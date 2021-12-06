@@ -25,13 +25,13 @@ import java.util.stream.*;
 
 import javax.swing.*;
 
+import ca.phon.app.script.*;
 import org.mozilla.javascript.*;
 import org.mozilla.javascript.tools.debugger.*;
 
 import ca.phon.app.log.*;
 import ca.phon.app.opgraph.editor.*;
 import ca.phon.app.opgraph.wizard.*;
-import ca.phon.app.query.*;
 import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.*;
 import ca.phon.opgraph.app.components.canvas.*;

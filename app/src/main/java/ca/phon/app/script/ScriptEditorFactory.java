@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.query;
+package ca.phon.app.script;
 
 import javax.swing.event.*;
 import javax.swing.text.*;
@@ -35,8 +35,8 @@ public class ScriptEditorFactory {
 	 *  be updated when user manually
 	 * @return new editor
 	 */
-	public static RSyntaxTextArea createEditorForScript(PhonScript script, boolean editScriptDirectly) {
-		RSyntaxTextArea scriptEditor = new RSyntaxTextArea();
+	public static PhonScriptTextArea createEditorForScript(PhonScript script, boolean editScriptDirectly) {
+		PhonScriptTextArea scriptEditor = new PhonScriptTextArea();
 		scriptEditor.setText(script.getScript());
 		scriptEditor.setColumns(80);
 		scriptEditor.setRows(40);
@@ -54,7 +54,7 @@ public class ScriptEditorFactory {
 	 * @param script
 	 * @return new editor
 	 */
-	public static RSyntaxTextArea createEditorForScript(PhonScript script) {
+	public static PhonScriptTextArea createEditorForScript(PhonScript script) {
 		return createEditorForScript(script, true);
 	}
 	

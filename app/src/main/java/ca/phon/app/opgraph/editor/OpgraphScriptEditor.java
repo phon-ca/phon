@@ -15,6 +15,7 @@
  */
 package ca.phon.app.opgraph.editor;
 
+import ca.hedlund.tst.TernaryTree;
 import ca.phon.app.opgraph.nodes.*;
 import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.GraphDocument;
@@ -40,8 +41,8 @@ public class OpgraphScriptEditor extends JPanel {
 
 	private final GraphDocument graphDocument;
 
-	private OpNode currentEditorNode = null;
-	private final Map<OpNode, ScriptNodeEditor> editorMap = new HashMap<>();
+	private ScriptNode currentEditorNode = null;
+	private TernaryTree<ScriptNode> openedScripts = new TernaryTree<>();
 
 	private JPanel topPanel;
 	private JButton updateButton;
@@ -55,12 +56,15 @@ public class OpgraphScriptEditor extends JPanel {
 	private final static String NO_NODE_PANEL = "no_node_panel";
 	private JPanel noNodePanel;
 
+	private final static String SCRIPT_EDITOR_PANEL = "script_editor";
+	private ScriptNodeEditor scriptEditorPanel;
+
+
 	public OpgraphScriptEditor(GraphDocument graphDocument) {
 		super();
 
 		this.graphDocument = graphDocument;
 		init();
-		this.graphDocument.getRootGraph().addGraphListener(graphListener);
 	}
 
 	private void init() {
@@ -79,7 +83,16 @@ public class OpgraphScriptEditor extends JPanel {
 		noNodeLbl.setFont(noNodeLbl.getFont().deriveFont(Font.ITALIC));
 		noNodePanel.add(noNodeLbl, gbc);
 
+		scriptEditorPanel = new ScriptNodeEditor();
+		scriptEditorPanel.addPropertyChangeListener("hasChanges", changeListener);
+
+		final PhonUIAction updateScriptAct = new PhonUIAction(this, "updateCurrentEditor");
+		scriptEditorPanel.getActionMap().put("update_script", updateScriptAct);
+		scriptEditorPanel.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
+				.put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), "update_script");
+
 		cardPanel.add(noNodePanel, NO_NODE_PANEL);
+		cardPanel.add(scriptEditorPanel, SCRIPT_EDITOR_PANEL);
 
 		scriptTree = new JXTree();
 		ScriptEditorTreeModel treeModel = new ScriptEditorTreeModel(scriptTree, this.graphDocument.getRootGraph());
@@ -142,7 +155,7 @@ public class OpgraphScriptEditor extends JPanel {
 	}
 
 	private void updateButtonStates() {
-		ScriptNodeEditor editor = currentEditor();
+		ScriptNodeEditor editor = getScriptNodeEditor();
 		if(editor != null && editor.hasChanges()) {
 			updateButton.setEnabled(true);
 		} else {
@@ -151,23 +164,21 @@ public class OpgraphScriptEditor extends JPanel {
 	}
 
 	private void updateLabel() {
-		ScriptNodeEditor currentEditor = currentEditor();
-		if(currentEditor != null) {
-			List<OpNode> nodePath = this.graphDocument.getRootGraph().getNodePath(this.currentEditorNode.getId());
+		if(this.currentEditorNode != null) {
+			List<OpNode> nodePath = this.graphDocument.getRootGraph().getNodePath(this.currentEditorNode.toOpNode().getId());
 			String nodeAddr = nodePath.stream().map(OpNode::getName).collect(Collectors.joining("/"));
 			if(nodeAddr.length() > 256) {
 				nodeAddr = StringUtils.abbreviate(nodeAddr, nodeAddr.length() - 256, 256);
 			}
-			currentNodeLabel.setText(this.currentEditorNode.getName() + (currentEditor.hasChanges() ? " *" : ""));
+			currentNodeLabel.setText(this.currentEditorNode.toOpNode().getName() + (getScriptNodeEditor().hasChanges() ? " *" : ""));
 			currentNodeLabel.setToolTipText(nodeAddr);
 		} else {
 			currentNodeLabel.setText("");
 		}
 	}
 
-	private ScriptNodeEditor currentEditor() {
-		if(currentEditorNode == null) return null;
-		return editorMap.get(currentEditorNode);
+	public ScriptNodeEditor getScriptNodeEditor() {
+		return this.scriptEditorPanel;
 	}
 
 	public void showScriptPopupMenu() {
@@ -178,25 +189,20 @@ public class OpgraphScriptEditor extends JPanel {
 	}
 
 	public void setupScriptPopupMenu(MenuBuilder builder) {
-		ScriptNodeEditor currentEditor = currentEditor();
-		for(OpNode node:editorMap.keySet()) {
-			ScriptNodeEditor editor = editorMap.get(node);
+		for(String nodePath:openedScripts.keySet()) {
+			ScriptNode scriptNode = openedScripts.get(nodePath);
 
-			List<OpNode> nodePath = this.graphDocument.getRootGraph().getNodePath(node.getId());
-			String nodeAddr = nodePath.stream().map(OpNode::getName).collect(Collectors.joining("/"));
-
-			PhonUIAction act = new PhonUIAction(this, "onOpenScriptNode", node);
-			act.putValue(PhonUIAction.NAME, nodeAddr + (editor.hasChanges() ? " *" : ""));
-			act.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open script for node " + node.getName());
-			act.putValue(PhonUIAction.SELECTED_KEY, editor == currentEditor);
+			PhonUIAction act = new PhonUIAction(this, "onOpenScriptNode", scriptNode);
+			act.putValue(PhonUIAction.NAME, nodePath + (scriptEditorPanel.hasChanges(scriptNode) ? " *" : ""));
+			act.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open script for node " + scriptNode.toOpNode().getName());
+			act.putValue(PhonUIAction.SELECTED_KEY, scriptEditorPanel.getScriptNode() == scriptNode);
 			builder.addItem(".", new JCheckBoxMenuItem(act));
 		}
 	}
 
 	public void updateCurrentEditor() {
-		ScriptNodeEditor editor = currentEditor();
-		if(editor != null && editor.hasChanges()) {
-			ScriptNodeEdit edit = new ScriptNodeEdit(editor);
+		if(scriptEditorPanel != null && scriptEditorPanel.hasChanges()) {
+			ScriptNodeEdit edit = new ScriptNodeEdit(scriptEditorPanel);
 			this.graphDocument.getUndoSupport().postEdit(edit);
 		}
 	}
@@ -206,28 +212,23 @@ public class OpgraphScriptEditor extends JPanel {
 	}
 
 	public void openScriptNode(ScriptNode scriptNode) {
-		ScriptNodeEditor currentEditor = currentEditor();
-		if(currentEditor != null) {
-			currentEditor.removePropertyChangeListener("hasChanges", changeListener);
-			currentEditor.getScriptNode().toOpNode().removeNodeListener(nodeListener);
+		if(scriptNode != null) {
+			if (scriptEditorPanel.getScriptNode() != null) {
+				scriptEditorPanel.getScriptNode().toOpNode().removeNodeListener(nodeListener);
+			}
+
+			List<OpNode> nodeList = graphDocument.getRootGraph().getNodePath(scriptNode.toOpNode().getId());
+			String nodePath = nodeList.stream().map(OpNode::getName).collect(Collectors.joining("/"));
+
+			cardLayout.show(cardPanel, SCRIPT_EDITOR_PANEL);
+
+			this.currentEditorNode = scriptNode;
+			scriptNode.toOpNode().addNodeListener(nodeListener);
+			scriptEditorPanel.setScriptNode(scriptNode);
+			openedScripts.put(nodePath, scriptNode);
+		} else {
+			cardLayout.show(cardPanel, NO_NODE_PANEL);
 		}
-
-		if (!editorMap.containsKey(scriptNode)) {
-			ScriptNodeEditor editor = new ScriptNodeEditor();
-			editor.setScriptNode(scriptNode);
-
-			final PhonUIAction updateScriptAct = new PhonUIAction(this, "updateCurrentEditor");
-			editor.getActionMap().put("update_script", updateScriptAct);
-			editor.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
-					.put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), "update_script");
-
-			editorMap.put(scriptNode.toOpNode(), editor);
-			cardPanel.add(editor, scriptNode.toOpNode().getId());
-		}
-		cardLayout.show(cardPanel, scriptNode.toOpNode().getId());
-		this.currentEditorNode = scriptNode.toOpNode();
-		scriptNode.toOpNode().addNodeListener(nodeListener);
-		editorMap.get(scriptNode.toOpNode()).addPropertyChangeListener("hasChanges", changeListener);
 		updateButtonStates();
 		updateLabel();
 	}
@@ -239,11 +240,10 @@ public class OpgraphScriptEditor extends JPanel {
 
 			if(value != null && value instanceof DefaultMutableTreeNode) {
 				DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode)value;
-				if(treeNode.getUserObject() != null && treeNode.getUserObject() instanceof OpNode) {
-					OpNode node = (OpNode) treeNode.getUserObject();
-					if (leaf && editorMap.containsKey(node)) {
-						ScriptNodeEditor editor = editorMap.get(node);
-						if (editor.hasChanges())
+				if(treeNode.getUserObject() != null && treeNode.getUserObject() instanceof ScriptNode) {
+					ScriptNode node = (ScriptNode) treeNode.getUserObject();
+					if (leaf) {
+						if (scriptEditorPanel.hasChanges(node))
 							retVal.setText(retVal.getText() + " *");
 					}
 				}
@@ -282,45 +282,6 @@ public class OpgraphScriptEditor extends JPanel {
 		if(!"hasChanges".equals(e.getPropertyName())) return;
 		updateButtonStates();
 		updateLabel();
-	};
-
-	private final OpGraphListener graphListener = new OpGraphListener() {
-		@Override
-		public void nodeAdded(OpGraph opGraph, OpNode opNode) {
-		}
-
-		@Override
-		public void nodeRemoved(OpGraph opGraph, OpNode opNode) {
-			ScriptNodeEditor currentEditor = currentEditor();
-			if(editorMap.containsKey(opNode)) {
-				ScriptNodeEditor removedEditor = editorMap.remove(opNode);
-				if(removedEditor == currentEditor) {
-					if(editorMap.keySet().size() > 0) {
-						openScriptNode((ScriptNode)editorMap.keySet().iterator().next());
-					} else {
-						cardLayout.show(cardPanel, NO_NODE_PANEL);
-						updateLabel();
-						updateButtonStates();
-					}
-				}
-			}
-		}
-
-		@Override
-		public void nodeSwapped(OpGraph opGraph, OpNode opNode, OpNode opNode1) {
-
-		}
-
-		@Override
-		public void linkAdded(OpGraph opGraph, OpLink opLink) {
-
-		}
-
-		@Override
-		public void linkRemoved(OpGraph opGraph, OpLink opLink) {
-
-		}
-
 	};
 
 	private final OpNodeListener nodeListener = new OpNodeAdapter() {

@@ -15,7 +15,7 @@
  */
 package ca.phon.app.query.report;
 
-import ca.phon.app.query.ScriptPanel;
+import ca.phon.app.script.ScriptPanel;
 import ca.phon.query.report.io.*;
 import ca.phon.query.script.QueryScript;
 import ca.phon.query.script.QueryScriptContext;

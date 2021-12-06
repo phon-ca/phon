@@ -29,6 +29,7 @@ import javax.swing.event.*;
 
 import ca.phon.app.log.*;
 import ca.phon.app.query.actions.*;
+import ca.phon.app.script.ScriptPanel;
 import ca.phon.project.*;
 import ca.phon.query.history.*;
 import ca.phon.query.script.*;

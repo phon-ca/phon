@@ -24,9 +24,8 @@ import javax.swing.*;
 import javax.swing.undo.*;
 
 import ca.phon.app.opgraph.library.*;
-import ca.phon.app.opgraph.nodes.ScriptNodeEditor;
 import ca.phon.app.opgraph.wizard.*;
-import ca.phon.app.query.*;
+import ca.phon.app.script.ScriptPanel;
 import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.*;
 import ca.phon.opgraph.app.components.*;
@@ -35,7 +34,6 @@ import ca.phon.opgraph.app.edits.graph.*;
 import ca.phon.opgraph.app.extensions.*;
 import ca.phon.opgraph.extensions.*;
 import ca.phon.opgraph.library.*;
-import ca.phon.query.db.Script;
 import ca.phon.ui.jbreadcrumb.*;
 import ca.phon.util.*;
 

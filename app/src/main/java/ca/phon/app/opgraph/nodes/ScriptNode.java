@@ -15,7 +15,7 @@
  */
 package ca.phon.app.opgraph.nodes;
 
-import ca.phon.app.query.ScriptPanel;
+import ca.phon.app.script.ScriptPanel;
 import ca.phon.opgraph.OpNode;
 import ca.phon.script.*;
 

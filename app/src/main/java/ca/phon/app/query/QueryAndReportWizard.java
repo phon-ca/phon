@@ -30,6 +30,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.tree.*;
 
+import ca.phon.app.script.ScriptPanel;
 import org.jdesktop.swingx.*;
 
 import ca.phon.app.log.*;

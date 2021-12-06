@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.query;
+package ca.phon.app.script;
 
 import java.awt.*;
 import java.beans.*;
@@ -21,7 +21,6 @@ import java.beans.*;
 import javax.swing.*;
 
 import ca.phon.app.log.*;
-import ca.phon.query.script.*;
 import ca.phon.script.*;
 import ca.phon.script.params.*;
 import ca.phon.script.params.ui.*;

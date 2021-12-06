@@ -16,7 +16,6 @@
 package ca.phon.app.opgraph.nodes.query;
 
 import java.awt.*;
-import java.awt.event.*;
 import java.beans.*;
 import java.io.*;
 import java.time.*;
@@ -25,10 +24,10 @@ import java.util.List;
 
 import javax.swing.*;
 
-import ca.phon.app.opgraph.editor.*;
 import ca.phon.app.opgraph.nodes.*;
 import ca.phon.app.opgraph.wizard.*;
 import ca.phon.app.query.*;
+import ca.phon.app.script.ScriptPanel;
 import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.*;
 import ca.phon.opgraph.app.extensions.*;
@@ -40,11 +39,6 @@ import ca.phon.query.script.*;
 import ca.phon.script.*;
 import ca.phon.script.params.*;
 import ca.phon.session.*;
-import ca.phon.ui.*;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.layout.*;
-import ca.phon.util.*;
-import ca.phon.util.icons.*;
 import ca.phon.worker.*;
 import ca.phon.worker.PhonTask.*;
 
