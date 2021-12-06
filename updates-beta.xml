@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.3.7-beta.7/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_7-beta_7.dmg" newVersion="3.3.7-beta.7" newMediaFileId="macos" fileSize="299655199" md5Sum="dfb746b663f17d0266a538a1aa249bae" sha256Sum="e41263e2a77f3ec033caf478ce0e18fbac5ecebbc343479d7071e6904179f53c" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.4.0-beta.1/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_0-beta_1.dmg" newVersion="3.4.0-beta.1" newMediaFileId="macos" fileSize="299840299" md5Sum="cd8af583e5c43f3a8a169cc9d9f46458" sha256Sum="df3726abec3257e3cad0bb2fcb839e3383e6af1e0ae432d5a61ae0b6884eba8f" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.3.6
 
+ * Added Consistency Analysis
  * Session editor will only switch to new records when using the New and Duplicate record buttons
  * Fixed an issue with Formant tables having too many columns on windows
  * Additional checks are put in place when editing TextGids in Praat and sending back to Phon:
@@ -493,9 +494,10 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_3_7-beta_7.dmg" newVersion="3.3.7-beta.7" newMediaFileId="macos" fileSize="299655199" md5Sum="dfb746b663f17d0266a538a1aa249bae" sha256Sum="e41263e2a77f3ec033caf478ce0e18fbac5ecebbc343479d7071e6904179f53c" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_0-beta_1.dmg" newVersion="3.4.0-beta.1" newMediaFileId="macos" fileSize="299840299" md5Sum="cd8af583e5c43f3a8a169cc9d9f46458" sha256Sum="df3726abec3257e3cad0bb2fcb839e3383e6af1e0ae432d5a61ae0b6884eba8f" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.3.6
 
+ * Added Consistency Analysis
  * Session editor will only switch to new records when using the New and Duplicate record buttons
  * Fixed an issue with Formant tables having too many columns on windows
  * Additional checks are put in place when editing TextGids in Praat and sending back to Phon:
@@ -986,9 +988,10 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_7-beta_7.exe" newVersion="3.3.7-beta.7" newMediaFileId="win64" fileSize="308040736" md5Sum="3c03bd99e5711b85556c18093e38450c" sha256Sum="63101c304cda6591a94169993d79d201d0b5f399ceb069b7588aa5339a0e75d0" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_0-beta_1.exe" newVersion="3.4.0-beta.1" newMediaFileId="win64" fileSize="308219936" md5Sum="ef2c9cb53a2fd47d48f7f4f2513dac1a" sha256Sum="cf3d54a2102414eeeb4252e56ab82d75c68d87fda12072df08cbecb3509e7d20" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.3.6
 
+ * Added Consistency Analysis
  * Session editor will only switch to new records when using the New and Duplicate record buttons
  * Fixed an issue with Formant tables having too many columns on windows
  * Additional checks are put in place when editing TextGids in Praat and sending back to Phon:
@@ -1479,9 +1482,10 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_7-beta_7.exe" newVersion="3.3.7-beta.7" newMediaFileId="win64" fileSize="308040736" md5Sum="3c03bd99e5711b85556c18093e38450c" sha256Sum="63101c304cda6591a94169993d79d201d0b5f399ceb069b7588aa5339a0e75d0" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_0-beta_1.exe" newVersion="3.4.0-beta.1" newMediaFileId="win64" fileSize="308219936" md5Sum="ef2c9cb53a2fd47d48f7f4f2513dac1a" sha256Sum="cf3d54a2102414eeeb4252e56ab82d75c68d87fda12072df08cbecb3509e7d20" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.3.6
 
+ * Added Consistency Analysis
  * Session editor will only switch to new records when using the New and Duplicate record buttons
  * Fixed an issue with Formant tables having too many columns on windows
  * Additional checks are put in place when editing TextGids in Praat and sending back to Phon:
@@ -1972,9 +1976,10 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_7-beta_7.exe" newVersion="3.3.7-beta.7" newMediaFileId="win64" fileSize="308040736" md5Sum="3c03bd99e5711b85556c18093e38450c" sha256Sum="63101c304cda6591a94169993d79d201d0b5f399ceb069b7588aa5339a0e75d0" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_0-beta_1.exe" newVersion="3.4.0-beta.1" newMediaFileId="win64" fileSize="308219936" md5Sum="ef2c9cb53a2fd47d48f7f4f2513dac1a" sha256Sum="cf3d54a2102414eeeb4252e56ab82d75c68d87fda12072df08cbecb3509e7d20" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.3.6
 
+ * Added Consistency Analysis
  * Session editor will only switch to new records when using the New and Duplicate record buttons
  * Fixed an issue with Formant tables having too many columns on windows
  * Additional checks are put in place when editing TextGids in Praat and sending back to Phon:
@@ -2465,9 +2470,10 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_3_7-beta_7.zip" newVersion="3.3.7-beta.7" newMediaFileId="win64zip" fileSize="306997828" md5Sum="c2de03409dfb741a2f24871f4fcb7e12" sha256Sum="7b9d4824ff68dbf95e929184c1d662476e9fe3bd7cd4efdcdced2dcf56e10d3e" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_0-beta_1.zip" newVersion="3.4.0-beta.1" newMediaFileId="win64zip" fileSize="307178565" md5Sum="36a0b08b5238c1075fcde43cae6419fa" sha256Sum="0cf9828b018ac19b017a90faf049db19091001a075fa8b715bd257c7b0d44bae" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.3.6
 
+ * Added Consistency Analysis
  * Session editor will only switch to new records when using the New and Duplicate record buttons
  * Fixed an issue with Formant tables having too many columns on windows
  * Additional checks are put in place when editing TextGids in Praat and sending back to Phon:

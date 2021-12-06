@@ -1,3 +1,4 @@
+antlr4.ca.phon.query.pql.gen
 ca.hedlund.dp.visitor
 ca.hedlund.dp.visitor.annotation
 ca.phon.alignment
@@ -59,6 +60,7 @@ ca.phon.app.project.mergewizard
 ca.phon.app.query
 ca.phon.app.query.actions
 ca.phon.app.query.report
+ca.phon.app.script
 ca.phon.app.session
 ca.phon.app.session.check
 ca.phon.app.session.editor
@@ -147,6 +149,7 @@ ca.phon.query.db.xml.io.query
 ca.phon.query.db.xml.io.resultset
 ca.phon.query.detectors
 ca.phon.query.history
+ca.phon.query.pql
 ca.phon.query.report
 ca.phon.query.report.csv
 ca.phon.query.report.datasource
