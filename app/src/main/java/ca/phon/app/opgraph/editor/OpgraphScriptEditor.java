@@ -46,6 +46,7 @@ public class OpgraphScriptEditor extends JPanel {
 
 	private JPanel topPanel;
 	private JButton updateButton;
+	private JButton resetButton;
 	private DropDownButton scriptTreeButton;
 	private JXTree scriptTree;
 	private JXLabel currentNodeLabel;
@@ -91,6 +92,10 @@ public class OpgraphScriptEditor extends JPanel {
 		scriptEditorPanel.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
 				.put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), "update_script");
 
+		final PhonUIAction resetScriptAct = new PhonUIAction(this, "resetCurrentEditor");
+		resetScriptAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset editor contents with node script");
+		resetScriptAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/reload", IconSize.SMALL));
+
 		cardPanel.add(noNodePanel, NO_NODE_PANEL);
 		cardPanel.add(scriptEditorPanel, SCRIPT_EDITOR_PANEL);
 
@@ -126,6 +131,9 @@ public class OpgraphScriptEditor extends JPanel {
 		updateButton = new JButton(updateAct);
 		updateButton.setEnabled(false);
 
+		resetButton = new JButton(resetScriptAct);
+		resetButton.setEnabled(false);
+
 		currentNodeLabel = new JXLabel();
 		DropDownIcon nodeIcn = new DropDownIcon(IconManager.getInstance().getIcon("mimetypes/text-x-script", IconSize.SMALL), SwingConstants.BOTTOM);
 		currentNodeLabel.setIcon(nodeIcn);
@@ -140,6 +148,8 @@ public class OpgraphScriptEditor extends JPanel {
 		gbc.weightx = 0.0;
 		gbc.weighty = 0.0;
 		topPanel.add(updateButton, gbc);
+		++gbc.gridx;
+		topPanel.add(resetButton, gbc);
 		gbc.insets = new Insets(0, 5, 0, 0);
 		++gbc.gridx;
 		topPanel.add(scriptTreeButton, gbc);
@@ -158,8 +168,10 @@ public class OpgraphScriptEditor extends JPanel {
 		ScriptNodeEditor editor = getScriptNodeEditor();
 		if(editor != null && editor.hasChanges()) {
 			updateButton.setEnabled(true);
+			resetButton.setEnabled(true);
 		} else {
 			updateButton.setEnabled(false);
+			resetButton.setEnabled(false);
 		}
 	}
 
@@ -197,6 +209,12 @@ public class OpgraphScriptEditor extends JPanel {
 			act.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open script for node " + scriptNode.toOpNode().getName());
 			act.putValue(PhonUIAction.SELECTED_KEY, scriptEditorPanel.getScriptNode() == scriptNode);
 			builder.addItem(".", new JCheckBoxMenuItem(act));
+		}
+	}
+
+	public void resetCurrentEditor() {
+		if(scriptEditorPanel != null && scriptEditorPanel.hasChanges()) {
+			scriptEditorPanel.resetScript();
 		}
 	}
 

@@ -503,6 +503,7 @@ public class OpgraphEditor extends CommonModuleFrame {
 			final JComponent view = model.getView(viewName);
 
 			final DefaultSingleCDockable retVal = new DefaultSingleCDockable( viewName , view , new CAction[0] );
+			retVal.setTitleIcon(getModel().getIconForView(viewName));
 			retVal.setTitleText(viewName);
 			return retVal;
 		}

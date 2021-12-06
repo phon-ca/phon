@@ -37,6 +37,7 @@ import ca.phon.opgraph.extensions.*;
 import ca.phon.project.*;
 import ca.phon.query.db.*;
 import ca.phon.util.*;
+import ca.phon.util.icons.*;
 
 public class ReportOpGraphEditorModel extends OpgraphEditorModel {
 
@@ -170,6 +171,15 @@ public class ReportOpGraphEditorModel extends OpgraphEditorModel {
 			break;
 		}
 		return retVal;
+	}
+
+	@Override
+	public Icon getIconForView(String viewName) {
+		if("Debug Settings".equals(viewName)) {
+			return IconManager.getInstance().getIcon("actions/bug-edit", IconSize.SMALL);
+		} else {
+			return super.getIconForView(viewName);
+		}
 	}
 
 	@Override

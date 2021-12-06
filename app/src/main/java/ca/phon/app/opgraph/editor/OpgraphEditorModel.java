@@ -36,6 +36,7 @@ import ca.phon.opgraph.extensions.*;
 import ca.phon.opgraph.library.*;
 import ca.phon.ui.jbreadcrumb.*;
 import ca.phon.util.*;
+import ca.phon.util.icons.*;
 
 /**
  * Base model for the opgraph editor.
@@ -230,6 +231,10 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 			retVal.setBounds(200, 0, 600, 600);
 			break;
 
+		case "Console":
+			retVal.setBounds(0, 200, 200, 200);
+			break;
+
 		case "Outline":
 			retVal.setBounds(0, 0, 200, 200);
 			break;
@@ -255,6 +260,52 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 			break;
 		}
 		return retVal;
+	}
+
+	/**
+	 * Get the view icon
+	 *
+	 * @param viewName
+	 * @return icon for view
+	 */
+	public Icon getIconForView(String viewName) {
+		String iconName = "blank";
+
+		switch(viewName) {
+			case "Canvas":
+				iconName = "actions/view-grid";
+				break;
+
+			case "Console":
+				iconName = "mimetypes/text-x-log";
+				break;
+
+			case "Library":
+				iconName = "actions/book-open";
+				break;
+
+			case "Debug":
+				iconName = "actions/bug";
+				break;
+
+			case "Script Editor":
+				iconName = "mimetypes/text-x-script";
+				break;
+
+			case "Outline":
+				iconName = "actions/code-class";
+				break;
+
+			case "Connections":
+				iconName = "actions/format-connect-node";
+				break;
+
+			case "Settings":
+				iconName = "actions/settings-black";
+				break;
+		}
+
+		return IconManager.getInstance().getIcon(iconName, IconSize.SMALL);
 	}
 
 	/**

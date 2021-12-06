@@ -216,7 +216,10 @@ public class ScriptNodeEditor extends JPanel {
 		ScriptNodeEditorExtension ext = scriptNode.toOpNode().getExtension(ScriptNodeEditorExtension.class);
 		if(ext == null) return;
 
+		setText(scriptNode.getScript().getScript());
+		editor.setCaretPosition(0);
 
+		setHasChanges(scriptNode, false);
 	}
 
 	/**
@@ -243,6 +246,8 @@ public class ScriptNodeEditor extends JPanel {
 			errorArea.setText(stringWriter.getBuffer().toString());
 			errorArea.setCaretPosition(0);
 		}
+
+		setHasChanges(scriptNode, false);
 	}
 
 	private static class ScriptNodeEditorExtension {
@@ -261,7 +266,7 @@ public class ScriptNodeEditor extends JPanel {
 			if(ext == null) return;
 
 			ext.undoManager.addEdit(e.getEdit());
-			ext.hasChanges = true;
+			setHasChanges(scriptNode, true);
 		}
 	};
 

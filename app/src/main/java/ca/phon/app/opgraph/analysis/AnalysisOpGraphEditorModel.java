@@ -35,6 +35,7 @@ import ca.phon.opgraph.exceptions.*;
 import ca.phon.opgraph.extensions.*;
 import ca.phon.project.*;
 import ca.phon.util.*;
+import ca.phon.util.icons.*;
 
 public class AnalysisOpGraphEditorModel extends OpgraphEditorModel {
 
@@ -198,6 +199,15 @@ public class AnalysisOpGraphEditorModel extends OpgraphEditorModel {
 			retVal = ViewLocation.WEST;
 		}
 		return retVal;
+	}
+
+	@Override
+	public Icon getIconForView(String viewName) {
+		if("Debug Settings".equals(viewName)) {
+			return IconManager.getInstance().getIcon("actions/bug-edit", IconSize.SMALL);
+		} else {
+			return super.getIconForView(viewName);
+		}
 	}
 
 	@Override
