@@ -189,8 +189,8 @@ public class AnalysisOpGraphEditorModel extends OpgraphEditorModel {
 	}
 	
 	@Override
-	public ViewLocation getDefaultViewLocation(String viewName) {
-		ViewLocation retVal = super.getDefaultViewLocation(viewName);
+	public ViewLocation getViewMinimizeLocation(String viewName) {
+		ViewLocation retVal = super.getViewMinimizeLocation(viewName);
 		
 		if(viewName.equals("Debug Settings")) {
 			retVal = ViewLocation.WEST;
@@ -202,52 +202,22 @@ public class AnalysisOpGraphEditorModel extends OpgraphEditorModel {
 
 	@Override
 	public Rectangle getInitialViewBounds(String viewName) {
-		Rectangle retVal = new Rectangle();
+		Rectangle retVal = super.getInitialViewBounds(viewName);
 		switch(viewName) {
-		case "Canvas":
-			retVal.setBounds(200, 0, 600, 600);
-			break;
-
 		case "Debug Settings":
 			retVal.setBounds(0, 200, 200, 200);
 			break;
 
-		case "Report Template":
-			retVal.setBounds(0, 0, 200, 200);
-			break;
-
-		case "Console":
-			retVal.setBounds(0, 200, 200, 200);
-			break;
-
-		case "Debug":
-			retVal.setBounds(0, 200, 200, 200);
-			break;
-
-		case "Connections":
-			retVal.setBounds(800, 200, 200, 200);
-			break;
-
-		case "Library":
-			retVal.setBounds(0, 0, 200, 200);
-			break;
-
-		case "Settings":
-			retVal.setBounds(800, 0, 200, 200);
-			break;
-
 		default:
-			retVal.setBounds(0, 0, 200, 200);
 			break;
 		}
 		return retVal;
 	}
 
 	@Override
-	public boolean isViewVisibleByDefault(String viewName) {
-		return super.isViewVisibleByDefault(viewName)
-				|| viewName.equals("Debug Settings")
-				|| viewName.equals("Report Template");
+	public boolean isInitiallyMinimized(String viewName) {
+		return super.isInitiallyMinimized(viewName)
+				|| viewName.equals("Debug Settings");
 	}
 
 	@Override

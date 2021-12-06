@@ -140,8 +140,8 @@ public class OpGraphSyllabifierEditorModel extends OpgraphEditorModel {
 	}
 
 	@Override
-	public boolean isViewVisibleByDefault(String viewName) {
-		boolean retVal = super.isViewVisibleByDefault(viewName);
+	public boolean isInitiallyMinimized(String viewName) {
+		boolean retVal = super.isInitiallyMinimized(viewName);
 		if(viewName.equals("Syllabifier") || viewName.equals("Debug Settings")) retVal = true;
 		return retVal;
 	}

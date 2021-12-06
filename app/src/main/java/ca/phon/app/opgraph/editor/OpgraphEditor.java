@@ -18,7 +18,9 @@ package ca.phon.app.opgraph.editor;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -409,33 +411,72 @@ public class OpgraphEditor extends CommonModuleFrame {
 		menuBuilder.addItem("Debug", new StepToAction(this));
 	}
 
+	private void setupMinimized(CPerspective perspective, Map<String, SingleCDockablePerspective> dockableMap) {
+		for(String viewName:dockableMap.keySet()) {
+			ViewLocation viewLocation = getModel().getViewMinimizeLocation(viewName);
+			SingleCDockablePerspective dockable = dockableMap.get(viewName);
+			addToMinimizePerspective(perspective, dockable, viewLocation);
+		}
+		perspective.storeLocations();
+	}
+
+	private void addToMinimizePerspective(CPerspective perspective, SingleCDockablePerspective dockable, ViewLocation viewLocation) {
+		switch (viewLocation) {
+			case WEST:
+				perspective.getContentArea().getWest().add(dockable);
+				break;
+
+			case EAST:
+				perspective.getContentArea().getEast().add(dockable);
+				break;
+
+			case NORTH:
+				perspective.getContentArea().getNorth().add(dockable);
+				break;
+
+			case SOUTH:
+				perspective.getContentArea().getSouth().add(dockable);
+				break;
+		}
+	}
+
+	private void setupNormalized(CPerspective perspective, Map<String, SingleCDockablePerspective> dockableMap) {
+		CGridPerspective center = perspective.getContentArea().getCenter();
+		CWorkingPerspective work = (CWorkingPerspective) perspective.getStation("work");
+
+		int maxX = 0;
+		int maxY = 0;
+		for(String viewName:dockableMap.keySet()) {
+			Rectangle viewBound = getModel().getInitialViewBounds(viewName);
+			SingleCDockablePerspective dockable = dockableMap.get(viewName);
+
+			work.gridAdd(viewBound.x, viewBound.y, viewBound.width, viewBound.height, dockable);
+			maxX = (int)Math.max(maxX, viewBound.getMaxX());
+			maxY = (int)Math.max(maxY, viewBound.getMaxY());
+		}
+		center.gridAdd(0, 0, maxX, maxY, work);
+
+		perspective.storeLocations();
+	}
+
+	private void minimizeDefault(CPerspective perspective, Map<String, SingleCDockablePerspective> dockableMap) {
+		for(String viewName:dockableMap.keySet()) {
+			SingleCDockablePerspective dockable = dockableMap.get(viewName);
+			if(getModel().isInitiallyMinimized(viewName)) {
+				addToMinimizePerspective(perspective, dockable, getModel().getViewMinimizeLocation(viewName));
+			}
+		}
+	}
+
 	protected void setupDefaultPerspective() {
 		final CControlPerspective perspectives = dockControl.getPerspectives();
 		final CPerspective defaultPerspective = perspectives.createEmptyPerspective();
 
-		final CWorkingPerspective workPerspective = (CWorkingPerspective)defaultPerspective.getStation("work");
-
-		for(String viewName:getModel().getAvailableViewNames()) {
-			final SingleCDockablePerspective dockablePerspective = new SingleCDockablePerspective(viewName);
-			if(getModel().isViewVisibleByDefault(viewName)) {
-				final ViewLocation viewLocation = getModel().getDefaultViewLocation(viewName);
-				if(viewLocation == ViewLocation.CENTER) {
-					final Rectangle bounds = getModel().getInitialViewBounds(viewName);
-					workPerspective.gridAdd(bounds.x, bounds.y, bounds.width, bounds.height, dockablePerspective);
-				} else if(viewLocation == ViewLocation.NORTH) {
-					workPerspective.getPerspective().getContentArea().getNorth().add(dockablePerspective);
-				} else if(viewLocation == ViewLocation.EAST) {
-					workPerspective.getPerspective().getContentArea().getEast().add(dockablePerspective);
-				} else if(viewLocation == ViewLocation.SOUTH) {
-					workPerspective.getPerspective().getContentArea().getSouth().add(dockablePerspective);
-				} else if(viewLocation == ViewLocation.WEST) {
-					workPerspective.getPerspective().getContentArea().getWest().add(dockablePerspective);
-				}
-			}
-		}
-
-		final CGridPerspective center = defaultPerspective.getContentArea().getCenter();
-		center.gridAdd( 0, 0, 600, 800, workPerspective );
+		Map<String, SingleCDockablePerspective> dockableMap = getModel().getAvailableViewNames()
+				.stream().collect(Collectors.toMap(String::toString, SingleCDockablePerspective::new));
+		setupMinimized(defaultPerspective, dockableMap);
+		setupNormalized(defaultPerspective, dockableMap);
+		minimizeDefault(defaultPerspective, dockableMap);
 
 		defaultPerspective.storeLocations();
 		defaultPerspective.shrink();

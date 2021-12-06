@@ -192,9 +192,35 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 		return retVal;
 	}
 
+	public boolean isInitiallyMinimized(String viewName) {
+		boolean retVal = true;
+
+		switch (viewName) {
+			case "Canvas":
+			case "Connections":
+			case "Settings":
+			case "Outline":
+			case "Script Editor":
+				retVal = false;
+				break;
+
+			case "Console":
+			case "Debug":
+			case "Library":
+				retVal = true;
+				break;
+
+			default:
+				break;
+		}
+
+		return retVal;
+	}
+
 	/**
 	 * Get initial view location as a rectangle.
 	 *
+	 * @param viewName
 	 * @return initial view rect
 	 */
 	public Rectangle getInitialViewBounds(String viewName) {
@@ -205,14 +231,11 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 			break;
 
 		case "Outline":
-			retVal.setBounds(0, 200, 200, 200);
-			break;
-
-		case "Console":
-			retVal.setBounds(0, 200, 200, 200);
+			retVal.setBounds(0, 0, 200, 200);
 			break;
 
 		case "Debug":
+		case "Script Editor":
 			retVal.setBounds(0, 200, 200, 200);
 			break;
 
@@ -228,102 +251,37 @@ public abstract class OpgraphEditorModel extends GraphEditorModel {
 			retVal.setBounds(800, 0, 200, 200);
 			break;
 
-		case "Script Editor":
-			retVal.setBounds(800, 200, 200, 200);
-			break;
-
 		default:
-			retVal.setBounds(0, 0, 200, 200);
 			break;
 		}
 		return retVal;
 	}
 
 	/**
+	 * Get the minimize location for the given view
 	 *
-	 * @return
+	 * @param viewName
+	 * @return minimize location for view
 	 */
-	public ViewLocation getDefaultViewLocation(String viewName) {
-		ViewLocation retVal = ViewLocation.CENTER;
+	public ViewLocation getViewMinimizeLocation(String viewName) {
+		ViewLocation retVal = ViewLocation.SOUTH;
 
 		switch(viewName) {
 		case "Canvas":
-			retVal = ViewLocation.CENTER;
+			retVal = ViewLocation.NORTH;
 			break;
 
 		case "Console":
-			retVal = ViewLocation.WEST;
+			case "Library":
+			case "Debug":
+			case "Script Editor":
+			case "Outline":
+				retVal = ViewLocation.WEST;
 			break;
 
-		case "Debug":
-			retVal = ViewLocation.WEST;
-			break;
-
-		case "Connections":
-			retVal = ViewLocation.CENTER;
-			break;
-
-		case "Library":
-			retVal = ViewLocation.WEST;
-			break;
-
-		case "Settings":
-			retVal = ViewLocation.CENTER;
-			break;
-
-		case "Script Editor":
-			retVal = ViewLocation.WEST;
-			break;
-
-		case "Outline":
-			retVal = ViewLocation.WEST;
-			break;
-		}
-		return retVal;
-	}
-
-	/**
-	 * Get initial visiblity of view.
-	 *
-	 * @return <code>true</code> if view is visible in default layout,
-	 * <code>false</code> otherwise
-	 */
-	public boolean isViewVisibleByDefault(String viewName) {
-		boolean retVal = false;
-		switch(viewName) {
-		case "Canvas":
-			retVal = true;
-			break;
-
-		case "Console":
-			retVal = false;
-			break;
-
-		case "Debug":
-			retVal = true;
-			break;
-
-		case "Connections":
-			retVal = true;
-			break;
-
-		case "Library":
-			retVal = true;
-			break;
-
-		case "Settings":
-			retVal = true;
-			break;
-
-		case "Script Editor":
-			retVal = true;
-			break;
-
-		case "Outline":
-			retVal = true;
-			break;
-
-		default:
+			case "Connections":
+			case "Settings":
+				retVal = ViewLocation.EAST;
 			break;
 		}
 		return retVal;
