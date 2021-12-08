@@ -20,7 +20,8 @@ import ca.phon.app.session.editor.SessionMediaModel;
 import ca.phon.app.syllabifier.SyllabifierComboBox;
 import ca.phon.ipadictionary.*;
 import ca.phon.ipadictionary.ui.IPADictionarySelector;
-import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllabifier.*;
+import ca.phon.ui.SyllabifierSelector;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.Language;
 import ca.phon.util.PrefHelper;
@@ -48,7 +49,7 @@ public class EditorPrefsPanel extends PrefsPanel {
 	 * UI
 	 */
 	private IPADictionarySelector dictionarySelector;
-	private SyllabifierComboBox cmbSyllabifierLanguage;
+	private SyllabifierSelector syllabifierSelector;
 
 	private JComboBox<Integer> autosaveBox;
 	private final Integer[] autosaveTimes = { 0, 5, 10, 15, 20, 30 }; // minutes
@@ -71,9 +72,6 @@ public class EditorPrefsPanel extends PrefsPanel {
 		final String dictLangPref = PrefHelper.get(PhonProperties.IPADICTIONARY_LANGUAGE,
 				PhonProperties.DEFAULT_IPADICTIONARY_LANGUAGE);
 		final Language dictLang = Language.parseLanguage(dictLangPref);
-		
-		Language langs[] = dictLibrary.availableLanguages().toArray(new Language[0]);
-		Arrays.sort(langs, new LanguageComparator());
 
 		dictionarySelector = new IPADictionarySelector();
 		dictionarySelector.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -92,12 +90,22 @@ public class EditorPrefsPanel extends PrefsPanel {
 			dictionarySelector.ensureIndexIsVisible(dictionarySelector.getLanguageIndex(dictLang));
 		});
 
-		cmbSyllabifierLanguage = new SyllabifierComboBox();
-		cmbSyllabifierLanguage.addItemListener(new SyllabifierLanguageListener());
+		syllabifierSelector = new SyllabifierSelector();
+		syllabifierSelector.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		syllabifierSelector.setSelectedSyllabifier(SyllabifierLibrary.getInstance().defaultSyllabifier());
+		syllabifierSelector.addListSelectionListener((e) -> {
+			Syllabifier syllabifier = (Syllabifier)syllabifierSelector.getSelectedSyllabifier();
+			if(syllabifier != null)
+				PrefHelper.getUserPreferences().put(PhonProperties.SYLLABIFIER_LANGUAGE, syllabifier.getLanguage().toString());
+		});
+		syllabifierSelector.setVisibleRowCount(5);
 
 		JPanel jpanel2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		jpanel2.setBorder(new TitledBorder("Syllabifier Language"));
-		jpanel2.add(cmbSyllabifierLanguage);
+		jpanel2.add(new JScrollPane(syllabifierSelector));
+		SwingUtilities.invokeLater(() -> {
+			syllabifierSelector.ensureIndexIsVisible(syllabifierSelector.getSelectedIndex());
+		});
 
 		autosaveBox = new JComboBox<>(autosaveTimes);
 
@@ -186,49 +194,6 @@ public class EditorPrefsPanel extends PrefsPanel {
 
 				PrefHelper.getUserPreferences().putInt(PhonProperties.AUTOSAVE_INTERVAL, val);
 			}
-		}
-
-	}
-	
-	private class SyllabifierLanguageListener implements ItemListener {
-		@Override
-		public void itemStateChanged(ItemEvent e) {
-			if(e.getStateChange() != ItemEvent.SELECTED) return;
-
-			Syllabifier syllabifier = (Syllabifier)e.getItem();
-			PrefHelper.getUserPreferences().put(PhonProperties.SYLLABIFIER_LANGUAGE, syllabifier.getLanguage().toString());
-		}
-	}
-
-	private class LanguageComparator implements Comparator<Language> {
-
-		@Override
-		public int compare(Language o1, Language o2) {
-			String l1 = o1.getPrimaryLanguage().getName() + " (" + o1.toString() + ")";
-			String l2 = o2.getPrimaryLanguage().getName() + " (" + o2.toString() + ")";
-			return l1.compareTo(l2);
-		}
-
-	}
-
-	private class LanguageCellRenderer extends DefaultListCellRenderer {
-
-		private static final long serialVersionUID = -5753923740573333306L;
-
-		@Override
-		public Component getListCellRendererComponent(JList list,
-				Object value, int index, boolean isSelected,
-				boolean cellHasFocus) {
-			final JLabel retVal = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected,
-					cellHasFocus);
-
-			if(value != null) {
-				final Language lang = (Language)value;
-				final String text = lang.getPrimaryLanguage().getName() + " (" + lang.toString() + ")";
-				retVal.setText(text);
-			}
-
-			return retVal;
 		}
 
 	}

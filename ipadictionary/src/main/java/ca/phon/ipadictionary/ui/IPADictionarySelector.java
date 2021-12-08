@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A list selection component for {@link IPADictionary}
@@ -29,20 +30,15 @@ public class IPADictionarySelector extends JList<IPADictionary> {
 			dictList.add(dictItr.next());
 		}
 		Collections.sort(dictList, Comparator.comparing(IPADictionary::getName));
-
 		availableDicts = dictList;
+
 		setModel(new IPADictionaryListModel());
 		setCellRenderer(new IPADictionaryListCellRenderer());
 	}
 
 	public int getLanguageIndex(Language lang) {
-		for(int i = 0; i < super.getModel().getSize(); i++) {
-			IPADictionary dict = getModel().getElementAt(i);
-			if (dict.getLanguage().equals(lang)) {
-				return i;
-			}
-		}
-		return -1;
+		List<Language> languages = availableDicts.stream().map(IPADictionary::getLanguage).collect(Collectors.toList());
+		return languages.indexOf(lang);
 	}
 
 	public int getIPADictionaryIndex(IPADictionary dict) {
