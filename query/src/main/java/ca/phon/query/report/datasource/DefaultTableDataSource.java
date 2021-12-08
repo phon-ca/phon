@@ -250,7 +250,7 @@ public class DefaultTableDataSource implements TableDataSource {
 	public String getColumnTitle(int col) {
 		String retVal = null;
 
-		if(col < columnNames.length) {
+		if(col >= 0 && col < columnNames.length) {
 			retVal =
 				(columnNames[col] != null ? columnNames[col] : getDefaultColumnTitle(col));
 		}

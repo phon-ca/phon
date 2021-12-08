@@ -18,7 +18,8 @@ package ca.phon.app.prefs;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.SessionMediaModel;
 import ca.phon.app.syllabifier.SyllabifierComboBox;
-import ca.phon.ipadictionary.IPADictionaryLibrary;
+import ca.phon.ipadictionary.*;
+import ca.phon.ipadictionary.ui.IPADictionarySelector;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.Language;
@@ -46,7 +47,7 @@ public class EditorPrefsPanel extends PrefsPanel {
 	/*
 	 * UI
 	 */
-	private JComboBox<Language> cmbDictionaryLanguage;
+	private IPADictionarySelector dictionarySelector;
 	private SyllabifierComboBox cmbSyllabifierLanguage;
 
 	private JComboBox<Integer> autosaveBox;
@@ -73,15 +74,23 @@ public class EditorPrefsPanel extends PrefsPanel {
 		
 		Language langs[] = dictLibrary.availableLanguages().toArray(new Language[0]);
 		Arrays.sort(langs, new LanguageComparator());
-		
-		cmbDictionaryLanguage = new JComboBox<>(langs);
-		cmbDictionaryLanguage.setSelectedItem(dictLang);
-		cmbDictionaryLanguage.addItemListener(new DictionaryLanguageListener());
-		cmbDictionaryLanguage.setRenderer(new LanguageCellRenderer());
+
+		dictionarySelector = new IPADictionarySelector();
+		dictionarySelector.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		dictionarySelector.setSelectedLang(dictLang, false);
+		dictionarySelector.addListSelectionListener( (e) -> {
+			IPADictionary dictLanguage = (IPADictionary) dictionarySelector.getSelectedValue();
+			if(dictLanguage != null)
+				PrefHelper.getUserPreferences().put(PhonProperties.IPADICTIONARY_LANGUAGE, dictLanguage.getLanguage().toString());
+		});
+		dictionarySelector.setVisibleRowCount(5);
 
 		JPanel jpanel1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		jpanel1.setBorder(new TitledBorder("Dictionary Language"));
-		jpanel1.add(cmbDictionaryLanguage);
+		jpanel1.add(new JScrollPane(dictionarySelector));
+		SwingUtilities.invokeLater(() -> {
+			dictionarySelector.ensureIndexIsVisible(dictionarySelector.getLanguageIndex(dictLang));
+		});
 
 		cmbSyllabifierLanguage = new SyllabifierComboBox();
 		cmbSyllabifierLanguage.addItemListener(new SyllabifierLanguageListener());
@@ -179,16 +188,6 @@ public class EditorPrefsPanel extends PrefsPanel {
 			}
 		}
 
-	}
-
-	private class DictionaryLanguageListener implements ItemListener {
-		@Override
-		public void itemStateChanged(ItemEvent e) {
-			if(e.getStateChange() != ItemEvent.SELECTED) return;
-
-			Language dictLanguage = (Language)e.getItem();
-			PrefHelper.getUserPreferences().put(PhonProperties.IPADICTIONARY_LANGUAGE, dictLanguage.toString());
-		}
 	}
 	
 	private class SyllabifierLanguageListener implements ItemListener {
