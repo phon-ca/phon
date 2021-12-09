@@ -4,7 +4,6 @@ import ca.phon.ipadictionary.*;
 import ca.phon.util.Language;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,7 +32,7 @@ public class IPADictionarySelector extends JList<IPADictionary> {
 		availableDicts = dictList;
 
 		setModel(new IPADictionaryListModel());
-		setCellRenderer(new IPADictionaryListCellRenderer());
+		setCellRenderer(new IPADictionaryCellRenderer());
 	}
 
 	public int getLanguageIndex(Language lang) {
@@ -76,22 +75,6 @@ public class IPADictionarySelector extends JList<IPADictionary> {
 		@Override
 		public IPADictionary getElementAt(int index) {
 			return availableDicts.get(index);
-		}
-
-	}
-
-	private class IPADictionaryListCellRenderer extends DefaultListCellRenderer {
-
-		@Override
-		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-			JLabel retVal = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-
-			if(value instanceof IPADictionary) {
-				IPADictionary dict = (IPADictionary) value;
-				retVal.setText(dict.getName() + " (" + dict.getLanguage().toString() + ")");
-			}
-
-			return retVal;
 		}
 
 	}

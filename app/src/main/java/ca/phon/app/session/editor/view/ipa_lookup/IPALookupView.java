@@ -18,6 +18,8 @@ package ca.phon.app.session.editor.view.ipa_lookup;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.*;
 import javax.swing.text.*;
@@ -54,7 +56,7 @@ public class IPALookupView extends EditorView {
 	
 	private JToolBar toolbar;
 	
-	private JComboBox<Language> langBox;
+	private JComboBox<IPADictionary> dictBox;
 	
 	private JButton autoTranscribeBtn;
 	
@@ -109,14 +111,9 @@ public class IPALookupView extends EditorView {
 	private void setupToolbar() {
 		toolbar = new JToolBar();
 
-		Set<Language> langs = IPADictionaryLibrary.getInstance().availableLanguages();
-		Language langArray[] = langs.toArray(new Language[0]);
-		Arrays.sort(langArray, new LanguageComparator());
-		final Language defLang = IPADictionaryLibrary.getInstance().getDefaultLanguage();
-		langBox = new JComboBox<>(langArray);
-		langBox.setRenderer(new LanguageCellRenderer());
-		langBox.setSelectedItem(defLang);
-		langBox.addItemListener(new ItemListener() {
+		dictBox = new JComboBox<>();
+		dictBox.setRenderer(new IPADictionaryCellRenderer());
+		dictBox.addItemListener(new ItemListener() {
 			
 			@Override
 			public void itemStateChanged(ItemEvent e) {
@@ -125,6 +122,7 @@ public class IPALookupView extends EditorView {
 			}
 			
 		});
+		updateLangBox();
 
 		autoTranscribeBtn = new JButton(new AutoTranscribeCommand(this));
 		
@@ -133,7 +131,7 @@ public class IPALookupView extends EditorView {
 		exportIPABtn = new JButton(new ExportIPACommand(this));
 
 		toolbar.add(new JLabel("IPA Dictionary:"));
-		toolbar.add(langBox);
+		toolbar.add(dictBox);
 		toolbar.add(importIPABtn);
 		toolbar.add(exportIPABtn);
 		toolbar.addSeparator();
@@ -192,13 +190,15 @@ public class IPALookupView extends EditorView {
 			@Override
 			public void run() {
 				isUpdatingBox = true;
-				Set<Language> langs = IPADictionaryLibrary.getInstance().availableLanguages();
-				Language langArray[] = langs.toArray(new Language[0]);
-				Arrays.sort(langArray, new LanguageComparator());
+				Iterator<IPADictionary> dictItr = IPADictionaryLibrary.getInstance().availableDictionaries();
+				List<IPADictionary> availableDicts = new ArrayList<>();
+				while(dictItr.hasNext()) availableDicts.add(dictItr.next());
+				Collections.sort(availableDicts, Comparator.comparing(IPADictionary::getName));
+				dictBox.setModel(new DefaultComboBoxModel<>(availableDicts.toArray(new IPADictionary[0])));
+
 				final Language defLang = IPADictionaryLibrary.getInstance().getDefaultLanguage();
-				final int langIdx = Arrays.binarySearch(langArray, defLang);
-				langBox.setModel(new DefaultComboBoxModel(langArray));
-				langBox.setSelectedItem(lookupContext.getDictionary().getLanguage());
+				dictBox.setSelectedIndex(availableDicts.stream().map(IPADictionary::getLanguage)
+						.collect(Collectors.toList()).indexOf(lookupContext.getDictionary().getLanguage()));
 				isUpdatingBox = false;
 			}
 		};
@@ -209,14 +209,14 @@ public class IPALookupView extends EditorView {
 	}
 
 	public Language getSelectedDictionaryLanguage() {
-		return (Language) this.langBox.getSelectedItem();
+		return ((IPADictionary) this.dictBox.getSelectedItem()).getLanguage();
 	}
 	
 	public void onLanguageSwitch() {
 		if(isUpdatingBox) return;
-		final Language lang = (Language)langBox.getSelectedItem();
-		if(lang == null) return;
-		lookupContext.switchDictionary(lang.toString());
+		final IPADictionary dict = (IPADictionary) dictBox.getSelectedItem();
+		if(dict == null) return;
+		lookupContext.switchDictionary(dict.getLanguage().toString());
 		recordLookupPanel.setDictionary(lookupContext.getDictionary());
 	}
 	
@@ -276,37 +276,5 @@ public class IPALookupView extends EditorView {
 		}
 		
 	};
-	
-	private class LanguageComparator implements Comparator<Language> {
 
-		@Override
-		public int compare(Language o1, Language o2) {
-			String l1 = o1.getPrimaryLanguage().getName() + " (" + o1.toString() + ")";
-			String l2 = o2.getPrimaryLanguage().getName() + " (" + o2.toString() + ")";
-			return l1.compareTo(l2);
-		}
-		
-	}
-
-	private class LanguageCellRenderer extends DefaultListCellRenderer {
-
-		private static final long serialVersionUID = -5753923740573333306L;
-
-		@Override
-		public Component getListCellRendererComponent(JList list,
-				Object value, int index, boolean isSelected,
-				boolean cellHasFocus) {
-			final JLabel retVal = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected,
-					cellHasFocus);
-		
-			if(value != null) {
-				final Language lang = (Language)value;
-				final String text = lang.getPrimaryLanguage().getName() + " (" + lang.toString() + ")";
-				retVal.setText(text);
-			}
-			
-			return retVal;
-		}
-	
-	}
 }
