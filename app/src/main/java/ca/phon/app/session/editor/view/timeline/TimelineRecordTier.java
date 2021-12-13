@@ -1079,7 +1079,6 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 	@Override
 	public void setupContextMenu(MenuBuilder builder, boolean includeAccel) {
-
 		final PhonUIAction copyAct = new PhonUIAction(this, "copy");
 		copyAct.putValue(PhonUIAction.NAME, "Copy record" + (getSelectionModel().getSelectedItemsCount()>1 ? "s" : ""));
 		copyAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Copy selected records");
@@ -1226,6 +1225,9 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		if(includeAccel)
 			shrinkSegmentsAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_K, KeyEvent.CTRL_DOWN_MASK));
 		builder.addItem(".", shrinkSegmentsAct);
+
+		builder.addSeparator(".", "other_actions");
+		builder.addItem(".", new DistributeRecordsAction(getParentView()));
 	}
 
 	private void setupSplitModeMenu(MenuBuilder builder, boolean includeAccel) {
