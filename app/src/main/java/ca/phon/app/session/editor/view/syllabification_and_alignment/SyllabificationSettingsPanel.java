@@ -21,6 +21,7 @@ import java.util.List;
 
 import javax.swing.*;
 
+import ca.phon.ui.SyllabifierSelector;
 import com.jgoodies.forms.layout.*;
 
 import ca.phon.session.*;
@@ -28,13 +29,14 @@ import ca.phon.syllabifier.*;
 import ca.phon.util.*;
 
 public class SyllabificationSettingsPanel extends JPanel {
-	
-	private static final long serialVersionUID = -2762436673337886614L;
 
-	private JComboBox<Syllabifier> targetSyllabifierBox;
-	
-	private JComboBox<Syllabifier> actualSyllabifierBox;
-	
+	public final static String IPA_TARGET_SYLLABIFIER_PROP = "_ipa_target_syllabifier_";
+
+	public final static String IPA_ACTUAL_SYLLABIFIER_PROP = "_ipa_actual_syllabifier_";
+
+	private SyllabifierSelector ipaTargetSelector;
+	private SyllabifierSelector ipaActualSelector;
+
 	private final SyllabifierInfo syllabifierInfo;
 
 	public SyllabificationSettingsPanel(SyllabifierInfo info) {
@@ -43,38 +45,55 @@ public class SyllabificationSettingsPanel extends JPanel {
 		
 		init();
 	}
-	
+
 	private void init() {
-		final FormLayout layout = new FormLayout("right:pref, fill:pref:grow", "5dlu, pref, 3dlu, pref, 5dlu");
-		setLayout(layout);
-		final CellConstraints cc = new CellConstraints();
-		
-		final SyllabifierLibrary library = SyllabifierLibrary.getInstance();
-		final Iterator<Syllabifier> syllabifiers = library.availableSyllabifiers();
-		final List<Syllabifier> syllabifierList = new ArrayList<Syllabifier>();
-		while(syllabifiers.hasNext()) syllabifierList.add(syllabifiers.next());
-		Collections.sort(syllabifierList, new SyllabifierComparator());
-		
-		this.targetSyllabifierBox = new JComboBox<>(syllabifierList.toArray(new Syllabifier[0]));
-		final Syllabifier selectedSyllabifier = library.getSyllabifierForLanguage(
-				syllabifierInfo.getSyllabifierLanguageForTier(SystemTierType.IPATarget.getName()));
-		this.targetSyllabifierBox.setSelectedItem(selectedSyllabifier);
-		this.targetSyllabifierBox.setRenderer(new SyllabifierCellRenderer());
-		
-		this.actualSyllabifierBox = new JComboBox<>(syllabifierList.toArray(new Syllabifier[0]));
-		this.actualSyllabifierBox.setSelectedItem(library.getSyllabifierForLanguage(
-				syllabifierInfo.getSyllabifierLanguageForTier(SystemTierType.IPAActual.getName())));
-		this.actualSyllabifierBox.setRenderer(new SyllabifierCellRenderer());
-		
-		add(new JLabel("Target syllabifier:"), cc.xy(1,2));
-		add(targetSyllabifierBox, cc.xy(2,2));
-		
-		add(new JLabel("Actual syllabifier:"), cc.xy(1,4));
-		add(actualSyllabifierBox, cc.xy(2,4));
+		SyllabifierInfo info = getSyllabifierInfo();
+
+		Language ipaTargetLang = info.getSyllabifierLanguageForTier(SystemTierType.IPATarget.getName());
+		if(ipaTargetLang == null)
+			ipaTargetLang = SyllabifierLibrary.getInstance().defaultSyllabifierLanguage();
+		Language ipaActualLang = info.getSyllabifierLanguageForTier(SystemTierType.IPAActual.getName());
+		if(ipaActualLang == null)
+			ipaActualLang = SyllabifierLibrary.getInstance().defaultSyllabifierLanguage();
+
+		ipaTargetSelector = new SyllabifierSelector();
+		ipaTargetSelector.setSelectedLanguage(ipaTargetLang);
+		ipaTargetSelector.addListSelectionListener( (e) -> {
+			Language currentSyllabifier = info.getSyllabifierLanguageForTier(SystemTierType.IPATarget.getName());
+			info.setSyllabifierLanguageForTier(SystemTierType.IPATarget.getName(), ipaTargetSelector.getSelectedSyllabifier().getLanguage());
+			firePropertyChange(IPA_ACTUAL_SYLLABIFIER_PROP, currentSyllabifier, ipaTargetSelector.getSelectedSyllabifier().getLanguage() );
+		});
+
+		ipaActualSelector = new SyllabifierSelector();
+		ipaActualSelector.setSelectedLanguage(ipaActualLang);
+		ipaActualSelector.addListSelectionListener( (e) -> {
+			Language currentSyllabifier = info.getSyllabifierLanguageForTier(SystemTierType.IPAActual.getName());
+			info.setSyllabifierLanguageForTier(SystemTierType.IPAActual.getName(), ipaActualSelector.getSelectedSyllabifier().getLanguage());
+			firePropertyChange(IPA_ACTUAL_SYLLABIFIER_PROP, currentSyllabifier, ipaActualSelector.getSelectedSyllabifier().getLanguage() );
+		});
+
+		SwingUtilities.invokeLater( () -> {
+			ipaTargetSelector.ensureIndexIsVisible(ipaTargetSelector.getSelectedIndex());
+			ipaActualSelector.ensureIndexIsVisible(ipaActualSelector.getSelectedIndex());
+		});
+
+		JScrollPane ipaTargetScroller = new JScrollPane(ipaTargetSelector);
+		ipaTargetScroller.setBorder(BorderFactory.createTitledBorder("IPA Target Syllabifier"));
+
+		JScrollPane ipaActualScroller = new JScrollPane(ipaActualSelector);
+		ipaActualScroller.setBorder(BorderFactory.createTitledBorder("IPA Actual Syllabifier"));
+
+		setLayout(new GridLayout(2, 1));
+		add(ipaTargetScroller);
+		add(ipaActualScroller);
+	}
+
+	public SyllabifierInfo getSyllabifierInfo() {
+		return this.syllabifierInfo;
 	}
 
 	public Language getSelectedTargetSyllabifier() {
-		final Syllabifier syllabifier = (Syllabifier)targetSyllabifierBox.getSelectedItem();
+		final Syllabifier syllabifier = ipaTargetSelector.getSelectedSyllabifier();
 		if(syllabifier != null) {
 			return syllabifier.getLanguage();
 		}
@@ -82,40 +101,11 @@ public class SyllabificationSettingsPanel extends JPanel {
 	}
 	
 	public Language getSelectedActualSyllabifier() {
-		final Syllabifier syllabifier = (Syllabifier)actualSyllabifierBox.getSelectedItem();
+		final Syllabifier syllabifier = ipaActualSelector.getSelectedSyllabifier();
 		if(syllabifier != null) {
 			return syllabifier.getLanguage();
 		}
 		return null;
 	}
-	
-	private class SyllabifierComparator implements Comparator<Syllabifier> {
 
-		@Override
-		public int compare(Syllabifier o1, Syllabifier o2) {
-			return o1.toString().toLowerCase().compareTo(o2.toString().toLowerCase());
-		}
-		
-	}
-	
-	private class SyllabifierCellRenderer extends DefaultListCellRenderer {
-
-		@Override
-		public Component getListCellRendererComponent(JList list,
-				Object value, int index, boolean isSelected,
-				boolean cellHasFocus) {
-			final JLabel retVal = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected,
-					cellHasFocus);
-			
-			if(value != null) {
-				final Syllabifier syllabifier = (Syllabifier)value;
-				final String text = syllabifier.getName() + " (" + syllabifier.getLanguage().toString() + ")";
-				retVal.setText(text);
-			}
-			
-			return retVal;
-		}
-		
-	}
-	
 }

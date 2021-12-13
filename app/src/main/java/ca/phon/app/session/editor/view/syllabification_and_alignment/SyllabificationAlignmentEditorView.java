@@ -22,7 +22,9 @@ import java.util.List;
 
 import javax.swing.*;
 
-import ca.phon.util.PrefHelper;
+import ca.phon.syllabifier.SyllabifierLibrary;
+import ca.phon.ui.*;
+import ca.phon.util.*;
 import com.jgoodies.forms.layout.*;
 
 import ca.phon.app.session.editor.*;
@@ -49,7 +51,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 	private final static String VIEW_NAME = "Syllabification & Alignment";
 
 	private JPanel topPanel;
-	private JButton settingsBtn;
+	private DropDownButton settingsBtn;
 
 	private final static String SHOW_TARGET_IPA = "SyllabificationAndAlignmentEditorView.showTargetIPA";
 	private final static boolean DEFAULT_SHOW_TARGET_IPA = true;
@@ -94,8 +96,27 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 				"pref, pref, pref, pref, pref, pref, fill:pref:grow, right:pref", "pref");
 		topPanel = new JPanel(topLayout);
 
-		final SyllabificationSettingsCommand settingsAct = new SyllabificationSettingsCommand(getEditor(), this);
-		settingsBtn = new JButton(settingsAct);
+		ImageIcon sigmaIcn = IconManager.getInstance().getIcon("misc/small_sigma", IconSize.SMALL);
+
+		final PhonUIAction syllabifierSettingsAct = new PhonUIAction(this, "noop");
+		syllabifierSettingsAct.putValue(PhonUIAction.NAME, "Syllabifier settings");
+		syllabifierSettingsAct.putValue(PhonUIAction.SMALL_ICON, sigmaIcn);
+		syllabifierSettingsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select syllabifier settings for session");
+
+		final SyllabifierInfo syllabifierInfo = getEditor().getSession().getExtension(SyllabifierInfo.class);
+		SyllabificationSettingsPanel popupPanel = new SyllabificationSettingsPanel(syllabifierInfo);
+		popupPanel.addPropertyChangeListener(SyllabificationSettingsPanel.IPA_TARGET_SYLLABIFIER_PROP, (e) -> {
+			syllabifierInfo.saveInfo(getEditor().getSession());
+		});
+		popupPanel.addPropertyChangeListener(SyllabificationSettingsPanel.IPA_ACTUAL_SYLLABIFIER_PROP, (e) -> {
+			syllabifierInfo.saveInfo(getEditor().getSession());
+		});
+		syllabifierSettingsAct.putValue(DropDownButton.BUTTON_POPUP, popupPanel);
+		syllabifierSettingsAct.putValue(DropDownButton.ARROW_ICON_GAP, 0);
+		syllabifierSettingsAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
+
+		settingsBtn = new DropDownButton(syllabifierSettingsAct);
+		settingsBtn.setOnlyPopup(true);
 
 		final PhonUIAction toggleTargetAct = new PhonUIAction(this, "toggleCheckbox");
 		toggleTargetAct.putValue(PhonUIAction.NAME, SystemTierType.TargetSyllables.getName());
