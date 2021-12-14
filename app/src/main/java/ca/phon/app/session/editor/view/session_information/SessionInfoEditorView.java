@@ -22,9 +22,11 @@ import java.io.*;
 import java.time.*;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import javax.swing.event.*;
 import javax.swing.undo.*;
 
+import ca.phon.media.MediaLocator;
 import org.apache.commons.lang3.*;
 import org.jdesktop.swingx.*;
 
@@ -358,6 +360,7 @@ public class SessionInfoEditorView extends EditorView {
 			mediaLocationField.setText("");
 			mediaLocationField.getTextField().setState(FieldState.PROMPT);
 		}
+		updateMediaFieldStatus();
 		
 		languageField.getDocument().removeDocumentListener(languageFieldListener);
 		languageField.setText(session.getLanguage());
@@ -433,6 +436,19 @@ public class SessionInfoEditorView extends EditorView {
 			act.actionPerformed(new ActionEvent(this, 0, null));
 		}
 	}
+
+	private void updateMediaFieldStatus() {
+		MediaLocator locator = new MediaLocator();
+		File mediaFile = locator.findMediaFile(mediaLocationField.getText(), getEditor().getProject(), getEditor().getSession().getCorpus());
+
+		if(mediaFile == null || !mediaFile.exists() || !mediaFile.canRead()) {
+			mediaLocationField.setToolTipText("Unable to open file");
+			mediaLocationField.setBorder(BorderFactory.createLineBorder(Color.red, 2));
+		} else {
+			mediaLocationField.setToolTipText("");
+			mediaLocationField.setBorder(BorderFactory.createEmptyBorder());
+		}
+	}
 	
 	/** Editor actions */
 	@RunOnEDT
@@ -484,9 +500,9 @@ public class SessionInfoEditorView extends EditorView {
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			if(updatingMediaLocation) return;
-//			final File mediaFile = mediaLocationField.getSelectedFile();
-//			final String mediaLoc = (mediaFile == null ? null : mediaFile.getPath());
-			
+
+			updateMediaFieldStatus();
+
 			final MediaLocationEdit edit = new MediaLocationEdit(getEditor(), mediaLocationField.getText());
 			edit.setSource(this);
 			getEditor().getUndoSupport().postEdit(edit);
