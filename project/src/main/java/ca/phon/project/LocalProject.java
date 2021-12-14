@@ -28,7 +28,6 @@ import javax.xml.parsers.*;
 import javax.xml.stream.*;
 import javax.xml.xpath.*;
 
-import org.apache.logging.log4j.Level;
 import org.w3c.dom.*;
 import org.xml.sax.*;
 
@@ -602,7 +601,7 @@ public class LocalProject implements Project, ProjectRefresh {
 		final UUID lock = UUID.randomUUID();
 		sessionLocks.put(key, lock);
 
-		final ProjectEvent pe = ProjectEvent.newSessionChagnedEvent(corpus, session);
+		final ProjectEvent pe = ProjectEvent.newSessionChangedEvent(corpus, session);
 		fireProjectWriteLocksChanged(pe);
 
 		return lock;
@@ -638,7 +637,7 @@ public class LocalProject implements Project, ProjectRefresh {
 		checkSessionWriteLock(corpus, session, writeLock);
 		sessionLocks.remove(sessionLoc);
 
-		final ProjectEvent pe = ProjectEvent.newSessionChagnedEvent(corpus, session);
+		final ProjectEvent pe = ProjectEvent.newSessionChangedEvent(corpus, session);
 		fireProjectWriteLocksChanged(pe);
 	}
 

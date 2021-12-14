@@ -168,7 +168,7 @@ public class ProjectEvent {
 	 *
 	 * @return
 	 */
-	public static ProjectEvent newSessionChagnedEvent(String corpus, String session) {
+	public static ProjectEvent newSessionChangedEvent(String corpus, String session) {
 		final ProjectEvent retVal = new ProjectEvent(ProjectEventType.SESSION_CHANGED);
 		retVal.setProperty(ProjectEventProp.CORPUS, corpus);
 		retVal.setProperty(ProjectEventProp.SESSION, session);

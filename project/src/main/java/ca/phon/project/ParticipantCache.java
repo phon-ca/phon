@@ -50,11 +50,33 @@ public class ParticipantCache {
 		return retVal;
 	};
 
+	private void resetCache() {
+		participantSet.clear();
+	}
+
 	public ParticipantCache(Project project) {
 		super();
 		this.project = project;
 		this.participantSet = Collections.synchronizedSet(new TreeSet<>(participantComparator));
 		this.sessionMap = Collections.synchronizedMap(new HashMap<>());
+
+		this.project.addProjectListener(new ProjectListener() {
+			@Override
+			public void projectStructureChanged(ProjectEvent pe) {
+				resetCache();
+			}
+
+			@Override
+			public void projectDataChanged(ProjectEvent pe) {
+
+			}
+
+			@Override
+			public void projectWriteLocksChanged(ProjectEvent pe) {
+				if(pe.getEventType() == ProjectEvent.ProjectEventType.SESSION_CHANGED)
+					resetCache();
+			}
+		});
 	}
 
 	public void setProject(Project project) {
