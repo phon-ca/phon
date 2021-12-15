@@ -72,7 +72,9 @@ import ca.phon.worker.*;
 public class ProjectWindow extends CommonModuleFrame {
 
 	private static final long serialVersionUID = -4771564010497815447L;
-	
+
+	private DialogHeader header;
+
 	private JPanel projectInfoPanel;
 	private JLabel projectFolderLabel;
 	private JLabel projectMediaFolderLabel;
@@ -105,9 +107,6 @@ public class ProjectWindow extends CommonModuleFrame {
 	private JXBusyLabel busyLabel;
 	private JLabel statusLabel;
 
-	/** Project path (used to load the project) */
-	private String projectLoadPath = new String();
-
 	private final ProjectListener myProjectListener;
 
 	private ProjectGitController gitController;
@@ -130,9 +129,6 @@ public class ProjectWindow extends CommonModuleFrame {
 
 		myProjectListener = new ProjectWindowProjectListener(this);
 		project.addProjectListener(myProjectListener);
-
-		this.projectLoadPath = projectPath;
-
 		this.setTitle("Phon : " + project.getName() + " : Project Manager");
 
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -548,7 +544,7 @@ public class ProjectWindow extends CommonModuleFrame {
 		String projectName = null;
 		projectName = getProject().getName();
 
-		DialogHeader header = new DialogHeader(projectName,"");
+		header = new DialogHeader(projectName,"");
 		header.replaceBottomLabel(projectInfoPanel);
 		
 		add(header, BorderLayout.NORTH);
@@ -593,7 +589,7 @@ public class ProjectWindow extends CommonModuleFrame {
 		++gbc.gridx;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.weightx = 1.0;
-		projectFolderLabel = new JLabel(projectLoadPath);
+		projectFolderLabel = new JLabel(getProject().getLocation());
 		projectFolderLabel.setForeground(Color.blue);
 		projectFolderLabel.setToolTipText("Click to show project folder");
 		projectFolderLabel.addMouseListener(new MouseAdapter() {
@@ -602,7 +598,7 @@ public class ProjectWindow extends CommonModuleFrame {
 			public void mouseClicked(MouseEvent me) {
 				if(Desktop.isDesktopSupported()) {
 					try {
-						Desktop.getDesktop().open(new File(projectLoadPath));
+						Desktop.getDesktop().open(new File(getProject().getLocation()));
 					} catch (IOException e) {
 						LogUtil.warning(e);
 						Toolkit.getDefaultToolkit().beep();
@@ -612,7 +608,7 @@ public class ProjectWindow extends CommonModuleFrame {
 
 		});
 		
-		ImageIcon folderIcn = IconManager.getInstance().getSystemIconForPath(projectLoadPath, "places/folder", IconSize.SMALL);
+		ImageIcon folderIcn = IconManager.getInstance().getSystemIconForPath(getProject().getLocation(), "places/folder", IconSize.SMALL);
 		DropDownIcon folderDdIcn = new DropDownIcon(folderIcn, 0, SwingConstants.BOTTOM);
 		folderDdIcn.setArrowPainted(false);
 		projectFolderLabel.setIcon(folderDdIcn);
@@ -697,12 +693,17 @@ public class ProjectWindow extends CommonModuleFrame {
 			public void projectDataChanged(ProjectEvent pe) {
 				if(pe.getEventType() == ProjectEventType.PROJECT_MEDIAFOLDER_CHANGED) {
 					updateProjectMediaLabel();
+				} else if(pe.getEventType() == ProjectEventType.PROJECT_NAME_CHANGED) {
+					updateProjectNameAndLocation();
 				}
 			}
 		});
 	}
 	
 	private void setupProjectMenu(MenuBuilder builder) {
+		final RenameProjectAction renameProjectAction = new RenameProjectAction(this);
+		builder.addItem(".", renameProjectAction);
+
 		// refresh lists
 		final RefreshAction refreshItem = new RefreshAction(this);
 		builder.addItem(".", refreshItem);
@@ -770,7 +771,15 @@ public class ProjectWindow extends CommonModuleFrame {
 			}
 		});
 	}
-	
+
+	private void updateProjectNameAndLocation() {
+		this.setTitle("Phon : " + getProject().getName() + " : Project Manager");
+		if(header != null)
+			header.setHeaderText(getProject().getName());
+		projectFolderLabel.setText(getProject().getLocation());
+		updateProjectMediaLabel();
+	}
+
 	private void updateProjectMediaLabel() {
 		File projectMediaFolder = new File(getProject().getProjectMediaFolder());
 		File absoluteProjectMediaFolder = projectMediaFolder.isAbsolute() ? projectMediaFolder : new File(getProject().getLocation(), getProject().getProjectMediaFolder());

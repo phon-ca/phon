@@ -21,6 +21,7 @@ import java.nio.file.*;
 import java.nio.file.attribute.*;
 import java.time.*;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.stream.*;
 
 import javax.xml.bind.*;
@@ -51,7 +52,7 @@ public class LocalProject implements Project, ProjectRefresh {
 	 * Project folder
 	 *
 	 */
-	private final File projectFolder;
+	private File projectFolder;
 	
 	private Properties properties;
 
@@ -115,6 +116,7 @@ public class LocalProject implements Project, ProjectRefresh {
 		checkProperties();
 		
 		putExtension(ProjectRefresh.class, this);
+		putExtension(ChangeProjectLocation.class, new LocalProjectChangeLocation(this));
 	}
 	
 	private void loadProperties() {
@@ -268,6 +270,11 @@ public class LocalProject implements Project, ProjectRefresh {
 	public void setName(String name) {
 		final String oldName = getName();
 		properties.put(PROJECT_NAME_PROP, name);
+		try {
+			saveProperties();
+		} catch (IOException e) {
+			LOGGER.error(e);
+		}
 
 		final ProjectEvent event = ProjectEvent.newNameChangedEvent(oldName, name);
 		fireProjectDataChanged(event);
@@ -1003,6 +1010,17 @@ public class LocalProject implements Project, ProjectRefresh {
 	@Override
 	public String getLocation() {
 		return projectFolder.getAbsolutePath();
+	}
+
+	/**
+	 * Local projects allow changing project location through the {@link ChangeProjectLocation}
+	 * extension
+	 *
+	 * @param location
+	 */
+	void setLocation(String location) {
+		File newLocation = new File(location);
+		this.projectFolder = newLocation;
 	}
 
 	@Override
