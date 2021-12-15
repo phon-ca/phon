@@ -23,7 +23,7 @@
             </extensions>
         </node>
         <ogcn:macro id="5ce06501" name="MarkNuclei" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="56dc73f2">
+            <graph id="4db3835b">
                 <node id="1e0dcec" name="MarkNuclei #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
                         <oga:settings>
@@ -62,7 +62,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="4b695456" name="MarkCoda" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="11121d77">
+            <graph id="5a5cb3b0">
                 <node id="36fd9910" name="MarkCoda #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
                         <oga:settings>
@@ -83,7 +83,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="2daac9" name="MaxCoda" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="3779bf45">
+            <graph id="2d2715a9">
                 <node id="50694453" name="MaxCoda #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
                         <oga:settings>
@@ -100,7 +100,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="40ced119" name="MarkOnset" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="5da6ccfe">
+            <graph id="7e73f8bc">
                 <node id="18f64bb4" name="MarkOnset #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
                         <oga:settings>
@@ -121,7 +121,7 @@
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="2ba5634d" name="MaxOnset" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="22acf37c">
+            <graph id="e220abd">
                 <node id="313e54e7" name="MaxOnset #1" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
                     <extensions>
                         <oga:settings>
@@ -137,12 +137,21 @@
                 <oga:meta x="454" y="221"/>
             </extensions>
         </ogcn:macro>
+        <node id="2f74166f" name="Fix Coda After Tone" type="class:ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode">
+            <extensions>
+                <oga:settings>
+                    <oga:property key="ca.phon.syllabifier.opgraph.nodes.MarkConstituentNode.phonex"><![CDATA['.+[¹²³⁴⁵⁶⁷⁸⁹⁰]' (O=\c:C)]]></oga:property>
+                </oga:settings>
+                <oga:meta x="245" y="325"/>
+            </extensions>
+        </node>
         <link dest="77e82a22" destField="ipa" source="6baa9f9d" sourceField="obj"/>
         <link dest="5ce06501" destField="ipa" source="77e82a22" sourceField="ipa"/>
         <link dest="2ba5634d" destField="ipa" source="40ced119" sourceField="ipa"/>
         <link dest="2daac9" destField="ipa" source="4b695456" sourceField="ipa"/>
         <link dest="4b695456" destField="ipa" source="5ce06501" sourceField="ipa"/>
         <link dest="40ced119" destField="ipa" source="2daac9" sourceField="ipa"/>
+        <link dest="2f74166f" destField="ipa" source="2ba5634d" sourceField="ipa"/>
         <extensions>
             <ops:settings lang="cmn" name="Mandarin Chinese"/>
             <nes:settings type="ca.phon.app.opgraph.syllabifier.OpGraphSyllabifierEditorModel"/>
