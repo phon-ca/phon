@@ -78,8 +78,8 @@ public class RenameProjectDialog extends JDialog {
 	}
 
 	public void onRenameProject() {
-		String projectName = projectNameField.getText();
-		if(projectName.trim().length() == 0) {
+		String projectName = projectNameField.getText().trim();
+		if(projectName.length() == 0) {
 			ToastFactory.makeToast("Invalid project name").start(projectNameField);
 			Toolkit.getDefaultToolkit().beep();
 			return;
