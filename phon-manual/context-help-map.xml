@@ -52,10 +52,10 @@
    <appContext helpID="feature_listing" path="transcription/features.html"/>
    <appContext helpID="introduction" path="phonex/phonex_introduction.html"/>
    <appContext helpID="concept_pjp_4nm_gg" path="phonex/phone_matchers.html"/>
-   <appContext helpID="syllable_matcher" path="syllable_matcher.html"/>
    <appContext helpID="concept_qb1_dhn_gg" path="phonex/boundaries.html"/>
    <appContext helpID="concept_ddz_ttt_gg" path="phonex/quantifiers.html"/>
    <appContext helpID="groups" path="phonex/groups.html"/>
+   <appContext helpID="syllable_matcher" path="syllable_matcher.html"/>
    <appContext helpID="comments" path="phonex/comments.html"/>
    <appContext helpID="concept_tpv_vc3_gg" path="phonex/constructs.html"/>
    <appContext helpID="concept_zkq_nnm_gg" path="phonex/plug-ins.html"/>
