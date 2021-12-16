@@ -99,6 +99,12 @@
                     selecting the record to be deleted.)</p>
             </body>
         </topic>
+        <topic id="distribute-records">
+            <title>Distribute unsegmented records</title>
+            <body>
+                <p>Distribute unsegmented records evenly across the space between existing records while maintaining record order.</p>
+            </body>
+        </topic>
         <topic id="media-player-position">
             <title>Media Player Position</title>
             <body>
