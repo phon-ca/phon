@@ -34,11 +34,11 @@
                             </scenarioAssociation>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>src/main/xslt/ipa2dita.xsl</String>
+                                    <String>src/main/xslt/features2dita.xsl</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
-                                        <String>ipa2dita</String>
+                                        <String>features2dita</String>
                                     </list>
                                 </field>
                                 <field name="scenarioTypes">
@@ -54,11 +54,11 @@
                             </scenarioAssociation>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>src/main/xslt/features2dita.xsl</String>
+                                    <String>src/main/xslt/ipa2dita.xsl</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
-                                        <String>features2dita</String>
+                                        <String>ipa2dita</String>
                                     </list>
                                 </field>
                                 <field name="scenarioTypes">

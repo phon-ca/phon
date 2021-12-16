@@ -70,10 +70,10 @@
         <topicref href="phonex/phonex_introduction.md" format="markdown"/>
         <topichead navtitle="Language Reference">
             <topicref href="phonex/phone_matchers.dita"/>
-            <topicref href="syllable_matcher.dita"/>
             <topicref href="phonex/boundaries.dita"/>
             <topicref href="phonex/quantifiers.dita"/>
             <topicref href="phonex/groups.md" format="markdown"/>
+            <topicref href="syllable_matcher.dita"/>
             <topicref href="phonex/comments.md" format="markdown"/>
             <topicref href="phonex/constructs.dita"/>
             <topichead navtitle="Supplementary Matchers">
