@@ -14,16 +14,16 @@
                         <scenarioAssociation-array>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>src/main/dita/phon_application_manual.ditamap</String>
+                                    <String>src/main/xslt/ipa2dita.xsl</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
-                                        <String>PhonManual - Web</String>
+                                        <String>ipa2dita</String>
                                     </list>
                                 </field>
                                 <field name="scenarioTypes">
                                     <list>
-                                        <String>DITAMAP</String>
+                                        <String>XSL</String>
                                     </list>
                                 </field>
                                 <field name="scenarioStorageLocations">
@@ -54,16 +54,16 @@
                             </scenarioAssociation>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>src/main/xslt/ipa2dita.xsl</String>
+                                    <String>src/main/dita/phon_application_manual.ditamap</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
-                                        <String>ipa2dita</String>
+                                        <String>PhonManual - Web</String>
                                     </list>
                                 </field>
                                 <field name="scenarioTypes">
                                     <list>
-                                        <String>XSL</String>
+                                        <String>DITAMAP</String>
                                     </list>
                                 </field>
                                 <field name="scenarioStorageLocations">
