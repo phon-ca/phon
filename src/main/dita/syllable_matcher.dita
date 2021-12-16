@@ -4,26 +4,29 @@
     <title>Syllable Matcher</title>
     <body>
         <p>The syllable matcher, denoted by the small character sigma <codeph>σ</codeph> (Unicode
-            character U+03C3), will match a syllable, or the remainder of a syllable. Data must be
-            correctly syllabified (see <xref
-                href="session_editor/syllabification_and_alignment_view.dita"/>) for this operation
-            to work correctly. To type the syllable matcher in expressions, use the autocomplete
-            feature available by pressing <userinput>Tab</userinput> inside phonex input fields.
-            This matcher cannot backtrack, but a constituent range may be specified.</p>
+            character U+03C3), will match a syllable, or the remainder of a syllable. IPA
+            transcripts must be correctly syllabified (see <xref
+                href="session_editor/syllabification_and_alignment_view.dita"/>) for this matcher to
+            work correctly. To type the syllable matcher in expressions use the autocomplete feature
+            available by pressing <userinput>Tab</userinput> inside phonex input fields.</p>
         <p>A range of syllable constituent types may be specified to restrict the portion of the
-            syllable matched. The range of contituent types is specified using the following
-            syntax:<codeblock>σ/X..Y/</codeblock>Where <i>X</i> and <i>Y</i> are single character
-            consituent type ids from the list:<ul id="ul_inl_b1y_xrb">
+            syllable potentially matched. The range of constituent types is specified using the
+            following syntax:<codeblock>σ/X..Y/</codeblock>Where <i>X</i> and <i>Y</i> are single
+            character constituent type ids from the list:<ul id="ul_inl_b1y_xrb">
                 <li><codeph>S</codeph> - syllable stress</li>
                 <li><codeph>L</codeph> - left appendix</li>
                 <li><codeph>O</codeph> - onset (include OEHS)</li>
                 <li><codeph>N</codeph> - nucleus</li>
                 <li><codeph>C</codeph> - coda</li>
                 <li><codeph>R</codeph> - right appendix</li>
-            </ul></p>
+            </ul>Including a constituent type in the range does not necessarily mean that the
+            matched portion or the transcript must include that constituent type.</p>
         <p>Examples:<ul id="ul_n2j_5xx_xrb">
                 <li>Match a single syllable (including stress):<codeblock>σ</codeblock></li>
                 <li>Match one or more syllables (i.e., any word):<codeblock>σ+</codeblock></li>
+                <li>Match a poriton of a syllable from the onset to the nucleus (i.e., do not
+                    include stress). Both the onset and nucleus characters are optional (may not
+                    exist in the syllable.)<codeblock>σ/O..N/</codeblock></li>
                 <li>Match a syllable which begins with one or more onsets, here the syllable matcher
                     takes on the 'remainder of' action and will match all phones from the syllable
                         rhyme.<codeblock>\c:O+σ</codeblock><p>Below is the same expression with
