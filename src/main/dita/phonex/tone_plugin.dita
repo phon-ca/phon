@@ -8,9 +8,10 @@
    argument is accepted denoting the allowed tones accepted, with multiple allowed values separated
    by a '|'. The numbers 0-9 are used to indicate tone number. If the list of tone numbers is
    preceeded by the word 'not' then the meaning is negated.</p>
-   <example><p>Search for a vowel with tone 214 <codeblock>\v:tone("214")</codeblock></p>
+   <example><p>Search for a vowel with tone 214 <codeblock>\v:tn("214")</codeblock></p>
    </example>
-  <example><p>Search for vowels which do not have tone number 214 or 51<codeblock>\v:tone("not 214|51")</codeblock></p>
+  <example><p>Search for vowels which do not have tone number 214 or
+    51<codeblock>\v:tn("not 214|51")</codeblock></p>
   </example>
  </conbody>
  <related-links>

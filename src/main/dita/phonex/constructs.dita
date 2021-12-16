@@ -53,6 +53,14 @@
        <entry>{<i>f<sub>0</sub></i>, <i>f<sub>1</sub></i>..., <i>f<sub>n</sub></i>}</entry>
        <entry>The phone with features <i>f<sub>0</sub></i> ... <i>f<sub>n</sub></i></entry>
       </row>
+      <row>
+       <entry>σ</entry>
+       <entry>Syllable, or the remainder of (see <xref href="../syllable_matcher.dita"/>)</entry>
+      </row>
+      <row>
+       <entry>σ/<i>X</i>..<i>Y</i>/</entry>
+       <entry>Portion of a syllable denoted by constituent type ids <i>X</i> and <i>Y</i></entry>
+      </row>
      </tbody>
     </tgroup>
    </table>

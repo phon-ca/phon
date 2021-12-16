@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="syllable_matcher">
+    <title>Syllable Matcher</title>
+    <body>
+        <p>The syllable matcher, denoted by the small character sigma <codeph>σ</codeph> (Unicode
+            character U+03C3), will match a syllable, or the remainder of a syllable. Data must be
+            correctly syllabified (see <xref
+                href="session_editor/syllabification_and_alignment_view.dita"/>) for this operation
+            to work correctly. To type the syllable matcher in expressions, use the autocomplete
+            feature available by pressing <userinput>Tab</userinput> inside phonex input fields.
+            This matcher cannot backtrack, but a constituent range may be specified.</p>
+        <p>A range of syllable constituent types may be specified to restrict the portion of the
+            syllable matched. The range of contituent types is specified using the following
+            syntax:<codeblock>σ/X..Y/</codeblock>Where <i>X</i> and <i>Y</i> are single character
+            consituent type ids from the list:<ul id="ul_inl_b1y_xrb">
+                <li><codeph>S</codeph> - syllable stress</li>
+                <li><codeph>L</codeph> - left appendix</li>
+                <li><codeph>O</codeph> - onset (include OEHS)</li>
+                <li><codeph>N</codeph> - nucleus</li>
+                <li><codeph>C</codeph> - coda</li>
+                <li><codeph>R</codeph> - right appendix</li>
+            </ul></p>
+        <p>Examples:<ul id="ul_n2j_5xx_xrb">
+                <li>Match a single syllable (including stress):<codeblock>σ</codeblock></li>
+                <li>Match one or more syllables (i.e., any word):<codeblock>σ+</codeblock></li>
+                <li>Match a syllable which begins with one or more onsets, here the syllable matcher
+                    takes on the 'remainder of' action and will match all phones from the syllable
+                        rhyme.<codeblock>\c:O+σ</codeblock><p>Below is the same expression with
+                        named groups 'O' and 'R' assigned to the portions of the syllable which are
+                        matched by each element in the
+                        expression:<codeblock>(O=\c:O+) (R=σ)</codeblock></p></li>
+                <li>Match a syllable which ends with one or more codas. This demonstrates the use of
+                    constituent range to match a portion of the syllable starting with the stress
+                    marker and ending with the nucleus:<codeblock>σ/S..N/\c:C+</codeblock></li>
+            </ul></p>
+    </body>
+</topic>
