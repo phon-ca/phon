@@ -2,7 +2,7 @@
 <!DOCTYPE html
   SYSTEM "about:legacy-compat">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:whc="http://www.oxygenxml.com/webhelp/components" xml:lang="en" lang="en" whc:version="22.0">
-    <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="description" content="The syllable matcher, denoted by the small character sigma σ (Unicode character U+03C3), will match a syllable, or the remainder of a syllable. Data must be correctly syllabified (see Syllabification ..." /><meta charset="UTF-8" /><meta name="copyright" content="(C) Copyright 2021" /><meta name="DC.rights.owner" content="(C) Copyright 2021" /><meta name="DC.type" content="topic" /><meta name="DC.format" content="HTML5" /><meta name="DC.identifier" content="syllable_matcher" /><title>Syllable Matcher</title><!--  Generated with Oxygen version 23.0, build number 2020111801.  --><meta name="wh-path2root" content="" /><meta name="wh-toc-id" content="syllable_matcher-d883e421" /><meta name="wh-source-relpath" content="syllable_matcher.dita" /><meta name="wh-out-relpath" content="syllable_matcher.html" />
+    <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="description" content="The syllable matcher, denoted by the small character sigma σ (Unicode character U+03C3), will match a syllable, or the remainder of a syllable. IPA transcripts must be correctly syllabified (see ..." /><meta charset="UTF-8" /><meta name="copyright" content="(C) Copyright 2021" /><meta name="DC.rights.owner" content="(C) Copyright 2021" /><meta name="DC.type" content="topic" /><meta name="DC.format" content="HTML5" /><meta name="DC.identifier" content="syllable_matcher" /><title>Syllable Matcher</title><!--  Generated with Oxygen version 23.0, build number 2020111801.  --><meta name="wh-path2root" content="" /><meta name="wh-toc-id" content="syllable_matcher-d883e421" /><meta name="wh-source-relpath" content="syllable_matcher.dita" /><meta name="wh-out-relpath" content="syllable_matcher.html" />
     <!-- Latest compiled and minified Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="./oxygen-webhelp/lib/bootstrap/css/bootstrap.min.css" />
     
@@ -121,25 +121,28 @@ $(document).ready( function () {
     <h1 class="- topic/title title topictitle1" id="ariaid-title1">Syllable Matcher</h1>
     <div class="- topic/body body">
         <p class="- topic/p p">The syllable matcher, denoted by the small character sigma <code class="+ topic/ph pr-d/codeph ph codeph">σ</code> (Unicode
-            character U+03C3), will match a syllable, or the remainder of a syllable. Data must be
-            correctly syllabified (see <a class="- topic/xref xref" href="session_editor/syllabification_and_alignment_view.html">Syllabification &amp; Alignment</a>) for this operation
-            to work correctly. To type the syllable matcher in expressions, use the autocomplete
-            feature available by pressing <kbd class="+ topic/ph sw-d/userinput ph userinput">Tab</kbd> inside phonex input fields.
-            This matcher cannot backtrack, but a constituent range may be specified.</p>
+            character U+03C3), will match a syllable, or the remainder of a syllable. IPA
+            transcripts must be correctly syllabified (see <a class="- topic/xref xref" href="session_editor/syllabification_and_alignment_view.html">Syllabification &amp; Alignment</a>) for this matcher to
+            work correctly. To type the syllable matcher in expressions use the autocomplete feature
+            available by pressing <kbd class="+ topic/ph sw-d/userinput ph userinput">Tab</kbd> inside phonex input fields.</p>
         <div class="- topic/p p">A range of syllable constituent types may be specified to restrict the portion of the
-            syllable matched. The range of contituent types is specified using the following
-            syntax:<pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>σ/X..Y/</code></pre>Where <em class="+ topic/ph hi-d/i ph i">X</em> and <em class="+ topic/ph hi-d/i ph i">Y</em> are single character
-            consituent type ids from the list:<ul class="- topic/ul ul" id="syllable_matcher__ul_inl_b1y_xrb">
+            syllable potentially matched. The range of constituent types is specified using the
+            following syntax:<pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>σ/X..Y/</code></pre>Where <em class="+ topic/ph hi-d/i ph i">X</em> and <em class="+ topic/ph hi-d/i ph i">Y</em> are single
+            character constituent type ids from the list:<ul class="- topic/ul ul" id="syllable_matcher__ul_inl_b1y_xrb">
                 <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">S</code> - syllable stress</li>
                 <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">L</code> - left appendix</li>
                 <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">O</code> - onset (include OEHS)</li>
                 <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">N</code> - nucleus</li>
                 <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">C</code> - coda</li>
                 <li class="- topic/li li"><code class="+ topic/ph pr-d/codeph ph codeph">R</code> - right appendix</li>
-            </ul></div>
+            </ul>Including a constituent type in the range does not necessarily mean that the
+            matched portion or the transcript must include that constituent type.</div>
         <div class="- topic/p p">Examples:<ul class="- topic/ul ul" id="syllable_matcher__ul_n2j_5xx_xrb">
                 <li class="- topic/li li">Match a single syllable (including stress):<pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>σ</code></pre></li>
                 <li class="- topic/li li">Match one or more syllables (i.e., any word):<pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>σ+</code></pre></li>
+                <li class="- topic/li li">Match a poriton of a syllable from the onset to the nucleus (i.e., do not
+                    include stress). Both the onset and nucleus characters are optional (may not
+                    exist in the syllable.)<pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>σ/O..N/</code></pre></li>
                 <li class="- topic/li li">Match a syllable which begins with one or more onsets, here the syllable matcher
                     takes on the 'remainder of' action and will match all phones from the syllable
                         rhyme.<pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>\c:O+σ</code></pre><div class="- topic/p p">Below is the same expression with
