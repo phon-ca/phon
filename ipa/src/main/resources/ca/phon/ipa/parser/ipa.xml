@@ -654,6 +654,10 @@
         <name>Latin Letter Small R with Fish Hook</name>
         <token>CONSONANT</token>
     </char>
+    <char value="&#x027f;">
+        <name>Latin Letter Small Turned R with Fishhook</name>
+        <token>CONSONANT</token>
+    </char>
     <char value="&#x0280;">
         <name>Latin Letter Small Capital R</name>
         <token>CONSONANT</token>
@@ -672,7 +676,11 @@
     </char>
     <char value="&#x0284;">
         <name>Latin Letter Small Dotless J with Stroke and Hook</name>
-        <token>CONSONANT</token>
+        <token>VOWEL</token>
+    </char>
+    <char value="&#x0285;">
+        <name>Latin Letter Small Squat Reversed Esh</name>
+        <token>VOWEL</token>
     </char>
     <char value="&#x0286;">
         <name>Latin Letter Small Esh with Curl</name>
