@@ -630,6 +630,12 @@
             <property name="Description">Near-close near-back rounded vowel</property>
             <property name="Unicode">0x28a</property>
         </cell>
+        <cell y="2" x="25" h="2" w="2">
+            <text>ɿ</text>
+            <property name="Name">Turned r with fishhook</property>
+            <property name="Description">Latin small letter turned r with fishhook</property>
+            <property name="Unicode">0x27f</property>
+        </cell>
         <cell y="4" x="2" h="2" w="2">
             <text>e</text>
             <property name="Name">Lower-case E</property>
@@ -665,6 +671,12 @@
             <property name="Name">Lower-case O</property>
             <property name="Description">Open-mid back rounded vowel</property>
             <property name="Unicode">0x6f</property>
+        </cell>
+        <cell y="4" x="25" h="2" w="2">
+            <text>ʅ</text>
+            <property name="Name">Small squat reversed Esh</property>
+            <property name="Description">Latin small squat reversed esh</property>
+            <property name="Unicode">0x0285</property>
         </cell>
         <cell y="6" x="13" h="2" w="2">
             <text>ə</text>
