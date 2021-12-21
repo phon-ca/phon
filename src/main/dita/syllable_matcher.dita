@@ -22,21 +22,23 @@
             </ul>Including a constituent type in the range does not necessarily mean that the
             matched portion or the transcript must include that constituent type.</p>
         <p>Examples:<ul id="ul_n2j_5xx_xrb">
-                <li>Match a single syllable (including stress):<codeblock>σ</codeblock>Note that
-                    this is the simplified version of specifying the constituent range as
-                        <codeph>/S..R/</codeph>:<codeblock>σ/S..R/</codeblock></li>
+                <li>Match a single syllable (including stress):<codeblock>σ</codeblock></li>
                 <li>Match one or more syllables (any word):<codeblock>σ+</codeblock></li>
+                <li>Use bounded quantifiers to match words of specific, minimium or maximum
+                    length:<codeblock>σ&lt;2,3></codeblock></li>
                 <li>Match a poriton of a syllable from the onset to the nucleus (do not include
                     stress). Both the onset and nucleus characters are optional (may not exist in
                     the syllable.)<codeblock>σ/O..N/</codeblock></li>
                 <li>Match a syllable which begins with one or more onsets, here the syllable matcher
                     takes on the 'remainder of' action and will match all phones from the syllable
-                        rhyme.<codeblock>\c:O+σ</codeblock><p>Below is the same expression with named groups 'O' and 'R' assigned to the portions of the
-                        syllable which are matched by each element in the
-                        expression:<codeblock>(O=\c:O+)(R=σ)</codeblock></p></li>
+                    rhyme.<codeblock>\c:O+σ</codeblock></li>
                 <li>Match a syllable which ends with one or more codas. This demonstrates the use of
                     constituent range to match a portion of the syllable starting with the stress
                     marker and ending with the nucleus:<codeblock>σ/S..N/\c:C+</codeblock></li>
+                <li>Supplementary matcher may be applied to the syllable matcher. For example,
+                    stress matching may be used to query word shape such as in the following example
+                    which will query any word with initial primary
+                    stress:<codeblock>σ!1 σ!U+</codeblock></li>
             </ul></p>
     </body>
 </topic>
