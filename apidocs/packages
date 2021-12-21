@@ -258,6 +258,8 @@ ca.phon.app.project
 ca.phon.app.project
 ca.phon.app.project
 ca.phon.app.project
+ca.phon.app.project
+ca.phon.app.project.actions
 ca.phon.app.project.actions
 ca.phon.app.project.actions
 ca.phon.app.project.actions
@@ -705,6 +707,7 @@ ca.phon.app.session.editor.view.timeline.actions
 ca.phon.app.session.editor.view.timeline.actions
 ca.phon.app.session.editor.view.timeline.actions
 ca.phon.app.session.editor.view.timeline.actions
+ca.phon.app.session.editor.view.timeline.actions
 ca.phon.app.session.editor.view.timeline
 ca.phon.app.session.editor.view.timeline
 ca.phon.app.session.editor.view.timeline
@@ -739,12 +742,14 @@ ca.phon.project
 ca.phon.project
 ca.phon.project
 ca.phon.project
+ca.phon.project
 ca.phon.project.io
 ca.phon.project.io
 ca.phon.project.io
 ca.phon.project.io
 ca.phon.project
 ca.phon.project.exceptions
+ca.phon.project
 ca.phon.project
 ca.phon.project
 ca.phon.project
@@ -1010,6 +1015,7 @@ ca.phon.ui.text
 ca.phon.ui.text
 ca.phon.ui.text
 ca.phon.ui.text
+ca.phon.ui
 ca.phon.ui
 ca.phon.ui
 ca.phon.ui.fonts
@@ -1398,6 +1404,8 @@ ca.phon.ipadictionary.impl
 ca.phon.ipadictionary.impl
 ca.phon.ipadictionary.impl
 ca.phon.ipadictionary.impl
+ca.phon.ipadictionary.ui
+ca.phon.ipadictionary.ui
 ca.phon.ipadictionary.ui
 ca.phon.ipadictionary.ui
 ca.phon.ipadictionary.ui

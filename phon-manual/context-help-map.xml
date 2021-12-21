@@ -109,6 +109,7 @@
    <appContext helpID="voice-onset-time-vot"
                path="report/acoustic_data_reports/vot_report.html"/>
    <appContext helpID="built-in-analyses" path="analysis/analyses.html"/>
+   <appContext helpID="consistency_analysis" path="analysis/consistency_analysis.html"/>
    <appContext helpID="consonants" path="analysis/consonants.html"/>
    <appContext helpID="mcp" path="analysis/mcp.html"/>
    <appContext helpID="pmlu" path="analysis/pmlu.html"/>

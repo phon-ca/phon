@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.4.0-beta.1/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_0-beta_1.dmg" newVersion="3.4.0-beta.1" newMediaFileId="macos" fileSize="299840299" md5Sum="cd8af583e5c43f3a8a169cc9d9f46458" sha256Sum="df3726abec3257e3cad0bb2fcb839e3383e6af1e0ae432d5a61ae0b6884eba8f" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.4.0-beta.2/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_0-beta_2.dmg" newVersion="3.4.0-beta.2" newMediaFileId="macos" fileSize="299938388" md5Sum="26a68d4dee6179a8a371575edaca90a6" sha256Sum="296f18e92c97ab0895152f55b6e96ce131e654d1d28597a11bb47f1a9ef40981" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.3.6
 
  * Added Consistency Analysis
+ * Added 'Distribute unsegmented records' function to Timeline context menu
  * Session editor will only switch to new records when using the New and Duplicate record buttons
  * Fixed an issue with Formant tables having too many columns on windows
  * Additional checks are put in place when editing TextGids in Praat and sending back to Phon:
@@ -494,10 +495,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_0-beta_1.dmg" newVersion="3.4.0-beta.1" newMediaFileId="macos" fileSize="299840299" md5Sum="cd8af583e5c43f3a8a169cc9d9f46458" sha256Sum="df3726abec3257e3cad0bb2fcb839e3383e6af1e0ae432d5a61ae0b6884eba8f" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_0-beta_2.dmg" newVersion="3.4.0-beta.2" newMediaFileId="macos" fileSize="299938388" md5Sum="26a68d4dee6179a8a371575edaca90a6" sha256Sum="296f18e92c97ab0895152f55b6e96ce131e654d1d28597a11bb47f1a9ef40981" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.3.6
 
  * Added Consistency Analysis
+ * Added 'Distribute unsegmented records' function to Timeline context menu
  * Session editor will only switch to new records when using the New and Duplicate record buttons
  * Fixed an issue with Formant tables having too many columns on windows
  * Additional checks are put in place when editing TextGids in Praat and sending back to Phon:
@@ -988,10 +990,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_0-beta_1.exe" newVersion="3.4.0-beta.1" newMediaFileId="win64" fileSize="308219936" md5Sum="ef2c9cb53a2fd47d48f7f4f2513dac1a" sha256Sum="cf3d54a2102414eeeb4252e56ab82d75c68d87fda12072df08cbecb3509e7d20" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_0-beta_2.exe" newVersion="3.4.0-beta.2" newMediaFileId="win64" fileSize="308322336" md5Sum="440d0a94f31a13428119c1af0336d44d" sha256Sum="7015cfac85223a4344103aa23a92c1f8a8c1db5339d42c7d667b7a92779e20a3" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.3.6
 
  * Added Consistency Analysis
+ * Added 'Distribute unsegmented records' function to Timeline context menu
  * Session editor will only switch to new records when using the New and Duplicate record buttons
  * Fixed an issue with Formant tables having too many columns on windows
  * Additional checks are put in place when editing TextGids in Praat and sending back to Phon:
@@ -1482,10 +1485,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_0-beta_1.exe" newVersion="3.4.0-beta.1" newMediaFileId="win64" fileSize="308219936" md5Sum="ef2c9cb53a2fd47d48f7f4f2513dac1a" sha256Sum="cf3d54a2102414eeeb4252e56ab82d75c68d87fda12072df08cbecb3509e7d20" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_0-beta_2.exe" newVersion="3.4.0-beta.2" newMediaFileId="win64" fileSize="308322336" md5Sum="440d0a94f31a13428119c1af0336d44d" sha256Sum="7015cfac85223a4344103aa23a92c1f8a8c1db5339d42c7d667b7a92779e20a3" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.3.6
 
  * Added Consistency Analysis
+ * Added 'Distribute unsegmented records' function to Timeline context menu
  * Session editor will only switch to new records when using the New and Duplicate record buttons
  * Fixed an issue with Formant tables having too many columns on windows
  * Additional checks are put in place when editing TextGids in Praat and sending back to Phon:
@@ -1976,10 +1980,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_0-beta_1.exe" newVersion="3.4.0-beta.1" newMediaFileId="win64" fileSize="308219936" md5Sum="ef2c9cb53a2fd47d48f7f4f2513dac1a" sha256Sum="cf3d54a2102414eeeb4252e56ab82d75c68d87fda12072df08cbecb3509e7d20" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_0-beta_2.exe" newVersion="3.4.0-beta.2" newMediaFileId="win64" fileSize="308322336" md5Sum="440d0a94f31a13428119c1af0336d44d" sha256Sum="7015cfac85223a4344103aa23a92c1f8a8c1db5339d42c7d667b7a92779e20a3" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.3.6
 
  * Added Consistency Analysis
+ * Added 'Distribute unsegmented records' function to Timeline context menu
  * Session editor will only switch to new records when using the New and Duplicate record buttons
  * Fixed an issue with Formant tables having too many columns on windows
  * Additional checks are put in place when editing TextGids in Praat and sending back to Phon:
@@ -2470,10 +2475,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_0-beta_1.zip" newVersion="3.4.0-beta.1" newMediaFileId="win64zip" fileSize="307178565" md5Sum="36a0b08b5238c1075fcde43cae6419fa" sha256Sum="0cf9828b018ac19b017a90faf049db19091001a075fa8b715bd257c7b0d44bae" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_0-beta_2.zip" newVersion="3.4.0-beta.2" newMediaFileId="win64zip" fileSize="307280927" md5Sum="9e246d7e69f1c91c430a5705f994f4e1" sha256Sum="c61d1dfc488857e25b33876d78ebdb6abbcd14265f6b13a2457dcd84f35ec695" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.3.6
 
  * Added Consistency Analysis
+ * Added 'Distribute unsegmented records' function to Timeline context menu
  * Session editor will only switch to new records when using the New and Duplicate record buttons
  * Fixed an issue with Formant tables having too many columns on windows
  * Additional checks are put in place when editing TextGids in Praat and sending back to Phon:

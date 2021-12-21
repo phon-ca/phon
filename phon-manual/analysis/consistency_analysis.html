@@ -1,0 +1,218 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:whc="http://www.oxygenxml.com/webhelp/components" xml:lang="en" lang="en" whc:version="22.0">
+    <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="description" content="This analysis will calculate consistency of word units , where a word unit is defined as a group of two or more productions with identical targets. (A word must be repeated more than once to be ..." /><meta charset="UTF-8" /><meta name="copyright" content="(C) Copyright 2021" /><meta name="DC.rights.owner" content="(C) Copyright 2021" /><meta name="DC.type" content="topic" /><meta name="DC.format" content="HTML5" /><meta name="DC.identifier" content="consistency_analysis" /><title>Consistency Analysis</title><!--  Generated with Oxygen version 23.0, build number 2020111801.  --><meta name="wh-path2root" content="../" /><meta name="wh-toc-id" content="consistency_analysis-d893e826" /><meta name="wh-source-relpath" content="analysis/consistency_analysis.dita" /><meta name="wh-out-relpath" content="analysis/consistency_analysis.html" />
+    <!-- Latest compiled and minified Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/lib/bootstrap/css/bootstrap.min.css" />
+    
+    <link rel="stylesheet" href="../oxygen-webhelp/lib/jquery-ui/jquery-ui.min.css" />
+    
+    <!-- Template default styles  -->
+    <link rel="stylesheet" type="text/css" href="../oxygen-webhelp/app/topic-page.css?buildId=2020111801" />
+    
+    
+    <script type="text/javascript" src="../oxygen-webhelp/lib/jquery/jquery-3.5.1.min.js"><!----></script>
+    
+    <script data-main="../oxygen-webhelp/app/topic-page.js" src="../oxygen-webhelp/lib/requirejs/require.js"></script>
+<link rel="stylesheet" type="text/css" href="../oxygen-webhelp/template/oxygen.css?buildId=2020111801" /><script type="text/javascript">
+$(document).ready( function () {
+	// add custom js to head element
+	var headEle = document.getElementsByTagName("head")[0];
+	
+	var origin = window.location.origin;
+	var pathname = window.location.pathname;
+	
+	var manualRootIdx = (origin == "file://" 
+		? pathname.lastIndexOf("webhelp-responsive") + ("webhelp-responsive").length 
+		: pathname.lastIndexOf("phon-manual") + ("phon-manual").length );
+	var customJSUrl = origin + "/" + pathname.substring(0, manualRootIdx) + "/js/custom_js.js";
+	
+	var scriptEle = document.createElement("script");
+	scriptEle.setAttribute("src", customJSUrl);
+	scriptEle.setAttribute("type", "text/javascript");
+	
+	headEle.appendChild(scriptEle);
+	
+	// change document title to include 'Phon'
+	document.title = "Phon - " + document.title;
+});
+</script><link rel="stylesheet" type="text/css" href="../webhelp.css" /></head>
+
+    <body id="consistency_analysis" class="wh_topic_page frmBody">
+        <a href="#wh_topic_body" class="sr-only sr-only-focusable">Jump to main content</a>
+        <!-- EXM-36950 - Expand the args.hdr parameter here -->
+        
+        
+        
+        <header class="navbar navbar-default wh_header" whc:version="23.0">
+    <div class="container-fluid">
+        <div class="wh_header_flex_container navbar-nav navbar-expand-md navbar-dark">
+            <div class="wh_logo_and_publication_title_container">
+                <div class="wh_logo_and_publication_title">
+                    
+                    <!--
+                            This component will be generated when the next parameters are specified in the transformation scenario:
+                            'webhelp.logo.image' and 'webhelp.logo.image.target.url'.
+                            See: http://oxygenxml.com/doc/versions/17.1/ug-editor/#topics/dita_webhelp_output.html.
+                    -->
+                    <a href="../index.html" class=" wh_logo d-none d-sm-block "><img src="../images/database_phon.png" alt="  Phon  " /></a>
+                    <div class=" wh_publication_title "><a href="../index.html"><span class="booktitle">  <span class="ph mainbooktitle">Phon</span>  </span></a></div>
+                    
+                </div>
+                
+                <!-- The menu button for mobile devices is copied in the output only when the 'webhelp.show.top.menu' parameter is set to 'yes' -->
+                <button type="button" data-target="#wh_top_menu_and_indexterms_link" id="wh_menu_mobile_button" data-toggle="collapse" class="navbar-toggler collapsed wh_toggle_button" aria-expanded="false" aria-label="Toggle menu" aria-controls="wh_top_menu_and_indexterms_link">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+
+            <div class="wh_top_menu_and_indexterms_link collapse navbar-collapse" id="wh_top_menu_and_indexterms_link">
+                
+                <nav class=" wh_top_menu " aria-label="Menu Container"><ul xmlns:xhtml="http://www.w3.org/1999/xhtml" role="menubar" aria-label="Menu"><li role="menuitem" aria-haspopup="true" aria-expanded="false" class="has-children"><span id="getting_started-d893e17-mi" data-tocid="getting_started-d893e17" data-state="not-ready" class=" topicref " data-id="getting_started"><span class="title"><a href="../getting_started.html">Getting Started</a></span></span></li><li role="menuitem" aria-haspopup="true" aria-expanded="false" class="has-children"><span id="tocId-d893e50-mi" data-tocid="tocId-d893e50" data-state="not-ready" class=" topicref "><span class="title"><a href="../welcome/welcome_window.html">User Interface</a></span></span></li><li role="menuitem" aria-haspopup="true" aria-expanded="false" class="has-children"><span id="tocId-d893e350-mi" data-tocid="tocId-d893e350" data-state="not-ready" class=" topicref "><span class="title"><a href="../transcription/record_data.html">Transcription</a></span></span></li><li role="menuitem" aria-haspopup="true" aria-expanded="false" class="has-children"><span id="tocId-d893e400-mi" data-tocid="tocId-d893e400" data-state="not-ready" class=" topicref "><span class="title"><a href="../phonex/phonex_introduction.html">Phonex</a></span></span></li><li role="menuitem" aria-haspopup="true" aria-expanded="false" class="has-children"><span id="queries-d893e607-mi" data-tocid="queries-d893e607" data-state="not-ready" class=" topicref " data-id="queries"><span class="title"><a href="../query/queries.html">Queries</a></span></span></li><li role="menuitem" aria-haspopup="true" aria-expanded="false" class="has-children"><span id="tocId-d893e817-mi" data-tocid="tocId-d893e817" data-state="not-ready" class=" topicref "><span class="title"><a href="../analysis/analyses.html">Analyses</a></span></span></li><li role="menuitem" aria-haspopup="true" aria-expanded="false" class="has-children"><span id="tocId-d893e983-mi" data-tocid="tocId-d893e983" data-state="not-ready" class=" topicref "><span class="title"><a href="../chat/phontalk.html">CHAT Support</a></span></span></li></ul></nav>
+                
+                <div id="wh_download_links">
+    <!--
+    <a id="wh_download_pdf" href="https://phon-ca.github.io/phon/phon-manual/phon_application_manual.pdf">PDF Documentation</a>
+    -->
+    <a id="wh_download_banner" href="https://github.com/phon-ca/phon/releases/3.3.6">Phon 3.3.6</a>
+    <a id="wh_download_beta_banner" href="https://github.com/phon-ca/phon/releases/3.4.0-beta.2">Phon 3.4.0-beta.2</a>
+    <a id="wh_forkme_banner" href="https://github.com/phon-ca/phon/releases">View on GitHub</a>
+</div>
+            </div>
+        </div>
+    </div>
+</header>
+        
+        <div class=" wh_search_input "><form id="searchForm" method="get" role="search" action="../search.html"><div><input type="search" placeholder="Search " class="wh_search_textfield" id="textToSearch" name="searchQuery" aria-label="Search query" required="required" /><button type="submit" class="wh_search_button" aria-label="Search"><span class="search_input_text">Search</span></button></div></form></div>
+        
+        <div class="container-fluid" id="wh_topic_container">
+            <div class="row">
+
+                <nav class="wh_tools d-print-none navbar-expand-md" aria-label="Tools">
+                    <div data-tooltip-position="bottom" class=" wh_breadcrumb "><ol xmlns:html="http://www.w3.org/1999/xhtml" class="d-print-none"><li><span class="home"><a href="../index.html"><span>Home</span></a></span></li><li><span class="topicref"><span class="title"><a href="../analysis/analyses.html">Analyses</a></span></span></li><li class="active"><span class="topicref" data-id="consistency_analysis"><span class="title"><a href="../analysis/consistency_analysis.html">Consistency Analysis</a></span></span></li></ol></div>
+
+                    <div class="wh_right_tools">
+                        <button class="wh_hide_highlight" aria-label="Toggle search highlights" title="Toggle search highlights"></button>
+                        <button class="webhelp_expand_collapse_sections" data-next-state="collapsed" aria-label="Collapse sections" title="Collapse sections"></button>
+                        <div class=" wh_navigation_links "><span id="topic_navigation_links" class="navheader"></span></div>
+                        <div class=" wh_print_link print d-none d-md-inline-block "><button onClick="window.print()" title="Print this page" aria-label="Print this page"></button></div>
+                        
+                        <!-- Expand/Collapse publishing TOC 
+                             The menu button for mobile devices is copied in the output only when the publication TOC is available
+                        -->
+                        <button type="button" data-target="#wh_publication_toc" id="wh_toc_button" data-toggle="collapse" class="custom-toggler navbar-toggler collapsed wh_toggle_button navbar-light" aria-expanded="false" aria-label="Toggle publishing table of content" aria-controls="wh_publication_toc">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                </nav>
+            </div>
+
+            <div class="wh_content_area">
+                <div class="row">
+                    
+                        <nav id="wh_publication_toc" class="collapse col-lg-3 col-md-3 col-sm-12 d-md-block d-print-none" aria-label="Table of Contents Container">
+                            <div class=" wh_publication_toc " data-tooltip-position="right"><ul role="tree" aria-label="Table of Contents"><span class="expand-button-action-labels"><span id="button-expand-action" aria-label="Expand"></span><span id="button-collapse-action" aria-label="Collapse"></span><span id="button-pending-action" aria-label="Pending"></span></span><li role="treeitem" aria-expanded="true"><span data-tocid="tocId-d893e817" class="topicref" data-state="expanded"><span role="button" tabindex="0" aria-labelledby="button-collapse-action tocId-d893e817-link" class="wh-expand-btn"></span><span class="title"><a href="../analysis/analyses.html" id="tocId-d893e817-link">Analyses</a></span></span><ul role="group" class="navbar-nav nav-list"><li role="treeitem"><span data-tocid="built-in-analyses-d893e818" class="topicref" data-id="built-in-analyses" data-state="leaf"><span role="button" class="wh-expand-btn"></span><span class="title"><a href="../analysis/analyses.html" id="built-in-analyses-d893e818-link">Built-in Analyses</a></span></span></li><li role="treeitem" class="active"><span data-tocid="consistency_analysis-d893e826" class="topicref" data-id="consistency_analysis" data-state="leaf"><span role="button" class="wh-expand-btn"></span><span class="title"><a href="../analysis/consistency_analysis.html" id="consistency_analysis-d893e826-link">Consistency Analysis</a></span></span></li><li role="treeitem"><span data-tocid="consonants-d893e834" class="topicref" data-id="consonants" data-state="leaf"><span role="button" class="wh-expand-btn"></span><span class="title"><a href="../analysis/consonants.html" id="consonants-d893e834-link">Consonants</a></span></span></li><li role="treeitem"><span data-tocid="mcp-d893e842" class="topicref" data-id="mcp" data-state="leaf"><span role="button" class="wh-expand-btn"></span><span class="title"><a href="../analysis/mcp.html" id="mcp-d893e842-link">Measure of Cluster Proximity</a></span></span></li><li role="treeitem"><span data-tocid="pmlu-d893e850" class="topicref" data-id="pmlu" data-state="leaf"><span role="button" class="wh-expand-btn"></span><span class="title"><a href="../analysis/pmlu.html" id="pmlu-d893e850-link">Phonological Mean Length of Utterance (PMLU)</a></span></span></li><li role="treeitem" aria-expanded="false"><span data-tocid="tocId-d893e858" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d893e858-link" class="wh-expand-btn"></span><span class="title"><a href="../analysis/inventory/phone_inventory.html" id="tocId-d893e858-link">Inventory</a></span></span></li><li role="treeitem" aria-expanded="false"><span data-tocid="tocId-d893e875" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d893e875-link" class="wh-expand-btn"></span><span class="title"><a href="../analysis/match/cv_pattern_match.html" id="tocId-d893e875-link">Match</a></span></span></li><li role="treeitem" aria-expanded="false"><span data-tocid="tocId-d893e908" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d893e908-link" class="wh-expand-btn"></span><span class="title"><a href="../analysis/percent%20correct/pdc.html" id="tocId-d893e908-link">Percent Correct</a></span></span></li><li role="treeitem"><span data-tocid="word_inventory-d893e933" class="topicref" data-id="word_inventory" data-state="leaf"><span role="button" class="wh-expand-btn"></span><span class="title"><a href="../analysis/phonological_processes.html" id="word_inventory-d893e933-link">Phonological Processes</a></span></span></li><li role="treeitem" aria-expanded="false"><span data-tocid="tocId-d893e941" class="topicref" data-state="not-ready"><span role="button" tabindex="0" aria-labelledby="button-expand-action tocId-d893e941-link" class="wh-expand-btn"></span><span class="title"><a href="../analysis/specialized/multisyllabic_nonlinear_analysis.html" id="tocId-d893e941-link">Specialized</a></span></span></li><li role="treeitem"><span data-tocid="using-the-analysis-composer-d893e974" class="topicref" data-id="using-the-analysis-composer" data-state="leaf"><span role="button" class="wh-expand-btn"></span><span class="title"><a href="../analysis/analysis_composer.html" id="using-the-analysis-composer-d893e974-link">Using the Analysis Composer</a></span></span></li></ul></li></ul></div>
+                        </nav>
+                    
+                    
+                    <div class="col-lg-7 col-md-9 col-sm-12" id="wh_topic_body">
+                        <div class=" wh_topic_content body "><main role="main"><article role="article" aria-labelledby="ariaid-title1">
+    <h1 class="- topic/title title topictitle1" id="ariaid-title1">Consistency Analysis</h1>
+    <div class="- topic/body body">
+        <p class="- topic/p p">This analysis will calculate consistency of <em class="+ topic/ph hi-d/i ph i">word units</em>, where a <em class="+ topic/ph hi-d/i ph i">word unit</em>
+            is defined as a group of two or more productions with identical targets. (A word must be
+            repeated more than once to be considered.)</p>
+        <div class="- topic/p p">A table for each <em class="+ topic/ph hi-d/i ph i">word unit</em> in a each selected session will be produced and added
+            to one of four categories:<ol class="- topic/ol ol" id="consistency_analysis__ol_xhf_kfj_zrb">
+                <li class="- topic/li li">Accurate and consistent</li>
+                <li class="- topic/li li">Accurate and inconsistent (only one production needs to be accurate)</li>
+                <li class="- topic/li li">Inaccurate and consistent</li>
+                <li class="- topic/li li">Inaccurate and inconsistent</li>
+            </ol>A summary for each session will be calculated with summary columns
+                <em class="+ topic/ph hi-d/i ph i">A&amp;C</em>,<em class="+ topic/ph hi-d/i ph i">A&amp;I</em>,<em class="+ topic/ph hi-d/i ph i">I&amp;C</em>,<em class="+ topic/ph hi-d/i ph i">I&amp;I</em> coresponding to the
+            aformentioned categories.</div>
+    </div>
+    
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title2" id="data-preparation">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title2">Data Preparation</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">Session data is queried by word for each aligned Orthography, IPA Target and IPA Actual triple. IPA transcriptions
+            should be syllabified and aligned.</p>
+        </div>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title3" id="parameters">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title3">Parameters</h2>
+        <div class="- topic/body body">
+            <div class="- topic/p p">
+                <figure class="- topic/fig fig fignone" id="parameters__fig_cdm_vhn_3nb"><figcaption class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">Figure<span class="fig--title-label-number"> 1</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">Consistency Analysis Parameters</span></figcaption>
+                    
+                    <br /><img class="- topic/image image" id="parameters__image_ddm_vhn_3nb" src="images/consistency_analysis_parameters.png" /><br />
+                </figure>
+            </div>
+            
+        </div>
+        
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title4" id="other_parameters">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title4">Other Parameters</h3>
+            <div class="- topic/body body">
+                <div class="- topic/p p">
+                    <ul class="- topic/ul ul">
+                        <li class="- topic/li li"><a class="- topic/xref xref" href="../query/common_query_options.html#ignore_diacritics" title="Ignore diacritics when comparing IPA transcripts.">Diacritic Options</a></li>
+                        <li class="- topic/li li"><a class="- topic/xref xref" href="../query/common_query_options.html#search_by" title="Control search domain of queries/analyses.">Search by</a></li>
+                        <li class="- topic/li li"><a class="- topic/xref xref" href="../query/common_query_options.html#group_options" title="Limit the results based on position or an expression defining the word group.">Group Options</a></li>
+                        <li class="- topic/li li"><a class="- topic/xref xref" href="../query/common_query_options.html#word_options" title="Limit the results based on position or an expression defining the word.">Word Options</a></li>
+                        <li class="- topic/li li"><a class="- topic/xref xref" href="../query/common_query_options.html#additional_tier_data" title="Include data from additional tiers with the result.">Additional Tier Data</a></li>
+                        <li class="- topic/li li"><a class="- topic/xref xref" href="../query/common_query_options.html#participant_filter" title="Limit the results based on participant information.">Participant Filter</a></li>
+                    </ul>
+                </div>
+            </div>
+        </article>
+    </article>
+    <article class="- topic/topic topic nested1" aria-labelledby="ariaid-title5" id="example">
+        <h2 class="- topic/title title topictitle2" id="ariaid-title5">Example</h2>
+        <div class="- topic/body body">
+            <p class="- topic/p p">Click the link below to view an example report.</p><p class="- topic/p p">
+                <a class="- topic/xref xref" href="./examples/consistency_analysis_example.html" target="_blank" rel="external noopener"><img class="- topic/image image" id="example__image_t3t_nmj_jpb" src="../images/report.png" alt="Example Report" /> Example Report</a></p>
+        </div>
+    </article>
+</article></main></div>
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                        <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
+                            <div class=" wh_topic_toc "><div class="wh_topic_label">On this page</div><ul><li class="topic-item"><a href="#data-preparation" data-tocid="data-preparation">Data Preparation</a></li><li class="topic-item"><a href="#parameters" data-tocid="parameters">Parameters</a><ul><li class="topic-item"><a href="#other_parameters" data-tocid="other_parameters">Other Parameters</a></li></ul></li><li class="topic-item"><a href="#example" data-tocid="example">Example</a></li></ul></div>
+                        </nav>
+                    
+                </div>
+            </div>
+        </div> 
+        <footer class="navbar navbar-default wh_footer" whc:version="23.0">
+  <div class=" footer-container mx-auto ">
+    
+            Generated by <a class="oxyFooter" href="http://www.oxygenxml.com/xml_webhelp.html" target="_blank">
+            &lt;oXygen/&gt; XML WebHelp
+            </a>
+        
+  </div>
+</footer>
+        
+        <div id="go2top" class="d-print-none">
+            <span class="oxy-icon oxy-icon-up"></span>
+        </div>
+        
+        <!-- The modal container for images -->
+        <div id="modal_img_large" class="modal">
+            <span class="close oxy-icon oxy-icon-remove"></span>
+            <!-- Modal Content (The Image) -->
+            <img class="modal-content" id="modal-img" alt="" />
+            <!-- Modal Caption (Image Text) -->
+            <div id="caption"></div>
+        </div>
+        
+        
+    </body>
+</html>
