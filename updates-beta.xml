@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.4.1-beta.1/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_1-beta_1.dmg" newVersion="3.4.1-beta.1" newMediaFileId="macos" fileSize="299937980" md5Sum="6cabcc57f7102147cbf61e42864dd7f6" sha256Sum="d5cad5f391787e5fe2845ba4f4967f67d1e29296b7502e73aecaffdcc4a7cb02" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_1-beta_1.dmg" newVersion="3.4.1-beta.1" newMediaFileId="macos" fileSize="299937995" md5Sum="5d38d83a3a5c1e20aff73cf82323152d" sha256Sum="f4f4f5248e0c05d34d0e2237ead65fd06cd3f080d426befcaadc935aa5b26ec4" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.4.0
 
  * Reset all macOS Security &amp; Privacy permissions. Phon and Phon-beta will now have separate sets of permissions instead of sharing
@@ -501,7 +501,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_1-beta_1.dmg" newVersion="3.4.1-beta.1" newMediaFileId="macos" fileSize="299937980" md5Sum="6cabcc57f7102147cbf61e42864dd7f6" sha256Sum="d5cad5f391787e5fe2845ba4f4967f67d1e29296b7502e73aecaffdcc4a7cb02" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_1-beta_1.dmg" newVersion="3.4.1-beta.1" newMediaFileId="macos" fileSize="299937995" md5Sum="5d38d83a3a5c1e20aff73cf82323152d" sha256Sum="f4f4f5248e0c05d34d0e2237ead65fd06cd3f080d426befcaadc935aa5b26ec4" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.4.0
 
  * Reset all macOS Security &amp; Privacy permissions. Phon and Phon-beta will now have separate sets of permissions instead of sharing
@@ -1002,7 +1002,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_1-beta_1.exe" newVersion="3.4.1-beta.1" newMediaFileId="win64" fileSize="308320800" md5Sum="038679e815dba98ce6f7af6e5a73e644" sha256Sum="112124f4a650354d865dcc735b118fb12bf0e0f378881694921896e49b1dd35c" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_1-beta_1.exe" newVersion="3.4.1-beta.1" newMediaFileId="win64" fileSize="308320800" md5Sum="aa732a6a02a384e671fe0146176840b5" sha256Sum="470f07ee8f80e1118580bbb37edd6999819d881a79cb5a7053c742a72e08f44e" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.4.0
 
  * Reset all macOS Security &amp; Privacy permissions. Phon and Phon-beta will now have separate sets of permissions instead of sharing
@@ -1503,7 +1503,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_1-beta_1.exe" newVersion="3.4.1-beta.1" newMediaFileId="win64" fileSize="308320800" md5Sum="038679e815dba98ce6f7af6e5a73e644" sha256Sum="112124f4a650354d865dcc735b118fb12bf0e0f378881694921896e49b1dd35c" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_1-beta_1.exe" newVersion="3.4.1-beta.1" newMediaFileId="win64" fileSize="308320800" md5Sum="aa732a6a02a384e671fe0146176840b5" sha256Sum="470f07ee8f80e1118580bbb37edd6999819d881a79cb5a7053c742a72e08f44e" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.4.0
 
  * Reset all macOS Security &amp; Privacy permissions. Phon and Phon-beta will now have separate sets of permissions instead of sharing
@@ -2004,7 +2004,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_1-beta_1.exe" newVersion="3.4.1-beta.1" newMediaFileId="win64" fileSize="308320800" md5Sum="038679e815dba98ce6f7af6e5a73e644" sha256Sum="112124f4a650354d865dcc735b118fb12bf0e0f378881694921896e49b1dd35c" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_1-beta_1.exe" newVersion="3.4.1-beta.1" newMediaFileId="win64" fileSize="308320800" md5Sum="aa732a6a02a384e671fe0146176840b5" sha256Sum="470f07ee8f80e1118580bbb37edd6999819d881a79cb5a7053c742a72e08f44e" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.4.0
 
  * Reset all macOS Security &amp; Privacy permissions. Phon and Phon-beta will now have separate sets of permissions instead of sharing
@@ -2505,7 +2505,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_1-beta_1.zip" newVersion="3.4.1-beta.1" newMediaFileId="win64zip" fileSize="307278081" md5Sum="abea8d3cef4ca643647a87543e38a1c7" sha256Sum="dbd23dec0ea9d60cf9289eaee82cc44ea99ea3bb6f1381555edd20f754384ca5" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_1-beta_1.zip" newVersion="3.4.1-beta.1" newMediaFileId="win64zip" fileSize="307279100" md5Sum="e90626e3131d928f41ab0a17901e21b1" sha256Sum="6ff560e951ed92a04a767e7caafa2c7cc1dff642c04a64922cc8de5b9bcd4905" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.4.0
 
  * Reset all macOS Security &amp; Privacy permissions. Phon and Phon-beta will now have separate sets of permissions instead of sharing
