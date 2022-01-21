@@ -26,7 +26,8 @@ public class IPADictionarySelector extends JList<IPADictionary> {
 		Iterator<IPADictionary> dictItr = IPADictionaryLibrary.getInstance().availableDictionaries();
 		List<IPADictionary> dictList = new ArrayList<>();
 		while(dictItr.hasNext()) {
-			dictList.add(dictItr.next());
+			IPADictionary dict = dictItr.next();
+			dictList.add(dict);
 		}
 		Collections.sort(dictList, Comparator.comparing(IPADictionary::getName));
 		availableDicts = dictList;
