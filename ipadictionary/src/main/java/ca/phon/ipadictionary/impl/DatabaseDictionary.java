@@ -32,7 +32,7 @@ import ca.phon.util.*;
  *
  */
 public class DatabaseDictionary implements IPADictionarySPI,
-	LanguageInfo, AddEntry, RemoveEntry, ClearEntries {
+	LanguageInfo,NameInfo, AddEntry, RemoveEntry, ClearEntries {
 	
 	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(DatabaseDictionary.class.getName());
 	
@@ -47,6 +47,11 @@ public class DatabaseDictionary implements IPADictionarySPI,
 	public DatabaseDictionary(Language lang) {
 		this.language = lang;
 		
+	}
+
+	@Override
+	public String getName() {
+		return (getLanguage().getPrimaryLanguage().getName() + " (user library)");
 	}
 	
 	private void checkLangId(Connection conn) throws SQLException {
@@ -146,6 +151,7 @@ public class DatabaseDictionary implements IPADictionarySPI,
 	@Override
 	public void install(IPADictionary dict) {
 		dict.putExtension(LanguageInfo.class, this);
+		dict.putExtension(NameInfo.class, this);
 		dict.putExtension(AddEntry.class, this);
 		dict.putExtension(RemoveEntry.class, this);
 	}

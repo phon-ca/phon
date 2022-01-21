@@ -120,12 +120,15 @@ public class CompoundDictionary implements IPADictionarySPI,
 	
 	@Override
 	public String getName() {
+		String retVal = "";
 		for(int i = 0; i < dicts.length; i++) {
 			IPADictionary dict = dicts[i];
-			if(dict.getName().trim().length() > 0)
-				return dict.getName();
+			if(dict.getName().trim().length() > 0) {
+				if(retVal.length() == 0 || retVal.contains("(user library)"))
+					retVal = dict.getName();
+			}
 		}
-		return "Compound";
+		return retVal;
 	}
 
 	@Override
