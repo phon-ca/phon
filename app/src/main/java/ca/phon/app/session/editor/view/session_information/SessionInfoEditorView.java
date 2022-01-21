@@ -443,7 +443,8 @@ public class SessionInfoEditorView extends EditorView {
 
 		if(mediaFile == null || !mediaFile.exists() || !mediaFile.canRead()) {
 			mediaLocationField.setToolTipText("Unable to open file");
-			mediaLocationField.setBorder(BorderFactory.createLineBorder(Color.red, 2));
+			if(mediaFile != null)
+				mediaLocationField.setBorder(BorderFactory.createLineBorder(Color.red, 2));
 		} else {
 			mediaLocationField.setToolTipText("");
 			mediaLocationField.setBorder(BorderFactory.createEmptyBorder());
