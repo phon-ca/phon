@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.4.0/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_0.dmg" newVersion="3.4.0" newMediaFileId="macos" fileSize="299928084" md5Sum="9b30c62cee848ba34a0f2043b042d827" sha256Sum="c12b2a74c514cd8249fa0514296f564f8b3ef93e14d10431ec6b3e16724aa66b" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.3.6
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.4.1/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_1.dmg" newVersion="3.4.1" newMediaFileId="macos" fileSize="299924981" md5Sum="660b491fdc293d9f3382f57174d282b8" sha256Sum="3b5fa3448105ba96e8d51213d37a7b576fc4d12491613f0110ec9371d3958343" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.4.0
+
+ * Reset all macOS Security &amp; Privacy permissions. Phon and Phon-beta will now have separate sets of permissions instead of sharing
+ * Fixed macOS entitlements to unblock the sendpraat command
+ * Media field in Session Information will no longer be outlined in read when no file is specified
+
+## Changes from 3.3.6
 
  * Added Consistency Analysis
  * Added 'Distribute unsegmented records' function to Timeline context menu
@@ -495,8 +501,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_0.dmg" newVersion="3.4.0" newMediaFileId="macos" fileSize="299928084" md5Sum="9b30c62cee848ba34a0f2043b042d827" sha256Sum="c12b2a74c514cd8249fa0514296f564f8b3ef93e14d10431ec6b3e16724aa66b" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.3.6
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_1.dmg" newVersion="3.4.1" newMediaFileId="macos" fileSize="299924981" md5Sum="660b491fdc293d9f3382f57174d282b8" sha256Sum="3b5fa3448105ba96e8d51213d37a7b576fc4d12491613f0110ec9371d3958343" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.4.0
+
+ * Reset all macOS Security &amp; Privacy permissions. Phon and Phon-beta will now have separate sets of permissions instead of sharing
+ * Fixed macOS entitlements to unblock the sendpraat command
+ * Media field in Session Information will no longer be outlined in read when no file is specified
+
+## Changes from 3.3.6
 
  * Added Consistency Analysis
  * Added 'Distribute unsegmented records' function to Timeline context menu
@@ -990,8 +1002,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_0.exe" newVersion="3.4.0" newMediaFileId="win64" fileSize="308321312" md5Sum="0839e4fc13269752480a119559782d11" sha256Sum="164fc395b212270939298ac4fa7df9547b64ca5d9fd6d4bbddc47ff36b09daec" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.3.6
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_1.exe" newVersion="3.4.1" newMediaFileId="win64" fileSize="308315680" md5Sum="056ac73c611760132bf8dda169a054dd" sha256Sum="40c1f02b0804cc1fd201349f4cf4f3cbfa8db67c811fc489fbf21cc7a5b9db22" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.4.0
+
+ * Reset all macOS Security &amp; Privacy permissions. Phon and Phon-beta will now have separate sets of permissions instead of sharing
+ * Fixed macOS entitlements to unblock the sendpraat command
+ * Media field in Session Information will no longer be outlined in read when no file is specified
+
+## Changes from 3.3.6
 
  * Added Consistency Analysis
  * Added 'Distribute unsegmented records' function to Timeline context menu
@@ -1485,8 +1503,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_0.exe" newVersion="3.4.0" newMediaFileId="win64" fileSize="308321312" md5Sum="0839e4fc13269752480a119559782d11" sha256Sum="164fc395b212270939298ac4fa7df9547b64ca5d9fd6d4bbddc47ff36b09daec" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.3.6
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_1.exe" newVersion="3.4.1" newMediaFileId="win64" fileSize="308315680" md5Sum="056ac73c611760132bf8dda169a054dd" sha256Sum="40c1f02b0804cc1fd201349f4cf4f3cbfa8db67c811fc489fbf21cc7a5b9db22" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.4.0
+
+ * Reset all macOS Security &amp; Privacy permissions. Phon and Phon-beta will now have separate sets of permissions instead of sharing
+ * Fixed macOS entitlements to unblock the sendpraat command
+ * Media field in Session Information will no longer be outlined in read when no file is specified
+
+## Changes from 3.3.6
 
  * Added Consistency Analysis
  * Added 'Distribute unsegmented records' function to Timeline context menu
@@ -1980,8 +2004,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_0.exe" newVersion="3.4.0" newMediaFileId="win64" fileSize="308321312" md5Sum="0839e4fc13269752480a119559782d11" sha256Sum="164fc395b212270939298ac4fa7df9547b64ca5d9fd6d4bbddc47ff36b09daec" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.3.6
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_1.exe" newVersion="3.4.1" newMediaFileId="win64" fileSize="308315680" md5Sum="056ac73c611760132bf8dda169a054dd" sha256Sum="40c1f02b0804cc1fd201349f4cf4f3cbfa8db67c811fc489fbf21cc7a5b9db22" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.4.0
+
+ * Reset all macOS Security &amp; Privacy permissions. Phon and Phon-beta will now have separate sets of permissions instead of sharing
+ * Fixed macOS entitlements to unblock the sendpraat command
+ * Media field in Session Information will no longer be outlined in read when no file is specified
+
+## Changes from 3.3.6
 
  * Added Consistency Analysis
  * Added 'Distribute unsegmented records' function to Timeline context menu
@@ -2475,8 +2505,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_0.zip" newVersion="3.4.0" newMediaFileId="win64zip" fileSize="307269857" md5Sum="4ad5fd310f7d33f5dbb5027bc8b342a4" sha256Sum="d9db4de6b36d42581b352e097cd19aaabfd36aaa315eed4d07cb487df81ce5d4" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.3.6
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_1.zip" newVersion="3.4.1" newMediaFileId="win64zip" fileSize="307265428" md5Sum="b8c45a3b47717761f412352961ca3d45" sha256Sum="3b77cffd31521a9552ec8b4d2bd397eb75d586e81404d90bad58493d272d9017" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.4.0
+
+ * Reset all macOS Security &amp; Privacy permissions. Phon and Phon-beta will now have separate sets of permissions instead of sharing
+ * Fixed macOS entitlements to unblock the sendpraat command
+ * Media field in Session Information will no longer be outlined in read when no file is specified
+
+## Changes from 3.3.6
 
  * Added Consistency Analysis
  * Added 'Distribute unsegmented records' function to Timeline context menu
