@@ -635,8 +635,27 @@ exports.PatternFilter = function (id) {
 
 		if (exactMatch == true) {
 			if (phonexMatcher.matches()) {
+				var groupData = new Array();
+
+				for (grpIdx = 1; grpIdx <= phonexMatcher.groupCount(); grpIdx++) {
+					grpName = phonexPattern.groupName(grpIdx);
+					if (phonexMatcher.start(grpIdx) >= 0) {
+						groupData[grpIdx] = {
+							start: phonexMatcher.start(grpIdx),
+							end: phonexMatcher.end(grpIdx),
+							value: new IPATranscript(phonexMatcher.group(grpIdx))
+						};
+						if (grpName)
+							groupData[grpName] = groupData[grpIdx];
+					} else {
+						if (grpName)
+							groupData[grpName] = {
+								start: -1, end: -1, value: new IPATranscript()
+							};
+					}
+				}
 				v = {
-					start: 0, end: obj.length(), value: obj, matcher: phonexMatcher, position: "all"
+					start: 0, end: obj.length(), value: obj, matcher: phonexMatcher, position: "all", groups: groupData
 				};
 				retVal.push(v);
 			}
