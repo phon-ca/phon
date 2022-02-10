@@ -529,6 +529,7 @@ public class ResultSetEditor extends ProjectFrame {
 		resultTable.setInputMap(JComponent.WHEN_FOCUSED, inputMap);
 		resultTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		resultTable.getSelectionModel().addListSelectionListener(tableSelectionListener);
+		resultTable.setFont(FontPreferences.getTierFont());
 		
 		// search field
 		tableSearchField = new TableSearchField(resultTable, false) {
