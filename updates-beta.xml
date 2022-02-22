@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.4.1-beta.1/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_1-beta_1.dmg" newVersion="3.4.1-beta.1" newMediaFileId="macos" fileSize="299937995" md5Sum="5d38d83a3a5c1e20aff73cf82323152d" sha256Sum="f4f4f5248e0c05d34d0e2237ead65fd06cd3f080d426befcaadc935aa5b26ec4" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.4.0
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.4.3-beta.1/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_3-beta_1.dmg" newVersion="3.4.3-beta.1" newMediaFileId="macos" fileSize="299930962" md5Sum="d4e099922a7c0a0a811bf6debebbc472" sha256Sum="c2ac81d504e9056a1f40c7f687e1b36e8c1fec5e2416451d4b071f4711228815" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.4.1
+
+ * Fixed an issue where phonex group data was not retained when exact match is selected
+
+## Changes from 3.4.0
 
  * Reset all macOS Security &amp; Privacy permissions. Phon and Phon-beta will now have separate sets of permissions instead of sharing
  * Fixed macOS entitlements to unblock the sendpraat command
@@ -501,8 +505,12 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_1-beta_1.dmg" newVersion="3.4.1-beta.1" newMediaFileId="macos" fileSize="299937995" md5Sum="5d38d83a3a5c1e20aff73cf82323152d" sha256Sum="f4f4f5248e0c05d34d0e2237ead65fd06cd3f080d426befcaadc935aa5b26ec4" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.4.0
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_3-beta_1.dmg" newVersion="3.4.3-beta.1" newMediaFileId="macos" fileSize="299930962" md5Sum="d4e099922a7c0a0a811bf6debebbc472" sha256Sum="c2ac81d504e9056a1f40c7f687e1b36e8c1fec5e2416451d4b071f4711228815" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.4.1
+
+ * Fixed an issue where phonex group data was not retained when exact match is selected
+
+## Changes from 3.4.0
 
  * Reset all macOS Security &amp; Privacy permissions. Phon and Phon-beta will now have separate sets of permissions instead of sharing
  * Fixed macOS entitlements to unblock the sendpraat command
@@ -1002,8 +1010,12 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_1-beta_1.exe" newVersion="3.4.1-beta.1" newMediaFileId="win64" fileSize="308320800" md5Sum="aa732a6a02a384e671fe0146176840b5" sha256Sum="470f07ee8f80e1118580bbb37edd6999819d881a79cb5a7053c742a72e08f44e" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.4.0
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_1.exe" newVersion="3.4.3-beta.1" newMediaFileId="win64" fileSize="308317216" md5Sum="f24f46da03366a0f2791c9d119973ef8" sha256Sum="20b305e647c2483812ff967e49c684e0895452781f5a3aade64617c9f4d1bcff" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.4.1
+
+ * Fixed an issue where phonex group data was not retained when exact match is selected
+
+## Changes from 3.4.0
 
  * Reset all macOS Security &amp; Privacy permissions. Phon and Phon-beta will now have separate sets of permissions instead of sharing
  * Fixed macOS entitlements to unblock the sendpraat command
@@ -1503,8 +1515,12 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_1-beta_1.exe" newVersion="3.4.1-beta.1" newMediaFileId="win64" fileSize="308320800" md5Sum="aa732a6a02a384e671fe0146176840b5" sha256Sum="470f07ee8f80e1118580bbb37edd6999819d881a79cb5a7053c742a72e08f44e" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.4.0
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_1.exe" newVersion="3.4.3-beta.1" newMediaFileId="win64" fileSize="308317216" md5Sum="f24f46da03366a0f2791c9d119973ef8" sha256Sum="20b305e647c2483812ff967e49c684e0895452781f5a3aade64617c9f4d1bcff" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.4.1
+
+ * Fixed an issue where phonex group data was not retained when exact match is selected
+
+## Changes from 3.4.0
 
  * Reset all macOS Security &amp; Privacy permissions. Phon and Phon-beta will now have separate sets of permissions instead of sharing
  * Fixed macOS entitlements to unblock the sendpraat command
@@ -2004,8 +2020,12 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_1-beta_1.exe" newVersion="3.4.1-beta.1" newMediaFileId="win64" fileSize="308320800" md5Sum="aa732a6a02a384e671fe0146176840b5" sha256Sum="470f07ee8f80e1118580bbb37edd6999819d881a79cb5a7053c742a72e08f44e" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.4.0
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_1.exe" newVersion="3.4.3-beta.1" newMediaFileId="win64" fileSize="308317216" md5Sum="f24f46da03366a0f2791c9d119973ef8" sha256Sum="20b305e647c2483812ff967e49c684e0895452781f5a3aade64617c9f4d1bcff" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.4.1
+
+ * Fixed an issue where phonex group data was not retained when exact match is selected
+
+## Changes from 3.4.0
 
  * Reset all macOS Security &amp; Privacy permissions. Phon and Phon-beta will now have separate sets of permissions instead of sharing
  * Fixed macOS entitlements to unblock the sendpraat command
@@ -2505,8 +2525,12 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_1-beta_1.zip" newVersion="3.4.1-beta.1" newMediaFileId="win64zip" fileSize="307279100" md5Sum="e90626e3131d928f41ab0a17901e21b1" sha256Sum="6ff560e951ed92a04a767e7caafa2c7cc1dff642c04a64922cc8de5b9bcd4905" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.4.0
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_1.zip" newVersion="3.4.3-beta.1" newMediaFileId="win64zip" fileSize="307275702" md5Sum="0d0ce1c31cda9f74db31fe4a3ae7da0f" sha256Sum="bb47b964826fdd21557197ecd7141a337eaefa868722e286fefe015ba5e3e988" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.4.1
+
+ * Fixed an issue where phonex group data was not retained when exact match is selected
+
+## Changes from 3.4.0
 
  * Reset all macOS Security &amp; Privacy permissions. Phon and Phon-beta will now have separate sets of permissions instead of sharing
  * Fixed macOS entitlements to unblock the sendpraat command
