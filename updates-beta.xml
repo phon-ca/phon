@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.4.3-beta.1/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_3-beta_1.dmg" newVersion="3.4.3-beta.1" newMediaFileId="macos" fileSize="299930962" md5Sum="d4e099922a7c0a0a811bf6debebbc472" sha256Sum="c2ac81d504e9056a1f40c7f687e1b36e8c1fec5e2416451d4b071f4711228815" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.4.3-beta.2/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_3-beta_2.dmg" newVersion="3.4.3-beta.2" newMediaFileId="macos" fileSize="299930764" md5Sum="6c1e489c1378f2eb00562f465caf0a6a" sha256Sum="def368ea13146b2a6c96a720d2d2f6e0b56dd26c70cd1a324f49652918b32664" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.4.1
 
  * Fixed an issue where phonex group data was not retained when exact match is selected
@@ -505,7 +505,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_3-beta_1.dmg" newVersion="3.4.3-beta.1" newMediaFileId="macos" fileSize="299930962" md5Sum="d4e099922a7c0a0a811bf6debebbc472" sha256Sum="c2ac81d504e9056a1f40c7f687e1b36e8c1fec5e2416451d4b071f4711228815" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_3-beta_2.dmg" newVersion="3.4.3-beta.2" newMediaFileId="macos" fileSize="299930764" md5Sum="6c1e489c1378f2eb00562f465caf0a6a" sha256Sum="def368ea13146b2a6c96a720d2d2f6e0b56dd26c70cd1a324f49652918b32664" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.4.1
 
  * Fixed an issue where phonex group data was not retained when exact match is selected
@@ -1010,7 +1010,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_1.exe" newVersion="3.4.3-beta.1" newMediaFileId="win64" fileSize="308317216" md5Sum="f24f46da03366a0f2791c9d119973ef8" sha256Sum="20b305e647c2483812ff967e49c684e0895452781f5a3aade64617c9f4d1bcff" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_2.exe" newVersion="3.4.3-beta.2" newMediaFileId="win64" fileSize="308317728" md5Sum="af04c08b46a23b10fe61fc73e46045a3" sha256Sum="8c01c65c59aeb7de1f50c4ce910fc34eaed656d96166c2f9da85666f08b74334" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.4.1
 
  * Fixed an issue where phonex group data was not retained when exact match is selected
@@ -1515,7 +1515,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_1.exe" newVersion="3.4.3-beta.1" newMediaFileId="win64" fileSize="308317216" md5Sum="f24f46da03366a0f2791c9d119973ef8" sha256Sum="20b305e647c2483812ff967e49c684e0895452781f5a3aade64617c9f4d1bcff" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_2.exe" newVersion="3.4.3-beta.2" newMediaFileId="win64" fileSize="308317728" md5Sum="af04c08b46a23b10fe61fc73e46045a3" sha256Sum="8c01c65c59aeb7de1f50c4ce910fc34eaed656d96166c2f9da85666f08b74334" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.4.1
 
  * Fixed an issue where phonex group data was not retained when exact match is selected
@@ -2020,7 +2020,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_1.exe" newVersion="3.4.3-beta.1" newMediaFileId="win64" fileSize="308317216" md5Sum="f24f46da03366a0f2791c9d119973ef8" sha256Sum="20b305e647c2483812ff967e49c684e0895452781f5a3aade64617c9f4d1bcff" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_2.exe" newVersion="3.4.3-beta.2" newMediaFileId="win64" fileSize="308317728" md5Sum="af04c08b46a23b10fe61fc73e46045a3" sha256Sum="8c01c65c59aeb7de1f50c4ce910fc34eaed656d96166c2f9da85666f08b74334" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.4.1
 
  * Fixed an issue where phonex group data was not retained when exact match is selected
@@ -2525,7 +2525,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_1.zip" newVersion="3.4.3-beta.1" newMediaFileId="win64zip" fileSize="307275702" md5Sum="0d0ce1c31cda9f74db31fe4a3ae7da0f" sha256Sum="bb47b964826fdd21557197ecd7141a337eaefa868722e286fefe015ba5e3e988" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_2.zip" newVersion="3.4.3-beta.2" newMediaFileId="win64zip" fileSize="307275088" md5Sum="f73ff2b78cbe306265707c08a8da07fc" sha256Sum="5042fe0a43fffd1aa972d766ef24eff4bac7e15cad38a2a084738340bcc2b85a" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.4.1
 
  * Fixed an issue where phonex group data was not retained when exact match is selected
