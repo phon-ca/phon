@@ -16,6 +16,7 @@
 package ca.phon.ui.fonts;
 
 import java.awt.*;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
 import java.util.prefs.Preferences;
@@ -25,10 +26,10 @@ import org.apache.logging.log4j.*;
 
 import ca.phon.ui.*;
 import ca.phon.util.*;
+import org.jdesktop.swingx.plaf.LoginPaneUI;
 
 public class FontPreferences {
-	
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(FontPreferences.class.getName());
+	private final static String CLASSPATH_ROOT = "data/fonts/";
 
 	public static final String[] SUGGESTED_IPA_FONT_NAMES = {
 			"Arial",				// sans
@@ -79,6 +80,105 @@ public class FontPreferences {
 		userPrefs.put(MESSAGE_DIALOG_FONT, DEFAULT_MESSAGE_DIALOG_FONT);
 		userPrefs.put(SMALL_FONT, DEFAULT_SMALL_FONT);
 		userPrefs.put(WINDOW_TITLE_FONT, DEFAULT_WINDOW_TITLE_FONT);
+	}
+
+	public static Font loadProvidedFontFromClasspath(String fontFileName, float fontSize) {
+		String defaultFontName =
+				(OSInfo.isMacOs() ? "Lucida Grande" : (OSInfo.isWindows() ? "Segoe UI" : "Dialog"));
+		Font retVal = null;
+
+		try {
+			retVal = Font.createFont(Font.TRUETYPE_FONT,
+					FontPreferences.class.getClassLoader()
+							.getResourceAsStream(CLASSPATH_ROOT + fontFileName)).deriveFont(fontSize);
+		} catch (IOException | FontFormatException e) {
+			retVal = Font.decode(defaultFontName + "-14-PLAIN");
+		}
+
+		return retVal;
+	}
+
+	/**
+	 * Returns font described by given preferences property or the default Dialog font.
+	 * This method will provide one of our custom Noto fonts if
+	 *
+	 * @param fontPref
+	 * @return
+	 */
+	private static Font _getFont(String fontPref) {
+		String fontDesc = PrefHelper.get(fontPref, "Dialog-12-PLAIN");
+		String[] fontInfo = fontDesc.split("-");
+		String fontStyle = (fontInfo.length > 2 ? fontInfo[2] : "PLAIN");
+		int fontSize = (fontInfo.length > 1 ? Integer.decode(fontInfo[1]) : 12);
+		String fontName = (fontInfo.length > 0 ? fontInfo[0] : "Dialog");
+		if(fontName.startsWith("Noto")) {
+			// return one of our custom font files with all necessary symbols
+			String fontFileName = "Noto";
+			switch(fontName) {
+				case "Noto Serif":
+					fontFileName += "Serif";
+					switch(fontStyle.toUpperCase()) {
+						case "BOLD":
+							fontFileName += "Bold";
+							break;
+
+						case "ITALIC":
+							fontFileName += "Italic";
+							break;
+
+						case "BOLDITALIC":
+							fontFileName += "BoldItalic";
+							break;
+
+						case "PLAIN":
+						default:
+							fontFileName += "Regular";
+							break;
+					}
+					break;
+
+				case "Noto Sans Mono":
+					fontFileName += "SansMono";
+					switch(fontStyle.toUpperCase()) {
+						case "BOLD":
+							fontFileName += "Bold";
+							break;
+
+						case "PLAIN":
+						default:
+							fontFileName += "Regular";
+							break;
+					}
+					break;
+
+				case "Noto Sans":
+				default:
+					fontFileName += "Sans-";
+					switch(fontStyle.toUpperCase()) {
+						case "BOLD":
+							fontFileName += "Bold";
+							break;
+
+						case "ITALIC":
+							fontFileName += "Italic";
+							break;
+
+						case "BOLDITALIC":
+							fontFileName += "BoldItalic";
+							break;
+
+						case "PLAIN":
+						default:
+							fontFileName += "Regular";
+							break;
+					}
+					break;
+			}
+			fontFileName += ".ttf";
+			return loadProvidedFontFromClasspath(fontFileName, fontSize);
+		} else {
+			return Font.decode(fontDesc);
+		}
 	}
 	
 	/**
