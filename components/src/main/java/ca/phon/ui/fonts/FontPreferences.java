@@ -31,6 +31,8 @@ import org.jdesktop.swingx.plaf.LoginPaneUI;
 public class FontPreferences {
 	private final static String CLASSPATH_ROOT = "data/fonts/";
 
+	private final static Map<String, Font> PROVIDED_FONTS = new LinkedHashMap<>();
+
 	public static final String[] SUGGESTED_IPA_FONT_NAMES = {
 			"Arial",				// sans
 			"Arial Unicode MS",		// sans
@@ -82,20 +84,11 @@ public class FontPreferences {
 		userPrefs.put(WINDOW_TITLE_FONT, DEFAULT_WINDOW_TITLE_FONT);
 	}
 
-	public static Font loadProvidedFontFromClasspath(String fontFileName, float fontSize) {
-		String defaultFontName =
-				(OSInfo.isMacOs() ? "Lucida Grande" : (OSInfo.isWindows() ? "Segoe UI" : "Dialog"));
-		Font retVal = null;
+	public static void registerFont(String filename, Font font) {
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		ge.registerFont(font);
 
-		try {
-			retVal = Font.createFont(Font.TRUETYPE_FONT,
-					FontPreferences.class.getClassLoader()
-							.getResourceAsStream(CLASSPATH_ROOT + fontFileName)).deriveFont(fontSize);
-		} catch (IOException | FontFormatException e) {
-			retVal = Font.decode(defaultFontName + "-14-PLAIN");
-		}
-
-		return retVal;
+		PROVIDED_FONTS.put(filename, font);
 	}
 
 	/**
@@ -175,7 +168,8 @@ public class FontPreferences {
 					break;
 			}
 			fontFileName += ".ttf";
-			return loadProvidedFontFromClasspath(fontFileName, fontSize);
+			return (PROVIDED_FONTS.containsKey(fontFileName) ? PROVIDED_FONTS.get(fontFileName) :
+					Font.decode("Dialog-12-PLAIN"));
 		} else {
 			return Font.decode(fontDesc);
 		}

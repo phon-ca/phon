@@ -5,6 +5,7 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginException;
+import ca.phon.ui.fonts.FontPreferences;
 
 import java.awt.*;
 import java.io.File;
@@ -33,8 +34,7 @@ public class FontStartupHook implements PhonStartupHook,
 
 			try {
 				Font customFont = Font.createFont(Font.TRUETYPE_FONT, fontFile);
-				GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-				ge.registerFont(customFont);
+				FontPreferences.registerFont(fontFile.getName(), customFont);
 
 				LogUtil.info("Registered font: " + fontFile.getName());
 			} catch (IOException | FontFormatException e) {
