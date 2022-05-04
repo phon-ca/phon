@@ -98,14 +98,16 @@ public class FontPreferences {
 	 * @param fontPref
 	 * @return
 	 */
-	private static Font _getFont(String fontPref) {
-		String fontDesc = PrefHelper.get(fontPref, "Dialog-12-PLAIN");
+	private static Font _getFont(String fontPref, String defaultValue) {
+		String fontDesc = PrefHelper.get(fontPref, defaultValue);
 		String[] fontInfo = fontDesc.split("-");
 		String fontStyle = (fontInfo.length > 2 ? fontInfo[2] : "PLAIN");
-		int fontSize = (fontInfo.length > 1 ? Integer.decode(fontInfo[1]) : 12);
+		float fontSize = (fontInfo.length > 1 ? Float.parseFloat(fontInfo[1]) : DEFAULT_FONT_SIZE);
 		String fontName = (fontInfo.length > 0 ? fontInfo[0] : "Dialog");
-		if(fontName.startsWith("Noto")) {
+
+		if(!OSInfo.isMacOs() && fontName.startsWith("Noto")) {
 			// return one of our custom font files with all necessary symbols
+			// as glyph fallback is not performed correctly on windows
 			String fontFileName = "Noto";
 			switch(fontName) {
 				case "Noto Serif":
@@ -168,7 +170,7 @@ public class FontPreferences {
 					break;
 			}
 			fontFileName += ".ttf";
-			return (PROVIDED_FONTS.containsKey(fontFileName) ? PROVIDED_FONTS.get(fontFileName) :
+			return (PROVIDED_FONTS.containsKey(fontFileName) ? PROVIDED_FONTS.get(fontFileName).deriveFont(fontSize) :
 					Font.decode("Dialog-12-PLAIN"));
 		} else {
 			return Font.decode(fontDesc);
@@ -179,11 +181,11 @@ public class FontPreferences {
 	 * Sans-serif Tier font
 	 */
 	public final static String TIER_FONT = FontPreferences.class.getName() + ".tierFont";
-	
+
 	public final static String DEFAULT_TIER_FONT = "Noto Sans-PLAIN-12";
 	
 	public static Font getTierFont() {
-		return PrefHelper.getFont(TIER_FONT, Font.decode(DEFAULT_TIER_FONT));
+		return _getFont(TIER_FONT, DEFAULT_TIER_FONT);
 	}
 	
 	public static void setTierFont(Font font) {
@@ -198,7 +200,7 @@ public class FontPreferences {
 	public final static String DEFAULT_TITLE_FONT = "Dialog-PLAIN-14";
 
 	public static Font getTitleFont() {
-		return PrefHelper.getFont(TITLE_FONT, Font.decode(DEFAULT_TITLE_FONT));
+		return _getFont(TITLE_FONT, DEFAULT_TITLE_FONT);
 	}
 
 	public static void setTitleFont(Font font) {
@@ -213,7 +215,7 @@ public class FontPreferences {
 	public final static String DEFAULT_MONOSPACE_FONT = "Noto Sans Mono-PLAIN-12";
 
 	public static Font getMonospaceFont() {
-		return PrefHelper.getFont(MONOSPACE_FONT, Font.decode(DEFAULT_MONOSPACE_FONT));
+		return _getFont(MONOSPACE_FONT, DEFAULT_MONOSPACE_FONT);
 	}
 
 	public static void setMonospaceFont(Font font) {
