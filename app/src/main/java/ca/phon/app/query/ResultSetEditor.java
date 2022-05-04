@@ -29,6 +29,7 @@ import javax.swing.text.*;
 import javax.swing.text.DefaultHighlighter.*;
 import javax.swing.text.Highlighter.*;
 
+import ca.phon.ipamap2.IPAMap;
 import org.jdesktop.swingx.*;
 import org.jdesktop.swingx.decorator.*;
 import org.jdesktop.swingx.decorator.ComponentAdapter;
@@ -503,7 +504,17 @@ public class ResultSetEditor extends ProjectFrame {
 		final ResultListingTableModel model = new ResultListingTableModel(session, resultSet, getListing());
 		resultTable = new JXTable(model);
 		resultTable.setColumnControlVisible(true);
-		resultTable.setFont(FontPreferences.getTierFont());
+
+		try {
+			Font font = Font.createFont(Font.TRUETYPE_FONT,
+					IPAMap.class.getClassLoader()
+							.getResourceAsStream("data/fonts/NotoSans-Regular.ttf")).deriveFont(14.0f);
+
+			resultTable.setFont(font);
+		} catch (Exception e) {
+		}
+
+
 		resultTable.addMouseListener(new MouseInputAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -529,7 +540,6 @@ public class ResultSetEditor extends ProjectFrame {
 		resultTable.setInputMap(JComponent.WHEN_FOCUSED, inputMap);
 		resultTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		resultTable.getSelectionModel().addListSelectionListener(tableSelectionListener);
-		resultTable.setFont(FontPreferences.getTierFont());
 		
 		// search field
 		tableSearchField = new TableSearchField(resultTable, false) {
@@ -809,5 +819,5 @@ public class ResultSetEditor extends ProjectFrame {
 			}
 		
 	};
-	
+
 }

@@ -101,8 +101,8 @@ public class FontPreferences {
 	private static Font _getFont(String fontPref, String defaultValue) {
 		String fontDesc = PrefHelper.get(fontPref, defaultValue);
 		String[] fontInfo = fontDesc.split("-");
-		String fontStyle = (fontInfo.length > 2 ? fontInfo[2] : "PLAIN");
-		float fontSize = (fontInfo.length > 1 ? Float.parseFloat(fontInfo[1]) : DEFAULT_FONT_SIZE);
+		String fontStyle = (fontInfo.length > 1 ? fontInfo[1] : "PLAIN");
+		float fontSize = (fontInfo.length > 2 ? Float.parseFloat(fontInfo[2]) : DEFAULT_FONT_SIZE);
 		String fontName = (fontInfo.length > 0 ? fontInfo[0] : "Dialog");
 
 		if(!OSInfo.isMacOs() && fontName.startsWith("Noto")) {
