@@ -151,6 +151,8 @@ public class QueryNode extends OpNode implements NodeSettings, ScriptNode {
 
 	@Override
 	public void operate(OpContext opCtx) throws ProcessingException {
+		boolean isStepInto = (opCtx.containsKey("__stepInto") ? Boolean.valueOf(opCtx.get("__stepInto").toString()) : false);
+
 		final Project project = (Project)opCtx.get(projectInputField);
 		if(project == null) throw new ProcessingException(null, "No project available");
 
@@ -230,6 +232,7 @@ public class QueryNode extends OpNode implements NodeSettings, ScriptNode {
 		int serial = 0;
 		Session currentSession = null;
 		QueryTask currentTask = null;
+		boolean debugSession = isStepInto;
 		for(RecordContainer rc:recordContainers) {
 			checkCanceled();
 			Session session = rc.getSession();
@@ -237,6 +240,10 @@ public class QueryNode extends OpNode implements NodeSettings, ScriptNode {
 			currentSession = session;
 			try {
 				QueryTask task = new QueryTask(project, currentSession, rc.idxIterator(), queryScript, ++serial);
+				task.setDebugSession(debugSession);
+				task.setDebugRecord(0);
+				// only debug first session
+				debugSession = false;
 				task.addTaskListener( new PhonTaskListener() {
 					
 					@Override

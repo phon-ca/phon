@@ -151,6 +151,24 @@ public class QueryTask extends PhonTask {
 			super.setStatus(TaskStatus.ERROR);
 		}
 	}
+
+	private void setupScope(Scriptable scope, QueryScriptContext ctx, Project project, int serial, ResultSet rs)
+		throws PhonScriptException {
+		ctx.installParams(scope);
+
+		scope.put("project", scope, project);
+		scope.put("serial", scope, serial);
+
+		scope.put("err", scope, ctx.getStdErr());
+		scope.put("out", scope, ctx.getStdOut());
+
+		// add result set ass top-level object
+		scope.put("results", scope, rs);
+
+		final QueryManager qm = QueryManager.getSharedInstance();
+		final QueryFactory factory = qm.createQueryFactory();
+		scope.put("factory", scope, factory);
+	}
 	
 	/**
 	 * Execute the query and return the result set.
@@ -168,25 +186,12 @@ public class QueryTask extends PhonTask {
 		// setup script
 		final QueryScriptContext ctx = getQueryScript().getQueryContext();
 		final Scriptable scope = ctx.getEvaluatedScope();
-		ctx.installParams(scope);
+		setupScope(scope, ctx, project, serial, rs);
 		
 		// check for query_record - required
 		if(!ctx.hasQueryRecord(scope)) {
 			throw new PhonScriptException("Script must define the " + QueryFunction.QUERY_RECORD.getName() + " function");
 		}
-		
-		scope.put("project", scope, project);
-		scope.put("serial", scope, serial);
-		
-		scope.put("err", scope, ctx.getStdErr());
-		scope.put("out", scope, ctx.getStdOut());
-		
-		// add result set ass top-level object
-		scope.put("results", scope, rs);
-		
-		final QueryManager qm = QueryManager.getSharedInstance();
-		final QueryFactory factory = qm.createQueryFactory();
-		scope.put("factory", scope, factory);
 		
 		// call begin_search
 		if(ctx.hasBeginSearch(scope)) {
@@ -208,7 +213,7 @@ public class QueryTask extends PhonTask {
 				if (!includeRecord && isIncludeExcludedRecords())
 					includeRecord = true;
 				if (includeRecord) {
-					if (i == getDebugRecord()) {
+					if (isDebugSession() && i == getDebugRecord()) {
 						// show debugger for this record
 						org.mozilla.javascript.tools.debugger.Main debugger = Main.mainEmbedded(getName());
 						debugger.setBreakOnEnter(false);
@@ -227,8 +232,7 @@ public class QueryTask extends PhonTask {
 						ctx.exit();
 
 						final Scriptable runScope = debugCtx.getEvaluatedScope(debugScope);
-						final ScriptParameters newParams = debugCtx.getScriptParameters(runScope);
-						ScriptParameters.copyParams(params, newParams);
+						setupScope(runScope, debugCtx, project, serial, rs);
 
 						debugger.setExitAction(new Runnable() {
 
