@@ -17,6 +17,7 @@ package ca.phon.query.script;
 
 import java.util.*;
 
+import ca.phon.script.params.ScriptParameters;
 import org.mozilla.javascript.*;
 
 import ca.phon.project.*;
@@ -27,6 +28,7 @@ import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.util.*;
 import ca.phon.worker.*;
+import org.mozilla.javascript.tools.debugger.Main;
 
 /**
  * Run a query given a project, session and query script.
@@ -48,6 +50,18 @@ public class QueryTask extends PhonTask {
 	
 	// include excluded records?
 	private boolean includeExcludedRecords = false;
+
+	/*
+	 * Debug session - enable debugging for this session. Both this
+	 * flag and the specific record number must be set for debugging
+	 * to occur
+	 */
+	private boolean debugSession = false;
+
+	/*
+	 * Debug record, if >= 0 will show debugger when querying this record
+	 */
+	private int debugRecord = -1;
 	
 	/*
 	 * Result set
@@ -97,6 +111,22 @@ public class QueryTask extends PhonTask {
 
 	public void setIncludeExcludedRecords(boolean includeExcludedRecords) {
 		this.includeExcludedRecords = includeExcludedRecords;
+	}
+
+	public int getDebugRecord() {
+		return this.debugRecord;
+	}
+
+	public void setDebugRecord(int debugRecord) {
+		this.debugRecord = debugRecord;
+	}
+
+	public boolean isDebugSession() {
+		return this.debugSession;
+	}
+
+	public void setDebugSession(boolean debugSession) {
+		this.debugSession = debugSession;
 	}
 
 	private ResultSet createResultSet() {
@@ -173,13 +203,52 @@ public class QueryTask extends PhonTask {
 				setProperty(PROGRESS_PROP, progress);
 				
 				final Record record = session.getRecord(i);
-				
+
 				boolean includeRecord = !record.isExcludeFromSearches();
-				if(!includeRecord && isIncludeExcludedRecords())
+				if (!includeRecord && isIncludeExcludedRecords())
 					includeRecord = true;
-				
-				if(includeRecord)
-					ctx.callQueryRecord(scope, i, record);
+				if (includeRecord) {
+					if (i == getDebugRecord()) {
+						// show debugger for this record
+						org.mozilla.javascript.tools.debugger.Main debugger = Main.mainEmbedded(getName());
+						debugger.setBreakOnEnter(false);
+						debugger.setBreakOnExceptions(true);
+
+						ScriptParameters params = ctx.getScriptParameters(scope);
+
+						queryScript.resetContext();
+						final QueryScriptContext debugCtx = queryScript.getQueryContext();
+
+						final Context jsctx = debugCtx.enter();
+						final Scriptable debugScope = debugCtx.getEvaluatedScope();
+						jsctx.setOptimizationLevel(-1);
+						debugger.attachTo(jsctx.getFactory());
+						debugger.setScope(debugScope);
+						ctx.exit();
+
+						final Scriptable runScope = debugCtx.getEvaluatedScope(debugScope);
+						final ScriptParameters newParams = debugCtx.getScriptParameters(runScope);
+						ScriptParameters.copyParams(params, newParams);
+
+						debugger.setExitAction(new Runnable() {
+
+							@Override
+							public void run() {
+								debugger.detach();
+								debugger.setVisible(false);
+							}
+
+						});
+						// break on entering main query script
+						debugger.doBreak();
+						debugger.setSize(500, 600);
+						debugger.setVisible(true);
+
+						ctx.callQueryRecord(runScope, i, record);
+					} else {
+						ctx.callQueryRecord(scope, i, record);
+					}
+				}
 			} catch (Exception e) {
 				// wrap script exceptions
 				throw new PhonScriptException("Error at " + session.getCorpus() + "." + session.getName() + "#" + i, e);
