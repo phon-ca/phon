@@ -232,6 +232,8 @@ public class QueryTask extends PhonTask {
 						ctx.exit();
 
 						final Scriptable runScope = debugCtx.getEvaluatedScope(debugScope);
+						final ScriptParameters newParams = debugCtx.getScriptParameters(debugScope);
+						ScriptParameters.copyParams(params, newParams);
 						setupScope(runScope, debugCtx, project, serial, rs);
 
 						debugger.setExitAction(new Runnable() {
