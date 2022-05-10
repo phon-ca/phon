@@ -1018,6 +1018,8 @@
     <feature_set char=")">diacritic</feature_set>
     <!--* (0x2a)-->
     <feature_set char="*">unintelligible cover</feature_set>
+    <!--~ (0x7e)-->
+    <feature_set char="~">diacritic</feature_set>
     <!--+ (0x2b)-->
     <feature_set char="+">diacritic</feature_set>
     <!--. (0x2e)-->

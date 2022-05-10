@@ -26,7 +26,7 @@ grammar UnicodeIPA;
 import ipa;
 
 start
-	: transcription EOF
+	: transcription? EOF
 	;
 
 transcription 
@@ -111,7 +111,7 @@ syllable_boundary
 	;
 
 compound_word_marker
-	: PLUS          # CompoundWordMarker
+	: (PLUS | TILDE)          # CompoundWordMarker
 	;
 
 sandhi

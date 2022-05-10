@@ -23,6 +23,17 @@ import ca.phon.ipa.features.*;
  */
 public class CompoundWordMarker extends IPAElement {
 
+	private char cwmChar = '+';
+
+	public CompoundWordMarker() {
+	}
+
+	public CompoundWordMarker(char cwm) {
+		if(cwm != '+' && cwm != '~')
+			throw new IllegalArgumentException("Invalid compound word marker '" + cwm + "'");
+		this.cwmChar = cwm;
+	}
+
 	@Override
 	protected FeatureSet _getFeatureSet() {
 		return new FeatureSet();
@@ -30,7 +41,7 @@ public class CompoundWordMarker extends IPAElement {
 
 	@Override
 	public String getText() {
-		return "+";
+		return "" + cwmChar;
 	}
 
 }

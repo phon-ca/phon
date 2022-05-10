@@ -165,7 +165,10 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 
 	@Override
 	public void exitCompoundWordMarker(CompoundWordMarkerContext ctx) {
-		builder.append(factory.createCompoundWordMarker());
+		if(ctx.getText().equals("+"))
+			builder.append(factory.createCompoundWordMarker());
+		else
+			builder.append(factory.createCompoundWordMarkerTilde());
 	}
 	
 	@Override

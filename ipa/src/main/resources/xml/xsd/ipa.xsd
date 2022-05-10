@@ -58,6 +58,7 @@
             <xs:enumeration value="MINOR_GROUP"/>
             <xs:enumeration value="PERIOD"/>
             <xs:enumeration value="PLUS"/>
+            <xs:enumeration value="TILDE"/>
             <xs:enumeration value="PRIMARY_STRESS"/>
             <xs:enumeration value="SECONDARY_STRESS"/>
             <xs:enumeration value="SPACE"/>

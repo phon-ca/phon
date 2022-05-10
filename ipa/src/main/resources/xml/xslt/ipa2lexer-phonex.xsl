@@ -52,6 +52,7 @@ CARET
 	;
 
 </xsl:when>
+<xsl:when test="$tokenType = 'TILDE'"></xsl:when>
 <xsl:when test="$tokenType = 'PLUS'">
 fragment
 ZERO_OR_ONE

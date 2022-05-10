@@ -110,6 +110,10 @@
         <name>Asterisk</name>
         <token>COVER_SYMBOL</token>
     </char>
+    <char value="&#x007e;">
+        <name>Tilde</name>
+        <token>TILDE</token>
+    </char>
     <char value="&#x002b;">
         <name>Plus sign</name>
         <token>PLUS</token>

@@ -38,6 +38,7 @@ public enum IPATokenType {
     OPEN_PAREN("Open Paren"),
     PERIOD("Period"),
     PLUS("Plus"),
+	TILDE("Tilde"),
     PREFIX_DIACRITIC("Prefix Diacritic"),
     PRIMARY_STRESS("Primary Stress"),
     ROLE_REVERSAL("Role Reversal"),

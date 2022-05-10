@@ -239,12 +239,20 @@ public class IPAElementFactory {
 	}
 	
 	/**
-	 * Create a compound word marker.
+	 * Create the default compound word marker ('+')
 	 * 
 	 * @return compound word marker
 	 */
 	public CompoundWordMarker createCompoundWordMarker() {
+		return createCompoundWordMarkerPlus();
+	}
+
+	public CompoundWordMarker createCompoundWordMarkerPlus() {
 		return new CompoundWordMarker();
+	}
+
+	public CompoundWordMarker createCompoundWordMarkerTilde() {
+		return new CompoundWordMarker('~');
 	}
 	
 	/**
