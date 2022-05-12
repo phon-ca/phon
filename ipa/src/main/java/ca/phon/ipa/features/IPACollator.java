@@ -32,7 +32,7 @@ public class IPACollator extends RuleBasedCollator {
 			final Set<Character> allChars = FeatureMatrix.getInstance().getCharacterSet();
 			for(Character c:allChars) {
 				// exclude punctuation
-				if(c != 0x28 && c!= 0x29 && c != 0x7c && c != 0x20 && c != 0x2a && c != 0x2e
+				if(c != 0x28 && c!= 0x29 && c != 0x7c && c != 0x20 && c != 0x2a && c != 0x2e && c != 0x7e
 						&& c != '+' && c != '-' && c != '>') {
 					chars.add(c);
 				}
