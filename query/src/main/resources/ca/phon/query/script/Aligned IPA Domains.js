@@ -214,7 +214,7 @@ function query_record(recordIndex, record) {
 			var syllList = new Array();
 			for (j = 0; j < toSearch.length; j++) {
 				var parentIpa = toSearch[j][0];
-				var parentOppositeIpa = toSearch[j][1];
+				var parentOppositeIpa = toSearch[j][1] || new IPATranscript();
 				var parentAlignment = toSearch[j][2];
 				
 				var syllableMap = (new Packages.ca.phon.ipa.alignment.SyllableAligner()).calculateSyllableAlignment(parentIpa, parentOppositeIpa, parentAlignment);
@@ -223,9 +223,7 @@ function query_record(recordIndex, record) {
 				var sylls = filters.syllable.filterSyllables(syllableMap);
 				
 				for (k = 0; k < sylls.length; k++) {
-					var syllData = sylls[k];
-					var syll = syllData.syllable;
-
+					var syll = sylls[k];
 					var alignedSylls = syllableMap.getAligned(java.util.List.of(syll));
 
 					var syllMeta = new java.util.LinkedHashMap();
