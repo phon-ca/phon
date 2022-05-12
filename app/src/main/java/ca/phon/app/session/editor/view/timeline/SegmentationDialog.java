@@ -150,7 +150,7 @@ public class SegmentationDialog extends JDialog {
 		keymapInfoPane = new JEditorPane("text/html", KEYMAP_HTML);
 		keymapInfoPane.setEditable(false);
 		keymapInfoPane.setCaretPosition(0);
-		keymapInfoPane.setPreferredSize(new Dimension(350, 450));
+		keymapInfoPane.setPreferredSize(new Dimension(300, 450));
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 		JPanel mediaPlaybackPanel = new JPanel(new GridBagLayout());
@@ -209,14 +209,6 @@ public class SegmentationDialog extends JDialog {
 		JLabel lbl = new JLabel("<html><span style='font-size:small;'>(maximum segment length in milliseconds)</span></html>");
 		gbc.gridy++;
 		recordCreationPanel.add(lbl, gbc);
-		gbc.insets = new Insets(5, 5, 0, 5);
-		gbc.fill = GridBagConstraints.BOTH;
-		gbc.weightx = 1.0;
-		gbc.weighty = 1.0;
-		gbc.gridx = 0;
-		gbc.gridy++;
-		gbc.gridwidth = 2;
-		recordCreationPanel.add(new JScrollPane(keymapInfoPane), gbc);
 		
 		recordCreationPanel.setBorder(BorderFactory.createTitledBorder("Segmentation"));
 		
@@ -234,9 +226,15 @@ public class SegmentationDialog extends JDialog {
 		JPanel centerPanel = new JPanel(new VerticalLayout());
 		centerPanel.add(mediaPlaybackPanel);
 		centerPanel.add(recordCreationPanel);
-		
-		add(mediaPlaybackPanel, BorderLayout.NORTH);
-		add(recordCreationPanel, BorderLayout.CENTER);
+
+		JPanel rightPanel = new JPanel(new VerticalLayout());
+		rightPanel.add(mediaPlaybackPanel);
+		rightPanel.add(recordCreationPanel);
+		JPanel contentPanel = new JPanel(new GridLayout(0, 2));
+		contentPanel.add(new JScrollPane(keymapInfoPane));
+		contentPanel.add(rightPanel);
+
+		add(contentPanel, BorderLayout.CENTER);
 		add(buttonBar, BorderLayout.SOUTH);
 	}
 	
