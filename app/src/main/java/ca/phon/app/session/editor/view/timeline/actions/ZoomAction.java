@@ -22,6 +22,7 @@ import javax.swing.*;
 
 import ca.phon.app.session.editor.view.timeline.*;
 import ca.phon.media.*;
+import ca.phon.session.Session;
 import ca.phon.util.*;
 import ca.phon.util.icons.*;
 
@@ -77,6 +78,15 @@ public class ZoomAction extends TimelineAction {
 			Toolkit.getDefaultToolkit().beep();
 		
 		timeModel.setPixelsPerSecond(pxPerS);
+
+		final Session session = getView().getEditor().getSession();
+		ListSelectionModel selectionModel = getView().getRecordTier().getSelectionModel();
+		int selectedRecords[] = selectionModel.getSelectedIndices();
+		if(selectedRecords.length > 0) {
+		 	getView().scrollToRecord(session.getRecord(selectionModel.getLeadSelectionIndex()));
+		} else {
+			getView().scrollToRecord(getView().getRecordTier().getRecordGrid().getCurrentRecord());
+		}
 	}
 
 }
