@@ -599,7 +599,7 @@ public final class TimelineView extends EditorView {
 		rect.x = (int)x;
 		tierPanel.scrollRectToVisible(rect);
 	}
-	
+
 	public void scrollToRecord(Record r) {
 		MediaSegment seg = r.getSegment().getGroup(0);
 		float time = seg.getStartValue() / 1000.0f;
@@ -925,10 +925,12 @@ public final class TimelineView extends EditorView {
 						MessageDialogProperties.okOptions);
 				return;
 			}
-			
+
+			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			SegmentationDialog startDialog = new SegmentationDialog(getEditor());
 			startDialog.setModal(true);
 			startDialog.pack();
+			startDialog.setSize(Math.min(800, screenSize.width), Math.min(600, screenSize.height));
 			startDialog.setLocationRelativeTo(getEditor());
 			startDialog.setVisible(true);
 			
