@@ -346,7 +346,7 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 		}
 	};
 	
-	private double cachedMaxValue = 1.0;
+	private double cachedMaxValue = 0.0;
 	private double getMaxValue() {
 		return cachedMaxValue;
 	}
@@ -410,7 +410,7 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 				float endTime = Math.min(time+incr, display.getEndTime());
 				
 				final Sound snd = sound.extractPart(time, endTime);
-				
+
 				loadWaveformData(snd, time, endTime);
 				publish(new Tuple<>(time, endTime));
 				time = endTime;
