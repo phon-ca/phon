@@ -150,7 +150,7 @@ public class SegmentationDialog extends JDialog {
 		keymapInfoPane = new JEditorPane("text/html", KEYMAP_HTML);
 		keymapInfoPane.setEditable(false);
 		keymapInfoPane.setCaretPosition(0);
-		keymapInfoPane.setPreferredSize(new Dimension(300, 450));
+//		keymapInfoPane.setPreferredSize(new Dimension(250, 300));
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 		JPanel mediaPlaybackPanel = new JPanel(new GridBagLayout());
