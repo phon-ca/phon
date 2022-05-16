@@ -600,46 +600,50 @@ public final class TimelineView extends EditorView {
 		tierPanel.scrollRectToVisible(rect);
 	}
 
+	/**
+	 * Centers view on given record
+	 *
+	 * @param r
+	 */
 	public void scrollToRecord(Record r) {
 		MediaSegment seg = r.getSegment().getGroup(0);
 		float time = seg.getStartValue() / 1000.0f;
 		float endTime = seg.getEndValue() / 1000.0f;
-		float paddingTime = 100.0f / getTimeModel().getPixelsPerSecond();
-		
-		float windowStart = Math.max(0.0f, time - paddingTime);
-		float windowEnd = Math.min(endTime + paddingTime, getTimeModel().getEndTime());
-		float windowLen = windowEnd - windowStart;
+		float windowLen = endTime - time;
 		
 		float viewStart = getWindowStart();
 		float viewEnd = getWindowEnd();
 		float viewLen = viewEnd - viewStart;
-		
-		if(windowLen <= viewLen) {
-			if( (windowStart >= viewStart && windowEnd > viewEnd) 
-					|| (windowStart > viewEnd && windowEnd > viewEnd) ) {
-				scrollToTime(windowEnd - viewLen);
-			} else if( (windowStart < viewStart && windowEnd < viewStart)
-					|| (windowStart < viewStart && windowEnd >= viewStart) ) {
-				scrollToTime(windowStart);
-			}
-		} else {
-			int viewWidth = getVisibleRect().width;
-			float newPxPerS = viewWidth / windowLen;
-			
-			getTimeModel().setPixelsPerSecond(newPxPerS);
-			scrollToTime(windowStart);
+
+		// entire segment can be viewed
+		float delta = viewLen - windowLen;
+		float newViewStart = Math.max(0, time - (delta/2.0f));
+
+		if(newViewStart + viewLen > getTimeModel().getEndTime()) {
+			newViewStart = getTimeModel().getEndTime() - viewLen;
 		}
-		
+
+		scrollToTime(newViewStart);
 	}
 	
 	public void scrollRectToVisible(Rectangle rect) {
 		tierPanel.scrollRectToVisible(rect);
 	}
-	
+
+	/**
+	 * Get start time of visible timeline
+	 *
+	 * @return
+	 */
 	public float getWindowStart() {
 		return getTimeModel().timeAtX(tierPanel.getVisibleRect().getX());
 	}
-	
+
+	/**
+	 * Get end time of visible timeline
+	 *
+	 * @return
+	 */
 	public float getWindowEnd() {
 		return getTimeModel().timeAtX(tierPanel.getVisibleRect().getMaxX());
 	}
