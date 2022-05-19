@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.4.3-beta.3/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_3-beta_3.dmg" newVersion="3.4.3-beta.3" newMediaFileId="macos" fileSize="299941607" md5Sum="033ff2ddee4da1818839ed8c9924cc53" sha256Sum="cd0cf55feb7e4c0cae3b37798d3b3359d32336b9666175260668d9147a9851ee" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.4.3
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.4.3-beta.4/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_3-beta_4.dmg" newVersion="3.4.3-beta.4" newMediaFileId="macos" fileSize="299939022" md5Sum="21b2748f3c3dfe7bb22223b239236cba" sha256Sum="113524b3567510c30f6d877aabb900f68de8a314f6868d322e1cd9a8a6812cd6" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.4.2
 
  * Timeline will center new record during navigation/zoom actions
  * Fixed a font issue with the results editor when using Noto fonts on Windows 
  * Fixed an issue when searching 'by syllable' in percent correct analyses
+ * ~ may now be used as a compound word marker in IPA transcriptions
+ * Fixed keyboard focus behaviour when switching records in session editor
+ * Fixed an issue where some editor keystrokes would not work until the Session menu was selected at least once
 
 ## Changes from 3.4.1
 
@@ -511,12 +514,15 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_3-beta_3.dmg" newVersion="3.4.3-beta.3" newMediaFileId="macos" fileSize="299941607" md5Sum="033ff2ddee4da1818839ed8c9924cc53" sha256Sum="cd0cf55feb7e4c0cae3b37798d3b3359d32336b9666175260668d9147a9851ee" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.4.3
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_3-beta_4.dmg" newVersion="3.4.3-beta.4" newMediaFileId="macos" fileSize="299939022" md5Sum="21b2748f3c3dfe7bb22223b239236cba" sha256Sum="113524b3567510c30f6d877aabb900f68de8a314f6868d322e1cd9a8a6812cd6" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.4.2
 
  * Timeline will center new record during navigation/zoom actions
  * Fixed a font issue with the results editor when using Noto fonts on Windows 
  * Fixed an issue when searching 'by syllable' in percent correct analyses
+ * ~ may now be used as a compound word marker in IPA transcriptions
+ * Fixed keyboard focus behaviour when switching records in session editor
+ * Fixed an issue where some editor keystrokes would not work until the Session menu was selected at least once
 
 ## Changes from 3.4.1
 
@@ -1022,12 +1028,15 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_3.exe" newVersion="3.4.3-beta.3" newMediaFileId="win64" fileSize="308330584" md5Sum="468b034497f7df8ad4a820612857f2bf" sha256Sum="76768134f45b77fb3c9f048636c351728e36733b656089b5f42f311faed66d09" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.4.3
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_4.exe" newVersion="3.4.3-beta.4" newMediaFileId="win64" fileSize="308330584" md5Sum="6680db19d33512657f30e3623d2443c4" sha256Sum="567727ad80d08be487b6f4b9715b7916afbaffd63ee2d030058445cceaf311cc" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.4.2
 
  * Timeline will center new record during navigation/zoom actions
  * Fixed a font issue with the results editor when using Noto fonts on Windows 
  * Fixed an issue when searching 'by syllable' in percent correct analyses
+ * ~ may now be used as a compound word marker in IPA transcriptions
+ * Fixed keyboard focus behaviour when switching records in session editor
+ * Fixed an issue where some editor keystrokes would not work until the Session menu was selected at least once
 
 ## Changes from 3.4.1
 
@@ -1533,12 +1542,15 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_3.exe" newVersion="3.4.3-beta.3" newMediaFileId="win64" fileSize="308330584" md5Sum="468b034497f7df8ad4a820612857f2bf" sha256Sum="76768134f45b77fb3c9f048636c351728e36733b656089b5f42f311faed66d09" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.4.3
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_4.exe" newVersion="3.4.3-beta.4" newMediaFileId="win64" fileSize="308330584" md5Sum="6680db19d33512657f30e3623d2443c4" sha256Sum="567727ad80d08be487b6f4b9715b7916afbaffd63ee2d030058445cceaf311cc" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.4.2
 
  * Timeline will center new record during navigation/zoom actions
  * Fixed a font issue with the results editor when using Noto fonts on Windows 
  * Fixed an issue when searching 'by syllable' in percent correct analyses
+ * ~ may now be used as a compound word marker in IPA transcriptions
+ * Fixed keyboard focus behaviour when switching records in session editor
+ * Fixed an issue where some editor keystrokes would not work until the Session menu was selected at least once
 
 ## Changes from 3.4.1
 
@@ -2044,12 +2056,15 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_3.exe" newVersion="3.4.3-beta.3" newMediaFileId="win64" fileSize="308330584" md5Sum="468b034497f7df8ad4a820612857f2bf" sha256Sum="76768134f45b77fb3c9f048636c351728e36733b656089b5f42f311faed66d09" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.4.3
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_4.exe" newVersion="3.4.3-beta.4" newMediaFileId="win64" fileSize="308330584" md5Sum="6680db19d33512657f30e3623d2443c4" sha256Sum="567727ad80d08be487b6f4b9715b7916afbaffd63ee2d030058445cceaf311cc" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.4.2
 
  * Timeline will center new record during navigation/zoom actions
  * Fixed a font issue with the results editor when using Noto fonts on Windows 
  * Fixed an issue when searching 'by syllable' in percent correct analyses
+ * ~ may now be used as a compound word marker in IPA transcriptions
+ * Fixed keyboard focus behaviour when switching records in session editor
+ * Fixed an issue where some editor keystrokes would not work until the Session menu was selected at least once
 
 ## Changes from 3.4.1
 
@@ -2555,12 +2570,15 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_3.zip" newVersion="3.4.3-beta.3" newMediaFileId="win64zip" fileSize="307286794" md5Sum="6a5aa20de2f767d6c828ee08940be352" sha256Sum="0d9c90743e227a5f1a30d93157a487ecc6ad9f4df0ce6f8fa6b373ac7b950682" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.4.3
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_4.zip" newVersion="3.4.3-beta.4" newMediaFileId="win64zip" fileSize="307285777" md5Sum="65e92411c7288903703db4e418bf460c" sha256Sum="adca07244f96f8ce2f4fbf1fc872e090af5fd3ef680922517890c43ccdb96e11" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.4.2
 
  * Timeline will center new record during navigation/zoom actions
  * Fixed a font issue with the results editor when using Noto fonts on Windows 
  * Fixed an issue when searching 'by syllable' in percent correct analyses
+ * ~ may now be used as a compound word marker in IPA transcriptions
+ * Fixed keyboard focus behaviour when switching records in session editor
+ * Fixed an issue where some editor keystrokes would not work until the Session menu was selected at least once
 
 ## Changes from 3.4.1
 
