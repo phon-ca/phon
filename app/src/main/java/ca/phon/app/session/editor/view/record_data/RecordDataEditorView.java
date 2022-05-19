@@ -284,7 +284,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 	private void update() {
 		updating = true;
 
-		Component currentFocusOwner = FocusManager.getCurrentManager().getFocusOwner();
+		boolean viewFocused = this == getEditor().getViewModel().getFocusedView();
 		final Tier<?> currentFocusTier = currentTier();
 
 		editorMap.clear();
@@ -455,7 +455,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 			row++;
 		}
 
-		if(toFocus != null) {
+		if(viewFocused && toFocus != null) {
 			toFocus.requestFocusInWindow();
 		}
 
