@@ -284,6 +284,9 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 	private void update() {
 		updating = true;
 
+		Component currentFocusOwner = FocusManager.getCurrentManager().getFocusOwner();
+		final Tier<?> currentFocusTier = currentTier();
+
 		editorMap.clear();
 
 		contentPane.removeAll();
@@ -391,9 +394,11 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 						tierComp.setEnabled(false);
 					}
 
-					if(toFocus == null) {
-						toFocus = (JComponent)tierComp;
+					if(currentFocusTier != null && toFocus == null
+							&& (currentFocusTier.getName().equals(tier.getName()))) {
+						toFocus = tierEditor.getEditorComponent();
 					}
+
 					editors.add(tierEditor);
 				}
 			} else {
@@ -440,21 +445,21 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 					tierComp.setEnabled(false);
 				}
 
-				if(toFocus == null) {
-					toFocus = (JComponent)tierComp;
+				if(currentFocusTier != null && toFocus == null
+						&& (currentFocusTier.getName().equals(tier.getName()))) {
+					toFocus = tierEditor.getEditorComponent();
 				}
+
 				editorMap.put(tierName, Collections.singletonList(tierEditor));
 			}
 			row++;
 		}
 
-		if(isFocusOwner() && toFocus != null) {
+		if(toFocus != null) {
 			toFocus.requestFocusInWindow();
 		}
 
 		// update location
-
-
 		updating = false;
 		revalidate();
 	}
