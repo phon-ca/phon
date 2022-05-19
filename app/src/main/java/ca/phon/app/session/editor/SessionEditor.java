@@ -353,48 +353,32 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 
 		// setup 'Session' menu
 		final JMenu sessionMenu = new JMenu("Session");
-		sessionMenu.addMenuListener(new MenuListener() {
-			
-			@Override
-			public void menuSelected(MenuEvent e) {
-				sessionMenu.removeAll();
-								
-				sessionMenu.add(new NewRecordAction(SessionEditor.this));
-				sessionMenu.add(new DuplicateRecordAction(SessionEditor.this));
-				sessionMenu.add(new DeleteRecordAction(SessionEditor.this));
-				sessionMenu.addSeparator();
+		sessionMenu.add(new NewRecordAction(SessionEditor.this));
+		sessionMenu.add(new DuplicateRecordAction(SessionEditor.this));
+		sessionMenu.add(new DeleteRecordAction(SessionEditor.this));
+		sessionMenu.addSeparator();
 
-				sessionMenu.add(new MoveRecordToBeginningAction(SessionEditor.this));
-				sessionMenu.add(new MoveRecordBackwardAction(SessionEditor.this));
-				sessionMenu.add(new MoveRecordForwardAction(SessionEditor.this));
-				sessionMenu.add(new MoveRecordToEndAction(SessionEditor.this));
-				sessionMenu.add(new SortRecordsAction(SessionEditor.this));
-				sessionMenu.addSeparator();
+		sessionMenu.add(new MoveRecordToBeginningAction(SessionEditor.this));
+		sessionMenu.add(new MoveRecordBackwardAction(SessionEditor.this));
+		sessionMenu.add(new MoveRecordForwardAction(SessionEditor.this));
+		sessionMenu.add(new MoveRecordToEndAction(SessionEditor.this));
+		sessionMenu.add(new SortRecordsAction(SessionEditor.this));
+		sessionMenu.addSeparator();
 
-				sessionMenu.add(new CutRecordAction(SessionEditor.this));
-				sessionMenu.add(new CopyRecordAction(SessionEditor.this));
-				sessionMenu.add(new PasteRecordAction(SessionEditor.this));
-				sessionMenu.addSeparator();
+		sessionMenu.add(new CutRecordAction(SessionEditor.this));
+		sessionMenu.add(new CopyRecordAction(SessionEditor.this));
+		sessionMenu.add(new PasteRecordAction(SessionEditor.this));
+		sessionMenu.addSeparator();
 
-				sessionMenu.add(new FirstRecordAction(SessionEditor.this));
-				sessionMenu.add(new PreviousRecordAction(SessionEditor.this));
-				sessionMenu.add(new NextRecordAction(SessionEditor.this));
-				sessionMenu.add(new LastRecordAction(SessionEditor.this));
+		sessionMenu.add(new FirstRecordAction(SessionEditor.this));
+		sessionMenu.add(new PreviousRecordAction(SessionEditor.this));
+		sessionMenu.add(new NextRecordAction(SessionEditor.this));
+		sessionMenu.add(new LastRecordAction(SessionEditor.this));
 
-				sessionMenu.addSeparator();
-				JMenuItem itrItem = new JMenuItem(new ITRAction(SessionEditor.this));
-				itrItem.setEnabled(getDataModel().getTranscriber() == null && getSession().getTranscriberCount() > 1);
-				sessionMenu.add(itrItem);
-			}
-			
-			@Override
-			public void menuDeselected(MenuEvent e) {
-			}
-			
-			@Override
-			public void menuCanceled(MenuEvent e) {
-			}
-		});
+		sessionMenu.addSeparator();
+		JMenuItem itrItem = new JMenuItem(new ITRAction(SessionEditor.this));
+		itrItem.setEnabled(getDataModel().getTranscriber() == null && getSession().getTranscriberCount() > 1);
+		sessionMenu.add(itrItem);
 
 		// setup 'View' menu, this menu must be created dynamically
 		// as the view model is not available when the menu bar is
