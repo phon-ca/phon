@@ -22,6 +22,7 @@ import java.util.concurrent.locks.*;
 
 import javax.swing.*;
 
+import ca.phon.media.VolumeModel;
 import org.apache.commons.io.*;
 
 import ca.phon.app.log.*;
@@ -49,6 +50,11 @@ public class SessionMediaModel {
 	
 	private SegmentPlayback segmentPlayback;
 
+	/*
+	 * Shared volume model for playback
+	 */
+	private VolumeModel volumeModel;
+
 	private enum AudioFileStatus {
 		UNKONWN,
 		OK,
@@ -73,6 +79,7 @@ public class SessionMediaModel {
 		super();
 		
 		this.editor = editor;
+		this.volumeModel = new VolumeModel();
 	}
 	
 	public Project getProject() {
@@ -85,6 +92,10 @@ public class SessionMediaModel {
 	
 	public Session getSession() {
 		return this.editor.getSession();
+	}
+
+	public VolumeModel getVolumeModel() {
+		return this.volumeModel;
 	}
 	
 	public SegmentPlayback getSegmentPlayback() {

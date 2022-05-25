@@ -1,4 +1,4 @@
-package ca.phon.app.session;
+package ca.phon.media;
 
 import java.beans.*;
 
@@ -12,7 +12,7 @@ public class VolumeModel {
 
 	public final static float DEFAULT_LEVEL = 1.0f;
 
-	public final static float MAX_LEVEL = 2.0f;
+	public final static float MAX_LEVEL = 1.0f;
 
 	/**
 	 * Value between MIN_LEVEL and MAX_LEVEL indicating volume level
