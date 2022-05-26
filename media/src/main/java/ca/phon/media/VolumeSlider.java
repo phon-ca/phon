@@ -2,6 +2,7 @@ package ca.phon.media;
 
 import javax.swing.*;
 import java.awt.*;
+import java.beans.PropertyChangeListener;
 
 public class VolumeSlider extends JComponent {
 
@@ -26,6 +27,7 @@ public class VolumeSlider extends JComponent {
 		super();
 
 		this.model = model;
+		model.addPropertyChangeListener(forwardListener);
 		checkOrientation(orientation);
 		this.orientation = orientation;
 
@@ -38,7 +40,9 @@ public class VolumeSlider extends JComponent {
 
 	public void setModel(VolumeModel model) {
 		var oldModel = this.model;
+		oldModel.removePropertyChangeListener(forwardListener);
 		this.model = model;
+		model.addPropertyChangeListener(forwardListener);
 		firePropertyChange("model", oldModel, model);
 	}
 
@@ -85,14 +89,8 @@ public class VolumeSlider extends JComponent {
 		setUI(new DefaultVolumeSliderUI());
 	}
 
-	public static void main(String[] args) throws Exception {
-		final JFrame testFrame = new JFrame("Test");
-		final VolumeSlider slider = new VolumeSlider();
-		slider.setVolumeLevel(0.5f);
-		testFrame.getContentPane().setLayout(new BorderLayout());
-		testFrame.getContentPane().add(slider, BorderLayout.NORTH);
-		testFrame.pack();
-		testFrame.setVisible(true);
-	}
+	private final PropertyChangeListener forwardListener = (evt) -> {
+		firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+	};
 
 }
