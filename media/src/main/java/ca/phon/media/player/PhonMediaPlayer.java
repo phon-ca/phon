@@ -972,7 +972,6 @@ public class PhonMediaPlayer extends JPanel {
 	}
 
 	private final PropertyChangeListener volumeModelListener = (evt) -> {
-		System.out.println(evt.getPropertyName());
 		switch(evt.getPropertyName()) {
 			case "muted":
 				if(getMediaPlayer() != null)
