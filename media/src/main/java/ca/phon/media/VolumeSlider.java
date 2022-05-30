@@ -14,6 +14,10 @@ public class VolumeSlider extends JComponent {
 		this(new VolumeModel(), SwingConstants.HORIZONTAL);
 	}
 
+	public VolumeSlider(VolumeModel model) {
+		this(model, SwingConstants.HORIZONTAL);
+	}
+
 	public VolumeSlider(int orientation) {
 		this(new VolumeModel(), orientation);
 	}

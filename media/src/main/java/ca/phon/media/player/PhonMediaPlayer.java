@@ -20,6 +20,7 @@ import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.awt.image.*;
+import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.nio.*;
 import java.util.*;
@@ -65,12 +66,6 @@ public class PhonMediaPlayer extends JPanel {
 	/* Position slider */
 	private TimeSlider positionSlider;
 
-	/* Volume button */
-	private JButton volumeBtn;
-
-	/* Volume slider */
-	private JSlider volumeSlider;
-
 	/* Menu button */
 	private JButton menuBtn;
 
@@ -81,8 +76,6 @@ public class PhonMediaPlayer extends JPanel {
 	private MediaPlayerFactory mediaPlayerFactory;
 	private EmbeddedMediaPlayer mediaPlayer;
 	private PhonPlayerComponent mediaPlayerCanvas;
-	
-//	private Timer mediaTimer;
 
 	/* Media player listener */
 	private final MediaPlayerListener mediaListener = new MediaPlayerListener();
@@ -91,8 +84,6 @@ public class PhonMediaPlayer extends JPanel {
 	private ImageIcon playIcn;
 	private ImageIcon replayIcn;
 	private ImageIcon pauseIcn;
-	private ImageIcon volMuteIcn;
-	private ImageIcon volIcn;
 	private ImageIcon menuIcn;
 	
 	/* Background images */
@@ -115,19 +106,28 @@ public class PhonMediaPlayer extends JPanel {
 	/** Media file */
 	private String mediaFile = null;
 
-	/** Volume popup frame */
-	private JFrame volumePopup;
+	/** Volume model */
+	private VolumeModel volumeModel;
+
+	/* Volume slider */
+	private VolumeSlider volumeSlider;
 	
 	/**
 	 * Constructor
 	 */
 	public PhonMediaPlayer() {
+		this(new VolumeModel());
+	}
+
+	public PhonMediaPlayer(VolumeModel volumeModel) {
 		super();
 
 		noMediaImage = getNoMediaImage();
 		audioOnlyImage = getAudioFileImage();
 		mediaAvailableImage = getMediaAvailableImage();
 		noPlayerImage = getNoPlayerImage();
+		this.volumeModel = volumeModel;
+		this.volumeModel.addPropertyChangeListener(volumeModelListener);
 		
 		loadIcons();
 		init();
@@ -157,8 +157,6 @@ public class PhonMediaPlayer extends JPanel {
 		IconSize icnSize = IconSize.SMALL;
 		playIcn = icnMgr.getIcon("actions/media-playback-start", icnSize);
 		pauseIcn = icnMgr.getIcon("actions/media-playback-pause", icnSize);
-		volMuteIcn = icnMgr.getIcon("status/audio-volume-muted", icnSize);
-		volIcn = icnMgr.getIcon("status/audio-volume-high", icnSize);
 		menuIcn = icnMgr.getIcon("misc/layer_lowerlayer", icnSize);
 		replayIcn = icnMgr.getIcon("actions/media-replay-30", icnSize);
 	}
@@ -208,9 +206,9 @@ public class PhonMediaPlayer extends JPanel {
 			positionSlider = getPositionSlider();
 			positionSlider.setEnabled(false);
 			positionSlider.setUI(new TimeSliderUI());
-			volumeBtn = getVolumeButton();
 			menuBtn = getMenuButton();
-			
+			volumeSlider = getVolumeSlider();
+
 			// setup layout
 			final GridBagConstraints gbc = new GridBagConstraints();
 			gbc.gridheight = 1;
@@ -227,15 +225,15 @@ public class PhonMediaPlayer extends JPanel {
 			++gbc.gridx;
 			retVal.add(replayBtn, gbc);
 			++gbc.gridx;
+			retVal.add(menuBtn, gbc);
+			++gbc.gridx;
 			gbc.weightx = 1.0;
 			gbc.fill = GridBagConstraints.HORIZONTAL;
 			retVal.add(positionSlider, gbc);
 			gbc.weightx = 0.0;
 			gbc.fill = GridBagConstraints.NONE;
 			++gbc.gridx;
-			retVal.add(volumeBtn, gbc);
-			++gbc.gridx;
-			retVal.add(menuBtn, gbc);
+			retVal.add(volumeSlider, gbc);
 		}
 		return retVal;
 	}
@@ -284,33 +282,25 @@ public class PhonMediaPlayer extends JPanel {
 		return retVal;
 	}
 
-	public JButton getVolumeButton() {
-		JButton retVal = volumeBtn;
-		if(retVal == null) {
-			PhonUIAction toggleMuteAct =
-					new PhonUIAction(this, "onVolumeBtn");
-			toggleMuteAct.putValue(Action.SMALL_ICON, volIcn);
-			retVal = new JButton();
-			retVal.setAction(toggleMuteAct);
-			volumeBtn = retVal;
-		}
-		return retVal;
-	}
+//	public JButton getVolumeButton() {
+//		JButton retVal = volumeBtn;
+//		if(retVal == null) {
+//			PhonUIAction toggleMuteAct =
+//					new PhonUIAction(this, "onVolumeBtn");
+//			toggleMuteAct.putValue(Action.SMALL_ICON, volIcn);
+//			retVal = new JButton();
+//			retVal.setAction(toggleMuteAct);
+//			volumeBtn = retVal;
+//		}
+//		return retVal;
+//	}
 
-	public JSlider getVolumeSlider() {
-		JSlider retVal = volumeSlider;
+	public VolumeSlider getVolumeSlider() {
+		VolumeSlider retVal = this.volumeSlider;
 		if(retVal == null) {
-			retVal = new JSlider();
-			retVal.setOrientation(SwingConstants.VERTICAL);
-			retVal.setMaximum(VOL_MAX);
-
-			retVal.addChangeListener((ChangeEvent ce) -> {
-					JSlider slider = (JSlider)ce.getSource();
-					final MediaPlayer player = getMediaPlayer();
-					if(player == null) return;
-					player.audio().setVolume(slider.getValue());
-				});
-			volumeSlider = retVal;
+			retVal = new VolumeSlider(this.volumeModel);
+			retVal.setFocusable(false);
+			this.volumeSlider = retVal;
 		}
 		return retVal;
 	}
@@ -491,81 +481,70 @@ public class PhonMediaPlayer extends JPanel {
 	};
 
 	/* UI actions */
-	public void toggleVolumeMute(PhonActionEvent pae) {
-		final MediaPlayer player = getMediaPlayer();
-		if(player != null) {
-			boolean isMuted = !player.audio().isMute();
-			player.audio().setMute(isMuted);
+//	public void toggleVolumeMute(PhonActionEvent pae) {
+//		final MediaPlayer player = getMediaPlayer();
+//		if(player != null) {
+//			boolean isMuted = !player.audio().isMute();
+//			player.audio().setMute(isMuted);
+//
+//			if(isMuted) {
+//				getVolumeButton().getAction().putValue(Action.SMALL_ICON, volMuteIcn);
+//			} else {
+//				getVolumeButton().getAction().putValue(Action.SMALL_ICON, volIcn);
+//			}
+//			getVolumeButton().repaint();
+//
+//			getVolumeSlider().setEnabled(!isMuted);
+//		}
+//	}
 
-			if(isMuted) {
-				getVolumeButton().getAction().putValue(Action.SMALL_ICON, volMuteIcn);
-			} else {
-				getVolumeButton().getAction().putValue(Action.SMALL_ICON, volIcn);
-			}
-			getVolumeButton().repaint();
-
-			getVolumeSlider().setEnabled(!isMuted);
-		}
-	}
-
-	public void onVolumeBtn(PhonActionEvent pae) {
-		final MediaPlayer player = getMediaPlayer();
-		if(player == null) return;
-
-		// show volume popup
-		if(volumePopup == null) {
-			volumePopup = new JFrame();
-			volumePopup.setUndecorated(true);
-			volumePopup.addWindowFocusListener(new WindowFocusListener() {
-
-				@Override
-				public void windowGainedFocus(WindowEvent we) {
-
-				}
-
-				@Override
-				public void windowLostFocus(WindowEvent we) {
-					if(volumePopup != null) {
-						volumePopup.setVisible(false);
-						volumePopup = null;
-					}
-				}
-			});
-
-			// create slider and mute button
-			JSlider volumeSlider = getVolumeSlider();
-			volumeSlider.setPreferredSize(new Dimension(
-					volumeSlider.getPreferredSize().width, 100));
-			if(!player.audio().isMute())
-				volumeSlider.setValue(player.audio().volume());
-			else
-				volumeSlider.setEnabled(false);
-			
-
-			PhonUIAction muteAct = new PhonUIAction(this, "toggleVolumeMute");
-			muteAct.putValue(Action.SMALL_ICON, volMuteIcn);
-			muteAct.putValue(Action.SHORT_DESCRIPTION, "Toggle mute");
-
-			JButton muteBtn = new JButton(muteAct);
-			muteBtn.setBorder(null);
-
-			JPanel panel = new JPanel(new BorderLayout());
-			panel.add(volumeSlider, BorderLayout.CENTER);
-			panel.add(muteBtn, BorderLayout.SOUTH);
-
-			volumePopup.add(panel);
-
-			Point p = getVolumeButton().getLocation();
-			SwingUtilities.convertPointToScreen(p, getVolumeButton().getParent());
-			Rectangle windowBounds = new Rectangle(
-					p.x,
-					p.y - volumePopup.getPreferredSize().height,
-					volumePopup.getPreferredSize().width,
-					volumePopup.getPreferredSize().height);
-			volumePopup.setBounds(windowBounds);
-			volumePopup.setVisible(true);
-		}
-	}
+//	public void onVolumeBtn(PhonActionEvent pae) {
+//		final MediaPlayer player = getMediaPlayer();
+//		if(player == null) return;
+//
+//		// show volume popup
+//		if(volumePopup == null) {
+//			volumePopup = new JFrame();
+//			volumePopup.setUndecorated(true);
+//			volumePopup.addWindowFocusListener(new WindowFocusListener() {
+//
+//				@Override
+//				public void windowGainedFocus(WindowEvent we) {
+//
+//				}
+//
+//				@Override
+//				public void windowLostFocus(WindowEvent we) {
+//					if(volumePopup != null) {
+//						volumePopup.setVisible(false);
+//						volumePopup = null;
+//					}
+//				}
+//			});
+//
+//			// create slider and mute button
+//			VolumeSlider volumeSlider = getVolumeSlider();
+//
+//			PhonUIAction muteAct = new PhonUIAction(this, "toggleVolumeMute");
+//			muteAct.putValue(Action.SMALL_ICON, volMuteIcn);
+//			muteAct.putValue(Action.SHORT_DESCRIPTION, "Toggle mute");
+//
+//			JPanel panel = new JPanel(new BorderLayout());
+//			panel.add(volumeSlider, BorderLayout.CENTER);
+//
+//			volumePopup.add(panel);
+//
+//			Point p = getVolumeButton().getLocation();
+//			SwingUtilities.convertPointToScreen(p, getVolumeButton().getParent());
+//			Rectangle windowBounds = new Rectangle(
+//					p.x,
+//					p.y - volumePopup.getPreferredSize().height,
+//					volumePopup.getPreferredSize().width,
+//					volumePopup.getPreferredSize().height);
+//			volumePopup.setBounds(windowBounds);
+//			volumePopup.setVisible(true);
+//		}
+//	}
 
 	public void onPlayPause(PhonActionEvent pae) {
 		final MediaPlayer player = getMediaPlayer();
@@ -662,10 +641,8 @@ public class PhonMediaPlayer extends JPanel {
 			long endTime = startTime + length;
 			if(segmentListener != null)
 				player.events().removeMediaPlayerEventListener(segmentListener);
-			
-			boolean unmute = false;
+
 			if(videoOnly) {
-				unmute = !player.audio().isMute();
 				player.audio().setMute(true);
 			}
 			
@@ -674,7 +651,7 @@ public class PhonMediaPlayer extends JPanel {
 			player.controls().setTime(startTime);
 			
 			if(segmentListener == null) {
-				segmentListener = new SegmentListener(endTime, unmute);
+				segmentListener = new SegmentListener(endTime);
 			} else {
 				segmentListener.setStopTime(endTime);
 			}
@@ -746,13 +723,11 @@ public class PhonMediaPlayer extends JPanel {
 
 		private volatile long stopTime = -1L;
 		private Lock stopTimeMutex = new ReentrantLock();
-		private boolean unmute = false;
 
-		public SegmentListener(long stopTime, boolean unmute) {
+		public SegmentListener(long stopTime) {
 			stopTimeMutex.lock();
 			this.stopTime = stopTime;
 			stopTimeMutex.unlock();
-			this.unmute = unmute;
 		}
 		
 		@Override
@@ -773,8 +748,7 @@ public class PhonMediaPlayer extends JPanel {
 			stopTimeMutex.lock();
 			if(stopTime >= 0 && newTime >= stopTime) {
 				getMediaPlayer().controls().pause();
-				if(unmute)
-					getMediaPlayer().audio().setMute(false);
+				getMediaPlayer().audio().setMute(volumeModel.isMuted());
 			}
 			stopTimeMutex.unlock();
 		}
@@ -920,17 +894,15 @@ public class PhonMediaPlayer extends JPanel {
 	}
 
 	public void play() {
-		if(getMediaPlayer() != null)
+		if(getMediaPlayer() != null) {
+			getMediaPlayer().audio().setMute(volumeModel.isMuted());
+			getMediaPlayer().audio().setVolume((int)Math.round(125 * volumeModel.getVolumeLevel()));
 			getMediaPlayer().controls().play();
+		}
 	}
 	
 	public boolean willPlay() {
 		return (getMediaPlayer() != null ? getMediaPlayer().status().isPlayable() : false);
-	}
-
-	public void setMuted(boolean arg0) {
-		if(getMediaPlayer() != null)
-			getMediaPlayer().audio().setMute(arg0);
 	}
 
 	public void setPosition(float arg0) {
@@ -970,11 +942,6 @@ public class PhonMediaPlayer extends JPanel {
 		if(getMediaPlayer() != null)
 			getMediaPlayer().controls().stop();
 	}
-
-	public void toggleMute() {
-		if(getMediaPlayer() != null)
-			getMediaPlayer().audio().setMute(!getMediaPlayer().audio().isMute());
-	}
 	
 	/**
 	 * Update the slider position based on the current time value
@@ -1003,6 +970,24 @@ public class PhonMediaPlayer extends JPanel {
 		}
 		cachedListeners.remove(listener);
 	}
+
+	private final PropertyChangeListener volumeModelListener = (evt) -> {
+		System.out.println(evt.getPropertyName());
+		switch(evt.getPropertyName()) {
+			case "muted":
+				if(getMediaPlayer() != null)
+					getMediaPlayer().audio().setMute(volumeModel.isMuted());
+				break;
+
+			case "volumeLevel":
+				if(getMediaPlayer() != null)
+					getMediaPlayer().audio().setVolume((int)Math.round(125 * volumeModel.getVolumeLevel()));
+				break;
+
+			default:
+				break;
+		}
+	};
 	
 	private class FileSelectionTransferHandler extends FileTransferHandler {
 

@@ -6,7 +6,7 @@ import java.beans.*;
  * Volume model used by all media playback elements in the session editor.
  *
  */
-public class VolumeModel {
+public final class VolumeModel {
 
 	public final static float MIN_LEVEL = 0.0f;
 

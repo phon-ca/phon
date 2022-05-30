@@ -1,5 +1,8 @@
 package ca.phon.media;
 
+import ca.phon.opgraph.nodes.phonex.PhonexGroupNode;
+import ca.phon.ui.PhonGuiConstants;
+import ca.phon.util.PhonConstants;
 import ca.phon.util.icons.*;
 import org.w3c.dom.css.Rect;
 
@@ -141,9 +144,11 @@ public class DefaultVolumeSliderUI extends VolumeSliderUI {
 		int height = volumeRect.height;
 
 		final Color colors[] = new Color[] {
-				Color.green.darker(), Color.green, Color.orange
+				//	Color.green.darker(), Color.green, Color.orange
+				(slider.isMuted() ? Color.gray : Color.decode("#9fafd1")),
+				(slider.isMuted() ? Color.lightGray : Color.decode("#c7d0e4"))
 		};
-		final float pts[] = { 0.0f, 0.8f, 1.0f };
+		final float pts[] = { 0.0f, 1.0f };
 
 		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2 = img.createGraphics();

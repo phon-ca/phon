@@ -24,6 +24,7 @@ import java.time.format.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
+import ca.phon.media.VolumeSlider;
 import org.jdesktop.swingx.*;
 import org.jdesktop.swingx.JXStatusBar.Constraint.*;
 
@@ -47,6 +48,8 @@ public class SessionEditorStatusBar extends JXStatusBar {
 	 */
 	private JLabel progressLabel;
 	private JProgressBar progressBar;
+
+	private VolumeSlider volumeSlider;
 
 	private final PhonTaskListener taskListener = new PhonTaskListener() {
 
@@ -119,15 +122,19 @@ public class SessionEditorStatusBar extends JXStatusBar {
 	private void init() {
 		statusLabel = new JLabel();
 
-		modifiedIcon = IconManager.getInstance().getIcon("actions/document-save", IconSize.XSMALL);
-		unmodifiedIcon = IconManager.getInstance().getDisabledIcon("actions/document-save", IconSize.XSMALL);
+		volumeSlider = new VolumeSlider(getEditor().getMediaModel().getVolumeModel(), SwingConstants.HORIZONTAL);
+
+		add(volumeSlider, new JXStatusBar.Constraint(100));
+
+		modifiedIcon = IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL);
+		unmodifiedIcon = IconManager.getInstance().getDisabledIcon("actions/document-save", IconSize.SMALL);
 		if(getEditor().hasUnsavedChanges()) {
 			statusLabel.setIcon(modifiedIcon);
 		} else {
 			statusLabel.setIcon(unmodifiedIcon);
 		}
 		statusLabel.setToolTipText(getStatusTooltipText());
-		add(statusLabel, new JXStatusBar.Constraint(IconSize.XSMALL.getWidth()));
+		add(statusLabel, new JXStatusBar.Constraint(IconSize.SMALL.getWidth()));
 
 		sessionPathLabel = new JLabel(getEditor().getSession().getCorpus() + "/" +
 				getEditor().getSession().getName());
@@ -181,6 +188,7 @@ public class SessionEditorStatusBar extends JXStatusBar {
 		add(progressLabel, new JXStatusBar.Constraint(200));
 		add(progressBar, new JXStatusBar.Constraint(120));
 		add(new JLabel(), new JXStatusBar.Constraint(5));
+
 	}
 
 	private String getStatusTooltipText() {

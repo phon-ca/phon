@@ -75,7 +75,7 @@ public class MediaPlayerEditorView extends EditorView {
 
 	private void init() {
 		setLayout(new BorderLayout());
-		mediaPlayer = new PhonMediaPlayer();
+		mediaPlayer = new PhonMediaPlayer(getEditor().getMediaModel().getVolumeModel());
 		mediaPlayer.addMediaMenuFilter(new MediaMenuFilter());
 		mediaPlayer.addPropertyChangeListener("mediaLoaded", (e) -> {
 			if((boolean)e.getNewValue()) {
