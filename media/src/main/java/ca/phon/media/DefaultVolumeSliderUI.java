@@ -146,16 +146,17 @@ public class DefaultVolumeSliderUI extends VolumeSliderUI {
 		final Color colors[] = new Color[] {
 				//	Color.green.darker(), Color.green, Color.orange
 				(slider.isMuted() ? Color.gray : Color.decode("#9fafd1")),
-				(slider.isMuted() ? Color.lightGray : Color.decode("#c7d0e4"))
+				(slider.isMuted() ? Color.lightGray : Color.decode("#c7d0e4")),
+				(slider.isMuted() ? Color.gray : Color.orange)
 		};
-		final float pts[] = { 0.0f, 1.0f };
+		final float vols[] = { 0.0f, 1.0f, 1.25f };
 
 		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2 = img.createGraphics();
 
 		for(int i = 0; i < colors.length-1; i++) {
-			float x1 = width * pts[i];
-			float x2 = width * pts[i+1];
+			float x1 = Math.round(width * (vols[i] / slider.getModel().getMaximumVolumeLevel()));
+			float x2 = Math.round(width * (vols[i+1] / slider.getModel().getMaximumVolumeLevel()));
 			Color c1 = colors[i];
 			Color c2 = colors[i+1];
 
@@ -197,17 +198,16 @@ public class DefaultVolumeSliderUI extends VolumeSliderUI {
 		Path2D volumeTri = getVolumeTri(volumeTriRect);
 
 		Rectangle2D volumeRect = new Rectangle2D.Double(volumeTriRect.x, volumeTriRect.y,
-			volumeTriRect.getWidth() * slider.getVolumeLevel(), volumeTriRect.height);
+			volumeTriRect.getWidth() * (slider.getVolumeLevel()/slider.getModel().getMaximumVolumeLevel()), volumeTriRect.height);
 
 		Area a1 = new Area(volumeRect);
 		Area a2 = new Area(volumeTri);
 		a1.intersect(a2);
 
-		GradientPaint gp = new GradientPaint((float)volumeTriRect.getMinX(), (float)volumeTriRect.getMinY(), Color.green.darker(),
-				(float)volumeTriRect.getCenterX(), (float)volumeTriRect.getMaxY(), new Color(0, 0, 0, 0), false);
 		Paint oldPaint = g2.getPaint();
 		g2.setPaint(createVolumePaint(volumeTriRect));
 		g2.fill(a1);
+		g2.setPaint(oldPaint);
 
 		g2.setColor(strokeColor);
 		g2.setStroke(s);
@@ -244,14 +244,14 @@ public class DefaultVolumeSliderUI extends VolumeSliderUI {
 			final Rectangle volRect = getVolumeSliderRect(slider);
 			if(volRect.contains(e.getPoint())) {
 				float newVolumeLevel = (float) ((e.getPoint().x - volRect.getX()) / volRect.getWidth());
-				newVolumeLevel *= 100.0f;
+				newVolumeLevel *= slider.getModel().getMaximumVolumeLevel() * 100.0f;
 				int volumeAsInteger = (int) Math.round(newVolumeLevel);
 				slider.getModel().setVolumeLevel(volumeAsInteger / 100.0f);
 			} else {
 				if(volRect.getMaxX() < e.getX())
-					slider.getModel().setVolumeLevel(1.0f);
+					slider.getModel().setVolumeLevel(VolumeModel.MAX_LEVEL);
 				else if(volRect.getMinX() > e.getX())
-					slider.getModel().setVolumeLevel(0.0f);
+					slider.getModel().setVolumeLevel(VolumeModel.MIN_LEVEL);
 			}
 		}
 
@@ -282,10 +282,10 @@ public class DefaultVolumeSliderUI extends VolumeSliderUI {
 
 			if(e.getWheelRotation() < 0) {
 				// move up
-				currentVolume = Math.min(100.0f, currentVolume + (5 - mod5));
+				currentVolume = Math.min(VolumeModel.MAX_LEVEL * 100.0f, currentVolume + (5 - mod5));
 			} else {
 				// move down
-				currentVolume = Math.max(0.0f, currentVolume - (mod5 == 0 ? 5.0f : mod5));
+				currentVolume = Math.max(VolumeModel.MIN_LEVEL * 100.0f, currentVolume - (mod5 == 0 ? 5.0f : mod5));
 			}
 
 			slider.setVolumeLevel(Math.round(currentVolume) / 100.0f);

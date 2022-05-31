@@ -1,6 +1,7 @@
 package ca.phon.media;
 
 import java.beans.*;
+import java.util.Map;
 
 /**
  * Volume model used by all media playback elements in the session editor.
@@ -12,7 +13,7 @@ public final class VolumeModel {
 
 	public final static float DEFAULT_LEVEL = 1.0f;
 
-	public final static float MAX_LEVEL = 1.0f;
+	public final static float MAX_LEVEL = 1.25f;
 
 	/**
 	 * Value between MIN_LEVEL and MAX_LEVEL indicating volume level
@@ -39,6 +40,10 @@ public final class VolumeModel {
 
 	public void setVolumeLevel(float volumeLevel) {
 		var oldVal = this.volumeLevel;
+		if(volumeLevel < MIN_LEVEL)
+			volumeLevel = MIN_LEVEL;
+		else if(volumeLevel > MAX_LEVEL)
+			volumeLevel = MAX_LEVEL;
 		this.volumeLevel = volumeLevel;
 		propSupport.firePropertyChange("volumeLevel", oldVal, volumeLevel);
 	}
@@ -51,6 +56,10 @@ public final class VolumeModel {
 		var oldVal = this.muted;
 		this.muted = muted;
 		propSupport.firePropertyChange("muted", oldVal, muted);
+	}
+
+	public float getMaximumVolumeLevel() {
+		return MAX_LEVEL;
 	}
 
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
