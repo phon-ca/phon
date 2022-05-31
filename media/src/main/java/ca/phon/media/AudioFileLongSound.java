@@ -25,17 +25,17 @@ public class AudioFileLongSound extends LongSound {
 
 	private final AudioFile audioFile;
 
-	public AudioFileLongSound(AudioFile audioFile) throws IOException {
+	public AudioFileLongSound(AudioFile audioFile, VolumeModel volumeModel) throws IOException {
 		super(audioFile.getFile());
 		this.audioFile = audioFile;
 
 		this.sampled = new AudioFileSampled(audioFile);
 
-		putExtension(PlaySegment.class, new SampledPlaySegment(sampled));
+		putExtension(PlaySegment.class, new SampledPlaySegment(sampled, volumeModel));
 		putExtension(ExportSegment.class, new SampledExportSegment(sampled, audioFile.getAudioFileType(), audioFile.getAudioFileEncoding()));
 	}
 
-	public AudioFileLongSound(File file) throws IOException {
+	public AudioFileLongSound(File file, VolumeModel volumeModel) throws IOException {
 		super(file);
 
 		try {
@@ -45,7 +45,7 @@ public class AudioFileLongSound extends LongSound {
 			throw new IOException(e);
 		}
 		
-		putExtension(PlaySegment.class, new SampledPlaySegment(sampled));
+		putExtension(PlaySegment.class, new SampledPlaySegment(sampled, volumeModel));
 		putExtension(ExportSegment.class, new SampledExportSegment(sampled, audioFile.getAudioFileType(), audioFile.getAudioFileEncoding()));
 	}
 

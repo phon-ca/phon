@@ -34,7 +34,7 @@ public abstract class LongSound implements IExtendable {
 	public final static String PREFERRED_LONGSOUND_LOADER_PROP = 
 			LongSound.class.getName() + ".preferredLongSoundLoader";
 	
-	public static LongSound fromFile(File file) throws IOException {
+	public static LongSound fromFile(File file, VolumeModel volumeModel) throws IOException {
 		String preferredLoader = PrefHelper.get(PREFERRED_LONGSOUND_LOADER_PROP, null);
 		
 		final List<IPluginExtensionPoint<LongSound>> soundLoaders =
@@ -45,12 +45,12 @@ public abstract class LongSound implements IExtendable {
 					: soundLoaders.get(0));
 			if(defaultLoader == null) defaultLoader = soundLoaders.get(0);
 			try {
-				return defaultLoader.getFactory().createObject(file);
+				return defaultLoader.getFactory().createObject(file, volumeModel);
 			} catch (Exception e) {
 				throw new IOException(e);
 			}
 		} else {
-			return new AudioFileLongSound(file);
+			return new AudioFileLongSound(file, volumeModel);
 		}
 	}
 	

@@ -44,9 +44,16 @@ public abstract class PlaySegment {
 	private volatile float position = -1.0f;
 	
 	private final PropertyChangeSupport propSupport = new PropertyChangeSupport(this);
+
+	private final VolumeModel volumeModel;
 	
 	public PlaySegment() {
+		this(new VolumeModel());
+	}
+
+	public PlaySegment(VolumeModel volumeModel) {
 		super();
+		this.volumeModel = volumeModel;
 	}
 	
 	/**

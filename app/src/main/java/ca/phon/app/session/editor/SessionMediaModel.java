@@ -286,7 +286,7 @@ public class SessionMediaModel {
 	public LongSound loadSessionAudio() throws IOException {
 		if(isSessionAudioAvailable()) {
 			File sessionAudio = getSessionAudioFile();
-			LongSound retVal = LongSound.fromFile(sessionAudio);
+			LongSound retVal = LongSound.fromFile(sessionAudio, volumeModel);
 			this.loadedAudioFile = sessionAudio;
 			return retVal;
 		} else {

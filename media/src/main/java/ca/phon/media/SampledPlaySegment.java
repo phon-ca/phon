@@ -15,6 +15,7 @@
  */
 package ca.phon.media;
 
+import java.beans.*;
 import java.io.*;
 import java.util.*;
 
@@ -32,11 +33,14 @@ public class SampledPlaySegment extends PlaySegment {
 	private Info mixerInfo = null;
 	
 	private PlaybackMarkerTask playbackTask = null;
+
+	private VolumeModel volumeModel;
 	
-	public SampledPlaySegment(Sampled sampled) {
-		super();
+	public SampledPlaySegment(Sampled sampled, VolumeModel volumeModel) {
+		super(volumeModel);
 		
 		this.sampled = sampled;
+		this.volumeModel = volumeModel;
 	}
 	
 	public Sampled getSampled() {
@@ -148,6 +152,10 @@ public class SampledPlaySegment extends PlaySegment {
 			@SuppressWarnings("resource")
 			final Clip audioClip = (getMixerInfo() == null ? AudioSystem.getClip() : AudioSystem.getClip(getMixerInfo()));
 			audioClip.open(ais);
+
+			updateVolume(audioClip);
+			final VolumeModelListener volumeModelListener = new VolumeModelListener(audioClip);
+			volumeModel.addPropertyChangeListener(volumeModelListener);
 			final LineListener lineListener = new LineListener() {
 				
 				@Override
@@ -162,6 +170,7 @@ public class SampledPlaySegment extends PlaySegment {
 						setPlaying(false);
 						setPlaybackTask(null);
 						event.getLine().close();
+						volumeModel.removePropertyChangeListener(volumeModelListener);
 					}
 				}
 				
@@ -177,6 +186,37 @@ public class SampledPlaySegment extends PlaySegment {
 		} finally {
 			ais.close();
 		}
+	}
+
+	private void updateVolume(Clip audioClip) {
+		float vol = volumeModel.isMuted() ? 0.0f : volumeModel.getVolumeLevel();
+		FloatControl gainCtrl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
+		if(gainCtrl != null) {
+			gainCtrl.setValue(20.0f * (float) Math.log10(vol));
+		}
+	}
+
+	private class VolumeModelListener implements PropertyChangeListener {
+
+		private Clip audioClip;
+
+		public VolumeModelListener(Clip audioClip) {
+			this.audioClip = audioClip;
+		}
+
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			switch(evt.getPropertyName()) {
+				case "muted":
+				case "volumeLevel":
+					updateVolume(audioClip);
+					break;
+
+				default:
+					break;
+			}
+		}
+
 	}
 
 	private class PlaybackMarkerTask extends SwingWorker<Float, Float> {
