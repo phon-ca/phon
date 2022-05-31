@@ -16,11 +16,13 @@
 package ca.phon.app.session.editor;
 
 import java.awt.event.*;
+import java.beans.*;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.locks.*;
 
 import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
 
 import ca.phon.media.VolumeModel;
 import org.apache.commons.io.*;
@@ -55,6 +57,13 @@ public class SessionMediaModel {
 	 */
 	private VolumeModel volumeModel;
 
+	public final static float MIN_PLAYBACK_RATE = 0.25f;
+	public final static float MAX_PLAYBACK_RATE = 2.0f;
+	public final static float DEFAULT_PLAYBACK_RATE = 1.0f;
+	private float playbackRate = DEFAULT_PLAYBACK_RATE;
+
+	private final PropertyChangeSupport propSupport = new PropertyChangeSupport(this);
+
 	private enum AudioFileStatus {
 		UNKONWN,
 		OK,
@@ -80,6 +89,9 @@ public class SessionMediaModel {
 		
 		this.editor = editor;
 		this.volumeModel = new VolumeModel();
+		this.volumeModel.addPropertyChangeListener((evt) -> {
+			propSupport.firePropertyChange(evt);
+		});
 	}
 	
 	public Project getProject() {
@@ -96,6 +108,20 @@ public class SessionMediaModel {
 
 	public VolumeModel getVolumeModel() {
 		return this.volumeModel;
+	}
+
+	public float getPlaybackRate() {
+		return this.playbackRate;
+	}
+
+	public void setPlaybackRate(float playbackRate) {
+		if(playbackRate < MIN_PLAYBACK_RATE)
+			playbackRate = MIN_PLAYBACK_RATE;
+		if(playbackRate > MAX_PLAYBACK_RATE)
+			playbackRate = MAX_PLAYBACK_RATE;
+		var oldVal = this.playbackRate;
+		this.playbackRate = playbackRate;
+		propSupport.firePropertyChange("playbackRate", oldVal, playbackRate);
 	}
 	
 	public SegmentPlayback getSegmentPlayback() {
@@ -288,6 +314,7 @@ public class SessionMediaModel {
 			File sessionAudio = getSessionAudioFile();
 			LongSound retVal = LongSound.fromFile(sessionAudio, volumeModel);
 			this.loadedAudioFile = sessionAudio;
+			propSupport.firePropertyChange("sessionAudioLoaded", false, true);
 			return retVal;
 		} else {
 			throw new FileNotFoundException();
@@ -308,5 +335,32 @@ public class SessionMediaModel {
 		}
 		return generateSessionAudioAction;
 	}
-	
+
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		propSupport.addPropertyChangeListener(listener);
+	}
+
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
+		propSupport.removePropertyChangeListener(listener);
+	}
+
+	public PropertyChangeListener[] getPropertyChangeListeners() {
+		return propSupport.getPropertyChangeListeners();
+	}
+
+	public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+		propSupport.addPropertyChangeListener(propertyName, listener);
+	}
+
+	public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+		propSupport.removePropertyChangeListener(propertyName, listener);
+	}
+
+	public PropertyChangeListener[] getPropertyChangeListeners(String propertyName) {
+		return propSupport.getPropertyChangeListeners(propertyName);
+	}
+
+	public boolean hasListeners(String propertyName) {
+		return propSupport.hasListeners(propertyName);
+	}
 }
