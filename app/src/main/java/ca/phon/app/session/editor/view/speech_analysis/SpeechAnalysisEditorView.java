@@ -120,6 +120,8 @@ public class SpeechAnalysisEditorView extends EditorView {
 	private ErrorBanner messageButton = new ErrorBanner();
 	private PhonTaskButton generateButton = null;
 
+	private VolumeSlider volumeSlider;
+
 	private final List<SpeechAnalysisTier> pluginTiers =
 			Collections.synchronizedList(new ArrayList<SpeechAnalysisTier>());
 
@@ -157,8 +159,15 @@ public class SpeechAnalysisEditorView extends EditorView {
 
 	private void init() {
 		setLayout(new BorderLayout());
-		setupToolbar();
-		
+		toolbar = setupToolbar();
+
+		volumeSlider = new VolumeSlider(getEditor().getMediaModel().getVolumeModel());
+		volumeSlider.setFocusable(false);
+		JPanel topPanel = new JPanel(new BorderLayout());
+		topPanel.add(toolbar, BorderLayout.CENTER);
+		topPanel.add(volumeSlider, BorderLayout.EAST);
+		add(topPanel, BorderLayout.NORTH);
+
 		errorPanel = new JPanel(new VerticalLayout());
 		errorPanel.add(messageButton);
 
@@ -304,8 +313,8 @@ public class SpeechAnalysisEditorView extends EditorView {
 		}
 	}
 
-	private void setupToolbar() {
-		toolbar = new JToolBar();
+	private JToolBar setupToolbar() {
+		JToolBar toolbar = new JToolBar();
 		toolbar.setFloatable(false);
 
 		final JPopupMenu playMenu = new JPopupMenu();
@@ -386,7 +395,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		toolbar.add(showMoreButton);
 		toolbar.add(zoomOutButton);
 
-		add(toolbar, BorderLayout.NORTH);
+		return toolbar;
 	}
 	
 	private void setupPlaybackMenu(MenuBuilder builder) {

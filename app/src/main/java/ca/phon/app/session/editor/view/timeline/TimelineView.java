@@ -97,6 +97,8 @@ public final class TimelineView extends EditorView {
 	private ErrorBanner messageButton = new ErrorBanner();
 	private PhonTaskButton generateButton = null;
 
+	private VolumeSlider volumeSlider;
+
 	/* Additional menu handlers */
 	private final List<BiConsumer<MenuBuilder, Boolean>> menuHandlers = new ArrayList<>();
 	
@@ -201,7 +203,13 @@ public final class TimelineView extends EditorView {
 		tierPanel.add(Box.createVerticalGlue(), gbc);
 
 		setLayout(new BorderLayout());
-		add(toolbar, BorderLayout.NORTH);
+
+		volumeSlider = new VolumeSlider(getEditor().getMediaModel().getVolumeModel());
+		volumeSlider.setFocusable(false);
+		JPanel topPanel = new JPanel(new BorderLayout());
+		topPanel.add(toolbar, BorderLayout.CENTER);
+		topPanel.add(volumeSlider, BorderLayout.EAST);
+		add(topPanel, BorderLayout.NORTH);
 		
 		add(tierScrollPane, BorderLayout.CENTER);
 		

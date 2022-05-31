@@ -49,8 +49,6 @@ public class SessionEditorStatusBar extends JXStatusBar {
 	private JLabel progressLabel;
 	private JProgressBar progressBar;
 
-	private VolumeSlider volumeSlider;
-
 	private final PhonTaskListener taskListener = new PhonTaskListener() {
 
 		@Override
@@ -121,10 +119,6 @@ public class SessionEditorStatusBar extends JXStatusBar {
 
 	private void init() {
 		statusLabel = new JLabel();
-
-		volumeSlider = new VolumeSlider(getEditor().getMediaModel().getVolumeModel(), SwingConstants.HORIZONTAL);
-
-		add(volumeSlider, new JXStatusBar.Constraint(100));
 
 		modifiedIcon = IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL);
 		unmodifiedIcon = IconManager.getInstance().getDisabledIcon("actions/document-save", IconSize.SMALL);
