@@ -277,7 +277,7 @@ public class DefaultVolumeSliderUI extends VolumeSliderUI {
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e) {
 			// move to nearest 5
-			float currentVolume = slider.getVolumeLevel() * 100.0f;
+			float currentVolume = Math.round(slider.getVolumeLevel() * 100.0f);
 			int mod5 = (int)(currentVolume) % 5;
 
 			if(e.getWheelRotation() < 0) {
@@ -285,10 +285,10 @@ public class DefaultVolumeSliderUI extends VolumeSliderUI {
 				currentVolume = Math.min(VolumeModel.MAX_LEVEL * 100.0f, currentVolume + (5 - mod5));
 			} else {
 				// move down
-				currentVolume = Math.max(VolumeModel.MIN_LEVEL * 100.0f, currentVolume - (mod5 == 0 ? 5.0f : mod5));
+				currentVolume = Math.max(VolumeModel.MIN_LEVEL * 100.0f, currentVolume - (mod5 == 0.0f ? 5.0f : mod5));
 			}
 
-			slider.setVolumeLevel(Math.round(currentVolume) / 100.0f);
+			slider.setVolumeLevel(currentVolume / 100.0f);
 		}
 
 		@Override
