@@ -71,6 +71,18 @@ public class MediaPlayerEditorView extends EditorView {
 
 		init();
 		addEditorViewListener(editorViewListener);
+		editor.getMediaModel().addPropertyChangeListener((evt) -> {
+			switch(evt.getPropertyName()) {
+				case "playbackRate":
+					if(mediaPlayer != null) {
+						mediaPlayer.setRate(editor.getMediaModel().getPlaybackRate());
+					}
+					break;
+
+			default:
+				break;
+			}
+		});
 	}
 
 	private void init() {
@@ -166,6 +178,7 @@ public class MediaPlayerEditorView extends EditorView {
 
 			final File mediaFile = mediaModel.getSessionMediaFile();
 			mediaPlayer.loadMedia(mediaFile.getAbsolutePath());
+			mediaPlayer.setRate(getEditor().getMediaModel().getPlaybackRate());
 			
 			messageButton.setVisible(false);
 		} else {
