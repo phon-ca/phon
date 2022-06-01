@@ -409,7 +409,7 @@ public final class SegmentationHandler {
 		public void run() {
 			if(segmentationInterval != null) {
 				long currentTime = System.currentTimeMillis();
-				long newTime = segmentationMediaStartTime + (currentTime - segmentsationSystemStartTime);
+				long newTime = segmentationMediaStartTime + Math.round((currentTime - segmentsationSystemStartTime) * editor.getMediaModel().getPlaybackRate());
 				long segStart = window.getWindowStartMs(newTime);
 				long segEnd = window.getWindowEndMs(newTime);
 				

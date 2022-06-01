@@ -1264,7 +1264,7 @@ public final class TimelineView extends EditorView {
 		public void run() {
 			if(playbackMarker != null) {
 				long currentTime = System.currentTimeMillis();
-				long newTime = mediaSyncTime + (currentTime - startTime);
+				long newTime = mediaSyncTime + (long)Math.round((currentTime - startTime) * getEditor().getMediaModel().getPlaybackRate());
 				
 				playbackMarker.setTime((float)TimeUIModel.roundTime(newTime / 1000.0f));
 			} else {
