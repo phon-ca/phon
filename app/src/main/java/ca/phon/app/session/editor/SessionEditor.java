@@ -26,6 +26,7 @@ import javax.swing.event.*;
 import javax.swing.undo.*;
 
 import ca.phon.app.log.LogUtil;
+import ca.phon.media.VolumeModel;
 import org.apache.logging.log4j.*;
 import org.jdesktop.swingx.*;
 
@@ -423,7 +424,23 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 				mediaMenu.add(genAudioItem);
 				mediaMenu.add(new ShowMediaInfoAction(SessionEditor.this)).setEnabled(mediaModel.isSessionMediaAvailable());;
 				mediaMenu.addSeparator();
-				
+
+				JMenu volumeMenu = new JMenu("Volume");
+				volumeMenu.add(new JCheckBoxMenuItem(new ToggleMuteAction(SessionEditor.this)));
+				volumeMenu.addSeparator();
+				for(float level = 0.25f; level <= VolumeModel.MAX_LEVEL; level += 0.25f) {
+					volumeMenu.add(new JMenuItem(new AdjustVolumeAction(SessionEditor.this, level)));
+				}
+				mediaMenu.add(volumeMenu);
+
+				JMenu playbackRateMenu = new JMenu("Playback rate");
+				for(float rate = 0.25f; rate <= 2.0f; rate += 0.25f) {
+					playbackRateMenu.add(new JCheckBoxMenuItem(new AdjustPlaybackRate(SessionEditor.this, rate)));
+				}
+				mediaMenu.add(playbackRateMenu);
+
+				mediaMenu.addSeparator();
+
 				boolean enabled = (mediaModel.isSessionAudioAvailable() || 
 						(mediaModel.isSessionMediaAvailable() && getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)));
 				mediaMenu.add(new PlaySegmentAction(SessionEditor.this)).setEnabled(enabled);
