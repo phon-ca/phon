@@ -17,6 +17,7 @@ package ca.phon.media;
 
 import java.beans.*;
 import java.io.*;
+import java.security.interfaces.RSAMultiPrimePrivateCrtKey;
 import java.util.*;
 
 import javax.sound.sampled.*;
@@ -35,10 +36,14 @@ public class SampledPlaySegment extends PlaySegment {
 	private PlaybackMarkerTask playbackTask = null;
 
 	private VolumeModel volumeModel;
-	
+
+	public SampledPlaySegment(Sampled sampled) {
+		this(sampled, new VolumeModel());
+	}
+
 	public SampledPlaySegment(Sampled sampled, VolumeModel volumeModel) {
 		super(volumeModel);
-		
+
 		this.sampled = sampled;
 		this.volumeModel = volumeModel;
 	}
@@ -54,10 +59,14 @@ public class SampledPlaySegment extends PlaySegment {
 	private void setPlaybackTask(PlaybackMarkerTask task) {
 		this.playbackTask = task;
 	}
-	
+
 	public AudioFormat getAudioFormat() {
-		final AudioFormat format = new AudioFormat(Encoding.PCM_SIGNED, sampled.getSampleRate(),
-				AudioFileEncoding.LINEAR_16_LITTLE_ENDIAN.getBitsPerSample(), sampled.getNumberOfChannels(), sampled.getNumberOfChannels() * AudioFileEncoding.LINEAR_16_LITTLE_ENDIAN.getBytesPerSample(), sampled.getSampleRate(), false);
+		return this.getAudioFormat(1.0f);
+	}
+
+	public AudioFormat getAudioFormat(float playbackRate) {
+		final AudioFormat format = new AudioFormat(Encoding.PCM_SIGNED, sampled.getSampleRate() * playbackRate,
+				AudioFileEncoding.LINEAR_16_LITTLE_ENDIAN.getBitsPerSample(), sampled.getNumberOfChannels(), sampled.getNumberOfChannels() * AudioFileEncoding.LINEAR_16_LITTLE_ENDIAN.getBytesPerSample(), sampled.getSampleRate() * playbackRate, false);
 		return format;
 	}
 	
@@ -111,10 +120,10 @@ public class SampledPlaySegment extends PlaySegment {
 	}
 	
 	@Override
-	public void playSegment(float startTime, float endTime) throws IOException {
+	public void playSegment(float startTime, float endTime, float playbackRate) throws IOException {
 		if(isPlaying()) return;
 		
-		AudioFormat format = getAudioFormat();
+		AudioFormat format = getAudioFormat(playbackRate);
 		
 		int firstSample = sampled.sampleForTime(startTime);
 		int lastSample = sampled.sampleForTime(endTime);
@@ -135,11 +144,11 @@ public class SampledPlaySegment extends PlaySegment {
 				// playback 16-bit audio
 				final AudioFormat playbackFormat = new AudioFormat(
 						format.getEncoding(),
-						format.getSampleRate(),
+						sampled.getSampleRate() * playbackRate,
 						16,
 						format.getChannels(),
 						format.getChannels() * 2,
-						format.getFrameRate(),
+						format.getFrameRate() * playbackRate,
 						format.isBigEndian());
 				
 				if(AudioSystem.isConversionSupported(format, playbackFormat)) {
@@ -154,8 +163,10 @@ public class SampledPlaySegment extends PlaySegment {
 			audioClip.open(ais);
 
 			updateVolume(audioClip);
+
 			final VolumeModelListener volumeModelListener = new VolumeModelListener(audioClip);
 			volumeModel.addPropertyChangeListener(volumeModelListener);
+
 			final LineListener lineListener = new LineListener() {
 				
 				@Override
@@ -233,8 +244,9 @@ public class SampledPlaySegment extends PlaySegment {
 		@Override
 		protected Float doInBackground() throws Exception {
 			while(isPlaying() && clip.isOpen()) {
-				final long clipPos = clip.getMicrosecondPosition() % clip.getMicrosecondLength();
-				final float lineMs = clipPos / 1000.0f / 1000.0f;
+				final float lineMs = (clip.getFramePosition() / sampled.getSampleRate());
+//				final long clipPos = clip.getMicrosecondPosition() % clip.getMicrosecondLength();
+//				final float lineMs = clipPos / 1000.0f / 1000.0f;
 				
 				final float currentTime = startTime + lineMs;
 				publish(currentTime);

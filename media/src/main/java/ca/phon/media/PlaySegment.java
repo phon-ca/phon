@@ -64,7 +64,7 @@ public abstract class PlaySegment {
 	 * 
 	 * @throws IOException on error
 	 */
-	public abstract void playSegment(float startTime, float endTime) throws IOException;
+	public abstract void playSegment(float startTime, float endTime, float playbackRate) throws IOException;
 	
 	/**
 	 * Stop playing segment.

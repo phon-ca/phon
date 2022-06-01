@@ -99,7 +99,7 @@ public class SegmentPlayback {
 					PlaySegment playSeg = longSound.getExtension(PlaySegment.class);
 					if(playSeg != null && !playSeg.isPlaying()) {
 						playSeg.addPropertyChangeListener(new PlaySegmentPropListener());
-						playSeg.playSegment(startTime, endTime);
+						playSeg.playSegment(startTime, endTime, getEditor().getMediaModel().getPlaybackRate());
 					}
 				} catch (IOException e) {
 					LogUtil.warning(e);
