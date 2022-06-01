@@ -244,11 +244,8 @@ public class SampledPlaySegment extends PlaySegment {
 		@Override
 		protected Float doInBackground() throws Exception {
 			while(isPlaying() && clip.isOpen()) {
-				final float lineMs = (clip.getFramePosition() / sampled.getSampleRate());
-//				final long clipPos = clip.getMicrosecondPosition() % clip.getMicrosecondLength();
-//				final float lineMs = clipPos / 1000.0f / 1000.0f;
-				
-				final float currentTime = startTime + lineMs;
+				final float lineTime = (clip.getFramePosition() / sampled.getSampleRate());
+				final float currentTime = startTime + lineTime;
 				publish(currentTime);
 				
 				try { Thread.sleep(10); } catch(Exception e) {}
