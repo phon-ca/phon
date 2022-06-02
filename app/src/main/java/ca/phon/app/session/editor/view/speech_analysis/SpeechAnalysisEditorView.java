@@ -682,7 +682,28 @@ public class SpeechAnalysisEditorView extends EditorView {
 
 		getEditor().getEventManager().queueEvent(new EditorEvent(TIME_MODEL_UPDATED));
 	}
-	
+
+	public void scrollToRecord(Record r) {
+		MediaSegment seg = r.getSegment().getGroup(0);
+		float time = seg.getStartValue() / 1000.0f;
+		float endTime = seg.getEndValue() / 1000.0f;
+		float windowLen = endTime - time;
+
+		float viewStart = getWindowStart();
+		float viewEnd = getWindowEnd();
+		float viewLen = viewEnd - viewStart;
+
+		// entire segment can be viewed
+		float delta = viewLen - windowLen;
+		float newViewStart = Math.max(0, time - (delta/2.0f));
+
+		if(newViewStart + viewLen > getTimeModel().getEndTime()) {
+			newViewStart = getTimeModel().getEndTime() - viewLen;
+		}
+
+		scrollToTime(newViewStart);
+	}
+
 	public void update() {
 		SessionMediaModel mediaModel = getEditor().getMediaModel();
 		if(mediaModel.isSessionAudioAvailable()) {

@@ -81,6 +81,7 @@ public class ZoomAction extends SpeechAnalysisEditorViewAction {
 			Toolkit.getDefaultToolkit().beep();
 		
 		timeModel.setPixelsPerSecond(pxPerS);
+		getView().scrollToRecord(getEditor().currentRecord());
 	}
 
 }
