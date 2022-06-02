@@ -464,7 +464,6 @@ ca.phon.app.session
 ca.phon.app.session
 ca.phon.app.session
 ca.phon.app.session
-ca.phon.app.session
 ca.phon.app.session.check
 ca.phon.app.session.check
 ca.phon.app.session.check
@@ -538,6 +537,9 @@ ca.phon.app.session.editor
 ca.phon.app.session.editor
 ca.phon.app.session.editor
 ca.phon.app.session.editor
+ca.phon.app.session.editor.actions
+ca.phon.app.session.editor.actions
+ca.phon.app.session.editor.actions
 ca.phon.app.session.editor.actions
 ca.phon.app.session.editor.actions
 ca.phon.app.session.editor.actions
@@ -1141,7 +1143,11 @@ ca.phon.media
 ca.phon.media
 ca.phon.media
 ca.phon.media
+ca.phon.media
+ca.phon.media
 ca.phon.media.exceptions
+ca.phon.media
+ca.phon.media
 ca.phon.media
 ca.phon.media
 ca.phon.media
