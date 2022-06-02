@@ -875,8 +875,8 @@ public final class TimelineView extends EditorView {
 			if(mediaPlayerView.getPlayer().isPlaying())
 				return;
 		}
-		
-		if(r != null) {
+
+		if(r != null && !recordGrid.isDraggingRecord()) {
 			scrollToRecord(r);
 		}
 	}

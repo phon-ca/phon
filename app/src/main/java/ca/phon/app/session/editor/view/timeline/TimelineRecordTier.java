@@ -870,6 +870,10 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		recordGrid.setSpeakers(speakerList);
 	}
 
+	public boolean isDraggingRecord() {
+		return dragData.mouseDragOffset >= 0;
+	}
+
 	public boolean isTierVisible(String tierName) {
 		boolean retVal = false;
 
@@ -1499,6 +1503,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		if (currentRecordInterval != null)
 			currentRecordInterval.setValueAdjusting(false);
 		dragData.draggedRecord = -1;
+		dragData.mouseDragOffset = -1.0f;
 	}
 	
 	private void cancelRecordDrag() {
@@ -1570,6 +1575,8 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 		volatile boolean waitForRecordChange = false;
 
+		volatile boolean draggingRecord = false;
+
 		@Override
 		public void recordClicked(int recordIndex, MouseEvent me) {
 		}
@@ -1593,8 +1600,8 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 					getSelectionModel().addSelectionInterval(recordIndex, recordIndex);
 				} else {
 					getSelectionModel().setSelectionInterval(recordIndex, recordIndex);
-					getParentView().getEditor().setCurrentRecordIndex(recordIndex);
 					waitForRecordChange = true;
+					getParentView().getEditor().setCurrentRecordIndex(recordIndex);
 				}
 				return;
 			} else if(waitForRecordChange) {
