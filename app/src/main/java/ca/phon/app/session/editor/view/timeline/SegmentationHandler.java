@@ -432,12 +432,11 @@ public final class SegmentationHandler {
 					float segMid = (segStart + ((segEnd - segStart) / 2));
 					float timeAtCenter = timelineView.getTimeModel().timeAtX(visibleRect.getCenterX());
 
-					System.out.println(String.format("%f, %f", segStart/1000.0f, timelineView.getWindowStart()));
-
 					if(((segMid / 1000.0f) > timeAtCenter) &&
 						(timelineView.getWindowEnd() < timelineView.getTimeModel().getEndTime())) {
+						float scrollToTime = Math.round(timelineView.getWindowStart() * 1000.0f + (segMid - (timeAtCenter * 1000.0f))) / 1000.0f;
 						//timelineView.scrollToTime(segStart/1000.0f);
-						timelineView.scrollToTime(timelineView.getWindowStart() + ((segMid/1000.0f) - timeAtCenter));
+						timelineView.scrollToTime(scrollToTime);
 					} else if((segStart / 1000.0f) < timelineView.getWindowStart()) {
 						timelineView.scrollToTime(segStart / 1000.0f);
 					} else {
