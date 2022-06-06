@@ -39,8 +39,6 @@ import ca.phon.util.*;
  *
  */
 public class SegmentationDialog extends JDialog {
-	
-//	private DialogHeader header;
 
 	private final static String INSERT_MODE_PROP = SegmentationDialog.class.getSimpleName() + ".insertMode";
 	private final static SegmentationMode DEFAULT_SEGMENTATION_MODE = SegmentationMode.INSERT_AT_END;
@@ -390,7 +388,9 @@ public class SegmentationDialog extends JDialog {
 		"<tr><td>Go back 1s</td><td><code>Left</code> or <code>Numpad subtract</code></td></tr>\n" + 
 		"<tr><td>Go forward 1s</td><td><code>Right</code> or <code>Numpad add</code></td></tr>\n" + 
 		"<tr><td>Go back 5s</td><td><code>Shift+Left</code> or <code>Shift+Numpad subtract</code></td></tr>\n" + 
-		"<tr><td>Go forward 5s</td><td><code>Shift+Right</code> or <code>Shift+Numpad add</code></td></tr>\n" + 
+		"<tr><td>Go forward 5s</td><td><code>Shift+Right</code> or <code>Shift+Numpad add</code></td></tr>\n" +
+		"<tr><td>Increase playback rate</td><td><code>Period</code></td></tr>\n" +
+		"<tr><td>Decrease playback rate</td><td><code>Comma</code></td></tr>\n" +
 		"</tbody>\n" + 
 		"</table>"
 		+ "</html>\n";

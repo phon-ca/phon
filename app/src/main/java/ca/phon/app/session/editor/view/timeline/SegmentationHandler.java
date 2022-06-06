@@ -17,6 +17,7 @@ package ca.phon.app.session.editor.view.timeline;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.security.Key;
 import java.util.*;
 import java.util.Timer;
 
@@ -158,7 +159,7 @@ public final class SegmentationHandler {
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), unidentifiedSegmentKey);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_0, 0), unidentifiedSegmentKey);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD0, 0), unidentifiedSegmentKey);
-		
+
 		for(int i = 1; i <= 9; i++) {
 			final String speakerSegmentKey = String.format("segment_speaker%d", i);
 			PhonUIAction newSegmentAct = new PhonUIAction(this, "newSegment", i-1);
@@ -202,6 +203,16 @@ public final class SegmentationHandler {
 		actionMap.put(volumeDownKey, volumeDownAct);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, KeyEvent.SHIFT_DOWN_MASK), volumeDownKey);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DIVIDE, 0), volumeDownKey);
+
+		final String increasePlaybackRateKey = "increase_playback_rate";
+		final PhonUIAction increasePlaybackRateAct = new PhonUIAction(this, "onIncreasePlaybackRate");
+		actionMap.put(increasePlaybackRateKey, increasePlaybackRateAct);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, 0), increasePlaybackRateKey);
+
+		final String decreasePlaybackRateKey = "decrease_playback_rate";
+		final PhonUIAction decreasePlaybackRateAct = new PhonUIAction(this, "onDecreasePlaybackRate");
+		actionMap.put(decreasePlaybackRateKey, decreasePlaybackRateAct);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, 0), decreasePlaybackRateKey);
 		
 		final String goBack1SKey = "goback_1s";
 		final PhonUIAction goBack1SAct = new PhonUIAction(this, "onGoBack", 1000L);
@@ -567,6 +578,22 @@ public final class SegmentationHandler {
 			if(timelineView != null && window.getBackwardWindowLengthMs() == 0L) {
 				timelineView.repaint(timelineView.getVisibleRect());
 			}
+		}
+	}
+
+	public void onIncreasePlaybackRate() {
+		float currentPlaybackRate = editor.getMediaModel().getPlaybackRate();
+		if(currentPlaybackRate < 2.0f) {
+			currentPlaybackRate += 0.25f;
+			editor.getMediaModel().setPlaybackRate(currentPlaybackRate);
+		}
+	}
+
+	public void onDecreasePlaybackRate() {
+		float currentPlaybackRate = editor.getMediaModel().getPlaybackRate();
+		if(currentPlaybackRate > 0.25f) {
+			currentPlaybackRate -= 0.25f;
+			editor.getMediaModel().setPlaybackRate(currentPlaybackRate);
 		}
 	}
 	
