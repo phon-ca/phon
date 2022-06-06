@@ -417,32 +417,45 @@ public final class SegmentationHandler {
 				float prevEnd = segmentationInterval.getEndMarker().getTime();
 				
 				// indicate we are going to change multiple values
+				// avoid repainting until we say
 				segmentationInterval.setValueAdjusting(true);
 				segmentationInterval.getStartMarker().setTime(segStart/1000.0f);
-				// indicate we are finished changing values
-				segmentationInterval.setValueAdjusting(false);
 				segmentationInterval.getEndMarker().setTime(segEnd/1000.0f);
-				
+				segmentationInterval.setValueAdjusting(false);
+
 				if(editor.getViewModel().isShowing(TimelineView.VIEW_TITLE)) {
 					TimelineView timelineView = 
 							(TimelineView)editor.getViewModel().getView(TimelineView.VIEW_TITLE);
-					
-					// repaint interval (with time limit)
-					long tn = (long)(1/60.0f * 1000.0f);
-					if(repaintEntireInterval) {
-						timelineView.getWaveformTier().getWaveformDisplay().repaint();
-						repaintEntireInterval = false;
+
+
+					// autoscroll if necessary
+					Rectangle visibleRect = timelineView.getRecordTier().getRecordGrid().getVisibleRect();
+					float segMid = (segStart + ((segEnd - segStart) / 2)) / 1000.0f;
+					float timeAtCenter = timelineView.getTimeModel().timeAtX(visibleRect.getCenterX());
+//					System.out.println(String.format("%f, %f", segMid, timeAtCenter));
+					if(segMid > timeAtCenter) {
+						//timelineView.scrollToTime(segStart/1000.0f);
+						timelineView.scrollToTime(timelineView.getWindowStart() + (segMid - timeAtCenter));
 					} else {
-						float s1 = Math.min(prevStart, segmentationInterval.getStartMarker().getTime());
-						float e1 = Math.max(prevStart, segmentationInterval.getStartMarker().getTime());
-						if(e1-s1 > 0.0f) {
-							timelineView.getWaveformTier().repaint(tn,s1, e1);
-						}
-						
-						float s2 = Math.min(prevEnd, segmentationInterval.getEndMarker().getTime());
-						float e2 = Math.max(prevEnd, segmentationInterval.getEndMarker().getTime());
-						if(e2-s2 > 0.0f) {
-							timelineView.getWaveformTier().repaint(tn,s2, e2);
+						// repaint interval (with time limit)
+						long tn = (long) (1 / 60.0f * 1000.0f);
+						if (repaintEntireInterval) {
+							timelineView.getWaveformTier().getWaveformDisplay().repaint();
+							repaintEntireInterval = false;
+						} else {
+							float s1 = Math.min(prevStart, segmentationInterval.getStartMarker().getTime());
+							float e1 = Math.max(prevStart, segmentationInterval.getStartMarker().getTime());
+							if (e1 - s1 > 0.0f) {
+								timelineView.getTimebar().repaint(tn, s1, e1);
+								timelineView.getWaveformTier().repaint(tn, s1, e1);
+							}
+
+							float s2 = Math.min(prevEnd, segmentationInterval.getEndMarker().getTime());
+							float e2 = Math.max(prevEnd, segmentationInterval.getEndMarker().getTime());
+							if (e2 - s2 > 0.0f) {
+								timelineView.getTimebar().repaint(tn, s2, e2);
+								timelineView.getWaveformTier().repaint(tn, s2, e2);
+							}
 						}
 					}
 
@@ -453,12 +466,6 @@ public final class SegmentationHandler {
 						if(timelineView.getTimeModel().getEndTime() < newEndTime) {
 							timelineView.getTimeModel().setEndTime(newEndTime);
 						}
-					}
-					
-					// autoscroll if necessary
-					Rectangle visibleRect = timelineView.getRecordTier().getRecordGrid().getVisibleRect();
-					if((segEnd/1000.0f) > timelineView.getTimeModel().timeAtX(visibleRect.getMaxX())) {
-						timelineView.scrollToTime(segStart/1000.0f);
 					}
 					
 				}

@@ -261,6 +261,8 @@ public final class TimelineView extends EditorView {
 			}
 		}
 	}
+
+	public Timebar getTimebar() { return this.timebar; }
 	
 	public JToolBar getToolbar() {
 		return this.toolbar;
