@@ -389,8 +389,8 @@ public class SegmentationDialog extends JDialog {
 		"<tr><td>Go forward 1s</td><td><code>Right</code> or <code>Numpad add</code></td></tr>\n" + 
 		"<tr><td>Go back 5s</td><td><code>Shift+Left</code> or <code>Shift+Numpad subtract</code></td></tr>\n" + 
 		"<tr><td>Go forward 5s</td><td><code>Shift+Right</code> or <code>Shift+Numpad add</code></td></tr>\n" +
-		"<tr><td>Increase playback rate</td><td><code>Period</code></td></tr>\n" +
-		"<tr><td>Decrease playback rate</td><td><code>Comma</code></td></tr>\n" +
+		"<tr><td>Increase playback rate</td><td><code>Period</code> or <code>PgUp</code></td></tr>\n" +
+		"<tr><td>Decrease playback rate</td><td><code>Comma</code> or <code>PgDn</code></td></tr>\n" +
 		"</tbody>\n" + 
 		"</table>"
 		+ "</html>\n";

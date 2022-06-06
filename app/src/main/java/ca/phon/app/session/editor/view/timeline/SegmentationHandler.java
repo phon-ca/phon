@@ -208,11 +208,13 @@ public final class SegmentationHandler {
 		final PhonUIAction increasePlaybackRateAct = new PhonUIAction(this, "onIncreasePlaybackRate");
 		actionMap.put(increasePlaybackRateKey, increasePlaybackRateAct);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, 0), increasePlaybackRateKey);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, 0), increasePlaybackRateKey);
 
 		final String decreasePlaybackRateKey = "decrease_playback_rate";
 		final PhonUIAction decreasePlaybackRateAct = new PhonUIAction(this, "onDecreasePlaybackRate");
 		actionMap.put(decreasePlaybackRateKey, decreasePlaybackRateAct);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, 0), decreasePlaybackRateKey);
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, 0), decreasePlaybackRateKey);
 		
 		final String goBack1SKey = "goback_1s";
 		final PhonUIAction goBack1SAct = new PhonUIAction(this, "onGoBack", 1000L);
