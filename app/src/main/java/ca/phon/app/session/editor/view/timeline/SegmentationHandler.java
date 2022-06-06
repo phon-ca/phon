@@ -427,15 +427,19 @@ public final class SegmentationHandler {
 					TimelineView timelineView = 
 							(TimelineView)editor.getViewModel().getView(TimelineView.VIEW_TITLE);
 
-
 					// autoscroll if necessary
 					Rectangle visibleRect = timelineView.getRecordTier().getRecordGrid().getVisibleRect();
-					float segMid = (segStart + ((segEnd - segStart) / 2)) / 1000.0f;
+					float segMid = (segStart + ((segEnd - segStart) / 2));
 					float timeAtCenter = timelineView.getTimeModel().timeAtX(visibleRect.getCenterX());
-//					System.out.println(String.format("%f, %f", segMid, timeAtCenter));
-					if(segMid > timeAtCenter) {
+
+					System.out.println(String.format("%f, %f", segStart/1000.0f, timelineView.getWindowStart()));
+
+					if(((segMid / 1000.0f) > timeAtCenter) &&
+						(timelineView.getWindowEnd() < timelineView.getTimeModel().getEndTime())) {
 						//timelineView.scrollToTime(segStart/1000.0f);
-						timelineView.scrollToTime(timelineView.getWindowStart() + (segMid - timeAtCenter));
+						timelineView.scrollToTime(timelineView.getWindowStart() + ((segMid/1000.0f) - timeAtCenter));
+					} else if((segStart / 1000.0f) < timelineView.getWindowStart()) {
+						timelineView.scrollToTime(segStart / 1000.0f);
 					} else {
 						// repaint interval (with time limit)
 						long tn = (long) (1 / 60.0f * 1000.0f);
