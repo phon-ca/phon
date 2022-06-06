@@ -422,7 +422,8 @@ public final class SegmentationHandler {
 		public void run() {
 			if(segmentationInterval != null) {
 				long currentTime = System.currentTimeMillis();
-				long newTime = segmentationMediaStartTime + Math.round((currentTime - segmentsationSystemStartTime) * editor.getMediaModel().getPlaybackRate());
+				long deltaTime = Math.round((currentTime - segmentsationSystemStartTime) * editor.getMediaModel().getPlaybackRate());
+				long newTime = segmentationMediaStartTime + deltaTime;
 				long segStart = window.getWindowStartMs(newTime);
 				long segEnd = window.getWindowEndMs(newTime);
 
@@ -445,10 +446,9 @@ public final class SegmentationHandler {
 					float segMid = (segStart + ((segEnd - segStart) / 2));
 					float timeAtCenter = timelineView.getTimeModel().timeAtX(visibleRect.getCenterX());
 
-					if (((segMid / 1000.0f) > timeAtCenter) &&
-							(timelineView.getWindowEnd() < timelineView.getTimeModel().getEndTime())) {
+					if (((segMid / 1000.0f) > timeAtCenter)
+							&& (timelineView.getWindowEnd() < timelineView.getTimeModel().getEndTime())) {
 						float scrollToTime = Math.round(timelineView.getWindowStart() * 1000.0f + (segMid - (timeAtCenter * 1000.0f))) / 1000.0f;
-						//timelineView.scrollToTime(segStart/1000.0f);
 						timelineView.scrollToTime(scrollToTime);
 					} else if ((segStart / 1000.0f) < timelineView.getWindowStart()) {
 						timelineView.scrollToTime(segStart / 1000.0f);

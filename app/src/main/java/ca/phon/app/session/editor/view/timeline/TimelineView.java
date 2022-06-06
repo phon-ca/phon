@@ -878,7 +878,7 @@ public final class TimelineView extends EditorView {
 				return;
 		}
 
-		if(r != null && !recordGrid.isDraggingRecord()) {
+		if(r != null && !recordGrid.isDraggingRecord() ) {
 			scrollToRecord(r);
 		}
 	}
