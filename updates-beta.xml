@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.4.3-beta.5/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_3-beta_5.dmg" newVersion="3.4.3-beta.5" newMediaFileId="macos" fileSize="299949386" md5Sum="c7b44d99e1876db29fc7ea16becc100d" sha256Sum="2503291a8594aedf2e0b5a88308c25644e8d1e1e4b263b83c8982cabde804430" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.4.3-beta.6/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_3-beta_6.dmg" newVersion="3.4.3-beta.6" newMediaFileId="macos" fileSize="299950171" md5Sum="f78f490454d13f5c7454054040b57a67" sha256Sum="5d5daaf8215495a4f3da5e39b17afe552238ef7f630b30c2b759f1d57deccc49" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.4.2
 
  * VLC and segment playback using the Java audio system now both use the same volume settings
  * New volume slider components are located in the media player, speech analysis, and timeline views. All three sliders control a single volume for the session (video and segment playback)
  * Media playback rate may now be changed
+ * Segmentation window stays in middle of timeline view when possible
+ * Media playback rate may be changed using keystrokes during segmentation
  * Settings for volume and media playback rate may be found in the 'Media' window menu for the session
  * Timeline will center new record during navigation/zoom actions
  * Speech analysis view will now correctly center on current record on zoom actions
@@ -519,12 +521,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_3-beta_5.dmg" newVersion="3.4.3-beta.5" newMediaFileId="macos" fileSize="299949386" md5Sum="c7b44d99e1876db29fc7ea16becc100d" sha256Sum="2503291a8594aedf2e0b5a88308c25644e8d1e1e4b263b83c8982cabde804430" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_3-beta_6.dmg" newVersion="3.4.3-beta.6" newMediaFileId="macos" fileSize="299950171" md5Sum="f78f490454d13f5c7454054040b57a67" sha256Sum="5d5daaf8215495a4f3da5e39b17afe552238ef7f630b30c2b759f1d57deccc49" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.4.2
 
  * VLC and segment playback using the Java audio system now both use the same volume settings
  * New volume slider components are located in the media player, speech analysis, and timeline views. All three sliders control a single volume for the session (video and segment playback)
  * Media playback rate may now be changed
+ * Segmentation window stays in middle of timeline view when possible
+ * Media playback rate may be changed using keystrokes during segmentation
  * Settings for volume and media playback rate may be found in the 'Media' window menu for the session
  * Timeline will center new record during navigation/zoom actions
  * Speech analysis view will now correctly center on current record on zoom actions
@@ -1038,12 +1042,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_5.exe" newVersion="3.4.3-beta.5" newMediaFileId="win64" fileSize="308346456" md5Sum="18915e9d231ab9e6183483814f7037dd" sha256Sum="cbd27628cf26d5d83e783efc5baa814449bd58f34160d57bc3e1b18bfa6de6cf" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_6.exe" newVersion="3.4.3-beta.6" newMediaFileId="win64" fileSize="308346456" md5Sum="bd5c803ea07125a947ee870da8a31789" sha256Sum="527aee361cd3c86c3f8972a24d4bb805d5c6c9b2e4eb43efcd6823e9774e25fe" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.4.2
 
  * VLC and segment playback using the Java audio system now both use the same volume settings
  * New volume slider components are located in the media player, speech analysis, and timeline views. All three sliders control a single volume for the session (video and segment playback)
  * Media playback rate may now be changed
+ * Segmentation window stays in middle of timeline view when possible
+ * Media playback rate may be changed using keystrokes during segmentation
  * Settings for volume and media playback rate may be found in the 'Media' window menu for the session
  * Timeline will center new record during navigation/zoom actions
  * Speech analysis view will now correctly center on current record on zoom actions
@@ -1557,12 +1563,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_5.exe" newVersion="3.4.3-beta.5" newMediaFileId="win64" fileSize="308346456" md5Sum="18915e9d231ab9e6183483814f7037dd" sha256Sum="cbd27628cf26d5d83e783efc5baa814449bd58f34160d57bc3e1b18bfa6de6cf" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_6.exe" newVersion="3.4.3-beta.6" newMediaFileId="win64" fileSize="308346456" md5Sum="bd5c803ea07125a947ee870da8a31789" sha256Sum="527aee361cd3c86c3f8972a24d4bb805d5c6c9b2e4eb43efcd6823e9774e25fe" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.4.2
 
  * VLC and segment playback using the Java audio system now both use the same volume settings
  * New volume slider components are located in the media player, speech analysis, and timeline views. All three sliders control a single volume for the session (video and segment playback)
  * Media playback rate may now be changed
+ * Segmentation window stays in middle of timeline view when possible
+ * Media playback rate may be changed using keystrokes during segmentation
  * Settings for volume and media playback rate may be found in the 'Media' window menu for the session
  * Timeline will center new record during navigation/zoom actions
  * Speech analysis view will now correctly center on current record on zoom actions
@@ -2076,12 +2084,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_5.exe" newVersion="3.4.3-beta.5" newMediaFileId="win64" fileSize="308346456" md5Sum="18915e9d231ab9e6183483814f7037dd" sha256Sum="cbd27628cf26d5d83e783efc5baa814449bd58f34160d57bc3e1b18bfa6de6cf" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_6.exe" newVersion="3.4.3-beta.6" newMediaFileId="win64" fileSize="308346456" md5Sum="bd5c803ea07125a947ee870da8a31789" sha256Sum="527aee361cd3c86c3f8972a24d4bb805d5c6c9b2e4eb43efcd6823e9774e25fe" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.4.2
 
  * VLC and segment playback using the Java audio system now both use the same volume settings
  * New volume slider components are located in the media player, speech analysis, and timeline views. All three sliders control a single volume for the session (video and segment playback)
  * Media playback rate may now be changed
+ * Segmentation window stays in middle of timeline view when possible
+ * Media playback rate may be changed using keystrokes during segmentation
  * Settings for volume and media playback rate may be found in the 'Media' window menu for the session
  * Timeline will center new record during navigation/zoom actions
  * Speech analysis view will now correctly center on current record on zoom actions
@@ -2595,12 +2605,14 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_5.zip" newVersion="3.4.3-beta.5" newMediaFileId="win64zip" fileSize="307301722" md5Sum="7bd8e5035bf779ac4bcf2ec04c8a905f" sha256Sum="f402fdaa7bfe200542814b9d4c0dc72ed636a4924be4954989466d14b61c9cdc" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_6.zip" newVersion="3.4.3-beta.6" newMediaFileId="win64zip" fileSize="307302693" md5Sum="ea904d1f363a5554d00a7c40827e95f1" sha256Sum="bf73873898483daae83ac5149509c4d0905bc50b6285ad3f0851df9ebeb6363e" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.4.2
 
  * VLC and segment playback using the Java audio system now both use the same volume settings
  * New volume slider components are located in the media player, speech analysis, and timeline views. All three sliders control a single volume for the session (video and segment playback)
  * Media playback rate may now be changed
+ * Segmentation window stays in middle of timeline view when possible
+ * Media playback rate may be changed using keystrokes during segmentation
  * Settings for volume and media playback rate may be found in the 'Media' window menu for the session
  * Timeline will center new record during navigation/zoom actions
  * Speech analysis view will now correctly center on current record on zoom actions
