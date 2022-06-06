@@ -600,23 +600,17 @@ public final class SegmentationHandler {
 	}
 	
 	public void onVolumeUp() {
-		MediaPlayerEditorView mediaView = 
-				(MediaPlayerEditorView)editor.getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
-		if(mediaView != null) {
-			int currentVolume = mediaView.getPlayer().getVolume();
-			int newVolume = Math.min(PhonMediaPlayer.VOL_MAX, currentVolume + VOLUME_INCR);
-			mediaView.getPlayer().setVolume(newVolume);
-		}
+		float currentVolume = Math.round(editor.getMediaModel().getVolumeModel().getVolumeLevel() * 100.0f);
+		int mod5 = (int)(currentVolume) % 5;
+		currentVolume = Math.min(VolumeModel.MAX_LEVEL * 100.0f, currentVolume + (5 - mod5));
+		editor.getMediaModel().getVolumeModel().setVolumeLevel(currentVolume / 100.0f);
 	}
 	
 	public void onVolumeDown() {
-		MediaPlayerEditorView mediaView = 
-				(MediaPlayerEditorView)editor.getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
-		if(mediaView != null) {
-			int currentVolume = mediaView.getPlayer().getVolume();
-			int newVolume = Math.max(0, currentVolume - VOLUME_INCR);
-			mediaView.getPlayer().setVolume(newVolume);
-		}
+		float currentVolume = Math.round(editor.getMediaModel().getVolumeModel().getVolumeLevel() * 100.0f);
+		int mod5 = (int)(currentVolume) % 5;
+		currentVolume = Math.max(VolumeModel.MIN_LEVEL * 100.0f, currentVolume - (mod5 == 0.0f ? 5.0f : mod5));
+		editor.getMediaModel().getVolumeModel().setVolumeLevel(currentVolume / 100.0f);
 	}
 	
 	public void onToggleSegmentationWindow() {
