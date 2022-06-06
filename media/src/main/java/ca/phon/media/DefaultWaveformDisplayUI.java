@@ -222,108 +222,108 @@ public class DefaultWaveformDisplayUI extends WaveformDisplayUI {
 	public void paint(Graphics g, JComponent c) {
 		if(!(c instanceof WaveformDisplay))
 			throw new IllegalArgumentException("Wrong class");
-		
+
 		float audioLength = 0.0f;
-		if(display.getLongSound() != null) {
+		if (display.getLongSound() != null) {
 			audioLength = display.getLongSound().length();
 		} else {
 			return;
 		}
-		
-		int currentStartX = (int)display.getWindowStartX();
-		int currentEndX = (int)display.getWindowEndX();
-		
-		if(currentStartX != lastStartX
+
+		int currentStartX = (int) display.getWindowStartX();
+		int currentEndX = (int) display.getWindowEndX();
+
+		if (currentStartX != lastStartX
 				|| currentEndX != lastEndX) {
 			needsRepaint = true;
 		}
-		int cnt = (int)Math.floor(audioLength * display.getPixelsPerSecond());
-		if(needsRepaint) {
+		int cnt = (int) Math.floor(audioLength * display.getPixelsPerSecond());
+		if (needsRepaint) {
 			needsRepaint = false;
-			
+
 			SampledWorker currentWorker = workerRef.get();
-			if(currentWorker != null && !currentWorker.isDone()) {
+			if (currentWorker != null && !currentWorker.isDone()) {
 				currentWorker.cancel(true);
 			}
-		
-			if(currentBufferSize < 0 || currentBufferSize != cnt) {
+
+			if (currentBufferSize < 0 || currentBufferSize != cnt) {
 				channelExtremaMap.clear();
-				for(Channel ch:display.availableChannels()) {
-					if(display.isChannelVisible(ch)) {
+				for (Channel ch : display.availableChannels()) {
+					if (display.isChannelVisible(ch)) {
 						double[][] extrema = new double[2][];
 						extrema[0] = new double[cnt];
 						extrema[1] = new double[cnt];
-						
+
 						channelExtremaMap.put(ch, extrema);
 					}
 				}
 				currentBufferSize = cnt;
 			}
-			
+
 			SampledWorker worker = new SampledWorker();
 			workerRef = new AtomicReference<>(worker);
 			worker.execute();
-			
+
 			lastStartX = currentStartX;
 			lastEndX = currentEndX;
 		}
-		
-		Graphics2D g2 = (Graphics2D)g;
+
+		Graphics2D g2 = (Graphics2D) g;
 		setupRenderingHints(g2);
-		
-		WaveformDisplay display = (WaveformDisplay)c;
-		
-		Rectangle bounds = 
+
+		WaveformDisplay display = (WaveformDisplay) c;
+
+		Rectangle bounds =
 				(g.getClipBounds() != null ? g.getClipBounds() : display.getVisibleRect());
 
 		// paint background
-		if(display.isOpaque()) {
+		if (display.isOpaque()) {
 			g2.setColor(display.getBackground());
 			g2.fill(bounds);
 		}
-		
+
 		int minX = display.getTimeModel().getTimeInsets().left;
 		int maxX = display.getWidth() - display.getTimeModel().getTimeInsets().right;
-		int sx = (int)Math.max(bounds.x, minX);
-		int ex = (int)Math.min(bounds.x + bounds.width, maxX);
+		int sx = (int) Math.max(bounds.x, minX);
+		int ex = (int) Math.min(bounds.x + bounds.width, maxX);
 		Rectangle visibleRect = display.getVisibleRect();
-		
+
 		boolean updateCache = (prevCacheStart < 0 || prevCacheStart != display.getWindowStart()
 				|| prevCacheEnd < 0 || prevCacheEnd != display.getWindowEnd()
 				|| prevCachedMax != cachedMaxValue
-				|| prevCacheWidth != (int)visibleRect.getWidth()
+				|| prevCacheWidth != (int) visibleRect.getWidth()
 				|| cachedImg == null);
-		
-		for(Channel ch:display.availableChannels()) {
-			if(display.isChannelVisible(ch)) {
+
+		for (Channel ch : display.availableChannels()) {
+			if (display.isChannelVisible(ch)) {
 				paintChannelBackground(g2, bounds, ch);
-				paintChannelBorder(g2, bounds, ch);				
+				paintChannelBorder(g2, bounds, ch);
 			}
 		}
-		if(updateCache) {
+		if (updateCache) {
 			cachedImg = new BufferedImage(visibleRect.width, display.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
-			Graphics2D cacheg = (Graphics2D)cachedImg.getGraphics();
-			for(Channel ch:display.availableChannels()) {
-				if(display.isChannelVisible(ch)) {
+			Graphics2D cacheg = (Graphics2D) cachedImg.getGraphics();
+			for (Channel ch : display.availableChannels()) {
+				if (display.isChannelVisible(ch)) {
 					// paint channel border and background
-					
+
 					RoundRectangle2D channelRect = getChannelRect(ch);
-					paintChannelData(cacheg, ch, (int)channelRect.getY(), visibleRect.getX(), Math.max(minX, visibleRect.x), Math.min(maxX, visibleRect.getMaxX()));
+					paintChannelData(cacheg, ch, (int) channelRect.getY(), visibleRect.getX(), Math.max(minX, visibleRect.x), Math.min(maxX, visibleRect.getMaxX()));
 				}
 			}
 			prevCacheStart = display.getWindowStart();
 			prevCacheEnd = display.getWindowEnd();
 			prevCachedMax = cachedMaxValue;
-			prevCacheWidth = (int)visibleRect.getWidth();
+			prevCacheWidth = (int) visibleRect.getWidth();
 		}
-		g2.drawImage(cachedImg, sx, 0, ex, display.getHeight(), 
+		g2.drawImage(cachedImg, sx, 0, ex, display.getHeight(),
 				sx - visibleRect.x, 0, ex - visibleRect.x, cachedImg.getHeight(), display);
-		
-		for(var interval:display.getTimeModel().getIntervals()) {
+
+		for (var interval : display.getTimeModel().getIntervals()) {
 			paintInterval(g2, interval, true);
 		}
-		
-		for(var marker:display.getTimeModel().getMarkers()) {
+
+		for (var marker : display.getTimeModel().getMarkers()) {
 			paintMarker(g2, marker);
 		}
 	}

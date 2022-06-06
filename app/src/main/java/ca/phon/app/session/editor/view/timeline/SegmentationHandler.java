@@ -412,32 +412,32 @@ public final class SegmentationHandler {
 				long newTime = segmentationMediaStartTime + Math.round((currentTime - segmentsationSystemStartTime) * editor.getMediaModel().getPlaybackRate());
 				long segStart = window.getWindowStartMs(newTime);
 				long segEnd = window.getWindowEndMs(newTime);
-				
+
 				float prevStart = segmentationInterval.getStartMarker().getTime();
 				float prevEnd = segmentationInterval.getEndMarker().getTime();
-				
+
 				// indicate we are going to change multiple values
 				// avoid repainting until we say
 				segmentationInterval.setValueAdjusting(true);
-				segmentationInterval.getStartMarker().setTime(segStart/1000.0f);
-				segmentationInterval.getEndMarker().setTime(segEnd/1000.0f);
+				segmentationInterval.getStartMarker().setTime(segStart / 1000.0f);
+				segmentationInterval.getEndMarker().setTime(segEnd / 1000.0f);
 				segmentationInterval.setValueAdjusting(false);
 
-				if(editor.getViewModel().isShowing(TimelineView.VIEW_TITLE)) {
-					TimelineView timelineView = 
-							(TimelineView)editor.getViewModel().getView(TimelineView.VIEW_TITLE);
+				if (editor.getViewModel().isShowing(TimelineView.VIEW_TITLE)) {
+					TimelineView timelineView =
+							(TimelineView) editor.getViewModel().getView(TimelineView.VIEW_TITLE);
 
 					// autoscroll if necessary
 					Rectangle visibleRect = timelineView.getRecordTier().getRecordGrid().getVisibleRect();
 					float segMid = (segStart + ((segEnd - segStart) / 2));
 					float timeAtCenter = timelineView.getTimeModel().timeAtX(visibleRect.getCenterX());
 
-					if(((segMid / 1000.0f) > timeAtCenter) &&
-						(timelineView.getWindowEnd() < timelineView.getTimeModel().getEndTime())) {
+					if (((segMid / 1000.0f) > timeAtCenter) &&
+							(timelineView.getWindowEnd() < timelineView.getTimeModel().getEndTime())) {
 						float scrollToTime = Math.round(timelineView.getWindowStart() * 1000.0f + (segMid - (timeAtCenter * 1000.0f))) / 1000.0f;
 						//timelineView.scrollToTime(segStart/1000.0f);
 						timelineView.scrollToTime(scrollToTime);
-					} else if((segStart / 1000.0f) < timelineView.getWindowStart()) {
+					} else if ((segStart / 1000.0f) < timelineView.getWindowStart()) {
 						timelineView.scrollToTime(segStart / 1000.0f);
 					} else {
 						// repaint interval (with time limit)
@@ -464,13 +464,12 @@ public final class SegmentationHandler {
 
 					// special case: segmenting with no media
 					//  update time model as we progress
-					if(!editor.getMediaModel().isSessionMediaAvailable()) {
+					if (!editor.getMediaModel().isSessionMediaAvailable()) {
 						float newEndTime = segEnd / 1000.0f;
-						if(timelineView.getTimeModel().getEndTime() < newEndTime) {
+						if (timelineView.getTimeModel().getEndTime() < newEndTime) {
 							timelineView.getTimeModel().setEndTime(newEndTime);
 						}
 					}
-					
 				}
 			}
 		}
