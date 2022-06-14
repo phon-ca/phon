@@ -42,7 +42,7 @@ public class FeatureSet implements Iterable<Feature> {
 	/**
 	 * Create a feature set from a single feature.
 	 * 
-	 * @param featureSet
+	 * @param featureName
 	 */
 	public static FeatureSet singleonFeature(String featureName) {
 		Set<String> fs = new HashSet<>();
