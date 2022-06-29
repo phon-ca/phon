@@ -86,7 +86,7 @@
 		<org.apache.commons.commons-lang3.version>3.1</org.apache.commons.commons-lang3.version>
 		<commons-io.version>2.7</commons-io.version>
 		<org.apache.commons.commons-collections4.version>4.1</org.apache.commons.commons-collections4.version>
-		<org.apache.derby.derby.version>10.10.2.0</org.apache.derby.derby.version>
+		<org.apache.derby.derby.version>10.14.2.0</org.apache.derby.derby.version>
 		<org.apache.logging.log4j.version>2.17.1</org.apache.logging.log4j.version>
 		<org.apache.velocity.velocity.version>1.7</org.apache.velocity.velocity.version>
 		<org.apache.velocity.velocity-tools.version>2.0</org.apache.velocity.velocity-tools.version>
