@@ -17,6 +17,7 @@ package ca.phon.worker;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.function.LongUnaryOperator;
 
 import ca.phon.worker.PhonTask.*;
 
@@ -113,10 +114,51 @@ public class PhonWorker extends Thread {
 			
 		});
 	}
+
+	public static PhonTask invokeOnNewWorker(Runnable toRun) {
+		return invokeOnNewWorker(toRun, () -> {}, (err) -> {});
+	}
+
+	public static PhonTask invokeOnNewWorker(Runnable toRun, Runnable onFinish) {
+		return invokeOnNewWorker(toRun, onFinish, (err) -> {});
+	}
+
+	/**
+	 * Invoke provided runnable on a new thread and return the generated PhonTask
+	 *
+	 * @param toRun
+	 * @param onFinish
+	 * @Param onError
+	 */
+	public static PhonTask invokeOnNewWorker(Runnable toRun, Runnable onFinish, PhonTaskErrorHandler onError) {
+		PhonWorker worker = PhonWorker.createWorker();
+
+		final PhonTask retVal = new PhonTask() {
+			@Override
+			public void performTask() {
+				setStatus(TaskStatus.RUNNING);
+				try {
+					toRun.run();
+					setStatus(TaskStatus.FINISHED);
+				} catch (Exception e) {
+					super.err = e;
+					setStatus(TaskStatus.ERROR);
+
+					onError.handleError(e);
+				}
+			}
+		};
+
+		worker.setFinalTask(onFinish);
+		worker.setFinishWhenQueueEmpty(true);
+		worker.start();
+
+		return retVal;
+	}
 	
 	/**
 	 * Add a task to the queue.
-	 * 
+	 *
 	 * @param task
 	 */
 	public void invokeLater(Runnable task) {
