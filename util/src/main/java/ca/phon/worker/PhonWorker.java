@@ -148,6 +148,7 @@ public class PhonWorker extends Thread {
 				}
 			}
 		};
+		worker.invokeLater(retVal);
 
 		worker.setFinalTask(onFinish);
 		worker.setFinishWhenQueueEmpty(true);
