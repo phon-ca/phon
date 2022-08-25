@@ -49,6 +49,10 @@
 		<groupId>org.apache.logging.log4j</groupId>
 		<artifactId>log4j-1.2-api</artifactId>
 	</dependency>
+    <dependency>
+	    <groupId>ca.hedlund</groupId>
+	    <artifactId>tst</artifactId>
+    </dependency>
   </dependencies>
   
 </project>
