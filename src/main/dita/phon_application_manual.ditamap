@@ -46,6 +46,7 @@
                 </topicref>
                 <topicref href="session_editor/ipa_lookup_view.dita" format="dita"/>
                 <topicref href="session_editor/find_and_replace_view.dita"/>
+                <topicref href="session_editor/transcript_mapper.dita"/>
             </topicref>
             <topicref href="session_editor/editor_layouts.dita"/>
             <topicref href="session_editor/editor_search.dita"/>
