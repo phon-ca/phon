@@ -22,17 +22,16 @@ import java.util.*;
 
 import ca.phon.app.actions.SaveOnExitDialog.*;
 import ca.phon.app.hooks.*;
+import ca.phon.app.log.LogUtil;
 import ca.phon.plugin.*;
 import ca.phon.project.*;
 import ca.phon.ui.*;
 import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeNode;
 
 @PhonPlugin(name="default")
 public class ExitEP implements IPluginEntryPoint
 {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ExitEP.class.getName());
-	
 	private final static String EP_NAME = "Exit";
 	@Override
 	public String getName() {
@@ -68,22 +67,9 @@ public class ExitEP implements IPluginEntryPoint
 	}
 	
 	private void performQuit() {
-		// check for editors with changes
-		ArrayList<CommonModuleFrame> editorsWithChanges
-			= new ArrayList<CommonModuleFrame>();
-		Set<Project> projectSet = new HashSet<Project>();
-		for(CommonModuleFrame f:CommonModuleFrame.getOpenWindows()) {
-			final Project project = f.getExtension(Project.class);
-			if(project != null) {
-				projectSet.add(project);
-			}
-			if(f.hasUnsavedChanges())
-				editorsWithChanges.add(f);
-		}
-		
-		if(editorsWithChanges.size() > 0) {
+		final SaveOnExitDialog dlg = new SaveOnExitDialog(new CommonModuleFrame());
+		if(dlg.getSelectedEditors().size() > 0 || dlg.getCheckForChangesOnExit().size() > 0) {
 			// display dialog
-			SaveOnExitDialog dlg = new SaveOnExitDialog(new CommonModuleFrame());
 			QuitOption r = dlg.showDialog();
 			
 			// wait for close ...
@@ -102,9 +88,20 @@ public class ExitEP implements IPluginEntryPoint
 							throw new IOException("Could not save data for window " + editor.getTitle());
 						}
 					} catch (IOException e) {
-						LOGGER.error( e.getMessage(), e);
+						LogUtil.severe(e);
 						// critical - don't exit without saving!!
 						throw new RuntimeException("Exit canceled, save data failed.");
+					}
+				}
+
+				// other changes
+				List<CheckForChangesOnExit> checkForChangesOnExit = dlg.getCheckForChangesOnExit();
+				for(CheckForChangesOnExit checkForChanges:checkForChangesOnExit) {
+					try {
+						checkForChanges.save();
+					} catch (IOException e) {
+						LogUtil.severe(e);
+						throw new RuntimeException("Exit canceled, save data failed for " + checkForChanges.getName(), e);
 					}
 				}
 			}
@@ -119,7 +116,7 @@ public class ExitEP implements IPluginEntryPoint
 			try {
 				hook.shutdown();
 			} catch (PluginException pe) {
-				LOGGER.error( pe.getMessage(), pe);
+				LogUtil.severe(pe);
 			}
 		}
 		

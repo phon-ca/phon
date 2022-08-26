@@ -24,6 +24,7 @@ import java.util.stream.*;
 import javax.swing.*;
 import javax.swing.tree.*;
 
+import ca.phon.plugin.*;
 import ca.phon.project.*;
 import ca.phon.ui.*;
 import ca.phon.ui.decorations.*;
@@ -165,6 +166,19 @@ public class SaveOnExitDialog extends JDialog {
 			
 			otherNode.add(editorNode);
 		}
+
+		final List<IPluginExtensionPoint<CheckForChangesOnExit>> extPts =
+				PluginManager.getInstance().getExtensionPoints(CheckForChangesOnExit.class);
+		for(IPluginExtensionPoint<CheckForChangesOnExit> extPt:extPts) {
+			final CheckForChangesOnExit checkForChangesOnExit = extPt.getFactory().createObject();
+			if(checkForChangesOnExit != null && checkForChangesOnExit.hasChanges()) {
+				final TristateCheckBoxTreeNode node = new TristateCheckBoxTreeNode(checkForChangesOnExit);
+				node.setEnablePartialCheck(false);
+
+				otherNode.add(node);
+			}
+		}
+
 		if(otherNode.getChildCount() > 0) {
 			root.add(otherNode);
 		}
@@ -201,6 +215,8 @@ public class SaveOnExitDialog extends JDialog {
 					panel.getLabel().setText(((CommonModuleFrame)userObj).getTitle());
 				} else if(userObj instanceof Project) {
 					panel.getLabel().setText(((Project)userObj).getName());
+				} else if(userObj instanceof CheckForChangesOnExit) {
+					panel.getLabel().setText(((CheckForChangesOnExit)userObj).getName());
 				}
 			}
 			
@@ -239,6 +255,23 @@ public class SaveOnExitDialog extends JDialog {
 			}
 		}
 		
+		return retVal;
+	}
+
+	public List<CheckForChangesOnExit> getCheckForChangesOnExit() {
+		List<CheckForChangesOnExit> retVal = new ArrayList<>();
+
+		final List<TreePath> selectedPaths = checkboxTree.getCheckedPaths();
+		for(TreePath path:selectedPaths) {
+			if(path.getLastPathComponent() instanceof TristateCheckBoxTreeNode) {
+				final TristateCheckBoxTreeNode node = (TristateCheckBoxTreeNode)path.getLastPathComponent();
+				if(node.getUserObject() instanceof CheckForChangesOnExit) {
+					final CheckForChangesOnExit checkForChangesOnExit = (CheckForChangesOnExit)node.getUserObject();
+					retVal.add(checkForChangesOnExit);
+				}
+			}
+		}
+
 		return retVal;
 	}
 	

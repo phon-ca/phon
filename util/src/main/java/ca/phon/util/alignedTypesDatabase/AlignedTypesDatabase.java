@@ -40,8 +40,6 @@ public final class AlignedTypesDatabase implements Serializable {
 
 	private TernaryTree<Collection<TypeEntry>> tree;
 
-	private TernaryTree<Collection<TernaryTreeNode<TierInfo>>> alwaysExcludeTree;
-
 	public AlignedTypesDatabase() {
 		super();
 
@@ -49,7 +47,6 @@ public final class AlignedTypesDatabase implements Serializable {
 		setupTierDescriptionTree();
 
 		tree = new TernaryTree<>();
-		alwaysExcludeTree = new TernaryTree<>();
 	}
 
 	private void setupTierDescriptionTree() {
