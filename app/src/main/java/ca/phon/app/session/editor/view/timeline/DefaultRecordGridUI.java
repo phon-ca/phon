@@ -581,6 +581,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		Tuple<Set<Integer>, Rectangle> tpl = (Tuple<Set<Integer>, Rectangle>)pae.getData();
 		Set<Integer> recordSet = tpl.getObj1();
 		List<Integer> recordList = new ArrayList<>(recordSet);
+		Collections.sort(recordList);
 		Rectangle lblRect = tpl.getObj2();
 
 		JPopupMenu menu = new JPopupMenu();
