@@ -36,16 +36,6 @@ public final class AlignedTypesDatabaseTSTImpl implements Serializable, AlignedT
 
 	private TernaryTree<Collection<TypeEntry>> tree;
 
-	static Tuple<String[], String[]> alignedTypesToArrays(Map<String, String> alignedTypes) {
-		final List<Tuple<String, String>> alignedInfo =
-				alignedTypes.entrySet().stream()
-						.map(e -> new Tuple<String, String>(e.getKey(), e.getValue()))
-						.collect(Collectors.toList());
-		final String[] tierNames = alignedInfo.stream().map(Tuple::getObj1).collect(Collectors.toList()).toArray(new String[0]);
-		final String[] types = alignedInfo.stream().map(Tuple::getObj2).collect(Collectors.toList()).toArray(new String[0]);
-		return new Tuple<>(tierNames, types);
-	}
-
 	AlignedTypesDatabaseTSTImpl() {
 		super();
 
@@ -154,7 +144,7 @@ public final class AlignedTypesDatabaseTSTImpl implements Serializable, AlignedT
 	 */
 	@Override
 	public void addAlignedTypes(Map<String, String> alignedTypes) {
-		final Tuple<String[], String[]> alignedArrays = alignedTypesToArrays(alignedTypes);
+		final Tuple<String[], String[]> alignedArrays = AlignedTypesUtil.alignedTypesToArrays(alignedTypes);
 		final String[] tierNames = alignedArrays.getObj1();
 		final String[] types = alignedArrays.getObj2();
 		// don't include cycle which already exists
@@ -224,7 +214,7 @@ public final class AlignedTypesDatabaseTSTImpl implements Serializable, AlignedT
 		try {
 			readWriteLock.writeLock().lock();
 
-			final Tuple<String[], String[]> alignedArrays = alignedTypesToArrays(alignedTypes);
+			final Tuple<String[], String[]> alignedArrays = AlignedTypesUtil.alignedTypesToArrays(alignedTypes);
 			final String[] tierNames = alignedArrays.getObj1();
 			final String[] types = alignedArrays.getObj2();
 			if (!hasAlignedTypes(tierNames, types)) {
@@ -568,7 +558,7 @@ public final class AlignedTypesDatabaseTSTImpl implements Serializable, AlignedT
 
 	@Override
 	public boolean hasAlignedTypes(Map<String, String> alignedTypes) {
-		final Tuple<String[], String[]> alignedArrays = alignedTypesToArrays(alignedTypes);
+		final Tuple<String[], String[]> alignedArrays = AlignedTypesUtil.alignedTypesToArrays(alignedTypes);
 		final String[] tierNames = alignedArrays.getObj1();
 		final String[] types = alignedArrays.getObj2();
 
