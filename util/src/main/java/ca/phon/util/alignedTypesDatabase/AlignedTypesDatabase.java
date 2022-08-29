@@ -1,25 +1,9 @@
-/*
- * Copyright (C) 2005-2022 Gregory Hedlund & Yvan Rose
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *    http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
 package ca.phon.util.alignedTypesDatabase;
 
-import ca.hedlund.tst.*;
 import ca.phon.util.Tuple;
 
-import java.io.*;
+import java.io.Serializable;
 import java.util.*;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
 /**
@@ -32,35 +16,18 @@ import java.util.stream.Collectors;
  */
 public final class AlignedTypesDatabase implements Serializable {
 
-	private static final long serialVersionUID = -4436233595101310518L;
+	private static final long serialVersionUID = -7813357866801444427L;
 
-	private transient ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+	private final AlignedTypesDatabaseImpl impl;
 
-	private TernaryTree<TierInfo> tierDescriptionTree;
-
-	private TernaryTree<Collection<TypeEntry>> tree;
-
-	public AlignedTypesDatabase() {
-		super();
-
-		tierDescriptionTree = new TernaryTree<>();
-		setupTierDescriptionTree();
-
-		tree = new TernaryTree<>();
+	AlignedTypesDatabase() {
+		this(new AlignedTypesDatabaseTSTImpl());
 	}
 
-	private void setupTierDescriptionTree() {
-		final TierInfo orthoInfo = new TierInfo("Orthography");
-		orthoInfo.setOrder(0);
-		tierDescriptionTree.put("Orthography", orthoInfo);
+	AlignedTypesDatabase(AlignedTypesDatabaseImpl impl) {
+		super();
 
-		final TierInfo ipaTInfo = new TierInfo("IPA Target");
-		ipaTInfo.setOrder(1);
-		tierDescriptionTree.put("IPA Target", ipaTInfo);
-
-		final TierInfo ipaAInfo = new TierInfo("IPA Actual");
-		ipaAInfo.setOrder(2);
-		tierDescriptionTree.put("IPA Actual", ipaAInfo);
+		this.impl = impl;
 	}
 
 	/**
@@ -69,86 +36,8 @@ public final class AlignedTypesDatabase implements Serializable {
 	 *
 	 * @param tierName
 	 */
-	public void addUserTier(String tierName) throws DuplicateTierEntry {
-		ReentrantReadWriteLock.WriteLock writeLock = readWriteLock.writeLock();
-
-		try {
-			writeLock.lock();
-			if (tierDescriptionTree.containsKey(tierName)) {
-				throw new DuplicateTierEntry(tierName);
-			}
-			final TierInfo userTierInfo = new TierInfo(tierName);
-			userTierInfo.setOrder(tierDescriptionTree.size());
-			tierDescriptionTree.put(tierName, userTierInfo);
-		} catch (DuplicateTierEntry e) {
-			throw e;
-		} finally {
-			writeLock.unlock();
-		}
-
-		fireDatabaseEvent(new AlignedTypesDatabaseEvent(AlignedTypesDatabaseEvent.EventType.TierAdded, tierName));
-	}
-
-	/**
-	 * Add type for specified tier
-	 *
-	 *
-	 *
-	 * @throws IllegalStateException if unable to add tier name or type to database
-	 */
-	public TernaryTreeNode<Collection<TypeEntry>> addTypeForTier(String tierName, String type) {
-		try {
-			readWriteLock.writeLock().lock();
-
-			// ensure tier exists
-			Optional<TernaryTreeNode<TierInfo>> tierNameRefOpt = tierDescriptionTree.findNode(tierName);
-			if (tierNameRefOpt.isEmpty()) {
-				try {
-					addUserTier(tierName);
-				} catch (Exception e) {
-					// do nothing, tier exists
-				}
-				tierNameRefOpt = tierDescriptionTree.findNode(tierName);
-			}
-			if (tierNameRefOpt.isEmpty())
-				throw new IllegalStateException("Unable to add tier name to database");
-			final TernaryTreeNode<TierInfo> tierNameRef = tierNameRefOpt.get();
-
-			Optional<TernaryTreeNode<Collection<TypeEntry>>> typeNodeOpt = tree.findNode(type, true, true);
-			if (typeNodeOpt.isPresent()) {
-				final TernaryTreeNode<Collection<TypeEntry>> typeNode = typeNodeOpt.get();
-				if (!typeNode.isTerminated()) {
-					List<TypeEntry> entryList = new ArrayList<>();
-					typeNode.setValue(entryList);
-				}
-				Optional<TypeEntry> entryOpt =
-						typeNode.getValue().stream().filter((e) -> e.getTierName(tierDescriptionTree).equals(tierName)).findAny();
-				if (entryOpt.isEmpty()) {
-					TypeEntry entry = new TypeEntry(tierNameRef);
-					typeNode.getValue().add(entry);
-
-					fireDatabaseEvent(new AlignedTypesDatabaseEvent(AlignedTypesDatabaseEvent.EventType.TypeInserted,
-							new Tuple<String, String>(tierName, type)));
-				}
-				return typeNode;
-			} else {
-				throw new IllegalStateException("Unable to add type to database");
-			}
-		} catch (IllegalStateException e) {
-			throw e;
-		} finally {
-			readWriteLock.writeLock().unlock();
-		}
-	}
-
-	public static Tuple<String[], String[]> alignedTypesToArrays(Map<String, String> alignedTypes) {
-		final List<Tuple<String, String>> alignedInfo =
-				alignedTypes.entrySet().stream()
-						.map(e -> new Tuple<String, String>(e.getKey(), e.getValue()))
-						.collect(Collectors.toList());
-		final String[] tierNames = alignedInfo.stream().map(Tuple::getObj1).collect(Collectors.toList()).toArray(new String[0]);
-		final String[] types = alignedInfo.stream().map(Tuple::getObj2).collect(Collectors.toList()).toArray(new String[0]);
-		return new Tuple<>(tierNames, types);
+	public void addUserTier(String tierName) {
+		impl.addUserTier(tierName);
 	}
 
 	/**
@@ -158,101 +47,23 @@ public final class AlignedTypesDatabase implements Serializable {
 	 * @param alignedTypes a map of tierName -> types which will be added to the database
 	 */
 	public void addAlignedTypes(Map<String, String> alignedTypes) {
-		final Tuple<String[], String[]> alignedArrays = alignedTypesToArrays(alignedTypes);
-		final String[] tierNames = alignedArrays.getObj1();
-		final String[] types = alignedArrays.getObj2();
-		// don't include cycle which already exists
-		if(hasAlignedTypes(tierNames, types)) {
-			return;
-		}
-
-		addAlignedTypes(tierNames, types);
+		impl.addAlignedTypes(alignedTypes);
 	}
 
 	public void addAlignedTypes(String[] tierNames, String[] types) {
-		for(int i = 0; i < tierNames.length; i++) {
-			final String tierName = tierNames[i];
-			final String type = types[i];
-
-			for(int j = 0; j < tierNames.length; j++) {
-				final String alignedTierName = tierNames[j];
-				final String alignedType = types[j];
-
-				addAlignment(tierName, type, alignedTierName, alignedType);
-			}
-		}
+		impl.addAlignedTypes(tierNames, types);
 	}
 
 	public void addAlignment(String tierName, String type, String alignedTierName, String alignedType) {
-		try {
-			readWriteLock.writeLock().lock();
-
-			final TernaryTreeNode<Collection<TypeEntry>> typeNode = addTypeForTier(tierName, type);
-			final TernaryTreeNode<Collection<TypeEntry>> alignedTypeNode = addTypeForTier(alignedTierName, alignedType);
-			final TernaryTreeNode<TierInfo> alignedTierNameNode = tierDescriptionTree.findNode(alignedTierName).get();
-
-			Optional<TypeEntry> typeEntryOpt =
-					typeNode.getValue()
-							.stream()
-							.filter((e) -> e.getTierName(tierDescriptionTree).equals(tierName)).findAny();
-			if (typeEntryOpt.isPresent()) {
-				TypeEntry typeEntryForTier = typeEntryOpt.get();
-
-				Optional<TypeLinkedEntry> linkedEntryOpt =
-						typeEntryForTier.getLinkedEntries()
-								.stream()
-								.filter((e) -> e.getTierName(tierDescriptionTree).equals(alignedTierName)).findAny();
-				if (linkedEntryOpt.isEmpty()) {
-					TypeLinkedEntry linkedEntry = new TypeLinkedEntry(alignedTierNameNode);
-					typeEntryForTier.addLinkedEntry(linkedEntry);
-					linkedEntry.addLinkedTier(tree, alignedTypeNode);
-
-					fireDatabaseEvent(new AlignedTypesDatabaseEvent(AlignedTypesDatabaseEvent.EventType.AlignmentAdded,
-							new Tuple<Tuple<String, String>, Tuple<String, String>>(new Tuple<>(tierName, type), new Tuple<>(alignedTierName, alignedType))));
-				} else {
-					linkedEntryOpt.get().incrementLinkedTier(tree, alignedTypeNode);
-
-					fireDatabaseEvent(new AlignedTypesDatabaseEvent(AlignedTypesDatabaseEvent.EventType.AlignmentIncremented,
-							new Tuple<Tuple<String, String>, Tuple<String, String>>(new Tuple<>(tierName, type), new Tuple<>(alignedTierName, alignedType))));
-				}
-			}
-		} finally {
-			readWriteLock.writeLock().unlock();
-		}
+		impl.addAlignment(tierName, type, alignedTierName, alignedType);
 	}
 
 	public boolean removeAlignedTypes(Map<String, String> alignedTypes) {
-		try {
-			readWriteLock.writeLock().lock();
-
-			final Tuple<String[], String[]> alignedArrays = alignedTypesToArrays(alignedTypes);
-			final String[] tierNames = alignedArrays.getObj1();
-			final String[] types = alignedArrays.getObj2();
-			if (!hasAlignedTypes(tierNames, types)) {
-				return false;
-			}
-
-			return removeAlignedTypes(tierNames, types);
-		} finally {
-			readWriteLock.writeLock().unlock();
-		}
+		return impl.removeAlignedTypes(alignedTypes);
 	}
 
 	public boolean removeAlignedTypes(String[] tierNames, String[] types) {
-		for(int i = 0; i < tierNames.length; i++) {
-			final String tierName = tierNames[i];
-			final String type = types[i];
-
-			for(int j = 0; j < tierNames.length; j++) {
-				if(i == j) continue;
-				final String alignedTier = tierNames[j];
-				final String alignedType = types[j];
-
-				removeAlignment(tierName, type, alignedTier, alignedType);
-			}
-		}
-
-		return true;
+		return impl.removeAlignedTypes(tierNames, types);
 	}
 
 	/**
@@ -261,11 +72,10 @@ public final class AlignedTypesDatabase implements Serializable {
 	 *
 	 * @param tierName
 	 * @param type
-	 *
 	 * @return a map of aligned tier values for the given tier and type
 	 */
 	public Map<String, String[]> alignedTypesForTier(String tierName, String type) {
-		return alignedTypesForTier(tierName, type, List.of());
+		return impl.alignedTypesForTier(tierName, type);
 	}
 
 	/**
@@ -275,107 +85,18 @@ public final class AlignedTypesDatabase implements Serializable {
 	 * @param tierName
 	 * @param type
 	 * @param tierList
-	 *
 	 * @return a map of aligned tier values for the given tier and type
 	 */
 	public Map<String, String[]> alignedTypesForTier(String tierName, String type, List<String> tierList) {
-		Map<String, String[]> retVal = new LinkedHashMap<>();
-		if (tierName == null || type == null) return retVal;
-		try {
-			readWriteLock.readLock().lock();
-
-			Optional<TernaryTreeNode<Collection<TypeEntry>>> typeNodeRefOpt = tree.findNode(type);
-			if (typeNodeRefOpt.isPresent()) {
-				final TernaryTreeNode<Collection<TypeEntry>> typeNodeRef = typeNodeRefOpt.get();
-				if (typeNodeRef.getValue() == null) {
-					return retVal;
-				}
-				retVal.put(tierName, new String[]{type});
-				Optional<TypeEntry> entryOpt =
-						typeNodeRef.getValue().stream().filter((e) -> e.getTierName(tierDescriptionTree).equals(tierName)).findAny();
-				if (entryOpt.isPresent()) {
-					TypeEntry entry = entryOpt.get();
-					retVal = alignedTypesForEntry(entry, tierList);
-				}
-			}
-		} finally {
-			readWriteLock.readLock().unlock();
-		}
-
-		return retVal;
-	}
-
-	private Map<String, String[]> alignedTypesForEntry(TypeEntry entry) {
-		return alignedTypesForEntry(entry, List.of());
-	}
-
-	private Map<String, String[]> alignedTypesForEntry(TypeEntry entry, List<String> tierList) {
-		Map<String, String[]> retVal = new LinkedHashMap<>();
-
-		try {
-			readWriteLock.readLock().lock();
-
-			for (TypeLinkedEntry linkedEntry : entry.getLinkedEntries()) {
-				String alignedTierName = linkedEntry.getTierName(tierDescriptionTree);
-				boolean includeTier = tierList.size() > 0 ? tierList.contains(alignedTierName) : true;
-				if (!includeTier) continue;
-				var linkedTierCounts = linkedEntry.getLinkedTierCounts(tree)
-						.entrySet()
-						.stream()
-						.filter(e -> e.getValue() != null && e.getValue() > 0)
-						.collect(Collectors.toMap(x -> x.getKey(), x -> x.getValue()));
-				String[] alignedTierVals = new String[linkedTierCounts.size()];
-				int i = 0;
-				for (Map.Entry<TernaryTreeNode<Collection<TypeEntry>>, Integer> alignedEntry : linkedTierCounts.entrySet()) {
-					alignedTierVals[i++] = alignedEntry.getKey().getPrefix();
-				}
-				retVal.put(alignedTierName, alignedTierVals);
-			}
-		} finally {
-			readWriteLock.readLock().unlock();
-		}
-		return retVal;
+		return impl.alignedTypesForTier(tierName, type, tierList);
 	}
 
 	public Collection<String> tierNames() {
-		try {
-			readWriteLock.readLock().lock();
-
-			return tierDescriptionTree.values()
-					.stream().sorted(Comparator.comparingInt(TierInfo::getOrder))
-					.map(TierInfo::getTierName)
-					.collect(Collectors.toList());
-		} finally {
-			readWriteLock.readLock().unlock();
-		}
+		return impl.tierNames();
 	}
 
 	public Collection<TierInfo> getTierInfo() {
-		try {
-			readWriteLock.readLock().lock();
-
-			return tierDescriptionTree.values()
-					.stream().sorted(Comparator.comparingInt(TierInfo::getOrder))
-					.collect(Collectors.toList());
-		} finally {
-			readWriteLock.readLock().unlock();
-		}
-	}
-
-	private TypeEntry typeEntryForTier(String key, String tierName) {
-		try {
-			readWriteLock.readLock().lock();
-
-			final Collection<TypeEntry> entries = typeEntries(key);
-			final Optional<TypeEntry> typeTaggerEntry =
-					entries.stream().filter((v) -> v.getTierName(tierDescriptionTree).equals(tierName)).findAny();
-			if (typeTaggerEntry.isPresent())
-				return typeTaggerEntry.get();
-			else
-				return null;
-		} finally {
-			readWriteLock.readLock().unlock();
-		}
+		return impl.getTierInfo();
 	}
 
 	/**
@@ -385,58 +106,15 @@ public final class AlignedTypesDatabase implements Serializable {
 	 * @return all types which appear for the given keyTier
 	 */
 	public Collection<String> typesForTier(String keyTier) {
-		final List<String> retVal = new ArrayList<>();
-		Set<Map.Entry<String, Collection<TypeEntry>>> entrySet = tree.entrySet();
-		for (Map.Entry<String, Collection<TypeEntry>> entry : entrySet) {
-			Optional<TypeEntry> entryForKeyTier = entry.getValue()
-					.stream()
-					.filter((e) -> e.getTierName(tierDescriptionTree).equals(keyTier))
-					.findAny();
-			if (entryForKeyTier.isPresent()) {
-				retVal.add(entry.getKey());
-			}
-		}
-		return retVal;
-	}
-
-	private Collection<TypeEntry> typeEntries(String key) {
-		try {
-			readWriteLock.readLock().lock();
-
-			final Optional<TernaryTreeNode<Collection<TypeEntry>>> node = tree.findNode(key);
-			if (node.isEmpty()) return new ArrayList<>();
-
-			return node.get().getValue();
-		} finally {
-			readWriteLock.readLock().unlock();
-		}
+		return impl.typesForTier(keyTier);
 	}
 
 	public boolean typeExists(String type) {
-		return this.tree.containsKey(type);
+		return impl.typeExists(type);
 	}
 
 	public boolean typeExistsInTier(String type, String tier) {
-		try {
-			readWriteLock.readLock().lock();
-
-			Optional<TernaryTreeNode<Collection<TypeEntry>>> treeNodeOpt = this.tree.findNode(type);
-			if (treeNodeOpt.isPresent()) {
-				TernaryTreeNode<Collection<TypeEntry>> treeNode = treeNodeOpt.get();
-				if (treeNode.getValue() != null) {
-					Optional<TypeEntry> typeEntryForTier = treeNode.getValue().stream()
-							.filter(e -> e.getTierName(this.tierDescriptionTree).equals(tier))
-							.findAny();
-					return typeEntryForTier.isPresent();
-				} else {
-					return false;
-				}
-			} else {
-				return false;
-			}
-		} finally {
-			readWriteLock.readLock().unlock();
-		}
+		return impl.typeExistsInTier(type, tier);
 	}
 
 	/**
@@ -448,11 +126,7 @@ public final class AlignedTypesDatabase implements Serializable {
 	 * @param linkedVal
 	 */
 	public boolean alignmentExists(String tierName, String tierVal, String linkedTier, String linkedVal) {
-		final Optional<TernaryTreeNode<Collection<TypeEntry>>> nodeOpt = tree.findNode(tierVal);
-		if(nodeOpt.isEmpty()) return false;
-
-		final var node = nodeOpt.get();
-		return alignmentExists(node, tierName, linkedTier, linkedVal);
+		return impl.alignmentExists(tierName, tierVal, linkedTier, linkedVal);
 	}
 
 	/**
@@ -463,242 +137,26 @@ public final class AlignedTypesDatabase implements Serializable {
 	 * @param type
 	 * @param alignedTierName
 	 * @param alignedType
-	 *
 	 * @return true if link was removed
 	 */
 	public boolean removeAlignment(String tierName, String type, String alignedTierName, String alignedType) {
-		try {
-			readWriteLock.writeLock().lock();
-
-			final Optional<TernaryTreeNode<Collection<TypeEntry>>> nodeOpt = tree.findNode(type);
-			if (nodeOpt.isEmpty()) return false;
-
-			final var node = nodeOpt.get();
-			if (node.getValue() == null) return false;
-
-			final Optional<TypeEntry> entryForTier = node.getValue()
-					.stream()
-					.filter((e) -> e.getTierName(tierDescriptionTree).equals(tierName))
-					.findAny();
-			if (entryForTier.isEmpty()) return false;
-
-			final TypeEntry taggerEntry = entryForTier.get();
-			final Optional<TypeLinkedEntry> linkedEntryOpt = taggerEntry.getLinkedEntries()
-					.stream()
-					.filter((e) -> e.getTierName(tierDescriptionTree).equals(alignedTierName))
-					.findAny();
-			if (linkedEntryOpt.isEmpty()) return false;
-
-			final TypeLinkedEntry linkedEntry = linkedEntryOpt.get();
-			final Optional<TernaryTreeNode<Collection<TypeEntry>>> linkedValOpt = linkedEntry.getLinkedTierRefs(tree)
-					.stream()
-					.filter((r) -> r.getPrefix().equals(alignedType))
-					.findAny();
-			if (linkedValOpt.isPresent()) {
-				int linkCnt = linkedEntry.getLinkedTierCount(tree, linkedValOpt.get());
-				if (linkCnt > 0) {
-					linkCnt = linkedEntry.decrementLinkedTier(tree, linkedValOpt.get());
-					if (linkCnt == 0) {
-						if (linkedEntry.getLinkedTierRefs(tree).size() == 0) {
-							taggerEntry.getLinkedEntries().remove(linkedEntry);
-
-							if (taggerEntry.getLinkedEntries().size() == 0) {
-								node.getValue().remove(taggerEntry);
-							}
-
-							fireDatabaseEvent(new AlignedTypesDatabaseEvent(AlignedTypesDatabaseEvent.EventType.AlignmentRemoved,
-									new Tuple<Tuple<String, String>, Tuple<String, String>>(new Tuple<>(tierName, type), new Tuple<>(alignedTierName, alignedType))));
-						}
-					} else {
-						fireDatabaseEvent(new AlignedTypesDatabaseEvent(AlignedTypesDatabaseEvent.EventType.AlignmentDecremented,
-								new Tuple<Tuple<String, String>, Tuple<String, String>>(new Tuple<>(tierName, type), new Tuple<>(alignedTierName, alignedType))));
-					}
-					return true;
-				}
-			}
-			return false;
-		} finally {
-			readWriteLock.writeLock().unlock();
-		}
+		return impl.removeAlignment(tierName, type, alignedTierName, alignedType);
 	}
 
-	private boolean alignmentExists(TernaryTreeNode<Collection<TypeEntry>> node, String tierName, String linkedTier, String linkedVal) {
-		try {
-			readWriteLock.readLock().lock();
-
-			if (node.getValue() == null) return false;
-			final Optional<TypeEntry> entryForTier = node.getValue()
-					.stream()
-					.filter((e) -> e.getTierName(tierDescriptionTree).equals(tierName))
-					.findAny();
-			if (entryForTier.isEmpty()) return false;
-
-			final TypeEntry taggerEntry = entryForTier.get();
-			final Optional<TypeLinkedEntry> linkedEntryOpt = taggerEntry.getLinkedEntries()
-					.stream()
-					.filter((e) -> e.getTierName(tierDescriptionTree).equals(linkedTier))
-					.findAny();
-			if (linkedEntryOpt.isEmpty()) return false;
-
-			final TypeLinkedEntry linkedEntry = linkedEntryOpt.get();
-			final Optional<TernaryTreeNode<Collection<TypeEntry>>> linkedValOpt
-					= linkedEntry.getLinkedTierRefs(tree)
-					.stream()
-					.filter((r) -> r.getPrefix().equals(linkedVal))
-					.findAny();
-			if (linkedValOpt.isPresent()) {
-				final int linkCnt = linkedEntry.getLinkedTierCount(tree, linkedValOpt.get());
-				return linkCnt > 0;
-			} else {
-				return false;
-			}
-		} finally {
-			readWriteLock.readLock().unlock();
-		}
+	public boolean hasAlignedTypes(Map<String, String> alignedTypes) {
+		return impl.hasAlignedTypes(alignedTypes);
 	}
 
-	public Boolean hasAlignedTypes(Map<String, String> alignedTypes) {
-		final Tuple<String[], String[]> alignedArrays = alignedTypesToArrays(alignedTypes);
-		final String[] tierNames = alignedArrays.getObj1();
-		final String[] types = alignedArrays.getObj2();
-
-		return hasAlignedTypes(tierNames, types);
+	public boolean hasAlignedTypes(String tierNames[], String[] rowVals) {
+		return impl.hasAlignedTypes(tierNames, rowVals);
 	}
-
-	public Boolean hasAlignedTypes(String tierNames[], String[] rowVals) {
-		if(rowVals.length != tierNames.length) return false;
-
-		try {
-			readWriteLock.readLock().lock();
-
-			boolean retVal = true;
-			// only include row if all values have links between them
-			for(int i = 0; i < rowVals.length-1; i++) {
-				String v1 = rowVals[i];
-				if(v1 == null) continue; // ignore empty tier values
-				String t1 = tierNames[i];
-
-				for(int j = i + 1; j < rowVals.length; j++) {
-					String v2= rowVals[j];
-					if(v2 == null) continue; // ignore empty tier values
-					String t2 = tierNames[j];
-
-					retVal &= alignmentExists(t1, v1, t2, v2);
-				}
-			}
-
-			return retVal;
-		} finally {
-			readWriteLock.readLock().unlock();
-		}
-	}
-
-	/**
-	 * Import all entries from given database into this database.
-	 *
-	 * @param importDb
-	 */
-	public void importDatabase(AlignedTypesDatabase importDb) {
-		// TODO rewrite after adding alignment counts
-//		// add all tiers
-//		for(TierInfo ti: importDb.getTierInfo()) {
-//			if(!tierDescriptionTree.containsKey(ti.getTierName())) {
-//				TierInfo cloneInfo = ti.clone();
-//				cloneInfo.setOrder(tierDescriptionTree.size());
-//				tierDescriptionTree.put(cloneInfo.getTierName(), cloneInfo);
-//			}
-//		}
-//
-//		// walk tree and add all entries
-//		Set<Map.Entry<String, Collection<TypeEntry>>> entrySet = tree.entrySet();
-//
-//		// first add all types to tree
-//		// we will need to add all keys first to ensure we have nodes for linked types
-//		for(Map.Entry<String, Collection<TypeEntry>> entry:entrySet) {
-//			String type = entry.getKey();
-//			for(TypeEntry taggerEntry:entry.getValue()) {
-//				addTypeForTier(taggerEntry.getTierName(importDb.tierDescriptionTree), type);
-//			}
-//		}
-//
-//		// now create links for aligned types
-//		for(Map.Entry<String, Collection<TypeEntry>> entry:entrySet) {
-//			String type = entry.getKey();
-//
-//			Optional<TernaryTreeNode<Collection<TypeEntry>>> keyNodeOpt = tree.findNode(type);
-//			// shouldn't happen because we added it above
-//			if(!keyNodeOpt.isPresent()) continue;
-//
-//			TernaryTreeNode<Collection<TypeEntry>> keyNode = keyNodeOpt.get();
-//			for(TypeEntry importTaggerEntry:entry.getValue()) {
-//				// create tagger entry for tier or use existing
-//				final String tierName = importTaggerEntry.getTierName(importDb.tierDescriptionTree);
-//				Optional<TypeEntry> existingEntry =
-//						keyNode.getValue().stream().filter(e -> e.getTierName(tierDescriptionTree).equals(tierName)).findAny();
-//				final TypeEntry taggerEntry = existingEntry.isPresent() ? existingEntry.get() :
-//						new TypeEntry(tierDescriptionTree.findNode(tierName).get());
-//				if(existingEntry.isEmpty())
-//					keyNode.getValue().add(taggerEntry);
-//
-//				for(TypeLinkedEntry importTaggerLinkedEntry:importTaggerEntry.getLinkedEntries()) {
-//					// create tagger linked entry for linked tier or use existing
-//					String linkedTierName = importTaggerLinkedEntry.getTierName(importDb.tierDescriptionTree);
-//					Optional<TypeLinkedEntry> existingLinkedEntry = taggerEntry.getLinkedEntries().stream()
-//							.filter((e) -> e.getTierName(tierDescriptionTree).equals(linkedTierName))
-//							.findAny();
-//					TypeLinkedEntry taggerLinkedEntry = (existingLinkedEntry.isPresent()
-//						? existingLinkedEntry.get()
-//						: new TypeLinkedEntry(
-//							tierDescriptionTree.findNode(importTaggerEntry.getTierName(importDb.tierDescriptionTree)).get()));
-//					if(existingLinkedEntry.isEmpty())
-//						taggerEntry.getLinkedEntries().add(taggerLinkedEntry);
-//
-//					for(Map.Entry<TernaryTreeNode<Collection<TypeEntry>>, Integer> importTierNodeRef:importTaggerLinkedEntry.getLinkedTierCounts(importDb.tree).entrySet()) {
-//						// find the tree node for the linked type
-//						Optional<TernaryTreeNode<Collection<TypeEntry>>> tierNodeRef =
-//								tree.findNode(importTierNodeRef.getKey().getPrefix());
-//						if(tierNodeRef.isPresent()) {
-//							taggerLinkedEntry.getLinkedTierCounts(tree).put(tierNodeRef.get(), importTierNodeRef.getValue());
-//						}
-//					}
-//				}
-//			}
-//		}
-	}
-
-	// events
-	private transient List<AlignedTypesDatabaseListener> listenerList = Collections.synchronizedList(new ArrayList<>());
 
 	public void addDatabaseListener(AlignedTypesDatabaseListener listener) {
-		if (!listenerList.contains(listener))
-			listenerList.add(listener);
-
+		impl.addDatabaseListener(listener);
 	}
 
 	public void removeDatabaseListener(AlignedTypesDatabaseListener listener) {
-		listenerList.remove(listener);
-	}
-
-	private void fireDatabaseEvent(AlignedTypesDatabaseEvent evt) {
-		for(AlignedTypesDatabaseListener listener:listenerList) {
-			listener.databaseEvent(evt);
-		}
-	}
-
-	@Serial
-	private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
-		ois.defaultReadObject();
-
-		this.readWriteLock = new ReentrantReadWriteLock();
-		this.listenerList = Collections.synchronizedList(new ArrayList<>());
-	}
-
-	public static class DuplicateTierEntry extends Exception {
-
-		public DuplicateTierEntry(String tierName) {
-			super(String.format("A tier with name %s already exists", tierName));
-		}
-
+		impl.removeDatabaseListener(listener);
 	}
 
 }
