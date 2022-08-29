@@ -5,7 +5,7 @@
   <parent>
     <artifactId>phon</artifactId>
     <groupId>ca.phon</groupId>
-    <version>3.4.3-SNAPSHOT</version>
+    <version>3.4.3-beta.7</version>
     <relativePath>..</relativePath>
   </parent>
 
