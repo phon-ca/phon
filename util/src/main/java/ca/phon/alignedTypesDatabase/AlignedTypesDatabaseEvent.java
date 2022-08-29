@@ -12,11 +12,36 @@
  * limitations under the License.
  */
 
-package ca.phon.util.alignedTypesDatabase;
+package ca.phon.alignedTypesDatabase;
 
-@FunctionalInterface
-public interface AlignedTypesDatabaseListener {
+public class AlignedTypesDatabaseEvent {
 
-	public void databaseEvent(AlignedTypesDatabaseEvent event);
+	public static enum EventType {
+		TierAdded,
+		TierRemoved,
+		TypeInserted,
+		AlignmentAdded,
+		AlignmentIncremented,
+		AlignmentDecremented,
+		AlignmentRemoved
+	};
 
+	private final EventType eventType;
+
+	private final Object eventData;
+
+	public AlignedTypesDatabaseEvent(EventType eventType, Object eventData) {
+		super();
+
+		this.eventType = eventType;
+		this.eventData = eventData;
+	}
+
+	public EventType getEventType() {
+		return eventType;
+	}
+
+	public Object getEventData() {
+		return eventData;
+	}
 }

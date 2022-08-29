@@ -1,9 +1,6 @@
-package ca.phon.util.alignedTypesDatabase;
-
-import ca.phon.util.Tuple;
+package ca.phon.alignedTypesDatabase;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public interface AlignedTypesDatabaseImpl {
 

@@ -12,7 +12,7 @@
  * limitations under the License.
  *
  */
-package ca.phon.util.alignedTypesDatabase;
+package ca.phon.alignedTypesDatabase;
 
 import ca.hedlund.tst.*;
 import ca.phon.util.Tuple;

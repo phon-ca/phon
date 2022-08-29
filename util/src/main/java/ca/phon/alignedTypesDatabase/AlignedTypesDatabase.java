@@ -1,10 +1,7 @@
-package ca.phon.util.alignedTypesDatabase;
-
-import ca.phon.util.Tuple;
+package ca.phon.alignedTypesDatabase;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * A database of types (unique strings) along with the tiers in which they appear

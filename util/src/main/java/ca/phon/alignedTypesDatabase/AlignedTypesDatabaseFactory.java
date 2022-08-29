@@ -1,4 +1,4 @@
-package ca.phon.util.alignedTypesDatabase;
+package ca.phon.alignedTypesDatabase;
 
 /**
  * Create instances of {@link AlignedTypesDatabase}
