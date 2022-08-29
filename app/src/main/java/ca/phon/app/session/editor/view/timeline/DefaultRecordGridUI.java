@@ -477,15 +477,17 @@ public class DefaultRecordGridUI extends RecordGridUI {
 
 		// determine if any records overlap
 		Set<Integer> overlappingRecords = calculateOverlappingRecords(recordSet);
+		List<Integer> recordList = new ArrayList<>(recordSet);
+		Collections.sort(recordList);
 		if(overlappingRecords.size() > 0) {
 			msgBuilder.append(" Overlapping records (#");
-			msgBuilder.append(overlappingRecords.stream().map( i -> Integer.toString(i+1) ).collect(Collectors.joining(",#")));
+			msgBuilder.append(recordList.stream().map( i -> Integer.toString(i+1) ).collect(Collectors.joining(",#")));
 			msgBuilder.append(")");
 		}
 
 		StockIcon stockIcon = (OSInfo.isMacOs() ? MacOSStockIcon.AlertNoteIcon
 				: WindowsStockIcon.INFO);
-		Icon icon = (overlappingRecords.size() > 0
+		Icon icon = (recordList.size() > 0
 				? IconManager.getInstance().getIcon("emblems/flag-red", IconSize.XSMALL)
 				: IconManager.getInstance().getSystemStockIcon(stockIcon, IconSize.XSMALL));
 
@@ -496,7 +498,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		StringBuilder builder = new StringBuilder();
 		builder.append("<html>");
 		builder.append("#");
-		Iterator<Integer> itr = recordSet.iterator();
+		Iterator<Integer> itr = recordList.iterator();
 
 		builder.append("<span style='color: ");
 		int r1Idx = itr.next();
