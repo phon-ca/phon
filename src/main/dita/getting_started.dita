@@ -51,17 +51,17 @@
             </body>
         </topic>
         <topic id="phon_beta">
-            <title>Phon 3.4.3-beta.6</title>
+            <title>Phon 3.4.3-beta.9</title>
             <body>
                 <ul>
                     <li><p><xref
-                                href="https://github.com/phon-ca/phon/releases/download/3.4.3-beta.6/Phon_macos_3_4_3-beta_6.dmg"
+                                href="https://github.com/phon-ca/phon/releases/download/3.4.3-beta.9/Phon_macos_3_4_3-beta_9.dmg"
                                 format="dmg" scope="external">macOS 10.9+ (dmg)</xref></p></li>
                     <li><p><xref
-                                href="https://github.com/phon-ca/phon/releases/download/3.4.3-beta.6/Phon_windows-x64_3_4_3-beta_6.exe"
+                                href="https://github.com/phon-ca/phon/releases/download/3.4.3-beta.9/Phon_windows-x64_3_4_3-beta_9.exe"
                                 format="exe" scope="external">Windows (64-bit) (installer)</xref> |
                                 <xref
-                                href="https://github.com/phon-ca/phon/releases/download/3.4.3-beta.6/Phon_windows-x64_3_4_3-beta_6.zip"
+                                href="https://github.com/phon-ca/phon/releases/download/3.4.3-beta.9/Phon_windows-x64_3_4_3-beta_9.zip"
                                 format="zip" scope="external">Windows (64 bit) (zip)</xref></p></li>
                 </ul>
             </body>

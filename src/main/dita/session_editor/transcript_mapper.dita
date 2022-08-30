@@ -10,7 +10,6 @@
                 is currently available as a downloadable plug-in. See <xref
                     href="https://github.com/phon-ca/phon-transcript-mapper-plugin" format="html"
                     scope="external"/> for installation instructions.</note></p>
-        
         <p>The UI contains three main componenets:<ol id="ol_yhd_1qq_p5b">
                 <li><uicontrol>Key tier</uicontrol> combo box; the <keyword>key tier</keyword> is
                     the tier used for lookups within the <keyword>aligned types database</keyword>.
@@ -21,12 +20,15 @@
                         tier</keyword> will always be shown as the first column.</li>
                 <li><uicontrol>Alignment options</uicontrol> table; this table displayed data from
                     the database which may be used to fill record data.</li>
-            </ol></p><p><fig id="fig_j4n_rjs_q5b">
+            </ol></p>
+        <p>
+            <fig id="fig_j4n_rjs_q5b">
                 <title>Transcript Mapper</title>
                 <image placement="break" href="images/transcript_mapper.png" id="image_k4n_rjs_q5b">
                     <alt>Transcript Mapper</alt>
                 </image>
-            </fig></p>
+            </fig>
+        </p>
         <p>Transcript mapper is intended to be used with partially transcribed data. Information
             from one tier, called the <keyword>key tier</keyword>, is used to lookup alignment sets
             in the database. These sets may then be used to insert values into other tiers in the
@@ -67,7 +69,6 @@
                     </p></li>
             </ol></p>
     </body>
-    
     <topic id="database_actions">
         <title>Aligned Types Database</title>
         <body>
@@ -91,14 +92,13 @@
                         <alt>Database menu</alt>
                     </image>
                 </fig>
-                <note>The aligned types database will be automatically saved when exiting the
-                    application if changes are detected.</note>
+                <note>A prompt to save the database will be shown on application exit if unsaved
+                    changes are detected.</note>
                 <note>A backup of of the database is created when saving, you can find this file in
                     the <filepath>transcriptMapper</filepath> folder named
                         <filepath>typeMap-backup.atdz</filepath>.</note>
             </p>
         </body>
-        
         <topic id="save_database">
             <title>Save database</title>
             <body>
@@ -107,7 +107,6 @@
                     detected.</p>
             </body>
         </topic>
-        
         <topic id="scan_project">
             <title>Scan Project</title>
             <body>
@@ -126,28 +125,25 @@
                 </p>
             </body>
         </topic>
-        
         <topic id="import_csv">
             <title>Import from CSV</title>
             <body>
-                <p>Data may be imported from a CSV file.  The first line of the CSV file should
+                <p>Data may be imported from a CSV file. The first line of the CSV file should
                     contain tier names, while each subsequent line should contain the aligned types
                     to be added to the database. The CSV file should be UTF-8 encoded, with quotes
                     around strings and commas separating values.</p>
             </body>
         </topic>
-        
         <topic id="export_csv">
             <title>Export to CSV</title>
             <body>
                 <p>The CSV export function will export aligned data for all keys found for the
                     selected key tier. The first line of the CSV file will contain tier names, while
-                    each subsequent line will contain aligned types contained in the database.  The
+                    each subsequent line will contain aligned types contained in the database. The
                     file will be UTF-8 encoded, with quotes around string and commas separating
                     values.</p>
             </body>
         </topic>
-        
         <topic id="import_dict">
             <title>Import IPA dictionary</title>
             <body>
@@ -162,23 +158,19 @@
                         are imported into the database.</note></p>
             </body>
         </topic>
-        
         <topic id="import_database">
             <title>Import Database</title>
             <body>
                 <p>This feature is not yet available.</p>
             </body>
         </topic>
-        
         <topic id="project_definitions">
             <title>Project TypeMap Definitions</title>
             <body>
                 <p>This feature is not yet available.</p>
             </body>
         </topic>
-        
     </topic>
-    
     <topic id="tiers">
         <title>Tiers</title>
         <body>
@@ -201,5 +193,4 @@
             </p>
         </body>
     </topic>
-    
 </topic>
