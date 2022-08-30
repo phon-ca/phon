@@ -26,10 +26,10 @@ import ca.phon.plugin.*;
 import ca.phon.project.*;
 import ca.phon.session.*;
 import ca.phon.util.*;
-import net.lingala.zip4j.core.*;
+import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.*;
 import net.lingala.zip4j.model.*;
-import net.lingala.zip4j.util.*;
+import net.lingala.zip4j.model.enums.*;
 
 public class BackupCommandHook implements ActionHook<SaveSessionAction>, IPluginExtensionPoint<ActionHook<SaveSessionAction>> {
 
@@ -63,18 +63,16 @@ public class BackupCommandHook implements ActionHook<SaveSessionAction>, IPlugin
         	if(!zipFile.getFile().exists()) {
         		ZipParameters parameters = new ZipParameters();
     			
-    			parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
-    			parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
-    			
-    			zipFile.createZipFile(new File(project.getLocation() + File.separator + "project.properties"), parameters);
+    			parameters.setCompressionMethod(CompressionMethod.DEFLATE);
+    			parameters.setCompressionLevel(CompressionLevel.NORMAL);
+
+    			zipFile.addFile(new File(project.getLocation() + File.separator + "project.properties"), parameters);
         	}
         	// add to zip file
     		ZipParameters parameters = new ZipParameters();
-			parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
-			parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
-			
+			parameters.setCompressionMethod(CompressionMethod.DEFLATE);
+			parameters.setCompressionLevel(CompressionLevel.NORMAL);
 			parameters.setFileNameInZip(session.getCorpus() + File.separator + zipName);
-			parameters.setSourceExternalStream(true);
 			
 			FileInputStream fin = null;
 			try {

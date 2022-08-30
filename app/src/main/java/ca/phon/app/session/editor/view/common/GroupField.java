@@ -254,13 +254,45 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 			}
 		}
 
-		// HACK call save on parent frame (if any)
 		CommonModuleFrame cmf = CommonModuleFrame.getCurrentFrame();
 		if(cmf == null) return;
-		try {
-			cmf.saveData();
-		} catch (IOException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+
+		// look for Save action in file menu
+		final JMenuBar windowMenu = cmf.getJMenuBar();
+		JMenu fileMenu = null;
+		for(int i = 0; i < windowMenu.getMenuCount(); i++) {
+			if(windowMenu.getMenu(i).getText().equals("File")) {
+				fileMenu = windowMenu.getMenu(i);
+				break;
+			}
+		}
+		if(fileMenu != null) {
+			JMenuItem saveItem = null;
+			for(int i = 0; i < fileMenu.getItemCount(); i++) {
+				if(fileMenu.getMenuComponent(i) instanceof  JMenuItem) {
+					JMenuItem item = (JMenuItem) fileMenu.getMenuComponent(i);
+					if(item.getText().equals("Save")) {
+						saveItem = item;
+						break;
+					}
+				}
+			}
+			if(saveItem != null) {
+				saveItem.getAction().actionPerformed(new ActionEvent(this, -1, "save"));
+			} else {
+				try {
+					cmf.saveData();
+				} catch (IOException e) {
+					LOGGER.error(e.getLocalizedMessage(), e);
+				}
+			}
+		} else {
+			// finally try to call save on parent frame (if any)
+			try {
+				cmf.saveData();
+			} catch (IOException e) {
+				LOGGER.error(e.getLocalizedMessage(), e);
+			}
 		}
 	}
 
