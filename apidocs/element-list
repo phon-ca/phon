@@ -1,6 +1,7 @@
 antlr4.ca.phon.query.pql.gen
 ca.hedlund.dp.visitor
 ca.hedlund.dp.visitor.annotation
+ca.phon.alignedTypesDatabase
 ca.phon.alignment
 ca.phon.app
 ca.phon.app.about
@@ -166,6 +167,7 @@ ca.phon.script.params.ui
 ca.phon.script.scripttable
 ca.phon.script.scripttable.io
 ca.phon.session
+ca.phon.session.alignedMorphemes
 ca.phon.session.check
 ca.phon.session.filter
 ca.phon.session.format

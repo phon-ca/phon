@@ -355,6 +355,7 @@ ca.phon.app.actions
 ca.phon.app.actions
 ca.phon.app.actions
 ca.phon.app.actions
+ca.phon.app.actions
 ca.phon.app
 ca.phon.app.log
 ca.phon.app.log
@@ -907,6 +908,12 @@ ca.phon.session.check
 ca.phon.session.check
 ca.phon.session
 ca.phon.session
+ca.phon.session.alignedMorphemes
+ca.phon.session.alignedMorphemes
+ca.phon.session.alignedMorphemes
+ca.phon.session.alignedMorphemes
+ca.phon.session.alignedMorphemes
+ca.phon.session.alignedMorphemes
 ca.phon.session
 ca.phon.session
 ca.phon.orthography
@@ -1089,6 +1096,18 @@ ca.phon.formatter
 ca.phon.formatter
 ca.phon.formatter
 ca.phon.formatter
+ca.phon.alignedTypesDatabase
+ca.phon.alignedTypesDatabase
+ca.phon.alignedTypesDatabase
+ca.phon.alignedTypesDatabase
+ca.phon.alignedTypesDatabase
+ca.phon.alignedTypesDatabase
+ca.phon.alignedTypesDatabase
+ca.phon.alignedTypesDatabase
+ca.phon.alignedTypesDatabase
+ca.phon.alignedTypesDatabase
+ca.phon.alignedTypesDatabase
+ca.phon.alignedTypesDatabase
 ca.phon.visitor
 ca.phon.visitor
 ca.phon.visitor.annotation
@@ -1104,6 +1123,7 @@ ca.phon.fontconverter.io
 ca.phon.fontconverter.io
 ca.phon.fontconverter.io
 ca.phon.fontconverter
+ca.phon.worker
 ca.phon.worker
 ca.phon.worker
 ca.phon.worker

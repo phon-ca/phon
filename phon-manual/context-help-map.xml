@@ -36,6 +36,7 @@
    <appContext helpID="ipa-lookup" path="session_editor/ipa_lookup_view.html"/>
    <appContext helpID="find_and_replace"
                path="session_editor/find_and_replace_view.html"/>
+   <appContext helpID="transcript_mapper" path="session_editor/transcript_mapper.html"/>
    <appContext helpID="editor_layouts" path="session_editor/editor_layouts.html"/>
    <appContext helpID="editor_search" path="session_editor/editor_search.html"/>
    <appContext helpID="inter_transcriber_reliability"
