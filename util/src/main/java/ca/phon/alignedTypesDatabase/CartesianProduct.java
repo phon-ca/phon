@@ -152,21 +152,25 @@ public final class CartesianProduct {
 	 * @param maxVals
 	 */
 	private static void bump(int[] currentVals, int[] maxVals) {
-		int lastArray = currentVals.length - 1;
-		for(int i = currentVals.length-1; i >= 1; i--) {
-			if(currentVals[i] < maxVals[i] - 1) {
-				++currentVals[i];
-				for(int j = i + 1; j < currentVals.length; j++) {
-					currentVals[j] = 0;
+		if(currentVals.length == 1) {
+			++currentVals[0];
+		} else {
+			int lastArray = currentVals.length - 1;
+			for (int i = currentVals.length - 1; i >= 1; i--) {
+				if (currentVals[i] < maxVals[i] - 1) {
+					++currentVals[i];
+					for (int j = i + 1; j < currentVals.length; j++) {
+						currentVals[j] = 0;
+					}
+					return;
 				}
-				return;
+				lastArray = i;
 			}
-			lastArray = i;
-		}
 
-		++currentVals[lastArray-1];
-		for(int i = lastArray; i < currentVals.length; i++)
-			currentVals[i] = 0;
+			++currentVals[lastArray - 1];
+			for (int i = lastArray; i < currentVals.length; i++)
+				currentVals[i] = 0;
+		}
 	}
 
 }
