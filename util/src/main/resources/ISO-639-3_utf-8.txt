@@ -420,7 +420,7 @@ aua				I	L	Asumboa
 aub				I	L	Alugu
 auc				I	L	Waorani
 aud				I	L	Anuta
-aue				I	L	=/Kx'au//'ein
+aue				I	L	Kx'au'ein
 aug				I	L	Aguna
 auh				I	L	Aushi
 aui				I	L	Anuki
@@ -2128,7 +2128,7 @@ gne				I	L	Ganang
 gng				I	L	Ngangam
 gnh				I	L	Lere
 gni				I	L	Gooniyandi
-gnk				I	L	//Gana
+gnk				I	L	Gana
 gnl				I	E	Gangulu
 gnm				I	L	Ginuman
 gnn				I	L	Gumatj
@@ -2248,7 +2248,7 @@ gwe				I	L	Gweno
 gwf				I	L	Gowro
 gwg				I	L	Moo
 gwi	gwi	gwi		I	L	Gwichʼin
-gwj				I	L	/Gwi
+gwj				I	L	Gwi
 gwn				I	L	Gwandara
 gwr				I	L	Gwere
 gwt				I	L	Gawar-Bati
@@ -2376,7 +2376,7 @@ hmz				I	L	Hmong Shua
 hna				I	L	Mina (Cameroon)
 hnd				I	L	Southern Hindko
 hne				I	L	Chhattisgarhi
-hnh				I	L	//Ani
+hnh				I	L	Ani
 hni				I	L	Hani
 hnj				I	L	Hmong Njua
 hnn				I	L	Hanunoo
@@ -2426,7 +2426,7 @@ hts				I	L	Hadza
 htu				I	L	Hitu
 htx				I	A	Middle Hittite
 hub				I	L	Huambisa
-huc				I	L	=/Hua
+huc				I	L	Hua
 hud				I	L	Huaulu
 hue				I	L	San Francisco Del Mar Huave
 huf				I	L	Humene
@@ -7053,7 +7053,7 @@ xae				I	A	Aequian
 xag				I	E	Aghwan
 xai				I	E	Kaimbé
 xal	xal	xal		I	L	Kalmyk
-xam				I	E	/Xam
+xam				I	E	Xam
 xan				I	L	Xamtanga
 xao				I	L	Khao
 xap				I	E	Apalachee
@@ -7095,7 +7095,7 @@ xdm				I	A	Edomite
 xdy				I	L	Malayic Dayak
 xeb				I	A	Eblan
 xed				I	L	Hdi
-xeg				I	E	//Xegwi
+xeg				I	E	Xegwi
 xel				I	L	Kelo
 xem				I	L	Kembayan
 xep				I	A	Epi-Olmec
