@@ -141,7 +141,9 @@
                     selected key tier. The first line of the CSV file will contain tier names, while
                     each subsequent line will contain aligned types contained in the database. The
                     file will be UTF-8 encoded, with quotes around string and commas separating
-                    values.</p>
+                    values.<note>Only tiers displayed in
+                        the <uicontrol>Alignment options</uicontrol> table will be exported to
+                        CSV.</note></p>
             </body>
         </topic>
         <topic id="import_dict">
@@ -178,10 +180,12 @@
                 displayed when clicking the <uicontrol>Tiers</uicontrol> toolbar button. Initially
                 all grouped tiers in the session are displayed in the order defined in the session
                 with the exception that the current key tier will always be the first column. Only
-                tiers displayed in the tables will be changed when selecting alignment data to
-                insert. It is possible that the database contains tiers which do not exist in the
-                session. Missing tiers will be displayed in the menu as options to create the new
-                tier. An option to create all missing tiers will also be available.</p>
+                tiers displayed in the <uicontrol>Words/morphemes</uicontrol> table will be changed
+                when selecting alignment data to insert. </p>
+            <p>It is possible that the database contains tiers which do not exist in the session.
+                Missing tiers are displayed at the end of the <uicontrol>Tiers</uicontrol> menu with
+                options to either add the missing tier to the session, or display the tier data in
+                the <uicontrol>Alignment options</uicontrol> table.</p>
             <p>
                 <fig id="fig_ypq_gls_q5b">
                     <title>Tiers menu</title>
@@ -192,5 +196,36 @@
                 </fig>
             </p>
         </body>
+        
+        <topic id="generated_tiers">
+            <title>Language Tier</title>
+            <body><p>When importing data to the database a tier 'Langauge' is automatically added to the data if it
+                    does not exist.  The value of this field is filled in the following manner:<ul
+                        id="ul_nhg_xnq_s5b">
+                        <li><uicontrol>Import from CSV</uicontrol><p>During import from CSV the
+                                value for language is determined by (in order): column in the CSV
+                                file; language identified in <uicontrol>Session
+                                    Information</uicontrol>; or default syllabifier language in
+                                application settings.</p></li>
+                        <li>
+                            <p>
+                                <uicontrol>Scan Project</uicontrol></p>
+                            <p>During scan project the value for language is determined by (in
+                                order): langauge identified in the first step of the <wintitle>Scan
+                                    Project</wintitle> wizard; value from a tier named 'Language' in
+                                the session (must be grouped and aligned with each word/morpheme);
+                                language identified in <uicontrol>Session Information</uicontrol>;
+                                or default syllabifier language in application settings.</p>
+                        </li>
+                        <li>Adding entries from <uicontrol>Words/morphemes</uicontrol> table<p>When
+                                adding alignment entries from the
+                                    <uicontrol>Words/morphemes</uicontrol> table the value for
+                                language is determined by (in order): value from a tier named
+                                'Language' in the session (must be grouped and aligned with each
+                                word/morpheme); language identified in <uicontrol>Session
+                                    Information</uicontrol>; or default syllabifier language in
+                                application settings.</p></li>
+                    </ul></p></body>
+        </topic>
     </topic>
 </topic>
