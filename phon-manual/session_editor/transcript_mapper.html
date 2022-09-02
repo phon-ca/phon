@@ -76,7 +76,7 @@ $(document).ready( function () {
     <a id="wh_download_pdf" href="https://phon-ca.github.io/phon/phon-manual/phon_application_manual.pdf">PDF Documentation</a>
     -->
     <a id="wh_download_banner" href="https://github.com/phon-ca/phon/releases/3.4.2">Phon 3.4.2</a>
-    <a id="wh_download_beta_banner" href="https://github.com/phon-ca/phon/releases/3.4.3-beta.9">Phon 3.4.3-beta.9</a>
+    <a id="wh_download_beta_banner" href="https://github.com/phon-ca/phon/releases/3.4.3-beta.10">Phon 3.4.3-beta.10</a>
     <a id="wh_forkme_banner" href="https://github.com/phon-ca/phon/releases">View on GitHub</a>
 </div>
             </div>
@@ -238,11 +238,13 @@ $(document).ready( function () {
         <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title6" id="export_csv">
             <h3 class="- topic/title title topictitle3" id="ariaid-title6">Export to CSV</h3>
             <div class="- topic/body body">
-                <p class="- topic/p p">The CSV export function will export aligned data for all keys found for the
+                <div class="- topic/p p">The CSV export function will export aligned data for all keys found for the
                     selected key tier. The first line of the CSV file will contain tier names, while
                     each subsequent line will contain aligned types contained in the database. The
                     file will be UTF-8 encoded, with quotes around string and commas separating
-                    values.</p>
+                    values.<div class="- topic/note note note note_note"><span class="note__title">Note:</span> Only tiers displayed in
+                        the <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Alignment options</span> table will be exported to
+                        CSV.</div></div>
             </div>
         </article>
         <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title7" id="import_dict">
@@ -279,10 +281,12 @@ $(document).ready( function () {
                 displayed when clicking the <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Tiers</span> toolbar button. Initially
                 all grouped tiers in the session are displayed in the order defined in the session
                 with the exception that the current key tier will always be the first column. Only
-                tiers displayed in the tables will be changed when selecting alignment data to
-                insert. It is possible that the database contains tiers which do not exist in the
-                session. Missing tiers will be displayed in the menu as options to create the new
-                tier. An option to create all missing tiers will also be available.</p>
+                tiers displayed in the <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Words/morphemes</span> table will be changed
+                when selecting alignment data to insert. </p>
+            <p class="- topic/p p">It is possible that the database contains tiers which do not exist in the session.
+                Missing tiers are displayed at the end of the <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Tiers</span> menu with
+                options to either add the missing tier to the session, or display the tier data in
+                the <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Alignment options</span> table.</p>
             <div class="- topic/p p">
                 <figure class="- topic/fig fig fignone" id="tiers__fig_ypq_gls_q5b"><figcaption class="- topic/title title figcap"><span class="figtitleprefix fig--title-label">Figure<span class="fig--title-label-number"> 6</span><span class="fig--title-label-punctuation">. </span></span><span class="fig--title">Tiers menu</span></figcaption>
                     
@@ -290,6 +294,36 @@ $(document).ready( function () {
                 </figure>
             </div>
         </div>
+        
+        <article class="- topic/topic topic nested2" aria-labelledby="ariaid-title11" id="generated_tiers">
+            <h3 class="- topic/title title topictitle3" id="ariaid-title11">Language Tier</h3>
+            <div class="- topic/body body"><div class="- topic/p p">When importing data to the database a tier 'Langauge' is automatically added to the data if it
+                    does not exist.  The value of this field is filled in the following manner:<ul class="- topic/ul ul" id="generated_tiers__ul_nhg_xnq_s5b">
+                        <li class="- topic/li li"><span class="+ topic/ph ui-d/uicontrol ph uicontrol">Import from CSV</span><p class="- topic/p p">During import from CSV the
+                                value for language is determined by (in order): column in the CSV
+                                file; language identified in <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Session
+                                    Information</span>; or default syllabifier language in
+                                application settings.</p></li>
+                        <li class="- topic/li li">
+                            <p class="- topic/p p">
+                                <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Scan Project</span></p>
+                            <p class="- topic/p p">During scan project the value for language is determined by (in
+                                order): langauge identified in the first step of the <span class="+ topic/keyword ui-d/wintitle keyword wintitle">Scan
+                                    Project</span> wizard; value from a tier named 'Language' in
+                                the session (must be grouped and aligned with each word/morpheme);
+                                language identified in <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Session Information</span>;
+                                or default syllabifier language in application settings.</p>
+                        </li>
+                        <li class="- topic/li li">Adding entries from <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Words/morphemes</span> table<p class="- topic/p p">When
+                                adding alignment entries from the
+                                    <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Words/morphemes</span> table the value for
+                                language is determined by (in order): value from a tier named
+                                'Language' in the session (must be grouped and aligned with each
+                                word/morpheme); language identified in <span class="+ topic/ph ui-d/uicontrol ph uicontrol">Session
+                                    Information</span>; or default syllabifier language in
+                                application settings.</p></li>
+                    </ul></div></div>
+        </article>
     </article>
 </article></main></div>
                         
@@ -299,7 +333,7 @@ $(document).ready( function () {
                     </div>
                     
                         <nav role="navigation" id="wh_topic_toc" aria-label="On this page" class="col-lg-2 d-none d-lg-block navbar d-print-none"> 
-                            <div class=" wh_topic_toc "><div class="wh_topic_label">On this page</div><ul><li class="topic-item"><a href="#database_actions" data-tocid="database_actions">Aligned Types Database</a><ul><li class="topic-item"><a href="#save_database" data-tocid="save_database">Save database</a></li><li class="topic-item"><a href="#scan_project" data-tocid="scan_project">Scan Project</a></li><li class="topic-item"><a href="#import_csv" data-tocid="import_csv">Import from CSV</a></li><li class="topic-item"><a href="#export_csv" data-tocid="export_csv">Export to CSV</a></li><li class="topic-item"><a href="#import_dict" data-tocid="import_dict">Import IPA dictionary</a></li><li class="topic-item"><a href="#import_database" data-tocid="import_database">Import Database</a></li><li class="topic-item"><a href="#project_definitions" data-tocid="project_definitions">Project TypeMap Definitions</a></li></ul></li><li class="topic-item"><a href="#tiers" data-tocid="tiers">Tiers</a></li></ul></div>
+                            <div class=" wh_topic_toc "><div class="wh_topic_label">On this page</div><ul><li class="topic-item"><a href="#database_actions" data-tocid="database_actions">Aligned Types Database</a><ul><li class="topic-item"><a href="#save_database" data-tocid="save_database">Save database</a></li><li class="topic-item"><a href="#scan_project" data-tocid="scan_project">Scan Project</a></li><li class="topic-item"><a href="#import_csv" data-tocid="import_csv">Import from CSV</a></li><li class="topic-item"><a href="#export_csv" data-tocid="export_csv">Export to CSV</a></li><li class="topic-item"><a href="#import_dict" data-tocid="import_dict">Import IPA dictionary</a></li><li class="topic-item"><a href="#import_database" data-tocid="import_database">Import Database</a></li><li class="topic-item"><a href="#project_definitions" data-tocid="project_definitions">Project TypeMap Definitions</a></li></ul></li><li class="topic-item"><a href="#tiers" data-tocid="tiers">Tiers</a><ul><li class="topic-item"><a href="#generated_tiers" data-tocid="generated_tiers">Language Tier</a></li></ul></li></ul></div>
                         </nav>
                     
                 </div>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.4.3-beta.9/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_3-beta_9.dmg" newVersion="3.4.3-beta.9" newMediaFileId="macos" fileSize="300465257" md5Sum="8f1a8438e9583a8e7708919a4006a364" sha256Sum="ec953baad6381fa5ccb2d2023aba8d6ecac6c39c65e7dd85e9cbcbb0e2c35fa8" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.4.3-beta.10/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_3-beta_10.dmg" newVersion="3.4.3-beta.10" newMediaFileId="macos" fileSize="300455756" md5Sum="7d642fbc3926a07104dfe580194eeba9" sha256Sum="00477ab4fd2309b35dccf09889cedd2ac3a1f4b99af432eb99169695e2efdbc8" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.4.2
 
  * VLC and segment playback using the Java audio system now both use the same volume settings
@@ -523,7 +523,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_3-beta_9.dmg" newVersion="3.4.3-beta.9" newMediaFileId="macos" fileSize="300465257" md5Sum="8f1a8438e9583a8e7708919a4006a364" sha256Sum="ec953baad6381fa5ccb2d2023aba8d6ecac6c39c65e7dd85e9cbcbb0e2c35fa8" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_3-beta_10.dmg" newVersion="3.4.3-beta.10" newMediaFileId="macos" fileSize="300455756" md5Sum="7d642fbc3926a07104dfe580194eeba9" sha256Sum="00477ab4fd2309b35dccf09889cedd2ac3a1f4b99af432eb99169695e2efdbc8" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.4.2
 
  * VLC and segment playback using the Java audio system now both use the same volume settings
@@ -1046,7 +1046,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_9.exe" newVersion="3.4.3-beta.9" newMediaFileId="win64" fileSize="308846056" md5Sum="d4068a93c36488aea09d02fa331ebded" sha256Sum="a3808d207908c3de13b3dadf2f4f674c7daa8a39533d42d5d5bcb8dc0bb01280" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_10.exe" newVersion="3.4.3-beta.10" newMediaFileId="win64" fileSize="308845032" md5Sum="ed2e14ed40db64b912f89cd444996bbb" sha256Sum="f41bc9efdc889ec50fe496514cb9571b2a5af4d1351f870b0e6f2db0815999fd" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.4.2
 
  * VLC and segment playback using the Java audio system now both use the same volume settings
@@ -1569,7 +1569,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_9.exe" newVersion="3.4.3-beta.9" newMediaFileId="win64" fileSize="308846056" md5Sum="d4068a93c36488aea09d02fa331ebded" sha256Sum="a3808d207908c3de13b3dadf2f4f674c7daa8a39533d42d5d5bcb8dc0bb01280" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_10.exe" newVersion="3.4.3-beta.10" newMediaFileId="win64" fileSize="308845032" md5Sum="ed2e14ed40db64b912f89cd444996bbb" sha256Sum="f41bc9efdc889ec50fe496514cb9571b2a5af4d1351f870b0e6f2db0815999fd" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.4.2
 
  * VLC and segment playback using the Java audio system now both use the same volume settings
@@ -2092,7 +2092,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_9.exe" newVersion="3.4.3-beta.9" newMediaFileId="win64" fileSize="308846056" md5Sum="d4068a93c36488aea09d02fa331ebded" sha256Sum="a3808d207908c3de13b3dadf2f4f674c7daa8a39533d42d5d5bcb8dc0bb01280" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_10.exe" newVersion="3.4.3-beta.10" newMediaFileId="win64" fileSize="308845032" md5Sum="ed2e14ed40db64b912f89cd444996bbb" sha256Sum="f41bc9efdc889ec50fe496514cb9571b2a5af4d1351f870b0e6f2db0815999fd" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.4.2
 
  * VLC and segment playback using the Java audio system now both use the same volume settings
@@ -2615,7 +2615,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_9.zip" newVersion="3.4.3-beta.9" newMediaFileId="win64zip" fileSize="307799280" md5Sum="5451d7dfab45f81251172bc20effa7e0" sha256Sum="0bede6008f0d8dfdc29fe586c038b221b738aa9dfeb7a63b14551086be6f3b2c" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3-beta_10.zip" newVersion="3.4.3-beta.10" newMediaFileId="win64zip" fileSize="307797823" md5Sum="e20a4e162c66ac959625f0d6da3dca27" sha256Sum="3a27b97a92121f287b6daa9f302d675eecb52a6482924e985d08ed4a2385eca5" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.4.2
 
  * VLC and segment playback using the Java audio system now both use the same volume settings
