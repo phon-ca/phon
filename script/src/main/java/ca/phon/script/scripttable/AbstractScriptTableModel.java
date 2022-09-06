@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.*;
 
 import javax.script.*;
 import javax.swing.table.*;
-import javax.xml.bind.*;
+import jakarta.xml.bind.*;
 import javax.xml.stream.*;
 
 import org.apache.logging.log4j.*;

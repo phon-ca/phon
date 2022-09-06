@@ -17,7 +17,7 @@ package ca.phon.app.opgraph.nodes.query;
 
 import java.io.*;
 
-import javax.xml.bind.*;
+import jakarta.xml.bind.*;
 import javax.xml.namespace.*;
 import javax.xml.stream.*;
 

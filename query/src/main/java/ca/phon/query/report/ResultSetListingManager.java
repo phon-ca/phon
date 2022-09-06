@@ -17,7 +17,7 @@ package ca.phon.query.report;
 
 import java.io.*;
 
-import javax.xml.bind.*;
+import jakarta.xml.bind.*;
 
 import ca.phon.project.*;
 import ca.phon.query.db.*;

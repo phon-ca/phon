@@ -29,7 +29,7 @@ import java.util.stream.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
-import javax.xml.bind.*;
+import jakarta.xml.bind.*;
 
 import org.apache.commons.lang3.*;
 import org.jdesktop.swingx.*;

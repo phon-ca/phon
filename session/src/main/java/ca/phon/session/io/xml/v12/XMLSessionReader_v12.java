@@ -20,7 +20,7 @@ import java.text.*;
 import java.time.*;
 import java.util.*;
 
-import javax.xml.bind.*;
+import jakarta.xml.bind.*;
 import javax.xml.datatype.*;
 import javax.xml.datatype.Duration;
 import javax.xml.namespace.*;

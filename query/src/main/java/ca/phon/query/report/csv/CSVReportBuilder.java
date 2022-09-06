@@ -18,7 +18,7 @@ package ca.phon.query.report.csv;
 import java.io.*;
 import java.util.*;
 
-import javax.xml.bind.*;
+import jakarta.xml.bind.*;
 
 import au.com.bytecode.opencsv.*;
 import ca.phon.project.*;

@@ -19,7 +19,7 @@ package ca.phon.query.db.xml;
 import java.io.*;
 import java.util.*;
 
-import javax.xml.bind.*;
+import jakarta.xml.bind.*;
 import javax.xml.transform.stream.*;
 import javax.xml.validation.*;
 

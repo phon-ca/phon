@@ -15,8 +15,8 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<jxb:bindings version="1.0"
-    xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+<jxb:bindings version="3.0"
+    xmlns:jxb="https://jakarta.ee/xml/ns/jaxb"
     xmlns:xs="http://www.w3.org/2001/XMLSchema">
     
     <jxb:bindings schemaLocation="../xsd/query.xsd" node="/xs:schema">

@@ -20,7 +20,7 @@ import java.io.*;
 import java.util.*;
 
 import javax.swing.*;
-import javax.xml.bind.*;
+import jakarta.xml.bind.*;
 import javax.xml.namespace.*;
 
 import ca.phon.app.query.report.*;

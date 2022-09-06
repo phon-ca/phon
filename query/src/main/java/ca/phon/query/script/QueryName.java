@@ -46,16 +46,16 @@ public class QueryName {
 
 		this.name = (lastSlash > 0 ? path.substring(lastSlash + 1) : path);
 		
-		final URLDecoder urlDecoder = new URLDecoder();
+		final URLDecoder urlDecoder = null;
 		try {
 			this.name = urlDecoder.decode(this.name, "UTF-8");
+
+			final int lastDot = this.name.lastIndexOf('.');
+			if(lastDot > 0) {
+				this.name = this.name.substring(0, lastDot);
+			}
 		} catch (UnsupportedEncodingException e) {
 			LOGGER.warn( e.getLocalizedMessage(), e);
-		}
-		
-		final int lastDot = this.name.lastIndexOf('.');
-		if(lastDot > 0) {
-			this.name = this.name.substring(0, lastDot);
 		}
 	}
 	
