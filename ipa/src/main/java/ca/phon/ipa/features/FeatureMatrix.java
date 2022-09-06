@@ -19,7 +19,7 @@ package ca.phon.ipa.features;
 import java.io.*;
 import java.util.*;
 
-import javax.xml.bind.*;
+import jakarta.xml.bind.*;
 import javax.xml.stream.*;
 import javax.xml.transform.stream.*;
 

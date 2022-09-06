@@ -17,7 +17,7 @@ package ca.phon.syllabifier.basic;
 
 import java.io.*;
 
-import javax.xml.bind.*;
+import jakarta.xml.bind.*;
 import javax.xml.transform.stream.*;
 
 import ca.phon.syllabifier.*;

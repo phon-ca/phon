@@ -18,7 +18,7 @@ package ca.phon.ipa.parser;
 import java.io.*;
 import java.util.*;
 
-import javax.xml.bind.*;
+import jakarta.xml.bind.*;
 
 import ca.phon.ipa.xml.*;
 
