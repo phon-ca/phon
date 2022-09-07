@@ -57,7 +57,7 @@
 		<ca.phon.phon-update-plugin.version>19</ca.phon.phon-update-plugin.version>
 		<ca.phon.phon-version-triggers.version>8</ca.phon.phon-version-triggers.version>
 		<ca.phon.csv.plugin.version>25</ca.phon.csv.plugin.version>
-		<ca.phon.phontalk.version>3.5.4-SNAPSHOT</ca.phon.phontalk.version>
+<!--		<ca.phon.phontalk.version>3.5.4-SNAPSHOT</ca.phon.phontalk.version>-->
 	</properties>
 
 	<dependencies>
