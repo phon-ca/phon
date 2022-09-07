@@ -102,7 +102,6 @@
 
 		<!-- java.xml.bind -->
 		<jaxb.version>4.0.0</jaxb.version>
-		<org.glassfish.jaxb.jaxb-runtime.version>2.3.3</org.glassfish.jaxb.jaxb-runtime.version>
 		<org.codehaus.mojo.jaxb2-maven-plugin.version>3.1.0</org.codehaus.mojo.jaxb2-maven-plugin.version>
 
 		<!-- Maven plugins -->
