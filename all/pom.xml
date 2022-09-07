@@ -45,15 +45,15 @@
 	<properties>
 		<!-- Project settings -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.build.sourceVersion>11</project.build.sourceVersion>
-		<project.build.targetVersion>11</project.build.targetVersion>
+		<project.build.sourceVersion>17</project.build.sourceVersion>
+		<project.build.targetVersion>17</project.build.targetVersion>
 
 		<!-- Dependency versions -->
 		<ca.phon.app.version>${project.version}</ca.phon.app.version>
 		<ca.phon.phon-dict-data.version>46</ca.phon.phon-dict-data.version>
 		<ca.phon.phon-shell-plugin.version>23</ca.phon.phon-shell-plugin.version>
 		<ca.phon.phon-groovy-plugin.version>6</ca.phon.phon-groovy-plugin.version>
-		<ca.phon.phon-praat-plugin.version>68</ca.phon.phon-praat-plugin.version>
+		<ca.phon.phon-praat-plugin.version>69-SNAPSHOT</ca.phon.phon-praat-plugin.version>
 		<ca.phon.phon-update-plugin.version>19</ca.phon.phon-update-plugin.version>
 		<ca.phon.phon-version-triggers.version>8</ca.phon.phon-version-triggers.version>
 		<ca.phon.csv.plugin.version>25</ca.phon.csv.plugin.version>
