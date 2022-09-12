@@ -35,17 +35,17 @@
             <p>Note: Phon does not currently support M1 macs.</p>
         </body>
         <topic id="phon_current">
-            <title>Phon 3.4.2</title>
+            <title>Phon 3.4.3</title>
             <body>
                 <ul>
                     <li><p><xref
-                                href="https://github.com/phon-ca/phon/releases/download/3.4.2/Phon_macos_3_4_2.dmg"
+                                href="https://github.com/phon-ca/phon/releases/download/3.4.3/Phon_macos_3_4_3.dmg"
                                 format="dmg" scope="external">macOS 10.9+ (dmg)</xref></p></li>
                     <li><p><xref
-                                href="https://github.com/phon-ca/phon/releases/download/3.4.2/Phon_windows-x64_3_4_2.exe"
+                                href="https://github.com/phon-ca/phon/releases/download/3.4.3/Phon_windows-x64_3_4_3.exe"
                                 format="exe" scope="external">Windows (64-bit) (installer)</xref> |
                                 <xref
-                                href="https://github.com/phon-ca/phon/releases/download/3.4.2/Phon_windows-x64_3_4_2.zip"
+                                href="https://github.com/phon-ca/phon/releases/download/3.4.3/Phon_windows-x64_3_4_3.zip"
                                 format="zip" scope="external">Windows (64 bit) (zip)</xref></p></li>
                 </ul>
             </body>
