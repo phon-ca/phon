@@ -21,19 +21,19 @@ import java.awt.event.*;
  * Wrapper for ActionEvents.  May also
  * contain extra data given by the registering object.
  */
-public class PhonActionEvent {
+public class PhonActionEvent<T> {
 
 	/** Wrapped action event */
 	private ActionEvent ae;
 
 	/** Extra data */
-	private Object data;
+	private T data;
 
 	public PhonActionEvent(ActionEvent ae) {
 		this(ae, null);
 	}
 
-	public PhonActionEvent(ActionEvent ae, Object data) {
+	public PhonActionEvent(ActionEvent ae, T data) {
 		this.ae = ae;
 		this.data = data;
 	}
@@ -46,11 +46,12 @@ public class PhonActionEvent {
 		this.ae = ae;
 	}
 
-	public Object getData() {
+	public T getData() {
 		return data;
 	}
 
-	public void setData(Object data) {
+	public void setData(T data) {
 		this.data = data;
 	}
+
 }
