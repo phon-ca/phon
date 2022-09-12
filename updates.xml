@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.4.3/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_3.dmg" newVersion="3.4.3" newMediaFileId="macos" fileSize="300454632" md5Sum="f6453296e007d325aa8c4137efe50669" sha256Sum="22bb9e494e4d8a1bda82fa478a8a80992ae10110a91ad7c5086659212d7bbbeb" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_3.dmg" newVersion="3.4.3" newMediaFileId="macos" fileSize="300455567" md5Sum="097aebfce43548bbb99f92a1ab0c4fac" sha256Sum="4069a0a3b162f7dfb14e406afcfa3f29a14805eb01b6b95f95597f8d06dc074d" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.4.2
 
  * VLC and segment playback using the Java audio system now both use the same volume settings
@@ -523,7 +523,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_3.dmg" newVersion="3.4.3" newMediaFileId="macos" fileSize="300454632" md5Sum="f6453296e007d325aa8c4137efe50669" sha256Sum="22bb9e494e4d8a1bda82fa478a8a80992ae10110a91ad7c5086659212d7bbbeb" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_3.dmg" newVersion="3.4.3" newMediaFileId="macos" fileSize="300455567" md5Sum="097aebfce43548bbb99f92a1ab0c4fac" sha256Sum="4069a0a3b162f7dfb14e406afcfa3f29a14805eb01b6b95f95597f8d06dc074d" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.4.2
 
  * VLC and segment playback using the Java audio system now both use the same volume settings
@@ -1046,7 +1046,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3.exe" newVersion="3.4.3" newMediaFileId="win64" fileSize="308842472" md5Sum="e0355ea07dabd085502a2c06d9300f59" sha256Sum="93511ad65503b7c933803882287995a00bfd55bae0e478879eb45fcc83dd44aa" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3.exe" newVersion="3.4.3" newMediaFileId="win64" fileSize="308842472" md5Sum="82cf8b64420ff8ce23d447ab9fc03821" sha256Sum="41d222e7c8b6a0ff7b41d85a9a5020f583095f538431d1bf0991f125b510b28a" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.4.2
 
  * VLC and segment playback using the Java audio system now both use the same volume settings
@@ -1569,7 +1569,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3.exe" newVersion="3.4.3" newMediaFileId="win64" fileSize="308842472" md5Sum="e0355ea07dabd085502a2c06d9300f59" sha256Sum="93511ad65503b7c933803882287995a00bfd55bae0e478879eb45fcc83dd44aa" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3.exe" newVersion="3.4.3" newMediaFileId="win64" fileSize="308842472" md5Sum="82cf8b64420ff8ce23d447ab9fc03821" sha256Sum="41d222e7c8b6a0ff7b41d85a9a5020f583095f538431d1bf0991f125b510b28a" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.4.2
 
  * VLC and segment playback using the Java audio system now both use the same volume settings
@@ -2092,7 +2092,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3.exe" newVersion="3.4.3" newMediaFileId="win64" fileSize="308842472" md5Sum="e0355ea07dabd085502a2c06d9300f59" sha256Sum="93511ad65503b7c933803882287995a00bfd55bae0e478879eb45fcc83dd44aa" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3.exe" newVersion="3.4.3" newMediaFileId="win64" fileSize="308842472" md5Sum="82cf8b64420ff8ce23d447ab9fc03821" sha256Sum="41d222e7c8b6a0ff7b41d85a9a5020f583095f538431d1bf0991f125b510b28a" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.4.2
 
  * VLC and segment playback using the Java audio system now both use the same volume settings
@@ -2615,7 +2615,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3.zip" newVersion="3.4.3" newMediaFileId="win64zip" fileSize="307787031" md5Sum="e69e5fa9923a73badd65b343065725ba" sha256Sum="737df9bb097dffbeffbf41e7a6d534015d122e0e8c93662eb47835ab7b2c3a84" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3.zip" newVersion="3.4.3" newMediaFileId="win64zip" fileSize="307786837" md5Sum="adc53afc9f51393d4e62daa62992fb8e" sha256Sum="6c168e791b8363ab29aec4fb497651628ede50002f1fc55a2394e441ebb7ac7b" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.4.2
 
  * VLC and segment playback using the Java audio system now both use the same volume settings
