@@ -1,7 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.4.2/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_2.dmg" newVersion="3.4.2" newMediaFileId="macos" fileSize="299923075" md5Sum="f863b79936c6ea8e84d665018bcc64d4" sha256Sum="8f6dccf5138786d59402020fd0db90627bb7a54c4b71fc9a6a7aa5b0d2513945" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.4.1
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.4.3/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_3.dmg" newVersion="3.4.3" newMediaFileId="macos" fileSize="300454632" md5Sum="f6453296e007d325aa8c4137efe50669" sha256Sum="22bb9e494e4d8a1bda82fa478a8a80992ae10110a91ad7c5086659212d7bbbeb" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.4.2
+
+ * VLC and segment playback using the Java audio system now both use the same volume settings
+ * New volume slider components are located in the media player, speech analysis, and timeline views. All three sliders control a single volume for the session (video and segment playback)
+ * Media playback rate may now be changed
+ * Segmentation window stays in middle of timeline view when possible
+ * Media playback rate may be changed using keystrokes during segmentation
+ * Settings for volume and media playback rate may be found in the 'Media' window menu for the session
+ * Timeline will center new record during navigation/zoom actions
+ * Speech analysis view will now correctly center on current record on zoom actions
+ * Fixed a font issue with the results editor when using Noto fonts on Windows 
+ * Fixed an issue when searching 'by syllable' in percent correct analyses
+ * ~ may now be used as a compound word marker in IPA transcriptions
+ * Fixed keyboard focus behaviour when switching records in session editor
+ * Fixed an issue where some editor keystrokes would not work until the Session menu was selected at least once
+ * Updated eng IPA dictionary
+ * Fixed an issue where session backups were not being created when saving while focused in Record Data
+
+## Changes from 3.4.1
 
  * Fixed an issue where phonex group data was not retained when exact match is selected
 
@@ -505,8 +523,26 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_2.dmg" newVersion="3.4.2" newMediaFileId="macos" fileSize="299923075" md5Sum="f863b79936c6ea8e84d665018bcc64d4" sha256Sum="8f6dccf5138786d59402020fd0db90627bb7a54c4b71fc9a6a7aa5b0d2513945" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.4.1
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_3.dmg" newVersion="3.4.3" newMediaFileId="macos" fileSize="300454632" md5Sum="f6453296e007d325aa8c4137efe50669" sha256Sum="22bb9e494e4d8a1bda82fa478a8a80992ae10110a91ad7c5086659212d7bbbeb" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.4.2
+
+ * VLC and segment playback using the Java audio system now both use the same volume settings
+ * New volume slider components are located in the media player, speech analysis, and timeline views. All three sliders control a single volume for the session (video and segment playback)
+ * Media playback rate may now be changed
+ * Segmentation window stays in middle of timeline view when possible
+ * Media playback rate may be changed using keystrokes during segmentation
+ * Settings for volume and media playback rate may be found in the 'Media' window menu for the session
+ * Timeline will center new record during navigation/zoom actions
+ * Speech analysis view will now correctly center on current record on zoom actions
+ * Fixed a font issue with the results editor when using Noto fonts on Windows 
+ * Fixed an issue when searching 'by syllable' in percent correct analyses
+ * ~ may now be used as a compound word marker in IPA transcriptions
+ * Fixed keyboard focus behaviour when switching records in session editor
+ * Fixed an issue where some editor keystrokes would not work until the Session menu was selected at least once
+ * Updated eng IPA dictionary
+ * Fixed an issue where session backups were not being created when saving while focused in Record Data
+
+## Changes from 3.4.1
 
  * Fixed an issue where phonex group data was not retained when exact match is selected
 
@@ -1010,8 +1046,26 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_2.exe" newVersion="3.4.2" newMediaFileId="win64" fileSize="308314656" md5Sum="675409ce8f9da3c38358f4b9e54c84d9" sha256Sum="d6c135e3526002ebb0ff02863769147bec6991f76b3c62e0c987db150d80d3b6" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.4.1
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3.exe" newVersion="3.4.3" newMediaFileId="win64" fileSize="308842472" md5Sum="e0355ea07dabd085502a2c06d9300f59" sha256Sum="93511ad65503b7c933803882287995a00bfd55bae0e478879eb45fcc83dd44aa" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.4.2
+
+ * VLC and segment playback using the Java audio system now both use the same volume settings
+ * New volume slider components are located in the media player, speech analysis, and timeline views. All three sliders control a single volume for the session (video and segment playback)
+ * Media playback rate may now be changed
+ * Segmentation window stays in middle of timeline view when possible
+ * Media playback rate may be changed using keystrokes during segmentation
+ * Settings for volume and media playback rate may be found in the 'Media' window menu for the session
+ * Timeline will center new record during navigation/zoom actions
+ * Speech analysis view will now correctly center on current record on zoom actions
+ * Fixed a font issue with the results editor when using Noto fonts on Windows 
+ * Fixed an issue when searching 'by syllable' in percent correct analyses
+ * ~ may now be used as a compound word marker in IPA transcriptions
+ * Fixed keyboard focus behaviour when switching records in session editor
+ * Fixed an issue where some editor keystrokes would not work until the Session menu was selected at least once
+ * Updated eng IPA dictionary
+ * Fixed an issue where session backups were not being created when saving while focused in Record Data
+
+## Changes from 3.4.1
 
  * Fixed an issue where phonex group data was not retained when exact match is selected
 
@@ -1515,8 +1569,26 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_2.exe" newVersion="3.4.2" newMediaFileId="win64" fileSize="308314656" md5Sum="675409ce8f9da3c38358f4b9e54c84d9" sha256Sum="d6c135e3526002ebb0ff02863769147bec6991f76b3c62e0c987db150d80d3b6" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.4.1
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3.exe" newVersion="3.4.3" newMediaFileId="win64" fileSize="308842472" md5Sum="e0355ea07dabd085502a2c06d9300f59" sha256Sum="93511ad65503b7c933803882287995a00bfd55bae0e478879eb45fcc83dd44aa" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.4.2
+
+ * VLC and segment playback using the Java audio system now both use the same volume settings
+ * New volume slider components are located in the media player, speech analysis, and timeline views. All three sliders control a single volume for the session (video and segment playback)
+ * Media playback rate may now be changed
+ * Segmentation window stays in middle of timeline view when possible
+ * Media playback rate may be changed using keystrokes during segmentation
+ * Settings for volume and media playback rate may be found in the 'Media' window menu for the session
+ * Timeline will center new record during navigation/zoom actions
+ * Speech analysis view will now correctly center on current record on zoom actions
+ * Fixed a font issue with the results editor when using Noto fonts on Windows 
+ * Fixed an issue when searching 'by syllable' in percent correct analyses
+ * ~ may now be used as a compound word marker in IPA transcriptions
+ * Fixed keyboard focus behaviour when switching records in session editor
+ * Fixed an issue where some editor keystrokes would not work until the Session menu was selected at least once
+ * Updated eng IPA dictionary
+ * Fixed an issue where session backups were not being created when saving while focused in Record Data
+
+## Changes from 3.4.1
 
  * Fixed an issue where phonex group data was not retained when exact match is selected
 
@@ -2020,8 +2092,26 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_2.exe" newVersion="3.4.2" newMediaFileId="win64" fileSize="308314656" md5Sum="675409ce8f9da3c38358f4b9e54c84d9" sha256Sum="d6c135e3526002ebb0ff02863769147bec6991f76b3c62e0c987db150d80d3b6" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.4.1
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3.exe" newVersion="3.4.3" newMediaFileId="win64" fileSize="308842472" md5Sum="e0355ea07dabd085502a2c06d9300f59" sha256Sum="93511ad65503b7c933803882287995a00bfd55bae0e478879eb45fcc83dd44aa" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.4.2
+
+ * VLC and segment playback using the Java audio system now both use the same volume settings
+ * New volume slider components are located in the media player, speech analysis, and timeline views. All three sliders control a single volume for the session (video and segment playback)
+ * Media playback rate may now be changed
+ * Segmentation window stays in middle of timeline view when possible
+ * Media playback rate may be changed using keystrokes during segmentation
+ * Settings for volume and media playback rate may be found in the 'Media' window menu for the session
+ * Timeline will center new record during navigation/zoom actions
+ * Speech analysis view will now correctly center on current record on zoom actions
+ * Fixed a font issue with the results editor when using Noto fonts on Windows 
+ * Fixed an issue when searching 'by syllable' in percent correct analyses
+ * ~ may now be used as a compound word marker in IPA transcriptions
+ * Fixed keyboard focus behaviour when switching records in session editor
+ * Fixed an issue where some editor keystrokes would not work until the Session menu was selected at least once
+ * Updated eng IPA dictionary
+ * Fixed an issue where session backups were not being created when saving while focused in Record Data
+
+## Changes from 3.4.1
 
  * Fixed an issue where phonex group data was not retained when exact match is selected
 
@@ -2525,8 +2615,26 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_2.zip" newVersion="3.4.2" newMediaFileId="win64zip" fileSize="307264515" md5Sum="55769253988b5f2ce242e2a0338a0e3e" sha256Sum="054aeca2f9f495224ed9cdfa2a6eb598f9afb323657afcc6f23dbf74ddf40bdb" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.4.1
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3.zip" newVersion="3.4.3" newMediaFileId="win64zip" fileSize="307787031" md5Sum="e69e5fa9923a73badd65b343065725ba" sha256Sum="737df9bb097dffbeffbf41e7a6d534015d122e0e8c93662eb47835ab7b2c3a84" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.4.2
+
+ * VLC and segment playback using the Java audio system now both use the same volume settings
+ * New volume slider components are located in the media player, speech analysis, and timeline views. All three sliders control a single volume for the session (video and segment playback)
+ * Media playback rate may now be changed
+ * Segmentation window stays in middle of timeline view when possible
+ * Media playback rate may be changed using keystrokes during segmentation
+ * Settings for volume and media playback rate may be found in the 'Media' window menu for the session
+ * Timeline will center new record during navigation/zoom actions
+ * Speech analysis view will now correctly center on current record on zoom actions
+ * Fixed a font issue with the results editor when using Noto fonts on Windows 
+ * Fixed an issue when searching 'by syllable' in percent correct analyses
+ * ~ may now be used as a compound word marker in IPA transcriptions
+ * Fixed keyboard focus behaviour when switching records in session editor
+ * Fixed an issue where some editor keystrokes would not work until the Session menu was selected at least once
+ * Updated eng IPA dictionary
+ * Fixed an issue where session backups were not being created when saving while focused in Record Data
+
+## Changes from 3.4.1
 
  * Fixed an issue where phonex group data was not retained when exact match is selected
 
