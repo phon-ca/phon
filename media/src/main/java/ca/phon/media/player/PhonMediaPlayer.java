@@ -245,8 +245,7 @@ public class PhonMediaPlayer extends JPanel {
 	public JButton getPlayPauseButton() {
 		JButton retVal = playPauseBtn;
 		if(retVal == null) {
-			PhonUIAction playPauseAct =
-					new PhonUIAction(this, "onPlayPause");
+			PhonUIAction playPauseAct = PhonUIAction.eventConsumer(this::onPlayPause);
 			playPauseAct.putValue(Action.SMALL_ICON, playIcn);
 			retVal = new JButton();
 			retVal.setAction(playPauseAct);
@@ -258,8 +257,7 @@ public class PhonMediaPlayer extends JPanel {
 	public JButton getReplayButton() {
 		JButton retVal = replayBtn;
 		if(retVal == null) {
-			PhonUIAction replayAct = 
-					new PhonUIAction(this, "onReplay30");
+			PhonUIAction replayAct = PhonUIAction.eventConsumer(this::onReplay30);
 			replayAct.putValue(Action.SMALL_ICON, replayIcn);
 			retVal = new JButton();
 			retVal.setAction(replayAct);
@@ -308,8 +306,7 @@ public class PhonMediaPlayer extends JPanel {
 	public JButton getMenuButton() {
 		JButton retVal = menuBtn;
 		if(retVal == null) {
-			PhonUIAction showMenuAct =
-					new PhonUIAction(this, "showMediaMenu");
+			PhonUIAction showMenuAct = PhonUIAction.eventConsumer(this::showMediaMenu);
 			showMenuAct.putValue(Action.SMALL_ICON, menuIcn);
 			retVal = new JButton();
 			retVal.setAction(showMenuAct);
@@ -480,73 +477,7 @@ public class PhonMediaPlayer extends JPanel {
 		
 	};
 
-	/* UI actions */
-//	public void toggleVolumeMute(PhonActionEvent pae) {
-//		final MediaPlayer player = getMediaPlayer();
-//		if(player != null) {
-//			boolean isMuted = !player.audio().isMute();
-//			player.audio().setMute(isMuted);
-//
-//			if(isMuted) {
-//				getVolumeButton().getAction().putValue(Action.SMALL_ICON, volMuteIcn);
-//			} else {
-//				getVolumeButton().getAction().putValue(Action.SMALL_ICON, volIcn);
-//			}
-//			getVolumeButton().repaint();
-//
-//			getVolumeSlider().setEnabled(!isMuted);
-//		}
-//	}
-
-//	public void onVolumeBtn(PhonActionEvent pae) {
-//		final MediaPlayer player = getMediaPlayer();
-//		if(player == null) return;
-//
-//		// show volume popup
-//		if(volumePopup == null) {
-//			volumePopup = new JFrame();
-//			volumePopup.setUndecorated(true);
-//			volumePopup.addWindowFocusListener(new WindowFocusListener() {
-//
-//				@Override
-//				public void windowGainedFocus(WindowEvent we) {
-//
-//				}
-//
-//				@Override
-//				public void windowLostFocus(WindowEvent we) {
-//					if(volumePopup != null) {
-//						volumePopup.setVisible(false);
-//						volumePopup = null;
-//					}
-//				}
-//			});
-//
-//			// create slider and mute button
-//			VolumeSlider volumeSlider = getVolumeSlider();
-//
-//			PhonUIAction muteAct = new PhonUIAction(this, "toggleVolumeMute");
-//			muteAct.putValue(Action.SMALL_ICON, volMuteIcn);
-//			muteAct.putValue(Action.SHORT_DESCRIPTION, "Toggle mute");
-//
-//			JPanel panel = new JPanel(new BorderLayout());
-//			panel.add(volumeSlider, BorderLayout.CENTER);
-//
-//			volumePopup.add(panel);
-//
-//			Point p = getVolumeButton().getLocation();
-//			SwingUtilities.convertPointToScreen(p, getVolumeButton().getParent());
-//			Rectangle windowBounds = new Rectangle(
-//					p.x,
-//					p.y - volumePopup.getPreferredSize().height,
-//					volumePopup.getPreferredSize().width,
-//					volumePopup.getPreferredSize().height);
-//			volumePopup.setBounds(windowBounds);
-//			volumePopup.setVisible(true);
-//		}
-//	}
-
-	public void onPlayPause(PhonActionEvent pae) {
+	public void onPlayPause(PhonActionEvent<Void> pae) {
 		final MediaPlayer player = getMediaPlayer();
 		if(player != null) {
 			if(player.status().isPlaying()) {
@@ -557,7 +488,7 @@ public class PhonMediaPlayer extends JPanel {
 		}
 	}
 	
-	public void onReplay30(PhonActionEvent pae) {
+	public void onReplay30(PhonActionEvent<Void> pae) {
 		final MediaPlayer player = getMediaPlayer();
 		if(player != null) {
 			long currentPos = player.status().time();
@@ -566,7 +497,7 @@ public class PhonMediaPlayer extends JPanel {
 		}
 	}
 
-	public void showMediaMenu(PhonActionEvent pae) {
+	public void showMediaMenu(PhonActionEvent<Void> pae) {
 		JPopupMenu menu = createMediaContextMenu();
 		menu.show(menuBtn, 0, menuBtn.getHeight());
 	}
@@ -586,11 +517,11 @@ public class PhonMediaPlayer extends JPanel {
 	}
 
 	/* Menu actions */
-	public void onReloadMedia(PhonActionEvent pae) {
+	public void onReloadMedia(PhonActionEvent<Void> pae) {
 		loadMedia();
 	}
 
-	public void onTakeSnapshot(PhonActionEvent pae) {
+	public void onTakeSnapshot(PhonActionEvent<Void> pae) {
 		final MediaPlayer player = getMediaPlayer();
 		if(player != null) {
 			boolean isPlaying = player.status().isPlaying();
@@ -695,8 +626,7 @@ public class PhonMediaPlayer extends JPanel {
 		}
 
 		private JMenuItem getLoadMediaItem() {
-			PhonUIAction loadMediaAct =
-					new PhonUIAction(PhonMediaPlayer.this, "onReloadMedia");
+			PhonUIAction loadMediaAct = PhonUIAction.eventConsumer(PhonMediaPlayer.this::onReloadMedia);
 			loadMediaAct.putValue(Action.NAME, "Load media");
 			loadMediaAct.putValue(Action.SHORT_DESCRIPTION, "Loads/reloads media for session");
 
@@ -705,8 +635,7 @@ public class PhonMediaPlayer extends JPanel {
 		}
 
 		private JMenuItem getTakeSnapshotItem() {
-			PhonUIAction takeSnapshotAct =
-					new PhonUIAction(PhonMediaPlayer.this, "onTakeSnapshot");
+			PhonUIAction takeSnapshotAct = PhonUIAction.eventConsumer(PhonMediaPlayer.this::onTakeSnapshot);
 			takeSnapshotAct.putValue(Action.NAME, "Take snapshot");
 			takeSnapshotAct.putValue(Action.SHORT_DESCRIPTION, "Take snapshot of video");
 

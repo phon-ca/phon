@@ -49,10 +49,6 @@ public class IpaMapSearchField extends SearchField {
 
 	public IpaMapSearchField() {
 		super();
-//		super.setFocusable(false);
-//		WindowFocusHandler wfh = new WindowFocusHandler();
-//		super.queryField.addMouseListener(wfh);
-//		super.queryField.addFocusListener(wfh);
 	}
 
 	public IpaMapSearchField(String prompt) {
@@ -77,17 +73,12 @@ public class IpaMapSearchField extends SearchField {
 	public void onShowContextMenu(PhonActionEvent pae) {
 		JPopupMenu popupMenu = new JPopupMenu();
 		
-//		JMenuItem titleItem = new JMenuItem("-- Search Type --");
-//		titleItem.setEnabled(false);
-//		popupMenu.add(titleItem);
-		
 		for(SearchType st:SearchType.values()) {
-			PhonUIAction selSearchTypeAct = new PhonUIAction(this, "onSelectSearchType", st);
+			PhonUIAction<SearchType> selSearchTypeAct = PhonUIAction.eventConsumer(this::onSelectSearchType, st);
 			selSearchTypeAct.putValue(PhonUIAction.NAME, st.getDisplayString());
 			
 			JCheckBoxMenuItem itm = new JCheckBoxMenuItem(selSearchTypeAct);
 			itm.setSelected(st == getSearchType());
-//			JMenuItem itm = new JMenuItem(selSearchTypeAct);
 			popupMenu.add(itm);
 		}
 		
@@ -97,33 +88,8 @@ public class IpaMapSearchField extends SearchField {
 	/**
 	 * Select search type
 	 */
-	public void onSelectSearchType(PhonActionEvent pae) {
-		setSearchType((SearchType)pae.getData());
+	public void onSelectSearchType(PhonActionEvent<SearchType> pae) {
+		setSearchType(pae.getData());
 	}
-	
-//	private class WindowFocusHandler extends MouseInputAdapter implements FocusListener {
-//
-//		@Override
-//		public void mouseClicked(MouseEvent e) {
-//			Window pWin = (Window)
-//				SwingUtilities.getAncestorOfClass(Window.class, e.getComponent());
-//			pWin.setFocusableWindowState(true);
-//			setFocusable(true);
-//			requestFocus();
-//		}
-//
-//		@Override
-//		public void focusGained(FocusEvent arg0) {
-//		}
-//
-//		@Override
-//		public void focusLost(FocusEvent arg0) {
-//			setFocusable(false);
-//			Window pWin = (Window)
-//			SwingUtilities.getAncestorOfClass(Window.class, arg0.getComponent());
-//			pWin.setFocusableWindowState(false);
-//		}
-//		
-//	}
-	
+
 }

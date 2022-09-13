@@ -918,8 +918,8 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		super.firePropertyChange(SCALE_PROP, oldScale, this.scale);
 	}
 	
-	public void onGoto(PhonActionEvent pae) {
-		JComponent comp = (JComponent)pae.getData();
+	public void onGoto(PhonActionEvent<JComponent> pae) {
+		JComponent comp = pae.getData();
 		scrollPane.getViewport().setViewPosition(
 				new Point(comp.getBounds().x, comp.getBounds().y));
 	}
@@ -1122,7 +1122,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 	}
 
 	private JButton getMapButton(Cell cell) {
-		PhonUIAction action = new PhonUIAction(this, "onCellClicked", cell);
+		PhonUIAction<Cell> action = PhonUIAction.eventConsumer(this::onCellClicked, cell);
 		action.putValue(Action.NAME, cell.getText());
 		action.putValue(Action.SHORT_DESCRIPTION, cell.getText());
 		
@@ -1204,8 +1204,8 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		final CommonModuleFrame parentFrame = 
 				(CommonModuleFrame)SwingUtilities.getAncestorOfClass(CommonModuleFrame.class, comp);
 		if(parentFrame != null) {
-			final PhonUIAction toggleAlwaysOnTopAct = 
-					new PhonUIAction(parentFrame, "setAlwaysOnTop", !parentFrame.isAlwaysOnTop());
+			final PhonUIAction<Boolean> toggleAlwaysOnTopAct =
+					PhonUIAction.consumer(parentFrame::setAlwaysOnTop, !parentFrame.isAlwaysOnTop());
 			toggleAlwaysOnTopAct.putValue(PhonUIAction.NAME, "Always on top");
 			toggleAlwaysOnTopAct.putValue(PhonUIAction.SELECTED_KEY, parentFrame.isAlwaysOnTop());
 			final JCheckBoxMenuItem toggleAlwaysOnTopItem = new JCheckBoxMenuItem(toggleAlwaysOnTopAct);
@@ -1219,7 +1219,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 			
 			// copy to clipboard options
 			String cellData = cell.getText().replaceAll(""+(char)0x25cc, "");
-			PhonUIAction copyToClipboardAct = new PhonUIAction(this, "onCopyToClipboard", cellData);
+			PhonUIAction<String> copyToClipboardAct = PhonUIAction.eventConsumer(this::onCopyToClipboard, cellData);
 			copyToClipboardAct.putValue(PhonUIAction.NAME, "Copy character (" + cell.getText() + ")");
 			JMenuItem copyToClipboardItem = new JMenuItem(copyToClipboardAct);
 			menu.add(copyToClipboardItem);
@@ -1229,7 +1229,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 				htmlVal += 
 					"&#" + (int)c + ";";
 			}
-			PhonUIAction copyHTMLToClipboardAct = new PhonUIAction(this, "onCopyToClipboard", htmlVal);
+			PhonUIAction<String> copyHTMLToClipboardAct = PhonUIAction.eventConsumer(this::onCopyToClipboard, htmlVal);
 			copyHTMLToClipboardAct.putValue(PhonUIAction.NAME, "Copy as HTML (" + htmlVal + ")");
 			JMenuItem copyHTMLToClipboardItem = new JMenuItem(copyHTMLToClipboardAct);
 			menu.add(copyHTMLToClipboardItem);
@@ -1240,20 +1240,20 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 					(hexVal.length() > 0  ? " " : "") + Integer.toHexString((int)c);
 			}
 			hexVal = hexVal.toUpperCase();
-			PhonUIAction copyHEXToClipboardAct = new PhonUIAction(this, "onCopyToClipboard", hexVal);
+			PhonUIAction<String> copyHEXToClipboardAct = PhonUIAction.eventConsumer(this::onCopyToClipboard, hexVal);
 			copyHEXToClipboardAct.putValue(PhonUIAction.NAME, "Copy as Unicode HEX (" + hexVal + ")");
 			JMenuItem copyHEXToClipboardItem = new JMenuItem(copyHEXToClipboardAct);
 			menu.add(copyHEXToClipboardItem);
 			
 			menu.addSeparator();
 			if(isInFavorites(cell)) {
-				PhonUIAction removeFromFavAct = new PhonUIAction(this, "onRemoveCellFromFavorites", cell);
+				PhonUIAction<Cell> removeFromFavAct = PhonUIAction.eventConsumer(this::onRemoveCellFromFavorites, cell);
 				removeFromFavAct.putValue(Action.NAME, "Remove from favorites");
 				removeFromFavAct.putValue(Action.SHORT_DESCRIPTION, "Remove button from list of favorites");
 				JMenuItem removeFromFavItem = new JMenuItem(removeFromFavAct);
 				menu.add(removeFromFavItem);
 			} else {
-				PhonUIAction addToFavAct = new PhonUIAction(this, "onAddCellToFavorites", cell);
+				PhonUIAction<Cell> addToFavAct = PhonUIAction.eventConsumer(this::onAddCellToFavorites, cell);
 				addToFavAct.putValue(Action.NAME, "Add to favorites");
 				addToFavAct.putValue(Action.SHORT_DESCRIPTION, "Add button to list of favorites");
 				JMenuItem addToFavItem = new JMenuItem(addToFavAct);
@@ -1268,7 +1268,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		menu.add(gotoTitleItem);
 		
 		for(JXButton toggleBtn:toggleButtons) {
-			PhonUIAction gotoAct = new PhonUIAction(this, "onGoto", toggleBtn);
+			PhonUIAction<JComponent> gotoAct = PhonUIAction.eventConsumer(this::onGoto, toggleBtn);
 			gotoAct.putValue(Action.NAME, toggleBtn.getText());
 			gotoAct.putValue(Action.SHORT_DESCRIPTION, "Scroll to " + toggleBtn.getText());
 			JMenuItem gotoItem = new JMenuItem(gotoAct);
@@ -1334,8 +1334,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		menu.addSeparator();
 		
 		// highlighting
-		PhonUIAction onToggleHighlightAct = 
-			new PhonUIAction(this, "onToggleHighlightRecent");
+		PhonUIAction onToggleHighlightAct = PhonUIAction.eventConsumer(this::onToggleHighlightRecent);
 		onToggleHighlightAct.putValue(PhonUIAction.NAME, "Highlight recently used");
 		onToggleHighlightAct.putValue(PhonUIAction.SELECTED_KEY, isHighlightRecent());
 		JCheckBoxMenuItem onToggleHighlightItm = new JCheckBoxMenuItem(onToggleHighlightAct);
@@ -1386,7 +1385,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 	/**
 	 * Toggle highlighting recent
 	 */
-	public void onToggleHighlightRecent(PhonActionEvent pae) {
+	public void onToggleHighlightRecent(PhonActionEvent<Void> pae) {
 		boolean newVal = !isHighlightRecent();
 		setHighlightRecent(newVal);
 		setSavedHighlightRecent(newVal);
@@ -1397,7 +1396,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 	/**
 	 * Cell button clicked
 	 */
-	public void onCellClicked(PhonActionEvent pae) {
+	public void onCellClicked(PhonActionEvent<Cell> pae) {
 		Cell cell = (Cell)pae.getData();
 		String btnData = cell.getText();
 		btnData = btnData.replaceAll("\\u25cc", "");
@@ -1412,8 +1411,8 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 	/**
 	 * Copy text to system clipboard
 	 */
-	public void onCopyToClipboard(PhonActionEvent pae) {
-		String txt = pae.getData().toString();
+	public void onCopyToClipboard(PhonActionEvent<String> pae) {
+		String txt = pae.getData();
 		Transferable toClipboard = 
 			new StringSelection(txt);
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(toClipboard, this);
@@ -1423,8 +1422,8 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 	 * Add cell to favorites grid
 	 * 
 	 */
-	public void onAddCellToFavorites(PhonActionEvent pae) {
-		Cell cell = (Cell)pae.getData();
+	public void onAddCellToFavorites(PhonActionEvent<Cell> pae) {
+		Cell cell = pae.getData();
 		
 		IpaGrids favData = getFavData();
 		Grid fg = favData.getGrid().get(0);
@@ -1515,8 +1514,8 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 	/**
 	 * Remove cell from the favorites list
 	 */
-	public void onRemoveCellFromFavorites(PhonActionEvent pae) {
-		Cell cell = (Cell)pae.getData();
+	public void onRemoveCellFromFavorites(PhonActionEvent<Cell> pae) {
+		Cell cell = pae.getData();
 		
 		IpaGrids favData = getFavData();
 		Grid fg = favData.getGrid().get(0);
