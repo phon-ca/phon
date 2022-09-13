@@ -100,23 +100,20 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 		ActionMap actionMap = display.getActionMap();
 		InputMap inputMap = display.getInputMap(JComponent.WHEN_FOCUSED);
 
-		PhonUIAction focusNextAct =
-				new PhonUIAction(this, "focusNextPhone");
+		PhonUIAction focusNextAct = PhonUIAction.eventConsumer(this::focusNextPhone);
 		actionMap.put(FOCUS_NEXT, focusNextAct);
 		KeyStroke focusNextKs =
 				KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0);
 		inputMap.put(focusNextKs, FOCUS_NEXT);
 
-		PhonUIAction moveRightAct =
-				new PhonUIAction(this, "movePhoneRight");
+		PhonUIAction moveRightAct = PhonUIAction.eventConsumer(this::movePhoneRight);
 		actionMap.put(MOVE_PHONE_RIGHT, moveRightAct);
 		KeyStroke moveRightKs =
 				KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT,
 					InputEvent.ALT_MASK);
 		inputMap.put(moveRightKs, MOVE_PHONE_RIGHT);
 
-		PhonUIAction focusPrevAct =
-				new PhonUIAction(this, "focusPrevPhone");
+		PhonUIAction focusPrevAct = PhonUIAction.eventConsumer(this::focusPrevPhone);
 		actionMap.put(FOCUS_PREVIOUS, focusPrevAct);
 		KeyStroke focusPrevKs =
 				KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0);
@@ -125,32 +122,28 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 				KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0);
 		inputMap.put(delKs, FOCUS_PREVIOUS);
 
-		PhonUIAction moveLeftAct =
-				new PhonUIAction(this, "movePhoneLeft");
+		PhonUIAction moveLeftAct = PhonUIAction.eventConsumer(this::movePhoneLeft);
 		actionMap.put(MOVE_PHONE_LEFT, moveLeftAct);
 		KeyStroke moveLeftKs =
 				KeyStroke.getKeyStroke(KeyEvent.VK_LEFT,
 					InputEvent.ALT_MASK);
 		inputMap.put(moveLeftKs, MOVE_PHONE_LEFT);
 
-		PhonUIAction toggleColourAct =
-				new PhonUIAction(this, "togglePhoneColour");
+		PhonUIAction toggleColourAct = PhonUIAction.eventConsumer(this::togglePhoneColour);
 		actionMap.put(TOGGLE_PHONE_COLOUR, toggleColourAct);
 		KeyStroke toggleColourKs =
 				KeyStroke.getKeyStroke(KeyEvent.VK_C,
 					InputEvent.ALT_MASK);
 		inputMap.put(toggleColourKs, TOGGLE_PHONE_COLOUR);
 
-		PhonUIAction selectTargetAct =
-				new PhonUIAction(this, "setLockTop", true);
+		PhonUIAction<Boolean> selectTargetAct = PhonUIAction.eventConsumer(this::setLockTop, true);
 		actionMap.put(SELECT_TARGET_SIDE, selectTargetAct);
 		KeyStroke selectTargetKs =
 				KeyStroke.getKeyStroke(KeyEvent.VK_UP,
 					InputEvent.ALT_MASK);
 		inputMap.put(selectTargetKs, SELECT_TARGET_SIDE);
 
-		PhonUIAction selectActualAct =
-				new PhonUIAction(this, "setLockTop", false);
+		PhonUIAction<Boolean> selectActualAct = PhonUIAction.eventConsumer(this::setLockTop, false);
 		actionMap.put(SELECT_ACTUAL_SIDE, selectActualAct);
 		KeyStroke selectActualKs =
 				KeyStroke.getKeyStroke(KeyEvent.VK_DOWN,
@@ -173,7 +166,7 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 	}
 
 	/** UI Actions */
-	public void focusNextPhone(PhonActionEvent pae) {
+	public void focusNextPhone(PhonActionEvent<Void> pae) {
 		int currentFocus = display.getFocusedPosition();
 		int nextFocus = currentFocus+1;
 
@@ -182,7 +175,7 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 		}
 	}
 
-	public void focusPrevPhone(PhonActionEvent pae) {
+	public void focusPrevPhone(PhonActionEvent<Void> pae) {
 		int currentFocus = display.getFocusedPosition();
 		int prevFocus = currentFocus-1;
 		if(prevFocus >= 0) {
@@ -190,24 +183,24 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 		}
 	}
 
-	public void movePhoneRight(PhonActionEvent pae) {
+	public void movePhoneRight(PhonActionEvent<Void> pae) {
 		Tuple<Integer, Integer> alignmentPos =
 				display.positionToGroupPos(display.getFocusedPosition());
 		display.movePhoneRight(alignmentPos.getObj1(), alignmentPos.getObj2(), lockTop);
 	}
 
-	public void movePhoneLeft(PhonActionEvent pae) {
+	public void movePhoneLeft(PhonActionEvent<Void> pae) {
 		Tuple<Integer, Integer> alignmentPos =
 				display.positionToGroupPos(display.getFocusedPosition());
 		display.movePhoneLeft(alignmentPos.getObj1(), alignmentPos.getObj2(), lockTop);
 	}
 
-	public void togglePhoneColour(PhonActionEvent pae) {
+	public void togglePhoneColour(PhonActionEvent<Void> pae) {
 		display.togglePaintPhoneBackground();
 	}
 
-	public void setLockTop(PhonActionEvent pae) {
-		lockTop = (Boolean)pae.getData();
+	public void setLockTop(PhonActionEvent<Boolean> pae) {
+		lockTop = pae.getData();
 		display.repaint();
 	}
 

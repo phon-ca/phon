@@ -102,8 +102,7 @@ public class FileSelectionField extends JPanel {
 		
 		final ImageIcon browseIcon = 
 				IconManager.getInstance().getIcon("actions/document-open", IconSize.SMALL);
-		final PhonUIAction browseAct = 
-				new PhonUIAction(this, "onBrowse");
+		final PhonUIAction browseAct = PhonUIAction.runnable(this::onBrowse);
 		browseAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Browse...");
 		browseAct.putValue(PhonUIAction.SMALL_ICON, browseIcon);
 		browseButton = new JButton(browseAct);

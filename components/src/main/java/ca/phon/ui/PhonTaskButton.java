@@ -95,7 +95,7 @@ public class PhonTaskButton extends MultiActionButton {
 		ImageIcon cancelIcnL =
 			IconManager.getInstance().getIcon("actions/button_cancel", IconSize.SMALL);
 		
-		PhonUIAction cancelAction = new PhonUIAction(this, "onCancelTask");
+		PhonUIAction cancelAction = PhonUIAction.eventConsumer(this::onCancelTask);
 		cancelAction.putValue(Action.NAME, "Stop task");
 		cancelAction.putValue(Action.SHORT_DESCRIPTION, "Shutdown task");
 		cancelAction.putValue(Action.SMALL_ICON, cancelIcn);
@@ -116,11 +116,11 @@ public class PhonTaskButton extends MultiActionButton {
 	/*
 	 * UI Actions
 	 */
-	public void onToggleConsole(PhonActionEvent pae) {
+	public void onToggleConsole(PhonActionEvent<Void> pae) {
 		revalidate();
 	}
 	
-	public void onCancelTask(PhonActionEvent pae) {
+	public void onCancelTask(PhonActionEvent<Void> pae) {
 		if(task.getStatus() == TaskStatus.RUNNING)
 			task.shutdown();
 	}

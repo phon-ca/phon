@@ -91,7 +91,7 @@ public class DatePicker extends JComponent {
 		final ImageIcon calIcon = 
 				IconManager.getInstance().getIcon("apps/office-calendar", IconSize.SMALL);
 		
-		final PhonUIAction monthViewAct = new PhonUIAction(this, "onShowMonthView");
+		final PhonUIAction monthViewAct = PhonUIAction.runnable(this::onShowMonthView);
 		monthViewAct.putValue(PhonUIAction.SMALL_ICON, calIcon);
 		monthViewAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show calendar");
 		monthViewButton = new JButton(monthViewAct);

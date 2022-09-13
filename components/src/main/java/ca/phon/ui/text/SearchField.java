@@ -150,7 +150,7 @@ public class SearchField extends JPanel {
 		
 		// load search icon
 		final ImageIcon searchIcon = new ImageIcon(createSearchIcon());
-		final PhonUIAction ctxAction = new PhonUIAction(this, "onShowContextMenu");
+		final PhonUIAction ctxAction = PhonUIAction.eventConsumer(this::onShowContextMenu);
 		ctxAction.putValue(PhonUIAction.SMALL_ICON, searchIcon);
 		ctxAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Click for options");
 		ctxButton = new SearchFieldButton(ctxAction);
@@ -161,7 +161,7 @@ public class SearchField extends JPanel {
 		add(queryField, cc.xy(3,1));
 		
 		final ImageIcon clearIcon = new ImageIcon(createClearIcon());
-		final PhonUIAction clearTextAct = new PhonUIAction(this, "onClearText");
+		final PhonUIAction clearTextAct = PhonUIAction.eventConsumer(this::onClearText);
 		clearTextAct.putValue(PhonUIAction.SMALL_ICON, clearIcon);
 		clearTextAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Clear field");
 		endButton = new SearchFieldButton(clearTextAct);
@@ -203,7 +203,7 @@ public class SearchField extends JPanel {
 	 * 
 	 * @param pae
 	 */
-	public void onShowContextMenu(PhonActionEvent pae) {
+	public void onShowContextMenu(PhonActionEvent<Void> pae) {
 		JPopupMenu menu = new JPopupMenu();
 		
 		setupPopupMenu(menu);
@@ -249,7 +249,7 @@ public class SearchField extends JPanel {
 	 * @param menu
 	 */
 	protected void setupPopupMenu(JPopupMenu menu) {
-		PhonUIAction clearFieldAct = new PhonUIAction(this, "onClearText");
+		PhonUIAction clearFieldAct = PhonUIAction.eventConsumer(this::onClearText);
 		clearFieldAct.putValue(PhonUIAction.NAME, "Clear text");
 		JMenuItem clearTextItem = new JMenuItem(clearFieldAct);
 		
@@ -272,7 +272,7 @@ public class SearchField extends JPanel {
 		queryField.setText(s);
 	}
 
-	public void onClearText(PhonActionEvent pae) {
+	public void onClearText(PhonActionEvent<Void> pae) {
 		queryField.setText("");
 	}
 	

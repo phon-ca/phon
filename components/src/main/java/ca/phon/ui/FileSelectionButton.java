@@ -49,8 +49,7 @@ public class FileSelectionButton extends MultiActionButton {
 		this.files = files;
 
 		if(this.files != null) {
-			PhonUIAction showFilesAct =
-					new PhonUIAction(this, "onShowFiles");
+			PhonUIAction showFilesAct = PhonUIAction.eventConsumer(this::onShowFiles);
 			showFilesAct.putValue(Action.NAME, "Select file");
 			showFilesAct.putValue(Action.SHORT_DESCRIPTION, "Select file/folder");
 			setDefaultAction(showFilesAct);
@@ -132,7 +131,7 @@ public class FileSelectionButton extends MultiActionButton {
 		}
 	}
 
-	public void onShowFiles(PhonActionEvent pae) {
+	public void onShowFiles(PhonActionEvent<Void> pae) {
 		if(this.files == null)  return;
 
 		JPopupMenu menu = new JPopupMenu();
@@ -142,7 +141,7 @@ public class FileSelectionButton extends MultiActionButton {
 		for(File f:this.files) history.add(f);
 		if(history.size() > 0) {
 			for(File f:history) {
-				PhonUIAction selectFileAct = new PhonUIAction(this, "setSelection", f);
+				PhonUIAction<File> selectFileAct = PhonUIAction.consumer(this::setSelection, f);
 				selectFileAct.putValue(PhonUIAction.NAME, f.getAbsolutePath());
 				selectFileAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select " + f.getAbsolutePath());
 				builder.addItem(".", selectFileAct);
@@ -173,7 +172,7 @@ public class FileSelectionButton extends MultiActionButton {
 	}
 
 	public Action createBrowseAction() {
-		PhonUIAction browseAct = new PhonUIAction(this, "onBrowse");
+		PhonUIAction browseAct = PhonUIAction.runnable(this::onBrowse);
 		browseAct.putValue(PhonUIAction.NAME, "Browse...");
 		browseAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Browse for file/folder...");
 		browseAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-open", IconSize.SMALL));

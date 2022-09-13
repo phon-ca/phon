@@ -85,23 +85,22 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 		ActionMap actionMap = display.getActionMap();
 		InputMap inputMap = display.getInputMap(JComponent.WHEN_FOCUSED);
 
-		PhonUIAction focusNextAct = new PhonUIAction(this, "focusNextPhone");
+		final PhonUIAction focusNextAct = PhonUIAction.eventConsumer(this::focusNextPhone);
 		actionMap.put(FOCUS_NEXT, focusNextAct);
 		KeyStroke focusNextKs = KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0);
 		inputMap.put(focusNextKs, FOCUS_NEXT);
 
-		PhonUIAction focusPrevAct = new PhonUIAction(this, "focusPrevPhone");
+		final PhonUIAction focusPrevAct = PhonUIAction.eventConsumer(this::focusPrevPhone);
 		actionMap.put(FOCUS_PREVIOUS, focusPrevAct);
 		KeyStroke focusPrevKs = KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0);
 		inputMap.put(focusPrevKs, FOCUS_PREVIOUS);
 
-		PhonUIAction backSpaceAct = new PhonUIAction(this, "onBackspace",
-				SyllableConstituentType.UNKNOWN);
+		PhonUIAction<SyllableConstituentType> backSpaceAct = PhonUIAction.eventConsumer(this::onBackspace, SyllableConstituentType.UNKNOWN);
 		actionMap.put(BACKSPACE, backSpaceAct);
 		KeyStroke delKs = KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0);
 		inputMap.put(delKs, BACKSPACE);
 
-		PhonUIAction toggleHiatusAct = new PhonUIAction(this, "toggleHiatus");
+		final PhonUIAction<Integer> toggleHiatusAct = PhonUIAction.eventConsumer(this::toggleHiatus, null);
 		actionMap.put(TOGGLE_HIATUS, toggleHiatusAct);
 		KeyStroke toggleHiatusKs1 = KeyStroke.getKeyStroke('h');
 		KeyStroke toggleHiatusKs2 = KeyStroke.getKeyStroke('H');
@@ -117,7 +116,7 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 
 			String scTypeActID = SET_SCTYPE_PREFIX + "_"
 					+ scType.getIdentifier().toUpperCase() + "_";
-			PhonUIAction scTypeAct = new PhonUIAction(this, "setScType", scType);
+			PhonUIAction<SyllableConstituentType> scTypeAct = PhonUIAction.eventConsumer(this::setScType, scType);
 			actionMap.put(scTypeActID, scTypeAct);
 
 			KeyStroke scKs1 = KeyStroke.getKeyStroke(scChar1.charAt(0));
@@ -131,8 +130,8 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 		String removeSyllabificationID = SET_SCTYPE_PREFIX + "_"
 				+ SyllableConstituentType.UNKNOWN.getIdentifier().toUpperCase()
 				+ "_";
-		PhonUIAction removeSyllabificationAct = new PhonUIAction(this,
-				"setScType", SyllableConstituentType.UNKNOWN);
+		PhonUIAction<SyllableConstituentType> removeSyllabificationAct = PhonUIAction.eventConsumer(
+				this::setScType, SyllableConstituentType.UNKNOWN);
 		actionMap.put(removeSyllabificationID, removeSyllabificationAct);
 		KeyStroke removeSyllabificationKs = KeyStroke.getKeyStroke(
 				KeyEvent.VK_DELETE, 0);
@@ -140,10 +139,9 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 	}
 
 	/** UI Actions */
-	public void onBackspace(PhonActionEvent pae) {
+	public void onBackspace(PhonActionEvent<SyllableConstituentType> pae) {
 		int pIdx = display.getFocusedPhone();
-		display.setSyllabificationAtIndex(pIdx,
-				(SyllableConstituentType) pae.getData());
+		display.setSyllabificationAtIndex(pIdx, pae.getData());
 		int prevFocus = pIdx - 1;
 		if (prevFocus >= 0) {
 			display.setFocusedPhone(prevFocus);
@@ -167,23 +165,20 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 		}
 	}
 
-	public void toggleHiatus(PhonActionEvent pae) {
-		int pIdx = 
-				(pae.getData() != null ? (int)pae.getData() : display.getFocusedPhone());
+	public void toggleHiatus(PhonActionEvent<Integer> pae) {
+		int pIdx = (pae.getData() != null ? pae.getData().intValue() : display.getFocusedPhone());
 		display.toggleHiatus(pIdx);
 	}
 
-	public void setScType(PhonActionEvent pae) {
+	public void setScType(PhonActionEvent<SyllableConstituentType> pae) {
 		int pIdx = display.getFocusedPhone();
-		display.setSyllabificationAtIndex(pIdx,
-				(SyllableConstituentType) pae.getData());
+		display.setSyllabificationAtIndex(pIdx, pae.getData());
 		display.setFocusedPhone(pIdx + 1);
 	}
 
-	public void menuSetScType(PhonActionEvent pae) {
+	public void menuSetScType(PhonActionEvent<SyllableConstituentType> pae) {
 		int pIdx = display.getFocusedPhone();
-		display.setSyllabificationAtIndex(pIdx,
-				(SyllableConstituentType) pae.getData());
+		display.setSyllabificationAtIndex(pIdx, pae.getData());
 	}
 
 	/**
@@ -222,8 +217,8 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 				itemText += "</html>";
 
 				final JMenuItem constituentItem = new JMenuItem(itemText);
-				PhonUIAction constituentAction = new PhonUIAction(this,
-						"menuSetScType", scType);
+				PhonUIAction<SyllableConstituentType> constituentAction = PhonUIAction.eventConsumer(
+						this::menuSetScType, scType);
 				constituentAction.putValue(Action.NAME, itemText);
 				constituentItem.setAction(constituentAction);
 
@@ -237,8 +232,8 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 				if(nextPhone.getScType() == SyllableConstituentType.NUCLEUS) {
 					String itemText = "<html>Toggle Hiatus with " + nextPhone.getText();
 					JMenuItem item = new JMenuItem();
-					PhonUIAction toggleHiatusAct = new PhonUIAction(this,
-							"toggleHiatus", pIdx+1);
+					PhonUIAction<Integer> toggleHiatusAct = PhonUIAction.eventConsumer(
+							this::toggleHiatus, pIdx+1);
 					toggleHiatusAct.putValue(Action.NAME, itemText);
 					item.setAction(toggleHiatusAct);
 
@@ -254,8 +249,8 @@ public class DefaultSyllabificationDisplayUI extends SyllabificationDisplayUI {
 				if (prevPhone.getScType() == SyllableConstituentType.NUCLEUS) {
 					String itemText = "<html>Toggle <u><b>H</b></u>iatus with " + prevPhone.getText();
 					JMenuItem item = new JMenuItem();
-					PhonUIAction toggleHiatusAct = new PhonUIAction(this,
-							"toggleHiatus", pIdx);
+					PhonUIAction<Integer> toggleHiatusAct = PhonUIAction.eventConsumer(
+							this::toggleHiatus, pIdx);
 					toggleHiatusAct.putValue(Action.NAME, itemText);
 					item.setAction(toggleHiatusAct);
 

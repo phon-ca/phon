@@ -116,7 +116,7 @@ public class ParticipantPanel extends JPanel {
 
 		});
 
-		final PhonUIAction anonymizeAct = new PhonUIAction(this, "onAnonymize");
+		final PhonUIAction anonymizeAct = PhonUIAction.runnable(this::onAnonymize);
 		anonymizeAct.putValue(PhonUIAction.NAME, "Anonymize");
 		anonymizeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Remove all optional information");
 		anonymizeBtn = new JButton(anonymizeAct);
@@ -388,7 +388,7 @@ public class ParticipantPanel extends JPanel {
 			}
 		};
 
-		final PhonUIAction okAct = new PhonUIAction(this, "doAnonymizeParticipant", optionsPanel);
+		final PhonUIAction okAct = PhonUIAction.consumer(this::doAnonymizeParticipant, optionsPanel);
 		okAct.putValue(PhonUIAction.NAME, "Ok");
 		final JButton okBtn = new JButton(okAct);
 		okBtn.addActionListener(closeListener);

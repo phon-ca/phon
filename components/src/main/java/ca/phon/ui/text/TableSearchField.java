@@ -109,7 +109,8 @@ public class TableSearchField extends SearchField {
 		
 		
 		// add case sensitivity
-		final PhonUIAction csAction = new PhonUIAction("Case sensitive", this, "toggleCaseSensitive");
+		final PhonUIAction csAction = PhonUIAction.runnable(this::toggleCaseSensitive);
+		csAction.putValue(PhonUIAction.NAME, "Case sensitive");
 		final JCheckBoxMenuItem csItem = new JCheckBoxMenuItem(csAction);
 		csItem.setSelected(isCaseSensitive());
 		menu.add(csItem);

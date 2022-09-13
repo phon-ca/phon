@@ -90,7 +90,7 @@ public class HidablePanel extends MultiActionButton {
 	private void init() {
 		setOpaque(false);
 		
-		hideAct = new PhonUIAction(this, "onHide");
+		hideAct = PhonUIAction.eventConsumer(this::onHide);
 		ImageIcon hideIcn = IconManager.getInstance().getIcon("actions/button_cancel", IconSize.XSMALL);
 		hideAct.putValue(Action.SHORT_DESCRIPTION, "Hide and don't show again");
 		hideAct.putValue(Action.NAME, "Hide message");
