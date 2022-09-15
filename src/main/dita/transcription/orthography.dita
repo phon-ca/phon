@@ -135,8 +135,30 @@
                         <row>
                             <entry><codeph>@n</codeph></entry>
                             <entry>neologism</entry>
-                            <entry><codeph>broked@b</codeph></entry>
+                            <entry><codeph>broked@n</codeph></entry>
                         </row>
+                        <row>
+                            <entry><codeph>@nv</codeph></entry>
+                            <entry>no voice</entry>
+                            <entry><codeph>ha@nv</codeph></entry>
+                        </row>
+                        <row>
+                            <entry><codeph>@o</codeph></entry>
+                            <entry>onomatopoeia</entry>
+                            <entry><codeph>boing@o</codeph></entry>
+                        </row>
+                        <row>
+                            <entry><codeph>@p</codeph></entry>
+                            <entry>phonology consistent</entry>
+                            <entry><codeph>aga@p</codeph></entry>
+                        </row>
+                        <!-- Need to check implementation vs. CLAN documentation
+                        <row>
+                            <entry><codeph>@q</codeph></entry>
+                            <entry>quoted metareference</entry>
+                            <entry><codeph>?@q</codeph></entry>
+                        </row>
+                        -->
                         <row>
                             <entry><codeph>@si</codeph></entry>
                             <entry>singing</entry>
@@ -193,20 +215,19 @@
     <topic id="special_sequences">
         <title>Special Sequences</title>
         <body>
-            <p>If the word content is either <codeph>xxx</codeph>, <codeph>yyy</codeph>
-                or <codeph>www</codeph> the word is considered to be 'untranscribed.'
-                Untranscribed word should be aligned with '*' in IPA Target and IPA Actual
-                tiers.</p>
+            <p>If the word content is either <codeph>xxx</codeph>, <codeph>yyy</codeph> or
+                    <codeph>www</codeph> the word is considered to be 'untranscribed.' Untranscribed
+                word should be aligned with '*' in IPA Target and IPA Actual tiers.</p>
         </body>
     </topic>
     <topic id="inline_comments">
         <title>Inline Comments</title>
         <body>
             <p>Inline comments are enclosed within parentheses - '<codeph>(</codeph>' and
-                '<codeph>)</codeph>' - or asterisks - '<codeph>*</codeph>'. Comments
-                may include any character data. When converting to/from CHAT data, some comments may
-                have the syntax <codeph>type:comment</codeph>. Comments enclosed with
-                asterisks are considered to be 'events' which occur within the utterance.</p>
+                    '<codeph>)</codeph>' - or asterisks - '<codeph>*</codeph>'. Comments may include
+                any character data. When converting to/from CHAT data, some comments may have the
+                syntax <codeph>type:comment</codeph>. Comments enclosed with asterisks are
+                considered to be 'events' which occur within the utterance.</p>
         </body>
         <topic id="pause">
             <title>Pauses</title>
