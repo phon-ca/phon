@@ -18,6 +18,7 @@ package ca.phon.session;
 import java.io.*;
 import java.util.*;
 
+import ca.phon.session.impl.SessionFactoryImpl;
 import org.apache.logging.log4j.*;
 
 import ca.phon.extensions.*;
@@ -175,7 +176,7 @@ public final class SessionFactory extends ExtendableObject {
 	/**
 	 * Create comment
 	 * 
-	 * @param tar
+	 * @param tag
 	 * @param value
 	 * 
 	 * @return new comment
@@ -216,7 +217,8 @@ public final class SessionFactory extends ExtendableObject {
 	/**
 	 * Clone session metadata
 	 * 
-	 * @param metadata
+	 * @param session
+	 * @param dest
 	 */
 	public void copySessionMetadata(Session session, Session dest) {
 		final SessionMetadata metadata = session.getMetadata();
@@ -390,7 +392,7 @@ public final class SessionFactory extends ExtendableObject {
 	/**
 	 * Clone participant
 	 * 
-	 * @param participant
+	 * @param part
 	 * 
 	 * @return cloned participant
 	 */

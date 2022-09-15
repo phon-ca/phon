@@ -54,12 +54,12 @@ public class RenameProjectDialog extends JDialog {
 		jpanel1.add(titledseparator1,cc.xywh(1,1,2,1));
 		jpanel1.add(projectNameField, cc.xywh(1, 2, 2, 1));
 
-		final PhonUIAction okAct = new PhonUIAction(this, "onRenameProject");
+		final PhonUIAction<Void> okAct = PhonUIAction.runnable(this::onRenameProject);
 		okAct.putValue(PhonUIAction.NAME, "Rename project");
 		okAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Assign new project name");
 		btnRenameProject = new JButton(okAct);
 
-		final PhonUIAction cancelAct = new PhonUIAction(this, "onCancel");
+		final PhonUIAction<Void> cancelAct = PhonUIAction.runnable(this::onCancel);
 		cancelAct.putValue(PhonUIAction.NAME, "Cancel");
 		cancelAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Cancel rename project");
 		btnCancel = new JButton(cancelAct);

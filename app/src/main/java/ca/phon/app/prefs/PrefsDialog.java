@@ -96,7 +96,7 @@ public class PrefsDialog extends JDialog {
 		add(header, BorderLayout.NORTH);
 		add(tabbedPane, BorderLayout.CENTER);
 		
-		PhonUIAction okAct = new PhonUIAction(this, "onOk");
+		PhonUIAction<Void> okAct = PhonUIAction.eventConsumer(this::onOk);
 		okAct.putValue(Action.NAME, "Ok");
 		okAct.putValue(Action.SHORT_DESCRIPTION, "Save prefs and close dialog");
 		
@@ -118,7 +118,7 @@ public class PrefsDialog extends JDialog {
 		}
 	}
 	
-	public void onOk(PhonActionEvent pae) {
+	public void onOk(PhonActionEvent<Void> pae) {
 		// save prefs and close dialog
 		setVisible(false);
 		dispose();

@@ -80,7 +80,7 @@ public class GeneralPrefsPanel extends PrefsPanel {
 		innerPanel.add(workspacePanel);
 		
 		// info messages
-		PhonUIAction resetInfoMessagesAct = new PhonUIAction(this, "onResetInfoMessages");
+		PhonUIAction<Void> resetInfoMessagesAct = PhonUIAction.eventConsumer(this::onResetInfoMessages);
 		resetInfoMessagesAct.putValue(Action.NAME, "Reset Information Messages");
 		JButton resetInfoMessagesBtn = new JButton(resetInfoMessagesAct);
 		
@@ -98,7 +98,7 @@ public class GeneralPrefsPanel extends PrefsPanel {
 	 * Reset hide-able messages.
 	 * @param pae
 	 */
-	public void onResetInfoMessages(PhonActionEvent pae) {
+	public void onResetInfoMessages(PhonActionEvent<Void> pae) {
 		HidablePanel.clearSavePanelProps();
 	}
 	

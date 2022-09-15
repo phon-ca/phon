@@ -122,7 +122,7 @@ public class SessionCheckView extends EditorView {
 
 		});
 
-		final PhonUIAction dropDownAct = new PhonUIAction(this, "noop");
+		final PhonUIAction<Void> dropDownAct = PhonUIAction.runnable(() -> {});
 		dropDownAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/settings-black", IconSize.SMALL));
 		dropDownAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select session checks...");
 		dropDownAct.putValue(DropDownButton.BUTTON_POPUP, settingsMenu);

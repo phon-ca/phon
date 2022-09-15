@@ -66,7 +66,7 @@ public class GitProgressBuffer extends BufferPanel implements ProgressMonitor {
 		
 		cmf.add(this, BorderLayout.CENTER);
 		
-		final PhonUIAction act = new PhonUIAction(cmf, "setVisible", false);
+		final PhonUIAction<Boolean> act = PhonUIAction.consumer(cmf::setVisible, false);
 		act.putValue(PhonUIAction.NAME, "Close");
 		final JComponent btnPanel = ButtonBarBuilder.buildOkBar(new JButton(act));
 		add(btnPanel, BorderLayout.SOUTH);

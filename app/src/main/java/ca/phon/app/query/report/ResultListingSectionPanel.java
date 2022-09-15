@@ -174,13 +174,13 @@ public class ResultListingSectionPanel extends SectionPanel<ResultListing> {
 		ActionMap fieldActionMap = fieldList.getActionMap();
 		InputMap fieldInputMap = fieldList.getInputMap(JComponent.WHEN_FOCUSED);
 		
-		PhonUIAction showListAction = new PhonUIAction(this, "onShowPopup");
+		PhonUIAction<Void> showListAction = PhonUIAction.eventConsumer(this::onShowPopup);
 		ImageIcon addIcn = IconManager.getInstance().getIcon("actions/list-add", IconSize.XSMALL);
 		showListAction.putValue(PhonUIAction.SMALL_ICON, addIcn);
 		showListAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Add field...");
 		addFieldButton = new JButton(showListAction);
 		
-		PhonUIAction removeFieldAction = new PhonUIAction(this, "onDelField");
+		PhonUIAction<Void> removeFieldAction = PhonUIAction.eventConsumer(this::onDelField);
 		ImageIcon delIcn = IconManager.getInstance().getIcon("actions/list-remove", IconSize.XSMALL);
 		removeFieldAction.putValue(PhonUIAction.SMALL_ICON, delIcn);
 		removeFieldAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Remove selected field");
@@ -192,13 +192,13 @@ public class ResultListingSectionPanel extends SectionPanel<ResultListing> {
 		fieldInputMap.put(delKs1, delActID);
 		fieldInputMap.put(delKs2, delActID);
 		
-		PhonUIAction moveFieldUpAction = new PhonUIAction(this, "onMoveFieldUp");
+		PhonUIAction<Void> moveFieldUpAction = PhonUIAction.eventConsumer(this::onMoveFieldUp);
 		ImageIcon upIcn = IconManager.getInstance().getIcon("actions/go-up", IconSize.XSMALL);
 		moveFieldUpAction.putValue(PhonUIAction.SMALL_ICON, upIcn);
 		moveFieldUpAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move selected field up");
 		upFieldButton = new JButton(moveFieldUpAction);
 		
-		PhonUIAction moveFieldDownAction = new PhonUIAction(this, "onMoveFieldDown");
+		PhonUIAction<Void> moveFieldDownAction = PhonUIAction.eventConsumer(this::onMoveFieldDown);
 		ImageIcon downIcn = IconManager.getInstance().getIcon("actions/go-down", IconSize.XSMALL);
 		moveFieldDownAction.putValue(PhonUIAction.SMALL_ICON, downIcn);
 		moveFieldDownAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move selected field down");
@@ -470,13 +470,13 @@ public class ResultListingSectionPanel extends SectionPanel<ResultListing> {
 	/*
 	 * UI Actions
 	 */
-	public void onShowPopup(PhonActionEvent pae) {
+	public void onShowPopup(PhonActionEvent<Void> pae) {
 		// display a popup menu for selecting what field to add
 		JPopupMenu menu = new JPopupMenu();
 		
 		ResultListingField[] defFields = getPredefinedFields();
 		for(ResultListingField field:defFields) {
-			PhonUIAction fieldAct = new PhonUIAction(this, "onAddField", field);
+			PhonUIAction<ResultListingField> fieldAct = PhonUIAction.eventConsumer(this::onAddField, field);
 			fieldAct.putValue(PhonUIAction.NAME, field.getTitle());
 			fieldAct.putValue(PhonUIAction.SHORT_DESCRIPTION, field.getFieldValue().getLang());
 			fieldAct.putValue(PhonUIAction.LONG_DESCRIPTION, field.getFieldValue().getScript());
@@ -489,14 +489,14 @@ public class ResultListingSectionPanel extends SectionPanel<ResultListing> {
 		userTierField.setTitle("User Defined Tier");
 		userTierField.getFieldValue().setLang("Javascript");
 		userTierField.getFieldValue().setScript(RECORD_TIER_SCRIPT.replaceAll("\\$\\{TIER\\}", ""));
-		PhonUIAction userFieldAct = new PhonUIAction(this, "onAddField", userTierField);
+		PhonUIAction<ResultListingField> userFieldAct = PhonUIAction.eventConsumer(this::onAddField, userTierField);
 		userFieldAct.putValue(PhonUIAction.NAME, userTierField.getTitle());
 		JMenuItem userFieldItem = new JMenuItem(userFieldAct);
 		menu.add(userFieldItem);
 		
 		ResultListingField emptyField = createEmptyField();
 		emptyField.setTitle("Untitled");
-		PhonUIAction customFieldAct = new PhonUIAction(this, "onAddField", emptyField);
+		PhonUIAction<ResultListingField> customFieldAct = PhonUIAction.eventConsumer(this::onAddField, emptyField);
 		customFieldAct.putValue(PhonUIAction.NAME, "Custom");
 		customFieldAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create a custom field");
 		JMenuItem customFieldItem = new JMenuItem(customFieldAct);
@@ -505,13 +505,13 @@ public class ResultListingSectionPanel extends SectionPanel<ResultListing> {
 		menu.show(addFieldButton, addFieldButton.getWidth(), addFieldButton.getHeight());
 	}
 	
-	public void onAddField(PhonActionEvent pae) {
+	public void onAddField(PhonActionEvent<ResultListingField> pae) {
 		if(pae.getData() == null)
 			throw new IllegalArgumentException("field cannot be null");
 		if(!(pae.getData() instanceof ResultListingField))
 			throw new IllegalArgumentException("not a field!");
 		
-		ResultListingField field = (ResultListingField)pae.getData();
+		ResultListingField field = pae.getData();
 		ResultListing resList = getSection();
 		
 		resList.getField().add(field);
@@ -523,7 +523,7 @@ public class ResultListingSectionPanel extends SectionPanel<ResultListing> {
 		
 	}
 	
-	public void onDelField(PhonActionEvent pae) {
+	public void onDelField(PhonActionEvent<Void> pae) {
 		int selectedField = fieldList.getSelectedIndex();
 		
 		ResultListing resList = getSection();
@@ -536,7 +536,7 @@ public class ResultListingSectionPanel extends SectionPanel<ResultListing> {
 		}
 	}
 	
-	public void onMoveFieldUp(PhonActionEvent pae) {
+	public void onMoveFieldUp(PhonActionEvent<Void> pae) {
 		int selectedField = fieldList.getSelectedIndex();
 		
 		ResultListing resList = getSection();
@@ -550,7 +550,7 @@ public class ResultListingSectionPanel extends SectionPanel<ResultListing> {
 		}
 	}
 	
-	public void onMoveFieldDown(PhonActionEvent pae) {
+	public void onMoveFieldDown(PhonActionEvent<Void> pae) {
 		int selectedField = fieldList.getSelectedIndex();
 		
 		ResultListing resList = getSection();

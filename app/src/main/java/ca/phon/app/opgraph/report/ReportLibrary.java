@@ -209,7 +209,7 @@ public class ReportLibrary implements OpGraphLibrary {
 		}
 
 		builder.addSeparator(".", "browse");
-		final PhonUIAction onBrowseAct = new PhonUIAction(ReportLibrary.class, "onBrowse", new Tuple<String, Project>(queryId, project));
+		final PhonUIAction<Tuple<String, Project>> onBrowseAct = PhonUIAction.eventConsumer(ReportLibrary::onBrowse, new Tuple<>(queryId, project));
 		onBrowseAct.putValue(PhonUIAction.NAME, "Browse...");
 		onBrowseAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Browse for query report document.");
 		builder.addItem(".@browse", onBrowseAct);
@@ -219,9 +219,8 @@ public class ReportLibrary implements OpGraphLibrary {
 		builder.addItem(".", showSimpleComposerAct);
 	}
 
-	public static void onBrowse(PhonActionEvent pae) {
-		@SuppressWarnings("unchecked")
-		final Tuple<String, Project> data = (Tuple<String, Project>)pae.getData();
+	public static void onBrowse(PhonActionEvent<Tuple<String, Project>> pae) {
+		final Tuple<String, Project> data = pae.getData();
 		final String queryId = data.getObj1();
 		final Project project = (Project)data.getObj2();
 		final FileFilter filter = new FileFilter("Query Report Documents", "xml;opgraph");

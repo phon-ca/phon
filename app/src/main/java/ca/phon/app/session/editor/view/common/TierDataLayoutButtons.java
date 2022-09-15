@@ -73,7 +73,7 @@ public class TierDataLayoutButtons extends JComponent {
 		final List<JButton> buttons = (new SegmentedButtonBuilder<JButton>(JButton::new)).createSegmentedButtons(2, buttonGroup);
 		
 		final ImageIcon wrapIcon = IconManager.getInstance().getIcon(WRAP_ICON, IconSize.SMALL);
-		final PhonUIAction wrapAct = new PhonUIAction(this, "wrapGroups");
+		final PhonUIAction<Void> wrapAct = PhonUIAction.runnable(this::wrapGroups);
 		wrapAct.putValue(PhonUIAction.SMALL_ICON, wrapIcon);
 		wrapAct.putValue(PhonUIAction.SHORT_DESCRIPTION, WRAP_DESC);
 		wrapButton = buttons.get(0);
@@ -81,7 +81,7 @@ public class TierDataLayoutButtons extends JComponent {
 		wrapButton.setFocusable(false);
 		
 		final ImageIcon alignIcon = IconManager.getInstance().getIcon(ALIGN_ICON, IconSize.SMALL);
-		final PhonUIAction alignAct = new PhonUIAction(this, "alignGroups");
+		final PhonUIAction<Void> alignAct = PhonUIAction.runnable(this::alignGroups);
 		alignAct.putValue(PhonUIAction.SMALL_ICON, alignIcon);
 		alignAct.putValue(PhonUIAction.SHORT_DESCRIPTION, ALIGN_DESC);
 		alignButton = buttons.get(1);

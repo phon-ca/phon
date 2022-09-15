@@ -210,12 +210,12 @@ public class SegmentationDialog extends JDialog {
 		
 		recordCreationPanel.setBorder(BorderFactory.createTitledBorder("Segmentation"));
 		
-		PhonUIAction okAct = new PhonUIAction(this, "onOk");
+		PhonUIAction<Void> okAct = PhonUIAction.runnable(this::onOk);
 		okAct.putValue(PhonUIAction.NAME, "Start segmentation");
 		startButton = new JButton(okAct);
 		getRootPane().setDefaultButton(startButton);
 		
-		PhonUIAction cancelAct = new PhonUIAction(this, "onCancel");
+		PhonUIAction<Void> cancelAct = PhonUIAction.runnable(this::onCancel);
 		cancelAct.putValue(PhonUIAction.NAME, "Cancel");
 		cancelButton = new JButton(cancelAct);
 		

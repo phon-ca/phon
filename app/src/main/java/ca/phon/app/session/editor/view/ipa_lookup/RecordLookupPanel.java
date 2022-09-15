@@ -133,7 +133,7 @@ public class RecordLookupPanel extends JPanel {
 		ipaActualBox.setOpaque(false);
 		ipaActualBox.setSelected(true);
 
-		final PhonUIAction setAct = new PhonUIAction(this, "onSetTranscription");
+		final PhonUIAction<Void> setAct = PhonUIAction.runnable(this::onSetTranscription);
 		setAct.putValue(PhonUIAction.NAME, "Set");
 		setAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Set transcription for selected tiers");
 		setButton = new JButton(setAct);
@@ -229,7 +229,7 @@ public class RecordLookupPanel extends JPanel {
 			grpField.setFont(FontPreferences.getTierFont());
 			grpField.addTierEditorListener(tierListener);
 
-			final PhonUIAction setGrpAct = new PhonUIAction(this, "onSetGroup", i);
+			final PhonUIAction<Integer> setGrpAct = PhonUIAction.consumer(this::onSetGroup, i);
 			setGrpAct.putValue(PhonUIAction.NAME, "Set");
 			setGrpAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Set transcription for group " + (i+1));
 			final JButton setGrpBtn = new JButton(setGrpAct);

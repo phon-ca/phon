@@ -54,7 +54,7 @@ public class SessionEditorQuickSearchField extends TableSearchField {
 	
 	@Override
 	protected void setupPopupMenu(JPopupMenu menu) {
-		final PhonUIAction incExcludedAct = new PhonUIAction(this, "toggleIncludeExcluded");
+		final PhonUIAction<Void> incExcludedAct = PhonUIAction.runnable(this::toggleIncludeExcluded);
 		incExcludedAct.putValue(PhonUIAction.NAME, "Include excluded records");
 		incExcludedAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Include excluded records in search.");
 		incExcludedAct.putValue(PhonUIAction.SELECTED_KEY, this.includeExcludedRecords);
@@ -64,21 +64,21 @@ public class SessionEditorQuickSearchField extends TableSearchField {
 		
 		ButtonGroup btnGroup = new ButtonGroup();
 		
-		final PhonUIAction usePlainAct = new PhonUIAction(this, "setSearchType", SearchType.PLAIN);
+		final PhonUIAction<SearchType> usePlainAct = PhonUIAction.consumer(this::setSearchType, SearchType.PLAIN);
 		usePlainAct.putValue(PhonUIAction.NAME, "Plain text");
 		usePlainAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Plain text search");
 		usePlainAct.putValue(PhonUIAction.SELECTED_KEY, searchType == SearchType.PLAIN);
 		final JRadioButtonMenuItem usePlainItem = new JRadioButtonMenuItem(usePlainAct);
 		menu.add(usePlainItem);
 		
-		final PhonUIAction useRegexAct = new PhonUIAction(this, "setSearchType", SearchType.REGEX);
+		final PhonUIAction<SearchType> useRegexAct = PhonUIAction.consumer(this::setSearchType, SearchType.REGEX);
 		useRegexAct.putValue(PhonUIAction.NAME, "Regex");
 		useRegexAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Regex search");
 		useRegexAct.putValue(PhonUIAction.SELECTED_KEY, searchType == SearchType.REGEX);
 		final JRadioButtonMenuItem useRegexItem = new JRadioButtonMenuItem(useRegexAct);
 		menu.add(useRegexItem);
 
-		final PhonUIAction usePhonexAct = new PhonUIAction(this, "setSearchType", SearchType.PHONEX);
+		final PhonUIAction<SearchType> usePhonexAct = PhonUIAction.consumer(this::setSearchType, SearchType.PHONEX);
 		usePhonexAct.putValue(PhonUIAction.NAME, "Phonex");
 		usePhonexAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Phonex search");
 		usePhonexAct.putValue(PhonUIAction.SELECTED_KEY, searchType == SearchType.PHONEX);

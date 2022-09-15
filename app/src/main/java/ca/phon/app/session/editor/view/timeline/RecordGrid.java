@@ -206,7 +206,7 @@ public class RecordGrid extends TimeComponent {
 	 * @param participant
 	 */
 	public void setupParticipantMenu(Participant participant, MenuBuilder builder) {
-		final PhonUIAction removeSpeakerAct = new PhonUIAction(this, "removeSpeaker", participant);
+		final PhonUIAction<Participant> removeSpeakerAct = PhonUIAction.consumer(this::removeSpeaker, participant);
 		removeSpeakerAct.putValue(PhonUIAction.NAME, "Hide participant");
 		removeSpeakerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Hide " + participant + " tier from view");
 		builder.addItem(".", removeSpeakerAct);

@@ -36,8 +36,8 @@ public class ScriptNodeEditor extends JPanel {
 	private void init() {
 		setLayout(new BorderLayout());
 
-		final PhonUIAction undoAct = new PhonUIAction(this, "undo");
-		final PhonUIAction redoAct = new PhonUIAction(this, "redo");
+		final PhonUIAction<Void> undoAct = PhonUIAction.runnable(this::undo);
+		final PhonUIAction<Void> redoAct = PhonUIAction.runnable(this::redo);
 
 		editor = ScriptEditorFactory.createEditorForScript(new BasicScript(""), false);
 		final RTextScrollPane scrollPane = new RTextScrollPane(editor);

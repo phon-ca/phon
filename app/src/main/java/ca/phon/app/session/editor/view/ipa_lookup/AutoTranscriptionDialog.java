@@ -59,11 +59,11 @@ public class AutoTranscriptionDialog extends JDialog {
 		
 		add(form, BorderLayout.CENTER);
 		
-		final PhonUIAction okAct = new PhonUIAction(this, "onOk");
+		final PhonUIAction<Void> okAct = PhonUIAction.runnable(this::onOk);
 		okAct.putValue(PhonUIAction.NAME, "Ok");
 		okButton = new JButton(okAct);
 		
-		final PhonUIAction cancelAct = new PhonUIAction(this, "onCancel");
+		final PhonUIAction<Void> cancelAct = PhonUIAction.runnable(this::onCancel);
 		cancelAct.putValue(PhonUIAction.NAME, "Cancel");
 		cancelButton = new JButton(cancelAct);
 		

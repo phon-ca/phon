@@ -173,20 +173,17 @@ public class SessionEditorQuickSearch {
 		final ActionMap actionMap = searchField.getActionMap();
 		final InputMap inputMap = searchField.getInputMap(JComponent.WHEN_FOCUSED);
 		
-		final PhonUIAction moveSelectionUp = 
-				new PhonUIAction(this, "moveSelectionUp");
+		final PhonUIAction moveSelectionUp = PhonUIAction.runnable(this::moveSelectionUp);
 		final KeyStroke upKs = KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0);
 		actionMap.put("_move_selection_up_", moveSelectionUp);
 		inputMap.put(upKs, "_move_selection_up_");
 		
-		final PhonUIAction moveSelectionDown =
-				new PhonUIAction(this, "moveSelectionDown");
+		final PhonUIAction moveSelectionDown = PhonUIAction.runnable(this::moveSelectionDown);
 		final KeyStroke downKs = KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0);
 		actionMap.put("_move_selection_down_", moveSelectionDown);
 		inputMap.put(downKs, "_move_selection_down_");
 		
-		final PhonUIAction openRecordListAct = 
-				new PhonUIAction(this, "showRecordList");
+		final PhonUIAction openRecordListAct = PhonUIAction.runnable(this::showRecordList);
 		openRecordListAct.putValue(PhonUIAction.NAME, "Open Record List");
 		openRecordListAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open record list with current filter.");
 		searchField.setAction(openRecordListAct);
@@ -222,7 +219,7 @@ public class SessionEditorQuickSearch {
 		final String searchText = searchField.getText();
 		table.setName("Record List : " + searchText);
 		
-		final PhonUIAction saveAct = new PhonUIAction(this, "saveAsCSV", table);
+		final PhonUIAction<JTable> saveAct = PhonUIAction.eventConsumer(this::saveAsCSV, table);
 		saveAct.putValue(PhonUIAction.NAME, "Save as CSV...");
 		saveAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save table as CSV...");
 		final ImageIcon saveIcon = IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL);
@@ -258,7 +255,7 @@ public class SessionEditorQuickSearch {
 		model.setRowFilter(model.getRowFilter());
 	}
 	
-	public void saveAsCSV(PhonActionEvent pae) {
+	public void saveAsCSV(PhonActionEvent<JTable> pae) {
 		final SaveDialogProperties props = new SaveDialogProperties();
 		props.setParentWindow(null);
 		props.setFileFilter(FileFilter.csvFilter);

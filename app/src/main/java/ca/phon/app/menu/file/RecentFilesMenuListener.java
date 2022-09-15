@@ -37,7 +37,7 @@ public class RecentFilesMenuListener implements MenuListener {
 		
 		OpenFileHistory fileHistory = new OpenFileHistory();
 		for(File file:fileHistory) {
-			PhonUIAction openFileAct = new PhonUIAction(this, "openFile", file);
+			PhonUIAction<File> openFileAct = PhonUIAction.consumer(this::openFile, file);
 			openFileAct.putValue(PhonUIAction.NAME, file.getAbsolutePath());
 			menu.add(openFileAct);
 		}
@@ -46,7 +46,7 @@ public class RecentFilesMenuListener implements MenuListener {
 			menu.addSeparator();
 		}
 		
-		PhonUIAction clearHistoryAct = new PhonUIAction(fileHistory, "clearHistory");
+		PhonUIAction<Void> clearHistoryAct = PhonUIAction.runnable(fileHistory::clearHistory);
 		clearHistoryAct.putValue(PhonUIAction.NAME, "Clear file history");
 		clearHistoryAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Clear open file history");
 		menu.add(clearHistoryAct);

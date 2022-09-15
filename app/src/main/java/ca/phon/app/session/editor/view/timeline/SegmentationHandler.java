@@ -154,7 +154,7 @@ public final class SegmentationHandler {
 	private void setupActions() {
 		// add actions for new records
 		final String unidentifiedSegmentKey = "segment_unidentified";
-		PhonUIAction newUnidentifiedSegmentAction = new PhonUIAction(this, "newSegment");
+		PhonUIAction<Integer> newUnidentifiedSegmentAction = PhonUIAction.eventConsumer(this::newSegment, -1);
 		actionMap.put(unidentifiedSegmentKey, newUnidentifiedSegmentAction);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), unidentifiedSegmentKey);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_0, 0), unidentifiedSegmentKey);
@@ -162,7 +162,7 @@ public final class SegmentationHandler {
 
 		for(int i = 1; i <= 9; i++) {
 			final String speakerSegmentKey = String.format("segment_speaker%d", i);
-			PhonUIAction newSegmentAct = new PhonUIAction(this, "newSegment", i-1);
+			PhonUIAction<Integer> newSegmentAct = PhonUIAction.eventConsumer(this::newSegment, i-1);
 			actionMap.put(speakerSegmentKey, newSegmentAct);
 			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_0 + i, 0), speakerSegmentKey);
 			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD0 + i, 0), speakerSegmentKey);
@@ -170,78 +170,78 @@ public final class SegmentationHandler {
 		
 		// segmentation window
 		final String toggleWindowKey = "toggle_segmentation_window";
-		final PhonUIAction toggleWindowAct = new PhonUIAction(this, "onToggleSegmentationWindow");
+		final PhonUIAction<Void> toggleWindowAct = PhonUIAction.runnable(this::onToggleSegmentationWindow);
 		actionMap.put(toggleWindowKey, toggleWindowAct);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_W, 0), toggleWindowKey);
 		
 		final String increaseWindowKey = "increase_segmentation_window";
-		final PhonUIAction increaseWindowAct = new PhonUIAction(this, "onIncreaseSegmentationWindow");
+		final PhonUIAction<Void> increaseWindowAct = PhonUIAction.runnable(this::onIncreaseSegmentationWindow);
 		actionMap.put(increaseWindowKey, increaseWindowAct);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), increaseWindowKey);
 		
 		final String decreaseWindowKey = "decrease_segmentation_window";
-		final PhonUIAction decreaseWindowAct = new PhonUIAction(this, "onDecreaseSegmentationWindow");
+		final PhonUIAction<Void> decreaseWindowAct = PhonUIAction.runnable(this::onDecreaseSegmentationWindow);
 		actionMap.put(decreaseWindowKey, decreaseWindowAct);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), decreaseWindowKey);
 		
 		// mark breaks
 		final String markBreakKey = "mark_break";
-		final PhonUIAction markBreakAct = new PhonUIAction(this, "onMarkBreak");
+		final PhonUIAction<Void> markBreakAct = PhonUIAction.runnable(this::onMarkBreak);
 		actionMap.put(markBreakKey, markBreakAct);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_B, 0), markBreakKey);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DECIMAL, 0), markBreakKey);
 		
 		// media controls
 		final String volumeUpKey = "volume_up";
-		final PhonUIAction volumeUpAct = new PhonUIAction(this, "onVolumeUp");
+		final PhonUIAction<Void> volumeUpAct = PhonUIAction.runnable(this::onVolumeUp);
 		actionMap.put(volumeUpKey, volumeUpAct);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, KeyEvent.SHIFT_DOWN_MASK), volumeUpKey);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_MULTIPLY, 0), volumeUpKey);
 		
 		final String volumeDownKey = "volume_down";
-		final PhonUIAction volumeDownAct = new PhonUIAction(this, "onVolumeDown");
+		final PhonUIAction<Void> volumeDownAct = PhonUIAction.runnable(this::onVolumeDown);
 		actionMap.put(volumeDownKey, volumeDownAct);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, KeyEvent.SHIFT_DOWN_MASK), volumeDownKey);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DIVIDE, 0), volumeDownKey);
 
 		final String increasePlaybackRateKey = "increase_playback_rate";
-		final PhonUIAction increasePlaybackRateAct = new PhonUIAction(this, "onIncreasePlaybackRate");
+		final PhonUIAction<Void> increasePlaybackRateAct = PhonUIAction.runnable(this::onIncreasePlaybackRate);
 		actionMap.put(increasePlaybackRateKey, increasePlaybackRateAct);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, 0), increasePlaybackRateKey);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, 0), increasePlaybackRateKey);
 
 		final String decreasePlaybackRateKey = "decrease_playback_rate";
-		final PhonUIAction decreasePlaybackRateAct = new PhonUIAction(this, "onDecreasePlaybackRate");
+		final PhonUIAction<Void> decreasePlaybackRateAct = PhonUIAction.runnable(this::onDecreasePlaybackRate);
 		actionMap.put(decreasePlaybackRateKey, decreasePlaybackRateAct);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, 0), decreasePlaybackRateKey);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, 0), decreasePlaybackRateKey);
 		
 		final String goBack1SKey = "goback_1s";
-		final PhonUIAction goBack1SAct = new PhonUIAction(this, "onGoBack", 1000L);
+		final PhonUIAction<Long> goBack1SAct = PhonUIAction.eventConsumer(this::onGoBack, 1000L);
 		actionMap.put(goBack1SKey, goBack1SAct);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), goBack1SKey);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, 0), goBack1SKey);
 		
 		final String goForward1SKey = "goforward_1s";
-		final PhonUIAction goForward1SAct = new PhonUIAction(this, "onGoForward", 1000L);
+		final PhonUIAction<Long> goForward1SAct = PhonUIAction.eventConsumer(this::onGoForward, 1000L);
 		actionMap.put(goForward1SKey, goForward1SAct);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), goForward1SKey);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ADD, 0), goForward1SKey);
 		
 		final String goBack5SKey = "goback_5s";
-		final PhonUIAction goBack5SAct = new PhonUIAction(this, "onGoBack", 5000L);
+		final PhonUIAction<Long> goBack5SAct = PhonUIAction.eventConsumer(this::onGoBack, 5000L);
 		actionMap.put(goBack5SKey, goBack5SAct);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.SHIFT_DOWN_MASK), goBack5SKey);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, KeyEvent.SHIFT_DOWN_MASK), goBack5SKey);
 		
 		final String goForward5SKey = "goforward_5s";
-		final PhonUIAction goForward5SAct = new PhonUIAction(this, "onGoForward", 5000L);
+		final PhonUIAction<Long> goForward5SAct = PhonUIAction.eventConsumer(this::onGoForward, 5000L);
 		actionMap.put(goForward5SKey, goForward5SAct);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.SHIFT_DOWN_MASK), goForward5SKey);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ADD, KeyEvent.SHIFT_DOWN_MASK), goForward5SKey);
 		
 		final String stopSegmentationKey = "stop_segmentation";
-		PhonUIAction stopSegmentationAction = new PhonUIAction(this, "stopSegmentation");
+		PhonUIAction<Void> stopSegmentationAction = PhonUIAction.runnable(this::stopSegmentation);
 		actionMap.put(stopSegmentationKey, stopSegmentationAction);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), stopSegmentationKey);
 	}
@@ -287,14 +287,14 @@ public final class SegmentationHandler {
 	}
 
 	/* Actions */
-	public void newSegment(PhonActionEvent pae) {
+	public void newSegment(PhonActionEvent<Integer> pae) {
 		Participant speaker = null;
 		
 		// speaker index is determined by the 'Time Grid' view
 		TimelineView tgView = (TimelineView)editor.getViewModel().getView(TimelineView.VIEW_TITLE);
 		if(tgView != null) {
-			if(pae.getData() != null) {
-				int speakerIdx = (int)pae.getData();
+			if(pae.getData() > 0) {
+				int speakerIdx = pae.getData();
 				
 				// check speaker index
 				if(speakerIdx < 0 || speakerIdx >= tgView.getRecordTier().getSpeakerList().size()) {
@@ -640,8 +640,8 @@ public final class SegmentationHandler {
 		}
 	}
 	
-	public void onGoBack(PhonActionEvent pae) {
-		long deltaMs = (long)pae.getData();
+	public void onGoBack(PhonActionEvent<Long> pae) {
+		long deltaMs = pae.getData();
 		
 		MediaPlayerEditorView mediaView = 
 				(MediaPlayerEditorView)editor.getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
@@ -651,8 +651,8 @@ public final class SegmentationHandler {
 		}
 	}
 	
-	public void onGoForward(PhonActionEvent pae) {
-		long deltaMs = (long)pae.getData();
+	public void onGoForward(PhonActionEvent<Long> pae) {
+		long deltaMs = pae.getData();
 		
 		MediaPlayerEditorView mediaView = 
 				(MediaPlayerEditorView)editor.getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);

@@ -77,7 +77,7 @@ public class TierInfoEditor extends JPanel {
 		groupBox.setEnabled(!editMode);
 		add(groupBox, cc.xy(4, 3));
 		
-		final PhonUIAction defaultFontAction = new PhonUIAction(this, "useDefaultFont");
+		final PhonUIAction<Void> defaultFontAction = PhonUIAction.runnable(this::useDefaultFont);
 		defaultFontAction.putValue(PhonUIAction.NAME, "Use default font");
 		defaultFontAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Use default tier font set in Preferences");
 		useDefaultFontButton = new JButton(defaultFontAction);

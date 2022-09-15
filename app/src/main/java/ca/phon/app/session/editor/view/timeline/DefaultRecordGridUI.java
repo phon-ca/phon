@@ -206,9 +206,9 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		return new Rectangle(x, y, w, h);
 	}
 	
-	public void showSpeakerMenu(PhonActionEvent pae) {
+	public void showSpeakerMenu(PhonActionEvent<Tuple<Participant, Rectangle>> pae) {
 		@SuppressWarnings("unchecked")
-		Tuple<Participant, Rectangle> tpl = (Tuple<Participant, Rectangle>)pae.getData();
+		Tuple<Participant, Rectangle> tpl = pae.getData();
 		
 		JPopupMenu popupMenu = new JPopupMenu();
 		MenuBuilder builder = new MenuBuilder(popupMenu);
@@ -307,7 +307,8 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		//recordGrid.getSpeakers().forEach( (s) -> paintSpeakerLabel(g2, s) );
 		for(Participant speaker:recordGrid.getSpeakers()) {
 			Rectangle speakerLblRect = paintSpeakerLabel(g2, speaker);
-			final PhonUIAction showSpeakerMenuAct = new PhonUIAction(this, "showSpeakerMenu", new Tuple<Participant, Rectangle>(speaker, speakerLblRect));
+			final PhonUIAction<Tuple<Participant, Rectangle>> showSpeakerMenuAct =
+					PhonUIAction.eventConsumer(this::showSpeakerMenu, new Tuple<Participant, Rectangle>(speaker, speakerLblRect));
 			actionsTree = actionsTree.add(showSpeakerMenuAct, Geometries.rectangle(speakerLblRect.getX(), speakerLblRect.getY(), 
 					speakerLblRect.getMaxX(), speakerLblRect.getMaxY()));
 		}
@@ -559,7 +560,8 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		SwingUtilities.paintComponent(g2, renderer, recordGrid,
 				labelX, labelY, prefSize.width, prefSize.height);
 
-		PhonUIAction showMultipleMarkersAct = new PhonUIAction(this, "showMultipleMarkerMenu", new Tuple<>(recordSet, lblRect));
+		PhonUIAction<Tuple<Set<Integer>, Rectangle>> showMultipleMarkersAct =
+				PhonUIAction.eventConsumer(this::showMultipleMarkerMenu, new Tuple<>(recordSet, lblRect));
 		actionsTree = actionsTree.add(showMultipleMarkersAct, Geometries.rectangle(labelX, labelY, labelX + prefSize.width, labelY + prefSize.height));
 
 		String msg = msgBuilder.toString();
@@ -572,15 +574,15 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		for(int i = fromIdx; i < toIdx; i++) {
 			int rIdx = recordList.get(i);
 
-			PhonUIAction selectRecordAct = new PhonUIAction(this, "setCurrentRecordIndex", rIdx);
+			PhonUIAction<Integer> selectRecordAct = PhonUIAction.eventConsumer(this::setCurrentRecordIndex, rIdx);
 			selectRecordAct.putValue(PhonUIAction.NAME, String.format("#%d", rIdx + 1));
 			selectRecordAct.putValue(PhonUIAction.SHORT_DESCRIPTION, String.format("Select record %d", rIdx + 1));
 			builder.addItem(".", selectRecordAct);
 		}
 	}
 
-	public void showMultipleMarkerMenu(PhonActionEvent pae) {
-		Tuple<Set<Integer>, Rectangle> tpl = (Tuple<Set<Integer>, Rectangle>)pae.getData();
+	public void showMultipleMarkerMenu(PhonActionEvent<Tuple<Set<Integer>, Rectangle>> pae) {
+		Tuple<Set<Integer>, Rectangle> tpl = pae.getData();
 		Set<Integer> recordSet = tpl.getObj1();
 		List<Integer> recordList = new ArrayList<>(recordSet);
 		Collections.sort(recordList);
@@ -604,7 +606,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 
 		builder.addSeparator(".", "select_all");
 
-		PhonUIAction selectAllAct = new PhonUIAction(this, "selectRecords", recordSet);
+		PhonUIAction<Set<Integer>> selectAllAct = PhonUIAction.eventConsumer(this::selectRecords, recordSet);
 		selectAllAct.putValue(PhonUIAction.NAME, "Select " + (recordSet.size() == 2 ? " both" : "all"));
 		selectAllAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select all records in list");
 		builder.addItem(".", selectAllAct);
@@ -612,15 +614,15 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		menu.show((Component)pae.getActionEvent().getSource(), (int)lblRect.getX(), (int)lblRect.getMaxY() );
 	}
 
-	public void setCurrentRecordIndex(PhonActionEvent pae) {
-		Integer rIdx = (Integer) pae.getData();
+	public void setCurrentRecordIndex(PhonActionEvent<Integer> pae) {
+		Integer rIdx = pae.getData();
 		recordGrid.getSelectionModel().clearSelection();
 		recordGrid.setCurrentRecordIndex(rIdx);
 		recordGrid.getSelectionModel().setSelectionInterval(rIdx, rIdx);
 	}
 
-	public void selectRecords(PhonActionEvent pae) {
-		Set<Integer> recordSet = (Set<Integer>)pae.getData();
+	public void selectRecords(PhonActionEvent<Set<Integer>> pae) {
+		Set<Integer> recordSet = pae.getData();
 
 		int currentRecord = recordGrid.getCurrentRecordIndex();
 		recordGrid.getSelectionModel().clearSelection();
@@ -782,7 +784,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 					acceptIcon.getIconWidth(), acceptIcon.getIconHeight());
 			g2.drawImage(acceptIcon.getImage(), (int)acceptRect.getX(), (int)acceptRect.getY(), recordGrid);
 			
-			final PhonUIAction acceptAct = new PhonUIAction(this, "endSplitMode", true);
+			final PhonUIAction<Boolean> acceptAct = PhonUIAction.eventConsumer(this::endSplitMode, true);
 			var acceptRect2 = Geometries.rectangle(acceptRect.getX(), acceptRect.getY(), acceptRect.getMaxX(), acceptRect.getMaxY());
 			actionsTree = actionsTree.add(acceptAct, acceptRect2);
 			messageTree = messageTree.add("Accept split", acceptRect2);
@@ -792,7 +794,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 					cancelIcon.getIconWidth(), cancelIcon.getIconHeight());
 			g2.drawImage(cancelIcon.getImage(), (int)cancelRect.getX(), (int)cancelRect.getY(), recordGrid);
 			
-			final PhonUIAction endAct = new PhonUIAction(this, "endSplitMode", false);
+			final PhonUIAction<Boolean> endAct = PhonUIAction.eventConsumer(this::endSplitMode, false);
 			var cancelRect2 = Geometries.rectangle(cancelRect.getX(), cancelRect.getY(), cancelRect.getMaxX(), cancelRect.getMaxY());
 			actionsTree = actionsTree.add(endAct, cancelRect2);
 			messageTree = messageTree.add("Exit split mode", cancelRect2);
@@ -853,8 +855,8 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		return segmentRect;
 	}
 	
-	public void endSplitMode(PhonActionEvent pae) {
-		recordGrid.setSplitModeAccept((boolean)pae.getData());
+	public void endSplitMode(PhonActionEvent<Boolean> pae) {
+		recordGrid.setSplitModeAccept(pae.getData());
 		recordGrid.setSplitMode(false);
 	}
 	

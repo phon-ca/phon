@@ -121,7 +121,7 @@ public class SyllabificationAndAlignmentPopupWindow extends JFrame {
 			}
 		});
 
-		final PhonUIAction closeAct = new PhonUIAction(this, "setVisible", false);
+		final PhonUIAction<Boolean> closeAct = PhonUIAction.consumer(this::setVisible, false);
 		getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "close");
 		getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "close");
 		getRootPane().getActionMap().put("close", closeAct);

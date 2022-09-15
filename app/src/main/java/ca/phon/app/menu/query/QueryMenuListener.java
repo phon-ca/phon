@@ -173,7 +173,7 @@ public class QueryMenuListener implements MenuListener {
 		prefsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open query preferences");
 		final JMenuItem prefsItem = new JMenuItem(prefsAct);
 		
-		final PhonUIAction browseAct = new PhonUIAction(QueryMenuListener.class, "onBrowseForQuery", project);
+		final PhonUIAction<Project> browseAct = PhonUIAction.eventConsumer(QueryMenuListener::onBrowseForQuery, project);
 		browseAct.putValue(PhonUIAction.NAME, "Browse...");
 		browseAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Browse for query...");
 		final JMenuItem browseItem = new JMenuItem(browseAct);
@@ -184,8 +184,8 @@ public class QueryMenuListener implements MenuListener {
 		queryMenu.add(prefsItem);
 	}
 
-	public static void onBrowseForQuery(PhonActionEvent pae) {
-		final Project project = (Project)pae.getData();
+	public static void onBrowseForQuery(PhonActionEvent<Project> pae) {
+		final Project project = pae.getData();
 		final OpenDialogProperties props = new OpenDialogProperties();
 		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 		props.setRunAsync(true);

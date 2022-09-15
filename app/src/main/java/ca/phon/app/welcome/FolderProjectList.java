@@ -196,7 +196,7 @@ public class FolderProjectList extends JPanel {
 		ImageIcon icon = IconManager.getInstance().getSystemIconForPath(f.getAbsolutePath(), defaultIconName, IconSize.SMALL);
 		ImageIcon iconL = IconManager.getInstance().getSystemIconForPath(f.getAbsolutePath(), defaultIconName, IconSize.MEDIUM);
 		
-		PhonUIAction openAction = new PhonUIAction(this, "onOpenProject", retVal);
+		PhonUIAction<LocalProjectButton> openAction = PhonUIAction.eventConsumer(this::onOpenProject, retVal);
 		
 		openAction.putValue(Action.NAME, "Open project");
 		openAction.putValue(Action.SHORT_DESCRIPTION, "Open: " + f.getAbsolutePath());
@@ -233,7 +233,7 @@ public class FolderProjectList extends JPanel {
 				fsIconL = finderIconL;
 		}
 		
-		PhonUIAction showAction = new PhonUIAction(this, "onShowProject", retVal);
+		PhonUIAction<LocalProjectButton> showAction = PhonUIAction.eventConsumer(this::onShowProject, retVal);
 		showAction.putValue(Action.NAME, "Show project");
 		showAction.putValue(Action.SMALL_ICON, fsIcon);
 		showAction.putValue(Action.LARGE_ICON_KEY, fsIconL);
@@ -244,7 +244,7 @@ public class FolderProjectList extends JPanel {
 		ImageIcon archiveIcn = IconManager.getInstance().getSystemIconForFileType("zip", defaultArchiveIconName, IconSize.SMALL);
 		ImageIcon archiveIcnL = IconManager.getInstance().getSystemIconForFileType("zip", defaultArchiveIconName, IconSize.MEDIUM);
 		
-		PhonUIAction archiveAction = new PhonUIAction(this, "onArchiveProject", retVal);
+		PhonUIAction<LocalProjectButton> archiveAction = PhonUIAction.eventConsumer(this::onArchiveProject, retVal);
 		archiveAction.putValue(Action.NAME, "Archive project");
 		archiveAction.putValue(Action.SHORT_DESCRIPTION, "Create .zip archive of phon project...");
 		archiveAction.putValue(Action.SMALL_ICON, archiveIcn);
@@ -384,8 +384,8 @@ public class FolderProjectList extends JPanel {
 	/*
 	 * UI Actions
 	 */
-	public void onArchiveProject(PhonActionEvent pae) {
-		final LocalProjectButton btn = (LocalProjectButton)pae.getData();
+	public void onArchiveProject(PhonActionEvent<LocalProjectButton> pae) {
+		final LocalProjectButton btn = pae.getData();
 		final ProjectFactory factory = new DesktopProjectFactory();
 		try {
 			final Project project = factory.openProject(btn.getProjectFile());
@@ -463,8 +463,8 @@ public class FolderProjectList extends JPanel {
 		}
 	}
 	
-	public void onOpenProject(PhonActionEvent pae) {
-		LocalProjectButton btn = (LocalProjectButton)pae.getData();
+	public void onOpenProject(PhonActionEvent<LocalProjectButton> pae) {
+		LocalProjectButton btn = pae.getData();
 		
 		final EntryPointArgs args = new EntryPointArgs();
 		args.put(EntryPointArgs.PROJECT_LOCATION, btn.getProjectFile().getAbsolutePath());
@@ -472,8 +472,8 @@ public class FolderProjectList extends JPanel {
 		PluginEntryPointRunner.executePluginInBackground("OpenProject", args);
 	}
 
-	public void onShowProject(PhonActionEvent pae) {
-		LocalProjectButton btn = (LocalProjectButton)pae.getData();
+	public void onShowProject(PhonActionEvent<LocalProjectButton> pae) {
+		LocalProjectButton btn = pae.getData();
 		if(Desktop.isDesktopSupported()) {
 			try {
 				Desktop.getDesktop().open(btn.getProjectFile());

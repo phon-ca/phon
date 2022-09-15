@@ -87,12 +87,12 @@ public class OpgraphScriptEditor extends JPanel {
 		scriptEditorPanel = new ScriptNodeEditor();
 		scriptEditorPanel.addPropertyChangeListener("hasChanges", changeListener);
 
-		final PhonUIAction updateScriptAct = new PhonUIAction(this, "updateCurrentEditor");
+		final PhonUIAction<Void> updateScriptAct = PhonUIAction.runnable(this::updateCurrentEditor);
 		scriptEditorPanel.getActionMap().put("update_script", updateScriptAct);
 		scriptEditorPanel.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
 				.put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), "update_script");
 
-		final PhonUIAction resetScriptAct = new PhonUIAction(this, "resetCurrentEditor");
+		final PhonUIAction<Void> resetScriptAct = PhonUIAction.runnable(this::resetCurrentEditor);
 		resetScriptAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset editor contents with node script");
 		resetScriptAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/reload", IconSize.SMALL));
 
@@ -112,7 +112,7 @@ public class OpgraphScriptEditor extends JPanel {
 		JScrollPane scriptTreeScroller = new JScrollPane(scriptTree);
 		scriptTreeScroller.setPreferredSize(new Dimension(400, scriptTreeScroller.getPreferredSize().height));
 
-		final PhonUIAction dropDownAct = new PhonUIAction(this, "noop");
+		final PhonUIAction<Void> dropDownAct = PhonUIAction.runnable(() -> {});
 		dropDownAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
 		dropDownAct.putValue(DropDownButton.ARROW_ICON_GAP, 0);
 		dropDownAct.putValue(DropDownButton.BUTTON_POPUP, scriptTreeScroller);
@@ -124,7 +124,7 @@ public class OpgraphScriptEditor extends JPanel {
 
 		ImageIcon saveIcn = IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL);
 
-		final PhonUIAction updateAct = new PhonUIAction(this, "updateCurrentEditor");
+		final PhonUIAction<Void> updateAct = PhonUIAction.runnable(this::updateCurrentEditor);
 		updateAct.putValue(PhonUIAction.NAME, "");
 		updateAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Update script node with current text (F5)");
 		updateAct.putValue(PhonUIAction.SMALL_ICON, saveIcn);
@@ -204,7 +204,7 @@ public class OpgraphScriptEditor extends JPanel {
 		for(String nodePath:openedScripts.keySet()) {
 			ScriptNode scriptNode = openedScripts.get(nodePath);
 
-			PhonUIAction act = new PhonUIAction(this, "onOpenScriptNode", scriptNode);
+			PhonUIAction<ScriptNode> act = PhonUIAction.eventConsumer(this::onOpenScriptNode, scriptNode);
 			act.putValue(PhonUIAction.NAME, nodePath + (scriptEditorPanel.hasChanges(scriptNode) ? " *" : ""));
 			act.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open script for node " + scriptNode.toOpNode().getName());
 			act.putValue(PhonUIAction.SELECTED_KEY, scriptEditorPanel.getScriptNode() == scriptNode);
@@ -225,8 +225,8 @@ public class OpgraphScriptEditor extends JPanel {
 		}
 	}
 
-	public void onOpenScriptNode(PhonActionEvent pae) {
-		openScriptNode((ScriptNode) pae.getData());
+	public void onOpenScriptNode(PhonActionEvent<ScriptNode> pae) {
+		openScriptNode(pae.getData());
 	}
 
 	public void openScriptNode(ScriptNode scriptNode) {

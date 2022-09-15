@@ -115,7 +115,7 @@ public class GraphOutlineExtension {
 				boolean isStep = ext.containsNode(node) && ext.isNodeForced(node);
 
 				if(!isSettingButNotStep) {
-					final PhonUIAction toggleNodeAsStepAct = new PhonUIAction(GraphOutlineExtension.this, "onToggleNodeAsStep", node);
+					final PhonUIAction<OpNode> toggleNodeAsStepAct = PhonUIAction.eventConsumer(GraphOutlineExtension.this::onToggleNodeAsStep, node);
 					toggleNodeAsStepAct.putValue(PhonUIAction.NAME, "Show as step");
 					toggleNodeAsStepAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show node settings as a wizard step (and in advanced settings)");
 					toggleNodeAsStepAct.putValue(PhonUIAction.SELECTED_KEY, isStep);
@@ -123,14 +123,14 @@ public class GraphOutlineExtension {
 				}
 
 				if(!isStep) {
-					final PhonUIAction toggleNodeSettingsAct = new PhonUIAction(GraphOutlineExtension.this, "onToggleNodeSettings", node);
+					final PhonUIAction<OpNode> toggleNodeSettingsAct = PhonUIAction.eventConsumer(GraphOutlineExtension.this::onToggleNodeSettings, node);
 					toggleNodeSettingsAct.putValue(PhonUIAction.NAME, "Show in advanced settings");
 					toggleNodeSettingsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show node settings in advanced settings");
 					toggleNodeSettingsAct.putValue(PhonUIAction.SELECTED_KEY, isSettingButNotStep);
 					builder.addItem(".", new JCheckBoxMenuItem(toggleNodeSettingsAct));
 				}
 
-				final PhonUIAction toggleOptionalAct = new PhonUIAction(GraphOutlineExtension.this, "onToggleNodeOptional", node);
+				final PhonUIAction<OpNode> toggleOptionalAct = PhonUIAction.eventConsumer(GraphOutlineExtension.this::onToggleNodeOptional, node);
 				toggleOptionalAct.putValue(PhonUIAction.NAME, "Optional node");
 				toggleOptionalAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Make execution of this node optional");
 				toggleOptionalAct.putValue(PhonUIAction.SELECTED_KEY, ext.isNodeOptional(node));
@@ -147,24 +147,24 @@ public class GraphOutlineExtension {
 		}
 	};
 
-	public void onToggleNodeSettings(PhonActionEvent pae) {
-		final OpNode node = (OpNode)pae.getData();
+	public void onToggleNodeSettings(PhonActionEvent<OpNode> pae) {
+		final OpNode node = pae.getData();
 		final NodeWizardSettingsEdit edit = new NodeWizardSettingsEdit(
 				getDocument().getGraph(), getWizardExtension(), node,
 					!getWizardExtension().containsNode(node), false);
 		getDocument().getUndoSupport().postEdit(edit);
 	}
 
-	public void onToggleNodeAsStep(PhonActionEvent pae) {
-		final OpNode node = (OpNode)pae.getData();
+	public void onToggleNodeAsStep(PhonActionEvent<OpNode> pae) {
+		final OpNode node = pae.getData();
 		final NodeWizardSettingsEdit edit = new NodeWizardSettingsEdit(
 				getDocument().getGraph(), getWizardExtension(), node,
 					!getWizardExtension().containsNode(node), true);
 		getDocument().getUndoSupport().postEdit(edit);
 	}
 
-	public void onToggleNodeOptional(PhonActionEvent pae) {
-		final OpNode node = (OpNode)pae.getData();
+	public void onToggleNodeOptional(PhonActionEvent<OpNode> pae) {
+		final OpNode node = pae.getData();
 		final NodeWizardOptionalsEdit edit = new NodeWizardOptionalsEdit(
 				getDocument().getGraph(), getWizardExtension(), node,
 					!getWizardExtension().isNodeOptional(node), true);
@@ -187,10 +187,10 @@ public class GraphOutlineExtension {
 			this.parentRenderer = parent;
 
 			final IconManager iconManager = IconManager.getInstance();
-			oIcon = iconManager.createGlyphIcon(new Character('O'), UIManager.getFont("Label.font").deriveFont(Font.BOLD), Color.BLACK,
+			oIcon = iconManager.createGlyphIcon(Character.valueOf('O'), UIManager.getFont("Label.font").deriveFont(Font.BOLD), Color.BLACK,
 					new Color(255, 255, 255));
-			sIcon = iconManager.createGlyphIcon(new Character('S'), UIManager.getFont("Label.font"), Color.black, Color.WHITE);
-			rIcon =  iconManager.createGlyphIcon(new Character('R'), UIManager.getFont("Label.font"), Color.black, Color.WHITE);
+			sIcon = iconManager.createGlyphIcon(Character.valueOf('S'), UIManager.getFont("Label.font"), Color.black, Color.WHITE);
+			rIcon =  iconManager.createGlyphIcon(Character.valueOf('R'), UIManager.getFont("Label.font"), Color.black, Color.WHITE);
 		}
 
 		@Override

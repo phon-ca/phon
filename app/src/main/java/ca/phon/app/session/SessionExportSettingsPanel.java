@@ -178,12 +178,12 @@ public class SessionExportSettingsPanel extends JPanel {
 		tierViewTable.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
 		final JScrollPane tableScroller = new JScrollPane(tierViewTable);
 		
-		final PhonUIAction moveUpAct = new PhonUIAction(this, "moveTierUp");
+		final PhonUIAction<Void> moveUpAct = PhonUIAction.runnable(this::moveTierUp);
 		moveUpAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move tier up");
 		moveUpAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/go-up", IconSize.SMALL));
 		moveTierUpBtn = new JButton(moveUpAct);
 		
-		final PhonUIAction moveDownAct = new PhonUIAction(this, "moveTierDown");
+		final PhonUIAction<Void> moveDownAct = PhonUIAction.runnable(this::moveTierDown);
 		moveDownAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move tier down");
 		moveDownAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/go-down", IconSize.SMALL));
 		moveTierDownBtn = new JButton(moveDownAct);

@@ -59,7 +59,7 @@ public class RecentProjectsMenuListener implements MenuListener {
 		}
 		
 		menu.addSeparator();
-		final PhonUIAction clearHistoryAct = new PhonUIAction(history, "clearHistory");
+		final PhonUIAction<Void> clearHistoryAct = PhonUIAction.runnable(history::clearHistory);
 		clearHistoryAct.putValue(PhonUIAction.NAME, "Clear project history");
 		clearHistoryAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Clear recent project history");
 		menu.add(clearHistoryAct);

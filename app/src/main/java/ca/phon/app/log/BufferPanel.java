@@ -232,7 +232,7 @@ public class BufferPanel extends JPanel implements IExtendable {
 		final InputMap im = retVal.getInputMap(JComponent.WHEN_FOCUSED);
 
 		final String deleteRowsKey = "__delete_rows__";
-		final PhonUIAction deleteRowsAct = new PhonUIAction(this, "deleteSelectedRows");
+		final PhonUIAction<Void> deleteRowsAct = PhonUIAction.runnable(this::deleteSelectedRows);
 		am.put(deleteRowsKey, deleteRowsAct);
 
 		final KeyStroke delKs = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
@@ -416,12 +416,12 @@ public class BufferPanel extends JPanel implements IExtendable {
 		ActionMap am = getActionMap();
 		InputMap im = getInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 		
-		final PhonUIAction zoomInAct = new PhonUIAction(this, "onZoomIn");
+		final PhonUIAction<Void> zoomInAct = PhonUIAction.runnable(this::onZoomIn);
 		am.put("zoomIn", zoomInAct);
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "zoomIn");
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ADD, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "zoomIn");
 		
-		final PhonUIAction zoomOutAct = new PhonUIAction(this, "onZoomOut");
+		final PhonUIAction<Void> zoomOutAct = PhonUIAction.runnable(this::onZoomOut);
 		am.put("zoomOut", zoomOutAct);
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_9, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "zoomOut");
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "zoomOut");

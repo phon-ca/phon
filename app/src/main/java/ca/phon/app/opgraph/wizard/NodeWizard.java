@@ -37,6 +37,7 @@ import javax.swing.text.html.*;
 import javax.swing.tree.*;
 
 import ca.phon.app.script.ScriptPanel;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxState;
 import org.apache.velocity.tools.generic.*;
 import org.jdesktop.swingx.*;
 
@@ -248,31 +249,32 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		
 		if(hasReport) {
 			if(PrefHelper.getBoolean("phon.debug", false)) {
-				final PhonUIAction debugAct = new PhonUIAction(reportBuffer, 
-						(reportBuffer.isShowingHtmlDebug() ? "hideHtmlDebug" : "showHtmlDebug"));
+				final PhonUIAction<Void> debugAct = PhonUIAction.runnable(
+					(reportBuffer.isShowingHtmlDebug() ? reportBuffer::hideHtmlDebug : reportBuffer::showHtmlDebug)
+				);
 				debugAct.putValue(PhonUIAction.NAME, "Debug");
 				debugAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show html debug frame");
 				debugAct.putValue(PhonUIAction.SELECTED_KEY, reportBuffer.isShowingHtmlDebug());
 				builder.addItem(".", new JCheckBoxMenuItem(debugAct));
 				
-				final PhonUIAction reloadAct = new PhonUIAction(reportBuffer.getBrowser(), "reload");
+				final PhonUIAction<Void> reloadAct = PhonUIAction.runnable(reportBuffer.getBrowser()::reload);
 				reloadAct.putValue(PhonUIAction.NAME, "Reload");
 				reloadAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reload report");
 				builder.addItem(".", reloadAct);
 				builder.addSeparator(".", "debug_sep");
 			}
 			
-			final PhonUIAction zoomInAct = new PhonUIAction(this, "onZoomIn");
+			final PhonUIAction<Void> zoomInAct = PhonUIAction.runnable(this::onZoomIn);
 			zoomInAct.putValue(PhonUIAction.NAME, "Zoom in");
 			zoomInAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Increase zoom level");
 			builder.addItem(".", zoomInAct);
 			
-			final PhonUIAction zoomOutAct = new PhonUIAction(this, "onZoomOut");
+			final PhonUIAction<Void> zoomOutAct = PhonUIAction.runnable(this::onZoomOut);
 			zoomOutAct.putValue(PhonUIAction.NAME, "Zoom out");
 			zoomOutAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Decrease zoom level");
 			builder.addItem(".", zoomOutAct);
 			
-			final PhonUIAction resetZoomAct = new PhonUIAction(this, "onZoomReset");
+			final PhonUIAction<Void> resetZoomAct = PhonUIAction.runnable(this::onZoomReset);
 			resetZoomAct.putValue(PhonUIAction.NAME, "Reset zoom");
 			resetZoomAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset zoom level");
 			builder.addItem(".", resetZoomAct);
@@ -300,7 +302,14 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 				}
 				URI uri = URI.create(reportTmpURLRef.get());
 				
-				final PhonUIAction openInBrowserAct = new PhonUIAction(Desktop.getDesktop(), "browse", uri);
+				final PhonUIAction<Void> openInBrowserAct = PhonUIAction.runnable(() -> {
+					try {
+						Desktop.getDesktop().browse(uri);
+					} catch (IOException e) {
+						Toolkit.getDefaultToolkit().beep();
+						LogUtil.warning(e);
+					}
+				});
 				openInBrowserAct.putValue(PhonUIAction.NAME, "Open report in browser");
 				openInBrowserAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open report in system web browser");
 				builder.addItem(".", openInBrowserAct);
@@ -366,7 +375,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 				IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL));
 		
 		
-		final PhonUIAction printReportAct = new PhonUIAction(this, "onPrintReport");
+		final PhonUIAction<Void> printReportAct = PhonUIAction.runnable(this::onPrintReport);
 		printReportAct.putValue(PhonUIAction.NAME, "Print");
 		printReportAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Print report");
 
@@ -409,7 +418,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	
 	private void appendReportTreeNode(MenuBuilder builder, ReportTreeNode node, int headerLevel) {
 		if(headerLevel == 1 || node.getChildren().size() == 0) {
-			final PhonUIAction act = new PhonUIAction(this, "gotoReportSection", node.getPath().toString());
+			final PhonUIAction<String> act = PhonUIAction.consumer(this::gotoReportSection, node.getPath().toString());
 			act.putValue(PhonUIAction.NAME, node.getTitle());
 			act.putValue(PhonUIAction.SHORT_DESCRIPTION, String.format("Goto section %s", node.getTitle()));
 			JMenuItem itm = new JMenuItem(act);
@@ -547,7 +556,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			
 		});
 		
-		PhonUIAction overridesMenuAct = new PhonUIAction(this, "noop");
+		PhonUIAction<Void> overridesMenuAct = PhonUIAction.runnable(() -> {});
 		overridesMenuAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show overrides menu");
 		overridesMenuAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/settings-black", IconSize.SMALL));
 		overridesMenuAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
@@ -1530,7 +1539,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 						}
 					}
 					if(linkEle != null) {
-						final PhonUIAction clickAct = new PhonUIAction(linkEle, "click");
+						final PhonUIAction<Void> clickAct = PhonUIAction.runnable(linkEle::click);
 						clickAct.putValue(PhonUIAction.NAME, "Open link");
 						builder.addItem(".", clickAct);
 					}
@@ -1576,24 +1585,24 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 						}
 						
 						// add table menu items
-						final PhonUIAction saveTableAsCSV = new PhonUIAction(params.getBrowser(), "executeJavaScript",
+						final PhonUIAction<String> saveTableAsCSV = PhonUIAction.consumer(params.getBrowser()::executeJavaScript,
 								String.format("saveTableAsCSV('%s')", tableId));
 						saveTableAsCSV.putValue(PhonUIAction.NAME, "Save table as CSV...");
 						builder.addItem(".", saveTableAsCSV);
 						
-						final PhonUIAction saveTableAsExcelAct = new PhonUIAction(params.getBrowser(), "executeJavaScript",
+						final PhonUIAction<String> saveTableAsExcelAct = PhonUIAction.consumer(params.getBrowser()::executeJavaScript,
 								String.format("saveTableAsExcel('%s')", tableId));
 						saveTableAsExcelAct.putValue(PhonUIAction.NAME, "Save table as Excel (XLS)...");
 						builder.addItem(".", saveTableAsExcelAct);
 						
-						final PhonUIAction showTableAct = new PhonUIAction(params.getBrowser(), "executeJavaScript",
+						final PhonUIAction<String> showTableAct = PhonUIAction.consumer(params.getBrowser()::executeJavaScript,
 								String.format("showTable('%s')", tableId));
 						showTableAct.putValue(PhonUIAction.NAME, "Open table in new buffer");
 						builder.addItem(".", showTableAct);
 						
 						builder.addSeparator(".", "table_actions_sep");
 
-						final PhonUIAction copyTableAct = new PhonUIAction(params.getBrowser(), "executeJavaScript",
+						final PhonUIAction<String> copyTableAct = PhonUIAction.consumer(params.getBrowser()::executeJavaScript,
 								String.format("onCopyTableData(document.getElementById('%s'), '%s')", tableId, tableId));
 						copyTableAct.putValue(PhonUIAction.NAME, "Copy table");
 						copyTableAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Copy table to clipboard as CSV");
@@ -1603,25 +1612,25 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			}
 			
 			// editor commands
-			final PhonUIAction copyAct = new PhonUIAction(params.getBrowser(), "executeCommand", EditorCommand.COPY);
+			final PhonUIAction<EditorCommand> copyAct = PhonUIAction.consumer(params.getBrowser()::executeCommand, EditorCommand.COPY);
 			copyAct.putValue(PhonUIAction.NAME, "Copy");
 			copyAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Copy selection to clipboard");
 			builder.addItem(".", copyAct);
 			builder.addSeparator(".", "editor_commands");
 			
-			final PhonUIAction zoomInAct = new PhonUIAction(params.getBrowser(), "zoomIn");
+			final PhonUIAction<Void> zoomInAct = PhonUIAction.runnable(params.getBrowser()::zoomIn);
 			zoomInAct.putValue(PhonUIAction.NAME, "Zoom in");
 			zoomInAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Increase zoom level");
 			zoomInAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 			builder.addItem(".", zoomInAct);
 			
-			final PhonUIAction zoomOutAct = new PhonUIAction(params.getBrowser(), "zoomOut");
+			final PhonUIAction<Void> zoomOutAct = PhonUIAction.runnable(params.getBrowser()::zoomOut);
 			zoomOutAct.putValue(PhonUIAction.NAME, "Zoom out");
 			zoomOutAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Decrease zoom level");
 			zoomOutAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_9, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 			builder.addItem(".", zoomOutAct);
 			
-			final PhonUIAction zoomResetAct = new PhonUIAction(params.getBrowser(), "zoomReset");
+			final PhonUIAction<Void> zoomResetAct = PhonUIAction.runnable(params.getBrowser()::zoomReset);
 			zoomResetAct.putValue(PhonUIAction.NAME, "Reset zoom");
 			zoomResetAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset zoom level to default");
 			builder.addItem(".", zoomResetAct);
@@ -1847,20 +1856,15 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			final CheckedOpNode node = (CheckedOpNode)path.getLastPathComponent();
 			final OpNode opNode = node.getNode();
 
-			final PhonUIAction checkNodeAction =
-					new PhonUIAction(optionalsTree,
-							(optionalsTree.isPathChecked(path) ? "removeCheckingPath" : "addCheckingPath"),
-							path);
+			final PhonUIAction<Void> checkNodeAction = PhonUIAction.runnable(() -> {
+				if(optionalsTree.isPathChecked(path))
+					optionalsTree.setCheckingStateForPath(path, TristateCheckBoxState.UNCHECKED);
+				else
+					optionalsTree.setCheckingStateForPath(path, TristateCheckBoxState.CHECKED);
+			});
 			String name = (optionalsTree.isPathChecked(path) ? "Uncheck " : "Check ") +  opNode.getName();
 			checkNodeAction.putValue(PhonUIAction.NAME, name);
 			menuBuilder.addItem(".", checkNodeAction);
-
-			final PhonUIAction showOptionsAction =
-					new PhonUIAction(NodeWizard.this, "showAdvancedSettings", path);
-			showOptionsAction.putValue(PhonUIAction.NAME, "Show settings");
-			showOptionsAction.putValue(PhonUIAction.SMALL_ICON,
-					IconManager.getInstance().getIcon("actions/settings-black", IconSize.SMALL));
-			menuBuilder.addItem(".", showOptionsAction);
 
 			menu.show(optionalsTree, e.getX(), e.getY());
 		}

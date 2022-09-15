@@ -178,7 +178,7 @@ public class SessionInfoEditorView extends EditorView {
 		
 		ImageIcon deleteIcon = 
 				IconManager.getInstance().getIcon("actions/delete_user", IconSize.SMALL);
-		final PhonUIAction deleteAction = new PhonUIAction(this, "deleteParticipant");
+		final PhonUIAction<Void> deleteAction = PhonUIAction.runnable(this::deleteParticipant);
 		deleteAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Delete selected participant");
 		deleteAction.putValue(PhonUIAction.SMALL_ICON, deleteIcon);
 		participantTableActionMap.put("DELETE_PARTICIPANT", deleteAction);
@@ -195,7 +195,7 @@ public class SessionInfoEditorView extends EditorView {
 		
 		ImageIcon editIcon = 
 			IconManager.getInstance().getIcon("actions/edit_user", IconSize.SMALL);
-		final PhonUIAction editParticipantAct = new PhonUIAction(this, "editParticipant");
+		final PhonUIAction<Void> editParticipantAct = PhonUIAction.runnable(this::editParticipant);
 		editParticipantAct.putValue(PhonUIAction.NAME, "Edit participant...");
 		editParticipantAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Edit selected participant...");
 		editParticipantAct.putValue(PhonUIAction.SMALL_ICON, editIcon);

@@ -272,19 +272,19 @@ public class QueryAndReportWizard extends NodeWizard {
 						super.menuSelected(e);
 						
 						int idx = 0;
-						final PhonUIAction runAct = new PhonUIAction(QueryAndReportWizard.this, "executeQuery");
+						final PhonUIAction<Void> runAct = PhonUIAction.runnable(QueryAndReportWizard.this::executeQuery);
 						runAct.putValue(PhonUIAction.NAME, "Run query");
 						runAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
 						runAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
 						
-						final PhonUIAction stopAct = new PhonUIAction(QueryAndReportWizard.this, "onStopQuery");
+						final PhonUIAction<Void> stopAct = PhonUIAction.runnable(QueryAndReportWizard.this::onStopQuery);
 						stopAct.putValue(PhonUIAction.NAME, "Stop query");
 						stopAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/process-stop", IconSize.SMALL));
 						final JMenuItem stopItem = new JMenuItem(stopAct);
 						boolean stopEnabled = (getCurrentQueryRunner() != null && getCurrentQueryRunner().isRunning());
 						stopItem.setEnabled(stopEnabled);
 						
-						final PhonUIAction resetQueryAct = new PhonUIAction(QueryAndReportWizard.this, "resetQueryParameters");
+						final PhonUIAction<Void> resetQueryAct = PhonUIAction.eventConsumer(QueryAndReportWizard.this::resetQueryParameters);
 						resetQueryAct.putValue(PhonUIAction.NAME, "Clear query settings");
 						resetQueryAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/draw-eraser", IconSize.SMALL));
 						resetQueryAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Clear query settings (reset to default)");
@@ -314,11 +314,11 @@ public class QueryAndReportWizard extends NodeWizard {
 							}
 						});
 						
-						final PhonUIAction duplicateAct = new PhonUIAction(QueryAndReportWizard.this, "onDuplicateQueryWizard");
+						final PhonUIAction<Void> duplicateAct = PhonUIAction.runnable(QueryAndReportWizard.this::onDuplicateQueryWizard);
 						duplicateAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/window-new", IconSize.SMALL));
 						duplicateAct.putValue(PhonUIAction.NAME, "New window");
 						
-						final PhonUIAction discardResultsAct = new PhonUIAction(QueryAndReportWizard.this, "discardResults");
+						final PhonUIAction<Void> discardResultsAct = PhonUIAction.runnable(QueryAndReportWizard.this::discardResults);
 						discardResultsAct.putValue(PhonUIAction.NAME, "Discard results");
 						discardResultsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Discard current result set");
 						discardResultsAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/list-remove", IconSize.SMALL));
@@ -334,7 +334,7 @@ public class QueryAndReportWizard extends NodeWizard {
 								queryResultsMenu.removeAll();
 								for(int i = 0; i < queryRunnerComboBoxModel.getSize(); i++) {
 									final String queryName = queryRunnerComboBoxModel.getElementAt(i);
-									final PhonUIAction selectResultsAct = new PhonUIAction(QueryAndReportWizard.this, "selectResults", queryName);
+									final PhonUIAction<String> selectResultsAct = PhonUIAction.consumer(QueryAndReportWizard.this::selectResults, queryName);
 									selectResultsAct.putValue(PhonUIAction.NAME, queryName);
 									selectResultsAct.putValue(PhonUIAction.SELECTED_KEY, i == queryRunnerBox.getSelectedIndex());
 									selectResultsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select result set for " + queryName);
@@ -345,7 +345,7 @@ public class QueryAndReportWizard extends NodeWizard {
 								
 								queryResultsMenu.addSeparator();
 								
-								final PhonUIAction discardAllAction = new PhonUIAction(QueryAndReportWizard.this, "discardAllResults");
+								final PhonUIAction<Void> discardAllAction = PhonUIAction.runnable(QueryAndReportWizard.this::discardAllResults);
 								discardAllAction.putValue(PhonUIAction.NAME, "Discard all results");
 								discardAllAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Discard all query results");
 								discardAllAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/list-remove", IconSize.SMALL));
@@ -372,7 +372,7 @@ public class QueryAndReportWizard extends NodeWizard {
 								List<ParamSetType> namedParamSets = queryHistoryPanel.getStockQueries().getNamedParamSets();
 								namedParamSets.sort( (ps1, ps2) -> ps1.getName().compareTo(ps2.getName()) );
 								for(ParamSetType paramSet:namedParamSets) {
-									final PhonUIAction psAct = new PhonUIAction(QueryAndReportWizard.this, "loadNamedQuery", paramSet);
+									final PhonUIAction<ParamSetType> psAct = PhonUIAction.consumer(QueryAndReportWizard.this::loadNamedQuery, paramSet);
 									psAct.putValue(PhonUIAction.NAME, paramSet.getName());
 									stockQueryMenu.add(new JMenuItem(psAct));
 								}
@@ -400,7 +400,7 @@ public class QueryAndReportWizard extends NodeWizard {
 								List<ParamSetType> namedParamSets = queryHistoryManager.getNamedParamSets();
 								namedParamSets.sort( (ps1, ps2) -> ps1.getName().compareTo(ps2.getName()) );
 								for(ParamSetType paramSet:namedParamSets) {
-									final PhonUIAction psAct = new PhonUIAction(QueryAndReportWizard.this, "loadNamedQuery", paramSet);
+									final PhonUIAction<ParamSetType> psAct = PhonUIAction.consumer(QueryAndReportWizard.this::loadNamedQuery, paramSet);
 									psAct.putValue(PhonUIAction.NAME, paramSet.getName());
 									userQueryMenu.add(new JMenuItem(psAct));
 								}
@@ -587,7 +587,7 @@ public class QueryAndReportWizard extends NodeWizard {
 			}
 		});
 		
-		final PhonUIAction discardResultsAct = new PhonUIAction(this, "discardResults");
+		final PhonUIAction<Void> discardResultsAct = PhonUIAction.runnable(this::discardResults);
 		discardResultsAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/list-remove", IconSize.SMALL));
 		discardResultsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Discard results");
 		discardResultsButton = new JButton(discardResultsAct);
@@ -627,14 +627,14 @@ public class QueryAndReportWizard extends NodeWizard {
 		scriptScroller.getViewport().setBackground(scriptPanel.getBackground());
 		queryPanel.getContentContainer().add(scriptScroller, BorderLayout.CENTER);
 		
-		final PhonUIAction duplicateQueryAct = new PhonUIAction(this, "onDuplicateQueryWizard");
+		final PhonUIAction<Void> duplicateQueryAct = PhonUIAction.runnable(this::onDuplicateQueryWizard);
 		duplicateQueryAct.putValue(PhonUIAction.NAME, "New window");
 		duplicateQueryAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open a new query wizard");
 		duplicateQueryAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/window-new", IconSize.SMALL));
 		duplicateQueryButton = new JButton(duplicateQueryAct);
 		duplicateQueryButton.setOpaque(false);
 		
-		final PhonUIAction runAct = new PhonUIAction(QueryAndReportWizard.this, "executeQuery");
+		final PhonUIAction<Void> runAct = PhonUIAction.runnable(QueryAndReportWizard.this::executeQuery);
 		runAct.putValue(PhonUIAction.NAME, "Run query");
 		runAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
 		runAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
@@ -677,7 +677,7 @@ public class QueryAndReportWizard extends NodeWizard {
 		queryLeftPanel.revalidate();
 	}
 		
-	public void resetQueryParameters(PhonActionEvent pae) {
+	public void resetQueryParameters(PhonActionEvent<Void> pae) {
 		queryScript.resetContext();
 		
 		updateQueryForm();
@@ -1029,7 +1029,7 @@ public class QueryAndReportWizard extends NodeWizard {
 		});
 		
 		final ImageIcon closeIcon = IconManager.getInstance().getIcon("actions/list-remove", IconSize.XSMALL);
-		final PhonUIAction closeAction = new PhonUIAction(this, "discardResults", queryName);
+		final PhonUIAction<QueryRunnerPanel> closeAction = PhonUIAction.consumer(this::discardResults, runnerPanel);
 		closeAction.putValue(PhonUIAction.SMALL_ICON, closeIcon);
 		closeAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Discard results");
 		

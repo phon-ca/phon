@@ -99,7 +99,7 @@ public class SortNodeSettingsPanel extends JPanel {
 		sortByPanel = new JPanel(new VerticalLayout());
 		
 		final ImageIcon icon = IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL);
-		final Action onAddAction = new PhonUIAction(this, "onAddColumn");
+		final Action onAddAction = PhonUIAction.runnable(this::onAddColumn);
 		onAddAction.putValue(Action.NAME, "Add");
 		onAddAction.putValue(Action.SHORT_DESCRIPTION, "Add column to sort");
 		onAddAction.putValue(Action.SMALL_ICON, icon);
@@ -158,7 +158,7 @@ public class SortNodeSettingsPanel extends JPanel {
 	private JComponent createSeparator(SortColumnPanel scPanel) {
 		final ImageIcon removeIcon =
 				IconManager.getInstance().getDisabledIcon("actions/list-remove", IconSize.SMALL);
-		final PhonUIAction removeAct = new PhonUIAction(this, "onRemoveColumn", scPanel);
+		final PhonUIAction<SortColumnPanel> removeAct = PhonUIAction.consumer(this::onRemoveColumn, scPanel);
 		removeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Remove sort column");
 		removeAct.putValue(PhonUIAction.SMALL_ICON, removeIcon);
 		final JButton removeButton = new JButton(removeAct);

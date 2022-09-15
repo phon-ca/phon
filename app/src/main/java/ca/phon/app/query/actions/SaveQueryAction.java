@@ -140,12 +140,12 @@ public class SaveQueryAction extends HookableAction {
 			
 			add(centerPanel, BorderLayout.CENTER);
 			
-			PhonUIAction closeAct = new PhonUIAction(this, "onClose");
+			PhonUIAction<Void> closeAct = PhonUIAction.runnable(this::onClose);
 			closeAct.putValue(PhonUIAction.NAME, "Cancel");
 			closeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Close without saving");
 			JButton closeBtn = new JButton(closeAct);
 			
-			PhonUIAction saveAct = new PhonUIAction(this, "onSave");
+			PhonUIAction<Void> saveAct = PhonUIAction.runnable(this::onSave);
 			saveAct.putValue(PhonUIAction.NAME, "Save");
 			saveAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save query and close");
 			JButton saveBtn = new JButton(saveAct);

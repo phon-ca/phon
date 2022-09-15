@@ -120,13 +120,13 @@ public class EditorPrefsPanel extends PrefsPanel {
 		jpanel4.add(autosaveBox);
 		jpanel4.setBorder(BorderFactory.createTitledBorder("Autosave Sessions"));
 
-		final PhonUIAction backupAct = new PhonUIAction(this, "toggleBackupWhenSave");
+		final PhonUIAction<Void> backupAct = PhonUIAction.runnable(this::toggleBackupWhenSave);
 		backupAct.putValue(PhonUIAction.NAME, "Backup session file to <project>" + File.separator +
 				"backups.zip when saving sessions.");
 		backupAct.putValue(PhonUIAction.SELECTED_KEY, PrefHelper.getBoolean(SessionEditor.BACKUP_WHEN_SAVING, true));
 		backupWhenSaveBox = new JCheckBox(backupAct);
 		
-		final PhonUIAction mediaCheckAct = new PhonUIAction(this, "toggleMediaCheck");
+		final PhonUIAction<Void> mediaCheckAct = PhonUIAction.runnable(this::toggleMediaCheck);
 		mediaCheckAct.putValue(PhonUIAction.NAME, "Check file when loading session audio");
 		mediaCheckAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Check audio file before loading to avoid crashes/freezing.  Turn off if problematic.");
 		mediaCheckAct.putValue(PhonUIAction.SELECTED_KEY, PrefHelper.getBoolean(SessionMediaModel.PERFORM_MEDIA_CHECK_PROP, SessionMediaModel.DEFAULT_PERFORM_MEDIA_CHECK));

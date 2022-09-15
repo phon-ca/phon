@@ -86,13 +86,13 @@ public class ValidationEditorView extends EditorView {
 		toolBar.add(autoValidateButton);
 		toolBar.addSeparator();
 		
-		final PhonUIAction setTargetAct = new PhonUIAction(this, "onValidateIPATarget");
+		final PhonUIAction<Void> setTargetAct = PhonUIAction.runnable(this::onValidateIPATarget);
 		setTargetAct.putValue(PhonUIAction.NAME, "Validate IPA Target");
 		setTargetAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Set value of IPA Target using current candidate transcription");
 		final JButton setTargetBtn = new JButton(setTargetAct);
 		toolBar.add(setTargetBtn);
 		
-		final PhonUIAction setActualAct = new PhonUIAction(this, "onValidateIPAActual");
+		final PhonUIAction<Void> setActualAct = PhonUIAction.runnable(this::onValidateIPAActual);
 		setActualAct.putValue(PhonUIAction.NAME, "Validate IPA Actual");
 		setActualAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Set value of IPA Actual using current candidate transcription");
 		final JButton setActualBtn = new JButton(setActualAct);
@@ -189,7 +189,7 @@ public class ValidationEditorView extends EditorView {
 			data.candidateTier = candidateTier;
 			data.group = i;
 			
-			final PhonUIAction setGrpAct = new PhonUIAction(this, "onSetGroup", data);
+			final PhonUIAction<SetGroupData> setGrpAct = PhonUIAction.consumer(this::onSetGroup, data);
 			setGrpAct.putValue(PhonUIAction.NAME, "Set");
 			setGrpAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Set group IPA");
 			final JButton btn = new JButton(setGrpAct);
@@ -215,7 +215,7 @@ public class ValidationEditorView extends EditorView {
 				selectData.group = i;
 				selectData.transcriber = t.getUsername();
 				
-				final PhonUIAction optAct = new PhonUIAction(this, "onSelectIPA", selectData);
+				final PhonUIAction<SelectIPAData> optAct = PhonUIAction.consumer(this::onSelectIPA, selectData);
 				optAct.putValue(PhonUIAction.NAME, opt.toString());
 				if(alts != null && alts.getSelected() != null && alts.getSelected().equals(t.getUsername())) {
 					optAct.putValue(PhonUIAction.SELECTED_KEY, true);
@@ -398,12 +398,12 @@ public class ValidationEditorView extends EditorView {
 		retVal.add(new AutoValidateAction(getEditor(), this));
 		retVal.addSeparator();
 		
-		final PhonUIAction setTargetAct = new PhonUIAction(this, "onValidateIPATarget");
+		final PhonUIAction<Void> setTargetAct = PhonUIAction.runnable(this::onValidateIPATarget);
 		setTargetAct.putValue(PhonUIAction.NAME, "Validate IPA Target");
 		setTargetAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Set value of IPA Target using current candidate transcription");
 		retVal.add(setTargetAct);
 		
-		final PhonUIAction setActualAct = new PhonUIAction(this, "onValidateIPAActual");
+		final PhonUIAction<Void> setActualAct = PhonUIAction.runnable(this::onValidateIPAActual);
 		setActualAct.putValue(PhonUIAction.NAME, "Validate IPA Actual");
 		setActualAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Set value of IPA Actual using current candidate transcription");
 		retVal.add(setActualAct);

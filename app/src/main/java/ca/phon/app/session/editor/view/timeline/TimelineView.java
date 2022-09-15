@@ -284,7 +284,7 @@ public final class TimelineView extends EditorView {
 		JToolBar toolbar = new JToolBar();
 		toolbar.setFloatable(false);
 		
-		PhonUIAction segmentationAction = new PhonUIAction(this, "toggleSegmentation");
+		PhonUIAction<Void> segmentationAction = PhonUIAction.runnable(this::toggleSegmentation);
 		segmentationAction.putValue(PhonUIAction.NAME, "Start Segmentation");
 		segmentationAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/segmentation", IconSize.SMALL));
 		segmentationButton = new JButton(segmentationAction);
@@ -326,7 +326,7 @@ public final class TimelineView extends EditorView {
 			
 		});
 		
-		final PhonUIAction playAct = new PhonUIAction(this,  "playPause");
+		final PhonUIAction<Void> playAct = PhonUIAction.runnable(this::playPause);
 		playAct.putValue(PhonUIAction.NAME, "Play segment");
 		playAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play selection/segment");
 		playAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
@@ -356,7 +356,7 @@ public final class TimelineView extends EditorView {
 			
 		});
 		
-		final PhonUIAction exportAct = new PhonUIAction(this, "onExportSelectionOrSegment");
+		final PhonUIAction<Void> exportAct = PhonUIAction.runnable(this::onExportSelectionOrSegment);
 		exportAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
 		exportAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export selection/segment (audio only)");
 		exportAct.putValue(PhonUIAction.NAME, "Export segment...");
@@ -366,7 +366,7 @@ public final class TimelineView extends EditorView {
 		exportButton.setFocusable(false);
 		exportButton.setEnabled(false);
 		
-		final PhonUIAction speakerVisibilityAct = new PhonUIAction(this, null);
+		final PhonUIAction<Void> speakerVisibilityAct = PhonUIAction.runnable(() -> {});
 		speakerVisibilityAct.putValue(PhonUIAction.NAME, "Participants");
 		speakerVisibilityAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show participant visibility menu");
 		speakerVisibilityAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("apps/system-users", IconSize.SMALL));
@@ -396,7 +396,7 @@ public final class TimelineView extends EditorView {
 			
 		});
 		
-		final PhonUIAction tierVisibilityAct = new PhonUIAction(this, null);
+		final PhonUIAction<Void> tierVisibilityAct = PhonUIAction.runnable(() -> {});
 		tierVisibilityAct.putValue(PhonUIAction.NAME, "Tiers");
 		tierVisibilityAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show tier visibility menu");
 		tierVisibilityAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("misc/record", IconSize.SMALL));
@@ -441,7 +441,7 @@ public final class TimelineView extends EditorView {
 
 				fontSizeMenu.addSeparator();
 
-				final PhonUIAction useDefaultFontSizeAct = new PhonUIAction(recordGrid.getRecordGrid(), "setFontSizeDelta", 0.0f);
+				final PhonUIAction<Float> useDefaultFontSizeAct = PhonUIAction.consumer(recordGrid.getRecordGrid()::setFontSizeDelta, 0.0f);
 				useDefaultFontSizeAct.putValue(PhonUIAction.NAME, "Use default font size");
 				useDefaultFontSizeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset font size");
 				fontSizeMenu.add(useDefaultFontSizeAct);
@@ -458,7 +458,7 @@ public final class TimelineView extends EditorView {
 			}
 		});
 
-		final PhonUIAction fontSizeAct = new PhonUIAction(this, null);
+		final PhonUIAction<Void> fontSizeAct = PhonUIAction.runnable(() -> {});
 		fontSizeAct.putValue(PhonUIAction.NAME, "Font size");
 		fontSizeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show font size menu");
 		fontSizeAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("apps/preferences-desktop-font", IconSize.SMALL));
@@ -671,12 +671,12 @@ public final class TimelineView extends EditorView {
 	}
 	
 	private void setupExportMenu(MenuBuilder builder) {
-		final PhonUIAction exportSelectionAct = new PhonUIAction(this, "exportSelection");
+		final PhonUIAction<Void> exportSelectionAct = PhonUIAction.runnable(this::exportSelection);
 		exportSelectionAct.putValue(PhonUIAction.NAME, "Export selection...");
 		exportSelectionAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export selection (audio only)");
 		exportSelectionAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
 		
-		final PhonUIAction exportSegmentAct = new PhonUIAction(this, "exportSegment");
+		final PhonUIAction<Void> exportSegmentAct = PhonUIAction.runnable(this::exportSegment);
 		exportSegmentAct.putValue(PhonUIAction.NAME, "Export record segment...");
 		exportSegmentAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export record segment (audio only)");
 		exportSegmentAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
@@ -719,7 +719,7 @@ public final class TimelineView extends EditorView {
 	
 	private void setupPlaybackMenu(MenuBuilder builder) {
 		if(isPlaying()) {
-			final PhonUIAction stopAct = new PhonUIAction(TimelineView.this, "stopPlaying");
+			final PhonUIAction<Void> stopAct = PhonUIAction.runnable(TimelineView.this::stopPlaying);
 			stopAct.putValue(PhonUIAction.NAME, "Stop playback");
 			stopAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Stop segment playback");
 			stopAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
@@ -728,14 +728,14 @@ public final class TimelineView extends EditorView {
 			builder.addSeparator(".", "stop");
 		}
 		
-		final PhonUIAction playSelectionAct = new PhonUIAction(TimelineView.this, "playSelection");
+		final PhonUIAction<Void> playSelectionAct = PhonUIAction.runnable(TimelineView.this::playSelection);
 		playSelectionAct.putValue(PhonUIAction.NAME, "Play selection");
 		playSelectionAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play current selection");
 		playSelectionAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
 		final JMenuItem playSelectionItem = new JMenuItem(playSelectionAct);
 		playSelectionItem.setEnabled( getWaveformTier().getSelection() != null );
 		
-		final PhonUIAction playSegmentAct = new PhonUIAction(TimelineView.this, "playSegment");
+		final PhonUIAction<Void> playSegmentAct = PhonUIAction.runnable(TimelineView.this::playSegment);
 		playSegmentAct.putValue(PhonUIAction.NAME, "Play record segment");
 		playSegmentAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play current record segment");
 		playSegmentAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
@@ -1018,7 +1018,7 @@ public final class TimelineView extends EditorView {
 		
 		builder.addSeparator(".", "segmentation");
 		
-		PhonUIAction segmentationAction = new PhonUIAction(this, "toggleSegmentation");
+		PhonUIAction<Void> segmentationAction = PhonUIAction.runnable(this::toggleSegmentation);
 		if(getEditor().getExtension(SegmentationHandler.class) != null) {
 			segmentationAction.putValue(PhonUIAction.NAME, "Stop Segmentation");
 			segmentationAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
@@ -1062,7 +1062,7 @@ public final class TimelineView extends EditorView {
 		
 		builder.addSeparator(".", "segmentation");
 		
-		PhonUIAction segmentationAction = new PhonUIAction(this, "toggleSegmentation");
+		PhonUIAction<Void> segmentationAction = PhonUIAction.runnable(this::toggleSegmentation);
 		if(getEditor().getExtension(SegmentationHandler.class) != null) {
 			segmentationAction.putValue(PhonUIAction.NAME, "Stop Segmentation");
 			segmentationAction.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-stop-7", IconSize.SMALL));

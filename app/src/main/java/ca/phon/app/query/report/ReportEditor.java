@@ -252,7 +252,7 @@ public class ReportEditor extends JPanel implements SectionListener {
 		KeyStroke ks1 = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
 		KeyStroke ks2 = KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0);
 		String remId = "remove_section";
-		PhonUIAction removeSectionAct = new PhonUIAction(this, "onRemoveSection");
+		PhonUIAction<Void> removeSectionAct = PhonUIAction.eventConsumer(this::onRemoveSection);
 		removeSectionAct.putValue(Action.NAME, "Remove section");
 		actionMap.put(remId, removeSectionAct);
 		inputMap.put(ks1, remId);
@@ -537,7 +537,7 @@ public class ReportEditor extends JPanel implements SectionListener {
 		}
 	}
 	
-	public void onRemoveSection(PhonActionEvent pae) {
+	public void onRemoveSection(PhonActionEvent<Void> pae) {
 		TreePath tp = reportTree.getSelectionPath();
 		if(tp != null) 
 			removeSectionAtPath(tp);

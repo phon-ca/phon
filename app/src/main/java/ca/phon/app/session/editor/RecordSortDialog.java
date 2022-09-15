@@ -96,12 +96,12 @@ public class RecordSortDialog extends JDialog {
 			formPanel.add(checkBoxes[i], cc.xy(4,i+1));
 		}
 		
-		PhonUIAction okAct = new PhonUIAction(this, "onOk");
+		PhonUIAction<Void> okAct = PhonUIAction.eventConsumer(this::onOk);
 		okAct.putValue(Action.NAME, "Ok");
 		okAct.putValue(Action.SHORT_DESCRIPTION, "Sort records and close");
 		okButton = new JButton(okAct);
 		
-		PhonUIAction cancelAct = new PhonUIAction(this, "onCancel");
+		PhonUIAction<Void> cancelAct = PhonUIAction.eventConsumer(this::onCancel);
 		cancelAct.putValue(Action.NAME, "Cancel");
 		cancelAct.putValue(Action.SHORT_DESCRIPTION, "Close dialog");
 		cancelButton = new JButton(cancelAct);
@@ -143,7 +143,7 @@ public class RecordSortDialog extends JDialog {
 			if(i == 0)
 				comboBoxes[i].setSelectedItem(SystemTierType.Segment.getName());
 			
-			PhonUIAction onChangeAct = new PhonUIAction(this, "onComboBoxChange", i);
+			PhonUIAction<Integer> onChangeAct = PhonUIAction.eventConsumer(this::onComboBoxChange, i);
 			comboBoxes[i].setAction(onChangeAct);
 		}
 		comboBoxes[2].setEnabled(false);
@@ -156,8 +156,8 @@ public class RecordSortDialog extends JDialog {
 		}
 	}
 	
-	public void onComboBoxChange(PhonActionEvent pae) {
-		Integer idx = (Integer)pae.getData();
+	public void onComboBoxChange(PhonActionEvent<Integer> pae) {
+		Integer idx = pae.getData();
 		
 		if(idx < 3 && idx >= 0 ) {
 			String selectedItem = comboBoxes[idx].getSelectedItem().toString();
@@ -180,7 +180,7 @@ public class RecordSortDialog extends JDialog {
 		
 	}
 	
-	public void onOk(PhonActionEvent pae) {
+	public void onOk(PhonActionEvent<Void> pae) {
 		// sort records
 		wasCanceled = false;
 		onCancel(pae);
@@ -190,7 +190,7 @@ public class RecordSortDialog extends JDialog {
 		return new RecordComparator();
 	}
 	
-	public void onCancel(PhonActionEvent pae) {
+	public void onCancel(PhonActionEvent<Void> pae) {
 		super.setVisible(false);
 		super.dispose();
 	}

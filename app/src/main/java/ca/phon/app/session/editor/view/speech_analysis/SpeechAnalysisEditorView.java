@@ -266,13 +266,13 @@ public class SpeechAnalysisEditorView extends EditorView {
 		final InputMap im = getInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 		
 		final String escapeId = "escape";
-		final PhonUIAction escapeAct = new PhonUIAction(this, "onEscape");
+		final PhonUIAction<Void> escapeAct = PhonUIAction.eventConsumer(this::onEscape);
 		final KeyStroke escapeKs = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
 		am.put(escapeId, escapeAct);
 		im.put(escapeKs, escapeId);
 		
 		final String selectId = "select";
-		final PhonUIAction selectAct = new PhonUIAction(this, "onEnter");
+		final PhonUIAction<Void> selectAct = PhonUIAction.eventConsumer(this::onEnter);
 		final KeyStroke selectKs = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
 		am.put(selectId, selectAct);
 		im.put(selectKs, selectId);
@@ -287,7 +287,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		setInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, im);
 	}
 	
-	public void onEscape(PhonActionEvent pae) {
+	public void onEscape(PhonActionEvent<Void> pae) {
 		if(isPlaying()) {
 			stopPlaying();
 		} else if(selectionInterval != null) {
@@ -295,7 +295,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		}
 	}
 	
-	public void onEnter(PhonActionEvent pae) {
+	public void onEnter(PhonActionEvent<Void> pae) {
 		if(selectionInterval != null) {
 			// use selection as new segment for current record
 			Record r = getEditor().currentRecord();
@@ -336,7 +336,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 			
 		});
 		
-		final PhonUIAction playAct = new PhonUIAction(this,  "playPause");
+		final PhonUIAction<Void> playAct = PhonUIAction.runnable(this::playPause);
 		playAct.putValue(PhonUIAction.NAME, "Play segment");
 		playAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play selection/segment");
 		playAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
@@ -366,7 +366,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 			
 		});
 		
-		final PhonUIAction exportAct = new PhonUIAction(this, "onExportSelectionOrSegment");
+		final PhonUIAction<Void> exportAct = PhonUIAction.runnable(this::onExportSelectionOrSegment);
 		exportAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
 		exportAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export selection/segment (audio only)");
 		exportAct.putValue(PhonUIAction.NAME, "Export segment...");
@@ -400,7 +400,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 	
 	private void setupPlaybackMenu(MenuBuilder builder) {
 		if(isPlaying()) {
-			final PhonUIAction stopAct = new PhonUIAction(SpeechAnalysisEditorView.this, "stopPlaying");
+			final PhonUIAction<Void> stopAct = PhonUIAction.runnable(SpeechAnalysisEditorView.this::stopPlaying);
 			stopAct.putValue(PhonUIAction.NAME, "Stop");
 			stopAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Stop playback");
 			stopAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
@@ -409,14 +409,14 @@ public class SpeechAnalysisEditorView extends EditorView {
 			builder.addSeparator(".", "stop");
 		}
 		
-		final PhonUIAction playSelectionAct = new PhonUIAction(SpeechAnalysisEditorView.this, "playSelection");
+		final PhonUIAction<Void> playSelectionAct = PhonUIAction.runnable(SpeechAnalysisEditorView.this::playSelection);
 		playSelectionAct.putValue(PhonUIAction.NAME, "Play selection");
 		playSelectionAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play current selection");
 		playSelectionAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
 		final JMenuItem playSelectionItem = new JMenuItem(playSelectionAct);
 		playSelectionItem.setEnabled( selectionInterval != null );
 		
-		final PhonUIAction playSegmentAct = new PhonUIAction(SpeechAnalysisEditorView.this, "playSegment");
+		final PhonUIAction<Void> playSegmentAct = PhonUIAction.runnable(SpeechAnalysisEditorView.this::playSegment);
 		playSegmentAct.putValue(PhonUIAction.NAME, "Play record segment");
 		playSegmentAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play current record segment");
 		playSegmentAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
@@ -428,12 +428,12 @@ public class SpeechAnalysisEditorView extends EditorView {
 	}
 	
 	private void setupExportMenu(MenuBuilder builder) {
-		final PhonUIAction exportSelectionAct = new PhonUIAction(this, "exportSelection");
+		final PhonUIAction<Void> exportSelectionAct = PhonUIAction.runnable(this::exportSelection);
 		exportSelectionAct.putValue(PhonUIAction.NAME, "Export selection...");
 		exportSelectionAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export selection (audio only)");
 		exportSelectionAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
 		
-		final PhonUIAction exportSegmentAct = new PhonUIAction(this, "exportSegment");
+		final PhonUIAction<Void> exportSegmentAct = PhonUIAction.runnable(this::exportSegment);
 		exportSegmentAct.putValue(PhonUIAction.NAME, "Export record segment...");
 		exportSegmentAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export record segment (audio only)");
 		exportSegmentAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
@@ -851,7 +851,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		MenuBuilder builder = new MenuBuilder(retVal);
 		
 		if(selectionInterval != null) {
-			final PhonUIAction selectAct = new PhonUIAction(this, "onEnter");
+			final PhonUIAction<Void> selectAct = PhonUIAction.eventConsumer(this::onEnter);
 			selectAct.putValue(PhonUIAction.NAME, "Set segment");
 			selectAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select segment for current record");
 			builder.addItem(".", selectAct);
@@ -921,7 +921,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		MenuBuilder builder = new MenuBuilder(menu);
 		
 		if(selectionInterval != null) {
-			final PhonUIAction selectAct = new PhonUIAction(this, "onEnter");
+			final PhonUIAction<Void> selectAct = PhonUIAction.eventConsumer(this::onEnter);
 			selectAct.putValue(PhonUIAction.NAME, "Assign segment to record");
 			selectAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Assign selected segment to current record");
 			builder.addItem(".", selectAct);

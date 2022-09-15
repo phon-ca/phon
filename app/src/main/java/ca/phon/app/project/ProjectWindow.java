@@ -392,7 +392,7 @@ public class ProjectWindow extends CommonModuleFrame {
 		final ActionMap sessionListAM = sessionList.getActionMap();
 		final InputMap sessionListIM = sessionList.getInputMap(JComponent.WHEN_FOCUSED);
 
-		final PhonUIAction openSessionAct = new PhonUIAction(this, "onOpenSelectedSession");
+		final PhonUIAction<Void> openSessionAct = PhonUIAction.eventConsumer(this::onOpenSelectedSession);
 		sessionListAM.put("openSelectedSession", openSessionAct);
 		sessionListIM.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "openSelectedSession");
 
@@ -420,7 +420,7 @@ public class ProjectWindow extends CommonModuleFrame {
 		JScrollPane corpusScroller = new JScrollPane(corpusList);
 		JScrollPane sessionScroller = new JScrollPane(sessionList);
 
-		final PhonUIAction showCreateCorpusAct = new PhonUIAction(this, "onShowCreateCorpusButton");
+		final PhonUIAction<Void> showCreateCorpusAct = PhonUIAction.runnable(this::onShowCreateCorpusButton);
 		showCreateCorpusAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "New corpus...");
 		showCreateCorpusAct.putValue(PhonUIAction.SMALL_ICON,
 				IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL));
@@ -452,7 +452,7 @@ public class ProjectWindow extends CommonModuleFrame {
 		corpusPanel.getContentContainer().add(corpusScroller, BorderLayout.CENTER);
 		corpusPanel.setRightDecoration(showCreateCorpusBtn);
 
-		final PhonUIAction showCreateSessionAct = new PhonUIAction(this, "onShowCreateSessionButton");
+		final PhonUIAction<Void> showCreateSessionAct = PhonUIAction.runnable(this::onShowCreateSessionButton);
 		showCreateSessionAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "New session...");
 		showCreateSessionAct.putValue(PhonUIAction.SMALL_ICON,
 				IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL));
@@ -808,12 +808,20 @@ public class ProjectWindow extends CommonModuleFrame {
 			}
 		}
 	}
-	
+
+	private void openFolder(File folder) {
+		try {
+			Desktop.getDesktop().open(folder);
+		} catch (UnsupportedOperationException | IOException e) {
+			LogUtil.warning(e);
+		}
+	}
+
 	private void setupProjectMediaFolderMenu(MenuBuilder builder) {
 		File projectMediaFolder = new File(getProject().getProjectMediaFolder());
 		File absoluteProjectMediaFolder = projectMediaFolder.isAbsolute() ? projectMediaFolder : new File(getProject().getLocation(), getProject().getProjectMediaFolder());
 		
-		final PhonUIAction showProjectFolderAct = new PhonUIAction(Desktop.getDesktop(), "open", absoluteProjectMediaFolder);
+		final PhonUIAction<File> showProjectFolderAct = PhonUIAction.consumer(this::openFolder, absoluteProjectMediaFolder);
 		showProjectFolderAct.putValue(PhonUIAction.NAME, "Show media folder");
 		showProjectFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open file system browser with project media folder selected");
 		JMenuItem showProjectFolderItem = new JMenuItem(showProjectFolderAct);
@@ -826,13 +834,13 @@ public class ProjectWindow extends CommonModuleFrame {
 		builder.addItem(".", selectFolderAct);
 		
 		if(getProject().hasCustomProjectMediaFolder()) {
-			final PhonUIAction resetProjectFolderAct = new PhonUIAction(this, "onResetProjectMediaFolder");
+			final PhonUIAction<Void> resetProjectFolderAct = PhonUIAction.eventConsumer(this::onResetProjectMediaFolder);
 			resetProjectFolderAct.putValue(PhonUIAction.NAME, "Clear media folder selection");
 			resetProjectFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Clear media folder selection");
 			builder.addItem(".", resetProjectFolderAct);
 			
 			if(!absoluteProjectMediaFolder.exists()) {
-				final PhonUIAction createProjectFolderAct = new PhonUIAction(absoluteProjectMediaFolder, "mkdirs");
+				final PhonUIAction<Void> createProjectFolderAct = PhonUIAction.runnable(() -> absoluteProjectMediaFolder.mkdirs());
 				createProjectFolderAct.putValue(PhonUIAction.NAME, (getProject().hasCustomProjectMediaFolder() ? "Create media folder" : "Create default media folder"));
 				createProjectFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create folder " + getProject().getProjectMediaFolder());
 				final JMenuItem createProjectFolderItem = new JMenuItem(createProjectFolderAct);
@@ -843,12 +851,12 @@ public class ProjectWindow extends CommonModuleFrame {
 		
 		if(getProject().hasCustomProjectMediaFolder()) {
 			if(projectMediaFolder.isAbsolute()) {
-				final PhonUIAction makeRelativeAct = new PhonUIAction(this, "onMakeProjectMediaFolderRelative");
+				final PhonUIAction<Void> makeRelativeAct = PhonUIAction.runnable(this::onMakeProjectMediaFolderRelative);
 				makeRelativeAct.putValue(PhonUIAction.NAME,	"Make media folder path relative to project");
 				makeRelativeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Make media folder path relative to project folder");
 				builder.addItem(".", makeRelativeAct);
 			} else {
-				final PhonUIAction makeAbsoluteAct = new PhonUIAction(this, "onMakeProjectMediaFolderAbsolute");
+				final PhonUIAction<Void> makeAbsoluteAct = PhonUIAction.runnable(this::onMakeProjectMediaFolderAbsolute);
 				makeAbsoluteAct.putValue(PhonUIAction.NAME, "Make media folder path absolute");
 				makeAbsoluteAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Make project media folder an absolute filename");
 				builder.addItem(".", makeAbsoluteAct);
@@ -865,7 +873,7 @@ public class ProjectWindow extends CommonModuleFrame {
 		File corpusMediaFolder = new File(corpusMediaPath);
 		File absoluteCorpusMediaFolder = corpusMediaFolder.isAbsolute() ? corpusMediaFolder : new File(getProject().getLocation(), corpusMediaPath);
 		
-		final PhonUIAction showProjectFolderAct = new PhonUIAction(Desktop.getDesktop(), "open", absoluteCorpusMediaFolder);
+		final PhonUIAction<File> showProjectFolderAct = PhonUIAction.consumer(this::openFolder, absoluteCorpusMediaFolder);
 		showProjectFolderAct.putValue(PhonUIAction.NAME, "Show media folder");
 		showProjectFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open file system browser with project media folder selected");
 		JMenuItem showProjectFolderItem = new JMenuItem(showProjectFolderAct);
@@ -878,13 +886,13 @@ public class ProjectWindow extends CommonModuleFrame {
 		builder.addItem(".", selectFolderAct).setEnabled(enabled);
 		
 		if(getProject().hasCustomCorpusMediaFolder(corpus)) {
-			final PhonUIAction resetCorpusFolderAct = new PhonUIAction(this, "onResetCorpusMediaFolder", corpus);
+			final PhonUIAction<String> resetCorpusFolderAct = PhonUIAction.eventConsumer(this::onResetCorpusMediaFolder, corpus);
 			resetCorpusFolderAct.putValue(PhonUIAction.NAME, "Clear media folder selection");
 			resetCorpusFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Clear corpus media folder selection (use project media folder)");
 			builder.addItem(".", resetCorpusFolderAct).setEnabled(enabled);
 			
 			if(!absoluteCorpusMediaFolder.exists()) {
-				final PhonUIAction createCorpusFolderAct = new PhonUIAction(absoluteCorpusMediaFolder, "mkdirs");
+				final PhonUIAction<Void> createCorpusFolderAct = PhonUIAction.runnable(() -> absoluteCorpusMediaFolder.mkdirs());
 				createCorpusFolderAct.putValue(PhonUIAction.NAME, (getProject().hasCustomCorpusMediaFolder(corpus) ? "Create media folder" : "Create default media folder"));
 				createCorpusFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create folder " + getProject().getProjectMediaFolder());
 				final JMenuItem createCorpusFolderItem = new JMenuItem(createCorpusFolderAct);
@@ -896,12 +904,12 @@ public class ProjectWindow extends CommonModuleFrame {
 		
 		if(getProject().hasCustomCorpusMediaFolder(corpus)) {
 			if(corpusMediaFolder.isAbsolute()) {
-				final PhonUIAction makeRelativeAct = new PhonUIAction(this, "onMakeCorpusMediaFolderRelative", corpus);
+				final PhonUIAction<String> makeRelativeAct = PhonUIAction.consumer(this::onMakeCorpusMediaFolderRelative, corpus);
 				makeRelativeAct.putValue(PhonUIAction.NAME,	"Make media folder path relative to project");
 				makeRelativeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Make corpus media folder path relative to project folder");
 				builder.addItem(".", makeRelativeAct).setEnabled(enabled);
 			} else {
-				final PhonUIAction makeAbsoluteAct = new PhonUIAction(this, "onMakeCorpusMediaFolderAbsolute", corpus);
+				final PhonUIAction<String> makeAbsoluteAct = PhonUIAction.consumer(this::onMakeCorpusMediaFolderAbsolute, corpus);
 				makeAbsoluteAct.putValue(PhonUIAction.NAME, "Make media folder path absolute");
 				makeAbsoluteAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Make corpus media folder an absolute filename");
 				builder.addItem(".", makeAbsoluteAct).setEnabled(enabled);
@@ -976,15 +984,15 @@ public class ProjectWindow extends CommonModuleFrame {
 		}
 	}
 	
-	public void onResetProjectMediaFolder(PhonActionEvent pae) {
+	public void onResetProjectMediaFolder(PhonActionEvent<Void> pae) {
 		getProject().setProjectMediaFolder(null);
 	}
 
-	public void onResetCorpusMediaFolder(PhonActionEvent pae) {
-		getProject().setCorpusMediaFolder(pae.getData().toString(), null);
+	public void onResetCorpusMediaFolder(PhonActionEvent<String> pae) {
+		getProject().setCorpusMediaFolder(pae.getData(), null);
 	}
 	
-	public void onOpenSelectedSession(PhonActionEvent pae) {
+	public void onOpenSelectedSession(PhonActionEvent<Void> pae) {
 		final PhonWorker worker = PhonWorker.createWorker();
 		busyLabel.setBusy(true);
 
@@ -1061,7 +1069,7 @@ public class ProjectWindow extends CommonModuleFrame {
 		ImageIcon cancelIcn = IconManager.getInstance().getIcon("actions/button_cancel", IconSize.SMALL);
 		ImageIcon cancelIcnL = cancelIcn;
 
-		PhonUIAction btnSwapAct = new PhonUIAction(this, "onHideCreateCorpusButton");
+		PhonUIAction<Void> btnSwapAct = PhonUIAction.runnable(this::onHideCreateCorpusButton);
 		btnSwapAct.putValue(Action.ACTION_COMMAND_KEY, "CANCEL_CREATE_ITEM");
 		btnSwapAct.putValue(Action.NAME, "Cancel create");
 		btnSwapAct.putValue(Action.SHORT_DESCRIPTION, "Cancel create");
@@ -1087,8 +1095,7 @@ public class ProjectWindow extends CommonModuleFrame {
 		retVal.setActionMap(actionMap);
 		retVal.setInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, inputMap);
 
-		PhonUIAction createNewCorpusAct =
-			new PhonUIAction(this, "onCreateCorpus", corpusNameField);
+		PhonUIAction<JTextField> createNewCorpusAct = PhonUIAction.eventConsumer(this::onCreateCorpus, corpusNameField);
 		createNewCorpusAct.putValue(Action.SHORT_DESCRIPTION, "Create new corpus folder");
 		createNewCorpusAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL));
 
@@ -1129,8 +1136,8 @@ public class ProjectWindow extends CommonModuleFrame {
 		corpusPanel.revalidate();
 	}
 
-	public void onCreateCorpus(PhonActionEvent pae) {
-		final JTextField textField = (JTextField)pae.getData();
+	public void onCreateCorpus(PhonActionEvent<JTextField> pae) {
+		final JTextField textField = pae.getData();
 		final String corpusName = textField.getText().trim();
 		if(corpusName.length() == 0) {
 			Toolkit.getDefaultToolkit().beep();
@@ -1247,7 +1254,7 @@ public class ProjectWindow extends CommonModuleFrame {
 		ImageIcon cancelIcn = IconManager.getInstance().getIcon("actions/button_cancel", IconSize.SMALL);
 		ImageIcon cancelIcnL = cancelIcn;
 
-		PhonUIAction btnSwapAct = new PhonUIAction(this, "onHideCreateSessionButton");
+		PhonUIAction<Void> btnSwapAct = PhonUIAction.runnable(this::onHideCreateSessionButton);
 		btnSwapAct.putValue(Action.ACTION_COMMAND_KEY, "CANCEL_CREATE_ITEM");
 		btnSwapAct.putValue(Action.NAME, "Cancel create");
 		btnSwapAct.putValue(Action.SHORT_DESCRIPTION, "Cancel create");
@@ -1312,8 +1319,7 @@ public class ProjectWindow extends CommonModuleFrame {
 		retVal.setActionMap(actionMap);
 		retVal.setInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, inputMap);
 
-		PhonUIAction createNewSessionAct =
-			new PhonUIAction(this, "onCreateSession", sessionNameField);
+		PhonUIAction<JTextField> createNewSessionAct = PhonUIAction.eventConsumer(this::onCreateSession, sessionNameField);
 		createNewSessionAct.putValue(Action.SHORT_DESCRIPTION, "Create new session in selected corpus");
 		createNewSessionAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL));
 
@@ -1342,8 +1348,8 @@ public class ProjectWindow extends CommonModuleFrame {
 		return retVal;
 	}
 
-	public void onCreateSession(PhonActionEvent pae) {
-		final JTextField textField = (JTextField)pae.getData();
+	public void onCreateSession(PhonActionEvent<JTextField> pae) {
+		final JTextField textField = pae.getData();
 		final String sessionName = textField.getText().trim();
 		if(sessionName.length() == 0) {
 			Toolkit.getDefaultToolkit().beep();
@@ -1378,8 +1384,7 @@ public class ProjectWindow extends CommonModuleFrame {
 	private void setupCorpusListContextMenu(MenuBuilder builder) {
 		List<String> corpora = getSelectedCorpora();
 		
-		PhonUIAction createNewCorpusAct =
-				new PhonUIAction(this, "onShowCreateCorpusButton");
+		PhonUIAction<Void> createNewCorpusAct = PhonUIAction.runnable(this::onShowCreateCorpusButton);
 		createNewCorpusAct.putValue(Action.NAME, "New corpus...");
 		createNewCorpusAct.putValue(Action.SHORT_DESCRIPTION, "Create a new corpus");
 		createNewCorpusAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL));
@@ -1430,8 +1435,7 @@ public class ProjectWindow extends CommonModuleFrame {
 	
 	private void setupSessionListContextMenu(MenuBuilder builder) {
 		// add 'new session item'
-		PhonUIAction createNewSessionAct =
-				new PhonUIAction(this, "onShowCreateSessionButton");
+		PhonUIAction<Void> createNewSessionAct = PhonUIAction.runnable(this::onShowCreateSessionButton);
 		createNewSessionAct.putValue(Action.NAME, "New session...");
 		createNewSessionAct.putValue(Action.SHORT_DESCRIPTION, "Create new session in selected corpus");
 		createNewSessionAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL));

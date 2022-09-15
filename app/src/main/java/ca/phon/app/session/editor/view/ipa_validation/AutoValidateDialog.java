@@ -136,13 +136,13 @@ public class AutoValidateDialog extends JDialog {
 		centerPanel.add(recordFilterPanel, cc.xy(1,3));
 		
 		// button bar
-		PhonUIAction okAction = new PhonUIAction(this, "onOk");
+		PhonUIAction<Void> okAction = PhonUIAction.eventConsumer(this::onOk);
 		okAction.putValue(Action.NAME, "Ok");
 		okAction.putValue(Action.SHORT_DESCRIPTION, "Perform auto-validation and close dialog");
 		
 		okButton = new JButton(okAction);
 		
-		PhonUIAction cancelAction = new PhonUIAction(this, "onCancel");
+		PhonUIAction<Void> cancelAction = PhonUIAction.eventConsumer(this::onCancel);
 		cancelAction.putValue(Action.NAME, "Cancel");
 		cancelAction.putValue(Action.SHORT_DESCRIPTION, "Cancel auto-validation and close dialog");
 		

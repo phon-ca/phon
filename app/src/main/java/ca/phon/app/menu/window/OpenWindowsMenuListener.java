@@ -93,14 +93,14 @@ public class OpenWindowsMenuListener implements MenuListener {
 			for(CommonModuleFrame projectWindow:projectWindows.get(project)) {
 				if(projectWindow instanceof ProjectWindow)
 					projectWindowAvail = true;
-				final PhonUIAction showWindowAct = new PhonUIAction(projectWindow, "toFront");
+				final PhonUIAction<Void> showWindowAct = PhonUIAction.runnable(projectWindow::toFront);
 				showWindowAct.putValue(PhonUIAction.NAME, projectWindow.getTitle());
 				showWindowAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Bring window to front");
 				final JMenuItem projectWindowItem = new JMenuItem(showWindowAct);
 				projectMenu.add(projectWindowItem);
 			}
 			if(!projectWindowAvail) {
-				PhonUIAction showProjectWindowAct = new PhonUIAction(OpenWindowsMenuListener.class, "openProjectWindow", project);
+				PhonUIAction<Project> showProjectWindowAct = PhonUIAction.eventConsumer(OpenWindowsMenuListener::openProjectWindow, project);
 				showProjectWindowAct.putValue(PhonUIAction.NAME, "Show project window");
 				showProjectWindowAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show project window");
 				menu.add(showProjectWindowAct);
@@ -109,7 +109,7 @@ public class OpenWindowsMenuListener implements MenuListener {
 		}
 		
 		for(CommonModuleFrame cmf:strayWindows) {
-			final PhonUIAction showWindowAct = new PhonUIAction(cmf, "toFront");
+			final PhonUIAction<Void> showWindowAct = PhonUIAction.runnable(cmf::toFront);
 			showWindowAct.putValue(PhonUIAction.NAME, cmf.getTitle());
 			showWindowAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Bring window to front");
 			final JMenuItem projectWindowItem = new JMenuItem(showWindowAct);
@@ -128,7 +128,7 @@ public class OpenWindowsMenuListener implements MenuListener {
 		menu.add(closeItem);
 	}
 	
-	public static void openProjectWindow(PhonActionEvent pae) {
+	public static void openProjectWindow(PhonActionEvent<Project> pae) {
 		Project project = (Project)pae.getData();
 		
 		EntryPointArgs args = new EntryPointArgs();

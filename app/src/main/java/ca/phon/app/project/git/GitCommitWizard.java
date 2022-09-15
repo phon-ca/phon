@@ -120,26 +120,22 @@ public class GitCommitWizard extends WizardFrame {
 		indexedTable.setVisibleRowCount(5);
 		final JScrollPane indexedScroller = new JScrollPane(indexedTable);
 		
-		final PhonUIAction addToIndexAction = 
-				new PhonUIAction(this, "onAddToIndex");
+		final PhonUIAction<Void> addToIndexAction = PhonUIAction.runnable(this::onAddToIndex);
 		addToIndexAction.putValue(PhonUIAction.NAME, "Add");
 		addToIndexAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Add selected changes to index");
 		addToIndexButton = new JButton(addToIndexAction);
 		
-		final PhonUIAction addAllAction =
-				new PhonUIAction(this, "onAddAllToIndex");
+		final PhonUIAction<Void> addAllAction = PhonUIAction.runnable(this::onAddAllToIndex);
 		addAllAction.putValue(PhonUIAction.NAME, "Add all");
 		addAllAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Add all changes to index");
 		addAllButton = new JButton(addAllAction);
 		
-		final PhonUIAction removeAllFromIndexAction =
-				new PhonUIAction(this, "onRemoveAllFromIndex");
+		final PhonUIAction<Void> removeAllFromIndexAction = PhonUIAction.runnable(this::onRemoveAllFromIndex);
 		removeAllFromIndexAction.putValue(PhonUIAction.NAME, "Remove all");
 		removeAllFromIndexAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Remove all changes from index");
 		removeAllFromIndexButton = new JButton(removeAllFromIndexAction);
 		
-		final PhonUIAction removeFromIndexAction =
-				new PhonUIAction(this, "onRemoveFromIndex");
+		final PhonUIAction<Void> removeFromIndexAction = PhonUIAction.runnable(this::onRemoveFromIndex);
 		removeFromIndexAction.putValue(PhonUIAction.NAME, "Remove");
 		removeFromIndexAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Remove selected changes from index");
 		removeFromIndexButton = new JButton(removeFromIndexAction);
@@ -148,8 +144,7 @@ public class GitCommitWizard extends WizardFrame {
 		commitArea.setRows(3);
 		final JScrollPane commitScroller = new JScrollPane(commitArea);
 		
-		final PhonUIAction pushChangesAct =
-				new PhonUIAction(this, "onTogglePushChanges");
+		final PhonUIAction pushChangesAct = PhonUIAction.runnable(() -> {});
 		pushChangesAct.putValue(PhonUIAction.NAME, "Immediately push changes");
 		pushChangesAct.putValue(PhonUIAction.SELECTED_KEY, 
 				PrefHelper.getBoolean(PUSH_CHANGES_KEY, DEFAULT_PUSH_CHANGES));

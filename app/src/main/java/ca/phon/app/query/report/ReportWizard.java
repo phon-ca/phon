@@ -136,11 +136,6 @@ public class ReportWizard extends WizardFrame {
 		
 		super.btnFinish.setVisible(false);
 		
-		final PhonUIAction saveAct = new PhonUIAction(console, "onSaveBuffer");
-		saveAct.putValue(PhonUIAction.NAME, "Save Report");
-		saveAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL));
-		super.btnFinish.setAction(saveAct);
-		
 		super.btnCancel.setText("Close");
 	}
 	

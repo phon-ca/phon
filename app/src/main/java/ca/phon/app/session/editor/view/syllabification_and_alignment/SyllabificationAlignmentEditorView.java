@@ -98,7 +98,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 
 		ImageIcon sigmaIcn = IconManager.getInstance().getIcon("misc/small_sigma", IconSize.SMALL);
 
-		final PhonUIAction syllabifierSettingsAct = new PhonUIAction(this, "noop");
+		final PhonUIAction<Void> syllabifierSettingsAct = PhonUIAction.runnable(() -> {});
 		syllabifierSettingsAct.putValue(PhonUIAction.NAME, "Syllabifier settings");
 		syllabifierSettingsAct.putValue(PhonUIAction.SMALL_ICON, sigmaIcn);
 		syllabifierSettingsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select syllabifier settings for session");
@@ -118,31 +118,31 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		settingsBtn = new DropDownButton(syllabifierSettingsAct);
 		settingsBtn.setOnlyPopup(true);
 
-		final PhonUIAction toggleTargetAct = new PhonUIAction(this, "toggleCheckbox");
+		final PhonUIAction<Void> toggleTargetAct = PhonUIAction.runnable(this::toggleCheckbox);
 		toggleTargetAct.putValue(PhonUIAction.NAME, SystemTierType.TargetSyllables.getName());
 		toggleTargetAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle target syllables");
 		toggleTargetAct.putValue(PhonUIAction.SELECTED_KEY, PrefHelper.getBoolean(SHOW_TARGET_IPA, DEFAULT_SHOW_TARGET_IPA));
 		targetIPABox = new JCheckBox(toggleTargetAct);
 
-		final PhonUIAction toggleActualAct = new PhonUIAction(this, "toggleCheckbox");
+		final PhonUIAction<Void> toggleActualAct = PhonUIAction.runnable(this::toggleCheckbox);
 		toggleActualAct.putValue(PhonUIAction.NAME, SystemTierType.ActualSyllables.getName());
 		toggleActualAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle actual syllables");
 		toggleActualAct.putValue(PhonUIAction.SELECTED_KEY, PrefHelper.getBoolean(SHOW_ACTUAL_IPA, DEFAULT_SHOW_ACTUAL_IPA));
 		actualIPABox = new JCheckBox(toggleActualAct);
 
-		final PhonUIAction toggleAlignmentAct = new PhonUIAction(this, "toggleCheckbox");
+		final PhonUIAction<Void> toggleAlignmentAct = PhonUIAction.runnable(this::toggleCheckbox);
 		toggleAlignmentAct.putValue(PhonUIAction.NAME, SystemTierType.SyllableAlignment.getName());
 		toggleAlignmentAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle alignment");
 		toggleAlignmentAct.putValue(PhonUIAction.SELECTED_KEY, PrefHelper.getBoolean(SHOW_ALIGNMENT, DEFAULT_SHOW_ALIGNMENT));
 		alignmentBox = new JCheckBox(toggleAlignmentAct);
 
-		final PhonUIAction toggleAlignmentColorAct = new PhonUIAction(this, "toggleCheckbox");
+		final PhonUIAction<Void> toggleAlignmentColorAct = PhonUIAction.runnable(this::toggleCheckbox);
 		toggleAlignmentColorAct.putValue(PhonUIAction.NAME, "Color in alignment");
 		toggleAlignmentColorAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle color in alignment");
 		toggleAlignmentColorAct.putValue(PhonUIAction.SELECTED_KEY, PrefHelper.getBoolean(COLOR_IN_ALIGNMENT, DEFAULT_COLOR_IN_ALIGNMENT));
 		colorInAlignmentBox = new JCheckBox(toggleAlignmentColorAct);
 
-		final PhonUIAction toggleDiacriticsAct = new PhonUIAction(this, "toggleCheckbox");
+		final PhonUIAction<Void> toggleDiacriticsAct = PhonUIAction.runnable(this::toggleCheckbox);
 		toggleDiacriticsAct.putValue(PhonUIAction.NAME, "Show diacritics");
 		toggleDiacriticsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle display of diacritics");
 		toggleDiacriticsAct.putValue(PhonUIAction.SELECTED_KEY, PrefHelper.getBoolean(SHOW_DIACRITICS, DEFAULT_SHOW_DIACRITICS));

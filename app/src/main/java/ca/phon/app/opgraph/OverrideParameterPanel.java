@@ -31,7 +31,7 @@ import ca.phon.ui.menu.*;
 import ca.phon.util.icons.*;
 
 /**
- * UI for modifying OverrideParamter settings for a report/analysis.
+ * UI for modifying OverrideParameter settings for a report/analysis.
  * 
  */
 public final class OverrideParameterPanel extends JPanel {
@@ -178,7 +178,7 @@ public final class OverrideParameterPanel extends JPanel {
 		menuBuilder.addItem(".", overridesItem);
 		
 		// inventory grouping
-		PhonUIAction defaultInventoryGroupingAct = new PhonUIAction(this, "inventoryGroupingHandler", "default");
+		PhonUIAction<String> defaultInventoryGroupingAct = PhonUIAction.eventConsumer(this::inventoryGroupingHandler, "default");
 		defaultInventoryGroupingAct.putValue(PhonUIAction.NAME, "Don't override");
 		defaultInventoryGroupingAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Don't override inventory grouping options for report");
 		defaultInventoryGroupingAct.putValue(PhonUIAction.SELECTED_KEY, !isOverrideInventoryGroupingColumn());
@@ -188,7 +188,7 @@ public final class OverrideParameterPanel extends JPanel {
 		inventoryGroupingMenu.add(defaultInventoryGroupingItem);
 		
 		for(String inventoryGroupingOpt:groupingColumnOptions) {
-			PhonUIAction inventoryGroupingAct = new PhonUIAction(this, "inventoryGroupingHandler", inventoryGroupingOpt);
+			PhonUIAction<String> inventoryGroupingAct = PhonUIAction.eventConsumer(this::inventoryGroupingHandler, inventoryGroupingOpt);
 			inventoryGroupingAct.putValue(PhonUIAction.NAME, inventoryGroupingOpt);
 			inventoryGroupingAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Override inventory grouping column options fro report");
 			inventoryGroupingAct.putValue(PhonUIAction.SELECTED_KEY, isOverrideInventoryGroupingColumn() && getInventoryGroupingColumn().contentEquals(inventoryGroupingOpt));
@@ -197,19 +197,19 @@ public final class OverrideParameterPanel extends JPanel {
 		}
 		
 		// case sensitive
-		PhonUIAction defaultCaseSensitiveAct = new PhonUIAction(this, "caseSensitiveHandler", "default");
+		PhonUIAction<String> defaultCaseSensitiveAct = PhonUIAction.eventConsumer(this::caseSensitiveHandler, "default");
 		defaultCaseSensitiveAct.putValue(PhonUIAction.NAME, "Don't override");
 		defaultCaseSensitiveAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Don't override case sensitive options for report");
 		defaultCaseSensitiveAct.putValue(PhonUIAction.SELECTED_KEY, !isOverrideCaseSensitive());
 		JCheckBoxMenuItem defaultCaseSensitiveItem = new JCheckBoxMenuItem(defaultCaseSensitiveAct);
 		
-		PhonUIAction yesCaseSensitiveAct = new PhonUIAction(this, "caseSensitiveHandler", "yes");
+		PhonUIAction<String> yesCaseSensitiveAct = PhonUIAction.eventConsumer(this::caseSensitiveHandler, "yes");
 		yesCaseSensitiveAct.putValue(PhonUIAction.NAME, "yes");
 		yesCaseSensitiveAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Override case sensitive options for report");
 		yesCaseSensitiveAct.putValue(PhonUIAction.SELECTED_KEY, isOverrideCaseSensitive() && isIgnoreDiacritics());
 		JCheckBoxMenuItem yesCaseSensitiveItem = new JCheckBoxMenuItem(yesCaseSensitiveAct);
 		
-		PhonUIAction noCaseSensitiveAct = new PhonUIAction(this, "caseSensitiveHandler", "no");
+		PhonUIAction<String> noCaseSensitiveAct = PhonUIAction.eventConsumer(this::caseSensitiveHandler, "no");
 		noCaseSensitiveAct.putValue(PhonUIAction.NAME, "no");
 		noCaseSensitiveAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Override case sensitive options for report");
 		noCaseSensitiveAct.putValue(PhonUIAction.SELECTED_KEY, isOverrideCaseSensitive() && !isIgnoreDiacritics());
@@ -221,19 +221,19 @@ public final class OverrideParameterPanel extends JPanel {
 		caseSensitiveMenu.add(noCaseSensitiveItem);
 		
 		// ignore diacritics
-		PhonUIAction defaultIgnoreDiacriticsAct = new PhonUIAction(this, "ignoreDiacriticsHandler", "default");
+		PhonUIAction<String> defaultIgnoreDiacriticsAct = PhonUIAction.eventConsumer(this::ignoreDiacriticsHandler, "default");
 		defaultIgnoreDiacriticsAct.putValue(PhonUIAction.NAME, "Don't override");
 		defaultIgnoreDiacriticsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Don't override ignore diacritics options for report");
 		defaultIgnoreDiacriticsAct.putValue(PhonUIAction.SELECTED_KEY, !isOverrideIgnoreDiacritics());
 		JCheckBoxMenuItem defaultIgnoreDiacriticsItem = new JCheckBoxMenuItem(defaultIgnoreDiacriticsAct);
 		
-		PhonUIAction yesIgnoreDiacriticsAct = new PhonUIAction(this, "ignoreDiacriticsHandler", "yes");
+		PhonUIAction<String> yesIgnoreDiacriticsAct = PhonUIAction.eventConsumer(this::ignoreDiacriticsHandler, "yes");
 		yesIgnoreDiacriticsAct.putValue(PhonUIAction.NAME, "yes");
 		yesIgnoreDiacriticsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Override ignore diacritics options for report");
 		yesIgnoreDiacriticsAct.putValue(PhonUIAction.SELECTED_KEY, isOverrideIgnoreDiacritics() && isIgnoreDiacritics());
 		JCheckBoxMenuItem yesIgnoreDiacriticsItem = new JCheckBoxMenuItem(yesIgnoreDiacriticsAct);
 		
-		PhonUIAction noIgnoreDiacriticsAct = new PhonUIAction(this, "ignoreDiacriticsHandler", "no");
+		PhonUIAction<String> noIgnoreDiacriticsAct = PhonUIAction.eventConsumer(this::ignoreDiacriticsHandler, "no");
 		noIgnoreDiacriticsAct.putValue(PhonUIAction.NAME, "no");
 		noIgnoreDiacriticsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Override ignore diacritics options for report");
 		noIgnoreDiacriticsAct.putValue(PhonUIAction.SELECTED_KEY, isOverrideIgnoreDiacritics() && !isIgnoreDiacritics());
@@ -245,8 +245,8 @@ public final class OverrideParameterPanel extends JPanel {
 		ignoreDiacriticsMenu.add(noIgnoreDiacriticsItem);
 	}
 	
-	public void caseSensitiveHandler(PhonActionEvent pae) {
-		String v = pae.getData().toString();
+	public void caseSensitiveHandler(PhonActionEvent<String> pae) {
+		String v = pae.getData();
 		
 		if("yes".contentEquals(v)) {
 			setOverrideCaseSensitive(true, true);
@@ -257,8 +257,8 @@ public final class OverrideParameterPanel extends JPanel {
 		}
 	}
 	
-	public void ignoreDiacriticsHandler(PhonActionEvent pae) {
-		String v = pae.getData().toString();
+	public void ignoreDiacriticsHandler(PhonActionEvent<String> pae) {
+		String v = pae.getData();
 		
 		if("yes".contentEquals(v)) {
 			setOverrideIgnoreDiacritics(true, true);
@@ -269,8 +269,8 @@ public final class OverrideParameterPanel extends JPanel {
 		}
 	}
 
-	public void inventoryGroupingHandler(PhonActionEvent pae) {
-		String v = pae.getData().toString();
+	public void inventoryGroupingHandler(PhonActionEvent<String> pae) {
+		String v = pae.getData();
 		
 		if("default".contentEquals(v)) {
 			setOverrideInventoryGroupingColumn(false);

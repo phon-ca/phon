@@ -150,45 +150,31 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 
 		final KeyStroke validateKs = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
 		final String validateId = "validate";
-		final PhonUIAction validateAct = new PhonUIAction(this, "onEnter");
+		final PhonUIAction<Void> validateAct = PhonUIAction.runnable(this::onEnter);
 		am.put(validateId, validateAct);
 		im.put(validateKs, validateId);
 
 		// override undo/redo for editor window
 		final KeyStroke undoKs =
 				KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
-		final PhonUIAction undoAct = new PhonUIAction(this, "onUndo");
+		final PhonUIAction<Void> undoAct = PhonUIAction.runnable(this::onUndo);
 		final String undoKey = "_custom_undo_";
 		am.put(undoKey, undoAct);
 		im.put(undoKs, undoKey);
 
 		final KeyStroke redoKs =
 				KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
-		final PhonUIAction redoAct = new PhonUIAction(this, "onRedo");
+		final PhonUIAction<Void> redoAct = PhonUIAction.runnable(this::onRedo);
 		final String redoKey = "_custom_redo_";
 		am.put(redoKey, redoAct);
 		im.put(redoKs, redoKey);
 
 		final KeyStroke saveKs =
 				KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
-		final PhonUIAction saveAct = new PhonUIAction(this, "onSave");
+		final PhonUIAction<Void> saveAct = PhonUIAction.runnable(this::onSave);
 		final String saveKey = "_custom_save_";
 		am.put(saveKey, saveAct);
 		im.put(saveKs, saveKey);
-
-//		final KeyStroke nextRecordKS =
-//				KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, 0);
-//		final String nextRecordKey = "_next_record_";
-//		final PhonUIAction nextRecordAct = new PhonUIAction(this, "onNextRecord");
-//		am.put(nextRecordKey, nextRecordAct);
-//		im.put(nextRecordKS, nextRecordKey);
-//
-//		final KeyStroke prevRecordKS =
-//				KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, 0);
-//		final String prevRecordKey = "_prev_record_";
-//		final PhonUIAction prevRecordAct = new PhonUIAction(this, "onPrevRecord");
-//		am.put(prevRecordKey, prevRecordAct);
-//		im.put(prevRecordKS, prevRecordKey);
 
 		setActionMap(am);
 		setInputMap(WHEN_FOCUSED, im);

@@ -66,7 +66,7 @@ public class LogViewer extends CommonModuleFrame {
 				logMenu.removeAll();
 				
 				final File currentLogFile = new File(LogManager.LOG_FILE);
-				final PhonUIAction loadCurrentLogAct = new PhonUIAction(LogViewer.this, "loadLog", new File(LogManager.LOG_FILE));
+				final PhonUIAction<File> loadCurrentLogAct = PhonUIAction.consumer(LogViewer.this::loadLog, new File(LogManager.LOG_FILE));
 				loadCurrentLogAct.putValue(PhonUIAction.NAME, "Current log");
 				loadCurrentLogAct.putValue(PhonUIAction.SHORT_DESCRIPTION, LogManager.LOG_FILE);
 				loadCurrentLogAct.putValue(PhonUIAction.SELECTED_KEY,
@@ -78,7 +78,7 @@ public class LogViewer extends CommonModuleFrame {
 				sortedFiles.sort( (f1, f2) -> Long.valueOf(f2.lastModified()).compareTo(f1.lastModified()) );
 				
 				for(File previousLogFile:sortedFiles) {
-					final PhonUIAction loadLogAct = new PhonUIAction(LogViewer.this, "loadLog", previousLogFile);
+					final PhonUIAction<File> loadLogAct = PhonUIAction.consumer(LogViewer.this::loadLog, previousLogFile);
 					var logName = previousLogFile.getName();
 					loadLogAct.putValue(PhonUIAction.NAME, logName);
 					loadLogAct.putValue(PhonUIAction.SHORT_DESCRIPTION, previousLogFile.getAbsolutePath());
@@ -91,8 +91,13 @@ public class LogViewer extends CommonModuleFrame {
 				logMenu.addSeparator();
 				
 				final File logFolder = new File(LogManager.LOG_FOLDER);
-				final PhonUIAction showLogFolderAct = new PhonUIAction(Desktop.getDesktop(), "open",
-						logFolder );
+				final PhonUIAction<Void> showLogFolderAct = PhonUIAction.runnable(() -> {
+					try {
+						Desktop.getDesktop().open(logFolder);
+					} catch (IOException ex) {
+						LogUtil.warning(ex);
+					}
+				});
 				showLogFolderAct.putValue(PhonUIAction.NAME, "Show log folder");
 				showLogFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, logFolder.getAbsolutePath());
 				final JMenuItem showLogFolderItem = new JMenuItem(showLogFolderAct);

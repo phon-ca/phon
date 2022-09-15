@@ -153,7 +153,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 			acceptSplitButton.setVisible(true);
 		});
 		
-		final PhonUIAction endSplitModeAct = new PhonUIAction(this, "onEndSplitRecord", false);
+		final PhonUIAction<Boolean> endSplitModeAct = PhonUIAction.eventConsumer(this::onEndSplitRecord, false);
 		endSplitModeAct.putValue(PhonUIAction.NAME, "Exit split record");
 		endSplitModeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Exit split record mode without accepting split");
 		endSplitModeAct.putValue(PhonUIAction.SMALL_ICON,
@@ -162,7 +162,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		cancelSplitButton.setVisible(false);
 		toolbar.add(cancelSplitButton);
 		
-		final PhonUIAction acceptSplitAct = new PhonUIAction(this, "onEndSplitRecord", true);
+		final PhonUIAction<Boolean> acceptSplitAct = PhonUIAction.eventConsumer(this::onEndSplitRecord, true);
 		acceptSplitAct.putValue(PhonUIAction.NAME, "Accept record split");
 		acceptSplitAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "");
 		acceptSplitAct.putValue(PhonUIAction.SMALL_ICON,
@@ -173,7 +173,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 		toolbar.addSeparator();
 
-		final PhonUIAction moveSegmentsAct = new PhonUIAction(this, "onMoveSegments");
+		final PhonUIAction<Void> moveSegmentsAct = PhonUIAction.eventConsumer(this::onMoveSegments);
 		moveSegmentsAct.putValue(PhonUIAction.NAME, "Move records");
 		moveSegmentsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move selected records a specified amount of time");
 		moveSegmentsAct.putValue(PhonUIAction.SMALL_ICON,
@@ -223,12 +223,12 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		final ActionMap actionMap = recordGrid.getActionMap();
 
 		final String selectAllKey = "select_all";
-		final PhonUIAction selectAllAct = new PhonUIAction(this, "onSelectAll");
+		final PhonUIAction<Void> selectAllAct = PhonUIAction.eventConsumer(this::onSelectAll);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), selectAllKey);
 		actionMap.put(selectAllKey, selectAllAct);
 
 		final String escapeKey = "escape";
-		final PhonUIAction escapeAction = new PhonUIAction(this, "onEscape", false);
+		final PhonUIAction<Boolean> escapeAction = PhonUIAction.eventConsumer(this::onEscape, false);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), escapeKey);
 		actionMap.put(escapeKey, escapeAction);
 
@@ -243,64 +243,64 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		actionMap.put(playSegmentKey, playSegmentAction);
 
 		final String moveRight = "move_segments_right";
-		final PhonUIAction moveRightAct = new PhonUIAction(this, "onMoveSegmentsRight", 5);
+		final PhonUIAction<Integer> moveRightAct = PhonUIAction.eventConsumer(this::onMoveSegmentsRight, 5);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, KeyEvent.CTRL_DOWN_MASK), moveRight);
 		actionMap.put(moveRight, moveRightAct);
 
 		final String moveRightSlow = "move_segments_right_slow";
-		final PhonUIAction moveRightSlowAct = new PhonUIAction(this, "onMoveSegmentsRight", 1);
+		final PhonUIAction<Integer> moveRightSlowAct = PhonUIAction.eventConsumer(this::onMoveSegmentsRight, 1);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK), moveRightSlow);
 		actionMap.put(moveRightSlow, moveRightSlowAct);
 
 		final String moveLeft = "move_segments_left";
-		final PhonUIAction moveLeftAct = new PhonUIAction(this, "onMoveSegmentsLeft", 5);
+		final PhonUIAction<Integer> moveLeftAct = PhonUIAction.eventConsumer(this::onMoveSegmentsLeft, 5);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, KeyEvent.CTRL_DOWN_MASK), moveLeft);
 		actionMap.put(moveLeft, moveLeftAct);
 
 		final String moveLeftSlow = "move_segments_left_slow";
-		final PhonUIAction moveLeftSlowAct = new PhonUIAction(this, "onMoveSegmentsLeft", 1);
+		final PhonUIAction<Integer> moveLeftSlowAct = PhonUIAction.eventConsumer(this::onMoveSegmentsLeft, 1);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK), moveLeftSlow);
 		actionMap.put(moveLeftSlow, moveLeftSlowAct);
 
 		final String move = "move_segments";
-		final PhonUIAction moveAct = new PhonUIAction(this, "onMoveSegments");
+		final PhonUIAction<Void> moveAct = PhonUIAction.eventConsumer(this::onMoveSegments);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SLASH, KeyEvent.CTRL_DOWN_MASK), move);
 		actionMap.put(move, moveAct);
 
 		final String growSegments = "grow_segments";
-		final PhonUIAction growSegmentsAct = new PhonUIAction(this, "onGrowSegments", 3);
+		final PhonUIAction<Integer> growSegmentsAct = PhonUIAction.eventConsumer(this::onGrowSegments, 3);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_DOWN_MASK ), growSegments);
 		actionMap.put(growSegments, growSegmentsAct);
 
 		final String growSegmentsSlow = "grow_segments_slow";
-		final PhonUIAction growSegmentsSlowAct = new PhonUIAction(this, "onGrowSegments", 1);
+		final PhonUIAction<Integer> growSegmentsSlowAct = PhonUIAction.eventConsumer(this::onGrowSegments, 1);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK), growSegmentsSlow);
 		actionMap.put(growSegmentsSlow, growSegmentsSlowAct);
 
 		final String shrinkSegments = "shrink_segments";
-		final PhonUIAction shrinkSegmentsAct = new PhonUIAction(this, "onShrinkSegments", 3);
+		final PhonUIAction<Integer> shrinkSegmentsAct = PhonUIAction.eventConsumer(this::onShrinkSegments, 3);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_K, KeyEvent.CTRL_DOWN_MASK ), shrinkSegments);
 		actionMap.put(shrinkSegments, shrinkSegmentsAct);
 
 		final String shrinkSegmentsSlow = "shrink_segments_slow";
-		final PhonUIAction shrinkSegmentsSlowAct = new PhonUIAction(this, "onShrinkSegments", 1);
+		final PhonUIAction<Integer> shrinkSegmentsSlowAct = PhonUIAction.eventConsumer(this::onShrinkSegments, 1);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_K, KeyEvent.CTRL_DOWN_MASK |KeyEvent.SHIFT_DOWN_MASK), shrinkSegmentsSlow);
 		actionMap.put(shrinkSegmentsSlow, shrinkSegmentsSlowAct);
 
-		final PhonUIAction copyRecordsAct = new PhonUIAction(this, "copy");
+		final PhonUIAction<Void> copyRecordsAct = PhonUIAction.runnable(this::copy);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "copy");
 		actionMap.put("copy", copyRecordsAct);
 
-		final PhonUIAction pasteRecordsAct = new PhonUIAction( this, "paste" );
+		final PhonUIAction<Void> pasteRecordsAct = PhonUIAction.eventConsumer(this::paste);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "paste");
 		actionMap.put("paste", pasteRecordsAct);
 
-		final PhonUIAction cutRecordsAct = new PhonUIAction(this, "cut");
+		final PhonUIAction<Void> cutRecordsAct = PhonUIAction.eventConsumer(this::cut);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "cut");
 		actionMap.put("cut", cutRecordsAct);
 
 		for (int i = 0; i < 10; i++) {
-			final PhonUIAction chSpeakerAct = new PhonUIAction(this, "onChangeSpeakerByIndex", i);
+			final PhonUIAction<Integer> chSpeakerAct = PhonUIAction.consumer(this::onChangeSpeakerByIndex, i);
 			KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_0 + i,
 					Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 			chSpeakerAct.putValue(PhonUIAction.ACCELERATOR_KEY, ks);
@@ -318,7 +318,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		actionMap.put(splitRecordId, splitRecordAct);
 
 		final String acceptSplitId = "accept_split_record";
-		final PhonUIAction acceptSplitRecordAct = new PhonUIAction(this, "onEndSplitRecord", true);
+		final PhonUIAction<Boolean> acceptSplitRecordAct = PhonUIAction.eventConsumer(this::onEndSplitRecord, true);
 		final KeyStroke acceptSplitRecordKs = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
 		inputMap.put(acceptSplitRecordKs, acceptSplitId);
 		actionMap.put(acceptSplitId, acceptSplitRecordAct);
@@ -326,7 +326,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		// modify record split
 		final String splitAtGroupId = "split_record_at_group_";
 		for (int i = 0; i < 10; i++) {
-			final PhonUIAction splitRecordAtGrpAct = new PhonUIAction(this, "onSplitRecordOnGroup", i);
+			final PhonUIAction<Integer> splitRecordAtGrpAct = PhonUIAction.eventConsumer(this::onSplitRecordOnGroup, i);
 			final KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_0 + i, 0);
 			inputMap.put(ks, splitAtGroupId + i);
 			actionMap.put(splitAtGroupId + i, splitRecordAtGrpAct);
@@ -352,7 +352,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		getParentView().getEditor().getUndoSupport().endUpdate();
 	}
 
-	public void onMoveSegmentsRight(PhonActionEvent pae) {
+	public void onMoveSegmentsRight(PhonActionEvent<Integer> pae) {
 		int amount = Integer.parseInt(pae.getData().toString());
 		float secondsPerPixel = getTimeModel().timeAtX(getTimeModel().getTimeInsets().left+1);
 		float secondsToAdd = amount * secondsPerPixel;
@@ -378,7 +378,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		recordGrid.repaint(recordGrid.getVisibleRect());
 	}
 
-	public void onGrowSegments(PhonActionEvent pae) {
+	public void onGrowSegments(PhonActionEvent<Integer> pae) {
 		int amount = Integer.parseInt(pae.getData().toString());
 		float secondsPerPixel = getTimeModel().timeAtX(getTimeModel().getTimeInsets().left+1);
 		float secondsToAdd = amount * secondsPerPixel;
@@ -403,7 +403,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		recordGrid.repaint(recordGrid.getVisibleRect());
 	}
 
-	public void onShrinkSegments(PhonActionEvent pae) {
+	public void onShrinkSegments(PhonActionEvent<Integer> pae) {
 		int amount = Integer.parseInt(pae.getData().toString());
 		float secondsPerPixel = getTimeModel().timeAtX(getTimeModel().getTimeInsets().left+1);
 		float secondsToSubtract = amount * secondsPerPixel;
@@ -430,7 +430,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		recordGrid.repaint(recordGrid.getVisibleRect());
 	}
 
-	public void onMoveSegmentsLeft(PhonActionEvent pae) {
+	public void onMoveSegmentsLeft(PhonActionEvent<Integer> pae) {
 		int amount = Integer.parseInt(pae.getData().toString());
 		float secondsPerPixel = getTimeModel().timeAtX(getTimeModel().getTimeInsets().left+1);
 		float secondsToAdd = amount * secondsPerPixel;
@@ -457,7 +457,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		recordGrid.repaint(recordGrid.getVisibleRect());
 	}
 
-	public void onEscape(PhonActionEvent pae) {
+	public void onEscape(PhonActionEvent<Boolean> pae) {
 		if (isSplitModeActive()) {
 			onEndSplitRecord(pae);
 		} else if (getParentView().getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
@@ -474,8 +474,8 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		}
 	}
 
-	public void onSelectSpeaker(PhonActionEvent pae) {
-		Participant speaker = (Participant) pae.getData();
+	public void onSelectSpeaker(PhonActionEvent<Participant> pae) {
+		Participant speaker = pae.getData();
 		if(speaker == null) return;
 
 		List<Integer> participantRecords = new ArrayList<>();
@@ -495,8 +495,8 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		}
 	}
 
-	public void onSelectResultRecords(PhonActionEvent pae) {
-		ResultSet rs = (ResultSet) pae.getData();
+	public void onSelectResultRecords(PhonActionEvent<ResultSet> pae) {
+		ResultSet rs = pae.getData();
 		Set<Integer> recordSet = new LinkedHashSet<>();
 		for(int i = 0; i < rs.numberOfResults(false); i++) {
 			recordSet.add(rs.getResult(i).getRecordIndex());
@@ -508,7 +508,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 			recordGrid.setCurrentRecordIndex(recordSet.iterator().next());
 	}
 
-	public void onSelectAll(PhonActionEvent pae) {
+	public void onSelectAll(PhonActionEvent<Void> pae) {
 		List<Integer> visibleRecords = new ArrayList<>();
 		List<Participant> visibleSpeakers = getSpeakerList();
 		if(isSpeakerVisible(Participant.UNKNOWN))
@@ -537,7 +537,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 	 *
 	 * @param pae
 	 */
-	public void onMoveSegments(PhonActionEvent pae) {
+	public void onMoveSegments(PhonActionEvent<Void> pae) {
 		final FormatterTextField<Long> msField = new FormatterTextField<>(new MsFormatter());
 		msField.setPrompt("###:##.###");
 		msField.setToolTipText("Enter number, may use ###:##.### format. Negative values allowed.");
@@ -551,13 +551,13 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		movePanel.add(lbl, BorderLayout.NORTH);
 		movePanel.add(msField, BorderLayout.CENTER);
 
-		final PhonUIAction okAct = new PhonUIAction(this, "onConfirmMoveSegments", msField);
+		final PhonUIAction<FormatterTextField<Long>> okAct = PhonUIAction.eventConsumer(this::onConfirmMoveSegments, msField);
 		okAct.putValue(PhonUIAction.NAME, "Ok");
 		okAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move segments given amount of time");
 		JButton okBtn = new JButton(okAct);
 		msField.setAction(okAct);
 
-		final PhonUIAction cancelAct = new PhonUIAction(this, "onCancelMoveSegments");
+		final PhonUIAction<Void> cancelAct = PhonUIAction.eventConsumer(this::onCancelMoveSegments);
 		cancelAct.putValue(PhonUIAction.NAME, "Cancel");
 		cancelAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Cancel move segments");
 		JButton cancelBtn = new JButton(cancelAct);
@@ -600,8 +600,8 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		timeSelectionPopup.setVisible(true);
 	}
 
-	public void onConfirmMoveSegments(PhonActionEvent pae) {
-		FormatterTextField<Long> msField = (FormatterTextField<Long>)pae.getData();
+	public void onConfirmMoveSegments(PhonActionEvent<FormatterTextField<Long>> pae) {
+		FormatterTextField<Long> msField = pae.getData();
 		Long confirmedValue = msField.getValue();
 		if(confirmedValue == null) {
 			Toolkit.getDefaultToolkit().beep();
@@ -635,14 +635,13 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		EditorEvent ee = new EditorEvent(EditorEventType.RECORD_REFRESH_EVT);
 		getParentView().getEditor().getEventManager().queueEvent(ee);
 
-		onCancelMoveSegments(pae);
+		onCancelMoveSegments(new PhonActionEvent<>(pae.getActionEvent()));
 	}
 
-	public void onCancelMoveSegments(PhonActionEvent pae) {
+	public void onCancelMoveSegments(PhonActionEvent<Void> pae) {
 		timeSelectionPopup.setVisible(false);
 		timeSelectionPopup = null;
 	}
-
 
 	private final DelegateEditorAction onRecordChange = new DelegateEditorAction(this, "onRecordChange");
 
@@ -840,8 +839,8 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		recordGrid.setSpeakers(newSpeakerList);
 	}
 
-	public void toggleSpeaker(PhonActionEvent pae) {
-		Participant speaker = (Participant) pae.getData();
+	public void toggleSpeaker(PhonActionEvent<Participant> pae) {
+		Participant speaker = pae.getData();
 		setSpeakerVisible(speaker, !isSpeakerVisible(speaker));
 	}
 
@@ -979,12 +978,12 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		acceptSplitButton.setVisible(false);
 	}
 
-	public void onEndSplitRecord(PhonActionEvent pae) {
+	public void onEndSplitRecord(PhonActionEvent<Boolean> pae) {
 		recordGrid.setSplitModeAccept((boolean) pae.getData());
 		recordGrid.setSplitMode(false);
 	}
 
-	public void onSplitRecordOnGroup(PhonActionEvent pae) {
+	public void onSplitRecordOnGroup(PhonActionEvent<Integer> pae) {
 		this.splitGroupIdx = (Integer) pae.getData();
 		updateSplitRecords();
 	}
@@ -1083,7 +1082,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 	@Override
 	public void setupContextMenu(MenuBuilder builder, boolean includeAccel) {
-		final PhonUIAction copyAct = new PhonUIAction(this, "copy");
+		final PhonUIAction<Void> copyAct = PhonUIAction.runnable(this::copy);
 		copyAct.putValue(PhonUIAction.NAME, "Copy record" + (getSelectionModel().getSelectedItemsCount()>1 ? "s" : ""));
 		copyAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Copy selected records");
 		if(includeAccel)
@@ -1094,7 +1093,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		if(clipboardContents != null && clipboardContents.isDataFlavorSupported(RecordsTransferable.FLAVOR)) {
 			try {
 				RecordsTransferable recordsTransferable = (RecordsTransferable) clipboardContents.getTransferData(RecordsTransferable.FLAVOR);
-				final PhonUIAction pasteAct = new PhonUIAction(this, "paste");
+				final PhonUIAction<Void> pasteAct = PhonUIAction.eventConsumer(this::paste);
 				pasteAct.putValue(PhonUIAction.NAME, "Paste record" + (recordsTransferable.getRecords().size() > 1 ? "s" : ""));
 				pasteAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Paste records");
 				if(includeAccel)
@@ -1105,7 +1104,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 			}
 		}
 
-		final PhonUIAction cutAct = new PhonUIAction(this, "cut");
+		final PhonUIAction<Void> cutAct = PhonUIAction.eventConsumer(this::cut);
 		cutAct.putValue(PhonUIAction.NAME, "Cut record" + (getSelectionModel().getSelectedItemsCount()>1 ? "s" : ""));
 		cutAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Cut selected records");
 		if(includeAccel)
@@ -1114,7 +1113,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 		builder.addSeparator(".", "copy_paste");
 
-		final PhonUIAction selectAllAct = new PhonUIAction(this, "onSelectAll");
+		final PhonUIAction<Void> selectAllAct = PhonUIAction.eventConsumer(this::onSelectAll);
 		selectAllAct.putValue(PhonUIAction.NAME, "Select all");
 		selectAllAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select all visible records");
 		if(includeAccel)
@@ -1123,12 +1122,12 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 		JMenu speakerMenu = builder.addMenu(".", "Select all for participant");
 		for(Participant speaker:getSpeakerList()) {
-			PhonUIAction selectSpeakerAct = new PhonUIAction(this, "onSelectSpeaker", speaker);
+			PhonUIAction<Participant> selectSpeakerAct = PhonUIAction.eventConsumer(this::onSelectSpeaker, speaker);
 			selectSpeakerAct.putValue(PhonUIAction.NAME, speaker.toString());
 			speakerMenu.add(selectSpeakerAct);
 		}
 		if(isSpeakerVisible(Participant.UNKNOWN)) {
-			PhonUIAction selectSpeakerAct = new PhonUIAction(this, "onSelectSpeaker", Participant.UNKNOWN);
+			PhonUIAction<Participant> selectSpeakerAct = PhonUIAction.eventConsumer(this::onSelectSpeaker, Participant.UNKNOWN);
 			selectSpeakerAct.putValue(PhonUIAction.NAME, Participant.UNKNOWN.toString());
 			speakerMenu.add(selectSpeakerAct);
 		}
@@ -1145,7 +1144,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 				ResultSet rs = tuple.getObj2().getObj2();
 
 				String queryItemName = String.format("%s: %s (%d results)", queryName.getName(), queryNum, rs.numberOfResults(false));
-				final PhonUIAction selectResultRecordsAct = new PhonUIAction(this, "onSelectResultRecords", rs);
+				final PhonUIAction<ResultSet> selectResultRecordsAct = PhonUIAction.eventConsumer(this::onSelectResultRecords, rs);
 				selectResultRecordsAct.putValue(PhonUIAction.NAME, queryItemName);
 				selectResultsMenu.add(selectResultRecordsAct);
 			}
@@ -1172,7 +1171,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 				changeSpeakerMenu.addSeparator();
 			}
 
-			final PhonUIAction onChangeSpeakerByIndexAct = new PhonUIAction(this, "onChangeSpeakerByIndex", speakerNum);
+			final PhonUIAction<Integer> onChangeSpeakerByIndexAct = PhonUIAction.consumer(this::onChangeSpeakerByIndex, speakerNum);
 			onChangeSpeakerByIndexAct.putValue(PhonUIAction.NAME, speaker.toString());
 			onChangeSpeakerByIndexAct.putValue(PhonUIAction.SHORT_DESCRIPTION,
 					"Change record speaker to " + speaker.toString());
@@ -1193,37 +1192,35 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 		builder.addSeparator(".", "record_actions");
 
-		final PhonUIAction moveSegmentsAct = new PhonUIAction(this, "onMoveSegments");
+		final PhonUIAction<Void> moveSegmentsAct = PhonUIAction.eventConsumer(this::onMoveSegments);
 		moveSegmentsAct.putValue(PhonUIAction.NAME, "Move records...");
 		moveSegmentsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move selected records a specified amount of time");
-//		moveSegmentsAct.putValue(PhonUIAction.SMALL_ICON,
-//				IconManager.getInstance().getIcon("actions/list-move", IconSize.SMALL));
 		if(includeAccel)
 			moveSegmentsAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_SLASH, KeyEvent.CTRL_DOWN_MASK));
 		builder.addItem(".", moveSegmentsAct);
 
-		final PhonUIAction moveSegmentsRightAct = new PhonUIAction(this, "onMoveSegmentsRight", 5);
+		final PhonUIAction<Integer> moveSegmentsRightAct = PhonUIAction.eventConsumer(this::onMoveSegmentsRight, 5);
 		moveSegmentsRightAct.putValue(PhonUIAction.NAME, "Move record" + (getSelectionModel().getSelectedItemsCount() > 1 ? "s" : "") + " right");
 		moveSegmentsRightAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move selected records right on the timeline");
 		if(includeAccel)
 			moveSegmentsRightAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, KeyEvent.CTRL_DOWN_MASK));
 		builder.addItem(".", moveSegmentsRightAct);
 
-		final PhonUIAction moveSegmentsLeftAct = new PhonUIAction(this, "onMoveSegmentsLeft", 5);
+		final PhonUIAction<Integer> moveSegmentsLeftAct = PhonUIAction.eventConsumer(this::onMoveSegmentsLeft, 5);
 		moveSegmentsLeftAct.putValue(PhonUIAction.NAME, "Move record" + (getSelectionModel().getSelectedItemsCount() > 1 ? "s" : "") + " left");
 		moveSegmentsLeftAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move selected records left on the timeline");
 		if(includeAccel)
 			moveSegmentsLeftAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, KeyEvent.CTRL_DOWN_MASK));
 		builder.addItem(".", moveSegmentsLeftAct);
 
-		final PhonUIAction growSegmentsAct = new PhonUIAction(this, "onGrowSegments", 3);
+		final PhonUIAction<Integer> growSegmentsAct = PhonUIAction.eventConsumer(this::onGrowSegments, 3);
 		growSegmentsAct.putValue(PhonUIAction.NAME, "Grow record" + (getSelectionModel().getSelectedItemsCount() > 1 ? "s" : ""));
 		growSegmentsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Grow selected records");
 		if(includeAccel)
 			growSegmentsAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_DOWN_MASK));
 		builder.addItem(".", growSegmentsAct);
 
-		final PhonUIAction shrinkSegmentsAct = new PhonUIAction(this, "onShrinkSegments", 3);
+		final PhonUIAction<Integer> shrinkSegmentsAct = PhonUIAction.eventConsumer(this::onShrinkSegments, 3);
 		shrinkSegmentsAct.putValue(PhonUIAction.NAME, "Shrink record" + (getSelectionModel().getSelectedItemsCount() > 1 ? "s" : ""));
 		shrinkSegmentsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Shrink selected records");
 		if(includeAccel)
@@ -1236,7 +1233,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 	private void setupSplitModeMenu(MenuBuilder builder, boolean includeAccel) {
 		if (splitMarker != null) {
-			final PhonUIAction acceptSplitAct = new PhonUIAction(this, "onEndSplitRecord", true);
+			final PhonUIAction<Boolean> acceptSplitAct = PhonUIAction.eventConsumer(this::onEndSplitRecord, true);
 			acceptSplitAct.putValue(PhonUIAction.NAME, "Accept record split");
 			acceptSplitAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "");
 			acceptSplitAct.putValue(PhonUIAction.SMALL_ICON,
@@ -1245,7 +1242,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 				acceptSplitAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0));
 			builder.addItem(".", acceptSplitAct);
 
-			final PhonUIAction endSplitModeAct = new PhonUIAction(this, "onEndSplitRecord", false);
+			final PhonUIAction<Boolean> endSplitModeAct = PhonUIAction.eventConsumer(this::onEndSplitRecord, false);
 			endSplitModeAct.putValue(PhonUIAction.NAME, "Exit split record");
 			endSplitModeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Exit split record mode without accepting split");
 			endSplitModeAct.putValue(PhonUIAction.SMALL_ICON,
@@ -1259,7 +1256,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 			if (r != null) {
 				JMenu splitMenu = builder.addMenu(".", "Split data after group");
 				for (int i = 0; i <= r.numberOfGroups(); i++) {
-					final PhonUIAction splitAfterGroupAct = new PhonUIAction(this, "onSplitRecordOnGroup", i);
+					final PhonUIAction<Integer> splitAfterGroupAct = PhonUIAction.eventConsumer(this::onSplitRecordOnGroup, i);
 					if (i == 0) {
 						splitAfterGroupAct.putValue(PhonUIAction.NAME, "All data to new record");
 					} else {
@@ -1279,7 +1276,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 			builder.addSeparator(".", "split_actions");
 		} else {
-			final PhonUIAction enterSplitModeAct = new PhonUIAction(this, "beginSplitMode");
+			final PhonUIAction<Void> enterSplitModeAct = PhonUIAction.runnable(this::beginSplitMode);
 			enterSplitModeAct.putValue(PhonUIAction.NAME, "Split record");
 			enterSplitModeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Enter split record mode for current record");
 			if (includeAccel)
@@ -1290,7 +1287,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 	
 	public void setupSpeakerContextMenu(Participant participant, MenuBuilder builder) {
 		builder.addSeparator(".", "select");
-		final PhonUIAction selectAllAct = new PhonUIAction(this, "onSelectSpeaker", participant);
+		final PhonUIAction<Participant> selectAllAct = PhonUIAction.eventConsumer(this::onSelectSpeaker, participant);
 		selectAllAct.putValue(PhonUIAction.NAME, "Select all");
 		selectAllAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select all records for " + participant.toString());
 		builder.addItem(".", selectAllAct);
@@ -1320,7 +1317,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 	public void setupSpeakerMenu(MenuBuilder builder) {
 		Session session = getParentView().getEditor().getSession();
 		for (var speaker : session.getParticipants()) {
-			final PhonUIAction toggleSpeakerAct = new PhonUIAction(this, "toggleSpeaker", speaker);
+			final PhonUIAction<Participant> toggleSpeakerAct = PhonUIAction.eventConsumer(this::toggleSpeaker, speaker);
 			toggleSpeakerAct.putValue(PhonUIAction.NAME, speaker.toString());
 			toggleSpeakerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle speaker " + speaker);
 			toggleSpeakerAct.putValue(PhonUIAction.SELECTED_KEY, isSpeakerVisible(speaker));
@@ -1328,7 +1325,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 			builder.addItem(".", toggleSpeakerItem);
 		}
 
-		final PhonUIAction toggleUnknownAct = new PhonUIAction(this, "toggleSpeaker", Participant.UNKNOWN);
+		final PhonUIAction<Participant> toggleUnknownAct = PhonUIAction.eventConsumer(this::toggleSpeaker, Participant.UNKNOWN);
 		toggleUnknownAct.putValue(PhonUIAction.NAME, Participant.UNKNOWN.toString());
 		toggleUnknownAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle speaker " + Participant.UNKNOWN);
 		toggleUnknownAct.putValue(PhonUIAction.SELECTED_KEY, isSpeakerVisible(Participant.UNKNOWN));
@@ -1346,7 +1343,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 	public void setupTierMenu(MenuBuilder builder) {
 		Session session = getParentView().getEditor().getSession();
 		for (var tierViewItem : session.getTierView()) {
-			final PhonUIAction toggleTierAct = new PhonUIAction(this, "toggleTier", tierViewItem.getTierName());
+			final PhonUIAction<String> toggleTierAct = PhonUIAction.consumer(this::toggleTier, tierViewItem.getTierName());
 			toggleTierAct.putValue(PhonUIAction.NAME, tierViewItem.getTierName());
 			toggleTierAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle tier " + tierViewItem.getTierName());
 			toggleTierAct.putValue(PhonUIAction.SELECTED_KEY, isTierVisible(tierViewItem.getTierName()));
@@ -1538,7 +1535,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(transferable, this);
 	}
 
-	public void paste(PhonActionEvent pae) {
+	public void paste(PhonActionEvent<Void> pae) {
 		int prevNumRecords = getParentView().getEditor().getSession().getRecordCount();
 		PasteRecordAction pasteAct = new PasteRecordAction(getParentView().getEditor());
 		pasteAct.actionPerformed(pae.getActionEvent());
@@ -1548,7 +1545,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		getSelectionModel().setSelectionInterval(prevNumRecords, numRecords-1);
 	}
 
-	public void cut(PhonActionEvent pae) {
+	public void cut(PhonActionEvent<Void> pae) {
 		copy();
 		DeleteRecordsAction deleteRecordsAction = new DeleteRecordsAction(getParentView(), false);
 		deleteRecordsAction.actionPerformed(pae.getActionEvent());

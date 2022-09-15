@@ -901,7 +901,8 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			}
 
 			for(String view:viewsByCategory.get(category)) {
-				final PhonUIAction toggleViewAct = new PhonUIAction(view, this, "showView", view);
+				final PhonUIAction<String> toggleViewAct = PhonUIAction.consumer(this::showView, view);
+				toggleViewAct.putValue(PhonUIAction.NAME, view);
 				toggleViewAct.putValue(PhonUIAction.SMALL_ICON, getViewIcon(view));
 
 				JComponent viewItem = new JMenuItem(toggleViewAct);
@@ -984,7 +985,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			((JMenu)menuElement).add(deleteMenu);
 
 		// save current layout
-		final PhonUIAction saveLayoutAct = new PhonUIAction(this, "onSaveLayout");
+		final PhonUIAction<Void> saveLayoutAct = PhonUIAction.runnable(this::onSaveLayout);
 		ImageIcon saveLayoutIcon = IconManager.getInstance().getIcon("actions/layout-add", IconSize.SMALL);
 		saveLayoutAct.putValue(PhonUIAction.SMALL_ICON, saveLayoutIcon);
 		saveLayoutAct.putValue(PhonUIAction.NAME, "Save current layout...");
@@ -1011,7 +1012,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		}
 
 		final Consumer<RecordEditorPerspective> addPerspectiveToMenu = (editorPerspective) -> {
-			final PhonUIAction showPerspectiveAct = new PhonUIAction(this, "loadPerspective", editorPerspective);
+			final PhonUIAction<RecordEditorPerspective> showPerspectiveAct = PhonUIAction.consumer(this::loadPerspective, editorPerspective);
 			showPerspectiveAct.putValue(PhonUIAction.NAME, editorPerspective.getName());
 			showPerspectiveAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Load perspective: " + editorPerspective.getName());
 			final JMenuItem showPerspectiveItem = new JMenuItem(showPerspectiveAct);
@@ -1031,7 +1032,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		}
 
 
-		final PhonUIAction showPerspectivesFolderAct = new PhonUIAction(this, "onShowLayoutFolder");
+		final PhonUIAction<Void> showPerspectivesFolderAct = PhonUIAction.runnable(this::onShowLayoutFolder);
 		showPerspectivesFolderAct.putValue(PhonUIAction.NAME, "-- User Library --");
 		showPerspectivesFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, RecordEditorPerspective.PERSPECTIVES_FOLDER.getAbsolutePath());
 		final JMenuItem showFolderItem = new JMenuItem(showPerspectivesFolderAct);
@@ -1078,8 +1079,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 				final File perspectiveFile = new File(editorPerspective.getLocation().toURI());
 				if(perspectiveFile.canWrite()) {
 					// add delete item
-					final PhonUIAction delPerspectiveAct =
-							new PhonUIAction(this, "onDeletePerspective", editorPerspective);
+					final PhonUIAction<RecordEditorPerspective> delPerspectiveAct =  PhonUIAction.consumer(this::onDeletePerspective, editorPerspective);
 					delPerspectiveAct.putValue(PhonUIAction.NAME, editorPerspective.getName());
 					delPerspectiveAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Delete layout " + editorPerspective.getName());
 					final JMenuItem delPerspectiveItem = new JMenuItem(delPerspectiveAct);

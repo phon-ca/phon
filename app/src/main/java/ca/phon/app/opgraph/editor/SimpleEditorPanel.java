@@ -144,7 +144,6 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	 *
 	 * @param project if <code>null</code> project graphs will not be displayed
 	 * @param library library display in add item dialog
-	 * @param graph
 	 * @param modelInstantiator the editor model instantiator
 	 * @param nodeInstantiator instantiator for nodes created by adding documents from the library
 	 * @param queryNodeInstantiator instantiator for nodes created by adding queries to the doucment
@@ -291,7 +290,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 			saveButton.setOnlyPopup(e.getNewValue() == null);
 		});
 		
-		final PhonUIAction browseAct = new PhonUIAction(this, "onBrowse");
+		final PhonUIAction<Void> browseAct = PhonUIAction.runnable(this::onBrowse);
 		final ImageIcon openIcn =
 				IconManager.getInstance().getIcon("actions/document-open", IconSize.SMALL);
 		browseAct.putValue(PhonUIAction.SMALL_ICON, openIcn);
@@ -300,17 +299,17 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 
 		final ImageIcon addIcn =
 				IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL);
-		final PhonUIAction addAct = new PhonUIAction(this, "addSelectedDocuments", documentTree);
+		final PhonUIAction<JTree> addAct = PhonUIAction.consumer(this::addSelectedDocuments, documentTree);
 		addAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Add selected items to " + getModel().getNoun().getObj1());
 		addAct.putValue(PhonUIAction.SMALL_ICON, addIcn);
 		final JPopupMenu addMenu = new JPopupMenu();
 		
-		final PhonUIAction addWithText = new PhonUIAction(this, "addSelectedDocuments", documentTree);
+		final PhonUIAction<JTree> addWithText = PhonUIAction.consumer(this::addSelectedDocuments, documentTree);
 		addWithText.putValue(PhonUIAction.NAME, addAct.getValue(PhonUIAction.SHORT_DESCRIPTION));
 		addWithText.putValue(PhonUIAction.SMALL_ICON, addAct.getValue(PhonUIAction.SMALL_ICON));
 		addMenu.add(new JMenuItem(addWithText));
 		
-		final PhonUIAction appendAct = new PhonUIAction(this, "onAppend");
+		final PhonUIAction<Void> appendAct = PhonUIAction.runnable(this::onAppend);
 		appendAct.putValue(PhonUIAction.NAME, "Append " + getModel().getNoun().getObj1() + " from disk...");
 		appendAct.putValue(PhonUIAction.SMALL_ICON, browseAct.getValue(PhonUIAction.SMALL_ICON));
 		addMenu.add(new JMenuItem(appendAct));
@@ -320,14 +319,14 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		
 		final ImageIcon dupIcn =
 				IconManager.getInstance().getIcon("actions/insert_table_row", IconSize.SMALL);
-		final PhonUIAction dupAct = new PhonUIAction(this, "onDuplicate");
+		final PhonUIAction<Void> dupAct = PhonUIAction.runnable(this::onDuplicate);
 		dupAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Duplicate selected " + getModel().getNoun().getObj1());
 		dupAct.putValue(PhonUIAction.SMALL_ICON, dupIcn);
 		duplicateButton = new JButton(dupAct);
 		
 		final ImageIcon removeIcn =
 				IconManager.getInstance().getIcon("actions/list-remove", IconSize.SMALL);
-		final PhonUIAction removeAct = new PhonUIAction(this, "onRemove");
+		final PhonUIAction<Void> removeAct = PhonUIAction.runnable(this::onRemove);
 		removeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Remove selected " + getModel().getNoun().getObj1());
 		removeAct.putValue(PhonUIAction.SMALL_ICON, removeIcn);
 		final KeyStroke removeKs = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
@@ -335,7 +334,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 
 		final ImageIcon upIcn =
 				IconManager.getInstance().getIcon("actions/draw-arrow-up", IconSize.SMALL);
-		final PhonUIAction upAct = new PhonUIAction(this, "onMoveUp");
+		final PhonUIAction<Void> upAct = PhonUIAction.runnable(this::onMoveUp);
 		upAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move selected " + getModel().getNoun().getObj1() + " up");
 		upAct.putValue(PhonUIAction.SMALL_ICON, upIcn);
 		final KeyStroke upKs = KeyStroke.getKeyStroke(KeyEvent.VK_UP, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
@@ -343,7 +342,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 
 		final ImageIcon downIcn =
 				IconManager.getInstance().getIcon("actions/draw-arrow-down", IconSize.SMALL);
-		final PhonUIAction downAct = new PhonUIAction(this, "onMoveDown");
+		final PhonUIAction<Void> downAct = PhonUIAction.runnable(this::onMoveDown);
 		downAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move selected " + getModel().getNoun().getObj1() + " down");
 		downAct.putValue(PhonUIAction.SMALL_ICON, downIcn);
 		final KeyStroke downKs = KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
@@ -351,7 +350,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 
 		final ImageIcon runIcn =
 				IconManager.getInstance().getIcon("actions/media-playback-start-7", IconSize.SMALL);
-		final PhonUIAction runAct = new PhonUIAction(this, "onRun");
+		final PhonUIAction<Void> runAct = PhonUIAction.runnable(this::onRun);
 		runAct.putValue(PhonUIAction.NAME, "Run " + getModel().getNoun().getObj1());
 		runAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Run " + getModel().getNoun().getObj1());
 		runAct.putValue(PhonUIAction.SMALL_ICON, runIcn);
@@ -1004,7 +1003,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		}
 	}
 	
-	public void saveInFolder(PhonActionEvent pae) {
+	public void saveInFolder(PhonActionEvent<String> pae) {
 		final String path = (String)pae.getData();
 		if(path != null) {
 			File folder = new File(path);
@@ -1027,17 +1026,17 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 		
 		final ImageIcon saveAsIcn = IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL);
 		
-		PhonUIAction saveUserAct = new PhonUIAction(this, "saveInFolder", library.getUserFolderPath());
+		PhonUIAction<String> saveUserAct = PhonUIAction.eventConsumer(this::saveInFolder, library.getUserFolderPath());
 		saveUserAct.putValue(PhonUIAction.NAME, "Save in user library...");
 		saveUserAct.putValue(PhonUIAction.SMALL_ICON, saveAsIcn);
 		menu.add(saveUserAct);
 		
-		PhonUIAction saveProjectAct = new PhonUIAction(this, "saveInFolder", library.getProjectFolderPath(getProject()));
+		PhonUIAction<String> saveProjectAct = PhonUIAction.eventConsumer(this::saveInFolder, library.getProjectFolderPath(getProject()));
 		saveProjectAct.putValue(PhonUIAction.NAME, "Save in project library...");
 		saveProjectAct.putValue(PhonUIAction.SMALL_ICON, saveAsIcn);
 		menu.add(saveProjectAct);
 		
-		PhonUIAction saveAsAct = new PhonUIAction(this, "saveInFolder", library.getProjectFolderPath(getProject()));
+		PhonUIAction<String> saveAsAct = PhonUIAction.eventConsumer(this::saveInFolder, library.getProjectFolderPath(getProject()));
 		saveAsAct.putValue(PhonUIAction.NAME, "Save as...");
 		saveAsAct.putValue(PhonUIAction.SMALL_ICON, saveAsIcn);
 		menu.add(saveAsAct);
@@ -1760,7 +1759,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 			
 			final ImageIcon dupIcn =
 					IconManager.getInstance().getIcon("actions/insert_table_row", IconSize.SMALL);
-			final PhonUIAction dupAct = new PhonUIAction(this, "onDuplicate");
+			final PhonUIAction<Void> dupAct = PhonUIAction.runnable(this::onDuplicate);
 			dupAct.putValue(PhonUIAction.NAME, "Duplicate " + getModel().getNoun().getObj1());
 			dupAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Duplicate selected " + getModel().getNoun().getObj1());
 			dupAct.putValue(PhonUIAction.SMALL_ICON, dupIcn);
@@ -1768,7 +1767,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 
 			final ImageIcon removeIcn =
 					IconManager.getInstance().getIcon("actions/list-remove", IconSize.SMALL);
-			final PhonUIAction removeAct = new PhonUIAction(this, "onRemove");
+			final PhonUIAction<Void> removeAct = PhonUIAction.runnable(this::onRemove);
 			removeAct.putValue(PhonUIAction.NAME, "Remove " + getModel().getNoun().getObj1());
 			removeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Remove selected " + getModel().getNoun().getObj1());
 			removeAct.putValue(PhonUIAction.SMALL_ICON, removeIcn);
@@ -1778,7 +1777,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 
 			final ImageIcon renameIcn =
 					IconManager.getInstance().getIcon("actions/edit-rename", IconSize.SMALL);
-			final PhonUIAction renameAct = new PhonUIAction(this, "onRename");
+			final PhonUIAction<Void> renameAct = PhonUIAction.runnable(this::onRename);
 			renameAct.putValue(PhonUIAction.NAME, "Rename");
 			renameAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Rename selected " + getModel().getNoun().getObj1());
 			renameAct.putValue(PhonUIAction.SMALL_ICON, renameIcn);
@@ -1786,7 +1785,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 
 			final ImageIcon upIcn =
 					IconManager.getInstance().getIcon("actions/draw-arrow-up", IconSize.SMALL);
-			final PhonUIAction upAct = new PhonUIAction(this, "onMoveUp");
+			final PhonUIAction<Void> upAct = PhonUIAction.runnable(this::onMoveUp);
 			upAct.putValue(PhonUIAction.NAME, "Move up");
 			upAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move selected " + getModel().getNoun().getObj1() + " up");
 			upAct.putValue(PhonUIAction.SMALL_ICON, upIcn);
@@ -1796,7 +1795,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 
 			final ImageIcon downIcn =
 					IconManager.getInstance().getIcon("actions/draw-arrow-down", IconSize.SMALL);
-			final PhonUIAction downAct = new PhonUIAction(this, "onMoveDown");
+			final PhonUIAction<Void> downAct = PhonUIAction.runnable(this::onMoveDown);
 			downAct.putValue(PhonUIAction.NAME, "Move down");
 			downAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move selected " + getModel().getNoun().getObj1() + " down");
 			downAct.putValue(PhonUIAction.SMALL_ICON, downIcn);

@@ -165,7 +165,7 @@ public class TierOrderingEditorView extends EditorView {
 		ActionMap tierOrderActionMap = new ActionMap();
 		ComponentInputMap tableInputMap = new ComponentInputMap(tierOrderingTable);
 		
-		final PhonUIAction deleteAction = new PhonUIAction(this, "onDeleteTier");
+		final PhonUIAction<Void> deleteAction = PhonUIAction.eventConsumer(this::onDeleteTier);
 		deleteAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Delete the currently selected tier.");
 		deleteAction.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
 		tierOrderActionMap.put("DELETE_TIER", deleteAction);
@@ -187,7 +187,7 @@ public class TierOrderingEditorView extends EditorView {
 		
 		final ImageIcon upIcon =
 			IconManager.getInstance().getIcon("actions/go-up", IconSize.SMALL);
-		final PhonUIAction upAction = new PhonUIAction(this, "moveUp");
+		final PhonUIAction<Void> upAction = PhonUIAction.runnable(this::moveUp);
 		upAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move tier up");
 		upAction.putValue(PhonUIAction.SMALL_ICON, upIcon);
 		moveUpButton = new JButton(upAction);
@@ -195,7 +195,7 @@ public class TierOrderingEditorView extends EditorView {
 		
 		final ImageIcon downIcon = 
 			IconManager.getInstance().getIcon("actions/go-down", IconSize.SMALL);
-		final PhonUIAction downAction = new PhonUIAction(this, "moveDown");
+		final PhonUIAction<Void> downAction = PhonUIAction.runnable(this::moveDown);
 		downAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move tier down");
 		downAction.putValue(PhonUIAction.SMALL_ICON, downIcon);
 		moveDownButton = new JButton(downAction);
@@ -203,7 +203,7 @@ public class TierOrderingEditorView extends EditorView {
 		
 		final ImageIcon fontIcon = 
 			IconManager.getInstance().getIcon("actions/edit", IconSize.SMALL);
-		final PhonUIAction fontAction = new PhonUIAction(this, "onEditTier");
+		final PhonUIAction<Void> fontAction = PhonUIAction.eventConsumer(this::onEditTier);
 		fontAction.putValue(PhonUIAction.NAME, "Edit tier...");
 		fontAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Edit tier...");
 		fontAction.putValue(PhonUIAction.SMALL_ICON, fontIcon);
@@ -352,27 +352,29 @@ public class TierOrderingEditorView extends EditorView {
 
 		Font currentFont = ("default".equals(tvi.getTierFont()) ? FontPreferences.getTierFont() : Font.decode(tvi.getTierFont()));
 
-		final PhonUIAction toggleBoldAct = new PhonUIAction(this, "onToggleStyle", new Tuple<TierViewItem, Integer>(tvi, Font.BOLD));
+		final PhonUIAction<Tuple<TierViewItem, Integer>> toggleBoldAct =
+				PhonUIAction.eventConsumer(this::onToggleStyle, new Tuple<>(tvi, Font.BOLD));
 		toggleBoldAct.putValue(PhonUIAction.NAME, "Bold");
 		toggleBoldAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle bold modifier");
 		toggleBoldAct.putValue(PhonUIAction.SELECTED_KEY, currentFont.isBold());
 		toggleBoldAct.putValue(PhonUIAction.SMALL_ICON, boldIcon);
 		builder.addItem(".", new JCheckBoxMenuItem(toggleBoldAct));
 
-		final PhonUIAction toggleItalicAct = new PhonUIAction(this, "onToggleStyle", new Tuple<TierViewItem, Integer>(tvi, Font.ITALIC));
+		final PhonUIAction<Tuple<TierViewItem, Integer>> toggleItalicAct =
+				PhonUIAction.eventConsumer(this::onToggleStyle, new Tuple<>(tvi, Font.ITALIC));
 		toggleItalicAct.putValue(PhonUIAction.NAME, "Italic");
 		toggleItalicAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle italic modifier");
 		toggleItalicAct.putValue(PhonUIAction.SELECTED_KEY, currentFont.isItalic());
 		toggleItalicAct.putValue(PhonUIAction.SMALL_ICON, italicIcon);
 		builder.addItem(".", new JCheckBoxMenuItem(toggleItalicAct));
 
-		final PhonUIAction onIncreaseFontSize = new PhonUIAction(this, "onIncreaseFontSize", tvi);
+		final PhonUIAction<TierViewItem> onIncreaseFontSize = PhonUIAction.eventConsumer(this::onIncreaseFontSize, tvi);
 		onIncreaseFontSize.putValue(PhonUIAction.NAME, "Increase size");
 		onIncreaseFontSize.putValue(PhonUIAction.SHORT_DESCRIPTION, "Increase point size by 2");
 		onIncreaseFontSize.putValue(PhonUIAction.SMALL_ICON, addIcon);
 		builder.addItem(".", onIncreaseFontSize);
 
-		final PhonUIAction onDecreaseFontSize = new PhonUIAction(this, "onDecreaseFontSize", tvi);
+		final PhonUIAction<TierViewItem> onDecreaseFontSize = PhonUIAction.eventConsumer(this::onDecreaseFontSize, tvi);
 		onDecreaseFontSize.putValue(PhonUIAction.NAME, "Decrease size");
 		onDecreaseFontSize.putValue(PhonUIAction.SHORT_DESCRIPTION, "Decrease point size by 2");
 		onDecreaseFontSize.putValue(PhonUIAction.SMALL_ICON, subIcon);
@@ -390,23 +392,24 @@ public class TierOrderingEditorView extends EditorView {
 			// font not found
 			if(Font.decode(fontString).getFamily().equals("Dialog")) continue;
 
-			final PhonUIAction selectSuggestedFont = new PhonUIAction(this, "onSelectSuggestedFont", new Tuple<TierViewItem, Integer>(tvi, i));
+			final PhonUIAction<Tuple<TierViewItem, Integer>> selectSuggestedFont =
+					PhonUIAction.eventConsumer(this::onSelectSuggestedFont, new Tuple<>(tvi, i));
 			selectSuggestedFont.putValue(PhonUIAction.NAME, suggestedFont);
 			selectSuggestedFont.putValue(PhonUIAction.SHORT_DESCRIPTION, "Use font: " + suggestedFont);
 			builder.addItem(".", selectSuggestedFont);
 		}
 
 		builder.addSeparator(".", "font-dialog");
-		final PhonUIAction defaultAct = new PhonUIAction(this, "onSelectFont", tvi);
+		final PhonUIAction<TierViewItem> defaultAct = PhonUIAction.eventConsumer(this::onSelectFont, tvi);
 		defaultAct.putValue(PhonUIAction.NAME, "Select font....");
 		defaultAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select font using font selection dialog");
 		defaultAct.putValue(PhonUIAction.LARGE_ICON_KEY, icon);
 		builder.addItem(".", defaultAct);
 	}
 
-	public void onSelectFont(PhonActionEvent pae) {
+	public void onSelectFont(PhonActionEvent<TierViewItem> pae) {
 		if(pae.getData() ==  null) return;
-		TierViewItem tvi = (TierViewItem) pae.getData();
+		TierViewItem tvi = pae.getData();
 		Font currentFont = ("default".equals(tvi.getTierFont()) ? FontPreferences.getTierFont() : Font.decode(tvi.getTierFont()));
 
 		final FontDialogProperties props = new FontDialogProperties();
@@ -443,9 +446,9 @@ public class TierOrderingEditorView extends EditorView {
 		}
 	};
 
-	public void onSelectSuggestedFont(PhonActionEvent pae) {
+	public void onSelectSuggestedFont(PhonActionEvent<Tuple<TierViewItem, Integer>> pae) {
 		if(pae.getData() == null) return;
-		Tuple<TierViewItem, Integer> tuple = (Tuple<TierViewItem, Integer>)pae.getData();
+		Tuple<TierViewItem, Integer> tuple = pae.getData();
 		TierViewItem tvi = tuple.getObj1();
 		int idx = tuple.getObj2();
 
@@ -462,8 +465,8 @@ public class TierOrderingEditorView extends EditorView {
 		getEditor().getUndoSupport().postEdit(edit);
 	}
 
-	public void onIncreaseFontSize(PhonActionEvent pae) {
-		TierViewItem tvi = (TierViewItem) pae.getData();
+	public void onIncreaseFontSize(PhonActionEvent<TierViewItem> pae) {
+		TierViewItem tvi = pae.getData();
 		if(tvi == null) return;
 
 		Font currentFont = ("default".equals(tvi.getTierFont()) ? FontPreferences.getTierFont() : Font.decode(tvi.getTierFont()));
@@ -476,8 +479,8 @@ public class TierOrderingEditorView extends EditorView {
 		getEditor().getUndoSupport().postEdit(edit);
 	}
 
-	public void onDecreaseFontSize(PhonActionEvent pae) {
-		TierViewItem tvi = (TierViewItem) pae.getData();
+	public void onDecreaseFontSize(PhonActionEvent<TierViewItem> pae) {
+		TierViewItem tvi = pae.getData();
 		if(tvi == null) return;
 
 		Font currentFont = ("default".equals(tvi.getTierFont()) ? FontPreferences.getTierFont() : Font.decode(tvi.getTierFont()));
@@ -490,9 +493,9 @@ public class TierOrderingEditorView extends EditorView {
 		getEditor().getUndoSupport().postEdit(edit);
 	}
 
-	public void onToggleStyle(PhonActionEvent pae) {
+	public void onToggleStyle(PhonActionEvent<Tuple<TierViewItem, Integer>> pae) {
 		if(pae.getData() == null) return;
-		Tuple<TierViewItem, Integer> tuple = (Tuple<TierViewItem, Integer>)pae.getData();
+		Tuple<TierViewItem, Integer> tuple = pae.getData();
 		TierViewItem tvi = tuple.getObj1();
 		int style = tuple.getObj2();
 
@@ -540,7 +543,7 @@ public class TierOrderingEditorView extends EditorView {
 		}
 	}
 	
-	public void onEditTier(PhonActionEvent pae) {
+	public void onEditTier(PhonActionEvent<Void> pae) {
 		int selectedRow = tierOrderingTable.getSelectedRow();
 		final List<TierViewItem> tierOrder = getCurrentOrder();
 		
@@ -551,7 +554,7 @@ public class TierOrderingEditorView extends EditorView {
 		}
 	}
 	
-	public void onDeleteTier(PhonActionEvent pae) {
+	public void onDeleteTier(PhonActionEvent<Void> pae) {
 		int selectedRow = tierOrderingTable.getSelectedRow();
 		final List<TierViewItem> tierOrder = getCurrentOrder();
 		final SessionEditor editor = getEditor();

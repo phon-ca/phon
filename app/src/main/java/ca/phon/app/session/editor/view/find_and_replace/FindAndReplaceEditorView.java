@@ -137,14 +137,14 @@ public class FindAndReplaceEditorView extends EditorView {
 		
 		final ButtonGroup directionGrp = new ButtonGroup();
 		
-		final PhonUIAction setDirectionForwardsAct = new PhonUIAction(this, "setDirection", FindManager.FindDirection.FORWARDS);
+		final PhonUIAction<FindDirection> setDirectionForwardsAct = PhonUIAction.consumer(this::setDirection, FindManager.FindDirection.FORWARDS);
 		setDirectionForwardsAct.putValue(PhonUIAction.NAME, "Search Forwards");
 		setDirectionForwardsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Search forwards in session");
 		setDirectionForwardsAct.putValue(PhonUIAction.SELECTED_KEY, Boolean.TRUE);
 		final JRadioButton forwardsBtn = new JRadioButton(setDirectionForwardsAct);
 		directionGrp.add(forwardsBtn);
 		
-		final PhonUIAction setDirectionBackwardAct = new PhonUIAction(this, "setDirection", FindManager.FindDirection.BACKWARDS);
+		final PhonUIAction<FindDirection> setDirectionBackwardAct = PhonUIAction.consumer(this::setDirection, FindManager.FindDirection.BACKWARDS);
 		setDirectionBackwardAct.putValue(PhonUIAction.NAME, "Search Backwards");
 		setDirectionBackwardAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Search backwards in session");
 		setDirectionBackwardAct.putValue(PhonUIAction.SELECTED_KEY, Boolean.FALSE);

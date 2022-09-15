@@ -83,18 +83,18 @@ public class TimelineWaveformTier extends TimelineTier  {
 		final ActionMap actionMap = wavDisplay.getActionMap();
 		
 		final String playKey = "play";
-		final PhonUIAction playAction = new PhonUIAction(this, "onPlay");
+		final PhonUIAction<Void> playAction = PhonUIAction.eventConsumer(this::onPlay);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), playKey);
 		actionMap.put(playKey, playAction);
 		
 		final String escapeKey = "escape";
-		final PhonUIAction escapeAction = new PhonUIAction(this, "onEscape");
+		final PhonUIAction<Void> escapeAction = PhonUIAction.eventConsumer(this::onEscape);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), escapeKey);
 		actionMap.put(escapeKey, escapeAction);
 		
 		// setup record creation actions
 		for(int i = 0; i < 10; i++) {
-			final PhonUIAction recordCreationAct = new PhonUIAction(this, "onCreateRecord", i);
+			final PhonUIAction<Integer> recordCreationAct = PhonUIAction.eventConsumer(this::onCreateRecord, i);
 			final KeyStroke ks1 = KeyStroke.getKeyStroke(KeyEvent.VK_0 + i, 0);
 			final KeyStroke ks2 = KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD0 + i, 0);
 			final String recordCreationId = "create_record_for_speaker_" + i;
@@ -125,7 +125,7 @@ public class TimelineWaveformTier extends TimelineTier  {
 	@Override
 	public void setupContextMenu(MenuBuilder builder, boolean includeAccel) {
 		if(selectionInterval != null) {
-			final PhonUIAction playSelectionAct = new PhonUIAction(getParentView(), "playSelection");
+			final PhonUIAction<Void> playSelectionAct = PhonUIAction.runnable(getParentView()::playSelection);
 			playSelectionAct.putValue(PhonUIAction.NAME, "Play selection");
 			playSelectionAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play current selection");
 			playSelectionAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
@@ -133,7 +133,7 @@ public class TimelineWaveformTier extends TimelineTier  {
 				playSelectionAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0));
 			builder.addItem(".", playSelectionAct);
 			
-			final PhonUIAction exportSelectionAct = new PhonUIAction(getParentView(), "exportSelection");
+			final PhonUIAction<Void> exportSelectionAct = PhonUIAction.runnable(getParentView()::exportSelection);
 			exportSelectionAct.putValue(PhonUIAction.NAME, "Export selection...");
 			exportSelectionAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export selection (audio only)");
 			exportSelectionAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
@@ -143,7 +143,7 @@ public class TimelineWaveformTier extends TimelineTier  {
 			builder.addSeparator(".", "play_and_export_selection");
 			
 			if(getParentView().getEditor().getSession().getRecordCount() > 0) {
-				final PhonUIAction assignSegmentAction = new PhonUIAction(this, "onAssignSegment");
+				final PhonUIAction<Void> assignSegmentAction = PhonUIAction.eventConsumer(this::onAssignSegment);
 				assignSegmentAction.putValue(PhonUIAction.NAME, "Assign selection to current record");
 				assignSegmentAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Assign selected segment to current record");
 				builder.addItem(".", assignSegmentAction);
@@ -153,7 +153,7 @@ public class TimelineWaveformTier extends TimelineTier  {
 			MenuBuilder newRecordBuilder = new MenuBuilder(newRecordMenu);
 			List<Participant> speakerList = getParentView().getRecordTier().getSpeakerList();
 			for(int i = 0; i < speakerList.size(); i++) {
-				final PhonUIAction recordCreationAct = new PhonUIAction(this, "onCreateRecord", i+1);
+				final PhonUIAction<Integer> recordCreationAct = PhonUIAction.eventConsumer(this::onCreateRecord, i+1);
 				recordCreationAct.putValue(PhonUIAction.NAME, speakerList.get(i) + "");
 				recordCreationAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create new record from selection assigned to " + speakerList.get(i));
 				final KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_1 + i, 0);
@@ -165,7 +165,7 @@ public class TimelineWaveformTier extends TimelineTier  {
 			if(speakerList.size() > 1) {
 				newRecordBuilder.addSeparator(".", "record_creation_user");
 			}
-			final PhonUIAction recordCreationAct = new PhonUIAction(this, "onCreateRecord", 0);
+			final PhonUIAction<Integer> recordCreationAct = PhonUIAction.eventConsumer(this::onCreateRecord, 0);
 			recordCreationAct.putValue(PhonUIAction.NAME, Participant.UNKNOWN + "");
 			recordCreationAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create new record from selection assigned to " + Participant.UNKNOWN);
 			newRecordBuilder.addItem(".", recordCreationAct);
@@ -187,7 +187,7 @@ public class TimelineWaveformTier extends TimelineTier  {
 			builder.addSeparator(".", "global_export_actions");
 		}
 		
-		final PhonUIAction toggleVisiblityAct = new PhonUIAction(this, "toggleVisible");
+		final PhonUIAction<Void> toggleVisiblityAct = PhonUIAction.runnable(this::toggleVisible);
 		toggleVisiblityAct.putValue(PhonUIAction.NAME, 
 				(isVisible() ? "Hide waveform" : "Show waveform"));
 		toggleVisiblityAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle waveform visibility");
@@ -195,14 +195,14 @@ public class TimelineWaveformTier extends TimelineTier  {
 	}
 	
 	/* UI Events */
-	public void onPlay(PhonActionEvent pae) {
+	public void onPlay(PhonActionEvent<Void> pae) {
 		if(selectionInterval != null) {
 			PlaySegmentAction playSegAct = new PlaySegmentAction(getParentView().getEditor(), selectionInterval.getStartMarker().getTime(), selectionInterval.getEndMarker().getTime());
 			playSegAct.actionPerformed(pae.getActionEvent());
 		}
 	}
 	
-	public void onEscape(PhonActionEvent pae) {
+	public void onEscape(PhonActionEvent<Void> pae) {
 		if(getParentView().getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
 			MediaPlayerEditorView mediaView =
 					(MediaPlayerEditorView)getParentView().getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
@@ -216,11 +216,11 @@ public class TimelineWaveformTier extends TimelineTier  {
 		}
 	}
 	
-	public void onCreateRecord(PhonActionEvent pae) {
+	public void onCreateRecord(PhonActionEvent<Integer> pae) {
 		if(selectionInterval == null) return;
 		
 		Participant speaker = Participant.UNKNOWN;
-		int speakerNum = (int)pae.getData();
+		int speakerNum = pae.getData();
 		if(speakerNum > 0) {
 			List<Participant> speakerList = 
 					getParentView().getRecordTier().getSpeakerList();
@@ -248,7 +248,7 @@ public class TimelineWaveformTier extends TimelineTier  {
 		clearSelection();
 	}
 	
-	public void onAssignSegment(PhonActionEvent pae) {
+	public void onAssignSegment(PhonActionEvent<Void> pae) {
 		if(selectionInterval == null) return;
 		
 		Record currentRecord = getParentView().getEditor().currentRecord();

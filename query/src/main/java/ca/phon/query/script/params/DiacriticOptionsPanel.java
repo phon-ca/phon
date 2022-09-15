@@ -116,7 +116,7 @@ public class DiacriticOptionsPanel extends JPanel {
 		
 		latch.countDown();
 		
-		PhonUIAction dropDownAct = new PhonUIAction(this, "noop");
+		PhonUIAction dropDownAct = PhonUIAction.runnable(() -> {});
 		dropDownAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Click to show diacritic selector");
 		dropDownAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("apps/preferences-desktop-font", IconSize.SMALL));
 		dropDownAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);

@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.*;
 
 /**
- * Container for multiple {@link BufferPanels}
+ * Container for multiple {@link BufferPanel}s
  */
 public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 
@@ -116,7 +116,7 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 		
 		final JMenu bufferMenu = builder.addMenu(".", "Show buffer");
 		for(String bufferName:getBufferNames()) {
-			final PhonUIAction showBufferAct = new PhonUIAction(this, "selectBuffer", bufferName);
+			final PhonUIAction<String> showBufferAct = PhonUIAction.consumer(this::selectBuffer, bufferName);
 			showBufferAct.putValue(PhonUIAction.NAME, bufferName);
 			showBufferAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show buffer " + bufferName);
 			showBufferAct.putValue(PhonUIAction.SELECTED_KEY, getCurrentBuffer() != null && getCurrentBuffer().getName().equals(bufferName));
@@ -126,27 +126,27 @@ public class MultiBufferPanel extends JPanel implements BufferPanelContainer {
 		
 		if(getCurrentBuffer() != null) {
 			// view actions
-			final PhonUIAction viewAsTextAct = new PhonUIAction(getCurrentBuffer(), "showBuffer");
+			final PhonUIAction<Void> viewAsTextAct = PhonUIAction.runnable(getCurrentBuffer()::showBuffer);
 			viewAsTextAct.putValue(PhonUIAction.NAME, "View as text");
 			viewAsTextAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "View current buffer data as text");
 			viewAsTextAct.putValue(PhonUIAction.SELECTED_KEY, getCurrentBuffer().isShowingBuffer());
 			builder.addItem(".", new JCheckBoxMenuItem(viewAsTextAct));
 		
-			final PhonUIAction viewAsTableAct = new PhonUIAction(getCurrentBuffer(), "showTable");
+			final PhonUIAction<Void> viewAsTableAct = PhonUIAction.runnable(getCurrentBuffer()::showTable);
 			viewAsTableAct.putValue(PhonUIAction.NAME, "View as table");
 			viewAsTableAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "View current buffer data as table");
 			viewAsTableAct.putValue(PhonUIAction.SELECTED_KEY, getCurrentBuffer().isShowingTable());
 			builder.addItem(".", new JCheckBoxMenuItem(viewAsTableAct));
 			
-			final PhonUIAction viewAsHtmlAct = new PhonUIAction(getCurrentBuffer(), "showHtml");
+			final PhonUIAction<Void> viewAsHtmlAct = PhonUIAction.runnable(getCurrentBuffer()::showHtml);
 			viewAsHtmlAct.putValue(PhonUIAction.NAME, "View as HTML");
 			viewAsHtmlAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "View current buffer data as HTML");
 			viewAsHtmlAct.putValue(PhonUIAction.SELECTED_KEY, getCurrentBuffer().isShowingHtml());
 			builder.addItem(".", new JCheckBoxMenuItem(viewAsHtmlAct));
 			
 			if(getCurrentBuffer().isShowingHtml() && PrefHelper.getBoolean("phon.debug", false)) {
-				final PhonUIAction toggleDebugAct = new PhonUIAction(getCurrentBuffer(), 
-						(getCurrentBuffer().isShowingHtmlDebug() ? "hideHtmlDebug" : "showHtmlDebug"));
+				final PhonUIAction<Void> toggleDebugAct = PhonUIAction.runnable(
+						(getCurrentBuffer().isShowingHtmlDebug() ? getCurrentBuffer()::hideHtmlDebug : getCurrentBuffer()::showHtmlDebug));
 				toggleDebugAct.putValue(PhonUIAction.NAME, "Debug");
 				toggleDebugAct.putValue(PhonUIAction.SELECTED_KEY, getCurrentBuffer().isShowingHtmlDebug());
 				builder.addItem(".", new JCheckBoxMenuItem(toggleDebugAct));

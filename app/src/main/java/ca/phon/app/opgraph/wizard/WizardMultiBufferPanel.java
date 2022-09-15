@@ -44,15 +44,8 @@ public class WizardMultiBufferPanel extends MultiBufferPanel {
 		
 		if(getCurrentBuffer() != null && getCurrentBuffer().getName().equals("Report")) {
 			// replace export as excel button with custom button
-			final PhonUIAction showExportMenuAct = new PhonUIAction(this, "showExportMenu");
-			showExportMenuAct.putValue(PhonUIAction.NAME, "Export tables...");
-			
 			final JPopupMenu menu = new JPopupMenu();
-			Action dropDownAct = new AbstractAction() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-				}
-			};
+			Action dropDownAct = PhonUIAction.runnable(() -> {});
 			dropDownAct.putValue(Action.NAME, "Export tables");
 			dropDownAct.putValue(Action.SHORT_DESCRIPTION, "Export tables as excel or CSV");
 			dropDownAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));

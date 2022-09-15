@@ -111,7 +111,7 @@ public class RecentProjectsList extends JPanel {
 	private LocalProjectButton getProjectButton(File projectFolder) {
 		LocalProjectButton retVal = new LocalProjectButton(projectFolder);
 		
-		PhonUIAction openAction = new PhonUIAction(this, "onOpenProject", retVal);
+		PhonUIAction<LocalProjectButton> openAction = PhonUIAction.eventConsumer(this::onOpenProject, retVal);
 		
 		final String defaultIconName = "actions/document-open";
 		ImageIcon openIcn = (projectFolder.exists() ? IconManager.getInstance().getSystemIconForPath(projectFolder.getAbsolutePath(), defaultIconName, IconSize.SMALL)
@@ -152,7 +152,7 @@ public class RecentProjectsList extends JPanel {
 				fsIconL = finderIconL;
 		}
 		
-		PhonUIAction showAction = new PhonUIAction(this, "onShowProject", retVal);
+		PhonUIAction<LocalProjectButton> showAction = PhonUIAction.eventConsumer(this::onShowProject, retVal);
 		showAction.putValue(Action.NAME, "Show project");
 		showAction.putValue(Action.SMALL_ICON, fsIcon);
 		showAction.putValue(Action.LARGE_ICON_KEY, fsIconL);
@@ -165,8 +165,8 @@ public class RecentProjectsList extends JPanel {
 		return retVal;
 	}
 	
-	public void onShowProject(PhonActionEvent pae) {
-		LocalProjectButton btn = (LocalProjectButton)pae.getData();
+	public void onShowProject(PhonActionEvent<LocalProjectButton> pae) {
+		LocalProjectButton btn = pae.getData();
 		if(Desktop.isDesktopSupported()) {
 			try {
 				Desktop.getDesktop().open(btn.getProjectFile());
@@ -177,8 +177,8 @@ public class RecentProjectsList extends JPanel {
 		}
 	}
 	
-	public void onOpenProject(PhonActionEvent pae) {
-		LocalProjectButton btn = (LocalProjectButton)pae.getData();
+	public void onOpenProject(PhonActionEvent<LocalProjectButton> pae) {
+		LocalProjectButton btn = pae.getData();
 		
 		final EntryPointArgs args = new EntryPointArgs();
 		args.put(EntryPointArgs.PROJECT_LOCATION, btn.getProjectFile().getAbsolutePath());

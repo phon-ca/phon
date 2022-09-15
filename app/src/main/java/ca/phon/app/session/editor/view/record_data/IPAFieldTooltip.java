@@ -43,7 +43,7 @@ public class IPAFieldTooltip {
 		String id = "showSyllabificationAndAlignment";
 		KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_T, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 		inputMap.put(ks, id);
-		actionMap.put(id, new PhonUIAction(this, "showWindow"));
+		actionMap.put(id, PhonUIAction.runnable(this::showWindow));
 	}
 
 	public void setAlignmentTier(Tier<PhoneMap> alignment) {

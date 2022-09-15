@@ -15,7 +15,7 @@
  */
 package ca.phon.app.log;
 
-import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.action.*;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -65,7 +65,7 @@ public class BufferPanelButtons extends JComponent {
 		
 		final ImageIcon txtIcon = 
 				IconManager.getInstance().getSystemIconForFileType("txt", TEXT_ICON, IconSize.SMALL);
-		final PhonUIAction txtAct = new PhonUIAction(getBufferPanel(), "showBuffer");
+		final PhonUIAction<Void> txtAct = PhonUIAction.runnable(getBufferPanel()::showBuffer);
 		txtAct.putValue(PhonUIAction.NAME, "Text");
 		txtAct.putValue(PhonUIAction.SHORT_DESCRIPTION, TEXT_TEXT);
 		txtAct.putValue(PhonUIAction.SMALL_ICON, txtIcon);
@@ -76,7 +76,7 @@ public class BufferPanelButtons extends JComponent {
 		
 		final ImageIcon tblIcon =
 				IconManager.getInstance().getSystemIconForFileType("csv", TABLE_ICON, IconSize.SMALL);
-		final PhonUIAction tblAct = new PhonUIAction(getBufferPanel(), "showTable");
+		final PhonUIAction<Void> tblAct = PhonUIAction.runnable(getBufferPanel()::showTable);
 		tblAct.putValue(PhonUIAction.NAME, "Table");
 		tblAct.putValue(PhonUIAction.SHORT_DESCRIPTION, TABLE_TEXT);
 		tblAct.putValue(PhonUIAction.SMALL_ICON, tblIcon);
@@ -87,7 +87,7 @@ public class BufferPanelButtons extends JComponent {
 		
 		final ImageIcon htmlIcon =
 				IconManager.getInstance().getSystemIconForFileType("html", HTML_ICON, IconSize.SMALL);
-		final PhonUIAction htmlAct = new PhonUIAction(getBufferPanel(), "showHtml");
+		final PhonUIAction<Void> htmlAct = PhonUIAction.runnable(getBufferPanel()::showHtml);
 		htmlAct.putValue(PhonUIAction.NAME, "HTML");
 		htmlAct.putValue(PhonUIAction.SHORT_DESCRIPTION, HTML_TEXT);
 		htmlAct.putValue(PhonUIAction.SMALL_ICON, htmlIcon);

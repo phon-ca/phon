@@ -107,7 +107,7 @@ public class PathListPanel extends JPanel {
 		if(addPathBtn == null) {
 			ImageIcon addIcon = 
 				IconManager.getInstance().getIcon("actions/list-add", IconSize.XSMALL);
-			PhonUIAction addPathAct = new PhonUIAction(this, "onAddPath");
+			PhonUIAction<Void> addPathAct = PhonUIAction.eventConsumer(this::onAddPath);
 			addPathAct.putValue(Action.NAME, "Add folder...");
 			addPathAct.putValue(Action.SHORT_DESCRIPTION, "Add folder to list...");
 			addPathAct.putValue(Action.SMALL_ICON, addIcon);
@@ -123,7 +123,7 @@ public class PathListPanel extends JPanel {
 		if(removePathBtn == null) {
 			ImageIcon removeIcon = 
 				IconManager.getInstance().getIcon("actions/list-remove", IconSize.XSMALL);
-			PhonUIAction removePathAct = new PhonUIAction(this, "onRemovePath");
+			PhonUIAction<Void> removePathAct = PhonUIAction.eventConsumer(this::onRemovePath);
 			removePathAct.putValue(Action.NAME, "Remove folder...");
 			removePathAct.putValue(Action.SHORT_DESCRIPTION, "Remove selected folder from list...");
 			removePathAct.putValue(Action.SMALL_ICON, removeIcon);
@@ -139,7 +139,7 @@ public class PathListPanel extends JPanel {
 		if(moveUpBtn == null) {
 			ImageIcon upIcon =
 				IconManager.getInstance().getIcon("actions/go-up", IconSize.XSMALL);
-			PhonUIAction moveUpAct = new PhonUIAction(this, "onMovePathUp");
+			PhonUIAction<Void> moveUpAct = PhonUIAction.eventConsumer(this::onMovePathUp);
 			moveUpAct.putValue(Action.NAME, "Move up");
 			moveUpAct.putValue(Action.SHORT_DESCRIPTION, "Move selected folder up in the list");
 			moveUpAct.putValue(Action.SMALL_ICON, upIcon);
@@ -155,7 +155,7 @@ public class PathListPanel extends JPanel {
 		if(moveDownBtn == null) {
 			ImageIcon downIcon = 
 				IconManager.getInstance().getIcon("actions/go-down", IconSize.XSMALL);
-			PhonUIAction moveDownAct = new PhonUIAction(this, "onMovePathDown");
+			PhonUIAction<Void> moveDownAct = PhonUIAction.eventConsumer(this::onMovePathDown);
 			moveDownAct.putValue(Action.NAME, "Move down");
 			moveDownAct.putValue(Action.SHORT_DESCRIPTION, "Move selected folder down in the list");
 			moveDownAct.putValue(Action.SMALL_ICON, downIcon);
@@ -171,7 +171,7 @@ public class PathListPanel extends JPanel {
 	 * Button actions
 	 * 
 	 */
-	public void onAddPath(PhonActionEvent pae) {
+	public void onAddPath(PhonActionEvent<Void> pae) {
 		final OpenDialogProperties props = new OpenDialogProperties();
 		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 		props.setCanChooseDirectories(true);
@@ -202,7 +202,7 @@ public class PathListPanel extends JPanel {
 
 	}
 	
-	public void onRemovePath(PhonActionEvent pae) {
+	public void onRemovePath(PhonActionEvent<Void> pae) {
 		int selectedIdx = pathList.getSelectedIndex();
 		
 		if(selectedIdx >= 0 && selectedIdx < paths.size()) {
@@ -216,7 +216,7 @@ public class PathListPanel extends JPanel {
 		}
 	}
 	
-	public void onMovePathUp(PhonActionEvent pae) {
+	public void onMovePathUp(PhonActionEvent<Void> pae) {
 		int selectedIdx = pathList.getSelectedIndex();
 		
 		if(selectedIdx > 0 && selectedIdx < paths.size()) {
@@ -232,7 +232,7 @@ public class PathListPanel extends JPanel {
 		}
 	}
 	
-	public void onMovePathDown(PhonActionEvent pae) {
+	public void onMovePathDown(PhonActionEvent<Void> pae) {
 		int selectedIdx = pathList.getSelectedIndex();
 		
 		if(selectedIdx >= 0 && selectedIdx < paths.size()-1) {

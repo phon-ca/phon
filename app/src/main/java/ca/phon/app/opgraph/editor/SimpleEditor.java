@@ -23,6 +23,7 @@ import java.util.function.*;
 
 import javax.swing.*;
 
+import ca.phon.app.log.LogUtil;
 import org.apache.commons.lang.*;
 
 import ca.phon.opgraph.*;
@@ -104,7 +105,14 @@ public class SimpleEditor extends CommonModuleFrame {
 	protected void setupMenu() {
 		final ImageIcon saveIcn =
 				IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL);
-		final PhonUIAction saveAct = new PhonUIAction(this, "saveData");
+		final PhonUIAction<Void> saveAct = PhonUIAction.runnable(() -> {
+			try {
+				this.saveData();
+			} catch (IOException e) {
+				Toolkit.getDefaultToolkit().beep();
+				LogUtil.warning(e);
+			}
+		});
 		saveAct.putValue(PhonUIAction.NAME, "Save");
 		saveAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save " + getModel().getNoun().getObj1());
 		saveAct.putValue(PhonUIAction.SMALL_ICON, saveIcn);
@@ -114,7 +122,7 @@ public class SimpleEditor extends CommonModuleFrame {
 		
 		final ImageIcon dupIcn =
 				IconManager.getInstance().getIcon("actions/insert_table_row", IconSize.SMALL);
-		final PhonUIAction dupAct = new PhonUIAction(editorPanel, "onDuplicate");
+		final PhonUIAction<Void> dupAct = PhonUIAction.runnable(editorPanel::onDuplicate);
 		dupAct.putValue(PhonUIAction.NAME, "Duplicate " + getModel().getNoun().getObj1());
 		dupAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Duplicate selected " + getModel().getNoun().getObj1());
 		dupAct.putValue(PhonUIAction.SMALL_ICON, dupIcn);
@@ -122,7 +130,7 @@ public class SimpleEditor extends CommonModuleFrame {
 
 		final ImageIcon removeIcn =
 				IconManager.getInstance().getIcon("actions/list-remove", IconSize.SMALL);
-		final PhonUIAction removeAct = new PhonUIAction(editorPanel, "onRemove");
+		final PhonUIAction<Void> removeAct = PhonUIAction.runnable(editorPanel::onRemove);
 		removeAct.putValue(PhonUIAction.NAME, "Remove " + getModel().getNoun().getObj1());
 		removeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Remove selected " + getModel().getNoun().getObj1());
 		removeAct.putValue(PhonUIAction.SMALL_ICON, removeIcn);
@@ -132,7 +140,7 @@ public class SimpleEditor extends CommonModuleFrame {
 
 		final ImageIcon renameIcn =
 				IconManager.getInstance().getIcon("actions/edit-rename", IconSize.SMALL);
-		final PhonUIAction renameAct = new PhonUIAction(editorPanel, "onRename");
+		final PhonUIAction<Void> renameAct = PhonUIAction.runnable(editorPanel::onRename);
 		renameAct.putValue(PhonUIAction.NAME, "Rename");
 		renameAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Rename selected " + getModel().getNoun().getObj1());
 		renameAct.putValue(PhonUIAction.SMALL_ICON, renameIcn);
@@ -140,7 +148,7 @@ public class SimpleEditor extends CommonModuleFrame {
 
 		final ImageIcon upIcn =
 				IconManager.getInstance().getIcon("actions/draw-arrow-up", IconSize.SMALL);
-		final PhonUIAction upAct = new PhonUIAction(editorPanel, "onMoveUp");
+		final PhonUIAction<Void> upAct = PhonUIAction.runnable(editorPanel::onMoveUp);
 		upAct.putValue(PhonUIAction.NAME, "Move up");
 		upAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move selected " + getModel().getNoun().getObj1() + " up");
 		upAct.putValue(PhonUIAction.SMALL_ICON, upIcn);
@@ -150,7 +158,7 @@ public class SimpleEditor extends CommonModuleFrame {
 
 		final ImageIcon downIcn =
 				IconManager.getInstance().getIcon("actions/draw-arrow-down", IconSize.SMALL);
-		final PhonUIAction downAct = new PhonUIAction(editorPanel, "onMoveDown");
+		final PhonUIAction<Void> downAct = PhonUIAction.runnable(editorPanel::onMoveDown);
 		downAct.putValue(PhonUIAction.NAME, "Move down");
 		downAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move selected " + getModel().getNoun().getObj1() + " down");
 		downAct.putValue(PhonUIAction.SMALL_ICON, downIcn);
@@ -160,7 +168,7 @@ public class SimpleEditor extends CommonModuleFrame {
 
 		final ImageIcon runIcn =
 				IconManager.getInstance().getIcon("actions/media-playback-start-7", IconSize.SMALL);
-		final PhonUIAction runAct = new PhonUIAction(editorPanel, "onRun");
+		final PhonUIAction<Void> runAct = PhonUIAction.runnable(editorPanel::onRun);
 		runAct.putValue(PhonUIAction.NAME, "Run " + getModel().getNoun().getObj1() + "...");
 		runAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Run " + getModel().getNoun().getObj1());
 		runAct.putValue(PhonUIAction.SMALL_ICON, runIcn);
@@ -170,7 +178,7 @@ public class SimpleEditor extends CommonModuleFrame {
 
 		final ImageIcon graphIcn =
 				IconManager.getInstance().getIcon("opgraph/graph", IconSize.SMALL);
-		final PhonUIAction openInComposerAct = new PhonUIAction(editorPanel, "onOpenInComposer");
+		final PhonUIAction<Void> openInComposerAct = PhonUIAction.runnable(editorPanel::onOpenInComposer);
 		openInComposerAct.putValue(PhonUIAction.NAME, "Open in Composer (advanced)");
 		openInComposerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open in Composer (advanced)");
 		openInComposerAct.putValue(PhonUIAction.SMALL_ICON, graphIcn);

@@ -42,7 +42,7 @@ public class RecordDataMenu extends JMenu implements MenuListener {
 	public void menuSelected(MenuEvent e) {
 		removeAll();
 		
-		final PhonUIAction findAndReplaceAct = new PhonUIAction(editor, "onToggleFindAndReplace");
+		final PhonUIAction<Void> findAndReplaceAct = PhonUIAction.eventConsumer(editor::onToggleFindAndReplace);
 		findAndReplaceAct.putValue(PhonUIAction.NAME, "Find & Replace");
 		findAndReplaceAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle Find & Replace UI");
 		findAndReplaceAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/edit-find-replace", IconSize.SMALL));

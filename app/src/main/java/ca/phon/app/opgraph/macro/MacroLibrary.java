@@ -189,7 +189,7 @@ public class MacroLibrary {
 		}
 		
 		builder.addSeparator(".", "composer");
-		final PhonUIAction showComposerAct = new PhonUIAction(MacroLibrary.class, "showComposer");
+		final PhonUIAction<Void> showComposerAct = PhonUIAction.runnable(MacroLibrary::showComposer);
 		showComposerAct.putValue(PhonUIAction.NAME, "Composer...");
 		showComposerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create a new macro using Composer...");
 		builder.addItem(".@composer", showComposerAct);

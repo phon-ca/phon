@@ -133,7 +133,7 @@ public class SessionEditorToolbar extends JPanel {
 		});
 		
 		final ImageIcon viewLayoutIcn = IconManager.getInstance().getIcon("actions/layout-content", IconSize.SMALL);
-		final PhonUIAction viewLayoutAct = new PhonUIAction(this, "noop");
+		final PhonUIAction viewLayoutAct = PhonUIAction.runnable(() -> {});
 		viewLayoutAct.putValue(PhonUIAction.SMALL_ICON, viewLayoutIcn);
 		viewLayoutAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show view layout menu");
 		viewLayoutAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
@@ -165,7 +165,7 @@ public class SessionEditorToolbar extends JPanel {
 		});
 		
 		final ImageIcon playIcn = IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL);
-		final PhonUIAction playSegmentAct = new PhonUIAction(this, "playPause");
+		final PhonUIAction playSegmentAct = PhonUIAction.eventConsumer(this::playPause);
 		playSegmentAct.putValue(PhonUIAction.NAME, "Play segment");
 		playSegmentAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play segment");
 		playSegmentAct.putValue(PhonUIAction.SMALL_ICON, playIcn);
@@ -190,7 +190,7 @@ public class SessionEditorToolbar extends JPanel {
 		add(quickSearch.getSearchField(), gbc);
 	}
 	
-	public void playPause(PhonActionEvent pae) {
+	public void playPause(PhonActionEvent<Void> pae) {
 		final SessionMediaModel mediaModel = getEditor().getMediaModel();
 		final SegmentPlayback segPlayback = mediaModel.getSegmentPlayback();
 		if(segPlayback.isPlaying()) {
@@ -205,7 +205,7 @@ public class SessionEditorToolbar extends JPanel {
 		final SegmentPlayback segPlayback = mediaModel.getSegmentPlayback();
 		
 		if(segPlayback.isPlaying()) {
-			final PhonUIAction stopAct = new PhonUIAction(segPlayback, "stopPlaying");
+			final PhonUIAction stopAct = PhonUIAction.runnable(segPlayback::stopPlaying);
 			stopAct.putValue(PhonUIAction.NAME, "Stop playback");
 			stopAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
 			stopAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Stop segment playback");

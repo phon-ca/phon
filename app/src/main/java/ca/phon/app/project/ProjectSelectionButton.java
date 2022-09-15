@@ -52,7 +52,7 @@ public class ProjectSelectionButton extends FileSelectionButton {
 		if(this.showOpenProjects) {
 			JMenu openProjectsMenu = builder.addMenu(".", "Open projects");
 			for(Project project: CommonModuleFrame.getProjectWindows().keySet()) {
-				PhonUIAction selectFileAct = new PhonUIAction(this, "setSelection", new File(project.getLocation()));
+				PhonUIAction<File> selectFileAct = PhonUIAction.consumer(this::setSelection, new File(project.getLocation()));
 				selectFileAct.putValue(PhonUIAction.NAME, project.getLocation());
 				selectFileAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select " + project.getLocation());
 				openProjectsMenu.add(selectFileAct);
@@ -61,7 +61,7 @@ public class ProjectSelectionButton extends FileSelectionButton {
 
 		JMenu workspaceMenu = builder.addMenu(".", "Workspace projects");
 		for(File f:workspaceProjects) {
-			PhonUIAction selectFileAct = new PhonUIAction(this, "setSelection", f);
+			PhonUIAction<File> selectFileAct = PhonUIAction.consumer(this::setSelection, f);
 			selectFileAct.putValue(PhonUIAction.NAME, f.getAbsolutePath());
 			selectFileAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select " + f.getAbsolutePath());
 			workspaceMenu.add(selectFileAct);

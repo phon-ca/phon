@@ -220,7 +220,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 
 		add(bottomPanel, BorderLayout.SOUTH);
 
-		final PhonUIAction playSegAct = new PhonUIAction(this, "playPause");
+		final PhonUIAction<Void> playSegAct = PhonUIAction.runnable(this::playPause);
 		playSegAct.putValue(PhonUIAction.NAME, "Play segment");
 		playSegAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play current record segment");
 		playSegAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
@@ -601,7 +601,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 			recNumField = new RecordNumberField(1, getEditor().getSession().getRecordCount());
 			recNumField.setColumns(3);
 			recNumField.setText("" + (getEditor().getCurrentRecordIndex()+1));
-			final PhonUIAction moveRecordAct = new PhonUIAction(this, "moveRecord");
+			final PhonUIAction<Void> moveRecordAct = PhonUIAction.runnable(this::moveRecord);
 			moveRecordAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Edit to set this record's position in session");
 			recNumField.setAction(moveRecordAct);
 			recNumField.addFocusListener(new FocusListener() {
@@ -645,7 +645,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 			speakerBox.setRenderer(speakerRenderer);
 			speakerBox.addItemListener(speakerListener);
 
-			final PhonUIAction excludeAct = new PhonUIAction(this, "onExclude");
+			final PhonUIAction<Void> excludeAct = PhonUIAction.runnable(this::onExclude);
 			excludeAct.putValue(PhonUIAction.NAME, excludeFromSearchesText);
 			excludeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Exclude record from queries");
 			excludeFromSearchesBox = new JCheckBox(excludeAct);
@@ -681,7 +681,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 			splitGroupBtn.setFocusable(false);
 			btnPanel.add(splitGroupBtn);
 			
-			final PhonUIAction toggleFindAndReplaceAct = new PhonUIAction(this, "onToggleFindAndReplace");
+			final PhonUIAction<Void> toggleFindAndReplaceAct = PhonUIAction.eventConsumer(this::onToggleFindAndReplace);
 			toggleFindAndReplaceAct.putValue(PhonUIAction.NAME, "");
 			toggleFindAndReplaceAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/edit-find-replace", IconSize.SMALL));
 			toggleFindAndReplaceAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle Find & Replace panel");
@@ -725,7 +725,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 
 					fontSizeMenu.addSeparator();
 
-					final PhonUIAction useDefaultFontSizeAct = new PhonUIAction(RecordDataEditorView.this, "setFontSizeDelta", 0.0f);
+					final PhonUIAction<Float> useDefaultFontSizeAct = PhonUIAction.consumer(RecordDataEditorView.this::setFontSizeDelta, 0.0f);
 					useDefaultFontSizeAct.putValue(PhonUIAction.NAME, "Use default font size");
 					useDefaultFontSizeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset font size");
 					fontSizeMenu.add(useDefaultFontSizeAct);
@@ -742,7 +742,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 				}
 			});
 
-			final PhonUIAction fontSizeAct = new PhonUIAction(this, null);
+			final PhonUIAction<Void> fontSizeAct = PhonUIAction.runnable(() -> {});
 			fontSizeAct.putValue(PhonUIAction.NAME, "");
 			fontSizeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show font scale menu");
 			fontSizeAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("apps/preferences-desktop-font", IconSize.SMALL));
@@ -994,14 +994,15 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 
 		Tier<?> tier = getEditor().currentRecord().getTier(tierName);
 
-		final PhonUIAction copyTierAct = new PhonUIAction(this, "onCopyTier", tier);
+		final PhonUIAction<Tier<?>> copyTierAct = PhonUIAction.eventConsumer(this::onCopyTier, tier);
 		copyTierAct.putValue(PhonUIAction.NAME, "Copy tier");
 		copyTierAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Copy tier contents to clipboard");
 		builder.addItem(".", copyTierAct);
 
 		if(Toolkit.getDefaultToolkit().getSystemClipboard().isDataFlavorAvailable(TierTransferrable.FLAVOR)
 			|| Toolkit.getDefaultToolkit().getSystemClipboard().isDataFlavorAvailable(DataFlavor.stringFlavor)) {
-			final PhonUIAction pasteTierAct = new PhonUIAction(this, "onPasteTier", new Tuple<Record, Tier<?>>(getEditor().currentRecord(), tier));
+			final PhonUIAction<Tuple<Record, Tier<?>>> pasteTierAct =
+					PhonUIAction.eventConsumer(this::onPasteTier, new Tuple<Record, Tier<?>>(getEditor().currentRecord(), tier));
 			pasteTierAct.putValue(PhonUIAction.NAME, "Paste tier");
 			pasteTierAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Paste tier data");
 			builder.addItem(".", pasteTierAct);
@@ -1023,8 +1024,8 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 		tierMenu.show(me.getComponent(), 0, me.getComponent().getHeight());
 	}
 
-	public void onCopyTier(PhonActionEvent pae) {
-		Tier<?> tier = (Tier<?>) pae.getData();
+	public void onCopyTier(PhonActionEvent<Tier<?>> pae) {
+		Tier<?> tier = pae.getData();
 
 		TierTransferrable tierTrans = new TierTransferrable(tier);
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(tierTrans, this);
@@ -1032,8 +1033,8 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 
 	private final static String GROUPED_TIER_PATTERN = "\\[.*?\\](\\p{Space}?\\[.*?\\])*";
 	private final static String GROUP_DATA_PATTERN = "\\[(.*?)\\]";
-	public void onPasteTier(PhonActionEvent pae) {
-		Tuple<Record, Tier<?>> tuple = (Tuple<Record, Tier<?>>) pae.getData();
+	public void onPasteTier(PhonActionEvent<Tuple<Record, Tier<?>>> pae) {
+		Tuple<Record, Tier<?>> tuple = pae.getData();
 		Record destRecord = tuple.getObj1();
 		Tier<?> destTier = tuple.getObj2();
 
@@ -1252,7 +1253,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 		this.findAndReplaceButton.setSelected(visible);
 	}
 	
-	public void onToggleFindAndReplace(PhonActionEvent pae) {
+	public void onToggleFindAndReplace(PhonActionEvent<Void> pae) {
 		setFindAndReplaceVisible(!isFindAndReplaceVisible());
 	}
 	

@@ -116,7 +116,6 @@ public class ResultSetEditor extends ProjectFrame {
 	 * Constructor
 	 * @param project
 	 * @param query
-	 * @param session
 	 * @param rs
 	 */
 	public ResultSetEditor(Project project, Query query, ResultSet rs) {
@@ -253,7 +252,14 @@ public class ResultSetEditor extends ProjectFrame {
 			final ImageIcon icon =
 					IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL);
 			
-			saveAction = new PhonUIAction(this, "saveData");
+			saveAction = PhonUIAction.runnable(() -> {
+				try {
+					saveData();
+				} catch (IOException e) {
+					Toolkit.getDefaultToolkit().beep();
+					LogUtil.warning(e);
+				}
+			});
 			saveAction.putValue(PhonUIAction.NAME, "Save");
 			final KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_S, 
 					Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
@@ -272,7 +278,7 @@ public class ResultSetEditor extends ProjectFrame {
 			final ImageIcon icon =
 					IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL);
 			
-			saveTableAction = new PhonUIAction(this, "saveTable");
+			saveTableAction = PhonUIAction.runnable(this::saveTable);
 			saveTableAction.putValue(PhonUIAction.NAME, "Save table as CSV...");
 			saveTableAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save result table as CSV.");
 			final KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_S,
@@ -317,7 +323,7 @@ public class ResultSetEditor extends ProjectFrame {
 			final ImageIcon icon =
 					IconManager.getInstance().getIcon("actions/inventory", IconSize.SMALL);
 			
-			inventoryAction = new PhonUIAction(this, "generateInventory");
+			inventoryAction = PhonUIAction.runnable(this::generateInventory);
 			inventoryAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Generate inventory...");
 			inventoryAction.putValue(PhonUIAction.SMALL_ICON, icon);
 		}
@@ -343,7 +349,7 @@ public class ResultSetEditor extends ProjectFrame {
 			final ImageIcon icon =
 					IconManager.getInstance().getIcon("actions/edit", IconSize.SMALL);
 			
-			editColumnsAction = new PhonUIAction(this, "editColumns");
+			editColumnsAction = PhonUIAction.runnable(this::editColumns);
 			editColumnsAction.putValue(PhonUIAction.NAME, "Edit table columns...");
 			editColumnsAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Set up result table columns.");
 			editColumnsAction.putValue(PhonUIAction.SMALL_ICON, icon);
@@ -411,7 +417,7 @@ public class ResultSetEditor extends ProjectFrame {
 	 */
 	private Action getToggleExcludedAction() {
 		if(this.toggleExcludedAction == null) {
-			toggleExcludedAction = new PhonUIAction(this, "toggleExcluded");
+			toggleExcludedAction = PhonUIAction.runnable(this::toggleExcluded);
 			toggleExcludedAction.putValue(PhonUIAction.NAME, "Toggle result excluded");
 			toggleExcludedAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle current result exclusion");
 			final KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
@@ -445,7 +451,7 @@ public class ResultSetEditor extends ProjectFrame {
 	 */
 	private Action getToggleShowExcludedAction() {
 		if(this.toggleShowExcludedAction == null) {
-			toggleShowExcludedAction = new PhonUIAction(this, "toggleShowExcluded");
+			toggleShowExcludedAction = PhonUIAction.runnable(this::toggleShowExcluded);
 			toggleShowExcludedAction.putValue(PhonUIAction.NAME, "Show excluded results");
 		}
 		return this.toggleShowExcludedAction;

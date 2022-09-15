@@ -95,7 +95,7 @@ public class MediaSelectionField extends FileSelectionField {
 		KeyStroke saveKs = KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
 		String saveId = "save";
 		
-		PhonUIAction validateAndSaveSessionAct = new PhonUIAction(this, "validateAndSaveSession");
+		PhonUIAction<Void> validateAndSaveSessionAct = PhonUIAction.eventConsumer(this::validateAndSaveSession);
 		actionMap.put(saveId, validateAndSaveSessionAct);
 		inputMap.put(saveKs, saveId);
 		
@@ -103,7 +103,7 @@ public class MediaSelectionField extends FileSelectionField {
 		setActionMap(actionMap);
 	}
 
-	public void validateAndSaveSession(PhonActionEvent pae) {
+	public void validateAndSaveSession(PhonActionEvent<Void> pae) {
 		final File f = getSelectedFile();
 		setFile(f);
 		
@@ -112,8 +112,7 @@ public class MediaSelectionField extends FileSelectionField {
 	
 	/**
 	 *
-	 * @param rootPath
-	 * @param mediaFile
+	 * @param path
 	 */
 	protected void addTextCompletion(Path path) {
 		final String name = path.normalize().toString();

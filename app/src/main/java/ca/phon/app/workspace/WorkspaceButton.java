@@ -35,8 +35,7 @@ public class WorkspaceButton extends MultiActionButton {
 	private void init() {
 		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-		PhonUIAction selectHistoryAct =
-				new PhonUIAction(this, "onShowHistory");
+		PhonUIAction<Void> selectHistoryAct = PhonUIAction.eventConsumer(this::onShowHistory);
 		selectHistoryAct.putValue(Action.NAME, "Select workspace");
 		selectHistoryAct.putValue(Action.SHORT_DESCRIPTION, "Change workspace folder...");
 
@@ -73,7 +72,7 @@ public class WorkspaceButton extends MultiActionButton {
 
 		for(File workspaceFolder:history) {
 			if(workspaceFolder.equals(Workspace.userWorkspaceFolder()) && !workspaceFolder.exists()) {
-				final PhonUIAction createWorkspaceFolderAct = new PhonUIAction(this, "onCreateWorkspace");
+				final PhonUIAction<Void> createWorkspaceFolderAct = PhonUIAction.runnable(this::onCreateWorkspace);
 				createWorkspaceFolderAct.putValue(PhonUIAction.NAME, "Create workspace folder");
 				createWorkspaceFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create workspace folder on disk");
 				builder.addItem(".", createWorkspaceFolderAct);
@@ -81,7 +80,7 @@ public class WorkspaceButton extends MultiActionButton {
 				ImageIcon workspaceIcn =
 						IconManager.getInstance().getSystemIconForPath(
 								workspaceFolder.getAbsolutePath(), "places/folder-workspace", IconSize.SMALL);
-				final PhonUIAction selectAction = new PhonUIAction(this, "onSelectFolder", workspaceFolder);
+				final PhonUIAction<File> selectAction = PhonUIAction.consumer(this::onSelectFolder, workspaceFolder);
 				selectAction.putValue(PhonUIAction.NAME, workspaceFolder.getAbsolutePath());
 				selectAction.putValue(PhonUIAction.SMALL_ICON, workspaceIcn);
 				builder.addItem(".", selectAction);
@@ -110,7 +109,7 @@ public class WorkspaceButton extends MultiActionButton {
 				Iterator<File> itr = history.iterator();
 				while(itr.hasNext()) {
 					File f = itr.next();
-					PhonUIAction removeAct = new PhonUIAction(WorkspaceButton.this, "removeFromHistory", f);
+					PhonUIAction<File> removeAct = PhonUIAction.consumer(WorkspaceButton.this::removeFromHistory, f);
 					removeAct.putValue(PhonUIAction.NAME, f.getAbsolutePath());
 					removeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Remove " + f.getAbsolutePath() + " from workspace history");
 
@@ -126,7 +125,7 @@ public class WorkspaceButton extends MultiActionButton {
 			public void menuCanceled(MenuEvent e) {}
 		});
 
-		final PhonUIAction clearHistoryAct = new PhonUIAction(this, "onClearHistory");
+		final PhonUIAction<Void> clearHistoryAct = PhonUIAction.runnable(this::onClearHistory);
 		clearHistoryAct.putValue(PhonUIAction.NAME, "Clear history");
 		clearHistoryAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Clear workspace history");
 		builder.addItem(".@clear", clearHistoryAct);
@@ -211,7 +210,7 @@ public class WorkspaceButton extends MultiActionButton {
 				fsIconL = finderIconL;
 		}
 
-		final PhonUIAction act = new PhonUIAction(this, "onShowWorkspace");
+		final PhonUIAction<Void> act = PhonUIAction.runnable(this::onShowWorkspace);
 		act.putValue(PhonUIAction.NAME, "Show workspace");
 		act.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show workspace folder");
 		act.putValue(PhonUIAction.SMALL_ICON, fsIcon);

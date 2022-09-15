@@ -132,13 +132,13 @@ public class CustomSegmentDialog extends JDialog {
 		final ImageIcon playIcon = IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL);
 		final ImageIcon cancelIcon = IconManager.getInstance().getIcon("actions/button_cancel", IconSize.SMALL);
 		
-		final PhonUIAction playAct = new PhonUIAction(this, "onPlay");
+		final PhonUIAction<Void> playAct = PhonUIAction.runnable(this::onPlay);
 		playAct.putValue(PhonUIAction.NAME, "Play");
 		playAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play segment");
 		playAct.putValue(PhonUIAction.SMALL_ICON, playIcon);
 		playBtn = new JButton(playAct);
 		
-		final PhonUIAction cancelAct = new PhonUIAction(this, "onCancel");
+		final PhonUIAction<Void> cancelAct = PhonUIAction.runnable(this::onCancel);
 		cancelAct.putValue(PhonUIAction.NAME, "Close");
 		cancelAct.putValue(PhonUIAction.SMALL_ICON, cancelIcon);
 		cancelBtn = new JButton(cancelAct);

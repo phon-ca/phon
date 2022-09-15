@@ -88,12 +88,12 @@ public class EditQueryDialog extends JDialog {
 		
 		setLayout(new BorderLayout());
 		
-		final PhonUIAction okAction = new PhonUIAction(this, "onOk");
+		final PhonUIAction<Void> okAction = PhonUIAction.runnable(this::onOk);
 		okAction.putValue(PhonUIAction.NAME, "Ok");
 		okButton = new JButton(okAction);
 		getRootPane().setDefaultButton(okButton);
 		
-		final PhonUIAction cancelAction = new PhonUIAction(this, "onCancel");
+		final PhonUIAction<Void> cancelAction = PhonUIAction.runnable(this::onCancel);
 		cancelAction.putValue(PhonUIAction.NAME, "Cancel");
 		cancelButton = new JButton(cancelAction);
 		

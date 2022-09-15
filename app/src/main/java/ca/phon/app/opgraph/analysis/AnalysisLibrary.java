@@ -234,15 +234,15 @@ public class AnalysisLibrary implements OpGraphLibrary {
 		}
 
 		builder.addSeparator(".", "browse");
-		final PhonUIAction onBrowseAct = new PhonUIAction(AnalysisLibrary.class, "onBrowse", project);
+		final PhonUIAction<Project> onBrowseAct = PhonUIAction.eventConsumer(AnalysisLibrary::onBrowse, project);
 		onBrowseAct.putValue(PhonUIAction.NAME, "Browse...");
 		onBrowseAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Browse for analysis document.");
 		builder.addItem(".@browse", onBrowseAct);
 		builder.addItem(".", new OpenSimpleAnalysisComposerAction(project));
 	}
 
-	public static void onBrowse(PhonActionEvent pae) {
-		final Project project = (Project)pae.getData();
+	public static void onBrowse(PhonActionEvent<Project> pae) {
+		final Project project = pae.getData();
 		final FileFilter filter = new FileFilter("Analysis Documents", "xml;opgraph");
 		final OpenDialogProperties props = new OpenDialogProperties();
 		props.setParentWindow(CommonModuleFrame.getCurrentFrame());

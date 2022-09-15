@@ -102,12 +102,12 @@ public class ReportTableExportDialog extends CommonModuleFrame {
 		
 		add(scroller, BorderLayout.CENTER);
 		
-		final PhonUIAction cancelAct = new PhonUIAction(this, "onCancel");
+		final PhonUIAction<Void> cancelAct = PhonUIAction.runnable(this::onCancel);
 		cancelAct.putValue(PhonUIAction.NAME, "Close");
 		cancelAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Cancel export and close window");
 		cancelButton = new JButton(cancelAct);
 		
-		final PhonUIAction exportAct = new PhonUIAction(this, "onExport");
+		final PhonUIAction<Void> exportAct = PhonUIAction.runnable(this::onExport);
 		exportAct.putValue(PhonUIAction.NAME, "Export");
 		exportAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Export selected tables");
 		exportButton = new JButton(exportAct);

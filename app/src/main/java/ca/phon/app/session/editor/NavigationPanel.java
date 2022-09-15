@@ -145,7 +145,7 @@ public class NavigationPanel extends JPanel {
 			public void keyPressed(KeyEvent e) {
 			}
 		});
-		final PhonUIAction gotoRecordAct = new PhonUIAction(this, "gotoRecord");
+		final PhonUIAction gotoRecordAct = PhonUIAction.runnable(this::gotoRecord);
 		recordNumberField.setAction(gotoRecordAct);
 		
 		numRecordsLabel = new JLabel("");

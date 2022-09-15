@@ -88,7 +88,7 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 
 		final KeyStroke validateKs = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
 		final String validateId = "validate";
-		final PhonUIAction validateAct = new PhonUIAction(this, "onEnter");
+		final PhonUIAction<Void> validateAct = PhonUIAction.runnable(this::onEnter);
 		actionMap.put(validateId, validateAct);
 		inputMap.put(validateKs, validateId);
 
