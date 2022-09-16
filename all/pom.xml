@@ -55,7 +55,7 @@
 		<ca.phon.phon-groovy-plugin.version>7</ca.phon.phon-groovy-plugin.version>
 		<ca.phon.phon-praat-plugin.version>69-SNAPSHOT</ca.phon.phon-praat-plugin.version>
 		<ca.phon.phon-version-triggers.version>9</ca.phon.phon-version-triggers.version>
-		<ca.phon.csv.plugin.version>26</ca.phon.csv.plugin.version>
+		<ca.phon.csv.plugin.version>27</ca.phon.csv.plugin.version>
 		<ca.phon.phontalk.version>3.5.4-SNAPSHOT</ca.phon.phontalk.version>
 	</properties>
 
