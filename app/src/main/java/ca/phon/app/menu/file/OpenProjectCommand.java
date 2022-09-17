@@ -58,6 +58,7 @@ public class OpenProjectCommand extends HookableAction {
 		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 		props.setTitle("Open Project");
 		props.setListener(openProjectListener);
+		props.setRunAsync(true);
 	//	props.setInitialFolder(Workspace.userWorkspace().getWorkspaceFolder().getAbsolutePath());
 		NativeDialogs.showOpenDialog(props);
 	}
