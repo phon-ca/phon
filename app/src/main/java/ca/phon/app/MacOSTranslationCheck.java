@@ -33,7 +33,7 @@ import java.net.*;
  * Check if Phon is running in translated mode using Rosetta on macOS computers.
  */
 @PhonPlugin(name="startup")
-public class MacOSTranslationCheck implements PhonStartupHook, IPluginExtensionPoint<PhonStartupHook> {
+public final class MacOSTranslationCheck implements PhonStartupHook, IPluginExtensionPoint<PhonStartupHook> {
 
 	private final static String TRANSLATION_TITLE = "Phon - Incorrect architecture detected";
 
