@@ -79,8 +79,8 @@ public final class MacOSTranslationCheck implements PhonStartupHook, IPluginExte
 
 	private boolean isTranslated() {
 		Pointer ptr = new Memory(Native.getNativeSize(Integer.class));
-		IntByReference ptrSize = new IntByReference();
-		final int ret = SystemB.INSTANCE.sysctlbyname("sysctl.proc_translated", ptr, ptrSize, null, 0);
+		IntByReference size = new IntByReference();
+		final int ret = SystemB.INSTANCE.sysctlbyname("sysctl.proc_translated", ptr, size, null, 0);
 		if (ret == -1) {
 			if(Native.getLastError() == 2) { // ENOENT
 				return false;
@@ -88,10 +88,10 @@ public final class MacOSTranslationCheck implements PhonStartupHook, IPluginExte
 				throw new RuntimeException("error calling sysctlbyname");
 			}
 		} else {
-			if(ret == 1) {
-				return true;
-			} else {
+			if(ptr.getInt(0) == 0) {
 				return false;
+			} else {
+				return true;
 			}
 		}
 	}
