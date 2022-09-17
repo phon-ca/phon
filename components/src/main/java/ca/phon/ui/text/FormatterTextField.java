@@ -15,14 +15,12 @@
  */
 package ca.phon.ui.text;
 
-import java.awt.*;
+import ca.phon.formatter.*;
+import org.apache.logging.log4j.LogManager;
 
 import javax.swing.event.*;
 import javax.swing.text.*;
-
-import org.apache.logging.log4j.*;
-
-import ca.phon.formatter.*;
+import java.awt.*;
 
 public class FormatterTextField<T> extends PromptedTextField {
 	

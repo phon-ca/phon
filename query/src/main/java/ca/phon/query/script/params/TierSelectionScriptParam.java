@@ -1,7 +1,6 @@
 package ca.phon.query.script.params;
 
-import ca.phon.script.params.ScriptParam;
-import ca.phon.script.params.StringScriptParam;
+import ca.phon.script.params.*;
 
 public class TierSelectionScriptParam extends ScriptParam {
 

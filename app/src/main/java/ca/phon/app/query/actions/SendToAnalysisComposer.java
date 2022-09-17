@@ -25,8 +25,7 @@ import ca.phon.opgraph.app.OpgraphIO;
 import ca.phon.opgraph.nodes.general.MacroNode;
 import ca.phon.project.Project;
 import ca.phon.query.script.QueryScript;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.icons.*;
 import ca.phon.worker.PhonWorker;
 
 import java.awt.*;

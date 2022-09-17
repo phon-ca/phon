@@ -15,7 +15,7 @@
  */
 package ca.phon.ipamap2;
 
-import javax.swing.plaf.*;
+import javax.swing.plaf.ComponentUI;
 
 /**
  * Base class for IPAMapGrid UI

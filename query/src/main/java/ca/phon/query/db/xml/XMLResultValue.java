@@ -16,9 +16,9 @@
 
 package ca.phon.query.db.xml;
 
-import ca.phon.query.db.*;
+import ca.phon.query.db.ResultValue;
 import ca.phon.query.db.xml.io.resultset.*;
-import ca.phon.util.*;
+import ca.phon.util.Range;
 
 /**
  * A result value used in the {@link XMLResult}.

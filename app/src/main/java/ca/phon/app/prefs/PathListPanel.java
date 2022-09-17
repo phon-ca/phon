@@ -16,21 +16,16 @@
 package ca.phon.app.prefs;
 
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.nativedialogs.OpenDialogProperties;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import ca.phon.ui.action.*;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.util.icons.*;
+import com.jgoodies.forms.layout.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
+import java.beans.*;
 import java.util.List;
+import java.util.*;
 
 /**
  * UI for editing a list of paths

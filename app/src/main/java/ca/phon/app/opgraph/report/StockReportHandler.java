@@ -15,10 +15,10 @@
  */
 package ca.phon.app.opgraph.report;
 
-import java.io.*;
-import java.net.*;
+import ca.phon.util.resources.ClassLoaderHandler;
 
-import ca.phon.util.resources.*;
+import java.io.IOException;
+import java.net.URL;
 
 public class StockReportHandler extends ClassLoaderHandler<URL> {
 

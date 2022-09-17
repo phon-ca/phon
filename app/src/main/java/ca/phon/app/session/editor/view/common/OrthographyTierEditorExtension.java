@@ -15,10 +15,10 @@
  */
 package ca.phon.app.session.editor.view.common;
 
-import ca.phon.app.session.editor.*;
-import ca.phon.orthography.*;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.orthography.Orthography;
 import ca.phon.plugin.*;
-import ca.phon.session.*;
+import ca.phon.session.Tier;
 
 @TierEditorInfo(type=Orthography.class)
 public class OrthographyTierEditorExtension implements IPluginExtensionPoint<TierEditor> {

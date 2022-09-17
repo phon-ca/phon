@@ -17,7 +17,7 @@ package ca.phon.util;
 
 
 import java.io.*;
-import java.nio.*;
+import java.nio.CharBuffer;
 
 
 /**

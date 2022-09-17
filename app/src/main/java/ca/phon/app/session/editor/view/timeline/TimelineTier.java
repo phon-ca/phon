@@ -15,9 +15,9 @@
  */
 package ca.phon.app.session.editor.view.timeline;
 
-import ca.phon.app.session.editor.*;
-import ca.phon.media.*;
-import ca.phon.ui.menu.*;
+import ca.phon.app.session.editor.EditorView;
+import ca.phon.media.TimeComponent;
+import ca.phon.ui.menu.MenuBuilder;
 
 public abstract class TimelineTier extends TimeComponent {
 

@@ -15,36 +15,33 @@
  */
 package ca.phon.app.query;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.time.*;
-import java.util.*;
-import java.util.List;
-
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.table.*;
-
-import org.apache.commons.lang.*;
-import org.jdesktop.swingx.*;
-import org.jdesktop.swingx.decorator.*;
-
-import com.jgoodies.forms.layout.*;
-
 import ca.phon.app.log.*;
-import ca.phon.app.project.*;
-import ca.phon.plugin.*;
-import ca.phon.project.*;
-import ca.phon.project.exceptions.*;
+import ca.phon.app.project.ShadowProject;
+import ca.phon.plugin.PluginEntryPointRunner;
+import ca.phon.project.Project;
+import ca.phon.project.exceptions.ProjectConfigurationException;
 import ca.phon.query.db.*;
 import ca.phon.query.script.*;
-import ca.phon.script.*;
+import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.*;
 import ca.phon.session.*;
 import ca.phon.util.icons.*;
 import ca.phon.worker.*;
-import ca.phon.worker.PhonTask.*;
+import ca.phon.worker.PhonTask.TaskStatus;
+import com.jgoodies.forms.layout.CellConstraints;
+import org.apache.commons.lang.WordUtils;
+import org.jdesktop.swingx.*;
+import org.jdesktop.swingx.decorator.HighlighterFactory;
+
+import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
+import javax.swing.table.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.*;
 
 public class QueryRunnerPanel extends JPanel {
 

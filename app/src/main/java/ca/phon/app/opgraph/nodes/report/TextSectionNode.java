@@ -15,15 +15,14 @@
  */
 package ca.phon.app.opgraph.nodes.report;
 
-import java.awt.*;
-import java.util.*;
-
-import javax.swing.*;
-
 import ca.phon.app.opgraph.report.tree.*;
 import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
-import ca.phon.opgraph.app.extensions.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.Properties;
 
 @OpNodeInfo(name="Text Section", description="Add Text to Report template", category="Report", showInLibrary=true)
 public class TextSectionNode extends ReportSectionNode implements NodeSettings {

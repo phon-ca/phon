@@ -15,19 +15,17 @@
  */
 package ca.phon.app.project;
 
+import ca.phon.project.*;
+import ca.phon.ui.dnd.FileTransferHandler;
+import ca.phon.ui.nativedialogs.FileFilter;
+import org.apache.commons.io.FileUtils;
+
+import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.*;
 import java.io.*;
-import java.util.*;
 import java.util.List;
-
-import javax.swing.*;
-
-import org.apache.commons.io.*;
-
-import ca.phon.project.*;
-import ca.phon.ui.dnd.*;
-import ca.phon.ui.nativedialogs.FileFilter;
+import java.util.*;
 
 public class ProjectDataTransferHandler extends FileTransferHandler {
 	

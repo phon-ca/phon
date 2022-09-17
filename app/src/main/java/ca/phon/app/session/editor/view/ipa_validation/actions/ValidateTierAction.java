@@ -15,15 +15,14 @@
  */
 package ca.phon.app.session.editor.view.ipa_validation.actions;
 
-import java.awt.event.*;
-
-import javax.swing.undo.*;
-
-import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.undo.*;
-import ca.phon.app.session.editor.view.ipa_validation.*;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.undo.TierEdit;
+import ca.phon.app.session.editor.view.ipa_validation.ValidationEditorView;
 import ca.phon.ipa.*;
 import ca.phon.session.*;
+
+import javax.swing.undo.CompoundEdit;
+import java.awt.event.ActionEvent;
 
 public class ValidateTierAction extends ValidationAction {
 

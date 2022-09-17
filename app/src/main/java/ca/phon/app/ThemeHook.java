@@ -15,16 +15,15 @@
  */
 package ca.phon.app;
 
-import java.awt.*;
-import java.lang.reflect.*;
-import java.util.*;
-
-import javax.swing.*;
-
-import ca.phon.app.hooks.*;
-import ca.phon.app.prefs.*;
+import ca.phon.app.hooks.PhonStartupHook;
+import ca.phon.app.prefs.PhonProperties;
 import ca.phon.plugin.*;
 import ca.phon.util.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 /**
  * Sets UI theme

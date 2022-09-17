@@ -15,27 +15,25 @@
  */
 package ca.phon.app.session;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import java.util.List;
-import java.util.stream.*;
-
-import javax.swing.*;
-import javax.swing.table.*;
-
-import org.jdesktop.swingx.*;
-
-import ca.phon.app.query.*;
+import ca.phon.app.query.OpenResultSetSelector;
 import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.*;
-import ca.phon.project.*;
+import ca.phon.project.Project;
 import ca.phon.query.db.*;
 import ca.phon.session.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.fonts.*;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.ipa.*;
 import ca.phon.util.icons.*;
+import org.jdesktop.swingx.*;
+
+import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * UI for editing session export settings.

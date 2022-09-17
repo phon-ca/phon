@@ -15,10 +15,10 @@
  */
 package ca.phon.script.params;
 
+import ca.phon.script.PhonScriptContext;
+
 import java.beans.*;
 import java.util.*;
-
-import ca.phon.script.*;
 
 /**
  * A parameter for a script.  These parameters are setup by the {@link PhonScriptContext}

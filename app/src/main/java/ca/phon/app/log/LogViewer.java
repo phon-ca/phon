@@ -21,12 +21,11 @@ import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.PrefHelper;
 
 import javax.swing.*;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
+import javax.swing.event.*;
 import java.awt.*;
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.*;
 import java.util.zip.GZIPInputStream;
 
 /**

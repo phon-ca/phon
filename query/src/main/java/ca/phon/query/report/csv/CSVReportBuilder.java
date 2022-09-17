@@ -15,21 +15,20 @@
  */
 package ca.phon.query.report.csv;
 
-import java.io.*;
-import java.util.*;
-
-import jakarta.xml.bind.*;
-
-import au.com.bytecode.opencsv.*;
-import ca.phon.project.*;
+import au.com.bytecode.opencsv.CSVWriter;
+import ca.phon.project.Project;
 import ca.phon.query.db.*;
 import ca.phon.query.report.*;
 import ca.phon.query.report.datasource.*;
-import ca.phon.query.report.io.*;
 import ca.phon.query.report.io.Group;
+import ca.phon.query.report.io.*;
 import ca.phon.session.*;
 import ca.phon.session.format.*;
-import ca.phon.util.*;
+import ca.phon.util.OSInfo;
+import jakarta.xml.bind.JAXBElement;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * CSV report builder implementation.

@@ -15,9 +15,9 @@
  */
 package ca.phon.session.spi;
 
-import java.time.*;
-
 import ca.phon.session.*;
+
+import java.time.*;
 
 public interface ParticipantSPI {
 

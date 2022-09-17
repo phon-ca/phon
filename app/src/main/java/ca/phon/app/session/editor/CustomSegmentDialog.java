@@ -15,29 +15,25 @@
  */
 package ca.phon.app.session.editor;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.text.*;
-import java.util.regex.*;
+import ca.phon.session.Record;
+import ca.phon.session.*;
+import ca.phon.session.position.SegmentCalculator;
+import ca.phon.ui.*;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.text.MediaSegmentField;
+import ca.phon.ui.toast.*;
+import ca.phon.util.*;
+import ca.phon.util.icons.*;
+import com.jgoodies.forms.layout.*;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import javax.swing.event.*;
-
-import org.apache.commons.lang3.*;
-
-import com.jgoodies.forms.layout.*;
-
-import ca.phon.session.*;
-import ca.phon.session.Record;
-import ca.phon.session.position.*;
-import ca.phon.ui.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.decorations.*;
-import ca.phon.ui.text.*;
-import ca.phon.ui.toast.*;
-import ca.phon.util.*;
-import ca.phon.util.Range;
-import ca.phon.util.icons.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.text.ParseException;
+import java.util.regex.*;
 
 /**
  * Dialog to play custom segments.

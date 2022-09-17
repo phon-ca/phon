@@ -15,13 +15,13 @@
  */
 package ca.phon.ipa.alignment;
 
-import java.util.*;
-import java.util.stream.*;
-
 import ca.phon.alignment.*;
 import ca.phon.ipa.*;
-import ca.phon.ipa.features.*;
+import ca.phon.ipa.features.FeatureSet;
 import ca.phon.syllable.*;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link IndelAligner} for {@link IPATranscript}s.

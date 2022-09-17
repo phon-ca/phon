@@ -15,11 +15,10 @@
  */
 package ca.phon.ui.wizard;
 
-import java.util.*;
+import ca.phon.extensions.*;
 
 import javax.swing.*;
-
-import ca.phon.extensions.*;
+import java.util.Set;
 
 /**
  * A single step in a wizard.

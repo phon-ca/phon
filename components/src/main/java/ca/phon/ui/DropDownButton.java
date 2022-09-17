@@ -15,12 +15,11 @@
  */
 package ca.phon.ui;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.beans.*;
+import java.beans.PropertyChangeListener;
 import java.util.*;
-
-import javax.swing.*;
 
 /**
  * {@link JButton} with a drop-down component.

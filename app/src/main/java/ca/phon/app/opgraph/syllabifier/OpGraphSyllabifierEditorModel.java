@@ -15,24 +15,22 @@
  */
 package ca.phon.app.opgraph.syllabifier;
 
-import java.awt.*;
-import java.io.*;
-import java.util.*;
+import ca.phon.app.opgraph.editor.OpgraphEditorModel;
+import ca.phon.ipa.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.syllabifier.opgraph.OpGraphSyllabifier;
+import ca.phon.syllabifier.opgraph.extensions.SyllabifierSettings;
+import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.ipa.SyllabificationDisplay;
+import ca.phon.util.*;
+import com.jgoodies.forms.layout.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
-
-import com.jgoodies.forms.layout.*;
-
-import ca.phon.app.opgraph.editor.*;
-import ca.phon.ipa.*;
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
-import ca.phon.syllabifier.opgraph.*;
-import ca.phon.syllabifier.opgraph.extensions.*;
-import ca.phon.ui.fonts.*;
-import ca.phon.ui.ipa.*;
-import ca.phon.util.*;
+import java.awt.*;
+import java.io.File;
+import java.util.Map;
 
 /**
  * Editor model for syllabifiers implemented with opgraph.

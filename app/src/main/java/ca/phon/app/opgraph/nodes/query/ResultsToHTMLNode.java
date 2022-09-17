@@ -15,33 +15,31 @@
  */
 package ca.phon.app.opgraph.nodes.query;
 
-import java.awt.*;
-import java.io.*;
-import java.lang.Boolean;
-import java.util.*;
-import java.util.List;
-import java.util.stream.*;
-
-import javax.swing.*;
-
-import org.apache.commons.lang3.*;
-import org.jdesktop.swingx.*;
-
 import ca.phon.app.log.*;
 import ca.phon.app.session.*;
-import ca.phon.app.session.SessionToHTML.*;
+import ca.phon.app.session.SessionToHTML.SessionToHTMLSettings;
 import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.*;
 import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
-import ca.phon.opgraph.app.extensions.*;
-import ca.phon.opgraph.exceptions.*;
-import ca.phon.project.*;
-import ca.phon.query.db.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.opgraph.exceptions.ProcessingException;
+import ca.phon.project.Project;
+import ca.phon.query.db.ResultSet;
 import ca.phon.session.*;
-import ca.phon.ui.fonts.*;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.ipa.*;
 import jxl.write.*;
+import org.apache.commons.lang3.ArrayUtils;
+import org.jdesktop.swingx.VerticalLayout;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.*;
+import java.lang.Boolean;
+import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @OpNodeInfo(name="Results to HTML", category="Query", description="Print results in HTML format optionally including tier data.", showInLibrary=true)
 public class ResultsToHTMLNode extends OpNode implements NodeSettings {

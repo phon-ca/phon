@@ -15,13 +15,12 @@
  */
 package ca.phon.app.session.editor.view.speech_analysis;
 
-import java.awt.*;
+import ca.phon.media.WaveformDisplay;
+import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.util.PrefHelper;
 
 import javax.swing.*;
-
-import ca.phon.media.*;
-import ca.phon.ui.fonts.*;
-import ca.phon.util.*;
+import java.awt.*;
 
 public class SpeechAnalysisWaveformTier extends SpeechAnalysisTier {
 	

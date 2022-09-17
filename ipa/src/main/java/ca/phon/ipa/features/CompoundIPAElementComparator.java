@@ -15,11 +15,11 @@
  */
 package ca.phon.ipa.features;
 
+import ca.phon.ipa.IPAElement;
+import ca.phon.util.CompoundComparator;
+
 import java.text.*;
 import java.util.*;
-
-import ca.phon.ipa.*;
-import ca.phon.util.*;
 
 /**
  * A compound comparator for features, with a fallback to a string comparator

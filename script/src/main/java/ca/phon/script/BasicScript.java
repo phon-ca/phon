@@ -15,13 +15,13 @@
  */
 package ca.phon.script;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import java.util.concurrent.atomic.*;
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.script.params.ScriptParameters;
 
-import ca.phon.extensions.*;
-import ca.phon.script.params.*;
+import java.io.*;
+import java.net.URI;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Basic phon script in memory.  This script stores the script

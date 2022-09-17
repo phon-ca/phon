@@ -15,11 +15,10 @@
  */
 package ca.phon.ui;
 
-import java.beans.*;
-import java.lang.ref.*;
-
 import javax.swing.*;
 import javax.swing.event.*;
+import java.beans.*;
+import java.lang.ref.WeakReference;
 
 public class ButtonPopup {
 	

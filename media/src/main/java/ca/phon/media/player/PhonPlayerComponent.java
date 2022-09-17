@@ -15,13 +15,12 @@
  */
 package ca.phon.media.player;
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.image.*;
+import ca.phon.ui.nativedialogs.OSInfo;
 
 import javax.swing.*;
-
-import ca.phon.ui.nativedialogs.*;
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 
 public class PhonPlayerComponent extends JComponent {
 	

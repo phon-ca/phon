@@ -15,21 +15,20 @@
  */
 package ca.phon.app.opgraph.macro;
 
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.opgraph.editor.OpgraphEditor;
+import ca.phon.project.Project;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.resources.ResourceLoader;
+
+import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.net.*;
-import java.util.*;
 import java.util.List;
-
-import javax.swing.*;
-
-import ca.phon.app.log.*;
-import ca.phon.app.opgraph.editor.*;
-import ca.phon.project.*;
-import ca.phon.ui.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.menu.*;
-import ca.phon.util.resources.*;
+import java.util.*;
 
 public class MacroLibrary {
 	

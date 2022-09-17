@@ -15,13 +15,13 @@
  */
 package ca.phon.ipadictionary.impl;
 
-import java.util.*;
-import java.util.regex.*;
-
-import ca.phon.ipadictionary.*;
-import ca.phon.ipadictionary.exceptions.*;
+import ca.phon.ipadictionary.IPADictionary;
+import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
 import ca.phon.ipadictionary.spi.*;
 import ca.phon.util.*;
+
+import java.util.*;
+import java.util.regex.*;
 
 /**
  * Perform lookups on multiple dictionaries at once.

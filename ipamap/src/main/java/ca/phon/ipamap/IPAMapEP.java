@@ -15,12 +15,11 @@
  */
 package ca.phon.ipamap;
 
-import java.awt.event.*;
-import java.util.*;
+import ca.phon.plugin.*;
 
 import javax.swing.*;
-
-import ca.phon.plugin.*;
+import java.awt.event.*;
+import java.util.Map;
 
 @PhonPlugin(name="default")
 public class IPAMapEP implements IPluginEntryPoint {

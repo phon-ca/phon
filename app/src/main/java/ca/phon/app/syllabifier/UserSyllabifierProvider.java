@@ -15,18 +15,17 @@
  */
 package ca.phon.app.syllabifier;
 
-import java.io.*;
-import java.util.*;
-
-import org.apache.commons.io.*;
-
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
+import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.app.OpgraphIO;
 import ca.phon.syllabifier.*;
-import ca.phon.syllabifier.basic.*;
-import ca.phon.syllabifier.opgraph.*;
-import ca.phon.syllabifier.opgraph.extensions.*;
-import ca.phon.util.*;
+import ca.phon.syllabifier.basic.BasicSyllabifierIO;
+import ca.phon.syllabifier.opgraph.OpGraphSyllabifier;
+import ca.phon.syllabifier.opgraph.extensions.SyllabifierSettings;
+import ca.phon.util.PrefHelper;
+import org.apache.commons.io.FileUtils;
+
+import java.io.*;
+import java.util.Iterator;
 
 public class UserSyllabifierProvider implements SyllabifierProvider {
 	

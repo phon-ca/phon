@@ -15,9 +15,9 @@
  */
 package ca.phon.fsa;
 
-import java.util.*;
+import ca.phon.fsa.FSAState.RunningState;
 
-import ca.phon.fsa.FSAState.*;
+import java.util.*;
 
 
 /**

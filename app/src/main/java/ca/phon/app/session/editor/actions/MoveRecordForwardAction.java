@@ -15,12 +15,12 @@
  */
 package ca.phon.app.session.editor.actions;
 
-import java.awt.event.*;
-
-import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.undo.*;
-import ca.phon.session.*;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.undo.RecordMoveEdit;
 import ca.phon.session.Record;
+import ca.phon.session.*;
+
+import java.awt.event.ActionEvent;
 
 public class MoveRecordForwardAction extends SessionEditorAction {
 

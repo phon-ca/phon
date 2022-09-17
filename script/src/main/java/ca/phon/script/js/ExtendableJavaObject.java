@@ -15,11 +15,10 @@
  */
 package ca.phon.script.js;
 
-import java.lang.ref.*;
-
+import ca.phon.extensions.IExtendable;
 import org.mozilla.javascript.*;
 
-import ca.phon.extensions.*;
+import java.lang.ref.WeakReference;
 
 /**
  * JavaScript wrapper object for {@link IExtendable} objects.

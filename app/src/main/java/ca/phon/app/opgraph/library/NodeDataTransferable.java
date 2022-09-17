@@ -15,10 +15,10 @@
  */
 package ca.phon.app.opgraph.library;
 
-import java.awt.datatransfer.*;
-import java.io.*;
+import ca.phon.opgraph.library.NodeData;
 
-import ca.phon.opgraph.library.*;
+import java.awt.datatransfer.*;
+import java.io.IOException;
 
 public class NodeDataTransferable implements Transferable {
 

@@ -15,19 +15,18 @@
  */
 package ca.phon.app.session.editor.view.ipa_lookup;
 
-import java.awt.event.*;
-import java.text.ParseException;
-
-import javax.swing.*;
-
-import ca.phon.app.ipalookup.*;
+import ca.phon.app.ipalookup.OrthoWordIPAOptions;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.view.common.*;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.*;
-import ca.phon.ui.fonts.*;
-import ca.phon.visitor.*;
-import ca.phon.visitor.annotation.*;
+import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.visitor.VisitorAdapter;
+import ca.phon.visitor.annotation.Visits;
+
+import javax.swing.*;
+import java.awt.event.*;
+import java.text.ParseException;
 
 public class OptionBoxVisitior extends VisitorAdapter<OrthoElement> {
 	

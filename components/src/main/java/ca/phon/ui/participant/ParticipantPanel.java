@@ -15,28 +15,25 @@
  */
 package ca.phon.ui.participant;
 
+import ca.phon.session.*;
+import ca.phon.session.format.AgeFormatter;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.ui.text.*;
+import ca.phon.ui.toast.ToastFactory;
+import com.jgoodies.forms.layout.*;
+import org.jdesktop.swingx.VerticalLayout;
+
+import javax.swing.*;
+import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.*;
 import java.time.*;
 import java.util.List;
-import java.util.function.*;
-
-import javax.swing.*;
-import javax.swing.event.*;
-
-import org.jdesktop.swingx.*;
-
-import com.jgoodies.forms.layout.*;
-
-import ca.phon.session.*;
-import ca.phon.session.format.*;
-import ca.phon.ui.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.decorations.*;
-import ca.phon.ui.layout.*;
-import ca.phon.ui.text.*;
-import ca.phon.ui.toast.*;
+import java.util.function.Consumer;
 
 /**
  * UI for editing participant information.

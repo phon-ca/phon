@@ -16,10 +16,10 @@
 package ca.phon.app.opgraph.nodes.table;
 
 
-import java.util.*;
-
 import ca.phon.opgraph.*;
-import ca.phon.query.report.datasource.*;
+import ca.phon.query.report.datasource.TableDataSource;
+
+import java.util.*;
 
 public abstract class TableOpNode extends OpNode {
 	

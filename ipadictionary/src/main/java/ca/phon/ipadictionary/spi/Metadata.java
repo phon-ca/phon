@@ -15,10 +15,10 @@
  */
 package ca.phon.ipadictionary.spi;
 
-import java.util.*;
+import ca.phon.extensions.Extension;
+import ca.phon.ipadictionary.IPADictionary;
 
-import ca.phon.extensions.*;
-import ca.phon.ipadictionary.*;
+import java.util.Iterator;
 
 /**
  * Metadata consists of a map of string to string

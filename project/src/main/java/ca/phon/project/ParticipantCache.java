@@ -15,12 +15,12 @@
  */
 package ca.phon.project;
 
-import java.io.*;
+import ca.phon.session.Record;
+import ca.phon.session.*;
+
+import java.io.IOException;
 import java.time.*;
 import java.util.*;
-
-import ca.phon.session.*;
-import ca.phon.session.Record;
 
 /**
  * Keep track of participants and what sessions in which they take part.

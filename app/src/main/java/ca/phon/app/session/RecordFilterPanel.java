@@ -15,31 +15,29 @@
  */
 package ca.phon.app.session;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.text.*;
-import java.time.*;
-import java.util.*;
-import java.util.List;
-import java.util.regex.*;
-
-import javax.swing.*;
-import javax.swing.table.*;
-
-import org.apache.commons.lang3.*;
-import org.jdesktop.swingx.*;
-
 import ca.phon.app.query.*;
-import ca.phon.project.*;
+import ca.phon.project.Project;
 import ca.phon.query.db.*;
-import ca.phon.session.*;
 import ca.phon.session.Record;
+import ca.phon.session.*;
 import ca.phon.session.filter.*;
 import ca.phon.session.format.*;
 import ca.phon.ui.*;
 import ca.phon.ui.toast.*;
-import ca.phon.util.*;
+import ca.phon.util.Tuple;
 import ca.phon.util.icons.*;
+import org.apache.commons.lang3.StringUtils;
+import org.jdesktop.swingx.*;
+
+import javax.swing.*;
+import javax.swing.table.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.text.ParseException;
+import java.time.*;
+import java.util.List;
+import java.util.*;
+import java.util.regex.*;
 
 /**
  * Displays options for identify records by range, 

@@ -15,15 +15,14 @@
  */
 package ca.phon.app.opgraph.editor.actions.graph;
 
-import java.awt.*;
-import java.awt.event.*;
-
-import javax.swing.*;
-
-import ca.phon.app.opgraph.editor.*;
-import ca.phon.app.opgraph.editor.actions.*;
+import ca.phon.app.opgraph.editor.OpgraphEditor;
+import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
 import ca.phon.opgraph.app.*;
 import ca.phon.util.icons.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
 public class AutoLayoutAction extends OpgraphEditorAction {
 

@@ -15,23 +15,22 @@
  */
 package ca.phon.app.opgraph.nodes.project;
 
-import java.awt.*;
-import java.lang.reflect.*;
-import java.util.*;
-import java.util.List;
+import ca.phon.app.session.SessionSelector;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.opgraph.exceptions.ProcessingException;
+import ca.phon.project.Project;
+import ca.phon.session.Session;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.layout.ButtonBarBuilder;
 
 import javax.swing.*;
-
-import ca.phon.app.session.*;
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
-import ca.phon.opgraph.app.extensions.*;
-import ca.phon.opgraph.exceptions.*;
-import ca.phon.project.*;
-import ca.phon.session.*;
-import ca.phon.ui.*;
-import ca.phon.ui.decorations.*;
-import ca.phon.ui.layout.*;
+import java.awt.*;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+import java.util.*;
 
 @OpNodeInfo(
 	category="Project",

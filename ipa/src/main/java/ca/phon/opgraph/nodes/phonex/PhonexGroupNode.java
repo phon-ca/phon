@@ -15,19 +15,18 @@
  */
 package ca.phon.opgraph.nodes.phonex;
 
-import java.awt.*;
-import java.text.*;
-import java.util.*;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.opgraph.exceptions.ProcessingException;
+import ca.phon.phonex.PhonexMatcher;
 
 import javax.swing.*;
 import javax.swing.event.*;
-
-import ca.phon.ipa.*;
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
-import ca.phon.opgraph.app.extensions.*;
-import ca.phon.opgraph.exceptions.*;
-import ca.phon.phonex.*;
+import java.awt.*;
+import java.text.NumberFormat;
+import java.util.Properties;
 
 /**
  * Source node for data returned from a phonex

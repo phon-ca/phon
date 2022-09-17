@@ -15,9 +15,9 @@
  */
 package ca.phon.project;
 
-import java.io.*;
+import ca.phon.project.exceptions.ProjectConfigurationException;
 
-import ca.phon.project.exceptions.*;
+import java.io.*;
 
 /**
  * Default project factory implementation.

@@ -15,10 +15,10 @@
  */
 package ca.phon.app.session.editor.undo;
 
-import javax.swing.undo.*;
-
-import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.session.Record;
+
+import javax.swing.undo.*;
 
 /**
  * Merge all groups for the given record into a single group.

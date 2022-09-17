@@ -15,7 +15,7 @@
  */
 package ca.phon.ui.action;
 
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
 
 /**
  * Wrapper for ActionEvents.  May also

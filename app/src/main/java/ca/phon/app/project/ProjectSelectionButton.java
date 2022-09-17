@@ -8,7 +8,7 @@ import ca.phon.ui.menu.MenuBuilder;
 
 import javax.swing.*;
 import java.io.File;
-import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**

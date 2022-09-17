@@ -15,15 +15,14 @@
  */
 package ca.phon.app.query;
 
-import java.beans.*;
-import java.util.*;
-
-import javax.swing.table.*;
-
-import ca.phon.project.*;
+import ca.phon.project.Project;
 import ca.phon.query.db.*;
 import ca.phon.worker.*;
-import ca.phon.worker.PhonTask.*;
+import ca.phon.worker.PhonTask.TaskStatus;
+
+import javax.swing.table.AbstractTableModel;
+import java.beans.*;
+import java.util.*;
 
 /**
  * Implements a selectable table model.

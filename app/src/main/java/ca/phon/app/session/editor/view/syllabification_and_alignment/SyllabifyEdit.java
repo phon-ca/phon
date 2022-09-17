@@ -15,16 +15,15 @@
  */
 package ca.phon.app.session.editor.view.syllabification_and_alignment;
 
-import java.text.*;
-
-import org.apache.logging.log4j.*;
-
 import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.undo.*;
-import ca.phon.ipa.*;
-import ca.phon.session.*;
-import ca.phon.syllabifier.*;
+import ca.phon.app.session.editor.undo.SessionEditorUndoableEdit;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.session.Tier;
+import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllable.*;
+import org.apache.logging.log4j.LogManager;
+
+import java.text.ParseException;
 
 public class SyllabifyEdit extends SessionEditorUndoableEdit {
 	

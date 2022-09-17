@@ -15,17 +15,16 @@
  */
 package ca.phon.ipadictionary.ui;
 
+import ca.phon.ipadictionary.*;
+import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
+import ca.phon.ipadictionary.impl.*;
+import ca.phon.ipadictionary.spi.*;
+import ca.phon.util.Language;
+import org.apache.logging.log4j.LogManager;
+
 import java.io.*;
 import java.util.*;
 import java.util.regex.*;
-
-import org.apache.logging.log4j.*;
-
-import ca.phon.ipadictionary.*;
-import ca.phon.ipadictionary.exceptions.*;
-import ca.phon.ipadictionary.impl.*;
-import ca.phon.ipadictionary.spi.*;
-import ca.phon.util.*;
 
 /**
  * Context object for cmd interpreter.

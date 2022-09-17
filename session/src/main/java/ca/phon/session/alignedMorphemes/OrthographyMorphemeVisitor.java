@@ -16,7 +16,7 @@ package ca.phon.session.alignedMorphemes;
 
 import ca.phon.orthography.*;
 import ca.phon.util.Tuple;
-import ca.phon.visitor.*;
+import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
 import java.util.*;

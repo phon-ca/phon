@@ -15,7 +15,7 @@
  */
 package ca.phon.ui.text;
 
-import ca.phon.project.*;
+import ca.phon.project.Project;
 
 /**
  * {@link PromptedTextField} for entering a corpus name.

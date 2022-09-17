@@ -15,22 +15,20 @@
  */
 package ca.phon.app.opgraph.nodes.log;
 
-import java.awt.*;
-import java.util.*;
-import java.util.List;
-import java.util.stream.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.opgraph.exceptions.ProcessingException;
+import ca.phon.script.*;
+import ca.phon.script.params.ScriptParameters;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
-
-import org.fife.ui.rsyntaxtextarea.*;
-import org.fife.ui.rtextarea.*;
-
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
-import ca.phon.opgraph.app.extensions.*;
-import ca.phon.opgraph.exceptions.*;
-import ca.phon.script.*;
-import ca.phon.script.params.*;
+import java.awt.*;
+import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  *

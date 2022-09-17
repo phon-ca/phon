@@ -15,17 +15,16 @@
  */
 package ca.phon.app.opgraph.editor.actions.graph;
 
-import java.awt.event.*;
-import java.util.*;
+import ca.phon.app.opgraph.editor.OpgraphEditor;
+import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
+import ca.phon.opgraph.OpNode;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.edits.graph.AlignNodesEdit;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
-
-import ca.phon.app.opgraph.editor.*;
-import ca.phon.app.opgraph.editor.actions.*;
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
-import ca.phon.opgraph.app.edits.graph.*;
-import ca.phon.util.icons.*;
+import java.awt.event.*;
+import java.util.Collection;
 
 public class AlignNodesAction extends OpgraphEditorAction {
 

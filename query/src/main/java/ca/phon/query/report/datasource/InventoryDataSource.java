@@ -15,13 +15,13 @@
  */
 package ca.phon.query.report.datasource;
 
-import java.text.*;
-import java.util.*;
-
-import ca.phon.ipa.*;
+import ca.phon.ipa.IPATranscript;
 import ca.phon.query.db.*;
-import ca.phon.query.report.io.*;
+import ca.phon.query.report.io.InventorySection;
 import ca.phon.util.*;
+
+import java.text.ParseException;
+import java.util.*;
 
 /**
  * Inventory data source for (now deprecated) reports.

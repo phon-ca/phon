@@ -15,15 +15,14 @@
  */
 package ca.phon.ui.text;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.List;
+import ca.phon.formatter.FormatterUtil;
 
 import javax.swing.*;
 import javax.swing.event.*;
-import javax.swing.text.*;
-
-import ca.phon.formatter.*;
+import javax.swing.text.JTextComponent;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.List;
 
 public class TextCompleter implements DocumentListener, FocusListener, KeyListener, ListSelectionListener {
 

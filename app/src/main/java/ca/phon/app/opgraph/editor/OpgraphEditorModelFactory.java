@@ -15,11 +15,11 @@
  */
 package ca.phon.app.opgraph.editor;
 
-import java.util.*;
-
-import ca.phon.app.opgraph.macro.*;
-import ca.phon.opgraph.*;
+import ca.phon.app.opgraph.macro.MacroOpgraphEditorModel;
+import ca.phon.opgraph.OpGraph;
 import ca.phon.plugin.*;
+
+import java.util.*;
 
 public class OpgraphEditorModelFactory {
 	

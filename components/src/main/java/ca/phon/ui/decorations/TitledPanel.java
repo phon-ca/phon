@@ -15,13 +15,12 @@
  */
 package ca.phon.ui.decorations;
 
-import java.awt.*;
-import java.awt.geom.*;
+import ca.phon.ui.painter.Painter;
 
 import javax.swing.*;
-import javax.swing.border.*;
-
-import ca.phon.ui.painter.Painter;
+import javax.swing.border.BevelBorder;
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
 
 /**
  * Panel with a title, content section, and optional left/right decorations.

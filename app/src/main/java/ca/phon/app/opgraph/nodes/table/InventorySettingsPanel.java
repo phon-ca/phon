@@ -15,25 +15,23 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import java.util.List;
-import java.util.stream.*;
+import ca.phon.app.opgraph.nodes.table.InventorySettings.ColumnInfo;
+import ca.phon.query.script.params.*;
+import ca.phon.query.script.params.DiacriticOptionsScriptParam.SelectionMode;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.decorations.TitledPanel;
+import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.ui.text.PromptedTextField;
+import ca.phon.util.icons.*;
+import org.jdesktop.swingx.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
-
-import org.jdesktop.swingx.*;
-
-import ca.phon.app.opgraph.nodes.table.InventorySettings.*;
-import ca.phon.query.script.params.*;
-import ca.phon.query.script.params.DiacriticOptionsScriptParam.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.decorations.*;
-import ca.phon.ui.layout.*;
-import ca.phon.ui.text.*;
-import ca.phon.util.icons.*;
+import java.awt.*;
+import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Settings for inventory.

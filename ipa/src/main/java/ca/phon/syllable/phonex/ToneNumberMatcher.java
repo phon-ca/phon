@@ -15,11 +15,11 @@
  */
 package ca.phon.syllable.phonex;
 
-import java.util.*;
+import ca.phon.ipa.IPAElement;
+import ca.phon.phonex.PhoneMatcher;
+import ca.phon.syllable.SyllabificationInfo;
 
-import ca.phon.ipa.*;
-import ca.phon.phonex.*;
-import ca.phon.syllable.*;
+import java.util.List;
 
 /**
  * Matcher for tone information in {@link SyllabificationInfo}

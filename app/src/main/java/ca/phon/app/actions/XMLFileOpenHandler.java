@@ -15,13 +15,12 @@
  */
 package ca.phon.app.actions;
 
-import java.io.*;
-import java.util.*;
+import ca.phon.plugin.*;
 
 import javax.xml.stream.*;
 import javax.xml.stream.events.*;
-
-import ca.phon.plugin.*;
+import java.io.*;
+import java.util.*;
 
 @PhonPlugin(name="Open")
 public class XMLFileOpenHandler implements OpenFileHandler, IPluginExtensionPoint<OpenFileHandler> {

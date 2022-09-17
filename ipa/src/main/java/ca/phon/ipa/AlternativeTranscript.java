@@ -15,9 +15,9 @@
  */
 package ca.phon.ipa;
 
-import java.util.*;
+import ca.phon.extensions.Extension;
 
-import ca.phon.extensions.*;
+import java.util.HashMap;
 
 /**
  * Extension for alternative forms for an IPATranscript.

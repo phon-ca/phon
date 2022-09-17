@@ -15,23 +15,19 @@
  */
 package ca.phon.app.session.editor.view.common;
 
-import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.record_data.IPAFieldTooltip;
-import ca.phon.app.session.editor.view.syllabification_and_alignment.ScTypeEdit;
-import ca.phon.app.session.editor.view.syllabification_and_alignment.ToggleDiphthongEdit;
-import ca.phon.ipa.*;
+import ca.phon.app.session.editor.view.syllabification_and_alignment.*;
+import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.plugin.*;
-import ca.phon.session.*;
 import ca.phon.session.Record;
+import ca.phon.session.*;
 import ca.phon.syllabifier.*;
-import ca.phon.ui.ipa.PhoneMapDisplay;
-import ca.phon.ui.ipa.SyllabificationDisplay;
+import ca.phon.ui.ipa.*;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.Arrays;
+import java.beans.*;
 
 /**
  * Editor for IPATranscript tiers 

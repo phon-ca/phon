@@ -2,7 +2,6 @@ package ca.phon.app.session.editor.view.ipa_lookup;
 
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipadictionary.IPADictionary;
-import ca.phon.orthography.Orthography;
 
 public interface IPALookupPostProcessor {
 

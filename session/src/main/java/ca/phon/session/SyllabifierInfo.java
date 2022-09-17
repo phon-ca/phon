@@ -15,12 +15,12 @@
  */
 package ca.phon.session;
 
+import ca.phon.extensions.Extension;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.util.Language;
+
 import java.util.*;
 import java.util.regex.*;
-
-import ca.phon.extensions.*;
-import ca.phon.ipa.*;
-import ca.phon.util.*;
 
 /**
  * Extension which provides the default syllabifier selection for the session.

@@ -15,12 +15,11 @@
  */
 package ca.phon.query.report;
 
-import java.io.*;
-
-import jakarta.xml.bind.*;
-import javax.xml.stream.*;
-
 import ca.phon.query.report.io.*;
+import jakarta.xml.bind.*;
+
+import javax.xml.stream.*;
+import java.io.*;
 
 /**
  * Methods for reading/writing report designs.

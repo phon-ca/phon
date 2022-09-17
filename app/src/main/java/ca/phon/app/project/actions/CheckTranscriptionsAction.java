@@ -15,10 +15,10 @@
  */
 package ca.phon.app.project.actions;
 
-import java.awt.event.*;
+import ca.phon.app.project.ProjectWindow;
+import ca.phon.app.project.checkwizard.CheckWizard;
 
-import ca.phon.app.project.*;
-import ca.phon.app.project.checkwizard.*;
+import java.awt.event.ActionEvent;
 
 public class CheckTranscriptionsAction extends ProjectWindowAction {
 	

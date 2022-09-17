@@ -15,12 +15,12 @@
  */
 package ca.phon.app.session.editor.view.timeline;
 
-import java.awt.*;
-import java.awt.geom.*;
-
-import ca.phon.media.*;
-import ca.phon.session.*;
+import ca.phon.media.TimeComponentUI;
 import ca.phon.session.Record;
+import ca.phon.session.*;
+
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
 
 public abstract class RecordGridUI extends TimeComponentUI {
 

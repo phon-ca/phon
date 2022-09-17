@@ -16,7 +16,7 @@
 package ca.phon.ipa.alignment.pmlu;
 
 import ca.phon.extensions.*;
-import ca.phon.ipa.alignment.*;
+import ca.phon.ipa.alignment.PhoneMap;
 
 /**
  * Attaches a new PMLU object to every PhoneMap when initialized.

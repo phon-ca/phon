@@ -15,11 +15,11 @@
  */
 package ca.phon.query.script.params;
 
-import javax.swing.*;
-
 import ca.phon.plugin.*;
-import ca.phon.script.params.*;
-import ca.phon.script.params.ui.*;
+import ca.phon.script.params.ScriptParam;
+import ca.phon.script.params.ui.ScriptParamComponentFactory;
+
+import javax.swing.*;
 
 public class DiacriticOptionsScriptParamComponentFactory 
 	implements ScriptParamComponentFactory, IPluginExtensionPoint<ScriptParamComponentFactory>{

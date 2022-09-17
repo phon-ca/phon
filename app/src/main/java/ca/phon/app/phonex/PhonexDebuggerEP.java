@@ -15,14 +15,13 @@
  */
 package ca.phon.app.phonex;
 
-import java.awt.*;
-import java.util.*;
+import ca.phon.plugin.*;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.decorations.DialogHeader;
 
 import javax.swing.*;
-
-import ca.phon.plugin.*;
-import ca.phon.ui.*;
-import ca.phon.ui.decorations.*;
+import java.awt.*;
+import java.util.Map;
 
 @PhonPlugin(minPhonVersion = "3.1.1")
 public class PhonexDebuggerEP implements IPluginEntryPoint {

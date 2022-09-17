@@ -15,11 +15,10 @@
  */
 package ca.phon.media;
 
-import java.awt.*;
+import ca.phon.media.TimeUIModel.*;
 
 import javax.swing.*;
-
-import ca.phon.media.TimeUIModel.*;
+import java.awt.*;
 
 public class Timebar extends TimeComponent {
 

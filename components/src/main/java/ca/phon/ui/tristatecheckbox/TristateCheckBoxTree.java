@@ -15,10 +15,9 @@
  */
 package ca.phon.ui.tristatecheckbox;
 
-import java.util.*;
-
 import javax.swing.*;
 import javax.swing.tree.*;
+import java.util.*;
 
 /**
  * Tree component with checkbox controls.

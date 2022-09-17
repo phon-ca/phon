@@ -15,10 +15,9 @@
  */
 package ca.phon.media;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.*;
-
-import javax.swing.*;
 
 public class TimebarMarkerModel {
 	

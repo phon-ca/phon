@@ -15,9 +15,9 @@
  */
 package ca.phon.app.session.editor.view.session_information.actions;
 
-import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.actions.*;
-import ca.phon.app.session.editor.view.session_information.*;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.actions.SessionEditorAction;
+import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
 
 public abstract class SessionInfoAction extends SessionEditorAction {
 	

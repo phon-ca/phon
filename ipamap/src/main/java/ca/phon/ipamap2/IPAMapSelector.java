@@ -15,18 +15,16 @@
  */
 package ca.phon.ipamap2;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import java.util.List;
-import java.util.stream.*;
+import ca.phon.ui.ipamap.io.*;
+import ca.phon.ui.tristatecheckbox.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
-
-import ca.phon.ui.fonts.*;
-import ca.phon.ui.ipamap.io.*;
-import ca.phon.ui.tristatecheckbox.*;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Allows for selection of a set of IPA elements.

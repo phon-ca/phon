@@ -15,12 +15,11 @@
  */
 package ca.phon.syllabifier.basic;
 
-import java.io.*;
-
-import jakarta.xml.bind.*;
-import javax.xml.transform.stream.*;
-
 import ca.phon.syllabifier.basic.io.*;
+import jakarta.xml.bind.*;
+
+import javax.xml.transform.stream.StreamSource;
+import java.io.*;
 
 /**
  * Utility methods for reading/writing {@link BasicSyllabifier}s.

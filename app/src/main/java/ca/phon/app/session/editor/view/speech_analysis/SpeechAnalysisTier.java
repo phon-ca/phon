@@ -15,9 +15,9 @@
  */
 package ca.phon.app.session.editor.view.speech_analysis;
 
-import javax.swing.*;
+import ca.phon.media.TimeComponent;
 
-import ca.phon.media.*;
+import javax.swing.*;
 
 /**
  * Extension point for waveform view tiers.

@@ -15,11 +15,10 @@
  */
 package ca.phon.ipa;
 
+import ca.phon.ipa.features.FeatureSet;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.*;
-
-import org.apache.commons.lang3.*;
-
-import ca.phon.ipa.features.*;
 
 /**
  * Phonetic profile for {@link IPAElement}

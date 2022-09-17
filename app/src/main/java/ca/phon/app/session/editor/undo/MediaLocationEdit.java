@@ -15,10 +15,10 @@
  */
 package ca.phon.app.session.editor.undo;
 
-import javax.swing.undo.*;
-
 import ca.phon.app.session.editor.*;
-import ca.phon.session.*;
+import ca.phon.session.Session;
+
+import javax.swing.undo.CannotUndoException;
 
 public class MediaLocationEdit extends SessionEditorUndoableEdit {
 

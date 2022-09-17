@@ -15,7 +15,7 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import ca.phon.opgraph.library.instantiators.*;
+import ca.phon.opgraph.library.instantiators.Instantiator;
 import ca.phon.script.*;
 import ca.phon.script.params.*;
 

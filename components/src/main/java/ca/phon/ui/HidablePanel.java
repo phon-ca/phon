@@ -15,17 +15,15 @@
  */
 package ca.phon.ui;
 
-import java.awt.*;
-import java.util.prefs.*;
-
-import javax.swing.*;
-
-import org.jdesktop.swingx.*;
+import ca.phon.ui.action.*;
+import ca.phon.util.PrefHelper;
+import ca.phon.util.icons.*;
+import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.painter.*;
 
-import ca.phon.ui.action.*;
-import ca.phon.util.*;
-import ca.phon.util.icons.*;
+import javax.swing.*;
+import java.awt.*;
+import java.util.prefs.*;
 
 /**
  * A panel to display some information to the user.  The panel

@@ -15,10 +15,10 @@
  */
 package ca.phon.app.session.editor.view.media_player.actions;
 
-import java.awt.event.*;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 
-import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.view.media_player.*;
+import java.awt.event.ActionEvent;
 
 public class ToggleAdjustVideoAction extends MediaPlayerAction {
 	

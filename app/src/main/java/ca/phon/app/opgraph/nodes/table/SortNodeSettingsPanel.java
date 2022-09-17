@@ -15,21 +15,19 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import java.awt.*;
-import java.awt.event.*;
+import ca.phon.app.opgraph.nodes.table.SortNodeSettings.SortOrder;
+import ca.phon.app.opgraph.nodes.table.SortNodeSettings.*;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.decorations.TitledPanel;
+import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.ui.text.PromptedTextField;
+import ca.phon.util.icons.*;
+import org.jdesktop.swingx.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
-
-import org.jdesktop.swingx.*;
-
-import ca.phon.app.opgraph.nodes.table.SortNodeSettings.*;
-import ca.phon.app.opgraph.nodes.table.SortNodeSettings.SortOrder;
-import ca.phon.ui.action.*;
-import ca.phon.ui.decorations.*;
-import ca.phon.ui.layout.*;
-import ca.phon.ui.text.*;
-import ca.phon.util.icons.*;
+import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class SortNodeSettingsPanel extends JPanel {
 

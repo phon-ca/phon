@@ -15,13 +15,13 @@
  */
 package ca.phon.ipa;
 
-import java.beans.*;
-import java.util.*;
-
 import ca.phon.extensions.*;
-import ca.phon.ipa.features.*;
+import ca.phon.ipa.features.FeatureSet;
 import ca.phon.syllable.*;
 import ca.phon.visitor.*;
+
+import java.beans.*;
+import java.util.Set;
 
 /**
  * <p>{@link IPAElement}s represent the atomic unit of IPA transcriptions.

@@ -15,11 +15,11 @@
  */
 package ca.phon.session;
 
-import java.time.*;
-import java.util.*;
+import ca.phon.extensions.ExtendableObject;
+import ca.phon.session.spi.SessionSPI;
 
-import ca.phon.extensions.*;
-import ca.phon.session.spi.*;
+import java.time.LocalDate;
+import java.util.List;
 
 /**
  * A session in a project.

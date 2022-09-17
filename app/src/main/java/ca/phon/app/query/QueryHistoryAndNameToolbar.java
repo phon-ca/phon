@@ -15,31 +15,30 @@
  */
 package ca.phon.app.query;
 
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.query.actions.*;
+import ca.phon.app.script.ScriptPanel;
+import ca.phon.project.Project;
+import ca.phon.query.history.QueryHistoryManager;
+import ca.phon.query.script.*;
+import ca.phon.script.PhonScriptException;
+import ca.phon.script.params.*;
+import ca.phon.script.params.history.*;
+import ca.phon.ui.*;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.icons.*;
+
+import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.*;
 import java.io.*;
-import java.lang.ref.*;
-import java.util.*;
+import java.lang.ref.WeakReference;
 import java.util.List;
-import java.util.stream.*;
-
-import javax.swing.*;
-import javax.swing.event.*;
-
-import ca.phon.app.log.*;
-import ca.phon.app.query.actions.*;
-import ca.phon.app.script.ScriptPanel;
-import ca.phon.project.*;
-import ca.phon.query.history.*;
-import ca.phon.query.script.*;
-import ca.phon.script.*;
-import ca.phon.script.params.*;
-import ca.phon.script.params.history.*;
-import ca.phon.ui.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.menu.*;
-import ca.phon.util.icons.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Utility panel for controlling query history for a {@link QueryScript}.

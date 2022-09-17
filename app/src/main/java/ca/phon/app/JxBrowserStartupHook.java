@@ -15,16 +15,15 @@
  */
 package ca.phon.app;
 
-import java.io.*;
-import java.util.*;
-import java.util.stream.*;
-
-import com.teamdev.jxbrowser.chromium.*;
-
-import ca.phon.app.hooks.*;
-import ca.phon.app.log.*;
+import ca.phon.app.hooks.PhonStartupHook;
+import ca.phon.app.log.LogUtil;
 import ca.phon.plugin.*;
 import ca.phon.util.*;
+import com.teamdev.jxbrowser.chromium.*;
+
+import java.io.File;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Startup hook for JxBrowser library

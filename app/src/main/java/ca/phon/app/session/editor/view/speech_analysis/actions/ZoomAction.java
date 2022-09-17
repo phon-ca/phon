@@ -15,16 +15,15 @@
  */
 package ca.phon.app.session.editor.view.speech_analysis.actions;
 
-import java.awt.*;
-import java.awt.event.*;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
+import ca.phon.media.TimeUIModel;
+import ca.phon.util.PrefHelper;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
-
-import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.view.speech_analysis.*;
-import ca.phon.media.*;
-import ca.phon.util.*;
-import ca.phon.util.icons.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 
 public class ZoomAction extends SpeechAnalysisEditorViewAction {
 

@@ -15,24 +15,22 @@
  */
 package ca.phon.app.actions;
 
+import ca.phon.app.hooks.HookableAction;
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.menu.file.OpenFileHistory;
+import ca.phon.plugin.*;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.nativedialogs.*;
+import org.apache.commons.io.FilenameUtils;
+
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.util.*;
 import java.util.List;
-import java.util.stream.*;
-
-import javax.swing.*;
-
-import org.apache.commons.io.*;
-
-import ca.phon.app.hooks.*;
-import ca.phon.app.log.*;
-import ca.phon.app.menu.file.*;
-import ca.phon.plugin.*;
-import ca.phon.ui.*;
-import ca.phon.ui.nativedialogs.*;
-import ca.phon.ui.nativedialogs.FileFilter;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class OpenFileEP extends HookableAction implements IPluginEntryPoint {
 

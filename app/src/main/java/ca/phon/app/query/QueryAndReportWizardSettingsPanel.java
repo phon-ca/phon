@@ -15,13 +15,11 @@
  */
 package ca.phon.app.query;
 
-import java.awt.event.*;
+import ca.phon.app.query.QueryAndReportWizardSettings.ReportLoadStrategy;
+import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
-
-import org.jdesktop.swingx.*;
-
-import ca.phon.app.query.QueryAndReportWizardSettings.*;
+import java.awt.event.ActionListener;
 
 /**
  * UI for editing {@link QueryAndReportWizardSettings}

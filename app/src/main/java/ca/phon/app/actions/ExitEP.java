@@ -16,18 +16,15 @@
 package ca.phon.app.actions;
 
 
-
-import java.io.*;
-import java.util.*;
-
-import ca.phon.app.actions.SaveOnExitDialog.*;
-import ca.phon.app.hooks.*;
+import ca.phon.app.actions.SaveOnExitDialog.QuitOption;
+import ca.phon.app.hooks.PhonShutdownHook;
 import ca.phon.app.log.LogUtil;
 import ca.phon.plugin.*;
-import ca.phon.project.*;
-import ca.phon.ui.*;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
-import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeNode;
+
+import java.io.IOException;
+import java.util.*;
 
 @PhonPlugin(name="default")
 public class ExitEP implements IPluginEntryPoint

@@ -16,7 +16,7 @@
 package ca.phon.util;
 
 import java.io.*;
-import java.util.*;
+import java.util.Properties;
 
 /**
  * Methods for determining the version number of the application.

@@ -15,15 +15,14 @@
  */
 package ca.phon.phonex;
 
-import java.text.*;
-import java.util.*;
-
+import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.features.FeatureMatrix;
 import org.junit.*;
-import org.junit.runner.*;
-import org.junit.runners.*;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
-import ca.phon.ipa.*;
-import ca.phon.ipa.features.*;
+import java.text.ParseException;
+import java.util.*;
 
 @RunWith(JUnit4.class)
 public class TestPredefinedPhoneClasses {

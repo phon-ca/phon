@@ -15,10 +15,10 @@
  */
 package ca.phon.syllable.phonex;
 
-import java.util.*;
-
 import ca.phon.phonex.*;
-import ca.phon.syllable.*;
+import ca.phon.syllable.SyllableStress;
+
+import java.util.List;
 
 /**
  * <p>Provides the plug-in matcher for syllable stress. Stress type

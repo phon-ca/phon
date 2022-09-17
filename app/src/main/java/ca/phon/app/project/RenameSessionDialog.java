@@ -15,22 +15,20 @@
  */
 package ca.phon.app.project;
 
+import ca.phon.project.Project;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.ui.toast.ToastFactory;
+import ca.phon.util.PhonConstants;
+import com.jgoodies.forms.factories.DefaultComponentFactory;
+import com.jgoodies.forms.layout.*;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
-
-import javax.swing.*;
-import javax.swing.border.*;
-
-import com.jgoodies.forms.factories.*;
-import com.jgoodies.forms.layout.*;
-
-import ca.phon.project.*;
-import ca.phon.ui.*;
-import ca.phon.ui.decorations.*;
-import ca.phon.ui.layout.*;
-import ca.phon.ui.toast.*;
-import ca.phon.util.*;
 
 public class RenameSessionDialog extends JDialog
 {

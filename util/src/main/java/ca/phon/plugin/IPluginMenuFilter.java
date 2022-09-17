@@ -15,9 +15,8 @@
  */
 package ca.phon.plugin;
 
-import java.awt.*;
-
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * A plugin extension point for controlling the window menu

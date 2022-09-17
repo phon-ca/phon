@@ -15,17 +15,17 @@
  */
 package ca.phon.app.opgraph.analysis;
 
-import java.awt.*;
-import java.util.*;
-import java.util.List;
-
 import ca.phon.app.opgraph.wizard.*;
-import ca.phon.app.project.*;
+import ca.phon.app.project.ParticipantsPanel;
 import ca.phon.opgraph.*;
-import ca.phon.project.*;
+import ca.phon.project.Project;
 import ca.phon.session.*;
-import ca.phon.ui.wizard.*;
-import ca.phon.util.*;
+import ca.phon.ui.wizard.WizardStep;
+import ca.phon.util.Tuple;
+
+import java.awt.*;
+import java.util.List;
+import java.util.*;
 
 public class AnalysisWizard extends NodeWizard {
 

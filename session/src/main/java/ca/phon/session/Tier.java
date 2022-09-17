@@ -15,10 +15,10 @@
  */
 package ca.phon.session;
 
-import java.util.*;
-
 import ca.phon.extensions.*;
-import ca.phon.session.spi.*;
+import ca.phon.session.spi.TierSPI;
+
+import java.util.*;
 
 /**
  * A tier in a record.  A tier has a name, type and a number

@@ -15,12 +15,11 @@
  */
 package ca.phon.app.session.editor.actions;
 
-import java.awt.*;
-import java.awt.event.*;
+import ca.phon.app.session.editor.SessionEditor;
 
 import javax.swing.*;
-
-import ca.phon.app.session.editor.*;
+import java.awt.*;
+import java.awt.event.KeyEvent;
 
 public class PlayCustomSegmentAction extends PlaySegmentAction {
 

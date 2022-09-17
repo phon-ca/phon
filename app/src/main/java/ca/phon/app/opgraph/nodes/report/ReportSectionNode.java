@@ -15,9 +15,9 @@
  */
 package ca.phon.app.opgraph.nodes.report;
 
-import ca.phon.app.opgraph.report.tree.*;
+import ca.phon.app.opgraph.report.tree.ReportTreeNode;
 import ca.phon.opgraph.*;
-import ca.phon.opgraph.exceptions.*;
+import ca.phon.opgraph.exceptions.ProcessingException;
 
 public abstract class ReportSectionNode extends OpNode {
 

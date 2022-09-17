@@ -15,11 +15,11 @@
  */
 package ca.phon.session.impl;
 
-import java.util.*;
-import java.util.concurrent.atomic.*;
+import ca.phon.session.Comment;
+import ca.phon.session.spi.SessionMetadataSPI;
 
-import ca.phon.session.*;
-import ca.phon.session.spi.*;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class SessionMetadataImpl implements SessionMetadataSPI {
 	

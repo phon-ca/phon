@@ -15,15 +15,15 @@
  */
 package ca.phon.app.opgraph.editor.actions;
 
-import java.awt.event.*;
+import ca.phon.app.hooks.HookableAction;
+import ca.phon.app.opgraph.editor.*;
+import ca.phon.app.opgraph.macro.MacroOpgraphEditorModel;
+import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.app.OpgraphIO;
+
+import java.awt.event.ActionEvent;
 import java.io.*;
 import java.net.*;
-
-import ca.phon.app.hooks.*;
-import ca.phon.app.opgraph.editor.*;
-import ca.phon.app.opgraph.macro.*;
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
 
 public class OpenComposerAction extends HookableAction {
 	

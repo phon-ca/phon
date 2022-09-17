@@ -15,14 +15,11 @@
  */
 package ca.phon.app.opgraph.editor;
 
-import javax.swing.*;
-
-import org.jdesktop.swingx.*;
-
+import ca.phon.util.OSInfo;
 import com.jgoodies.forms.layout.*;
+import org.jdesktop.swingx.JXStatusBar;
 
-import ca.phon.ui.fonts.*;
-import ca.phon.util.*;
+import javax.swing.*;
 
 public class NodeEditorStatusBar extends JXStatusBar {
 	

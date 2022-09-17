@@ -15,18 +15,17 @@
  */
 package ca.phon.app.opgraph.editor.actions.debug;
 
-import java.awt.event.*;
-
-import javax.swing.*;
-
-import ca.phon.app.opgraph.editor.*;
-import ca.phon.app.opgraph.editor.actions.*;
+import ca.phon.app.opgraph.editor.OpgraphEditor;
+import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
 import ca.phon.app.opgraph.wizard.*;
 import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
-import ca.phon.opgraph.exceptions.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.util.icons.*;
-import ca.phon.worker.*;
+import ca.phon.worker.PhonWorker;
+
+import javax.swing.*;
+import java.awt.event.*;
 
 public class StartAction extends OpgraphEditorAction {
 

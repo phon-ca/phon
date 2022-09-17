@@ -18,8 +18,7 @@ package ca.phon.app.menu.edit;
 import javax.swing.*;
 import javax.swing.undo.UndoManager;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
 /**
  * Undo command template.  Requires a {@link UndoManager} be provided.

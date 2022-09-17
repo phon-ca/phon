@@ -15,10 +15,9 @@
  */
 package ca.phon.ipadictionary.ui;
 
+import javax.swing.text.*;
 import java.awt.*;
 import java.util.regex.*;
-
-import javax.swing.text.*;
 
 /**
  * Styled document for IPA lookups.

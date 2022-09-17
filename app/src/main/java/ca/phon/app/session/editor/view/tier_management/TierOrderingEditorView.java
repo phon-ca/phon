@@ -15,34 +15,29 @@
  */
 package ca.phon.app.session.editor.view.tier_management;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import java.util.List;
-import java.util.concurrent.atomic.*;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.table.*;
-
-import ca.phon.ui.FontFormatter;
-import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.util.PrefHelper;
-import ca.phon.util.Tuple;
-import org.jdesktop.swingx.*;
-
-import com.jgoodies.forms.layout.*;
-
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.tier_management.actions.*;
 import ca.phon.session.*;
+import ca.phon.ui.FontFormatter;
 import ca.phon.ui.action.*;
+import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.nativedialogs.*;
+import ca.phon.util.Tuple;
 import ca.phon.util.icons.*;
+import com.jgoodies.forms.layout.*;
+import org.jdesktop.swingx.JXTable;
+
+import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
+import javax.swing.table.DefaultTableCellRenderer;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.List;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.*;
 
 /**
  * Panel for changing tier ordering, visibility and fonts.

@@ -15,24 +15,23 @@
  */
 package ca.phon.app.session.editor.actions;
 
-import java.awt.event.*;
-import java.io.*;
-import java.util.*;
-import java.util.stream.*;
-
-import javax.swing.*;
-
-import ca.phon.app.log.*;
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.*;
-import ca.phon.audio.*;
+import ca.phon.audio.AudioFileType;
 import ca.phon.media.*;
-import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.position.*;
-import ca.phon.ui.nativedialogs.*;
+import ca.phon.session.*;
+import ca.phon.session.position.SegmentCalculator;
 import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.icons.*;
 import ca.phon.worker.*;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.io.*;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class ExportSegmentAction extends SessionEditorAction {
 

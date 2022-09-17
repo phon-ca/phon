@@ -15,13 +15,13 @@
  */
 package ca.phon.syllabifier.basic;
 
-import java.util.*;
-
 import ca.phon.extensions.*;
 import ca.phon.ipa.*;
-import ca.phon.syllabifier.*;
+import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.basic.io.*;
 import ca.phon.util.*;
+
+import java.util.*;
 
 /**
  * 

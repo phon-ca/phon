@@ -15,7 +15,7 @@
  */
 package ca.phon.app.session.editor.view.common;
 
-import ca.phon.session.*;
+import ca.phon.session.Tier;
 
 /**
  * Listener interface for tier editors.

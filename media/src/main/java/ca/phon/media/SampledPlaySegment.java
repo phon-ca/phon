@@ -15,16 +15,15 @@
  */
 package ca.phon.media;
 
+import ca.phon.audio.*;
+
+import javax.sound.sampled.*;
+import javax.sound.sampled.AudioFormat.Encoding;
+import javax.sound.sampled.Mixer.Info;
+import javax.swing.*;
 import java.beans.*;
 import java.io.*;
 import java.util.*;
-
-import javax.sound.sampled.*;
-import javax.sound.sampled.AudioFormat.*;
-import javax.sound.sampled.Mixer.*;
-import javax.swing.*;
-
-import ca.phon.audio.*;
 
 public class SampledPlaySegment extends PlaySegment {
 	

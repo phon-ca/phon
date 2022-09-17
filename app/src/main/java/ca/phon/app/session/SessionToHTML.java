@@ -15,22 +15,21 @@
  */
 package ca.phon.app.session;
 
-import java.io.*;
+import ca.phon.app.VersionInfo;
+import ca.phon.app.html.HTMLConstants;
+import ca.phon.app.log.LogUtil;
+import ca.phon.formatter.FormatterUtil;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.query.db.*;
+import ca.phon.session.Record;
+import ca.phon.session.*;
+import ca.phon.session.filter.RecordFilter;
+import org.apache.commons.io.IOUtils;
+
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.*;
-
-import org.apache.commons.io.*;
-
-import ca.phon.app.*;
-import ca.phon.app.html.*;
-import ca.phon.app.log.*;
-import ca.phon.formatter.*;
-import ca.phon.ipa.*;
-import ca.phon.ipa.alignment.*;
-import ca.phon.query.db.*;
-import ca.phon.session.*;
-import ca.phon.session.Record;
-import ca.phon.session.filter.*;
 
 /**
  * Class for constructing an HTML page from a Phon session.

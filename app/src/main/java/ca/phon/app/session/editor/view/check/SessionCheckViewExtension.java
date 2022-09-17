@@ -16,7 +16,7 @@
 package ca.phon.app.session.editor.view.check;
 
 import ca.phon.app.session.editor.*;
-import ca.phon.phonex.*;
+import ca.phon.phonex.PhonexPlugin;
 import ca.phon.plugin.*;
 
 @PhonexPlugin(name="Session Check")

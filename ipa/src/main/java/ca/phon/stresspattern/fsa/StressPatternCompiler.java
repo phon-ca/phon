@@ -15,13 +15,12 @@
  */
 package ca.phon.stresspattern.fsa;
 
-import java.text.*;
-
-import org.apache.logging.log4j.*;
-
 import ca.phon.fsa.*;
-import ca.phon.stresspattern.*;
+import ca.phon.stresspattern.StressMatcherType;
 import de.susebox.jtopas.*;
+import org.apache.logging.log4j.LogManager;
+
+import java.text.ParseException;
 
 /**
  * Compiles a given stress pattern string into

@@ -15,16 +15,15 @@
  */
 package ca.phon.ui.participant;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.time.*;
-import java.util.List;
+import ca.phon.session.Participant;
+import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.layout.ButtonBarBuilder;
 
 import javax.swing.*;
-
-import ca.phon.session.*;
-import ca.phon.ui.decorations.*;
-import ca.phon.ui.layout.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.time.LocalDate;
+import java.util.List;
 
 public class ParticipantEditor extends JDialog {
 	private static final long serialVersionUID = -878164228645403658L;

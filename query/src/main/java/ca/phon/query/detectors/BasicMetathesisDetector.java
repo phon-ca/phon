@@ -15,10 +15,10 @@
  */
 package ca.phon.query.detectors;
 
-import java.util.*;
+import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.features.FeatureSet;
 
-import ca.phon.ipa.*;
-import ca.phon.ipa.features.*;
+import java.util.List;
 
 /**
  * A class that can detect metatheses in a word based on an

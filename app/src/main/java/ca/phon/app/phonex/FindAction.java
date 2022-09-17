@@ -15,7 +15,7 @@
  */
 package ca.phon.app.phonex;
 
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
 
 public class FindAction extends PhonexDebuggerAction {
 

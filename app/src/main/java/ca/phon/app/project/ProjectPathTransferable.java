@@ -15,11 +15,11 @@
  */
 package ca.phon.app.project;
 
+import ca.phon.project.ProjectPath;
+
 import java.awt.datatransfer.*;
 import java.io.*;
 import java.util.*;
-
-import ca.phon.project.*;
 
 public class ProjectPathTransferable implements Transferable {
 	/**

@@ -15,16 +15,15 @@
  */
 package ca.phon.ipamap;
 
-import java.awt.*;
-import java.awt.datatransfer.*;
-import java.awt.event.*;
-import java.beans.*;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.util.PrefHelper;
 
 import javax.swing.*;
-import javax.swing.text.*;
-
-import ca.phon.ui.*;
-import ca.phon.util.*;
+import javax.swing.text.JTextComponent;
+import java.awt.*;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.*;
+import java.beans.*;
 
 /**
  * Frame with custom behaviour for the Ipa Map.

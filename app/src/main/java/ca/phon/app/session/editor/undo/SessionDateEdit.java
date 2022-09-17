@@ -15,12 +15,11 @@
  */
 package ca.phon.app.session.editor.undo;
 
-import java.time.*;
-
-import javax.swing.undo.*;
-
 import ca.phon.app.session.editor.*;
-import ca.phon.session.*;
+import ca.phon.session.Session;
+
+import javax.swing.undo.CannotUndoException;
+import java.time.LocalDate;
 
 public class SessionDateEdit extends SessionEditorUndoableEdit {
 	

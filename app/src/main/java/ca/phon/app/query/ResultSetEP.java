@@ -15,18 +15,17 @@
  */
 package ca.phon.app.query;
 
-import java.awt.*;
-import java.util.*;
-import java.util.concurrent.atomic.*;
-
-import javax.swing.*;
-
-import ca.phon.app.modules.*;
+import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.session.editor.*;
 import ca.phon.plugin.*;
-import ca.phon.project.*;
+import ca.phon.project.Project;
 import ca.phon.query.db.*;
-import ca.phon.ui.*;
+import ca.phon.ui.CommonModuleFrame;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Display a result set optionally along with the

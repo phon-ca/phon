@@ -15,9 +15,9 @@
  */
 package ca.phon.session.filter;
 
-import java.util.*;
-
 import ca.phon.session.Record;
+
+import java.util.*;
 
 /**
  * Abstract implementation of utterance filter.

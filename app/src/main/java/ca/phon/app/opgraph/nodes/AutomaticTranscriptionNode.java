@@ -1,22 +1,18 @@
 package ca.phon.app.opgraph.nodes;
 
-import ca.phon.app.ipalookup.*;
-import ca.phon.app.session.editor.view.ipa_lookup.*;
-import ca.phon.extensions.UnvalidatedValue;
-import ca.phon.ipa.*;
-import ca.phon.ipadictionary.*;
+import ca.phon.app.session.editor.view.ipa_lookup.AutoTranscriptionForm;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.ipadictionary.IPADictionaryLibrary;
 import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
-import ca.phon.orthography.*;
-import ca.phon.session.*;
+import ca.phon.orthography.Orthography;
 import ca.phon.syllabifier.*;
-import ca.phon.util.*;
+import ca.phon.util.Language;
 
 import java.awt.*;
-import java.util.*;
-import java.util.List;
+import java.util.Properties;
 
 /**
  * OpNode for performing automatic transcription on a given {@link ca.phon.orthography.Orthography}

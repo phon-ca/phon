@@ -1,8 +1,6 @@
 package ca.phon.app.session.editor;
 
-import ca.phon.session.Session;
 import ca.phon.ui.nativedialogs.*;
-import jxl.write.DateTime;
 
 import java.awt.event.*;
 import java.time.ZonedDateTime;

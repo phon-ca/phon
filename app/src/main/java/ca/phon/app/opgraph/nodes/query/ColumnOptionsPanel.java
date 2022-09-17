@@ -15,11 +15,10 @@
  */
 package ca.phon.app.opgraph.nodes.query;
 
-import java.awt.*;
+import ca.phon.ui.text.PromptedTextField;
 
 import javax.swing.*;
-
-import ca.phon.ui.text.*;
+import java.awt.*;
 
 public class ColumnOptionsPanel extends JPanel {
 

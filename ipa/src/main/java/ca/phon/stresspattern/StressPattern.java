@@ -15,14 +15,14 @@
  */
 package ca.phon.stresspattern;
 
-import java.text.*;
-import java.util.*;
-
 import ca.phon.fsa.*;
 import ca.phon.ipa.*;
-import ca.phon.stresspattern.fsa.*;
-import ca.phon.syllable.*;
-import ca.phon.util.*;
+import ca.phon.stresspattern.fsa.StressPatternCompiler;
+import ca.phon.syllable.SyllableStress;
+import ca.phon.util.Range;
+
+import java.text.ParseException;
+import java.util.*;
 
 public class StressPattern {
 	

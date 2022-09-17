@@ -15,20 +15,18 @@
  */
 package ca.phon.app.query;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import java.util.List;
+import ca.phon.project.Project;
+import ca.phon.query.db.*;
+import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.decorator.HighlighterFactory;
 
 import javax.swing.*;
 import javax.swing.event.*;
-import javax.swing.table.*;
-
-import org.jdesktop.swingx.*;
-import org.jdesktop.swingx.decorator.*;
-
-import ca.phon.project.*;
-import ca.phon.query.db.*;
+import javax.swing.table.TableRowSorter;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.List;
+import java.util.*;
 
 
 /**

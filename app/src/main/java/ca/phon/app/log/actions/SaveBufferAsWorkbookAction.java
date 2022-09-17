@@ -16,27 +16,19 @@
 package ca.phon.app.log.actions;
 
 import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.log.BufferPanel;
-import ca.phon.app.log.ExcelExporter;
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.log.MultiBufferPanel;
+import ca.phon.app.log.*;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.ui.nativedialogs.NativeDialogEvent;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.ui.nativedialogs.SaveDialogProperties;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.util.icons.*;
 import ca.phon.worker.PhonWorker;
 import jxl.Workbook;
-import jxl.write.WritableWorkbook;
-import jxl.write.WriteException;
+import jxl.write.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 public class SaveBufferAsWorkbookAction extends HookableAction {
 

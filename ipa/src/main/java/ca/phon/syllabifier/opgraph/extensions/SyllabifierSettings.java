@@ -15,9 +15,9 @@
  */
 package ca.phon.syllabifier.opgraph.extensions;
 
-import java.beans.*;
+import ca.phon.util.Language;
 
-import ca.phon.util.*;
+import java.beans.*;
 
 /**
  * Name and language settings for a syllabifier.

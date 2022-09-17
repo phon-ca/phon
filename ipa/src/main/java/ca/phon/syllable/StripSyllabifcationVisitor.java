@@ -16,8 +16,8 @@
 package ca.phon.syllable;
 
 import ca.phon.ipa.*;
-import ca.phon.visitor.*;
-import ca.phon.visitor.annotation.*;
+import ca.phon.visitor.VisitorAdapter;
+import ca.phon.visitor.annotation.Visits;
 
 public class StripSyllabifcationVisitor extends VisitorAdapter<IPAElement> {
 

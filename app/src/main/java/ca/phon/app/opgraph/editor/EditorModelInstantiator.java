@@ -15,11 +15,11 @@
  */
 package ca.phon.app.opgraph.editor;
 
-import java.io.*;
-import java.lang.annotation.*;
+import ca.phon.app.opgraph.macro.MacroOpgraphEditorModel;
+import ca.phon.opgraph.OpGraph;
 
-import ca.phon.app.opgraph.macro.*;
-import ca.phon.opgraph.*;
+import java.io.IOException;
+import java.lang.annotation.*;
 
 /**
  * Instantiator for {@link OpgraphEditor} editor models.

@@ -15,10 +15,10 @@
  */
 package ca.phon.phonex;
 
-import java.util.*;
+import ca.phon.ipa.IPATranscript;
+import junit.framework.Assert;
 
-import ca.phon.ipa.*;
-import junit.framework.*;
+import java.util.*;
 
 public class PhonexTest {
 

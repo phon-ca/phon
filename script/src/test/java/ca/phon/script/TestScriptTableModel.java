@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 package ca.phon.script;
-import java.util.*;
-
-import org.junit.Test;
-import org.junit.runner.*;
-import org.junit.runners.*;
 
 import ca.phon.script.scripttable.*;
-import ca.phon.util.*;
+import ca.phon.util.Tuple;
 import junit.framework.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
+import java.util.*;
 
 /**
  * Run test on {@link AbstractScriptTableModel}

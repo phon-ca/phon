@@ -15,9 +15,9 @@
  */
 package ca.phon.app.session.editor.view.speech_analysis.actions;
 
-import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.actions.*;
-import ca.phon.app.session.editor.view.speech_analysis.*;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.actions.SessionEditorAction;
+import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
 
 public abstract class SpeechAnalysisEditorViewAction extends SessionEditorAction {
 

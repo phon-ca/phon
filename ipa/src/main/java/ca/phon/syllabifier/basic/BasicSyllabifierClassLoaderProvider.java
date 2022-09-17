@@ -15,11 +15,11 @@
  */
 package ca.phon.syllabifier.basic;
 
-import java.io.*;
-import java.net.*;
-
 import ca.phon.syllabifier.*;
-import ca.phon.util.resources.*;
+import ca.phon.util.resources.ClassLoaderHandler;
+
+import java.io.*;
+import java.net.URL;
 
 /**
  * Loader for Phon 1.6 syllabifier files.

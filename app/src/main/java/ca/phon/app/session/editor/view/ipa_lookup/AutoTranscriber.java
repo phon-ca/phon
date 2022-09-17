@@ -15,23 +15,22 @@
  */
 package ca.phon.app.session.editor.view.ipa_lookup;
 
-import java.util.*;
-
-import javax.swing.undo.*;
-
 import ca.phon.app.ipalookup.*;
-import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.*;
-import ca.phon.extensions.*;
+import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.*;
-import ca.phon.ipadictionary.*;
-import ca.phon.orthography.*;
-import ca.phon.session.*;
+import ca.phon.ipadictionary.IPADictionary;
+import ca.phon.orthography.OrthoElement;
 import ca.phon.session.Record;
-import ca.phon.session.filter.*;
-import ca.phon.syllabifier.*;
-import ca.phon.util.*;
+import ca.phon.session.*;
+import ca.phon.session.filter.RecordFilter;
+import ca.phon.syllabifier.Syllabifier;
+import ca.phon.util.Tuple;
+
+import javax.swing.undo.*;
+import java.util.List;
 
 /**
  * Utility for performing automatic IPA transcription for a {@link Record}.

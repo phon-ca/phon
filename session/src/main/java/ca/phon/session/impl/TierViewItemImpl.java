@@ -15,7 +15,7 @@
  */
 package ca.phon.session.impl;
 
-import ca.phon.session.spi.*;
+import ca.phon.session.spi.TierViewItemSPI;
 
 /**
  * Information about tier visibility, font and locking.  This

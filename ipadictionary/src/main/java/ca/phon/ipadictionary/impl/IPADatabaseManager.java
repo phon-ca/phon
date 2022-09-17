@@ -15,17 +15,16 @@
  */
 package ca.phon.ipadictionary.impl;
 
+import ca.phon.ipadictionary.IPADictionaryLibrary;
+import ca.phon.util.*;
+import ca.phon.worker.PhonWorker;
+import org.apache.derby.jdbc.EmbeddedConnectionPoolDataSource;
+import org.apache.logging.log4j.LogManager;
+
 import java.io.*;
 import java.sql.*;
 import java.util.*;
 import java.util.regex.*;
-
-import org.apache.derby.jdbc.*;
-import org.apache.logging.log4j.*;
-
-import ca.phon.ipadictionary.*;
-import ca.phon.util.*;
-import ca.phon.worker.*;
 
 /**
  * Handles creation and connections to the IPA transcription

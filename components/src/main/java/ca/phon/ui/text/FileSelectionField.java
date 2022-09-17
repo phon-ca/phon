@@ -15,22 +15,21 @@
  */
 package ca.phon.ui.text;
 
-import java.awt.*;
-import java.awt.datatransfer.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.List;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.dnd.FileTransferHandler;
+import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.text.PromptedTextField.FieldState;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
-import javax.swing.text.*;
-
-import ca.phon.ui.action.*;
-import ca.phon.ui.dnd.*;
-import ca.phon.ui.nativedialogs.*;
-import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.ui.text.PromptedTextField.*;
-import ca.phon.util.icons.*;
+import javax.swing.text.Document;
+import java.awt.*;
+import java.awt.datatransfer.Transferable;
+import java.awt.event.*;
+import java.io.*;
+import java.util.List;
 
 /**
  * Special text field for selecting file/folders.

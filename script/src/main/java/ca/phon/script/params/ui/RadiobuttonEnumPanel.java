@@ -15,16 +15,15 @@
  */
 package ca.phon.script.params.ui;
 
+import ca.phon.script.params.EnumScriptParam;
+import ca.phon.script.params.EnumScriptParam.ReturnValue;
+
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.*;
-import java.util.*;
 import java.util.List;
-
-import javax.swing.*;
-
-import ca.phon.script.params.*;
-import ca.phon.script.params.EnumScriptParam.*;
+import java.util.*;
 
 public class RadiobuttonEnumPanel extends JPanel {
 

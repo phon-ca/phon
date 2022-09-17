@@ -15,18 +15,16 @@
  */
 package ca.phon.app.query;
 
-import java.awt.*;
-import java.util.*;
-import java.util.List;
+import ca.phon.project.Project;
+import ca.phon.query.db.Query;
+import ca.phon.ui.CommonModuleFrame;
+import org.jdesktop.swingx.JXTable;
 
 import javax.swing.*;
-import javax.swing.table.*;
-
-import org.jdesktop.swingx.*;
-
-import ca.phon.project.*;
-import ca.phon.query.db.*;
-import ca.phon.ui.*;
+import javax.swing.table.AbstractTableModel;
+import java.awt.*;
+import java.util.List;
+import java.util.*;
 
 /**
  * Display a list of all available queries from any open

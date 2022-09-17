@@ -15,10 +15,10 @@
  */
 package ca.phon.app.opgraph.nodes;
 
-import ca.phon.app.log.*;
-import ca.phon.app.opgraph.wizard.*;
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.util.*;
+import ca.phon.opgraph.app.util.GraphUtils;
 import ca.phon.opgraph.nodes.general.*;
 import ca.phon.script.*;
 import ca.phon.script.params.*;

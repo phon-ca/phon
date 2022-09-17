@@ -16,14 +16,13 @@
 
 package ca.phon.ui.ipa;
 
-import java.util.*;
+import ca.phon.ipa.*;
+import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.util.Tuple;
 
 import javax.swing.*;
-import javax.swing.plaf.*;
-
-import ca.phon.ipa.*;
-import ca.phon.ipa.alignment.*;
-import ca.phon.util.*;
+import javax.swing.plaf.ComponentUI;
+import java.util.*;
 
 /**
  * Display a list of phonemaps for editing.

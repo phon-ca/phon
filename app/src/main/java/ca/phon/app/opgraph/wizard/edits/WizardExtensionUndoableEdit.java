@@ -15,10 +15,10 @@
  */
 package ca.phon.app.opgraph.wizard.edits;
 
-import javax.swing.undo.*;
+import ca.phon.app.opgraph.wizard.WizardExtension;
+import ca.phon.opgraph.OpGraph;
 
-import ca.phon.app.opgraph.wizard.*;
-import ca.phon.opgraph.*;
+import javax.swing.undo.*;
 
 public class WizardExtensionUndoableEdit extends AbstractUndoableEdit {
 

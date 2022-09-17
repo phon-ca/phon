@@ -15,26 +15,24 @@
  */
 package ca.phon.app.opgraph.editor;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.*;
-import java.io.*;
-import java.util.function.*;
+import ca.phon.app.log.LogUtil;
+import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.library.instantiators.Instantiator;
+import ca.phon.opgraph.nodes.general.MacroNode;
+import ca.phon.project.Project;
+import ca.phon.query.script.QueryScript;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.icons.*;
+import org.apache.commons.lang.StringUtils;
 
 import javax.swing.*;
-
-import ca.phon.app.log.LogUtil;
-import org.apache.commons.lang.*;
-
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.library.instantiators.*;
-import ca.phon.opgraph.nodes.general.*;
-import ca.phon.project.*;
-import ca.phon.query.script.*;
-import ca.phon.ui.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.menu.*;
-import ca.phon.util.icons.*;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeListener;
+import java.io.*;
+import java.util.function.BiFunction;
 
 /**
  * UI for creating new {@link OpgraphEditor} documents using existing

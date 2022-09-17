@@ -15,9 +15,9 @@
  */
 package ca.phon.script.params.ui;
 
-import javax.swing.*;
+import ca.phon.script.params.ScriptParam;
 
-import ca.phon.script.params.*;
+import javax.swing.*;
 
 /**
  * Extension point for custom script parameters implementations.

@@ -15,11 +15,11 @@
  */
 package ca.phon.syllabifier.opgraph;
 
-import java.io.*;
-import java.net.*;
-
 import ca.phon.syllabifier.*;
-import ca.phon.util.resources.*;
+import ca.phon.util.resources.ClassLoaderHandler;
+
+import java.io.*;
+import java.net.URL;
 
 /**
  * Load opgraph syllabifiers listed in the syllabifier/opgraph.list file.

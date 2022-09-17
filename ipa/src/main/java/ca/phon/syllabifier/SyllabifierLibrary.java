@@ -15,11 +15,11 @@
  */
 package ca.phon.syllabifier;
 
-import java.util.*;
-
 import ca.phon.extensions.*;
 import ca.phon.util.*;
-import ca.phon.util.resources.*;
+import ca.phon.util.resources.ResourceLoader;
+
+import java.util.*;
 
 /**
  * Class to help with loading syllabifiers.

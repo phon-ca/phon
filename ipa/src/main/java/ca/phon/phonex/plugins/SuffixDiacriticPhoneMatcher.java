@@ -16,9 +16,9 @@
 package ca.phon.phonex.plugins;
 
 import ca.phon.ipa.*;
-import ca.phon.phonex.*;
-import ca.phon.visitor.*;
-import ca.phon.visitor.annotation.*;
+import ca.phon.phonex.PhoneMatcher;
+import ca.phon.visitor.VisitorAdapter;
+import ca.phon.visitor.annotation.Visits;
 
 /**
  * 

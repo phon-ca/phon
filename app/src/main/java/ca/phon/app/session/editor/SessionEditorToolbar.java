@@ -15,21 +15,20 @@
  */
 package ca.phon.app.session.editor;
 
-import java.awt.*;
-import java.beans.*;
-import java.lang.ref.*;
-import java.util.List;
+import ca.phon.app.session.editor.actions.*;
+import ca.phon.app.session.editor.search.SessionEditorQuickSearch;
+import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
+import ca.phon.ui.DropDownButton;
+import ca.phon.ui.action.*;
+import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
-
-import ca.phon.app.session.editor.actions.*;
-import ca.phon.app.session.editor.search.*;
-import ca.phon.app.session.editor.view.media_player.*;
-import ca.phon.ui.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.menu.*;
-import ca.phon.util.icons.*;
+import java.awt.*;
+import java.beans.*;
+import java.lang.ref.WeakReference;
+import java.util.List;
 
 /**
  * Session editor toolbar

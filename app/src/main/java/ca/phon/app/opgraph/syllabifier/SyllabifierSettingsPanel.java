@@ -15,14 +15,12 @@
  */
 package ca.phon.app.opgraph.syllabifier;
 
-import javax.swing.*;
-
-import org.apache.logging.log4j.*;
-
+import ca.phon.syllabifier.opgraph.extensions.SyllabifierSettings;
+import ca.phon.util.Language;
 import com.jgoodies.forms.layout.*;
+import org.apache.logging.log4j.LogManager;
 
-import ca.phon.syllabifier.opgraph.extensions.*;
-import ca.phon.util.*;
+import javax.swing.*;
 
 /**
  * Panel for modifying syllabifier settings such as language

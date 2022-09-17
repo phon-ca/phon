@@ -15,7 +15,7 @@
  */
 package ca.phon.app.opgraph.report.tree;
 
-import ca.phon.app.log.*;
+import ca.phon.app.log.ExcelExporter;
 
 @Deprecated
 public class ExcelExportableNode extends TextNode {

@@ -15,16 +15,15 @@
  */
 package ca.phon.media;
 
+import ca.phon.media.TimeUIModel.*;
+
+import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
+import javax.swing.plaf.ComponentUI;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
 import java.beans.*;
-
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.plaf.*;
-
-import ca.phon.media.TimeUIModel.*;
 
 public class TimeComponentUI extends ComponentUI {
 	

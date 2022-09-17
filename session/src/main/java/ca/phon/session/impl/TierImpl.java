@@ -15,10 +15,10 @@
  */
 package ca.phon.session.impl;
 
-import java.util.*;
+import ca.phon.formatter.FormatterUtil;
+import ca.phon.session.spi.TierSPI;
 
-import ca.phon.formatter.*;
-import ca.phon.session.spi.*;
+import java.util.*;
 
 public class TierImpl<T> implements TierSPI<T> {
 	

@@ -15,13 +15,12 @@
  */
 package ca.phon.app.opgraph.editor;
 
-import java.awt.*;
+import ca.phon.app.opgraph.editor.actions.OpenComposerAction;
+import ca.phon.plugin.*;
+import ca.phon.ui.menu.MenuBuilder;
 
 import javax.swing.*;
-
-import ca.phon.app.opgraph.editor.actions.*;
-import ca.phon.plugin.*;
-import ca.phon.ui.menu.*;
+import java.awt.*;
 
 public class NodeEditorMenuHandler implements IPluginMenuFilter, IPluginExtensionPoint<IPluginMenuFilter> {
 

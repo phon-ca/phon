@@ -15,24 +15,21 @@
  */
 package ca.phon.script.params.ui;
 
-import java.awt.*;
-import java.util.*;
-import java.util.function.*;
-
-import javax.swing.*;
-
+import ca.phon.plugin.PluginManager;
+import ca.phon.script.params.*;
+import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.text.PromptedTextField;
+import ca.phon.visitor.VisitorAdapter;
+import ca.phon.visitor.annotation.Visits;
+import com.jgoodies.forms.layout.*;
 import org.fife.ui.rsyntaxtextarea.*;
-import org.fife.ui.rtextarea.*;
+import org.fife.ui.rtextarea.RTextScrollPane;
 import org.jdesktop.swingx.*;
 
-import com.jgoodies.forms.layout.*;
-
-import ca.phon.plugin.*;
-import ca.phon.script.params.*;
-import ca.phon.ui.fonts.*;
-import ca.phon.ui.text.*;
-import ca.phon.visitor.*;
-import ca.phon.visitor.annotation.*;
+import javax.swing.*;
+import java.awt.*;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * Create a script param form.

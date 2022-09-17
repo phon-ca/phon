@@ -16,7 +16,7 @@
 package ca.phon.app.project;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.project.*;
+import ca.phon.project.LocalProject;
 import ca.phon.session.io.*;
 
 import java.io.*;

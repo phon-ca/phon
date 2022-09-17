@@ -16,18 +16,18 @@
 
 package ca.phon.media.export;
 
-import java.awt.*;
-import java.io.*;
-import java.text.*;
-import java.util.*;
-import java.util.List;
-import java.util.concurrent.*;
-
-import ca.phon.media.exceptions.*;
-import ca.phon.util.*;
-import ca.phon.worker.*;
-import uk.co.caprica.vlcj.factory.*;
+import ca.phon.media.exceptions.PhonMediaException;
+import ca.phon.util.PrefHelper;
+import ca.phon.worker.PhonTask;
+import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
 import uk.co.caprica.vlcj.player.base.*;
+
+import java.awt.*;
+import java.io.File;
+import java.text.NumberFormat;
+import java.util.List;
+import java.util.*;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * Export video and/or audio with the option

@@ -15,15 +15,14 @@
  */
 package ca.phon.ipa.features;
 
-import java.util.*;
-
-import org.apache.logging.log4j.*;
-import org.junit.Test;
-import org.junit.runner.*;
-import org.junit.runners.*;
-
-import ca.phon.ipa.parser.*;
+import ca.phon.ipa.parser.IPATokens;
 import junit.framework.Assert;
+import org.apache.logging.log4j.LogManager;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
+import java.util.*;
 
 @RunWith(JUnit4.class)
 public class TestFeatureMatrix {

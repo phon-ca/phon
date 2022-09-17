@@ -15,10 +15,10 @@
  */
 package ca.phon.phonex;
 
-import java.util.*;
-
 import ca.phon.fsa.*;
-import ca.phon.ipa.*;
+import ca.phon.ipa.IPAElement;
+
+import java.util.*;
 
 /**
  * Transitions using {@link PhoneMatcher}s.

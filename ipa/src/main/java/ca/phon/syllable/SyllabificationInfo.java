@@ -15,11 +15,11 @@
  */
 package ca.phon.syllable;
 
-import java.util.*;
-import java.util.concurrent.atomic.*;
-
-import ca.phon.extensions.*;
+import ca.phon.extensions.Extension;
 import ca.phon.ipa.*;
+
+import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Adds syllabification information to Phones.

@@ -15,9 +15,8 @@
  */
 package ca.phon.app.session.editor.view.speech_analysis;
 
-import java.awt.*;
-
 import javax.swing.*;
+import java.awt.*;
 
 public class SpeechAnalysisViewColors {
 

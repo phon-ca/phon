@@ -15,10 +15,10 @@
  */
 package ca.phon.syllable.phonex;
 
-import java.util.*;
-
 import ca.phon.phonex.*;
-import ca.phon.syllable.*;
+import ca.phon.syllable.SyllableConstituentType;
+
+import java.util.List;
 
 /**
  * <p>Phonex plug-in for syllable constituent type matching.  This

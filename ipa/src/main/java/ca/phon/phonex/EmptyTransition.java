@@ -16,7 +16,7 @@
 package ca.phon.phonex;
 
 import ca.phon.fsa.*;
-import ca.phon.ipa.*;
+import ca.phon.ipa.IPAElement;
 
 public class EmptyTransition extends PhonexTransition {
 

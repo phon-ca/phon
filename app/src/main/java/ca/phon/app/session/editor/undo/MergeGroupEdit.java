@@ -15,15 +15,14 @@
  */
 package ca.phon.app.session.editor.undo;
 
-import java.awt.*;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.view.common.GroupField;
+import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
+import ca.phon.session.Record;
 
 import javax.swing.FocusManager;
-import javax.swing.undo.*;
-
-import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.view.common.*;
-import ca.phon.app.session.editor.view.record_data.*;
-import ca.phon.session.Record;
+import javax.swing.undo.CannotUndoException;
+import java.awt.*;
 
 /**
  * Edit which will merge a group with the next adjacent group.

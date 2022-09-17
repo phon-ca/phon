@@ -15,14 +15,13 @@
  */
 package ca.phon.syllabifier.basic;
 
-import java.io.*;
-
-import jakarta.xml.bind.*;
-import javax.xml.transform.stream.*;
-
-import ca.phon.syllabifier.*;
+import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllabifier.basic.io.*;
-import ca.phon.util.resources.*;
+import ca.phon.util.resources.FolderHandler;
+import jakarta.xml.bind.*;
+
+import javax.xml.transform.stream.StreamSource;
+import java.io.*;
 
 public class BasicSyllabifierFolderHandler extends FolderHandler<Syllabifier> {
 	

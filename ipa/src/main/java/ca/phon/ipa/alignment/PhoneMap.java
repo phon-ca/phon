@@ -16,13 +16,13 @@
 
 package ca.phon.ipa.alignment;
 
-import java.util.*;
-
-import ca.phon.alignment.*;
+import ca.phon.alignment.AlignmentMap;
 import ca.phon.extensions.*;
 import ca.phon.ipa.*;
 import ca.phon.phonex.*;
-import ca.phon.util.*;
+import ca.phon.util.PhonConstants;
+
+import java.util.*;
 
 /**
  *

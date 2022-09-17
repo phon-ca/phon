@@ -16,7 +16,7 @@
 package ca.phon.util;
 
 import java.io.*;
-import java.nio.channels.*;
+import java.nio.channels.FileChannel;
 
 /**
  * Collection of helper methods for

@@ -15,10 +15,9 @@
  */
 package ca.phon.app.actions;
 
+import javax.xml.stream.events.StartElement;
 import java.io.*;
-import java.util.*;
-
-import javax.xml.stream.events.*;
+import java.util.Set;
 
 public interface XMLOpenHandler {
 

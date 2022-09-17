@@ -15,7 +15,7 @@
  */
 package ca.phon.ipadictionary;
 
-import ca.phon.util.resources.*;
+import ca.phon.util.resources.ResourceHandler;
 
 /**
  * Interface for dictionary providers.

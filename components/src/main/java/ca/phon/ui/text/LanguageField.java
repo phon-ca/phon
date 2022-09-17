@@ -15,10 +15,10 @@
  */
 package ca.phon.ui.text;
 
-import java.util.*;
-
 import ca.phon.formatter.Formatter;
 import ca.phon.util.*;
+
+import java.util.List;
 
 public class LanguageField extends FormatterTextField<List<Language>> {
 	

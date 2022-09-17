@@ -16,9 +16,9 @@
 package ca.phon.app.modules;
 
 
-import java.util.*;
-
 import org.apache.commons.cli.*;
+
+import java.util.*;
 
 /**
  * Custom parser for entry point arguments.

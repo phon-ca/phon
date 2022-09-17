@@ -1,17 +1,12 @@
 package ca.phon.app.session.editor.view.tier_management.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.undo.AddTierEdit;
-import ca.phon.app.session.editor.undo.TierEdit;
-import ca.phon.app.session.editor.view.tier_management.TierEditorDialog;
-import ca.phon.app.session.editor.view.tier_management.TierInfoEditor;
-import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
-import ca.phon.session.*;
+import ca.phon.app.session.editor.undo.*;
+import ca.phon.app.session.editor.view.tier_management.*;
 import ca.phon.session.Record;
-import ca.phon.ui.toast.Toast;
-import ca.phon.ui.toast.ToastFactory;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.session.*;
+import ca.phon.ui.toast.*;
+import ca.phon.util.icons.*;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;

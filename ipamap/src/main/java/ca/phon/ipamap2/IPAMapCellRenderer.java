@@ -15,9 +15,9 @@
  */
 package ca.phon.ipamap2;
 
-import java.awt.*;
+import ca.phon.ui.ipamap.io.Cell;
 
-import ca.phon.ui.ipamap.io.*;
+import java.awt.*;
 
 public interface IPAMapCellRenderer {
 	

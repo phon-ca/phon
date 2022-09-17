@@ -15,38 +15,29 @@
  */
 package ca.phon.app.session.editor.view.timeline;
 
-import java.awt.*;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.event.*;
-import java.awt.geom.*;
-import java.beans.*;
-import java.util.*;
-import java.util.List;
-import java.util.concurrent.atomic.*;
-import java.util.stream.*;
-
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.event.*;
-import javax.tools.Tool;
-
-import ca.hedlund.desktopicons.MacOSStockIcon;
-import ca.hedlund.desktopicons.StockIcon;
-import ca.hedlund.desktopicons.WindowsStockIcon;
+import ca.hedlund.desktopicons.*;
 import ca.phon.app.log.LogUtil;
-import com.github.davidmoten.rtree.*;
-import com.github.davidmoten.rtree.geometry.*;
-
-import ca.phon.session.*;
 import ca.phon.session.Record;
+import ca.phon.session.*;
 import ca.phon.ui.*;
 import ca.phon.ui.action.*;
-import ca.phon.ui.fonts.*;
-import ca.phon.ui.menu.*;
+import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.*;
 import ca.phon.util.icons.*;
-import org.w3c.dom.css.Rect;
+import com.github.davidmoten.rtree.RTree;
+import com.github.davidmoten.rtree.geometry.Geometries;
+
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.event.MouseInputAdapter;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.geom.*;
+import java.beans.PropertyChangeListener;
+import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class DefaultRecordGridUI extends RecordGridUI {
 	

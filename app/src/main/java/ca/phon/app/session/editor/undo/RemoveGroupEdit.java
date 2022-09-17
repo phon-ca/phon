@@ -15,16 +15,15 @@
  */
 package ca.phon.app.session.editor.undo;
 
-import java.util.*;
-
-import javax.swing.undo.*;
-
 import ca.phon.app.session.editor.*;
-import ca.phon.ipa.*;
-import ca.phon.ipa.alignment.*;
-import ca.phon.orthography.*;
-import ca.phon.session.*;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.orthography.Orthography;
 import ca.phon.session.Record;
+import ca.phon.session.*;
+
+import javax.swing.undo.CannotUndoException;
+import java.util.*;
 
 public class RemoveGroupEdit extends SessionEditorUndoableEdit {
 

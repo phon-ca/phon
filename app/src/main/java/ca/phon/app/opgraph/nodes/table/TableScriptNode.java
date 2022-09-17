@@ -15,39 +15,37 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import java.util.List;
-import java.util.stream.*;
-
-import javax.swing.*;
-
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.opgraph.editor.OpgraphEditor;
+import ca.phon.app.opgraph.nodes.ScriptNode;
+import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.script.*;
-import org.apache.commons.io.*;
-import org.mozilla.javascript.*;
-import org.mozilla.javascript.tools.debugger.*;
-
-import ca.phon.app.log.*;
-import ca.phon.app.opgraph.editor.*;
-import ca.phon.app.opgraph.nodes.*;
-import ca.phon.app.opgraph.wizard.*;
 import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
-import ca.phon.opgraph.app.extensions.*;
-import ca.phon.opgraph.exceptions.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.opgraph.nodes.general.script.*;
-import ca.phon.query.report.datasource.*;
-import ca.phon.query.script.*;
+import ca.phon.query.report.datasource.DefaultTableDataSource;
+import ca.phon.query.script.QueryScript;
 import ca.phon.script.*;
 import ca.phon.script.params.*;
 import ca.phon.ui.*;
-import ca.phon.ui.layout.*;
-import ca.phon.util.*;
+import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.*;
 import ca.phon.util.resources.*;
+import org.apache.commons.io.FilenameUtils;
+import org.mozilla.javascript.*;
+import org.mozilla.javascript.tools.debugger.Main;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.io.*;
+import java.net.*;
+import java.util.List;
+import java.util.*;
+import java.util.stream.*;
 
 /**
  * Base class for script operations on tables.  This node looks for

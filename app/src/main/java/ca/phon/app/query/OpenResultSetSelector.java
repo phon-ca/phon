@@ -15,18 +15,16 @@
  */
 package ca.phon.app.query;
 
-import java.awt.*;
-import java.util.*;
-import java.util.List;
+import ca.phon.query.db.ResultSet;
+import ca.phon.session.Session;
+import ca.phon.util.Tuple;
+import org.jdesktop.swingx.JXTable;
 
 import javax.swing.*;
-import javax.swing.table.*;
-
-import org.jdesktop.swingx.*;
-
-import ca.phon.query.db.*;
-import ca.phon.session.*;
-import ca.phon.util.*;
+import javax.swing.table.AbstractTableModel;
+import java.awt.*;
+import java.util.List;
+import java.util.*;
 
 /**
  * Display available {@link ResultSet}s for a session.

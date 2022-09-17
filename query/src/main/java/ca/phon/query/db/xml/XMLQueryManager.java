@@ -16,13 +16,12 @@
 
 package ca.phon.query.db.xml;
 
-import java.io.*;
-
-import jakarta.xml.bind.*;
-import javax.xml.stream.*;
-
 import ca.phon.query.db.*;
 import ca.phon.query.db.xml.io.query.*;
+import jakarta.xml.bind.*;
+
+import javax.xml.stream.*;
+import java.io.*;
 
 /**
  * XML-based implementation of {@link QueryManager}.

@@ -16,7 +16,7 @@
 package ca.phon.syllable;
 
 import ca.phon.extensions.*;
-import ca.phon.ipa.*;
+import ca.phon.ipa.IPAElement;
 
 /**
  * Provides the syllable constituent type

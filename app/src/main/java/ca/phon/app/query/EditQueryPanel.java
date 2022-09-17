@@ -15,17 +15,15 @@
  */
 package ca.phon.app.query;
 
-import java.lang.ref.*;
+import ca.phon.query.db.Query;
+import ca.phon.session.format.DateFormatter;
+import ca.phon.ui.StarBox;
+import ca.phon.util.icons.IconSize;
+import com.jgoodies.forms.layout.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
-
-import com.jgoodies.forms.layout.*;
-
-import ca.phon.query.db.*;
-import ca.phon.session.format.*;
-import ca.phon.ui.*;
-import ca.phon.util.icons.*;
+import java.lang.ref.WeakReference;
 
 /**
  * Edit query name and comments.

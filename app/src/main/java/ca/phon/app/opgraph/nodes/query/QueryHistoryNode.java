@@ -15,14 +15,14 @@
  */
 package ca.phon.app.opgraph.nodes.query;
 
-import java.util.*;
-import java.util.stream.*;
-
 import ca.phon.opgraph.*;
-import ca.phon.opgraph.exceptions.*;
-import ca.phon.project.*;
+import ca.phon.opgraph.exceptions.ProcessingException;
+import ca.phon.project.Project;
 import ca.phon.query.db.*;
-import ca.phon.session.*;
+import ca.phon.session.SessionPath;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 @OpNodeInfo(
 		name="Query History",

@@ -15,11 +15,11 @@
  */
 package ca.phon.session.format;
 
-import java.text.*;
-import java.time.*;
-import java.time.format.*;
-
 import ca.phon.formatter.*;
+
+import java.text.ParseException;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 
 @FormatterType(LocalDate.class)
 public class DateFormatter implements Formatter<LocalDate> {

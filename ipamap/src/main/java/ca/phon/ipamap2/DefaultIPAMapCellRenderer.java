@@ -15,12 +15,11 @@
  */
 package ca.phon.ipamap2;
 
-import java.awt.*;
-import java.awt.geom.*;
+import ca.phon.ui.ipamap.io.Cell;
 
 import javax.swing.*;
-
-import ca.phon.ui.ipamap.io.*;
+import java.awt.*;
+import java.awt.geom.RoundRectangle2D;
 
 public class DefaultIPAMapCellRenderer implements IPAMapCellRenderer {
 	

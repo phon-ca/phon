@@ -15,10 +15,10 @@
  */
 package ca.phon.syllable.phonex;
 
+import ca.phon.phonex.*;
+
 import java.util.*;
 import java.util.regex.*;
-
-import ca.phon.phonex.*;
 
 /**
  * Tone plug-in provider. This matcher allows for matching tone number of an element.

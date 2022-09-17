@@ -15,14 +15,13 @@
  */
 package ca.phon.app.project;
 
-import java.io.*;
-import java.time.*;
-import java.time.format.*;
+import ca.phon.project.Project;
+import ca.phon.worker.PhonWorker;
 
 import javax.swing.*;
-
-import ca.phon.project.*;
-import ca.phon.worker.*;
+import java.io.IOException;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class SessionDetailsPane extends JTextArea {
 

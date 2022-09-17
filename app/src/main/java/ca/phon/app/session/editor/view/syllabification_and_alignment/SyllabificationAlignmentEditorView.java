@@ -15,32 +15,29 @@
  */
 package ca.phon.app.session.editor.view.syllabification_and_alignment;
 
-import java.awt.*;
-import java.beans.*;
-import java.util.*;
-import java.util.List;
-
-import javax.swing.*;
-
-import ca.phon.syllabifier.SyllabifierLibrary;
-import ca.phon.ui.*;
-import ca.phon.util.*;
-import com.jgoodies.forms.layout.*;
-
 import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.undo.*;
+import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.common.*;
 import ca.phon.app.session.editor.view.syllabification_and_alignment.actions.*;
-import ca.phon.ipa.*;
-import ca.phon.ipa.alignment.*;
-import ca.phon.session.*;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.session.Record;
-import ca.phon.ui.action.*;
-import ca.phon.ui.fonts.*;
+import ca.phon.session.*;
+import ca.phon.ui.DropDownButton;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.ipa.*;
-import ca.phon.ui.ipa.PhoneMapDisplay.*;
-import ca.phon.ui.ipa.SyllabificationDisplay.*;
+import ca.phon.ui.ipa.PhoneMapDisplay.AlignmentChangeData;
+import ca.phon.ui.ipa.SyllabificationDisplay.SyllabificationChangeData;
+import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.*;
+import com.jgoodies.forms.layout.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.beans.*;
+import java.util.List;
+import java.util.*;
 
 public class SyllabificationAlignmentEditorView extends EditorView {
 

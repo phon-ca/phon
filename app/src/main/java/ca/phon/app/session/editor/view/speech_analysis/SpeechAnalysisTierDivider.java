@@ -15,11 +15,10 @@
  */
 package ca.phon.app.session.editor.view.speech_analysis;
 
-import java.awt.*;
-import java.awt.event.*;
-
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.MouseInputAdapter;
+import java.awt.*;
+import java.awt.event.MouseEvent;
 
 public class SpeechAnalysisTierDivider extends JSeparator {
 	

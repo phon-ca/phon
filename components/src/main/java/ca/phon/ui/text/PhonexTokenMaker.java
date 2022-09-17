@@ -15,18 +15,16 @@
  */
 package ca.phon.ui.text;
 
-import java.io.*;
-import java.util.*;
-
-import javax.swing.text.*;
-
-import org.antlr.runtime.*;
-import org.fife.ui.rsyntaxtextarea.*;
-import org.fife.ui.rsyntaxtextarea.Token;
-import org.fife.ui.rsyntaxtextarea.modes.*;
-
 import ca.phon.ipa.features.*;
 import ca.phon.phonex.*;
+import org.antlr.runtime.*;
+import org.fife.ui.rsyntaxtextarea.Token;
+import org.fife.ui.rsyntaxtextarea.*;
+import org.fife.ui.rsyntaxtextarea.modes.PlainTextTokenMaker;
+
+import javax.swing.text.Segment;
+import java.io.IOException;
+import java.util.Properties;
 
 public class PhonexTokenMaker extends AbstractTokenMaker {
 	

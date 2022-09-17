@@ -16,10 +16,10 @@
 
 package ca.phon.query.db.xml;
 
-import java.util.*;
-
 import ca.phon.query.db.*;
 import ca.phon.query.db.xml.io.resultset.*;
+
+import java.util.*;
 
 /**
  * XML-based implementation of {@link ResultSet}. 

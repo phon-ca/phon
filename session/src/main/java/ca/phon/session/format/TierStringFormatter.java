@@ -15,10 +15,10 @@
  */
 package ca.phon.session.format;
 
-import java.text.*;
-
 import ca.phon.formatter.*;
-import ca.phon.session.*;
+import ca.phon.session.TierString;
+
+import java.text.ParseException;
 
 @FormatterType(TierString.class)
 public class TierStringFormatter implements Formatter<TierString> {

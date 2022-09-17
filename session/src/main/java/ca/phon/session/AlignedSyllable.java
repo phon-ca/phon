@@ -15,11 +15,11 @@
  */
 package ca.phon.session;
 
-import java.util.concurrent.atomic.*;
-
-import ca.phon.extensions.*;
-import ca.phon.ipa.*;
+import ca.phon.extensions.ExtendableObject;
+import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.*;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 public final class AlignedSyllable extends ExtendableObject {
 	

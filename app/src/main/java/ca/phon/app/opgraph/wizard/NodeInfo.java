@@ -15,7 +15,7 @@
  */
 package ca.phon.app.opgraph.wizard;
 
-import ca.phon.opgraph.*;
+import ca.phon.opgraph.OpNode;
 
 public class NodeInfo extends WizardInfo {
 

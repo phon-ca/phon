@@ -15,30 +15,26 @@
  */
 package ca.phon.app.session.editor.view.check;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.*;
-import java.util.List;
-import java.util.concurrent.*;
-
-import javax.swing.*;
-import javax.swing.event.*;
-
-import au.com.bytecode.opencsv.*;
+import au.com.bytecode.opencsv.CSVWriter;
 import ca.phon.app.log.*;
 import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.view.check.actions.*;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PhonPlugin;
-import ca.phon.plugin.PluginManager;
-import ca.phon.session.Session;
+import ca.phon.app.session.editor.view.check.actions.SessionCheckRefreshAction;
+import ca.phon.plugin.*;
 import ca.phon.session.check.*;
 import ca.phon.ui.DropDownButton;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.*;
 import org.jdesktop.swingx.JXBusyLabel;
+
+import javax.swing.*;
+import javax.swing.event.*;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.io.*;
+import java.util.List;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 public class SessionCheckView extends EditorView {
 	

@@ -15,18 +15,18 @@
  */
 package ca.phon.syllabifier.opgraph.nodes;
 
-import java.awt.*;
-import java.util.*;
-import java.util.List;
-
 import ca.phon.ipa.*;
 import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
-import ca.phon.opgraph.app.extensions.*;
-import ca.phon.opgraph.exceptions.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.opgraph.nodes.phonex.*;
 import ca.phon.phonex.*;
 import ca.phon.syllable.*;
+
+import java.awt.*;
+import java.util.List;
+import java.util.*;
 
 @OpNodeInfo(
 		name="Mark Constituent Type",

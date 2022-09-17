@@ -15,18 +15,14 @@
  */
 package ca.phon.app.prefs;
 
-import ca.phon.app.welcome.WelcomeWindow;
 import ca.phon.app.workspace.WorkspaceButton;
-import ca.phon.ui.HidablePanel;
-import ca.phon.ui.MultiActionButton;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.*;
+import ca.phon.ui.action.*;
 import ca.phon.util.PrefHelper;
 import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+import javax.swing.event.*;
 import java.awt.*;
 
 /**

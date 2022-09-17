@@ -15,22 +15,20 @@
  */
 package ca.phon.ui.syllable;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.text.*;
-import java.util.*;
-import java.util.List;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllabifier.basic.*;
+import ca.phon.ui.ipa.SyllabificationDisplay;
+import ca.phon.util.resources.*;
+import org.apache.logging.log4j.LogManager;
 
 import javax.swing.*;
-
-import org.apache.logging.log4j.*;
-
-import ca.phon.ipa.*;
-import ca.phon.syllabifier.*;
-import ca.phon.syllabifier.basic.*;
-import ca.phon.ui.ipa.*;
-import ca.phon.util.resources.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.io.File;
+import java.text.ParseException;
+import java.util.List;
+import java.util.*;
 
 public class BasicSyllabifierTest extends JFrame {
 

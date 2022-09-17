@@ -15,7 +15,7 @@
  */
 package ca.phon.cvseq.fsa;
 
-import ca.phon.cvseq.*;
+import ca.phon.cvseq.CVSeqType;
 import ca.phon.fsa.*;
 
 /**

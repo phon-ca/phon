@@ -15,13 +15,12 @@
  */
 package ca.phon.app.session.editor.view.tier_management;
 
-import java.util.*;
-
-import javax.swing.table.*;
-
 import ca.phon.session.*;
-import ca.phon.ui.fonts.*;
-import ca.phon.util.*;
+import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.util.PrefHelper;
+
+import javax.swing.table.AbstractTableModel;
+import java.util.*;
 
 public class TierOrderingTableModel extends AbstractTableModel {
 	

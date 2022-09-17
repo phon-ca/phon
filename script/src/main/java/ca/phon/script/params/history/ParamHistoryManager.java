@@ -15,17 +15,16 @@
  */
 package ca.phon.script.params.history;
 
+import ca.phon.script.*;
+import ca.phon.script.params.*;
+import jakarta.xml.bind.*;
+
+import javax.xml.datatype.*;
+import javax.xml.stream.*;
 import java.io.*;
 import java.time.*;
 import java.util.*;
-import java.util.stream.*;
-
-import jakarta.xml.bind.*;
-import javax.xml.datatype.*;
-import javax.xml.stream.*;
-
-import ca.phon.script.*;
-import ca.phon.script.params.*;
+import java.util.stream.Collectors;
 
 /**
  * Manager for {@link ParamHistoryType} objects.  This method provides the application

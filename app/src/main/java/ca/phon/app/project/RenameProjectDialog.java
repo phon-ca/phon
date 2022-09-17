@@ -7,8 +7,6 @@ import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.toast.ToastFactory;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 import com.jgoodies.forms.layout.*;
-import org.apache.commons.io.FilenameUtils;
-import org.fife.ui.rtextarea.ToolTipSupplier;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

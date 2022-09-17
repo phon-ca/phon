@@ -15,7 +15,6 @@
  */
 package ca.phon.formatter;
 
-import javax.swing.text.html.Option;
 import java.util.*;
 
 /**

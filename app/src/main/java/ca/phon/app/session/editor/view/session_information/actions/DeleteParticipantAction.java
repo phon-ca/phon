@@ -15,18 +15,17 @@
  */
 package ca.phon.app.session.editor.view.session_information.actions;
 
-import java.awt.event.*;
-
-import javax.swing.*;
-import javax.swing.undo.*;
-
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.*;
-import ca.phon.app.session.editor.view.session_information.*;
-import ca.phon.session.*;
+import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
 import ca.phon.session.Record;
+import ca.phon.session.*;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.icons.*;
+
+import javax.swing.*;
+import javax.swing.undo.CompoundEdit;
+import java.awt.event.ActionEvent;
 
 public class DeleteParticipantAction extends SessionInfoAction {
 	

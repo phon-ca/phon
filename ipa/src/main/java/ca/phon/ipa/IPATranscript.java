@@ -15,25 +15,23 @@
  */
 package ca.phon.ipa;
 
-import java.text.*;
-import java.util.*;
-import java.util.function.*;
-import java.util.regex.Pattern;
-
-import ca.phon.ipa.parser.exceptions.IPAParserException;
-import org.antlr.runtime.*;
-
 import ca.phon.cvseq.*;
 import ca.phon.extensions.*;
 import ca.phon.ipa.features.*;
 import ca.phon.ipa.parser.*;
+import ca.phon.ipa.parser.exceptions.IPAParserException;
 import ca.phon.phonex.*;
 import ca.phon.stresspattern.*;
 import ca.phon.syllable.*;
 import ca.phon.util.*;
 import ca.phon.visitor.*;
-import ca.phon.visitor.annotation.*;
+import ca.phon.visitor.annotation.Visits;
+import org.antlr.runtime.*;
 import org.antlr.v4.runtime.CharStreams;
+
+import java.text.ParseException;
+import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * <p>A (somewhat) immutable representation of an IPA transcription.  While the number of elements

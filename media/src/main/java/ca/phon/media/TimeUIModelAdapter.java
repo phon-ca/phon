@@ -15,9 +15,9 @@
  */
 package ca.phon.media;
 
-import java.beans.*;
-
 import ca.phon.media.TimeUIModel.*;
+
+import java.beans.PropertyChangeEvent;
 
 public class TimeUIModelAdapter implements TimeUIModelListener {
 

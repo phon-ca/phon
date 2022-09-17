@@ -15,11 +15,11 @@
  */
 package ca.phon.app.session.editor.view.ipa_lookup;
 
-import ca.phon.app.ipalookup.*;
+import ca.phon.app.ipalookup.OrthoWordIPAOptions;
 import ca.phon.ipa.*;
 import ca.phon.orthography.*;
-import ca.phon.visitor.*;
-import ca.phon.visitor.annotation.*;
+import ca.phon.visitor.VisitorAdapter;
+import ca.phon.visitor.annotation.Visits;
 
 public class WordLookupVisitor extends VisitorAdapter<OrthoElement> {
 

@@ -15,15 +15,14 @@
  */
 package ca.phon.app.opgraph.library;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-
-import org.apache.commons.io.*;
-
-import ca.phon.opgraph.library.*;
-import ca.phon.opgraph.library.handlers.*;
+import ca.phon.opgraph.library.NodeData;
+import ca.phon.opgraph.library.handlers.URIHandler;
 import ca.phon.opgraph.nodes.general.*;
+import org.apache.commons.io.FilenameUtils;
+
+import java.io.IOException;
+import java.net.*;
+import java.util.List;
 
 public class MacroURIHandler implements URIHandler<List<NodeData>> {
 

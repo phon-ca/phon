@@ -15,10 +15,10 @@
  */
 package ca.phon.app.opgraph.nodes;
 
-import java.util.*;
-
-import ca.phon.session.*;
 import ca.phon.session.Record;
+import ca.phon.session.*;
+
+import java.util.*;
 
 public class SessionRecordContainer implements RecordContainer {
 	

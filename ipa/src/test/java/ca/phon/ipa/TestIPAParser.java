@@ -15,17 +15,15 @@
  */
 package ca.phon.ipa;
 
-import java.text.*;
-import java.util.*;
-
-import ca.phon.util.PrefHelper;
-import org.junit.Test;
-import org.junit.runner.*;
-import org.junit.runners.*;
-
 import ca.phon.ipa.parser.*;
-import ca.phon.syllable.*;
-import org.junit.Assert;
+import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.util.PrefHelper;
+import org.junit.*;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
+import java.text.ParseException;
+import java.util.*;
 
 /**
  * Test methods for the ipa parser.

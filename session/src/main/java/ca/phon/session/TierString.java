@@ -15,11 +15,11 @@
  */
 package ca.phon.session;
 
-import java.io.*;
-import java.nio.charset.*;
-import java.util.*;
+import ca.phon.extensions.ExtendableObject;
 
-import ca.phon.extensions.*;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.util.*;
 
 /**
  * Custom String implementation for tiers with extension support.

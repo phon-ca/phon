@@ -15,15 +15,14 @@
  */
 package ca.phon.app.session.editor.undo;
 
-import java.awt.*;
-import java.lang.ref.*;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.view.common.GroupField;
+import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
+import ca.phon.session.Record;
 
 import javax.swing.FocusManager;
-
-import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.view.common.*;
-import ca.phon.app.session.editor.view.record_data.*;
-import ca.phon.session.Record;
+import java.awt.*;
+import java.lang.ref.WeakReference;
 
 /**
  * Undo-able edit for splitting groups.

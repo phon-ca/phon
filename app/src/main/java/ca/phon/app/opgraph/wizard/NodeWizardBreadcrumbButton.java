@@ -15,13 +15,12 @@
  */
 package ca.phon.app.opgraph.wizard;
 
-import java.awt.*;
-import java.awt.geom.*;
+import ca.phon.ui.GUIHelper;
+import ca.phon.ui.jbreadcrumb.*;
 
 import javax.swing.*;
-
-import ca.phon.ui.*;
-import ca.phon.ui.jbreadcrumb.*;
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
 
 /**
  * @deprecated Use {@link BreadcrumbButton}

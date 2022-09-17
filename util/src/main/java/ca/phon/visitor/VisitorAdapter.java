@@ -15,10 +15,10 @@
  */
 package ca.phon.visitor;
 
+import ca.phon.visitor.annotation.Visits;
+
 import java.lang.reflect.*;
 import java.util.*;
-
-import ca.phon.visitor.annotation.*;
 
 /**
  * Multiple dispatch visitor adapter.  The generic {@link #visit(Object)}

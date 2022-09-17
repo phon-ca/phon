@@ -15,11 +15,10 @@
  */
 package ca.phon.ui;
 
+import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.*;
-
-import javax.swing.*;
-import javax.swing.event.*;
 
 /**
  * Add an action to {@link JLabel} components.

@@ -15,13 +15,12 @@
  */
 package ca.phon.app.session.editor.actions;
 
-import java.awt.*;
-import java.awt.event.*;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.undo.DeleteRecordEdit;
 
 import javax.swing.*;
-
-import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.undo.*;
+import java.awt.*;
+import java.awt.event.*;
 
 public class CutRecordAction extends CopyRecordAction {
 

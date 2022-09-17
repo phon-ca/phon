@@ -15,7 +15,7 @@
  */
 package ca.phon.util.resources;
 
-import java.util.*;
+import java.util.Iterator;
 
 /**
  * Responsible for finding resources for a resource loader.

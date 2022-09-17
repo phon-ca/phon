@@ -15,17 +15,17 @@
  */
 package ca.phon.app.session.editor.actions;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.List;
-
 import ca.phon.app.log.*;
 import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.view.media_player.*;
+import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.audio.*;
 import ca.phon.util.*;
 import uk.co.caprica.vlcj.media.*;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.io.*;
+import java.util.List;
 
 public class ShowMediaInfoAction extends SessionEditorAction {
 	

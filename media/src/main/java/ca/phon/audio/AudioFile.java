@@ -18,7 +18,7 @@ package ca.phon.audio;
 import java.io.*;
 import java.math.*;
 import java.nio.*;
-import java.nio.channels.FileChannel.*;
+import java.nio.channels.FileChannel.MapMode;
 
 /**
  * An audio file. For a list of supported file types see {@link AudioFileType}.

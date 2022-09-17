@@ -15,11 +15,10 @@
  */
 package ca.phon.worker;
 
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.function.LongUnaryOperator;
+import ca.phon.worker.PhonTask.TaskStatus;
 
-import ca.phon.worker.PhonTask.*;
+import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * A worker thread for the application.

@@ -16,9 +16,9 @@
 
 package ca.phon.ipa.features;
 
-import java.util.*;
+import org.apache.commons.lang3.StringUtils;
 
-import org.apache.commons.lang3.*;
+import java.util.*;
 
 /**
  * Class to represent a charater's feature set.

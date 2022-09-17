@@ -15,16 +15,15 @@
  */
 package ca.phon.app.project;
 
-import java.awt.*;
+import ca.phon.project.Project;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.ui.toast.ToastFactory;
+import ca.phon.util.PhonConstants;
 
 import javax.swing.*;
-
-import ca.phon.project.*;
-import ca.phon.ui.*;
-import ca.phon.ui.decorations.*;
-import ca.phon.ui.layout.*;
-import ca.phon.ui.toast.*;
-import ca.phon.util.*;
+import java.awt.*;
 
 public class NewSessionDialog extends JDialog {
 	

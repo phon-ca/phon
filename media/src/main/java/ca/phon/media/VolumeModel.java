@@ -1,7 +1,6 @@
 package ca.phon.media;
 
 import java.beans.*;
-import java.util.Map;
 
 /**
  * Volume model used by all media playback elements in the session editor.

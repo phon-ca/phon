@@ -15,12 +15,11 @@
  */
 package ca.phon.ui.wizard;
 
-import java.awt.*;
+import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.jbreadcrumb.*;
 
 import javax.swing.*;
-
-import ca.phon.ui.fonts.*;
-import ca.phon.ui.jbreadcrumb.*;
+import java.awt.*;
 
 /**
  * Wizard frame with breadcrumb UI for navigation

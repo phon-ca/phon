@@ -15,16 +15,15 @@
  */
 package ca.phon.app.project.actions;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+import ca.phon.app.project.ProjectWindow;
+import ca.phon.plugin.*;
+import ca.phon.session.SessionPath;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
-
-import ca.phon.app.project.*;
-import ca.phon.plugin.*;
-import ca.phon.session.*;
-import ca.phon.util.icons.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.util.HashMap;
 
 public class OpenSessionAction extends ProjectWindowAction {
 	

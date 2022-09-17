@@ -15,57 +15,48 @@
  */
 package ca.phon.app.session.editor.view.record_data;
 
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.session.TierTransferrable;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.actions.PlaySegmentAction;
+import ca.phon.app.session.editor.undo.*;
+import ca.phon.app.session.editor.view.common.*;
+import ca.phon.app.session.editor.view.record_data.actions.*;
+import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
+import ca.phon.formatter.Formatter;
+import ca.phon.formatter.*;
+import ca.phon.ipa.*;
+import ca.phon.ipa.alignment.*;
+import ca.phon.orthography.Orthography;
+import ca.phon.session.Record;
+import ca.phon.session.*;
+import ca.phon.session.position.*;
+import ca.phon.syllabifier.*;
+import ca.phon.ui.*;
+import ca.phon.ui.action.*;
+import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.*;
+import ca.phon.util.icons.*;
+import com.jgoodies.forms.layout.*;
+import org.jdesktop.swingx.*;
+
+import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.event.*;
+import javax.swing.text.*;
+import javax.swing.text.Highlighter.*;
+import javax.swing.undo.*;
 import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.beans.*;
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.event.*;
-import javax.swing.text.*;
-import javax.swing.text.Highlighter.*;
-import javax.swing.undo.*;
-import javax.tools.Tool;
-
-import ca.phon.app.log.LogUtil;
-import ca.phon.app.session.TierTransferrable;
-import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
-import ca.phon.app.session.editor.view.timeline.TimelineRecordTier;
-import ca.phon.formatter.Formatter;
-import ca.phon.formatter.FormatterFactory;
-import ca.phon.orthography.Orthography;
-import ca.phon.syllabifier.Syllabifier;
-import ca.phon.syllabifier.SyllabifierLibrary;
-import ca.phon.syllable.SyllabificationInfo;
-import ca.phon.ui.ipa.SyllabificationDisplay;
-import ca.phon.ui.menu.MenuBuilder;
-import org.jdesktop.swingx.*;
-
-import com.jgoodies.forms.layout.*;
-
-import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.actions.*;
-import ca.phon.app.session.editor.undo.*;
-import ca.phon.app.session.editor.view.common.*;
-import ca.phon.app.session.editor.view.record_data.actions.*;
-import ca.phon.ipa.*;
-import ca.phon.ipa.alignment.*;
-import ca.phon.session.*;
-import ca.phon.session.Record;
-import ca.phon.session.position.*;
-import ca.phon.ui.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.fonts.*;
-import ca.phon.util.*;
-import ca.phon.util.icons.*;
+import java.util.regex.*;
 
 /**
  * Editor view for tier data.

@@ -3,15 +3,15 @@ package ca.phon.app.opgraph.nodes;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.script.*;
 import ca.phon.script.*;
-import ca.phon.ui.action.*;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
-import org.fife.ui.rtextarea.*;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.BadLocationException;
-import javax.swing.undo.*;
+import javax.swing.undo.UndoManager;
 import java.awt.*;
 import java.io.*;
 

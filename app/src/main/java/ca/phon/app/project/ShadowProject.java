@@ -15,12 +15,12 @@
  */
 package ca.phon.app.project;
 
+import ca.phon.app.log.LogUtil;
+import ca.phon.project.*;
+import ca.phon.project.exceptions.ProjectConfigurationException;
+
 import java.io.*;
 import java.util.*;
-
-import ca.phon.app.log.*;
-import ca.phon.project.*;
-import ca.phon.project.exceptions.*;
 
 /**
  * Shadow projects are used as temporary projects with the same

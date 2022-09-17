@@ -15,13 +15,12 @@
  */
 package ca.phon.app.session.editor.undo;
 
-import java.util.*;
-
-import javax.swing.undo.*;
-
 import ca.phon.app.session.editor.*;
-import ca.phon.session.*;
 import ca.phon.session.Record;
+import ca.phon.session.*;
+
+import javax.swing.undo.CannotUndoException;
+import java.util.*;
 
 /**
  * Add a new tier to the session.  This will also add a new empty tier

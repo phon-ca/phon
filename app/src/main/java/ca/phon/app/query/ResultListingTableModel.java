@@ -15,13 +15,13 @@
  */
 package ca.phon.app.query;
 
-import java.util.*;
+import ca.phon.query.db.ResultSet;
+import ca.phon.query.report.datasource.ResultListingDataSource;
+import ca.phon.query.report.io.ResultListing;
+import ca.phon.session.Session;
+import ca.phon.util.Tuple;
 
-import ca.phon.query.db.*;
-import ca.phon.query.report.datasource.*;
-import ca.phon.query.report.io.*;
-import ca.phon.session.*;
-import ca.phon.util.*;
+import java.util.*;
 
 /**
  * Displays the contents of a resultset using

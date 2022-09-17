@@ -15,13 +15,13 @@
  */
 package ca.phon.app.workspace;
 
-import java.io.*;
-import java.util.*;
-
 import ca.phon.app.project.ProjectDetector;
 import ca.phon.project.*;
-import ca.phon.project.exceptions.*;
-import ca.phon.util.*;
+import ca.phon.project.exceptions.ProjectConfigurationException;
+import ca.phon.util.PrefHelper;
+
+import java.io.*;
+import java.util.*;
 
 public class Workspace {
 	

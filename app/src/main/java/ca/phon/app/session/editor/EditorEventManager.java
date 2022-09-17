@@ -15,11 +15,11 @@
  */
 package ca.phon.app.session.editor;
 
-import java.lang.ref.*;
+import ca.phon.worker.*;
+
+import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.concurrent.*;
-
-import ca.phon.worker.*;
 
 /**
  * <p>Handles passing of internal EditorEvents.  Events can be dispatched on the AWT event

@@ -15,12 +15,11 @@
  */
 package ca.phon.ui.tristatecheckbox;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-
 import javax.swing.*;
 import javax.swing.tree.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.EventObject;
 
 public class TristateCheckBoxTreeCellEditor extends AbstractCellEditor implements TreeCellEditor {
 	

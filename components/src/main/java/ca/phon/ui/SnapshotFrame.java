@@ -15,15 +15,14 @@
  */
 package ca.phon.ui;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.*;
-import java.awt.image.*;
+import java.awt.geom.Area;
+import java.awt.image.BufferedImage;
 import java.io.*;
-
-import javax.imageio.*;
-import javax.swing.*;
-import javax.swing.event.*;
 
 public class SnapshotFrame extends JFrame {
 	

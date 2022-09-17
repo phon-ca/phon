@@ -15,29 +15,24 @@
  */
 package ca.phon.app.session.editor.view.timeline;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.security.Key;
-import java.util.*;
-import java.util.Timer;
-
-import javax.swing.*;
-import javax.swing.undo.*;
-
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.*;
-import ca.phon.app.session.editor.view.media_player.*;
-import ca.phon.app.session.editor.view.media_player.actions.*;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
+import ca.phon.app.session.editor.view.media_player.actions.GoToEndOfSegmentedAction;
 import ca.phon.media.*;
-import ca.phon.media.player.*;
-import ca.phon.orthography.*;
-import ca.phon.session.*;
+import ca.phon.orthography.Orthography;
 import ca.phon.session.Record;
+import ca.phon.session.*;
 import ca.phon.ui.action.*;
 import ca.phon.ui.nativedialogs.*;
 import uk.co.caprica.vlcj.player.base.*;
+
+import javax.swing.*;
+import javax.swing.undo.CompoundEdit;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.Timer;
+import java.util.*;
 
 public final class SegmentationHandler {
 

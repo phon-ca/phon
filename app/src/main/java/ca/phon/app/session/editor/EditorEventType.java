@@ -16,7 +16,7 @@
 
 package ca.phon.app.session.editor;
 
-import ca.phon.session.*;
+import ca.phon.session.TierListener;
 
 /**
  * The class holds the event names that are sent

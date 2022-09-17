@@ -15,28 +15,27 @@
  */
 package ca.phon.app.opgraph.editor;
 
-import java.awt.*;
-import java.io.*;
-import java.util.*;
-import java.util.List;
-
-import javax.swing.*;
-import javax.swing.undo.*;
-
-import ca.phon.app.opgraph.library.*;
-import ca.phon.app.opgraph.wizard.*;
+import ca.phon.app.opgraph.library.LibraryView;
+import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.app.script.ScriptPanel;
 import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
-import ca.phon.opgraph.app.components.*;
+import ca.phon.opgraph.app.GraphEditorModel;
+import ca.phon.opgraph.app.components.NodeSettingsPanel;
 import ca.phon.opgraph.app.components.canvas.*;
-import ca.phon.opgraph.app.edits.graph.*;
-import ca.phon.opgraph.app.extensions.*;
-import ca.phon.opgraph.extensions.*;
-import ca.phon.opgraph.library.*;
-import ca.phon.ui.jbreadcrumb.*;
+import ca.phon.opgraph.app.edits.graph.DeleteNodesEdit;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.opgraph.extensions.CompositeNode;
+import ca.phon.opgraph.library.NodeLibrary;
+import ca.phon.ui.jbreadcrumb.JBreadcrumbScrollPane;
 import ca.phon.util.*;
 import ca.phon.util.icons.*;
+
+import javax.swing.*;
+import javax.swing.undo.UndoableEdit;
+import java.awt.*;
+import java.io.File;
+import java.util.List;
+import java.util.*;
 
 /**
  * Base model for the opgraph editor.

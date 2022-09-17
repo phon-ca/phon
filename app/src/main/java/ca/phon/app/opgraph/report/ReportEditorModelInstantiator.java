@@ -15,18 +15,18 @@
  */
 package ca.phon.app.opgraph.report;
 
-import java.io.*;
-import java.util.*;
-
-import ca.phon.app.opgraph.editor.*;
-import ca.phon.app.opgraph.editor.EditorModelInstantiator.*;
-import ca.phon.app.opgraph.nodes.query.*;
+import ca.phon.app.opgraph.editor.EditorModelInstantiator;
+import ca.phon.app.opgraph.editor.EditorModelInstantiator.EditorModelInstantiatorMenuInfo;
+import ca.phon.app.opgraph.nodes.query.QueryHistoryNode;
 import ca.phon.opgraph.*;
 import ca.phon.opgraph.dag.*;
-import ca.phon.opgraph.exceptions.*;
-import ca.phon.opgraph.nodes.reflect.*;
+import ca.phon.opgraph.exceptions.ItemMissingException;
+import ca.phon.opgraph.nodes.reflect.ObjectNode;
 import ca.phon.plugin.*;
-import ca.phon.project.*;
+import ca.phon.project.Project;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 @EditorModelInstantiatorMenuInfo(
 		name="Query Report",

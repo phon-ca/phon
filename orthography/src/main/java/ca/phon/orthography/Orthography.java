@@ -15,15 +15,14 @@
  */
 package ca.phon.orthography;
 
-import java.text.*;
-import java.util.*;
-
-import org.antlr.runtime.*;
-
 import ca.phon.extensions.*;
 import ca.phon.orthography.parser.*;
-import ca.phon.orthography.parser.exceptions.*;
+import ca.phon.orthography.parser.exceptions.OrthoParserException;
 import ca.phon.visitor.*;
+import org.antlr.runtime.*;
+
+import java.text.ParseException;
+import java.util.*;
 
 /**
  * Container for orthographic transcriptions.  This class is immutable after being created.

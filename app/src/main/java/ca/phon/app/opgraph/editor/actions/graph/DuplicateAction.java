@@ -15,22 +15,21 @@
  */
 package ca.phon.app.opgraph.editor.actions.graph;
 
+import ca.phon.app.opgraph.editor.OpgraphEditor;
+import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.edits.graph.*;
+import ca.phon.opgraph.app.util.GraphUtils;
+import ca.phon.opgraph.dag.*;
+import ca.phon.opgraph.exceptions.ItemMissingException;
+import ca.phon.opgraph.extensions.NodeMetadata;
+
+import javax.swing.*;
+import javax.swing.undo.CompoundEdit;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-
-import javax.swing.*;
-import javax.swing.undo.*;
-
-import ca.phon.app.opgraph.editor.*;
-import ca.phon.app.opgraph.editor.actions.*;
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
-import ca.phon.opgraph.app.edits.graph.*;
-import ca.phon.opgraph.app.util.*;
-import ca.phon.opgraph.dag.*;
-import ca.phon.opgraph.exceptions.*;
-import ca.phon.opgraph.extensions.*;
 
 public class DuplicateAction extends OpgraphEditorAction {
 	

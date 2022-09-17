@@ -17,10 +17,10 @@
 
 package ca.phon.session;
 
-import java.time.*;
+import ca.phon.extensions.ExtendableObject;
+import ca.phon.session.spi.ParticipantSPI;
 
-import ca.phon.extensions.*;
-import ca.phon.session.spi.*;
+import java.time.*;
 
 /**
  * Immutable participant object.

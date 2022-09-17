@@ -15,13 +15,13 @@
  */
 package ca.phon.media;
 
-import java.io.*;
-import java.util.*;
-
 import ca.phon.audio.Sampled;
 import ca.phon.extensions.*;
 import ca.phon.plugin.*;
-import ca.phon.util.*;
+import ca.phon.util.PrefHelper;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * LongSound objects allow for access to audio stream information

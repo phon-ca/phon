@@ -15,13 +15,13 @@
  */
 package ca.phon.app.opgraph.wizard;
 
+import org.apache.velocity.Template;
+import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.resource.loader.StringResourceLoader;
+import org.apache.velocity.runtime.resource.util.StringResourceRepository;
+
 import java.io.*;
 import java.util.*;
-
-import org.apache.velocity.*;
-import org.apache.velocity.app.*;
-import org.apache.velocity.runtime.resource.loader.*;
-import org.apache.velocity.runtime.resource.util.*;
 
 public class NodeWizardReportTemplate {
 

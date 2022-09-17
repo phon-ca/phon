@@ -15,10 +15,10 @@
  */
 package ca.phon.session;
 
-import java.util.*;
-
 import ca.phon.extensions.*;
 import ca.phon.visitor.*;
+
+import java.util.*;
 
 /**
  * Iterable/visitor access for {@link Session} {@link TierDescription}s.

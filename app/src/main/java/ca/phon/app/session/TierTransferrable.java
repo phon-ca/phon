@@ -2,9 +2,7 @@ package ca.phon.app.session;
 
 import ca.phon.session.Tier;
 
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.datatransfer.*;
 import java.io.IOException;
 
 /**

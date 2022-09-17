@@ -15,12 +15,12 @@
  */
 package ca.phon.ipa.alignment.pmlu;
 
-import java.lang.ref.*;
-
-import ca.phon.extensions.*;
+import ca.phon.extensions.Extension;
 import ca.phon.ipa.*;
-import ca.phon.ipa.alignment.*;
+import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.phonex.*;
+
+import java.lang.ref.WeakReference;
 
 /**
  * Implements "Phonological Mean Length of Utterance" (Ingram 2002)

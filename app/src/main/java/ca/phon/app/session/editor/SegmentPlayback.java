@@ -15,16 +15,16 @@
  */
 package ca.phon.app.session.editor;
 
-import java.awt.*;
-import java.beans.*;
-import java.io.*;
-
-import ca.phon.app.log.*;
-import ca.phon.app.session.editor.view.media_player.*;
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.media.*;
 import ca.phon.session.*;
-import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import uk.co.caprica.vlcj.player.base.*;
+
+import java.awt.*;
+import java.beans.*;
+import java.io.IOException;
 
 /**
  * Centralized segment playback for the editor with

@@ -15,17 +15,14 @@
  */
 package ca.phon.app.opgraph.wizard;
 
-import java.io.*;
-import java.lang.reflect.*;
-
-import javax.xml.namespace.*;
-
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.io.xml.*;
+import ca.phon.xml.XMLConstants;
 import org.w3c.dom.*;
 
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.io.xml.XMLSerializer;
-import ca.phon.opgraph.io.xml.XMLSerializerFactory;
-import ca.phon.xml.*;
+import javax.xml.namespace.QName;
+import java.io.IOException;
+import java.lang.reflect.*;
 
 public class NodeWizardXMLSerializer implements XMLSerializer {
 	

@@ -15,21 +15,17 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import java.io.*;
-import java.util.*;
-import java.util.stream.*;
-
-import javax.xml.namespace.*;
-
-import org.w3c.dom.*;
-import org.w3c.dom.Node;
-
-import ca.phon.app.opgraph.nodes.table.InventorySettings.*;
+import ca.phon.app.opgraph.nodes.table.InventorySettings.ColumnInfo;
 import ca.phon.ipa.*;
 import ca.phon.opgraph.*;
-import ca.phon.opgraph.io.xml.XMLSerializer;
-import ca.phon.opgraph.io.xml.XMLSerializerFactory;
-import ca.phon.xml.*;
+import ca.phon.opgraph.io.xml.*;
+import ca.phon.xml.XMLConstants;
+import org.w3c.dom.*;
+
+import javax.xml.namespace.QName;
+import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class InventorySettingsXMLSerializer implements XMLSerializer {
 	

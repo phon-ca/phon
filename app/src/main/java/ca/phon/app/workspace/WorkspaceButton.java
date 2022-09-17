@@ -1,27 +1,20 @@
 package ca.phon.app.workspace;
 
-import ca.hedlund.desktopicons.MacOSStockIcon;
-import ca.hedlund.desktopicons.WindowsStockIcon;
+import ca.hedlund.desktopicons.*;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.menu.workspace.SelectWorkspaceCommand;
 import ca.phon.app.welcome.WorkspaceTextStyler;
-import ca.phon.ui.DropDownIcon;
-import ca.phon.ui.MultiActionButton;
-import ca.phon.ui.action.PhonActionEvent;
-import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.*;
+import ca.phon.ui.action.*;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.util.OSInfo;
-import ca.phon.util.PrefHelper;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
+import ca.phon.util.*;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
+import javax.swing.event.*;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.Iterator;
 
 public class WorkspaceButton extends MultiActionButton {

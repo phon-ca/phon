@@ -15,11 +15,10 @@
  */
 package ca.phon.ui;
 
-import java.awt.*;
-import java.awt.font.*;
-import java.awt.geom.*;
-
 import javax.swing.*;
+import java.awt.*;
+import java.awt.font.LineMetrics;
+import java.awt.geom.Rectangle2D;
 
 /**
  * A class similar to {@link SwingUtilities} that has some helper functions

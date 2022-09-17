@@ -15,15 +15,14 @@
  */
 package ca.phon.app.session.check;
 
-import java.awt.*;
-import java.util.*;
-import java.util.List;
+import ca.phon.session.check.CheckTranscripts;
+import ca.phon.syllabifier.*;
+import ca.phon.util.Language;
 
 import javax.swing.*;
-
-import ca.phon.session.check.*;
-import ca.phon.syllabifier.*;
-import ca.phon.util.*;
+import java.awt.*;
+import java.util.List;
+import java.util.*;
 
 public class CheckTranscriptsUI extends JPanel implements SessionCheckUI {
 	

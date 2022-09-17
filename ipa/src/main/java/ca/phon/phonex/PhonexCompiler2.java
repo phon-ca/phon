@@ -15,21 +15,14 @@
  */
 package ca.phon.phonex;
 
-import ca.phon.fsa.FSATransition;
-import ca.phon.fsa.OffsetType;
-import ca.phon.fsa.TransitionType;
+import ca.phon.fsa.*;
 import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.features.Feature;
-import ca.phon.ipa.features.FeatureMatrix;
-import ca.phon.phonex.plugins.AnyDiacriticPhoneMatcher;
-import ca.phon.phonex.plugins.CombinableMatcher;
-import ca.phon.phonexg4.PhonexListener;
+import ca.phon.ipa.features.*;
+import ca.phon.phonex.plugins.*;
 import ca.phon.phonexg4.PhonexParser;
-import ca.phon.syllable.SyllableConstituentType;
-import ca.phon.syllable.SyllableStress;
-import ca.phon.syllable.phonex.StressMatcher;
-import ca.phon.syllable.phonex.SyllableConstituentMatcher;
-import ca.phon.syllable.phonex.SyllableTransition;
+import ca.phon.phonexg4.*;
+import ca.phon.syllable.*;
+import ca.phon.syllable.phonex.*;
 import ca.phon.util.Tuple;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.*;

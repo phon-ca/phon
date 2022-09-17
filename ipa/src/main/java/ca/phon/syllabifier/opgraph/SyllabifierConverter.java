@@ -15,19 +15,19 @@
  */
 package ca.phon.syllabifier.opgraph;
 
-import ca.phon.ipa.*;
+import ca.phon.ipa.IPATranscript;
 import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
+import ca.phon.opgraph.app.AutoLayoutManager;
 import ca.phon.opgraph.dag.*;
-import ca.phon.opgraph.exceptions.*;
-import ca.phon.opgraph.nodes.general.*;
-import ca.phon.opgraph.nodes.reflect.*;
-import ca.phon.syllabifier.basic.*;
+import ca.phon.opgraph.exceptions.ItemMissingException;
+import ca.phon.opgraph.nodes.general.MacroNode;
+import ca.phon.opgraph.nodes.reflect.ObjectNode;
+import ca.phon.syllabifier.basic.BasicSyllabifier;
 import ca.phon.syllabifier.basic.io.*;
-import ca.phon.syllabifier.basic.io.SonorityValues.*;
-import ca.phon.syllabifier.opgraph.extensions.*;
+import ca.phon.syllabifier.basic.io.SonorityValues.SonorityClass;
+import ca.phon.syllabifier.opgraph.extensions.SyllabifierSettings;
 import ca.phon.syllabifier.opgraph.nodes.*;
-import ca.phon.util.*;
+import ca.phon.util.Language;
 
 /**
  * Convert a {@link BasicSyllabifier} into a new {@link OpGraphSyllabifier}

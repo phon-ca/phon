@@ -15,11 +15,11 @@
  */
 package ca.phon.app.ipalookup;
 
-import java.util.*;
+import ca.phon.extensions.Extension;
+import ca.phon.orthography.OrthoWord;
+import ca.phon.util.Language;
 
-import ca.phon.extensions.*;
-import ca.phon.orthography.*;
-import ca.phon.util.*;
+import java.util.*;
 
 /**
  * Extension for {@link OrthoWord} objects providing

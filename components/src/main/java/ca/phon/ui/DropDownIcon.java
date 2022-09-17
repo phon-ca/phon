@@ -15,10 +15,9 @@
  */
 package ca.phon.ui;
 
-import java.awt.*;
-import java.net.*;
-
 import javax.swing.*;
+import java.awt.*;
+import java.net.URL;
 
 /**
  * Create a 'drop-down' icon composed of an original icon

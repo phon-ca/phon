@@ -15,9 +15,9 @@
  */
 package ca.phon.app.session.check;
 
-import java.lang.annotation.*;
+import ca.phon.session.check.SessionCheck;
 
-import ca.phon.session.check.*;
+import java.lang.annotation.*;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

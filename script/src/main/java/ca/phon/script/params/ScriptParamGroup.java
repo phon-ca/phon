@@ -16,9 +16,9 @@
 
 package ca.phon.script.params;
 
-import java.util.*;
+import ca.phon.util.Tuple;
 
-import ca.phon.util.*;
+import java.util.Collection;
 
 /**
  * A group of script parameters.

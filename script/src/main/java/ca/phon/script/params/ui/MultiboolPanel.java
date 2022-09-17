@@ -15,12 +15,11 @@
  */
 package ca.phon.script.params.ui;
 
-import java.awt.*;
-import java.beans.*;
+import ca.phon.script.params.MultiboolScriptParam;
 
 import javax.swing.*;
-
-import ca.phon.script.params.*;
+import java.awt.*;
+import java.beans.*;
 
 /**
  *

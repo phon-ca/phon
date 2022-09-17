@@ -15,7 +15,7 @@
  */
 package ca.phon.phonex;
 
-import java.util.*;
+import java.util.List;
 
 /**
  * <p>Extension point for the phonex language.  To add a new plug-in matcher

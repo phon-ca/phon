@@ -15,17 +15,16 @@
  */
 package ca.phon.app.project.actions;
 
+import ca.phon.app.project.ProjectWindow;
+import ca.phon.project.Project;
+import ca.phon.util.CollatorFactory;
+import org.apache.commons.io.FileUtils;
+
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
 import java.io.*;
-import java.util.*;
 import java.util.List;
-
-import org.apache.commons.io.*;
-
-import ca.phon.app.project.*;
-import ca.phon.project.*;
-import ca.phon.util.*;
+import java.util.*;
 
 /**
  * Duplicate sessions selected in project window.  Session names

@@ -15,10 +15,10 @@
  */
 package ca.phon.session.filter;
 
-import java.util.*;
-
-import ca.phon.session.*;
 import ca.phon.session.Record;
+import ca.phon.session.*;
+
+import java.util.*;
 
 /**
  * Filter utterances by speaker.  If 'null' is given during construction

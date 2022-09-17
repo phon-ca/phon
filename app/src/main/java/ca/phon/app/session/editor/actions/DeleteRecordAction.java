@@ -15,16 +15,15 @@
  */
 package ca.phon.app.session.editor.actions;
 
-import java.awt.*;
-import java.awt.event.*;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.undo.DeleteRecordEdit;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.util.PrefHelper;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
-
-import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.undo.*;
-import ca.phon.ui.nativedialogs.*;
-import ca.phon.util.*;
-import ca.phon.util.icons.*;
+import java.awt.*;
+import java.awt.event.*;
 
 /**
  * Delete the current record.

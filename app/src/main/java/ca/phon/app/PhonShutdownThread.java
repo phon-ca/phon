@@ -15,12 +15,12 @@
  */
 package ca.phon.app;
 
-import java.util.*;
-
-import ca.phon.app.hooks.*;
-import ca.phon.app.log.*;
+import ca.phon.app.hooks.PhonShutdownHook;
+import ca.phon.app.log.LogManager;
 import ca.phon.plugin.*;
 import ca.phon.worker.*;
+
+import java.util.List;
 
 public class PhonShutdownThread extends PhonWorker {
 	

@@ -15,16 +15,14 @@
  */
 package ca.phon.session;
 
-import java.io.*;
-import java.util.*;
-
-import ca.phon.session.impl.SessionFactoryImpl;
-import org.apache.logging.log4j.*;
-
-import ca.phon.extensions.*;
+import ca.phon.extensions.ExtendableObject;
 import ca.phon.plugin.*;
 import ca.phon.session.io.*;
 import ca.phon.session.spi.*;
+import org.apache.logging.log4j.LogManager;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * A factory for creating mutable session objects.

@@ -1,6 +1,5 @@
 package ca.phon.app.opgraph.nodes;
 
-import ca.phon.app.session.editor.search.ParticipantCellRenderer;
 import ca.phon.opgraph.*;
 import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.session.Participant;

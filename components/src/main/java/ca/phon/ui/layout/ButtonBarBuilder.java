@@ -15,14 +15,12 @@
  */
 package ca.phon.ui.layout;
 
-import java.lang.ref.*;
-import java.util.*;
-
-import javax.swing.*;
-
+import ca.phon.util.OSInfo;
 import com.jgoodies.forms.layout.*;
 
-import ca.phon.util.*;
+import javax.swing.*;
+import java.lang.ref.WeakReference;
+import java.util.*;
 
 /**
  * Utility class for building dialog button bars.  The layout

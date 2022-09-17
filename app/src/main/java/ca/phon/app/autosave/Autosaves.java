@@ -15,13 +15,13 @@
  */
 package ca.phon.app.autosave;
 
-import java.io.*;
-import java.lang.ref.*;
-import java.time.*;
-import java.util.*;
+import ca.phon.project.Project;
+import ca.phon.session.Session;
 
-import ca.phon.project.*;
-import ca.phon.session.*;
+import java.io.*;
+import java.lang.ref.WeakReference;
+import java.time.*;
+import java.util.UUID;
 
 /**
  * Extension for {@link Project}s which manages auto-save files for 

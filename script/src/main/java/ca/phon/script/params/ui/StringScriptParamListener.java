@@ -15,14 +15,13 @@
  */
 package ca.phon.script.params.ui;
 
-import java.awt.event.*;
-import java.lang.ref.*;
+import ca.phon.script.params.ScriptParam;
+import ca.phon.ui.text.PromptedTextField;
+import ca.phon.ui.text.PromptedTextField.FieldState;
 
 import javax.swing.event.*;
-
-import ca.phon.script.params.*;
-import ca.phon.ui.text.*;
-import ca.phon.ui.text.PromptedTextField.*;
+import java.awt.event.ActionEvent;
+import java.lang.ref.WeakReference;
 
 public class StringScriptParamListener extends ScriptParamAction implements DocumentListener {
 	

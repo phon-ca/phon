@@ -15,28 +15,26 @@
  */
 package ca.phon.app.project;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.time.*;
-import java.time.format.*;
-import java.util.*;
-import java.util.List;
-
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.table.*;
-
-import org.jdesktop.swingx.*;
-
-import ca.phon.app.log.*;
-import ca.phon.formatter.*;
+import ca.phon.app.log.LogUtil;
+import ca.phon.formatter.FormatterUtil;
 import ca.phon.project.*;
-import ca.phon.project.ProjectEvent.*;
+import ca.phon.project.ProjectEvent.ProjectEventProp;
 import ca.phon.session.*;
-import ca.phon.util.*;
+import ca.phon.util.OSInfo;
 import ca.phon.util.icons.*;
 import ca.phon.worker.*;
+import org.jdesktop.swingx.JXTable;
+
+import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
+import javax.swing.table.AbstractTableModel;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.io.*;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.*;
 
 public class SessionDetails extends JPanel {
 

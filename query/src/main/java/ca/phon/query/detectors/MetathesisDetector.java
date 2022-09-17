@@ -15,12 +15,12 @@
  */
 package ca.phon.query.detectors;
 
-import java.util.*;
-
 import ca.phon.ipa.*;
-import ca.phon.ipa.alignment.*;
-import ca.phon.ipa.features.*;
-import ca.phon.query.detectors.MetathesisDetectorResult.*;
+import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.ipa.features.FeatureSet;
+import ca.phon.query.detectors.MetathesisDetectorResult.Type;
+
+import java.util.*;
 
 /**
  * <div id='metathesis'><h2>Metathesis</h2>

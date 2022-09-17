@@ -15,9 +15,8 @@
  */
 package ca.phon.ui.text;
 
-import java.awt.*;
-
 import javax.swing.text.*;
+import java.awt.*;
 
 public class OverwriteCaret extends DefaultCaret {
 

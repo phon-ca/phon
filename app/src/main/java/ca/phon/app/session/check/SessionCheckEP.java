@@ -15,11 +15,11 @@
  */
 package ca.phon.app.session.check;
 
-import java.awt.*;
-import java.util.*;
-
-import ca.phon.app.modules.*;
+import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.plugin.*;
+
+import java.awt.*;
+import java.util.Map;
 
 @PhonPlugin(name="Session Check")
 public class SessionCheckEP implements IPluginEntryPoint {

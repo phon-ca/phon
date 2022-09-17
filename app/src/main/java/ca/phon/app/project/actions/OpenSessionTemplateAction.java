@@ -15,13 +15,13 @@
  */
 package ca.phon.app.project.actions;
 
-import java.awt.event.*;
-import java.util.*;
+import ca.phon.app.corpus.SessionTemplateEP;
+import ca.phon.app.project.ProjectWindow;
+import ca.phon.plugin.PluginEntryPointRunner;
+import ca.phon.ui.toast.ToastFactory;
 
-import ca.phon.app.corpus.*;
-import ca.phon.app.project.*;
-import ca.phon.plugin.*;
-import ca.phon.ui.toast.*;
+import java.awt.event.ActionEvent;
+import java.util.HashMap;
 
 public class OpenSessionTemplateAction extends ProjectWindowAction {
 

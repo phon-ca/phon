@@ -15,10 +15,10 @@
  */
 package ca.phon.script;
 
-import java.net.*;
-import java.util.*;
+import ca.phon.extensions.IExtendable;
 
-import ca.phon.extensions.*;
+import java.net.URI;
+import java.util.List;
 
 /**
  * <p>Interface for Phon runtime scripts.  Scripts are written in

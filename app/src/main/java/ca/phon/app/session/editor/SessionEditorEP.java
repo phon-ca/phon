@@ -15,32 +15,29 @@
  */
 package ca.phon.app.session.editor;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.lang.reflect.*;
-import java.util.*;
-import java.util.concurrent.atomic.*;
-
-import javax.swing.*;
-
-import org.apache.logging.log4j.*;
-
-import com.jgoodies.forms.layout.*;
-
-import ca.phon.app.autosave.*;
-import ca.phon.app.menu.file.*;
-import ca.phon.app.modules.*;
-import ca.phon.app.session.editor.view.check.*;
-import ca.phon.app.session.editor.view.record_data.*;
+import ca.phon.app.autosave.Autosaves;
+import ca.phon.app.menu.file.OpenFileHistory;
+import ca.phon.app.modules.EntryPointArgs;
+import ca.phon.app.session.editor.view.check.SessionCheckView;
+import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.plugin.*;
 import ca.phon.project.*;
 import ca.phon.query.db.*;
 import ca.phon.session.*;
-import ca.phon.ui.*;
-import ca.phon.ui.layout.*;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.*;
+import com.jgoodies.forms.layout.*;
+import org.apache.logging.log4j.LogManager;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * SessionEditor entry point

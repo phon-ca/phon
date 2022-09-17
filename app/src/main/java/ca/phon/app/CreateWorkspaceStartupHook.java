@@ -1,6 +1,6 @@
 package ca.phon.app;
 
-import ca.phon.app.hooks.*;
+import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.workspace.Workspace;
 import ca.phon.plugin.*;

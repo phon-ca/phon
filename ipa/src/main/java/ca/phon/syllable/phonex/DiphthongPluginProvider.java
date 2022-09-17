@@ -15,9 +15,9 @@
  */
 package ca.phon.syllable.phonex;
 
-import java.util.*;
-
 import ca.phon.phonex.*;
+
+import java.util.List;
 
 /**
  * Provides the 'diphthong' phonex plug-in matcher. 

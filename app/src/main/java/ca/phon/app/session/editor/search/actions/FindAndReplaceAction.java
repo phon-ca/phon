@@ -15,9 +15,9 @@
  */
 package ca.phon.app.session.editor.search.actions;
 
-import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.actions.*;
-import ca.phon.app.session.editor.view.record_data.*;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.actions.SessionEditorAction;
+import ca.phon.app.session.editor.view.record_data.FindAndReplacePanel;
 
 public abstract class FindAndReplaceAction extends SessionEditorAction {
 

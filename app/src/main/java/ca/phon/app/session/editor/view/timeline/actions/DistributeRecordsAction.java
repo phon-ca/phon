@@ -4,16 +4,14 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.timeline.TimelineView;
 import ca.phon.media.LongSound;
-import ca.phon.session.*;
 import ca.phon.session.Record;
-import org.fife.ui.rtextarea.ToolTipSupplier;
+import ca.phon.session.*;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 /**
  * Distribute unsegmented records evenly across the space between existing records while maintaining order

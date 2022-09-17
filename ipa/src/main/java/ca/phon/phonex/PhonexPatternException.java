@@ -15,7 +15,7 @@
  */
 package ca.phon.phonex;
 
-import org.antlr.runtime.tree.*;
+import org.antlr.runtime.tree.TreeNodeStream;
 
 /**
  * Exception for phonex pattern errors.

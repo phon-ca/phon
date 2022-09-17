@@ -15,10 +15,10 @@
  */
 package ca.phon.session.io;
 
+import ca.phon.plugin.*;
+
 import java.io.*;
 import java.util.*;
-
-import ca.phon.plugin.*;
 
 /**
  * Used to create instances of session readers.

@@ -15,9 +15,9 @@
  */
 package ca.phon.ui.tristatecheckbox;
 
-import javax.swing.*;
-
 import ca.phon.util.icons.*;
+
+import javax.swing.*;
 
 public class TristateCheckBox extends JCheckBox {
 

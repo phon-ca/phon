@@ -15,34 +15,32 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import java.awt.*;
-import java.io.*;
-import java.text.*;
-import java.time.*;
-import java.util.*;
-import java.util.List;
-import java.util.stream.*;
-
-import javax.swing.*;
-
-import org.jdesktop.swingx.*;
-
-import ca.phon.app.opgraph.*;
-import ca.phon.formatter.*;
+import ca.phon.app.opgraph.GlobalParameter;
 import ca.phon.formatter.Formatter;
+import ca.phon.formatter.*;
 import ca.phon.ipa.*;
-import ca.phon.ipa.features.*;
+import ca.phon.ipa.features.FeatureMatrix;
 import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
-import ca.phon.opgraph.app.extensions.*;
-import ca.phon.opgraph.exceptions.*;
-import ca.phon.project.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.opgraph.exceptions.ProcessingException;
+import ca.phon.project.Project;
 import ca.phon.query.db.*;
 import ca.phon.query.report.datasource.*;
 import ca.phon.query.script.params.*;
-import ca.phon.query.script.params.DiacriticOptionsScriptParam.*;
-import ca.phon.session.*;
+import ca.phon.query.script.params.DiacriticOptionsScriptParam.SelectionMode;
 import ca.phon.session.Record;
+import ca.phon.session.*;
+import org.jdesktop.swingx.JXTitledSeparator;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
+import java.text.ParseException;
+import java.time.Period;
+import java.util.List;
+import java.util.*;
+import java.util.stream.*;
 
 @OpNodeInfo(name="Results To Table",
 	description="Convert a set of result to a table",

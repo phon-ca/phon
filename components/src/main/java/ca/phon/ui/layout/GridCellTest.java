@@ -15,9 +15,8 @@
  */
 package ca.phon.ui.layout;
 
-import java.awt.*;
-
 import javax.swing.*;
+import java.awt.*;
 
 public class GridCellTest extends JPanel {
 	

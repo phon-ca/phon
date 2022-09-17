@@ -19,17 +19,11 @@ import ca.phon.app.actions.OpenFileEP;
 import ca.phon.app.menu.analysis.AnalysisMenuListener;
 import ca.phon.app.menu.edit.EditMenuListener;
 import ca.phon.app.menu.file.*;
-import ca.phon.app.menu.help.HelpCommand;
-import ca.phon.app.menu.help.LogCommand;
+import ca.phon.app.menu.help.*;
 import ca.phon.app.menu.macro.MacroMenuListener;
 import ca.phon.app.menu.query.QueryMenuListener;
-import ca.phon.app.menu.tools.BasicSyllabifierTestCommand;
-import ca.phon.app.menu.tools.IpaMapCommand;
-import ca.phon.app.menu.tools.LanguageCodesCommand;
+import ca.phon.app.menu.tools.*;
 import ca.phon.app.menu.window.OpenWindowsMenuListener;
-import ca.phon.app.menu.workspace.SelectWorkspaceCommand;
-import ca.phon.app.menu.workspace.WorkspaceHistoryMenuListener;
-import ca.phon.app.menu.workspace.WorkspaceProjectsMenuListener;
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.welcome.WelcomeWindow;
 import ca.phon.plugin.IPluginMenuFilter;
@@ -40,8 +34,7 @@ import ca.phon.util.PrefHelper;
 import org.apache.logging.log4j.LogManager;
 
 import javax.swing.*;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
+import javax.swing.event.*;
 import java.awt.*;
 
 /**

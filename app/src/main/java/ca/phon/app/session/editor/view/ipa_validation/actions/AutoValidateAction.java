@@ -15,15 +15,14 @@
  */
 package ca.phon.app.session.editor.view.ipa_validation.actions;
 
-import java.awt.event.*;
-
-import javax.swing.undo.*;
-
-import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.ipa_validation.*;
-import ca.phon.app.session.editor.view.ipa_validation.AutoValidateDialog.*;
+import ca.phon.app.session.editor.view.ipa_validation.AutoValidateDialog.AutoValidateReturnValue;
 import ca.phon.worker.*;
-import ca.phon.worker.PhonTask.*;
+import ca.phon.worker.PhonTask.TaskStatus;
+
+import javax.swing.undo.UndoableEdit;
+import java.awt.event.ActionEvent;
 
 public class AutoValidateAction extends ValidationAction {
 

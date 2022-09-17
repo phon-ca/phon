@@ -15,9 +15,9 @@
  */
 package ca.phon.syllabifier.basic;
 
-import java.util.*;
+import ca.phon.ipa.IPAElement;
 
-import ca.phon.ipa.*;
+import java.util.List;
 
 public interface SyllabifierStage {
 

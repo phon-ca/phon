@@ -15,10 +15,10 @@
  */
 package ca.phon.ui;
 
-import java.awt.*;
-import java.text.*;
-
 import ca.phon.formatter.*;
+
+import java.awt.*;
+import java.text.ParseException;
 
 /**
  * Formatter for {@link Font}s

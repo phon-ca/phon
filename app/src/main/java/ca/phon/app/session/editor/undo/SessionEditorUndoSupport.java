@@ -15,11 +15,10 @@
  */
 package ca.phon.app.session.editor.undo;
 
-import java.lang.ref.*;
+import ca.phon.app.session.editor.SessionEditor;
 
 import javax.swing.undo.*;
-
-import ca.phon.app.session.editor.*;
+import java.lang.ref.WeakReference;
 
 /**
  * Undo support for the {@link SessionEditor}

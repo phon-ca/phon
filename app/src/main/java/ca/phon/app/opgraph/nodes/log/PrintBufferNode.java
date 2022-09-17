@@ -15,26 +15,24 @@
  */
 package ca.phon.app.opgraph.nodes.log;
 
-import java.awt.*;
-import java.io.*;
-import java.lang.reflect.*;
-import java.util.*;
-import java.util.concurrent.atomic.*;
+import ca.phon.app.log.*;
+import ca.phon.formatter.FormatterUtil;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.opgraph.exceptions.ProcessingException;
+import ca.phon.query.report.datasource.DefaultTableDataSource;
+import ca.phon.ui.HidablePanel;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rtextarea.RTextScrollPane;
+import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
-
-import org.fife.ui.rsyntaxtextarea.*;
-import org.fife.ui.rtextarea.*;
-import org.jdesktop.swingx.*;
-
-import ca.phon.app.log.*;
-import ca.phon.formatter.*;
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
-import ca.phon.opgraph.app.extensions.*;
-import ca.phon.opgraph.exceptions.*;
-import ca.phon.query.report.datasource.*;
-import ca.phon.ui.*;
+import java.awt.*;
+import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 @OpNodeInfo(
 		name="Print to Buffer",

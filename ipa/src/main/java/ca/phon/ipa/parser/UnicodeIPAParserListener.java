@@ -1,48 +1,14 @@
 package ca.phon.ipa.parser;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 import ca.phon.ipa.*;
-import ca.phon.ipa.parser.exceptions.HangingLigatureException;
-import ca.phon.ipa.parser.exceptions.IPAParserException;
-import ca.phon.ipa.parser.exceptions.StrayDiacriticException;
-import ca.phon.syllable.SyllabificationInfo;
-import org.antlr.v4.runtime.CommonToken;
-import org.antlr.v4.runtime.Token;
+import ca.phon.ipa.parser.UnicodeIPAParser.*;
+import ca.phon.ipa.parser.exceptions.*;
+import ca.phon.syllable.*;
+import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ErrorNode;
 
-import ca.phon.ipa.parser.UnicodeIPAParser.AlignmentContext;
-import ca.phon.ipa.parser.UnicodeIPAParser.CompoundPhoneContext;
-import ca.phon.ipa.parser.UnicodeIPAParser.CompoundWordMarkerContext;
-import ca.phon.ipa.parser.UnicodeIPAParser.GroupNameRefContext;
-import ca.phon.ipa.parser.UnicodeIPAParser.GroupNumberRefContext;
-import ca.phon.ipa.parser.UnicodeIPAParser.Intra_word_pauseContext;
-import ca.phon.ipa.parser.UnicodeIPAParser.LongPauseContext;
-import ca.phon.ipa.parser.UnicodeIPAParser.MajorGroupContext;
-import ca.phon.ipa.parser.UnicodeIPAParser.MediumPauseContext;
-import ca.phon.ipa.parser.UnicodeIPAParser.MinorGroupContext;
-import ca.phon.ipa.parser.UnicodeIPAParser.PauseContext;
-import ca.phon.ipa.parser.UnicodeIPAParser.Phonex_matcher_refContext;
-import ca.phon.ipa.parser.UnicodeIPAParser.PrefixDiacriticContext;
-import ca.phon.ipa.parser.UnicodeIPAParser.PrefixDiacriticLigatureContext;
-import ca.phon.ipa.parser.UnicodeIPAParser.PrefixDiacriticRoleReversedContext;
-import ca.phon.ipa.parser.UnicodeIPAParser.PrimaryStressContext;
-import ca.phon.ipa.parser.UnicodeIPAParser.SandhiMarkerContext;
-import ca.phon.ipa.parser.UnicodeIPAParser.SctypeContext;
-import ca.phon.ipa.parser.UnicodeIPAParser.SecondaryStressContext;
-import ca.phon.ipa.parser.UnicodeIPAParser.ShortPauseContext;
-import ca.phon.ipa.parser.UnicodeIPAParser.SinglePhoneContext;
-import ca.phon.ipa.parser.UnicodeIPAParser.StartContext;
-import ca.phon.ipa.parser.UnicodeIPAParser.SuffixDiacriticContext;
-import ca.phon.ipa.parser.UnicodeIPAParser.SuffixDiacriticLigatureContext;
-import ca.phon.ipa.parser.UnicodeIPAParser.SuffixDiacriticRoleReversedContext;
-import ca.phon.ipa.parser.UnicodeIPAParser.SyllableBoundaryContext;
-import ca.phon.ipa.parser.UnicodeIPAParser.TranscriptionContext;
-import ca.phon.ipa.parser.UnicodeIPAParser.WordContext;
-import ca.phon.syllable.SyllableConstituentType;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 

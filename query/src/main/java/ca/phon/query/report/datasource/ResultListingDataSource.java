@@ -15,19 +15,18 @@
  */
 package ca.phon.query.report.datasource;
 
-import java.io.*;
-import java.util.*;
-
-import org.mozilla.javascript.*;
-
-import ca.phon.project.*;
+import ca.phon.project.Project;
 import ca.phon.query.db.*;
 import ca.phon.query.report.io.*;
 import ca.phon.script.*;
 import ca.phon.script.params.*;
-import ca.phon.script.scripttable.*;
-import ca.phon.session.*;
+import ca.phon.script.scripttable.AbstractScriptTableModel;
 import ca.phon.session.Record;
+import ca.phon.session.*;
+import org.mozilla.javascript.Scriptable;
+
+import java.io.IOException;
+import java.util.*;
 
 /**
  * A data source which lists each

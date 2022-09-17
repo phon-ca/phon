@@ -15,13 +15,12 @@
  */
 package ca.phon.query.report;
 
-import java.io.*;
-
-import jakarta.xml.bind.*;
-
-import ca.phon.project.*;
+import ca.phon.project.Project;
 import ca.phon.query.db.*;
 import ca.phon.query.report.io.*;
+import jakarta.xml.bind.JAXBElement;
+
+import java.io.*;
 
 /**
  * Handles storage of result listing formats

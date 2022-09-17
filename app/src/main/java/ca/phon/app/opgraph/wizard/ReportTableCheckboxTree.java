@@ -15,13 +15,12 @@
  */
 package ca.phon.app.opgraph.wizard;
 
-import java.awt.*;
-
-import javax.swing.*;
-
 import ca.phon.app.opgraph.report.tree.*;
 import ca.phon.ui.tristatecheckbox.*;
 import ca.phon.util.icons.*;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class ReportTableCheckboxTree extends TristateCheckBoxTree {
 	

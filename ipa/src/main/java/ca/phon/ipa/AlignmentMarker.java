@@ -16,7 +16,7 @@
 package ca.phon.ipa;
 
 import ca.phon.ipa.features.*;
-import ca.phon.syllable.*;
+import ca.phon.syllable.SyllableConstituentType;
 
 /**
  * Character used to indicate alignment.

@@ -15,16 +15,15 @@
  */
 package ca.phon.ipa;
 
+import ca.phon.ipa.features.IPAElementComparator;
+import ca.phon.ipa.tree.IpaTernaryTree;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
 import java.io.*;
-import java.text.*;
+import java.text.ParseException;
 import java.util.*;
-
-import org.junit.*;
-import org.junit.runner.*;
-import org.junit.runners.*;
-
-import ca.phon.ipa.features.*;
-import ca.phon.ipa.tree.*;
 
 @RunWith(JUnit4.class)
 public class TestTernaryTree {

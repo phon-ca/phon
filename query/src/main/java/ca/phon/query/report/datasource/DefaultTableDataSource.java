@@ -15,10 +15,10 @@
  */
 package ca.phon.query.report.datasource;
 
-import java.util.*;
-import java.util.stream.*;
+import ca.phon.query.TableUtils;
 
-import ca.phon.query.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Basic implementation of a {@link TableDataSource}.  Data

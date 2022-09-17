@@ -15,11 +15,11 @@
  */
 package ca.phon.app.project.git.actions;
 
-import java.awt.event.*;
+import ca.phon.app.project.ProjectWindow;
+import ca.phon.app.project.actions.ProjectWindowAction;
+import ca.phon.app.project.git.GitCommitWizard;
 
-import ca.phon.app.project.*;
-import ca.phon.app.project.actions.*;
-import ca.phon.app.project.git.*;
+import java.awt.event.ActionEvent;
 
 public class CommitAction extends ProjectWindowAction {
 

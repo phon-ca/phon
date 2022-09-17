@@ -15,26 +15,24 @@
  */
 package ca.phon.app.project.git;
 
-import java.awt.*;
-import java.io.*;
-import java.util.List;
-
-import javax.swing.*;
-
+import ca.phon.app.project.git.CommitTableModel.FileStatus;
+import ca.phon.app.project.git.actions.GitProgressBuffer;
+import ca.phon.project.Project;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.ui.toast.ToastFactory;
+import ca.phon.ui.wizard.*;
+import ca.phon.util.PrefHelper;
+import ca.phon.worker.PhonWorker;
 import org.eclipse.jgit.api.*;
-import org.eclipse.jgit.api.errors.*;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.jdesktop.swingx.*;
 
-import ca.phon.app.project.git.CommitTableModel.*;
-import ca.phon.app.project.git.actions.*;
-import ca.phon.project.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.decorations.*;
-import ca.phon.ui.layout.*;
-import ca.phon.ui.toast.*;
-import ca.phon.ui.wizard.*;
-import ca.phon.util.*;
-import ca.phon.worker.*;
+import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
+import java.util.List;
 
 public class GitCommitWizard extends WizardFrame {
 	

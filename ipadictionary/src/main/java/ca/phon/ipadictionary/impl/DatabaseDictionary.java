@@ -15,16 +15,15 @@
  */
 package ca.phon.ipadictionary.impl;
 
+import ca.phon.ipadictionary.IPADictionary;
+import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
+import ca.phon.ipadictionary.spi.*;
+import ca.phon.util.Language;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+
 import java.sql.*;
 import java.util.*;
-
-import org.apache.commons.lang3.*;
-import org.apache.logging.log4j.*;
-
-import ca.phon.ipadictionary.*;
-import ca.phon.ipadictionary.exceptions.*;
-import ca.phon.ipadictionary.spi.*;
-import ca.phon.util.*;
 
 /**
  * User-defined IPA dictionary where all entries are 

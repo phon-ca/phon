@@ -15,37 +15,34 @@
  */
 package ca.phon.app.phonex;
 
-import java.awt.*;
-import java.io.*;
-import java.text.*;
-import java.util.*;
-import java.util.List;
-
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.table.*;
-
-import org.fife.ui.rsyntaxtextarea.*;
-import org.fife.ui.rtextarea.*;
+import ca.phon.app.syllabifier.SyllabifierComboBox;
+import ca.phon.fsa.*;
+import ca.phon.fsa.FSAState.RunningState;
+import ca.phon.fsa.SimpleFSA.DecisionTracker;
+import ca.phon.ipa.*;
+import ca.phon.phonex.*;
+import ca.phon.syllabifier.Syllabifier;
+import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.text.PatternEditor;
+import ca.phon.ui.text.PatternEditor.SyntaxStyle;
+import guru.nidi.graphviz.attribute.Color;
+import guru.nidi.graphviz.engine.Renderer;
+import guru.nidi.graphviz.engine.*;
+import guru.nidi.graphviz.model.MutableGraph;
+import guru.nidi.graphviz.parse.Parser;
+import org.fife.ui.rsyntaxtextarea.ErrorStrip;
+import org.fife.ui.rtextarea.RTextScrollPane;
 import org.jdesktop.swingx.*;
 import org.jdesktop.swingx.treetable.*;
 
-import ca.phon.app.syllabifier.*;
-import ca.phon.fsa.*;
-import ca.phon.fsa.FSAState.*;
-import ca.phon.fsa.SimpleFSA.*;
-import ca.phon.ipa.*;
-import ca.phon.phonex.*;
-import ca.phon.syllabifier.*;
-import ca.phon.ui.fonts.*;
-import ca.phon.ui.text.*;
-import ca.phon.ui.text.PatternEditor.*;
-import guru.nidi.graphviz.attribute.Color;
-import guru.nidi.graphviz.engine.*;
-import guru.nidi.graphviz.engine.Format;
-import guru.nidi.graphviz.engine.Renderer;
-import guru.nidi.graphviz.model.*;
-import guru.nidi.graphviz.parse.*;
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.table.AbstractTableModel;
+import java.awt.*;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.List;
+import java.util.*;
 
 public class PhonexDebugger extends JComponent {
 

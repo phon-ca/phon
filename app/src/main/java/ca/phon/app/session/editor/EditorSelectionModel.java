@@ -15,7 +15,7 @@
  */
 package ca.phon.app.session.editor;
 
-import java.util.*;
+import java.util.List;
 
 /**
  * Selection model for the {@link SessionEditor}.

@@ -15,9 +15,9 @@
  */
 package ca.phon.media;
 
-import java.io.*;
-
 import ca.phon.audio.*;
+
+import java.io.*;
 
 public class AudioFileLongSound extends LongSound {
 	

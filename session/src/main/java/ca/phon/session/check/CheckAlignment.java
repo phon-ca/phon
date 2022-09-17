@@ -15,14 +15,14 @@
  */
 package ca.phon.session.check;
 
-import java.util.*;
-
 import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.*;
 import ca.phon.plugin.*;
-import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.util.*;
+import ca.phon.session.*;
+import ca.phon.util.PrefHelper;
+
+import java.util.*;
 
 @PhonPlugin(name="Check Phone Alignments", comments="Check phone alignments")
 @Rank(2)

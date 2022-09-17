@@ -15,39 +15,36 @@
  */
 package ca.phon.app.session.editor.view.speech_analysis;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.*;
-import java.io.*;
-import java.util.*;
-import java.util.List;
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.session.EditorViewAdapter;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.actions.*;
+import ca.phon.app.session.editor.undo.TierEdit;
+import ca.phon.app.session.editor.view.speech_analysis.actions.NewRecordAction;
+import ca.phon.app.session.editor.view.speech_analysis.actions.*;
+import ca.phon.media.*;
+import ca.phon.media.TimeUIModel.*;
+import ca.phon.media.export.VLCWavExporter;
+import ca.phon.plugin.*;
+import ca.phon.session.Record;
+import ca.phon.session.*;
+import ca.phon.ui.*;
+import ca.phon.ui.action.*;
+import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.icons.*;
+import ca.phon.worker.*;
+import ca.phon.worker.PhonTask.TaskStatus;
+import org.apache.logging.log4j.LogManager;
+import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
 import javax.swing.event.*;
-
-import org.apache.logging.log4j.LogManager;
-import org.jdesktop.swingx.*;
-
-import ca.phon.app.log.*;
-import ca.phon.app.session.*;
-import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.actions.*;
-import ca.phon.app.session.editor.undo.*;
-import ca.phon.app.session.editor.view.speech_analysis.actions.*;
-import ca.phon.app.session.editor.view.speech_analysis.actions.NewRecordAction;
-import ca.phon.media.*;
-import ca.phon.media.TimeUIModel.*;
-import ca.phon.media.TimeUIModel.Marker;
-import ca.phon.media.export.*;
-import ca.phon.plugin.*;
-import ca.phon.session.*;
-import ca.phon.session.Record;
-import ca.phon.ui.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.menu.*;
-import ca.phon.util.icons.*;
-import ca.phon.worker.*;
-import ca.phon.worker.PhonTask.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.beans.*;
+import java.io.IOException;
+import java.util.List;
+import java.util.*;
 
 /**
  * Displays wavform and associated commands.

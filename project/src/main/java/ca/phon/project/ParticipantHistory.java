@@ -15,10 +15,10 @@
  */
 package ca.phon.project;
 
-import java.time.*;
-import java.util.*;
+import ca.phon.session.SessionPath;
 
-import ca.phon.session.*;
+import java.time.Period;
+import java.util.*;
 
 /**
  * Runtime extension for Participant objects.  This

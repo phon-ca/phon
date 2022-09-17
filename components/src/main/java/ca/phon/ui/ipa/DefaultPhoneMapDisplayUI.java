@@ -16,22 +16,20 @@
 
 package ca.phon.ui.ipa;
 
+import ca.phon.ipa.*;
+import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.syllable.SyllableVisitor;
+import ca.phon.ui.action.*;
+import ca.phon.util.Tuple;
+import org.jdesktop.swingx.painter.effects.GlowPathEffect;
+
+import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
-import java.util.*;
 import java.util.List;
-
-import javax.swing.*;
-import javax.swing.event.*;
-
-import org.jdesktop.swingx.painter.effects.*;
-
-import ca.phon.ipa.*;
-import ca.phon.ipa.alignment.*;
-import ca.phon.syllable.*;
-import ca.phon.ui.action.*;
-import ca.phon.util.*;
+import java.util.*;
 
 /**
  * Default UI for the phone map display.  This class

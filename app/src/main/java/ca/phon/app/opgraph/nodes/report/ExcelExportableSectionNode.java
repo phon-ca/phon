@@ -15,7 +15,7 @@
  */
 package ca.phon.app.opgraph.nodes.report;
 
-import ca.phon.app.log.*;
+import ca.phon.app.log.ExcelExporter;
 import ca.phon.app.opgraph.report.tree.*;
 import ca.phon.opgraph.*;
 

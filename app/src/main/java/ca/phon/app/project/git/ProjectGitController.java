@@ -15,20 +15,18 @@
  */
 package ca.phon.app.project.git;
 
-import java.io.*;
-import java.util.function.*;
-
+import ca.phon.project.Project;
 import org.eclipse.jgit.api.*;
 import org.eclipse.jgit.api.errors.*;
-import org.eclipse.jgit.api.errors.TransportException;
-import org.eclipse.jgit.dircache.*;
-import org.eclipse.jgit.errors.*;
+import org.eclipse.jgit.dircache.DirCache;
+import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.lib.*;
-import org.eclipse.jgit.revwalk.*;
-import org.eclipse.jgit.storage.file.*;
-import org.eclipse.jgit.transport.*;
+import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.transport.PushResult;
 
-import ca.phon.project.*;
+import java.io.*;
+import java.util.function.Consumer;
 
 /**
  *

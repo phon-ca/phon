@@ -16,18 +16,14 @@
 package ca.phon.app.about;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.IPluginMenuFilter;
-import ca.phon.plugin.PhonPlugin;
+import ca.phon.plugin.*;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.PrefHelper;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.net.*;
 
 @PhonPlugin(author="Greg J. Hedlund", comments="Add manual items to Help menu", minPhonVersion="2.2.0", name="HelpMenuHandler", version="1")
 public class HelpMenuHandler implements IPluginMenuFilter, IPluginExtensionPoint<IPluginMenuFilter> {

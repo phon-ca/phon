@@ -15,14 +15,13 @@
  */
 package ca.phon.ui.menu;
 
-import java.awt.*;
-import java.lang.ref.*;
-import java.util.*;
-import java.util.List;
+import ca.phon.util.Tuple;
 
 import javax.swing.*;
-
-import ca.phon.util.*;
+import java.awt.*;
+import java.lang.ref.WeakReference;
+import java.util.List;
+import java.util.*;
 
 /**
  * <p>Helper class for building menus.  Menus items are 'addressed' using paths.  Paths are

@@ -17,12 +17,10 @@ package ca.phon.ipamap2;
 
 import ca.phon.util.OSInfo;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.swing.*;
+import java.util.logging.*;
 
 public class IPAMap  {
 

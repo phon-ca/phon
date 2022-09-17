@@ -15,9 +15,9 @@
  */
 package ca.phon.phonex;
 
-import java.util.*;
+import ca.phon.ipa.IPAElement;
 
-import ca.phon.ipa.*;
+import java.util.*;
 
 /**
  * Combine multiple phone matchers.

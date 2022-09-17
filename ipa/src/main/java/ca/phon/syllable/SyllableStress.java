@@ -16,8 +16,8 @@
 
 package ca.phon.syllable;
 
-import ca.phon.extensions.*;
-import ca.phon.ipa.*;
+import ca.phon.extensions.Extension;
+import ca.phon.ipa.IPATranscript;
 
 /**
  * Represents syllable stress.

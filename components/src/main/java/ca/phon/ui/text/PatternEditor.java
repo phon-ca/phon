@@ -15,13 +15,12 @@
  */
 package ca.phon.ui.text;
 
-import java.awt.event.*;
-
-import javax.swing.*;
-
 import ca.phon.ui.fonts.FontPreferences;
 import org.fife.ui.autocomplete.*;
 import org.fife.ui.rsyntaxtextarea.*;
+
+import javax.swing.*;
+import java.awt.event.KeyEvent;
 
 /**
  * Editor for query patterns with custom syntax highlighting

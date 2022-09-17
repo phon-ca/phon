@@ -15,15 +15,14 @@
  */
 package ca.phon.project;
 
-import java.io.*;
-import java.util.*;
-
-import org.junit.Test;
-import org.junit.runner.*;
-import org.junit.runners.*;
-
-import ca.phon.project.exceptions.*;
+import ca.phon.project.exceptions.ProjectConfigurationException;
 import junit.framework.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
+import java.io.*;
+import java.util.Collections;
 
 /**
  * Tests for the LocalProject implementation.

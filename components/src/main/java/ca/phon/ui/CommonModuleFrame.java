@@ -16,26 +16,24 @@
 package ca.phon.ui;
 
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.*;
-import java.util.List;
-
-import javax.swing.*;
-import javax.swing.event.*;
-
-import com.jgoodies.forms.layout.*;
-
 import ca.phon.extensions.*;
 import ca.phon.plugin.*;
-import ca.phon.project.*;
-import ca.phon.ui.menu.*;
+import ca.phon.project.Project;
+import ca.phon.ui.menu.MenuManager;
 import ca.phon.ui.nativedialogs.*;
-import ca.phon.util.*;
 import ca.phon.util.OSInfo;
+import ca.phon.util.*;
 import ca.phon.util.icons.*;
-import ca.phon.worker.*;
+import ca.phon.worker.PhonWorker;
+import com.jgoodies.forms.layout.*;
+
+import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.IOException;
+import java.util.List;
+import java.util.*;
 
 
 /**

@@ -15,18 +15,16 @@
  */
 package ca.phon.ipamap2;
 
-import java.io.*;
-import java.util.*;
-import java.util.stream.*;
-
-import jakarta.xml.bind.*;
-
-import org.apache.commons.lang3.*;
-
 import ca.phon.ipa.features.*;
 import ca.phon.ipa.parser.*;
-import ca.phon.ipamap.IpaMapSearchField.*;
+import ca.phon.ipamap.IpaMapSearchField.SearchType;
 import ca.phon.ui.ipamap.io.*;
+import jakarta.xml.bind.*;
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class IPAGrids {
 	

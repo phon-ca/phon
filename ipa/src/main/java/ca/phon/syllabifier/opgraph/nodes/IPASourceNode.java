@@ -15,18 +15,17 @@
  */
 package ca.phon.syllabifier.opgraph.nodes;
 
-import java.awt.*;
-import java.text.*;
-import java.util.*;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.opgraph.exceptions.ProcessingException;
+import ca.phon.syllabifier.opgraph.OpGraphSyllabifier;
 
 import javax.swing.*;
-
-import ca.phon.ipa.*;
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
-import ca.phon.opgraph.app.extensions.*;
-import ca.phon.opgraph.exceptions.*;
-import ca.phon.syllabifier.opgraph.*;
+import java.awt.*;
+import java.text.ParseException;
+import java.util.Properties;
 
 /**
  * IPA source node for the syllabifier.

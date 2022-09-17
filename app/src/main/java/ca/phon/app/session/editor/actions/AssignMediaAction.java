@@ -15,16 +15,15 @@
  */
 package ca.phon.app.session.editor.actions;
 
-import java.awt.event.*;
-import java.util.*;
-
-import javax.swing.*;
-
-import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.undo.*;
-import ca.phon.app.session.editor.view.media_player.*;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.undo.MediaLocationEdit;
+import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.icons.*;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.util.List;
 
 public class AssignMediaAction extends SessionEditorAction {
 

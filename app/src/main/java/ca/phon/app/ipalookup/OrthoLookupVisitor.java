@@ -15,13 +15,13 @@
  */
 package ca.phon.app.ipalookup;
 
+import ca.phon.ipadictionary.IPADictionary;
+import ca.phon.orthography.*;
+import ca.phon.visitor.VisitorAdapter;
+import ca.phon.visitor.annotation.Visits;
+
 import java.util.*;
 import java.util.regex.*;
-
-import ca.phon.ipadictionary.*;
-import ca.phon.orthography.*;
-import ca.phon.visitor.*;
-import ca.phon.visitor.annotation.*;
 
 /**
  * Produce a set of suggested transcriptions for a given {@link Orthography}.

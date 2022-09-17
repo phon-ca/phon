@@ -15,13 +15,13 @@
  */
 package ca.phon.syllabifier.basic;
 
-import java.util.*;
-
 import ca.phon.ipa.*;
 import ca.phon.phonex.*;
-import ca.phon.syllabifier.basic.io.*;
-import ca.phon.syllabifier.basic.io.SonorityValues.*;
-import ca.phon.syllabifier.phonex.*;
+import ca.phon.syllabifier.basic.io.SonorityValues;
+import ca.phon.syllabifier.basic.io.SonorityValues.SonorityClass;
+import ca.phon.syllabifier.phonex.SonorityInfo;
+
+import java.util.*;
 
 public class SonorityScale implements SyllabifierStage {
 

@@ -15,19 +15,18 @@
  */
 package ca.phon.ui.text;
 
-import java.lang.ref.*;
-import java.text.*;
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.regex.*;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.phonex.*;
+import ca.phon.ui.action.*;
+import ca.phon.util.Tuple;
 
 import javax.swing.*;
 import javax.swing.table.*;
-
-import ca.phon.ipa.*;
-import ca.phon.phonex.*;
-import ca.phon.ui.action.*;
-import ca.phon.util.*;
+import java.lang.ref.WeakReference;
+import java.text.ParseException;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.regex.*;
 
 /**
  * Search field for applying plain text and regular

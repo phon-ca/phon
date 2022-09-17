@@ -15,14 +15,12 @@
  */
 package ca.phon.app.session.editor;
 
-import java.awt.*;
-
-import javax.swing.*;
-
-import org.jdesktop.swingx.*;
+import ca.phon.ui.*;
+import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.painter.*;
 
-import ca.phon.ui.*;
+import javax.swing.*;
+import java.awt.*;
 
 public class ErrorBanner extends MultiActionButton {
 	

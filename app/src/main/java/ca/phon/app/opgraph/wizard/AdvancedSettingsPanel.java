@@ -15,19 +15,17 @@
  */
 package ca.phon.app.opgraph.wizard;
 
-import java.awt.*;
-import java.util.*;
-import java.util.List;
-import java.util.stream.*;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.util.icons.*;
+import org.jdesktop.swingx.JXTree;
 
 import javax.swing.*;
 import javax.swing.tree.*;
-
-import org.jdesktop.swingx.*;
-
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.extensions.*;
-import ca.phon.util.icons.*;
+import java.awt.*;
+import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Display settings for wizard nodes identified in the

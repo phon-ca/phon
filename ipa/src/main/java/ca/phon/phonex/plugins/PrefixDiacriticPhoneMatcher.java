@@ -16,8 +16,8 @@
 package ca.phon.phonex.plugins;
 
 import ca.phon.ipa.*;
-import ca.phon.visitor.*;
-import ca.phon.visitor.annotation.*;
+import ca.phon.visitor.VisitorAdapter;
+import ca.phon.visitor.annotation.Visits;
 
 /**
  * Matches prefix diacritic portion of the phone.

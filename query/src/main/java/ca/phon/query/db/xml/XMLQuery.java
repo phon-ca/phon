@@ -16,13 +16,12 @@
 
 package ca.phon.query.db.xml;
 
-import java.time.*;
-import java.util.*;
-
-import javax.xml.datatype.*;
-
 import ca.phon.query.db.*;
 import ca.phon.query.db.xml.io.query.*;
+
+import javax.xml.datatype.*;
+import java.time.*;
+import java.util.*;
 
 
 /**

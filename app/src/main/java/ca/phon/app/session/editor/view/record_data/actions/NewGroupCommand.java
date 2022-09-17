@@ -15,15 +15,14 @@
  */
 package ca.phon.app.session.editor.view.record_data.actions;
 
-import java.awt.*;
-import java.awt.event.*;
-
-import javax.swing.*;
-
-import ca.phon.app.session.editor.undo.*;
-import ca.phon.app.session.editor.view.record_data.*;
+import ca.phon.app.session.editor.undo.AddGroupEdit;
+import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.session.Record;
 import ca.phon.util.icons.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
 /**
  * Action for creating a new group in a record.  This command will

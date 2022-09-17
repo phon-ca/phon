@@ -15,16 +15,15 @@
  */
 package ca.phon.app.session.editor.search;
 
-import java.util.*;
-import java.util.regex.*;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.phonex.*;
+import ca.phon.session.Record;
+import ca.phon.session.*;
 
 import javax.swing.*;
-import javax.swing.table.*;
-
-import ca.phon.ipa.*;
-import ca.phon.phonex.*;
-import ca.phon.session.*;
-import ca.phon.session.Record;
+import javax.swing.table.TableModel;
+import java.util.*;
+import java.util.regex.*;
 
 public class SessionRowFilter extends RowFilter<TableModel, Integer> {
 	

@@ -15,7 +15,7 @@
  */
 package ca.phon.orthography;
 
-import java.text.*;
+import java.text.ParseException;
 import java.util.*;
 
 /**

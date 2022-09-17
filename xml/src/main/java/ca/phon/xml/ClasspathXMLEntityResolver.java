@@ -15,12 +15,11 @@
  */
 package ca.phon.xml;
 
+import javax.xml.stream.*;
 import java.io.*;
-import java.net.*;
+import java.net.URL;
 import java.util.*;
 import java.util.regex.*;
-
-import javax.xml.stream.*;
 
 /**
  * <p>XML entity resolver that will look for catalog files

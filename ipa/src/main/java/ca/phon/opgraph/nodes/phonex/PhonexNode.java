@@ -15,8 +15,8 @@
  */
 package ca.phon.opgraph.nodes.phonex;
 
-import ca.phon.opgraph.app.extensions.*;
-import ca.phon.phonex.*;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.phonex.PhonexPatternException;
 
 public interface PhonexNode extends NodeSettings {
 	

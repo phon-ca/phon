@@ -15,7 +15,7 @@
  */
 package ca.phon.extensions;
 
-import java.lang.ref.*;
+import java.lang.ref.WeakReference;
 import java.util.*;
 
 /**

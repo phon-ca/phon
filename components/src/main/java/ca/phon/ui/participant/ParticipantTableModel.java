@@ -15,11 +15,10 @@
  */
 package ca.phon.ui.participant;
 
-import java.time.*;
-
-import javax.swing.table.*;
-
 import ca.phon.session.*;
+
+import javax.swing.table.AbstractTableModel;
+import java.time.*;
 
 public class ParticipantTableModel extends AbstractTableModel {
 	

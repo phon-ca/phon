@@ -15,7 +15,7 @@
  */
 package ca.phon.util;
 
-import java.io.*;
+import java.io.File;
 import java.util.*;
 
 public class RecentFiles implements Iterable<File> {

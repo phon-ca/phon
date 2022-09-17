@@ -15,8 +15,8 @@
  */
 package ca.phon.ipadictionary.spi;
 
-import ca.phon.extensions.*;
-import ca.phon.ipadictionary.*;
+import ca.phon.extensions.Extension;
+import ca.phon.ipadictionary.IPADictionary;
 
 /**
  * Performs a search of keys (i.e., orthography) of the dictionary

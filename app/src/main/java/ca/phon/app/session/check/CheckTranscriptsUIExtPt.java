@@ -16,7 +16,7 @@
 package ca.phon.app.session.check;
 
 import ca.phon.plugin.*;
-import ca.phon.session.check.*;
+import ca.phon.session.check.CheckTranscripts;
 
 @SessionCheckTarget(CheckTranscripts.class)
 public class CheckTranscriptsUIExtPt implements IPluginExtensionPoint<SessionCheckUI>, IPluginExtensionFactory<SessionCheckUI> {

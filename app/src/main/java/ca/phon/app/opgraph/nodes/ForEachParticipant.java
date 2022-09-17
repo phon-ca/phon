@@ -7,23 +7,18 @@ import ca.phon.opgraph.app.components.canvas.NodeStyle;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.opgraph.extensions.CustomProcessing;
-import ca.phon.opgraph.extensions.Publishable;
 import ca.phon.opgraph.nodes.general.MacroNode;
-import ca.phon.opgraph.nodes.general.script.InputFields;
-import ca.phon.opgraph.nodes.reflect.*;
-import ca.phon.query.report.datasource.DefaultTableDataSource;
-import ca.phon.query.report.datasource.TableDataSource;
+import ca.phon.opgraph.nodes.reflect.ContextualItemClassNode;
+import ca.phon.query.report.datasource.*;
 import ca.phon.session.Participant;
 import ca.phon.ui.text.FormatterTextField;
 import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.util.*;
+import java.awt.event.*;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @OpNodeInfo(name="For Each Participant", description = "Iterate over a list of participants with optional table data", category = "Participants", showInLibrary = true)
 public class ForEachParticipant extends MacroNode implements NodeSettings, CustomProcessing, CustomProcessing.CustomProcessor {

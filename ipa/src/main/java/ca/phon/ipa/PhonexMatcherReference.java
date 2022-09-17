@@ -15,8 +15,8 @@
  */
 package ca.phon.ipa;
 
-import ca.phon.ipa.features.*;
-import ca.phon.ipa.parser.*;
+import ca.phon.ipa.features.FeatureSet;
+import ca.phon.ipa.parser.IPATokenType;
 
 /**
  * A special type of IPAElement which represents a

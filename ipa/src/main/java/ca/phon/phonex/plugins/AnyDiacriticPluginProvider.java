@@ -15,9 +15,9 @@
  */
 package ca.phon.phonex.plugins;
 
-import java.util.*;
-
 import ca.phon.phonex.*;
+
+import java.util.List;
 
 @PhonexPlugin(name="diacritic", description="Match diacritics of a phone", arguments= {"diacritics"})
 public class AnyDiacriticPluginProvider implements PluginProvider {

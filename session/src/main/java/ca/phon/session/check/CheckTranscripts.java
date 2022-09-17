@@ -15,17 +15,17 @@
  */
 package ca.phon.session.check;
 
-import java.util.*;
-
-import ca.phon.extensions.*;
+import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.*;
-import ca.phon.ipa.parser.exceptions.*;
+import ca.phon.ipa.parser.exceptions.StrayDiacriticException;
 import ca.phon.plugin.*;
-import ca.phon.session.*;
 import ca.phon.session.Record;
+import ca.phon.session.*;
 import ca.phon.syllabifier.*;
-import ca.phon.syllable.*;
-import ca.phon.util.*;
+import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.util.PrefHelper;
+
+import java.util.*;
 
 /**
  * Check IPA transcriptions for a session. 

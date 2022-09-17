@@ -15,14 +15,13 @@
  */
 package ca.phon.app.session.editor.view.media_player.actions;
 
-import java.awt.event.*;
-import java.text.*;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
+import ca.phon.ui.action.PhonActionEvent;
+import org.apache.logging.log4j.LogManager;
 
-import org.apache.logging.log4j.*;
-
-import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.view.media_player.*;
-import ca.phon.ui.action.*;
+import java.awt.event.ActionEvent;
+import java.text.ParseException;
 
 public class GoToAction extends MediaPlayerAction {
 	

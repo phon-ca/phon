@@ -15,15 +15,14 @@
  */
 package ca.phon.phonex;
 
-import java.text.*;
-import java.util.*;
-
-import org.junit.Test;
-import org.junit.runner.*;
-import org.junit.runners.*;
-
-import ca.phon.ipa.*;
+import ca.phon.ipa.IPATranscript;
 import junit.framework.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
+import java.text.ParseException;
+import java.util.*;
 
 @RunWith(JUnit4.class)
 public class TestPhonex extends PhonexTest {

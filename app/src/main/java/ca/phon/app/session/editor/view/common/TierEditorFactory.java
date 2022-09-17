@@ -15,15 +15,14 @@
  */
 package ca.phon.app.session.editor.view.common;
 
-import java.awt.event.*;
-import java.util.*;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.plugin.*;
+import ca.phon.session.Record;
+import ca.phon.session.*;
 
 import javax.swing.*;
-
-import ca.phon.app.session.editor.*;
-import ca.phon.plugin.*;
-import ca.phon.session.*;
-import ca.phon.session.Record;
+import java.awt.event.*;
+import java.util.List;
 
 /**
  * Create tier editors

@@ -15,13 +15,12 @@
  */
 package ca.phon.app.query;
 
-import java.io.*;
-import java.util.*;
-
-import javax.xml.stream.events.*;
-
-import ca.phon.app.actions.*;
+import ca.phon.app.actions.XMLOpenHandler;
 import ca.phon.plugin.*;
+
+import javax.xml.stream.events.StartElement;
+import java.io.*;
+import java.util.Set;
 
 @PhonPlugin(name="Open")
 public class QueryXMLFileOpenHandler implements XMLOpenHandler, IPluginExtensionPoint<XMLOpenHandler> {

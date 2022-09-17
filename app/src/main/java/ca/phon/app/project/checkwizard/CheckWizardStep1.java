@@ -15,24 +15,22 @@
  */
 package ca.phon.app.project.checkwizard;
 
-import java.awt.*;
-import java.util.*;
-import java.util.List;
+import ca.phon.app.prefs.PhonProperties;
+import ca.phon.app.session.SessionSelector;
+import ca.phon.project.Project;
+import ca.phon.session.SessionPath;
+import ca.phon.syllabifier.*;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.decorations.TitledPanel;
+import ca.phon.ui.wizard.WizardStep;
+import ca.phon.util.PrefHelper;
+import com.jgoodies.forms.layout.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
-
-import com.jgoodies.forms.layout.*;
-
-import ca.phon.app.prefs.*;
-import ca.phon.app.session.*;
-import ca.phon.project.*;
-import ca.phon.session.*;
-import ca.phon.syllabifier.*;
-import ca.phon.ui.*;
-import ca.phon.ui.decorations.*;
-import ca.phon.ui.wizard.*;
-import ca.phon.util.*;
+import java.awt.*;
+import java.util.List;
+import java.util.*;
 
 /**
  * Step 1 - Check IPA wizard

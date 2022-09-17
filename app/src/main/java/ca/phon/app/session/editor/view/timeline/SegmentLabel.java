@@ -16,14 +16,13 @@
 
 package ca.phon.app.session.editor.view.timeline;
 
-import java.awt.*;
-import java.awt.event.*;
+import ca.phon.util.MsFormatter;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
-import javax.swing.event.*;
-
-import ca.phon.util.*;
-import ca.phon.util.icons.*;
+import javax.swing.event.MouseInputAdapter;
+import java.awt.*;
+import java.awt.event.MouseEvent;
 
 /**
  * Simple component which displays two labels for

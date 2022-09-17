@@ -16,11 +16,11 @@
 
 package ca.phon.query.db.xml;
 
-import java.io.*;
-import java.time.*;
-import java.util.*;
+import ca.phon.query.db.Script;
 
-import ca.phon.query.db.*;
+import java.io.*;
+import java.time.LocalDateTime;
+import java.util.*;
 
 /**
  * Similar to {@link XMLQuery}, except loading of result set data is lazy

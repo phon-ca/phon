@@ -15,9 +15,9 @@
  */
 package ca.phon.ipadictionary.spi;
 
-import ca.phon.extensions.*;
-import ca.phon.ipadictionary.*;
-import ca.phon.ipadictionary.exceptions.*;
+import ca.phon.extensions.Extension;
+import ca.phon.ipadictionary.IPADictionary;
+import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
 
 @Extension(IPADictionary.class)
 public interface ClearEntries {

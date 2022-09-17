@@ -16,14 +16,13 @@
 
 package ca.phon.ipa.features;
 
+import ca.phon.featureset.xml.*;
+import jakarta.xml.bind.*;
+
+import javax.xml.stream.*;
+import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.util.*;
-
-import jakarta.xml.bind.*;
-import javax.xml.stream.*;
-import javax.xml.transform.stream.*;
-
-import ca.phon.featureset.xml.*;
 
 /**
  * Holds all defined feature set for IPA characters. This information is held in

@@ -15,17 +15,17 @@
  */
 package ca.phon.session.impl;
 
-import java.util.*;
-import java.util.concurrent.atomic.*;
-
 import ca.phon.extensions.*;
-import ca.phon.formatter.*;
 import ca.phon.formatter.Formatter;
-import ca.phon.ipa.*;
-import ca.phon.ipa.alignment.*;
-import ca.phon.orthography.*;
+import ca.phon.formatter.*;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.orthography.Orthography;
 import ca.phon.session.*;
-import ca.phon.session.spi.*;
+import ca.phon.session.spi.RecordSPI;
+
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Basic record implementation

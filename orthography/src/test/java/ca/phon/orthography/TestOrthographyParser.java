@@ -15,11 +15,11 @@
  */
 package ca.phon.orthography;
 
-import java.text.*;
-
 import org.junit.*;
-import org.junit.runner.*;
-import org.junit.runners.*;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
+import java.text.ParseException;
 
 /**
  * Orthography parser tests

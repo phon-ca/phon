@@ -15,19 +15,18 @@
  */
 package ca.phon.app;
 
-import java.awt.*;
-import java.io.*;
-import java.lang.reflect.*;
-import java.net.*;
-import java.util.*;
-import java.util.List;
+import ca.phon.app.hooks.PhonBootHook;
+import ca.phon.plugin.*;
+import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.nativedialogs.OSInfo;
 
 import javax.swing.*;
-
-import ca.phon.app.hooks.*;
-import ca.phon.plugin.*;
-import ca.phon.ui.fonts.*;
-import ca.phon.ui.nativedialogs.*;
+import java.awt.*;
+import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
+import java.util.List;
+import java.util.*;
 
 public class BootWindow extends Window {
 	

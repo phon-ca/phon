@@ -15,22 +15,21 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import java.awt.*;
-import java.util.*;
-import java.util.stream.*;
+import ca.phon.app.opgraph.wizard.NodeWizard;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.opgraph.exceptions.ProcessingException;
+import ca.phon.orthography.Orthography;
+import ca.phon.query.TableUtils;
+import ca.phon.query.report.datasource.*;
+import ca.phon.session.SystemTierType;
 
 import javax.swing.*;
-
-import ca.phon.app.opgraph.wizard.*;
-import ca.phon.ipa.*;
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
-import ca.phon.opgraph.app.extensions.*;
-import ca.phon.opgraph.exceptions.*;
-import ca.phon.orthography.*;
-import ca.phon.query.*;
-import ca.phon.query.report.datasource.*;
-import ca.phon.session.*;
+import java.awt.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  *

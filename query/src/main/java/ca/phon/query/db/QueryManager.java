@@ -16,10 +16,10 @@
 
 package ca.phon.query.db;
 
-import java.io.*;
-import java.util.*;
-
 import ca.phon.plugin.*;
+
+import java.io.*;
+import java.util.List;
 
 
 /**

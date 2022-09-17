@@ -15,12 +15,12 @@
  */
 package ca.phon.app.session.editor.view.record_data;
 
+import ca.phon.app.session.editor.view.record_data.actions.*;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.util.icons.*;
+
 import javax.swing.*;
 import javax.swing.event.*;
-
-import ca.phon.app.session.editor.view.record_data.actions.*;
-import ca.phon.ui.action.*;
-import ca.phon.util.icons.*;
 
 /**
  * Menu for the Record Data editor view.

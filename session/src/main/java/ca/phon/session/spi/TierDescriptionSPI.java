@@ -15,7 +15,7 @@
  */
 package ca.phon.session.spi;
 
-import ca.phon.session.*;
+import ca.phon.session.Tier;
 
 public interface TierDescriptionSPI {
 

@@ -15,23 +15,18 @@
  */
 package ca.phon.app.session.editor.view.timeline;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import java.util.List;
-import java.util.function.*;
+import ca.phon.media.*;
+import ca.phon.session.Record;
+import ca.phon.session.*;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.menu.MenuBuilder;
 
 import javax.swing.*;
-import javax.swing.event.*;
-
-import ca.phon.app.session.editor.view.timeline.actions.*;
-import ca.phon.media.*;
-import ca.phon.session.*;
-import ca.phon.session.Record;
-import ca.phon.ui.action.*;
-import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.ui.menu.*;
-import ca.phon.util.*;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.util.List;
+import java.util.*;
+import java.util.function.BiConsumer;
 
 public class RecordGrid extends TimeComponent {
 	

@@ -15,27 +15,25 @@
  */
 package ca.phon.app.session.editor.view.ipa_validation;
 
-import java.awt.*;
-import java.util.*;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.undo.TierEdit;
+import ca.phon.app.session.editor.view.common.*;
+import ca.phon.app.session.editor.view.ipa_validation.actions.AutoValidateAction;
+import ca.phon.ipa.*;
+import ca.phon.ipa.alignment.*;
+import ca.phon.session.Record;
+import ca.phon.session.*;
+import ca.phon.syllabifier.*;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.util.Language;
+import ca.phon.util.icons.*;
+import org.jdesktop.swingx.HorizontalLayout;
 
 import javax.swing.*;
 import javax.swing.undo.*;
-
-import org.jdesktop.swingx.*;
-
-import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.undo.*;
-import ca.phon.app.session.editor.view.common.*;
-import ca.phon.app.session.editor.view.ipa_validation.actions.*;
-import ca.phon.ipa.*;
-import ca.phon.ipa.alignment.*;
-import ca.phon.session.*;
-import ca.phon.session.Record;
-import ca.phon.syllabifier.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.fonts.*;
-import ca.phon.util.*;
-import ca.phon.util.icons.*;
+import java.awt.*;
+import java.util.Iterator;
 
 /**
  * Editor view used to validate double-blind transcriptions.  References

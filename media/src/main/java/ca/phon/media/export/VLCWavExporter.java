@@ -16,11 +16,11 @@
 
 package ca.phon.media.export;
 
-import java.io.*;
-import java.nio.*;
-import java.nio.channels.*;
+import ca.phon.media.exceptions.PhonMediaException;
 
-import ca.phon.media.exceptions.*;
+import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 
 
 /**

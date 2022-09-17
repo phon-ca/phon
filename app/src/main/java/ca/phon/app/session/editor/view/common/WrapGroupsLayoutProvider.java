@@ -16,9 +16,9 @@
 package ca.phon.app.session.editor.view.common;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
-import java.util.concurrent.atomic.*;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Layout provider which wraps groups components.

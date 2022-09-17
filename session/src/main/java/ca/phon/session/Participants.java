@@ -15,10 +15,10 @@
  */
 package ca.phon.session;
 
-import java.util.*;
-
-import ca.phon.extensions.*;
+import ca.phon.extensions.ExtendableObject;
 import ca.phon.visitor.*;
+
+import java.util.*;
 
 /**
  * Helper class providing iterator and visitor methods

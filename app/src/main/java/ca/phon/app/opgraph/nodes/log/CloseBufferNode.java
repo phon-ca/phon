@@ -15,14 +15,13 @@
  */
 package ca.phon.app.opgraph.nodes.log;
 
-import java.lang.reflect.*;
-import java.util.concurrent.atomic.*;
+import ca.phon.app.log.BufferPanelContainer;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.exceptions.ProcessingException;
 
 import javax.swing.*;
-
-import ca.phon.app.log.*;
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.exceptions.*;
+import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Close the buffer with given name.

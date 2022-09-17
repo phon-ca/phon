@@ -16,13 +16,12 @@
 
 package ca.phon.ui.ipa;
 
-import java.awt.*;
+import ca.phon.ipa.*;
+import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.util.Tuple;
 
 import javax.swing.*;
-
-import ca.phon.ipa.*;
-import ca.phon.syllable.*;
-import ca.phon.util.*;
+import java.awt.*;
 
 /**
  */

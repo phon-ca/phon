@@ -1,7 +1,6 @@
 package ca.phon.media;
 
 import javax.swing.*;
-import java.awt.*;
 import java.beans.PropertyChangeListener;
 
 public class VolumeSlider extends JComponent {

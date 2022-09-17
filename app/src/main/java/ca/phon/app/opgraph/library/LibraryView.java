@@ -15,25 +15,23 @@
  */
 package ca.phon.app.opgraph.library;
 
+import ca.phon.opgraph.app.components.canvas.GraphCanvas;
+import ca.phon.opgraph.library.*;
+import ca.phon.ui.text.SearchField;
+import ca.phon.util.PrefHelper;
+import org.jdesktop.swingx.*;
+import org.jdesktop.swingx.JXCollapsiblePane.Direction;
+
+import javax.swing.*;
+import javax.swing.event.*;
 import java.awt.*;
 import java.awt.dnd.*;
 import java.awt.event.*;
 import java.awt.font.*;
-import java.awt.geom.*;
-import java.awt.image.*;
-import java.util.*;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.util.List;
-
-import javax.swing.*;
-import javax.swing.event.*;
-
-import org.jdesktop.swingx.*;
-import org.jdesktop.swingx.JXCollapsiblePane.*;
-
-import ca.phon.opgraph.app.components.canvas.*;
-import ca.phon.opgraph.library.*;
-import ca.phon.ui.text.*;
-import ca.phon.util.*;
+import java.util.*;
 
 /**
  * <p>Custom library view for Phon node editor.  The view consists

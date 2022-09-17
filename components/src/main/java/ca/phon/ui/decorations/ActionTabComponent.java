@@ -15,11 +15,10 @@
  */
 package ca.phon.ui.decorations;
 
+import javax.swing.*;
+import javax.swing.plaf.basic.BasicButtonUI;
 import java.awt.*;
 import java.awt.event.*;
-
-import javax.swing.*;
-import javax.swing.plaf.basic.*;
 
 /**
  * Tab component based on ButtonTabComponent.java 

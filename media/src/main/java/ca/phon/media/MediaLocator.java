@@ -15,16 +15,15 @@
  */
 package ca.phon.media;
 
-import java.io.*;
-import java.util.*;
-
-import org.apache.commons.lang3.*;
-
-import ca.phon.project.*;
-import ca.phon.session.*;
+import ca.phon.project.Project;
+import ca.phon.session.Session;
 import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.util.*;
 import ca.phon.util.Queue;
+import ca.phon.util.*;
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.File;
+import java.util.*;
 
 /**
  * Helper methods for locating and handling paths for media files.

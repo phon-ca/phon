@@ -15,17 +15,15 @@
  */
 package ca.phon.app.session.editor.view.common;
 
-import java.awt.*;
-import java.text.*;
+import ca.phon.session.MediaSegment;
+import ca.phon.session.format.MediaSegmentFormatter;
+import org.apache.logging.log4j.LogManager;
 
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.*;
-
-import org.apache.logging.log4j.*;
-
-import ca.phon.session.*;
-import ca.phon.session.format.*;
+import java.awt.*;
+import java.text.ParseException;
 
 public class SegmentField extends JFormattedTextField {
 	

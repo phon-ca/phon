@@ -15,18 +15,17 @@
  */
 package ca.phon.app.opgraph.editor.actions.file;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
+import ca.phon.app.menu.file.OpenFileHistory;
+import ca.phon.app.opgraph.editor.OpgraphEditor;
+import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
+import ca.phon.ui.toast.ToastFactory;
+import ca.phon.util.RecentFiles;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
-
-import ca.phon.app.menu.file.*;
-import ca.phon.app.opgraph.editor.*;
-import ca.phon.app.opgraph.editor.actions.*;
-import ca.phon.ui.toast.*;
-import ca.phon.util.*;
-import ca.phon.util.icons.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.IOException;
 
 public class SaveAction extends OpgraphEditorAction {
 	

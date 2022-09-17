@@ -16,43 +16,41 @@
 
 package ca.phon.app.session.editor.view.timeline;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.*;
-import java.io.*;
-import java.util.*;
-import java.util.List;
-import java.util.Timer;
-import java.util.function.*;
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.session.EditorViewAdapter;
+import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.actions.*;
+import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
+import ca.phon.app.session.editor.view.speech_analysis.*;
+import ca.phon.app.session.editor.view.timeline.actions.ZoomAction;
+import ca.phon.media.*;
+import ca.phon.media.TimeUIModel.*;
+import ca.phon.media.export.VLCWavExporter;
+import ca.phon.plugin.PluginManager;
+import ca.phon.session.Record;
+import ca.phon.session.*;
+import ca.phon.ui.*;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.util.PrefHelper;
+import ca.phon.util.icons.*;
+import ca.phon.worker.*;
+import ca.phon.worker.PhonTask.TaskStatus;
+import org.jdesktop.swingx.*;
+import uk.co.caprica.vlcj.player.base.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
-
-import ca.phon.ui.fonts.FontPreferences;
-import org.jdesktop.swingx.*;
-
-import ca.phon.app.log.*;
-import ca.phon.app.session.*;
-import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.actions.*;
-import ca.phon.app.session.editor.view.media_player.*;
-import ca.phon.app.session.editor.view.speech_analysis.*;
-import ca.phon.app.session.editor.view.timeline.actions.*;
-import ca.phon.media.*;
-import ca.phon.media.TimeUIModel.*;
-import ca.phon.media.export.*;
-import ca.phon.plugin.*;
-import ca.phon.session.*;
-import ca.phon.session.Record;
-import ca.phon.ui.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.menu.*;
-import ca.phon.ui.nativedialogs.*;
-import ca.phon.util.*;
-import ca.phon.util.icons.*;
-import ca.phon.worker.*;
-import ca.phon.worker.PhonTask.*;
-import uk.co.caprica.vlcj.player.base.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.beans.*;
+import java.io.IOException;
+import java.util.List;
+import java.util.Timer;
+import java.util.*;
+import java.util.function.*;
 
 public final class TimelineView extends EditorView {
 

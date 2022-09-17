@@ -15,29 +15,27 @@
  */
 package ca.phon.project;
 
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.project.exceptions.ProjectConfigurationException;
+import ca.phon.project.io.*;
+import ca.phon.session.Record;
+import ca.phon.session.*;
+import ca.phon.session.io.*;
+import ca.phon.util.VersionInfo;
+import jakarta.xml.bind.*;
+import org.w3c.dom.*;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.*;
+import javax.xml.stream.*;
+import javax.xml.xpath.*;
 import java.io.*;
-import java.net.*;
+import java.net.URI;
 import java.nio.file.*;
 import java.nio.file.attribute.*;
 import java.time.*;
 import java.util.*;
-import java.util.stream.*;
-
-import jakarta.xml.bind.*;
-import javax.xml.parsers.*;
-import javax.xml.stream.*;
-import javax.xml.xpath.*;
-
-import org.w3c.dom.*;
-import org.xml.sax.*;
-
-import ca.phon.extensions.*;
-import ca.phon.project.exceptions.*;
-import ca.phon.project.io.*;
-import ca.phon.session.*;
-import ca.phon.session.Record;
-import ca.phon.session.io.*;
-import ca.phon.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A local on-disk project

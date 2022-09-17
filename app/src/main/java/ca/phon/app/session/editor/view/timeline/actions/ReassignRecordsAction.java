@@ -1,11 +1,10 @@
 package ca.phon.app.session.editor.view.timeline.actions;
 
-import java.awt.event.*;
-
-import ca.phon.app.session.editor.undo.*;
-import ca.phon.app.session.editor.view.timeline.*;
+import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
+import ca.phon.app.session.editor.view.timeline.TimelineView;
 import ca.phon.session.*;
-import ca.phon.session.Record;
+
+import java.awt.event.ActionEvent;
 
 public class ReassignRecordsAction extends TimelineAction {
 	

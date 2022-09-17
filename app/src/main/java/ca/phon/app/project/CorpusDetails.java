@@ -15,20 +15,19 @@
  */
 package ca.phon.app.project;
 
+import ca.hedlund.desktopicons.*;
+import ca.phon.app.log.LogUtil;
+import ca.phon.project.Project;
+import ca.phon.ui.DropDownIcon;
+import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.OSInfo;
+import ca.phon.util.icons.*;
+
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.nio.file.*;
-
-import javax.swing.*;
-
-import ca.hedlund.desktopicons.*;
-import ca.phon.app.log.*;
-import ca.phon.project.*;
-import ca.phon.ui.*;
-import ca.phon.ui.menu.*;
-import ca.phon.util.*;
-import ca.phon.util.icons.*;
 
 /**
  * Corpus details for project manager.

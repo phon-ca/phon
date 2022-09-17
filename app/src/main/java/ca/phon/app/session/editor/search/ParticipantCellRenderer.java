@@ -15,12 +15,11 @@
  */
 package ca.phon.app.session.editor.search;
 
-import java.awt.*;
+import ca.phon.session.Participant;
 
 import javax.swing.*;
-import javax.swing.table.*;
-
-import ca.phon.session.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import java.awt.*;
 
 public class ParticipantCellRenderer extends DefaultTableCellRenderer {
 

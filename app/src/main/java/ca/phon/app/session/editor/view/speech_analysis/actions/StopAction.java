@@ -15,13 +15,12 @@
  */
 package ca.phon.app.session.editor.view.speech_analysis.actions;
 
-import java.awt.event.*;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
-
-import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.view.speech_analysis.*;
-import ca.phon.util.icons.*;
+import java.awt.event.ActionEvent;
 
 public class StopAction extends SpeechAnalysisEditorViewAction {
 

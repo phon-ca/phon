@@ -15,11 +15,10 @@
  */
 package ca.phon.app.session.editor;
 
-import java.awt.*;
-import java.util.*;
-import java.util.List;
-
 import javax.swing.*;
+import java.awt.*;
+import java.util.List;
+import java.util.*;
 
 /**
  * <p>View model for the {@link SessionEditor}.  This class

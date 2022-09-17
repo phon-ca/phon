@@ -15,25 +15,23 @@
  */
 package ca.phon.app.project.mergewizard;
 
-import java.awt.*;
-import java.io.*;
-import java.text.*;
-import java.util.*;
-import java.util.List;
+import ca.phon.app.session.RecordFilterPanel;
+import ca.phon.project.Project;
+import ca.phon.session.Record;
+import ca.phon.session.*;
+import ca.phon.session.filter.*;
+import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.wizard.WizardStep;
+import ca.phon.util.CollatorFactory;
+import org.jdesktop.swingx.JXList;
 
 import javax.swing.*;
 import javax.swing.event.*;
-
-import org.jdesktop.swingx.*;
-
-import ca.phon.app.session.*;
-import ca.phon.project.*;
-import ca.phon.session.*;
-import ca.phon.session.Record;
-import ca.phon.session.filter.*;
-import ca.phon.ui.decorations.*;
-import ca.phon.ui.wizard.*;
-import ca.phon.util.*;
+import java.awt.*;
+import java.io.IOException;
+import java.text.Collator;
+import java.util.List;
+import java.util.*;
 
 /**
  * Provide a record filter for each session

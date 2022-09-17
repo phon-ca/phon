@@ -15,18 +15,18 @@
  */
 package ca.phon.app.opgraph.syllabifier;
 
-import java.io.*;
-
-import ca.phon.app.opgraph.editor.*;
-import ca.phon.app.opgraph.editor.EditorModelInstantiator.*;
-import ca.phon.ipa.*;
+import ca.phon.app.opgraph.editor.EditorModelInstantiator;
+import ca.phon.app.opgraph.editor.EditorModelInstantiator.EditorModelInstantiatorMenuInfo;
+import ca.phon.ipa.IPATranscript;
 import ca.phon.opgraph.*;
 import ca.phon.opgraph.dag.*;
-import ca.phon.opgraph.exceptions.*;
-import ca.phon.opgraph.nodes.reflect.*;
+import ca.phon.opgraph.exceptions.ItemMissingException;
+import ca.phon.opgraph.nodes.reflect.ObjectNode;
 import ca.phon.plugin.*;
-import ca.phon.syllabifier.opgraph.*;
-import ca.phon.syllabifier.opgraph.nodes.*;
+import ca.phon.syllabifier.opgraph.OpGraphSyllabifier;
+import ca.phon.syllabifier.opgraph.nodes.SonorityNode;
+
+import java.io.IOException;
 
 @EditorModelInstantiatorMenuInfo(
 		name="Syllabifier",

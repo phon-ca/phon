@@ -15,15 +15,15 @@
  */
 package ca.phon.syllabifier.opgraph;
 
-import java.io.*;
-import java.util.*;
-
 import ca.phon.ipa.*;
 import ca.phon.opgraph.*;
 import ca.phon.opgraph.io.*;
-import ca.phon.syllabifier.*;
-import ca.phon.syllabifier.opgraph.extensions.*;
-import ca.phon.util.*;
+import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllabifier.opgraph.extensions.SyllabifierSettings;
+import ca.phon.util.Language;
+
+import java.io.*;
+import java.util.List;
 
 /**
  * Syllabifier implementation using operable graphs.

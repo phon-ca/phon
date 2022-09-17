@@ -1,18 +1,12 @@
 package ca.phon.app.session.editor.view.timeline.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.actions.DeleteRecordAction;
 import ca.phon.app.session.editor.undo.DeleteRecordEdit;
-import ca.phon.app.session.editor.view.timeline.TimelineRecordTier;
-import ca.phon.app.session.editor.view.timeline.TimelineView;
-import ca.phon.ui.nativedialogs.MessageDialogProperties;
-import ca.phon.ui.nativedialogs.NativeDialogs;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
-import org.pushingpixels.trident.Timeline;
+import ca.phon.app.session.editor.view.timeline.*;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.util.icons.*;
 
 import java.awt.event.ActionEvent;
-import java.sql.Time;
 
 public class DeleteRecordsAction extends TimelineAction  {
 

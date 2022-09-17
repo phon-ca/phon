@@ -15,14 +15,12 @@
  */
 package ca.phon.ui;
 
-import java.text.*;
+import ca.phon.util.MsFormat;
+import com.jgoodies.forms.layout.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
-
-import com.jgoodies.forms.layout.*;
-
-import ca.phon.util.*;
+import java.text.Format;
 
 /**
  * A component that lets the user graphically select a contiguous range of values by

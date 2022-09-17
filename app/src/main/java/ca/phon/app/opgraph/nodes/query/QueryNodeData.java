@@ -15,12 +15,12 @@
  */
 package ca.phon.app.opgraph.nodes.query;
 
-import java.net.*;
+import ca.phon.opgraph.OpNode;
+import ca.phon.opgraph.library.NodeData;
+import ca.phon.opgraph.library.instantiators.Instantiator;
+import ca.phon.query.script.QueryScript;
 
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.library.*;
-import ca.phon.opgraph.library.instantiators.*;
-import ca.phon.query.script.*;
+import java.net.URI;
 
 public class QueryNodeData extends NodeData {
 	

@@ -3,7 +3,6 @@ package ca.phon.query.pql;
 import ca.phon.project.Project;
 import ca.phon.session.filter.RecordFilter;
 import ca.phon.util.Range;
-import org.antlr.v4.runtime.tree.*;
 
 import java.util.*;
 

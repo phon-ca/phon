@@ -15,14 +15,13 @@
  */
 package ca.phon.script.params;
 
+import ca.phon.visitor.*;
+import org.antlr.runtime.*;
+
 import java.io.*;
 import java.security.*;
 import java.util.*;
 import java.util.regex.*;
-
-import org.antlr.runtime.*;
-
-import ca.phon.visitor.*;
 
 /**
  *

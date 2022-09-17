@@ -16,10 +16,10 @@
 
 package ca.phon.query.db;
 
-import java.io.*;
-import java.util.*;
+import ca.phon.project.Project;
 
-import ca.phon.project.*;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * An interface used for anything that manages the retrieval and storage of

@@ -15,22 +15,20 @@
  */
 package ca.phon.ipadictionary.ui;
 
+import ca.phon.ipadictionary.cmd.*;
+import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
+import ca.phon.util.*;
+import ca.phon.worker.PhonTask;
+import org.antlr.runtime.*;
+import org.antlr.runtime.tree.*;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+
+import javax.swing.*;
+import javax.swing.text.BadLocationException;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-
-import javax.swing.*;
-import javax.swing.text.*;
-
-import org.antlr.runtime.*;
-import org.antlr.runtime.tree.*;
-import org.apache.commons.lang3.*;
-import org.apache.logging.log4j.*;
-
-import ca.phon.ipadictionary.cmd.*;
-import ca.phon.ipadictionary.exceptions.*;
-import ca.phon.util.*;
-import ca.phon.worker.*;
 
 /**
  * UI for IPA Lookups

@@ -15,14 +15,12 @@
  */
 package ca.phon.app.query;
 
-import java.awt.*;
-
-import javax.swing.*;
-
-import org.apache.commons.lang3.*;
-
 import ca.phon.script.params.*;
 import ca.phon.script.params.history.*;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class QueryHistoryList extends ParamHistoryList {
 

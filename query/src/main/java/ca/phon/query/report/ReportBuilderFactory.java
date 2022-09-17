@@ -15,11 +15,11 @@
  */
 package ca.phon.query.report;
 
-import java.util.*;
-
 import ca.phon.plugin.*;
-import ca.phon.query.report.csv.*;
-import ca.phon.util.*;
+import ca.phon.query.report.csv.CSVReportBuilder;
+import ca.phon.util.CollatorFactory;
+
+import java.util.*;
 
 /**
  * Factory for creating report builders.

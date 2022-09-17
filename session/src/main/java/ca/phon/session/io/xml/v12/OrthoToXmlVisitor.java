@@ -16,8 +16,8 @@
 package ca.phon.session.io.xml.v12;
 
 import ca.phon.orthography.*;
-import ca.phon.visitor.*;
-import ca.phon.visitor.annotation.*;
+import ca.phon.visitor.VisitorAdapter;
+import ca.phon.visitor.annotation.Visits;
 
 /**
  * Converts the visited orthography elements into a

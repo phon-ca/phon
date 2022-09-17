@@ -15,39 +15,37 @@
  */
 package ca.phon.session.io.xml.v12;
 
-import java.io.*;
-import java.text.*;
-import java.time.*;
-import java.util.*;
-
-import jakarta.xml.bind.*;
-import javax.xml.datatype.*;
-import javax.xml.datatype.Duration;
-import javax.xml.namespace.*;
-import javax.xml.parsers.*;
-import javax.xml.stream.*;
-import javax.xml.stream.events.*;
-
-import org.apache.commons.lang3.*;
-import org.apache.logging.log4j.*;
-import org.w3c.dom.*;
-import org.w3c.dom.Element;
-import org.xml.sax.*;
-
-import ca.phon.extensions.*;
+import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.*;
-import ca.phon.ipa.alignment.*;
-import ca.phon.orthography.*;
+import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.orthography.Orthography;
 import ca.phon.plugin.*;
-import ca.phon.session.*;
 import ca.phon.session.Comment;
 import ca.phon.session.Record;
+import ca.phon.session.*;
 import ca.phon.session.io.*;
 import ca.phon.syllable.*;
-import ca.phon.visitor.*;
-import ca.phon.visitor.annotation.*;
-import ca.phon.xml.*;
-import ca.phon.xml.annotation.*;
+import ca.phon.visitor.VisitorAdapter;
+import ca.phon.visitor.annotation.Visits;
+import ca.phon.xml.XMLObjectReader;
+import ca.phon.xml.annotation.XMLSerial;
+import jakarta.xml.bind.*;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.w3c.dom.Element;
+import org.w3c.dom.*;
+import org.xml.sax.SAXException;
+
+import javax.xml.datatype.Duration;
+import javax.xml.datatype.*;
+import javax.xml.namespace.QName;
+import javax.xml.parsers.*;
+import javax.xml.stream.*;
+import javax.xml.stream.events.XMLEvent;
+import java.io.*;
+import java.text.ParseException;
+import java.time.*;
+import java.util.*;
 
 /**
  * Session XML reader for session files with

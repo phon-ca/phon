@@ -15,16 +15,15 @@
  */
 package ca.phon.app;
 
-import java.io.*;
-
-import org.apache.commons.io.*;
+import ca.phon.app.hooks.PhonStartupHook;
+import ca.phon.app.log.LogUtil;
+import ca.phon.ipadictionary.impl.IPADatabaseManager;
+import ca.phon.plugin.*;
+import ca.phon.util.PrefHelper;
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 
-import ca.phon.app.hooks.*;
-import ca.phon.app.log.*;
-import ca.phon.ipadictionary.impl.*;
-import ca.phon.plugin.*;
-import ca.phon.util.*;
+import java.io.*;
 
 public class IPADictionaryInitHook implements PhonStartupHook, IPluginExtensionPoint<PhonStartupHook> {
 

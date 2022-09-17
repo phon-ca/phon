@@ -16,21 +16,19 @@
 
 package ca.phon.query.db.xml;
 
+import ca.phon.project.Project;
+import ca.phon.query.db.*;
+import ca.phon.query.db.xml.io.query.QueryType;
+import ca.phon.query.db.xml.io.resultset.ResultSetType;
+import ca.phon.xml.XMLConstants;
+import jakarta.xml.bind.*;
+import org.apache.logging.log4j.LogManager;
+import org.xml.sax.SAXException;
+
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.*;
 import java.io.*;
 import java.util.*;
-
-import jakarta.xml.bind.*;
-import javax.xml.transform.stream.*;
-import javax.xml.validation.*;
-
-import org.apache.logging.log4j.*;
-import org.xml.sax.*;
-
-import ca.phon.project.*;
-import ca.phon.query.db.*;
-import ca.phon.query.db.xml.io.query.*;
-import ca.phon.query.db.xml.io.resultset.*;
-import ca.phon.xml.*;
 
 /**
  * An implementation of {@link ResultSetManager} that implements an XML-based

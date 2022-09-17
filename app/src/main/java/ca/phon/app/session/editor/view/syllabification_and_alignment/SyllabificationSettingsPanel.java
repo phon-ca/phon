@@ -15,18 +15,13 @@
  */
 package ca.phon.app.session.editor.view.syllabification_and_alignment;
 
-import java.awt.*;
-import java.util.*;
-import java.util.List;
-
-import javax.swing.*;
-
-import ca.phon.ui.SyllabifierSelector;
-import com.jgoodies.forms.layout.*;
-
 import ca.phon.session.*;
 import ca.phon.syllabifier.*;
-import ca.phon.util.*;
+import ca.phon.ui.SyllabifierSelector;
+import ca.phon.util.Language;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class SyllabificationSettingsPanel extends JPanel {
 

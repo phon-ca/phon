@@ -16,11 +16,11 @@
 
 package ca.phon.query.db.xml;
 
-import java.io.*;
-import java.util.*;
+import ca.phon.query.db.Result;
+import ca.phon.query.db.xml.io.resultset.ResultSetType;
 
-import ca.phon.query.db.*;
-import ca.phon.query.db.xml.io.resultset.*;
+import java.io.*;
+import java.util.Iterator;
 
 /**
  * Similar to {@link XMLResultSet}, except loading of result set data is lazy

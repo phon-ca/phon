@@ -15,14 +15,13 @@
  */
 package ca.phon.query.report.csv;
 
+import au.com.bytecode.opencsv.CSVWriter;
+import ca.phon.query.report.datasource.ResultListingDataSource;
+import ca.phon.query.report.io.ResultListingFormatType;
+import org.apache.logging.log4j.LogManager;
+
 import java.util.*;
 import java.util.regex.*;
-
-import org.apache.logging.log4j.*;
-
-import au.com.bytecode.opencsv.*;
-import ca.phon.query.report.datasource.*;
-import ca.phon.query.report.io.*;
 
 public class CSVResultListingDataSourceWriter extends CSVTableDataSourceWriter {
 

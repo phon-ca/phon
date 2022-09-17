@@ -15,7 +15,7 @@
  */
 package ca.phon.query.report.csv;
 
-import au.com.bytecode.opencsv.*;
+import au.com.bytecode.opencsv.CSVWriter;
 
 public class PhonScriptCSVWriter implements CSVSectionWriter {
 

@@ -15,24 +15,22 @@
  */
 package ca.phon.app.project;
 
-import java.awt.*;
-import java.io.*;
-import java.time.*;
-import java.util.*;
-
-import javax.swing.*;
-
-import org.apache.logging.log4j.*;
-
-import ca.phon.app.session.*;
-import ca.phon.project.*;
-import ca.phon.session.*;
+import ca.phon.app.session.SessionSelector;
+import ca.phon.project.Project;
 import ca.phon.session.Record;
-import ca.phon.ui.decorations.*;
-import ca.phon.ui.participant.*;
+import ca.phon.session.*;
+import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.participant.AnonymizeParticipantOptionsPanel;
 import ca.phon.ui.wizard.*;
 import ca.phon.worker.*;
-import ca.phon.worker.PhonTask.*;
+import ca.phon.worker.PhonTask.TaskStatus;
+import org.apache.logging.log4j.LogManager;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
+import java.time.Period;
+import java.util.UUID;
 
 /**
  * Wizard for stripping participant info.

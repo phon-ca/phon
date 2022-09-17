@@ -15,14 +15,12 @@
  */
 package ca.phon.script.params.history;
 
-import java.awt.*;
-import java.util.List;
+import ca.phon.ui.PhonGuiConstants;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
-
-import org.apache.commons.lang3.*;
-
-import ca.phon.ui.*;
+import java.awt.*;
+import java.util.List;
 
 /**
  *  

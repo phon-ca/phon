@@ -15,9 +15,8 @@
  */
 package ca.phon.ui.toast;
 
-import java.awt.event.*;
-
 import javax.swing.*;
+import java.awt.event.MouseEvent;
 
 /**
  * Listens for display/close events on a Toast window.

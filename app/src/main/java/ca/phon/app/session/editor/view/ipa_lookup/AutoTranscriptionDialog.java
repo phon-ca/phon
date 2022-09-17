@@ -15,15 +15,14 @@
  */
 package ca.phon.app.session.editor.view.ipa_lookup;
 
-import java.awt.*;
+import ca.phon.project.Project;
+import ca.phon.session.Session;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.util.Language;
 
 import javax.swing.*;
-
-import ca.phon.project.*;
-import ca.phon.session.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.decorations.*;
-import ca.phon.util.Language;
+import java.awt.*;
 
 public class AutoTranscriptionDialog extends JDialog {
 	

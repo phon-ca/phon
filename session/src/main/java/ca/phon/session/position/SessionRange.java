@@ -15,7 +15,7 @@
  */
 package ca.phon.session.position;
 
-import ca.phon.util.*;
+import ca.phon.util.Tuple;
 
 public class SessionRange extends Tuple<Integer, RecordRange> {
 

@@ -15,10 +15,10 @@
  */
 package ca.phon.app.session.editor.view.timeline.actions;
 
-import java.awt.event.*;
-
-import ca.phon.app.session.editor.view.timeline.*;
+import ca.phon.app.session.editor.view.timeline.TimelineView;
 import ca.phon.util.icons.*;
+
+import java.awt.event.ActionEvent;
 
 /**
  * Split current record interval.

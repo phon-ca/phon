@@ -15,12 +15,11 @@
  */
 package ca.phon.app.phonex;
 
-import java.awt.*;
+import ca.phon.ui.ipa.DefaultSyllabificationDisplayUI;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
-
-import ca.phon.ui.ipa.*;
-import ca.phon.util.icons.*;
+import java.awt.*;
 
 public class DebuggerSyllabificationUI extends DefaultSyllabificationDisplayUI {
 

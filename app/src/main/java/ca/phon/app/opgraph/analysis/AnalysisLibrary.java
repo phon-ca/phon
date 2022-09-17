@@ -15,38 +15,37 @@
  */
 package ca.phon.app.opgraph.analysis;
 
+import ca.hedlund.tst.TernaryTree;
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.opgraph.editor.*;
+import ca.phon.app.opgraph.nodes.query.*;
+import ca.phon.app.opgraph.wizard.WizardExtension;
+import ca.phon.app.query.QueryAndReportWizard;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.OpgraphIO;
+import ca.phon.opgraph.app.util.GraphUtils;
+import ca.phon.opgraph.dag.*;
+import ca.phon.opgraph.exceptions.ItemMissingException;
+import ca.phon.opgraph.nodes.general.MacroNode;
+import ca.phon.opgraph.nodes.reflect.ObjectNode;
+import ca.phon.project.Project;
+import ca.phon.query.script.*;
+import ca.phon.session.SessionPath;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.action.*;
+import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.util.Tuple;
+import ca.phon.util.resources.ResourceLoader;
+import ca.phon.worker.PhonWorker;
+
+import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.net.*;
-import java.util.*;
 import java.util.List;
-
-import javax.swing.*;
-
-import ca.hedlund.tst.*;
-import ca.phon.app.log.*;
-import ca.phon.app.opgraph.editor.*;
-import ca.phon.app.opgraph.nodes.query.*;
-import ca.phon.app.opgraph.wizard.*;
-import ca.phon.app.query.*;
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
-import ca.phon.opgraph.app.util.*;
-import ca.phon.opgraph.dag.*;
-import ca.phon.opgraph.exceptions.*;
-import ca.phon.opgraph.nodes.general.*;
-import ca.phon.opgraph.nodes.reflect.*;
-import ca.phon.project.*;
-import ca.phon.query.script.*;
-import ca.phon.session.*;
-import ca.phon.ui.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.menu.*;
-import ca.phon.ui.nativedialogs.*;
-import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.util.*;
-import ca.phon.util.resources.*;
-import ca.phon.worker.*;
+import java.util.*;
 
 /**
  * <p>Library of analysis. These analysis are available

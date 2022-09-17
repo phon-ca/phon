@@ -15,12 +15,12 @@
  */
 package ca.phon.query.history;
 
-import java.io.*;
-import java.util.*;
-
 import ca.phon.query.script.*;
 import ca.phon.script.params.history.*;
-import ca.phon.util.*;
+import ca.phon.util.PrefHelper;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * Responsible for loading and saving query history files. Also includes

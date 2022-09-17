@@ -15,26 +15,22 @@
  */
 package ca.phon.app.session.editor;
 
-import java.awt.event.*;
-import java.beans.*;
-import java.io.*;
-import java.util.*;
-import java.util.concurrent.locks.*;
-
-import javax.swing.*;
-import javax.swing.event.MouseInputAdapter;
-
-import ca.phon.media.VolumeModel;
-import org.apache.commons.io.*;
-
-import ca.phon.app.log.*;
-import ca.phon.app.session.editor.actions.*;
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.session.editor.actions.GenerateSessionAudioAction;
 import ca.phon.audio.*;
 import ca.phon.media.*;
-import ca.phon.project.*;
-import ca.phon.session.*;
+import ca.phon.project.Project;
+import ca.phon.session.Session;
 import ca.phon.ui.nativedialogs.*;
-import ca.phon.util.*;
+import ca.phon.util.PrefHelper;
+import org.apache.commons.io.FilenameUtils;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.beans.*;
+import java.io.*;
+import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Media model for a session editor.

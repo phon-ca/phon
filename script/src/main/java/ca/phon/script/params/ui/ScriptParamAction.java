@@ -15,11 +15,10 @@
  */
 package ca.phon.script.params.ui;
 
-import java.lang.ref.*;
+import ca.phon.script.params.ScriptParam;
 
 import javax.swing.*;
-
-import ca.phon.script.params.*;
+import java.lang.ref.WeakReference;
 
 /**
  * Abstract class for script parameter actions.

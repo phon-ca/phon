@@ -16,12 +16,12 @@
 
 package ca.phon.query.db.xml;
 
-import java.io.*;
-import java.time.*;
-import java.util.*;
-
-import ca.phon.project.*;
+import ca.phon.project.Project;
 import ca.phon.query.db.*;
+
+import java.io.File;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * XML-based implementation of {@link QueryFactory}.

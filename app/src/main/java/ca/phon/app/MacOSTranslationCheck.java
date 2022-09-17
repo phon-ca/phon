@@ -105,4 +105,5 @@ public final class MacOSTranslationCheck implements PhonStartupHook, IPluginExte
 	public IPluginExtensionFactory<PhonStartupHook> getFactory() {
 		return (args) -> this;
 	}
+
 }

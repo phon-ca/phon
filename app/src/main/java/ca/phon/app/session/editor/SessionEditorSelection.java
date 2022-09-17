@@ -15,12 +15,11 @@
  */
 package ca.phon.app.session.editor;
 
-import java.util.*;
-
-import javax.swing.text.Highlighter.*;
-
 import ca.phon.extensions.*;
-import ca.phon.util.*;
+import ca.phon.util.Range;
+
+import javax.swing.text.Highlighter.HighlightPainter;
+import java.util.Set;
 
 /**
  * Selection information used for {@link EditorSelectionModel}.

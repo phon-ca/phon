@@ -15,11 +15,11 @@
  */
 package ca.phon.media;
 
-import java.beans.*;
-import java.io.*;
-
 import ca.phon.audio.*;
-import ca.phon.extensions.*;
+import ca.phon.extensions.Extension;
+
+import java.beans.PropertyChangeSupport;
+import java.io.*;
 
 /**
  * Extension interface for LongSound objects.

@@ -15,18 +15,16 @@
  */
 package ca.phon.ui.wizard;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import java.util.List;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.wizard.WizardEvent.WizardEventType;
+import ca.phon.util.icons.*;
+import org.jdesktop.swingx.JXBusyLabel;
 
 import javax.swing.*;
-
-import org.jdesktop.swingx.*;
-
-import ca.phon.ui.*;
-import ca.phon.ui.wizard.WizardEvent.*;
-import ca.phon.util.icons.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.List;
+import java.util.*;
 
 /**
  * A basic wizard implementation.

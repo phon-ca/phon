@@ -15,15 +15,15 @@
  */
 package ca.phon.app.actions;
 
+import ca.phon.plugin.*;
+
+import javax.swing.FocusManager;
+import javax.swing.*;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.lang.reflect.*;
-import java.util.*;
-
-import javax.swing.*;
-import javax.swing.text.*;
-
-import ca.phon.plugin.*;
+import java.util.Map;
 
 @PhonPlugin(name="default")
 public class CopyEP implements IPluginEntryPoint {

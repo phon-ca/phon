@@ -15,11 +15,10 @@
  */
 package ca.phon.script.scripttable;
 
-import java.util.*;
+import ca.phon.script.PhonScript;
 
-import javax.swing.table.*;
-
-import ca.phon.script.*;
+import javax.swing.table.TableModel;
+import java.util.Map;
 
 /**
  * Model for a scripted table.  The values for each

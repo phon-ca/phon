@@ -19,7 +19,7 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.awt.image.*;
 import java.beans.*;
-import java.util.concurrent.atomic.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public abstract class BufferedPainter<T> implements Painter<T> {
 	

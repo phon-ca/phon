@@ -15,16 +15,15 @@
  */
 package ca.phon.visitor.annotation;
 
-import java.util.*;
+import ca.phon.visitor.VisitorAdapter;
 
 import javax.annotation.processing.*;
-import javax.lang.model.*;
+import javax.lang.model.SourceVersion;
 import javax.lang.model.element.*;
 import javax.lang.model.type.*;
 import javax.lang.model.util.*;
-import javax.tools.Diagnostic.*;
-
-import ca.phon.visitor.*;
+import javax.tools.Diagnostic.Kind;
+import java.util.Set;
 
 /**
  * <p>Annotation processor for the {@link Visits} annotation.

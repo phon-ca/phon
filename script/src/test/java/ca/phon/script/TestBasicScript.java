@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 package ca.phon.script;
-import java.net.*;
-
-import org.junit.Test;
-import org.junit.runner.*;
-import org.junit.runners.*;
-import org.mozilla.javascript.*;
 
 import junit.framework.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+import org.mozilla.javascript.Scriptable;
+
+import java.net.*;
 
 
 @RunWith(JUnit4.class)

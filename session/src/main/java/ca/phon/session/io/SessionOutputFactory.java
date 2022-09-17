@@ -15,9 +15,9 @@
  */
 package ca.phon.session.io;
 
-import java.util.*;
-
 import ca.phon.plugin.*;
+
+import java.util.*;
 
 /**
  * Factory for creating {@link SessionWriter}s

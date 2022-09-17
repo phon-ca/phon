@@ -15,7 +15,7 @@
  */
 package ca.phon.app.phonex;
 
-import ca.phon.app.hooks.*;
+import ca.phon.app.hooks.HookableAction;
 
 public abstract class PhonexDebuggerAction extends HookableAction {
 

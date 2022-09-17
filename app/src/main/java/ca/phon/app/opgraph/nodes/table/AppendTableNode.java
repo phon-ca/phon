@@ -16,7 +16,7 @@
 package ca.phon.app.opgraph.nodes.table;
 
 import ca.phon.opgraph.*;
-import ca.phon.opgraph.exceptions.*;
+import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.query.report.datasource.*;
 
 @OpNodeInfo(

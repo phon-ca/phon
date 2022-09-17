@@ -15,20 +15,18 @@
  */
 package ca.phon.ui;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.*;
-import java.util.*;
-import java.util.List;
-
-import javax.swing.*;
-import javax.swing.event.*;
-
+import ca.phon.util.icons.*;
 import org.jdesktop.swingx.*;
 import org.jdesktop.swingx.painter.Painter;
-import org.jdesktop.swingx.painter.effects.*;
+import org.jdesktop.swingx.painter.effects.GlowPathEffect;
 
-import ca.phon.util.icons.*;
+import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.geom.Rectangle2D;
+import java.util.List;
+import java.util.*;
 
 /**
  * A 'on click' button which includes the following features:

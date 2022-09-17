@@ -26,12 +26,11 @@
 
 package ca.phon.ipadictionary.impl;
 
-import java.io.*;
-import java.sql.*;
-import java.util.*;
-import java.util.concurrent.*;
-
 import javax.sql.*;
+import java.io.PrintWriter;
+import java.sql.*;
+import java.util.Stack;
+import java.util.concurrent.*;
 
 /**
  * A simple standalone JDBC connection pool manager.

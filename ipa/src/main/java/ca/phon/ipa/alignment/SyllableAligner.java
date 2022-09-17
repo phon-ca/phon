@@ -15,10 +15,10 @@
  */
 package ca.phon.ipa.alignment;
 
-import java.util.*;
-
 import ca.phon.alignment.*;
 import ca.phon.ipa.*;
+
+import java.util.List;
 
 public class SyllableAligner extends IndelAligner<IPATranscript> {
 	

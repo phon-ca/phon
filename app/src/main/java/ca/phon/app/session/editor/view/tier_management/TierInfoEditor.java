@@ -15,18 +15,16 @@
  */
 package ca.phon.app.session.editor.view.tier_management;
 
-import java.awt.*;
-
-import javax.swing.*;
-
-import com.jgoodies.forms.layout.*;
-
 import ca.phon.formatter.*;
 import ca.phon.session.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.dialogs.*;
-import ca.phon.ui.fonts.*;
-import ca.phon.util.*;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.dialogs.JFontPanel;
+import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.util.PrefHelper;
+import com.jgoodies.forms.layout.*;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * Displays a UI for editing tier name,

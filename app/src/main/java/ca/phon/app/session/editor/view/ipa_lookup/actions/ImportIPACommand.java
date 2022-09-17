@@ -15,11 +15,11 @@
  */
 package ca.phon.app.session.editor.view.ipa_lookup.actions;
 
-import java.awt.event.*;
-import java.util.*;
-
-import ca.phon.app.session.editor.view.ipa_lookup.*;
+import ca.phon.app.session.editor.view.ipa_lookup.IPALookupView;
 import ca.phon.ui.nativedialogs.*;
+
+import java.awt.event.ActionEvent;
+import java.util.List;
 
 public class ImportIPACommand extends IPALookupViewAction {
 	

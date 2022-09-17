@@ -16,8 +16,8 @@
 package ca.phon.phonex;
 
 import ca.phon.ipa.*;
-import ca.phon.visitor.*;
-import ca.phon.visitor.annotation.*;
+import ca.phon.visitor.VisitorAdapter;
+import ca.phon.visitor.annotation.Visits;
 
 /**
  * Handles matching compound phones using two separate

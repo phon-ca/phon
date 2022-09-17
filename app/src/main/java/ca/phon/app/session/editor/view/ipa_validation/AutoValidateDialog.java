@@ -15,23 +15,20 @@
  */
 package ca.phon.app.session.editor.view.ipa_validation;
 
-import java.awt.*;
-import java.util.*;
-import java.util.List;
+import ca.phon.app.session.RecordFilterPanel;
+import ca.phon.project.Project;
+import ca.phon.session.*;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.action.*;
+import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.layout.ButtonBarBuilder;
+import com.jgoodies.forms.layout.*;
+import org.jdesktop.swingx.JXRadioGroup;
 
 import javax.swing.*;
-
-import org.jdesktop.swingx.*;
-
-import com.jgoodies.forms.layout.*;
-
-import ca.phon.app.session.*;
-import ca.phon.project.*;
-import ca.phon.session.*;
-import ca.phon.ui.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.decorations.*;
-import ca.phon.ui.layout.*;
+import java.awt.*;
+import java.util.List;
+import java.util.*;
 
 /**
  * Auto-validate options.

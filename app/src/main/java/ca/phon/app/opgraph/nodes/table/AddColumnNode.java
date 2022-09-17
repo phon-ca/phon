@@ -15,21 +15,19 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import java.awt.*;
-import java.io.*;
-import java.net.*;
-import java.util.*;
-
-import javax.swing.*;
-
-import org.mozilla.javascript.*;
-
 import ca.phon.opgraph.*;
-import ca.phon.opgraph.exceptions.*;
+import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.query.report.datasource.*;
 import ca.phon.script.*;
-import ca.phon.ui.text.*;
+import ca.phon.ui.text.PromptedTextField;
 import ca.phon.util.resources.*;
+import org.mozilla.javascript.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Properties;
 
 /**
  * Add a new column to the given table using

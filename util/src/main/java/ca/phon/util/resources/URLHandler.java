@@ -15,11 +15,11 @@
  */
 package ca.phon.util.resources;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import org.apache.logging.log4j.LogManager;
 
-import org.apache.logging.log4j.*;
+import java.io.IOException;
+import java.net.URL;
+import java.util.*;
 
 /**
  * Load resources from URLs.

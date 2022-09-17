@@ -15,21 +15,21 @@
  */
 package ca.phon.app.session.editor.actions;
 
-import java.awt.event.*;
-import java.io.*;
-import java.time.*;
-import java.time.format.*;
-
-import ca.phon.app.hooks.*;
-import ca.phon.app.session.editor.*;
+import ca.phon.app.hooks.ActionHook;
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.plugin.*;
-import ca.phon.project.*;
-import ca.phon.session.*;
-import ca.phon.util.*;
+import ca.phon.project.Project;
+import ca.phon.session.Session;
+import ca.phon.util.PrefHelper;
 import net.lingala.zip4j.ZipFile;
-import net.lingala.zip4j.exception.*;
-import net.lingala.zip4j.model.*;
+import net.lingala.zip4j.exception.ZipException;
+import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.model.enums.*;
+
+import java.awt.event.ActionEvent;
+import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatterBuilder;
 
 public class BackupCommandHook implements ActionHook<SaveSessionAction>, IPluginExtensionPoint<ActionHook<SaveSessionAction>> {
 

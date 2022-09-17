@@ -15,30 +15,28 @@
  */
 package ca.phon.app.opgraph.nodes;
 
-import java.awt.*;
-import java.io.*;
-import java.util.*;
-import java.util.concurrent.atomic.*;
-import java.util.stream.*;
-
-import javax.swing.*;
-
-import org.apache.commons.lang.StringUtils;
-import org.jdesktop.swingx.*;
-
-import ca.phon.app.log.*;
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.check.*;
 import ca.phon.app.session.editor.*;
 import ca.phon.extensions.*;
 import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
-import ca.phon.opgraph.app.extensions.*;
-import ca.phon.opgraph.exceptions.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.plugin.*;
-import ca.phon.project.*;
-import ca.phon.query.report.datasource.*;
+import ca.phon.project.Project;
+import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.session.*;
 import ca.phon.session.check.*;
+import org.apache.commons.lang.StringUtils;
+import org.jdesktop.swingx.VerticalLayout;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 @OpNodeInfo(name="Session Check", description="Check session for errors", category="Session", showInLibrary=true)
 public class SessionCheckNode extends OpNode implements NodeSettings{

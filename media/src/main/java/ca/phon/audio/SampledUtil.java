@@ -1,7 +1,5 @@
 package ca.phon.audio;
 
-import java.io.IOException;
-
 /**
  * Helper sampled methods
  */

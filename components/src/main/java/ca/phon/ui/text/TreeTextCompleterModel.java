@@ -15,10 +15,10 @@
  */
 package ca.phon.ui.text;
 
-import java.util.*;
-import java.util.Map.*;
+import ca.hedlund.tst.TernaryTree;
 
-import ca.hedlund.tst.*;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class TreeTextCompleterModel<T> implements TextCompleterModel<T> {
 	

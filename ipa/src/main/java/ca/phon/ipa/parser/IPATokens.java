@@ -15,12 +15,11 @@
  */
 package ca.phon.ipa.parser;
 
-import java.io.*;
-import java.util.*;
-
+import ca.phon.ipa.xml.*;
 import jakarta.xml.bind.*;
 
-import ca.phon.ipa.xml.*;
+import java.io.*;
+import java.util.*;
 
 /**
  * Maps individual glyphs to their IPA token type.

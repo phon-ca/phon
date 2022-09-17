@@ -15,16 +15,15 @@
  */
 package ca.phon.ipa;
 
-import java.util.*;
-import java.util.regex.*;
-
+import ca.phon.phonex.*;
+import ca.phon.syllable.*;
+import ca.phon.visitor.VisitorAdapter;
+import ca.phon.visitor.annotation.Visits;
 import org.antlr.runtime.*;
 import org.antlr.runtime.tree.*;
 
-import ca.phon.phonex.*;
-import ca.phon.syllable.*;
-import ca.phon.visitor.*;
-import ca.phon.visitor.annotation.*;
+import java.util.*;
+import java.util.regex.*;
 
 /**
  * Performs the cover operation on a {@link IPATranscript}

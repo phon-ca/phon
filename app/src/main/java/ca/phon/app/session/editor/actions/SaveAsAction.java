@@ -15,16 +15,15 @@
  */
 package ca.phon.app.session.editor.actions;
 
-import java.awt.event.*;
-import java.io.*;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.session.io.*;
+import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
-
-import ca.phon.app.session.editor.*;
-import ca.phon.session.io.*;
-import ca.phon.ui.nativedialogs.*;
-import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.util.icons.*;
+import java.awt.event.ActionEvent;
+import java.io.*;
 
 /**
  * Display save as... dialog for Sessions

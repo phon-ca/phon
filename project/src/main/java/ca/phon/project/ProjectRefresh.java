@@ -15,7 +15,7 @@
  */
 package ca.phon.project;
 
-import ca.phon.extensions.*;
+import ca.phon.extensions.Extension;
 
 /**
  * Project extension which provides refresh support for a project.

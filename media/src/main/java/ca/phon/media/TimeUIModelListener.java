@@ -15,10 +15,10 @@
  */
 package ca.phon.media;
 
-import java.beans.*;
-import java.util.*;
-
 import ca.phon.media.TimeUIModel.*;
+
+import java.beans.*;
+import java.util.EventListener;
 
 public interface TimeUIModelListener extends EventListener {
 

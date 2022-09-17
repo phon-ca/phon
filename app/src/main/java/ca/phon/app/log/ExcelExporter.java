@@ -15,8 +15,7 @@
  */
 package ca.phon.app.log;
 
-import jxl.write.WritableWorkbook;
-import jxl.write.WriteException;
+import jxl.write.*;
 
 /**
  * Interface for exporting some context to Excel.

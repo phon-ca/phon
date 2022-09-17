@@ -15,7 +15,7 @@
  */
 package ca.phon.formatter;
 
-import java.text.*;
+import java.text.ParseException;
 
 /**
  * Base interface for implementing formatters.  {@link Formatter}s are classes

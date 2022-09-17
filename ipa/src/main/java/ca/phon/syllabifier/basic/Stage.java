@@ -15,12 +15,12 @@
  */
 package ca.phon.syllabifier.basic;
 
-import java.util.*;
-
-import ca.phon.ipa.*;
+import ca.phon.ipa.IPAElement;
 import ca.phon.phonex.*;
 import ca.phon.syllabifier.basic.io.*;
 import ca.phon.syllable.*;
+
+import java.util.*;
 
 public class Stage implements SyllabifierStage {
 	

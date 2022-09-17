@@ -15,7 +15,7 @@
  */
 package ca.phon.app.project;
 
-import ca.phon.ui.*;
+import ca.phon.ui.MultiActionButton;
 
 public class CorpusHeaderButton extends MultiActionButton {
 

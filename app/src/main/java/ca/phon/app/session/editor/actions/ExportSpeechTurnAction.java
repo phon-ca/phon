@@ -15,7 +15,7 @@
  */
 package ca.phon.app.session.editor.actions;
 
-import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.SessionEditor;
 
 public class ExportSpeechTurnAction extends ExportSegmentAction {
 

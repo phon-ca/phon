@@ -15,7 +15,7 @@
  */
 package ca.phon.phonex;
 
-import ca.phon.ipa.*;
+import ca.phon.ipa.IPAElement;
 
 /**
  * Interface for providing 'matching' capabilites

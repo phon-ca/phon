@@ -15,14 +15,14 @@
  */
 package ca.phon.app.session.editor.search;
 
-import java.text.*;
-import java.util.regex.*;
-
 import ca.phon.extensions.*;
-import ca.phon.formatter.*;
+import ca.phon.formatter.FormatterUtil;
 import ca.phon.ipa.*;
 import ca.phon.phonex.*;
-import ca.phon.util.*;
+import ca.phon.util.Range;
+
+import java.text.ParseException;
+import java.util.regex.*;
 
 public class FindExpr {
 	

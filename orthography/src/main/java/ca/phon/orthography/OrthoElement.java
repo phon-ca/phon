@@ -15,7 +15,7 @@
  */
 package ca.phon.orthography;
 
-import ca.phon.extensions.*;
+import ca.phon.extensions.IExtendable;
 
 public interface OrthoElement extends IExtendable {
 

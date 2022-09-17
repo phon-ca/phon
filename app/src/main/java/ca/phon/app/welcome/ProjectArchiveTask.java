@@ -15,14 +15,14 @@
  */
 package ca.phon.app.welcome;
 
+import ca.phon.project.Project;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.worker.PhonTask;
+
 import java.io.*;
 import java.util.*;
 import java.util.zip.*;
-
-import ca.phon.project.*;
-import ca.phon.ui.*;
-import ca.phon.ui.nativedialogs.*;
-import ca.phon.worker.*;
 
 /** 
  * Task to archive projects.

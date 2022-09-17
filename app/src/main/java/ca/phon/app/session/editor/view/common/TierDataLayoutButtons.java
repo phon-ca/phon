@@ -15,15 +15,14 @@
  */
 package ca.phon.app.session.editor.view.common;
 
-import java.awt.*;
-import java.lang.ref.*;
-import java.util.List;
+import ca.phon.app.session.editor.SegmentedButtonBuilder;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
-
-import ca.phon.app.session.editor.*;
-import ca.phon.ui.action.*;
-import ca.phon.util.icons.*;
+import java.awt.*;
+import java.lang.ref.WeakReference;
+import java.util.List;
 
 /**
  * Buttons for controlling layout options for a given

@@ -15,13 +15,12 @@
  */
 package ca.phon.ui.text;
 
+import ca.phon.util.icons.IconSize;
+
+import javax.swing.plaf.basic.BasicTextFieldUI;
 import java.awt.*;
 import java.awt.geom.*;
-import java.awt.image.*;
-
-import javax.swing.plaf.basic.*;
-
-import ca.phon.util.icons.*;
+import java.awt.image.BufferedImage;
 
 /**
  * 

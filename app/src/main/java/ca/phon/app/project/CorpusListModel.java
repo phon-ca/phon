@@ -15,14 +15,13 @@
  */
 package ca.phon.app.project;
 
-import java.text.*;
-import java.util.*;
+import ca.phon.project.Project;
+import ca.phon.util.CollatorFactory;
 
 import javax.swing.*;
 import javax.swing.event.*;
-
-import ca.phon.project.*;
-import ca.phon.util.*;
+import java.text.Collator;
+import java.util.*;
 
 /**
  * Handles the data model for the corpus list in the

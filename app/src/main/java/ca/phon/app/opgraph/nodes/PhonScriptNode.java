@@ -15,37 +15,35 @@
  */
 package ca.phon.app.opgraph.nodes;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import java.util.List;
-import java.util.stream.*;
-
-import javax.swing.*;
-
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.opgraph.editor.OpgraphEditor;
+import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.app.script.*;
-import org.mozilla.javascript.*;
-import org.mozilla.javascript.tools.debugger.*;
-
-import ca.phon.app.log.*;
-import ca.phon.app.opgraph.editor.*;
-import ca.phon.app.opgraph.wizard.*;
 import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
-import ca.phon.opgraph.app.components.canvas.*;
-import ca.phon.opgraph.app.extensions.*;
-import ca.phon.opgraph.exceptions.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.components.canvas.CanvasContextMenuExtension;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.opgraph.nodes.general.script.*;
-import ca.phon.plugin.*;
-import ca.phon.query.script.params.*;
+import ca.phon.plugin.PluginManager;
+import ca.phon.query.script.params.DiacriticOptionsScriptParam;
 import ca.phon.script.*;
 import ca.phon.script.params.*;
 import ca.phon.ui.*;
-import ca.phon.ui.layout.*;
-import ca.phon.util.*;
+import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.*;
+import org.mozilla.javascript.*;
+import org.mozilla.javascript.tools.debugger.Main;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.IOException;
+import java.net.*;
+import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @OpNodeInfo(
 		name="PhonScript",

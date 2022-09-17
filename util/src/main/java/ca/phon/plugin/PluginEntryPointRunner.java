@@ -15,10 +15,10 @@
  */
 package ca.phon.plugin;
 
-import java.util.*;
-
-import ca.phon.util.*;
+import ca.phon.util.StackTraceInfo;
 import ca.phon.worker.*;
+
+import java.util.*;
 
 /**
  * Methods for executing plugin entry points

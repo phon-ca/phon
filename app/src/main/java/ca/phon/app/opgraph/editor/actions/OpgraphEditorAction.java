@@ -15,10 +15,10 @@
  */
 package ca.phon.app.opgraph.editor.actions;
 
-import java.lang.ref.*;
+import ca.phon.app.opgraph.editor.OpgraphEditor;
+import ca.phon.opgraph.app.commands.HookableCommand;
 
-import ca.phon.app.opgraph.editor.*;
-import ca.phon.opgraph.app.commands.*;
+import java.lang.ref.WeakReference;
 
 public abstract class OpgraphEditorAction extends HookableCommand {
 	

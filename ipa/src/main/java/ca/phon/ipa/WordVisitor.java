@@ -15,10 +15,10 @@
  */
 package ca.phon.ipa;
 
-import java.util.*;
+import ca.phon.visitor.VisitorAdapter;
+import ca.phon.visitor.annotation.Visits;
 
-import ca.phon.visitor.*;
-import ca.phon.visitor.annotation.*;
+import java.util.*;
 
 /**
  * Breaks a transcript into individual words.

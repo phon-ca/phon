@@ -15,13 +15,13 @@
  */
 package ca.phon.query.script;
 
-import java.io.*;
-import java.net.*;
-
 import ca.phon.query.db.*;
-import ca.phon.query.db.xml.*;
+import ca.phon.query.db.xml.XMLQuery;
 import ca.phon.script.*;
 import ca.phon.script.params.*;
+
+import java.io.*;
+import java.net.URL;
 
 /**
  * Defers loading of the query script until data is needed.

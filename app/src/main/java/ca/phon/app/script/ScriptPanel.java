@@ -15,15 +15,14 @@
  */
 package ca.phon.app.script;
 
-import java.awt.*;
-import java.beans.*;
-
-import javax.swing.*;
-
-import ca.phon.app.log.*;
+import ca.phon.app.log.LogUtil;
 import ca.phon.script.*;
 import ca.phon.script.params.*;
-import ca.phon.script.params.ui.*;
+import ca.phon.script.params.ui.ParamPanelFactory;
+
+import javax.swing.*;
+import java.awt.*;
+import java.beans.*;
 
 /**
  * Component for {@link PhonScript} forms.

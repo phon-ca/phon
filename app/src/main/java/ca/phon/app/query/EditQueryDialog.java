@@ -15,17 +15,16 @@
  */
 package ca.phon.app.query;
 
-import java.awt.*;
+import ca.phon.project.Project;
+import ca.phon.query.db.Query;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.ui.nativedialogs.OSInfo;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
-
-import ca.phon.project.*;
-import ca.phon.query.db.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.decorations.*;
-import ca.phon.ui.layout.*;
-import ca.phon.ui.nativedialogs.*;
-import ca.phon.util.icons.*;
+import java.awt.*;
 
 /**
  * Custom dialog for editing query information.

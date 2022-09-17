@@ -15,20 +15,19 @@
  */
 package ca.phon.query.script;
 
-import java.io.*;
-import java.util.*;
-import java.util.function.*;
-
-import org.apache.logging.log4j.*;
-
 import ca.phon.extensions.*;
 import ca.phon.plugin.*;
-import ca.phon.project.*;
+import ca.phon.project.Project;
 import ca.phon.query.db.*;
-import ca.phon.script.*;
-import ca.phon.script.params.*;
-import ca.phon.util.*;
-import ca.phon.util.resources.*;
+import ca.phon.script.PhonScriptException;
+import ca.phon.script.params.ScriptParam;
+import ca.phon.util.PrefHelper;
+import ca.phon.util.resources.ResourceLoader;
+import org.apache.logging.log4j.LogManager;
+
+import java.io.*;
+import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Script library for phon query scripts.

@@ -15,10 +15,10 @@
  */
 package ca.phon.app.opgraph.report.tree;
 
-import java.util.*;
-import java.util.stream.*;
+import ca.phon.query.report.datasource.TableDataSource;
 
-import ca.phon.query.report.datasource.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class TableNode extends ReportTreeNode {
 	

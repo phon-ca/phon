@@ -15,29 +15,27 @@
  */
 package ca.phon.app.session.editor.view.common;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.text.*;
-import java.util.*;
-import java.util.List;
-import java.util.concurrent.atomic.*;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.extensions.*;
+import ca.phon.formatter.Formatter;
+import ca.phon.formatter.*;
+import ca.phon.session.*;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.action.PhonUIAction;
+import org.apache.logging.log4j.LogManager;
 
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.*;
-import javax.swing.text.Highlighter.*;
-import javax.swing.undo.*;
-
-import org.apache.logging.log4j.*;
-
-import ca.phon.app.session.editor.*;
-import ca.phon.extensions.*;
-import ca.phon.formatter.*;
-import ca.phon.formatter.Formatter;
-import ca.phon.session.*;
-import ca.phon.ui.*;
-import ca.phon.ui.action.*;
+import javax.swing.text.Highlighter.Highlight;
+import javax.swing.undo.UndoManager;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.List;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Text field for editing tier data for a group.

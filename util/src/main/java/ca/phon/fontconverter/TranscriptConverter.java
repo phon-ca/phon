@@ -15,15 +15,14 @@
  */
 package ca.phon.fontconverter;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-
-import jakarta.xml.bind.*;
-
 import ca.phon.fontconverter.io.*;
 import ca.phon.util.resources.*;
 import de.susebox.jtopas.*;
+import jakarta.xml.bind.*;
+
+import java.io.*;
+import java.net.URL;
+import java.util.*;
 
 /**
  * Handles conversion of one transcription method to UTF-8 IPA

@@ -15,11 +15,10 @@
  */
 package ca.phon.ui.dnd;
 
+import javax.swing.*;
 import java.awt.datatransfer.*;
 import java.io.*;
-import java.util.*;
-
-import javax.swing.*;
+import java.util.List;
 
 public class FileTransferHandler extends TransferHandler {
 

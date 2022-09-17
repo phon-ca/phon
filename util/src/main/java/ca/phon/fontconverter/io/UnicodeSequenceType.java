@@ -22,9 +22,9 @@
 
 package ca.phon.fontconverter.io;
 
-import java.util.*;
-
 import jakarta.xml.bind.annotation.*;
+
+import java.util.*;
 
 
 /**

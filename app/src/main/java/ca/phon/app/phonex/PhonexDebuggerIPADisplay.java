@@ -15,7 +15,7 @@
  */
 package ca.phon.app.phonex;
 
-import ca.phon.ui.ipa.*;
+import ca.phon.ui.ipa.SyllabificationDisplay;
 
 public class PhonexDebuggerIPADisplay extends SyllabificationDisplay {
 

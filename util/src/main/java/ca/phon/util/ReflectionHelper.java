@@ -15,7 +15,7 @@
  */
 package ca.phon.util;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Method;
 
 /**
  * Various helper methods which use reflection.

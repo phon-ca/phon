@@ -15,22 +15,20 @@
  */
 package ca.phon.app.opgraph.nodes.report;
 
-import java.awt.*;
-import java.io.*;
-import java.util.*;
-import java.util.List;
-import java.util.stream.*;
-
-import javax.swing.*;
-
-import org.jdesktop.swingx.*;
-
-import ca.phon.app.log.*;
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.report.tree.*;
 import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
-import ca.phon.opgraph.app.extensions.*;
-import ca.phon.query.report.datasource.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.query.report.datasource.TableDataSource;
+import org.jdesktop.swingx.VerticalLayout;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.*;
+import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @OpNodeInfo(name="Table Section", category="Report", description="Add/Create a new table section for the report", showInLibrary=true)
 public class TableSectionNode extends ReportSectionNode implements NodeSettings {

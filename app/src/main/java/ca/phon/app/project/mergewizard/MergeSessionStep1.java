@@ -15,20 +15,18 @@
  */
 package ca.phon.app.project.mergewizard;
 
-import java.awt.*;
-import java.util.List;
-
-import javax.swing.*;
-
-import com.jgoodies.forms.layout.*;
-
-import ca.phon.app.project.*;
-import ca.phon.project.*;
+import ca.phon.app.project.ParticipantsPanel;
+import ca.phon.project.Project;
 import ca.phon.session.*;
 import ca.phon.ui.decorations.*;
 import ca.phon.ui.text.*;
 import ca.phon.ui.toast.*;
-import ca.phon.ui.wizard.*;
+import ca.phon.ui.wizard.WizardStep;
+import com.jgoodies.forms.layout.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.List;
 
 /**
  * Select session name, corpus and sessions for

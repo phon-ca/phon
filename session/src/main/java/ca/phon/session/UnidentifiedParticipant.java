@@ -15,9 +15,9 @@
  */
 package ca.phon.session;
 
-import java.time.*;
+import ca.phon.session.spi.ParticipantSPI;
 
-import ca.phon.session.spi.*;
+import java.time.*;
 
 /**
  * A participant implementation for 'unidentified' or unknown participants.

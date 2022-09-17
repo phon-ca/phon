@@ -15,13 +15,13 @@
  */
 package ca.phon.app;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-
-import ca.phon.app.hooks.*;
+import ca.phon.app.hooks.PhonBootHook;
 import ca.phon.plugin.*;
-import ca.phon.util.*;
+import ca.phon.util.OSInfo;
+
+import java.io.*;
+import java.net.URL;
+import java.util.*;
 
 /**
  * Setup appliation environment using resource files

@@ -15,55 +15,51 @@
  */
 package ca.phon.app.project;
 
-import java.awt.*;
-import java.awt.dnd.*;
-import java.awt.event.*;
-import java.awt.image.*;
-import java.io.*;
-import java.lang.reflect.*;
-import java.nio.file.*;
-import java.util.*;
-import java.util.List;
-
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.event.*;
-import javax.swing.text.*;
-
-import org.apache.commons.io.*;
-import org.eclipse.jgit.api.*;
-import org.eclipse.jgit.api.errors.*;
-import org.eclipse.jgit.errors.*;
-import org.jdesktop.swingx.*;
-import org.jdesktop.swingx.JXCollapsiblePane.*;
-import org.jdesktop.swingx.JXStatusBar.Constraint.*;
-
 import ca.hedlund.desktopicons.*;
-import ca.hedlund.desktopicons.NativeUtilities;
-import ca.phon.app.log.*;
-import ca.phon.app.modules.*;
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.project.actions.*;
-import ca.phon.app.project.git.*;
+import ca.phon.app.project.git.ProjectGitController;
 import ca.phon.app.project.git.actions.*;
-import ca.phon.app.session.check.*;
-import ca.phon.app.welcome.*;
-import ca.phon.media.*;
-import ca.phon.plugin.*;
+import ca.phon.app.session.check.SessionCheckEP;
+import ca.phon.app.welcome.WorkspaceTextStyler;
+import ca.phon.media.MediaLocator;
+import ca.phon.plugin.PluginAction;
 import ca.phon.project.*;
-import ca.phon.project.ProjectEvent.*;
-import ca.phon.session.*;
+import ca.phon.project.ProjectEvent.ProjectEventType;
+import ca.phon.session.SessionPath;
 import ca.phon.ui.*;
 import ca.phon.ui.action.*;
 import ca.phon.ui.decorations.*;
-import ca.phon.ui.fonts.*;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.*;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.text.*;
-import ca.phon.ui.toast.*;
+import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.*;
-import ca.phon.util.OSInfo;
 import ca.phon.util.icons.*;
-import ca.phon.worker.*;
+import ca.phon.worker.PhonWorker;
+import org.apache.commons.io.FilenameUtils;
+import org.eclipse.jgit.api.Status;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.errors.NoWorkTreeException;
+import org.jdesktop.swingx.*;
+import org.jdesktop.swingx.JXCollapsiblePane.Direction;
+import org.jdesktop.swingx.JXStatusBar.Constraint.ResizeBehavior;
+
+import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.event.*;
+import javax.swing.text.*;
+import java.awt.*;
+import java.awt.dnd.*;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.nio.file.*;
+import java.util.List;
+import java.util.*;
 
 /**
  * The project window.

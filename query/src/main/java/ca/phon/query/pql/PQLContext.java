@@ -1,9 +1,6 @@
 package ca.phon.query.pql;
 
 import ca.phon.project.Project;
-import ca.phon.session.Session;
-
-import java.util.*;
 
 /**
  * Context for a PQL query.

@@ -15,12 +15,11 @@
  */
 package ca.phon.media;
 
+import javax.swing.event.EventListenerList;
 import java.awt.*;
 import java.beans.*;
 import java.math.*;
 import java.util.*;
-
-import javax.swing.event.*;
 
 /**
  * Time model for UI applications.  Useful for time based media.

@@ -15,64 +15,59 @@
  */
 package ca.phon.app.opgraph.editor;
 
-import java.awt.*;
-import java.awt.datatransfer.*;
-import java.awt.event.*;
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import java.util.List;
-import java.util.function.*;
-import java.util.stream.*;
-
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.table.*;
-import javax.swing.tree.*;
-
-import org.apache.commons.io.*;
-import org.apache.commons.lang.*;
-import org.apache.commons.lang3.StringUtils;
-import org.jdesktop.swingx.*;
-
-import com.teamdev.jxbrowser.chromium.internal.ipc.message.*;
-
 import ca.hedlund.desktopicons.*;
-import ca.hedlund.tst.*;
-import ca.phon.app.log.*;
-import ca.phon.app.menu.file.*;
-import ca.phon.app.modules.*;
-import ca.phon.app.opgraph.nodes.*;
+import ca.hedlund.tst.TernaryTree;
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.menu.file.OpenFileHistory;
+import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.opgraph.nodes.ScriptNode;
-import ca.phon.app.opgraph.nodes.query.*;
-import ca.phon.app.opgraph.wizard.*;
-import ca.phon.app.opgraph.wizard.edits.*;
+import ca.phon.app.opgraph.nodes.*;
+import ca.phon.app.opgraph.nodes.query.QueryNode;
+import ca.phon.app.opgraph.wizard.WizardExtension;
+import ca.phon.app.opgraph.wizard.edits.NodeWizardOptionalsEdit;
 import ca.phon.extensions.*;
 import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
+import ca.phon.opgraph.app.OpgraphIO;
 import ca.phon.opgraph.app.edits.graph.*;
-import ca.phon.opgraph.app.extensions.*;
-import ca.phon.opgraph.app.util.*;
-import ca.phon.opgraph.extensions.*;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.opgraph.app.util.GraphUtils;
+import ca.phon.opgraph.extensions.NodeMetadata;
 import ca.phon.opgraph.io.*;
-import ca.phon.opgraph.library.instantiators.*;
+import ca.phon.opgraph.library.instantiators.Instantiator;
 import ca.phon.opgraph.nodes.general.*;
-import ca.phon.plugin.*;
-import ca.phon.project.*;
+import ca.phon.plugin.PluginEntryPointRunner;
+import ca.phon.project.Project;
 import ca.phon.query.script.*;
 import ca.phon.script.*;
 import ca.phon.script.params.*;
 import ca.phon.ui.*;
 import ca.phon.ui.action.*;
-import ca.phon.ui.decorations.*;
-import ca.phon.ui.jbreadcrumb.*;
-import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.util.*;
+import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.OSInfo;
+import ca.phon.util.*;
 import ca.phon.util.icons.*;
-import ca.phon.util.resources.*;
-import ca.phon.worker.*;
+import ca.phon.util.resources.ResourceLoader;
+import ca.phon.worker.PhonWorker;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.WordUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.jdesktop.swingx.*;
+
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.tree.*;
+import java.awt.*;
+import java.awt.datatransfer.*;
+import java.awt.event.*;
+import java.io.*;
+import java.net.*;
+import java.util.List;
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.Collectors;
 
 public class SimpleEditorPanel extends JPanel implements IExtendable {
 

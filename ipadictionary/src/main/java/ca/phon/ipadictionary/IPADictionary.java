@@ -15,14 +15,13 @@
  */
 package ca.phon.ipadictionary;
 
-import java.util.*;
-
-import org.apache.logging.log4j.*;
-
 import ca.phon.extensions.*;
 import ca.phon.ipadictionary.exceptions.*;
 import ca.phon.ipadictionary.spi.*;
 import ca.phon.util.*;
+import org.apache.logging.log4j.LogManager;
+
+import java.util.*;
 
 /**
  * API for the IPA dictionary.  This class is final.

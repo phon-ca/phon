@@ -15,26 +15,23 @@
  */
 package ca.phon.app.opgraph.nodes.query;
 
-import java.io.*;
-import java.util.*;
-
-import jakarta.xml.bind.*;
-import javax.xml.namespace.*;
-
-import org.w3c.dom.*;
-import org.w3c.dom.Element;
-
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.extensions.*;
-import ca.phon.opgraph.io.xml.XMLSerializer;
-import ca.phon.opgraph.io.xml.XMLSerializerFactory;
+import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.extensions.Extendable;
+import ca.phon.opgraph.io.xml.*;
 import ca.phon.query.db.*;
-import ca.phon.query.db.xml.*;
+import ca.phon.query.db.xml.XMLQuery;
 import ca.phon.query.db.xml.io.query.*;
 import ca.phon.query.script.*;
-import ca.phon.script.*;
+import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.*;
-import ca.phon.xml.*;
+import ca.phon.xml.XMLConstants;
+import jakarta.xml.bind.*;
+import org.w3c.dom.Element;
+import org.w3c.dom.*;
+
+import javax.xml.namespace.QName;
+import java.io.IOException;
+import java.util.*;
 
 public class QueryNodeXMLSerializer implements XMLSerializer {
 

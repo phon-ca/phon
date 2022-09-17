@@ -16,9 +16,9 @@
 package ca.phon.app.session.editor.view.syllabification_and_alignment;
 
 import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.undo.*;
-import ca.phon.ipa.*;
-import ca.phon.syllable.*;
+import ca.phon.app.session.editor.undo.SessionEditorUndoableEdit;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.syllable.SyllableConstituentType;
 
 public class ScTypeEdit extends SessionEditorUndoableEdit {
 

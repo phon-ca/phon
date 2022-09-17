@@ -16,13 +16,13 @@
 
 package ca.phon.session;
 
-import java.util.*;
-
-import ca.phon.extensions.*;
+import ca.phon.extensions.ExtendableObject;
 import ca.phon.ipa.*;
-import ca.phon.ipa.alignment.*;
+import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.*;
-import ca.phon.session.spi.*;
+import ca.phon.session.spi.RecordSPI;
+
+import java.util.*;
 
 
 /**

@@ -15,14 +15,13 @@
  */
 package ca.phon.app.session.editor.view.record_data.actions;
 
-import java.awt.*;
-import java.awt.event.*;
+import ca.phon.app.session.editor.undo.RemoveGroupEdit;
+import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
-
-import ca.phon.app.session.editor.undo.*;
-import ca.phon.app.session.editor.view.record_data.*;
-import ca.phon.util.icons.*;
+import java.awt.*;
+import java.awt.event.*;
 
 /**
  * Removes specified group for all tiers.

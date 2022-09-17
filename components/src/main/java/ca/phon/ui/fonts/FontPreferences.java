@@ -15,18 +15,13 @@
  */
 package ca.phon.ui.fonts;
 
+import ca.phon.ui.FontFormatter;
+import ca.phon.util.*;
+
 import java.awt.*;
-import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
 import java.util.prefs.Preferences;
-
-import ca.phon.session.spi.MediaSegmentSPI;
-import org.apache.logging.log4j.*;
-
-import ca.phon.ui.*;
-import ca.phon.util.*;
-import org.jdesktop.swingx.plaf.LoginPaneUI;
 
 public class FontPreferences {
 	private final static String CLASSPATH_ROOT = "data/fonts/";

@@ -15,19 +15,18 @@
  */
 package ca.phon.app.project;
 
+import ca.phon.app.modules.EntryPointArgs;
+import ca.phon.plugin.*;
+import ca.phon.project.*;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.nativedialogs.*;
+import org.apache.logging.log4j.Level;
+
+import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
-
-import javax.swing.*;
-
-import ca.phon.app.modules.*;
-import ca.phon.plugin.*;
-import ca.phon.project.*;
-import ca.phon.ui.*;
-import ca.phon.ui.nativedialogs.*;
-import org.apache.logging.log4j.Level;
 
 @PhonPlugin(name="default")
 public class OpenProjectEP implements IPluginEntryPoint {

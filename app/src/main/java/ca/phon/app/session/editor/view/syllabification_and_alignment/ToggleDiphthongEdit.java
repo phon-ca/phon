@@ -16,9 +16,9 @@
 package ca.phon.app.session.editor.view.syllabification_and_alignment;
 
 import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.undo.*;
+import ca.phon.app.session.editor.undo.SessionEditorUndoableEdit;
 import ca.phon.ipa.*;
-import ca.phon.syllable.*;
+import ca.phon.syllable.SyllabificationInfo;
 
 public class ToggleDiphthongEdit extends SessionEditorUndoableEdit {
 	

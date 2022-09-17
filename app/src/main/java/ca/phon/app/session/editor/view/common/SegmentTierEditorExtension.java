@@ -15,7 +15,7 @@
  */
 package ca.phon.app.session.editor.view.common;
 
-import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.plugin.*;
 import ca.phon.session.*;
 

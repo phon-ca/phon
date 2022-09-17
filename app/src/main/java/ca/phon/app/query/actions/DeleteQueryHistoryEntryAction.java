@@ -15,21 +15,20 @@
  */
 package ca.phon.app.query.actions;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
+import ca.phon.app.hooks.HookableAction;
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.query.*;
+import ca.phon.query.history.QueryHistoryManager;
+import ca.phon.query.script.QueryScript;
+import ca.phon.script.params.history.ParamSetType;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.ui.nativedialogs.*;
 
 import javax.swing.*;
-
-import ca.phon.app.hooks.*;
-import ca.phon.app.log.*;
-import ca.phon.app.query.*;
-import ca.phon.query.history.*;
-import ca.phon.query.script.*;
-import ca.phon.script.params.history.*;
-import ca.phon.ui.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.nativedialogs.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.io.IOException;
 
 public class DeleteQueryHistoryEntryAction extends HookableAction {
 	

@@ -16,23 +16,20 @@
 
 package ca.phon.app.session.editor.view.ipa_lookup;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import java.util.List;
+import ca.phon.app.session.RecordFilterPanel;
+import ca.phon.ipadictionary.IPADictionaryLibrary;
+import ca.phon.project.Project;
+import ca.phon.session.Session;
+import ca.phon.session.filter.RecordFilter;
+import ca.phon.syllabifier.*;
+import ca.phon.util.Language;
+import com.jgoodies.forms.layout.*;
+import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
-
-import ca.phon.ipadictionary.IPADictionaryLibrary;
-import com.jgoodies.forms.layout.*;
-
-import ca.phon.app.session.*;
-import ca.phon.project.*;
-import ca.phon.session.*;
-import ca.phon.session.filter.*;
-import ca.phon.syllabifier.*;
-import ca.phon.util.*;
-import org.jdesktop.swingx.VerticalLayout;
+import java.awt.*;
+import java.util.List;
+import java.util.*;
 
 /**
  * Form for selection options when performing automatic

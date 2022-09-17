@@ -15,8 +15,8 @@
  */
 package ca.phon.ipa;
 
-import ca.phon.visitor.*;
-import ca.phon.visitor.annotation.*;
+import ca.phon.visitor.VisitorAdapter;
+import ca.phon.visitor.annotation.Visits;
 
 /**
  * Phone visitor for filtering punctuation in transcriptions.

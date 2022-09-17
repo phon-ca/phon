@@ -15,26 +15,22 @@
  */
 package ca.phon.ipadictionary.impl;
 
-import java.io.*;
-import java.net.*;
-import java.text.ParseException;
-import java.util.*;
-import java.util.regex.*;
-
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.IPATranscriptBuilder;
-import ca.phon.phonex.PhonexPattern;
-import ca.phon.phonex.PhonexPatternException;
-import ca.phon.syllabifier.Syllabifier;
-import ca.phon.syllabifier.SyllabifierLibrary;
-import org.apache.commons.lang3.*;
-
-import ca.hedlund.tst.*;
+import ca.hedlund.tst.TernaryTree;
+import ca.phon.ipa.*;
 import ca.phon.ipadictionary.*;
 import ca.phon.ipadictionary.exceptions.*;
 import ca.phon.ipadictionary.spi.*;
+import ca.phon.phonex.*;
+import ca.phon.syllabifier.*;
 import ca.phon.util.*;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
+
+import java.io.*;
+import java.net.URL;
+import java.text.ParseException;
+import java.util.*;
+import java.util.regex.*;
 
 /**
  * Implements the basic dictionary format used by Phon.

@@ -15,16 +15,15 @@
  */
 package ca.phon.app.session.editor.actions;
 
-import java.awt.*;
-import java.awt.event.*;
+import ca.phon.app.session.editor.*;
+import ca.phon.session.Record;
+import ca.phon.session.*;
+import ca.phon.session.position.SegmentCalculator;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
-
-import ca.phon.app.session.editor.*;
-import ca.phon.session.*;
-import ca.phon.session.Record;
-import ca.phon.session.position.*;
-import ca.phon.util.icons.*;
+import java.awt.*;
+import java.awt.event.*;
 
 /**
  * Action for playing current segment in media player.

@@ -15,12 +15,12 @@
  */
 package ca.phon.query.report;
 
+import ca.phon.project.Project;
+import ca.phon.query.db.*;
+import ca.phon.query.report.io.ReportDesign;
+
 import java.io.*;
 import java.util.*;
-
-import ca.phon.project.*;
-import ca.phon.query.db.*;
-import ca.phon.query.report.io.*;
 
 /**
  * An interface for building reports based on a report design

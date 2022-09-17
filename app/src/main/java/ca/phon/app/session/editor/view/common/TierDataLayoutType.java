@@ -15,7 +15,7 @@
  */
 package ca.phon.app.session.editor.view.common;
 
-import org.apache.logging.log4j.*;
+import org.apache.logging.log4j.LogManager;
 
 /**
  * Enumeration of available tier data layout types.

@@ -16,7 +16,7 @@
 package ca.phon.app.session;
 
 import ca.phon.session.*;
-import ca.phon.ui.text.*;
+import ca.phon.ui.text.DefaultTextCompleterModel;
 
 public class TierNameTextCompleterModel extends DefaultTextCompleterModel {
 	

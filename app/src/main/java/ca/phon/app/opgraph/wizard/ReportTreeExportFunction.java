@@ -1,6 +1,5 @@
 package ca.phon.app.opgraph.wizard;
 
-import ca.phon.app.opgraph.report.tree.ReportTree;
 import ca.phon.app.opgraph.report.tree.ReportTreeNode;
 
 @FunctionalInterface

@@ -5,7 +5,6 @@ import ca.phon.util.Language;
 
 import javax.swing.*;
 import java.util.*;
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**

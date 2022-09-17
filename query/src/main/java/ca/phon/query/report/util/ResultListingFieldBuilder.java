@@ -15,10 +15,10 @@
  */
 package ca.phon.query.report.util;
 
-import java.util.*;
-
-import ca.phon.query.db.*;
+import ca.phon.query.db.ResultSet;
 import ca.phon.query.report.io.*;
+
+import java.util.*;
 
 /**
  * Scripts for adding values to (now deprecated) reports.

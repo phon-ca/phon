@@ -15,21 +15,20 @@
  */
 package ca.phon.query.script.params;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.*;
-import java.util.List;
-import java.util.concurrent.*;
+import ca.phon.ipamap2.*;
+import ca.phon.query.script.params.DiacriticOptionsScriptParam.SelectionMode;
+import ca.phon.script.params.ScriptParam;
+import ca.phon.ui.DropDownButton;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
-import javax.swing.event.*;
-
-import ca.phon.ipamap2.*;
-import ca.phon.query.script.params.DiacriticOptionsScriptParam.*;
-import ca.phon.script.params.*;
-import ca.phon.ui.*;
-import ca.phon.ui.action.*;
-import ca.phon.util.icons.*;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.awt.event.ItemListener;
+import java.beans.PropertyChangeListener;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 public class DiacriticOptionsPanel extends JPanel {
 	

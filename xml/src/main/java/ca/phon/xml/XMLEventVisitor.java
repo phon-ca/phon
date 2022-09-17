@@ -15,10 +15,10 @@
  */
 package ca.phon.xml;
 
-import javax.xml.stream.events.*;
+import ca.phon.visitor.VisitorAdapter;
+import ca.phon.visitor.annotation.Visits;
 
-import ca.phon.visitor.*;
-import ca.phon.visitor.annotation.*;
+import javax.xml.stream.events.*;
 
 /**
  * Visitor implementation for xml stream events.

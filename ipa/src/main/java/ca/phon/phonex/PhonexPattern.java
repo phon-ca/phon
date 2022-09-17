@@ -15,23 +15,21 @@
  */
 package ca.phon.phonex;
 
-import java.util.*;
-import java.util.BitSet;
-
+import ca.phon.ipa.*;
+import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.util.PrefHelper;
-import org.antlr.runtime.*;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.*;
 import org.antlr.runtime.tree.*;
-
-import ca.phon.ipa.*;
-import ca.phon.syllable.*;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
+
+import java.util.BitSet;
+import java.util.*;
 
 /**
  * <p>A compiled representation of a phonex expression.</p>

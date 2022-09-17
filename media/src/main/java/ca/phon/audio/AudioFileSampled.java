@@ -15,7 +15,7 @@
  */
 package ca.phon.audio;
 
-import java.io.*;
+import java.io.IOException;
 import java.nio.BufferUnderflowException;
 
 public final class AudioFileSampled extends AbstractSampled {

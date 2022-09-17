@@ -15,31 +15,27 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import java.awt.*;
-import java.text.*;
-import java.util.*;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.swing.*;
-
-import ca.phon.query.script.params.DiacriticOptionsPanel;
-import ca.phon.query.script.params.DiacriticOptionsScriptParam;
-import org.jdesktop.swingx.*;
-
-import ca.phon.app.log.*;
-import ca.phon.app.opgraph.wizard.*;
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.opgraph.wizard.NodeWizard;
 import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.*;
-import ca.phon.ipa.tree.*;
+import ca.phon.ipa.tree.IpaTernaryTree;
 import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
-import ca.phon.opgraph.app.extensions.*;
-import ca.phon.opgraph.exceptions.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.query.db.*;
-import ca.phon.query.report.datasource.*;
-import ca.phon.syllable.*;
-import ca.phon.util.*;
+import ca.phon.query.report.datasource.DefaultTableDataSource;
+import ca.phon.query.script.params.*;
+import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.util.Range;
+import org.jdesktop.swingx.VerticalLayout;
+
+import javax.swing.*;
+import java.awt.*;
+import java.text.ParseException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Accurate, Substitutions, Deletions Node (PhoneAccuracyNode)

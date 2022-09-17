@@ -15,10 +15,10 @@
  */
 package ca.phon.ipa.relations;
 
-import java.util.*;
-
 import ca.phon.ipa.*;
-import ca.phon.ipa.alignment.*;
+import ca.phon.ipa.alignment.PhoneMap;
+
+import java.util.*;
 
 /**
 * <link rel='stylesheet' type='text/css' href='../../../../../resources/ca/phon/query/detectors/detectors.css'/>

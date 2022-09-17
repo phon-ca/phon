@@ -15,9 +15,9 @@
  */
 package ca.phon.app.session.editor.view.ipa_lookup.actions;
 
-import javax.swing.*;
+import ca.phon.app.session.editor.view.ipa_lookup.IPALookupView;
 
-import ca.phon.app.session.editor.view.ipa_lookup.*;
+import javax.swing.*;
 
 /**
  * Base class for lookup view actions.

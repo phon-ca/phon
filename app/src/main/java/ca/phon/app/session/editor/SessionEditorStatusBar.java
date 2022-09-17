@@ -15,27 +15,23 @@
  */
 package ca.phon.app.session.editor;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.lang.ref.*;
-import java.time.format.*;
-
-import javax.swing.*;
-import javax.swing.event.*;
-
-import ca.phon.media.VolumeSlider;
-import org.jdesktop.swingx.*;
-import org.jdesktop.swingx.JXStatusBar.Constraint.*;
-
-import ca.phon.app.log.*;
-import ca.phon.project.*;
-import ca.phon.session.*;
-import ca.phon.ui.fonts.*;
-import ca.phon.util.*;
+import ca.phon.app.log.LogUtil;
+import ca.phon.project.Project;
+import ca.phon.session.Session;
+import ca.phon.util.ByteSize;
 import ca.phon.util.icons.*;
 import ca.phon.worker.*;
-import ca.phon.worker.PhonTask.*;
+import ca.phon.worker.PhonTask.TaskStatus;
+import org.jdesktop.swingx.*;
+import org.jdesktop.swingx.JXStatusBar.Constraint.ResizeBehavior;
+
+import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.lang.ref.WeakReference;
+import java.time.format.DateTimeFormatter;
 
 public class SessionEditorStatusBar extends JXStatusBar {
 

@@ -15,12 +15,12 @@
  */
 package ca.phon.app.project;
 
-import java.awt.*;
+import ca.phon.project.Project;
+import ca.phon.session.Participant;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.decorations.DialogHeader;
 
-import ca.phon.project.*;
-import ca.phon.session.*;
-import ca.phon.ui.*;
-import ca.phon.ui.decorations.*;
+import java.awt.*;
 
 /**
  * Window for viewing and modifying {@link Participant}s for a {@link Project}.

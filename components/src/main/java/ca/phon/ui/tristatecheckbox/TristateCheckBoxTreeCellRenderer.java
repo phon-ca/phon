@@ -15,10 +15,9 @@
  */
 package ca.phon.ui.tristatecheckbox;
 
-import java.awt.*;
-
 import javax.swing.*;
-import javax.swing.tree.*;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import java.awt.*;
 
 public class TristateCheckBoxTreeCellRenderer extends DefaultTreeCellRenderer {
 

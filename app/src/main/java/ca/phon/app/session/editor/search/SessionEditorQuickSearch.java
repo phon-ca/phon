@@ -15,33 +15,31 @@
  */
 package ca.phon.app.session.editor.search;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.*;
-import java.io.*;
-import java.lang.ref.*;
+import ca.phon.app.session.editor.*;
+import ca.phon.query.report.csv.CSVTableDataWriter;
+import ca.phon.ui.PhonGuiConstants;
+import ca.phon.ui.action.*;
+import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.text.PromptedTextField.FieldState;
+import ca.phon.ui.text.SearchField;
+import ca.phon.ui.toast.*;
+import ca.phon.util.icons.*;
+import ca.phon.worker.PhonWorker;
+import org.apache.logging.log4j.LogManager;
+import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.decorator.HighlighterFactory;
 
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
-
-import org.apache.logging.log4j.*;
-import org.jdesktop.swingx.*;
-import org.jdesktop.swingx.decorator.*;
-
-import ca.phon.app.session.editor.*;
-import ca.phon.query.report.csv.*;
-import ca.phon.ui.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.fonts.*;
-import ca.phon.ui.layout.*;
-import ca.phon.ui.nativedialogs.*;
-import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.ui.text.*;
-import ca.phon.ui.text.PromptedTextField.*;
-import ca.phon.ui.toast.*;
-import ca.phon.util.icons.*;
-import ca.phon.worker.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.beans.PropertyChangeListener;
+import java.io.*;
+import java.lang.ref.WeakReference;
 
 /**
  */

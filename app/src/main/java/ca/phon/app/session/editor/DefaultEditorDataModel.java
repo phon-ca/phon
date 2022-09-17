@@ -15,12 +15,10 @@
  */
 package ca.phon.app.session.editor;
 
-import java.lang.ref.*;
-import java.util.concurrent.atomic.*;
-
-import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.filter.*;
+import ca.phon.session.*;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Default data model for the {@link SessionEditor}

@@ -15,8 +15,8 @@
  */
 package ca.phon.worker;
 
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.Collection;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  *

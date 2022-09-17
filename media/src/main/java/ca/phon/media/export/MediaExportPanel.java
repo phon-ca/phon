@@ -15,18 +15,15 @@
  */
 package ca.phon.media.export;
 
-import java.text.*;
+import ca.phon.formatter.Formatter;
+import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.text.*;
+import com.jgoodies.forms.layout.*;
+import org.jdesktop.swingx.*;
+import org.jdesktop.swingx.JXCollapsiblePane.Direction;
 
 import javax.swing.*;
-
-import org.jdesktop.swingx.*;
-import org.jdesktop.swingx.JXCollapsiblePane.*;
-
-import com.jgoodies.forms.layout.*;
-
-import ca.phon.formatter.*;
-import ca.phon.ui.nativedialogs.*;
-import ca.phon.ui.text.*;
+import java.text.*;
 
 /**
  * Panel for configuration options for media export.  Includes fields for

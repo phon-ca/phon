@@ -15,16 +15,15 @@
  */
 package ca.phon.audio;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-
-import org.junit.Test;
-import org.junit.runner.*;
-import org.junit.runners.*;
-import org.junit.runners.Parameterized.*;
-
 import junit.framework.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
+
+import java.io.File;
+import java.net.URL;
+import java.util.*;
 
 @RunWith(Parameterized.class)
 public class TestAudioFileHeaders {

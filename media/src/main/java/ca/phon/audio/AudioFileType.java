@@ -15,9 +15,9 @@
  */
 package ca.phon.audio;
 
-import java.util.*;
-
 import ca.phon.plugin.*;
+
+import java.util.*;
 
 /**
  * Audio file types

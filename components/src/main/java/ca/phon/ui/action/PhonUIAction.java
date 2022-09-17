@@ -15,14 +15,11 @@
  */
 package ca.phon.ui.action;
 
-import java.awt.event.*;
-import java.lang.ref.*;
-import java.lang.reflect.*;
-import java.util.function.Consumer;
+import ca.phon.worker.PhonWorker;
 
 import javax.swing.*;
-
-import ca.phon.worker.*;
+import java.awt.event.ActionEvent;
+import java.util.function.Consumer;
 
 /**
  * UI action calling {@link FunctionalInterface} methods.

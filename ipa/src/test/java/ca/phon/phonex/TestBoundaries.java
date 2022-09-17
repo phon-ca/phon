@@ -15,13 +15,12 @@
  */
 package ca.phon.phonex;
 
-import java.text.*;
-
+import ca.phon.ipa.IPATranscript;
 import org.junit.*;
-import org.junit.runner.*;
-import org.junit.runners.*;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
-import ca.phon.ipa.*;
+import java.text.ParseException;
 
 /**
  * Test phonex boundary detection.

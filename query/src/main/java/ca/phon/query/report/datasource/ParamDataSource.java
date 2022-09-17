@@ -15,11 +15,11 @@
  */
 package ca.phon.query.report.datasource;
 
-import java.util.*;
-
 import ca.phon.query.db.*;
-import ca.phon.query.report.io.*;
-import ca.phon.util.*;
+import ca.phon.query.report.io.ParamSection;
+import ca.phon.util.CollatorFactory;
+
+import java.util.*;
 
 /**
  * List query parameters.

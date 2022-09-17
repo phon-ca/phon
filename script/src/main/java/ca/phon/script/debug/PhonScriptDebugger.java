@@ -15,7 +15,7 @@
  */
 package ca.phon.script.debug;
 
-import org.mozilla.javascript.*;
+import org.mozilla.javascript.Context;
 import org.mozilla.javascript.debug.*;
 
 

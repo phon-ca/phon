@@ -15,22 +15,21 @@
  */
 package ca.phon.app.opgraph.report;
 
-import java.awt.*;
-import java.io.*;
-import java.util.*;
+import ca.phon.app.modules.EntryPointArgs;
+import ca.phon.app.opgraph.editor.SimpleEditor;
+import ca.phon.app.opgraph.nodes.ReportNodeInstantiator;
+import ca.phon.app.query.OpenQuerySelector;
+import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.nodes.general.MacroNode;
+import ca.phon.plugin.*;
+import ca.phon.project.Project;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.decorations.DialogHeader;
 
 import javax.swing.*;
-
-import ca.phon.app.modules.*;
-import ca.phon.app.opgraph.editor.*;
-import ca.phon.app.opgraph.nodes.*;
-import ca.phon.app.query.*;
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.nodes.general.*;
-import ca.phon.plugin.*;
-import ca.phon.project.*;
-import ca.phon.ui.*;
-import ca.phon.ui.decorations.*;
+import java.awt.*;
+import java.io.File;
+import java.util.Map;
 
 @PhonPlugin(name=ReportComposerEP.EP_NAME)
 public class ReportComposerEP implements IPluginEntryPoint {

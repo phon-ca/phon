@@ -15,25 +15,22 @@
  */
 package ca.phon.app.session.editor.actions;
 
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.session.RecordsTransferable;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.undo.*;
+import ca.phon.session.Record;
+import ca.phon.session.*;
+import org.apache.logging.log4j.LogManager;
+
+import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.event.*;
-import java.io.*;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.StreamSupport;
-
-import javax.swing.*;
-
-import ca.phon.app.log.LogUtil;
-import ca.phon.session.*;
-import ca.phon.session.Record;
-import org.apache.logging.log4j.*;
-
-import ca.phon.app.session.*;
-import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.undo.*;
 
 /**
  * Paste record from system clipboard.

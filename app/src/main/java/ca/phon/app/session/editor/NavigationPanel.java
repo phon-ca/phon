@@ -15,16 +15,14 @@
  */
 package ca.phon.app.session.editor;
 
-import java.awt.event.*;
-import java.lang.ref.*;
-import java.util.*;
-
-import javax.swing.*;
-
+import ca.phon.app.session.editor.actions.*;
+import ca.phon.ui.action.PhonUIAction;
 import com.jgoodies.forms.layout.*;
 
-import ca.phon.app.session.editor.actions.*;
-import ca.phon.ui.action.*;
+import javax.swing.*;
+import java.awt.event.*;
+import java.lang.ref.WeakReference;
+import java.util.List;
 
 public class NavigationPanel extends JPanel {
 	

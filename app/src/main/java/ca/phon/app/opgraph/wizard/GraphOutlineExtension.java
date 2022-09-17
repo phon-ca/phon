@@ -15,21 +15,20 @@
  */
 package ca.phon.app.opgraph.wizard;
 
-import java.awt.*;
-import java.util.*;
-import java.util.List;
+import ca.phon.app.opgraph.wizard.edits.*;
+import ca.phon.opgraph.OpNode;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.components.*;
+import ca.phon.ui.action.*;
+import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.icons.IconManager;
 
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.tree.*;
-
-import ca.phon.app.opgraph.wizard.edits.*;
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
-import ca.phon.opgraph.app.components.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.menu.*;
-import ca.phon.util.icons.*;
+import java.awt.*;
+import java.util.List;
+import java.util.*;
 
 /**
  * Setup cell renderer and mouse handler on {@link GraphOutline} view

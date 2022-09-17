@@ -17,7 +17,7 @@
 package ca.phon.query.db.xml;
 
 import ca.phon.plugin.*;
-import ca.phon.query.db.*;
+import ca.phon.query.db.QueryManager;
 
 
 /**

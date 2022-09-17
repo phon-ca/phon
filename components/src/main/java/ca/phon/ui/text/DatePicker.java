@@ -15,21 +15,19 @@
  */
 package ca.phon.ui.text;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.time.*;
-import java.util.*;
-
-import javax.swing.*;
-
+import ca.phon.session.format.DateFormatter;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.text.PromptedTextField.FieldState;
+import ca.phon.ui.toast.ToastFactory;
+import ca.phon.util.icons.*;
 import org.jdesktop.swingx.*;
 import org.jdesktop.swingx.event.*;
 
-import ca.phon.session.format.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.text.PromptedTextField.*;
-import ca.phon.ui.toast.*;
-import ca.phon.util.icons.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.time.*;
+import java.util.Date;
 
 /**
  * Customizations for {@link JXDatePicker}

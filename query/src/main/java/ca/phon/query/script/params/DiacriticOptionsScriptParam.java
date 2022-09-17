@@ -15,12 +15,12 @@
  */
 package ca.phon.query.script.params;
 
-import java.util.*;
-import java.util.function.*;
-import java.util.stream.*;
-
 import ca.phon.ipa.*;
-import ca.phon.script.params.*;
+import ca.phon.script.params.ScriptParam;
+
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class DiacriticOptionsScriptParam extends ScriptParam {
 

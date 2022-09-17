@@ -15,13 +15,12 @@
  */
 package ca.phon.app.session.editor.view.speech_analysis.actions;
 
-import java.awt.event.*;
-
-import javax.swing.*;
-
-import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.speech_analysis.*;
 import ca.phon.util.icons.*;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 
 public class ResetAction extends SpeechAnalysisEditorViewAction {
 

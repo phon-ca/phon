@@ -15,16 +15,15 @@
  */
 package ca.phon.ipamap2;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import java.util.function.*;
+import ca.phon.ui.ipamap.io.*;
 
 import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.plaf.*;
-
-import ca.phon.ui.ipamap.io.*;
+import javax.swing.event.EventListenerList;
+import javax.swing.plaf.ComponentUI;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.util.Arrays;
+import java.util.function.Predicate;
 
 /**
  * Display a single grid of the IPA Map.

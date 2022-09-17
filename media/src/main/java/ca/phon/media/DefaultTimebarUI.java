@@ -15,18 +15,17 @@
  */
 package ca.phon.media;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.*;
-import java.beans.*;
-import java.util.*;
-import java.util.List;
+import ca.phon.media.TimeUIModel.Marker;
+import ca.phon.util.MsFormatter;
 
 import javax.swing.*;
-import javax.swing.event.*;
-
-import ca.phon.media.TimeUIModel.*;
-import ca.phon.util.*;
+import javax.swing.event.MouseInputAdapter;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.geom.*;
+import java.beans.*;
+import java.util.List;
+import java.util.*;
 
 public class DefaultTimebarUI extends TimebarUI {
 	

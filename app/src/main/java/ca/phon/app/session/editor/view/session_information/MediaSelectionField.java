@@ -15,27 +15,26 @@
  */
 package ca.phon.app.session.editor.view.session_information;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.lang.ref.*;
-import java.nio.file.*;
-import java.util.*;
-import java.util.List;
-
-import javax.swing.*;
-
-import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.actions.*;
-import ca.phon.app.session.editor.view.media_player.*;
-import ca.phon.media.*;
-import ca.phon.project.*;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.actions.SaveSessionAction;
+import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
+import ca.phon.media.MediaLocator;
+import ca.phon.project.Project;
 import ca.phon.ui.action.*;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.text.*;
-import ca.phon.ui.text.PromptedTextField.*;
-import ca.phon.util.*;
-import ca.phon.worker.*;
+import ca.phon.ui.text.PromptedTextField.FieldState;
+import ca.phon.util.Tuple;
+import ca.phon.worker.PhonWorker;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.lang.ref.WeakReference;
+import java.nio.file.*;
+import java.util.List;
+import java.util.*;
 
 /**
  * Media selection field for {@link SessionInfoEditorView}.

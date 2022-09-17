@@ -1,17 +1,13 @@
 package ca.phon.media;
 
-import ca.phon.opgraph.nodes.phonex.PhonexGroupNode;
-import ca.phon.ui.PhonGuiConstants;
-import ca.phon.util.PhonConstants;
 import ca.phon.util.icons.*;
-import org.w3c.dom.css.Rect;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
-import java.awt.image.*;
+import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeListener;
 
 public class DefaultVolumeSliderUI extends VolumeSliderUI {

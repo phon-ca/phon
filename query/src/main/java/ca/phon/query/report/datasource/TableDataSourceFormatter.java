@@ -15,13 +15,13 @@
  */
 package ca.phon.query.report.datasource;
 
-import java.io.*;
-import java.text.*;
-
-import au.com.bytecode.opencsv.*;
+import au.com.bytecode.opencsv.CSVWriter;
 import ca.phon.formatter.*;
-import ca.phon.ipa.*;
-import ca.phon.util.*;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.util.PhonConstants;
+
+import java.io.*;
+import java.text.ParseException;
 
 @FormatterType(value=TableDataSource.class)
 public class TableDataSourceFormatter implements Formatter<TableDataSource> {

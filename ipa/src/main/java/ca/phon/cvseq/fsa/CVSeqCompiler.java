@@ -15,13 +15,12 @@
  */
 package ca.phon.cvseq.fsa;
 
-import java.text.*;
-
-import org.apache.logging.log4j.*;
-
-import ca.phon.cvseq.*;
+import ca.phon.cvseq.CVSeqType;
 import ca.phon.fsa.*;
 import de.susebox.jtopas.*;
+import org.apache.logging.log4j.LogManager;
+
+import java.text.ParseException;
 
 /**
  *

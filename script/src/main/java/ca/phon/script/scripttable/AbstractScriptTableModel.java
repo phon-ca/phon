@@ -15,20 +15,18 @@
  */
 package ca.phon.script.scripttable;
 
-import java.io.*;
-import java.util.*;
-import java.util.concurrent.atomic.*;
-
-import javax.script.*;
-import javax.swing.table.*;
-import jakarta.xml.bind.*;
-import javax.xml.stream.*;
-
-import org.apache.logging.log4j.*;
-import org.mozilla.javascript.*;
-
 import ca.phon.script.*;
 import ca.phon.script.scripttable.io.*;
+import jakarta.xml.bind.*;
+import org.apache.logging.log4j.LogManager;
+import org.mozilla.javascript.*;
+
+import javax.script.ScriptException;
+import javax.swing.table.AbstractTableModel;
+import javax.xml.stream.*;
+import java.io.*;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * <p>Abstract implementation of {@link ScriptTableModel}.  The class include

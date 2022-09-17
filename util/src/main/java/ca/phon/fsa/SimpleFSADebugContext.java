@@ -15,10 +15,10 @@
  */
 package ca.phon.fsa;
 
-import java.util.*;
+import ca.phon.fsa.FSAState.RunningState;
+import ca.phon.fsa.SimpleFSA.DecisionTracker;
 
-import ca.phon.fsa.FSAState.*;
-import ca.phon.fsa.SimpleFSA.*;
+import java.util.*;
 
 /**
  * Class for executing a SimleFSA in a step-by-step

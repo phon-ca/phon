@@ -15,13 +15,13 @@
  */
 package ca.phon.app.opgraph.nodes;
 
-import java.io.*;
-import java.util.*;
-
-import ca.phon.app.opgraph.nodes.query.*;
-import ca.phon.project.*;
-import ca.phon.query.db.*;
+import ca.phon.app.opgraph.nodes.query.ResultSetRecordContainer;
+import ca.phon.project.Project;
+import ca.phon.query.db.ResultSet;
 import ca.phon.session.*;
+
+import java.io.IOException;
+import java.util.*;
 
 public interface RecordContainer {
 	

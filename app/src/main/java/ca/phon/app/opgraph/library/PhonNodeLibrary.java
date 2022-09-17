@@ -15,28 +15,27 @@
  */
 package ca.phon.app.opgraph.library;
 
-import java.awt.*;
-import java.io.*;
-import java.net.*;
-import java.util.*;
-
-import org.apache.commons.io.*;
-
-import ca.phon.app.log.*;
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.analysis.*;
 import ca.phon.app.opgraph.macro.*;
 import ca.phon.app.opgraph.nodes.*;
 import ca.phon.app.opgraph.nodes.query.*;
 import ca.phon.app.opgraph.nodes.table.*;
-import ca.phon.app.opgraph.report.*;
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.components.canvas.*;
-import ca.phon.opgraph.library.*;
+import ca.phon.app.opgraph.report.ReportLibrary;
+import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.app.components.canvas.NodeStyle;
+import ca.phon.opgraph.library.NodeLibrary;
 import ca.phon.opgraph.nodes.general.*;
 import ca.phon.query.script.*;
 import ca.phon.script.*;
 import ca.phon.util.icons.*;
-import ca.phon.util.resources.*;
+import ca.phon.util.resources.ResourceLoader;
+import org.apache.commons.io.FilenameUtils;
+
+import java.awt.*;
+import java.io.*;
+import java.net.*;
+import java.util.Iterator;
 
 /**
  * Adds Phon's custom nodes to the {@link OpGraph} {@link NodeLibrary}.

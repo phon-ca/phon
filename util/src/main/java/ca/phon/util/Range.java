@@ -15,7 +15,7 @@
  */
 package ca.phon.util;
 
-import java.io.*;
+import java.io.Serializable;
 import java.util.*;
 import java.util.regex.*;
 

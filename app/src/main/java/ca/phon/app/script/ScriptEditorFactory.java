@@ -15,14 +15,12 @@
  */
 package ca.phon.app.script;
 
+import ca.phon.app.log.LogUtil;
+import ca.phon.script.PhonScript;
+import org.fife.ui.rtextarea.RTextScrollPane;
+
 import javax.swing.event.*;
-import javax.swing.text.*;
-
-import org.fife.ui.rsyntaxtextarea.*;
-import org.fife.ui.rtextarea.*;
-
-import ca.phon.app.log.*;
-import ca.phon.script.*;
+import javax.swing.text.BadLocationException;
 
 public class ScriptEditorFactory {
 	

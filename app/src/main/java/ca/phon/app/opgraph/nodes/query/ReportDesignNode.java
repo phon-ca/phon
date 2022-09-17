@@ -15,24 +15,23 @@
  */
 package ca.phon.app.opgraph.nodes.query;
 
-import java.awt.*;
-import java.io.*;
-import java.util.*;
-
-import javax.swing.*;
-import jakarta.xml.bind.*;
-import javax.xml.namespace.*;
-
-import ca.phon.app.query.report.*;
+import ca.phon.app.query.report.ReportEditor;
 import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
-import ca.phon.opgraph.app.extensions.*;
-import ca.phon.opgraph.exceptions.*;
-import ca.phon.project.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.opgraph.exceptions.ProcessingException;
+import ca.phon.project.Project;
 import ca.phon.query.db.*;
 import ca.phon.query.report.*;
-import ca.phon.query.report.io.*;
-import ca.phon.util.*;
+import ca.phon.query.report.io.ReportDesign;
+import ca.phon.util.PrefHelper;
+import jakarta.xml.bind.*;
+
+import javax.swing.*;
+import javax.xml.namespace.QName;
+import java.awt.*;
+import java.io.*;
+import java.util.Properties;
 
 /**
  * 

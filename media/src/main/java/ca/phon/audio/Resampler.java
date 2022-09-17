@@ -1,9 +1,6 @@
 package ca.phon.audio;
 
-import com.ibm.icu.util.Output;
-
-import java.io.*;
-import java.util.stream.IntStream;
+import java.io.IOException;
 
 /**
  * Resample given sampled.

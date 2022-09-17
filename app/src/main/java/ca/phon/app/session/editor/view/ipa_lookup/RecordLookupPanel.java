@@ -15,36 +15,31 @@
  */
 package ca.phon.app.session.editor.view.ipa_lookup;
 
-import java.awt.*;
-import java.lang.ref.*;
-import java.text.*;
-import java.util.List;
-import java.util.concurrent.atomic.*;
-
-import javax.swing.*;
-import javax.swing.undo.*;
-
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginManager;
-import org.apache.logging.log4j.*;
-import org.jdesktop.swingx.*;
-
-import com.jgoodies.forms.layout.*;
-
-import ca.phon.app.ipalookup.*;
+import ca.phon.app.ipalookup.OrthoLookupVisitor;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.common.*;
-import ca.phon.extensions.*;
+import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.*;
-import ca.phon.ipadictionary.*;
-import ca.phon.orthography.*;
-import ca.phon.session.*;
+import ca.phon.ipadictionary.IPADictionary;
+import ca.phon.orthography.Orthography;
+import ca.phon.plugin.*;
 import ca.phon.session.Record;
+import ca.phon.session.*;
 import ca.phon.syllabifier.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.fonts.*;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.fonts.FontPreferences;
+import com.jgoodies.forms.layout.*;
+import org.apache.logging.log4j.LogManager;
+import org.jdesktop.swingx.HorizontalLayout;
+
+import javax.swing.*;
+import java.awt.*;
+import java.lang.ref.WeakReference;
+import java.text.ParseException;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Provides a UI for selecting IPA transcriptions from

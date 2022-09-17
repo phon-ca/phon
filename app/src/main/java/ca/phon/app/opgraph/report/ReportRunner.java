@@ -15,13 +15,13 @@
  */
 package ca.phon.app.opgraph.report;
 
-import javax.swing.*;
-
 import ca.phon.app.opgraph.wizard.*;
 import ca.phon.opgraph.*;
-import ca.phon.opgraph.exceptions.*;
-import ca.phon.project.*;
-import ca.phon.ui.*;
+import ca.phon.opgraph.exceptions.ProcessingException;
+import ca.phon.project.Project;
+import ca.phon.ui.CommonModuleFrame;
+
+import javax.swing.*;
 
 /**
  * Execute an opgraph report given a project and query.

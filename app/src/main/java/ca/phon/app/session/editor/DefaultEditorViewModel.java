@@ -15,50 +15,48 @@
  */
 package ca.phon.app.session.editor;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.lang.ref.*;
-import java.net.*;
-import java.util.*;
-import java.util.List;
-import java.util.function.*;
-
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.undo.*;
-
-import org.apache.logging.log4j.LogManager;
-
-import bibliothek.gui.*;
-import bibliothek.gui.dock.*;
+import bibliothek.gui.DockStation;
+import bibliothek.gui.dock.StackDockStation;
 import bibliothek.gui.dock.action.*;
-import bibliothek.gui.dock.action.actions.*;
+import bibliothek.gui.dock.action.actions.SimpleButtonAction;
 import bibliothek.gui.dock.common.*;
 import bibliothek.gui.dock.common.action.*;
 import bibliothek.gui.dock.common.event.*;
-import bibliothek.gui.dock.common.intern.*;
-import bibliothek.gui.dock.common.intern.action.*;
-import bibliothek.gui.dock.common.mode.*;
+import bibliothek.gui.dock.common.intern.CDockable;
+import bibliothek.gui.dock.common.intern.action.CDecorateableAction;
+import bibliothek.gui.dock.common.mode.ExtendedMode;
 import bibliothek.gui.dock.common.perspective.*;
-import bibliothek.gui.dock.common.theme.*;
+import bibliothek.gui.dock.common.theme.ThemeMap;
 import bibliothek.gui.dock.dockable.*;
-import bibliothek.gui.dock.themes.color.*;
+import bibliothek.gui.dock.themes.color.TitleColor;
 import bibliothek.gui.dock.util.*;
 import bibliothek.gui.dock.util.color.*;
-import bibliothek.util.*;
+import bibliothek.util.Filter;
 import bibliothek.util.xml.*;
-import ca.phon.app.log.*;
+import ca.phon.app.log.LogUtil;
 import ca.phon.plugin.*;
-import ca.phon.project.*;
-import ca.phon.session.*;
-import ca.phon.ui.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.menu.*;
+import ca.phon.project.Project;
+import ca.phon.session.Session;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.menu.MenuManager;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.OSInfo;
-import ca.phon.util.icons.*;
 import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.*;
+import org.apache.logging.log4j.LogManager;
+
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.undo.UndoManager;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.lang.ref.WeakReference;
+import java.net.*;
+import java.util.List;
+import java.util.*;
+import java.util.function.Consumer;
 
 public class DefaultEditorViewModel implements EditorViewModel {
 

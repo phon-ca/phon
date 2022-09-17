@@ -17,8 +17,8 @@ package ca.phon.app.ipalookup;
 
 import ca.phon.ipa.*;
 import ca.phon.orthography.*;
-import ca.phon.visitor.*;
-import ca.phon.visitor.annotation.*;
+import ca.phon.visitor.VisitorAdapter;
+import ca.phon.visitor.annotation.Visits;
 
 /**
  * Create an {@link IPATranscript} from the given {@link Orthography}.  The

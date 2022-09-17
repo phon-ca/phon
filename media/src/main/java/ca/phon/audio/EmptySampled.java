@@ -1,7 +1,5 @@
 package ca.phon.audio;
 
-import ca.phon.audio.Sampled;
-
 import java.io.IOException;
 import java.util.Arrays;
 

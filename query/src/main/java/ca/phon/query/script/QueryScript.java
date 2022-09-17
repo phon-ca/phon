@@ -15,17 +15,16 @@
  */
 package ca.phon.query.script;
 
-import java.io.*;
+import ca.phon.plugin.PluginManager;
+import ca.phon.script.*;
+import ca.phon.script.params.ScriptParameters;
+import org.apache.logging.log4j.LogManager;
+
+import java.io.IOException;
 import java.net.*;
 import java.security.*;
-import java.util.*;
-import java.util.concurrent.atomic.*;
-
-import org.apache.logging.log4j.*;
-
-import ca.phon.plugin.*;
-import ca.phon.script.*;
-import ca.phon.script.params.*;
+import java.util.Enumeration;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Holds the text for a query script.

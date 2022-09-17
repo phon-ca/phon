@@ -15,24 +15,22 @@
  */
 package ca.phon.app.session.editor.view.timeline;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.text.*;
-import java.util.*;
-import java.util.List;
-
-import javax.swing.*;
-
-import org.jdesktop.swingx.*;
-
-import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.timeline.SegmentationHandler.*;
 import ca.phon.formatter.Formatter;
-import ca.phon.session.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.layout.*;
-import ca.phon.ui.text.*;
-import ca.phon.util.*;
+import ca.phon.session.Participant;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.ui.text.FormatterTextField;
+import ca.phon.util.PrefHelper;
+import org.jdesktop.swingx.VerticalLayout;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.util.List;
+import java.util.*;
 
 /**
  * Options dialog for segmentation.

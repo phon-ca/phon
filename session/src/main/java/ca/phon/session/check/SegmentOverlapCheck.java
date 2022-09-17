@@ -15,12 +15,12 @@
  */
 package ca.phon.session.check;
 
-import java.util.*;
-
 import ca.phon.plugin.*;
-import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.util.*;
+import ca.phon.session.*;
+import ca.phon.util.PrefHelper;
+
+import java.util.*;
 
 @PhonPlugin(name="Check Segment Overlaps", comments="Check for overlapping media segments")
 @Rank(3)

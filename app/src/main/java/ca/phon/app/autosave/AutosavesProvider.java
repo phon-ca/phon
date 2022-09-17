@@ -16,7 +16,7 @@
 package ca.phon.app.autosave;
 
 import ca.phon.extensions.*;
-import ca.phon.project.*;
+import ca.phon.project.Project;
 
 @Extension(Project.class)
 public class AutosavesProvider implements ExtensionProvider {

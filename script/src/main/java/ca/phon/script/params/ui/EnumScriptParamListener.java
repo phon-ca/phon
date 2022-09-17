@@ -15,11 +15,10 @@
  */
 package ca.phon.script.params.ui;
 
-import java.awt.event.*;
+import ca.phon.script.params.EnumScriptParam;
 
 import javax.swing.*;
-
-import ca.phon.script.params.*;
+import java.awt.event.*;
 
 public class EnumScriptParamListener extends ScriptParamAction implements ItemListener {
 

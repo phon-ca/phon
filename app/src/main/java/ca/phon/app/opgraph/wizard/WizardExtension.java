@@ -15,10 +15,10 @@
  */
 package ca.phon.app.opgraph.wizard;
 
-import java.util.*;
-
-import ca.phon.app.opgraph.wizard.WizardExtensionEvent.*;
+import ca.phon.app.opgraph.wizard.WizardExtensionEvent.EventType;
 import ca.phon.opgraph.*;
+
+import java.util.*;
 
 /**
  * Provides a wizard for an {@link OpGraph}.  Nodes are

@@ -15,36 +15,34 @@
  */
 package ca.phon.app.session.editor.view.find_and_replace;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import java.util.List;
-
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.undo.*;
-
-import org.jdesktop.swingx.*;
-
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.search.*;
 import ca.phon.app.session.editor.search.FindManager.*;
-import ca.phon.app.session.editor.undo.*;
+import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.common.*;
 import ca.phon.app.session.editor.view.find_and_replace.actions.*;
-import ca.phon.app.session.editor.view.record_data.*;
-import ca.phon.ipa.*;
+import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
+import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.*;
-import ca.phon.session.*;
 import ca.phon.session.Record;
+import ca.phon.session.*;
 import ca.phon.session.position.*;
 import ca.phon.syllabifier.*;
-import ca.phon.ui.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.fonts.*;
+import ca.phon.ui.PhonGuiConstants;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.toast.*;
-import ca.phon.util.*;
+import ca.phon.util.Language;
 import ca.phon.util.icons.*;
+import org.jdesktop.swingx.VerticalLayout;
+
+import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.undo.CompoundEdit;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.List;
+import java.util.*;
 
 /**
  * An {@link SessionEditor} {@link EditorView} implementing Find & Replace

@@ -22,7 +22,7 @@
 
 package ca.phon.fontconverter.io;
 
-import jakarta.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.XmlRegistry;
 
 
 /**

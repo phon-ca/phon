@@ -15,10 +15,10 @@
  */
 package ca.phon.media;
 
-import java.beans.*;
-import java.io.*;
+import ca.phon.extensions.Extension;
 
-import ca.phon.extensions.*;
+import java.beans.*;
+import java.io.IOException;
 
 /**
  * Extension interface for LongSound objects.

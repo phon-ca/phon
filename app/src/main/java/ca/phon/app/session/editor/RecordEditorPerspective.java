@@ -15,14 +15,13 @@
  */
 package ca.phon.app.session.editor;
 
+import ca.phon.util.PrefHelper;
+import ca.phon.util.resources.*;
+import org.apache.logging.log4j.LogManager;
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
-
-import org.apache.logging.log4j.*;
-
-import ca.phon.util.*;
-import ca.phon.util.resources.*;
 
 /**
  * Perspective for record editor docking views.  This class

@@ -2,8 +2,6 @@ package ca.phon.ui;
 
 import ca.phon.util.RecentFiles;
 
-import java.io.File;
-
 public class FileHistorySelectionButton extends FileSelectionButton {
 
 	private String historyProp;

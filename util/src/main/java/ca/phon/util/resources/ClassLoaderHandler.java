@@ -15,12 +15,11 @@
  */
 package ca.phon.util.resources;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import org.apache.commons.lang3.StringUtils;
 
-import ca.phon.extensions.*;
-import org.apache.commons.lang3.*;
+import java.io.*;
+import java.net.URL;
+import java.util.*;
 
 /**
  * Loads resources from a specified class loader (or the

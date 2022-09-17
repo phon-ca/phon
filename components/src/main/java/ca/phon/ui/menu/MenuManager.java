@@ -15,12 +15,11 @@
  */
 package ca.phon.ui.menu;
 
-import java.awt.*;
-import java.util.List;
+import ca.phon.plugin.*;
 
 import javax.swing.*;
-
-import ca.phon.plugin.*;
+import java.awt.*;
+import java.util.List;
 
 /**
  * Helper class to build menus based on plugin

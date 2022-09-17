@@ -15,11 +15,11 @@
  */
 package ca.phon.query.script;
 
-import java.io.*;
-import java.net.*;
+import ca.phon.query.db.ScriptLibrary;
+import ca.phon.util.resources.ClassLoaderHandler;
 
-import ca.phon.query.db.*;
-import ca.phon.util.resources.*;
+import java.io.IOException;
+import java.net.URL;
 
 public class SystemQueryScriptHandler extends ClassLoaderHandler<QueryScript>{
 	

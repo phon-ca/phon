@@ -15,11 +15,11 @@
  */
 package ca.phon.syllable;
 
-import java.util.*;
-
 import ca.phon.ipa.*;
-import ca.phon.visitor.*;
-import ca.phon.visitor.annotation.*;
+import ca.phon.visitor.VisitorAdapter;
+import ca.phon.visitor.annotation.Visits;
+
+import java.util.*;
 
 /**
  * A phone visitor that breaks a list of phones

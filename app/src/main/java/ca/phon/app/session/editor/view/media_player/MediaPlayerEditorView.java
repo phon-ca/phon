@@ -16,32 +16,30 @@
 
 package ca.phon.app.session.editor.view.media_player;
 
-import java.awt.*;
-import java.awt.datatransfer.*;
-import java.awt.event.*;
-import java.io.*;
-import java.text.*;
-
-import javax.swing.*;
-import javax.swing.text.*;
-
-import org.apache.logging.log4j.*;
-import org.jdesktop.swingx.*;
-
-import ca.phon.app.session.*;
+import ca.phon.app.session.EditorViewAdapter;
 import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.actions.*;
-import ca.phon.app.session.editor.undo.*;
+import ca.phon.app.session.editor.actions.AssignMediaAction;
+import ca.phon.app.session.editor.undo.MediaLocationEdit;
 import ca.phon.app.session.editor.view.media_player.actions.*;
 import ca.phon.media.*;
 import ca.phon.media.player.*;
-import ca.phon.session.*;
 import ca.phon.session.Record;
+import ca.phon.session.*;
 import ca.phon.ui.action.*;
-import ca.phon.ui.dnd.*;
+import ca.phon.ui.dnd.FileTransferHandler;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.util.*;
 import ca.phon.util.icons.*;
+import org.apache.logging.log4j.LogManager;
+import org.jdesktop.swingx.VerticalLayout;
+
+import javax.swing.*;
+import javax.swing.text.MaskFormatter;
+import java.awt.*;
+import java.awt.datatransfer.Transferable;
+import java.awt.event.*;
+import java.io.*;
+import java.text.ParseException;
 
 /**
  * Panel for embedded media player for editor.

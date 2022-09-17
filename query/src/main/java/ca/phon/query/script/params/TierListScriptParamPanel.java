@@ -1,22 +1,17 @@
 package ca.phon.query.script.params;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.*;
-import java.util.*;
-import java.util.List;
-import java.util.stream.*;
+import ca.phon.script.params.*;
+import ca.phon.session.SystemTierType;
+import ca.phon.ui.text.*;
+import ca.phon.ui.text.PromptedTextField.FieldState;
+import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
 import javax.swing.event.*;
-
-import org.jdesktop.swingx.*;
-
-import ca.phon.script.params.*;
-import ca.phon.session.*;
-import ca.phon.ui.text.*;
-import ca.phon.ui.text.PromptedTextField.*;
+import java.awt.*;
+import java.beans.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class TierListScriptParamPanel extends JPanel {
 

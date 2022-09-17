@@ -15,19 +15,18 @@
  */
 package ca.phon.app.opgraph.editor.actions.graph;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+import ca.phon.app.opgraph.editor.OpgraphEditor;
+import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
+import ca.phon.opgraph.OpNode;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.components.canvas.GraphCanvasSelectionModel;
+import ca.phon.opgraph.nodes.menu.edits.CreateMacroEdit;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
-
-import ca.phon.app.opgraph.editor.*;
-import ca.phon.app.opgraph.editor.actions.*;
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
-import ca.phon.opgraph.app.components.canvas.*;
-import ca.phon.opgraph.nodes.menu.edits.*;
-import ca.phon.util.icons.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.Collection;
 
 /**
  * Create a new macro node from selection

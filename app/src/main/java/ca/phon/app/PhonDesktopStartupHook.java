@@ -15,15 +15,15 @@
  */
 package ca.phon.app;
 
-import java.awt.*;
-import java.io.*;
-
-import ca.phon.app.actions.*;
-import ca.phon.app.hooks.*;
-import ca.phon.app.log.*;
-import ca.phon.app.modules.*;
+import ca.phon.app.actions.OpenFileEP;
+import ca.phon.app.hooks.PhonStartupHook;
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.plugin.*;
-import ca.phon.util.*;
+import ca.phon.util.OSInfo;
+
+import java.awt.*;
+import java.io.File;
 
 /**
  * 

@@ -15,11 +15,10 @@
  */
 package ca.phon.app;
 
-import java.io.*;
+import ca.phon.util.PrefHelper;
 
-import javax.imageio.*;
-
-import ca.phon.util.*;
+import javax.imageio.ImageIO;
+import java.io.InputStream;
 
 /**
  * Starts the Phon application along with a fast Phon splash screen.

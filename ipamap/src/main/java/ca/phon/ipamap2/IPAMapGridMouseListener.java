@@ -15,10 +15,10 @@
  */
 package ca.phon.ipamap2;
 
-import java.awt.event.*;
-import java.util.*;
+import ca.phon.ui.ipamap.io.Cell;
 
-import ca.phon.ui.ipamap.io.*;
+import java.awt.event.MouseEvent;
+import java.util.EventListener;
 
 public interface IPAMapGridMouseListener extends EventListener {
 	

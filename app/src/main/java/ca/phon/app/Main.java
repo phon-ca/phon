@@ -15,24 +15,22 @@
  */
 package ca.phon.app;
 
-import java.awt.event.*;
-import java.io.*;
-import java.lang.management.*;
-import java.lang.reflect.*;
-import java.util.*;
-import java.util.Map.*;
+import ca.phon.app.hooks.PhonStartupHook;
+import ca.phon.app.log.*;
+import ca.phon.app.modules.EntryPointArgs;
+import ca.phon.app.welcome.WelcomeWindowEP;
+import ca.phon.plugin.*;
+import ca.phon.util.PrefHelper;
+import ca.phon.worker.PhonWorker;
+import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
-
-import org.apache.commons.io.*;
-
-import ca.phon.app.hooks.*;
-import ca.phon.app.log.*;
-import ca.phon.app.modules.*;
-import ca.phon.app.welcome.*;
-import ca.phon.plugin.*;
-import ca.phon.util.*;
-import ca.phon.worker.*;
+import java.awt.event.ActionEvent;
+import java.io.*;
+import java.lang.management.ManagementFactory;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * Main entry point for the application.

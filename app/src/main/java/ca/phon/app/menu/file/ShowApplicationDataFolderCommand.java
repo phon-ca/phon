@@ -21,8 +21,7 @@ import ca.phon.util.PrefHelper;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 public class ShowApplicationDataFolderCommand extends HookableAction {
 

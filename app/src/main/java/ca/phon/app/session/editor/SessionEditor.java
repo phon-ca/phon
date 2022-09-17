@@ -15,40 +15,38 @@
  */
 package ca.phon.app.session.editor;
 
-import java.awt.*;
-import java.awt.datatransfer.*;
-import java.io.*;
-import java.util.*;
-import java.util.concurrent.atomic.*;
+import ca.hedlund.desktopicons.*;
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.menu.edit.*;
+import ca.phon.app.project.ProjectFrame;
+import ca.phon.app.session.editor.actions.*;
+import ca.phon.app.session.editor.undo.SessionEditorUndoSupport;
+import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
+import ca.phon.media.VolumeModel;
+import ca.phon.project.Project;
+import ca.phon.session.Record;
+import ca.phon.session.*;
+import ca.phon.session.io.*;
+import ca.phon.syllabifier.SyllabifierLibrary;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.menu.MenuManager;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.toast.ToastFactory;
+import ca.phon.util.OSInfo;
+import ca.phon.util.*;
+import ca.phon.util.icons.*;
+import org.apache.logging.log4j.LogManager;
+import org.jdesktop.swingx.JXStatusBar;
 
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.undo.*;
-
-import ca.phon.app.log.LogUtil;
-import ca.phon.media.VolumeModel;
-import org.apache.logging.log4j.*;
-import org.jdesktop.swingx.*;
-
-import ca.hedlund.desktopicons.*;
-import ca.phon.app.menu.edit.*;
-import ca.phon.app.project.*;
-import ca.phon.app.session.editor.actions.*;
-import ca.phon.app.session.editor.undo.*;
-import ca.phon.app.session.editor.view.media_player.*;
-import ca.phon.project.*;
-import ca.phon.session.*;
-import ca.phon.session.Record;
-import ca.phon.session.io.*;
-import ca.phon.syllabifier.*;
-import ca.phon.ui.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.menu.*;
-import ca.phon.ui.nativedialogs.*;
-import ca.phon.ui.toast.*;
-import ca.phon.util.*;
-import ca.phon.util.OSInfo;
-import ca.phon.util.icons.*;
+import java.awt.*;
+import java.awt.datatransfer.*;
+import java.io.IOException;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * <p>Main UI for the application.  This window provides the interface for

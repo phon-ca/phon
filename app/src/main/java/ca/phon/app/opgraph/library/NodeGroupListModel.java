@@ -15,12 +15,11 @@
  */
 package ca.phon.app.opgraph.library;
 
-import java.util.*;
-import java.util.stream.*;
+import ca.phon.opgraph.library.NodeData;
 
 import javax.swing.*;
-
-import ca.phon.opgraph.library.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  *

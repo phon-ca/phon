@@ -16,7 +16,7 @@
 package ca.phon.stresspattern.fsa;
 
 import ca.phon.fsa.*;
-import ca.phon.stresspattern.*;
+import ca.phon.stresspattern.StressMatcherType;
 
 public class StressMatcherTransition extends FSATransition<StressMatcherType> {
 

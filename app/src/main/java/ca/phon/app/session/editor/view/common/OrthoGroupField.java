@@ -15,17 +15,16 @@
  */
 package ca.phon.app.session.editor.view.common;
 
-import java.awt.*;
-import java.text.*;
+import ca.phon.extensions.UnvalidatedValue;
+import ca.phon.orthography.*;
+import ca.phon.session.Tier;
+import ca.phon.visitor.VisitorAdapter;
+import ca.phon.visitor.annotation.Visits;
 
 import javax.swing.text.*;
-import javax.swing.text.Highlighter.*;
-
-import ca.phon.extensions.*;
-import ca.phon.orthography.*;
-import ca.phon.session.*;
-import ca.phon.visitor.*;
-import ca.phon.visitor.annotation.*;
+import javax.swing.text.Highlighter.HighlightPainter;
+import java.awt.*;
+import java.text.ParseException;
 
 /**
  * Tier editor for {@link Orthography} type.

@@ -15,16 +15,15 @@
  */
 package ca.phon.script;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-
+import ca.phon.script.js.ExtendableWrapFactory;
+import ca.phon.script.params.*;
 import org.mozilla.javascript.*;
 import org.mozilla.javascript.commonjs.module.*;
 import org.mozilla.javascript.commonjs.module.provider.*;
 
-import ca.phon.script.js.*;
-import ca.phon.script.params.*;
+import java.io.PrintStream;
+import java.net.URI;
+import java.util.List;
 
 /**
  * Handles setting up script context, scope and

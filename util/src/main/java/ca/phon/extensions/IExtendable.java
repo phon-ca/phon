@@ -15,7 +15,7 @@
  */
 package ca.phon.extensions;
 
-import java.util.*;
+import java.util.Set;
 
 /**
  * Adds the ability to add/remove capabilites to an

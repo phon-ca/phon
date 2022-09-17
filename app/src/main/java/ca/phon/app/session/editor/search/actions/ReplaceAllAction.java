@@ -15,10 +15,10 @@
  */
 package ca.phon.app.session.editor.search.actions;
 
-import java.awt.event.*;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.view.record_data.FindAndReplacePanel;
 
-import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.view.record_data.*;
+import java.awt.event.ActionEvent;
 
 public class ReplaceAllAction extends FindAndReplaceAction {
 

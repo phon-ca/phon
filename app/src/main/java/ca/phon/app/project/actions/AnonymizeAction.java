@@ -15,9 +15,9 @@
  */
 package ca.phon.app.project.actions;
 
-import java.awt.event.*;
-
 import ca.phon.app.project.*;
+
+import java.awt.event.ActionEvent;
 
 public class AnonymizeAction extends ProjectWindowAction {
 

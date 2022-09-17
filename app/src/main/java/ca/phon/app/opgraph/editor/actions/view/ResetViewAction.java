@@ -15,13 +15,12 @@
  */
 package ca.phon.app.opgraph.editor.actions.view;
 
-import java.awt.*;
-import java.awt.event.*;
+import ca.phon.app.opgraph.editor.OpgraphEditor;
+import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
 
 import javax.swing.*;
-
-import ca.phon.app.opgraph.editor.*;
-import ca.phon.app.opgraph.editor.actions.*;
+import java.awt.*;
+import java.awt.event.*;
 
 public class ResetViewAction extends OpgraphEditorAction {
 

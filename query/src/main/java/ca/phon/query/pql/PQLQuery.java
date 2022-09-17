@@ -2,7 +2,6 @@ package ca.phon.query.pql;
 
 import ca.phon.project.Project;
 import ca.phon.query.db.ResultSet;
-import ca.phon.session.SessionPath;
 import org.antlr.v4.runtime.*;
 
 import java.text.ParseException;

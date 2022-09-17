@@ -16,7 +16,7 @@
 package ca.phon.app.actions;
 
 import java.io.*;
-import java.util.*;
+import java.util.Set;
 
 /**
  * Service interface for open file handlers.

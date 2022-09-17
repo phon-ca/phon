@@ -15,9 +15,9 @@
  */
 package ca.phon.plugin;
 
-import java.util.*;
+import ca.phon.worker.PhonTask;
 
-import ca.phon.worker.*;
+import java.util.*;
 
 public abstract class AbstractPluginEntryPoint extends PhonTask implements IPluginEntryPoint {
 	

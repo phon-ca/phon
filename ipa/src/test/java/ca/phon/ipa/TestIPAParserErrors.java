@@ -15,17 +15,13 @@
  */
 package ca.phon.ipa;
 
-import java.text.*;
-
-import ca.phon.ipa.parser.exceptions.HangingLigatureException;
-import ca.phon.ipa.parser.exceptions.IPAParserException;
-import ca.phon.ipa.parser.exceptions.InvalidTokenException;
-import ca.phon.ipa.parser.exceptions.StrayDiacriticException;
-import org.junit.Test;
-import org.junit.runner.*;
-import org.junit.runners.*;
-
+import ca.phon.ipa.parser.exceptions.*;
 import junit.framework.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
+import java.text.ParseException;
 
 @RunWith(JUnit4.class)
 public class TestIPAParserErrors {

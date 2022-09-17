@@ -15,8 +15,8 @@
  */
 package ca.phon.app.session.editor.view.ipa_lookup;
 
-import ca.phon.ipadictionary.ui.*;
-import ca.phon.ui.*;
+import ca.phon.ipadictionary.ui.IPALookupContext;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
 
 /**

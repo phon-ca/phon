@@ -20,12 +20,10 @@ import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.menu.MenuBuilder;
 
 import javax.swing.*;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
+import javax.swing.event.*;
 import java.awt.*;
-import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class BufferWindow extends CommonModuleFrame implements BufferPanelContainer {
 

@@ -15,39 +15,37 @@
  */
 package ca.phon.app.opgraph.editor;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.*;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.undo.*;
-
-import org.apache.commons.io.*;
-
 import bibliothek.gui.dock.common.*;
-import bibliothek.gui.dock.common.action.*;
+import bibliothek.gui.dock.common.action.CAction;
 import bibliothek.gui.dock.common.perspective.*;
-import bibliothek.util.*;
-import ca.phon.app.opgraph.editor.OpgraphEditorModel.*;
+import bibliothek.util.Filter;
+import ca.phon.app.opgraph.editor.OpgraphEditorModel.ViewLocation;
 import ca.phon.app.opgraph.editor.actions.debug.*;
 import ca.phon.app.opgraph.editor.actions.file.*;
 import ca.phon.app.opgraph.editor.actions.graph.*;
 import ca.phon.app.opgraph.editor.actions.view.*;
-import ca.phon.app.opgraph.macro.*;
-import ca.phon.app.opgraph.wizard.*;
+import ca.phon.app.opgraph.macro.MacroOpgraphEditorModel;
+import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.app.*;
-import ca.phon.opgraph.app.components.*;
-import ca.phon.opgraph.app.components.canvas.*;
+import ca.phon.opgraph.app.components.PathAddressableMenuImpl;
+import ca.phon.opgraph.app.components.canvas.GridLayer;
 import ca.phon.plugin.*;
-import ca.phon.ui.*;
-import ca.phon.ui.menu.*;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.menu.MenuManager;
+import ca.phon.ui.menu.*;
 import ca.phon.ui.nativedialogs.*;
-import ca.phon.util.*;
+import ca.phon.util.RecentFiles;
+import org.apache.commons.io.FilenameUtils;
+
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.undo.UndoManager;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.io.*;
+import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Generic opgragh editor.

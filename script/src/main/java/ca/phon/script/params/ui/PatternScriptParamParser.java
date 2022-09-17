@@ -15,13 +15,12 @@
  */
 package ca.phon.script.params.ui;
 
-import java.net.*;
-import java.util.*;
-
+import ca.phon.script.params.PatternScriptParam;
 import org.fife.ui.rsyntaxtextarea.*;
 import org.fife.ui.rsyntaxtextarea.parser.*;
 
-import ca.phon.script.params.*;
+import java.net.URL;
+import java.util.*;
 
 public class PatternScriptParamParser implements Parser {
 	

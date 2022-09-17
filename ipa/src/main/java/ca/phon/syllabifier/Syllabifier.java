@@ -15,11 +15,11 @@
  */
 package ca.phon.syllabifier;
 
-import java.util.*;
+import ca.phon.ipa.IPAElement;
+import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.util.Language;
 
-import ca.phon.ipa.*;
-import ca.phon.syllable.*;
-import ca.phon.util.*;
+import java.util.List;
 
 /**
  * Provides methods for applying the {@link SyllableConstituentType}

@@ -15,21 +15,20 @@
  */
 package ca.phon.app.session;
 
-import java.awt.*;
-import java.text.*;
-import java.util.*;
-import java.util.List;
-
-import javax.swing.*;
-import javax.swing.tree.*;
-
 import ca.hedlund.desktopicons.*;
-import ca.phon.app.session.editor.*;
-import ca.phon.project.*;
-import ca.phon.session.*;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.project.Project;
+import ca.phon.session.SessionPath;
 import ca.phon.ui.tristatecheckbox.*;
 import ca.phon.util.*;
 import ca.phon.util.icons.*;
+
+import javax.swing.*;
+import javax.swing.tree.*;
+import java.awt.*;
+import java.text.Collator;
+import java.util.List;
+import java.util.*;
 
 /**
  * Displays an interface for selection one or more

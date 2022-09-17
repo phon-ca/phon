@@ -15,11 +15,11 @@
  */
 package ca.phon.ipa;
 
+import ca.phon.ipa.features.FeatureSet;
+import ca.phon.phonex.*;
+
 import java.text.*;
 import java.util.*;
-
-import ca.phon.ipa.features.*;
-import ca.phon.phonex.*;
 
 public class FeatureCollator extends Collator {
 

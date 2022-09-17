@@ -15,15 +15,13 @@
  */
 package ca.phon.ui.decorations;
 
-import java.awt.*;
+import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.util.icons.*;
+import org.jdesktop.swingx.painter.Painter;
+import org.jdesktop.swingx.painter.*;
 
 import javax.swing.*;
-
-import org.jdesktop.swingx.painter.*;
-import org.jdesktop.swingx.painter.Painter;
-
-import ca.phon.ui.fonts.*;
-import ca.phon.util.icons.*;
+import java.awt.*;
 
 /**
  * A header component meant to be placed at the top of a dialog.

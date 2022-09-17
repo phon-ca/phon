@@ -15,40 +15,37 @@
  */
 package ca.phon.ipamap;
 
+import ca.phon.ipa.features.*;
+import ca.phon.ipa.parser.*;
+import ca.phon.ipamap.IpaMapSearchField.SearchType;
+import ca.phon.ui.*;
+import ca.phon.ui.action.*;
+import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.ipamap.io.*;
+import ca.phon.ui.layout.*;
+import ca.phon.ui.text.PromptedTextField.FieldState;
+import ca.phon.util.*;
+import com.jgoodies.forms.layout.*;
+import jakarta.xml.bind.*;
+import org.apache.commons.lang3.StringUtils;
+import org.jdesktop.swingx.*;
+import org.jdesktop.swingx.painter.Painter;
+import org.jdesktop.swingx.painter.*;
+import org.jdesktop.swingx.painter.effects.InnerGlowPathEffect;
+
+import javax.swing.*;
+import javax.swing.event.*;
 import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.awt.geom.*;
 import java.beans.*;
 import java.io.*;
-import java.text.*;
-import java.util.*;
+import java.text.Collator;
 import java.util.List;
-import java.util.concurrent.*;
-import java.util.stream.*;
-
-import javax.swing.*;
-import javax.swing.event.*;
-import jakarta.xml.bind.*;
-
-import org.apache.commons.lang3.*;
-import org.jdesktop.swingx.*;
-import org.jdesktop.swingx.painter.*;
-import org.jdesktop.swingx.painter.Painter;
-import org.jdesktop.swingx.painter.effects.*;
-
-import com.jgoodies.forms.layout.*;
-
-import ca.phon.ipa.features.*;
-import ca.phon.ipa.parser.*;
-import ca.phon.ipamap.IpaMapSearchField.*;
-import ca.phon.ui.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.fonts.*;
-import ca.phon.ui.ipamap.io.*;
-import ca.phon.ui.layout.*;
-import ca.phon.ui.text.PromptedTextField.*;
-import ca.phon.util.*;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * Displays a sectioned list of 

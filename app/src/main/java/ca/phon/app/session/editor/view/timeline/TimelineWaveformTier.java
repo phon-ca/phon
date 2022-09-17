@@ -16,26 +16,25 @@
 
 package ca.phon.app.session.editor.view.timeline;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.List;
-
-import javax.swing.*;
-import javax.swing.FocusManager;
-import javax.swing.event.*;
-
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.actions.*;
 import ca.phon.app.session.editor.undo.*;
-import ca.phon.app.session.editor.view.media_player.*;
+import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.media.*;
-import ca.phon.media.TimeUIModel.*;
-import ca.phon.orthography.*;
-import ca.phon.session.*;
+import ca.phon.media.TimeUIModel.Interval;
+import ca.phon.orthography.Orthography;
 import ca.phon.session.Record;
+import ca.phon.session.*;
 import ca.phon.ui.action.*;
-import ca.phon.ui.menu.*;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.icons.*;
+
+import javax.swing.FocusManager;
+import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.List;
 
 public class TimelineWaveformTier extends TimelineTier  {
 

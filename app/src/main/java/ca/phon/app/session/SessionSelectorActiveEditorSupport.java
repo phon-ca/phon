@@ -15,14 +15,14 @@
  */
 package ca.phon.app.session;
 
-import java.awt.event.*;
-
-import ca.phon.app.session.SessionSelector.*;
-import ca.phon.app.session.editor.*;
-import ca.phon.project.*;
-import ca.phon.session.*;
+import ca.phon.app.session.SessionSelector.SessionTreeNode;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.project.Project;
+import ca.phon.session.SessionPath;
 import ca.phon.ui.*;
-import ca.phon.ui.tristatecheckbox.*;
+import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeModel;
+
+import java.awt.event.*;
 
 /**
  * Updates the session selector when session editors open/close.

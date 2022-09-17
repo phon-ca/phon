@@ -15,21 +15,18 @@
  */
 package ca.phon.ipamap2;
 
-import java.awt.*;
-import java.awt.event.*;
+import ca.phon.ipa.features.*;
+import ca.phon.ipa.parser.IPATokens;
+import ca.phon.ui.ipamap.io.Cell;
+import org.apache.commons.lang3.StringUtils;
+import org.jdesktop.swingx.*;
+import org.jdesktop.swingx.JXCollapsiblePane.Direction;
+import org.jdesktop.swingx.JXStatusBar.Constraint.ResizeBehavior;
 
 import javax.swing.*;
-import javax.swing.event.*;
-
-import org.apache.commons.lang3.*;
-import org.jdesktop.swingx.*;
-import org.jdesktop.swingx.JXCollapsiblePane.*;
-import org.jdesktop.swingx.JXStatusBar.Constraint.*;
-
-import ca.phon.ipa.features.*;
-import ca.phon.ipa.parser.*;
-import ca.phon.ui.fonts.*;
-import ca.phon.ui.ipamap.io.*;
+import javax.swing.event.MouseInputAdapter;
+import java.awt.*;
+import java.awt.event.MouseEvent;
 
 public class IPAMapInfoPane extends JPanel {
 	

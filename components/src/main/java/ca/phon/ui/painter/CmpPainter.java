@@ -15,11 +15,10 @@
  */
 package ca.phon.ui.painter;
 
-import java.awt.*;
-import java.util.*;
-import java.util.List;
-
 import javax.swing.*;
+import java.awt.*;
+import java.util.List;
+import java.util.*;
 
 public class CmpPainter<T extends JComponent> implements ComponentPainter<T> {
 

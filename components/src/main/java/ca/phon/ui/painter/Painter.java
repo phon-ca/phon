@@ -16,7 +16,7 @@
 package ca.phon.ui.painter;
 
 import java.awt.*;
-import java.awt.geom.*;
+import java.awt.geom.Rectangle2D;
 
 /**
  * Interface for painter classes.

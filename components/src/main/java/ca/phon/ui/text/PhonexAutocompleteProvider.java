@@ -15,15 +15,13 @@
  */
 package ca.phon.ui.text;
 
-import java.util.*;
-
-import javax.swing.text.*;
-
-import org.fife.ui.autocomplete.*;
-
 import ca.phon.ipa.features.*;
 import ca.phon.phonex.*;
-import ca.phon.syllable.*;
+import ca.phon.syllable.SyllableConstituentType;
+import org.fife.ui.autocomplete.*;
+
+import javax.swing.text.*;
+import java.util.*;
 
 /**
  * Autocomplete provider for rsyntaxtextarea phonex editor.

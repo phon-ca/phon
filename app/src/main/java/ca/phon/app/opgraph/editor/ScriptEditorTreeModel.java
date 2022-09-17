@@ -16,15 +16,14 @@
  */
 package ca.phon.app.opgraph.editor;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import ca.phon.app.opgraph.nodes.ScriptNode;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.extensions.CompositeNode;
 
 import javax.swing.*;
 import javax.swing.tree.*;
-
-import ca.phon.app.opgraph.nodes.ScriptNode;
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.extensions.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Tree model for {@link OpGraph} outline.

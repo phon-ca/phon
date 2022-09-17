@@ -1,16 +1,10 @@
 package ca.phon.app.session.editor.view.timeline;
 
-import ca.phon.media.TimeComponent;
-import ca.phon.media.TimeComponentUI;
-import ca.phon.media.TimeUIModel;
-import org.mozilla.javascript.tools.debugger.Dim;
-import org.pushingpixels.trident.Timeline;
-import org.w3c.dom.css.Rect;
+import ca.phon.media.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.sql.Time;
 
 public class TimelineTitledSeparator extends TimeComponent {
 

@@ -15,10 +15,10 @@
  */
 package ca.phon.query.report.csv;
 
-import java.util.*;
+import au.com.bytecode.opencsv.CSVWriter;
+import ca.phon.query.report.datasource.TableDataSource;
 
-import au.com.bytecode.opencsv.*;
-import ca.phon.query.report.datasource.*;
+import java.util.*;
 /**
  * Write the data for the tabular data sources
  * to the given csv writer.

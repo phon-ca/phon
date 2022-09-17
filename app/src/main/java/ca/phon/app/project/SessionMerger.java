@@ -15,14 +15,14 @@
  */
 package ca.phon.app.project;
 
-import java.io.*;
-import java.util.*;
-
-import ca.phon.project.*;
-import ca.phon.session.*;
+import ca.phon.project.Project;
 import ca.phon.session.Record;
+import ca.phon.session.*;
 import ca.phon.session.filter.*;
-import ca.phon.worker.*;
+import ca.phon.worker.PhonTask;
+
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Handle merging of sessions

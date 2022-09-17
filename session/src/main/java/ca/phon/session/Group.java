@@ -15,8 +15,8 @@
  */
  package ca.phon.session;
 
-import ca.phon.extensions.*;
-import ca.phon.ipa.*;
+import ca.phon.extensions.ExtendableObject;
+import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.*;
 import ca.phon.orthography.*;
 

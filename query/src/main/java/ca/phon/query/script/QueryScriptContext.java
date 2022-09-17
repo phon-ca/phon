@@ -15,12 +15,11 @@
  */
 package ca.phon.query.script;
 
-import org.mozilla.javascript.*;
-
-import ca.phon.query.script.QueryScript.*;
+import ca.phon.query.script.QueryScript.QueryFunction;
 import ca.phon.script.*;
-import ca.phon.session.*;
 import ca.phon.session.Record;
+import ca.phon.session.*;
+import org.mozilla.javascript.Scriptable;
 
 public class QueryScriptContext extends PhonScriptContext {
 

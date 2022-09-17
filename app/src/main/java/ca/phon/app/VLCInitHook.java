@@ -15,13 +15,12 @@
  */
 package ca.phon.app;
 
-import org.apache.logging.log4j.*;
-
-import ca.phon.app.hooks.*;
-import ca.phon.media.*;
+import ca.phon.app.hooks.PhonStartupHook;
+import ca.phon.media.VLCHelper;
 import ca.phon.plugin.*;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.OSInfo;
+import org.apache.logging.log4j.LogManager;
 
 @PhonPlugin
 public class VLCInitHook implements PhonStartupHook, IPluginExtensionPoint<PhonStartupHook> {

@@ -15,25 +15,23 @@
  */
 package ca.phon.session.io.xml.v12;
 
+import ca.phon.extensions.UnvalidatedValue;
+import ca.phon.ipa.*;
+import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.orthography.Orthography;
+import ca.phon.plugin.*;
+import ca.phon.session.Record;
+import ca.phon.session.*;
+import ca.phon.session.io.*;
+import ca.phon.xml.annotation.XMLSerial;
+import jakarta.xml.bind.*;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.xml.datatype.Duration;
+import javax.xml.datatype.*;
 import java.io.*;
 import java.time.*;
 import java.util.*;
-
-import jakarta.xml.bind.*;
-import javax.xml.datatype.*;
-import javax.xml.datatype.Duration;
-
-import org.apache.commons.lang3.*;
-
-import ca.phon.extensions.*;
-import ca.phon.ipa.*;
-import ca.phon.ipa.alignment.*;
-import ca.phon.orthography.*;
-import ca.phon.plugin.*;
-import ca.phon.session.*;
-import ca.phon.session.Record;
-import ca.phon.session.io.*;
-import ca.phon.xml.annotation.*;
 
 @XMLSerial(
 	namespace="http://phon.ling.mun.ca/ns/phonbank",

@@ -15,21 +15,19 @@
  */
 package ca.phon.app.project;
 
-import java.awt.*;
-import java.util.*;
-import java.util.List;
-
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.tree.*;
-
-import org.jdesktop.swingx.*;
-
 import ca.phon.app.session.*;
 import ca.phon.project.*;
 import ca.phon.session.*;
-import ca.phon.ui.decorations.*;
+import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.tristatecheckbox.*;
+import org.jdesktop.swingx.JXBusyLabel;
+
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.tree.TreePath;
+import java.awt.*;
+import java.util.List;
+import java.util.*;
 
 /**
  * UI for viewing participants in a project.  This view has has two parts,

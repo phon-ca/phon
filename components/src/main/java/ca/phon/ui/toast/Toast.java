@@ -15,16 +15,15 @@
  */
 package ca.phon.ui.toast;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.*;
-import java.util.List;
+import ca.phon.util.*;
 
 import javax.script.*;
 import javax.swing.*;
-
-import ca.phon.util.*;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.util.List;
+import java.util.*;
 
 /**
  * <p>A message to the user that is displayed in an 

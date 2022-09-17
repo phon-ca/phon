@@ -1,13 +1,8 @@
 package ca.phon.session.check;
 
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PhonPlugin;
-import ca.phon.plugin.Rank;
-import ca.phon.session.Group;
+import ca.phon.plugin.*;
 import ca.phon.session.Record;
-import ca.phon.session.Session;
-import ca.phon.session.SystemTierType;
+import ca.phon.session.*;
 
 import java.util.Properties;
 

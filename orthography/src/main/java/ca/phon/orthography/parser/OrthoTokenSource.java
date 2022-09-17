@@ -15,11 +15,10 @@
  */
 package ca.phon.orthography.parser;
 
-import java.util.*;
-
+import ca.phon.orthography.*;
 import org.antlr.runtime.*;
 
-import ca.phon.orthography.*;
+import java.util.*;
 
 /**
  * Chomps the given string into tokens usable

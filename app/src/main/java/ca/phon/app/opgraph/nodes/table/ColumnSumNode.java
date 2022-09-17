@@ -15,20 +15,19 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import java.awt.*;
-import java.io.*;
-import java.util.*;
-import java.util.List;
-import java.util.stream.*;
+import ca.phon.app.log.LogUtil;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.opgraph.exceptions.ProcessingException;
+import ca.phon.query.report.datasource.DefaultTableDataSource;
 
 import javax.swing.*;
-
-import ca.phon.app.log.*;
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
-import ca.phon.opgraph.app.extensions.*;
-import ca.phon.opgraph.exceptions.*;
-import ca.phon.query.report.datasource.*;
+import java.awt.*;
+import java.io.*;
+import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @OpNodeInfo(name="Sum Columns", category="Table", description="Add a row of column sums to the input table", showInLibrary=true)
 public class ColumnSumNode extends TableOpNode implements NodeSettings {

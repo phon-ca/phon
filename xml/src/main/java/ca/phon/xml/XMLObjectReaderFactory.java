@@ -15,11 +15,10 @@
  */
 package ca.phon.xml;
 
+import ca.phon.xml.annotation.XMLSerial;
+
+import javax.xml.namespace.QName;
 import java.util.*;
-
-import javax.xml.namespace.*;
-
-import ca.phon.xml.annotation.*;
 
 /**
  * Creates {@link XMLObjectReader} for given {@link QName}

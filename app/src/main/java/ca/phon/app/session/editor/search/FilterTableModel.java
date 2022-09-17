@@ -15,15 +15,14 @@
  */
 package ca.phon.app.session.editor.search;
 
-import java.util.*;
-import java.util.concurrent.*;
+import ca.phon.worker.PhonWorker;
 
 import javax.swing.*;
-import javax.swing.RowFilter.*;
+import javax.swing.RowFilter.Entry;
 import javax.swing.event.*;
 import javax.swing.table.*;
-
-import ca.phon.worker.*;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 /**
  * A table model wrapper that uses a {@link SwingWorker} to

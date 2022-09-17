@@ -15,37 +15,34 @@
  */
 package ca.phon.app.welcome;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.time.*;
-import java.util.*;
-import java.util.List;
-
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.event.*;
-
-import org.jdesktop.swingx.*;
-
-import com.jgoodies.forms.layout.*;
-
-import ca.hedlund.desktopicons.*;
-import ca.phon.app.log.*;
-import ca.phon.app.modules.*;
-import ca.phon.app.project.*;
-import ca.phon.app.workspace.*;
-import ca.phon.plugin.*;
+import ca.hedlund.desktopicons.MacOSStockIcon;
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.modules.EntryPointArgs;
+import ca.phon.app.project.DesktopProjectFactory;
+import ca.phon.app.workspace.Workspace;
+import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.project.*;
-import ca.phon.project.exceptions.*;
-import ca.phon.session.format.*;
+import ca.phon.project.exceptions.ProjectConfigurationException;
+import ca.phon.session.format.DateFormatter;
 import ca.phon.ui.*;
 import ca.phon.ui.action.*;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.OSInfo;
 import ca.phon.util.icons.*;
 import ca.phon.worker.*;
-import ca.phon.worker.PhonTask.*;
+import ca.phon.worker.PhonTask.TaskStatus;
+import com.jgoodies.forms.layout.*;
+import org.jdesktop.swingx.*;
+
+import javax.swing.*;
+import javax.swing.border.MatteBorder;
+import javax.swing.event.MouseInputAdapter;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.*;
 
 /**
  * List for displaying project in a given directory.

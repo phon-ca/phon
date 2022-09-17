@@ -15,14 +15,13 @@
  */
 package ca.phon.app.query;
 
-import java.util.*;
-
-import javax.swing.table.*;
-
-import ca.phon.query.db.*;
-import ca.phon.query.script.*;
+import ca.phon.query.db.ResultSet;
+import ca.phon.query.script.QueryTask;
 import ca.phon.worker.*;
-import ca.phon.worker.PhonTask.*;
+import ca.phon.worker.PhonTask.TaskStatus;
+
+import javax.swing.table.AbstractTableModel;
+import java.util.*;
 
 /**
  *

@@ -15,15 +15,14 @@
  */
 package ca.phon.app.session.editor.view.common;
 
-import java.awt.*;
-import java.awt.geom.*;
+import ca.phon.ui.PhonGuiConstants;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.text.*;
-
-import ca.phon.ui.*;
-import ca.phon.util.icons.*;
+import javax.swing.border.Border;
+import javax.swing.text.JTextComponent;
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
 
 /**
  * Border for group text fields

@@ -15,14 +15,13 @@
  */
 package ca.phon.app.project;
 
+import ca.phon.project.*;
+import ca.phon.project.exceptions.ProjectConfigurationException;
+import org.apache.commons.io.FileUtils;
+
 import java.awt.*;
 import java.io.*;
-import java.util.*;
-
-import org.apache.commons.io.*;
-
-import ca.phon.project.*;
-import ca.phon.project.exceptions.*;
+import java.util.UUID;
 
 /**
  * Local project which will send files to trash instead of

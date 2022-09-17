@@ -15,16 +15,15 @@
  */
 package ca.phon.app.opgraph.nodes.report;
 
-import java.awt.*;
-import java.util.*;
-
-import javax.swing.*;
-
 import ca.phon.app.opgraph.report.tree.*;
 import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
-import ca.phon.opgraph.app.extensions.*;
-import ca.phon.opgraph.exceptions.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.opgraph.exceptions.ProcessingException;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.Properties;
 
 @OpNodeInfo(name="New Report", description="New report tree", category="Report", showInLibrary=true)
 public class NewReportNode extends OpNode implements NodeSettings {

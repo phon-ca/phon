@@ -15,9 +15,9 @@
  */
 package ca.phon.app.session.editor.view.common;
 
-import java.awt.*;
+import ca.phon.ui.PhonGuiConstants;
 
-import ca.phon.ui.*;
+import java.awt.*;
 
 /**
  * <p>Background painter for components using the {@link TierDataLayout} provider.</p>

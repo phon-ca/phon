@@ -24,7 +24,7 @@ import ca.phon.ui.*;
 import ca.phon.ui.action.*;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.icons.*;
-import org.apache.commons.lang3.*;
+import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.*;
 
 import javax.swing.*;
@@ -32,8 +32,7 @@ import javax.swing.event.MouseInputAdapter;
 import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.beans.*;
-import java.util.*;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 import java.util.stream.Collectors;
 

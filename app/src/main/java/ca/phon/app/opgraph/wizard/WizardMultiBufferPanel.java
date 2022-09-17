@@ -15,16 +15,14 @@
  */
 package ca.phon.app.opgraph.wizard;
 
-import java.awt.event.*;
+import ca.phon.app.log.MultiBufferPanel;
+import ca.phon.app.opgraph.wizard.actions.*;
+import ca.phon.app.opgraph.wizard.actions.SaveTablesToFolderAction.ExportType;
+import ca.phon.ui.*;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
-
-import ca.phon.app.log.*;
-import ca.phon.app.opgraph.wizard.actions.*;
-import ca.phon.app.opgraph.wizard.actions.SaveTablesToFolderAction.*;
-import ca.phon.ui.*;
-import ca.phon.ui.action.*;
-import ca.phon.util.icons.*;
 
 public class WizardMultiBufferPanel extends MultiBufferPanel {
 

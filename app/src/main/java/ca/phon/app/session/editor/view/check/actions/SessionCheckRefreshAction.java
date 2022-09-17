@@ -15,10 +15,10 @@
  */
 package ca.phon.app.session.editor.view.check.actions;
 
-import java.awt.event.*;
-
-import ca.phon.app.session.editor.view.check.*;
+import ca.phon.app.session.editor.view.check.SessionCheckView;
 import ca.phon.util.icons.*;
+
+import java.awt.event.ActionEvent;
 
 public class SessionCheckRefreshAction extends SessionCheckViewAction {
 

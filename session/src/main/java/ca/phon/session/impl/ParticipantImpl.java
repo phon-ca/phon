@@ -15,10 +15,10 @@
  */
 package ca.phon.session.impl;
 
-import java.time.*;
-
 import ca.phon.session.*;
-import ca.phon.session.spi.*;
+import ca.phon.session.spi.ParticipantSPI;
+
+import java.time.*;
 
 /**
  * Basic participant implementation.

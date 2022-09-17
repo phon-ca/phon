@@ -16,8 +16,8 @@
 package ca.phon.ipa.relations;
 
 import ca.phon.ipa.*;
-import ca.phon.ipa.features.*;
-import ca.phon.ipa.relations.SegmentalRelation.*;
+import ca.phon.ipa.features.FeatureSet;
+import ca.phon.ipa.relations.SegmentalRelation.Relation;
 
 public class ReduplicationDetector extends AbstractSegmentalRelationDetector {
 

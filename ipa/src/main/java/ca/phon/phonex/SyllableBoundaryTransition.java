@@ -15,12 +15,12 @@
  */
 package ca.phon.phonex;
 
-import java.util.*;
-
 import ca.phon.fsa.*;
 import ca.phon.ipa.*;
-import ca.phon.visitor.*;
-import ca.phon.visitor.annotation.*;
+import ca.phon.visitor.VisitorAdapter;
+import ca.phon.visitor.annotation.Visits;
+
+import java.util.List;
 
 /**
  * Used to detect syllable boundaries.  Syllable boundaries

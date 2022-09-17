@@ -15,55 +15,40 @@
  */
 package ca.phon.app.session.editor.view.timeline;
 
-import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.ClipboardOwner;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.*;
-import java.beans.*;
-import java.io.IOException;
-import java.security.Key;
-import java.util.*;
-import java.util.List;
-import java.util.stream.*;
-
-import javax.print.attribute.standard.Media;
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.query.QueryAndReportWizard;
 import ca.phon.app.session.RecordsTransferable;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.actions.*;
 import ca.phon.app.session.editor.undo.*;
-import ca.phon.app.session.editor.view.media_player.*;
-import ca.phon.app.session.editor.view.session_information.*;
-import ca.phon.app.session.editor.view.session_information.actions.*;
-import ca.phon.app.session.editor.view.timeline.RecordGrid.*;
+import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
+import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
+import ca.phon.app.session.editor.view.session_information.actions.NewParticipantAction;
+import ca.phon.app.session.editor.view.timeline.RecordGrid.GhostMarker;
 import ca.phon.app.session.editor.view.timeline.actions.*;
-import ca.phon.media.*;
+import ca.phon.media.TimeUIModel;
 import ca.phon.media.TimeUIModel.*;
-import ca.phon.opgraph.app.components.canvas.CanvasMinimap;
-import ca.phon.query.db.Query;
 import ca.phon.query.db.ResultSet;
-import ca.phon.query.script.QueryName;
-import ca.phon.query.script.QueryScript;
-import ca.phon.session.*;
+import ca.phon.query.script.*;
 import ca.phon.session.Record;
-import ca.phon.ui.CommonModuleFrame;
+import ca.phon.session.*;
 import ca.phon.ui.action.*;
-import ca.phon.ui.fonts.*;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.layout.ButtonBarBuilder;
-import ca.phon.ui.menu.*;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.text.FormatterTextField;
 import ca.phon.util.*;
 import ca.phon.util.icons.*;
-import org.apache.commons.logging.Log;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.datatransfer.*;
+import java.awt.event.*;
+import java.beans.*;
+import java.io.IOException;
+import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 

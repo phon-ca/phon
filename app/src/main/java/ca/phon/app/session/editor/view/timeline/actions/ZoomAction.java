@@ -15,16 +15,15 @@
  */
 package ca.phon.app.session.editor.view.timeline.actions;
 
-import java.awt.*;
-import java.awt.event.*;
+import ca.phon.app.session.editor.view.timeline.TimelineView;
+import ca.phon.media.TimeUIModel;
+import ca.phon.session.Session;
+import ca.phon.util.PrefHelper;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
-
-import ca.phon.app.session.editor.view.timeline.*;
-import ca.phon.media.*;
-import ca.phon.session.Session;
-import ca.phon.util.*;
-import ca.phon.util.icons.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 
 public class ZoomAction extends TimelineAction {
 

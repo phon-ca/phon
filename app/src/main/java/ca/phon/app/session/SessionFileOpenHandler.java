@@ -15,24 +15,22 @@
  */
 package ca.phon.app.session;
 
-import java.io.*;
-import java.util.*;
-
-import javax.xml.stream.events.*;
-
-import org.apache.commons.io.*;
-
-import ca.phon.app.actions.*;
-import ca.phon.app.log.*;
-import ca.phon.app.modules.*;
+import ca.phon.app.actions.XMLOpenHandler;
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.project.*;
 import ca.phon.app.session.editor.*;
 import ca.phon.plugin.*;
-import ca.phon.project.*;
-import ca.phon.project.exceptions.*;
-import ca.phon.session.*;
+import ca.phon.project.Project;
+import ca.phon.project.exceptions.ProjectConfigurationException;
+import ca.phon.session.Session;
 import ca.phon.session.io.*;
-import ca.phon.ui.*;
+import ca.phon.ui.CommonModuleFrame;
+import org.apache.commons.io.FilenameUtils;
+
+import javax.xml.stream.events.StartElement;
+import java.io.*;
+import java.util.*;
 
 /**
  * Open session files in Phon format. If no project is detected a temorary

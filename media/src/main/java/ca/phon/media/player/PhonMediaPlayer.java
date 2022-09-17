@@ -16,35 +16,33 @@
 
 package ca.phon.media.player;
 
+import ca.phon.media.*;
+import ca.phon.ui.action.*;
+import ca.phon.ui.dnd.FileTransferHandler;
+import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.util.PrefHelper;
+import ca.phon.util.icons.*;
+import org.apache.logging.log4j.LogManager;
+import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
+import uk.co.caprica.vlcj.player.base.*;
+import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
+import uk.co.caprica.vlcj.player.embedded.videosurface.callback.*;
+import uk.co.caprica.vlcj.player.embedded.videosurface.callback.format.RV32BufferFormat;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.event.*;
 import java.awt.*;
-import java.awt.datatransfer.*;
-import java.awt.event.*;
+import java.awt.datatransfer.Transferable;
+import java.awt.event.MouseEvent;
 import java.awt.image.*;
 import java.beans.PropertyChangeListener;
 import java.io.*;
-import java.nio.*;
-import java.util.*;
+import java.nio.ByteBuffer;
 import java.util.List;
+import java.util.*;
 import java.util.concurrent.locks.*;
-
-import javax.imageio.*;
-import javax.swing.*;
-import javax.swing.event.*;
-
-import org.apache.logging.log4j.*;
-
-import ca.phon.media.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.dnd.*;
-import ca.phon.ui.nativedialogs.*;
-import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.util.*;
-import ca.phon.util.icons.*;
-import uk.co.caprica.vlcj.factory.*;
-import uk.co.caprica.vlcj.player.base.*;
-import uk.co.caprica.vlcj.player.embedded.*;
-import uk.co.caprica.vlcj.player.embedded.videosurface.callback.*;
-import uk.co.caprica.vlcj.player.embedded.videosurface.callback.format.*;
 
 /**
  * Media player using vlc4j (including media playback controls.)

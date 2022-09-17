@@ -15,12 +15,11 @@
  */
 package ca.phon.app.welcome;
 
-import java.util.*;
+import ca.phon.plugin.*;
+import ca.phon.ui.CommonModuleFrame;
 
 import javax.swing.*;
-
-import ca.phon.plugin.*;
-import ca.phon.ui.*;
+import java.util.Map;
 
 @PhonPlugin(author="Greg Hedlund", minPhonVersion="Phon 2.2", version="1")
 public class WelcomeWindowEP implements IPluginEntryPoint {

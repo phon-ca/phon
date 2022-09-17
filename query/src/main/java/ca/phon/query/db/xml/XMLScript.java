@@ -16,14 +16,14 @@
 
 package ca.phon.query.db.xml;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-
 import ca.phon.query.db.*;
 import ca.phon.query.db.xml.io.query.*;
 import ca.phon.query.script.*;
-import ca.phon.util.resources.*;
+import ca.phon.util.resources.ResourceLoader;
+
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
 
 /**

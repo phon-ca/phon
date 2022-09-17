@@ -1,8 +1,6 @@
 package ca.phon.audio;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.Arrays;
 
 /**
  * Wrapper around a sampled object allowing access to a filtered list of channels

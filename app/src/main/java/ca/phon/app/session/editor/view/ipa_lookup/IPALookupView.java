@@ -15,24 +15,23 @@
  */
 package ca.phon.app.session.editor.view.ipa_lookup;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.swing.*;
-import javax.swing.text.*;
-
-import ca.phon.app.session.*;
+import ca.phon.app.session.EditorViewAdapter;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.view.ipa_lookup.actions.*;
 import ca.phon.ipadictionary.*;
 import ca.phon.ipadictionary.ui.*;
-import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.util.*;
+import ca.phon.session.*;
+import ca.phon.util.Language;
 import ca.phon.util.icons.*;
+
+import javax.swing.*;
+import javax.swing.text.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class IPALookupView extends EditorView {
 	

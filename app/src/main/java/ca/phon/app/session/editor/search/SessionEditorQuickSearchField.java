@@ -15,14 +15,14 @@
  */
 package ca.phon.app.session.editor.search;
 
-import javax.swing.*;
-import javax.swing.table.*;
-
-import ca.phon.session.*;
 import ca.phon.session.Record;
+import ca.phon.session.*;
 import ca.phon.ui.action.*;
-import ca.phon.ui.fonts.*;
-import ca.phon.ui.text.*;
+import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.text.TableSearchField;
+
+import javax.swing.*;
+import javax.swing.table.TableModel;
 
 /**
  * Overrides the default table search field so that the row

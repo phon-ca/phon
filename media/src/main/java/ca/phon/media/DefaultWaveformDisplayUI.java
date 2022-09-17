@@ -15,17 +15,16 @@
  */
 package ca.phon.media;
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.image.*;
-import java.beans.*;
-import java.util.*;
-import java.util.List;
-import java.util.concurrent.atomic.*;
+import ca.phon.util.Tuple;
 
 import javax.swing.*;
-
-import ca.phon.util.*;
+import java.awt.*;
+import java.awt.geom.*;
+import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeListener;
+import java.util.List;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Default implementation of UI for {@link WaveformDisplay}

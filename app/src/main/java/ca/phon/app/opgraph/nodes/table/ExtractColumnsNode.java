@@ -15,18 +15,17 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import java.awt.*;
-import java.util.*;
-import java.util.List;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.opgraph.exceptions.ProcessingException;
+import ca.phon.query.report.datasource.*;
+import ca.phon.ui.text.PromptedTextField;
 
 import javax.swing.*;
-
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
-import ca.phon.opgraph.app.extensions.*;
-import ca.phon.opgraph.exceptions.*;
-import ca.phon.query.report.datasource.*;
-import ca.phon.ui.text.*;
+import java.awt.*;
+import java.util.List;
+import java.util.*;
 
 @OpNodeInfo(
 		name="Extract Columns",

@@ -15,17 +15,15 @@
  */
 package ca.phon.media.player;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.*;
+import ca.phon.ui.PhonGuiConstants;
+import ca.phon.util.MsFormatter;
 
 import javax.swing.*;
 import javax.swing.event.*;
-import javax.swing.plaf.*;
-
-import ca.phon.ui.*;
-import ca.phon.ui.fonts.*;
-import ca.phon.util.*;
+import javax.swing.plaf.SliderUI;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.geom.*;
 
 public class TimeSliderUI extends SliderUI {
 	

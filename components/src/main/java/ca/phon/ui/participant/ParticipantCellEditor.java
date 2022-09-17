@@ -15,14 +15,13 @@
  */
 package ca.phon.ui.participant;
 
-import java.awt.*;
-import java.time.*;
+import ca.phon.session.Sex;
+import ca.phon.ui.DateTimeDocument;
 
 import javax.swing.*;
 import javax.swing.text.*;
-
-import ca.phon.session.*;
-import ca.phon.ui.*;
+import java.awt.*;
+import java.time.LocalDate;
 
 public class ParticipantCellEditor extends DefaultCellEditor {
 	

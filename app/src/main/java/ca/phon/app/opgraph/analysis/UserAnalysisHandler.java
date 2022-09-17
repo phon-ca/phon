@@ -15,11 +15,11 @@
  */
 package ca.phon.app.opgraph.analysis;
 
-import java.io.*;
-import java.net.*;
+import ca.phon.util.PrefHelper;
+import ca.phon.util.resources.FolderHandler;
 
-import ca.phon.util.*;
-import ca.phon.util.resources.*;
+import java.io.*;
+import java.net.URL;
 
 public class UserAnalysisHandler extends FolderHandler<URL> {
 

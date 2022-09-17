@@ -17,7 +17,7 @@ package ca.phon.app.session.editor.view.common;
 
 import java.awt.*;
 import java.util.*;
-import java.util.concurrent.atomic.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Layout tier groups so that they are vertically aligned.

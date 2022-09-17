@@ -15,18 +15,17 @@
  */
 package ca.phon.util.icons;
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.image.*;
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import ca.hedlund.desktopicons.*;
+import ca.phon.plugin.PluginManager;
+import ca.phon.util.*;
 
 import javax.swing.*;
-
-import ca.hedlund.desktopicons.*;
-import ca.phon.plugin.*;
-import ca.phon.util.*;
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.*;
+import java.io.File;
+import java.net.URL;
+import java.util.HashMap;
 
 /**
  * Class for obtaining icons.

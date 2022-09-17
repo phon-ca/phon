@@ -15,10 +15,10 @@
  */
 package ca.phon.ipa;
 
-import java.util.*;
-
-import ca.phon.ipa.features.*;
+import ca.phon.ipa.features.FeatureMatrix;
 import ca.phon.ipa.parser.*;
+
+import java.util.*;
 
 public class SetupTokenTypes {
 	

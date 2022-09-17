@@ -15,37 +15,33 @@
  */
 package ca.phon.app.session.editor.view.session_information;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.*;
-import java.io.*;
-import java.time.*;
-
-import javax.swing.*;
-import javax.swing.border.BevelBorder;
-import javax.swing.event.*;
-import javax.swing.undo.*;
-
-import ca.phon.media.MediaLocator;
-import org.apache.commons.lang3.*;
-import org.jdesktop.swingx.*;
-
-import com.jgoodies.forms.layout.*;
-
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.actions.*;
 import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.common.*;
 import ca.phon.app.session.editor.view.session_information.actions.*;
-import ca.phon.project.*;
-import ca.phon.session.*;
+import ca.phon.media.MediaLocator;
+import ca.phon.project.Project;
 import ca.phon.session.Record;
-import ca.phon.ui.action.*;
+import ca.phon.session.*;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.*;
-import ca.phon.ui.participant.*;
+import ca.phon.ui.participant.ParticipantsTableModel;
 import ca.phon.ui.text.*;
-import ca.phon.ui.text.PromptedTextField.*;
+import ca.phon.ui.text.PromptedTextField.FieldState;
 import ca.phon.util.icons.*;
+import com.jgoodies.forms.layout.*;
+import org.apache.commons.lang3.StringUtils;
+import org.jdesktop.swingx.JXTable;
+
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.undo.CompoundEdit;
+import java.awt.*;
+import java.awt.event.*;
+import java.beans.*;
+import java.io.File;
+import java.time.LocalDate;
 
 /**
  * 

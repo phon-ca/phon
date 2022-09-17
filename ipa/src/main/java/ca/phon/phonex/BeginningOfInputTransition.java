@@ -16,7 +16,7 @@
 package ca.phon.phonex;
 
 import ca.phon.fsa.*;
-import ca.phon.ipa.*;
+import ca.phon.ipa.IPAElement;
 
 /**
  * Transition for matching beginning of tape input.

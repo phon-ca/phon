@@ -15,8 +15,8 @@
  */
 package ca.phon.script.debug;
 
-import org.mozilla.javascript.*;
-import org.mozilla.javascript.tools.debugger.*;
+import org.mozilla.javascript.ContextFactory;
+import org.mozilla.javascript.tools.debugger.Main;
 
 public class PhonScriptDebuggerWindow extends Main {
 

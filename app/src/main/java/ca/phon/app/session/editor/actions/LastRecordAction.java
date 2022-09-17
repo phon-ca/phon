@@ -15,13 +15,12 @@
  */
 package ca.phon.app.session.editor.actions;
 
-import java.awt.event.*;
+import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.ui.nativedialogs.OSInfo;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
-
-import ca.phon.app.session.editor.*;
-import ca.phon.ui.nativedialogs.*;
-import ca.phon.util.icons.*;
+import java.awt.event.*;
 
 /**
  * Move {@link SessionEditor} to last record.

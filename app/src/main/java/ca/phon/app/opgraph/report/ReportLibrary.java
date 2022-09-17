@@ -15,28 +15,27 @@
  */
 package ca.phon.app.opgraph.report;
 
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.opgraph.editor.OpGraphLibrary;
+import ca.phon.app.opgraph.wizard.WizardExtension;
+import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.app.OpgraphIO;
+import ca.phon.project.Project;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.action.*;
+import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.util.Tuple;
+import ca.phon.util.resources.ResourceLoader;
+import ca.phon.worker.PhonWorker;
+
+import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.net.*;
-import java.util.*;
 import java.util.List;
-
-import javax.swing.*;
-
-import ca.phon.app.log.*;
-import ca.phon.app.opgraph.editor.*;
-import ca.phon.app.opgraph.wizard.*;
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
-import ca.phon.project.*;
-import ca.phon.ui.*;
-import ca.phon.ui.action.*;
-import ca.phon.ui.menu.*;
-import ca.phon.ui.nativedialogs.*;
-import ca.phon.ui.nativedialogs.FileFilter;
-import ca.phon.util.*;
-import ca.phon.util.resources.*;
-import ca.phon.worker.*;
+import java.util.*;
 
 /**
  * <p>Library of query reports. These reports are available

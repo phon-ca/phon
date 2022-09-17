@@ -15,10 +15,9 @@
  */
 package ca.phon.ui;
 
-import java.time.*;
-import java.time.format.*;
-
 import javax.swing.text.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class DateTimeDocument extends PlainDocument {
 	

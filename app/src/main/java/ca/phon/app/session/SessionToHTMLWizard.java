@@ -15,20 +15,18 @@
  */
 package ca.phon.app.session;
 
-import java.awt.*;
-import java.io.*;
-import java.net.*;
-import java.util.concurrent.*;
+import ca.phon.app.log.*;
+import ca.phon.project.Project;
+import ca.phon.session.Session;
+import ca.phon.ui.decorations.TitledPanel;
+import ca.phon.ui.wizard.*;
+import org.jdesktop.swingx.JXBusyLabel;
 
 import javax.swing.*;
-
-import org.jdesktop.swingx.*;
-
-import ca.phon.app.log.*;
-import ca.phon.project.*;
-import ca.phon.session.*;
-import ca.phon.ui.decorations.*;
-import ca.phon.ui.wizard.*;
+import java.awt.*;
+import java.io.*;
+import java.net.MalformedURLException;
+import java.util.concurrent.ExecutionException;
 
 public class SessionToHTMLWizard extends BreadcrumbWizardFrame {
 

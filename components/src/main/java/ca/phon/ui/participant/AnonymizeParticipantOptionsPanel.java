@@ -15,12 +15,11 @@
  */
 package ca.phon.ui.participant;
 
-import java.awt.*;
-import java.awt.event.*;
+import ca.phon.util.PrefHelper;
 
 import javax.swing.*;
-
-import ca.phon.util.*;
+import java.awt.*;
+import java.awt.event.*;
 
 public class AnonymizeParticipantOptionsPanel extends JPanel {
 

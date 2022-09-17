@@ -16,11 +16,10 @@
 
 package ca.phon.app.session.editor;
 
-import java.lang.reflect.*;
+import ca.phon.worker.PhonWorker;
 
 import javax.swing.*;
-
-import ca.phon.worker.*;
+import java.lang.reflect.*;
 
 /**
  * Action class for editor events.  This class will call

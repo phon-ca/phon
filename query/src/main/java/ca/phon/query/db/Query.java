@@ -16,7 +16,7 @@
 
 package ca.phon.query.db;
 
-import java.time.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**

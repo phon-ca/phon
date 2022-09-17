@@ -15,14 +15,14 @@
  */
 package ca.phon.app.project.actions;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.*;
-
 import ca.phon.app.project.*;
-import ca.phon.project.*;
-import ca.phon.session.*;
+import ca.phon.project.Project;
+import ca.phon.session.Session;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.util.UUID;
 
 public class NewSessionAction extends ProjectWindowAction {
 	

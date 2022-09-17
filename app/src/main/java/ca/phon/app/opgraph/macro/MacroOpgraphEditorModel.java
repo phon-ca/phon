@@ -16,10 +16,10 @@
 package ca.phon.app.opgraph.macro;
 
 import ca.phon.app.opgraph.editor.*;
-import ca.phon.app.opgraph.library.*;
-import ca.phon.app.opgraph.wizard.*;
-import ca.phon.opgraph.*;
-import ca.phon.util.*;
+import ca.phon.app.opgraph.library.PhonNodeLibrary;
+import ca.phon.app.opgraph.wizard.WizardExtension;
+import ca.phon.opgraph.OpGraph;
+import ca.phon.util.Tuple;
 
 @OpgraphEditorModelInfo(name="General", description="Empty graph with default context")
 public class MacroOpgraphEditorModel extends OpgraphEditorModel {

@@ -15,32 +15,31 @@
  */
 package ca.phon.app.opgraph.nodes.query;
 
-import java.awt.*;
-import java.beans.*;
-import java.io.*;
-import java.time.*;
-import java.util.*;
-import java.util.List;
-
-import javax.swing.*;
-
 import ca.phon.app.opgraph.nodes.*;
-import ca.phon.app.opgraph.wizard.*;
-import ca.phon.app.query.*;
+import ca.phon.app.opgraph.wizard.NodeWizard;
+import ca.phon.app.query.QueryHistoryAndNameToolbar;
 import ca.phon.app.script.ScriptPanel;
 import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
-import ca.phon.opgraph.app.extensions.*;
-import ca.phon.opgraph.exceptions.*;
-import ca.phon.project.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.opgraph.exceptions.ProcessingException;
+import ca.phon.project.Project;
 import ca.phon.query.db.*;
-import ca.phon.query.history.*;
+import ca.phon.query.history.QueryHistoryManager;
 import ca.phon.query.script.*;
 import ca.phon.script.*;
 import ca.phon.script.params.*;
 import ca.phon.session.*;
 import ca.phon.worker.*;
-import ca.phon.worker.PhonTask.*;
+import ca.phon.worker.PhonTask.TaskStatus;
+
+import javax.swing.*;
+import java.awt.*;
+import java.beans.*;
+import java.io.*;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.*;
 
 @OpNodeInfo(
 	category="Query",

@@ -15,8 +15,8 @@
  */
 package ca.phon.session.impl;
 
-import ca.phon.session.*;
-import ca.phon.session.spi.*;
+import ca.phon.session.MediaUnit;
+import ca.phon.session.spi.MediaSegmentSPI;
 
 /**
  * Media segment

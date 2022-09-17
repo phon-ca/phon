@@ -15,16 +15,15 @@
  */
 package ca.phon.app.modules;
 
-import java.io.*;
-import java.util.*;
-
+import ca.phon.app.project.DesktopProjectFactory;
+import ca.phon.app.workspace.Workspace;
+import ca.phon.project.*;
+import ca.phon.project.exceptions.ProjectConfigurationException;
+import ca.phon.session.Session;
 import org.apache.commons.cli.*;
 
-import ca.phon.app.project.*;
-import ca.phon.app.workspace.*;
-import ca.phon.project.*;
-import ca.phon.project.exceptions.*;
-import ca.phon.session.*;
+import java.io.*;
+import java.util.*;
 
 /**
  * Argument information for plug-in entry points.

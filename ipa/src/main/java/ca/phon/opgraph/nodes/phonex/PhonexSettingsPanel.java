@@ -15,14 +15,13 @@
  */
 package ca.phon.opgraph.nodes.phonex;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.edits.node.NodeSettingsEdit;
 
 import javax.swing.*;
-
-import ca.phon.opgraph.app.*;
-import ca.phon.opgraph.app.edits.node.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.Properties;
 
 /**
  * Phonex node settings panel.

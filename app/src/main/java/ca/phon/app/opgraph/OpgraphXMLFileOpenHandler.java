@@ -15,23 +15,22 @@
  */
 package ca.phon.app.opgraph;
 
-import java.io.*;
-import java.util.*;
-
-import javax.xml.stream.events.*;
-
-import ca.phon.app.actions.*;
-import ca.phon.app.log.*;
-import ca.phon.app.modules.*;
+import ca.phon.app.actions.XMLOpenHandler;
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.opgraph.analysis.*;
 import ca.phon.app.opgraph.editor.*;
 import ca.phon.app.opgraph.report.*;
-import ca.phon.app.opgraph.wizard.*;
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
+import ca.phon.app.opgraph.wizard.WizardExtension;
+import ca.phon.opgraph.OpGraph;
+import ca.phon.opgraph.app.OpgraphIO;
 import ca.phon.plugin.*;
-import ca.phon.project.*;
-import ca.phon.ui.*;
+import ca.phon.project.Project;
+import ca.phon.ui.CommonModuleFrame;
+
+import javax.xml.stream.events.StartElement;
+import java.io.*;
+import java.util.Set;
 
 public class OpgraphXMLFileOpenHandler implements XMLOpenHandler, IPluginExtensionPoint<XMLOpenHandler> {
 

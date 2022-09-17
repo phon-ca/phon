@@ -15,14 +15,13 @@
  */
 package ca.phon.app.opgraph.nodes.log;
 
-import java.lang.reflect.*;
-import java.util.concurrent.atomic.*;
-
-import javax.swing.*;
-
 import ca.phon.app.log.*;
 import ca.phon.opgraph.*;
-import ca.phon.opgraph.exceptions.*;
+import ca.phon.opgraph.exceptions.ProcessingException;
+
+import javax.swing.*;
+import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Node for reading the current text of a given buffer.

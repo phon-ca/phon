@@ -16,13 +16,13 @@
 
 package ca.phon.app.session.editor.search;
 
-import java.util.*;
-
-import ca.phon.formatter.*;
-import ca.phon.session.*;
+import ca.phon.formatter.FormatterUtil;
 import ca.phon.session.Record;
+import ca.phon.session.*;
 import ca.phon.session.position.*;
-import ca.phon.util.*;
+import ca.phon.util.Range;
+
+import java.util.*;
 
 /**
  * Class to manage find and replace for a

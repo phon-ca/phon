@@ -15,10 +15,10 @@
  */
 package ca.phon.ipamap;
 
-import javax.swing.*;
-
 import ca.phon.ui.action.*;
-import ca.phon.ui.text.*;
+import ca.phon.ui.text.SearchField;
+
+import javax.swing.*;
 
 /**
  * Custom search field for the ipa map

@@ -15,14 +15,12 @@
  */
 package ca.phon.script.params.ui;
 
-import java.awt.event.*;
-import java.lang.ref.*;
+import ca.phon.script.params.*;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 import javax.swing.event.*;
-
-import org.fife.ui.rsyntaxtextarea.*;
-
-import ca.phon.script.params.*;
+import java.awt.event.ActionEvent;
+import java.lang.ref.WeakReference;
 
 public class PatternScriptParamListener extends ScriptParamAction implements DocumentListener {
 

@@ -15,22 +15,21 @@
  */
 package ca.phon.app.actions;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import java.util.List;
-import java.util.stream.*;
+import ca.phon.plugin.*;
+import ca.phon.project.Project;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.ui.tristatecheckbox.*;
+import ca.phon.util.icons.*;
 
 import javax.swing.*;
 import javax.swing.tree.*;
-
-import ca.phon.plugin.*;
-import ca.phon.project.*;
-import ca.phon.ui.*;
-import ca.phon.ui.decorations.*;
-import ca.phon.ui.layout.*;
-import ca.phon.ui.tristatecheckbox.*;
-import ca.phon.util.icons.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Save changes on exit dialog.

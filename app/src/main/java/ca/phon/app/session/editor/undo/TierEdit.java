@@ -16,7 +16,7 @@
 package ca.phon.app.session.editor.undo;
 
 import ca.phon.app.session.editor.*;
-import ca.phon.session.*;
+import ca.phon.session.Tier;
 
 /**
  * A change to the value of a group in a tier.

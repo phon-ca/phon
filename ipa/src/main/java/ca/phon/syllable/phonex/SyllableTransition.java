@@ -15,13 +15,13 @@
  */
 package ca.phon.syllable.phonex;
 
-import java.util.*;
-
 import ca.phon.fsa.*;
 import ca.phon.ipa.*;
 import ca.phon.phonex.*;
-import ca.phon.syllable.*;
-import ca.phon.util.*;
+import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.util.Tuple;
+
+import java.util.*;
 
 /**
  * A transition which will match a full syllable unit

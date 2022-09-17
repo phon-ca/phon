@@ -15,11 +15,11 @@
  */
 package ca.phon.phonex;
 
-import java.util.*;
-
-import ca.phon.fsa.*;
-import ca.phon.fsa.FSAState.*;
+import ca.phon.fsa.FSAState;
+import ca.phon.fsa.FSAState.RunningState;
 import ca.phon.ipa.*;
+
+import java.util.*;
 
 public class PhonexMatcher {
 

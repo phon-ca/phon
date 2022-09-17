@@ -15,15 +15,15 @@
  */
 package ca.phon.app.session.editor.view.ipa_validation;
 
-import javax.swing.undo.*;
-
-import ca.phon.app.session.editor.undo.*;
+import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.ipa.*;
-import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.filter.*;
+import ca.phon.session.*;
+import ca.phon.session.filter.RecordFilter;
 import ca.phon.syllabifier.*;
-import ca.phon.util.*;
+import ca.phon.util.Language;
+
+import javax.swing.undo.*;
 
 /**
  * Auto-validate ipa fields for a session.

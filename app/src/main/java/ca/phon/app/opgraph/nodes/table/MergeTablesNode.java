@@ -15,23 +15,21 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import java.awt.*;
-import java.lang.reflect.*;
-import java.util.*;
-import java.util.List;
+import ca.phon.app.opgraph.nodes.query.ColumnOptionsPanel;
+import ca.phon.opgraph.*;
+import ca.phon.opgraph.app.GraphDocument;
+import ca.phon.opgraph.app.extensions.NodeSettings;
+import ca.phon.opgraph.exceptions.ProcessingException;
+import ca.phon.query.TableUtils;
+import ca.phon.query.report.datasource.*;
+import ca.phon.ui.text.PromptedTextField;
+import org.jdesktop.swingx.JXTitledSeparator;
 
 import javax.swing.*;
-
-import org.jdesktop.swingx.*;
-
-import ca.phon.app.opgraph.nodes.query.*;
-import ca.phon.opgraph.*;
-import ca.phon.opgraph.app.*;
-import ca.phon.opgraph.app.extensions.*;
-import ca.phon.opgraph.exceptions.*;
-import ca.phon.query.*;
-import ca.phon.query.report.datasource.*;
-import ca.phon.ui.text.*;
+import java.awt.*;
+import java.lang.reflect.*;
+import java.util.List;
+import java.util.*;
 
 @OpNodeInfo(
 		name="Merge Tables",

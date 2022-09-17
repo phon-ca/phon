@@ -15,16 +15,15 @@
  */
 package ca.phon.app.session.editor.view.syllabification_and_alignment.actions;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.concurrent.atomic.*;
-
-import javax.swing.*;
-
-import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.syllabification_and_alignment.*;
 import ca.phon.session.*;
-import ca.phon.ui.decorations.*;
+import ca.phon.ui.decorations.DialogHeader;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SyllabificationSettingsCommand extends SyllabificationAlignmentCommand {
 	

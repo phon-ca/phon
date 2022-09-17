@@ -15,13 +15,12 @@
  */
 package ca.phon.app.actions;
 
+import ca.phon.plugin.*;
+
+import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.lang.reflect.*;
-import java.util.*;
-
-import javax.swing.text.*;
-
-import ca.phon.plugin.*;
+import java.util.Map;
 
 @PhonPlugin(name="default")
 public class PasteEP implements IPluginEntryPoint {

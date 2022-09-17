@@ -15,7 +15,7 @@
 package ca.phon.session.alignedMorphemes;
 
 import ca.phon.ipa.IPATranscript;
-import ca.phon.orthography.*;
+import ca.phon.orthography.OrthoElement;
 import ca.phon.session.*;
 
 /**

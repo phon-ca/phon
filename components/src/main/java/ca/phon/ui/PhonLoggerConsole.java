@@ -15,12 +15,11 @@
  */
 package ca.phon.ui;
 
-import java.util.*;
-import java.util.logging.*;
-import java.util.logging.Formatter;
-
 import javax.swing.*;
 import javax.swing.text.*;
+import java.util.*;
+import java.util.logging.Formatter;
+import java.util.logging.*;
 
 /**
  * A panel which prints messages from a given {@link Logger}

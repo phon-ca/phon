@@ -15,9 +15,9 @@
  */
 package ca.phon.orthography;
 
-import java.util.*;
+import ca.phon.extensions.ExtensionSupport;
 
-import ca.phon.extensions.*;
+import java.util.Set;
 
 /**
  * Abstract implementation of {@link OrthoElement} implementing

@@ -15,15 +15,12 @@
  */
 package ca.phon.app.session.editor.actions;
 
-import java.awt.*;
-import java.awt.event.*;
+import ca.phon.app.session.RecordsTransferable;
+import ca.phon.app.session.editor.SessionEditor;
 
 import javax.swing.*;
-
-import ca.phon.app.session.*;
-import ca.phon.app.session.editor.*;
-import ca.phon.session.*;
-import ca.phon.session.Record;
+import java.awt.*;
+import java.awt.event.*;
 
 /**
  * Copy record data into system clipboard. 

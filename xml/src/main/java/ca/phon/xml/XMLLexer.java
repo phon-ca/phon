@@ -15,19 +15,17 @@
  */
 package ca.phon.xml;
 
-import java.io.*;
-import java.nio.charset.*;
-import java.util.*;
-
-import javax.xml.namespace.*;
-import javax.xml.stream.*;
-import javax.xml.stream.events.*;
-
+import ca.phon.util.Queue;
+import ca.phon.util.*;
+import ca.phon.visitor.annotation.Visits;
 import org.antlr.runtime.*;
 
-import ca.phon.util.*;
-import ca.phon.util.Queue;
-import ca.phon.visitor.annotation.*;
+import javax.xml.namespace.QName;
+import javax.xml.stream.*;
+import javax.xml.stream.events.*;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.util.*;
 
 /**
  * <p>ANTLR3 lexer for XML files using the
