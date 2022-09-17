@@ -41,7 +41,7 @@ public final class MacOSTranslationCheck implements PhonStartupHook, IPluginExte
 			This version of phon is intended for use on x86_64 systems. Please
 			visit https://phon.ca/ to download Phon for apple silicon computers.""";
 
-	private final static String[] TRANSLATION_OPTIONS = { "Open https://www.phon.ca", "Exit" };
+	private final static String[] TRANSLATION_OPTIONS = { "Open https://www.phon.ca", "Quit" };
 
 	@Override
 	public void startup() throws PluginException {
