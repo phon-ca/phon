@@ -35,14 +35,13 @@ import java.net.*;
 @PhonPlugin(name="startup")
 public final class MacOSTranslationCheck implements PhonStartupHook, IPluginExtensionPoint<PhonStartupHook> {
 
-	private final static String TRANSLATION_TITLE = "Phon - Incorrect architecture detected";
+	private final static String TRANSLATION_TITLE = "Incorrect architecture detected";
 
 	private final static String PHON_URL = "https://www.phon.ca";
 
-	// os.arch will be x86_64 when translated on arm64 computers
 	private final static String TRANSLATION_MESSAGE = String.format("""
-			This version of phon is intended for use on %s systems. Please
-			visit %s to download Phon for apple silicon computers.""", System.getProperty("os.arch"), PHON_URL);
+			This version of phon is intended for use on x86_64 systems. Please
+			visit %s to download Phon for apple silicon computers.""", PHON_URL);
 
 	private final static String[] TRANSLATION_OPTIONS = { String.format("Open %s", PHON_URL), "Quit" };
 
