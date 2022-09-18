@@ -37,11 +37,16 @@ public final class MacOSTranslationCheck implements PhonStartupHook, IPluginExte
 
 	private final static String TRANSLATION_TITLE = "Phon - Incorrect architecture detected";
 
-	private final static String TRANSLATION_MESSAGE = """
-			This version of phon is intended for use on x86_64 systems. Please
-			visit https://phon.ca/ to download Phon for apple silicon computers.""";
+	private final static String PHON_URL = "https://www.phon.ca";
 
-	private final static String[] TRANSLATION_OPTIONS = { "Open https://www.phon.ca", "Quit" };
+	// os.arch will be x86_64 when translated on arm64 computers
+	private final static String TRANSLATION_MESSAGE = String.format("""
+			This version of phon is intended for use on %s systems. Please
+			visit %s to download Phon for apple silicon computers.""", System.getProperty("os.arch"), PHON_URL);
+
+	private final static String[] TRANSLATION_OPTIONS = { String.format("Open %s", PHON_URL), "Quit" };
+
+	private final static int ENOENT = 2;
 
 	@Override
 	public void startup() throws PluginException {
@@ -71,28 +76,26 @@ public final class MacOSTranslationCheck implements PhonStartupHook, IPluginExte
 		final int selection = NativeDialogs.showMessageDialog(props);
 		if(selection == 0) {
 			try {
-				Desktop.getDesktop().browse(new URL("https://www.phon.ca").toURI());
-			} catch (URISyntaxException | IOException e) {}
+				Desktop.getDesktop().browse(new URL(PHON_URL).toURI());
+			} catch (URISyntaxException | IOException e) {
+				LogUtil.warning(e);
+			}
 		}
 		System.exit(1);
 	}
 
 	private boolean isTranslated() {
-		Pointer ptr = new Memory(Native.getNativeSize(Integer.class));
-		IntByReference size = new IntByReference();
+		final Pointer ptr = new Memory(Native.getNativeSize(Integer.class));
+		final IntByReference size = new IntByReference();
 		final int ret = SystemB.INSTANCE.sysctlbyname("sysctl.proc_translated", ptr, size, null, 0);
 		if (ret == -1) {
-			if(Native.getLastError() == 2) { // ENOENT
+			if(Native.getLastError() == ENOENT) {
 				return false;
 			} else {
 				throw new RuntimeException("error calling sysctlbyname");
 			}
 		} else {
-			if(ptr.getInt(0) == 0) {
-				return false;
-			} else {
-				return true;
-			}
+			return ptr.getInt(0) != 0;
 		}
 	}
 
