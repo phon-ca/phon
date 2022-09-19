@@ -74,7 +74,7 @@ public class DelegateEditorAction implements EditorAction {
 	}
 	
 	@Override
-	public void eventOccured(EditorEvent ee) {
+	public void eventOccurred(EditorEvent ee) {
 		try {
 			final Method m = getMethod();
 			

@@ -27,6 +27,6 @@ public interface EditorAction {
 	 * This method is always called on the
 	 * editor event queue (not the AWT event queue.)
 	 */
-	public void eventOccured(EditorEvent ee);
+	public void eventOccurred(EditorEvent ee);
 
 }

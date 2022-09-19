@@ -178,7 +178,7 @@ public class EditorEventManager {
 				if(event != null) {
 					synchronized (actionMap) {
 						for(EditorAction action:getActionsForEvent(event.getEventName())) {
-							action.eventOccured(event);
+							action.eventOccurred(event);
 						}
 					}
 				}
