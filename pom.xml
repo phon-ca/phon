@@ -97,7 +97,7 @@
 		<org.eclipse.jgit.version>4.0.0.201506020755-rc3</org.eclipse.jgit.version>
 		<org.mozilla.rhino.version>1.7.13</org.mozilla.rhino.version>
 		<org.swinglabs.swingx.swingx-all.version>1.6.5-1</org.swinglabs.swingx.swingx-all.version>
-		<uk.co.caprica.vlcj.version>4.3.0</uk.co.caprica.vlcj.version>
+		<uk.co.caprica.vlcj.version>4.7.3</uk.co.caprica.vlcj.version>
 		<guru.nidi.graphviz-java.version>0.16.3</guru.nidi.graphviz-java.version>
 
 		<!-- java.xml.bind -->
