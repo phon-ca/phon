@@ -23,6 +23,7 @@ import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.ui.DropDownButton;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
@@ -41,7 +42,8 @@ import java.util.*;
 
 public class SyllabificationAlignmentEditorView extends EditorView {
 
-	public final static String SC_EDIT = EditorEventType.MODIFICATION_EVENT + "_SC_TYPE_";
+	public record ScEditData(IPATranscript ipa, int eleIdx, SyllableConstituentType oldType, SyllableConstituentType newType) { }
+	public final static EditorEventType<ScEditData> ScEdit = new EditorEventType<>(EditorEventName.MODIFICATION_EVENT + "_SC_TYPE_", ScEditData.class);
 
 	private static final long serialVersionUID = -1757697054252181347L;
 
@@ -171,27 +173,16 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		final SessionEditor editor = getEditor();
 		final EditorEventManager eventManager = editor.getEventManager();
 
-		final EditorAction sessionChangedAct =
-				new DelegateEditorAction(this, "onSessionChanged");
-		eventManager.registerActionForEvent(EditorEventType.SESSION_CHANGED_EVT, sessionChangedAct);
+		eventManager.registerActionForEvent(EditorEventType.SessionChanged, this::onSessionChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 
-		final EditorAction updateAct =
-				new DelegateEditorAction(this, "onDataChanged");
-		eventManager.registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, updateAct);
-		eventManager.registerActionForEvent(EditorEventType.GROUP_LIST_CHANGE_EVT, updateAct);
-		eventManager.registerActionForEvent(EditorEventType.RECORD_REFRESH_EVT, updateAct);
+		eventManager.registerActionForEvent(EditorEventType.RecordChanged, this::onRecordChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		eventManager.registerActionForEvent(EditorEventType.RecordRefresh, this::onRecordChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		eventManager.registerActionForEvent(EditorEventType.GroupListChange, this::onGroupListChange, EditorEventManager.RunOn.AWTEventDispatchThread);
 
-		final EditorAction tierChangeAct =
-				new DelegateEditorAction(this, "onTierChanged");
-		eventManager.registerActionForEvent(EditorEventType.TIER_CHANGE_EVT, tierChangeAct);
+		eventManager.registerActionForEvent(EditorEventType.TierChange, this::onTierChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		eventManager.registerActionForEvent(EditorEventType.TierChanged, this::onTierChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 
-		final EditorAction tierChangedAct =
-				new DelegateEditorAction(this, "onTierChanged");
-		eventManager.registerActionForEvent(EditorEventType.TIER_CHANGED_EVT, tierChangedAct);
-
-		final EditorAction scChangeAct =
-				new DelegateEditorAction(this, "onScChange");
-		eventManager.registerActionForEvent(SC_EDIT, scChangeAct);
+		eventManager.registerActionForEvent(ScEdit, this::onScChange, EditorEventManager.RunOn.AWTEventDispatchThread);
 	}
 
 	private SyllabificationDisplay getIPATargetDisplay(int group) {
@@ -427,60 +418,50 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 	}
 
 	/*---- Editor Actions -------------------*/
-	@RunOnEDT
-	public void onSessionChanged(EditorEvent ee) {
+	private void onSessionChanged(EditorEvent<Session> ee) {
 		onDataChanged(ee);
 	}
 
-	@RunOnEDT
-	public void onDataChanged(EditorEvent ee) {
+	private void onRecordChanged(EditorEvent<EditorEventType.RecordChangedData> ee) {
+		onDataChanged(ee);
+	}
+
+	private void onGroupListChange(EditorEvent<Void> ee) {
+		onDataChanged(ee);
+	}
+
+	private void onDataChanged(EditorEvent<?> ee) {
 		update();
 		repaint();
 	}
 
-	@RunOnEDT
-	public void onTierChanged(EditorEvent ee) {
-		if(ee.getEventData() != null) {
-			final String tierName = ee.getEventData().toString();
-			if(SystemTierType.IPATarget.getName().equals(tierName) ||
-					SystemTierType.IPAActual.getName().equals(tierName) ||
-					SystemTierType.SyllableAlignment.getName().equals(tierName)) {
-				update();
-				repaint();
-			}
+	private void onTierChanged(EditorEvent<EditorEventType.TierChangeData> ee) {
+		final String tierName = ee.data().tier().getName();
+		if(SystemTierType.IPATarget.getName().equals(tierName) ||
+				SystemTierType.IPAActual.getName().equals(tierName) ||
+				SystemTierType.SyllableAlignment.getName().equals(tierName)) {
+			update();
+			repaint();
 		}
 	}
 
-//	@RunOnEDT
-//	public void onTierChange(EditorEvent ee) {
-//		if(ee.getEventData() != null && ee.getSource() == getEditor().getUndoSupport()) {
-//			final String tierName = ee.getEventData().toString();
-//
-//			update();
-//			repaint();
-//		}
-//	}
-
-	@RunOnEDT
-	public void onScChange(EditorEvent ee) {
-		if(ee.getEventData() != null && ee.getEventData() instanceof IPATranscript) {
-			final IPATranscript ipa = (IPATranscript)ee.getEventData();
-			final Record r = getEditor().currentRecord();
-			for(int i = 0; i < r.numberOfGroups(); i++) {
-				final SyllabificationDisplay targetDisplay = targetDisplays.get(i);
-				final SyllabificationDisplay actualDisplay = actualDisplays.get(i);
-				boolean found = false;
-				if(targetDisplay.getTranscript() == ipa) {
-					targetDisplay.repaint();
-					found = true;
-				} else if(actualDisplay.getTranscript() == ipa) {
-					actualDisplay.repaint();
-					found = true;
-				}
-				if(found) {
-					alignmentDisplays.get(i).repaint();
-					return;
-				}
+	private void onScChange(EditorEvent<ScEditData> ee) {
+		final IPATranscript ipa = ee.data().ipa();
+		final Record r = getEditor().currentRecord();
+		for(int i = 0; i < r.numberOfGroups(); i++) {
+			final SyllabificationDisplay targetDisplay = targetDisplays.get(i);
+			final SyllabificationDisplay actualDisplay = actualDisplays.get(i);
+			boolean found = false;
+			if(targetDisplay.getTranscript() == ipa) {
+				targetDisplay.repaint();
+				found = true;
+			} else if(actualDisplay.getTranscript() == ipa) {
+				actualDisplay.repaint();
+				found = true;
+			}
+			if(found) {
+				alignmentDisplays.get(i).repaint();
+				return;
 			}
 		}
 	}

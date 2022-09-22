@@ -45,7 +45,7 @@ import javax.swing.undo.*;
 import java.awt.*;
 import java.awt.datatransfer.*;
 import java.io.IOException;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -55,8 +55,6 @@ import java.util.concurrent.atomic.AtomicReference;
  * <p>This window supports plug-ins.  Plug-ins can provide custom EditorViews.</p>
  */
 public class SessionEditor extends ProjectFrame implements ClipboardOwner {
-
-	private final static long serialVersionUID = 2831713307191769522L;
 
 	public final static String BACKUP_WHEN_SAVING =
 			SessionEditor.class.getName() + ".backupWhenSaving";
@@ -186,7 +184,6 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		return generateTitle();
 	}
 
-	@RunOnEDT
 	private void _dispose() {
 		setVisible(false);
 		CommonModuleFrame.getOpenWindows().remove(this);
@@ -209,16 +206,9 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 
 	@Override
 	public void dispose() {
-		getEventManager().registerActionForEvent(EditorEventType.EDITOR_CLOSING, new EditorAction() {
-
-			@Override
-			public void eventOccurred(EditorEvent ee) {
-				SwingUtilities.invokeLater( () -> { _dispose(); } );
-			}
-
-		});
+		getEventManager().registerActionForEvent(EditorEventType.EditorClosing, (ee) -> SwingUtilities.invokeLater(this::_dispose));
 		// send out closing event
-		final EditorEvent ee = new EditorEvent(EditorEventType.EDITOR_CLOSING, this);
+		final EditorEvent<Void> ee = new EditorEvent<>(EditorEventType.EditorClosing, this, null);
 		getEventManager().queueEvent(ee);
 	}
 
@@ -249,29 +239,20 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	}
 
 	private void setupEditorActions() {
-		final EditorAction sessionChangedAct =
-				new DelegateEditorAction(this, "onSessionChanged");
-		getEventManager().registerActionForEvent(EditorEventType.SESSION_CHANGED_EVT, sessionChangedAct);
+		final EditorAction<Session> sessionChangedAct = this::onSessionChanged;
+		getEventManager().registerActionForEvent(EditorEventType.SessionChanged, sessionChangedAct, EditorEventManager.RunOn.AWTEventDispatchThread);
 
-		final EditorAction modifiedChangedAct =
-				new DelegateEditorAction(this, "onModifiedChanged");
-		getEventManager().registerActionForEvent(EditorEventType.MODIFIED_FLAG_CHANGED, modifiedChangedAct);
+		final EditorAction<Boolean> modifiedChangedAct = this::onModifiedChanged;
+		getEventManager().registerActionForEvent(EditorEventType.ModifiedFlagChanged, modifiedChangedAct, EditorEventManager.RunOn.AWTEventDispatchThread);
 
-//		final EditorAction recordAddedAct =
-//				new DelegateEditorAction(this, "onRecordAdded");
-//		getEventManager().registerActionForEvent(EditorEventType.RECORD_ADDED_EVT, recordAddedAct);
+		final EditorAction<EditorEventType.RecordDeletedData> recordDeletedAct = this::onRecordDeleted;
+		getEventManager().registerActionForEvent(EditorEventType.RecordDeleted, recordDeletedAct, EditorEventManager.RunOn.AWTEventDispatchThread);
 
-		final EditorAction recordDeletedAct =
-				new DelegateEditorAction(this, "onRecordDeleted");
-		getEventManager().registerActionForEvent(EditorEventType.RECORD_DELETED_EVT, recordDeletedAct);
+		final EditorAction<Void> reloadFromDiskAct = this::onReloadSessionFromDisk;
+		getEventManager().registerActionForEvent(EditorEventType.EditorReloadFromDisk, reloadFromDiskAct, EditorEventManager.RunOn.AWTEventDispatchThread);
 
-		final EditorAction reloadFromDiskAct =
-				new DelegateEditorAction(this, "onReloadSessionFromDisk");
-		getEventManager().registerActionForEvent(EditorEventType.EDITOR_RELOAD_FROM_DISK, reloadFromDiskAct);
-
-		final EditorAction onClosingAct =
-				new DelegateEditorAction(this, "onEditorClosing");
-		getEventManager().registerActionForEvent(EditorEventType.EDITOR_CLOSING, onClosingAct);
+		final EditorAction<Void> onClosingAct = this::onEditorClosing;
+		getEventManager().registerActionForEvent(EditorEventType.EditorClosing, onClosingAct, EditorEventManager.RunOn.AWTEventDispatchThread);
 	}
 
 	/**
@@ -560,7 +541,8 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			throw new ArrayIndexOutOfBoundsException(index);
 		}
 		this.currentRecord = index;
-		final EditorEvent ee = new EditorEvent(EditorEventType.RECORD_CHANGED_EVT, this, currentRecord());
+		final EditorEvent<EditorEventType.RecordChangedData> ee = new EditorEvent<>(EditorEventType.RecordChanged, this,
+				new EditorEventType.RecordChangedData(this.currentRecord, currentRecord()));
 		getEventManager().queueEvent(ee);
 	}
 
@@ -605,9 +587,8 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		super.setModified(modified);
 
 		if(lastVal != modified) {
-			final EditorEvent ee = new EditorEvent(EditorEventType.MODIFIED_FLAG_CHANGED, this);
+			final EditorEvent<Boolean> ee = new EditorEvent(EditorEventType.ModifiedFlagChanged, this, modified);
 			getEventManager().queueEvent(ee);
-
 		}
 	}
 
@@ -630,8 +611,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	/*
 	 * Editor actions
 	 */
-	@RunOnEDT
-	public void onEditorClosing(EditorEvent ee) {
+	private void onEditorClosing(EditorEvent<Void> ee) {
 		if(getMediaModel().isSessionAudioAvailable()) {
 			try {
 				getMediaModel().getSharedSessionAudio().close();
@@ -641,8 +621,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		}
 	}
 
-	@RunOnEDT
-	public void onSessionChanged(EditorEvent ee) {
+	private void onSessionChanged(EditorEvent<Session> ee) {
 		// reset media model
 		this.mediaModelRef.set(new SessionMediaModel(this));
 
@@ -663,29 +642,19 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		setTitle(generateTitle());
 	}
 
-	@RunOnEDT
-	public void onModifiedChanged(EditorEvent eee) {
+	private void onModifiedChanged(EditorEvent<Boolean> eee) {
 		final String title = generateTitle();
 		setTitle(title);
 	}
 
-	@RunOnEDT
-	public void onRecordAdded(EditorEvent ee) {
-		if(ee.getEventData() != null && ee.getEventData() instanceof Record) {
-			final Record r = (Record)ee.getEventData();
-			final int recordIndex = getSession().getRecordPosition(r);
-			setCurrentRecordIndex(recordIndex);
-		}
-	}
-
-	@RunOnEDT
-	public void onRecordDeleted(EditorEvent ee) {
+	private void onRecordDeleted(EditorEvent ee) {
 		if(getDataModel().getRecordCount() > 0 && getCurrentRecordIndex() >= getDataModel().getRecordCount()) {
 			setCurrentRecordIndex(getDataModel().getRecordCount()-1);
 		} else if(getDataModel().getRecordCount() == 0) {
 			setCurrentRecordIndex(-1);
 		} else {
-			final EditorEvent refreshAct = new EditorEvent(EditorEventType.RECORD_REFRESH_EVT, this);
+			final EditorEvent<EditorEventType.RecordChangedData> refreshAct = new EditorEvent<>(EditorEventType.RecordRefresh, this,
+					new EditorEventType.RecordChangedData(this.currentRecord, currentRecord()));
 			getEventManager().queueEvent(refreshAct);
 		}
 	}
@@ -696,15 +665,14 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	 *
 	 * @param ee
 	 */
-	@RunOnEDT
-	public void onReloadSessionFromDisk(EditorEvent ee) throws IOException {
+	private void onReloadSessionFromDisk(EditorEvent<Void> ee) {
 		final Project project = getProject();
 		final Session currentSession = getSession();
 
 		try {
 			final Session reloadedSession = project.openSession(currentSession.getCorpus(), currentSession.getName());
 			getDataModel().setSession(reloadedSession);
-			getEventManager().queueEvent(new EditorEvent(EditorEventType.SESSION_CHANGED_EVT, reloadedSession));
+			getEventManager().queueEvent(new EditorEvent<>(EditorEventType.SessionChanged, this, reloadedSession));
 
 			setModified(false);
 		} catch (IOException e) {
@@ -790,7 +758,8 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 				if(retVal == 1) return false;
 			}
 
-			getEventManager().queueEvent(new EditorEvent(EditorEventType.EDITOR_SAVED_SESSION));
+			final EditorEvent<Session> ee = new EditorEvent<>(EditorEventType.SessionSaved, this, session);
+			getEventManager().queueEvent(ee);
 
 			// show a short message next to the save button to indicate save completed
 			return true;

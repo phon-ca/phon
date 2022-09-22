@@ -29,8 +29,6 @@ import java.awt.event.ActionEvent;
 
 public class DeleteParticipantAction extends SessionInfoAction {
 	
-	private static final long serialVersionUID = -1353836110650283444L;
-
 	private final Participant participant;
 	
 	private final ImageIcon ICON = 
@@ -98,7 +96,9 @@ public class DeleteParticipantAction extends SessionInfoAction {
 			if(e.getDialogResult() == 1) {
 				SwingUtilities.invokeLater( () -> {
 					getEditor().getUndoManager().undo();
-					getEditor().getEventManager().queueEvent(new EditorEvent(EditorEventType.RECORD_REFRESH_EVT));
+					final EditorEvent<EditorEventType.RecordChangedData> ee =
+							new EditorEvent<>(EditorEventType.RecordRefresh, getEditor(), new EditorEventType.RecordChangedData(getEditor().getCurrentRecordIndex(), getEditor().currentRecord()));
+					getEditor().getEventManager().queueEvent(ee);
 				});
 			}
 		});

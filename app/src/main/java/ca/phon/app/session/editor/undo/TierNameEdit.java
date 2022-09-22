@@ -24,8 +24,6 @@ import java.util.*;
 
 public class TierNameEdit extends SessionEditorUndoableEdit {
 
-	private static final long serialVersionUID = 1803430040195263868L;
-	
 	private final String newTierName;
 	
 	private final String oldTierName;
@@ -48,10 +46,7 @@ public class TierNameEdit extends SessionEditorUndoableEdit {
 
 	@Override
 	public void undo() throws CannotUndoException {
-		final Object oldSource = getSource();
-		setSource(getEditor().getUndoSupport());
 		changeTierName(newTierName, oldTierName);
-		setSource(oldSource);
 	}
 
 	@Override
@@ -101,7 +96,9 @@ public class TierNameEdit extends SessionEditorUndoableEdit {
 				r.putTier(newTier);
 			}
 		}
-		
-		super.queueEvent(EditorEventType.TIER_VIEW_CHANGED_EVT, getSource(), newTierView);
+
+		final EditorEvent<EditorEventType.TierViewChangedData> ee =
+				new EditorEvent<>(EditorEventType.TierViewChanged, getSource(), new EditorEventType.TierViewChangedData(oldTierView, newTierView));
+		getEditor().getEventManager().queueEvent(ee);
 	}
 }

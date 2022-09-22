@@ -31,8 +31,6 @@ import java.util.Optional;
  */
 public class AutoTranscribeCommand extends IPALookupViewAction {
 	
-	private static final long serialVersionUID = 106655469525258379L;
-
 	private final static String CMD_NAME = "Auto-transcribe Session";
 	
 	// TODO icon?
@@ -79,8 +77,10 @@ public class AutoTranscribeCommand extends IPALookupViewAction {
 					
 					final UndoableEdit edit = transcriber.transcribeSession(sessionEditor.getSession());
 					sessionEditor.getUndoSupport().postEdit(edit);
-					
-					final EditorEvent ee = new EditorEvent(EditorEventType.RECORD_REFRESH_EVT);
+
+					final EditorEvent<EditorEventType.RecordChangedData> ee =
+							new EditorEvent<>(EditorEventType.RecordRefresh, sessionEditor,
+									new EditorEventType.RecordChangedData(sessionEditor.getCurrentRecordIndex(), sessionEditor.currentRecord()));
 					sessionEditor.getEventManager().queueEvent(ee);
 					
 					setStatus(TaskStatus.FINISHED);

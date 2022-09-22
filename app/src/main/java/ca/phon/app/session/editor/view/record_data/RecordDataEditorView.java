@@ -232,40 +232,24 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 	}
 
 	private void setupEditorActions() {
-		final EditorAction onSessionChangedAct =
-				new DelegateEditorAction(this, "onSessionChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_CHANGED_EVT, onSessionChangedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SessionChanged, this::onSessionChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 
-		final EditorAction onTierViewChangeAct =
-				new DelegateEditorAction(this, "onTierViewChange");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_VIEW_CHANGED_EVT, onTierViewChangeAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.TierViewChanged, this::onTierViewChange, EditorEventManager.RunOn.AWTEventDispatchThread);
 
-		final EditorAction onRecordChangeAct =
-				new DelegateEditorAction(this, "onRecordChange");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChangeAct);
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_REFRESH_EVT, onRecordChangeAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordChanged, this::onRecordChange, EditorEventManager.RunOn.AWTEventDispatchThreadInvokeAndWait);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordRefresh, this::onRecordChange, EditorEventManager.RunOn.AWTEventDispatchThread);
 
-		final EditorAction onSpeakerChangeAct =
-				new DelegateEditorAction(this, "onSpeakerChange");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.SPEAKER_CHANGE_EVT, onSpeakerChangeAct);
-		
-		final EditorAction onGroupListChangeAct =
-				new DelegateEditorAction(this, "onGroupsChange");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.GROUP_LIST_CHANGE_EVT, onGroupListChangeAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SpeakerChanged, this::onSpeakerChange, EditorEventManager.RunOn.AWTEventDispatchThread);
 
-		final EditorAction onParticipantsChangedAct =
-				new DelegateEditorAction(this, "onParticipantsChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.PARTICIPANT_ADDED, onParticipantsChangedAct);
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.PARTICIPANT_REMOVED, onParticipantsChangedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.GroupListChange, this::onGroupsChange, EditorEventManager.RunOn.AWTEventDispatchThread);
 
-		final EditorAction onNumRecordsChangeAct =
-				new DelegateEditorAction(this, "onNumRecordsChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_ADDED_EVT, onNumRecordsChangeAct);
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_DELETED_EVT, onNumRecordsChangeAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.ParticipantAdded, this::onParticipantsChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.ParticipantRemoved, this::onParticipantsChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 
-		final EditorAction onSessionLocationChangedAct =
-				new DelegateEditorAction(this, "onSessionLocationChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_LOCATION_CHANGED_EVT, onSessionLocationChangedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordAdded, this::onRecordAdded, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordDeleted, this::onRecordDeleted);
+
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SessionLocationChanged, this::onSessionLocationChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 	}
 
 	/**
@@ -770,7 +754,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 			speakerBox.setSelectedItem(selected);
 	}
 	
-	private SessionEditorUndoableEdit updateRecordAlignment(Record record, int group) {
+	private TierEdit<PhoneMap> updateRecordAlignment(Record record, int group) {
 		final Tier<IPATranscript> ipaTarget = record.getIPATarget();
 		final Tier<IPATranscript> ipaActual = record.getIPAActual();
 
@@ -813,14 +797,16 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 				tierEdit.doIt();
 				edit.addEdit(tierEdit);
 
-				final SessionEditorUndoableEdit alignEdit = updateRecordAlignment(record, groupIndex);
+				final TierEdit<PhoneMap> alignEdit = updateRecordAlignment(record, groupIndex);
 				alignEdit.doIt();
 				edit.addEdit(alignEdit);
 
 				((CompoundEdit)edit).end();
 
 				// we also need to send out a TIER_DATA_CHANGED event so the syllabification/alignment view updates
-				final EditorEvent ee = new EditorEvent(EditorEventType.TIER_CHANGED_EVT, this, SystemTierType.SyllableAlignment.getName());
+				final EditorEvent<EditorEventType.TierChangeData> ee =
+						new EditorEvent(EditorEventType.TierChanged, RecordDataEditorView.this,
+								new EditorEventType.TierChangeData(record.getPhoneAlignment(), groupIndex, alignEdit.getOldValue(), alignEdit.getNewValue()));
 				getEditor().getEventManager().queueEvent(ee);
 			}
 
@@ -830,7 +816,8 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 		@Override
 		public <T> void tierValueChanged(Tier<T> tier, int groupIndex,
 				T newValue, T oldValue) {
-			final EditorEvent ee = new EditorEvent(EditorEventType.TIER_CHANGED_EVT, RecordDataEditorView.this, tier.getName());
+			final EditorEvent<EditorEventType.TierChangeData> ee = new EditorEvent<>(EditorEventType.TierChanged, RecordDataEditorView.this,
+					new EditorEventType.TierChangeData(tier, groupIndex, oldValue, newValue));
 			getEditor().getEventManager().queueEvent(ee);
 		}
 
@@ -968,8 +955,8 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 	}
 
 	public void fireSessionLocationChanged() {
-		final EditorEvent ee = new EditorEvent(EditorEventType.SESSION_LOCATION_CHANGED_EVT, this,
-				getSessionLocation());
+		final EditorEvent<SessionLocation> ee =
+				new EditorEvent(EditorEventType.SessionLocationChanged, this, getSessionLocation());
 		getEditor().getEventManager().queueEvent(ee);
 	}
 
@@ -1168,40 +1155,42 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 	/*
 	 * Editor Actions
 	 */
-	@RunOnEDT
-	public void onSessionChanged(EditorEvent ee) {
-		onRecordChange(ee);
-	}
-
-	@RunOnEDT
-	public void onNumRecordsChanged(EditorEvent event) {
-		recNumField.setMaxNumber(getEditor().getSession().getRecordCount());
-	}
-
-	@RunOnEDT
-	public void onTierViewChange(EditorEvent event) {
-		update();
-		repaint();
-	}
-
-	@RunOnEDT
-	public void onRecordChange(EditorEvent event) {
+	private void onSessionChanged(EditorEvent<Session> ee) {
 		update();
 		updateStatus();
 		repaint();
 	}
 
-	@RunOnEDT
-	public void onSpeakerChange(EditorEvent event) {
+	private void onRecordAdded(EditorEvent<EditorEventType.RecordAddedData> ee) {
+		onNumRecordsChanged(ee);
+	}
+
+	private void onRecordDeleted(EditorEvent<EditorEventType.RecordDeletedData> ee) {
+		onNumRecordsChanged(ee);
+	}
+
+	private void onNumRecordsChanged(EditorEvent<?> event) {
+		recNumField.setMaxNumber(getEditor().getSession().getRecordCount());
+	}
+
+	private void onTierViewChange(EditorEvent<EditorEventType.TierViewChangedData> event) {
+		update();
+		repaint();
+	}
+
+	private void onRecordChange(EditorEvent<EditorEventType.RecordChangedData> event) {
+		update();
+		updateStatus();
+		repaint();
+	}
+
+	private void onSpeakerChange(EditorEvent<EditorEventType.SpeakerChangedData> event) {
 		updating = true;
-		
-		speakerBox.setSelectedItem(((Record)event.getEventData()).getSpeaker());
-		
+		speakerBox.setSelectedItem(event.data().newSpeaker());
 		updating = false;
 	}
 	
-	@RunOnEDT
-	public void onGroupsChange(EditorEvent event) {
+	public void onGroupsChange(EditorEvent<Void> event) {
 		final SessionLocation location = getSessionLocation();
 		if(location != null &&
 				location.getRecordLocation().getGroupLocation().getGroupIndex() >= getEditor().currentRecord().numberOfGroups()) {
@@ -1213,15 +1202,13 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 		repaint();
 	}
 
-	@RunOnEDT
-	public void onParticipantsChanged(EditorEvent event) {
+	public void onParticipantsChanged(EditorEvent<Participant> event) {
 		updating = true;
 		setupSpeakerBoxModel();
 		updating = false;
 	}
 
-	@RunOnEDT
-	public void onSessionLocationChanged(EditorEvent event) {
+	private void onSessionLocationChanged(EditorEvent<SessionLocation> event) {
 		updateStatus();
 	}
 

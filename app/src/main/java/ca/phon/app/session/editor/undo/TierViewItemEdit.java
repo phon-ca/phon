@@ -22,8 +22,6 @@ import java.util.*;
 
 public class TierViewItemEdit extends SessionEditorUndoableEdit {
 
-	private static final long serialVersionUID = 5225502635375340813L;
-	
 	private final TierViewItem oldItem;
 	
 	private final TierViewItem newItem;
@@ -36,27 +34,31 @@ public class TierViewItemEdit extends SessionEditorUndoableEdit {
 	
 	@Override
 	public void undo() {
-		final List<TierViewItem> tierView = new ArrayList<TierViewItem>(getEditor().getSession().getTierView());
+		final List<TierViewItem> oldView = getEditor().getSession().getTierView();
+		final List<TierViewItem> tierView = new ArrayList<>(oldView);
 		final int idx = tierView.indexOf(newItem);
 		tierView.remove(idx);
 		tierView.add(idx, oldItem);
 		
 		getEditor().getSession().setTierView(tierView);
 		
-		final EditorEvent ee = new EditorEvent(EditorEventType.TIER_VIEW_CHANGED_EVT, getEditor().getUndoSupport(), newItem);
+		final EditorEvent<EditorEventType.TierViewChangedData> ee =
+				new EditorEvent<>(EditorEventType.TierViewChanged, getEditor(), new EditorEventType.TierViewChangedData(oldView, tierView));
 		getEditor().getEventManager().queueEvent(ee);
 	}
 
 	@Override
 	public void doIt() {
-		final List<TierViewItem> tierView = new ArrayList<TierViewItem>(getEditor().getSession().getTierView());
+		final List<TierViewItem> oldView = getEditor().getSession().getTierView();
+		final List<TierViewItem> tierView = new ArrayList<>(oldView);
 		final int idx = tierView.indexOf(oldItem);
 		tierView.remove(idx);
 		tierView.add(idx, newItem);
 		
 		getEditor().getSession().setTierView(tierView);
-		
-		final EditorEvent ee = new EditorEvent(EditorEventType.TIER_VIEW_CHANGED_EVT, getSource(), newItem);
+
+		final EditorEvent<EditorEventType.TierViewChangedData> ee =
+				new EditorEvent<>(EditorEventType.TierViewChanged, getEditor(), new EditorEventType.TierViewChangedData(oldView, tierView));
 		getEditor().getEventManager().queueEvent(ee);
 	}
 

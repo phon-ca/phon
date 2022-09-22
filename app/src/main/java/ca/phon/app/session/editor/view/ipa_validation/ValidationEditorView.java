@@ -26,7 +26,7 @@ import ca.phon.session.*;
 import ca.phon.syllabifier.*;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.util.Language;
+import ca.phon.util.*;
 import ca.phon.util.icons.*;
 import org.jdesktop.swingx.HorizontalLayout;
 
@@ -41,8 +41,6 @@ import java.util.Iterator;
  * objects for the IPA Target and IPA Actual tiers or a {@link Record}.
  */
 public class ValidationEditorView extends EditorView {
-
-	private static final long serialVersionUID = -1179165192834735478L;
 
 	public final static String VIEW_NAME = "IPA Validation";
 	
@@ -106,11 +104,8 @@ public class ValidationEditorView extends EditorView {
 	}
 	
 	private void setupEditorActions() {
-		final DelegateEditorAction recordChangedAct = new DelegateEditorAction(this, "onRecordChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, recordChangedAct);
-
-		final DelegateEditorAction sessionChangedAct = new DelegateEditorAction(this, "onSessionChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_CHANGED_EVT, sessionChangedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SessionChanged, this::onSessionChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordChanged, this::onRecordChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 	}
 	
 	private void update() {
@@ -257,25 +252,25 @@ public class ValidationEditorView extends EditorView {
 	}
 	
 	private void validateTier(Tier<IPATranscript> tier, Tier<IPATranscript> candidateTier) {
-		final CompoundEdit edit = new CompoundEdit();
-		
+		getEditor().getUndoSupport().beginUpdate();
 		for(int i = 0; i < tier.numberOfGroups(); i++) {
 			final SetGroupData data = new SetGroupData();
 			data.tier = tier;
 			data.candidateTier = candidateTier;
 			data.group = i;
-			edit.addEdit(setGroup(data));
+
+			final Tuple<TierEdit<IPATranscript>, TierEdit<PhoneMap>> edits = setGroup(data);
+
+			final boolean fireTierChanged = i == tier.numberOfGroups() - 1;
+			edits.getObj1().setFireHardChangeOnUndo(fireTierChanged);
+			edits.getObj2().setFireHardChangeOnUndo(fireTierChanged);
+			getEditor().getUndoSupport().postEdit(edits.getObj1());
+			getEditor().getUndoSupport().postEdit(edits.getObj2());
 		}
-		
-		edit.end();
-		getEditor().getUndoSupport().postEdit(edit);
-		
-		// force update of tier in other views
-		final EditorEvent ee = new EditorEvent(EditorEventType.TIER_CHANGED_EVT, this, tier.getName());
-		getEditor().getEventManager().queueEvent(ee);
+		getEditor().getUndoSupport().endUpdate();
 	}
 	
-	private UndoableEdit setGroup(SetGroupData data) {
+	private Tuple<TierEdit<IPATranscript>, TierEdit<PhoneMap>> setGroup(SetGroupData data) {
 		final Tier<IPATranscript> tier = data.tier;
 		final IPATranscript ipa = data.candidateTier.getGroup(data.group);
 		final SyllabifierInfo info = getEditor().getSession().getExtension(SyllabifierInfo.class);
@@ -289,25 +284,17 @@ public class ValidationEditorView extends EditorView {
 		}
 		ipa.putExtension(AlternativeTranscript.class, tier.getGroup(data.group).getExtension(AlternativeTranscript.class));
 		
-		final CompoundEdit cmpEdit = new CompoundEdit();
-		
 		final TierEdit<IPATranscript> edit = new TierEdit<IPATranscript>(getEditor(),
 				data.tier, data.group, ipa);
-		edit.doIt();
-		cmpEdit.addEdit(edit);
 		
 		final Record r = getEditor().currentRecord();
 		final Tier<PhoneMap> alignmentTier = r.getPhoneAlignment();
 		final PhoneAligner aligner = new PhoneAligner();
-		final PhoneMap pm = aligner.calculatePhoneMap(r.getIPATarget().getGroup(data.group), r.getIPAActual().getGroup(data.group));
+		final PhoneMap pm = aligner.calculatePhoneAlignment(r.getIPATarget().getGroup(data.group), r.getIPAActual().getGroup(data.group));
 		
 		final TierEdit<PhoneMap> pmEdit = new TierEdit<PhoneMap>(getEditor(), alignmentTier, data.group, pm);
-		pmEdit.doIt();
-		cmpEdit.addEdit(pmEdit);
-		
-		cmpEdit.end();
-		
-		return cmpEdit;
+
+		return new Tuple<>(edit, pmEdit);
 	}
 	
 	/**
@@ -315,12 +302,13 @@ public class ValidationEditorView extends EditorView {
 	 * @param data
 	 */
 	public void onSetGroup(SetGroupData data) {
-		final UndoableEdit edit = setGroup(data);
-		getEditor().getUndoSupport().postEdit(edit);
-		
-		// force update of tier in other views
-		final EditorEvent ee = new EditorEvent(EditorEventType.TIER_CHANGED_EVT, this, data.tier.getName());
-		getEditor().getEventManager().queueEvent(ee);
+		final Tuple<TierEdit<IPATranscript>, TierEdit<PhoneMap>> edits = setGroup(data);
+		getEditor().getUndoSupport().beginUpdate();
+		edits.getObj1().setFireHardChangeOnUndo(true);
+		edits.getObj2().setFireHardChangeOnUndo(true);
+		getEditor().getUndoSupport().postEdit(edits.getObj1());
+		getEditor().getUndoSupport().postEdit(edits.getObj2());
+		getEditor().getUndoSupport().endUpdate();
 	}
 	
 	/**
@@ -351,13 +339,11 @@ public class ValidationEditorView extends EditorView {
 	/*
 	 * Editor actions
 	 */
-	@RunOnEDT
-	public void onSessionChanged(EditorEvent ee) {
+	private void onSessionChanged(EditorEvent<Session> ee) {
 		update();
 	}
 
-	@RunOnEDT
-	public void onRecordChanged(EditorEvent ee) {
+	private void onRecordChanged(EditorEvent<EditorEventType.RecordChangedData> ee) {
 		update();
 	}
 	
@@ -373,7 +359,8 @@ public class ValidationEditorView extends EditorView {
 		@Override
 		public <T> void tierValueChanged(Tier<T> tier, int groupIndex,
 				T newValue, T oldValue) {
-			final EditorEvent ee = new EditorEvent(EditorEventType.TIER_CHANGED_EVT, ValidationEditorView.this, tier.getName());
+			final EditorEvent<EditorEventType.TierChangeData> ee = new EditorEvent<>(EditorEventType.TierChanged, ValidationEditorView.this,
+					new EditorEventType.TierChangeData(tier, groupIndex, oldValue, newValue));
 			getEditor().getEventManager().queueEvent(ee);
 		}
 		

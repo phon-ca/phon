@@ -16,6 +16,7 @@
 
 package ca.phon.app.session.editor.view.media_player;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.EditorViewAdapter;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.actions.AssignMediaAction;
@@ -47,17 +48,15 @@ import java.text.ParseException;
  */
 public class MediaPlayerEditorView extends EditorView {
 
-	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(MediaPlayerEditorView.class.getName());
-
 	public static final String VIEW_TITLE = "Media Player";
 	
 	/** 
 	 * Custom editor event signaled when media loaded 
 	 * Event data: media file (as string)
 	 */
-	public static final String MEDIA_LOADED_EVENT = "_media_loaded_";
-	
-	public static final String MEDIA_UNLOADED_EVENT = "_media_unloaded_";
+	public static final EditorEventType<MediaPlayerEditorView> MediaLoaded = new EditorEventType<>("_media_loaded_", MediaPlayerEditorView.class);
+
+	public static final EditorEventType<MediaPlayerEditorView> MediaUnloaded = new EditorEventType<>("_media_unloaded_", MediaPlayerEditorView.class);
 
 	private PhonMediaPlayer mediaPlayer;
 	
@@ -89,10 +88,10 @@ public class MediaPlayerEditorView extends EditorView {
 		mediaPlayer.addMediaMenuFilter(new MediaMenuFilter());
 		mediaPlayer.addPropertyChangeListener("mediaLoaded", (e) -> {
 			if((boolean)e.getNewValue()) {
-				EditorEvent ee = new EditorEvent(MEDIA_LOADED_EVENT, MediaPlayerEditorView.this, mediaPlayer.getMediaFile());
+				EditorEvent<MediaPlayerEditorView> ee = new EditorEvent<>(MediaLoaded, this, this);
 				getEditor().getEventManager().queueEvent(ee);
 			} else {
-				EditorEvent ee = new EditorEvent(MEDIA_UNLOADED_EVENT, MediaPlayerEditorView.this);
+				EditorEvent<MediaPlayerEditorView> ee = new EditorEvent(MediaUnloaded, this, this);
 				getEditor().getEventManager().queueEvent(ee);
 			}
 		});
@@ -159,7 +158,7 @@ public class MediaPlayerEditorView extends EditorView {
 		loadMedia();
 	}
 
-	public void onSessionChanged(EditorEvent ee) {
+	public void onSessionChanged(EditorEvent<Session> ee) {
 		loadMedia();
 	}
 
@@ -186,34 +185,19 @@ public class MediaPlayerEditorView extends EditorView {
 	}
 
 	private void setupEditorActions() {
-		final EditorAction mediaChangedAct =
-				new DelegateEditorAction(this, "onMediaChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED,
-				mediaChangedAct);
-
-		final EditorAction sessionChangedAct =
-				new DelegateEditorAction(this, "onSessionChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_CHANGED_EVT, sessionChangedAct);
-
-		final EditorAction recordChangedAct =
-				new DelegateEditorAction(this, "onRecordChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, recordChangedAct);
-
-		final EditorAction segmentPlaybackAct =
-				new DelegateEditorAction(this, "doSegmentPlayback");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.SEGMENT_PLAYBACK_EVENT, segmentPlaybackAct);
-
-		final EditorAction edtiorClosingAct =
-				new DelegateEditorAction(this, "doCleanup");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.EDITOR_CLOSING, edtiorClosingAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SessionMediaChanged, this::onMediaChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SessionChanged, this::onSessionChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordChanged, this::onRecordChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SegmentPlayback, this::doSegmentPlayback, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.EditorClosing, this::doCleanup, EditorEventManager.RunOn.AWTEventDispatchThread);
 	}
 
 	/** Editor actions */
-	public void onMediaChanged(EditorEvent ee) {
+	private void onMediaChanged(EditorEvent<EditorEventType.SessionMediaChangedData> ee) {
 		loadMedia();
 	}
 
-	public void onRecordChanged(EditorEvent ee) {
+	private void onRecordChanged(EditorEvent<EditorEventType.RecordChangedData> ee) {
 		if(!isAdjustVideo()) return;
 		final Record utt = getEditor().currentRecord();
 		if(utt == null) return;
@@ -230,18 +214,16 @@ public class MediaPlayerEditorView extends EditorView {
 		mediaPlayer.setTime((long)media.getStartValue());
 	}
 
-	public void doSegmentPlayback(EditorEvent ee) {
-		Tuple<Integer, Integer> segment =
-				(Tuple<Integer,Integer>)ee.getEventData();
+	private void doSegmentPlayback(EditorEvent<MediaSegment> ee) {
+		MediaSegment segment = ee.data();
 
-		long startTime = segment.getObj1();
-		long length = segment.getObj2();
+		long startTime = (long)segment.getStartValue();
+		long length = (long)(segment.getStartValue() - segment.getEndValue());
 
 		mediaPlayer.playSegment(startTime, length);
 	}
 
-	@RunOnEDT
-	public void doCleanup(EditorEvent ee) {
+	private void doCleanup(EditorEvent ee) {
 		mediaPlayer.cleanup();
 	}
 
@@ -280,7 +262,7 @@ public class MediaPlayerEditorView extends EditorView {
 						timeSelectionPopup = null;
 					}
 				} catch (ParseException e) {
-					LOGGER.error( e.getLocalizedMessage(), e);
+					LogUtil.warning(e);
 				}
 			}
 

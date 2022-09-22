@@ -27,8 +27,6 @@ import java.util.*;
 
 public class RemoveGroupEdit extends SessionEditorUndoableEdit {
 
-	private static final long serialVersionUID = 546623740766808063L;
-
 	/**
 	 * tier
 	 */
@@ -39,7 +37,7 @@ public class RemoveGroupEdit extends SessionEditorUndoableEdit {
 	 */
 	private final int groupIndex;
 
-	private final Map<String, Object> oldGroupData = new HashMap<String, Object>();
+	private final Map<String, Object> oldGroupData = new HashMap<>();
 	
 	public RemoveGroupEdit(SessionEditor editor, Record record, int groupIndex) {
 		super(editor);
@@ -70,8 +68,9 @@ public class RemoveGroupEdit extends SessionEditorUndoableEdit {
 				record.getTier(key, String.class).addGroup(groupIndex, (String)oldGroupData.get(key));
 			}
 		}
-		
-		queueEvent(EditorEventType.GROUP_LIST_CHANGE_EVT, getSource(), null);
+
+		final EditorEvent<Void> ee = new EditorEvent<>(EditorEventType.GroupListChange, getSource(), null);
+		getEditor().getEventManager().queueEvent(ee);
 	}
 
 	@Override
@@ -90,12 +89,13 @@ public class RemoveGroupEdit extends SessionEditorUndoableEdit {
 			final Tier<String> extraTier = record.getTier(tierName, String.class);
 			if(extraTier.isGrouped())
 				oldGroupData.put(tierName, 
-						(groupIndex < extraTier.numberOfGroups() ? extraTier.getGroup(groupIndex) : new String()));
+						(groupIndex < extraTier.numberOfGroups() ? extraTier.getGroup(groupIndex) : ""));
 		}
 		
-		record.removeGroup(groupIndex);	
-		
-		queueEvent(EditorEventType.GROUP_LIST_CHANGE_EVT, getSource(), null);
+		record.removeGroup(groupIndex);
+
+		final EditorEvent<Void> ee = new EditorEvent<>(EditorEventType.GroupListChange, getSource(), null);
+		getEditor().getEventManager().queueEvent(ee);
 	}
 
 }

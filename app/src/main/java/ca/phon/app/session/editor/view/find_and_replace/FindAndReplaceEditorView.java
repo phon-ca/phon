@@ -51,8 +51,6 @@ import java.util.*;
  */
 public class FindAndReplaceEditorView extends EditorView {
 	
-	private static final long serialVersionUID = 3981954934024480576L;
-
 	public final static String VIEW_NAME = "Find & Replace";
 	
 	public final static String VIEW_ICON = "actions/edit-find-replace";
@@ -154,20 +152,9 @@ public class FindAndReplaceEditorView extends EditorView {
 	}
 	
 	private void setupEditorActions() {
-		final EditorAction viewChangedAct = 
-				new DelegateEditorAction(this, "onTierViewChanged");
-		getEditor().getEventManager().registerActionForEvent(
-				EditorEventType.TIER_VIEW_CHANGED_EVT, viewChangedAct);
-		
-		final EditorAction sessionLocationChangedAct = 
-				new DelegateEditorAction(this, "onSessionLocationChanged");
-		getEditor().getEventManager().registerActionForEvent(
-				EditorEventType.SESSION_LOCATION_CHANGED_EVT, sessionLocationChangedAct);
-
-		final EditorAction sessionChangedAct =
-				new DelegateEditorAction(this, "onSessionChanged");
-		getEditor().getEventManager().registerActionForEvent(
-				EditorEventType.SESSION_CHANGED_EVT, sessionChangedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.TierViewChanged, this::onTierViewChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SessionLocationChanged, this::onSessionLocationChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SessionChanged, this::onSessionChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 	}
 
 	private void updateTierView() {
@@ -268,22 +255,18 @@ public class FindAndReplaceEditorView extends EditorView {
 	}
 	
 	/* Editor Actions */
-	@RunOnEDT
-	public void onTierViewChanged(EditorEvent ee) {
+	private void onTierViewChanged(EditorEvent<EditorEventType.TierViewChangedData> ee) {
 		updateTierView();
 		getFindManager().setSearchTier(getSearchTiers());
 	}
 
-	@RunOnEDT
-	public void onSessionChanged(EditorEvent ee) {
+	private void onSessionChanged(EditorEvent<Session> ee) {
 		updateTierView();
 		getFindManager().setSearchTier(getSearchTiers());
 	}
 
-	@RunOnEDT
-	public void onSessionLocationChanged(EditorEvent ee) {
-		final SessionLocation location = 
-				(SessionLocation)ee.getEventData();
+	private void onSessionLocationChanged(EditorEvent<SessionLocation> ee) {
+		final SessionLocation location = ee.data();
 		if(location != null) {
 			findManager.setCurrentLocation(location);
 		}
@@ -610,9 +593,10 @@ public class FindAndReplaceEditorView extends EditorView {
 		edit.end();
 		
 		if(occurrences > 0) {
-			final EditorEvent ee = new EditorEvent(EditorEventType.MODIFICATION_EVENT, this);
-			getEditor().getEventManager().queueEvent(ee);
-			final EditorEvent refresh = new EditorEvent(EditorEventType.RECORD_REFRESH_EVT, this);
+			getEditor().getEventManager().queueEvent(
+					new EditorEvent<>(new EditorEventType<>(EditorEventName.MODIFICATION_EVENT.getEventName(), Void.class), this, null));
+			final EditorEvent<EditorEventType.RecordChangedData> refresh =
+					new EditorEvent<>(EditorEventType.RecordRefresh, this, new EditorEventType.RecordChangedData(getEditor().getCurrentRecordIndex(), getEditor().currentRecord()));
 			getEditor().getEventManager().queueEvent(refresh);
 			
 			getEditor().getUndoSupport().postEdit(edit);

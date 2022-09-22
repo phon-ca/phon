@@ -15,6 +15,7 @@
  */
 package ca.phon.app.session.editor.view.ipa_lookup;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.EditorViewAdapter;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.view.ipa_lookup.actions.*;
@@ -24,6 +25,7 @@ import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.util.Language;
 import ca.phon.util.icons.*;
+import org.apache.commons.logging.Log;
 
 import javax.swing.*;
 import javax.swing.text.*;
@@ -35,10 +37,6 @@ import java.util.stream.Collectors;
 
 public class IPALookupView extends EditorView {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(IPALookupView.class.getName());
-
-	private final static long serialVersionUID = 2932635326993882782L;
-
 	public final static String VIEW_NAME = "IPA Lookup";
 	
 	public final static String VIEW_ICON = "misc/ipa-dict";
@@ -97,14 +95,8 @@ public class IPALookupView extends EditorView {
 	private void setupEditorActions() {
 		final SessionEditor editor = getEditor();
 		
-		final DelegateEditorAction recordChangeAct = new DelegateEditorAction(this, "onRecordChanged");
-		editor.getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, recordChangeAct);
-		
-		final DelegateEditorAction tierChangeAct = new DelegateEditorAction(this, "onTierChanged");
-		editor.getEventManager().registerActionForEvent(EditorEventType.TIER_CHANGED_EVT, tierChangeAct);
-
-		final DelegateEditorAction sessionChangedAct = new DelegateEditorAction(this, "onSessionChanged");
-		editor.getEventManager().registerActionForEvent(EditorEventType.SESSION_CHANGED_EVT, sessionChangedAct);
+		editor.getEventManager().registerActionForEvent(EditorEventType.RecordChanged, this::onRecordChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		editor.getEventManager().registerActionForEvent(EditorEventType.TierChanged, this::onTierChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 	}
 	
 	private void setupToolbar() {
@@ -160,7 +152,7 @@ public class IPALookupView extends EditorView {
 				try {
 					doc.insertString(doc.getLength(), "S " + err, null);
 				} catch (BadLocationException e) {
-					LOGGER.warn( e.getLocalizedMessage(), e);
+					LogUtil.warning(e);
 				}
 			}
 			
@@ -226,26 +218,17 @@ public class IPALookupView extends EditorView {
 	/*
 	 * Editor actions
 	 */
-	@RunOnEDT
-	public void onSessionChanged(EditorEvent ee) {
-		// do same as if record changed
-		onRecordChanged(ee);
-	}
-
-	@RunOnEDT
-	public void onRecordChanged(EditorEvent ee) {
+	private void onRecordChanged(EditorEvent<EditorEventType.RecordChangedData> ee) {
 		if(!getEditor().getViewModel().isShowingInStack(VIEW_NAME)) return;
 		
-		final Record r = getEditor().currentRecord();
+		final Record r = ee.data().record();
 		recordLookupPanel.setRecord(r);
 	}
 	
-	@RunOnEDT
-	public void onTierChanged(EditorEvent ee) {
+	private void onTierChanged(EditorEvent<EditorEventType.TierChangeData> ee) {
 		if(!getEditor().getViewModel().isShowingInStack(VIEW_NAME)) return;
 		
-		if(ee.getEventData() != null && 
-				SystemTierType.Orthography.getName().equals(ee.getEventData())) {
+		if(SystemTierType.Orthography.getName().equals(ee.data().tier().getName())) {
 			recordLookupPanel.update();
 		}
 	}

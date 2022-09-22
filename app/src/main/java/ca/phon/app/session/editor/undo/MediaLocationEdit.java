@@ -19,10 +19,9 @@ import ca.phon.app.session.editor.*;
 import ca.phon.session.Session;
 
 import javax.swing.undo.CannotUndoException;
+import java.awt.*;
 
 public class MediaLocationEdit extends SessionEditorUndoableEdit {
-
-	private static final long serialVersionUID = 7934882593502356426L;
 
 	private final String mediaLocation;
 	
@@ -52,7 +51,9 @@ public class MediaLocationEdit extends SessionEditorUndoableEdit {
 				|| getOldLocation() != null && !getOldLocation().equals(session.getMediaLocation())) {
 			session.setMediaLocation(getOldLocation());
 			getEditor().getMediaModel().resetAudioCheck();
-			queueEvent(EditorEventType.SESSION_MEDIA_CHANGED, getSource(), getOldLocation());
+			final EditorEvent<EditorEventType.SessionMediaChangedData> ee =
+					new EditorEvent<>(EditorEventType.SessionMediaChanged, (Component) getSource(), new EditorEventType.SessionMediaChangedData(getMediaLocation(), getOldLocation()));
+			getEditor().getEventManager().queueEvent(ee);
 		}
 	}
 
@@ -68,11 +69,12 @@ public class MediaLocationEdit extends SessionEditorUndoableEdit {
 		
 		if(oldLocation == null && mediaLocation != null
 				|| oldLocation != null && mediaLocation == null
-				|| oldLocation != null && !oldLocation.equals(mediaLocation)
-				|| mediaLocation != null && !mediaLocation.equals(oldLocation)) {
+				|| oldLocation != null && !oldLocation.equals(mediaLocation)) {
 			session.setMediaLocation(mediaLocation);
 			getEditor().getMediaModel().resetAudioCheck();
-			queueEvent(EditorEventType.SESSION_MEDIA_CHANGED, getSource(), mediaLocation);
+			final EditorEvent<EditorEventType.SessionMediaChangedData> ee =
+					new EditorEvent<>(EditorEventType.SessionMediaChanged, (Component) getSource(), new EditorEventType.SessionMediaChangedData(getOldLocation(), getMediaLocation()));
+			getEditor().getEventManager().queueEvent(ee);
 		}
 	}
 

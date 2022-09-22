@@ -114,8 +114,6 @@ public class TierOrderingEditorView extends EditorView {
 		final TierOrderingTableModel tableModel =
 				new TierOrderingTableModel(session, getCurrentOrder()) {
 
-					private static final long serialVersionUID = 1L;
-
 					@Override
 					public void setValueAt(Object aValue, int rowIndex,
 							int columnIndex) {
@@ -229,11 +227,8 @@ public class TierOrderingEditorView extends EditorView {
 	}
 	
 	private void setupEditorActions() {
-		final EditorAction sessionChangedAct = new DelegateEditorAction(this, "onSessionChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_CHANGED_EVT, sessionChangedAct);
-
-		final EditorAction tierViewChangeAct = new DelegateEditorAction(this, "onTierViewChange");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_VIEW_CHANGED_EVT, tierViewChangeAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SessionChanged, this::onSessionChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.TierViewChanged, this::onTierViewChange, EditorEventManager.RunOn.AWTEventDispatchThread);
 	}
 	
 	public JTable getTierOrderingTable() {
@@ -590,13 +585,15 @@ public class TierOrderingEditorView extends EditorView {
 	/*
 	 * Editor events 
 	 */
-	@RunOnEDT
-	public void onSessionChanged(EditorEvent ee) {
-		onTierViewChange(ee);
+	private void onSessionChanged(EditorEvent<Session> ee) {
+		onDataChange(ee);
 	}
 
-	@RunOnEDT
-	public void onTierViewChange(EditorEvent ee) {
+	public void onTierViewChange(EditorEvent<EditorEventType.TierViewChangedData> ee) {
+		onDataChange(ee);
+	}
+
+	private void onDataChange(EditorEvent<?> ee) {
 		final List<TierViewItem> tierOrder = new ArrayList<TierViewItem>(getEditor().getSession().getTierView());
 		tierOrderRef.getAndSet(tierOrder);
 

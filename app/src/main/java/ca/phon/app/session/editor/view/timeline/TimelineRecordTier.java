@@ -617,7 +617,8 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		}
 		getParentView().getEditor().getUndoSupport().endUpdate();
 
-		EditorEvent ee = new EditorEvent(EditorEventType.RECORD_REFRESH_EVT);
+		EditorEvent<EditorEventType.RecordChangedData> ee = new EditorEvent(EditorEventType.RecordRefresh, this,
+				new EditorEventType.RecordChangedData(getParentView().getEditor().getCurrentRecordIndex(), getParentView().getEditor().currentRecord()));
 		getParentView().getEditor().getEventManager().queueEvent(ee);
 
 		onCancelMoveSegments(new PhonActionEvent<>(pae.getActionEvent()));
@@ -628,52 +629,24 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		timeSelectionPopup = null;
 	}
 
-	private final DelegateEditorAction onRecordChange = new DelegateEditorAction(this, "onRecordChange");
-
-	private final DelegateEditorAction onSpeakerChange = new DelegateEditorAction(this, "onSpeakerChange");
-
-	private final DelegateEditorAction onRecordDeleted = new DelegateEditorAction(this, "onRecordDeleted");
-
-	private final DelegateEditorAction onTierChangedAct = new DelegateEditorAction(this, "onTierChanged");
-
-	private final DelegateEditorAction onParticipantRemoveAct = new DelegateEditorAction(this, "onParticipantRemoved");
-
-	private final DelegateEditorAction onParticipantAddedAct = new DelegateEditorAction(this, "onParticipantAdded");
-
-	private final DelegateEditorAction onTierViewChangedAct = new DelegateEditorAction(this, "onTierViewChanged");
-
 	private void setupEditorEvents() {
-		getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT,
-				onRecordChange);
-		getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.SPEAKER_CHANGE_EVT,
-				onSpeakerChange);
-		getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_CHANGED_EVT,
-				onTierChangedAct);
-		getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_VIEW_CHANGED_EVT,
-				onTierViewChangedAct);
-		getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.PARTICIPANT_REMOVED,
-				onParticipantRemoveAct);
-		getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.PARTICIPANT_ADDED,
-				onParticipantAddedAct);
-		getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_DELETED_EVT,
-				onRecordDeleted);
+		getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordChanged, this::onRecordChange, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.SpeakerChanged, this::onSpeakerChange, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.TierChanged, this::onTierChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.TierViewChanged, this::onTierViewChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.ParticipantRemoved, this::onParticipantRemoved, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.ParticipantAdded, this::onParticipantAdded, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordDeleted, this::onRecordDeleted, EditorEventManager.RunOn.AWTEventDispatchThread);
 	}
 
 	private void deregisterEditorEvents() {
-		getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.RECORD_CHANGED_EVT,
-				onRecordChange);
-		getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.SPEAKER_CHANGE_EVT,
-				onSpeakerChange);
-		getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.TIER_CHANGED_EVT,
-				onTierChangedAct);
-		getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.TIER_VIEW_CHANGED_EVT,
-				onTierViewChangedAct);
-		getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.PARTICIPANT_REMOVED,
-				onParticipantRemoveAct);
-		getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.PARTICIPANT_ADDED,
-				onParticipantAddedAct);
-		getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.RECORD_DELETED_EVT,
-				onRecordDeleted);
+		getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.RecordChanged, this::onRecordChange);
+		getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.SpeakerChanged, this::onSpeakerChange);
+		getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.TierChanged, this::onTierChanged);
+		getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.TierViewChanged, this::onTierViewChanged);
+		getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.ParticipantRemoved, this::onParticipantRemoved);
+		getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.ParticipantAdded, this::onParticipantAdded);
+		getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.RecordDeleted, this::onRecordDeleted);
 	}
 
 	private void updateCurrentRecordInterval(Record r) {
@@ -731,9 +704,8 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 	}
 
 	/* Editor events */
-	@RunOnEDT
-	public void onRecordChange(EditorEvent evt) {
-		Record r = (Record) evt.getEventData();
+	private void onRecordChange(EditorEvent<EditorEventType.RecordChangedData> evt) {
+		Record r = evt.data().record();
 		// don't update if already switched to record
 		if(recordGrid.getCurrentRecordIndex() == getParentView().getEditor().getCurrentRecordIndex()) {
 			updateCurrentRecordInterval(r);
@@ -752,8 +724,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		recordGrid.repaint(recordGrid.getVisibleRect());
 	}
 
-	@RunOnEDT
-	public void onRecordDeleted(EditorEvent evt) {
+	private void onRecordDeleted(EditorEvent<EditorEventType.RecordDeletedData> evt) {
 		if (currentRecordInterval != null) {
 			getTimeModel().removeInterval(currentRecordInterval);
 
@@ -764,31 +735,27 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		}
 	}
 
-	@RunOnEDT
-	public void onSpeakerChange(EditorEvent evt) {
+	private void onSpeakerChange(EditorEvent<EditorEventType.SpeakerChangedData> evt) {
 		recordGrid.repaint(recordGrid.getVisibleRect());
 	}
 
-	@RunOnEDT
-	public void onParticipantRemoved(EditorEvent ee) {
-		recordGrid.removeSpeaker((Participant) ee.getEventData());
+	private void onParticipantRemoved(EditorEvent<Participant> ee) {
+		recordGrid.removeSpeaker(ee.data());
 	}
 
-	@RunOnEDT
-	public void onParticipantAdded(EditorEvent ee) {
-		setSpeakerVisible((Participant) ee.getEventData(), true);
+	private void onParticipantAdded(EditorEvent<Participant> ee) {
+		setSpeakerVisible(ee.data(), true);
 	}
 
-	@RunOnEDT
-	public void onTierViewChanged(EditorEvent ee) {
+	private void onTierViewChanged(EditorEvent<EditorEventType.TierViewChangedData> ee) {
 		revalidate();
 		repaint();
 	}
 
-	@RunOnEDT
-	public void onTierChanged(EditorEvent ee) {
-		if (SystemTierType.Orthography.getName().equals(ee.getEventData().toString())
-				|| SystemTierType.Segment.getName().equals(ee.getEventData().toString())) {
+	private void onTierChanged(EditorEvent<EditorEventType.TierChangeData> ee) {
+		final String tierName = ee.data().tier().getName();
+		if (SystemTierType.Orthography.getName().equals(tierName)
+				|| SystemTierType.Segment.getName().equals(tierName)) {
 			updateCurrentRecordInterval(getParentView().getEditor().currentRecord());
 			recordGrid.repaint(recordGrid.getVisibleRect());
 		}
@@ -1375,7 +1342,9 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 					getParentView().getEditor().getUndoSupport().beginUpdate();
 				} else {
 					getParentView().getEditor().getUndoSupport().endUpdate();
-					getParentView().getEditor().getEventManager().queueEvent(new EditorEvent(EditorEventType.TIER_CHANGED_EVT, TimelineRecordTier.class, SystemTierType.Segment.getName()));
+					getParentView().getEditor().getEventManager().queueEvent(
+							new EditorEvent<>(EditorEventType.TierChanged, TimelineRecordTier.this,
+									new EditorEventType.TierChangeData(r.getSegment(), 0, segment, segment)));
 				}
 			} else if(evt.getPropertyName().endsWith("time")) {
 				MediaSegment newSegment = factory.createMediaSegment();

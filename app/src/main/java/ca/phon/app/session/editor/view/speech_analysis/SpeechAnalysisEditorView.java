@@ -34,6 +34,7 @@ import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.icons.*;
 import ca.phon.worker.*;
 import ca.phon.worker.PhonTask.TaskStatus;
+import org.apache.commons.logging.Log;
 import org.apache.logging.log4j.LogManager;
 import org.jdesktop.swingx.VerticalLayout;
 
@@ -53,11 +54,8 @@ import java.util.*;
 public class SpeechAnalysisEditorView extends EditorView {
 
 	/** Editor event sent when time model has been updated */
-	public final static String TIME_MODEL_UPDATED = "_SPEECH_ANALYSIS_TIME_MODEL_UPDATE_";
-
-	private static final long serialVersionUID = -1680881691504590317L;
-
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(SpeechAnalysisEditorView.class.getName());
+	public final static EditorEventType<TimeUIModel> TimeModelUpdated =
+			new EditorEventType<>("_SPEECH_ANALYSIS_TIME_MODEL_UPDATE_", TimeUIModel.class);
 
 	public static final String VIEW_TITLE = "Speech Analysis";
 
@@ -145,7 +143,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 				addTier(tier);
 				pluginTiers.add(tier);
 			} catch (Exception e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 		}
 	}
@@ -677,7 +675,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		final float scrollToTime = scrollTo;
 		SwingUtilities.invokeLater(() -> scrollToTime(scrollToTime));
 
-		getEditor().getEventManager().queueEvent(new EditorEvent(TIME_MODEL_UPDATED));
+		getEditor().getEventManager().queueEvent(new EditorEvent<>(TimeModelUpdated, this, timeModel));
 	}
 
 	public void scrollToRecord(Record r) {
@@ -775,64 +773,49 @@ public class SpeechAnalysisEditorView extends EditorView {
 	}
 	
 	/** Editor events */
-	private final DelegateEditorAction sessionLoadedAct = new DelegateEditorAction(this, "onSessionLoaded");
-	private final DelegateEditorAction sessionMediaChangedAct = new DelegateEditorAction(this, "onSessionMediaChanged");
-	private final DelegateEditorAction onSessionAudioAvailableAct = new DelegateEditorAction(this, "onSessionAudioAvailable");
-	private final DelegateEditorAction recordChangedAct = new DelegateEditorAction(this, "onRecordChanged");
-	private final DelegateEditorAction recordRefershAct = new DelegateEditorAction(this, "onRecordRefresh");
-	private final DelegateEditorAction segmentChangedAct = new DelegateEditorAction(this, "onMediaSegmentChanged");
-	private final DelegateEditorAction sessionChangedAct = new DelegateEditorAction(this, "onSessionChanged");
-	
 	private void setupEditorActions() {
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_CHANGED_EVT, sessionChangedAct);
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.EDITOR_FINISHED_LOADING, sessionLoadedAct);
-		
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, sessionMediaChangedAct);
-		getEditor().getEventManager().registerActionForEvent(SessionMediaModel.SESSION_AUDIO_AVAILABLE, onSessionAudioAvailableAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.EditorFinishedLoading, this::onSessionLoaded, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SessionChanged, this::onSessionChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, recordChangedAct);
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_REFRESH_EVT, recordRefershAct);
+		getEditor().getEventManager().registerActionForEvent(SessionMediaModel.SessionAudioAvailable, this::onSessionAudioAvailable, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SessionMediaChanged, this::onSessionMediaChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_CHANGED_EVT, segmentChangedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordChanged, this::onRecordChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordRefresh, this::onRecordRefresh, EditorEventManager.RunOn.AWTEventDispatchThread);
+
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.TierChanged, this::onMediaSegmentChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 	}
 
-	@RunOnEDT
-	public void onSessionChanged(EditorEvent ee) {
+	private void onSessionChanged(EditorEvent ee) {
 		onRecordChanged(ee);
 	}
 
-	@RunOnEDT
-	public void onSessionLoaded(EditorEvent ee) {
+	private void onSessionLoaded(EditorEvent<Void> ee) {
 		// time model will be at default settings when initialized
 		setupTimeModel();
 	}
 	
-	@RunOnEDT
-	public void onRecordChanged(EditorEvent ee) {
+	private void onRecordChanged(EditorEvent<EditorEventType.RecordChangedData> ee) {
 		if(!isVisible() || !getEditor().getViewModel().isShowing(VIEW_TITLE)
 				|| !getEditor().getViewModel().isShowingInStack(VIEW_TITLE)) return;
 		setupTimeModel();
 	}
 
-	@RunOnEDT
-	public void onSessionMediaChanged(EditorEvent ee) {
+	private void onSessionMediaChanged(EditorEvent<EditorEventType.SessionMediaChangedData> ee) {
 		update();
 	}
 	
-	@RunOnEDT
-	public void onSessionAudioAvailable(EditorEvent ee) {
+	private void onSessionAudioAvailable(EditorEvent<SessionMediaModel> ee) {
 		update();
 	}
 
-	@RunOnEDT
-	public void onMediaSegmentChanged(EditorEvent ee) {
-		if(ee.getEventData() != null && ee.getEventData().toString().equals(SystemTierType.Segment.getName())
+	private void onMediaSegmentChanged(EditorEvent<EditorEventType.TierChangeData> ee) {
+		if(ee.data().tier().getName().equals(SystemTierType.Segment.getName())
 				&& getEditor().getViewModel().isShowingInStack(VIEW_TITLE))
 			setupTimeModel();
 	}
 
-	@RunOnEDT
-	public void onRecordRefresh(EditorEvent ee) {
+	private void onRecordRefresh(EditorEvent<EditorEventType.RecordChangedData> ee) {
 		if(!isVisible() || !getEditor().getViewModel().isShowing(VIEW_TITLE)) return;
 		update();
 	}
@@ -861,7 +844,6 @@ public class SpeechAnalysisEditorView extends EditorView {
 		if(mediaModel.isSessionAudioAvailable()) {
 			setupPlaybackMenu(builder);
 			builder.addSeparator(".", "playback");
-//			setupExportMenu(builder);
 			builder.addSeparator(".", "export");
 		} else {
 			if(mediaModel.isSessionMediaAvailable()) {
@@ -869,28 +851,6 @@ public class SpeechAnalysisEditorView extends EditorView {
 				builder.addSeparator(".", "generate");
 			}
 		}
-		
-//		if(getWavDisplay().isPlaying()) {
-//			retVal.add(new StopAction(getEditor(), this));
-//		} else {
-//			retVal.add(new PlayAction(getEditor(), this));
-//			final JCheckBoxMenuItem loopItem = new JCheckBoxMenuItem(new ToggleLoop(getWavDisplay()));
-//			retVal.add(loopItem);
-//
-//			// output device selection
-//			final JMenu mixerMenu = new JMenu("Output Device");
-//			final Info[] mixers = AudioSystem.getMixerInfo();
-//			for(Info mixerInfo:mixers) {
-//				// if we have no source lines, we can't use this device
-//				if(AudioSystem.getMixer(mixerInfo).getSourceLineInfo().length == 0) continue;
-//				final SelectMixerAction mixerAct = new SelectMixerAction(getWavDisplay(), mixerInfo);
-//				mixerAct.putValue(SelectMixerAction.SELECTED_KEY,
-//						getWavDisplay().getMixerInfo() == mixerInfo);
-//				mixerMenu.add(new JCheckBoxMenuItem(mixerAct));
-//			}
-//			retVal.add(mixerMenu);
-//		}
-//		retVal.addSeparator();
 		
 		retVal.add(new ResetAction(getEditor(), this));
 		retVal.add(new ZoomAction(getEditor(), this));
@@ -1138,7 +1098,8 @@ public class SpeechAnalysisEditorView extends EditorView {
 					getEditor().getUndoSupport().beginUpdate();
 				} else {
 					getEditor().getUndoSupport().endUpdate();
-					getEditor().getEventManager().queueEvent(new EditorEvent(EditorEventType.TIER_CHANGED_EVT, this, SystemTierType.Segment.getName()));
+					final EditorEventType.TierChangeData data = new EditorEventType.TierChangeData(r.getSegment(), 0, r.getSegment().getGroup(0), r.getSegment().getGroup(0));
+					getEditor().getEventManager().queueEvent(new EditorEvent(EditorEventType.TierChanged, SpeechAnalysisEditorView.this, data));
 				}
 			} else if(evt.getPropertyName().endsWith("time")) {
 				MediaSegment newSegment = factory.createMediaSegment();

@@ -159,12 +159,15 @@ public class SessionCheckNode extends OpNode implements NodeSettings{
 		if(modified) {
 			if(spRef.get().getExtension(SessionEditor.class) != null) {
 				// tell editor a modification has occured and refresh
-				EditorEvent evt = new EditorEvent(EditorEventType.MODIFICATION_EVENT + "CHECK_SESSION");
-				spRef.get().getExtension(SessionEditor.class).getEventManager().queueEvent(evt);
+				final SessionEditor editor = spRef.get().getExtension(SessionEditor.class);
+				final EditorEvent<Void> evt = new EditorEvent<>(
+						new EditorEventType<>(EditorEventName.MODIFICATION_EVENT + "CHECK_SESSION", Void.class), editor, null);
+				editor.getEventManager().queueEvent(evt);
 				SwingUtilities.invokeLater( () -> spRef.get().getExtension(SessionEditor.class).setModified(true) );
 				
-				evt = new EditorEvent(EditorEventType.RECORD_REFRESH_EVT);
-				spRef.get().getExtension(SessionEditor.class).getEventManager().queueEvent(evt);
+				final EditorEvent<EditorEventType.RecordChangedData> evt2 = new EditorEvent<>(EditorEventType.RecordRefresh, editor,
+						new EditorEventType.RecordChangedData(editor.getCurrentRecordIndex(), editor.currentRecord()));
+				editor.getEventManager().queueEvent(evt2);
 			} else {
 				try {
 					UUID writeLock = project.getSessionWriteLock(session);

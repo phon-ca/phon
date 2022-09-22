@@ -37,9 +37,9 @@ import java.util.*;
 public final class SegmentationHandler {
 
 	/* Editor events */
-	public final static String EDITOR_SEGMENTATION_START = "_segmentation_start_";
+	public final static EditorEventType<SegmentationHandler> SegmentationStarted = new EditorEventType<>("_segmentation_start_", SegmentationHandler.class);
 	
-	public final static String EDITOR_SEGMENTATION_END = "_segmentation_end_";
+	public final static EditorEventType<SegmentationHandler> SegmentationStopped = new EditorEventType<>("_segmentation_end_", SegmentationHandler.class);
 	
 	private final static int VOLUME_INCR = 5;
 	
@@ -491,7 +491,7 @@ public final class SegmentationHandler {
 	}
 	
 	public void startSegmentation() {
-		editor.getEventManager().queueEvent(new EditorEvent(EDITOR_SEGMENTATION_START));
+		editor.getEventManager().queueEvent(new EditorEvent<>(SegmentationStarted, editor, this));
 		
 		cachedSegmentWindow = (window.getBackwardWindowLengthMs() > 0 ? window.getBackwardWindowLengthMs() : 3000L);
 		
@@ -541,7 +541,7 @@ public final class SegmentationHandler {
 	}
 	
 	public void stopSegmentation() {
-		editor.getEventManager().queueEvent(new EditorEvent(EDITOR_SEGMENTATION_END));
+		editor.getEventManager().queueEvent(new EditorEvent<>(SegmentationStopped, editor, this));
 		
 		Toolkit.getDefaultToolkit().removeAWTEventListener(segmentationListener);
 		

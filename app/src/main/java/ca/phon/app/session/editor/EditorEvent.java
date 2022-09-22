@@ -16,63 +16,20 @@
 
 package ca.phon.app.session.editor;
 
+import java.awt.*;
+import java.util.Optional;
+
 /**
  * Entity class for editor events.
+ *
+ * @param eventType
+ * @param source
+ * @param data
  */
-public class EditorEvent {
+public record EditorEvent<T>(EditorEventType<T> eventType, Component source, T data) {
 
-	/** Event name */
-	private String evtName;
-
-	/** Source */
-	private Object source;
-
-	/** Event data */
-	private Object evtData;
-
-	public EditorEvent() {
-		super();
-	}
-
-	public EditorEvent(String evtName) {
-		this(evtName, null, null);
-	}
-
-	public EditorEvent(String evtName, Object src) {
-		this(evtName, src, null);
-	}
-
-	public EditorEvent(String evtName, Object src, Object data) {
-		super();
-
-		this.evtName = evtName;
-		this.source = src;
-		this.evtData = data;
-	}
-
-	/** Get/Set */
-	public String getEventName() {
-		return evtName;
-	}
-
-	public void setEventName(String evtName) {
-		this.evtName = evtName;
-	}
-
-	public Object getSource() {
-		return source;
-	}
-
-	public void setSource(Object src) {
-		this.source = src;
-	}
-
-	public Object getEventData() {
-		return this.evtData;
-	}
-
-	public void setEventData(Object data) {
-		this.evtData = data;
+	public Optional<T> getData() {
+		return Optional.ofNullable(data());
 	}
 
 }

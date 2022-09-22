@@ -27,8 +27,6 @@ import java.util.*;
  */
 public class TierViewEdit extends SessionEditorUndoableEdit {
 
-	private static final long serialVersionUID = 8337753863840703579L;
-
 	/**
 	 * Old view
 	 */
@@ -41,7 +39,7 @@ public class TierViewEdit extends SessionEditorUndoableEdit {
 	
 	public TierViewEdit(SessionEditor editor, List<TierViewItem> oldView, List<TierViewItem> newView) {
 		super(editor);
-		this.oldView = new ArrayList<TierViewItem>(oldView);
+		this.oldView = new ArrayList<>(oldView);
 		this.newView = newView;
 	}
 	
@@ -70,8 +68,10 @@ public class TierViewEdit extends SessionEditorUndoableEdit {
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getSession();
 		session.setTierView(oldView);
-		
-		super.queueEvent(EditorEventType.TIER_VIEW_CHANGED_EVT, editor.getUndoSupport(), oldView);
+
+		final EditorEvent<EditorEventType.TierViewChangedData> ee =
+				new EditorEvent<>(EditorEventType.TierViewChanged, getSource(), new EditorEventType.TierViewChangedData(newView, oldView));
+		getEditor().getEventManager().queueEvent(ee);
 	}
 
 	@Override
@@ -79,8 +79,10 @@ public class TierViewEdit extends SessionEditorUndoableEdit {
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getSession();
 		session.setTierView(newView);
-		
-		super.queueEvent(EditorEventType.TIER_VIEW_CHANGED_EVT, getSource(), newView);
+
+		final EditorEvent<EditorEventType.TierViewChangedData> ee =
+				new EditorEvent<>(EditorEventType.TierViewChanged, getSource(), new EditorEventType.TierViewChangedData(oldView, newView));
+		getEditor().getEventManager().queueEvent(ee);
 	}
 	
 }

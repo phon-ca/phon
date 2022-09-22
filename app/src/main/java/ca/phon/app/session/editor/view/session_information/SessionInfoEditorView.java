@@ -48,8 +48,6 @@ import java.time.LocalDate;
  */
 public class SessionInfoEditorView extends EditorView {
 
-	private static final long serialVersionUID = -3112381708875592956L;
-	
 	public static final String VIEW_TITLE = "Session Information";
 
 	/**
@@ -92,7 +90,7 @@ public class SessionInfoEditorView extends EditorView {
 			final String newVal = languageField.getText();
 			
 			final SessionLanguageEdit edit = new SessionLanguageEdit(getEditor(), newVal);
-			edit.setSource(this);
+			edit.setSource(SessionInfoEditorView.this);
 			getEditor().getUndoSupport().postEdit(edit);
 		}
 		
@@ -118,26 +116,17 @@ public class SessionInfoEditorView extends EditorView {
 	}
 
 	private void setupEditorActions() {
-		final DelegateEditorAction sessionChangedAct = new DelegateEditorAction(this, "onSessionChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_CHANGED_EVT, sessionChangedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SessionChanged, this::onSessionChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 
-		final DelegateEditorAction sessionMediaChangedAct = new
-				DelegateEditorAction(this, "onSessionMediaChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, sessionMediaChangedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SessionMediaChanged, this::onSessionMediaChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 		
-		final DelegateEditorAction participantsChangedAct = 
-				new DelegateEditorAction(this, "onParticipantListChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.PARTICIPANT_ADDED, participantsChangedAct);
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.PARTICIPANT_REMOVED, participantsChangedAct);
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.PARTICIPANT_CHANGED, participantsChangedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.ParticipantAdded, this::onParticipantListChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.ParticipantRemoved, this::onParticipantListChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.ParticipantChanged, this::onParticipantListChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 	
-		final DelegateEditorAction dateChangedAct = 
-				new DelegateEditorAction(this, "onDateChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_DATE_CHANGED, dateChangedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SessionDateChanged, this::onDateChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 		
-		final DelegateEditorAction langChangedAct = 
-				new DelegateEditorAction(this, "onLangChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_LANG_CHANGED, langChangedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SessionLangChanged, this::onLangChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 	}
 	
 	private void init() {
@@ -448,15 +437,13 @@ public class SessionInfoEditorView extends EditorView {
 	}
 	
 	/** Editor actions */
-	@RunOnEDT
-	public void onSessionChanged(EditorEvent ee) {
+	private void onSessionChanged(EditorEvent<Session> ee) {
 		update();
 	}
 
 	boolean updatingMediaLocation = false;
-	@RunOnEDT
-	public void onSessionMediaChanged(EditorEvent ee) {
-		if(ee.getSource() != this) {
+	private void onSessionMediaChanged(EditorEvent<EditorEventType.SessionMediaChangedData> ee) {
+		if(ee.source() != this) {
 			final String mediaPath = getEditor().getSession().getMediaLocation();
 			updatingMediaLocation = true;
 			mediaLocationField.setFile(mediaPath != null ? new File(mediaPath) : null);
@@ -464,8 +451,7 @@ public class SessionInfoEditorView extends EditorView {
 		}
 	}
 	
-	@RunOnEDT
-	public void onParticipantListChanged(EditorEvent ee) {
+	private void onParticipantListChanged(EditorEvent<Participant> ee) {
 		((ParticipantsTableModel)participantTable.getModel()).fireTableDataChanged();
 		
 		// setup menu for editor so that new participant actions for
@@ -473,20 +459,18 @@ public class SessionInfoEditorView extends EditorView {
 		getEditor().setJMenuBar(MenuManager.createWindowMenuBar(getEditor()));
 	}
 	
-	@RunOnEDT
-	public void onLangChanged(EditorEvent ee) {
-		if(ee.getSource() != languageFieldListener) {
-			final String newVal = (String)ee.getEventData();
+	private void onLangChanged(EditorEvent<EditorEventType.SessionLangChangedData> ee) {
+		if(ee.source() != languageFieldListener) {
+			final String newVal = ee.data().newLang();
 			updatingLanguage = true;
 			languageField.setText(newVal);
 			updatingLanguage = false;
 		}
 	}
 	
-	@RunOnEDT
-	public void onDateChanged(EditorEvent ee) {
-		if(ee.getSource() != dateField) {
-			final LocalDate newDate = (LocalDate)ee.getEventData();
+	private void onDateChanged(EditorEvent<EditorEventType.SessionDateChangedData> ee) {
+		if(ee.source() != dateField) {
+			final LocalDate newDate = ee.data().newDate();
 			dateField.setDateTime(newDate);
 		}
 		((ParticipantsTableModel)participantTable.getModel()).fireTableDataChanged();
@@ -501,7 +485,7 @@ public class SessionInfoEditorView extends EditorView {
 			updateMediaFieldStatus();
 
 			final MediaLocationEdit edit = new MediaLocationEdit(getEditor(), mediaLocationField.getText());
-			edit.setSource(this);
+			edit.setSource(SessionInfoEditorView.this);
 			getEditor().getUndoSupport().postEdit(edit);
 		}
 		

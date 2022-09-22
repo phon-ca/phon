@@ -22,8 +22,6 @@ import ca.phon.syllable.SyllabificationInfo;
 
 public class ToggleDiphthongEdit extends SessionEditorUndoableEdit {
 	
-	private static final long serialVersionUID = -4921206917410378793L;
-
 	private final IPATranscript transcript;
 	
 	private final int index;
@@ -45,8 +43,10 @@ public class ToggleDiphthongEdit extends SessionEditorUndoableEdit {
 			final IPAElement ele = transcript.elementAt(index);
 			final SyllabificationInfo info = ele.getExtension(SyllabificationInfo.class);
 			info.setDiphthongMember(!info.isDiphthongMember());
-			
-			final EditorEvent ee = new EditorEvent(SyllabificationAlignmentEditorView.SC_EDIT, getSource(), transcript);
+
+			final EditorEvent<SyllabificationAlignmentEditorView.ScEditData> ee =
+					new EditorEvent<>(SyllabificationAlignmentEditorView.ScEdit, getSource(),
+							new SyllabificationAlignmentEditorView.ScEditData(transcript, index, info.getConstituentType(), info.getConstituentType()));
 			getEditor().getEventManager().queueEvent(ee);
 		}
 	}

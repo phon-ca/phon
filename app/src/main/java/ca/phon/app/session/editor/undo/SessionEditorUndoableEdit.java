@@ -20,6 +20,7 @@ import ca.phon.extensions.*;
 import ca.phon.session.Session;
 
 import javax.swing.undo.*;
+import java.awt.*;
 import java.lang.ref.WeakReference;
 import java.util.Set;
 
@@ -30,8 +31,6 @@ import java.util.Set;
  */
 public abstract class SessionEditorUndoableEdit extends AbstractUndoableEdit implements IExtendable {
 
-	private static final long serialVersionUID = 7922388747133546800L;
-	
 	private final ExtensionSupport extSupport = new ExtensionSupport(SessionEditorUndoableEdit.class, this);
 
 	/**
@@ -42,7 +41,7 @@ public abstract class SessionEditorUndoableEdit extends AbstractUndoableEdit imp
 	/**
 	 * Optional 'source' for edit.
 	 */
-	private Object source;
+	private Component source;
 	
 	/**
 	 * Constructor
@@ -51,26 +50,14 @@ public abstract class SessionEditorUndoableEdit extends AbstractUndoableEdit imp
 	 */
 	public SessionEditorUndoableEdit(SessionEditor editor) {
 		super();
-		this.editorRef = new WeakReference<SessionEditor>(editor);
+		this.editorRef = new WeakReference<>(editor);
+		setSource(editor);
 		
 		extSupport.initExtensions();
 	}
 	
 	public SessionEditor getEditor() {
 		return editorRef.get();
-	}
-	
-	/**
-	 * Helper method for firing events
-	 * 
-	 * @param eventName
-	 * @param eventData
-	 */
-	public void queueEvent(String eventName, Object src, Object eventData) {
-		final SessionEditor editor = getEditor();
-		final EditorEventManager eventManager = editor.getEventManager();
-		final EditorEvent event = new EditorEvent(eventName, src, eventData);
-		eventManager.queueEvent(event);
 	}
 	
 	/**
@@ -82,7 +69,7 @@ public abstract class SessionEditorUndoableEdit extends AbstractUndoableEdit imp
 	 * 
 	 * @return the source
 	 */
-	public Object getSource() {
+	public Component getSource() {
 		return this.source;
 	}
 	
@@ -91,9 +78,9 @@ public abstract class SessionEditorUndoableEdit extends AbstractUndoableEdit imp
 	 * initial execution of the edit.  Undo/redo operations always use
 	 * the editor's undo support as the source.
 	 * 
-	 * @param the edit source
+	 * @param source
 	 */
-	public void setSource(Object source) {
+	public void setSource(Component source) {
 		this.source = source;
 	}
 	
@@ -102,8 +89,6 @@ public abstract class SessionEditorUndoableEdit extends AbstractUndoableEdit imp
 		final Object oldSource = getSource();
 	
 		if(getEditor() != null) {
-			setSource(getEditor().getUndoSupport());
-			
 			final Integer recordIdx = getExtension(Integer.class);
 			if(recordIdx != null && getEditor().getCurrentRecordIndex() != recordIdx.intValue()) {
 				getEditor().setCurrentRecordIndex(recordIdx.intValue());
@@ -111,7 +96,6 @@ public abstract class SessionEditorUndoableEdit extends AbstractUndoableEdit imp
 		}
 		
 		doIt();
-		setSource(oldSource);
 	}
 	
 	@Override

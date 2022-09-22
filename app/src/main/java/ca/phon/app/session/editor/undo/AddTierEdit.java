@@ -20,7 +20,9 @@ import ca.phon.session.Record;
 import ca.phon.session.*;
 
 import javax.swing.undo.CannotUndoException;
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * Add a new tier to the session.  This will also add a new empty tier
@@ -28,8 +30,6 @@ import java.util.*;
  *
  */
 public class AddTierEdit extends SessionEditorUndoableEdit {
-
-	private static final long serialVersionUID = 5600095287675463984L;
 
 	private final TierDescription tierDescription;
 	
@@ -66,9 +66,6 @@ public class AddTierEdit extends SessionEditorUndoableEdit {
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getSession();
 		
-		final Object oldSource = getSource();
-		setSource(editor.getUndoSupport());
-		
 		session.removeUserTier(tierDescription);
 		
 		final List<TierViewItem> tierView = session.getTierView();
@@ -79,10 +76,10 @@ public class AddTierEdit extends SessionEditorUndoableEdit {
 		for(Record r:session.getRecords()) {
 			r.removeTier(tierDescription.getName());
 		}
-		
-		queueEvent(EditorEventType.TIER_VIEW_CHANGED_EVT, getSource(), newView);
-		
-		setSource(oldSource);
+
+		final EditorEvent<EditorEventType.TierViewChangedData> ee =
+				new EditorEvent<>(EditorEventType.TierViewChanged, getSource(), new EditorEventType.TierViewChangedData(tierView, newView));
+		getEditor().getEventManager().queueEvent(ee);
 	}
 
 	@Override
@@ -114,8 +111,10 @@ public class AddTierEdit extends SessionEditorUndoableEdit {
 				r.putTier(tier);
 			}
 		}
-		
-		queueEvent(EditorEventType.TIER_VIEW_CHANGED_EVT, getSource(), newView);
+
+		final EditorEvent<EditorEventType.TierViewChangedData> ee =
+				new EditorEvent<>(EditorEventType.TierViewChanged, getSource(), new EditorEventType.TierViewChangedData(tierView, newView));
+		getEditor().getEventManager().queueEvent(ee);
 	}
 
 }

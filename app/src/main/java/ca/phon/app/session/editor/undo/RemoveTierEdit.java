@@ -24,8 +24,6 @@ import java.util.*;
 
 public class RemoveTierEdit extends SessionEditorUndoableEdit {
 
-	private static final long serialVersionUID = 5829729907299422281L;
-	
 	private final TierDescription tierDescription;
 	
 	private int tierIdx = -1;
@@ -58,15 +56,13 @@ public class RemoveTierEdit extends SessionEditorUndoableEdit {
 	public void undo() throws CannotUndoException {
 		Session session = getEditor().getSession();
 		
-		final Object oldSource = getSource();
-		setSource(getEditor().getUndoSupport());
-		
 		if(tierIdx >= 0)
 			session.addUserTier(tierIdx, tierDescription);
 		else
 			session.addUserTier(tierDescription);
-		
-		List<TierViewItem> tierView = new ArrayList<>(session.getTierView());
+
+		final List<TierViewItem> oldTierView = session.getTierView();
+		final List<TierViewItem> tierView = new ArrayList<>(oldTierView);
 		if(tierViewIdx >= 0) {
 			tierView.add(tierViewIdx, tierViewItem);
 		} else {
@@ -81,18 +77,15 @@ public class RemoveTierEdit extends SessionEditorUndoableEdit {
 			}
 		}
 
-		queueEvent(EditorEventType.TIER_VIEW_CHANGED_EVT, getSource(), tierView);
-		
-		setSource(oldSource);
+		final EditorEvent<EditorEventType.TierViewChangedData> ee =
+				new EditorEvent<>(EditorEventType.TierViewChanged, getSource(), new EditorEventType.TierViewChangedData(oldTierView, tierView));
+		getEditor().getEventManager().queueEvent(ee);
 	}
 
 	@Override
 	public void doIt() {
 		Session session = getEditor().getSession();
-		
-		final Object oldSource = getSource();
-		setSource(getEditor().getUndoSupport());
-		
+
 		tierMap.clear();
 		for(Record r:session.getRecords()) {
 			if(r.hasTier(tierDescription.getName())) {
@@ -108,15 +101,16 @@ public class RemoveTierEdit extends SessionEditorUndoableEdit {
 			}
 		}
 		session.removeUserTier(tierIdx);
-		
-		List<TierViewItem> tierView = new ArrayList<>(session.getTierView());
+
+		final List<TierViewItem> oldTierView = session.getTierView();
+		final List<TierViewItem> tierView = new ArrayList<>(oldTierView);
 		tierViewIdx = tierView.indexOf(this.tierViewItem);
 		tierView.remove(this.tierViewItem);
 		session.setTierView(tierView);
-		
-		queueEvent(EditorEventType.TIER_VIEW_CHANGED_EVT, getSource(), tierView);
-		
-		setSource(oldSource);
+
+		final EditorEvent<EditorEventType.TierViewChangedData> ee =
+				new EditorEvent<>(EditorEventType.TierViewChanged, getSource(), new EditorEventType.TierViewChangedData(oldTierView, tierView));
+		getEditor().getEventManager().queueEvent(ee);
 	}
 	
 }

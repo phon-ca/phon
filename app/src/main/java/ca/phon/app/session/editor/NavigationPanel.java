@@ -62,17 +62,9 @@ public class NavigationPanel extends JPanel {
 	}
 
 	private void setupEditorActions() {
-		DelegateEditorAction recordChangedAct =
-				new DelegateEditorAction(this, "onRecordChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, recordChangedAct);
-
-		DelegateEditorAction recordAddedAct =
-				new DelegateEditorAction(this, "onRecordAdded");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_ADDED_EVT, recordAddedAct);
-
-		DelegateEditorAction recordDeletedAct =
-				new DelegateEditorAction(this, "onRecordDeleted");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_DELETED_EVT, recordDeletedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordChanged, this::onRecordChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordAdded, this::onRecordAdded, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordDeleted, this::onRecordDeleted, EditorEventManager.RunOn.AWTEventDispatchThread);
 	}
 	
 	private void init() {
@@ -180,12 +172,12 @@ public class NavigationPanel extends JPanel {
 	}
 	
 	/** Editor events */
-	public void onRecordChanged(EditorEvent ee) {
+	private void onRecordChanged(EditorEvent<EditorEventType.RecordChangedData> ee) {
 		if(!recordNumberField.hasFocus())
 			recordNumberField.setText(""+(getEditor().getCurrentRecordIndex()+1));
 	}
 
-	public void onRecordAdded(EditorEvent ee) {
+	private void onRecordAdded(EditorEvent<EditorEventType.RecordAddedData> ee) {
 		numRecordsLabel.setText(""+getEditor().getDataModel().getRecordCount());
 		recordNumberField.setMaxNumber(getEditor().getDataModel().getRecordCount());
 	}

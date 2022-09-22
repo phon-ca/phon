@@ -367,11 +367,9 @@ public class RecordLookupPanel extends JPanel {
 			final PhoneMap pm = aligner.calculatePhoneAlignment(targetIpa, actualIpa);
 
 			final TierEdit<PhoneMap> pmEdit = new TierEdit<PhoneMap>(editor, r.getPhoneAlignment(), i, pm);
+			pmEdit.setFireHardChangeOnUndo(true);
 			getEditor().getUndoSupport().postEdit(pmEdit);
 		}
-
-		final EditorEvent ee = new EditorEvent(EditorEventType.TIER_CHANGED_EVT, this, SystemTierType.SyllableAlignment.getName());
-		getEditor().getEventManager().queueEvent(ee);
 
 		getEditor().getUndoSupport().endUpdate();
 	}
@@ -388,7 +386,8 @@ public class RecordLookupPanel extends JPanel {
 		@Override
 		public <T> void tierValueChanged(Tier<T> tier, int groupIndex,
 				T newValue, T oldValue) {
-			final EditorEvent ee = new EditorEvent(EditorEventType.TIER_CHANGED_EVT, RecordLookupPanel.this, tier.getName());
+			final EditorEvent<EditorEventType.TierChangeData> ee =
+					new EditorEvent<>(EditorEventType.TierChanged, RecordLookupPanel.this, new EditorEventType.TierChangeData(tier, groupIndex, oldValue, newValue));
 			getEditor().getEventManager().queueEvent(ee);
 		}
 

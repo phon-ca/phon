@@ -29,7 +29,7 @@ public class AddRecordEdit extends SessionEditorUndoableEdit {
 	private Record record;
 	
 	// the insertion point
-	private final int index;
+	private int index;
 	
 	private boolean fireEvent = true;
 
@@ -77,8 +77,11 @@ public class AddRecordEdit extends SessionEditorUndoableEdit {
 		final Session session = editor.getSession();
 		
 		session.removeRecord(record);
-		if(isFireEvent())
-			queueEvent(EditorEventType.RECORD_DELETED_EVT, editor.getUndoSupport(), record);
+		if(isFireEvent()) {
+			final EditorEvent<EditorEventType.RecordDeletedData> ee =
+					new EditorEvent<>(EditorEventType.RecordDeleted, getSource(), new EditorEventType.RecordDeletedData(index, record));
+			getEditor().getEventManager().queueEvent(ee);
+		}
 	}
 	
 	@Override
@@ -95,13 +98,17 @@ public class AddRecordEdit extends SessionEditorUndoableEdit {
 			segTier.setGroup(0, factory.createMediaSegment());
 		}
 		
-		if(index < 0)
+		if(index < 0) {
 			session.addRecord(record);
-		else
+			index = session.getRecordCount() - 1;
+		} else
 			session.addRecord(index, record);
 		
-		if(isFireEvent())
-			queueEvent(EditorEventType.RECORD_ADDED_EVT, getSource(), record);
+		if(isFireEvent()) {
+			final EditorEvent<EditorEventType.RecordAddedData> ee =
+					new EditorEvent<>(EditorEventType.RecordAdded, getSource(), new EditorEventType.RecordAddedData(index, record));
+			getEditor().getEventManager().queueEvent(ee);
+		}
 	}
 
 }

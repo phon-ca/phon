@@ -19,7 +19,7 @@ package ca.phon.app.session.editor;
 /**
  * Interface for handling editor actions.
  */
-public interface EditorAction {
+public interface EditorAction<T> {
 
 	/**
 	 * Called when an editor event occurs.
@@ -27,6 +27,6 @@ public interface EditorAction {
 	 * This method is always called on the
 	 * editor event queue (not the AWT event queue.)
 	 */
-	public void eventOccurred(EditorEvent ee);
+	public void eventOccurred(EditorEvent<T> ee);
 
 }

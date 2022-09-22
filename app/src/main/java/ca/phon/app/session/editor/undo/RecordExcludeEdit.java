@@ -50,15 +50,19 @@ public class RecordExcludeEdit extends SessionEditorUndoableEdit {
 		super.undo();
 		
 		record.setExcludeFromSearches(wasExcluded);
-		
-		queueEvent(EditorEventType.RECORD_EXCLUDE_CHANGE_EVT, getEditor().getUndoSupport(), record);
+
+		final EditorEvent<EditorEventType.RecordExcludedChangedData> ee =
+				new EditorEvent<>(EditorEventType.RecordExcludedChanged, getEditor(), new EditorEventType.RecordExcludedChangedData(record, wasExcluded));
+		getEditor().getEventManager().queueEvent(ee);
 	}
 
 	@Override
 	public void doIt() {
 		record.setExcludeFromSearches(this.exclude);
-		
-		queueEvent(EditorEventType.RECORD_EXCLUDE_CHANGE_EVT, getSource(), record);
+
+		final EditorEvent<EditorEventType.RecordExcludedChangedData> ee =
+				new EditorEvent<>(EditorEventType.RecordExcludedChanged, getEditor(), new EditorEventType.RecordExcludedChangedData(record, exclude));
+		getEditor().getEventManager().queueEvent(ee);
 	}
 
 }

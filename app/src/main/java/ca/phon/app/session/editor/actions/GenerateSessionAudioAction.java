@@ -96,8 +96,7 @@ public class GenerateSessionAudioAction extends SessionEditorAction {
 
 					if(getEditor().getMediaModel().isSessionAudioAvailable()) {
 						// tell the editor session audio is now available
-						EditorEvent ee = new EditorEvent(SessionMediaModel.SESSION_AUDIO_AVAILABLE, GenerateSessionAudioAction.this, 
-								getEditor().getMediaModel().getSessionAudioFile());
+						EditorEvent<SessionMediaModel> ee = new EditorEvent<>(SessionMediaModel.SessionAudioAvailable, getEditor(), getEditor().getMediaModel());
 						getEditor().getEventManager().queueEvent(ee);
 					}
 				}

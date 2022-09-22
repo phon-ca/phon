@@ -26,7 +26,7 @@ import org.apache.logging.log4j.LogManager;
 import java.text.ParseException;
 
 public class SyllabifyEdit extends SessionEditorUndoableEdit {
-	
+
 	private static final long serialVersionUID = 4846772248441893228L;
 
 	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(SyllabifyEdit.class.getName());
@@ -58,8 +58,10 @@ public class SyllabifyEdit extends SessionEditorUndoableEdit {
 				final SyllabificationInfo oldInfo = oldTranscript.elementAt(j).getExtension(SyllabificationInfo.class);
 				grp.elementAt(j).putExtension(SyllabificationInfo.class, oldInfo);
 			}
-			
-			final EditorEvent ee = new EditorEvent(SyllabificationAlignmentEditorView.SC_EDIT, getEditor().getUndoSupport(), grp);
+
+			final EditorEvent<SyllabificationAlignmentEditorView.ScEditData> ee =
+					new EditorEvent<>(SyllabificationAlignmentEditorView.ScEdit, getEditor(),
+							new SyllabificationAlignmentEditorView.ScEditData(grp, -1, SyllableConstituentType.UNKNOWN, SyllableConstituentType.UNKNOWN));
 			getEditor().getEventManager().queueEvent(ee);
 		} catch (ParseException e) {
 			LOGGER.error( e.getLocalizedMessage(), e);
@@ -75,8 +77,10 @@ public class SyllabifyEdit extends SessionEditorUndoableEdit {
 		ipa.accept(visitor);
 		
 		syllabifier.syllabify(ipa.toList());
-		
-		final EditorEvent ee = new EditorEvent(SyllabificationAlignmentEditorView.SC_EDIT, getSource(), ipa);
+
+		final EditorEvent<SyllabificationAlignmentEditorView.ScEditData> ee =
+				new EditorEvent<>(SyllabificationAlignmentEditorView.ScEdit, getEditor(),
+						new SyllabificationAlignmentEditorView.ScEditData(ipa, -1, SyllableConstituentType.UNKNOWN, SyllableConstituentType.UNKNOWN));
 		getEditor().getEventManager().queueEvent(ee);
 	}
 	

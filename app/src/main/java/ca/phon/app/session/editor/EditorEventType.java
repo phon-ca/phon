@@ -1,261 +1,183 @@
-/*
- * Copyright (C) 2005-2020 Gregory Hedlund & Yvan Rose
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
-
- *    http://www.apache.org/licenses/LICENSE-2.0
-
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package ca.phon.app.session.editor;
 
-import ca.phon.session.TierListener;
+import ca.phon.app.query.EditQueryDialog;
+import ca.phon.query.db.ResultSet;
+import ca.phon.session.*;
+import ca.phon.session.Record;
+import ca.phon.session.position.SessionLocation;
 
-/**
- * The class holds the event names that are sent
- * by the editor model while the editor is displayed.
- *
- * 
- */
-public class EditorEventType {
+import java.time.*;
+import java.util.List;
 
-	/**
-	 * Modification event.  Any event which starts with
-	 * '_x_' will set the modified flag.  This is a generic
-	 * event that should only be used when all other events
-	 * do not apply or when a new event is needed by a module.
-	 *
-	 */
-	public final static String MODIFICATION_EVENT = "_x_";
+public record EditorEventType<T>(String eventName, Class<T> type) {
 
 	/**
-	 * Editor has saved the session
-	 * data: null
+	 * Fired after the editor has been initialized
 	 */
-	public final static String EDITOR_SAVED_SESSION = "_EDITOR_SAVED_SESSION_";
+	public final static EditorEventType<Void> EditorFinishedLoading =
+			new EditorEventType<>(EditorEventName.EDITOR_FINISHED_LOADING.getEventName(), Void.class);
 
 	/**
 	 * Editor should reload contents from disk
-	 * data: null
 	 */
-	public final static String EDITOR_RELOAD_FROM_DISK = "_EDITOR_RELOAD_FROM_DISK_";
+	public final static EditorEventType<Void> EditorReloadFromDisk =
+			new EditorEventType<>(EditorEventName.EDITOR_RELOAD_FROM_DISK.getEventName(), Void.class);
 
 	/**
 	 * Called when the editor is about to close
-	 * data: null
 	 */
-	public final static String EDITOR_CLOSING = "_EDITOR_CLOSING_";
+	public final static EditorEventType<Void> EditorClosing =
+			new EditorEventType<>(EditorEventName.EDITOR_CLOSING.getEventName(), Void.class);
+
 
 	/**
-	 * Called after the editor has been initialized
-	 * data: null
+	 * Editor has saved the session
 	 */
-	public final static String EDITOR_FINISHED_LOADING = "_EDITOR_FINSIHED_LOADING_";
+	public final static EditorEventType<Session> SessionSaved =
+			new EditorEventType<>(EditorEventName.EDITOR_SAVED_SESSION.getEventName(), Session.class);
 
+	/**
+	 * Session has changed in editor
+	 */
+	public final static EditorEventType<Session> SessionChanged =
+			new EditorEventType<>(EditorEventName.SESSION_CHANGED_EVT.getEventName(), Session.class);
+
+	public record SessionDateChangedData(LocalDate oldDate, LocalDate newDate) { }
+	/**
+	 * Session date change
+	 */
+	public final static EditorEventType<SessionDateChangedData> SessionDateChanged =
+			new EditorEventType<>(EditorEventName.SESSION_DATE_CHANGED.getEventName(), SessionDateChangedData.class);
+
+	public record SessionLangChangedData(String oldLang, String newLang) { }
+	/**
+	 * Session language change
+	 */
+	public final static EditorEventType<SessionLangChangedData> SessionLangChanged =
+			new EditorEventType<>(EditorEventName.SESSION_LANG_CHANGED.getEventName(), SessionLangChangedData.class);
+
+	public record SessionMediaChangedData(String oldMedia, String newMedia) { }
+	/**
+	 * Session media change
+	 */
+	public final static EditorEventType<SessionMediaChangedData> SessionMediaChanged =
+			new EditorEventType<>(EditorEventName.SESSION_MEDIA_CHANGED.getEventName(), SessionMediaChangedData.class);
+
+	public record TierViewChangedData(List<TierViewItem> oldTierView, List<TierViewItem> newTierView) { }
+	/**
+	 * Tier view has changed
+	 */
+	public final static EditorEventType<TierViewChangedData> TierViewChanged =
+			new EditorEventType<>(EditorEventName.TIER_VIEW_CHANGED_EVT.getEventName(), TierViewChangedData.class);
+
+	public record TierLockChangedData(TierViewItem tierViewItem, boolean locked) { }
+	/**
+	 * Tier lock has changed
+	 */
+	public final static EditorEventType<TierLockChangedData> TierLockChanged =
+			new EditorEventType<>(EditorEventName.TIER_LOCK_CHANGED_EVT.getEventName(), TierLockChangedData.class);
+
+	/**
+	 * A participant was added
+	 */
+	public final static EditorEventType<Participant> ParticipantAdded =
+			new EditorEventType<>(EditorEventName.PARTICIPANT_ADDED.getEventName(), Participant.class);
+
+	/**
+	 * A participant was removed
+	 */
+	public final static EditorEventType<Participant> ParticipantRemoved =
+			new EditorEventType<>(EditorEventName.PARTICIPANT_REMOVED.getEventName(), Participant.class);
+
+	/**
+	 * Participant data has changed
+	 */
+	public final static EditorEventType<Participant> ParticipantChanged =
+			new EditorEventType<>(EditorEventName.PARTICIPANT_CHANGED.getEventName(), Participant.class);
+
+	public record RecordAddedData(int index, Record record) { }
 	/**
 	 * Called when a new record is added to the open session
-	 * data: 
 	 */
-	public final static String RECORD_ADDED_EVT = MODIFICATION_EVENT + "RECORD_ADDED_";
-
+	public final static EditorEventType<RecordAddedData> RecordAdded =
+			new EditorEventType<>(EditorEventName.RECORD_ADDED_EVT.getEventName(), RecordAddedData.class);
+	public record RecordDeletedData(int index, Record record) { }
 	/**
 	 * Called when a record is removed from the open session
-	 * data:
 	 */
-	public final static String RECORD_DELETED_EVT = MODIFICATION_EVENT + "RECORD_DELETED_";
-	
+	public final static EditorEventType<RecordDeletedData> RecordDeleted =
+			new EditorEventType<>(EditorEventName.RECORD_DELETED_EVT.getEventName(), RecordDeletedData.class);
+	public record RecordMovedData(int fromIndex, int toIndex, Record record) { }
 	/**
 	 * Called when a record is moved
-	 * data: record
 	 */
-	public final static String RECORD_MOVED_EVT = MODIFICATION_EVENT + "RECORD_MOVED_";
+	public final static EditorEventType<RecordMovedData> RecordMoved =
+			new EditorEventType<>(EditorEventName.RECORD_MOVED_EVT.getEventName(), RecordMovedData.class);
+	public record RecordChangedData(int index, Record record) { }
+	/**
+	 * Current record has changed in editor
+	 */
+	public final static EditorEventType<RecordChangedData> RecordChanged =
+			new EditorEventType<>(EditorEventName.RECORD_CHANGED_EVT.getEventName(), RecordChangedData.class);
 
 	/**
 	 * Called when the editor wants a refresh of the view for the
 	 * current record
-	 * data:
 	 */
-	public final static String RECORD_REFRESH_EVT = "_RECORD_REFRESH_";
-
-	/**
-	 * New session
-	 * data: session
-	 */
-	public final static String SESSION_CHANGED_EVT = "_SESSION_CHANGED_";
-
-	/**
-	 * Current record has changed in editor
-	 * data: record
-	 */
-	public final static String RECORD_CHANGED_EVT = "_RECORD_CHANGED_";
-
-	/**
-	 * Highlighted search result change
-	 * data: search result handle
-	 */
-	public final static String SEARCH_RESULT_CHANGED_EVT = "_SEARCH_RESULT_CHANGED_";
-
-	/**
-	 * Selected range change
-	 * data: new range to select - SessionRange
-	 */
-	public final static String SELECTED_RANGE_CHANGED_EVT = "_SELECTED_RANGE_CHANGED_EVT_";
+	public final static EditorEventType<RecordChangedData> RecordRefresh =
+			new EditorEventType<>(EditorEventName.RECORD_REFRESH_EVT.getEventName(), RecordChangedData.class);
 
 	/**
 	 * Position of caret changed in record tiers
-	 * data: new session location - SessionLocation
 	 */
-	public final static String SESSION_LOCATION_CHANGED_EVT = "_SESSION_LOCATION_CHANGED_EVT_";
+	public final static EditorEventType<SessionLocation> SessionLocationChanged =
+			new EditorEventType<>(EditorEventName.SESSION_LOCATION_CHANGED_EVT.getEventName(), SessionLocation.class);
 
+	public record SpeakerChangedData(Record record, Participant oldSpeaker, Participant newSpeaker) { }
 	/**
 	 * Change to speaker for record
-	 * data: record
 	 */
-	public final static String SPEAKER_CHANGE_EVT = MODIFICATION_EVENT + "SPEAKER_CHANGE_";
-	
+	public final static EditorEventType<SpeakerChangedData> SpeakerChanged =
+			new EditorEventType<>(EditorEventName.SPEAKER_CHANGE_EVT.getEventName(), SpeakerChangedData.class);
+
+	public record TierChangeData(Tier<?> tier, int group, Object oldValue, Object newValue) { }
 	/**
-	 * Changes in tier data.
-	 * 
-	 * data: the tier name - String
+	 * Changes in tier data, usually fired during value adjustments.
+	 *
 	 */
-	public final static String TIER_CHANGE_EVT = MODIFICATION_EVENT + "TIER_CHANGE_";
-	
+	public final static EditorEventType<TierChangeData> TierChange =
+			new EditorEventType<>(EditorEventName.TIER_CHANGE_EVT.getEventName(), TierChangeData.class);
+
 	/**
-	 * Changes in tier data.  Unlike {@link TierListener}s, this event is only called after 
-	 * focus has changed in a component.  This is useful for view which should not update 
-	 * data as it is typed into editor fields. To listen for tier changes as they occur, use {@link TierListener}s
-	 * instead.
-	 * 
-	 * data: the tier name - String
+	 * Changes in tier data. This event is fired when tier data has been
+	 * committed (such as when the current record field is changed)
 	 */
-	public final static String TIER_CHANGED_EVT = MODIFICATION_EVENT + "TIER_CHANGED_";
-	
+	public final static EditorEventType<TierChangeData> TierChanged =
+			new EditorEventType<>(EditorEventName.TIER_CHANGED_EVT.getEventName(), TierChangeData.class);
+
+	public record RecordExcludedChangedData(Record record, boolean excluded) { }
 	/**
-	 * Fired when user clicks on the exclude record box
-	 * Data: null
+	 * Fired when user clicks on the exclude record from searches box
 	 */
-	public static final String RECORD_EXCLUDE_CHANGE_EVT = "_record_exclude_change_";
+	public final static EditorEventType<RecordExcludedChangedData> RecordExcludedChanged =
+			new EditorEventType<>(EditorEventName.RECORD_EXCLUDE_CHANGE_EVT.getEventName(), RecordExcludedChangedData.class);
 
 	/**
 	 * Fired when the number of phonetic groups changes
-	 * data: null
 	 */
-	public final static String GROUP_LIST_CHANGE_EVT = MODIFICATION_EVENT + "GROUP_LIST_CHANGE_EVT_";
+	public final static EditorEventType<Void> GroupListChange =
+			new EditorEventType<>(EditorEventName.GROUP_LIST_CHANGE_EVT.getEventName(), Void.class);
 
 	/**
-	 * Change to current record's segment
-	 * data: null
+	 * Notifies on changes to the modification flag
 	 */
-	public final static String SEGMENT_CHANGED_EVT = MODIFICATION_EVENT + "SEGMENT_CHANGED_EVT_";
+	public final static EditorEventType<Boolean> ModifiedFlagChanged =
+			new EditorEventType<>(EditorEventName.MODIFIED_FLAG_CHANGED.getEventName(), Boolean.class);
 
 	/**
-	 * Event for playing a segment
-	 * data: Tuple<Long, Long>
+	 * Request playback of provided media segment
 	 */
-	public static final String SEGMENT_PLAYBACK_EVENT = "_segment_playback_event_";
+	public final static EditorEventType<MediaSegment> SegmentPlayback =
+			new EditorEventType<>(EditorEventName.SEGMENT_PLAYBACK_EVENT.getEventName(), MediaSegment.class);
 
-	/**
-	 * Notifies on changes to the modification bit
-	 * data: null
-	 */
-	public final static String MODIFIED_FLAG_CHANGED = "_MODIFIED_FLAG_CHANGED_";
-
-
-	/**
-	 * Search completed event
-	 * data:
-	 */
-	public final static String SEARCH_FINISHED_EVT = "_SEARCH_FINISHED_";
-
-
-	/**
-	 * Event fired when a result is hit
-	 * data: search result - 
-	 */
-	public static final String FIND_REPLACE_RESULT_HIT = "_find_replace_result_hit_";
-
-	/**
-	 * A participant has changed
-	 * data: the changed participant - IParticipant
-	 */
-	public final static String PARTICIPANT_CHANGED = MODIFICATION_EVENT + "PARTICIPANT_CHANGED_";
-
-	/**
-	 * A participant was added
-	 * data: added participant - IParticipant
-	 */
-	public final static String PARTICIPANT_ADDED = MODIFICATION_EVENT + "PARTICIPANT_ADDED_";
-
-	/**
-	 * A participant was removed
-	 * data: removed participant - IParticipant
-	 */
-	public final static String PARTICIPANT_REMOVED = MODIFICATION_EVENT + "PARTICIPANT_REMOVED_";
-
-	/**
-	 * Session date change
-	 * data:
-	 */
-	public final static String SESSION_DATE_CHANGED = MODIFICATION_EVENT + "SESSION_DATE_CHANGED_";
-
-	/**
-	 * Session media change
-	 * data: new media - String
-	 */
-	public final static String SESSION_MEDIA_CHANGED = MODIFICATION_EVENT + "SESSION_MEDIA_CHANGED_";
-
-	/**
-	 * Session language change
-	 * data: 
-	 */
-	public final static String SESSION_LANG_CHANGED = MODIFICATION_EVENT + "SESSION_LANG_CHANGED_";
-
-	/**
-	 * Tier view has changed
-	 * data: null
-	 */
-	public final static String TIER_VIEW_CHANGED_EVT = MODIFICATION_EVENT + "TIER_VIEW_CHANGE_";
-
-	/**
-	 * Tier lock has changed
-	 * data: tier name - String
-	 */
-	public final static String TIER_LOCK_CHANGED_EVT = MODIFICATION_EVENT + "TIER_LOCK_CHANGE_";
-
-	/**
-	 * A new background task was queued
-	 * data: task - PhonTask
-	 */
-	public final static String TASK_QUEUED = "_TASK_QUEUED_";
-
-	/**
-	 * A background task has started to run
-	 * data: task - PhonTask
-	 */
-	public final static String TASK_RUNNING = "_TASK_RUNNING_";
-
-	/**
-	 * A background task has finished
-	 * data: task - PhonTask
-	 */
-	public final static String TASK_FINISHED = "_TASK_FINISHED_";
-
-	/**
-	 * Task progress
-	 *
-	 */
-	public final static String TASK_PROGRESS = "_TASK_PROGRESS_";
-
-	/**
-	 * An error occurred during a task
-	 * data: task - PhonTask
-	 */
-	public final static String TASK_ERROR = "_TASK_ERROR_";
 }

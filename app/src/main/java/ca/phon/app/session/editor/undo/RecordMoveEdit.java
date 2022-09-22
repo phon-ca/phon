@@ -68,10 +68,15 @@ public class RecordMoveEdit extends SessionEditorUndoableEdit {
 		final Session session = editor.getSession();
 		
 		session.setRecordPosition(record, oldPosition);
-		
-		queueEvent(EditorEventType.RECORD_MOVED_EVT, getSource(), record);
+
+		final EditorEvent<EditorEventType.RecordMovedData> ee =
+				new EditorEvent<>(EditorEventType.RecordMoved, getSource(),
+						new EditorEventType.RecordMovedData(position, oldPosition, record));
+		getEditor().getEventManager().queueEvent(ee);
 		if(issueRefresh) {
-			queueEvent(EditorEventType.RECORD_REFRESH_EVT, getSource(), null);
+			getEditor().getEventManager().queueEvent(
+					new EditorEvent<>(EditorEventType.RecordRefresh, getSource(),
+							new EditorEventType.RecordChangedData(oldPosition, record)));
 			getEditor().setCurrentRecordIndex(oldPosition);
 		}
 	}
@@ -80,10 +85,15 @@ public class RecordMoveEdit extends SessionEditorUndoableEdit {
 	public void doIt() {
 		oldPosition = getEditor().getSession().getRecordPosition(record);
 		getEditor().getSession().setRecordPosition(record, position);
-		
-		queueEvent(EditorEventType.RECORD_MOVED_EVT, getSource(), record);
+
+		final EditorEvent<EditorEventType.RecordMovedData> ee =
+				new EditorEvent<>(EditorEventType.RecordMoved, getSource(),
+						new EditorEventType.RecordMovedData(oldPosition, position, record));
+		getEditor().getEventManager().queueEvent(ee);
 		if(issueRefresh) {
-			queueEvent(EditorEventType.RECORD_REFRESH_EVT, getSource(), null);
+			getEditor().getEventManager().queueEvent(
+					new EditorEvent<>(EditorEventType.RecordRefresh, getSource(),
+							new EditorEventType.RecordChangedData(position, record)));
 			getEditor().setCurrentRecordIndex(position);
 		}
 	}

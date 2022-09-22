@@ -20,6 +20,7 @@ import ca.phon.app.log.*;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.view.check.actions.SessionCheckRefreshAction;
 import ca.phon.plugin.*;
+import ca.phon.session.Session;
 import ca.phon.session.check.*;
 import ca.phon.ui.DropDownButton;
 import ca.phon.ui.action.PhonUIAction;
@@ -59,12 +60,10 @@ public class SessionCheckView extends EditorView {
 	}
 
 	private void setupEditorActions() {
-		final EditorAction sessionChangedAct = new DelegateEditorAction(this,"onSessionChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_CHANGED_EVT, sessionChangedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SessionChanged, this::onSessionChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 	}
 
-	@RunOnEDT
-	public void onSessionChanged(EditorEvent ee) {
+	private void onSessionChanged(EditorEvent<Session> ee) {
 		refresh();
 	}
 

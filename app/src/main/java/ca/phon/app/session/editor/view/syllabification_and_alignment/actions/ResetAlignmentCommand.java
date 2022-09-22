@@ -22,13 +22,10 @@ import ca.phon.ipa.alignment.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 
-import javax.swing.undo.CompoundEdit;
 import java.awt.event.ActionEvent;
 
 public class ResetAlignmentCommand extends SyllabificationAlignmentCommand {
 
-	private static final long serialVersionUID = 8113102199705193951L;
-	
 	private final static String TXT = "Reset alignment";
 			
 	private final static String DESC = "Reset alignment";
@@ -46,24 +43,18 @@ public class ResetAlignmentCommand extends SyllabificationAlignmentCommand {
 		final Record r = getEditor().currentRecord();
 		final Tier<PhoneMap> alignmentTier = r.getPhoneAlignment();
 		
-		final CompoundEdit edit = new CompoundEdit();
 		final PhoneAligner aligner = new PhoneAligner();
-		
+
+		getEditor().getUndoSupport().beginUpdate();
 		for(int i = 0; i < r.numberOfGroups(); i++) {
 			final Group group = r.getGroup(i);
-			final PhoneMap newPm = aligner.calculatePhoneMap(group.getIPATarget(), group.getIPAActual());
+			final PhoneMap newPm = aligner.calculatePhoneAlignment(group.getIPATarget(), group.getIPAActual());
 			
-			final TierEdit<PhoneMap> ed = new TierEdit<PhoneMap>(getEditor(), alignmentTier, i, newPm);
-			ed.doIt();
-			edit.addEdit(ed);
-			
+			final TierEdit<PhoneMap> ed = new TierEdit<>(getEditor(), alignmentTier, i, newPm);
+			ed.setFireHardChangeOnUndo(i == r.numberOfGroups() - 1);
+			getEditor().getUndoSupport().postEdit(ed);
 		}
-		final EditorEvent ee = new EditorEvent(EditorEventType.TIER_CHANGED_EVT, getView(), SystemTierType.SyllableAlignment.getName());
-		getEditor().getEventManager().queueEvent(ee);
-		
-		edit.end();
-		
-		getEditor().getUndoSupport().postEdit(edit);
+		getEditor().getUndoSupport().endUpdate();
 	}
 
 }

@@ -304,40 +304,43 @@ public class SessionEditorQuickSearch {
 	}
 	
 	public void setupEditorActions() {
-		final DelegateEditorAction tierChangeAct = new DelegateEditorAction(this, "onTierDataChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_CHANGED_EVT, tierChangeAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.TierChanged, this::onTierDataChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.TierViewChanged, this::onTierNumberChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 		
-		final DelegateEditorAction tierNumberChangedAct = new DelegateEditorAction(this, "onTierNumberChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_VIEW_CHANGED_EVT, tierNumberChangedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordDeleted, this::onRecordDeleted, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordAdded, this::onRecordAdded, EditorEventManager.RunOn.AWTEventDispatchThread);
 		
-		final DelegateEditorAction recordNumberChangedAct = new DelegateEditorAction(this, "onRecordNumberChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_DELETED_EVT, recordNumberChangedAct);
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_ADDED_EVT, recordNumberChangedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordExcludedChanged, this::onRecordExcluded, EditorEventManager.RunOn.AWTEventDispatchThread);
 		
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_EXCLUDE_CHANGE_EVT, tierChangeAct);
-		
-		final DelegateEditorAction closingAct = new DelegateEditorAction(this, "onEditorClosing");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.EDITOR_CLOSING, closingAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.EditorClosing, this::onEditorClosing, EditorEventManager.RunOn.AWTEventDispatchThread);
 	}
 	
-	@RunOnEDT
-	public void onEditorClosing(EditorEvent ee) {
+	private void onEditorClosing(EditorEvent<Void> ee) {
 		// shut down exeService
 		filterTableModel.cleanup();
 	}
-	
-	@RunOnEDT
-	public void onTierDataChanged(EditorEvent ee) {
+
+	private void onRecordExcluded(EditorEvent<EditorEventType.RecordExcludedChangedData> ee) {
+		tableModel.fireTableDataChanged();
+	}
+
+	private void onTierDataChanged(EditorEvent<EditorEventType.TierChangeData> ee) {
 		tableModel.fireTableDataChanged();
 	}
 	
-	@RunOnEDT
-	public void onTierNumberChanged(EditorEvent ee) {
+	private void onTierNumberChanged(EditorEvent<EditorEventType.TierViewChangedData> ee) {
 		tableModel.fireTableStructureChanged();
 	}
-	
-	@RunOnEDT
-	public void onRecordNumberChanged(EditorEvent ee) {
+
+	private void onRecordAdded(EditorEvent<EditorEventType.RecordAddedData> ee) {
+		onRecordNumberChanged(ee);
+	}
+
+	private void onRecordDeleted(EditorEvent<EditorEventType.RecordDeletedData> ee) {
+		onRecordNumberChanged(ee);
+	}
+
+	private void onRecordNumberChanged(EditorEvent<?> ee) {
 		tableModel.fireTableDataChanged();
 	}
 	

@@ -19,6 +19,7 @@ import ca.phon.app.session.editor.*;
 import ca.phon.session.Record;
 
 import javax.swing.undo.CannotUndoException;
+import java.awt.*;
 
 public class AddGroupEdit extends SessionEditorUndoableEdit {
 	
@@ -53,15 +54,17 @@ public class AddGroupEdit extends SessionEditorUndoableEdit {
 		super.undo();
 		
 		record.removeGroup(groupIndex);
-		
-		queueEvent(EditorEventType.GROUP_LIST_CHANGE_EVT, getEditor().getUndoSupport(), null);
+
+		final EditorEvent<Void> ee = new EditorEvent<>(EditorEventType.GroupListChange, (Component) getSource(), null);
+		getEditor().getEventManager().queueEvent(ee);
 	}
 
 	@Override
 	public void doIt() {
 		record.addGroup(groupIndex);
-		
-		queueEvent(EditorEventType.GROUP_LIST_CHANGE_EVT, getSource(), record.getGroup(groupIndex));
+
+		final EditorEvent<Void> ee = new EditorEvent<>(EditorEventType.GroupListChange, (Component) getSource(), null);
+		getEditor().getEventManager().queueEvent(ee);
 	}
 
 }

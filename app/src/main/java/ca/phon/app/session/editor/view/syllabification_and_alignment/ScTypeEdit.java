@@ -22,8 +22,6 @@ import ca.phon.syllable.SyllableConstituentType;
 
 public class ScTypeEdit extends SessionEditorUndoableEdit {
 
-	private static final long serialVersionUID = -4921206917410378793L;
-
 	private final IPATranscript transcript;
 	
 	private final int index;
@@ -44,7 +42,9 @@ public class ScTypeEdit extends SessionEditorUndoableEdit {
 		if(prevScType != null && index >= 0 && index < transcript.length()) {
 			transcript.elementAt(index).setScType(prevScType);
 		
-			final EditorEvent ee = new EditorEvent(SyllabificationAlignmentEditorView.SC_EDIT, getEditor().getUndoSupport(), transcript);
+			final EditorEvent<SyllabificationAlignmentEditorView.ScEditData> ee =
+					new EditorEvent<>(SyllabificationAlignmentEditorView.ScEdit, getEditor(),
+							new SyllabificationAlignmentEditorView.ScEditData(transcript, index, scType, prevScType));
 			getEditor().getEventManager().queueEvent(ee);
 		}
 	}
@@ -54,8 +54,10 @@ public class ScTypeEdit extends SessionEditorUndoableEdit {
 		if(index >= 0 && index < transcript.length()) {
 			prevScType = transcript.elementAt(index).getScType();
 			transcript.elementAt(index).setScType(scType);
-		
-			final EditorEvent ee = new EditorEvent(SyllabificationAlignmentEditorView.SC_EDIT, getSource(), transcript);
+
+			final EditorEvent<SyllabificationAlignmentEditorView.ScEditData> ee =
+					new EditorEvent<>(SyllabificationAlignmentEditorView.ScEdit, getEditor(),
+							new SyllabificationAlignmentEditorView.ScEditData(transcript, index, prevScType, scType));
 			getEditor().getEventManager().queueEvent(ee);
 		}
 	}

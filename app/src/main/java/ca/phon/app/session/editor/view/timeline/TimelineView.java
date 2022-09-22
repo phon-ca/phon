@@ -54,8 +54,6 @@ import java.util.function.*;
 
 public final class TimelineView extends EditorView {
 
-	private static final long serialVersionUID = 8442995100291417078L;
-	
 	static {
 		TimelineViewColors.install();
 	}
@@ -789,84 +787,58 @@ public final class TimelineView extends EditorView {
 	}
 	
 	/* Editor actions */
-	
-	private final DelegateEditorAction onMediaChangedAct = new DelegateEditorAction(this, "onMediaChanged");
-	
-	private final DelegateEditorAction onSessionAudioAvailableAct = new DelegateEditorAction(this, "onSessionAudioAvailable");
-	
-	private final DelegateEditorAction onRecordChangeAct = new DelegateEditorAction(this, "onRecordChanged");
-	
-	private final DelegateEditorAction onSegmentationStarted = new DelegateEditorAction(this, "onSegmentationStarted");
-	
-	private final DelegateEditorAction onSegmentationEnded = new DelegateEditorAction(this, "onSegmentationEnded");
-	
-	private final DelegateEditorAction onRecordAddedAct = new DelegateEditorAction(this, "onRecordAdded");
-	
-	private final DelegateEditorAction onRecordDeletedAct = new DelegateEditorAction(this, "onRecordDeleted");
-	
-	private final DelegateEditorAction onTierChangedAct = new DelegateEditorAction(this, "onTierChanged");
-	
-	private final DelegateEditorAction onMediaLoadedAct = new DelegateEditorAction(this, "onMediaLoaded");
-
-	private final DelegateEditorAction onSessionChangedAct = new DelegateEditorAction(this, "onSessionChanged");
-	
 	private void registerEditorEvents() {
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_CHANGED_EVT, onSessionChangedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SessionChanged, this::onSessionChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChangeAct);
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_REFRESH_EVT, onRecordChangeAct);
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, onMediaChangedAct);
-		getEditor().getEventManager().registerActionForEvent(SessionMediaModel.SESSION_AUDIO_AVAILABLE, onSessionAudioAvailableAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordChanged, this::onRecordChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordRefresh, this::onRecordChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.SessionMediaChanged, this::onMediaChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(SessionMediaModel.SessionAudioAvailable, this::onSessionAudioAvailable, EditorEventManager.RunOn.AWTEventDispatchThread);
 		
-		getEditor().getEventManager().registerActionForEvent(SegmentationHandler.EDITOR_SEGMENTATION_START, onSegmentationStarted);
-		getEditor().getEventManager().registerActionForEvent(SegmentationHandler.EDITOR_SEGMENTATION_END, onSegmentationEnded);
+		getEditor().getEventManager().registerActionForEvent(SegmentationHandler.SegmentationStarted, this::onSegmentationStarted, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(SegmentationHandler.SegmentationStopped, this::onSegmentationEnded, EditorEventManager.RunOn.AWTEventDispatchThread);
 		
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_ADDED_EVT, onRecordAddedAct);
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_DELETED_EVT, onRecordDeletedAct);
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.TIER_CHANGED_EVT, onTierChangedAct);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordAdded, this::onRecordAdded, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordDeleted, this::onRecordDeleted, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.TierChanged, this::onTierChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 		
-		getEditor().getEventManager().registerActionForEvent(MediaPlayerEditorView.MEDIA_LOADED_EVENT, onMediaLoadedAct);
+		getEditor().getEventManager().registerActionForEvent(MediaPlayerEditorView.MediaLoaded, this::onMediaLoaded, EditorEventManager.RunOn.AWTEventDispatchThread);
 	}
 	
 	private void deregisterEditorEvents() {
-		getEditor().getEventManager().removeActionForEvent(EditorEventType.SESSION_CHANGED_EVT, onSessionChangedAct);
+		getEditor().getEventManager().removeActionForEvent(EditorEventType.SessionChanged, this::onSessionChanged);
 
-		getEditor().getEventManager().removeActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChangeAct);
-		getEditor().getEventManager().removeActionForEvent(EditorEventType.SESSION_MEDIA_CHANGED, onMediaChangedAct);
-		getEditor().getEventManager().removeActionForEvent(SessionMediaModel.SESSION_AUDIO_AVAILABLE, onSessionAudioAvailableAct);
+		getEditor().getEventManager().removeActionForEvent(EditorEventType.RecordChanged, this::onRecordChanged);
+		getEditor().getEventManager().removeActionForEvent(EditorEventType.SessionMediaChanged, this::onMediaChanged);
+		getEditor().getEventManager().removeActionForEvent(SessionMediaModel.SessionAudioAvailable, this::onSessionAudioAvailable);
 		
-		getEditor().getEventManager().removeActionForEvent(SegmentationHandler.EDITOR_SEGMENTATION_START, onSegmentationStarted);
-		getEditor().getEventManager().removeActionForEvent(SegmentationHandler.EDITOR_SEGMENTATION_END, onSegmentationEnded);
+		getEditor().getEventManager().removeActionForEvent(SegmentationHandler.SegmentationStarted, this::onSegmentationStarted);
+		getEditor().getEventManager().removeActionForEvent(SegmentationHandler.SegmentationStopped, this::onSegmentationEnded);
 		
-		getEditor().getEventManager().removeActionForEvent(EditorEventType.RECORD_ADDED_EVT, onRecordAddedAct);
-		getEditor().getEventManager().removeActionForEvent(EditorEventType.RECORD_DELETED_EVT, onRecordDeletedAct);
-		getEditor().getEventManager().removeActionForEvent(EditorEventType.TIER_CHANGED_EVT, onTierChangedAct);
+		getEditor().getEventManager().removeActionForEvent(EditorEventType.RecordAdded, this::onRecordAdded);
+		getEditor().getEventManager().removeActionForEvent(EditorEventType.RecordDeleted, this::onRecordDeleted);
+		getEditor().getEventManager().removeActionForEvent(EditorEventType.TierChanged, this::onTierChanged);
 		
-		getEditor().getEventManager().removeActionForEvent(MediaPlayerEditorView.MEDIA_LOADED_EVENT, onMediaLoadedAct);
+		getEditor().getEventManager().removeActionForEvent(MediaPlayerEditorView.MediaLoaded, this::onMediaLoaded);
 	}
 
-	@RunOnEDT
-	public void onSessionChanged(EditorEvent ee) {
+	private void onSessionChanged(EditorEvent<Session> ee) {
 		update();
 	}
 	
-	@RunOnEDT
-	public void onMediaLoaded(EditorEvent ee) {
+	private void onMediaLoaded(EditorEvent<MediaPlayerEditorView> ee) {
 		setupTimeModel();
-		MediaPlayerEditorView mediaPlayerView = 
-				(MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+		MediaPlayerEditorView mediaPlayerView = ee.data();
 		if(mediaPlayerView.getPlayer().getMediaFile() != null) {
 			mediaPlayerView.getPlayer().addMediaPlayerListener(playbackMarkerSyncListener);
 		}
 	}
 	
-	@RunOnEDT
-	public void onMediaChanged(EditorEvent ee) {
+	private void onMediaChanged(EditorEvent<EditorEventType.SessionMediaChangedData> ee) {
 		update();
 	}
-	
-	@RunOnEDT
-	public void onRecordChanged(EditorEvent ee) {
+
+	private void onRecordChanged(EditorEvent<EditorEventType.RecordChangedData> ee) {
 		Record r = getEditor().currentRecord();
 		
 		if(getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
@@ -881,13 +853,11 @@ public final class TimelineView extends EditorView {
 		}
 	}
 	
-	@RunOnEDT
-	public void onSessionAudioAvailable(EditorEvent ee) {
+	private void onSessionAudioAvailable(EditorEvent<SessionMediaModel> ee) {
 		update();
 	}
 	
-	@RunOnEDT
-	public void onSegmentationStarted(EditorEvent ee) {
+	private void onSegmentationStarted(EditorEvent<SegmentationHandler> ee) {
 		segmentationButton.setText("Stop Segmentation");
 		segmentationButton.setIcon(IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
 		
@@ -895,8 +865,7 @@ public final class TimelineView extends EditorView {
 			timeModel.removeMarker(mediaPlayerPlaybackMarker);
 	}
 	
-	@RunOnEDT
-	public void onSegmentationEnded(EditorEvent ee) {
+	private void onSegmentationEnded(EditorEvent<SegmentationHandler> ee) {
 		segmentationButton.setText("Start Segmentation");
 		segmentationButton.setIcon(IconManager.getInstance().getIcon("actions/segmentation", IconSize.SMALL));
 		
@@ -905,21 +874,18 @@ public final class TimelineView extends EditorView {
 		repaint();
 	}
 	
-	@RunOnEDT
-	public void onRecordAdded(EditorEvent ee) {
+	private void onRecordAdded(EditorEvent<EditorEventType.RecordAddedData> ee) {
 		setupTimeModel();
 		repaint();
 	}
 	
-	@RunOnEDT
-	public void onRecordDeleted(EditorEvent ee) {
+	private void onRecordDeleted(EditorEvent<EditorEventType.RecordDeletedData> ee) {
 		setupTimeModel();
 		repaint();
 	}
 	
-	@RunOnEDT
-	public void onTierChanged(EditorEvent ee) {
-		String tierName = ee.getEventData().toString();
+	private void onTierChanged(EditorEvent<EditorEventType.TierChangeData> ee) {
+		String tierName = ee.data().tier().getName();
 		if(SystemTierType.Segment.getName().equals(tierName)) {
 			setupTimeModel();
 		}

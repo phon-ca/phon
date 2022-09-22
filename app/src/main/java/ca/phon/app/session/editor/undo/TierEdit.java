@@ -104,18 +104,6 @@ public class TierEdit<T> extends SessionEditorUndoableEdit {
 	public void setFireHardChangeOnUndo(boolean fireHardChangeOnUndo) {
 		this.fireHardChangeOnUndo = fireHardChangeOnUndo;
 	}
-	
-	@Override
-	public void redo() {
-		super.redo();
-		
-		if(getEditor() != null) {
-			queueEvent(EditorEventType.TIER_CHANGE_EVT, getEditor().getUndoSupport(), tier.getName());
-			if(isFireHardChangeOnUndo()) {
-				queueEvent(EditorEventType.TIER_CHANGED_EVT, getEditor().getUndoSupport(), tier.getName());
-			}
-		}
-	}
 
 	@Override
 	public void undo() {
@@ -125,9 +113,14 @@ public class TierEdit<T> extends SessionEditorUndoableEdit {
 		tier.setGroup(groupIndex, oldVal);
 		
 		if(getEditor() != null) {
-			queueEvent(EditorEventType.TIER_CHANGE_EVT, getEditor().getUndoSupport(), tier.getName());
+			final EditorEventType.TierChangeData tcd = new EditorEventType.TierChangeData(tier, groupIndex, newValue, oldVal);
+			final EditorEvent<EditorEventType.TierChangeData> tierChangeEvt =
+					new EditorEvent<>(EditorEventType.TierChange, getEditor(), tcd);
+			getEditor().getEventManager().queueEvent(tierChangeEvt);
 			if(isFireHardChangeOnUndo()) {
-				queueEvent(EditorEventType.TIER_CHANGED_EVT, getEditor().getUndoSupport(), tier.getName());
+				final EditorEvent<EditorEventType.TierChangeData> tierChangedEvt =
+						new EditorEvent<>(EditorEventType.TierChange, getEditor(), tcd);
+				getEditor().getEventManager().queueEvent(tierChangedEvt);
 			}
 		}
 	}
@@ -145,10 +138,15 @@ public class TierEdit<T> extends SessionEditorUndoableEdit {
 			tier.addGroup(newValue);
 		}
 		
-		if(getEditor() != null) { 
-			queueEvent(EditorEventType.TIER_CHANGE_EVT, getSource(), tier.getName());
+		if(getEditor() != null) {
+			final EditorEventType.TierChangeData tcd = new EditorEventType.TierChangeData(tier, groupIndex, getOldValue(), newValue);
+			final EditorEvent<EditorEventType.TierChangeData> tierChangeEvt =
+					new EditorEvent<>(EditorEventType.TierChange, getEditor(), tcd);
+			getEditor().getEventManager().queueEvent(tierChangeEvt);
 			if(isFireHardChangeOnUndo()) {
-				queueEvent(EditorEventType.TIER_CHANGED_EVT, getSource(), tier.getName());
+				final EditorEvent<EditorEventType.TierChangeData> tierChangedEvt =
+						new EditorEvent<>(EditorEventType.TierChange, getEditor(), tcd);
+				getEditor().getEventManager().queueEvent(tierChangedEvt);
 			}
 		}
 	}

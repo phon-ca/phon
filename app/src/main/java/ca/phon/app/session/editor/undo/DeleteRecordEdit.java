@@ -18,6 +18,8 @@ package ca.phon.app.session.editor.undo;
 import ca.phon.app.session.editor.*;
 import ca.phon.session.Record;
 
+import java.awt.*;
+
 /**
  * Delete the current record.
  */
@@ -54,8 +56,11 @@ public class DeleteRecordEdit extends SessionEditorUndoableEdit {
 		final SessionEditor editor = getEditor();
 		editor.getSession().addRecord(recordIndex, deletedRecord);
 
-		if(fireEvent)
-			queueEvent(EditorEventType.RECORD_ADDED_EVT, editor.getUndoSupport(), deletedRecord);
+		if(fireEvent) {
+			final EditorEvent<EditorEventType.RecordAddedData> ee =
+					new EditorEvent<>(EditorEventType.RecordAdded, (Component) getSource(), new EditorEventType.RecordAddedData(recordIndex, deletedRecord));
+			getEditor().getEventManager().queueEvent(ee);
+		}
 	}
 
 	@Override
@@ -68,8 +73,11 @@ public class DeleteRecordEdit extends SessionEditorUndoableEdit {
 		deletedRecord = editor.getSession().getRecord(recordIndex);
 		editor.getSession().removeRecord(deletedRecord);
 
-		if(fireEvent)
-			queueEvent(EditorEventType.RECORD_DELETED_EVT, getSource(), deletedRecord);
+		if(fireEvent) {
+			final EditorEvent<EditorEventType.RecordDeletedData> ee =
+					new EditorEvent<>(EditorEventType.RecordDeleted, (Component) getSource(), new EditorEventType.RecordDeletedData(recordIndex, deletedRecord));
+			getEditor().getEventManager().queueEvent(ee);
+		}
 	}
 
 }

@@ -110,11 +110,8 @@ public class TimelineWaveformTier extends TimelineTier  {
 		return this.wavDisplay;
 	}
 	
-	private final DelegateEditorAction onRecordChange = 
-			new DelegateEditorAction(this, "onRecordChange");
-	
 	private void setupEditorEvents() {
-		getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, onRecordChange);
+		getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordChanged, this::onRecordChange, EditorEventManager.RunOn.AWTEventDispatchThread);
 	}
 	
 	public void toggleVisible() {
@@ -266,8 +263,7 @@ public class TimelineWaveformTier extends TimelineTier  {
 	}
 	
 	/* Editor Events */
-	@RunOnEDT
-	public void onRecordChange(EditorEvent ee) {
+	private void onRecordChange(EditorEvent<EditorEventType.RecordChangedData> ee) {
 		wavDisplay.repaint(wavDisplay.getVisibleRect());
 	}
 	

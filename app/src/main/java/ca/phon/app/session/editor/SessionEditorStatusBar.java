@@ -35,8 +35,6 @@ import java.time.format.DateTimeFormatter;
 
 public class SessionEditorStatusBar extends JXStatusBar {
 
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(SessionEditorStatusBar.class.getName());
-
 	private static final long serialVersionUID = 286465072395883742L;
 
 	/**
@@ -96,15 +94,15 @@ public class SessionEditorStatusBar extends JXStatusBar {
 		super();
 		this.editorRef = new WeakReference<SessionEditor>(editor);
 
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.MODIFIED_FLAG_CHANGED,
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.ModifiedFlagChanged,
 				(ee) -> {
-					if(getEditor().hasUnsavedChanges()) {
+					if(ee.data()) {
 						statusLabel.setIcon(modifiedIcon);
 					} else {
 						statusLabel.setIcon(unmodifiedIcon);
 					}
 					statusLabel.setToolTipText(getStatusTooltipText());
-				} );
+				}, EditorEventManager.RunOn.AWTEventDispatchThread );
 
 		init();
 	}

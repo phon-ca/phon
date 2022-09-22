@@ -84,9 +84,8 @@ public class SessionEditorToolbar extends JPanel {
 		saveButton.setText(null);
 		saveButton.setEnabled(getEditor().hasUnsavedChanges());
 		add(saveButton, gbc);
-		
-		final EditorAction modifiedAct = new DelegateEditorAction(this, "onModifiedChanged");
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.MODIFIED_FLAG_CHANGED, modifiedAct);
+
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.ModifiedFlagChanged, this::onModifiedChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 		
 		final ButtonGroup btnGrp = new ButtonGroup();
 		final List<JButton> buttons = (new SegmentedButtonBuilder<JButton>(JButton::new)).createSegmentedButtons(3, btnGrp);
@@ -221,9 +220,8 @@ public class SessionEditorToolbar extends JPanel {
 		builder.addItem(".", new PlayAdjacencySequenceAction(getEditor())).setEnabled(enabled);
 	}
 	
-	@RunOnEDT
-	public void onModifiedChanged(EditorEvent ee) {
-		saveButton.setEnabled(getEditor().hasUnsavedChanges());
+	public void onModifiedChanged(EditorEvent<Boolean> ee) {
+		saveButton.setEnabled(ee.data());
 	}
 
 	private final PropertyChangeListener segmentPlaybackListener = new PropertyChangeListener() {

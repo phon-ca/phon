@@ -15,9 +15,13 @@
  */
 package ca.phon.app.session.editor;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.worker.*;
+import org.apache.commons.logging.Log;
 
+import javax.swing.*;
 import java.lang.ref.WeakReference;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -30,14 +34,12 @@ import java.util.concurrent.*;
  * 
  */
 public class EditorEventManager {
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(EditorEventManager.class.getName());
 	
 	/**
 	 * Event queue.  Events are placed in the queue until they
 	 * can be processed.
 	 */
-	private final BlockingQueue<EditorEvent> eventQueue = new LinkedBlockingQueue<EditorEvent>();
+	private final BlockingQueue<EditorEvent<?>> eventQueue = new LinkedBlockingQueue<>();
 	
 	/**
 	 * Event dispatch thread for the editor
@@ -52,7 +54,7 @@ public class EditorEventManager {
 	/**
 	 * action map
 	 */
-	private final Map<String, List<EditorAction>> actionMap = Collections.synchronizedMap(new HashMap<String, List<EditorAction>>());
+	private final Map<EditorEventType<?>, List<EditorEventHandler<?>>> actionMap = Collections.synchronizedMap(new HashMap<>());
 	
 	/**
 	 * Constructor
@@ -61,7 +63,7 @@ public class EditorEventManager {
 	 */
 	public EditorEventManager(SessionEditor editor) {
 		super();
-		this.editorRef = new WeakReference<SessionEditor>(editor);
+		this.editorRef = new WeakReference<>(editor);
 		dispatchThread.setName("EET (" + editor.getTitle() + ")");
 	}
 	
@@ -91,50 +93,60 @@ public class EditorEventManager {
 	/**
 	 * Queue the given event.
 	 * 
-	 * @param event
+	 * @param ee
 	 */
-	public void queueEvent(EditorEvent ee) {
+	public void queueEvent(EditorEvent<?> ee) {
 		try {
 			eventQueue.put(ee);
 		} catch (InterruptedException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.warning(e);
 		}
 		// start thread if necessary
-		if(!dispatchThread.isAlive()) {
+		if (!dispatchThread.isAlive()) {
 			dispatchThread.setFinishWhenQueueEmpty(true);
 			dispatchThread.invokeLater(dispatchTask);
 			dispatchThread.start();
 		}
 	}
-	
+
+	public <T> void registerActionForEvent(EditorEventType<T> eventType, EditorAction<T> action) {
+		registerActionForEvent(eventType, action, RunOn.EditorEventDispatchThread);
+	}
+
 	/**
 	 * Register a handler for the given event name
 	 * 
 	 * @param eventName
 	 * @param action
+	 * @param runOn
+	 * @param blocking
 	 */
-	public void registerActionForEvent(String eventName, EditorAction action) {
-		synchronized (actionMap) {			
-			List<EditorAction> handlers = actionMap.get(eventName);
+	public <T> void registerActionForEvent(EditorEventType<T> eventName, EditorAction<T> action, RunOn runOn) {
+		synchronized (actionMap) {
+			final EditorEventHandler<T> handler = new EditorEventHandler<>(action, runOn);
+			List<EditorEventHandler<?>> handlers = actionMap.get(eventName);
 			if(handlers == null) {
-				handlers = new ArrayList<EditorAction>();
+				handlers = new ArrayList<>();
 				actionMap.put(eventName, handlers);
 			}
-			handlers.add(action);
+			handlers.add(handler);
 		}
 	}
 	
 	/**
 	 * Remove handler for the given event
 	 * 
-	 * @param eventName
+	 * @param eventType
 	 * @param action
 	 */
-	public void removeActionForEvent(String eventName, EditorAction action) {
+	public <T> void removeActionForEvent(EditorEventType<T> eventType, EditorAction<T> action) {
 		synchronized (actionMap) {
-			List<EditorAction> handlers = actionMap.get(eventName);
+			final List<EditorEventHandler<?>> handlers = actionMap.get(eventType);
 			if(handlers != null) {
-				handlers.remove(action);
+				final Optional<EditorEventHandler<?>> selectedHandler =
+						handlers.stream().filter((h) -> h.action() == action).findAny();
+				if(selectedHandler.isPresent())
+					handlers.remove(selectedHandler);
 			}
 		}
 	}
@@ -146,15 +158,15 @@ public class EditorEventManager {
 	 * 
 	 * @return list of handlers for the event
 	 */
-	public List<EditorAction> getActionsForEvent(String eventName) {
-		List<EditorAction> retVal = actionMap.get(eventName);
-		if(retVal == null) 
-			retVal = new ArrayList<EditorAction>();
-		else 
+	private List<EditorEventHandler<?>> getHandlersForEvent(EditorEventType<?> eventName) {
+		List<EditorEventHandler<?>> retVal = actionMap.get(eventName);
+		if(retVal == null)
+			retVal = new ArrayList<>();
+		else
 			retVal = Collections.unmodifiableList(retVal);
 		return retVal;			
 	}
-	
+
 	/**
 	 * Task for dispatching events
 	 */
@@ -163,29 +175,67 @@ public class EditorEventManager {
 		@Override
 		public void performTask() {
 			super.setStatus(TaskStatus.RUNNING);
-			
+
 			while(!isShutdown()) {
-				EditorEvent event = null;
+				EditorEvent<?> event = null;
 				try {
 					event = eventQueue.take();
 				} catch (InterruptedException e) {
 					if(!isShutdown()) {
 						// an error only if we are not shutdown
-						LOGGER.error( e.getLocalizedMessage(), e);
+						LogUtil.warning(e);
 					}
 				}
-				
+
 				if(event != null) {
 					synchronized (actionMap) {
-						for(EditorAction action:getActionsForEvent(event.getEventName())) {
-							action.eventOccurred(event);
+						for(EditorEventHandler<?> action: getHandlersForEvent(event.eventType())) {
+							action.handleEvent(event);
 						}
 					}
 				}
 			}
-			
+
 			super.setStatus(TaskStatus.FINISHED);
 		}
-		
+
 	};
+
+	public static enum RunOn {
+		AWTEventDispatchThread,
+		AWTEventDispatchThreadInvokeAndWait,
+		EditorEventDispatchThread,
+		BackgroundThread;
+	}
+
+	private record EditorEventHandler<T>(EditorAction<T> action, RunOn runOn) {
+
+		public void handleEvent(EditorEvent<?> ee) {
+			final Runnable doAction = () -> action.eventOccurred((EditorEvent<T>) ee);
+
+			switch(runOn()) {
+				case AWTEventDispatchThread -> {
+					SwingUtilities.invokeLater(doAction);
+				}
+
+				case AWTEventDispatchThreadInvokeAndWait -> {
+					try {
+						SwingUtilities.invokeAndWait(doAction);
+					} catch (InterruptedException | InvocationTargetException e) {
+						LogUtil.warning(e);
+					}
+				}
+
+				case BackgroundThread -> {
+					PhonWorker.invokeOnNewWorker(doAction);
+				}
+
+				case EditorEventDispatchThread -> {
+					doAction.run();
+				}
+			}
+		}
+
+	}
+
 }

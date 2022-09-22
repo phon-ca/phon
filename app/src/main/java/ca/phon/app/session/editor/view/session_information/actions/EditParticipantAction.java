@@ -28,8 +28,6 @@ import java.awt.event.ActionEvent;
 
 public class EditParticipantAction extends SessionInfoAction {
 
-	private static final long serialVersionUID = 552410881946559812L;
-
 	private final Participant participant;
 	
 	private final ImageIcon ICON = 
@@ -64,8 +62,10 @@ public class EditParticipantAction extends SessionInfoAction {
 			}
 			final ParticipantUndoableEdit edit = new ParticipantUndoableEdit(getEditor(), participant, part);
 			getEditor().getUndoSupport().postEdit(edit);
-			
-			final EditorEvent ee = new EditorEvent(EditorEventType.RECORD_REFRESH_EVT);
+
+			final EditorEvent<EditorEventType.RecordChangedData> ee =
+					new EditorEvent<>(EditorEventType.RecordRefresh, getEditor(),
+							new EditorEventType.RecordChangedData(getEditor().getCurrentRecordIndex(), getEditor().currentRecord()));
 			getEditor().getEventManager().queueEvent(ee);
 		}
 	}

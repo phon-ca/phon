@@ -19,12 +19,11 @@ import ca.phon.app.session.editor.*;
 import ca.phon.session.Session;
 
 import javax.swing.undo.CannotUndoException;
+import java.awt.*;
 import java.time.LocalDate;
 
 public class SessionDateEdit extends SessionEditorUndoableEdit {
 	
-	private static final long serialVersionUID = 126365404901461662L;
-
 	private final LocalDate newDate;
 	
 	private final LocalDate prevDate;
@@ -73,8 +72,10 @@ public class SessionDateEdit extends SessionEditorUndoableEdit {
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getSession();
 		session.setDate(getPrevDate());
-		
-		queueEvent(EditorEventType.SESSION_DATE_CHANGED, getEditor().getUndoSupport(), getPrevDate());
+
+		final EditorEvent<EditorEventType.SessionDateChangedData> ee =
+				new EditorEvent<>(EditorEventType.SessionDateChanged, (Component) getSource(), new EditorEventType.SessionDateChangedData(getNewDate(), getPrevDate()));
+		getEditor().getEventManager().queueEvent(ee);
 	}
 
 	@Override
@@ -82,8 +83,10 @@ public class SessionDateEdit extends SessionEditorUndoableEdit {
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getSession();
 		session.setDate(getNewDate());
-		
-		queueEvent(EditorEventType.SESSION_DATE_CHANGED, getSource(), getNewDate());
+
+		final EditorEvent<EditorEventType.SessionDateChangedData> ee =
+				new EditorEvent<>(EditorEventType.SessionDateChanged, (Component) getSource(), new EditorEventType.SessionDateChangedData(getPrevDate(), getNewDate()));
+		getEditor().getEventManager().queueEvent(ee);
 	}
 
 }

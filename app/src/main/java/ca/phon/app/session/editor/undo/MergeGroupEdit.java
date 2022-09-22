@@ -53,8 +53,9 @@ public class MergeGroupEdit extends SessionEditorUndoableEdit {
 		} else {
 			record.splitGroup(groupIndex, wIdx);
 		}
-		
-		queueEvent(EditorEventType.GROUP_LIST_CHANGE_EVT, getSource(), null);
+
+		final EditorEvent<Void> ee = new EditorEvent<>(EditorEventType.GroupListChange, (Component) getSource(), null);
+		getEditor().getEventManager().queueEvent(ee);
 	}
 	
 	@Override
@@ -64,7 +65,7 @@ public class MergeGroupEdit extends SessionEditorUndoableEdit {
 		if(recordDataView.currentGroupIndex() == groupIndex) {
 			final Component focusedComp = 
 					FocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
-			if(focusedComp != null && focusedComp instanceof GroupField) {
+			if(focusedComp instanceof GroupField) {
 				final GroupField<?> grpField = (GroupField<?>)focusedComp;
 				grpField.validateAndUpdate();
 			}
@@ -73,8 +74,9 @@ public class MergeGroupEdit extends SessionEditorUndoableEdit {
 		if(groupIndex+1 >= record.numberOfGroups()) return;
 		
 		wordIndex = record.mergeGroups(groupIndex, groupIndex+1);
-		
-		queueEvent(EditorEventType.GROUP_LIST_CHANGE_EVT, getSource(), null);
+
+		final EditorEvent<Void> ee = new EditorEvent<>(EditorEventType.GroupListChange, (Component) getSource(), null);
+		getEditor().getEventManager().queueEvent(ee);
 	}
 
 }

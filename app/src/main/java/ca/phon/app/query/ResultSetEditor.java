@@ -62,12 +62,8 @@ import java.util.*;
  *
  */
 public class ResultSetEditor extends ProjectFrame {
-	
-	private static final long serialVersionUID = -4309831950609525140L;
 
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ResultSetEditor.class.getName());
-	
-	/* 
+	/*
 	 * Actions buttons
 	 */
 	private Action saveAction;
@@ -106,8 +102,6 @@ public class ResultSetEditor extends ProjectFrame {
 	 */
 	private Project tempProject;
 	
-	private EditorAction recordChangedAct;
-	
 	/**
 	 * Constructor
 	 * @param project
@@ -124,7 +118,7 @@ public class ResultSetEditor extends ProjectFrame {
 			this.session = project.openSession(rs.getCorpus(), rs.getSession());
 			putExtension(Session.class, this.session);
 		} catch (IOException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.warning(e);
 		}
 		
 		// setup title
@@ -147,10 +141,8 @@ public class ResultSetEditor extends ProjectFrame {
 							&& transcript.getName().equals(resultSet.getSession())) {
 						super.setParentFrame(cmf);
 						final SessionEditor editor = getEditor();
-						
-						recordChangedAct = 
-								new DelegateEditorAction(this, "onRecordChange");
-						editor.getEventManager().registerActionForEvent(EditorEventType.RECORD_CHANGED_EVT, recordChangedAct);
+
+						editor.getEventManager().registerActionForEvent(EditorEventType.RecordChanged, this::onRecordChange, EditorEventManager.RunOn.AWTEventDispatchThread);
 						
 						break;
 					}
@@ -163,7 +155,7 @@ public class ResultSetEditor extends ProjectFrame {
 	/*
 	 * Editor event for record changes
 	 */
-	public void onRecordChange(EditorEvent ee) {
+	private void onRecordChange(EditorEvent<EditorEventType.RecordChangedData> ee) {
 		resultTable.repaint();
 	}
 	
@@ -299,7 +291,7 @@ public class ResultSetEditor extends ProjectFrame {
 			try {
 				writer.writeTableToFile(resultTable, new File(saveAs));
 			} catch (IOException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 				
 				final Toast toast = ToastFactory.makeToast("Unable to save table: " + e.getLocalizedMessage());
 				toast.start(saveTableButton);
@@ -383,7 +375,7 @@ public class ResultSetEditor extends ProjectFrame {
 					manager.saveResultListing(getProject(), query, resultSet, listing);
 				} catch (IOException e) {
 					// not critical, but should report the 'why'
-					LOGGER.error( e.getLocalizedMessage(), e);
+					LogUtil.warning(e);
 				}
 			}
 		});
@@ -624,7 +616,7 @@ public class ResultSetEditor extends ProjectFrame {
 			if(getEditor().getSelectionModel() != null) 
 				getEditor().getSelectionModel().clear();
 			if(getEditor().getEventManager() != null)
-				getEditor().getEventManager().removeActionForEvent(EditorEventType.RECORD_CHANGED_EVT, recordChangedAct);
+				getEditor().getEventManager().removeActionForEvent(EditorEventType.RecordChanged, this::onRecordChange);
 		}
 		super.close();
 	}

@@ -20,7 +20,7 @@ import ca.phon.app.session.editor.actions.GenerateSessionAudioAction;
 import ca.phon.audio.*;
 import ca.phon.media.*;
 import ca.phon.project.Project;
-import ca.phon.session.Session;
+import ca.phon.session.*;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.PrefHelper;
 import org.apache.commons.io.FilenameUtils;
@@ -78,7 +78,8 @@ public class SessionMediaModel {
 	 * Editor action key generated when session audio file becomes available
 	 * The session audio file should be provided as event data
 	 */
-	public final static String SESSION_AUDIO_AVAILABLE = "session_audio_available";
+	public final static EditorEventType<SessionMediaModel> SessionAudioAvailable =
+			new EditorEventType<>("session_audio_available", SessionMediaModel.class);
 	
 	public SessionMediaModel(SessionEditor editor) {
 		super();

@@ -1,5 +1,6 @@
 package ca.phon.app.session.editor;
 
+import ca.phon.session.Session;
 import ca.phon.ui.nativedialogs.*;
 
 import java.awt.event.*;
@@ -28,20 +29,11 @@ public class SessionEditorModificationListener implements WindowFocusListener {
 		this.editor = editor;
 		this.lastModificationDate = this.editor.getProject().getSessionModificationTime(this.editor.getSession());
 
-		this.editor.getEventManager().registerActionForEvent(EditorEventType.SESSION_CHANGED_EVT,
-				new DelegateEditorAction(this, "onSessionChanged"));
-
-		this.editor.getEventManager().registerActionForEvent(EditorEventType.EDITOR_SAVED_SESSION,
-				new DelegateEditorAction(this, "onSessionSaved"));
+		this.editor.getEventManager().registerActionForEvent(EditorEventType.SessionChanged, this::onSessionChanged);
+		this.editor.getEventManager().registerActionForEvent(EditorEventType.SessionSaved, this::onSessionChanged);
 	}
 
-	@RunOnEDT
-	public void onSessionChanged(EditorEvent ee) {
-		this.lastModificationDate = this.editor.getProject().getSessionModificationTime(this.editor.getSession());
-	}
-
-	@RunOnEDT
-	public void onSessionSaved(EditorEvent ee) {
+	private void onSessionChanged(EditorEvent<Session> ee) {
 		this.lastModificationDate = this.editor.getProject().getSessionModificationTime(this.editor.getSession());
 	}
 
@@ -66,7 +58,7 @@ public class SessionEditorModificationListener implements WindowFocusListener {
 				if (editor.hasUnsavedChanges()) {
 					showLoseChangesDialog();
 				} else {
-					editor.getEventManager().queueEvent(new EditorEvent(EditorEventType.EDITOR_RELOAD_FROM_DISK));
+					editor.getEventManager().queueEvent(new EditorEvent<>(EditorEventType.EditorReloadFromDisk, editor, null));
 				}
 			}
 		});
@@ -83,7 +75,7 @@ public class SessionEditorModificationListener implements WindowFocusListener {
 		props.setTitle("Reload Session");
 		props.setListener(nativeDialogEvent -> {
 			if(nativeDialogEvent.getDialogResult() == 0 /* Yes */)
-				editor.getEventManager().queueEvent(new EditorEvent(EditorEventType.EDITOR_RELOAD_FROM_DISK));
+				editor.getEventManager().queueEvent(new EditorEvent<>(EditorEventType.EditorReloadFromDisk, editor, null));
 		});
 		NativeDialogs.showMessageDialog(props);
 	}

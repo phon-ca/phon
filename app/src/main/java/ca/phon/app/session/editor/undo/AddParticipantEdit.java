@@ -26,8 +26,6 @@ import javax.swing.undo.CannotUndoException;
  */
 public class AddParticipantEdit extends SessionEditorUndoableEdit {
 
-	private static final long serialVersionUID = 2633079803945025310L;
-	
 	private final Participant participant;
 	
 	/**
@@ -102,8 +100,9 @@ public class AddParticipantEdit extends SessionEditorUndoableEdit {
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getSession();
 		session.removeParticipant(getParticipant());
-		
-		queueEvent(EditorEventType.PARTICIPANT_REMOVED, getEditor().getUndoSupport(), getParticipant());
+
+		final EditorEvent<Participant> ee = new EditorEvent<>(EditorEventType.ParticipantRemoved, getSource(), getParticipant());
+		getEditor().getEventManager().queueEvent(ee);
 	}
 
 	@Override
@@ -111,8 +110,9 @@ public class AddParticipantEdit extends SessionEditorUndoableEdit {
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getSession();
 		session.addParticipant(getParticipant());
-		
-		queueEvent(EditorEventType.PARTICIPANT_ADDED, getSource(), getParticipant());
+
+		final EditorEvent<Participant> ee = new EditorEvent<>(EditorEventType.ParticipantAdded, getSource(), getParticipant());
+		getEditor().getEventManager().queueEvent(ee);
 	}
 	
 }

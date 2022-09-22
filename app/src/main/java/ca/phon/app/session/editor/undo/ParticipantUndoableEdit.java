@@ -18,12 +18,12 @@ package ca.phon.app.session.editor.undo;
 import ca.phon.app.session.editor.*;
 import ca.phon.session.*;
 
+import java.awt.*;
+
 /**
- * {@link Session} edits involving particpants.
+ * {@link Session} edits involving participants.
  */
 public class ParticipantUndoableEdit extends SessionEditorUndoableEdit {
-
-	private static final long serialVersionUID = -5312599132320247077L;
 
 	/**
 	 * Participant involved in the edit
@@ -48,7 +48,8 @@ public class ParticipantUndoableEdit extends SessionEditorUndoableEdit {
 	public void undo() {
 		Participants.copyParticipantInfo(oldVals, participant);
 
-		final EditorEvent ee = new EditorEvent(EditorEventType.PARTICIPANT_CHANGED, getSource(), participant);
+		final EditorEvent<Participant> ee =
+				new EditorEvent<>(EditorEventType.ParticipantChanged, (Component) getSource(), participant);
 		getEditor().getEventManager().queueEvent(ee);
 	}
 
@@ -60,8 +61,9 @@ public class ParticipantUndoableEdit extends SessionEditorUndoableEdit {
 		oldVals = p;
 		
 		Participants.copyParticipantInfo(template, participant);
-		
-		final EditorEvent ee = new EditorEvent(EditorEventType.PARTICIPANT_CHANGED, getSource(), participant);
+
+		final EditorEvent<Participant> ee =
+				new EditorEvent<>(EditorEventType.ParticipantChanged, (Component) getSource(), participant);
 		getEditor().getEventManager().queueEvent(ee);
 	}
 	

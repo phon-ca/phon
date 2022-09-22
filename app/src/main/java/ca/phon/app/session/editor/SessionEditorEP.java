@@ -275,7 +275,7 @@ public class SessionEditorEP implements IPluginEntryPoint {
 			editor.getViewModel().getView(SessionCheckView.VIEW_NAME);
 			
 			editor.getStatusBar().getProgressBar().setIndeterminate(false);
-			editor.getEventManager().queueEvent(new EditorEvent(EditorEventType.EDITOR_FINISHED_LOADING));
+			editor.getEventManager().queueEvent(new EditorEvent<>(EditorEventType.EditorFinishedLoading, editor, null));
 		});
 		
 		// add to open file history

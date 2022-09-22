@@ -29,8 +29,6 @@ import java.lang.ref.WeakReference;
  */
 public class SplitGroupEdit extends SessionEditorUndoableEdit {
 
-	private static final long serialVersionUID = -7260735541114380839L;
-
 	private final WeakReference<Record> recordRef;
 	
 	private final int gIndex;
@@ -39,7 +37,7 @@ public class SplitGroupEdit extends SessionEditorUndoableEdit {
 	
 	public SplitGroupEdit(SessionEditor editor, Record record, int gIndex, int eleIndex) {
 		super(editor);
-		this.recordRef = new WeakReference<Record>(record);
+		this.recordRef = new WeakReference<>(record);
 		this.gIndex = gIndex;
 		this.wIndex = eleIndex;
 	}
@@ -54,8 +52,9 @@ public class SplitGroupEdit extends SessionEditorUndoableEdit {
 		if(record == null) return;
 		
 		record.mergeGroups(gIndex, gIndex+1);
-		
-		queueEvent(EditorEventType.GROUP_LIST_CHANGE_EVT, getEditor().getUndoSupport(), null);
+
+		final EditorEvent<Void> ee = new EditorEvent<>(EditorEventType.GroupListChange, getSource(), null);
+		getEditor().getEventManager().queueEvent(ee);
 	}
 	
 	@Override
@@ -82,8 +81,9 @@ public class SplitGroupEdit extends SessionEditorUndoableEdit {
 		} else {
 			record.splitGroup(gIndex, wIdx);
 		}
-		
-		queueEvent(EditorEventType.GROUP_LIST_CHANGE_EVT, getSource(), null);
+
+		final EditorEvent<Void> ee = new EditorEvent<>(EditorEventType.GroupListChange, getSource(), null);
+		getEditor().getEventManager().queueEvent(ee);
 	}
 
 }
