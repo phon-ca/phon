@@ -16,4 +16,3 @@ ca.phon.app.JxBrowserStartupHook
 ca.phon.app.IPADictionaryInitHook
 # Load common objects
 ca.phon.app.ObjectLoaderHook
-ca.phon.app.MacOSTranslationCheck
