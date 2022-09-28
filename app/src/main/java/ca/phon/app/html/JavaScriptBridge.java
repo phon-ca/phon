@@ -23,7 +23,6 @@ import ca.phon.query.db.*;
 import ca.phon.query.db.xml.XMLQueryFactory;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.util.Range;
-import com.teamdev.jxbrowser.chromium.JSArray;
 
 /**
  * JavaScript bridge for common Phon functions.
@@ -81,34 +80,34 @@ public class JavaScriptBridge {
 	 * @param recordIndex
 	 * @param jsRvs
 	 */
-	public void openSessionAtRecordWithResultValues(String corpus, String session, int recordIndex, JSArray jsRvs) {
-		final EntryPointArgs args = new EntryPointArgs();
-		args.put(EntryPointArgs.PROJECT_OBJECT, getProject());
-		args.put(EntryPointArgs.CORPUS_NAME, corpus);
-		args.put(EntryPointArgs.SESSION_NAME, session);
-		args.put(SessionEditorEP.RECORD_INDEX_PROPERY, recordIndex);
-		
-		final QueryFactory factory = new XMLQueryFactory();
-		final Result tempResult = factory.createResult();
-		tempResult.setRecordIndex(recordIndex);
-
-		// find result value using columnName - which should be the tier name
-		for(int i = 0; i < jsRvs.length(); i++) {
-			JSArray rvData = jsRvs.get(i).asArray();
-			
-			String tierName = rvData.get(0).getStringValue();
-			int gIdx = (int)rvData.get(1).asNumber().getNumberValue();
-			Range range = Range.fromString(rvData.get(2).getStringValue());
-			
-			ResultValue rv = factory.createResultValue();
-			rv.setTierName(tierName);
-			rv.setGroupIndex(gIdx);
-			rv.setRange(range);
-			tempResult.addResultValue(rv);
-		}
-		args.put(SessionEditorEP.RESULT_VALUES_PROPERTY, new Result[] { tempResult });
-
-		PluginEntryPointRunner.executePluginInBackground(SessionEditorEP.EP_NAME, args);
+	public void openSessionAtRecordWithResultValues(String corpus, String session, int recordIndex, Object jsRvs) {
+//		final EntryPointArgs args = new EntryPointArgs();
+//		args.put(EntryPointArgs.PROJECT_OBJECT, getProject());
+//		args.put(EntryPointArgs.CORPUS_NAME, corpus);
+//		args.put(EntryPointArgs.SESSION_NAME, session);
+//		args.put(SessionEditorEP.RECORD_INDEX_PROPERY, recordIndex);
+//
+//		final QueryFactory factory = new XMLQueryFactory();
+//		final Result tempResult = factory.createResult();
+//		tempResult.setRecordIndex(recordIndex);
+//
+//		// find result value using columnName - which should be the tier name
+//		for(int i = 0; i < jsRvs.length(); i++) {
+//			JSArray rvData = jsRvs.get(i).asArray();
+//
+//			String tierName = rvData.get(0).getStringValue();
+//			int gIdx = (int)rvData.get(1).asNumber().getNumberValue();
+//			Range range = Range.fromString(rvData.get(2).getStringValue());
+//
+//			ResultValue rv = factory.createResultValue();
+//			rv.setTierName(tierName);
+//			rv.setGroupIndex(gIdx);
+//			rv.setRange(range);
+//			tempResult.addResultValue(rv);
+//		}
+//		args.put(SessionEditorEP.RESULT_VALUES_PROPERTY, new Result[] { tempResult });
+//
+//		PluginEntryPointRunner.executePluginInBackground(SessionEditorEP.EP_NAME, args);
 	}
 	
 }

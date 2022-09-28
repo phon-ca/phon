@@ -16,6 +16,7 @@
 package ca.phon.app.log;
 
 import au.com.bytecode.opencsv.CSVReader;
+import ca.phon.app.JCefHelper;
 import ca.phon.app.excel.WorkbookUtils;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.session.editor.*;
@@ -33,6 +34,7 @@ import ca.phon.util.*;
 import jxl.Workbook;
 import jxl.write.*;
 import jxl.write.biff.RowsExceededException;
+import org.cef.browser.CefBrowser;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import org.jdesktop.swingx.JXTable;
 
@@ -76,10 +78,6 @@ public class BufferPanel extends JPanel implements IExtendable {
 
 	public final static String STOP_BUSY = "STOP_BUSY";
 
-	private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(BufferPanel.class.getName());
-
-	private static final long serialVersionUID = -153000974506461908L;
-
 	private final ExtensionSupport extSupport = new ExtensionSupport(BufferPanel.class, this);
 
 	private final String name;
@@ -92,9 +90,9 @@ public class BufferPanel extends JPanel implements IExtendable {
 	/* Views */
 	private JXTable dataTable;
 
-	private Browser browser;
-	private Browser debugBrowser;
-	private BrowserView htmlView;
+	private CefBrowser browser;
+
+	private Component htmlView;
 	
 	private JPanel htmlPanel;
 	private JSplitPane htmlSplitPane;
@@ -308,14 +306,14 @@ public class BufferPanel extends JPanel implements IExtendable {
 		JComponent oldComp = currentView;
 		
 		if(htmlView == null) {
-			BrowserView view = getWebView();
+			Component view = getWebView();
 			htmlPanel = new JPanel(new BorderLayout());
 			htmlPanel.add(view, BorderLayout.CENTER);
 			contentPanel.add(htmlPanel, HTML_VIEW_ID);
 		}
 		
 		if(loadTextContent) {
-			browser.loadHTML(logBuffer.getText());
+			browser.loadURL("data:text/html;charset=utf-8," + logBuffer.getText());
 		}
 		
 		currentView = htmlPanel;
@@ -325,19 +323,19 @@ public class BufferPanel extends JPanel implements IExtendable {
 	
 	public void onZoomIn() {
 		if(!isShowingHtml() || browser == null) return;
-		browser.zoomIn();
+//		browser.set
 		System.out.println(String.format("Zoom level %f", browser.getZoomLevel()));
 	}
 	
 	public void onZoomOut() {
 		if(!isShowingHtml() || browser == null) return;
-		browser.zoomOut();
+//		browser.zoomOut();
 		System.out.println(String.format("Zoom level %f", browser.getZoomLevel()));
 	}
 	
 	public void onZoomReset() {
 		if(!isShowingHtml()) return;
-		browser.zoomReset();
+//		browser.zoomReset();
 		System.out.println(String.format("Zoom level %f", browser.getZoomLevel()));
 	}
 	
@@ -347,10 +345,10 @@ public class BufferPanel extends JPanel implements IExtendable {
 	
 	public void hideHtmlDebug() {
 		if(!isShowingHtmlDebug()) return;
-		if(debugBrowser != null) {
-			debugBrowser.dispose();
-			debugBrowser = null;
-		}
+//		if(debugBrowser != null) {
+//			debugBrowser.dispose();
+//			debugBrowser = null;
+//		}
 		
 		htmlPanel.removeAll();
 		htmlPanel.add(getWebView(), BorderLayout.CENTER);
@@ -358,28 +356,28 @@ public class BufferPanel extends JPanel implements IExtendable {
 	}
 	
 	public void showHtmlDebug() {
-		if(browser != null) {
-			if(debugBrowser != null) {
-				debugBrowser.dispose();
-				debugBrowser = null;
-			}
-			final String debugURL = browser.getRemoteDebuggingURL();
-			debugBrowser = createBrowser();
-			final BrowserView debugBrowserView = new BrowserView(debugBrowser);
-			
-			htmlSplitPane = new JSplitPane();
-			htmlSplitPane.setLeftComponent(getWebView());
-			htmlSplitPane.setRightComponent(debugBrowserView);
-			htmlSplitPane.setResizeWeight(1.0);
-			
-			htmlPanel.removeAll();
-			htmlPanel.add(htmlSplitPane, BorderLayout.CENTER);
-			htmlPanel.revalidate();
-			
-			SwingUtilities.invokeLater( () -> htmlSplitPane.setDividerLocation(0.6) );
-			
-			debugBrowser.loadURL(debugURL);
-		}
+//		if(browser != null) {
+//			if(debugBrowser != null) {
+//				debugBrowser.dispose();
+//				debugBrowser = null;
+//			}
+//			final String debugURL = browser.getRemoteDebuggingURL();
+//			debugBrowser = createBrowser();
+//			final BrowserView debugBrowserView = new BrowserView(debugBrowser);
+//
+//			htmlSplitPane = new JSplitPane();
+//			htmlSplitPane.setLeftComponent(getWebView());
+//			htmlSplitPane.setRightComponent(debugBrowserView);
+//			htmlSplitPane.setResizeWeight(1.0);
+//
+//			htmlPanel.removeAll();
+//			htmlPanel.add(htmlSplitPane, BorderLayout.CENTER);
+//			htmlPanel.revalidate();
+//
+//			SwingUtilities.invokeLater( () -> htmlSplitPane.setDividerLocation(0.6) );
+//
+//			debugBrowser.loadURL(debugURL);
+//		}
 	}
 
 	private void init() {
@@ -417,7 +415,7 @@ public class BufferPanel extends JPanel implements IExtendable {
 		return logBuffer;
 	}
 
-	public Browser getBrowser() {
+	public CefBrowser getBrowser() {
 		if(browser == null) {
 			browser = createBrowser();
 			
@@ -454,10 +452,7 @@ public class BufferPanel extends JPanel implements IExtendable {
 					public void windowClosed(WindowEvent e) {
 						LogUtil.info("Disposing browser");
 						if(browser != null) {
-							browser.dispose();
-						}
-						if(debugBrowser != null) {
-							debugBrowser.dispose();
+							browser.close(true);
 						}
 					}
 					
@@ -472,29 +467,31 @@ public class BufferPanel extends JPanel implements IExtendable {
 		return browser;
 	}
 	
-	private Browser createBrowser() {
-		BrowserType browserType = (OSInfo.isMacOs() ? BrowserType.HEAVYWEIGHT : BrowserType.LIGHTWEIGHT);
-		Browser browser = new Browser(browserType);
-		
-		JSValue windowObj = browser.executeJavaScriptAndReturnValue("window");
-		windowObj.asObject().setProperty("buffer", this);
-		
-		browser.addConsoleListener( (e) -> {
-			if(e.getLevel() == Level.DEBUG) {
-				LogUtil.info(e.getMessage());
-			} else if(e.getLevel() == Level.WARNING) {
-				LogUtil.warning(e.getMessage());
-			} else if(e.getLevel() == Level.ERROR) {
-				LogUtil.severe(e.getMessage());
-			}
-		});
+	private CefBrowser createBrowser() {
+		final CefBrowser browser = JCefHelper.getInstance().createBrowser();
 		return browser;
+//		BrowserType browserType = (OSInfo.isMacOs() ? BrowserType.HEAVYWEIGHT : BrowserType.LIGHTWEIGHT);
+//		Browser browser = new Browser(browserType);
+//
+//		JSValue windowObj = browser.executeJavaScriptAndReturnValue("window");
+//		windowObj.asObject().setProperty("buffer", this);
+//
+//		browser.addConsoleListener( (e) -> {
+//			if(e.getLevel() == Level.DEBUG) {
+//				LogUtil.info(e.getMessage());
+//			} else if(e.getLevel() == Level.WARNING) {
+//				LogUtil.warning(e.getMessage());
+//			} else if(e.getLevel() == Level.ERROR) {
+//				LogUtil.severe(e.getMessage());
+//			}
+//		});
+//		return browser;
 	}
 	
-	public BrowserView getWebView() {
+	public Component getWebView() {
 		if(htmlView == null) {
 			browser = getBrowser();
-			htmlView = new BrowserView(browser);
+			htmlView = browser.getUIComponent();
 		}
 		return this.htmlView;
 	}
@@ -692,7 +689,7 @@ public class BufferPanel extends JPanel implements IExtendable {
 		try {
 			PluginEntryPointRunner.executePlugin(SessionEditorEP.EP_NAME, epArgs);
 		} catch (PluginException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.severe(e);
 			return;
 		}
 

@@ -15,7 +15,6 @@
  */
 package ca.phon.app.opgraph.wizard;
 
-import ca.phon.app.html.JavaScriptBridge;
 import ca.phon.app.log.*;
 import ca.phon.app.log.actions.SaveBufferAction;
 import ca.phon.app.modules.EntryPointArgs;
@@ -55,11 +54,8 @@ import ca.phon.util.*;
 import ca.phon.util.icons.*;
 import ca.phon.worker.*;
 import ca.phon.worker.PhonTask.TaskStatus;
-import com.teamdev.jxbrowser.chromium.*;
-import com.teamdev.jxbrowser.chromium.dom.*;
-import com.teamdev.jxbrowser.chromium.events.*;
-import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 import org.apache.velocity.tools.generic.MathTool;
+import org.cef.browser.CefBrowser;
 import org.jdesktop.swingx.JXBusyLabel;
 
 import javax.swing.Timer;
@@ -157,7 +153,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	protected BreadcrumbButton btnStop;
 	protected BreadcrumbButton btnRunAgain;
 
-	private final WebViewInterface webViewInterface = new WebViewInterface();
+//	private final WebViewInterface webViewInterface = new WebViewInterface();
 
 	public NodeWizard(String title) {
 		super(title);
@@ -281,21 +277,21 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 				// bug on macos using Browser.getURL() for some reason when opening window menu
 				// use javascript interface to get URL instead
 				final AtomicReference<String> reportTmpURLRef = new AtomicReference<>();
-				if(SwingUtilities.isEventDispatchThread()) {
-					CountDownLatch latch = new CountDownLatch(1);
-					PhonWorker.getInstance().invokeLater( () -> {
-						JSValue urlVal = reportBuffer.getBrowser().executeJavaScriptAndReturnValue("window.location.href");
-						reportTmpURLRef.set(urlVal.getStringValue());
-						latch.countDown();
-					});
-					try {
-						latch.await(2, TimeUnit.SECONDS);
-					} catch (InterruptedException e1) {
-						LogUtil.severe(e1);
-					}
-				} else {
+//				if(SwingUtilities.isEventDispatchThread()) {
+//					CountDownLatch latch = new CountDownLatch(1);
+//					PhonWorker.getInstance().invokeLater( () -> {
+//						JSValue urlVal = reportBuffer.getBrowser().executeJavaScriptAndReturnValue("window.location.href");
+//						reportTmpURLRef.set(urlVal.getStringValue());
+//						latch.countDown();
+//					});
+//					try {
+//						latch.await(2, TimeUnit.SECONDS);
+//					} catch (InterruptedException e1) {
+//						LogUtil.severe(e1);
+//					}
+//				} else {
 					reportTmpURLRef.set(reportBuffer.getBrowser().getURL());
-				}
+//				}
 				URI uri = URI.create(reportTmpURLRef.get());
 				
 				final PhonUIAction<Void> openInBrowserAct = PhonUIAction.runnable(() -> {
@@ -442,8 +438,9 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	
 	public void gotoReportSection(String htmlId) {
 		if(reportBufferAvailable()) {
-			final Browser browser = bufferPanel.getBuffer("Report").getBrowser();
-			browser.executeJavaScript(String.format("document.getElementById('%s').scrollIntoView(true)", htmlId));
+			final CefBrowser browser = bufferPanel.getBuffer("Report").getBrowser();
+			// TODO fix js
+//			browser.executeJavaScript(String.format("document.getElementById('%s').scrollIntoView(true)", htmlId));
 		}
 	}
  
@@ -1041,59 +1038,59 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 					searchForTables(reportTree.getRoot(), tableMap);
 					reportBufferPanel.setUserObject(reportTree);
 					
-					final Browser browser = reportBufferPanel.getBrowser();
-					browser.addScriptContextListener(new ScriptContextListener() {
-						
-						@Override
-						public void onScriptContextDestroyed(ScriptContextEvent arg0) {}
-						
-						@Override
-						public void onScriptContextCreated(ScriptContextEvent arg0) {
-							final JSValue windowObj = browser.executeJavaScriptAndReturnValue("window");
-							windowObj.asObject().setProperty("project", getExtension(Project.class));
-							windowObj.asObject().setProperty("buffers", bufferPanel);
-							windowObj.asObject().setProperty("reportTree", reportTree);
-							windowObj.asObject().setProperty("tableMap", tableMap);
-							
-							// phon general bridge
-							windowObj.asObject().setProperty("jsbridge", new JavaScriptBridge(getExtension(Project.class)));
-							// wizard-specific bridge
-							windowObj.asObject().setProperty("app", webViewInterface);
-						}
-						
-					});
-					browser.addLoadListener(new LoadListener() {
-						
-						@Override
-						public void onStartLoadingFrame(StartLoadingEvent arg0) {}
-						
-						@Override
-						public void onProvisionalLoadingFrame(ProvisionalLoadingEvent arg0) {}
-						
-						@Override
-						public void onFinishLoadingFrame(FinishLoadingEvent arg0) {
-							int idx = 0;
-							for(String tableId:tableMap.keySet()) {
-								if(tableMap.get(tableId).getRowCount() == 0) continue;
-								browser.executeJavaScript(
-										String.format("addMenuButtons(document.getElementById('%s'), %d)", tableId, idx));
-								browser.executeJavaScript(
-										String.format("$(\"#table_menu_\" + (%d+1)).menu()", idx));
-								++idx;
-							}
-							
-							browser.setContextMenuHandler(new WebViewContextHandler(reportBufferPanel.getWebView(), reportTree, tableMap));							
-						}
-						
-						@Override
-						public void onFailLoadingFrame(FailLoadingEvent arg0) {}
-						
-						@Override
-						public void onDocumentLoadedInMainFrame(LoadEvent arg0) {}
-						
-						@Override
-						public void onDocumentLoadedInFrame(FrameLoadEvent arg0) {}
-					});
+//					final Browser browser = reportBufferPanel.getBrowser();
+//					browser.addScriptContextListener(new ScriptContextListener() {
+//
+//						@Override
+//						public void onScriptContextDestroyed(ScriptContextEvent arg0) {}
+//
+//						@Override
+//						public void onScriptContextCreated(ScriptContextEvent arg0) {
+//							final JSValue windowObj = browser.executeJavaScriptAndReturnValue("window");
+//							windowObj.asObject().setProperty("project", getExtension(Project.class));
+//							windowObj.asObject().setProperty("buffers", bufferPanel);
+//							windowObj.asObject().setProperty("reportTree", reportTree);
+//							windowObj.asObject().setProperty("tableMap", tableMap);
+//
+//							// phon general bridge
+//							windowObj.asObject().setProperty("jsbridge", new JavaScriptBridge(getExtension(Project.class)));
+//							// wizard-specific bridge
+//							windowObj.asObject().setProperty("app", webViewInterface);
+//						}
+//
+//					});
+//					browser.addLoadListener(new LoadListener() {
+//
+//						@Override
+//						public void onStartLoadingFrame(StartLoadingEvent arg0) {}
+//
+//						@Override
+//						public void onProvisionalLoadingFrame(ProvisionalLoadingEvent arg0) {}
+//
+//						@Override
+//						public void onFinishLoadingFrame(FinishLoadingEvent arg0) {
+//							int idx = 0;
+//							for(String tableId:tableMap.keySet()) {
+//								if(tableMap.get(tableId).getRowCount() == 0) continue;
+//								browser.executeJavaScript(
+//										String.format("addMenuButtons(document.getElementById('%s'), %d)", tableId, idx));
+//								browser.executeJavaScript(
+//										String.format("$(\"#table_menu_\" + (%d+1)).menu()", idx));
+//								++idx;
+//							}
+//
+//							browser.setContextMenuHandler(new WebViewContextHandler(reportBufferPanel.getWebView(), reportTree, tableMap));
+//						}
+//
+//						@Override
+//						public void onFailLoadingFrame(FailLoadingEvent arg0) {}
+//
+//						@Override
+//						public void onDocumentLoadedInMainFrame(LoadEvent arg0) {}
+//
+//						@Override
+//						public void onDocumentLoadedInFrame(FrameLoadEvent arg0) {}
+//					});
 
 					reportBufferPanel.getBrowser().loadURL(reportURL);
 					reportBufferPanel.requestFocusInWindow();
@@ -1487,297 +1484,297 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		}
 	}
 	
-	private class WebViewContextHandler implements ContextMenuHandler {
+//	private class WebViewContextHandler implements ContextMenuHandler {
+//
+//		private BrowserView browserView;
+//
+//		private ReportTree reportTree;
+//
+//		private Map<String, DefaultTableDataSource> tableMap;
+//
+//		public WebViewContextHandler(BrowserView browserView, ReportTree reportTree, Map<String, DefaultTableDataSource> tableMap) {
+//			this.browserView = browserView;
+//			this.reportTree = reportTree;
+//			this.tableMap = tableMap;
+//		}
+//
+//		@Override
+//		public void showContextMenu(ContextMenuParams params) {
+//			// add report save and export items
+//			JPopupMenu menu = new JPopupMenu();
+//			final MenuBuilder builder = new MenuBuilder(menu);
+//
+//			// element selection commands
+//			DOMNodeAtPoint nodeAtPoint = params.getBrowser().getNodeAtPoint(
+//					params.getLocation().x, params.getLocation().y);
+//			if(nodeAtPoint != null) {
+//				// look for a parent table
+//				DOMNode node = nodeAtPoint.getNode();
+//				while(node.getParent() != null && !node.getNodeName().equalsIgnoreCase("table")) {
+//					node = node.getParent();
+//				}
+//
+//				if(node.getNodeName().equalsIgnoreCase("table")) {
+//					// add 'Open link' if table cell has an 'onclick' value
+//					// check for a span with an 'onclick'
+//					DOMElement linkEle = null;
+//					DOMNode n = nodeAtPoint.getNode();
+//					while(n.getParent() != null
+//							&& !n.getParent().getXPath().equals(node.getXPath())
+//							&& !n.getNodeName().equalsIgnoreCase("span")) {
+//						n = n.getParent();
+//					}
+//					if(n.getNodeName().equalsIgnoreCase("span") && n.getParent().getNodeName().equalsIgnoreCase("td")) {
+//						DOMElement divEle = params.getBrowser().getDocument().findElement(By.xpath(n.getXPath()));
+//						String onclick = divEle.getAttribute("onclick");
+//						if(onclick != null && onclick.length() > 0) {
+//							linkEle = divEle;
+//						}
+//					}
+//					if(linkEle != null) {
+//						final PhonUIAction<Void> clickAct = PhonUIAction.runnable(linkEle::click);
+//						clickAct.putValue(PhonUIAction.NAME, "Open link");
+//						builder.addItem(".", clickAct);
+//					}
+//
+//					DOMElement tableEle = params.getBrowser().getDocument().findElement(By.xpath(node.getXPath()));
+//					String tableId = tableEle.getAttribute("id");
+//
+//					if(tableId != null && tableMap.containsKey(tableId)) {
+//						// look for the tr element
+//						n = nodeAtPoint.getNode();
+//						while(n.getParent() != null && !n.getNodeName().equalsIgnoreCase("tr")) {
+//							n = n.getParent();
+//						}
+//						if(n.getNodeName().equalsIgnoreCase("tr")) {
+//							String trXpath = n.getXPath();
+//							int trIdx = -1;
+//							Pattern p = Pattern.compile("\\[([0-9]+)\\]");
+//							Matcher m = p.matcher(trXpath);
+//							while(m.find()) {
+//								trIdx = Integer.parseInt(m.group(1))-2;
+//							}
+//
+//							if(trIdx >= 0) {
+//								DefaultTableDataSource table = tableMap.get(tableId);
+//								Result r = (Result)table.getValueAt(trIdx, "Result");
+//								if(r != null) {
+//									final PluginAction openResultAct = new PluginAction(SessionEditorEP.EP_NAME);
+//									EntryPointArgs args = new EntryPointArgs();
+//									args.put(EntryPointArgs.PROJECT_OBJECT, getExtension(Project.class));
+//									args.put(EntryPointArgs.SESSION_NAME, table.getValueAt(trIdx, "Session").toString());
+//									args.put(SessionEditorEP.RECORD_INDEX_PROPERY, r.getRecordIndex());
+//									args.put(SessionEditorEP.RESULT_VALUES_PROPERTY, new Result[] {r});
+//									openResultAct.putArgs(args);
+//									openResultAct.putValue(PhonUIAction.NAME, "Open session and highlight result");
+//									openResultAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open session and highlight result");
+//									builder.addItem(".@Open Link", openResultAct);
+//								}
+//							}
+//						}
+//
+//						if(menu.getComponentCount() > 0) {
+//							builder.addSeparator(".", "link_sep");
+//						}
+//
+//						// add table menu items
+//						final PhonUIAction<String> saveTableAsCSV = PhonUIAction.consumer(params.getBrowser()::executeJavaScript,
+//								String.format("saveTableAsCSV('%s')", tableId));
+//						saveTableAsCSV.putValue(PhonUIAction.NAME, "Save table as CSV...");
+//						builder.addItem(".", saveTableAsCSV);
+//
+//						final PhonUIAction<String> saveTableAsExcelAct = PhonUIAction.consumer(params.getBrowser()::executeJavaScript,
+//								String.format("saveTableAsExcel('%s')", tableId));
+//						saveTableAsExcelAct.putValue(PhonUIAction.NAME, "Save table as Excel (XLS)...");
+//						builder.addItem(".", saveTableAsExcelAct);
+//
+//						final PhonUIAction<String> showTableAct = PhonUIAction.consumer(params.getBrowser()::executeJavaScript,
+//								String.format("showTable('%s')", tableId));
+//						showTableAct.putValue(PhonUIAction.NAME, "Open table in new buffer");
+//						builder.addItem(".", showTableAct);
+//
+//						builder.addSeparator(".", "table_actions_sep");
+//
+//						final PhonUIAction<String> copyTableAct = PhonUIAction.consumer(params.getBrowser()::executeJavaScript,
+//								String.format("onCopyTableData(document.getElementById('%s'), '%s')", tableId, tableId));
+//						copyTableAct.putValue(PhonUIAction.NAME, "Copy table");
+//						copyTableAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Copy table to clipboard as CSV");
+//						builder.addItem(".", copyTableAct);
+//					}
+//				}
+//			}
+//
+//			// editor commands
+//			final PhonUIAction<EditorCommand> copyAct = PhonUIAction.consumer(params.getBrowser()::executeCommand, EditorCommand.COPY);
+//			copyAct.putValue(PhonUIAction.NAME, "Copy");
+//			copyAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Copy selection to clipboard");
+//			builder.addItem(".", copyAct);
+//			builder.addSeparator(".", "editor_commands");
+//
+//			final PhonUIAction<Void> zoomInAct = PhonUIAction.runnable(params.getBrowser()::zoomIn);
+//			zoomInAct.putValue(PhonUIAction.NAME, "Zoom in");
+//			zoomInAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Increase zoom level");
+//			zoomInAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+//			builder.addItem(".", zoomInAct);
+//
+//			final PhonUIAction<Void> zoomOutAct = PhonUIAction.runnable(params.getBrowser()::zoomOut);
+//			zoomOutAct.putValue(PhonUIAction.NAME, "Zoom out");
+//			zoomOutAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Decrease zoom level");
+//			zoomOutAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_9, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+//			builder.addItem(".", zoomOutAct);
+//
+//			final PhonUIAction<Void> zoomResetAct = PhonUIAction.runnable(params.getBrowser()::zoomReset);
+//			zoomResetAct.putValue(PhonUIAction.NAME, "Reset zoom");
+//			zoomResetAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset zoom level to default");
+//			builder.addItem(".", zoomResetAct);
+//
+//			builder.addSeparator(".", "zoom_actions");
+//
+//			setupReportMenu(builder);
+//
+//			menu.show(browserView, params.getLocation().x, params.getLocation().y);
+//		}
+//
+//	}
 
-		private BrowserView browserView;
-		
-		private ReportTree reportTree;
-		
-		private Map<String, DefaultTableDataSource> tableMap;
-		
-		public WebViewContextHandler(BrowserView browserView, ReportTree reportTree, Map<String, DefaultTableDataSource> tableMap) {
-			this.browserView = browserView;
-			this.reportTree = reportTree;
-			this.tableMap = tableMap;
-		}
-		
-		@Override
-		public void showContextMenu(ContextMenuParams params) {
-			// add report save and export items
-			JPopupMenu menu = new JPopupMenu();
-			final MenuBuilder builder = new MenuBuilder(menu);
-			
-			// element selection commands
-			DOMNodeAtPoint nodeAtPoint = params.getBrowser().getNodeAtPoint(
-					params.getLocation().x, params.getLocation().y);
-			if(nodeAtPoint != null) {
-				// look for a parent table
-				DOMNode node = nodeAtPoint.getNode();
-				while(node.getParent() != null && !node.getNodeName().equalsIgnoreCase("table")) {
-					node = node.getParent();
-				}
-				
-				if(node.getNodeName().equalsIgnoreCase("table")) {
-					// add 'Open link' if table cell has an 'onclick' value
-					// check for a span with an 'onclick'
-					DOMElement linkEle = null;
-					DOMNode n = nodeAtPoint.getNode();
-					while(n.getParent() != null 
-							&& !n.getParent().getXPath().equals(node.getXPath())
-							&& !n.getNodeName().equalsIgnoreCase("span")) {
-						n = n.getParent();
-					}
-					if(n.getNodeName().equalsIgnoreCase("span") && n.getParent().getNodeName().equalsIgnoreCase("td")) {
-						DOMElement divEle = params.getBrowser().getDocument().findElement(By.xpath(n.getXPath()));
-						String onclick = divEle.getAttribute("onclick");
-						if(onclick != null && onclick.length() > 0) {
-							linkEle = divEle;
-						}
-					}
-					if(linkEle != null) {
-						final PhonUIAction<Void> clickAct = PhonUIAction.runnable(linkEle::click);
-						clickAct.putValue(PhonUIAction.NAME, "Open link");
-						builder.addItem(".", clickAct);
-					}
-					
-					DOMElement tableEle = params.getBrowser().getDocument().findElement(By.xpath(node.getXPath()));
-					String tableId = tableEle.getAttribute("id");
-					
-					if(tableId != null && tableMap.containsKey(tableId)) {
-						// look for the tr element
-						n = nodeAtPoint.getNode();
-						while(n.getParent() != null && !n.getNodeName().equalsIgnoreCase("tr")) {
-							n = n.getParent();
-						}
-						if(n.getNodeName().equalsIgnoreCase("tr")) {
-							String trXpath = n.getXPath();
-							int trIdx = -1;
-							Pattern p = Pattern.compile("\\[([0-9]+)\\]");
-							Matcher m = p.matcher(trXpath);
-							while(m.find()) {
-								trIdx = Integer.parseInt(m.group(1))-2;
-							}
-							
-							if(trIdx >= 0) {
-								DefaultTableDataSource table = tableMap.get(tableId);
-								Result r = (Result)table.getValueAt(trIdx, "Result");
-								if(r != null) {
-									final PluginAction openResultAct = new PluginAction(SessionEditorEP.EP_NAME);
-									EntryPointArgs args = new EntryPointArgs();
-									args.put(EntryPointArgs.PROJECT_OBJECT, getExtension(Project.class));
-									args.put(EntryPointArgs.SESSION_NAME, table.getValueAt(trIdx, "Session").toString());
-									args.put(SessionEditorEP.RECORD_INDEX_PROPERY, r.getRecordIndex());
-									args.put(SessionEditorEP.RESULT_VALUES_PROPERTY, new Result[] {r});
-									openResultAct.putArgs(args);
-									openResultAct.putValue(PhonUIAction.NAME, "Open session and highlight result");
-									openResultAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open session and highlight result");
-									builder.addItem(".@Open Link", openResultAct);
-								}
-							}
-						}
-
-						if(menu.getComponentCount() > 0) {
-							builder.addSeparator(".", "link_sep");
-						}
-						
-						// add table menu items
-						final PhonUIAction<String> saveTableAsCSV = PhonUIAction.consumer(params.getBrowser()::executeJavaScript,
-								String.format("saveTableAsCSV('%s')", tableId));
-						saveTableAsCSV.putValue(PhonUIAction.NAME, "Save table as CSV...");
-						builder.addItem(".", saveTableAsCSV);
-						
-						final PhonUIAction<String> saveTableAsExcelAct = PhonUIAction.consumer(params.getBrowser()::executeJavaScript,
-								String.format("saveTableAsExcel('%s')", tableId));
-						saveTableAsExcelAct.putValue(PhonUIAction.NAME, "Save table as Excel (XLS)...");
-						builder.addItem(".", saveTableAsExcelAct);
-						
-						final PhonUIAction<String> showTableAct = PhonUIAction.consumer(params.getBrowser()::executeJavaScript,
-								String.format("showTable('%s')", tableId));
-						showTableAct.putValue(PhonUIAction.NAME, "Open table in new buffer");
-						builder.addItem(".", showTableAct);
-						
-						builder.addSeparator(".", "table_actions_sep");
-
-						final PhonUIAction<String> copyTableAct = PhonUIAction.consumer(params.getBrowser()::executeJavaScript,
-								String.format("onCopyTableData(document.getElementById('%s'), '%s')", tableId, tableId));
-						copyTableAct.putValue(PhonUIAction.NAME, "Copy table");
-						copyTableAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Copy table to clipboard as CSV");
-						builder.addItem(".", copyTableAct);
-					}
-				}
-			}
-			
-			// editor commands
-			final PhonUIAction<EditorCommand> copyAct = PhonUIAction.consumer(params.getBrowser()::executeCommand, EditorCommand.COPY);
-			copyAct.putValue(PhonUIAction.NAME, "Copy");
-			copyAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Copy selection to clipboard");
-			builder.addItem(".", copyAct);
-			builder.addSeparator(".", "editor_commands");
-			
-			final PhonUIAction<Void> zoomInAct = PhonUIAction.runnable(params.getBrowser()::zoomIn);
-			zoomInAct.putValue(PhonUIAction.NAME, "Zoom in");
-			zoomInAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Increase zoom level");
-			zoomInAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
-			builder.addItem(".", zoomInAct);
-			
-			final PhonUIAction<Void> zoomOutAct = PhonUIAction.runnable(params.getBrowser()::zoomOut);
-			zoomOutAct.putValue(PhonUIAction.NAME, "Zoom out");
-			zoomOutAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Decrease zoom level");
-			zoomOutAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_9, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
-			builder.addItem(".", zoomOutAct);
-			
-			final PhonUIAction<Void> zoomResetAct = PhonUIAction.runnable(params.getBrowser()::zoomReset);
-			zoomResetAct.putValue(PhonUIAction.NAME, "Reset zoom");
-			zoomResetAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset zoom level to default");
-			builder.addItem(".", zoomResetAct);
-			
-			builder.addSeparator(".", "zoom_actions");
-			
-			setupReportMenu(builder);
-			
-			menu.show(browserView, params.getLocation().x, params.getLocation().y);
-		}
-		
-	}
-
-	public class WebViewInterface {
-		
-		public void log(String log) {
-			java.lang.System.out.println(log);
-		}
-
-		public void openSession(String sessionName) {
-			final SessionPath sessionPath = new SessionPath(sessionName);
-
-			// call open session module
-			final EntryPointArgs args = new EntryPointArgs();
-			args.put(EntryPointArgs.PROJECT_OBJECT, getExtension(Project.class));
-			args.put(EntryPointArgs.CORPUS_NAME, sessionPath.getCorpus());
-			args.put(EntryPointArgs.SESSION_NAME, sessionPath.getSession());
-
-			PluginEntryPointRunner.executePluginInBackground(SessionEditorEP.EP_NAME, args);
-		}
-
-		public void openSessionAtRecord(String sessionName, int recordIndex) {
-			final SessionPath sessionPath = new SessionPath(sessionName);
-
-			// call open session module
-			final EntryPointArgs args = new EntryPointArgs();
-			args.put(EntryPointArgs.PROJECT_OBJECT, getExtension(Project.class));
-			args.put(EntryPointArgs.CORPUS_NAME, sessionPath.getCorpus());
-			args.put(EntryPointArgs.SESSION_NAME, sessionPath.getSession());
-			args.put(SessionEditorEP.RECORD_INDEX_PROPERY, recordIndex);
-
-			PluginEntryPointRunner.executePluginInBackground(SessionEditorEP.EP_NAME, args);
-		}
-		
-		public void createTableBuffer(String tableId, DefaultTableDataSource table) {
-			final PrintBufferNode printBuffer = new PrintBufferNode();
-			printBuffer.setShowTable(true);
-			printBuffer.setShowBuffer(false);
-			
-			final OpContext ctx = new OpContext();
-			ctx.put("_buffers", bufferPanel);
-			ctx.put("buffer", tableId);
-			ctx.put("data", table);
-			
-			try {
-				printBuffer.operate(ctx);
-			} catch (ProcessingException pe) {
-				LogUtil.severe(pe);
-			}
-		}
-		
-		public void showTable(String tableId, JSObject tableObj) {
-			showTable(tableId, (DefaultTableDataSource)tableObj.asJavaObject());
-		}
-		
-		public void showTable(String tableId, DefaultTableDataSource table) {
-			SwingUtilities.invokeLater( () -> {
-				if(!bufferPanel.getBufferNames().contains(tableId)) {
-					createTableBuffer(tableId, table);
-				}
-				bufferPanel.selectBuffer(tableId);
-			});
-		}
-		
-		public void saveTableAsCSV(String tableId, JSObject tableObj) {
-			saveTableAsCSV(tableId, (DefaultTableDataSource)tableObj.asJavaObject());
-		}
-		
-		public void saveTableAsCSV(String tableId, DefaultTableDataSource table) {
-			SwingUtilities.invokeLater(() -> {
-				if(!bufferPanel.getBufferNames().contains(tableId)) {
-					createTableBuffer(tableId, table);
-				}
-				bufferPanel.saveAsCSV(tableId);
-			});
-		}
-		
-		public void saveTableAsWorkbook(String tableId, JSObject tableObj) {
-			saveTableAsWorkbook(tableId, (DefaultTableDataSource)tableObj.asJavaObject());
-		}
-		
-		public void saveTableAsWorkbook(String tableId, DefaultTableDataSource table) {
-			SwingUtilities.invokeLater( () -> {
-				if(!bufferPanel.getBufferNames().contains(tableId)) {
-					createTableBuffer(tableId, table);
-				}
-				bufferPanel.saveAsWorkbook(tableId);
-			});
-		}
-		
-		public void onHighlightResultValue(JSObject tableModelObj, int row, String columnName) {
-			onHighlightResultValue((DefaultTableDataSource)tableModelObj.asJavaObject(), row, columnName);
-		}
-
-		public void onHighlightResultValue(DefaultTableDataSource tableModel, int row, String columnName) {
-			if(row < 0 || row >= tableModel.getRowCount()) return;
-
-			final Object[] rowData = tableModel.getRow(row);
-
-			final int sessionCol = tableModel.getColumnIndex("Session");
-			if(sessionCol < 0) return;
-			final String sessionName = rowData[sessionCol].toString();
-
-			final int resultCol = tableModel.getColumnIndex("Result");
-			if(resultCol < 0) return;
-
-			final int dataCol = tableModel.getColumnIndex(columnName);
-			if(dataCol < 0) return;
-
-			final Result result = (Result) rowData[resultCol];
-			if(result == null) return;
-
-			// create a temporary result object
-			final QueryFactory factory = new XMLQueryFactory();
-			final Result tempResult = factory.createResult();
-			tempResult.setRecordIndex(result.getRecordIndex());
-			tempResult.setExcluded(result.isExcluded());
-			tempResult.setSchema(result.getSchema());
-
-			// find result value using columnName - which should be the tier name
-			for(int i = 0; i < result.getNumberOfResultValues(); i++) {
-				final ResultValue rv = result.getResultValue(i);
-				if(rv.getName().equals(columnName)) {
-					tempResult.addResultValue(rv);
-				}
-			}
-
-			final SessionPath sessionPath = new SessionPath(sessionName);
-
-			// call open session module
-			final EntryPointArgs args = new EntryPointArgs();
-			args.put(EntryPointArgs.PROJECT_OBJECT, getExtension(Project.class));
-			args.put(EntryPointArgs.CORPUS_NAME, sessionPath.getCorpus());
-			args.put(EntryPointArgs.SESSION_NAME, sessionPath.getSession());
-			args.put(SessionEditorEP.RECORD_INDEX_PROPERY, result.getRecordIndex());
-			args.put(SessionEditorEP.RESULT_VALUES_PROPERTY, new Result[] { tempResult });
-
-			PluginEntryPointRunner.executePluginInBackground(SessionEditorEP.EP_NAME, args);
-		}
-
-	}
+//	public class WebViewInterface {
+//
+//		public void log(String log) {
+//			java.lang.System.out.println(log);
+//		}
+//
+//		public void openSession(String sessionName) {
+//			final SessionPath sessionPath = new SessionPath(sessionName);
+//
+//			// call open session module
+//			final EntryPointArgs args = new EntryPointArgs();
+//			args.put(EntryPointArgs.PROJECT_OBJECT, getExtension(Project.class));
+//			args.put(EntryPointArgs.CORPUS_NAME, sessionPath.getCorpus());
+//			args.put(EntryPointArgs.SESSION_NAME, sessionPath.getSession());
+//
+//			PluginEntryPointRunner.executePluginInBackground(SessionEditorEP.EP_NAME, args);
+//		}
+//
+//		public void openSessionAtRecord(String sessionName, int recordIndex) {
+//			final SessionPath sessionPath = new SessionPath(sessionName);
+//
+//			// call open session module
+//			final EntryPointArgs args = new EntryPointArgs();
+//			args.put(EntryPointArgs.PROJECT_OBJECT, getExtension(Project.class));
+//			args.put(EntryPointArgs.CORPUS_NAME, sessionPath.getCorpus());
+//			args.put(EntryPointArgs.SESSION_NAME, sessionPath.getSession());
+//			args.put(SessionEditorEP.RECORD_INDEX_PROPERY, recordIndex);
+//
+//			PluginEntryPointRunner.executePluginInBackground(SessionEditorEP.EP_NAME, args);
+//		}
+//
+//		public void createTableBuffer(String tableId, DefaultTableDataSource table) {
+//			final PrintBufferNode printBuffer = new PrintBufferNode();
+//			printBuffer.setShowTable(true);
+//			printBuffer.setShowBuffer(false);
+//
+//			final OpContext ctx = new OpContext();
+//			ctx.put("_buffers", bufferPanel);
+//			ctx.put("buffer", tableId);
+//			ctx.put("data", table);
+//
+//			try {
+//				printBuffer.operate(ctx);
+//			} catch (ProcessingException pe) {
+//				LogUtil.severe(pe);
+//			}
+//		}
+//
+//		public void showTable(String tableId, JSObject tableObj) {
+//			showTable(tableId, (DefaultTableDataSource)tableObj.asJavaObject());
+//		}
+//
+//		public void showTable(String tableId, DefaultTableDataSource table) {
+//			SwingUtilities.invokeLater( () -> {
+//				if(!bufferPanel.getBufferNames().contains(tableId)) {
+//					createTableBuffer(tableId, table);
+//				}
+//				bufferPanel.selectBuffer(tableId);
+//			});
+//		}
+//
+//		public void saveTableAsCSV(String tableId, JSObject tableObj) {
+//			saveTableAsCSV(tableId, (DefaultTableDataSource)tableObj.asJavaObject());
+//		}
+//
+//		public void saveTableAsCSV(String tableId, DefaultTableDataSource table) {
+//			SwingUtilities.invokeLater(() -> {
+//				if(!bufferPanel.getBufferNames().contains(tableId)) {
+//					createTableBuffer(tableId, table);
+//				}
+//				bufferPanel.saveAsCSV(tableId);
+//			});
+//		}
+//
+//		public void saveTableAsWorkbook(String tableId, JSObject tableObj) {
+//			saveTableAsWorkbook(tableId, (DefaultTableDataSource)tableObj.asJavaObject());
+//		}
+//
+//		public void saveTableAsWorkbook(String tableId, DefaultTableDataSource table) {
+//			SwingUtilities.invokeLater( () -> {
+//				if(!bufferPanel.getBufferNames().contains(tableId)) {
+//					createTableBuffer(tableId, table);
+//				}
+//				bufferPanel.saveAsWorkbook(tableId);
+//			});
+//		}
+//
+//		public void onHighlightResultValue(JSObject tableModelObj, int row, String columnName) {
+//			onHighlightResultValue((DefaultTableDataSource)tableModelObj.asJavaObject(), row, columnName);
+//		}
+//
+//		public void onHighlightResultValue(DefaultTableDataSource tableModel, int row, String columnName) {
+//			if(row < 0 || row >= tableModel.getRowCount()) return;
+//
+//			final Object[] rowData = tableModel.getRow(row);
+//
+//			final int sessionCol = tableModel.getColumnIndex("Session");
+//			if(sessionCol < 0) return;
+//			final String sessionName = rowData[sessionCol].toString();
+//
+//			final int resultCol = tableModel.getColumnIndex("Result");
+//			if(resultCol < 0) return;
+//
+//			final int dataCol = tableModel.getColumnIndex(columnName);
+//			if(dataCol < 0) return;
+//
+//			final Result result = (Result) rowData[resultCol];
+//			if(result == null) return;
+//
+//			// create a temporary result object
+//			final QueryFactory factory = new XMLQueryFactory();
+//			final Result tempResult = factory.createResult();
+//			tempResult.setRecordIndex(result.getRecordIndex());
+//			tempResult.setExcluded(result.isExcluded());
+//			tempResult.setSchema(result.getSchema());
+//
+//			// find result value using columnName - which should be the tier name
+//			for(int i = 0; i < result.getNumberOfResultValues(); i++) {
+//				final ResultValue rv = result.getResultValue(i);
+//				if(rv.getName().equals(columnName)) {
+//					tempResult.addResultValue(rv);
+//				}
+//			}
+//
+//			final SessionPath sessionPath = new SessionPath(sessionName);
+//
+//			// call open session module
+//			final EntryPointArgs args = new EntryPointArgs();
+//			args.put(EntryPointArgs.PROJECT_OBJECT, getExtension(Project.class));
+//			args.put(EntryPointArgs.CORPUS_NAME, sessionPath.getCorpus());
+//			args.put(EntryPointArgs.SESSION_NAME, sessionPath.getSession());
+//			args.put(SessionEditorEP.RECORD_INDEX_PROPERY, result.getRecordIndex());
+//			args.put(SessionEditorEP.RESULT_VALUES_PROPERTY, new Result[] { tempResult });
+//
+//			PluginEntryPointRunner.executePluginInBackground(SessionEditorEP.EP_NAME, args);
+//		}
+//
+//	}
 
 	private class ReportReader extends SwingWorker<String, String> {
 

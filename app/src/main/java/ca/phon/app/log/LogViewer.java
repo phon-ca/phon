@@ -19,10 +19,13 @@ import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.PrefHelper;
+import org.cef.browser.*;
+import org.cef.handler.CefLoadHandlerAdapter;
 
 import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
+import java.awt.event.*;
 import java.io.*;
 import java.util.List;
 import java.util.*;
@@ -150,7 +153,16 @@ public class LogViewer extends CommonModuleFrame {
 		final BufferPanel buffer = bufferPanel.createBuffer(bufferName, true);
 		if(logFile.getName().endsWith(".html")) {
 			buffer.showHtml(false);
-			buffer.getBrowser().loadURL(logFile.toURI().toString());
+			// wait for load of about:blank before attempting to load another url
+			buffer.getBrowser().getClient().addLoadHandler(new CefLoadHandlerAdapter() {
+				@Override
+				public void onLoadingStateChange(CefBrowser browser, boolean isLoading, boolean canGoBack, boolean canGoForward) {
+					if(!isLoading) {
+						buffer.getBrowser().getClient().removeLoadHandler();
+						buffer.getBrowser().loadURL(logFile.toURI().toString());
+					}
+				}
+			});
 		} else if(logFile.getName().endsWith(".html.gz")) {
 			try (
 				final BufferedReader reader = new BufferedReader(
