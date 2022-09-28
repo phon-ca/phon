@@ -119,30 +119,10 @@
 			<artifactId>graphviz-java</artifactId>
 		</dependency>
 
-		<!-- jxbrowesr -->
+		<!-- jcef -->
 		<dependency>
-			<groupId>com.teamdev</groupId>
-			<artifactId>jxbrowser</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.teamdev</groupId>
-			<artifactId>jxbrowser-mac</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.teamdev</groupId>
-			<artifactId>jxbrowser-win64</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.teamdev</groupId>
-			<artifactId>jxbrowser-linux-x64</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.teamdev</groupId>
-			<artifactId>jxbrowser-license-phon</artifactId>
+			<groupId>me.friwi</groupId>
+			<artifactId>jcefmaven</artifactId>
 		</dependency>
 		
 		<!-- Markdown -->

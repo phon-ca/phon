@@ -100,6 +100,9 @@
 		<uk.co.caprica.vlcj.version>4.7.3</uk.co.caprica.vlcj.version>
 		<guru.nidi.graphviz-java.version>0.16.3</guru.nidi.graphviz-java.version>
 
+		<!-- jcef -->
+		<me.friwi.jcefmaven.version>105.3.36</me.friwi.jcefmaven.version>
+
 		<!-- java.xml.bind -->
 		<jaxb.version>4.0.0</jaxb.version>
 		<org.codehaus.mojo.jaxb2-maven-plugin.version>3.1.0</org.codehaus.mojo.jaxb2-maven-plugin.version>
@@ -112,10 +115,6 @@
 		<org.apache.maven.plugins.maven-shade-plugin.version>2.2</org.apache.maven.plugins.maven-shade-plugin.version>
 		<org.apache.maven.plugins.maven-surefire-plugin.version>2.16</org.apache.maven.plugins.maven-surefire-plugin.version>
 		<org.apache.maven.plugins.maven-dependency-plugin.version>2.8</org.apache.maven.plugins.maven-dependency-plugin.version>
-
-		<!-- jxbrowser -->
-		<com.teamdev.jxbrowser.version>6.24.2</com.teamdev.jxbrowser.version>
-		<com.teamdev.jxbrowser.license.version>6.0</com.teamdev.jxbrowser.license.version>
 	</properties>
 
 	<modules>
@@ -435,35 +434,11 @@
 				<version>${uk.co.caprica.vlcj.version}</version>
 			</dependency>
 
-			<!-- jxbrowesr -->
+			<!-- jcef -->
 			<dependency>
-				<groupId>com.teamdev</groupId>
-				<artifactId>jxbrowser</artifactId>
-				<version>${com.teamdev.jxbrowser.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.teamdev</groupId>
-				<artifactId>jxbrowser-mac</artifactId>
-				<version>${com.teamdev.jxbrowser.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.teamdev</groupId>
-				<artifactId>jxbrowser-win64</artifactId>
-				<version>${com.teamdev.jxbrowser.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.teamdev</groupId>
-				<artifactId>jxbrowser-linux-x64</artifactId>
-				<version>${com.teamdev.jxbrowser.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.teamdev</groupId>
-				<artifactId>jxbrowser-license-phon</artifactId>
-				<version>${com.teamdev.jxbrowser.license.version}</version>
+				<groupId>me.friwi</groupId>
+				<artifactId>jcefmaven</artifactId>
+				<version>${me.friwi.jcefmaven.version}</version>
 			</dependency>
 
 		</dependencies>
