@@ -20,6 +20,8 @@ import ca.phon.project.Project;
 import ca.phon.session.Session;
 import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.wizard.*;
+import org.cef.browser.CefBrowser;
+import org.cef.handler.CefLoadHandlerAdapter;
 import org.jdesktop.swingx.JXBusyLabel;
 
 import javax.swing.*;
@@ -138,8 +140,18 @@ public class SessionToHTMLWizard extends BreadcrumbWizardFrame {
 					toExcel.createSheetInWorkbook(wb, session);
 				});
 				buffer.showHtml(false);
-				buffer.getBrowser().loadURL(htmlFile.toURI().toURL().toString());
-			} catch (InterruptedException | ExecutionException | MalformedURLException e) {
+				buffer.getBrowser().getClient().addLoadHandler(new CefLoadHandlerAdapter() {
+					@Override
+					public void onLoadingStateChange(CefBrowser browser, boolean isLoading, boolean canGoBack, boolean canGoForward) {
+						if(!isLoading) {
+							buffer.getBrowser().getClient().removeLoadHandler();
+							SwingUtilities.invokeLater(() -> {
+								buffer.getBrowser().loadURL(htmlFile.toURI().toString());
+							});
+						}
+					}
+				});
+			} catch (InterruptedException | ExecutionException e) {
 				LogUtil.severe(e.getLocalizedMessage(), e);
 			}
 			busyLabel.setBusy(false);

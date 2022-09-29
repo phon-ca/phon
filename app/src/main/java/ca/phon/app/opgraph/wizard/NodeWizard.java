@@ -17,7 +17,6 @@ package ca.phon.app.opgraph.wizard;
 
 import ca.phon.app.log.*;
 import ca.phon.app.log.actions.SaveBufferAction;
-import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.opgraph.*;
 import ca.phon.app.opgraph.nodes.log.*;
 import ca.phon.app.opgraph.nodes.query.QueryNode;
@@ -27,17 +26,13 @@ import ca.phon.app.opgraph.wizard.WizardOptionalsCheckboxTree.CheckedOpNode;
 import ca.phon.app.opgraph.wizard.actions.*;
 import ca.phon.app.opgraph.wizard.actions.SaveTablesToFolderAction.ExportType;
 import ca.phon.app.script.ScriptPanel;
-import ca.phon.app.session.editor.SessionEditorEP;
 import ca.phon.formatter.FormatterUtil;
 import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.OpgraphIO;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.opgraph.nodes.general.MacroNode;
-import ca.phon.plugin.*;
 import ca.phon.project.*;
-import ca.phon.query.db.*;
-import ca.phon.query.db.xml.XMLQueryFactory;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.query.script.QueryTask;
 import ca.phon.session.*;
@@ -56,6 +51,7 @@ import ca.phon.worker.*;
 import ca.phon.worker.PhonTask.TaskStatus;
 import org.apache.velocity.tools.generic.MathTool;
 import org.cef.browser.CefBrowser;
+import org.cef.handler.*;
 import org.jdesktop.swingx.JXBusyLabel;
 
 import javax.swing.Timer;
@@ -73,9 +69,7 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.*;
-import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.regex.*;
 import java.util.stream.Collectors;
 
 /**
@@ -1092,8 +1086,18 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 //						public void onDocumentLoadedInFrame(FrameLoadEvent arg0) {}
 //					});
 
-					reportBufferPanel.getBrowser().loadURL(reportURL);
-					reportBufferPanel.requestFocusInWindow();
+					reportBufferPanel.getBrowser().getClient().addLoadHandler(new CefLoadHandlerAdapter() {
+						@Override
+						public void onLoadingStateChange(CefBrowser browser, boolean isLoading, boolean canGoBack, boolean canGoForward) {
+							if(!isLoading) {
+								reportBufferPanel.getBrowser().getClient().removeLoadHandler();
+								SwingUtilities.invokeLater(() -> {
+									reportBufferPanel.getBrowser().loadURL(reportURL);
+									reportBufferPanel.requestFocusInWindow();
+								});
+							}
+						}
+					});
 				} catch (InterruptedException | InvocationTargetException e) {
 					LOGGER.error( e.getLocalizedMessage(), e);
 				}
