@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.5.0-alpha.3/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_0-alpha_3.dmg" newVersion="3.5.0-alpha.3" newMediaFileId="macos" fileSize="459048633" md5Sum="6929b7037660b10cd3d84c499b0dd066" sha256Sum="baf20de9c1cea3ac5d1cd4326a852313eab2974e318e4fcf2cb8e63d0c1ed6b8" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.5.0-alpha.4/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_0-alpha_4.dmg" newVersion="3.5.0-alpha.4" newMediaFileId="macos" fileSize="286116678" md5Sum="c1558ba90a7db708feded2d0b69cbf38" sha256Sum="9ead5992c8bd6fa9ed72e36b6d79cbd4ddd69551a92b1533690dd68dbca0940a" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.4.2
 
  * VLC and segment playback using the Java audio system now both use the same volume settings
@@ -523,7 +523,2099 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_0-alpha_3.dmg" newVersion="3.5.0-alpha.3" newMediaFileId="macos" fileSize="459048633" md5Sum="6929b7037660b10cd3d84c499b0dd066" sha256Sum="baf20de9c1cea3ac5d1cd4326a852313eab2974e318e4fcf2cb8e63d0c1ed6b8" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_0-alpha_4.dmg" newVersion="3.5.0-alpha.4" newMediaFileId="macos" fileSize="286116678" md5Sum="c1558ba90a7db708feded2d0b69cbf38" sha256Sum="9ead5992c8bd6fa9ed72e36b6d79cbd4ddd69551a92b1533690dd68dbca0940a" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.4.2
+
+ * VLC and segment playback using the Java audio system now both use the same volume settings
+ * New volume slider components are located in the media player, speech analysis, and timeline views. All three sliders control a single volume for the session (video and segment playback)
+ * Media playback rate may now be changed
+ * Segmentation window stays in middle of timeline view when possible
+ * Media playback rate may be changed using keystrokes during segmentation
+ * Settings for volume and media playback rate may be found in the 'Media' window menu for the session
+ * Timeline will center new record during navigation/zoom actions
+ * Speech analysis view will now correctly center on current record on zoom actions
+ * Fixed a font issue with the results editor when using Noto fonts on Windows 
+ * Fixed an issue when searching 'by syllable' in percent correct analyses
+ * ~ may now be used as a compound word marker in IPA transcriptions
+ * Fixed keyboard focus behaviour when switching records in session editor
+ * Fixed an issue where some editor keystrokes would not work until the Session menu was selected at least once
+ * Updated eng IPA dictionary
+ * Fixed an issue where session backups were not being created when saving while focused in Record Data
+
+## Changes from 3.4.1
+
+ * Fixed an issue where phonex group data was not retained when exact match is selected
+
+## Changes from 3.4.0
+
+ * Reset all macOS Security &amp; Privacy permissions. Phon and Phon-beta will now have separate sets of permissions instead of sharing
+ * Fixed macOS entitlements to unblock the sendpraat command
+ * Media field in Session Information will no longer be outlined in read when no file is specified
+
+## Changes from 3.3.6
+
+ * Added Consistency Analysis
+ * Added 'Distribute unsegmented records' function to Timeline context menu
+ * Session editor will only switch to new records when using the New and Duplicate record buttons
+ * Fixed an issue with Formant tables having too many columns on windows
+ * Additional checks are put in place when editing TextGids in Praat and sending back to Phon:
+   * Phon will perform a round-trip test before copying the TextGrid data from Praat
+   * A backup of the TextGrid file will be created with the suffix ```-backup``` when sending back to Phon
+   * A backup of the TextGrid file will be created in the ```backups.zip``` file when sending back to Phon under ```__res/textgrids/&lt;corpus&gt;/&lt;session&gt;```
+ * Fixed an issue where the Speech Analysis view would not refresh correctly when switching records
+
+## Changes from 3.3.5
+
+ * Session editor will now detect and offer to load changes from disk if changes were made to the files using an external editor.
+ * Fixed a regression issue with creating records via the Timeline waveform tier
+ * Fixed a race condition when using the praat function 'File -&gt; Send back to calling program' while editing TextGrids
+
+## Changes from 3.3.4
+
+ * Added Urdu syllabifier
+ * Added IPA dictionary selection to automatic transcription form in IPA Lookup view
+ * Moved location of project properties file from '.properties' to 'project.properties'
+ * Improved detection of Phon projects in workspace folder
+ * Fixed an issue where invalid segment times would cause repaint issues in the editor
+ * Fixed an issue with segmentation
+ * Merging groups in a record will now correctly merge alignment
+
+## Changes from 3.3.3
+
+ * Fixed an bug with the 'keep like on top' sorting option
+ * Added ability to toggle display of diacritics in Syllabification and Alignment editor view
+ * Display settings for Syllabification and Alignment editor view are remembered between sessions
+
+## Changes from 3.3.2
+
+ * Updated ara syllabifier and dictionary
+ * Updated tsn dictionary
+
+## Changes from 3.3.1
+
+ * Fixed an issue with switching workspaces
+
+## Changes from 3.3.0
+
+### General
+ * The workspace project list in the Welcome window may now be collapsed. The list is initially collapsed by default if there are no workspace projects
+ * Added session check for aligned word counts in between Phon tiers. The tier with the most words defines the aligned word count for the record. Any tier which does no match the aligned word count for the record will be reported.
+ * Added a settings menu to the toolbar of the Session Check view to allow selection of which checks are performed within the session editor. This setting is remembered between instances of the session editor.
+ * Fixed issues related to session check
+ * Fixed a bug with the Word Match analysis
+ * Fixed an issue with detecting positional information when using plain text queries
+ * Fixed an issue with the 'keep like on top' option when sorting tables
+ * Fixed highlight of word suffix codes
+ * Update ara syllabifier
+
+### CHAT/TalkBank Support
+ * 'Import Project' has been renamed as 'Import from CHAT/TalkBank'.  The UI has been updated for clarity and ease of use. It is no longer necessary to create extra folders when importing data. For more information see https://www.phon.ca/phon-manual/chat/import.html
+ * 'Export Project' has been renamed as 'Export to CHAT/TalkBank'. The export will no longer create a project folder in the selected output folder. For more information see https://www.phon.ca/phon-manual/chat/export.html.
+ * Added new session checks - available in the Sesion Check wizard from the Project Manager window - for exporting to TalkBank/CHAT. Each record in a session is checked to see if it will properly export to xml (and optionally CHAT) individually. Useful for finding which records have round-trip issues. (Note: only Phon -&gt; TalkBank checks are available in the session editor as Phon -&gt; CHAT checks take substantially longer.)
+ * Added round-trip support for CA elements/delimiters
+ * Added round-trip support for segment repetitions. Segment repetitions are enclosed by the ↫ (0x21ab) character.  e.g., ↫r-r↫repeat
+ * Fixed issues with underline and italic elements
+ * Fixed handling of numerical length pauses
+ * Fixed export of Postcode tier data
+ * Fixed an issue with exporting empty phone alignments
+
+### Phonex
+ * Custom phone classes may now be part of compound phone expressions. e.g., ```t_[^s]```
+ * Ligatures may now be used in compound phone matchers instead of underscore. e.g., ```t[͜^s]```
+ * Regular expression matchers may be declared using single or double quotes
+ * Long (ː) and halflong (ˑ) diacritics may be applied to phone matchers to test for the features {long} and {halflong} respectively
+
+## Changes from 3.2.0
+
+### Query &amp; Analysis
+
+ * Added new option to 'Combine results for all participants' to all stock analyses
+ * Added Measure of Cluster Proximity analysis
+ * Added Tier Match, CV Pattern Match, Stress Match, and Syllable Count Match analyses
+ * Categorized analyses into sub-folders
+ * Updated Consonants analysis to include positional information and accuracy columns to all listings
+ * Added participant filter to parameters for all analyses
+ * Updated Specialized/Word Match analysis
+ * Added new common query option to add positional data to query results
+ * Fixed a bug where results from non-selected participants would appear in analysis result listings
+
+### Session Editor
+
+ * Improved context menu in Tier Management view
+ * Added new 'Duplicate Tier' action
+ * Integrated tier management functions into new context menu available on tier lables in Record Data view
+ * New copy/paste tier functions available from the tier context menu in Record Data view.  Clipboard data may come from external strings (i.e., any text in the clipboard - will try to fit the data if brackets are used)
+ * Added inter-transcriber reliability function to Session Editor
+ * Fixed issue with session date field
+ * Updated cmn and tsn dictionaries
+ * Added support for multi-record selection the record grid tier of the Timeline view. Record selection may be manipulated using standard mouse and keyboard interactions
+ * Added new actions for moving selected records left/right: CTRL+,/. to Timeline 
+ * Added new actions for growing (CTRL+G) or shrinking (CTRL+K) selected records
+ * Added ability to copy and paste multiple records in the Timeline view
+ * Added ability to select records based on query result sets in Timeline view
+ * Improved behaviour of record labels when multiple records are at the same position in Timeline view
+ * Diacritics are no longer shown in syllabifier and alignment boxes
+ * A Syllabification and alignment popup window is displayed when holding shift while mousing over the ipa field, or by pressing CMD/CTRL+T when an ipa field is focused 
+ * Added a button for scaling font size to the Record Data, Timeline and Speech Analysis views
+
+### Fonts
+ 
+ * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
+ * Font preferences have been simplified and reset
+
+### Other
+
+ * IPA dictionaries may now be associated with a particular syllabifier in the metadata section using the '#syllabifer' tag. The syllabifier will be executed during the dictionary lookup phase just before any phonex find/replace expressions are executed
+ * Fixed a bug with phonex Find &amp; Replace related to an issue with look-ahead groups
+ * Updated VLC to 3.0.12
+
+
+## Changes from 3.1.3
+
+ * Added simplified Find &amp; Replace UI to Record data view which may be toggled using Record Data menu item and a toolbar button
+ * Added new Find &amp; Replace menu item to Edit menu of Session Editor to show Record Data view with Find &amp; Replace UI visible
+ * Added new File -&gt; Open command allowing opening of individual files including:
+   - Phon session files (.xml)
+   - TalkBank files (.xml)
+   - CHAT files (.cha)
+   - Analysis files (.xml)
+   - Query files (.xml)
+   - Query report files (.xml)
+ * Added new File -&gt; Recent files menu displaying the list of recently opened files.
+ * Added new Window -&gt; Show project window command when no project window is open for the active session editor window
+ * Can now open .cha and .xml files in Phon using the 'Open with' context menu in macOS.
+ * Fixed an issue with the input fields of the Find &amp; Replace view
+ * Updated PhonTalk, added new Import Project and Export Project commands to the
+File menu for importing/exporting CHAT (.cha) and TalkBank (.xml) data.
+ * Fixed an issue where the syllabification display would not be wide enough in some situations.
+ * Added workspace history menu to Workspace window menu
+ * Recent project menu now displays full path and includes a menu item to clear history
+ * Updated to Java 15
+ * PhonShell now usess Rhino JavaScript engine instead of nashorn
+ * PhonShell scripts may now be opened using the File -&gt; Open menu command
+ * Moved 'Add aligned groups/words' query/analysis options to new section named 'Additional Tier Data' with new UI for tier selection
+ * Fixed issues with Analysis Composer when using nested analyses derived from queries
+ * Added new 'Duplicate' action for items in the Analysis/Report Composer
+ * Added conext menu for table in Analysis/Report Composer
+ * Added Chineses (cmn and yue) syllabifiers
+ * Added function to reassign all records for a speaker to another speaker in
+the speaker context menu of the Timeline view. Click speaker name in the record
+grid to access this menu.
+
+## Changes from 3.1.2
+
+ * Changed name of PPC analysis to Percent Phones Correct
+ * Added option to PPC analysis to allow phones marked as distored to be considered correct (PPC-r)
+ * Update PPC 'report type' options to include onset, coda and nuclei singleton or cluster selection
+ * Added Percent Diacritics Correct (PDC) analysis
+ * Added Percent Number Tones Correct (PNTC) analysis
+ * Added zoom commands to HTNL report preview
+ * Fixed issue with new phonex syllable matcher and backtracking expressions
+ * Added new 'Sum columns' setting to manual inventory options
+ * Fixed check for VLC at launch
+ * Fixed an issue where changing the report name in analysis setting panel would not update report name in the analysis list (Analysis Composer)
+
+## Changes from 3.1.0
+
+ * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
+   - Alaw
+   - ulaw
+   - 12/16/24/32 bit linear
+   - 32/64 bit float
+ * Added 'Show media information' command to 'Media' menu of the session editor.
+ * Updated Multisyllabic Nonlinear Analysis.
+ * Removed restrictions on corpus/session name length in project manager - allowing use of any valid filename.
+ * Added text completions for session name field in project manager. Completions are generated from media filenames scanned in media folders for selected corpus.
+ * Added syllable matcher ('σ' U+03c3) with optional range (e.g., 'σ/O..N/') to phonex. This matcher will match an entire syllable - or the remainder of the current syllable - up to and including syllable positions included in the optional range.
+ * Improved support for tone numbers in IPA transcriptions.
+ * Removed 'tone' phonex plug-in.
+ * Added new 'tn (tone number)' phonex plug-in allowing matching (or not matching) a list of provided tone numbers on individual IPA elements.
+ * Added PTNC (Percent Tone Number Correct) query to query list in Analysis Composer.
+ * project.xml file for projects is no longer needed or created in future projects. This file may be safely removed and ignored in file sharing and version control systems. The new .properties file may also be safely ignored in team setups.
+
+## Changes from 3.0.5
+
+ * Improved method of opening sessions in blind mode
+ * Improved method of viewing and selecting project/corpus media folders
+ * Improved media loading and unloading in Session Editor
+ * Improved segment playback in Session Editor.  Segment playback no longer requires the Speech Analysis view to be open.
+ * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
+ * Added new 'Timeline' view which displays the audio waveform along with record data on a horizontal timeline. This view allows access to
+Segmentation functions as well as allowing easy manipulation of record segment times.
+ * Updated 'Speech Analysis' view with improved waveform and timebar components. 
+ * Diacritic selection has been added to all query reports and analyses which use the 'ignore diacritics' option.
+ * Improved method of setting up global overrides in query and report wizard
+
+### Other changes:
+
+ * Fix age comparisons for participants in query forms. Ages are now normalized before comparison (e.g., 01;04.00 is equal to 00;16.00)
+ * Added validation to age fields in query forms
+ * Record speaker will now change as expected when using 'replace' mode with segmentation
+ * Fix bugs with Specialized/Multisyllabic Nonlinear Analysis
+ * Updated English-NA (eng) dictionary
+ * Added Cantonese (yue) dictionary
+ * Added Mandarin (cmn) dictionary
+ * Fixed Phone Inventory analysis for IPA Actual elements
+ * Fixed an issue where compound phone characters were reversed in reports when ignoring diacritics.
+ * Update libjpraat to version 6.0.52
+ * Updated WAP analysis with improved definition of distortions.
+ * Added status background images for media player
+ * Can now click media player to toggle play/pause
+ * Drag and drop files onto media player to assign media to session
+ * Added menu items for assigning media, un-assigning media, and generating session audio file to Session menu in editor
+ * Improved media prompts (banners) in session editor
+
+## Changes from 3.0.4
+
+ * Fixed an issue where reports containing elements from the praat-plugin were not loading after saving the custom report to disk
+ * Updated Italian (ita) dictionary
+ * Added summary tables to PMLU analysis
+
+## Changes from 3.0.3
+
+ * Query and Report Wizard
+   - Query history is now displayed as a drop-down list
+   - Improved method of saving/exporting queries
+   - Clicking 'New window' will now show an exact copy of the current query (including parameters)
+   - Queries saved in user/project libraries or exported to disk now correctly link to the proper stock query
+   - Saved/exported queries now display the correct query history and named query lists
+   - Query results are now displayed in a split panel under the session selection view.
+   - Query results window will now open in proper location
+   - Stop button will now appear in the breadcrumb when executing queries
+   - Text for the next button now clearly indicates the next action
+   - Simplified and improved query window menu
+   - Add new 'Send to Analysis Composer' action allowing the current query and report settings to be added to a new or existing custom analysis
+ * Removed 'allow overlapping matches' from phonex options in forms
+ * Queries imported into analyses using the Analysis Composer from the user/project libraries will now work correctly
+ * Analysis composer now allows for setup of custom query reports
+ * Fixed behaviour of scrollbars in query forms.
+ * Folder names for reports and queries have been changed:
+   - Query folder name has been changed from 'script' to 'query'
+   - Report folder name has been changed from 'reports' to 'report'
+ * Enabled 'Export as Excel' button in Session to HTML wizard
+ * Result Listing sections may now be selected in the 'Export tables' dialog when exporting as Excel
+ * Record and result links now work in the Result Listing sections of query reports
+ * Session selector now displays scrollbars when needed in Session Check wizard
+ * Windows binaries are now signed
+ * Fixed an issue where SendPraat was blocked on Windows if not running as administrator
+ * Merged participant summary tables in Phonological Process analyses
+ * Session Check is now available from the 'View' menu in the session editor (instead of the 'Session' menu.)
+ * Changed format of phon version numbers
+
+## Changes from 3.0.2
+ 
+ * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
+ * Improvments to phone alignment
+ * Removed JavaFX dependency
+ * HTML reports are now displayed using JxBrowser
+ * New preferences panel for Query and Report wizard
+ * Added menu items for named queries to Query menu 
+ * Added 'Go to' menu for the Report menu allowing navigation to sections in the report.
+ * Added 'Open report in browser' menu item
+ * Added context menu for HTML reports
+ * Query wizards may now be opened for multiple projects
+ * Fixed a regression bug with acoustic data reports
+ * TextGrid view now uses the font Charis SIL Compact
+ * Improved workflow of wizard dialogs
+
+## Changes from 3.0.1
+
+ * Updated to Java 11
+ * Updated Consonants analysis
+ * Added 'Phone Accuracy' query report
+ * Improved options for Session to HTML wizard
+ * Updated Ewe (ewe) transliteration dictionary
+ * Added Turkish (tur) transliteration dictionary
+ * Added 'zoom' control to Composer (advanced)
+ * Automatic transcription will not overwrite unvalidated values
+ * Fixed an issue with matching back refrences at the end of transcripts 
+ * Application should now exit when selecting 'Close all windows' from the Windows taskbar
+ * Reconfigured application package directory structure
+ * Greatly improved page load time of reports
+ * Improved table of contents (ToC) menu
+ * Moved ToC to right hand side of report
+ * Renamed query reports
+ * Added new query report 'Listing by Session' which prints results organized by session and record. Tier data may also be included.
+ * Added a 'New window' function to query wizard
+
+## Changes from 3.0.0
+
+ * Beta versions of the application now have '-beta' added to the name
+ * Switched logging system to log4j2
+ * Increased previous log count to 10
+ * Logs are now stored in the $APPDATA/logs folder
+ * Updated application logs UI
+ * Added new function 'Export as HTML' to Session editor File menu
+ * Added menu item to display application data folder under the 'File' menu for all windows
+ * Added support for adding prefix, suffix, and combining diacritics to phonex matcher references
+ * Phonex expressions can now be used to modify results from Transliteration dictionaries
+ * Updated Ewe transliteration dictionary
+ * Add 'Show Welcome window' item under Window menu when Welcome window is not currently open.
+
+Bug fixes
+ * Fixed an issue with praat reports when media and TextGrids were located in external media folders
+ * Fixed an issue with creating new sessions
+ * Fixed an issue with the 'Save as' dialog in editor quick search tables
+ * Application will now exit when the last window is closed
+
+## Changes from Phon 2.1.8
+
+Version 3.0.0 is a significant update to Phon and is recommended for all users.
+
+ * General improvements to user interface
+   - Updated Welcome and Project windows
+   - New look and feel for wizards
+ * Improved phone alignment
+ * Revamped Query &amp; Report system
+   - Streamlined Query &amp; Report wizard
+   - New Report Composer for creating customized query reports
+   - Reports are now generated in HTML format. Report tables can be exported to CSV and Excel formats.
+   - New query history implementation allowing access to previously executed queries directly from the Query wizard. Entries in the query history can be 'named' and will appear in a combo box next to the query history controls.
+ * Updates to the phonex language
+   - Added grouping ability including capturing groups, named groups, non-capturing groups, look ahead/behind, and back references
+   - Added support for or'ed group expressions.
+   - Added support for C/C++ style comments (i.e., /* */ and //)
+ * Refactored Praat support
+   - Improved TextGrid support
+   - Updated acoustic data reports for new Query system
+   - Added VoT acoustic data report
+ * New analyses
+ * New syllabifier languages: Babbling, Icelandic, German, Slovenian
+ * New ipa lookup languages: Ewe, Persian
+
+&gt; Phon 3.0+ only supports 64-bit operating systems.
+
+The full changelog is available at https://github.com/phon-ca/phon/releases. For documentation visit https://www.phon.ca or https://phon-ca.github.io/phon/.
+
+## Changes from Phon 3.0.0b5
+
+ * Set application data folder to OS specific locations:
+  - macOS: ~/Library/Application Support/Phon
+  - windows: %APPDATA%/Phon
+  - linux: ~/.Phon/
+
+## Changes from Phon 3.0.0b4
+
+ * Additional stock queries added to Data Tiers and Phones
+ * Update to Java 10.0.2
+ * Minor bug fixes
+
+## Changes from Phon 3.0.0b3
+
+ * Added ability to name entries in Query History
+ * Added commands for removing items from Query History
+ * Added stock/example queries for the Phones query which can be selected using a combox box at the top of the query form
+ * Query History can now be accessed in the Analysis composer
+ * Keystroke trigger for autocomplete in the phonex editor is now Tab instead of Ctrl+Space
+ * Minor bug fixes
+
+## Changes from Phon 3.0.0b2
+
+### Phonex
+ * Added support for the or (i.e., '|') operator in phonex groups.
+ * Added multi-line support to phonex.
+ * Added c-style comment support to phonex (i.e., /* */ and //)
+ * Improved phonex editor with syntax highlighting and autocomplete (available via Ctrl+Space.)
+ * Improved error reporting and highlighting for phonex expressions.
+
+### Queries
+ * Integrated query results into the query step of the wizard.
+ * Query History is now saved globally for each query script.
+ * Previously exectued queries can be accessed directly through the query form.
+ * Additional query menu items are available in the Query menu for the Query wizard.
+
+### General
+ * Added dialog for selecting and exporting report tables as Excel/CSV.
+ * Improvements to the automatic phone aligner.
+ * Various bug fixes and UI improvements.
+
+## Changes from Phon 3.0.0b1
+
+ * Fixed issue with audio playback in the Speech Analysis view
+ * Added support for 24/32-bit WAV file playback in Speech Analysis view
+ * Added Aggreagte and Listing for participant results to Consonants analysis
+ * Added segmental relations to WAP analysis
+ * Added keystroke 'CMD/ALT+SHIFT+M' for merging all groups in a record
+ * Added a 'Reset query' button to reset query parameters in the Query and Report wizard.
+ * Added 'Inventory grouping' global parameter to reports and analyses. 
+ * General bux fixes
+
+## Changes from Phon 2.2.0b25
+
+### General
+ 
+ * Set version to 3.0.0
+ * Migrated to Java 9.0.4, now only supporting 64-bit operating systems
+ * Added downloads for linux
+
+### Queries
+
+ * New 'Query and Report' wizard will be displayed when running queries.  This wizard has four steps:
+  1. Query Parameters - select sessions and enter query settings
+  2. Results - perform query and allow saving/opening query results
+  3. Report Composer - displays the Report Composer and allows configuration of query report
+  4. Report - generate and display HTML query report.
+ * Query settings are saved when executing a query and loaded when a new query wizard is opened
+ * Report configuration is saved when generating a report and loaded when a new query wizard is opened
+
+### Analyses
+ 
+ * Improved performance and reduced memory usage
+ * Improved HTML rendering of reports on macOS
+ * Added new 'Consonants' analysis
+ * Updated Vocalization analysis
+ * Update WAP analysis
+
+## Changes from Phon 2.2.0b24
+
+ * Added VOT acoustic data query report.
+ * Added speaker name and age to acoustic data reports.
+ * Fixed an issue with PPC form.
+ * Fixed a freeze on macos when saving data from the report buffer panel.
+
+## Changes from Phon 2.2.0b21
+
+### General
+ * Significantly improved phone alignment algorithm.
+ * IPA Map will now be displayed if iconified when requested.
+ * Project and corpus media folders can now be setup in the Project Manager window.  These media folders take precedence over global media folder settings.
+ * Button to setup global media folders has been removed from the Welcome window.
+ * Improved automatic updates. Application updates will now be downloaded in the background when available and update installation has been simplified. Automatic update will only execute if the user has appropriate permissions to install the update.
+ * Replaced Help menu items for pdf user manuals with a single item linking to unified online documentation.
+
+### Queries and Analyses
+ * A new column 'Alignment' showing the IPA Target &lt;-&gt; IPA Actual alignment is added by the Phone Query when includeAlignedPhones is set to true.
+ * Updated menus of Query Reports and Analyses
+ * Updated PCC analysis. It is has been merged with the Phone Accuracy analysis and is now titled 'PPC'.  Options have been added for easlity selecting singleton consonants and consonant clusters.
+ * Added Word Level Analysis of Polysyllables to list of specialized analyses.
+ * Renamed 'Phone Dispersion' as 'Phone Similarity' and fixed calculation.
+ * Added ability to export reports and tables to Excel.
+
+### Session Editor
+ * New action available 'Assign unidentified records to participant' in the Session Information view of the Session Editor.
+ * New sessions now have zero records when created.
+ * Fixed issues with segmentation.
+ * Default layout for Session editor is now maximized.
+ * Extended state (maximized, iconified, etc.) is retained between Session editor sessions.
+
+## Changes from Phon 2.2.0b20
+
+ * Added global summaries to PCC and Phone Accuracy analyses.
+ * Reverted to UTF-8 when saving CSV files in reports.
+ * Reduce the size of fonts in reports.
+ * Updated French syllabifiers.
+ * Workspace and project windows now display file modification times in 24-hour format with timezone.
+ * Added phonex matcher '\p' for matching intra-word pauses.
+ * Added Ewe transliteration IPA dictionary.
+
+## Changes from Phon 2.2.0b18
+
+### UI
+ 
+ * Added link to project folder in the header of the Project Manager window.
+ * Added link to the corpus folder in corpus details of the Project Manager window.
+ * Improved editor for corpus description in Project Manager window.
+ * Added participant list for selected session in session details of the Project Manager window.
+ * Buffer list is now collapsed by default in Buffers window. A new combo box is available for selecting current buffer.
+
+### Queries and Analyses
+
+ * Removed Harmony and Metathesis queries.
+ * Added new query 'Segmental Relations' which includes detectors for Harmony, Assimilation, Reduplication, Metathesis, and Migration.
+ * Added new table 'All Results', to the 'Word Match' analysis.
+ * Added 'Phone Cluster' analysis.
+ * Revised PCC analysis and report to be clearer and more concise.
+ * Improved text for copy/show buffer buttons in reports.
+ * CSV files are now written in UTF-16 format.
+
+### General
+
+ * Fixed an issue with French syllabifiers.
+ * Added support for TalkBank 2.5.0
+
+## Changes from Phon 2.2.0b17
+
+### Analyses
+
+ * Added Phone Clusters analysis
+ * Added 'All Results' table for each selected participant in the Word Match analysis
+
+### General
+
+ * New installers for Windows
+
+</comment>
+  </entry>
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-alpha_4.exe" newVersion="3.5.0-alpha.4" newMediaFileId="win64" fileSize="258914264" md5Sum="3de87c1ad6096fc3d2e59a0c9db82040" sha256Sum="c03820f6d51d0248f07b86f449d352f86180408b3733884b9c4056699c5fa9d5" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.4.2
+
+ * VLC and segment playback using the Java audio system now both use the same volume settings
+ * New volume slider components are located in the media player, speech analysis, and timeline views. All three sliders control a single volume for the session (video and segment playback)
+ * Media playback rate may now be changed
+ * Segmentation window stays in middle of timeline view when possible
+ * Media playback rate may be changed using keystrokes during segmentation
+ * Settings for volume and media playback rate may be found in the 'Media' window menu for the session
+ * Timeline will center new record during navigation/zoom actions
+ * Speech analysis view will now correctly center on current record on zoom actions
+ * Fixed a font issue with the results editor when using Noto fonts on Windows 
+ * Fixed an issue when searching 'by syllable' in percent correct analyses
+ * ~ may now be used as a compound word marker in IPA transcriptions
+ * Fixed keyboard focus behaviour when switching records in session editor
+ * Fixed an issue where some editor keystrokes would not work until the Session menu was selected at least once
+ * Updated eng IPA dictionary
+ * Fixed an issue where session backups were not being created when saving while focused in Record Data
+
+## Changes from 3.4.1
+
+ * Fixed an issue where phonex group data was not retained when exact match is selected
+
+## Changes from 3.4.0
+
+ * Reset all macOS Security &amp; Privacy permissions. Phon and Phon-beta will now have separate sets of permissions instead of sharing
+ * Fixed macOS entitlements to unblock the sendpraat command
+ * Media field in Session Information will no longer be outlined in read when no file is specified
+
+## Changes from 3.3.6
+
+ * Added Consistency Analysis
+ * Added 'Distribute unsegmented records' function to Timeline context menu
+ * Session editor will only switch to new records when using the New and Duplicate record buttons
+ * Fixed an issue with Formant tables having too many columns on windows
+ * Additional checks are put in place when editing TextGids in Praat and sending back to Phon:
+   * Phon will perform a round-trip test before copying the TextGrid data from Praat
+   * A backup of the TextGrid file will be created with the suffix ```-backup``` when sending back to Phon
+   * A backup of the TextGrid file will be created in the ```backups.zip``` file when sending back to Phon under ```__res/textgrids/&lt;corpus&gt;/&lt;session&gt;```
+ * Fixed an issue where the Speech Analysis view would not refresh correctly when switching records
+
+## Changes from 3.3.5
+
+ * Session editor will now detect and offer to load changes from disk if changes were made to the files using an external editor.
+ * Fixed a regression issue with creating records via the Timeline waveform tier
+ * Fixed a race condition when using the praat function 'File -&gt; Send back to calling program' while editing TextGrids
+
+## Changes from 3.3.4
+
+ * Added Urdu syllabifier
+ * Added IPA dictionary selection to automatic transcription form in IPA Lookup view
+ * Moved location of project properties file from '.properties' to 'project.properties'
+ * Improved detection of Phon projects in workspace folder
+ * Fixed an issue where invalid segment times would cause repaint issues in the editor
+ * Fixed an issue with segmentation
+ * Merging groups in a record will now correctly merge alignment
+
+## Changes from 3.3.3
+
+ * Fixed an bug with the 'keep like on top' sorting option
+ * Added ability to toggle display of diacritics in Syllabification and Alignment editor view
+ * Display settings for Syllabification and Alignment editor view are remembered between sessions
+
+## Changes from 3.3.2
+
+ * Updated ara syllabifier and dictionary
+ * Updated tsn dictionary
+
+## Changes from 3.3.1
+
+ * Fixed an issue with switching workspaces
+
+## Changes from 3.3.0
+
+### General
+ * The workspace project list in the Welcome window may now be collapsed. The list is initially collapsed by default if there are no workspace projects
+ * Added session check for aligned word counts in between Phon tiers. The tier with the most words defines the aligned word count for the record. Any tier which does no match the aligned word count for the record will be reported.
+ * Added a settings menu to the toolbar of the Session Check view to allow selection of which checks are performed within the session editor. This setting is remembered between instances of the session editor.
+ * Fixed issues related to session check
+ * Fixed a bug with the Word Match analysis
+ * Fixed an issue with detecting positional information when using plain text queries
+ * Fixed an issue with the 'keep like on top' option when sorting tables
+ * Fixed highlight of word suffix codes
+ * Update ara syllabifier
+
+### CHAT/TalkBank Support
+ * 'Import Project' has been renamed as 'Import from CHAT/TalkBank'.  The UI has been updated for clarity and ease of use. It is no longer necessary to create extra folders when importing data. For more information see https://www.phon.ca/phon-manual/chat/import.html
+ * 'Export Project' has been renamed as 'Export to CHAT/TalkBank'. The export will no longer create a project folder in the selected output folder. For more information see https://www.phon.ca/phon-manual/chat/export.html.
+ * Added new session checks - available in the Sesion Check wizard from the Project Manager window - for exporting to TalkBank/CHAT. Each record in a session is checked to see if it will properly export to xml (and optionally CHAT) individually. Useful for finding which records have round-trip issues. (Note: only Phon -&gt; TalkBank checks are available in the session editor as Phon -&gt; CHAT checks take substantially longer.)
+ * Added round-trip support for CA elements/delimiters
+ * Added round-trip support for segment repetitions. Segment repetitions are enclosed by the ↫ (0x21ab) character.  e.g., ↫r-r↫repeat
+ * Fixed issues with underline and italic elements
+ * Fixed handling of numerical length pauses
+ * Fixed export of Postcode tier data
+ * Fixed an issue with exporting empty phone alignments
+
+### Phonex
+ * Custom phone classes may now be part of compound phone expressions. e.g., ```t_[^s]```
+ * Ligatures may now be used in compound phone matchers instead of underscore. e.g., ```t[͜^s]```
+ * Regular expression matchers may be declared using single or double quotes
+ * Long (ː) and halflong (ˑ) diacritics may be applied to phone matchers to test for the features {long} and {halflong} respectively
+
+## Changes from 3.2.0
+
+### Query &amp; Analysis
+
+ * Added new option to 'Combine results for all participants' to all stock analyses
+ * Added Measure of Cluster Proximity analysis
+ * Added Tier Match, CV Pattern Match, Stress Match, and Syllable Count Match analyses
+ * Categorized analyses into sub-folders
+ * Updated Consonants analysis to include positional information and accuracy columns to all listings
+ * Added participant filter to parameters for all analyses
+ * Updated Specialized/Word Match analysis
+ * Added new common query option to add positional data to query results
+ * Fixed a bug where results from non-selected participants would appear in analysis result listings
+
+### Session Editor
+
+ * Improved context menu in Tier Management view
+ * Added new 'Duplicate Tier' action
+ * Integrated tier management functions into new context menu available on tier lables in Record Data view
+ * New copy/paste tier functions available from the tier context menu in Record Data view.  Clipboard data may come from external strings (i.e., any text in the clipboard - will try to fit the data if brackets are used)
+ * Added inter-transcriber reliability function to Session Editor
+ * Fixed issue with session date field
+ * Updated cmn and tsn dictionaries
+ * Added support for multi-record selection the record grid tier of the Timeline view. Record selection may be manipulated using standard mouse and keyboard interactions
+ * Added new actions for moving selected records left/right: CTRL+,/. to Timeline 
+ * Added new actions for growing (CTRL+G) or shrinking (CTRL+K) selected records
+ * Added ability to copy and paste multiple records in the Timeline view
+ * Added ability to select records based on query result sets in Timeline view
+ * Improved behaviour of record labels when multiple records are at the same position in Timeline view
+ * Diacritics are no longer shown in syllabifier and alignment boxes
+ * A Syllabification and alignment popup window is displayed when holding shift while mousing over the ipa field, or by pressing CMD/CTRL+T when an ipa field is focused 
+ * Added a button for scaling font size to the Record Data, Timeline and Speech Analysis views
+
+### Fonts
+ 
+ * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
+ * Font preferences have been simplified and reset
+
+### Other
+
+ * IPA dictionaries may now be associated with a particular syllabifier in the metadata section using the '#syllabifer' tag. The syllabifier will be executed during the dictionary lookup phase just before any phonex find/replace expressions are executed
+ * Fixed a bug with phonex Find &amp; Replace related to an issue with look-ahead groups
+ * Updated VLC to 3.0.12
+
+
+## Changes from 3.1.3
+
+ * Added simplified Find &amp; Replace UI to Record data view which may be toggled using Record Data menu item and a toolbar button
+ * Added new Find &amp; Replace menu item to Edit menu of Session Editor to show Record Data view with Find &amp; Replace UI visible
+ * Added new File -&gt; Open command allowing opening of individual files including:
+   - Phon session files (.xml)
+   - TalkBank files (.xml)
+   - CHAT files (.cha)
+   - Analysis files (.xml)
+   - Query files (.xml)
+   - Query report files (.xml)
+ * Added new File -&gt; Recent files menu displaying the list of recently opened files.
+ * Added new Window -&gt; Show project window command when no project window is open for the active session editor window
+ * Can now open .cha and .xml files in Phon using the 'Open with' context menu in macOS.
+ * Fixed an issue with the input fields of the Find &amp; Replace view
+ * Updated PhonTalk, added new Import Project and Export Project commands to the
+File menu for importing/exporting CHAT (.cha) and TalkBank (.xml) data.
+ * Fixed an issue where the syllabification display would not be wide enough in some situations.
+ * Added workspace history menu to Workspace window menu
+ * Recent project menu now displays full path and includes a menu item to clear history
+ * Updated to Java 15
+ * PhonShell now usess Rhino JavaScript engine instead of nashorn
+ * PhonShell scripts may now be opened using the File -&gt; Open menu command
+ * Moved 'Add aligned groups/words' query/analysis options to new section named 'Additional Tier Data' with new UI for tier selection
+ * Fixed issues with Analysis Composer when using nested analyses derived from queries
+ * Added new 'Duplicate' action for items in the Analysis/Report Composer
+ * Added conext menu for table in Analysis/Report Composer
+ * Added Chineses (cmn and yue) syllabifiers
+ * Added function to reassign all records for a speaker to another speaker in
+the speaker context menu of the Timeline view. Click speaker name in the record
+grid to access this menu.
+
+## Changes from 3.1.2
+
+ * Changed name of PPC analysis to Percent Phones Correct
+ * Added option to PPC analysis to allow phones marked as distored to be considered correct (PPC-r)
+ * Update PPC 'report type' options to include onset, coda and nuclei singleton or cluster selection
+ * Added Percent Diacritics Correct (PDC) analysis
+ * Added Percent Number Tones Correct (PNTC) analysis
+ * Added zoom commands to HTNL report preview
+ * Fixed issue with new phonex syllable matcher and backtracking expressions
+ * Added new 'Sum columns' setting to manual inventory options
+ * Fixed check for VLC at launch
+ * Fixed an issue where changing the report name in analysis setting panel would not update report name in the analysis list (Analysis Composer)
+
+## Changes from 3.1.0
+
+ * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
+   - Alaw
+   - ulaw
+   - 12/16/24/32 bit linear
+   - 32/64 bit float
+ * Added 'Show media information' command to 'Media' menu of the session editor.
+ * Updated Multisyllabic Nonlinear Analysis.
+ * Removed restrictions on corpus/session name length in project manager - allowing use of any valid filename.
+ * Added text completions for session name field in project manager. Completions are generated from media filenames scanned in media folders for selected corpus.
+ * Added syllable matcher ('σ' U+03c3) with optional range (e.g., 'σ/O..N/') to phonex. This matcher will match an entire syllable - or the remainder of the current syllable - up to and including syllable positions included in the optional range.
+ * Improved support for tone numbers in IPA transcriptions.
+ * Removed 'tone' phonex plug-in.
+ * Added new 'tn (tone number)' phonex plug-in allowing matching (or not matching) a list of provided tone numbers on individual IPA elements.
+ * Added PTNC (Percent Tone Number Correct) query to query list in Analysis Composer.
+ * project.xml file for projects is no longer needed or created in future projects. This file may be safely removed and ignored in file sharing and version control systems. The new .properties file may also be safely ignored in team setups.
+
+## Changes from 3.0.5
+
+ * Improved method of opening sessions in blind mode
+ * Improved method of viewing and selecting project/corpus media folders
+ * Improved media loading and unloading in Session Editor
+ * Improved segment playback in Session Editor.  Segment playback no longer requires the Speech Analysis view to be open.
+ * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
+ * Added new 'Timeline' view which displays the audio waveform along with record data on a horizontal timeline. This view allows access to
+Segmentation functions as well as allowing easy manipulation of record segment times.
+ * Updated 'Speech Analysis' view with improved waveform and timebar components. 
+ * Diacritic selection has been added to all query reports and analyses which use the 'ignore diacritics' option.
+ * Improved method of setting up global overrides in query and report wizard
+
+### Other changes:
+
+ * Fix age comparisons for participants in query forms. Ages are now normalized before comparison (e.g., 01;04.00 is equal to 00;16.00)
+ * Added validation to age fields in query forms
+ * Record speaker will now change as expected when using 'replace' mode with segmentation
+ * Fix bugs with Specialized/Multisyllabic Nonlinear Analysis
+ * Updated English-NA (eng) dictionary
+ * Added Cantonese (yue) dictionary
+ * Added Mandarin (cmn) dictionary
+ * Fixed Phone Inventory analysis for IPA Actual elements
+ * Fixed an issue where compound phone characters were reversed in reports when ignoring diacritics.
+ * Update libjpraat to version 6.0.52
+ * Updated WAP analysis with improved definition of distortions.
+ * Added status background images for media player
+ * Can now click media player to toggle play/pause
+ * Drag and drop files onto media player to assign media to session
+ * Added menu items for assigning media, un-assigning media, and generating session audio file to Session menu in editor
+ * Improved media prompts (banners) in session editor
+
+## Changes from 3.0.4
+
+ * Fixed an issue where reports containing elements from the praat-plugin were not loading after saving the custom report to disk
+ * Updated Italian (ita) dictionary
+ * Added summary tables to PMLU analysis
+
+## Changes from 3.0.3
+
+ * Query and Report Wizard
+   - Query history is now displayed as a drop-down list
+   - Improved method of saving/exporting queries
+   - Clicking 'New window' will now show an exact copy of the current query (including parameters)
+   - Queries saved in user/project libraries or exported to disk now correctly link to the proper stock query
+   - Saved/exported queries now display the correct query history and named query lists
+   - Query results are now displayed in a split panel under the session selection view.
+   - Query results window will now open in proper location
+   - Stop button will now appear in the breadcrumb when executing queries
+   - Text for the next button now clearly indicates the next action
+   - Simplified and improved query window menu
+   - Add new 'Send to Analysis Composer' action allowing the current query and report settings to be added to a new or existing custom analysis
+ * Removed 'allow overlapping matches' from phonex options in forms
+ * Queries imported into analyses using the Analysis Composer from the user/project libraries will now work correctly
+ * Analysis composer now allows for setup of custom query reports
+ * Fixed behaviour of scrollbars in query forms.
+ * Folder names for reports and queries have been changed:
+   - Query folder name has been changed from 'script' to 'query'
+   - Report folder name has been changed from 'reports' to 'report'
+ * Enabled 'Export as Excel' button in Session to HTML wizard
+ * Result Listing sections may now be selected in the 'Export tables' dialog when exporting as Excel
+ * Record and result links now work in the Result Listing sections of query reports
+ * Session selector now displays scrollbars when needed in Session Check wizard
+ * Windows binaries are now signed
+ * Fixed an issue where SendPraat was blocked on Windows if not running as administrator
+ * Merged participant summary tables in Phonological Process analyses
+ * Session Check is now available from the 'View' menu in the session editor (instead of the 'Session' menu.)
+ * Changed format of phon version numbers
+
+## Changes from 3.0.2
+ 
+ * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
+ * Improvments to phone alignment
+ * Removed JavaFX dependency
+ * HTML reports are now displayed using JxBrowser
+ * New preferences panel for Query and Report wizard
+ * Added menu items for named queries to Query menu 
+ * Added 'Go to' menu for the Report menu allowing navigation to sections in the report.
+ * Added 'Open report in browser' menu item
+ * Added context menu for HTML reports
+ * Query wizards may now be opened for multiple projects
+ * Fixed a regression bug with acoustic data reports
+ * TextGrid view now uses the font Charis SIL Compact
+ * Improved workflow of wizard dialogs
+
+## Changes from 3.0.1
+
+ * Updated to Java 11
+ * Updated Consonants analysis
+ * Added 'Phone Accuracy' query report
+ * Improved options for Session to HTML wizard
+ * Updated Ewe (ewe) transliteration dictionary
+ * Added Turkish (tur) transliteration dictionary
+ * Added 'zoom' control to Composer (advanced)
+ * Automatic transcription will not overwrite unvalidated values
+ * Fixed an issue with matching back refrences at the end of transcripts 
+ * Application should now exit when selecting 'Close all windows' from the Windows taskbar
+ * Reconfigured application package directory structure
+ * Greatly improved page load time of reports
+ * Improved table of contents (ToC) menu
+ * Moved ToC to right hand side of report
+ * Renamed query reports
+ * Added new query report 'Listing by Session' which prints results organized by session and record. Tier data may also be included.
+ * Added a 'New window' function to query wizard
+
+## Changes from 3.0.0
+
+ * Beta versions of the application now have '-beta' added to the name
+ * Switched logging system to log4j2
+ * Increased previous log count to 10
+ * Logs are now stored in the $APPDATA/logs folder
+ * Updated application logs UI
+ * Added new function 'Export as HTML' to Session editor File menu
+ * Added menu item to display application data folder under the 'File' menu for all windows
+ * Added support for adding prefix, suffix, and combining diacritics to phonex matcher references
+ * Phonex expressions can now be used to modify results from Transliteration dictionaries
+ * Updated Ewe transliteration dictionary
+ * Add 'Show Welcome window' item under Window menu when Welcome window is not currently open.
+
+Bug fixes
+ * Fixed an issue with praat reports when media and TextGrids were located in external media folders
+ * Fixed an issue with creating new sessions
+ * Fixed an issue with the 'Save as' dialog in editor quick search tables
+ * Application will now exit when the last window is closed
+
+## Changes from Phon 2.1.8
+
+Version 3.0.0 is a significant update to Phon and is recommended for all users.
+
+ * General improvements to user interface
+   - Updated Welcome and Project windows
+   - New look and feel for wizards
+ * Improved phone alignment
+ * Revamped Query &amp; Report system
+   - Streamlined Query &amp; Report wizard
+   - New Report Composer for creating customized query reports
+   - Reports are now generated in HTML format. Report tables can be exported to CSV and Excel formats.
+   - New query history implementation allowing access to previously executed queries directly from the Query wizard. Entries in the query history can be 'named' and will appear in a combo box next to the query history controls.
+ * Updates to the phonex language
+   - Added grouping ability including capturing groups, named groups, non-capturing groups, look ahead/behind, and back references
+   - Added support for or'ed group expressions.
+   - Added support for C/C++ style comments (i.e., /* */ and //)
+ * Refactored Praat support
+   - Improved TextGrid support
+   - Updated acoustic data reports for new Query system
+   - Added VoT acoustic data report
+ * New analyses
+ * New syllabifier languages: Babbling, Icelandic, German, Slovenian
+ * New ipa lookup languages: Ewe, Persian
+
+&gt; Phon 3.0+ only supports 64-bit operating systems.
+
+The full changelog is available at https://github.com/phon-ca/phon/releases. For documentation visit https://www.phon.ca or https://phon-ca.github.io/phon/.
+
+## Changes from Phon 3.0.0b5
+
+ * Set application data folder to OS specific locations:
+  - macOS: ~/Library/Application Support/Phon
+  - windows: %APPDATA%/Phon
+  - linux: ~/.Phon/
+
+## Changes from Phon 3.0.0b4
+
+ * Additional stock queries added to Data Tiers and Phones
+ * Update to Java 10.0.2
+ * Minor bug fixes
+
+## Changes from Phon 3.0.0b3
+
+ * Added ability to name entries in Query History
+ * Added commands for removing items from Query History
+ * Added stock/example queries for the Phones query which can be selected using a combox box at the top of the query form
+ * Query History can now be accessed in the Analysis composer
+ * Keystroke trigger for autocomplete in the phonex editor is now Tab instead of Ctrl+Space
+ * Minor bug fixes
+
+## Changes from Phon 3.0.0b2
+
+### Phonex
+ * Added support for the or (i.e., '|') operator in phonex groups.
+ * Added multi-line support to phonex.
+ * Added c-style comment support to phonex (i.e., /* */ and //)
+ * Improved phonex editor with syntax highlighting and autocomplete (available via Ctrl+Space.)
+ * Improved error reporting and highlighting for phonex expressions.
+
+### Queries
+ * Integrated query results into the query step of the wizard.
+ * Query History is now saved globally for each query script.
+ * Previously exectued queries can be accessed directly through the query form.
+ * Additional query menu items are available in the Query menu for the Query wizard.
+
+### General
+ * Added dialog for selecting and exporting report tables as Excel/CSV.
+ * Improvements to the automatic phone aligner.
+ * Various bug fixes and UI improvements.
+
+## Changes from Phon 3.0.0b1
+
+ * Fixed issue with audio playback in the Speech Analysis view
+ * Added support for 24/32-bit WAV file playback in Speech Analysis view
+ * Added Aggreagte and Listing for participant results to Consonants analysis
+ * Added segmental relations to WAP analysis
+ * Added keystroke 'CMD/ALT+SHIFT+M' for merging all groups in a record
+ * Added a 'Reset query' button to reset query parameters in the Query and Report wizard.
+ * Added 'Inventory grouping' global parameter to reports and analyses. 
+ * General bux fixes
+
+## Changes from Phon 2.2.0b25
+
+### General
+ 
+ * Set version to 3.0.0
+ * Migrated to Java 9.0.4, now only supporting 64-bit operating systems
+ * Added downloads for linux
+
+### Queries
+
+ * New 'Query and Report' wizard will be displayed when running queries.  This wizard has four steps:
+  1. Query Parameters - select sessions and enter query settings
+  2. Results - perform query and allow saving/opening query results
+  3. Report Composer - displays the Report Composer and allows configuration of query report
+  4. Report - generate and display HTML query report.
+ * Query settings are saved when executing a query and loaded when a new query wizard is opened
+ * Report configuration is saved when generating a report and loaded when a new query wizard is opened
+
+### Analyses
+ 
+ * Improved performance and reduced memory usage
+ * Improved HTML rendering of reports on macOS
+ * Added new 'Consonants' analysis
+ * Updated Vocalization analysis
+ * Update WAP analysis
+
+## Changes from Phon 2.2.0b24
+
+ * Added VOT acoustic data query report.
+ * Added speaker name and age to acoustic data reports.
+ * Fixed an issue with PPC form.
+ * Fixed a freeze on macos when saving data from the report buffer panel.
+
+## Changes from Phon 2.2.0b21
+
+### General
+ * Significantly improved phone alignment algorithm.
+ * IPA Map will now be displayed if iconified when requested.
+ * Project and corpus media folders can now be setup in the Project Manager window.  These media folders take precedence over global media folder settings.
+ * Button to setup global media folders has been removed from the Welcome window.
+ * Improved automatic updates. Application updates will now be downloaded in the background when available and update installation has been simplified. Automatic update will only execute if the user has appropriate permissions to install the update.
+ * Replaced Help menu items for pdf user manuals with a single item linking to unified online documentation.
+
+### Queries and Analyses
+ * A new column 'Alignment' showing the IPA Target &lt;-&gt; IPA Actual alignment is added by the Phone Query when includeAlignedPhones is set to true.
+ * Updated menus of Query Reports and Analyses
+ * Updated PCC analysis. It is has been merged with the Phone Accuracy analysis and is now titled 'PPC'.  Options have been added for easlity selecting singleton consonants and consonant clusters.
+ * Added Word Level Analysis of Polysyllables to list of specialized analyses.
+ * Renamed 'Phone Dispersion' as 'Phone Similarity' and fixed calculation.
+ * Added ability to export reports and tables to Excel.
+
+### Session Editor
+ * New action available 'Assign unidentified records to participant' in the Session Information view of the Session Editor.
+ * New sessions now have zero records when created.
+ * Fixed issues with segmentation.
+ * Default layout for Session editor is now maximized.
+ * Extended state (maximized, iconified, etc.) is retained between Session editor sessions.
+
+## Changes from Phon 2.2.0b20
+
+ * Added global summaries to PCC and Phone Accuracy analyses.
+ * Reverted to UTF-8 when saving CSV files in reports.
+ * Reduce the size of fonts in reports.
+ * Updated French syllabifiers.
+ * Workspace and project windows now display file modification times in 24-hour format with timezone.
+ * Added phonex matcher '\p' for matching intra-word pauses.
+ * Added Ewe transliteration IPA dictionary.
+
+## Changes from Phon 2.2.0b18
+
+### UI
+ 
+ * Added link to project folder in the header of the Project Manager window.
+ * Added link to the corpus folder in corpus details of the Project Manager window.
+ * Improved editor for corpus description in Project Manager window.
+ * Added participant list for selected session in session details of the Project Manager window.
+ * Buffer list is now collapsed by default in Buffers window. A new combo box is available for selecting current buffer.
+
+### Queries and Analyses
+
+ * Removed Harmony and Metathesis queries.
+ * Added new query 'Segmental Relations' which includes detectors for Harmony, Assimilation, Reduplication, Metathesis, and Migration.
+ * Added new table 'All Results', to the 'Word Match' analysis.
+ * Added 'Phone Cluster' analysis.
+ * Revised PCC analysis and report to be clearer and more concise.
+ * Improved text for copy/show buffer buttons in reports.
+ * CSV files are now written in UTF-16 format.
+
+### General
+
+ * Fixed an issue with French syllabifiers.
+ * Added support for TalkBank 2.5.0
+
+## Changes from Phon 2.2.0b17
+
+### Analyses
+
+ * Added Phone Clusters analysis
+ * Added 'All Results' table for each selected participant in the Word Match analysis
+
+### General
+
+ * New installers for Windows
+
+</comment>
+  </entry>
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-alpha_4.exe" newVersion="3.5.0-alpha.4" newMediaFileId="win64" fileSize="258914264" md5Sum="3de87c1ad6096fc3d2e59a0c9db82040" sha256Sum="c03820f6d51d0248f07b86f449d352f86180408b3733884b9c4056699c5fa9d5" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.4.2
+
+ * VLC and segment playback using the Java audio system now both use the same volume settings
+ * New volume slider components are located in the media player, speech analysis, and timeline views. All three sliders control a single volume for the session (video and segment playback)
+ * Media playback rate may now be changed
+ * Segmentation window stays in middle of timeline view when possible
+ * Media playback rate may be changed using keystrokes during segmentation
+ * Settings for volume and media playback rate may be found in the 'Media' window menu for the session
+ * Timeline will center new record during navigation/zoom actions
+ * Speech analysis view will now correctly center on current record on zoom actions
+ * Fixed a font issue with the results editor when using Noto fonts on Windows 
+ * Fixed an issue when searching 'by syllable' in percent correct analyses
+ * ~ may now be used as a compound word marker in IPA transcriptions
+ * Fixed keyboard focus behaviour when switching records in session editor
+ * Fixed an issue where some editor keystrokes would not work until the Session menu was selected at least once
+ * Updated eng IPA dictionary
+ * Fixed an issue where session backups were not being created when saving while focused in Record Data
+
+## Changes from 3.4.1
+
+ * Fixed an issue where phonex group data was not retained when exact match is selected
+
+## Changes from 3.4.0
+
+ * Reset all macOS Security &amp; Privacy permissions. Phon and Phon-beta will now have separate sets of permissions instead of sharing
+ * Fixed macOS entitlements to unblock the sendpraat command
+ * Media field in Session Information will no longer be outlined in read when no file is specified
+
+## Changes from 3.3.6
+
+ * Added Consistency Analysis
+ * Added 'Distribute unsegmented records' function to Timeline context menu
+ * Session editor will only switch to new records when using the New and Duplicate record buttons
+ * Fixed an issue with Formant tables having too many columns on windows
+ * Additional checks are put in place when editing TextGids in Praat and sending back to Phon:
+   * Phon will perform a round-trip test before copying the TextGrid data from Praat
+   * A backup of the TextGrid file will be created with the suffix ```-backup``` when sending back to Phon
+   * A backup of the TextGrid file will be created in the ```backups.zip``` file when sending back to Phon under ```__res/textgrids/&lt;corpus&gt;/&lt;session&gt;```
+ * Fixed an issue where the Speech Analysis view would not refresh correctly when switching records
+
+## Changes from 3.3.5
+
+ * Session editor will now detect and offer to load changes from disk if changes were made to the files using an external editor.
+ * Fixed a regression issue with creating records via the Timeline waveform tier
+ * Fixed a race condition when using the praat function 'File -&gt; Send back to calling program' while editing TextGrids
+
+## Changes from 3.3.4
+
+ * Added Urdu syllabifier
+ * Added IPA dictionary selection to automatic transcription form in IPA Lookup view
+ * Moved location of project properties file from '.properties' to 'project.properties'
+ * Improved detection of Phon projects in workspace folder
+ * Fixed an issue where invalid segment times would cause repaint issues in the editor
+ * Fixed an issue with segmentation
+ * Merging groups in a record will now correctly merge alignment
+
+## Changes from 3.3.3
+
+ * Fixed an bug with the 'keep like on top' sorting option
+ * Added ability to toggle display of diacritics in Syllabification and Alignment editor view
+ * Display settings for Syllabification and Alignment editor view are remembered between sessions
+
+## Changes from 3.3.2
+
+ * Updated ara syllabifier and dictionary
+ * Updated tsn dictionary
+
+## Changes from 3.3.1
+
+ * Fixed an issue with switching workspaces
+
+## Changes from 3.3.0
+
+### General
+ * The workspace project list in the Welcome window may now be collapsed. The list is initially collapsed by default if there are no workspace projects
+ * Added session check for aligned word counts in between Phon tiers. The tier with the most words defines the aligned word count for the record. Any tier which does no match the aligned word count for the record will be reported.
+ * Added a settings menu to the toolbar of the Session Check view to allow selection of which checks are performed within the session editor. This setting is remembered between instances of the session editor.
+ * Fixed issues related to session check
+ * Fixed a bug with the Word Match analysis
+ * Fixed an issue with detecting positional information when using plain text queries
+ * Fixed an issue with the 'keep like on top' option when sorting tables
+ * Fixed highlight of word suffix codes
+ * Update ara syllabifier
+
+### CHAT/TalkBank Support
+ * 'Import Project' has been renamed as 'Import from CHAT/TalkBank'.  The UI has been updated for clarity and ease of use. It is no longer necessary to create extra folders when importing data. For more information see https://www.phon.ca/phon-manual/chat/import.html
+ * 'Export Project' has been renamed as 'Export to CHAT/TalkBank'. The export will no longer create a project folder in the selected output folder. For more information see https://www.phon.ca/phon-manual/chat/export.html.
+ * Added new session checks - available in the Sesion Check wizard from the Project Manager window - for exporting to TalkBank/CHAT. Each record in a session is checked to see if it will properly export to xml (and optionally CHAT) individually. Useful for finding which records have round-trip issues. (Note: only Phon -&gt; TalkBank checks are available in the session editor as Phon -&gt; CHAT checks take substantially longer.)
+ * Added round-trip support for CA elements/delimiters
+ * Added round-trip support for segment repetitions. Segment repetitions are enclosed by the ↫ (0x21ab) character.  e.g., ↫r-r↫repeat
+ * Fixed issues with underline and italic elements
+ * Fixed handling of numerical length pauses
+ * Fixed export of Postcode tier data
+ * Fixed an issue with exporting empty phone alignments
+
+### Phonex
+ * Custom phone classes may now be part of compound phone expressions. e.g., ```t_[^s]```
+ * Ligatures may now be used in compound phone matchers instead of underscore. e.g., ```t[͜^s]```
+ * Regular expression matchers may be declared using single or double quotes
+ * Long (ː) and halflong (ˑ) diacritics may be applied to phone matchers to test for the features {long} and {halflong} respectively
+
+## Changes from 3.2.0
+
+### Query &amp; Analysis
+
+ * Added new option to 'Combine results for all participants' to all stock analyses
+ * Added Measure of Cluster Proximity analysis
+ * Added Tier Match, CV Pattern Match, Stress Match, and Syllable Count Match analyses
+ * Categorized analyses into sub-folders
+ * Updated Consonants analysis to include positional information and accuracy columns to all listings
+ * Added participant filter to parameters for all analyses
+ * Updated Specialized/Word Match analysis
+ * Added new common query option to add positional data to query results
+ * Fixed a bug where results from non-selected participants would appear in analysis result listings
+
+### Session Editor
+
+ * Improved context menu in Tier Management view
+ * Added new 'Duplicate Tier' action
+ * Integrated tier management functions into new context menu available on tier lables in Record Data view
+ * New copy/paste tier functions available from the tier context menu in Record Data view.  Clipboard data may come from external strings (i.e., any text in the clipboard - will try to fit the data if brackets are used)
+ * Added inter-transcriber reliability function to Session Editor
+ * Fixed issue with session date field
+ * Updated cmn and tsn dictionaries
+ * Added support for multi-record selection the record grid tier of the Timeline view. Record selection may be manipulated using standard mouse and keyboard interactions
+ * Added new actions for moving selected records left/right: CTRL+,/. to Timeline 
+ * Added new actions for growing (CTRL+G) or shrinking (CTRL+K) selected records
+ * Added ability to copy and paste multiple records in the Timeline view
+ * Added ability to select records based on query result sets in Timeline view
+ * Improved behaviour of record labels when multiple records are at the same position in Timeline view
+ * Diacritics are no longer shown in syllabifier and alignment boxes
+ * A Syllabification and alignment popup window is displayed when holding shift while mousing over the ipa field, or by pressing CMD/CTRL+T when an ipa field is focused 
+ * Added a button for scaling font size to the Record Data, Timeline and Speech Analysis views
+
+### Fonts
+ 
+ * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
+ * Font preferences have been simplified and reset
+
+### Other
+
+ * IPA dictionaries may now be associated with a particular syllabifier in the metadata section using the '#syllabifer' tag. The syllabifier will be executed during the dictionary lookup phase just before any phonex find/replace expressions are executed
+ * Fixed a bug with phonex Find &amp; Replace related to an issue with look-ahead groups
+ * Updated VLC to 3.0.12
+
+
+## Changes from 3.1.3
+
+ * Added simplified Find &amp; Replace UI to Record data view which may be toggled using Record Data menu item and a toolbar button
+ * Added new Find &amp; Replace menu item to Edit menu of Session Editor to show Record Data view with Find &amp; Replace UI visible
+ * Added new File -&gt; Open command allowing opening of individual files including:
+   - Phon session files (.xml)
+   - TalkBank files (.xml)
+   - CHAT files (.cha)
+   - Analysis files (.xml)
+   - Query files (.xml)
+   - Query report files (.xml)
+ * Added new File -&gt; Recent files menu displaying the list of recently opened files.
+ * Added new Window -&gt; Show project window command when no project window is open for the active session editor window
+ * Can now open .cha and .xml files in Phon using the 'Open with' context menu in macOS.
+ * Fixed an issue with the input fields of the Find &amp; Replace view
+ * Updated PhonTalk, added new Import Project and Export Project commands to the
+File menu for importing/exporting CHAT (.cha) and TalkBank (.xml) data.
+ * Fixed an issue where the syllabification display would not be wide enough in some situations.
+ * Added workspace history menu to Workspace window menu
+ * Recent project menu now displays full path and includes a menu item to clear history
+ * Updated to Java 15
+ * PhonShell now usess Rhino JavaScript engine instead of nashorn
+ * PhonShell scripts may now be opened using the File -&gt; Open menu command
+ * Moved 'Add aligned groups/words' query/analysis options to new section named 'Additional Tier Data' with new UI for tier selection
+ * Fixed issues with Analysis Composer when using nested analyses derived from queries
+ * Added new 'Duplicate' action for items in the Analysis/Report Composer
+ * Added conext menu for table in Analysis/Report Composer
+ * Added Chineses (cmn and yue) syllabifiers
+ * Added function to reassign all records for a speaker to another speaker in
+the speaker context menu of the Timeline view. Click speaker name in the record
+grid to access this menu.
+
+## Changes from 3.1.2
+
+ * Changed name of PPC analysis to Percent Phones Correct
+ * Added option to PPC analysis to allow phones marked as distored to be considered correct (PPC-r)
+ * Update PPC 'report type' options to include onset, coda and nuclei singleton or cluster selection
+ * Added Percent Diacritics Correct (PDC) analysis
+ * Added Percent Number Tones Correct (PNTC) analysis
+ * Added zoom commands to HTNL report preview
+ * Fixed issue with new phonex syllable matcher and backtracking expressions
+ * Added new 'Sum columns' setting to manual inventory options
+ * Fixed check for VLC at launch
+ * Fixed an issue where changing the report name in analysis setting panel would not update report name in the analysis list (Analysis Composer)
+
+## Changes from 3.1.0
+
+ * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
+   - Alaw
+   - ulaw
+   - 12/16/24/32 bit linear
+   - 32/64 bit float
+ * Added 'Show media information' command to 'Media' menu of the session editor.
+ * Updated Multisyllabic Nonlinear Analysis.
+ * Removed restrictions on corpus/session name length in project manager - allowing use of any valid filename.
+ * Added text completions for session name field in project manager. Completions are generated from media filenames scanned in media folders for selected corpus.
+ * Added syllable matcher ('σ' U+03c3) with optional range (e.g., 'σ/O..N/') to phonex. This matcher will match an entire syllable - or the remainder of the current syllable - up to and including syllable positions included in the optional range.
+ * Improved support for tone numbers in IPA transcriptions.
+ * Removed 'tone' phonex plug-in.
+ * Added new 'tn (tone number)' phonex plug-in allowing matching (or not matching) a list of provided tone numbers on individual IPA elements.
+ * Added PTNC (Percent Tone Number Correct) query to query list in Analysis Composer.
+ * project.xml file for projects is no longer needed or created in future projects. This file may be safely removed and ignored in file sharing and version control systems. The new .properties file may also be safely ignored in team setups.
+
+## Changes from 3.0.5
+
+ * Improved method of opening sessions in blind mode
+ * Improved method of viewing and selecting project/corpus media folders
+ * Improved media loading and unloading in Session Editor
+ * Improved segment playback in Session Editor.  Segment playback no longer requires the Speech Analysis view to be open.
+ * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
+ * Added new 'Timeline' view which displays the audio waveform along with record data on a horizontal timeline. This view allows access to
+Segmentation functions as well as allowing easy manipulation of record segment times.
+ * Updated 'Speech Analysis' view with improved waveform and timebar components. 
+ * Diacritic selection has been added to all query reports and analyses which use the 'ignore diacritics' option.
+ * Improved method of setting up global overrides in query and report wizard
+
+### Other changes:
+
+ * Fix age comparisons for participants in query forms. Ages are now normalized before comparison (e.g., 01;04.00 is equal to 00;16.00)
+ * Added validation to age fields in query forms
+ * Record speaker will now change as expected when using 'replace' mode with segmentation
+ * Fix bugs with Specialized/Multisyllabic Nonlinear Analysis
+ * Updated English-NA (eng) dictionary
+ * Added Cantonese (yue) dictionary
+ * Added Mandarin (cmn) dictionary
+ * Fixed Phone Inventory analysis for IPA Actual elements
+ * Fixed an issue where compound phone characters were reversed in reports when ignoring diacritics.
+ * Update libjpraat to version 6.0.52
+ * Updated WAP analysis with improved definition of distortions.
+ * Added status background images for media player
+ * Can now click media player to toggle play/pause
+ * Drag and drop files onto media player to assign media to session
+ * Added menu items for assigning media, un-assigning media, and generating session audio file to Session menu in editor
+ * Improved media prompts (banners) in session editor
+
+## Changes from 3.0.4
+
+ * Fixed an issue where reports containing elements from the praat-plugin were not loading after saving the custom report to disk
+ * Updated Italian (ita) dictionary
+ * Added summary tables to PMLU analysis
+
+## Changes from 3.0.3
+
+ * Query and Report Wizard
+   - Query history is now displayed as a drop-down list
+   - Improved method of saving/exporting queries
+   - Clicking 'New window' will now show an exact copy of the current query (including parameters)
+   - Queries saved in user/project libraries or exported to disk now correctly link to the proper stock query
+   - Saved/exported queries now display the correct query history and named query lists
+   - Query results are now displayed in a split panel under the session selection view.
+   - Query results window will now open in proper location
+   - Stop button will now appear in the breadcrumb when executing queries
+   - Text for the next button now clearly indicates the next action
+   - Simplified and improved query window menu
+   - Add new 'Send to Analysis Composer' action allowing the current query and report settings to be added to a new or existing custom analysis
+ * Removed 'allow overlapping matches' from phonex options in forms
+ * Queries imported into analyses using the Analysis Composer from the user/project libraries will now work correctly
+ * Analysis composer now allows for setup of custom query reports
+ * Fixed behaviour of scrollbars in query forms.
+ * Folder names for reports and queries have been changed:
+   - Query folder name has been changed from 'script' to 'query'
+   - Report folder name has been changed from 'reports' to 'report'
+ * Enabled 'Export as Excel' button in Session to HTML wizard
+ * Result Listing sections may now be selected in the 'Export tables' dialog when exporting as Excel
+ * Record and result links now work in the Result Listing sections of query reports
+ * Session selector now displays scrollbars when needed in Session Check wizard
+ * Windows binaries are now signed
+ * Fixed an issue where SendPraat was blocked on Windows if not running as administrator
+ * Merged participant summary tables in Phonological Process analyses
+ * Session Check is now available from the 'View' menu in the session editor (instead of the 'Session' menu.)
+ * Changed format of phon version numbers
+
+## Changes from 3.0.2
+ 
+ * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
+ * Improvments to phone alignment
+ * Removed JavaFX dependency
+ * HTML reports are now displayed using JxBrowser
+ * New preferences panel for Query and Report wizard
+ * Added menu items for named queries to Query menu 
+ * Added 'Go to' menu for the Report menu allowing navigation to sections in the report.
+ * Added 'Open report in browser' menu item
+ * Added context menu for HTML reports
+ * Query wizards may now be opened for multiple projects
+ * Fixed a regression bug with acoustic data reports
+ * TextGrid view now uses the font Charis SIL Compact
+ * Improved workflow of wizard dialogs
+
+## Changes from 3.0.1
+
+ * Updated to Java 11
+ * Updated Consonants analysis
+ * Added 'Phone Accuracy' query report
+ * Improved options for Session to HTML wizard
+ * Updated Ewe (ewe) transliteration dictionary
+ * Added Turkish (tur) transliteration dictionary
+ * Added 'zoom' control to Composer (advanced)
+ * Automatic transcription will not overwrite unvalidated values
+ * Fixed an issue with matching back refrences at the end of transcripts 
+ * Application should now exit when selecting 'Close all windows' from the Windows taskbar
+ * Reconfigured application package directory structure
+ * Greatly improved page load time of reports
+ * Improved table of contents (ToC) menu
+ * Moved ToC to right hand side of report
+ * Renamed query reports
+ * Added new query report 'Listing by Session' which prints results organized by session and record. Tier data may also be included.
+ * Added a 'New window' function to query wizard
+
+## Changes from 3.0.0
+
+ * Beta versions of the application now have '-beta' added to the name
+ * Switched logging system to log4j2
+ * Increased previous log count to 10
+ * Logs are now stored in the $APPDATA/logs folder
+ * Updated application logs UI
+ * Added new function 'Export as HTML' to Session editor File menu
+ * Added menu item to display application data folder under the 'File' menu for all windows
+ * Added support for adding prefix, suffix, and combining diacritics to phonex matcher references
+ * Phonex expressions can now be used to modify results from Transliteration dictionaries
+ * Updated Ewe transliteration dictionary
+ * Add 'Show Welcome window' item under Window menu when Welcome window is not currently open.
+
+Bug fixes
+ * Fixed an issue with praat reports when media and TextGrids were located in external media folders
+ * Fixed an issue with creating new sessions
+ * Fixed an issue with the 'Save as' dialog in editor quick search tables
+ * Application will now exit when the last window is closed
+
+## Changes from Phon 2.1.8
+
+Version 3.0.0 is a significant update to Phon and is recommended for all users.
+
+ * General improvements to user interface
+   - Updated Welcome and Project windows
+   - New look and feel for wizards
+ * Improved phone alignment
+ * Revamped Query &amp; Report system
+   - Streamlined Query &amp; Report wizard
+   - New Report Composer for creating customized query reports
+   - Reports are now generated in HTML format. Report tables can be exported to CSV and Excel formats.
+   - New query history implementation allowing access to previously executed queries directly from the Query wizard. Entries in the query history can be 'named' and will appear in a combo box next to the query history controls.
+ * Updates to the phonex language
+   - Added grouping ability including capturing groups, named groups, non-capturing groups, look ahead/behind, and back references
+   - Added support for or'ed group expressions.
+   - Added support for C/C++ style comments (i.e., /* */ and //)
+ * Refactored Praat support
+   - Improved TextGrid support
+   - Updated acoustic data reports for new Query system
+   - Added VoT acoustic data report
+ * New analyses
+ * New syllabifier languages: Babbling, Icelandic, German, Slovenian
+ * New ipa lookup languages: Ewe, Persian
+
+&gt; Phon 3.0+ only supports 64-bit operating systems.
+
+The full changelog is available at https://github.com/phon-ca/phon/releases. For documentation visit https://www.phon.ca or https://phon-ca.github.io/phon/.
+
+## Changes from Phon 3.0.0b5
+
+ * Set application data folder to OS specific locations:
+  - macOS: ~/Library/Application Support/Phon
+  - windows: %APPDATA%/Phon
+  - linux: ~/.Phon/
+
+## Changes from Phon 3.0.0b4
+
+ * Additional stock queries added to Data Tiers and Phones
+ * Update to Java 10.0.2
+ * Minor bug fixes
+
+## Changes from Phon 3.0.0b3
+
+ * Added ability to name entries in Query History
+ * Added commands for removing items from Query History
+ * Added stock/example queries for the Phones query which can be selected using a combox box at the top of the query form
+ * Query History can now be accessed in the Analysis composer
+ * Keystroke trigger for autocomplete in the phonex editor is now Tab instead of Ctrl+Space
+ * Minor bug fixes
+
+## Changes from Phon 3.0.0b2
+
+### Phonex
+ * Added support for the or (i.e., '|') operator in phonex groups.
+ * Added multi-line support to phonex.
+ * Added c-style comment support to phonex (i.e., /* */ and //)
+ * Improved phonex editor with syntax highlighting and autocomplete (available via Ctrl+Space.)
+ * Improved error reporting and highlighting for phonex expressions.
+
+### Queries
+ * Integrated query results into the query step of the wizard.
+ * Query History is now saved globally for each query script.
+ * Previously exectued queries can be accessed directly through the query form.
+ * Additional query menu items are available in the Query menu for the Query wizard.
+
+### General
+ * Added dialog for selecting and exporting report tables as Excel/CSV.
+ * Improvements to the automatic phone aligner.
+ * Various bug fixes and UI improvements.
+
+## Changes from Phon 3.0.0b1
+
+ * Fixed issue with audio playback in the Speech Analysis view
+ * Added support for 24/32-bit WAV file playback in Speech Analysis view
+ * Added Aggreagte and Listing for participant results to Consonants analysis
+ * Added segmental relations to WAP analysis
+ * Added keystroke 'CMD/ALT+SHIFT+M' for merging all groups in a record
+ * Added a 'Reset query' button to reset query parameters in the Query and Report wizard.
+ * Added 'Inventory grouping' global parameter to reports and analyses. 
+ * General bux fixes
+
+## Changes from Phon 2.2.0b25
+
+### General
+ 
+ * Set version to 3.0.0
+ * Migrated to Java 9.0.4, now only supporting 64-bit operating systems
+ * Added downloads for linux
+
+### Queries
+
+ * New 'Query and Report' wizard will be displayed when running queries.  This wizard has four steps:
+  1. Query Parameters - select sessions and enter query settings
+  2. Results - perform query and allow saving/opening query results
+  3. Report Composer - displays the Report Composer and allows configuration of query report
+  4. Report - generate and display HTML query report.
+ * Query settings are saved when executing a query and loaded when a new query wizard is opened
+ * Report configuration is saved when generating a report and loaded when a new query wizard is opened
+
+### Analyses
+ 
+ * Improved performance and reduced memory usage
+ * Improved HTML rendering of reports on macOS
+ * Added new 'Consonants' analysis
+ * Updated Vocalization analysis
+ * Update WAP analysis
+
+## Changes from Phon 2.2.0b24
+
+ * Added VOT acoustic data query report.
+ * Added speaker name and age to acoustic data reports.
+ * Fixed an issue with PPC form.
+ * Fixed a freeze on macos when saving data from the report buffer panel.
+
+## Changes from Phon 2.2.0b21
+
+### General
+ * Significantly improved phone alignment algorithm.
+ * IPA Map will now be displayed if iconified when requested.
+ * Project and corpus media folders can now be setup in the Project Manager window.  These media folders take precedence over global media folder settings.
+ * Button to setup global media folders has been removed from the Welcome window.
+ * Improved automatic updates. Application updates will now be downloaded in the background when available and update installation has been simplified. Automatic update will only execute if the user has appropriate permissions to install the update.
+ * Replaced Help menu items for pdf user manuals with a single item linking to unified online documentation.
+
+### Queries and Analyses
+ * A new column 'Alignment' showing the IPA Target &lt;-&gt; IPA Actual alignment is added by the Phone Query when includeAlignedPhones is set to true.
+ * Updated menus of Query Reports and Analyses
+ * Updated PCC analysis. It is has been merged with the Phone Accuracy analysis and is now titled 'PPC'.  Options have been added for easlity selecting singleton consonants and consonant clusters.
+ * Added Word Level Analysis of Polysyllables to list of specialized analyses.
+ * Renamed 'Phone Dispersion' as 'Phone Similarity' and fixed calculation.
+ * Added ability to export reports and tables to Excel.
+
+### Session Editor
+ * New action available 'Assign unidentified records to participant' in the Session Information view of the Session Editor.
+ * New sessions now have zero records when created.
+ * Fixed issues with segmentation.
+ * Default layout for Session editor is now maximized.
+ * Extended state (maximized, iconified, etc.) is retained between Session editor sessions.
+
+## Changes from Phon 2.2.0b20
+
+ * Added global summaries to PCC and Phone Accuracy analyses.
+ * Reverted to UTF-8 when saving CSV files in reports.
+ * Reduce the size of fonts in reports.
+ * Updated French syllabifiers.
+ * Workspace and project windows now display file modification times in 24-hour format with timezone.
+ * Added phonex matcher '\p' for matching intra-word pauses.
+ * Added Ewe transliteration IPA dictionary.
+
+## Changes from Phon 2.2.0b18
+
+### UI
+ 
+ * Added link to project folder in the header of the Project Manager window.
+ * Added link to the corpus folder in corpus details of the Project Manager window.
+ * Improved editor for corpus description in Project Manager window.
+ * Added participant list for selected session in session details of the Project Manager window.
+ * Buffer list is now collapsed by default in Buffers window. A new combo box is available for selecting current buffer.
+
+### Queries and Analyses
+
+ * Removed Harmony and Metathesis queries.
+ * Added new query 'Segmental Relations' which includes detectors for Harmony, Assimilation, Reduplication, Metathesis, and Migration.
+ * Added new table 'All Results', to the 'Word Match' analysis.
+ * Added 'Phone Cluster' analysis.
+ * Revised PCC analysis and report to be clearer and more concise.
+ * Improved text for copy/show buffer buttons in reports.
+ * CSV files are now written in UTF-16 format.
+
+### General
+
+ * Fixed an issue with French syllabifiers.
+ * Added support for TalkBank 2.5.0
+
+## Changes from Phon 2.2.0b17
+
+### Analyses
+
+ * Added Phone Clusters analysis
+ * Added 'All Results' table for each selected participant in the Word Match analysis
+
+### General
+
+ * New installers for Windows
+
+</comment>
+  </entry>
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-alpha_4.exe" newVersion="3.5.0-alpha.4" newMediaFileId="win64" fileSize="258914264" md5Sum="3de87c1ad6096fc3d2e59a0c9db82040" sha256Sum="c03820f6d51d0248f07b86f449d352f86180408b3733884b9c4056699c5fa9d5" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.4.2
+
+ * VLC and segment playback using the Java audio system now both use the same volume settings
+ * New volume slider components are located in the media player, speech analysis, and timeline views. All three sliders control a single volume for the session (video and segment playback)
+ * Media playback rate may now be changed
+ * Segmentation window stays in middle of timeline view when possible
+ * Media playback rate may be changed using keystrokes during segmentation
+ * Settings for volume and media playback rate may be found in the 'Media' window menu for the session
+ * Timeline will center new record during navigation/zoom actions
+ * Speech analysis view will now correctly center on current record on zoom actions
+ * Fixed a font issue with the results editor when using Noto fonts on Windows 
+ * Fixed an issue when searching 'by syllable' in percent correct analyses
+ * ~ may now be used as a compound word marker in IPA transcriptions
+ * Fixed keyboard focus behaviour when switching records in session editor
+ * Fixed an issue where some editor keystrokes would not work until the Session menu was selected at least once
+ * Updated eng IPA dictionary
+ * Fixed an issue where session backups were not being created when saving while focused in Record Data
+
+## Changes from 3.4.1
+
+ * Fixed an issue where phonex group data was not retained when exact match is selected
+
+## Changes from 3.4.0
+
+ * Reset all macOS Security &amp; Privacy permissions. Phon and Phon-beta will now have separate sets of permissions instead of sharing
+ * Fixed macOS entitlements to unblock the sendpraat command
+ * Media field in Session Information will no longer be outlined in read when no file is specified
+
+## Changes from 3.3.6
+
+ * Added Consistency Analysis
+ * Added 'Distribute unsegmented records' function to Timeline context menu
+ * Session editor will only switch to new records when using the New and Duplicate record buttons
+ * Fixed an issue with Formant tables having too many columns on windows
+ * Additional checks are put in place when editing TextGids in Praat and sending back to Phon:
+   * Phon will perform a round-trip test before copying the TextGrid data from Praat
+   * A backup of the TextGrid file will be created with the suffix ```-backup``` when sending back to Phon
+   * A backup of the TextGrid file will be created in the ```backups.zip``` file when sending back to Phon under ```__res/textgrids/&lt;corpus&gt;/&lt;session&gt;```
+ * Fixed an issue where the Speech Analysis view would not refresh correctly when switching records
+
+## Changes from 3.3.5
+
+ * Session editor will now detect and offer to load changes from disk if changes were made to the files using an external editor.
+ * Fixed a regression issue with creating records via the Timeline waveform tier
+ * Fixed a race condition when using the praat function 'File -&gt; Send back to calling program' while editing TextGrids
+
+## Changes from 3.3.4
+
+ * Added Urdu syllabifier
+ * Added IPA dictionary selection to automatic transcription form in IPA Lookup view
+ * Moved location of project properties file from '.properties' to 'project.properties'
+ * Improved detection of Phon projects in workspace folder
+ * Fixed an issue where invalid segment times would cause repaint issues in the editor
+ * Fixed an issue with segmentation
+ * Merging groups in a record will now correctly merge alignment
+
+## Changes from 3.3.3
+
+ * Fixed an bug with the 'keep like on top' sorting option
+ * Added ability to toggle display of diacritics in Syllabification and Alignment editor view
+ * Display settings for Syllabification and Alignment editor view are remembered between sessions
+
+## Changes from 3.3.2
+
+ * Updated ara syllabifier and dictionary
+ * Updated tsn dictionary
+
+## Changes from 3.3.1
+
+ * Fixed an issue with switching workspaces
+
+## Changes from 3.3.0
+
+### General
+ * The workspace project list in the Welcome window may now be collapsed. The list is initially collapsed by default if there are no workspace projects
+ * Added session check for aligned word counts in between Phon tiers. The tier with the most words defines the aligned word count for the record. Any tier which does no match the aligned word count for the record will be reported.
+ * Added a settings menu to the toolbar of the Session Check view to allow selection of which checks are performed within the session editor. This setting is remembered between instances of the session editor.
+ * Fixed issues related to session check
+ * Fixed a bug with the Word Match analysis
+ * Fixed an issue with detecting positional information when using plain text queries
+ * Fixed an issue with the 'keep like on top' option when sorting tables
+ * Fixed highlight of word suffix codes
+ * Update ara syllabifier
+
+### CHAT/TalkBank Support
+ * 'Import Project' has been renamed as 'Import from CHAT/TalkBank'.  The UI has been updated for clarity and ease of use. It is no longer necessary to create extra folders when importing data. For more information see https://www.phon.ca/phon-manual/chat/import.html
+ * 'Export Project' has been renamed as 'Export to CHAT/TalkBank'. The export will no longer create a project folder in the selected output folder. For more information see https://www.phon.ca/phon-manual/chat/export.html.
+ * Added new session checks - available in the Sesion Check wizard from the Project Manager window - for exporting to TalkBank/CHAT. Each record in a session is checked to see if it will properly export to xml (and optionally CHAT) individually. Useful for finding which records have round-trip issues. (Note: only Phon -&gt; TalkBank checks are available in the session editor as Phon -&gt; CHAT checks take substantially longer.)
+ * Added round-trip support for CA elements/delimiters
+ * Added round-trip support for segment repetitions. Segment repetitions are enclosed by the ↫ (0x21ab) character.  e.g., ↫r-r↫repeat
+ * Fixed issues with underline and italic elements
+ * Fixed handling of numerical length pauses
+ * Fixed export of Postcode tier data
+ * Fixed an issue with exporting empty phone alignments
+
+### Phonex
+ * Custom phone classes may now be part of compound phone expressions. e.g., ```t_[^s]```
+ * Ligatures may now be used in compound phone matchers instead of underscore. e.g., ```t[͜^s]```
+ * Regular expression matchers may be declared using single or double quotes
+ * Long (ː) and halflong (ˑ) diacritics may be applied to phone matchers to test for the features {long} and {halflong} respectively
+
+## Changes from 3.2.0
+
+### Query &amp; Analysis
+
+ * Added new option to 'Combine results for all participants' to all stock analyses
+ * Added Measure of Cluster Proximity analysis
+ * Added Tier Match, CV Pattern Match, Stress Match, and Syllable Count Match analyses
+ * Categorized analyses into sub-folders
+ * Updated Consonants analysis to include positional information and accuracy columns to all listings
+ * Added participant filter to parameters for all analyses
+ * Updated Specialized/Word Match analysis
+ * Added new common query option to add positional data to query results
+ * Fixed a bug where results from non-selected participants would appear in analysis result listings
+
+### Session Editor
+
+ * Improved context menu in Tier Management view
+ * Added new 'Duplicate Tier' action
+ * Integrated tier management functions into new context menu available on tier lables in Record Data view
+ * New copy/paste tier functions available from the tier context menu in Record Data view.  Clipboard data may come from external strings (i.e., any text in the clipboard - will try to fit the data if brackets are used)
+ * Added inter-transcriber reliability function to Session Editor
+ * Fixed issue with session date field
+ * Updated cmn and tsn dictionaries
+ * Added support for multi-record selection the record grid tier of the Timeline view. Record selection may be manipulated using standard mouse and keyboard interactions
+ * Added new actions for moving selected records left/right: CTRL+,/. to Timeline 
+ * Added new actions for growing (CTRL+G) or shrinking (CTRL+K) selected records
+ * Added ability to copy and paste multiple records in the Timeline view
+ * Added ability to select records based on query result sets in Timeline view
+ * Improved behaviour of record labels when multiple records are at the same position in Timeline view
+ * Diacritics are no longer shown in syllabifier and alignment boxes
+ * A Syllabification and alignment popup window is displayed when holding shift while mousing over the ipa field, or by pressing CMD/CTRL+T when an ipa field is focused 
+ * Added a button for scaling font size to the Record Data, Timeline and Speech Analysis views
+
+### Fonts
+ 
+ * Default tier font is now 'Noto Sans' instead of 'Charis SIL'. Copies of 'Noto Sans' and 'Noto Serif' are included with Phon
+ * Font preferences have been simplified and reset
+
+### Other
+
+ * IPA dictionaries may now be associated with a particular syllabifier in the metadata section using the '#syllabifer' tag. The syllabifier will be executed during the dictionary lookup phase just before any phonex find/replace expressions are executed
+ * Fixed a bug with phonex Find &amp; Replace related to an issue with look-ahead groups
+ * Updated VLC to 3.0.12
+
+
+## Changes from 3.1.3
+
+ * Added simplified Find &amp; Replace UI to Record data view which may be toggled using Record Data menu item and a toolbar button
+ * Added new Find &amp; Replace menu item to Edit menu of Session Editor to show Record Data view with Find &amp; Replace UI visible
+ * Added new File -&gt; Open command allowing opening of individual files including:
+   - Phon session files (.xml)
+   - TalkBank files (.xml)
+   - CHAT files (.cha)
+   - Analysis files (.xml)
+   - Query files (.xml)
+   - Query report files (.xml)
+ * Added new File -&gt; Recent files menu displaying the list of recently opened files.
+ * Added new Window -&gt; Show project window command when no project window is open for the active session editor window
+ * Can now open .cha and .xml files in Phon using the 'Open with' context menu in macOS.
+ * Fixed an issue with the input fields of the Find &amp; Replace view
+ * Updated PhonTalk, added new Import Project and Export Project commands to the
+File menu for importing/exporting CHAT (.cha) and TalkBank (.xml) data.
+ * Fixed an issue where the syllabification display would not be wide enough in some situations.
+ * Added workspace history menu to Workspace window menu
+ * Recent project menu now displays full path and includes a menu item to clear history
+ * Updated to Java 15
+ * PhonShell now usess Rhino JavaScript engine instead of nashorn
+ * PhonShell scripts may now be opened using the File -&gt; Open menu command
+ * Moved 'Add aligned groups/words' query/analysis options to new section named 'Additional Tier Data' with new UI for tier selection
+ * Fixed issues with Analysis Composer when using nested analyses derived from queries
+ * Added new 'Duplicate' action for items in the Analysis/Report Composer
+ * Added conext menu for table in Analysis/Report Composer
+ * Added Chineses (cmn and yue) syllabifiers
+ * Added function to reassign all records for a speaker to another speaker in
+the speaker context menu of the Timeline view. Click speaker name in the record
+grid to access this menu.
+
+## Changes from 3.1.2
+
+ * Changed name of PPC analysis to Percent Phones Correct
+ * Added option to PPC analysis to allow phones marked as distored to be considered correct (PPC-r)
+ * Update PPC 'report type' options to include onset, coda and nuclei singleton or cluster selection
+ * Added Percent Diacritics Correct (PDC) analysis
+ * Added Percent Number Tones Correct (PNTC) analysis
+ * Added zoom commands to HTNL report preview
+ * Fixed issue with new phonex syllable matcher and backtracking expressions
+ * Added new 'Sum columns' setting to manual inventory options
+ * Fixed check for VLC at launch
+ * Fixed an issue where changing the report name in analysis setting panel would not update report name in the analysis list (Analysis Composer)
+
+## Changes from 3.1.0
+
+ * Improved audio IO with support for wav an aiff/aifc files with the following encodings:
+   - Alaw
+   - ulaw
+   - 12/16/24/32 bit linear
+   - 32/64 bit float
+ * Added 'Show media information' command to 'Media' menu of the session editor.
+ * Updated Multisyllabic Nonlinear Analysis.
+ * Removed restrictions on corpus/session name length in project manager - allowing use of any valid filename.
+ * Added text completions for session name field in project manager. Completions are generated from media filenames scanned in media folders for selected corpus.
+ * Added syllable matcher ('σ' U+03c3) with optional range (e.g., 'σ/O..N/') to phonex. This matcher will match an entire syllable - or the remainder of the current syllable - up to and including syllable positions included in the optional range.
+ * Improved support for tone numbers in IPA transcriptions.
+ * Removed 'tone' phonex plug-in.
+ * Added new 'tn (tone number)' phonex plug-in allowing matching (or not matching) a list of provided tone numbers on individual IPA elements.
+ * Added PTNC (Percent Tone Number Correct) query to query list in Analysis Composer.
+ * project.xml file for projects is no longer needed or created in future projects. This file may be safely removed and ignored in file sharing and version control systems. The new .properties file may also be safely ignored in team setups.
+
+## Changes from 3.0.5
+
+ * Improved method of opening sessions in blind mode
+ * Improved method of viewing and selecting project/corpus media folders
+ * Improved media loading and unloading in Session Editor
+ * Improved segment playback in Session Editor.  Segment playback no longer requires the Speech Analysis view to be open.
+ * Removed 'Segmentation' view from Session Editor. Segmentation is now performed using the new 'Timeline' view.
+ * Added new 'Timeline' view which displays the audio waveform along with record data on a horizontal timeline. This view allows access to
+Segmentation functions as well as allowing easy manipulation of record segment times.
+ * Updated 'Speech Analysis' view with improved waveform and timebar components. 
+ * Diacritic selection has been added to all query reports and analyses which use the 'ignore diacritics' option.
+ * Improved method of setting up global overrides in query and report wizard
+
+### Other changes:
+
+ * Fix age comparisons for participants in query forms. Ages are now normalized before comparison (e.g., 01;04.00 is equal to 00;16.00)
+ * Added validation to age fields in query forms
+ * Record speaker will now change as expected when using 'replace' mode with segmentation
+ * Fix bugs with Specialized/Multisyllabic Nonlinear Analysis
+ * Updated English-NA (eng) dictionary
+ * Added Cantonese (yue) dictionary
+ * Added Mandarin (cmn) dictionary
+ * Fixed Phone Inventory analysis for IPA Actual elements
+ * Fixed an issue where compound phone characters were reversed in reports when ignoring diacritics.
+ * Update libjpraat to version 6.0.52
+ * Updated WAP analysis with improved definition of distortions.
+ * Added status background images for media player
+ * Can now click media player to toggle play/pause
+ * Drag and drop files onto media player to assign media to session
+ * Added menu items for assigning media, un-assigning media, and generating session audio file to Session menu in editor
+ * Improved media prompts (banners) in session editor
+
+## Changes from 3.0.4
+
+ * Fixed an issue where reports containing elements from the praat-plugin were not loading after saving the custom report to disk
+ * Updated Italian (ita) dictionary
+ * Added summary tables to PMLU analysis
+
+## Changes from 3.0.3
+
+ * Query and Report Wizard
+   - Query history is now displayed as a drop-down list
+   - Improved method of saving/exporting queries
+   - Clicking 'New window' will now show an exact copy of the current query (including parameters)
+   - Queries saved in user/project libraries or exported to disk now correctly link to the proper stock query
+   - Saved/exported queries now display the correct query history and named query lists
+   - Query results are now displayed in a split panel under the session selection view.
+   - Query results window will now open in proper location
+   - Stop button will now appear in the breadcrumb when executing queries
+   - Text for the next button now clearly indicates the next action
+   - Simplified and improved query window menu
+   - Add new 'Send to Analysis Composer' action allowing the current query and report settings to be added to a new or existing custom analysis
+ * Removed 'allow overlapping matches' from phonex options in forms
+ * Queries imported into analyses using the Analysis Composer from the user/project libraries will now work correctly
+ * Analysis composer now allows for setup of custom query reports
+ * Fixed behaviour of scrollbars in query forms.
+ * Folder names for reports and queries have been changed:
+   - Query folder name has been changed from 'script' to 'query'
+   - Report folder name has been changed from 'reports' to 'report'
+ * Enabled 'Export as Excel' button in Session to HTML wizard
+ * Result Listing sections may now be selected in the 'Export tables' dialog when exporting as Excel
+ * Record and result links now work in the Result Listing sections of query reports
+ * Session selector now displays scrollbars when needed in Session Check wizard
+ * Windows binaries are now signed
+ * Fixed an issue where SendPraat was blocked on Windows if not running as administrator
+ * Merged participant summary tables in Phonological Process analyses
+ * Session Check is now available from the 'View' menu in the session editor (instead of the 'Session' menu.)
+ * Changed format of phon version numbers
+
+## Changes from 3.0.2
+ 
+ * Added new 'Session Check' wizard available via the 'Project' window menu. The new wizard incorporates and replaces the older 'Check Transcriptions' wizard.
+ * Improvments to phone alignment
+ * Removed JavaFX dependency
+ * HTML reports are now displayed using JxBrowser
+ * New preferences panel for Query and Report wizard
+ * Added menu items for named queries to Query menu 
+ * Added 'Go to' menu for the Report menu allowing navigation to sections in the report.
+ * Added 'Open report in browser' menu item
+ * Added context menu for HTML reports
+ * Query wizards may now be opened for multiple projects
+ * Fixed a regression bug with acoustic data reports
+ * TextGrid view now uses the font Charis SIL Compact
+ * Improved workflow of wizard dialogs
+
+## Changes from 3.0.1
+
+ * Updated to Java 11
+ * Updated Consonants analysis
+ * Added 'Phone Accuracy' query report
+ * Improved options for Session to HTML wizard
+ * Updated Ewe (ewe) transliteration dictionary
+ * Added Turkish (tur) transliteration dictionary
+ * Added 'zoom' control to Composer (advanced)
+ * Automatic transcription will not overwrite unvalidated values
+ * Fixed an issue with matching back refrences at the end of transcripts 
+ * Application should now exit when selecting 'Close all windows' from the Windows taskbar
+ * Reconfigured application package directory structure
+ * Greatly improved page load time of reports
+ * Improved table of contents (ToC) menu
+ * Moved ToC to right hand side of report
+ * Renamed query reports
+ * Added new query report 'Listing by Session' which prints results organized by session and record. Tier data may also be included.
+ * Added a 'New window' function to query wizard
+
+## Changes from 3.0.0
+
+ * Beta versions of the application now have '-beta' added to the name
+ * Switched logging system to log4j2
+ * Increased previous log count to 10
+ * Logs are now stored in the $APPDATA/logs folder
+ * Updated application logs UI
+ * Added new function 'Export as HTML' to Session editor File menu
+ * Added menu item to display application data folder under the 'File' menu for all windows
+ * Added support for adding prefix, suffix, and combining diacritics to phonex matcher references
+ * Phonex expressions can now be used to modify results from Transliteration dictionaries
+ * Updated Ewe transliteration dictionary
+ * Add 'Show Welcome window' item under Window menu when Welcome window is not currently open.
+
+Bug fixes
+ * Fixed an issue with praat reports when media and TextGrids were located in external media folders
+ * Fixed an issue with creating new sessions
+ * Fixed an issue with the 'Save as' dialog in editor quick search tables
+ * Application will now exit when the last window is closed
+
+## Changes from Phon 2.1.8
+
+Version 3.0.0 is a significant update to Phon and is recommended for all users.
+
+ * General improvements to user interface
+   - Updated Welcome and Project windows
+   - New look and feel for wizards
+ * Improved phone alignment
+ * Revamped Query &amp; Report system
+   - Streamlined Query &amp; Report wizard
+   - New Report Composer for creating customized query reports
+   - Reports are now generated in HTML format. Report tables can be exported to CSV and Excel formats.
+   - New query history implementation allowing access to previously executed queries directly from the Query wizard. Entries in the query history can be 'named' and will appear in a combo box next to the query history controls.
+ * Updates to the phonex language
+   - Added grouping ability including capturing groups, named groups, non-capturing groups, look ahead/behind, and back references
+   - Added support for or'ed group expressions.
+   - Added support for C/C++ style comments (i.e., /* */ and //)
+ * Refactored Praat support
+   - Improved TextGrid support
+   - Updated acoustic data reports for new Query system
+   - Added VoT acoustic data report
+ * New analyses
+ * New syllabifier languages: Babbling, Icelandic, German, Slovenian
+ * New ipa lookup languages: Ewe, Persian
+
+&gt; Phon 3.0+ only supports 64-bit operating systems.
+
+The full changelog is available at https://github.com/phon-ca/phon/releases. For documentation visit https://www.phon.ca or https://phon-ca.github.io/phon/.
+
+## Changes from Phon 3.0.0b5
+
+ * Set application data folder to OS specific locations:
+  - macOS: ~/Library/Application Support/Phon
+  - windows: %APPDATA%/Phon
+  - linux: ~/.Phon/
+
+## Changes from Phon 3.0.0b4
+
+ * Additional stock queries added to Data Tiers and Phones
+ * Update to Java 10.0.2
+ * Minor bug fixes
+
+## Changes from Phon 3.0.0b3
+
+ * Added ability to name entries in Query History
+ * Added commands for removing items from Query History
+ * Added stock/example queries for the Phones query which can be selected using a combox box at the top of the query form
+ * Query History can now be accessed in the Analysis composer
+ * Keystroke trigger for autocomplete in the phonex editor is now Tab instead of Ctrl+Space
+ * Minor bug fixes
+
+## Changes from Phon 3.0.0b2
+
+### Phonex
+ * Added support for the or (i.e., '|') operator in phonex groups.
+ * Added multi-line support to phonex.
+ * Added c-style comment support to phonex (i.e., /* */ and //)
+ * Improved phonex editor with syntax highlighting and autocomplete (available via Ctrl+Space.)
+ * Improved error reporting and highlighting for phonex expressions.
+
+### Queries
+ * Integrated query results into the query step of the wizard.
+ * Query History is now saved globally for each query script.
+ * Previously exectued queries can be accessed directly through the query form.
+ * Additional query menu items are available in the Query menu for the Query wizard.
+
+### General
+ * Added dialog for selecting and exporting report tables as Excel/CSV.
+ * Improvements to the automatic phone aligner.
+ * Various bug fixes and UI improvements.
+
+## Changes from Phon 3.0.0b1
+
+ * Fixed issue with audio playback in the Speech Analysis view
+ * Added support for 24/32-bit WAV file playback in Speech Analysis view
+ * Added Aggreagte and Listing for participant results to Consonants analysis
+ * Added segmental relations to WAP analysis
+ * Added keystroke 'CMD/ALT+SHIFT+M' for merging all groups in a record
+ * Added a 'Reset query' button to reset query parameters in the Query and Report wizard.
+ * Added 'Inventory grouping' global parameter to reports and analyses. 
+ * General bux fixes
+
+## Changes from Phon 2.2.0b25
+
+### General
+ 
+ * Set version to 3.0.0
+ * Migrated to Java 9.0.4, now only supporting 64-bit operating systems
+ * Added downloads for linux
+
+### Queries
+
+ * New 'Query and Report' wizard will be displayed when running queries.  This wizard has four steps:
+  1. Query Parameters - select sessions and enter query settings
+  2. Results - perform query and allow saving/opening query results
+  3. Report Composer - displays the Report Composer and allows configuration of query report
+  4. Report - generate and display HTML query report.
+ * Query settings are saved when executing a query and loaded when a new query wizard is opened
+ * Report configuration is saved when generating a report and loaded when a new query wizard is opened
+
+### Analyses
+ 
+ * Improved performance and reduced memory usage
+ * Improved HTML rendering of reports on macOS
+ * Added new 'Consonants' analysis
+ * Updated Vocalization analysis
+ * Update WAP analysis
+
+## Changes from Phon 2.2.0b24
+
+ * Added VOT acoustic data query report.
+ * Added speaker name and age to acoustic data reports.
+ * Fixed an issue with PPC form.
+ * Fixed a freeze on macos when saving data from the report buffer panel.
+
+## Changes from Phon 2.2.0b21
+
+### General
+ * Significantly improved phone alignment algorithm.
+ * IPA Map will now be displayed if iconified when requested.
+ * Project and corpus media folders can now be setup in the Project Manager window.  These media folders take precedence over global media folder settings.
+ * Button to setup global media folders has been removed from the Welcome window.
+ * Improved automatic updates. Application updates will now be downloaded in the background when available and update installation has been simplified. Automatic update will only execute if the user has appropriate permissions to install the update.
+ * Replaced Help menu items for pdf user manuals with a single item linking to unified online documentation.
+
+### Queries and Analyses
+ * A new column 'Alignment' showing the IPA Target &lt;-&gt; IPA Actual alignment is added by the Phone Query when includeAlignedPhones is set to true.
+ * Updated menus of Query Reports and Analyses
+ * Updated PCC analysis. It is has been merged with the Phone Accuracy analysis and is now titled 'PPC'.  Options have been added for easlity selecting singleton consonants and consonant clusters.
+ * Added Word Level Analysis of Polysyllables to list of specialized analyses.
+ * Renamed 'Phone Dispersion' as 'Phone Similarity' and fixed calculation.
+ * Added ability to export reports and tables to Excel.
+
+### Session Editor
+ * New action available 'Assign unidentified records to participant' in the Session Information view of the Session Editor.
+ * New sessions now have zero records when created.
+ * Fixed issues with segmentation.
+ * Default layout for Session editor is now maximized.
+ * Extended state (maximized, iconified, etc.) is retained between Session editor sessions.
+
+## Changes from Phon 2.2.0b20
+
+ * Added global summaries to PCC and Phone Accuracy analyses.
+ * Reverted to UTF-8 when saving CSV files in reports.
+ * Reduce the size of fonts in reports.
+ * Updated French syllabifiers.
+ * Workspace and project windows now display file modification times in 24-hour format with timezone.
+ * Added phonex matcher '\p' for matching intra-word pauses.
+ * Added Ewe transliteration IPA dictionary.
+
+## Changes from Phon 2.2.0b18
+
+### UI
+ 
+ * Added link to project folder in the header of the Project Manager window.
+ * Added link to the corpus folder in corpus details of the Project Manager window.
+ * Improved editor for corpus description in Project Manager window.
+ * Added participant list for selected session in session details of the Project Manager window.
+ * Buffer list is now collapsed by default in Buffers window. A new combo box is available for selecting current buffer.
+
+### Queries and Analyses
+
+ * Removed Harmony and Metathesis queries.
+ * Added new query 'Segmental Relations' which includes detectors for Harmony, Assimilation, Reduplication, Metathesis, and Migration.
+ * Added new table 'All Results', to the 'Word Match' analysis.
+ * Added 'Phone Cluster' analysis.
+ * Revised PCC analysis and report to be clearer and more concise.
+ * Improved text for copy/show buffer buttons in reports.
+ * CSV files are now written in UTF-16 format.
+
+### General
+
+ * Fixed an issue with French syllabifiers.
+ * Added support for TalkBank 2.5.0
+
+## Changes from Phon 2.2.0b17
+
+### Analyses
+
+ * Added Phone Clusters analysis
+ * Added 'All Results' table for each selected participant in the Word Match analysis
+
+### General
+
+ * New installers for Windows
+
+</comment>
+  </entry>
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-alpha_4.zip" newVersion="3.5.0-alpha.4" newMediaFileId="win64zip" fileSize="257830976" md5Sum="cd4e0e5e7110272a3fb11613ecca3cf8" sha256Sum="94b4f8dc6016d953463bb6478faf060e34703790f33539ade7f94e288e698756" bundledJre="windows-amd64-17.0.4.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.4.2
 
  * VLC and segment playback using the Java audio system now both use the same volume settings
