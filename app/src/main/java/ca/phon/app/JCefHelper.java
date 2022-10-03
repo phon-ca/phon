@@ -14,7 +14,11 @@ import java.io.*;
 
 public final class JCefHelper {
 
+	private final static String DEFAULT_URL = "about:blank";
+
 	private static JCefHelper INSTANCE;
+
+	private final static boolean useOsr = !OSInfo.isMacOs();
 
 	public static JCefHelper getInstance() {
 		if(INSTANCE == null) {
@@ -22,9 +26,9 @@ public final class JCefHelper {
 
 			builder.setInstallDir(new File(PrefHelper.getUserDataFolder(), "jcef-bundle"));
 			builder.setProgressHandler(new ConsoleProgressHandler());
-			builder.addJcefArgs("--disable-gpu");
+			//builder.addJcefArgs("--disable-gpu");
 			builder.addJcefArgs("--allow-file-access-from-files");
-			builder.getCefSettings().windowless_rendering_enabled = false;
+			builder.getCefSettings().windowless_rendering_enabled = useOsr;
 			builder.setAppHandler(new MavenCefAppHandlerAdapter() {
 				@Override
 				public boolean onBeforeTerminate() {
@@ -54,22 +58,33 @@ public final class JCefHelper {
 
 	private final CefApp cefApp;
 
-	private final CefClient cefClient;
-
 	private JCefHelper(CefApp cefApp) {
 		super();
 
 		this.cefApp = cefApp;
-		this.cefClient = cefApp.createClient();
 	}
 
 	public CefApp getApp() {
 		return this.cefApp;
 	}
 
-	public CefBrowser createBrowser() {
+	public CefClient createClient() {
+		return cefApp.createClient();
+	}
+
+	public Tuple<CefClient, CefBrowser> createClientAndBrowser() {
+		final CefClient cefClient = getApp().createClient();
+		final CefBrowser cefBrowser = createBrowser(cefClient);
+		return new Tuple<>(cefClient, cefBrowser);
+	}
+
+	public CefBrowser createBrowser(CefClient cefClient) {
+		return createBrowser(cefClient, DEFAULT_URL);
+	}
+
+	public CefBrowser createBrowser(CefClient cefClient, String url) {
 		final CefBrowser browser =
-				cefClient.createBrowser("about:blank", false, false);
+				cefClient.createBrowser("about:blank", useOsr, false);
 		return browser;
 	}
 

@@ -34,7 +34,10 @@ import ca.phon.util.*;
 import jxl.Workbook;
 import jxl.write.*;
 import jxl.write.biff.RowsExceededException;
-import org.cef.browser.CefBrowser;
+import org.cef.CefClient;
+import org.cef.browser.*;
+import org.cef.callback.CefQueryCallback;
+import org.cef.handler.CefMessageRouterHandler;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import org.jdesktop.swingx.JXTable;
 
@@ -78,6 +81,14 @@ public class BufferPanel extends JPanel implements IExtendable {
 
 	public final static String STOP_BUSY = "STOP_BUSY";
 
+	private final static double MAX_ZOOM_LEVEL = 4.0;
+
+	private final static double MIN_ZOOM_LEVEL = -1.0;
+
+	private final static double ZOOM_LEVEL_INCR = 0.5;
+
+	private final static double DEFAULT_ZOOM_LEVEL = 0.0;
+
 	private final ExtensionSupport extSupport = new ExtensionSupport(BufferPanel.class, this);
 
 	private final String name;
@@ -89,6 +100,8 @@ public class BufferPanel extends JPanel implements IExtendable {
 
 	/* Views */
 	private JXTable dataTable;
+
+	private CefClient cefClient;
 
 	private CefBrowser browser;
 
@@ -254,39 +267,8 @@ public class BufferPanel extends JPanel implements IExtendable {
 		cardLayout.show(contentPanel, TABLE_VIEW_ID);
 		currentView = dataTable;
 
-//		firstRowAsHeaderBox.setVisible(true);
 		firePropertyChange(SHOWING_BUFFER_PROP, oldComp, currentView);
 	}
-
-//	@SuppressWarnings("restriction")
-//	private Tuple<JFXPanel, WebView> createHtmlPane() {
-//		final JFXPanel fxpanel = new JFXPanel();
-//		final AtomicReference<JFXPanel> panelRef = new AtomicReference<JFXPanel>(fxpanel);
-//		final AtomicReference<WebView> viewRef = new AtomicReference<WebView>();
-//		java.util.concurrent.CountDownLatch countDownLatch = new java.util.concurrent.CountDownLatch(1);
-//		Platform.runLater( () -> {
-//			final WebView webView = new WebView();
-//			fxpanel.setScene(new Scene(webView));
-//
-//			webView.getEngine().setOnError( (evt) -> {
-//				LOGGER.warn( evt.toString());
-//			});
-//
-//
-//			panelRef.set(fxpanel);
-//			viewRef.set(webView);
-//
-//			countDownLatch.countDown();
-//		});
-//		try {
-//			boolean released = countDownLatch.await(10, java.util.concurrent.TimeUnit.SECONDS);
-//			if(released) {
-//				contentPanel.add(panelRef.get(), HTML_VIEW_ID);
-//			}
-//		} catch (InterruptedException e) {
-//		}
-//		return new Tuple<>(panelRef.get(), viewRef.get());
-//	}
 
 	public void copyTextToClipboard(String text) {
 		final StringSelection stringSelection = new StringSelection(text);
@@ -323,20 +305,25 @@ public class BufferPanel extends JPanel implements IExtendable {
 	
 	public void onZoomIn() {
 		if(!isShowingHtml() || browser == null) return;
-//		browser.set
-		System.out.println(String.format("Zoom level %f", browser.getZoomLevel()));
+		double zoomLevel = browser.getZoomLevel();
+		if(zoomLevel < MAX_ZOOM_LEVEL) {
+			zoomLevel += ZOOM_LEVEL_INCR;
+		}
+		browser.setZoomLevel(zoomLevel);
 	}
 	
 	public void onZoomOut() {
 		if(!isShowingHtml() || browser == null) return;
-//		browser.zoomOut();
-		System.out.println(String.format("Zoom level %f", browser.getZoomLevel()));
+		double zoomLevel = browser.getZoomLevel();
+		if(zoomLevel > MIN_ZOOM_LEVEL) {
+			zoomLevel -= ZOOM_LEVEL_INCR;
+		}
+		browser.setZoomLevel(zoomLevel);
 	}
 	
 	public void onZoomReset() {
 		if(!isShowingHtml()) return;
-//		browser.zoomReset();
-		System.out.println(String.format("Zoom level %f", browser.getZoomLevel()));
+		browser.setZoomLevel(DEFAULT_ZOOM_LEVEL);
 	}
 	
 	public boolean isShowingHtmlDebug() {
@@ -417,8 +404,10 @@ public class BufferPanel extends JPanel implements IExtendable {
 
 	public CefBrowser getBrowser() {
 		if(browser == null) {
-			browser = createBrowser();
-			
+			final Tuple<CefClient, CefBrowser> clientAndBrowser = createBrowser();
+			this.cefClient = clientAndBrowser.getObj1();
+			this.browser = clientAndBrowser.getObj2();
+
 			// HACK is there a better way to detect when to dispose the JxBrowser instances?
 			final JFrame parentFrame = (JFrame)SwingUtilities.getAncestorOfClass(JFrame.class, this);
 			if(parentFrame != null) {
@@ -453,6 +442,7 @@ public class BufferPanel extends JPanel implements IExtendable {
 						LogUtil.info("Disposing browser");
 						if(browser != null) {
 							browser.close(true);
+							cefClient.dispose();
 						}
 					}
 					
@@ -467,25 +457,9 @@ public class BufferPanel extends JPanel implements IExtendable {
 		return browser;
 	}
 	
-	private CefBrowser createBrowser() {
-		final CefBrowser browser = JCefHelper.getInstance().createBrowser();
-		return browser;
-//		BrowserType browserType = (OSInfo.isMacOs() ? BrowserType.HEAVYWEIGHT : BrowserType.LIGHTWEIGHT);
-//		Browser browser = new Browser(browserType);
-//
-//		JSValue windowObj = browser.executeJavaScriptAndReturnValue("window");
-//		windowObj.asObject().setProperty("buffer", this);
-//
-//		browser.addConsoleListener( (e) -> {
-//			if(e.getLevel() == Level.DEBUG) {
-//				LogUtil.info(e.getMessage());
-//			} else if(e.getLevel() == Level.WARNING) {
-//				LogUtil.warning(e.getMessage());
-//			} else if(e.getLevel() == Level.ERROR) {
-//				LogUtil.severe(e.getMessage());
-//			}
-//		});
-//		return browser;
+	private Tuple<CefClient, CefBrowser> createBrowser() {
+		final Tuple<CefClient, CefBrowser> clientAndBrowser = JCefHelper.getInstance().createClientAndBrowser();
+		return clientAndBrowser;
 	}
 	
 	public Component getWebView() {
