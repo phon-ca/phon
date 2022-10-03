@@ -105,6 +105,8 @@ public class BufferPanel extends JPanel implements IExtendable {
 
 	private CefBrowser browser;
 
+	private CefBrowser debugBrowser;
+
 	private Component htmlView;
 	
 	private JPanel htmlPanel;
@@ -332,10 +334,6 @@ public class BufferPanel extends JPanel implements IExtendable {
 	
 	public void hideHtmlDebug() {
 		if(!isShowingHtmlDebug()) return;
-//		if(debugBrowser != null) {
-//			debugBrowser.dispose();
-//			debugBrowser = null;
-//		}
 		
 		htmlPanel.removeAll();
 		htmlPanel.add(getWebView(), BorderLayout.CENTER);
@@ -343,28 +341,20 @@ public class BufferPanel extends JPanel implements IExtendable {
 	}
 	
 	public void showHtmlDebug() {
-//		if(browser != null) {
-//			if(debugBrowser != null) {
-//				debugBrowser.dispose();
-//				debugBrowser = null;
-//			}
-//			final String debugURL = browser.getRemoteDebuggingURL();
-//			debugBrowser = createBrowser();
-//			final BrowserView debugBrowserView = new BrowserView(debugBrowser);
-//
-//			htmlSplitPane = new JSplitPane();
-//			htmlSplitPane.setLeftComponent(getWebView());
-//			htmlSplitPane.setRightComponent(debugBrowserView);
-//			htmlSplitPane.setResizeWeight(1.0);
-//
-//			htmlPanel.removeAll();
-//			htmlPanel.add(htmlSplitPane, BorderLayout.CENTER);
-//			htmlPanel.revalidate();
-//
-//			SwingUtilities.invokeLater( () -> htmlSplitPane.setDividerLocation(0.6) );
-//
-//			debugBrowser.loadURL(debugURL);
-//		}
+		if(browser != null) {
+			debugBrowser = browser.getDevTools();
+
+			htmlSplitPane = new JSplitPane();
+			htmlSplitPane.setLeftComponent(getWebView());
+			htmlSplitPane.setRightComponent(debugBrowser.getUIComponent());
+			htmlSplitPane.setResizeWeight(1.0);
+
+			htmlPanel.removeAll();
+			htmlPanel.add(htmlSplitPane, BorderLayout.CENTER);
+			htmlPanel.revalidate();
+
+			SwingUtilities.invokeLater( () -> htmlSplitPane.setDividerLocation(0.6) );
+		}
 	}
 
 	private void init() {
@@ -441,6 +431,8 @@ public class BufferPanel extends JPanel implements IExtendable {
 					public void windowClosed(WindowEvent e) {
 						LogUtil.info("Disposing browser");
 						if(browser != null) {
+							if(debugBrowser != null)
+								debugBrowser.close(true);
 							browser.close(true);
 							cefClient.dispose();
 						}
