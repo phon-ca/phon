@@ -10,8 +10,6 @@ ca.phon.app.FontStartupHook
 ca.phon.app.ThemeHook
 # VLC
 ca.phon.app.VLCInitHook
-# jcef
-ca.phon.app.JCefStartupHook
 # IPA Dictionaries
 ca.phon.app.IPADictionaryInitHook
 # Load common objects
