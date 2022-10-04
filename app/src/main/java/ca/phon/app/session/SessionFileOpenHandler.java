@@ -84,7 +84,7 @@ public class SessionFileOpenHandler implements XMLOpenHandler, IPluginExtensionP
 	}
 	
 	@Override
-	public void openXMLFile(File file) throws IOException {
+	public void openXMLFile(File file, Map<String, Object> args) throws IOException {
 		SessionEditor existingEditor = findEditorForFile(file);
 		if(existingEditor != null) {
 			existingEditor.toFront();
@@ -101,10 +101,10 @@ public class SessionFileOpenHandler implements XMLOpenHandler, IPluginExtensionP
 			project = createTempProjectForFile(file);
 		}
 		
-		final EntryPointArgs args = new EntryPointArgs();
-		args.put(EntryPointArgs.PROJECT_OBJECT, project);
-		args.put(EntryPointArgs.SESSION_OBJECT, session);
-		PluginEntryPointRunner.executePluginInBackground(SessionEditorEP.EP_NAME, args);
+		final EntryPointArgs epArgs = new EntryPointArgs(args);
+		epArgs.put(EntryPointArgs.PROJECT_OBJECT, project);
+		epArgs.put(EntryPointArgs.SESSION_OBJECT, session);
+		PluginEntryPointRunner.executePluginInBackground(SessionEditorEP.EP_NAME, epArgs);
 	}
 	
 	protected Session openSession(File file) throws IOException {

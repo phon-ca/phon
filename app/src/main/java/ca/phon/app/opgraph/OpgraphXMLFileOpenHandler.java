@@ -30,7 +30,7 @@ import ca.phon.ui.CommonModuleFrame;
 
 import javax.xml.stream.events.StartElement;
 import java.io.*;
-import java.util.Set;
+import java.util.*;
 
 public class OpgraphXMLFileOpenHandler implements XMLOpenHandler, IPluginExtensionPoint<XMLOpenHandler> {
 
@@ -60,7 +60,7 @@ public class OpgraphXMLFileOpenHandler implements XMLOpenHandler, IPluginExtensi
 	}
 
 	@Override
-	public void openXMLFile(File file) throws IOException {
+	public void openXMLFile(File file, Map<String, Object> args) throws IOException {
 		try {
 			final OpGraph graph = OpgraphIO.read(file);
 			

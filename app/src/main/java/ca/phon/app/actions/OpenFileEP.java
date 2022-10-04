@@ -41,6 +41,8 @@ public class OpenFileEP extends HookableAction implements IPluginEntryPoint {
 	public static String INPUT_FILE = OpenFileEP.class.getName() + ".inputFile";
 	
 	private File inputFile;
+
+	private Map<String, Object> args = new HashMap<>();
 	
 	public OpenFileEP() {
 		super();
@@ -65,6 +67,7 @@ public class OpenFileEP extends HookableAction implements IPluginEntryPoint {
 				inputFile = new File(inputFileObj.toString());
 			}
 		}
+		this.args = args;
 		SwingUtilities.invokeLater( () -> {
 			ActionEvent ae = new ActionEvent(OpenFileEP.this, 0, EP_NAME);
 			hookableActionPerformed(ae);
@@ -88,10 +91,10 @@ public class OpenFileEP extends HookableAction implements IPluginEntryPoint {
 	public void dialogFinished(NativeDialogEvent evt) {
 		if(evt.getDialogResult() != NativeDialogEvent.OK_OPTION) return;
 		String selectedFile = evt.getDialogData().toString();
-		openFile(new File(selectedFile));
+		openFile(new File(selectedFile), args);
 	}
 	
-	public void openFile(File file) {
+	public void openFile(File file, Map<String, Object> args) {
 		List<IPluginExtensionPoint<OpenFileHandler>> fileHandlers = 
 				PluginManager.getInstance().getExtensionPoints(OpenFileHandler.class);
 		for(var extPt:fileHandlers) {
@@ -108,7 +111,7 @@ public class OpenFileEP extends HookableAction implements IPluginEntryPoint {
 			}
 			if(canOpen) {
 				try {
-					handler.openFile(file);
+					handler.openFile(file, args);
 					
 					OpenFileHistory history = new OpenFileHistory();
 					history.addToHistory(file);
@@ -127,6 +130,10 @@ public class OpenFileEP extends HookableAction implements IPluginEntryPoint {
 			}
 		}
 	}
+
+	private void doOpen(Map<String, String> args) {
+
+	}
 	
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
@@ -140,10 +147,10 @@ public class OpenFileEP extends HookableAction implements IPluginEntryPoint {
 			props.setFileFilter(createFileFilter());
 			props.setRunAsync(true);
 			props.setListener(this::dialogFinished);
-			
+
 			NativeDialogs.showOpenDialog(props);
 		} else {
-			openFile(inputFile);
+			openFile(inputFile, args);
 		}
 	}
 

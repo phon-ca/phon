@@ -17,7 +17,7 @@ package ca.phon.app.actions;
 
 import javax.xml.stream.events.StartElement;
 import java.io.*;
-import java.util.Set;
+import java.util.*;
 
 public interface XMLOpenHandler {
 
@@ -35,8 +35,10 @@ public interface XMLOpenHandler {
 	
 	/**
 	 * Open xml document
-	 * 
+	 *
+	 * @param file
+	 * @param args
 	 */
-	public void openXMLFile(File file) throws IOException;
+	public void openXMLFile(File file, Map<String, Object> args) throws IOException;
 	
 }

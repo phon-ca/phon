@@ -55,7 +55,7 @@ public class XMLFileOpenHandler implements OpenFileHandler, IPluginExtensionPoin
 	}
 
 	@Override
-	public void openFile(File file) throws IOException {
+	public void openFile(File file, Map<String, Object> args) throws IOException {
 		// determine file type based on root element
 		XMLInputFactory inputFactory = XMLInputFactory.newDefaultFactory();
 		try {
@@ -74,14 +74,14 @@ public class XMLFileOpenHandler implements OpenFileHandler, IPluginExtensionPoin
 			for(var extPt:extPts) {
 				var xmlOpenHandler = extPt.getFactory().createObject();
 				if(xmlOpenHandler.canRead(rootEle)) {
-					xmlOpenHandler.openXMLFile(file);
+					xmlOpenHandler.openXMLFile(file, args);
 					return;
 				}
 			}
 			
 			// open file as text to new buffer
 			TextFileOpenHandler txtHandler = new TextFileOpenHandler();
-			txtHandler.openFile(file);
+			txtHandler.openFile(file, args);
 		} catch (XMLStreamException e) {
 			throw new IOException(e);
 		}

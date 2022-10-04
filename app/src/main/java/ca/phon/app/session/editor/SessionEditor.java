@@ -355,10 +355,12 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		sessionMenu.add(new NextRecordAction(SessionEditor.this));
 		sessionMenu.add(new LastRecordAction(SessionEditor.this));
 
-		sessionMenu.addSeparator();
-		JMenuItem itrItem = new JMenuItem(new ITRAction(SessionEditor.this));
-		itrItem.setEnabled(getDataModel().getTranscriber() == null && getSession().getTranscriberCount() > 1);
-		sessionMenu.add(itrItem);
+		if(getSession() != null) {
+			sessionMenu.addSeparator();
+			JMenuItem itrItem = new JMenuItem(new ITRAction(SessionEditor.this));
+			itrItem.setEnabled(getDataModel().getTranscriber() == null && getSession().getTranscriberCount() > 1);
+			sessionMenu.add(itrItem);
+		}
 
 		// setup 'View' menu, this menu must be created dynamically
 		// as the view model is not available when the menu bar is

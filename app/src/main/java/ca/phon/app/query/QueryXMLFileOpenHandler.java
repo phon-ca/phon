@@ -20,7 +20,7 @@ import ca.phon.plugin.*;
 
 import javax.xml.stream.events.StartElement;
 import java.io.*;
-import java.util.Set;
+import java.util.*;
 
 @PhonPlugin(name="Open")
 public class QueryXMLFileOpenHandler implements XMLOpenHandler, IPluginExtensionPoint<XMLOpenHandler> {
@@ -47,7 +47,7 @@ public class QueryXMLFileOpenHandler implements XMLOpenHandler, IPluginExtension
 	}
 
 	@Override
-	public void openXMLFile(File file) throws IOException {
+	public void openXMLFile(File file, Map<String, Object> args) throws IOException {
 		
 	}
 

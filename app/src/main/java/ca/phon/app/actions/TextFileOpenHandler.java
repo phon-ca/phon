@@ -21,7 +21,7 @@ import ca.phon.plugin.*;
 import org.apache.commons.io.FileUtils;
 
 import java.io.*;
-import java.util.Set;
+import java.util.*;
 
 @PhonexPlugin(name="Open")
 public class TextFileOpenHandler implements OpenFileHandler, IPluginExtensionPoint<OpenFileHandler> {
@@ -37,7 +37,7 @@ public class TextFileOpenHandler implements OpenFileHandler, IPluginExtensionPoi
 	}
 
 	@Override
-	public void openFile(File file) throws IOException {
+	public void openFile(File file, Map<String, Object> args) throws IOException {
 		// open file in new buffer
 		BufferWindow bufferWindow = BufferWindow.getBufferWindow();
 		

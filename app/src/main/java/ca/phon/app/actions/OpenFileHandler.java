@@ -16,7 +16,7 @@
 package ca.phon.app.actions;
 
 import java.io.*;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Service interface for open file handlers.
@@ -41,8 +41,9 @@ public interface OpenFileHandler {
 	 * Open the file in the appropriate editor/viewer.
 	 * 
 	 * @param file
+	 * @param args - arguments pass to the open file handler
 	 * @throws IOException
 	 */
-	public void openFile(File file) throws IOException;
+	public void openFile(File file, Map<String, Object> args) throws IOException;
 	
 }
