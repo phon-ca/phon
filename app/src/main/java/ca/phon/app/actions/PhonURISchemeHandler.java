@@ -16,7 +16,7 @@ import java.util.*;
 
 /**
  * Open url with phon:// scheme.  The url may have the following parts:
- *  1) phon:// - scheme
+ *  1) phon: - scheme
  *  2) /path/to/session/file - session file or project folder to open
  *  3) ?GETVARS - information about record number and search result highlight
  *     a) record=#
@@ -39,7 +39,7 @@ public final class PhonURISchemeHandler {
 	 *  2) file exists
 	 *  3) validate getvars
 	 *
-	 * @param url
+	 * @param uri to parse
 	 *
 	 * @return the localFile to open along with a map of query variables
 	 */
@@ -54,26 +54,22 @@ public final class PhonURISchemeHandler {
 		}
 
 		final Map<String, String> getVars = new LinkedHashMap<>();
-//		try {
-			final List<NameValuePair> nameValuePairs = URLEncodedUtils.parse(uri, "utf-8");
-			for(NameValuePair nvp:nameValuePairs) {
-				final String name = nvp.getName();
-				final String value = nvp.getValue();
+		final List<NameValuePair> nameValuePairs = URLEncodedUtils.parse(uri, "utf-8");
+		for(NameValuePair nvp:nameValuePairs) {
+			final String name = nvp.getName();
+			final String value = nvp.getValue();
 
-				if(!GET_VARS.contains(name)) {
-					throw new MalformedURLException("Invalid get var " + name);
-				}
-				final String pattern = GET_VAR_PATTERNS.get(GET_VARS.indexOf(name));
-				if(!value.matches(pattern)) {
-					throw new MalformedURLException("Invalid data for get var " + name + " '" + value + "'");
-				}
-				getVars.put(name, value);
+			if(!GET_VARS.contains(name)) {
+				throw new MalformedURLException("Invalid get var " + name);
 			}
+			final String pattern = GET_VAR_PATTERNS.get(GET_VARS.indexOf(name));
+			if(!value.matches(pattern)) {
+				throw new MalformedURLException("Invalid data for get var " + name + " '" + value + "'");
+			}
+			getVars.put(name, value);
+		}
 
-			return new Tuple<>(localFile, getVars);
-//		} catch (URISyntaxException e) {
-//			throw new RuntimeException(e);
-//		}
+		return new Tuple<>(localFile, getVars);
 	}
 
 	private void setupEpArgs(Map<String, String> queryVars, EntryPointArgs epArgs) {
