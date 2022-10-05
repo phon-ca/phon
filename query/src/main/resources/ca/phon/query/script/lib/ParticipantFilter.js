@@ -276,10 +276,10 @@ exports.ParticipantFilter = function (id) {
 	}
 	
 	this.checkSpeakerAge = function (speaker) {
-		if (speaker == null || speaker.ageTo == null)
+		if (speaker == null || speaker.getAge(null) == null)
 		return false;
 		
-		var speakerPeriod = speaker.ageTo;
+		var speakerPeriod = speaker.getAge(null);
 		
 		var p1 = AgeFormatter.stringToAge(this.age1String);
 		var cmp1 = this.compareAges(speakerPeriod, p1);
