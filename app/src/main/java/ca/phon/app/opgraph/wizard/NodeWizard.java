@@ -16,7 +16,6 @@
 package ca.phon.app.opgraph.wizard;
 
 import ca.phon.app.actions.PhonURISchemeHandler;
-import ca.phon.app.html.JavaScriptBridge;
 import ca.phon.app.log.*;
 import ca.phon.app.log.actions.SaveBufferAction;
 import ca.phon.app.opgraph.*;
@@ -1000,8 +999,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 				tempFile.deleteOnExit();
 
 				try(final FileOutputStream fout = new FileOutputStream(tempFile)) {
-					final NodeWizardReportGenerator reportGenerator =
-							new NodeWizardReportGenerator(this, reportTree, reportTree.getReportTemplate(), fout);
+					final NodeWizardReportGenerator reportGenerator = createReportGenerator(reportTree, reportTree.getReportTemplate(), fout);
 
 					try (PrintWriter out = new PrintWriter(new OutputStreamWriter(getLogBuffer().getLogBuffer().getStdOutStream()))) {
 						out.print("Generating report...");
@@ -1134,6 +1132,11 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		} finally {
 			SwingUtilities.invokeLater( this::executionEnded );
 		}
+	}
+
+	protected NodeWizardReportGenerator createReportGenerator(ReportTree reportTree, String reportTemplate, OutputStream fout) {
+		final NodeWizardReportGenerator retVal = new NodeWizardReportGenerator(this, reportTree, reportTemplate, fout);
+		return retVal;
 	}
 
 	public String loadDefaultReport() {

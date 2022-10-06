@@ -48,7 +48,7 @@
 #end
 
 #macro( printSessionLink $sessionPath )
-<td class='session-link'><span onclick="app.openSession('$sessionPath')">$sessionPath</span></td>
+<td class='session-link'><span onclick="openSession('$sessionPath.corpus', '$sessionPath.session')">$sessionPath</span></td>
 #end
 
 #macro( printRecordLink $sessionPath $recordNum )

@@ -15,6 +15,7 @@
  */
 package ca.phon.app.opgraph.analysis;
 
+import ca.phon.app.opgraph.report.tree.ReportTree;
 import ca.phon.app.opgraph.wizard.*;
 import ca.phon.app.project.ParticipantsPanel;
 import ca.phon.opgraph.*;
@@ -22,8 +23,10 @@ import ca.phon.project.Project;
 import ca.phon.session.*;
 import ca.phon.ui.wizard.WizardStep;
 import ca.phon.util.Tuple;
+import org.apache.commons.lang.StringEscapeUtils;
 
 import java.awt.*;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.*;
 
@@ -151,6 +154,13 @@ public class AnalysisWizard extends NodeWizard {
 		context.put("project", getProject());
 		context.put("selectedSessions", participantsPanel.getCheckedSessions());
 		context.put("selectedParticipants", participantsPanel.getCheckedParticipants());
+	}
+
+	@Override
+	protected NodeWizardReportGenerator createReportGenerator(ReportTree reportTree, String reportTemplate, OutputStream fout) {
+		final NodeWizardReportGenerator retVal = super.createReportGenerator(reportTree, reportTemplate, fout);
+		retVal.addCustomJs(String.format("window.projectLocation = '%s'", StringEscapeUtils.escapeHtml(project.getLocation())));
+		return retVal;
 	}
 
 }

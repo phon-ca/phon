@@ -15,7 +15,7 @@
  */
 package ca.phon.app.query;
 
-import ca.phon.app.log.LogUtil;
+import ca.phon.app.log.*;
 import ca.phon.app.menu.query.QueryMenuListener;
 import ca.phon.app.opgraph.editor.*;
 import ca.phon.app.opgraph.nodes.ReportNodeInstantiator;
@@ -50,6 +50,9 @@ import ca.phon.ui.wizard.WizardStep;
 import ca.phon.util.*;
 import ca.phon.util.icons.*;
 import ca.phon.worker.PhonTask.TaskStatus;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.cef.browser.CefBrowser;
+import org.cef.handler.CefLoadHandlerAdapter;
 import org.jdesktop.swingx.HorizontalLayout;
 
 import javax.swing.*;
@@ -58,6 +61,7 @@ import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.net.*;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -1047,6 +1051,13 @@ public class QueryAndReportWizard extends NodeWizard {
 			}
 		});
 		super.executeGraph();
+	}
+
+	@Override
+	protected NodeWizardReportGenerator createReportGenerator(ReportTree reportTree, String reportTemplate, OutputStream fout) {
+		final NodeWizardReportGenerator retVal = super.createReportGenerator(reportTree, reportTemplate, fout);
+		retVal.addCustomJs(String.format("window.projectLocation = '%s'", StringEscapeUtils.escapeHtml(project.getLocation())));
+		return retVal;
 	}
 
 	@Override

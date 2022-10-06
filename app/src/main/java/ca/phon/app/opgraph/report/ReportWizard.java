@@ -15,7 +15,8 @@
  */
 package ca.phon.app.opgraph.report;
 
-import ca.phon.app.opgraph.wizard.NodeWizard;
+import ca.phon.app.opgraph.report.tree.ReportTree;
+import ca.phon.app.opgraph.wizard.*;
 import ca.phon.app.query.ResultSetSelector;
 import ca.phon.opgraph.*;
 import ca.phon.project.Project;
@@ -24,8 +25,10 @@ import ca.phon.session.SessionPath;
 import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.wizard.WizardStep;
 import ca.phon.util.Tuple;
+import org.apache.commons.lang.StringEscapeUtils;
 
 import java.awt.*;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -113,6 +116,13 @@ public class ReportWizard extends NodeWizard {
 			}
 		}
 		super.gotoStep(stepIdx);
+	}
+
+	@Override
+	protected NodeWizardReportGenerator createReportGenerator(ReportTree reportTree, String reportTemplate, OutputStream fout) {
+		final NodeWizardReportGenerator retVal = super.createReportGenerator(reportTree, reportTemplate, fout);
+		retVal.addCustomJs(String.format("window.projectLocation = '%s'", StringEscapeUtils.escapeHtml(project.getLocation())));
+		return retVal;
 	}
 	
 //	@Override

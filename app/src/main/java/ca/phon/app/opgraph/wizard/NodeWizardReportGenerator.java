@@ -68,6 +68,8 @@ public class NodeWizardReportGenerator {
 		HTMLConstants.JS_COMMON,
 		"ca/phon/app/opgraph/wizard/wizard.js"
 	};
+
+	private List<String> customJsScripts = new ArrayList<>();
 	
 	public NodeWizardReportGenerator(NodeWizard wizard, ReportTree reportTree, String reportTemplate, String outputPath)
 		throws IOException {
@@ -81,6 +83,10 @@ public class NodeWizardReportGenerator {
 		this.reportTree = reportTree;
 		this.reportTemplate = reportTemplate;
 		this.stream = stream;
+	}
+
+	public void addCustomJs(String js) {
+		this.customJsScripts.add(js);
 	}
 
 	public void generateReport()
@@ -130,6 +136,12 @@ public class NodeWizardReportGenerator {
 		for(String jsFile:jsFiles) {
 			sb.append("<script>\n");
 			appendCPFile(sb, jsFile);
+			sb.append("\n</script>");
+		}
+
+		for(String js:customJsScripts) {
+			sb.append("<script>\n");
+			sb.append(js);
 			sb.append("\n</script>");
 		}
 		

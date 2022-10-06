@@ -139,6 +139,26 @@ function saveTableAsExcel(tableId) {
     }
 }
 
+function loadUri(uri) {
+    if(window.cefQuery) {
+        window.cefQuery({
+            request: uri,
+            persistent: false,
+            onSuccess: function(response) { console.log("uri loaded " + response) },
+            onFailure: function(error_code, response) { console.log("Failed to open uri " + response + " with error code " + error_code) }
+        })
+    } else {
+        window.open(uri);
+    }
+}
+
+function openSession(corpus, session) {
+    if(window.projectLocation) {
+        var uri = "phon:" + window.projectLocation + "/" + corpus + "/" + session + ".xml";
+        loadUri(uri);
+    }
+}
+
 function highlightResultValue(tableId, row, column) {
 	app.onHighlightResultValue(tableMap.get(tableId), row, column);
 }
