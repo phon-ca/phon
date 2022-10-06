@@ -154,12 +154,14 @@ public class LogViewer extends CommonModuleFrame {
 		if(logFile.getName().endsWith(".html")) {
 			buffer.showHtml(false);
 			// wait for load of about:blank before attempting to load another url
-			buffer.getBrowser().getClient().addLoadHandler(new CefLoadHandlerAdapter() {
+			buffer.addBrowserLoadHandler(new CefLoadHandlerAdapter() {
 				@Override
 				public void onLoadingStateChange(CefBrowser browser, boolean isLoading, boolean canGoBack, boolean canGoForward) {
 					if(!isLoading) {
-						buffer.getBrowser().getClient().removeLoadHandler();
-						buffer.getBrowser().loadURL(logFile.toURI().toString());
+						SwingUtilities.invokeLater(() -> {
+							buffer.removeBrowserLoadHandler(this);
+							buffer.getBrowser().loadURL(logFile.toURI().toString());
+						});
 					}
 				}
 			});

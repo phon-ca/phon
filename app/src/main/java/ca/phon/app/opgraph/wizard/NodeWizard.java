@@ -1037,6 +1037,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 						public void onLoadingStateChange(CefBrowser browser, boolean isLoading, boolean canGoBack, boolean canGoForward) {
 							if(!isLoading) {
 								if (!"about:blank".equals(browser.getURL())) {
+									// execute javascript to setup table buttons
 									SwingUtilities.invokeLater(() -> {
 										int idx = 0;
 
@@ -1052,6 +1053,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 										reportBufferPanel.removeBrowserLoadHandler(this);
 									});
 								} else {
+									// load report
 									SwingUtilities.invokeLater(() -> {
 										reportBufferPanel.getBrowser().loadURL(reportURL);
 										reportBufferPanel.requestFocusInWindow();
@@ -1060,69 +1062,6 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 							}
 						}
 					});
-
-//					browser.getClient().addLoadHandler(new CefLoadHandlerAdapter() {
-//						@Override
-//						public void onLoadingStateChange(CefBrowser browser, boolean isLoading, boolean canGoBack, boolean canGoForward) {
-//							if(!isLoading) {
-//								browser.getClient().removeLoadHandler();
-//							}
-//						}
-//					});
-//					final Browser browser = reportBufferPanel.getBrowser();
-//					browser.addScriptContextListener(new ScriptContextListener() {
-//
-//						@Override
-//						public void onScriptContextDestroyed(ScriptContextEvent arg0) {}
-//
-//						@Override
-//						public void onScriptContextCreated(ScriptContextEvent arg0) {
-//							final JSValue windowObj = browser.executeJavaScriptAndReturnValue("window");
-//							windowObj.asObject().setProperty("project", getExtension(Project.class));
-//							windowObj.asObject().setProperty("buffers", bufferPanel);
-//							windowObj.asObject().setProperty("reportTree", reportTree);
-//							windowObj.asObject().setProperty("tableMap", tableMap);
-//
-//							// phon general bridge
-//							windowObj.asObject().setProperty("jsbridge", new JavaScriptBridge(getExtension(Project.class)));
-//							// wizard-specific bridge
-//							windowObj.asObject().setProperty("app", webViewInterface);
-//						}
-//
-//					});
-//					browser.addLoadListener(new LoadListener() {
-//
-//						@Override
-//						public void onStartLoadingFrame(StartLoadingEvent arg0) {}
-//
-//						@Override
-//						public void onProvisionalLoadingFrame(ProvisionalLoadingEvent arg0) {}
-//
-//						@Override
-//						public void onFinishLoadingFrame(FinishLoadingEvent arg0) {
-//							int idx = 0;
-//							for(String tableId:tableMap.keySet()) {
-//								if(tableMap.get(tableId).getRowCount() == 0) continue;
-//								browser.executeJavaScript(
-//										String.format("addMenuButtons(document.getElementById('%s'), %d)", tableId, idx));
-//								browser.executeJavaScript(
-//										String.format("$(\"#table_menu_\" + (%d+1)).menu()", idx));
-//								++idx;
-//							}
-//
-//							browser.setContextMenuHandler(new WebViewContextHandler(reportBufferPanel.getWebView(), reportTree, tableMap));
-//						}
-//
-//						@Override
-//						public void onFailLoadingFrame(FailLoadingEvent arg0) {}
-//
-//						@Override
-//						public void onDocumentLoadedInMainFrame(LoadEvent arg0) {}
-//
-//						@Override
-//						public void onDocumentLoadedInFrame(FrameLoadEvent arg0) {}
-//					});
-
 				} catch (InterruptedException | InvocationTargetException e) {
 					LOGGER.error( e.getLocalizedMessage(), e);
 				}
