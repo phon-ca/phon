@@ -406,11 +406,13 @@ public class BufferPanel extends JPanel implements IExtendable {
 		InputMap im = getInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 		
 		final PhonUIAction<Void> zoomInAct = PhonUIAction.runnable(this::onZoomIn);
+		zoomInAct.setRunInBackground(true);
 		am.put("zoomIn", zoomInAct);
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "zoomIn");
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ADD, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "zoomIn");
 		
 		final PhonUIAction<Void> zoomOutAct = PhonUIAction.runnable(this::onZoomOut);
+		zoomOutAct.setRunInBackground(true);
 		am.put("zoomOut", zoomOutAct);
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_9, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "zoomOut");
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "zoomOut");

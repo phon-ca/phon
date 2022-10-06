@@ -54,7 +54,7 @@ import ca.phon.worker.PhonTask.TaskStatus;
 import org.apache.velocity.tools.generic.MathTool;
 import org.cef.CefClient;
 import org.cef.browser.*;
-import org.cef.callback.CefQueryCallback;
+import org.cef.callback.*;
 import org.cef.handler.*;
 import org.jdesktop.swingx.JXBusyLabel;
 
@@ -255,16 +255,19 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			}
 			
 			final PhonUIAction<Void> zoomInAct = PhonUIAction.runnable(this::onZoomIn);
+			zoomInAct.setRunInBackground(true);
 			zoomInAct.putValue(PhonUIAction.NAME, "Zoom in");
 			zoomInAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Increase zoom level");
 			builder.addItem(".", zoomInAct);
 			
 			final PhonUIAction<Void> zoomOutAct = PhonUIAction.runnable(this::onZoomOut);
+			zoomOutAct.setRunInBackground(true);
 			zoomOutAct.putValue(PhonUIAction.NAME, "Zoom out");
 			zoomOutAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Decrease zoom level");
 			builder.addItem(".", zoomOutAct);
 			
 			final PhonUIAction<Void> resetZoomAct = PhonUIAction.runnable(this::onZoomReset);
+			resetZoomAct.setRunInBackground(true);
 			resetZoomAct.putValue(PhonUIAction.NAME, "Reset zoom");
 			resetZoomAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset zoom level");
 			builder.addItem(".", resetZoomAct);
@@ -1044,6 +1047,15 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 					messageRouter.addHandler(new JavaScriptBridge(tableMap), true);
 					cefClient.addMessageRouter(messageRouter);
 
+					cefClient.addContextMenuHandler(new CefContextMenuHandlerAdapter() {
+						@Override
+						public void onBeforeContextMenu(CefBrowser browser, CefFrame frame, CefContextMenuParams params, CefMenuModel model) {
+							model.clear();
+						}
+					});
+
+					reportBufferPanel.getWebView().addMouseListener(new WebViewContextHandler(reportTree, tableMap));
+
 					reportBufferPanel.addBrowserLoadHandler(new CefLoadHandlerAdapter() {
 						@Override
 						public void onLoadingStateChange(CefBrowser browser, boolean isLoading, boolean canGoBack, boolean canGoForward) {
@@ -1468,14 +1480,175 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			super.cancel();
 		}
 	}
-	
+
+	private class WebViewContextHandler extends MouseInputAdapter {
+
+		private ReportTree reportTree;
+
+		private Map<String, DefaultTableDataSource> tableMap;
+
+		public WebViewContextHandler(ReportTree reportTree, Map<String, DefaultTableDataSource> tableMap) {
+			this.reportTree = reportTree;
+			this.tableMap = tableMap;
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			if(e.isPopupTrigger())
+				showContextMenu(e);
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			if(e.isPopupTrigger())
+				showContextMenu(e);
+		}
+
+		private void showContextMenu(MouseEvent me) {
+			// add report save and export items
+			JPopupMenu menu = new JPopupMenu();
+			final MenuBuilder builder = new MenuBuilder(menu);
+
+			// element selection commands
+//			DOMNodeAtPoint nodeAtPoint = params.getBrowser().getNodeAtPoint(
+//					params.getLocation().x, params.getLocation().y);
+//			if(nodeAtPoint != null) {
+//				// look for a parent table
+//				DOMNode node = nodeAtPoint.getNode();
+//				while(node.getParent() != null && !node.getNodeName().equalsIgnoreCase("table")) {
+//					node = node.getParent();
+//				}
+//
+//				if(node.getNodeName().equalsIgnoreCase("table")) {
+//					// add 'Open link' if table cell has an 'onclick' value
+//					// check for a span with an 'onclick'
+//					DOMElement linkEle = null;
+//					DOMNode n = nodeAtPoint.getNode();
+//					while(n.getParent() != null
+//							&& !n.getParent().getXPath().equals(node.getXPath())
+//							&& !n.getNodeName().equalsIgnoreCase("span")) {
+//						n = n.getParent();
+//					}
+//					if(n.getNodeName().equalsIgnoreCase("span") && n.getParent().getNodeName().equalsIgnoreCase("td")) {
+//						DOMElement divEle = params.getBrowser().getDocument().findElement(By.xpath(n.getXPath()));
+//						String onclick = divEle.getAttribute("onclick");
+//						if(onclick != null && onclick.length() > 0) {
+//							linkEle = divEle;
+//						}
+//					}
+//					if(linkEle != null) {
+//						final PhonUIAction<Void> clickAct = PhonUIAction.runnable(linkEle::click);
+//						clickAct.putValue(PhonUIAction.NAME, "Open link");
+//						builder.addItem(".", clickAct);
+//					}
+//
+//					DOMElement tableEle = params.getBrowser().getDocument().findElement(By.xpath(node.getXPath()));
+//					String tableId = tableEle.getAttribute("id");
+//
+//					if(tableId != null && tableMap.containsKey(tableId)) {
+//						// look for the tr element
+//						n = nodeAtPoint.getNode();
+//						while(n.getParent() != null && !n.getNodeName().equalsIgnoreCase("tr")) {
+//							n = n.getParent();
+//						}
+//						if(n.getNodeName().equalsIgnoreCase("tr")) {
+//							String trXpath = n.getXPath();
+//							int trIdx = -1;
+//							Pattern p = Pattern.compile("\\[([0-9]+)\\]");
+//							Matcher m = p.matcher(trXpath);
+//							while(m.find()) {
+//								trIdx = Integer.parseInt(m.group(1))-2;
+//							}
+//
+//							if(trIdx >= 0) {
+//								DefaultTableDataSource table = tableMap.get(tableId);
+//								Result r = (Result)table.getValueAt(trIdx, "Result");
+//								if(r != null) {
+//									final PluginAction openResultAct = new PluginAction(SessionEditorEP.EP_NAME);
+//									EntryPointArgs args = new EntryPointArgs();
+//									args.put(EntryPointArgs.PROJECT_OBJECT, getExtension(Project.class));
+//									args.put(EntryPointArgs.SESSION_NAME, table.getValueAt(trIdx, "Session").toString());
+//									args.put(SessionEditorEP.RECORD_INDEX_PROPERY, r.getRecordIndex());
+//									args.put(SessionEditorEP.RESULT_VALUES_PROPERTY, new Result[] {r});
+//									openResultAct.putArgs(args);
+//									openResultAct.putValue(PhonUIAction.NAME, "Open session and highlight result");
+//									openResultAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open session and highlight result");
+//									builder.addItem(".@Open Link", openResultAct);
+//								}
+//							}
+//						}
+//
+//						if(menu.getComponentCount() > 0) {
+//							builder.addSeparator(".", "link_sep");
+//						}
+//
+//						// add table menu items
+//						final PhonUIAction<String> saveTableAsCSV = PhonUIAction.consumer(params.getBrowser()::executeJavaScript,
+//								String.format("saveTableAsCSV('%s')", tableId));
+//						saveTableAsCSV.putValue(PhonUIAction.NAME, "Save table as CSV...");
+//						builder.addItem(".", saveTableAsCSV);
+//
+//						final PhonUIAction<String> saveTableAsExcelAct = PhonUIAction.consumer(params.getBrowser()::executeJavaScript,
+//								String.format("saveTableAsExcel('%s')", tableId));
+//						saveTableAsExcelAct.putValue(PhonUIAction.NAME, "Save table as Excel (XLS)...");
+//						builder.addItem(".", saveTableAsExcelAct);
+//
+//						final PhonUIAction<String> showTableAct = PhonUIAction.consumer(params.getBrowser()::executeJavaScript,
+//								String.format("showTable('%s')", tableId));
+//						showTableAct.putValue(PhonUIAction.NAME, "Open table in new buffer");
+//						builder.addItem(".", showTableAct);
+//
+//						builder.addSeparator(".", "table_actions_sep");
+//
+//						final PhonUIAction<String> copyTableAct = PhonUIAction.consumer(params.getBrowser()::executeJavaScript,
+//								String.format("onCopyTableData(document.getElementById('%s'), '%s')", tableId, tableId));
+//						copyTableAct.putValue(PhonUIAction.NAME, "Copy table");
+//						copyTableAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Copy table to clipboard as CSV");
+//						builder.addItem(".", copyTableAct);
+//					}
+//				}
+//			}
+
+			// editor commands
+//			final PhonUIAction<EditorCommand> copyAct = PhonUIAction.consumer(params.getBrowser()::executeCommand, EditorCommand.COPY);
+//			copyAct.putValue(PhonUIAction.NAME, "Copy");
+//			copyAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Copy selection to clipboard");
+//			builder.addItem(".", copyAct);
+//			builder.addSeparator(".", "editor_commands");
+
+			final BufferPanel reportBuffer = getBufferPanel().getBuffer("Report");
+
+			final PhonUIAction<Void> zoomInAct = PhonUIAction.runnable(reportBuffer::onZoomIn);
+			zoomInAct.setRunInBackground(true);
+			zoomInAct.putValue(PhonUIAction.NAME, "Zoom in");
+			zoomInAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Increase zoom level");
+			zoomInAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+			builder.addItem(".", zoomInAct);
+
+			final PhonUIAction<Void> zoomOutAct = PhonUIAction.runnable(reportBuffer::onZoomOut);
+			zoomOutAct.setRunInBackground(true);
+			zoomOutAct.putValue(PhonUIAction.NAME, "Zoom out");
+			zoomOutAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Decrease zoom level");
+			zoomOutAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_9, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+			builder.addItem(".", zoomOutAct);
+
+			final PhonUIAction<Void> zoomResetAct = PhonUIAction.runnable(reportBuffer::onZoomReset);
+			zoomResetAct.setRunInBackground(true);
+			zoomResetAct.putValue(PhonUIAction.NAME, "Reset zoom");
+			zoomResetAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset zoom level to default");
+			builder.addItem(".", zoomResetAct);
+
+			builder.addSeparator(".", "zoom_actions");
+
+			setupReportMenu(builder);
+
+			menu.show(me.getComponent(), me.getX(), me.getY());
+		}
+
+	}
+
 //	private class WebViewContextHandler implements ContextMenuHandler {
 //
-//		private BrowserView browserView;
-//
-//		private ReportTree reportTree;
-//
-//		private Map<String, DefaultTableDataSource> tableMap;
 //
 //		public WebViewContextHandler(BrowserView browserView, ReportTree reportTree, Map<String, DefaultTableDataSource> tableMap) {
 //			this.browserView = browserView;
