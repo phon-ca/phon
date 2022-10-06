@@ -34,6 +34,7 @@ import ca.phon.util.*;
 import jxl.Workbook;
 import jxl.write.*;
 import jxl.write.biff.RowsExceededException;
+import org.apache.commons.lang.*;
 import org.cef.CefClient;
 import org.cef.browser.*;
 import org.cef.handler.*;
@@ -303,10 +304,22 @@ public class BufferPanel extends JPanel implements IExtendable {
 	            @Override
 	            public void onLoadingStateChange(CefBrowser browser, boolean isLoading, boolean canGoBack, boolean canGoForward) {
 					if(!isLoading) {
-						SwingUtilities.invokeLater(() -> {
-							removeBrowserLoadHandler(this);
-							browser.loadURL("data:text/html;charset=utf-8," + logBuffer.getText());
-						});
+						try {
+							final File tempFile = File.createTempFile("phon", ".html");
+							tempFile.deleteOnExit();
+
+							final PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(tempFile), "UTF-8"));
+							writer.write(logBuffer.getText());
+							writer.flush();
+							writer.close();
+
+							SwingUtilities.invokeLater(() -> {
+								removeBrowserLoadHandler(this);
+								browser.loadURL(tempFile.toURI().toString());
+							});
+						} catch (IOException e) {
+							LogUtil.warning(e);
+						}
 					}
 	            }
 	        });
