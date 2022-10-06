@@ -176,10 +176,6 @@ function openSessionWithHighlightedValues(corpus, session, recordIdx, groupIdx, 
     }
 }
 
-function highlightResultValue(tableId, row, column) {
-	app.onHighlightResultValue(tableMap.get(tableId), row, column);
-}
-
 function addMenuButtons(table, index) {
     var documentRef = document;
 
