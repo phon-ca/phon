@@ -86,21 +86,17 @@ public class SessionFileOpenHandler implements XMLOpenHandler, IPluginExtensionP
 	@Override
 	public void openXMLFile(File file, Map<String, Object> args) throws IOException {
 		SessionEditor existingEditor = findEditorForFile(file);
+		Session session = existingEditor != null ? existingEditor.getSession() : openSession(file);
+		Project project = existingEditor != null ? existingEditor.getProject() : findProjectForFile(file);
 		if(existingEditor != null) {
-			existingEditor.toFront();
-			return;
+			if (session.getName() == null || session.getName().trim().length() == 0) {
+				session.setName(FilenameUtils.removeExtension(file.getName()));
+			}
+			if(project == null) {
+				project = createTempProjectForFile(file);
+			}
 		}
-		
-		Session session = openSession(file);
-		if(session.getName() == null || session.getName().trim().length() == 0) {
-			session.setName(FilenameUtils.removeExtension(file.getName()));
-		}
-		
-		Project project = findProjectForFile(file);
-		if(project == null) {
-			project = createTempProjectForFile(file);
-		}
-		
+
 		final EntryPointArgs epArgs = new EntryPointArgs(args);
 		epArgs.put(EntryPointArgs.PROJECT_OBJECT, project);
 		epArgs.put(EntryPointArgs.SESSION_OBJECT, session);

@@ -126,7 +126,7 @@ public final class PhonURISchemeHandler {
 			setupEpArgs(queryVars, epArgs);
 			// try to open using file open handler
 			epArgs.put(OpenFileEP.INPUT_FILE, toOpen);
-			PluginEntryPointRunner.executePlugin(OpenFileEP.EP_NAME, epArgs);
+			PluginEntryPointRunner.executePluginInBackground(OpenFileEP.EP_NAME, epArgs);
 		}
 	}
 
