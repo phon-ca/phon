@@ -96,9 +96,6 @@ function addCopyTableButton(table, index) {
 /*
  * Functions called by the application when using the embedded viewer
  */
-function showTable(tableId) {
-	app.showTable(tableId, tableMap.get(tableId));
-}
 
 function showTableMenu(tablePopupId) {
     if(currentPopupMenu != null) {
@@ -109,12 +106,37 @@ function showTableMenu(tablePopupId) {
 	currentPopupMenu.classList = ["table-popup-menu"];
 }
 
+function showTable(tableId) {
+    if(window.cefQuery) {
+        window.cefQuery({
+            request: 'showTable:' + tableId,
+            persistent: false,
+            onSuccess: function(response) { console.log("Table displayed in new buffer " + response) },
+            onFailure: function(error_code, response) { console.log("Failed to show table. " + response + " with error code " + error_code) }
+        })
+    }
+}
+
 function saveTableAsCSV(tableId) {
-	app.saveTableAsCSV(tableId, tableMap.get(tableId));
+    if(window.cefQuery) {
+        window.cefQuery({
+            request: 'saveTableAsCSV:' + tableId,
+            persistent: false,
+            onSuccess: function(response) { console.log("Table saved " + response) },
+            onFailure: function(error_code, response) { console.log("Failed to save table. " + response + " with error code " + error_code) }
+        })
+    }
 }
 
 function saveTableAsExcel(tableId) {
-	app.saveTableAsWorkbook(tableId, tableMap.get(tableId));
+    if(window.cefQuery) {
+        window.cefQuery({
+            request: 'saveTableAsExcel:' + tableId,
+            persistent: false,
+            onSuccess: function(response) { console.log("Table saved " + response) },
+            onFailure: function(error_code, response) { console.log("Failed to save table. " + response + " with error code " + error_code) }
+        })
+    }
 }
 
 function highlightResultValue(tableId, row, column) {

@@ -15,6 +15,8 @@
  */
 package ca.phon.app.opgraph.wizard;
 
+import ca.phon.app.actions.PhonURISchemeHandler;
+import ca.phon.app.html.JavaScriptBridge;
 import ca.phon.app.log.*;
 import ca.phon.app.log.actions.SaveBufferAction;
 import ca.phon.app.opgraph.*;
@@ -32,6 +34,7 @@ import ca.phon.opgraph.app.OpgraphIO;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.opgraph.nodes.general.MacroNode;
+import ca.phon.plugin.PluginException;
 import ca.phon.project.*;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.query.script.QueryTask;
@@ -50,7 +53,9 @@ import ca.phon.util.icons.*;
 import ca.phon.worker.*;
 import ca.phon.worker.PhonTask.TaskStatus;
 import org.apache.velocity.tools.generic.MathTool;
-import org.cef.browser.CefBrowser;
+import org.cef.CefClient;
+import org.cef.browser.*;
+import org.cef.callback.CefQueryCallback;
 import org.cef.handler.*;
 import org.jdesktop.swingx.JXBusyLabel;
 
@@ -1032,6 +1037,15 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 					searchForTables(reportTree.getRoot(), tableMap);
 					reportBufferPanel.setUserObject(reportTree);
 
+					final CefClient cefClient = reportBufferPanel.getBrowser().getClient();
+					final CefMessageRouter.CefMessageRouterConfig routerConfig = new CefMessageRouter.CefMessageRouterConfig();
+					routerConfig.jsQueryFunction = "cefQuery";
+					routerConfig.jsCancelFunction = "cefQueryCancel";
+
+					final CefMessageRouter messageRouter = CefMessageRouter.create(routerConfig);
+					messageRouter.addHandler(new JavaScriptBridge(tableMap), true);
+					cefClient.addMessageRouter(messageRouter);
+
 					reportBufferPanel.addBrowserLoadHandler(new CefLoadHandlerAdapter() {
 						@Override
 						public void onLoadingStateChange(CefBrowser browser, boolean isLoading, boolean canGoBack, boolean canGoForward) {
@@ -1604,6 +1618,133 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 //		}
 //
 //	}
+
+	private class JavaScriptBridge extends CefMessageRouterHandlerAdapter {
+
+		private final Map<String, DefaultTableDataSource> tableMap;
+
+		private final static String SHOW_TABLE = "showTable:";
+
+		private final static String SAVE_TABLE_AS_CSV = "saveTableAsCSV:";
+
+		private final static String SAVE_TABLE_AS_EXCEL = "saveTableAsExcel:";
+
+		private final static String PHON_URI = "phon:";
+
+		public JavaScriptBridge(Map<String, DefaultTableDataSource> tableMap) {
+			this.tableMap = tableMap;
+		}
+
+		@Override
+		public boolean onQuery(CefBrowser cefBrowser, CefFrame cefFrame, long queryId, String s, boolean persistent, CefQueryCallback cefQueryCallback) {
+			if(s.startsWith(PHON_URI)) {
+				PhonURISchemeHandler uriHandler = new PhonURISchemeHandler();
+				try {
+					uriHandler.openURI(new URI(s));
+				} catch (MalformedURLException | FileNotFoundException | PluginException | URISyntaxException e) {
+					LogUtil.warning(e);
+					cefQueryCallback.failure(1, s);
+				}
+				cefQueryCallback.success(s);
+				return true;
+			} else if(s.startsWith(SHOW_TABLE)) {
+				final String[] parts = s.split(":");
+				final String tableId = (parts.length == 2 ? parts[1] : null);
+				if(tableMap.containsKey(tableId)) {
+					showTable(tableId);
+					cefQueryCallback.success(s);
+				} else {
+					cefQueryCallback.failure(1, "Invalid table id " + s);
+				}
+				return true;
+			} else if(s.startsWith(SAVE_TABLE_AS_CSV)) {
+				final String[] parts = s.split(":");
+				final String tableId = (parts.length == 2 ? parts[1] : null);
+				if(tableMap.containsKey(tableId)) {
+					saveTableAsCSV(tableId);
+					cefQueryCallback.success(s);
+				} else {
+					cefQueryCallback.failure(1, "Invalid table id " + s);
+				}
+				return true;
+			} else if(s.startsWith(SAVE_TABLE_AS_EXCEL)) {
+				final String[] parts = s.split(":");
+				final String tableId = (parts.length == 2 ? parts[1] : null);
+				if(tableMap.containsKey(tableId)) {
+					saveTableAsWorkbook(tableId);
+					cefQueryCallback.success(s);
+				} else {
+					cefQueryCallback.failure(1, "Invalid table id " + s);
+				}
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		private void createTableBuffer(String tableId, DefaultTableDataSource table) {
+			final PrintBufferNode printBuffer = new PrintBufferNode();
+			printBuffer.setShowTable(true);
+			printBuffer.setShowBuffer(false);
+
+			final OpContext ctx = new OpContext();
+			ctx.put("_buffers", bufferPanel);
+			ctx.put("buffer", tableId);
+			ctx.put("data", table);
+
+			try {
+				printBuffer.operate(ctx);
+			} catch (ProcessingException pe) {
+				LogUtil.severe(pe);
+			}
+		}
+
+		private void showTable(String tableId) {
+			if(tableMap.containsKey(tableId))
+				showTable(tableId, tableMap.get(tableId));
+		}
+
+		private void showTable(String tableId, DefaultTableDataSource table) {
+			SwingUtilities.invokeLater( () -> {
+				if(!bufferPanel.getBufferNames().contains(tableId)) {
+					createTableBuffer(tableId, table);
+				}
+				bufferPanel.selectBuffer(tableId);
+			});
+		}
+
+		public void saveTableAsCSV(String tableId) {
+			saveTableAsCSV(tableId, tableMap.get(tableId));
+		}
+
+		public void saveTableAsCSV(String tableId, DefaultTableDataSource table) {
+			SwingUtilities.invokeLater(() -> {
+				if(!bufferPanel.getBufferNames().contains(tableId)) {
+					createTableBuffer(tableId, table);
+				}
+				bufferPanel.saveAsCSV(tableId);
+			});
+		}
+
+		public void saveTableAsWorkbook(String tableId) {
+			saveTableAsWorkbook(tableId, tableMap.get(tableId));
+		}
+
+		public void saveTableAsWorkbook(String tableId, DefaultTableDataSource table) {
+			SwingUtilities.invokeLater( () -> {
+				if(!bufferPanel.getBufferNames().contains(tableId)) {
+					createTableBuffer(tableId, table);
+				}
+				bufferPanel.saveAsWorkbook(tableId);
+			});
+		}
+
+		@Override
+		public void onQueryCanceled(CefBrowser cefBrowser, CefFrame cefFrame, long l) {
+
+		}
+
+	}
 
 //	public class WebViewInterface {
 //
