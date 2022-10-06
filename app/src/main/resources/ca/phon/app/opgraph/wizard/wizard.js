@@ -166,6 +166,16 @@ function openSessionAtRecord(corpus, session, recordIdx) {
     }
 }
 
+function openSessionWithHighlightedValues(corpus, session, recordIdx, groupIdx, tiers, ranges) {
+    if(window.projectLocation) {
+        var uri = "phon:" + window.projectLocation + "/" + corpus + "/" + session + ".xml?record=" + recordIdx;
+        uri += "&group=" + groupIdx;
+        uri += "&tier=" + encodeURI(tiers);
+        uri += "&range=" + ranges;
+        loadUri(uri);
+    }
+}
+
 function highlightResultValue(tableId, row, column) {
 	app.onHighlightResultValue(tableMap.get(tableId), row, column);
 }

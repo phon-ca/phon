@@ -55,7 +55,7 @@
 <td class='session-link'><span onclick="openSessionAtRecord('$sessionPath.corpus', '$sessionPath.session', ($recordNum - 1))">$recordNum</span></td>
 #end
 
-#macro( printResultValue $tableId $row $columnName $v )
+#macro( printResultValue $sessionPath $result $rv $v )
 	#if( (! $v) && ("$!v" == "") ) <td/>
 	#else
 	#set($clazz = $v.class)
@@ -66,7 +66,10 @@
 	#elseif($number.isAssignableFrom($clazz))
 		#set($type = "number-value")
 	#else #set($type = "text-value")#end
-<td class='$type session-link'><span onclick="highlightResultValue('$tableId', $row, '$columnName')">$txt</span></td>
+	#set($tiers = $rv.tierName)
+	#set($groups = $rv.groupIndex + "")
+	#set($ranges = $rv.range + "")
+<td class='$type session-link'><span onclick="openSessionWithHighlightedValues('$sessionPath.corpus', '$sessionPath.session', $result.recordIndex, '$groups', '$tiers', '$ranges' )">$txt</span></td>
 	#end
 #end
 
@@ -109,7 +112,7 @@
 							#end
 						#end
 						#if($rv != "")
-							#printResultValue ( $id $row $columnName $val )
+							#printResultValue ( $sessionPath $result $rv $val )
 						#else
 							#printValue( $val )
 						#end
