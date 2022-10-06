@@ -15,7 +15,7 @@
  */
 package ca.phon.app;
 
-import ca.phon.app.actions.OpenFileEP;
+import ca.phon.app.actions.*;
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.modules.EntryPointArgs;
@@ -23,7 +23,8 @@ import ca.phon.plugin.*;
 import ca.phon.util.OSInfo;
 
 import java.awt.*;
-import java.io.File;
+import java.io.*;
+import java.net.MalformedURLException;
 
 /**
  * 
@@ -75,6 +76,16 @@ public class PhonDesktopStartupHook implements PhonStartupHook, IPluginExtension
 						Toolkit.getDefaultToolkit().beep();
 						LogUtil.severe(ex);
 					}
+				}
+			});
+
+			desktop.setOpenURIHandler( (e) -> {
+				final PhonURISchemeHandler handler = new PhonURISchemeHandler();
+				try {
+					handler.openURI(e.getURI());
+				} catch (MalformedURLException | FileNotFoundException | PluginException ex) {
+					Toolkit.getDefaultToolkit().beep();
+					LogUtil.severe(ex);
 				}
 			});
 			
