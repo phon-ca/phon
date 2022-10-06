@@ -1031,7 +1031,44 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 					final HashMap<String, DefaultTableDataSource> tableMap = new HashMap<>();
 					searchForTables(reportTree.getRoot(), tableMap);
 					reportBufferPanel.setUserObject(reportTree);
-					
+
+					reportBufferPanel.addBrowserLoadHandler(new CefLoadHandlerAdapter() {
+						@Override
+						public void onLoadingStateChange(CefBrowser browser, boolean isLoading, boolean canGoBack, boolean canGoForward) {
+							if(!isLoading) {
+								if (!"about:blank".equals(browser.getURL())) {
+									SwingUtilities.invokeLater(() -> {
+										int idx = 0;
+
+										for (String tableId : tableMap.keySet()) {
+											if (tableMap.get(tableId).getRowCount() == 0) continue;
+											browser.executeJavaScript(
+													String.format("addMenuButtons(document.getElementById('%s'), %d)", tableId, idx), "", 0);
+											browser.executeJavaScript(
+													String.format("$(\"#table_menu_\" + (%d+1)).menu()", idx), "", 0);
+											++idx;
+										}
+
+										reportBufferPanel.removeBrowserLoadHandler(this);
+									});
+								} else {
+									SwingUtilities.invokeLater(() -> {
+										reportBufferPanel.getBrowser().loadURL(reportURL);
+										reportBufferPanel.requestFocusInWindow();
+									});
+								}
+							}
+						}
+					});
+
+//					browser.getClient().addLoadHandler(new CefLoadHandlerAdapter() {
+//						@Override
+//						public void onLoadingStateChange(CefBrowser browser, boolean isLoading, boolean canGoBack, boolean canGoForward) {
+//							if(!isLoading) {
+//								browser.getClient().removeLoadHandler();
+//							}
+//						}
+//					});
 //					final Browser browser = reportBufferPanel.getBrowser();
 //					browser.addScriptContextListener(new ScriptContextListener() {
 //
@@ -1086,18 +1123,6 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 //						public void onDocumentLoadedInFrame(FrameLoadEvent arg0) {}
 //					});
 
-					reportBufferPanel.getBrowser().getClient().addLoadHandler(new CefLoadHandlerAdapter() {
-						@Override
-						public void onLoadingStateChange(CefBrowser browser, boolean isLoading, boolean canGoBack, boolean canGoForward) {
-							if(!isLoading) {
-								reportBufferPanel.getBrowser().getClient().removeLoadHandler();
-								SwingUtilities.invokeLater(() -> {
-									reportBufferPanel.getBrowser().loadURL(reportURL);
-									reportBufferPanel.requestFocusInWindow();
-								});
-							}
-						}
-					});
 				} catch (InterruptedException | InvocationTargetException e) {
 					LOGGER.error( e.getLocalizedMessage(), e);
 				}

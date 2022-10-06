@@ -140,12 +140,12 @@ public class SessionToHTMLWizard extends BreadcrumbWizardFrame {
 					toExcel.createSheetInWorkbook(wb, session);
 				});
 				buffer.showHtml(false);
-				buffer.getBrowser().getClient().addLoadHandler(new CefLoadHandlerAdapter() {
+				buffer.addBrowserLoadHandler(new CefLoadHandlerAdapter() {
 					@Override
 					public void onLoadingStateChange(CefBrowser browser, boolean isLoading, boolean canGoBack, boolean canGoForward) {
 						if(!isLoading) {
-							buffer.getBrowser().getClient().removeLoadHandler();
 							SwingUtilities.invokeLater(() -> {
+								buffer.removeBrowserLoadHandler(this);
 								buffer.getBrowser().loadURL(htmlFile.toURI().toString());
 							});
 						}

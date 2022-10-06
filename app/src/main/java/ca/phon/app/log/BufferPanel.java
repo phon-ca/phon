@@ -36,8 +36,8 @@ import jxl.write.*;
 import jxl.write.biff.RowsExceededException;
 import org.cef.CefClient;
 import org.cef.browser.*;
-import org.cef.callback.CefQueryCallback;
-import org.cef.handler.CefMessageRouterHandler;
+import org.cef.handler.*;
+import org.cef.network.CefRequest;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import org.jdesktop.swingx.JXTable;
 
@@ -106,6 +106,8 @@ public class BufferPanel extends JPanel implements IExtendable {
 	private CefBrowser browser;
 
 	private CefBrowser debugBrowser;
+
+	private List<CefLoadHandler> cefLoadHandlers = Collections.synchronizedList(new ArrayList<>());
 
 	private Component htmlView;
 	
@@ -297,7 +299,17 @@ public class BufferPanel extends JPanel implements IExtendable {
 		}
 		
 		if(loadTextContent) {
-			browser.loadURL("data:text/html;charset=utf-8," + logBuffer.getText());
+			addBrowserLoadHandler(new CefLoadHandlerAdapter() {
+	            @Override
+	            public void onLoadingStateChange(CefBrowser browser, boolean isLoading, boolean canGoBack, boolean canGoForward) {
+					if(!isLoading) {
+						SwingUtilities.invokeLater(() -> {
+							removeBrowserLoadHandler(this);
+							browser.loadURL("data:text/html;charset=utf-8," + logBuffer.getText());
+						});
+					}
+	            }
+	        });
 		}
 		
 		currentView = htmlPanel;
@@ -327,7 +339,15 @@ public class BufferPanel extends JPanel implements IExtendable {
 		if(!isShowingHtml()) return;
 		browser.setZoomLevel(DEFAULT_ZOOM_LEVEL);
 	}
-	
+
+	public void addBrowserLoadHandler(CefLoadHandler loadHandler) {
+		cefLoadHandlers.add(loadHandler);
+	}
+
+	public void removeBrowserLoadHandler(CefLoadHandler loadHandler) {
+		cefLoadHandlers.remove(loadHandler);
+	}
+
 	public boolean isShowingHtmlDebug() {
 		return isShowingHtml() && htmlSplitPane != null && htmlPanel.getComponent(0) == htmlSplitPane;
 	}
@@ -398,51 +418,20 @@ public class BufferPanel extends JPanel implements IExtendable {
 			this.cefClient = clientAndBrowser.getObj1();
 			this.browser = clientAndBrowser.getObj2();
 
-			// HACK is there a better way to detect when to dispose the JxBrowser instances?
 			final JFrame parentFrame = (JFrame)SwingUtilities.getAncestorOfClass(JFrame.class, this);
 			if(parentFrame != null) {
-				parentFrame.addWindowListener(new WindowListener() {
-					
-					@Override
-					public void windowOpened(WindowEvent e) {
-						
-					}
-					
-					@Override
-					public void windowIconified(WindowEvent e) {
-						
-					}
-					
-					@Override
-					public void windowDeiconified(WindowEvent e) {
-						
-					}
-					
-					@Override
-					public void windowDeactivated(WindowEvent e) {
-						
-					}
-					
-					@Override
-					public void windowClosing(WindowEvent e) {
-					}
-					
+				parentFrame.addWindowListener(new WindowAdapter() {
 					@Override
 					public void windowClosed(WindowEvent e) {
 						LogUtil.info("Disposing browser");
 						if(browser != null) {
+							browser.getClient().removeLoadHandler();
 							if(debugBrowser != null)
 								debugBrowser.close(true);
 							browser.close(true);
 							cefClient.dispose();
 						}
 					}
-					
-					@Override
-					public void windowActivated(WindowEvent e) {
-						
-					}
-					
 				});
 			}
 		}
@@ -451,6 +440,38 @@ public class BufferPanel extends JPanel implements IExtendable {
 	
 	private Tuple<CefClient, CefBrowser> createBrowser() {
 		final Tuple<CefClient, CefBrowser> clientAndBrowser = JCefHelper.getInstance().createClientAndBrowser();
+
+		final CefClient client = clientAndBrowser.getObj1();
+		client.addLoadHandler(new CefLoadHandler() {
+			@Override
+			public void onLoadingStateChange(CefBrowser cefBrowser, boolean b, boolean b1, boolean b2) {
+				for(CefLoadHandler loadHandler:cefLoadHandlers) {
+					loadHandler.onLoadingStateChange(cefBrowser, b, b1, b2);
+				}
+			}
+
+			@Override
+			public void onLoadStart(CefBrowser cefBrowser, CefFrame cefFrame, CefRequest.TransitionType transitionType) {
+				for(CefLoadHandler loadHandler:cefLoadHandlers) {
+					loadHandler.onLoadStart(cefBrowser, cefFrame, transitionType);
+				}
+			}
+
+			@Override
+			public void onLoadEnd(CefBrowser cefBrowser, CefFrame cefFrame, int i) {
+				for(CefLoadHandler loadHandler:cefLoadHandlers) {
+					loadHandler.onLoadEnd(cefBrowser, cefFrame, i);
+				}
+			}
+
+			@Override
+			public void onLoadError(CefBrowser cefBrowser, CefFrame cefFrame, ErrorCode errorCode, String s, String s1) {
+				for(CefLoadHandler loadHandler:cefLoadHandlers) {
+					loadHandler.onLoadError(cefBrowser, cefFrame, errorCode, s, s1);
+				}
+			}
+		});
+
 		return clientAndBrowser;
 	}
 	
