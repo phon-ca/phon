@@ -159,6 +159,13 @@ function openSession(corpus, session) {
     }
 }
 
+function openSessionAtRecord(corpus, session, recordIdx) {
+    if(window.projectLocation) {
+        var uri = "phon:" + window.projectLocation + "/" + corpus + "/" + session + ".xml?record=" + recordIdx;
+        loadUri(uri);
+    }
+}
+
 function highlightResultValue(tableId, row, column) {
 	app.onHighlightResultValue(tableMap.get(tableId), row, column);
 }

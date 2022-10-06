@@ -52,7 +52,7 @@
 #end
 
 #macro( printRecordLink $sessionPath $recordNum )
-<td class='session-link'><span onclick="app.openSessionAtRecord('$sessionPath', ($recordNum - 1))">$recordNum</span></td>
+<td class='session-link'><span onclick="openSessionAtRecord('$sessionPath.corpus', '$sessionPath.session', ($recordNum - 1))">$recordNum</span></td>
 #end
 
 #macro( printResultValue $tableId $row $columnName $v )
