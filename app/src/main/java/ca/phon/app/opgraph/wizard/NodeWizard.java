@@ -199,7 +199,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			@Override
 			public void menuSelected(MenuEvent e) {
 				reportMenu.removeAll();
-				setupReportMenu(new MenuBuilder(reportMenu));
+				setupReportMenu(new MenuBuilder(reportMenu), true);
 			}
 			
 			@Override
@@ -233,7 +233,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		}
 	}
 	
-	public void setupReportMenu(MenuBuilder builder) {
+	private void setupReportMenu(MenuBuilder builder, boolean includeZoomActions) {
 		final boolean hasReport = reportBufferAvailable();		
 		final BufferPanel reportBuffer = bufferPanel.getBuffer("Report");
 		
@@ -253,26 +253,28 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 				builder.addItem(".", reloadAct);
 				builder.addSeparator(".", "debug_sep");
 			}
-			
-			final PhonUIAction<Void> zoomInAct = PhonUIAction.runnable(this::onZoomIn);
-			zoomInAct.setRunInBackground(true);
-			zoomInAct.putValue(PhonUIAction.NAME, "Zoom in");
-			zoomInAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Increase zoom level");
-			builder.addItem(".", zoomInAct);
-			
-			final PhonUIAction<Void> zoomOutAct = PhonUIAction.runnable(this::onZoomOut);
-			zoomOutAct.setRunInBackground(true);
-			zoomOutAct.putValue(PhonUIAction.NAME, "Zoom out");
-			zoomOutAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Decrease zoom level");
-			builder.addItem(".", zoomOutAct);
-			
-			final PhonUIAction<Void> resetZoomAct = PhonUIAction.runnable(this::onZoomReset);
-			resetZoomAct.setRunInBackground(true);
-			resetZoomAct.putValue(PhonUIAction.NAME, "Reset zoom");
-			resetZoomAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset zoom level");
-			builder.addItem(".", resetZoomAct);
-			
-			builder.addSeparator(".", "zoom_actions");
+
+			if(includeZoomActions) {
+				final PhonUIAction<Void> zoomInAct = PhonUIAction.runnable(this::onZoomIn);
+				zoomInAct.setRunInBackground(true);
+				zoomInAct.putValue(PhonUIAction.NAME, "Zoom in");
+				zoomInAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Increase zoom level");
+				builder.addItem(".", zoomInAct);
+
+				final PhonUIAction<Void> zoomOutAct = PhonUIAction.runnable(this::onZoomOut);
+				zoomOutAct.setRunInBackground(true);
+				zoomOutAct.putValue(PhonUIAction.NAME, "Zoom out");
+				zoomOutAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Decrease zoom level");
+				builder.addItem(".", zoomOutAct);
+
+				final PhonUIAction<Void> resetZoomAct = PhonUIAction.runnable(this::onZoomReset);
+				resetZoomAct.setRunInBackground(true);
+				resetZoomAct.putValue(PhonUIAction.NAME, "Reset zoom");
+				resetZoomAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset zoom level");
+				builder.addItem(".", resetZoomAct);
+
+				builder.addSeparator(".", "zoom_actions");
+			}
 			
 			if(Desktop.isDesktopSupported() && hasReport) {
 				// bug on macos using Browser.getURL() for some reason when opening window menu
@@ -1640,7 +1642,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 
 			builder.addSeparator(".", "zoom_actions");
 
-			setupReportMenu(builder);
+			setupReportMenu(builder, false);
 
 			menu.show(me.getComponent(), me.getX(), me.getY());
 		}
