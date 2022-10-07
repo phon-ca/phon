@@ -114,6 +114,16 @@ public class OpenWindowsMenuListener implements MenuListener {
 			welcomeWindowAct.putValue(PhonUIAction.NAME, "Show Welcome window");
 			menu.add(new JMenuItem(welcomeWindowAct));
 		}
+
+		if(menu.getItemCount() > 0)
+			menu.addSeparator();
+
+		// keep on top
+		if(owner.get() instanceof JFrame) {
+			final JCheckBoxMenuItem alwaysOnTopItem = new JCheckBoxMenuItem(new KeepOnTopCommand((JFrame) owner.get()));
+			alwaysOnTopItem.setSelected(((JFrame)owner.get()).isAlwaysOnTop());
+			menu.add(alwaysOnTopItem);
+		}
 		
 		// generic close item
 		final JMenuItem closeItem = new JMenuItem(new CloseWindowCommand(owner.get()));
