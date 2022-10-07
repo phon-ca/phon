@@ -1,6 +1,4 @@
 antlr4.ca.phon.query.pql.gen
-ca.hedlund.dp.visitor
-ca.hedlund.dp.visitor.annotation
 ca.phon.alignedTypesDatabase
 ca.phon.alignment
 ca.phon.app
@@ -136,9 +134,6 @@ ca.phon.orthography.parser.exceptions
 ca.phon.phonex
 ca.phon.phonex.plugins
 ca.phon.phonexg4
-ca.phon.phontalk
-ca.phon.phontalk.parser
-ca.phon.phontalk.plugin
 ca.phon.plugin
 ca.phon.project
 ca.phon.project.exceptions
