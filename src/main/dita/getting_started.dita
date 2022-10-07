@@ -17,52 +17,57 @@
                     >Praat</xref> functions for acoustic data analysis.</p>
         </body>
     </topic>
-    
     <topic id="tutorial_videos">
         <title>Tutorials</title>
         <body>
             <p><object data="https://www.youtube.com/embed/T1fu9pxZI-A" outputclass="iframe">
-                <param name="allowfullscreen"/>
-            </object></p>
-            
+                    <param name="allowfullscreen"/>
+                </object></p>
             <p>For a full list of tutorials see: <xref href="tutorials.dita"/></p>
         </body>
     </topic>
-    
     <topic id="download_phon">
         <title>Download Phon</title>
         <body>
-            <p>Note: Phon does not currently support M1 macs.</p>
+            <p>Note: For apple silicon macs please use Phon 3.5.0-beta.1 or newer</p>
         </body>
         <topic id="phon_current">
             <title>Phon 3.4.3</title>
             <body>
                 <ul>
-                    <li><p><xref
+                    <li>
+                        <p><xref
                                 href="https://github.com/phon-ca/phon/releases/download/3.4.3/Phon_macos_3_4_3.dmg"
-                                format="dmg" scope="external">macOS 10.9+ (dmg)</xref></p></li>
-                    <li><p><xref
+                                format="dmg" scope="external">macOS 10.9+ (dmg)</xref></p>
+                    </li>
+                    <li>
+                        <p><xref
                                 href="https://github.com/phon-ca/phon/releases/download/3.4.3/Phon_windows-x64_3_4_3.exe"
                                 format="exe" scope="external">Windows (64-bit) (installer)</xref> |
                                 <xref
                                 href="https://github.com/phon-ca/phon/releases/download/3.4.3/Phon_windows-x64_3_4_3.zip"
-                                format="zip" scope="external">Windows (64 bit) (zip)</xref></p></li>
+                                format="zip" scope="external">Windows (64 bit) (zip)</xref></p>
+                    </li>
                 </ul>
             </body>
         </topic>
         <topic id="phon_beta">
-            <title>Phon 3.4.3-beta.10</title>
+            <title>Phon 3.5.0-beta.1</title>
             <body>
                 <ul>
-                    <li><p><xref
-                                href="https://github.com/phon-ca/phon/releases/download/3.4.3-beta.10/Phon_macos_3_4_3-beta_10.dmg"
-                                format="dmg" scope="external">macOS 10.9+ (dmg)</xref></p></li>
-                    <li><p><xref
-                                href="https://github.com/phon-ca/phon/releases/download/3.4.3-beta.10/Phon_windows-x64_3_4_3-beta_10.exe"
+                    <li>
+                        <p><xref
+                                href="https://github.com/phon-ca/phon/releases/download/3.5.0-beta.1/Phon_macos_3_5_0-beta_1.dmg"
+                                format="dmg" scope="external">macOS 10.9+ (dmg)</xref></p>
+                    </li>
+                    <li>
+                        <p><xref
+                                href="https://github.com/phon-ca/phon/releases/download/3.5.0-beta.1/Phon_windows-x64_3_5_0-beta_1.exe"
                                 format="exe" scope="external">Windows (64-bit) (installer)</xref> |
                                 <xref
-                                href="https://github.com/phon-ca/phon/releases/download/3.4.3-beta.10/Phon_windows-x64_3_4_3-beta_10.zip"
-                                format="zip" scope="external">Windows (64 bit) (zip)</xref></p></li>
+                                href="https://github.com/phon-ca/phon/releases/download/3.5.0-beta.1/Phon_windows-x64_3_5_0-beta_1.zip"
+                                format="zip" scope="external">Windows (64 bit) (zip)</xref></p>
+                    </li>
                 </ul>
             </body>
         </topic>
@@ -72,11 +77,16 @@
         <body>
             <ul>
                 <li><b><xref href="tutorials.dita"/></b></li>
-                <li><p><b><xref href="https://github.com/phon-ca/PhonDemoProject/archive/1.zip"
-                                format="zip" scope="external">Demo Project</xref></b></p><ul>
-                        <li><p><xref href="https://github.com/phon-ca/PhonDemoProject" format="html"
-                                    scope="external">README for Demo Project</xref></p></li>
-                    </ul></li>
+                <li>
+                    <p><b><xref href="https://github.com/phon-ca/PhonDemoProject/archive/1.zip"
+                                format="zip" scope="external">Demo Project</xref></b></p>
+                    <ul>
+                        <li>
+                            <p><xref href="https://github.com/phon-ca/PhonDemoProject" format="html"
+                                    scope="external">README for Demo Project</xref></p>
+                        </li>
+                    </ul>
+                </li>
             </ul>
         </body>
     </topic>
@@ -108,13 +118,20 @@
                     <xref href="http://phonbank.talkbank.org" format="html" scope="external"
                     >PhonBank</xref> (or other TalkBank-related) discussion group:</p>
             <ul>
-                <li><p><xref href="http://talkbank.org/share/email.html" format="html"
-                            scope="external"/></p><ul>
-                        <li><p>No Google mail (gmail) account is required to subscribe</p></li>
-                        <li><p>Group’s email address (for message posting): <xref
+                <li>
+                    <p><xref href="http://talkbank.org/share/email.html" format="html"
+                            scope="external"/></p>
+                    <ul>
+                        <li>
+                            <p>No Google mail (gmail) account is required to subscribe</p>
+                        </li>
+                        <li>
+                            <p>Group’s email address (for message posting): <xref
                                     href="mailto:phon@googlegroups.com" format="email"
-                                    scope="external">phon@googlegroups.com</xref></p></li>
-                    </ul></li>
+                                    scope="external">phon@googlegroups.com</xref></p>
+                        </li>
+                    </ul>
+                </li>
             </ul>
         </body>
     </topic>
@@ -131,36 +148,58 @@
             <p><b>Dictionaries</b>: Built-in dictionaries of pronounced forms were obtained from
                 generous organizations and people, to whom we are indebted:</p>
             <ul>
-                <li><p>Catalan: Universitat Politècnica de Catalunya <xref href="http://www.upc.es/"
-                            format="html" scope="external"/></p></li>
-                <li><p>Dutch (Flemish): Fonilex Database <xref
+                <li>
+                    <p>Catalan: Universitat Politècnica de Catalunya <xref href="http://www.upc.es/"
+                            format="html" scope="external"/></p>
+                </li>
+                <li>
+                    <p>Dutch (Flemish): Fonilex Database <xref
                             href="http://bach.arts.kuleuven.be/fonilex/" format="html"
-                            scope="external"/></p></li>
-                <li><p>English (British): Cambridge University Engineering Department,Cambridge,UK
+                            scope="external"/></p>
+                </li>
+                <li>
+                    <p>English (British): Cambridge University Engineering Department,Cambridge,UK
                             <xref
                             href="http://svr-www.eng.cam.ac.uk/comp.speech/Section1/Lexical/beep.html"
-                            format="html" scope="external"/></p></li>
-                <li><p>English (North American): CMU Pronouncing Dictionary (Speech at CMU) <xref
+                            format="html" scope="external"/></p>
+                </li>
+                <li>
+                    <p>English (North American): CMU Pronouncing Dictionary (Speech at CMU) <xref
                             href="http://www.speech.cs.cmu.edu/speech/" format="html"
-                            scope="external"/></p></li>
-                <li><p>French: Lexique Database <xref href="http://www.lexique.org/" format="html"
-                            scope="external"/></p></li>
-                <li><p>German: Universität Bonn <xref
+                            scope="external"/></p>
+                </li>
+                <li>
+                    <p>French: Lexique Database <xref href="http://www.lexique.org/" format="html"
+                            scope="external"/></p>
+                </li>
+                <li>
+                    <p>German: Universität Bonn <xref
                             href="http://www.sk.uni-bonn.de/forschung/phonetik/sprachsynthese/bomp"
-                            format="html" scope="external"/></p></li>
-                <li><p>Icelandic: The Icelandic Centre for Language Technology <xref
+                            format="html" scope="external"/></p>
+                </li>
+                <li>
+                    <p>Icelandic: The Icelandic Centre for Language Technology <xref
                             href="http://www.tungutaekni.is/materials/e001.html" format="html"
-                            scope="external"/></p></li>
-                <li><p>Italian: ISTC-SPFD CNR, Istituto di Scienze e Tecnologie della Cognizione
+                            scope="external"/></p>
+                </li>
+                <li>
+                    <p>Italian: ISTC-SPFD CNR, Istituto di Scienze e Tecnologie della Cognizione
                             <xref href="http://www2.pd.istc.cnr.it/FESTIVAL/home/default.htm"
-                            format="htm" scope="external"/></p></li>
-                <li><p>Norwegian: Norwegian Computational Lexicon (NorKompLeks), Institutt for språk
+                            format="htm" scope="external"/></p>
+                </li>
+                <li>
+                    <p>Norwegian: Norwegian Computational Lexicon (NorKompLeks), Institutt for språk
                         og litteratur, Norges teknisk-naturvitenskapelige universitet <xref
-                            href="https://www.ntnu.no/isl" format="html" scope="external"/></p></li>
-                <li><p>Spanish (Spain): Universitat Politècnica de Catalunya <xref
-                            href="http://www.upc.es/" format="html" scope="external"/></p></li>
-                <li><p>Spanish (Latin America): Scott Sadowsky <xref href="http://sadowsky.cl/"
-                            format="html" scope="external"/></p></li>
+                            href="https://www.ntnu.no/isl" format="html" scope="external"/></p>
+                </li>
+                <li>
+                    <p>Spanish (Spain): Universitat Politècnica de Catalunya <xref
+                            href="http://www.upc.es/" format="html" scope="external"/></p>
+                </li>
+                <li>
+                    <p>Spanish (Latin America): Scott Sadowsky <xref href="http://sadowsky.cl/"
+                            format="html" scope="external"/></p>
+                </li>
             </ul>
             <p><b>Special thanks</b>: While it is impossible to name everyone who ended up being
                 involved in one way or another in this project, we owe special thanks to a wonderful
@@ -168,7 +207,7 @@
                 whom it would have been much more difficult to produce the current software program.
                 We are also grateful to Paul Boersma for this tremendous collaboration toward the
                 interactions between Praat and related functions within Phon 2.</p>
-            <p>Install packages create using <xref
+            <p>Install packages created using <xref
                     href="https://www.ej-technologies.com/products/install4j/overview.html"
                     format="html" scope="external">multi-platform installer builder <image
                         placement="inline"
