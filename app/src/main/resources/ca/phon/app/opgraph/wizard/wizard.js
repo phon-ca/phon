@@ -6,6 +6,13 @@ function toggleToC() {
     toc.toggle();
 }
 
+function onChangeProjectLocation() {
+    var newProjectLocation = prompt("Enter project location", window.projectLocation);
+    if(newProjectLocation) {
+        window.projectLocation = newProjectLocation;
+    }
+}
+
 function tableToCSV(table) {
     var retVal = "";
 
@@ -240,6 +247,9 @@ function page_init(documentRef) {
     }
     
     $(".table-button").button();
+
+    if(window.cefQuery !== undefined)
+        $("#select_project_location_item").hide();
     
     $(document).on("click", function(event){
         if(currentPopupMenu != null && !event.target.closest(".table-button")) {

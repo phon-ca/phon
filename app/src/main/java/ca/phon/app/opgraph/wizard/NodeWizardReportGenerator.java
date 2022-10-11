@@ -209,24 +209,39 @@ public class NodeWizardReportGenerator {
 			appendToC(sb, node, 1);
 		}
 		sb.append("</ul>").append(nl);
+		appendSelectProjectLocation(sb);
 		sb.append("</div>").append(nl);
 		
 		sb.append("</nav>");
 	}
-	
+
+	/**
+	 * Append a menu item which allow for selection of project location when displayed in an external
+	 * browser.
+	 *
+	 * @param builder
+	 */
+	private void appendSelectProjectLocation(StringBuilder sb) {
+		sb.append("<ul id='select_project_location_item' class='ui-widget-header'>").append(nl);
+		sb.append("<div onclick='onChangeProjectLocation()'>");
+		sb.append("Update project location...");
+		sb.append("</div>").append(nl);
+		sb.append("</ul>").append(nl);
+	}
+
+	/**
+	 * Recursive method for appending items to the report ToC
+	 *
+	 * @param sb
+	 * @param node
+	 * @param headerLevel
+	 */
 	private void appendToC(StringBuilder sb, ReportTreeNode node, int headerLevel) {
 		final String linkText = node.getTitle();
 		sb.append("<li");
 		sb.append( (headerLevel == 1 ? " class='ui-widget-header'>" : ">")).append(nl);
 		sb.append("<div onclick=\"document.getElementById('").append(node.getPath().toString())
 		  .append("').scrollIntoView(true)\">").append(nl);
-//		if(node.getChildren().size() > 0) {
-//			String tocIcn = (headerLevel > 3 ? tocClosedIcn : tocExpandedIcn);
-//			sb.append("<div class='toc_toggle_btn' onclick=\"toggleTocSection(this, 'toc_section_")
-//			  .append(tocSectionIdx).append("')\">");
-//			sb.append("<img src='").append(tocIcn).append("'/>").append(nl);
-//			sb.append("</div>").append(nl);
-//		}
 		sb.append("<a>").append(linkText).append("</a>").append(nl);
 		sb.append("</div>").append(nl);
 		
