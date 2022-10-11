@@ -137,7 +137,7 @@ function begin_search(s) {
  *******************************/
 function query_record(recordIndex, record) {
 	// check participant filter
-	if (! filters.speaker.check_speaker(record.speaker)) return;
+	if (! filters.speaker.check_speaker(record.speaker, session.date)) return;
 
 	// check group+groupPattern filters
 	var groups = filters.group.getRequestedGroups(record);

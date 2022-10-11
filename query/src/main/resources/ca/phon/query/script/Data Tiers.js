@@ -105,7 +105,7 @@ function isGroupedTier(tierName) {
 }
 
 function query_record(recordIndex, record) {
-	if (! filters.speaker.check_speaker(record.speaker)) return;
+	if (! filters.speaker.check_speaker(record.speaker, session.date)) return;
 
 	var searchTier = filters.primary.tier;
 	var tierGrouped = isGroupedTier(searchTier);

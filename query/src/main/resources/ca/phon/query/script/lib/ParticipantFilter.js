@@ -275,11 +275,11 @@ exports.ParticipantFilter = function (id) {
 		return retVal;
 	}
 	
-	this.checkSpeakerAge = function (speaker) {
-		if (speaker == null || speaker.getAge(null) == null)
+	this.checkSpeakerAge = function (speaker, sessionDate) {
+		if (speaker == null || speaker.getAge(sessionDate) == null)
 		return false;
 		
-		var speakerPeriod = speaker.getAge(null);
+		var speakerPeriod = speaker.getAge(sessionDate);
 		
 		var p1 = AgeFormatter.stringToAge(this.age1String);
 		var cmp1 = this.compareAges(speakerPeriod, p1);
@@ -341,10 +341,11 @@ exports.ParticipantFilter = function (id) {
 	 * Check if given speaker matches filter
 	 *
 	 * @param speaker
+	 * @param sessionDate
 	 * @return true if speaker matches the filter
 	 *  false otherwise
 	 */
-	this.check_speaker = function (speaker) {
+	this.check_speaker = function (speaker, sessionDate) {
 		var speakerOk = true;
 		
 		if (this.isUseRoleFilter() == true) {
@@ -356,7 +357,7 @@ exports.ParticipantFilter = function (id) {
 		}
 		
 		if (this.isUseAge1Filter() == true) {
-			speakerOk &= this.checkSpeakerAge(speaker);
+			speakerOk &= this.checkSpeakerAge(speaker, sessionDate);
 		}
 		
 		return speakerOk;
