@@ -249,7 +249,7 @@ function page_init(documentRef) {
     $(".table-button").button();
 
     if(window.cefQuery !== undefined)
-        $("#select_project_location_item").hide();
+        $("#change_project_location_item").hide();
     
     $(document).on("click", function(event){
         if(currentPopupMenu != null && !event.target.closest(".table-button")) {

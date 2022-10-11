@@ -209,7 +209,7 @@ public class NodeWizardReportGenerator {
 			appendToC(sb, node, 1);
 		}
 		sb.append("</ul>").append(nl);
-		appendSelectProjectLocation(sb);
+		appendChangeProjectLocation(sb);
 		sb.append("</div>").append(nl);
 		
 		sb.append("</nav>");
@@ -219,10 +219,10 @@ public class NodeWizardReportGenerator {
 	 * Append a menu item which allow for selection of project location when displayed in an external
 	 * browser.
 	 *
-	 * @param builder
+	 * @param sb
 	 */
-	private void appendSelectProjectLocation(StringBuilder sb) {
-		sb.append("<ul id='select_project_location_item' class='ui-widget-header'>").append(nl);
+	private void appendChangeProjectLocation(StringBuilder sb) {
+		sb.append("<ul id='change_project_location_item' class='ui-widget-header'>").append(nl);
 		sb.append("<div onclick='onChangeProjectLocation()'>");
 		sb.append("Update project location...");
 		sb.append("</div>").append(nl);
