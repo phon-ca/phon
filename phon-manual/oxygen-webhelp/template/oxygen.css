@@ -104,7 +104,20 @@ a:hover{
 .wh_top_menu ul ul {
     background-color: #333;
 }
-.wh_top_menu ul li:hover {
+
+.wh_top_menu:not(.activated-on-click) ul:hover li,
+.wh_top_menu:not(.activated-on-click) ul li:hover {
+    /* WH-2521 Change the background color imediatelly when the current menu item (li) or other menu item is hovered. */
+    transition: none; 
+}
+
+.wh_top_menu:not(.activated-on-click) ul li {
+    /* WH-2521 Delay the background color change on hover off. */
+    transition: background-color 0.2s 1s;
+}
+
+.wh_top_menu ul li:hover,
+.wh_top_menu.activated-on-click ul li.active {
     background-color: #333;
 }
 .wh_top_menu ul ul li a:hover {
@@ -169,6 +182,7 @@ a:hover{
 .webhelp_expand_collapse_sections,
 .wh_hide_highlight,
 .wh_print_link button,
+.oxy-icon-pdf-link,
 .wh_navigation_links a,
 .wh_navigation_links a:hover,
 .wh_navigation_links a:active,
@@ -318,8 +332,9 @@ Example:
 }
 .wh_publication_toc .active > .topicref a {
     color: #5185cb;
+    font-weight: normal;
 }
-.wh_publication_toc span, .wh_publication_toc a, .wh_publication_toc a:visited, .wh_publication_toc a:hover {
+.wh_publication_toc div, .wh_publication_toc a, .wh_publication_toc a:visited, .wh_publication_toc a:hover {
     color: #878787;
 }
 .wh_publication_toc a:hover {
@@ -347,33 +362,37 @@ Example:
 
 /* Publication TOC tooltip */
 .wh_breadcrumb .topicref .wh-tooltip,
-.wh_publication_toc .topicref .wh-tooltip {
+.wh-toc-tooltip {
     background-color: #5185cb;
     color: #fff;
     font-size: 1.4rem;
 }
 
 .wh_breadcrumb .topicref .wh-tooltip a,
-.wh_publication_toc .topicref .wh-tooltip a {
+.wh-toc-tooltip a {
     color: #fff;
     text-decoration: underline;
 }
 
 /* Tooltip arrow. */
 
-[data-tooltip-position="left"] .topicref .wh-tooltip::before {
+[data-tooltip-position="left"] .topicref .wh-tooltip::before,
+[data-tooltip-position="left"] .wh-toc-tooltip::before {
     border-left-color: #5185cb;
 }
 
-[data-tooltip-position="right"] .topicref .wh-tooltip::before {
+[data-tooltip-position="right"] .topicref .wh-tooltip::before,
+[data-tooltip-position="right"] .wh-toc-tooltip::before {
     border-right-color: #5185cb;
 }
 
-[data-tooltip-position="bottom"] .topicref .wh-tooltip::before {
+[data-tooltip-position="bottom"] .topicref .wh-tooltip::before,
+[data-tooltip-position="bottom"] .wh-toc-tooltip::before {
     border-bottom-color: #5185cb;
 }
 
-[data-tooltip-position="top"] .topicref .wh-tooltip::before {
+[data-tooltip-position="top"] .topicref .wh-tooltip::before,
+[data-tooltip-position="top"] .wh-toc-tooltip::before {
     border-top-color: #5185cb;
 }
 
@@ -410,7 +429,7 @@ Example:
     margin-bottom: 80px;
 }
 .wh_main_page .wh_content_area {
-    margin: 40px auto;
+    margin: 40px 0;
 }
 .wh_topic_content .title.topictitle1 {
     font-size: 2em;
@@ -448,7 +467,6 @@ Example:
 .related-links a,
 .related-links a:visited {
     color: #5185cb;
-    display:inline-block;
 }
 
 .filepath {
@@ -531,6 +549,7 @@ Example:
  * Styles used for RTL pages
  *
  */
-html[dir='rtl'] .wh_top_menu ul li:hover > ul {
+html[dir='rtl'] .wh_top_menu:not(.activated-on-click) ul li:hover > ul,
+html[dir='rtl'] .wh_top_menu.activated-on-click ul li.active > ul {
     max-width: 270px;
 }

@@ -1,5 +1,5 @@
 define(function() {
-	// FROM: https://github.com/get/parseuri/blob/master/index.js
+	// FROM: See index.js file from the main branch of https://github.com/galkn/parseuri GITHUB repository.
 
     /**
      * Parses an URI

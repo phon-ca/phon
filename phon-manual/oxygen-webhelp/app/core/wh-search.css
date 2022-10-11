@@ -322,6 +322,7 @@
     overflow-y: auto;
     /* prevent horizontal scrollbar */
     overflow-x: hidden;
+    z-index: 998;
 }
 
 /* Don't add border or margin to active item in autocomplate widget */
@@ -349,4 +350,29 @@ ui-menu-item > .ui-state-active{
 
 .search-autocomplete-proposal-hg {
     font-weight: bold;
+}
+
+/* OSB-273 - Fix default look of Search Component */
+.wh_search_input {
+  display: block;
+  margin: 0;
+  position: relative;
+  padding: 40px 0;
+}
+
+.wh_search_textfield {
+  border: solid 1px #CCC;
+  border-radius: 5px;
+  padding: 0 .5em;
+  position: relative;
+  height: 2.8em;
+}
+
+.wh_search_button {
+  border: solid 1px #CCC;
+  border-radius: 0 5px 5px 0;
+  padding: 0.6em 1em;
+  color: #fff;
+  background-color: #C93416;
+  height: 2.8em;
 }

@@ -1,4 +1,4 @@
-define(["options", "jquery", "nav"], function (options, $, navConfig) {
+define(["options", "dom-sanitizer", "jquery", "nav"], function (options, domSanitizer, $, navConfig) {
 
     /**
      * The path of the output directory, relative to the current HTML file.
@@ -149,7 +149,8 @@ define(["options", "jquery", "nav"], function (options, $, navConfig) {
         if (topicImage.width != null) {
             img.attr("width", topicImage.width);
         }
-        imgSpan.append(img);
+        domSanitizer.appendHtmlNode(img, imgSpan);
+//        imgSpan.append(img);
 
         return imgSpan;
     }
@@ -228,9 +229,10 @@ define(["options", "jquery", "nav"], function (options, $, navConfig) {
         var titleSpan = $("<span>", {
            class: "title"
         });
-
-        titleSpan.append(link);
-        topicRefSpan.append(titleSpan);
+        domSanitizer.appendHtmlNode(link, titleSpan);
+        domSanitizer.appendHtmlNode(titleSpan, topicRefSpan);
+//        titleSpan.append(link);
+//        topicRefSpan.append(titleSpan);
 
         return topicRefSpan;
     }
@@ -272,8 +274,8 @@ define(["options", "jquery", "nav"], function (options, $, navConfig) {
                         html: [dot, dot.clone(), dot.clone()]
                     })
                 });
-
-            $(this).append(loadingMarker);
+        
+            domSanitizer.appendHtmlNode(loadingMarker, $(this));
 
             handleMenuPosition($(this));
             retrieveChildNodes(topicRefSpan);

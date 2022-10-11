@@ -1,4 +1,4 @@
-define(["options", "jquery", "nav"], function (options, $, navConfig) {
+define(["options", "dom-sanitizer", "jquery", "nav"], function (options, domSanitizer, $, navConfig) {
 
     /**
      * The path of the output directory, relative to the current HTML file.
@@ -7,6 +7,13 @@ define(["options", "jquery", "nav"], function (options, $, navConfig) {
     var path2root = null;
 
     $(document).ready ( function() {
+		$(".wh_publication_toc .title").mouseenter(showTocTooltip);
+		$(".wh_publication_toc .title").mouseleave(removeTocTooltip);
+		/* WH-2785 Hide tooltip on window or TOC scroll */
+        $(window).scroll(removeTocTooltip);
+        /* The TOC can display its own scroll bars */
+        $(".wh_publication_toc").scroll(removeTocTooltip);
+    
         // Register the click handler for the TOC
         var topicRefExpandBtn = $(".wh_publication_toc .wh-expand-btn");
         topicRefExpandBtn.click(toggleTocExpand);
@@ -14,6 +21,39 @@ define(["options", "jquery", "nav"], function (options, $, navConfig) {
         /* Toggle expand/collapse on enter and space */
         topicRefExpandBtn.keypress(handleKeyEvent);
     });
+    
+    /* 
+     * Display the tooltip for an element in the publication toc.
+     */
+    function showTocTooltip() {
+        // Find the tooltip generated in the toc hierarchy
+    	var originalTooltip = $(this).find(".wh-tooltip");
+    	if(originalTooltip.length > 0) {
+    		// Tooltip exists. Generate a container for the tooltip.
+    	    var container = $("<div>",{ 
+        	  class: "wh-tooltip-wrapper",
+        	  "data-tooltip-position": $('.wh_publication_toc').attr("data-tooltip-position")
+        	});
+        	// Clone the tooltip so that when is removed from dom, the original tooltip will not.
+        	var tooltip = originalTooltip.clone();
+        	tooltip.removeClass("wh-tooltip");
+        	tooltip.addClass("wh-toc-tooltip");
+        	container.append(tooltip);
+    		var top = $(this).offset().top - $("#wh_publication_toc").offset().top;
+    		var left = $(this).offset().left - ($("#wh_publication_toc").offset().left + parseInt($("#wh_publication_toc").css("padding-left")));
+    	    container.css("position", "absolute").css("top", top).css("left", left).css("width", $(this).width() + left).css("height", $(this).height()).css("float", "left");
+    	    domSanitizer.appendHtmlNode(container, $("#wh_publication_toc"));
+    	    
+    	    setTimeout(function(){ $(".wh-toc-tooltip").addClass("wh-display-tooltip"); }, 50);
+    	}
+    }
+    
+    /* 
+     * Remove the tooltip for an element in the publication toc.
+     */
+    function removeTocTooltip(){
+        $("#wh_publication_toc>.wh-tooltip-wrapper").remove();
+    }
 
     /**
      * Retrieves the path of the output directory, relative to the current HTML file.
@@ -157,7 +197,7 @@ define(["options", "jquery", "nav"], function (options, $, navConfig) {
         var isExternalReference = topic.scope == 'external';
 
         // .topicref span
-        var topicRefSpan = $("<span>");
+        var topicRefSpan = $("<div>");
         topicRefSpan.addClass("topicref");
         if (topic.outputclass != null) {
             topicRefSpan.addClass(topic.outputclass);
@@ -231,15 +271,16 @@ define(["options", "jquery", "nav"], function (options, $, navConfig) {
         if (isExternalReference) {
             link.attr("target", "_blank");
         }
-        var titleSpan = $("<span>", {
+        var titleSpan = $("<div>", {
            class: "title"
         });
-
-        titleSpan.append(link);
+        titleSpan.mouseenter(showTocTooltip)
+        titleSpan.mouseleave(removeTocTooltip)
+        domSanitizer.appendHtmlNode(link, titleSpan);
 
         // Topic ref short description
         if (topic.shortdesc != null) {
-            var tooltipSpan = $("<span>", {
+            var tooltipSpan = $("<div>", {
                 class: "wh-tooltip",
                 html: topic.shortdesc
             });
@@ -261,7 +302,7 @@ define(["options", "jquery", "nav"], function (options, $, navConfig) {
                         $(this).attr("src", pathToRoot + src);
                     }
                 });
-
+                
                 titleSpan.append(tooltipSpan);
             }
         }

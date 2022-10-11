@@ -113,7 +113,8 @@ html {
 }
 
 body {
-    font-size: 14px;     
+    font-size: 14px;
+    line-height: 1.5; /* Moved here from bootstrap so it ca be applied on the styles basket preview area.*/        
 }
 
 /*
@@ -125,8 +126,9 @@ body {
 .custom-toggler {
     border-color: #347bb7;
 }
-#wh_toc_button {
-    margin-left: 1em;
+
+.navbar {
+	background: white;
 }
 
 @media screen {

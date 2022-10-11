@@ -1,4 +1,4 @@
-define(['util', 'jquery', 'jquery.highlight'], function(util, $) {		
+define(['util', 'dom-sanitizer', 'jquery', 'jquery.highlight'], function(util, domSanitizer, $) {		
 	$(document).ready(function () {
 		/*
          * Codeblock copy to clipboard action
@@ -30,7 +30,7 @@ define(['util', 'jquery', 'jquery.highlight'], function(util, $) {
             var textArea = document.createElement("textarea");
             textArea.style.position = 'fixed';
             textArea.value = text;
-            document.body.appendChild(textArea);
+            textArea = domSanitizer.appendElementNodeToBody(textArea);
             textArea.select();
             try {
                 var successful = document.execCommand('copy');

@@ -23,8 +23,8 @@
 
 .wh_expand_btn {
     cursor: pointer;
-    position: absolute;
-    left: .6em;
+    position: relative;
+    left: -0.6em;
 }
 
 }

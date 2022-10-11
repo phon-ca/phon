@@ -5,6 +5,10 @@
     align-items: baseline;
 }
 
+.wh_breadcrumb .topicref {
+    display: inline-block;
+}
+
 .wh_publication_toc .wh-expand-btn:before{
     display: inline-block;
     font-family: "oXygen WebHelp", serif;
@@ -16,6 +20,7 @@
     margin-right: 4px;
     border: 2px solid transparent;
     opacity: 0.5;
+    line-height: 1em;
 }
 
 .wh_publication_toc:hover .wh-expand-btn:before {
@@ -28,24 +33,24 @@
     }
 }
 
-.wh_publication_toc span[data-state=expanded] > .wh-expand-btn:before {
+.wh_publication_toc div[data-state=expanded] > .wh-expand-btn:before {
     content: "p";
 }
 
-.wh_publication_toc span[data-state=not-ready]  > .wh-expand-btn:before,
-.wh_publication_toc span[data-state=collapsed] > .wh-expand-btn:before {
+.wh_publication_toc div[data-state=not-ready]  > .wh-expand-btn:before,
+.wh_publication_toc div[data-state=collapsed] > .wh-expand-btn:before {
     content: "q";
 }
 
-.wh_publication_toc span[data-state=collapsed] ~ ul {
+.wh_publication_toc div[data-state=collapsed] ~ ul {
     display: none;
 }
 
-.wh_publication_toc span[data-state=leaf] > .wh-expand-btn:before {
+.wh_publication_toc div[data-state=leaf] > .wh-expand-btn:before {
     content : " ";
 }
 
-.wh_publication_toc span[data-state=pending] > .wh-expand-btn:before {
+.wh_publication_toc div[data-state=pending] > .wh-expand-btn:before {
     display: inline-block;
     content: " ";
     border: 2px solid #f3f3f3; /* Light grey */

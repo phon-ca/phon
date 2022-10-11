@@ -31,7 +31,7 @@ define(["parseuri"], function(parseUri){
                 this.debug(e);
             }
         },
-
+        
         isLocal : function () {
             this.debug("isLocal()");
             var whLocation = "";

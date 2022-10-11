@@ -90,7 +90,7 @@
 .wh_topic_toc{
     border-left: 1px solid #cfe2f5;
     margin-left:0;
-    padding-left:.5em;
+    padding-left:1em;
 }
 .wh_topic_toc li, .wh_publication_toc li{
     line-height: 1.4em;

@@ -30,3 +30,8 @@
         margin-left: 0;
     }
 }
+
+/* OSB-273 - Fix default look of Index link */
+.wh_indexterms_link a span {
+  display: none;
+}

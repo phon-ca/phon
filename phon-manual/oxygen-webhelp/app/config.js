@@ -8,6 +8,8 @@ define(function() {
         "expand": "core/expand",
         "permalink": "core/permalink",
         "polyfill": "core/polyfill",
+        "wh-sticky": "core/wh-sticky",
+        "dom-sanitizer": "core/wh-dom-sanitizer", 
         // context sensitive help
         "context-help" : "context-help/context-help",
         "context-help-map" : "context-help/context-help-map",
@@ -18,9 +20,13 @@ define(function() {
         // search
         "search-init" : "search/search-init",
         "search" : "search/search",
+        "searchAPI" : "search/searchAPI",
+        "searchEngine" : "search/searchEngine",
+        "searchPresenter" : "search/searchPresenter",
         "nwSearchFnt" : "search/nwSearchFnt",
         "searchAutocomplete" : "search/searchAutocomplete",
         "searchHistoryItems" : "search/searchHistoryItems",
+        "webhelpSearchEngine" : "search/webhelpSearchEngine",
         // search index
         "index" : "search/index/index",
         "link2parent" : "search/index/link-to-parent",
@@ -76,7 +82,10 @@ define(function() {
         // Popper
         "bootstrap" : "../lib/bootstrap/js/bootstrap.bundle.min",
 
-        "kuromoji" : "../lib/kuromoji/kuromoji"
+        "kuromoji" : "../lib/kuromoji/kuromoji",
+        
+        // DOM Purify
+        "dompurify" : "../lib/dom-purify/purify.min"
     };
 
     var shimConfig = {
@@ -101,11 +110,11 @@ define(function() {
         paths : modulePaths,
         shim : shimConfig,
         urlArgs: function(id, url) {
-            var args = '2020111801';
+            var args = '2022092200';
         	
             if(id === 'index-1' || id === 'index-2' || id === 'index-3' || id === 'stopwords' 
             ||id === 'htmlFileInfoList' || id === 'keywords') {
-                args = '20221007090142';
+                args = '20221011134113';
         	} 
 	
 	        return (url.indexOf('?') === -1 ? '?' : '&') + args;

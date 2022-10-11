@@ -166,15 +166,17 @@ define(["index", "options", "stemmer", "util"], function(index, options, stemmer
      * @param {string} originalSearchExpression The initial search expression.
      * @param {DocumentInfo[]} documents The array containing the search result grouped by topic/document.
      * @param {string} errorMsg The message returned by search when an error occurred. This message will be displayed to user.
+     * @param {Boolean} isPhraseSearch <code>true</code> the search performed a phrase search, <code>false</code> otherwise.
      *
      * @constructor
      */
-    function SearchResult(searchExpression, excluded, originalSearchExpression, documents, errorMsg) {
+    function SearchResult(searchExpression, excluded, originalSearchExpression, documents, errorMsg, isPhraseSearch) {
         this.searchExpression = searchExpression;
         this.excluded = excluded;
         this.documents = documents;
         this.originalSearchExpression = originalSearchExpression;
         this.error = errorMsg;
+        this.isPhraseSearch = isPhraseSearch;
     }
 
     /**
@@ -262,6 +264,9 @@ define(["index", "options", "stemmer", "util"], function(index, options, stemmer
             phraseSearch =
                 (firstChar == "'" || firstChar == '"') &&
                 (lastChar == "'" || lastChar == '"');
+           	if(phraseSearch) {
+           		initialSearchExpression = initialSearchExpression.substring(1,initialSearchExpression.length-1);
+           	}
         }
 
         // Remove ' and " characters
@@ -360,10 +365,7 @@ define(["index", "options", "stemmer", "util"], function(index, options, stemmer
                 docInfos.push(docInfo);
             }
         }
-        // Filter expression to cross site scripting possibility
-        initialSearchExpression = filterOriginalSearchExpression(initialSearchExpression);
-        realSearchQuery = filterOriginalSearchExpression(realSearchQuery);
-        var searchResult = new SearchResult(realSearchQuery, excluded, initialSearchExpression, docInfos, errorMsg);
+        var searchResult = new SearchResult(realSearchQuery, excluded, initialSearchExpression, docInfos, errorMsg, phraseSearch);
         return searchResult;
     }
 

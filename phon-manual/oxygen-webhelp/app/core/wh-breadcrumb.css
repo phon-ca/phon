@@ -7,16 +7,33 @@
 
 /* Place the right tools in line with the breadcrumb. */
 .wh_tools{
+	background-color: white;
     position: relative;
-    padding-right: 10px;
     display: flex;
     justify-content: space-between;
     flex: 1 0;
+    margin-bottom: 1em;
+    align-items: center;
+    padding: 4px 15px;
+}
+
+@media only screen and (max-width: 767px) {
+    .wh_tools {
+        flex-wrap: wrap;
+    }
 }
 
 .wh_right_tools {
     display: flex;
     align-items: center;
+}
+
+.wh_right_tools > *:not(:last-child) {
+  margin-right: 8px;
+}
+/* When visible, the above style rule does apply to the Print Link because it has a hidden sibling, */
+.wh_right_tools > .wh_print_link {
+  margin-right:0;
 }
 
 .wh_breadcrumb {
@@ -28,7 +45,7 @@
     margin:0;
     border-radius: 0;
     font-size: .9em;
-    padding: 8px 15px;
+    padding: 0;
     list-style: none;
     background:none;
 }
@@ -45,7 +62,7 @@
 .webhelp_expand_collapse_sections[data-next-state='expanded']:after{content:'l'}
 .webhelp_expand_collapse_sections[data-next-state='collapsed']:after{content:'k'}
 
-.wh_hide_highlight, .webhelp_expand_collapse_sections{background: transparent; border:0; display: none}
+.wh_hide_highlight, .webhelp_expand_collapse_sections{background: transparent; border:0; display: none;padding:0;}
 .wh_hide_highlight:after{font-family: "oXygen WebHelp"; content:'j'; display:inline-block; vertical-align: bottom;}
 .wh_hide_highlight:focus {outline: none}
 .wh_hide_highlight.hl-close:after{opacity:.7}

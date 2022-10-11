@@ -97,6 +97,9 @@
 .wh_publication_title {
     display:inline-block;
 }
+.wh_logo + .wh_publication_title {
+    margin-left: 1.5em;
+}
 
 .wh_logo_and_publication_title.navbar-brand {
     font-size: 1em;
@@ -117,13 +120,35 @@
         display: inline-block;
     }
 
-    .wh_top_menu ul ul {
+    /* Menu activated on :HOVER */
+    .wh_top_menu:not(.activated-on-click) ul ul {
+        display: block;
+        visibility: hidden;
+        transition: visibility 0.2s 1s; /* WH-2521 Delay menu hiding with 1 second on hover off */
+    }
+
+    .wh_top_menu:not(.activated-on-click) ul:hover li:not(:hover) > ul {
+        /* WH-2521 Imedaitelly hide submenus that are not hovered when at least one menu item (li) is hovered. */
+        visibility: hidden;
+        transition: none;
+    }
+
+    .wh_top_menu:not(.activated-on-click) ul li:hover > ul {
+        display: block;
+        visibility: visible;
+        transition: visibility 0.2s 1s;
+    }
+
+    /* Menu activated on CLICK */
+    .wh_top_menu.activated-on-click ul ul {
         display: none;
     }
 
-    .wh_top_menu ul li:hover > ul {
+    .wh_top_menu.activated-on-click ul li.active > ul{
         display: block;
     }
+
+    /* Common menu rules */
 
     .wh_top_menu ul {
         position: relative;
@@ -187,10 +212,10 @@
     }
 
     .wh_top_menu ul ul {
-        background-color: #0f0f0f;
+        background-color: #e6e6e6; /* OSB-273 - Fix default colors for menu items */
     }
     .wh_top_menu ul ul li {
-        border-top-color: #4b545f;
+        border-top-color: #ffffff; /* OSB-273 - Fix default colors for menu items */
     }
     .wh_top_menu ul ul li.has-children:after{
         color:silver;
@@ -212,8 +237,8 @@
         padding: .5em;
         text-decoration: none;
     }
-}
-.wh_top_menu ul li.active > ul {
-    display: block;
-    padding-left: .5em;
+    .wh_top_menu ul li.active > ul {
+        display: block;
+        padding-left: .5em;
+    }
 }

@@ -1,78 +1,115 @@
 /*
 
 Oxygen WebHelp Plugin
-Copyright (c) 1998-2020 Syncro Soft SRL, Romania.  All rights reserved.
+Copyright (c) 1998-2021 Syncro Soft SRL, Romania.  All rights reserved.
 
 */
 /* Use the admonitions from the oXygen WebHelp resources. */
-
-div.note>span.note__title{
-    background-repeat:no-repeat;
-    background-image:url("../img/note.svg") !important;
-    font-weight: bold;
+div.note {
+  background-repeat:no-repeat;
+  background-image:url("../img/note.svg");
 }
 
-span.note__title,
-*[dir] *[dir='ltr'] span.note__title,
-*[dir] *[dir] *[dir='ltr'] span.note__title,
-*[dir] *[dir] *[dir] *[dir='ltr'] span.note__title,
-*[dir] *[dir] *[dir] *[dir] *[dir='ltr'] span.note__title{
-    padding:4px 4px 4px 23px;
-    background-position:left;
+div.note > span.note__title {
+  font-weight: bold;
 }
 
-span.note__title[dir='rtl'],
-*[dir] *[dir='rtl'] span.note__title,
-*[dir] *[dir] *[dir='rtl'] span.note__title,
-*[dir] *[dir] *[dir] *[dir='rtl'] span.note__title,
-*[dir] *[dir] *[dir] *[dir] *[dir='rtl'] span.note__title{
-    padding:4px 23px 4px 4px;
-    background-position:right;
+div.note,
+div.note[dir='ltr'],
+*[dir] div.note[dir='ltr'],
+*[dir] *[dir] div.note[dir='ltr'],
+*[dir] *[dir] *[dir] div.note[dir='ltr'],
+*[dir] *[dir] *[dir] *[dir] div.note[dir='ltr'],
+*[dir='ltr'] div.note,
+*[dir] *[dir='ltr'] div.note,
+*[dir] *[dir] *[dir='ltr'] div.note,
+*[dir] *[dir] *[dir] *[dir='ltr'] div.note,
+*[dir] *[dir] *[dir] *[dir] *[dir='ltr'] div.note {
+  padding: 0.75em 0.5em 0.75em 3em;
+  background-position: 0.5em 0.5em;
+}
+
+@media screen {
+  div.note[dir='rtl'],
+  *[dir='rtl'] div.note,
+  *[dir] div.note[dir='rtl'],
+  *[dir] *[dir] div.note[dir='rtl'],
+  *[dir] *[dir] *[dir] div.note[dir='rtl'],
+  *[dir] *[dir] *[dir] *[dir] div.note[dir='rtl'],
+  *[dir] *[dir='rtl'] div.note,
+  *[dir] *[dir] *[dir='rtl'] div.note,
+  *[dir] *[dir] *[dir] *[dir='rtl'] div.note,
+  *[dir] *[dir] *[dir] *[dir] *[dir='rtl'] div.note {
+    padding: 0.75em 3em 0.75em 0.5em;
+    background-position: top 0.5em right 0.5em;
+  }  
+}
+
+@media print {
+  /* Chemistry does not know 4 tokens expression, using only two. */
+  div.note[dir='rtl'],
+  *[dir='rtl'] div.note,
+  *[dir] div.note[dir='rtl'],
+  *[dir] *[dir] div.note[dir='rtl'],
+  *[dir] *[dir] *[dir] div.note[dir='rtl'],
+  *[dir] *[dir] *[dir] *[dir] div.note[dir='rtl'],
+  *[dir] *[dir='rtl'] div.note,
+  *[dir] *[dir] *[dir='rtl'] div.note,
+  *[dir] *[dir] *[dir] *[dir='rtl'] div.note,
+  *[dir] *[dir] *[dir] *[dir] *[dir='rtl'] div.note {
+    padding: 0.75em 3em 0.75em 0.5em;
+    background-position: 99% 0.5em;
+  }
+}
+
+/* WH-2033 - No icon for note with type="other" */
+div.note.note_other {
+    background-image: none;
 }
 
 
-div.warning>span.note__title{
-    background-image:url("../img/warning.svg") !important;
+div.warning {
+    background-image:url("../img/warning.svg");
 }
 
-div.caution>span.note__title{
-    background-image:url("../img/caution.svg") !important;
+div.caution {
+    background-image:url("../img/caution.svg");
 }
 
-div.trouble>span.note__title{
-    background-image:url("../img/troubleshooting.svg") !important;
+div.trouble {
+    background-image:url("../img/troubleshooting.svg");
 }
 
-div.important>span.note__title {
-    background-image:url("../img/important.svg") !important;
+div.important {
+    background-image:url("../img/important.svg");
 }
 
-div.attention>span.note__title{
-    background-image:url("../img/attention.svg") !important;
+div.attention {
+    background-image:url("../img/attention.svg");
 }
 
-div.notice>span.note__title{
-    background-image:url("../img/notice.svg") !important;
+div.notice {
+    background-image:url("../img/notice.svg");
 }
 
-div.remember>span.note__title{
-    background-image:url("../img/remember.svg") !important;
+div.remember {
+    background-image:url("../img/remember.svg");
 }
 
-div.fastpath>span.note__title{
-    background-image:url("../img/fastpath.svg") !important;
+div.fastpath {
+    background-image:url("../img/fastpath.svg");
 }
 
-div.restriction>span.note__title{
-    background-image:url("../img/restriction.svg") !important;
+div.restriction {
+    background-image:url("../img/restriction.svg");
 }
 
-div.danger>span.note__title{
-    background-image:url("../img/danger.svg") !important;
+div.danger {
+    background-image:url("../img/danger.svg");
 }
 
-div.tip>span.note__title{
-    background-image:url("../img/tip.svg") !important;
+div.tip {
+    background-image:url("../img/tip.svg");
 }
 
 /*
@@ -137,7 +174,7 @@ div.fignone img {
 /* OXYGEN PATCH END EXM-17248 */
 
 .italic {
-    font-style:italic; 	 
+    font-style:italic;   
 }
 .small {font-size:0.9em;}
 .hide {display:none;}
@@ -192,9 +229,18 @@ a#star5 { width:100px; z-index:2; }
 div#rate_comment {clear:both; margin:14px 0 0 0;}
 div.rate_response {margin:-14px 0 0 0; }
 
-/* Conforms to the DITA spec. The HTML uses middle instead of top. */
-.simpletable td:not([valign]),
-.table td:not([valign]) {
-	vertical-align: top;
+/* Conforms to the DITA specs we need to use top instead of browser's user agent (middle). */
+.simpletable thead,
+.simpletable tbody,
+.table > tbody:not([class*="valign"]) > tr:not([class*="valign"]) > td:not([class*="valign"]) {
+  vertical-align: top;
 }
 
+caption.tablecap[data-caption-side="bottom"] {
+  caption-side: bottom;
+}
+
+img.break {
+  display: block;
+  margin-bottom: 1em;
+}
