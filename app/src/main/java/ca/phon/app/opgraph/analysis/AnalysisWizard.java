@@ -26,7 +26,9 @@ import ca.phon.util.Tuple;
 import org.apache.commons.lang.StringEscapeUtils;
 
 import java.awt.*;
+import java.io.File;
 import java.io.OutputStream;
+import java.net.URI;
 import java.util.List;
 import java.util.*;
 
@@ -159,7 +161,9 @@ public class AnalysisWizard extends NodeWizard {
 	@Override
 	protected NodeWizardReportGenerator createReportGenerator(ReportTree reportTree, String reportTemplate, OutputStream fout) {
 		final NodeWizardReportGenerator retVal = super.createReportGenerator(reportTree, reportTemplate, fout);
-		retVal.addCustomJs(String.format("window.projectLocation = '%s'", StringEscapeUtils.escapeHtml(project.getLocation())));
+		final File projectLocationFile = new File(project.getLocation());
+		final URI projectLocationURI = projectLocationFile.toURI();
+		retVal.addCustomJs(String.format("window.projectLocation = '%s'", projectLocationURI.getPath()));
 		return retVal;
 	}
 

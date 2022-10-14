@@ -1056,7 +1056,9 @@ public class QueryAndReportWizard extends NodeWizard {
 	@Override
 	protected NodeWizardReportGenerator createReportGenerator(ReportTree reportTree, String reportTemplate, OutputStream fout) {
 		final NodeWizardReportGenerator retVal = super.createReportGenerator(reportTree, reportTemplate, fout);
-		retVal.addCustomJs(String.format("window.projectLocation = '%s'", StringEscapeUtils.escapeHtml(project.getLocation())));
+		final File projectLocationFile = new File(project.getLocation());
+		final URI projectLocationURI = projectLocationFile.toURI();
+		retVal.addCustomJs(String.format("window.projectLocation = '%s'", projectLocationURI.getPath()));
 		return retVal;
 	}
 
