@@ -200,37 +200,42 @@ public final class Main {
 
 			if(unparsedArgs.length > 0) {
 				// handle request to open file/uri
-				for (int i = 0; i < unparsedArgs.length; i++) {
-					final String fileOrUriToOpen = unparsedArgs[i];
-					if (fileOrUriToOpen.startsWith(PhonURISchemeHandler.PHON_URI_SCHEME + ":")) {
-						try {
-							final URI uri = new URI(fileOrUriToOpen);
-							final PhonURISchemeHandler uriHandler = new PhonURISchemeHandler();
-							uriHandler.openURI(uri);
-						} catch (URISyntaxException | MalformedURLException | FileNotFoundException |
-						         PluginException e) {
-							LogUtil.severe(e);
-							System.exit(1);
-						}
-					} else {
-						final String entryPt = OpenFileEP.EP_NAME;
-						entryPointArgs.put(OpenFileEP.INPUT_FILE, new File(fileOrUriToOpen));
-
-						final PluginEntryPointRunner entryPtRunner =
-								new PluginEntryPointRunner(entryPt);
-						entryPtRunner.setArgs(entryPointArgs);
-						try {
-							entryPtRunner.executePlugin();
-						} catch (PluginException e) {
-							LogUtil.severe( e.getMessage(), e);
-							System.exit(2);
-						}
-					}
-				}
+				openFilesOrUris(unparsedArgs);
 			} else {
 				LogUtil.info("Starting " + initialEntryPoint);
 				final PluginEntryPointRunner entryPtRunner =
 						new PluginEntryPointRunner(initialEntryPoint);
+				entryPtRunner.setArgs(entryPointArgs);
+				try {
+					entryPtRunner.executePlugin();
+				} catch (PluginException e) {
+					LogUtil.severe( e.getMessage(), e);
+					System.exit(2);
+				}
+			}
+		}
+	}
+
+	public static void opensFileOrUris(String[] fileOrUris) {
+		for (int i = 0; i < fileOrUris.length; i++) {
+			final String fileOrUriToOpen = fileOrUris[i];
+			if (fileOrUriToOpen.startsWith(PhonURISchemeHandler.PHON_URI_SCHEME + ":")) {
+				try {
+					final URI uri = new URI(fileOrUriToOpen);
+					final PhonURISchemeHandler uriHandler = new PhonURISchemeHandler();
+					uriHandler.openURI(uri);
+				} catch (URISyntaxException | MalformedURLException | FileNotFoundException |
+				         PluginException e) {
+					LogUtil.severe(e);
+					System.exit(1);
+				}
+			} else {
+				final String entryPt = OpenFileEP.EP_NAME;
+				final EntryPointArgs entryPointArgs = new EntryPointArgs();
+				entryPointArgs.put(OpenFileEP.INPUT_FILE, new File(fileOrUriToOpen));
+
+				final PluginEntryPointRunner entryPtRunner =
+						new PluginEntryPointRunner(entryPt);
 				entryPtRunner.setArgs(entryPointArgs);
 				try {
 					entryPtRunner.executePlugin();
