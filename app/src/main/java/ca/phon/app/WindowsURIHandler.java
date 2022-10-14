@@ -24,7 +24,7 @@ import java.net.URISyntaxException;
  */
 public final class WindowsURIHandler implements PhonStartupHook, IPluginExtensionPoint<PhonStartupHook> {
 
-    private final static String WINDOW_CLASS = "Phon_uri_handler";
+    public final static String WINDOW_CLASS = "Phon_uri_handler";
 
     private final static String URI_HANDLER_FOLDER = "uri_requests";
 
@@ -97,7 +97,8 @@ public final class WindowsURIHandler implements PhonStartupHook, IPluginExtensio
                         return new WinDef.LRESULT(0);
                     }
                     case WinUser.WM_USER: {
-                        if(lParam.longValue() > 0) {
+                        LogUtil.info("WM_USER message with lParam " + Long.toHexString(lParam.longValue()));
+                        if(lParam.longValue() != 0) {
                             PhonWorker.getInstance().invokeLater(() -> {
                                 try {
                                     processMessageWithId(lParam.longValue());
@@ -122,7 +123,7 @@ public final class WindowsURIHandler implements PhonStartupHook, IPluginExtensio
 
         // create new window
         WinDef.HWND hWnd = User32.INSTANCE.CreateWindowEx(User32.WS_EX_TOPMOST, windowClass,
-                "Hidden helper window, used only to catch the windows events", 0, 0, 0, 0, 0, null, null, hInst,
+                "Hidden helper window, used only to catch uri request events", 0, 0, 0, 0, 0, null, null, hInst,
                 null);
 
         //getLastError();
