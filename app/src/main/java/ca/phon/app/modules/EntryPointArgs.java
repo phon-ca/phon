@@ -202,8 +202,9 @@ public class EntryPointArgs extends HashMap<String, Object> {
 	 * Parse command line arguments.
 	 * 
 	 * @param args
+	 * @return list of unparsed arguments
 	 */
-	public void parseArgs(String[] args) {
+	public String[] parseArgs(String[] args) {
 		final Options options = new Options();
 		options.addOption(PROJECT_NAME_OPT, PROJECT_NAME, true, PROJECT_NAME_DESC);
 		options.addOption(PROJECT_LOCATION_OPT, PROJECT_LOCATION, true, PROJECT_LOCATION_DESC);
@@ -217,8 +218,11 @@ public class EntryPointArgs extends HashMap<String, Object> {
 			for(Option opt:cmdLine.getOptions()) {
 				put(opt.getLongOpt(), opt.getValue());
 			}
+			return cmdLine.getArgs();
 		} catch (ParseException e) {
 			LOGGER.error( e.getLocalizedMessage(), e);
 		}
+		return new String[0];
 	}
+
 }

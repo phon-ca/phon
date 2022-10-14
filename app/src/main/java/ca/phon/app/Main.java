@@ -15,11 +15,13 @@
  */
 package ca.phon.app;
 
+import ca.phon.app.actions.*;
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.app.log.*;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.welcome.WelcomeWindowEP;
 import ca.phon.plugin.*;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.PrefHelper;
 import ca.phon.worker.PhonWorker;
 import org.apache.commons.io.FileUtils;
@@ -29,6 +31,7 @@ import java.awt.event.ActionEvent;
 import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.InvocationTargetException;
+import java.net.*;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -192,16 +195,49 @@ public final class Main {
 				LogUtil.severe( e.getLocalizedMessage(), e);
 			}
 		} else {
-			LogUtil.info("Starting " + initialEntryPoint);
-			final PluginEntryPointRunner entryPtRunner =
-					new PluginEntryPointRunner(initialEntryPoint);
-			try {
-				final EntryPointArgs entryPointArgs = new EntryPointArgs();
-				entryPointArgs.parseArgs(args);
+			final EntryPointArgs entryPointArgs = new EntryPointArgs();
+			final String[] unparsedArgs = entryPointArgs.parseArgs(args);
+
+			if(unparsedArgs.length > 0) {
+				// handle request to open file/uri
+				for (int i = 0; i < unparsedArgs.length; i++) {
+					final String fileOrUriToOpen = unparsedArgs[i];
+					if (fileOrUriToOpen.startsWith(PhonURISchemeHandler.PHON_URI_SCHEME + ":")) {
+						try {
+							final URI uri = new URI(fileOrUriToOpen);
+							final PhonURISchemeHandler uriHandler = new PhonURISchemeHandler();
+							uriHandler.openURI(uri);
+						} catch (URISyntaxException | MalformedURLException | FileNotFoundException |
+						         PluginException e) {
+							LogUtil.severe(e);
+							System.exit(1);
+						}
+					} else {
+						final String entryPt = OpenFileEP.EP_NAME;
+						entryPointArgs.put(OpenFileEP.INPUT_FILE, new File(fileOrUriToOpen));
+
+						final PluginEntryPointRunner entryPtRunner =
+								new PluginEntryPointRunner(entryPt);
+						entryPtRunner.setArgs(entryPointArgs);
+						try {
+							entryPtRunner.executePlugin();
+						} catch (PluginException e) {
+							LogUtil.severe( e.getMessage(), e);
+							System.exit(2);
+						}
+					}
+				}
+			} else {
+				LogUtil.info("Starting " + initialEntryPoint);
+				final PluginEntryPointRunner entryPtRunner =
+						new PluginEntryPointRunner(initialEntryPoint);
 				entryPtRunner.setArgs(entryPointArgs);
-				entryPtRunner.executePlugin();
-			} catch (PluginException e) {
-				LogUtil.severe( e.getMessage(), e);
+				try {
+					entryPtRunner.executePlugin();
+				} catch (PluginException e) {
+					LogUtil.severe( e.getMessage(), e);
+					System.exit(2);
+				}
 			}
 		}
 	}

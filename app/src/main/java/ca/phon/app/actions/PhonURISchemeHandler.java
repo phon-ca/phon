@@ -26,6 +26,8 @@ import java.util.*;
  */
 public final class PhonURISchemeHandler {
 
+	public final static String PHON_URI_SCHEME = "phon";
+
 	private final static List<String> GET_VARS = List.of("record",  "tier", "group","range");
 	private final static List<String> GET_VAR_PATTERNS = List.of("[0-9]+", "\\w[ \\w]+(,\\w[ \\w]+)*", "[0-9]+(,[0-9]+)*", "\\([0-9]+\\.{2,3}[0-9]+\\)(,\\([0-9]+\\.{2,3}[0-9]+\\))*");
 
@@ -44,7 +46,7 @@ public final class PhonURISchemeHandler {
 	 * @return the localFile to open along with a map of query variables
 	 */
 	private Tuple<File, Map<String, String>> parseURI(URI uri) throws MalformedURLException, FileNotFoundException {
-		if(!uri.getScheme().equals("phon")) {
+		if(!uri.getScheme().equals(PHON_URI_SCHEME)) {
 			throw new MalformedURLException("URI scheme must be phon");
 		}
 		final String filePath = uri.getPath();
