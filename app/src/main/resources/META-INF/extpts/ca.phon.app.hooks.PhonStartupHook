@@ -14,3 +14,5 @@ ca.phon.app.VLCInitHook
 ca.phon.app.IPADictionaryInitHook
 # Load common objects
 ca.phon.app.ObjectLoaderHook
+# Windows URI handler
+ca.phon.app.WindowsURIHandler

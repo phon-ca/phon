@@ -216,7 +216,7 @@ public final class Main {
 		}
 	}
 
-	public static void opensFileOrUris(String[] fileOrUris) {
+	public static void openFilesOrUris(String[] fileOrUris) {
 		for (int i = 0; i < fileOrUris.length; i++) {
 			final String fileOrUriToOpen = fileOrUris[i];
 			if (fileOrUriToOpen.startsWith(PhonURISchemeHandler.PHON_URI_SCHEME + ":")) {
