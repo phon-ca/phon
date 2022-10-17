@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.5.0-beta.2/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_0-beta_2.dmg" newVersion="3.5.0-beta.2" newMediaFileId="macos" fileSize="286175397" md5Sum="b520e48dcaef26b7936e682d7b3b7f33" sha256Sum="e767bb33b39ffb8e125534f35ee8e747020f851d2b61c9268e9bf109ed0c53d1" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.5.0-beta.3/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_0-beta_3.dmg" newVersion="3.5.0-beta.3" newMediaFileId="macos" fileSize="286188558" md5Sum="a05447c99f4de0d11d41da81e3ff6d11" sha256Sum="94cf630c9727458b49c06b3ffb77d5962b235d4bb26baa487ce0f2716c792da4" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.4.3
 
  * Update to Java 17
- * Add support for apple silicon macs
+ * Add support for apple silicon macs, minimum macOS version is no 10.12
  * Fix issue with participant age filter in queries
  * Fix issue with exporting participant age to CSV when birthday is undefined
  * Add item to the window menu for keeping window on top of others
@@ -533,11 +533,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_0-beta_2.dmg" newVersion="3.5.0-beta.2" newMediaFileId="macos" fileSize="286175397" md5Sum="b520e48dcaef26b7936e682d7b3b7f33" sha256Sum="e767bb33b39ffb8e125534f35ee8e747020f851d2b61c9268e9bf109ed0c53d1" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_0-beta_3.dmg" newVersion="3.5.0-beta.3" newMediaFileId="macos" fileSize="286188558" md5Sum="a05447c99f4de0d11d41da81e3ff6d11" sha256Sum="94cf630c9727458b49c06b3ffb77d5962b235d4bb26baa487ce0f2716c792da4" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.4.3
 
  * Update to Java 17
- * Add support for apple silicon macs
+ * Add support for apple silicon macs, minimum macOS version is no 10.12
  * Fix issue with participant age filter in queries
  * Fix issue with exporting participant age to CSV when birthday is undefined
  * Add item to the window menu for keeping window on top of others
@@ -1066,11 +1066,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-beta_2.exe" newVersion="3.5.0-beta.2" newMediaFileId="win64" fileSize="258955224" md5Sum="bb80f72bbedc0e18e6e4c3a248718792" sha256Sum="7b5b939c64af1162602b97e7996dbea87a070cfcfac02ba65c2300236245a5bc" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-beta_3.exe" newVersion="3.5.0-beta.3" newMediaFileId="win64" fileSize="259139544" md5Sum="265295e8baa3213ce4cc500b83c9cb69" sha256Sum="3354f1e0f128c713dd92c2e1707283665d9364359b4615574d86e4bb5cb73253" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.4.3
 
  * Update to Java 17
- * Add support for apple silicon macs
+ * Add support for apple silicon macs, minimum macOS version is no 10.12
  * Fix issue with participant age filter in queries
  * Fix issue with exporting participant age to CSV when birthday is undefined
  * Add item to the window menu for keeping window on top of others
@@ -1599,11 +1599,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-beta_2.exe" newVersion="3.5.0-beta.2" newMediaFileId="win64" fileSize="258955224" md5Sum="bb80f72bbedc0e18e6e4c3a248718792" sha256Sum="7b5b939c64af1162602b97e7996dbea87a070cfcfac02ba65c2300236245a5bc" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-beta_3.exe" newVersion="3.5.0-beta.3" newMediaFileId="win64" fileSize="259139544" md5Sum="265295e8baa3213ce4cc500b83c9cb69" sha256Sum="3354f1e0f128c713dd92c2e1707283665d9364359b4615574d86e4bb5cb73253" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.4.3
 
  * Update to Java 17
- * Add support for apple silicon macs
+ * Add support for apple silicon macs, minimum macOS version is no 10.12
  * Fix issue with participant age filter in queries
  * Fix issue with exporting participant age to CSV when birthday is undefined
  * Add item to the window menu for keeping window on top of others
@@ -2132,11 +2132,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-beta_2.exe" newVersion="3.5.0-beta.2" newMediaFileId="win64" fileSize="258955224" md5Sum="bb80f72bbedc0e18e6e4c3a248718792" sha256Sum="7b5b939c64af1162602b97e7996dbea87a070cfcfac02ba65c2300236245a5bc" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-beta_3.exe" newVersion="3.5.0-beta.3" newMediaFileId="win64" fileSize="259139544" md5Sum="265295e8baa3213ce4cc500b83c9cb69" sha256Sum="3354f1e0f128c713dd92c2e1707283665d9364359b4615574d86e4bb5cb73253" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.4.3
 
  * Update to Java 17
- * Add support for apple silicon macs
+ * Add support for apple silicon macs, minimum macOS version is no 10.12
  * Fix issue with participant age filter in queries
  * Fix issue with exporting participant age to CSV when birthday is undefined
  * Add item to the window menu for keeping window on top of others
@@ -2665,11 +2665,11 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-beta_2.zip" newVersion="3.5.0-beta.2" newMediaFileId="win64zip" fileSize="257870171" md5Sum="e1fc635f210b655f1afa4d671f90efa4" sha256Sum="a5c232714936de1ebf9f427687faa28a527e6f35a0af48101e3b0134cbb45a28" bundledJre="windows-amd64-17.0.4.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-beta_3.zip" newVersion="3.5.0-beta.3" newMediaFileId="win64zip" fileSize="258052375" md5Sum="129fde850aded78db804dbcb51764936" sha256Sum="60401b4037de470b769b304d7057e76de2f4896541574308b476c5a93b7b851f" bundledJre="windows-amd64-17.0.4.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.4.3
 
  * Update to Java 17
- * Add support for apple silicon macs
+ * Add support for apple silicon macs, minimum macOS version is no 10.12
  * Fix issue with participant age filter in queries
  * Fix issue with exporting participant age to CSV when birthday is undefined
  * Add item to the window menu for keeping window on top of others
