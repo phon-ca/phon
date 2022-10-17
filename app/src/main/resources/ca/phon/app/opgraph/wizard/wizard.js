@@ -147,6 +147,7 @@ function saveTableAsExcel(tableId) {
 }
 
 function loadUri(uri) {
+    uri = encodeURI(uri);
     if(window.cefQuery) {
         window.cefQuery({
             request: uri,
@@ -161,23 +162,23 @@ function loadUri(uri) {
 
 function openSession(corpus, session) {
     if(window.projectLocation) {
-        var uri = "phon:" + window.projectLocation + "/" + corpus + "/" + session + ".xml";
+        var uri = "phon:" + window.projectLocation + corpus + "/" + session;
         loadUri(uri);
     }
 }
 
 function openSessionAtRecord(corpus, session, recordIdx) {
     if(window.projectLocation) {
-        var uri = "phon:" + window.projectLocation + "/" + corpus + "/" + session + ".xml?record=" + recordIdx;
+        var uri = "phon:" + window.projectLocation + corpus + "/" + session + "?record=" + recordIdx;
         loadUri(uri);
     }
 }
 
 function openSessionWithHighlightedValues(corpus, session, recordIdx, groupIdx, tiers, ranges) {
     if(window.projectLocation) {
-        var uri = "phon:" + window.projectLocation + "/" + corpus + "/" + session + ".xml?record=" + recordIdx;
+        var uri = "phon:" + window.projectLocation + corpus + "/" + session + "?record=" + recordIdx;
         uri += "&group=" + groupIdx;
-        uri += "&tier=" + encodeURI(tiers);
+        uri += "&tier=" + tiers;
         uri += "&range=" + ranges;
         loadUri(uri);
     }

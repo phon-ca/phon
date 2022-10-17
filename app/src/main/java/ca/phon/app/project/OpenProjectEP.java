@@ -16,6 +16,7 @@
 package ca.phon.app.project;
 
 import ca.phon.app.modules.EntryPointArgs;
+import ca.phon.app.session.editor.SessionEditorEP;
 import ca.phon.plugin.*;
 import ca.phon.project.*;
 import ca.phon.ui.CommonModuleFrame;
@@ -35,8 +36,12 @@ public class OpenProjectEP implements IPluginEntryPoint {
 	
 	public static final String EP_NAME = "OpenProject";
 
-	private Project project;
-	
+	/**
+	 * If true, OpenSessionEP will be called after the project window is opened with
+	 * the provided entry point args which should point to an existing session in the project
+	 */
+	public static final String OPEN_WITH_SESSION = "open_with_session";
+
 	@Override
 	public String getName() {
 		return EP_NAME;
@@ -47,10 +52,23 @@ public class OpenProjectEP implements IPluginEntryPoint {
 		super();
 	}
 			
-	public void loadProject() {
-		if(project == null)
-			return;
-		loadLocalProject();
+	public void loadProject(EntryPointArgs epArgs) {
+		final Project project = epArgs.getProject();
+		if(project != null) {
+			moveOldProperitesFile(project);
+
+			final boolean openWithSession =
+					epArgs.containsKey(OPEN_WITH_SESSION) ? (Boolean)epArgs.get(OPEN_WITH_SESSION) : false;
+			loadLocalProject(project, !openWithSession);
+
+			if(openWithSession) {
+				try {
+					PluginEntryPointRunner.executePlugin(SessionEditorEP.EP_NAME, epArgs);
+				} catch (PluginException e) {
+					throw new RuntimeException(e);
+				}
+			}
+		}
 	}
 	
 	public void newProject() {
@@ -58,7 +76,7 @@ public class OpenProjectEP implements IPluginEntryPoint {
 	}
 	
 	//	 load the project
-    private boolean loadLocalProject() {
+    private boolean loadLocalProject(Project project, boolean requestFocus) {
     	final MessageDialogProperties props = new MessageDialogProperties();
     	props.setTitle("Open Project");
     	props.setHeader("Could not open project");
@@ -81,8 +99,10 @@ public class OpenProjectEP implements IPluginEntryPoint {
 				if(!(cmf instanceof ProjectWindow)) continue;
 				final Project pfe = cmf.getExtension(Project.class);
 				if(pfe != null && pfe.getLocation().equals(project.getLocation())) {
-					cmf.toFront();
-					cmf.requestFocus();
+					if(requestFocus) {
+						cmf.toFront();
+						cmf.requestFocus();
+					}
 					return true;
 				}
 			}
@@ -134,9 +154,7 @@ public class OpenProjectEP implements IPluginEntryPoint {
 		return false;
     }
 
-    private void moveOldProperitesFile() {
-		if(this.project == null) return;
-
+    private void moveOldProperitesFile(Project project) {
 		final File oldPropsFile = new File(project.getLocation(), LocalProject.PREV_PROJECT_PROPERTIES_FILE);
 		final File newPropsFile = new File(project.getLocation(), LocalProject.PROJECT_PROPERTIES_FILE);
 		if(oldPropsFile.exists() && !newPropsFile.exists()) {
@@ -154,25 +172,16 @@ public class OpenProjectEP implements IPluginEntryPoint {
 		if(GraphicsEnvironment.isHeadless()) return;
 		
 		final EntryPointArgs epArgs = new EntryPointArgs(args);
-		this.project = epArgs.getProject();
-		
+		final Runnable openProject = () -> {
+
+			loadProject(epArgs);
+		};
+
 		if(SwingUtilities.isEventDispatchThread()) {
 			openProject.run();
 		} else {
 			SwingUtilities.invokeLater(openProject);
 		}
 	}
-	
-	/**
-	 * Runnable action
-	 */
-	private final Runnable openProject = new Runnable() {
-		
-		@Override
-		public void run() {
-			moveOldProperitesFile();
-			loadProject();
-		}
-		
-	};
+
 }

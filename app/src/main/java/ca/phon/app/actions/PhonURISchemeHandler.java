@@ -4,9 +4,12 @@ import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.project.*;
 import ca.phon.app.session.editor.SessionEditorEP;
 import ca.phon.plugin.*;
+import ca.phon.project.Project;
 import ca.phon.query.db.*;
 import ca.phon.query.db.xml.XMLQueryFactory;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.util.*;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 
@@ -43,17 +46,13 @@ public final class PhonURISchemeHandler {
 	 *
 	 * @param uri to parse
 	 *
-	 * @return the localFile to open along with a map of query variables
+	 * @return path to open along with a map of query variables
 	 */
-	private Tuple<File, Map<String, String>> parseURI(URI uri) throws MalformedURLException, FileNotFoundException {
+	private Tuple<String, Map<String, String>> parseURI(URI uri) throws MalformedURLException, FileNotFoundException {
 		if(!uri.getScheme().equals(PHON_URI_SCHEME)) {
 			throw new MalformedURLException("URI scheme must be phon");
 		}
 		final String filePath = uri.getPath();
-		final File localFile = new File(filePath);
-		if(!localFile.exists()) {
-			throw new FileNotFoundException(localFile.getAbsolutePath());
-		}
 
 		final Map<String, String> getVars = new LinkedHashMap<>();
 		final List<NameValuePair> nameValuePairs = URLEncodedUtils.parse(uri, "utf-8");
@@ -71,7 +70,7 @@ public final class PhonURISchemeHandler {
 			getVars.put(name, value);
 		}
 
-		return new Tuple<>(localFile, getVars);
+		return new Tuple<>(filePath, getVars);
 	}
 
 	private void setupEpArgs(Map<String, String> queryVars, EntryPointArgs epArgs) {
@@ -114,18 +113,32 @@ public final class PhonURISchemeHandler {
 	}
 
 	public void openURI(URI uri) throws MalformedURLException, FileNotFoundException, PluginException {
-		final Tuple<File, Map<String, String>> openInfo = parseURI(uri);
-
-		final File toOpen = openInfo.getObj1();
-		final Map<String, String> queryVars = openInfo.getObj2();
+		final Tuple<String, Map<String, String>> openInfo = parseURI(uri);
 
 		final EntryPointArgs epArgs = new EntryPointArgs();
-		if(toOpen.isDirectory()) {
+		final Map<String, String> queryVars = openInfo.getObj2();
+		setupEpArgs(queryVars, epArgs);
+
+		final String path = openInfo.getObj1();
+		File toOpen = new File(openInfo.getObj1());
+		if(FilenameUtils.indexOfExtension(path) < 0 && !toOpen.exists()) {
+			// treat as session path in project
+			final String sessionName = toOpen.getName();
+			final File corpusFolder = toOpen.getParentFile();
+			final String corpusName = corpusFolder.getName();
+			final File projectFolder = corpusFolder.getParentFile();
+			toOpen = projectFolder;
+
+			epArgs.put(EntryPointArgs.CORPUS_NAME, corpusName);
+			epArgs.put(EntryPointArgs.SESSION_NAME, sessionName);
+			epArgs.put(OpenProjectEP.OPEN_WITH_SESSION, true);
+		}
+
+		if(toOpen.exists() && toOpen.isDirectory()) {
 			// open as project
 			epArgs.put(EntryPointArgs.PROJECT_LOCATION, toOpen.getAbsolutePath());
 			PluginEntryPointRunner.executePlugin(OpenProjectEP.EP_NAME, epArgs);
 		} else {
-			setupEpArgs(queryVars, epArgs);
 			// try to open using file open handler
 			epArgs.put(OpenFileEP.INPUT_FILE, toOpen);
 			PluginEntryPointRunner.executePluginInBackground(OpenFileEP.EP_NAME, epArgs);
