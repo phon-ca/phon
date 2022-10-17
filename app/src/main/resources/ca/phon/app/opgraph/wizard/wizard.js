@@ -156,7 +156,7 @@ function loadUri(uri) {
             onFailure: function(error_code, response) { console.log("Failed to open uri " + response + " with error code " + error_code) }
         })
     } else {
-        window.open(uri);
+        window.open(uri, "uri_target");
     }
 }
 
