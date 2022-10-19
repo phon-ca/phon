@@ -40,23 +40,7 @@ public final class AlignedTypesDatabaseTSTImpl implements Serializable, AlignedT
 		super();
 
 		tierDescriptionTree = new TernaryTree<>();
-		setupTierDescriptionTree();
-
 		tree = new TernaryTree<>();
-	}
-
-	private void setupTierDescriptionTree() {
-		final TierInfo orthoInfo = new TierInfo("Orthography");
-		orthoInfo.setOrder(0);
-		tierDescriptionTree.put("Orthography", orthoInfo);
-
-		final TierInfo ipaTInfo = new TierInfo("IPA Target");
-		ipaTInfo.setOrder(1);
-		tierDescriptionTree.put("IPA Target", ipaTInfo);
-
-		final TierInfo ipaAInfo = new TierInfo("IPA Actual");
-		ipaAInfo.setOrder(2);
-		tierDescriptionTree.put("IPA Actual", ipaAInfo);
 	}
 
 	/**
