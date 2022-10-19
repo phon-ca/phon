@@ -511,7 +511,7 @@ public interface Project extends IExtendable {
 	 *
 	 * @param folder
 	 */
-	public void setRecourceLocation(String location);
+	public void setResourceLocation(String location);
 
 	/**
 	 * Get an input stream for the specified project resource.

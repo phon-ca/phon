@@ -62,7 +62,7 @@ public final class ShadowProject extends LocalProject {
 		for(String corpusName:project.getCorpora()) {
 			retVal.setCorpusPath(corpusName, project.getCorpusPath(corpusName));
 		}
-		retVal.setRecourceLocation(project.getResourceLocation());
+		retVal.setResourceLocation(project.getResourceLocation());
 		return retVal;
 	}
 	

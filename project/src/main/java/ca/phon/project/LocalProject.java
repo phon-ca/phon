@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
  * A local on-disk project
  *
  */
-public class LocalProject implements Project, ProjectRefresh {
+public class LocalProject extends AbstractProject implements ProjectRefresh {
 
 	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(LocalProject.class.getName());
 
@@ -52,12 +52,6 @@ public class LocalProject implements Project, ProjectRefresh {
 	private File projectFolder;
 	
 	private Properties properties;
-
-	/**
-	 * @deprecated since 3.1.1
-	 */
-	@Deprecated
-	public final static String PROJECT_XML_FILE = "project.xml";
 
 	public final static String PREV_PROJECT_PROPERTIES_FILE = ".properties";
 	public final static String PROJECT_PROPERTIES_FILE = "project.properties";
@@ -82,15 +76,7 @@ public class LocalProject implements Project, ProjectRefresh {
 	private final Map<String, UUID> sessionLocks =
 			Collections.synchronizedMap(new HashMap<String, UUID>());
 
-	private final List<ProjectListener> projectListeners =
-			Collections.synchronizedList(new ArrayList<ProjectListener>());
-
 	private String resourceLocation = null;
-
-	/**
-	 * Extension support
-	 */
-	private final ExtensionSupport extSupport = new ExtensionSupport(Project.class, this);
 
 	/**
 	 *
@@ -100,9 +86,6 @@ public class LocalProject implements Project, ProjectRefresh {
 			throws ProjectConfigurationException {
 		super();
 		this.projectFolder = projectFolder;
-
-		// Properties are loaded here if found
-		extSupport.initExtensions();
 
 		loadProperties();
 		// if not found, create new properties
@@ -138,10 +121,13 @@ public class LocalProject implements Project, ProjectRefresh {
 	 */
 	private void checkProperties() {
 		ProjectType pt = null;
-		try {
-			pt = loadProjectData();
-		} catch(ProjectConfigurationException e) {
-			LOGGER.warn(e);
+		final File projectXMLFile = new File(getFolder(), PROJECT_XML_FILE);
+		if(projectXMLFile.exists()) {
+			try(FileInputStream fin = new FileInputStream(projectXMLFile)) {
+				pt = loadProjectData(fin);
+			} catch (IOException | ProjectConfigurationException e) {
+				LOGGER.warn(e);
+			}
 		}
 		
 		boolean modified = false;
@@ -193,40 +179,6 @@ public class LocalProject implements Project, ProjectRefresh {
 			} catch (IOException e) {
 				LOGGER.error(e);
 			}
-		}
-	}
-
-	/**
-	 * Load project data from the project.xml file.
-	 * If not found, empty project data is created.
-	 *
-	 * @return projectData
-	 * 
-	 * @deprecated
-	 */
-	private ProjectType loadProjectData() throws ProjectConfigurationException {
-		final File dataFile = new File(getFolder(), PROJECT_XML_FILE);
-		if(dataFile.exists()) {
-			try {
-				final JAXBContext jaxbContext = JAXBContext.newInstance(ObjectFactory.class);
-				final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-
-				final FileInputStream fin = new FileInputStream(dataFile);
-				final XMLInputFactory inputFactory = XMLInputFactory.newFactory();
-				final XMLEventReader eventReader = inputFactory.createXMLEventReader(fin);
-
-				final JAXBElement<ProjectType> projectEle =
-						unmarshaller.unmarshal(eventReader, ProjectType.class);
-				return projectEle.getValue();
-			} catch (JAXBException jaxbEx) {
-				throw new ProjectConfigurationException(jaxbEx);
-			} catch (FileNotFoundException e) {
-				throw new ProjectConfigurationException(e);
-			} catch (XMLStreamException e) {
-				throw new ProjectConfigurationException(e);
-			}
-		} else {
-			return null;
 		}
 	}
 
@@ -773,67 +725,6 @@ public class LocalProject implements Project, ProjectRefresh {
 	}
 
 	@Override
-	public Set<Class<?>> getExtensions() {
-		return extSupport.getExtensions();
-	}
-
-	@Override
-	public <T> T getExtension(Class<T> cap) {
-		return extSupport.getExtension(cap);
-	}
-
-	@Override
-	public <T> T putExtension(Class<T> cap, T impl) {
-		return extSupport.putExtension(cap, impl);
-	}
-
-	@Override
-	public <T> T removeExtension(Class<T> cap) {
-		return extSupport.removeExtension(cap);
-	}
-
-	@Override
-	public List<ProjectListener> getProjectListeners() {
-		return Collections.unmodifiableList(projectListeners);
-	}
-
-	@Override
-	public void addProjectListener(ProjectListener listener) {
-		if(!projectListeners.contains(listener)) {
-			projectListeners.add(listener);
-		}
-	}
-
-	@Override
-	public void removeProjectListener(ProjectListener listener) {
-		projectListeners.remove(listener);
-	}
-
-	@Override
-	public void fireProjectStructureChanged(ProjectEvent pe) {
-		final List<ProjectListener> listeners = getProjectListeners();
-		for(ProjectListener listener:listeners) {
-			listener.projectStructureChanged(pe);
-		}
-	}
-
-	@Override
-	public void fireProjectDataChanged(ProjectEvent pe) {
-		final List<ProjectListener> listeners = getProjectListeners();
-		for(ProjectListener listener:listeners) {
-			listener.projectDataChanged(pe);
-		}
-	}
-
-	@Override
-	public void fireProjectWriteLocksChanged(ProjectEvent pe) {
-		final List<ProjectListener> listeners = getProjectListeners();
-		for(ProjectListener listener:listeners) {
-			listener.projectWriteLocksChanged(pe);
-		}
-	}
-
-	@Override
 	public ZonedDateTime getSessionModificationTime(Session session) {
 		return getSessionModificationTime(session.getCorpus(), session.getName());
 	}
@@ -1123,7 +1014,7 @@ public class LocalProject implements Project, ProjectRefresh {
 	}
 
 	@Override
-	public void setRecourceLocation(String location) {
+	public void setResourceLocation(String location) {
 		this.resourceLocation = location;
 	}
 
