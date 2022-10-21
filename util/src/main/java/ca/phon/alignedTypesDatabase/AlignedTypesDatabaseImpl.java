@@ -96,6 +96,12 @@ public interface AlignedTypesDatabaseImpl {
 
 	void removeDatabaseListener(AlignedTypesDatabaseListener listener);
 
+	Iterator<String> typesWithPrefix(String prefix, Function<String, Boolean> filter);
+
+	Iterator<String> typesContaining(String infix, Function<String, Boolean> filter);
+
+	Iterator<String> typesWithSuffix(String suffix, Function<String, Boolean> filter);
+
 	Iterator<String> typeIterator(Function<String, Boolean> filter);
 
 }

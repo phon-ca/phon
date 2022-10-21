@@ -176,4 +176,67 @@ public final class AlignedTypesDatabase implements Serializable {
 		return impl.typeIterator(filter);
 	}
 
+	/**
+	 * Return an iterator for types with given prefix
+	 *
+	 * @param prefix
+	 * @return type iterator for types with given prefix
+	 */
+	public Iterator<String> typesWithPrefix(String prefix) {
+		return typesWithPrefix(prefix, (type) -> true);
+	}
+
+	/**
+	 * Return an iterator for types with given prefix
+	 *
+	 * @param prefix
+	 * @param filter
+	 * @return type iterator for types with given prefix
+	 */
+	public Iterator<String> typesWithPrefix(String prefix, Function<String, Boolean> filter) {
+		return impl.typesWithPrefix(prefix, filter);
+	}
+
+	/**
+	 * Return an iterator for types which contain infix
+	 *
+	 * @param infix
+	 * @return type iterator for types containing infix
+	 */
+	public Iterator<String> typesContaining(String infix) {
+		return typesContaining(infix, (type) -> true);
+	}
+
+	/**
+	 * Return an iterator for types which contain infix
+	 *
+	 * @param infix
+	 * @param filter
+	 * @return type iterator for types containing infix
+	 */
+	public Iterator<String> typesContaining(String infix, Function<String, Boolean> filter) {
+		return impl.typesContaining(infix, filter);
+	}
+
+	/**
+	 * Return an iterator for types ending with suffix
+	 *
+	 * @param suffix
+	 * @return iterator for types ending with suffix
+	 */
+	public Iterator<String> typesWithSuffix(String suffix) {
+		return typesWithSuffix(suffix, (type) -> true);
+	}
+
+	/**
+	 * Return an iterator for types ending with suffix
+	 *
+	 * @param suffix
+	 * @param filter
+	 * @return iterator for types ending with suffix
+	 */
+	public Iterator<String> typesWithSuffix(String suffix, Function<String, Boolean> filter) {
+		return impl.typesWithSuffix(suffix, filter);
+	}
+
 }

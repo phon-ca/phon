@@ -682,16 +682,53 @@ public final class AlignedTypesDatabaseTSTImpl implements Serializable, AlignedT
 	}
 
 	@Override
+	public Iterator<String> typesWithPrefix(String prefix, Function<String, Boolean> filter) {
+		final Optional<TernaryTreeNode<Collection<TypeEntry>>> prefixNodeOpt = tree.findNode(prefix);
+		if(prefixNodeOpt.isPresent()) {
+			final Function<TernaryTreeNode<Collection<TypeEntry>>, Boolean> itrFilter = (node) -> filter.apply(node.getPrefix());
+			return new TypeIterator(new TerminatedNodeIterator<>(tree, prefixNodeOpt.get(), itrFilter));
+		} else {
+			return new Iterator<String>() {
+				@Override
+				public boolean hasNext() {
+					return false;
+				}
+
+				@Override
+				public String next() {
+					return null;
+				}
+			};
+		}
+	}
+
+	@Override
+	public Iterator<String> typesContaining(String infix, Function<String, Boolean> filter) {
+		final Function<TernaryTreeNode<Collection<TypeEntry>>, Boolean> itrFilter = (node) -> {
+			return node.getPrefix().contains(infix) && filter.apply(node.getPrefix());
+		};
+		return new TypeIterator(new TerminatedNodeIterator<>(tree, filter));
+	}
+
+	@Override
+	public Iterator<String> typesWithSuffix(String suffix, Function<String, Boolean> filter) {
+		final Function<TernaryTreeNode<Collection<TypeEntry>>, Boolean> itrFilter = (node) -> {
+			return node.getPrefix().endsWith(suffix) && filter.apply(node.getPrefix());
+		};
+		return new TypeIterator(new TerminatedNodeIterator<>(tree, filter));
+	}
+
+	@Override
 	public Iterator<String> typeIterator(Function<String, Boolean> filter) {
-		final Function<TernaryTreeNode<String>, Boolean> itrFilter = (node) -> filter.apply(node.getPrefix());
+		final Function<TernaryTreeNode<Collection<TypeEntry>>, Boolean> itrFilter = (node) -> filter.apply(node.getPrefix());
 		return new TypeIterator(new TerminatedNodeIterator<>(tree, itrFilter));
 	}
 
 	private class TypeIterator implements Iterator<String> {
 
-		private final TerminatedNodeIterator<String> itr;
+		private final TerminatedNodeIterator<Collection<TypeEntry>> itr;
 
-		public TypeIterator(TerminatedNodeIterator<String> itr) {
+		public TypeIterator(TerminatedNodeIterator<Collection<TypeEntry>> itr) {
 			this.itr = itr;
 		}
 
