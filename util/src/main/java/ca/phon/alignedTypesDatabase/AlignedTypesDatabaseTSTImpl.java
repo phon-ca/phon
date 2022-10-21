@@ -20,6 +20,7 @@ import ca.phon.util.Tuple;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -678,6 +679,32 @@ public final class AlignedTypesDatabaseTSTImpl implements Serializable, AlignedT
 
 		this.readWriteLock = new ReentrantReadWriteLock();
 		this.listenerList = Collections.synchronizedList(new ArrayList<>());
+	}
+
+	@Override
+	public Iterator<String> typeIterator(Function<String, Boolean> filter) {
+		final Function<TernaryTreeNode<String>, Boolean> itrFilter = (node) -> filter.apply(node.getPrefix());
+		return new TypeIterator(new TerminatedNodeIterator<>(tree, itrFilter));
+	}
+
+	private class TypeIterator implements Iterator<String> {
+
+		private final TerminatedNodeIterator<String> itr;
+
+		public TypeIterator(TerminatedNodeIterator<String> itr) {
+			this.itr = itr;
+		}
+
+		@Override
+		public boolean hasNext() {
+			return itr.hasNext();
+		}
+
+		@Override
+		public String next() {
+			return itr.next().getPrefix();
+		}
+
 	}
 
 }

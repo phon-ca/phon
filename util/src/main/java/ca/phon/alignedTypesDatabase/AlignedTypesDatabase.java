@@ -2,6 +2,7 @@ package ca.phon.alignedTypesDatabase;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * A database of types (unique strings) along with the tiers in which they appear
@@ -154,6 +155,25 @@ public final class AlignedTypesDatabase implements Serializable {
 
 	public void removeDatabaseListener(AlignedTypesDatabaseListener listener) {
 		impl.removeDatabaseListener(listener);
+	}
+
+	/**
+	 * Return an iterator for types in the database
+	 *
+	 * @return type iterator
+	 */
+	public Iterator<String> typeIterator() {
+		return typeIterator((type) -> true);
+	}
+
+	/**
+	 * Return an iterator for types in the database using given filter
+	 *
+	 * @param filter
+	 * @return type iterator for types which pass filter
+	 */
+	public Iterator<String> typeIterator(Function<String, Boolean> filter) {
+		return impl.typeIterator(filter);
 	}
 
 }

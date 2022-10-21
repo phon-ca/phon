@@ -1,6 +1,7 @@
 package ca.phon.alignedTypesDatabase;
 
 import java.util.*;
+import java.util.function.Function;
 
 public interface AlignedTypesDatabaseImpl {
 
@@ -94,5 +95,7 @@ public interface AlignedTypesDatabaseImpl {
 	void addDatabaseListener(AlignedTypesDatabaseListener listener);
 
 	void removeDatabaseListener(AlignedTypesDatabaseListener listener);
+
+	Iterator<String> typeIterator(Function<String, Boolean> filter);
 
 }
