@@ -398,6 +398,43 @@ public final class AlignedTypesDatabaseTSTImpl implements Serializable, AlignedT
 	}
 
 	@Override
+	public boolean removeType(String type) {
+		final Optional<TernaryTreeNode<Collection<TypeEntry>>> typeNodeOpt = tree.findNode(type);
+		if(typeNodeOpt.isPresent()) {
+			final TernaryTreeNode<Collection<TypeEntry>> typeNode = typeNodeOpt.get();
+			final Collection<TypeEntry> typeEntries = typeNode.getValue();
+			// un-terminate node
+			typeNode.setValue(null);
+
+			// replace links back to node with links to empty string
+			for(TypeEntry typeEntry:typeEntries) {
+				final String tierName = typeEntry.getTierName(tierDescriptionTree);
+				for(TypeLinkedEntry linkedEntry:typeEntry.getLinkedEntries()) {
+					final String linkedTierName = linkedEntry.getTierName(tierDescriptionTree);
+					for(TernaryTreeNode<Collection<TypeEntry>> linkedNode:linkedEntry.getLinkedTierRefs(tree)) {
+						final Optional<TypeEntry> linkedTypeEntryForTier = linkedNode.getValue()
+								.stream()
+								.filter((te) -> te.getTierName(tierDescriptionTree).equals(linkedTierName)).findAny();
+						if(linkedTypeEntryForTier.isPresent()) {
+							final TypeEntry linkedTypeEntry = linkedTypeEntryForTier.get();
+							final Optional<TypeLinkedEntry> backLinkOpt = linkedTypeEntry.getLinkedEntries()
+									.stream()
+									.filter((te) -> te.getTierName(tierDescriptionTree).equals(tierName)).findFirst();
+							if(backLinkOpt.isPresent()) {
+								final TypeLinkedEntry backLinkTypeEntry = backLinkOpt.get();
+								backLinkTypeEntry.decrementLinkedTier(tree, typeNode);
+							}
+						}
+					}
+				}
+			}
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
 	public boolean typeExistsInTier(String type, String tier) {
 		try {
 			readWriteLock.readLock().lock();
@@ -705,9 +742,12 @@ public final class AlignedTypesDatabaseTSTImpl implements Serializable, AlignedT
 	@Override
 	public Iterator<String> typesContaining(String infix, Function<String, Boolean> filter) {
 		final Function<TernaryTreeNode<Collection<TypeEntry>>, Boolean> itrFilter = (node) -> {
-			return node.getPrefix().contains(infix) && filter.apply(node.getPrefix());
+			final String type = node.getPrefix();
+			final int loc = type.indexOf(infix);
+			final boolean contains = (loc > 0 && loc < type.length()-infix.length());
+			return contains && filter.apply(node.getPrefix());
 		};
-		return new TypeIterator(new TerminatedNodeIterator<>(tree, filter));
+		return new TypeIterator(new TerminatedNodeIterator<>(tree, itrFilter));
 	}
 
 	@Override
@@ -715,7 +755,7 @@ public final class AlignedTypesDatabaseTSTImpl implements Serializable, AlignedT
 		final Function<TernaryTreeNode<Collection<TypeEntry>>, Boolean> itrFilter = (node) -> {
 			return node.getPrefix().endsWith(suffix) && filter.apply(node.getPrefix());
 		};
-		return new TypeIterator(new TerminatedNodeIterator<>(tree, filter));
+		return new TypeIterator(new TerminatedNodeIterator<>(tree, itrFilter));
 	}
 
 	@Override

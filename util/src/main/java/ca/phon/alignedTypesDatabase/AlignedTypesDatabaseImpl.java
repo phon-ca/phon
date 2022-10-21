@@ -64,6 +64,8 @@ public interface AlignedTypesDatabaseImpl {
 
 	boolean typeExists(String type);
 
+	boolean removeType(String type);
+
 	boolean typeExistsInTier(String type, String tier);
 
 	/**

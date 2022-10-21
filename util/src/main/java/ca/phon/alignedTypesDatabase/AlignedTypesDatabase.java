@@ -56,10 +56,23 @@ public final class AlignedTypesDatabase implements Serializable {
 		impl.addAlignment(tierName, type, alignedTierName, alignedType);
 	}
 
+	/**
+	 * Remove alignment from database
+	 *
+	 * @param alignedTypes
+	 * @return
+	 */
 	public boolean removeAlignedTypes(Map<String, String> alignedTypes) {
 		return impl.removeAlignedTypes(alignedTypes);
 	}
 
+	/**
+	 * Remove alignment from the database
+	 *
+	 * @param tierNames
+	 * @param types
+	 * @return
+	 */
 	public boolean removeAlignedTypes(String[] tierNames, String[] types) {
 		return impl.removeAlignedTypes(tierNames, types);
 	}
@@ -107,8 +120,24 @@ public final class AlignedTypesDatabase implements Serializable {
 		return impl.typesForTier(keyTier);
 	}
 
+	/**
+	 * Does the given type exist in the database
+	 *
+	 * @param type
+	 * @return true if type exists in database (any tier)
+	 */
 	public boolean typeExists(String type) {
 		return impl.typeExists(type);
+	}
+
+	/**
+	 * Remove type from database
+	 *
+	 * @param type
+	 * @return true if type was removed, false if type does not exist in db
+	 */
+	public boolean removeType(String type) {
+		return impl.removeType(type);
 	}
 
 	public boolean typeExistsInTier(String type, String tier) {
