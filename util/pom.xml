@@ -1,58 +1,65 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>phon</artifactId>
-    <groupId>ca.phon</groupId>
-    <version>3.5.0-SNAPSHOT</version>
-    <relativePath>..</relativePath>
-  </parent>
- 
-  <artifactId>phon-util</artifactId>
-  <name>Phon Utility Classes</name>
-  <description>A collection of useful classes used withing the Phon libraries.</description>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>phon</artifactId>
+        <groupId>ca.phon</groupId>
+        <version>3.5.0-SNAPSHOT</version>
+        <relativePath>..</relativePath>
+    </parent>
 
-  <dependencies>
-    
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-    </dependency>
-    
-  	<dependency>
-  		<groupId>de.susebox</groupId>
-  		<artifactId>jtopas</artifactId>
-  	</dependency>
-  	
-  	<dependency>
-  		<groupId>ca.hedlund</groupId>
-  		<artifactId>desktopicons</artifactId>
-  	</dependency>
-  	
-  	<dependency>
-	    <groupId>jakarta.xml.bind</groupId>
-	    <artifactId>jakarta.xml.bind-api</artifactId>
-	</dependency>
-	<dependency>
-	    <groupId>com.sun.xml.bind</groupId>
-	    <artifactId>jaxb-impl</artifactId>
-	</dependency>
-  	
-  	<dependency>
-		<groupId>org.apache.logging.log4j</groupId>
-		<artifactId>log4j-core</artifactId>
-	</dependency>
-	<dependency>
-		<groupId>org.apache.logging.log4j</groupId>
-		<artifactId>log4j-slf4j-impl</artifactId>
-	</dependency>
-	<dependency>
-		<groupId>org.apache.logging.log4j</groupId>
-		<artifactId>log4j-1.2-api</artifactId>
-	</dependency>
-    <dependency>
-	    <groupId>ca.hedlund</groupId>
-	    <artifactId>tst</artifactId>
-    </dependency>
-  </dependencies>
-  
+    <artifactId>phon-util</artifactId>
+    <name>Phon Utility Classes</name>
+    <description>A collection of useful classes used withing the Phon libraries.</description>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>de.susebox</groupId>
+            <artifactId>jtopas</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>ca.hedlund</groupId>
+            <artifactId>desktopicons</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-1.2-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ca.hedlund</groupId>
+            <artifactId>tst</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
 </project>

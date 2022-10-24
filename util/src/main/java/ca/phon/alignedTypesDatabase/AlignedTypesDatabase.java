@@ -28,6 +28,10 @@ public final class AlignedTypesDatabase implements Serializable {
 		this.impl = impl;
 	}
 
+	public AlignedTypesDatabaseImpl impl() {
+		return this.impl;
+	}
+
 	/**
 	 * Adds a user tier to the list of tiers in the database
 	 * Tier data type is assumed to be TierString

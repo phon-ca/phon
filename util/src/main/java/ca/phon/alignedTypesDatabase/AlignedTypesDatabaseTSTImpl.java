@@ -147,6 +147,7 @@ public final class AlignedTypesDatabaseTSTImpl implements Serializable, AlignedT
 			final String type = types[i];
 
 			for(int j = 0; j < tierNames.length; j++) {
+				if(i == j) continue;
 				final String alignedTierName = tierNames[j];
 				final String alignedType = types[j];
 
@@ -406,7 +407,6 @@ public final class AlignedTypesDatabaseTSTImpl implements Serializable, AlignedT
 			// un-terminate node
 			typeNode.setValue(null);
 
-			// replace links back to node with links to empty string
 			for(TypeEntry typeEntry:typeEntries) {
 				final String tierName = typeEntry.getTierName(tierDescriptionTree);
 				for(TypeLinkedEntry linkedEntry:typeEntry.getLinkedEntries()) {
@@ -421,8 +421,8 @@ public final class AlignedTypesDatabaseTSTImpl implements Serializable, AlignedT
 									.stream()
 									.filter((te) -> te.getTierName(tierDescriptionTree).equals(tierName)).findFirst();
 							if(backLinkOpt.isPresent()) {
-								final TypeLinkedEntry backLinkTypeEntry = backLinkOpt.get();
-								backLinkTypeEntry.decrementLinkedTier(tree, typeNode);
+								TypeLinkedEntry backLink = backLinkOpt.get();
+								backLink.getLinkedTierCounts(tree).remove(typeNode);
 							}
 						}
 					}
