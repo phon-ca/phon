@@ -31,7 +31,7 @@ public class TestAlignedTypesDatabase {
 				final String[] row = line.split(",");
 				rows.add(row);
 			}
-			Collections.shuffle(rows);
+//			Collections.shuffle(rows);
 
 			for(String[] row:rows) {
 				removeQuotes(row);
@@ -45,6 +45,22 @@ public class TestAlignedTypesDatabase {
 		}
 
 		return database;
+	}
+
+	private Set<String> loadUniqueTypes() throws IOException {
+		final Set<String> retVal = new LinkedHashSet<>();
+		try(final BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(TYPEMAP_CSV_FILE), "UTF-8"))) {
+			String line = reader.readLine();
+
+			while ((line = reader.readLine()) != null) {
+				final String[] row = line.split(",");
+				removeQuotes(row);
+				for(String val:row) {
+					retVal.add(val);
+				}
+			}
+		}
+		return retVal;
 	}
 
 	private void checkDatabase(AlignedTypesDatabase database) throws IOException {
@@ -87,7 +103,7 @@ public class TestAlignedTypesDatabase {
 	}
 
 	@Test
-	public void testRemove() throws IOException {
+	public void testRemoveType() throws IOException {
 		final AlignedTypesDatabase db = loadDatabase();
 		final String[] tierNames = {"Orthography","IPA Target","IPA Actual","MorphCat","Language"};
 		final String[] types = {"Amerika","ˌaˈmeʀika","ʔmˈmeːˌka","name","nld"};
@@ -98,6 +114,23 @@ public class TestAlignedTypesDatabase {
 		Assert.assertTrue(!db.typeExists(types[0]));
 		Assert.assertTrue(!db.hasAlignedTypes(tierNames, types));
 		Assert.assertTrue(db.hasAlignedTypes(tierNames, modifiedTypes));
+	}
+
+	@Test
+	public void testTypeIterator() throws IOException {
+		final AlignedTypesDatabase db = loadDatabase();
+
+		// load unique types from csv
+		final Set<String> uniqueTypes = loadUniqueTypes();
+
+		final Iterator<String> typeItr = db.typeIterator();
+		int cnt = 0;
+		while(typeItr.hasNext()) {
+			final String type = typeItr.next();
+			Assert.assertTrue(uniqueTypes.contains(type));
+			++cnt;
+		}
+		Assert.assertEquals(cnt, uniqueTypes.size());
 	}
 
 }
