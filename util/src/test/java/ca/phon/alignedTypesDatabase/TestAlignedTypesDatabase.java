@@ -31,7 +31,7 @@ public class TestAlignedTypesDatabase {
 				final String[] row = line.split(",");
 				rows.add(row);
 			}
-//			Collections.shuffle(rows);
+			Collections.shuffle(rows);
 
 			for(String[] row:rows) {
 				removeQuotes(row);
@@ -130,7 +130,7 @@ public class TestAlignedTypesDatabase {
 			Assert.assertTrue(uniqueTypes.contains(type));
 			++cnt;
 		}
-		Assert.assertEquals(cnt, uniqueTypes.size());
+		Assert.assertEquals(uniqueTypes.size(), cnt);
 	}
 
 }
