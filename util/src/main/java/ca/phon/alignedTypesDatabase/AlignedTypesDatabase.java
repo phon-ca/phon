@@ -2,7 +2,7 @@ package ca.phon.alignedTypesDatabase;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.function.Function;
+import java.util.function.*;
 
 /**
  * A database of types (unique strings) along with the tiers in which they appear
@@ -205,7 +205,7 @@ public final class AlignedTypesDatabase implements Serializable {
 	 * @param filter
 	 * @return type iterator for types which pass filter
 	 */
-	public Iterator<String> typeIterator(Function<String, Boolean> filter) {
+	public Iterator<String> typeIterator(Predicate<String> filter) {
 		return impl.typeIterator(filter);
 	}
 
@@ -226,7 +226,7 @@ public final class AlignedTypesDatabase implements Serializable {
 	 * @param filter
 	 * @return type iterator for types with given prefix
 	 */
-	public Iterator<String> typesWithPrefix(String prefix, Function<String, Boolean> filter) {
+	public Iterator<String> typesWithPrefix(String prefix, Predicate<String> filter) {
 		return impl.typesWithPrefix(prefix, filter);
 	}
 
@@ -247,7 +247,7 @@ public final class AlignedTypesDatabase implements Serializable {
 	 * @param filter
 	 * @return type iterator for types containing infix
 	 */
-	public Iterator<String> typesContaining(String infix, Function<String, Boolean> filter) {
+	public Iterator<String> typesContaining(String infix, Predicate<String> filter) {
 		return impl.typesContaining(infix, filter);
 	}
 
@@ -268,7 +268,7 @@ public final class AlignedTypesDatabase implements Serializable {
 	 * @param filter
 	 * @return iterator for types ending with suffix
 	 */
-	public Iterator<String> typesWithSuffix(String suffix, Function<String, Boolean> filter) {
+	public Iterator<String> typesWithSuffix(String suffix, Predicate<String> filter) {
 		return impl.typesWithSuffix(suffix, filter);
 	}
 

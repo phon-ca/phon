@@ -47,7 +47,7 @@ public class TestAlignedTypesDatabase {
 		return database;
 	}
 
-	private Set<String> loadUniqueTypes() throws IOException {
+	private Set<String> loadUniqueTypes(int column) throws IOException {
 		final Set<String> retVal = new LinkedHashSet<>();
 		try(final BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(TYPEMAP_CSV_FILE), "UTF-8"))) {
 			String line = reader.readLine();
@@ -55,8 +55,12 @@ public class TestAlignedTypesDatabase {
 			while ((line = reader.readLine()) != null) {
 				final String[] row = line.split(",");
 				removeQuotes(row);
-				for(String val:row) {
-					retVal.add(val);
+				if(column < 0) {
+					for (String val : row) {
+						retVal.add(val);
+					}
+				} else {
+					retVal.add(row[column]);
 				}
 			}
 		}
@@ -119,10 +123,7 @@ public class TestAlignedTypesDatabase {
 	@Test
 	public void testTypeIterator() throws IOException {
 		final AlignedTypesDatabase db = loadDatabase();
-
-		// load unique types from csv
-		final Set<String> uniqueTypes = loadUniqueTypes();
-
+		final Set<String> uniqueTypes = loadUniqueTypes(-1);
 		final Iterator<String> typeItr = db.typeIterator();
 		int cnt = 0;
 		while(typeItr.hasNext()) {
@@ -131,6 +132,20 @@ public class TestAlignedTypesDatabase {
 			++cnt;
 		}
 		Assert.assertEquals(uniqueTypes.size(), cnt);
+	}
+
+	@Test
+	public void testTypeIteratorWithFilter() throws IOException {
+		final AlignedTypesDatabase db = loadDatabase();
+		final Set<String> uniqueOrthos = loadUniqueTypes(0);
+		final Iterator<String> typeItr = db.typeIterator((type) -> db.typeExistsInTier(type, "Orthography"));
+		int cnt = 0;
+		while(typeItr.hasNext()) {
+			final String type = typeItr.next();
+			Assert.assertTrue(uniqueOrthos.contains(type));
+			++cnt;
+		}
+		Assert.assertEquals(uniqueOrthos.size(), cnt);
 	}
 
 }

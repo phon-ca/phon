@@ -1,7 +1,7 @@
 package ca.phon.alignedTypesDatabase;
 
 import java.util.*;
-import java.util.function.Function;
+import java.util.function.*;
 
 public interface AlignedTypesDatabaseImpl {
 
@@ -98,12 +98,12 @@ public interface AlignedTypesDatabaseImpl {
 
 	void removeDatabaseListener(AlignedTypesDatabaseListener listener);
 
-	Iterator<String> typesWithPrefix(String prefix, Function<String, Boolean> filter);
+	Iterator<String> typesWithPrefix(String prefix, Predicate<String> filter);
 
-	Iterator<String> typesContaining(String infix, Function<String, Boolean> filter);
+	Iterator<String> typesContaining(String infix, Predicate<String> filter);
 
-	Iterator<String> typesWithSuffix(String suffix, Function<String, Boolean> filter);
+	Iterator<String> typesWithSuffix(String suffix, Predicate<String> filter);
 
-	Iterator<String> typeIterator(Function<String, Boolean> filter);
+	Iterator<String> typeIterator(Predicate<String> filter);
 
 }

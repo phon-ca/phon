@@ -20,7 +20,7 @@ import ca.phon.util.Tuple;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.function.Function;
+import java.util.function.*;
 import java.util.stream.Collectors;
 
 /**
@@ -719,10 +719,10 @@ public final class AlignedTypesDatabaseTSTImpl implements Serializable, AlignedT
 	}
 
 	@Override
-	public Iterator<String> typesWithPrefix(String prefix, Function<String, Boolean> filter) {
+	public Iterator<String> typesWithPrefix(String prefix, Predicate<String> filter) {
 		final Optional<TernaryTreeNode<Collection<TypeEntry>>> prefixNodeOpt = tree.findNode(prefix);
 		if(prefixNodeOpt.isPresent()) {
-			final Function<TernaryTreeNode<Collection<TypeEntry>>, Boolean> itrFilter = (node) -> filter.apply(node.getPrefix());
+			final Predicate<TernaryTreeNode<Collection<TypeEntry>>> itrFilter = (node) -> filter.test(node.getPrefix());
 			return new TypeIterator(new TerminatedNodeIterator<>(tree, prefixNodeOpt.get(), itrFilter));
 		} else {
 			return new Iterator<String>() {
@@ -740,27 +740,27 @@ public final class AlignedTypesDatabaseTSTImpl implements Serializable, AlignedT
 	}
 
 	@Override
-	public Iterator<String> typesContaining(String infix, Function<String, Boolean> filter) {
-		final Function<TernaryTreeNode<Collection<TypeEntry>>, Boolean> itrFilter = (node) -> {
+	public Iterator<String> typesContaining(String infix, Predicate<String> filter) {
+		final Predicate<TernaryTreeNode<Collection<TypeEntry>>> itrFilter = (node) -> {
 			final String type = node.getPrefix();
 			final int loc = type.indexOf(infix);
 			final boolean contains = (loc > 0 && loc < type.length()-infix.length());
-			return contains && filter.apply(node.getPrefix());
+			return contains && filter.test(node.getPrefix());
 		};
 		return new TypeIterator(new TerminatedNodeIterator<>(tree, itrFilter));
 	}
 
 	@Override
-	public Iterator<String> typesWithSuffix(String suffix, Function<String, Boolean> filter) {
-		final Function<TernaryTreeNode<Collection<TypeEntry>>, Boolean> itrFilter = (node) -> {
-			return node.getPrefix().endsWith(suffix) && filter.apply(node.getPrefix());
+	public Iterator<String> typesWithSuffix(String suffix, Predicate<String> filter) {
+		final Predicate<TernaryTreeNode<Collection<TypeEntry>>> itrFilter = (node) -> {
+			return node.getPrefix().endsWith(suffix) && filter.test(node.getPrefix());
 		};
 		return new TypeIterator(new TerminatedNodeIterator<>(tree, itrFilter));
 	}
 
 	@Override
-	public Iterator<String> typeIterator(Function<String, Boolean> filter) {
-		final Function<TernaryTreeNode<Collection<TypeEntry>>, Boolean> itrFilter = (node) -> filter.apply(node.getPrefix());
+	public Iterator<String> typeIterator(Predicate<String> filter) {
+		final Predicate<TernaryTreeNode<Collection<TypeEntry>>> itrFilter = (node) -> filter.test(node.getPrefix());
 		return new TypeIterator(new TerminatedNodeIterator<>(tree, itrFilter));
 	}
 
