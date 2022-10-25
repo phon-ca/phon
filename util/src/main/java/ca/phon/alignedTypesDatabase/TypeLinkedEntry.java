@@ -51,6 +51,7 @@ final class TypeLinkedEntry implements Serializable {
 						tierDescriptionTree.findNode(this.tierNamePath);
 				if(tierInfoOpt.isEmpty())
 					throw new IllegalStateException("Invalid tier node path");
+				this.tierNamePath = null;
 				this.tierNameRef = tierInfoOpt.get();
 			} else {
 				throw new IllegalStateException("No tier node path");
@@ -71,6 +72,7 @@ final class TypeLinkedEntry implements Serializable {
 						throw new IllegalStateException("Invalid value path");
 					this.linkedTierCounts.put(tierNodeOpt.get(), this.linkedNodePaths.get(path));
 				}
+				this.linkedNodePaths = null;
 			} else {
 				throw new IllegalStateException("No linked values");
 			}

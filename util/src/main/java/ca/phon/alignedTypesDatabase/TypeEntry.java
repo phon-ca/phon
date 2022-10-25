@@ -53,6 +53,7 @@ final class TypeEntry implements Serializable {
 				if(tierNodeOpt.isEmpty()) {
 					throw new IllegalStateException("Invalid tier name path");
 				}
+				this.tierNameNodePath = null;
 				this.tierNameRef = tierNodeOpt.get();
 			} else {
 				throw new IllegalStateException("No path to tier name");
