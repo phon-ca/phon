@@ -96,11 +96,11 @@
 			<version>${ca.phon.phon-praat-plugin.version}</version>
 		</dependency>
 
-<!--		<dependency>-->
-<!--			<groupId>ca.phon</groupId>-->
-<!--			<artifactId>phontalk-plugin</artifactId>-->
-<!--			<version>${ca.phon.phontalk.version}</version>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>ca.phon</groupId>
+			<artifactId>phontalk-plugin</artifactId>
+			<version>${ca.phon.phontalk.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>ca.phon</groupId>
