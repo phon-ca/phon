@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.5.0-beta.3/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_0-beta_3.dmg" newVersion="3.5.0-beta.3" newMediaFileId="macos" fileSize="286188558" md5Sum="a05447c99f4de0d11d41da81e3ff6d11" sha256Sum="94cf630c9727458b49c06b3ffb77d5962b235d4bb26baa487ce0f2716c792da4" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.5.0-beta.5/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_0-beta_5.dmg" newVersion="3.5.0-beta.5" newMediaFileId="macos" fileSize="300868328" md5Sum="8025ce6a32b458031ed5c03343ab5b85" sha256Sum="6bc726dc38a95b94e4d7adc6a8530756a561dbb96936ff5f1b25a5ccd78f02ef" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.4.3
 
+ * Add support for apple silicon macs, minimum macOS version is now 10.12
  * Update to Java 17
- * Add support for apple silicon macs, minimum macOS version is no 10.12
  * Fix issue with participant age filter in queries
  * Fix issue with exporting participant age to CSV when birthday is undefined
  * Add item to the window menu for keeping window on top of others
  * Switch to java-cef for rendering html reports
  * Add support for custom phon: uri scheme allowing session links in saved html reports to open Phon
+ * Update chatter to 1.0-alpha-179
 
 ## Changes from 3.4.2
 
@@ -533,16 +534,17 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_0-beta_3.dmg" newVersion="3.5.0-beta.3" newMediaFileId="macos" fileSize="286188558" md5Sum="a05447c99f4de0d11d41da81e3ff6d11" sha256Sum="94cf630c9727458b49c06b3ffb77d5962b235d4bb26baa487ce0f2716c792da4" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_0-beta_5.dmg" newVersion="3.5.0-beta.5" newMediaFileId="macos" fileSize="300868328" md5Sum="8025ce6a32b458031ed5c03343ab5b85" sha256Sum="6bc726dc38a95b94e4d7adc6a8530756a561dbb96936ff5f1b25a5ccd78f02ef" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.4.3
 
+ * Add support for apple silicon macs, minimum macOS version is now 10.12
  * Update to Java 17
- * Add support for apple silicon macs, minimum macOS version is no 10.12
  * Fix issue with participant age filter in queries
  * Fix issue with exporting participant age to CSV when birthday is undefined
  * Add item to the window menu for keeping window on top of others
  * Switch to java-cef for rendering html reports
  * Add support for custom phon: uri scheme allowing session links in saved html reports to open Phon
+ * Update chatter to 1.0-alpha-179
 
 ## Changes from 3.4.2
 
@@ -1066,16 +1068,17 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-beta_3.exe" newVersion="3.5.0-beta.3" newMediaFileId="win64" fileSize="259139544" md5Sum="265295e8baa3213ce4cc500b83c9cb69" sha256Sum="3354f1e0f128c713dd92c2e1707283665d9364359b4615574d86e4bb5cb73253" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-beta_5.exe" newVersion="3.5.0-beta.5" newMediaFileId="win64" fileSize="284092376" md5Sum="2e27dc6258d190eca72c517c33ac5250" sha256Sum="59590481f56c841c43ee1d8ad8c8f14958c9a50cb884e5dc040c34652bf2b73d" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.4.3
 
+ * Add support for apple silicon macs, minimum macOS version is now 10.12
  * Update to Java 17
- * Add support for apple silicon macs, minimum macOS version is no 10.12
  * Fix issue with participant age filter in queries
  * Fix issue with exporting participant age to CSV when birthday is undefined
  * Add item to the window menu for keeping window on top of others
  * Switch to java-cef for rendering html reports
  * Add support for custom phon: uri scheme allowing session links in saved html reports to open Phon
+ * Update chatter to 1.0-alpha-179
 
 ## Changes from 3.4.2
 
@@ -1599,16 +1602,17 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-beta_3.exe" newVersion="3.5.0-beta.3" newMediaFileId="win64" fileSize="259139544" md5Sum="265295e8baa3213ce4cc500b83c9cb69" sha256Sum="3354f1e0f128c713dd92c2e1707283665d9364359b4615574d86e4bb5cb73253" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-beta_5.exe" newVersion="3.5.0-beta.5" newMediaFileId="win64" fileSize="284092376" md5Sum="2e27dc6258d190eca72c517c33ac5250" sha256Sum="59590481f56c841c43ee1d8ad8c8f14958c9a50cb884e5dc040c34652bf2b73d" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.4.3
 
+ * Add support for apple silicon macs, minimum macOS version is now 10.12
  * Update to Java 17
- * Add support for apple silicon macs, minimum macOS version is no 10.12
  * Fix issue with participant age filter in queries
  * Fix issue with exporting participant age to CSV when birthday is undefined
  * Add item to the window menu for keeping window on top of others
  * Switch to java-cef for rendering html reports
  * Add support for custom phon: uri scheme allowing session links in saved html reports to open Phon
+ * Update chatter to 1.0-alpha-179
 
 ## Changes from 3.4.2
 
@@ -2132,16 +2136,17 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-beta_3.exe" newVersion="3.5.0-beta.3" newMediaFileId="win64" fileSize="259139544" md5Sum="265295e8baa3213ce4cc500b83c9cb69" sha256Sum="3354f1e0f128c713dd92c2e1707283665d9364359b4615574d86e4bb5cb73253" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-beta_5.exe" newVersion="3.5.0-beta.5" newMediaFileId="win64" fileSize="284092376" md5Sum="2e27dc6258d190eca72c517c33ac5250" sha256Sum="59590481f56c841c43ee1d8ad8c8f14958c9a50cb884e5dc040c34652bf2b73d" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.4.3
 
+ * Add support for apple silicon macs, minimum macOS version is now 10.12
  * Update to Java 17
- * Add support for apple silicon macs, minimum macOS version is no 10.12
  * Fix issue with participant age filter in queries
  * Fix issue with exporting participant age to CSV when birthday is undefined
  * Add item to the window menu for keeping window on top of others
  * Switch to java-cef for rendering html reports
  * Add support for custom phon: uri scheme allowing session links in saved html reports to open Phon
+ * Update chatter to 1.0-alpha-179
 
 ## Changes from 3.4.2
 
@@ -2665,16 +2670,17 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-beta_3.zip" newVersion="3.5.0-beta.3" newMediaFileId="win64zip" fileSize="258052375" md5Sum="129fde850aded78db804dbcb51764936" sha256Sum="60401b4037de470b769b304d7057e76de2f4896541574308b476c5a93b7b851f" bundledJre="windows-amd64-17.0.4.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-beta_5.zip" newVersion="3.5.0-beta.5" newMediaFileId="win64zip" fileSize="283004545" md5Sum="b14726fe50ef9cf66460b85c1eea212c" sha256Sum="19f3b3d5b3954a86a9084dad4b08bd40a4a48fead80ae082967d4c6cd1d61481" bundledJre="windows-amd64-17.0.4.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.4.3
 
+ * Add support for apple silicon macs, minimum macOS version is now 10.12
  * Update to Java 17
- * Add support for apple silicon macs, minimum macOS version is no 10.12
  * Fix issue with participant age filter in queries
  * Fix issue with exporting participant age to CSV when birthday is undefined
  * Add item to the window menu for keeping window on top of others
  * Switch to java-cef for rendering html reports
  * Add support for custom phon: uri scheme allowing session links in saved html reports to open Phon
+ * Update chatter to 1.0-alpha-179
 
 ## Changes from 3.4.2
 
