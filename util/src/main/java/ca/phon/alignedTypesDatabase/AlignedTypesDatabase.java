@@ -195,7 +195,7 @@ public final class AlignedTypesDatabase implements Serializable {
 	 *
 	 * @return type iterator
 	 */
-	public Iterator<String> typeIterator() {
+	public TypeIterator typeIterator() {
 		return typeIterator((type) -> true);
 	}
 
@@ -205,7 +205,7 @@ public final class AlignedTypesDatabase implements Serializable {
 	 * @param filter
 	 * @return type iterator for types which pass filter
 	 */
-	public Iterator<String> typeIterator(Predicate<String> filter) {
+	public TypeIterator typeIterator(Predicate<String> filter) {
 		return impl.typeIterator(filter);
 	}
 
@@ -215,7 +215,7 @@ public final class AlignedTypesDatabase implements Serializable {
 	 * @param prefix
 	 * @return type iterator for types with given prefix
 	 */
-	public Iterator<String> typesWithPrefix(String prefix) {
+	public TypeIterator typesWithPrefix(String prefix) {
 		return typesWithPrefix(prefix, (type) -> true);
 	}
 
@@ -226,7 +226,7 @@ public final class AlignedTypesDatabase implements Serializable {
 	 * @param filter
 	 * @return type iterator for types with given prefix
 	 */
-	public Iterator<String> typesWithPrefix(String prefix, Predicate<String> filter) {
+	public TypeIterator typesWithPrefix(String prefix, Predicate<String> filter) {
 		return impl.typesWithPrefix(prefix, filter);
 	}
 
@@ -236,7 +236,7 @@ public final class AlignedTypesDatabase implements Serializable {
 	 * @param infix
 	 * @return type iterator for types containing infix
 	 */
-	public Iterator<String> typesContaining(String infix) {
+	public TypeIterator typesContaining(String infix) {
 		return typesContaining(infix, (type) -> true);
 	}
 
@@ -247,7 +247,7 @@ public final class AlignedTypesDatabase implements Serializable {
 	 * @param filter
 	 * @return type iterator for types containing infix
 	 */
-	public Iterator<String> typesContaining(String infix, Predicate<String> filter) {
+	public TypeIterator typesContaining(String infix, Predicate<String> filter) {
 		return impl.typesContaining(infix, filter);
 	}
 
@@ -257,7 +257,7 @@ public final class AlignedTypesDatabase implements Serializable {
 	 * @param suffix
 	 * @return iterator for types ending with suffix
 	 */
-	public Iterator<String> typesWithSuffix(String suffix) {
+	public TypeIterator typesWithSuffix(String suffix) {
 		return typesWithSuffix(suffix, (type) -> true);
 	}
 
@@ -268,7 +268,7 @@ public final class AlignedTypesDatabase implements Serializable {
 	 * @param filter
 	 * @return iterator for types ending with suffix
 	 */
-	public Iterator<String> typesWithSuffix(String suffix, Predicate<String> filter) {
+	public TypeIterator typesWithSuffix(String suffix, Predicate<String> filter) {
 		return impl.typesWithSuffix(suffix, filter);
 	}
 

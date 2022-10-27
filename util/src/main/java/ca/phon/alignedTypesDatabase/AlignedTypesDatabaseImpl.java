@@ -98,12 +98,12 @@ public interface AlignedTypesDatabaseImpl {
 
 	void removeDatabaseListener(AlignedTypesDatabaseListener listener);
 
-	Iterator<String> typesWithPrefix(String prefix, Predicate<String> filter);
+	TypeIterator typesWithPrefix(String prefix, Predicate<String> filter);
 
-	Iterator<String> typesContaining(String infix, Predicate<String> filter);
+	TypeIterator typesContaining(String infix, Predicate<String> filter);
 
-	Iterator<String> typesWithSuffix(String suffix, Predicate<String> filter);
+	TypeIterator typesWithSuffix(String suffix, Predicate<String> filter);
 
-	Iterator<String> typeIterator(Predicate<String> filter);
+	TypeIterator typeIterator(Predicate<String> filter);
 
 }

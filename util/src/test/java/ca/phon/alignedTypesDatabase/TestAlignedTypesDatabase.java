@@ -148,4 +148,26 @@ public class TestAlignedTypesDatabase {
 		Assert.assertEquals(uniqueOrthos.size(), cnt);
 	}
 
+	@Test
+	public void testTypeIteratorReset() throws IOException {
+		final AlignedTypesDatabase db = loadDatabase();
+		final TypeIterator itr = db.typeIterator();
+
+		Assert.assertTrue(itr.hasNext());
+		final String firstString = itr.next();
+		Assert.assertTrue(itr.hasNext());
+		final String secondString = itr.next();
+		Assert.assertTrue(itr.hasNext());
+		final String thirdString = itr.next();
+
+		itr.reset();
+		Assert.assertTrue(itr.hasNext());
+		Assert.assertEquals(firstString, itr.next());
+
+		// skip second
+		itr.continueFrom(secondString);
+		Assert.assertTrue(itr.hasNext());
+		Assert.assertEquals(thirdString, itr.next());
+	}
+
 }

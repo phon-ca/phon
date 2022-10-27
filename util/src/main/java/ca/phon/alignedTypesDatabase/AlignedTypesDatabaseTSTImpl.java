@@ -719,56 +719,89 @@ public final class AlignedTypesDatabaseTSTImpl implements Serializable, AlignedT
 	}
 
 	@Override
-	public Iterator<String> typesWithPrefix(String prefix, Predicate<String> filter) {
+	public TypeIterator typesWithPrefix(String prefix, Predicate<String> filter) {
 		final Optional<TernaryTreeNode<Collection<TypeEntry>>> prefixNodeOpt = tree.findNode(prefix);
 		if(prefixNodeOpt.isPresent()) {
 			final Predicate<TernaryTreeNode<Collection<TypeEntry>>> itrFilter = (node) -> filter.test(node.getPrefix());
-			return new TypeIterator(new TerminatedNodeIterator<>(tree, prefixNodeOpt.get(), itrFilter));
+			return new TSTTypeIterator(new TerminatedNodeIterator<>(tree, prefixNodeOpt.get(), itrFilter, true));
 		} else {
-			return new Iterator<String>() {
-				@Override
-				public boolean hasNext() {
-					return false;
-				}
-
-				@Override
-				public String next() {
-					return null;
-				}
-			};
+			return new EmptyTypeIterator();
 		}
 	}
 
 	@Override
-	public Iterator<String> typesContaining(String infix, Predicate<String> filter) {
+	public TypeIterator typesContaining(String infix, Predicate<String> filter) {
 		final Predicate<TernaryTreeNode<Collection<TypeEntry>>> itrFilter = (node) -> {
 			final String type = node.getPrefix();
 			final int loc = type.indexOf(infix);
 			final boolean contains = (loc > 0 && loc < type.length()-infix.length());
 			return contains && filter.test(node.getPrefix());
 		};
-		return new TypeIterator(new TerminatedNodeIterator<>(tree, itrFilter));
+		return new TSTTypeIterator(new TerminatedNodeIterator<>(tree, itrFilter));
 	}
 
 	@Override
-	public Iterator<String> typesWithSuffix(String suffix, Predicate<String> filter) {
+	public TypeIterator typesWithSuffix(String suffix, Predicate<String> filter) {
 		final Predicate<TernaryTreeNode<Collection<TypeEntry>>> itrFilter = (node) -> {
 			return node.getPrefix().endsWith(suffix) && filter.test(node.getPrefix());
 		};
-		return new TypeIterator(new TerminatedNodeIterator<>(tree, itrFilter));
+		return new TSTTypeIterator(new TerminatedNodeIterator<>(tree, itrFilter));
 	}
 
 	@Override
-	public Iterator<String> typeIterator(Predicate<String> filter) {
+	public TypeIterator typeIterator(Predicate<String> filter) {
 		final Predicate<TernaryTreeNode<Collection<TypeEntry>>> itrFilter = (node) -> filter.test(node.getPrefix());
-		return new TypeIterator(new TerminatedNodeIterator<>(tree, itrFilter));
+		return new TSTTypeIterator(new TerminatedNodeIterator<>(tree, itrFilter));
 	}
 
-	private class TypeIterator implements Iterator<String> {
+	private class EmptyTypeIterator implements TypeIterator {
+
+		@Override
+		public String getTypePrefix() {
+			return null;
+		}
+
+		@Override
+		public void setTypePrefix(String type) {
+
+		}
+
+		@Override
+		public boolean isPrefixSearch() {
+			return false;
+		}
+
+		@Override
+		public void setPrefixSearch(boolean prefixSearch) {
+
+		}
+
+		@Override
+		public void continueFrom(String type) {
+
+		}
+
+		@Override
+		public void reset() {
+
+		}
+
+		@Override
+		public boolean hasNext() {
+			return false;
+		}
+
+		@Override
+		public String next() {
+			return null;
+		}
+	}
+
+	private class TSTTypeIterator implements TypeIterator {
 
 		private final TerminatedNodeIterator<Collection<TypeEntry>> itr;
 
-		public TypeIterator(TerminatedNodeIterator<Collection<TypeEntry>> itr) {
+		public TSTTypeIterator(TerminatedNodeIterator<Collection<TypeEntry>> itr) {
 			this.itr = itr;
 		}
 
@@ -780,6 +813,41 @@ public final class AlignedTypesDatabaseTSTImpl implements Serializable, AlignedT
 		@Override
 		public String next() {
 			return itr.next().getPrefix();
+		}
+
+		@Override
+		public String getTypePrefix() {
+			return itr.getStartNode().getPrefix();
+		}
+
+		@Override
+		public void setTypePrefix(String type) {
+			final Optional<TernaryTreeNode<Collection<TypeEntry>>> prefixNode = tree.findNode(type);
+			if(prefixNode.isPresent())
+				itr.setStartNode(prefixNode.get());
+		}
+
+		@Override
+		public boolean isPrefixSearch() {
+			return itr.isPrefixSearch();
+		}
+
+		@Override
+		public void setPrefixSearch(boolean prefixSearch) {
+			itr.setPrefixSearch(prefixSearch);
+		}
+
+		@Override
+		public void continueFrom(String type) {
+			final Optional<TernaryTreeNode<Collection<TypeEntry>>> typeNode = tree.findNode(type);
+			if(typeNode.isPresent()) {
+				itr.setCurrentNode(typeNode.get());
+			}
+		}
+
+		@Override
+		public void reset() {
+			itr.reset();
 		}
 
 	}
