@@ -67,7 +67,6 @@ public class SessionInfoEditorView extends EditorView {
 	
 	private TierDataLayoutPanel contentPanel;
 
-	private boolean updatingLanguage = false;
 	private final DocumentListener languageFieldListener = new DocumentListener() {
 		
 		@Override
@@ -76,21 +75,19 @@ public class SessionInfoEditorView extends EditorView {
 
 		@Override
 		public void insertUpdate(DocumentEvent e) {
-			if(!updatingLanguage)
-				updateLang();
+			updateLang();
 		}
 
 		@Override
 		public void removeUpdate(DocumentEvent e) {
-			if(!updatingLanguage)
-				updateLang();
+			updateLang();
 		}
 		
 		private void updateLang() {
 			final String newVal = languageField.getText();
 			
 			final SessionLanguageEdit edit = new SessionLanguageEdit(getEditor(), newVal);
-			edit.setSource(SessionInfoEditorView.this);
+			edit.setSource(languageField);
 			getEditor().getUndoSupport().postEdit(edit);
 		}
 		
@@ -266,37 +263,11 @@ public class SessionInfoEditorView extends EditorView {
 		final LocalDate sessionDate = getEditor().getSession().getDate();
 		if(sessionDate != null)
 			retVal.setDateTime(sessionDate);
-		
-		retVal.getTextField().getDocument().addDocumentListener(new DocumentListener() {
 
-			void dateFieldUpdate() {
-				final LocalDate selectedDate = retVal.getDateTime();
-				if(selectedDate == null) return;
-				
-				final LocalDate newDate = LocalDate.from(selectedDate);
-				
-				final SessionDateEdit edit = new SessionDateEdit(getEditor(), newDate, getEditor().getSession().getDate());
-				edit.setSource(dateField);
-				getEditor().getUndoSupport().postEdit(edit);
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				if(!dateField.isValueAdjusing())
-					dateFieldUpdate();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				if(!dateField.isValueAdjusing())
-					dateFieldUpdate();
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				
-			}
-			
+		retVal.addPropertyChangeListener(DatePicker.DATETIME_PROP, (e) -> {
+			final SessionDateEdit edit = new SessionDateEdit(getEditor(), dateField.getDateTime(), getEditor().getSession().getDate());
+			edit.setSource(dateField);
+			getEditor().getUndoSupport().postEdit(edit);
 		});
 
 		retVal.getTextField().addFocusListener(new FocusListener() {
@@ -441,13 +412,12 @@ public class SessionInfoEditorView extends EditorView {
 		update();
 	}
 
-	boolean updatingMediaLocation = false;
 	private void onSessionMediaChanged(EditorEvent<EditorEventType.SessionMediaChangedData> ee) {
-		if(ee.source() != this) {
+		if(mediaLocationField != null && !mediaLocationField.hasFocus()) {
 			final String mediaPath = getEditor().getSession().getMediaLocation();
-			updatingMediaLocation = true;
+			mediaLocationField.removePropertyChangeListener(FileSelectionField.FILE_PROP, mediaLocationListener);
 			mediaLocationField.setFile(mediaPath != null ? new File(mediaPath) : null);
-			updatingMediaLocation = false;
+			mediaLocationField.addPropertyChangeListener(FileSelectionField.FILE_PROP, mediaLocationListener);
 		}
 	}
 	
@@ -460,18 +430,20 @@ public class SessionInfoEditorView extends EditorView {
 	}
 	
 	private void onLangChanged(EditorEvent<EditorEventType.SessionLangChangedData> ee) {
-		if(ee.source() != languageFieldListener) {
+		if(languageField != null && !languageField.hasFocus()) {
 			final String newVal = ee.data().newLang();
-			updatingLanguage = true;
+			languageField.getDocument().removeDocumentListener(languageFieldListener);
 			languageField.setText(newVal);
-			updatingLanguage = false;
+			languageField.getDocument().addDocumentListener(languageFieldListener);
 		}
 	}
 	
 	private void onDateChanged(EditorEvent<EditorEventType.SessionDateChangedData> ee) {
-		if(ee.source() != dateField) {
+		if(dateField != null && !dateField.hasFocus() && !dateField.isValueAdjusing()) {
 			final LocalDate newDate = ee.data().newDate();
+			dateField.setValueIsAdjusting(true);
 			dateField.setDateTime(newDate);
+			dateField.setValueIsAdjusting(false);
 		}
 		((ParticipantsTableModel)participantTable.getModel()).fireTableDataChanged();
 	}
@@ -480,8 +452,6 @@ public class SessionInfoEditorView extends EditorView {
 		
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			if(updatingMediaLocation) return;
-
 			updateMediaFieldStatus();
 
 			final MediaLocationEdit edit = new MediaLocationEdit(getEditor(), mediaLocationField.getText());

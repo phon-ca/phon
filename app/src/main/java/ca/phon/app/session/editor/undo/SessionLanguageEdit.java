@@ -35,7 +35,7 @@ public class SessionLanguageEdit extends SessionEditorUndoableEdit {
 		getEditor().getSession().setLanguage(oldLang);
 
 		final EditorEvent<EditorEventType.SessionLangChangedData> ee =
-				new EditorEvent<>(EditorEventType.SessionLangChanged, getEditor(), new EditorEventType.SessionLangChangedData(newLang, oldLang));
+				new EditorEvent<>(EditorEventType.SessionLangChanged, getSource(), new EditorEventType.SessionLangChangedData(newLang, oldLang));
 		getEditor().getEventManager().queueEvent(ee);
 	}
 	
@@ -45,7 +45,7 @@ public class SessionLanguageEdit extends SessionEditorUndoableEdit {
 		getEditor().getSession().setLanguage(newLang);
 
 		final EditorEvent<EditorEventType.SessionLangChangedData> ee =
-				new EditorEvent<>(EditorEventType.SessionLangChanged, getEditor(), new EditorEventType.SessionLangChangedData(oldLang, newLang));
+				new EditorEvent<>(EditorEventType.SessionLangChanged, getSource(), new EditorEventType.SessionLangChangedData(oldLang, newLang));
 		getEditor().getEventManager().queueEvent(ee);
 	}
 

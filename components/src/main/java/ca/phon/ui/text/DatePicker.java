@@ -82,10 +82,10 @@ public class DatePicker extends JComponent {
 			}
 			
 		});
-		
+
 		monthView = new JXMonthView();
 		monthView.setTraversable(true);
-		
+
 		final ImageIcon calIcon = 
 				IconManager.getInstance().getIcon("apps/office-calendar", IconSize.SMALL);
 		
@@ -113,14 +113,14 @@ public class DatePicker extends JComponent {
 		add(monthViewButton, gbc);
 	}
 	
-	
-	
 	public LocalDate getDateTime() {
 		return textField.getValue();
 	}
 	
 	public void setDateTime(LocalDate dateTime) {
+		final LocalDate currentDateTime = getDateTime();
 		textField.setValue(dateTime);
+		firePropertyChange(DATETIME_PROP, currentDateTime, dateTime);
 	}
 	
 	public JXMonthView getMonthView() {
@@ -149,8 +149,9 @@ public class DatePicker extends JComponent {
 				final Date javaDate = monthView.getSelectionDate();
 				if(javaDate == null) return;
 				final LocalDate localDate = javaDate.toInstant().atOffset(ZoneOffset.UTC).toLocalDate();
-				
-				textField.setValue(localDate);
+				setValueIsAdjusting(true);
+				setDateTime(localDate);
+				setValueIsAdjusting(false);
 			}
 			
 		});
@@ -158,27 +159,5 @@ public class DatePicker extends JComponent {
 		popup.add(monthView);
 		popup.show(monthViewButton, 0, monthViewButton.getHeight());
 	}
-	
-//	
-//	private final FocusListener fl = new FocusListener() {
-//		
-//		String initialVal = null;
-//		
-//		@Override
-//		public void focusLost(FocusEvent e) {
-//			final String curVal = getEditor().getText();
-//			if(initialVal != null && !initialVal.equals(curVal)) {
-//				final DateTime newDate = dateTimeDoc.getDateTime();
-//				setDate(newDate.toDate());
-//				fireActionPerformed(COMMIT_KEY);
-//			}
-//		}
-//		
-//		@Override
-//		public void focusGained(FocusEvent e) {
-//			initialVal = getEditor().getText();
-//		}
-//		
-//	};
-//	
+
 }

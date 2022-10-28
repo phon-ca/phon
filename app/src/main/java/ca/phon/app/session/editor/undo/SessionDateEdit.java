@@ -74,7 +74,7 @@ public class SessionDateEdit extends SessionEditorUndoableEdit {
 		session.setDate(getPrevDate());
 
 		final EditorEvent<EditorEventType.SessionDateChangedData> ee =
-				new EditorEvent<>(EditorEventType.SessionDateChanged, (Component) getSource(), new EditorEventType.SessionDateChangedData(getNewDate(), getPrevDate()));
+				new EditorEvent<>(EditorEventType.SessionDateChanged, getSource(), new EditorEventType.SessionDateChangedData(getNewDate(), getPrevDate()));
 		getEditor().getEventManager().queueEvent(ee);
 	}
 
@@ -85,7 +85,7 @@ public class SessionDateEdit extends SessionEditorUndoableEdit {
 		session.setDate(getNewDate());
 
 		final EditorEvent<EditorEventType.SessionDateChangedData> ee =
-				new EditorEvent<>(EditorEventType.SessionDateChanged, (Component) getSource(), new EditorEventType.SessionDateChangedData(getPrevDate(), getNewDate()));
+				new EditorEvent<>(EditorEventType.SessionDateChanged, getSource(), new EditorEventType.SessionDateChangedData(getPrevDate(), getNewDate()));
 		getEditor().getEventManager().queueEvent(ee);
 	}
 
