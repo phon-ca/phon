@@ -264,26 +264,7 @@ public class SessionInfoEditorView extends EditorView {
 		if(sessionDate != null)
 			retVal.setDateTime(sessionDate);
 
-		retVal.addPropertyChangeListener(DatePicker.DATETIME_PROP, (e) -> {
-			final SessionDateEdit edit = new SessionDateEdit(getEditor(), dateField.getDateTime(), getEditor().getSession().getDate());
-			edit.setSource(dateField);
-			getEditor().getUndoSupport().postEdit(edit);
-		});
-
-		retVal.getTextField().addFocusListener(new FocusListener() {
-			@Override
-			public void focusGained(FocusEvent e) {
-
-			}
-
-			@Override
-			public void focusLost(FocusEvent e) {
-				if(retVal.getTextField().getState() == FieldState.PROMPT) {
-					retVal.setDateTime(sessionDate);
-				}
-			}
-		});
-
+		retVal.addPropertyChangeListener(DatePicker.DATETIME_PROP, dateChangeListener);
 		return retVal;
 	}
 	
@@ -439,14 +420,23 @@ public class SessionInfoEditorView extends EditorView {
 	}
 	
 	private void onDateChanged(EditorEvent<EditorEventType.SessionDateChangedData> ee) {
-		if(dateField != null && !dateField.hasFocus() && !dateField.isValueAdjusing()) {
+		if(ee.source() != dateField) {
 			final LocalDate newDate = ee.data().newDate();
-			dateField.setValueIsAdjusting(true);
+			dateField.removePropertyChangeListener(DatePicker.DATETIME_PROP, dateChangeListener);
 			dateField.setDateTime(newDate);
-			dateField.setValueIsAdjusting(false);
+			dateField.addPropertyChangeListener(DatePicker.DATETIME_PROP, dateChangeListener);
 		}
 		((ParticipantsTableModel)participantTable.getModel()).fireTableDataChanged();
 	}
+
+	private final PropertyChangeListener dateChangeListener = new PropertyChangeListener() {
+		@Override
+		public void propertyChange(PropertyChangeEvent e) {
+			final SessionDateEdit edit = new SessionDateEdit(getEditor(), (LocalDate) e.getNewValue(), (LocalDate) e.getOldValue());
+			edit.setSource(dateField);
+			getEditor().getUndoSupport().postEdit(edit);
+		}
+	};
 	
 	private final PropertyChangeListener mediaLocationListener = new PropertyChangeListener() {
 		

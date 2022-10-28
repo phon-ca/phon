@@ -86,16 +86,16 @@ public abstract class SessionEditorUndoableEdit extends AbstractUndoableEdit imp
 	
 	@Override
 	public void redo() {
-		final Object oldSource = getSource();
-	
+		final Component oldSource = getSource();
 		if(getEditor() != null) {
+			setSource(getEditor());
 			final Integer recordIdx = getExtension(Integer.class);
 			if(recordIdx != null && getEditor().getCurrentRecordIndex() != recordIdx.intValue()) {
 				getEditor().setCurrentRecordIndex(recordIdx.intValue());
 			}
 		}
-		
 		doIt();
+		setSource(oldSource);
 	}
 	
 	@Override
@@ -106,6 +106,7 @@ public abstract class SessionEditorUndoableEdit extends AbstractUndoableEdit imp
 				getEditor().setCurrentRecordIndex(recordIdx.intValue());
 			}
 		}
+		super.undo();
 	}
 	
 	/**

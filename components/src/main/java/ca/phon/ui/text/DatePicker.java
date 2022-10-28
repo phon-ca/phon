@@ -43,8 +43,6 @@ public class DatePicker extends JComponent {
 	
 	private JButton monthViewButton;
 	
-	private JXMonthView monthView;
-	
 	private boolean valueIsAdjusting;
 	
 	public DatePicker() {
@@ -83,8 +81,9 @@ public class DatePicker extends JComponent {
 			
 		});
 
-		monthView = new JXMonthView();
-		monthView.setTraversable(true);
+		textField.addPropertyChangeListener(FormatterTextField.VALIDATED_VALUE, (e) -> {
+			firePropertyChange(DATETIME_PROP, e.getOldValue(), e.getNewValue());
+		});
 
 		final ImageIcon calIcon = 
 				IconManager.getInstance().getIcon("apps/office-calendar", IconSize.SMALL);
@@ -123,17 +122,14 @@ public class DatePicker extends JComponent {
 		firePropertyChange(DATETIME_PROP, currentDateTime, dateTime);
 	}
 	
-	public JXMonthView getMonthView() {
-		return this.monthView;
-	}
-	
 	public FormatterTextField<LocalDate> getTextField() {
 		return this.textField;
 	}
 	
 	public void onShowMonthView() {
-		final JXMonthView monthView = getMonthView();
+		final JXMonthView monthView = new JXMonthView();
 		monthView.setTraversable(true);
+
 		monthView.setBorder(BorderFactory.createEtchedBorder());
 		
 		if(textField.getValue() != null) {
@@ -146,12 +142,14 @@ public class DatePicker extends JComponent {
 			
 			@Override
 			public void valueChanged(DateSelectionEvent ev) {
-				final Date javaDate = monthView.getSelectionDate();
-				if(javaDate == null) return;
-				final LocalDate localDate = javaDate.toInstant().atOffset(ZoneOffset.UTC).toLocalDate();
-				setValueIsAdjusting(true);
-				setDateTime(localDate);
-				setValueIsAdjusting(false);
+				if(ev.getEventType() == DateSelectionEvent.EventType.DATES_SET) {
+					final Date javaDate = monthView.getSelectionDate();
+					if (javaDate == null) return;
+					final LocalDate localDate = javaDate.toInstant().atOffset(ZoneOffset.UTC).toLocalDate();
+					setValueIsAdjusting(true);
+					setDateTime(localDate);
+					setValueIsAdjusting(false);
+				}
 			}
 			
 		});

@@ -21,6 +21,7 @@ import org.apache.logging.log4j.LogManager;
 import javax.swing.event.*;
 import javax.swing.text.*;
 import java.awt.*;
+import java.awt.event.*;
 
 public class FormatterTextField<T> extends PromptedTextField {
 	
@@ -33,28 +34,33 @@ public class FormatterTextField<T> extends PromptedTextField {
 	}
 	
 	private final Formatter<T> formatter;
+
+	public final static String VALIDATED_VALUE = Formatter.class.getName() + ".validatedValue";
+
+	private T validatedValue;
 	
 	private FormatterTextField(Class<T> type) {
-		super();
-		formatter = getFormatter(type);
-		getDocument().addDocumentListener(docListener);
+		this(getFormatter(type));
 	}
 	
 	public FormatterTextField(Formatter<T> formatter) {
 		super();
 		this.formatter = formatter;
-		getDocument().addDocumentListener(docListener);
+
+		addFocusListener(new FocusListener() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				getDocument().addDocumentListener(docListener);
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				getDocument().removeDocumentListener(docListener);
+			}
+		});
 	}
 	
-	@Override
-	public void setDocument(Document document) {
-		if(getDocument() != null)
-			getDocument().removeDocumentListener(docListener);
-		super.setDocument(document);
-		document.addDocumentListener(docListener);
-	}
-	
-	private Formatter<T> getFormatter(Class<T> type) {
+	private static <R> Formatter<R> getFormatter(Class<R> type) {
 		return FormatterFactory.createFormatter(type);
 	}
 	
@@ -63,15 +69,16 @@ public class FormatterTextField<T> extends PromptedTextField {
 		if(value == null && getState() == FieldState.INPUT) {
 			setForeground(Color.red);
 		} else {
+			setValue(value);
 			setForeground(getState().getColor());
 		}
 		return value != null;
 	}
 	
 	public T getValue() {
-		T retVal = null;
+		T retVal = this.validatedValue;
 		
-		if(getText().length() > 0 && getState() == FieldState.INPUT) {
+		if(getText().length() > 0 && getState() == FieldState.INPUT && hasFocus()) {
 			try {
 				retVal = formatter.parse(getText());
 				setToolTipText(null);
@@ -85,17 +92,22 @@ public class FormatterTextField<T> extends PromptedTextField {
 	}
 	
 	public void setValue(T val) {
+		T oldVal = this.validatedValue;
+		this.validatedValue = val;
 		if(val == null) {
 			setText("");
 			super.setState(FieldState.PROMPT);
 		} else {
-			try {
-				final String s = formatter.format(val);
-				setText(s);
-			} catch (Exception e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+			if(!hasFocus()) {
+				try {
+					final String s = formatter.format(val);
+					setText(s);
+				} catch (Exception e) {
+					LOGGER.error(e.getLocalizedMessage(), e);
+				}
 			}
 		}
+		firePropertyChange(VALIDATED_VALUE, oldVal, val);
 	}
 	
 	private final DocumentListener docListener = new DocumentListener() {
