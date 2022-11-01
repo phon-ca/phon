@@ -142,6 +142,7 @@ public class TestAlignedTypesDatabase {
 		int cnt = 0;
 		while(typeItr.hasNext()) {
 			final String type = typeItr.next();
+			if(type.isEmpty()) continue;
 			Assert.assertTrue(uniqueOrthos.contains(type));
 			++cnt;
 		}

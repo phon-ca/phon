@@ -60,7 +60,7 @@
 		<project.build.sourceVersion>17</project.build.sourceVersion>
 		<project.build.targetVersion>17</project.build.targetVersion>
 
-		<ca.hedlund.tst.version>24</ca.hedlund.tst.version>
+		<ca.hedlund.tst.version>25</ca.hedlund.tst.version>
 		<ca.hedlund.desktopicons.version>6</ca.hedlund.desktopicons.version>
 		<ca.phon.opgraph.version>2.1.3</ca.phon.opgraph.version>
 		<ca.phon.native-dialogs.version>19</ca.phon.native-dialogs.version>
