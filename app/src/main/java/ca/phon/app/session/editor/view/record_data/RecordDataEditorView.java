@@ -64,10 +64,6 @@ import java.util.regex.*;
  */
 public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(RecordDataEditorView.class.getName());
-
-	private static final long serialVersionUID = 2961561720211049250L;
-
 	public final static String VIEW_NAME = "Record Data";
 
 	public final static String VIEW_ICON = "misc/record";
@@ -259,7 +255,8 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 	private void update() {
 		updating = true;
 
-		boolean viewFocused = this == getEditor().getViewModel().getFocusedView();
+		Component keyboardFocusedComp = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
+		boolean viewFocused = this == getEditor().getViewModel().getFocusedView() && SwingUtilities.isDescendingFrom(keyboardFocusedComp, this);
 		final Tier<?> currentFocusTier = currentTier();
 
 		editorMap.clear();
@@ -509,7 +506,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 								painter = new DefaultHighlighter.DefaultHighlightPainter(PhonGuiConstants.PHON_SELECTED);
 							hl.addHighlight(r.getFirst(), r.getLast()+1, painter);
 						} catch (BadLocationException e) {
-							LOGGER.info( e.getLocalizedMessage(), e);
+							LogUtil.info( e.getLocalizedMessage(), e);
 						}
 					}
 				}
@@ -530,7 +527,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 				try {
 					hl.addHighlight(hilight.getStartOffset(), hilight.getEndOffset(), hilight.getPainter());
 				} catch (BadLocationException e) {
-					LOGGER.info( e.getLocalizedMessage(), e);
+					LogUtil.info( e.getLocalizedMessage(), e);
 				}
 		}
 		for(SessionEditorSelection selection:selections) {
@@ -541,7 +538,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 					painter = new DefaultHighlighter.DefaultHighlightPainter(PhonGuiConstants.PHON_SELECTED);
 				hl.addHighlight(r.getFirst(), r.getLast()+1, painter);
 			} catch (BadLocationException e) {
-				LOGGER.info( e.getLocalizedMessage(), e);
+				LogUtil.info( e.getLocalizedMessage(), e);
 			}
 		}
 	}

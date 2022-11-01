@@ -60,8 +60,6 @@ import java.util.function.Consumer;
 
 public class DefaultEditorViewModel implements EditorViewModel {
 
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(DefaultEditorViewModel.class.getName());
-
 	/* Since there is not one but many main-Frames, it is hard to specify which one is the root-window. The
      * FocusedWindowProvider always assumes that the window that is or was focused is the root-window. */
 	private FocusedWindowProvider windows = new FocusedWindowProvider();
@@ -287,7 +285,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 						retVal = viewFactory.createObject(getEditor());
 						registeredViews.put(viewName, retVal);
 					} catch (Exception e) {
-						LOGGER.error( e.getLocalizedMessage(),
+						LogUtil.severe( e.getLocalizedMessage(),
 								e);
 					}
 					break;
@@ -607,7 +605,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 				}
 			}
 		} catch (IOException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.severe( e.getLocalizedMessage(), e);
 		}
 	}
 
@@ -681,7 +679,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 							prevPerspetiveFile.toURI().toURL());
 			savePerspective(prevPerspective);
 		} catch (MalformedURLException e1) {
-			LOGGER.error(e1.getLocalizedMessage(), e1);
+			LogUtil.severe(e1.getLocalizedMessage(), e1);
 		}
 	}
 
@@ -1123,7 +1121,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			final RecordEditorPerspective perspective = new RecordEditorPerspective(layoutName, perspectiveFile.toURI().toURL());
 			savePerspective(perspective);
 		} catch (MalformedURLException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.severe( e.getLocalizedMessage(), e);
 		}
 	}
 
