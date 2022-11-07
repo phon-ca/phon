@@ -216,18 +216,27 @@ public final class AlignedTypesDatabase implements Serializable {
 	 * @return type iterator for types with given prefix
 	 */
 	public TypeIterator typesWithPrefix(String prefix) {
-		return typesWithPrefix(prefix, (type) -> true);
+		return typesWithPrefix(prefix, true, (type) -> true);
+	}
+
+	public TypeIterator typesWithPrefix(String prefix, boolean caseSensitive) {
+		return typesWithPrefix(prefix, caseSensitive, (type) -> true);
+	}
+
+	public TypeIterator typesWithPrefix(String prefix, Predicate<String> filter) {
+		return impl.typesWithPrefix(prefix, true, filter);
 	}
 
 	/**
 	 * Return an iterator for types with given prefix
 	 *
 	 * @param prefix
+	 * @param caseSensitive
 	 * @param filter
 	 * @return type iterator for types with given prefix
 	 */
-	public TypeIterator typesWithPrefix(String prefix, Predicate<String> filter) {
-		return impl.typesWithPrefix(prefix, filter);
+	public TypeIterator typesWithPrefix(String prefix,  boolean caseSensitive, Predicate<String> filter) {
+		return impl.typesWithPrefix(prefix, caseSensitive, filter);
 	}
 
 	/**
@@ -240,15 +249,24 @@ public final class AlignedTypesDatabase implements Serializable {
 		return typesContaining(infix, (type) -> true);
 	}
 
+	public TypeIterator typesContaining(String infix, boolean caseSensitive) {
+		return typesContaining(infix, caseSensitive, (type) -> true);
+	}
+
+	public TypeIterator typesContaining(String infix, Predicate<String> filter) {
+		return typesContaining(infix, true, filter);
+	}
+
 	/**
 	 * Return an iterator for types which contain infix
 	 *
 	 * @param infix
+	 * @param caseSensitive
 	 * @param filter
 	 * @return type iterator for types containing infix
 	 */
-	public TypeIterator typesContaining(String infix, Predicate<String> filter) {
-		return impl.typesContaining(infix, filter);
+	public TypeIterator typesContaining(String infix, boolean caseSensitive, Predicate<String> filter) {
+		return impl.typesContaining(infix, caseSensitive, filter);
 	}
 
 	/**
@@ -261,15 +279,24 @@ public final class AlignedTypesDatabase implements Serializable {
 		return typesWithSuffix(suffix, (type) -> true);
 	}
 
+	public TypeIterator typesWithSuffix(String suffix, boolean caseSensitive) {
+		return typesWithSuffix(suffix, caseSensitive, (type) -> true);
+	}
+
+	public TypeIterator typesWithSuffix(String suffix, Predicate<String> filter) {
+		return typesWithSuffix(suffix, true, filter);
+	}
+
 	/**
 	 * Return an iterator for types ending with suffix
 	 *
 	 * @param suffix
+	 * @param caseSensitive
 	 * @param filter
 	 * @return iterator for types ending with suffix
 	 */
-	public TypeIterator typesWithSuffix(String suffix, Predicate<String> filter) {
-		return impl.typesWithSuffix(suffix, filter);
+	public TypeIterator typesWithSuffix(String suffix, boolean caseSensitive, Predicate<String> filter) {
+		return impl.typesWithSuffix(suffix, caseSensitive, filter);
 	}
 
 }

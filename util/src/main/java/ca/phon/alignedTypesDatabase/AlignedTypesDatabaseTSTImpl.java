@@ -719,39 +719,40 @@ public final class AlignedTypesDatabaseTSTImpl implements Serializable, AlignedT
 	}
 
 	@Override
-	public TypeIterator typesWithPrefix(String prefix, Predicate<String> filter) {
-		final Optional<TernaryTreeNode<Collection<TypeEntry>>> prefixNodeOpt = tree.findNode(prefix);
+	public TypeIterator typesWithPrefix(String prefix, boolean caseSensitive, Predicate<String> filter) {
+		final Optional<TernaryTreeNode<Collection<TypeEntry>>> prefixNodeOpt = tree.findNode(prefix, caseSensitive);
 		if(prefixNodeOpt.isPresent()) {
 			final Predicate<TernaryTreeNode<Collection<TypeEntry>>> itrFilter = (node) -> filter.test(node.getPrefix());
-			return new TSTTypeIterator(new TerminatedNodeIterator<>(tree, prefixNodeOpt.get(), itrFilter, true));
+			return new TSTTypeIterator(new TerminatedNodeIterator<>(tree, prefixNodeOpt.get(), itrFilter, true), caseSensitive);
 		} else {
 			return new EmptyTypeIterator();
 		}
 	}
 
 	@Override
-	public TypeIterator typesContaining(String infix, Predicate<String> filter) {
+	public TypeIterator typesContaining(String infix, boolean caseSensitive, Predicate<String> filter) {
 		final Predicate<TernaryTreeNode<Collection<TypeEntry>>> itrFilter = (node) -> {
 			final String type = node.getPrefix();
-			final int loc = type.indexOf(infix);
+			final int loc = (caseSensitive ? type.indexOf(infix) : type.toLowerCase().indexOf(infix.toLowerCase()));
 			final boolean contains = (loc > 0 && loc < type.length()-infix.length());
 			return contains && filter.test(node.getPrefix());
 		};
-		return new TSTTypeIterator(new TerminatedNodeIterator<>(tree, itrFilter));
+		return new TSTTypeIterator(new TerminatedNodeIterator<>(tree, itrFilter), caseSensitive);
 	}
 
 	@Override
-	public TypeIterator typesWithSuffix(String suffix, Predicate<String> filter) {
+	public TypeIterator typesWithSuffix(String suffix,  boolean caseSensitive, Predicate<String> filter) {
 		final Predicate<TernaryTreeNode<Collection<TypeEntry>>> itrFilter = (node) -> {
-			return node.getPrefix().endsWith(suffix) && filter.test(node.getPrefix());
+			boolean endsWith = (caseSensitive ? node.getPrefix().endsWith(suffix) : node.getPrefix().toLowerCase().endsWith(suffix.toLowerCase()));
+			return endsWith && filter.test(node.getPrefix());
 		};
-		return new TSTTypeIterator(new TerminatedNodeIterator<>(tree, itrFilter));
+		return new TSTTypeIterator(new TerminatedNodeIterator<>(tree, itrFilter), caseSensitive);
 	}
 
 	@Override
 	public TypeIterator typeIterator(Predicate<String> filter) {
 		final Predicate<TernaryTreeNode<Collection<TypeEntry>>> itrFilter = (node) -> filter.test(node.getPrefix());
-		return new TSTTypeIterator(new TerminatedNodeIterator<>(tree, itrFilter));
+		return new TSTTypeIterator(new TerminatedNodeIterator<>(tree, itrFilter), true);
 	}
 
 	private class EmptyTypeIterator implements TypeIterator {
@@ -801,8 +802,11 @@ public final class AlignedTypesDatabaseTSTImpl implements Serializable, AlignedT
 
 		private final TerminatedNodeIterator<Collection<TypeEntry>> itr;
 
-		public TSTTypeIterator(TerminatedNodeIterator<Collection<TypeEntry>> itr) {
+		private final boolean caseSensitive;
+
+		public TSTTypeIterator(TerminatedNodeIterator<Collection<TypeEntry>> itr, boolean caseSensitive) {
 			this.itr = itr;
+			this.caseSensitive = caseSensitive;
 		}
 
 		@Override
@@ -822,7 +826,7 @@ public final class AlignedTypesDatabaseTSTImpl implements Serializable, AlignedT
 
 		@Override
 		public void setTypePrefix(String type) {
-			final Optional<TernaryTreeNode<Collection<TypeEntry>>> prefixNode = tree.findNode(type);
+			final Optional<TernaryTreeNode<Collection<TypeEntry>>> prefixNode = tree.findNode(type, caseSensitive);
 			if(prefixNode.isPresent())
 				itr.setStartNode(prefixNode.get());
 		}
@@ -839,7 +843,7 @@ public final class AlignedTypesDatabaseTSTImpl implements Serializable, AlignedT
 
 		@Override
 		public void continueFrom(String type) {
-			final Optional<TernaryTreeNode<Collection<TypeEntry>>> typeNode = tree.findNode(type);
+			final Optional<TernaryTreeNode<Collection<TypeEntry>>> typeNode = tree.findNode(type, caseSensitive);
 			if(typeNode.isPresent()) {
 				itr.setCurrentNode(typeNode.get());
 			}
