@@ -256,7 +256,8 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 		updating = true;
 
 		Component keyboardFocusedComp = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
-		boolean viewFocused = this == getEditor().getViewModel().getFocusedView() && SwingUtilities.isDescendingFrom(keyboardFocusedComp, this);
+		boolean viewFocused =
+				(keyboardFocusedComp != null && (this == getEditor().getViewModel().getFocusedView() && SwingUtilities.isDescendingFrom(keyboardFocusedComp, this)));
 		final Tier<?> currentFocusTier = currentTier();
 
 		editorMap.clear();
