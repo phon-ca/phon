@@ -16,6 +16,7 @@
 package ca.phon.app.session.editor.view.tier_management;
 
 import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.actions.ConvertFlatTierAction;
 import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.tier_management.actions.*;
 import ca.phon.session.*;
@@ -319,6 +320,12 @@ public class TierOrderingEditorView extends EditorView {
 
 		final DuplicateTierAction dupTierAction = new DuplicateTierAction(getEditor(), this, td, tierViewIdx+1);
 		builder.addItem(".", dupTierAction);
+
+		if(!SystemTierType.Segment.getName().equals(td.getName()) &&
+				!SystemTierType.Notes.getName().equals(td.getName()) && !td.isGrouped()) {
+			final ConvertFlatTierAction convertFlatTierAction = new ConvertFlatTierAction(getEditor(), td.getName());
+			builder.addItem(".", convertFlatTierAction);
+		}
 
 		if(tierDesc.isPresent()) {
 			final RemoveTierAction removeTierAction = new RemoveTierAction(getEditor(), this, tierDesc.get(), tvi);
