@@ -90,8 +90,10 @@ public class OpenFileEP extends HookableAction implements IPluginEntryPoint {
 	
 	public void dialogFinished(NativeDialogEvent evt) {
 		if(evt.getDialogResult() != NativeDialogEvent.OK_OPTION) return;
-		String selectedFile = evt.getDialogData().toString();
-		openFile(new File(selectedFile), args);
+		final String selectedFile = evt.getDialogData().toString();
+		SwingUtilities.invokeLater(() -> {
+			openFile(new File(selectedFile), args);
+		});
 	}
 	
 	public void openFile(File file, Map<String, Object> args) {
