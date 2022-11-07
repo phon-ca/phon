@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.5.0-beta.5/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_0-beta_5.dmg" newVersion="3.5.0-beta.5" newMediaFileId="macos" fileSize="300868328" md5Sum="8025ce6a32b458031ed5c03343ab5b85" sha256Sum="6bc726dc38a95b94e4d7adc6a8530756a561dbb96936ff5f1b25a5ccd78f02ef" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.5.0-beta.6/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_0-beta_6.dmg" newVersion="3.5.0-beta.6" newMediaFileId="macos" fileSize="300859047" md5Sum="68c21fcc11cc5a6cfbe620a27d2bdfad" sha256Sum="1da2ff95d979d658c4ae150caae63e26fb3cb351a2a426748b94a40e106a519d" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.4.3
 
  * Add support for apple silicon macs, minimum macOS version is now 10.12
@@ -534,7 +534,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_0-beta_5.dmg" newVersion="3.5.0-beta.5" newMediaFileId="macos" fileSize="300868328" md5Sum="8025ce6a32b458031ed5c03343ab5b85" sha256Sum="6bc726dc38a95b94e4d7adc6a8530756a561dbb96936ff5f1b25a5ccd78f02ef" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_0-beta_6.dmg" newVersion="3.5.0-beta.6" newMediaFileId="macos" fileSize="300859047" md5Sum="68c21fcc11cc5a6cfbe620a27d2bdfad" sha256Sum="1da2ff95d979d658c4ae150caae63e26fb3cb351a2a426748b94a40e106a519d" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.4.3
 
  * Add support for apple silicon macs, minimum macOS version is now 10.12
@@ -1068,7 +1068,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-beta_5.exe" newVersion="3.5.0-beta.5" newMediaFileId="win64" fileSize="284092376" md5Sum="2e27dc6258d190eca72c517c33ac5250" sha256Sum="59590481f56c841c43ee1d8ad8c8f14958c9a50cb884e5dc040c34652bf2b73d" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-beta_6.exe" newVersion="3.5.0-beta.6" newMediaFileId="win64" fileSize="284117464" md5Sum="d77cb18821182706c7757a02de8ba796" sha256Sum="d745c80e19468bc772ba7d9d345e9041cb03cb33e48905752ac7df4f82038042" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.4.3
 
  * Add support for apple silicon macs, minimum macOS version is now 10.12
@@ -1602,7 +1602,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-beta_5.exe" newVersion="3.5.0-beta.5" newMediaFileId="win64" fileSize="284092376" md5Sum="2e27dc6258d190eca72c517c33ac5250" sha256Sum="59590481f56c841c43ee1d8ad8c8f14958c9a50cb884e5dc040c34652bf2b73d" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-beta_6.exe" newVersion="3.5.0-beta.6" newMediaFileId="win64" fileSize="284117464" md5Sum="d77cb18821182706c7757a02de8ba796" sha256Sum="d745c80e19468bc772ba7d9d345e9041cb03cb33e48905752ac7df4f82038042" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.4.3
 
  * Add support for apple silicon macs, minimum macOS version is now 10.12
@@ -2136,7 +2136,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-beta_5.exe" newVersion="3.5.0-beta.5" newMediaFileId="win64" fileSize="284092376" md5Sum="2e27dc6258d190eca72c517c33ac5250" sha256Sum="59590481f56c841c43ee1d8ad8c8f14958c9a50cb884e5dc040c34652bf2b73d" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-beta_6.exe" newVersion="3.5.0-beta.6" newMediaFileId="win64" fileSize="284117464" md5Sum="d77cb18821182706c7757a02de8ba796" sha256Sum="d745c80e19468bc772ba7d9d345e9041cb03cb33e48905752ac7df4f82038042" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.4.3
 
  * Add support for apple silicon macs, minimum macOS version is now 10.12
@@ -2670,7 +2670,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-beta_5.zip" newVersion="3.5.0-beta.5" newMediaFileId="win64zip" fileSize="283004545" md5Sum="b14726fe50ef9cf66460b85c1eea212c" sha256Sum="19f3b3d5b3954a86a9084dad4b08bd40a4a48fead80ae082967d4c6cd1d61481" bundledJre="windows-amd64-17.0.4.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-beta_6.zip" newVersion="3.5.0-beta.6" newMediaFileId="win64zip" fileSize="283029036" md5Sum="d81f21bde055bdd1dade04015070d26b" sha256Sum="126d10be099008ce909b1110e54aa95e0eec468adcc1bdf9a12785626b351b25" bundledJre="windows-amd64-17.0.4.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.4.3
 
  * Add support for apple silicon macs, minimum macOS version is now 10.12

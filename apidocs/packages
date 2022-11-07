@@ -516,6 +516,7 @@ ca.phon.app.session.editor.undo
 ca.phon.app.session.editor.undo
 ca.phon.app.session.editor.undo
 ca.phon.app.session.editor.undo
+ca.phon.app.session.editor.undo
 ca.phon.app.session.editor
 ca.phon.app.session.editor
 ca.phon.app.session.editor
@@ -539,6 +540,7 @@ ca.phon.app.session.editor
 ca.phon.app.session.editor
 ca.phon.app.session.editor
 ca.phon.app.session.editor
+ca.phon.app.session.editor.actions
 ca.phon.app.session.editor.actions
 ca.phon.app.session.editor.actions
 ca.phon.app.session.editor.actions
@@ -1003,6 +1005,7 @@ ca.phon.ui.menu
 ca.phon.ui.menu
 ca.phon.ui
 ca.phon.ui
+ca.phon.ui
 ca.phon.ui.syllable
 ca.phon.ui.syllable
 ca.phon.ui.text
@@ -1098,6 +1101,7 @@ ca.phon.formatter
 ca.phon.formatter
 ca.phon.formatter
 ca.phon.formatter
+ca.phon.alignedTypesDatabase
 ca.phon.alignedTypesDatabase
 ca.phon.alignedTypesDatabase
 ca.phon.alignedTypesDatabase
