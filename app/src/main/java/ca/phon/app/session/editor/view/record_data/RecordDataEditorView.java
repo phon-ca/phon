@@ -259,6 +259,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 		boolean viewFocused =
 				(keyboardFocusedComp != null && (this == getEditor().getViewModel().getFocusedView() && SwingUtilities.isDescendingFrom(keyboardFocusedComp, this)));
 		final Tier<?> currentFocusTier = currentTier();
+		final int grpIdx = currentGroupIndex();
 
 		editorMap.clear();
 
@@ -369,7 +370,9 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 
 					if(currentFocusTier != null && toFocus == null
 							&& (currentFocusTier.getName().equals(tier.getName()))) {
-						toFocus = tierEditor.getEditorComponent();
+						if(grpIdx >= record.numberOfGroups() || grpIdx == gIdx) {
+							toFocus = tierEditor.getEditorComponent();
+						}
 					}
 
 					editors.add(tierEditor);
