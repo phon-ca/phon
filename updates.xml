@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.4.3/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_3.dmg" newVersion="3.4.3" newMediaFileId="macos" fileSize="300455567" md5Sum="097aebfce43548bbb99f92a1ab0c4fac" sha256Sum="4069a0a3b162f7dfb14e406afcfa3f29a14805eb01b6b95f95597f8d06dc074d" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.4.2
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.5.0/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_0.dmg" newVersion="3.5.0" newMediaFileId="macos" fileSize="347388179" md5Sum="76221bbfb81e0d4aa98e7e2fc82dba91" sha256Sum="9149ceb6473d2ddb7fd8cce407d7de458bddd76a60a76b40d176d4c8b9bc54d4" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.4.3
+
+ * Add support for apple silicon macs, minimum macOS version is now 10.12
+ * Add ipa dictionaries for Australian English, Russian (Cyrillic), Russian (Romanized)
+ * Update to Java 17
+ * Fix issue with participant age filter in queries
+ * Fix issue with exporting participant age to CSV when birthday is undefined
+ * Add item to the window menu for keeping window on top of others
+ * Switch to java-cef for rendering html reports
+ * Add support for custom phon: uri scheme allowing session links in saved html reports to open Phon
+ * Update chatter to 1.0-alpha-179
+
+## Changes from 3.4.2
 
  * VLC and segment playback using the Java audio system now both use the same volume settings
  * New volume slider components are located in the media player, speech analysis, and timeline views. All three sliders control a single volume for the session (video and segment playback)
@@ -523,8 +535,20 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_4_3.dmg" newVersion="3.4.3" newMediaFileId="macos" fileSize="300455567" md5Sum="097aebfce43548bbb99f92a1ab0c4fac" sha256Sum="4069a0a3b162f7dfb14e406afcfa3f29a14805eb01b6b95f95597f8d06dc074d" bundledJre="macos-amd64-15.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.4.2
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_0.dmg" newVersion="3.5.0" newMediaFileId="macos" fileSize="347388179" md5Sum="76221bbfb81e0d4aa98e7e2fc82dba91" sha256Sum="9149ceb6473d2ddb7fd8cce407d7de458bddd76a60a76b40d176d4c8b9bc54d4" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.4.3
+
+ * Add support for apple silicon macs, minimum macOS version is now 10.12
+ * Add ipa dictionaries for Australian English, Russian (Cyrillic), Russian (Romanized)
+ * Update to Java 17
+ * Fix issue with participant age filter in queries
+ * Fix issue with exporting participant age to CSV when birthday is undefined
+ * Add item to the window menu for keeping window on top of others
+ * Switch to java-cef for rendering html reports
+ * Add support for custom phon: uri scheme allowing session links in saved html reports to open Phon
+ * Update chatter to 1.0-alpha-179
+
+## Changes from 3.4.2
 
  * VLC and segment playback using the Java audio system now both use the same volume settings
  * New volume slider components are located in the media player, speech analysis, and timeline views. All three sliders control a single volume for the session (video and segment playback)
@@ -1046,8 +1070,20 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3.exe" newVersion="3.4.3" newMediaFileId="win64" fileSize="308842472" md5Sum="82cf8b64420ff8ce23d447ab9fc03821" sha256Sum="41d222e7c8b6a0ff7b41d85a9a5020f583095f538431d1bf0991f125b510b28a" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.4.2
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0.exe" newVersion="3.5.0" newMediaFileId="win64" fileSize="330614744" md5Sum="cba65caace3971721b5b9a6a6f42792f" sha256Sum="097a87f83797a123441e50ec65dc51b17aaf003c4181604b3382bcb4b7b368df" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.4.3
+
+ * Add support for apple silicon macs, minimum macOS version is now 10.12
+ * Add ipa dictionaries for Australian English, Russian (Cyrillic), Russian (Romanized)
+ * Update to Java 17
+ * Fix issue with participant age filter in queries
+ * Fix issue with exporting participant age to CSV when birthday is undefined
+ * Add item to the window menu for keeping window on top of others
+ * Switch to java-cef for rendering html reports
+ * Add support for custom phon: uri scheme allowing session links in saved html reports to open Phon
+ * Update chatter to 1.0-alpha-179
+
+## Changes from 3.4.2
 
  * VLC and segment playback using the Java audio system now both use the same volume settings
  * New volume slider components are located in the media player, speech analysis, and timeline views. All three sliders control a single volume for the session (video and segment playback)
@@ -1569,8 +1605,20 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3.exe" newVersion="3.4.3" newMediaFileId="win64" fileSize="308842472" md5Sum="82cf8b64420ff8ce23d447ab9fc03821" sha256Sum="41d222e7c8b6a0ff7b41d85a9a5020f583095f538431d1bf0991f125b510b28a" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.4.2
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0.exe" newVersion="3.5.0" newMediaFileId="win64" fileSize="330614744" md5Sum="cba65caace3971721b5b9a6a6f42792f" sha256Sum="097a87f83797a123441e50ec65dc51b17aaf003c4181604b3382bcb4b7b368df" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.4.3
+
+ * Add support for apple silicon macs, minimum macOS version is now 10.12
+ * Add ipa dictionaries for Australian English, Russian (Cyrillic), Russian (Romanized)
+ * Update to Java 17
+ * Fix issue with participant age filter in queries
+ * Fix issue with exporting participant age to CSV when birthday is undefined
+ * Add item to the window menu for keeping window on top of others
+ * Switch to java-cef for rendering html reports
+ * Add support for custom phon: uri scheme allowing session links in saved html reports to open Phon
+ * Update chatter to 1.0-alpha-179
+
+## Changes from 3.4.2
 
  * VLC and segment playback using the Java audio system now both use the same volume settings
  * New volume slider components are located in the media player, speech analysis, and timeline views. All three sliders control a single volume for the session (video and segment playback)
@@ -2092,8 +2140,20 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3.exe" newVersion="3.4.3" newMediaFileId="win64" fileSize="308842472" md5Sum="82cf8b64420ff8ce23d447ab9fc03821" sha256Sum="41d222e7c8b6a0ff7b41d85a9a5020f583095f538431d1bf0991f125b510b28a" bundledJre="windows-amd64-15.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.4.2
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0.exe" newVersion="3.5.0" newMediaFileId="win64" fileSize="330614744" md5Sum="cba65caace3971721b5b9a6a6f42792f" sha256Sum="097a87f83797a123441e50ec65dc51b17aaf003c4181604b3382bcb4b7b368df" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.4.3
+
+ * Add support for apple silicon macs, minimum macOS version is now 10.12
+ * Add ipa dictionaries for Australian English, Russian (Cyrillic), Russian (Romanized)
+ * Update to Java 17
+ * Fix issue with participant age filter in queries
+ * Fix issue with exporting participant age to CSV when birthday is undefined
+ * Add item to the window menu for keeping window on top of others
+ * Switch to java-cef for rendering html reports
+ * Add support for custom phon: uri scheme allowing session links in saved html reports to open Phon
+ * Update chatter to 1.0-alpha-179
+
+## Changes from 3.4.2
 
  * VLC and segment playback using the Java audio system now both use the same volume settings
  * New volume slider components are located in the media player, speech analysis, and timeline views. All three sliders control a single volume for the session (video and segment playback)
@@ -2615,8 +2675,20 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_4_3.zip" newVersion="3.4.3" newMediaFileId="win64zip" fileSize="307786837" md5Sum="adc53afc9f51393d4e62daa62992fb8e" sha256Sum="6c168e791b8363ab29aec4fb497651628ede50002f1fc55a2394e441ebb7ac7b" bundledJre="windows-amd64-15.tar.gz" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.4.2
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0.zip" newVersion="3.5.0" newMediaFileId="win64zip" fileSize="329517607" md5Sum="1f1f4067036b9003460b7b984ab0f4b9" sha256Sum="9878d4c1fc8d8e8fcd88fea3b109df470307ec7082cd9d2636300c15d45d990d" bundledJre="windows-amd64-17.0.4.tar.gz" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.4.3
+
+ * Add support for apple silicon macs, minimum macOS version is now 10.12
+ * Add ipa dictionaries for Australian English, Russian (Cyrillic), Russian (Romanized)
+ * Update to Java 17
+ * Fix issue with participant age filter in queries
+ * Fix issue with exporting participant age to CSV when birthday is undefined
+ * Add item to the window menu for keeping window on top of others
+ * Switch to java-cef for rendering html reports
+ * Add support for custom phon: uri scheme allowing session links in saved html reports to open Phon
+ * Update chatter to 1.0-alpha-179
+
+## Changes from 3.4.2
 
  * VLC and segment playback using the Java audio system now both use the same volume settings
  * New volume slider components are located in the media player, speech analysis, and timeline views. All three sliders control a single volume for the session (video and segment playback)
