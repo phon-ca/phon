@@ -105,7 +105,7 @@ public interface Project extends IExtendable {
 	/**
 	 * Add a new corpus with the specified name.
 	 *
-	 * @param corpus
+	 * @param name
 	 * @param description
 	 * @throws IOException if the corpus could not be
 	 *  created
@@ -167,7 +167,7 @@ public interface Project extends IExtendable {
 	/**
 	 * Set media folder for project.
 	 *
-	 * @param folder.  If <code>null</code> sets the media folder
+	 * @param mediaFolder If <code>null</code> sets the media folder
 	 * back to default.
 	 */
 	public void setProjectMediaFolder(String mediaFolder);
@@ -222,7 +222,7 @@ public interface Project extends IExtendable {
 	 * This method will also add the session to the specified corpus.
 	 *
 	 * @param corpus
-	 * @param sessionName
+	 * @param session
 	 *
 	 * @return new Session object
 	 */
@@ -445,7 +445,7 @@ public interface Project extends IExtendable {
 	 *
 	 * @throws IOException
 	 */
-	public void removeSession(Session sesion, UUID writeLock)
+	public void removeSession(Session session, UUID writeLock)
 		throws IOException;
 
 	/**
@@ -458,7 +458,7 @@ public interface Project extends IExtendable {
 	 *
 	 * @throws IOException
 	 */
-	public void removeSession(String corpus, String sesion, UUID writeLock)
+	public void removeSession(String corpus, String session, UUID writeLock)
 		throws IOException;
 
 	/**
@@ -509,7 +509,7 @@ public interface Project extends IExtendable {
 	/**
 	 * Set the location of the project resources folder.
 	 *
-	 * @param folder
+	 * @param location
 	 */
 	public void setResourceLocation(String location);
 
