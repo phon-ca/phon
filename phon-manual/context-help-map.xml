@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map>
-   <appContext helpID="" path="getting_started.html"/>
+   <appContext helpID="getting_started" path="getting_started.html"/>
    <appContext helpID="installing-phon" path="install.html"/>
    <appContext helpID="tutorials" path="tutorials.html"/>
    <appContext helpID="known-issues" path="known_issues.html"/>
