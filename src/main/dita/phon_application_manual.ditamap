@@ -55,7 +55,7 @@
         </topicref>
         <topichead navtitle="Tools">
             <topicref href="tools/ipamap.dita"/>
-            <topicref href="tools/phonshell.md" format="markdown"/>
+            <topicref href="tools/PhonShell.md" format="markdown"/>
             <topicref href="tools/iso_langauge_codes.md" format="markdown"/>
         </topichead>
     </chapter>

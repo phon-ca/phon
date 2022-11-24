@@ -37,15 +37,15 @@
                 <ul>
                     <li>
                         <p><xref
-                                href="https://github.com/phon-ca/phon/releases/download/3.5.0/Phon_macos_3_4_3.dmg"
+                                href="https://github.com/phon-ca/phon/releases/download/3.5.0/Phon_macos_3_5_0.dmg"
                                 format="dmg" scope="external">macOS 10.9+ (dmg)</xref></p>
                     </li>
                     <li>
                         <p><xref
-                                href="https://github.com/phon-ca/phon/releases/download/3.5.0/Phon_windows-x64_3_4_3.exe"
+                                href="https://github.com/phon-ca/phon/releases/download/3.5.0/Phon_windows-x64_3_5_0.exe"
                                 format="exe" scope="external">Windows (64-bit) (installer)</xref> |
                                 <xref
-                                href="https://github.com/phon-ca/phon/releases/download/3.5.0/Phon_windows-x64_3_4_3.zip"
+                                href="https://github.com/phon-ca/phon/releases/download/3.5.0/Phon_windows-x64_3_5_0.zip"
                                 format="zip" scope="external">Windows (64 bit) (zip)</xref></p>
                     </li>
                 </ul>
@@ -207,12 +207,10 @@
                 whom it would have been much more difficult to produce the current software program.
                 We are also grateful to Paul Boersma for this tremendous collaboration toward the
                 interactions between Praat and related functions within Phon 2.</p>
-            <p>Install packages created using <xref
-                    href="https://www.ej-technologies.com/products/install4j/overview.html"
-                    format="html" scope="external">multi-platform installer builder <image
+            <p>Install packages created using <xref scope="external" href="https://www.ej-technologies.com/products/install4j/overview.html" format="html">multi-platform installer builder <image
                         placement="inline"
                         href="https://www.ej-technologies.com/images/product_banners/install4j_small.png"
-                        id="image_kzn_1f3_y5b"/></xref>.</p>
+                        id="image_kzn_1f3_y5b" scope="external" /></xref>.</p>
         </body>
     </topic>
 </topic>
