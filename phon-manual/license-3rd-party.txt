@@ -11,57 +11,27 @@ THIRDPARTY COMPONENT FILE                                           			LICENSE
 
 Third Party Code in generated WebHelp Output:
 
+oxygen-webhelp/app/commons.js								                    Various licenses (see commons.js.LICENSE.txt)
+
 oxygen-webhelp/app/search/nwSearchFnt.js                                		BSD 3-Clause (see oxygen-webhelp/search/nwSearchFnt.LICENSE.txt )
 oxygen-webhelp/app/search/stemmers/de_stemmer.js                        		BSD 2-Clause (FormBlitz AG)
 oxygen-webhelp/app/search/stemmers/fr_stemmer.js                        		BSD 2-Clause (Kasun Gajasinghe)
 oxygen-webhelp/app/search/stemmers/en_stemmer.js                        		BSD 2-Clause (http://tartarus.org/~martin/PorterStemmer/)
-oxygen-webhelp/app/util/parseuri.js                             				MIT License (author Steven Levithan)
 
-
-Bootstrap v4.4.1 (https://getbootstrap.com/)                                    MIT License (https://github.com/twbs/bootstrap/blob/v4.4.1/LICENSE)
-  - oxygen-webhelp/lib/bootstrap/css/bootstrap.min.css 
-  - oxygen-webhelp/lib/bootstrap/js/bootstrap.bundle.min.js
-  
-jQuery v3.5.1 (https://jquery.org)                                              MIT License (https://jquery.org/license/)
-  - oxygen-webhelp/lib/jquery/jquery-3.5.1.min.js
-  
-bootpag v1.07 (http://botmonster.com/jquery-bootpag/)                           MIT License (http://www.opensource.org/licenses/mit-license.php)
-  - oxygen-webhelp/lib/jquery-bootpag/jquery.bootpag.min.js
-
-highlight v3                                                                    MIT license (https://opensource.org/licenses/MIT)
-(https://johannburkard.de/blog/programming/javascript/highlight-javascript-text-higlighting-jquery-plugin.html)
-  - oxygen-webhelp/lib/jquery-highlight/jquery.highlight-3.js
-  
-jQuery UI v1.13.2  (http://jqueryui.com)                                        MIT License (https://jquery.org/license/) 
-  - oxygen-webhelp/lib/jquery-ui/jquery-ui.min.css
-  - oxygen-webhelp/lib/jquery-ui/jquery-ui.min.js
-  
 kuromoji v0.1.1 (https://github.com/takuyaa/kuromoji.js)                        Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
-  - oxygen-webhelp/lib/kuromoji/kuromoji.js
-  - oxygen-webhelp/lib/kuromoji/dict/base.dat.gz
-  - oxygen-webhelp/lib/kuromoji/dict/cc.dat.gz
-  - oxygen-webhelp/lib/kuromoji/dict/check.dat.gz
-  - oxygen-webhelp/lib/kuromoji/dict/tid_map.dat.gz
-  - oxygen-webhelp/lib/kuromoji/dict/tid_pos.dat.gz
-  - oxygen-webhelp/lib/kuromoji/dict/tid.dat.gz
-  - oxygen-webhelp/lib/kuromoji/dict/unk_char.dat.gz
-  - oxygen-webhelp/lib/kuromoji/dict/unk_compat.dat.gz
-  - oxygen-webhelp/lib/kuromoji/dict/unk_invoke.dat.gz
-  - oxygen-webhelp/lib/kuromoji/dict/unk_map.dat.gz
-  - oxygen-webhelp/lib/kuromoji/dict/unk_pos.dat.gz
-  - oxygen-webhelp/lib/kuromoji/dict/unk.dat.gz
-
-maphilight v1.3.1 (https://github.com/kemayo/maphilight)                        MIT License (https://github.com/kemayo/maphilight/blob/1.3.1/MIT-LICENSE.txt)
-  - oxygen-webhelp/lib/maphighlight/jquery.maphilight.min.js
-  
-RequireJS 2.3.5 (https://requirejs.org/)                                        MIT License (https://github.com/requirejs/requirejs/blob/2.3.5/LICENSE)
-  - oxygen-webhelp/lib/requirejs/require.js
-  
-DOMPurify 2.3.1 (https://github.com/cure53/DOMPurify)                           Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
-  - oxygen-webhelp/lib/dom-purify/purify.min.js
-  
-rwdImageMaps v1.6 (https://github.com/stowball/jQuery-rwdImageMaps)             MIT License (https://github.com/stowball/jQuery-rwdImageMaps/blob/1.6/LICENSE)
-  - oxygen-webhelp/lib/rwdImageMaps/jquery.rwdImageMaps.min.js
+  - oxygen-webhelp/app/search/kuromoji/kuromoji.js
+  - oxygen-webhelp/app/search/kuromoji/dict/base.dat.gz
+  - oxygen-webhelp/app/search/kuromoji/dict/cc.dat.gz
+  - oxygen-webhelp/app/search/kuromoji/dict/check.dat.gz
+  - oxygen-webhelp/app/search/kuromoji/dict/tid_map.dat.gz
+  - oxygen-webhelp/app/search/kuromoji/dict/tid_pos.dat.gz
+  - oxygen-webhelp/app/search/kuromoji/dict/tid.dat.gz
+  - oxygen-webhelp/app/search/kuromoji/dict/unk_char.dat.gz
+  - oxygen-webhelp/app/search/kuromoji/dict/unk_compat.dat.gz
+  - oxygen-webhelp/app/search/kuromoji/dict/unk_invoke.dat.gz
+  - oxygen-webhelp/app/search/kuromoji/dict/unk_map.dat.gz
+  - oxygen-webhelp/app/search/kuromoji/dict/unk_pos.dat.gz
+  - oxygen-webhelp/app/search/kuromoji/dict/unk.dat.gz
   
 Roboto Font (https://github.com/google/roboto/)                                 Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
   - templates/oxygen/resources/fonts/Roboto-Bold.ttf
@@ -69,10 +39,6 @@ Roboto Font (https://github.com/google/roboto/)                                 
   - templates/oxygen/resources/fonts/Roboto-Regular.ttf
   - templates/oxygen/resources/fonts/Roboto-Thin.ttf
 
-
-Bootstrap v4.4.1 (https://getbootstrap.com/)                                    MIT License (https://github.com/twbs/bootstrap/blob/v4.4.1/LICENSE)
-  - oxygen-webhelp/lib/bootstrap/css/bootstrap.min.css 
-  - oxygen-webhelp/lib/bootstrap/js/bootstrap.bundle.min.js
 
 Additional Third Party Code in Oxygen WebHelp Plug-In (inside Oxygen XML) distribution:
 

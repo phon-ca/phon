@@ -1,0 +1,1 @@
+oxy_webhelp_navlinks = {"query_and_report_wizard-d854e619":{"topics":[{"title":"View Result Set","shortdesc":"<p class=\"shortdesc\">View a <em class=\"ph i\">Result Set<\/em> from a query.<\/p>","href":"query\/view_result_set.html","attributes":{"data-id":"view_result_set"},"menu":{"hasChildren":false},"tocID":"view_result_set-d854e627","topics":[]}]}};

@@ -1,4 +1,6 @@
-define(function() {var localization = new Array();
+var localization = new Array();
+localization["indexing_in_progress"]="The indexing process is in progress. Try again later.";
+localization["search_index_not_found"]="No content index found to execute the search query.";
 localization["index.terms.page.title"]="Index Terms";
 localization["toggle.menu"]="Toggle menu";
 localization["label.cleditorControls"]="Insert your comment. Press Alt+S to submit your comment or Alt+` to discard it.";
@@ -221,4 +223,3 @@ localization["inst.adminPass2"]="Confirm Administrator Password";
 localization["inst.start"]="Start Installation";
 localization["inst.nextStep"]="Next Step";
 localization["excluded.terms"]="Excluded terms:";
-return localization;});

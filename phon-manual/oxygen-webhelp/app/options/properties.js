@@ -1,6 +1,7 @@
-define(
+var properties = 
   { "default.language" : "en",
     "use.stemming" : "false",
+    "webhelp.enable.scroll.to.search.term" : "no",
     "webhelp.enable.search.autocomplete" : "true",
     "webhelp.enable.search.kuromoji.js" : "true",
     "webhelp.enable.sticky.header" : "yes",
@@ -10,6 +11,7 @@ define(
     "webhelp.language" : "en",
     "webhelp.publication.toc.links" : "chapter",
     "webhelp.publication.toc.tooltip.position" : "right",
+    "webhelp.search.default.operator" : "or",
     "webhelp.search.enable.pagination" : "true",
     "webhelp.search.page.numberOfItems" : "10",
     "webhelp.search.ranking" : "true",
@@ -17,4 +19,4 @@ define(
     "webhelp.show.main.page.tiles" : "no",
     "webhelp.show.main.page.toc" : "yes",
     "webhelp.top.menu.depth" : "4",
-    "webhelp.topic.collapsible.elements.initial.state" : "expanded" });
+    "webhelp.topic.collapsible.elements.initial.state" : "expanded" };
