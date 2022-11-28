@@ -65,6 +65,11 @@ public class FormatterTextField<T> extends PromptedTextField {
 	}
 	
 	public boolean validateText() {
+		if(super.getText().trim().length() == 0 && this.validatedValue != null) {
+			T validatedValue = this.validatedValue;
+			this.validatedValue = null;
+			firePropertyChange(VALIDATED_VALUE, validatedValue, null);
+		}
 		final T value = getValue();
 		if(value == null && getState() == FieldState.INPUT) {
 			setForeground(Color.red);
@@ -114,18 +119,21 @@ public class FormatterTextField<T> extends PromptedTextField {
 		
 		@Override
 		public void removeUpdate(DocumentEvent e) {
-			validateText();
+			if(hasFocus() && getState() == FieldState.INPUT)
+				validateText();
 		}
 		
 		@Override
 		public void insertUpdate(DocumentEvent e) {
-			validateText();
+			if(hasFocus() && getState() == FieldState.INPUT)
+				validateText();
 		}
 		
 		@Override
 		public void changedUpdate(DocumentEvent e) {
 			
 		}
+
 	};
 
 	public class FormatterDocument extends PlainDocument {

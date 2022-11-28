@@ -41,11 +41,6 @@ import java.util.function.Consumer;
  */
 public class ParticipantPanel extends JPanel {
 
-	private static final long serialVersionUID = 8479424482231807300L;
-
-	/*
-	 * UI
-	 */
 	private JComboBox<ParticipantRole> roleBox;
 
 	private JCheckBox assignIdBox;
@@ -62,7 +57,6 @@ public class ParticipantPanel extends JPanel {
 	private DatePicker bdayField;
 
 	private FormatterTextField<Period> ageField;
-//	private JButton calcAgeBtn;
 
 	private LocalDate sessionDate;
 
@@ -249,8 +243,8 @@ public class ParticipantPanel extends JPanel {
 				}
 			}
 		};
-//		bdayField.addPropertyChangeListener(DatePicker.DATETIME_PROP, new PropertyUpdater(bdayUpdater));
-		bdayField.getTextField().getDocument().addDocumentListener(new TextFieldUpdater(bdayUpdater));
+		bdayField.addPropertyChangeListener(DatePicker.DATETIME_PROP, new PropertyUpdater(bdayUpdater));
+//		bdayField.getTextField().getDocument().addDocumentListener(new TextFieldUpdater(bdayUpdater));
 		bdayField.getTextField().addActionListener(new ActionUpdater(bdayUpdater));
 
 		final Consumer<Participant> ageUpdater = (obj) -> {
@@ -409,7 +403,7 @@ public class ParticipantPanel extends JPanel {
 
 		final String ageTxt = ageField.getPrompt();
 		if(optionsPanel.isAnonBday())
-			bdayField.getTextField().setText("");
+			bdayField.setDateTime(null);
 
 		if(optionsPanel.isAnonAge())
 			ageField.setText("");

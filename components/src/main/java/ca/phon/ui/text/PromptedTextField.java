@@ -18,6 +18,7 @@ package ca.phon.ui.text;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
 
 /**
  * Text field with optional prompt.
@@ -89,6 +90,7 @@ public class PromptedTextField extends JTextField {
 		this.prompt = prompt;
 		setState(FieldState.PROMPT);
 		addFocusListener(focusStateListener);
+		addPropertyChangeListener(STATE_PROPERTY, this::onStateChange);
 	}
 	
 	public boolean isKeepPrompt() {
@@ -119,10 +121,9 @@ public class PromptedTextField extends JTextField {
 		if(this.fieldState == state) return;
 		FieldState oldState = this.fieldState;
 		this.fieldState = state;
-		
-		
-		
-		if(this.fieldState == FieldState.PROMPT) {
+		super.setForeground(this.fieldState.getColor());
+
+		if(state == FieldState.PROMPT) {
 			if(oldState == FieldState.INPUT && super.getText().length() > 0)
 				throw new IllegalStateException("Cannot set state to PROMPT when field has input.");
 			super.setText(prompt);
@@ -130,10 +131,12 @@ public class PromptedTextField extends JTextField {
 			if(oldState == FieldState.PROMPT)
 				super.setText("");
 		}
-		
-		super.setForeground(this.fieldState.getColor());
-		
+
 		super.firePropertyChange(STATE_PROPERTY, oldState, this.fieldState);
+	}
+
+	private void onStateChange(PropertyChangeEvent evt) {
+
 	}
 	
 	public void setState(String state) {
