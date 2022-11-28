@@ -48,7 +48,6 @@ public class ParticipantPanel extends JPanel {
 
 	private JComboBox<ParticipantRole> roleBox;
 
-	private JCheckBox assignIdBox;
 	private JTextField idField;
 
 	private JComboBox<Sex> sexBox;
@@ -94,9 +93,6 @@ public class ParticipantPanel extends JPanel {
 	private void init() {
 		// setup form
 		roleBox = new JComboBox<>(ParticipantRole.values());
-
-		assignIdBox = new JCheckBox("Assign ID from role");
-		assignIdBox.setSelected(true);
 
 		idField = new JTextField();
 		idField.setEnabled(false);
@@ -193,9 +189,7 @@ public class ParticipantPanel extends JPanel {
 		final Consumer<Participant> roleUpdater = (obj) -> {
 			final ParticipantRole role = (ParticipantRole)roleBox.getSelectedItem();
 			obj.setRole(role);
-			if(assignIdBox.isSelected()) {
-				idField.setText(getRoleId());
-			}
+			idField.setText(getRoleId());
 		};
 		roleBox.addItemListener(new ItemUpdater(roleUpdater));
 
@@ -234,16 +228,6 @@ public class ParticipantPanel extends JPanel {
 		};
 		sexBox.addItemListener(new ItemUpdater(sexUpdater));
 
-		final Consumer<Participant> assignIdFunctor = (obj) -> {
-			if(assignIdBox.isSelected()) {
-				if(assignIdBox.isSelected()) {
-					idField.setText(getRoleId());
-				}
-			}
-			idField.setEnabled(!assignIdBox.isSelected());
-		};
-		assignIdBox.addItemListener(new ItemUpdater(assignIdFunctor));
-
 		final Consumer<Participant> bdayUpdater = (obj) -> {
 			final LocalDate bday = bdayField.getDateTime();
 			obj.setBirthDate(bday);
@@ -260,7 +244,6 @@ public class ParticipantPanel extends JPanel {
 			}
 		};
 		bdayField.addPropertyChangeListener(DatePicker.DATETIME_PROP, new PropertyUpdater(bdayUpdater));
-//		bdayField.getTextField().getDocument().addDocumentListener(new TextFieldUpdater(bdayUpdater));
 		bdayField.getTextField().addActionListener(new ActionUpdater(bdayUpdater));
 
 		final Consumer<Participant> ageUpdater = (obj) -> {
@@ -286,8 +269,7 @@ public class ParticipantPanel extends JPanel {
 		required.setBorder(BorderFactory.createTitledBorder("Required Information"));
 		required.add(new JLabel("Role"), cc.xy(1,1));
 		required.add(roleBox, cc.xy(3,1));
-		required.add(assignIdBox, cc.xy(3,2));
-		required.add(new JLabel("Id"), cc.xy(1, 3));
+		required.add(createFieldLabel("Id", "id"), cc.xy(1, 3));
 		required.add(idField, cc.xy(3, 3));
 
 		final FormLayout optLayout = new FormLayout(
@@ -345,10 +327,6 @@ public class ParticipantPanel extends JPanel {
 			ageField.setKeepPrompt(true);
 		}
 	}
-	
-	public boolean isSetRoleFromId() {
-		return assignIdBox.isSelected();
-	}
 
 	public String getRoleId() {
 		final ParticipantRole role = (ParticipantRole)roleBox.getSelectedItem();
@@ -374,23 +352,19 @@ public class ParticipantPanel extends JPanel {
 		idField.setText(getRoleId());
 	}
 
-	private void onShowPropertyMenu(String propName) {
+	private void onShowPropertyMenu(JComponent lbl, String propName) {
 		final JPopupMenu menu = new JPopupMenu();
 		final MenuBuilder builder = new MenuBuilder(menu);
 
-		JComponent field = null;
 		switch (propName) {
-			case "name" -> {
-				field = nameField;
-			}
-
-			case "language" -> {
-				field = languageField;
+			case "id" -> {
+				final PhonUIAction<Void> assignIdFromRole = PhonUIAction.runnable(this::updateRoleId);
+				assignIdFromRole.putValue(PhonUIAction.NAME, "Assign id from role");
+				assignIdFromRole.putValue(PhonUIAction.SHORT_DESCRIPTION, "Assign id from selected role");
+				builder.addItem(".", assignIdFromRole);
 			}
 
 			case "birthday" -> {
-				field = bdayField;
-
 				if(participant.getAge(null) != null) {
 					final PhonUIAction<Void> onCalcBirthday = PhonUIAction.runnable(this::onCalcBirthday);
 					onCalcBirthday.putValue(PhonUIAction.NAME, "Calculate from age");
@@ -401,8 +375,6 @@ public class ParticipantPanel extends JPanel {
 			}
 
 			case "age" -> {
-				field = ageField;
-
 				if(participant.getBirthDate() != null) {
 					final PhonUIAction<Void> onCalcAge = PhonUIAction.runnable(this::onCalcAge);
 					onCalcAge.putValue(PhonUIAction.NAME, "Calculate from birthday");
@@ -411,30 +383,16 @@ public class ParticipantPanel extends JPanel {
 					builder.addSeparator(".", "custom_items");
 				}
 			}
-
-			case "group" -> {
-				field = groupField;
-			}
-
-			case "sex" -> {
-				field = sexBox;
-			}
-
-			case "ses" -> {
-				field = sesField;
-			}
-
-			case "education" -> {
-				field = educationField;
-			}
 		}
 
-		final PhonUIAction<String> onClearField = PhonUIAction.consumer(this::onClearField, propName);
-		onClearField.putValue(PhonUIAction.NAME, "Clear");
-		onClearField.putValue(PhonUIAction.SHORT_DESCRIPTION, "Clear data for property " + propName);
-		builder.addItem(".", onClearField);
+		if(!"id".equals(propName)) {
+			final PhonUIAction<String> onClearField = PhonUIAction.consumer(this::onClearField, propName);
+			onClearField.putValue(PhonUIAction.NAME, "Clear " + propName);
+			onClearField.putValue(PhonUIAction.SHORT_DESCRIPTION, "Clear data for property " + propName);
+			builder.addItem(".", onClearField);
+		}
 
-		menu.show(field, 0, field.getHeight());
+		menu.show(lbl, 0, lbl.getHeight());
 	}
 
 	private void onClearField(String propName) {
@@ -572,7 +530,7 @@ public class ParticipantPanel extends JPanel {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			onShowPropertyMenu(propName);
+			onShowPropertyMenu((JLabel)e.getSource(), propName);
 		}
 
 	}
