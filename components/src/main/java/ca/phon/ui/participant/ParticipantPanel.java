@@ -18,11 +18,16 @@ package ca.phon.ui.participant;
 import ca.phon.session.*;
 import ca.phon.session.format.AgeFormatter;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.DropDownIcon;
+import ca.phon.ui.PhonLoggerConsole;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.text.*;
 import ca.phon.ui.toast.ToastFactory;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 import com.jgoodies.forms.layout.*;
 import org.jdesktop.swingx.VerticalLayout;
 
@@ -77,6 +82,15 @@ public class ParticipantPanel extends JPanel {
 		init();
 	}
 
+	private JLabel createFieldLabel(String text, String propName) {
+		final JLabel retVal = new JLabel(text);
+		retVal.setIcon(new DropDownIcon(new ImageIcon(), 0, SwingConstants.BOTTOM));
+		retVal.setHorizontalTextPosition(SwingConstants.LEFT);
+		retVal.addMouseListener(new FieldMenuListener(propName));
+		retVal.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		return retVal;
+	}
+
 	private void init() {
 		// setup form
 		roleBox = new JComboBox<>(ParticipantRole.values());
@@ -115,8 +129,10 @@ public class ParticipantPanel extends JPanel {
 		int defCols = 20;
 		nameField = new JTextField();
 		nameField.setColumns(defCols);
+
 		groupField = new JTextField();
 		groupField.setColumns(defCols);
+
 		sesField = new JTextField();
 		sesField.setColumns(defCols);
 		educationField = new JTextField();
@@ -279,22 +295,22 @@ public class ParticipantPanel extends JPanel {
 				"pref, pref, pref, pref");
 		final JPanel optional = new JPanel(optLayout);
 		optional.setBorder(BorderFactory.createTitledBorder("Optional Information"));
-		optional.add(new JLabel("Name"), cc.xy(1, 1));
+		optional.add(createFieldLabel("Name", "name"), cc.xy(1, 1));
 		optional.add(nameField, cc.xy(3, 1));
-		optional.add(new JLabel("Sex"), cc.xy(1, 2));
+		optional.add(createFieldLabel("Sex", "sex"), cc.xy(1, 2));
 		optional.add(sexBox, cc.xy(3, 2));
-		optional.add(new JLabel("Birthday (YYYY-MM-DD)"), cc.xy(1, 3));
+		optional.add(createFieldLabel("Birthday (YYYY-MM-DD)", "birthday"), cc.xy(1, 3));
 		optional.add(bdayField, cc.xy(3, 3));
-		optional.add(new JLabel("Age (" + AgeFormatter.AGE_FORMAT + ")"), cc.xy(1, 4));
+		optional.add(createFieldLabel("Age (" + AgeFormatter.AGE_FORMAT + ")", "age"), cc.xy(1, 4));
 		optional.add(ageField, cc.xy(3, 4));
 
-		optional.add(new JLabel("Language"), cc.xy(5, 1));
+		optional.add(createFieldLabel("Language", "language"), cc.xy(5, 1));
 		optional.add(languageField, cc.xy(7, 1));
-		optional.add(new JLabel("Group"), cc.xy(5, 2));
+		optional.add(createFieldLabel("Group", "group"), cc.xy(5, 2));
 		optional.add(groupField, cc.xy(7, 2));
-		optional.add(new JLabel("Education"), cc.xy(5, 3));
+		optional.add(createFieldLabel("Education", "education"), cc.xy(5, 3));
 		optional.add(educationField, cc.xy(7, 3));
-		optional.add(new JLabel("SES"), cc.xy(5, 4));
+		optional.add(createFieldLabel("SES", "ses"), cc.xy(5, 4));
 		optional.add(sesField, cc.xy(7, 4));
 
 		setLayout(new VerticalLayout(5));
@@ -357,8 +373,125 @@ public class ParticipantPanel extends JPanel {
 	public void updateRoleId() {
 		idField.setText(getRoleId());
 	}
-	
-	public void onAnonymize() {
+
+	private void onShowPropertyMenu(String propName) {
+		final JPopupMenu menu = new JPopupMenu();
+		final MenuBuilder builder = new MenuBuilder(menu);
+
+		JComponent field = null;
+		switch (propName) {
+			case "name" -> {
+				field = nameField;
+			}
+
+			case "language" -> {
+				field = languageField;
+			}
+
+			case "birthday" -> {
+				field = bdayField;
+
+				if(participant.getAge(null) != null) {
+					final PhonUIAction<Void> onCalcBirthday = PhonUIAction.runnable(this::onCalcBirthday);
+					onCalcBirthday.putValue(PhonUIAction.NAME, "Calculate from age");
+					onCalcBirthday.putValue(PhonUIAction.SHORT_DESCRIPTION, "Calculate birthday from provided age");
+					builder.addItem(".", onCalcBirthday);
+					builder.addSeparator(".", "custom_items");
+				}
+			}
+
+			case "age" -> {
+				field = ageField;
+
+				if(participant.getBirthDate() != null) {
+					final PhonUIAction<Void> onCalcAge = PhonUIAction.runnable(this::onCalcAge);
+					onCalcAge.putValue(PhonUIAction.NAME, "Calculate from birthday");
+					onCalcAge.putValue(PhonUIAction.SHORT_DESCRIPTION, "Calculate age from provided birthday");
+					builder.addItem(".", onCalcAge);
+					builder.addSeparator(".", "custom_items");
+				}
+			}
+
+			case "group" -> {
+				field = groupField;
+			}
+
+			case "sex" -> {
+				field = sexBox;
+			}
+
+			case "ses" -> {
+				field = sesField;
+			}
+
+			case "education" -> {
+				field = educationField;
+			}
+		}
+
+		final PhonUIAction<String> onClearField = PhonUIAction.consumer(this::onClearField, propName);
+		onClearField.putValue(PhonUIAction.NAME, "Clear");
+		onClearField.putValue(PhonUIAction.SHORT_DESCRIPTION, "Clear data for property " + propName);
+		builder.addItem(".", onClearField);
+
+		menu.show(field, 0, field.getHeight());
+	}
+
+	private void onClearField(String propName) {
+		switch (propName) {
+			case "name" -> {
+				nameField.setText("");
+			}
+
+			case "language" -> {
+				languageField.setText("");
+			}
+
+			case "birthday" -> {
+				bdayField.setDateTime(null);
+			}
+
+			case "age" -> {
+				ageField.setText("");
+			}
+
+			case "group" -> {
+				groupField.setText("");
+			}
+
+			case "sex" -> {
+				sexBox.setSelectedItem(Sex.UNSPECIFIED);
+			}
+
+			case "ses" -> {
+				sesField.setText("");
+			}
+
+			case "education" -> {
+				educationField.setText("");
+			}
+		}
+	}
+
+	private void onCalcBirthday() {
+		final Period age = participant.getAge(null);
+		if(age != null) {
+			final LocalDate sessionDate = getSessionDate();
+			final LocalDate bday = sessionDate.minus(age);
+			bdayField.setDateTime(bday);
+		}
+	}
+
+	private void onCalcAge() {
+		final LocalDate sessionDate = getSessionDate();
+		final LocalDate bday = participant.getBirthDate();
+		if(sessionDate.isAfter(bday)) {
+			final Period age = bday.until(sessionDate);
+			ageField.setValue(age);
+		}
+	}
+
+	private void onAnonymize() {
 		final JDialog anonymizeDialog = new JDialog(CommonModuleFrame.getCurrentFrame());
 		anonymizeDialog.setModal(true);
 
@@ -427,6 +560,21 @@ public class ParticipantPanel extends JPanel {
 
 	public Participant getParticipant() {
 		return this.participant;
+	}
+
+	private class FieldMenuListener extends MouseInputAdapter {
+
+		final String propName;
+
+		public FieldMenuListener(String propName) {
+			this.propName = propName;
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			onShowPropertyMenu(propName);
+		}
+
 	}
 
 	private class ItemUpdater implements ItemListener {
