@@ -24,8 +24,10 @@ import org.jdesktop.swingx.*;
 import org.jdesktop.swingx.event.*;
 
 import javax.swing.*;
+import javax.swing.event.ListDataListener;
 import java.awt.*;
 import java.awt.event.*;
+import java.security.Key;
 import java.time.*;
 import java.util.Date;
 
@@ -137,6 +139,20 @@ public class DatePicker extends JComponent {
 			monthView.setFirstDisplayedDay(date);
 			monthView.setSelectionDate(date);
 		}
+
+		JComboBox<Integer> yearSelectionBox = new JComboBox<>(new YearComboBoxModel());
+		yearSelectionBox.setSelectedItem(getDateTime().getYear());
+
+		yearSelectionBox.addItemListener((e) -> {
+			if(e.getStateChange() == ItemEvent.SELECTED) {
+				final Date javaDate = monthView.getSelectionDate();
+				if(javaDate == null) return;
+				final LocalDate localDate = javaDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+				final LocalDate newDate = LocalDate.of((int)yearSelectionBox.getSelectedItem(), localDate.getMonth(), localDate.getDayOfMonth());
+				final Date newJavaDate = Date.from(newDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+				monthView.setFirstDisplayedDay(newJavaDate);
+			}
+		});
 		
 		monthView.getSelectionModel().addDateSelectionListener(new DateSelectionListener() {
 			
@@ -145,7 +161,7 @@ public class DatePicker extends JComponent {
 				if(ev.getEventType() == DateSelectionEvent.EventType.DATES_SET) {
 					final Date javaDate = monthView.getSelectionDate();
 					if (javaDate == null) return;
-					final LocalDate localDate = javaDate.toInstant().atOffset(ZoneOffset.UTC).toLocalDate();
+					final LocalDate localDate = javaDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 					setValueIsAdjusting(true);
 					setDateTime(localDate);
 					setValueIsAdjusting(false);
@@ -153,9 +169,73 @@ public class DatePicker extends JComponent {
 			}
 			
 		});
-		final JPopupMenu popup = new JPopupMenu();
-		popup.add(monthView);
-		popup.show(monthViewButton, 0, monthViewButton.getHeight());
+
+
+		final JFrame popupFrame = new JFrame();
+		popupFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		popupFrame.setUndecorated(true);
+
+		final JPanel content = new JPanel(new VerticalLayout());
+		content.add(yearSelectionBox);
+		content.add(monthView);
+		final PhonUIAction closePopupAct = PhonUIAction.runnable(() -> popupFrame.setVisible(false));
+		content.getActionMap().put("close_popup", closePopupAct);
+		monthView.getActionMap().put("close_popup", closePopupAct);
+		monthView.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "close_popup");
+		content.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "close_popup");
+		popupFrame.add(content);
+
+		popupFrame.pack();
+		popupFrame.setLocation(monthViewButton.getLocationOnScreen().x, monthViewButton.getLocationOnScreen().y + monthViewButton.getHeight());
+		popupFrame.setVisible(true);
+
+		yearSelectionBox.requestFocus();
+		popupFrame.addWindowFocusListener(new WindowFocusListener() {
+			@Override
+			public void windowGainedFocus(WindowEvent e) {
+
+			}
+
+			@Override
+			public void windowLostFocus(WindowEvent e) {
+				popupFrame.setVisible(false);
+			}
+		});
+	}
+
+	private class YearComboBoxModel extends DefaultComboBoxModel<Integer> {
+
+		private int numYears;
+
+		private int selectedYear = 0;
+
+		public YearComboBoxModel() {
+			this(150);
+		}
+
+		public YearComboBoxModel(int numYears) {
+			this.numYears = numYears;
+		}
+
+		@Override
+		public int getSize() {
+			return this.numYears;
+		}
+
+		@Override
+		public Integer getElementAt(int index) {
+			return LocalDate.now().getYear() - ((this.numYears-1)-index);
+		}
+
+		@Override
+		public void setSelectedItem(Object anItem) {
+			this.selectedYear = (Integer)anItem;
+		}
+
+		@Override
+		public Object getSelectedItem() {
+			return this.selectedYear;
+		}
 	}
 
 }
