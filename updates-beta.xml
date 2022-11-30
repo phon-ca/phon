@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.5.0-beta.7/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_0-beta_7.dmg" newVersion="3.5.0-beta.7" newMediaFileId="macos" fileSize="347384974" md5Sum="9f1220b00ac380a699f729fc7afe73f1" sha256Sum="8c3a9e330eec0c44f244440cf451a3bae4a45a6a7c1704a6783881f8c24c5e07" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.4.3
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.5.1-beta.1/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_1-beta_1.dmg" newVersion="3.5.1-beta.1" newMediaFileId="macos" fileSize="347394948" md5Sum="0c6b36cad42fad25eb190494e1273742" sha256Sum="e785060ee90209f41215da19835503ffc65f463bc2994b44ae787737ee8dd4d2" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.5.0
+
+ * Fix and improve participant editor dialog
+
+## Changes from 3.4.3
 
  * Add support for apple silicon macs, minimum macOS version is now 10.12
  * Add ipa dictionaries for Australian English, Russian (Cyrillic), Russian (Romanized)
@@ -535,8 +539,12 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_0-beta_7.dmg" newVersion="3.5.0-beta.7" newMediaFileId="macos" fileSize="347384974" md5Sum="9f1220b00ac380a699f729fc7afe73f1" sha256Sum="8c3a9e330eec0c44f244440cf451a3bae4a45a6a7c1704a6783881f8c24c5e07" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.4.3
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_1-beta_1.dmg" newVersion="3.5.1-beta.1" newMediaFileId="macos" fileSize="347394948" md5Sum="0c6b36cad42fad25eb190494e1273742" sha256Sum="e785060ee90209f41215da19835503ffc65f463bc2994b44ae787737ee8dd4d2" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.5.0
+
+ * Fix and improve participant editor dialog
+
+## Changes from 3.4.3
 
  * Add support for apple silicon macs, minimum macOS version is now 10.12
  * Add ipa dictionaries for Australian English, Russian (Cyrillic), Russian (Romanized)
@@ -1070,8 +1078,12 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-beta_7.exe" newVersion="3.5.0-beta.7" newMediaFileId="win64" fileSize="330615768" md5Sum="9eb9a28c6319faba8d18c161ba1b6887" sha256Sum="73783c8033caee082eb37be31328d1a80a0902502149ff50f3893cf04579970d" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.4.3
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_1-beta_1.exe" newVersion="3.5.1-beta.1" newMediaFileId="win64" fileSize="330623960" md5Sum="68d9f444ee1623c47dae916bb3db6eab" sha256Sum="2d1064029b9dfd39d3b46d08ccff9baba6c6df7908b5bb1b5377d2188935ccc0" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.5.0
+
+ * Fix and improve participant editor dialog
+
+## Changes from 3.4.3
 
  * Add support for apple silicon macs, minimum macOS version is now 10.12
  * Add ipa dictionaries for Australian English, Russian (Cyrillic), Russian (Romanized)
@@ -1605,8 +1617,12 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-beta_7.exe" newVersion="3.5.0-beta.7" newMediaFileId="win64" fileSize="330615768" md5Sum="9eb9a28c6319faba8d18c161ba1b6887" sha256Sum="73783c8033caee082eb37be31328d1a80a0902502149ff50f3893cf04579970d" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.4.3
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_1-beta_1.exe" newVersion="3.5.1-beta.1" newMediaFileId="win64" fileSize="330623960" md5Sum="68d9f444ee1623c47dae916bb3db6eab" sha256Sum="2d1064029b9dfd39d3b46d08ccff9baba6c6df7908b5bb1b5377d2188935ccc0" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.5.0
+
+ * Fix and improve participant editor dialog
+
+## Changes from 3.4.3
 
  * Add support for apple silicon macs, minimum macOS version is now 10.12
  * Add ipa dictionaries for Australian English, Russian (Cyrillic), Russian (Romanized)
@@ -2140,8 +2156,12 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-beta_7.exe" newVersion="3.5.0-beta.7" newMediaFileId="win64" fileSize="330615768" md5Sum="9eb9a28c6319faba8d18c161ba1b6887" sha256Sum="73783c8033caee082eb37be31328d1a80a0902502149ff50f3893cf04579970d" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.4.3
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_1-beta_1.exe" newVersion="3.5.1-beta.1" newMediaFileId="win64" fileSize="330623960" md5Sum="68d9f444ee1623c47dae916bb3db6eab" sha256Sum="2d1064029b9dfd39d3b46d08ccff9baba6c6df7908b5bb1b5377d2188935ccc0" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.5.0
+
+ * Fix and improve participant editor dialog
+
+## Changes from 3.4.3
 
  * Add support for apple silicon macs, minimum macOS version is now 10.12
  * Add ipa dictionaries for Australian English, Russian (Cyrillic), Russian (Romanized)
@@ -2675,8 +2695,12 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0-beta_7.zip" newVersion="3.5.0-beta.7" newMediaFileId="win64zip" fileSize="329528314" md5Sum="d42eb473cae57d1c4f4d94f1452a765c" sha256Sum="91025cb2cc7bf38a62efc12079e6a82d5504fe56793a3bb92b4be518f6c6c38a" bundledJre="windows-amd64-17.0.4.tar.gz" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.4.3
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_1-beta_1.zip" newVersion="3.5.1-beta.1" newMediaFileId="win64zip" fileSize="329536242" md5Sum="0c679e0f2aa8b5456d76810b3d03b891" sha256Sum="29a72f2584fa85d98fb79ff5fd527373482ba1dc2067fdc9529ea7b6f60aef11" bundledJre="windows-amd64-17.0.4.tar.gz" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.5.0
+
+ * Fix and improve participant editor dialog
+
+## Changes from 3.4.3
 
  * Add support for apple silicon macs, minimum macOS version is now 10.12
  * Add ipa dictionaries for Australian English, Russian (Cyrillic), Russian (Romanized)
