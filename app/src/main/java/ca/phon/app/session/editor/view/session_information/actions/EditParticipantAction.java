@@ -48,26 +48,27 @@ public class EditParticipantAction extends SessionInfoAction {
 		final Participant part = factory.createParticipant();
 		Participants.copyParticipantInfo(participant, part);
 		
-		boolean canceled = ParticipantEditor.editParticipant(getEditor(), part, 
+		ParticipantEditor.editParticipant(getEditor(), part,
 				getEditor().getDataModel().getSession().getDate(),
-				getEditor().getDataModel().getSession().getParticipants().otherParticipants(participant));
-		
-		if(!canceled) {
-			if(!participant.getId().equals(part.getId())) {
-				// XXX we need to ensure that every record is loaded 
-				// so that participant information changes when id is modified
-				for(Record r:getEditor().getSession().getRecords()) {
-					r.getSpeaker();
-				}
-			}
-			final ParticipantUndoableEdit edit = new ParticipantUndoableEdit(getEditor(), participant, part);
-			getEditor().getUndoSupport().postEdit(edit);
+				getEditor().getDataModel().getSession().getParticipants().otherParticipants(participant),
+				(wasCanceled) -> {
+					if(!wasCanceled) {
+						if (!participant.getId().equals(part.getId())) {
+							// XXX we need to ensure that every record is loaded
+							// so that participant information changes when id is modified
+							for (Record r : getEditor().getSession().getRecords()) {
+								r.getSpeaker();
+							}
+						}
+						final ParticipantUndoableEdit edit = new ParticipantUndoableEdit(getEditor(), participant, part);
+						getEditor().getUndoSupport().postEdit(edit);
 
-			final EditorEvent<EditorEventType.RecordChangedData> ee =
-					new EditorEvent<>(EditorEventType.RecordRefresh, getEditor(),
-							new EditorEventType.RecordChangedData(getEditor().getCurrentRecordIndex(), getEditor().currentRecord()));
-			getEditor().getEventManager().queueEvent(ee);
-		}
+						final EditorEvent<EditorEventType.RecordChangedData> ee =
+								new EditorEvent<>(EditorEventType.RecordRefresh, getEditor(),
+										new EditorEventType.RecordChangedData(getEditor().getCurrentRecordIndex(), getEditor().currentRecord()));
+						getEditor().getEventManager().queueEvent(ee);
+					}
+				});
 	}
 
 }

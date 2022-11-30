@@ -27,8 +27,6 @@ import java.awt.event.ActionEvent;
 
 public class NewParticipantAction extends SessionInfoAction {
 
-	private static final long serialVersionUID = 993265447147157942L;
-	
 	private final static String TXT = "Add participant...";
 	
 	private final static String DESC = "Add participant to session.";
@@ -48,14 +46,15 @@ public class NewParticipantAction extends SessionInfoAction {
 	public void hookableActionPerformed(ActionEvent e) {
 		final SessionFactory factory = SessionFactory.newFactory();
 		final Participant part = factory.createParticipant();
-		boolean canceled = ParticipantEditor.editNewParticipant(getEditor(), part, 
+		ParticipantEditor.editNewParticipant(getEditor(), part,
 				getEditor().getDataModel().getSession().getDate(),
-				getEditor().getDataModel().getSession().getParticipants().otherParticipants(null));
-
-		if(!canceled) {
-			final AddParticipantEdit edit = new AddParticipantEdit(getEditor(), part);
-			getEditor().getUndoSupport().postEdit(edit);
-		}
+				getEditor().getDataModel().getSession().getParticipants().otherParticipants(null),
+				(wasCanceled) -> {
+					if(!wasCanceled) {
+						final AddParticipantEdit edit = new AddParticipantEdit(getEditor(), part);
+						getEditor().getUndoSupport().postEdit(edit);
+					}
+				});
 	}
 
 }

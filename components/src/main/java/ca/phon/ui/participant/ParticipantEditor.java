@@ -26,8 +26,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class ParticipantEditor extends JDialog {
-	private static final long serialVersionUID = -878164228645403658L;
-	
+
 	/** GUI */
 	private DialogHeader header;
 	private JButton cancelButton;
@@ -36,63 +35,50 @@ public class ParticipantEditor extends JDialog {
 	private ParticipantPanel participantPanel;
 	
 	/** The participant */
-	private Participant participant;
-	private LocalDate sessionDate;
+	private final Participant participant;
+
+	private final ParticipantEditorListener listener;
 	
-	private boolean wasCanceled = false;
-	
-	public static boolean editParticipant(JFrame parent, Participant part,
-			List<Participant> otherParts) {
-		ParticipantEditor editor = new ParticipantEditor(parent, part, LocalDate.now(), otherParts);
+	public static void editParticipant(JFrame parent, Participant part,
+			List<Participant> otherParts, ParticipantEditorListener listener) {
+		ParticipantEditor editor = new ParticipantEditor(parent, part, LocalDate.now(), otherParts, listener);
 		editor.pack();
 		editor.setLocationRelativeTo(parent);
 		editor.setVisible(true);
-		
-		return editor.wasCanceled;
 	}
 	
-	public static boolean editNewParticipant(JFrame parent, Participant part,
-			List<Participant> otherParts) {
-		ParticipantEditor editor = new ParticipantEditor(parent, part, LocalDate.now(), otherParts);
+	public static void editNewParticipant(JFrame parent, Participant part,
+			List<Participant> otherParts, ParticipantEditorListener listener) {
+		ParticipantEditor editor = new ParticipantEditor(parent, part, LocalDate.now(), otherParts, listener);
 		editor.participantPanel.updateRoleId();
 		editor.pack();
 		editor.setLocationRelativeTo(parent);
 		editor.setVisible(true);
-		
-		return editor.wasCanceled;
 	}
 	
-	public static boolean editParticipant(JFrame parent, Participant part, LocalDate sessionDate,
-			List<Participant> otherParts) {
-		ParticipantEditor editor = new ParticipantEditor(parent, part, sessionDate, otherParts);
+	public static void editParticipant(JFrame parent, Participant part, LocalDate sessionDate,
+			List<Participant> otherParts, ParticipantEditorListener listener) {
+		ParticipantEditor editor = new ParticipantEditor(parent, part, sessionDate, otherParts, listener);
 		editor.pack();
 		editor.setLocationRelativeTo(parent);
 		editor.setVisible(true);
-		
-		return editor.wasCanceled;
 	}
 	
-	public static boolean editNewParticipant(JFrame parent, Participant part, LocalDate sessionDate,
-			List<Participant> otherParts) {
-		ParticipantEditor editor = new ParticipantEditor(parent, part, sessionDate, otherParts);
+	public static void editNewParticipant(JFrame parent, Participant part, LocalDate sessionDate,
+			List<Participant> otherParts, ParticipantEditorListener listener) {
+		ParticipantEditor editor = new ParticipantEditor(parent, part, sessionDate, otherParts, listener);
 		editor.participantPanel.updateRoleId();
 		editor.pack();
 		editor.setLocationRelativeTo(parent);
 		editor.setVisible(true);
-		
-		return editor.wasCanceled;
-	}
-	
-	public boolean wasCanceled() {
-		return wasCanceled;
 	}
 	
 	/** Consctructor */
-	protected ParticipantEditor(JFrame parent, Participant participant, LocalDate sessionDate, List<Participant> otherParts) {
-		super(parent, "Edit Participant", true);
+	protected ParticipantEditor(JFrame parent, Participant participant, LocalDate sessionDate, List<Participant> otherParts, ParticipantEditorListener listener) {
+		super(parent, "Edit Participant", false);
 		
 		this.participant = participant;
-		this.sessionDate = sessionDate;
+		this.listener = listener;
 		
 		init();
 		participantPanel.setOtherParticipants(otherParts);
@@ -126,7 +112,7 @@ public class ParticipantEditor extends JDialog {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					wasCanceled = true;
+					listener.editorClosed(true);
 					dispose();
 				}
 				
@@ -151,7 +137,7 @@ public class ParticipantEditor extends JDialog {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					wasCanceled = false;
+					listener.editorClosed(false);
 					dispose();
 				}
 				
@@ -159,5 +145,11 @@ public class ParticipantEditor extends JDialog {
 		}
 		return saveButton;
 	}
-	
+
+	public interface ParticipantEditorListener {
+
+		void editorClosed(boolean wasCanceled);
+
+	}
+
 }
