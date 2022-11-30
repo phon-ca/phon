@@ -80,24 +80,24 @@ public class ParticipantEditor extends JDialog {
 		this.participant = participant;
 		this.listener = listener;
 		
-		init();
-		participantPanel.setOtherParticipants(otherParts);
-		participantPanel.setSessionDate(sessionDate);
+		init(sessionDate, otherParts);
 	}
-	
-	private void init() {
+
+	private void init(LocalDate sessionDate, List<Participant> otherParts) {
 		setLayout(new BorderLayout());
-		
+
 		// create display
 		header = getHeader();
-		
+
 		cancelButton = getCancelButton();
 		saveButton = getSaveButton();
-		
+
 		getRootPane().setDefaultButton(saveButton);
-		
+
 		participantPanel = new ParticipantPanel(participant);
-		
+		participantPanel.setSessionDate(sessionDate);
+		participantPanel.setOtherParticipants(otherParts);
+
 		final JComponent btnGroup = ButtonBarBuilder.buildOkCancelBar(saveButton, cancelButton);
 		
 		add(header, BorderLayout.NORTH);

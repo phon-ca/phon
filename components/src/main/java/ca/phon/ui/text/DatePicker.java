@@ -24,10 +24,8 @@ import org.jdesktop.swingx.*;
 import org.jdesktop.swingx.event.*;
 
 import javax.swing.*;
-import javax.swing.event.ListDataListener;
 import java.awt.*;
 import java.awt.event.*;
-import java.security.Key;
 import java.time.*;
 import java.util.Date;
 
@@ -42,18 +40,34 @@ public class DatePicker extends JComponent {
 	public static final String DATETIME_PROP = "dateTime";
 	
 	private FormatterTextField<LocalDate> textField;
+
+	private LocalDate promptDate;
 	
 	private JButton monthViewButton;
 	
 	private boolean valueIsAdjusting;
 	
 	public DatePicker() {
+		this(LocalDate.now());
+	}
+
+	public DatePicker(LocalDate promptDate) {
 		super();
-		
+
+		this.promptDate = promptDate;
+
 		init();
 	}
 
-	public boolean isValueAdjusing() {
+	public LocalDate getPromptDate() {
+		return promptDate;
+	}
+
+	public void setPromptDate(LocalDate promptDate) {
+		this.promptDate = promptDate;
+	}
+
+	public boolean isValueAdjusting() {
 		return this.valueIsAdjusting;
 	}
 	
@@ -134,15 +148,18 @@ public class DatePicker extends JComponent {
 
 		monthView.setBorder(BorderFactory.createEtchedBorder());
 		
+		JComboBox<Integer> yearSelectionBox = new JComboBox<>(new YearComboBoxModel());
 		if(textField.getValue() != null) {
 			final Date date = Date.from(textField.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
 			monthView.setFirstDisplayedDay(date);
 			monthView.setSelectionDate(date);
-		}
-
-		JComboBox<Integer> yearSelectionBox = new JComboBox<>(new YearComboBoxModel());
-		if(getDateTime() != null)
 			yearSelectionBox.setSelectedItem(getDateTime().getYear());
+		} else {
+			final Date date = Date.from(promptDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+			monthView.setFirstDisplayedDay(date);
+
+			yearSelectionBox.setSelectedItem(promptDate.getYear());
+		}
 
 		yearSelectionBox.addItemListener((e) -> {
 			if(e.getStateChange() == ItemEvent.SELECTED) {

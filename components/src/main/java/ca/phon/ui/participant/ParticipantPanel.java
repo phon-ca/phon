@@ -136,7 +136,7 @@ public class ParticipantPanel extends JPanel {
 		languageField = new LanguageField();
 		languageField.setColumns(defCols);
 
-		bdayField = new DatePicker();
+		bdayField = new DatePicker(sessionDate);
 		ageField = FormatterTextField.createTextField(Period.class);
 		ageField.setPrompt("YY;MM.DD");
 		ageField.setToolTipText("Enter age in format YY;MM.YY");
@@ -318,6 +318,7 @@ public class ParticipantPanel extends JPanel {
 
 	public void setSessionDate(LocalDate sessionDate) {
 		this.sessionDate = sessionDate;
+		bdayField.setPromptDate(sessionDate);
 
 		if(sessionDate != null && participant.getAge(null) == null
 				&& participant.getBirthDate() != null
