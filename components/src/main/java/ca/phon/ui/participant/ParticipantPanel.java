@@ -22,6 +22,7 @@ import ca.phon.ui.DropDownIcon;
 import ca.phon.ui.PhonLoggerConsole;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.text.*;
@@ -57,6 +58,8 @@ public class ParticipantPanel extends JPanel {
 	private JTextField sesField;
 	private JTextField educationField;
 	private LanguageField languageField;
+
+	private JLabel bdayWarningLbl;
 
 	private DatePicker bdayField;
 
@@ -137,6 +140,20 @@ public class ParticipantPanel extends JPanel {
 		languageField.setColumns(defCols);
 
 		bdayField = new DatePicker(sessionDate);
+
+		final ImageIcon warningIcn = IconManager.getInstance().getIcon("emblems/flag-red", IconSize.XSMALL);
+		bdayWarningLbl = new JLabel("Birthday is after specified session date");
+		bdayWarningLbl.setIcon(warningIcn);
+		bdayWarningLbl.setFont(bdayWarningLbl.getFont().deriveFont(10.0f));
+		if(sessionDate != null)
+			bdayWarningLbl.setVisible(participant.getBirthDate() != null ? participant.getBirthDate().isAfter(sessionDate) : false);
+		else
+			bdayWarningLbl.setVisible(false);
+
+		final JPanel bdayPanel = new JPanel(new VerticalLayout());
+		bdayPanel.add(bdayField);
+		bdayPanel.add(bdayWarningLbl);
+
 		ageField = FormatterTextField.createTextField(Period.class);
 		ageField.setPrompt("YY;MM.DD");
 		ageField.setToolTipText("Enter age in format YY;MM.YY");
@@ -242,6 +259,17 @@ public class ParticipantPanel extends JPanel {
 					ageField.setKeepPrompt(false);
 				}
 			}
+
+			if(bday != null) {
+				// show warning if birthday is after session date (negative age)
+				if (bday.isAfter(sessionDate)) {
+					bdayWarningLbl.setVisible(true);
+				} else {
+					bdayWarningLbl.setVisible(false);
+				}
+			} else {
+				bdayWarningLbl.setVisible(false);
+			}
 		};
 		bdayField.addPropertyChangeListener(DatePicker.DATETIME_PROP, new PropertyUpdater(bdayUpdater));
 		bdayField.getTextField().addActionListener(new ActionUpdater(bdayUpdater));
@@ -282,7 +310,7 @@ public class ParticipantPanel extends JPanel {
 		optional.add(createFieldLabel("Sex", "sex"), cc.xy(1, 2));
 		optional.add(sexBox, cc.xy(3, 2));
 		optional.add(createFieldLabel("Birthday (YYYY-MM-DD)", "birthday"), cc.xy(1, 3));
-		optional.add(bdayField, cc.xy(3, 3));
+		optional.add(bdayPanel, cc.xy(3, 3));
 		optional.add(createFieldLabel("Age (" + AgeFormatter.AGE_FORMAT + ")", "age"), cc.xy(1, 4));
 		optional.add(ageField, cc.xy(3, 4));
 
@@ -319,6 +347,10 @@ public class ParticipantPanel extends JPanel {
 	public void setSessionDate(LocalDate sessionDate) {
 		this.sessionDate = sessionDate;
 		bdayField.setPromptDate(sessionDate);
+		if(sessionDate != null)
+			bdayWarningLbl.setVisible(bdayField.getDateTime() != null ? bdayField.getDateTime().isAfter(sessionDate) : false);
+		else
+			bdayWarningLbl.setVisible(false);
 
 		if(sessionDate != null && participant.getAge(null) == null
 				&& participant.getBirthDate() != null
