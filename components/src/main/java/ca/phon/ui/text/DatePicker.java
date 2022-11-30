@@ -141,7 +141,8 @@ public class DatePicker extends JComponent {
 		}
 
 		JComboBox<Integer> yearSelectionBox = new JComboBox<>(new YearComboBoxModel());
-		yearSelectionBox.setSelectedItem(getDateTime().getYear());
+		if(getDateTime() != null)
+			yearSelectionBox.setSelectedItem(getDateTime().getYear());
 
 		yearSelectionBox.addItemListener((e) -> {
 			if(e.getStateChange() == ItemEvent.SELECTED) {
