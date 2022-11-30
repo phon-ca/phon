@@ -65,6 +65,8 @@ public class ParticipantPanel extends JPanel {
 
 	private FormatterTextField<Period> ageField;
 
+	private JLabel ageWarninglbl;
+
 	private LocalDate sessionDate;
 
 	private List<Participant> otherParticipants;
@@ -145,10 +147,7 @@ public class ParticipantPanel extends JPanel {
 		bdayWarningLbl = new JLabel("Birthday is after specified session date");
 		bdayWarningLbl.setIcon(warningIcn);
 		bdayWarningLbl.setFont(bdayWarningLbl.getFont().deriveFont(10.0f));
-		if(sessionDate != null)
-			bdayWarningLbl.setVisible(participant.getBirthDate() != null ? participant.getBirthDate().isAfter(sessionDate) : false);
-		else
-			bdayWarningLbl.setVisible(false);
+		updateBirthdayWarningLabel();
 
 		final JPanel bdayPanel = new JPanel(new VerticalLayout());
 		bdayPanel.add(bdayField);
@@ -174,6 +173,15 @@ public class ParticipantPanel extends JPanel {
 			}
 
 		});
+
+		ageWarninglbl = new JLabel("Age does not match specified birthday");
+		ageWarninglbl.setIcon(warningIcn);
+		ageWarninglbl.setFont(ageWarninglbl.getFont().deriveFont(10.0f));
+		updateAgeWarningLabel();
+
+		final JPanel agePanel = new JPanel(new VerticalLayout());
+		agePanel.add(ageField);
+		agePanel.add(ageWarninglbl);
 
 		// setup info
 
@@ -260,16 +268,8 @@ public class ParticipantPanel extends JPanel {
 				}
 			}
 
-			if(bday != null) {
-				// show warning if birthday is after session date (negative age)
-				if (bday.isAfter(sessionDate)) {
-					bdayWarningLbl.setVisible(true);
-				} else {
-					bdayWarningLbl.setVisible(false);
-				}
-			} else {
-				bdayWarningLbl.setVisible(false);
-			}
+			updateBirthdayWarningLabel();
+			updateAgeWarningLabel();
 		};
 		bdayField.addPropertyChangeListener(DatePicker.DATETIME_PROP, new PropertyUpdater(bdayUpdater));
 		bdayField.getTextField().addActionListener(new ActionUpdater(bdayUpdater));
@@ -281,6 +281,7 @@ public class ParticipantPanel extends JPanel {
 				final Period p = ageField.getValue();
 				obj.setAge(p);
 			}
+			updateAgeWarningLabel();
 		};
 		ageField.getDocument().addDocumentListener(new TextFieldUpdater(ageUpdater));
 
@@ -312,7 +313,7 @@ public class ParticipantPanel extends JPanel {
 		optional.add(createFieldLabel("Birthday (YYYY-MM-DD)", "birthday"), cc.xy(1, 3));
 		optional.add(bdayPanel, cc.xy(3, 3));
 		optional.add(createFieldLabel("Age (" + AgeFormatter.AGE_FORMAT + ")", "age"), cc.xy(1, 4));
-		optional.add(ageField, cc.xy(3, 4));
+		optional.add(agePanel, cc.xy(3, 4));
 
 		optional.add(createFieldLabel("Language", "language"), cc.xy(5, 1));
 		optional.add(languageField, cc.xy(7, 1));
@@ -328,6 +329,31 @@ public class ParticipantPanel extends JPanel {
 		add(optional);
 		add(ButtonBarBuilder.buildOkBar(anonymizeBtn));
 		add(new JSeparator(SwingConstants.HORIZONTAL));
+	}
+
+	private void updateAgeWarningLabel() {
+		if(sessionDate != null) {
+			final Period specifiedAge = ageField.getValue();
+			if (specifiedAge != null && participant.getBirthDate() != null) {
+				if(sessionDate.isAfter(participant.getBirthDate())) {
+					final Period calculatedAge = participant.getBirthDate().until(sessionDate);
+					ageWarninglbl.setVisible(!calculatedAge.equals(specifiedAge));
+				} else {
+					ageWarninglbl.setVisible(false);
+				}
+			} else {
+				ageWarninglbl.setVisible(false);
+			}
+		} else {
+			ageWarninglbl.setVisible(false);
+		}
+	}
+
+	private void updateBirthdayWarningLabel() {
+		if(sessionDate != null)
+			bdayWarningLbl.setVisible(participant.getBirthDate() != null ? participant.getBirthDate().isAfter(sessionDate) : false);
+		else
+			bdayWarningLbl.setVisible(false);
 	}
 
 	public void setOtherParticipants(List<Participant> parts) {
@@ -347,10 +373,8 @@ public class ParticipantPanel extends JPanel {
 	public void setSessionDate(LocalDate sessionDate) {
 		this.sessionDate = sessionDate;
 		bdayField.setPromptDate(sessionDate);
-		if(sessionDate != null)
-			bdayWarningLbl.setVisible(bdayField.getDateTime() != null ? bdayField.getDateTime().isAfter(sessionDate) : false);
-		else
-			bdayWarningLbl.setVisible(false);
+		updateBirthdayWarningLabel();
+		updateAgeWarningLabel();
 
 		if(sessionDate != null && participant.getAge(null) == null
 				&& participant.getBirthDate() != null
