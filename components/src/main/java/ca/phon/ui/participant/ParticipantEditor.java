@@ -97,6 +97,11 @@ public class ParticipantEditor extends JDialog {
 		participantPanel = new ParticipantPanel(participant);
 		participantPanel.setSessionDate(sessionDate);
 		participantPanel.setOtherParticipants(otherParts);
+		participantPanel.addPropertyChangeListener("preferredSize", (e) -> {
+			pack();
+			revalidate();
+			repaint();
+		});
 
 		final JComponent btnGroup = ButtonBarBuilder.buildOkCancelBar(saveButton, cancelButton);
 		

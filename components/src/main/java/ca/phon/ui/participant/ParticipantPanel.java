@@ -153,7 +153,7 @@ public class ParticipantPanel extends JPanel {
 
 		bdayField = new DatePicker(sessionDate);
 
-		bdayWarningLbl = new JLabel("Birthday is after specified session date");
+		bdayWarningLbl = new JLabel("Birthday is after session date");
 		bdayWarningLbl.setIcon(warningIcn);
 		bdayWarningLbl.setFont(bdayWarningLbl.getFont().deriveFont(10.0f));
 		updateBirthdayWarningLabel();
@@ -183,7 +183,7 @@ public class ParticipantPanel extends JPanel {
 
 		});
 
-		ageWarninglbl = new JLabel("Age does not match specified birthday");
+		ageWarninglbl = new JLabel("Age does not match birthday");
 		ageWarninglbl.setIcon(warningIcn);
 		ageWarninglbl.setFont(ageWarninglbl.getFont().deriveFont(10.0f));
 		updateAgeWarningLabel();
@@ -344,6 +344,7 @@ public class ParticipantPanel extends JPanel {
 	}
 
 	private void updateIdWarningLabel() {
+		final boolean wasVisible = idWarningLbl.isVisible();
 		if(idField.getText() == null || idField.getText().trim().length() == 0) {
 			idWarningLbl.setText("Id cannot be empty");
 			idWarningLbl.setVisible(true);
@@ -353,9 +354,11 @@ public class ParticipantPanel extends JPanel {
 		} else {
 			idWarningLbl.setVisible(false);
 		}
+		firePropertyChange("preferredSize", wasVisible, idWarningLbl.isVisible());
 	}
 
 	private void updateAgeWarningLabel() {
+		final boolean wasVisible = ageWarninglbl.isVisible();
 		if(sessionDate != null) {
 			final Period specifiedAge = ageField.getValue();
 			if (specifiedAge != null && participant.getBirthDate() != null) {
@@ -371,13 +374,16 @@ public class ParticipantPanel extends JPanel {
 		} else {
 			ageWarninglbl.setVisible(false);
 		}
+		firePropertyChange("preferredSize", wasVisible, ageWarninglbl.isVisible());
 	}
 
 	private void updateBirthdayWarningLabel() {
+		final boolean wasVisible = bdayWarningLbl.isVisible();
 		if(sessionDate != null)
 			bdayWarningLbl.setVisible(participant.getBirthDate() != null ? participant.getBirthDate().isAfter(sessionDate) : false);
 		else
 			bdayWarningLbl.setVisible(false);
+		firePropertyChange("preferredSize", wasVisible, bdayWarningLbl.isVisible());
 	}
 
 	public void setOtherParticipants(List<Participant> parts) {
