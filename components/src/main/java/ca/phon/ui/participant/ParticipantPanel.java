@@ -51,6 +51,8 @@ public class ParticipantPanel extends JPanel {
 
 	private JTextField idField;
 
+	private JLabel idWarningLbl;
+
 	private JComboBox<Sex> sexBox;
 
 	private JTextField nameField;
@@ -96,11 +98,19 @@ public class ParticipantPanel extends JPanel {
 	}
 
 	private void init() {
+		final ImageIcon warningIcn = IconManager.getInstance().getIcon("emblems/flag-red", IconSize.XSMALL);
+
 		// setup form
 		roleBox = new JComboBox<>(ParticipantRole.values());
 
 		idField = new JTextField();
-		idField.setEnabled(false);
+		idWarningLbl = new JLabel("");
+		idWarningLbl.setIcon(warningIcn);
+		idWarningLbl.setFont(idWarningLbl.getFont().deriveFont(10.0f));
+		final JPanel idPanel = new JPanel(new VerticalLayout());
+		idPanel.add(idField);
+		idPanel.add(idWarningLbl);
+		updateIdWarningLabel();
 
 		sexBox = new JComboBox<>(Sex.values());
 		sexBox.setSelectedItem(
@@ -143,7 +153,6 @@ public class ParticipantPanel extends JPanel {
 
 		bdayField = new DatePicker(sessionDate);
 
-		final ImageIcon warningIcn = IconManager.getInstance().getIcon("emblems/flag-red", IconSize.XSMALL);
 		bdayWarningLbl = new JLabel("Birthday is after specified session date");
 		bdayWarningLbl.setIcon(warningIcn);
 		bdayWarningLbl.setFont(bdayWarningLbl.getFont().deriveFont(10.0f));
@@ -190,7 +199,7 @@ public class ParticipantPanel extends JPanel {
 		if(participant.getId() != null) {
 			idField.setText(participant.getId());
 		}
-		idField.setText(participant.getId());
+		updateIdWarningLabel();
 		if(participant.getName() != null)
 			nameField.setText(participant.getName());
 		if(participant.getGroup() != null)
@@ -219,7 +228,10 @@ public class ParticipantPanel extends JPanel {
 		roleBox.addItemListener(new ItemUpdater(roleUpdater));
 
 		final Consumer<Participant> idUpdater = (obj) -> {
-			obj.setId(idField.getText());
+			if(idField.getText().trim().length() > 0
+				&& idField.getText().split("\\s").length == 1)
+				obj.setId(idField.getText());
+			updateIdWarningLabel();
 		};
 		idField.getDocument().addDocumentListener(new TextFieldUpdater(idUpdater));
 
@@ -299,7 +311,7 @@ public class ParticipantPanel extends JPanel {
 		required.add(new JLabel("Role"), cc.xy(1,1));
 		required.add(roleBox, cc.xy(3,1));
 		required.add(createFieldLabel("Id", "id"), cc.xy(1, 3));
-		required.add(idField, cc.xy(3, 3));
+		required.add(idPanel, cc.xy(3, 3));
 
 		final FormLayout optLayout = new FormLayout(
 				"right:pref, 3dlu, fill:pref:grow, 5dlu, right:pref, 3dlu, fill:pref:grow",
@@ -329,6 +341,18 @@ public class ParticipantPanel extends JPanel {
 		add(optional);
 		add(ButtonBarBuilder.buildOkBar(anonymizeBtn));
 		add(new JSeparator(SwingConstants.HORIZONTAL));
+	}
+
+	private void updateIdWarningLabel() {
+		if(idField.getText() == null || idField.getText().trim().length() == 0) {
+			idWarningLbl.setText("Id cannot be empty");
+			idWarningLbl.setVisible(true);
+		} else if(idField.getText().split("\\s").length > 1) {
+			idWarningLbl.setText("Id cannot contain spaces");
+			idWarningLbl.setVisible(true);
+		} else {
+			idWarningLbl.setVisible(false);
+		}
 	}
 
 	private void updateAgeWarningLabel() {
