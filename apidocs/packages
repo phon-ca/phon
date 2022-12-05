@@ -1585,7 +1585,6 @@ ca.phon.query.detectors
 ca.phon.query.detectors
 ca.phon.query.detectors
 ca.phon.query
-antlr4.ca.phon.query.pql.gen
 ca.phon.script
 ca.phon.script.scripttable
 ca.phon.script.scripttable.io
