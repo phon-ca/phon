@@ -287,7 +287,7 @@ public class ParticipantPanel extends JPanel {
 		bdayField.getTextField().addActionListener(new ActionUpdater(bdayUpdater));
 
 		final Consumer<Participant> ageUpdater = (obj) -> {
-			if(ageField.getText().trim().length() == 0) {
+			if(ageField.getValue() == null) {
 				obj.setAge(null);
 			} else {
 				final Period p = ageField.getValue();
@@ -295,7 +295,7 @@ public class ParticipantPanel extends JPanel {
 			}
 			updateAgeWarningLabel();
 		};
-		ageField.getDocument().addDocumentListener(new TextFieldUpdater(ageUpdater));
+		ageField.addPropertyChangeListener(FormatterTextField.VALIDATED_VALUE, new PropertyUpdater(ageUpdater));
 
 		// ensure a role is selected!
 		if(participant.getRole() == null) {
@@ -497,7 +497,7 @@ public class ParticipantPanel extends JPanel {
 			}
 
 			case "age" -> {
-				ageField.setText("");
+				ageField.setValue(null);
 			}
 
 			case "group" -> {
