@@ -92,8 +92,6 @@ public class RecentProjectsList extends JPanel {
 		for(File projectFolder:history) {
 			final LocalProjectButton projectButton = getProjectButton(projectFolder);
 
-			projectButton.updateProjectSize(worker);
-
 			if(stripeRow) {
 				projectButton.setBackground(PhonGuiConstants.PHON_UI_STRIP_COLOR);
 				stripeRow = false;

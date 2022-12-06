@@ -33,8 +33,6 @@ import java.awt.geom.Rectangle2D;
  */
 public class WorkspaceProjectsPanel extends JPanel {
 
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(WorkspaceProjectsPanel.class.getName());
-
 	/* UI */
 	private MultiActionButton workspaceBtn;
 
@@ -42,7 +40,6 @@ public class WorkspaceProjectsPanel extends JPanel {
 
 	public WorkspaceProjectsPanel() {
 		super();
-
 
 		init();
 	}

@@ -51,15 +51,12 @@ import java.util.*;
  */
 public class FolderProjectList extends JPanel {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(FolderProjectList.class.getName());
-	
 	private enum SortBy {
 		NAME,
-		MOD_DATE,
-		SIZE;
-		
+		MOD_DATE;
+
 		private String[] displayNames = {
-				"Name", "Modified", "Size"
+				"Name", "Modified"
 		};
 		
 		public String getDisplayName() {
@@ -70,6 +67,7 @@ public class FolderProjectList extends JPanel {
 		public String toString() {
 			return getDisplayName();
 		}
+
 	};
 	
 	/**
@@ -148,10 +146,6 @@ public class FolderProjectList extends JPanel {
 		for(MultiActionButton btn:projectButtons) {
 			listPanel.add(btn);
 
-			if(btn instanceof LocalProjectButton) {
-				((LocalProjectButton) btn).updateProjectSize(worker);
-			}
-			
 			if(stripRow) {
 				btn.setBackground(PhonGuiConstants.PHON_UI_STRIP_COLOR);
 				stripRow = false;
@@ -286,11 +280,6 @@ public class FolderProjectList extends JPanel {
 				Long o2Mod = new File(o2.getProjectFile(), "project.xml").lastModified();
 				
 				retVal = o2Mod.compareTo(o1Mod);
-			} else if(sortBy == SortBy.SIZE) {
-				Long o1Size = o1.getProjectSize();
-				Long o2Size = o2.getProjectSize();
-				
-				retVal = o1Size.compareTo(o2Size);
 			}
 			
 			return retVal;
@@ -316,9 +305,6 @@ public class FolderProjectList extends JPanel {
 			FormLayout layout = new FormLayout(
 					"2dlu, left:pref, fill:pref:grow, right:pref, 2dlu", "pref");
 			CellConstraints cc = new CellConstraints();
-//			FlowLayout fl = new FlowLayout(FlowLayout.LEFT);
-//			fl.setVgap(0);
-			
 			setLayout(layout);
 			
 			JXLabel titleLabel = new JXLabel("Sort by:");
@@ -345,19 +331,9 @@ public class FolderProjectList extends JPanel {
 					}
 				});
 			}
-				
 			add(sortByGrp, cc.xy(3,1));
 			
-//			PhonUIAction refreshAction = 
-//				new PhonUIAction(FolderProjectList.this, "onRefresh");
 			ImageIcon icn = IconManager.getInstance().getIcon("actions/reload", IconSize.SMALL);
-//			refreshAction.putValue(PhonUIAction.SMALL_ICON, icn);
-//			refreshAction.putValue(PhonUIAction.NAME, "Refresh");
-//			refreshAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Refresh project list");
-//			
-//			JButton refreshButton = new JButton(refreshAction);
-//			refreshButton.setBorderPainted(false);
-			
 			JLabel refreshLabel = new JLabel("<html><u style='color: rgb(0, 90, 140);'>Refresh</u></html>");
 			refreshLabel.setIcon(icn);
 			refreshLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -370,11 +346,8 @@ public class FolderProjectList extends JPanel {
 				}
 				
 			});
-			
-			
 			add(refreshLabel, cc.xy(4,1));
 		}
-		
 		
 	}
 	
@@ -447,16 +420,8 @@ public class FolderProjectList extends JPanel {
 			updateProjectList();
 			
 			PhonWorker.getInstance().invokeLater(task);
-					
-//			HashMap<String, Object> initInfo = new HashMap<String, Object>();
-//			initInfo.put("project", project);
-//			ModuleInformation mi = ResourceLocator.getInstance().getModuleInformationByAction("ca.phon.modules.project.ProjectArchiveController");
-//			LoadModule lm = new LoadModule(mi, initInfo);
-//			lm.start();
-		} catch (IOException e) {
-			LOGGER.error(e.getMessage());
-		} catch (ProjectConfigurationException e) {
-			LOGGER.error(e.getMessage());
+		} catch (IOException | ProjectConfigurationException e) {
+			LogUtil.warning(e);
 		}
 	}
 	

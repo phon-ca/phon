@@ -40,10 +40,6 @@ public class LocalProjectButton extends MultiActionButton {
 	/** Project file, should be a directory containing a project.xml file */
 	private File projectFile;
 
-	private Lock projSizeLock = new ReentrantLock();
-	private long projSize = 0L;
-	private boolean projSizeCalculated = false;
-
 	private BgPainter bgPainter = new BgPainter();
 
 	/**
@@ -54,29 +50,8 @@ public class LocalProjectButton extends MultiActionButton {
 		this.projectFile = projFile;
 
 		updateLabels();
-
 		setBackgroundPainter(bgPainter);
-
 		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-	}
-
-	public void updateProjectSize(PhonWorker worker) {
-		worker.invokeLater(new ProjectSizeCalcTask());
-	}
-
-	/**
-	 * Get the calculated size of the project.
-	 * May be 0 if size has not been calculated.
-	 */
-	public long getProjectSize() {
-		return this.projSize;
-	}
-
-	/**
-	 * Has the sie been calculated
-	 */
-	public boolean isProjectSizeCalculated() {
-		return this.projSizeCalculated;
 	}
 
 	@Override
@@ -112,94 +87,7 @@ public class LocalProjectButton extends MultiActionButton {
 		nf.setMaximumFractionDigits(2);
 
 		String modStr =	"Modified: " + (zonedDate != null ? formatter.format(zonedDate) : " ??? ");
-		String sizeStr = "Size: ";
-		if(!projSizeCalculated) {
-			sizeStr += "Calculating...";
-		} else {
-			projSizeLock.lock();
-			sizeStr += getSizeString(projSize);
-			projSizeLock.unlock();
-		}
-
-		String detailsStr = modStr + " &#8226; " + sizeStr;
-		getBottomLabel().setText(WorkspaceTextStyler.toDescText(detailsStr));
-	}
-
-	private class ProjectSizeCalcTask extends PhonTask {
-
-		@Override
-		public void performTask() {
-			super.setStatus(TaskStatus.RUNNING);
-
-			long ps = getSize(projectFile);
-			projSizeLock.lock();
-			projSize = ps;
-			projSizeCalculated = true;
-			projSizeLock.unlock();
-
-			Runnable r = new Runnable() {
-				@Override
-				public void run() {
-					updateLabels();
-				}
-			};
-			SwingUtilities.invokeLater(r);
-
-			super.setStatus(TaskStatus.FINISHED);
-		}
-
-	}
-
-	/**
-	 * Returns size of the given file/directory.
-	 * If a directory, this method will recusively
-	 * traverse and calculate the size of all files.
-	 *
-	 * @param f
-	 * @return the size of the file/directory
-	 */
-	private long getSize(File f) {
-		long retVal = 0;
-		if(f.isFile()) {
-			// return size of file
-			retVal = f.length();
-		} else if(f.isDirectory()) {
-			File[] files = f.listFiles();
-			if(files != null) {
-				for (File lf : files) {
-					retVal += getSize(lf);
-				}
-			}
-		}
-		return retVal;
-	}
-
-	/**
-	 * Get string from byte size
-	 * @param bytes
-	 * @return
-	 */
-	private String getSizeString(long bytes) {
-		int kb = 1024;
-		int mb = kb * 1024;
-		int gb = mb * 1024;
-
-		NumberFormat nf = NumberFormat.getNumberInstance();
-		nf.setMaximumFractionDigits(2);
-
-		String retVal = bytes + " B";
-		if(bytes > gb) {
-			double numgbs = (double)bytes/(double)gb;
-			retVal = nf.format(numgbs) + " GB";
-		} else if(bytes > mb) {
-			double nummbs = (double)bytes/(double)mb;
-			retVal = nf.format(nummbs) + " MB";
-		} else if(bytes > kb) {
-			double numkbs = (double)bytes/(double)kb;
-			retVal = nf.format(numkbs) + " KB";
-		}
-
-		return retVal;
+		getBottomLabel().setText(WorkspaceTextStyler.toDescText(modStr));
 	}
 
 	/**
@@ -235,12 +123,6 @@ public class LocalProjectButton extends MultiActionButton {
 			g.fillRect(0, 0, width, height);
 
 			if(useSelected) {
-//				GradientPaint gp = new GradientPaint(
-//						(float)0, 0.0f, new Color(237,243, 254), (float)0.0f, (float)height, new Color(207, 213, 224), true);
-//				MattePainter bgPainter = new MattePainter(gp);
-//				bgPainter.paint(g, object, width, height);
-//
-//				NeonBorderEffect effect  = new NeonBorderEffect();
 				GlowPathEffect effect = new GlowPathEffect();
 				effect.setRenderInsideShape(true);
 				effect.setBrushColor(selectedColor);
