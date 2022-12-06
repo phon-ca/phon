@@ -104,15 +104,13 @@ public class FolderProjectList extends JPanel {
 	private void init() {
 		setLayout(new BorderLayout());
 		
-		setBackground(Color.white);
-		setOpaque(true);
-		
 		listPanel = new ButtonPanel();
 		BoxLayout bl = new BoxLayout(listPanel, BoxLayout.Y_AXIS);
 		listPanel.setLayout(bl);
 		
 		listScroller = new JScrollPane(listPanel);
 		listScroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		listScroller.getViewport().setBackground(Color.white);
 		
 		add(listScroller, BorderLayout.CENTER);
 		

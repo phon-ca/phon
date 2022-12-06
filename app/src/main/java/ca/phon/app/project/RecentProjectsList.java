@@ -49,7 +49,7 @@ public class RecentProjectsList extends JPanel {
 	
 	private void init() {
 		setLayout(new BorderLayout());
-		
+
 		final JPanel actionPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		MatteBorder lineBorder = 
 				BorderFactory.createMatteBorder(1, 1, 1, 1, Color.lightGray);
@@ -74,6 +74,7 @@ public class RecentProjectsList extends JPanel {
 		buttonPanel = new ButtonPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 		final JScrollPane scrollPanel = new JScrollPane(buttonPanel);
+		scrollPanel.getViewport().setBackground(Color.white);
 		add(scrollPanel, BorderLayout.CENTER);
 		
 		updateProjectList();
