@@ -216,6 +216,7 @@ public class DatePicker extends JComponent {
 			@Override
 			public void windowLostFocus(WindowEvent e) {
 				popupFrame.setVisible(false);
+				popupFrame.dispose();
 			}
 		});
 	}
