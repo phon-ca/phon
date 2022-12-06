@@ -55,7 +55,7 @@ public class OpenProjectEP implements IPluginEntryPoint {
 	public void loadProject(EntryPointArgs epArgs) {
 		final Project project = epArgs.getProject();
 		if(project != null) {
-			moveOldProperitesFile(project);
+			moveOldPropertiesFile(project);
 
 			final boolean openWithSession =
 					epArgs.containsKey(OPEN_WITH_SESSION) ? (Boolean)epArgs.get(OPEN_WITH_SESSION) : false;
@@ -154,7 +154,7 @@ public class OpenProjectEP implements IPluginEntryPoint {
 		return false;
     }
 
-    private void moveOldProperitesFile(Project project) {
+    private void moveOldPropertiesFile(Project project) {
 		final File oldPropsFile = new File(project.getLocation(), LocalProject.PREV_PROJECT_PROPERTIES_FILE);
 		final File newPropsFile = new File(project.getLocation(), LocalProject.PROJECT_PROPERTIES_FILE);
 		if(oldPropsFile.exists() && !newPropsFile.exists()) {

@@ -107,8 +107,8 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 		if(propsFile.exists()) {
 			// load properties
 			Properties props = new Properties();
-			try {
-				props.load(new FileInputStream(propsFile));
+			try(final FileInputStream fin = new FileInputStream(propsFile)) {
+				props.load(fin);
 			} catch (IOException e) {
 				LOGGER.warn( "Could not load project properties. " + e.getLocalizedMessage(), e);
 			}
