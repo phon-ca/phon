@@ -135,7 +135,6 @@ public class DatePicker extends JComponent {
 	public void setDateTime(LocalDate dateTime) {
 		final LocalDate currentDateTime = getDateTime();
 		textField.setValue(dateTime);
-		firePropertyChange(DATETIME_PROP, currentDateTime, dateTime);
 	}
 	
 	public FormatterTextField<LocalDate> getTextField() {

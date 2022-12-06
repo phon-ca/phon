@@ -19,10 +19,9 @@ import ca.phon.session.*;
 import ca.phon.session.format.AgeFormatter;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.DropDownIcon;
-import ca.phon.ui.PhonLoggerConsole;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.decorations.ComponentWithMessage;
 import ca.phon.ui.decorations.DialogHeader;
-import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.text.*;
@@ -49,9 +48,13 @@ public class ParticipantPanel extends JPanel {
 
 	private JComboBox<ParticipantRole> roleBox;
 
-	private JTextField idField;
+	private final ImageIcon warningIcn;
+	private final ImageIcon infoIcn;
 
-	private JLabel idWarningLbl;
+	private ComponentWithMessage<JTextField> idField;
+	private final static String ID_FIELD_PROMPT = "Id will be used in place of name if not provided";
+	private final static String ID_NO_SPACES = "Id cannot contain spaces";
+	private final static String ID_NOT_EMPTY = "Id cannot be empty";
 
 	private JComboBox<Sex> sexBox;
 
@@ -61,13 +64,13 @@ public class ParticipantPanel extends JPanel {
 	private JTextField educationField;
 	private LanguageField languageField;
 
-	private JLabel bdayWarningLbl;
+	private ComponentWithMessage<DatePicker> bdayField;
+	private final static String BDAY_PROMPT = "Format YYYY-MM-DD";
+	private final static String BDAY_BEFORE_SESSION = "Birthday is after session date";
 
-	private DatePicker bdayField;
-
-	private FormatterTextField<Period> ageField;
-
-	private JLabel ageWarninglbl;
+	private ComponentWithMessage<FormatterTextField<Period>> ageField;
+	private final static String AGE_NO_MATCH = "Age does not match birthday";
+	private final static String AGE_PROMPT = "Format YY;MM.DD";
 
 	private LocalDate sessionDate;
 
@@ -84,6 +87,9 @@ public class ParticipantPanel extends JPanel {
 	public ParticipantPanel(Participant participant) {
 		super();
 		this.participant = participant;
+
+		this.warningIcn = IconManager.getInstance().getIcon("status/dialog-warning", IconSize.XSMALL);
+		this.infoIcn = null;
 
 		init();
 	}
@@ -103,13 +109,10 @@ public class ParticipantPanel extends JPanel {
 		// setup form
 		roleBox = new JComboBox<>(ParticipantRole.values());
 
-		idField = new JTextField();
-		idWarningLbl = new JLabel("");
+		idField = new ComponentWithMessage<>(new JTextField(), infoIcn, ID_FIELD_PROMPT);
+		JLabel idWarningLbl = idField.getLabel();
 		idWarningLbl.setIcon(warningIcn);
 		idWarningLbl.setFont(idWarningLbl.getFont().deriveFont(10.0f));
-		final JPanel idPanel = new JPanel(new VerticalLayout());
-		idPanel.add(idField);
-		idPanel.add(idWarningLbl);
 		updateIdWarningLabel();
 
 		sexBox = new JComboBox<>(Sex.values());
@@ -151,53 +154,41 @@ public class ParticipantPanel extends JPanel {
 		languageField = new LanguageField();
 		languageField.setColumns(defCols);
 
-		bdayField = new DatePicker(sessionDate);
-
-		bdayWarningLbl = new JLabel("Birthday is after session date");
+		bdayField = new ComponentWithMessage<>(new DatePicker(sessionDate), infoIcn, BDAY_PROMPT);
+		JLabel bdayWarningLbl = bdayField.getLabel();
 		bdayWarningLbl.setIcon(warningIcn);
 		bdayWarningLbl.setFont(bdayWarningLbl.getFont().deriveFont(10.0f));
 		updateBirthdayWarningLabel();
 
-		final JPanel bdayPanel = new JPanel(new VerticalLayout());
-		bdayPanel.add(bdayField);
-		bdayPanel.add(bdayWarningLbl);
 
-		ageField = FormatterTextField.createTextField(Period.class);
-		ageField.setPrompt("YY;MM.DD");
-		ageField.setToolTipText("Enter age in format YY;MM.YY");
-		ageField.addFocusListener(new FocusListener() {
-
-			@Override
-			public void focusLost(FocusEvent arg0) {
-				if(ageField.getText().length() > 0 &&
-						!ageField.validateText()) {
-					ToastFactory.makeToast("Age format: " + AgeFormatter.AGE_FORMAT).start(ageField);
-					Toolkit.getDefaultToolkit().beep();
-					bdayField.requestFocus();
-				}
-			}
-
-			@Override
-			public void focusGained(FocusEvent arg0) {
-			}
-
-		});
-
-		ageWarninglbl = new JLabel("Age does not match birthday");
-		ageWarninglbl.setIcon(warningIcn);
-		ageWarninglbl.setFont(ageWarninglbl.getFont().deriveFont(10.0f));
+		ageField = new ComponentWithMessage<>(FormatterTextField.createTextField(Period.class), infoIcn, AGE_PROMPT);
+		ageField.getComponent().setPrompt("YY;MM.DD");
+		ageField.getComponent().setToolTipText("Enter age in format YY;MM.YY");
+		ageField.getLabel().setFont(ageField.getLabel().getFont().deriveFont(10.0f));
 		updateAgeWarningLabel();
-
-		final JPanel agePanel = new JPanel(new VerticalLayout());
-		agePanel.add(ageField);
-		agePanel.add(ageWarninglbl);
+//		ageField.addFocusListener(new FocusListener() {
+//
+//			@Override
+//			public void focusLost(FocusEvent arg0) {
+//				if(ageField.getText().length() > 0 &&
+//						!ageField.validateText()) {
+//					ToastFactory.makeToast("Age format: " + AgeFormatter.AGE_FORMAT).start(ageField);
+//					Toolkit.getDefaultToolkit().beep();
+//					bdayField.requestFocus();
+//				}
+//			}
+//
+//			@Override
+//			public void focusGained(FocusEvent arg0) {
+//			}
+//
+//		});
 
 		// setup info
-
 		if(participant.getRole() != null)
 			roleBox.setSelectedItem(participant.getRole());
 		if(participant.getId() != null) {
-			idField.setText(participant.getId());
+			idField.getComponent().setText(participant.getId());
 		}
 		updateIdWarningLabel();
 		if(participant.getName() != null)
@@ -212,28 +203,28 @@ public class ParticipantPanel extends JPanel {
 			educationField.setText(participant.getEducation());
 
 		if(participant.getBirthDate() != null) {
-			bdayField.setDateTime(participant.getBirthDate());
+			bdayField.getComponent().setDateTime(participant.getBirthDate());
 		}
 
 		if(participant.getAge(null) != null) {
-			ageField.setValue(participant.getAge(null));
+			ageField.getComponent().setValue(participant.getAge(null));
 		}
 
 		// setup listeners
 		final Consumer<Participant> roleUpdater = (obj) -> {
 			final ParticipantRole role = (ParticipantRole)roleBox.getSelectedItem();
 			obj.setRole(role);
-			idField.setText(getRoleId());
+			idField.getComponent().setText(getRoleId());
 		};
 		roleBox.addItemListener(new ItemUpdater(roleUpdater));
 
 		final Consumer<Participant> idUpdater = (obj) -> {
-			if(idField.getText().trim().length() > 0
-				&& idField.getText().split("\\s").length == 1)
-				obj.setId(idField.getText());
+			if(idField.getComponent().getText().trim().length() > 0
+				&& idField.getComponent().getText().split("\\s").length == 1)
+				obj.setId(idField.getComponent().getText());
 			updateIdWarningLabel();
 		};
-		idField.getDocument().addDocumentListener(new TextFieldUpdater(idUpdater));
+		idField.getComponent().getDocument().addDocumentListener(new TextFieldUpdater(idUpdater));
 
 		final Consumer<Participant> nameUpdater = (obj) -> {
 			obj.setName(nameField.getText());
@@ -266,36 +257,44 @@ public class ParticipantPanel extends JPanel {
 		sexBox.addItemListener(new ItemUpdater(sexUpdater));
 
 		final Consumer<Participant> bdayUpdater = (obj) -> {
-			final LocalDate bday = bdayField.getDateTime();
+			final LocalDate bday = bdayField.getComponent().getDateTime();
+			final Period currentAge = obj.getAge(null);
+			final boolean ageNotSet = (currentAge == null);
+			final boolean hasValidInfo =
+					(sessionDate != null && obj.getBirthDate() != null
+						&& sessionDate.isAfter(obj.getBirthDate()));
+			final Period calculatedAge = hasValidInfo ? obj.getBirthDate().until(sessionDate) : null;
 			obj.setBirthDate(bday);
-			if(obj.getAge(null) == null) {
-				if(sessionDate != null && obj.getBirthDate() != null
-					&& sessionDate.isAfter(obj.getBirthDate())) {
-					final Period age = obj.getAge(sessionDate);
-					ageField.setPrompt(AgeFormatter.ageToString(age));
-					ageField.setKeepPrompt(true);
+			if(bday != null) {
+				if(bday.isBefore(sessionDate)) {
+					if (ageNotSet || (calculatedAge != null && calculatedAge.equals(currentAge))) {
+						obj.setAge(null);
+						final Period age = obj.getAge(sessionDate);
+						ageField.getComponent().setValue(age);
+					}
 				} else {
-					ageField.setPrompt("YY:MM.DD");
-					ageField.setKeepPrompt(false);
+					if (ageNotSet || (calculatedAge != null && calculatedAge.equals(currentAge))) {
+						ageField.getComponent().setValue(null);
+					}
 				}
 			}
 
 			updateBirthdayWarningLabel();
 			updateAgeWarningLabel();
 		};
-		bdayField.addPropertyChangeListener(DatePicker.DATETIME_PROP, new PropertyUpdater(bdayUpdater));
-		bdayField.getTextField().addActionListener(new ActionUpdater(bdayUpdater));
+		bdayField.getComponent().addPropertyChangeListener(DatePicker.DATETIME_PROP, new PropertyUpdater(bdayUpdater));
+		bdayField.getComponent().getTextField().addActionListener(new ActionUpdater(bdayUpdater));
 
 		final Consumer<Participant> ageUpdater = (obj) -> {
-			if(ageField.getValue() == null) {
+			if(ageField.getComponent().getValue() == null) {
 				obj.setAge(null);
 			} else {
-				final Period p = ageField.getValue();
+				final Period p = ageField.getComponent().getValue();
 				obj.setAge(p);
 			}
 			updateAgeWarningLabel();
 		};
-		ageField.addPropertyChangeListener(FormatterTextField.VALIDATED_VALUE, new PropertyUpdater(ageUpdater));
+		ageField.getComponent().addPropertyChangeListener(FormatterTextField.VALIDATED_VALUE, new PropertyUpdater(ageUpdater));
 
 		// ensure a role is selected!
 		if(participant.getRole() == null) {
@@ -311,7 +310,7 @@ public class ParticipantPanel extends JPanel {
 		required.add(new JLabel("Role"), cc.xy(1,1));
 		required.add(roleBox, cc.xy(3,1));
 		required.add(createFieldLabel("Id", "id"), cc.xy(1, 3));
-		required.add(idPanel, cc.xy(3, 3));
+		required.add(idField, cc.xy(3, 3));
 
 		final FormLayout optLayout = new FormLayout(
 				"right:pref, 3dlu, fill:pref:grow, 5dlu, right:pref, 3dlu, fill:pref:grow",
@@ -323,9 +322,9 @@ public class ParticipantPanel extends JPanel {
 		optional.add(createFieldLabel("Sex", "sex"), cc.xy(1, 2));
 		optional.add(sexBox, cc.xy(3, 2));
 		optional.add(createFieldLabel("Birthday (YYYY-MM-DD)", "birthday"), cc.xy(1, 3));
-		optional.add(bdayPanel, cc.xy(3, 3));
+		optional.add(bdayField, cc.xy(3, 3));
 		optional.add(createFieldLabel("Age (" + AgeFormatter.AGE_FORMAT + ")", "age"), cc.xy(1, 4));
-		optional.add(agePanel, cc.xy(3, 4));
+		optional.add(ageField, cc.xy(3, 4));
 
 		optional.add(createFieldLabel("Language", "language"), cc.xy(5, 1));
 		optional.add(languageField, cc.xy(7, 1));
@@ -344,46 +343,40 @@ public class ParticipantPanel extends JPanel {
 	}
 
 	private void updateIdWarningLabel() {
-		final boolean wasVisible = idWarningLbl.isVisible();
-		if(idField.getText() == null || idField.getText().trim().length() == 0) {
-			idWarningLbl.setText("Id cannot be empty");
-			idWarningLbl.setVisible(true);
-		} else if(idField.getText().split("\\s").length > 1) {
-			idWarningLbl.setText("Id cannot contain spaces");
-			idWarningLbl.setVisible(true);
+		if(idField.getComponent().getText() == null || idField.getComponent().getText().trim().length() == 0) {
+			idField.updateLabel(warningIcn, ID_NOT_EMPTY, true);
+		} else if(idField.getComponent().getText().split("\\s").length > 1) {
+			idField.updateLabel(warningIcn, ID_NO_SPACES, true);
 		} else {
-			idWarningLbl.setVisible(false);
+			idField.updateLabel(infoIcn, ID_FIELD_PROMPT, true);
 		}
-		firePropertyChange("preferredSize", wasVisible, idWarningLbl.isVisible());
 	}
 
 	private void updateAgeWarningLabel() {
-		final boolean wasVisible = ageWarninglbl.isVisible();
 		if(sessionDate != null) {
-			final Period specifiedAge = ageField.getValue();
+			final Period specifiedAge = ageField.getComponent().getValue();
 			if (specifiedAge != null && participant.getBirthDate() != null) {
 				if(sessionDate.isAfter(participant.getBirthDate())) {
 					final Period calculatedAge = participant.getBirthDate().until(sessionDate);
-					ageWarninglbl.setVisible(!calculatedAge.equals(specifiedAge));
+					if(!calculatedAge.equals(specifiedAge))
+						ageField.updateLabel(warningIcn, AGE_NO_MATCH, true);
 				} else {
-					ageWarninglbl.setVisible(false);
+					ageField.updateLabel(infoIcn, AGE_PROMPT, true);
 				}
 			} else {
-				ageWarninglbl.setVisible(false);
+				ageField.updateLabel(infoIcn, AGE_PROMPT, true);
 			}
 		} else {
-			ageWarninglbl.setVisible(false);
+			ageField.updateLabel(infoIcn, AGE_PROMPT, true);
 		}
-		firePropertyChange("preferredSize", wasVisible, ageWarninglbl.isVisible());
 	}
 
 	private void updateBirthdayWarningLabel() {
-		final boolean wasVisible = bdayWarningLbl.isVisible();
-		if(sessionDate != null)
-			bdayWarningLbl.setVisible(participant.getBirthDate() != null ? participant.getBirthDate().isAfter(sessionDate) : false);
+		if(sessionDate != null &&  participant.getBirthDate() != null
+			&& participant.getBirthDate().isAfter(sessionDate))
+			bdayField.updateLabel(warningIcn, BDAY_BEFORE_SESSION, true);
 		else
-			bdayWarningLbl.setVisible(false);
-		firePropertyChange("preferredSize", wasVisible, bdayWarningLbl.isVisible());
+			bdayField.updateLabel(infoIcn, BDAY_PROMPT, true);
 	}
 
 	public void setOtherParticipants(List<Participant> parts) {
@@ -392,7 +385,7 @@ public class ParticipantPanel extends JPanel {
 		if(participant.getRole() == null) {
 			participant.setRole(ParticipantRole.TARGET_CHILD);
 			participant.setId(getRoleId());
-			idField.setText(participant.getId());
+			idField.getComponent().setText(participant.getId());
 		}
 	}
 
@@ -402,7 +395,7 @@ public class ParticipantPanel extends JPanel {
 
 	public void setSessionDate(LocalDate sessionDate) {
 		this.sessionDate = sessionDate;
-		bdayField.setPromptDate(sessionDate);
+		bdayField.getComponent().setPromptDate(sessionDate);
 		updateBirthdayWarningLabel();
 		updateAgeWarningLabel();
 
@@ -410,8 +403,7 @@ public class ParticipantPanel extends JPanel {
 				&& participant.getBirthDate() != null
 				&& participant.getBirthDate().isBefore(sessionDate)) {
 			final Period age = participant.getAge(sessionDate);
-			ageField.setPrompt(AgeFormatter.ageToString(age));
-			ageField.setKeepPrompt(true);
+			ageField.getComponent().setValue(age);
 		}
 	}
 
@@ -436,7 +428,7 @@ public class ParticipantPanel extends JPanel {
 	}
 
 	public void updateRoleId() {
-		idField.setText(getRoleId());
+		idField.getComponent().setText(getRoleId());
 	}
 
 	private void onShowPropertyMenu(JComponent lbl, String propName) {
@@ -473,7 +465,7 @@ public class ParticipantPanel extends JPanel {
 		}
 
 		if(!"id".equals(propName)) {
-			final PhonUIAction<String> onClearField = PhonUIAction.consumer(this::onClearField, propName);
+			final PhonUIAction<String> onClearField = PhonUIAction.consumer(this::clearField, propName);
 			onClearField.putValue(PhonUIAction.NAME, "Clear " + propName);
 			onClearField.putValue(PhonUIAction.SHORT_DESCRIPTION, "Clear data for property " + propName);
 			builder.addItem(".", onClearField);
@@ -482,7 +474,7 @@ public class ParticipantPanel extends JPanel {
 		menu.show(lbl, 0, lbl.getHeight());
 	}
 
-	private void onClearField(String propName) {
+	private void clearField(String propName) {
 		switch (propName) {
 			case "name" -> {
 				nameField.setText("");
@@ -493,11 +485,11 @@ public class ParticipantPanel extends JPanel {
 			}
 
 			case "birthday" -> {
-				bdayField.setDateTime(null);
+				bdayField.getComponent().setDateTime(null);
 			}
 
 			case "age" -> {
-				ageField.setValue(null);
+				ageField.getComponent().setValue(null);
 			}
 
 			case "group" -> {
@@ -523,7 +515,7 @@ public class ParticipantPanel extends JPanel {
 		if(age != null) {
 			final LocalDate sessionDate = getSessionDate();
 			final LocalDate bday = sessionDate.minus(age);
-			bdayField.setDateTime(bday);
+			bdayField.getComponent().setDateTime(bday);
 		}
 	}
 
@@ -532,7 +524,7 @@ public class ParticipantPanel extends JPanel {
 		final LocalDate bday = participant.getBirthDate();
 		if(sessionDate.isAfter(bday)) {
 			final Period age = bday.until(sessionDate);
-			ageField.setValue(age);
+			ageField.getComponent().setValue(age);
 		}
 	}
 
@@ -575,32 +567,23 @@ public class ParticipantPanel extends JPanel {
 
 	public void doAnonymizeParticipant(AnonymizeParticipantOptionsPanel optionsPanel) {
 		if(optionsPanel.isAssignId())
-			idField.setText(getRoleId());
+			idField.getComponent().setText(getRoleId());
 		if(optionsPanel.isAnonName())
-			nameField.setText("");
-
-		final String ageTxt = ageField.getPrompt();
+			clearField("name");
 		if(optionsPanel.isAnonBday())
-			bdayField.setDateTime(null);
-
+			clearField("birthday");
 		if(optionsPanel.isAnonAge())
-			ageField.setText("");
-		else {
-			if(participant.getAge(null) == null && ageTxt.matches("[0-9]+;[0-9]{1,2}\\.[0-9]{1,2}")) {
-				ageField.setText(ageTxt);
-			}
-		}
-
+			clearField("age");
 		if(optionsPanel.isAnonSex())
-			sexBox.setSelectedItem(Sex.UNSPECIFIED);
+			clearField("sex");
 		if(optionsPanel.isAnonLang())
-			languageField.setText("");
+			clearField("language");
 		if(optionsPanel.isAnonGroup())
-			groupField.setText("");
+			clearField("group");
 		if(optionsPanel.isAnonEdu())
-			educationField.setText("");
+			clearField("education");
 		if(optionsPanel.isAnonSes())
-			sesField.setText("");
+			clearField("ses");
 	}
 
 	public Participant getParticipant() {
