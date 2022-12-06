@@ -42,6 +42,7 @@ import java.awt.event.*;
 import java.beans.*;
 import java.io.File;
 import java.time.LocalDate;
+import java.time.Period;
 
 /**
  * 
@@ -432,9 +433,32 @@ public class SessionInfoEditorView extends EditorView {
 	private final PropertyChangeListener dateChangeListener = new PropertyChangeListener() {
 		@Override
 		public void propertyChange(PropertyChangeEvent e) {
-			final SessionDateEdit edit = new SessionDateEdit(getEditor(), (LocalDate) e.getNewValue(), (LocalDate) e.getOldValue());
+			final LocalDate oldDate = (LocalDate)e.getOldValue();
+			final LocalDate newDate = (LocalDate)e.getNewValue();
+
+			getEditor().getUndoSupport().beginUpdate();
+
+			final SessionDateEdit edit =
+					new SessionDateEdit(getEditor(), (LocalDate) e.getNewValue(), (LocalDate) e.getOldValue());
 			edit.setSource(dateField);
 			getEditor().getUndoSupport().postEdit(edit);
+
+			if(newDate != null && oldDate != null) {
+				for(Participant participant:getEditor().getSession().getParticipants()) {
+					if(participant.getBirthDate() != null && participant.getBirthDate().isBefore(newDate)) {
+						if (participant.getAge(null) == null || participant.getBirthDate().until(oldDate).equals(participant.getAge(null))) {
+							final Participant modifiedParticipant = SessionFactory.newFactory().cloneParticipant(participant);
+							final Period calculatedAge = participant.getBirthDate().until(newDate);
+							modifiedParticipant.setAge(calculatedAge);
+
+							final ParticipantUndoableEdit participantEdit = new ParticipantUndoableEdit(getEditor(), participant, modifiedParticipant);
+							getEditor().getUndoSupport().postEdit(participantEdit);
+						}
+					}
+				}
+			}
+
+			getEditor().getUndoSupport().endUpdate();
 		}
 	};
 	
