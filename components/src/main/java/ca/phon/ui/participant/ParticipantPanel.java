@@ -358,17 +358,14 @@ public class ParticipantPanel extends JPanel {
 			if (specifiedAge != null && participant.getBirthDate() != null) {
 				if(sessionDate.isAfter(participant.getBirthDate())) {
 					final Period calculatedAge = participant.getBirthDate().until(sessionDate);
-					if(!calculatedAge.equals(specifiedAge))
+					if(!calculatedAge.equals(specifiedAge)) {
 						ageField.updateLabel(warningIcn, AGE_NO_MATCH, true);
-				} else {
-					ageField.updateLabel(infoIcn, AGE_PROMPT, true);
+						return;
+					}
 				}
-			} else {
-				ageField.updateLabel(infoIcn, AGE_PROMPT, true);
 			}
-		} else {
-			ageField.updateLabel(infoIcn, AGE_PROMPT, true);
 		}
+		ageField.updateLabel(infoIcn, AGE_PROMPT, true);
 	}
 
 	private void updateBirthdayWarningLabel() {
