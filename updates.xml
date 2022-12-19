@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.5.0/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_0.dmg" newVersion="3.5.0" newMediaFileId="macos" fileSize="347388179" md5Sum="76221bbfb81e0d4aa98e7e2fc82dba91" sha256Sum="9149ceb6473d2ddb7fd8cce407d7de458bddd76a60a76b40d176d4c8b9bc54d4" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.4.3
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.5.1/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_1.dmg" newVersion="3.5.1" newMediaFileId="macos" fileSize="347638366" md5Sum="c62ddebb3c08179143663619232bbfab" sha256Sum="b48e74632e3662278b78f896720977495a5d307413e89b8ee20451081bf8526f" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.5.0
+
+ * Fix and improve participant editor dialog
+ * Update libjpraat to version 6.3.02
+
+## Changes from 3.4.3
 
  * Add support for apple silicon macs, minimum macOS version is now 10.12
  * Add ipa dictionaries for Australian English, Russian (Cyrillic), Russian (Romanized)
@@ -535,8 +540,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_0.dmg" newVersion="3.5.0" newMediaFileId="macos" fileSize="347388179" md5Sum="76221bbfb81e0d4aa98e7e2fc82dba91" sha256Sum="9149ceb6473d2ddb7fd8cce407d7de458bddd76a60a76b40d176d4c8b9bc54d4" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.4.3
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_1.dmg" newVersion="3.5.1" newMediaFileId="macos" fileSize="347638366" md5Sum="c62ddebb3c08179143663619232bbfab" sha256Sum="b48e74632e3662278b78f896720977495a5d307413e89b8ee20451081bf8526f" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.5.0
+
+ * Fix and improve participant editor dialog
+ * Update libjpraat to version 6.3.02
+
+## Changes from 3.4.3
 
  * Add support for apple silicon macs, minimum macOS version is now 10.12
  * Add ipa dictionaries for Australian English, Russian (Cyrillic), Russian (Romanized)
@@ -1070,8 +1080,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0.exe" newVersion="3.5.0" newMediaFileId="win64" fileSize="330614744" md5Sum="cba65caace3971721b5b9a6a6f42792f" sha256Sum="097a87f83797a123441e50ec65dc51b17aaf003c4181604b3382bcb4b7b368df" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.4.3
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_1.exe" newVersion="3.5.1" newMediaFileId="win64" fileSize="330831320" md5Sum="2820683273ee51945ee22f5008362147" sha256Sum="7b93c3201a63ff8e70af833ce37a1f4448e7571e53a2f4a7edcdee98cc99339c" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.5.0
+
+ * Fix and improve participant editor dialog
+ * Update libjpraat to version 6.3.02
+
+## Changes from 3.4.3
 
  * Add support for apple silicon macs, minimum macOS version is now 10.12
  * Add ipa dictionaries for Australian English, Russian (Cyrillic), Russian (Romanized)
@@ -1605,8 +1620,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0.exe" newVersion="3.5.0" newMediaFileId="win64" fileSize="330614744" md5Sum="cba65caace3971721b5b9a6a6f42792f" sha256Sum="097a87f83797a123441e50ec65dc51b17aaf003c4181604b3382bcb4b7b368df" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.4.3
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_1.exe" newVersion="3.5.1" newMediaFileId="win64" fileSize="330831320" md5Sum="2820683273ee51945ee22f5008362147" sha256Sum="7b93c3201a63ff8e70af833ce37a1f4448e7571e53a2f4a7edcdee98cc99339c" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.5.0
+
+ * Fix and improve participant editor dialog
+ * Update libjpraat to version 6.3.02
+
+## Changes from 3.4.3
 
  * Add support for apple silicon macs, minimum macOS version is now 10.12
  * Add ipa dictionaries for Australian English, Russian (Cyrillic), Russian (Romanized)
@@ -2140,8 +2160,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0.exe" newVersion="3.5.0" newMediaFileId="win64" fileSize="330614744" md5Sum="cba65caace3971721b5b9a6a6f42792f" sha256Sum="097a87f83797a123441e50ec65dc51b17aaf003c4181604b3382bcb4b7b368df" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.4.3
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_1.exe" newVersion="3.5.1" newMediaFileId="win64" fileSize="330831320" md5Sum="2820683273ee51945ee22f5008362147" sha256Sum="7b93c3201a63ff8e70af833ce37a1f4448e7571e53a2f4a7edcdee98cc99339c" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.5.0
+
+ * Fix and improve participant editor dialog
+ * Update libjpraat to version 6.3.02
+
+## Changes from 3.4.3
 
  * Add support for apple silicon macs, minimum macOS version is now 10.12
  * Add ipa dictionaries for Australian English, Russian (Cyrillic), Russian (Romanized)
@@ -2675,8 +2700,13 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_0.zip" newVersion="3.5.0" newMediaFileId="win64zip" fileSize="329517607" md5Sum="1f1f4067036b9003460b7b984ab0f4b9" sha256Sum="9878d4c1fc8d8e8fcd88fea3b109df470307ec7082cd9d2636300c15d45d990d" bundledJre="windows-amd64-17.0.4.tar.gz" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.4.3
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_1.zip" newVersion="3.5.1" newMediaFileId="win64zip" fileSize="329734164" md5Sum="7bb85fd06ba838a1d34da723261cea0c" sha256Sum="b07bbebe329d8980fcb74d87e20e70972575e8959f87840a48df1eef53f9bf87" bundledJre="windows-amd64-17.0.4.tar.gz" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.5.0
+
+ * Fix and improve participant editor dialog
+ * Update libjpraat to version 6.3.02
+
+## Changes from 3.4.3
 
  * Add support for apple silicon macs, minimum macOS version is now 10.12
  * Add ipa dictionaries for Australian English, Russian (Cyrillic), Russian (Romanized)
