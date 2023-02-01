@@ -288,7 +288,7 @@ public final class SegmentationHandler {
 		// speaker index is determined by the 'Time Grid' view
 		TimelineView tgView = (TimelineView)editor.getViewModel().getView(TimelineView.VIEW_TITLE);
 		if(tgView != null) {
-			if(pae.getData() > 0) {
+			if(pae.getData() >= 0) {
 				int speakerIdx = pae.getData();
 				
 				// check speaker index
