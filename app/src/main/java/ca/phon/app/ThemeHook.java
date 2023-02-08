@@ -95,37 +95,38 @@ public class ThemeHook implements PhonStartupHook,
 	}
 
 	private void setupWindowsCustomizations() {
-		UIManager.put("Button.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
-		UIManager.put("ToggleButton.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
-		UIManager.put("RadioButton.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
-		UIManager.put("CheckBox.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
-		UIManager.put("ColorChooser.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
-		UIManager.put("ComboBox.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
-		UIManager.put("Label.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
-		UIManager.put("List.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
-		UIManager.put("MenuBar.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
-		UIManager.put("MenuItem.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
-		UIManager.put("RadioButtonMenuItem.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
-		UIManager.put("CheckBoxMenuItem.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
-		UIManager.put("Menu.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
-		UIManager.put("PopupMenu.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
-		UIManager.put("OptionPane.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
-		UIManager.put("Panel.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
-		UIManager.put("ProgressBar.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
-		UIManager.put("ScrollPane.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
-		UIManager.put("Viewport.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
-		UIManager.put("TabbedPane.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
-		UIManager.put("Table.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
-		UIManager.put("TableHeader.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
-		UIManager.put("TextField.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
-		UIManager.put("PasswordField.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
-		UIManager.put("TextArea.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
-		UIManager.put("TextPane.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
-		UIManager.put("EditorPane.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
-		UIManager.put("TitledBorder.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
-		UIManager.put("ToolBar.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
-		UIManager.put("ToolTip.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
-		UIManager.put("Tree.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		final Font defaultFont = Font.decode(FontPreferences.DEFAULT_TIER_FONT);
+		UIManager.put("Button.font", defaultFont);
+		UIManager.put("ToggleButton.font", defaultFont);
+		UIManager.put("RadioButton.font", defaultFont);
+		UIManager.put("CheckBox.font", defaultFont);
+		UIManager.put("ColorChooser.font", defaultFont);
+		UIManager.put("ComboBox.font", defaultFont);
+		UIManager.put("Label.font", defaultFont);
+		UIManager.put("List.font", defaultFont);
+		UIManager.put("MenuBar.font", defaultFont);
+		UIManager.put("MenuItem.font", defaultFont);
+		UIManager.put("RadioButtonMenuItem.font", defaultFont);
+		UIManager.put("CheckBoxMenuItem.font", defaultFont);
+		UIManager.put("Menu.font", defaultFont);
+		UIManager.put("PopupMenu.font", defaultFont);
+		UIManager.put("OptionPane.font", defaultFont);
+		UIManager.put("Panel.font", defaultFont);
+		UIManager.put("ProgressBar.font", defaultFont);
+		UIManager.put("ScrollPane.font", defaultFont);
+		UIManager.put("Viewport.font", defaultFont);
+		UIManager.put("TabbedPane.font", defaultFont);
+		UIManager.put("Table.font", defaultFont);
+		UIManager.put("TableHeader.font", defaultFont);
+		UIManager.put("TextField.font", defaultFont);
+		UIManager.put("PasswordField.font", defaultFont);
+		UIManager.put("TextArea.font", defaultFont);
+		UIManager.put("TextPane.font", defaultFont);
+		UIManager.put("EditorPane.font", defaultFont);
+		UIManager.put("TitledBorder.font", defaultFont);
+		UIManager.put("ToolBar.font", defaultFont);
+		UIManager.put("ToolTip.font", defaultFont);
+		UIManager.put("Tree.font", defaultFont);
 	}
 	
 	@Override
