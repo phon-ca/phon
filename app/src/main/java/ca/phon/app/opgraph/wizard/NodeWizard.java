@@ -902,7 +902,10 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 						}
 						if(reportTreeView != null) {
 							SwingUtilities.invokeLater(() -> {
-								final ReportTreeModel.UIReportTreeNode uiNode = (treeNode.getParent() == reportTree.getRoot() ? (ReportTreeModel.UIReportTreeNode) reportTreeView.getTreeModel().getRoot() : new ReportTreeModel.UIReportTreeNode(treeNode.getParent()));
+								// we can provide new UIReportNode objects for everything except the root
+								final ReportTreeModel.UIReportTreeNode uiNode = (treeNode.getParent() == reportTree.getRoot()
+										? (ReportTreeModel.UIReportTreeNode) reportTreeView.getTreeModel().getRoot()
+										: new ReportTreeModel.UIReportTreeNode(treeNode.getParent()));
 								if (treeNode.getParent().getChildren().size() == 1) {
 									reportTreeView.getTreeModel().nodeStructureChanged(uiNode);
 								} else {
