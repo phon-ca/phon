@@ -114,7 +114,8 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		editor.addWindowListener(windowChangeListener);
 		getDockControl();
 		
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.EditorFinishedLoading, (e) -> perspectiveFinishedLoading = true, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.EditorFinishedLoading,
+				(e) -> perspectiveFinishedLoading = true, EditorEventManager.RunOn.AWTEventDispatchThread);
 	}
 
 	private CControl getDockControl() {

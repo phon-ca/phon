@@ -1,5 +1,9 @@
 package ca.phon.app.opgraph.wizard;
 
+import bibliothek.gui.dock.common.CControl;
+import bibliothek.gui.dock.common.CGrid;
+import bibliothek.gui.dock.common.CWorkingArea;
+import bibliothek.gui.dock.common.DefaultSingleCDockable;
 import ca.phon.app.opgraph.report.tree.ReportTree;
 import ca.phon.app.opgraph.report.tree.ReportTreeNode;
 import ca.phon.project.Project;
@@ -13,6 +17,8 @@ import java.awt.*;
  * Report tree viewer displayed at the end of node wizard dialogs such as the query and analysis wizards.
  */
 public class ReportTreeView extends JPanel {
+
+    private CControl control;
 
     private Project project;
 
@@ -48,12 +54,20 @@ public class ReportTreeView extends JPanel {
     private void init() {
         setLayout(new BorderLayout());
 
+        control = new CControl();
+        add(control.getContentArea(), BorderLayout.CENTER);
+
         tree = new JTree(new ReportTreeModel(reportTree));
         tree.setCellRenderer(new ReportTreeCellRenderer());
         tree.setRootVisible(true);
         final JScrollPane treeScroller = new JScrollPane(tree);
 
-        add(treeScroller, BorderLayout.WEST);
+        final CWorkingArea work = control.createWorkingArea("work");
+
+        CGrid grid = new CGrid(control);
+        grid.add(0, 0, 1, 3, new DefaultSingleCDockable("Report Outline", "Report Outline", treeScroller));
+        grid.add( 1, 0, 3, 3, work);
+        control.getContentArea().deploy(grid);
     }
 
     public JTree getTree() {
