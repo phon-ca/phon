@@ -16,6 +16,7 @@
 package ca.phon.app;
 
 import ca.phon.app.hooks.PhonStartupHook;
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.plugin.*;
 import ca.phon.ui.fonts.FontPreferences;
@@ -32,9 +33,6 @@ import java.util.*;
  */
 public class ThemeHook implements PhonStartupHook,
 		IPluginExtensionPoint<PhonStartupHook> {
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ThemeHook.class
-			.getName());
 
 	@Override
 	public void startup() throws PluginException {
@@ -60,17 +58,11 @@ public class ThemeHook implements PhonStartupHook,
 										UIManager.getSystemLookAndFeelClassName()
 								);
 						if(uiClassName != null) {
-							LOGGER.info("Installing L&F " + uiClassName);
+							LogUtil.info("Installing L&F " + uiClassName);
 							UIManager.setLookAndFeel(uiClassName);
 						}
-					} catch (UnsupportedLookAndFeelException e) {
-						LOGGER.error( e.getLocalizedMessage(), e);
-					} catch (ClassNotFoundException e) {
-						LOGGER.error( e.getLocalizedMessage(), e);
-					} catch (InstantiationException e) {
-						LOGGER.error( e.getLocalizedMessage(), e);
-					} catch (IllegalAccessException e) {
-						LOGGER.error( e.getLocalizedMessage(), e);
+					} catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+						LogUtil.severe( e.getLocalizedMessage(), e);
 					}
 
 					for (String key : uiMap.keySet()) {
@@ -78,10 +70,8 @@ public class ThemeHook implements PhonStartupHook,
 					}
 				}
 			});
-		} catch (InterruptedException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
-		} catch (InvocationTargetException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+		} catch (InterruptedException | InvocationTargetException e) {
+			LogUtil.severe(e.getLocalizedMessage(), e);
 		}
 
 	}
