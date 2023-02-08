@@ -18,6 +18,7 @@ package ca.phon.app;
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.plugin.*;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.*;
 
 import javax.swing.*;
@@ -48,6 +49,8 @@ public class ThemeHook implements PhonStartupHook,
 					if (OSInfo.isMacOs()) {
 						setupMacosCustomizations();
 						return;
+					} else if(OSInfo.isWindows()) {
+						setupWindowsCustomizations();
 					}
 					
 					try {
@@ -99,6 +102,40 @@ public class ThemeHook implements PhonStartupHook,
 		// fix selected tab foreground color
 		Color listSelectionForeground = UIManager.getColor("List.selectionForeground");
 		UIManager.put("TabbedPane.foreground", Color.black);
+	}
+
+	private void setupWindowsCustomizations() {
+		UIManager.put("Button.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		UIManager.put("ToggleButton.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		UIManager.put("RadioButton.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		UIManager.put("CheckBox.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		UIManager.put("ColorChooser.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		UIManager.put("ComboBox.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		UIManager.put("Label.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		UIManager.put("List.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		UIManager.put("MenuBar.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		UIManager.put("MenuItem.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		UIManager.put("RadioButtonMenuItem.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		UIManager.put("CheckBoxMenuItem.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		UIManager.put("Menu.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		UIManager.put("PopupMenu.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		UIManager.put("OptionPane.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		UIManager.put("Panel.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		UIManager.put("ProgressBar.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		UIManager.put("ScrollPane.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		UIManager.put("Viewport.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		UIManager.put("TabbedPane.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		UIManager.put("Table.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		UIManager.put("TableHeader.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		UIManager.put("TextField.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		UIManager.put("PasswordField.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		UIManager.put("TextArea.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		UIManager.put("TextPane.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		UIManager.put("EditorPane.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		UIManager.put("TitledBorder.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		UIManager.put("ToolBar.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		UIManager.put("ToolTip.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
+		UIManager.put("Tree.font", Font.decode(FontPreferences.DEFAULT_TIER_FONT));
 	}
 	
 	@Override
