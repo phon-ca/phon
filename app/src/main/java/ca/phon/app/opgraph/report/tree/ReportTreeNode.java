@@ -119,6 +119,16 @@ public abstract class ReportTreeNode implements Iterable<ReportTreeNode> {
 		
 		return path;
 	}
+
+	public ReportTreeNode findRoot() {
+		ReportTreeNode parent = getParent();
+		ReportTreeNode retVal = this;
+		while(parent != null) {
+			retVal = parent;
+			parent = parent.getParent();
+		}
+		return retVal;
+	}
 	
 	/**
 	 * Return the markdown template code for this report node.

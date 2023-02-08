@@ -62,6 +62,8 @@ import javax.swing.Timer;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.html.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.*;
@@ -897,7 +899,17 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 						try (PrintWriter out = new PrintWriter(new OutputStreamWriter(getLogBuffer().getLogBuffer().getStdOutStream()))) {
 							out.println("New report section: " + treeNode.getPath().toString());
 							out.flush();
-						}						
+						}
+						if(reportTreeView != null) {
+							SwingUtilities.invokeLater(() -> {
+								final ReportTreeModel.UIReportTreeNode uiNode = (treeNode.getParent() == reportTree.getRoot() ? (ReportTreeModel.UIReportTreeNode) reportTreeView.getTreeModel().getRoot() : new ReportTreeModel.UIReportTreeNode(treeNode.getParent()));
+								if (treeNode.getParent().getChildren().size() == 1) {
+									reportTreeView.getTreeModel().nodeStructureChanged(uiNode);
+								} else {
+									reportTreeView.getTreeModel().nodesWereInserted(uiNode, new int[]{treeNode.getParent().getChildren().indexOf(treeNode)});
+								}
+							});
+						}
 					}
 				}
 			}
