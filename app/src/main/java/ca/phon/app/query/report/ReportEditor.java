@@ -53,7 +53,7 @@ public class ReportEditor extends JPanel implements SectionListener {
 	
 	/* UI */
 	private JXTree reportTree;
-	private ReportTreeModel reportTreeModel;
+	private ReportDesignTreeModel reportDesignTreeModel;
 	
 	private JButton addSectionButton;
 	private JButton removeSectionButton;
@@ -222,8 +222,8 @@ public class ReportEditor extends JPanel implements SectionListener {
 		
 		JPanel leftPanel = new JPanel(new BorderLayout());
 		
-		reportTreeModel = new ReportTreeModel(report);
-		reportTree = new JXTree(reportTreeModel);
+		reportDesignTreeModel = new ReportDesignTreeModel(report);
+		reportTree = new JXTree(reportDesignTreeModel);
 		reportTree.addMouseListener(new TreeMouseListener());
 		reportTree.expandAll();
 		reportTree.setCellRenderer(new ReportTreeCellRenderer());
@@ -336,7 +336,7 @@ public class ReportEditor extends JPanel implements SectionListener {
 			moveDownButton.setEnabled(false);
 		} else {
 			Section parentSection = (Section)tp.getParentPath().getLastPathComponent();
-			int childIndex = reportTreeModel.getIndexOfChild(parentSection, selectedSection);
+			int childIndex = reportDesignTreeModel.getIndexOfChild(parentSection, selectedSection);
 			
 			if(childIndex == 0) {
 				moveUpButton.setEnabled(false);
@@ -344,7 +344,7 @@ public class ReportEditor extends JPanel implements SectionListener {
 				moveUpButton.setEnabled(true);
 			}
 			
-			if(childIndex < reportTreeModel.getChildCount(parentSection)-1) {
+			if(childIndex < reportDesignTreeModel.getChildCount(parentSection)-1) {
 				moveDownButton.setEnabled(true);
 			} else {
 				moveDownButton.setEnabled(false);
@@ -386,8 +386,8 @@ public class ReportEditor extends JPanel implements SectionListener {
 		SectionPanelFactory panelFactory = new SectionPanelFactory();
 		addSectionPanel(report, panelFactory);
 		
-		reportTreeModel = new ReportTreeModel(report);
-		reportTree.setModel(reportTreeModel);
+		reportDesignTreeModel = new ReportDesignTreeModel(report);
+		reportTree.setModel(reportDesignTreeModel);
 	}
 	
 	private boolean saveReportFormat() {
@@ -444,8 +444,8 @@ public class ReportEditor extends JPanel implements SectionListener {
 				SectionPanelFactory panelFactory = new SectionPanelFactory();
 				addSectionPanel(report, panelFactory);
 				
-				reportTreeModel = new ReportTreeModel(design);
-				reportTree.setModel(reportTreeModel);
+				reportDesignTreeModel = new ReportDesignTreeModel(design);
+				reportTree.setModel(reportDesignTreeModel);
 			} catch (IOException e) {
 				ToastFactory.makeToast(e.getLocalizedMessage()).start(openButton);
 				
@@ -476,7 +476,7 @@ public class ReportEditor extends JPanel implements SectionListener {
 			// after this one
 			Section parentSection = 
 				(Section)tp.getParentPath().getLastPathComponent();
-			int sectionIndex = reportTreeModel.getIndexOfChild(parentSection, selectedSection);
+			int sectionIndex = reportDesignTreeModel.getIndexOfChild(parentSection, selectedSection);
 			if(parentSection == report) {
 				report.getReportSection().add(sectionIndex+1, ele);
 			} else {
@@ -492,7 +492,7 @@ public class ReportEditor extends JPanel implements SectionListener {
 			( selectedSection == report || selectedSection instanceof Group ? tp : tp.getParentPath() );
 		if(section instanceof Group) 
 			changedTp = new TreePath(report);
-		reportTreeModel.fireTreeChanged(changedTp);
+		reportDesignTreeModel.fireTreeChanged(changedTp);
 		
 		reportTree.setSelectionPath(changedTp.pathByAddingChild(section));
 		reportTree.expandPath(changedTp.pathByAddingChild(section));
@@ -507,7 +507,7 @@ public class ReportEditor extends JPanel implements SectionListener {
 		
 		Section parentSection = (Section)tp.getParentPath().getLastPathComponent();
 
-		int selectedChild = reportTreeModel.getIndexOfChild(parentSection, selectedSection);
+		int selectedChild = reportDesignTreeModel.getIndexOfChild(parentSection, selectedSection);
 		if(parentSection == report) {
 			report.getReportSection().remove(selectedChild);
 //			sectionPanels.remove(selectedSection);
@@ -517,13 +517,13 @@ public class ReportEditor extends JPanel implements SectionListener {
 //			sectionPanels.remove(selectedSection);
 		}
 
-		reportTreeModel.fireTreeChanged(tp.getParentPath());
+		reportDesignTreeModel.fireTreeChanged(tp.getParentPath());
 		
 		if(selectedChild == 0)
 			reportTree.setSelectionPath(tp.getParentPath());
 		else {
 			TreePath sibPath = tp.getParentPath().pathByAddingChild(
-					reportTreeModel.getChild(parentSection, selectedChild-1));
+					reportDesignTreeModel.getChild(parentSection, selectedChild-1));
 			reportTree.setSelectionPath(sibPath);
 		}
 	}
@@ -539,7 +539,7 @@ public class ReportEditor extends JPanel implements SectionListener {
 		if(selectedSection == report) return;
 		
 		Section parentSection = (Section)tp.getParentPath().getLastPathComponent();
-		int selectedChild = reportTreeModel.getIndexOfChild(parentSection, selectedSection);
+		int selectedChild = reportDesignTreeModel.getIndexOfChild(parentSection, selectedSection);
 		if(selectedChild > 0) {
 			int newIndex = selectedChild - 1;
 			
@@ -559,7 +559,7 @@ public class ReportEditor extends JPanel implements SectionListener {
 						Section.class, null, selectedSection);
 			sectionList.add(newIndex, ele);
 			
-			reportTreeModel.fireTreeChanged(tp.getParentPath());
+			reportDesignTreeModel.fireTreeChanged(tp.getParentPath());
 			reportTree.setSelectionPath(tp);
 		}
 	}
@@ -569,8 +569,8 @@ public class ReportEditor extends JPanel implements SectionListener {
 		if(selectedSection == report) return;
 		
 		Section parentSection = (Section)tp.getParentPath().getLastPathComponent();
-		int selectedChild = reportTreeModel.getIndexOfChild(parentSection, selectedSection);
-		if(selectedChild < reportTreeModel.getChildCount(parentSection)-1) {
+		int selectedChild = reportDesignTreeModel.getIndexOfChild(parentSection, selectedSection);
+		if(selectedChild < reportDesignTreeModel.getChildCount(parentSection)-1) {
 			int newIndex = selectedChild + 1;
 			
 			List<JAXBElement<? extends Section>> sectionList = null;
@@ -589,7 +589,7 @@ public class ReportEditor extends JPanel implements SectionListener {
 						Section.class, null, selectedSection);
 			sectionList.add(newIndex, ele);
 			
-			reportTreeModel.fireTreeChanged(tp.getParentPath());
+			reportDesignTreeModel.fireTreeChanged(tp.getParentPath());
 			reportTree.setSelectionPath(tp);
 		}
 	}

@@ -26,14 +26,14 @@ import java.util.*;
  * 
  *
  */
-public class ReportTreeModel implements TreeModel {
+public class ReportDesignTreeModel implements TreeModel {
 	
 	private List<TreeModelListener> listeners = new ArrayList<TreeModelListener>();
 	
 	/** The report - also the root of our tree */
 	private ReportDesign report;
 	
-	public ReportTreeModel(ReportDesign root) {
+	public ReportDesignTreeModel(ReportDesign root) {
 		super();
 		
 		this.report = root;
