@@ -62,7 +62,7 @@ public abstract class ReportSectionNode extends OpNode {
 			else
 				parentNode.add(sectionNode);
 		}
-				
+
 		context.put(parentNodeOutput, parentNode);
 		context.put(sectionNodeOutput, sectionNode);
 	}

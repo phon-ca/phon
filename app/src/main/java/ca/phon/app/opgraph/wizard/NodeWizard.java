@@ -63,6 +63,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.html.*;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import java.awt.*;
@@ -127,7 +128,6 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	private JLabel statusLabel;
 
 	protected TitledPanel reportTitledPanel;
-	protected JTabbedPane reportTabbedPane;
 	protected WizardStep reportDataStep;
 	private Timer reportTimer;
 	private long reportStartTime;
@@ -887,9 +887,18 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 				
 			} else if(pe.getType() == ProcessorEvent.Type.FINISH_NODE) {
 				if(pe.getNode() instanceof NewReportNode) {
+					final NewReportNode newReportNode = (NewReportNode) pe.getNode();
+					final OpContext ctx = pe.getProcessor().getContext().getChildContext(newReportNode);
 					if(reportTree == null) {
 						reportTree = (ReportTree) processor.getContext().get(NewReportNode.REPORT_TREE_KEY);
 						SwingUtilities.invokeLater(() -> loadReportTreeViewer());
+					} else {
+						if(reportTreeView != null) {
+							ReportTree subTree = (ReportTree) ctx.get("reportTree");
+							if(subTree != null) {
+								SwingUtilities.invokeLater(() -> reportTreeView.getTreeModel().nodeStructureChanged((MutableTreeNode)reportTreeView.getTreeModel().getRoot()));
+							}
+						}
 					}
 				} else if(pe.getNode() instanceof ReportSectionNode) {
 					ReportSectionNode node = (ReportSectionNode)pe.getNode();
@@ -1401,20 +1410,12 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	protected void loadReportTreeViewer() {
 		if(this.reportTree == null) return;
 
-		this.reportTreeView = new ReportTreeView(this.reportTree);
-		if(reportTabbedPane == null) {
-			reportTitledPanel.getContentContainer().remove(bufferPanel);
+		this.reportTreeView = new ReportTreeView(this.reportTree, (reportTreeNode) -> {
+			return bufferPanel;
+		});
 
-			reportTabbedPane = new JTabbedPane();
-			reportTabbedPane.addTab("Log", bufferPanel);
-			reportTitledPanel.getContentContainer().add(reportTabbedPane, BorderLayout.CENTER);
-		} else {
-			if(reportTabbedPane.getTitleAt(0).equals("Report Data")) {
-				reportTabbedPane.removeTabAt(0);
-			}
-		}
-		reportTabbedPane.insertTab("Report Data", null, reportTreeView, "Report data", 0);
-		reportTabbedPane.setSelectedIndex(0);
+		reportTitledPanel.getContentContainer().removeAll();
+		reportTitledPanel.getContentContainer().add(this.reportTreeView, BorderLayout.CENTER);
 
 		reportTitledPanel.revalidate();
 		reportTitledPanel.repaint();
