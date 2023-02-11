@@ -28,6 +28,8 @@ public abstract class ReportTreeNode implements Iterable<ReportTreeNode> {
 	private ReportTreeNode parent;
 	
 	private List<ReportTreeNode> children = new ArrayList<>();
+
+	private List<ReportTreeListener> listeners = new ArrayList<>();
 	
 	public ReportTreeNode() {
 		this("");
@@ -62,18 +64,27 @@ public abstract class ReportTreeNode implements Iterable<ReportTreeNode> {
 		return children.size();
 	}
 
-	public boolean contains(Object o) {
+	public boolean contains(ReportTreeNode o) {
 		return children.contains(o);
 	}
 
 	public boolean add(ReportTreeNode e) {
 		e.setParent(this);
-		return children.add(e);
+		children.add(e);
+		int index = children.size() - 1;
+		findRoot().fireNodeAdded(this, index, e);
+		return true;
 	}
 
-	public boolean remove(Object o) {
+	public boolean remove(ReportTreeNode o) {
 		((ReportTreeNode)o).setParent(null);
-		return children.remove(o);
+		int index = children.indexOf(o);
+		if(index >= 0) {
+			children.remove(o);
+			findRoot().fireNodeRemoved(this, index, o);
+			return true;
+		}
+		return false;
 	}
 
 	public void clear() {
@@ -83,11 +94,13 @@ public abstract class ReportTreeNode implements Iterable<ReportTreeNode> {
 	public void add(int index, ReportTreeNode element) {
 		element.setParent(this);
 		children.add(index, element);
+		findRoot().fireNodeAdded(this, index, element);
 	}
 
 	public ReportTreeNode remove(int index) {
 		ReportTreeNode retVal = children.remove(index);
 		retVal.setParent(null);
+		findRoot().fireNodeRemoved(this, index, retVal);
 		return retVal;
 	}
 
@@ -128,6 +141,27 @@ public abstract class ReportTreeNode implements Iterable<ReportTreeNode> {
 			parent = parent.getParent();
 		}
 		return retVal;
+	}
+
+	public void addReportTreeListener(ReportTreeListener listener) {
+		if(!listeners.contains(listener))
+			listeners.add(listener);
+	}
+
+	public void removeReportTreeListener(ReportTreeListener listener) {
+		listeners.remove(listener);
+	}
+
+	public List<ReportTreeListener> getListeners() {
+		return Collections.unmodifiableList(listeners);
+	}
+
+	public void fireNodeAdded(ReportTreeNode parent, int index, ReportTreeNode child) {
+		getListeners().forEach((l) -> l.reportNodeAdded(parent, index, child));
+	}
+
+	public void fireNodeRemoved(ReportTreeNode parent, int index, ReportTreeNode child) {
+		getListeners().forEach((l) -> l.reportNodeRemoved(parent, index, child));
 	}
 	
 	/**

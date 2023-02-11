@@ -1072,11 +1072,10 @@ public class QueryAndReportWizard extends NodeWizard {
 			queryName = qn.getName();
 		
 		final ReportTree masterTree = (ReportTree)ctx.get(NewReportNode.REPORT_TREE_KEY);
-		final ReportTree queryTree = new ReportTree(new SectionHeaderNode(queryName));
-		masterTree.getRoot().add(queryTree.getRoot());
+		if(masterTree.getRoot() instanceof SectionHeaderNode) {
+			((SectionHeaderNode)masterTree.getRoot()).setTitle(queryName);
+		}
 		masterTreeRef.set(masterTree);
-		
-		ctx.put(NewReportNode.REPORT_TREE_KEY, queryTree);
 	}
 
 	private void addNodesToSessionSelector(String queryName, QueryRunnerPanel runnerPanel) {

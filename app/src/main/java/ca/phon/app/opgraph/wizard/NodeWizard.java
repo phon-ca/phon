@@ -906,7 +906,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 					if(ctx != null && ctx.get(node.sectionNodeOutput) != null) {
 						ReportTreeNode treeNode = (ReportTreeNode)ctx.get(node.sectionNodeOutput);
 						try (PrintWriter out = new PrintWriter(new OutputStreamWriter(getLogBuffer().getLogBuffer().getStdOutStream()))) {
-							out.println("New report section: " + treeNode.getPath().toString());
+							out.println("Adding: " + treeNode.getPath().toString());
 							out.flush();
 						}
 						if(reportTreeView != null) {
