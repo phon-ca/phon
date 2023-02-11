@@ -20,6 +20,16 @@ public class ReportTreeModel extends DefaultTreeModel {
         }
 
         @Override
+        public TreeNode getParent() {
+            final ReportTreeNode thisNode = (ReportTreeNode) getUserObject();
+            if(thisNode.getParent() != null) {
+                return new UIReportTreeNode(thisNode.getParent());
+            } else {
+                return null;
+            }
+        }
+
+        @Override
         public TreeNode getChildAt(int index) {
             final ReportTreeNode thisNode = (ReportTreeNode) getUserObject();
             final ReportTreeNode childNode = thisNode.getChildren().get(index);
@@ -41,6 +51,19 @@ public class ReportTreeModel extends DefaultTreeModel {
             return -1;
         }
 
+        @Override
+        public boolean equals(Object obj) {
+            if(!(obj instanceof UIReportTreeNode)) return false;
+            UIReportTreeNode uiNode = (UIReportTreeNode) obj;
+            final ReportTreeNode thisNode = (ReportTreeNode) getUserObject();
+            final ReportTreeNode otherNode = (ReportTreeNode) uiNode.getUserObject();
+            return thisNode == otherNode;
+        }
+
+        @Override
+        public int hashCode() {
+            return getUserObject().hashCode();
+        }
     }
 
 }

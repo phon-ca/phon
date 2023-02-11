@@ -892,42 +892,38 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 					if(reportTree == null) {
 						reportTree = (ReportTree) processor.getContext().get(NewReportNode.REPORT_TREE_KEY);
 						SwingUtilities.invokeLater(() -> loadReportTreeViewer());
-					} else {
-						if(reportTreeView != null) {
-							ReportTree subTree = (ReportTree) ctx.get("reportTree");
-							if(subTree != null) {
-								SwingUtilities.invokeLater(() -> reportTreeView.getTreeModel().nodeStructureChanged((MutableTreeNode)reportTreeView.getTreeModel().getRoot()));
-							}
-						}
-					}
-				} else if(pe.getNode() instanceof ReportSectionNode) {
-					ReportSectionNode node = (ReportSectionNode)pe.getNode();
-					final OpContext ctx = pe.getProcessor().getContext().getChildContext(node);
-					if(ctx != null && ctx.get(node.sectionNodeOutput) != null) {
-						ReportTreeNode treeNode = (ReportTreeNode)ctx.get(node.sectionNodeOutput);
-						try (PrintWriter out = new PrintWriter(new OutputStreamWriter(getLogBuffer().getLogBuffer().getStdOutStream()))) {
-							out.println("Adding: " + treeNode.getPath().toString());
-							out.flush();
-						}
-						if(reportTreeView != null) {
-							SwingUtilities.invokeLater(() -> {
-								// we can provide new UIReportNode objects for everything except the root
-								final ReportTreeModel.UIReportTreeNode uiNode = (treeNode.getParent() == reportTree.getRoot()
-										? (ReportTreeModel.UIReportTreeNode) reportTreeView.getTreeModel().getRoot()
-										: new ReportTreeModel.UIReportTreeNode(treeNode.getParent()));
-								if (treeNode.getParent().getChildren().size() == 1) {
-									reportTreeView.getTreeModel().nodeStructureChanged(uiNode);
-								} else {
-									reportTreeView.getTreeModel().nodesWereInserted(uiNode, new int[]{treeNode.getParent().getChildren().indexOf(treeNode)});
-								}
-							});
-						}
 					}
 				}
 			}
 		}
-		
 	}
+
+	private final ReportTreeListener reportTreeListener = new ReportTreeListener() {
+
+		@Override
+		public void reportNodeAdded(ReportTreeNode parent, int index, ReportTreeNode node) {
+			if(reportTreeView != null && reportTree != null) {
+				final ReportTreeModel.UIReportTreeNode uiNode = (parent == reportTree.getRoot()
+						? (ReportTreeModel.UIReportTreeNode) reportTreeView.getTreeModel().getRoot()
+						: new ReportTreeModel.UIReportTreeNode(parent));
+				reportTreeView.getTreeModel().nodesWereInserted(uiNode, new int[]{index});
+				if(index == 0 && uiNode != reportTreeView.getTreeModel().getRoot()) {
+					TreeNode tp[] = uiNode.getPath();
+					SwingUtilities.invokeLater(() -> reportTreeView.getTree().expandPath(new TreePath(tp)));
+				}
+			}
+			try (PrintWriter out = new PrintWriter(new OutputStreamWriter(getLogBuffer().getLogBuffer().getStdOutStream()))) {
+				out.println("Adding: " + node.getPath().toString());
+				out.flush();
+			}
+		}
+
+		@Override
+		public void reportNodeRemoved(ReportTreeNode parent, int index, ReportTreeNode node) {
+
+		}
+
+	};
 
 	/**
 	 * Called when the processors begins
@@ -1019,6 +1015,10 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			reportTree = null;
 			reportSaved = false;
 			processor.stepAll();
+
+			if(reportTree != null) {
+				reportTree.removeReportTreeListener(reportTreeListener);
+			}
 
 			if(PrefHelper.getBoolean("phon.debug", false) && reportTree != null) {
 				final BufferPanel reportTemplateBuffer = bufferPanel.createBuffer("Report Template");
@@ -1248,6 +1248,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	protected void setupContext(OpContext ctx) {
 		ctx.put(BufferNodeConstants.BUFFER_CONTEXT_KEY, bufferPanel);
 		ReportTree reportTree = new ReportTree(new SectionHeaderNode(getWizardExtension().getWizardTitle()));
+		reportTree.addReportTreeListener(reportTreeListener);
 		ctx.put(NewReportNode.REPORT_TREE_KEY, reportTree);
 	}
 

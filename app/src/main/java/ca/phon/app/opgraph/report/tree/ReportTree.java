@@ -15,6 +15,9 @@
  */
 package ca.phon.app.opgraph.report.tree;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Report tree used in OpGraph documents useful for creating
  * report templates.
@@ -34,6 +37,18 @@ public class ReportTree {
 	
 	public ReportTreeNode getRoot() {
 		return this.root;
+	}
+
+	public void addReportTreeListener(ReportTreeListener listener) {
+		getRoot().addReportTreeListener(listener);
+	}
+
+	public void removeReportTreeListener(ReportTreeListener listener) {
+		getRoot().removeReportTreeListener(listener);
+	}
+
+	public List<ReportTreeListener> getListeners() {
+		return getRoot().getListeners();
 	}
 	
 	public String getReportTemplate() {
