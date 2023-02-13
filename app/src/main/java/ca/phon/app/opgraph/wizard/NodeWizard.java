@@ -1018,7 +1018,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 				reportTree.removeReportTreeListener(reportTreeListener);
 			}
 			if(reportTreeView != null) {
-				reportTreeView.getTree().expandAll();
+				SwingUtilities.invokeLater(reportTreeView.getTree()::expandAll);
 			}
 
 			if(PrefHelper.getBoolean("phon.debug", false) && reportTree != null) {
