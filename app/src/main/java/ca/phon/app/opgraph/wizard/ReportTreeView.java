@@ -5,6 +5,7 @@ import ca.phon.app.opgraph.report.tree.ReportTree;
 import ca.phon.app.opgraph.report.tree.ReportTreeNode;
 import ca.phon.project.Project;
 import ca.phon.ui.decorations.TitledPanel;
+import org.jdesktop.swingx.JXTree;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -24,7 +25,7 @@ public class ReportTreeView extends JPanel {
 
     private final ReportContentFactory reportContentFactory;
 
-    private JTree tree;
+    private JXTree tree;
 
     private JPanel selectedContentPanel;
 
@@ -63,7 +64,7 @@ public class ReportTreeView extends JPanel {
         selectedContentPanel = new JPanel(new BorderLayout());
         selectedContentPanel.add(this.reportContentFactory.createComponentForNode(this.reportTree.getRoot()), BorderLayout.CENTER);
 
-        tree = new JTree(new ReportTreeModel(reportTree));
+        tree = new JXTree(new ReportTreeModel(reportTree));
         tree.setCellRenderer(new ReportTreeCellRenderer());
         tree.setRootVisible(true);
         final JScrollPane treeScroller = new JScrollPane(tree);
@@ -82,7 +83,7 @@ public class ReportTreeView extends JPanel {
         selectedItemDockable.toFront();
     }
 
-    public JTree getTree() {
+    public JXTree getTree() {
         return this.tree;
     }
 

@@ -891,7 +891,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 					final OpContext ctx = pe.getProcessor().getContext().getChildContext(newReportNode);
 					if(reportTree == null) {
 						reportTree = (ReportTree) processor.getContext().get(NewReportNode.REPORT_TREE_KEY);
-						SwingUtilities.invokeLater(() -> loadReportTreeViewer());
+						SwingUtilities.invokeLater(NodeWizard.this::loadReportTreeViewer);
 					}
 				}
 			}
@@ -903,14 +903,12 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		@Override
 		public void reportNodeAdded(ReportTreeNode parent, int index, ReportTreeNode node) {
 			if(reportTreeView != null && reportTree != null) {
-				final ReportTreeModel.UIReportTreeNode uiNode = (parent == reportTree.getRoot()
-						? (ReportTreeModel.UIReportTreeNode) reportTreeView.getTreeModel().getRoot()
-						: new ReportTreeModel.UIReportTreeNode(parent));
-				reportTreeView.getTreeModel().nodesWereInserted(uiNode, new int[]{index});
-				if(index == 0 && uiNode != reportTreeView.getTreeModel().getRoot()) {
-					TreeNode tp[] = uiNode.getPath();
-					SwingUtilities.invokeLater(() -> reportTreeView.getTree().expandPath(new TreePath(tp)));
-				}
+				SwingUtilities.invokeLater(() -> {
+					final ReportTreeModel.UIReportTreeNode uiNode = (parent == reportTree.getRoot()
+							? (ReportTreeModel.UIReportTreeNode) reportTreeView.getTreeModel().getRoot()
+							: new ReportTreeModel.UIReportTreeNode(parent));
+					reportTreeView.getTreeModel().nodesWereInserted(uiNode, new int[]{index});
+				});
 			}
 			try (PrintWriter out = new PrintWriter(new OutputStreamWriter(getLogBuffer().getLogBuffer().getStdOutStream()))) {
 				out.println("Adding: " + node.getPath().toString());
@@ -1018,6 +1016,9 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 
 			if(reportTree != null) {
 				reportTree.removeReportTreeListener(reportTreeListener);
+			}
+			if(reportTreeView != null) {
+				reportTreeView.getTree().expandAll();
 			}
 
 			if(PrefHelper.getBoolean("phon.debug", false) && reportTree != null) {
