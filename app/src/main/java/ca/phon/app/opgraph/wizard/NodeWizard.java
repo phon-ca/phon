@@ -22,6 +22,7 @@ import ca.phon.app.opgraph.*;
 import ca.phon.app.opgraph.nodes.log.*;
 import ca.phon.app.opgraph.nodes.query.QueryNode;
 import ca.phon.app.opgraph.nodes.report.*;
+import ca.phon.app.opgraph.report.ReportTableView;
 import ca.phon.app.opgraph.report.tree.*;
 import ca.phon.app.opgraph.wizard.WizardOptionalsCheckboxTree.CheckedOpNode;
 import ca.phon.app.opgraph.wizard.actions.*;
@@ -1412,15 +1413,25 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	protected void loadReportTreeViewer() {
 		if(this.reportTree == null) return;
 
-		this.reportTreeView = new ReportTreeView(this.reportTree, (reportTreeNode) -> {
-			return bufferPanel;
-		});
+		this.reportTreeView = new ReportTreeView(this.reportTree, this::getReportTreeContentView);
 
 		reportTitledPanel.getContentContainer().removeAll();
 		reportTitledPanel.getContentContainer().add(this.reportTreeView, BorderLayout.CENTER);
 
 		reportTitledPanel.revalidate();
 		reportTitledPanel.repaint();
+	}
+
+	protected JComponent getReportTreeContentView(ReportTreeNode node) {
+		if(reportTreeView == null) return bufferPanel;
+
+		if(node == reportTreeView.getReportTree().getRoot()) {
+			return bufferPanel;
+		} else if(node instanceof TableNode) {
+			return new ReportTableView(((TableNode)node));
+		} else {
+			return null;
+		}
 	}
 
 	@Override

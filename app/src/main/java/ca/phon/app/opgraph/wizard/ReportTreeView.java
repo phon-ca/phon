@@ -3,13 +3,17 @@ package ca.phon.app.opgraph.wizard;
 import bibliothek.gui.dock.common.*;
 import ca.phon.app.opgraph.report.tree.ReportTree;
 import ca.phon.app.opgraph.report.tree.ReportTreeNode;
+import ca.phon.app.opgraph.report.tree.TableNode;
 import ca.phon.project.Project;
 import ca.phon.ui.decorations.TitledPanel;
 import org.jdesktop.swingx.JXTree;
 
 import javax.swing.*;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.TreePath;
 import java.awt.*;
 
 /**
@@ -67,6 +71,20 @@ public class ReportTreeView extends JPanel {
         tree = new JXTree(new ReportTreeModel(reportTree));
         tree.setCellRenderer(new ReportTreeCellRenderer());
         tree.setRootVisible(true);
+        tree.addTreeSelectionListener(new TreeSelectionListener() {
+            @Override
+            public void valueChanged(TreeSelectionEvent e) {
+                final TreePath selectedPath = e.getPath();
+                final DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) selectedPath.getLastPathComponent();
+                final JComponent comp = reportContentFactory.createComponentForNode((ReportTreeNode) treeNode.getUserObject());
+                if(comp != null) {
+                    selectedContentPanel.removeAll();
+                    selectedContentPanel.add(comp, BorderLayout.CENTER);
+                    selectedContentPanel.revalidate();
+                    selectedContentPanel.repaint();
+                }
+            }
+        });
         final JScrollPane treeScroller = new JScrollPane(tree);
 
         final CWorkingArea work = control.createWorkingArea("work");
@@ -100,7 +118,9 @@ public class ReportTreeView extends JPanel {
             final DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
             retVal.setText(((ReportTreeNode)node.getUserObject()).getTitle());
 
-            // TODO set icon based on type report node type
+            if(node.isLeaf() && node.getUserObject() instanceof TableNode) {
+                // TODO set icon
+            }
 
             return retVal;
         }

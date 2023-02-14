@@ -19,7 +19,6 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.ProjectFrame;
 import ca.phon.app.query.report.*;
 import ca.phon.app.session.editor.*;
-import ca.phon.ipamap2.IPAMap;
 import ca.phon.project.Project;
 import ca.phon.query.db.*;
 import ca.phon.query.report.ResultSetListingManager;
@@ -498,16 +497,7 @@ public class ResultSetEditor extends ProjectFrame {
 		final ResultListingTableModel model = new ResultListingTableModel(session, resultSet, getListing());
 		resultTable = new JXTable(model);
 		resultTable.setColumnControlVisible(true);
-
-		try {
-			Font font = Font.createFont(Font.TRUETYPE_FONT,
-					IPAMap.class.getClassLoader()
-							.getResourceAsStream("data/fonts/NotoSans-Regular.ttf")).deriveFont(14.0f);
-
-			resultTable.setFont(font);
-		} catch (Exception e) {
-		}
-
+		resultTable.setFont(FontPreferences.getUIFont());
 
 		resultTable.addMouseListener(new MouseInputAdapter() {
 			@Override

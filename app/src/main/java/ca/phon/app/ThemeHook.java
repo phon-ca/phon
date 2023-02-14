@@ -95,7 +95,7 @@ public class ThemeHook implements PhonStartupHook,
 	}
 
 	private void setupWindowsCustomizations() {
-		final Font defaultFont = Font.decode(FontPreferences.DEFAULT_TIER_FONT);
+		final Font defaultFont = FontPreferences.getUIFont();
 		UIManager.put("Button.font", defaultFont);
 		UIManager.put("ToggleButton.font", defaultFont);
 		UIManager.put("RadioButton.font", defaultFont);
