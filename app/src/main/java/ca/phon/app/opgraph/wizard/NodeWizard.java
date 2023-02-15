@@ -40,6 +40,7 @@ import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.query.script.QueryTask;
 import ca.phon.session.*;
 import ca.phon.ui.DropDownButton;
+import ca.phon.ui.HidablePanel;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.fonts.FontPreferences;
@@ -63,9 +64,6 @@ import javax.swing.Timer;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.html.*;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.MutableTreeNode;
-import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.*;
@@ -115,13 +113,18 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 
 	private final static String DEFAULT_REPORT_FILE = "ca/phon/app/opgraph/wizard/DefaultReport.vm";
 
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(NodeWizard.class.getName());
-
 	private Processor processor;
 
 	private OpGraph graph;
 
-	private WizardMultiBufferPanel bufferPanel;
+	private MultiBufferPanel bufferPanel;
+
+	private final static String REPORT_GENERATION_MESSAGE_PROP = NodeWizard.class.getName() + ".reportGenerationMessage";
+	private final static String REPORT_GENERATION_MESSAGE = """
+			Report generation is complete. Select items in the Report Outline to view data or use the toolbar
+			buttons to export data to a spreadsheet or printable HTML report.""";
+	private JPanel bufferPanelWithMessage;
+	private HidablePanel bufferPanelHidableMessage;
 
 	private JXBusyLabel loadingLabel;
 	private JXBusyLabel busyLabel;
@@ -354,17 +357,17 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		runAgainItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, KeyEvent.SHIFT_DOWN_MASK));
 		runAgainItem.setEnabled(hasReport);
 		
-		final SaveTablesToWorkbookAction saveTablesToWorkbookAct = new SaveTablesToWorkbookAction(this);
+		final SaveTablesToWorkbookAction saveTablesToWorkbookAct = new SaveTablesToWorkbookAction(this.reportTree);
 		saveTablesToWorkbookAct.putValue(Action.NAME, "Export tables as Excel workbook...");
 		saveTablesToWorkbookAct.putValue(Action.SHORT_DESCRIPTION, "Export report tables to a single Excel workbook");
 		saveTablesToWorkbookAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
 		
-		final SaveTablesToFolderAction saveTablesCSVAct = new SaveTablesToFolderAction(this, ExportType.CSV);
+		final SaveTablesToFolderAction saveTablesCSVAct = new SaveTablesToFolderAction(this.reportTree, ExportType.CSV);
 		saveTablesCSVAct.putValue(Action.NAME, "Export tables to folder (CSV)...");
 		saveTablesCSVAct.putValue(Action.SHORT_DESCRIPTION, "Export report tables in CSV format to selected folder - one file per table.");
 		saveTablesCSVAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
 
-		final SaveTablesToFolderAction saveTablesExcelAct = new SaveTablesToFolderAction(this, ExportType.EXCEL);
+		final SaveTablesToFolderAction saveTablesExcelAct = new SaveTablesToFolderAction(this.reportTree, ExportType.EXCEL);
 		saveTablesExcelAct.putValue(Action.NAME, "Export tables to folder (XLS)...");
 		saveTablesExcelAct.putValue(Action.SHORT_DESCRIPTION, "Export report tables in Excel format to selected folder - one file per table.");
 		saveTablesExcelAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
@@ -514,7 +517,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	private void init() {
 		globalOptionsPanel = new OverrideParameterPanel();
 		
-		bufferPanel = new WizardMultiBufferPanel(this);
+		bufferPanel = new MultiBufferPanel();
 		
 		btnCancel.setVisible(false);
 
@@ -1074,113 +1077,102 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		}
 	}
 
-	private void generateHTMLReport(ReportTree reportTree) {
-		// create temp file
+	protected void generateHTML(ReportTree reportTree, OutputStream out) throws NodeWizardReportException {
+		final NodeWizardReportGenerator reportGenerator = createReportGenerator(reportTree, reportTree.getReportTemplate(), out);
+		reportGenerator.generateReport();
+	}
+
+	private File generateHTMLReport(ReportTree reportTree) throws NodeWizardReportException, IOException {
 		File tempFile = null;
-		try {
-			tempFile = File.createTempFile("phon", "report.html");
-			tempFile.deleteOnExit();
+		tempFile = File.createTempFile("phon", "report.html");
+		tempFile.deleteOnExit();
+		return generateHTMLReport(reportTree, tempFile);
+	}
 
-			try(final FileOutputStream fout = new FileOutputStream(tempFile)) {
-				final NodeWizardReportGenerator reportGenerator = createReportGenerator(reportTree, reportTree.getReportTemplate(), fout);
-
-				try (PrintWriter out = new PrintWriter(new OutputStreamWriter(getLogBuffer().getLogBuffer().getStdOutStream()))) {
-					out.print("Generating report...");
-					out.flush();
-				}
-
-				SwingUtilities.invokeLater(() -> {
-					statusLabel.setText("Generating report...");
-				});
-
-				reportGenerator.generateReport();
-				try (PrintWriter out = new PrintWriter(new OutputStreamWriter(getLogBuffer().getLogBuffer().getStdOutStream()))) {
-					FileInputStream fin = new FileInputStream(tempFile);
-					out.println(getSizeString(fin.getChannel().size()));
-					out.flush();
-					fin.close();
-				}
-			} catch (IOException | NodeWizardReportException e) {
-				// throw to outer try
-				throw new IOException(e);
+	protected File generateHTMLReport(ReportTree reportTree, File reportFile) throws NodeWizardReportException, IOException {
+		// create temp file
+		try(final FileOutputStream fout = new FileOutputStream(reportFile)) {
+			try (PrintWriter out = new PrintWriter(new OutputStreamWriter(getLogBuffer().getLogBuffer().getStdOutStream()))) {
+				out.print("Generating report...");
+				out.flush();
 			}
+			SwingUtilities.invokeLater(() -> {
+				statusLabel.setText("Generating report...");
+			});
+			generateHTML(reportTree, fout);
+			try (PrintWriter out = new PrintWriter(new OutputStreamWriter(getLogBuffer().getLogBuffer().getStdOutStream()))) {
+				FileInputStream fin = new FileInputStream(reportFile);
+				out.println(getSizeString(fin.getChannel().size()));
+				out.flush();
+				fin.close();
+			}
+		}
+		return reportFile;
+	}
 
-			// create buffer
-			final String reportURL = tempFile.toURI().toString();
-			final AtomicReference<BufferPanel> bufferPanelRef = new AtomicReference<BufferPanel>();
-			try {
-				SwingUtilities.invokeAndWait( () -> {
-					bufferPanelRef.getAndSet(bufferPanel.createBuffer("Report"));
-					bufferPanelRef.get().showHtml(false);
-				});
-				final BufferPanel reportBufferPanel = bufferPanelRef.get();
-				final HashMap<String, DefaultTableDataSource> tableMap = new HashMap<>();
-				searchForTables(reportTree.getRoot(), tableMap);
-				reportBufferPanel.setUserObject(reportTree);
+	protected void loadHTMLReport(File reportFile) {
+		final String reportURL = reportFile.toURI().toString();
+		final AtomicReference<BufferPanel> bufferPanelRef = new AtomicReference<BufferPanel>();
+		try {
+			SwingUtilities.invokeAndWait( () -> {
+				bufferPanelRef.getAndSet(bufferPanel.createBuffer("Report"));
+			});
+			bufferPanelRef.get().showHtml(false);
+			final BufferPanel reportBufferPanel = bufferPanelRef.get();
+			final HashMap<String, DefaultTableDataSource> tableMap = new HashMap<>();
+			searchForTables(reportTree.getRoot(), tableMap);
+			reportBufferPanel.setUserObject(reportTree);
 
-				final CefClient cefClient = reportBufferPanel.getBrowser().getClient();
-				final CefMessageRouter.CefMessageRouterConfig routerConfig = new CefMessageRouter.CefMessageRouterConfig();
-				routerConfig.jsQueryFunction = "cefQuery";
-				routerConfig.jsCancelFunction = "cefQueryCancel";
+			final CefClient cefClient = reportBufferPanel.getBrowser().getClient();
+			final CefMessageRouter.CefMessageRouterConfig routerConfig = new CefMessageRouter.CefMessageRouterConfig();
+			routerConfig.jsQueryFunction = "cefQuery";
+			routerConfig.jsCancelFunction = "cefQueryCancel";
 
-				final CefMessageRouter messageRouter = CefMessageRouter.create(routerConfig);
-				messageRouter.addHandler(new JavaScriptBridge(tableMap), true);
-				cefClient.addMessageRouter(messageRouter);
+			final CefMessageRouter messageRouter = CefMessageRouter.create(routerConfig);
+			messageRouter.addHandler(new JavaScriptBridge(tableMap), true);
+			cefClient.addMessageRouter(messageRouter);
 
-				cefClient.addContextMenuHandler(new CefContextMenuHandlerAdapter() {
-					@Override
-					public void onBeforeContextMenu(CefBrowser browser, CefFrame frame, CefContextMenuParams params, CefMenuModel model) {
-						model.clear();
-					}
-				});
+			cefClient.addContextMenuHandler(new CefContextMenuHandlerAdapter() {
+				@Override
+				public void onBeforeContextMenu(CefBrowser browser, CefFrame frame, CefContextMenuParams params, CefMenuModel model) {
+					model.clear();
+				}
+			});
 
-				reportBufferPanel.getWebView().addMouseListener(new WebViewContextHandler(reportTree, tableMap));
+			reportBufferPanel.getWebView().addMouseListener(new WebViewContextHandler(reportTree, tableMap));
 
-				reportBufferPanel.addBrowserLoadHandler(new CefLoadHandlerAdapter() {
-					@Override
-					public void onLoadingStateChange(CefBrowser browser, boolean isLoading, boolean canGoBack, boolean canGoForward) {
-						if(!isLoading) {
-							if (!"about:blank".equals(browser.getURL())) {
-								// execute javascript to setup table buttons
-								SwingUtilities.invokeLater(() -> {
-									int idx = 0;
+			reportBufferPanel.addBrowserLoadHandler(new CefLoadHandlerAdapter() {
+				@Override
+				public void onLoadingStateChange(CefBrowser browser, boolean isLoading, boolean canGoBack, boolean canGoForward) {
+					if(!isLoading) {
+						if (!"about:blank".equals(browser.getURL())) {
+							// execute javascript to setup table buttons
+							SwingUtilities.invokeLater(() -> {
+								int idx = 0;
 
-									for (String tableId : tableMap.keySet()) {
-										if (tableMap.get(tableId).getRowCount() == 0) continue;
-										browser.executeJavaScript(
-												String.format("addMenuButtons(document.getElementById('%s'), %d)", tableId, idx), "", 0);
-										browser.executeJavaScript(
-												String.format("$(\"#table_menu_\" + (%d+1)).menu()", idx), "", 0);
-										++idx;
-									}
+								for (String tableId : tableMap.keySet()) {
+									if (tableMap.get(tableId).getRowCount() == 0) continue;
+									browser.executeJavaScript(
+											String.format("addMenuButtons(document.getElementById('%s'), %d)", tableId, idx), "", 0);
+									browser.executeJavaScript(
+											String.format("$(\"#table_menu_\" + (%d+1)).menu()", idx), "", 0);
+									++idx;
+								}
 
-									reportBufferPanel.removeBrowserLoadHandler(this);
-								});
-							} else {
-								// load report
-								SwingUtilities.invokeLater(() -> {
-									reportBufferPanel.getBrowser().loadURL(reportURL);
-									reportBufferPanel.requestFocusInWindow();
-								});
-							}
+								reportBufferPanel.removeBrowserLoadHandler(this);
+							});
+						} else {
+							// load report
+							SwingUtilities.invokeLater(() -> {
+								reportBufferPanel.getBrowser().loadURL(reportURL);
+								reportBufferPanel.requestFocusInWindow();
+							});
 						}
 					}
-				});
-			} catch (InterruptedException | InvocationTargetException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
-			}
-		} catch (IOException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
-
-			final BufferPanel errPanel = getLogBuffer();
-			errPanel.getLogBuffer().setForeground(Color.red);
-			final PrintWriter writer = new PrintWriter(errPanel.getLogBuffer().getStdErrStream());
-			e.printStackTrace(writer);
-			writer.flush();
-			writer.close();
-
-			final String title = String.format("Report Generation Failed (%s)", e.getLocalizedMessage());
-			reportTitledPanel.setTitle(title);
+				}
+			});
+		} catch (InterruptedException | InvocationTargetException e) {
+			LogUtil.severe( e.getLocalizedMessage(), e);
 		}
 	}
 
@@ -1200,10 +1192,10 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 					buffer.append(line).append("\n");
 				}
 			} catch (IOException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.severe( e.getLocalizedMessage(), e);
 			}
 		} else {
-			LOGGER.warn( "Not found " + DEFAULT_REPORT_FILE, new FileNotFoundException(DEFAULT_REPORT_FILE));
+			LogUtil.warning( "Not found " + DEFAULT_REPORT_FILE, new FileNotFoundException(DEFAULT_REPORT_FILE));
 		}
 		return buffer.toString();
 	}
@@ -1351,7 +1343,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 				styleSheet.loadRules(
 						new InputStreamReader(cssURL.openStream(), "UTF-8"), cssURL);
 			} catch (IOException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.severe(e.getLocalizedMessage(), e);
 			}
 		}
 
@@ -1412,20 +1404,22 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	 */
 	protected void loadReportTreeViewer() {
 		if(this.reportTree == null) return;
-
 		this.reportTreeView = new ReportTreeView(this.reportTree, this::getReportTreeContentView);
-
 		reportTitledPanel.getContentContainer().removeAll();
 		reportTitledPanel.getContentContainer().add(this.reportTreeView, BorderLayout.CENTER);
-
 		reportTitledPanel.revalidate();
 		reportTitledPanel.repaint();
 	}
 
 	protected JComponent getReportTreeContentView(ReportTreeNode node) {
 		if(reportTreeView == null) return bufferPanel;
-
 		if(node == reportTreeView.getReportTree().getRoot()) {
+			if(bufferPanelWithMessage == null) {
+				bufferPanelWithMessage = new JPanel(new BorderLayout());
+
+				bufferPanelHidableMessage = new HidablePanel(REPORT_GENERATION_MESSAGE_PROP);
+
+			}
 			return bufferPanel;
 		} else if(node instanceof TableNode) {
 			return new ReportTableView(((TableNode)node));

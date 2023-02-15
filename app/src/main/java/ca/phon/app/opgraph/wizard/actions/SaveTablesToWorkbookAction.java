@@ -33,14 +33,14 @@ import java.util.List;
 
 public class SaveTablesToWorkbookAction extends HookableAction {
 
-	private final NodeWizard wizard;
-	
+	private ReportTree reportTree;
+
 	private WritableWorkbook workbook;
 	
-	public SaveTablesToWorkbookAction(NodeWizard wizard) {
+	public SaveTablesToWorkbookAction(ReportTree reportTree) {
 		super();
 		
-		this.wizard = wizard;
+		this.reportTree = reportTree;
 	}
 	
 	public boolean exportReportNode(String filename, ReportTreeNode node, boolean useIntegerForBoolean) {
@@ -139,16 +139,9 @@ public class SaveTablesToWorkbookAction extends HookableAction {
 	
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
-		final BufferPanel reportBuffer = wizard.getBufferPanel().getBuffer("Report");
-		if(reportBuffer != null) {
-			final ReportTree tree = (ReportTree)reportBuffer.getUserObject();
-			
-			final ReportTableExportDialog exportDialog = new ReportTableExportDialog(tree, this::getFilename, this::exportReportNode, this::done, true);
-			exportDialog.setParentFrame(wizard);
-			
-			exportDialog.showDialog();
-		}
+		final ReportTableExportDialog exportDialog = new ReportTableExportDialog(this.reportTree, this::getFilename, this::exportReportNode, this::done, true);
+		exportDialog.setParentFrame(CommonModuleFrame.getCurrentFrame());
+		exportDialog.showDialog();
 	}
-	
-	
+
 }

@@ -32,31 +32,20 @@ public class ReportTableView extends JPanel {
         final TableNodeTableModel tableModel = new TableNodeTableModel(tableNode);
         table = new JXTable(tableModel);
         table.setColumnControlVisible(true);
-//        table.setDefaultRenderer(String.class, new TableNodeCellRenderer());
 
-        try {
-            Font font = Font.createFont(Font.TRUETYPE_FONT,
-                    IPAMap.class.getClassLoader()
-                            .getResourceAsStream("data/fonts/NotoSans-Regular.ttf")).deriveFont(14.0f);
-
-            table.setFont(font);
-        } catch (Exception e) {
+        for (int i = 0; i < tableModel.getColumnCount(); i++) {
+            final String colName = tableModel.getColumnName(i);
+            var tblColExt = table.getColumnExt(table.convertColumnIndexToView(i));
+            if (tableNode.isIncludeColumns()) {
+                tblColExt.setVisible(tableNode.getColumns().size() == 0 || tableNode.getColumns().contains(colName));
+            } else {
+                tblColExt.setVisible(!tableNode.getColumns().contains(colName));
+            }
         }
+        SwingUtilities.invokeLater(table::packAll);
 
         JScrollPane scroller = new JScrollPane(table);
-
         add(scroller, BorderLayout.CENTER);
     }
-
-//    private class TableNodeCellRenderer extends DefaultTableCellRenderer {
-//        @Override
-//        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-//            JLabel retVal = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-//
-//            retVal.setFont(FontPreferences.getTierFont());
-//
-//            return retVal;
-//        }
-//    }
 
 }

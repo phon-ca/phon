@@ -26,8 +26,11 @@ public final class JCefHelper {
 
 			builder.setInstallDir(new File(PrefHelper.getUserDataFolder(), "jcef-bundle"));
 			builder.setProgressHandler(new ConsoleProgressHandler());
-			if(OSInfo.isWindows())
+			if(OSInfo.isWindows()) {
 				builder.addJcefArgs("--disable-gpu");
+			}
+			builder.addJcefArgs("--disable-audio-input");
+			builder.addJcefArgs("--disable-audio-output");
 			builder.addJcefArgs("--allow-file-access-from-files");
 			builder.getCefSettings().windowless_rendering_enabled = useOsr;
 			builder.setAppHandler(new MavenCefAppHandlerAdapter() {

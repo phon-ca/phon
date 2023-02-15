@@ -4,6 +4,8 @@ import ca.phon.app.opgraph.report.tree.TableNode;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 
 import javax.swing.table.AbstractTableModel;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TableNodeTableModel extends AbstractTableModel {
 
@@ -38,7 +40,6 @@ public class TableNodeTableModel extends AbstractTableModel {
     @Override
     public Class<?> getColumnClass(int columnIndex) {
         Class<?> retVal = null;
-
         for(int i = 0; i < getRowCount(); i++) {
             Object val = tableNode.getTable().getValueAt(0, columnIndex);
             if(val != null) {

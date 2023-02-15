@@ -43,7 +43,7 @@ public class SaveTablesToFolderAction extends HookableAction {
 	
 	private JCheckBox exportWithFoldersBox;
 	
-	private final NodeWizard wizard;
+	private final ReportTree reportTree;
 	
 	private final static String TXT = "Export tables to folder ";
 		
@@ -53,11 +53,11 @@ public class SaveTablesToFolderAction extends HookableAction {
 	};
 	private final ExportType type;
 	
-	public SaveTablesToFolderAction(NodeWizard wizard, ExportType type) {
+	public SaveTablesToFolderAction(ReportTree reportTree, ExportType type) {
 		super();
 		
 		this.type = type;
-		this.wizard = wizard;
+		this.reportTree = reportTree;
 		
 		putValue(HookableAction.NAME, TXT);
 	}
@@ -169,26 +169,21 @@ public class SaveTablesToFolderAction extends HookableAction {
 
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
-		final BufferPanel reportBuffer = wizard.getBufferPanel().getBuffer("Report");
-		if(reportBuffer != null) {
-			final ReportTree tree = (ReportTree)reportBuffer.getUserObject();
-			
-			exportWithFoldersBox = new JCheckBox("Create subfolders as shown");
-			exportWithFoldersBox.setSelected(exportWithFolders);
-			
-			final ActionListener l = (e) -> {
-				exportWithFolders = exportWithFoldersBox.isSelected();
-				PrefHelper.getUserPreferences().putBoolean(EXPORT_WITH_FOLDERS_PROP, exportWithFolders);
-			};
-			exportWithFoldersBox.addActionListener(l);
-			
-			final ReportTableExportDialog exportDialog = new ReportTableExportDialog(tree, this::getFolder, this::exportReportNode, this::done, getType() == ExportType.EXCEL ? true : false);
-			exportDialog.setParentFrame(wizard);
+		exportWithFoldersBox = new JCheckBox("Create subfolders as shown");
+		exportWithFoldersBox.setSelected(exportWithFolders);
 
-			exportDialog.getCustomOptionsPanel().add(exportWithFoldersBox);
-			
-			exportDialog.showDialog();
-		}
+		final ActionListener l = (e) -> {
+			exportWithFolders = exportWithFoldersBox.isSelected();
+			PrefHelper.getUserPreferences().putBoolean(EXPORT_WITH_FOLDERS_PROP, exportWithFolders);
+		};
+		exportWithFoldersBox.addActionListener(l);
+
+		final ReportTableExportDialog exportDialog = new ReportTableExportDialog(reportTree, this::getFolder, this::exportReportNode, this::done, getType() == ExportType.EXCEL ? true : false);
+		exportDialog.setParentFrame(CommonModuleFrame.getCurrentFrame());
+
+		exportDialog.getCustomOptionsPanel().add(exportWithFoldersBox);
+
+		exportDialog.showDialog();
 	}
 	
 	private void writeTableToFile(DefaultTableDataSource table, File file, String encoding, boolean useIntegerForBoolean) throws IOException {

@@ -4,8 +4,14 @@ import bibliothek.gui.dock.common.*;
 import ca.phon.app.opgraph.report.tree.ReportTree;
 import ca.phon.app.opgraph.report.tree.ReportTreeNode;
 import ca.phon.app.opgraph.report.tree.TableNode;
+import ca.phon.app.opgraph.wizard.actions.SaveTablesToFolderAction;
+import ca.phon.app.opgraph.wizard.actions.SaveTablesToWorkbookAction;
 import ca.phon.project.Project;
-import ca.phon.ui.decorations.TitledPanel;
+import ca.phon.ui.ButtonPopup;
+import ca.phon.ui.DropDownButton;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 import org.jdesktop.swingx.JXTree;
 
 import javax.swing.*;
@@ -62,6 +68,10 @@ public class ReportTreeView extends JPanel {
     private void init() {
         setLayout(new BorderLayout());
 
+        final JToolBar toolBar = new JToolBar();
+        setupToolbar(toolBar);
+        add(toolBar, BorderLayout.NORTH);
+
         control = new CControl();
         add(control.getContentArea(), BorderLayout.CENTER);
 
@@ -99,6 +109,54 @@ public class ReportTreeView extends JPanel {
 
         work.show(selectedItemDockable);
         selectedItemDockable.toFront();
+    }
+
+    protected void setupToolbar(JToolBar toolbar) {
+        // replace export as excel button with custom button
+        final JPopupMenu menu = new JPopupMenu();
+        Action dropDownAct = PhonUIAction.runnable(() -> {});
+        dropDownAct.putValue(Action.NAME, "Export tables");
+        dropDownAct.putValue(Action.SHORT_DESCRIPTION, "Export tables as excel or CSV");
+        dropDownAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
+        dropDownAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
+        dropDownAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
+        dropDownAct.putValue(DropDownButton.BUTTON_POPUP, menu);
+
+        final DropDownButton exportButton = new DropDownButton(dropDownAct);
+        exportButton.setOnlyPopup(true);
+        exportButton.getButtonPopup().addPropertyChangeListener(ButtonPopup.POPUP_VISIBLE, (e) -> {
+            if(Boolean.parseBoolean(e.getNewValue().toString())) {
+                setupExportMenu(menu);
+            }
+        });
+
+        toolbar.add(exportButton);
+    }
+
+    public void setupExportMenu(JPopupMenu menu) {
+        menu.removeAll();
+
+        final SaveTablesToWorkbookAction saveTablesToWorkbookAct = new SaveTablesToWorkbookAction(reportTree);
+        saveTablesToWorkbookAct.putValue(Action.NAME, "Export tables as Excel workbook...");
+        saveTablesToWorkbookAct.putValue(Action.SHORT_DESCRIPTION, "Export report tables to a single Excel workbook");
+        saveTablesToWorkbookAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
+
+        final SaveTablesToFolderAction saveTablesCSVAct = new SaveTablesToFolderAction(reportTree, SaveTablesToFolderAction.ExportType.CSV);
+        saveTablesCSVAct.putValue(Action.NAME, "Export tables to folder (CSV)...");
+        saveTablesCSVAct.putValue(Action.SHORT_DESCRIPTION, "Export report tables in CSV format to selected folder - one file per table.");
+        saveTablesCSVAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
+
+        final SaveTablesToFolderAction saveTablesExcelAct = new SaveTablesToFolderAction(reportTree, SaveTablesToFolderAction.ExportType.EXCEL);
+        saveTablesExcelAct.putValue(Action.NAME, "Export tables to folder (XLS)...");
+        saveTablesExcelAct.putValue(Action.SHORT_DESCRIPTION, "Export report tables in Excel format to selected folder - one file per table.");
+        saveTablesExcelAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
+
+        menu.add(new JMenuItem(saveTablesToWorkbookAct));
+        menu.add(new JMenuItem(saveTablesExcelAct));
+        menu.add(new JMenuItem(saveTablesCSVAct));
+
+//		JComponent src = (JComponent)pae.getActionEvent().getSource();
+//		menu.show(src, 0, src.getHeight());
     }
 
     public JXTree getTree() {
