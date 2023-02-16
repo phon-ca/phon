@@ -15,6 +15,7 @@
  */
 package ca.phon.app.opgraph.wizard;
 
+import ca.phon.app.JCefHelper;
 import ca.phon.app.actions.PhonURISchemeHandler;
 import ca.phon.app.log.*;
 import ca.phon.app.log.actions.SaveBufferAction;
@@ -50,6 +51,7 @@ import ca.phon.ui.nativedialogs.*;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxState;
 import ca.phon.ui.wizard.*;
 import ca.phon.util.*;
+import ca.phon.util.OSInfo;
 import ca.phon.util.icons.*;
 import ca.phon.worker.*;
 import ca.phon.worker.PhonTask.TaskStatus;
@@ -1018,13 +1020,6 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			reportSaved = false;
 			processor.stepAll();
 
-			if(reportTree != null) {
-				reportTree.removeReportTreeListener(reportTreeListener);
-			}
-			if(reportTreeView != null) {
-				SwingUtilities.invokeLater(reportTreeView.getTree()::expandAll);
-			}
-
 			if(PrefHelper.getBoolean("phon.debug", false) && reportTree != null) {
 				final BufferPanel reportTemplateBuffer = bufferPanel.createBuffer("Report Template");
 
@@ -1034,6 +1029,21 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 				writer.flush();
 				writer.close();
 			}
+
+			if(reportTreeView != null) {
+				SwingUtilities.invokeLater(reportTreeView.getTree()::expandAll);
+			}
+
+			if(reportTree != null) {
+				reportTree.removeReportTreeListener(reportTreeListener);
+				try {
+					final File tmpFile = generateHTMLReport(reportTree);
+					loadHTMLReport(tmpFile);
+				} catch (NodeWizardReportException | IOException e) {
+					throw new ProcessingException(processor, e);
+				}
+			}
+
 
 			SwingUtilities.invokeLater( () -> {
 				statusLabel.setText("");
@@ -1112,67 +1122,63 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 
 	protected void loadHTMLReport(File reportFile) {
 		final String reportURL = reportFile.toURI().toString();
-		final AtomicReference<BufferPanel> bufferPanelRef = new AtomicReference<BufferPanel>();
-		try {
-			SwingUtilities.invokeAndWait( () -> {
-				bufferPanelRef.getAndSet(bufferPanel.createBuffer("Report"));
-			});
-			bufferPanelRef.get().showHtml(false);
-			final BufferPanel reportBufferPanel = bufferPanelRef.get();
-			final HashMap<String, DefaultTableDataSource> tableMap = new HashMap<>();
-			searchForTables(reportTree.getRoot(), tableMap);
-			reportBufferPanel.setUserObject(reportTree);
+		final CefClient cefClient = JCefHelper.getInstance().createClient();
 
-			final CefClient cefClient = reportBufferPanel.getBrowser().getClient();
-			final CefMessageRouter.CefMessageRouterConfig routerConfig = new CefMessageRouter.CefMessageRouterConfig();
-			routerConfig.jsQueryFunction = "cefQuery";
-			routerConfig.jsCancelFunction = "cefQueryCancel";
+		final HashMap<String, DefaultTableDataSource> tableMap = new HashMap<>();
+		searchForTables(reportTree.getRoot(), tableMap);
 
-			final CefMessageRouter messageRouter = CefMessageRouter.create(routerConfig);
-			messageRouter.addHandler(new JavaScriptBridge(tableMap), true);
-			cefClient.addMessageRouter(messageRouter);
+		final CefMessageRouter.CefMessageRouterConfig routerConfig = new CefMessageRouter.CefMessageRouterConfig();
+		routerConfig.jsQueryFunction = "cefQuery";
+		routerConfig.jsCancelFunction = "cefQueryCancel";
+		final CefMessageRouter messageRouter = CefMessageRouter.create(routerConfig);
+		messageRouter.addHandler(new JavaScriptBridge(tableMap), true);
+		cefClient.addMessageRouter(messageRouter);
 
-			cefClient.addContextMenuHandler(new CefContextMenuHandlerAdapter() {
-				@Override
-				public void onBeforeContextMenu(CefBrowser browser, CefFrame frame, CefContextMenuParams params, CefMenuModel model) {
-					model.clear();
-				}
-			});
+		final CefBrowser cefBrowser = JCefHelper.getInstance().createBrowser(cefClient);
 
-			reportBufferPanel.getWebView().addMouseListener(new WebViewContextHandler(reportTree, tableMap));
+		cefClient.addContextMenuHandler(new CefContextMenuHandlerAdapter() {
+			@Override
+			public void onBeforeContextMenu(CefBrowser browser, CefFrame frame, CefContextMenuParams params, CefMenuModel model) {
+				model.clear();
+			}
+		});
 
-			reportBufferPanel.addBrowserLoadHandler(new CefLoadHandlerAdapter() {
-				@Override
-				public void onLoadingStateChange(CefBrowser browser, boolean isLoading, boolean canGoBack, boolean canGoForward) {
-					if(!isLoading) {
-						if (!"about:blank".equals(browser.getURL())) {
-							// execute javascript to setup table buttons
-							SwingUtilities.invokeLater(() -> {
-								int idx = 0;
+		cefBrowser.getUIComponent().addMouseListener(new WebViewContextHandler(reportTree, tableMap));
 
-								for (String tableId : tableMap.keySet()) {
-									if (tableMap.get(tableId).getRowCount() == 0) continue;
-									browser.executeJavaScript(
-											String.format("addMenuButtons(document.getElementById('%s'), %d)", tableId, idx), "", 0);
-									browser.executeJavaScript(
-											String.format("$(\"#table_menu_\" + (%d+1)).menu()", idx), "", 0);
-									++idx;
-								}
+		cefClient.addLoadHandler(new CefLoadHandlerAdapter() {
+			@Override
+			public void onLoadingStateChange(CefBrowser browser, boolean isLoading, boolean canGoBack, boolean canGoForward) {
+				if (!isLoading) {
+					if (!"about:blank".equals(browser.getURL())) {
+						// execute javascript to setup table buttons
+						SwingUtilities.invokeLater(() -> {
+							int idx = 0;
 
-								reportBufferPanel.removeBrowserLoadHandler(this);
-							});
-						} else {
-							// load report
-							SwingUtilities.invokeLater(() -> {
-								reportBufferPanel.getBrowser().loadURL(reportURL);
-								reportBufferPanel.requestFocusInWindow();
-							});
-						}
+							for (String tableId : tableMap.keySet()) {
+								if (tableMap.get(tableId).getRowCount() == 0) continue;
+								browser.executeJavaScript(
+										String.format("addMenuButtons(document.getElementById('%s'), %d)", tableId, idx), "", 0);
+								browser.executeJavaScript(
+										String.format("$(\"#table_menu_\" + (%d+1)).menu()", idx), "", 0);
+								++idx;
+							}
+
+							cefClient.removeLoadHandler();
+						});
+					} else {
+						cefBrowser.loadURL(reportURL);
 					}
 				}
+			}
+		});
+
+		if(reportTreeView != null) {
+			final Icon htmlIcn = IconManager.getInstance().getSystemIconForFileType(".html", "mimetypes/text-html", IconSize.SMALL);
+			SwingUtilities.invokeLater(() -> {
+				final JPanel htmlPanel = new JPanel(new BorderLayout());
+				htmlPanel.add(cefBrowser.getUIComponent(), BorderLayout.CENTER);
+				reportTreeView.openContentInNewTab("HTML Report", htmlIcn, true, htmlPanel);
 			});
-		} catch (InterruptedException | InvocationTargetException e) {
-			LogUtil.severe( e.getLocalizedMessage(), e);
 		}
 	}
 
@@ -1409,19 +1415,13 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		reportTitledPanel.getContentContainer().add(this.reportTreeView, BorderLayout.CENTER);
 		reportTitledPanel.revalidate();
 		reportTitledPanel.repaint();
+
+		final Icon logIcn = IconManager.getInstance().getIcon("mimetypes/text-x-generic", IconSize.SMALL);
+		this.reportTreeView.openContentInNewTab("Log", logIcn, false, bufferPanel);
 	}
 
 	protected JComponent getReportTreeContentView(ReportTreeNode node) {
-		if(reportTreeView == null) return bufferPanel;
-		if(node == reportTreeView.getReportTree().getRoot()) {
-			if(bufferPanelWithMessage == null) {
-				bufferPanelWithMessage = new JPanel(new BorderLayout());
-
-				bufferPanelHidableMessage = new HidablePanel(REPORT_GENERATION_MESSAGE_PROP);
-
-			}
-			return bufferPanel;
-		} else if(node instanceof TableNode) {
+		if(node instanceof TableNode) {
 			return new ReportTableView(((TableNode)node));
 		} else {
 			return null;
@@ -1447,15 +1447,12 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 
 					if(retVal == 1) return;
 
-					SwingUtilities.invokeLater( () -> {
-						bufferPanel.closeAllBuffers();
-						PhonWorker.getInstance().invokeLater( () -> executeGraph() );
-					});
-
+					bufferPanel.closeAllBuffers();
+					PhonWorker.invokeOnNewWorker(this::executeGraph);
 				});
 				NativeDialogs.showMessageDialog(props);
 			} else {
-				PhonWorker.getInstance().invokeLater( () -> executeGraph() );
+				PhonWorker.invokeOnNewWorker(this::executeGraph);
 			}
 		} else {
 			getRootPane().setDefaultButton(nextButton);

@@ -1,6 +1,7 @@
 package ca.phon.app.opgraph.wizard;
 
 import bibliothek.gui.dock.common.*;
+import ca.phon.app.opgraph.report.ReportTableView;
 import ca.phon.app.opgraph.report.tree.ReportTree;
 import ca.phon.app.opgraph.report.tree.ReportTreeNode;
 import ca.phon.app.opgraph.report.tree.TableNode;
@@ -15,12 +16,17 @@ import ca.phon.util.icons.IconSize;
 import org.jdesktop.swingx.JXTree;
 
 import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Report tree viewer displayed at the end of node wizard dialogs such as the query and analysis wizards.
@@ -29,6 +35,10 @@ public class ReportTreeView extends JPanel {
 
     private CControl control;
 
+    private CWorkingArea workingArea;
+
+    private final Map<String, MultipleCDockable> dockables = new LinkedHashMap<>();
+
     private Project project;
 
     private final ReportTree reportTree;
@@ -36,8 +46,6 @@ public class ReportTreeView extends JPanel {
     private final ReportContentFactory reportContentFactory;
 
     private JXTree tree;
-
-    private JPanel selectedContentPanel;
 
     public ReportTreeView(ReportTree reportTree, ReportContentFactory reportContentFactory) {
         this(null, reportTree, reportContentFactory);
@@ -75,40 +83,48 @@ public class ReportTreeView extends JPanel {
         control = new CControl();
         add(control.getContentArea(), BorderLayout.CENTER);
 
-        selectedContentPanel = new JPanel(new BorderLayout());
-        selectedContentPanel.add(this.reportContentFactory.createComponentForNode(this.reportTree.getRoot()), BorderLayout.CENTER);
-
         tree = new JXTree(new ReportTreeModel(reportTree));
         tree.setCellRenderer(new ReportTreeCellRenderer());
         tree.setRootVisible(true);
-        tree.addTreeSelectionListener(new TreeSelectionListener() {
+
+        final Icon tblIcn = IconManager.getInstance().getIcon("misc/table", IconSize.SMALL);
+        tree.addMouseListener(new MouseInputAdapter() {
             @Override
-            public void valueChanged(TreeSelectionEvent e) {
-                final TreePath selectedPath = e.getPath();
-                final DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) selectedPath.getLastPathComponent();
-                final JComponent comp = reportContentFactory.createComponentForNode((ReportTreeNode) treeNode.getUserObject());
-                if(comp != null) {
-                    selectedContentPanel.removeAll();
-                    selectedContentPanel.add(comp, BorderLayout.CENTER);
-                    selectedContentPanel.revalidate();
-                    selectedContentPanel.repaint();
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    final int row = tree.getRowForLocation(e.getX(), e.getY());
+                    final TreePath tp = tree.getPathForRow(row);
+                    if(tp != null) {
+                        DefaultMutableTreeNode lastNode = (DefaultMutableTreeNode) tp.getLastPathComponent();
+                        if(lastNode.isLeaf() && lastNode.getUserObject() instanceof TableNode) {
+                            final TableNode tblNode = (TableNode) lastNode.getUserObject();
+                            openContentInNewTab(tblNode.getPath().toString(), tblIcn, true, new ReportTableView(tblNode));
+                        }
+                    }
                 }
             }
         });
         final JScrollPane treeScroller = new JScrollPane(tree);
 
-        final CWorkingArea work = control.createWorkingArea("work");
-        DefaultMultipleCDockable selectedItemDockable = new DefaultMultipleCDockable(null, selectedContentPanel);
-        selectedItemDockable.setTitleText("Log");
-        selectedItemDockable.setCloseable(false);
+        workingArea = control.createWorkingArea("work");
 
         CGrid grid = new CGrid(control);
         grid.add(0, 0, 1, 3, new DefaultSingleCDockable("Report Outline", "Report Outline", treeScroller));
-        grid.add( 1, 0, 3, 3, work);
+        grid.add( 1, 0, 3, 3, workingArea);
         control.getContentArea().deploy(grid);
+    }
 
-        work.show(selectedItemDockable);
-        selectedItemDockable.toFront();
+    public void openContentInNewTab(String title, Icon icon, boolean isClosable, JComponent component) {
+        DefaultMultipleCDockable dockable = (DefaultMultipleCDockable) dockables.get(title);
+        if(dockable == null) {
+            dockable = new DefaultMultipleCDockable(null, icon, title, component);
+            dockable.setCloseable(isClosable);
+            dockable.setExternalizable(false);
+            workingArea.show(dockable);
+
+            dockables.put(title, dockable);
+        }
+        dockable.toFront();
     }
 
     protected void setupToolbar(JToolBar toolbar) {

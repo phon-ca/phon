@@ -78,6 +78,11 @@ public final class JCefHelper {
 
 	public Tuple<CefClient, CefBrowser> createClientAndBrowser() {
 		final CefClient cefClient = getApp().createClient();
+		final CefMessageRouter.CefMessageRouterConfig routerConfig = new CefMessageRouter.CefMessageRouterConfig();
+		routerConfig.jsQueryFunction = "cefQuery";
+		routerConfig.jsCancelFunction = "cefQueryCancel";
+		final CefMessageRouter msgRouter = CefMessageRouter.create(routerConfig);
+		cefClient.addMessageRouter(msgRouter);
 		final CefBrowser cefBrowser = createBrowser(cefClient);
 		return new Tuple<>(cefClient, cefBrowser);
 	}
