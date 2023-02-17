@@ -158,7 +158,9 @@
                             scope="external"/></p>
                 </li>
                 <li>
-                    <p>English (Australian): Macquarie dictionary, Felicity Cox <xref format="html" scope="external" href="https://researchers.mq.edu.au/en/persons/felicity-cox">https://researchers.mq.edu.au/en/persons/felicity-cox</xref></p>
+                    <p>English (Australian): Australian lexicon, adapted and corrected from <xref
+                            href="https://www.cstr.ed.ac.uk/projects/unisyn/" format="html"
+                            scope="external"/> by Felicity Cox</p>
                 </li>
                 <li>
                     <p>English (British): Cambridge University Engineering Department,Cambridge,UK
