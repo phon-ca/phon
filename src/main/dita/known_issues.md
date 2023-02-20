@@ -13,14 +13,16 @@ Some common issues with Phon are listed in the table below. To report a problem 
 
 The ```vmoptions``` file can be found in the following location:
 
- * C:\\Program Files\\Phon\\vmoptions.txt (windows)
+ * C:\\Program Files\\Phon\\Phon.vmoptions (windows)
 
- * /Applications/Phon.app/Contents/Macos/vmoptions.txt (macos)
+ * Phon.app/Contents/vmoptions.txt (macos)
+   
+   Note: Right-click on Phon.app and choose ```Show package contents``` to access the ```Contents``` folder in Finder
 
 Modify the ```vmoptions.txt``` file, change the line which says
 
 ```
--Xmx4098m
+-Xmx4096m
 ```
 
 to another value, for example 8GB
