@@ -50,6 +50,7 @@ import ca.phon.ui.wizard.WizardStep;
 import ca.phon.util.*;
 import ca.phon.util.icons.*;
 import ca.phon.worker.PhonTask.TaskStatus;
+import ca.phon.worker.PhonWorker;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.cef.browser.CefBrowser;
 import org.cef.handler.CefLoadHandlerAdapter;
@@ -76,8 +77,6 @@ import java.util.function.Consumer;
  */
 public class QueryAndReportWizard extends NodeWizard {
 	
-	private static final long serialVersionUID = -3028026575633555881L;
-
 	public final static String PREVIOUS_QUERY_PARAMETERS_FOLDER = QueryAndReportWizard.class.getName() + ".prevQueryParametersFolder";
 	public final static String DEFAULT_QUERY_PARAMETERS_FOLDER = 
 			PrefHelper.getUserDataFolder() + File.separator + "previous_query_parameters";
@@ -577,8 +576,7 @@ public class QueryAndReportWizard extends NodeWizard {
 							discardResultsButton.setIcon(IconManager.getInstance().getIcon("actions/list-remove", IconSize.SMALL));
 						}
 						
-						if(runnerPanel.getTaskStatus() == TaskStatus.FINISHED || runnerPanel.getTaskStatus() == TaskStatus.TERMINATED
-								|| runnerPanel.getTaskStatus() == TaskStatus.ERROR) {
+						if(runnerPanel.hasStarted() && !runnerPanel.isRunning()) {
 							// load params from query
 							loadParamsFromQuery(runnerPanel.getQuery());
 						}
@@ -985,8 +983,7 @@ public class QueryAndReportWizard extends NodeWizard {
 			return;
 		}
 				
-		final QueryRunnerPanel runnerPanel = 
-				new QueryRunnerPanel(project, queryScript, sessionSelector.getSelectedSessions(), isIncludeExcluded());
+		final QueryRunnerPanel runnerPanel = new QueryRunnerPanel(project, queryScript, sessionSelector.getSelectedSessions(), isIncludeExcluded());
 		
 		final String queryName = "Query " + (++queryIndex);
 		queryResultsPanel.getContentContainer().add(runnerPanel, queryName);
@@ -1038,7 +1035,7 @@ public class QueryAndReportWizard extends NodeWizard {
 		queryLatch = new CountDownLatch(1);
 		previousExeuction = currentSettings();
 		showResults();
-		runnerPanel.startQuery();
+		PhonWorker.invokeOnNewWorker(runnerPanel::startQuery);
 		discardResultsButton.setEnabled(true);
 	}
 	

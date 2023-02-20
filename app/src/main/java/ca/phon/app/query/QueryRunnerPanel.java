@@ -42,12 +42,10 @@ import java.io.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class QueryRunnerPanel extends JPanel {
-
-	private static final long serialVersionUID = 1427147887370979071L;
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(QueryRunnerPanel.class.getName());
 
 	private JXBusyLabel busyLabel;
 	
@@ -89,6 +87,12 @@ public class QueryRunnerPanel extends JPanel {
 	private final QueryScript queryScript;
 	
 	private final TableRowSorter<RunnerTableModel> resultsTableSorter;
+
+	private final AtomicReference<PhonWorkerGroup> workerGroupRef = new AtomicReference<>();
+
+	private final AtomicReference<CountDownLatch> taskLatchRef = new AtomicReference<>();
+
+	private final AtomicReference<TaskStatus> taskStatusRef = new AtomicReference<>(TaskStatus.WAITING);
 	
 	/**
 	 * Property change event that is sent when the query is 
@@ -108,7 +112,7 @@ public class QueryRunnerPanel extends JPanel {
 		try {
 			tempProject = ShadowProject.of(project);
 		} catch (ProjectConfigurationException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.severe( e.getLocalizedMessage(), e);
 		}
 		
 		init();
@@ -171,35 +175,145 @@ public class QueryRunnerPanel extends JPanel {
 	}
 		
 	public void startQuery() {
-		final PhonWorker worker = PhonWorker.createWorker();
-		worker.setFinishWhenQueueEmpty(true);
-		worker.invokeLater(queryTask);
-		queryTask.addTaskListener(new PhonTaskListener() {
-			
-			@Override
-			public void statusChanged(PhonTask task, TaskStatus oldStatus, TaskStatus newStatus) {
-				firePropertyChange("taskStatus", oldStatus, newStatus);
+		setStatus(TaskStatus.RUNNING);
+		SwingUtilities.invokeLater(() -> busyLabel.setBusy(true));
+
+		final QueryManager qm = QueryManager.getSharedInstance();
+		final QueryFactory qfactory = qm.createQueryFactory();
+		final ResultSetManager rsManager = qm.createResultSetManager();
+
+		// setup query object
+		query = qfactory.createQuery(project);
+		final QueryScriptContext ctx = queryScript.getQueryContext();
+
+		ScriptParameters scriptParams = new ScriptParameters();
+		try {
+			scriptParams = ctx.getScriptParameters(ctx.getEvaluatedScope());
+		} catch (PhonScriptException e) {
+			LogUtil.severe( e.getLocalizedMessage(), e);
+		}
+
+		final Script qScript = query.getScript();
+		qScript.setSource(queryScript.getScript());
+		final Map<String, String> sparams = new HashMap<String, String>();
+		for(ScriptParam sp:scriptParams) {
+			if(sp.hasChanged()) {
+				for(String paramid:sp.getParamIds()) {
+					sparams.put(paramid, sp.getValue(paramid).toString());
+				}
 			}
-			
-			@Override
-			public void propertyChanged(PhonTask task, String property, Object oldValue, Object newValue) {
-				
+		}
+		qScript.setParameters(sparams);
+		qScript.setMimeType("text/javascript");
+
+		query.setDate(LocalDateTime.now());
+
+		final QueryName queryName = queryScript.getExtension(QueryName.class);
+		String name = (queryName != null ? queryName.getName() : "untitled");
+		query.setName(name);
+
+		try {
+			rsManager.saveQuery(tempProject, query);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			LogUtil.severe( e1.getLocalizedMessage(), e1);
+		}
+
+		int numProcessors = Runtime.getRuntime().availableProcessors();
+		int numThreads = (int)Math.ceil((float)numProcessors / 4.0);
+		final PhonWorkerGroup workerGroup = new PhonWorkerGroup(numThreads);
+		int serial = 0;
+		for(SessionPath sessionLocation:tableModel.sessions) {
+			// load session
+			try {
+				final String bufferName = query.getName() + ":" +
+						sessionLocation.toString();
+
+				final Session session =
+						project.openSession(sessionLocation.getCorpus(), sessionLocation.getSession());
+
+				final QueryScript clonedScript = (QueryScript)queryScript.clone();
+				final QueryTask queryTask = new QueryTask(project, session, clonedScript, serial++);
+				queryTask.setIncludeExcludedRecords(includeExcluded);
+				queryTask.addTaskListener(queryTaskListener);
+				queryTask.addTaskListener(new PhonTaskListener() {
+					@Override
+					public void statusChanged(PhonTask task, TaskStatus oldStatus, TaskStatus newStatus) {
+						if(newStatus == TaskStatus.FINISHED) {
+							taskCompleted();
+							try {
+								rsManager.saveResultSet(tempProject, query, queryTask.getResultSet());
+							} catch (IOException e) {
+								LogUtil.warning(e);
+							}
+							taskLatchRef.get().countDown();
+						}
+					}
+
+					@Override
+					public void propertyChanged(PhonTask task, String property, Object oldValue, Object newValue) {
+
+					}
+
+				});
+
+				workerGroup.queueTask(queryTask);
+			} catch (IOException e) {
+				LogUtil.severe( e.getLocalizedMessage(), e);
+			}
+		}
+		final CountDownLatch taskCountDownLatch = new CountDownLatch(serial);
+		taskLatchRef.set(taskCountDownLatch);
+
+		workerGroup.queueTask(() -> {
+			try {
+				taskCountDownLatch.await();
+				SwingUtilities.invokeLater(() -> {
+					final PrintStream bufferOut = queryScript.getQueryContext().getStdOut();
+					bufferOut.flush();
+					bufferOut.print(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.SHOW_TABLE_CODE);
+					bufferOut.flush();
+
+					busyLabel.setBusy(false);
+
+					hideRowsBox.setEnabled(true);
+					topPanel.add(hideRowsBox, BorderLayout.CENTER);
+				});
+				workerGroup.shutdown();
+
+				setStatus(TaskStatus.FINISHED);
+			} catch (InterruptedException e) {
+				LogUtil.severe(e);
 			}
 		});
-		worker.start();
-		
+
+		workerGroupRef.set(workerGroup);
+		workerGroup.begin();
 	}
 	
 	public void stopQuery() {
-		queryTask.shutdown();
+		if(isRunning()) {
+			workerGroupRef.get().shutdown();
+			setStatus(TaskStatus.TERMINATED);
+		}
 	}
-	
+
+	private void setStatus(TaskStatus taskStatus) {
+		final TaskStatus currentStatus = getStatus();
+		this.taskStatusRef.set(taskStatus);
+		firePropertyChange("taskStatus", currentStatus, taskStatus);
+	}
+
+	public TaskStatus getStatus() {
+		return this.taskStatusRef.get();
+	}
+
+	public boolean hasStarted() {
+		return getStatus() != TaskStatus.WAITING;
+	}
+
 	public boolean isRunning() {
-		return queryTask.getStatus() == TaskStatus.RUNNING;
-	}
-	
-	public TaskStatus getTaskStatus() {
-		return queryTask.getStatus();
+		return hasStarted() && getStatus() == TaskStatus.RUNNING;
 	}
 	
 	public Project getProject() {
@@ -238,97 +352,6 @@ public class QueryRunnerPanel extends JPanel {
 		super.firePropertyChange("numberComplete", numberComplete-1, numberComplete);
 	}
 	
-	private final PhonTask queryTask = new PhonTask() {
-
-		@Override
-		public void performTask() {
-			// do nothing if already shutdown
-			if(isShutdown()) return;
-			super.setStatus(TaskStatus.RUNNING);
-			
-			final QueryManager qm = QueryManager.getSharedInstance();
-			final QueryFactory qfactory = qm.createQueryFactory();
-			final ResultSetManager rsManager = qm.createResultSetManager();
-			
-			// setup query object
-			query = qfactory.createQuery(project);
-			final QueryScriptContext ctx = queryScript.getQueryContext();
-			
-			ScriptParameters scriptParams = new ScriptParameters();
-			try {
-				scriptParams = ctx.getScriptParameters(ctx.getEvaluatedScope());
-			} catch (PhonScriptException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
-			}
-			
-			final Script qScript = query.getScript();
-			qScript.setSource(queryScript.getScript());
-			final Map<String, String> sparams = new HashMap<String, String>();
-			for(ScriptParam sp:scriptParams) {
-				if(sp.hasChanged()) {
-					for(String paramid:sp.getParamIds()) {
-						sparams.put(paramid, sp.getValue(paramid).toString());
-					}
-				}
-			}
-			qScript.setParameters(sparams);
-			qScript.setMimeType("text/javascript");
-			
-			query.setDate(LocalDateTime.now());
-			
-			final QueryName queryName = queryScript.getExtension(QueryName.class);
-			String name = (queryName != null ? queryName.getName() : "untitled");
-			query.setName(name);
-			
-			try {
-				rsManager.saveQuery(tempProject, query);
-			} catch (IOException e1) {
-				e1.printStackTrace();
-				LOGGER.error( e1.getLocalizedMessage(), e1);
-			}
-			
-			busyLabel.setBusy(true);
-			
-			int serial = 0;
-			for(SessionPath sessionLocation:tableModel.sessions) {
-				if(isShutdown()) break;
-				// load session
-				try {
-					final String bufferName = query.getName() + ":" + 
-			        		sessionLocation.toString();
-					
-					final Session session = 
-							project.openSession(sessionLocation.getCorpus(), sessionLocation.getSession());
-					
-					final QueryTask queryTask = new QueryTask(project, session, queryScript, ++serial);
-					queryTask.setIncludeExcludedRecords(includeExcluded);
-					queryTask.addTaskListener(queryTaskListener);
-					
-					queryTask.run();
-					taskCompleted();
-					
-					rsManager.saveResultSet(tempProject, query, queryTask.getResultSet());
-				} catch (IOException e) {
-					LOGGER.error( e.getLocalizedMessage(), e);
-				}
-			}
-			
-			final PrintStream bufferOut = queryScript.getQueryContext().getStdOut();
-			bufferOut.flush();
-			bufferOut.print(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.SHOW_TABLE_CODE);
-			bufferOut.flush();
-			
-			busyLabel.setBusy(false);
-			
-			hideRowsBox.setEnabled(true);
-			topPanel.add(hideRowsBox, BorderLayout.CENTER);
-			
-			if(getStatus() != TaskStatus.TERMINATED && getStatus() != TaskStatus.ERROR)
-				super.setStatus(TaskStatus.FINISHED);
-		}
-		
-	};
-	
 	private MouseInputAdapter tableMouseListener = new MouseInputAdapter() {
 
 		/* (non-Javadoc)
@@ -341,8 +364,7 @@ public class QueryRunnerPanel extends JPanel {
 				selectedIndex = resultsTable.convertRowIndexToModel(selectedIndex);
 				if(selectedIndex >= 0) {
 					final SessionPath location = tableModel.sessions.get(selectedIndex);
-//					if(sessionNameObj == null) return;
-					
+
 					final String sessionName = location.getCorpus() + "." + location.getSession();
 					final QueryManager qm = QueryManager.getSharedInstance();
 					final ResultSetManager rsManager = qm.createResultSetManager();
@@ -352,7 +374,7 @@ public class QueryRunnerPanel extends JPanel {
 						final ResultSet rs = rsManager.loadResultSet((loadFromTemp ? tempProject : project), query, sessionName);
 						initInfo.put("resultset", rs);
 					} catch (IOException e1) {
-						LOGGER.error( e1.getLocalizedMessage(), e1);
+						LogUtil.severe( e1.getLocalizedMessage(), e1);
 					}
 					initInfo.put("project", project);
 					
@@ -360,8 +382,7 @@ public class QueryRunnerPanel extends JPanel {
 						initInfo.put("tempProject", tempProject);
 					}
 					initInfo.put("query", query);
-//					initInfo.put("opensession", openEditorBox.isSelected());
-					
+
 					PluginEntryPointRunner.executePluginInBackground(ResultSetEP.EP_NAME, initInfo);
 				}
 			}
