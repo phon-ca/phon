@@ -15,6 +15,7 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.GlobalParameter;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.*;
@@ -31,6 +32,7 @@ import ca.phon.query.script.params.*;
 import ca.phon.query.script.params.DiacriticOptionsScriptParam.SelectionMode;
 import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.worker.PhonWorkerGroup;
 import org.jdesktop.swingx.JXTitledSeparator;
 
 import javax.swing.*;
@@ -40,6 +42,8 @@ import java.text.ParseException;
 import java.time.Period;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.*;
 
 @OpNodeInfo(name="Results To Table",
@@ -47,7 +51,8 @@ import java.util.stream.*;
 	category="Table")
 public class ResultsToTableNode extends OpNode implements NodeSettings {
 
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ResultsToTableNode.class.getName());
+	// global context key for results cache
+	private final static String RESULT_CACHE = "__resultTableCache";
 
 	// required inputs
 	private final InputField projectInput = new InputField("project", "Project", false, true, Project.class);
@@ -55,6 +60,8 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 	private final InputField resultSetsInput = new InputField("results", "Query results", false, true, ResultSet[].class);
 
 	// optional inputs
+	private final InputField cacheIdInput = new InputField("cacheId", "Result cache id (optional)", true, true, UUID.class);
+
 	private final InputField includeSessionInfoInput = new InputField("includeSessionInfo", "Include session info columns: Name, Date", true, true, Boolean.class);
 	
 	private final InputField includeSpeakerInfoInput = new InputField("includeSpeakerInfo", "Include speaker info columns: Speaker, Age",  true, true, Boolean.class);
@@ -67,7 +74,7 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 	
 	private final InputField onlyOrExceptInput = new InputField("onlyOrExcept", "If true (only) selected diacritics will be ignored, if false operation will be 'except'",  true, true, Boolean.class);
 	
-	private final InputField selectedDiacriticsInput = new InputField("selectedDiacritics", "Selected diacriitcs to ignore",  true, true, Collection.class);
+	private final InputField selectedDiacriticsInput = new InputField("selectedDiacritics", "Selected diacritics to ignore",  true, true, Collection.class);
 	
 	private final OutputField tableOutput = new OutputField("table", "Result sets as table", true, TableDataSource.class);
 
@@ -101,7 +108,8 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 
 		putField(projectInput);
 		putField(resultSetsInput);
-		
+		putField(cacheIdInput);
+
 		putField(includeSessionInfoInput);
 		putField(includeSpeakerInfoInput);
 		putField(includeTierInfoInput);
@@ -115,10 +123,26 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 		putExtension(NodeSettings.class, this);
 	}
 
+	private OpContext getGlobalContext(OpContext context) {
+		OpContext retVal = context;
+		while(retVal.getParent() != null) {
+			retVal = retVal.getParent();
+		}
+		return retVal;
+	}
+
 	@Override
 	public void operate(OpContext context) throws ProcessingException {
+		final OpContext globalContext = getGlobalContext(context);
+		if(!globalContext.containsKey(RESULT_CACHE)) {
+			globalContext.put(RESULT_CACHE, Collections.synchronizedMap(new HashMap<>()));
+		}
+		final Map<ResultTableKey, DefaultTableDataSource> resultTableCache = (Map<ResultTableKey, DefaultTableDataSource>)globalContext.get(RESULT_CACHE);
+
 		final ResultSet[] resultSets = (ResultSet[])context.get(resultSetsInput);
 		final Project project = (Project)context.get(projectInput);
+
+		final UUID cacheId = (UUID) context.get(cacheIdInput);
 		
 		boolean includeSessionInfo = context.get(includeSessionInfoInput) != null 
 				?	(boolean)context.get(includeSessionInfoInput)
@@ -154,20 +178,81 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 				:	context.get(selectedDiacriticsInput) != null
 					?	(Collection<Diacritic>)context.get(selectedDiacriticsInput)
 					:	getSelectedDiacritics();
-		
-		TableDataSource table = resultsToTable(project, resultSets, includeSessionInfo, includeSpeakerInfo, includeTierInfo, 
-				includeMetadata, ignoreDiacritics, onlyOrExcept, selectedDiacritics);
+
+		int numProcessors = Runtime.getRuntime().availableProcessors();
+		int numThreads = (int)Math.ceil((float)numProcessors / 4.0);
+		final PhonWorkerGroup workerGroup = new PhonWorkerGroup(numThreads);
+		int serial = 0;
+		final Map<ResultSet, DefaultTableDataSource> resultTables = Collections.synchronizedMap(new HashMap<>());
+		final AtomicReference<CountDownLatch> latchRef = new AtomicReference<>();
+		for(final ResultSet rs:resultSets) {
+			workerGroup.queueTask(() -> {
+				DefaultTableDataSource resultTable = null;
+				if(cacheId != null) {
+					resultTable = resultTableCache.get(new ResultTableKey(cacheId, project.getUUID(), rs.getSessionPath()));
+				}
+				if(resultTable == null)
+					resultTable = resultsToTable(project, new ResultSet[]{rs}, includeSessionInfo, includeSpeakerInfo, includeTierInfo, includeMetadata, ignoreDiacritics, onlyOrExcept, selectedDiacritics);
+				resultTables.put(rs, resultTable);
+				latchRef.get().countDown();
+
+				if(cacheId != null) {
+					resultTableCache.put(new ResultTableKey(cacheId, project.getUUID(), rs.getSessionPath()), resultTable);
+				}
+			});
+			++serial;
+		}
+		final CountDownLatch cdLatch = new CountDownLatch(serial);
+		latchRef.set(cdLatch);
+		final DefaultTableDataSource table = setupTable(resultSets, includeSessionInfo, includeSpeakerInfo, includeTierInfo, includeMetadata);
+
+		workerGroup.begin();
+
+		try {
+			cdLatch.await();
+			workerGroup.shutdown();
+
+			for(ResultSet rs:resultSets) {
+				DefaultTableDataSource tbl = resultTables.get(rs);
+				if(tbl != null)
+					table.append(tbl);
+			}
+		} catch (InterruptedException e) {
+			throw new ProcessingException(null, e);
+		}
+
 		context.put(tableOutput, table);
 	}
 
-	@SuppressWarnings("unchecked")
-	private TableDataSource resultsToTable(Project project, ResultSet[] results, boolean includeSessionInfo,
-			boolean includeSpeakerInfo, boolean includeTierInfo, boolean includeMetadata, 
-			boolean ignoreDiacritics, boolean onlyOrExcept, Collection<Diacritic> selectedDiacritics) {
+	private Set<String> collectTierNames(ResultSet[] results) {
+		final Set<String> tierNames = new LinkedHashSet<>();
+		// assuming all results come from the same query, the tiers should be the
+		// same in every result value
+		Arrays.asList(results).stream()
+				.filter((rs) -> rs.numberOfResults(true) > 0)
+				.findFirst()
+				.ifPresent( firstNonEmptyResultSet -> {
+					final Result firstResult = firstNonEmptyResultSet.getResult(0);
+					for(ResultValue rv:firstResult) {
+						tierNames.add(rv.getName());
+					}
+				});
+		return tierNames;
+	}
+
+	private Set<String> collectMetadataKeys(ResultSet[] results) {
+		Set<String> metadataKeys = new LinkedHashSet<>();
+		for(ResultSet rs:results) {
+			metadataKeys.addAll(Arrays.asList(rs.getMetadataKeys()));
+		}
+		return metadataKeys;
+	}
+
+	private DefaultTableDataSource setupTable(ResultSet[] results, boolean includeSessionInfo,
+											  boolean includeSpeakerInfo, boolean includeTierInfo, boolean includeMetadata) {
 		final DefaultTableDataSource retVal = new DefaultTableDataSource();
 
 		List<String> columnNames = new ArrayList<>();
-		
 		if(includeSessionInfo) {
 			columnNames.add("Session");
 			columnNames.add("Date");
@@ -184,31 +269,31 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 			columnNames.add("Tier");
 			columnNames.add("Range");
 		}
-
 		columnNames.add("Result");
 
 		// collect all result value tier names
-		final Set<String> tierNames = new LinkedHashSet<>();
-		// assuming all results come from the same query, the tiers should be the
-		// same in every result value
-		Arrays.asList(results).stream()
-			.filter((rs) -> rs.numberOfResults(true) > 0)
-			.findFirst()
-			.ifPresent( firstNonEmptyResultSet -> {
-				final Result firstResult = firstNonEmptyResultSet.getResult(0);
-				for(ResultValue rv:firstResult) {
-					tierNames.add(rv.getName());
-				}
-				columnNames.addAll(tierNames);
-			});
+		final Set<String> tierNames = collectTierNames(results);
+		columnNames.addAll(tierNames);
 
-		Set<String> metadataKeys = new LinkedHashSet<>();
+		Set<String> metadataKeys = collectMetadataKeys(results);
 		if(includeMetadata) {
-			for(ResultSet rs:results) {
-				metadataKeys.addAll(Arrays.asList(rs.getMetadataKeys()));
-			}
 			columnNames.addAll(metadataKeys);
 		}
+
+		for(int i = 0; i < columnNames.size(); i++) {
+			retVal.setColumnTitle(i, columnNames.get(i));
+		}
+
+		return retVal;
+	}
+
+	@SuppressWarnings("unchecked")
+	private DefaultTableDataSource resultsToTable(Project project, ResultSet[] results, boolean includeSessionInfo,
+			boolean includeSpeakerInfo, boolean includeTierInfo, boolean includeMetadata, 
+			boolean ignoreDiacritics, boolean onlyOrExcept, Collection<Diacritic> selectedDiacritics) {
+		final DefaultTableDataSource retVal = setupTable(results, includeSessionInfo, includeSpeakerInfo, includeTierInfo, includeMetadata);
+		final Set<String> tierNames = collectTierNames(results);
+		final Set<String> metadataKeys = collectMetadataKeys(results);
 
 		for(ResultSet rs:results) {
 			try {
@@ -338,7 +423,7 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 							try {
 								resultVal = formatter.parse(buffer.toString());
 							} catch (ParseException e) {
-								LOGGER.info( e.getLocalizedMessage(), e);
+								LogUtil.info( e.getLocalizedMessage(), e);
 							}
 						}
 						rowData.add(resultVal);
@@ -361,9 +446,7 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 			}
 		}
 
-		for(int i = 0; i < columnNames.size(); i++) {
-			retVal.setColumnTitle(i, columnNames.get(i));
-		}
+
 
 		return retVal;
 	}
@@ -543,6 +626,33 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 				Boolean.parseBoolean(properties.getProperty("includeTierInfo", "true")));
 		setIncludeMetadata(
 				Boolean.parseBoolean(properties.getProperty("includeMetadata", "true")));
+	}
+
+	// key used for result table cache
+	private class ResultTableKey {
+		UUID queryId;
+		UUID projectId;
+		String sessionPath;
+
+		public ResultTableKey(UUID queryId, UUID projectId, String sessionPath) {
+			this.queryId = queryId;
+			this.projectId = projectId;
+			this.sessionPath = sessionPath;
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(queryId, projectId, sessionPath);
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			if(!(o instanceof ResultTableKey)) return false;
+			ResultTableKey otherKey = (ResultTableKey) o;
+			return queryId.equals(otherKey.queryId) &&
+					projectId.equals(otherKey.projectId) &&
+					sessionPath.equals(otherKey.sessionPath);
+		}
 	}
 
 }

@@ -897,7 +897,11 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 					final OpContext ctx = pe.getProcessor().getContext().getChildContext(newReportNode);
 					if(reportTree == null) {
 						reportTree = (ReportTree) processor.getContext().get(NewReportNode.REPORT_TREE_KEY);
-						SwingUtilities.invokeLater(NodeWizard.this::loadReportTreeViewer);
+						try {
+							SwingUtilities.invokeAndWait(NodeWizard.this::loadReportTreeViewer);
+						} catch (InterruptedException | InvocationTargetException e) {
+							LogUtil.severe(e);
+						}
 					}
 				}
 			}
