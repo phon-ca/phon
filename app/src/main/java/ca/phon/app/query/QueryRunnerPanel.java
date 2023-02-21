@@ -296,6 +296,16 @@ public class QueryRunnerPanel extends JPanel {
 	public void stopQuery() {
 		if(isRunning()) {
 			workerGroupRef.get().shutdown();
+			for(int i = 0; i < tableModel.getRowCount(); i++) {
+				final TaskStatus currentStatus = (TaskStatus) tableModel.getValueAt(i, 1);
+				if(currentStatus == TaskStatus.WAITING) {
+					tableModel.setValueAt(TaskStatus.TERMINATED, i, 1);
+					if(taskLatchRef.get() != null) {
+						taskLatchRef.get().countDown();
+					}
+				}
+			}
+			SwingUtilities.invokeLater(() -> busyLabel.setBusy(false));
 			setStatus(TaskStatus.TERMINATED);
 		}
 	}
