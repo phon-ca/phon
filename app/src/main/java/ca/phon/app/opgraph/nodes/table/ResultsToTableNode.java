@@ -181,7 +181,8 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 
 		int numProcessors = Runtime.getRuntime().availableProcessors();
 		int numThreads = (int)Math.ceil((float)numProcessors / 4.0);
-		final PhonWorkerGroup workerGroup = new PhonWorkerGroup(numThreads);
+		int numSessions = resultSets.length;
+		final PhonWorkerGroup workerGroup = new PhonWorkerGroup(Math.min(numThreads, numSessions));
 		int serial = 0;
 		final Map<ResultSet, DefaultTableDataSource> resultTables = Collections.synchronizedMap(new HashMap<>());
 		final AtomicReference<CountDownLatch> latchRef = new AtomicReference<>();
