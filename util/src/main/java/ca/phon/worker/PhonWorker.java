@@ -37,8 +37,7 @@ public class PhonWorker extends Thread {
 	private static volatile int STATIC_THREAD_NUM = 0;
 	
 	/** The queue */
-	private ConcurrentLinkedQueue<Runnable> queue = 
-		new ConcurrentLinkedQueue<Runnable>();
+	private ConcurrentLinkedQueue<Runnable> queue = new ConcurrentLinkedQueue<Runnable>();
 	
 	/** The static instance */
 	private volatile static PhonWorker _instance;
@@ -170,12 +169,13 @@ public class PhonWorker extends Thread {
 		shutdown = false;
 		LOGGER.trace("Starting worker thread: " + getName());
 		while(!shutdown) {
-			if(queue.peek() != null) {
+			// poll instead of peek then poll as other threads may then acquire the task first
+			Runnable nextTask = queue.poll();
+			if(nextTask != null) {
 				// run the next task in the queue
-				Runnable nextTask = queue.poll();
 				try {
 					nextTask.run();
-					
+
 					if(nextTask instanceof PhonTask) {
 						PhonTask pt = (PhonTask)nextTask;
 						if(pt.getStatus() == TaskStatus.ERROR) {
