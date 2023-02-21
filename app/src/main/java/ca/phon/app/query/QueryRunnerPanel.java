@@ -221,7 +221,10 @@ public class QueryRunnerPanel extends JPanel {
 
 		int numProcessors = Runtime.getRuntime().availableProcessors();
 		int numThreads = (int)Math.ceil((float)numProcessors / 4.0);
-		final PhonWorkerGroup workerGroup = new PhonWorkerGroup(numThreads);
+		int numSessions = tableModel.getRowCount();
+		final PhonWorkerGroup workerGroup = new PhonWorkerGroup(Math.min(numThreads, numSessions));
+		workerGroupRef.set(workerGroup);
+		workerGroup.begin();
 		int serial = 0;
 		for(SessionPath sessionLocation:tableModel.sessions) {
 			// load session
@@ -287,8 +290,7 @@ public class QueryRunnerPanel extends JPanel {
 			}
 		});
 
-		workerGroupRef.set(workerGroup);
-		workerGroup.begin();
+//		workerGroup.begin();
 	}
 	
 	public void stopQuery() {
