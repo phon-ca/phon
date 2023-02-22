@@ -1,6 +1,8 @@
 package ca.phon.app.opgraph.wizard;
 
 import bibliothek.gui.dock.common.*;
+import bibliothek.gui.dock.common.event.CVetoClosingEvent;
+import bibliothek.gui.dock.common.event.CVetoClosingListener;
 import ca.phon.app.opgraph.report.ReportTableView;
 import ca.phon.app.opgraph.report.tree.ReportTree;
 import ca.phon.app.opgraph.report.tree.ReportTreeNode;
@@ -114,17 +116,30 @@ public class ReportTreeView extends JPanel {
         control.getContentArea().deploy(grid);
     }
 
-    public void openContentInNewTab(String title, Icon icon, boolean isClosable, JComponent component) {
+    public DefaultMultipleCDockable openContentInNewTab(String title, Icon icon, boolean isClosable, JComponent component) {
         DefaultMultipleCDockable dockable = (DefaultMultipleCDockable) dockables.get(title);
         if(dockable == null) {
             dockable = new DefaultMultipleCDockable(null, icon, title, component);
             dockable.setCloseable(isClosable);
+            if(isClosable) {
+                dockable.addVetoClosingListener(new CVetoClosingListener() {
+                    @Override
+                    public void closing(CVetoClosingEvent cVetoClosingEvent) {}
+
+                    @Override
+                    public void closed(CVetoClosingEvent cVetoClosingEvent) {
+                        dockables.remove(title);
+                        cVetoClosingEvent.getDockable(0).removeVetoClosingListener(this);
+                    }
+                });
+            }
             dockable.setExternalizable(false);
             workingArea.show(dockable);
 
             dockables.put(title, dockable);
         }
         dockable.toFront();
+        return dockable;
     }
 
     protected void setupToolbar(JToolBar toolbar) {

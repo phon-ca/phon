@@ -15,6 +15,9 @@
  */
 package ca.phon.app.opgraph.wizard;
 
+import bibliothek.gui.dock.common.DefaultMultipleCDockable;
+import bibliothek.gui.dock.common.event.CVetoClosingEvent;
+import bibliothek.gui.dock.common.event.CVetoClosingListener;
 import ca.phon.app.JCefHelper;
 import ca.phon.app.actions.PhonURISchemeHandler;
 import ca.phon.app.log.*;
@@ -140,6 +143,17 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	private ReportTree reportTree;
 	protected ReportTreeView reportTreeView;
 
+	private final static double MAX_ZOOM_LEVEL = 4.0;
+
+	private final static double MIN_ZOOM_LEVEL = -1.0;
+
+	private final static double ZOOM_LEVEL_INCR = 0.5;
+
+	private final static double DEFAULT_ZOOM_LEVEL = 0.0;
+	private HTMLReportUI htmlReportUI;
+	protected JCheckBox autoGenHTMLBox;
+	private final static String AUTOGEN_HTML_PROP = NodeWizard.class.getName() + ".autoGenHTML";
+
 	protected WizardStep optionalsStep;
 
 	private WizardOptionalsCheckboxTree optionalsTree;
@@ -245,25 +259,25 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	}
 	
 	private void setupReportMenu(MenuBuilder builder, boolean includeZoomActions) {
-		final boolean hasReport = reportBufferAvailable();		
-		final BufferPanel reportBuffer = bufferPanel.getBuffer("Report");
-		
-		if(hasReport) {
-			if(PrefHelper.getBoolean("phon.debug", false)) {
-				final PhonUIAction<Void> debugAct = PhonUIAction.runnable(
-					(reportBuffer.isShowingHtmlDebug() ? reportBuffer::hideHtmlDebug : reportBuffer::showHtmlDebug)
-				);
-				debugAct.putValue(PhonUIAction.NAME, "Debug");
-				debugAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show html debug frame");
-				debugAct.putValue(PhonUIAction.SELECTED_KEY, reportBuffer.isShowingHtmlDebug());
-				builder.addItem(".", new JCheckBoxMenuItem(debugAct));
-				
-				final PhonUIAction<Void> reloadAct = PhonUIAction.runnable(reportBuffer.getBrowser()::reload);
-				reloadAct.putValue(PhonUIAction.NAME, "Reload");
-				reloadAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reload report");
-				builder.addItem(".", reloadAct);
-				builder.addSeparator(".", "debug_sep");
-			}
+		final boolean hasHTMLReport = htmlReportAvailable();
+
+		if(hasHTMLReport) {
+			/* Disabled until we have a method of showing debug split pane in wizard */
+//			if(PrefHelper.getBoolean("phon.debug", false)) {
+//				final PhonUIAction<Void> debugAct = PhonUIAction.runnable(
+//					(reportBuffer.isShowingHtmlDebug() ? reportBuffer::hideHtmlDebug : reportBuffer::showHtmlDebug)
+//				);
+//				debugAct.putValue(PhonUIAction.NAME, "Debug");
+//				debugAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show html debug frame");
+//				debugAct.putValue(PhonUIAction.SELECTED_KEY, reportBuffer.isShowingHtmlDebug());
+//				builder.addItem(".", new JCheckBoxMenuItem(debugAct));
+//
+//				final PhonUIAction<Void> reloadAct = PhonUIAction.runnable(reportBuffer.getBrowser()::reload);
+//				reloadAct.putValue(PhonUIAction.NAME, "Reload");
+//				reloadAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reload report");
+//				builder.addItem(".", reloadAct);
+//				builder.addSeparator(".", "debug_sep");
+//			}
 
 			if(includeZoomActions) {
 				final PhonUIAction<Void> zoomInAct = PhonUIAction.runnable(this::onZoomIn);
@@ -287,25 +301,11 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 				builder.addSeparator(".", "zoom_actions");
 			}
 			
-			if(Desktop.isDesktopSupported() && hasReport) {
+			if(Desktop.isDesktopSupported() && hasHTMLReport) {
 				// bug on macos using Browser.getURL() for some reason when opening window menu
 				// use javascript interface to get URL instead
 				final AtomicReference<String> reportTmpURLRef = new AtomicReference<>();
-//				if(SwingUtilities.isEventDispatchThread()) {
-//					CountDownLatch latch = new CountDownLatch(1);
-//					PhonWorker.getInstance().invokeLater( () -> {
-//						JSValue urlVal = reportBuffer.getBrowser().executeJavaScriptAndReturnValue("window.location.href");
-//						reportTmpURLRef.set(urlVal.getStringValue());
-//						latch.countDown();
-//					});
-//					try {
-//						latch.await(2, TimeUnit.SECONDS);
-//					} catch (InterruptedException e1) {
-//						LogUtil.severe(e1);
-//					}
-//				} else {
-					reportTmpURLRef.set(reportBuffer.getBrowser().getURL());
-//				}
+				reportTmpURLRef.set(htmlReportUI.cefBrowser.getURL());
 				URI uri = URI.create(reportTmpURLRef.get());
 				
 				final PhonUIAction<Void> openInBrowserAct = PhonUIAction.runnable(() -> {
@@ -357,7 +357,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		runAgainItem.setToolTipText("Clear results and run report again");
 		runAgainItem.addActionListener( (e) -> gotoStep(super.getStepIndex(reportDataStep)) );
 		runAgainItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, KeyEvent.SHIFT_DOWN_MASK));
-		runAgainItem.setEnabled(hasReport);
+		runAgainItem.setEnabled(hasHTMLReport);
 		
 		final SaveTablesToWorkbookAction saveTablesToWorkbookAct = new SaveTablesToWorkbookAction(this.reportTree);
 		saveTablesToWorkbookAct.putValue(Action.NAME, "Export tables as Excel workbook...");
@@ -387,30 +387,47 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 
 		builder.addItem(".", runAgainItem);
 		builder.addSeparator(".", "_run");
-		builder.addItem(".", saveAct).setEnabled(hasReport);
+		builder.addItem(".", saveAct).setEnabled(hasHTMLReport);
 		builder.addSeparator(".", "_save");
-		builder.addItem(".", saveTablesToWorkbookAct).setEnabled(hasReport);
-		builder.addItem(".", saveTablesExcelAct).setEnabled(hasReport);
-		builder.addItem(".", saveTablesCSVAct).setEnabled(hasReport);
+		builder.addItem(".", saveTablesToWorkbookAct).setEnabled(hasHTMLReport);
+		builder.addItem(".", saveTablesExcelAct).setEnabled(hasHTMLReport);
+		builder.addItem(".", saveTablesCSVAct).setEnabled(hasHTMLReport);
 		builder.addSeparator(".", "_export");
-		builder.addItem(".", printReportAct).setEnabled(hasReport);
+		builder.addItem(".", printReportAct).setEnabled(hasHTMLReport);
+	}
+
+	public void onPrintReport() {
+		if(htmlReportAvailable()) {
+
+		}
 	}
 	
 	public void onZoomIn() {
-		if(reportBufferAvailable()) {
-			bufferPanel.getCurrentBuffer().onZoomIn();
+		if(htmlReportAvailable()) {
+			var browser = htmlReportUI.cefBrowser;
+			double zoomLevel = browser.getZoomLevel();
+			if(zoomLevel < MAX_ZOOM_LEVEL) {
+				zoomLevel += ZOOM_LEVEL_INCR;
+			}
+			browser.setZoomLevel(zoomLevel);
 		}
 	}
 	
 	public void onZoomOut() {
-		if(reportBufferAvailable()) {
-			bufferPanel.getCurrentBuffer().onZoomOut();
+		if(htmlReportAvailable()) {
+			var browser = htmlReportUI.cefBrowser;
+			double zoomLevel = browser.getZoomLevel();
+			if(zoomLevel > MIN_ZOOM_LEVEL) {
+				zoomLevel -= ZOOM_LEVEL_INCR;
+			}
+			browser.setZoomLevel(zoomLevel);
 		}
 	}
 	
 	public void onZoomReset() {
-		if(reportBufferAvailable()) {
-			bufferPanel.getCurrentBuffer().onZoomReset();
+		if(htmlReportAvailable()) {
+			var browser = htmlReportUI.cefBrowser;
+			browser.setZoomLevel(DEFAULT_ZOOM_LEVEL);
 		}
 	}
 	
@@ -451,11 +468,11 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	}
 	
 	public void gotoReportSection(String htmlId) {
-		if(reportBufferAvailable()) {
-			final CefBrowser browser = bufferPanel.getBuffer("Report").getBrowser();
-			// TODO fix js
+//		if(reportBufferAvailable()) {
+//			final CefBrowser browser = bufferPanel.getBuffer("Report").getBrowser();
+//			// TODO fix js
 //			browser.executeJavaScript(String.format("document.getElementById('%s').scrollIntoView(true)", htmlId));
-		}
+//		}
 	}
  
 	public void onStop() {
@@ -470,7 +487,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		if(running) {
 			cancel();
 		} else {
-			if(reportBufferAvailable() && !reportSaved) {
+			if(htmlReportAvailable() && !reportSaved) {
 				// ask to save report
 				final MessageDialogProperties props = new MessageDialogProperties();
 				final String[] options = MessageDialogProperties.okCancelOptions;
@@ -484,6 +501,8 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 				props.setListener( (e) -> {
 					final int result = e.getDialogResult();
 					if(result == 0) {
+						htmlReportUI.cefBrowser.close(true);
+						htmlReportUI.cefClient.dispose();
 						SwingUtilities.invokeLater( () -> super.close() );
 					} else if(result == 3) {
 						return;
@@ -496,24 +515,11 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		}
 	}
 	
-	public boolean reportBufferAvailable() {
-		return (bufferPanel != null ? bufferPanel.getBufferNames().contains("Report") : false);
-	}
-	
 	public Optional<ReportTree> getCurrentReportTree() {
-		if(reportBufferAvailable()) {
-			final Object userObj = bufferPanel.getBuffer("Report").getUserObject();
-			if(userObj != null && userObj instanceof ReportTree) {
-				return Optional.of((ReportTree)userObj);
-			}
-		}
-		return Optional.empty();
-	}
-	
-	public void onPrintReport() {
-		if(reportBufferAvailable()) {
-			bufferPanel.getBuffer("Report").getBrowser().print();
-		}
+		if(this.reportTree != null)
+			return Optional.of(this.reportTree);
+		else
+			return Optional.empty();
 	}
 	
 	private void init() {
@@ -714,7 +720,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 				setBounds(btnStop);
 				endBtn = btnStop;
 			} else {
-				if(reportBufferAvailable()) {
+				if(getCurrentReportTree().isPresent()) {
 					btnStop.setText("Close window");
 					btnStop.setBackground(btnRunAgain.getBackground());
 					btnStop.setForeground(Color.black);
@@ -1014,6 +1020,11 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		});
 		reportTimer.start();
 
+		try (PrintWriter out = new PrintWriter(new OutputStreamWriter(getLogBuffer().getLogBuffer().getStdOutStream()))) {
+			out.print("Begin report...");
+			out.flush();
+		}
+
 		try {
 			SwingUtilities.invokeLater( () -> {
 				breadCrumbViewer.setEnabled(false);
@@ -1047,7 +1058,6 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 					throw new ProcessingException(processor, e);
 				}
 			}
-
 
 			SwingUtilities.invokeLater( () -> {
 				statusLabel.setText("");
@@ -1124,6 +1134,10 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		return reportFile;
 	}
 
+	protected boolean htmlReportAvailable() {
+		return this.htmlReportUI != null;
+	}
+
 	protected void loadHTMLReport(File reportFile) {
 		final String reportURL = reportFile.toURI().toString();
 		final CefClient cefClient = JCefHelper.getInstance().createClient();
@@ -1181,7 +1195,20 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			SwingUtilities.invokeLater(() -> {
 				final JPanel htmlPanel = new JPanel(new BorderLayout());
 				htmlPanel.add(cefBrowser.getUIComponent(), BorderLayout.CENTER);
-				reportTreeView.openContentInNewTab("HTML Report", htmlIcn, true, htmlPanel);
+				final DefaultMultipleCDockable dockable = reportTreeView.openContentInNewTab("HTML Report", htmlIcn, true, htmlPanel);
+				dockable.addVetoClosingListener(new CVetoClosingListener() {
+					@Override
+					public void closing(CVetoClosingEvent cVetoClosingEvent) {}
+
+					@Override
+					public void closed(CVetoClosingEvent cVetoClosingEvent) {
+						htmlReportUI = null;
+						cefBrowser.close(true);
+						cefClient.dispose();
+						dockable.removeVetoClosingListener(this);
+					}
+				});
+				htmlReportUI = new HTMLReportUI(dockable, cefClient, cefBrowser);
 			});
 		}
 	}
@@ -1405,6 +1432,14 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		return retVal;
 	}
 
+	protected void resetReportStep() {
+		reportTitledPanel.getContentContainer().removeAll();
+		reportTitledPanel.getContentContainer().add(bufferPanel);
+		bufferPanel.closeAllBuffers();
+		reportTitledPanel.revalidate();
+		reportTitledPanel.repaint();
+	}
+
 	/**
 	 * This method is called during graph execution when a NewReport node is executed
 	 * and a report tree is available.
@@ -1437,7 +1472,8 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		super.gotoStep(step);
 
 		if(!inInit && getCurrentStep() == reportDataStep) {
-			if(reportBufferAvailable()) {
+			final Optional<ReportTree> reportTreeOpt = getCurrentReportTree();
+			if(reportTreeOpt.isPresent()) {
 				final MessageDialogProperties props = new MessageDialogProperties();
 				props.setTitle("Re-run " + getNoun().getObj1());
 				props.setHeader("Re-run " + getNoun().getObj1());
@@ -1451,7 +1487,9 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 
 					if(retVal == 1) return;
 
-					bufferPanel.closeAllBuffers();
+					this.reportTree = null;
+					resetReportStep();
+					this.reportTreeView = null;
 					PhonWorker.invokeOnNewWorker(this::executeGraph);
 				});
 				NativeDialogs.showMessageDialog(props);
@@ -1546,6 +1584,18 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		}
 	}
 
+	private class HTMLReportUI {
+		DefaultMultipleCDockable dockable;
+		CefClient cefClient;
+		CefBrowser cefBrowser;
+
+		public HTMLReportUI(DefaultMultipleCDockable dockable, CefClient cefClient, CefBrowser cefBrowser) {
+			this.dockable = dockable;
+			this.cefClient = cefClient;
+			this.cefBrowser = cefBrowser;
+		}
+	}
+
 	private class WebViewContextHandler extends MouseInputAdapter {
 
 		private ReportTree reportTree;
@@ -1574,23 +1624,21 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			JPopupMenu menu = new JPopupMenu();
 			final MenuBuilder builder = new MenuBuilder(menu);
 
-			final BufferPanel reportBuffer = getBufferPanel().getBuffer("Report");
-
-			final PhonUIAction<Void> zoomInAct = PhonUIAction.runnable(reportBuffer::onZoomIn);
+			final PhonUIAction<Void> zoomInAct = PhonUIAction.runnable(NodeWizard.this::onZoomIn);
 			zoomInAct.setRunInBackground(true);
 			zoomInAct.putValue(PhonUIAction.NAME, "Zoom in");
 			zoomInAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Increase zoom level");
 			zoomInAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 			builder.addItem(".", zoomInAct);
 
-			final PhonUIAction<Void> zoomOutAct = PhonUIAction.runnable(reportBuffer::onZoomOut);
+			final PhonUIAction<Void> zoomOutAct = PhonUIAction.runnable(NodeWizard.this::onZoomOut);
 			zoomOutAct.setRunInBackground(true);
 			zoomOutAct.putValue(PhonUIAction.NAME, "Zoom out");
 			zoomOutAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Decrease zoom level");
 			zoomOutAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_9, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 			builder.addItem(".", zoomOutAct);
 
-			final PhonUIAction<Void> zoomResetAct = PhonUIAction.runnable(reportBuffer::onZoomReset);
+			final PhonUIAction<Void> zoomResetAct = PhonUIAction.runnable(NodeWizard.this::onZoomReset);
 			zoomResetAct.setRunInBackground(true);
 			zoomResetAct.putValue(PhonUIAction.NAME, "Reset zoom");
 			zoomResetAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset zoom level to default");

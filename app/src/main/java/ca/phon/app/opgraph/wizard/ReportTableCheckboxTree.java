@@ -66,7 +66,7 @@ public class ReportTableCheckboxTree extends TristateCheckBoxTree {
 	}
 	
 	private void init() {
-		setRootVisible(false);
+		setRootVisible(true);
 		
 		final ReportTreeNodeRenderer renderer = new ReportTreeNodeRenderer();
 		renderer.setLeafIcon(IconManager.getInstance().getIcon("misc/table", IconSize.SMALL));
