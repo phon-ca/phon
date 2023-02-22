@@ -16,6 +16,7 @@
 package ca.phon.app.opgraph.wizard;
 
 import bibliothek.gui.dock.common.DefaultMultipleCDockable;
+import bibliothek.gui.dock.common.action.CButton;
 import bibliothek.gui.dock.common.event.CVetoClosingEvent;
 import bibliothek.gui.dock.common.event.CVetoClosingListener;
 import ca.phon.app.JCefHelper;
@@ -51,10 +52,10 @@ import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.jbreadcrumb.BreadcrumbButton;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxState;
 import ca.phon.ui.wizard.*;
 import ca.phon.util.*;
-import ca.phon.util.OSInfo;
 import ca.phon.util.icons.*;
 import ca.phon.worker.*;
 import ca.phon.worker.PhonTask.TaskStatus;
@@ -373,16 +374,15 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		saveTablesExcelAct.putValue(Action.NAME, "Export tables to folder (XLS)...");
 		saveTablesExcelAct.putValue(Action.SHORT_DESCRIPTION, "Export report tables in Excel format to selected folder - one file per table.");
 		saveTablesExcelAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
-		
-		final SaveBufferAction saveAct = new SaveBufferAction(getBufferPanel());
-		saveAct.putValue(SaveBufferAction.NAME, "Save Report (HTML)...");
+
+		final PhonUIAction<Void> saveAct = PhonUIAction.runnable(this::saveHTMLReport);
+		saveAct.putValue(SaveBufferAction.NAME, "Save HTML Report...");
 		saveAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
-		saveAct.putValue(PhonUIAction.SMALL_ICON,
-				IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL));
-		
-		
+		saveAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL));
+
 		final PhonUIAction<Void> printReportAct = PhonUIAction.runnable(this::onPrintReport);
-		printReportAct.putValue(PhonUIAction.NAME, "Print");
+		printReportAct.putValue(PhonUIAction.NAME, "Print HTML Report...");
+		printReportAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-print", IconSize.SMALL));
 		printReportAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Print report");
 
 		builder.addItem(".", runAgainItem);
@@ -396,9 +396,63 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		builder.addItem(".", printReportAct).setEnabled(hasHTMLReport);
 	}
 
+	private String getReportHTML() {
+		StringBuffer buffer = new StringBuffer();
+		if(htmlReportAvailable()) {
+			final String docLocation = htmlReportUI.cefBrowser.getURL();
+			if(docLocation != null && docLocation.trim().length() > 0) {
+				try {
+					final URL docURL = new URL(docLocation);
+					final BufferedReader in = new BufferedReader(new InputStreamReader(docURL.openStream(), "UTF-8"));
+					String line = null;
+					while((line = in.readLine()) != null) {
+						buffer.append(line).append("\n");
+					}
+					in.close();
+				} catch (IOException e) {
+					LogUtil.warning(e);
+				}
+			}
+		}
+		return buffer.toString();
+	}
+
+	public void saveHTMLReportToFile(String filename) throws IOException {
+		if(!htmlReportAvailable())
+			throw new IOException("No HTML Report available");
+		final String html = getReportHTML();
+		try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), "UTF-8"))) {
+			out.write(html);
+			out.flush();
+		}
+	}
+
+	public void saveHTMLReport() {
+		if(htmlReportAvailable()) {
+			final SaveDialogProperties saveProps = new SaveDialogProperties();
+			saveProps.setParentWindow(this);
+			saveProps.setFileFilter(FileFilter.htmlFilter);
+			saveProps.setCanCreateDirectories(true);
+			saveProps.setInitialFile(this.reportTree.getRoot().getTitle() + ".html");
+			saveProps.setRunAsync(true);
+			saveProps.setListener((e) -> {
+				if(e.getDialogResult() == NativeDialogEvent.OK_OPTION) {
+					final String filename = e.getDialogData().toString();
+					try {
+						saveHTMLReportToFile(filename);
+					} catch (IOException ex) {
+						Toolkit.getDefaultToolkit().beep();
+						LogUtil.severe(ex);
+					}
+				}
+			});
+			NativeDialogs.showSaveDialog(saveProps);
+		}
+	}
+
 	public void onPrintReport() {
 		if(htmlReportAvailable()) {
-
+			htmlReportUI.cefBrowser.print();
 		}
 	}
 	
@@ -1195,7 +1249,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			SwingUtilities.invokeLater(() -> {
 				final JPanel htmlPanel = new JPanel(new BorderLayout());
 				htmlPanel.add(cefBrowser.getUIComponent(), BorderLayout.CENTER);
-				final DefaultMultipleCDockable dockable = reportTreeView.openContentInNewTab("HTML Report", htmlIcn, true, htmlPanel);
+				final DefaultMultipleCDockable dockable = reportTreeView.openContentInNewTab("HTML Report", htmlIcn, true, htmlPanel, new CSaveHTMLButton(), new CPrintHTMLButton());
 				dockable.addVetoClosingListener(new CVetoClosingListener() {
 					@Override
 					public void closing(CVetoClosingEvent cVetoClosingEvent) {}
@@ -1582,6 +1636,32 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		} else {
 			super.cancel();
 		}
+	}
+
+	private class CSaveHTMLButton extends CButton {
+
+		public CSaveHTMLButton() {
+			super("Save HTML Report...", IconManager.getInstance().getIcon("actions/document-save", IconSize.XSMALL));
+		}
+
+		@Override
+		protected void action() {
+			saveHTMLReport();
+		}
+
+	}
+
+	private class CPrintHTMLButton extends CButton {
+
+		public CPrintHTMLButton() {
+			super("Print HTML Report...", IconManager.getInstance().getIcon("actions/document-print", IconSize.XSMALL));
+		}
+
+		@Override
+		protected void action() {
+			onPrintReport();
+		}
+
 	}
 
 	private class HTMLReportUI {

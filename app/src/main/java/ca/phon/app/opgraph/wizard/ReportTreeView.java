@@ -1,8 +1,14 @@
 package ca.phon.app.opgraph.wizard;
 
+import bibliothek.gui.DockStation;
+import bibliothek.gui.dock.action.actions.SimpleButtonAction;
 import bibliothek.gui.dock.common.*;
+import bibliothek.gui.dock.common.action.CAction;
+import bibliothek.gui.dock.common.action.CButton;
+import bibliothek.gui.dock.common.action.core.CommonDockAction;
 import bibliothek.gui.dock.common.event.CVetoClosingEvent;
 import bibliothek.gui.dock.common.event.CVetoClosingListener;
+import bibliothek.gui.dock.common.intern.action.CDecorateableAction;
 import ca.phon.app.opgraph.report.ReportTableView;
 import ca.phon.app.opgraph.report.tree.ReportTree;
 import ca.phon.app.opgraph.report.tree.ReportTreeNode;
@@ -116,10 +122,10 @@ public class ReportTreeView extends JPanel {
         control.getContentArea().deploy(grid);
     }
 
-    public DefaultMultipleCDockable openContentInNewTab(String title, Icon icon, boolean isClosable, JComponent component) {
+    public DefaultMultipleCDockable openContentInNewTab(String title, Icon icon, boolean isClosable, JComponent component, CAction... actions) {
         DefaultMultipleCDockable dockable = (DefaultMultipleCDockable) dockables.get(title);
         if(dockable == null) {
-            dockable = new DefaultMultipleCDockable(null, icon, title, component);
+            dockable = new DefaultMultipleCDockable(null, icon, title, component, actions);
             dockable.setCloseable(isClosable);
             if(isClosable) {
                 dockable.addVetoClosingListener(new CVetoClosingListener() {
