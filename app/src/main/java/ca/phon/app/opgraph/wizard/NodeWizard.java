@@ -441,6 +441,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 					try {
 						saveHTMLReportToFile(filename);
 					} catch (IOException ex) {
+						showErrorMessage("Unable to save HTML Report: " + ex.getMessage());
 						Toolkit.getDefaultToolkit().beep();
 						LogUtil.severe(ex);
 					}
