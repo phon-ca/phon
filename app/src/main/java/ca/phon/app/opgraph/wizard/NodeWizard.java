@@ -1099,11 +1099,13 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 
 			if(reportTree != null) {
 				reportTree.removeReportTreeListener(reportTreeListener);
-				try {
-					final File tmpFile = generateHTMLReport(reportTree);
-					loadHTMLReport(tmpFile);
-				} catch (NodeWizardReportException | IOException e) {
-					throw new ProcessingException(processor, e);
+				if(PrefHelper.getBoolean(AUTOGEN_HTML_PROP, true)) {
+					try {
+						final File tmpFile = generateHTMLReport(reportTree);
+						loadHTMLReport(tmpFile);
+					} catch (NodeWizardReportException | IOException e) {
+						throw new ProcessingException(processor, e);
+					}
 				}
 			}
 
@@ -1562,8 +1564,17 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 
 			final JButton generateHTMLButton = new JButton(new GenerateHTMLReportAction(this, reportTree));
 
+			autoGenHTMLBox = new JCheckBox("Automatically generate HTML Report");
+			autoGenHTMLBox.setToolTipText("Generate HTML report when finished compiling tables");
+			boolean autoGenHTML = PrefHelper.getBoolean(AUTOGEN_HTML_PROP, true);
+			autoGenHTMLBox.setSelected(autoGenHTML);
+			autoGenHTMLBox.addActionListener((e) -> {
+				PrefHelper.getUserPreferences().putBoolean(AUTOGEN_HTML_PROP, autoGenHTMLBox.isSelected());
+			});
+
 			reportTreeViewToolbar.add(exportButton);
 			reportTreeViewToolbar.add(generateHTMLButton);
+			reportTreeViewToolbar.add(autoGenHTMLBox);
 		}
 		return reportTreeViewToolbar;
 	}
