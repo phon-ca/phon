@@ -396,38 +396,26 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		builder.addItem(".", printReportAct).setEnabled(hasHTMLReport);
 	}
 
-	private String getReportHTML() {
-		StringBuffer buffer = new StringBuffer();
-		if(htmlReportAvailable()) {
-			final String docLocation = htmlReportUI.cefBrowser.getURL();
-			if(docLocation != null && docLocation.trim().length() > 0) {
-				try {
-					final URL docURL = new URL(docLocation);
-					final BufferedReader in = new BufferedReader(new InputStreamReader(docURL.openStream(), "UTF-8"));
-					String line = null;
-					while((line = in.readLine()) != null) {
-						buffer.append(line).append("\n");
-					}
-					in.close();
-				} catch (IOException e) {
-					LogUtil.warning(e);
-				}
-			}
-		}
-		return buffer.toString();
-	}
-
-	public void saveHTMLReportToFile(String filename) throws IOException {
+	private void saveHTMLReportToFile(String filename) throws IOException {
 		if(!htmlReportAvailable())
 			throw new IOException("No HTML Report available");
-		final String html = getReportHTML();
 		try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), "UTF-8"))) {
-			out.write(html);
+			final String docLocation = htmlReportUI.cefBrowser.getURL();
+			if(docLocation != null && docLocation.trim().length() > 0) {
+				final URL docURL = new URL(docLocation);
+				try(final BufferedReader in = new BufferedReader(new InputStreamReader(docURL.openStream(), "UTF-8"))) {
+					String line = null;
+					while ((line = in.readLine()) != null) {
+						out.write(line);
+						out.write("\n");
+					}
+				}
+			}
 			out.flush();
 		}
 	}
 
-	public void saveHTMLReport() {
+	private void saveHTMLReport() {
 		if(htmlReportAvailable()) {
 			final SaveDialogProperties saveProps = new SaveDialogProperties();
 			saveProps.setParentWindow(this);

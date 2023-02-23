@@ -125,7 +125,6 @@ public class SaveTablesToWorkbookAction extends HookableAction {
 	}
 	
 	public String getFilename() {
-		
 		final SaveDialogProperties props = new SaveDialogProperties();
 		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 		props.setCanCreateDirectories(true);

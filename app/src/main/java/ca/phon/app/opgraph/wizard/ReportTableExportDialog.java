@@ -126,12 +126,14 @@ public class ReportTableExportDialog extends CommonModuleFrame {
 
 		customOptionsPanel = new JPanel(new VerticalLayout());
 		customOptionsPanel.add(useIntegerForBooleanBox);
+		customOptionsPanel.add(openAfterExportBox);
 
-		final JComponent buttonBar = ButtonBarBuilder.buildOkCancelBar(exportButton, cancelButton, busyLabel, openAfterExportBox);
-		
+		final JComponent exportBtnPanel = new JPanel(new HorizontalLayout(3));
+		exportBtnPanel.add(busyLabel);
+		exportBtnPanel.add(exportButton);
+		final JComponent buttonBar = ButtonBarBuilder.buildOkCancelBar(exportBtnPanel, cancelButton);
 		final JPanel bottomPanel = new JPanel(new VerticalLayout());
 		bottomPanel.add(customOptionsPanel);
-		bottomPanel.add(useIntegerForBooleanBox);
 		bottomPanel.add(buttonBar);
 		
 		add(bottomPanel, BorderLayout.SOUTH);
@@ -145,14 +147,16 @@ public class ReportTableExportDialog extends CommonModuleFrame {
 	}
 	
 	public void onExport() {
-		String exportLocation = locationFunction.get();
-		if(exportLocation == null || exportLocation.trim().length() == 0) return;
-		
 		List<TreePath> checkedPaths = reportTableCheckboxTree.getCheckedPaths();
 		if(checkedPaths.size() == 0) {
+			showErrorMessage("Please select at least one table");
 			Toolkit.getDefaultToolkit().beep();
+			return;
 		}
-		
+
+		String exportLocation = locationFunction.get();
+		if(exportLocation == null || exportLocation.trim().length() == 0) return;
+
 		List<ReportTreeNode> tableNodes =
 			checkedPaths.stream()
 				.filter( (p) -> ((TristateCheckBoxTreeNode)p.getLastPathComponent()).isLeaf() )
@@ -205,7 +209,6 @@ public class ReportTableExportDialog extends CommonModuleFrame {
 		
 		@Override
 		protected void done() {
-			Toolkit.getDefaultToolkit().beep();
 			try {
 				finishFunction.accept(get());
 			} catch (InterruptedException | ExecutionException e1) {
@@ -220,7 +223,6 @@ public class ReportTableExportDialog extends CommonModuleFrame {
 					Toolkit.getDefaultToolkit().beep();
 				}
 			}
-			
 			onCancel();
 		}
 		

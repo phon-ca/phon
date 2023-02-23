@@ -27,6 +27,7 @@ public class ReportTableCheckboxTree extends TristateCheckBoxTree {
 	public static TristateCheckBoxTreeModel createModel(ReportTree reportTree, boolean includeExcelExportable) {
 		final TristateCheckBoxTreeNode root = new TristateCheckBoxTreeNode(reportTree.getRoot());
 		root.setEnablePartialCheck(false);
+		root.setCheckingState(TristateCheckBoxState.CHECKED);
 		
 		scanTree(reportTree.getRoot(), root, includeExcelExportable);
 		
