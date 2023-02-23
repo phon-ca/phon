@@ -19,7 +19,7 @@ public class GenerateHTMLReportAction extends NodeWizardAction {
         this.reportTree = reportTree;
 
         putValue(PhonUIAction.NAME, "Generate HTML Report...");
-        putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getSystemIconForFileType(".html", "mimetypes/text-html", IconSize.SMALL));
+        putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon( "mimetypes/text-html", IconSize.SMALL));
     }
 
     @Override

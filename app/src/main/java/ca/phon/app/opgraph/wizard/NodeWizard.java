@@ -1246,7 +1246,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		});
 
 		if(reportTreeView != null) {
-			final Icon htmlIcn = IconManager.getInstance().getSystemIconForFileType(".html", "mimetypes/text-html", IconSize.SMALL);
+			final Icon htmlIcn = IconManager.getInstance().getIcon("mimetypes/text-html", IconSize.SMALL);
 
 			if(reportFile.length() > HTML_REPORT_MAX_SIZE) {
 				final MessageDialogProperties props = new MessageDialogProperties();
@@ -1272,7 +1272,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 				SwingUtilities.invokeLater(() -> {
 					final JPanel htmlPanel = new JPanel(new BorderLayout());
 					htmlPanel.add(cefBrowser.getUIComponent(), BorderLayout.CENTER);
-					final DefaultMultipleCDockable dockable = reportTreeView.openContentInNewTab("HTML Report", htmlIcn, true, htmlPanel, new CSaveHTMLButton(), new CPrintHTMLButton());
+					final DefaultMultipleCDockable dockable = reportTreeView.openContentInNewTab("HTML Report", htmlIcn, true, htmlPanel, new CSaveHTMLButton(), new CPrintHTMLButton(), new COpenInBrowserButton());
 					dockable.addVetoClosingListener(new CVetoClosingListener() {
 						@Override
 						public void closing(CVetoClosingEvent cVetoClosingEvent) {
@@ -1727,6 +1727,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		}
 	}
 
+	/* Dockable buttons for HTML Report */
 	private class CSaveHTMLButton extends CButton {
 
 		public CSaveHTMLButton() {
@@ -1749,6 +1750,31 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		@Override
 		protected void action() {
 			onPrintReport();
+		}
+
+	}
+
+	private class COpenInBrowserButton extends CButton {
+
+		public COpenInBrowserButton() {
+			super("Open report in browser", IconManager.getInstance().getSystemIconForFileType(".html", "mimetypes/text-html", IconSize.XSMALL));
+		}
+
+		@Override
+		protected void action() {
+			if(htmlReportAvailable()) {
+				final AtomicReference<String> reportTmpURLRef = new AtomicReference<>();
+				reportTmpURLRef.set(htmlReportUI.cefBrowser.getURL());
+				URI uri = URI.create(reportTmpURLRef.get());
+				if(Desktop.isDesktopSupported()) {
+					try {
+						Desktop.getDesktop().browse(uri);
+					} catch (IOException e) {
+						Toolkit.getDefaultToolkit().beep();
+						LogUtil.warning(e);
+					}
+				}
+			}
 		}
 
 	}
