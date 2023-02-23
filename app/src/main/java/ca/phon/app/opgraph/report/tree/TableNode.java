@@ -102,4 +102,10 @@ public class TableNode extends ReportTreeNode {
 		return buffer.toString();
 	}
 
+	@Override
+	public ReportTreeNode cloneWithoutChildren() {
+		final TableNode tn = new TableNode(getTitle(), this.table, this.includeColumns, this.columnList);
+		return tn;
+	}
+
 }

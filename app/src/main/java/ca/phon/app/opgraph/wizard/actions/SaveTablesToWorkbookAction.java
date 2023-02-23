@@ -31,14 +31,14 @@ import java.awt.event.ActionEvent;
 import java.io.*;
 import java.util.List;
 
-public class SaveTablesToWorkbookAction extends HookableAction {
+public class SaveTablesToWorkbookAction extends NodeWizardAction {
 
 	private ReportTree reportTree;
 
 	private WritableWorkbook workbook;
 	
-	public SaveTablesToWorkbookAction(ReportTree reportTree) {
-		super();
+	public SaveTablesToWorkbookAction(NodeWizard nodeWizard, ReportTree reportTree) {
+		super(nodeWizard);
 		
 		this.reportTree = reportTree;
 	}

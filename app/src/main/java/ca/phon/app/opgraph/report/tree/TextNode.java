@@ -42,4 +42,10 @@ public class TextNode extends ReportTreeNode {
 		return buffer.toString();
 	}
 
+	@Override
+	public ReportTreeNode cloneWithoutChildren() {
+		final TextNode tn = new TextNode(super.getTitle(), this.text);
+		return tn;
+	}
+
 }

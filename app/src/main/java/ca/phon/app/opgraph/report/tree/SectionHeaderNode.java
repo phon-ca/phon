@@ -30,4 +30,9 @@ public class SectionHeaderNode extends ReportTreeNode {
 		return String.format("#h%d(\"%s\" \"%s\")\n", getLevel(), getTitle(), getPath().toString());
 	}
 
+	@Override
+	public ReportTreeNode cloneWithoutChildren() {
+		return new SectionHeaderNode(getTitle());
+	}
+
 }

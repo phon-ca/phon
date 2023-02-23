@@ -17,6 +17,7 @@ package ca.phon.app.opgraph.report.tree;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * Report tree used in OpGraph documents useful for creating
@@ -67,5 +68,24 @@ public class ReportTree {
 		for(ReportTreeNode reportNode:node.getChildren())
 			append(buffer, reportNode);
 	}
-	
+
+	public ReportTree createFilteredTree(Predicate<ReportTreeNode> nodePredicate) {
+		final ReportTreeNode clonedRoot = scanTree(getRoot(), nodePredicate);
+		return new ReportTree(clonedRoot);
+	}
+
+	private ReportTreeNode scanTree(ReportTreeNode node, Predicate<ReportTreeNode> nodePredicate) {
+		if(nodePredicate.test(node)) {
+			final ReportTreeNode clonedNode = node.cloneWithoutChildren();
+			for(ReportTreeNode childNode:node.getChildren()) {
+				final ReportTreeNode clonedChildNode = scanTree(childNode, nodePredicate);
+				if(clonedChildNode != null)
+					clonedNode.add(clonedChildNode);
+			}
+			return clonedNode;
+		} else {
+			return null;
+		}
+	}
+
 }

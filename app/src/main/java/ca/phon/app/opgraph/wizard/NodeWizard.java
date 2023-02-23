@@ -44,6 +44,7 @@ import ca.phon.project.*;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.query.script.QueryTask;
 import ca.phon.session.*;
+import ca.phon.ui.ButtonPopup;
 import ca.phon.ui.DropDownButton;
 import ca.phon.ui.HidablePanel;
 import ca.phon.ui.action.PhonUIAction;
@@ -143,6 +144,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	private long reportStartTime;
 	private ReportTree reportTree;
 	protected ReportTreeView reportTreeView;
+	protected JToolBar reportTreeViewToolbar;
 
 	private final static double MAX_ZOOM_LEVEL = 4.0;
 
@@ -360,17 +362,17 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		runAgainItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, KeyEvent.SHIFT_DOWN_MASK));
 		runAgainItem.setEnabled(hasHTMLReport);
 		
-		final SaveTablesToWorkbookAction saveTablesToWorkbookAct = new SaveTablesToWorkbookAction(this.reportTree);
+		final SaveTablesToWorkbookAction saveTablesToWorkbookAct = new SaveTablesToWorkbookAction(this, this.reportTree);
 		saveTablesToWorkbookAct.putValue(Action.NAME, "Export tables as Excel workbook...");
 		saveTablesToWorkbookAct.putValue(Action.SHORT_DESCRIPTION, "Export report tables to a single Excel workbook");
 		saveTablesToWorkbookAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
 		
-		final SaveTablesToFolderAction saveTablesCSVAct = new SaveTablesToFolderAction(this.reportTree, ExportType.CSV);
+		final SaveTablesToFolderAction saveTablesCSVAct = new SaveTablesToFolderAction(this, this.reportTree, ExportType.CSV);
 		saveTablesCSVAct.putValue(Action.NAME, "Export tables to folder (CSV)...");
 		saveTablesCSVAct.putValue(Action.SHORT_DESCRIPTION, "Export report tables in CSV format to selected folder - one file per table.");
 		saveTablesCSVAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
 
-		final SaveTablesToFolderAction saveTablesExcelAct = new SaveTablesToFolderAction(this.reportTree, ExportType.EXCEL);
+		final SaveTablesToFolderAction saveTablesExcelAct = new SaveTablesToFolderAction(this, this.reportTree, ExportType.EXCEL);
 		saveTablesExcelAct.putValue(Action.NAME, "Export tables to folder (XLS)...");
 		saveTablesExcelAct.putValue(Action.SHORT_DESCRIPTION, "Export report tables in Excel format to selected folder - one file per table.");
 		saveTablesExcelAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
@@ -1149,7 +1151,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		reportGenerator.generateReport();
 	}
 
-	private File generateHTMLReport(ReportTree reportTree) throws NodeWizardReportException, IOException {
+	public File generateHTMLReport(ReportTree reportTree) throws NodeWizardReportException, IOException {
 		File tempFile = null;
 		tempFile = File.createTempFile("phon", "report.html");
 		tempFile.deleteOnExit();
@@ -1281,7 +1283,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	}
 
 	/**
-	 * Setup report context variables for
+	 * Setup report context variables for velocity
 	 * graph, buffers, etc.
 	 *
 	 * @param ctx
@@ -1494,12 +1496,67 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		if(this.reportTree == null) return;
 		this.reportTreeView = new ReportTreeView(this.reportTree, this::getReportTreeContentView);
 		reportTitledPanel.getContentContainer().removeAll();
+		reportTreeViewToolbar = setupReportTreeViewToolbar();
+		reportTitledPanel.getContentContainer().add(reportTreeViewToolbar, BorderLayout.NORTH);
 		reportTitledPanel.getContentContainer().add(this.reportTreeView, BorderLayout.CENTER);
 		reportTitledPanel.revalidate();
 		reportTitledPanel.repaint();
 
 		final Icon logIcn = IconManager.getInstance().getIcon("mimetypes/text-x-generic", IconSize.SMALL);
 		this.reportTreeView.openContentInNewTab("Log", logIcn, false, bufferPanel);
+	}
+
+	protected JToolBar setupReportTreeViewToolbar() {
+		if(reportTreeViewToolbar == null) {
+			reportTreeViewToolbar = new JToolBar();
+			reportTreeViewToolbar.setFloatable(false);
+
+			final JPopupMenu menu = new JPopupMenu();
+			Action dropDownAct = PhonUIAction.runnable(() -> {});
+			dropDownAct.putValue(Action.NAME, "Export tables");
+			dropDownAct.putValue(Action.SHORT_DESCRIPTION, "Export tables as excel or CSV");
+			dropDownAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
+			dropDownAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
+			dropDownAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
+			dropDownAct.putValue(DropDownButton.BUTTON_POPUP, menu);
+
+			final DropDownButton exportButton = new DropDownButton(dropDownAct);
+			exportButton.setOnlyPopup(true);
+			exportButton.getButtonPopup().addPropertyChangeListener(ButtonPopup.POPUP_VISIBLE, (e) -> {
+				if(Boolean.parseBoolean(e.getNewValue().toString())) {
+					setupExportTablesMenu(menu);
+				}
+			});
+
+			final JButton generateHTMLButton = new JButton(new GenerateHTMLReportAction(this, reportTree));
+
+			reportTreeViewToolbar.add(exportButton);
+			reportTreeViewToolbar.add(generateHTMLButton);
+		}
+		return reportTreeViewToolbar;
+	}
+
+	public void setupExportTablesMenu(JPopupMenu menu) {
+		menu.removeAll();
+
+		final SaveTablesToWorkbookAction saveTablesToWorkbookAct = new SaveTablesToWorkbookAction(this, reportTree);
+		saveTablesToWorkbookAct.putValue(Action.NAME, "Export tables as Excel workbook...");
+		saveTablesToWorkbookAct.putValue(Action.SHORT_DESCRIPTION, "Export report tables to a single Excel workbook");
+		saveTablesToWorkbookAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
+
+		final SaveTablesToFolderAction saveTablesCSVAct = new SaveTablesToFolderAction(this, reportTree, SaveTablesToFolderAction.ExportType.CSV);
+		saveTablesCSVAct.putValue(Action.NAME, "Export tables to folder (CSV)...");
+		saveTablesCSVAct.putValue(Action.SHORT_DESCRIPTION, "Export report tables in CSV format to selected folder - one file per table.");
+		saveTablesCSVAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
+
+		final SaveTablesToFolderAction saveTablesExcelAct = new SaveTablesToFolderAction(this, reportTree, SaveTablesToFolderAction.ExportType.EXCEL);
+		saveTablesExcelAct.putValue(Action.NAME, "Export tables to folder (XLS)...");
+		saveTablesExcelAct.putValue(Action.SHORT_DESCRIPTION, "Export report tables in Excel format to selected folder - one file per table.");
+		saveTablesExcelAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
+
+		menu.add(new JMenuItem(saveTablesToWorkbookAct));
+		menu.add(new JMenuItem(saveTablesExcelAct));
+		menu.add(new JMenuItem(saveTablesCSVAct));
 	}
 
 	protected JComponent getReportTreeContentView(ReportTreeNode node) {

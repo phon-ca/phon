@@ -171,4 +171,6 @@ public abstract class ReportTreeNode implements Iterable<ReportTreeNode> {
 	 */
 	public abstract String getReportTemplateBlock();
 
+	public abstract ReportTreeNode cloneWithoutChildren();
+
 }

@@ -28,6 +28,7 @@ import ca.phon.util.OSInfo;
 import ca.phon.util.*;
 import jxl.Workbook;
 import jxl.write.*;
+import org.w3c.dom.Node;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -35,7 +36,7 @@ import java.io.*;
 import java.lang.Boolean;
 import java.util.List;
 
-public class SaveTablesToFolderAction extends HookableAction {
+public class SaveTablesToFolderAction extends NodeWizardAction {
 	
 	private final static String EXPORT_WITH_FOLDERS_PROP = SaveTablesToFolderAction.class.getName() + ".exportWithFolders";
 	private final static boolean DEFAULT_EXPORT_WITH_FOLDERS = Boolean.TRUE;
@@ -53,8 +54,8 @@ public class SaveTablesToFolderAction extends HookableAction {
 	};
 	private final ExportType type;
 	
-	public SaveTablesToFolderAction(ReportTree reportTree, ExportType type) {
-		super();
+	public SaveTablesToFolderAction(NodeWizard nodeWizard, ReportTree reportTree, ExportType type) {
+		super(nodeWizard);
 		
 		this.type = type;
 		this.reportTree = reportTree;
