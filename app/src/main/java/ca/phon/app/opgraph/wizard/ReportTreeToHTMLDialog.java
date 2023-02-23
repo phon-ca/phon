@@ -2,8 +2,7 @@ package ca.phon.app.opgraph.wizard;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.report.tree.ReportTree;
-import ca.phon.app.opgraph.report.tree.ReportTreeNode;
-import ca.phon.app.opgraph.report.tree.SectionHeaderNode;
+import ca.phon.app.opgraph.report.tree.TableNode;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
@@ -20,14 +19,10 @@ import org.jdesktop.swingx.JXBusyLabel;
 import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class ReportTreeToHTMLDialog extends CommonModuleFrame {
 
@@ -39,7 +34,7 @@ public class ReportTreeToHTMLDialog extends CommonModuleFrame {
 
     private JCheckBox openAfterExportBox;
 
-    private ReportTableCheckboxTree reportTableCheckboxTree;
+    private ReportTreeCheckboxTree reportTreeCheckboxTree;
 
     private JXBusyLabel busyLabel;
     private ReportTree reportTree;
@@ -66,10 +61,10 @@ public class ReportTreeToHTMLDialog extends CommonModuleFrame {
         header = new DialogHeader("Generate HTML Report", "Use checkboxes to select sections for inclusion in report");
         add(header, BorderLayout.NORTH);
 
-        reportTableCheckboxTree = new ReportTableCheckboxTree(reportTree, true);
-        reportTableCheckboxTree.expandAll();
+        reportTreeCheckboxTree = new ReportTreeCheckboxTree(reportTree, (reportTreeNode) -> true);
+        reportTreeCheckboxTree.expandAll();
 
-        final JScrollPane scroller = new JScrollPane(reportTableCheckboxTree);
+        final JScrollPane scroller = new JScrollPane(reportTreeCheckboxTree);
 
         busyLabel = new JXBusyLabel(new Dimension(16, 16));
 
@@ -112,7 +107,7 @@ public class ReportTreeToHTMLDialog extends CommonModuleFrame {
 
     private ReportTree getSelectedReportTree() {
         final ReportTree retVal = this.reportTree.createFilteredTree((treeNode) -> {
-            final TreePath treePath = reportTableCheckboxTree.userPathToTreePath(treeNode.getPath().getPath());
+            final TreePath treePath = reportTreeCheckboxTree.userPathToTreePath(treeNode.getPath().getPath());
             if(treePath == null) return false;
             final TristateCheckBoxTreeNode tristateCheckBoxTreeNode = (TristateCheckBoxTreeNode) treePath.getLastPathComponent();
             if(tristateCheckBoxTreeNode == null) return false;

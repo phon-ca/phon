@@ -56,7 +56,7 @@ public class ReportTableExportDialog extends CommonModuleFrame {
 
 	private JPanel customOptionsPanel;
 	
-	private ReportTableCheckboxTree reportTableCheckboxTree;
+	private ReportTreeCheckboxTree reportTreeCheckboxTree;
 	
 	private JXBusyLabel busyLabel;
 	private ReportTree reportTree;
@@ -91,10 +91,12 @@ public class ReportTableExportDialog extends CommonModuleFrame {
 		header = new DialogHeader("Export Tables", "Use checkboxes to select tables for export");
 		add(header, BorderLayout.NORTH);
 		
-		reportTableCheckboxTree = new ReportTableCheckboxTree(reportTree, includeExcelExportable);
-		reportTableCheckboxTree.expandAll();
+		reportTreeCheckboxTree = new ReportTreeCheckboxTree(reportTree, (reportTreeNode -> {
+			return (reportTreeNode instanceof TableNode) || (reportTreeNode instanceof ExcelExportableNode && includeExcelExportable);
+		}));
+		reportTreeCheckboxTree.expandAll();
 		
-		final JScrollPane scroller = new JScrollPane(reportTableCheckboxTree);
+		final JScrollPane scroller = new JScrollPane(reportTreeCheckboxTree);
 		
 		busyLabel = new JXBusyLabel(new Dimension(16, 16));
 		
@@ -147,7 +149,7 @@ public class ReportTableExportDialog extends CommonModuleFrame {
 	}
 	
 	public void onExport() {
-		List<TreePath> checkedPaths = reportTableCheckboxTree.getCheckedPaths();
+		List<TreePath> checkedPaths = reportTreeCheckboxTree.getCheckedPaths();
 		if(checkedPaths.size() == 0) {
 			showErrorMessage("Please select at least one table");
 			Toolkit.getDefaultToolkit().beep();
