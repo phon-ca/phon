@@ -8,6 +8,9 @@ import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.SaveDialogProperties;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxState;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeNode;
 import ca.phon.util.PrefHelper;
@@ -48,7 +51,8 @@ public class ReportTreeToHTMLDialog extends CommonModuleFrame {
     private NodeWizard nodeWizard;
 
     public ReportTreeToHTMLDialog(NodeWizard nodeWizard, ReportTree reportTree) {
-        super("Generate HTML Report");
+        super();
+        setWindowName("Generate HTML Report");
 
         this.nodeWizard = nodeWizard;
         this.reportTree = reportTree;
@@ -121,19 +125,30 @@ public class ReportTreeToHTMLDialog extends CommonModuleFrame {
     }
 
     private void onExport() {
-        if(this.nodeWizard.htmlReportAvailable()) {
-//            this.nodeWizard.closeHTMlReport();
+        final SaveDialogProperties props = new SaveDialogProperties();
+        props.setParentWindow(this);
+        props.setInitialFile(this.reportTree.getRoot().getTitle() + ".html");
+        props.setFileFilter(FileFilter.htmlFilter);
+        props.setRunAsync(false);
+
+        final String saveLocation = NativeDialogs.showSaveDialog(props);
+        if(saveLocation != null) {
+            final ReportTree selectedReportTree = getSelectedReportTree();
+            busyLabel.setBusy(true);
+            PhonWorker.invokeOnNewWorker(() -> {
+                try {
+                    final File saveFile = new File(saveLocation);
+                    this.nodeWizard.generateHTMLReport(selectedReportTree, saveFile);
+                    this.nodeWizard.loadHTMLReport(saveFile);
+                    onCancel();
+                } catch (NodeWizardReportException | IOException e) {
+                    LogUtil.severe(e);
+                    Toolkit.getDefaultToolkit().beep();
+                } finally {
+                    SwingUtilities.invokeLater(() -> busyLabel.setBusy(false));
+                }
+            });
         }
-        final ReportTree selectedReportTree = getSelectedReportTree();
-        PhonWorker.invokeOnNewWorker(() -> {
-            try {
-                final File tempFile = this.nodeWizard.generateHTMLReport(selectedReportTree);
-                this.nodeWizard.loadHTMLReport(tempFile);
-            } catch (NodeWizardReportException | IOException e) {
-                LogUtil.severe(e);
-                Toolkit.getDefaultToolkit().beep();
-            }
-        });
     }
 
     public void showDialog() {

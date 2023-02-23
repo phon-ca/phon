@@ -8,6 +8,7 @@ import bibliothek.gui.dock.common.action.CButton;
 import bibliothek.gui.dock.common.action.core.CommonDockAction;
 import bibliothek.gui.dock.common.event.CVetoClosingEvent;
 import bibliothek.gui.dock.common.event.CVetoClosingListener;
+import bibliothek.gui.dock.common.intern.CDockable;
 import bibliothek.gui.dock.common.intern.action.CDecorateableAction;
 import ca.phon.app.opgraph.report.ReportTableView;
 import ca.phon.app.opgraph.report.tree.ReportTree;
@@ -116,6 +117,18 @@ public class ReportTreeView extends JPanel {
         grid.add(0, 0, 1, 3, new DefaultSingleCDockable("Report Outline", "Report Outline", treeScroller));
         grid.add( 1, 0, 3, 3, workingArea);
         control.getContentArea().deploy(grid);
+    }
+
+    public void closeTab(String title) {
+        var dockable = dockables.get(title);
+        if(dockable != null)
+            dockable.setVisible(false);
+    }
+
+    public void focusTab(String title) {
+        var dockable = dockables.get(title);
+        if(dockable != null)
+            workingArea.show(dockable);
     }
 
     public DefaultMultipleCDockable openContentInNewTab(String title, Icon icon, boolean isClosable, JComponent component, CAction... actions) {

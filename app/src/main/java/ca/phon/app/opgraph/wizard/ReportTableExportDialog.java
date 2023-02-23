@@ -74,7 +74,7 @@ public class ReportTableExportDialog extends CommonModuleFrame {
 	public ReportTableExportDialog(ReportTree reportTree, Supplier<String> locationFunction,
 			ReportTreeExportFunction exportFunction, Consumer<List<ReportTreeNode>> finishFunction, boolean includeExcelExportable) {
 		super();
-		setTitle("Export Report Tables");
+		setWindowName("Export Report Tables");
 		
 		this.reportTree = reportTree;
 		this.locationFunction = locationFunction;

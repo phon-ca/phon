@@ -60,6 +60,7 @@ import ca.phon.util.*;
 import ca.phon.util.icons.*;
 import ca.phon.worker.*;
 import ca.phon.worker.PhonTask.TaskStatus;
+import org.antlr.tool.Message;
 import org.apache.velocity.tools.generic.MathTool;
 import org.cef.CefClient;
 import org.cef.browser.*;
@@ -119,6 +120,8 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	private static final long serialVersionUID = -652423592288338133L;
 
 	private final static String DEFAULT_REPORT_FILE = "ca/phon/app/opgraph/wizard/DefaultReport.vm";
+
+	private final static long HTML_REPORT_MAX_SIZE = (long)(100 * Math.pow(2, 20));
 
 	private Processor processor;
 
@@ -320,7 +323,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 					}
 				});
 				openInBrowserAct.putValue(PhonUIAction.NAME, "Open report in browser");
-				openInBrowserAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open report in system web browser");
+				openInBrowserAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open report in default browser");
 				builder.addItem(".", openInBrowserAct);
 				builder.addSeparator(".", "open_sep");
 			}
@@ -1183,6 +1186,11 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		return this.htmlReportUI != null;
 	}
 
+	protected void closeHTMLReport() {
+		if(!htmlReportAvailable()) return;
+		this.reportTreeView.closeTab("HTML Report");
+	}
+
 	protected void loadHTMLReport(File reportFile) {
 		final String reportURL = reportFile.toURI().toString();
 		final CefClient cefClient = JCefHelper.getInstance().createClient();
@@ -1237,24 +1245,48 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 
 		if(reportTreeView != null) {
 			final Icon htmlIcn = IconManager.getInstance().getSystemIconForFileType(".html", "mimetypes/text-html", IconSize.SMALL);
-			SwingUtilities.invokeLater(() -> {
-				final JPanel htmlPanel = new JPanel(new BorderLayout());
-				htmlPanel.add(cefBrowser.getUIComponent(), BorderLayout.CENTER);
-				final DefaultMultipleCDockable dockable = reportTreeView.openContentInNewTab("HTML Report", htmlIcn, true, htmlPanel, new CSaveHTMLButton(), new CPrintHTMLButton());
-				dockable.addVetoClosingListener(new CVetoClosingListener() {
-					@Override
-					public void closing(CVetoClosingEvent cVetoClosingEvent) {}
 
-					@Override
-					public void closed(CVetoClosingEvent cVetoClosingEvent) {
-						htmlReportUI = null;
-						cefBrowser.close(true);
-						cefClient.dispose();
-						dockable.removeVetoClosingListener(this);
+			if(reportFile.length() > HTML_REPORT_MAX_SIZE) {
+				final MessageDialogProperties props = new MessageDialogProperties();
+				props.setParentWindow(this);
+				props.setRunAsync(false);
+				props.setHeader("Generate HTML Report");
+				props.setMessage("HTML Report is too large to open in Phon, open in default browser instead?");
+				props.setOptions(MessageDialogProperties.okCancelOptions);
+
+				int selection = NativeDialogs.showMessageDialog(props);
+				if(selection == 0) {
+					try {
+						Desktop.getDesktop().browse(reportFile.toURI());
+					} catch (IOException e) {
+						Toolkit.getDefaultToolkit().beep();
+						LogUtil.warning(e);
 					}
+				}
+			} else {
+				if(htmlReportAvailable())
+					closeHTMLReport();
+
+				SwingUtilities.invokeLater(() -> {
+					final JPanel htmlPanel = new JPanel(new BorderLayout());
+					htmlPanel.add(cefBrowser.getUIComponent(), BorderLayout.CENTER);
+					final DefaultMultipleCDockable dockable = reportTreeView.openContentInNewTab("HTML Report", htmlIcn, true, htmlPanel, new CSaveHTMLButton(), new CPrintHTMLButton());
+					dockable.addVetoClosingListener(new CVetoClosingListener() {
+						@Override
+						public void closing(CVetoClosingEvent cVetoClosingEvent) {
+						}
+
+						@Override
+						public void closed(CVetoClosingEvent cVetoClosingEvent) {
+							htmlReportUI = null;
+							cefBrowser.close(true);
+							cefClient.dispose();
+							dockable.removeVetoClosingListener(this);
+						}
+					});
+					htmlReportUI = new HTMLReportUI(dockable, cefClient, cefBrowser);
 				});
-				htmlReportUI = new HTMLReportUI(dockable, cefClient, cefBrowser);
-			});
+			}
 		}
 	}
 
