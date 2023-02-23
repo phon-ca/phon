@@ -1,13 +1,9 @@
 package ca.phon.app.opgraph.report;
 
 import ca.phon.app.opgraph.report.tree.TableNode;
-import ca.phon.app.opgraph.wizard.ReportTreeView;
-import ca.phon.ipamap2.IPAMap;
-import ca.phon.ui.fonts.FontPreferences;
 import org.jdesktop.swingx.JXTable;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 
 public class ReportTableView extends JPanel {

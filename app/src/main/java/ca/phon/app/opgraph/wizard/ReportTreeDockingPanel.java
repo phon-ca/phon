@@ -1,46 +1,32 @@
 package ca.phon.app.opgraph.wizard;
 
-import bibliothek.gui.DockStation;
-import bibliothek.gui.dock.action.actions.SimpleButtonAction;
 import bibliothek.gui.dock.common.*;
 import bibliothek.gui.dock.common.action.CAction;
-import bibliothek.gui.dock.common.action.CButton;
-import bibliothek.gui.dock.common.action.core.CommonDockAction;
 import bibliothek.gui.dock.common.event.CVetoClosingEvent;
 import bibliothek.gui.dock.common.event.CVetoClosingListener;
-import bibliothek.gui.dock.common.intern.CDockable;
-import bibliothek.gui.dock.common.intern.action.CDecorateableAction;
 import ca.phon.app.opgraph.report.ReportTableView;
 import ca.phon.app.opgraph.report.tree.ReportTree;
 import ca.phon.app.opgraph.report.tree.ReportTreeNode;
 import ca.phon.app.opgraph.report.tree.TableNode;
-import ca.phon.app.opgraph.wizard.actions.SaveTablesToFolderAction;
-import ca.phon.app.opgraph.wizard.actions.SaveTablesToWorkbookAction;
 import ca.phon.project.Project;
-import ca.phon.ui.ButtonPopup;
-import ca.phon.ui.DropDownButton;
-import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import org.jdesktop.swingx.JXTree;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
  * Report tree viewer displayed at the end of node wizard dialogs such as the query and analysis wizards.
  */
-public class ReportTreeView extends JPanel {
+public class ReportTreeDockingPanel extends JPanel {
 
     private CControl control;
 
@@ -56,11 +42,11 @@ public class ReportTreeView extends JPanel {
 
     private JXTree tree;
 
-    public ReportTreeView(ReportTree reportTree, ReportContentFactory reportContentFactory) {
+    public ReportTreeDockingPanel(ReportTree reportTree, ReportContentFactory reportContentFactory) {
         this(null, reportTree, reportContentFactory);
     }
 
-    public ReportTreeView(Project project, ReportTree reportTree, ReportContentFactory reportContentFactory) {
+    public ReportTreeDockingPanel(Project project, ReportTree reportTree, ReportContentFactory reportContentFactory) {
         super();
 
         this.project = project;

@@ -60,7 +60,6 @@ import ca.phon.util.*;
 import ca.phon.util.icons.*;
 import ca.phon.worker.*;
 import ca.phon.worker.PhonTask.TaskStatus;
-import org.antlr.tool.Message;
 import org.apache.velocity.tools.generic.MathTool;
 import org.cef.CefClient;
 import org.cef.browser.*;
@@ -146,7 +145,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	private Timer reportTimer;
 	private long reportStartTime;
 	private ReportTree reportTree;
-	protected ReportTreeView reportTreeView;
+	protected ReportTreeDockingPanel reportTreeDockingPanel;
 	protected JToolBar reportTreeViewToolbar;
 
 	private final static double MAX_ZOOM_LEVEL = 4.0;
@@ -966,12 +965,12 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 
 		@Override
 		public void reportNodeAdded(ReportTreeNode parent, int index, ReportTreeNode node) {
-			if(reportTreeView != null && reportTree != null) {
+			if(reportTreeDockingPanel != null && reportTree != null) {
 				SwingUtilities.invokeLater(() -> {
 					final ReportTreeModel.UIReportTreeNode uiNode = (parent == reportTree.getRoot()
-							? (ReportTreeModel.UIReportTreeNode) reportTreeView.getTreeModel().getRoot()
+							? (ReportTreeModel.UIReportTreeNode) reportTreeDockingPanel.getTreeModel().getRoot()
 							: new ReportTreeModel.UIReportTreeNode(parent));
-					reportTreeView.getTreeModel().nodesWereInserted(uiNode, new int[]{index});
+					reportTreeDockingPanel.getTreeModel().nodesWereInserted(uiNode, new int[]{index});
 				});
 			}
 			try (PrintWriter out = new PrintWriter(new OutputStreamWriter(getLogBuffer().getLogBuffer().getStdOutStream()))) {
@@ -1093,8 +1092,8 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 				writer.close();
 			}
 
-			if(reportTreeView != null) {
-				SwingUtilities.invokeLater(reportTreeView.getTree()::expandAll);
+			if(reportTreeDockingPanel != null) {
+				SwingUtilities.invokeLater(reportTreeDockingPanel.getTree()::expandAll);
 			}
 
 			if(reportTree != null) {
@@ -1190,7 +1189,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 
 	protected void closeHTMLReport() {
 		if(!htmlReportAvailable()) return;
-		this.reportTreeView.closeTab("HTML Report");
+		this.reportTreeDockingPanel.closeTab("HTML Report");
 	}
 
 	protected void loadHTMLReport(File reportFile) {
@@ -1245,7 +1244,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			}
 		});
 
-		if(reportTreeView != null) {
+		if(reportTreeDockingPanel != null) {
 			final Icon htmlIcn = IconManager.getInstance().getIcon("mimetypes/text-html", IconSize.SMALL);
 
 			if(reportFile.length() > HTML_REPORT_MAX_SIZE) {
@@ -1272,7 +1271,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 				SwingUtilities.invokeLater(() -> {
 					final JPanel htmlPanel = new JPanel(new BorderLayout());
 					htmlPanel.add(cefBrowser.getUIComponent(), BorderLayout.CENTER);
-					final DefaultMultipleCDockable dockable = reportTreeView.openContentInNewTab("HTML Report", htmlIcn, true, htmlPanel, new CSaveHTMLButton(), new CPrintHTMLButton(), new COpenInBrowserButton());
+					final DefaultMultipleCDockable dockable = reportTreeDockingPanel.openContentInNewTab("HTML Report", htmlIcn, true, htmlPanel, new CSaveHTMLButton(), new CPrintHTMLButton(), new COpenInBrowserButton());
 					dockable.addVetoClosingListener(new CVetoClosingListener() {
 						@Override
 						public void closing(CVetoClosingEvent cVetoClosingEvent) {
@@ -1528,16 +1527,16 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	 */
 	protected void loadReportTreeViewer() {
 		if(this.reportTree == null) return;
-		this.reportTreeView = new ReportTreeView(this.reportTree, this::getReportTreeContentView);
+		this.reportTreeDockingPanel = new ReportTreeDockingPanel(this.reportTree, this::getReportTreeContentView);
 		reportTitledPanel.getContentContainer().removeAll();
 		reportTreeViewToolbar = setupReportTreeViewToolbar();
 		reportTitledPanel.getContentContainer().add(reportTreeViewToolbar, BorderLayout.NORTH);
-		reportTitledPanel.getContentContainer().add(this.reportTreeView, BorderLayout.CENTER);
+		reportTitledPanel.getContentContainer().add(this.reportTreeDockingPanel, BorderLayout.CENTER);
 		reportTitledPanel.revalidate();
 		reportTitledPanel.repaint();
 
 		final Icon logIcn = IconManager.getInstance().getIcon("mimetypes/text-x-generic", IconSize.SMALL);
-		this.reportTreeView.openContentInNewTab("Log", logIcn, false, bufferPanel);
+		this.reportTreeDockingPanel.openContentInNewTab("Log", logIcn, false, bufferPanel);
 	}
 
 	protected JToolBar setupReportTreeViewToolbar() {
@@ -1632,7 +1631,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 
 					this.reportTree = null;
 					resetReportStep();
-					this.reportTreeView = null;
+					this.reportTreeDockingPanel = null;
 					PhonWorker.invokeOnNewWorker(this::executeGraph);
 				});
 				NativeDialogs.showMessageDialog(props);
