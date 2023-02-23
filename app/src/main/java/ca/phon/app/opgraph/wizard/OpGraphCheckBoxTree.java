@@ -30,7 +30,7 @@ public class OpGraphCheckBoxTree extends TristateCheckBoxTree {
 	public static TristateCheckBoxTreeModel createModel(OpGraph graph, boolean propogateState) {
 		final TristateCheckBoxTreeNode root = new TristateCheckBoxTreeNode(graph);
 		root.setEnablePartialCheck(false);
-		root.setPropogateState(propogateState);
+		root.setPropagateState(propogateState);
 		setupTree(root, graph, propogateState);
 		
 		return new TristateCheckBoxTreeModel(root);
@@ -42,7 +42,7 @@ public class OpGraphCheckBoxTree extends TristateCheckBoxTree {
 			final OpNode node = nodeItr.next();
 			final TristateCheckBoxTreeNode treeNode = new TristateCheckBoxTreeNode(node);
 			treeNode.setEnablePartialCheck(false);
-			treeNode.setPropogateState(propogateState);
+			treeNode.setPropagateState(propogateState);
 			parent.add(treeNode);
 			
 			if(node instanceof MacroNode) {
