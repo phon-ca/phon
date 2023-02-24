@@ -1,10 +1,14 @@
 package ca.phon.app.opgraph.report;
 
 import ca.phon.app.opgraph.report.tree.TableNode;
+import ca.phon.formatter.Formatter;
+import ca.phon.formatter.FormatterFactory;
 import org.jdesktop.swingx.JXTable;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
+import java.time.Period;
 
 public class ReportTableView extends JPanel {
 
@@ -28,6 +32,8 @@ public class ReportTableView extends JPanel {
         final TableNodeTableModel tableModel = new TableNodeTableModel(tableNode);
         table = new JXTable(tableModel);
         table.setColumnControlVisible(true);
+        table.setSortable(false);
+        table.setDefaultRenderer(Period.class, new AgeCellRenderer());
 
         for (int i = 0; i < tableModel.getColumnCount(); i++) {
             final String colName = tableModel.getColumnName(i);
@@ -42,6 +48,20 @@ public class ReportTableView extends JPanel {
 
         JScrollPane scroller = new JScrollPane(table);
         add(scroller, BorderLayout.CENTER);
+    }
+
+    private class AgeCellRenderer extends DefaultTableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            JLabel retVal = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+            if(value instanceof Period) {
+                final Formatter<Period> ageFormatter = FormatterFactory.createFormatter(Period.class);
+                retVal.setText(ageFormatter.format((Period) value));
+            }
+
+            return retVal;
+        }
     }
 
 }
