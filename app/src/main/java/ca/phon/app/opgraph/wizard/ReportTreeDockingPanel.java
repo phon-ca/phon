@@ -2,12 +2,15 @@ package ca.phon.app.opgraph.wizard;
 
 import bibliothek.gui.dock.common.*;
 import bibliothek.gui.dock.common.action.CAction;
+import bibliothek.gui.dock.common.action.CButton;
 import bibliothek.gui.dock.common.event.CVetoClosingEvent;
 import bibliothek.gui.dock.common.event.CVetoClosingListener;
 import ca.phon.app.opgraph.report.ReportTableView;
+import ca.phon.app.opgraph.report.TableExporter;
 import ca.phon.app.opgraph.report.tree.ReportTree;
 import ca.phon.app.opgraph.report.tree.ReportTreeNode;
 import ca.phon.app.opgraph.report.tree.TableNode;
+import ca.phon.app.opgraph.wizard.actions.SaveTableAsAction;
 import ca.phon.project.Project;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -19,6 +22,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -89,7 +93,7 @@ public class ReportTreeDockingPanel extends JPanel {
                         DefaultMutableTreeNode lastNode = (DefaultMutableTreeNode) tp.getLastPathComponent();
                         if(lastNode.isLeaf() && lastNode.getUserObject() instanceof TableNode) {
                             final TableNode tblNode = (TableNode) lastNode.getUserObject();
-                            openContentInNewTab(tblNode.getPath().toString(), tblIcn, true, new ReportTableView(tblNode));
+                            openContentInNewTab(tblNode.getPath().toString(), tblIcn, true, new ReportTableView(tblNode), new CSaveTableAsButton(tblNode, TableExporter.TableExportType.CSV), new CSaveTableAsButton(tblNode, TableExporter.TableExportType.EXCEL));
                         }
                     }
                 }
@@ -170,6 +174,28 @@ public class ReportTreeDockingPanel extends JPanel {
 
     public interface ReportContentFactory {
         public JComponent createComponentForNode(ReportTreeNode node);
+    }
+
+    /* Dockable actions for tables */
+    private class CSaveTableAsButton extends CButton {
+
+        private final TableNode tableNode;
+
+        private final TableExporter.TableExportType exportType;
+
+        public CSaveTableAsButton(TableNode tableNode, TableExporter.TableExportType exportType) {
+            super(exportType == TableExporter.TableExportType.CSV ? "Save table as CSV..." : "Save table as XLS...",
+                    IconManager.getInstance().getIcon(exportType == TableExporter.TableExportType.CSV ? "mimetypes/text-x-generic" : "mimetypes/x-office-spreadsheet", IconSize.SMALL));
+            this.tableNode = tableNode;
+            this.exportType = exportType;
+        }
+
+        @Override
+        protected void action() {
+            final SaveTableAsAction saveTableAsAction = new SaveTableAsAction(tableNode, tableNode.getTitle(), exportType);
+            saveTableAsAction.actionPerformed(new ActionEvent(this, -1, "saveTableAs"));
+        }
+
     }
 
 }

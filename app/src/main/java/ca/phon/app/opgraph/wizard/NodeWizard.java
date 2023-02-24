@@ -27,11 +27,11 @@ import ca.phon.app.opgraph.*;
 import ca.phon.app.opgraph.nodes.log.*;
 import ca.phon.app.opgraph.nodes.query.QueryNode;
 import ca.phon.app.opgraph.nodes.report.*;
+import ca.phon.app.opgraph.report.TableExporter;
 import ca.phon.app.opgraph.report.ReportTableView;
 import ca.phon.app.opgraph.report.tree.*;
 import ca.phon.app.opgraph.wizard.WizardOptionalsCheckboxTree.CheckedOpNode;
 import ca.phon.app.opgraph.wizard.actions.*;
-import ca.phon.app.opgraph.wizard.actions.SaveTablesToFolderAction.ExportType;
 import ca.phon.app.script.ScriptPanel;
 import ca.phon.formatter.FormatterUtil;
 import ca.phon.opgraph.*;
@@ -116,11 +116,10 @@ import java.util.stream.Collectors;
  */
 public class NodeWizard extends BreadcrumbWizardFrame {
 
-	private static final long serialVersionUID = -652423592288338133L;
-
 	private final static String DEFAULT_REPORT_FILE = "ca/phon/app/opgraph/wizard/DefaultReport.vm";
 
-	private final static long HTML_REPORT_MAX_SIZE = (long)(100 * Math.pow(2, 20));
+	/* Max report size which can be loaded in Phon - 50MB */
+	private final static long HTML_REPORT_MAX_SIZE = (long)(50 * Math.pow(2, 20));
 
 	private Processor processor;
 
@@ -369,12 +368,12 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		saveTablesToWorkbookAct.putValue(Action.SHORT_DESCRIPTION, "Export report tables to a single Excel workbook");
 		saveTablesToWorkbookAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
 		
-		final SaveTablesToFolderAction saveTablesCSVAct = new SaveTablesToFolderAction(this, this.reportTree, ExportType.CSV);
+		final SaveTablesToFolderAction saveTablesCSVAct = new SaveTablesToFolderAction(this, this.reportTree, TableExporter.TableExportType.CSV);
 		saveTablesCSVAct.putValue(Action.NAME, "Export tables to folder (CSV)...");
 		saveTablesCSVAct.putValue(Action.SHORT_DESCRIPTION, "Export report tables in CSV format to selected folder - one file per table.");
 		saveTablesCSVAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
 
-		final SaveTablesToFolderAction saveTablesExcelAct = new SaveTablesToFolderAction(this, this.reportTree, ExportType.EXCEL);
+		final SaveTablesToFolderAction saveTablesExcelAct = new SaveTablesToFolderAction(this, this.reportTree, TableExporter.TableExportType.EXCEL);
 		saveTablesExcelAct.putValue(Action.NAME, "Export tables to folder (XLS)...");
 		saveTablesExcelAct.putValue(Action.SHORT_DESCRIPTION, "Export report tables in Excel format to selected folder - one file per table.");
 		saveTablesExcelAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
@@ -1586,12 +1585,12 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		saveTablesToWorkbookAct.putValue(Action.SHORT_DESCRIPTION, "Export report tables to a single Excel workbook");
 		saveTablesToWorkbookAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
 
-		final SaveTablesToFolderAction saveTablesCSVAct = new SaveTablesToFolderAction(this, reportTree, SaveTablesToFolderAction.ExportType.CSV);
+		final SaveTablesToFolderAction saveTablesCSVAct = new SaveTablesToFolderAction(this, reportTree, TableExporter.TableExportType.CSV);
 		saveTablesCSVAct.putValue(Action.NAME, "Export tables to folder (CSV)...");
 		saveTablesCSVAct.putValue(Action.SHORT_DESCRIPTION, "Export report tables in CSV format to selected folder - one file per table.");
 		saveTablesCSVAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
 
-		final SaveTablesToFolderAction saveTablesExcelAct = new SaveTablesToFolderAction(this, reportTree, SaveTablesToFolderAction.ExportType.EXCEL);
+		final SaveTablesToFolderAction saveTablesExcelAct = new SaveTablesToFolderAction(this, reportTree, TableExporter.TableExportType.EXCEL);
 		saveTablesExcelAct.putValue(Action.NAME, "Export tables to folder (XLS)...");
 		saveTablesExcelAct.putValue(Action.SHORT_DESCRIPTION, "Export report tables in Excel format to selected folder - one file per table.");
 		saveTablesExcelAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));

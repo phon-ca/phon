@@ -15,20 +15,17 @@
  */
 package ca.phon.app.opgraph.wizard.actions;
 
-import au.com.bytecode.opencsv.CSVWriter;
-import ca.phon.app.excel.WorkbookUtils;
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.log.*;
+import ca.phon.app.opgraph.report.TableExporter;
 import ca.phon.app.opgraph.report.tree.*;
 import ca.phon.app.opgraph.wizard.*;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
-import ca.phon.util.OSInfo;
 import ca.phon.util.*;
 import jxl.Workbook;
 import jxl.write.*;
-import org.w3c.dom.Node;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -47,14 +44,10 @@ public class SaveTablesToFolderAction extends NodeWizardAction {
 	private final ReportTree reportTree;
 	
 	private final static String TXT = "Export tables to folder ";
-		
-	public static enum ExportType {
-		CSV,
-		EXCEL
-	};
-	private final ExportType type;
+
+	private final TableExporter.TableExportType type;
 	
-	public SaveTablesToFolderAction(NodeWizard nodeWizard, ReportTree reportTree, ExportType type) {
+	public SaveTablesToFolderAction(NodeWizard nodeWizard, ReportTree reportTree, TableExporter.TableExportType type) {
 		super(nodeWizard);
 		
 		this.type = type;
@@ -63,7 +56,7 @@ public class SaveTablesToFolderAction extends NodeWizardAction {
 		putValue(HookableAction.NAME, TXT);
 	}
 	
-	public ExportType getType() {
+	public TableExporter.TableExportType getType() {
 		return this.type;
 	}
 	
@@ -121,7 +114,7 @@ public class SaveTablesToFolderAction extends NodeWizardAction {
 		}
 		
 		try {
-			writeTableToFile(table, tableFile, "UTF-8", useIntegerForBoolean);
+			TableExporter.writeTableToFile(table, tableFile, getType(),"UTF-8", useIntegerForBoolean);
 			return true;
 		} catch (IOException e) {
 			LogUtil.severe(e);
@@ -142,7 +135,7 @@ public class SaveTablesToFolderAction extends NodeWizardAction {
 				subPath += (exportWithFolders ? File.separator : "_");
 			subPath += ele.getTitle().trim().replaceAll(illegalCharRegex, "_");
 		}
-		final String tableFilePath = folder + subPath + (type == ExportType.CSV ? ".csv" : ".xls");
+		final String tableFilePath = folder + subPath + (type == TableExporter.TableExportType.CSV ? ".csv" : ".xls");
 		
 		final File tableFile = new File(tableFilePath);
 		
@@ -179,72 +172,12 @@ public class SaveTablesToFolderAction extends NodeWizardAction {
 		};
 		exportWithFoldersBox.addActionListener(l);
 
-		final ReportTableExportDialog exportDialog = new ReportTableExportDialog(reportTree, this::getFolder, this::exportReportNode, this::done, getType() == ExportType.EXCEL ? true : false);
+		final ReportTableExportDialog exportDialog = new ReportTableExportDialog(reportTree, this::getFolder, this::exportReportNode, this::done, getType() == TableExporter.TableExportType.EXCEL ? true : false);
 		exportDialog.setParentFrame(CommonModuleFrame.getCurrentFrame());
 
 		exportDialog.getCustomOptionsPanel().add(exportWithFoldersBox);
 
 		exportDialog.showDialog();
-	}
-	
-	private void writeTableToFile(DefaultTableDataSource table, File file, String encoding, boolean useIntegerForBoolean) throws IOException {
-		switch(getType() ) {
-		case CSV:
-			writeTableToCSVFile(table, file, encoding, useIntegerForBoolean);
-			break;
-			
-		case EXCEL:
-			writeTableToExcelWorkbook(table, file, encoding, useIntegerForBoolean);
-			break;
-			
-		default:
-			break;
-		}
-	}
-	
-	private void writeTableToExcelWorkbook(DefaultTableDataSource table, File file, String encoding, boolean useIntegerForBoolean) throws IOException {
-		final WritableWorkbook workbook = Workbook.createWorkbook(file);
-		final WritableSheet sheet = workbook.createSheet("Sheet 1", 1);
-		
-		try {
-			WorkbookUtils.addTableToSheet(sheet, 0, table, useIntegerForBoolean);
-			workbook.write();
-		} catch (WriteException e) {
-			throw new IOException(e);
-		} finally {
-			try {
-				workbook.close();
-			} catch (WriteException e) {
-				LogUtil.severe(e);
-			}
-		}		
-	}
-	
-	private void writeTableToCSVFile(DefaultTableDataSource table, File file, String encoding, boolean useIntegerForBoolean) throws IOException {
-		final CSVWriter writer = 
-				new CSVWriter(new PrintWriter(file, encoding), ',', '\"', 
-						(OSInfo.isWindows() ? "\r\n" : "\n"));
-		
-		// write column header
-		final String[] colnames = new String[table.getColumnCount()];
-		for(int i = 0; i < table.getColumnCount(); i++) {
-			colnames[i] = table.getColumnTitle(i);
-		}
-		writer.writeNext(colnames);
-		
-		final String[] currentRow = new String[table.getColumnCount()];
-		for(int row = 0; row < table.getRowCount(); row++) {
-			for(int col = 0; col < table.getColumnCount(); col++) {
-				Object cellVal = table.getValueAt(row, col);
-				if(cellVal instanceof Boolean && useIntegerForBoolean) {
-					cellVal = (cellVal == Boolean.TRUE ? 1 : 0);
-				}
-				currentRow[col] = (cellVal == null ? "" : cellVal.toString());
-			}
-			writer.writeNext(currentRow);
-		}
-		writer.flush();
-		writer.close();
 	}
 	
 }
