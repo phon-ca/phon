@@ -35,6 +35,8 @@ import java.util.*;
 )
 public class SortNode extends TableOpNode implements NodeSettings {
 
+	private final static String IPA_COLUMN_PREFIX = "IPA";
+
 	private SortNodeSettingsPanel nodeSettingsPanel;
 
 	public SortNode() {
@@ -56,7 +58,7 @@ public class SortNode extends TableOpNode implements NodeSettings {
 				break;
 			}
 			
-			settings.addColumn(colName, (colType == IPATranscript.class ? SortType.IPA : SortType.PLAIN), 
+			settings.addColumn(colName, (colType == IPATranscript.class || colName.startsWith(IPA_COLUMN_PREFIX) ? SortType.IPA : SortType.PLAIN),
 					settings.getAutoSortOrder());
 		}
 	}
