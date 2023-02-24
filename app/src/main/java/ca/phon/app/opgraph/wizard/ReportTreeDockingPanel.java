@@ -9,9 +9,11 @@ import ca.phon.app.opgraph.report.ReportTableView;
 import ca.phon.app.opgraph.report.TableExporter;
 import ca.phon.app.opgraph.report.tree.ReportTree;
 import ca.phon.app.opgraph.report.tree.ReportTreeNode;
+import ca.phon.app.opgraph.report.tree.SectionHeaderNode;
 import ca.phon.app.opgraph.report.tree.TableNode;
 import ca.phon.app.opgraph.wizard.actions.SaveTableAsAction;
 import ca.phon.project.Project;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import org.jdesktop.swingx.JXTree;
@@ -104,7 +106,7 @@ public class ReportTreeDockingPanel extends JPanel {
         workingArea = control.createWorkingArea("work");
 
         CGrid grid = new CGrid(control);
-        grid.add(0, 0, 1, 3, new DefaultSingleCDockable("Report Outline", "Report Outline", treeScroller));
+        grid.add(0, 0, 1, 3, new DefaultSingleCDockable("Report Outline", IconManager.getInstance().getIcon("misc/view-list-tree", IconSize.SMALL), "Report Outline", treeScroller));
         grid.add( 1, 0, 3, 3, workingArea);
         control.getContentArea().deploy(grid);
     }
@@ -165,7 +167,12 @@ public class ReportTreeDockingPanel extends JPanel {
             retVal.setText(((ReportTreeNode)node.getUserObject()).getTitle());
 
             if(node.isLeaf() && node.getUserObject() instanceof TableNode) {
-                // TODO set icon
+                final ImageIcon tblIcn = IconManager.getInstance().getIcon("misc/table", IconSize.SMALL);
+                retVal.setIcon(tblIcn);
+            } else if(node.getUserObject() instanceof SectionHeaderNode) {
+                final ImageIcon sectionIcn = IconManager.getInstance().createGlyphIcon('\u00a7',
+                        FontPreferences.getUIFont().deriveFont(Font.BOLD, 14.0f), Color.black, Color.white);
+                retVal.setIcon(sectionIcn);
             }
 
             return retVal;
