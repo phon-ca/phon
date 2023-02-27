@@ -1067,7 +1067,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		reportTimer.start();
 
 		try (PrintWriter out = new PrintWriter(new OutputStreamWriter(getLogBuffer().getLogBuffer().getStdOutStream()))) {
-			out.print("Begin report...");
+			out.println("Compiling tables...");
 			out.flush();
 		}
 

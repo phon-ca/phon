@@ -243,12 +243,14 @@ public class QueryRunnerPanel extends JPanel {
 					@Override
 					public void statusChanged(PhonTask task, TaskStatus oldStatus, TaskStatus newStatus) {
 						if(newStatus == TaskStatus.FINISHED) {
-							taskCompleted();
 							try {
-								rsManager.saveResultSet(tempProject, query, queryTask.getResultSet());
+								synchronized (rsManager) {
+									rsManager.saveResultSet(tempProject, query, queryTask.getResultSet());
+								}
 							} catch (IOException e) {
 								LogUtil.warning(e);
 							}
+							taskCompleted();
 							taskLatchRef.get().countDown();
 						}
 					}
