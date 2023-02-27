@@ -101,7 +101,7 @@
 		<guru.nidi.graphviz-java.version>0.16.3</guru.nidi.graphviz-java.version>
 
 		<!-- jcef -->
-		<me.friwi.jcefmaven.version>105.3.36</me.friwi.jcefmaven.version>
+		<me.friwi.jcefmaven.version>110.0.25</me.friwi.jcefmaven.version>
 
 		<!-- java.xml.bind -->
 		<jaxb.version>4.0.0</jaxb.version>
