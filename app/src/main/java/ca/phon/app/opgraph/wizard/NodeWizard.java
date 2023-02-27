@@ -1357,6 +1357,15 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		ctx.put(BufferNodeConstants.BUFFER_CONTEXT_KEY, bufferPanel);
 		ReportTree reportTree = new ReportTree(new SectionHeaderNode(getWizardExtension().getWizardTitle()));
 		reportTree.addReportTreeListener(reportTreeListener);
+
+		final OpGraph graph = getGraph();
+		final List<OpNode> newReportNodes = graph.getNodesByName("New Report");
+		if(newReportNodes.size() == 1) {
+			if(graph.getVertices().contains(newReportNodes.get(0))) {
+				// new report is in root of graph
+				ctx.put(NewReportNode.REPLACE_REPORT_ROOT, true);
+			}
+		}
 		ctx.put(NewReportNode.REPORT_TREE_KEY, reportTree);
 	}
 

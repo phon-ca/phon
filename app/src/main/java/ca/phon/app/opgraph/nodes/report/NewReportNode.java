@@ -30,6 +30,8 @@ public class NewReportNode extends OpNode implements NodeSettings {
 
 	public final static String REPORT_TREE_KEY = "_reportTree";
 
+	public final static String REPLACE_REPORT_ROOT = "_replaceReportRoot";
+
 	private final InputField reportNameInput =
 			new InputField("reportName", "Report name", true, true, String.class);
 	
@@ -61,18 +63,24 @@ public class NewReportNode extends OpNode implements NodeSettings {
 				(context.get(reportRootInput) != null ? (ReportTreeNode)context.get(reportRootInput) : 
 						( context.get(reportNameInput) != null ? new SectionHeaderNode(context.get(reportNameInput).toString()) : new SectionHeaderNode("root") ) );
 
-		final ReportTree reportTree = new ReportTree(root);
 		// may need to set name
 		if(context.get(reportNameInput) != null)
 			root.setTitle(context.get(reportNameInput).toString());
-		
-		context.put(reportOutput, reportTree);
-		context.put(reportRootOutput, root);
-		
+
+		ReportTree reportTree = new ReportTree(root);
 		if(context.containsKey(REPORT_TREE_KEY)) {
 			final ReportTree masterReport = (ReportTree)context.get(REPORT_TREE_KEY);
-			masterReport.getRoot().add(root);
+			final boolean replaceRoot = (context.containsKey(REPLACE_REPORT_ROOT) ? Boolean.parseBoolean(context.get(REPLACE_REPORT_ROOT).toString()) : false);
+			if(replaceRoot) {
+				((SectionHeaderNode) masterReport.getRoot()).setTitle(root.getTitle());
+				reportTree = masterReport;
+			} else {
+				masterReport.getRoot().add(root);
+			}
 		}
+
+		context.put(reportOutput, reportTree);
+		context.put(reportRootOutput, reportTree.getRoot());
 	}
 
 	@Override

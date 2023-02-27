@@ -17,6 +17,7 @@ package ca.phon.app.opgraph.report.tree;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
@@ -82,6 +83,16 @@ public class ReportTree {
 		} else {
 			return null;
 		}
+	}
+
+	public void forEachNode(Consumer<ReportTreeNode> consumer) {
+		forEach(root, consumer);
+	}
+
+	private void forEach(ReportTreeNode node, Consumer<ReportTreeNode> consumer) {
+		consumer.accept(node);
+		for(ReportTreeNode child:node.getChildren())
+			forEach(child, consumer);
 	}
 
 }
