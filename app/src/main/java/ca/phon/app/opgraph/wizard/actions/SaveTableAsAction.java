@@ -35,7 +35,7 @@ public class SaveTableAsAction extends HookableAction {
         this.initialFilename = initialFilename;
         this.exportType = exportType;
 
-        putValue(PhonUIAction.NAME, "Save table as " + (exportType == TableExporter.TableExportType.CSV ? "CSV" : "XLS"));
+        putValue(PhonUIAction.NAME, "Save table as " + (exportType == TableExporter.TableExportType.CSV ? "CSV" : "XLS") + "...");
         final String iconName = exportType == TableExporter.TableExportType.CSV ? "mimetypes/text-x-generic" : "mimetypes/x-office-spreadsheet";
         final ImageIcon icn = IconManager.getInstance().getIcon(iconName, IconSize.SMALL);
         putValue(PhonUIAction.SMALL_ICON, icn);

@@ -477,7 +477,13 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			browser.setZoomLevel(DEFAULT_ZOOM_LEVEL);
 		}
 	}
-	
+
+	/**
+	 * Add report tree items to a menu
+	 *
+	 * @param builder
+	 * @param reportTree
+	 */
 	private void setupReportTreeMenu(MenuBuilder builder, ReportTree reportTree) {
 		int idx = 0;
 		for(ReportTreeNode node:reportTree.getRoot()) {
@@ -951,7 +957,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 					if(reportTree == null) {
 						reportTree = (ReportTree) processor.getContext().get(NewReportNode.REPORT_TREE_KEY);
 						try {
-							SwingUtilities.invokeAndWait(NodeWizard.this::loadReportTreeViewer);
+							SwingUtilities.invokeAndWait(NodeWizard.this::loadReportTreeDockingPanel);
 						} catch (InterruptedException | InvocationTargetException e) {
 							LogUtil.severe(e);
 						}
@@ -1537,8 +1543,9 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	 * The bufferPanel will be removed from the report panel and replaced with a tab view contaning both
 	 * the report view and the bufferPanel.
 	 */
-	protected void loadReportTreeViewer() {
+	protected void loadReportTreeDockingPanel() {
 		if(this.reportTree == null) return;
+
 		this.reportTreeDockingPanel = new ReportTreeDockingPanel(this.reportTree, this::getReportTreeContentView);
 		reportTitledPanel.getContentContainer().removeAll();
 		reportTreeViewToolbar = setupReportTreeViewToolbar();
@@ -1547,8 +1554,54 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		reportTitledPanel.revalidate();
 		reportTitledPanel.repaint();
 
+		reportTreeDockingPanel.getTree().addMouseListener(new MouseInputAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if(e.isPopupTrigger())
+					showReportTreeContextMenu(e);
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				if(e.isPopupTrigger())
+					showReportTreeContextMenu(e);
+			}
+
+			void showReportTreeContextMenu(MouseEvent e) {
+				final JPopupMenu menu = new JPopupMenu();
+				final List<ReportTreeNode> selectedNodes = reportTreeDockingPanel.getSelectedNodes();
+				final List<TableNode> selectedTableNodes = selectedNodes.stream().filter((n) -> n instanceof TableNode)
+																.map((n) -> (TableNode)n)
+																.collect(Collectors.toList());
+				setupReportTreeContextMenu(new MenuBuilder(menu), selectedTableNodes);
+				menu.show(e.getComponent(), e.getX(), e.getY());
+			}
+
+		});
+
 		final Icon logIcn = IconManager.getInstance().getIcon("mimetypes/text-x-generic", IconSize.SMALL);
 		this.reportTreeDockingPanel.openContentInNewTab("Log", logIcn, false, bufferPanel);
+	}
+
+	private void setupReportTreeContextMenu(MenuBuilder builder, List<TableNode> selectedTableNodes) {
+		if(selectedTableNodes.size() == 1) {
+			final TableNode tblNode = selectedTableNodes.get(0);
+			final PhonUIAction<TableNode> openTableAct = PhonUIAction.consumer(reportTreeDockingPanel::openTable, tblNode);
+			openTableAct.putValue(PhonUIAction.NAME, "Open table " + tblNode.getTitle());
+			builder.addItem(".", openTableAct);
+
+			builder.addItem(".", new SaveTableAsAction(tblNode, tblNode.getTitle(), TableExporter.TableExportType.CSV));
+			builder.addItem(".", new SaveTableAsAction(tblNode, tblNode.getTitle(), TableExporter.TableExportType.EXCEL));
+		} else if(selectedTableNodes.size() > 1) {
+			final PhonUIAction<List<TableNode>> openTablesAct = PhonUIAction.consumer(reportTreeDockingPanel::openTables, selectedTableNodes);
+			openTablesAct.putValue(PhonUIAction.NAME, "Open selected tables");
+			builder.addItem(".", openTablesAct);
+		}
+		if(selectedTableNodes.size() > 0)
+			builder.addSeparator(".", "table_actions");
+
+		setupExportTablesMenu(builder);
+		builder.addItem(".", new GenerateHTMLReportAction(this, reportTree));
 	}
 
 	protected JToolBar setupReportTreeViewToolbar() {
@@ -1569,7 +1622,8 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			exportButton.setOnlyPopup(true);
 			exportButton.getButtonPopup().addPropertyChangeListener(ButtonPopup.POPUP_VISIBLE, (e) -> {
 				if(Boolean.parseBoolean(e.getNewValue().toString())) {
-					setupExportTablesMenu(menu);
+					menu.removeAll();
+					setupExportTablesMenu(new MenuBuilder(menu));
 				}
 			});
 
@@ -1590,9 +1644,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		return reportTreeViewToolbar;
 	}
 
-	public void setupExportTablesMenu(JPopupMenu menu) {
-		menu.removeAll();
-
+	public void setupExportTablesMenu(MenuBuilder builder) {
 		final SaveTablesToWorkbookAction saveTablesToWorkbookAct = new SaveTablesToWorkbookAction(this, reportTree);
 		saveTablesToWorkbookAct.putValue(Action.NAME, "Export tables as Excel workbook...");
 		saveTablesToWorkbookAct.putValue(Action.SHORT_DESCRIPTION, "Export report tables to a single Excel workbook");
@@ -1608,9 +1660,9 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		saveTablesExcelAct.putValue(Action.SHORT_DESCRIPTION, "Export report tables in Excel format to selected folder - one file per table.");
 		saveTablesExcelAct.putValue(Action.SMALL_ICON, IconManager.getInstance().getIcon("actions/document-save-as", IconSize.SMALL));
 
-		menu.add(new JMenuItem(saveTablesToWorkbookAct));
-		menu.add(new JMenuItem(saveTablesExcelAct));
-		menu.add(new JMenuItem(saveTablesCSVAct));
+		builder.addItem(".", new JMenuItem(saveTablesToWorkbookAct));
+		builder.addItem(".", new JMenuItem(saveTablesExcelAct));
+		builder.addItem(".", new JMenuItem(saveTablesCSVAct));
 	}
 
 	protected JComponent getReportTreeContentView(ReportTreeNode node) {

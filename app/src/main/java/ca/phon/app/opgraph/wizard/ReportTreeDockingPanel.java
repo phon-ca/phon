@@ -26,8 +26,11 @@ import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Report tree viewer displayed at the end of node wizard dialogs such as the query and analysis wizards.
@@ -84,7 +87,6 @@ public class ReportTreeDockingPanel extends JPanel {
         tree.setCellRenderer(new ReportTreeCellRenderer());
         tree.setRootVisible(true);
 
-        final Icon tblIcn = IconManager.getInstance().getIcon("misc/table", IconSize.SMALL);
         tree.addMouseListener(new MouseInputAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -95,7 +97,7 @@ public class ReportTreeDockingPanel extends JPanel {
                         DefaultMutableTreeNode lastNode = (DefaultMutableTreeNode) tp.getLastPathComponent();
                         if(lastNode.isLeaf() && lastNode.getUserObject() instanceof TableNode) {
                             final TableNode tblNode = (TableNode) lastNode.getUserObject();
-                            openContentInNewTab(tblNode.getPath().toString(), tblIcn, true, new ReportTableView(tblNode), new CSaveTableAsButton(tblNode, TableExporter.TableExportType.CSV), new CSaveTableAsButton(tblNode, TableExporter.TableExportType.EXCEL));
+                            openTable(tblNode);
                         }
                     }
                 }
@@ -121,6 +123,23 @@ public class ReportTreeDockingPanel extends JPanel {
         var dockable = dockables.get(title);
         if(dockable != null)
             workingArea.show(dockable);
+    }
+
+    public void openTable(TableNode tblNode) {
+        final Icon tblIcn = IconManager.getInstance().getIcon("misc/table", IconSize.SMALL);
+        openContentInNewTab(tblNode.getPath().toString(), tblIcn, true, new ReportTableView(tblNode),
+                new CSaveTableAsButton(tblNode, TableExporter.TableExportType.CSV), new CSaveTableAsButton(tblNode, TableExporter.TableExportType.EXCEL));
+    }
+
+    public void openTables(List<TableNode> tblNodes) {
+        tblNodes.forEach((n) -> openTable(n));
+    }
+
+    public List<ReportTreeNode> getSelectedNodes() {
+        final TreePath[] selectionPaths = getTree().getSelectionPaths();
+        return Arrays.stream(selectionPaths)
+                .map((n) -> (ReportTreeNode)((DefaultMutableTreeNode)n.getLastPathComponent()).getUserObject())
+                .collect(Collectors.toList());
     }
 
     public DefaultMultipleCDockable openContentInNewTab(String title, Icon icon, boolean isClosable, JComponent component, CAction... actions) {
