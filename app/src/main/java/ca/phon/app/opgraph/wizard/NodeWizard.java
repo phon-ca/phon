@@ -1165,11 +1165,11 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		// create temp file
 		try(final FileOutputStream fout = new FileOutputStream(reportFile)) {
 			try (PrintWriter out = new PrintWriter(new OutputStreamWriter(getLogBuffer().getLogBuffer().getStdOutStream()))) {
-				out.print("Generating report...");
+				out.print("Generating HTML report...");
 				out.flush();
 			}
 			SwingUtilities.invokeLater(() -> {
-				statusLabel.setText("Generating report...");
+				statusLabel.setText("Generating HTML report...");
 			});
 			generateHTML(reportTree, fout);
 			try (PrintWriter out = new PrintWriter(new OutputStreamWriter(getLogBuffer().getLogBuffer().getStdOutStream()))) {

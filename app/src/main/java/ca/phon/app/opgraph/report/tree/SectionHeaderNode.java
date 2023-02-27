@@ -27,7 +27,7 @@ public class SectionHeaderNode extends ReportTreeNode {
 
 	@Override
 	public String getReportTemplateBlock() {
-		return String.format("#h%d(\"%s\" \"%s\")\n", getLevel(), getTitle(), getPath().toString());
+		return String.format("#h%d(\"%s\" \"%s\")\n", Math.min(getLevel() + 1, 6), getTitle(), getPath().toString());
 	}
 
 	@Override

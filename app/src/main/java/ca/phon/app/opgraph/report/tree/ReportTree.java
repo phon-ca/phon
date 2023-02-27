@@ -54,11 +54,7 @@ public class ReportTree {
 	
 	public String getReportTemplate() {
 		final StringBuffer buffer = new StringBuffer();
-		
-		for(ReportTreeNode reportNode:root.getChildren()) {
-			append(buffer, reportNode);
-		}
-		
+		append(buffer, root);
 		return buffer.toString();
 	}
 		
