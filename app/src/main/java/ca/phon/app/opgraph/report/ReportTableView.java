@@ -2,13 +2,17 @@ package ca.phon.app.opgraph.report;
 
 import ca.phon.app.opgraph.report.tree.TableNode;
 import ca.phon.app.opgraph.wizard.ResultTableMouseAdapter;
+import ca.phon.app.opgraph.wizard.actions.SaveTableAsAction;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
 import org.jdesktop.swingx.JXTable;
 
 import javax.swing.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MouseInputAdapter;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.time.Period;
 
 public class ReportTableView extends JPanel {
@@ -36,6 +40,7 @@ public class ReportTableView extends JPanel {
         table.setSortable(false);
         table.setDefaultRenderer(Period.class, new AgeCellRenderer());
         table.addMouseListener(new ResultTableMouseAdapter(this));
+        table.addMouseListener(contextMenuHandler);
 
         for (int i = 0; i < tableModel.getColumnCount(); i++) {
             final String colName = tableModel.getColumnName(i);
@@ -73,5 +78,27 @@ public class ReportTableView extends JPanel {
             return retVal;
         }
     }
+
+    private void showContextMenu(MouseEvent e) {
+        final JPopupMenu popupMenu = new JPopupMenu();
+        popupMenu.add(new JMenuItem(new SaveTableAsAction(tableNode, tableNode.getTitle(), TableExporter.TableExportType.CSV)));
+        popupMenu.add(new JMenuItem(new SaveTableAsAction(tableNode, tableNode.getTitle(), TableExporter.TableExportType.EXCEL)));
+        popupMenu.show(e.getComponent(), e.getX(), e.getY());
+    }
+
+    private final MouseInputAdapter contextMenuHandler = new MouseInputAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+            if(e.isPopupTrigger())
+                showContextMenu(e);
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            if(e.isPopupTrigger())
+                showContextMenu(e);
+        }
+
+    };
 
 }
