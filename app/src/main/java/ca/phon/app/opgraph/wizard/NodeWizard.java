@@ -1592,8 +1592,18 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			openTableAct.putValue(PhonUIAction.NAME, "Open table " + tblNode.getTitle());
 			builder.addItem(".", openTableAct);
 
-			builder.addItem(".", new SaveTableAsAction(tblNode, tblNode.getTitle(), TableExporter.TableExportType.CSV));
-			builder.addItem(".", new SaveTableAsAction(tblNode, tblNode.getTitle(), TableExporter.TableExportType.EXCEL));
+			final List<String> columns = new ArrayList<>();
+			for(int i = 0; i < tblNode.getTable().getColumnCount(); i++) {
+				final String colname = tblNode.getTable().getColumnTitle(i);
+				if(tblNode.isIncludeColumns() && tblNode.getColumns().contains(colname)) {
+					columns.add(colname);
+				} else if(!tblNode.isIncludeColumns() && !tblNode.getColumns().contains(colname)) {
+					columns.add(colname);
+				}
+			}
+
+			builder.addItem(".", new SaveTableAsAction(tblNode, columns, tblNode.getTitle(), TableExporter.TableExportType.CSV));
+			builder.addItem(".", new SaveTableAsAction(tblNode, columns, tblNode.getTitle(), TableExporter.TableExportType.EXCEL));
 		} else if(selectedTableNodes.size() > 1) {
 			final PhonUIAction<List<TableNode>> openTablesAct = PhonUIAction.consumer(reportTreeDockingPanel::openTables, selectedTableNodes);
 			openTablesAct.putValue(PhonUIAction.NAME, "Open selected tables");

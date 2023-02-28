@@ -20,6 +20,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class SaveTableAsAction extends HookableAction {
 
@@ -29,9 +30,12 @@ public class SaveTableAsAction extends HookableAction {
 
     private final String initialFilename;
 
-    public SaveTableAsAction(TableNode tableNode, String initialFilename, TableExporter.TableExportType exportType) {
+    private final List<String> columns;
+
+    public SaveTableAsAction(TableNode tableNode, List<String> columns, String initialFilename, TableExporter.TableExportType exportType) {
         super();
         this.tableNode = tableNode;
+        this.columns = columns;
         this.initialFilename = initialFilename;
         this.exportType = exportType;
 
@@ -54,7 +58,7 @@ public class SaveTableAsAction extends HookableAction {
         props.setListener((e) -> {
             if(e.getDialogResult() == NativeDialogEvent.OK_OPTION) {
                 try {
-                    TableExporter.writeTableToFile((DefaultTableDataSource) tableNode.getTable(), new File(e.getDialogData().toString()), exportType, "UTF-8", true);
+                    TableExporter.writeTableToFile((DefaultTableDataSource) tableNode.getTable(), columns, new File(e.getDialogData().toString()), exportType, "UTF-8", true);
                 } catch (IOException ex) {
                     Toolkit.getDefaultToolkit().beep();
                     LogUtil.severe(ex);

@@ -16,20 +16,20 @@ import ca.phon.project.Project;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTree;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
+import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -127,8 +127,9 @@ public class ReportTreeDockingPanel extends JPanel {
 
     public void openTable(TableNode tblNode) {
         final Icon tblIcn = IconManager.getInstance().getIcon("misc/table", IconSize.SMALL);
-        openContentInNewTab(tblNode.getPath().toString(), tblIcn, true, new ReportTableView(tblNode),
-                new CSaveTableAsButton(tblNode, TableExporter.TableExportType.CSV), new CSaveTableAsButton(tblNode, TableExporter.TableExportType.EXCEL));
+        final ReportTableView reportTableView = new ReportTableView(tblNode);
+        openContentInNewTab(tblNode.getPath().toString(), tblIcn, true, reportTableView,
+                new CSaveTableAsButton(reportTableView.getTable(), tblNode, TableExporter.TableExportType.CSV), new CSaveTableAsButton(reportTableView.getTable(), tblNode, TableExporter.TableExportType.EXCEL));
     }
 
     public void openTables(List<TableNode> tblNodes) {
@@ -205,20 +206,29 @@ public class ReportTreeDockingPanel extends JPanel {
     /* Dockable actions for tables */
     private class CSaveTableAsButton extends CButton {
 
+        private final JXTable table;
+
         private final TableNode tableNode;
 
         private final TableExporter.TableExportType exportType;
 
-        public CSaveTableAsButton(TableNode tableNode, TableExporter.TableExportType exportType) {
+        public CSaveTableAsButton(JXTable table, TableNode tableNode, TableExporter.TableExportType exportType) {
             super(exportType == TableExporter.TableExportType.CSV ? "Save table as CSV..." : "Save table as XLS...",
                     IconManager.getInstance().getIcon(exportType == TableExporter.TableExportType.CSV ? "mimetypes/text-x-generic" : "mimetypes/x-office-spreadsheet", IconSize.SMALL));
+            this.table = table;
             this.tableNode = tableNode;
             this.exportType = exportType;
         }
 
         @Override
         protected void action() {
-            final SaveTableAsAction saveTableAsAction = new SaveTableAsAction(tableNode, tableNode.getTitle(), exportType);
+            final List<String> columns = new ArrayList<>();
+            final Enumeration<TableColumn> tblColumnEnum = table.getColumnModel().getColumns();
+            while(tblColumnEnum.hasMoreElements()) {
+                final TableColumn tblColumn = tblColumnEnum.nextElement();
+                columns.add(table.getModel().getColumnName(tblColumn.getModelIndex()));
+            }
+            final SaveTableAsAction saveTableAsAction = new SaveTableAsAction(tableNode, columns, tableNode.getTitle(), exportType);
             saveTableAsAction.actionPerformed(new ActionEvent(this, -1, "saveTableAs"));
         }
 

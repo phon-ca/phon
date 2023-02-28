@@ -11,9 +11,13 @@ import javax.swing.*;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.time.Period;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 
 public class ReportTableView extends JPanel {
 
@@ -81,8 +85,14 @@ public class ReportTableView extends JPanel {
 
     private void showContextMenu(MouseEvent e) {
         final JPopupMenu popupMenu = new JPopupMenu();
-        popupMenu.add(new JMenuItem(new SaveTableAsAction(tableNode, tableNode.getTitle(), TableExporter.TableExportType.CSV)));
-        popupMenu.add(new JMenuItem(new SaveTableAsAction(tableNode, tableNode.getTitle(), TableExporter.TableExportType.EXCEL)));
+        final List<String> columns = new ArrayList<>();
+        final Enumeration<TableColumn> tblColumnEnum = table.getColumnModel().getColumns();
+        while(tblColumnEnum.hasMoreElements()) {
+            final TableColumn tblColumn = tblColumnEnum.nextElement();
+            columns.add(table.getModel().getColumnName(tblColumn.getModelIndex()));
+        }
+        popupMenu.add(new JMenuItem(new SaveTableAsAction(tableNode, columns, tableNode.getTitle(), TableExporter.TableExportType.CSV)));
+        popupMenu.add(new JMenuItem(new SaveTableAsAction(tableNode, columns, tableNode.getTitle(), TableExporter.TableExportType.EXCEL)));
         popupMenu.show(e.getComponent(), e.getX(), e.getY());
     }
 

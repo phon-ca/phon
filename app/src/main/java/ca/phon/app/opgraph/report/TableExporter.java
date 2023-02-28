@@ -13,17 +13,18 @@ import jxl.write.WriteException;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 public class TableExporter {
 
-    public static void writeTableToFile(DefaultTableDataSource table, File file, TableExportType type, String encoding, boolean useIntegerForBoolean) throws IOException {
+    public static void writeTableToFile(DefaultTableDataSource table, List<String> columns, File file, TableExportType type, String encoding, boolean useIntegerForBoolean) throws IOException {
         switch(type) {
             case CSV:
-                writeTableToCSVFile(table, file, encoding, useIntegerForBoolean);
+                writeTableToCSVFile(table, columns, file, encoding, useIntegerForBoolean);
                 break;
 
             case EXCEL:
-                writeTableToExcelWorkbook(table, file, encoding, useIntegerForBoolean);
+                writeTableToExcelWorkbook(table, columns, file, encoding, useIntegerForBoolean);
                 break;
 
             default:
@@ -31,12 +32,12 @@ public class TableExporter {
         }
     }
 
-    public static void writeTableToExcelWorkbook(DefaultTableDataSource table, File file, String encoding, boolean useIntegerForBoolean) throws IOException {
+    public static void writeTableToExcelWorkbook(DefaultTableDataSource table, List<String> columns, File file, String encoding, boolean useIntegerForBoolean) throws IOException {
         final WritableWorkbook workbook = Workbook.createWorkbook(file);
         final WritableSheet sheet = workbook.createSheet("Sheet 1", 1);
 
         try {
-            WorkbookUtils.addTableToSheet(sheet, 0, table, useIntegerForBoolean);
+            WorkbookUtils.addTableToSheet(sheet, 0, table, columns, useIntegerForBoolean);
             workbook.write();
         } catch (WriteException e) {
             throw new IOException(e);
@@ -49,26 +50,24 @@ public class TableExporter {
         }
     }
 
-    public static void writeTableToCSVFile(DefaultTableDataSource table, File file, String encoding, boolean useIntegerForBoolean) throws IOException {
+    public static void writeTableToCSVFile(DefaultTableDataSource table, List<String> columns, File file, String encoding, boolean useIntegerForBoolean) throws IOException {
         final CSVWriter writer =
                 new CSVWriter(new PrintWriter(file, encoding), ',', '\"',
                         (OSInfo.isWindows() ? "\r\n" : "\n"));
 
         // write column header
-        final String[] colnames = new String[table.getColumnCount()];
-        for(int i = 0; i < table.getColumnCount(); i++) {
-            colnames[i] = table.getColumnTitle(i);
-        }
+        final String[] colnames = columns.toArray(new String[columns.size()]);
         writer.writeNext(colnames);
 
-        final String[] currentRow = new String[table.getColumnCount()];
+        final String[] currentRow = new String[colnames.length];
         for(int row = 0; row < table.getRowCount(); row++) {
-            for(int col = 0; col < table.getColumnCount(); col++) {
-                Object cellVal = table.getValueAt(row, col);
+            int col = 0;
+            for(String colname:colnames) {
+                Object cellVal = table.getValueAt(row, colname);
                 if(cellVal instanceof Boolean && useIntegerForBoolean) {
                     cellVal = (cellVal == Boolean.TRUE ? 1 : 0);
                 }
-                currentRow[col] = (cellVal == null ? "" : cellVal.toString());
+                currentRow[col++] = (cellVal == null ? "" : cellVal.toString());
             }
             writer.writeNext(currentRow);
         }

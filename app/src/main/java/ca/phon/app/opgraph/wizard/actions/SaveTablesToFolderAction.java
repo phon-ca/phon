@@ -114,7 +114,7 @@ public class SaveTablesToFolderAction extends NodeWizardAction {
 		}
 		
 		try {
-			TableExporter.writeTableToFile(table, tableFile, getType(),"UTF-8", useIntegerForBoolean);
+			TableExporter.writeTableToFile(table, tableNode.getColumns(), tableFile, getType(),"UTF-8", useIntegerForBoolean);
 			return true;
 		} catch (IOException e) {
 			LogUtil.severe(e);
