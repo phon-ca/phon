@@ -181,8 +181,6 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	protected BreadcrumbButton btnStop;
 	protected BreadcrumbButton btnRunAgain;
 
-//	private final WebViewInterface webViewInterface = new WebViewInterface();
-
 	public NodeWizard(String title) {
 		super(title);
 		setWindowName(title);
@@ -1103,6 +1101,10 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 					reportTreeDockingPanel.getTreeModel().nodeStructureChanged((TreeNode) reportTreeDockingPanel.getTreeModel().getRoot());
 					reportTreeDockingPanel.getTree().expandAll();
 				});
+				try (PrintWriter out = new PrintWriter(new OutputStreamWriter(getLogBuffer().getLogBuffer().getStdOutStream()))) {
+					out.println("\nFinished compiling tables, open tables by double clicking the table name in the tree view on the left.\n  Table data will be displayed in a new tab.  Tabs may be rearranged by dragging the tab label.\n");
+					out.flush();
+				}
 			}
 
 			if(reportTree != null) {

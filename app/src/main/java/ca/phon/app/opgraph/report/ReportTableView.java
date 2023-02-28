@@ -1,6 +1,7 @@
 package ca.phon.app.opgraph.report;
 
 import ca.phon.app.opgraph.report.tree.TableNode;
+import ca.phon.app.opgraph.wizard.ResultTableMouseAdapter;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
 import org.jdesktop.swingx.JXTable;
@@ -34,6 +35,7 @@ public class ReportTableView extends JPanel {
         table.setColumnControlVisible(true);
         table.setSortable(false);
         table.setDefaultRenderer(Period.class, new AgeCellRenderer());
+        table.addMouseListener(new ResultTableMouseAdapter(this));
 
         for (int i = 0; i < tableModel.getColumnCount(); i++) {
             final String colName = tableModel.getColumnName(i);
@@ -48,6 +50,14 @@ public class ReportTableView extends JPanel {
 
         JScrollPane scroller = new JScrollPane(table);
         add(scroller, BorderLayout.CENTER);
+    }
+
+    public JXTable getTable() {
+        return table;
+    }
+
+    public TableNode getTableNode() {
+        return tableNode;
     }
 
     private class AgeCellRenderer extends DefaultTableCellRenderer {

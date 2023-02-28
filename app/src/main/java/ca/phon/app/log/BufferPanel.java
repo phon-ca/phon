@@ -502,8 +502,6 @@ public class BufferPanel extends JPanel implements IExtendable {
 	}
 
 	public void setBusy(boolean busy) {
-//		busyLabel.setBusy(busy);
-//		busyLabel.setVisible(busy);
 	}
 
 	public void setFirstRowIsHeader(boolean firstRowIsColumnHeader) {
