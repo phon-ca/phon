@@ -539,7 +539,8 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 			try {
 				HighlightPainter painter = selection.getExtension(HighlightPainter.class);
 				if(painter == null)
-					painter = new DefaultHighlighter.DefaultHighlightPainter(PhonGuiConstants.PHON_SELECTED);
+					painter = new DefaultHighlighter.DefaultHighlightPainter(
+							OSInfo.isWindows() ? Color.yellow : PhonGuiConstants.PHON_SELECTED);
 				hl.addHighlight(r.getFirst(), r.getLast()+1, painter);
 			} catch (BadLocationException e) {
 				LogUtil.info( e.getLocalizedMessage(), e);

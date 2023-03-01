@@ -28,10 +28,13 @@ import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.*;
+import ca.phon.util.OSInfo;
 import com.jgoodies.forms.layout.*;
 import org.apache.logging.log4j.LogManager;
 
 import javax.swing.*;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
