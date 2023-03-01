@@ -225,6 +225,9 @@ public class QueryRunnerPanel extends JPanel {
 		final PhonWorkerGroup workerGroup = new PhonWorkerGroup(Math.min(numThreads, numSessions));
 		workerGroupRef.set(workerGroup);
 		workerGroup.begin();
+
+		final CountDownLatch taskCountDownLatch = new CountDownLatch(tableModel.sessions.size());
+		taskLatchRef.set(taskCountDownLatch);
 		int serial = 0;
 		for(SessionPath sessionLocation:tableModel.sessions) {
 			// load session
@@ -267,8 +270,6 @@ public class QueryRunnerPanel extends JPanel {
 				LogUtil.severe( e.getLocalizedMessage(), e);
 			}
 		}
-		final CountDownLatch taskCountDownLatch = new CountDownLatch(serial);
-		taskLatchRef.set(taskCountDownLatch);
 
 		workerGroup.queueTask(() -> {
 			try {

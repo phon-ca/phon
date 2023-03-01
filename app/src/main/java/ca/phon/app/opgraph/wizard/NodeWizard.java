@@ -552,8 +552,6 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 				props.setListener( (e) -> {
 					final int result = e.getDialogResult();
 					if(result == 0) {
-						htmlReportUI.cefBrowser.close(true);
-						htmlReportUI.cefClient.dispose();
 						SwingUtilities.invokeLater( () -> super.close() );
 					} else if(result == 3) {
 						return;
@@ -1291,8 +1289,6 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 						@Override
 						public void closed(CVetoClosingEvent cVetoClosingEvent) {
 							htmlReportUI = null;
-							cefBrowser.close(true);
-							cefClient.dispose();
 							dockable.removeVetoClosingListener(this);
 						}
 					});
@@ -1697,20 +1693,16 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 				props.setHeader("Re-run " + getNoun().getObj1());
 				props.setMessage("Clear results and re-run " + getNoun().getObj1() + ".");
 				props.setOptions(MessageDialogProperties.yesNoOptions);
-				props.setRunAsync(true);
+				props.setRunAsync(false);
 				props.setParentWindow(this);
 
-				props.setListener( (e) -> {
-					final int retVal = e.getDialogResult();
-
-					if(retVal == 1) return;
-
+				int result = NativeDialogs.showMessageDialog(props);
+				if(result == 0) {
 					this.reportTree = null;
 					resetReportStep();
 					this.reportTreeDockingPanel = null;
 					PhonWorker.invokeOnNewWorker(this::executeGraph);
-				});
-				NativeDialogs.showMessageDialog(props);
+				}
 			} else {
 				PhonWorker.invokeOnNewWorker(this::executeGraph);
 			}
@@ -1832,7 +1824,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 	private class COpenInBrowserButton extends CButton {
 
 		public COpenInBrowserButton() {
-			super("Open report in browser", IconManager.getInstance().getSystemIconForFileType(".html", "mimetypes/text-html", IconSize.XSMALL));
+			super("Open report in browser", IconManager.getInstance().getSystemIconForFileType("html", "mimetypes/text-html", IconSize.XSMALL));
 		}
 
 		@Override
