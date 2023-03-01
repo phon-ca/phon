@@ -65,12 +65,32 @@ public class PhonURI {
         s.append("?");
         s.append("record=").append(recordIndex);
         if (groups.size() >= 0) {
-            s.append("&group=").append(groups.stream().map((i) -> i.toString()).collect(Collectors.joining(",")));
-            if (tierNames.size() > 0) {
-                s.append("&tier=").append(tierNames.stream().map((tier) -> encodeURIPathComponent(tier)).collect(Collectors.joining(",")));
-                if (ranges.size() > 0) {
-                    s.append("&range=").append(ranges.stream().map((r) -> r.toString()).collect(Collectors.joining(",")));
+            if (ranges.size() > 0 && ranges.size() == tierNames.size()) {
+                final StringBuilder tierBuilder = new StringBuilder();
+                final StringBuilder rangeBuilder = new StringBuilder();
+                final StringBuilder groupBuilder = new StringBuilder();
+                for(int i = 0; i < ranges.size(); i++) {
+                    final int group = groups.get(i);
+                    final Range range = ranges.get(i);
+                    final String tier = tierNames.get(i);
+                    if(range.getLast() >= range.getFirst()) {
+                        if(tierBuilder.length() == 0) {
+                            groupBuilder.append("&group=");
+                            tierBuilder.append("&tier=");
+                            rangeBuilder.append("&range=");
+                        } else {
+                            groupBuilder.append(",");
+                            tierBuilder.append(",");
+                            rangeBuilder.append(",");
+                        }
+                        groupBuilder.append(group);
+                        tierBuilder.append(encodeURIPathComponent(tier));
+                        rangeBuilder.append(range.toString());
+                    }
                 }
+                s.append(groupBuilder);
+                s.append(tierBuilder);
+                s.append(rangeBuilder);
             }
         }
         return new URI(s.toString());
