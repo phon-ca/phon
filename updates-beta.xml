@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.5.1-beta.3/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_1-beta_3.dmg" newVersion="3.5.1-beta.3" newMediaFileId="macos" fileSize="347650465" md5Sum="799bac6473c7b579f403cab626af8dba" sha256Sum="d1c36f317ccd97f5c0354966fe359639869448d9af41df75e6cfcfad809ab202" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.5.0
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.5.2-beta.1/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_2-beta_1.dmg" newVersion="3.5.2-beta.1" newMediaFileId="macos" fileSize="348221536" md5Sum="e2ab79a34c064a869eb51e2ebcc47fbb" sha256Sum="5db3d8b19332258cbc9f22e354b38eae06feebf72a04512d3b01224b1d9be4a6" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.5.1
+
+ * Update UI for reports and analyses.
+    * A new report outline view is now available which may be used to open and view tables in Phon.
+    * A button for generating HTML reports has been added
+    * A checkbox for controlling automatic generation of HTML reports has been added.
+    * HTML reports larger than 50MB will be opened in default browser instead of Phon.
+ * Improved font rendering and result highlighting on Windows hosts
+ * Performance improvements for queries and reports
+
+## Changes from 3.5.0
 
  * Fix and improve participant editor dialog
  * Update libjpraat to version 6.3.02
+ * Update chatter to version 1.0-alpha-180
 
 ## Changes from 3.4.3
 
@@ -540,11 +551,22 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_1-beta_3.dmg" newVersion="3.5.1-beta.3" newMediaFileId="macos" fileSize="347650465" md5Sum="799bac6473c7b579f403cab626af8dba" sha256Sum="d1c36f317ccd97f5c0354966fe359639869448d9af41df75e6cfcfad809ab202" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
-    <comment language="en">## Changes from 3.5.0
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_2-beta_1.dmg" newVersion="3.5.2-beta.1" newMediaFileId="macos" fileSize="348221536" md5Sum="e2ab79a34c064a869eb51e2ebcc47fbb" sha256Sum="5db3d8b19332258cbc9f22e354b38eae06feebf72a04512d3b01224b1d9be4a6" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
+    <comment language="en">## Changes from 3.5.1
+
+ * Update UI for reports and analyses.
+    * A new report outline view is now available which may be used to open and view tables in Phon.
+    * A button for generating HTML reports has been added
+    * A checkbox for controlling automatic generation of HTML reports has been added.
+    * HTML reports larger than 50MB will be opened in default browser instead of Phon.
+ * Improved font rendering and result highlighting on Windows hosts
+ * Performance improvements for queries and reports
+
+## Changes from 3.5.0
 
  * Fix and improve participant editor dialog
  * Update libjpraat to version 6.3.02
+ * Update chatter to version 1.0-alpha-180
 
 ## Changes from 3.4.3
 
@@ -1080,11 +1102,22 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_1-beta_3.exe" newVersion="3.5.1-beta.3" newMediaFileId="win64" fileSize="330832856" md5Sum="42737b00389482f425ed6318e1974c9c" sha256Sum="4f8e17e2dd456ec5141c9a6df41b7406efb55638eef1f39b31c4727c19192663" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.5.0
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_2-beta_1.exe" newVersion="3.5.2-beta.1" newMediaFileId="win64" fileSize="331360208" md5Sum="c9177b690d4b2e135b3b8e4ce81316ae" sha256Sum="d411b85f25282b29af58250698e6e4d14f01320114f31840c4a4355672c6dc08" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.5.1
+
+ * Update UI for reports and analyses.
+    * A new report outline view is now available which may be used to open and view tables in Phon.
+    * A button for generating HTML reports has been added
+    * A checkbox for controlling automatic generation of HTML reports has been added.
+    * HTML reports larger than 50MB will be opened in default browser instead of Phon.
+ * Improved font rendering and result highlighting on Windows hosts
+ * Performance improvements for queries and reports
+
+## Changes from 3.5.0
 
  * Fix and improve participant editor dialog
  * Update libjpraat to version 6.3.02
+ * Update chatter to version 1.0-alpha-180
 
 ## Changes from 3.4.3
 
@@ -1620,11 +1653,22 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_1-beta_3.exe" newVersion="3.5.1-beta.3" newMediaFileId="win64" fileSize="330832856" md5Sum="42737b00389482f425ed6318e1974c9c" sha256Sum="4f8e17e2dd456ec5141c9a6df41b7406efb55638eef1f39b31c4727c19192663" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.5.0
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_2-beta_1.exe" newVersion="3.5.2-beta.1" newMediaFileId="win64" fileSize="331360208" md5Sum="c9177b690d4b2e135b3b8e4ce81316ae" sha256Sum="d411b85f25282b29af58250698e6e4d14f01320114f31840c4a4355672c6dc08" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.5.1
+
+ * Update UI for reports and analyses.
+    * A new report outline view is now available which may be used to open and view tables in Phon.
+    * A button for generating HTML reports has been added
+    * A checkbox for controlling automatic generation of HTML reports has been added.
+    * HTML reports larger than 50MB will be opened in default browser instead of Phon.
+ * Improved font rendering and result highlighting on Windows hosts
+ * Performance improvements for queries and reports
+
+## Changes from 3.5.0
 
  * Fix and improve participant editor dialog
  * Update libjpraat to version 6.3.02
+ * Update chatter to version 1.0-alpha-180
 
 ## Changes from 3.4.3
 
@@ -2160,11 +2204,22 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_1-beta_3.exe" newVersion="3.5.1-beta.3" newMediaFileId="win64" fileSize="330832856" md5Sum="42737b00389482f425ed6318e1974c9c" sha256Sum="4f8e17e2dd456ec5141c9a6df41b7406efb55638eef1f39b31c4727c19192663" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
-    <comment language="en">## Changes from 3.5.0
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_2-beta_1.exe" newVersion="3.5.2-beta.1" newMediaFileId="win64" fileSize="331360208" md5Sum="c9177b690d4b2e135b3b8e4ce81316ae" sha256Sum="d411b85f25282b29af58250698e6e4d14f01320114f31840c4a4355672c6dc08" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
+    <comment language="en">## Changes from 3.5.1
+
+ * Update UI for reports and analyses.
+    * A new report outline view is now available which may be used to open and view tables in Phon.
+    * A button for generating HTML reports has been added
+    * A checkbox for controlling automatic generation of HTML reports has been added.
+    * HTML reports larger than 50MB will be opened in default browser instead of Phon.
+ * Improved font rendering and result highlighting on Windows hosts
+ * Performance improvements for queries and reports
+
+## Changes from 3.5.0
 
  * Fix and improve participant editor dialog
  * Update libjpraat to version 6.3.02
+ * Update chatter to version 1.0-alpha-180
 
 ## Changes from 3.4.3
 
@@ -2700,11 +2755,22 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_1-beta_3.zip" newVersion="3.5.1-beta.3" newMediaFileId="win64zip" fileSize="329745401" md5Sum="1b92e35b9ae0f1e33799ffde5f311cf7" sha256Sum="85b236e4fae22d831496cefcb2482dd829191c00b52514928ddf5b5df423822a" bundledJre="windows-amd64-17.0.4.tar.gz" archive="true" singleBundle="false">
-    <comment language="en">## Changes from 3.5.0
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_2-beta_1.zip" newVersion="3.5.2-beta.1" newMediaFileId="win64zip" fileSize="330273145" md5Sum="90f59be9ff886b5dd473ec0c58243c75" sha256Sum="566d185fe135477902459b3c21591ba1188a8f30dfb75fc60ef7bef02caa708e" bundledJre="windows-amd64-17.0.4.tar.gz" archive="true" singleBundle="false">
+    <comment language="en">## Changes from 3.5.1
+
+ * Update UI for reports and analyses.
+    * A new report outline view is now available which may be used to open and view tables in Phon.
+    * A button for generating HTML reports has been added
+    * A checkbox for controlling automatic generation of HTML reports has been added.
+    * HTML reports larger than 50MB will be opened in default browser instead of Phon.
+ * Improved font rendering and result highlighting on Windows hosts
+ * Performance improvements for queries and reports
+
+## Changes from 3.5.0
 
  * Fix and improve participant editor dialog
  * Update libjpraat to version 6.3.02
+ * Update chatter to version 1.0-alpha-180
 
 ## Changes from 3.4.3
 
