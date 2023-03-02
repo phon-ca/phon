@@ -69,7 +69,7 @@ function setup_params(params) {
             </extensions>
         </node>
         <ogcn:macro id="cefeea9929f34628" name="Get Report Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="3df1d587">
+            <graph id="5a5efcc6">
                 <node id="cc47418ba9f4481d" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -227,7 +227,7 @@ function tableOp(context, table) {
             </extensions>
         </node>
         <ogcn:macro id="377dc934a03c4467" name="For Each Participant" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="24fe83eb">
+            <graph id="33c15388">
                 <node id="2b8ec9139ac44ac3" name="Current Object" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -257,7 +257,6 @@ function tableOp(context, table) {
                 <node id="69b5ba47" name="ReportTreeNode" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
-                            <oga:property key="contextKey"/>
                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
                         </oga:settings>
                         <oga:meta x="44" y="514"/>
@@ -273,7 +272,7 @@ function tableOp(context, table) {
                     </extensions>
                 </node>
                 <ogcn:macro id="b23fe102f72345c5" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="68cbe04">
+                    <graph id="39a59e23">
                         <node id="34d8fd40cddc4eb4" name="Map#get(Object)" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                             <extensions>
                                 <oga:settings>
@@ -322,7 +321,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="acdfc9d81204886" name="If Speaker has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="4d294a06">
+                    <graph id="30f3e95a">
                         <node id="5407785632ac4bc0" name="Table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -356,7 +355,7 @@ function run(context) {
                                 <oga:meta x="42" y="514"/>
                             </extensions>
                         </node>
-                        <node id="e1fd3e4c56be4a33" name="Table Options" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
+                        <node id="d3ef487aaa654f10" name="Table Options" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
                             <extensions>
                                 <oga:settings>
                                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[false]]></oga:property>
@@ -366,12 +365,14 @@ Tier
 Range
 Result]]></oga:property>
                                 </oga:settings>
-                                <oga:meta x="533" y="173"/>
+                                <oga:meta x="532" y="175">
+                                    <oga:default for="sectionName" type="java.lang.String">All results</oga:default>
+                                </oga:meta>
                             </extensions>
                         </node>
-                        <link dest="e1fd3e4c56be4a33" destField="sectionName" source="a8210d69646942aa" sourceField="obj"/>
-                        <link dest="e1fd3e4c56be4a33" destField="parent" source="95aa33b79e2d43cc" sourceField="obj"/>
-                        <link dest="e1fd3e4c56be4a33" destField="table" source="5407785632ac4bc0" sourceField="obj"/>
+                        <link dest="d3ef487aaa654f10" destField="table" source="5407785632ac4bc0" sourceField="obj"/>
+                        <link dest="d3ef487aaa654f10" destField="sectionName" source="a8210d69646942aa" sourceField="obj"/>
+                        <link dest="d3ef487aaa654f10" destField="parent" source="95aa33b79e2d43cc" sourceField="obj"/>
                         <extensions>
                             <oga:notes>
                                 <oga:note color="0xffff96" height="745" title="Published Inputs" width="342" x="13" y="50"/>
@@ -432,7 +433,7 @@ Result]]></oga:property>
                 <opqry:info format="html" title="Table by Participant">
                     <opqry:message/>
                 </opqry:info>
-                <opqry:node ref="e1fd3e4c56be4a33">
+                <opqry:node ref="d3ef487aaa654f10">
                     <opqry:info format="html" title="Table Options">
                         <opqry:message/>
                     </opqry:info>
