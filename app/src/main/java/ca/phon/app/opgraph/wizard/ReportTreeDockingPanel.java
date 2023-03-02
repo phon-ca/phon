@@ -5,6 +5,7 @@ import bibliothek.gui.dock.common.action.CAction;
 import bibliothek.gui.dock.common.action.CButton;
 import bibliothek.gui.dock.common.event.CVetoClosingEvent;
 import bibliothek.gui.dock.common.event.CVetoClosingListener;
+import bibliothek.gui.dock.common.intern.CDockable;
 import ca.phon.app.opgraph.report.ReportTableView;
 import ca.phon.app.opgraph.report.TableExporter;
 import ca.phon.app.opgraph.report.tree.ReportTree;
@@ -38,6 +39,8 @@ import java.util.stream.Collectors;
 public class ReportTreeDockingPanel extends JPanel {
 
     private CControl control;
+
+    private DefaultSingleCDockable reportOutlineDockable;
 
     private CWorkingArea workingArea;
 
@@ -108,7 +111,9 @@ public class ReportTreeDockingPanel extends JPanel {
         workingArea = control.createWorkingArea("work");
 
         CGrid grid = new CGrid(control);
-        grid.add(0, 0, 1, 3, new DefaultSingleCDockable("Report Outline", IconManager.getInstance().getIcon("misc/view-list-tree", IconSize.SMALL), "Report Outline", treeScroller));
+        reportOutlineDockable = new DefaultSingleCDockable("Report Outline", IconManager.getInstance().getIcon("misc/view-list-tree", IconSize.SMALL), "Report Outline", treeScroller);
+        reportOutlineDockable.setExternalizable(false);
+        grid.add(0, 0, 1, 3, reportOutlineDockable);
         grid.add( 1, 0, 3, 3, workingArea);
         control.getContentArea().deploy(grid);
     }
@@ -189,10 +194,6 @@ public class ReportTreeDockingPanel extends JPanel {
             if(node.isLeaf() && node.getUserObject() instanceof TableNode) {
                 final ImageIcon tblIcn = IconManager.getInstance().getIcon("misc/table", IconSize.SMALL);
                 retVal.setIcon(tblIcn);
-            } else if(node.getUserObject() instanceof SectionHeaderNode) {
-                final ImageIcon sectionIcn = IconManager.getInstance().createGlyphIcon('\u00a7',
-                        FontPreferences.getUIFont().deriveFont(Font.BOLD, 14.0f), Color.black, Color.white);
-                retVal.setIcon(sectionIcn);
             }
 
             return retVal;
