@@ -19,9 +19,8 @@ import ca.phon.ui.FontFormatter;
 import ca.phon.util.*;
 
 import java.awt.*;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.util.*;
 import java.util.prefs.Preferences;
@@ -29,14 +28,11 @@ import java.util.prefs.Preferences;
 public class FontPreferences {
 	private final static String CLASSPATH_ROOT = "data/fonts/";
 
-	/**
-	 * A customized version of noto sans which includes the alignment and null characters
-	 * from the noto math set.  This font is required on windows as glyph fallback does not
-	 * work in Java on windows.
-	 */
-	private final static String NOTO_SANS_COMPLETE = "bin/fonts/NotoSans-Regular.ttf";
-
 	private final static Map<String, Font> PROVIDED_FONTS = new LinkedHashMap<>();
+
+	private final static String UI_FONT_PREF = FontPreferences.class.getName() + ".uiFont";
+
+	private final static String DEFAULT_UI_FONT = "NotoSans-Regular.ttf";
 
 	public static final String[] SUGGESTED_IPA_FONT_NAMES = {
 			"Arial",				// sans
@@ -186,16 +182,7 @@ public class FontPreferences {
 	 * Font used as default font for application
 	 */
 	public static Font getUIFont() {
-		if(!PROVIDED_FONTS.containsKey(NOTO_SANS_COMPLETE)) {
-			try(FileInputStream fin = new FileInputStream(new File(NOTO_SANS_COMPLETE))) {
-				Font uiFont = Font.createFont(Font.TRUETYPE_FONT, fin).deriveFont(DEFAULT_FONT_SIZE);
-				PROVIDED_FONTS.put(NOTO_SANS_COMPLETE, uiFont);
-			} catch (FontFormatException | IOException e) {
-				e.printStackTrace();
-				PROVIDED_FONTS.put(NOTO_SANS_COMPLETE, getTierFont());
-			}
-		}
-		return PROVIDED_FONTS.get(NOTO_SANS_COMPLETE);
+		return _getFont(UI_FONT_PREF, DEFAULT_UI_FONT);
 	}
 
 	/**
