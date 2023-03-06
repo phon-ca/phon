@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.5.2-beta.1/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_2-beta_1.dmg" newVersion="3.5.2-beta.1" newMediaFileId="macos" fileSize="348221536" md5Sum="e2ab79a34c064a869eb51e2ebcc47fbb" sha256Sum="5db3d8b19332258cbc9f22e354b38eae06feebf72a04512d3b01224b1d9be4a6" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/3.5.2-beta.2/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_2-beta_2.dmg" newVersion="3.5.2-beta.2" newMediaFileId="macos" fileSize="428277502" md5Sum="52e02dd775f9fa95fbdc3b84b1ac44eb" sha256Sum="068e9e4b2481beef4bafca87f58e71716b02e98aa4f3a93adf9a98e4dbbdfbed" bundledJre="macos-universal-17.0.6.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.5.1
 
  * Update UI for reports and analyses.
@@ -551,7 +551,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_2-beta_1.dmg" newVersion="3.5.2-beta.1" newMediaFileId="macos" fileSize="348221536" md5Sum="e2ab79a34c064a869eb51e2ebcc47fbb" sha256Sum="5db3d8b19332258cbc9f22e354b38eae06feebf72a04512d3b01224b1d9be4a6" bundledJre="macos-universal-17.0.4.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_3_5_2-beta_2.dmg" newVersion="3.5.2-beta.2" newMediaFileId="macos" fileSize="428277502" md5Sum="52e02dd775f9fa95fbdc3b84b1ac44eb" sha256Sum="068e9e4b2481beef4bafca87f58e71716b02e98aa4f3a93adf9a98e4dbbdfbed" bundledJre="macos-universal-17.0.6.tar.gz" archive="true" singleBundle="true">
     <comment language="en">## Changes from 3.5.1
 
  * Update UI for reports and analyses.
@@ -1102,7 +1102,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_2-beta_1.exe" newVersion="3.5.2-beta.1" newMediaFileId="win64" fileSize="331360208" md5Sum="c9177b690d4b2e135b3b8e4ce81316ae" sha256Sum="d411b85f25282b29af58250698e6e4d14f01320114f31840c4a4355672c6dc08" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_2-beta_2.exe" newVersion="3.5.2-beta.2" newMediaFileId="win64" fileSize="411026896" md5Sum="e2dbc85c6e56c7083060a6a349e465ab" sha256Sum="c5449fc256fc355efe0993ea81ac3c83b056820e3e05f61d8b8c338e84b52f22" bundledJre="windows-amd64-17.0.6.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.5.1
 
  * Update UI for reports and analyses.
@@ -1653,7 +1653,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_2-beta_1.exe" newVersion="3.5.2-beta.1" newMediaFileId="win64" fileSize="331360208" md5Sum="c9177b690d4b2e135b3b8e4ce81316ae" sha256Sum="d411b85f25282b29af58250698e6e4d14f01320114f31840c4a4355672c6dc08" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_2-beta_2.exe" newVersion="3.5.2-beta.2" newMediaFileId="win64" fileSize="411026896" md5Sum="e2dbc85c6e56c7083060a6a349e465ab" sha256Sum="c5449fc256fc355efe0993ea81ac3c83b056820e3e05f61d8b8c338e84b52f22" bundledJre="windows-amd64-17.0.6.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.5.1
 
  * Update UI for reports and analyses.
@@ -2204,7 +2204,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_2-beta_1.exe" newVersion="3.5.2-beta.1" newMediaFileId="win64" fileSize="331360208" md5Sum="c9177b690d4b2e135b3b8e4ce81316ae" sha256Sum="d411b85f25282b29af58250698e6e4d14f01320114f31840c4a4355672c6dc08" bundledJre="windows-amd64-17.0.4.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_2-beta_2.exe" newVersion="3.5.2-beta.2" newMediaFileId="win64" fileSize="411026896" md5Sum="e2dbc85c6e56c7083060a6a349e465ab" sha256Sum="c5449fc256fc355efe0993ea81ac3c83b056820e3e05f61d8b8c338e84b52f22" bundledJre="windows-amd64-17.0.6.tar.gz" archive="false" singleBundle="false">
     <comment language="en">## Changes from 3.5.1
 
  * Update UI for reports and analyses.
@@ -2755,7 +2755,7 @@ The full changelog is available at https://github.com/phon-ca/phon/releases. For
 
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_2-beta_1.zip" newVersion="3.5.2-beta.1" newMediaFileId="win64zip" fileSize="330273145" md5Sum="90f59be9ff886b5dd473ec0c58243c75" sha256Sum="566d185fe135477902459b3c21591ba1188a8f30dfb75fc60ef7bef02caa708e" bundledJre="windows-amd64-17.0.4.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_3_5_2-beta_2.zip" newVersion="3.5.2-beta.2" newMediaFileId="win64zip" fileSize="409917162" md5Sum="a3ee7a30544b3134cc54d0b4ff4bbabe" sha256Sum="3b420cc752121d3ddfafe3280c76dcd8d5a95aae18b2ec8258c714eceb6ddddf" bundledJre="windows-amd64-17.0.6.tar.gz" archive="true" singleBundle="false">
     <comment language="en">## Changes from 3.5.1
 
  * Update UI for reports and analyses.
