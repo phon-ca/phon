@@ -1085,11 +1085,13 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 			processor.stepAll();
 
 			if(PrefHelper.getBoolean("phon.debug", false) && reportTree != null) {
-				final BufferPanel reportTemplateBuffer = bufferPanel.createBuffer("Report Template");
+				final BufferPanel reportTemplateBuffer = getLogBuffer();
 
 				final OutputStream os = reportTemplateBuffer.getLogBuffer().getStdOutStream();
 				final PrintWriter writer = new PrintWriter(os);
+				writer.write("\n*** Report Template ***\n");
 				writer.write(reportTree.getReportTemplate() + "\n");
+				writer.write("\n*** End Report Template ***\n");
 				writer.flush();
 				writer.close();
 			}
@@ -1100,7 +1102,7 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 					reportTreeDockingPanel.getTree().expandAll();
 				});
 				try (PrintWriter out = new PrintWriter(new OutputStreamWriter(getLogBuffer().getLogBuffer().getStdOutStream()))) {
-					out.println("\nFinished compiling tables, open tables by double clicking the table name in the tree view on the left.\n  Table data will be displayed in a new tab.  Tabs may be rearranged by dragging the tab label.\n");
+					out.println("\nFinished compiling tables, open tables by double clicking the table name in the tree view on the left.\nTable data will be displayed in a new tab.  Tabs may be rearranged by dragging the tab label.\n");
 					out.flush();
 				}
 			}
