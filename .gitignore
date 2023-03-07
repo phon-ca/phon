@@ -16,3 +16,4 @@ bin
 *.iml
 gen/
 *.log
+.DS_Store
