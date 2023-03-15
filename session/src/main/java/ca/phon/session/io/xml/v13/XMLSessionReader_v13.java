@@ -13,67 +13,88 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.session.io.xml.v12;
+package ca.phon.session.io.xml.v13;
 
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.Orthography;
-import ca.phon.plugin.*;
-import ca.phon.session.Comment;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.PluginManager;
+import ca.phon.plugin.Rank;
 import ca.phon.session.Record;
 import ca.phon.session.*;
-import ca.phon.session.io.*;
-import ca.phon.syllable.*;
+import ca.phon.session.io.SessionIO;
+import ca.phon.session.io.SessionReader;
+import ca.phon.syllable.SyllabificationInfo;
+import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 import ca.phon.xml.XMLObjectReader;
 import ca.phon.xml.annotation.XMLSerial;
-import jakarta.xml.bind.*;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 import javax.xml.datatype.Duration;
-import javax.xml.datatype.*;
+import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
-import javax.xml.parsers.*;
-import javax.xml.stream.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.EventFilter;
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
-import java.time.*;
-import java.util.*;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Session XML reader for session files with
- * version 'PB1.2'
+ * version '1.3'
  *
  */
 @XMLSerial(
-	namespace="http://phon.ling.mun.ca/ns/phonbank",
+	namespace="https://phon.ca/ns/phonbank",
 	elementName="session",
 	bindType=Session.class
 )
 @SessionIO(
 		group="ca.phon",
 		id="phonbank",
-		version="1.2",
+		version="1.3",
 		mimetype="application/xml",
 		extension="xml",
-		name="Phon <3.6 (.xml)"
+		name="Phon 3.6+ (.xml)"
 )
-@Rank(1)
-public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Session>, IPluginExtensionPoint<SessionReader> {
+@Rank(0)
+public class XMLSessionReader_v13 implements SessionReader, XMLObjectReader<Session>, IPluginExtensionPoint<SessionReader> {
 
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(XMLSessionReader_v12.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(XMLSessionReader_v13.class.getName());
 
 	@Override
 	public Session read(Document doc, Element ele)
 			throws IOException {
 		Session retVal = null;
+
+		// ensure our element namespace is correct, required when reading PB1.2 documents
+		ele.setAttribute("xmlns", "https://phon.ca/ns/phonbank");
 
 		final ObjectFactory xmlFactory = new ObjectFactory();
 
@@ -555,7 +576,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 	 * the transcription is re-parsed.
 	 *
 	 * @param factory
-	 * @param ipaType
+	 * @param itt
 	 */
 	private Tier<IPATranscript> copyTranscript(SessionFactory factory, IpaTierType itt) {
 		final SystemTierType tierType =
@@ -698,7 +719,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 	/**
 	 * Get an dom version of the xml stream
 	 *
-	 * @param in
+	 * @param stream
 	 * @return dom document
 	 */
 	private Document documentFromStream(InputStream stream)
@@ -744,7 +765,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 			while(!(evt = reader.nextEvent()).isStartElement());
 			canRead =
 					evt.asStartElement().getName().getLocalPart().equals("session")
-					&& evt.asStartElement().getAttributeByName(new QName("version")).getValue().equals("PB1.2");
+					&& evt.asStartElement().getAttributeByName(new QName("version")).getValue().equals("1.3");
 		} catch (XMLStreamException e) {
 			throw new IOException(e);
 		}
@@ -777,7 +798,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 
 	@Override
 	public IPluginExtensionFactory<SessionReader> getFactory() {
-		return (args) -> { return new XMLSessionReader_v12(); };
+		return (args) -> { return new XMLSessionReader_v13(); };
 	}
 
 }

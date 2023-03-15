@@ -13,43 +13,56 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.session.io.xml.v12;
+package ca.phon.session.io.xml.v13;
 
 import ca.phon.extensions.UnvalidatedValue;
-import ca.phon.ipa.*;
+import ca.phon.ipa.AlternativeTranscript;
+import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.Orthography;
-import ca.phon.plugin.*;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.plugin.Rank;
 import ca.phon.session.Record;
 import ca.phon.session.*;
-import ca.phon.session.io.*;
+import ca.phon.session.io.SerializationWarning;
+import ca.phon.session.io.SerializationWarnings;
+import ca.phon.session.io.SessionIO;
+import ca.phon.session.io.SessionWriter;
 import ca.phon.xml.annotation.XMLSerial;
-import jakarta.xml.bind.*;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.xml.datatype.Duration;
 import javax.xml.datatype.*;
-import java.io.*;
-import java.time.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
 
 @XMLSerial(
-	namespace="http://phon.ling.mun.ca/ns/phonbank",
+	namespace="https://phon.ca/ns/phonbank",
 	elementName="session",
 	bindType=Session.class
 )
 @SessionIO(
 		group="ca.phon",
 		id="phonbank",
-		version="1.2",
+		version="1.3",
 		mimetype="application/xml",
 		extension="xml",
-		name="Phon <3.6 (.xml)"
+		name="Phon 3.6+ (.xml)"
 )
-@Rank(1)
-public class XMLSessionWriter_v12 implements SessionWriter, IPluginExtensionPoint<SessionWriter> {
+@Rank(0)
+public class XMLSessionWriter_v13 implements SessionWriter, IPluginExtensionPoint<SessionWriter> {
 
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(XMLSessionWriter_v12.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(XMLSessionWriter_v13.class.getName());
 
 	/**
 	 * Create a new jaxb version of the session
@@ -62,7 +75,7 @@ public class XMLSessionWriter_v12 implements SessionWriter, IPluginExtensionPoin
 		final SessionType retVal = factory.createSessionType();
 
 		// header data
-		retVal.setVersion("PB1.2");
+		retVal.setVersion("1.3");
 		retVal.setId(session.getName());
 		retVal.setCorpus(session.getCorpus());
 
@@ -585,7 +598,7 @@ public class XMLSessionWriter_v12 implements SessionWriter, IPluginExtensionPoin
 
 	@Override
 	public IPluginExtensionFactory<SessionWriter> getFactory() {
-		return (args) -> { return new XMLSessionWriter_v12(); };
+		return (args) -> { return new XMLSessionWriter_v13(); };
 	}
 
 }

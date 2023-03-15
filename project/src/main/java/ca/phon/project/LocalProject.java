@@ -941,7 +941,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 		if(templateFile.exists()) {
 			final SessionInputFactory inputFactory = new SessionInputFactory();
 			// TODO use method to find which reader will work for the file
-			final SessionReader reader = inputFactory.createReader("phonbank", "1.2");
+			final SessionReader reader = inputFactory.createReader("phonbank", "1.3");
 			if(reader == null) {
 				throw new IOException("No session reader available for " + templateFile.toURI().toASCIIString());
 			}

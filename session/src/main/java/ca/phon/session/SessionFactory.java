@@ -342,7 +342,7 @@ public final class SessionFactory extends ExtendableObject {
 		final SessionWriter writer = outputFactory.createWriter();
 		
 		final SessionInputFactory inputFactory = new SessionInputFactory();
-		final SessionReader reader = inputFactory.createReader("phonbank", "1.2");
+		final SessionReader reader = inputFactory.createReader("phonbank", "1.3");
 		
 		final ByteArrayOutputStream out = new ByteArrayOutputStream();
 		try {
