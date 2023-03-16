@@ -18,6 +18,7 @@ package ca.phon.util.resources;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
@@ -112,16 +113,24 @@ public abstract class ClassLoaderHandler<T> extends URLHandler<T> {
 	public Iterator<T> iterator() {
 		super.getURLS().clear();
 		for(String res:resourcePaths) {
-			
-			try {
-				Enumeration<URL> resURLS = getClassLoader().getResources(res);
-				while(resURLS.hasMoreElements()) {
-					super.add(resURLS.nextElement());
+			if(res.startsWith("http")) {
+				try {
+					URL url = new URL(res);
+					super.add(url);
+				} catch (MalformedURLException e) {
+					LOGGER.error(e.getMessage());
 				}
-				
-			} catch (IOException e) {
-				e.printStackTrace();
-				LOGGER.error(e.getMessage());
+			} else {
+				try {
+					Enumeration<URL> resURLS = getClassLoader().getResources(res);
+					while (resURLS.hasMoreElements()) {
+						super.add(resURLS.nextElement());
+					}
+
+				} catch (IOException e) {
+					e.printStackTrace();
+					LOGGER.error(e.getMessage());
+				}
 			}
 			
 		}
