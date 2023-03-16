@@ -35,8 +35,7 @@ public class SegmentCalculator {
 		final MediaSegment retVal = factory.createMediaSegment();
 		
 		final Record utt = session.getRecord(recordIndex);
-		final Tier<MediaSegment> segmentTier = utt.getSegment();
-		final MediaSegment media = segmentTier.getGroup(0);
+		final MediaSegment media = utt.getSegment().getRecordSegment();
 		
 		if(media == null) return retVal;
 		
@@ -57,8 +56,7 @@ public class SegmentCalculator {
 		if(endRecord == null)
 			endRecord = utt;
 		
-		final Tier<MediaSegment> endSegmentTier = endRecord.getSegment();
-		final MediaSegment endMedia = endSegmentTier.getGroup(0);
+		final MediaSegment endMedia = endRecord.getSegment().getRecordSegment();
 		if(endMedia == null) return retVal;
 		long endTime = (long)endMedia.getEndValue();
 		
@@ -83,8 +81,7 @@ public class SegmentCalculator {
 		final MediaSegment retVal = factory.createMediaSegment();
 		
 		final Record utt = t.getRecord(recordIndex);
-		final Tier<MediaSegment> segmentTier = utt.getSegment();
-		final MediaSegment media = segmentTier.getGroup(0);
+		final MediaSegment media = utt.getSegment().getRecordSegment();
 		
 		if(media == null) return retVal;
 		
@@ -109,8 +106,7 @@ public class SegmentCalculator {
 		if(endRecord == null)
 			endRecord = t.getRecord(t.getRecordCount()-1);
 		
-		final Tier<MediaSegment> endSegmentTier = endRecord.getSegment();
-		final MediaSegment endMedia = endSegmentTier.getGroup(0);
+		final MediaSegment endMedia = endRecord.getSegment().getRecordSegment();
 		if(endMedia == null) return retVal;
 		
 		long endTime = (long)endMedia.getStartValue();

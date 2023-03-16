@@ -53,12 +53,8 @@ public final class Record extends ExtendableObject {
 		recordImpl.setSpeaker(participant);
 	}
 
-	public Tier<MediaSegment> getSegment() {
+	public SegmentTier getSegment() {
 		return recordImpl.getSegment();
-	}
-
-	public void setSegment(Tier<MediaSegment> media) {
-		recordImpl.setSegment(media);
 	}
 
 	public boolean isExcludeFromSearches() {
@@ -240,8 +236,8 @@ public final class Record extends ExtendableObject {
 
 		if(getNotes().numberOfGroups() == 0)
 			getNotes().addGroup(new TierString());
-		if(getSegment().numberOfGroups() == 0)
-			getSegment().addGroup(factory.createMediaSegment());
+//		if(getSegment().numberOfGroups() == 0)
+//			getSegment().addGroup(factory.createMediaSegment());
 
 		return factory.createGroup(this, gidx);
 	}

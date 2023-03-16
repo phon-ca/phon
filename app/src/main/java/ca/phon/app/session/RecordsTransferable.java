@@ -138,7 +138,7 @@ public class RecordsTransferable implements Transferable {
         rowData[colIdx++] = record.getOrthography().toString();
         rowData[colIdx++] = record.getIPATarget().toString();
         rowData[colIdx++] = record.getIPAActual().toString();
-        rowData[colIdx++] = record.getSegment().getGroup(0).toString();
+        rowData[colIdx++] = record.getSegment().getRecordSegment().toString();
         rowData[colIdx++] = record.getNotes().getGroup(0).toString();
 
         for(TierDescription userTier:session.getUserTiers()) {

@@ -27,6 +27,7 @@ import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionReader;
+import ca.phon.session.GroupSegment;
 import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.visitor.VisitorAdapter;
@@ -444,9 +445,24 @@ public class XMLSessionReader_v13 implements SessionReader, XMLObjectReader<Sess
 		// segment
 		if(rt.getSegment() != null) {
 			final MediaSegment segment = copySegment(factory, rt.getSegment());
-			retVal.getSegment().setGroup(0, segment);
+			retVal.getSegment().setRecordSegment(segment);
+
+			for(ca.phon.session.io.xml.v13.GroupSegment gseg:rt.getSegment().gseg) {
+				retVal.getSegment().getGroupSegmentTier().addGroup(new GroupSegment(retVal.getSegment().getRecordSegment(),
+						gseg.getStart(), gseg.getEnd()));
+			}
 		} else {
-			retVal.getSegment().setGroup(0, factory.createMediaSegment());
+			retVal.getSegment().setRecordSegment(factory.createMediaSegment());
+		}
+		if(retVal.getSegment().getGroupSegmentTier().numberOfGroups() == 0) {
+			// setup default group segment lengths as these are not stored prior to phonbank 1.3
+			float start = 0.0f;
+			float gwidth = (orthoTier.numberOfGroups() > 0 ? 1.0f / orthoTier.numberOfGroups() : 1.0f);
+			for(int i = 0; i < orthoTier.numberOfGroups(); i++) {
+				float end = Math.min(1.0f, start + gwidth);
+				retVal.getSegment().getGroupSegmentTier().addGroup(new GroupSegment(retVal.getSegment().getRecordSegment(), start, end));
+				start = end;
+			}
 		}
 
 		// alignment

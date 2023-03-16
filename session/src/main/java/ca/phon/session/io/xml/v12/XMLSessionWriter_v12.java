@@ -429,10 +429,8 @@ public class XMLSessionWriter_v12 implements SessionWriter, IPluginExtensionPoin
 		}
 
 		// segment
-		if(record.getSegment().numberOfGroups() > 0) {
-			final SegmentType segType = copySegment(factory, record.getSegment().getGroup(0));
-			retVal.setSegment(segType);
-		}
+		final SegmentType segType = copySegment(factory, record.getSegment().getRecordSegment());
+		retVal.setSegment(segType);
 
 		// alignment
 		final Tier<PhoneMap> alignmentTier = record.getPhoneAlignment();
@@ -476,7 +474,7 @@ public class XMLSessionWriter_v12 implements SessionWriter, IPluginExtensionPoin
 	 * Copy orthography
 	 *
 	 * @param factory
-	 * @param ot
+	 * @param orthoTier
 	 * @return
 	 */
 	private OrthographyType copyOrthography(ObjectFactory factory, Tier<Orthography> orthoTier) {

@@ -76,14 +76,9 @@ public final class LazyRecord implements RecordSPI {
 		internalRecord.setSpeaker(participant);
 	}
 
-	public Tier<MediaSegment> getSegment() {
+	public SegmentTier getSegment() {
 		loadRecord();
 		return internalRecord.getSegment();
-	}
-
-	public void setSegment(Tier<MediaSegment> media) {
-		loadRecord();
-		internalRecord.setSegment(media);
 	}
 
 	public boolean isExcludeFromSearches() {

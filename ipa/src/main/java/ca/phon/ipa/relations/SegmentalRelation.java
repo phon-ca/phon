@@ -36,7 +36,7 @@ import java.util.*;
 * T are contained in the first row while elements from A are contained in the second row. There may be indels contained in the alignment (i.e., 
 * deletions or epenthesis in A) which are indicated by <code>null</code> values.  Indels may occur on the first row, indicating epenthesis, or
 * the second row for deletions.
-* <div align='center'>
+mvn  l* <div align='center'>
 * <p align='left'>e.g.,</p> 
 * <table class='matrix'>
 * 	<tr>

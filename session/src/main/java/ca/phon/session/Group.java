@@ -138,6 +138,7 @@ public final class Group extends ExtendableObject {
 		int retVal = getWordCount(SystemTierType.Orthography.getName());
 		retVal = Math.max(retVal, getWordCount(SystemTierType.IPATarget.getName()));
 		retVal = Math.max(retVal, getWordCount(SystemTierType.IPAActual.getName()));
+		retVal = Math.max(retVal, getWordCount(SystemTierType.Segment.getName()));
 		
 		for(String tierName:record.getExtraTierNames()) {
 			final Tier<String> tier = record.getTier(tierName, String.class);
@@ -163,6 +164,8 @@ public final class Group extends ExtendableObject {
 			retVal = ((TierString)obj).numberOfWords();
 		} else if(obj instanceof String) {
 			retVal = obj.toString().split("\\p{Space}").length;
+		} else if(obj instanceof GroupSegment) {
+			retVal = ((GroupSegment)obj).getWordSegments().size();
 		}
 		
 		return retVal;

@@ -57,7 +57,7 @@ public class DistributeRecordsAction extends TimelineAction {
 		if(node.zeroRecord != null) {
 			float rightEdge = maxValue;
 			if(node.nonzeroRecord != null) {
-				MediaSegment rightEdgeSeg = node.nonzeroRecord.value.getSegment().getGroup(0);
+				MediaSegment rightEdgeSeg = node.nonzeroRecord.value.getSegment().getRecordSegment();
 				rightEdge = rightEdgeSeg.getStartValue();
 			}
 

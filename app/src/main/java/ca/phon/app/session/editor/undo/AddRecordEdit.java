@@ -94,8 +94,6 @@ public class AddRecordEdit extends SessionEditorUndoableEdit {
 			record = factory.createRecord();
 			record.setSpeaker(Participant.UNKNOWN);
 			record.addGroup();
-			final Tier<MediaSegment> segTier = record.getSegment();
-			segTier.setGroup(0, factory.createMediaSegment());
 		}
 		
 		if(index < 0) {

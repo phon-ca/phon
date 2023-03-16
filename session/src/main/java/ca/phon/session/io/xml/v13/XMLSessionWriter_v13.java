@@ -317,6 +317,13 @@ public class XMLSessionWriter_v13 implements SessionWriter, IPluginExtensionPoin
 		return segType;
 	}
 
+	private GroupSegment copyGroupSegment(ObjectFactory factory, ca.phon.session.GroupSegment groupSegment) {
+		final GroupSegment retVal = factory.createGroupSegment();
+		retVal.setStart(groupSegment.getStart());
+		retVal.setEnd(groupSegment.getEnd());
+		return retVal;
+	}
+
 	// copy comment data
 	private CommentType copyComment(ObjectFactory factory, Comment com) {
 		final String tag = com.getTag();
@@ -442,9 +449,12 @@ public class XMLSessionWriter_v13 implements SessionWriter, IPluginExtensionPoin
 		}
 
 		// segment
-		if(record.getSegment().numberOfGroups() > 0) {
-			final SegmentType segType = copySegment(factory, record.getSegment().getGroup(0));
-			retVal.setSegment(segType);
+		final SegmentType segType = copySegment(factory, record.getSegment().getRecordSegment());
+		retVal.setSegment(segType);
+		if(record.getSegment().getGroupSegmentTier().numberOfGroups() > 0) {
+			for(ca.phon.session.GroupSegment groupSegment:record.getSegment().getGroupSegmentTier()) {
+				segType.getGseg().add(copyGroupSegment(factory, groupSegment));
+			}
 		}
 
 		// alignment
@@ -489,7 +499,7 @@ public class XMLSessionWriter_v13 implements SessionWriter, IPluginExtensionPoin
 	 * Copy orthography
 	 *
 	 * @param factory
-	 * @param ot
+	 * @param orthoTier
 	 * @return
 	 */
 	private OrthographyType copyOrthography(ObjectFactory factory, Tier<Orthography> orthoTier) {

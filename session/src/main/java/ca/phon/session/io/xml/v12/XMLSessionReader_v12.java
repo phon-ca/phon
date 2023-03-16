@@ -24,6 +24,7 @@ import ca.phon.session.Comment;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.io.*;
+import ca.phon.session.GroupSegment;
 import ca.phon.syllable.*;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
@@ -423,9 +424,17 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 		// segment
 		if(rt.getSegment() != null) {
 			final MediaSegment segment = copySegment(factory, rt.getSegment());
-			retVal.getSegment().setGroup(0, segment);
+			retVal.getSegment().setRecordSegment(segment);
 		} else {
-			retVal.getSegment().setGroup(0, factory.createMediaSegment());
+			retVal.getSegment().setRecordSegment(factory.createMediaSegment());
+		}
+		// setup default group segment lengths as these are not stored prior to phonbank 1.3
+		float start = 0.0f;
+		float gwidth = (orthoTier.numberOfGroups() > 0 ? 1.0f / orthoTier.numberOfGroups() : 1.0f);
+		for(int i = 0; i < orthoTier.numberOfGroups(); i++) {
+			float end = Math.min(1.0f, start + gwidth);
+			retVal.getSegment().getGroupSegmentTier().addGroup(new GroupSegment(retVal.getSegment().getRecordSegment(), start, end));
+			start = end;
 		}
 
 		// alignment
@@ -555,7 +564,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 	 * the transcription is re-parsed.
 	 *
 	 * @param factory
-	 * @param ipaType
+	 * @param itt
 	 */
 	private Tier<IPATranscript> copyTranscript(SessionFactory factory, IpaTierType itt) {
 		final SystemTierType tierType =
@@ -698,7 +707,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 	/**
 	 * Get an dom version of the xml stream
 	 *
-	 * @param in
+	 * @param stream
 	 * @return dom document
 	 */
 	private Document documentFromStream(InputStream stream)

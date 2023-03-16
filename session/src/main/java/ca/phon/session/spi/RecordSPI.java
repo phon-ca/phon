@@ -55,17 +55,10 @@ public interface RecordSPI {
 	
 	/**
 	 * Get media segment
-	 * 
-	 * @return IMedia
+	 *
+	 * @return segment tier
 	 */
-	public Tier<MediaSegment> getSegment();
-	
-	/**
-	 * Set media segment
-	 * 
-	 * @param media
-	 */
-	public void setSegment(Tier<MediaSegment> media);
+	public SegmentTier getSegment();
 	
 	/**
 	 * Should we exclude this record from searches?

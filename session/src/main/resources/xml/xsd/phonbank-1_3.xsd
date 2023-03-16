@@ -346,7 +346,8 @@ Schema for Phon sessions.
         <xs:sequence>
             <xs:element ref="wseg" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
-        <xs:attribute name="mark" type="normalizedValue" use="required"/>
+        <xs:attribute name="start" type="normalizedValue" use="required"/>
+        <xs:attribute name="end" type="normalizedValue" use="required"/>
     </xs:complexType>
 
     <xs:element name="wseg" type="wordSegment"/>
@@ -354,7 +355,8 @@ Schema for Phon sessions.
         <xs:annotation>
             <xs:documentation>normalized end time for word in group</xs:documentation>
         </xs:annotation>
-        <xs:attribute name="mark" type="normalizedValue" use="required"/>
+        <xs:attribute name="start" type="normalizedValue" use="required"/>
+        <xs:attribute name="end" type="normalizedValue" use="required"/>
     </xs:complexType>
 
     <xs:simpleType name="normalizedValue">

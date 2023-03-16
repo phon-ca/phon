@@ -22,6 +22,7 @@ import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.*;
+import ca.phon.session.GroupSegment;
 import ca.phon.session.spi.RecordSPI;
 
 import java.util.*;
@@ -47,7 +48,7 @@ public class RecordImpl implements RecordSPI {
 
 	private final Tier<IPATranscript> ipaActual;
 
-	private final Tier<MediaSegment> segment;
+	private final SegmentTier segmentTier;
 
 	private final Tier<TierString> notes;
 
@@ -63,7 +64,9 @@ public class RecordImpl implements RecordSPI {
 		orthography = factory.createTier(SystemTierType.Orthography.getName(), Orthography.class, SystemTierType.Orthography.isGrouped());
 		ipaTarget = factory.createTier(SystemTierType.IPATarget.getName(), IPATranscript.class, SystemTierType.IPATarget.isGrouped());
 		ipaActual = factory.createTier(SystemTierType.IPAActual.getName(), IPATranscript.class, SystemTierType.IPAActual.isGrouped());
-		segment = factory.createTier(SystemTierType.Segment.getName(), MediaSegment.class, SystemTierType.Segment.isGrouped());
+		segmentTier = factory.createRecordSegmentTier();
+		final Tier<GroupSegment> segmentGroupTier = factory.createTier(SystemTierType.Segment.getName(), GroupSegment.class, SystemTierType.Segment.isGrouped());
+		segmentTier.putGroupSegmentTier(segmentGroupTier);
 		notes = factory.createTier(SystemTierType.Notes.getName(), TierString.class, SystemTierType.Notes.isGrouped());
 		alignment = factory.createTier(SystemTierType.SyllableAlignment.getName(), PhoneMap.class, SystemTierType.SyllableAlignment.isGrouped());
 
@@ -94,16 +97,8 @@ public class RecordImpl implements RecordSPI {
 	}
 
 	@Override
-	public Tier<MediaSegment> getSegment() {
-		return segment;
-	}
-
-	@Override
-	public void setSegment(Tier<MediaSegment> media) {
-		this.segment.removeAll();
-		for(int i = 0; i < media.numberOfGroups(); i++) {
-			this.segment.addGroup(media.getGroup(i));
-		}
+	public SegmentTier getSegment() {
+		return segmentTier;
 	}
 
 	@Override
@@ -268,7 +263,7 @@ public class RecordImpl implements RecordSPI {
 				break;
 
 			case Segment:
-				systemTier = getSegment();
+				systemTier = getSegment().getGroupSegmentTier();
 				break;
 
 			case Notes:
@@ -366,7 +361,7 @@ public class RecordImpl implements RecordSPI {
 			retVal.add((Tier<T>)getIPATarget());
 			retVal.add((Tier<T>)getIPAActual());
 		} else if(type == MediaSegment.class) {
-			retVal.add((Tier<T>)getSegment());
+			retVal.add((Tier<T>) getSegment().getGroupSegmentTier());
 		} else if(type == TierString.class) {
 			retVal.add((Tier<T>)getNotes());
 		} else if(type == PhoneMap.class) {
