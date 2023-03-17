@@ -128,7 +128,6 @@ ca.phon.media
 ca.phon.media.exceptions
 ca.phon.media.export
 ca.phon.media.player
-ca.phon.ns.phon_session
 ca.phon.opgraph.nodes.phonex
 ca.phon.orthography
 ca.phon.orthography.parser
@@ -174,6 +173,7 @@ ca.phon.session.format
 ca.phon.session.impl
 ca.phon.session.io
 ca.phon.session.io.xml.v12
+ca.phon.session.io.xml.v13
 ca.phon.session.position
 ca.phon.session.spi
 ca.phon.stresspattern
