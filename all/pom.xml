@@ -56,7 +56,7 @@
 		<ca.phon.phon-praat-plugin.version>70-SNAPSHOT</ca.phon.phon-praat-plugin.version>
 		<ca.phon.phon-version-triggers.version>9</ca.phon.phon-version-triggers.version>
 		<ca.phon.csv.plugin.version>28</ca.phon.csv.plugin.version>
-		<ca.phon.phontalk.version>3.5.5-SNAPSHOT</ca.phon.phontalk.version>
+		<ca.phon.phontalk.version>3.5.5</ca.phon.phontalk.version>
 	</properties>
 
 	<dependencies>
