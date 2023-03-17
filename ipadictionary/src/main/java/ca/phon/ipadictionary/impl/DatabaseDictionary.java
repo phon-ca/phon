@@ -160,7 +160,7 @@ public class DatabaseDictionary implements IPADictionarySPI,
 		Connection conn = IPADatabaseManager.getInstance().getConnection();
 		
 		if(conn != null) {
-			String qSt = "DELETTE * FROM transcript WHERE langId = ?";
+			String qSt = "DELETE * FROM transcript WHERE langId = ?";
 			try {
 				PreparedStatement pSt = conn.prepareStatement(qSt);
 				pSt.setString(1, getLanguage().toString());
