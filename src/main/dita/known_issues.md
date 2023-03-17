@@ -4,7 +4,7 @@ Some common issues with Phon are listed in the table below. To report a problem 
 
 | Issue | Resolution |
 | --- | --- |
-| Phon runs out of memory generating large reports | Increase the amount of memory available to Phon using the method outlined below |
+| Phon runs out of memory generating large reports or other large operations | Increase the amount of memory available to Phon using the method outlined below |
 | Phon freezes when loading .wav file in session editor. | If the .wav file was taken from a digital recording device it may be missing header information.  Re-encode .wav file before using in Phon (see below.) |
 | Unable to use IPA input fields after stacking multiple combining diacritics. | No known solution at this time. |
 | Unable to view reports/application logs. Blank window displayed. | If running on a managed Windows system running AppLocker or other security software required binaries may be blocked from execution.  Please see your system administrator. |
@@ -19,7 +19,7 @@ The ```vmoptions``` file can be found in the following location:
    
    Note: Right-click on Phon.app and choose ```Show package contents``` to access the ```Contents``` folder in Finder
 
-Modify the ```vmoptions.txt``` file, change the line which says
+Modify the ```vmoptions``` file, change the line which says
 
 ```
 -Xmx4096m
