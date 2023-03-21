@@ -1999,15 +1999,31 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 
 		private void showTable(String tableId) {
 			if(tableMap.containsKey(tableId))
-				showTable(tableId, tableMap.get(tableId));
+				showTable(tableMap.get(tableId));
 		}
 
-		private void showTable(String tableId, DefaultTableDataSource table) {
-			SwingUtilities.invokeLater( () -> {
-				if(!bufferPanel.getBufferNames().contains(tableId)) {
-					createTableBuffer(tableId, table);
+		private TableNode findTableNode(ReportTreeNode node, DefaultTableDataSource table) {
+			if(node instanceof TableNode) {
+				if(((TableNode)node).getTable() == table) {
+					return (TableNode) node;
 				}
-				bufferPanel.selectBuffer(tableId);
+			}
+			for(int cidx = 0; cidx < node.getChildren().size(); cidx++) {
+				TableNode cret = findTableNode(node.getChildren().get(cidx), table);
+				if(cret != null)
+					return cret;
+			}
+			return null;
+		}
+
+		private void showTable(DefaultTableDataSource table) {
+			SwingUtilities.invokeLater( () -> {
+				if(reportTree != null) {
+					final TableNode tableNode = findTableNode(reportTree.getRoot(), table);
+					if(reportTreeDockingPanel != null) {
+						reportTreeDockingPanel.openTable(tableNode);
+					}
+				}
 			});
 		}
 

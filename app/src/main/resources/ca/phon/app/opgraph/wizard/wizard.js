@@ -217,7 +217,7 @@ function addMenuButtons(table, index) {
 	var saveAsExcelItem = createMenuLink("Save table as Excel (XLS)...", "saveTableAsExcel('" + table.getAttribute("id") + "')");
 	menuList.appendChild(saveAsExcelItem);
 	
-	var showBufferItem = createMenuLink("Open table in new buffer", "showTable('" + table.getAttribute("id") + "')");
+	var showBufferItem = createMenuLink("Open table in new tab", "showTable('" + table.getAttribute("id") + "')");
 	menuList.appendChild(showBufferItem);
 	
 	tableMenu.appendChild(menuList);
