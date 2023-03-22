@@ -40,8 +40,6 @@ import java.util.regex.*;
  */
 public class CustomSegmentDialog extends JDialog {
 
-	private static final long serialVersionUID = -1199119546046104883L;
-
 	/**
 	 * Session editor
 	 */
@@ -165,7 +163,7 @@ public class CustomSegmentDialog extends JDialog {
 		if(currentSegmentBtn.isSelected()) {
 			final Record utt = editor.currentRecord();
 			if(utt != null) {
-				retVal = utt.getSegment().getGroup(0);
+				retVal = utt.getSegment().getRecordSegment();
 			}
 		} else if(contiguousSegmentBtn.isSelected()) {
 			retVal = SegmentCalculator.contiguousSegment(editor.getSession(), editor.getCurrentRecordIndex());
@@ -174,9 +172,9 @@ public class CustomSegmentDialog extends JDialog {
 				final Range range = Range.fromString("(" + rangeField.getText() + ")");
 				
 				final Record startRecord = editor.getSession().getRecord(range.getFirst()-1);
-				final MediaSegment startMedia = startRecord.getSegment().getGroup(0);
+				final MediaSegment startMedia = startRecord.getSegment().getRecordSegment();
 				final Record endRecord = editor.getSession().getRecord(range.getLast()-1);
-				final MediaSegment endMedia = endRecord.getSegment().getGroup(0);
+				final MediaSegment endMedia = endRecord.getSegment().getRecordSegment();
 				
 				if(startMedia != null && endMedia != null) {
 					retVal.setStartValue(startMedia.getStartValue());
@@ -186,7 +184,7 @@ public class CustomSegmentDialog extends JDialog {
 				return retVal;
 			}
 		} else if(segmentTimeBtn.isSelected()) {
-			final String times[] = segmentField.getText().split("-");
+			final String[] times = segmentField.getText().split("-");
 			long start = 0L;
 			long end = 0L;
 			try {

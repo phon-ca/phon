@@ -30,7 +30,7 @@ import java.awt.event.*;
  */
 public class PlaySegmentAction extends SessionEditorAction {
 	
-	public static enum SegmentType {
+	public enum SegmentType {
 		CURRENT_RECORD,
 		SPEAKER_TURN,
 		CONVERSATION_PERIOD,
@@ -88,7 +88,7 @@ public class PlaySegmentAction extends SessionEditorAction {
 	private MediaSegment getMediaSegment(ActionEvent ae) {
 		if(segmentType == SegmentType.CURRENT_RECORD) {
 			Record r = getEditor().currentRecord();
-			return (r != null ? r.getSegment().getGroup(0) : null);
+			return (r != null ? r.getSegment().getRecordSegment() : null);
 		} else if(segmentType == SegmentType.SPEAKER_TURN) {
 			return SegmentCalculator.contiguousSegment(getEditor().getSession(), getEditor().getCurrentRecordIndex());
 		} else if(segmentType == SegmentType.CONVERSATION_PERIOD) {

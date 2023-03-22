@@ -26,7 +26,7 @@ import ca.phon.session.spi.MediaSegmentSPI;
  */ 
 public final class MediaSegment extends ExtendableObject {
 	
-	private MediaSegmentSPI mediaSegmentImpl;
+	private final MediaSegmentSPI mediaSegmentImpl;
 	
 	MediaSegment(MediaSegmentSPI impl) {
 		super();
@@ -55,6 +55,27 @@ public final class MediaSegment extends ExtendableObject {
 
 	public void setUnitType(MediaUnit type) {
 		mediaSegmentImpl.setUnitType(type);
+	}
+
+	public void setSegment(float startValue, float endValue) {
+		setSegment(startValue, endValue, getUnitType());
+	}
+
+	public void setSegment(float startValue, float endValue, MediaUnit unit) {
+		setStartValue(startValue);
+		setEndValue(endValue);
+		setUnitType(unit);
+	}
+
+	public void setSegment(MediaSegment seg) {
+		setSegment(seg.getStartValue(), seg.getEndValue(), seg.getUnitType());
+	}
+
+	public boolean equals(Object b) {
+		if(!(b instanceof MediaSegment bSeg)) return false;
+		return getStartValue() == bSeg.getStartValue()
+				&& getEndValue() == bSeg.getEndValue()
+				&& getUnitType() == bSeg.getUnitType();
 	}
 
 	public String toString() {

@@ -1,6 +1,7 @@
 package ca.phon.app.session.editor.view.timeline.actions;
 
 import ca.phon.app.log.LogUtil;
+import ca.phon.app.session.editor.undo.RecordSegmentEdit;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.timeline.TimelineView;
 import ca.phon.media.LongSound;
@@ -84,19 +85,19 @@ public class DistributeRecordsAction extends TimelineAction {
 
 					currentStart += recordLen;
 
-					TierEdit<MediaSegment> segEdit = new TierEdit<>(getView().getEditor(), r.getSegment(), 0, seg);
+					RecordSegmentEdit segEdit = new RecordSegmentEdit(getView().getEditor(), r, seg);
 					getView().getEditor().getUndoSupport().postEdit(segEdit);
 				}
 			}
 		}
 		if(node.nonzeroRecord != null) {
-			MediaSegment leftEdgeSeg = node.nonzeroRecord.value.getSegment().getGroup(0);
+			MediaSegment leftEdgeSeg = node.nonzeroRecord.value.getSegment().getRecordSegment();
 			distributeZeroLengthRecords(node.nonzeroRecord, leftEdgeSeg.getEndValue(), maxValue);
 		}
 	}
 
 	private void insertRecord(DistributeRecordTreeNode node, int recordIndex, Record record) {
-		MediaSegment seg = record.getSegment().getGroup(0);
+		MediaSegment seg = record.getSegment().getRecordSegment();
 		boolean isZero = seg.getStartValue() == 0.0f && seg.getEndValue() == 0.0f;
 
 		if(isZero) {
