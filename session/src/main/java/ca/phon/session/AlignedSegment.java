@@ -17,14 +17,14 @@ public class AlignedSegment extends ExtendableObject {
     public AlignedSegment(MediaSegment parentSegment, float startMark, float endMark) {
         this.parentSegment = parentSegment;
         this.parentAlignedSegment = null;
-        setStart(start);
-        setEnd(end);
+        setStart(startMark);
+        setEnd(endMark);
     }
     public AlignedSegment(AlignedSegment parentAlignedSegment, float startMark, float endMark) {
         this.parentSegment = null;
         this.parentAlignedSegment = parentAlignedSegment;
-        setStart(start);
-        setEnd(end);
+        setStart(startMark);
+        setEnd(endMark);
     }
 
     public MediaSegment getParentSegment() {
