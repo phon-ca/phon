@@ -202,7 +202,7 @@ public class MediaPlayerEditorView extends EditorView {
 		final Record utt = getEditor().currentRecord();
 		if(utt == null) return;
 
-		final MediaSegment media = utt.getSegment().getGroup(0);
+		final MediaSegment media = utt.getSegment().getRecordSegment();
 
 		// check for necessary vars
 		if(media == null) return;
@@ -237,8 +237,8 @@ public class MediaPlayerEditorView extends EditorView {
 
 		String defValue = "000:00.000";
 		Record utt = getEditor().currentRecord();
-		if(utt.getSegment().getGroup(0) != null) {
-			long startTime = (long)utt.getSegment().getGroup(0).getStartValue();
+		if(utt.getSegment().getRecordSegment() != null) {
+			long startTime = (long)utt.getSegment().getRecordSegment().getStartValue();
 			defValue = MsFormatter.msToDisplayString(startTime);
 		}
 
@@ -314,10 +314,8 @@ public class MediaPlayerEditorView extends EditorView {
 		if(pae.getData() == null) {
 			for(int uttIdx = t.getRecordCount()-1; uttIdx >= 0; uttIdx--) {
 				final Record utt = t.getRecord(uttIdx);
-				if(utt.getSegment().numberOfGroups() == 0) continue;
-
-				if(utt.getSegment().getGroup(0).getEndValue() > lastSegment.getEndValue())
-					lastSegment = utt.getSegment().getGroup(0);
+				if(utt.getSegment().getRecordSegment().getEndValue() > lastSegment.getEndValue())
+					lastSegment = utt.getSegment().getRecordSegment();
 			}
 		} else {
 			final Participant p = (Participant)pae.getData();
@@ -325,17 +323,13 @@ public class MediaPlayerEditorView extends EditorView {
 				final Record utt = t.getRecord(uttIdx);
 				if(utt.getSpeaker() != null
 						&& utt.getSpeaker().getId() == p.getId()) {
-					lastSegment = utt.getSegment().getGroup(0);
+					lastSegment = utt.getSegment().getRecordSegment();
 					break;
 				}
 			}
 		}
 
 		mediaPlayer.setTime((long) lastSegment.getEndValue());
-	}
-
-	public void onMenuPlayto(PhonActionEvent pae) {
-
 	}
 
 	private final static String ADJUST_VIDEO = MediaPlayerEditorView.class.getName() + ".adjustVideo";

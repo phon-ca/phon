@@ -38,8 +38,6 @@ import java.util.List;
 
 public class TimelineWaveformTier extends TimelineTier  {
 
-	private static final long serialVersionUID = -2864344329017995791L;
-
 	private WaveformDisplay wavDisplay;
 	
 	public TimelineWaveformTier(TimelineView parent) {
@@ -235,7 +233,7 @@ public class TimelineWaveformTier extends TimelineTier  {
 		m.setEndValue(selectionInterval.getEndMarker().getTime() * 1000.0f);
 		
 		utt.getOrthography().setGroup(0, new Orthography());
-		utt.getSegment().setGroup(0, m);
+		utt.getSegment().setRecordSegment(m);
 		
 		final SessionEditor editor = getParentView().getEditor();
 		final AddRecordEdit edit = new AddRecordEdit(editor, utt);
@@ -254,8 +252,8 @@ public class TimelineWaveformTier extends TimelineTier  {
 		MediaSegment m = factory.createMediaSegment();
 		m.setStartValue(selectionInterval.getStartMarker().getTime() * 1000.0f);
 		m.setEndValue(selectionInterval.getEndMarker().getTime() * 1000.0f);
-		
-		final TierEdit<MediaSegment> segEdit = new TierEdit<MediaSegment>(getParentView().getEditor(), currentRecord.getSegment(), 0, m);
+
+		final RecordSegmentEdit segEdit = new RecordSegmentEdit(getParentView().getEditor(), currentRecord, m);
 		segEdit.setFireHardChangeOnUndo(true);
 		getParentView().getEditor().getUndoSupport().postEdit(segEdit);
 		

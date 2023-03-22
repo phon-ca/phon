@@ -19,6 +19,7 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.EditorViewAdapter;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.actions.*;
+import ca.phon.app.session.editor.undo.RecordSegmentEdit;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.speech_analysis.actions.NewRecordAction;
 import ca.phon.app.session.editor.view.speech_analysis.actions.*;
@@ -301,8 +302,8 @@ public class SpeechAnalysisEditorView extends EditorView {
 			seg.setEndValue(selectionInterval.getEndMarker().getTime() * 1000.0f);
 			
 			clearSelection();
-			
-			TierEdit<MediaSegment> segEdit = new TierEdit<MediaSegment>(getEditor(), r.getSegment(), 0, seg);
+
+			final RecordSegmentEdit segEdit = new RecordSegmentEdit(getEditor(), r, seg);
 			segEdit.setFireHardChangeOnUndo(true);
 			getEditor().getUndoSupport().postEdit(segEdit);
 		}
@@ -625,7 +626,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		
 		Record r = getEditor().currentRecord();
 		if(r != null) {
-			final MediaSegment segment = r.getSegment().getGroup(0);
+			final MediaSegment segment = r.getSegment().getRecordSegment();
 
 			double length = (segment.getEndValue() - segment.getStartValue());
 			long preferredClipExtension = (long)Math.ceil(length * 0.4);
@@ -679,7 +680,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 	}
 
 	public void scrollToRecord(Record r) {
-		MediaSegment seg = r.getSegment().getGroup(0);
+		MediaSegment seg = r.getSegment().getRecordSegment();
 		float time = seg.getStartValue() / 1000.0f;
 		float endTime = seg.getEndValue() / 1000.0f;
 		float windowLen = endTime - time;
@@ -1085,7 +1086,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 			Record r = getEditor().currentRecord();
 			if(r == null) return;
 			
-			MediaSegment segment = r.getSegment().getGroup(0);
+			MediaSegment segment = r.getSegment().getRecordSegment();
 			final SessionFactory factory = SessionFactory.newFactory();
 
 			if(evt.getPropertyName().equals("valueAdjusting")) {
@@ -1098,8 +1099,8 @@ public class SpeechAnalysisEditorView extends EditorView {
 					getEditor().getUndoSupport().beginUpdate();
 				} else {
 					getEditor().getUndoSupport().endUpdate();
-					final EditorEventType.TierChangeData data = new EditorEventType.TierChangeData(r.getSegment(), 0, r.getSegment().getGroup(0), r.getSegment().getGroup(0));
-					getEditor().getEventManager().queueEvent(new EditorEvent(EditorEventType.TierChanged, SpeechAnalysisEditorView.this, data));
+					final EditorEventType.RecordSegmentChangedData data = new EditorEventType.RecordSegmentChangedData(r, r.getSegment().getRecordSegment().getStartValue(), r.getSegment().getRecordSegment().getEndValue());
+					getEditor().getEventManager().queueEvent(new EditorEvent<>(EditorEventType.RecordSegmentChanged, SpeechAnalysisEditorView.this, data));
 				}
 			} else if(evt.getPropertyName().endsWith("time")) {
 				MediaSegment newSegment = factory.createMediaSegment();
@@ -1111,8 +1112,8 @@ public class SpeechAnalysisEditorView extends EditorView {
 				} else if(evt.getPropertyName().startsWith("endMarker")) {
 					newSegment.setEndValue((float)evt.getNewValue() * 1000.0f);
 				}
-				
-				TierEdit<MediaSegment> segmentEdit = new TierEdit<MediaSegment>(getEditor(), r.getSegment(), 0, newSegment);
+
+				final RecordSegmentEdit segmentEdit = new RecordSegmentEdit(getEditor(), r, newSegment);
 				getEditor().getUndoSupport().postEdit(segmentEdit);
 				segmentEdit.setFireHardChangeOnUndo(isFirstChange);
 				isFirstChange = false;
