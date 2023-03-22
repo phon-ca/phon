@@ -224,7 +224,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	
 	@Override
 	public Rectangle2D getSegmentRect(Record record) {
-		final MediaSegment seg = record.getSegment().getGroup(0);
+		final MediaSegment seg = record.getSegment().getRecordSegment();
 		
 		double x1 = recordGrid.getTimeModel().xForTime(seg.getStartValue() / 1000.0f);
 		double x2 = recordGrid.getTimeModel().xForTime(seg.getEndValue() / 1000.0f);
@@ -317,7 +317,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			Record r = session.getRecord(rIdx);
 
 			try {
-				MediaSegment seg = r.getSegment().getGroup(0);
+				MediaSegment seg = r.getSegment().getRecordSegment();
 
 				// update segment rect location
 				int segY = 0;
@@ -345,14 +345,14 @@ public class DefaultRecordGridUI extends RecordGridUI {
 
 				if (recordGrid.getCurrentRecord() == r && recordGrid.isSplitMode()) {
 					Record leftRecord = recordGrid.getLeftRecordSplit();
-					MediaSegment leftRecordSeg = leftRecord.getSegment().getGroup(0);
+					MediaSegment leftRecordSeg = leftRecord.getSegment().getRecordSegment();
 					segRect.setFrame(segRect.getX(), segRect.getY(),
 							recordGrid.xForTime(leftRecordSeg.getEndValue() / 1000.0f) - segRect.getX(), segRect.getHeight());
 					paintSegment(g2, rIdx, recordGrid.getLeftRecordSplit(), segRect);
 					paintSegmentLabelAndActions(g2, rIdx, recordGrid.getLeftRecordSplit(), segRect);
 
 					Record rightRecord = recordGrid.getRightRecordSplit();
-					MediaSegment rightRecordSeg = rightRecord.getSegment().getGroup(0);
+					MediaSegment rightRecordSeg = rightRecord.getSegment().getRecordSegment();
 					segRect.setFrame(recordGrid.xForTime(rightRecordSeg.getStartValue() / 1000.0f), segRect.getY(),
 							recordGrid.xForTime(rightRecordSeg.getEndValue() / 1000.0f) - recordGrid.xForTime(rightRecordSeg.getStartValue() / 1000.0f), segRect.getHeight());
 					paintSegment(g2, (rIdx + 2) * -1, recordGrid.getRightRecordSplit(), segRect);
@@ -711,7 +711,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		
 		// don't paint overlap warning if record is at 0 and has zero-length segment
 		boolean checkForOverlap = true;
-		final MediaSegment mediaSeg = r.getSegment().getGroup(0);
+		final MediaSegment mediaSeg = r.getSegment().getRecordSegment();
 		if(mediaSeg.getStartValue() == 0.0f
 				&& mediaSeg.getEndValue() - mediaSeg.getStartValue() == 0.0f) {
 			checkForOverlap = false;
@@ -729,7 +729,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 			for(int rIdx:potentialOverlaps) {
 				
 				Record r2 = recordGrid.getSession().getRecord(rIdx);
-				MediaSegment seg2 = r2.getSegment().getGroup(0);
+				MediaSegment seg2 = r2.getSegment().getRecordSegment();
 
 				boolean isZeroAtZero = (seg2.getStartValue() == 0.0f) && (seg2.getEndValue() - seg2.getStartValue() == 0.0f);
 				boolean isContiguous = (mediaSeg.getStartValue() == seg2.getEndValue() || seg2.getStartValue() == mediaSeg.getEndValue());
@@ -1167,7 +1167,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 				Record record = recordGrid.getSession().getRecord(currentMouseOverMarkerRecordIdx);
 				
 				if(record != recordGrid.getCurrentRecord()) {
-					MediaSegment seg = record.getSegment().getGroup(0);
+					MediaSegment seg = record.getSegment().getRecordSegment();
 					
 					float markerTime = intersectedMarker.get() > 0 ? 
 					seg.getStartValue() / 1000.0f : seg.getEndValue() / 1000.0f;

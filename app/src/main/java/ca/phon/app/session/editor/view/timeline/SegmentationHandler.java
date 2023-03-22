@@ -329,7 +329,7 @@ public final class SegmentationHandler {
 			// setup orthography
 			utt.addGroup();
 			utt.getOrthography().setGroup(0, new Orthography());
-			utt.getSegment().setGroup(0, m);
+			utt.getSegment().setRecordSegment(m);
 
 			SegmentationMode mode = getSegmentationMode();
 			if(mode == SegmentationMode.REPLACE_CURRENT && editor.currentRecord() == null) {
@@ -359,7 +359,7 @@ public final class SegmentationHandler {
 					edit.addEdit(speakerEdit);
 				}
 
-				final TierEdit<MediaSegment> segEdit = new TierEdit<MediaSegment>(editor, editor.currentRecord().getSegment(), 0, m);
+				final RecordSegmentEdit segEdit = new RecordSegmentEdit(editor, editor.currentRecord(), m);
 				segEdit.doIt();
 				edit.addEdit(segEdit);
 

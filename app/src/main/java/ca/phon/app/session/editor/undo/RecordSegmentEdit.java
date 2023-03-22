@@ -18,6 +18,8 @@ public class RecordSegmentEdit extends SessionEditorUndoableEdit {
 
     private final float prevEnd;
 
+    private boolean fireHardChangeOnUndo = false;
+
     public RecordSegmentEdit(SessionEditor editor, Record record, MediaSegment segment) {
         super(editor);
 
@@ -26,6 +28,14 @@ public class RecordSegmentEdit extends SessionEditorUndoableEdit {
         this.segmentEnd = segment.getEndValue();
         this.prevStart = record.getSegment().getRecordSegment().getStartValue();
         this.prevEnd = record.getSegment().getRecordSegment().getEndValue();
+    }
+
+    public boolean isFireHardChangeOnUndo() {
+        return fireHardChangeOnUndo;
+    }
+
+    public void setFireHardChangeOnUndo(boolean fireHardChangeOnUndo) {
+        this.fireHardChangeOnUndo = fireHardChangeOnUndo;
     }
 
     @Override

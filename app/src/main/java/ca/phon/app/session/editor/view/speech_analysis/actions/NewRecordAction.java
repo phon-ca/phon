@@ -25,8 +25,6 @@ import java.awt.event.ActionEvent;
 
 public class NewRecordAction extends SpeechAnalysisEditorViewAction {
 
-	private static final long serialVersionUID = 1773651812539774012L;
-
 	private final static String TXT = "New record from selection";
 	
 	private final static String DESC = "Create a new record after current using selection as segment time";
@@ -56,7 +54,7 @@ public class NewRecordAction extends SpeechAnalysisEditorViewAction {
 		segment.setStartValue(startTime*1000.0f);
 		segment.setEndValue(endTime*1000.0f);
 		
-		record.getSegment().setGroup(0, segment);
+		record.getSegment().getRecordSegment().setSegment(segment);
 		
 		final AddRecordEdit edit = new AddRecordEdit(getEditor(), record, (getEditor().getDataModel().getSession().getRecordCount() > 0 ? 
 				getEditor().getCurrentRecordIndex()+1 : -1));

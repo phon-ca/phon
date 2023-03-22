@@ -346,7 +346,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		for(int recordIdx:getSelectionModel().getSelectedIndices()) {
 			Record r = getParentView().getEditor().getSession().getRecord(recordIdx);
 
-			MediaSegment recordSeg = r.getSegment().getGroup(0);
+			MediaSegment recordSeg = r.getSegment().getRecordSegment();
 			MediaSegment seg = SessionFactory.newFactory().createMediaSegment();
 			float startValue = recordSeg.getStartValue() + (1000.0f * secondsToAdd);
 			float endValue = recordSeg.getEndValue() + (1000.0f * secondsToAdd);
@@ -354,7 +354,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 				seg.setStartValue(startValue);
 				seg.setEndValue(endValue);
 
-				TierEdit<MediaSegment> changeSeg = new TierEdit<>(getParentView().getEditor(), r.getSegment(), 0, seg);
+				final RecordSegmentEdit changeSeg = new RecordSegmentEdit(getParentView().getEditor(), r, seg);
 				changeSeg.setFireHardChangeOnUndo(true);
 				getParentView().getEditor().getUndoSupport().postEdit(changeSeg);
 			}
@@ -372,7 +372,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		for(int recordIdx:getSelectionModel().getSelectedIndices()) {
 			Record r = getParentView().getEditor().getSession().getRecord(recordIdx);
 
-			MediaSegment recordSeg = r.getSegment().getGroup(0);
+			MediaSegment recordSeg = r.getSegment().getRecordSegment();
 			MediaSegment seg = SessionFactory.newFactory().createMediaSegment();
 			float startValue =  Math.max(0, recordSeg.getStartValue() - (1000.0f * secondsToAdd));
 			float endValue = Math.min(getTimeModel().getEndTime() * 1000.0f, recordSeg.getEndValue() + (1000.0f * secondsToAdd));
@@ -380,7 +380,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 			seg.setStartValue(startValue);
 			seg.setEndValue(endValue);
 
-			TierEdit<MediaSegment> changeSeg = new TierEdit<>(getParentView().getEditor(), r.getSegment(), 0, seg);
+			final RecordSegmentEdit changeSeg = new RecordSegmentEdit(getParentView().getEditor(), r, seg);
 			changeSeg.setFireHardChangeOnUndo(true);
 			getParentView().getEditor().getUndoSupport().postEdit(changeSeg);
 		}
@@ -397,7 +397,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		for(int recordIdx:getSelectionModel().getSelectedIndices()) {
 			Record r = getParentView().getEditor().getSession().getRecord(recordIdx);
 
-			MediaSegment recordSeg = r.getSegment().getGroup(0);
+			MediaSegment recordSeg = r.getSegment().getRecordSegment();
 			MediaSegment seg = SessionFactory.newFactory().createMediaSegment();
 			float startValue = recordSeg.getStartValue() + (1000.0f * secondsToSubtract);
 			float endValue = recordSeg.getEndValue() - (1000.0f * secondsToSubtract);
@@ -406,7 +406,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 				seg.setStartValue(startValue);
 				seg.setEndValue(endValue);
 
-				TierEdit<MediaSegment> changeSeg = new TierEdit<>(getParentView().getEditor(), r.getSegment(), 0, seg);
+				final RecordSegmentEdit changeSeg = new RecordSegmentEdit(getParentView().getEditor(), r, seg);
 				changeSeg.setFireHardChangeOnUndo(true);
 				getParentView().getEditor().getUndoSupport().postEdit(changeSeg);
 			}
@@ -424,7 +424,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		for(int recordIdx:getSelectionModel().getSelectedIndices()) {
 			Record r = getParentView().getEditor().getSession().getRecord(recordIdx);
 
-			MediaSegment recordSeg = r.getSegment().getGroup(0);
+			MediaSegment recordSeg = r.getSegment().getRecordSegment();
 			MediaSegment seg = SessionFactory.newFactory().createMediaSegment();
 			float startValue =  recordSeg.getStartValue() - (1000.0f * secondsToAdd);
 			float endValue = recordSeg.getEndValue() - (1000.0f * secondsToAdd);
@@ -433,7 +433,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 				seg.setStartValue(startValue);
 				seg.setEndValue(endValue);
 
-				TierEdit<MediaSegment> changeSeg = new TierEdit<>(getParentView().getEditor(), r.getSegment(), 0, seg);
+				final RecordSegmentEdit changeSeg = new RecordSegmentEdit(getParentView().getEditor(), r, seg);
 				changeSeg.setFireHardChangeOnUndo(true);
 				getParentView().getEditor().getUndoSupport().postEdit(changeSeg);
 			}
@@ -598,7 +598,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		getParentView().getEditor().getUndoSupport().beginUpdate();
 		for(int recordIndex:getSelectionModel().getSelectedIndices()) {
 			Record r = getParentView().getEditor().getSession().getRecord(recordIndex);
-			MediaSegment seg = r.getSegment().getGroup(0);
+			MediaSegment seg = r.getSegment().getRecordSegment();
 			float segLength = seg.getEndValue() - seg.getStartValue();
 			MediaSegment newSeg = SessionFactory.newFactory().createMediaSegment();
 
@@ -610,9 +610,9 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 				newSeg.setEndValue(newSeg.getStartValue() + segLength);
 			}
 
-			TierEdit<MediaSegment> tierEdit = new TierEdit<>(getParentView().getEditor(), r.getSegment(), 0, newSeg);
-			tierEdit.setFireHardChangeOnUndo(firstChange);
-			getParentView().getEditor().getUndoSupport().postEdit(tierEdit);
+			final RecordSegmentEdit segEdit = new RecordSegmentEdit(getParentView().getEditor(), r, newSeg);
+			segEdit.setFireHardChangeOnUndo(firstChange);
+			getParentView().getEditor().getUndoSupport().postEdit(segEdit);
 			firstChange = false;
 		}
 		getParentView().getEditor().getUndoSupport().endUpdate();
@@ -660,7 +660,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 		int rIdx = getParentView().getEditor().getCurrentRecordIndex();
 
-		MediaSegment segment = r.getSegment().getGroup(0);
+		MediaSegment segment = r.getSegment().getRecordSegment();
 		var segStartTime = segment.getStartValue() / 1000.0f;
 		var segEndTime = segment.getEndValue() / 1000.0f;
 
@@ -868,7 +868,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		if (record == null)
 			return;
 
-		final MediaSegment segment = record.getSegment().getGroup(0);
+		final MediaSegment segment = record.getSegment().getRecordSegment();
 		if (segment == null)
 			return;
 
@@ -953,11 +953,11 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 	private void updateSplitRecordTimes(float splitTime) {
 		Record leftRecord = recordGrid.getLeftRecordSplit();
-		MediaSegment leftSeg = leftRecord.getSegment().getGroup(0);
+		MediaSegment leftSeg = leftRecord.getSegment().getRecordSegment();
 		leftSeg.setEndValue(splitTime * 1000.0f);
 
 		Record rightRecord = recordGrid.getRightRecordSplit();
-		MediaSegment rightSeg = rightRecord.getSegment().getGroup(0);
+		MediaSegment rightSeg = rightRecord.getSegment().getRecordSegment();
 
 		long segOffset = (long) Math.ceil(timeAtX(getTimeModel().getTimeInsets().left + 1) * 1000.0f);
 		rightSeg.setStartValue((splitTime * 1000.0f) + segOffset);
@@ -969,10 +969,10 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		final SessionFactory sessionFactory = SessionFactory.newFactory();
 
 		Record recordToSplit = getParentView().getEditor().currentRecord();
-		MediaSegment seg = recordToSplit.getSegment().getGroup(0);
+		MediaSegment seg = recordToSplit.getSegment().getRecordSegment();
 
 		Record leftRecord = sessionFactory.cloneRecord(recordToSplit);
-		leftRecord.getSegment().getGroup(0).setEndValue(splitTime * 1000.0f);
+		leftRecord.getSegment().getRecordSegment().setEndValue(splitTime * 1000.0f);
 
 		Record rightRecord = sessionFactory.createRecord();
 		rightRecord.addGroup();
@@ -980,7 +980,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		long segOffset = (long) Math.ceil(timeAtX(getTimeModel().getTimeInsets().left + 1) * 1000.0f);
 		rightSeg.setStartValue((splitTime * 1000.0f) + segOffset);
 		rightSeg.setEndValue(seg.getEndValue());
-		rightRecord.getSegment().setGroup(0, rightSeg);
+		rightRecord.getSegment().setRecordSegment(rightSeg);
 
 		for (String tierName : leftRecord.getExtraTierNames()) {
 			Tier<?> tier = leftRecord.getTier(tierName);
@@ -994,14 +994,14 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 				leftRecord = rightRecord;
 				rightRecord = t;
 
-				MediaSegment ls = leftRecord.getSegment().getGroup(0);
-				MediaSegment rs = rightRecord.getSegment().getGroup(0);
+				MediaSegment ls = leftRecord.getSegment().getRecordSegment();
+				MediaSegment rs = rightRecord.getSegment().getRecordSegment();
 
-				leftRecord.getSegment().setGroup(0, rs);
-				rightRecord.getSegment().setGroup(0, ls);
+				leftRecord.getSegment().setRecordSegment(rs);
+				rightRecord.getSegment().setRecordSegment(ls);
 			} else if (splitGroupIdx <= leftRecord.numberOfGroups()) {
-				MediaSegment ls = leftRecord.getSegment().getGroup(0);
-				MediaSegment rs = rightRecord.getSegment().getGroup(0);
+				MediaSegment ls = leftRecord.getSegment().getRecordSegment();
+				MediaSegment rs = rightRecord.getSegment().getRecordSegment();
 
 				rightRecord = sessionFactory.cloneRecord(recordToSplit);
 
@@ -1013,8 +1013,8 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 					rightRecord.removeGroup(i);
 				}
 
-				leftRecord.getSegment().setGroup(0, ls);
-				rightRecord.getSegment().setGroup(0, rs);
+				leftRecord.getSegment().setRecordSegment(ls);
+				rightRecord.getSegment().setRecordSegment(rs);
 			}
 		}
 
@@ -1326,7 +1326,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 			Record r = recordGrid.getCurrentRecord();
 			if(r == null) return;
 			
-			MediaSegment segment = r.getSegment().getGroup(0);
+			MediaSegment segment = r.getSegment().getRecordSegment();
 			final SessionFactory factory = SessionFactory.newFactory();
 
 			if(evt.getPropertyName().equals("valueAdjusting")) {
@@ -1342,9 +1342,9 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 					getParentView().getEditor().getUndoSupport().beginUpdate();
 				} else {
 					getParentView().getEditor().getUndoSupport().endUpdate();
-					getParentView().getEditor().getEventManager().queueEvent(
-							new EditorEvent<>(EditorEventType.TierChanged, TimelineRecordTier.this,
-									new EditorEventType.TierChangeData(r.getSegment(), 0, segment, segment)));
+					final EditorEvent<EditorEventType.RecordSegmentChangedData> editorEvent =
+							new EditorEvent<>(EditorEventType.RecordSegmentChanged, TimelineRecordTier.this, new EditorEventType.RecordSegmentChangedData(r, segment.getStartValue(), segment.getEndValue()));
+					getParentView().getEditor().getEventManager().queueEvent(editorEvent);
 				}
 			} else if(evt.getPropertyName().endsWith("time")) {
 				MediaSegment newSegment = factory.createMediaSegment();
@@ -1357,7 +1357,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 					newSegment.setEndValue((float)evt.getNewValue() * 1000.0f);
 				}
 
-				TierEdit<MediaSegment> segmentEdit = new TierEdit<MediaSegment>(getParentView().getEditor(), r.getSegment(), 0, newSegment);
+				final RecordSegmentEdit segmentEdit = new RecordSegmentEdit(getParentView().getEditor(), r, newSegment);
 				getParentView().getEditor().getUndoSupport().postEdit(segmentEdit);
 				segmentEdit.setFireHardChangeOnUndo(isFirstChange);
 				isFirstChange = false;
@@ -1432,7 +1432,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 			Record r = getRecordGrid().getSession().getRecord(selectedRecord);
 			participants.add(r.getSpeaker());
 
-			MediaSegment recordSeg = r.getSegment().getGroup(0);
+			MediaSegment recordSeg = r.getSegment().getRecordSegment();
 			MediaSegment origSeg = SessionFactory.newFactory().createMediaSegment();
 			origSeg.setStartValue(recordSeg.getStartValue());
 			origSeg.setEndValue(recordSeg.getEndValue());
@@ -1467,7 +1467,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 				currentRecordInterval.getStartMarker().setTime(origSegment.getStartValue());
 				currentRecordInterval.getEndMarker().setTime(origSegment.getEndValue());
 			} else {
-				MediaSegment recordSeg = r.getSegment().getGroup(0);
+				MediaSegment recordSeg = r.getSegment().getRecordSegment();
 				recordSeg.setStartValue(origSegment.getStartValue());
 				recordSeg.setEndValue(origSegment.getEndValue());
 			}
@@ -1535,7 +1535,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		@Override
 		public void recordPressed(int recordIndex, MouseEvent me) {
 			Record r = getParentView().getEditor().getSession().getRecord(recordIndex);
-			MediaSegment seg = r.getSegment().getGroup(0);
+			MediaSegment seg = r.getSegment().getRecordSegment();
 			dragData.mouseDragOffset = getTimeModel().timeAtX(me.getX()) - seg.getStartValue() / 1000.0f;
 		}
 
@@ -1596,7 +1596,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 				}
 
 				Record dragRecord = getRecordGrid().getSession().getRecord(dragData.draggedRecord);
-				MediaSegment dragSeg = dragRecord.getSegment().getGroup(0);
+				MediaSegment dragSeg = dragRecord.getSegment().getRecordSegment();
 
 				float startTime = dragSeg.getStartValue() / 1000.0f;
 				float oldOffsetTime = startTime + dragData.mouseDragOffset;
@@ -1606,7 +1606,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 				for(int rIdx:getSelectionModel().getSelectedIndices()) {
 					Record selectedRecord = getRecordGrid().getSession().getRecord(rIdx);
-					MediaSegment seg = selectedRecord.getSegment().getGroup(0);
+					MediaSegment seg = selectedRecord.getSegment().getRecordSegment();
 
 					float st = (rIdx == getRecordGrid().getCurrentRecordIndex() ?
 							currentRecordInterval.getStartMarker().getTime() : seg.getStartValue() / 1000.0f);
@@ -1633,7 +1633,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 						editSeg.setEndValue(newEndTime * 1000.0f);
 
 						if(dragData.isFirstChange) {
-							TierEdit<MediaSegment> tierEdit = new TierEdit<>(getParentView().getEditor(), selectedRecord.getSegment(), 0, editSeg);
+							final RecordSegmentEdit tierEdit = new RecordSegmentEdit(getParentView().getEditor(), selectedRecord, editSeg);
 							getParentView().getEditor().getUndoSupport().postEdit(tierEdit);
 						}
 					}
