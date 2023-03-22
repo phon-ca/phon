@@ -19,6 +19,7 @@ package ca.phon.app.session.editor.view.common;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.*;
+import ca.phon.query.report.io.Group;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.check.SegmentOverlapCheck;
@@ -41,26 +42,25 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class SegmentTierComponent extends JComponent implements TierEditor {
 
-	private static final long serialVersionUID = 5303962410367183323L;
-
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(SegmentTierComponent.class.getName());
-
 	private final static String DEFAULT_SEGMENT_TEXT = "000:00.000-000:00.000";
 
 	private final WeakReference<SessionEditor> editorRef;
 
-	private Tier<MediaSegment> segmentTier;
+	private Record record;
+
+	private Tier<GroupSegment> segmentTier;
 
 	private int groupIndex = 0;
 
 	private final SegmentField segmentField;
 
-	public SegmentTierComponent(SessionEditor editor, Tier<MediaSegment> tier, int groupIndex) {
+	public SegmentTierComponent(SessionEditor editor, Record record, Tier<GroupSegment> tier, int groupIndex) {
 		super();
 		setOpaque(false);
 		setFocusable(false);
 
 		this.editorRef = new WeakReference<SessionEditor>(editor);
+		this.record = record;
 		
 		this.segmentTier = tier;
 		segmentTier.addTierListener(tierListener);
@@ -124,7 +124,7 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 	 * @return <code>true</code> if the contents of the field
 	 *  are valid, <code>false</code> otherwise.
 	 */
-	private final AtomicReference<MediaSegment> validatedObjRef = new AtomicReference<MediaSegment>();
+	private final AtomicReference<GroupSegment> validatedObjRef = new AtomicReference<GroupSegment>();
 	protected boolean validateText() {
 		boolean retVal = true;
 
@@ -136,7 +136,7 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 		try {
 			final MediaSegment validatedObj = formatter.parse(text);
 			if(validatedObj.getEndValue() >= validatedObj.getStartValue()) {
-				setValidatedObject(validatedObj);
+				setValidatedObject(new GroupSegment(record.getSegment().getRecordSegment(), validatedObj.getStartValue(), validatedObj.getEndValue()));
 			} else {
 				retVal = false;
 			}
@@ -148,33 +148,6 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 			retVal = false;
 		}
 
-		// check if segment overlaps with previous record
-		final int tolerance = PrefHelper.getInt(SegmentOverlapCheck.OVERLAP_TOLERANCE_PROPERTY, SegmentOverlapCheck.DEFAULT_OVERLAP_TOLERANCE);
-		MediaSegment validated = getValidatedObject();
-		if(getEditor().getCurrentRecordIndex() > 0) {
-			Record currentRecord = getEditor().currentRecord();
-			int idx = getEditor().getCurrentRecordIndex()-1;
-			Record prevRecord = null;
-			while(idx >= 0 && prevRecord == null) {
-				Record r = getEditor().getSession().getRecord(idx--);
-				if(r.getSpeaker() == currentRecord.getSpeaker())
-					prevRecord = r;
-			}
-			if(prevRecord != null) {
-				MediaSegment prevSegment = prevRecord.getSegment().getGroup(0);
-				if(prevSegment != null) {
-					final float diffMs = validated.getStartValue() - prevSegment.getEndValue();
-
-					if( (diffMs < 0) && (Math.abs(diffMs) > tolerance) ) {
-						// XXX Border does not update properly while typing
-						getGroupFieldBorder().setShowWarningIcon(true);
-						segmentField.setToolTipText("Segment overlaps with previous record for " + prevRecord.getSpeaker() + " (#" + (idx+2) + ")");
-						repaint();
-					}
-				}
-			}
-		}
-
 		return retVal;
 	}
 
@@ -183,35 +156,37 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 			updateTier();
 	}
 
-	protected MediaSegment getValidatedObject() {
+	protected GroupSegment getValidatedObject() {
 		return this.validatedObjRef.get();
 	}
 
-	protected void setValidatedObject(MediaSegment object) {
+	protected void setValidatedObject(GroupSegment object) {
 		this.validatedObjRef.getAndSet(object);
 	}
 
 	public void updateText() {
-		final MediaSegment segment = getGroupValue();
+		final GroupSegment segment = getGroupValue();
 		final Formatter<MediaSegment> segmentFormatter = FormatterFactory.createFormatter(MediaSegment.class);
+		final MediaSegment tempSeg = SessionFactory.newFactory().createMediaSegment();
+		tempSeg.setSegment(segment.getStartTime(), segment.getEndTime());
 
 		String tierTxt =
-				(segmentFormatter != null ? segmentFormatter.format(segment) : DEFAULT_SEGMENT_TEXT);
+				(segmentFormatter != null ? segmentFormatter.format(tempSeg) : DEFAULT_SEGMENT_TEXT);
 		segmentField.setText(tierTxt);
 	}
 
 	public void onEnter() {
 		if(getGroupValue() != initialGroupVal) {
 			for(TierEditorListener listener:getTierEditorListeners()) {
-				listener.tierValueChanged(segmentTier, 0, getValidatedObject(), initialGroupVal);
+				listener.tierValueChanged(segmentTier, groupIndex, getValidatedObject(), initialGroupVal);
 			}
 			initialGroupVal = getGroupValue();
 		}
 	}
 
 	private void updateTier() {
-		final MediaSegment oldVal = getGroupValue();
-		final MediaSegment newVal = getValidatedObject();
+		final GroupSegment oldVal = getGroupValue();
+		final GroupSegment newVal = getValidatedObject();
 		if(newVal != null) {
 			for(TierEditorListener listener:listeners) {
 				listener.tierValueChange(segmentTier, groupIndex, newVal, oldVal);
@@ -219,27 +194,26 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 		}
 	}
 
-	private MediaSegment getGroupValue() {
-		MediaSegment retVal = null;
+	private GroupSegment getGroupValue() {
+		GroupSegment retVal = null;
 
 		if(groupIndex < segmentTier.numberOfGroups()) {
 			retVal = segmentTier.getGroup(groupIndex);
 		} else {
-			final SessionFactory factory = SessionFactory.newFactory();
-			retVal = factory.createMediaSegment();
+			retVal = new GroupSegment(record.getSegment().getRecordSegment(), 0.0f, 0.0f);
 		}
 
 		return retVal;
 	}
 
-	private MediaSegment initialGroupVal;
+	private GroupSegment initialGroupVal;
 	private final FocusListener focusListener = new FocusListener() {
 
 		@Override
 		public void focusLost(FocusEvent e) {
 			if(getGroupValue() != initialGroupVal) {
 				for(TierEditorListener listener:getTierEditorListeners()) {
-					listener.tierValueChanged(segmentTier, 0, getValidatedObject(), initialGroupVal);
+					listener.tierValueChanged(segmentTier, groupIndex, getValidatedObject(), initialGroupVal);
 				}
 			}
 		}
@@ -269,20 +243,20 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 
 	};
 
-	private final TierListener<MediaSegment> tierListener = new TierListener<MediaSegment>() {
+	private final TierListener<GroupSegment> tierListener = new TierListener<GroupSegment>() {
 
 		@Override
-		public void groupsCleared(Tier<MediaSegment> tier) {
+		public void groupsCleared(Tier<GroupSegment> tier) {
 		}
 
 		@Override
-		public void groupRemoved(Tier<MediaSegment> tier, int index,
-				MediaSegment value) {
+		public void groupRemoved(Tier<GroupSegment> tier, int index,
+				GroupSegment value) {
 		}
 
 		@Override
-		public void groupChanged(Tier<MediaSegment> tier, int index,
-				MediaSegment oldValue, MediaSegment value) {
+		public void groupChanged(Tier<GroupSegment> tier, int index,
+				GroupSegment oldValue, GroupSegment value) {
 			if(!segmentField.hasFocus() && index == groupIndex) {
 				updateText();
 			}
@@ -290,8 +264,8 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 		}
 
 		@Override
-		public void groupAdded(Tier<MediaSegment> tier, int index,
-				MediaSegment value) {
+		public void groupAdded(Tier<GroupSegment> tier, int index,
+				GroupSegment value) {
 		}
 		
 	};

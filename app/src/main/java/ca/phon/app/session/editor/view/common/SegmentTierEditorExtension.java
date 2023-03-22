@@ -18,8 +18,9 @@ package ca.phon.app.session.editor.view.common;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.plugin.*;
 import ca.phon.session.*;
+import ca.phon.session.Record;
 
-@TierEditorInfo(type=MediaSegment.class)
+@TierEditorInfo(type=GroupSegment.class)
 public class SegmentTierEditorExtension implements IPluginExtensionPoint<TierEditor> {
 
 	@Override
@@ -38,14 +39,15 @@ public class SegmentTierEditorExtension implements IPluginExtensionPoint<TierEdi
 		@Override
 		public TierEditor createObject(Object... args) {
 			final SessionEditor editor = SessionEditor.class.cast(args[TierEditorFactory.EDITOR]);
+			final Record record = Record.class.cast(args[TierEditorFactory.RECORD]);
 			final Tier<?> tier = Tier.class.cast(args[TierEditorFactory.TIER]);
 			final Integer group = Integer.class.cast(args[TierEditorFactory.GROUP]);
 			
-			if(tier.getDeclaredType() != MediaSegment.class) {
+			if(tier.getDeclaredType() != GroupSegment.class) {
 				throw new IllegalArgumentException("Tier type must be " + MediaSegment.class.getName());
 			}
 			
-			return new SegmentTierComponent(editor, (Tier<MediaSegment>)tier, group);
+			return new SegmentTierComponent(editor, record, (Tier<GroupSegment>)tier, group);
 		}
 		
 	};
