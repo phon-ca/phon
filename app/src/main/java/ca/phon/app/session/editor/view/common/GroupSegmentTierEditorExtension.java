@@ -47,7 +47,7 @@ public class SegmentTierEditorExtension implements IPluginExtensionPoint<TierEdi
 				throw new IllegalArgumentException("Tier type must be " + MediaSegment.class.getName());
 			}
 			
-			return new SegmentTierComponent(editor, record, (Tier<GroupSegment>)tier, group);
+			return new GroupSegmentTierComponent(editor, record, (Tier<GroupSegment>)tier, group);
 		}
 		
 	};
