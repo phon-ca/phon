@@ -16,6 +16,8 @@
 
 package ca.phon.app.session.editor.view.common;
 
+import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.*;
@@ -45,19 +47,21 @@ public class MediaSegmentTierComponent extends JComponent implements TierEditor 
 
     private final WeakReference<SessionEditor> editorRef;
 
+    private final Record record;
+
     private Tier<MediaSegment> segmentTier;
 
     private int groupIndex = 0;
 
     private final SegmentField segmentField;
 
-    public MediaSegmentTierComponent(SessionEditor editor, Tier<MediaSegment> tier, int groupIndex) {
+    public MediaSegmentTierComponent(SessionEditor editor, Record record, Tier<MediaSegment> tier, int groupIndex) {
         super();
         setOpaque(false);
         setFocusable(false);
 
         this.editorRef = new WeakReference<SessionEditor>(editor);
-
+        this.record = record;
         this.segmentTier = tier;
         segmentTier.addTierListener(tierListener);
         this.groupIndex = groupIndex;
@@ -211,6 +215,16 @@ public class MediaSegmentTierComponent extends JComponent implements TierEditor 
         if(newVal != null) {
             for(TierEditorListener listener:listeners) {
                 listener.tierValueChange(segmentTier, groupIndex, newVal, oldVal);
+            }
+            for(int gidx = 0; gidx < this.record.numberOfGroups(); gidx++) {
+                final GroupSegment prevSeg = this.record.getGroupSegment().getGroup(gidx);
+                final GroupSegment gseg = new GroupSegment(record, prevSeg.getStart(), prevSeg.getEnd());
+                this.record.getGroupSegment().setGroup(gidx, gseg);
+
+                final EditorEvent<EditorEventType.TierChangeData> gsegChangeEvt =
+                        new EditorEvent<>(EditorEventType.TierChanged, getEditor(),
+                                new EditorEventType.TierChangeData(record.getGroupSegment(), gidx, prevSeg, gseg));
+                getEditor().getEventManager().queueEvent(gsegChangeEvt);
             }
         }
     }

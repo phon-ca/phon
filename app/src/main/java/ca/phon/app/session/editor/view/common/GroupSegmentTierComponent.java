@@ -70,6 +70,8 @@ public class GroupSegmentTierComponent extends JComponent implements TierEditor 
 			}
 
 		};
+		segmentField.setEditable(false);
+		segmentField.setEnabled(false);
 
 		updateText();
 		//validateText();
