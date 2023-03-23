@@ -98,12 +98,12 @@ public class RecordImpl implements RecordSPI {
 
 	@Override
 	public MediaSegment getMediaSegment() {
-		return this.segmentTier.getRecordSegment();
+		return getSegment().getGroup(0);
 	}
 
 	@Override
 	public void setMediaSegment(MediaSegment segment) {
-		this.segmentTier.setRecordSegment(segment);
+		getSegment().setGroup(0, segment);
 	}
 
 	@Override

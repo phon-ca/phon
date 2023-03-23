@@ -6,7 +6,7 @@ import javax.print.attribute.standard.Media;
 
 public final class SegmentTier {
 
-    private final MediaSegment recordSegment;
+    private MediaSegment recordSegment;
 
     private final Tier<MediaSegment> recordSegmentTier;
 
@@ -21,15 +21,8 @@ public final class SegmentTier {
         return this.recordSegment;
     }
 
-    public void setRecordSegment(float start, float end) {
-        this.recordSegment.setStartValue(start);
-        this.recordSegment.setEndValue(end);
-    }
-
     public void setRecordSegment(MediaSegment recordSegment) {
-        this.recordSegment.setStartValue(recordSegment.getStartValue());
-        this.recordSegment.setEndValue(recordSegment.getEndValue());
-        this.recordSegment.setUnitType(recordSegment.getUnitType());
+        this.recordSegment = recordSegment;
     }
 
     public Tier<MediaSegment> getRecordSegmentTier() {

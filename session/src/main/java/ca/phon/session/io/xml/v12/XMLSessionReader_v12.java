@@ -433,7 +433,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 		float gwidth = (orthoTier.numberOfGroups() > 0 ? 1.0f / orthoTier.numberOfGroups() : 1.0f);
 		for(int i = 0; i < orthoTier.numberOfGroups(); i++) {
 			float end = Math.min(1.0f, start + gwidth);
-			retVal.getGroupSegment().addGroup(new GroupSegment(retVal.getMediaSegment(), start, end));
+			retVal.getGroupSegment().addGroup(new GroupSegment(retVal, start, end));
 			start = end;
 		}
 

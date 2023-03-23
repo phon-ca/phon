@@ -197,11 +197,11 @@ public class MediaSegmentTierComponent extends JComponent implements TierEditor 
     }
 
     public void onEnter() {
-        if(getGroupValue() != initialGroupVal) {
+        if(!getGroupValue().equals(initialGroupVal)) {
             for(TierEditorListener listener:getTierEditorListeners()) {
                 listener.tierValueChanged(segmentTier, 0, getValidatedObject(), initialGroupVal);
             }
-            initialGroupVal = getGroupValue();
+            initialGroupVal.setSegment(getGroupValue());
         }
     }
 
@@ -216,24 +216,15 @@ public class MediaSegmentTierComponent extends JComponent implements TierEditor 
     }
 
     private MediaSegment getGroupValue() {
-        MediaSegment retVal = null;
-
-        if(groupIndex < segmentTier.numberOfGroups()) {
-            retVal = segmentTier.getGroup(groupIndex);
-        } else {
-            final SessionFactory factory = SessionFactory.newFactory();
-            retVal = factory.createMediaSegment();
-        }
-
-        return retVal;
+        return segmentTier.getGroup(groupIndex);
     }
 
-    private MediaSegment initialGroupVal;
+    private MediaSegment initialGroupVal = SessionFactory.newFactory().createMediaSegment();
     private final FocusListener focusListener = new FocusListener() {
 
         @Override
         public void focusLost(FocusEvent e) {
-            if(getGroupValue() != initialGroupVal) {
+            if(!getGroupValue().equals(initialGroupVal)) {
                 for(TierEditorListener listener:getTierEditorListeners()) {
                     listener.tierValueChanged(segmentTier, 0, getValidatedObject(), initialGroupVal);
                 }
@@ -242,7 +233,7 @@ public class MediaSegmentTierComponent extends JComponent implements TierEditor 
 
         @Override
         public void focusGained(FocusEvent e) {
-            initialGroupVal = getGroupValue();
+            initialGroupVal.setSegment(getGroupValue());
         }
 
     };

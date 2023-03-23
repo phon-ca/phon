@@ -11,8 +11,8 @@ public class GroupSegment extends AlignedSegment {
 
     private List<AlignedSegment> wordSegments;
 
-    public GroupSegment(MediaSegment parentSegment, float startMark, float endMark) {
-        super(parentSegment, startMark, endMark);
+    public GroupSegment(Record record, float startMark, float endMark) {
+        super(record, startMark, endMark);
         wordSegments = new ArrayList<>();
     }
 

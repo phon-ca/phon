@@ -1,10 +1,14 @@
 package ca.phon.session;
 
 import ca.phon.extensions.ExtendableObject;
+import ca.phon.formatter.Formatter;
+import ca.phon.formatter.FormatterFactory;
 
 import javax.print.attribute.standard.Media;
 
 public class AlignedSegment extends ExtendableObject {
+
+    private final Record record;
 
     private final MediaSegment parentSegment;
 
@@ -14,13 +18,23 @@ public class AlignedSegment extends ExtendableObject {
 
     private float end;
 
+    public AlignedSegment(Record record, float startMark, float endMark) {
+        this.record = record;
+        this.parentSegment = null;
+        this.parentAlignedSegment = null;
+        setStart(startMark);
+        setEnd(endMark);
+    }
+
     public AlignedSegment(MediaSegment parentSegment, float startMark, float endMark) {
+        this.record = null;
         this.parentSegment = parentSegment;
         this.parentAlignedSegment = null;
         setStart(startMark);
         setEnd(endMark);
     }
     public AlignedSegment(AlignedSegment parentAlignedSegment, float startMark, float endMark) {
+        this.record = null;
         this.parentSegment = null;
         this.parentAlignedSegment = parentAlignedSegment;
         setStart(startMark);
@@ -28,7 +42,9 @@ public class AlignedSegment extends ExtendableObject {
     }
 
     public MediaSegment getParentSegment() {
-        if(this.parentSegment != null) {
+        if(this.record != null) {
+            return record.getMediaSegment();
+        } else if(this.parentSegment != null) {
             return this.parentSegment;
         } else if(this.parentAlignedSegment != null) {
             SessionFactory factory = SessionFactory.newFactory();
@@ -70,6 +86,14 @@ public class AlignedSegment extends ExtendableObject {
     public float setEnd(float end) {
         this.end = (float)Math.min(1.0, end);
         return this.end;
+    }
+
+    @Override
+    public String toString() {
+        final Formatter<MediaSegment> segmentFormatter = FormatterFactory.createFormatter(MediaSegment.class);
+        final MediaSegment segment = SessionFactory.newFactory().createMediaSegment();
+        segment.setSegment(getStartTime(), getEndTime());
+        return segmentFormatter.format(segment);
     }
 
 }

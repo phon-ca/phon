@@ -132,7 +132,7 @@ public class GroupSegmentTierComponent extends JComponent implements TierEditor 
 		try {
 			final MediaSegment validatedObj = formatter.parse(text);
 			if(validatedObj.getEndValue() >= validatedObj.getStartValue()) {
-				setValidatedObject(new GroupSegment(record.getMediaSegment(), validatedObj.getStartValue(), validatedObj.getEndValue()));
+				setValidatedObject(new GroupSegment(record, validatedObj.getStartValue(), validatedObj.getEndValue()));
 			} else {
 				retVal = false;
 			}
@@ -196,7 +196,7 @@ public class GroupSegmentTierComponent extends JComponent implements TierEditor 
 		if(groupIndex < segmentTier.numberOfGroups()) {
 			retVal = segmentTier.getGroup(groupIndex);
 		} else {
-			retVal = new GroupSegment(record.getMediaSegment(), 0.0f, 0.0f);
+			retVal = new GroupSegment(record, 0.0f, 0.0f);
 		}
 
 		return retVal;
