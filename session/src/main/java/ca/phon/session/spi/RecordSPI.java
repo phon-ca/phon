@@ -52,13 +52,33 @@ public interface RecordSPI {
 	 * @paran IParticipant
 	 */
 	public void setSpeaker(Participant participant);
-	
+
 	/**
-	 * Get media segment
+	 * Return media segment for record
 	 *
-	 * @return segment tier
+	 * @return media segment
 	 */
-	public SegmentTier getSegment();
+	public MediaSegment getMediaSegment();
+
+	/**
+	 * Set media segment for record
+	 * @param segment
+	 */
+	public void setMediaSegment(MediaSegment segment);
+
+	/**
+	 * Get media segment tier
+	 *
+	 * @return segment tier for record, always available
+	 */
+	public Tier<MediaSegment> getSegment();
+
+	/**
+	 * Get group segment tier
+	 *
+	 * @return group segment tier for record, may be null
+	 */
+	public Tier<GroupSegment> getGroupSegment();
 	
 	/**
 	 * Should we exclude this record from searches?

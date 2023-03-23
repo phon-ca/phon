@@ -626,7 +626,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		
 		Record r = getEditor().currentRecord();
 		if(r != null) {
-			final MediaSegment segment = r.getSegment().getRecordSegment();
+			final MediaSegment segment = r.getMediaSegment();
 
 			double length = (segment.getEndValue() - segment.getStartValue());
 			long preferredClipExtension = (long)Math.ceil(length * 0.4);
@@ -680,7 +680,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 	}
 
 	public void scrollToRecord(Record r) {
-		MediaSegment seg = r.getSegment().getRecordSegment();
+		MediaSegment seg = r.getMediaSegment();
 		float time = seg.getStartValue() / 1000.0f;
 		float endTime = seg.getEndValue() / 1000.0f;
 		float windowLen = endTime - time;
@@ -1086,7 +1086,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 			Record r = getEditor().currentRecord();
 			if(r == null) return;
 			
-			MediaSegment segment = r.getSegment().getRecordSegment();
+			MediaSegment segment = r.getMediaSegment();
 			final SessionFactory factory = SessionFactory.newFactory();
 
 			if(evt.getPropertyName().equals("valueAdjusting")) {
@@ -1099,8 +1099,8 @@ public class SpeechAnalysisEditorView extends EditorView {
 					getEditor().getUndoSupport().beginUpdate();
 				} else {
 					getEditor().getUndoSupport().endUpdate();
-					final EditorEventType.RecordSegmentChangedData data = new EditorEventType.RecordSegmentChangedData(r, r.getSegment().getRecordSegment().getStartValue(), r.getSegment().getRecordSegment().getEndValue());
-					getEditor().getEventManager().queueEvent(new EditorEvent<>(EditorEventType.RecordSegmentChanged, SpeechAnalysisEditorView.this, data));
+					final EditorEventType.TierChangeData data = new EditorEventType.TierChangeData(r.getSegment(), 0, r.getSegment().getGroup(0), r.getSegment().getGroup(0));
+					getEditor().getEventManager().queueEvent(new EditorEvent(EditorEventType.TierChanged, SpeechAnalysisEditorView.this, data));
 				}
 			} else if(evt.getPropertyName().endsWith("time")) {
 				MediaSegment newSegment = factory.createMediaSegment();

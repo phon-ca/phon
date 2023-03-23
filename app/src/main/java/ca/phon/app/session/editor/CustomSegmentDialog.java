@@ -163,7 +163,7 @@ public class CustomSegmentDialog extends JDialog {
 		if(currentSegmentBtn.isSelected()) {
 			final Record utt = editor.currentRecord();
 			if(utt != null) {
-				retVal = utt.getSegment().getRecordSegment();
+				retVal = utt.getMediaSegment();
 			}
 		} else if(contiguousSegmentBtn.isSelected()) {
 			retVal = SegmentCalculator.contiguousSegment(editor.getSession(), editor.getCurrentRecordIndex());
@@ -172,9 +172,9 @@ public class CustomSegmentDialog extends JDialog {
 				final Range range = Range.fromString("(" + rangeField.getText() + ")");
 				
 				final Record startRecord = editor.getSession().getRecord(range.getFirst()-1);
-				final MediaSegment startMedia = startRecord.getSegment().getRecordSegment();
+				final MediaSegment startMedia = startRecord.getMediaSegment();
 				final Record endRecord = editor.getSession().getRecord(range.getLast()-1);
-				final MediaSegment endMedia = endRecord.getSegment().getRecordSegment();
+				final MediaSegment endMedia = endRecord.getMediaSegment();
 				
 				if(startMedia != null && endMedia != null) {
 					retVal.setStartValue(startMedia.getStartValue());

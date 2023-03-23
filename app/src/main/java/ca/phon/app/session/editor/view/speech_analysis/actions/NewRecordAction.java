@@ -54,7 +54,7 @@ public class NewRecordAction extends SpeechAnalysisEditorViewAction {
 		segment.setStartValue(startTime*1000.0f);
 		segment.setEndValue(endTime*1000.0f);
 		
-		record.getSegment().getRecordSegment().setSegment(segment);
+		record.getMediaSegment().setSegment(segment);
 		
 		final AddRecordEdit edit = new AddRecordEdit(getEditor(), record, (getEditor().getDataModel().getSession().getRecordCount() > 0 ? 
 				getEditor().getCurrentRecordIndex()+1 : -1));

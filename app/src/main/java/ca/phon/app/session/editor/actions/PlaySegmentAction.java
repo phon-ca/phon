@@ -88,7 +88,7 @@ public class PlaySegmentAction extends SessionEditorAction {
 	private MediaSegment getMediaSegment(ActionEvent ae) {
 		if(segmentType == SegmentType.CURRENT_RECORD) {
 			Record r = getEditor().currentRecord();
-			return (r != null ? r.getSegment().getRecordSegment() : null);
+			return (r != null ? r.getMediaSegment() : null);
 		} else if(segmentType == SegmentType.SPEAKER_TURN) {
 			return SegmentCalculator.contiguousSegment(getEditor().getSession(), getEditor().getCurrentRecordIndex());
 		} else if(segmentType == SegmentType.CONVERSATION_PERIOD) {

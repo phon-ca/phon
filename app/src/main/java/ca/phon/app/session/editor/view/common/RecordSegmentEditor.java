@@ -150,7 +150,7 @@ public class RecordSegmentEditor extends JComponent {
 					prevRecord = r;
 			}
 			if(prevRecord != null) {
-				MediaSegment prevSegment = prevRecord.getSegment().getRecordSegment();
+				MediaSegment prevSegment = prevRecord.getMediaSegment();
 				if(prevSegment != null) {
 					final float diffMs = validated.getStartValue() - prevSegment.getEndValue();
 
@@ -207,7 +207,7 @@ public class RecordSegmentEditor extends JComponent {
 	}
 
 	private MediaSegment getMediaSegment() {
-		return this.record.getSegment().getRecordSegment();
+		return this.record.getMediaSegment();
 	}
 
 	private MediaSegment initialGroupVal;

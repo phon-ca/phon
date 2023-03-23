@@ -121,9 +121,9 @@ public record EditorEventType<T>(String eventName, Class<T> type) {
 	public final static EditorEventType<RecordChangedData> RecordChanged =
 			new EditorEventType<>(EditorEventName.RECORD_CHANGED_EVT.getEventName(), RecordChangedData.class);
 
-	public record RecordSegmentChangedData(Record record, float segmentStart, float segmentEnd) { }
-	public final static EditorEventType<RecordSegmentChangedData> RecordSegmentChanged =
-			new EditorEventType<>(EditorEventName.RECORD_SEGMENT_CHANGED_EVT.getEventName(), RecordSegmentChangedData.class);
+//	public record RecordSegmentChangedData(Record record, float segmentStart, float segmentEnd) { }
+//	public final static EditorEventType<RecordSegmentChangedData> RecordSegmentChanged =
+//			new EditorEventType<>(EditorEventName.RECORD_SEGMENT_CHANGED_EVT.getEventName(), RecordSegmentChangedData.class);
 
 	/**
 	 * Called when the editor wants a refresh of the view for the

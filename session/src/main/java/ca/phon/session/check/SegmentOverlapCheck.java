@@ -74,8 +74,7 @@ public class SegmentOverlapCheck implements SessionCheck, IPluginExtensionPoint<
 			if(lastRecords.get(r.getSpeaker()) == null) {
 				lastRecords.put(r.getSpeaker(), 0);
 			}
-			final SegmentTier segmentTier = r.getSegment();
-			final MediaSegment segment = segmentTier.getRecordSegment();
+			final MediaSegment segment = r.getMediaSegment();
 
 			// ignore non-segments with no length
 			if(segment.getStartValue() == 0f && segment.getEndValue() == 0f) continue;

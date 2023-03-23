@@ -429,7 +429,7 @@ public class XMLSessionWriter_v12 implements SessionWriter, IPluginExtensionPoin
 		}
 
 		// segment
-		final SegmentType segType = copySegment(factory, record.getSegment().getRecordSegment());
+		final SegmentType segType = copySegment(factory, record.getMediaSegment());
 		retVal.setSegment(segType);
 
 		// alignment

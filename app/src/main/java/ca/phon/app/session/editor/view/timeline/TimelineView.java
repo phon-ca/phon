@@ -543,7 +543,7 @@ public final class TimelineView extends EditorView {
 		float retVal = 0.0f;
 		
 		for(Record r:getEditor().getSession().getRecords()) {
-			MediaSegment segment = r.getSegment().getRecordSegment();
+			MediaSegment segment = r.getMediaSegment();
 			if(segment != null) {
 				float segEnd = (float)(segment.getEndValue() / 1000.0f);
 				retVal = Math.max(segEnd, retVal);
@@ -610,7 +610,7 @@ public final class TimelineView extends EditorView {
 	 * @param r
 	 */
 	public void scrollToRecord(Record r) {
-		MediaSegment seg = r.getSegment().getRecordSegment();
+		MediaSegment seg = r.getMediaSegment();
 		float time = seg.getStartValue() / 1000.0f;
 		float endTime = seg.getEndValue() / 1000.0f;
 		float windowLen = endTime - time;

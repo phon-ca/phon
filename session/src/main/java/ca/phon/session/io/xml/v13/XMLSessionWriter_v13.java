@@ -449,10 +449,10 @@ public class XMLSessionWriter_v13 implements SessionWriter, IPluginExtensionPoin
 		}
 
 		// segment
-		final SegmentType segType = copySegment(factory, record.getSegment().getRecordSegment());
+		final SegmentType segType = copySegment(factory, record.getMediaSegment());
 		retVal.setSegment(segType);
-		if(record.getSegment().getGroupSegmentTier().numberOfGroups() > 0) {
-			for(ca.phon.session.GroupSegment groupSegment:record.getSegment().getGroupSegmentTier()) {
+		if(record.getGroupSegment().numberOfGroups() > 0) {
+			for(ca.phon.session.GroupSegment groupSegment:record.getGroupSegment()) {
 				segType.getGseg().add(copyGroupSegment(factory, groupSegment));
 			}
 		}

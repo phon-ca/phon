@@ -58,7 +58,7 @@ public class DistributeRecordsAction extends TimelineAction {
 		if(node.zeroRecord != null) {
 			float rightEdge = maxValue;
 			if(node.nonzeroRecord != null) {
-				MediaSegment rightEdgeSeg = node.nonzeroRecord.value.getSegment().getRecordSegment();
+				MediaSegment rightEdgeSeg = node.nonzeroRecord.value.getMediaSegment();
 				rightEdge = rightEdgeSeg.getStartValue();
 			}
 
@@ -91,13 +91,13 @@ public class DistributeRecordsAction extends TimelineAction {
 			}
 		}
 		if(node.nonzeroRecord != null) {
-			MediaSegment leftEdgeSeg = node.nonzeroRecord.value.getSegment().getRecordSegment();
+			MediaSegment leftEdgeSeg = node.nonzeroRecord.value.getMediaSegment();
 			distributeZeroLengthRecords(node.nonzeroRecord, leftEdgeSeg.getEndValue(), maxValue);
 		}
 	}
 
 	private void insertRecord(DistributeRecordTreeNode node, int recordIndex, Record record) {
-		MediaSegment seg = record.getSegment().getRecordSegment();
+		MediaSegment seg = record.getMediaSegment();
 		boolean isZero = seg.getStartValue() == 0.0f && seg.getEndValue() == 0.0f;
 
 		if(isZero) {

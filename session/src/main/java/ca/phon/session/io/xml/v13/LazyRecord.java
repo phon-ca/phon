@@ -18,6 +18,7 @@ package ca.phon.session.io.xml.v13;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.Orthography;
+import ca.phon.session.GroupSegment;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.spi.RecordSPI;
@@ -78,9 +79,25 @@ public final class LazyRecord implements RecordSPI {
 		internalRecord.setSpeaker(participant);
 	}
 
-	public SegmentTier getSegment() {
+	public MediaSegment getMediaSegment() {
+		loadRecord();
+		return internalRecord.getMediaSegment();
+	}
+
+	public void setMediaSegment(MediaSegment segment) {
+		loadRecord();
+		internalRecord.setMediaSegment(segment);
+	}
+
+	public Tier<MediaSegment> getSegment() {
 		loadRecord();
 		return internalRecord.getSegment();
+	}
+
+	@Override
+	public Tier<GroupSegment> getGroupSegment() {
+		loadRecord();
+		return internalRecord.getGroupSegment();
 	}
 
 	public boolean isExcludeFromSearches() {

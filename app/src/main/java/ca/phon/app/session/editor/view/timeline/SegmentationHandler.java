@@ -329,7 +329,7 @@ public final class SegmentationHandler {
 			// setup orthography
 			utt.addGroup();
 			utt.getOrthography().setGroup(0, new Orthography());
-			utt.getSegment().setRecordSegment(m);
+			utt.setMediaSegment(m);
 
 			SegmentationMode mode = getSegmentationMode();
 			if(mode == SegmentationMode.REPLACE_CURRENT && editor.currentRecord() == null) {

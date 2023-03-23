@@ -65,7 +65,7 @@ public class RecordImpl implements RecordSPI {
 		ipaTarget = factory.createTier(SystemTierType.IPATarget.getName(), IPATranscript.class, SystemTierType.IPATarget.isGrouped());
 		ipaActual = factory.createTier(SystemTierType.IPAActual.getName(), IPATranscript.class, SystemTierType.IPAActual.isGrouped());
 		segmentTier = factory.createRecordSegmentTier();
-		final Tier<GroupSegment> segmentGroupTier = factory.createTier(SystemTierType.Segment.getName(), GroupSegment.class, SystemTierType.Segment.isGrouped());
+		final Tier<GroupSegment> segmentGroupTier = factory.createTier(SystemTierType.GroupSegment.getName(), GroupSegment.class, SystemTierType.GroupSegment.isGrouped());
 		segmentTier.putGroupSegmentTier(segmentGroupTier);
 		notes = factory.createTier(SystemTierType.Notes.getName(), TierString.class, SystemTierType.Notes.isGrouped());
 		alignment = factory.createTier(SystemTierType.SyllableAlignment.getName(), PhoneMap.class, SystemTierType.SyllableAlignment.isGrouped());
@@ -97,8 +97,23 @@ public class RecordImpl implements RecordSPI {
 	}
 
 	@Override
-	public SegmentTier getSegment() {
-		return segmentTier;
+	public MediaSegment getMediaSegment() {
+		return this.segmentTier.getRecordSegment();
+	}
+
+	@Override
+	public void setMediaSegment(MediaSegment segment) {
+		this.segmentTier.setRecordSegment(segment);
+	}
+
+	@Override
+	public Tier<MediaSegment> getSegment() {
+		return segmentTier.getRecordSegmentTier();
+	}
+
+	@Override
+	public Tier<GroupSegment> getGroupSegment() {
+		return segmentTier.getGroupSegmentTier();
 	}
 
 	@Override
@@ -263,7 +278,11 @@ public class RecordImpl implements RecordSPI {
 				break;
 
 			case Segment:
-				systemTier = getSegment().getGroupSegmentTier();
+				systemTier = getSegment();
+				break;
+
+			case GroupSegment:
+				systemTier = getGroupSegment();
 				break;
 
 			case Notes:
@@ -361,7 +380,9 @@ public class RecordImpl implements RecordSPI {
 			retVal.add((Tier<T>)getIPATarget());
 			retVal.add((Tier<T>)getIPAActual());
 		} else if(type == MediaSegment.class) {
-			retVal.add((Tier<T>) getSegment().getGroupSegmentTier());
+			retVal.add((Tier<T>) getSegment());
+		} else if(type == GroupSegment.class) {
+			retVal.add((Tier<T>)getGroupSegment());
 		} else if(type == TierString.class) {
 			retVal.add((Tier<T>)getNotes());
 		} else if(type == PhoneMap.class) {

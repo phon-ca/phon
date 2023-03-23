@@ -19,13 +19,9 @@ package ca.phon.app.session.editor.view.common;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.*;
-import ca.phon.query.report.io.Group;
 import ca.phon.session.Record;
 import ca.phon.session.*;
-import ca.phon.session.check.SegmentOverlapCheck;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.util.PrefHelper;
-import org.apache.logging.log4j.LogManager;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -40,7 +36,7 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * Editor for media segments.
  */
-public class SegmentTierComponent extends JComponent implements TierEditor {
+public class GroupSegmentTierComponent extends JComponent implements TierEditor {
 
 	private final static String DEFAULT_SEGMENT_TEXT = "000:00.000-000:00.000";
 
@@ -54,7 +50,7 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 
 	private final SegmentField segmentField;
 
-	public SegmentTierComponent(SessionEditor editor, Record record, Tier<GroupSegment> tier, int groupIndex) {
+	public GroupSegmentTierComponent(SessionEditor editor, Record record, Tier<GroupSegment> tier, int groupIndex) {
 		super();
 		setOpaque(false);
 		setFocusable(false);
@@ -70,7 +66,7 @@ public class SegmentTierComponent extends JComponent implements TierEditor {
 
 			public void validateText() {
 				super.validateText();
-				SegmentTierComponent.this.validateText();
+				GroupSegmentTierComponent.this.validateText();
 			}
 
 		};

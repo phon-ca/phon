@@ -5,6 +5,7 @@ import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Record;
+import ca.phon.session.SessionFactory;
 
 public class RecordSegmentEdit extends SessionEditorUndoableEdit {
 
@@ -26,8 +27,8 @@ public class RecordSegmentEdit extends SessionEditorUndoableEdit {
         this.record = record;
         this.segmentStart = segment.getStartValue();
         this.segmentEnd = segment.getEndValue();
-        this.prevStart = record.getSegment().getRecordSegment().getStartValue();
-        this.prevEnd = record.getSegment().getRecordSegment().getEndValue();
+        this.prevStart = record.getMediaSegment().getStartValue();
+        this.prevEnd = record.getMediaSegment().getEndValue();
     }
 
     public boolean isFireHardChangeOnUndo() {
@@ -40,23 +41,27 @@ public class RecordSegmentEdit extends SessionEditorUndoableEdit {
 
     @Override
     public void doIt() {
-        final MediaSegment recordSegment = this.record.getSegment().getRecordSegment();
+        final MediaSegment oldSegment = SessionFactory.newFactory().createMediaSegment();
+        final MediaSegment recordSegment = this.record.getMediaSegment();
+        oldSegment.setSegment(recordSegment);
         recordSegment.setStartValue(this.segmentStart);
         recordSegment.setEndValue(this.segmentEnd);
-
-        EditorEvent<EditorEventType.RecordSegmentChangedData> segmentChangedEvt =
-                new EditorEvent<>(EditorEventType.RecordSegmentChanged, getEditor(), new EditorEventType.RecordSegmentChangedData(this.record, this.segmentStart, this.segmentEnd));
+        final EditorEvent<EditorEventType.TierChangeData> segmentChangedEvt =
+                new EditorEvent<>(isFireHardChangeOnUndo() ? EditorEventType.TierChanged : EditorEventType.TierChange, getEditor(),
+                        new EditorEventType.TierChangeData(this.record.getSegment(), 0, oldSegment, recordSegment));
         getEditor().getEventManager().queueEvent(segmentChangedEvt);
     }
 
     @Override
     public void undo() {
-        final MediaSegment recordSegment = this.record.getSegment().getRecordSegment();
+        final MediaSegment oldSegment = SessionFactory.newFactory().createMediaSegment();
+        final MediaSegment recordSegment = this.record.getMediaSegment();
+        oldSegment.setSegment(recordSegment);
         recordSegment.setStartValue(this.prevStart);
         recordSegment.setEndValue(this.prevEnd);
-
-        EditorEvent<EditorEventType.RecordSegmentChangedData> segmentChangedEvt =
-                new EditorEvent<>(EditorEventType.RecordSegmentChanged, getEditor(), new EditorEventType.RecordSegmentChangedData(this.record, this.prevStart, this.prevEnd));
+        final EditorEvent<EditorEventType.TierChangeData> segmentChangedEvt =
+                new EditorEvent<>(isFireHardChangeOnUndo() ? EditorEventType.TierChanged : EditorEventType.TierChange, getEditor(),
+                        new EditorEventType.TierChangeData(this.record.getSegment(), 0, oldSegment, recordSegment));
         getEditor().getEventManager().queueEvent(segmentChangedEvt);
     }
 

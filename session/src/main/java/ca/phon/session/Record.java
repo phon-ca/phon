@@ -53,9 +53,15 @@ public final class Record extends ExtendableObject {
 		recordImpl.setSpeaker(participant);
 	}
 
-	public SegmentTier getSegment() {
+	public MediaSegment getMediaSegment() { return recordImpl.getMediaSegment(); }
+
+	public void setMediaSegment(MediaSegment segment) { recordImpl.setMediaSegment(segment); }
+
+	public Tier<MediaSegment> getSegment() {
 		return recordImpl.getSegment();
 	}
+
+	public Tier<GroupSegment> getGroupSegment() { return recordImpl.getGroupSegment(); }
 
 	public boolean isExcludeFromSearches() {
 		return recordImpl.isExcludeFromSearches();

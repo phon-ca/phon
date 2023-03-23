@@ -21,7 +21,7 @@ import ca.phon.session.*;
 import ca.phon.session.Record;
 
 @TierEditorInfo(type=GroupSegment.class)
-public class SegmentTierEditorExtension implements IPluginExtensionPoint<TierEditor> {
+public class GroupSegmentTierEditorExtension implements IPluginExtensionPoint<TierEditor> {
 
 	@Override
 	public Class<?> getExtensionType() {
