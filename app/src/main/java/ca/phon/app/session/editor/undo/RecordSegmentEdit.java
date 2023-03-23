@@ -37,18 +37,34 @@ public class RecordSegmentEdit extends SessionEditorUndoableEdit {
     @Override
     public void doIt() {
         this.record.setMediaSegment(this.segment);
-        for(int gidx = 0; gidx < this.record.numberOfGroups(); gidx++) {
-            final GroupSegment gseg = this.record.getGroupSegment().getGroup(gidx);
-            this.record.getGroupSegment().setGroup(gidx, gseg);
-        }
+        fireChangeEvent(this.prevSegment, this.segment);
+        updateGroupSegments();
     }
 
     @Override
     public void undo() {
         this.record.setMediaSegment(this.prevSegment);
+        fireChangeEvent(this.segment, this.prevSegment);
+        updateGroupSegments();
+    }
+
+    private void fireChangeEvent(MediaSegment prevSegment, MediaSegment segment) {
+        final EditorEvent<EditorEventType.TierChangeData> segChangeEvt =
+                new EditorEvent<>(isFireHardChangeOnUndo() ? EditorEventType.TierChanged : EditorEventType.TierChange, getEditor(),
+                        new EditorEventType.TierChangeData(record.getSegment(), 0, prevSegment, segment));
+        getEditor().getEventManager().queueEvent(segChangeEvt);
+    }
+
+    private void updateGroupSegments() {
         for(int gidx = 0; gidx < this.record.numberOfGroups(); gidx++) {
-            final GroupSegment gseg = this.record.getGroupSegment().getGroup(gidx);
+            final GroupSegment prevSeg = this.record.getGroupSegment().getGroup(gidx);
+            final GroupSegment gseg = new GroupSegment(record, prevSeg.getStart(), prevSeg.getEnd());
             this.record.getGroupSegment().setGroup(gidx, gseg);
+
+            final EditorEvent<EditorEventType.TierChangeData> gsegChangeEvt =
+                    new EditorEvent<>(isFireHardChangeOnUndo() ? EditorEventType.TierChanged : EditorEventType.TierChange, getEditor(),
+                            new EditorEventType.TierChangeData(record.getGroupSegment(), gidx, prevSeg, gseg));
+            getEditor().getEventManager().queueEvent(gsegChangeEvt);
         }
     }
 
