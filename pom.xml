@@ -46,6 +46,11 @@
 
 	<repositories>
 		<repository>
+			<id>phon</id>
+			<name>GitHub phon-ca Apache Maven Packages</name>
+			<url>https://maven.pkg.github.com/phon-ca/phon</url>
+		</repository>
+		<repository>
 			<id>ghedlund-tst</id>
 			<name>tst</name>
 			<url>https://maven.pkg.github.com/ghedlund/tst</url>
