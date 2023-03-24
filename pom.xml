@@ -36,17 +36,6 @@
 		</developer>
 	</developers>
 
-	<contributors>
-		<contributor>
-			<name>Kelly Burkinshaw</name>
-			<email>kburkin@mun.ca</email>
-		</contributor>
-		<contributor>
-			<name>Jason Gedge</name>
-			<email>gedge@cs.mun.ca</email>
-		</contributor>
-	</contributors>
-
 	<distributionManagement>
 		<repository>
 			<id>github</id>
@@ -54,6 +43,24 @@
 			<url>https://maven.pkg.github.com/phon-ca/phon</url>
 		</repository>
 	</distributionManagement>
+
+	<repositories>
+		<repository>
+			<id>ghedlund-tst</id>
+			<name>tst</name>
+			<url>https://maven.pkg.github.com/ghedlund/tst</url>
+		</repository>
+		<repository>
+			<id>ghedlund-desktopicons</id>
+			<name>tst</name>
+			<url>https://maven.pkg.github.com/ghedlund/desktopicons</url>
+		</repository>
+		<repository>
+			<id>ghedlund-nativedialogs</id>
+			<name>tst</name>
+			<url>https://maven.pkg.github.com/ghedlund/nativedialogs</url>
+		</repository>
+	</repositories>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
