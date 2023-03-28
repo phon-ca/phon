@@ -447,7 +447,7 @@ public class XMLSessionReader_v13 implements SessionReader, XMLObjectReader<Sess
 			final MediaSegment segment = copySegment(factory, rt.getSegment());
 			retVal.setMediaSegment(segment);
 
-			for(ca.phon.session.io.xml.v13.GroupSegment gseg:rt.getSegment().gseg) {
+			for (ca.phon.session.io.xml.v13.GroupSegment gseg : rt.getSegment().getGseg()) {
 				retVal.getGroupSegment().addGroup(new GroupSegment(retVal,
 						gseg.getStart(), gseg.getEnd()));
 			}

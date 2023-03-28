@@ -83,6 +83,26 @@ public class AlignedSegment extends ExtendableObject {
         return this.start;
     }
 
+    public void setStartTime(float startTime) {
+        final MediaSegment parentSeg = getParentSegment();
+        if(startTime < parentSeg.getStartValue())
+            startTime = parentSeg.getStartValue();
+        if(startTime > parentSeg.getEndValue())
+            startTime = parentSeg.getEndValue();
+        float v = (startTime - parentSeg.getStartValue()) / (parentSeg.getEndValue() - parentSeg.getStartValue());
+        setStart(v);
+    }
+
+    public void setEndTime(float endTime) {
+        final MediaSegment parentSeg = getParentSegment();
+        if(endTime < parentSeg.getStartValue())
+            endTime = parentSeg.getStartValue();
+        if(endTime > parentSeg.getEndValue())
+            endTime = parentSeg.getEndValue();
+        float v = (endTime - parentSeg.getStartValue()) / (parentSeg.getEndValue() - parentSeg.getStartValue());
+        setEnd(v);
+    }
+
     public float setEnd(float end) {
         this.end = (float)Math.min(1.0, end);
         return this.end;
