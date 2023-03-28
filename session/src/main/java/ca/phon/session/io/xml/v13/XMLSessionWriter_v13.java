@@ -83,15 +83,17 @@ public class XMLSessionWriter_v13 implements SessionWriter, IPluginExtensionPoin
 		if(session.getMediaLocation() != null && session.getMediaLocation().length() > 0) {
 			headerData.setMedia(session.getMediaLocation());
 		}
-		final LocalDate date = (session.getDate() == null ? LocalDate.now() : session.getDate());
-		try {
-			final DatatypeFactory df = DatatypeFactory.newInstance();
-			final XMLGregorianCalendar cal = df.newXMLGregorianCalendar(
-					GregorianCalendar.from(date.atStartOfDay(ZoneId.systemDefault())));
-			cal.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
-			headerData.setDate(cal);
-		} catch (DatatypeConfigurationException e) {
-			LOGGER.warn( e.getMessage(), e);
+		final LocalDate date = session.getDate();
+		if(date != null) {
+			try {
+				final DatatypeFactory df = DatatypeFactory.newInstance();
+				final XMLGregorianCalendar cal = df.newXMLGregorianCalendar(
+						GregorianCalendar.from(date.atStartOfDay(ZoneId.systemDefault())));
+				cal.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
+				headerData.setDate(cal);
+			} catch (DatatypeConfigurationException e) {
+				LOGGER.warn(e.getMessage(), e);
+			}
 		}
 		final String lang = session.getLanguage();
 		if(lang != null && lang.length() > 0) {

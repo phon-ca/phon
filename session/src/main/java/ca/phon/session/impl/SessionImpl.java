@@ -200,12 +200,6 @@ public class SessionImpl implements SessionSPI {
 	public void setTierView(List<TierViewItem> view) {
 		tierOrder.clear();
 		tierOrder.addAll(view);
-//		for(TierViewItem item:view) {
-//			// Segment tier has been deprecated, make sure it never gets into our view ordering
-//			if(!SystemTierType.Segment.getName().equals(item.getTierName())) {
-//				tierOrder.add(item);
-//			}
-//		}
 	}
 
 	@Override

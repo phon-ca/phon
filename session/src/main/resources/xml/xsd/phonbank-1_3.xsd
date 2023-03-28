@@ -421,9 +421,9 @@ Schema for Phon sessions.
     <xs:complexType name="headerType" mixed="false">
         <xs:annotation/>
         <xs:sequence>
-            <xs:element ref="date"/>
-            <xs:element ref="language"/>
-            <xs:element ref="media"/>
+            <xs:element ref="date" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="language" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="media" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
     </xs:complexType>
 
