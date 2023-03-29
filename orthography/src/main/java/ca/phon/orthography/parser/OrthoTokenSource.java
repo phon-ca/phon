@@ -215,7 +215,7 @@ public class OrthoTokenSource implements TokenSource {
 		boolean insideElement = false;
 		while(cIndex < data.length && data[cIndex] != '*') {
 			final char c = data[cIndex++];
-			if(c == ':' && !insideElement) {
+			if(c == ':' && !insideElement && type == null) {
 				type = evtBuffer.toString();
 				evtBuffer.setLength(0);
 			} else {
