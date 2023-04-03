@@ -49,10 +49,29 @@ public enum MediaUnit {
     </xs:restriction>
   </xs:simpleType>
 	 */
-	Frame,
-	Second,
-	Millisecond,
-	Byte,
-	Character,
-	Undefined
+	Frame("f"),
+	Second("s"),
+	Millisecond("ms"),
+	Byte("b"),
+	Character("c");
+
+	private final String unitText;
+
+	private MediaUnit(String unitText) {
+		this.unitText = unitText;
+	}
+
+	@Override
+	public String toString() {
+		return this.unitText;
+	}
+
+	public static MediaUnit fromString(String unitText) {
+		for(MediaUnit type:MediaUnit.values()) {
+			if(type.toString().equals(unitText))
+				return type;
+		}
+		return null;
+	}
+
 }
