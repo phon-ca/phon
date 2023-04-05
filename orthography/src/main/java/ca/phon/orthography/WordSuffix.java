@@ -48,7 +48,15 @@ public class WordSuffix {
 	public void setCode(String code) {
 		this.code = code;
 	}
-	
+
+	public String getFormSuffix() {
+		return formSuffix;
+	}
+
+	public void setFormSuffix(String formSuffix) {
+		this.formSuffix = formSuffix;
+	}
+
 	@Override
 	public String toString() {
 		final StringBuffer buffer = new StringBuffer();
