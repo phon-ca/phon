@@ -22,15 +22,18 @@ public class WordSuffix {
 	private String formSuffix;
 	
 	private String code;
+
+	private String pos;
 	
 	public WordSuffix(WordSuffixType type) {
-		this(type, null, null);
+		this(type, null, null, null);
 	}
 	
-	public WordSuffix(WordSuffixType type, String formSuffix, String code) {
+	public WordSuffix(WordSuffixType type, String formSuffix, String code, String pos) {
 		this.type = type;
 		this.formSuffix = formSuffix;
 		this.code = code;
+		this.pos = pos;
 	}
 
 	public WordSuffixType getType() {
@@ -57,6 +60,14 @@ public class WordSuffix {
 		this.formSuffix = formSuffix;
 	}
 
+	public String getPos() {
+		return pos;
+	}
+
+	public void setPos(String pos) {
+		this.pos = pos;
+	}
+
 	@Override
 	public String toString() {
 		final StringBuffer buffer = new StringBuffer();
@@ -65,6 +76,8 @@ public class WordSuffix {
 			buffer.append("-").append(formSuffix);
 		if(code != null && code.length() > 0)
 			buffer.append(":").append(code);
+		if(pos != null && pos.length() > 0)
+			buffer.append("$").append(pos);
 		return buffer.toString();
 	}
 

@@ -166,8 +166,8 @@ public class OrthoTokenSource implements TokenSource {
 				}
 				
 			case ':':
-				// type is defined before first ':'
-				if(type == null) {
+				// type is defined before first ':' and must contain only letters
+				if(type == null && buffer.toString().matches("\\w+")) {
 					type = buffer.toString();
 					buffer.setLength(0);
 				} else 
@@ -278,6 +278,7 @@ public class OrthoTokenSource implements TokenSource {
 		WordSuffixType wst = null;
 		String formSuffix = null;
 		String code = null;
+		String pos = null;
 		final int wsIdx = buffer.lastIndexOf("@");
 		if(buffer.indexOf("@") > 0) {
 			String suffixVal = buffer.substring(wsIdx);
@@ -288,6 +289,10 @@ public class OrthoTokenSource implements TokenSource {
 			if(suffixVal.indexOf(':') > 0) {
 				code = suffixVal.substring(suffixVal.indexOf(':')+1);
 				suffixVal = suffixVal.substring(0, suffixVal.indexOf(':'));
+			}
+			if(suffixVal.indexOf("$") > 0) {
+				pos = suffixVal.substring(suffixVal.indexOf("$")+1);
+				suffixVal = suffixVal.substring(0, suffixVal.indexOf("$"));
 			}
 			wst = WordSuffixType.fromCode(suffixVal);
 			if(wst != null) {
@@ -315,7 +320,7 @@ public class OrthoTokenSource implements TokenSource {
 		tokenQueue.add(wordToken);
 		
 		if(wst != null) {
-			WordSuffix wordSuffix = new WordSuffix(wst, formSuffix, code);
+			WordSuffix wordSuffix = new WordSuffix(wst, formSuffix, code, pos);
 			CommonToken wsToken = new WordSuffixToken(wordSuffix);
 			tokenQueue.add(wsToken);
 		}
