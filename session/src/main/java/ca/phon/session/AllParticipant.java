@@ -11,6 +11,36 @@ public class AllParticipant implements ParticipantSPI {
 	}
 
 	@Override
+	public void setBirthplace(String birthplace) {
+
+	}
+
+	@Override
+	public String getBirthplace() {
+		return null;
+	}
+
+	@Override
+	public void setFirstLanguage(String firstLanguage) {
+
+	}
+
+	@Override
+	public String getFirstLanguage() {
+		return null;
+	}
+
+	@Override
+	public void setOther(String other) {
+
+	}
+
+	@Override
+	public String getOther() {
+		return null;
+	}
+
+	@Override
 	public void setSES(String ses) {
 	}
 

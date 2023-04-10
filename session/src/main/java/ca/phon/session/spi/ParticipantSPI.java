@@ -130,5 +130,17 @@ public interface ParticipantSPI {
 	 * @param sex The sex to set.
 	 */
 	public abstract void setSex(Sex sex);
-	
+
+	public abstract void setBirthplace(String birthplace);
+
+	public abstract String getBirthplace();
+
+	public abstract void setFirstLanguage(String firstLanguage);
+
+	public abstract String getFirstLanguage();
+
+	public abstract void setOther(String other);
+
+	public abstract String getOther();
+
 }

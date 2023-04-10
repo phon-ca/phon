@@ -126,7 +126,31 @@ public final class Participant extends ExtendableObject {
 	public void setSex(Sex sex) {
 		participantImpl.setSex(sex);
 	}
-	
+
+	public void setBirthplace(String birthplace) {
+		participantImpl.setBirthplace(birthplace);
+	}
+
+	public String getBirthplace() {
+		return participantImpl.getBirthplace();
+	}
+
+	public void setFirstLanguage(String firstLanguage) {
+		participantImpl.setFirstLanguage(firstLanguage);
+	}
+
+	public String getFirstLanguage() {
+		return participantImpl.getFirstLanguage();
+	}
+
+	public void setOther(String other) {
+		participantImpl.setOther(other);
+	}
+
+	public String getOther() {
+		return participantImpl.getOther();
+	}
+
 	@Override
 	public String toString() {
 		return (getName() != null ? getName() : 

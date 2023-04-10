@@ -31,6 +31,8 @@ public class ParticipantImpl implements ParticipantSPI {
 	private String id;
 	
 	private LocalDate birthDate;
+
+	private String birthPlace;
 	
 	private String name;
 	
@@ -49,6 +51,10 @@ public class ParticipantImpl implements ParticipantSPI {
 	private ParticipantRole role;
 	
 	private String language;
+
+	private String firstLanguage;
+
+	private String other;
 	
 	ParticipantImpl() {
 		super();
@@ -174,6 +180,34 @@ public class ParticipantImpl implements ParticipantSPI {
 	public void setSex(Sex sex) {
 		this.sex = sex;
 	}
-	
-	
+
+	@Override
+	public void setBirthplace(String birthplace) {
+		this.birthPlace = birthplace;
+	}
+
+	@Override
+	public String getBirthplace() {
+		return this.birthPlace;
+	}
+
+	@Override
+	public void setFirstLanguage(String firstLanguage) {
+		this.firstLanguage = firstLanguage;
+	}
+
+	@Override
+	public String getFirstLanguage() {
+		return this.firstLanguage;
+	}
+
+	@Override
+	public void setOther(String other) {
+		this.other = other;
+	}
+
+	@Override
+	public String getOther() {
+		return this.other;
+	}
 }

@@ -218,6 +218,10 @@ public class XMLSessionWriter_v13 implements SessionWriter, IPluginExtensionPoin
 			}
 		}
 
+		if(part.getBirthplace() != null) {
+			retVal.setBirthplace(part.getBirthplace());
+		}
+
 		final Period age = part.getAge(null);
 		if(age != null) {
 			try {
@@ -237,6 +241,9 @@ public class XMLSessionWriter_v13 implements SessionWriter, IPluginExtensionPoin
 		for(String l:langs) {
 			retVal.getLanguage().add(StringUtils.strip(l));
 		}
+
+		if(part.getFirstLanguage() != null)
+			retVal.setFirstLanguage(part.getFirstLanguage());
 
 		if(part.getSex() == Sex.MALE)
 			retVal.setSex(SexType.MALE);
@@ -264,6 +271,9 @@ public class XMLSessionWriter_v13 implements SessionWriter, IPluginExtensionPoin
 		}
 
 		retVal.setSES(part.getSES());
+
+		if(part.getOther() != null)
+			retVal.setOther(part.getOther());
 
 		return retVal;
 	}

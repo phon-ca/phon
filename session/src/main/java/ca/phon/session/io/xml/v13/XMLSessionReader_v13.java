@@ -256,6 +256,10 @@ public class XMLSessionReader_v13 implements SessionReader, XMLObjectReader<Sess
 			}
 		}
 
+		if(pt.getBirthplace() != null) {
+			retVal.setBirthplace(pt.getBirthplace());
+		}
+
 		final Duration ageDuration = pt.getAge();
 		if(ageDuration != null) {
 			// convert to period
@@ -271,6 +275,10 @@ public class XMLSessionReader_v13 implements SessionReader, XMLObjectReader<Sess
 			langs += (langs.length() > 0 ? " " : "") + lang;
 		retVal.setLanguage(langs);
 
+		if(pt.getFirstLanguage() != null) {
+			retVal.setFirstLanguage(pt.getFirstLanguage());
+		}
+
 		if(pt.getSex() == SexType.MALE)
 			retVal.setSex(Sex.MALE);
 		else if(pt.getSex() == SexType.FEMALE)
@@ -284,6 +292,10 @@ public class XMLSessionReader_v13 implements SessionReader, XMLObjectReader<Sess
 		retVal.setRole(prole);
 
 		retVal.setSES(pt.getSES());
+
+		if(pt.getOther() != null) {
+			retVal.setOther(pt.getOther());
+		}
 
 		return retVal;
 	}
