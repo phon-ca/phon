@@ -21,6 +21,7 @@ import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.*;
 import ca.phon.session.spi.RecordSPI;
+import ca.phon.util.Language;
 
 import java.util.*;
 
@@ -52,6 +53,10 @@ public final class Record extends ExtendableObject {
 	public void setSpeaker(Participant participant) {
 		recordImpl.setSpeaker(participant);
 	}
+
+	public Language getLanguage() { return recordImpl.getLanguage(); }
+
+	public void setLanguage(Language language) { recordImpl.setLanguage(language); }
 
 	public MediaSegment getMediaSegment() { return recordImpl.getMediaSegment(); }
 

@@ -358,6 +358,9 @@ public class XMLSessionWriter_v13 implements SessionWriter, IPluginExtensionPoin
 
 		retVal.setExcludeFromSearches(record.isExcludeFromSearches());
 
+		if(record.getLanguage() != null)
+			retVal.setLanguage(record.getLanguage().toString());
+
 		// orthography
 		final Tier<Orthography> orthoTier = record.getOrthography();
 		final OrthographyType orthoType = copyOrthography(factory, orthoTier);

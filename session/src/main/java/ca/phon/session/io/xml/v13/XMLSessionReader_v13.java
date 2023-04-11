@@ -30,6 +30,7 @@ import ca.phon.session.io.SessionReader;
 import ca.phon.session.GroupSegment;
 import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.syllable.SyllableConstituentType;
+import ca.phon.util.Language;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 import ca.phon.xml.XMLObjectReader;
@@ -366,6 +367,14 @@ public class XMLSessionReader_v13 implements SessionReader, XMLObjectReader<Sess
 		final Record retVal = factory.createRecord();
 
 		retVal.setExcludeFromSearches(rt.isExcludeFromSearches());
+
+		if(rt.getLanguage() != null) {
+			try {
+				Language l = Language.parseLanguage(rt.getLanguage());
+				retVal.setLanguage(l);
+			} catch (IllegalArgumentException e) {
+			}
+		}
 
 		try {
 			if(rt.getId() != null) {

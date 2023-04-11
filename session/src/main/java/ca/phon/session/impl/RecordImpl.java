@@ -24,6 +24,7 @@ import ca.phon.orthography.Orthography;
 import ca.phon.session.*;
 import ca.phon.session.GroupSegment;
 import ca.phon.session.spi.RecordSPI;
+import ca.phon.util.Language;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -35,11 +36,13 @@ import java.util.concurrent.atomic.AtomicReference;
 public class RecordImpl implements RecordSPI {
 
 	/* Attributes */
-	private final AtomicReference<Participant> participantRef = new AtomicReference<Participant>();
+	private UUID uuid = UUID.randomUUID();
+
+	private Participant participant = null;
 
 	private volatile boolean excludeFromSearches = false;
 
-	private final AtomicReference<UUID> uuidRef = new AtomicReference<UUID>(UUID.randomUUID());
+	private Language language = null;
 
 	/* default tiers */
 	private final Tier<Orthography> orthography;
@@ -76,24 +79,32 @@ public class RecordImpl implements RecordSPI {
 
 	@Override
 	public UUID getUuid() {
-		return this.uuidRef.get();
+		return this.uuid;
 	}
 
 	@Override
 	public void setUuid(UUID id) {
-		uuidRef.getAndSet(id);
+		this.uuid = id;
 	}
 
 	@Override
 	public Participant getSpeaker() {
-		return participantRef.get();
+		return this.participant;
 	}
 
 	@Override
 	public void setSpeaker(Participant participant) {
-		participantRef.getAndSet(
-				(participant != null ? participant : Participant.UNKNOWN)
-				);
+		this.participant = participant;
+	}
+
+	@Override
+	public Language getLanguage() {
+		return this.language;
+	}
+
+	@Override
+	public void setLanguage(Language language) {
+		this.language = language;
 	}
 
 	@Override

@@ -16,13 +16,7 @@
    limitations under the License.
 -->
 <!-- 
-Schema for Phon sessions.
-
-2010-01-20:
- * Added namespace declaration 'http://phon.ling.mun.ca/ns/phonbank'
- * Created elements for each type.  Types now ref the appropriate element.
- 
-
+Schema for Phon sessions
  -->
 <xs:schema xmlns="https://phon.ca/ns/phonbank"
     targetNamespace="https://phon.ca/ns/phonbank"
@@ -149,7 +143,6 @@ Schema for Phon sessions.
             <xs:documentation>A record.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
-
             <xs:element ref="orthography" minOccurs="1" maxOccurs="1"/>
 
             <xs:element ref="ipaTier" minOccurs="0" maxOccurs="unbounded"/>
@@ -165,11 +158,11 @@ Schema for Phon sessions.
             <xs:element ref="flatTier" maxOccurs="unbounded" minOccurs="0"/>
 
             <xs:element ref="groupTier" minOccurs="0" maxOccurs="unbounded"/>
-
         </xs:sequence>
         <xs:attribute name="speaker" type="xs:IDREF"/>
         <xs:attribute name="id" type="xs:ID"/>
         <xs:attribute name="excludeFromSearches" type="xs:boolean" default="false" use="optional"/>
+        <xs:attribute name="language" type="xs:language" use="optional"/>
     </xs:complexType>
 
     <xs:element name="orthography" type="orthographyType"/>
@@ -617,6 +610,7 @@ Schema for Phon sessions.
     </xs:simpleType>
 
     <xs:simpleType name="listOfLanguages">
-        <xs:list itemType="xs:string"/>
+        <xs:list itemType="xs:language"/>
     </xs:simpleType>
+
 </xs:schema>

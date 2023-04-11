@@ -26,7 +26,7 @@ import java.util.*;
  */
 public class Language implements Comparable<Language> {
 
-	private final static String langRegex = "([a-z]{3})(-[_a-zA-Z0-9]{1,8})*";
+	private final static String langRegex = "([a-zA-Z]{1,8})(-[a-zA-Z0-9]{1,8})*";
 	
 	private LanguageEntry primaryLanguage;
 	

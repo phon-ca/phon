@@ -19,6 +19,7 @@ import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.*;
+import ca.phon.util.Language;
 
 import java.util.*;
 
@@ -52,6 +53,10 @@ public interface RecordSPI {
 	 * @paran IParticipant
 	 */
 	public void setSpeaker(Participant participant);
+
+	public Language getLanguage();
+
+	public void setLanguage(Language language);
 
 	/**
 	 * Return media segment for record
