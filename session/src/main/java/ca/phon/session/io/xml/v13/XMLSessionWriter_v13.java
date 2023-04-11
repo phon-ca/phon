@@ -99,7 +99,7 @@ public class XMLSessionWriter_v13 implements SessionWriter, IPluginExtensionPoin
 		if(lang != null && lang.length() > 0) {
 			final String langs[] = lang.split("\\p{Space}");
 			for(String l:langs) {
-				headerData.getLanguage().add(l);
+				headerData.getLanguages().add(l);
 			}
 		}
 		retVal.setHeader(headerData);
@@ -239,7 +239,7 @@ public class XMLSessionWriter_v13 implements SessionWriter, IPluginExtensionPoin
 		final String lang = part.getLanguage();
 		final String langs[] = (lang != null ? lang.split(",") : new String[0]);
 		for(String l:langs) {
-			retVal.getLanguage().add(StringUtils.strip(l));
+			retVal.getLanguages().add(StringUtils.strip(l));
 		}
 
 		if(part.getFirstLanguage() != null)

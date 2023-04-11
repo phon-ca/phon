@@ -19,8 +19,10 @@
 Schema for Phon sessions
  -->
 <xs:schema xmlns="https://phon.ca/ns/phonbank"
-    targetNamespace="https://phon.ca/ns/phonbank"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema" id="PhonBank" version="1.3">
+           xmlns:pb="https://phon.ca/ns/phonbank"
+           targetNamespace="https://phon.ca/ns/phonbank"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           id="PhonBank" version="1.3">
 
     <!-- root element -->
     <xs:element name="session" type="SessionType">
@@ -144,19 +146,12 @@ Schema for Phon sessions
         </xs:annotation>
         <xs:sequence>
             <xs:element ref="orthography" minOccurs="1" maxOccurs="1"/>
-
             <xs:element ref="ipaTier" minOccurs="0" maxOccurs="unbounded"/>
-
             <xs:element ref="blindTranscription" minOccurs="0" maxOccurs="unbounded"/>
-
             <xs:element ref="alignment" minOccurs="0" maxOccurs="unbounded"/>
-
             <xs:element ref="segment" maxOccurs="1" minOccurs="0"/>
-
             <xs:element ref="notes" minOccurs="0" maxOccurs="1"/>
-
             <xs:element ref="flatTier" maxOccurs="unbounded" minOccurs="0"/>
-
             <xs:element ref="groupTier" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="speaker" type="xs:IDREF"/>
@@ -171,11 +166,10 @@ Schema for Phon sessions
             <xs:documentation>The main line transcription.</xs:documentation>
         </xs:annotation>
         <xs:choice maxOccurs="unbounded">
-            <xs:element ref="w" maxOccurs="unbounded" minOccurs="0"/>
-            <xs:element ref="g" maxOccurs="unbounded" minOccurs="0"/>
-            <xs:element ref="p" maxOccurs="unbounded" minOccurs="0"/>
-            <xs:element ref="com" maxOccurs="0" minOccurs="0"/>
-            <xs:element ref="chat" maxOccurs="0" minOccurs="0"/>
+            <xs:element ref="w"/>
+            <xs:element ref="g"/>
+            <xs:element ref="p"/>
+            <xs:element ref="com"/>
             <xs:element ref="e"/>
         </xs:choice>
     </xs:complexType>
@@ -259,7 +253,6 @@ Schema for Phon sessions
                 <xs:element ref="w"/>
                 <xs:element ref="com"/>
                 <xs:element ref="e"/>
-                <xs:element ref="chat"/>
                 <xs:element ref="p"/>
                 <xs:element ref="ig"/>
             </xs:choice>
@@ -300,14 +293,6 @@ Schema for Phon sessions
         <xs:annotation>
             <xs:documentation>A single word.</xs:documentation>
         </xs:annotation>
-    </xs:complexType>
-
-    <xs:element name="chat" type="chatCodeType"/>
-    <xs:complexType name="chatCodeType" mixed="true">
-        <xs:annotation>
-            <xs:documentation>A holder element for chat information.</xs:documentation>
-        </xs:annotation>
-        <xs:attribute name="type" type="xs:string"/>
     </xs:complexType>
 
     <xs:element name="p" type="punctuationType"/>
@@ -390,6 +375,7 @@ Schema for Phon sessions
     </xs:complexType>
 
     <xs:element name="transcriber" type="transcriberType"/>
+    <xs:element name="password" type="passwordType"/>
     <xs:complexType name="passwordType" mixed="true">
         <xs:attribute name="use" type="xs:boolean" default="false"/>
     </xs:complexType>
@@ -400,39 +386,55 @@ Schema for Phon sessions
                 cheating.)</xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="name" type="xs:string"/>
-            <xs:element name="password" type="passwordType"/>
+            <xs:element ref="name"/>
+            <xs:element ref="password"/>
         </xs:sequence>
         <xs:attribute name="id" type="xs:ID" use="required"/>
     </xs:complexType>
 
     <xs:element name="header" type="headerType"/>
+    <xs:element name="date" type="xs:date"/>
+    <xs:element name="languages" type="listOfLanguages"/>
+    <xs:element name="media" type="xs:string"/>
     <xs:complexType name="headerType" mixed="false">
         <xs:annotation/>
         <xs:sequence>
-            <xs:element name="date" type="xs:date" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="language" type="listOfLanguages" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="media" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="date" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="languages" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="media" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
     </xs:complexType>
 
     <xs:element name="participant" type="participantType"/>
+    <xs:element name="role" type="xs:string"/>
+    <xs:element name="name" type="xs:string"/>
+    <xs:element name="group" type="xs:string"/>
+    <xs:element name="sex" type="sexType"/>
+    <xs:element name="SES" type="xs:string"/>
+    <xs:element name="education" type="xs:string"/>
+    <xs:element name="birthday" type="xs:date"/>
+    <xs:element name="birthplace" type="xs:string"/>
+    <xs:element name="age" type="ageType"/>
+    <xs:element name="first-language" type="xs:language"/>
+    <xs:element name="syllabifier" type="xs:string"/>
+    <xs:element name="dictionary" type="xs:string"/>
+    <xs:element name="other" type="xs:string"/>
     <xs:complexType name="participantType" mixed="false">
         <xs:sequence>
-            <xs:element name="role" type="xs:string" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="name" type="xs:string" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="group" type="xs:string" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="sex" type="sexType" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="SES" type="xs:string" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="education" type="xs:string" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="birthday" type="xs:date" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="birthplace" type="xs:string" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="age" type="ageType" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="language" type="listOfLanguages" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="first-language" type="xs:string" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="syllabifier" type="xs:string" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="dictionary" type="xs:string" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="other" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="role" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="name" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="group" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="sex" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="SES" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="education" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="birthday" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="birthplace" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="age" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="languages" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="first-language" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="syllabifier" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="dictionary" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="other" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
 
         <!-- Changed id to xs:ID for constraints -->

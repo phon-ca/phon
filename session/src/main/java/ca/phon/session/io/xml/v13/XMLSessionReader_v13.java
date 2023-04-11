@@ -145,9 +145,9 @@ public class XMLSessionReader_v13 implements SessionReader, XMLObjectReader<Sess
 						xmlDate.getDay());
 				retVal.setDate(dateTime);
 			}
-			if(headerData.getLanguage().size() > 0) {
+			if(headerData.getLanguages().size() > 0) {
 				String langs = "";
-				for(String lang:headerData.getLanguage()) {
+				for(String lang:headerData.getLanguages()) {
 					langs += (langs.length() > 0 ? " " : "") + lang;
 				}
 				retVal.setLanguage(langs);
@@ -272,7 +272,7 @@ public class XMLSessionReader_v13 implements SessionReader, XMLObjectReader<Sess
 		retVal.setGroup(pt.getGroup());
 
 		String langs = "";
-		for(String lang:pt.getLanguage())
+		for(String lang:pt.getLanguages())
 			langs += (langs.length() > 0 ? " " : "") + lang;
 		retVal.setLanguage(langs);
 
