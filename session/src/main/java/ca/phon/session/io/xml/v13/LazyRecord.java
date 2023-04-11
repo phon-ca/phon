@@ -22,6 +22,7 @@ import ca.phon.session.GroupSegment;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.spi.RecordSPI;
+import ca.phon.util.Language;
 
 import java.util.List;
 import java.util.Set;
@@ -58,7 +59,19 @@ public final class LazyRecord implements RecordSPI {
 			return internalRecord.getSpeaker();
 		}
 	}
-	
+
+	@Override
+	public Language getLanguage() {
+		loadRecord();
+		return internalRecord.getLanguage();
+	}
+
+	@Override
+	public void setLanguage(Language language) {
+		loadRecord();
+		internalRecord.setLanguage(language);
+	}
+
 	private Participant findSpeaker() {
 		if(recordElement.getSpeaker() != null) {
 			final ParticipantType pt = (ParticipantType)recordElement.getSpeaker();

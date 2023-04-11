@@ -21,6 +21,7 @@ import ca.phon.orthography.Orthography;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.spi.RecordSPI;
+import ca.phon.util.Language;
 
 import java.util.*;
 
@@ -74,6 +75,18 @@ public final class LazyRecord implements RecordSPI {
 	public void setSpeaker(Participant participant) {
 		loadRecord();
 		internalRecord.setSpeaker(participant);
+	}
+
+	@Override
+	public Language getLanguage() {
+		loadRecord();
+		return internalRecord.getLanguage();
+	}
+
+	@Override
+	public void setLanguage(Language language) {
+		loadRecord();
+		internalRecord.setLanguage(language);
 	}
 
 	public MediaSegment getMediaSegment() {
