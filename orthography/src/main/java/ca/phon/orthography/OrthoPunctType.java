@@ -21,6 +21,8 @@ package ca.phon.orthography;
 public enum OrthoPunctType {
 	PERIOD('.'),
 	COMMA(','),
+	COLON(':'),
+	SEMICOLON(';'),
 	EXCLAMATION('!'),
 	QUESTION('?'),
 	AT('@'),

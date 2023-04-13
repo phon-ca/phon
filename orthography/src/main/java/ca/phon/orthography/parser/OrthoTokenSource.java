@@ -167,7 +167,7 @@ public class OrthoTokenSource implements TokenSource {
 				
 			case ':':
 				// type is defined before first ':' and must contain only letters
-				if(type == null && buffer.toString().matches("\\w+")) {
+				if(type == null && buffer.toString().matches("[-\\w_]+")) {
 					type = buffer.toString();
 					buffer.setLength(0);
 				} else 
