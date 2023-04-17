@@ -161,26 +161,92 @@ public final class SessionMetadata extends ExtendableObject {
 		sessionMetadataImpl.setRights(rights);
 	}
 
+	/**
+	 * Return number of comments at beginning of session.
+	 *
+	 * @return number of comments
+	 */
 	public int getNumberOfComments() {
 		return sessionMetadataImpl.getNumberOfComments();
 	}
 
+	/**
+	 * Return comment at beginning of session at given index
+	 *
+	 * @param idx
+	 * @return
+	 */
 	public Comment getComment(int idx) {
 		return sessionMetadataImpl.getComment(idx);
 	}
 
+	/**
+	 * Add comment to beginning of session
+	 * @param comment
+	 */
 	public void addComment(Comment comment) {
 		sessionMetadataImpl.addComment(comment);
 	}
 
+	/**
+	 * Remove comment from beginning of session
+	 *
+	 * @param comment
+	 */
 	public void removeComment(Comment comment) {
 		sessionMetadataImpl.removeComment(comment);
 	}
 
+	/**
+	 * Remove comment from beginning of session at given index
+	 * @param idx
+	 */
 	public void removeComment(int idx) {
 		sessionMetadataImpl.removeComment(idx);
 	}
-	
-	
-	
+
+	/**
+	 * Return number of comments at end of session.
+	 *
+	 * @return number of comments
+	 */
+	public int getNumberOfTrailingComments() {
+		return sessionMetadataImpl.getNumberOfTrailingComments();
+	}
+
+	/**
+	 * Return comment at end of session at given index
+	 *
+	 * @param idx
+	 * @return
+	 */
+	public Comment getTrailingComment(int idx) {
+		return sessionMetadataImpl.getTrailingComment(idx);
+	}
+
+	/**
+	 * Add comment to end of session
+	 * @param comment
+	 */
+	public void addTrailingComment(Comment comment) {
+		sessionMetadataImpl.addTrailingComment(comment);
+	}
+
+	/**
+	 * Remove comment from end of session
+	 *
+	 * @param comment
+	 */
+	public void removeTrailingComment(Comment comment) {
+		sessionMetadataImpl.removeTrailingComment(comment);
+	}
+
+	/**
+	 * Remove comment from beginning of end at given index
+	 * @param idx
+	 */
+	public void removeTrailingComment(int idx) {
+		sessionMetadataImpl.removeTrailingComment(idx);
+	}
+
 }

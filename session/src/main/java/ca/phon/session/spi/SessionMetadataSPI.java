@@ -177,5 +177,39 @@ public interface SessionMetadataSPI {
 	 */
 	public void removeComment(Comment comment);
 	public void removeComment(int idx);
+
+	/**
+	 * Return number of comments at end of session.
+	 *
+	 * @return number of comments
+	 */
+	public int getNumberOfTrailingComments();
+
+	/**
+	 * Return comment at end of session at given index
+	 *
+	 * @param idx
+	 * @return
+	 */
+	public Comment getTrailingComment(int idx);
+
+	/**
+	 * Add comment to end of session
+	 * @param comment
+	 */
+	public void addTrailingComment(Comment comment);
+
+	/**
+	 * Remove comment from end of session
+	 *
+	 * @param comment
+	 */
+	public void removeTrailingComment(Comment comment);
+
+	/**
+	 * Remove comment from beginning of end at given index
+	 * @param idx
+	 */
+	public void removeTrailingComment(int idx);
 	
 }

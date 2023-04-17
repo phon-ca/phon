@@ -264,4 +264,46 @@ public class SessionMetadataImpl implements SessionMetadataSPI {
 		comments.remove(idx);
 	}
 
+	private final List<Comment> trailingComments =
+			Collections.synchronizedList(new ArrayList<Comment>());
+
+	public int getNumberOfTrailingComments() {
+		return trailingComments.size();
+	}
+
+	/**
+	 * Return comment at end of session at given index
+	 *
+	 * @param idx
+	 * @return
+	 */
+	public Comment getTrailingComment(int idx) {
+		return trailingComments.get(idx);
+	}
+
+	/**
+	 * Add comment to end of session
+	 * @param comment
+	 */
+	public void addTrailingComment(Comment comment) {
+		trailingComments.add(comment);
+	}
+
+	/**
+	 * Remove comment from end of session
+	 *
+	 * @param comment
+	 */
+	public void removeTrailingComment(Comment comment) {
+		trailingComments.remove(comment);
+	}
+
+	/**
+	 * Remove comment from beginning of end at given index
+	 * @param idx
+	 */
+	public void removeTrailingComment(int idx) {
+		trailingComments.remove(idx);
+	}
+
 }
