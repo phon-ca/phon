@@ -18,6 +18,8 @@ package ca.phon.session.io.xml.v13;
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.orthography.OrthoPunct;
+import ca.phon.orthography.OrthoPunctType;
 import ca.phon.orthography.Orthography;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
@@ -581,7 +583,11 @@ public class XMLSessionReader_v13 implements SessionReader, XMLObjectReader<Sess
 						eleList.add("}");
 				} else if(ele instanceof PunctuationType) {
 					PunctuationType pt = (PunctuationType)ele;
-					eleList.add(pt.getContent());
+					OrthoPunctType opt = OrthoPunctType.valueOf(pt.getType());
+					if(opt != null)
+						eleList.add(opt.getChar()+"");
+					else
+						eleList.add(pt.getType());
 				}
 			}
 

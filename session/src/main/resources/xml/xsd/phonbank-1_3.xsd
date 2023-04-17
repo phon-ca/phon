@@ -296,7 +296,7 @@ Schema for Phon sessions
     </xs:complexType>
 
     <xs:element name="p" type="punctuationType"/>
-    <xs:complexType name="punctuationType" mixed="true">
+    <xs:complexType name="punctuationType" mixed="false">
         <xs:annotation>
             <xs:documentation>Punctuation like '.',',',etc.</xs:documentation>
         </xs:annotation>
