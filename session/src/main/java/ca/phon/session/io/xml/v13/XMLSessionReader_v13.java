@@ -229,10 +229,10 @@ public class XMLSessionReader_v13 implements SessionReader, XMLObjectReader<Sess
 					foundFirstRecord = true;
 				}
 			}
-			if(!foundFirstRecord && recordComments.size() > 0) {
+			if(recordComments.size() > 0) {
 				// add record comments to session metadata
 				for(Comment c:recordComments) {
-					retVal.getMetadata().addComment(c);
+					retVal.getMetadata().addTrailingComment(c);
 				}
 			}
 		}

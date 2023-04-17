@@ -188,6 +188,13 @@ public class XMLSessionWriter_v13 implements SessionWriter, IPluginExtensionPoin
 				warnings.add(new SerializationWarning(i, e));
 			}
 		}
+
+		for(int tcIdx = 0; tcIdx < session.getMetadata().getNumberOfTrailingComments(); tcIdx++) {
+			final Comment com = session.getMetadata().getTrailingComment(tcIdx);
+			final CommentType ct = copyComment(factory, com);
+			transcript.getUOrComment().add(ct);
+		}
+
 		retVal.setTranscript(transcript);
 
 		return factory.createSession(retVal);
