@@ -265,8 +265,8 @@ public class OrthoTokenSource implements TokenSource {
 		}
 		
 		// check for word prefix codes
-		WordPrefixType wpt = null;
-		for(WordPrefixType prefix:WordPrefixType.values()) {
+		WordType wpt = null;
+		for(WordType prefix: WordType.values()) {
 			if(buffer.toString().startsWith(prefix.getCode())) {
 				wpt = prefix;
 				buffer.delete(0, wpt.getCode().length());
@@ -275,7 +275,7 @@ public class OrthoTokenSource implements TokenSource {
 		}
 		
 		// check for word suffix
-		WordSuffixType wst = null;
+		WordFormType wst = null;
 		String formSuffix = null;
 		String code = null;
 		String pos = null;
@@ -294,7 +294,7 @@ public class OrthoTokenSource implements TokenSource {
 				pos = suffixVal.substring(suffixVal.indexOf("$")+1);
 				suffixVal = suffixVal.substring(0, suffixVal.indexOf("$"));
 			}
-			wst = WordSuffixType.fromCode(suffixVal);
+			wst = WordFormType.fromCode(suffixVal);
 			if(wst != null) {
 				buffer.delete(wsIdx, buffer.length());
 			}
@@ -302,7 +302,7 @@ public class OrthoTokenSource implements TokenSource {
 		
 		// separated-prefix
 		if(buffer.toString().endsWith("#")) {
-			wst = WordSuffixType.SEPARATED_PREFIX;
+			wst = WordFormType.SEPARATED_PREFIX;
 			buffer.delete(buffer.length()-1, buffer.length());
 		}
 		

@@ -51,7 +51,7 @@ public class OrthoWordExtractor extends VisitorAdapter<OrthoElement> {
 	
 	@Visits
 	public void visitWord(OrthoWord word) {
-		if(word.getPrefix() != null && word.getPrefix().getType() == WordPrefixType.OMISSION)
+		if(word.getPrefix() != null && word.getPrefix().getType() == WordType.OMISSION)
 			return;
 		
 		wordList.add(word);

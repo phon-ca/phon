@@ -31,7 +31,7 @@ public class TestOrthographyParser {
 	public void testWordPrefixCodes() throws ParseException {
 		final String wordData = "word";
 		
-		for(WordPrefixType wp:WordPrefixType.values()) {
+		for(WordType wp: WordType.values()) {
 			final Orthography ortho = Orthography.parseOrthography(wp.getCode() + wordData);
 			Assert.assertEquals(1, ortho.length());
 			
@@ -49,7 +49,7 @@ public class TestOrthographyParser {
 	public void testWordSuffixCodes() throws ParseException {
 		final String wordData = "word";
 		
-		for(WordSuffixType ws:WordSuffixType.values()) {
+		for(WordFormType ws: WordFormType.values()) {
 			final Orthography ortho = Orthography.parseOrthography(wordData + ws.getCode());
 			Assert.assertEquals(1, ortho.length());
 			
@@ -67,8 +67,8 @@ public class TestOrthographyParser {
 	public void testWordComboCodes() throws ParseException {
 		final String wordData = "word";
 		
-		for(WordPrefixType wp:WordPrefixType.values()) {
-			for(WordSuffixType ws:WordSuffixType.values()) {
+		for(WordType wp: WordType.values()) {
+			for(WordFormType ws: WordFormType.values()) {
 				final String txt = wp.getCode() + wordData + ws.getCode();
 				
 				final Orthography ortho = Orthography.parseOrthography(txt);

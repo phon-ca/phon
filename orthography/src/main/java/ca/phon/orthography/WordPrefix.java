@@ -17,17 +17,17 @@ package ca.phon.orthography;
 
 public class WordPrefix {
 	
-	private WordPrefixType type;
+	private WordType type;
 	
-	public WordPrefix(WordPrefixType type) {
+	public WordPrefix(WordType type) {
 		this.type = type;
 	}
 	
-	public WordPrefixType getType() {
+	public WordType getType() {
 		return type;
 	}
 	
-	public void setType(WordPrefixType type) {
+	public void setType(WordType type) {
 		this.type = type;
 	}
 	

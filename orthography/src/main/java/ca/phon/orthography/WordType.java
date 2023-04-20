@@ -19,18 +19,18 @@ package ca.phon.orthography;
 /**
  * Codes for word prefix.
  */
-public enum WordPrefixType {
+public enum WordType {
 	// w attribute:type
 	OMISSION("0", "omission"),
-	INCOMPLETE("&+", "incomplete"),
+	NONWORD("&~", "nonword"),
 	FILLER("&-", "filler"),
-	FRAGMENT("&", "fragment");
+	FRAGMENT("&+", "fragment");
 	
 	private String code;
 	
 	private String displayName;
 	
-	private WordPrefixType(String code, String displayName) {
+	private WordType(String code, String displayName) {
 		this.code = code;
 		this.displayName = displayName;
 	}
@@ -43,10 +43,10 @@ public enum WordPrefixType {
 		return this.displayName;
 	}
 
-	public static WordPrefixType fromCode(String code) {
-		WordPrefixType retVal = null;
+	public static WordType fromCode(String code) {
+		WordType retVal = null;
 		
-		for(WordPrefixType v:values()) {
+		for(WordType v:values()) {
 			if(v.getCode().equals(code)) {
 				retVal = v;
 				break;

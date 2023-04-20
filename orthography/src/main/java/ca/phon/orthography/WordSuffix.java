@@ -17,7 +17,7 @@ package ca.phon.orthography;
 
 public class WordSuffix {
 	
-	private WordSuffixType type;
+	private WordFormType type;
 	
 	private String formSuffix;
 	
@@ -25,22 +25,22 @@ public class WordSuffix {
 
 	private String pos;
 	
-	public WordSuffix(WordSuffixType type) {
+	public WordSuffix(WordFormType type) {
 		this(type, null, null, null);
 	}
 	
-	public WordSuffix(WordSuffixType type, String formSuffix, String code, String pos) {
+	public WordSuffix(WordFormType type, String formSuffix, String code, String pos) {
 		this.type = type;
 		this.formSuffix = formSuffix;
 		this.code = code;
 		this.pos = pos;
 	}
 
-	public WordSuffixType getType() {
+	public WordFormType getType() {
 		return type;
 	}
 
-	public void setType(WordSuffixType type) {
+	public void setType(WordFormType type) {
 		this.type = type;
 	}
 

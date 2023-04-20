@@ -65,25 +65,25 @@ public class OrthographyBuilder {
 		return this;
 	}
 	
-	public OrthographyBuilder appendWord(String data, WordPrefixType prefix, WordSuffixType suffix,
-			UntranscribedType untranscribed) {
+	public OrthographyBuilder appendWord(String data, WordType prefix, WordFormType suffix,
+										 UntranscribedType untranscribed) {
 		final OrthoWord word = new OrthoWord(data, prefix, suffix, untranscribed);
 		eleList.add(word);
 		return this;
 	}
 	
-	public OrthographyBuilder appendWord(String data, WordPrefixType prefix, WordSuffixType suffix) {
+	public OrthographyBuilder appendWord(String data, WordType prefix, WordFormType suffix) {
 		final OrthoWord word = new OrthoWord(data, prefix, suffix);
 		eleList.add(word);
 		return this;
 	}
 	
-	public OrthographyBuilder appendWord(String data, WordPrefixType prefix) {
+	public OrthographyBuilder appendWord(String data, WordType prefix) {
 		appendWord(data, prefix, null);
 		return this;
 	}
 	
-	public OrthographyBuilder appendWord(String data, WordSuffixType suffix) {
+	public OrthographyBuilder appendWord(String data, WordFormType suffix) {
 		appendWord(data, null, suffix);
 		return this;
 	}

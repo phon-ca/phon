@@ -47,15 +47,15 @@ public class OrthoWord extends AbstractOrthoElement {
 		this.untranscribed = untranscribed;
 	}
 
-	public OrthoWord(String data, WordPrefixType prefix) {
+	public OrthoWord(String data, WordType prefix) {
 		this(data, prefix, null);
 	}
 	
-	public OrthoWord(String data, WordSuffixType suffix) {
+	public OrthoWord(String data, WordFormType suffix) {
 		this(data, null, suffix);
 	}
 	
-	public OrthoWord(String data, WordPrefixType prefix, WordSuffixType suffix) {
+	public OrthoWord(String data, WordType prefix, WordFormType suffix) {
 		super();
 		this.prefix = new WordPrefix(prefix);
 		this.suffix = new WordSuffix(suffix);
@@ -79,7 +79,7 @@ public class OrthoWord extends AbstractOrthoElement {
 		this.untranscribed = untranscribed;
 	}
 	
-	public OrthoWord(String data, WordPrefixType prefix, WordSuffixType suffix, UntranscribedType untranscribed) {
+	public OrthoWord(String data, WordType prefix, WordFormType suffix, UntranscribedType untranscribed) {
 		super();
 		this.prefix = new WordPrefix(prefix);
 		this.suffix = new WordSuffix(suffix);

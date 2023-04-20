@@ -20,7 +20,6 @@ package ca.phon.orthography;
  */
 public enum OrthoPunctType {
 	PERIOD('.'),
-	COMMA(','),
 	COLON(':'),
 	SEMICOLON(';'),
 	EXCLAMATION('!'),
@@ -35,8 +34,6 @@ public enum OrthoPunctType {
 	CLOSE_BRACE('}'),
 	FORWARD_SLASH('/'),
 	BACK_SLASH('\\'),
-	DOUBLE_COMMA('\u201e'),
-	DOUBLE_DAGGER('\u2021');
 
 	/* CHAT ca-element-type */
 	/*
@@ -50,7 +47,7 @@ public enum OrthoPunctType {
 	PRIMARY_STRESS('\u02c8'),
 	SECONDARY_STRESS('\u02cc');
 	 */
-	
+	;
 	private final char punctChar;
 	
 	private OrthoPunctType(char c) {

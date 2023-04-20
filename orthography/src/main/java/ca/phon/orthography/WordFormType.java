@@ -20,7 +20,7 @@ package ca.phon.orthography;
  * Word suffix codes.  Suffixes are applied to words
  * after a '@' character.
  */
-public enum WordSuffixType {
+public enum WordFormType {
 	// w attribute:separated-prefix
 	SEPARATED_PREFIX("#", "separated-prefix"),
 	// w attribute:user-special-form
@@ -57,7 +57,7 @@ public enum WordSuffixType {
 	
 	private String displayName;
 	
-	private WordSuffixType(String code, String displayName) {
+	private WordFormType(String code, String displayName) {
 		this.code = code;
 		this.displayName = displayName;
 	}
@@ -70,10 +70,10 @@ public enum WordSuffixType {
 		return this.displayName;
 	}
 	
-	public static WordSuffixType fromCode(String code) {
-		WordSuffixType retVal = null;
+	public static WordFormType fromCode(String code) {
+		WordFormType retVal = null;
 		
-		for(WordSuffixType v:values()) {
+		for(WordFormType v:values()) {
 			if(v.getCode().equals(code)) {
 				retVal = v;
 				break;
