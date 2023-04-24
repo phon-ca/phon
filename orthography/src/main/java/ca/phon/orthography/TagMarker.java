@@ -6,13 +6,12 @@ import ca.phon.extensions.IExtendable;
 import java.util.Optional;
 import java.util.Set;
 
-public class TagMarker implements OrthoElement {
-
-    private final ExtensionSupport extensionSupport = new ExtensionSupport(TagMarker.class, this);
+public final class TagMarker extends AbstractOrthoElement {
 
     private final TagMarkerType type;
 
     public TagMarker(TagMarkerType type) {
+        super();
         this.type = type;
     }
 
@@ -23,26 +22,6 @@ public class TagMarker implements OrthoElement {
     @Override
     public String text() {
         return type.getChar() + "";
-    }
-
-    @Override
-    public Set<Class<?>> getExtensions() {
-        return extensionSupport.getExtensions();
-    }
-
-    @Override
-    public <T> T getExtension(Class<T> cap) {
-        return extensionSupport.getExtension(cap);
-    }
-
-    @Override
-    public <T> T putExtension(Class<T> cap, T impl) {
-        return extensionSupport.putExtension(cap, impl);
-    }
-
-    @Override
-    public <T> T removeExtension(Class<T> cap) {
-        return extensionSupport.removeExtension(cap);
     }
 
 }

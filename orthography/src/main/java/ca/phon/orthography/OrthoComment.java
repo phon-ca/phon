@@ -22,7 +22,7 @@ package ca.phon.orthography;
  *  
  * type is optional
  */
-public class OrthoComment extends AbstractOrthoElement {
+public final class OrthoComment extends AbstractOrthoElement {
 	
 	private final String type;
 	

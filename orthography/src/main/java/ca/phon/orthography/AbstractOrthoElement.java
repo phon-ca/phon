@@ -48,4 +48,9 @@ public abstract class AbstractOrthoElement implements OrthoElement {
 		return extSupport.removeExtension(cap);
 	}
 
+	@Override
+	public String toString() {
+		return text();
+	}
+
 }

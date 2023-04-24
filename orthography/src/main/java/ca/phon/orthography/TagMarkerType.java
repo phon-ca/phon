@@ -35,4 +35,9 @@ public enum TagMarkerType {
         return retVal;
     }
 
+    @Override
+    public String toString() {
+        return getChar() + "";
+    }
+
 }
