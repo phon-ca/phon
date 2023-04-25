@@ -50,4 +50,17 @@ public class TestUnicodeOrthography {
         }
     }
 
+    @Test
+    public void testTerminator() {
+        for(TerminatorType tt:TerminatorType.values()) {
+            final String text = "word " + tt.toString();
+            final Orthography ortho = roundTrip(text);
+            Assert.assertEquals(2, ortho.length());
+            Assert.assertEquals(OrthoWord.class, ortho.elementAt(0).getClass());
+            Assert.assertEquals("word", ortho.elementAt(0).toString());
+            Assert.assertEquals(Terminator.class, ortho.elementAt(1).getClass());
+            Assert.assertEquals(tt.toString(), ortho.elementAt(1).toString());
+        }
+    }
+
 }

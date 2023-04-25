@@ -92,6 +92,11 @@ public class OrthographyBuilder {
 		appendWord(data, null, null);
 		return this;
 	}
+
+	public OrthographyBuilder appendTagMarker(TagMarkerType tmType) {
+		append(new TagMarker(tmType));
+		return this;
+	}
 	
 	public OrthographyBuilder appendComment(String type, String data) {
 		final OrthoComment comment = new OrthoComment(type, data);

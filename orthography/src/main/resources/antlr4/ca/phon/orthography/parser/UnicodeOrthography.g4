@@ -26,9 +26,18 @@ tagMarker
     ;
 
 terminator
-    :   EXCLAMATION
-    |   QUESTION
-    |   PERIOD
+    :   (EXCLAMATION|QUESTION|PERIOD)               // BasicTerminator
+    |   PLUS PERIOD                                 // BrokenForCoding
+    |   PLUS PERIOD PERIOD PERIOD                   // TrailOff
+    |   PLUS PERIOD PERIOD QUESTION                 // TrailOffQuestion
+    |   PLUS EXCLAMATION QUESTION                   // QuestionExclamation
+    |   PLUS FORWARD_SLASH PERIOD                   // Interruption
+    |   PLUS FORWARD_SLASH QUESTION                 // InterruptionQuestion
+    |   PLUS FORWARD_SLASH FORWARD_SLASH PERIOD     // SelfInterruption
+    |   PLUS FORWARD_SLASH FORWARD_SLASH QUESTION   // SelfInterruptionQuestion
+    |   PLUS QUOTATION FORWARD_SLASH PERIOD         // QuotationNextLine
+    |   PLUS QUOTATION PERIOD                       // QuotationPrecedes
+    |   AMP ('\u224b' | '\u2248')                   // TCUContinuation
     ;
 
 word
@@ -62,6 +71,14 @@ formtype
 // tokens
 CHAR
     :   [a-zA-Z]
+    ;
+
+FORWARD_SLASH
+    :   '/'
+    ;
+
+QUOTATION
+    :   '"'
     ;
 
 COMMA

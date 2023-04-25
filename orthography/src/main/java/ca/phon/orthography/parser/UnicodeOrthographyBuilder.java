@@ -1,9 +1,6 @@
 package ca.phon.orthography.parser;
 
-import ca.phon.orthography.Orthography;
-import ca.phon.orthography.OrthographyBuilder;
-import ca.phon.orthography.TagMarker;
-import ca.phon.orthography.TagMarkerType;
+import ca.phon.orthography.*;
 
 public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyParserListener {
 
@@ -18,6 +15,12 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
     public void exitTagMarker(UnicodeOrthographyParser.TagMarkerContext ctx) {
         final TagMarkerType tmType = TagMarkerType.fromChar(ctx.getText().charAt(0));
         builder.append(new TagMarker(tmType));
+    }
+
+    @Override
+    public void exitTerminator(UnicodeOrthographyParser.TerminatorContext ctx) {
+        final TerminatorType tt = TerminatorType.fromString(ctx.getText());
+        builder.append(new Terminator(tt));
     }
 
     public Orthography getOrthography() {
