@@ -1,13 +1,22 @@
 grammar UnicodeOrthography;
 
+start
+    :   orthography? EOF
+    ;
+
 orthography
-    :   orthoelement* EOF
+    :   orthography word_boundary orthography
+    |   orthoelement
     ;
 
 orthoelement
     :   word
     |   terminator
     |   tagMarker
+    ;
+
+word_boundary
+    :   WS    # WhiteSpace
     ;
 
 tagMarker
@@ -36,20 +45,23 @@ wordelement
     ;
 
 wordsuffix
-    :   formtype? ( DOLLAR_SIGN CHAR+ )?
+    :   formtype
+    |   wordpos
+    |   formtype wordpos
+    ;
+
+wordpos
+    :   DOLLAR_SIGN CHAR+
     ;
 
 formtype
-    :   AT ('a'|'b'|'c'|'d'|'e'|'f'|'fp'|'fs'|'g'
-        |'i'|'k'|'l'|'n'|'nv'|'o'|'p'|'q'|'sas'
-        |'si'|'sl'|'t'|'u'|'x'|'wp'|'z')
+    :   FORMTYPE
     |   HASH
     ;
 
 // tokens
 CHAR
-    :   'a'..'z'
-    |   'A'..'Z'
+    :   [a-zA-Z]
     ;
 
 COMMA
@@ -119,4 +131,14 @@ PERIOD
 
 HASH
     :   '#'
+    ;
+
+FORMTYPE
+    :   AT ('a'|'b'|'c'|'d'|'e'|'f'|'fp'|'fs'|'g'
+                   |'i'|'k'|'l'|'n'|'nv'|'o'|'p'|'q'|'sas'
+                   |'si'|'sl'|'t'|'u'|'x'|'wp'|'z')
+    ;
+
+WS
+    :   [ \t\n]
     ;
