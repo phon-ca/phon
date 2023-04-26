@@ -10,7 +10,8 @@ orthography
     ;
 
 orthoelement
-    :   word
+    :   linker
+    |   word
     |   terminator
     |   tagMarker
     ;
@@ -19,10 +20,20 @@ word_boundary
     :   WS    # WhiteSpace
     ;
 
+linker
+    :   PLUS QUOTATION              // quoted utterance next
+    |   PLUS CARET                  // quick uptake
+    |   PLUS LESS_THAN              // lazy overlap mark
+    |   PLUS COMMA                  // self completion
+    |   PLUS PLUS                   // other completion
+    |   PLUS '\u224b'               // technical break TCU completion
+    |   PLUS '\u2248'               // no break TCU completion
+    ;
+
 tagMarker
-    :   COMMA
-    |   DOUBLE_DAGGER
-    |   DOUBLE_COMMA
+    :   COMMA           // Comma
+    |   DOUBLE_DAGGER   // Vocative
+    |   DOUBLE_COMMA    // Tag
     ;
 
 terminator
@@ -79,6 +90,15 @@ FORWARD_SLASH
 
 QUOTATION
     :   '"'
+    ;
+
+CARET
+    :   '^'
+    ;
+
+
+LESS_THAN
+    :   '<'
     ;
 
 COMMA

@@ -28,6 +28,19 @@ public class TestUnicodeOrthography {
     }
 
     @Test
+    public void testLinkers() {
+        for(LinkerType lt:LinkerType.values()) {
+            final String text = lt.getText() + " word";
+            final Orthography ortho = roundTrip(text);
+            Assert.assertEquals(2, ortho.length());
+            Assert.assertEquals(Linker.class, ortho.elementAt(0).getClass());
+            Assert.assertEquals(lt.toString(), ortho.elementAt(0).toString());
+            Assert.assertEquals(OrthoWord.class, ortho.elementAt(1).getClass());
+            Assert.assertEquals("word", ortho.elementAt(1).toString());
+        }
+    }
+
+    @Test
     public void testWord() {
         final String text = "word";
         final Orthography ortho = roundTrip(text);
@@ -36,7 +49,7 @@ public class TestUnicodeOrthography {
     }
 
     @Test
-    public void testTagMarker() {
+    public void testTagMarkers() {
         for(TagMarkerType tmType:TagMarkerType.values()) {
             final String text = "wo " + tmType.getChar() + " rd";
             final Orthography ortho = roundTrip(text);
@@ -51,7 +64,7 @@ public class TestUnicodeOrthography {
     }
 
     @Test
-    public void testTerminator() {
+    public void testTerminators() {
         for(TerminatorType tt:TerminatorType.values()) {
             final String text = "word " + tt.toString();
             final Orthography ortho = roundTrip(text);

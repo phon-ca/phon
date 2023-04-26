@@ -7,6 +7,12 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
     final OrthographyBuilder builder = new OrthographyBuilder();
 
     @Override
+    public void exitLinker(UnicodeOrthographyParser.LinkerContext ctx) {
+        final LinkerType lt = LinkerType.fromString(ctx.getText());
+        builder.append(new Linker(lt));
+    }
+
+    @Override
     public void exitWord(UnicodeOrthographyParser.WordContext ctx) {
         builder.append(ctx.getText());
     }

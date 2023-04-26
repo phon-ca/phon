@@ -46,6 +46,16 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
+    public void enterLinker(UnicodeOrthographyParser.LinkerContext ctx) {
+
+    }
+
+    @Override
+    public void exitLinker(UnicodeOrthographyParser.LinkerContext ctx) {
+
+    }
+
+    @Override
     public void enterTagMarker(UnicodeOrthographyParser.TagMarkerContext ctx) {
 
     }
