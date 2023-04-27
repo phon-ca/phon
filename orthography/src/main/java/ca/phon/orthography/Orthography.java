@@ -29,7 +29,7 @@ import java.util.*;
  * To append/modify the data in the Orthography, use the {@link OrthographyBuilder} class to create
  * a modified {@link Orthography} instance.
  */
-public class Orthography implements Iterable<OrthoElement>, Visitable<OrthoElement>, IExtendable {
+public final class Orthography implements Iterable<OrthoElement>, Visitable<OrthoElement>, IExtendable {
 	
 	private static final long serialVersionUID = 7468757586738978448L;
 	private final ExtensionSupport extSupport = 

@@ -23,12 +23,14 @@ import java.util.*;
  * is <i>not</i> thread-safe.
  *
  */
-public class OrthographyBuilder {
+public final class OrthographyBuilder {
 	
 	/**
 	 * Internal list of {@link OrthoElement}s
 	 */
 	private final List<OrthoElement> eleList = new ArrayList<OrthoElement>();
+
+	private final List<OrthoWordElement> wordElements = new ArrayList<>();
 
 	public OrthographyBuilder() {
 	}
@@ -91,6 +93,46 @@ public class OrthographyBuilder {
 	public OrthographyBuilder appendWord(String data) {
 		appendWord(data, null, null);
 		return this;
+	}
+
+	public OrthographyBuilder appendWord(OrthoWordElement ... wordElements) {
+		return appendWord(null, null, null, wordElements);
+	}
+
+	public OrthographyBuilder appendWord(WordSuffix suffix, OrthoWordElement ... wordElements) {
+		return appendWord(null, suffix, null, wordElements);
+	}
+
+	public OrthographyBuilder appendWord(WordPrefix prefix, OrthoWordElement ... wordElements) {
+		return appendWord(prefix, null, null, wordElements);
+	}
+
+	public OrthographyBuilder appendWord(WordPrefix prefix, WordSuffix suffix, OrthoWordElement ... wordElements) {
+		return appendWord(prefix, suffix, null, wordElements);
+	}
+
+	public OrthographyBuilder appendWord(WordPrefix prefix, WordSuffix suffix, UntranscribedType untranscribedType, OrthoWordElement ... wordElements) {
+		return append(new OrthoWord(prefix, suffix, untranscribedType, wordElements));
+	}
+
+	public OrthographyBuilder appendWord(List<OrthoWordElement> wordElements) {
+		return appendWord(null, null, null, wordElements);
+	}
+
+	public OrthographyBuilder appendWord(WordSuffix suffix, List<OrthoWordElement> wordElements) {
+		return appendWord(null, suffix, null, wordElements);
+	}
+
+	public OrthographyBuilder appendWord(WordPrefix prefix, List<OrthoWordElement> wordElements) {
+		return appendWord(prefix, null, null, wordElements);
+	}
+
+	public OrthographyBuilder appendWord(WordPrefix prefix, WordSuffix suffix, List<OrthoWordElement> wordElements) {
+		return appendWord(prefix, suffix, null, wordElements);
+	}
+
+	public OrthographyBuilder appendWord(WordPrefix prefix, WordSuffix suffix, UntranscribedType untranscribedType, List<OrthoWordElement> wordElements) {
+		return appendWord(prefix, suffix, untranscribedType, wordElements.toArray(new OrthoWordElement[0]));
 	}
 
 	public OrthographyBuilder appendTagMarker(TagMarkerType tmType) {
