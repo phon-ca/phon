@@ -2,9 +2,14 @@ package ca.phon.orthography.parser;
 
 import ca.phon.orthography.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyParserListener {
 
-    final OrthographyBuilder builder = new OrthographyBuilder();
+    private final OrthographyBuilder builder = new OrthographyBuilder();
+
+    private List<OrthoWordElement> wordElements = new ArrayList<>();
 
     @Override
     public void exitLinker(UnicodeOrthographyParser.LinkerContext ctx) {
@@ -14,7 +19,58 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
 
     @Override
     public void exitWord(UnicodeOrthographyParser.WordContext ctx) {
-        builder.append(ctx.getText());
+        WordType wordType = null;
+        WordFormType formType = null;
+        String pos = null;
+        UntranscribedType untranscribedType = null;
+        if(ctx.wordprefix() != null) {
+            wordType = WordType.fromCode(ctx.wordprefix().getText());
+            // TODO issue warning if wordType is null
+        }
+        if(ctx.wordsuffix() != null) {
+            if(ctx.wordsuffix().formtype() != null) {
+                formType = WordFormType.fromCode(ctx.wordsuffix().formtype().getText());
+            }
+            if(ctx.wordsuffix().wordpos() != null) {
+                pos = ctx.wordsuffix().wordpos().getText();
+            }
+        }
+        if(wordElements.size() == 1 && wordElements.get(0).getText().equals("xxx")) {
+            untranscribedType = UntranscribedType.UNINTELLIGIBLE;
+        } else if(wordElements.size() == 1 && wordElements.get(0).getText().equals("yyy")) {
+            untranscribedType = UntranscribedType.UNINTELLIGIBLE_WORD_WITH_PHO;
+        } else if(wordElements.size() == 1 && wordElements.get(0).getText().equals("www")) {
+            untranscribedType = UntranscribedType.UNTRANSCRIBED;
+        }
+        WordPrefix prefix = (wordType == null ? null : new WordPrefix(wordType));
+        WordSuffix suffix = (formType != null || pos != null ? new WordSuffix(formType, null, null, pos) : null);
+        builder.appendWord(prefix, suffix, untranscribedType, wordElements);
+        wordElements.clear();
+    }
+
+    @Override
+    public void exitCa_element(UnicodeOrthographyParser.Ca_elementContext ctx) {
+        final CaElementType eleType = CaElementType.fromString(ctx.getText());
+        if(eleType != null) {
+            wordElements.add(new CaElement(eleType));
+        } else {
+            throw new IllegalArgumentException(ctx.getText());
+        }
+    }
+
+    @Override
+    public void exitCa_delimiter(UnicodeOrthographyParser.Ca_delimiterContext ctx) {
+        final CaDelimiterType eleType = CaDelimiterType.fromString(ctx.getText());
+        if(eleType != null) {
+            wordElements.add(new CaDelimiter(eleType));
+        } else {
+            throw new IllegalArgumentException(ctx.getText());
+        }
+    }
+
+    @Override
+    public void exitText(UnicodeOrthographyParser.TextContext ctx) {
+        wordElements.add(new OrthoWordText(ctx.getText()));
     }
 
     @Override

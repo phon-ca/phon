@@ -106,6 +106,56 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
+    public void enterText(UnicodeOrthographyParser.TextContext ctx) {
+
+    }
+
+    @Override
+    public void exitText(UnicodeOrthographyParser.TextContext ctx) {
+
+    }
+
+    @Override
+    public void enterCa_element(UnicodeOrthographyParser.Ca_elementContext ctx) {
+
+    }
+
+    @Override
+    public void exitCa_element(UnicodeOrthographyParser.Ca_elementContext ctx) {
+
+    }
+
+    @Override
+    public void enterCa_delimiter(UnicodeOrthographyParser.Ca_delimiterContext ctx) {
+
+    }
+
+    @Override
+    public void exitCa_delimiter(UnicodeOrthographyParser.Ca_delimiterContext ctx) {
+
+    }
+
+    @Override
+    public void enterShortening(UnicodeOrthographyParser.ShorteningContext ctx) {
+
+    }
+
+    @Override
+    public void exitShortening(UnicodeOrthographyParser.ShorteningContext ctx) {
+
+    }
+
+    @Override
+    public void enterProsody(UnicodeOrthographyParser.ProsodyContext ctx) {
+
+    }
+
+    @Override
+    public void exitProsody(UnicodeOrthographyParser.ProsodyContext ctx) {
+
+    }
+
+    @Override
     public void enterWordsuffix(UnicodeOrthographyParser.WordsuffixContext ctx) {
 
     }

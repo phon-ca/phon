@@ -9,6 +9,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.util.List;
+
 @RunWith(JUnit4.class)
 public class TestUnicodeOrthography {
 
@@ -46,6 +48,25 @@ public class TestUnicodeOrthography {
         final Orthography ortho = roundTrip(text);
         Assert.assertEquals(1, ortho.length());
         Assert.assertEquals(OrthoWord.class, ortho.elementAt(0).getClass());
+    }
+
+    @Test
+    public void testCaElements() {
+        for(CaElementType eleType:CaElementType.values()) {
+            final String text = "wo" + eleType.toString() + "rd";
+            final Orthography ortho = roundTrip(text);
+            Assert.assertEquals(1, ortho.length());
+            Assert.assertEquals(OrthoWord.class, ortho.elementAt(0).getClass());
+            Assert.assertEquals("word", ((OrthoWord)ortho.elementAt(0)).getWord());
+            final List<OrthoWordElement> wordElements = ((OrthoWord)ortho.elementAt(0)).getWordElements();
+            Assert.assertEquals(3, wordElements.size());
+            Assert.assertEquals(OrthoWordText.class, wordElements.get(0).getClass());
+            Assert.assertEquals("wo", wordElements.get(0).getText());
+            Assert.assertEquals(CaElement.class, wordElements.get(1).getClass());
+            Assert.assertEquals(eleType.toString(), wordElements.get(1).getText());
+            Assert.assertEquals(OrthoWordText.class, wordElements.get(2).getClass());
+            Assert.assertEquals("rd", wordElements.get(2).getText());
+        }
     }
 
     @Test

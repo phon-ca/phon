@@ -61,11 +61,15 @@ wordprefix
     ;
 
 wordelement
-    :   CHAR
+    :   text
     |   ca_element
     |   ca_delimiter
     |   shortening
     |   prosody
+    ;
+
+text
+    :   CHAR+
     ;
 
 ca_element
