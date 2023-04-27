@@ -19,10 +19,6 @@
       <artifactId>antlr4</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.antlr</groupId>
-      <artifactId>antlr</artifactId>
-    </dependency>
-    <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>phon-util</artifactId>
       <version>${project.version}</version>
@@ -61,21 +57,6 @@
     </resources>
     
     <plugins>
-      <plugin>
-        <groupId>org.antlr</groupId>
-        <artifactId>antlr3-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>antlr</id>
-            <goals>
-              <goal>antlr</goal>
-            </goals>
-            <configuration>
-              <sourceDirectory>src/main/resources/antlr3</sourceDirectory>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
 
       <plugin>
         <groupId>org.antlr</groupId>

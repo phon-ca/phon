@@ -72,6 +72,11 @@ text
     :   CHAR+
     ;
 
+wk
+    :   PLUS
+    |   TILDE
+    ;
+
 ca_element
     :   CA_ELEMENT
     ;

@@ -20,6 +20,8 @@ import ca.phon.orthography.parser.*;
 import ca.phon.orthography.parser.exceptions.OrthoParserException;
 import ca.phon.visitor.*;
 import org.antlr.runtime.*;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.RecognitionException;
 
 import java.text.ParseException;
 import java.util.*;
@@ -46,21 +48,29 @@ public final class Orthography implements Iterable<OrthoElement>, Visitable<Orth
 	 */
 	public static Orthography parseOrthography(String text) 
 		throws ParseException {
-		final OrthoTokenSource tokenSource = new OrthoTokenSource(text);
-		final TokenStream tokenStream = new CommonTokenStream(tokenSource);
-		final OrthographyParser parser = new OrthographyParser(tokenStream);
+		org.antlr.v4.runtime.CharStream charStream = CharStreams.fromString(text);
+		UnicodeOrthographyLexer lexer = new UnicodeOrthographyLexer(charStream);
+		org.antlr.v4.runtime.TokenStream tokenStream = new org.antlr.v4.runtime.CommonTokenStream(lexer);
+
+		UnicodeOrthographyBuilder orthoBuilder = new UnicodeOrthographyBuilder();
+		UnicodeOrthographyParser parser = new UnicodeOrthographyParser(tokenStream);
+		parser.addParseListener(orthoBuilder);
+
 		try {
-			return parser.orthography().ortho;
+			parser.start();
 		} catch (RecognitionException e) {
-			throw new ParseException(text, e.charPositionInLine);
+			throw new ParseException(text, e.getOffendingToken().getCharPositionInLine());
 		} catch (OrthoParserException pe) {
 			if(pe.getCause() instanceof RecognitionException) {
 				RecognitionException re = (RecognitionException)pe.getCause();
-				throw new ParseException(text, re.charPositionInLine);
+				throw new ParseException(text, re.getOffendingToken().getCharPositionInLine());
 			} else {
 				throw new ParseException(text, -1);
 			}
 		}
+
+		Orthography retVal = orthoBuilder.getOrthography();
+		return retVal;
 	}
 	
 	public Orthography() {
