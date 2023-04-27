@@ -57,7 +57,8 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
 
     @Override
     public void exitCompoundWord(UnicodeOrthographyParser.CompoundWordContext ctx) {
-        builder.createCompoundWord(OrthoCompoundWordMarkerType.fromMarker(ctx.getText().charAt(0)));
+        OrthoCompoundWordMarkerType type = OrthoCompoundWordMarkerType.fromMarker(ctx.wk().getText().charAt(0));
+        builder.createCompoundWord(type);
     }
 
     @Override
@@ -102,16 +103,6 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
             wordElements.add(new Prosody(type));
         } else {
             throw new IllegalArgumentException(ctx.getText());
-        }
-    }
-
-    @Override
-    public void exitWk(UnicodeOrthographyParser.WkContext ctx) {
-        final OrthoCompoundWordMarkerType marker = OrthoCompoundWordMarkerType.fromMarker(ctx.getText().charAt(0));
-        if(marker != null) {
-
-        } else {
-            throw new OrthoParserException("Invalid compound work marker '" + ctx.getText() + "'", ctx.getStart().getCharPositionInLine());
         }
     }
 

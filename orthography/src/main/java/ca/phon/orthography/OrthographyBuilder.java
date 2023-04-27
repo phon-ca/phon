@@ -194,6 +194,8 @@ public final class OrthographyBuilder {
 		final OrthoElement ele2 = eleList.get(eleList.size()-1);
 		if(!(ele2 instanceof OrthoWord))
 			throw new IllegalStateException("Unable to create wordnet, both elements must be words");
+		eleList.remove(eleList.size()-1);
+		eleList.remove(eleList.size()-1);
 		return appendCompoundWord((OrthoWord)ele1, (OrthoWord)ele2, marker);
 	}
 	
@@ -223,7 +225,7 @@ public final class OrthographyBuilder {
 		final OrthoElement ele = eleList.get(eleList.size()-1);
 		if(ele instanceof OrthoCompoundWord) {
 			final OrthoCompoundWord compoundWord = (OrthoCompoundWord) ele;
-			final OrthoCompoundWord annotatedWord = new OrthoCompoundWord(wordPrefix, wordSuffix, compoundWord.getWord2(), compoundWord.getWord2(), compoundWord.getMarker());
+			final OrthoCompoundWord annotatedWord = new OrthoCompoundWord(wordPrefix, wordSuffix, compoundWord.getWord1(), compoundWord.getWord2(), compoundWord.getMarker());
 			eleList.remove(eleList.size()-1);
 			eleList.add(annotatedWord);
 		} else if(ele instanceof OrthoWord) {

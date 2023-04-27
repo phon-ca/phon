@@ -55,6 +55,20 @@ public class TestUnicodeOrthography {
     }
 
     @Test
+    public void testCompoundWord() {
+        for(OrthoCompoundWordMarkerType type:OrthoCompoundWordMarkerType.values()) {
+            final String text = "hello" + type.getMarker() + "world";
+            final Orthography ortho = roundTrip(text);
+            Assert.assertEquals(1, ortho.length());
+            Assert.assertEquals(OrthoCompoundWord.class, ortho.elementAt(0).getClass());
+            final OrthoCompoundWord compoundWord = (OrthoCompoundWord) ortho.elementAt(0);
+            Assert.assertEquals("hello", compoundWord.getWord1().toString());
+            Assert.assertEquals("world", compoundWord.getWord2().toString());
+            Assert.assertEquals(type, compoundWord.getMarker().getType());
+        }
+    }
+
+    @Test
     public void testCaElements() {
         for(CaElementType eleType:CaElementType.values()) {
             final String text = "wo" + eleType.toString() + "rd";
