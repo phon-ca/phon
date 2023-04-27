@@ -76,12 +76,12 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
-    public void enterWord(UnicodeOrthographyParser.WordContext ctx) {
+    public void enterComplete_word(UnicodeOrthographyParser.Complete_wordContext ctx) {
 
     }
 
     @Override
-    public void exitWord(UnicodeOrthographyParser.WordContext ctx) {
+    public void exitComplete_word(UnicodeOrthographyParser.Complete_wordContext ctx) {
 
     }
 
@@ -92,6 +92,26 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
 
     @Override
     public void exitWordprefix(UnicodeOrthographyParser.WordprefixContext ctx) {
+
+    }
+
+    @Override
+    public void enterSingleWord(UnicodeOrthographyParser.SingleWordContext ctx) {
+
+    }
+
+    @Override
+    public void exitSingleWord(UnicodeOrthographyParser.SingleWordContext ctx) {
+
+    }
+
+    @Override
+    public void enterCompoundWord(UnicodeOrthographyParser.CompoundWordContext ctx) {
+
+    }
+
+    @Override
+    public void exitCompoundWord(UnicodeOrthographyParser.CompoundWordContext ctx) {
 
     }
 
@@ -112,6 +132,16 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
 
     @Override
     public void exitText(UnicodeOrthographyParser.TextContext ctx) {
+
+    }
+
+    @Override
+    public void enterWk(UnicodeOrthographyParser.WkContext ctx) {
+
+    }
+
+    @Override
+    public void exitWk(UnicodeOrthographyParser.WkContext ctx) {
 
     }
 

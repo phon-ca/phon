@@ -41,6 +41,11 @@ public class OrthoParserException extends RuntimeException {
 		super(message);
 	}
 
+	public OrthoParserException(String message, int charPositionInLine) {
+		super(message);
+		this.positionInLine = charPositionInLine;
+	}
+
 	public OrthoParserException(Throwable cause) {
 		super(cause);
 	}

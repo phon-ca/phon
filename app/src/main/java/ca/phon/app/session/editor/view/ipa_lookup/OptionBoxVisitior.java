@@ -98,7 +98,7 @@ public class OptionBoxVisitior extends VisitorAdapter<OrthoElement> {
 	}
 	
 	@Visits
-	public void visitCompoundWord(OrthoWordnet word) {
+	public void visitCompoundWord(OrthoCompoundWord word) {
 		final JLabel orthoLabel = new JLabel(word.text());
 		groupPanel.add(orthoLabel, new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN+col, row));
 		

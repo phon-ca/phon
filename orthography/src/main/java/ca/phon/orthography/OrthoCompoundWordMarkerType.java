@@ -18,13 +18,13 @@ package ca.phon.orthography;
 /**
  * Symbols used to create wordnets.
  */
-public enum OrthoWordnetMarker {
+public enum OrthoCompoundWordMarkerType {
 	COMPOUND('+'),
 	CLITIC('~');
 	
 	private char marker;
 	
-	private OrthoWordnetMarker(char c) {
+	private OrthoCompoundWordMarkerType(char c) {
 		this.marker = c;
 	}
 	
@@ -32,10 +32,10 @@ public enum OrthoWordnetMarker {
 		return this.marker;
 	}
 	
-	public static OrthoWordnetMarker fromMarker(char c) {
-		OrthoWordnetMarker retVal = null;
+	public static OrthoCompoundWordMarkerType fromMarker(char c) {
+		OrthoCompoundWordMarkerType retVal = null;
 		
-		for(OrthoWordnetMarker v:values()) {
+		for(OrthoCompoundWordMarkerType v:values()) {
 			if(v.getMarker() == c) {
 				retVal = v;
 				break;

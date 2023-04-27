@@ -50,7 +50,7 @@ public class OrthoLookupVisitor extends VisitorAdapter<OrthoElement> {
 	}
 	
 	@Visits
-	public void visitWordnet(OrthoWordnet wordnet) {
+	public void visitWordnet(OrthoCompoundWord wordnet) {
 		final OrthoWord word1 = wordnet.getWord1();
 		visitWord(word1);
 		final OrthoWord word2 = wordnet.getWord2();
@@ -66,7 +66,7 @@ public class OrthoLookupVisitor extends VisitorAdapter<OrthoElement> {
 		for(String word1Opt:word1Opts) {
 			for(String word2Opt:word2Opts) {
 				wordnetOpts.add(
-						word1Opt + wordnet.getMarker().getMarker() + word2Opt);
+						word1Opt + wordnet.getMarker().getText() + word2Opt);
 			}
 		}
 		final OrthoWordIPAOptions wordnetExt = new OrthoWordIPAOptions();

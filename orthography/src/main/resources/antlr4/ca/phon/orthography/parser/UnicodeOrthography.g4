@@ -11,7 +11,7 @@ orthography
 
 orthoelement
     :   linker
-    |   word
+    |   complete_word
     |   terminator
     |   tagMarker
     ;
@@ -51,13 +51,18 @@ terminator
     |   AMP ('\u224b' | '\u2248')                   // TCUContinuation
     ;
 
-word
-    :   wordprefix? wordelement+ wordsuffix?
+complete_word
+    :   wordprefix? word wordsuffix?
     ;
 
 wordprefix
     :   ZERO
     |   AMP ( TILDE | MINUS | PLUS )
+    ;
+
+word
+    :   word wk word    # CompoundWord
+    |   wordelement+    # SingleWord
     ;
 
 wordelement

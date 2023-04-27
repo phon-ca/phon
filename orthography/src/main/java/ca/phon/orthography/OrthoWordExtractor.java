@@ -58,7 +58,7 @@ public class OrthoWordExtractor extends VisitorAdapter<OrthoElement> {
 	}
 
 	@Visits
-	public void visitWordnet(OrthoWordnet wordnet) {
+	public void visitWordnet(OrthoCompoundWord wordnet) {
 		wordList.add(wordnet);
 	}
 	

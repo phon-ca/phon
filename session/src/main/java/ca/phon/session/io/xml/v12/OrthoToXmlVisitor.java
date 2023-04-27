@@ -73,7 +73,7 @@ public class OrthoToXmlVisitor extends VisitorAdapter<OrthoElement> {
 	}
 
 	@Visits
-	public void visitWordnet(OrthoWordnet wordnet) {
+	public void visitWordnet(OrthoCompoundWord wordnet) {
 		final WordType wt = factory.createWordType();
 		wt.setContent(wordnet.text());
 		gt.getWOrComOrE().add(wt);

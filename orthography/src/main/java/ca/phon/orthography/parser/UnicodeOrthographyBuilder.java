@@ -1,6 +1,7 @@
 package ca.phon.orthography.parser;
 
 import ca.phon.orthography.*;
+import ca.phon.orthography.parser.exceptions.OrthoParserException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
     }
 
     @Override
-    public void exitWord(UnicodeOrthographyParser.WordContext ctx) {
+    public void exitComplete_word(UnicodeOrthographyParser.Complete_wordContext ctx) {
         WordType wordType = null;
         WordFormType formType = null;
         String pos = null;
@@ -44,8 +45,19 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         }
         WordPrefix prefix = (wordType == null ? null : new WordPrefix(wordType));
         WordSuffix suffix = (formType != null || pos != null ? new WordSuffix(formType, null, null, pos) : null);
-        builder.appendWord(prefix, suffix, untranscribedType, wordElements);
+
+        builder.annnotateWord(prefix, suffix, untranscribedType);
+    }
+
+    @Override
+    public void exitSingleWord(UnicodeOrthographyParser.SingleWordContext ctx) {
+        builder.appendWord(wordElements);
         wordElements.clear();
+    }
+
+    @Override
+    public void exitCompoundWord(UnicodeOrthographyParser.CompoundWordContext ctx) {
+        builder.createCompoundWord(OrthoCompoundWordMarkerType.fromMarker(ctx.getText().charAt(0)));
     }
 
     @Override
@@ -90,6 +102,16 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
             wordElements.add(new Prosody(type));
         } else {
             throw new IllegalArgumentException(ctx.getText());
+        }
+    }
+
+    @Override
+    public void exitWk(UnicodeOrthographyParser.WkContext ctx) {
+        final OrthoCompoundWordMarkerType marker = OrthoCompoundWordMarkerType.fromMarker(ctx.getText().charAt(0));
+        if(marker != null) {
+
+        } else {
+            throw new OrthoParserException("Invalid compound work marker '" + ctx.getText() + "'", ctx.getStart().getCharPositionInLine());
         }
     }
 

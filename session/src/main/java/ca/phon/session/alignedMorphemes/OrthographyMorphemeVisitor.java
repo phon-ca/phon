@@ -48,7 +48,7 @@ public class OrthographyMorphemeVisitor extends VisitorAdapter<OrthoElement> {
 	}
 
 	@Visits
-	public void visitWordnet(OrthoWordnet wordnet) {
+	public void visitWordnet(OrthoCompoundWord wordnet) {
 		visit(wordnet.getWord1());
 		visit(wordnet.getWord2());
 	}

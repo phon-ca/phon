@@ -45,7 +45,7 @@ public class OrthoToIPAVisitor extends VisitorAdapter<Orthography> {
 	}
 	
 	@Visits
-	public void visitWordnet(OrthoWordnet wordnet) {
+	public void visitWordnet(OrthoCompoundWord wordnet) {
 		final OrthoWord word1 = wordnet.getWord1();
 		final OrthoWordIPAOptions word1opts = word1.getExtension(OrthoWordIPAOptions.class);
 		final OrthoWord word2 = wordnet.getWord2();
@@ -53,7 +53,7 @@ public class OrthoToIPAVisitor extends VisitorAdapter<Orthography> {
 		
 		final String selectedOpt = 
 				(word1opts != null ? word1opts.getOptions().get(word1opts.getSelectedOption()) : "*")
-				+ wordnet.getMarker().getMarker()
+				+ wordnet.getMarker().getText()
 				+ (word2opts != null ? word2opts.getOptions().get(word2opts.getSelectedOption()) : "*");
 		if(builder.size() > 0) builder.appendWordBoundary();
 		builder.append(selectedOpt);

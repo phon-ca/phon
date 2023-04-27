@@ -49,7 +49,7 @@ public class WordLookupVisitor extends VisitorAdapter<OrthoElement> {
 	}
 	
 	@Visits
-	public void visitCompoundWord(OrthoWordnet wordnet) {
+	public void visitCompoundWord(OrthoCompoundWord wordnet) {
 		OrthoWordIPAOptions opt1 = wordnet.getWord1().getExtension(OrthoWordIPAOptions.class);
 		if(opt1 == null) opt1 = new OrthoWordIPAOptions();
 		OrthoWordIPAOptions opt2 = wordnet.getWord2().getExtension(OrthoWordIPAOptions.class);

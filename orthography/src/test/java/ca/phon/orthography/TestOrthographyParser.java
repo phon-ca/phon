@@ -173,7 +173,7 @@ public class TestOrthographyParser {
 			
 			Assert.assertEquals(1, ortho.length());
 			Assert.assertEquals(wd, ortho.toString());
-			Assert.assertEquals(OrthoWordnet.class, ortho.elementAt(0).getClass());
+			Assert.assertEquals(OrthoCompoundWord.class, ortho.elementAt(0).getClass());
 		}
 	}
 	
