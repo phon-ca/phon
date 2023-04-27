@@ -72,7 +72,7 @@ public final class OrthoCompoundWord extends OrthoWord {
 
 	@Override
 	public String text() {
-		return word1.toString() + marker.getText() + word2.toString();
+		return word1.toString() + marker.text() + word2.toString();
 	}
 	
 	@Override

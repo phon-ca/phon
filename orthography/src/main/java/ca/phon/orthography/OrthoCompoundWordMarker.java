@@ -14,7 +14,7 @@ public final class OrthoCompoundWordMarker extends AbstractOrthoWordElement {
     }
 
     @Override
-    public String getText() {
+    public String text() {
         return type.getMarker() + "";
     }
 

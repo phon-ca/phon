@@ -66,7 +66,7 @@ public class OrthoLookupVisitor extends VisitorAdapter<OrthoElement> {
 		for(String word1Opt:word1Opts) {
 			for(String word2Opt:word2Opts) {
 				wordnetOpts.add(
-						word1Opt + wordnet.getMarker().getText() + word2Opt);
+						word1Opt + wordnet.getMarker().text() + word2Opt);
 			}
 		}
 		final OrthoWordIPAOptions wordnetExt = new OrthoWordIPAOptions();

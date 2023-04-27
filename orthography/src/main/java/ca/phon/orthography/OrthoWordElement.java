@@ -2,6 +2,6 @@ package ca.phon.orthography;
 
 public interface OrthoWordElement {
 
-    public String getText();
+    public String text();
 
 }

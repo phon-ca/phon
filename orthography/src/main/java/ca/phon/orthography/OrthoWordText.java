@@ -10,7 +10,7 @@ public final class OrthoWordText extends AbstractOrthoWordElement {
     }
 
     @Override
-    public String getText() {
+    public String text() {
         return this.text;
     }
 

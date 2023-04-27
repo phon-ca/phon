@@ -20,33 +20,47 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
 
     @Override
     public void exitComplete_word(UnicodeOrthographyParser.Complete_wordContext ctx) {
-        WordType wordType = null;
-        WordFormType formType = null;
-        String pos = null;
-        UntranscribedType untranscribedType = null;
-        if(ctx.wordprefix() != null) {
-            wordType = WordType.fromCode(ctx.wordprefix().getText());
-            // TODO issue warning if wordType is null
-        }
-        if(ctx.wordsuffix() != null) {
-            if(ctx.wordsuffix().formtype() != null) {
-                formType = WordFormType.fromCode(ctx.wordsuffix().formtype().getText());
-            }
-            if(ctx.wordsuffix().wordpos() != null) {
-                pos = ctx.wordsuffix().wordpos().getText();
-            }
-        }
-        if(wordElements.size() == 1 && wordElements.get(0).getText().equals("xxx")) {
-            untranscribedType = UntranscribedType.UNINTELLIGIBLE;
-        } else if(wordElements.size() == 1 && wordElements.get(0).getText().equals("yyy")) {
-            untranscribedType = UntranscribedType.UNINTELLIGIBLE_WORD_WITH_PHO;
-        } else if(wordElements.size() == 1 && wordElements.get(0).getText().equals("www")) {
-            untranscribedType = UntranscribedType.UNTRANSCRIBED;
-        }
-        WordPrefix prefix = (wordType == null ? null : new WordPrefix(wordType));
-        WordSuffix suffix = (formType != null || pos != null ? new WordSuffix(formType, null, null, pos) : null);
+        if(builder.size() == 0) return;
+        if(builder.lastElement() instanceof OrthoWord) { // should always be true
+            OrthoWord lastWord = (OrthoWord) builder.lastElement();
+            List<OrthoWordElement> wordElements = lastWord.getWordElements();
 
-        builder.annnotateWord(prefix, suffix, untranscribedType);
+            // handle special cases
+            // overlap-point
+            if(wordElements.size() == 1 && wordElements.get(0) instanceof OverlapPoint) {
+                builder.replaceLastElement((OverlapPoint)wordElements.get(0));
+            } else {
+                WordType wordType = null;
+                WordFormType formType = null;
+                String pos = null;
+                UntranscribedType untranscribedType = null;
+                if (ctx.wordprefix() != null) {
+                    wordType = WordType.fromCode(ctx.wordprefix().getText());
+                    if (wordType == null)
+                        throw new OrthoParserException("Invalid word prefix '" + ctx.wordprefix().getText() + "'",
+                                ctx.wordprefix().getStart().getCharPositionInLine());
+                }
+                if (ctx.wordsuffix() != null) {
+                    if (ctx.wordsuffix().formtype() != null) {
+                        formType = WordFormType.fromCode(ctx.wordsuffix().formtype().getText());
+                    }
+                    if (ctx.wordsuffix().wordpos() != null) {
+                        pos = ctx.wordsuffix().wordpos().getText();
+                    }
+                }
+                if (wordElements.size() == 1 && wordElements.get(0).text().equals("xxx")) {
+                    untranscribedType = UntranscribedType.UNINTELLIGIBLE;
+                } else if (wordElements.size() == 1 && wordElements.get(0).text().equals("yyy")) {
+                    untranscribedType = UntranscribedType.UNINTELLIGIBLE_WORD_WITH_PHO;
+                } else if (wordElements.size() == 1 && wordElements.get(0).text().equals("www")) {
+                    untranscribedType = UntranscribedType.UNTRANSCRIBED;
+                }
+                WordPrefix prefix = (wordType == null ? null : new WordPrefix(wordType));
+                WordSuffix suffix = (formType != null || pos != null ? new WordSuffix(formType, null, null, pos) : null);
+
+                builder.annnotateWord(prefix, suffix, untranscribedType);
+            }
+        }
     }
 
     @Override
@@ -104,6 +118,13 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         } else {
             throw new IllegalArgumentException(ctx.getText());
         }
+    }
+
+    @Override
+    public void exitOverlap_point(UnicodeOrthographyParser.Overlap_pointContext ctx) {
+        final OverlapPointType type = OverlapPointType.fromString(ctx.OVERLAP_POINT().getText());
+        final int index = (ctx.DIGIT() != null ? Integer.parseInt(ctx.DIGIT().getText()) : -1);
+        wordElements.add(new OverlapPoint(type, index));
     }
 
     @Override

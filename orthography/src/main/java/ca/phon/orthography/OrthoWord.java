@@ -123,7 +123,7 @@ public class OrthoWord extends AbstractOrthoElement {
 	public String getWord() {
 		final List<OrthoWordElement> textElements =
 				this.wordElements.stream().filter((ele) -> ele instanceof OrthoWordText).toList();
-		return textElements.stream().map((ele) -> ele.getText()).collect(Collectors.joining());
+		return textElements.stream().map((ele) -> ele.text()).collect(Collectors.joining());
 	}
 
 	/**
@@ -139,7 +139,7 @@ public class OrthoWord extends AbstractOrthoElement {
 	public String text() {
 		return (
 				(this.prefix == null ? "" : this.prefix) +
-						this.wordElements.stream().map((ele) -> ele.getText()).collect(Collectors.joining()) +
+						this.wordElements.stream().map((ele) -> ele.text()).collect(Collectors.joining()) +
 						(this.suffix == null ? "" : this.suffix)
 		);
 	}

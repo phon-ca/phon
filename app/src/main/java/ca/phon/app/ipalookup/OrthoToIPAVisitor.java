@@ -53,7 +53,7 @@ public class OrthoToIPAVisitor extends VisitorAdapter<Orthography> {
 		
 		final String selectedOpt = 
 				(word1opts != null ? word1opts.getOptions().get(word1opts.getSelectedOption()) : "*")
-				+ wordnet.getMarker().getText()
+				+ wordnet.getMarker().text()
 				+ (word2opts != null ? word2opts.getOptions().get(word2opts.getSelectedOption()) : "*");
 		if(builder.size() > 0) builder.appendWordBoundary();
 		builder.append(selectedOpt);

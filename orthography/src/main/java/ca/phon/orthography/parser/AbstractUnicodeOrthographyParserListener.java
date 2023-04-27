@@ -176,6 +176,16 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
+    public void enterOverlap_point(UnicodeOrthographyParser.Overlap_pointContext ctx) {
+
+    }
+
+    @Override
+    public void exitOverlap_point(UnicodeOrthographyParser.Overlap_pointContext ctx) {
+
+    }
+
+    @Override
     public void enterProsody(UnicodeOrthographyParser.ProsodyContext ctx) {
 
     }

@@ -17,7 +17,7 @@ public final class Prosody extends AbstractOrthoWordElement {
     }
 
     @Override
-    public String getText() {
+    public String text() {
         return this.type.toString();
     }
 

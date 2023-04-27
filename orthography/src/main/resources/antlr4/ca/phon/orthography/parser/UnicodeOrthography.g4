@@ -71,10 +71,11 @@ wordelement
     |   ca_delimiter
     |   shortening
     |   prosody
+    |   overlap_point
     ;
 
 text
-    :   CHAR+
+    :   (CHAR | APOSTROPHE)+
     ;
 
 wk
@@ -92,6 +93,10 @@ ca_delimiter
 
 shortening
     :   OPEN_PAREN CHAR+ CLOSE_PAREN
+    ;
+
+overlap_point
+    :   OVERLAP_POINT DIGIT?
     ;
 
 prosody
@@ -115,6 +120,10 @@ formtype
     ;
 
 // tokens
+APOSTROPHE
+    :   '\''
+    ;
+
 CHAR
     :   [a-zA-Z]
     ;
@@ -245,6 +254,12 @@ CA_DELIMITER
     |   '\u03ab'        // yawn
     ;
 
+OVERLAP_POINT
+    :   '⌈'
+    |   '⌉'
+    |   '⌊'
+    |   '⌋'
+    ;
 
 WS
     :   [ \t\n]

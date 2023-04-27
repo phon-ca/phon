@@ -14,7 +14,7 @@ public final class CaDelimiter extends AbstractOrthoWordElement {
     }
 
     @Override
-    public String getText() {
+    public String text() {
         return type.toString();
     }
 

@@ -264,6 +264,21 @@ public final class OrthographyBuilder {
 	public OrthoElement elementAt(int idx) {
 		return eleList.get(idx);
 	}
+
+	public OrthoElement lastElement() {
+		if(size() > 0)
+			return elementAt(size()-1);
+		else
+			return null;
+	}
+
+	public OrthoElement replaceLastElement(OrthoElement ele) {
+		OrthoElement retVal = lastElement();
+		if(size() > 0)
+			eleList.remove(size()-1);
+		eleList.add(ele);
+		return retVal;
+	}
 	
 	public OrthographyBuilder appendEvent(String type, String data) {
 		final OrthoEvent evt = new OrthoEvent(type, data);

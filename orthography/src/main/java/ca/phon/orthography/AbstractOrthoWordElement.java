@@ -36,7 +36,7 @@ public abstract class AbstractOrthoWordElement implements OrthoWordElement, IExt
 
     @Override
     public String toString() {
-        return getText();
+        return text();
     }
 
 }

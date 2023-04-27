@@ -69,6 +69,72 @@ public class TestUnicodeOrthography {
     }
 
     @Test
+    public void testOverlapPoints() {
+        final String[] texts = {
+            "this " + OverlapPointType.TOP_START.getChar() + " is a " + OverlapPointType.TOP_END.getChar() + " test",
+            "this " + OverlapPointType.BOTTOM_START.getChar() + " is a " + OverlapPointType.BOTTOM_END.getChar() + " test"
+        };
+        for(String text:texts) {
+            final Orthography ortho = roundTrip(text);
+            Assert.assertEquals(6, ortho.length());
+            Assert.assertEquals(OverlapPoint.class, ortho.elementAt(1).getClass());
+            Assert.assertEquals(OverlapPoint.class, ortho.elementAt(4).getClass());
+        }
+    }
+
+    @Test
+    public void testIndexedOverlapPoints() {
+        final String[] texts = {
+                "this " + OverlapPointType.TOP_START.getChar() + "1 is a " + OverlapPointType.TOP_END.getChar() + "1 test",
+                "this " + OverlapPointType.BOTTOM_START.getChar() + "2 is a " + OverlapPointType.BOTTOM_END.getChar() + "2 test"
+        };
+        for(int i = 0; i < texts.length; i++) {
+            final String text = texts[i];
+            final Orthography ortho = roundTrip(text);
+            Assert.assertEquals(6, ortho.length());
+            Assert.assertEquals(OverlapPoint.class, ortho.elementAt(1).getClass());
+            Assert.assertEquals(i+1, ((OverlapPoint)ortho.elementAt(1)).getIndex());
+            Assert.assertEquals(OverlapPoint.class, ortho.elementAt(4).getClass());
+            Assert.assertEquals(i+1, ((OverlapPoint)ortho.elementAt(4)).getIndex());
+        }
+    }
+
+    @Test
+    public void testOverlapPointsInWord() {
+        final String[] texts = {
+                "this" + OverlapPointType.TOP_START.getChar() + " is a " + OverlapPointType.TOP_END.getChar() + "test",
+                "this" + OverlapPointType.BOTTOM_START.getChar() + " is a " + OverlapPointType.BOTTOM_END.getChar() + "test"
+        };
+        for(String text:texts) {
+            final Orthography ortho = roundTrip(text);
+            Assert.assertEquals(4, ortho.length());
+            Assert.assertEquals(OrthoWord.class, ortho.elementAt(0).getClass());
+            Assert.assertEquals(OverlapPoint.class, ((OrthoWord)ortho.elementAt(0)).getWordElements().get(1).getClass());
+            Assert.assertEquals(OrthoWord.class, ortho.elementAt(3).getClass());
+            Assert.assertEquals(OverlapPoint.class, ((OrthoWord)ortho.elementAt(3)).getWordElements().get(0).getClass());
+        }
+    }
+
+    @Test
+    public void testIndexedOverlapPointsInWord() {
+        final String[] texts = {
+                "this" + OverlapPointType.TOP_START.getChar() + "1 is a " + OverlapPointType.TOP_END.getChar() + "1test",
+                "this" + OverlapPointType.BOTTOM_START.getChar() + "2 is a " + OverlapPointType.BOTTOM_END.getChar() + "2test"
+        };
+        for(int i = 0; i < texts.length; i++) {
+            final String text = texts[i];
+            final Orthography ortho = roundTrip(text);
+            Assert.assertEquals(4, ortho.length());
+            Assert.assertEquals(OrthoWord.class, ortho.elementAt(0).getClass());
+            Assert.assertEquals(OverlapPoint.class, ((OrthoWord)ortho.elementAt(0)).getWordElements().get(1).getClass());
+            Assert.assertEquals(i+1, ((OverlapPoint)((OrthoWord)ortho.elementAt(0)).getWordElements().get(1)).getIndex());
+            Assert.assertEquals(OrthoWord.class, ortho.elementAt(3).getClass());
+            Assert.assertEquals(OverlapPoint.class, ((OrthoWord)ortho.elementAt(3)).getWordElements().get(0).getClass());
+            Assert.assertEquals(i+1, ((OverlapPoint)((OrthoWord)ortho.elementAt(3)).getWordElements().get(0)).getIndex());
+        }
+    }
+
+    @Test
     public void testCaElements() {
         for(CaElementType eleType:CaElementType.values()) {
             final String text = "wo" + eleType.toString() + "rd";
@@ -79,11 +145,11 @@ public class TestUnicodeOrthography {
             final List<OrthoWordElement> wordElements = ((OrthoWord)ortho.elementAt(0)).getWordElements();
             Assert.assertEquals(3, wordElements.size());
             Assert.assertEquals(OrthoWordText.class, wordElements.get(0).getClass());
-            Assert.assertEquals("wo", wordElements.get(0).getText());
+            Assert.assertEquals("wo", wordElements.get(0).text());
             Assert.assertEquals(CaElement.class, wordElements.get(1).getClass());
-            Assert.assertEquals(eleType.toString(), wordElements.get(1).getText());
+            Assert.assertEquals(eleType.toString(), wordElements.get(1).text());
             Assert.assertEquals(OrthoWordText.class, wordElements.get(2).getClass());
-            Assert.assertEquals("rd", wordElements.get(2).getText());
+            Assert.assertEquals("rd", wordElements.get(2).text());
         }
     }
 
@@ -98,11 +164,11 @@ public class TestUnicodeOrthography {
             final List<OrthoWordElement> wordElements = ((OrthoWord)ortho.elementAt(0)).getWordElements();
             Assert.assertEquals(3, wordElements.size());
             Assert.assertEquals(CaDelimiter.class, wordElements.get(0).getClass());
-            Assert.assertEquals(delimType.toString(), wordElements.get(0).getText());
+            Assert.assertEquals(delimType.toString(), wordElements.get(0).text());
             Assert.assertEquals(OrthoWordText.class, wordElements.get(1).getClass());
-            Assert.assertEquals("word", wordElements.get(1).getText());
+            Assert.assertEquals("word", wordElements.get(1).text());
             Assert.assertEquals(CaDelimiter.class, wordElements.get(2).getClass());
-            Assert.assertEquals(delimType.toString(), wordElements.get(2).getText());
+            Assert.assertEquals(delimType.toString(), wordElements.get(2).text());
         }
     }
 
@@ -116,7 +182,7 @@ public class TestUnicodeOrthography {
         final List<OrthoWordElement> wordElements = ((OrthoWord)ortho.elementAt(0)).getWordElements();
         Assert.assertEquals(2, wordElements.size());
         Assert.assertEquals(OrthoWordText.class, wordElements.get(0).getClass());
-        Assert.assertEquals("du", wordElements.get(0).getText());
+        Assert.assertEquals("du", wordElements.get(0).text());
         Assert.assertEquals(Prosody.class, wordElements.get(1).getClass());
         Assert.assertEquals(ProsodyType.DRAWL, ((Prosody)wordElements.get(1)).getType());
     }
@@ -131,11 +197,11 @@ public class TestUnicodeOrthography {
         final List<OrthoWordElement> wordElements = ((OrthoWord)ortho.elementAt(0)).getWordElements();
         Assert.assertEquals(3, wordElements.size());
         Assert.assertEquals(OrthoWordText.class, wordElements.get(0).getClass());
-        Assert.assertEquals("wo", wordElements.get(0).getText());
+        Assert.assertEquals("wo", wordElements.get(0).text());
         Assert.assertEquals(Prosody.class, wordElements.get(1).getClass());
         Assert.assertEquals(ProsodyType.PAUSE, ((Prosody)wordElements.get(1)).getType());
         Assert.assertEquals(OrthoWordText.class, wordElements.get(2).getClass());
-        Assert.assertEquals("rd", wordElements.get(2).getText());
+        Assert.assertEquals("rd", wordElements.get(2).text());
     }
 
     @Test
@@ -150,7 +216,7 @@ public class TestUnicodeOrthography {
         Assert.assertEquals(Prosody.class, wordElements.get(0).getClass());
         Assert.assertEquals(ProsodyType.BLOCKING, ((Prosody)wordElements.get(0)).getType());
         Assert.assertEquals(OrthoWordText.class, wordElements.get(1).getClass());
-        Assert.assertEquals("word", wordElements.get(1).getText());
+        Assert.assertEquals("word", wordElements.get(1).text());
     }
 
     @Test
