@@ -15,6 +15,10 @@
  */
 package ca.phon.orthography;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Two words joined by a marker.
  */
@@ -55,6 +59,15 @@ public final class OrthoCompoundWord extends OrthoWord {
 
 	public OrthoWord getWord2() {
 		return word2;
+	}
+
+	@Override
+	public List<OrthoWordElement> getWordElements() {
+		final List<OrthoWordElement> elements = new ArrayList<>();
+		elements.addAll(getWord1().getWordElements());
+		elements.add(getMarker());
+		elements.addAll(getWord2().getWordElements());
+		return Collections.unmodifiableList(elements);
 	}
 
 	@Override
