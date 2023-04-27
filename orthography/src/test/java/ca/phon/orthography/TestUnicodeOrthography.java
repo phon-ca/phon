@@ -70,6 +70,25 @@ public class TestUnicodeOrthography {
     }
 
     @Test
+    public void testCaDelimiters() {
+        for(CaDelimiterType delimType:CaDelimiterType.values()) {
+            final String text = delimType.toString() + "word" + delimType.toString();
+            final Orthography ortho = roundTrip(text);
+            Assert.assertEquals(1, ortho.length());
+            Assert.assertEquals(OrthoWord.class, ortho.elementAt(0).getClass());
+            Assert.assertEquals("word", ((OrthoWord)ortho.elementAt(0)).getWord());
+            final List<OrthoWordElement> wordElements = ((OrthoWord)ortho.elementAt(0)).getWordElements();
+            Assert.assertEquals(3, wordElements.size());
+            Assert.assertEquals(CaDelimiter.class, wordElements.get(0).getClass());
+            Assert.assertEquals(delimType.toString(), wordElements.get(0).getText());
+            Assert.assertEquals(OrthoWordText.class, wordElements.get(1).getClass());
+            Assert.assertEquals("word", wordElements.get(1).getText());
+            Assert.assertEquals(CaDelimiter.class, wordElements.get(2).getClass());
+            Assert.assertEquals(delimType.toString(), wordElements.get(2).getText());
+        }
+    }
+
+    @Test
     public void testTagMarkers() {
         for(TagMarkerType tmType:TagMarkerType.values()) {
             final String text = "wo " + tmType.getChar() + " rd";

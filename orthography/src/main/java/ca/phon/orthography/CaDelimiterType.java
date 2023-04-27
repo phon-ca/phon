@@ -1,7 +1,7 @@
 package ca.phon.orthography;
 
 public enum CaDelimiterType {
-    BREATHY_VOICE('\u224b', "breathy voice"),
+    BREATHY_VOICE('\u264b', "breathy voice"),
     CREAKY('\u204e', "creaky"),
     FASTER('\u2206', "faster"),
     HIGH_PITCH('\u2594', "high-pitch"),
@@ -14,7 +14,7 @@ public enum CaDelimiterType {
     SMILE_VOICE('\u26ea', "smile voice"),
     SOFTER('\u00b0', "softer"),
     UNSURE('\u2047', "unsure"),
-    WHISPER('\u222c', "whipser"),
+    WHISPER('\u222c', "whisper"),
     YAWN('\u03ab', "yawn");
 
     private char ch;
