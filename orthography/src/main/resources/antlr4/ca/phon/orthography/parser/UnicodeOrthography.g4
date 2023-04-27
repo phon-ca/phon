@@ -126,6 +126,10 @@ LESS_THAN
     :   '<'
     ;
 
+COLON
+    :   ':'
+    ;
+
 COMMA
     :   ','
     ;

@@ -11,6 +11,10 @@ import org.junit.runners.JUnit4;
 
 import java.util.List;
 
+/**
+ * Parser tests for UnicodeOrthography.g4 grammar
+ *
+ */
 @RunWith(JUnit4.class)
 public class TestUnicodeOrthography {
 
@@ -86,6 +90,53 @@ public class TestUnicodeOrthography {
             Assert.assertEquals(CaDelimiter.class, wordElements.get(2).getClass());
             Assert.assertEquals(delimType.toString(), wordElements.get(2).getText());
         }
+    }
+
+    @Test
+    public void testDrawl() {
+        final String drawlText = "du:";
+        final Orthography ortho = roundTrip(drawlText);
+        Assert.assertEquals(1, ortho.length());
+        Assert.assertEquals(OrthoWord.class, ortho.elementAt(0).getClass());
+        Assert.assertEquals("du", ((OrthoWord)ortho.elementAt(0)).getWord());
+        final List<OrthoWordElement> wordElements = ((OrthoWord)ortho.elementAt(0)).getWordElements();
+        Assert.assertEquals(2, wordElements.size());
+        Assert.assertEquals(OrthoWordText.class, wordElements.get(0).getClass());
+        Assert.assertEquals("du", wordElements.get(0).getText());
+        Assert.assertEquals(Prosody.class, wordElements.get(1).getClass());
+        Assert.assertEquals(ProsodyType.DRAWL, ((Prosody)wordElements.get(1)).getType());
+    }
+
+    @Test
+    public void testPause() {
+        final String text = "wo^rd";
+        final Orthography ortho = roundTrip(text);
+        Assert.assertEquals(1, ortho.length());
+        Assert.assertEquals(OrthoWord.class, ortho.elementAt(0).getClass());
+        Assert.assertEquals("word", ((OrthoWord)ortho.elementAt(0)).getWord());
+        final List<OrthoWordElement> wordElements = ((OrthoWord)ortho.elementAt(0)).getWordElements();
+        Assert.assertEquals(3, wordElements.size());
+        Assert.assertEquals(OrthoWordText.class, wordElements.get(0).getClass());
+        Assert.assertEquals("wo", wordElements.get(0).getText());
+        Assert.assertEquals(Prosody.class, wordElements.get(1).getClass());
+        Assert.assertEquals(ProsodyType.PAUSE, ((Prosody)wordElements.get(1)).getType());
+        Assert.assertEquals(OrthoWordText.class, wordElements.get(2).getClass());
+        Assert.assertEquals("rd", wordElements.get(2).getText());
+    }
+
+    @Test
+    public void testBlocking() {
+        final String text = "^word";
+        final Orthography ortho = roundTrip(text);
+        Assert.assertEquals(1, ortho.length());
+        Assert.assertEquals(OrthoWord.class, ortho.elementAt(0).getClass());
+        Assert.assertEquals("word", ((OrthoWord)ortho.elementAt(0)).getWord());
+        final List<OrthoWordElement> wordElements = ((OrthoWord)ortho.elementAt(0)).getWordElements();
+        Assert.assertEquals(2, wordElements.size());
+        Assert.assertEquals(Prosody.class, wordElements.get(0).getClass());
+        Assert.assertEquals(ProsodyType.BLOCKING, ((Prosody)wordElements.get(0)).getType());
+        Assert.assertEquals(OrthoWordText.class, wordElements.get(1).getClass());
+        Assert.assertEquals("word", wordElements.get(1).getText());
     }
 
     @Test

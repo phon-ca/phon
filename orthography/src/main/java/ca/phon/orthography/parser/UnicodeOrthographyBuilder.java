@@ -80,6 +80,20 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
     }
 
     @Override
+    public void exitProsody(UnicodeOrthographyParser.ProsodyContext ctx) {
+        ProsodyType type = switch(ctx.getText()) {
+            case ":" -> ProsodyType.DRAWL;
+            case "^" -> (wordElements.size() == 0 ? ProsodyType.BLOCKING : ProsodyType.PAUSE);
+            default -> null;
+        };
+        if(type != null) {
+            wordElements.add(new Prosody(type));
+        } else {
+            throw new IllegalArgumentException(ctx.getText());
+        }
+    }
+
+    @Override
     public void exitTerminator(UnicodeOrthographyParser.TerminatorContext ctx) {
         final TerminatorType tt = TerminatorType.fromString(ctx.getText());
         builder.append(new Terminator(tt));
