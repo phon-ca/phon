@@ -72,7 +72,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
 
     @Override
     public void exitCompoundWord(UnicodeOrthographyParser.CompoundWordContext ctx) {
-        OrthoCompoundWordMarkerType type = OrthoCompoundWordMarkerType.fromMarker(ctx.wk().getText().charAt(0));
+        CompoundWordMarkerType type = CompoundWordMarkerType.fromMarker(ctx.wk().getText().charAt(0));
         builder.createCompoundWord(type);
     }
 

@@ -151,7 +151,7 @@ public final class OrthographyBuilder {
 		return this;
 	}
 	
-	public OrthographyBuilder appendCompoundWord(Word word1, Word word2, OrthoCompoundWordMarkerType marker) {
+	public OrthographyBuilder appendCompoundWord(Word word1, Word word2, CompoundWordMarkerType marker) {
 		final CompoundWord wordnet = new CompoundWord(word1, word2, marker);
 		eleList.add(wordnet);
 		return this;
@@ -167,7 +167,7 @@ public final class OrthographyBuilder {
 	 * @throws IllegalStateException if the previous element is not an {@link Word} or
 	 *  the element list is empty
 	 */
-	public OrthographyBuilder createCompoundWord(Word word2, OrthoCompoundWordMarkerType marker) {
+	public OrthographyBuilder createCompoundWord(Word word2, CompoundWordMarkerType marker) {
 		if(eleList.size() == 0)
 			throw new IllegalStateException("Unable to create wordnet from empty list");
 		final OrthographyElement prevEle = eleList.get(eleList.size()-1);
@@ -185,7 +185,7 @@ public final class OrthographyBuilder {
 	 * @throws IllegalStateException if the previous two elements are not {@link Word}s or
 	 *  the element list is empty 
 	 */
-	public OrthographyBuilder createCompoundWord(OrthoCompoundWordMarkerType marker) {
+	public OrthographyBuilder createCompoundWord(CompoundWordMarkerType marker) {
 		if(eleList.size() < 2)
 			throw new IllegalStateException("Unable to create wordnet, not enough elements.");
 		final OrthographyElement ele1 = eleList.get(eleList.size()-2);
@@ -208,7 +208,7 @@ public final class OrthographyBuilder {
 	 *  the element list is empty 
 	 */
 	public OrthographyBuilder createCompoundWord() {
-		return createCompoundWord(OrthoCompoundWordMarkerType.COMPOUND);
+		return createCompoundWord(CompoundWordMarkerType.COMPOUND);
 	}
 
 	/**

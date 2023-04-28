@@ -2,14 +2,14 @@ package ca.phon.orthography;
 
 public final class CompoundWordMarker extends AbstractWordElement {
 
-    private final OrthoCompoundWordMarkerType type;
+    private final CompoundWordMarkerType type;
 
-    public CompoundWordMarker(OrthoCompoundWordMarkerType type) {
+    public CompoundWordMarker(CompoundWordMarkerType type) {
         super();
         this.type = type;
     }
 
-    public OrthoCompoundWordMarkerType getType() {
+    public CompoundWordMarkerType getType() {
         return this.type;
     }
 

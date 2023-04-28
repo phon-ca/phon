@@ -31,10 +31,10 @@ public final class CompoundWord extends Word {
 	private final Word word2;
 	
 	public CompoundWord(Word word1, Word word2) {
-		this(word1, word2, OrthoCompoundWordMarkerType.COMPOUND);
+		this(word1, word2, CompoundWordMarkerType.COMPOUND);
 	}
 	
-	public CompoundWord(Word word1, Word word2, OrthoCompoundWordMarkerType marker) {
+	public CompoundWord(Word word1, Word word2, CompoundWordMarkerType marker) {
 		this(word1, word2, new CompoundWordMarker(marker));
 	}
 

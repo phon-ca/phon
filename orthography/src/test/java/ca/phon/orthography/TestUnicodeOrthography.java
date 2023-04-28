@@ -56,7 +56,7 @@ public class TestUnicodeOrthography {
 
     @Test
     public void testCompoundWord() {
-        for(OrthoCompoundWordMarkerType type:OrthoCompoundWordMarkerType.values()) {
+        for(CompoundWordMarkerType type: CompoundWordMarkerType.values()) {
             final String text = "hello" + type.getMarker() + "world";
             final Orthography ortho = roundTrip(text);
             Assert.assertEquals(1, ortho.length());
