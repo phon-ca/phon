@@ -15,6 +15,7 @@ orthoelement
     |   terminator
     |   tagMarker
     |   pause
+    |   freecode
     ;
 
 word_boundary
@@ -35,6 +36,10 @@ tagMarker
     :   COMMA           // Comma
     |   DOUBLE_DAGGER   // Vocative
     |   DOUBLE_COMMA    // Tag
+    ;
+
+freecode
+    :   FREECODE
     ;
 
 terminator
@@ -142,6 +147,10 @@ digit
     |   ONE_TO_NINE
     ;
 
+FREECODE
+    :   OPEN_BRACKET CARET ( '\\]' | '\\[' | . )*? CLOSE_BRACKET
+    ;
+
 // tokens
 APOSTROPHE
     :   '\''
@@ -182,6 +191,26 @@ DOUBLE_DAGGER
 
 DOUBLE_COMMA
     :   '„'
+    ;
+
+OPEN_BRACKET
+    :   '['
+    ;
+
+CLOSE_BRACKET
+    :   ']'
+    ;
+
+OPEN_BRACE
+    :   '{'
+    ;
+
+CLOSE_BRACE
+    :   '}'
+    ;
+
+EQUALS
+    :   '='
     ;
 
 OPEN_PAREN

@@ -177,4 +177,9 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         }
     }
 
+    @Override
+    public void exitFreecode(UnicodeOrthographyParser.FreecodeContext ctx) {
+        final String data = ctx.getText().substring(2, ctx.getText().length()-1);
+        builder.append(new Freecode(data));
+    }
 }

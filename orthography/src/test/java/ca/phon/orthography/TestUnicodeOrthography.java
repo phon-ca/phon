@@ -307,4 +307,13 @@ public class TestUnicodeOrthography {
         Assert.assertEquals(PauseLength.NUMERIC, ((Pause)ortho.elementAt(5)).getType());
     }
 
+    @Test
+    public void testFreecode() {
+        final String text = "hello [^ waves] world";
+        final Orthography ortho = roundTrip(text);
+        Assert.assertEquals(3, ortho.length());
+        Assert.assertEquals(Freecode.class, ortho.elementAt(1).getClass());
+        Assert.assertEquals("waves", ((Freecode)ortho.elementAt(1)).getData().trim());
+    }
+
 }

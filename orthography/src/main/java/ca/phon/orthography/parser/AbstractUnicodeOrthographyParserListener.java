@@ -66,6 +66,16 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
+    public void enterFreecode(UnicodeOrthographyParser.FreecodeContext ctx) {
+
+    }
+
+    @Override
+    public void exitFreecode(UnicodeOrthographyParser.FreecodeContext ctx) {
+
+    }
+
+    @Override
     public void enterTerminator(UnicodeOrthographyParser.TerminatorContext ctx) {
 
     }
