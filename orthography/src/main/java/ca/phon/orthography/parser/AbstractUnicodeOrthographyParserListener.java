@@ -176,6 +176,46 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
+    public void enterPause(UnicodeOrthographyParser.PauseContext ctx) {
+
+    }
+
+    @Override
+    public void exitPause(UnicodeOrthographyParser.PauseContext ctx) {
+
+    }
+
+    @Override
+    public void enterSymbolic_pause(UnicodeOrthographyParser.Symbolic_pauseContext ctx) {
+
+    }
+
+    @Override
+    public void exitSymbolic_pause(UnicodeOrthographyParser.Symbolic_pauseContext ctx) {
+
+    }
+
+    @Override
+    public void enterNumeric_pause(UnicodeOrthographyParser.Numeric_pauseContext ctx) {
+
+    }
+
+    @Override
+    public void exitNumeric_pause(UnicodeOrthographyParser.Numeric_pauseContext ctx) {
+
+    }
+
+    @Override
+    public void enterTime_in_minutes_seconds(UnicodeOrthographyParser.Time_in_minutes_secondsContext ctx) {
+
+    }
+
+    @Override
+    public void exitTime_in_minutes_seconds(UnicodeOrthographyParser.Time_in_minutes_secondsContext ctx) {
+
+    }
+
+    @Override
     public void enterOverlap_point(UnicodeOrthographyParser.Overlap_pointContext ctx) {
 
     }

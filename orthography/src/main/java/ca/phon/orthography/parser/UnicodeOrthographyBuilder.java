@@ -5,6 +5,8 @@ import ca.phon.orthography.parser.exceptions.OrthoParserException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyParserListener {
 
@@ -146,6 +148,36 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
 
     public Orthography getOrthography() {
         return builder.toOrthography();
+    }
+
+    @Override
+    public void exitSymbolic_pause(UnicodeOrthographyParser.Symbolic_pauseContext ctx) {
+        final PauseLength type = switch (ctx.getText()) {
+            case "(.)" -> PauseLength.SIMPLE;
+            case "(..)" -> PauseLength.LONG;
+            case "(...)" -> PauseLength.VERY_LONG;
+            default -> throw new OrthoParserException("Invalid symbolic pause", ctx.getStart().getCharPositionInLine());
+        };
+        builder.append(new Pause(type));
+    }
+
+    @Override
+    public void exitNumeric_pause(UnicodeOrthographyParser.Numeric_pauseContext ctx) {
+        final String regex = "\\((([0-9]+):)?([0-9]+)\\.([0-9]*)\\)";
+        final Pattern pattern = Pattern.compile(regex);
+        final Matcher matcher = pattern.matcher(ctx.getText());
+        if(matcher.matches()) {
+            String minText = matcher.group(2);
+            String secText = matcher.group(3);
+            String fracSecText = matcher.group(4);
+            int numMins = minText != null ? Integer.parseInt(minText) : 0;
+            int numSec = secText != null ? Integer.parseInt(secText) : 0;
+            numSec += (60 * numMins);
+            float seconds = Float.parseFloat(Integer.toString(numSec) + fracSecText);
+            builder.append(new Pause(PauseLength.NUMERIC, seconds));
+        } else {
+            throw new OrthoParserException("Invalid numeric pause", ctx.getStart().getCharPositionInLine());
+        }
     }
 
 }

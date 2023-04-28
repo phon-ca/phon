@@ -281,4 +281,17 @@ public class TestUnicodeOrthography {
         }
     }
 
+    @Test
+    public void testSymbolicPause() {
+        final String text = "one (.) two (..) three (...)";
+        final Orthography ortho = roundTrip(text);
+        Assert.assertEquals(6, ortho.length());
+        Assert.assertEquals(Pause.class, ortho.elementAt(1).getClass());
+        Assert.assertEquals(PauseLength.SIMPLE, ((Pause)ortho.elementAt(1)).getType());
+        Assert.assertEquals(Pause.class, ortho.elementAt(3).getClass());
+        Assert.assertEquals(PauseLength.LONG, ((Pause)ortho.elementAt(3)).getType());
+        Assert.assertEquals(Pause.class, ortho.elementAt(5).getClass());
+        Assert.assertEquals(PauseLength.VERY_LONG, ((Pause)ortho.elementAt(5)).getType());
+    }
+
 }

@@ -14,6 +14,7 @@ orthoelement
     |   complete_word
     |   terminator
     |   tagMarker
+    |   pause
     ;
 
 word_boundary
@@ -93,6 +94,23 @@ ca_delimiter
 
 shortening
     :   OPEN_PAREN text CLOSE_PAREN
+    ;
+
+pause
+    :   symbolic_pause
+    |   numeric_pause
+    ;
+
+symbolic_pause
+    :   SYMBOLIC_PAUSE
+    ;
+
+numeric_pause
+    :   OPEN_PAREN time_in_minutes_seconds CLOSE_PAREN
+    ;
+
+time_in_minutes_seconds
+    :   (DIGIT+ COLON)? DIGIT+ PERIOD DIGIT*
     ;
 
 overlap_point
@@ -259,6 +277,12 @@ OVERLAP_POINT
     |   '⌉'
     |   '⌊'
     |   '⌋'
+    ;
+
+SYMBOLIC_PAUSE
+    :   OPEN_PAREN PERIOD CLOSE_PAREN
+    |   OPEN_PAREN PERIOD PERIOD CLOSE_PAREN
+    |   OPEN_PAREN PERIOD PERIOD PERIOD CLOSE_PAREN
     ;
 
 WS
