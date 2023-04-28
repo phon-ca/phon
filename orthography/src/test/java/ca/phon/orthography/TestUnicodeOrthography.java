@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import javax.swing.*;
 import java.util.List;
 
 /**
@@ -217,6 +218,39 @@ public class TestUnicodeOrthography {
         Assert.assertEquals(ProsodyType.BLOCKING, ((Prosody)wordElements.get(0)).getType());
         Assert.assertEquals(OrthoWordText.class, wordElements.get(1).getClass());
         Assert.assertEquals("word", wordElements.get(1).text());
+    }
+
+    @Test
+    public void testShortening() {
+        final String text = "(w)ord wo(r)d wo(rd)";
+        final Orthography ortho = roundTrip(text);
+        Assert.assertEquals(3, ortho.length());
+        // beginning of word
+        Assert.assertEquals(OrthoWord.class, ortho.elementAt(0).getClass());
+        final OrthoWord word1 = (OrthoWord) ortho.elementAt(0);
+        Assert.assertEquals(2, word1.getWordElements().size());
+        Assert.assertEquals(Shortening.class, word1.getWordElements().get(0).getClass());
+        Assert.assertEquals("w", ((Shortening)word1.getWordElements().get(0)).getOrthoText().text());
+        Assert.assertEquals(OrthoWordText.class, word1.getWordElements().get(1).getClass());
+        Assert.assertEquals("ord", ((OrthoWordText)word1.getWordElements().get(1)).text());
+        // middle of word
+        Assert.assertEquals(OrthoWord.class, ortho.elementAt(1).getClass());
+        final OrthoWord word2 = (OrthoWord) ortho.elementAt(1);
+        Assert.assertEquals(3, word2.getWordElements().size());
+        Assert.assertEquals(OrthoWordText.class, word2.getWordElements().get(0).getClass());
+        Assert.assertEquals("wo", ((OrthoWordText)word2.getWordElements().get(0)).text());
+        Assert.assertEquals(Shortening.class, word2.getWordElements().get(1).getClass());
+        Assert.assertEquals("r", ((Shortening)word2.getWordElements().get(1)).getOrthoText().text());
+        Assert.assertEquals(OrthoWordText.class, word2.getWordElements().get(2).getClass());
+        Assert.assertEquals("d", ((OrthoWordText)word2.getWordElements().get(2)).text());
+        // end of word
+        Assert.assertEquals(OrthoWord.class, ortho.elementAt(2).getClass());
+        final OrthoWord word3 = (OrthoWord) ortho.elementAt(2);
+        Assert.assertEquals(2, word3.getWordElements().size());
+        Assert.assertEquals(OrthoWordText.class, word3.getWordElements().get(0).getClass());
+        Assert.assertEquals("wo", ((OrthoWordText)word3.getWordElements().get(0)).text());
+        Assert.assertEquals(Shortening.class, word3.getWordElements().get(1).getClass());
+        Assert.assertEquals("rd", ((Shortening)word3.getWordElements().get(1)).getOrthoText().text());
     }
 
     @Test

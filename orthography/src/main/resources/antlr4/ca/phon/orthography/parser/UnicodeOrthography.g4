@@ -92,7 +92,7 @@ ca_delimiter
     ;
 
 shortening
-    :   OPEN_PAREN CHAR+ CLOSE_PAREN
+    :   OPEN_PAREN text CLOSE_PAREN
     ;
 
 overlap_point

@@ -91,13 +91,24 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         if(eleType != null) {
             wordElements.add(new CaDelimiter(eleType));
         } else {
-            throw new IllegalArgumentException(ctx.getText());
+            throw new OrthoParserException(ctx.getText(), ctx.getStart().getCharPositionInLine());
         }
     }
 
     @Override
     public void exitText(UnicodeOrthographyParser.TextContext ctx) {
         wordElements.add(new OrthoWordText(ctx.getText()));
+    }
+
+    @Override
+    public void exitShortening(UnicodeOrthographyParser.ShorteningContext ctx) {
+        // text has been added as a word element
+        if(wordElements.size() == 0)
+            throw new OrthoParserException("Shortening must include text", ctx.getStart().getCharPositionInLine());
+        if(!(wordElements.get(wordElements.size()-1) instanceof OrthoWordText))
+            throw new OrthoParserException("Shortening must only include text data", ctx.getStart().getCharPositionInLine());
+        final OrthoWordText text = (OrthoWordText) wordElements.remove(wordElements.size()-1);
+        wordElements.add(new Shortening(text));
     }
 
     @Override
