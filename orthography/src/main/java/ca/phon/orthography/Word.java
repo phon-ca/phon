@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  * Words may have prefix and/or suffix
  * codes.
  */
-public class OrthoWord extends AbstractOrthoElement {
+public class Word extends AbstractOrthographyElement {
 
 	private final WordPrefix prefix;
 
@@ -35,21 +35,21 @@ public class OrthoWord extends AbstractOrthoElement {
 
 	private final UntranscribedType untranscribed;
 
-	private final List<OrthoWordElement> wordElements;
+	private final List<WordElement> wordElements;
 
-	public OrthoWord(String text) {
-		this(new OrthoWordText(text));
+	public Word(String text) {
+		this(new WordText(text));
 	}
 
-	public OrthoWord(OrthoWordElement ... wordElements) {
+	public Word(WordElement... wordElements) {
 		this(null, null, wordElements);
 	}
 
-	public OrthoWord(WordPrefix prefix, WordSuffix suffix, OrthoWordElement ... wordElements) {
+	public Word(WordPrefix prefix, WordSuffix suffix, WordElement... wordElements) {
 		this(prefix, suffix, null, wordElements);
 	}
 
-	public OrthoWord(WordPrefix prefix, WordSuffix suffix, UntranscribedType untranscribedType, OrthoWordElement ... wordElements) {
+	public Word(WordPrefix prefix, WordSuffix suffix, UntranscribedType untranscribedType, WordElement... wordElements) {
 		super();
 		this.prefix = prefix;
 		this.suffix = suffix;
@@ -58,31 +58,31 @@ public class OrthoWord extends AbstractOrthoElement {
 		this.wordElements.addAll(Arrays.asList(wordElements));
 	}
 
-	public OrthoWord(String text, UntranscribedType untranscribed) {
-		this(null, null, untranscribed, new OrthoWordText(text));
+	public Word(String text, UntranscribedType untranscribed) {
+		this(null, null, untranscribed, new WordText(text));
 	}
 
-	public OrthoWord(String text, WordType prefix) {
+	public Word(String text, WordType prefix) {
 		this(text, prefix, null);
 	}
 
-	public OrthoWord(String text, WordFormType suffix) {
+	public Word(String text, WordFormType suffix) {
 		this(text, null, suffix);
 	}
 
-	public OrthoWord(String text, WordType prefix, WordFormType suffix) {
+	public Word(String text, WordType prefix, WordFormType suffix) {
 		this(text, new WordPrefix(prefix), new WordSuffix(suffix));
 	}
 
-	public OrthoWord(String text, WordPrefix prefix, WordSuffix suffix) {
+	public Word(String text, WordPrefix prefix, WordSuffix suffix) {
 		this(text, prefix, suffix, null);
 	}
 
-	public OrthoWord(String text, WordPrefix prefix, WordSuffix suffix, UntranscribedType untranscribed) {
-		this(prefix, suffix, untranscribed, new OrthoWordText(text));
+	public Word(String text, WordPrefix prefix, WordSuffix suffix, UntranscribedType untranscribed) {
+		this(prefix, suffix, untranscribed, new WordText(text));
 	}
 
-	public OrthoWord(String text, WordType prefix, WordFormType suffix, UntranscribedType untranscribed) {
+	public Word(String text, WordType prefix, WordFormType suffix, UntranscribedType untranscribed) {
 		this(text, new WordPrefix(prefix), new WordSuffix(suffix), untranscribed);
 	}
 
@@ -121,8 +121,8 @@ public class OrthoWord extends AbstractOrthoElement {
 	 * @return the root word
 	 */
 	public String getWord() {
-		final List<OrthoWordElement> textElements =
-				this.wordElements.stream().filter((ele) -> ele instanceof OrthoWordText).toList();
+		final List<WordElement> textElements =
+				this.wordElements.stream().filter((ele) -> ele instanceof WordText).toList();
 		return textElements.stream().map((ele) -> ele.text()).collect(Collectors.joining());
 	}
 
@@ -131,7 +131,7 @@ public class OrthoWord extends AbstractOrthoElement {
 	 *
 	 * @return wordElements
 	 */
-	public List<OrthoWordElement> getWordElements() {
+	public List<WordElement> getWordElements() {
 		return Collections.unmodifiableList(this.wordElements);
 	}
 

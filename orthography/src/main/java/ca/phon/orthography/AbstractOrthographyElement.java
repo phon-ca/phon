@@ -20,11 +20,11 @@ import ca.phon.extensions.ExtensionSupport;
 import java.util.Set;
 
 /**
- * Abstract implementation of {@link OrthoElement} implementing
+ * Abstract implementation of {@link OrthographyElement} implementing
  * extension support.
  *
  */
-public abstract class AbstractOrthoElement implements OrthoElement {
+public abstract class AbstractOrthographyElement implements OrthographyElement {
 
 	private final ExtensionSupport extSupport = new ExtensionSupport(getClass(), this);
 	

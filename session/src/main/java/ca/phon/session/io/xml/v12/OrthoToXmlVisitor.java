@@ -23,7 +23,7 @@ import ca.phon.visitor.annotation.Visits;
  * Converts the visited orthography elements into a
  * {@link GroupType} object useable by JAXB for serialization.
  */
-public class OrthoToXmlVisitor extends VisitorAdapter<OrthoElement> {
+public class OrthoToXmlVisitor extends VisitorAdapter<OrthographyElement> {
 	
 	private final ObjectFactory factory = new ObjectFactory();
 	
@@ -38,11 +38,11 @@ public class OrthoToXmlVisitor extends VisitorAdapter<OrthoElement> {
 	}
 
 	@Override
-	public void fallbackVisit(OrthoElement obj) {
+	public void fallbackVisit(OrthographyElement obj) {
 	}
 
 	@Visits
-	public void visitComment(OrthoComment comment) {
+	public void visitComment(OrthographyComment comment) {
 		final CommentType ct = factory.createCommentType();
 		ct.getContent().add(comment.getData());
 		ct.setType(comment.getType());
@@ -50,7 +50,7 @@ public class OrthoToXmlVisitor extends VisitorAdapter<OrthoElement> {
 	}
 
 	@Visits
-	public void visitEvent(OrthoEvent event) {
+	public void visitEvent(OrthographyEvent event) {
 		final EventType et = factory.createEventType();
 		et.setContent(
 				(event.getType() != null ? event.getType() + ":" : "") + event.getData());
@@ -58,7 +58,7 @@ public class OrthoToXmlVisitor extends VisitorAdapter<OrthoElement> {
 	}
 
 	@Visits
-	public void visitPunct(OrthoPunct punct) {
+	public void visitPunct(OrthographyPunct punct) {
 		final PunctuationType pt = factory.createPunctuationType();
 		pt.setContent(punct.text());
 		pt.setType(punct.getType().toString());
@@ -66,14 +66,14 @@ public class OrthoToXmlVisitor extends VisitorAdapter<OrthoElement> {
 	}
 
 	@Visits
-	public void visitWord(OrthoWord word) {
+	public void visitWord(Word word) {
 		final WordType wt = factory.createWordType();
 		wt.setContent(word.text());
 		gt.getWOrComOrE().add(wt);
 	}
 
 	@Visits
-	public void visitWordnet(OrthoCompoundWord wordnet) {
+	public void visitWordnet(CompoundWord wordnet) {
 		final WordType wt = factory.createWordType();
 		wt.setContent(wordnet.text());
 		gt.getWOrComOrE().add(wt);

@@ -16,17 +16,17 @@
 package ca.phon.app.ipalookup;
 
 import ca.phon.extensions.Extension;
-import ca.phon.orthography.OrthoWord;
+import ca.phon.orthography.Word;
 import ca.phon.util.Language;
 
 import java.util.*;
 
 /**
- * Extension for {@link OrthoWord} objects providing
+ * Extension for {@link Word} objects providing
  * a list of transcriptions for the given Orthography
  *
  */
-@Extension(value=OrthoWord.class)
+@Extension(value= Word.class)
 public class OrthoWordIPAOptions {
 	
 	private int selectedOption = 0;

@@ -1,6 +1,6 @@
 package ca.phon.orthography;
 
-public class OverlapPoint extends AbstractOrthoElement implements OrthoWordElement {
+public class OverlapPoint extends AbstractOrthographyElement implements WordElement {
 
     private final OverlapPointType type;
 

@@ -1,19 +1,19 @@
 package ca.phon.orthography;
 
-public final class Shortening extends AbstractOrthoWordElement {
+public final class Shortening extends AbstractWordElement {
 
-    private final OrthoWordText orthoText;
+    private final WordText orthoText;
 
     public Shortening(String data) {
-        this(new OrthoWordText(data));
+        this(new WordText(data));
     }
 
-    public Shortening(OrthoWordText orthoText) {
+    public Shortening(WordText orthoText) {
         super();
         this.orthoText = orthoText;
     }
 
-    public OrthoWordText getOrthoText() {
+    public WordText getOrthoText() {
         return this.orthoText;
     }
 

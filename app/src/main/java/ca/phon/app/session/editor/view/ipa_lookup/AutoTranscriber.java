@@ -22,7 +22,7 @@ import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.*;
 import ca.phon.ipadictionary.IPADictionary;
-import ca.phon.orthography.OrthoElement;
+import ca.phon.orthography.OrthographyElement;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.filter.RecordFilter;
@@ -150,7 +150,7 @@ public class AutoTranscriber {
 		for(int i = 0; i < group.getWordCount(SystemTierType.Orthography.getName()); i++) {
 			final Word word = group.getAlignedWord(i);
 			
-			final OrthoElement orthoEle = word.getOrthography();
+			final OrthographyElement orthoEle = word.getOrthography();
 			final OrthoLookupVisitor visitor = new OrthoLookupVisitor(getDictionary());
 			visitor.visit(orthoEle);
 			final OrthoWordIPAOptions ipaExt =

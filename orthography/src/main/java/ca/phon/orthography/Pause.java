@@ -1,9 +1,7 @@
 package ca.phon.orthography;
 
 
-import ca.phon.util.MsFormatter;
-
-public class Pause extends AbstractOrthoElement {
+public class Pause extends AbstractOrthographyElement {
 
     private final PauseLength type;
 

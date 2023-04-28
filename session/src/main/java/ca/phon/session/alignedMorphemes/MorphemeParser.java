@@ -15,7 +15,7 @@
 package ca.phon.session.alignedMorphemes;
 
 import ca.phon.ipa.IPATranscript;
-import ca.phon.orthography.OrthoElement;
+import ca.phon.orthography.OrthographyElement;
 import ca.phon.session.TierString;
 
 /**
@@ -53,7 +53,7 @@ public class MorphemeParser {
 	 * @param orthoEle
 	 * @return
 	 */
-	public OrthoElement[] parseOrthography(OrthoElement orthoEle) {
+	public OrthographyElement[] parseOrthography(OrthographyElement orthoEle) {
 		final OrthographyMorphemeVisitor visitor = new OrthographyMorphemeVisitor();
 		visitor.visit(orthoEle);
 		return visitor.getMorphemes();

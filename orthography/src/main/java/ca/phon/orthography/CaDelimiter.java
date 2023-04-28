@@ -1,6 +1,6 @@
 package ca.phon.orthography;
 
-public final class CaDelimiter extends AbstractOrthoWordElement {
+public final class CaDelimiter extends AbstractWordElement {
 
     private final CaDelimiterType type;
 

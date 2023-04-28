@@ -420,7 +420,7 @@ public final class Record extends ExtendableObject {
 		final Group newGroup = addGroup(grp+1);
 
 		// orthography
-		final OrthoElement ele = word.getOrthography();
+		final OrthographyElement ele = word.getOrthography();
 		int wordIdx = group.getOrthography().indexOf(ele);
 		final Orthography ortho = group.getOrthography().subsection(0, wordIdx);
 		final Orthography newOrtho = group.getOrthography().subsection(wordIdx, group.getOrthography().length());

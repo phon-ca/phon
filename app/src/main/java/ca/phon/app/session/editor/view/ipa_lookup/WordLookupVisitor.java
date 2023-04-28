@@ -21,7 +21,7 @@ import ca.phon.orthography.*;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
-public class WordLookupVisitor extends VisitorAdapter<OrthoElement> {
+public class WordLookupVisitor extends VisitorAdapter<OrthographyElement> {
 
 	/**
 	 * 
@@ -36,11 +36,11 @@ public class WordLookupVisitor extends VisitorAdapter<OrthoElement> {
 	}
 
 	@Override
-	public void fallbackVisit(OrthoElement obj) {
+	public void fallbackVisit(OrthographyElement obj) {
 	}
 	
 	@Visits
-	public void visitWord(OrthoWord word) {
+	public void visitWord(Word word) {
 		OrthoWordIPAOptions ext = word.getExtension(OrthoWordIPAOptions.class);
 		if(ext == null) ext = new OrthoWordIPAOptions();
 		
@@ -49,7 +49,7 @@ public class WordLookupVisitor extends VisitorAdapter<OrthoElement> {
 	}
 	
 	@Visits
-	public void visitCompoundWord(OrthoCompoundWord wordnet) {
+	public void visitCompoundWord(CompoundWord wordnet) {
 		OrthoWordIPAOptions opt1 = wordnet.getWord1().getExtension(OrthoWordIPAOptions.class);
 		if(opt1 == null) opt1 = new OrthoWordIPAOptions();
 		OrthoWordIPAOptions opt2 = wordnet.getWord2().getExtension(OrthoWordIPAOptions.class);
@@ -61,7 +61,7 @@ public class WordLookupVisitor extends VisitorAdapter<OrthoElement> {
 	}
 	
 	@Visits
-	public void visitComment(OrthoComment comment) {
+	public void visitComment(OrthographyComment comment) {
 		if(comment.getData().matches("\\.{1,3}")) {
 			OrthoWordIPAOptions ext = comment.getExtension(OrthoWordIPAOptions.class);
 			if(ext == null) ext = new OrthoWordIPAOptions();

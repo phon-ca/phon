@@ -1,12 +1,6 @@
 package ca.phon.orthography;
 
-import ca.phon.extensions.ExtensionSupport;
-import ca.phon.extensions.IExtendable;
-
-import java.util.Optional;
-import java.util.Set;
-
-public final class TagMarker extends AbstractOrthoElement {
+public final class TagMarker extends AbstractOrthographyElement {
 
     private final TagMarkerType type;
 

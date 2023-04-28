@@ -26,11 +26,11 @@ import java.util.*;
 public final class OrthographyBuilder {
 	
 	/**
-	 * Internal list of {@link OrthoElement}s
+	 * Internal list of {@link OrthographyElement}s
 	 */
-	private final List<OrthoElement> eleList = new ArrayList<OrthoElement>();
+	private final List<OrthographyElement> eleList = new ArrayList<OrthographyElement>();
 
-	private final List<OrthoWordElement> wordElements = new ArrayList<>();
+	private final List<WordElement> wordElements = new ArrayList<>();
 
 	public OrthographyBuilder() {
 	}
@@ -41,11 +41,11 @@ public final class OrthographyBuilder {
 	}
 	
 	public OrthographyBuilder append(Orthography ortho) {
-		for(OrthoElement ele:ortho) eleList.add(ele);
+		for(OrthographyElement ele:ortho) eleList.add(ele);
 		return this;
 	}
 	
-	public OrthographyBuilder append(OrthoElement ele) {
+	public OrthographyBuilder append(OrthographyElement ele) {
 		eleList.add(ele);
 		return this;
 	}
@@ -69,13 +69,13 @@ public final class OrthographyBuilder {
 	
 	public OrthographyBuilder appendWord(String data, WordType prefix, WordFormType suffix,
 										 UntranscribedType untranscribed) {
-		final OrthoWord word = new OrthoWord(data, prefix, suffix, untranscribed);
+		final Word word = new Word(data, prefix, suffix, untranscribed);
 		eleList.add(word);
 		return this;
 	}
 	
 	public OrthographyBuilder appendWord(String data, WordType prefix, WordFormType suffix) {
-		final OrthoWord word = new OrthoWord(data, prefix, suffix);
+		final Word word = new Word(data, prefix, suffix);
 		eleList.add(word);
 		return this;
 	}
@@ -95,44 +95,44 @@ public final class OrthographyBuilder {
 		return this;
 	}
 
-	public OrthographyBuilder appendWord(OrthoWordElement ... wordElements) {
+	public OrthographyBuilder appendWord(WordElement... wordElements) {
 		return appendWord(null, null, null, wordElements);
 	}
 
-	public OrthographyBuilder appendWord(WordSuffix suffix, OrthoWordElement ... wordElements) {
+	public OrthographyBuilder appendWord(WordSuffix suffix, WordElement... wordElements) {
 		return appendWord(null, suffix, null, wordElements);
 	}
 
-	public OrthographyBuilder appendWord(WordPrefix prefix, OrthoWordElement ... wordElements) {
+	public OrthographyBuilder appendWord(WordPrefix prefix, WordElement... wordElements) {
 		return appendWord(prefix, null, null, wordElements);
 	}
 
-	public OrthographyBuilder appendWord(WordPrefix prefix, WordSuffix suffix, OrthoWordElement ... wordElements) {
+	public OrthographyBuilder appendWord(WordPrefix prefix, WordSuffix suffix, WordElement... wordElements) {
 		return appendWord(prefix, suffix, null, wordElements);
 	}
 
-	public OrthographyBuilder appendWord(WordPrefix prefix, WordSuffix suffix, UntranscribedType untranscribedType, OrthoWordElement ... wordElements) {
-		return append(new OrthoWord(prefix, suffix, untranscribedType, wordElements));
+	public OrthographyBuilder appendWord(WordPrefix prefix, WordSuffix suffix, UntranscribedType untranscribedType, WordElement... wordElements) {
+		return append(new Word(prefix, suffix, untranscribedType, wordElements));
 	}
 
-	public OrthographyBuilder appendWord(List<OrthoWordElement> wordElements) {
+	public OrthographyBuilder appendWord(List<WordElement> wordElements) {
 		return appendWord(null, null, null, wordElements);
 	}
 
-	public OrthographyBuilder appendWord(WordSuffix suffix, List<OrthoWordElement> wordElements) {
+	public OrthographyBuilder appendWord(WordSuffix suffix, List<WordElement> wordElements) {
 		return appendWord(null, suffix, null, wordElements);
 	}
 
-	public OrthographyBuilder appendWord(WordPrefix prefix, List<OrthoWordElement> wordElements) {
+	public OrthographyBuilder appendWord(WordPrefix prefix, List<WordElement> wordElements) {
 		return appendWord(prefix, null, null, wordElements);
 	}
 
-	public OrthographyBuilder appendWord(WordPrefix prefix, WordSuffix suffix, List<OrthoWordElement> wordElements) {
+	public OrthographyBuilder appendWord(WordPrefix prefix, WordSuffix suffix, List<WordElement> wordElements) {
 		return appendWord(prefix, suffix, null, wordElements);
 	}
 
-	public OrthographyBuilder appendWord(WordPrefix prefix, WordSuffix suffix, UntranscribedType untranscribedType, List<OrthoWordElement> wordElements) {
-		return appendWord(prefix, suffix, untranscribedType, wordElements.toArray(new OrthoWordElement[0]));
+	public OrthographyBuilder appendWord(WordPrefix prefix, WordSuffix suffix, UntranscribedType untranscribedType, List<WordElement> wordElements) {
+		return appendWord(prefix, suffix, untranscribedType, wordElements.toArray(new WordElement[0]));
 	}
 
 	public OrthographyBuilder appendTagMarker(TagMarkerType tmType) {
@@ -141,7 +141,7 @@ public final class OrthographyBuilder {
 	}
 	
 	public OrthographyBuilder appendComment(String type, String data) {
-		final OrthoComment comment = new OrthoComment(type, data);
+		final OrthographyComment comment = new OrthographyComment(type, data);
 		eleList.add(comment);
 		return this;
 	}
@@ -151,8 +151,8 @@ public final class OrthographyBuilder {
 		return this;
 	}
 	
-	public OrthographyBuilder appendCompoundWord(OrthoWord word1, OrthoWord word2, OrthoCompoundWordMarkerType marker) {
-		final OrthoCompoundWord wordnet = new OrthoCompoundWord(word1, word2, marker);
+	public OrthographyBuilder appendCompoundWord(Word word1, Word word2, OrthoCompoundWordMarkerType marker) {
+		final CompoundWord wordnet = new CompoundWord(word1, word2, marker);
 		eleList.add(wordnet);
 		return this;
 	}
@@ -164,16 +164,16 @@ public final class OrthographyBuilder {
 	 * @param marker
 	 * @return
 	 * 
-	 * @throws IllegalStateException if the previous element is not an {@link OrthoWord} or
+	 * @throws IllegalStateException if the previous element is not an {@link Word} or
 	 *  the element list is empty
 	 */
-	public OrthographyBuilder createCompoundWord(OrthoWord word2, OrthoCompoundWordMarkerType marker) {
+	public OrthographyBuilder createCompoundWord(Word word2, OrthoCompoundWordMarkerType marker) {
 		if(eleList.size() == 0)
 			throw new IllegalStateException("Unable to create wordnet from empty list");
-		final OrthoElement prevEle = eleList.get(eleList.size()-1);
-		if(!(prevEle instanceof OrthoWord))
+		final OrthographyElement prevEle = eleList.get(eleList.size()-1);
+		if(!(prevEle instanceof Word))
 			throw new IllegalStateException("Unable to create wordnet, previous element not a word.");
-		return appendCompoundWord((OrthoWord)prevEle, word2, marker);
+		return appendCompoundWord((Word)prevEle, word2, marker);
 	}
 	
 	/**
@@ -182,21 +182,21 @@ public final class OrthographyBuilder {
 	 * @param marker
 	 * @return
 	 * 
-	 * @throws IllegalStateException if the previous two elements are not {@link OrthoWord}s or
+	 * @throws IllegalStateException if the previous two elements are not {@link Word}s or
 	 *  the element list is empty 
 	 */
 	public OrthographyBuilder createCompoundWord(OrthoCompoundWordMarkerType marker) {
 		if(eleList.size() < 2)
 			throw new IllegalStateException("Unable to create wordnet, not enough elements.");
-		final OrthoElement ele1 = eleList.get(eleList.size()-2);
-		if(!(ele1 instanceof OrthoWord))
+		final OrthographyElement ele1 = eleList.get(eleList.size()-2);
+		if(!(ele1 instanceof Word))
 			throw new IllegalStateException("Unable to create wordnet, both elements must be words");
-		final OrthoElement ele2 = eleList.get(eleList.size()-1);
-		if(!(ele2 instanceof OrthoWord))
+		final OrthographyElement ele2 = eleList.get(eleList.size()-1);
+		if(!(ele2 instanceof Word))
 			throw new IllegalStateException("Unable to create wordnet, both elements must be words");
 		eleList.remove(eleList.size()-1);
 		eleList.remove(eleList.size()-1);
-		return appendCompoundWord((OrthoWord)ele1, (OrthoWord)ele2, marker);
+		return appendCompoundWord((Word)ele1, (Word)ele2, marker);
 	}
 	
 	/**
@@ -204,7 +204,7 @@ public final class OrthographyBuilder {
 	 * 
 	 * @return
 	 * 
-	 * @throws IllegalStateException if the previous two elements are not {@link OrthoWord}s or
+	 * @throws IllegalStateException if the previous two elements are not {@link Word}s or
 	 *  the element list is empty 
 	 */
 	public OrthographyBuilder createCompoundWord() {
@@ -222,15 +222,15 @@ public final class OrthographyBuilder {
 	public OrthographyBuilder annnotateWord(WordPrefix wordPrefix, WordSuffix wordSuffix, UntranscribedType untranscribedType) {
 		if(eleList.size() < 1)
 			throw new IllegalStateException("Unable to annotate word, no data");
-		final OrthoElement ele = eleList.get(eleList.size()-1);
-		if(ele instanceof OrthoCompoundWord) {
-			final OrthoCompoundWord compoundWord = (OrthoCompoundWord) ele;
-			final OrthoCompoundWord annotatedWord = new OrthoCompoundWord(wordPrefix, wordSuffix, compoundWord.getWord1(), compoundWord.getWord2(), compoundWord.getMarker());
+		final OrthographyElement ele = eleList.get(eleList.size()-1);
+		if(ele instanceof CompoundWord) {
+			final CompoundWord compoundWord = (CompoundWord) ele;
+			final CompoundWord annotatedWord = new CompoundWord(wordPrefix, wordSuffix, compoundWord.getWord1(), compoundWord.getWord2(), compoundWord.getMarker());
 			eleList.remove(eleList.size()-1);
 			eleList.add(annotatedWord);
-		} else if(ele instanceof OrthoWord) {
-			final OrthoWord word = (OrthoWord) ele;
-			final OrthoWord annotatedWord = new OrthoWord(wordPrefix, wordSuffix, untranscribedType, word.getWordElements().toArray(new OrthoWordElement[0]));
+		} else if(ele instanceof Word) {
+			final Word word = (Word) ele;
+			final Word annotatedWord = new Word(wordPrefix, wordSuffix, untranscribedType, word.getWordElements().toArray(new WordElement[0]));
 			eleList.remove(eleList.size()-1);
 			eleList.add(annotatedWord);
 		} else {
@@ -240,7 +240,7 @@ public final class OrthographyBuilder {
 	}
 	
 	public OrthographyBuilder appendPunct(OrthoPunctType type) {
-		final OrthoPunct punct = new OrthoPunct(type);
+		final OrthographyPunct punct = new OrthographyPunct(type);
 		eleList.add(punct);
 		return this;
 	}
@@ -261,19 +261,19 @@ public final class OrthographyBuilder {
 		return eleList.size();
 	}
 	
-	public OrthoElement elementAt(int idx) {
+	public OrthographyElement elementAt(int idx) {
 		return eleList.get(idx);
 	}
 
-	public OrthoElement lastElement() {
+	public OrthographyElement lastElement() {
 		if(size() > 0)
 			return elementAt(size()-1);
 		else
 			return null;
 	}
 
-	public OrthoElement replaceLastElement(OrthoElement ele) {
-		OrthoElement retVal = lastElement();
+	public OrthographyElement replaceLastElement(OrthographyElement ele) {
+		OrthographyElement retVal = lastElement();
 		if(size() > 0)
 			eleList.remove(size()-1);
 		eleList.add(ele);
@@ -281,7 +281,7 @@ public final class OrthographyBuilder {
 	}
 	
 	public OrthographyBuilder appendEvent(String type, String data) {
-		final OrthoEvent evt = new OrthoEvent(type, data);
+		final OrthographyEvent evt = new OrthographyEvent(type, data);
 		eleList.add(evt);
 		return this;
 	}

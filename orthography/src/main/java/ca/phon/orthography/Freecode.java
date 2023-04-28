@@ -1,6 +1,6 @@
 package ca.phon.orthography;
 
-public class Freecode extends AbstractOrthoElement {
+public class Freecode extends AbstractOrthographyElement {
 
     private final String data;
 

@@ -1,6 +1,6 @@
 package ca.phon.orthography;
 
-public final class Linker extends AbstractOrthoElement {
+public final class Linker extends AbstractOrthographyElement {
 
     private final LinkerType type;
 

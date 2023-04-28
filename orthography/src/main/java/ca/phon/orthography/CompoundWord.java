@@ -22,48 +22,48 @@ import java.util.List;
 /**
  * Two words joined by a marker.
  */
-public final class OrthoCompoundWord extends OrthoWord {
+public final class CompoundWord extends Word {
 	
-	private final OrthoWord word1;
+	private final Word word1;
 	
-	private final OrthoCompoundWordMarker marker;
+	private final CompoundWordMarker marker;
 	
-	private final OrthoWord word2;
+	private final Word word2;
 	
-	public OrthoCompoundWord(OrthoWord word1, OrthoWord word2) {
+	public CompoundWord(Word word1, Word word2) {
 		this(word1, word2, OrthoCompoundWordMarkerType.COMPOUND);
 	}
 	
-	public OrthoCompoundWord(OrthoWord word1, OrthoWord word2, OrthoCompoundWordMarkerType marker) {
-		this(word1, word2, new OrthoCompoundWordMarker(marker));
+	public CompoundWord(Word word1, Word word2, OrthoCompoundWordMarkerType marker) {
+		this(word1, word2, new CompoundWordMarker(marker));
 	}
 
-	public OrthoCompoundWord(OrthoWord word1, OrthoWord word2, OrthoCompoundWordMarker marker) {
+	public CompoundWord(Word word1, Word word2, CompoundWordMarker marker) {
 		this(null, null, word1, word2, marker);
 	}
 
-	public OrthoCompoundWord(WordPrefix prefix, WordSuffix suffix, OrthoWord word1, OrthoWord word2, OrthoCompoundWordMarker marker) {
-		super(prefix, suffix, new OrthoWordElement[0]);
+	public CompoundWord(WordPrefix prefix, WordSuffix suffix, Word word1, Word word2, CompoundWordMarker marker) {
+		super(prefix, suffix, new WordElement[0]);
 		this.word1 = word1;
 		this.word2 = word2;
 		this.marker = marker;
 	}
 	
-	public OrthoWord getWord1() {
+	public Word getWord1() {
 		return word1;
 	}
 
-	public OrthoCompoundWordMarker getMarker() {
+	public CompoundWordMarker getMarker() {
 		return marker;
 	}
 
-	public OrthoWord getWord2() {
+	public Word getWord2() {
 		return word2;
 	}
 
 	@Override
-	public List<OrthoWordElement> getWordElements() {
-		final List<OrthoWordElement> elements = new ArrayList<>();
+	public List<WordElement> getWordElements() {
+		final List<WordElement> elements = new ArrayList<>();
 		elements.addAll(getWord1().getWordElements());
 		elements.add(getMarker());
 		elements.addAll(getWord2().getWordElements());

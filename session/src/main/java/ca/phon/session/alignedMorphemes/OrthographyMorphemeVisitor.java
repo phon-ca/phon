@@ -22,17 +22,17 @@ import ca.phon.visitor.annotation.Visits;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class OrthographyMorphemeVisitor extends VisitorAdapter<OrthoElement> {
+public class OrthographyMorphemeVisitor extends VisitorAdapter<OrthographyElement> {
 
 	private int wrdIdx = 0;
 
-	private List<Tuple<Integer, OrthoElement>> morphemeList = new ArrayList<>();
+	private List<Tuple<Integer, OrthographyElement>> morphemeList = new ArrayList<>();
 
-	public OrthoElement[] getMorphemes() {
+	public OrthographyElement[] getMorphemes() {
 		return morphemeList.stream()
 				.map(t -> t.getObj2())
 				.collect(Collectors.toList())
-				.toArray(new OrthoElement[0]);
+				.toArray(new OrthographyElement[0]);
 	}
 
 	public Integer[] getMorphemeIndexes() {
@@ -43,18 +43,18 @@ public class OrthographyMorphemeVisitor extends VisitorAdapter<OrthoElement> {
 	}
 
 	@Override
-	public void fallbackVisit(OrthoElement obj) {
+	public void fallbackVisit(OrthographyElement obj) {
 
 	}
 
 	@Visits
-	public void visitWordnet(OrthoCompoundWord wordnet) {
+	public void visitWordnet(CompoundWord wordnet) {
 		visit(wordnet.getWord1());
 		visit(wordnet.getWord2());
 	}
 
 	@Visits
-	public void visitOrthoWord(OrthoWord word) {
+	public void visitOrthoWord(Word word) {
 		morphemeList.add(new Tuple<>(wrdIdx, word));
 		wrdIdx += word.toString().length() + 1;
 	}

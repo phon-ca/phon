@@ -35,10 +35,10 @@ public class TestOrthographyParser {
 			final Orthography ortho = Orthography.parseOrthography(wp.getCode() + wordData);
 			Assert.assertEquals(1, ortho.length());
 			
-			final OrthoElement wordEle = ortho.elementAt(0);
-			Assert.assertEquals(OrthoWord.class, wordEle.getClass());
+			final OrthographyElement wordEle = ortho.elementAt(0);
+			Assert.assertEquals(Word.class, wordEle.getClass());
 			
-			final OrthoWord word = (OrthoWord)wordEle;
+			final Word word = (Word)wordEle;
 			Assert.assertNotNull(word.getPrefix());
 			Assert.assertEquals(wp, word.getPrefix().getType());
 			Assert.assertEquals(wordData, word.getWord());
@@ -53,10 +53,10 @@ public class TestOrthographyParser {
 			final Orthography ortho = Orthography.parseOrthography(wordData + ws.getCode());
 			Assert.assertEquals(1, ortho.length());
 			
-			final OrthoElement wordEle = ortho.elementAt(0);
-			Assert.assertEquals(OrthoWord.class, wordEle.getClass());
+			final OrthographyElement wordEle = ortho.elementAt(0);
+			Assert.assertEquals(Word.class, wordEle.getClass());
 			
-			final OrthoWord word = (OrthoWord)wordEle;
+			final Word word = (Word)wordEle;
 			Assert.assertNotNull(word.getSuffix());
 			Assert.assertEquals(ws, word.getSuffix().getType());
 			Assert.assertEquals(wordData, word.getWord());
@@ -74,10 +74,10 @@ public class TestOrthographyParser {
 				final Orthography ortho = Orthography.parseOrthography(txt);
 				Assert.assertEquals(1, ortho.length());
 				
-				final OrthoElement wordEle = ortho.elementAt(0);
-				Assert.assertEquals(OrthoWord.class, wordEle.getClass());
+				final OrthographyElement wordEle = ortho.elementAt(0);
+				Assert.assertEquals(Word.class, wordEle.getClass());
 				
-				final OrthoWord word = (OrthoWord)wordEle;
+				final Word word = (Word)wordEle;
 				Assert.assertEquals(wp, word.getPrefix().getType());
 				Assert.assertEquals(ws, word.getSuffix().getType());
 				Assert.assertEquals(wordData, word.getWord());
@@ -93,10 +93,10 @@ public class TestOrthographyParser {
 		final Orthography ortho = Orthography.parseOrthography(txt);
 		Assert.assertEquals(3, ortho.length());
 		
-		final OrthoElement commentEle = ortho.elementAt(1);
-		Assert.assertEquals(OrthoComment.class, commentEle.getClass());
+		final OrthographyElement commentEle = ortho.elementAt(1);
+		Assert.assertEquals(OrthographyComment.class, commentEle.getClass());
 		
-		final OrthoComment c = (OrthoComment)commentEle;
+		final OrthographyComment c = (OrthographyComment)commentEle;
 		Assert.assertEquals(comment, c.getData());
 	}
 	
@@ -109,10 +109,10 @@ public class TestOrthographyParser {
 		final Orthography ortho = Orthography.parseOrthography(txt);
 		Assert.assertEquals(3, ortho.length());
 		
-		final OrthoElement commentEle = ortho.elementAt(1);
-		Assert.assertEquals(OrthoComment.class, commentEle.getClass());
+		final OrthographyElement commentEle = ortho.elementAt(1);
+		Assert.assertEquals(OrthographyComment.class, commentEle.getClass());
 		
-		final OrthoComment c = (OrthoComment)commentEle;
+		final OrthographyComment c = (OrthographyComment)commentEle;
 		Assert.assertEquals(comment, c.getData());
 	}
 	
@@ -124,10 +124,10 @@ public class TestOrthographyParser {
 		final Orthography ortho = Orthography.parseOrthography(txt);
 		Assert.assertEquals(3, ortho.length());
 		
-		final OrthoElement eventEle = ortho.elementAt(1);
-		Assert.assertEquals(OrthoEvent.class, eventEle.getClass());
+		final OrthographyElement eventEle = ortho.elementAt(1);
+		Assert.assertEquals(OrthographyEvent.class, eventEle.getClass());
 		
-		final OrthoEvent e = (OrthoEvent)eventEle;
+		final OrthographyEvent e = (OrthographyEvent)eventEle;
 		Assert.assertEquals(event, e.getData());
 	}
 	
@@ -140,10 +140,10 @@ public class TestOrthographyParser {
 		final Orthography ortho = Orthography.parseOrthography(txt);
 		Assert.assertEquals(3, ortho.length());
 		
-		final OrthoElement eventEle = ortho.elementAt(1);
-		Assert.assertEquals(OrthoEvent.class, eventEle.getClass());
+		final OrthographyElement eventEle = ortho.elementAt(1);
+		Assert.assertEquals(OrthographyEvent.class, eventEle.getClass());
 		
-		final OrthoEvent e = (OrthoEvent)eventEle;
+		final OrthographyEvent e = (OrthographyEvent)eventEle;
 		Assert.assertEquals(event, e.getData());
 	}
 	
@@ -157,10 +157,10 @@ public class TestOrthographyParser {
 			final Orthography ortho = Orthography.parseOrthography(testString);
 			Assert.assertEquals(2, ortho.length());
 			
-			final OrthoElement punctEle = ortho.elementAt(1);
-			Assert.assertEquals(OrthoPunct.class, punctEle.getClass());
+			final OrthographyElement punctEle = ortho.elementAt(1);
+			Assert.assertEquals(OrthographyPunct.class, punctEle.getClass());
 			
-			final OrthoPunct punct = (OrthoPunct)punctEle;
+			final OrthographyPunct punct = (OrthographyPunct)punctEle;
 			Assert.assertEquals(opt.getChar()+"", punct.text());
 		}
 	}
@@ -173,7 +173,7 @@ public class TestOrthographyParser {
 			
 			Assert.assertEquals(1, ortho.length());
 			Assert.assertEquals(wd, ortho.toString());
-			Assert.assertEquals(OrthoCompoundWord.class, ortho.elementAt(0).getClass());
+			Assert.assertEquals(CompoundWord.class, ortho.elementAt(0).getClass());
 		}
 	}
 	

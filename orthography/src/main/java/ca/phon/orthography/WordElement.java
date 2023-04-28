@@ -1,6 +1,6 @@
 package ca.phon.orthography;
 
-public interface OrthoWordElement {
+public interface WordElement {
 
     public String text();
 

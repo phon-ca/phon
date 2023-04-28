@@ -3,7 +3,7 @@ package ca.phon.orthography;
 /**
  * Prosody inside word
  */
-public final class Prosody extends AbstractOrthoWordElement {
+public final class Prosody extends AbstractWordElement {
 
     private ProsodyType type;
 

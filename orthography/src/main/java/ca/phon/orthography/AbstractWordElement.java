@@ -5,11 +5,11 @@ import ca.phon.extensions.IExtendable;
 
 import java.util.Set;
 
-public abstract class AbstractOrthoWordElement implements OrthoWordElement, IExtendable {
+public abstract class AbstractWordElement implements WordElement, IExtendable {
 
     private ExtensionSupport extensionSupport = new ExtensionSupport(getClass(), this);
 
-    public AbstractOrthoWordElement() {
+    public AbstractWordElement() {
         super();
         extensionSupport.initExtensions();
     }

@@ -34,7 +34,7 @@ public class OrthoToIPAVisitor extends VisitorAdapter<Orthography> {
 	}
 
 	@Visits
-	public void visitWord(OrthoWord word) {
+	public void visitWord(Word word) {
 		final OrthoWordIPAOptions opts = word.getExtension(OrthoWordIPAOptions.class);
 		if(opts != null) {
 			final String selectedOption = 
@@ -45,10 +45,10 @@ public class OrthoToIPAVisitor extends VisitorAdapter<Orthography> {
 	}
 	
 	@Visits
-	public void visitWordnet(OrthoCompoundWord wordnet) {
-		final OrthoWord word1 = wordnet.getWord1();
+	public void visitWordnet(CompoundWord wordnet) {
+		final Word word1 = wordnet.getWord1();
 		final OrthoWordIPAOptions word1opts = word1.getExtension(OrthoWordIPAOptions.class);
-		final OrthoWord word2 = wordnet.getWord2();
+		final Word word2 = wordnet.getWord2();
 		final OrthoWordIPAOptions word2opts = word2.getExtension(OrthoWordIPAOptions.class);
 		
 		final String selectedOpt = 
@@ -60,7 +60,7 @@ public class OrthoToIPAVisitor extends VisitorAdapter<Orthography> {
 	}
 	
 	@Visits
-	public void visitComment(OrthoComment comment) {
+	public void visitComment(OrthographyComment comment) {
 		final String commentTxt = comment.getData();
 		if(commentTxt.matches("\\.{1,3}")) {
 			if(builder.size() > 0) builder.appendWordBoundary();

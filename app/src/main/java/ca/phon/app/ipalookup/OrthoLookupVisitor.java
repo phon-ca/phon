@@ -26,7 +26,7 @@ import java.util.regex.*;
 /**
  * Produce a set of suggested transcriptions for a given {@link Orthography}.
  */
-public class OrthoLookupVisitor extends VisitorAdapter<OrthoElement> {
+public class OrthoLookupVisitor extends VisitorAdapter<OrthographyElement> {
 	
 	private final IPADictionary dictionary;
 	
@@ -35,25 +35,25 @@ public class OrthoLookupVisitor extends VisitorAdapter<OrthoElement> {
 	}
 	
 	@Override
-	public void visit(OrthoElement ele) {
+	public void visit(OrthographyElement ele) {
 		if(dictionary != null)
 			super.visit(ele);
 	}
 	
 	@Override
-	public void fallbackVisit(OrthoElement obj) {
+	public void fallbackVisit(OrthographyElement obj) {
 	}
 	
 	@Visits
-	public void visitWord(OrthoWord word) {
+	public void visitWord(Word word) {
 		updateAnnotation(word);
 	}
 	
 	@Visits
-	public void visitWordnet(OrthoCompoundWord wordnet) {
-		final OrthoWord word1 = wordnet.getWord1();
+	public void visitWordnet(CompoundWord wordnet) {
+		final Word word1 = wordnet.getWord1();
 		visitWord(word1);
-		final OrthoWord word2 = wordnet.getWord2();
+		final Word word2 = wordnet.getWord2();
 		visitWord(word2);
 		
 		// create option combos
@@ -97,7 +97,7 @@ public class OrthoLookupVisitor extends VisitorAdapter<OrthoElement> {
 	}
 	
 	@Visits
-	public void visitComment(OrthoComment comment) {
+	public void visitComment(OrthographyComment comment) {
 		// check for pauses
 		final String commentTxt = comment.getData();
 		if(commentTxt.matches("\\.{1,3}")) {
@@ -108,7 +108,7 @@ public class OrthoLookupVisitor extends VisitorAdapter<OrthoElement> {
 		}
 	}
 	
-	private OrthoWordIPAOptions updateAnnotation(OrthoWord word) {
+	private OrthoWordIPAOptions updateAnnotation(Word word) {
 		OrthoWordIPAOptions ext = word.getExtension(OrthoWordIPAOptions.class);
 		if(ext == null || ext.getDictLang() != dictionary.getLanguage()) {
 			String text = word.getWord();

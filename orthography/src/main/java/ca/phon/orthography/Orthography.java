@@ -19,7 +19,6 @@ import ca.phon.extensions.*;
 import ca.phon.orthography.parser.*;
 import ca.phon.orthography.parser.exceptions.OrthoParserException;
 import ca.phon.visitor.*;
-import org.antlr.runtime.*;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.RecognitionException;
 
@@ -31,13 +30,13 @@ import java.util.*;
  * To append/modify the data in the Orthography, use the {@link OrthographyBuilder} class to create
  * a modified {@link Orthography} instance.
  */
-public final class Orthography implements Iterable<OrthoElement>, Visitable<OrthoElement>, IExtendable {
+public final class Orthography implements Iterable<OrthographyElement>, Visitable<OrthographyElement>, IExtendable {
 	
 	private static final long serialVersionUID = 7468757586738978448L;
 	private final ExtensionSupport extSupport = 
 			new ExtensionSupport(Orthography.class, this);
 	
-	private final OrthoElement[] elements;
+	private final OrthographyElement[] elements;
 	
 	/**
 	 * Parse the given text into a new {@link Orthography} object.
@@ -76,18 +75,18 @@ public final class Orthography implements Iterable<OrthoElement>, Visitable<Orth
 	public Orthography() {
 		super();
 		
-		elements = new OrthoElement[0];
+		elements = new OrthographyElement[0];
 		
 		extSupport.initExtensions();
 	}
 	
-	public Orthography(Collection<? extends OrthoElement> elements) {
+	public Orthography(Collection<? extends OrthographyElement> elements) {
 		super();
-		this.elements = elements.toArray(new OrthoElement[0]);
+		this.elements = elements.toArray(new OrthographyElement[0]);
 		extSupport.initExtensions();
 	}
 	
-	public Orthography(OrthoElement[] eles) {
+	public Orthography(OrthographyElement[] eles) {
 		super();
 		this.elements = eles;
 		extSupport.initExtensions();
@@ -114,8 +113,8 @@ public final class Orthography implements Iterable<OrthoElement>, Visitable<Orth
 	}
 
 	@Override
-	public void accept(Visitor<OrthoElement> visitor) {
-		for(OrthoElement ele:this) {
+	public void accept(Visitor<OrthographyElement> visitor) {
+		for(OrthographyElement ele:this) {
 			visitor.visit(ele);
 		}
 	}
@@ -123,7 +122,7 @@ public final class Orthography implements Iterable<OrthoElement>, Visitable<Orth
 	public Orthography subsection(int start, int end) {
 		int len = end - start;
 		if(len > 0) {
-			OrthoElement[] subeles = Arrays.copyOfRange(elements, start, end);
+			OrthographyElement[] subeles = Arrays.copyOfRange(elements, start, end);
 			return new Orthography(subeles);
 		}
 		return new Orthography();
@@ -133,13 +132,13 @@ public final class Orthography implements Iterable<OrthoElement>, Visitable<Orth
 		return elements.length;
 	}
 	
-	public OrthoElement elementAt(int idx) {
+	public OrthographyElement elementAt(int idx) {
 		return elements[idx];
 	}
 	
-	public int indexOf(OrthoElement ele) {
+	public int indexOf(OrthographyElement ele) {
 		for(int i = 0; i < length(); i++) {
-			final OrthoElement e = elementAt(i);
+			final OrthographyElement e = elementAt(i);
 			if(e == ele) {
 				return i;
 			}
@@ -151,7 +150,7 @@ public final class Orthography implements Iterable<OrthoElement>, Visitable<Orth
 	public String toString() {
 		final StringBuffer buffer = new StringBuffer();
 		
-		for(OrthoElement ele:this) {
+		for(OrthographyElement ele:this) {
 			buffer.append(
 					(buffer.length() > 0 ? " " : "") + ele.text());
 		}
@@ -159,12 +158,12 @@ public final class Orthography implements Iterable<OrthoElement>, Visitable<Orth
 		return buffer.toString();
 	}
 	
-	public List<OrthoElement> toList() {
+	public List<OrthographyElement> toList() {
 		return Collections.unmodifiableList(Arrays.asList(elements));
 	}
 	
 	@Override
-	public Iterator<OrthoElement> iterator() {
+	public Iterator<OrthographyElement> iterator() {
 		return toList().iterator();
 	}
 	

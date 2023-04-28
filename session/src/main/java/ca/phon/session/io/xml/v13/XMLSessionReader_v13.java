@@ -18,7 +18,6 @@ package ca.phon.session.io.xml.v13;
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.PhoneMap;
-import ca.phon.orthography.OrthoPunct;
 import ca.phon.orthography.OrthoPunctType;
 import ca.phon.orthography.Orthography;
 import ca.phon.plugin.IPluginExtensionFactory;

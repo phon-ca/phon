@@ -28,7 +28,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.text.ParseException;
 
-public class OptionBoxVisitior extends VisitorAdapter<OrthoElement> {
+public class OptionBoxVisitior extends VisitorAdapter<OrthographyElement> {
 	
 	private final RecordLookupPanel recordLookupPanel;
 	
@@ -51,11 +51,11 @@ public class OptionBoxVisitior extends VisitorAdapter<OrthoElement> {
 	}
 
 	@Override
-	public void fallbackVisit(OrthoElement obj) {
+	public void fallbackVisit(OrthographyElement obj) {
 	}
 	
 	@Visits
-	public void visitWord(OrthoWord word) {
+	public void visitWord(Word word) {
 		final JLabel orthoLabel = new JLabel(word.getWord());
 		orthoLabel.setFont(FontPreferences.getTierFont());
 		groupPanel.add(orthoLabel, new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN+col, row));
@@ -98,7 +98,7 @@ public class OptionBoxVisitior extends VisitorAdapter<OrthoElement> {
 	}
 	
 	@Visits
-	public void visitCompoundWord(OrthoCompoundWord word) {
+	public void visitCompoundWord(CompoundWord word) {
 		final JLabel orthoLabel = new JLabel(word.text());
 		groupPanel.add(orthoLabel, new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN+col, row));
 		

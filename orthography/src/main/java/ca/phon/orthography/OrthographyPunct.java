@@ -15,15 +15,31 @@
  */
 package ca.phon.orthography;
 
-import ca.phon.extensions.IExtendable;
 
-public interface OrthoElement extends IExtendable {
-
-	/**
-	 * Get string representation of the element.
-	 * 
-	 * @return the string value of the element
-	 */
-	public String text();
+/**
+ * Represents punctuation and syntax elements.
+ */
+public class OrthographyPunct extends AbstractOrthographyElement {
 	
+	private final OrthoPunctType type;
+
+	public OrthographyPunct(OrthoPunctType type) {
+		super();
+		this.type = type;
+	}
+	
+	public OrthoPunctType getType() {
+		return this.type;
+	}
+	
+	@Override
+	public String text() {
+		return this.type.getChar() + "";
+	}
+	
+	@Override
+	public String toString() {
+		return text();
+	}
+
 }

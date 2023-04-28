@@ -1,6 +1,6 @@
 package ca.phon.orthography;
 
-public final class Terminator extends AbstractOrthoElement {
+public final class Terminator extends AbstractOrthographyElement {
 
     private final TerminatorType type;
 

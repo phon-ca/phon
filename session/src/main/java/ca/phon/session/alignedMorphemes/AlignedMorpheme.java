@@ -15,7 +15,7 @@
 package ca.phon.session.alignedMorphemes;
 
 import ca.phon.ipa.IPATranscript;
-import ca.phon.orthography.OrthoElement;
+import ca.phon.orthography.OrthographyElement;
 import ca.phon.session.*;
 
 /**
@@ -43,10 +43,10 @@ public class AlignedMorpheme {
 		return morphemeIdx;
 	}
 
-	public OrthoElement getOrthography() {
+	public OrthographyElement getOrthography() {
 		MorphemeParser parser = new MorphemeParser();
-		OrthoElement orthoElement = getAlignedWord().getOrthography();
-		OrthoElement[] morphemes = orthoElement == null ? new OrthoElement[0] : parser.parseOrthography(getAlignedWord().getOrthography());
+		OrthographyElement orthographyElement = getAlignedWord().getOrthography();
+		OrthographyElement[] morphemes = orthographyElement == null ? new OrthographyElement[0] : parser.parseOrthography(getAlignedWord().getOrthography());
 		return (getMorphemeIdx() >= 0 && getMorphemeIdx() < morphemes.length
 				? morphemes[getMorphemeIdx()]
 				: null);
@@ -54,9 +54,9 @@ public class AlignedMorpheme {
 
 	public int getOrthographyWordLocation() {
 		MorphemeParser parser = new MorphemeParser();
-		OrthoElement orthoElement = getAlignedWord().getOrthography();
+		OrthographyElement orthographyElement = getAlignedWord().getOrthography();
 		final OrthographyMorphemeVisitor visitor = new OrthographyMorphemeVisitor();
-		visitor.visit(orthoElement);
+		visitor.visit(orthographyElement);
 
 		return (this.morphemeIdx < visitor.getMorphemeIndexes().length
 				? visitor.getMorphemeIndexes()[this.morphemeIdx] : -1);
@@ -111,7 +111,7 @@ public class AlignedMorpheme {
 		if(systemTier != null) {
 			switch (systemTier) {
 				case Orthography -> {
-					OrthoElement ortho = getOrthography();
+					OrthographyElement ortho = getOrthography();
 					retVal = (ortho != null ? ortho.toString() : "");
 				}
 

@@ -6,14 +6,12 @@ import ca.phon.orthography.parser.exceptions.OrthoParserException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyParserListener {
 
     private final OrthographyBuilder builder = new OrthographyBuilder();
 
-    private List<OrthoWordElement> wordElements = new ArrayList<>();
+    private List<WordElement> wordElements = new ArrayList<>();
 
     @Override
     public void exitLinker(UnicodeOrthographyParser.LinkerContext ctx) {
@@ -24,9 +22,9 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
     @Override
     public void exitComplete_word(UnicodeOrthographyParser.Complete_wordContext ctx) {
         if(builder.size() == 0) return;
-        if(builder.lastElement() instanceof OrthoWord) { // should always be true
-            OrthoWord lastWord = (OrthoWord) builder.lastElement();
-            List<OrthoWordElement> wordElements = lastWord.getWordElements();
+        if(builder.lastElement() instanceof Word) { // should always be true
+            Word lastWord = (Word) builder.lastElement();
+            List<WordElement> wordElements = lastWord.getWordElements();
 
             // handle special cases
             // overlap-point
@@ -100,7 +98,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
 
     @Override
     public void exitText(UnicodeOrthographyParser.TextContext ctx) {
-        wordElements.add(new OrthoWordText(ctx.getText()));
+        wordElements.add(new WordText(ctx.getText()));
     }
 
     @Override
@@ -108,9 +106,9 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         // text has been added as a word element
         if(wordElements.size() == 0)
             throw new OrthoParserException("Shortening must include text", ctx.getStart().getCharPositionInLine());
-        if(!(wordElements.get(wordElements.size()-1) instanceof OrthoWordText))
+        if(!(wordElements.get(wordElements.size()-1) instanceof WordText))
             throw new OrthoParserException("Shortening must only include text data", ctx.getStart().getCharPositionInLine());
-        final OrthoWordText text = (OrthoWordText) wordElements.remove(wordElements.size()-1);
+        final WordText text = (WordText) wordElements.remove(wordElements.size()-1);
         wordElements.add(new Shortening(text));
     }
 

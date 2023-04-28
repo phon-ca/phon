@@ -15,31 +15,58 @@
  */
 package ca.phon.orthography;
 
-
 /**
- * Represents punctuation and syntax elements.
+ * An event written in-line with orthography.
+ * 
+ * Events can have syntax 'type:data' or just
+ * 'data'.
+ * 
  */
-public class OrthoPunct extends AbstractOrthoElement {
+public class OrthographyEvent extends AbstractOrthographyElement {
 	
-	private final OrthoPunctType type;
-
-	public OrthoPunct(OrthoPunctType type) {
-		super();
-		this.type = type;
+	private final String type;
+	
+	private final String data;
+	
+	public OrthographyEvent(String data) {
+		this(null, data);
 	}
 	
-	public OrthoPunctType getType() {
+	public OrthographyEvent(String type, String data) {
+		super();
+		this.type = type;
+		this.data = data;
+	}
+	
+	/**
+	 * Get the type of the event.  This is the text before
+	 * the first ':' in the event text.
+	 * 
+	 * @return the type of the event.  Default is 'action' if
+	 *  not defined
+	 */
+	public String getType() {
 		return this.type;
 	}
 	
+	/**
+	 * Event data
+	 * 
+	 * @return the data for the event
+	 */
+	public String getData() {
+		return this.data;
+	}
+
 	@Override
 	public String text() {
-		return this.type.getChar() + "";
+		return ("*" + (this.type == null ? "" : this.type + ":") + this.data + "*");
 	}
 	
 	@Override
 	public String toString() {
 		return text();
 	}
+	
 
 }

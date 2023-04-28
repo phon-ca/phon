@@ -1,10 +1,10 @@
 package ca.phon.orthography;
 
-public final class OrthoWordText extends AbstractOrthoWordElement {
+public final class WordText extends AbstractWordElement {
 
     private final String text;
 
-    public OrthoWordText(String text) {
+    public WordText(String text) {
         super();
         this.text = text;
     }

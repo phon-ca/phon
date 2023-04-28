@@ -26,9 +26,9 @@ import java.util.*;
  * the number of align-able elements in an Orthography instance.
  *
  */
-public class OrthoWordExtractor extends VisitorAdapter<OrthoElement> {
+public class OrthoWordExtractor extends VisitorAdapter<OrthographyElement> {
 
-	private final List<OrthoElement> wordList = new ArrayList<OrthoElement>();
+	private final List<OrthographyElement> wordList = new ArrayList<OrthographyElement>();
 	
 	private boolean includeOmitted = false;
 	
@@ -50,7 +50,7 @@ public class OrthoWordExtractor extends VisitorAdapter<OrthoElement> {
 	}
 	
 	@Visits
-	public void visitWord(OrthoWord word) {
+	public void visitWord(Word word) {
 		if(word.getPrefix() != null && word.getPrefix().getType() == WordType.OMISSION)
 			return;
 		
@@ -58,24 +58,24 @@ public class OrthoWordExtractor extends VisitorAdapter<OrthoElement> {
 	}
 
 	@Visits
-	public void visitWordnet(OrthoCompoundWord wordnet) {
+	public void visitWordnet(CompoundWord wordnet) {
 		wordList.add(wordnet);
 	}
 	
 	@Visits
-	public void visitComment(OrthoComment comment) {
+	public void visitComment(OrthographyComment comment) {
 		if(comment.getData().matches("\\.{1,3}")) {
 			// add pause as an alignment element
 			wordList.add(comment);
 		}
 	}
 	
-	public List<OrthoElement> getWordList() {
+	public List<OrthographyElement> getWordList() {
 		return this.wordList;
 	}
 
 	@Override
-	public void fallbackVisit(OrthoElement obj) {
+	public void fallbackVisit(OrthographyElement obj) {
 	}
 	
 }

@@ -22,17 +22,17 @@ package ca.phon.orthography;
  *  
  * type is optional
  */
-public final class OrthoComment extends AbstractOrthoElement {
+public final class OrthographyComment extends AbstractOrthographyElement {
 	
 	private final String type;
 	
 	private final String data;
 	
-	public OrthoComment(String data) {
+	public OrthographyComment(String data) {
 		this(null, data);
 	}
 	
-	public OrthoComment(String type, String data) {
+	public OrthographyComment(String type, String data) {
 		super();
 		this.type = type;
 		this.data = data;

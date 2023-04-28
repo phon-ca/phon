@@ -85,7 +85,7 @@ public class OrthoGroupField extends GroupField<Orthography> {
 		return true;
 	}
 	
-	public class HighlightVisitor extends VisitorAdapter<OrthoElement> {
+	public class HighlightVisitor extends VisitorAdapter<OrthographyElement> {
 		
 		int currentPos = 0;
 		
@@ -96,14 +96,14 @@ public class OrthoGroupField extends GroupField<Orthography> {
 		}
 
 		@Override
-		public void fallbackVisit(OrthoElement obj) {
+		public void fallbackVisit(OrthographyElement obj) {
 			int objIdx = text.indexOf(obj.text(), currentPos);
 			currentPos = objIdx + obj.text().length();
 			while(currentPos < text.length() && Character.isWhitespace(text.charAt(currentPos))) currentPos++;
 		}
 		
 		@Visits
-		public void visitWord(OrthoWord word) {
+		public void visitWord(Word word) {
 			if(word.getPrefix() != null) {
 				try {
 					getHighlighter().addHighlight(currentPos,
@@ -129,7 +129,7 @@ public class OrthoGroupField extends GroupField<Orthography> {
 		}
 		
 		@Visits
-		public void visitComment(OrthoComment comment) {
+		public void visitComment(OrthographyComment comment) {
 			try {
 				int i = currentPos;
 				int j = i + comment.text().length();
@@ -140,7 +140,7 @@ public class OrthoGroupField extends GroupField<Orthography> {
 		}
 		
 		@Visits
-		public void visitEvent(OrthoEvent event) {
+		public void visitEvent(OrthographyEvent event) {
 			try {
 				int i = currentPos;
 				int j = i + event.text().length();

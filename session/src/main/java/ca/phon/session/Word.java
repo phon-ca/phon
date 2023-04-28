@@ -74,13 +74,13 @@ public final class Word extends ExtendableObject {
 		return this.wordIndex;
 	}
 
-	public OrthoElement getOrthography() {
+	public OrthographyElement getOrthography() {
 		final Orthography ortho =
 				(getGroup().getOrthography() == null ? new Orthography() : getGroup().getOrthography());
 		final OrthoWordExtractor extractor = new OrthoWordExtractor();
 		ortho.accept(extractor);
 
-		final List<OrthoElement> wordList = extractor.getWordList();
+		final List<OrthographyElement> wordList = extractor.getWordList();
 
 		if(wordIndex >= 0 && wordIndex < wordList.size()) {
 			return wordList.get(wordIndex);
@@ -92,7 +92,7 @@ public final class Word extends ExtendableObject {
 	public int getOrthographyWordLocation() {
 		int retVal = -1;
 
-		final OrthoElement ele = getOrthography();
+		final OrthographyElement ele = getOrthography();
 		if(ele != null) {
 			final int idx = getGroup().getOrthography().indexOf(ele);
 			if(idx >= 0) {

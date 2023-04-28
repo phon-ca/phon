@@ -16,7 +16,7 @@ package ca.phon.session.alignedMorphemes;
 
 import ca.phon.extensions.*;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.orthography.OrthoElement;
+import ca.phon.orthography.OrthographyElement;
 import ca.phon.session.*;
 
 import java.lang.ref.WeakReference;
@@ -42,8 +42,8 @@ public class AlignedMorphemes implements ExtensionProvider {
 		final Word alignedWord = getAlignedWord();
 		final MorphemeParser morphemeParser = new MorphemeParser();
 		if(alignedWord != null) {
-			OrthoElement orthoWord = alignedWord.getOrthography();
-			OrthoElement[] orthoMorphemes = orthoWord == null ? new OrthoElement[0] : morphemeParser.parseOrthography(alignedWord.getOrthography());
+			OrthographyElement orthoWord = alignedWord.getOrthography();
+			OrthographyElement[] orthoMorphemes = orthoWord == null ? new OrthographyElement[0] : morphemeParser.parseOrthography(alignedWord.getOrthography());
 			retVal = Math.max(retVal, orthoMorphemes.length);
 
 			IPATranscript ipaTarget = alignedWord.getIPATarget();
