@@ -110,11 +110,11 @@ numeric_pause
     ;
 
 time_in_minutes_seconds
-    :   (DIGIT+ COLON)? DIGIT+ PERIOD DIGIT*
+    :   (digit+ COLON)? digit+ PERIOD digit*
     ;
 
 overlap_point
-    :   OVERLAP_POINT DIGIT?
+    :   OVERLAP_POINT digit?
     ;
 
 prosody
@@ -135,6 +135,11 @@ wordpos
 formtype
     :   FORMTYPE
     |   HASH
+    ;
+
+digit
+    :   ZERO
+    |   ONE_TO_NINE
     ;
 
 // tokens
@@ -195,9 +200,8 @@ ZERO
     :   '0'
     ;
 
-DIGIT
-    :   ZERO
-    |   '1'..'9'
+ONE_TO_NINE
+    :   '1'..'9'
     ;
 
 AMP

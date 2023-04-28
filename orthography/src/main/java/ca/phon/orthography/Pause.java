@@ -27,7 +27,8 @@ public class Pause extends AbstractOrthoElement {
     }
 
     private String lengthToString() {
-        return MsFormatter.msToDisplayString((long)(getLength() * 1000.0f));
+        final NumericPauseFormat pauseFormat = new NumericPauseFormat();
+        return pauseFormat.sToDisplayString(getLength());
     }
 
     @Override

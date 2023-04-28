@@ -3,6 +3,7 @@ package ca.phon.orthography.parser;
 import ca.phon.orthography.*;
 import ca.phon.orthography.parser.exceptions.OrthoParserException;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -136,7 +137,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
     @Override
     public void exitOverlap_point(UnicodeOrthographyParser.Overlap_pointContext ctx) {
         final OverlapPointType type = OverlapPointType.fromString(ctx.OVERLAP_POINT().getText());
-        final int index = (ctx.DIGIT() != null ? Integer.parseInt(ctx.DIGIT().getText()) : -1);
+        final int index = (ctx.digit() != null ? Integer.parseInt(ctx.digit().getText()) : -1);
         wordElements.add(new OverlapPoint(type, index));
     }
 
@@ -163,18 +164,14 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
 
     @Override
     public void exitNumeric_pause(UnicodeOrthographyParser.Numeric_pauseContext ctx) {
-        final String regex = "\\((([0-9]+):)?([0-9]+)\\.([0-9]*)\\)";
-        final Pattern pattern = Pattern.compile(regex);
-        final Matcher matcher = pattern.matcher(ctx.getText());
-        if(matcher.matches()) {
-            String minText = matcher.group(2);
-            String secText = matcher.group(3);
-            String fracSecText = matcher.group(4);
-            int numMins = minText != null ? Integer.parseInt(minText) : 0;
-            int numSec = secText != null ? Integer.parseInt(secText) : 0;
-            numSec += (60 * numMins);
-            float seconds = Float.parseFloat(Integer.toString(numSec) + fracSecText);
-            builder.append(new Pause(PauseLength.NUMERIC, seconds));
+        if(ctx.time_in_minutes_seconds().getText().matches(NumericPauseFormat.PATTERN)) {
+            final NumericPauseFormat format = new NumericPauseFormat();
+            try {
+                Float seconds = (Float) format.parseObject(ctx.time_in_minutes_seconds().getText());
+                builder.append(new Pause(PauseLength.NUMERIC, seconds));
+            } catch (ParseException pe) {
+                throw new OrthoParserException(pe.getMessage(), pe.getErrorOffset());
+            }
         } else {
             throw new OrthoParserException("Invalid numeric pause", ctx.getStart().getCharPositionInLine());
         }

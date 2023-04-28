@@ -294,4 +294,17 @@ public class TestUnicodeOrthography {
         Assert.assertEquals(PauseLength.VERY_LONG, ((Pause)ortho.elementAt(5)).getType());
     }
 
+    @Test
+    public void testNumericPause() {
+        final String text = "one (1.) two (2.15) three (1:05.2)";
+        final Orthography ortho = roundTrip(text);
+        Assert.assertEquals(6, ortho.length());
+        Assert.assertEquals(Pause.class, ortho.elementAt(1).getClass());
+        Assert.assertEquals(PauseLength.NUMERIC, ((Pause)ortho.elementAt(1)).getType());
+        Assert.assertEquals(Pause.class, ortho.elementAt(3).getClass());
+        Assert.assertEquals(PauseLength.NUMERIC, ((Pause)ortho.elementAt(3)).getType());
+        Assert.assertEquals(Pause.class, ortho.elementAt(5).getClass());
+        Assert.assertEquals(PauseLength.NUMERIC, ((Pause)ortho.elementAt(5)).getType());
+    }
+
 }

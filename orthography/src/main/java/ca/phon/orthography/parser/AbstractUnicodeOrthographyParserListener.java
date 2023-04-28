@@ -266,6 +266,16 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
+    public void enterDigit(UnicodeOrthographyParser.DigitContext ctx) {
+
+    }
+
+    @Override
+    public void exitDigit(UnicodeOrthographyParser.DigitContext ctx) {
+
+    }
+
+    @Override
     public void visitTerminal(TerminalNode terminalNode) {
 
     }
