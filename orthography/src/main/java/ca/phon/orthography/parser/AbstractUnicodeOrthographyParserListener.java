@@ -276,6 +276,26 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
+    public void enterInternal_media(UnicodeOrthographyParser.Internal_mediaContext ctx) {
+
+    }
+
+    @Override
+    public void exitInternal_media(UnicodeOrthographyParser.Internal_mediaContext ctx) {
+
+    }
+
+    @Override
+    public void enterMediasegment(UnicodeOrthographyParser.MediasegmentContext ctx) {
+
+    }
+
+    @Override
+    public void exitMediasegment(UnicodeOrthographyParser.MediasegmentContext ctx) {
+
+    }
+
+    @Override
     public void enterDigit(UnicodeOrthographyParser.DigitContext ctx) {
 
     }

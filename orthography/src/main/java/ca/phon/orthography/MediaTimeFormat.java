@@ -18,10 +18,9 @@ import java.util.regex.*;
 
 
 /**
- * Text formatter for milliseconds.
- *
+ * Text formatter for time in <pre>(min:)?s.(ms)?</pre>
  */
-public class NumericPauseFormat extends Format {
+public class MediaTimeFormat extends Format {
 
     public final static String PATTERN = "(?:([0-9]{0,3})\\:)?([0-9]{1,2})\\.([0-9]{0,3})";
 

@@ -16,6 +16,7 @@ orthoelement
     |   tagMarker
     |   pause
     |   freecode
+    |   internal_media
     ;
 
 word_boundary
@@ -142,39 +143,35 @@ formtype
     |   HASH
     ;
 
+internal_media
+    :   BULLET mediasegment BULLET
+    ;
+
+mediasegment
+    :   time_in_minutes_seconds MINUS time_in_minutes_seconds
+    ;
+
 digit
     :   ZERO
     |   ONE_TO_NINE
     ;
 
-FREECODE
-    :   OPEN_BRACKET CARET ( '\\]' | '\\[' | . )*? CLOSE_BRACKET
-    ;
+// TOKENS
 
-// tokens
 APOSTROPHE
     :   '\''
     ;
 
-CHAR
-    :   [a-zA-Z]
-    ;
-
-FORWARD_SLASH
-    :   '/'
-    ;
-
-QUOTATION
-    :   '"'
+BULLET
+    :   '\u2022'
     ;
 
 CARET
     :   '^'
     ;
 
-
-LESS_THAN
-    :   '<'
+CHAR
+    :   [a-zA-Z]
     ;
 
 COLON
@@ -185,12 +182,28 @@ COMMA
     :   ','
     ;
 
+DOUBLE_COMMA
+    :   '„'
+    ;
+
 DOUBLE_DAGGER
     :   '‡'
     ;
 
-DOUBLE_COMMA
-    :   '„'
+FREECODE
+    :   OPEN_BRACKET CARET ( '\\]' | '\\[' | . )*? CLOSE_BRACKET
+    ;
+
+FORWARD_SLASH
+    :   '/'
+    ;
+
+QUOTATION
+    :   '"'
+    ;
+
+LESS_THAN
+    :   '<'
     ;
 
 OPEN_BRACKET

@@ -25,7 +25,7 @@ public class Pause extends AbstractOrthographyElement {
     }
 
     private String lengthToString() {
-        final NumericPauseFormat pauseFormat = new NumericPauseFormat();
+        final MediaTimeFormat pauseFormat = new MediaTimeFormat();
         return pauseFormat.sToDisplayString(getLength());
     }
 

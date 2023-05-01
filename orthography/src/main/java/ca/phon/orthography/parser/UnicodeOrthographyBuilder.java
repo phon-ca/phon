@@ -162,8 +162,8 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
 
     @Override
     public void exitNumeric_pause(UnicodeOrthographyParser.Numeric_pauseContext ctx) {
-        if(ctx.time_in_minutes_seconds().getText().matches(NumericPauseFormat.PATTERN)) {
-            final NumericPauseFormat format = new NumericPauseFormat();
+        if(ctx.time_in_minutes_seconds().getText().matches(MediaTimeFormat.PATTERN)) {
+            final MediaTimeFormat format = new MediaTimeFormat();
             try {
                 Float seconds = (Float) format.parseObject(ctx.time_in_minutes_seconds().getText());
                 builder.append(new Pause(PauseLength.NUMERIC, seconds));
@@ -180,4 +180,23 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         final String data = ctx.getText().substring(2, ctx.getText().length()-1);
         builder.append(new Freecode(data));
     }
+
+    @Override
+    public void exitInternal_media(UnicodeOrthographyParser.Internal_mediaContext ctx) {
+        final MediaTimeFormat timeFormat = new MediaTimeFormat();
+        float startTime = 0.0f;
+        try {
+            startTime = (float)timeFormat.parseObject(ctx.mediasegment().time_in_minutes_seconds(0).getText());
+        } catch(ParseException e) {
+            throw new OrthoParserException("Invalid start time", ctx.mediasegment().time_in_minutes_seconds(0).getStart().getCharPositionInLine());
+        }
+        float endTime = startTime;
+        try {
+            endTime = (float)timeFormat.parseObject(ctx.mediasegment().time_in_minutes_seconds(1).getText());
+        } catch(ParseException e) {
+            throw new OrthoParserException("Invalid start time", ctx.mediasegment().time_in_minutes_seconds(1).getStart().getCharPositionInLine());
+        }
+        builder.append(new InternalMedia(startTime, endTime));
+    }
+
 }

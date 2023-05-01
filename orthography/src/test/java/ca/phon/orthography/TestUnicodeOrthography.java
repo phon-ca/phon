@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import javax.swing.*;
 import java.util.List;
 
 /**
@@ -313,6 +314,21 @@ public class TestUnicodeOrthography {
         Assert.assertEquals(3, ortho.length());
         Assert.assertEquals(Freecode.class, ortho.elementAt(1).getClass());
         Assert.assertEquals("waves", ((Freecode)ortho.elementAt(1)).getData().trim());
+    }
+
+    @Test
+    public void testInternalMedia() {
+        final String text = "hello \u20220.5-1.2\u2022 world \u20221:05.1-1:06.\u2022";
+        final Orthography ortho = roundTrip(text);
+        Assert.assertEquals(4, ortho.length());
+        Assert.assertEquals(InternalMedia.class, ortho.elementAt(1).getClass());
+        final InternalMedia media1 = (InternalMedia)ortho.elementAt(1);
+        Assert.assertEquals(0.5f, media1.getStartTime(), 0.0001);
+        Assert.assertEquals(1.2f, media1.getEndTime(), 0.0001);
+        Assert.assertEquals(InternalMedia.class, ortho.elementAt(3).getClass());
+        final InternalMedia media2 = (InternalMedia)ortho.elementAt(3);
+        Assert.assertEquals(65.1f, media2.getStartTime(), 0.0001);
+        Assert.assertEquals(66.0f, media2.getEndTime(), 0.0001);
     }
 
 }
