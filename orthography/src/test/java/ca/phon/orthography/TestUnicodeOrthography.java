@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import javax.swing.*;
 import java.util.List;
 
 /**
@@ -455,6 +454,19 @@ public class TestUnicodeOrthography {
             Assert.assertEquals(type, groupAnnotation.getType());
             Assert.assertEquals("bar", groupAnnotation.getData().trim());
         }
+    }
+
+    @Test
+    public void testDuration() {
+        final String text = Happening.PREFIX + "foo [# 1.2]";
+        final Orthography ortho = roundTrip(text);
+        Assert.assertEquals(1, ortho.length());
+        Assert.assertEquals(Happening.class, ortho.elementAt(0).getClass());
+        final Happening happening = (Happening) ortho.elementAt(0);
+        Assert.assertEquals(1, happening.getEventAnnotations().size());
+        Assert.assertEquals(Duration.class, happening.getEventAnnotations().get(0).getClass());
+        final Duration duration = (Duration) happening.getEventAnnotations().get(0);
+        Assert.assertEquals(1.2f, duration.getDuration(), 0.0001f);
     }
 
 }

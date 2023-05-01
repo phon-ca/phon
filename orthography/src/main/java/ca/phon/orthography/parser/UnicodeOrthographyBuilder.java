@@ -330,4 +330,16 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         addGroupAnnotation(GroupAnnotationType.PARALINGUISTICS, data.trim());
     }
 
+    @Override
+    public void exitDuration(UnicodeOrthographyParser.DurationContext ctx) {
+        final MediaTimeFormat timeFormat = new MediaTimeFormat();
+        float duration = 0.0f;
+        try {
+            duration = (float) timeFormat.parseObject(ctx.time_in_minutes_seconds().getText());
+        } catch (ParseException pe) {
+            throw new OrthoParserException(pe.getMessage(), ctx.time_in_minutes_seconds().getStart().getCharPositionInLine());
+        }
+        annotateLastElement(new Duration(duration));
+    }
+
 }

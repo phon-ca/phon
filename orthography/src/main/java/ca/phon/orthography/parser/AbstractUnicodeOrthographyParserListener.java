@@ -426,6 +426,16 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
+    public void enterDuration(UnicodeOrthographyParser.DurationContext ctx) {
+
+    }
+
+    @Override
+    public void exitDuration(UnicodeOrthographyParser.DurationContext ctx) {
+
+    }
+
+    @Override
     public void enterDigit(UnicodeOrthographyParser.DigitContext ctx) {
 
     }

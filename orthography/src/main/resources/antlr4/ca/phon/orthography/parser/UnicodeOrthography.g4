@@ -24,6 +24,7 @@ orthoelement
     |   error
     |   overlap
     |   group_annotation
+    |   duration
     ;
 
 word_boundary
@@ -206,6 +207,10 @@ group_annotation
 overlap
     :   OPEN_BRACKET LESS_THAN digit? CLOSE_BRACKET         // overlap preceeds
     |   OPEN_BRACKET GREATER_THAN digit? CLOSE_BRACKET      // overlap follows
+    ;
+
+duration
+    :   OPEN_BRACKET HASH WS time_in_minutes_seconds CLOSE_BRACKET
     ;
 
 digit
