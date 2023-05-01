@@ -23,6 +23,7 @@ orthoelement
     |   marker
     |   error
     |   overlap
+    |   group_annotation
     ;
 
 word_boundary
@@ -195,6 +196,13 @@ error
     :   ERROR
     ;
 
+group_annotation
+    :   COMMENT             # Comment
+    |   ALTERNATIVE         # Alternative
+    |   EXPLANATION         # Explanation
+    |   PARALINGUISTICS     # Paralinguistics
+    ;
+
 overlap
     :   OPEN_BRACKET LESS_THAN digit? CLOSE_BRACKET         // overlap preceeds
     |   OPEN_BRACKET GREATER_THAN digit? CLOSE_BRACKET      // overlap follows
@@ -260,6 +268,28 @@ FREECODE
 
 ERROR
     :   OPEN_BRACKET STAR ( '\\]' | '\\[' | .)*? CLOSE_BRACKET
+    ;
+
+
+COMMENT
+    :   OPEN_BRACKET PERCENT ( '\\]' | '\\[' | .)*? CLOSE_BRACKET
+    ;
+
+
+ALTERNATIVE
+    :   OPEN_BRACKET EQUALS QUESTION ( '\\]' | '\\[' | .)*? CLOSE_BRACKET
+    ;
+
+PARALINGUISTICS
+    :   OPEN_BRACKET EQUALS EXCLAMATION ( '\\]' | '\\[' | .)*? CLOSE_BRACKET
+    ;
+
+EXPLANATION
+    :   OPEN_BRACKET EQUALS ( '\\]' | '\\[' | .)*? CLOSE_BRACKET
+    ;
+
+PERCENT
+    :   '%'
     ;
 
 FORWARD_SLASH

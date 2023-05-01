@@ -441,4 +441,20 @@ public class TestUnicodeOrthography {
         }
     }
 
+    @Test
+    public void testGroupAnnotation() {
+        for(GroupAnnotationType type:GroupAnnotationType.values()) {
+            final String text = Happening.PREFIX + "foo [" + type.getPrefix() + " bar]";
+            final Orthography ortho = roundTrip(text);
+            Assert.assertEquals(1, ortho.length());
+            Assert.assertEquals(Happening.class, ortho.elementAt(0).getClass());
+            final Happening happening = (Happening) ortho.elementAt(0);
+            Assert.assertEquals(1, happening.getEventAnnotations().size());
+            Assert.assertEquals(GroupAnnotation.class, happening.getEventAnnotations().get(0).getClass());
+            final GroupAnnotation groupAnnotation = (GroupAnnotation) happening.getEventAnnotations().get(0);
+            Assert.assertEquals(type, groupAnnotation.getType());
+            Assert.assertEquals("bar", groupAnnotation.getData().trim());
+        }
+    }
+
 }

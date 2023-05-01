@@ -257,11 +257,11 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
                 Event evt = (Event) lastEle;
                 final List<OrthographyElement> annotations = new ArrayList<>(evt.getEventAnnotations());
                 annotations.add(ele);
-                if(evt instanceof Action) {
+                if (evt instanceof Action) {
                     builder.replaceLastElement(new Action(annotations));
-                } else if(evt instanceof Happening) {
+                } else if (evt instanceof Happening) {
                     builder.replaceLastElement(new Happening(((Happening) evt).getData(), annotations));
-                } else if(evt instanceof OtherSpokenEvent) {
+                } else if (evt instanceof OtherSpokenEvent) {
                     OtherSpokenEvent ote = (OtherSpokenEvent) evt;
                     builder.replaceLastElement(new OtherSpokenEvent(ote.getWho(), ote.getData(), annotations));
                 }
@@ -296,6 +296,38 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         final int index = (ctx.digit() != null ? Integer.parseInt(ctx.digit().getText()) : -1);
         final Overlap overlap = new Overlap(overlapType, index);
         annotateLastElement(overlap);
+    }
+
+    private void addGroupAnnotation(GroupAnnotationType type, String data) {
+        annotateLastElement(new GroupAnnotation(type, data));
+    }
+
+    @Override
+    public void exitComment(UnicodeOrthographyParser.CommentContext ctx) {
+        final String data = ctx.getText().substring(GroupAnnotationType.COMMENTS.getPrefix().length()+1,
+                ctx.getText().length()-1);
+        addGroupAnnotation(GroupAnnotationType.COMMENTS, data.trim());
+    }
+
+    @Override
+    public void exitAlternative(UnicodeOrthographyParser.AlternativeContext ctx) {
+        final String data = ctx.getText().substring(GroupAnnotationType.ALTERNATIVE.getPrefix().length()+1,
+                ctx.getText().length()-1);
+        addGroupAnnotation(GroupAnnotationType.ALTERNATIVE, data.trim());
+    }
+
+    @Override
+    public void exitExplanation(UnicodeOrthographyParser.ExplanationContext ctx) {
+        final String data = ctx.getText().substring(GroupAnnotationType.EXPLANATION.getPrefix().length()+1,
+                ctx.getText().length()-1);
+        addGroupAnnotation(GroupAnnotationType.EXPLANATION, data.trim());
+    }
+
+    @Override
+    public void exitParalinguistics(UnicodeOrthographyParser.ParalinguisticsContext ctx) {
+        final String data = ctx.getText().substring(GroupAnnotationType.PARALINGUISTICS.getPrefix().length()+1,
+                ctx.getText().length()-1);
+        addGroupAnnotation(GroupAnnotationType.PARALINGUISTICS, data.trim());
     }
 
 }

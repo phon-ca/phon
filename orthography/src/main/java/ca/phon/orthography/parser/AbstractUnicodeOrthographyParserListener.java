@@ -376,6 +376,46 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
+    public void enterComment(UnicodeOrthographyParser.CommentContext ctx) {
+
+    }
+
+    @Override
+    public void exitComment(UnicodeOrthographyParser.CommentContext ctx) {
+
+    }
+
+    @Override
+    public void enterAlternative(UnicodeOrthographyParser.AlternativeContext ctx) {
+
+    }
+
+    @Override
+    public void exitAlternative(UnicodeOrthographyParser.AlternativeContext ctx) {
+
+    }
+
+    @Override
+    public void enterExplanation(UnicodeOrthographyParser.ExplanationContext ctx) {
+
+    }
+
+    @Override
+    public void exitExplanation(UnicodeOrthographyParser.ExplanationContext ctx) {
+
+    }
+
+    @Override
+    public void enterParalinguistics(UnicodeOrthographyParser.ParalinguisticsContext ctx) {
+
+    }
+
+    @Override
+    public void exitParalinguistics(UnicodeOrthographyParser.ParalinguisticsContext ctx) {
+
+    }
+
+    @Override
     public void enterOverlap(UnicodeOrthographyParser.OverlapContext ctx) {
 
     }
