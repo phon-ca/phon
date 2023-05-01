@@ -408,4 +408,37 @@ public class TestUnicodeOrthography {
         Assert.assertEquals("bar", error.getData().trim());
     }
 
+    @Test
+    public void testOverlap() {
+        for(OverlapType type:OverlapType.values()) {
+            final String text = Happening.PREFIX + "foo " + type.getPrefix() + "]";
+            final Orthography ortho = roundTrip(text);
+            Assert.assertEquals(1, ortho.length());
+            Assert.assertEquals(Happening.class, ortho.elementAt(0).getClass());
+            final Happening happening = (Happening) ortho.elementAt(0);
+            Assert.assertEquals(1, happening.getEventAnnotations().size());
+            Assert.assertEquals(Overlap.class, happening.getEventAnnotations().get(0).getClass());
+            final Overlap overlap = (Overlap) happening.getEventAnnotations().get(0);
+            Assert.assertEquals(type, overlap.getType());
+        }
+    }
+
+    @Test
+    public void testIndexedOverlap() {
+        int idx = 1;
+        for(OverlapType type:OverlapType.values()) {
+            final String text = Happening.PREFIX + "foo " + type.getPrefix() + (idx) + "]";
+            final Orthography ortho = roundTrip(text);
+            Assert.assertEquals(1, ortho.length());
+            Assert.assertEquals(Happening.class, ortho.elementAt(0).getClass());
+            final Happening happening = (Happening) ortho.elementAt(0);
+            Assert.assertEquals(1, happening.getEventAnnotations().size());
+            Assert.assertEquals(Overlap.class, happening.getEventAnnotations().get(0).getClass());
+            final Overlap overlap = (Overlap) happening.getEventAnnotations().get(0);
+            Assert.assertEquals(type, overlap.getType());
+            Assert.assertEquals(idx, overlap.getIndex());
+            ++idx;
+        }
+    }
+
 }

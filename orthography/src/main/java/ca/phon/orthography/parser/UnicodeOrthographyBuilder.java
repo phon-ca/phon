@@ -290,4 +290,12 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         annotateLastElement(error);
     }
 
+    @Override
+    public void exitOverlap(UnicodeOrthographyParser.OverlapContext ctx) {
+        final OverlapType overlapType = ctx.getText().charAt(1) == '<' ? OverlapType.OVERLAP_PRECEEDS : OverlapType.OVERLAP_FOLLOWS;
+        final int index = (ctx.digit() != null ? Integer.parseInt(ctx.digit().getText()) : -1);
+        final Overlap overlap = new Overlap(overlapType, index);
+        annotateLastElement(overlap);
+    }
+
 }

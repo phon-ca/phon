@@ -376,6 +376,16 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
+    public void enterOverlap(UnicodeOrthographyParser.OverlapContext ctx) {
+
+    }
+
+    @Override
+    public void exitOverlap(UnicodeOrthographyParser.OverlapContext ctx) {
+
+    }
+
+    @Override
     public void enterDigit(UnicodeOrthographyParser.DigitContext ctx) {
 
     }

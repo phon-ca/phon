@@ -22,6 +22,7 @@ orthoelement
     |   event
     |   marker
     |   error
+    |   overlap
     ;
 
 word_boundary
@@ -181,7 +182,7 @@ id_or_basic_word
 marker
     :   OPEN_BRACKET EXCLAMATION CLOSE_BRACKET                                  // stressing
     |   OPEN_BRACKET EXCLAMATION EXCLAMATION CLOSE_BRACKET                      // contrasive stressing
-    |   OPEN_BRACKET QUOTATION CLOSE_BRACKET                                    // best guess
+    |   OPEN_BRACKET QUESTION CLOSE_BRACKET                                    // best guess
     |   OPEN_BRACKET FORWARD_SLASH CLOSE_BRACKET                                // retracing
     |   OPEN_BRACKET FORWARD_SLASH FORWARD_SLASH CLOSE_BRACKET                  // retracing with correction
     |   OPEN_BRACKET FORWARD_SLASH FORWARD_SLASH FORWARD_SLASH CLOSE_BRACKET    // retraction reformulation
@@ -192,6 +193,11 @@ marker
 
 error
     :   ERROR
+    ;
+
+overlap
+    :   OPEN_BRACKET LESS_THAN digit? CLOSE_BRACKET         // overlap preceeds
+    |   OPEN_BRACKET GREATER_THAN digit? CLOSE_BRACKET      // overlap follows
     ;
 
 digit
@@ -266,6 +272,10 @@ QUOTATION
 
 LESS_THAN
     :   '<'
+    ;
+
+GREATER_THAN
+    :   '>'
     ;
 
 OPEN_BRACKET
