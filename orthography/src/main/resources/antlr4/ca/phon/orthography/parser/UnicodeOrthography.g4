@@ -18,6 +18,7 @@ orthoelement
     |   freecode
     |   internal_media
     |   separator
+    |   toneMarker
     ;
 
 word_boundary
@@ -156,6 +157,12 @@ separator
     :   COLON
     |   SEMICOLON
     |   CLAUSE_DELIMITER
+    |   '\u221e'    // unmarked ending
+    |   '\u2261'    // uptake
+    ;
+
+toneMarker
+    :   TONE_MARKER
     ;
 
 digit
@@ -301,6 +308,14 @@ FORMTYPE
     :   AT ('a'|'b'|'c'|'d'|'e'|'f'|'fp'|'fs'|'g'
            |'i'|'k'|'l'|'n'|'nv'|'o'|'p'|'q'|'sas'
            |'si'|'sl'|'t'|'u'|'x'|'wp'|'z')
+    ;
+
+TONE_MARKER
+    :   '\u21d7'        // rising to high
+    |   '\u2197'        // rising to mid
+    |   '\u2192'        // level
+    |   '\u2198'        // falling to mid
+    |   '\u21d8'        // falling to low
     ;
 
 CA_ELEMENT

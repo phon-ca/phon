@@ -306,6 +306,16 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
+    public void enterToneMarker(UnicodeOrthographyParser.ToneMarkerContext ctx) {
+
+    }
+
+    @Override
+    public void exitToneMarker(UnicodeOrthographyParser.ToneMarkerContext ctx) {
+
+    }
+
+    @Override
     public void enterDigit(UnicodeOrthographyParser.DigitContext ctx) {
 
     }

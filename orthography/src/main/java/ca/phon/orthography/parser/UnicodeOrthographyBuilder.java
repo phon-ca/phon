@@ -221,4 +221,14 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         }
     }
 
+    @Override
+    public void exitToneMarker(UnicodeOrthographyParser.ToneMarkerContext ctx) {
+        final ToneMarkerType type = ToneMarkerType.fromString(ctx.getText());
+        if(type != null) {
+            builder.append(new ToneMarker(type));
+        } else {
+            throw new OrthoParserException("Invalid tone marker", ctx.getStart().getCharPositionInLine());
+        }
+    }
+
 }

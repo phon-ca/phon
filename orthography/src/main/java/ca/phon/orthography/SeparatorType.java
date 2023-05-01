@@ -3,7 +3,9 @@ package ca.phon.orthography;
 public enum SeparatorType {
     SEMICOLON(";", "semicolon"),
     COLON(":", "colon"),
-    CLAUSE_DELIMITER("[c]", "clause delimiter");
+    CLAUSE_DELIMITER("[c]", "clause delimiter"),
+    UNMARKED_ENDING("\u221e", "unmarked ending"),
+    UPTAKE("\u2261", "uptake");
 
     private String text;
 

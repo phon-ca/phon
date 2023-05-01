@@ -342,4 +342,15 @@ public class TestUnicodeOrthography {
         }
     }
 
+    @Test
+    public void testToneMarker() {
+        for(ToneMarkerType type:ToneMarkerType.values()) {
+            final String text = "hello " + type.toString() + " world";
+            final Orthography ortho = roundTrip(text);
+            Assert.assertEquals(3, ortho.length());
+            Assert.assertEquals(ToneMarker.class, ortho.elementAt(1).getClass());
+            Assert.assertEquals(type, ((ToneMarker)ortho.elementAt(1)).getType());
+        }
+    }
+
 }
