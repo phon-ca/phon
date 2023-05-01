@@ -20,6 +20,7 @@ orthoelement
     |   separator
     |   toneMarker
     |   event
+    |   marker
     ;
 
 word_boundary
@@ -176,6 +177,18 @@ id_or_basic_word
     :   CHAR+
     ;
 
+marker
+    :   OPEN_BRACKET EXCLAMATION CLOSE_BRACKET                                  // stressing
+    |   OPEN_BRACKET EXCLAMATION EXCLAMATION CLOSE_BRACKET                      // contrasive stressing
+    |   OPEN_BRACKET QUOTATION CLOSE_BRACKET                                    // best guess
+    |   OPEN_BRACKET FORWARD_SLASH CLOSE_BRACKET                                // retracing
+    |   OPEN_BRACKET FORWARD_SLASH FORWARD_SLASH CLOSE_BRACKET                  // retracing with correction
+    |   OPEN_BRACKET FORWARD_SLASH FORWARD_SLASH FORWARD_SLASH CLOSE_BRACKET    // retraction reformulation
+    |   OPEN_BRACKET FORWARD_SLASH QUESTION CLOSE_BRACKET                       // retracing unclear
+    |   OPEN_BRACKET FORWARD_SLASH MINUS CLOSE_BRACKET                          // false start
+    |   MOR_EXCLUDE                                                             // mor exclude
+    ;
+
 digit
     :   ZERO
     |   ONE_TO_NINE
@@ -212,6 +225,10 @@ SEMICOLON
 
 CLAUSE_DELIMITER
     :   '[c]'
+    ;
+
+MOR_EXCLUDE
+    :   '[e]'
     ;
 
 COMMA

@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import javax.swing.*;
 import java.util.List;
 
 /**
@@ -377,6 +378,21 @@ public class TestUnicodeOrthography {
         Assert.assertEquals(OtherSpokenEvent.class, ortho.elementAt(0).getClass());
         Assert.assertEquals("CHI", ((OtherSpokenEvent)ortho.elementAt(0)).getWho());
         Assert.assertEquals("foo", ((OtherSpokenEvent)ortho.elementAt(0)).getData());
+    }
+
+    @Test
+    public void testMarker() {
+        for(MarkerType type:MarkerType.values()) {
+            final String text = Happening.PREFIX + "foo " + type.getText();
+            final Orthography ortho = roundTrip(text);
+            Assert.assertEquals(1, ortho.length());
+            Assert.assertEquals(Happening.class, ortho.elementAt(0).getClass());
+            final Happening happening = (Happening) ortho.elementAt(0);
+            Assert.assertEquals(1, happening.getEventAnnotations().size());
+            Assert.assertEquals(Marker.class, happening.getEventAnnotations().get(0).getClass());
+            final Marker maker = (Marker) happening.getEventAnnotations().get(0);
+            Assert.assertEquals(type, maker.getType());
+        }
     }
 
 }

@@ -356,6 +356,16 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
+    public void enterMarker(UnicodeOrthographyParser.MarkerContext ctx) {
+
+    }
+
+    @Override
+    public void exitMarker(UnicodeOrthographyParser.MarkerContext ctx) {
+
+    }
+
+    @Override
     public void enterDigit(UnicodeOrthographyParser.DigitContext ctx) {
 
     }
