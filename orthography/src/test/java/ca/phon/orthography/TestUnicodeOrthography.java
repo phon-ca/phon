@@ -395,4 +395,17 @@ public class TestUnicodeOrthography {
         }
     }
 
+    @Test
+    public void testError() {
+        final String text = Happening.PREFIX + "foo " + Error.PREFIX + " bar]";
+        final Orthography ortho = roundTrip(text);
+        Assert.assertEquals(1, ortho.length());
+        Assert.assertEquals(Happening.class, ortho.elementAt(0).getClass());
+        final Happening happening = (Happening) ortho.elementAt(0);
+        Assert.assertEquals(1, happening.getEventAnnotations().size());
+        Assert.assertEquals(Error.class, happening.getEventAnnotations().get(0).getClass());
+        final Error error = (Error) happening.getEventAnnotations().get(0);
+        Assert.assertEquals("bar", error.getData().trim());
+    }
+
 }

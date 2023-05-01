@@ -366,6 +366,16 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
+    public void enterError(UnicodeOrthographyParser.ErrorContext ctx) {
+
+    }
+
+    @Override
+    public void exitError(UnicodeOrthographyParser.ErrorContext ctx) {
+
+    }
+
+    @Override
     public void enterDigit(UnicodeOrthographyParser.DigitContext ctx) {
 
     }

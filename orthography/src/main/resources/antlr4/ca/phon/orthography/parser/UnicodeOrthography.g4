@@ -21,6 +21,7 @@ orthoelement
     |   toneMarker
     |   event
     |   marker
+    |   error
     ;
 
 word_boundary
@@ -189,6 +190,10 @@ marker
     |   MOR_EXCLUDE                                                             // mor exclude
     ;
 
+error
+    :   ERROR
+    ;
+
 digit
     :   ZERO
     |   ONE_TO_NINE
@@ -245,6 +250,10 @@ DOUBLE_DAGGER
 
 FREECODE
     :   OPEN_BRACKET CARET ( '\\]' | '\\[' | . )*? CLOSE_BRACKET
+    ;
+
+ERROR
+    :   OPEN_BRACKET STAR ( '\\]' | '\\[' | .)*? CLOSE_BRACKET
     ;
 
 FORWARD_SLASH

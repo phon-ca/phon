@@ -1,6 +1,7 @@
 package ca.phon.orthography.parser;
 
 import ca.phon.orthography.*;
+import ca.phon.orthography.Error;
 import ca.phon.orthography.parser.exceptions.OrthoParserException;
 
 import java.text.ParseException;
@@ -249,33 +250,44 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         builder.append(new OtherSpokenEvent(who, text));
     }
 
+    private void annotateLastElement(OrthographyElement ele) {
+        if(builder.size() > 0) {
+            OrthographyElement lastEle = builder.lastElement();
+            if(lastEle instanceof Event) {
+                Event evt = (Event) lastEle;
+                final List<OrthographyElement> annotations = new ArrayList<>(evt.getEventAnnotations());
+                annotations.add(ele);
+                if(evt instanceof Action) {
+                    builder.replaceLastElement(new Action(annotations));
+                } else if(evt instanceof Happening) {
+                    builder.replaceLastElement(new Happening(((Happening) evt).getData(), annotations));
+                } else if(evt instanceof OtherSpokenEvent) {
+                    OtherSpokenEvent ote = (OtherSpokenEvent) evt;
+                    builder.replaceLastElement(new OtherSpokenEvent(ote.getWho(), ote.getData(), annotations));
+                }
+            } else {
+                builder.append(ele);
+            }
+        } else {
+            builder.append(ele);
+        }
+    }
+
     @Override
     public void exitMarker(UnicodeOrthographyParser.MarkerContext ctx) {
         final MarkerType type = MarkerType.fromString(ctx.getText());
         if(type != null) {
             final Marker marker = new Marker(type);
-
-            if(builder.size() > 0) {
-                OrthographyElement lastEle = builder.lastElement();
-                if(lastEle instanceof Event) {
-                    Event evt = (Event) lastEle;
-                    final List<OrthographyElement> annotations = new ArrayList<>(evt.getEventAnnotations());
-                    annotations.add(marker);
-                    if(evt instanceof Action) {
-                        builder.replaceLastElement(new Action(annotations));
-                    } else if(evt instanceof Happening) {
-                        builder.replaceLastElement(new Happening(((Happening) evt).getData(), annotations));
-                    } else if(evt instanceof OtherSpokenEvent) {
-                        OtherSpokenEvent ote = (OtherSpokenEvent) evt;
-                        builder.replaceLastElement(new OtherSpokenEvent(ote.getWho(), ote.getData(), annotations));
-                    }
-                } else {
-                    builder.append(marker);
-                }
-            } else {
-                builder.append(marker);
-            }
+            annotateLastElement(marker);
+        } else {
+            throw new OrthoParserException("Invalid marker", ctx.getStart().getCharPositionInLine());
         }
+    }
+
+    @Override
+    public void exitError(UnicodeOrthographyParser.ErrorContext ctx) {
+        final Error error = new Error(ctx.getText().substring(2, ctx.getText().length()-1));
+        annotateLastElement(error);
     }
 
 }
