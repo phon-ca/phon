@@ -66,6 +66,18 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
 
     @Override
     public void exitSingleWord(UnicodeOrthographyParser.SingleWordContext ctx) {
+        // handle some special cases
+        if(wordElements.size() == 1) {
+            if(wordElements.get(0) instanceof Prosody) {
+                // word == ':'
+                if(((Prosody)wordElements.get(0)).getType() == ProsodyType.DRAWL) {
+                    // switch to separator
+                    builder.append(new Separator(SeparatorType.COLON));
+                    wordElements.clear();
+                    return;
+                }
+            }
+        }
         builder.appendWord(wordElements);
         wordElements.clear();
     }
@@ -197,6 +209,16 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
             throw new OrthoParserException("Invalid start time", ctx.mediasegment().time_in_minutes_seconds(1).getStart().getCharPositionInLine());
         }
         builder.append(new InternalMedia(startTime, endTime));
+    }
+
+    @Override
+    public void exitSeparator(UnicodeOrthographyParser.SeparatorContext ctx) {
+        final SeparatorType type = SeparatorType.fromString(ctx.getText());
+        if(type != null) {
+            builder.append(new Separator(type));
+        } else {
+            throw new OrthoParserException("Invalid separator", ctx.getStart().getCharPositionInLine());
+        }
     }
 
 }

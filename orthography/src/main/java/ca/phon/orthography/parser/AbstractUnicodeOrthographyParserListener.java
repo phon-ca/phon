@@ -296,6 +296,16 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
+    public void enterSeparator(UnicodeOrthographyParser.SeparatorContext ctx) {
+
+    }
+
+    @Override
+    public void exitSeparator(UnicodeOrthographyParser.SeparatorContext ctx) {
+
+    }
+
+    @Override
     public void enterDigit(UnicodeOrthographyParser.DigitContext ctx) {
 
     }

@@ -309,11 +309,11 @@ public class TestUnicodeOrthography {
 
     @Test
     public void testFreecode() {
-        final String text = "hello [^ waves] world";
+        final String text = "hello [^ foo] world";
         final Orthography ortho = roundTrip(text);
         Assert.assertEquals(3, ortho.length());
         Assert.assertEquals(Freecode.class, ortho.elementAt(1).getClass());
-        Assert.assertEquals("waves", ((Freecode)ortho.elementAt(1)).getData().trim());
+        Assert.assertEquals("foo", ((Freecode)ortho.elementAt(1)).getData().trim());
     }
 
     @Test
@@ -329,6 +329,17 @@ public class TestUnicodeOrthography {
         final InternalMedia media2 = (InternalMedia)ortho.elementAt(3);
         Assert.assertEquals(65.1f, media2.getStartTime(), 0.0001);
         Assert.assertEquals(66.0f, media2.getEndTime(), 0.0001);
+    }
+
+    @Test
+    public void testSeparator() {
+        for(SeparatorType type:SeparatorType.values()) {
+            final String text = "hello " + type.getText() + " world";
+            final Orthography ortho = roundTrip(text);
+            Assert.assertEquals(3, ortho.length());
+            Assert.assertEquals(Separator.class, ortho.elementAt(1).getClass());
+            Assert.assertEquals(type, ((Separator)ortho.elementAt(1)).getType());
+        }
     }
 
 }

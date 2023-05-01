@@ -1,6 +1,6 @@
 package ca.phon.orthography;
 
-public class InternalMedia extends AbstractOrthographyElement {
+public final class InternalMedia extends AbstractOrthographyElement {
 
     public final static char MEDIA_BULLET = '•';
 

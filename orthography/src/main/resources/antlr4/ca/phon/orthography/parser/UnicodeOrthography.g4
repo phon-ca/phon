@@ -17,6 +17,7 @@ orthoelement
     |   pause
     |   freecode
     |   internal_media
+    |   separator
     ;
 
 word_boundary
@@ -151,6 +152,12 @@ mediasegment
     :   time_in_minutes_seconds MINUS time_in_minutes_seconds
     ;
 
+separator
+    :   COLON
+    |   SEMICOLON
+    |   CLAUSE_DELIMITER
+    ;
+
 digit
     :   ZERO
     |   ONE_TO_NINE
@@ -176,6 +183,14 @@ CHAR
 
 COLON
     :   ':'
+    ;
+
+SEMICOLON
+    :   ';'
+    ;
+
+CLAUSE_DELIMITER
+    :   '[c]'
     ;
 
 COMMA
