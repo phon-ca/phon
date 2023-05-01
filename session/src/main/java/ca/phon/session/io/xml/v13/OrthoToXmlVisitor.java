@@ -50,11 +50,11 @@ public class OrthoToXmlVisitor extends VisitorAdapter<OrthographyElement> {
 	}
 
 	@Visits
-	public void visitEvent(OrthographyEvent event) {
-		final EventType et = factory.createEventType();
-		et.setContent(
-				(event.getType() != null ? event.getType() + ":" : "") + event.getData());
-		gt.getWOrComOrE().add(et);
+	public void visitEvent(Event event) {
+//		final EventType et = factory.createEventType();
+//		et.setContent(
+//				(event.getType() != null ? event.getType() + ":" : "") + event.getData());
+//		gt.getWOrComOrE().add(et);
 	}
 
 	@Visits

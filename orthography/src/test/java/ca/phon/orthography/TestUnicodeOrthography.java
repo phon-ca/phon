@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import javax.swing.*;
 import java.util.List;
 
 /**
@@ -351,6 +350,33 @@ public class TestUnicodeOrthography {
             Assert.assertEquals(ToneMarker.class, ortho.elementAt(1).getClass());
             Assert.assertEquals(type, ((ToneMarker)ortho.elementAt(1)).getType());
         }
+    }
+
+    @Test
+    public void testAction() {
+        final String text = "0";
+        final Orthography ortho = roundTrip(text);
+        Assert.assertEquals(1, ortho.length());
+        Assert.assertEquals(Action.class, ortho.elementAt(0).getClass());
+    }
+
+    @Test
+    public void testHappening() {
+        final String text = Happening.PREFIX + "foo";
+        final Orthography ortho = roundTrip(text);
+        Assert.assertEquals(1, ortho.length());
+        Assert.assertEquals(Happening.class, ortho.elementAt(0).getClass());
+        Assert.assertEquals("foo", ((Happening)ortho.elementAt(0)).getData());
+    }
+
+    @Test
+    public void testOtherSpokenEvent() {
+        final String text = OtherSpokenEvent.PREFIX + "CHI=foo";
+        final Orthography ortho = roundTrip(text);
+        Assert.assertEquals(1, ortho.length());
+        Assert.assertEquals(OtherSpokenEvent.class, ortho.elementAt(0).getClass());
+        Assert.assertEquals("CHI", ((OtherSpokenEvent)ortho.elementAt(0)).getWho());
+        Assert.assertEquals("foo", ((OtherSpokenEvent)ortho.elementAt(0)).getData());
     }
 
 }

@@ -17,6 +17,7 @@ package ca.phon.app.session.editor.view.common;
 
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.orthography.*;
+import ca.phon.orthography.Event;
 import ca.phon.session.Tier;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
@@ -140,7 +141,7 @@ public class OrthoGroupField extends GroupField<Orthography> {
 		}
 		
 		@Visits
-		public void visitEvent(OrthographyEvent event) {
+		public void visitEvent(Event event) {
 			try {
 				int i = currentPos;
 				int j = i + event.text().length();

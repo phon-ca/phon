@@ -19,6 +19,7 @@ orthoelement
     |   internal_media
     |   separator
     |   toneMarker
+    |   event
     ;
 
 word_boundary
@@ -165,15 +166,28 @@ toneMarker
     :   TONE_MARKER
     ;
 
+event
+    :   ZERO                                                # Action
+    |   AMP EQUALS id_or_basic_word                         # Happening
+    |   AMP STAR id_or_basic_word EQUALS id_or_basic_word   # OtherSpokenEvent
+    ;
+
+id_or_basic_word
+    :   CHAR+
+    ;
+
 digit
     :   ZERO
     |   ONE_TO_NINE
     ;
 
 // TOKENS
-
 APOSTROPHE
     :   '\''
+    ;
+
+STAR
+    :   '*'
     ;
 
 BULLET

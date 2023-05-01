@@ -117,37 +117,6 @@ public class TestOrthographyParser {
 	}
 	
 	@Test
-	public void testEvent() throws ParseException {
-		final String event = "this is a test";
-		final String txt = "word *" + event + "* .";
-		
-		final Orthography ortho = Orthography.parseOrthography(txt);
-		Assert.assertEquals(3, ortho.length());
-		
-		final OrthographyElement eventEle = ortho.elementAt(1);
-		Assert.assertEquals(OrthographyEvent.class, eventEle.getClass());
-		
-		final OrthographyEvent e = (OrthographyEvent)eventEle;
-		Assert.assertEquals(event, e.getData());
-	}
-	
-	@Test
-	public void testEventWithType() throws ParseException {
-		final String event = "this is a test";
-		final String type = "test";
-		final String txt = "word *" + type + ":" + event + "* .";
-		
-		final Orthography ortho = Orthography.parseOrthography(txt);
-		Assert.assertEquals(3, ortho.length());
-		
-		final OrthographyElement eventEle = ortho.elementAt(1);
-		Assert.assertEquals(OrthographyEvent.class, eventEle.getClass());
-		
-		final OrthographyEvent e = (OrthographyEvent)eventEle;
-		Assert.assertEquals(event, e.getData());
-	}
-	
-	@Test
 	public void testPunct() throws ParseException {
 		final String word = "word";
 		

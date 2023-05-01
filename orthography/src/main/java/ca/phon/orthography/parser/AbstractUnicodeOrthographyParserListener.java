@@ -316,6 +316,46 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
+    public void enterAction(UnicodeOrthographyParser.ActionContext ctx) {
+
+    }
+
+    @Override
+    public void exitAction(UnicodeOrthographyParser.ActionContext ctx) {
+
+    }
+
+    @Override
+    public void enterHappening(UnicodeOrthographyParser.HappeningContext ctx) {
+
+    }
+
+    @Override
+    public void exitHappening(UnicodeOrthographyParser.HappeningContext ctx) {
+
+    }
+
+    @Override
+    public void enterOtherSpokenEvent(UnicodeOrthographyParser.OtherSpokenEventContext ctx) {
+
+    }
+
+    @Override
+    public void exitOtherSpokenEvent(UnicodeOrthographyParser.OtherSpokenEventContext ctx) {
+
+    }
+
+    @Override
+    public void enterId_or_basic_word(UnicodeOrthographyParser.Id_or_basic_wordContext ctx) {
+
+    }
+
+    @Override
+    public void exitId_or_basic_word(UnicodeOrthographyParser.Id_or_basic_wordContext ctx) {
+
+    }
+
+    @Override
     public void enterDigit(UnicodeOrthographyParser.DigitContext ctx) {
 
     }

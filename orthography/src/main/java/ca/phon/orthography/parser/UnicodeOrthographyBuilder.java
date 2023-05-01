@@ -231,4 +231,22 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         }
     }
 
+    @Override
+    public void exitAction(UnicodeOrthographyParser.ActionContext ctx) {
+        builder.append(new Action());
+    }
+
+    @Override
+    public void exitHappening(UnicodeOrthographyParser.HappeningContext ctx) {
+        final String text = ctx.id_or_basic_word().getText();
+        builder.append(new Happening(text));
+    }
+
+    @Override
+    public void exitOtherSpokenEvent(UnicodeOrthographyParser.OtherSpokenEventContext ctx) {
+        final String who = ctx.id_or_basic_word(0).getText();
+        final String text = ctx.id_or_basic_word(1).getText();
+        builder.append(new OtherSpokenEvent(who, text));
+    }
+
 }

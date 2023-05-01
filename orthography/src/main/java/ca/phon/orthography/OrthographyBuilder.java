@@ -280,12 +280,6 @@ public final class OrthographyBuilder {
 		return retVal;
 	}
 	
-	public OrthographyBuilder appendEvent(String type, String data) {
-		final OrthographyEvent evt = new OrthographyEvent(type, data);
-		eleList.add(evt);
-		return this;
-	}
-	
 	public Orthography toOrthography() {
 		return new Orthography(eleList);
 	}
