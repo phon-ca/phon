@@ -12,10 +12,10 @@ public final class OtherSpokenEvent extends Event {
     private String data;
 
     public OtherSpokenEvent(String who, String data) {
-        this(who, data, new ArrayList<OrthographyElement>());
+        this(who, data, new ArrayList<>());
     }
 
-    public OtherSpokenEvent(String who, String data, List<OrthographyElement> annotations) {
+    public OtherSpokenEvent(String who, String data, List<OrthographyAnnotation> annotations) {
         super(annotations);
         this.who = who;
         this.data = data;
@@ -32,6 +32,13 @@ public final class OtherSpokenEvent extends Event {
     @Override
     public String text() {
         return String.format("%s%s=%s", PREFIX, getWho(), getData()) + getAnnotationText();
+    }
+
+    @Override
+    public AnnotatedOrthographyElement cloneAppendingAnnotation(OrthographyAnnotation annotation) {
+        final List<OrthographyAnnotation> annotations = new ArrayList<>(getAnnotations());
+        annotations.add(annotation);
+        return new OtherSpokenEvent(getWho(), getData(), annotations);
     }
 
 }

@@ -387,9 +387,9 @@ public class TestUnicodeOrthography {
             Assert.assertEquals(1, ortho.length());
             Assert.assertEquals(Happening.class, ortho.elementAt(0).getClass());
             final Happening happening = (Happening) ortho.elementAt(0);
-            Assert.assertEquals(1, happening.getEventAnnotations().size());
-            Assert.assertEquals(Marker.class, happening.getEventAnnotations().get(0).getClass());
-            final Marker maker = (Marker) happening.getEventAnnotations().get(0);
+            Assert.assertEquals(1, happening.getAnnotations().size());
+            Assert.assertEquals(Marker.class, happening.getAnnotations().get(0).getClass());
+            final Marker maker = (Marker) happening.getAnnotations().get(0);
             Assert.assertEquals(type, maker.getType());
         }
     }
@@ -401,9 +401,9 @@ public class TestUnicodeOrthography {
         Assert.assertEquals(1, ortho.length());
         Assert.assertEquals(Happening.class, ortho.elementAt(0).getClass());
         final Happening happening = (Happening) ortho.elementAt(0);
-        Assert.assertEquals(1, happening.getEventAnnotations().size());
-        Assert.assertEquals(Error.class, happening.getEventAnnotations().get(0).getClass());
-        final Error error = (Error) happening.getEventAnnotations().get(0);
+        Assert.assertEquals(1, happening.getAnnotations().size());
+        Assert.assertEquals(Error.class, happening.getAnnotations().get(0).getClass());
+        final Error error = (Error) happening.getAnnotations().get(0);
         Assert.assertEquals("bar", error.getData().trim());
     }
 
@@ -415,9 +415,9 @@ public class TestUnicodeOrthography {
             Assert.assertEquals(1, ortho.length());
             Assert.assertEquals(Happening.class, ortho.elementAt(0).getClass());
             final Happening happening = (Happening) ortho.elementAt(0);
-            Assert.assertEquals(1, happening.getEventAnnotations().size());
-            Assert.assertEquals(Overlap.class, happening.getEventAnnotations().get(0).getClass());
-            final Overlap overlap = (Overlap) happening.getEventAnnotations().get(0);
+            Assert.assertEquals(1, happening.getAnnotations().size());
+            Assert.assertEquals(Overlap.class, happening.getAnnotations().get(0).getClass());
+            final Overlap overlap = (Overlap) happening.getAnnotations().get(0);
             Assert.assertEquals(type, overlap.getType());
         }
     }
@@ -431,9 +431,9 @@ public class TestUnicodeOrthography {
             Assert.assertEquals(1, ortho.length());
             Assert.assertEquals(Happening.class, ortho.elementAt(0).getClass());
             final Happening happening = (Happening) ortho.elementAt(0);
-            Assert.assertEquals(1, happening.getEventAnnotations().size());
-            Assert.assertEquals(Overlap.class, happening.getEventAnnotations().get(0).getClass());
-            final Overlap overlap = (Overlap) happening.getEventAnnotations().get(0);
+            Assert.assertEquals(1, happening.getAnnotations().size());
+            Assert.assertEquals(Overlap.class, happening.getAnnotations().get(0).getClass());
+            final Overlap overlap = (Overlap) happening.getAnnotations().get(0);
             Assert.assertEquals(type, overlap.getType());
             Assert.assertEquals(idx, overlap.getIndex());
             ++idx;
@@ -448,9 +448,9 @@ public class TestUnicodeOrthography {
             Assert.assertEquals(1, ortho.length());
             Assert.assertEquals(Happening.class, ortho.elementAt(0).getClass());
             final Happening happening = (Happening) ortho.elementAt(0);
-            Assert.assertEquals(1, happening.getEventAnnotations().size());
-            Assert.assertEquals(GroupAnnotation.class, happening.getEventAnnotations().get(0).getClass());
-            final GroupAnnotation groupAnnotation = (GroupAnnotation) happening.getEventAnnotations().get(0);
+            Assert.assertEquals(1, happening.getAnnotations().size());
+            Assert.assertEquals(GroupAnnotation.class, happening.getAnnotations().get(0).getClass());
+            final GroupAnnotation groupAnnotation = (GroupAnnotation) happening.getAnnotations().get(0);
             Assert.assertEquals(type, groupAnnotation.getType());
             Assert.assertEquals("bar", groupAnnotation.getData().trim());
         }
@@ -463,9 +463,43 @@ public class TestUnicodeOrthography {
         Assert.assertEquals(1, ortho.length());
         Assert.assertEquals(Happening.class, ortho.elementAt(0).getClass());
         final Happening happening = (Happening) ortho.elementAt(0);
-        Assert.assertEquals(1, happening.getEventAnnotations().size());
-        Assert.assertEquals(Duration.class, happening.getEventAnnotations().get(0).getClass());
-        final Duration duration = (Duration) happening.getEventAnnotations().get(0);
+        Assert.assertEquals(1, happening.getAnnotations().size());
+        Assert.assertEquals(Duration.class, happening.getAnnotations().get(0).getClass());
+        final Duration duration = (Duration) happening.getAnnotations().get(0);
+        Assert.assertEquals(1.2f, duration.getDuration(), 0.0001f);
+    }
+
+    @Test
+    public void testSimpleGroup() {
+        final String text = "foo [# 1.2]";
+        final Orthography ortho = roundTrip(text);
+        Assert.assertEquals(1, ortho.length());
+        Assert.assertEquals(OrthoGroup.class, ortho.elementAt(0).getClass());
+        final OrthoGroup group = (OrthoGroup) ortho.elementAt(0);
+        Assert.assertEquals(1, group.getGroupElements().size());
+        Assert.assertEquals(Word.class, group.getGroupElements().get(0).getClass());
+        Assert.assertEquals("foo", ((Word)group.getGroupElements().get(0)).getWord());
+        Assert.assertEquals(1, group.getAnnotations().size());
+        Assert.assertEquals(Duration.class, group.getAnnotations().get(0).getClass());
+        final Duration duration = (Duration) group.getAnnotations().get(0);
+        Assert.assertEquals(1.2f, duration.getDuration(), 0.0001f);
+    }
+
+    @Test
+    public void testExplicitGroup() {
+        final String text = "<foo bar> [# 1.2]";
+        final Orthography ortho = roundTrip(text);
+        Assert.assertEquals(1, ortho.length());
+        Assert.assertEquals(OrthoGroup.class, ortho.elementAt(0).getClass());
+        final OrthoGroup group = (OrthoGroup) ortho.elementAt(0);
+        Assert.assertEquals(2, group.getGroupElements().size());
+        Assert.assertEquals(Word.class, group.getGroupElements().get(0).getClass());
+        Assert.assertEquals("foo", ((Word)group.getGroupElements().get(0)).getWord());
+        Assert.assertEquals(Word.class, group.getGroupElements().get(1).getClass());
+        Assert.assertEquals("bar", ((Word)group.getGroupElements().get(1)).getWord());
+        Assert.assertEquals(1, group.getAnnotations().size());
+        Assert.assertEquals(Duration.class, group.getAnnotations().get(0).getClass());
+        final Duration duration = (Duration) group.getAnnotations().get(0);
         Assert.assertEquals(1.2f, duration.getDuration(), 0.0001f);
     }
 

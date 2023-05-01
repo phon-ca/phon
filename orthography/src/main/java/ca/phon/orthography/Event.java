@@ -24,25 +24,10 @@ import java.util.stream.Collectors;
  *
  * 
  */
-public abstract class Event extends AbstractOrthographyElement {
+public abstract class Event extends AnnotatedOrthographyElement {
 
-	private List<OrthographyElement> eventAnnotations;
-
-	public Event(List<OrthographyElement> annotations) {
-		this.eventAnnotations = new ArrayList<>(annotations);
-	}
-
-	public List<OrthographyElement> getEventAnnotations() {
-		return Collections.unmodifiableList(this.eventAnnotations);
-	}
-
-	protected String getAnnotationText() {
-		if(this.eventAnnotations.size() > 0) {
-			return " " + this.eventAnnotations.stream()
-					.map(annotation -> annotation.text())
-					.collect(Collectors.joining(" "));
-		} else
-			return "";
+	public Event(List<OrthographyAnnotation> annotations) {
+		super(annotations);
 	}
 
 }

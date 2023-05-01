@@ -1,6 +1,6 @@
 package ca.phon.orthography;
 
-public final class Marker extends AbstractOrthographyElement {
+public final class Marker extends AbstractOrthographyElement implements OrthographyAnnotation {
 
     private final MarkerType type;
 

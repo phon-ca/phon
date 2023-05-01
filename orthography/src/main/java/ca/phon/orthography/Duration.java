@@ -1,6 +1,6 @@
 package ca.phon.orthography;
 
-public final class Duration extends AbstractOrthographyElement {
+public final class Duration extends AbstractOrthographyElement implements OrthographyAnnotation {
 
     private final float duration;
 

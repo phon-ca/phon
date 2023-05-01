@@ -36,6 +36,26 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
+    public void enterGroup(UnicodeOrthographyParser.GroupContext ctx) {
+
+    }
+
+    @Override
+    public void exitGroup(UnicodeOrthographyParser.GroupContext ctx) {
+
+    }
+
+    @Override
+    public void enterGroupcontent(UnicodeOrthographyParser.GroupcontentContext ctx) {
+
+    }
+
+    @Override
+    public void exitGroupcontent(UnicodeOrthographyParser.GroupcontentContext ctx) {
+
+    }
+
+    @Override
     public void enterWhiteSpace(UnicodeOrthographyParser.WhiteSpaceContext ctx) {
 
     }

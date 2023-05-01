@@ -10,10 +10,10 @@ public final class Happening extends Event {
     private final String data;
 
     public Happening(String text) {
-        this(text, new ArrayList<OrthographyElement>());
+        this(text, new ArrayList<>());
     }
 
-    public Happening(String data, List<OrthographyElement> annotations) {
+    public Happening(String data, List<OrthographyAnnotation> annotations) {
         super(annotations);
         this.data = data;
     }
@@ -25,6 +25,13 @@ public final class Happening extends Event {
     @Override
     public String text() {
         return String.format("%s%s", PREFIX, getData()) + getAnnotationText();
+    }
+
+    @Override
+    public AnnotatedOrthographyElement cloneAppendingAnnotation(OrthographyAnnotation annotation) {
+        final List<OrthographyAnnotation> annotations = new ArrayList<>(getAnnotations());
+        annotations.add(annotation);
+        return new Happening(getData(), annotations);
     }
 
 }

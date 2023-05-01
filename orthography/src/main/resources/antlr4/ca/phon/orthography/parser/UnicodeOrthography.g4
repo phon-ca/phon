@@ -19,12 +19,22 @@ orthoelement
     |   internal_media
     |   separator
     |   toneMarker
+    |   group
     |   event
     |   marker
     |   error
     |   overlap
     |   group_annotation
     |   duration
+    ;
+
+group
+    :   LESS_THAN groupcontent GREATER_THAN
+    ;
+
+groupcontent
+    :   groupcontent word_boundary groupcontent
+    |   orthoelement
     ;
 
 word_boundary

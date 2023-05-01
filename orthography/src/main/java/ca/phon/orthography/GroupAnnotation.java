@@ -1,6 +1,6 @@
 package ca.phon.orthography;
 
-public final class GroupAnnotation extends AbstractOrthographyElement {
+public final class GroupAnnotation extends AbstractOrthographyElement implements OrthographyAnnotation {
 
     private final GroupAnnotationType type;
 

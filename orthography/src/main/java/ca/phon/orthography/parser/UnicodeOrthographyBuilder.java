@@ -6,11 +6,15 @@ import ca.phon.orthography.parser.exceptions.OrthoParserException;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Stack;
 
 public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyParserListener {
 
-    private final OrthographyBuilder builder = new OrthographyBuilder();
+    private OrthographyBuilder builder = new OrthographyBuilder();
+
+    private final Stack<OrthographyBuilder> builderStack = new Stack<>();
 
     private List<WordElement> wordElements = new ArrayList<>();
 
@@ -250,21 +254,15 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         builder.append(new OtherSpokenEvent(who, text));
     }
 
-    private void annotateLastElement(OrthographyElement ele) {
+    private void annotateLastElement(OrthographyAnnotation ele) {
         if(builder.size() > 0) {
             OrthographyElement lastEle = builder.lastElement();
-            if(lastEle instanceof Event) {
-                Event evt = (Event) lastEle;
-                final List<OrthographyElement> annotations = new ArrayList<>(evt.getEventAnnotations());
-                annotations.add(ele);
-                if (evt instanceof Action) {
-                    builder.replaceLastElement(new Action(annotations));
-                } else if (evt instanceof Happening) {
-                    builder.replaceLastElement(new Happening(((Happening) evt).getData(), annotations));
-                } else if (evt instanceof OtherSpokenEvent) {
-                    OtherSpokenEvent ote = (OtherSpokenEvent) evt;
-                    builder.replaceLastElement(new OtherSpokenEvent(ote.getWho(), ote.getData(), annotations));
-                }
+            if(lastEle instanceof AnnotatedOrthographyElement) {
+                AnnotatedOrthographyElement annotatedOrthographyElement = (AnnotatedOrthographyElement) lastEle;
+                builder.replaceLastElement(annotatedOrthographyElement.cloneAppendingAnnotation(ele));
+            } else if(lastEle instanceof Word) {
+                Word word = (Word) lastEle;
+                builder.replaceLastElement(new OrthoGroup(Collections.singletonList(word), Collections.singletonList(ele)));
             } else {
                 builder.append(ele);
             }
@@ -340,6 +338,19 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
             throw new OrthoParserException(pe.getMessage(), ctx.time_in_minutes_seconds().getStart().getCharPositionInLine());
         }
         annotateLastElement(new Duration(duration));
+    }
+
+    @Override
+    public void enterGroup(UnicodeOrthographyParser.GroupContext ctx) {
+        builderStack.push(builder);
+        builder = new OrthographyBuilder();
+    }
+
+    @Override
+    public void exitGroup(UnicodeOrthographyParser.GroupContext ctx) {
+        final Orthography innerOrtho = builder.toOrthography();
+        builder = builderStack.pop();
+        builder.append(new OrthoGroup(innerOrtho.toList(), new ArrayList<>()));
     }
 
 }
