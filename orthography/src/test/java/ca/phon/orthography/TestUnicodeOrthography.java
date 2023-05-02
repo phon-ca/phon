@@ -554,15 +554,15 @@ public class TestUnicodeOrthography {
 
     @Test
     public void testPostcode() {
-        final String text = "hello world [+ foo] [+ bar]";
+        final String text = "<ryoote agete> [=! singing] . [+ bch] [+ foo]";
         final Orthography ortho = roundTrip(text);
         Assert.assertEquals(4, ortho.length());
         Assert.assertEquals(Postcode.class, ortho.elementAt(2).getClass());
         final Postcode pc1 = (Postcode) ortho.elementAt(2);
-        Assert.assertEquals("foo", pc1.getCode());
+        Assert.assertEquals("bch", pc1.getCode());
         Assert.assertEquals(Postcode.class, ortho.elementAt(3).getClass());
         final Postcode pc2 = (Postcode) ortho.elementAt(3);
-        Assert.assertEquals("bar", pc2.getCode());
+        Assert.assertEquals("foo", pc2.getCode());
     }
 
 }
