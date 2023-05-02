@@ -516,6 +516,16 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
+    public void enterPostcode(UnicodeOrthographyParser.PostcodeContext ctx) {
+
+    }
+
+    @Override
+    public void exitPostcode(UnicodeOrthographyParser.PostcodeContext ctx) {
+
+    }
+
+    @Override
     public void enterDigit(UnicodeOrthographyParser.DigitContext ctx) {
 
     }

@@ -15,7 +15,7 @@
  */
 package ca.phon.orthography;
 
-public class WordSuffix {
+public final class WordSuffix {
 	
 	private WordFormType type;
 	

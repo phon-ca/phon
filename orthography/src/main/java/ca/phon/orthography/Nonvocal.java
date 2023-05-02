@@ -1,6 +1,6 @@
 package ca.phon.orthography;
 
-public class Nonvocal extends AbstractOrthographyElement  {
+public final class Nonvocal extends AbstractOrthographyElement  {
 
     public final static String NONVOCAL_START = "&{n=";
 

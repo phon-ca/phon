@@ -1,12 +1,12 @@
 package ca.phon.orthography;
 
-public final class Freecode extends AbstractOrthographyElement {
+public final class Postcode extends AbstractOrthographyElement {
 
-    public final static String PREFIX = "[^";
+    public final static String POSTCODE_PREFIX = "[+";
 
     private final String code;
 
-    public Freecode(String code) {
+    public Postcode(String code) {
         super();
         this.code = code;
     }
@@ -17,7 +17,7 @@ public final class Freecode extends AbstractOrthographyElement {
 
     @Override
     public String text() {
-        return String.format("%s %s]", PREFIX, getCode());
+        return String.format("%s %s]", POSTCODE_PREFIX, getCode());
     }
 
 }

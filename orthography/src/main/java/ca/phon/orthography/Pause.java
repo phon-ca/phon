@@ -1,7 +1,7 @@
 package ca.phon.orthography;
 
 
-public class Pause extends AbstractOrthographyElement {
+public final class Pause extends AbstractOrthographyElement {
 
     private final PauseLength type;
 

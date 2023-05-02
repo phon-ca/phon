@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class OrthoGroup extends AnnotatedOrthographyElement {
+public final class OrthoGroup extends AnnotatedOrthographyElement {
 
     private final List<OrthographyElement> elements;
 

@@ -195,7 +195,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
     @Override
     public void exitFreecode(UnicodeOrthographyParser.FreecodeContext ctx) {
         final String data = ctx.getText().substring(2, ctx.getText().length()-1);
-        builder.append(new Freecode(data));
+        builder.append(new Freecode(data.trim()));
     }
 
     @Override
@@ -383,6 +383,12 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         }
         final String label = ctx.id_or_basic_word().getText();
         builder.append(new Nonvocal(beginEndSimple, label));
+    }
+
+    @Override
+    public void exitPostcode(UnicodeOrthographyParser.PostcodeContext ctx) {
+        final String code = ctx.id_or_basic_word().getText();
+        builder.append(new Postcode(code));
     }
 
 }

@@ -15,7 +15,7 @@
  */
 package ca.phon.orthography;
 
-public class WordPrefix {
+public final class WordPrefix {
 	
 	private WordType type;
 	

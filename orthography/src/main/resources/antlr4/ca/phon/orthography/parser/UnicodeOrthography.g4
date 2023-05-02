@@ -29,6 +29,7 @@ orthodata
     |   long_feature
     |   nonvocal
     |   terminator
+    |   postcode
     ;
 
 orthoannotation
@@ -254,6 +255,10 @@ duration
     :   OPEN_BRACKET HASH WS time_in_minutes_seconds CLOSE_BRACKET
     ;
 
+postcode
+    :   POSTCODE_START WS id_or_basic_word CLOSE_BRACKET
+    ;
+
 digit
     :   ZERO
     |   ONE_TO_NINE
@@ -348,6 +353,10 @@ PARALINGUISTICS
 
 EXPLANATION
     :   OPEN_BRACKET EQUALS ( '\\]' | '\\[' | .)*? CLOSE_BRACKET
+    ;
+
+POSTCODE_START
+    :   '[+'
     ;
 
 PERCENT

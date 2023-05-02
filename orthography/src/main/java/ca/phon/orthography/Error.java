@@ -1,6 +1,6 @@
 package ca.phon.orthography;
 
-public class Error extends AbstractOrthographyElement implements OrthographyAnnotation {
+public final class Error extends AbstractOrthographyElement implements OrthographyAnnotation {
 
     public final static String PREFIX = "[*";
 

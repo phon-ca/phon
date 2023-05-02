@@ -4,7 +4,6 @@ import ca.phon.orthography.parser.UnicodeOrthographyLexer;
 import ca.phon.orthography.parser.UnicodeOrthographyBuilder;
 import ca.phon.orthography.parser.UnicodeOrthographyParser;
 import org.antlr.v4.runtime.*;
-import org.apache.logging.log4j.core.appender.AsyncAppender;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -313,7 +312,7 @@ public class TestUnicodeOrthography {
         final Orthography ortho = roundTrip(text);
         Assert.assertEquals(3, ortho.length());
         Assert.assertEquals(Freecode.class, ortho.elementAt(1).getClass());
-        Assert.assertEquals("foo", ((Freecode)ortho.elementAt(1)).getData().trim());
+        Assert.assertEquals("foo", ((Freecode)ortho.elementAt(1)).getCode().trim());
     }
 
     @Test
@@ -551,6 +550,19 @@ public class TestUnicodeOrthography {
         final Nonvocal nv3 = (Nonvocal) ortho.elementAt(11);
         Assert.assertEquals(BeginEndSimple.SIMPLE, nv3.getBeginEndSimple());
         Assert.assertEquals("PUNCH", nv3.getLabel());
+    }
+
+    @Test
+    public void testPostcode() {
+        final String text = "hello world [+ foo] [+ bar]";
+        final Orthography ortho = roundTrip(text);
+        Assert.assertEquals(4, ortho.length());
+        Assert.assertEquals(Postcode.class, ortho.elementAt(2).getClass());
+        final Postcode pc1 = (Postcode) ortho.elementAt(2);
+        Assert.assertEquals("foo", pc1.getCode());
+        Assert.assertEquals(Postcode.class, ortho.elementAt(3).getClass());
+        final Postcode pc2 = (Postcode) ortho.elementAt(3);
+        Assert.assertEquals("bar", pc2.getCode());
     }
 
 }
