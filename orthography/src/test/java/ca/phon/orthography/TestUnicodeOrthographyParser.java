@@ -16,7 +16,7 @@ import java.util.List;
  *
  */
 @RunWith(JUnit4.class)
-public class TestUnicodeOrthography {
+public class TestUnicodeOrthographyParser {
 
     private Orthography roundTrip(String text) {
         CharStream charStream = CharStreams.fromString(text);
@@ -563,6 +563,19 @@ public class TestUnicodeOrthography {
         Assert.assertEquals(Postcode.class, ortho.elementAt(3).getClass());
         final Postcode pc2 = (Postcode) ortho.elementAt(3);
         Assert.assertEquals("foo", pc2.getCode());
+    }
+
+    @Test
+    public void testQuotation() {
+        final String text = Quotation.QUOTATION_BEGIN + " hello world " + Quotation.QUOTATION_END;
+        final Orthography ortho = roundTrip(text);
+        Assert.assertEquals(4, ortho.length());
+        Assert.assertEquals(Quotation.class, ortho.elementAt(0).getClass());
+        final Quotation q1 = (Quotation) ortho.elementAt(0);
+        Assert.assertEquals(BeginEnd.BEGIN, q1.getBeginEnd());
+        Assert.assertEquals(Quotation.class, ortho.elementAt(3).getClass());
+        final Quotation q2 = (Quotation) ortho.elementAt(3);
+        Assert.assertEquals(BeginEnd.END, q2.getBeginEnd());
     }
 
 }

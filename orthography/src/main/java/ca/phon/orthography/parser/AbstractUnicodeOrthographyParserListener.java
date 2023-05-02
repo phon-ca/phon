@@ -376,6 +376,16 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
+    public void enterQuotation(UnicodeOrthographyParser.QuotationContext ctx) {
+
+    }
+
+    @Override
+    public void exitQuotation(UnicodeOrthographyParser.QuotationContext ctx) {
+
+    }
+
+    @Override
     public void enterAction(UnicodeOrthographyParser.ActionContext ctx) {
 
     }

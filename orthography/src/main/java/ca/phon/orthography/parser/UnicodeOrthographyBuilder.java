@@ -391,4 +391,10 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         builder.append(new Postcode(code));
     }
 
+    @Override
+    public void exitQuotation(UnicodeOrthographyParser.QuotationContext ctx) {
+        final BeginEnd beginEnd = ctx.getText().equals(Quotation.QUOTATION_BEGIN) ? BeginEnd.BEGIN : BeginEnd.END;
+        builder.append(new Quotation(beginEnd));
+    }
+
 }

@@ -1,3 +1,12 @@
+/**
+* ANTLR4 grammer for the CHAT transcription format
+*
+* This is a parser (non strict) for the main line of the
+* <a href="https://talkbank.org/manuals/CHAT.html"/>CHAT Transcription Format</a>
+*
+* This parser is intended to be used as the parser for the Orthography tier type
+* in <a href="https://www.phon.ca">Phon</a>.
+*/
 grammar UnicodeOrthography;
 
 start
@@ -30,6 +39,7 @@ orthodata
     |   nonvocal
     |   terminator
     |   postcode
+    |   quotation
     ;
 
 orthoannotation
@@ -200,6 +210,11 @@ separator
 
 toneMarker
     :   TONE_MARKER
+    ;
+
+quotation
+    :   QUOTATION_START
+    |   QUOTATION_END
     ;
 
 event
@@ -465,6 +480,14 @@ PG_START
 
 PG_END
     :   '\u203a'
+    ;
+
+QUOTATION_START
+    :   '\u201c'
+    ;
+
+QUOTATION_END
+    :   '\u201d'
     ;
 
 FORMTYPE
