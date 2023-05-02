@@ -353,4 +353,17 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         builder.append(new OrthoGroup(innerOrtho.toList(), new ArrayList<>()));
     }
 
+    @Override
+    public void enterPhonetic_group(UnicodeOrthographyParser.Phonetic_groupContext ctx) {
+        builderStack.push(builder);
+        builder = new OrthographyBuilder();
+    }
+
+    @Override
+    public void exitPhonetic_group(UnicodeOrthographyParser.Phonetic_groupContext ctx) {
+        final Orthography innerOrtho = builder.toOrthography();
+        builder = builderStack.pop();
+        builder.append(new PhoneticGroup(innerOrtho.toList()));
+    }
+
 }

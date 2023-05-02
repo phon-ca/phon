@@ -10,6 +10,11 @@ orthography
     ;
 
 orthoelement
+    :   orthodata
+    |   orthoannotation
+    ;
+
+orthodata
     :   linker
     |   complete_word
     |   terminator
@@ -20,8 +25,12 @@ orthoelement
     |   separator
     |   toneMarker
     |   group
+    |   phonetic_group
     |   event
-    |   marker
+    ;
+
+orthoannotation
+    :   marker
     |   error
     |   overlap
     |   group_annotation
@@ -35,6 +44,15 @@ group
 groupcontent
     :   groupcontent word_boundary groupcontent
     |   orthoelement
+    ;
+
+phonetic_group
+    :   PG_START pgcontent PG_END
+    ;
+
+pgcontent
+    :   pgcontent word_boundary pgcontent
+    |   orthodata
     ;
 
 word_boundary
@@ -397,6 +415,14 @@ PERIOD
 
 HASH
     :   '#'
+    ;
+
+PG_START
+    :   '\u2039'
+    ;
+
+PG_END
+    :   '\u203a'
     ;
 
 FORMTYPE

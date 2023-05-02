@@ -36,6 +36,26 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
+    public void enterOrthodata(UnicodeOrthographyParser.OrthodataContext ctx) {
+
+    }
+
+    @Override
+    public void exitOrthodata(UnicodeOrthographyParser.OrthodataContext ctx) {
+
+    }
+
+    @Override
+    public void enterOrthoannotation(UnicodeOrthographyParser.OrthoannotationContext ctx) {
+
+    }
+
+    @Override
+    public void exitOrthoannotation(UnicodeOrthographyParser.OrthoannotationContext ctx) {
+
+    }
+
+    @Override
     public void enterGroup(UnicodeOrthographyParser.GroupContext ctx) {
 
     }
@@ -52,6 +72,26 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
 
     @Override
     public void exitGroupcontent(UnicodeOrthographyParser.GroupcontentContext ctx) {
+
+    }
+
+    @Override
+    public void enterPhonetic_group(UnicodeOrthographyParser.Phonetic_groupContext ctx) {
+
+    }
+
+    @Override
+    public void exitPhonetic_group(UnicodeOrthographyParser.Phonetic_groupContext ctx) {
+
+    }
+
+    @Override
+    public void enterPgcontent(UnicodeOrthographyParser.PgcontentContext ctx) {
+
+    }
+
+    @Override
+    public void exitPgcontent(UnicodeOrthographyParser.PgcontentContext ctx) {
 
     }
 

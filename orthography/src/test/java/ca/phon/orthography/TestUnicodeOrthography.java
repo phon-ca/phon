@@ -476,9 +476,9 @@ public class TestUnicodeOrthography {
         Assert.assertEquals(1, ortho.length());
         Assert.assertEquals(OrthoGroup.class, ortho.elementAt(0).getClass());
         final OrthoGroup group = (OrthoGroup) ortho.elementAt(0);
-        Assert.assertEquals(1, group.getGroupElements().size());
-        Assert.assertEquals(Word.class, group.getGroupElements().get(0).getClass());
-        Assert.assertEquals("foo", ((Word)group.getGroupElements().get(0)).getWord());
+        Assert.assertEquals(1, group.getElements().size());
+        Assert.assertEquals(Word.class, group.getElements().get(0).getClass());
+        Assert.assertEquals("foo", ((Word)group.getElements().get(0)).getWord());
         Assert.assertEquals(1, group.getAnnotations().size());
         Assert.assertEquals(Duration.class, group.getAnnotations().get(0).getClass());
         final Duration duration = (Duration) group.getAnnotations().get(0);
@@ -492,15 +492,29 @@ public class TestUnicodeOrthography {
         Assert.assertEquals(1, ortho.length());
         Assert.assertEquals(OrthoGroup.class, ortho.elementAt(0).getClass());
         final OrthoGroup group = (OrthoGroup) ortho.elementAt(0);
-        Assert.assertEquals(2, group.getGroupElements().size());
-        Assert.assertEquals(Word.class, group.getGroupElements().get(0).getClass());
-        Assert.assertEquals("foo", ((Word)group.getGroupElements().get(0)).getWord());
-        Assert.assertEquals(Word.class, group.getGroupElements().get(1).getClass());
-        Assert.assertEquals("bar", ((Word)group.getGroupElements().get(1)).getWord());
+        Assert.assertEquals(2, group.getElements().size());
+        Assert.assertEquals(Word.class, group.getElements().get(0).getClass());
+        Assert.assertEquals("foo", ((Word)group.getElements().get(0)).getWord());
+        Assert.assertEquals(Word.class, group.getElements().get(1).getClass());
+        Assert.assertEquals("bar", ((Word)group.getElements().get(1)).getWord());
         Assert.assertEquals(1, group.getAnnotations().size());
         Assert.assertEquals(Duration.class, group.getAnnotations().get(0).getClass());
         final Duration duration = (Duration) group.getAnnotations().get(0);
         Assert.assertEquals(1.2f, duration.getDuration(), 0.0001f);
+    }
+
+    @Test
+    public void testPhoneticGroup() {
+        final String text = PhoneticGroup.PHONETIC_GROUP_START + "foo bar" + PhoneticGroup.PHONETIC_GROUP_END;
+        final Orthography ortho = roundTrip(text);
+        Assert.assertEquals(1, ortho.length());
+        Assert.assertEquals(PhoneticGroup.class, ortho.elementAt(0).getClass());
+        final PhoneticGroup group = (PhoneticGroup) ortho.elementAt(0);
+        Assert.assertEquals(2, group.getElements().size());
+        Assert.assertEquals(Word.class, group.getElements().get(0).getClass());
+        Assert.assertEquals("foo", ((Word)group.getElements().get(0)).getWord());
+        Assert.assertEquals(Word.class, group.getElements().get(1).getClass());
+        Assert.assertEquals("bar", ((Word)group.getElements().get(1)).getWord());
     }
 
 }
