@@ -416,6 +416,16 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
+    public void enterNonvocal(UnicodeOrthographyParser.NonvocalContext ctx) {
+
+    }
+
+    @Override
+    public void exitNonvocal(UnicodeOrthographyParser.NonvocalContext ctx) {
+
+    }
+
+    @Override
     public void enterId_or_basic_word(UnicodeOrthographyParser.Id_or_basic_wordContext ctx) {
 
     }

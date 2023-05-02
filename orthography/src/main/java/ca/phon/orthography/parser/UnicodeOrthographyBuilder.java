@@ -374,4 +374,15 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         builder.append(new LongFeature(beginEnd, label));
     }
 
+    @Override
+    public void exitNonvocal(UnicodeOrthographyParser.NonvocalContext ctx) {
+        BeginEndSimple beginEndSimple =
+                ctx.getText().startsWith(Nonvocal.NONVOCAL_START) ? BeginEndSimple.BEGIN : BeginEndSimple.END;
+        if(ctx.CLOSE_BRACE() != null) {
+            beginEndSimple = BeginEndSimple.SIMPLE;
+        }
+        final String label = ctx.id_or_basic_word().getText();
+        builder.append(new Nonvocal(beginEndSimple, label));
+    }
+
 }

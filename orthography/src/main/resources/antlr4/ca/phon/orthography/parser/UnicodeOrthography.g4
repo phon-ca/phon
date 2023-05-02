@@ -17,17 +17,18 @@ orthoelement
 orthodata
     :   linker
     |   complete_word
-    |   terminator
-    |   tagMarker
-    |   pause
-    |   freecode
-    |   internal_media
-    |   separator
-    |   toneMarker
     |   group
     |   phonetic_group
+    |   pause
+    |   internal_media
+    |   freecode
     |   event
+    |   separator
+    |   toneMarker
+    |   tagMarker
     |   long_feature
+    |   nonvocal
+    |   terminator
     ;
 
 orthoannotation
@@ -209,6 +210,11 @@ event
 long_feature
     :   LONG_FEATURE_START id_or_basic_word
     |   LONG_FEATURE_END id_or_basic_word
+    ;
+
+nonvocal
+    :   LONG_NONVOCAL_START id_or_basic_word CLOSE_BRACE?
+    |   LONG_NONVOCAL_END id_or_basic_word
     ;
 
 id_or_basic_word

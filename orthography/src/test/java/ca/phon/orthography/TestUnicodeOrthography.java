@@ -534,4 +534,23 @@ public class TestUnicodeOrthography {
         Assert.assertEquals("laughs", lf2.getLabel());
     }
 
+    @Test
+    public void testNonvocal() {
+        final String text = "is &{n=THUMP_MICROPHONE &=nonvocal this &=nonvocal &{l=X one &}l=X working &}n=THUMP_MICROPHONE &}l=PAR &{n=PUNCH}";
+        final Orthography ortho = roundTrip(text);
+        Assert.assertEquals(12, ortho.length());
+        Assert.assertEquals(Nonvocal.class, ortho.elementAt(1).getClass());
+        final Nonvocal nv1 = (Nonvocal) ortho.elementAt(1);
+        Assert.assertEquals(BeginEndSimple.BEGIN, nv1.getBeginEndSimple());
+        Assert.assertEquals("THUMP_MICROPHONE", nv1.getLabel());
+        Assert.assertEquals(Nonvocal.class, ortho.elementAt(9).getClass());
+        final Nonvocal nv2 = (Nonvocal) ortho.elementAt(9);
+        Assert.assertEquals(BeginEndSimple.END, nv2.getBeginEndSimple());
+        Assert.assertEquals("THUMP_MICROPHONE", nv2.getLabel());
+        Assert.assertEquals(Nonvocal.class, ortho.elementAt(11).getClass());
+        final Nonvocal nv3 = (Nonvocal) ortho.elementAt(11);
+        Assert.assertEquals(BeginEndSimple.SIMPLE, nv3.getBeginEndSimple());
+        Assert.assertEquals("PUNCH", nv3.getLabel());
+    }
+
 }
