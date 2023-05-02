@@ -129,16 +129,16 @@ public class OrthoGroupField extends GroupField<Orthography> {
 			fallbackVisit(word);
 		}
 		
-		@Visits
-		public void visitComment(OrthographyComment comment) {
-			try {
-				int i = currentPos;
-				int j = i + comment.text().length();
-				getHighlighter().addHighlight(i, j, commentPainter);
-			} catch (BadLocationException e) {
-			}
-			fallbackVisit(comment);
-		}
+//		@Visits
+//		public void visitComment(OrthographyComment comment) {
+//			try {
+//				int i = currentPos;
+//				int j = i + comment.text().length();
+//				getHighlighter().addHighlight(i, j, commentPainter);
+//			} catch (BadLocationException e) {
+//			}
+//			fallbackVisit(comment);
+//		}
 		
 		@Visits
 		public void visitEvent(Event event) {

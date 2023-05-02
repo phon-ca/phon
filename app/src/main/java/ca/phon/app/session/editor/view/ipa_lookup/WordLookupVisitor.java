@@ -60,17 +60,17 @@ public class WordLookupVisitor extends VisitorAdapter<OrthographyElement> {
 		addWordToTier(t1 + wordnet.getMarker().toString() + t2);
 	}
 	
-	@Visits
-	public void visitComment(OrthographyComment comment) {
-		if(comment.getData().matches("\\.{1,3}")) {
-			OrthoWordIPAOptions ext = comment.getExtension(OrthoWordIPAOptions.class);
-			if(ext == null) ext = new OrthoWordIPAOptions();
-			
-			final String txt = (ext.getOptions().size() > 0 ? ext.getOptions().get(ext.getSelectedOption()) 
-					: "(" + comment.getData() + ")");
-			addWordToTier(txt);
-		}
-	}
+//	@Visits
+//	public void visitComment(OrthographyComment comment) {
+//		if(comment.getData().matches("\\.{1,3}")) {
+//			OrthoWordIPAOptions ext = comment.getExtension(OrthoWordIPAOptions.class);
+//			if(ext == null) ext = new OrthoWordIPAOptions();
+//
+//			final String txt = (ext.getOptions().size() > 0 ? ext.getOptions().get(ext.getSelectedOption())
+//					: "(" + comment.getData() + ")");
+//			addWordToTier(txt);
+//		}
+//	}
 
 	private void addWordToTier(String txt) {
 		int grpIdx = recordLookupPanel.lookupTier.numberOfGroups()-1;

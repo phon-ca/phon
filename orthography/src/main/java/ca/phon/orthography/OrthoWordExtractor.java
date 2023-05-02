@@ -62,13 +62,13 @@ public class OrthoWordExtractor extends VisitorAdapter<OrthographyElement> {
 		wordList.add(wordnet);
 	}
 	
-	@Visits
-	public void visitComment(OrthographyComment comment) {
-		if(comment.getData().matches("\\.{1,3}")) {
-			// add pause as an alignment element
-			wordList.add(comment);
-		}
-	}
+//	@Visits
+//	public void visitComment(OrthographyComment comment) {
+//		if(comment.getData().matches("\\.{1,3}")) {
+//			// add pause as an alignment element
+//			wordList.add(comment);
+//		}
+//	}
 	
 	public List<OrthographyElement> getWordList() {
 		return this.wordList;

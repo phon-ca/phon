@@ -140,17 +140,6 @@ public final class OrthographyBuilder {
 		return this;
 	}
 	
-	public OrthographyBuilder appendComment(String type, String data) {
-		final OrthographyComment comment = new OrthographyComment(type, data);
-		eleList.add(comment);
-		return this;
-	}
-	
-	public OrthographyBuilder appendComment(String data) {
-		appendComment(null, data);
-		return this;
-	}
-	
 	public OrthographyBuilder appendCompoundWord(Word word1, Word word2, CompoundWordMarkerType marker) {
 		final CompoundWord wordnet = new CompoundWord(word1, word2, marker);
 		eleList.add(wordnet);
@@ -237,24 +226,6 @@ public final class OrthographyBuilder {
 			throw new IllegalStateException("Unable to annotate word, last element is not a word");
 		}
 		return this;
-	}
-	
-	public OrthographyBuilder appendPunct(OrthoPunctType type) {
-		final OrthographyPunct punct = new OrthographyPunct(type);
-		eleList.add(punct);
-		return this;
-	}
-	
-	/**
-	 * Append punctuation.
-	 * @param punct
-	 * @return
-	 * 
-	 * @throws IllegalArgumentException if the given text is not valid
-	 */
-	public OrthographyBuilder appendPunct(char punct) {	
-		final OrthoPunctType type = OrthoPunctType.fromChar(punct);
-		return appendPunct(type);
 	}
 	
 	public int size() {

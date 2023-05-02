@@ -59,14 +59,14 @@ public class OrthoToIPAVisitor extends VisitorAdapter<Orthography> {
 		builder.append(selectedOpt);
 	}
 	
-	@Visits
-	public void visitComment(OrthographyComment comment) {
-		final String commentTxt = comment.getData();
-		if(commentTxt.matches("\\.{1,3}")) {
-			if(builder.size() > 0) builder.appendWordBoundary();
-			builder.append(commentTxt);
-		}
-	}
+//	@Visits
+//	public void visitComment(OrthographyComment comment) {
+//		final String commentTxt = comment.getData();
+//		if(commentTxt.matches("\\.{1,3}")) {
+//			if(builder.size() > 0) builder.appendWordBoundary();
+//			builder.append(commentTxt);
+//		}
+//	}
 	
 	public IPATranscript getTranscript() {
 		return builder.toIPATranscript();

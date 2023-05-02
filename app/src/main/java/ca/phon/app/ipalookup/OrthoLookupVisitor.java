@@ -96,17 +96,17 @@ public class OrthoLookupVisitor extends VisitorAdapter<OrthographyElement> {
 		return retVal;
 	}
 	
-	@Visits
-	public void visitComment(OrthographyComment comment) {
-		// check for pauses
-		final String commentTxt = comment.getData();
-		if(commentTxt.matches("\\.{1,3}")) {
-			final OrthoWordIPAOptions opts = new OrthoWordIPAOptions(Collections.singletonList("(" + commentTxt + ")"));
-			opts.setDictLang(dictionary.getLanguage());
-			opts.setSelectedOption(0);
-			comment.putExtension(OrthoWordIPAOptions.class, opts);
-		}
-	}
+//	@Visits
+//	public void visitComment(OrthographyComment comment) {
+//		// check for pauses
+//		final String commentTxt = comment.getData();
+//		if(commentTxt.matches("\\.{1,3}")) {
+//			final OrthoWordIPAOptions opts = new OrthoWordIPAOptions(Collections.singletonList("(" + commentTxt + ")"));
+//			opts.setDictLang(dictionary.getLanguage());
+//			opts.setSelectedOption(0);
+//			comment.putExtension(OrthoWordIPAOptions.class, opts);
+//		}
+//	}
 	
 	private OrthoWordIPAOptions updateAnnotation(Word word) {
 		OrthoWordIPAOptions ext = word.getExtension(OrthoWordIPAOptions.class);

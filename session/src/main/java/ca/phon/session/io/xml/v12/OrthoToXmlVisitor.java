@@ -41,13 +41,13 @@ public class OrthoToXmlVisitor extends VisitorAdapter<OrthographyElement> {
 	public void fallbackVisit(OrthographyElement obj) {
 	}
 
-	@Visits
-	public void visitComment(OrthographyComment comment) {
-		final CommentType ct = factory.createCommentType();
-		ct.getContent().add(comment.getData());
-		ct.setType(comment.getType());
-		gt.getWOrComOrE().add(ct);
-	}
+//	@Visits
+//	public void visitComment(OrthographyComment comment) {
+//		final CommentType ct = factory.createCommentType();
+//		ct.getContent().add(comment.getData());
+//		ct.setType(comment.getType());
+//		gt.getWOrComOrE().add(ct);
+//	}
 
 	@Visits
 	public void visitEvent(Event event) {
@@ -57,13 +57,13 @@ public class OrthoToXmlVisitor extends VisitorAdapter<OrthographyElement> {
 //		gt.getWOrComOrE().add(et);
 	}
 
-	@Visits
-	public void visitPunct(OrthographyPunct punct) {
-		final PunctuationType pt = factory.createPunctuationType();
-		pt.setContent(punct.text());
-		pt.setType(punct.getType().toString());
-		gt.getWOrComOrE().add(pt);
-	}
+//	@Visits
+//	public void visitPunct(OrthographyPunct punct) {
+//		final PunctuationType pt = factory.createPunctuationType();
+//		pt.setContent(punct.text());
+//		pt.setType(punct.getType().toString());
+//		gt.getWOrComOrE().add(pt);
+//	}
 
 	@Visits
 	public void visitWord(Word word) {
