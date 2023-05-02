@@ -4,6 +4,7 @@ import ca.phon.orthography.parser.UnicodeOrthographyLexer;
 import ca.phon.orthography.parser.UnicodeOrthographyBuilder;
 import ca.phon.orthography.parser.UnicodeOrthographyParser;
 import org.antlr.v4.runtime.*;
+import org.apache.logging.log4j.core.appender.AsyncAppender;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -515,6 +516,22 @@ public class TestUnicodeOrthography {
         Assert.assertEquals("foo", ((Word)group.getElements().get(0)).getWord());
         Assert.assertEquals(Word.class, group.getElements().get(1).getClass());
         Assert.assertEquals("bar", ((Word)group.getElements().get(1)).getWord());
+    }
+
+    @Test
+    public void testLongFeature() {
+        final String text = "hello " + LongFeature.LONG_FEATURE_START + "laughs world " +
+                LongFeature.LONG_FEATURE_END + "laughs .";
+        final Orthography ortho = roundTrip(text);
+        Assert.assertEquals(5, ortho.length());
+        Assert.assertEquals(LongFeature.class, ortho.elementAt(1).getClass());
+        final LongFeature lf1 = (LongFeature) ortho.elementAt(1);
+        Assert.assertEquals(BeginEnd.BEGIN, lf1.getBeginEnd());
+        Assert.assertEquals("laughs", lf1.getLabel());
+        Assert.assertEquals(LongFeature.class, ortho.elementAt(3).getClass());
+        final LongFeature lf2 = (LongFeature) ortho.elementAt(3);
+        Assert.assertEquals(BeginEnd.END, lf2.getBeginEnd());
+        Assert.assertEquals("laughs", lf2.getLabel());
     }
 
 }

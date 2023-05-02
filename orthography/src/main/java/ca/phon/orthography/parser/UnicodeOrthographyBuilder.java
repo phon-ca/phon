@@ -366,4 +366,12 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         builder.append(new PhoneticGroup(innerOrtho.toList()));
     }
 
+    @Override
+    public void exitLong_feature(UnicodeOrthographyParser.Long_featureContext ctx) {
+        final BeginEnd beginEnd =
+                ctx.getText().startsWith(LongFeature.LONG_FEATURE_START) ? BeginEnd.BEGIN : BeginEnd.END;
+        final String label = ctx.id_or_basic_word().getText();
+        builder.append(new LongFeature(beginEnd, label));
+    }
+
 }

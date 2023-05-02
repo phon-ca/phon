@@ -27,6 +27,7 @@ orthodata
     |   group
     |   phonetic_group
     |   event
+    |   long_feature
     ;
 
 orthoannotation
@@ -205,8 +206,14 @@ event
     |   AMP STAR id_or_basic_word EQUALS id_or_basic_word   # OtherSpokenEvent
     ;
 
+long_feature
+    :   LONG_FEATURE_START id_or_basic_word
+    |   LONG_FEATURE_END id_or_basic_word
+    ;
+
 id_or_basic_word
-    :   CHAR+
+    :   id_or_basic_word (COLON | UNDERSCORE | MINUS ) id_or_basic_word
+    |   CHAR+
     ;
 
 marker
@@ -281,6 +288,22 @@ CLAUSE_DELIMITER
 
 MOR_EXCLUDE
     :   '[e]'
+    ;
+
+LONG_FEATURE_START
+    :   '&{l='
+    ;
+
+LONG_FEATURE_END
+    :   '&}l='
+    ;
+
+LONG_NONVOCAL_START
+    :   '&{n='
+    ;
+
+LONG_NONVOCAL_END
+    :   '&}n='
     ;
 
 COMMA
@@ -415,6 +438,10 @@ PERIOD
 
 HASH
     :   '#'
+    ;
+
+UNDERSCORE
+    :   '_'
     ;
 
 PG_START

@@ -406,6 +406,16 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
+    public void enterLong_feature(UnicodeOrthographyParser.Long_featureContext ctx) {
+
+    }
+
+    @Override
+    public void exitLong_feature(UnicodeOrthographyParser.Long_featureContext ctx) {
+
+    }
+
+    @Override
     public void enterId_or_basic_word(UnicodeOrthographyParser.Id_or_basic_wordContext ctx) {
 
     }
