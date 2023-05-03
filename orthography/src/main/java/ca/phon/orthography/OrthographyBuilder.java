@@ -112,7 +112,7 @@ public final class OrthographyBuilder {
 	}
 
 	public OrthographyBuilder appendWord(WordPrefix prefix, WordSuffix suffix, UntranscribedType untranscribedType, WordElement... wordElements) {
-		return append(new Word(prefix, suffix, untranscribedType, wordElements));
+		return append(new Word(new Langs(), prefix, suffix, untranscribedType, wordElements));
 	}
 
 	public OrthographyBuilder appendWord(List<WordElement> wordElements) {
@@ -208,18 +208,18 @@ public final class OrthographyBuilder {
 	 * @param untranscribedType
 	 * @return
 	 */
-	public OrthographyBuilder annnotateWord(WordPrefix wordPrefix, WordSuffix wordSuffix, UntranscribedType untranscribedType) {
+	public OrthographyBuilder annnotateWord(Langs langs, WordPrefix wordPrefix, WordSuffix wordSuffix, UntranscribedType untranscribedType) {
 		if(eleList.size() < 1)
 			throw new IllegalStateException("Unable to annotate word, no data");
 		final OrthographyElement ele = eleList.get(eleList.size()-1);
 		if(ele instanceof CompoundWord) {
 			final CompoundWord compoundWord = (CompoundWord) ele;
-			final CompoundWord annotatedWord = new CompoundWord(wordPrefix, wordSuffix, compoundWord.getWord1(), compoundWord.getWord2(), compoundWord.getMarker());
+			final CompoundWord annotatedWord = new CompoundWord(langs, wordPrefix, wordSuffix, compoundWord.getWord1(), compoundWord.getWord2(), compoundWord.getMarker());
 			eleList.remove(eleList.size()-1);
 			eleList.add(annotatedWord);
 		} else if(ele instanceof Word) {
 			final Word word = (Word) ele;
-			final Word annotatedWord = new Word(wordPrefix, wordSuffix, untranscribedType, word.getWordElements().toArray(new WordElement[0]));
+			final Word annotatedWord = new Word(langs, wordPrefix, wordSuffix, untranscribedType, word.getWordElements().toArray(new WordElement[0]));
 			eleList.remove(eleList.size()-1);
 			eleList.add(annotatedWord);
 		} else {

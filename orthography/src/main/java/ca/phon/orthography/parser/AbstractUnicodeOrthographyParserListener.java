@@ -186,6 +186,76 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
+    public void enterSecondaryLanguage(UnicodeOrthographyParser.SecondaryLanguageContext ctx) {
+
+    }
+
+    @Override
+    public void exitSecondaryLanguage(UnicodeOrthographyParser.SecondaryLanguageContext ctx) {
+
+    }
+
+    @Override
+    public void enterSingleLanguage(UnicodeOrthographyParser.SingleLanguageContext ctx) {
+
+    }
+
+    @Override
+    public void exitSingleLanguage(UnicodeOrthographyParser.SingleLanguageContext ctx) {
+
+    }
+
+    @Override
+    public void enterAmbiguousLanguages(UnicodeOrthographyParser.AmbiguousLanguagesContext ctx) {
+
+    }
+
+    @Override
+    public void exitAmbiguousLanguages(UnicodeOrthographyParser.AmbiguousLanguagesContext ctx) {
+
+    }
+
+    @Override
+    public void enterMultipleLanguages(UnicodeOrthographyParser.MultipleLanguagesContext ctx) {
+
+    }
+
+    @Override
+    public void exitMultipleLanguages(UnicodeOrthographyParser.MultipleLanguagesContext ctx) {
+
+    }
+
+    @Override
+    public void enterAmbig_lang_list(UnicodeOrthographyParser.Ambig_lang_listContext ctx) {
+
+    }
+
+    @Override
+    public void exitAmbig_lang_list(UnicodeOrthographyParser.Ambig_lang_listContext ctx) {
+
+    }
+
+    @Override
+    public void enterMulti_lang_list(UnicodeOrthographyParser.Multi_lang_listContext ctx) {
+
+    }
+
+    @Override
+    public void exitMulti_lang_list(UnicodeOrthographyParser.Multi_lang_listContext ctx) {
+
+    }
+
+    @Override
+    public void enterLanguage(UnicodeOrthographyParser.LanguageContext ctx) {
+
+    }
+
+    @Override
+    public void exitLanguage(UnicodeOrthographyParser.LanguageContext ctx) {
+
+    }
+
+    @Override
     public void enterWordelement(UnicodeOrthographyParser.WordelementContext ctx) {
 
     }

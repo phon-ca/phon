@@ -43,7 +43,11 @@ public final class CompoundWord extends Word {
 	}
 
 	public CompoundWord(WordPrefix prefix, WordSuffix suffix, Word word1, Word word2, CompoundWordMarker marker) {
-		super(prefix, suffix, new WordElement[0]);
+		this(new Langs(), prefix, suffix, word1, word2, marker);
+	}
+
+	public CompoundWord(Langs langs, WordPrefix prefix, WordSuffix suffix, Word word1, Word word2, CompoundWordMarker marker) {
+		super(langs, prefix, suffix, null, new WordElement[0]);
 		this.word1 = word1;
 		this.word2 = word2;
 		this.marker = marker;

@@ -108,7 +108,7 @@ terminator
     ;
 
 complete_word
-    :   wordprefix? word wordsuffix?
+    :   wordprefix? word langs? wordsuffix?
     ;
 
 wordprefix
@@ -121,6 +121,27 @@ word
     |   wordelement+    # SingleWord
     ;
 
+langs
+    :   LANG_PREFIX                         # SecondaryLanguage
+    |   LANG_PREFIX COLON language          # SingleLanguage
+    |   LANG_PREFIX COLON ambig_lang_list   # AmbiguousLanguages
+    |   LANG_PREFIX COLON multi_lang_list   # MultipleLanguages
+    ;
+
+ambig_lang_list
+    :   ambig_lang_list AMP ambig_lang_list
+    |   language
+    ;
+
+multi_lang_list
+    :   multi_lang_list PLUS multi_lang_list
+    |   language
+    ;
+
+language
+    :   CHAR CHAR CHAR? (MINUS CHAR CHAR? CHAR? CHAR? CHAR? CHAR? CHAR? CHAR?)*
+    ;
+
 wordelement
     :   text
     |   ca_element
@@ -131,7 +152,7 @@ wordelement
     ;
 
 text
-    :   (CHAR | APOSTROPHE)+
+    :   (CHAR | APOSTROPHE | MINUS | UNDERSCORE)+
     ;
 
 wk
@@ -488,6 +509,10 @@ QUOTATION_START
 
 QUOTATION_END
     :   '\u201d'
+    ;
+
+LANG_PREFIX
+    :   '@s'
     ;
 
 FORMTYPE

@@ -71,7 +71,8 @@ public final class WordSuffix {
 	@Override
 	public String toString() {
 		final StringBuffer buffer = new StringBuffer();
-		buffer.append(type.getCode());
+		if(type != null)
+			buffer.append(type.getCode());
 		if(formSuffix != null && formSuffix.length() > 0)
 			buffer.append("-").append(formSuffix);
 		if(code != null && code.length() > 0)

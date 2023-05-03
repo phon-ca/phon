@@ -3,6 +3,7 @@ package ca.phon.orthography.parser;
 import ca.phon.orthography.*;
 import ca.phon.orthography.Error;
 import ca.phon.orthography.parser.exceptions.OrthoParserException;
+import ca.phon.util.Language;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -18,10 +19,20 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
 
     private List<WordElement> wordElements = new ArrayList<>();
 
+    private Langs langs = new Langs();
+
+    private List<Language> langList = new ArrayList<>();
+
     @Override
     public void exitLinker(UnicodeOrthographyParser.LinkerContext ctx) {
         final LinkerType lt = LinkerType.fromString(ctx.getText());
         builder.append(new Linker(lt));
+    }
+
+    @Override
+    public void enterComplete_word(UnicodeOrthographyParser.Complete_wordContext ctx) {
+        langList.clear();
+        langs = new Langs();
     }
 
     @Override
@@ -51,7 +62,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
                         formType = WordFormType.fromCode(ctx.wordsuffix().formtype().getText());
                     }
                     if (ctx.wordsuffix().wordpos() != null) {
-                        pos = ctx.wordsuffix().wordpos().getText();
+                        pos = ctx.wordsuffix().wordpos().getText().substring(1);
                     }
                 }
                 if (wordElements.size() == 1 && wordElements.get(0).text().equals("xxx")) {
@@ -64,7 +75,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
                 WordPrefix prefix = (wordType == null ? null : new WordPrefix(wordType));
                 WordSuffix suffix = (formType != null || pos != null ? new WordSuffix(formType, null, null, pos) : null);
 
-                builder.annnotateWord(prefix, suffix, untranscribedType);
+                builder.annnotateWord(langs, prefix, suffix, untranscribedType);
             }
         }
     }
@@ -85,6 +96,36 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         }
         builder.appendWord(wordElements);
         wordElements.clear();
+    }
+
+    @Override
+    public void exitLanguage(UnicodeOrthographyParser.LanguageContext ctx) {
+        try {
+            final Language lang = Language.parseLanguage(ctx.getText());
+            langList.add(lang);
+        } catch (IllegalArgumentException e) {
+            throw new OrthoParserException("invalid language", ctx.getStart().getCharPositionInLine());
+        }
+    }
+
+    @Override
+    public void exitSecondaryLanguage(UnicodeOrthographyParser.SecondaryLanguageContext ctx) {
+        langs = new Langs(Langs.LangsType.SECONDARY);
+    }
+
+    @Override
+    public void exitSingleLanguage(UnicodeOrthographyParser.SingleLanguageContext ctx) {
+        langs = new Langs(Langs.LangsType.SINGLE, langList);
+    }
+
+    @Override
+    public void exitAmbiguousLanguages(UnicodeOrthographyParser.AmbiguousLanguagesContext ctx) {
+        langs = new Langs(Langs.LangsType.AMBIGUOUS, langList);
+    }
+
+    @Override
+    public void exitMultipleLanguages(UnicodeOrthographyParser.MultipleLanguagesContext ctx) {
+        langs = new Langs(Langs.LangsType.MULTIPLE, langList);
     }
 
     @Override

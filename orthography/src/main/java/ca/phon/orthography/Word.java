@@ -29,6 +29,8 @@ import java.util.stream.Collectors;
  */
 public class Word extends AbstractOrthographyElement {
 
+	private final Langs langs;
+
 	private final WordPrefix prefix;
 
 	private final WordSuffix suffix;
@@ -46,11 +48,12 @@ public class Word extends AbstractOrthographyElement {
 	}
 
 	public Word(WordPrefix prefix, WordSuffix suffix, WordElement... wordElements) {
-		this(prefix, suffix, null, wordElements);
+		this(new Langs(), prefix, suffix, null, wordElements);
 	}
 
-	public Word(WordPrefix prefix, WordSuffix suffix, UntranscribedType untranscribedType, WordElement... wordElements) {
+	public Word(Langs langs, WordPrefix prefix, WordSuffix suffix, UntranscribedType untranscribedType, WordElement... wordElements) {
 		super();
+		this.langs = langs;
 		this.prefix = prefix;
 		this.suffix = suffix;
 		this.untranscribed = untranscribedType;
@@ -59,7 +62,7 @@ public class Word extends AbstractOrthographyElement {
 	}
 
 	public Word(String text, UntranscribedType untranscribed) {
-		this(null, null, untranscribed, new WordText(text));
+		this(new Langs(), null, null, untranscribed, new WordText(text));
 	}
 
 	public Word(String text, WordType prefix) {
@@ -79,7 +82,7 @@ public class Word extends AbstractOrthographyElement {
 	}
 
 	public Word(String text, WordPrefix prefix, WordSuffix suffix, UntranscribedType untranscribed) {
-		this(prefix, suffix, untranscribed, new WordText(text));
+		this(new Langs(), prefix, suffix, untranscribed, new WordText(text));
 	}
 
 	public Word(String text, WordType prefix, WordFormType suffix, UntranscribedType untranscribed) {
@@ -114,6 +117,10 @@ public class Word extends AbstractOrthographyElement {
 		return this.suffix;
 	}
 
+	public Langs getLangs() {
+		return this.langs;
+	}
+
 	/**
 	 * Get the root word data without prefix/suffix,
 	 * ca-elements, ca-delimiters, etc.
@@ -140,6 +147,7 @@ public class Word extends AbstractOrthographyElement {
 		return (
 				(this.prefix == null ? "" : this.prefix) +
 						this.wordElements.stream().map((ele) -> ele.text()).collect(Collectors.joining()) +
+						this.langs +
 						(this.suffix == null ? "" : this.suffix)
 		);
 	}

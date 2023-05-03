@@ -3,6 +3,7 @@ package ca.phon.orthography;
 import ca.phon.orthography.parser.UnicodeOrthographyLexer;
 import ca.phon.orthography.parser.UnicodeOrthographyBuilder;
 import ca.phon.orthography.parser.UnicodeOrthographyParser;
+import ca.phon.util.Language;
 import org.antlr.v4.runtime.*;
 import org.junit.Assert;
 import org.junit.Test;
@@ -10,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Parser tests for UnicodeOrthography.g4 grammar
@@ -65,6 +67,90 @@ public class TestUnicodeOrthographyParser {
             Assert.assertEquals("hello", compoundWord.getWord1().toString());
             Assert.assertEquals("world", compoundWord.getWord2().toString());
             Assert.assertEquals(type, compoundWord.getMarker().getType());
+        }
+    }
+
+    @Test
+    public void testWordPos() {
+        final String text = "hello world$n";
+        final Orthography ortho = roundTrip(text);
+        Assert.assertEquals(2, ortho.length());
+        Assert.assertEquals(Word.class, ortho.elementAt(1).getClass());
+        final Word w2 = (Word) ortho.elementAt(1);
+        Assert.assertEquals("world", w2.getWord());
+        Assert.assertEquals("n", w2.getSuffix().getPos());
+    }
+
+    @Test
+    public void testWordLangs() {
+        final String[] texts = {
+                "hello world",
+                "hello world@s",
+                "hello world@s:eng",
+                "hello world@s:eng+fra",
+                "hello world@s:eng&fra&deu"
+        };
+        final Langs.LangsType[] types = {
+                Langs.LangsType.UNSPECIFIED,
+                Langs.LangsType.SECONDARY,
+                Langs.LangsType.SINGLE,
+                Langs.LangsType.MULTIPLE,
+                Langs.LangsType.AMBIGUOUS
+        };
+        final String[] langs = {
+                "", "", "eng", "eng+fra", "eng&fra&deu"
+        };
+        for(int i = 0; i < texts.length; i++) {
+            final String text = texts[i];
+            final Orthography ortho = roundTrip(text);
+            Assert.assertEquals(2, ortho.length());
+            Assert.assertEquals(Word.class, ortho.elementAt(0).getClass());
+            final Word w2 = (Word) ortho.elementAt(1);
+            Assert.assertEquals(types[i], w2.getLangs().getType());
+            final String delim = switch(types[i]) {
+                case UNSPECIFIED, SECONDARY, SINGLE -> "";
+                case MULTIPLE -> "+";
+                case AMBIGUOUS -> "&";
+            };
+            final String langText = w2.getLangs().getLangs().stream().map(l -> l.toString()).collect(Collectors.joining(delim));
+            Assert.assertEquals(langs[i], langText);
+        }
+    }
+
+    @Test
+    public void testWordLangsWithPos() {
+        final String[] texts = {
+                "hello world$n",
+                "hello world@s$n",
+                "hello world@s:eng$n",
+                "hello world@s:eng+fra$n",
+                "hello world@s:eng&fra&deu$n"
+        };
+        final Langs.LangsType[] types = {
+                Langs.LangsType.UNSPECIFIED,
+                Langs.LangsType.SECONDARY,
+                Langs.LangsType.SINGLE,
+                Langs.LangsType.MULTIPLE,
+                Langs.LangsType.AMBIGUOUS
+        };
+        final String[] langs = {
+                "", "", "eng", "eng+fra", "eng&fra&deu"
+        };
+        for(int i = 0; i < texts.length; i++) {
+            final String text = texts[i];
+            final Orthography ortho = roundTrip(text);
+            Assert.assertEquals(2, ortho.length());
+            Assert.assertEquals(Word.class, ortho.elementAt(0).getClass());
+            final Word w2 = (Word) ortho.elementAt(1);
+            Assert.assertEquals(types[i], w2.getLangs().getType());
+            final String delim = switch(types[i]) {
+                case UNSPECIFIED, SECONDARY, SINGLE -> "";
+                case MULTIPLE -> "+";
+                case AMBIGUOUS -> "&";
+            };
+            final String langText = w2.getLangs().getLangs().stream().map(l -> l.toString()).collect(Collectors.joining(delim));
+            Assert.assertEquals(langs[i], langText);
+            Assert.assertEquals("n", w2.getSuffix().getPos());
         }
     }
 
