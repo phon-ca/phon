@@ -250,11 +250,15 @@ public class TestUnicodeOrthographyParser {
             final List<WordElement> wordElements = ((Word)ortho.elementAt(0)).getWordElements();
             Assert.assertEquals(3, wordElements.size());
             Assert.assertEquals(CaDelimiter.class, wordElements.get(0).getClass());
-            Assert.assertEquals(delimType.toString(), wordElements.get(0).text());
+            final CaDelimiter cd1 = (CaDelimiter) wordElements.get(0);
+            Assert.assertEquals(BeginEnd.BEGIN, cd1.getBeginEnd());
+            Assert.assertEquals(delimType, cd1.getType());
             Assert.assertEquals(WordText.class, wordElements.get(1).getClass());
             Assert.assertEquals("word", wordElements.get(1).text());
             Assert.assertEquals(CaDelimiter.class, wordElements.get(2).getClass());
-            Assert.assertEquals(delimType.toString(), wordElements.get(2).text());
+            final CaDelimiter cd2 = (CaDelimiter) wordElements.get(2);
+            Assert.assertEquals(BeginEnd.END, cd2.getBeginEnd());
+            Assert.assertEquals(delimType, cd2.getType());
         }
     }
 

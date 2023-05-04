@@ -159,22 +159,19 @@ These schema elements are a customization of those found in the TalkBank XML sch
             <xs:sequence>
                 <xs:element ref="langs" minOccurs="0"/>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
-                    <xs:element ref="overlap-point"/>
-                    <xs:element ref="underline"/>
-                    <xs:element ref="italic"/>
-                    <xs:element ref="shortening"/>
-                    <xs:element ref="p"/>
-
-                    <xs:element ref="long-feature"/>
-
-                    <!-- For CA -->
                     <xs:element ref="ca-delimiter"/>
                     <xs:element ref="ca-element"/>
-
+                    <xs:element ref="long-feature"/>
+                    <xs:element ref="overlap-point"/>
+                    <xs:element ref="p"/>
+                    <xs:element ref="shortening"/>
                     <xs:element ref="wk"/>
 
                     <xs:element ref="pos"/>
                     <xs:element ref="replacement"/>
+
+                    <xs:element ref="underline"/>
+                    <xs:element ref="italic"/>
                 </xs:choice>
 
             </xs:sequence>
@@ -517,6 +514,75 @@ These schema elements are a customization of those found in the TalkBank XML sch
 
         </xs:complexType>
     </xs:element>
+
+    <xs:element name="langs">
+        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+            <xs:documentation> What language(s) a word is in (if not the one in default scope). </xs:documentation>
+            <xs:documentation>
+                <a href="https://talkbank.org/manuals/CHAT.html#SecondLanguage_Marker">CHAT manual
+                    section on this topic...</a>
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexType mixed="false">
+            <xs:choice>
+                <xs:element name="single" type="languageType">
+                    <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                        <xs:documentation> Word is to be interpreted in a single language. </xs:documentation>
+                        <xs:documentation>
+                            <a href="https://talkbank.org/manuals/CHAT.html#SecondLanguage_Marker_Single"
+                            >CHAT manual section on this topic...</a>
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+
+                <xs:element name="multiple" type="languagesType">
+                    <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                        <xs:documentation> Word is a combination of many languages. </xs:documentation>
+                        <xs:documentation>
+                            <a href="https://talkbank.org/manuals/CHAT.html#SecondLanguage_Marker_Multiple"
+                            >CHAT manual section on this topic...</a>
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+
+                <xs:element name="ambiguous" type="languagesType">
+                    <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                        <xs:documentation> Word can be interpreted as one of many languages. </xs:documentation>
+                        <xs:documentation>
+                            <a href="https://talkbank.org/manuals/CHAT.html#SecondLanguage_Marker_Ambiguous"
+                            >CHAT manual section on this topic...</a>
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="languageType">
+        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+            <xs:documentation> Language code restricted to only three instead of one to eight characters. </xs:documentation>
+            <xs:documentation>
+                <a href="https://talkbank.org/manuals/CHAT.html#Languages_Header">CHAT manual section
+                    on this topic...</a>
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:restriction base="xs:language">
+            <xs:pattern value="[a-zA-Z]{3}(-[a-zA-Z0-9]{1,8})*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="languagesType">
+        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+            <xs:documentation> A list of languages, using the official ISO codes. </xs:documentation>
+            <xs:documentation>
+                <a href="https://talkbank.org/manuals/CHAT.html#ISO_Language_Codes">CHAT manual
+                    section on this topic...</a>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:list itemType="languageType"/>
+    </xs:simpleType>
 
     <xs:element name="g">
         <xs:annotation xmlns="http://www.w3.org/1999/xhtml">

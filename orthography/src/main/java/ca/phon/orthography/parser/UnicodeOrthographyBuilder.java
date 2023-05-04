@@ -6,10 +6,7 @@ import ca.phon.orthography.parser.exceptions.OrthoParserException;
 import ca.phon.util.Language;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyParserListener {
 
@@ -22,6 +19,8 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
     private Langs langs = new Langs();
 
     private List<Language> langList = new ArrayList<>();
+
+    private Collection<CaDelimiterType> insideCaDelim = new ArrayList<>();
 
     @Override
     public void exitLinker(UnicodeOrthographyParser.LinkerContext ctx) {
@@ -148,7 +147,10 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
     public void exitCa_delimiter(UnicodeOrthographyParser.Ca_delimiterContext ctx) {
         final CaDelimiterType eleType = CaDelimiterType.fromString(ctx.getText());
         if(eleType != null) {
-            wordElements.add(new CaDelimiter(eleType));
+            final BeginEnd beginEnd = !insideCaDelim.contains(eleType) ? BeginEnd.BEGIN : BeginEnd.END;
+            if(beginEnd == BeginEnd.BEGIN)
+                insideCaDelim.add(eleType);
+            wordElements.add(new CaDelimiter(beginEnd, eleType));
         } else {
             throw new OrthoParserException(ctx.getText(), ctx.getStart().getCharPositionInLine());
         }
