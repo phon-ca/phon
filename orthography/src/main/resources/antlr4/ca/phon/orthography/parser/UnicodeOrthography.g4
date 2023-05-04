@@ -157,7 +157,12 @@ text
     ;
 
 replacement
-    :   REPLACEMENT
+    :   REPLACEMENT_START COLON? replacement_words CLOSE_BRACKET
+    ;
+
+replacement_words
+    :   replacement_words WS replacement_words
+    |   word
     ;
 
 wk
@@ -383,8 +388,8 @@ COMMENT
     :   OPEN_BRACKET PERCENT WS ( '\\]' | '\\[' | .)*? CLOSE_BRACKET
     ;
 
-REPLACEMENT
-    :   '[:' COLON? WS ( '\\]' | '\\[' | .)*? CLOSE_BRACKET
+REPLACEMENT_START
+    :   '[:' COLON?
     ;
 
 ALTERNATIVE

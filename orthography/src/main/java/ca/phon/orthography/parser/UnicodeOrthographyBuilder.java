@@ -441,23 +441,27 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
     }
 
     @Override
+    public void enterReplacement(UnicodeOrthographyParser.ReplacementContext ctx) {
+        builderStack.push(builder);
+        builder = new OrthographyBuilder();
+    }
+
+    @Override
     public void exitReplacement(UnicodeOrthographyParser.ReplacementContext ctx) {
         final boolean real = ctx.getText().startsWith(Replacement.PREFIX_REAL);
-        final String data = ctx.getText().substring(
-                (real ? Replacement.PREFIX_REAL.length() : Replacement.PREFIX.length()) + 1,
-                ctx.getText().length() - 1);
+        final Replacement replacement = new Replacement(real, builder.toOrthography().toList().stream().map(e -> (Word)e).toList());
+        builder = builderStack.pop();
+
         final OrthographyElement lastEle = builder.lastElement();
-        final Replacement replacement = new Replacement(real, data);
         if (lastEle != null && lastEle instanceof Word) {
             final Word w = (Word) lastEle;
-            if(w.getReplacement() == null)
-                builder.replaceLastElement(new Word(w.getLangs(), replacement,
+            final List<Replacement> replacements = new ArrayList<>(w.getReplacements());
+            replacements.add(replacement);
+                builder.replaceLastElement(new Word(w.getLangs(), replacements,
                         w.getPrefix(), w.getSuffix(), w.getUntranscribedType(),
                         w.getWordElements().toArray(new WordElement[0])));
-            else
-                builder.append(replacement);
         } else {
-            builder.append(replacement);
+            throw new OrthoParserException("replacement without word", ctx.getStart().getCharPositionInLine());
         }
     }
 

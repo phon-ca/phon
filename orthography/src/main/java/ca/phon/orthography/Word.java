@@ -39,7 +39,7 @@ public class Word extends AbstractOrthographyElement {
 
 	private final List<WordElement> wordElements;
 
-	private final Replacement replacement;
+	private final List<Replacement> replacements;
 
 	public Word(String text) {
 		this(new WordText(text));
@@ -57,10 +57,11 @@ public class Word extends AbstractOrthographyElement {
 		this(langs, null, prefix, suffix, untranscribedType, wordElements);
 	}
 
-	public Word(Langs langs, Replacement replacement, WordPrefix prefix, WordSuffix suffix, UntranscribedType untranscribedType, WordElement... wordElements) {
+	public Word(Langs langs, List<Replacement> replacements, WordPrefix prefix, WordSuffix suffix, UntranscribedType untranscribedType, WordElement... wordElements) {
 		super();
 		this.langs = langs;
-		this.replacement = replacement;
+		this.replacements =
+				replacements != null ? Collections.unmodifiableList(replacements) : new ArrayList<>();
 		this.prefix = prefix;
 		this.suffix = suffix;
 		this.untranscribed = untranscribedType;
@@ -128,8 +129,8 @@ public class Word extends AbstractOrthographyElement {
 		return this.langs;
 	}
 
-	public Replacement getReplacement() {
-		return this.replacement;
+	public List<Replacement> getReplacements() {
+		return this.replacements;
 	}
 
 	/**
@@ -160,8 +161,8 @@ public class Word extends AbstractOrthographyElement {
 						this.wordElements.stream().map((ele) -> ele.text()).collect(Collectors.joining()) +
 						(this.langs == null ? "" : this.langs) +
 						(this.suffix == null ? "" : this.suffix);
-		if(getReplacement() != null) {
-			retVal += " " + replacement.text();
+		if(getReplacements().size() > 0) {
+			retVal += " " + replacements.stream().map(r -> r.text()).collect(Collectors.joining(" "));
 		}
 		return retVal;
 	}

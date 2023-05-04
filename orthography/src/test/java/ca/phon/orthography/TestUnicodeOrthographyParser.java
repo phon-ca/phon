@@ -670,25 +670,24 @@ public class TestUnicodeOrthographyParser {
 
     @Test
     public void testReplacement() {
-        final String text = "hello [: foo] world [:: bar] [: foobar]";
+        final String text = "hello [: foo] world [:: bar] [: foo bar]";
         final Orthography ortho = roundTrip(text);
-        Assert.assertEquals(3, ortho.length());
+        Assert.assertEquals(2, ortho.length());
         Assert.assertEquals(Word.class, ortho.elementAt(0).getClass());
         final Word w1 = (Word) ortho.elementAt(0);
-        final Replacement r1 = w1.getReplacement();
-        Assert.assertNotNull(r1);
+        Assert.assertEquals(1, w1.getReplacements().size());
+        final Replacement r1 = w1.getReplacements().get(0);
         Assert.assertEquals(false, r1.isReal());
-        Assert.assertEquals("foo", r1.getData());
+        Assert.assertEquals("foo", r1.getWordText());
         Assert.assertEquals(Word.class, ortho.elementAt(1).getClass());
         final Word w2 = (Word) ortho.elementAt(1);
-        final Replacement r2 = w2.getReplacement();
-        Assert.assertNotNull(r2);
+        Assert.assertEquals(2, w2.getReplacements().size());
+        final Replacement r2 = w2.getReplacements().get(0);
         Assert.assertEquals(true, r2.isReal());
-        Assert.assertEquals("bar", r2.getData());
-        Assert.assertEquals(Replacement.class, ortho.elementAt(2).getClass());
-        final Replacement r3 = (Replacement) ortho.elementAt(2);
+        Assert.assertEquals("bar", r2.getWordText());
+        final Replacement r3 = w2.getReplacements().get(1);
         Assert.assertEquals(false, r3.isReal());
-        Assert.assertEquals("foobar", r3.getData());
+        Assert.assertEquals("foo bar", r3.getWordText());
     }
 
 }

@@ -286,6 +286,16 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
+    public void enterReplacement_words(UnicodeOrthographyParser.Replacement_wordsContext ctx) {
+
+    }
+
+    @Override
+    public void exitReplacement_words(UnicodeOrthographyParser.Replacement_wordsContext ctx) {
+
+    }
+
+    @Override
     public void enterWk(UnicodeOrthographyParser.WkContext ctx) {
 
     }
