@@ -39,6 +39,8 @@ public class Word extends AbstractOrthographyElement {
 
 	private final List<WordElement> wordElements;
 
+	private final Replacement replacement;
+
 	public Word(String text) {
 		this(new WordText(text));
 	}
@@ -52,8 +54,13 @@ public class Word extends AbstractOrthographyElement {
 	}
 
 	public Word(Langs langs, WordPrefix prefix, WordSuffix suffix, UntranscribedType untranscribedType, WordElement... wordElements) {
+		this(langs, null, prefix, suffix, untranscribedType, wordElements);
+	}
+
+	public Word(Langs langs, Replacement replacement, WordPrefix prefix, WordSuffix suffix, UntranscribedType untranscribedType, WordElement... wordElements) {
 		super();
 		this.langs = langs;
+		this.replacement = replacement;
 		this.prefix = prefix;
 		this.suffix = suffix;
 		this.untranscribed = untranscribedType;
@@ -121,6 +128,10 @@ public class Word extends AbstractOrthographyElement {
 		return this.langs;
 	}
 
+	public Replacement getReplacement() {
+		return this.replacement;
+	}
+
 	/**
 	 * Get the root word data without prefix/suffix,
 	 * ca-elements, ca-delimiters, etc.
@@ -144,12 +155,15 @@ public class Word extends AbstractOrthographyElement {
 
 	@Override
 	public String text() {
-		return (
+		String retVal =
 				(this.prefix == null ? "" : this.prefix) +
 						this.wordElements.stream().map((ele) -> ele.text()).collect(Collectors.joining()) +
-						this.langs +
-						(this.suffix == null ? "" : this.suffix)
-		);
+						(this.langs == null ? "" : this.langs) +
+						(this.suffix == null ? "" : this.suffix);
+		if(getReplacement() != null) {
+			retVal += " " + replacement.text();
+		}
+		return retVal;
 	}
 
 	@Override

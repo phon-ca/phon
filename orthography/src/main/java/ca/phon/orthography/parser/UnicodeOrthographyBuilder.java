@@ -444,7 +444,19 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         final String data = ctx.getText().substring(
                 (real ? Replacement.PREFIX_REAL.length() : Replacement.PREFIX.length()) + 1,
                 ctx.getText().length() - 1);
-        builder.append(new Replacement(real, data));
+        final OrthographyElement lastEle = builder.lastElement();
+        final Replacement replacement = new Replacement(real, data);
+        if (lastEle != null && lastEle instanceof Word) {
+            final Word w = (Word) lastEle;
+            if(w.getReplacement() == null)
+                builder.replaceLastElement(new Word(w.getLangs(), replacement,
+                        w.getPrefix(), w.getSuffix(), w.getUntranscribedType(),
+                        w.getWordElements().toArray(new WordElement[0])));
+            else
+                builder.append(replacement);
+        } else {
+            builder.append(replacement);
+        }
     }
 
 }
