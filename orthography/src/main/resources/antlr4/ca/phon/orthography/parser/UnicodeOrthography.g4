@@ -40,6 +40,7 @@ orthodata
     |   terminator
     |   postcode
     |   quotation
+    |   replacement
     ;
 
 orthoannotation
@@ -153,6 +154,10 @@ wordelement
 
 text
     :   (CHAR | APOSTROPHE | MINUS | UNDERSCORE)+
+    ;
+
+replacement
+    :   REPLACEMENT
     ;
 
 wk
@@ -366,18 +371,21 @@ DOUBLE_DAGGER
     ;
 
 FREECODE
-    :   OPEN_BRACKET CARET ( '\\]' | '\\[' | . )*? CLOSE_BRACKET
+    :   OPEN_BRACKET CARET WS ( '\\]' | '\\[' | . )*? CLOSE_BRACKET
     ;
 
 ERROR
-    :   OPEN_BRACKET STAR ( '\\]' | '\\[' | .)*? CLOSE_BRACKET
+    :   OPEN_BRACKET STAR WS ( '\\]' | '\\[' | .)*? CLOSE_BRACKET
     ;
 
 
 COMMENT
-    :   OPEN_BRACKET PERCENT ( '\\]' | '\\[' | .)*? CLOSE_BRACKET
+    :   OPEN_BRACKET PERCENT WS ( '\\]' | '\\[' | .)*? CLOSE_BRACKET
     ;
 
+REPLACEMENT
+    :   '[:' COLON? WS ( '\\]' | '\\[' | .)*? CLOSE_BRACKET
+    ;
 
 ALTERNATIVE
     :   OPEN_BRACKET EQUALS QUESTION ( '\\]' | '\\[' | .)*? CLOSE_BRACKET

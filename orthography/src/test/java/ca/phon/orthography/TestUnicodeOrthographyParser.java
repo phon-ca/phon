@@ -664,4 +664,19 @@ public class TestUnicodeOrthographyParser {
         Assert.assertEquals(BeginEnd.END, q2.getBeginEnd());
     }
 
+    @Test
+    public void testReplacement() {
+        final String text = "hello [: foo] world [:: bar]";
+        final Orthography ortho = roundTrip(text);
+        Assert.assertEquals(4, ortho.length());
+        Assert.assertEquals(Replacement.class, ortho.elementAt(1).getClass());
+        final Replacement r1 = (Replacement) ortho.elementAt(1);
+        Assert.assertEquals(false, r1.isReal());
+        Assert.assertEquals("foo", r1.getData());
+        Assert.assertEquals(Replacement.class, ortho.elementAt(3).getClass());
+        final Replacement r2 = (Replacement) ortho.elementAt(3);
+        Assert.assertEquals(true, r2.isReal());
+        Assert.assertEquals("bar", r2.getData());
+    }
+
 }

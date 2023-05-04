@@ -9,7 +9,7 @@ public enum MarkerType {
     RETRACING_REFORMULATION("[///]", "retracing reformulation"),
     RETRACING_UNCLEAR("[/?]", "retracing unclear"),
     FALSE_START("[/-]", "false start"),
-    MOR_EXCLUDE("[e]", "mor exclude");
+    EXCLUDE("[e]", "exclude");
 
     private String text;
 

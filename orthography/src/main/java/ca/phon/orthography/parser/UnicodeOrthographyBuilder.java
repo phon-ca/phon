@@ -438,4 +438,13 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         builder.append(new Quotation(beginEnd));
     }
 
+    @Override
+    public void exitReplacement(UnicodeOrthographyParser.ReplacementContext ctx) {
+        final boolean real = ctx.getText().startsWith(Replacement.PREFIX_REAL);
+        final String data = ctx.getText().substring(
+                (real ? Replacement.PREFIX_REAL.length() : Replacement.PREFIX.length()) + 1,
+                ctx.getText().length() - 1);
+        builder.append(new Replacement(real, data));
+    }
+
 }
