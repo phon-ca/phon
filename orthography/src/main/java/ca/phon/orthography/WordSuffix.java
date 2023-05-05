@@ -15,57 +15,48 @@
  */
 package ca.phon.orthography;
 
-public final class WordSuffix {
-	
-	private WordFormType type;
-	
-	private String formSuffix;
-	
-	private String code;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
-	private String pos;
+public final class WordSuffix {
+
+	private final boolean separatedPrefix;
+
+	private final WordFormType type;
+
+	private final String formSuffix;
+
+	private final String userSpecialForm;
+
+	private List<WordPos> wordPos;
 	
 	public WordSuffix(WordFormType type) {
-		this(type, null, null, null);
+		this(false, type, null, null);
+	}
+
+	public WordSuffix(boolean separatedPrefix, WordFormType type, String formSuffix, String userSpecialForm, WordPos ... wordPos) {
+		this(separatedPrefix, type, formSuffix, userSpecialForm, Arrays.asList(wordPos));
 	}
 	
-	public WordSuffix(WordFormType type, String formSuffix, String code, String pos) {
+	public WordSuffix(boolean separatedPrefix, WordFormType type, String formSuffix, String userSpecialForm, List<WordPos> wordPos) {
+		this.separatedPrefix = separatedPrefix;
 		this.type = type;
 		this.formSuffix = formSuffix;
-		this.code = code;
-		this.pos = pos;
+		this.userSpecialForm = userSpecialForm;
+		this.wordPos = Collections.unmodifiableList(wordPos);
 	}
 
 	public WordFormType getType() {
 		return type;
 	}
 
-	public void setType(WordFormType type) {
-		this.type = type;
+	public String getUserSpecialForm() {
+		return userSpecialForm;
 	}
 
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public String getFormSuffix() {
-		return formSuffix;
-	}
-
-	public void setFormSuffix(String formSuffix) {
-		this.formSuffix = formSuffix;
-	}
-
-	public String getPos() {
-		return pos;
-	}
-
-	public void setPos(String pos) {
-		this.pos = pos;
+	public List<WordPos> getPos() {
+		return this.wordPos;
 	}
 
 	@Override
@@ -75,10 +66,11 @@ public final class WordSuffix {
 			buffer.append(type.getCode());
 		if(formSuffix != null && formSuffix.length() > 0)
 			buffer.append("-").append(formSuffix);
-		if(code != null && code.length() > 0)
-			buffer.append(":").append(code);
-		if(pos != null && pos.length() > 0)
+		if(userSpecialForm != null && userSpecialForm.length() > 0)
+			buffer.append("@z:").append(userSpecialForm);
+		for(WordPos pos:wordPos) {
 			buffer.append("$").append(pos);
+		}
 		return buffer.toString();
 	}
 

@@ -27,6 +27,14 @@ public enum TerminatorType {
         this.displayName = displayName;
     }
 
+    public String getText() {
+        return text;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
     @Override
     public String toString() {
         return this.text;
@@ -34,7 +42,7 @@ public enum TerminatorType {
 
     public static TerminatorType fromString(String text) {
         for(TerminatorType tt:TerminatorType.values()) {
-            if(tt.text.equals(text)) {
+            if(tt.getText().equals(text) || tt.getDisplayName().equals(text)) {
                 return tt;
             }
         }

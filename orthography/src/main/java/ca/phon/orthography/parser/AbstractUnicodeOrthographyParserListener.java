@@ -406,12 +406,32 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
+    public void enterUser_special_form(UnicodeOrthographyParser.User_special_formContext ctx) {
+
+    }
+
+    @Override
+    public void exitUser_special_form(UnicodeOrthographyParser.User_special_formContext ctx) {
+
+    }
+
+    @Override
     public void enterWordpos(UnicodeOrthographyParser.WordposContext ctx) {
 
     }
 
     @Override
     public void exitWordpos(UnicodeOrthographyParser.WordposContext ctx) {
+
+    }
+
+    @Override
+    public void enterPos(UnicodeOrthographyParser.PosContext ctx) {
+
+    }
+
+    @Override
+    public void exitPos(UnicodeOrthographyParser.PosContext ctx) {
 
     }
 

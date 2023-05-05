@@ -57,7 +57,8 @@ public class Word extends AbstractOrthographyElement {
 		this(langs, null, prefix, suffix, untranscribedType, wordElements);
 	}
 
-	public Word(Langs langs, List<Replacement> replacements, WordPrefix prefix, WordSuffix suffix, UntranscribedType untranscribedType, WordElement... wordElements) {
+	public Word(Langs langs, List<Replacement> replacements, WordPrefix prefix, WordSuffix suffix,
+				UntranscribedType untranscribedType, WordElement... wordElements) {
 		super();
 		this.langs = langs;
 		this.replacements =

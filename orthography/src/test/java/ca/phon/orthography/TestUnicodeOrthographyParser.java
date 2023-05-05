@@ -72,13 +72,17 @@ public class TestUnicodeOrthographyParser {
 
     @Test
     public void testWordPos() {
-        final String text = "hello world$n";
+        final String text = "hello world$n:t:p";
         final Orthography ortho = roundTrip(text);
         Assert.assertEquals(2, ortho.length());
         Assert.assertEquals(Word.class, ortho.elementAt(1).getClass());
         final Word w2 = (Word) ortho.elementAt(1);
         Assert.assertEquals("world", w2.getWord());
-        Assert.assertEquals("n", w2.getSuffix().getPos());
+        Assert.assertEquals(1, w2.getSuffix().getPos().size());
+        Assert.assertEquals("n", w2.getSuffix().getPos().get(0).getCategory());
+        Assert.assertEquals(2, w2.getSuffix().getPos().get(0).getSubCategories().size());
+        Assert.assertEquals("t", w2.getSuffix().getPos().get(0).getSubCategories().get(0));
+        Assert.assertEquals("p", w2.getSuffix().getPos().get(0).getSubCategories().get(1));
     }
 
     @Test
@@ -150,7 +154,8 @@ public class TestUnicodeOrthographyParser {
             };
             final String langText = w2.getLangs().getLangs().stream().map(l -> l.toString()).collect(Collectors.joining(delim));
             Assert.assertEquals(langs[i], langText);
-            Assert.assertEquals("n", w2.getSuffix().getPos());
+            Assert.assertEquals(1, w2.getSuffix().getPos().size());
+            Assert.assertEquals("n", w2.getSuffix().getPos().get(0).getCategory());
         }
     }
 
@@ -688,6 +693,15 @@ public class TestUnicodeOrthographyParser {
         final Replacement r3 = w2.getReplacements().get(1);
         Assert.assertEquals(false, r3.isReal());
         Assert.assertEquals("foo bar", r3.getWordText());
+    }
+
+    @Test
+    public void testUserSpecialForm() {
+        final String text = "hello@z:rtfd";
+        final Orthography ortho = roundTrip(text);
+        Assert.assertEquals(1, ortho.length());
+        Assert.assertEquals(Word.class, ortho.elementAt(0).getClass());
+        Assert.assertEquals("rtfd", ((Word)ortho.elementAt(0)).getSuffix().getUserSpecialForm());
     }
 
 }

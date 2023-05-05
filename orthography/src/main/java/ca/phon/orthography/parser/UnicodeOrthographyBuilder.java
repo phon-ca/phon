@@ -4,7 +4,9 @@ import ca.phon.orthography.*;
 import ca.phon.orthography.Error;
 import ca.phon.orthography.parser.exceptions.OrthoParserException;
 import ca.phon.util.Language;
+import com.ibm.icu.text.ArabicShaping;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.util.*;
 
@@ -46,22 +48,40 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
             if(wordElements.size() == 1 && wordElements.get(0) instanceof OverlapPoint) {
                 builder.replaceLastElement((OverlapPoint)wordElements.get(0));
             } else {
+                boolean separatedPrefix = false;
+                String userSpecialForm = "";
                 WordType wordType = null;
                 WordFormType formType = null;
-                String pos = null;
+                List<WordPos> pos = new ArrayList<>();
                 UntranscribedType untranscribedType = null;
                 if (ctx.wordprefix() != null) {
-                    wordType = WordType.fromCode(ctx.wordprefix().getText());
+                    wordType = WordType.fromString(ctx.wordprefix().getText());
                     if (wordType == null)
                         throw new OrthoParserException("Invalid word prefix '" + ctx.wordprefix().getText() + "'",
                                 ctx.wordprefix().getStart().getCharPositionInLine());
                 }
                 if (ctx.wordsuffix() != null) {
+                    if(ctx.wordsuffix().HASH() != null) {
+                        separatedPrefix = true;
+                    }
                     if (ctx.wordsuffix().formtype() != null) {
                         formType = WordFormType.fromCode(ctx.wordsuffix().formtype().getText());
                     }
+                    if(ctx.wordsuffix().user_special_form() != null) {
+                        userSpecialForm = ctx.wordsuffix().user_special_form().getText().substring(3);
+                    }
                     if (ctx.wordsuffix().wordpos() != null) {
-                        pos = ctx.wordsuffix().wordpos().getText().substring(1);
+                        for(var wordposctx:ctx.wordsuffix().wordpos()) {
+                            final String[] categories = wordposctx.getText().substring(1).split(":");
+                            if(categories.length > 0) {
+                                final String category = categories[0];
+                                final List<String> subcategories = new ArrayList<>();
+                                for(int i = 1; i < categories.length; i++) subcategories.add(categories[i]);
+                                pos.add(new WordPos(category, subcategories));
+                            } else {
+                                throw new OrthoParserException("Invalid pos", wordposctx.getStart().getCharPositionInLine());
+                            }
+                        }
                     }
                 }
                 if (wordElements.size() == 1 && wordElements.get(0).text().equals("xxx")) {
@@ -72,7 +92,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
                     untranscribedType = UntranscribedType.UNTRANSCRIBED;
                 }
                 WordPrefix prefix = (wordType == null ? null : new WordPrefix(wordType));
-                WordSuffix suffix = (formType != null || pos != null ? new WordSuffix(formType, null, null, pos) : null);
+                WordSuffix suffix = (formType != null || pos != null ? new WordSuffix(separatedPrefix, formType, null, userSpecialForm, pos) : null);
 
                 builder.annnotateWord(langs, prefix, suffix, untranscribedType);
             }

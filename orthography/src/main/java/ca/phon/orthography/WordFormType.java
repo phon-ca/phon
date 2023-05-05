@@ -21,10 +21,6 @@ package ca.phon.orthography;
  * after a '@' character.
  */
 public enum WordFormType {
-	// w attribute:separated-prefix
-	SEPARATED_PREFIX("#", "separated-prefix"),
-	// w attribute:user-special-form
-	USER_SPECIAL_FORM("@z", "user-special-form"),
 	// w attribute:formType
 	ADDITION("@a", "addition"),
 	BABBLING("@b", "babbling"),

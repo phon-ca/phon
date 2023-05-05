@@ -33,7 +33,7 @@ public enum LinkerType {
 
     public static LinkerType fromString(String text) {
         for(LinkerType lt:values()) {
-            if(lt.getText().equals(text)) {
+            if(lt.getText().equals(text) || lt.getDisplayName().equals(text)) {
                 return lt;
             }
         }

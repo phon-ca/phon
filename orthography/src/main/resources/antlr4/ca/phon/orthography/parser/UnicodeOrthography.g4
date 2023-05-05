@@ -109,7 +109,7 @@ terminator
     ;
 
 complete_word
-    :   wordprefix? word langs? wordsuffix?
+    :   wordprefix? word wordsuffix?
     ;
 
 wordprefix
@@ -157,7 +157,7 @@ text
     ;
 
 replacement
-    :   REPLACEMENT_START COLON? replacement_words CLOSE_BRACKET
+    :   REPLACEMENT_START COLON? WS replacement_words CLOSE_BRACKET
     ;
 
 replacement_words
@@ -209,13 +209,20 @@ prosody
     ;
 
 wordsuffix
-    :   formtype
-    |   wordpos
-    |   formtype wordpos
+    :   HASH? formtype? user_special_form? langs? wordpos*
+    ;
+
+user_special_form
+    :   USER_SPECIAL_FORM_SUFFIX CHAR CHAR? CHAR? CHAR? CHAR?
     ;
 
 wordpos
-    :   DOLLAR_SIGN CHAR+
+    :   DOLLAR_SIGN pos
+    ;
+
+pos
+    :   pos COLON pos
+    |   CHAR+
     ;
 
 formtype
@@ -528,10 +535,14 @@ LANG_PREFIX
     :   '@s'
     ;
 
+USER_SPECIAL_FORM_SUFFIX
+    :   '@z:'
+    ;
+
 FORMTYPE
     :   AT ('a'|'b'|'c'|'d'|'e'|'f'|'fp'|'fs'|'g'
            |'i'|'k'|'l'|'n'|'nv'|'o'|'p'|'q'|'sas'
-           |'si'|'sl'|'t'|'u'|'x'|'wp'|'z')
+           |'si'|'sl'|'t'|'u'|'x'|'wp')
     ;
 
 TONE_MARKER

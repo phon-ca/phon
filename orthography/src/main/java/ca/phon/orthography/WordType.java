@@ -43,11 +43,11 @@ public enum WordType {
 		return this.displayName;
 	}
 
-	public static WordType fromCode(String code) {
+	public static WordType fromString(String text) {
 		WordType retVal = null;
 		
 		for(WordType v:values()) {
-			if(v.getCode().equals(code)) {
+			if(v.getCode().equals(text) || v.getDisplayName().equals(text)) {
 				retVal = v;
 				break;
 			}
