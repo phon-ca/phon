@@ -18,7 +18,9 @@ package ca.phon.session.io.xml.v13;
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.PhoneMap;
-import ca.phon.orthography.Orthography;
+import ca.phon.orthography.*;
+import ca.phon.orthography.Linker;
+import ca.phon.orthography.xml.XMLOrthographyUtteranceType;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
@@ -192,7 +194,7 @@ public class XMLSessionReader_v13 implements SessionReader, XMLObjectReader<Sess
 		final List<Comment> recordComments = new ArrayList<Comment>();
 		boolean foundFirstRecord = false;
 		if(sessionType.getTranscript() != null) {
-			for(Object uOrComment:sessionType.getTranscript().getUOrComment()) {
+			for(Object uOrComment:sessionType.getTranscript().getROrComment()) {
 				if(uOrComment instanceof CommentType) {
 					final CommentType ct = (CommentType)uOrComment;
 					final Comment comment = copyComment(factory, ct);
@@ -531,81 +533,38 @@ public class XMLSessionReader_v13 implements SessionReader, XMLObjectReader<Sess
 	 * @return
 	 */
 	private Tier<Orthography> copyOrthography(SessionFactory factory, OrthographyType ot) {
-		// first create a string from the orthography type,
-		// then parse the string into the new orthography container
-
 		final Tier<Orthography> retVal = factory.createTier(SystemTierType.Orthography.getName(), Orthography.class, SystemTierType.Orthography.isGrouped());
 
-		for(Object otEle:ot.getWOrGOrP()) {
-			if(!(otEle instanceof GroupType)) continue;
+		for(XMLOrthographyUtteranceType utt:ot.getU()) {
+			final OrthographyBuilder builder = new OrthographyBuilder();
 
-			final GroupType gt = (GroupType)otEle;
-			final List<String> eleList = new ArrayList<String>();
-			for(Object ele:gt.getWOrComOrE()) {
-				if(ele instanceof WordType) {
-					WordType w = (WordType)ele;
-
-					String lastV = null;
-					if(eleList.size() > 0) {
-						lastV = eleList.get(eleList.size()-1);
-					}
-
-					String wTxt = w.getContent();
-					if(
-							/* compound marker */ wTxt.equals("+") ||
-							/* seond part of cmp */ (lastV != null && lastV.endsWith("+")) ) {
-						// add to previous word data
-						if(lastV != null) {
-							eleList.remove(lastV);
-							lastV += wTxt;
-							eleList.add(lastV);
-						} else {
-							eleList.add(wTxt);
-						}
-					} else {
-						eleList.add(w.getContent());
-					}
-				} else if(ele instanceof EventType) {
-					EventType e = (EventType)ele;
-					eleList.add("*" + e.getContent() + "*");
-				} else if(ele instanceof CommentType) {
-					CommentType oct = (CommentType)ele;
-					final StringBuffer buffer = new StringBuffer();
-					for(Object obj:oct.getContent()) buffer.append(obj);
-					eleList.add("(" + (oct.getType() != null ? oct.getType() + ":" : "") + buffer.toString() + ")");
-				} else if(ele instanceof InnerGroupMarker) {
-					InnerGroupMarker ig = (InnerGroupMarker)ele;
-					if(ig.getType() == InnerGroupMarkerType.S)
-						eleList.add("{");
-					else
-						eleList.add("}");
-				}
-//				else if(ele instanceof PunctuationType) {
-//					PunctuationType pt = (PunctuationType)ele;
-//					OrthoPunctType opt = OrthoPunctType.valueOf(pt.getType());
-//					if(opt != null)
-//						eleList.add(opt.getChar()+"");
-//					else
-//						eleList.add(pt.getType());
+//			for(XMLLinker l:utt.getLinker()) {
+//				final LinkerType lt = LinkerType.fromString(l.getType());
+//				if(lt != null)
+//					builder.append(new Linker(lt));
+//				else {
+//					throw new IllegalArgumentException("Invalid linker type " + l.getType());
 //				}
-			}
+//			}
+//
+//			for(Object obj:utt.getWOrGOrPg()) {
+//
+//			}
+//
+//			if(utt.getT() != null) {
+//				final TerminatorType tt = TerminatorType.fromString(utt.getT().getType());
+//				if(tt != null) {
+//					builder.append(new Terminator(tt));
+//				} else {
+//					throw new IllegalArgumentException("Invalid terminator type " + utt.getT().getType());
+//				}
+//			}
+//
+//			for(XMLPostcode pc:utt.getPostcode()) {
+//				builder.append(new Postcode(pc.getValue()));
+//			}
 
-			final StringBuffer buffer = new StringBuffer();
-			for(String ele:eleList) {
-				if(buffer.length() > 0)
-					buffer.append(" ");
-				buffer.append(ele);
-			}
-
-			final String orthoTxt = buffer.toString();
-			Orthography ortho = new Orthography();
-			try {
-				ortho = Orthography.parseOrthography(orthoTxt);
-			} catch (ParseException pe) {
-				final UnvalidatedValue uv = new UnvalidatedValue(orthoTxt, pe);
-				ortho.putExtension(UnvalidatedValue.class, uv);
-			}
-			retVal.addGroup(ortho);
+			retVal.addGroup(builder.toOrthography());
 		}
 
 		return retVal;

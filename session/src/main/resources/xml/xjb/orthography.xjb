@@ -19,9 +19,13 @@
     xmlns:jxb="https://jakarta.ee/xml/ns/jaxb"
     xmlns:xs="http://www.w3.org/2001/XMLSchema">
     
-    <jxb:bindings schemaLocation="../xsd/phonbank-1_3.xsd" node="/xs:schema">
+    <jxb:bindings schemaLocation="../xsd/orthography.xsd" node="/xs:schema">
         <jxb:schemaBindings>
-            <jxb:package name="ca.phon.session.io.xml.v13"/>
+            <jxb:package name="ca.phon.orthography.xml"/>
+            <jxb:nameXmlTransform>
+                <jxb:typeName prefix="XMLOrthography"/>
+                <jxb:elementName prefix="XMLOrthography"/>
+            </jxb:nameXmlTransform>
         </jxb:schemaBindings>
     </jxb:bindings>
     

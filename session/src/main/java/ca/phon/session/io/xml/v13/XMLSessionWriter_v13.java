@@ -109,7 +109,7 @@ public class XMLSessionWriter_v13 implements SessionWriter, IPluginExtensionPoin
 		for(int i = 0; i < session.getMetadata().getNumberOfComments(); i++) {
 			final Comment c = session.getMetadata().getComment(i);
 			final CommentType ct = copyComment(factory, c);
-			transcript.getUOrComment().add(ct);
+			transcript.getROrComment().add(ct);
 		}
 
 		// participants
@@ -154,7 +154,7 @@ public class XMLSessionWriter_v13 implements SessionWriter, IPluginExtensionPoin
 			for(int j = 0; j < record.getNumberOfComments(); j++) {
 				final Comment com = record.getComment(j);
 				final CommentType ct = copyComment(factory, com);
-				transcript.getUOrComment().add(ct);
+				transcript.getROrComment().add(ct);
 			}
 
 			// copy record data
@@ -176,7 +176,7 @@ public class XMLSessionWriter_v13 implements SessionWriter, IPluginExtensionPoin
 					}
 				}
 	
-				transcript.getUOrComment().add(rt);
+				transcript.getROrComment().add(rt);
 			} catch (Exception e) {
 				// catch all record-specific errors and recover
 				LOGGER.error( "Record #" + (i+1) + " " + e.getLocalizedMessage(), e);
@@ -192,7 +192,7 @@ public class XMLSessionWriter_v13 implements SessionWriter, IPluginExtensionPoin
 		for(int tcIdx = 0; tcIdx < session.getMetadata().getNumberOfTrailingComments(); tcIdx++) {
 			final Comment com = session.getMetadata().getTrailingComment(tcIdx);
 			final CommentType ct = copyComment(factory, com);
-			transcript.getUOrComment().add(ct);
+			transcript.getROrComment().add(ct);
 		}
 
 		retVal.setTranscript(transcript);
@@ -527,24 +527,24 @@ public class XMLSessionWriter_v13 implements SessionWriter, IPluginExtensionPoin
 	private OrthographyType copyOrthography(ObjectFactory factory, Tier<Orthography> orthoTier) {
 		final OrthographyType retVal = factory.createOrthographyType();
 
-		for(Orthography ortho:orthoTier) {
-			final UnvalidatedValue uv = ortho.getExtension(UnvalidatedValue.class);
-			if(ortho.length() == 0 && uv != null) {
-				// stuff everything into a single word element
-				// it will be marked invalid when read again, but we should not
-				// delete user entered information
-				final GroupType gt = factory.createGroupType();
-				final WordType wt = factory.createWordType();
-				wt.setContent(uv.getValue());
-				gt.getWOrComOrE().add(wt);
-				retVal.getWOrGOrP().add(gt);
-			} else {
-				final OrthoToXmlVisitor visitor = new OrthoToXmlVisitor();
-				ortho.accept(visitor);
-				final GroupType gt = visitor.getGroup();
-				retVal.getWOrGOrP().add(gt);
-			}
-		}
+//		for(Orthography ortho:orthoTier) {
+//			final UnvalidatedValue uv = ortho.getExtension(UnvalidatedValue.class);
+//			if(ortho.length() == 0 && uv != null) {
+//				// stuff everything into a single word element
+//				// it will be marked invalid when read again, but we should not
+//				// delete user entered information
+//				final GroupType gt = factory.createGroupType();
+//				final WordType wt = factory.createWordType();
+//				wt.setContent(uv.getValue());
+//				gt.getWOrComOrE().add(wt);
+//				retVal.getU().add(gt);
+//			} else {
+//				final OrthoToXmlVisitor visitor = new OrthoToXmlVisitor();
+//				ortho.accept(visitor);
+//				final GroupType gt = visitor.getGroup();
+//				retVal.getU().add(gt);
+//			}
+//		}
 
 		return retVal;
 	}

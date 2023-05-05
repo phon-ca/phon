@@ -3,15 +3,16 @@
 XML schema for the Orthography type in Phon.
 This is a customization of CHAT transcription format main line.
 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="https://www.phon.ca/ns/orthography"
-           targetNamespace="https://www.phon.ca/ns/orthography"
-           elementFormDefault="qualified" version="1" id="Orthography">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="https://phon.ca/ns/orthography"
+           targetNamespace="https://phon.ca/ns/orthography"
+           elementFormDefault="qualified" version="1" id="phon-orthography">
 
     <xs:annotation>
         <xs:documentation>2023-05-05: Created from definitions found in talkbank.xsd version 2.20.0</xs:documentation>
     </xs:annotation>
 
-    <xs:element name="u">
+    <xs:element name="u" type="utteranceType"/>
+    <xs:complexType name="utteranceType" mixed="false">
         <xs:annotation>
             <xs:documentation>A single utterance</xs:documentation>
             <xs:documentation>
@@ -19,33 +20,31 @@ This is a customization of CHAT transcription format main line.
                     this topic...</a>
             </xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="false">
-            <xs:sequence>
-                <xs:element ref="linker" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:sequence>
+            <xs:element ref="linker" minOccurs="0" maxOccurs="unbounded"/>
 
-                <xs:choice maxOccurs="unbounded">
-                    <xs:element ref="w"/>
-                    <xs:element ref="g"/>
-                    <xs:element ref="pg"/>
-                    <xs:element ref="quotation"/>
-                    <xs:element ref="pause"/>
-                    <xs:element ref="internal-media"/>
-                    <xs:element ref="freecode"/>
-                    <xs:element ref="e"/>
-                    <xs:element ref="s"/>
-                    <xs:element ref="tagMarker"/>
-                    <xs:element ref="overlap-point"/>
-                    <xs:element ref="underline"/>
-                    <xs:element ref="italic"/>
-                    <xs:element ref="long-feature"/>
-                    <xs:element ref="nonvocal"/>
-                </xs:choice>
+            <xs:choice maxOccurs="unbounded">
+                <xs:element ref="w"/>
+                <xs:element ref="g"/>
+                <xs:element ref="pg"/>
+                <xs:element ref="quotation"/>
+                <xs:element ref="pause"/>
+                <xs:element ref="internal-media"/>
+                <xs:element ref="freecode"/>
+                <xs:element ref="e"/>
+                <xs:element ref="s"/>
+                <xs:element ref="tagMarker"/>
+                <xs:element ref="overlap-point"/>
+                <xs:element ref="underline"/>
+                <xs:element ref="italic"/>
+                <xs:element ref="long-feature"/>
+                <xs:element ref="nonvocal"/>
+            </xs:choice>
 
-                <xs:element ref="t" minOccurs="0" maxOccurs="1"/>
-                <xs:element ref="postcode" minOccurs="0" maxOccurs="unbounded"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
+            <xs:element ref="t" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="postcode" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
 
     <xs:element name="linker">
         <xs:annotation xmlns="http://www.w3.org/1999/xhtml">

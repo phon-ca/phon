@@ -17,11 +17,9 @@ package ca.phon.session.io.xml.v13;
 
 import ca.phon.orthography.*;
 import ca.phon.visitor.VisitorAdapter;
-import ca.phon.visitor.annotation.Visits;
 
 /**
- * Converts the visited orthography elements into a
- * {@link GroupType} object useable by JAXB for serialization.
+ *
  */
 public class OrthoToXmlVisitor extends VisitorAdapter<OrthographyElement> {
 	
@@ -39,43 +37,8 @@ public class OrthoToXmlVisitor extends VisitorAdapter<OrthographyElement> {
 
 	@Override
 	public void fallbackVisit(OrthographyElement obj) {
+
 	}
 
-//	@Visits
-//	public void visitComment(OrthographyComment comment) {
-//		final CommentType ct = factory.createCommentType();
-//		ct.getContent().add(comment.getData());
-//		ct.setType(comment.getType());
-//		gt.getWOrComOrE().add(ct);
-//	}
-
-	@Visits
-	public void visitEvent(Event event) {
-//		final EventType et = factory.createEventType();
-//		et.setContent(
-//				(event.getType() != null ? event.getType() + ":" : "") + event.getData());
-//		gt.getWOrComOrE().add(et);
-	}
-
-//	@Visits
-//	public void visitPunct(OrthographyPunct punct) {
-//		final PunctuationType pt = factory.createPunctuationType();
-//		pt.setType(punct.getType().toString());
-//		gt.getWOrComOrE().add(pt);
-//	}
-
-	@Visits
-	public void visitWord(Word word) {
-		final WordType wt = factory.createWordType();
-		wt.setContent(word.text());
-		gt.getWOrComOrE().add(wt);
-	}
-
-	@Visits
-	public void visitWordnet(CompoundWord wordnet) {
-		final WordType wt = factory.createWordType();
-		wt.setContent(wordnet.text());
-		gt.getWOrComOrE().add(wt);
-	}
 
 }
