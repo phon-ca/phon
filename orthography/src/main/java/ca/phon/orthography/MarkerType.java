@@ -35,7 +35,7 @@ public enum MarkerType {
 
     public static MarkerType fromString(String text) {
         for(MarkerType type:values()) {
-            if(type.getText().equals(text)) {
+            if(type.getText().equals(text) || type.getDisplayString().equals(text)) {
                 return type;
             }
         }

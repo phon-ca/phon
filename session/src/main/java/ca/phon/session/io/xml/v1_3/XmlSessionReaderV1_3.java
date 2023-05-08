@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.session.io.xml.v13;
+package ca.phon.session.io.xml.v1_3;
 
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.*;
-import ca.phon.orthography.Linker;
 import ca.phon.orthography.xml.XMLOrthographyUtteranceType;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
@@ -30,6 +29,8 @@ import ca.phon.session.*;
 import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionReader;
 import ca.phon.session.GroupSegment;
+import ca.phon.session.io.xml.v13.*;
+import ca.phon.session.io.xml.v13.WordType;
 import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.util.Language;
@@ -88,9 +89,9 @@ import java.util.UUID;
 		name="Phon 3.6+ (.xml)"
 )
 @Rank(0)
-public class XMLSessionReader_v13 implements SessionReader, XMLObjectReader<Session>, IPluginExtensionPoint<SessionReader> {
+public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Session>, IPluginExtensionPoint<SessionReader> {
 
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(XMLSessionReader_v13.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(XmlSessionReaderV1_3.class.getName());
 
 	@Override
 	public Session read(Document doc, Element ele)
@@ -321,7 +322,7 @@ public class XMLSessionReader_v13 implements SessionReader, XMLObjectReader<Sess
 	// tier descriptions
 	private TierDescription copyTierDescription(SessionFactory factory, UserTierType utt) {
 		final boolean grouped = utt.isGrouped();
-		final String name = utt.tierName;
+		final String name = utt.getTierName();
 		
 		try {
 			Class<?> type = Class.forName(utt.getType(), true, PluginManager.getInstance());
@@ -431,7 +432,7 @@ public class XMLSessionReader_v13 implements SessionReader, XMLObjectReader<Sess
 			int gidx = 0;
 			for(BgType bgt:btt.getBg()) {
 				final StringBuffer buffer = new StringBuffer();
-				for(WordType wt:bgt.getW()) {
+				for(ca.phon.session.io.xml.v13.WordType wt:bgt.getW()) {
 					if(buffer.length() > 0)
 						buffer.append(" ");
 					buffer.append(wt.getContent());
@@ -508,7 +509,7 @@ public class XMLSessionReader_v13 implements SessionReader, XMLObjectReader<Sess
 			int gidx = 0;
 			for(TgType tgt:gtt.getTg()) {
 				final StringBuffer buffer = new StringBuffer();
-				for(WordType wt:tgt.getW()) {
+				for(ca.phon.session.io.xml.v13.WordType wt:tgt.getW()) {
 					if(buffer.length() > 0)
 						buffer.append(" ");
 					buffer.append(wt.getContent());
@@ -536,35 +537,15 @@ public class XMLSessionReader_v13 implements SessionReader, XMLObjectReader<Sess
 		final Tier<Orthography> retVal = factory.createTier(SystemTierType.Orthography.getName(), Orthography.class, SystemTierType.Orthography.isGrouped());
 
 		for(XMLOrthographyUtteranceType utt:ot.getU()) {
-			final OrthographyBuilder builder = new OrthographyBuilder();
+			final XmlOrthographyVisitor visitor = new XmlOrthographyVisitor();
 
-//			for(XMLLinker l:utt.getLinker()) {
-//				final LinkerType lt = LinkerType.fromString(l.getType());
-//				if(lt != null)
-//					builder.append(new Linker(lt));
-//				else {
-//					throw new IllegalArgumentException("Invalid linker type " + l.getType());
-//				}
-//			}
-//
-//			for(Object obj:utt.getWOrGOrPg()) {
-//
-//			}
-//
-//			if(utt.getT() != null) {
-//				final TerminatorType tt = TerminatorType.fromString(utt.getT().getType());
-//				if(tt != null) {
-//					builder.append(new Terminator(tt));
-//				} else {
-//					throw new IllegalArgumentException("Invalid terminator type " + utt.getT().getType());
-//				}
-//			}
-//
-//			for(XMLPostcode pc:utt.getPostcode()) {
-//				builder.append(new Postcode(pc.getValue()));
-//			}
+			utt.getLinker().forEach(visitor::visit);
+			utt.getWOrGOrPg().forEach(visitor::visit);
+			if(utt.getT() != null)
+				visitor.visit(utt.getT());
+			utt.getPostcode().forEach(visitor::visit);
 
-			retVal.addGroup(builder.toOrthography());
+			retVal.addGroup(visitor.getOrthography());
 		}
 
 		return retVal;
@@ -799,7 +780,7 @@ public class XMLSessionReader_v13 implements SessionReader, XMLObjectReader<Sess
 
 	@Override
 	public IPluginExtensionFactory<SessionReader> getFactory() {
-		return (args) -> { return new XMLSessionReader_v13(); };
+		return (args) -> { return new XmlSessionReaderV1_3(); };
 	}
 
 }

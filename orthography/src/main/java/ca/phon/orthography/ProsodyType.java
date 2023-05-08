@@ -27,4 +27,13 @@ public enum ProsodyType {
         return getChar() + "";
     }
 
+    public static ProsodyType fromString(String string) {
+        for(ProsodyType type:values()) {
+            if(type.getDisplayName().equals(string)) {
+                return type;
+            }
+        }
+        return null;
+    }
+
 }

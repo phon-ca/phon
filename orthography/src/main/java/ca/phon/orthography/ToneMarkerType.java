@@ -30,7 +30,7 @@ public enum ToneMarkerType {
 
     public static ToneMarkerType fromString(String text) {
         for(ToneMarkerType type:values()) {
-            if(type.toString().equals(text)) {
+            if(type.toString().equals(text) || type.getDisplayName().equals(text)) {
                 return type;
             }
         }

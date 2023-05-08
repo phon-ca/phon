@@ -31,7 +31,7 @@ public enum SeparatorType {
 
     public static SeparatorType fromString(String text) {
         for(SeparatorType type:values()) {
-            if(type.getText().equals(text)) {
+            if(type.getText().equals(text) || type.getDisplayName().equals(text)) {
                 return type;
             }
         }

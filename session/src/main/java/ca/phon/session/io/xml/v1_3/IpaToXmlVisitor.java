@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.session.io.xml.v13;
+package ca.phon.session.io.xml.v1_3;
 
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.WordBoundary;

@@ -1,6 +1,6 @@
 package ca.phon.orthography;
 
-public class Italic extends AbstractOrthographyElement {
+public class Italic extends AbstractOrthographyElement implements WordElement {
 
     private final BeginEnd beginEnd;
 

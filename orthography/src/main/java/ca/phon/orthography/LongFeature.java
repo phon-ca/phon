@@ -1,6 +1,6 @@
 package ca.phon.orthography;
 
-public final class LongFeature extends AbstractOrthographyElement {
+public final class LongFeature extends AbstractOrthographyElement implements WordElement {
 
     public final static String LONG_FEATURE_START = "&{l=";
 

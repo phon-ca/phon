@@ -37,4 +37,28 @@ public enum OverlapPointType {
         return null;
     }
 
+    public static OverlapPointType fromDescription(String topBottom, String startEnd) {
+        OverlapPointType type = null;
+        if("top".equals(topBottom)) {
+            if("start".equals(startEnd)) {
+                type = OverlapPointType.TOP_START;
+            } else if("end".equals(startEnd)) {
+                type = OverlapPointType.TOP_END;
+            } else {
+                throw new IllegalArgumentException(startEnd);
+            }
+        } else if("bottom".equals(topBottom)) {
+            if("start".equals(startEnd)) {
+                type = OverlapPointType.BOTTOM_START;
+            } else if("end".equals(startEnd)) {
+                type = OverlapPointType.BOTTOM_END;
+            } else {
+                throw new IllegalArgumentException(startEnd);
+            }
+        } else {
+            throw new IllegalArgumentException(topBottom);
+        }
+        return type;
+    }
+
 }

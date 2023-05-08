@@ -41,11 +41,11 @@ public enum UntranscribedType {
 		return this.displayName;
 	}
 
-	public static UntranscribedType fromCode(String code) {
+	public static UntranscribedType fromString(String code) {
 		UntranscribedType retVal = null;
 		
 		for(UntranscribedType v:values()) {
-			if(v.getCode().equals(code)) {
+			if(v.getCode().equals(code) || v.getDisplayName().equals(code)) {
 				retVal = v;
 				break;
 			}

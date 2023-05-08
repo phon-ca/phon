@@ -21,4 +21,13 @@ public enum OverlapType {
         return displayName;
     }
 
+    public static OverlapType fromString(String text) {
+        for(OverlapType type:values()) {
+            if(type.getPrefix().equals(text) || type.getDisplayName().equals(text)) {
+                return type;
+            }
+        }
+        return null;
+    }
+
 }

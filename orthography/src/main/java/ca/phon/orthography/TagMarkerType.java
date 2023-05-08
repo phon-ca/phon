@@ -22,11 +22,11 @@ public enum TagMarkerType {
         return displayName;
     }
 
-    public static TagMarkerType fromChar(char c) {
+    public static TagMarkerType fromString(String text) {
         TagMarkerType retVal = null;
 
         for(TagMarkerType v:values()) {
-            if(v.getChar() == c) {
+            if((v.getChar() + "").equals(text) || v.getDisplayName().equals(text)) {
                 retVal = v;
                 break;
             }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.session.io.xml.v13;
+package ca.phon.session.io.xml.v1_3;
 
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.AlternativeTranscript;
@@ -29,6 +29,7 @@ import ca.phon.session.io.SerializationWarning;
 import ca.phon.session.io.SerializationWarnings;
 import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionWriter;
+import ca.phon.session.io.xml.v13.*;
 import ca.phon.xml.annotation.XMLSerial;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBElement;
@@ -60,9 +61,9 @@ import java.util.Map;
 		name="Phon 3.6+ (.xml)"
 )
 @Rank(0)
-public class XMLSessionWriter_v13 implements SessionWriter, IPluginExtensionPoint<SessionWriter> {
+public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoint<SessionWriter> {
 
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(XMLSessionWriter_v13.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(XmlSessionWriterV1_3.class.getName());
 
 	/**
 	 * Create a new jaxb version of the session
@@ -336,8 +337,8 @@ public class XMLSessionWriter_v13 implements SessionWriter, IPluginExtensionPoin
 		return segType;
 	}
 
-	private GroupSegment copyGroupSegment(ObjectFactory factory, ca.phon.session.GroupSegment groupSegment) {
-		final GroupSegment retVal = factory.createGroupSegment();
+	private ca.phon.session.io.xml.v13.GroupSegment copyGroupSegment(ObjectFactory factory, ca.phon.session.GroupSegment groupSegment) {
+		final ca.phon.session.io.xml.v13.GroupSegment retVal = factory.createGroupSegment();
 		retVal.setStart(groupSegment.getStart());
 		retVal.setEnd(groupSegment.getEnd());
 		return retVal;
@@ -630,7 +631,7 @@ public class XMLSessionWriter_v13 implements SessionWriter, IPluginExtensionPoin
 
 	@Override
 	public IPluginExtensionFactory<SessionWriter> getFactory() {
-		return (args) -> { return new XMLSessionWriter_v13(); };
+		return (args) -> { return new XmlSessionWriterV1_3(); };
 	}
 
 }

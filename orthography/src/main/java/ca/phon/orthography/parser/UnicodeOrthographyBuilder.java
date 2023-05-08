@@ -4,9 +4,7 @@ import ca.phon.orthography.*;
 import ca.phon.orthography.Error;
 import ca.phon.orthography.parser.exceptions.OrthoParserException;
 import ca.phon.util.Language;
-import com.ibm.icu.text.ArabicShaping;
 
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.util.*;
 
@@ -194,7 +192,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
 
     @Override
     public void exitTagMarker(UnicodeOrthographyParser.TagMarkerContext ctx) {
-        final TagMarkerType tmType = TagMarkerType.fromChar(ctx.getText().charAt(0));
+        final TagMarkerType tmType = TagMarkerType.fromString(ctx.getText().charAt(0));
         builder.append(new TagMarker(tmType));
     }
 
