@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.session.io.xml.v12;
+package ca.phon.session.io.xml.v1_2;
 
 import ca.phon.ipa.*;
+import ca.phon.session.io.xml.v12.*;
 import ca.phon.syllable.*;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;

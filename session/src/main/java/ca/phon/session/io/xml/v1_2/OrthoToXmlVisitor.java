@@ -13,9 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.session.io.xml.v12;
+package ca.phon.session.io.xml.v1_2;
 
 import ca.phon.orthography.*;
+import ca.phon.session.io.xml.v12.GroupType;
+import ca.phon.session.io.xml.v12.ObjectFactory;
+import ca.phon.session.io.xml.v12.WordType;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
@@ -67,7 +70,7 @@ public class OrthoToXmlVisitor extends VisitorAdapter<OrthographyElement> {
 
 	@Visits
 	public void visitWord(Word word) {
-		final WordType wt = factory.createWordType();
+		final ca.phon.session.io.xml.v12.WordType wt = factory.createWordType();
 		wt.setContent(word.text());
 		gt.getWOrComOrE().add(wt);
 	}

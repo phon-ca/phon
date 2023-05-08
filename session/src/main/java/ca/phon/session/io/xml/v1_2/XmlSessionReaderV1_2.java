@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.session.io.xml.v12;
+package ca.phon.session.io.xml.v1_2;
 
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.*;
@@ -25,6 +25,7 @@ import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.io.*;
 import ca.phon.session.GroupSegment;
+import ca.phon.session.io.xml.v12.*;
 import ca.phon.syllable.*;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
@@ -67,9 +68,9 @@ import java.util.*;
 		name="Phon <3.6 (.xml)"
 )
 @Rank(1)
-public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Session>, IPluginExtensionPoint<SessionReader> {
+public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Session>, IPluginExtensionPoint<SessionReader> {
 
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(XMLSessionReader_v12.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(XmlSessionReaderV1_2.class.getName());
 
 	@Override
 	public Session read(Document doc, Element ele)
@@ -786,7 +787,7 @@ public class XMLSessionReader_v12 implements SessionReader, XMLObjectReader<Sess
 
 	@Override
 	public IPluginExtensionFactory<SessionReader> getFactory() {
-		return (args) -> { return new XMLSessionReader_v12(); };
+		return (args) -> { return new XmlSessionReaderV1_2(); };
 	}
 
 }

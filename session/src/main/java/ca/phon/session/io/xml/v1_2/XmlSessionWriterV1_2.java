@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.session.io.xml.v12;
+package ca.phon.session.io.xml.v1_2;
 
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.*;
@@ -23,6 +23,7 @@ import ca.phon.plugin.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.io.*;
+import ca.phon.session.io.xml.v12.*;
 import ca.phon.xml.annotation.XMLSerial;
 import jakarta.xml.bind.*;
 import org.apache.commons.lang3.StringUtils;
@@ -47,9 +48,9 @@ import java.util.*;
 		name="Phon <3.6 (.xml)"
 )
 @Rank(1)
-public class XMLSessionWriter_v12 implements SessionWriter, IPluginExtensionPoint<SessionWriter> {
+public class XmlSessionWriterV1_2 implements SessionWriter, IPluginExtensionPoint<SessionWriter> {
 
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(XMLSessionWriter_v12.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(XmlSessionWriterV1_2.class.getName());
 
 	/**
 	 * Create a new jaxb version of the session
@@ -583,7 +584,7 @@ public class XMLSessionWriter_v12 implements SessionWriter, IPluginExtensionPoin
 
 	@Override
 	public IPluginExtensionFactory<SessionWriter> getFactory() {
-		return (args) -> { return new XMLSessionWriter_v12(); };
+		return (args) -> { return new XmlSessionWriterV1_2(); };
 	}
 
 }
