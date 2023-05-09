@@ -5,7 +5,6 @@ import ca.phon.orthography.Error;
 import ca.phon.orthography.xml.XMLOrthographyGa;
 import ca.phon.orthography.xml.XMLOrthographyK;
 import ca.phon.orthography.xml.XMLOrthographyOverlap;
-import ca.phon.orthography.xml.XMLOrthographyW;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
@@ -19,7 +18,17 @@ public class XmlOrthographyAnnotationVisitor extends VisitorAdapter<Object> {
 
     @Visits
     public void visitMarker(XMLOrthographyK xmlMarker) {
-        final MarkerType type = MarkerType.fromString(xmlMarker.getType());
+        final MarkerType type = switch (xmlMarker.getType()) {
+            case BEST_GUESS -> MarkerType.BEST_GUESS;
+            case CONTRASTIVE_STRESSING -> MarkerType.CONTRASTIVE_STRESSING;
+            case FALSE_START -> MarkerType.FALSE_START;
+            case MOR_EXCLUDE -> MarkerType.EXCLUDE;
+            case RETRACING -> MarkerType.RETRACING;
+            case RETRACING_REFORMULATION -> MarkerType.RETRACING_REFORMULATION;
+            case RETRACING_UNCLEAR -> MarkerType.RETRACING_UNCLEAR;
+            case RETRACING_WITH_CORRECTION -> MarkerType.RETRACING_WITH_CORRECTION;
+            case STRESSING -> MarkerType.STRESSING;
+        };
         annotations.add(new Marker(type));
     }
 
@@ -46,8 +55,10 @@ public class XmlOrthographyAnnotationVisitor extends VisitorAdapter<Object> {
 
     @Visits
     public void visitOverlap(XMLOrthographyOverlap xmlOverlap) {
-        final OverlapType type = OverlapType.fromString(xmlOverlap.getType());
-        if(type == null) throw new IllegalArgumentException(xmlOverlap.getType());
+        final OverlapType type = switch (xmlOverlap.getType()) {
+            case OVERLAP_FOLLOWS -> OverlapType.OVERLAP_FOLLOWS;
+            case OVERLAP_PRECEDES -> OverlapType.OVERLAP_PRECEEDS;
+        };
         annotations.add(new Overlap(type));
     }
 

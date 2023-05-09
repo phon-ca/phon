@@ -85,7 +85,15 @@ public final class XmlWordContentVisitor extends VisitorAdapter<Object> {
 
     @Visits
     public void visitOverlapPoint(XMLOrthographyOverlapPoint xmlOverlapPt) {
-        final OverlapPointType type = OverlapPointType.fromDescription(xmlOverlapPt.getTopBottom(), xmlOverlapPt.getStartEnd());
+        final String topBottom = switch (xmlOverlapPt.getTopBottom()) {
+            case TOP -> "top";
+            case BOTTOM -> "bottom";
+        };
+        final String startEnd = switch (xmlOverlapPt.getStartEnd()) {
+            case START -> "start";
+            case END -> "end";
+        };
+        final OverlapPointType type = OverlapPointType.fromDescription(topBottom, startEnd);
         final int index = xmlOverlapPt.getIndex() != null ? xmlOverlapPt.getIndex().intValue() : -1;
         wordElements.add(new OverlapPoint(type, index));
     }
@@ -104,9 +112,8 @@ public final class XmlWordContentVisitor extends VisitorAdapter<Object> {
     @Visits
     public void visitWk(XMLOrthographyWk xmlWk) {
         final CompoundWordMarkerType type = switch(xmlWk.getType()) {
-            case "cmp" -> CompoundWordMarkerType.COMPOUND;
-            case "cli" -> CompoundWordMarkerType.CLITIC;
-            default -> throw new IllegalArgumentException(xmlWk.getType());
+            case CMP -> CompoundWordMarkerType.COMPOUND;
+            case CLI -> CompoundWordMarkerType.CLITIC;
         };
         if(wordElements.size() == 0)
             throw new IllegalStateException("invalid compound word");

@@ -33,6 +33,7 @@ This is a customization of CHAT transcription format main line.
                 <xs:element ref="freecode"/>
                 <xs:element ref="e"/>
                 <xs:element ref="s"/>
+                <xs:element ref="tone-marker"/>
                 <xs:element ref="tagMarker"/>
                 <xs:element ref="overlap-point"/>
                 <xs:element ref="underline"/>
@@ -209,7 +210,7 @@ This is a customization of CHAT transcription format main line.
                 </xs:annotation>
             </xs:attribute>
 
-            <xs:attribute name="formType">
+            <xs:attribute name="formType" type="wordFormType">
                 <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
                     <xs:documentation> Form marker: an attribute for a word. </xs:documentation>
                     <xs:documentation>
@@ -217,265 +218,12 @@ This is a customization of CHAT transcription format main line.
                             section on this topic...</a>
                     </xs:documentation>
                 </xs:annotation>
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:enumeration value="addition">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>@a</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#Addition_Marker">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="babbling">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>@b</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#Babbling_Marker">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="child-invented">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>@c</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#ChildInvented_Marker">CHAT
-                                        manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="dialect">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>@d</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#DialectForm_Marker">CHAT
-                                        manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="echolalia">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>@e</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#EcholaliaForm_Marker">CHAT
-                                        manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="family-specific">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>@f</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#FamilySpecificForm_Marker"
-                                    >CHAT manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="filled pause">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>@fp</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#FilledPause_Marker">CHAT
-                                        manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="generic">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>@g</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#GeneralSpecialForm_Marker"
-                                    >CHAT manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="interjection">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>@i</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#Interjection_Marker">CHAT
-                                        manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="kana">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>@k</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#Kana_Marker">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="letter">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>@l</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#Letter_Marker">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="neologism">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>@n</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#Neologism_Marker">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="no voice">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>@nv</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#NonvoicedForm_Marker">CHAT
-                                        manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="onomatopoeia">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>@o</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#Onomatopoeia_Marker">CHAT
-                                        manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="phonology consistent">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>@p</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#PCF_Marker">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="quoted metareference">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>@q</xs:documentation>
-                                <xs:documentation>
-                                    <a
-                                            href="https://talkbank.org/manuals/CHAT.html#MetalinguisticReference_Marker"
-                                    >CHAT manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="sign speech">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>@sas</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#SignAndSpeech_Marker">CHAT
-                                        manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="singing">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>@si</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#Singing_Marker">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="signed language">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>@sl</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#SignLanguage_Marker">CHAT
-                                        manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="test">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>@t</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#TestWord_Marker">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="UNIBET">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>@u</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#Unibet_Marker">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="words to be excluded">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>@x</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#Excluded_Marker">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="word play">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>@wp</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#WordPlay_Marker">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                    </xs:restriction>
-                </xs:simpleType>
             </xs:attribute>
 
-            <xs:attribute name="type">
+            <xs:attribute name="type" type="wordType">
                 <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
                     <xs:documentation> Optional attribute for a word. </xs:documentation>
                 </xs:annotation>
-
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:enumeration value="omission">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>0word</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#OmittedWord_Code">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="fragment">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>&amp;; phonological fragment</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#PhonologicalFragment_Code"
-                                    >CHAT manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="filler">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>&amp;-; filler</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#Filler_Code"
-                                    >CHAT manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="incomplete">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>&amp;+; incomplete</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#Incomplete_Code"
-                                    >CHAT manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                    </xs:restriction>
-                </xs:simpleType>
             </xs:attribute>
 
             <xs:attribute name="untranscribed">
@@ -517,6 +265,260 @@ This is a customization of CHAT transcription format main line.
 
         </xs:complexType>
     </xs:element>
+
+    <xs:simpleType name="wordType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="omission">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>0word</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#OmittedWord_Code">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="nonword">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>&amp;~; nonword</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#Nonword"
+                        >CHAT manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="filler">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>&amp;-; filler</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#Filler_Code"
+                        >CHAT manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="fragment">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>&amp;+; incomplete</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#PhonologicalFragment_Code"
+                        >CHAT manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="wordFormType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="addition">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>@a</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#Addition_Marker">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="babbling">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>@b</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#Babbling_Marker">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="child-invented">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>@c</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#ChildInvented_Marker">CHAT
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="dialect">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>@d</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#DialectForm_Marker">CHAT
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="echolalia">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>@e</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#EcholaliaForm_Marker">CHAT
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="family-specific">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>@f</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#FamilySpecificForm_Marker"
+                        >CHAT manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="filled pause">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>@fp</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#FilledPause_Marker">CHAT
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="generic">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>@g</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#GeneralSpecialForm_Marker"
+                        >CHAT manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="interjection">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>@i</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#Interjection_Marker">CHAT
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="kana">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>@k</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#Kana_Marker">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="letter">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>@l</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#Letter_Marker">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="neologism">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>@n</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#Neologism_Marker">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="no voice">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>@nv</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#NonvoicedForm_Marker">CHAT
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="onomatopoeia">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>@o</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#Onomatopoeia_Marker">CHAT
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="phonology consistent">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>@p</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#PCF_Marker">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="quoted metareference">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>@q</xs:documentation>
+                    <xs:documentation>
+                        <a
+                                href="https://talkbank.org/manuals/CHAT.html#MetalinguisticReference_Marker"
+                        >CHAT manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="sign speech">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>@sas</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#SignAndSpeech_Marker">CHAT
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="singing">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>@si</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#Singing_Marker">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="signed language">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>@sl</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#SignLanguage_Marker">CHAT
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="test">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>@t</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#TestWord_Marker">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="UNIBET">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>@u</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#Unibet_Marker">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="words to be excluded">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>@x</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#Excluded_Marker">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="word play">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>@wp</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#WordPlay_Marker">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:element name="langs">
         <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
@@ -866,96 +868,95 @@ This is a customization of CHAT transcription format main line.
             </xs:documentation>
         </xs:annotation>
         <xs:complexType mixed="false">
-            <xs:attribute name="type" use="required">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:enumeration value="stressing">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>[!]</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#Stressing_Scope">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="contrastive stressing">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>[!!]</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#ContrastiveStressing_Scope"
-                                    >CHAT manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="best guess">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>[?] in CHAT, ( text ) in CA</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#BestGuess_Scope">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="retracing">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>[/] in CHAT</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#Repetition_Scope">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="retracing with correction">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>[//] in CHAT, - in CA</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#Retracing_Scope">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="retracing reformulation">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>[///] in CHAT</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#Reformulation_Scope">CHAT
-                                        manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="retracing unclear">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>[/?]</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#UnclearRetracing_Scope">CHAT
-                                        manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="false start">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>[/-]</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#FalseStart_Scope">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="mor exclude">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>[e]</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#MorExclude_Scope">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:attribute>
+            <xs:attribute name="type" use="required" type="markerType"/>
         </xs:complexType>
-
     </xs:element>
+
+    <xs:simpleType name="markerType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="stressing">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>[!]</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#Stressing_Scope">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="contrastive stressing">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>[!!]</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#ContrastiveStressing_Scope"
+                        >CHAT manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="best guess">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>[?] in CHAT, ( text ) in CA</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#BestGuess_Scope">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="retracing">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>[/] in CHAT</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#Repetition_Scope">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="retracing with correction">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>[//] in CHAT, - in CA</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#Retracing_Scope">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="retracing reformulation">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>[///] in CHAT</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#Reformulation_Scope">CHAT
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="retracing unclear">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>[/?]</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#UnclearRetracing_Scope">CHAT
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="false start">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>[/-]</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#FalseStart_Scope">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="mor exclude">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>[e]</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#MorExclude_Scope">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:element name="duration" type="pauseNumericLengthType">
         <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
@@ -1066,7 +1067,6 @@ This is a customization of CHAT transcription format main line.
             </xs:documentation>
         </xs:annotation>
         <xs:complexType mixed="true">
-
             <xs:attribute name="type" type="groupAnnotationTypeType"/>
         </xs:complexType>
     </xs:element>
@@ -1137,33 +1137,32 @@ This is a customization of CHAT transcription format main line.
                     </xs:documentation>
                 </xs:annotation>
             </xs:attribute>
-
-            <xs:attribute name="type" use="required">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:enumeration value="overlap follows">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>[&gt;]</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#OverlapFollows_Scope">CHAT
-                                        manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="overlap precedes">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>[&lt;]</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#OverlapPrecedes_Scope">CHAT
-                                        manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:attribute>
+            <xs:attribute name="type" use="required" type="overlapType"/>
         </xs:complexType>
     </xs:element>
+
+    <xs:simpleType name="overlapType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="overlap follows">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>[&gt;]</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#OverlapFollows_Scope">CHAT
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="overlap precedes">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>[&lt;]</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#OverlapPrecedes_Scope">CHAT
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:element name="overlap-point">
         <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
@@ -1183,80 +1182,141 @@ This is a customization of CHAT transcription format main line.
                     </xs:documentation>
                 </xs:annotation>
             </xs:attribute>
-
-            <xs:attribute name="start-end" use="required">
-                <xs:simpleType>
-                    <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                        <xs:documentation>Start or end of overlap</xs:documentation>
-                        <xs:documentation>
-                            <a href="https://talkbank.org/manuals/CHAT.html#CA_Overlaps">CHAT manual section
-                                on this topic...</a>
-                        </xs:documentation>
-                    </xs:annotation>
-                    <xs:restriction base="xs:string">
-                        <xs:enumeration value="start">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>Start</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#TopBeginOverlap_Delimiter">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#BottomBeginOverlap_Delimiter">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="end">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>End</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#TopEndOverlap_Delimiter">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#BottomEndOverlap_Delimiter">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:attribute>
-            <xs:attribute name="top-bottom" use="required">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:enumeration value="top">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation> The first of a set of overlaps. </xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#TopBeginOverlap_Delimiter">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#TopEndOverlap_Delimiter">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="bottom">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation> The second (or third, etc.) of a set of overlaps. </xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#BottomBeginOverlap_Delimiter">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#BottomEndOverlap_Delimiter">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:attribute>
+            <xs:attribute name="start-end" use="required" type="startEndType"/>
+            <xs:attribute name="top-bottom" use="required" type="topBottomType"/>
         </xs:complexType>
     </xs:element>
+
+    <xs:simpleType name="topBottomType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="top">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation> The first of a set of overlaps. </xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#TopBeginOverlap_Delimiter">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#TopEndOverlap_Delimiter">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="bottom">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation> The second (or third, etc.) of a set of overlaps. </xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#BottomBeginOverlap_Delimiter">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#BottomEndOverlap_Delimiter">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="startEndType">
+        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+            <xs:documentation>Start or end of overlap</xs:documentation>
+            <xs:documentation>
+                <a href="https://talkbank.org/manuals/CHAT.html#CA_Overlaps">CHAT manual section
+                    on this topic...</a>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="start">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>Start</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#TopBeginOverlap_Delimiter">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#BottomBeginOverlap_Delimiter">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="end">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>End</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#TopEndOverlap_Delimiter">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#BottomEndOverlap_Delimiter">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="tone-marker">
+        <xs:annotation>
+            <xs:documentation>
+                <a href="https://talkbank.org/manuals/CHAT.html#ToneDirection_Marker">CHAT manual
+                    section on this topic...</a>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="false">
+            <xs:attribute name="type" use="required" type="toneMarkerType"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="toneMarkerType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="rising to high">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>&#x21D7;</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#RisingToHigh">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="rising to mid">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>&#x2197;</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#RisingToMid">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="level">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>&#x2192;</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#Level">CHAT manual section on
+                            this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="falling to mid">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>&#x2198;</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#FallingToMid">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="falling to low">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>&#x21D8;</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#FallingToLow">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:element name="s">
         <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
@@ -1265,110 +1325,61 @@ This is a customization of CHAT transcription format main line.
                 <a href="https://talkbank.org/manuals/CHAT.html#Separators">CHAT manual section on
                     this topic...</a>
             </xs:documentation>
-            <xs:documentation>
-                <a href="https://talkbank.org/manuals/CHAT.html#ToneDirection_Marker">CHAT manual
-                    section on this topic...</a>
-            </xs:documentation>
         </xs:annotation>
         <xs:complexType mixed="false">
-            <xs:attribute name="type" use="required">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:enumeration value="semicolon">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>;</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#Semicolon">CHAT manual section
-                                        on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="colon">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>:</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#Colon">CHAT manual section on
-                                        this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="clause delimiter">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>[c] clause-delimiter;</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#ClauseDelimiter_Scope">CHAT
-                                        manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="rising to high">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>&#x21D7;</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#RisingToHigh">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="rising to mid">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>&#x2197;</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#RisingToMid">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="level">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>&#x2192;</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#Level">CHAT manual section on
-                                        this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="falling to mid">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>&#x2198;</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#FallingToMid">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="falling to low">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>&#x21D8;</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#FallingToLow">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="unmarked ending">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>&#x221E;</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#UnmarkedEnding">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="uptake">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>&#x2261;</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#Uptake">CHAT manual section
-                                        on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:attribute>
+            <xs:attribute name="type" use="required" type="separatorType"/>
         </xs:complexType>
     </xs:element>
+
+    <xs:simpleType name="separatorType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="semicolon">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>;</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#Semicolon">CHAT manual section
+                            on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="colon">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>:</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#Colon">CHAT manual section on
+                            this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="clause delimiter">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>[c] clause-delimiter;</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#ClauseDelimiter_Scope">CHAT
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="unmarked ending">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>&#x221E;</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#UnmarkedEnding">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="uptake">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>&#x2261;</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#Uptake">CHAT manual section
+                            on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:element name="tagMarker">
         <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
@@ -1382,51 +1393,50 @@ This is a customization of CHAT transcription format main line.
                     this topic...</a>
             </xs:documentation>
         </xs:annotation>
-
         <xs:complexType mixed="false">
-            <xs:attribute name="type" use="required">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:enumeration value="comma">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>,</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#Comma">CHAT manual section on
-                                        this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="tag">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>&#x201E;</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#Tag_Satellite_Marker">CHAT
-                                        manual section on this topic...</a>
-                                </xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/MOR.html#MorphologicalTagMarker_Tag"
-                                    >MOR manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="vocative">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>&#x2021;</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#Vocative_Satellite_Marker"
-                                    >CHAT manual section on this topic...</a>
-                                </xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/MOR.html#MorphologicalTagMarker_Vocative"
-                                    >MOR manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:attribute>
+            <xs:attribute name="type" use="required" type="tagMarkerType"/>
         </xs:complexType>
     </xs:element>
+
+    <xs:simpleType name="tagMarkerType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="comma">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>,</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#Comma">CHAT manual section on
+                            this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="tag">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>&#x201E;</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#Tag_Satellite_Marker">CHAT
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/MOR.html#MorphologicalTagMarker_Tag"
+                        >MOR manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="vocative">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>&#x2021;</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#Vocative_Satellite_Marker"
+                        >CHAT manual section on this topic...</a>
+                    </xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/MOR.html#MorphologicalTagMarker_Vocative"
+                        >MOR manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:element name="p">
         <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
@@ -1507,32 +1517,32 @@ This is a customization of CHAT transcription format main line.
             </xs:documentation>
         </xs:annotation>
         <xs:complexType mixed="false">
-            <xs:attribute name="type">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:enumeration value="cmp">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>compound, CHAT +</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/MOR.html#SimpleCompound">MOR manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="cli">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>clitic, CHAT ~</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/MOR.html#Clitic_Compound">MOR manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:attribute>
+            <xs:attribute name="type" type="wkType"/>
         </xs:complexType>
     </xs:element>
+
+    <xs:simpleType name="wkType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="cmp">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>compound, CHAT +</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/MOR.html#SimpleCompound">MOR manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="cli">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>clitic, CHAT ~</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/MOR.html#Clitic_Compound">MOR manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:element name="underline">
         <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
@@ -1607,6 +1617,7 @@ This is a customization of CHAT transcription format main line.
                     <xs:element ref="freecode"/>
                     <xs:element ref="e"/>
                     <xs:element ref="s"/>
+                    <xs:element ref="tone-marker"/>
                     <xs:element ref="tagMarker"/>
 
                     <xs:element ref="long-feature"/>
@@ -1651,6 +1662,7 @@ This is a customization of CHAT transcription format main line.
                     <xs:element ref="overlap-point"/>
                     <xs:element ref="pause"/>
                     <xs:element ref="s"/>
+                    <xs:element ref="tone-marker"/>
                     <xs:element ref="tagMarker"/>
                     <xs:element ref="quotation"/>
 
@@ -1912,179 +1924,178 @@ This is a customization of CHAT transcription format main line.
                     this topic...</a>
             </xs:documentation>
         </xs:annotation>
-
-        <xs:attribute name="type" use="required">
-            <xs:simpleType>
-                <xs:restriction base="xs:string">
-                    <xs:enumeration value="p">
-                        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                            <xs:documentation> Period. </xs:documentation>
-                            <xs:documentation>
-                                <a href="https://talkbank.org/manuals/CHAT.html#Period_Terminator">CHAT manual
-                                    section on this topic...</a>
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:enumeration>
-
-                    <xs:enumeration value="q">
-                        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                            <xs:documentation> Question mark. </xs:documentation>
-                            <xs:documentation>
-                                <a href="https://talkbank.org/manuals/CHAT.html#QuestionMark_Terminator">CHAT
-                                    manual section on this topic...</a>
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:enumeration>
-
-                    <xs:enumeration value="e">
-                        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                            <xs:documentation> Exclamation point. </xs:documentation>
-                            <xs:documentation>
-                                <a href="https://talkbank.org/manuals/CHAT.html#ExclamationMark_Terminator"
-                                >CHAT manual section on this topic...</a>
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:enumeration>
-
-                    <!-- sterminator -->
-                    <xs:enumeration value="broken for coding">
-                        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                            <xs:documentation>+.</xs:documentation>
-                            <xs:documentation>
-                                <a href="https://talkbank.org/manuals/CHAT.html#TranscriptionBreak_Terminator"
-                                >CHAT manual section on this topic...</a>
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:enumeration>
-
-                    <xs:enumeration value="trail off">
-                        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                            <xs:documentation>+...</xs:documentation>
-                            <xs:documentation>
-                                <a href="https://talkbank.org/manuals/CHAT.html#TrailingOff_Terminator">CHAT
-                                    manual section on this topic...</a>
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:enumeration>
-
-                    <xs:enumeration value="trail off question">
-                        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                            <xs:documentation>+..?</xs:documentation>
-                            <xs:documentation>
-                                <a
-                                        href="https://talkbank.org/manuals/CHAT.html#TrailingOffQuestion_Terminator"
-                                >CHAT manual section on this topic...</a>
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:enumeration>
-
-                    <xs:enumeration value="question exclamation">
-                        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                            <xs:documentation>+!?</xs:documentation>
-                            <xs:documentation>
-                                <a
-                                        href="https://talkbank.org/manuals/CHAT.html#QuestionExclamation_Terminator"
-                                >CHAT manual section on this topic...</a>
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:enumeration>
-
-                    <xs:enumeration value="interruption">
-                        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                            <xs:documentation>+/.</xs:documentation>
-                            <xs:documentation>
-                                <a href="https://talkbank.org/manuals/CHAT.html#Interruption_Terminator">CHAT
-                                    manual section on this topic...</a>
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:enumeration>
-
-                    <xs:enumeration value="interruption question">
-                        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                            <xs:documentation>+/?</xs:documentation>
-                            <xs:documentation>
-                                <a
-                                        href="https://talkbank.org/manuals/CHAT.html#QuestionInterruption_Terminator"
-                                >CHAT manual section on this topic...</a>
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:enumeration>
-
-                    <xs:enumeration value="self interruption">
-                        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                            <xs:documentation>+//.</xs:documentation>
-                            <xs:documentation>
-                                <a href="https://talkbank.org/manuals/CHAT.html#SelfInterruption_Terminator"
-                                >CHAT manual section on this topic...</a>
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:enumeration>
-
-                    <xs:enumeration value="self interruption question">
-                        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                            <xs:documentation>+//?</xs:documentation>
-                            <xs:documentation>
-                                <a
-                                        href="https://talkbank.org/manuals/CHAT.html#SelfInterruptedQuestion_Terminator"
-                                >CHAT manual section on this topic...</a>
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:enumeration>
-
-                    <xs:enumeration value="quotation next line">
-                        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                            <xs:documentation>+&quot;/.</xs:documentation>
-                            <xs:documentation>
-                                <a href="https://talkbank.org/manuals/CHAT.html#QuotationFollows_Terminator"
-                                >CHAT manual section on this topic...</a>
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:enumeration>
-
-                    <xs:enumeration value="quotation precedes">
-                        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                            <xs:documentation>+&quot;.</xs:documentation>
-                            <xs:documentation>
-                                <a href="https://talkbank.org/manuals/CHAT.html#QuotationPrecedes_Terminator"
-                                >CHAT manual section on this topic...</a>
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:enumeration>
-
-                    <xs:enumeration value="missing CA terminator">
-                        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                            <xs:documentation>For heritage only</xs:documentation>
-                            <xs:documentation>
-                                <a href="https://talkbank.org/manuals/CHAT.html#MissingCA_Terminator">CHAT
-                                    manual section on this topic...</a>
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:enumeration>
-
-                    <xs:enumeration value="technical break TCU continuation">
-                        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                            <xs:documentation>&#x224B;</xs:documentation>
-                            <xs:documentation>
-                                <a href="https://talkbank.org/manuals/CHAT.html#TechnicalBreakTCUContinuation_Terminator"
-                                >CHAT manual section on this topic...</a>
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:enumeration>
-
-                    <xs:enumeration value="no break TCU continuation">
-                        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                            <xs:documentation>&#x2248;</xs:documentation>
-                            <xs:documentation>
-                                <a
-                                        href="https://talkbank.org/manuals/CHAT.html#NoBreakTCUContinuation_Terminator"
-                                >CHAT manual section on this topic...</a>
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:enumeration>
-                </xs:restriction>
-            </xs:simpleType>
-        </xs:attribute>
+        <xs:attribute name="type" use="required" type="terminatorType"/>
     </xs:complexType>
+
+    <xs:simpleType name="terminatorType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="p">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation> Period. </xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#Period_Terminator">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+
+            <xs:enumeration value="q">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation> Question mark. </xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#QuestionMark_Terminator">CHAT
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+
+            <xs:enumeration value="e">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation> Exclamation point. </xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#ExclamationMark_Terminator"
+                        >CHAT manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+
+            <!-- sterminator -->
+            <xs:enumeration value="broken for coding">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>+.</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#TranscriptionBreak_Terminator"
+                        >CHAT manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+
+            <xs:enumeration value="trail off">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>+...</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#TrailingOff_Terminator">CHAT
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+
+            <xs:enumeration value="trail off question">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>+..?</xs:documentation>
+                    <xs:documentation>
+                        <a
+                                href="https://talkbank.org/manuals/CHAT.html#TrailingOffQuestion_Terminator"
+                        >CHAT manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+
+            <xs:enumeration value="question exclamation">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>+!?</xs:documentation>
+                    <xs:documentation>
+                        <a
+                                href="https://talkbank.org/manuals/CHAT.html#QuestionExclamation_Terminator"
+                        >CHAT manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+
+            <xs:enumeration value="interruption">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>+/.</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#Interruption_Terminator">CHAT
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+
+            <xs:enumeration value="interruption question">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>+/?</xs:documentation>
+                    <xs:documentation>
+                        <a
+                                href="https://talkbank.org/manuals/CHAT.html#QuestionInterruption_Terminator"
+                        >CHAT manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+
+            <xs:enumeration value="self interruption">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>+//.</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#SelfInterruption_Terminator"
+                        >CHAT manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+
+            <xs:enumeration value="self interruption question">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>+//?</xs:documentation>
+                    <xs:documentation>
+                        <a
+                                href="https://talkbank.org/manuals/CHAT.html#SelfInterruptedQuestion_Terminator"
+                        >CHAT manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+
+            <xs:enumeration value="quotation next line">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>+&quot;/.</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#QuotationFollows_Terminator"
+                        >CHAT manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+
+            <xs:enumeration value="quotation precedes">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>+&quot;.</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#QuotationPrecedes_Terminator"
+                        >CHAT manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+
+            <xs:enumeration value="missing CA terminator">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>For heritage only</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#MissingCA_Terminator">CHAT
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+
+            <xs:enumeration value="technical break TCU continuation">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>&#x224B;</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#TechnicalBreakTCUContinuation_Terminator"
+                        >CHAT manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+
+            <xs:enumeration value="no break TCU continuation">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>&#x2248;</xs:documentation>
+                    <xs:documentation>
+                        <a
+                                href="https://talkbank.org/manuals/CHAT.html#NoBreakTCUContinuation_Terminator"
+                        >CHAT manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:simpleType name="beginEndType">
         <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
