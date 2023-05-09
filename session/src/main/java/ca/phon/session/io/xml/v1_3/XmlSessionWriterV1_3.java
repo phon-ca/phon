@@ -58,7 +58,7 @@ import java.util.Map;
 		version="1.3",
 		mimetype="application/xml",
 		extension="xml",
-		name="Phon 3.6+ (.xml)"
+		name="Phon 4.0+ (.xml)"
 )
 @Rank(0)
 public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoint<SessionWriter> {

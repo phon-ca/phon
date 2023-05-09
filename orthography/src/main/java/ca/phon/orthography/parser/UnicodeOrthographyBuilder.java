@@ -192,7 +192,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
 
     @Override
     public void exitTagMarker(UnicodeOrthographyParser.TagMarkerContext ctx) {
-        final TagMarkerType tmType = TagMarkerType.fromString(ctx.getText().charAt(0));
+        final TagMarkerType tmType = TagMarkerType.fromString(ctx.getText().charAt(0) + "");
         builder.append(new TagMarker(tmType));
     }
 

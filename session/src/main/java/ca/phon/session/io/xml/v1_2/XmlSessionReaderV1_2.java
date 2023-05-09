@@ -286,7 +286,7 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 	// tier descriptions
 	private TierDescription copyTierDescription(SessionFactory factory, UserTierType utt) {
 		final boolean grouped = utt.isGrouped();
-		final String name = utt.tierName;
+		final String name = utt.getTierName();
 		
 		try {
 			Class<?> type = Class.forName(utt.getType(), true, PluginManager.getInstance());

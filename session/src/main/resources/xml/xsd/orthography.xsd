@@ -56,77 +56,77 @@ This is a customization of CHAT transcription format main line.
             </xs:documentation>
         </xs:annotation>
         <xs:complexType mixed="false">
-            <xs:attribute name="type">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:enumeration value="quoted utterance next">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>+&quot;</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#QuotedUtterance_Linker">CHAT
-                                        manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="quick uptake">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>+^</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#QuickUptake_Linker">CHAT
-                                        manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="lazy overlap mark">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>+&lt;</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#LazyOverlap_Linker">CHAT
-                                        manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="self completion">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>+,</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#SelfCompletion_Linker">CHAT
-                                        manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="other completion">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>++</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#OtherCompletion_Linker">CHAT
-                                        manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="technical break TCU completion">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>+&#x224B;</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#TechnicalBreakTCUCompletion_Linker">CHAT
-                                        manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="no break TCU completion">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>+&#x2248;</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#NoBreakTCUCompletion_Linker">CHAT
-                                        manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:attribute>
+            <xs:attribute name="type" type="linkerType"/>
         </xs:complexType>
     </xs:element>
+
+    <xs:simpleType name="linkerType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="quoted utterance next">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>+&quot;</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#QuotedUtterance_Linker">CHAT
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="quick uptake">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>+^</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#QuickUptake_Linker">CHAT
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="lazy overlap mark">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>+&lt;</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#LazyOverlap_Linker">CHAT
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="self completion">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>+,</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#SelfCompletion_Linker">CHAT
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="other completion">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>++</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#OtherCompletion_Linker">CHAT
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="technical break TCU completion">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>+&#x224B;</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#TechnicalBreakTCUCompletion_Linker">CHAT
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="no break TCU completion">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>+&#x2248;</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#NoBreakTCUCompletion_Linker">CHAT
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:element name="w">
         <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
