@@ -37,6 +37,11 @@ public final class XmlWordContentVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
+    public void visitText(String text) {
+        wordElements.add(new WordText(text));
+    }
+
+    @Visits
     public void visitCaDelimiter(XMLOrthographyCaDelimiter xmlCaDelim) {
         final BeginEnd beginEnd =
                 (xmlCaDelim.getType() == XMLOrthographyBeginEndType.BEGIN ? BeginEnd.BEGIN : BeginEnd.END);

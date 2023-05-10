@@ -170,8 +170,19 @@ Schema for Phon sessions
         </xs:annotation>
         <xs:choice maxOccurs="unbounded">
             <xs:element ref="ort:u"/>
+            <xs:element ref="unparsable"/>
         </xs:choice>
     </xs:complexType>
+
+    <xs:element name="unparsable" type="unparsableData"/>
+    <xs:simpleType name="unparsableData">
+        <xs:annotation>
+            <xs:documentation>Unparsable tier data</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:element name="flatTier" type="flatTierType"/>
     <xs:element name="notes" type="flatTierType"/>

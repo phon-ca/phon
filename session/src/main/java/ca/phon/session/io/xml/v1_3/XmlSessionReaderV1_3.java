@@ -536,16 +536,21 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 	private Tier<Orthography> copyOrthography(SessionFactory factory, OrthographyType ot) {
 		final Tier<Orthography> retVal = factory.createTier(SystemTierType.Orthography.getName(), Orthography.class, SystemTierType.Orthography.isGrouped());
 
-		for(XMLOrthographyUtteranceType utt:ot.getU()) {
-			final XmlOrthographyVisitor visitor = new XmlOrthographyVisitor();
-
-			utt.getLinker().forEach(visitor::visit);
-			utt.getWOrGOrPg().forEach(visitor::visit);
-			if(utt.getT() != null)
-				visitor.visit(utt.getT());
-			utt.getPostcode().forEach(visitor::visit);
-
-			retVal.addGroup(visitor.getOrthography());
+		for(Object uttGrp:ot.getUOrUnparsable()) {
+			if(uttGrp instanceof XMLOrthographyUtteranceType) {
+				final XMLOrthographyUtteranceType utt = (XMLOrthographyUtteranceType) uttGrp;
+				final XmlOrthographyVisitor visitor = new XmlOrthographyVisitor();
+				utt.getLinker().forEach(visitor::visit);
+				utt.getWOrGOrPg().forEach(visitor::visit);
+				if(utt.getT() != null)
+					visitor.visit(utt.getT());
+				utt.getPostcode().forEach(visitor::visit);
+				retVal.addGroup(visitor.getOrthography());
+			} else if(uttGrp instanceof String) {
+				final Orthography ortho = new Orthography();
+				ortho.putExtension(UnvalidatedValue.class, new UnvalidatedValue(uttGrp.toString()));
+				retVal.addGroup(ortho);
+			}
 		}
 
 		return retVal;

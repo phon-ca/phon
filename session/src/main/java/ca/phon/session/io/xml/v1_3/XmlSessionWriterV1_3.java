@@ -20,6 +20,7 @@ import ca.phon.ipa.AlternativeTranscript;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.Orthography;
+import ca.phon.orthography.xml.XMLOrthographyUtteranceType;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.Rank;
@@ -527,30 +528,17 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 	 */
 	private OrthographyType copyOrthography(ObjectFactory factory, Tier<Orthography> orthoTier) {
 		final OrthographyType retVal = factory.createOrthographyType();
-
 		for(Orthography ortho:orthoTier) {
-
+			final UnvalidatedValue uv = ortho.getExtension(UnvalidatedValue.class);
+			if(ortho.length() == 0 && uv != null) {
+				retVal.getUOrUnparsable().add(uv.getValue());
+			} else {
+				final XMLOrthographyUtteranceType u = (new ca.phon.orthography.xml.ObjectFactory()).createXMLOrthographyUtteranceType();
+				final OrthoToXmlVisitor visitor = new OrthoToXmlVisitor(u);
+				ortho.accept(visitor);
+				retVal.getUOrUnparsable().add(u);
+			}
 		}
-
-//		for(Orthography ortho:orthoTier) {
-//			final UnvalidatedValue uv = ortho.getExtension(UnvalidatedValue.class);
-//			if(ortho.length() == 0 && uv != null) {
-//				// stuff everything into a single word element
-//				// it will be marked invalid when read again, but we should not
-//				// delete user entered information
-//				final GroupType gt = factory.createGroupType();
-//				final WordType wt = factory.createWordType();
-//				wt.setContent(uv.getValue());
-//				gt.getWOrComOrE().add(wt);
-//				retVal.getU().add(gt);
-//			} else {
-//				final OrthoToXmlVisitor visitor = new OrthoToXmlVisitor();
-//				ortho.accept(visitor);
-//				final GroupType gt = visitor.getGroup();
-//				retVal.getU().add(gt);
-//			}
-//		}
-
 		return retVal;
 	}
 
@@ -620,7 +608,7 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 			final JAXBContext context = JAXBContext.newInstance(ObjectFactory.class);
 			final Marshaller marshaller = context.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+//			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
 			marshaller.marshal(ele, out);
 		} catch(JAXBException e) {

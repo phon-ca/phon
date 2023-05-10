@@ -18,6 +18,7 @@ package ca.phon.session.io.xml.v1_3;
 import ca.phon.orthography.*;
 import ca.phon.orthography.xml.*;
 import ca.phon.util.Language;
+import ca.phon.visitor.annotation.Visits;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -32,22 +33,24 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 
 	private final ObjectFactory factory = new ObjectFactory();
 
-	private final List<Object> elements;
+	private final XMLOrthographyUtteranceType u;
 
 	public OrthoToXmlVisitor() {
-		this(new ArrayList());
+		this.u = factory.createXMLOrthographyUtteranceType();
 	}
 
-	public OrthoToXmlVisitor(List<Object> elements) {
-		this.elements = elements;
+	public OrthoToXmlVisitor(XMLOrthographyUtteranceType u) {
+		this.u = u;
 	}
 
 	@Override
+    @Visits
 	public void visitCompoundWord(CompoundWord compoundWord) {
 		visitWord(compoundWord);
 	}
 
 	@Override
+    @Visits
 	public void visitWord(Word word) {
 		final XMLOrthographyW w = factory.createXMLOrthographyW();
 		final XMLOrthographyWordType wordType = word.getPrefix() == null ? null : switch (word.getPrefix().getType()) {
@@ -87,7 +90,8 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 			};
 			w.setFormType(wordFormType);
 			w.setFormSuffix(word.getSuffix().getFormSuffix());
-			w.setSeparatedPrefix(word.getSuffix().isSeparatedPrefix());
+			if(word.getSuffix().isSeparatedPrefix())
+				w.setSeparatedPrefix(word.getSuffix().isSeparatedPrefix());
 			if(word.isUntranscribed()) {
 				final XMLOrthographyUntranscribedType untranscribed = switch (word.getUntranscribedType()) {
 					case UNTRANSCRIBED -> XMLOrthographyUntranscribedType.UNTRANSCRIBED;
@@ -96,7 +100,8 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 				};
 				w.setUntranscribed(untranscribed);
 			}
-			w.setUserSpecialForm(word.getSuffix().getUserSpecialForm());
+			if(word.getSuffix().getUserSpecialForm() != null && word.getSuffix().getUserSpecialForm().length() > 0)
+				w.setUserSpecialForm(word.getSuffix().getUserSpecialForm());
 		}
 
 		// add langs
@@ -144,13 +149,14 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 			xmlReplacement.setReal(replacement.isReal());
 			final OrthoToXmlVisitor wordVisitor = new OrthoToXmlVisitor();
 			replacement.getWords().forEach(wordVisitor::visitWord);
-			wordVisitor.elements.stream().map(XMLOrthographyW.class::cast).forEach(xmlReplacement.getW()::add);
+			wordVisitor.getU().getWOrGOrPg().stream().map(XMLOrthographyW.class::cast).forEach(xmlReplacement.getW()::add);
 		}
 
-		elements.add(w);
+		u.getWOrGOrPg().add(w);
 	}
 
 	@Override
+    @Visits
 	public void visitLinker(Linker linker) {
 		final XMLOrthographyLinker xmlLinker = factory.createXMLOrthographyLinker();
 		final XMLOrthographyLinkerType type = switch (linker.getType()) {
@@ -163,28 +169,33 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 			case TECHNICAL_BREAK_TCU_COMPLETION -> XMLOrthographyLinkerType.TECHNICAL_BREAK_TCU_COMPLETION;
 		};
 		xmlLinker.setType(type);
-		elements.add(xmlLinker);
+		u.getLinker().add(xmlLinker);
 	}
 
 	@Override
+    @Visits
 	public void visitOrthoGroup(OrthoGroup group) {
 		final XMLOrthographyG xmlG = factory.createXMLOrthographyG();
-		final OrthoToXmlVisitor innerGVisitor = new OrthoToXmlVisitor(xmlG.getWOrGOrPg());
+		final OrthoToXmlVisitor innerGVisitor = new OrthoToXmlVisitor();
 		group.getElements().forEach(innerGVisitor::visit);
+		innerGVisitor.getU().getWOrGOrPg().forEach(xmlG.getWOrGOrPg()::add);
 		final OrthoAnnotationToXmlVisitor annotationVisitor = new OrthoAnnotationToXmlVisitor(xmlG.getKOrErrorOrDuration());
 		group.getAnnotations().forEach(annotationVisitor::visit);
-		elements.add(xmlG);
+		u.getWOrGOrPg().add(xmlG);
 	}
 
 	@Override
+    @Visits
 	public void visitPhoneticGroup(PhoneticGroup phoneticGroup) {
 		final XMLOrthographyPg xmlPg = factory.createXMLOrthographyPg();
-		final OrthoToXmlVisitor innnerGVisitor = new OrthoToXmlVisitor(xmlPg.getWOrGOrE());
+		final OrthoToXmlVisitor innnerGVisitor = new OrthoToXmlVisitor();
 		phoneticGroup.getElements().forEach(innnerGVisitor::visit);
-		elements.add(xmlPg);
+		innnerGVisitor.getU().getWOrGOrPg().forEach(xmlPg.getWOrGOrE()::add);
+		u.getWOrGOrPg().add(xmlPg);
 	}
 
 	@Override
+    @Visits
 	public void visitQuotation(Quotation quotation) {
 		final XMLOrthographyQuotation xmlQuotation = factory.createXMLOrthographyQuotation();
 		final XMLOrthographyBeginEndType beginEnd = switch (quotation.getBeginEnd()) {
@@ -192,10 +203,11 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 			case END -> XMLOrthographyBeginEndType.END;
 		};
 		xmlQuotation.setType(beginEnd);
-		elements.add(xmlQuotation);
+		u.getWOrGOrPg().add(xmlQuotation);
 	}
 
 	@Override
+    @Visits
 	public void visitPause(Pause pause) {
 		final XMLOrthographyPause xmlPause = factory.createXMLOrthographyPause();
 		final XMLOrthographyPauseSymbolicLengthType type = switch (pause.getType()) {
@@ -209,10 +221,11 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 		} else {
 			xmlPause.setSymbolicLength(type);
 		}
-		elements.add(xmlPause);
+		u.getWOrGOrPg().add(xmlPause);
 	}
 
 	@Override
+    @Visits
 	public void visitInternalMedia(InternalMedia internalMedia) {
 		final XMLOrthographyMediaType xmlMedia = factory.createXMLOrthographyMediaType();
 		xmlMedia.setUnit(XMLOrthographyMediaUnitType.MS);
@@ -220,14 +233,15 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 		float endTime = internalMedia.getEndTime() * 1000.0f;
 		xmlMedia.setStart(BigDecimal.valueOf(startTime));
 		xmlMedia.setEnd(BigDecimal.valueOf(endTime));
-		elements.add(xmlMedia);
+		u.getWOrGOrPg().add(xmlMedia);
 	}
 
 	@Override
+    @Visits
 	public void visitFreecode(Freecode freecode) {
 		final XMLOrthographyFreecode xmlFreecode = factory.createXMLOrthographyFreecode();
 		xmlFreecode.setValue(freecode.getCode());
-		elements.add(xmlFreecode);
+		u.getWOrGOrPg().add(xmlFreecode);
 	}
 
 	public void visitEventAnnotations(Event event, XMLOrthographyE xmlEvent) {
@@ -236,22 +250,25 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 	}
 
 	@Override
+    @Visits
 	public void visitAction(Action action) {
 		final XMLOrthographyE xmlEvent = factory.createXMLOrthographyE();
 		xmlEvent.setAction(factory.createXMLOrthographyAction());
 		visitEventAnnotations(action, xmlEvent);
-		elements.add(xmlEvent);
+		u.getWOrGOrPg().add(xmlEvent);
 	}
 
 	@Override
+    @Visits
 	public void visitHappening(Happening happening) {
 		final XMLOrthographyE xmlEvent = factory.createXMLOrthographyE();
 		xmlEvent.setHappening(happening.getData());
 		visitEventAnnotations(happening, xmlEvent);
-		elements.add(xmlEvent);
+		u.getWOrGOrPg().add(xmlEvent);
 	}
 
 	@Override
+    @Visits
 	public void visitOtherSpokenEvent(OtherSpokenEvent otherSpokenEvent) {
 		final XMLOrthographyE xmlEvent = factory.createXMLOrthographyE();
 		final XMLOrthographyOtherSpokenEvent xmlOte = factory.createXMLOrthographyOtherSpokenEvent();
@@ -259,10 +276,11 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 		xmlOte.setSaid(otherSpokenEvent.getData());
 		xmlEvent.setOtherSpokenEvent(xmlOte);
 		visitEventAnnotations(otherSpokenEvent, xmlEvent);
-		elements.add(xmlEvent);
+		u.getWOrGOrPg().add(xmlEvent);
 	}
 
 	@Override
+    @Visits
 	public void visitSeparator(Separator separator) {
 		final XMLOrthographyS xmlS = factory.createXMLOrthographyS();
 		final XMLOrthographySeparatorType type = switch (separator.getType()) {
@@ -273,10 +291,11 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 			case UPTAKE -> XMLOrthographySeparatorType.UPTAKE;
 		};
 		xmlS.setType(type);
-		elements.add(xmlS);
+		u.getWOrGOrPg().add(xmlS);
 	}
 
 	@Override
+    @Visits
 	public void visitToneMarker(ToneMarker toneMarker) {
 		final XMLOrthographyToneMarker xmlToneMarker = factory.createXMLOrthographyToneMarker();
 		final XMLOrthographyToneMarkerType type = switch (toneMarker.getType()) {
@@ -287,10 +306,11 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 			case RISING_TO_MID -> XMLOrthographyToneMarkerType.RISING_TO_MID;
 		};
 		xmlToneMarker.setType(type);
-		elements.add(xmlToneMarker);
+		u.getWOrGOrPg().add(xmlToneMarker);
 	}
 
 	@Override
+    @Visits
 	public void visitTagMarker(TagMarker tagMarker) {
 		final XMLOrthographyTagMarker xmlTagMarker = factory.createXMLOrthographyTagMarker();
 		final XMLOrthographyTagMarkerType type = switch (tagMarker.getType()) {
@@ -299,10 +319,11 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 			case VOCATIVE -> XMLOrthographyTagMarkerType.VOCATIVE;
 		};
 		xmlTagMarker.setType(type);
-		elements.add(xmlTagMarker);
+		u.getWOrGOrPg().add(xmlTagMarker);
 	}
 
 	@Override
+    @Visits
 	public void visitOverlapPoint(OverlapPoint overlapPoint) {
 		final XMLOrthographyOverlapPoint xmlOverlapPt = factory.createXMLOrthographyOverlapPoint();
 		final XMLOrthographyStartEndType startEnd = switch (overlapPoint.getType()) {
@@ -317,10 +338,11 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 		xmlOverlapPt.setTopBottom(topBottom);
 		if(overlapPoint.getIndex() >= 0)
 			xmlOverlapPt.setIndex(BigInteger.valueOf(overlapPoint.getIndex()));
-		elements.add(xmlOverlapPt);
+		u.getWOrGOrPg().add(xmlOverlapPt);
 	}
 
 	@Override
+    @Visits
 	public void visitUnderline(Underline underline) {
 		final XMLOrthographyUnderline xmlUnderline = factory.createXMLOrthographyUnderline();
 		final XMLOrthographyBeginEndType beginEnd = switch (underline.getBeginEnd()) {
@@ -328,10 +350,11 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 			case BEGIN -> XMLOrthographyBeginEndType.BEGIN;
 		};
 		xmlUnderline.setType(beginEnd);
-		elements.add(underline);
+		u.getWOrGOrPg().add(xmlUnderline);
 	}
 
 	@Override
+    @Visits
 	public void visitItalic(Italic italic) {
 		final XMLOrthographyItalic xmlItalic = factory.createXMLOrthographyItalic();
 		final XMLOrthographyBeginEndType beginEnd = switch (italic.getBeginEnd()) {
@@ -339,10 +362,11 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 			case BEGIN -> XMLOrthographyBeginEndType.BEGIN;
 		};
 		xmlItalic.setType(beginEnd);
-		elements.add(xmlItalic);
+		u.getWOrGOrPg().add(xmlItalic);
 	}
 
 	@Override
+    @Visits
 	public void visitLongFeature(LongFeature longFeature) {
 		final XMLOrthographyLongFeature xmlLongFeature = factory.createXMLOrthographyLongFeature();
 		final XMLOrthographyBeginEndType beginEnd = switch (longFeature.getBeginEnd()) {
@@ -351,10 +375,11 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 		};
 		xmlLongFeature.setType(beginEnd);
 		xmlLongFeature.setValue(longFeature.getLabel());
-		elements.add(xmlLongFeature);
+		u.getWOrGOrPg().add(xmlLongFeature);
 	}
 
 	@Override
+    @Visits
 	public void visitNonvocal(Nonvocal nonvocal) {
 		final XMLOrthographyNonvocal xmlNonvocal = factory.createXMLOrthographyNonvocal();
 		final XMLOrthographyBeginEndSimpleType beginEndSimple = switch (nonvocal.getBeginEndSimple()) {
@@ -364,10 +389,11 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 		};
 		xmlNonvocal.setType(beginEndSimple);
 		xmlNonvocal.setValue(nonvocal.getLabel());
-		elements.add(xmlNonvocal);
+		u.getWOrGOrPg().add(xmlNonvocal);
 	}
 
 	@Override
+    @Visits
 	public void visitTerminator(Terminator terminator) {
 		final XMLOrthographyT xmlT = factory.createXMLOrthographyT();
 		final XMLOrthographyTerminatorType type = switch (terminator.getType()) {
@@ -388,18 +414,19 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 			case TRAIL_OFF_QUESTION -> XMLOrthographyTerminatorType.TRAIL_OFF_QUESTION;
 		};
 		xmlT.setType(type);
-		elements.add(xmlT);
+		u.setT(xmlT);
 	}
 
 	@Override
+    @Visits
 	public void visitPostcode(Postcode postcode) {
 		final XMLOrthographyPostcode xmlPostcode = factory.createXMLOrthographyPostcode();
 		xmlPostcode.setValue(postcode.getCode());
-		elements.add(xmlPostcode);
+		u.getPostcode().add(xmlPostcode);
 	}
 
-	public List<Object> getElements() {
-		return elements;
+	public XMLOrthographyUtteranceType getU() {
+		return this.u;
 	}
 
 	@Override

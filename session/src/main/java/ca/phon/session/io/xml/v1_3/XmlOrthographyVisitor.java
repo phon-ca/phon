@@ -55,7 +55,7 @@ public class XmlOrthographyVisitor extends VisitorAdapter<Object> {
         };
         final List<WordPos> wordPos = new ArrayList<>();
 
-        final WordSuffix suffix = new WordSuffix(word.isSeparatedPrefix(), formType, word.getFormSuffix(), userSpecialForm, wordPos);
+        final WordSuffix suffix = new WordSuffix(word.isSeparatedPrefix() == null ? false : word.isSeparatedPrefix(), formType, word.getFormSuffix(), userSpecialForm, wordPos);
         final XmlWordContentVisitor visitor = new XmlWordContentVisitor();
         word.getContent().forEach(visitor::visit);
         if(visitor.isCompound()) {

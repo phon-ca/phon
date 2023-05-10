@@ -3,6 +3,7 @@ package ca.phon.session.io.xml.v1_3;
 import ca.phon.orthography.*;
 import ca.phon.orthography.Error;
 import ca.phon.orthography.xml.*;
+import ca.phon.visitor.annotation.Visits;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -24,17 +25,20 @@ public class OrthoAnnotationToXmlVisitor extends AbstractOrthographyAnnotationVi
     }
 
     @Override
+    @Visits
     public void visitDuration(Duration duration) {
         final long durationMs = (long)(duration.getDuration() * 1000.0f);
         annotations.add(factory.createDuration(BigDecimal.valueOf(durationMs)));
     }
 
     @Override
+    @Visits
     public void visitError(Error error) {
         annotations.add(factory.createError(error.getData()));
     }
 
     @Override
+    @Visits
     public void visitMarker(Marker marker) {
         final XMLOrthographyK xmlMarker = factory.createXMLOrthographyK();
         final XMLOrthographyMarkerType type = switch (marker.getType()) {
@@ -53,6 +57,7 @@ public class OrthoAnnotationToXmlVisitor extends AbstractOrthographyAnnotationVi
     }
 
     @Override
+    @Visits
     public void visitGroupAnnotation(GroupAnnotation groupAnnotation) {
         final XMLOrthographyGa xmlGa = factory.createXMLOrthographyGa();
         final XMLOrthographyGroupAnnotationTypeType type = switch (groupAnnotation.getType()) {
@@ -67,6 +72,7 @@ public class OrthoAnnotationToXmlVisitor extends AbstractOrthographyAnnotationVi
     }
 
     @Override
+    @Visits
     public void visitOverlap(Overlap overlap) {
         final XMLOrthographyOverlap xmlOverlap = factory.createXMLOrthographyOverlap();
         final XMLOrthographyOverlapType type = switch (overlap.getType()) {

@@ -3,6 +3,7 @@ package ca.phon.session.io.xml.v1_3;
 import ca.phon.orthography.*;
 import ca.phon.orthography.xml.*;
 import ca.phon.session.Word;
+import ca.phon.visitor.annotation.Visits;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -23,11 +24,13 @@ public class WordElementTwoXmlVisitor extends AbstractWordElementVisitor {
     }
 
     @Override
+    @Visits
     public void visitText(WordText text) {
         wordElements.add(text.text());
     }
 
     @Override
+    @Visits
     public void visitCaDelimiter(CaDelimiter caDelimiter) {
         final XMLOrthographyCaDelimiter xmlCaDelimiter = factory.createXMLOrthographyCaDelimiter();
         final XMLOrthographyBeginEndType beginEndType = switch (caDelimiter.getBeginEnd()) {
@@ -57,6 +60,7 @@ public class WordElementTwoXmlVisitor extends AbstractWordElementVisitor {
     }
 
     @Override
+    @Visits
     public void visitCaElement(CaElement caElement) {
         final XMLOrthographyCaElement xmlCaElement = factory.createXMLOrthographyCaElement();
         final XMLOrthographyCaElementType type = switch (caElement.getType()) {
@@ -75,6 +79,7 @@ public class WordElementTwoXmlVisitor extends AbstractWordElementVisitor {
     }
 
     @Override
+    @Visits
     public void visitLongFeature(LongFeature longFeature) {
         final XMLOrthographyLongFeature xmlLongFeature = factory.createXMLOrthographyLongFeature();
         final XMLOrthographyBeginEndType beginEndType = switch (longFeature.getBeginEnd()) {
@@ -87,6 +92,7 @@ public class WordElementTwoXmlVisitor extends AbstractWordElementVisitor {
     }
 
     @Override
+    @Visits
     public void visitOverlapPoint(OverlapPoint overlapPoint) {
         final XMLOrthographyStartEndType startEnd =
                 overlapPoint.getType() == OverlapPointType.TOP_START || overlapPoint.getType() == OverlapPointType.BOTTOM_START
@@ -103,6 +109,7 @@ public class WordElementTwoXmlVisitor extends AbstractWordElementVisitor {
     }
 
     @Override
+    @Visits
     public void visitProsody(Prosody prosody) {
         final XMLOrthographyP xmlP = factory.createXMLOrthographyP();
         final XMLOrthographyProsodyType xmlType = switch (prosody.getType()) {
@@ -115,6 +122,7 @@ public class WordElementTwoXmlVisitor extends AbstractWordElementVisitor {
     }
 
     @Override
+    @Visits
     public void vistShortening(Shortening shortening) {
         final XMLOrthographyShortening xmlShortening = factory.createXMLOrthographyShortening();
         xmlShortening.setValue(shortening.getOrthoText().text());
@@ -122,6 +130,7 @@ public class WordElementTwoXmlVisitor extends AbstractWordElementVisitor {
     }
 
     @Override
+    @Visits
     public void visitCompoundWordMarker(CompoundWordMarker compoundWordMarker) {
         final XMLOrthographyWk xmlWk = factory.createXMLOrthographyWk();
         final XMLOrthographyWkType type = switch (compoundWordMarker.getType()) {
@@ -133,6 +142,7 @@ public class WordElementTwoXmlVisitor extends AbstractWordElementVisitor {
     }
 
     @Override
+    @Visits
     public void visitUnderline(Underline underline) {
         final XMLOrthographyUnderline xmlUnderline = factory.createXMLOrthographyUnderline();
         final XMLOrthographyBeginEndType beginEndType = switch (underline.getBeginEnd()) {
@@ -144,6 +154,7 @@ public class WordElementTwoXmlVisitor extends AbstractWordElementVisitor {
     }
 
     @Override
+    @Visits
     public void visitItalic(Italic italic) {
         final XMLOrthographyItalic xmlItalic = factory.createXMLOrthographyItalic();
         final XMLOrthographyBeginEndType beginEndType = switch (italic.getBeginEnd()) {
