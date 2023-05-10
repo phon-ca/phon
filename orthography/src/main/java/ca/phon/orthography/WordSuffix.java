@@ -59,6 +59,18 @@ public final class WordSuffix {
 		return this.wordPos;
 	}
 
+	public String getFormSuffix() {
+		return formSuffix;
+	}
+
+	public boolean isSeparatedPrefix() {
+		return separatedPrefix;
+	}
+
+	public List<WordPos> getWordPos() {
+		return wordPos;
+	}
+
 	@Override
 	public String toString() {
 		final StringBuffer buffer = new StringBuffer();

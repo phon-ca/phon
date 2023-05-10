@@ -48,7 +48,11 @@ public class XmlOrthographyVisitor extends VisitorAdapter<Object> {
             case WORDS_TO_BE_EXCLUDED -> WordFormType.WORDS_TO_BE_EXCLUDED;
             case WORD_PLAY -> WordFormType.WORD_PLAY;
         };
-        final UntranscribedType untranscribedType = UntranscribedType.fromString(word.getUntranscribed());
+        final UntranscribedType untranscribedType = word.getUntranscribed() == null ? null : switch (word.getUntranscribed()) {
+            case UNTRANSCRIBED -> UntranscribedType.UNTRANSCRIBED;
+            case UNINTELLIGIBLE -> UntranscribedType.UNINTELLIGIBLE;
+            case UNINTELLIGIBLE_WITH_PHO -> UntranscribedType.UNINTELLIGIBLE_WORD_WITH_PHO;
+        };
         final List<WordPos> wordPos = new ArrayList<>();
 
         final WordSuffix suffix = new WordSuffix(word.isSeparatedPrefix(), formType, word.getFormSuffix(), userSpecialForm, wordPos);

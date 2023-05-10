@@ -7,10 +7,6 @@ This is a customization of CHAT transcription format main line.
            targetNamespace="https://phon.ca/ns/orthography"
            elementFormDefault="qualified" version="1" id="phon-orthography">
 
-    <xs:annotation>
-        <xs:documentation>2023-05-05: Created from definitions found in talkbank.xsd version 2.20.0</xs:documentation>
-    </xs:annotation>
-
     <xs:element name="u" type="utteranceType"/>
     <xs:complexType name="utteranceType" mixed="false">
         <xs:annotation>
@@ -22,7 +18,6 @@ This is a customization of CHAT transcription format main line.
         </xs:annotation>
         <xs:sequence>
             <xs:element ref="linker" minOccurs="0" maxOccurs="unbounded"/>
-
             <xs:choice maxOccurs="unbounded">
                 <xs:element ref="w"/>
                 <xs:element ref="g"/>
@@ -41,7 +36,6 @@ This is a customization of CHAT transcription format main line.
                 <xs:element ref="long-feature"/>
                 <xs:element ref="nonvocal"/>
             </xs:choice>
-
             <xs:element ref="t" minOccurs="0" maxOccurs="1"/>
             <xs:element ref="postcode" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
@@ -226,45 +220,45 @@ This is a customization of CHAT transcription format main line.
                 </xs:annotation>
             </xs:attribute>
 
-            <xs:attribute name="untranscribed">
+            <xs:attribute name="untranscribed" type="untranscribedType">
                 <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
                     <xs:documentation>Mark as untranscribed non-word.</xs:documentation>
                 </xs:annotation>
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:enumeration value="unintelligible">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>xxx</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#UnintelligibleSpeech_Code"
-                                    >CHAT manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="unintelligible-with-pho">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>yyy</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#PhonologicalCoding_Code">CHAT
-                                        manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="untranscribed">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>www</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#UntranscribedMaterial_Code"
-                                    >CHAT manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                    </xs:restriction>
-                </xs:simpleType>
             </xs:attribute>
-
         </xs:complexType>
     </xs:element>
+
+    <xs:simpleType name="untranscribedType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="unintelligible">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>xxx</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#UnintelligibleSpeech_Code"
+                        >CHAT manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="unintelligible-with-pho">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>yyy</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#PhonologicalCoding_Code">CHAT
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="untranscribed">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>www</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#UntranscribedMaterial_Code"
+                        >CHAT manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:simpleType name="wordType">
         <xs:restriction base="xs:string">
@@ -1446,43 +1440,42 @@ This is a customization of CHAT transcription format main line.
                     topic...</a>
             </xs:documentation>
         </xs:annotation>
-
         <xs:complexType mixed="false">
-            <xs:attribute name="type">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:enumeration value="drawl">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>:</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#Lengthening_Marker">CHAT
-                                        manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="pause">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>^ internal</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#WordInternalPause_Marker">CHAT
-                                        manual section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                        <xs:enumeration value="blocking">
-                            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                                <xs:documentation>^ at beginning</xs:documentation>
-                                <xs:documentation>
-                                    <a href="https://talkbank.org/manuals/CHAT.html#Blocking_Marker">CHAT manual
-                                        section on this topic...</a>
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:enumeration>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:attribute>
+            <xs:attribute name="type" type="prosodyType"/>
         </xs:complexType>
     </xs:element>
+
+    <xs:simpleType name="prosodyType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="drawl">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>:</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#Lengthening_Marker">CHAT
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="pause">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>^ internal</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#WordInternalPause_Marker">CHAT
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="blocking">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>^ at beginning</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/CHAT.html#Blocking_Marker">CHAT manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:element name="postcode">
         <xs:annotation xmlns="http://www.w3.org/1999/xhtml">

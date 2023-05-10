@@ -100,7 +100,11 @@ public final class XmlWordContentVisitor extends VisitorAdapter<Object> {
 
     @Visits
     public void visitProsody(XMLOrthographyP xmlP) {
-        final ProsodyType type = ProsodyType.fromString(xmlP.getType());
+        final ProsodyType type = switch (xmlP.getType()) {
+            case BLOCKING -> ProsodyType.BLOCKING;
+            case DRAWL -> ProsodyType.DRAWL;
+            case PAUSE -> ProsodyType.PAUSE;
+        };
         wordElements.add(new Prosody(type));
     }
 
@@ -112,8 +116,8 @@ public final class XmlWordContentVisitor extends VisitorAdapter<Object> {
     @Visits
     public void visitWk(XMLOrthographyWk xmlWk) {
         final CompoundWordMarkerType type = switch(xmlWk.getType()) {
-            case CMP -> CompoundWordMarkerType.COMPOUND;
             case CLI -> CompoundWordMarkerType.CLITIC;
+            case CMP -> CompoundWordMarkerType.COMPOUND;
         };
         if(wordElements.size() == 0)
             throw new IllegalStateException("invalid compound word");

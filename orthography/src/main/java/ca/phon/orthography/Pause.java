@@ -5,6 +5,9 @@ public final class Pause extends AbstractOrthographyElement {
 
     private final PauseLength type;
 
+    /**
+     * Length in seconds
+     */
     private final float length;
 
     public Pause(PauseLength type) {

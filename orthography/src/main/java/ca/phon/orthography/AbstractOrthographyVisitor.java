@@ -37,7 +37,13 @@ public abstract class AbstractOrthographyVisitor extends VisitorAdapter<Orthogra
     public void visitFreecode(Freecode freecode) {}
 
     @Visits
-    public void visitEvent(Event event) {}
+    public void visitAction(Action action) {}
+
+    @Visits
+    public void visitHappening(Happening happening) {}
+
+    @Visits
+    public void visitOtherSpokenEvent(OtherSpokenEvent otherSpokenEvent) {}
 
     @Visits
     public void visitSeparator(Separator separator) {}

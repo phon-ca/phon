@@ -528,6 +528,10 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 	private OrthographyType copyOrthography(ObjectFactory factory, Tier<Orthography> orthoTier) {
 		final OrthographyType retVal = factory.createOrthographyType();
 
+		for(Orthography ortho:orthoTier) {
+
+		}
+
 //		for(Orthography ortho:orthoTier) {
 //			final UnvalidatedValue uv = ortho.getExtension(UnvalidatedValue.class);
 //			if(ortho.length() == 0 && uv != null) {
