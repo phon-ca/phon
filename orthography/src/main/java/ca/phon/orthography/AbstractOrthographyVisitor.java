@@ -10,7 +10,11 @@ import ca.phon.visitor.annotation.Visits;
 public abstract class AbstractOrthographyVisitor extends VisitorAdapter<OrthographyElement> {
 
     @Visits
-    public void visitLinker(Linker linker) {}
+    public void visitLinker(Linker linker) {
+    }
+
+    @Visits
+    public void visitUtteranceLanguage(UtteranceLanguage utteranceLanguage) {}
 
     @Visits
     public void visitCompoundWord(CompoundWord compoundWord) {}

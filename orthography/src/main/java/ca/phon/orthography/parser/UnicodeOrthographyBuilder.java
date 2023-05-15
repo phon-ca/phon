@@ -57,6 +57,9 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
                     if (wordType == null)
                         throw new OrthoParserException("Invalid word prefix '" + ctx.wordprefix().getText() + "'",
                                 ctx.wordprefix().getStart().getCharPositionInLine());
+                } else if(isOmission) {
+                    isOmission = false;
+                    wordType = WordType.OMISSION;
                 }
                 if (ctx.wordsuffix() != null) {
                     if(ctx.wordsuffix().HASH() != null) {
@@ -97,6 +100,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         }
     }
 
+    private boolean isOmission = false;
     @Override
     public void exitSingleWord(UnicodeOrthographyParser.SingleWordContext ctx) {
         // handle some special cases
@@ -109,7 +113,17 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
                     wordElements.clear();
                     return;
                 }
+            } else if(wordElements.get(0) instanceof WordText && "0".equals(wordElements.get(0).text())) {
+                builder.append(new Action());
+                wordElements.clear();
+                return;
             }
+        }
+        if(wordElements.get(0) instanceof WordText && wordElements.get(0).text().startsWith("0")) {
+            isOmission = true;
+            WordText fixedWordText = new WordText(wordElements.get(0).text().substring(1));
+            wordElements.remove(0);
+            wordElements.add(0, fixedWordText);
         }
         builder.appendWord(wordElements);
         wordElements.clear();
@@ -123,6 +137,19 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         } catch (IllegalArgumentException e) {
             throw new OrthoParserException("invalid language", ctx.getStart().getCharPositionInLine());
         }
+    }
+
+    @Override
+    public void exitUttlang(UnicodeOrthographyParser.UttlangContext ctx) {
+        if(langList.size() == 0)
+            throw new OrthoParserException("no language specified",
+                    ctx.LANGUAGE_START().getSymbol().getCharPositionInLine());
+        if(langList.size() > 1)
+            throw new OrthoParserException("too many languages",
+                    ctx.language().getStart().getCharPositionInLine());
+        final Language lang = langList.get(0);
+        builder.append(new UtteranceLanguage(lang));
+        langList.clear();
     }
 
     @Override
@@ -175,19 +202,13 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
     }
 
     @Override
-    public void exitText(UnicodeOrthographyParser.TextContext ctx) {
+    public void exitWord_text(UnicodeOrthographyParser.Word_textContext ctx) {
         wordElements.add(new WordText(ctx.getText()));
     }
 
     @Override
     public void exitShortening(UnicodeOrthographyParser.ShorteningContext ctx) {
-        // text has been added as a word element
-        if(wordElements.size() == 0)
-            throw new OrthoParserException("Shortening must include text", ctx.getStart().getCharPositionInLine());
-        if(!(wordElements.get(wordElements.size()-1) instanceof WordText))
-            throw new OrthoParserException("Shortening must only include text data", ctx.getStart().getCharPositionInLine());
-        final WordText text = (WordText) wordElements.remove(wordElements.size()-1);
-        wordElements.add(new Shortening(text));
+        wordElements.add(new Shortening(ctx.text().getText()));
     }
 
     @Override
@@ -213,7 +234,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
     @Override
     public void exitOverlap_point(UnicodeOrthographyParser.Overlap_pointContext ctx) {
         final OverlapPointType type = OverlapPointType.fromString(ctx.OVERLAP_POINT().getText());
-        final int index = (ctx.digit() != null ? Integer.parseInt(ctx.digit().getText()) : -1);
+        final int index = (ctx.number() != null ? Integer.parseInt(ctx.number().getText()) : -1);
         wordElements.add(new OverlapPoint(type, index));
     }
 
@@ -298,20 +319,15 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
     }
 
     @Override
-    public void exitAction(UnicodeOrthographyParser.ActionContext ctx) {
-        builder.append(new Action());
-    }
-
-    @Override
     public void exitHappening(UnicodeOrthographyParser.HappeningContext ctx) {
-        final String text = ctx.id_or_basic_word().getText();
+        final String text = ctx.text().getText();
         builder.append(new Happening(text));
     }
 
     @Override
     public void exitOtherSpokenEvent(UnicodeOrthographyParser.OtherSpokenEventContext ctx) {
-        final String who = ctx.id_or_basic_word(0).getText();
-        final String text = ctx.id_or_basic_word(1).getText();
+        final String who = ctx.who().getText();
+        final String text = ctx.text().getText();
         builder.append(new OtherSpokenEvent(who, text));
     }
 
@@ -352,7 +368,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
     @Override
     public void exitOverlap(UnicodeOrthographyParser.OverlapContext ctx) {
         final OverlapType overlapType = ctx.getText().charAt(1) == '<' ? OverlapType.OVERLAP_PRECEEDS : OverlapType.OVERLAP_FOLLOWS;
-        final int index = (ctx.digit() != null ? Integer.parseInt(ctx.digit().getText()) : -1);
+        final int index = (ctx.number() != null ? Integer.parseInt(ctx.number().getText()) : -1);
         final Overlap overlap = new Overlap(overlapType, index);
         annotateLastElement(overlap);
     }
@@ -431,7 +447,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
     public void exitLong_feature(UnicodeOrthographyParser.Long_featureContext ctx) {
         final BeginEnd beginEnd =
                 ctx.getText().startsWith(LongFeature.LONG_FEATURE_START) ? BeginEnd.BEGIN : BeginEnd.END;
-        final String label = ctx.id_or_basic_word().getText();
+        final String label = ctx.text().getText();
         builder.append(new LongFeature(beginEnd, label));
     }
 
@@ -442,13 +458,13 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         if(ctx.CLOSE_BRACE() != null) {
             beginEndSimple = BeginEndSimple.SIMPLE;
         }
-        final String label = ctx.id_or_basic_word().getText();
+        final String label = ctx.text().getText();
         builder.append(new Nonvocal(beginEndSimple, label));
     }
 
     @Override
     public void exitPostcode(UnicodeOrthographyParser.PostcodeContext ctx) {
-        final String code = ctx.id_or_basic_word().getText();
+        final String code = ctx.text().getText();
         builder.append(new Postcode(code));
     }
 

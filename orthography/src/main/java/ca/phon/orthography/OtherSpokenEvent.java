@@ -31,7 +31,7 @@ public final class OtherSpokenEvent extends Event {
 
     @Override
     public String text() {
-        return String.format("%s%s=%s", PREFIX, getWho(), getData()) + getAnnotationText();
+        return String.format("%s%s:%s", PREFIX, getWho(), getData()) + getAnnotationText();
     }
 
     @Override

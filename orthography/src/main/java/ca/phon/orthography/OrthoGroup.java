@@ -28,7 +28,7 @@ public final class OrthoGroup extends AnnotatedOrthographyElement {
     @Override
     public String text() {
         final String groupTxt = getElements().stream().map(ele -> ele.text()).collect(Collectors.joining(" "));
-        if(getElements().size() == 1)
+        if(getElements().size() == 1 && getElements().get(0) instanceof Word)
             return groupTxt + getAnnotationText();
         else
             return String.format("<%s>%s", groupTxt, getAnnotationText());

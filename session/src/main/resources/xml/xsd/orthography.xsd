@@ -35,6 +35,7 @@ This is a customization of CHAT transcription format main line.
                 <xs:element ref="italic"/>
                 <xs:element ref="long-feature"/>
                 <xs:element ref="nonvocal"/>
+                <xs:element ref="lang"/>
             </xs:choice>
             <xs:element ref="t" minOccurs="0" maxOccurs="1"/>
             <xs:element ref="postcode" minOccurs="0" maxOccurs="unbounded"/>
@@ -53,6 +54,12 @@ This is a customization of CHAT transcription format main line.
         <xs:complexType mixed="false">
             <xs:attribute name="type" type="linkerType"/>
         </xs:complexType>
+    </xs:element>
+
+    <xs:element name="lang" type="languageType">
+        <xs:annotation>
+            <xs:documentation>[- lang] - Language switch inside utterance.</xs:documentation>
+        </xs:annotation>
     </xs:element>
 
     <xs:simpleType name="linkerType">

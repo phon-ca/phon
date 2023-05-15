@@ -51,9 +51,6 @@ public class MediaTimeFormat extends Format {
         long numSecondsLeft = numSeconds % 60;
 
         NumberFormat secondsFormat = NumberFormat.getIntegerInstance();
-        if(numMinutes > 0) {
-            secondsFormat.setMinimumIntegerDigits(2);
-        }
 
         NumberFormat minutesFormat = NumberFormat.getIntegerInstance();
 

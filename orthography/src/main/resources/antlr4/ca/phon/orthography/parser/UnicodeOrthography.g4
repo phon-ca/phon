@@ -25,6 +25,7 @@ orthoelement
 
 orthodata
     :   linker
+    |   uttlang
     |   complete_word
     |   group
     |   phonetic_group
@@ -66,11 +67,11 @@ phonetic_group
 
 pgcontent
     :   pgcontent word_boundary pgcontent
-    |   orthodata
+    |   orthoelement
     ;
 
 word_boundary
-    :   WS    # WhiteSpace
+    :   WS+    # WhiteSpace
     ;
 
 linker
@@ -81,6 +82,10 @@ linker
     |   PLUS PLUS                   // other completion
     |   PLUS '\u224b'               // technical break TCU completion
     |   PLUS '\u2248'               // no break TCU completion
+    ;
+
+uttlang
+    :   LANGUAGE_START WS language CLOSE_BRACKET
     ;
 
 tagMarker
@@ -109,12 +114,11 @@ terminator
     ;
 
 complete_word
-    :   wordprefix? word wordsuffix?
+    :   wordprefix? word wordsuffix? (terminator|separator|toneMarker|tagMarker)?
     ;
 
 wordprefix
-    :   ZERO
-    |   AMP ( TILDE | MINUS | PLUS )
+    :   AMP ( TILDE | MINUS | PLUS )
     ;
 
 word
@@ -144,7 +148,7 @@ language
     ;
 
 wordelement
-    :   text
+    :   word_text
     |   ca_element
     |   ca_delimiter
     |   shortening
@@ -152,8 +156,12 @@ wordelement
     |   overlap_point
     ;
 
+word_text
+    :   (CHAR | DIGIT | APOSTROPHE | MINUS | UNDERSCORE | AMP | FORWARD_SLASH)+
+    ;
+
 text
-    :   (CHAR | APOSTROPHE | MINUS | UNDERSCORE)+
+    :   (CHAR | DIGIT | COLON | APOSTROPHE | MINUS | UNDERSCORE | AMP | FORWARD_SLASH)+
     ;
 
 replacement
@@ -162,7 +170,7 @@ replacement
 
 replacement_words
     :   replacement_words WS replacement_words
-    |   word
+    |   complete_word
     ;
 
 wk
@@ -196,11 +204,11 @@ numeric_pause
     ;
 
 time_in_minutes_seconds
-    :   (digit+ COLON)? digit+ PERIOD digit*
+    :   (number COLON)? number PERIOD number?
     ;
 
 overlap_point
-    :   OVERLAP_POINT digit?
+    :   OVERLAP_POINT number?
     ;
 
 prosody
@@ -256,24 +264,22 @@ quotation
     ;
 
 event
-    :   ZERO                                                # Action
-    |   AMP EQUALS id_or_basic_word                         # Happening
-    |   AMP STAR id_or_basic_word EQUALS id_or_basic_word   # OtherSpokenEvent
+    :   AMP EQUALS text                         # Happening
+    |   AMP STAR who COLON text                # OtherSpokenEvent
+    ;
+
+who
+    :   (CHAR | DIGIT)+
     ;
 
 long_feature
-    :   LONG_FEATURE_START id_or_basic_word
-    |   LONG_FEATURE_END id_or_basic_word
+    :   LONG_FEATURE_START text
+    |   LONG_FEATURE_END text
     ;
 
 nonvocal
-    :   LONG_NONVOCAL_START id_or_basic_word CLOSE_BRACE?
-    |   LONG_NONVOCAL_END id_or_basic_word
-    ;
-
-id_or_basic_word
-    :   id_or_basic_word (COLON | UNDERSCORE | MINUS ) id_or_basic_word
-    |   CHAR+
+    :   LONG_NONVOCAL_START text CLOSE_BRACE?
+    |   LONG_NONVOCAL_END text
     ;
 
 marker
@@ -300,21 +306,20 @@ group_annotation
     ;
 
 overlap
-    :   OPEN_BRACKET LESS_THAN digit? CLOSE_BRACKET         // overlap preceeds
-    |   OPEN_BRACKET GREATER_THAN digit? CLOSE_BRACKET      // overlap follows
+    :   OPEN_BRACKET LESS_THAN number? CLOSE_BRACKET         // overlap preceeds
+    |   OPEN_BRACKET GREATER_THAN number? CLOSE_BRACKET      // overlap follows
     ;
 
 duration
-    :   OPEN_BRACKET HASH WS time_in_minutes_seconds CLOSE_BRACKET
+    :   OPEN_BRACKET HASH WS? time_in_minutes_seconds CLOSE_BRACKET
     ;
 
 postcode
-    :   POSTCODE_START WS id_or_basic_word CLOSE_BRACKET
+    :   POSTCODE_START WS? text CLOSE_BRACKET
     ;
 
-digit
-    :   ZERO
-    |   ONE_TO_NINE
+number
+    :   DIGIT+
     ;
 
 // TOKENS
@@ -336,6 +341,10 @@ CARET
 
 CHAR
     :   [a-zA-Z]
+    |   [\u00bf-\u024f]
+    |   [\u0250-\u02af]
+    |   [\u02b0-\u02c7\u02c9-\u02cb\u02cd-\u02ff]
+    |   [\u0300-\u036f]
     ;
 
 COLON
@@ -347,7 +356,7 @@ SEMICOLON
     ;
 
 CLAUSE_DELIMITER
-    :   '[c]'
+    :   '[^c]'
     ;
 
 MOR_EXCLUDE
@@ -383,16 +392,16 @@ DOUBLE_DAGGER
     ;
 
 FREECODE
-    :   OPEN_BRACKET CARET WS ( '\\]' | '\\[' | . )*? CLOSE_BRACKET
+    :   OPEN_BRACKET CARET WS? ( '\\]' | '\\[' | . )*? CLOSE_BRACKET
     ;
 
 ERROR
-    :   OPEN_BRACKET STAR WS ( '\\]' | '\\[' | .)*? CLOSE_BRACKET
+    :   OPEN_BRACKET STAR WS? ( '\\]' | '\\[' | .)*? CLOSE_BRACKET
     ;
 
 
 COMMENT
-    :   OPEN_BRACKET PERCENT WS ( '\\]' | '\\[' | .)*? CLOSE_BRACKET
+    :   OPEN_BRACKET PERCENT WS? ( '\\]' | '\\[' | .)*? CLOSE_BRACKET
     ;
 
 REPLACEMENT_START
@@ -400,19 +409,23 @@ REPLACEMENT_START
     ;
 
 ALTERNATIVE
-    :   OPEN_BRACKET EQUALS QUESTION ( '\\]' | '\\[' | .)*? CLOSE_BRACKET
+    :   OPEN_BRACKET EQUALS QUESTION WS? ( '\\]' | '\\[' | .)*? CLOSE_BRACKET
     ;
 
 PARALINGUISTICS
-    :   OPEN_BRACKET EQUALS EXCLAMATION ( '\\]' | '\\[' | .)*? CLOSE_BRACKET
+    :   OPEN_BRACKET EQUALS EXCLAMATION WS? ( '\\]' | '\\[' | .)*? CLOSE_BRACKET
     ;
 
 EXPLANATION
-    :   OPEN_BRACKET EQUALS ( '\\]' | '\\[' | .)*? CLOSE_BRACKET
+    :   OPEN_BRACKET EQUALS WS? ( '\\]' | '\\[' | .)*? CLOSE_BRACKET
     ;
 
 POSTCODE_START
     :   '[+'
+    ;
+
+LANGUAGE_START
+    :   '[-'
     ;
 
 PERCENT
@@ -467,12 +480,8 @@ AT
     :   '@'
     ;
 
-ZERO
-    :   '0'
-    ;
-
-ONE_TO_NINE
-    :   '1'..'9'
+DIGIT
+    :   '0'..'9'
     ;
 
 AMP
@@ -576,7 +585,7 @@ CA_DELIMITER
     |   '\u21ab'        // repeated-segment
     |   '\u222e'        // singing
     |   '\u2207'        // slower
-    |   '\u26ea'        // smile voice
+    |   '\u263a'        // smile voice
     |   '\u00b0'        // softer
     |   '\u2047'        // unsure
     |   '\u222c'        // whisper

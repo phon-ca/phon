@@ -11,7 +11,7 @@ public enum CaDelimiterType {
     REPEATED_SEGMENT('\u21ab', "repeated-segment"),
     SINGING('\u222e', "singing"),
     SLOWER('\u2207', "slower"),
-    SMILE_VOICE('\u26ea', "smile voice"),
+    SMILE_VOICE('\u263a', "smile voice"),
     SOFTER('\u00b0', "softer"),
     UNSURE('\u2047', "unsure"),
     WHISPER('\u222c', "whisper"),

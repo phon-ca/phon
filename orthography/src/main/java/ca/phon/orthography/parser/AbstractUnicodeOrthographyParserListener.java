@@ -116,6 +116,16 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
+    public void enterUttlang(UnicodeOrthographyParser.UttlangContext ctx) {
+
+    }
+
+    @Override
+    public void exitUttlang(UnicodeOrthographyParser.UttlangContext ctx) {
+
+    }
+
+    @Override
     public void enterTagMarker(UnicodeOrthographyParser.TagMarkerContext ctx) {
 
     }
@@ -262,6 +272,16 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
 
     @Override
     public void exitWordelement(UnicodeOrthographyParser.WordelementContext ctx) {
+
+    }
+
+    @Override
+    public void enterWord_text(UnicodeOrthographyParser.Word_textContext ctx) {
+
+    }
+
+    @Override
+    public void exitWord_text(UnicodeOrthographyParser.Word_textContext ctx) {
 
     }
 
@@ -496,16 +516,6 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
-    public void enterAction(UnicodeOrthographyParser.ActionContext ctx) {
-
-    }
-
-    @Override
-    public void exitAction(UnicodeOrthographyParser.ActionContext ctx) {
-
-    }
-
-    @Override
     public void enterHappening(UnicodeOrthographyParser.HappeningContext ctx) {
 
     }
@@ -526,6 +536,16 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
+    public void enterWho(UnicodeOrthographyParser.WhoContext ctx) {
+
+    }
+
+    @Override
+    public void exitWho(UnicodeOrthographyParser.WhoContext ctx) {
+
+    }
+
+    @Override
     public void enterLong_feature(UnicodeOrthographyParser.Long_featureContext ctx) {
 
     }
@@ -542,16 +562,6 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
 
     @Override
     public void exitNonvocal(UnicodeOrthographyParser.NonvocalContext ctx) {
-
-    }
-
-    @Override
-    public void enterId_or_basic_word(UnicodeOrthographyParser.Id_or_basic_wordContext ctx) {
-
-    }
-
-    @Override
-    public void exitId_or_basic_word(UnicodeOrthographyParser.Id_or_basic_wordContext ctx) {
 
     }
 
@@ -646,12 +656,12 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
-    public void enterDigit(UnicodeOrthographyParser.DigitContext ctx) {
+    public void enterNumber(UnicodeOrthographyParser.NumberContext ctx) {
 
     }
 
     @Override
-    public void exitDigit(UnicodeOrthographyParser.DigitContext ctx) {
+    public void exitNumber(UnicodeOrthographyParser.NumberContext ctx) {
 
     }
 

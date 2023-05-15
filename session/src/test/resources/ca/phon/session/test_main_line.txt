@@ -1,0 +1,646 @@
+&-foo &+word↑ &~ba↑r stuff .
+&=C17H21NO4 .
+&=END_FIRST_TAPE/_BEGIN_SECOND_TAPE .
+&=TAPE_CUTS_OFF_BEFORE_EVENT_FINISHES .
+&=TRANSCRIPT_ABORTED_AT_26:34:_POOR_SOUND_QUALITY_LAST_42_MIN .
+&=VIDEO_CLIP_THROUGHOUT_NEXT_:22_OF_UTTERANCE .
+&=foo [# 6.] .
+&=laughter .
+&=yawn [= LIN] ?
+&=yawn who are you &=cough ?
+0cou: &~cou: &+cou: , &-cou: .
+&+gʰan .
+'aḳšáyw Hagári tesapér .
+'aḳšáyw ʔímaʔ tesapér 'al .
+'al Dodí Símxa ?
+'al mi ze kaʔn ?
+'od pá'am .
+'od pá'am ?
+'od pá'am ʔet ha- séfer ha- ze ?
+(0.4) .
++" hey man what in the world isn't this ?
++≋ continuation .
++≈ no break TCU continuation .
++≋ til .
+0 &=yawn .
+0 .
+0 [<] .
+0 [= did nothing] .
+0 [= did nothing] 0 word 0 .
+0 [=! babbles] .
+0 [=! chuckles] .
+0 [=! eating noises] .
+0 [=! gasps] .
+0 [=! laughs louder] .
+0 [=! laughs] .
+0 [=! laughs] [<] .
+0 [=! laughs] [>] .
+0 [=! snoring noise] .
+0 everywhere 0 you can see .
+0 only at beginning .
+0die@wp is silly .
+<foo (0.4)> [= WHO CHI TYPE walking] .
+<a (3.4)> [/] a .
+<a b> [# 2:3.4] .
+<a b> [# 2:3.] .
+<a b> [# 3.4] .
+<a b> [# 3.] .
+<a °softer°> [= foo] .
+<a ⌊ bottom begin overlap , bottom end overlap ⌋ there> [= foo] .
+<a ⌊ bottom begin overlap , bottom end overlap⌋ there> [= foo] .
+<a ⌈ top begin overlap , top end overlap ⌉ here> [= foo] .
+<a ⌈ top begin overlap , top end overlap⌉ here> [= foo] .
+<a ♋breathyvoice♋> [= foo] .
+<a ⁎creaky⁎> [= foo] .
+<a ∆faster∆> [= foo] .
+<a ▔highpitch▔> [= foo] .
+<a ▁lowpitch▁> [= foo] .
+<a ∮singing∮> [= foo] .
+<a ∇slower∇> [= foo] .
+<a ☺smilevoice☺> [= foo] .
+<a ⁇unsure⁇> [= foo] .
+<a ∬whisper∬> [= foo] .
+<a ΫyawnΫ> [= foo] .
+<ant that's> [<] where you .
+<eei@o eei@o> [/?] +/.
+<foo (.)> [<] bar .
+<hello [^ huh: what] there> [= foo] sucks .
+<het hele> [<] [/] het hele onderzoek gaat de mist in zo .
+<hey you (.)> [= hey you] .
+<honey we need> [<2] to go .
+<honey we need> [<] to go .
+<ik heb g:epuzzeld> [= silly] , zeg je dan .
+<my car [<]> is stupid .
+<my car [>]> is stupid .
+<my car> [= foo] .
+<my car> [% comment stuff] .
+<my car> [>] . [+ noatt]
+<my car> is stupid .
+<my car> is stupid .
+<overlap with comment [^ comment]> [>] .
+<ryoote agete> [=! singing]
+<ryoote agete> [=! singing] . [+ bch] [+ foo]
+<ryoote agete> [=! singing] . [+ bch] [+ foo]
+<ryoote agete> [=! singing] . [+ bch] [+ foo]
+<ryoote agete> [=! singing] . [+ bch] [+ foo]
+<start overlap and retrace> [<] [/] rest of retrace .
+<this is [^ huh] mother [^ right] speaking> [= foo] sucks .
+<what's this one> [>] ?
+<°softer° [/]> [= foo] .
+<“ wij hebben een kikker gevangen ”> [<] .
+A B C .
+CA can use xx , XX , and even XXX .
+CA uses (parens) for words whose transcription is uncertain .
+Foo+Bar ist richtig .
+Hagár , lašír 'al ʔóṭo ?
+Hagár , ʔat rocá lišmóa' sipúr ?
+Hagári , ʔéjze šir ze ?
+I am &li:ing right &woh: [>] now .
+I am now allowing Mary_Had_A_Little_Lamb underscores .
+I am now allowing Mary_had_a_little_lamb underscores .
+I believe that it [^ my car] is stupid .
+I don't know +...
+I have &=$ &=5 million .
+I have &=foo&bar .
+I have &=foo:bar:baz .
+I have &foo .
+I need band-aids .
+I read section <four b@l> [= (4)(b)] yesterday .
+I want (s)ome cookies .
+I want 0some cookies .
+I'm a play 0the toys .
+I_B_M Foo_Bar Foo-Bar Old_McDonald O'Reilly D'Artagnan .
+MacDonald
+Mom [<1] !
+Mom [<] !
+Mommy .
+Mommy open this ?
+Mommy's the phone+man [*] .
+No if@q-s and@q-s or but@q-s about it .
+The 0die is silly .
+This is <oh oh dash nineteen point two b@l e@l> [= OO-19.2(b)(e)] here .
+This is a test of bck .
+When you are stu//pid here .
+When you are stupid [^ c] this makes no sense .
+Wi(nnie_the)_Pooh .
+[- zho] a foo3 stupid .
+[^ freecode 1] [^ freecode 2] this is child speaking .
+[^ freecode 1] this is child speaking .
+[^ freecode 2] this is child speaking .
+a &=li b .
+a (.) , b .
+a (.) b .
+a (..) b .
+a (...) b .
+a (2:3.) b .
+a (2:3.4) b .
+a (3.) b .
+a (3.4) b .
+a a: a:b a:b: a:b:c a:b:3 .
+a b b b .
+a ball ?
+a chicken !
+a constriction∾ .
+a foo3 stupid .
+a hash# word and another# .
+a in∙halation .
+a ladder I guess .
+a lauἩgh in word .
+a p↓itch down .
+a p↑itch up .
+a °softer° .
+a ⌊ bottom begin overlap , bottom end overlap ⌋ there .
+a ⌊ bottom begin overlap , bottom end overlap⌋ there .
+a ⌈ top begin overlap , top end overlap ⌉ here .
+a ⌈ top begin overlap , top end overlap⌉ here .
+a ♋breathyvoice♋ .
+a ⁎creaky⁎ .
+a ∆faster∆ .
+a ▔highpitch▔ .
+a ▁lowpitch▁ .
+a ↻pitch reset .
+a ∮singing∮ .
+a ∇slower∇ .
+a ☺smilevoice☺ .
+a ⁇unsure⁇ .
+a ∬whisper∬ .
+a ΫyawnΫ .
+a(b)_c(d) .
+a(b)c(d) efg hij(k) lmn(o)p .
+a::n b: animal .
+a@a .
+a@b .
+a@c .
+a@d .
+a@e .
+a@f .
+a@fp .
+a@g .
+a@i .
+a@k .
+a@l .
+a@l b@l c@l d@l e@l f@l g@l k@l ok n@l ok Peter p@l s@l y@l ok Peter
+a@l-s b@l-s .
+a@n .
+a@nv .
+a@o .
+a@p .
+a@q .
+a@q-s .
+a@sas .
+a@si .
+a@sl .
+a@t .
+a@wp .
+a@x .
+a@x$adj .
+aba .
+ah !
+aht@i !
+al yalda al yalda yalda .
+ana [//] .
+and you can sit some people down here .
+an↫d-d-d-d-d-d↫d the lion .
+are yinz [* you all] going to school ?
+at end 0 .
+ausgegangen .
+az hi loʔ oxelet .
+á naḳón !
+b@l-s .
+bar .
+be- séder , tatxíli lesapér .
+berettiger andre≋
+bisogna metterne via ancora Marco .
+blocked segments rub-b-b≠bber .
+boom+boom+boom+boom .
+boy-s .
+bubá ʔaní we- šmi .
+bul še- madbiqím 'al miḳtáv .
+c(o)m(e) on .
+can you take him out ?
+cosa (.) dimmelo .
+crap
+crap
+da(ncing)+(s)chool .
+damelo .
+danke .
+dog and the boy .
+dog's gon (t)a eat first .
+dubi .
+duː (.) us go on sunday .
+dúbi !
+e f ⌊ g h⌋ .
+en nu <moeten we> [//] [>1] staan we <op het> [>2] punt om het
+erim exim exim .
+et ze (.) sipur .
+et ze , ba amama .
+et ze , et ze , lashir .
+et ze , et ze .
+et ze .
+f::oo@sas
+falling to low with continuation⇘≋
+falling to low with no break TCU continuation⇘ ≈
+falling to low⇘
+falling to mid with continuation↘≋
+falling to mid↘
+foo &=1 bar .
+foo &=head [= head] bar .
+foo &=head:no bar .
+foo &au^bg bar &foo::bar &foo:: .
+foo .
+foo bar +.
+foo bar .
+foo bar$n baz .
+foo bar$n:m:l baz .
+foo d'Eoin bar .
+foo ⇘ falling to low⇘
+foo ↘ falling to mid↘
+foo → level→
+foo ⇗ rising to high⇗
+foo ↗ rising to mid↗
+foo^bar is ^blocking name .
+form_marker_allowed [: foo@n] .
+ga ga ga .
+gamárnu ?
+geshem , geshem .
+geshem geshem geshem mi- shamayim .
+girl !
+go for a ride ?
+ha(i)6 foo .
+ha(i)e(i)e(i)o foo(bar) baz(ball) .
+ha- oto shelanu a .
+ha- shafan , ha- shafan ha- katan .
+ha- shafan ha- katan .
+ha- xamór ʔoḳél ?
+ha6 foo7 .
+hat .
+he is “ noisy ” .
+he saw the jack-in-the-box in an all-too-human way .
+he's gon (t)a go for a ride with the children .
+hel/lo there mam//a .
+hello (there)_now .
+hello .
+hello [^ huh: what] there .
+hello there .
+here (.) the dog's gon (t)a go up the ladder .
+here .
+here comes the little girl .
+here i am !
+here is a &=thing .
+here is a &frag .
+here is a (.) pause .
+here is an 0for word .
+hey
+hey man what in the world isn't this gonna [: going to] ?
+hey !
+hey [= foo] man <what in the world> [= bar] isn't [= baz] this ?
+hey a/c what in the universe is in this fé ?
+hey man
+hey man &*MOT:yeah what in the world isn't this ?
+hey man , what in the world isn't this ?
+hey man : what in the world isn't this ?
+hey man ; what in the world isn't this ?
+hey man IBM whatEver in the world isn't this ?
+hey man [% human] what in the world isn't this ?
+hey man what in the woRld isn't this ?
+hey man what in the world isn't this ?
+hey man what in the world isn't this gonna [: going to] ?
+hey man- what in the world isn't this ?
+hey man-eater , what in the world isn't this ?
+hey there what is hao3@s ?
+hey there what is hao3@s$n ?
+hey there what is hao3@s:eng&zho&fra$n ?
+hey there what is hao3@s:eng+zho+fra ?
+hey there what is hao3@s:eng+zho+fra$n ?
+hey there what is hao3@s:zho ?
+hey there what is hao3@s:zho$n ?
+hey there what is this ?
+hey woman what in the universe is in this fé ?
+hey@s:spa there what is hao3@s:eng&zho&fra ?
+hi .
+hine kelev .
+híne katúv .
+híne ʔóṭo !
+hoo+hoo+hoo+hoo+hoo !
+hoo+hoo+hoo@c .
+hoo+hoo+hoo@n .
+hou2 aa:3 .
+hópa !
+huh !
+huh ?
+i said woof+(woof) here .
+ice+cream .
+if we have <some time> [>1] we can get <tickets to> [>2] the opera .
+if we have <some time> [>] we can get <tickets to> [>] the opera .
+ima !
+ima ima e aba .
+in~the .
+is &=A&P [= A&P] allowed ?
+is that a hat ?
+it was lowering <concrete posts , wasn't it off a> [//] concrete
+it was lowering <concrete posts „ wasn't it off a> [//] concrete
+it was lowering <concrete posts ‡ wasn't it off a> [//] concrete
+it's a chicken .
+it's a woof+(woof) .
+it's me !
+junk .
+junk ▔higher▔ ▁lower▁ stuff .
+katuv .
+kaʔn be- ʔemét yeš yom hulédet .
+kaʔn ze meʔaxoréy ha- har ʔaxát štáyim šalóš .
+kaʔn ze yom hulédet le- Yoram .
+kelev .
+kelev kelev .
+kelev kelev kelev .
+ken .
+ken ze géšem , naḳón , ze géšem .
+ki-ss i-s junk .
+kof .
+kof kof kof .
+kova kova .
+ku ku ku .
+kɛstɰə˞@u [:: giftware] [* n:k] no [//] &in &=shakes:head
+lalalalala .
+lashir , lashir .
+lashir lashir .
+lašír ʔet ze ?
+lesapér 'al xatúl ?
+lesapér laḳ ʔet Dodí Símxa ?
+let me see .
+let's go eat .
+level with continuation→≋
+level→
+little girl !
+look .
+look at this .
+loʔ , xim la- yam .
+ma ?
+ma yeš lo le- ʔitamár , ma ze ?
+ma ze , ma ze ?
+ma ze , šir ?
+ma ze ?
+ma ze Hagári , ma ze ?
+ma ze mimixa mimixa .
+mais <c'est> [//] <ce+qu' y+a ‹en haut›> [>] +/. 
+mesapér ?
+mhm [<] [>] .
+mi musica mi .
+mi šar ʔóṭo ?
+mi ze ?
+mi ze kaʔn , Hagári ?
+mi ʔoḳélet ?
+mi- šamáyim .
+miḳtáv , 'im bul .
+mimiexa .
+mimix xa mimixa .
+mimixa day .
+mimixa mimixa , mimixa .
+mimixa mimixa .
+mine .
+mixa mimixa .
+mixa yalti mixa , yalti mimixa , yalti mimixa .
+mjam  .
+mmhm .
+mom:my@b .
+mommy <&+≠w> [//] <we> [//] ↫a↫and .
+mor a'a ia .
+more cookie . [+ IMP]
+my &car  is stupid .
+my car [= foo]  .
+my car  [% comment stuff] .
+my car  is stupid .
+my foo [>] [<] bar is broken .
+my foo bar is broken +...
+my+car [= foo]  .
+my+car  [% comment stuff] .
+my+car  [>] . [+ noatt]
+my+car  is stupid .
+n(e)j (v)ill [?] (h)a han(d) .
+naḳón !
+naḳón , we- ma ze ?
+naḳón , we- mi ze ?
+naḳón , yaḳól lihiyót .
+naḳón , ze yéled šováv .
+naḳón , ze ʔóṭo dóʔar .
+naḳón .
+no !
+no .
+no ?
+no [<] !
+no it doesn't go there .
+non ‹0il y a› pas d' Anaé dans ma classe <‹0il y a›> [//] c'est que Anouk .
+nope .
+not supported .
+nu@k is here .
+obsolete .
+od pa'am .
+od pa'am od pa'am .
+oh !
+oh look at that .
+only_one_allowed [: foo] .
+ooh &piNb &k &grr .
+ooh &pinb &k &grr .
+ooh &pinb &k3 &grr5 .
+ooh &pinb &k:3 &grr:5 .
+op(en) !
+oto .
+oto shelanu .
+oto shelanu a a a o .
+oto shelanu a ha- katan .
+ow .
+oxel .
+palma .
+parpar .
+parpar parpar .
+parpár , ma 'oṣé ha- parpár ?
+per , per .
+perro .
+piao4:liang4 .
+pil pil .
+pil pil pil .
+pil pilón .
+pitch↑ up .
+pos [: puess] [*] [//] pues .
+pre-&=1982 ideas are old .
+rising to high with continuation⇗≋
+rising to high⇗
+rising to mid with continuation↗≋
+rising to mid↗
+rocking+house [: rocking+horse] [*] ?
+sau sau , ashav .
+seaka .
+seu .
+shall we dump them all out ?
+shall we go eat ?
+sham .
+shav .
+she said “I want cookies” .
+sik6 ping4gwo2 caang2 hoeng1ziu1 .
+sipur .
+sipur al sipur al yalda .
+so dirty soldier aa3 .
+so dirty soldier's aa3 .
+sus .
+še- ʔímaʔ tesapér 'aḳšáyw ?
+tarnegol .
+tarnegól !
+tarnegól .
+tarʔí li ʔéjfo katúv .
+technical break TCU continuation≋
+technical break Tcu continuation≋
+tešví we- tesaprí ʔet ha- sipúr .
+the people are making cakes .
+there !
+there .
+there [>] .
+there's a little boy .
+there's a picnic table .
+there's a table and there's some chairs .
+this is [^ huh] mother [^ right] speaking .
+this is a <four five six> [/?] retrace .
+this is a five [/?] retrace .
+this is a four [/-] retrace .
+this is a mor [e] exclude .
+this is a one [/] retrace .
+this is a three [///] retrace .
+this is a two [//] retrace .
+this is child [!!] speaking .
+this is child [!] speaking .
+this is child [% a+er b] speaking .
+this is child [* a+er b] speaking .
+this is child [*] speaking .
+this is child [: a+er b] speaking .
+this is child [= a+er b] speaking .
+this is child [=! a+er b] speaking .
+this is child [=? a+er b] speaking .
+this is child [?] speaking .
+this is child+child [!!] speaking .
+this is child+child [!] speaking .
+this is child+child [% a b] speaking .
+this is child+child [* a b] speaking .
+this is child+child [*] speaking .
+this is child+child [: a b] speaking .
+this is child+child [= a b] speaking .
+this is child+child [=! a b] speaking .
+this is child+child [=? a b] speaking .
+this is child+child [?] speaking .
+this is child@x speaking . [+ post1 arg]
+this is child@x speaking . [+ post1 arg] [+ post2 arg]
+this is child@x speaking . [+ post2 arg]
+this is@z:foo a word@z:bar$pos .
+tistaklí ma huʔ 'oṣé .
+ton .
+ton ton ton .
+try right there !
+ṭipá , ṭipá šel máyim .
+ṭov , Hagári ?
+ṭov .
+uh !
+uh .
+uh+uh+uh .
+uhoh (.) where does that [!] go ?
+uhoh .
+up !
+wai4+yu3 [*] [= wai+yu] .
+we- ma huʔ 'oṣé ha- xamór , ma huʔ 'oṣé ?
+we- ma ze ?
+we- mi ze ?
+we- mi ze po ?
+we- ze kaʔn ?
+wha- is that ?
+what [^c] why now ?
+what is [!] that ?
+what is it ?
+what why now ?
+what's in there ?
+what's that ?
+what's that@s?
+what's this ?
+when [=! foo bar] [=? ah+er] will you go ?
+when+ever [=! foo bar] [=? ah+er] will you go ?
+whenn [*] is it ?
+where does [!] it go ?
+where does it go ?
+where does that one go ?
+where does this [!] go ?
+where does this go ?
+where go ?
+where's your cup ?
+whoop(s) !
+whoops .
+wirklich bin ich ein Grammatik+Nazi !
+word (.) rest .
+word (7:1.5) .
+word .
+xag lo ṣaméax .
+xamor , xamor .
+xatul !
+xatul , eper , xatul .
+xatul .
+xatul xatul xatul eta xatul .
+xelet .
+xi xim yam xim la- yam .
+xim la- yam .
+xim la- yam yam yam .
+xxx .
+xxx [= DESC=EDITED REASON=CONFIDENTIALITY] .
+xxx and yyy and www .
+xxx is my x⌈xx⌉ and yyy is my yyy !
+xxx open it Mommy .
+xxx woof .
+yad ten yad .
+yadi yadi yad .
+yafé ha- sipúr .
+yeah !
+yeah .
+year &='91 bar .
+yeled .
+yeš lo yom hulédet .
+yo a a o .
+yom huledet .
+yom huledet Itamar .
+yom huledet esh esh .
+yom huledet i Itamar .
+yom huledet ima , yom yed , yom huledet Imamar .
+yom yom , yom huledet .
+you gonna put the choo's+choo's wheel on ?
+you gonna put the choo+choo's wheel on ?
+yyy !
+yyy .
+yyy ?
+yyy turn the radio on .
+ze , qol dodí , qol dodí .
+ze bul .
+ze ha- xayót še- dod Símxa hevíʔ .
+ze loʔ katúv , ze ciyúr .
+ze mimixa .
+ze oto .
+ze pil , bubi .
+ze šir 'al yéled še- yagídu lo , ʔal také , ʔal tarbíc , ze loʔ
+ze ʔábaʔ ?
+zhei4+ge hello .
+þa⌈ð er svo liti⌉ langt síðan∞
+°softer(foo)° [/] .
+°softer° [/] .
+⌈ a b c d .
+⌈ a b⌉ c d .
+“ &foo and more ” .
+‹A B› C .
+‹Mommy [?]› .
+ʔat tešví po we- tesaprí .
+ʔavál kaʔn ze loʔ yom hulédet .
+ʔavál ze loʔ ha- ʔOṭo Šelánu .
+↫bo:-bo:↫both [/] bo:th .
+ʔet ma ?
+ʔet ze .
+ʔéjfo ha- katúv ?
+ʔéjfo ʔóṭo , tarʔí li ʔéjfo ʔóṭo .
+↫h-h↫hit ↫som:↫somebod(y)↫body↫ .
+ʔímaʔ ta'ané 'al ha- ṭélefon , ṭov ?
+ʔímaʔ yeqará li .
+“ only_one_allowed [: foo] ” .
+↫s-s-s↫segment .
+↫s-s-s↫seg↫m-m-m-m↫ments .
+↫the-the↫≠then .
+↫w:↫what's this daddy ?
+≠↫i↫it was .

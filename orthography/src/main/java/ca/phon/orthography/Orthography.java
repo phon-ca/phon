@@ -32,12 +32,11 @@ import java.util.*;
  */
 public final class Orthography implements Iterable<OrthographyElement>, Visitable<OrthographyElement>, IExtendable {
 	
-	private static final long serialVersionUID = 7468757586738978448L;
-	private final ExtensionSupport extSupport = 
+	private final ExtensionSupport extSupport =
 			new ExtensionSupport(Orthography.class, this);
 	
 	private final OrthographyElement[] elements;
-	
+
 	/**
 	 * Parse the given text into a new {@link Orthography} object.
 	 * 
