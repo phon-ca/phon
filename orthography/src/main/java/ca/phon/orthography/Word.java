@@ -158,12 +158,12 @@ public class Word extends AbstractOrthographyElement {
 	@Override
 	public String text() {
 		String retVal =
-				(this.prefix == null ? "" : this.prefix) +
-						this.wordElements.stream().map((ele) -> ele.text()).collect(Collectors.joining()) +
-						(this.langs == null ? "" : this.langs) +
-						(this.suffix == null ? "" : this.suffix);
+				(this.getPrefix() == null ? "" : this.getPrefix()) +
+						this.getWordElements().stream().map((ele) -> ele.text()).collect(Collectors.joining()) +
+						(this.getLangs() == null ? "" : this.getLangs()) +
+						(this.getSuffix() == null ? "" : this.getSuffix());
 		if(getReplacements().size() > 0) {
-			retVal += " " + replacements.stream().map(r -> r.text()).collect(Collectors.joining(" "));
+			retVal += " " + getReplacements().stream().map(r -> r.text()).collect(Collectors.joining(" "));
 		}
 		return retVal;
 	}

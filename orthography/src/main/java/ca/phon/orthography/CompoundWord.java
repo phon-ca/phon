@@ -74,14 +74,4 @@ public final class CompoundWord extends Word {
 		return Collections.unmodifiableList(elements);
 	}
 
-	@Override
-	public String text() {
-		return word1.toString() + marker.text() + word2.toString();
-	}
-	
-	@Override
-	public String toString() {
-		return text();
-	}
-
 }

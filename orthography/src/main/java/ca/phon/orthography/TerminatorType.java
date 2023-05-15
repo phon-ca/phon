@@ -14,8 +14,8 @@ public enum TerminatorType {
     SELF_INTERRUPTION_QUESTION("+//?", "self interruption question"),
     QUOTATION_NEXT_LINE("+\"/.", "quotation next line"),
     QUOTATION_PRECEDES("+\".", "quotation precedes"),
-    TECHNICAL_BREAK_TCU_CONTINUATION("&≋", "technical break TCU continuation"),
-    NO_BREAK_TCU_CONTINUATION("&≈", "no break TCU continuation")
+    TECHNICAL_BREAK_TCU_CONTINUATION("≋", "technical break TCU continuation"),
+    NO_BREAK_TCU_CONTINUATION("≈", "no break TCU continuation")
     ;
 
     private String text;

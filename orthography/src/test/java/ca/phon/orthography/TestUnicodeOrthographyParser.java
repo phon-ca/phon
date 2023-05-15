@@ -390,7 +390,7 @@ public class TestUnicodeOrthographyParser {
 
     @Test
     public void testNumericPause() {
-        final String text = "one (1.) two (2.15) three (1:05.2)";
+        final String text = "one (1.) two (2.15) three (1:5.2)";
         final Orthography ortho = roundTrip(text);
         Assert.assertEquals(6, ortho.length());
         Assert.assertEquals(Pause.class, ortho.elementAt(1).getClass());
@@ -412,7 +412,7 @@ public class TestUnicodeOrthographyParser {
 
     @Test
     public void testInternalMedia() {
-        final String text = "hello \u20220.5-1.2\u2022 world \u20221:05.1-1:06.\u2022";
+        final String text = "hello \u20220.5-1.2\u2022 world \u20221:5.1-1:6.\u2022";
         final Orthography ortho = roundTrip(text);
         Assert.assertEquals(4, ortho.length());
         Assert.assertEquals(InternalMedia.class, ortho.elementAt(1).getClass());
@@ -466,7 +466,7 @@ public class TestUnicodeOrthographyParser {
 
     @Test
     public void testOtherSpokenEvent() {
-        final String text = OtherSpokenEvent.PREFIX + "CHI=foo";
+        final String text = OtherSpokenEvent.PREFIX + "CHI:foo";
         final Orthography ortho = roundTrip(text);
         Assert.assertEquals(1, ortho.length());
         Assert.assertEquals(OtherSpokenEvent.class, ortho.elementAt(0).getClass());

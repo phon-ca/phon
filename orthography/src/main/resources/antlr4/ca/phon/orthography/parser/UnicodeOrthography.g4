@@ -110,11 +110,12 @@ terminator
     |   PLUS FORWARD_SLASH FORWARD_SLASH QUESTION   // SelfInterruptionQuestion
     |   PLUS QUOTATION FORWARD_SLASH PERIOD         // QuotationNextLine
     |   PLUS QUOTATION PERIOD                       // QuotationPrecedes
-    |   AMP ('\u224b' | '\u2248')                   // TCUContinuation
+    |   '\u224b'                                    // TechnicalBreakTCUContinuation
+    |   '\u2248'                                    // TCUContinuation
     ;
 
 complete_word
-    :   wordprefix? word wordsuffix? (terminator|separator|toneMarker|tagMarker)?
+    :   wordprefix? (quotation?) word wordsuffix? (terminator|separator|toneMarker|tagMarker|quotation)?
     ;
 
 wordprefix
@@ -217,7 +218,11 @@ prosody
     ;
 
 wordsuffix
-    :   HASH? formtype? user_special_form? langs? wordpos*
+    :   HASH? (formtype formsuffix?)? user_special_form? langs? wordpos*
+    ;
+
+formsuffix
+    :   MINUS CHAR+
     ;
 
 user_special_form
@@ -315,7 +320,7 @@ duration
     ;
 
 postcode
-    :   POSTCODE_START WS? text CLOSE_BRACKET
+    :   POSTCODE
     ;
 
 number
@@ -393,6 +398,10 @@ DOUBLE_DAGGER
 
 FREECODE
     :   OPEN_BRACKET CARET WS? ( '\\]' | '\\[' | . )*? CLOSE_BRACKET
+    ;
+
+POSTCODE
+    :   POSTCODE_START WS? ( '\\]' | '\\[' | . )*? CLOSE_BRACKET
     ;
 
 ERROR

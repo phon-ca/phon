@@ -74,6 +74,8 @@ public final class WordSuffix {
 	@Override
 	public String toString() {
 		final StringBuffer buffer = new StringBuffer();
+		if(separatedPrefix)
+			buffer.append("#");
 		if(type != null)
 			buffer.append(type.getCode());
 		if(formSuffix != null && formSuffix.length() > 0)

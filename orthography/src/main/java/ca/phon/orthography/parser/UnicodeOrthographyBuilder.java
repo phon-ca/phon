@@ -30,7 +30,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
 
     @Override
     public void enterComplete_word(UnicodeOrthographyParser.Complete_wordContext ctx) {
-        langList.clear();
+        langList = new ArrayList<>();
         langs = new Langs();
     }
 
@@ -50,6 +50,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
                 String userSpecialForm = "";
                 WordType wordType = null;
                 WordFormType formType = null;
+                String formSuffix = null;
                 List<WordPos> pos = new ArrayList<>();
                 UntranscribedType untranscribedType = null;
                 if (ctx.wordprefix() != null) {
@@ -67,6 +68,9 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
                     }
                     if (ctx.wordsuffix().formtype() != null) {
                         formType = WordFormType.fromCode(ctx.wordsuffix().formtype().getText());
+                        if(ctx.wordsuffix().formsuffix() != null) {
+                            formSuffix = ctx.wordsuffix().formsuffix().getText().substring(1);
+                        }
                     }
                     if(ctx.wordsuffix().user_special_form() != null) {
                         userSpecialForm = ctx.wordsuffix().user_special_form().getText().substring(3);
@@ -93,7 +97,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
                     untranscribedType = UntranscribedType.UNTRANSCRIBED;
                 }
                 WordPrefix prefix = (wordType == null ? null : new WordPrefix(wordType));
-                WordSuffix suffix = (formType != null || pos != null ? new WordSuffix(separatedPrefix, formType, null, userSpecialForm, pos) : null);
+                WordSuffix suffix = (formType != null || pos != null ? new WordSuffix(separatedPrefix, formType, formSuffix, userSpecialForm, pos) : null);
 
                 builder.annnotateWord(langs, prefix, suffix, untranscribedType);
             }
@@ -149,7 +153,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
                     ctx.language().getStart().getCharPositionInLine());
         final Language lang = langList.get(0);
         builder.append(new UtteranceLanguage(lang));
-        langList.clear();
+        langList = new ArrayList<>();
     }
 
     @Override
@@ -464,7 +468,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
 
     @Override
     public void exitPostcode(UnicodeOrthographyParser.PostcodeContext ctx) {
-        final String code = ctx.text().getText();
+        final String code = ctx.getText().substring(Postcode.POSTCODE_PREFIX.length(), ctx.getText().length()-1).trim();
         builder.append(new Postcode(code));
     }
 

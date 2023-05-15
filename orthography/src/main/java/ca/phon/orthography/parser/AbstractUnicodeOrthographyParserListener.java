@@ -426,6 +426,16 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
+    public void enterFormsuffix(UnicodeOrthographyParser.FormsuffixContext ctx) {
+
+    }
+
+    @Override
+    public void exitFormsuffix(UnicodeOrthographyParser.FormsuffixContext ctx) {
+
+    }
+
+    @Override
     public void enterUser_special_form(UnicodeOrthographyParser.User_special_formContext ctx) {
 
     }

@@ -209,7 +209,7 @@ á naḳón !
 b@l-s .
 bar .
 be- séder , tatxíli lesapér .
-berettiger andre≋
+berettiger andre ≋
 bisogna metterne via ancora Marco .
 blocked segments rub-b-b≠bber .
 boom+boom+boom+boom .
@@ -238,11 +238,11 @@ et ze , et ze , lashir .
 et ze , et ze .
 et ze .
 f::oo@sas
-falling to low with continuation⇘≋
-falling to low with no break TCU continuation⇘ ≈
-falling to low⇘
-falling to mid with continuation↘≋
-falling to mid↘
+falling to low with continuation ⇘ ≋
+falling to low with no break TCU continuation ⇘ ≈
+falling to low ⇘
+falling to mid with continuation ↘ ≋
+falling to mid ↘
 foo &=1 bar .
 foo &=head [= head] bar .
 foo &=head:no bar .
@@ -253,11 +253,11 @@ foo bar .
 foo bar$n baz .
 foo bar$n:m:l baz .
 foo d'Eoin bar .
-foo ⇘ falling to low⇘
-foo ↘ falling to mid↘
-foo → level→
-foo ⇗ rising to high⇗
-foo ↗ rising to mid↗
+foo ⇘ falling to low ⇘
+foo ↘ falling to mid ↘
+foo → level →
+foo ⇗ rising to high ⇗
+foo ↗ rising to mid ↗
 foo^bar is ^blocking name .
 form_marker_allowed [: foo@n] .
 ga ga ga .
@@ -368,8 +368,8 @@ lesapér 'al xatúl ?
 lesapér laḳ ʔet Dodí Símxa ?
 let me see .
 let's go eat .
-level with continuation→≋
-level→
+level with continuation → ≋
+level →
 little girl !
 look .
 look at this .
@@ -381,7 +381,7 @@ ma ze , šir ?
 ma ze ?
 ma ze Hagári , ma ze ?
 ma ze mimixa mimixa .
-mais <c'est> [//] <ce+qu' y+a ‹en haut›> [>] +/. 
+mais c'est [//] <ce+qu' y+a ‹en haut›> [>] +/.
 mesapér ?
 mhm [<] [>] .
 mi musica mi .
@@ -399,22 +399,22 @@ mimixa mimixa .
 mine .
 mixa mimixa .
 mixa yalti mixa , yalti mimixa , yalti mimixa .
-mjam  .
+mjam .
 mmhm .
 mom:my@b .
-mommy <&+≠w> [//] <we> [//] ↫a↫and .
+mommy &+≠w [//] we [//] ↫a↫and .
 mor a'a ia .
 more cookie . [+ IMP]
-my &car  is stupid .
-my car [= foo]  .
-my car  [% comment stuff] .
-my car  is stupid .
+my &car is stupid .
+my car [= foo] .
+my car [% comment stuff] .
+my car is stupid .
 my foo [>] [<] bar is broken .
 my foo bar is broken +...
-my+car [= foo]  .
-my+car  [% comment stuff] .
-my+car  [>] . [+ noatt]
-my+car  is stupid .
+my+car [= foo] .
+my+car [% comment stuff] .
+my+car [>] . [+ noatt]
+my+car is stupid .
 n(e)j (v)ill [?] (h)a han(d) .
 naḳón !
 naḳón , we- ma ze ?
@@ -461,11 +461,11 @@ pil pil pil .
 pil pilón .
 pitch↑ up .
 pos [: puess] [*] [//] pues .
-pre-&=1982 ideas are old .
-rising to high with continuation⇗≋
-rising to high⇗
-rising to mid with continuation↗≋
-rising to mid↗
+pre- &=1982 ideas are old .
+rising to high with continuation ⇗ ≋
+rising to high ⇗
+rising to mid with continuation ↗ ≋
+rising to mid ↗
 rocking+house [: rocking+horse] [*] ?
 sau sau , ashav .
 seaka .
@@ -474,7 +474,7 @@ shall we dump them all out ?
 shall we go eat ?
 sham .
 shav .
-she said “I want cookies” .
+she said “ I want cookies ” .
 sik6 ping4gwo2 caang2 hoeng1ziu1 .
 sipur .
 sipur al sipur al yalda .
@@ -486,8 +486,8 @@ tarnegol .
 tarnegól !
 tarnegól .
 tarʔí li ʔéjfo katúv .
-technical break TCU continuation≋
-technical break Tcu continuation≋
+technical break TCU continuation ≋
+technical break Tcu continuation ≋
 tešví we- tesaprí ʔet ha- sipúr .
 the people are making cakes .
 there !
@@ -554,7 +554,7 @@ what is it ?
 what why now ?
 what's in there ?
 what's that ?
-what's that@s?
+what's that@s ?
 what's this ?
 when [=! foo bar] [=? ah+er] will you go ?
 when+ever [=! foo bar] [=? ah+er] will you go ?
@@ -619,14 +619,14 @@ ze pil , bubi .
 ze šir 'al yéled še- yagídu lo , ʔal také , ʔal tarbíc , ze loʔ
 ze ʔábaʔ ?
 zhei4+ge hello .
-þa⌈ð er svo liti⌉ langt síðan∞
+þa⌈ð er svo liti⌉ langt síðan ∞
 °softer(foo)° [/] .
 °softer° [/] .
 ⌈ a b c d .
 ⌈ a b⌉ c d .
 “ &foo and more ” .
 ‹A B› C .
-‹Mommy [?]› .
+‹Mommy sa [?]› .
 ʔat tešví po we- tesaprí .
 ʔavál kaʔn ze loʔ yom hulédet .
 ʔavál ze loʔ ha- ʔOṭo Šelánu .
