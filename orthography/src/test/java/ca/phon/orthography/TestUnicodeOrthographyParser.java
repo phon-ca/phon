@@ -704,4 +704,14 @@ public class TestUnicodeOrthographyParser {
         Assert.assertEquals("rtfd", ((Word)ortho.elementAt(0)).getSuffix().getUserSpecialForm());
     }
 
+    @Test
+    public void testUtteranceLanguage() {
+        final String text = "[- zho] hello world";
+        final Orthography ortho = roundTrip(text);
+        Assert.assertEquals(3, ortho.length());
+        Assert.assertEquals(UtteranceLanguage.class, ortho.elementAt(0).getClass());
+        final UtteranceLanguage uttLang = (UtteranceLanguage) ortho.elementAt(0);
+        Assert.assertEquals("zho", uttLang.getLanguage().toString());
+    }
+
 }

@@ -10,7 +10,7 @@
 grammar UnicodeOrthography;
 
 start
-    :   orthography? EOF
+    :   (uttlang WS)? orthography? EOF
     ;
 
 orthography
@@ -25,7 +25,6 @@ orthoelement
 
 orthodata
     :   linker
-    |   uttlang
     |   complete_word
     |   group
     |   phonetic_group
@@ -85,13 +84,13 @@ linker
     ;
 
 uttlang
-    :   LANGUAGE_START WS language CLOSE_BRACKET
+    :   LANGUAGE_START WS? language CLOSE_BRACKET
     ;
 
 tagMarker
     :   COMMA           // Comma
-    |   DOUBLE_DAGGER   // Vocative
-    |   DOUBLE_COMMA    // Tag
+    |   DOUBLE_DAGGER   // PrefixSattellite
+    |   DOUBLE_COMMA    // SuffixSattelite
     ;
 
 freecode

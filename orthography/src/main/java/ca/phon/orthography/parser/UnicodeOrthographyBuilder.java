@@ -152,7 +152,8 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
             throw new OrthoParserException("too many languages",
                     ctx.language().getStart().getCharPositionInLine());
         final Language lang = langList.get(0);
-        builder.append(new UtteranceLanguage(lang));
+        final UtteranceLanguage utteranceLanguage = new UtteranceLanguage(lang);
+        annotateLastElement(utteranceLanguage);
         langList = new ArrayList<>();
     }
 
