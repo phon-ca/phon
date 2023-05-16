@@ -2,7 +2,7 @@ package ca.phon.orthography;
 
 import ca.phon.util.Language;
 
-public class UtteranceLanguage extends AbstractOrthographyElement implements OrthographyAnnotation {
+public class UtteranceLanguage extends AbstractOrthographyElement {
 
     public final static String PREFIX = "[-";
 

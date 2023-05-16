@@ -49,6 +49,7 @@ orthoannotation
     |   overlap
     |   group_annotation
     |   duration
+    |   langsannotation
     ;
 
 group
@@ -85,6 +86,12 @@ linker
 
 uttlang
     :   LANGUAGE_START WS? language CLOSE_BRACKET
+    ;
+
+langsannotation
+    :   LANGUAGE_START WS? language CLOSE_BRACKET           # SingleLangsAnnotation
+    |   LANGUAGE_START WS? multi_lang_list CLOSE_BRACKET    # MultiLangsAnnotation
+    |   LANGUAGE_START WS? ambig_lang_list CLOSE_BRACKET    # AmbigLangsAnnotation
     ;
 
 tagMarker

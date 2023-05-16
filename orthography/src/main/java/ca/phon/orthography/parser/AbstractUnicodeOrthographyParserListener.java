@@ -126,6 +126,36 @@ public class AbstractUnicodeOrthographyParserListener implements UnicodeOrthogra
     }
 
     @Override
+    public void enterSingleLangsAnnotation(UnicodeOrthographyParser.SingleLangsAnnotationContext ctx) {
+
+    }
+
+    @Override
+    public void exitSingleLangsAnnotation(UnicodeOrthographyParser.SingleLangsAnnotationContext ctx) {
+
+    }
+
+    @Override
+    public void enterMultiLangsAnnotation(UnicodeOrthographyParser.MultiLangsAnnotationContext ctx) {
+
+    }
+
+    @Override
+    public void exitMultiLangsAnnotation(UnicodeOrthographyParser.MultiLangsAnnotationContext ctx) {
+
+    }
+
+    @Override
+    public void enterAmbigLangsAnnotation(UnicodeOrthographyParser.AmbigLangsAnnotationContext ctx) {
+
+    }
+
+    @Override
+    public void exitAmbigLangsAnnotation(UnicodeOrthographyParser.AmbigLangsAnnotationContext ctx) {
+
+    }
+
+    @Override
     public void enterTagMarker(UnicodeOrthographyParser.TagMarkerContext ctx) {
 
     }

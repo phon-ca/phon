@@ -10,6 +10,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import javax.swing.*;
+import java.util.AbstractSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -712,6 +714,39 @@ public class TestUnicodeOrthographyParser {
         Assert.assertEquals(UtteranceLanguage.class, ortho.elementAt(0).getClass());
         final UtteranceLanguage uttLang = (UtteranceLanguage) ortho.elementAt(0);
         Assert.assertEquals("zho", uttLang.getLanguage().toString());
+    }
+
+    @Test
+    public void testLangsAnnotation() {
+        final String text = "<hello world> [- eng] goodbye [- eng+fra] sanity [- eng&fra]";
+        final Orthography ortho = roundTrip(text);
+        Assert.assertEquals(3, ortho.length());
+        Assert.assertEquals(OrthoGroup.class, ortho.elementAt(0).getClass());
+        final OrthoGroup g1 = (OrthoGroup) ortho.elementAt(0);
+        Assert.assertEquals(1, g1.getAnnotations().size());
+        Assert.assertEquals(LangsAnnotation.class, g1.getAnnotations().get(0).getClass());
+        final LangsAnnotation l1 = (LangsAnnotation) g1.getAnnotations().get(0);
+        Assert.assertEquals(Langs.LangsType.SINGLE, l1.getLangs().getType());
+        Assert.assertEquals(1, l1.getLangs().getLangs().size());
+        Assert.assertEquals("eng", l1.getLangs().getLangs().get(0).toString());
+        Assert.assertEquals(OrthoGroup.class, ortho.elementAt(1).getClass());
+        final OrthoGroup g2 = (OrthoGroup) ortho.elementAt(1);
+        Assert.assertEquals(1, g2.getAnnotations().size());
+        Assert.assertEquals(LangsAnnotation.class, g2.getAnnotations().get(0).getClass());
+        final LangsAnnotation l2 = (LangsAnnotation) g2.getAnnotations().get(0);
+        Assert.assertEquals(Langs.LangsType.MULTIPLE, l2.getLangs().getType());
+        Assert.assertEquals(2, l2.getLangs().getLangs().size());
+        Assert.assertEquals("eng", l2.getLangs().getLangs().get(0).toString());
+        Assert.assertEquals("fra", l2.getLangs().getLangs().get(1).toString());
+        Assert.assertEquals(OrthoGroup.class, ortho.elementAt(2).getClass());
+        final OrthoGroup g3 = (OrthoGroup) ortho.elementAt(2);
+        Assert.assertEquals(1, g3.getAnnotations().size());
+        Assert.assertEquals(LangsAnnotation.class, g3.getAnnotations().get(0).getClass());
+        final LangsAnnotation l3 = (LangsAnnotation) g3.getAnnotations().get(0);
+        Assert.assertEquals(Langs.LangsType.AMBIGUOUS, l3.getLangs().getType());
+        Assert.assertEquals(2, l3.getLangs().getLangs().size());
+        Assert.assertEquals("eng", l3.getLangs().getLangs().get(0).toString());
+        Assert.assertEquals("fra", l3.getLangs().getLangs().get(1).toString());
     }
 
 }
