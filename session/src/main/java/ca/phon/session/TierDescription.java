@@ -31,10 +31,6 @@ public final class TierDescription extends ExtendableObject {
 		this.tierDescriptionImpl = impl;
 	}
 
-	public boolean isGrouped() {
-		return tierDescriptionImpl.isGrouped();
-	}
-
 	public String getName() {
 		return tierDescriptionImpl.getName();
 	}
@@ -42,5 +38,7 @@ public final class TierDescription extends ExtendableObject {
 	public Class<?> getDeclaredType() {
 		return tierDescriptionImpl.getDeclaredType();
 	}
+
+	public TierAlignmentRules getTierAlignmentRules() { return tierDescriptionImpl.getTierAlignmentRules(); }
 	
 }

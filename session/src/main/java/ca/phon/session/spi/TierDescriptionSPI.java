@@ -15,19 +15,11 @@
  */
 package ca.phon.session.spi;
 
-import ca.phon.session.Tier;
+import ca.phon.session.TierAlignmentRules;
+import ca.phon.session.WordAlignmentRules;
 
 public interface TierDescriptionSPI {
 
-	/**
-	 * Is the tier grouped, if tier is not grouped,
-	 * {@link Tier#numberOfGroups()} will always return 1.
-	 * 
-	 * @return <code>true</code> if the tier is grouped, <code>false</code>
-	 *  otherwise
-	 */
-	public boolean isGrouped();
-	
 	/**
 	 * Get the name of the tier.
 	 * 
@@ -41,5 +33,11 @@ public interface TierDescriptionSPI {
 	 * 
 	 */
 	public Class<?> getDeclaredType();
+
+	/**
+	 * Tier alignment rules
+	 *
+	 */
+	public TierAlignmentRules getTierAlignmentRules();
 	
 }

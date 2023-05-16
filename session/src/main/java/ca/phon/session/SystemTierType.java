@@ -23,25 +23,22 @@ import ca.phon.orthography.Orthography;
  * Tier descriptions for default tiers.
  */
 public enum SystemTierType {
-	Orthography("Orthography", true, Orthography.class),
-	IPATarget("IPA Target", true, IPATranscript.class),
-	TargetSyllables("Target Syllables", true, IPATranscript.class),
-	IPAActual("IPA Actual", true, IPATranscript.class),
-	ActualSyllables("Actual Syllables", true, IPATranscript.class),
-	SyllableAlignment("Alignment", true, PhoneMap.class),
-	Segment("Segment", false, MediaSegment.class),
-	GroupSegment("Group Segment", true, GroupSegment.class),
-	Notes("Notes", false, TierString.class);
+	Orthography("Orthography", Orthography.class),
+	IPATarget("IPA Target", IPATranscript.class),
+	TargetSyllables("Target Syllables", IPATranscript.class),
+	IPAActual("IPA Actual", IPATranscript.class),
+	ActualSyllables("Actual Syllables", IPATranscript.class),
+	SyllableAlignment("Alignment", PhoneMap.class),
+	Segment("Segment", MediaSegment.class),
+	GroupSegment("Group Segment", GroupSegment.class),
+	Notes("Notes", TierString.class);
 	
 	private String tierName;
 	
-	private boolean grouped = false;
-	
 	private Class<?> type;
 	
-	private SystemTierType(String tierName, boolean grouped, Class<?> type) {
+	private SystemTierType(String tierName, Class<?> type) {
 		this.tierName = tierName;
-		this.grouped = grouped;
 		this.type = type;
 	}
 	
@@ -56,10 +53,6 @@ public enum SystemTierType {
 		}
 		
 		return null;
-	}
-
-	public boolean isGrouped() {
-		return this.grouped;
 	}
 
 	public String getName() {

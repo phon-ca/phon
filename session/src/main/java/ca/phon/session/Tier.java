@@ -18,6 +18,7 @@ package ca.phon.session;
 import ca.phon.extensions.*;
 import ca.phon.session.spi.TierSPI;
 
+import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -25,7 +26,7 @@ import java.util.*;
  * of groups.
  * 
  */
-public final class Tier<T> extends ExtendableObject implements Iterable<T> {
+public final class Tier<T> extends ExtendableObject {
 	
 	private final TierSPI<T> tierImpl;
 	
@@ -53,119 +54,61 @@ public final class Tier<T> extends ExtendableObject implements Iterable<T> {
 		return tierImpl.getDeclaredType();
 	}
 
-	public boolean isGrouped() {
-		return tierImpl.isGrouped();
+	/**
+	 * Set the tier text. If the text can be parsed into the appropriate object type
+	 * the tier value will be updated with the new value. If the text cannot be parsed
+	 * the tier value will be cleared and the tier become unvalidated.
+	 *
+	 * @param text
+	 */
+	public void setText(String text) {
+		try {
+			final T obj = tierImpl.parse(text);
+			setValue(obj);
+		} catch (ParseException pe) {
+			final UnvalidatedValue uv = new UnvalidatedValue(text, pe);
+			putExtension(UnvalidatedValue.class, uv);
+		}
 	}
 
-	public int numberOfGroups() {
-		return tierImpl.numberOfGroups();
+	/**
+	 * Is the tier unvalidated, meaning unparseable text has been passed to setText.
+	 *
+	 * @return boolean
+	 */
+	public boolean isUnvalidated() {
+		return getExtension(UnvalidatedValue.class) != null;
 	}
 
-	public T getGroup(int idx) {
-		return tierImpl.getGroup(idx);
+	public UnvalidatedValue getUnvalidatedValue() {
+		return getExtension(UnvalidatedValue.class);
 	}
 
-	public void setGroup(int idx, T val) {
-		final T oldVal = (idx < numberOfGroups() ? getGroup(idx) : null);
-		tierImpl.setGroup(idx, val);
-		fireTierGroupChanged(idx, oldVal, val);
+	public T getValue() {
+		return tierImpl.getValue();
 	}
 
-	public void addGroup() {
-		tierImpl.addGroup();
-		fireTierGroupAdded(numberOfGroups()-1, getGroup(numberOfGroups()-1));
+	public boolean hasValue() {
+		return getValue() != null;
 	}
 
-	public void addGroup(int idx) {
-		tierImpl.addGroup(idx);
-		fireTierGroupAdded(idx, getGroup(idx));
+	public void clear() {
+		setValue(null);
 	}
 
-	public void addGroup(T val) {
-		tierImpl.addGroup(val);
-		fireTierGroupAdded(numberOfGroups()-1, val);
+	public void setValue(T value) {
+		final T oldValue = getValue();
+		tierImpl.setValue(value);
+		putExtension(UnvalidatedValue.class, null);
+		fireTireValueChanged(oldValue, value);
 	}
 
-	public void addGroup(int idx, T val) {
-		tierImpl.addGroup(idx, val);
-		fireTierGroupAdded(idx, val);
-	}
-
-	public T removeGroup(int idx) {
-		T val = tierImpl.removeGroup(idx);
-		fireTierGroupRemoved(idx, val);
-		return val;
-	}
-
-	public void removeAll() {
-		tierImpl.removeAll();
-		fireTierGroupsCleared();
-	}
-
-	@Override
-	public Iterator<T> iterator() {
-		return new TierDataIterator();
-	}
-	
 	@Override
 	public String toString() {
 		final StringBuffer buffer = new StringBuffer();
-		
-		if(isGrouped()) {
-			buffer.append("[");
-			for(int i = 0; i < numberOfGroups(); i++) {
-				if(i > 0) buffer.append("] [");
-				final T grpVal = getGroup(i);
-				String grpTxt = (grpVal != null ? grpVal.toString() : "");
-				if(grpTxt.length() == 0) {
-					// XXX Check for unvalidated values
-					if(grpVal instanceof IExtendable) {
-						final IExtendable extGrp = (IExtendable)grpVal;
-						final UnvalidatedValue uv = extGrp.getExtension(UnvalidatedValue.class);
-						if(uv != null) 
-							grpTxt = uv.getValue();
-					}
-				}
-				if(grpVal != null)
-					buffer.append(grpTxt);
-			}
-			buffer.append("]");
-		} else {
-			if(numberOfGroups() > 0) {
-				final T grpVal = getGroup(0);
-				String grpTxt = (grpVal != null ? grpVal.toString() : "");
-				if(grpTxt.length() == 0 && grpVal instanceof IExtendable) {
-					final IExtendable extGrp = (IExtendable)grpVal;
-					final UnvalidatedValue uv = extGrp.getExtension(UnvalidatedValue.class);
-					if(uv != null) 
-						grpTxt = uv.getValue();
-				}
-				buffer.append(grpTxt);
-			}
-		}
-		
+		if(hasValue())
+			buffer.append(getValue());
 		return buffer.toString();
-	}
-	
-	private final class TierDataIterator implements Iterator<T> {
-
-		private int idx = 0;
-		
-		@Override
-		public boolean hasNext() {
-			return (idx <  numberOfGroups());
-		}
-
-		@Override
-		public T next() {
-			return getGroup(idx++);
-		}
-
-		@Override
-		public void remove() {
-			removeGroup(idx - 1);
-		}
-		
 	}
 	
 	/*
@@ -179,28 +122,10 @@ public final class Tier<T> extends ExtendableObject implements Iterable<T> {
 		tierListeners.remove(listener);
 	}
 	
-	private void fireTierGroupAdded(int index, T value) {
+	private void fireTireValueChanged(T oldValue, T value) {
 		for(TierListener<T> listener:tierListeners.keySet()) {
-			listener.groupAdded(this, index, value);
+			listener.tierValueChanged(this, oldValue, value);
 		}
 	}
-	
-	private void fireTierGroupRemoved(int index, T value) {
-		for(TierListener<T> listener:tierListeners.keySet()) {
-			listener.groupRemoved(this, index, value);
-		}
-	}
-	
-	private void fireTierGroupChanged(int index, T oldValue, T value) {
-		for(TierListener<T> listener:tierListeners.keySet()) {
-			listener.groupChanged(this, index, oldValue, value);
-		}
-	}
-	
-	private void fireTierGroupsCleared() {
-		for(TierListener<T> listener:tierListeners.keySet()) {
-			listener.groupsCleared(this);
-		}
-	}	
-	
+
 }
