@@ -204,7 +204,7 @@ public class RecordLookupPanel extends JPanel {
 		row = 0;
 		col = 0;
 		// create group sections
-		final Tier<Orthography> orthoTier = r.getOrthography();
+		final Tier<Orthography> orthoTier = r.getOrthographyTier();
 		final TierDataLayout groupLayout = (TierDataLayout)groupPanel.getLayout();
 		for(int i = 0; i < lookupTier.numberOfGroups(); i++) {
 			if(i > 0) {
@@ -275,8 +275,8 @@ public class RecordLookupPanel extends JPanel {
 		final SessionEditor editor = getEditor();
 		if(editor == null) return;
 
-		final Tier<IPATranscript> ipaTarget = r.getIPATarget();
-		final Tier<IPATranscript> ipaActual = r.getIPAActual();
+		final Tier<IPATranscript> ipaTarget = r.getIPATargetTier();
+		final Tier<IPATranscript> ipaActual = r.getIPAActualTier();
 
 		final IPATranscript ipa = lookupTier.getGroup(i);
 		final IPATranscript ipaA = (new IPATranscriptBuilder()).append(ipa.toString()).toIPATranscript();
@@ -366,7 +366,7 @@ public class RecordLookupPanel extends JPanel {
 			final PhoneAligner aligner = new PhoneAligner();
 			final PhoneMap pm = aligner.calculatePhoneAlignment(targetIpa, actualIpa);
 
-			final TierEdit<PhoneMap> pmEdit = new TierEdit<PhoneMap>(editor, r.getPhoneAlignment(), i, pm);
+			final TierEdit<PhoneMap> pmEdit = new TierEdit<PhoneMap>(editor, r.getPhoneAlignmentTier(), i, pm);
 			pmEdit.setFireHardChangeOnUndo(true);
 			getEditor().getUndoSupport().postEdit(pmEdit);
 		}

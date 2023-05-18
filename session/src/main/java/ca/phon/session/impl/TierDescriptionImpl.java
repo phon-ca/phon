@@ -15,7 +15,8 @@
  */
 package ca.phon.session.impl;
 
-import ca.phon.session.TierString;
+import ca.phon.session.TierAlignmentRules;
+import ca.phon.session.UserTierData;
 import ca.phon.session.spi.TierDescriptionSPI;
 
 /**
@@ -23,26 +24,29 @@ import ca.phon.session.spi.TierDescriptionSPI;
  */
 public class TierDescriptionImpl implements TierDescriptionSPI {
 
-	private final boolean isGrouped;
-	
 	private final String name;
 	
 	private final Class<?> declaredType;
-	
-	TierDescriptionImpl(String name, boolean grouped) {
-		this(name, grouped, TierString.class);
+
+	private final TierAlignmentRules tierAlignmentRules;
+
+	TierDescriptionImpl(String name) {
+		this(name, UserTierData.class, new TierAlignmentRules());
 	}
 	
-	TierDescriptionImpl(String name, boolean grouped, Class<?> declaredType) {
+	TierDescriptionImpl(String name, TierAlignmentRules tierAlignmentRules) {
+		this(name, UserTierData.class, tierAlignmentRules);
+	}
+
+	TierDescriptionImpl(String name, Class<?> declaredType) {
+		this(name, declaredType, new TierAlignmentRules());
+	}
+	
+	TierDescriptionImpl(String name, Class<?> declaredType, TierAlignmentRules tierAlignmentRules) {
 		super();
-		this.isGrouped = grouped;
 		this.name = name;
 		this.declaredType = declaredType;
-	}
-	
-	@Override
-	public boolean isGrouped() {
-		return isGrouped;
+		this.tierAlignmentRules = tierAlignmentRules;
 	}
 
 	@Override
@@ -55,4 +59,8 @@ public class TierDescriptionImpl implements TierDescriptionSPI {
 		return declaredType;
 	}
 
+	@Override
+	public TierAlignmentRules getTierAlignmentRules() {
+		return this.tierAlignmentRules;
+	}
 }

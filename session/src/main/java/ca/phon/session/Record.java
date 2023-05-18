@@ -25,9 +25,19 @@ import ca.phon.util.Language;
 
 import java.util.*;
 
-
 /**
- * 
+ * Record for phon {@link Session}s composed of a number of tiers. By
+ * default, every record has the following tier:
+ *
+ * <ul>
+ *     <li>Orthography - orthography transcription of utterance in the CHAT transcription format</li>
+ *     <li>IPA Target - model transcription of words in the utterance</li>
+ *     <li>IPA Actual - actual transcription of words</li>
+ *     <li>Segment - media segment time for record</li>
+ *     <li>Notes - notes for record</li>
+ * </ul>
+ *
+ * Additional tiers, called user-defined tiers, may also be added to the record.
  */
 public final class Record extends ExtendableObject {
 	
@@ -38,6 +48,11 @@ public final class Record extends ExtendableObject {
 		this.recordImpl = impl;
 	}
 
+	/**
+	 * Unique id for record
+	 *
+	 * @return id
+	 */
 	public UUID getUuid() {
 		return recordImpl.getUuid();
 	}
@@ -46,6 +61,11 @@ public final class Record extends ExtendableObject {
 		recordImpl.setUuid(id);
 	}
 
+	/**
+	 * Speaker for record, default {@link Participant#UNKNOWN}
+	 *
+	 * @return speaker
+	 */
 	public Participant getSpeaker() {
 		return recordImpl.getSpeaker();
 	}
@@ -54,20 +74,57 @@ public final class Record extends ExtendableObject {
 		recordImpl.setSpeaker(participant);
 	}
 
-	public Language getLanguage() { return recordImpl.getLanguage(); }
+	/**
+	 * Language for record (if specified).  Record language is written in orthography
+	 * as '[- lang]' at the beginning of the utterance.
+	 *
+	 * @return language or null not specified
+	 */
+	public Language getLanguage() {
+		final Orthography ortho = getOrthographyTier().getValue();
+		if(ortho.length() > 0 && ortho.elementAt(0) instanceof UtteranceLanguage) {
+			final UtteranceLanguage uttLang = (UtteranceLanguage) ortho.elementAt(0);
+			return uttLang.getLanguage();
+		} else {
+			return null;
+		}
+	}
 
-	public void setLanguage(Language language) { recordImpl.setLanguage(language); }
+	public void setLanguage(Language language) {
+		// update orthography with UtteranceLanguage annotation
+		final UtteranceLanguage utteranceLanguage = new UtteranceLanguage(language);
+		final List<OrthographyElement> orthographyElements = new ArrayList<>();
+		orthographyElements.add(utteranceLanguage);
+		// TODO
+	}
 
-	public MediaSegment getMediaSegment() { return recordImpl.getMediaSegment(); }
+	/**
+	 * Get media segment for record
+	 *
+	 * @return media segment
+	 */
+	public MediaSegment getMediaSegment() { return getSegmentTier().getValue(); }
 
-	public void setMediaSegment(MediaSegment segment) { recordImpl.setMediaSegment(segment); }
+	public void setMediaSegment(MediaSegment segment) {
+		getSegmentTier().setValue(segment);
+	}
 
-	public Tier<MediaSegment> getSegment() {
-		return recordImpl.getSegment();
+	/**
+	 * Get media segment tier
+	 *
+	 * @return segment tier
+	 */
+	public Tier<MediaSegment> getSegmentTier() {
+		return recordImpl.getSegmentTier();
 	}
 
 	public Tier<GroupSegment> getGroupSegment() { return recordImpl.getGroupSegment(); }
 
+	/**
+	 * Should we exclude this record from searches?
+	 *
+	 * @return true if record should be excluded
+	 */
 	public boolean isExcludeFromSearches() {
 		return recordImpl.isExcludeFromSearches();
 	}
@@ -76,70 +133,184 @@ public final class Record extends ExtendableObject {
 		recordImpl.setExcludeFromSearches(excluded);
 	}
 
-	public Tier<Orthography> getOrthography() {
-		return recordImpl.getOrthography();
+	/**
+	 * Get orthographic transcription for record. Utterances are written in the CHAT tanscription
+	 * format.
+	 *
+	 * @return utterance
+	 */
+	public Orthography getOrthography() {
+		return getOrthographyTier().getValue();
 	}
 
-	public void setOrthography(Tier<Orthography> ortho) {
-		recordImpl.setOrthography(ortho);
+	public void setOrthography(Orthography orthography) {
+		getOrthographyTier().setValue(orthography);
 	}
 
-	public Tier<IPATranscript> getIPATarget() {
-		return recordImpl.getIPATarget();
+	/**
+	 * Get orthography tier
+	 *
+	 * @return orthography tier
+	 */
+	public Tier<Orthography> getOrthographyTier() {
+		return recordImpl.getOrthographyTier();
 	}
 
-	public void setIPATarget(Tier<IPATranscript> ipa) {
-		recordImpl.setIPATarget(ipa);
+	public IPATranscript getIPATarget() {
+		return getIPATargetTier().getValue();
 	}
 
-	public Tier<IPATranscript> getIPAActual() {
-		return recordImpl.getIPAActual();
+	public void setIPATarget(IPATranscript ipa) {
+		getIPATargetTier().setValue(ipa);
 	}
 
-	public void setIPAActual(Tier<IPATranscript> ipa) {
-		recordImpl.setIPAActual(ipa);
+	public Tier<IPATranscript> getIPATargetTier() {
+		return recordImpl.getIPATargetTier();
 	}
 
-	public Tier<PhoneMap> getPhoneAlignment() {
-		return recordImpl.getPhoneAlignment();
+	public IPATranscript getIPAActual() {
+		return getIPAActualTier().getValue();
 	}
 
-	public void setPhoneAlignment(Tier<PhoneMap> phoneAlignment) {
-		recordImpl.setPhoneAlignment(phoneAlignment);
+	public void setIPAActual(IPATranscript ipa) {
+		getIPAActualTier().setValue(ipa);
 	}
 
-	public Tier<TierString> getNotes() {
-		return recordImpl.getNotes();
+	public Tier<IPATranscript> getIPAActualTier() {
+		return recordImpl.getIPAActualTier();
 	}
 
-	public void setNotes(Tier<TierString> notes) {
-		recordImpl.setNotes(notes);
+	public PhoneMap getPhoneAlignment() {
+		return getPhoneAlignmentTier().getValue();
 	}
 
+	public void setPhoneAlignment(PhoneMap phoneAlignment) {
+		getPhoneAlignmentTier().setValue(phoneAlignment);
+	}
+
+	public Tier<PhoneMap> getPhoneAlignmentTier() {
+		return recordImpl.getPhoneAlignmentTier();
+	}
+
+	public UserTierData getNotes() {
+		return getNotesTier().getValue();
+	}
+
+	public void setNotes(UserTierData tierData) {
+		getNotesTier().setValue(tierData);
+	}
+
+	public Tier<UserTierData> getNotesTier() {
+		return recordImpl.getNotesTier();
+	}
+
+	/**
+	 * Get the register type of the given tier.
+	 *
+	 * @param name
+	 * @return the tier type
+	 */
 	public Class<?> getTierType(String name) {
 		return recordImpl.getTierType(name);
 	}
 
+	/**
+	 * Get the given tier with the expected type.  Optional will
+	 * be empty if tier does not exist in the record or the
+	 * incorrect type was specified.
+	 *
+	 * @param name
+	 * @param type
+	 *
+	 * @return optional tier
+	 */
 	public <T> Tier<T> getTier(String name, Class<T> type) {
 		return recordImpl.getTier(name, type);
 	}
 
+	/**
+	 * Get the given tier (type unspecified).  Optional will
+	 * be empty if ties does not exist.
+	 *
+	 * @return name
+	 */
 	public Tier<?> getTier(String name) {
 		return recordImpl.getTier(name);
 	}
 
-	public Set<String> getExtraTierNames() {
-		return recordImpl.getExtraTierNames();
+	/**
+	 * Return a list of user-defined tiers that are present
+	 * in this record.
+	 *
+	 * @return the list of tier user-defined tier names
+	 *  present in this record
+	 */
+	public Set<String> getUserDefinedTierNames() {
+		return recordImpl.getUserDefinedTierNames();
 	}
 
+	/**
+	 * Return a list of all present tiers which have the given
+	 * type.
+	 *
+	 * @param type
+	 * @return list of tiers
+	 */
 	public <T> List<Tier<T>> getTiersOfType(Class<T> type) {
 		return recordImpl.getTiersOfType(type);
 	}
 
+	/**
+	 * @param name
+	 * @return <code>true</code> if this record contains
+	 *  the specified tier
+	 */
 	public boolean hasTier(String name) {
 		return recordImpl.hasTier(name);
 	}
 
+	/**
+	 * Set value for tier with name and type.  No effect
+	 * if the specified tier was not found.
+	 *
+	 * @param name
+	 * @param type
+	 * @param value
+	 *
+	 * @param <T>
+	 */
+	public <T> void setTierValue(String name, Class<T> type, T value) {
+		final Tier<T> tier = getTier(name, type);
+		if(tier != null) {
+			tier.setValue(value);
+		}
+	}
+
+	/**
+	 * Get value for tier with name and type.  No effect
+	 * if the specified tier was not found.
+	 *
+	 * @param name
+	 * @param type
+	 *
+	 * @return value for tier or null if specified tier was not found
+	 * @param <T>
+	 */
+	public <T> T getTierValue(String name, Class<T> type) {
+		final Tier<T> tier = getTier(name, type);
+		if(tier != null) {
+			return tier.getValue();
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Add/set the given tier to the list of user defined
+	 * tiers.
+	 *
+	 * @param tier
+	 */
 	public void putTier(Tier<?> tier) {
 		recordImpl.putTier(tier);
 	}
@@ -166,314 +337,6 @@ public final class Record extends ExtendableObject {
 
 	public void removeComment(int idx) {
 		recordImpl.removeComment(idx);
-	}
-	
-	/* Groups */
-	/**
-	 * Get the number of aligned groups in the record.
-	 * The number of groups for a record is determined by the number
-	 * of groups in the orthoraphy tier.
-	 * 
-	 * @return number of groups
-	 */
-	public int numberOfGroups() {
-		return getOrthography().numberOfGroups();
-	}
-	
-	/**
-	 * Get the group at the specified index
-	 * 
-	 * @param idx
-	 * 
-	 * @return the specified group
-	 */
-	public Group getGroup(int idx) {
-		if(idx >= 0 && idx < numberOfGroups()) {
-			return SessionFactory.newFactory().createGroup(this, idx);
-		} else {
-			throw new IndexOutOfBoundsException("Invalid group index " + idx);
-		}
-	}
-	
-	/**
-	 * Delete the group at the specified index.  This will
-	 * affect all grouped tiers.
-	 * 
-	 * @param idx the group to remove
-	 */
-	public void removeGroup(int idx) {
-		if(idx < 0 && idx >= numberOfGroups())
-			throw new IndexOutOfBoundsException("Invalid group index " + idx);
-
-		if(idx < getOrthography().numberOfGroups())
-			getOrthography().removeGroup(idx);
-		if(idx < getIPAActual().numberOfGroups())
-			getIPAActual().removeGroup(idx);
-		if(idx < getIPATarget().numberOfGroups())
-			getIPATarget().removeGroup(idx);
-		if(idx < getPhoneAlignment().numberOfGroups())
-			getPhoneAlignment().removeGroup(idx);
-
-		for(String tierName:getExtraTierNames()) {
-			final Tier<?> tier = getTier(tierName);
-			if(tier.isGrouped() && idx < tier.numberOfGroups()) {
-				tier.removeGroup(idx);
-			}
-		}
-	}
-		
-	/**
-	 * Add a new group to the end of the record data
-	 * 
-	 * @return the new group
-	 */
-	public Group addGroup() {
-		int gidx = numberOfGroups();
-
-		SessionFactory factory = SessionFactory.newFactory();
-		
-		getOrthography().addGroup(new Orthography());
-		getIPATarget().addGroup(new IPATranscript());
-		getIPAActual().addGroup(new IPATranscript());
-		getPhoneAlignment().addGroup(new PhoneMap(getIPATarget().getGroup(gidx), getIPAActual().getGroup(gidx)));
-
-		for(String tierName:getExtraTierNames()) {
-			final Tier<TierString> tier = getTier(tierName, TierString.class);
-			if(tier.isGrouped())
-				tier.addGroup();
-			else if(tier.numberOfGroups() == 0)
-				tier.addGroup(new TierString());
-		}
-
-		if(getNotes().numberOfGroups() == 0)
-			getNotes().addGroup(new TierString());
-//		if(getSegment().numberOfGroups() == 0)
-//			getSegment().addGroup(factory.createMediaSegment());
-
-		return factory.createGroup(this, gidx);
-	}
-	
-	/**
-	 * Add a new group at the specified index.  This method
-	 * will add a new group value to each grouped tier.
-	 * 
-	 * @param idx
-	 * @return the new group
-	 * 
-	 * @throws ArrayIndexOutOfBoundsException if idx is out of bounds
-	 */
-	public Group addGroup(int idx) {
-		if(getOrthography().numberOfGroups() < idx)
-			while(getOrthography().numberOfGroups() < idx) {
-				getOrthography().addGroup(new Orthography());
-			}
-		getOrthography().addGroup(idx, new Orthography());
-
-		if(getIPATarget().numberOfGroups() < idx)
-			while(getIPATarget().numberOfGroups() < idx) {
-				getIPATarget().addGroup(new IPATranscript());
-			}
-		getIPATarget().addGroup(idx, new IPATranscript());
-
-		if(getIPAActual().numberOfGroups() < idx)
-			while(getIPAActual().numberOfGroups() < idx) {
-				getIPAActual().addGroup(new IPATranscript());
-			}
-		getIPAActual().addGroup(idx, new IPATranscript());
-
-		if(getPhoneAlignment().numberOfGroups() < idx)
-			while(getPhoneAlignment().numberOfGroups() < idx) {
-				getPhoneAlignment().addGroup(new PhoneMap(getIPATarget().getGroup(getPhoneAlignment().numberOfGroups()), getIPAActual().getGroup(getPhoneAlignment().numberOfGroups())));
-			}
-		getPhoneAlignment().addGroup(idx, new PhoneMap(getIPATarget().getGroup(idx), getIPAActual().getGroup(idx)));
-		
-		for(String tierName:getExtraTierNames()) {
-			final Tier<TierString> tier = getTier(tierName, TierString.class);
-			if(tier.isGrouped()) {
-				if(tier.numberOfGroups() < idx)
-					while(tier.numberOfGroups() < idx) {
-						tier.addGroup(new TierString());
-					}
-				tier.addGroup(idx, new TierString());
-			} else if(tier.numberOfGroups() == 0)
-				tier.addGroup();
-		}
-
-		return SessionFactory.newFactory().createGroup(this, idx);
-	}
-	
-	/**
-	 * Merge the two specified gropus.
-	 * 
-	 * @param grp1
-	 * @param grp2
-	 * 
-	 * @return the word index of grp1 where the merge occured.
-	 * 
-	 * @throws IllegalArgumentException if <code>grp1</grp1>
-	 *  or <code>grp2</code> are not adjacent groups or <code>grp2 <= grp1</code>
-	 * @throws ArrayIndexOutOfBoundsException if either <code>grp1</code>
-	 *  or <code>grp2</code> is out of bounds
-	 */
-	public int mergeGroups(int grp1, int grp2) {
-		if(grp2 <= grp1) {
-			throw new IllegalArgumentException("grp2 must be greater than grp1");
-		}
-		if(grp2 - grp1 != 1) {
-			throw new IllegalArgumentException("groups must be adjacent to merge");
-		}
-		if(grp1 < 0 || grp1 >= numberOfGroups()) {
-			throw new ArrayIndexOutOfBoundsException(grp1);
-		}
-		if(grp2 < 0 || grp2 >= numberOfGroups()) {
-			throw new ArrayIndexOutOfBoundsException(grp2);
-		}
-
-		final Group group1 = getGroup(grp1);
-		final Group group2 = getGroup(grp2);
-		int retVal = group1.getAlignedWordCount();
-
-		// orthography
-		final OrthographyBuilder orthoBuilder = new OrthographyBuilder();
-		orthoBuilder.append(group1.getOrthography());
-		orthoBuilder.append(group2.getOrthography());
-		group1.setOrthography(orthoBuilder.toOrthography());
-
-		// ipa target
-		final IPATranscriptBuilder tBuilder = new IPATranscriptBuilder();
-		tBuilder.append(group1.getIPATarget());
-		if(tBuilder.size() > 0) tBuilder.appendWordBoundary();
-		tBuilder.append(group2.getIPATarget());
-		final IPATranscript ipaTarget = tBuilder.toIPATranscript();
-
-		final IPATranscriptBuilder aBuilder = new IPATranscriptBuilder();
-		aBuilder.append(group1.getIPAActual());
-		if(aBuilder.size() > 0) aBuilder.appendWordBoundary();
-		aBuilder.append(group2.getIPAActual());
-		final IPATranscript ipaActual = aBuilder.toIPATranscript();
-
-		PhoneMap pm1 = group1.getPhoneAlignment();
-		if(pm1 == null) pm1 = new PhoneMap();
-		PhoneMap pm2 = group2.getPhoneAlignment();
-		if(pm2 == null) pm2 = new PhoneMap();
-		int alignmentLength = pm1.getAlignmentLength() + pm2.getAlignmentLength();
-		Integer[] topAlignment = new Integer[alignmentLength];
-		Integer[] bottomAlignment = new Integer[alignmentLength];
-		int aIdx = 0;
-		for(int i = 0; i < pm1.getAlignmentLength(); i++) {
-			topAlignment[aIdx] = pm1.getTopAlignment()[i];
-			bottomAlignment[aIdx] = pm1.getBottomAlignment()[i];
-			++aIdx;
-		}
-		final int topOffset = (group1.getIPATarget().audiblePhones().length() > 0 ? group1.getIPATarget().audiblePhones().length() : 0);
-		final int btmOffset = (group1.getIPAActual().audiblePhones().length() > 0 ? group1.getIPAActual().audiblePhones().length() : 0);
-		for(int i = 0; i < pm2.getAlignmentLength(); i++) {
-			topAlignment[aIdx] = pm2.getTopAlignment()[i] + topOffset;
-			bottomAlignment[aIdx] = pm2.getBottomAlignment()[i] + btmOffset;
-			++aIdx;
-		}
-		final PhoneMap combinedPhoneMap = new PhoneMap(ipaTarget, ipaActual);
-		combinedPhoneMap.setTopAlignment(topAlignment);
-		combinedPhoneMap.setBottomAlignment(bottomAlignment);
-
-		group1.setIPATarget(ipaTarget);
-		group1.setIPAActual(ipaActual);
-		group1.setPhoneAlignment(combinedPhoneMap);
-
-		// other tiers
-		for(String tierName:getExtraTierNames()) {
-			if(getTier(tierName).isGrouped()) {
-				final TierString tierVal = group1.getTier(tierName, TierString.class);
-				if(tierVal != null) {
-					final String newVal = new String(tierVal + " " + group2.getTier(tierName, TierString.class)).trim();
-					group1.setTier(tierName, TierString.class, new TierString(newVal));
-				}
-			}
-		}
-
-		removeGroup(grp2);
-
-		return retVal;
-	}
-	
-	/**
-	 * Split groups based on group and aligned word index.
-	 * 
-	 * @param grp
-	 * @param wrd
-	 * 
-	 * @return the new group created by the split
-	 * 
-	 * @throws ArrayIndexOutOfBoundsException if either <code>grp</code> or <code>wrd</code>
-	 *  are out of bounds
-	 */
-	public Group splitGroup(int grp, int wrd) {
-		if(grp < 0 || grp >= numberOfGroups()) {
-			throw new ArrayIndexOutOfBoundsException(grp);
-		}
-		final Group group = getGroup(grp);
-		if(wrd < 0 || wrd >= group.getAlignedWordCount()) {
-			throw new ArrayIndexOutOfBoundsException(wrd);
-		}
-		final Word word = group.getAlignedWord(wrd);
-
-		final Group newGroup = addGroup(grp+1);
-
-		// orthography
-		final OrthographyElement ele = word.getOrthography();
-		int wordIdx = group.getOrthography().indexOf(ele);
-		final Orthography ortho = group.getOrthography().subsection(0, wordIdx);
-		final Orthography newOrtho = group.getOrthography().subsection(wordIdx, group.getOrthography().length());
-		group.setOrthography(ortho);
-		newGroup.setOrthography(newOrtho);
-
-		// ipa target
-		final IPATranscript ipaT = word.getIPATarget();
-		int ipaTIdx = group.getIPATarget().indexOf(ipaT);
-		IPATranscript ipaTarget = group.getIPATarget();
-		IPATranscript newIpaTarget = new IPATranscript();
-		if(ipaTIdx >= 0) {
-			ipaTarget = group.getIPATarget().subsection(0, (ipaTIdx-1 >= 0 ? ipaTIdx-1 : 0));
-			newIpaTarget = group.getIPATarget().subsection(ipaTIdx, group.getIPATarget().length());
-		}
-		group.setIPATarget(ipaTarget);
-		newGroup.setIPATarget(newIpaTarget);
-
-		// ipa actual
-		final IPATranscript ipaA = word.getIPAActual();
-		int ipaAIdx = group.getIPAActual().indexOf(ipaA);
-		IPATranscript ipaActual = group.getIPAActual();
-		IPATranscript newIpaActual = new IPATranscript();
-		if(ipaAIdx >= 0) {
-			ipaActual = group.getIPAActual().subsection(0, (ipaAIdx-1 >= 0 ? ipaAIdx-1 :0));
-			newIpaActual = group.getIPAActual().subsection(ipaAIdx, group.getIPAActual().length());
-		}
-		group.setIPAActual(ipaActual);
-		newGroup.setIPAActual(newIpaActual);
-
-		// other tiers
-		for(String tierName:getExtraTierNames()) {
-			if(getTier(tierName).isGrouped()) {
-				final TierString tierVal = group.getTier(tierName, TierString.class);
-				if(tierVal != null) {
-					final String words[] = tierVal.split("\\p{Space}");
-
-					String val = "";
-					String newVal = "";
-					for(int i = 0; i < words.length; i++) {
-						if(i < wrd) {
-							val += (val.length() > 0 ? " " : "") + words[i];
-						} else {
-							newVal += (newVal.length() > 0 ? " " : "") + words[i];
-						}
-					}
-					group.setTier(tierName, TierString.class, new TierString(val));
-					newGroup.setTier(tierName, TierString.class, new TierString(newVal));
-				}
-			}
-		}
-
-		return newGroup;
 	}
 	
 }

@@ -29,8 +29,7 @@ public interface TierDescriptionSPI {
 	
 	/**
 	 * Get declared type of the tier
-	 * 
-	 * 
+	 *
 	 */
 	public Class<?> getDeclaredType();
 

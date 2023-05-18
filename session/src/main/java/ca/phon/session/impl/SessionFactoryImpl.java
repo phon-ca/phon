@@ -16,6 +16,7 @@
 package ca.phon.session.impl;
 
 import ca.phon.plugin.*;
+import ca.phon.session.TierAlignmentRules;
 import ca.phon.session.spi.*;
 
 /**
@@ -51,9 +52,8 @@ public class SessionFactoryImpl implements SessionFactorySPI, IPluginExtensionPo
 	}
 
 	@Override
-	public TierDescriptionSPI createTierDescription(String name, boolean grouped,
-			Class<?> type) {
-		return new TierDescriptionImpl(name, grouped, type);
+	public TierDescriptionSPI createTierDescription(String name, Class<?> type, TierAlignmentRules tierAlignmentRules) {
+		return new TierDescriptionImpl(name, type, tierAlignmentRules);
 	}
 
 	@Override

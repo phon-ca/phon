@@ -135,12 +135,12 @@ public class RecordsTransferable implements Transferable {
         int colIdx = 0;
 
         rowData[colIdx++] = (record.getSpeaker() != null ? record.getSpeaker().toString() : "");
-        rowData[colIdx++] = record.getOrthography().toString();
-        rowData[colIdx++] = record.getIPATarget().toString();
-        rowData[colIdx++] = record.getIPAActual().toString();
+        rowData[colIdx++] = record.getOrthographyTier().toString();
+        rowData[colIdx++] = record.getIPATargetTier().toString();
+        rowData[colIdx++] = record.getIPAActualTier().toString();
         rowData[colIdx++] = record.getMediaSegment().toString();
         rowData[colIdx++] = record.getGroupSegment().toString();
-        rowData[colIdx++] = record.getNotes().getGroup(0).toString();
+        rowData[colIdx++] = record.getNotesTier().getGroup(0).toString();
 
         for(TierDescription userTier:session.getUserTiers()) {
             Tier<?> tier = record.getTier(userTier.getName());

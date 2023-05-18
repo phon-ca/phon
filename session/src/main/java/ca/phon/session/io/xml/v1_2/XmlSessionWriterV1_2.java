@@ -328,17 +328,17 @@ public class XmlSessionWriterV1_2 implements SessionWriter, IPluginExtensionPoin
 		retVal.setExcludeFromSearches(record.isExcludeFromSearches());
 
 		// orthography
-		final Tier<Orthography> orthoTier = record.getOrthography();
+		final Tier<Orthography> orthoTier = record.getOrthographyTier();
 		final OrthographyType orthoType = copyOrthography(factory, orthoTier);
 		retVal.setOrthography(orthoType);
 
 		// ipa
-		final Tier<IPATranscript> ipaTarget = record.getIPATarget();
+		final Tier<IPATranscript> ipaTarget = record.getIPATargetTier();
 		final IpaTierType targetType = copyIPA(factory, ipaTarget);
 		targetType.setForm(PhoTypeType.MODEL);
 		retVal.getIpaTier().add(targetType);
 
-		final Tier<IPATranscript> ipaActual = record.getIPAActual();
+		final Tier<IPATranscript> ipaActual = record.getIPAActualTier();
 		final IpaTierType actualType = copyIPA(factory, ipaActual);
 		actualType.setForm(PhoTypeType.ACTUAL);
 		retVal.getIpaTier().add(actualType);
@@ -421,7 +421,7 @@ public class XmlSessionWriterV1_2 implements SessionWriter, IPluginExtensionPoin
 		}
 
 		// notes
-		final Tier<TierString> notesTier = record.getNotes();
+		final Tier<TierString> notesTier = record.getNotesTier();
 		if(notesTier.numberOfGroups() > 0 && notesTier.getGroup(0) != null && notesTier.getGroup(0).length() > 0) {
 			final FlatTierType notesType = factory.createFlatTierType();
 			notesType.setContent(notesTier.getGroup(0).toString());
@@ -434,13 +434,13 @@ public class XmlSessionWriterV1_2 implements SessionWriter, IPluginExtensionPoin
 		retVal.setSegment(segType);
 
 		// alignment
-		final Tier<PhoneMap> alignmentTier = record.getPhoneAlignment();
+		final Tier<PhoneMap> alignmentTier = record.getPhoneAlignmentTier();
 		if(alignmentTier != null) {
 			final AlignmentTierType att = copyAlignment(factory, record, alignmentTier);
 			retVal.getAlignment().add(att);
 		}
 
-		for(String tierName:record.getExtraTierNames()) {
+		for(String tierName:record.getUserDefinedTierNames()) {
 			Tier<TierString> userTier = record.getTier(tierName, TierString.class);
 			if(userTier == null)
 				userTier = SessionFactory.newFactory().createTier(tierName, TierString.class, true);

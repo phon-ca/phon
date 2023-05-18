@@ -982,7 +982,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		rightSeg.setEndValue(seg.getEndValue());
 		rightRecord.setMediaSegment(rightSeg);
 
-		for (String tierName : leftRecord.getExtraTierNames()) {
+		for (String tierName : leftRecord.getUserDefinedTierNames()) {
 			Tier<?> tier = leftRecord.getTier(tierName);
 			rightRecord.putTier(sessionFactory.createTier(tierName, tier.getDeclaredType(), tier.isGrouped()));
 		}
@@ -1344,7 +1344,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 					getParentView().getEditor().getUndoSupport().endUpdate();
 					getParentView().getEditor().getEventManager().queueEvent(
 							new EditorEvent<>(EditorEventType.TierChanged, TimelineRecordTier.this,
-									new EditorEventType.TierChangeData(r.getSegment(), 0, segment, segment)));
+									new EditorEventType.TierChangeData(r.getSegmentTier(), 0, segment, segment)));
 				}
 			} else if(evt.getPropertyName().endsWith("time")) {
 				MediaSegment newSegment = factory.createMediaSegment();

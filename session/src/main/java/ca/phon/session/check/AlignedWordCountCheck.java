@@ -44,7 +44,7 @@ public class AlignedWordCountCheck implements SessionCheck, IPluginExtensionPoin
 				}
 
 				final int groupIdx = gIdx;
-				record.getExtraTierNames().forEach( (tierName) -> {
+				record.getUserDefinedTierNames().forEach( (tierName) -> {
 					if(record.getTier(tierName).isGrouped() && group.getWordCount(tierName) != targetWordCount) {
 						reportWordAlignmentDifference(validator, session, record, tierName, groupIdx);
 					}

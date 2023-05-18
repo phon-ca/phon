@@ -31,7 +31,6 @@ import ca.phon.util.icons.*;
 import org.jdesktop.swingx.HorizontalLayout;
 
 import javax.swing.*;
-import javax.swing.undo.*;
 import java.awt.*;
 import java.util.Iterator;
 
@@ -112,11 +111,11 @@ public class ValidationEditorView extends EditorView {
 		final Record record = getEditor().currentRecord();
 		if(record == null) return;
 		
-		updateCandidateTier(record.getIPATarget(), targetCandidateTier);
-		updateValidationPanel(targetValidationPanel, record.getIPATarget(), targetCandidateTier);
+		updateCandidateTier(record.getIPATargetTier(), targetCandidateTier);
+		updateValidationPanel(targetValidationPanel, record.getIPATargetTier(), targetCandidateTier);
 		
-		updateCandidateTier(record.getIPAActual(), actualCandidateTier);
-		updateValidationPanel(actualValidationPanel, record.getIPAActual(), actualCandidateTier);
+		updateCandidateTier(record.getIPAActualTier(), actualCandidateTier);
+		updateValidationPanel(actualValidationPanel, record.getIPAActualTier(), actualCandidateTier);
 	}
 	
 	
@@ -232,13 +231,13 @@ public class ValidationEditorView extends EditorView {
 	
 	public void onValidateIPATarget() {
 		final Record r = getEditor().currentRecord();
-		final Tier<IPATranscript> tier = r.getIPATarget();
+		final Tier<IPATranscript> tier = r.getIPATargetTier();
 		validateTier(tier, targetCandidateTier);
 	}
 	
 	public void onValidateIPAActual() {
 		final Record r = getEditor().currentRecord();
-		final Tier<IPATranscript> tier = r.getIPAActual();
+		final Tier<IPATranscript> tier = r.getIPAActualTier();
 		validateTier(tier, actualCandidateTier);
 	}
 
@@ -288,9 +287,9 @@ public class ValidationEditorView extends EditorView {
 				data.tier, data.group, ipa);
 		
 		final Record r = getEditor().currentRecord();
-		final Tier<PhoneMap> alignmentTier = r.getPhoneAlignment();
+		final Tier<PhoneMap> alignmentTier = r.getPhoneAlignmentTier();
 		final PhoneAligner aligner = new PhoneAligner();
-		final PhoneMap pm = aligner.calculatePhoneAlignment(r.getIPATarget().getGroup(data.group), r.getIPAActual().getGroup(data.group));
+		final PhoneMap pm = aligner.calculatePhoneAlignment(r.getIPATargetTier().getGroup(data.group), r.getIPAActualTier().getGroup(data.group));
 		
 		final TierEdit<PhoneMap> pmEdit = new TierEdit<PhoneMap>(getEditor(), alignmentTier, data.group, pm);
 

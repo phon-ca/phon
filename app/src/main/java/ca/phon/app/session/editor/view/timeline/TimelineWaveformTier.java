@@ -232,7 +232,7 @@ public class TimelineWaveformTier extends TimelineTier  {
 		m.setStartValue(selectionInterval.getStartMarker().getTime() * 1000.0f);
 		m.setEndValue(selectionInterval.getEndMarker().getTime() * 1000.0f);
 		
-		utt.getOrthography().setGroup(0, new Orthography());
+		utt.getOrthographyTier().setGroup(0, new Orthography());
 		utt.setMediaSegment(m);
 		
 		final SessionEditor editor = getParentView().getEditor();

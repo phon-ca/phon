@@ -26,7 +26,6 @@ import ca.phon.session.*;
 import ca.phon.session.check.SegmentOverlapCheck;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.PrefHelper;
-import org.apache.logging.log4j.LogManager;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -161,7 +160,7 @@ public class MediaSegmentTierComponent extends JComponent implements TierEditor 
                     prevRecord = r;
             }
             if(prevRecord != null) {
-                MediaSegment prevSegment = prevRecord.getSegment().getGroup(0);
+                MediaSegment prevSegment = prevRecord.getSegmentTier().getGroup(0);
                 if(prevSegment != null) {
                     final float diffMs = validated.getStartValue() - prevSegment.getEndValue();
 

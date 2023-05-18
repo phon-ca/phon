@@ -256,7 +256,7 @@ public final class SessionFactory extends ExtendableObject {
 	public void copySessionTierInformation(Session session, Session dest) {
 		for(TierDescription tierDesc:session.getUserTiers()) {
 			final TierDescription tierCopy =
-					createTierDescription(tierDesc.getName(), tierDesc.isGrouped(), tierDesc.getDeclaredType());
+					createTierDescription(tierDesc.getName(), tierDesc.getDeclaredType(), tierDesc.getTierAlignmentRules());
 			dest.addUserTier(tierCopy);
 		}
 		final List<TierViewItem> tierView = session.getTierView();
@@ -328,10 +328,10 @@ public final class SessionFactory extends ExtendableObject {
 		}
 		
 		// add extra tiers
-		for(String tierName:record.getExtraTierNames()) {
-			final Tier<String> extraTier = record.getTier(tierName, String.class);
+		for(String tierName:record.getUserDefinedTierNames()) {
+			final Tier<UserTierData> extraTier = record.getTier(tierName, UserTierData.class);
 			
-			final TierDescription td = createTierDescription(tierName, extraTier.isGrouped());
+			final TierDescription td = createTierDescription(tierName);
 			tempSession.addUserTier(td);
 		}
 		
@@ -452,16 +452,29 @@ public final class SessionFactory extends ExtendableObject {
 	}
 	
 	/**
-	 * Create a new tier object with the specified type.
+	 * Create a new tier object with the specified type and alignment rules
 	 * 
 	 * @param name
 	 * @param type
-	 * @param grouped
+	 * @param tierAlignmentRules
 	 * @return the new tier
+	 * @param <T>
 	 */
-	public <T> Tier<T> createTier(String name, Class<T> type, boolean grouped) { 
-		final TierSPI<T> tierImpl = sessionFactoryImpl.createTier(name, type, grouped);
+	public <T> Tier<T> createTier(String name, Class<T> type, TierAlignmentRules tierAlignmentRules) {
+		final TierSPI<T> tierImpl = sessionFactoryImpl.createTier(name, type, tierAlignmentRules);
 		return createTier(type, tierImpl);
+	}
+
+	/**
+	 * Create new tier with name, type and default tier alignment rules
+	 *
+	 * @param name
+	 * @param type
+	 * @return
+	 * @param <T>
+	 */
+	public <T> Tier<T> createTier(String name, Class<T> type) {
+		return createTier(name, type, new TierAlignmentRules());
 	}
 	
 	public <T> Tier<T> createTier(Class<T> type, TierSPI<T> tierImpl) {
@@ -474,33 +487,30 @@ public final class SessionFactory extends ExtendableObject {
 	 * @param name
 	 * @return the new tier
 	 */
-	public Tier<TierString> createTier(String name) {
-		return createTier(name, TierString.class, true);
+	public Tier<UserTierData> createTier(String name) {
+		return createTier(name, UserTierData.class);
 	}
 	
 	/**
 	 * Create a new string tier description.
 	 * 
 	 * @param name
-	 * @param grouped
-	 * 
 	 * @return new tier description
 	 */
-	public TierDescription createTierDescription(String name, boolean grouped) {
-		return createTierDescription(name, grouped, TierString.class);
+	public TierDescription createTierDescription(String name) {
+		return createTierDescription(name, UserTierData.class, new TierAlignmentRules());
 	}
 	
 	/**
 	 * Create tier description.
 	 * 
 	 * @param name
-	 * @param grouped
 	 * @param type
-	 * 
+	 * @param tierAlignmentRules
 	 * @return new tier description
 	 */
-	public TierDescription createTierDescription(String name, boolean grouped, Class<?> type) {
-		final TierDescriptionSPI tierDescriptionImpl = sessionFactoryImpl.createTierDescription(name, grouped, type);
+	public TierDescription createTierDescription(String name, Class<?> type, TierAlignmentRules tierAlignmentRules) {
+		final TierDescriptionSPI tierDescriptionImpl = sessionFactoryImpl.createTierDescription(name, type, tierAlignmentRules);
 		return createTierDescription(tierDescriptionImpl);
 	}
 

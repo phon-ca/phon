@@ -20,7 +20,6 @@ import ca.phon.app.session.EditorViewAdapter;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.actions.*;
 import ca.phon.app.session.editor.undo.RecordSegmentEdit;
-import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.speech_analysis.actions.NewRecordAction;
 import ca.phon.app.session.editor.view.speech_analysis.actions.*;
 import ca.phon.media.*;
@@ -35,8 +34,6 @@ import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.icons.*;
 import ca.phon.worker.*;
 import ca.phon.worker.PhonTask.TaskStatus;
-import org.apache.commons.logging.Log;
-import org.apache.logging.log4j.LogManager;
 import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
@@ -1099,7 +1096,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 					getEditor().getUndoSupport().beginUpdate();
 				} else {
 					getEditor().getUndoSupport().endUpdate();
-					final EditorEventType.TierChangeData data = new EditorEventType.TierChangeData(r.getSegment(), 0, r.getSegment().getGroup(0), r.getSegment().getGroup(0));
+					final EditorEventType.TierChangeData data = new EditorEventType.TierChangeData(r.getSegmentTier(), 0, r.getSegmentTier().getGroup(0), r.getSegmentTier().getGroup(0));
 					getEditor().getEventManager().queueEvent(new EditorEvent(EditorEventType.TierChanged, SpeechAnalysisEditorView.this, data));
 				}
 			} else if(evt.getPropertyName().endsWith("time")) {

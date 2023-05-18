@@ -1,5 +1,7 @@
 package ca.phon.orthography;
 
+import javax.swing.text.html.HTML;
+
 public enum TagMarkerType {
     COMMA(',', "comma"),
     VOCATIVE('‡', "vocative"),
@@ -20,6 +22,13 @@ public enum TagMarkerType {
 
     public String getDisplayName() {
         return displayName;
+    }
+
+    public static TagMarkerType fromChar(char ch) {
+        for(TagMarkerType v:values()) {
+            if(v.getChar() == ch) return v;
+        }
+        return null;
     }
 
     public static TagMarkerType fromString(String text) {

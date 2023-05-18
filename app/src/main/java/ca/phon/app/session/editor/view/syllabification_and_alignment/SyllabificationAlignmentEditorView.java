@@ -262,7 +262,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 			pm.setBottomAlignment(newVal.getAlignment()[1]);
 
 			final Record r = getEditor().currentRecord();
-			final TierEdit<PhoneMap> edit = new TierEdit<PhoneMap>(getEditor(), r.getPhoneAlignment(), gIdx, pm);
+			final TierEdit<PhoneMap> edit = new TierEdit<PhoneMap>(getEditor(), r.getPhoneAlignmentTier(), gIdx, pm);
 			getEditor().getUndoSupport().postEdit(edit);
 		}
 

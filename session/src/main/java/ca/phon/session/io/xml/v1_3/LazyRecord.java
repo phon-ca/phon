@@ -104,9 +104,9 @@ public final class LazyRecord implements RecordSPI {
 		internalRecord.setMediaSegment(segment);
 	}
 
-	public Tier<MediaSegment> getSegment() {
+	public Tier<MediaSegment> getSegmentTier() {
 		loadRecord();
-		return internalRecord.getSegment();
+		return internalRecord.getSegmentTier();
 	}
 
 	@Override
@@ -125,9 +125,9 @@ public final class LazyRecord implements RecordSPI {
 		internalRecord.setExcludeFromSearches(excluded);
 	}
 
-	public Tier<Orthography> getOrthography() {
+	public Tier<Orthography> getOrthographyTier() {
 		loadRecord();
-		return internalRecord.getOrthography();
+		return internalRecord.getOrthographyTier();
 	}
 
 	public void setOrthography(Tier<Orthography> ortho) {
@@ -135,9 +135,9 @@ public final class LazyRecord implements RecordSPI {
 		internalRecord.setOrthography(ortho);
 	}
 
-	public Tier<IPATranscript> getIPATarget() {
+	public Tier<IPATranscript> getIPATargetTier() {
 		loadRecord();
-		return internalRecord.getIPATarget();
+		return internalRecord.getIPATargetTier();
 	}
 
 	public void setIPATarget(Tier<IPATranscript> ipa) {
@@ -145,9 +145,9 @@ public final class LazyRecord implements RecordSPI {
 		internalRecord.setIPATarget(ipa);
 	}
 
-	public Tier<IPATranscript> getIPAActual() {
+	public Tier<IPATranscript> getIPAActualTier() {
 		loadRecord();
-		return internalRecord.getIPAActual();
+		return internalRecord.getIPAActualTier();
 	}
 
 	public void setIPAActual(Tier<IPATranscript> ipa) {
@@ -155,9 +155,9 @@ public final class LazyRecord implements RecordSPI {
 		internalRecord.setIPAActual(ipa);
 	}
 
-	public Tier<PhoneMap> getPhoneAlignment() {
+	public Tier<PhoneMap> getPhoneAlignmentTier() {
 		loadRecord();
-		return internalRecord.getPhoneAlignment();
+		return internalRecord.getPhoneAlignmentTier();
 	}
 
 	public void setPhoneAlignment(Tier<PhoneMap> phoneAlignment) {
@@ -165,9 +165,9 @@ public final class LazyRecord implements RecordSPI {
 		internalRecord.setPhoneAlignment(phoneAlignment);
 	}
 
-	public Tier<TierString> getNotes() {
+	public Tier<TierString> getNotesTier() {
 		loadRecord();
-		return internalRecord.getNotes();
+		return internalRecord.getNotesTier();
 	}
 
 	public void setNotes(Tier<TierString> notes) {
@@ -190,9 +190,9 @@ public final class LazyRecord implements RecordSPI {
 		return internalRecord.getTier(name);
 	}
 
-	public Set<String> getExtraTierNames() {
+	public Set<String> getUserDefinedTierNames() {
 		loadRecord();
-		return internalRecord.getExtraTierNames();
+		return internalRecord.getUserDefinedTierNames();
 	}
 
 	public boolean hasTier(String name) {

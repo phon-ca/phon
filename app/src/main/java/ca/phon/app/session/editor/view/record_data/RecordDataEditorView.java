@@ -757,15 +757,15 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 	}
 	
 	private TierEdit<PhoneMap> updateRecordAlignment(Record record, int group) {
-		final Tier<IPATranscript> ipaTarget = record.getIPATarget();
-		final Tier<IPATranscript> ipaActual = record.getIPAActual();
+		final Tier<IPATranscript> ipaTarget = record.getIPATargetTier();
+		final Tier<IPATranscript> ipaActual = record.getIPAActualTier();
 
 		final IPATranscript targetGroup = (group < ipaTarget.numberOfGroups() ? ipaTarget.getGroup(group) : new IPATranscript());
 		final IPATranscript actualGroup = (group < ipaActual.numberOfGroups() ? ipaActual.getGroup(group) : new IPATranscript());
 		final PhoneAligner aligner = new PhoneAligner();
 		final PhoneMap pm = aligner.calculatePhoneMap(targetGroup, actualGroup);
 
-		final TierEdit<PhoneMap> pmEdit = new TierEdit<PhoneMap>(getEditor(), record.getPhoneAlignment(), group, pm);
+		final TierEdit<PhoneMap> pmEdit = new TierEdit<PhoneMap>(getEditor(), record.getPhoneAlignmentTier(), group, pm);
 
 		return pmEdit;
 	}
@@ -808,7 +808,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 				// we also need to send out a TIER_DATA_CHANGED event so the syllabification/alignment view updates
 				final EditorEvent<EditorEventType.TierChangeData> ee =
 						new EditorEvent(EditorEventType.TierChanged, RecordDataEditorView.this,
-								new EditorEventType.TierChangeData(record.getPhoneAlignment(), groupIndex, alignEdit.getOldValue(), alignEdit.getNewValue()));
+								new EditorEventType.TierChangeData(record.getPhoneAlignmentTier(), groupIndex, alignEdit.getOldValue(), alignEdit.getNewValue()));
 				getEditor().getEventManager().queueEvent(ee);
 			}
 
@@ -1100,9 +1100,9 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 					edit.setFireHardChangeOnUndo(i == 0);
 					getEditor().getUndoSupport().postEdit(edit);
 
-					PhoneMap pm = (new PhoneAligner()).calculatePhoneAlignment(destRecord.getIPATarget().getGroup(i),
-							destRecord.getIPAActual().getGroup(i));
-					TierEdit<PhoneMap> alignEdit = new TierEdit<>(getEditor(), destRecord.getPhoneAlignment(), i, pm);
+					PhoneMap pm = (new PhoneAligner()).calculatePhoneAlignment(destRecord.getIPATargetTier().getGroup(i),
+							destRecord.getIPAActualTier().getGroup(i));
+					TierEdit<PhoneMap> alignEdit = new TierEdit<>(getEditor(), destRecord.getPhoneAlignmentTier(), i, pm);
 					getEditor().getUndoSupport().postEdit(alignEdit);
 				} else if (destTier.getDeclaredType() == TierString.class) {
 					TierString copyTxt = new TierString(sourceTier.getGroup(i).toString());

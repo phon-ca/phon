@@ -207,12 +207,12 @@ public class AutoTranscriber {
 				if(getTranscriber() != null) {
 					IPATranscript grpVal = (g.getIPATarget() != null ? g.getIPATarget() : new IPATranscript());
 					targetEdit = 
-							new BlindTierEdit(getEditor(), record.getIPATarget(), i, getTranscriber(), 
+							new BlindTierEdit(getEditor(), record.getIPATargetTier(), i, getTranscriber(),
 									autoTranscription.getObj1(), grpVal);
 				} else {
 					IPATranscript currentValue = 
-							(record.getIPATarget().numberOfGroups() > i ? 
-									record.getIPATarget().getGroup(i) : new IPATranscript());
+							(record.getIPATargetTier().numberOfGroups() > i ?
+									record.getIPATargetTier().getGroup(i) : new IPATranscript());
 					IPATranscript newValue = autoTranscription.getObj1();
 					
 					AlternativeTranscript alts = 
@@ -220,8 +220,8 @@ public class AutoTranscriber {
 					if(alts != null) newValue.putExtension(AlternativeTranscript.class, alts);
 					
 					targetEdit = 
-							new IPALookupEdit(getEditor(), getDictionary(), record.getOrthography().getGroup(i).toString(),
-									record.getIPATarget(), i, newValue);
+							new IPALookupEdit(getEditor(), getDictionary(), record.getOrthographyTier().getGroup(i).toString(),
+									record.getIPATargetTier(), i, newValue);
 				}
 				targetEdit.doIt();
 				retVal.addEdit(targetEdit);
@@ -232,12 +232,12 @@ public class AutoTranscriber {
 				if(getTranscriber() != null) {
 					IPATranscript grpVal = (g.getIPAActual() != null ? g.getIPAActual() : new IPATranscript());
 					actualEdit = 
-							new BlindTierEdit(getEditor(), record.getIPAActual(), i, getTranscriber(),
+							new BlindTierEdit(getEditor(), record.getIPAActualTier(), i, getTranscriber(),
 									autoTranscription.getObj2(), grpVal);
 				} else {
 					IPATranscript currentValue = 
-							(record.getIPAActual().numberOfGroups() > i ?
-									record.getIPAActual().getGroup(i) : new IPATranscript());
+							(record.getIPAActualTier().numberOfGroups() > i ?
+									record.getIPAActualTier().getGroup(i) : new IPATranscript());
 					IPATranscript newValue = autoTranscription.getObj2();
 					
 					AlternativeTranscript alts =
@@ -245,8 +245,8 @@ public class AutoTranscriber {
 					if(alts != null) newValue.putExtension(AlternativeTranscript.class, alts);
 					
 					actualEdit = 
-							new IPALookupEdit(getEditor(), getDictionary(), record.getOrthography().getGroup(i).toString(),
-									record.getIPAActual(), i, newValue);
+							new IPALookupEdit(getEditor(), getDictionary(), record.getOrthographyTier().getGroup(i).toString(),
+									record.getIPAActualTier(), i, newValue);
 				}
 				actualEdit.doIt();
 				retVal.addEdit(actualEdit);
@@ -256,7 +256,7 @@ public class AutoTranscriber {
 				final PhoneAligner aligner = new PhoneAligner();
 				final PhoneMap pm = aligner.calculatePhoneAlignment(g.getIPATarget(), g.getIPAActual());
 				final TierEdit<PhoneMap> alignmentEdit = 
-						new TierEdit<PhoneMap>(getEditor(), record.getPhoneAlignment(), i, pm);
+						new TierEdit<PhoneMap>(getEditor(), record.getPhoneAlignmentTier(), i, pm);
 				alignmentEdit.setFireHardChangeOnUndo(true);
 				alignmentEdit.doIt();
 				retVal.addEdit(alignmentEdit);

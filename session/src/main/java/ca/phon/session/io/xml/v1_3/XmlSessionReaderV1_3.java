@@ -418,17 +418,17 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 			}
 		}
 
-		Tier<IPATranscript> ipaTargetTier = retVal.getIPATarget();
+		Tier<IPATranscript> ipaTargetTier = retVal.getIPATargetTier();
 		while(ipaTargetTier.numberOfGroups() < retVal.numberOfGroups()) ipaTargetTier.addGroup();
 
-		Tier<IPATranscript> ipaActualTier = retVal.getIPAActual();
+		Tier<IPATranscript> ipaActualTier = retVal.getIPAActualTier();
 		while(ipaActualTier.numberOfGroups() < retVal.numberOfGroups()) ipaActualTier.addGroup();
 
 		// blind transcriptions
 		for(BlindTierType btt:rt.getBlindTranscription()) {
 			// get the correct ipa object from our new record
 			final Tier<IPATranscript> ipaTier =
-					(btt.getForm() == PhoTypeType.MODEL ? retVal.getIPATarget() : retVal.getIPAActual());
+					(btt.getForm() == PhoTypeType.MODEL ? retVal.getIPATargetTier() : retVal.getIPAActualTier());
 			int gidx = 0;
 			for(BgType bgt:btt.getBg()) {
 				final StringBuffer buffer = new StringBuffer();
@@ -464,7 +464,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 
 		// notes
 		if(rt.getNotes() != null)
-			retVal.getNotes().setGroup(0, new TierString(rt.getNotes().getContent()));
+			retVal.getNotesTier().setGroup(0, new TierString(rt.getNotes().getContent()));
 
 		// segment
 		if(rt.getSegment() != null) {
@@ -670,8 +670,8 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 
 		// create 'sound-only' lists from the ipa transcripts.  These are used for alignment
 		// indices
-		final Tier<IPATranscript> ipaT = record.getIPATarget();
-		final Tier<IPATranscript> ipaA = record.getIPAActual();
+		final Tier<IPATranscript> ipaT = record.getIPATargetTier();
+		final Tier<IPATranscript> ipaA = record.getIPAActualTier();
 
 		int gidx = 0;
 		for(AlignmentType at:att.getAg()) {

@@ -362,10 +362,10 @@ public class FindAndReplacePanel extends JPanel {
 					
 					final CompoundEdit edit = new CompoundEdit();
 					final PhoneMap pm = (new PhoneAligner()).calculatePhoneMap(
-							record.getIPATarget().getGroup(sr.getRecordRange().getGroupRange().getGroupIndex()),
-							record.getIPAActual().getGroup(sr.getRecordRange().getGroupRange().getGroupIndex()));
+							record.getIPATargetTier().getGroup(sr.getRecordRange().getGroupRange().getGroupIndex()),
+							record.getIPAActualTier().getGroup(sr.getRecordRange().getGroupRange().getGroupIndex()));
 					final TierEdit<PhoneMap> alignmentEdit = 
-							new TierEdit<PhoneMap>(getEditor(), record.getPhoneAlignment(), 
+							new TierEdit<PhoneMap>(getEditor(), record.getPhoneAlignmentTier(),
 									sr.getRecordRange().getGroupRange().getGroupIndex(), pm);
 					tierEdit.doIt();
 					edit.addEdit(tierEdit);
@@ -439,10 +439,10 @@ public class FindAndReplacePanel extends JPanel {
 				// update alignment
 				
 				final PhoneMap pm = (new PhoneAligner()).calculatePhoneMap(
-						r.getIPATarget().getGroup(currentRange.getRecordRange().getGroupRange().getGroupIndex()),
-						r.getIPAActual().getGroup(currentRange.getRecordRange().getGroupRange().getGroupIndex()));
+						r.getIPATargetTier().getGroup(currentRange.getRecordRange().getGroupRange().getGroupIndex()),
+						r.getIPAActualTier().getGroup(currentRange.getRecordRange().getGroupRange().getGroupIndex()));
 				final TierEdit<PhoneMap> alignmentEdit = 
-						new TierEdit<PhoneMap>(getEditor(), r.getPhoneAlignment(), 
+						new TierEdit<PhoneMap>(getEditor(), r.getPhoneAlignmentTier(),
 								currentRange.getRecordRange().getGroupRange().getGroupIndex(), pm);
 				alignmentEdit.doIt();
 

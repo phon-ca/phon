@@ -165,10 +165,10 @@ public class AutoValidateTask extends ca.phon.worker.PhonTask {
 		for(Record utt:session.getRecords()) {
 			if(recordFilter != null && recordFilter.checkRecord(utt)) {
 				if(validateTarget) {
-					undoableEdit.addEdit(validateIPA(utt.getIPATarget()));
+					undoableEdit.addEdit(validateIPA(utt.getIPATargetTier()));
 				}
 				if(validateActual) {
-					undoableEdit.addEdit(validateIPA(utt.getIPAActual()));
+					undoableEdit.addEdit(validateIPA(utt.getIPAActualTier()));
 				}
 			}
 		}

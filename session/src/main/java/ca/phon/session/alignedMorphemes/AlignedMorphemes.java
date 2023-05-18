@@ -54,7 +54,7 @@ public class AlignedMorphemes implements ExtensionProvider {
 			IPATranscript[] ipaActuals = ipaActual == null ? new IPATranscript[0] : morphemeParser.parseIPA(alignedWord.getIPAActual());
 			retVal = Math.max(retVal, ipaActuals.length);
 
-			for(String userTierName:alignedWord.getGroup().getRecord().getExtraTierNames()) {
+			for(String userTierName:alignedWord.getGroup().getRecord().getUserDefinedTierNames()) {
 				TierString tierVal = (TierString)alignedWord.getTier(userTierName);
 				TierString[] tierMorphemes = tierVal == null ? new TierString[0] : morphemeParser.parseTier((TierString)alignedWord.getTier(userTierName));
 				retVal = Math.max(retVal, tierMorphemes.length);

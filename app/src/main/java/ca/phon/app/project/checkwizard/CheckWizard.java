@@ -138,8 +138,8 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 					
 					final Record record = session.getRecord(i);
 					
-					checkTier(i, record.getIPATarget(), out);
-					checkTier(i, record.getIPAActual(), out);
+					checkTier(i, record.getIPATargetTier(), out);
+					checkTier(i, record.getIPAActualTier(), out);
 				}
 			} catch (IOException e) {
 				LOGGER.error( e.getLocalizedMessage(), e);
@@ -211,9 +211,9 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 				
 				final Record record = session.getRecord(i);
 				
-				final Tier<IPATranscript> ipaTarget = record.getIPATarget();
+				final Tier<IPATranscript> ipaTarget = record.getIPATargetTier();
 				resetSyllabification(ipaTarget);
-				final Tier<IPATranscript> ipaActual = record.getIPAActual();
+				final Tier<IPATranscript> ipaActual = record.getIPAActualTier();
 				resetSyllabification(ipaActual);
 				
 				if(isResetAlignment) {
@@ -222,7 +222,7 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 						continue;
 					}
 					
-					final Tier<PhoneMap> alignmentTier = record.getPhoneAlignment();
+					final Tier<PhoneMap> alignmentTier = record.getPhoneAlignmentTier();
 					for(int j = 0; j < ipaTarget.numberOfGroups(); j++) {
 						final IPATranscript target = ipaTarget.getGroup(j);
 						final IPATranscript actual = ipaActual.getGroup(j);
@@ -311,15 +311,15 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 				final Record record = session.getRecord(i);				
 				final PhoneAligner phoneAligner = new PhoneAligner();
 				
-				final Tier<IPATranscript> ipaTarget = record.getIPATarget();
-				final Tier<IPATranscript> ipaActual = record.getIPAActual();
+				final Tier<IPATranscript> ipaTarget = record.getIPATargetTier();
+				final Tier<IPATranscript> ipaActual = record.getIPAActualTier();
 				
 				if(ipaTarget.numberOfGroups() != ipaActual.numberOfGroups()) {
 					out.println("Alignment error in record " + (i+1));
 					continue;
 				}
 				
-				final Tier<PhoneMap> alignmentTier = record.getPhoneAlignment();
+				final Tier<PhoneMap> alignmentTier = record.getPhoneAlignmentTier();
 				for(int j = 0; j < ipaTarget.numberOfGroups(); j++) {
 					final IPATranscript target = ipaTarget.getGroup(j);
 					final IPATranscript actual = ipaActual.getGroup(j);

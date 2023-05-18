@@ -61,7 +61,7 @@ public class IPATierEditorExtension implements IPluginExtensionPoint<TierEditor>
 			@SuppressWarnings("unchecked")
 			final Tier<IPATranscript> ipaTier = (Tier<IPATranscript>)tier;
 
-			final Tier<PhoneMap> alignmentTier = record.getPhoneAlignment();
+			final Tier<PhoneMap> alignmentTier = record.getPhoneAlignmentTier();
 			PhoneMap alignment = alignmentTier.getGroup(group);
 			
 			Syllabifier syllabifier = null;
@@ -106,7 +106,7 @@ public class IPATierEditorExtension implements IPluginExtensionPoint<TierEditor>
 					final PhoneMapDisplay.AlignmentChangeData newVal = (PhoneMapDisplay.AlignmentChangeData)evt.getNewValue();
 					final PhoneMapDisplay display = (PhoneMapDisplay)evt.getSource();
 
-					final PhoneMap pm = new PhoneMap(record.getIPATarget().getGroup(group), record.getIPAActual().getGroup(group));
+					final PhoneMap pm = new PhoneMap(record.getIPATargetTier().getGroup(group), record.getIPAActualTier().getGroup(group));
 					pm.setTopAlignment(newVal.getAlignment()[0]);
 					pm.setBottomAlignment(newVal.getAlignment()[1]);
 

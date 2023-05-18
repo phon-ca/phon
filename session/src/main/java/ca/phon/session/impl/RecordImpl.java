@@ -21,13 +21,14 @@ import ca.phon.formatter.*;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.Orthography;
+import ca.phon.orthography.OrthographyElement;
+import ca.phon.orthography.UtteranceLanguage;
 import ca.phon.session.*;
 import ca.phon.session.GroupSegment;
 import ca.phon.session.spi.RecordSPI;
 import ca.phon.util.Language;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Basic record implementation
@@ -38,11 +39,9 @@ public class RecordImpl implements RecordSPI {
 	/* Attributes */
 	private UUID uuid = UUID.randomUUID();
 
-	private Participant participant = null;
+	private Participant participant = Participant.UNKNOWN;
 
 	private volatile boolean excludeFromSearches = false;
-
-	private Language language = null;
 
 	/* default tiers */
 	private final Tier<Orthography> orthography;
@@ -53,7 +52,7 @@ public class RecordImpl implements RecordSPI {
 
 	private final SegmentTier segmentTier;
 
-	private final Tier<TierString> notes;
+	private final Tier<UserTierData> notes;
 
 	private final Tier<PhoneMap> alignment;
 
@@ -62,17 +61,15 @@ public class RecordImpl implements RecordSPI {
 
 	RecordImpl() {
 		super();
-
 		final SessionFactory factory = SessionFactory.newFactory();
-		orthography = factory.createTier(SystemTierType.Orthography.getName(), Orthography.class, SystemTierType.Orthography.isGrouped());
-		ipaTarget = factory.createTier(SystemTierType.IPATarget.getName(), IPATranscript.class, SystemTierType.IPATarget.isGrouped());
-		ipaActual = factory.createTier(SystemTierType.IPAActual.getName(), IPATranscript.class, SystemTierType.IPAActual.isGrouped());
+		orthography = factory.createTier(SystemTierType.Orthography.getName(), Orthography.class);
+		ipaTarget = factory.createTier(SystemTierType.IPATarget.getName(), IPATranscript.class);
+		ipaActual = factory.createTier(SystemTierType.IPAActual.getName(), IPATranscript.class);
 		segmentTier = factory.createRecordSegmentTier();
-		final Tier<GroupSegment> segmentGroupTier = factory.createTier(SystemTierType.GroupSegment.getName(), GroupSegment.class, SystemTierType.GroupSegment.isGrouped());
+		final Tier<GroupSegment> segmentGroupTier = factory.createTier(SystemTierType.GroupSegment.getName(), GroupSegment.class);
 		segmentTier.putGroupSegmentTier(segmentGroupTier);
-		notes = factory.createTier(SystemTierType.Notes.getName(), TierString.class, SystemTierType.Notes.isGrouped());
-		alignment = factory.createTier(SystemTierType.SyllableAlignment.getName(), PhoneMap.class, SystemTierType.SyllableAlignment.isGrouped());
-
+		notes = factory.createTier(SystemTierType.Notes.getName(), UserTierData.class);
+		alignment = factory.createTier(SystemTierType.SyllableAlignment.getName(), PhoneMap.class);
 		userDefined =
 				Collections.synchronizedMap(new HashMap<String, Tier<?>>());
 	}
@@ -98,27 +95,7 @@ public class RecordImpl implements RecordSPI {
 	}
 
 	@Override
-	public Language getLanguage() {
-		return this.language;
-	}
-
-	@Override
-	public void setLanguage(Language language) {
-		this.language = language;
-	}
-
-	@Override
-	public MediaSegment getMediaSegment() {
-		return getSegment().getGroup(0);
-	}
-
-	@Override
-	public void setMediaSegment(MediaSegment segment) {
-		getSegment().setGroup(0, segment);
-	}
-
-	@Override
-	public Tier<MediaSegment> getSegment() {
+	public Tier<MediaSegment> getSegmentTier() {
 		return segmentTier.getRecordSegmentTier();
 	}
 
@@ -138,68 +115,28 @@ public class RecordImpl implements RecordSPI {
 	}
 
 	@Override
-	public Tier<Orthography> getOrthography() {
+	public Tier<Orthography> getOrthographyTier() {
 		return orthography;
 	}
 
 	@Override
-	public void setOrthography(Tier<Orthography> ortho) {
-		this.orthography.removeAll();
-		for(int i = 0; i < ortho.numberOfGroups(); i++) {
-			this.orthography.addGroup(ortho.getGroup(i));
-		}
-	}
-
-	@Override
-	public Tier<IPATranscript> getIPATarget() {
+	public Tier<IPATranscript> getIPATargetTier() {
 		return this.ipaTarget;
 	}
 
 	@Override
-	public void setIPATarget(Tier<IPATranscript> ipa) {
-		this.ipaTarget.removeAll();
-		for(int i = 0; i < ipa.numberOfGroups(); i++) {
-			this.ipaTarget.addGroup(ipa.getGroup(i));
-		}
-	}
-
-	@Override
-	public Tier<IPATranscript> getIPAActual() {
+	public Tier<IPATranscript> getIPAActualTier() {
 		return this.ipaActual;
 	}
 
 	@Override
-	public void setIPAActual(Tier<IPATranscript> ipa) {
-		this.ipaActual.removeAll();
-		for(int i = 0; i < ipa.numberOfGroups(); i++) {
-			this.ipaActual.addGroup(ipa.getGroup(i));
-		}
-	}
-
-	@Override
-	public Tier<PhoneMap> getPhoneAlignment() {
+	public Tier<PhoneMap> getPhoneAlignmentTier() {
 		return this.alignment;
 	}
 
 	@Override
-	public void setPhoneAlignment(Tier<PhoneMap> phoneAlignment) {
-		this.alignment.removeAll();
-		for(int i = 0; i < phoneAlignment.numberOfGroups(); i++) {
-			this.alignment.addGroup(phoneAlignment.getGroup(i));
-		}
-	}
-
-	@Override
-	public Tier<TierString> getNotes() {
+	public Tier<UserTierData> getNotesTier() {
 		return this.notes;
-	}
-
-	@Override
-	public void setNotes(Tier<TierString> notes) {
-		this.notes.removeAll();
-		if(notes.numberOfGroups() > 0) {
-			this.notes.addGroup(notes.getGroup(0));
-		}
 	}
 
 	@Override
@@ -218,78 +155,66 @@ public class RecordImpl implements RecordSPI {
 
 	@Override
 	public boolean hasTier(String name) {
-		return (SystemTierType.tierFromString(name) != null || getExtraTierNames().contains(name));
+		return (SystemTierType.tierFromString(name) != null || getUserDefinedTierNames().contains(name));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public <T> Tier<T> getTier(String name, Class<T> type) {
-		Tier<T> retVal = null;
-
 		final SystemTierType systemTierType = SystemTierType.tierFromString(name);
 		final Tier<T> systemTier = getSystemTier(systemTierType, type);
-
 		if(systemTier != null) {
-			retVal = systemTier;
+			return systemTier;
 		} else {
 			final Tier<?> userTier = userDefined.get(name);
 			if(userTier != null) {
 				if(userTier.getDeclaredType() == type) {
-					retVal = (Tier<T>)userTier;
-				} else if(type == String.class || type == TierString.class) {
+					return (Tier<T>)userTier;
+				} else if(type == String.class) {
 					// create a new string tier to return
 					final SessionFactory factory = SessionFactory.newFactory();
-					retVal = factory.createTier(name, type, userTier.isGrouped());
-
+					Tier<T> retVal = factory.createTier(name, type);
 					final Formatter<Object> formatter =
 							(Formatter<Object>)FormatterFactory.createFormatter(userTier.getDeclaredType());
-
-					// copy group data as string
-					for(int i = 0; i < userTier.numberOfGroups(); i++) {
-						final Object obj = userTier.getGroup(i);
-						String val = (formatter != null ? formatter.format(obj) : obj.toString());
-						Object tierVal = (type == TierString.class ? new TierString(val) : val);
-
-						if(obj instanceof IExtendable) {
-							final UnvalidatedValue uv = ((IExtendable)obj).getExtension(UnvalidatedValue.class);
-							if(uv != null) {
-								tierVal = (type == TierString.class ? new TierString(uv.getValue()) : uv.getValue());
-							}
+					final Object obj = userTier.getValue();
+					String val = (formatter != null ? formatter.format(obj) : obj.toString());
+					if(obj instanceof IExtendable) {
+						final UnvalidatedValue uv = ((IExtendable)obj).getExtension(UnvalidatedValue.class);
+						if(uv != null) {
+							val = uv.getValue();
 						}
-						retVal.addGroup((T)tierVal);
 					}
+					retVal.setValue((T)val);
+					return retVal;
 				}
 			}
 		}
-
-		return retVal;
+		return null;
 	}
 
 	@SuppressWarnings("unchecked")
 	private <T> Tier<T> getSystemTier(SystemTierType systemTierType, Class<T> type) {
 		Tier<T> retVal = null;
-
 		Tier<?> systemTier = null;
 		if(systemTierType != null) {
 			switch(systemTierType) {
 			case Orthography:
-				systemTier = getOrthography();
+				systemTier = getOrthographyTier();
 				break;
 
 			case IPATarget:
-				systemTier = getIPATarget();
+				systemTier = getIPATargetTier();
 				break;
 
 			case IPAActual:
-				systemTier = getIPAActual();
+				systemTier = getIPAActualTier();
 				break;
 
 			case SyllableAlignment:
-				systemTier = getPhoneAlignment();
+				systemTier = getPhoneAlignmentTier();
 				break;
 
 			case Segment:
-				systemTier = getSegment();
+				systemTier = getSegmentTier();
 				break;
 
 			case GroupSegment:
@@ -297,7 +222,7 @@ public class RecordImpl implements RecordSPI {
 				break;
 
 			case Notes:
-				systemTier = getNotes();
+				systemTier = getNotesTier();
 				break;
 
 			default:
@@ -306,27 +231,23 @@ public class RecordImpl implements RecordSPI {
 			if(systemTier != null) {
 				if(systemTier.getDeclaredType() == type) {
 					retVal = (Tier<T>)systemTier;
-				} else if(type == String.class || type == TierString.class) {
+				} else if(type == String.class) {
 					// create a new string tier to return
 					final SessionFactory factory = SessionFactory.newFactory();
-					retVal = factory.createTier(systemTier.getName(), type, systemTier.isGrouped());
-					// copy group data as string
-					for(int i = 0; i < systemTier.numberOfGroups(); i++) {
-						final Object obj = systemTier.getGroup(i);
-						Object val = (type == TierString.class ? new TierString(obj.toString()) : obj.toString());
-
-						if(obj instanceof IExtendable) {
-							final UnvalidatedValue uv = ((IExtendable)obj).getExtension(UnvalidatedValue.class);
-							if(uv != null) {
-								val = (type == TierString.class ? new TierString(uv.getValue()) : uv.getValue());
-							}
+					retVal = factory.createTier(systemTier.getName(), type);
+					final Object obj = systemTier.getValue();
+					Object val = obj.toString();
+					if(obj instanceof IExtendable) {
+						final UnvalidatedValue uv = ((IExtendable)obj).getExtension(UnvalidatedValue.class);
+						if(uv != null) {
+							val = uv.getValue();
 						}
-						retVal.addGroup((T)val);
 					}
+
+					retVal.setValue((T)val);
 				}
 			}
 		}
-
 		return retVal;
 	}
 
@@ -337,7 +258,7 @@ public class RecordImpl implements RecordSPI {
 	}
 
 	@Override
-	public Set<String> getExtraTierNames() {
+	public Set<String> getUserDefinedTierNames() {
 		return userDefined.keySet();
 	}
 
@@ -384,29 +305,27 @@ public class RecordImpl implements RecordSPI {
 	@Override
 	public <T> List<Tier<T>> getTiersOfType(Class<T> type) {
 		List<Tier<T>> retVal = new ArrayList<>();
-		
 		if(type == Orthography.class) {
-			retVal.add((Tier<T>)getOrthography());
+			retVal.add((Tier<T>) getOrthographyTier());
 		} else if(type == IPATranscript.class) {
-			retVal.add((Tier<T>)getIPATarget());
-			retVal.add((Tier<T>)getIPAActual());
+			retVal.add((Tier<T>) getIPATargetTier());
+			retVal.add((Tier<T>) getIPAActualTier());
 		} else if(type == MediaSegment.class) {
-			retVal.add((Tier<T>) getSegment());
+			retVal.add((Tier<T>) getSegmentTier());
 		} else if(type == GroupSegment.class) {
 			retVal.add((Tier<T>)getGroupSegment());
-		} else if(type == TierString.class) {
-			retVal.add((Tier<T>)getNotes());
+		} else if(type == UserTierData.class) {
+			retVal.add((Tier<T>) getNotesTier());
 		} else if(type == PhoneMap.class) {
-			retVal.add((Tier<T>)getPhoneAlignment());
+			retVal.add((Tier<T>) getPhoneAlignmentTier());
 		}
-		
 		for(String tierName:userDefined.keySet()) {
 			Tier<?> userTier = userDefined.get(tierName);
 			if(userTier.getDeclaredType() == type) {
 				retVal.add((Tier<T>)userTier);
 			}
 		}
-		
 		return retVal;
 	}
+
 }

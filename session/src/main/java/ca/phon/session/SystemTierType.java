@@ -31,11 +31,13 @@ public enum SystemTierType {
 	SyllableAlignment("Alignment", PhoneMap.class),
 	Segment("Segment", MediaSegment.class),
 	GroupSegment("Group Segment", GroupSegment.class),
-	Notes("Notes", TierString.class);
+	Notes("Notes", UserTierData.class);
 	
 	private String tierName;
 	
 	private Class<?> type;
+
+	private TierAlignmentRules tierAlignmentRules;
 	
 	private SystemTierType(String tierName, Class<?> type) {
 		this.tierName = tierName;

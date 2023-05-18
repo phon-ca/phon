@@ -50,23 +50,23 @@ public final class Group extends ExtendableObject {
 	
 	public Orthography getOrthography() {
 		return 
-				(record.getOrthography().numberOfGroups() > groupIndex ? record.getOrthography().getGroup(groupIndex) 
+				(record.getOrthographyTier().numberOfGroups() > groupIndex ? record.getOrthographyTier().getGroup(groupIndex)
 						: new Orthography());
 	}
 
 	public void setOrthography(Orthography ortho) {
-		record.getOrthography().setGroup(groupIndex, ortho);
+		record.getOrthographyTier().setGroup(groupIndex, ortho);
 	}
 
 	public IPATranscript getIPATarget() {
 		return 
-				(record.getIPATarget().numberOfGroups() > groupIndex ?  record.getIPATarget().getGroup(groupIndex)
+				(record.getIPATargetTier().numberOfGroups() > groupIndex ?  record.getIPATargetTier().getGroup(groupIndex)
 						: new IPATranscript());
 	}
 
 	public IPATranscript getIPAActual() {
 		return 
-				(record.getIPAActual().numberOfGroups() > groupIndex ? record.getIPAActual().getGroup(groupIndex)
+				(record.getIPAActualTier().numberOfGroups() > groupIndex ? record.getIPAActualTier().getGroup(groupIndex)
 						: new IPATranscript());
 	}
 	
@@ -93,31 +93,31 @@ public final class Group extends ExtendableObject {
 	}
 
 	public void setIPATarget(IPATranscript ipa) {
-		record.getIPATarget().setGroup(groupIndex, ipa);
+		record.getIPATargetTier().setGroup(groupIndex, ipa);
 	}
 
 	public void setIPAActual(IPATranscript ipa) {
-		record.getIPAActual().setGroup(groupIndex, ipa);
+		record.getIPAActualTier().setGroup(groupIndex, ipa);
 	}
 
 	public PhoneMap getPhoneAlignment() {
-		final Tier<PhoneMap> alignmentTier = record.getPhoneAlignment();
+		final Tier<PhoneMap> alignmentTier = record.getPhoneAlignmentTier();
 		return (alignmentTier != null && 
 				alignmentTier.numberOfGroups() > groupIndex ? alignmentTier.getGroup(groupIndex) : null);
 	}
 
 	public void setPhoneAlignment(PhoneMap alignment) {
-		record.getPhoneAlignment().setGroup(groupIndex, alignment);
+		record.getPhoneAlignmentTier().setGroup(groupIndex, alignment);
 	}
 
 	public TierString getNotes() {
 		return 
-				(record.getNotes() != null && 
-					record.getNotes().numberOfGroups() > 0 ? record.getNotes().getGroup(0) : null);
+				(record.getNotesTier() != null &&
+					record.getNotesTier().numberOfGroups() > 0 ? record.getNotesTier().getGroup(0) : null);
 	}
 
 	public void setNotes(TierString notes) {
-		record.getNotes().setGroup(0, notes);
+		record.getNotesTier().setGroup(0, notes);
 	}
 
 	public <T> void setTier(String name, Class<T> type, T val) {
@@ -140,7 +140,7 @@ public final class Group extends ExtendableObject {
 		retVal = Math.max(retVal, getWordCount(SystemTierType.IPAActual.getName()));
 		retVal = Math.max(retVal, getWordCount(SystemTierType.Segment.getName()));
 		
-		for(String tierName:record.getExtraTierNames()) {
+		for(String tierName:record.getUserDefinedTierNames()) {
 			final Tier<String> tier = record.getTier(tierName, String.class);
 			if(tier.isGrouped())
 				retVal = Math.max(retVal, getWordCount(tierName));

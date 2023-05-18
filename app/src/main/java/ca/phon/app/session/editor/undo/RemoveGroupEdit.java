@@ -57,13 +57,13 @@ public class RemoveGroupEdit extends SessionEditorUndoableEdit {
 			}
 			
 			if(SystemTierType.tierFromString(key) == SystemTierType.Orthography)
-				record.getOrthography().addGroup(groupIndex, (Orthography)oldGroupData.get(key));
+				record.getOrthographyTier().addGroup(groupIndex, (Orthography)oldGroupData.get(key));
 			else if(SystemTierType.tierFromString(key) == SystemTierType.IPATarget)
-				record.getIPATarget().addGroup(groupIndex, (IPATranscript)oldGroupData.get(key));
+				record.getIPATargetTier().addGroup(groupIndex, (IPATranscript)oldGroupData.get(key));
 			else if(SystemTierType.tierFromString(key) == SystemTierType.IPAActual) 
-				record.getIPAActual().addGroup(groupIndex, (IPATranscript)oldGroupData.get(key));
+				record.getIPAActualTier().addGroup(groupIndex, (IPATranscript)oldGroupData.get(key));
 			else if(SystemTierType.tierFromString(key) == SystemTierType.SyllableAlignment)
-				record.getPhoneAlignment().addGroup(groupIndex, (PhoneMap)oldGroupData.get(key));
+				record.getPhoneAlignmentTier().addGroup(groupIndex, (PhoneMap)oldGroupData.get(key));
 			else {
 				record.getTier(key, String.class).addGroup(groupIndex, (String)oldGroupData.get(key));
 			}
@@ -77,15 +77,15 @@ public class RemoveGroupEdit extends SessionEditorUndoableEdit {
 	public void doIt() {
 		oldGroupData.clear();
 		oldGroupData.put(SystemTierType.Orthography.getName(), 
-				(groupIndex < record.getOrthography().numberOfGroups() ? record.getOrthography().getGroup(groupIndex) : new Orthography()));
+				(groupIndex < record.getOrthographyTier().numberOfGroups() ? record.getOrthographyTier().getGroup(groupIndex) : new Orthography()));
 		oldGroupData.put(SystemTierType.IPATarget.getName(), 
-				(groupIndex < record.getIPATarget().numberOfGroups() ? record.getIPATarget().getGroup(groupIndex) : new IPATranscript()));
+				(groupIndex < record.getIPATargetTier().numberOfGroups() ? record.getIPATargetTier().getGroup(groupIndex) : new IPATranscript()));
 		oldGroupData.put(SystemTierType.IPAActual.getName(), 
-				(groupIndex < record.getIPAActual().numberOfGroups() ? record.getIPAActual().getGroup(groupIndex) : new IPATranscript()));
+				(groupIndex < record.getIPAActualTier().numberOfGroups() ? record.getIPAActualTier().getGroup(groupIndex) : new IPATranscript()));
 		oldGroupData.put(SystemTierType.SyllableAlignment.getName(), 
-				(groupIndex < record.getPhoneAlignment().numberOfGroups() ? record.getPhoneAlignment().getGroup(groupIndex) : new PhoneMap()));
+				(groupIndex < record.getPhoneAlignmentTier().numberOfGroups() ? record.getPhoneAlignmentTier().getGroup(groupIndex) : new PhoneMap()));
 		
-		for(String tierName:record.getExtraTierNames()) {
+		for(String tierName:record.getUserDefinedTierNames()) {
 			final Tier<String> extraTier = record.getTier(tierName, String.class);
 			if(extraTier.isGrouped())
 				oldGroupData.put(tierName, 

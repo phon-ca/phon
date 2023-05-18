@@ -15,6 +15,8 @@
  */
 package ca.phon.session.spi;
 
+import ca.phon.session.TierAlignmentRules;
+
 public interface SessionFactorySPI {
 
 	/**
@@ -73,18 +75,18 @@ public interface SessionFactorySPI {
 	 * @param grouped
 	 * @return the new tier
 	 */
-	public <T> TierSPI<T> createTier(String name, Class<T> type, boolean grouped);
+	public <T> TierSPI<T> createTier(String name, Class<T> type, TierAlignmentRules tierAlignmentRules);
 	
 	/**
 	 * Create tier description.
 	 * 
 	 * @param name
-	 * @param grouped
 	 * @param type
+	 * @param tierAlignmentRules
 	 * 
 	 * @return new tier description
 	 */
-	public TierDescriptionSPI createTierDescription(String name, boolean grouped, Class<?> type);
+	public TierDescriptionSPI createTierDescription(String name, Class<?> type, TierAlignmentRules tierAlignmentRules);
 	
 	/**
 	 * Create a tier display and ordering object
