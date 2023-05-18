@@ -27,7 +27,6 @@ import java.util.*;
 /**
  * A factory for creating mutable session objects.
  * 
- * 
  */
 public final class SessionFactory extends ExtendableObject {
 	
@@ -429,14 +428,6 @@ public final class SessionFactory extends ExtendableObject {
 	
 	public Transcriber createTranscriber(TranscriberSPI transcriberImpl) {
 		return new Transcriber(transcriberImpl);
-	}
-
-	public SegmentTier createRecordSegmentTier() {
-		return createRecordSegmentTier(createMediaSegment());
-	}
-
-	public SegmentTier createRecordSegmentTier(MediaSegment recordSegment) {
-		return new SegmentTier(recordSegment);
 	}
 
 	/**

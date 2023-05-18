@@ -82,8 +82,7 @@ public final class Record extends ExtendableObject {
 	 */
 	public Language getLanguage() {
 		final Orthography ortho = getOrthographyTier().getValue();
-		if(ortho.length() > 0 && ortho.elementAt(0) instanceof UtteranceLanguage) {
-			final UtteranceLanguage uttLang = (UtteranceLanguage) ortho.elementAt(0);
+		if(ortho.length() > 0 && ortho.elementAt(0) instanceof UtteranceLanguage uttLang) {
 			return uttLang.getLanguage();
 		} else {
 			return null;
@@ -93,9 +92,20 @@ public final class Record extends ExtendableObject {
 	public void setLanguage(Language language) {
 		// update orthography with UtteranceLanguage annotation
 		final UtteranceLanguage utteranceLanguage = new UtteranceLanguage(language);
-		final List<OrthographyElement> orthographyElements = new ArrayList<>();
-		orthographyElements.add(utteranceLanguage);
-		// TODO
+		final Orthography currentOrtho = getOrthography();
+		int startIdx = 0;
+		if(currentOrtho.length() > 0 && currentOrtho.elementAt(0) instanceof UtteranceLanguage) {
+			++startIdx;
+		}
+		final OrthographyBuilder builder = new OrthographyBuilder();
+		builder.append(utteranceLanguage);
+		int i = 0;
+		for(OrthographyElement ele:currentOrtho) {
+			if(i++ >= startIdx) {
+				builder.append(ele);
+			}
+		}
+		setOrthography(builder.toOrthography());
 	}
 
 	/**
@@ -117,8 +127,6 @@ public final class Record extends ExtendableObject {
 	public Tier<MediaSegment> getSegmentTier() {
 		return recordImpl.getSegmentTier();
 	}
-
-	public Tier<GroupSegment> getGroupSegment() { return recordImpl.getGroupSegment(); }
 
 	/**
 	 * Should we exclude this record from searches?
@@ -211,7 +219,17 @@ public final class Record extends ExtendableObject {
 	 * @return the tier type
 	 */
 	public Class<?> getTierType(String name) {
-		return recordImpl.getTierType(name);
+		if(SystemTierType.isSystemTier(name)) {
+			return SystemTierType.tierFromString(name).getDeclaredType();
+		} else {
+			for(String tierName:getUserDefinedTierNames()) {
+				final Tier<?> t = getTier(tierName);
+				if(t.getName().equals(name)) {
+					return t.getDeclaredType();
+				}
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -235,7 +253,7 @@ public final class Record extends ExtendableObject {
 	 * @return name
 	 */
 	public Tier<?> getTier(String name) {
-		return recordImpl.getTier(name);
+		return getTier(name, getTierType(name));
 	}
 
 	/**
@@ -257,7 +275,26 @@ public final class Record extends ExtendableObject {
 	 * @return list of tiers
 	 */
 	public <T> List<Tier<T>> getTiersOfType(Class<T> type) {
-		return recordImpl.getTiersOfType(type);
+		List<Tier<T>> retVal = new ArrayList<>();
+		if(type == Orthography.class) {
+			retVal.add((Tier<T>) getOrthographyTier());
+		} else if(type == IPATranscript.class) {
+			retVal.add((Tier<T>) getIPATargetTier());
+			retVal.add((Tier<T>) getIPAActualTier());
+		} else if(type == MediaSegment.class) {
+			retVal.add((Tier<T>) getSegmentTier());
+		} else if(type == UserTierData.class) {
+			retVal.add((Tier<T>) getNotesTier());
+		} else if(type == PhoneMap.class) {
+			retVal.add((Tier<T>) getPhoneAlignmentTier());
+		}
+		for(String tierName:getUserDefinedTierNames()) {
+			Tier<?> userTier = getTier(tierName);
+			if(userTier.getDeclaredType() == type) {
+				retVal.add((Tier<T>)userTier);
+			}
+		}
+		return retVal;
 	}
 
 	/**
@@ -315,28 +352,13 @@ public final class Record extends ExtendableObject {
 		recordImpl.putTier(tier);
 	}
 
+	/**
+	 * Remove user-defined tier from record
+	 *
+	 * @param name
+	 */
 	public void removeTier(String name) {
 		recordImpl.removeTier(name);
 	}
 
-	public int getNumberOfComments() {
-		return recordImpl.getNumberOfComments();
-	}
-
-	public Comment getComment(int idx) {
-		return recordImpl.getComment(idx);
-	}
-
-	public void addComment(Comment comment) {
-		recordImpl.addComment(comment);
-	}
-
-	public void removeComment(Comment comment) {
-		recordImpl.removeComment(comment);
-	}
-
-	public void removeComment(int idx) {
-		recordImpl.removeComment(idx);
-	}
-	
 }

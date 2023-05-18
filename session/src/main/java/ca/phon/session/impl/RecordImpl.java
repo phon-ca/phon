@@ -28,6 +28,7 @@ import ca.phon.session.GroupSegment;
 import ca.phon.session.spi.RecordSPI;
 import ca.phon.util.Language;
 
+import javax.print.attribute.standard.Media;
 import java.util.*;
 
 /**
@@ -50,7 +51,7 @@ public class RecordImpl implements RecordSPI {
 
 	private final Tier<IPATranscript> ipaActual;
 
-	private final SegmentTier segmentTier;
+	private final Tier<MediaSegment> segmentTier;
 
 	private final Tier<UserTierData> notes;
 
@@ -65,13 +66,10 @@ public class RecordImpl implements RecordSPI {
 		orthography = factory.createTier(SystemTierType.Orthography.getName(), Orthography.class);
 		ipaTarget = factory.createTier(SystemTierType.IPATarget.getName(), IPATranscript.class);
 		ipaActual = factory.createTier(SystemTierType.IPAActual.getName(), IPATranscript.class);
-		segmentTier = factory.createRecordSegmentTier();
-		final Tier<GroupSegment> segmentGroupTier = factory.createTier(SystemTierType.GroupSegment.getName(), GroupSegment.class);
-		segmentTier.putGroupSegmentTier(segmentGroupTier);
+		segmentTier = factory.createTier(SystemTierType.Segment.getName(), MediaSegment.class);
 		notes = factory.createTier(SystemTierType.Notes.getName(), UserTierData.class);
 		alignment = factory.createTier(SystemTierType.SyllableAlignment.getName(), PhoneMap.class);
-		userDefined =
-				Collections.synchronizedMap(new HashMap<String, Tier<?>>());
+		userDefined = Collections.synchronizedMap(new HashMap<>());
 	}
 
 	@Override
@@ -96,12 +94,7 @@ public class RecordImpl implements RecordSPI {
 
 	@Override
 	public Tier<MediaSegment> getSegmentTier() {
-		return segmentTier.getRecordSegmentTier();
-	}
-
-	@Override
-	public Tier<GroupSegment> getGroupSegment() {
-		return segmentTier.getGroupSegmentTier();
+		return this.segmentTier;
 	}
 
 	@Override
@@ -116,7 +109,7 @@ public class RecordImpl implements RecordSPI {
 
 	@Override
 	public Tier<Orthography> getOrthographyTier() {
-		return orthography;
+		return this.orthography;
 	}
 
 	@Override
@@ -137,20 +130,6 @@ public class RecordImpl implements RecordSPI {
 	@Override
 	public Tier<UserTierData> getNotesTier() {
 		return this.notes;
-	}
-
-	@Override
-	public Class<?> getTierType(String name) {
-		if(SystemTierType.isSystemTier(name)) {
-			return SystemTierType.tierFromString(name).getDeclaredType();
-		} else {
-			for(Tier<?> t:userDefined.values()) {
-				if(t.getName().equals(name)) {
-					return t.getDeclaredType();
-				}
-			}
-		}
-		return null;
 	}
 
 	@Override
@@ -217,10 +196,6 @@ public class RecordImpl implements RecordSPI {
 				systemTier = getSegmentTier();
 				break;
 
-			case GroupSegment:
-				systemTier = getGroupSegment();
-				break;
-
 			case Notes:
 				systemTier = getNotesTier();
 				break;
@@ -251,12 +226,6 @@ public class RecordImpl implements RecordSPI {
 		return retVal;
 	}
 
-
-	@Override
-	public Tier<?> getTier(String name) {
-		return getTier(name, getTierType(name));
-	}
-
 	@Override
 	public Set<String> getUserDefinedTierNames() {
 		return userDefined.keySet();
@@ -267,65 +236,9 @@ public class RecordImpl implements RecordSPI {
 		userDefined.remove(name);
 	}
 
-	// COMMENTS
-	private final List<Comment> comments =
-			Collections.synchronizedList(new ArrayList<Comment>());
-
-	@Override
-	public int getNumberOfComments() {
-		return comments.size();
-	}
-
-	@Override
-	public Comment getComment(int idx) {
-		return comments.get(idx);
-	}
-
-	@Override
-	public void addComment(Comment comment) {
-		comments.add(comment);
-	}
-
-	@Override
-	public void removeComment(Comment comment) {
-		comments.remove(comment);
-	}
-
-	@Override
-	public void removeComment(int idx) {
-		comments.remove(idx);
-	}
-
 	@Override
 	public void putTier(Tier<?> tier) {
 		userDefined.put(tier.getName(), tier);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> List<Tier<T>> getTiersOfType(Class<T> type) {
-		List<Tier<T>> retVal = new ArrayList<>();
-		if(type == Orthography.class) {
-			retVal.add((Tier<T>) getOrthographyTier());
-		} else if(type == IPATranscript.class) {
-			retVal.add((Tier<T>) getIPATargetTier());
-			retVal.add((Tier<T>) getIPAActualTier());
-		} else if(type == MediaSegment.class) {
-			retVal.add((Tier<T>) getSegmentTier());
-		} else if(type == GroupSegment.class) {
-			retVal.add((Tier<T>)getGroupSegment());
-		} else if(type == UserTierData.class) {
-			retVal.add((Tier<T>) getNotesTier());
-		} else if(type == PhoneMap.class) {
-			retVal.add((Tier<T>) getPhoneAlignmentTier());
-		}
-		for(String tierName:userDefined.keySet()) {
-			Tier<?> userTier = userDefined.get(tierName);
-			if(userTier.getDeclaredType() == type) {
-				retVal.add((Tier<T>)userTier);
-			}
-		}
-		return retVal;
 	}
 
 }
