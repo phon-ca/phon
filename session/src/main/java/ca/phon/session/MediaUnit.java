@@ -17,38 +17,6 @@
 package ca.phon.session;
 
 public enum MediaUnit {
-	/*
-	 * <xs:simpleType name="mediaUnitType">
-    <xs:restriction base="xs:NMTOKEN">
-      <xs:enumeration value="f">
-        <xs:annotation>
-          <xs:documentation> frame</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="s">
-        <xs:annotation>
-          <xs:documentation> second</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <!-- MUN added -->
-      <xs:enumeration value="ms">
-        <xs:annotation>
-          <xs:documentation> millisecond</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="b">
-        <xs:annotation>
-          <xs:documentation> byte</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="c">
-        <xs:annotation>
-          <xs:documentation> character</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-    </xs:restriction>
-  </xs:simpleType>
-	 */
 	Frame("f"),
 	Second("s"),
 	Millisecond("ms"),

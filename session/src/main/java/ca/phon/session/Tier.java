@@ -22,36 +22,49 @@ import java.text.ParseException;
 import java.util.*;
 
 /**
- * A tier in a record.  A tier has a name, type and a number
- * of groups.
+ * A tier in a record with name, parameters, alignment rules and value.
  * 
  */
 public final class Tier<T> extends ExtendableObject {
 	
 	private final TierSPI<T> tierImpl;
-	
-	/**
-	 * Tier listeners, using a {@link WeakHashMap} so that listeners
-	 * are removed when their references are no longer needed.  The second
-	 * {@link Boolean} parameter is unused
-	 */
-	private final Map<TierListener<T>, Boolean> tierListeners;
+
+	private final List<TierListener<T>> tierListeners = Collections.synchronizedList(new ArrayList<>());
 	
 	Tier(TierSPI<T> impl) {
 		super();
 		this.tierImpl = impl;
-		
-		final WeakHashMap<TierListener<T>, Boolean> weakHash = 
-				new WeakHashMap<TierListener<T>, Boolean>();
-		tierListeners = Collections.synchronizedMap(weakHash);
 	}
-	
+
+	/**
+	 * @return tier name
+	 */
 	public String getName() {
 		return tierImpl.getName();
 	}
 
+	/**
+	 * @return tier type
+	 */
 	public Class<?> getDeclaredType() {
 		return tierImpl.getDeclaredType();
+	}
+
+	/**
+	 * Tier parameters as setup in the session {@link TierDescription}
+	 * @return tier parameters
+	 */
+	public Map<String, String> getTierParameters() {
+		return tierImpl.getTierParameters();
+	}
+
+	/**
+	 * Tier alignment rules as setup in the session {@link TierDescription}
+	 *
+	 * @return tier alignment rules
+	 */
+	public TierAlignmentRules getTierAlignmentRules() {
+		return tierImpl.getTierAlignmentRules();
 	}
 
 	/**
@@ -80,22 +93,45 @@ public final class Tier<T> extends ExtendableObject {
 		return getExtension(UnvalidatedValue.class) != null;
 	}
 
+	/**
+	 * Return the unvalidated value for this tier (if set)
+	 * @return unvalidated value or null
+	 */
 	public UnvalidatedValue getUnvalidatedValue() {
 		return getExtension(UnvalidatedValue.class);
 	}
 
+	/**
+	 * Get tier value
+	 *
+	 * @return tier value (may be null)
+	 */
 	public T getValue() {
 		return tierImpl.getValue();
 	}
 
+	/**
+	 * Has the tier value been set
+	 *
+	 * @return true if tier value is not null
+	 */
 	public boolean hasValue() {
 		return getValue() != null;
 	}
 
+	/**
+	 * Clear tier value (set to null)
+	 *
+	 */
 	public void clear() {
 		setValue(null);
 	}
 
+	/**
+	 * Set value for tier, this will trigger a value changed event if necessary
+	 *
+	 * @param value
+	 */
 	public void setValue(T value) {
 		final T oldValue = getValue();
 		tierImpl.setValue(value);
@@ -103,6 +139,11 @@ public final class Tier<T> extends ExtendableObject {
 		fireTireValueChanged(oldValue, value);
 	}
 
+	/**
+	 * Return string representation of tier value
+	 *
+	 * @return tier string
+	 */
 	@Override
 	public String toString() {
 		final StringBuffer buffer = new StringBuffer();
@@ -115,7 +156,7 @@ public final class Tier<T> extends ExtendableObject {
 	 * Tier Listeners
 	 */
 	public void addTierListener(TierListener<T> listener) {
-		tierListeners.put(listener, Boolean.TRUE);
+		tierListeners.add(listener);
 	}
 
 	public void removeTierListener(TierListener<T> listener) {
@@ -123,7 +164,7 @@ public final class Tier<T> extends ExtendableObject {
 	}
 	
 	private void fireTireValueChanged(T oldValue, T value) {
-		for(TierListener<T> listener:tierListeners.keySet()) {
+		for(TierListener<T> listener:tierListeners) {
 			listener.tierValueChanged(this, oldValue, value);
 		}
 	}

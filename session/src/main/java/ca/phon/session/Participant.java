@@ -23,7 +23,7 @@ import ca.phon.session.spi.ParticipantSPI;
 import java.time.*;
 
 /**
- * Immutable participant object.
+ * A participant is a speaker or object which participates in the {@link Session}.
  *
  */
 public final class Participant extends ExtendableObject {

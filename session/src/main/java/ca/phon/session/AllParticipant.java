@@ -4,7 +4,10 @@ import ca.phon.session.spi.ParticipantSPI;
 
 import java.time.*;
 
-public class AllParticipant implements ParticipantSPI {
+/**
+ * Used as a placeholder in lists for all participants
+ */
+public final class AllParticipant implements ParticipantSPI {
 
 	@Override
 	public void setSex(Sex sex) {

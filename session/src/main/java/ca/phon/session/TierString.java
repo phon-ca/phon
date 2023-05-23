@@ -25,7 +25,7 @@ import java.util.*;
  * Custom String implementation for tiers with extension support.
  * 
  */
-public class UserTierData extends ExtendableObject
+public class TierString extends ExtendableObject
 	implements java.io.Serializable, Comparable<String>, CharSequence, UserTierElement {
 	
 	private static final long serialVersionUID = 7079791690885598508L;

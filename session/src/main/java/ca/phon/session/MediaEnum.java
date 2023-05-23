@@ -17,17 +17,6 @@
 package ca.phon.session;
 
 public enum MediaEnum {
-	/*
-	 * <xs:simpleType name="mediaTypeType">
-    <xs:restriction base="xs:NMTOKEN">
-      <xs:enumeration value="text"/>
-      <xs:enumeration value="image"/>
-      <xs:enumeration value="audio"/>
-      <xs:enumeration value="video"/>
-      <xs:enumeration value="application"/>
-    </xs:restriction>
-  </xs:simpleType>
-	 */
 	Text,
 	Image,
 	Audio,

@@ -5,6 +5,7 @@ import ca.phon.orthography.Word;
 import ca.phon.visitor.annotation.Visits;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -13,43 +14,57 @@ import java.util.List;
  */
 public final class TypeAlignmentRules {
 
+    /**
+     * Types in orthography which may be used in alignment
+     */
+    public static enum AlignableType {
+        Linker,
+        /**
+         * words, including words inside groups and phonetic groups
+         */
+        Word,
+        /**
+         * groups, if selected only one aligned type will be required for the entire group
+         */
+        Group,
+        /**
+         * Phonetic groups, if selected only one aligned type will be required for the entire group
+         */
+        PhoneticGroup,
+        Pause,
+        Terminator,
+        Postcode
+    };
+
+    private final List<AlignableType> alignableTypes;
+
     public static final boolean DEFAULT_INCLUDE_WORD_XXX = false;
-    private boolean includeXXX = DEFAULT_INCLUDE_WORD_XXX;
+    private final boolean includeXXX;
 
     public static final boolean DEFAULT_INCLUDE_WORD_YYY = false;
-    private boolean includeYYY = DEFAULT_INCLUDE_WORD_YYY;
+    private final boolean includeYYY;
 
     public static final boolean DEFAULT_INCLUDE_WORD_WWW = false;
-    private boolean includeWWW = DEFAULT_INCLUDE_WORD_WWW;
+    private final boolean includeWWW;
 
     public static final boolean DEFAULT_INCLUDE_OMITTED = false;
-    private boolean includeOmitted = DEFAULT_INCLUDE_OMITTED;
+    private final boolean includeOmitted;
 
     public static final boolean DEFAULT_INCLUDE_EXCLUDED = false;
-    private boolean includeExcluded = DEFAULT_INCLUDE_EXCLUDED;
-
-    public static final boolean DEFAULT_INCLUDE_PAUSES = true;
-    private boolean includePauses = DEFAULT_INCLUDE_PAUSES;
-
-    public static final boolean DEFAULT_INCLUDE_PHONETIC_GROUPS = false;
-    private boolean includePhoneticGroups = DEFAULT_INCLUDE_PHONETIC_GROUPS;
-
-    public static final boolean DEFAULT_INCLUDE_TERMINATORS = false;
-    private boolean includeTerminators = DEFAULT_INCLUDE_TERMINATORS;
+    private final boolean includeExcluded;
 
     public TypeAlignmentRules() {
-        super();
+        this(Collections.singletonList(AlignableType.Word), DEFAULT_INCLUDE_WORD_XXX, DEFAULT_INCLUDE_WORD_YYY,
+                DEFAULT_INCLUDE_WORD_WWW, DEFAULT_INCLUDE_OMITTED, DEFAULT_INCLUDE_EXCLUDED);
     }
 
-    public TypeAlignmentRules(boolean includeWords, boolean includeXXX, boolean includeYYY, boolean includeWWW, boolean includeOmitted, boolean includeExcluded, boolean includePauses, boolean includePhoneticGroups, boolean includeTerminators) {
+    public TypeAlignmentRules(List<AlignableType> alignableTypes, boolean includeXXX, boolean includeYYY, boolean includeWWW, boolean includeOmitted, boolean includeExcluded) {
+        this.alignableTypes = alignableTypes;
         this.includeXXX = includeXXX;
         this.includeYYY = includeYYY;
         this.includeWWW = includeWWW;
         this.includeOmitted = includeOmitted;
         this.includeExcluded = includeExcluded;
-        this.includePauses = includePauses;
-        this.includePhoneticGroups = includePhoneticGroups;
-        this.includeTerminators = includeTerminators;
     }
 
     public List<OrthographyElement> filterOrthography(Orthography orthography) {
@@ -62,64 +77,24 @@ public final class TypeAlignmentRules {
         return includeXXX;
     }
 
-    public void setIncludeXXX(boolean includeXXX) {
-        this.includeXXX = includeXXX;
-    }
-
     public boolean isIncludeYYY() {
         return includeYYY;
-    }
-
-    public void setIncludeYYY(boolean includeYYY) {
-        this.includeYYY = includeYYY;
     }
 
     public boolean isIncludeWWW() {
         return includeWWW;
     }
 
-    public void setIncludeWWW(boolean includeWWW) {
-        this.includeWWW = includeWWW;
-    }
-
     public boolean isIncludeOmitted() {
         return includeOmitted;
-    }
-
-    public void setIncludeOmitted(boolean includeOmitted) {
-        this.includeOmitted = includeOmitted;
     }
 
     public boolean isIncludeExcluded() {
         return includeExcluded;
     }
 
-    public void setIncludeExcluded(boolean includeExcluded) {
-        this.includeExcluded = includeExcluded;
-    }
-
-    public boolean isIncludePauses() {
-        return includePauses;
-    }
-
-    public void setIncludePauses(boolean includePauses) {
-        this.includePauses = includePauses;
-    }
-
-    public boolean isIncludePhoneticGroups() {
-        return includePhoneticGroups;
-    }
-
-    public void setIncludePhoneticGroups(boolean includePhoneticGroups) {
-        this.includePhoneticGroups = includePhoneticGroups;
-    }
-
-    public boolean isIncludeTerminators() {
-        return includeTerminators;
-    }
-
-    public void setIncludeTerminators(boolean includeTerminators) {
-        this.includeTerminators = includeTerminators;
+    public boolean isIncluded(AlignableType type) {
+        return alignableTypes.contains(type);
     }
 
     private final class OrthographyFilter extends AbstractOrthographyVisitor {
@@ -129,7 +104,7 @@ public final class TypeAlignmentRules {
         @Visits
         @Override
         public void visitWord(Word word) {
-            boolean includeWord = true;
+            boolean includeWord = isIncluded(AlignableType.Word);
             if(word.getPrefix().getType() == WordType.OMISSION) {
                 includeWord = isIncludeOmitted();
             }
@@ -147,18 +122,20 @@ public final class TypeAlignmentRules {
         @Visits
         @Override
         public void visitPause(Pause pause) {
-            if(isIncludePauses())
+            if(isIncluded(AlignableType.Pause))
                 elements.add(pause);
         }
 
         @Override
         public void visitOrthoGroup(OrthoGroup group) {
+            if(isIncluded(AlignableType.Group))
+                elements.add(group);
             group.getElements().forEach(this::visit);
         }
 
         @Override
         public void visitPhoneticGroup(PhoneticGroup phoneticGroup) {
-            if(isIncludePhoneticGroups()) {
+            if(isIncluded(AlignableType.PhoneticGroup)) {
                 elements.add(phoneticGroup);
             } else {
                 phoneticGroup.getElements().forEach(this::visit);
@@ -167,8 +144,20 @@ public final class TypeAlignmentRules {
 
         @Override
         public void visitTerminator(Terminator terminator) {
-            if(isIncludeTerminators())
+            if(isIncluded(AlignableType.Terminator))
                 elements.add(terminator);
+        }
+
+        @Override
+        public void visitLinker(Linker linker) {
+            if(isIncluded(AlignableType.Linker))
+                elements.add(linker);
+        }
+
+        @Override
+        public void visitPostcode(Postcode postcode) {
+            if(isIncluded(AlignableType.Postcode))
+                elements.add(postcode);
         }
 
         @Override
