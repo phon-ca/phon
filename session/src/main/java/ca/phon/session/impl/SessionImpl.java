@@ -18,6 +18,7 @@ package ca.phon.session.impl;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.spi.SessionSPI;
+import ca.phon.util.Language;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -34,30 +35,32 @@ public class SessionImpl implements SessionSPI {
 	
 	private final AtomicReference<LocalDate> dateRef = new AtomicReference<LocalDate>();
 	
-	private final AtomicReference<String> langRef = new AtomicReference<String>();
-	
 	private final AtomicReference<String> mediaRef = new AtomicReference<String>();
 	
 	private final SessionMetadata metadata;
+
+	private final List<Language> languages =
+			Collections.synchronizedList(new ArrayList<>());
 	
 	private final List<Participant> participants =
-			Collections.synchronizedList(new ArrayList<Participant>());
+			Collections.synchronizedList(new ArrayList<>());
 	
 	private final List<Transcriber> transcribers =
-			Collections.synchronizedList(new ArrayList<Transcriber>());
+			Collections.synchronizedList(new ArrayList<>());
 	
 	private final List<TierViewItem> tierOrder =
-			Collections.synchronizedList(new ArrayList<TierViewItem>());
+			Collections.synchronizedList(new ArrayList<>());
 	
 	private final List<TierDescription> userTiers =
-			Collections.synchronizedList(new ArrayList<TierDescription>());
+			Collections.synchronizedList(new ArrayList<>());
 	
-	private final List<Record> records =
-			Collections.synchronizedList(new ArrayList<Record>());
+	private final Transcript transcript;
 	
 	SessionImpl() {
 		super();
-		metadata = SessionFactory.newFactory().createSessionMetadata();
+		final SessionFactory factory = SessionFactory.newFactory();
+		metadata = factory.createSessionMetadata();
+		transcript = factory.createTranscript();
 	}
 
 	@Override
@@ -76,8 +79,14 @@ public class SessionImpl implements SessionSPI {
 	}
 
 	@Override
-	public String getLanguage() {
-		return langRef.get();
+	public List<Language> getLanguages() {
+		return Collections.unmodifiableList(languages);
+	}
+
+	@Override
+	public void setLanguages(List<Language> languages) {
+		this.languages.clear();
+		this.languages.addAll(languages);
 	}
 
 	@Override
@@ -121,27 +130,8 @@ public class SessionImpl implements SessionSPI {
 	}
 
 	@Override
-	public Record getRecord(int pos) {
-		return records.get(pos);
-	}
-
-	@Override
-	public int getRecordCount() {
-		return records.size();
-	}
-
-	@Override
-	public int getRecordPosition(Record record) {
-		return records.indexOf(record);
-	}
-	
-	@Override
-	public void setRecordPosition(Record record, int position) {
-		int currentPos = getRecordPosition(record);
-		if(currentPos >= 0) {
-			records.remove(currentPos);
-			records.add(position, record);
-		}
+	public Transcript getTranscript() {
+		return this.transcript;
 	}
 
 	@Override
@@ -187,11 +177,6 @@ public class SessionImpl implements SessionSPI {
 	}
 
 	@Override
-	public void setLanguage(String language) {
-		langRef.getAndSet(language);
-	}
-
-	@Override
 	public void setMediaLocation(String mediaLocation) {
 		mediaRef.getAndSet(mediaLocation);
 	}
@@ -218,26 +203,6 @@ public class SessionImpl implements SessionSPI {
 		if(t != null) {
 			transcribers.remove(t);
 		}
-	}
-
-	@Override
-	public void addRecord(Record record) {
-		records.add(record);
-	}
-
-	@Override
-	public void addRecord(int pos, Record record) {
-		records.add(pos, record);
-	}
-
-	@Override
-	public void removeRecord(Record record) {
-		records.remove(record);
-	}
-
-	@Override
-	public void removeRecord(int pos) {
-		records.remove(pos);
 	}
 
 	@Override
@@ -285,4 +250,5 @@ public class SessionImpl implements SessionSPI {
 	public int getTranscriberCount() {
 		return transcribers.size();
 	}
+
 }

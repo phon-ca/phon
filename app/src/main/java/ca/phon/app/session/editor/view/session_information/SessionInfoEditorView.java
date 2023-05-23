@@ -301,7 +301,7 @@ public class SessionInfoEditorView extends EditorView {
 		updateMediaFieldStatus();
 		
 		languageField.getDocument().removeDocumentListener(languageFieldListener);
-		languageField.setText(session.getLanguage());
+		languageField.setText(session.getLanguages());
 		languageField.getDocument().addDocumentListener(languageFieldListener);
 		
 		ParticipantsTableModel tableModel = new ParticipantsTableModel(session);

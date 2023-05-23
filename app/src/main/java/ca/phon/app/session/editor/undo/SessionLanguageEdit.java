@@ -32,7 +32,7 @@ public class SessionLanguageEdit extends SessionEditorUndoableEdit {
 
 	@Override
 	public void undo() {
-		getEditor().getSession().setLanguage(oldLang);
+		getEditor().getSession().setLanguages(oldLang);
 
 		final EditorEvent<EditorEventType.SessionLangChangedData> ee =
 				new EditorEvent<>(EditorEventType.SessionLangChanged, getEditor(), new EditorEventType.SessionLangChangedData(newLang, oldLang));
@@ -41,8 +41,8 @@ public class SessionLanguageEdit extends SessionEditorUndoableEdit {
 	
 	@Override
 	public void doIt() {
-		oldLang = getEditor().getSession().getLanguage();
-		getEditor().getSession().setLanguage(newLang);
+		oldLang = getEditor().getSession().getLanguages();
+		getEditor().getSession().setLanguages(newLang);
 
 		final EditorEvent<EditorEventType.SessionLangChangedData> ee =
 				new EditorEvent<>(EditorEventType.SessionLangChanged, getSource(), new EditorEventType.SessionLangChangedData(oldLang, newLang));

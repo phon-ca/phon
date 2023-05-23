@@ -16,7 +16,8 @@
 package ca.phon.session.spi;
 
 import ca.phon.session.TierAlignmentRules;
-import ca.phon.session.WordAlignmentRules;
+
+import java.util.Map;
 
 public interface TierDescriptionSPI {
 
@@ -32,6 +33,8 @@ public interface TierDescriptionSPI {
 	 *
 	 */
 	public Class<?> getDeclaredType();
+
+	public Map<String, String> getTierParameters();
 
 	/**
 	 * Tier alignment rules

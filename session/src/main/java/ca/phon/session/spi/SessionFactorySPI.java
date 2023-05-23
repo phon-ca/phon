@@ -41,6 +41,8 @@ public interface SessionFactorySPI {
 	 */
 	public SessionMetadataSPI createSessionMetadata();
 
+	public TranscriptSPI createTranscript();
+
 	/**
 	 * Create a new record.
 	 * 

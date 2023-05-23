@@ -11,7 +11,7 @@ import java.util.List;
  * Class which describes how a tier is aligned with elements in the orthography.
  *
  */
-public class WordAlignmentRules {
+public final class TypeAlignmentRules {
 
     public static final boolean DEFAULT_INCLUDE_WORD_XXX = false;
     private boolean includeXXX = DEFAULT_INCLUDE_WORD_XXX;
@@ -37,11 +37,11 @@ public class WordAlignmentRules {
     public static final boolean DEFAULT_INCLUDE_TERMINATORS = false;
     private boolean includeTerminators = DEFAULT_INCLUDE_TERMINATORS;
 
-    public WordAlignmentRules() {
+    public TypeAlignmentRules() {
         super();
     }
 
-    public WordAlignmentRules(boolean includeWords, boolean includeXXX, boolean includeYYY, boolean includeWWW, boolean includeOmitted, boolean includeExcluded, boolean includePauses, boolean includePhoneticGroups, boolean includeTerminators) {
+    public TypeAlignmentRules(boolean includeWords, boolean includeXXX, boolean includeYYY, boolean includeWWW, boolean includeOmitted, boolean includeExcluded, boolean includePauses, boolean includePhoneticGroups, boolean includeTerminators) {
         this.includeXXX = includeXXX;
         this.includeYYY = includeYYY;
         this.includeWWW = includeWWW;

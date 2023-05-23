@@ -16,9 +16,12 @@
 package ca.phon.session.impl;
 
 import ca.phon.formatter.FormatterUtil;
+import ca.phon.session.TierAlignmentRules;
 import ca.phon.session.spi.TierSPI;
 
+import java.text.ParseException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class TierImpl<T> implements TierSPI<T> {
 	
@@ -33,20 +36,14 @@ public class TierImpl<T> implements TierSPI<T> {
 	 * name
 	 */
 	private final String tierName;
-	
-	/**
-	 * is this a grouped tier
-	 */
-	private final boolean grouped;
+
+	private final TierAlignmentRules tierAlignmentRules;
 	
 	/**
 	 * Group data
 	 */
-	private final List<T> tierData =
-			Collections.synchronizedList(new ArrayList<T>());
+	private final AtomicReference<T> valueRef = new AtomicReference<>();
 
-	
-	
 	/**
 	 * Constructor
 	 * 
@@ -54,141 +51,13 @@ public class TierImpl<T> implements TierSPI<T> {
 	 * @param type
 	 * @param grouped
 	 */
-	TierImpl(String name, Class<T> type, boolean grouped) {
+	TierImpl(String name, Class<T> type, TierAlignmentRules tierAlignmentRules) {
 		super();
 		this.tierName = name;
 		this.declaredType = type;
-		this.grouped = grouped;
-
+		this.tierAlignmentRules = tierAlignmentRules;
 	}
 
-	@Override
-	public int numberOfGroups() {
-		int retVal = 0;
-		synchronized(tierData) {
-			retVal = tierData.size();
-		}
-		if(retVal > 0 && !grouped)
-			retVal = 1;
-		return retVal;
-	}
-
-	@Override
-	public T getGroup(int idx) {
-		T retVal = null;
-		synchronized(tierData) {
-			if(grouped && (idx < 0 || idx >= numberOfGroups())) {
-				throw new ArrayIndexOutOfBoundsException(idx);
-			}
-			if(!grouped && idx == 0 && tierData.size() == 0) {
-				// create a new object to return
-				try {
-					final T val = getDeclaredType().newInstance();
-					tierData.add(val);
-				} catch (InstantiationException e) {
-					LOGGER.warn( e.getMessage(), e);
-				} catch (IllegalAccessException e) {
-					LOGGER.warn( e.getMessage(), e);
-				}
-			}
-			retVal = tierData.get(idx);
-		}
-		return retVal;
-	}
-
-	@Override
-	public void setGroup(int idx, T val) {
-		synchronized(tierData) {
-			if(!grouped && idx > 0) {
-				throw new ArrayIndexOutOfBoundsException(idx);
-			}
-			
-			// add empty groups if necessary
-			while(idx > tierData.size()) {
-				tierData.add(getDeclaredType().cast(FormatterUtil.parse(getDeclaredType(), "")));
-			}
-			if(idx == tierData.size())
-				tierData.add(val);
-			else
-				tierData.set(idx, val);
-		}
-		
-	}
-	
-	@Override
-	public void addGroup() {
-		final Class<? extends T> type = getDeclaredType();
-		try {
-			final T obj = type.newInstance();
-			addGroup(obj);
-		} catch (InstantiationException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
-		} catch (IllegalAccessException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
-		}
-	}
-	
-	@Override
-	public void addGroup(int idx) {
-		final Class<? extends T> type = getDeclaredType();
-		try {
-			final T obj = type.newInstance();
-			addGroup(idx, obj);
-		} catch (InstantiationException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
-		} catch (IllegalAccessException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
-		}
-	}
-
-	@Override
-	public void addGroup(T val) {
-		synchronized(tierData) {
-			if(!grouped && tierData.size() > 0) {
-				throw new ArrayIndexOutOfBoundsException("Un-grouped tiers may only have one group.");
-			}
-			tierData.add(val);
-		}
-	}
-	
-	@Override
-	public void addGroup(int idx, T val) {
-		synchronized (tierData) {
-			if(!grouped && tierData.size() > 0) {
-				throw new ArrayIndexOutOfBoundsException("Un-grouped tiers may only have one group.");
-			}
-			if(idx < 0 || idx > tierData.size()) { 
-				throw new ArrayIndexOutOfBoundsException(idx);
-			}
-			if(val == null) {
-				throw new NullPointerException();
-			}
-			tierData.add(idx, val);
-		}
-	}
-
-	@Override
-	public T removeGroup(int idx) {
-		synchronized(tierData) {
-			if(!grouped && idx > 0) {
-				throw new ArrayIndexOutOfBoundsException(idx);
-			}
-			return tierData.remove(idx);
-		}
-	}
-
-	@Override
-	public void removeAll() {
-		synchronized(tierData) {
-			tierData.clear();
-		}
-	}
-
-	@Override
-	public boolean isGrouped() {
-		return grouped;
-	}
-	
 	@Override
 	public String getName() {
 		return tierName;
@@ -198,5 +67,24 @@ public class TierImpl<T> implements TierSPI<T> {
 	public Class<T> getDeclaredType() {
 		return declaredType;
 	}
-	
+
+	@Override
+	public TierAlignmentRules getTierAlignmentRules() {
+		return this.tierAlignmentRules;
+	}
+
+	@Override
+	public T parse(String text) throws ParseException {
+		return null;
+	}
+
+	@Override
+	public T getValue() {
+		return this.valueRef.get();
+	}
+
+	@Override
+	public void setValue(T value) {
+		this.valueRef.set(value);
+	}
 }

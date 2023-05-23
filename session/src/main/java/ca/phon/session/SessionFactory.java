@@ -91,6 +91,10 @@ public final class SessionFactory extends ExtendableObject {
 		
 		return retVal;
 	}
+
+	public Transcript createTranscript() {
+		return new Transcript(sessionFactoryImpl.createTranscript());
+	}
 	
 	/**
 	 * Setup default tier view for session.
@@ -153,7 +157,7 @@ public final class SessionFactory extends ExtendableObject {
 		dest.setCorpus(session.getCorpus());
 		dest.setMediaLocation(session.getMediaLocation());
 		dest.setDate(session.getDate());
-		dest.setLanguage(session.getLanguage());
+		dest.setLanguages(session.getLanguages());
 	}
 	
 	/**
@@ -196,7 +200,11 @@ public final class SessionFactory extends ExtendableObject {
 		retVal.setValue(comment.getValue());
 		return retVal;
 	}
-	
+
+	public Transcript createSessionTranscript() {
+		return null;
+	}
+
 	/**
 	 * Create session metadata object.
 	 * 

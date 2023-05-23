@@ -16,8 +16,8 @@
 
 package ca.phon.session.spi;
 
-import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.util.Language;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -37,14 +37,34 @@ public interface SessionSPI {
 	/** Get the transcript date */
 	public LocalDate getDate();
 	
-	/** Get the language */
-	public String getLanguage();
+	/**
+	 * Get the list of (unmodifiable) languages (if any) for the session
+	 */
+	public List<Language> getLanguages();
+
+	/**
+	 * Set the list of languages for the session
+	 *
+	 * @param languages
+	 */
+	public void setLanguages(List<Language> languages);
 	
 	/** Get/Set the media file location */
 	public String getMediaLocation();
 
-	/** Get/Set the tier view */
+	/**
+	 * Get the tier view
+	 *
+	 * @return tier view (unmodifiable)
+	 */
 	public List<TierViewItem> getTierView();
+
+	/**
+	 * Set tier view
+	 *
+	 * @param view
+	 */
+	public void setTierView(List<TierViewItem> view);
 	
 	/*
 	 * Custom tiers defined for the session
@@ -76,6 +96,7 @@ public interface SessionSPI {
 	 * Add a user tier
 	 */
 	public void addUserTier(TierDescription tierDescription);
+
 	public void addUserTier(int idx, TierDescription tierDescription);
 	
 	/**
@@ -110,36 +131,6 @@ public interface SessionSPI {
 	 * @return Metadata
 	 */
 	public SessionMetadata getMetadata();
-	
-	/**
-	 * Return the record at the given index.
-	 * 
-	 * @param pos
-	 * @return the specified record
-	 */
-	public Record getRecord(int pos);
-	
-	/**
-	 * Return the number of records.
-	 * 
-	 * @return the number of records
-	 */
-	public int getRecordCount();
-	
-	/**
-	 * Get the position of the given record.
-	 * 
-	 * @param record
-	 */
-	public int getRecordPosition(Record record);
-	
-	/**
-	 * Set the position of the given record
-	 * 
-	 * @param record
-	 * @param position
-	 */
-	public void setRecordPosition(Record record, int position);
 	
 	/**
 	 * Get the number of participants
@@ -188,14 +179,8 @@ public interface SessionSPI {
 	/** Get the transcript date */
 	public void setDate(LocalDate date);
 	
-	/** Set the language */
-	public void setLanguage(String language);
-	
 	/** Media location */
 	public void setMediaLocation(String mediaLocation);
-	
-	/** Tier view */
-	public void setTierView(List<TierViewItem> view);
 	
 	/**
 	 * Add a new transcriber
@@ -207,35 +192,6 @@ public interface SessionSPI {
 	 */
 	public void removeTranscriber(Transcriber t);
 	public void removeTranscriber(String username);
-	
-	/**
-	 * Add a new record to the session
-	 * 
-	 * @param record
-	 */
-	public void addRecord(Record record);
-	
-	/**
-	 * Add a new record to the list in the given position.
-	 * 
-	 * @param pos
-	 * @param record
-	 */
-	public void addRecord(int pos, Record record);
-	
-	/**
-	 * Remove a record from the session.
-	 * 
-	 * @param record
-	 */
-	public void removeRecord(Record record);
-	
-	/**
-	 * Remove a record from the session
-	 * 
-	 * @param pos
-	 */
-	public void removeRecord(int pos);
 	
 	/**
 	 * Remove a participant.
@@ -250,5 +206,7 @@ public interface SessionSPI {
 	 * @param idx
 	 */
 	public void removeParticipant(int idx);
+
+	public Transcript getTranscript();
 	
 }

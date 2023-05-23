@@ -81,7 +81,7 @@ public class XmlSessionWriterV1_2 implements SessionWriter, IPluginExtensionPoin
 		} catch (DatatypeConfigurationException e) {
 			LOGGER.warn( e.getMessage(), e);
 		}
-		final String lang = session.getLanguage();
+		final String lang = session.getLanguages();
 		if(lang != null && lang.length() > 0) {
 			final String langs[] = lang.split("\\p{Space}");
 			for(String l:langs) {

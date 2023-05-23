@@ -18,8 +18,10 @@ package ca.phon.session;
 import ca.phon.extensions.ExtendableObject;
 import ca.phon.session.spi.TierDescriptionSPI;
 
+import java.util.Map;
+
 /**
- * Name and grouped information for a tier.
+ * Description of a tier including name, type, parameters and alignment rules.
  *
  */
 public final class TierDescription extends ExtendableObject {
@@ -39,6 +41,22 @@ public final class TierDescription extends ExtendableObject {
 		return tierDescriptionImpl.getDeclaredType();
 	}
 
+	/**
+	 * Parameters for the tier description. Parameters are defined by individual tier
+	 * types.  For example, the IPA tiers include an optional parameter for syllabifier
+	 * language.
+	 *
+	 * @return map of tier parameters
+	 */
+	public Map<String, String> getTierParameters() {
+		return tierDescriptionImpl.getTierParameters();
+	}
+
+	/**
+	 * Alignment rules for this tier with respect to the Orthography
+	 *
+	 * @return tier alignment rules
+	 */
 	public TierAlignmentRules getTierAlignmentRules() { return tierDescriptionImpl.getTierAlignmentRules(); }
 	
 }

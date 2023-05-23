@@ -1,6 +1,6 @@
 package ca.phon.session;
 
-public class TierAlignmentRules {
+public final class TierAlignmentRules {
 
     public enum TierAlignmentType {
         /**
@@ -8,31 +8,55 @@ public class TierAlignmentRules {
          */
         None,
         /**
-         * Alignment based on WordAlignmentRules
+         * Alignment based on TypeAlignmentRules
          */
-        ByWord
+        ByType,
+        /**
+         * Use for user-defined tiers which include parameters
+         * for identifying subtypes in the user data
+         */
+        ByTypeThenSubType;
     };
 
     private final TierAlignmentType type;
 
-    private final WordAlignmentRules wordAlignmentRules;
+    private final TypeAlignmentRules typeAlignmentRules;
+
+    private final String[] subtypeDelim;
+
+    private final String subtypeExpr;
 
     public TierAlignmentRules() {
-        this(TierAlignmentType.None, null);
+        this(TierAlignmentType.None, null, null, null);
     }
 
-    public TierAlignmentRules(TierAlignmentType type, WordAlignmentRules wordAlignmentRules) {
+    public TierAlignmentRules(TypeAlignmentRules typeAlignmentRules) {
+        this(TierAlignmentType.ByType, typeAlignmentRules, null, null);
+    }
+
+    public TierAlignmentRules(TypeAlignmentRules typeAlignmentRules, String[] subtypeDelim) {
+        this(TierAlignmentType.ByTypeThenSubType, typeAlignmentRules, subtypeDelim, null);
+    }
+
+    public TierAlignmentRules(TypeAlignmentRules typeAlignmentRules, String subtypeExpr) {
+        this(TierAlignmentType.ByTypeThenSubType, typeAlignmentRules, null, subtypeExpr);
+    }
+
+    private TierAlignmentRules(TierAlignmentType type, TypeAlignmentRules typeAlignmentRules,
+                               String[] subtypeDelim, String subtypeExpr) {
         super();
         this.type = type;
-        this.wordAlignmentRules = wordAlignmentRules;
+        this.typeAlignmentRules = typeAlignmentRules;
+        this.subtypeDelim = subtypeDelim;
+        this.subtypeExpr = subtypeExpr;
     }
 
     public TierAlignmentType getType() {
         return type;
     }
 
-    public WordAlignmentRules getWordAlignmentRules() {
-        return wordAlignmentRules;
+    public TypeAlignmentRules getWordAlignmentRules() {
+        return typeAlignmentRules;
     }
 
 }

@@ -153,7 +153,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 				for(String lang:headerData.getLanguages()) {
 					langs += (langs.length() > 0 ? " " : "") + lang;
 				}
-				retVal.setLanguage(langs);
+				retVal.setLanguages(langs);
 			}
 		}
 

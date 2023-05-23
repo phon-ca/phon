@@ -46,8 +46,8 @@ public class SessionFactoryImpl implements SessionFactorySPI, IPluginExtensionPo
 	}
 
 	@Override
-	public <T> TierSPI<T> createTier(String name, Class<T> type, boolean grouped) {
-		final TierImpl<T> retVal = new TierImpl<T>(name, type, grouped);
+	public <T> TierSPI<T> createTier(String name, Class<T> type, TierAlignmentRules tierAlignmentRules) {
+		final TierImpl<T> retVal = new TierImpl<T>(name, type, tierAlignmentRules);
 		return retVal;
 	}
 
@@ -76,6 +76,9 @@ public class SessionFactoryImpl implements SessionFactorySPI, IPluginExtensionPo
 	public SessionMetadataSPI createSessionMetadata() {
 		return new SessionMetadataImpl();
 	}
+
+	@Override
+	public TranscriptSPI createTranscript() { return new TranscriptImpl(); }
 
 	@Override
 	public Class<?> getExtensionType() {
