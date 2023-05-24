@@ -486,7 +486,7 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 		// first create a string from the orthography type,
 		// then parse the string into the new orthography container
 
-		final Tier<Orthography> retVal = factory.createTier(SystemTierType.Orthography.getName(), Orthography.class, SystemTierType.Orthography.isGrouped());
+		final Tier<Orthography> retVal = factory.createTier(SystemTierType.Orthography.getName(), Orthography.class);
 
 		for(Object otEle:ot.getWOrGOrP()) {
 			if(!(otEle instanceof GroupType)) continue;

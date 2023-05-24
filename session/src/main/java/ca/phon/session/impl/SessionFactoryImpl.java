@@ -19,6 +19,8 @@ import ca.phon.plugin.*;
 import ca.phon.session.TierAlignmentRules;
 import ca.phon.session.spi.*;
 
+import java.util.Map;
+
 /**
  * Default implementation of a session factory.
  */
@@ -46,8 +48,8 @@ public class SessionFactoryImpl implements SessionFactorySPI, IPluginExtensionPo
 	}
 
 	@Override
-	public <T> TierSPI<T> createTier(String name, Class<T> type, TierAlignmentRules tierAlignmentRules) {
-		final TierImpl<T> retVal = new TierImpl<T>(name, type, tierAlignmentRules);
+	public <T> TierSPI<T> createTier(String name, Class<T> type, Map<String, String> tierParameters, TierAlignmentRules tierAlignmentRules) {
+		final TierImpl<T> retVal = new TierImpl<T>(name, type, tierParameters, tierAlignmentRules);
 		return retVal;
 	}
 

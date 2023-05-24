@@ -25,8 +25,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class TierImpl<T> implements TierSPI<T> {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(TierImpl.class.getName());
-	
 	/**
 	 * Declared type
 	 */
@@ -36,6 +34,8 @@ public class TierImpl<T> implements TierSPI<T> {
 	 * name
 	 */
 	private final String tierName;
+
+	private final Map<String, String> tierParameters;
 
 	private final TierAlignmentRules tierAlignmentRules;
 	
@@ -51,10 +51,11 @@ public class TierImpl<T> implements TierSPI<T> {
 	 * @param type
 	 * @param grouped
 	 */
-	TierImpl(String name, Class<T> type, TierAlignmentRules tierAlignmentRules) {
+	TierImpl(String name, Class<T> type, Map<String, String> tierParameters, TierAlignmentRules tierAlignmentRules) {
 		super();
 		this.tierName = name;
 		this.declaredType = type;
+		this.tierParameters = tierParameters;
 		this.tierAlignmentRules = tierAlignmentRules;
 	}
 
@@ -66,6 +67,11 @@ public class TierImpl<T> implements TierSPI<T> {
 	@Override
 	public Class<T> getDeclaredType() {
 		return declaredType;
+	}
+
+	@Override
+	public Map<String, String> getTierParameters() {
+		return Collections.unmodifiableMap(this.tierParameters);
 	}
 
 	@Override
