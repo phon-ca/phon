@@ -133,6 +133,22 @@ public final class Session extends ExtendableObject {
 	}
 
 	/**
+	 * Get tier description from tier name
+	 *
+	 * @param tierName
+	 * @return user-define tier description or null if tier was not found
+	 */
+	public TierDescription getUserTier(String tierName) {
+		for(int i = 0; i < getUserTierCount(); i++) {
+			final TierDescription td = getUserTier(i);
+			if(td.getName().equals(tierName)) {
+				return td;
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * Get tier description for user-defined tier at given index
 	 *
 	 * @param idx

@@ -26,12 +26,12 @@ import java.util.*;
  * the number of align-able elements in an Orthography instance.
  *
  */
-public class OrthoWordExtractor extends VisitorAdapter<OrthographyElement> {
+public class OrthoWordExtractor extends AbstractOrthographyVisitor {
 
-	private final List<OrthographyElement> wordList = new ArrayList<OrthographyElement>();
+	private final List<Word> wordList = new ArrayList<Word>();
 	
 	private boolean includeOmitted = false;
-	
+
 	public OrthoWordExtractor() {
 		this(false);
 	}
@@ -44,34 +44,38 @@ public class OrthoWordExtractor extends VisitorAdapter<OrthographyElement> {
 	public boolean isIncludeOmitted() {
 		return this.includeOmitted;
 	}
-	
+
 	public void setIncludeOmitted(boolean includeOmitted) {
 		this.includeOmitted = includeOmitted;
 	}
-	
+
 	@Visits
+	@Override
 	public void visitWord(Word word) {
-		if(word.getPrefix() != null && word.getPrefix().getType() == WordType.OMISSION)
+		if(word.getPrefix() != null && word.getPrefix().getType() == WordType.OMISSION && !isIncludeOmitted())
 			return;
-		
 		wordList.add(word);
 	}
 
 	@Visits
-	public void visitWordnet(CompoundWord wordnet) {
+	@Override
+	public void visitCompoundWord(CompoundWord wordnet) {
 		wordList.add(wordnet);
 	}
-	
-//	@Visits
-//	public void visitComment(OrthographyComment comment) {
-//		if(comment.getData().matches("\\.{1,3}")) {
-//			// add pause as an alignment element
-//			wordList.add(comment);
-//		}
-//	}
-	
-	public List<OrthographyElement> getWordList() {
-		return this.wordList;
+
+	@Visits
+	@Override
+	public void visitOrthoGroup(OrthoGroup group) {
+		group.getElements().forEach(this::visit);
+	}
+
+	@Override
+	public void visitPhoneticGroup(PhoneticGroup phoneticGroup) {
+		phoneticGroup.getElements().forEach(this::visit);
+	}
+
+	public List<Word> getWordList() {
+		return Collections.unmodifiableList(this.wordList);
 	}
 
 	@Override

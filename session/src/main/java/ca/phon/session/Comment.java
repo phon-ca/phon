@@ -21,7 +21,6 @@ import ca.phon.session.spi.CommentSPI;
 
 /**
  * Entity class for comments.
- * 
  *
  */
 public final class Comment extends ExtendableObject {
@@ -48,23 +47,20 @@ public final class Comment extends ExtendableObject {
 	public void setValue(String comment) {
 		commentImpl.setValue(comment);
 	}
-	
+
 	/**
-	 * Get the tag for the comment.
-	 * @return CommentEnum
+	 * Get comment type
+	 *
+	 * @return comment type
 	 */
-	public String getTag() {
-		return commentImpl.getTag();
-	}
-	
+	public CommentType getType() { return commentImpl.getType(); }
+
 	/**
-	 * Set the tag for the comment, cannot be <code>null</code>
+	 * Set comment type
+	 *
 	 * @param type
-	 * 
-	 * @throws NullPointerException if tag is <code>null</code>
 	 */
-	public void setTag(String tag) {
-		commentImpl.setTag(tag);
-	}
+	public void setType(CommentType type) { commentImpl.setType(type); }
+
 
 }

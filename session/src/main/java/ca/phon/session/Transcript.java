@@ -14,12 +14,12 @@ public final class Transcript extends ExtendableObject {
         final Comment comment;
         final Record record;
 
-        public Element(Comment comment) {
+        Element(Comment comment) {
             this.comment = comment;
             this.record = null;
         }
 
-        public Element(Record record) {
+        Element(Record record) {
             this.record = record;
             this.comment = null;
         }
@@ -32,6 +32,16 @@ public final class Transcript extends ExtendableObject {
 
         public Record asRecord() { return this.record; }
 
+        @Override
+        public int hashCode() {
+            return (isComment() ? asComment().hashCode() : asRecord().hashCode());
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if(!(obj instanceof Element)) return false;
+            return (isComment() ? asComment() == ((Element)obj).asComment() : asRecord() == ((Element)obj).asRecord());
+        }
     }
 
     private final TranscriptSPI spi;
@@ -102,6 +112,56 @@ public final class Transcript extends ExtendableObject {
     }
 
     /**
+     * Return the element index
+     *
+     * @param ele
+     * @return element index in transcript or -1 if not found
+     */
+    public int getElementIndex(Element ele) {
+        for(int i = 0; i < getNumberOfElements(); i++) {
+            if(getElementAt(i).equals(ele))
+                return i;
+        }
+        return -1;
+    }
+
+    /**
+     * Add a new record to end of the transcript
+     *
+     * @param comment
+     */
+    public void addComment(Comment comment) {
+        addElement(new Element(comment));
+    }
+
+    /**
+     * Add new comment at the given element index. Note this
+     * is different from asRecord(int recordIndex, Record record) which is
+     * a helper function to insert a record at the correct location between comments
+     * and records.
+     *
+     * @param elementIndex
+     * @param comment
+     * @thorws ArrayIndexOutOfBoundsException
+     */
+    public void addComment(int elementIndex, Comment comment) {
+        addElement(elementIndex, new Element(comment));
+    }
+
+    /**
+     * Remove given comment
+     *
+     * @param comment
+     */
+    public Comment removeComment(Comment comment) {
+        int eleIdx = getElementIndex(new Element(comment));
+        if(eleIdx >= 0) {
+            return removeElement(eleIdx).asComment();
+        }
+        return null;
+    }
+
+    /**
      * Add a new record to the session
      *
      * @param record
@@ -134,18 +194,13 @@ public final class Transcript extends ExtendableObject {
      * @return element index of record, or -1 if not found
      */
     public int getRecordElementIndex(Record record) {
-        for(int i = 0; i < getNumberOfElements(); i++) {
-            if(getElementAt(i).isRecord() && getElementAt(i).asRecord() == record) {
-                return i;
-            }
-        }
-        return -1;
+        return getElementIndex(new Element(record));
     }
 
     /**
      * Add a new record to the list in the given position.
      *
-     * @param pos
+     * @param recordIndex
      * @param record
      * @throws ArrayIndexOutOfBoundsException
      */
@@ -187,10 +242,10 @@ public final class Transcript extends ExtendableObject {
      * @param recordIndex
      * @throws ArrayIndexOutOfBoundsException
      */
-    public void removeRecord(int recordIndex) {
+    public Record removeRecord(int recordIndex) {
         final int eleIdx = getRecordElementIndex(recordIndex);
         if(eleIdx >= 0) {
-            removeElement(eleIdx);
+            return removeElement(eleIdx).asRecord();
         } else {
             throw new ArrayIndexOutOfBoundsException(recordIndex);
         }

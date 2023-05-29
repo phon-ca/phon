@@ -15,6 +15,7 @@
  */
 package ca.phon.session.impl;
 
+import ca.phon.session.CommentType;
 import ca.phon.session.spi.CommentSPI;
 
 /**
@@ -25,16 +26,16 @@ public class CommentImpl implements CommentSPI {
 	
 	private String value;
 	
-	private String tag;
+	private CommentType type;
 	
 	CommentImpl() {
 		super();
 	}
 	
-	CommentImpl(String tag, String value) {
+	CommentImpl(CommentType type, String value) {
 		super();
 		this.value = value;
-		this.tag = tag;
+		this.type = type;
 	}
 	
 	@Override
@@ -47,16 +48,8 @@ public class CommentImpl implements CommentSPI {
 		this.value = comment;
 	}
 
-	@Override
-	public String getTag() {
-		return (tag == null ? "comment" : tag);
-	}
+	public CommentType getType() { return this.type; }
 
-	@Override
-	public void setTag(String tag) {
-		if(tag == null)
-			throw new NullPointerException("tag");
-		this.tag = tag;
-	}
-	
+	public void setType(CommentType type) { this.type = type; }
+
 }

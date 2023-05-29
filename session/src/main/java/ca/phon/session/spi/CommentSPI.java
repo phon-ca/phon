@@ -15,6 +15,8 @@
  */
 package ca.phon.session.spi;
 
+import ca.phon.session.CommentType;
+
 public interface CommentSPI {
 	
 	/** 
@@ -29,16 +31,8 @@ public interface CommentSPI {
 	 */
 	public void setValue(String comment);
 	
-	/**
-	 * Get the tag.
-	 * @return tag for the comment
-	 */
-	public String getTag();
-	
-	/**
-	 * Set the tag (cannot be <code>null</code>).
-	 * @param type
-	 */
-	public void setTag(String tag);
+	public CommentType getType();
+
+	public void setType(CommentType type);
 
 }

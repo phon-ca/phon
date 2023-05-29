@@ -1,5 +1,6 @@
 package ca.phon.session;
 
+import ca.phon.extensions.ExtendableObject;
 import ca.phon.orthography.InternalMedia;
 import ca.phon.orthography.MediaTimeFormat;
 import ca.phon.orthography.TagMarkerType;
@@ -13,11 +14,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public final class UserTierData {
+public final class UserTierData extends ExtendableObject {
 
     private final List<UserTierElement> elements;
 
-    public UserTierData parseTierData(String text) throws ParseException {
+    public static UserTierData parseTierData(String text) throws ParseException {
         final String[] parts = text.split("\\p{Space}");
         final String commentPattern = "\\((.+)\\)";
         final String internalMediaPattern = InternalMedia.MEDIA_BULLET
@@ -79,6 +80,7 @@ public final class UserTierData {
     }
 
     public UserTierData(List<UserTierElement> elements) {
+        super();
         this.elements = Collections.unmodifiableList(elements);
     }
 

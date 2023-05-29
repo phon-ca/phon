@@ -91,7 +91,7 @@ public interface SessionFactorySPI {
 	 * 
 	 * @return new tier description
 	 */
-	public TierDescriptionSPI createTierDescription(String name, Class<?> type, TierAlignmentRules tierAlignmentRules);
+	public TierDescriptionSPI createTierDescription(String name, Class<?> type, Map<String, String> tierParameters, TierAlignmentRules tierAlignmentRules);
 	
 	/**
 	 * Create a tier display and ordering object

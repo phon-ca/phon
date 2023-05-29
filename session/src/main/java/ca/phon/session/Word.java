@@ -80,8 +80,7 @@ public final class Word extends ExtendableObject {
 		final OrthoWordExtractor extractor = new OrthoWordExtractor();
 		ortho.accept(extractor);
 
-		final List<OrthographyElement> wordList = extractor.getWordList();
-
+		final List<ca.phon.orthography.Word> wordList = extractor.getWordList();
 		if(wordIndex >= 0 && wordIndex < wordList.size()) {
 			return wordList.get(wordIndex);
 		} else {
