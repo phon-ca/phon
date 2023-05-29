@@ -79,18 +79,6 @@ public final class LazyRecord implements RecordSPI {
 		internalRecord.setSpeaker(participant);
 	}
 
-	@Override
-	public Language getLanguage() {
-		loadRecord();
-		return internalRecord.getLanguage();
-	}
-
-	@Override
-	public void setLanguage(Language language) {
-		loadRecord();
-		internalRecord.setLanguage(language);
-	}
-
 	public MediaSegment getMediaSegment() {
 		loadRecord();
 		return internalRecord.getMediaSegment();
@@ -104,12 +92,6 @@ public final class LazyRecord implements RecordSPI {
 	public Tier<MediaSegment> getSegmentTier() {
 		loadRecord();
 		return internalRecord.getSegmentTier();
-	}
-
-	@Override
-	public Tier<GroupSegment> getGroupSegment() {
-		loadRecord();
-		return internalRecord.getGroupSegment();
 	}
 
 	public boolean isExcludeFromSearches() {
@@ -127,19 +109,9 @@ public final class LazyRecord implements RecordSPI {
 		return internalRecord.getOrthographyTier();
 	}
 
-	public void setOrthography(Tier<Orthography> ortho) {
-		loadRecord();
-		internalRecord.setOrthography(ortho);
-	}
-
 	public Tier<IPATranscript> getIPATargetTier() {
 		loadRecord();
 		return internalRecord.getIPATargetTier();
-	}
-
-	public void setIPATarget(Tier<IPATranscript> ipa) {
-		loadRecord();
-		internalRecord.setIPATarget(ipa);
 	}
 
 	public Tier<IPATranscript> getIPAActualTier() {
@@ -147,29 +119,14 @@ public final class LazyRecord implements RecordSPI {
 		return internalRecord.getIPAActualTier();
 	}
 
-	public void setIPAActual(Tier<IPATranscript> ipa) {
-		loadRecord();
-		internalRecord.setIPAActual(ipa);
-	}
-
 	public Tier<PhoneMap> getPhoneAlignmentTier() {
 		loadRecord();
 		return internalRecord.getPhoneAlignmentTier();
 	}
 
-	public void setPhoneAlignment(Tier<PhoneMap> phoneAlignment) {
-		loadRecord();
-		internalRecord.setPhoneAlignment(phoneAlignment);
-	}
-
-	public Tier<TierString> getNotesTier() {
+	public Tier<UserTierData> getNotesTier() {
 		loadRecord();
 		return internalRecord.getNotesTier();
-	}
-
-	public void setNotes(Tier<TierString> notes) {
-		loadRecord();
-		internalRecord.setNotes(notes);
 	}
 
 	public Class<?> getTierType(String name) {
@@ -207,31 +164,6 @@ public final class LazyRecord implements RecordSPI {
 		internalRecord.removeTier(name);
 	}
 
-	public int getNumberOfComments() {
-		loadRecord();
-		return internalRecord.getNumberOfComments();
-	}
-
-	public Comment getComment(int idx) {
-		loadRecord();
-		return internalRecord.getComment(idx);
-	}
-
-	public void addComment(Comment comment) {
-		loadRecord();
-		internalRecord.addComment(comment);
-	}
-
-	public void removeComment(Comment comment) {
-		loadRecord();
-		internalRecord.removeComment(comment);
-	}
-
-	public void removeComment(int idx) {
-		loadRecord();
-		internalRecord.removeComment(idx);
-	}
-
 	LazyRecord(SessionFactory factory, Session session, RecordType ele) {
 		super();
 		this.factory = factory;
@@ -243,12 +175,6 @@ public final class LazyRecord implements RecordSPI {
 		if(internalRecord != null) return;
 		final XmlSessionReaderV1_2 reader = new XmlSessionReaderV1_2();
 		internalRecord = reader.copyRecord(factory, session, recordElement);
-	}
-
-	@Override
-	public <T> List<Tier<T>> getTiersOfType(Class<T> type) {
-		loadRecord();
-		return internalRecord.getTiersOfType(type);
 	}
 
 }
