@@ -26,7 +26,6 @@ import ca.phon.syllable.*;
 import ca.phon.util.*;
 import ca.phon.visitor.*;
 import ca.phon.visitor.annotation.Visits;
-import org.antlr.runtime.*;
 import org.antlr.v4.runtime.CharStreams;
 
 import java.text.ParseException;
@@ -51,9 +50,6 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 
 	private final ExtensionSupport extSupport = new ExtensionSupport(IPATranscript.class, this);
 
-	public final static String USE_ANTLR4 = IPATranscript.class.getName() + ".useAntlr4";
-	private final static boolean defaultUseAntlr4 = true;
-
 	private final IPAElement[] transcription;
 
 	/**
@@ -67,47 +63,31 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 		IPATranscript retVal = new IPATranscript();
 
 		if(transcript.trim().length() > 0) {
-			if(PrefHelper.getBoolean(USE_ANTLR4, defaultUseAntlr4)) {
-				try {
-					org.antlr.v4.runtime.CharStream charStream = CharStreams.fromString(transcript);
-					UnicodeIPALexer lexer = new UnicodeIPALexer(charStream);
-					UnicodeIPAParserErrorListener errorListener = new UnicodeIPAParserErrorListener();
-					lexer.addErrorListener(errorListener);
-					org.antlr.v4.runtime.CommonTokenStream tokenStream = new org.antlr.v4.runtime.CommonTokenStream(lexer);
+			try {
+				org.antlr.v4.runtime.CharStream charStream = CharStreams.fromString(transcript);
+				UnicodeIPALexer lexer = new UnicodeIPALexer(charStream);
+				UnicodeIPAParserErrorListener errorListener = new UnicodeIPAParserErrorListener();
+				lexer.addErrorListener(errorListener);
+				org.antlr.v4.runtime.CommonTokenStream tokenStream = new org.antlr.v4.runtime.CommonTokenStream(lexer);
 
-					UnicodeIPAParser parser = new UnicodeIPAParser(tokenStream);
-					UnicodeIPAParserListener listener = new UnicodeIPAParserListener();
-					parser.setErrorHandler(new UnicodeIPAParserErrorStrategy(listener));
-					parser.addParseListener(listener);
-					parser.start();
+				UnicodeIPAParser parser = new UnicodeIPAParser(tokenStream);
+				UnicodeIPAParserListener listener = new UnicodeIPAParserListener();
+				parser.setErrorHandler(new UnicodeIPAParserErrorStrategy(listener));
+				parser.addParseListener(listener);
+				parser.start();
 
-					if (errorListener.getParseExceptions().size() > 0) {
-						throw errorListener.getParseExceptions().get(0);
-					}
-					if(listener.getParserErrors().size() > 0) {
-						throw listener.getParserErrors().get(0);
-					}
-
-					retVal = listener.getTranscript();
-				}catch (IPAParserException e) {
-					final ParseException pe = new ParseException(transcript + ": " + e.getLocalizedMessage(), e.getPositionInLine());
-					pe.addSuppressed(e);
-					throw pe;
+				if (errorListener.getParseExceptions().size() > 0) {
+					throw errorListener.getParseExceptions().get(0);
 				}
-			} else {
-				try {
-					IPALexer lexer = new IPALexer(transcript);
-					TokenStream tokenStream = new CommonTokenStream(lexer);
-
-					IPAParser parser = new IPAParser(tokenStream);
-					retVal = parser.transcription();
-				} catch (RecognitionException re) {
-					throw new ParseException(transcript, re.charPositionInLine);
-				} catch (IPAParserException e) {
-					final ParseException pe = new ParseException(transcript + ": " + e.getLocalizedMessage(), e.getPositionInLine());
-					pe.addSuppressed(e);
-					throw pe;
+				if(listener.getParserErrors().size() > 0) {
+					throw listener.getParserErrors().get(0);
 				}
+
+				retVal = listener.getTranscript();
+			} catch (IPAParserException e) {
+				final ParseException pe = new ParseException(transcript + ": " + e.getLocalizedMessage(), e.getPositionInLine());
+				pe.addSuppressed(e);
+				throw pe;
 			}
 		}
 

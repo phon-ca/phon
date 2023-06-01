@@ -19,9 +19,9 @@ package ca.phon.ipa;
  * Pause lengths
  */
 public enum PauseLength {
-	SHORT("."),
-	MEDIUM(".."),
-	LONG("...");
+	SIMPLE("."),
+	LONG(".."),
+	VERY_LONG("...");
 	
 	private String image;
 	
@@ -46,15 +46,15 @@ public enum PauseLength {
 		int len = text.length();
 		switch(len) {
 		case 1:
-			retVal = SHORT;
+			retVal = SIMPLE;
 			break;
 			
 		case 2:
-			retVal = MEDIUM;
+			retVal = LONG;
 			break;
 			
 		case 3:
-			retVal = LONG;
+			retVal = VERY_LONG;
 			break;
 			
 		default:

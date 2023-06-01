@@ -19,7 +19,6 @@ import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.*;
-import ca.phon.orthography.xml.XMLOrthographyUtteranceType;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
@@ -30,6 +29,7 @@ import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionReader;
 import ca.phon.session.GroupSegment;
 import ca.phon.session.io.xml.v13.*;
+import ca.phon.session.io.xml.v13.TierAlignmentRules;
 import ca.phon.session.io.xml.v13.WordType;
 import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.syllable.SyllableConstituentType;
@@ -66,9 +66,7 @@ import java.io.InputStream;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Session XML reader for session files with
@@ -149,9 +147,14 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 				retVal.setDate(dateTime);
 			}
 			if(headerData.getLanguages().size() > 0) {
-				String langs = "";
+				List<Language> langs = new ArrayList<>();
 				for(String lang:headerData.getLanguages()) {
-					langs += (langs.length() > 0 ? " " : "") + lang;
+					try {
+						Language l = Language.parseLanguage(lang);
+						langs.add(l);
+					} catch (IllegalArgumentException e) {
+						LOGGER.warn(e);
+					}
 				}
 				retVal.setLanguages(langs);
 			}
@@ -178,8 +181,8 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		// copy tier information
 		final UserTiersType userTiers = sessionType.getUserTiers();
 		if(userTiers != null) {
-			for(UserTierType utt:userTiers.getUserTier()) {
-				final TierDescription td = copyTierDescription(factory, utt);
+			for(TierDescriptionType tdt:userTiers.getTd()) {
+				final TierDescription td = readTierDescription(factory, tdt);
 				retVal.addUserTier(td);
 			}
 		}
@@ -320,15 +323,19 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 	}
 
 	// tier descriptions
-	private TierDescription copyTierDescription(SessionFactory factory, UserTierType utt) {
-		final boolean grouped = utt.isGrouped();
-		final String name = utt.getTierName();
-		
-		try {
-			Class<?> type = Class.forName(utt.getType(), true, PluginManager.getInstance());
-			return factory.createTierDescription(name, grouped, type);
-		} catch (ClassNotFoundException e) {
-			throw new IllegalArgumentException(e);
+	private TierDescription readTierDescription(SessionFactory factory, TierDescriptionType tdt) {
+		final String tierName = tdt.getTierName();
+		final Map<String, String> tierParams = new LinkedHashMap<>();
+		if(tdt.getTierParameters() != null) {
+			for (TierParameterType tp : tdt.getTierParameters().getParam()) {
+				tierParams.put(tp.getName(), tp.getContent());
+			}
+		}
+		if(tdt.getTierAlignment() != null) {
+			final TierAlignmentRules alignmentRules = tdt.getTierAlignment();
+
+			final List<TypeAlignmentRules.AlignableType> alignableTypes = new ArrayList<>();
+
 		}
 	}
 

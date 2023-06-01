@@ -361,20 +361,25 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 	}
 
 	@Override
-	public void exitShortPause(ShortPauseContext ctx) {
-		builder.append(factory.createPause(PauseLength.SHORT));
+	public void exitSimplePause(SimplePauseContext ctx) {
+		super.exitSimplePause(ctx);
 	}
-	
-	@Override
-	public void exitMediumPause(MediumPauseContext ctx) {
-		builder.append(factory.createPause(PauseLength.MEDIUM));
-	}
-	
+
 	@Override
 	public void exitLongPause(LongPauseContext ctx) {
 		builder.append(factory.createPause(PauseLength.LONG));
 	}
-	
+
+	@Override
+	public void exitVeryLongPause(VeryLongPauseContext ctx) {
+		super.exitVeryLongPause(ctx);
+	}
+
+	@Override
+	public void exitNumericPause(NumericPauseContext ctx) {
+		super.exitNumericPause(ctx);
+	}
+
 	@Override
 	public void exitAlignment(AlignmentContext ctx) {
 		builder.append(factory.createAlignmentMarker());

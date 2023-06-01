@@ -16,7 +16,7 @@
 package ca.phon.phonex;
 
 import ca.phon.ipa.IPATranscript;
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import java.util.*;
 

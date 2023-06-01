@@ -17,12 +17,6 @@ package ca.phon.phonex;
 
 import ca.phon.ipa.*;
 import ca.phon.syllable.SyllabificationInfo;
-import ca.phon.util.PrefHelper;
-import org.antlr.runtime.CharStream;
-import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.*;
-import org.antlr.runtime.tree.*;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -58,9 +52,6 @@ import java.util.*;
  *
  */
 public class PhonexPattern implements Comparable<PhonexPattern> {
-
-	public final static String USE_ANTLR4 = PhonexPattern.class.getName() + ".useAntlr4";
-	private final static boolean defaultUseAntlr4 = true;
 
 	/**
 	 * phonex pattern
@@ -120,11 +111,7 @@ public class PhonexPattern implements Comparable<PhonexPattern> {
 	 *
 	 */
 	public static PhonexPattern compile(String phonex, int flags) throws PhonexPatternException {
-		if(PrefHelper.getBoolean(USE_ANTLR4, defaultUseAntlr4)) {
-			return compileAntlr4(phonex, flags);
-		} else {
-			return compileAntlr3(phonex, flags);
-		}
+		return compileAntlr4(phonex, flags);
 	}
 
 	private static PhonexPattern compileAntlr4(String phonex, int flags) throws PhonexPatternException {
@@ -149,33 +136,6 @@ public class PhonexPattern implements Comparable<PhonexPattern> {
 		retVal.pattern = phonex;
 		retVal.flags = flags | compiler.flags;
 		return retVal;
-	}
-
-	private static PhonexPattern compileAntlr3(String phonex, int flags) throws PhonexPatternException {
-		CharStream exprStream = new ANTLRStringStream(phonex);
-		PhonexLexer lexer = new PhonexLexer(exprStream);
-		CommonTokenStream tokenStream = new CommonTokenStream(lexer);
-		PhonexParser parser = new PhonexParser(tokenStream);
-
-		PhonexParser.expr_return exprVal = null;
-
-		try {
-			exprVal = parser.expr();
-
-			CommonTree exprTree = CommonTree.class.cast(exprVal.getTree());
-			CommonTreeNodeStream noes = new CommonTreeNodeStream(exprTree);
-			PhonexCompiler compiler = new PhonexCompiler(noes);
-			PhonexFSA fsa = compiler.expr();
-
-			PhonexPattern retVal = new PhonexPattern(fsa);
-			retVal.flags = flags | compiler.getFlags();
-			retVal.pattern = phonex;
-			return retVal;
-		} catch (RecognitionException e) {
-			throw new PhonexPatternException(e.line, e.charPositionInLine, e);
-		} catch (RewriteEarlyExitException e) {
-			throw new PhonexPatternException(0, -1, e);
-		}
 	}
 
 	/**

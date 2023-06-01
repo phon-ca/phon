@@ -75,6 +75,7 @@
             <xs:element ref="userTiers"/>
             <xs:element ref="tierOrder"/>
             <xs:element ref="transcript"/>
+            <xs:element ref="timeline" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
 
         <!-- ID = session name in Phon -->
@@ -645,7 +646,7 @@
     <xs:element name="ipaActual" type="ipaTierType"/>
     <xs:complexType name="ipaTierType">
         <xs:annotation>
-            <xs:documentation></xs:documentation>
+            <xs:documentation>IPA transcript tier</xs:documentation>
         </xs:annotation>
         <xs:choice minOccurs="1" maxOccurs="1">
             <xs:element ref="pho"/>
@@ -670,7 +671,6 @@
         <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:element ref="pw"/>
             <xs:element ref="pause"/>
-            <xs:element ref="tagMarker"/>
         </xs:choice>
     </xs:complexType>
 
@@ -680,10 +680,36 @@
             <xs:documentation>A word in an IPA transcription.</xs:documentation>
         </xs:annotation>
         <xs:choice minOccurs="1" maxOccurs="unbounded">
-            <xs:element ref="pp"/>
+            <xs:element ref="stress"/>
             <xs:element ref="ph"/>
+            <xs:element ref="pp"/>
+            <xs:element ref="sandhi"/>
+            <xs:element ref="toneNumber"/>
         </xs:choice>
     </xs:complexType>
+    
+    <xs:complexType name="stressType">
+        <xs:annotation>
+            <xs:documentation>Syllable stress</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="stressTypeType" use="required"/>
+    </xs:complexType>
+
+    <xs:element name="stress" type="stressType"/>
+    <xs:simpleType name="stressTypeType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="primary">
+                <xs:annotation>
+                    <xs:documentation>Primary stress</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="secondary">
+                <xs:annotation>
+                    <xs:documentation>Secondary stress</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:element name="pp" type="phoneticProsodyType"/>
     <xs:complexType name="phoneticProsodyType">
@@ -695,58 +721,93 @@
 
     <xs:simpleType name="ipaProsodyTypeType">
         <xs:restriction base="xs:string">
-            <xs:enumeration value="primary stress">
-                <xs:annotation>
-                    <xs:documentation>Primary stress</xs:documentation>
-                </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="secondary stress">
-                <xs:annotation>
-                    <xs:documentation>Secondary stress</xs:documentation>
-                </xs:annotation>
-            </xs:enumeration>
             <xs:enumeration value="syllable break">
                 <xs:annotation>
-                    <xs:documentation>. - Syllable break</xs:documentation>
+                    <xs:documentation>. - Syllable break / forced syllable boundary</xs:documentation>
+                    <xs:documentation>See https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#syllable_boundary
+                        for more information.</xs:documentation>
                 </xs:annotation>
             </xs:enumeration>
             <xs:enumeration value="major intonation group">
                 <xs:annotation>
                     <xs:documentation>\u2016 - Major intonation group</xs:documentation>
+                    <xs:documentation>See https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#intonation_group
+                        for more information.</xs:documentation>
                 </xs:annotation>
             </xs:enumeration>
             <xs:enumeration value="minor intonation group">
                 <xs:annotation>
                     <xs:documentation>\007c - Minor intonation group</xs:documentation>
+                    <xs:documentation>See https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#intonation_group
+                        for more information.</xs:documentation>
                 </xs:annotation>
             </xs:enumeration>
             <xs:enumeration value="compound word marker">
                 <xs:annotation>
                     <xs:documentation>+ - Compound word marker</xs:documentation>
+                    <xs:documentation>See https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#compound_word
+                        for more information.</xs:documentation>
                 </xs:annotation>
             </xs:enumeration>
-            <xs:enumeration value="intra-word pause">
+            <xs:enumeration value="pause">
                 <xs:annotation>
                     <xs:documentation>^ - intra-word pause</xs:documentation>
+                    <xs:documentation>See https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#intra-word_pause
+                        for more information.</xs:documentation>
                 </xs:annotation>
             </xs:enumeration>
+            <xs:enumeration value="blocking">
+                <xs:annotation>
+                    <xs:documentation>^ - at beginning</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:element name="sandhi" type="sandhiType"/>
+    <xs:complexType name="sandhiType">
+        <xs:annotation>
+            <xs:documentation>See https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#sandhi
+                for more information.</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="sandhiTypeType" use="required"/>
+    </xs:complexType>
+
+    <xs:simpleType name="sandhiTypeType">
+        <xs:restriction base="xs:string">
             <xs:enumeration value="contraction">
                 <xs:annotation>
-                    <xs:documentation>\u203f - Shandhi contraction</xs:documentation>
+                    <xs:documentation>\u203f - contraction</xs:documentation>
                 </xs:annotation>
             </xs:enumeration>
             <xs:enumeration value="linker">
                 <xs:annotation>
-                    <xs:documentation>\u2040 - Shandhi linker</xs:documentation>
+                    <xs:documentation>\u2040 - linker</xs:documentation>
                 </xs:annotation>
             </xs:enumeration>
         </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="toneNumber" type="toneNumberType"/>
+    <xs:complexType name="toneNumberType">
+        <xs:annotation>
+            <xs:documentation>Super-script tone number in a transcription</xs:documentation>
+            <xs:documentation>See https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#phone__tone_number
+                for more information.</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="value" type="toneNumberValue"/>
+    </xs:complexType>
+
+    <xs:simpleType name="toneNumberValue">
+        <xs:restriction base="xs:positiveInteger"/>
     </xs:simpleType>
 
     <xs:element name="ph" type="phoneType"/>
     <xs:complexType name="phoneType" mixed="true">
         <xs:annotation>
             <xs:documentation>A single phone in an ipa transcription including all diacritics</xs:documentation>
+            <xs:documentation>See https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#phone
+                for more information.</xs:documentation>
         </xs:annotation>
         <xs:attribute name="scType" type="syllableConstituentType"/>
     </xs:complexType>
@@ -788,7 +849,7 @@
             </xs:enumeration>
             <xs:enumeration value="OEHS">
                 <xs:annotation>
-                    <xs:documentation>Onset of empty headed syllable - ':E' when written inline with transcription</xs:documentation>
+                    <xs:documentation>Onset of empty-headed syllable - ':E' when written inline with transcription</xs:documentation>
                 </xs:annotation>
             </xs:enumeration>
             <xs:enumeration value="ambisyllabic">
@@ -3025,5 +3086,47 @@
             <xs:minLength value="1"/>
         </xs:restriction>
     </xs:simpleType>
+
+    <!-- timeline -->
+    <xs:element name="timeline" type="timelineType"/>
+    <xs:complexType name="timelineType">
+        <xs:annotation>
+            <xs:documentation></xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="timelineTier" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="length" type="xs:float" use="required"/>
+        <xs:attribute name="unit" type="mediaUnitType" use="required"/>
+    </xs:complexType>
+
+    <xs:element name="timelineTier" type="timelineTierType"/>
+    <xs:complexType name="timelineTierType">
+        <xs:annotation>
+            <xs:documentation>A collection of points/intervals on the timeline</xs:documentation>
+        </xs:annotation>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="point"/>
+            <xs:element ref="interval"/>
+        </xs:choice>
+        <xs:attribute name="name" type="nonemptyStringType" use="required"/>
+    </xs:complexType>
+
+    <xs:element name="interval" type="intervalType"/>
+    <xs:complexType name="intervalType" mixed="true">
+        <xs:annotation>
+            <xs:documentation>Timeline interval with label</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="start" type="xs:float" use="required"/>
+        <xs:attribute name="end" type="xs:float" use="required"/>
+    </xs:complexType>
+
+    <xs:element name="point" type="pointType"/>
+    <xs:complexType name="pointType" mixed="true">
+        <xs:annotation>
+            <xs:documentation>Point on timeline with label</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="value" type="xs:float" use="required"/>
+    </xs:complexType>
 
 </xs:schema>

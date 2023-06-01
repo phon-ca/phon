@@ -19,8 +19,6 @@ import ca.phon.phonex.*;
 import ca.phon.syllable.*;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
-import org.antlr.runtime.*;
-import org.antlr.runtime.tree.*;
 
 import java.util.*;
 import java.util.regex.*;
@@ -61,7 +59,7 @@ public class CoverVisitor extends VisitorAdapter<IPAElement> {
 	 * @param symbolMap
 	 * @param includeStress
 	 * @param includeSyllableBoundaries
-	 * @param ioncludeDiacritics
+	 * @param includeDiacritics
 	 */
 	public CoverVisitor(String symbolMap, boolean includeStress, boolean includeSyllableBoundaries,
 			boolean insertImplicitSyllableBoundaries, boolean includeDiacritics) {
@@ -88,24 +86,24 @@ public class CoverVisitor extends VisitorAdapter<IPAElement> {
 			final String g2 = matcher.group(3);
 			
 			if(g1.length() == 1) {
-				CharStream exprStream = new ANTLRStringStream(g2);
-				PhonexLexer lexer = new PhonexLexer(exprStream);
-				CommonTokenStream tokenStream = new CommonTokenStream(lexer);
-				PhonexParser parser = new PhonexParser(tokenStream);
-				
-				PhonexParser.single_phone_matcher_return exprVal;
-				try {
-					exprVal = parser.single_phone_matcher();
-					
-					CommonTree exprTree = CommonTree.class.cast(exprVal.getTree());
-					CommonTreeNodeStream noes = new CommonTreeNodeStream(exprTree);
-					PhonexCompiler compiler = new PhonexCompiler(noes);
-					
-					final PhoneMatcher phoneMatcher = compiler.single_phone_matcher();
-					retVal.put(phoneMatcher, g1.charAt(0));
-				} catch(RecognitionException re) {
-					throw new IllegalArgumentException(symbolMap, re);
-				}
+//				CharStream exprStream = new ANTLRStringStream(g2);
+//				PhonexLexer lexer = new PhonexLexer(exprStream);
+//				CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+//				PhonexParser parser = new PhonexParser(tokenStream);
+//
+//				PhonexParser.single_phone_matcher_return exprVal;
+//				try {
+//					exprVal = parser.single_phone_matcher();
+//
+//					CommonTree exprTree = CommonTree.class.cast(exprVal.getTree());
+//					CommonTreeNodeStream noes = new CommonTreeNodeStream(exprTree);
+//					PhonexCompiler compiler = new PhonexCompiler(noes);
+//
+//					final PhoneMatcher phoneMatcher = compiler.single_phone_matcher();
+//					retVal.put(phoneMatcher, g1.charAt(0));
+//				} catch(RecognitionException re) {
+//					throw new IllegalArgumentException(symbolMap, re);
+//				}
 			} else {
 				if(g1.matches("stress")) {
 					Boolean includeStress = Boolean.parseBoolean(g2);

@@ -127,10 +127,19 @@ pause
 	;
 
 pause_length
-	: PERIOD                # ShortPause
-	| PERIOD PERIOD         # MediumPause
-	| PERIOD PERIOD PERIOD  # LongPause
+	: PERIOD                    # SimplePause
+	| PERIOD PERIOD             # LongPause
+	| PERIOD PERIOD PERIOD      # VeryLongPause
+	| time_in_minutes_seconds   # NumericPause
 	;
+
+time_in_minutes_seconds
+    :   (number COLON)? number PERIOD number?
+    ;
+
+number
+    :   INT+
+    ;
 
 /* Other Items */
 /**
@@ -148,3 +157,7 @@ sctype
 alignment
 	: ALIGNMENT
 	;
+
+INT
+    :   [0-9]
+    ;
