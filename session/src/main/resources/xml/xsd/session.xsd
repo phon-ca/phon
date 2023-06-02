@@ -343,12 +343,13 @@
 
     <!-- Comments - Comments types are derived from the CHAT transcription format -->
     <xs:element name="comment" type="commentType"/>
-    <xs:complexType name="commentType" mixed="true">
+    <xs:complexType name="commentType">
         <xs:annotation>
             <xs:documentation>Comments interleaved with transcriptions or in header</xs:documentation>
         </xs:annotation>
-        <xs:choice maxOccurs="unbounded">
-            <xs:element ref="internal-media"/>
+        <xs:choice minOccurs="1" maxOccurs="1">
+            <xs:element ref="tierData"/>
+            <xs:element ref="unparsable"/>
         </xs:choice>
         <xs:attribute type="commentTypeType" name="type" use="required"/>
     </xs:complexType>
@@ -618,6 +619,7 @@
         <xs:attribute name="id" type="xs:ID"/>
         <xs:attribute name="excludeFromSearches" type="xs:boolean" default="false"/>
     </xs:complexType>
+
     <xs:element name="unparsable" type="unparsableData"/>
     <xs:simpleType name="unparsableData">
         <xs:annotation>
@@ -716,10 +718,10 @@
         <xs:annotation>
             <xs:documentation>Prosody in IPA transcriptions</xs:documentation>
         </xs:annotation>
-        <xs:attribute name="type" type="ipaProsodyTypeType" use="required"/>
+        <xs:attribute name="type" type="phoneticProsodyTypeType" use="required"/>
     </xs:complexType>
 
-    <xs:simpleType name="ipaProsodyTypeType">
+    <xs:simpleType name="phoneticProsodyTypeType">
         <xs:restriction base="xs:string">
             <xs:enumeration value="syllable break">
                 <xs:annotation>
@@ -742,7 +744,7 @@
                         for more information.</xs:documentation>
                 </xs:annotation>
             </xs:enumeration>
-            <xs:enumeration value="compound word marker">
+            <xs:enumeration value="cmp">
                 <xs:annotation>
                     <xs:documentation>+ - Compound word marker</xs:documentation>
                     <xs:documentation>See https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#compound_word
@@ -777,12 +779,12 @@
         <xs:restriction base="xs:string">
             <xs:enumeration value="contraction">
                 <xs:annotation>
-                    <xs:documentation>\u203f - contraction</xs:documentation>
+                    <xs:documentation>\u2040 - contraction</xs:documentation>
                 </xs:annotation>
             </xs:enumeration>
             <xs:enumeration value="linker">
                 <xs:annotation>
-                    <xs:documentation>\u2040 - linker</xs:documentation>
+                    <xs:documentation>\u203f - linker</xs:documentation>
                 </xs:annotation>
             </xs:enumeration>
         </xs:restriction>
@@ -791,7 +793,7 @@
     <xs:element name="toneNumber" type="toneNumberType"/>
     <xs:complexType name="toneNumberType">
         <xs:annotation>
-            <xs:documentation>Super-script tone number in a transcription</xs:documentation>
+            <xs:documentation>Superscript tone number in a transcription</xs:documentation>
             <xs:documentation>See https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#phone__tone_number
                 for more information.</xs:documentation>
         </xs:annotation>
@@ -940,7 +942,6 @@
             <xs:element ref="tw"/>
             <xs:element ref="tc"/>
             <xs:element ref="internal-media"/>
-            <xs:element ref="tagMarker"/>
         </xs:choice>
     </xs:complexType>
 

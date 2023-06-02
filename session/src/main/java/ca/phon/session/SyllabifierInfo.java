@@ -16,9 +16,11 @@
 package ca.phon.session;
 
 import ca.phon.extensions.Extension;
+import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.util.Language;
 
+import java.text.ParseException;
 import java.util.*;
 import java.util.regex.*;
 
@@ -61,9 +63,10 @@ public class SyllabifierInfo {
 		final Pattern commentPattern = Pattern.compile(COMMENT_PATTERN);
 		for(int i = 0; i < session.getMetadata().getNumberOfComments(); i++) {
 			final Comment comment = session.getMetadata().getComment(i);
-			if(comment.getTag().equals("Generic")) {
-				final String commentValue = comment.getValue();
-				final Matcher matcher = commentPattern.matcher(commentValue);
+			if(comment.getType() == CommentType.Generic) {
+				final UserTierData commentValue = comment.getValue();
+				final String commentText = commentValue.toString();
+				final Matcher matcher = commentPattern.matcher(commentText);
 				if(matcher.matches()) {
 					final String langString = matcher.group(1);
 					final String tierName = matcher.group(3);
@@ -83,15 +86,23 @@ public class SyllabifierInfo {
 		final List<Integer> toRemove = new ArrayList<Integer>();
 		for(int i = 0; i < session.getMetadata().getNumberOfComments(); i++) {
 			final Comment comment = session.getMetadata().getComment(i);
-			if(comment.getTag().equals("Generic")) {
-				final String commentValue = comment.getValue();
-				final Matcher matcher = commentPattern.matcher(commentValue);
+			if(comment.getType() == CommentType.Generic) {
+				final UserTierData commentValue = comment.getValue();
+				final String commentText = commentValue.toString();
+				final Matcher matcher = commentPattern.matcher(commentText);
 				if(matcher.matches()) {
 					final String langString = matcher.group(1);
 					final String tierName = matcher.group(3);
 					if(syllabifierMap.containsKey(tierName)) {
 						updatedTiers.add(tierName);
-						comment.setValue(String.format(COMMENT_FORMAT, syllabifierMap.get(tierName).toString(), tierName));
+						final String updatedText = String.format(COMMENT_FORMAT, syllabifierMap.get(tierName).toString(), tierName);
+						UserTierData tierData = new UserTierData();
+						try {
+							tierData = UserTierData.parseTierData(updatedText);
+						} catch (ParseException pe) {
+							tierData.putExtension(UnvalidatedValue.class, new UnvalidatedValue(updatedText, pe));
+						}
+						comment.setValue(tierData);
 					} else {
 						toRemove.add(i);
 					}
@@ -111,8 +122,15 @@ public class SyllabifierInfo {
 		set.removeAll(updatedTiers);
 		for(String tierName:set) {
 			if(tierName == null) break;
-			final Comment c = 
-					factory.createComment("Generic", String.format(COMMENT_FORMAT, syllabifierMap.get(tierName).toString(), tierName));
+			final String commentText = String.format(COMMENT_FORMAT, syllabifierMap.get(tierName).toString(), tierName);
+			UserTierData tierData = new UserTierData();
+			try {
+				tierData = UserTierData.parseTierData(commentText);
+			} catch (ParseException pe) {
+				tierData.putExtension(UnvalidatedValue.class, new UnvalidatedValue(commentText, pe));
+			}
+			final Comment c =
+					factory.createComment(CommentType.Generic, tierData);
 			session.getMetadata().addComment(c);
 		}
 		

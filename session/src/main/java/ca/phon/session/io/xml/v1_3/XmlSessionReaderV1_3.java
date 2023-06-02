@@ -25,10 +25,12 @@ import ca.phon.plugin.PluginManager;
 import ca.phon.plugin.Rank;
 import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.session.UserTierData;
 import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionReader;
 import ca.phon.session.GroupSegment;
 import ca.phon.session.io.xml.v13.*;
+import ca.phon.session.io.xml.v13.CommentType;
 import ca.phon.session.io.xml.v13.TierAlignmentRules;
 import ca.phon.session.io.xml.v13.WordType;
 import ca.phon.syllable.SyllabificationInfo;
@@ -339,7 +341,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		}
 	}
 
-	private TierViewItem copyTierViewItem(SessionFactory factory, TvType tvt) {
+	private TierViewItem copyTierViewItem(SessionFactory factory, TierViewType tvt) {
 		final boolean locked = tvt.isLocked();
 		final boolean visible = tvt.isVisible();
 		final String name = tvt.getTierName();
@@ -348,29 +350,72 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		return factory.createTierViewItem(name, visible, font, locked);
 	}
 	
-	private MediaSegment copySegment(SessionFactory factory, SegmentType st) {
+	private MediaSegment copySegment(SessionFactory factory, MediaType st) {
 		final MediaSegment segment = factory.createMediaSegment();
-		segment.setStartValue(Math.abs(st.getStartTime()));
-		segment.setEndValue(Math.abs(st.getStartTime()) + Math.abs(st.getDuration()));
-		segment.setUnitType(MediaUnit.Millisecond);
+		final float startVal = st.getStart().floatValue();
+		final float endVal = st.getEnd().floatValue();
+		segment.setStartValue(startVal);
+		segment.setEndValue(endVal);
+		final MediaUnit unit = switch(st.getUnit()) {
+			case S -> MediaUnit.Second;
+			case MS -> MediaUnit.Millisecond;
+		};
+		segment.setUnitType(unit);
 		return segment;
 	}
 
 	// copy comment data
 	private Comment copyComment(SessionFactory factory, CommentType ct) {
-		final String tag = ct.getType();
-		final StringBuffer buffer = new StringBuffer();
-		MediaSegment segment = null;
-		for(Object obj:ct.getContent()) {
-			if(obj instanceof JAXBElement) {
-				final JAXBElement<?> jaxbEle = (JAXBElement<?>)obj;
-				if(jaxbEle.getDeclaredType() == SegmentType.class)
-					segment = copySegment(factory, (SegmentType)jaxbEle.getValue());
-			} else {
-				buffer.append(obj.toString());
+		final ca.phon.session.CommentType type = switch (ct.getType()) {
+			case ACTIVITIES -> ca.phon.session.CommentType.Activities;
+			case BCK -> ca.phon.session.CommentType.Bck;
+			case BEGIN_GEM -> ca.phon.session.CommentType.Bg;
+			case BLANK -> ca.phon.session.CommentType.Blank;
+			case DATE -> ca.phon.session.CommentType.Date;
+			case END_GEM -> ca.phon.session.CommentType.Eg;
+			case GENERIC -> ca.phon.session.CommentType.Generic;
+			case LAZY_GEM -> ca.phon.session.CommentType.G;
+			case LOCATION -> ca.phon.session.CommentType.Location;
+			case NEW_EPISODE -> ca.phon.session.CommentType.NewEpisode;
+			case NUMBER -> ca.phon.session.CommentType.Number;
+			case PAGE -> ca.phon.session.CommentType.Page;
+			case RECORDING_QUALITY -> ca.phon.session.CommentType.RecordingQuality;
+			case ROOM_LAYOUT -> ca.phon.session.CommentType.RoomLayout;
+			case SITUATION -> ca.phon.session.CommentType.Situation;
+			case T -> ca.phon.session.CommentType.T;
+			case TAPE_LOCATION -> ca.phon.session.CommentType.TapeLocation;
+			case TIME_DURATION -> ca.phon.session.CommentType.TimeDuration;
+			case TIME_START -> ca.phon.session.CommentType.TimeStart;
+			case TRANSCRIBER -> ca.phon.session.CommentType.Transcriber;
+			case TRANSCRIPTION -> ca.phon.session.CommentType.Transcription;
+			case TYPES -> ca.phon.session.CommentType.Types;
+			case WARNING -> ca.phon.session.CommentType.Warning;
+		};
+		final List<UserTierElement> elements = new ArrayList<>();
+		for(Object obj:ct.getTierData().getTwOrTcOrInternalMedia()) {
+			if(!(obj instanceof JAXBElement<?> ele)) continue;
+			if(ele.getName().getLocalPart().equals("tw")) {
+				elements.add(new TierString(((JAXBElement<String>)ele).getValue()));
+			} else if(ele.getName().getLocalPart().equals("tc")) {
+				elements.add(new UserTierComment(((JAXBElement<String>)ele).getValue()));
+			} else if(ele.getName().getLocalPart().equals("internal-media")) {
+				final MediaType mediaType = ((JAXBElement<MediaType>)ele).getValue();
+				float start = mediaType.getStart().floatValue();
+				float end = mediaType.getEnd().floatValue();
+				final MediaUnit unit = switch (mediaType.getUnit()) {
+					case S -> MediaUnit.Second;
+					case MS -> MediaUnit.Millisecond;
+				};
+				if(unit == MediaUnit.Millisecond) {
+					start /= 1000.0f;
+					end /= 1000.0f;
+				}
+				final InternalMedia imedia = new InternalMedia(start, end);
+				elements.add(new UserTierInternalMedia(imedia));
 			}
 		}
-		return factory.createComment(tag, buffer.toString(), segment);
+		final UserTierData userTierData = new UserTierData(elements);
+		return factory.createComment(type, userTierData);
 	}
 
 	Record copyRecord(SessionFactory factory, Session session, RecordType rt) {

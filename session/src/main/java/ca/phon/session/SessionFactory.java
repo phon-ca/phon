@@ -182,18 +182,13 @@ public final class SessionFactory extends ExtendableObject {
 	 * 
 	 * @return new comment
 	 */
-	public Comment createComment(CommentType commentType, String value) {
-		return createComment(commentType, value, null);
-	}
-	
-	public Comment createComment(CommentType commentType, String value, MediaSegment segment) {
+	public Comment createComment(CommentType commentType, UserTierData value) {
 		final Comment retVal = createComment();
 		retVal.setType(commentType);
 		retVal.setValue(value);
-		if(segment != null) retVal.putExtension(MediaSegment.class, segment);
 		return retVal;
 	}
-	
+
 	public Comment cloneComment(Comment comment) {
 		final Comment retVal = createComment();
 		retVal.setType(comment.getType());
@@ -288,17 +283,6 @@ public final class SessionFactory extends ExtendableObject {
 	
 	public Record createRecord(RecordSPI recordImpl) {
 		return new Record(recordImpl);
-	}
-	
-	/**
-	 * Create group object for given record and index
-	 * 
-	 * @param r
-	 * @param gIdx
-	 * @return
-	 */
-	public Group createGroup(Record r, int gIdx) {
-		return new Group(r, gIdx);
 	}
 	
 	/**

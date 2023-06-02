@@ -20,7 +20,8 @@ import ca.phon.extensions.ExtendableObject;
 import ca.phon.session.spi.CommentSPI;
 
 /**
- * Entity class for comments.
+ * Entity class for comments.  See {@link CommentType} for more information
+ * on types of comments specified by the CHAT transcription format.
  *
  */
 public final class Comment extends ExtendableObject {
@@ -33,18 +34,18 @@ public final class Comment extends ExtendableObject {
 	}
 	
 	/** 
-	 * Get the comment string.
-	 * @return String
+	 * Get the comment data.
+	 * @return tier data for comment
 	 */
-	public String getValue() {
+	public UserTierData getValue() {
 		return commentImpl.getValue();
 	}
 	
 	/**
-	 * Set the comment string.
+	 * Set the comment value.
 	 * @param comment
 	 */
-	public void setValue(String comment) {
+	public void setValue(UserTierData comment) {
 		commentImpl.setValue(comment);
 	}
 
@@ -61,6 +62,5 @@ public final class Comment extends ExtendableObject {
 	 * @param type
 	 */
 	public void setType(CommentType type) { commentImpl.setType(type); }
-
 
 }

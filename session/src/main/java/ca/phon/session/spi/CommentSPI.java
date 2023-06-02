@@ -16,6 +16,7 @@
 package ca.phon.session.spi;
 
 import ca.phon.session.CommentType;
+import ca.phon.session.UserTierData;
 
 public interface CommentSPI {
 	
@@ -23,13 +24,13 @@ public interface CommentSPI {
 	 * Get the comment string.
 	 * @return String
 	 */
-	public String getValue();
+	public UserTierData getValue();
 	
 	/**
 	 * Set the comment string.
 	 * @param comment
 	 */
-	public void setValue(String comment);
+	public void setValue(UserTierData comment);
 	
 	public CommentType getType();
 
