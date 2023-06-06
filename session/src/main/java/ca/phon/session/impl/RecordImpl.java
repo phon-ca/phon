@@ -19,16 +19,10 @@ import ca.phon.extensions.*;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.*;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.Orthography;
-import ca.phon.orthography.OrthographyElement;
-import ca.phon.orthography.UtteranceLanguage;
 import ca.phon.session.*;
-import ca.phon.session.GroupSegment;
 import ca.phon.session.spi.RecordSPI;
-import ca.phon.util.Language;
 
-import javax.print.attribute.standard.Media;
 import java.util.*;
 
 /**
