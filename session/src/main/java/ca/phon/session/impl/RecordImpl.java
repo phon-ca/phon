@@ -55,7 +55,7 @@ public class RecordImpl implements RecordSPI {
 
 	private final Tier<UserTierData> notes;
 
-	private final Tier<PhoneMap> alignment;
+	private final Tier<PhoneAlignment> alignment;
 
 	/* Additional tiers */
 	private final Map<String, Tier<?>> userDefined;
@@ -68,7 +68,7 @@ public class RecordImpl implements RecordSPI {
 		ipaActual = factory.createTier(SystemTierType.IPAActual.getName(), IPATranscript.class);
 		segmentTier = factory.createTier(SystemTierType.Segment.getName(), MediaSegment.class);
 		notes = factory.createTier(SystemTierType.Notes.getName(), UserTierData.class);
-		alignment = factory.createTier(SystemTierType.SyllableAlignment.getName(), PhoneMap.class);
+		alignment = factory.createTier(SystemTierType.SyllableAlignment.getName(), PhoneAlignment.class);
 		userDefined = Collections.synchronizedMap(new HashMap<>());
 	}
 
@@ -123,7 +123,7 @@ public class RecordImpl implements RecordSPI {
 	}
 
 	@Override
-	public Tier<PhoneMap> getPhoneAlignmentTier() {
+	public Tier<PhoneAlignment> getPhoneAlignmentTier() {
 		return this.alignment;
 	}
 

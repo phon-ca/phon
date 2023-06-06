@@ -2,9 +2,8 @@ package ca.phon.session.io.xml.v1_3;
 
 import ca.phon.orthography.*;
 import ca.phon.orthography.Error;
-import ca.phon.orthography.xml.XMLOrthographyGa;
-import ca.phon.orthography.xml.XMLOrthographyK;
-import ca.phon.orthography.xml.XMLOrthographyOverlap;
+import ca.phon.session.io.xml.v13.Ga;
+import ca.phon.session.io.xml.v13.K;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
@@ -17,7 +16,7 @@ public class XmlOrthographyAnnotationVisitor extends VisitorAdapter<Object> {
     private final List<OrthographyAnnotation> annotations = new ArrayList<>();
 
     @Visits
-    public void visitMarker(XMLOrthographyK xmlMarker) {
+    public void visitMarker(K xmlMarker) {
         final MarkerType type = switch (xmlMarker.getType()) {
             case BEST_GUESS -> MarkerType.BEST_GUESS;
             case CONTRASTIVE_STRESSING -> MarkerType.CONTRASTIVE_STRESSING;
@@ -43,7 +42,7 @@ public class XmlOrthographyAnnotationVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitGroupAnnotation(XMLOrthographyGa xmlGa) {
+    public void visitGroupAnnotation(Ga xmlGa) {
         final GroupAnnotationType type = switch (xmlGa.getType()) {
             case COMMENTS -> GroupAnnotationType.COMMENTS;
             case ALTERNATIVE -> GroupAnnotationType.ALTERNATIVE;
@@ -54,12 +53,17 @@ public class XmlOrthographyAnnotationVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitOverlap(XMLOrthographyOverlap xmlOverlap) {
+    public void visitOverlap(ca.phon.session.io.xml.v13.Overlap xmlOverlap) {
         final OverlapType type = switch (xmlOverlap.getType()) {
             case OVERLAP_FOLLOWS -> OverlapType.OVERLAP_FOLLOWS;
             case OVERLAP_PRECEDES -> OverlapType.OVERLAP_PRECEEDS;
         };
         annotations.add(new Overlap(type));
+    }
+
+    @Visits
+    public void visitLangs(ca.phon.session.io.xml.v13.Langs langs) {
+        // TODO
     }
 
     @Override

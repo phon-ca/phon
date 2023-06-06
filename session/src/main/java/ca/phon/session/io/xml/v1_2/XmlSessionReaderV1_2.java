@@ -306,15 +306,15 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 		}
 		final StringBuffer buffer = new StringBuffer();
 		for(Object obj:ct.getContent()) {
-//			if(obj instanceof JAXBElement) {
-//				final JAXBElement<?> jaxbEle = (JAXBElement<?>)obj;
-//				if(jaxbEle.getDeclaredType() == SegmentType.class)
-//					segment = copySegment(factory, (SegmentType)jaxbEle.getValue());
-//			} else {
-				buffer.append(obj.toString());
-//			}
+			buffer.append(obj.toString());
 		}
-		return factory.createComment(tag, buffer.toString(), null);
+		try {
+			final UserTierData tierData = UserTierData.parseTierData(buffer.toString());
+			return factory.createComment(type, tierData);
+		} catch (ParseException e) {
+			LOGGER.warn(e);
+			return factory.createComment(type, new UserTierData());
+		}
 	}
 
 	Record copyRecord(SessionFactory factory, Session session, RecordType rt) {
@@ -422,7 +422,7 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 
 		// alignment
 		for(AlignmentTierType att:rt.getAlignment()) {
-			final PhoneMap alignment = copyAlignment(factory, retVal, att);
+			final PhoneAlignment alignment = copyAlignment(factory, retVal, att);
 			retVal.setPhoneAlignment(alignment);
 			break; // only processing the first alignment element (which should be the only one)
 		}
@@ -734,7 +734,7 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 	/**
 	 * Copy alignment data
 	 */
-	private PhoneMap copyAlignment(SessionFactory factory, Record record, AlignmentTierType att) {
+	private PhoneAlignment copyAlignment(SessionFactory factory, Record record, AlignmentTierType att) {
 		final IPATranscript ipaT = record.getIPATargetTier().hasValue() ? record.getIPATarget() : new IPATranscript();
 		final IPATranscript ipaA = record.getIPAActualTier().hasValue() ? record.getIPAActual() : new IPATranscript();
 		int alignLength = 0;
@@ -758,7 +758,20 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 		}
 		pm.setTopAlignment(alignmentData[0]);
 		pm.setBottomAlignment(alignmentData[1]);
-		return pm;
+
+		// split alignment by word pairing
+		final List<IPATranscript> targetWords = ipaT.words();
+		final List<IPATranscript> actualWords = ipaA.words();
+		final int numAlignments = Math.max(targetWords.size(), actualWords.size());
+		final List<PhoneMap> alignments = new ArrayList<>();
+		for(int i = 0; i < numAlignments; i++) {
+			final IPATranscript tw = i < targetWords.size() ? targetWords.get(i) : new IPATranscript();
+			final IPATranscript aw = i < actualWords.size() ? actualWords.get(i) : new IPATranscript();
+			final PhoneMap subAlignment = pm.getSubAlignment(tw, aw);
+			alignments.add(subAlignment);
+		}
+
+		return new PhoneAlignment(alignments);
 	}
 
 	/**

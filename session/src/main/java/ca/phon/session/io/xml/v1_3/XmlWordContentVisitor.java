@@ -1,7 +1,10 @@
 package ca.phon.session.io.xml.v1_3;
 
 import ca.phon.orthography.*;
-import ca.phon.orthography.xml.*;
+import ca.phon.session.io.xml.v13.BeginEndType;
+import ca.phon.session.io.xml.v13.P;
+import ca.phon.session.io.xml.v13.Pos;
+import ca.phon.session.io.xml.v13.Wk;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
@@ -26,7 +29,7 @@ public final class XmlWordContentVisitor extends VisitorAdapter<Object> {
     private final Stack<CompoundWordMarkerType> compoundWordMarkerTypes = new Stack<>();
 
     @Visits
-    public void visitLangs(XMLOrthographyLangs xmlLangs) {
+    public void visitLangs(ca.phon.session.io.xml.v13.Langs xmlLangs) {
         if(xmlLangs.getSingle() != null) {
             langs = new Langs(Langs.LangsType.SINGLE, xmlLangs.getSingle());
         } else if(xmlLangs.getMultiple() != null) {
@@ -42,9 +45,9 @@ public final class XmlWordContentVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitCaDelimiter(XMLOrthographyCaDelimiter xmlCaDelim) {
+    public void visitCaDelimiter(ca.phon.session.io.xml.v13.CaDelimiter xmlCaDelim) {
         final BeginEnd beginEnd =
-                (xmlCaDelim.getType() == XMLOrthographyBeginEndType.BEGIN ? BeginEnd.BEGIN : BeginEnd.END);
+                (xmlCaDelim.getType() == BeginEndType.BEGIN ? BeginEnd.BEGIN : BeginEnd.END);
         final CaDelimiterType caDelimiterType = switch(xmlCaDelim.getLabel()) {
             case BREATHY_VOICE ->  CaDelimiterType.BREATHY_VOICE;
             case CREAKY -> CaDelimiterType.CREAKY;
@@ -66,7 +69,7 @@ public final class XmlWordContentVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitCaElement(XMLOrthographyCaElement xmlCaEle) {
+    public void visitCaElement(ca.phon.session.io.xml.v13.CaElement xmlCaEle) {
         final CaElementType caElementType = switch(xmlCaEle.getType()) {
             case BLOCKED_SEGMENTS -> CaElementType.BLOCKED_SEGMENTS;
             case CONSTRICTION -> CaElementType.CONSTRICTION;
@@ -82,14 +85,14 @@ public final class XmlWordContentVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitLongFeature(XMLOrthographyLongFeature xmlLongFeature) {
+    public void visitLongFeature(ca.phon.session.io.xml.v13.LongFeature xmlLongFeature) {
         final BeginEnd beginEnd =
-                (xmlLongFeature.getType() == XMLOrthographyBeginEndType.BEGIN ? BeginEnd.BEGIN : BeginEnd.END);
+                (xmlLongFeature.getType() == BeginEndType.BEGIN ? BeginEnd.BEGIN : BeginEnd.END);
         wordElements.add(new LongFeature(beginEnd, xmlLongFeature.getValue()));
     }
 
     @Visits
-    public void visitOverlapPoint(XMLOrthographyOverlapPoint xmlOverlapPt) {
+    public void visitOverlapPoint(ca.phon.session.io.xml.v13.OverlapPoint xmlOverlapPt) {
         final String topBottom = switch (xmlOverlapPt.getTopBottom()) {
             case TOP -> "top";
             case BOTTOM -> "bottom";
@@ -104,7 +107,7 @@ public final class XmlWordContentVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitProsody(XMLOrthographyP xmlP) {
+    public void visitProsody(P xmlP) {
         final ProsodyType type = switch (xmlP.getType()) {
             case BLOCKING -> ProsodyType.BLOCKING;
             case DRAWL -> ProsodyType.DRAWL;
@@ -114,12 +117,12 @@ public final class XmlWordContentVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitShortening(XMLOrthographyShortening xmlShortening) {
+    public void visitShortening(ca.phon.session.io.xml.v13.Shortening xmlShortening) {
         wordElements.add(new Shortening(xmlShortening.getValue()));
     }
 
     @Visits
-    public void visitWk(XMLOrthographyWk xmlWk) {
+    public void visitWk(Wk xmlWk) {
         final CompoundWordMarkerType type = switch(xmlWk.getType()) {
             case CLI -> CompoundWordMarkerType.CLITIC;
             case CMP -> CompoundWordMarkerType.COMPOUND;
@@ -133,26 +136,26 @@ public final class XmlWordContentVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitUnderline(XMLOrthographyUnderline xmlUnderline) {
+    public void visitUnderline(ca.phon.session.io.xml.v13.Underline xmlUnderline) {
         final BeginEnd beginEnd =
-                (xmlUnderline.getType() == XMLOrthographyBeginEndType.BEGIN ? BeginEnd.BEGIN : BeginEnd.END);
+                (xmlUnderline.getType() == BeginEndType.BEGIN ? BeginEnd.BEGIN : BeginEnd.END);
         wordElements.add(new Underline(beginEnd));
     }
 
     @Visits
-    public void visitItalic(XMLOrthographyItalic xmlItalic) {
+    public void visitItalic(ca.phon.session.io.xml.v13.Italic xmlItalic) {
         final BeginEnd beginEnd =
-                (xmlItalic.getType() == XMLOrthographyBeginEndType.BEGIN ? BeginEnd.BEGIN : BeginEnd.END);
+                (xmlItalic.getType() == BeginEndType.BEGIN ? BeginEnd.BEGIN : BeginEnd.END);
         wordElements.add(new Italic(beginEnd));
     }
 
     @Visits
-    public void visitPos(XMLOrthographyPos xmlPos) {
+    public void visitPos(Pos xmlPos) {
         wordPos.add(new WordPos(xmlPos.getC(), xmlPos.getS()));
     }
 
     @Visits
-    public void visitReplacement(XMLOrthographyReplacement xmlReplacement) {
+    public void visitReplacement(ca.phon.session.io.xml.v13.Replacement xmlReplacement) {
         final XmlOrthographyVisitor orthoVisitor = new XmlOrthographyVisitor();
         xmlReplacement.getW().forEach(orthoVisitor::visitWord);
         final Orthography ortho = orthoVisitor.getOrthography();

@@ -188,15 +188,15 @@ public final class Record extends ExtendableObject {
 		return recordImpl.getIPAActualTier();
 	}
 
-	public PhoneMap getPhoneAlignment() {
+	public PhoneAlignment getPhoneAlignment() {
 		return getPhoneAlignmentTier().getValue();
 	}
 
-	public void setPhoneAlignment(PhoneMap phoneAlignment) {
+	public void setPhoneAlignment(PhoneAlignment phoneAlignment) {
 		getPhoneAlignmentTier().setValue(phoneAlignment);
 	}
 
-	public Tier<PhoneMap> getPhoneAlignmentTier() {
+	public Tier<PhoneAlignment> getPhoneAlignmentTier() {
 		return recordImpl.getPhoneAlignmentTier();
 	}
 

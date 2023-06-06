@@ -31,7 +31,10 @@ public final class TypeAlignmentRules {
          * Phonetic groups, if selected only one aligned type will be required for the entire group
          */
         PhoneticGroup,
+        Freecode,
         Pause,
+        TagMarker,
+        InternalMedia,
         Terminator,
         Postcode
     };

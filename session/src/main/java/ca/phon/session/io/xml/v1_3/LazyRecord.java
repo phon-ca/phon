@@ -18,15 +18,12 @@ package ca.phon.session.io.xml.v1_3;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.Orthography;
-import ca.phon.session.GroupSegment;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.io.xml.v13.ParticipantType;
 import ca.phon.session.io.xml.v13.RecordType;
 import ca.phon.session.spi.RecordSPI;
-import ca.phon.util.Language;
 
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -172,7 +169,7 @@ public final class LazyRecord implements RecordSPI {
 	private void loadRecord() {
 		if(internalRecord != null) return;
 		final XmlSessionReaderV1_3 reader = new XmlSessionReaderV1_3();
-		internalRecord = reader.copyRecord(factory, session, recordElement);
+		internalRecord = reader.readRecord(factory, session, recordElement);
 	}
 
 }

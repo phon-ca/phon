@@ -21,29 +21,19 @@ import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.*;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
-import ca.phon.plugin.PluginManager;
 import ca.phon.plugin.Rank;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.UserTierData;
 import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionReader;
-import ca.phon.session.GroupSegment;
 import ca.phon.session.io.xml.v13.*;
 import ca.phon.session.io.xml.v13.CommentType;
 import ca.phon.session.io.xml.v13.TierAlignmentRules;
-import ca.phon.session.io.xml.v13.WordType;
-import ca.phon.syllable.SyllabificationInfo;
-import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.util.Language;
-import ca.phon.visitor.VisitorAdapter;
-import ca.phon.visitor.annotation.Visits;
 import ca.phon.xml.XMLObjectReader;
 import ca.phon.xml.annotation.XMLSerial;
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBElement;
-import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Unmarshaller;
+import jakarta.xml.bind.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.w3c.dom.Document;
@@ -166,7 +156,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		final ParticipantsType participants = sessionType.getParticipants();
 		if(participants != null) {
 			for(ParticipantType pt:participants.getParticipant()) {
-				final Participant p = copyParticipant(factory, pt, retVal.getDate());
+				final Participant p = readParticipant(factory, pt, retVal.getDate());
 				retVal.addParticipant(p);
 			}
 		}
@@ -190,32 +180,21 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		}
 
 		final List<TierViewItem> tierOrder = new ArrayList<TierViewItem>();
-		for(TvType tot:sessionType.getTierOrder().getTier()) {
-			final TierViewItem toi = copyTierViewItem(factory, tot);
+		for(TierViewType tot:sessionType.getTierOrder().getTv()) {
+			final TierViewItem toi = readTierViewItem(factory, tot);
 			tierOrder.add(toi);
 		}
 		retVal.setTierView(tierOrder);
 
-		// copy transcript data
-		final List<Comment> recordComments = new ArrayList<Comment>();
-		boolean foundFirstRecord = false;
+		// read transcript data
 		if(sessionType.getTranscript() != null) {
 			for(Object uOrComment:sessionType.getTranscript().getROrComment()) {
 				if(uOrComment instanceof CommentType) {
 					final CommentType ct = (CommentType)uOrComment;
-					final Comment comment = copyComment(factory, ct);
-					recordComments.add(comment);
+					final Comment comment = readComment(factory, ct);
+					retVal.getTranscript().addComment(comment);
 				} else {
-					if(!foundFirstRecord && recordComments.size() > 0) {
-						// add record comments to session metadata
-						for(Comment c:recordComments) {
-							retVal.getMetadata().addComment(c);
-						}
-						recordComments.clear();
-					}
 					final RecordType rt = (RecordType)uOrComment;
-
-
 					Record record = null;
 					try {
 						record = factory.createRecord(new LazyRecord(factory, retVal, rt));
@@ -225,20 +204,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 								e.getLocalizedMessage(), e);
 
 					}
-
 					retVal.addRecord(record);
-
-					for(Comment comment:recordComments) {
-						record.addComment(comment);
-					}
-					recordComments.clear();
-					foundFirstRecord = true;
-				}
-			}
-			if(recordComments.size() > 0) {
-				// add record comments to session metadata
-				for(Comment c:recordComments) {
-					retVal.getMetadata().addTrailingComment(c);
 				}
 			}
 		}
@@ -247,7 +213,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 	}
 
 	// participants
-	Participant copyParticipant(SessionFactory factory, ParticipantType pt, LocalDate sessionDate) {
+	Participant readParticipant(SessionFactory factory, ParticipantType pt, LocalDate sessionDate) {
 		final Participant retVal = factory.createParticipant();
 
 		retVal.setId(pt.getId());
@@ -327,21 +293,46 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 	// tier descriptions
 	private TierDescription readTierDescription(SessionFactory factory, TierDescriptionType tdt) {
 		final String tierName = tdt.getTierName();
+		final Class<?> tierType = switch (tdt.getType()) {
+			case CHAT -> Orthography.class;
+			case IPA -> IPATranscript.class;
+			case SIMPLE -> UserTierData.class;
+		};
 		final Map<String, String> tierParams = new LinkedHashMap<>();
 		if(tdt.getTierParameters() != null) {
 			for (TierParameterType tp : tdt.getTierParameters().getParam()) {
 				tierParams.put(tp.getName(), tp.getContent());
 			}
 		}
+		ca.phon.session.TierAlignmentRules tierAlignmentRules = new ca.phon.session.TierAlignmentRules();
 		if(tdt.getTierAlignment() != null) {
 			final TierAlignmentRules alignmentRules = tdt.getTierAlignment();
 
 			final List<TypeAlignmentRules.AlignableType> alignableTypes = new ArrayList<>();
-
+			for(var alignableType:tdt.getTierAlignment().getAlignWith()) {
+				final TypeAlignmentRules.AlignableType type = switch (alignableType) {
+					case FREECODE -> TypeAlignmentRules.AlignableType.Freecode;
+					case GROUP -> TypeAlignmentRules.AlignableType.Group;
+					case INTERNAL_MEDIA -> TypeAlignmentRules.AlignableType.InternalMedia;
+					case LINKER -> TypeAlignmentRules.AlignableType.Linker;
+					case PAUSE -> TypeAlignmentRules.AlignableType.Pause;
+					case PHONETIC_GROUP -> TypeAlignmentRules.AlignableType.PhoneticGroup;
+					case POSTCODE -> TypeAlignmentRules.AlignableType.Postcode;
+					case TAG_MARKER -> TypeAlignmentRules.AlignableType.TagMarker;
+					case TERMINATOR -> TypeAlignmentRules.AlignableType.Terminator;
+					case WORD -> TypeAlignmentRules.AlignableType.Word;
+				};
+				alignableTypes.add(type);
+			}
+			tierAlignmentRules = new ca.phon.session.TierAlignmentRules(
+					new TypeAlignmentRules(alignableTypes, alignmentRules.isIncludeXXX(),
+							alignmentRules.isIncludeYYY(), alignmentRules.isIncludeWWW(),
+							alignmentRules.isIncludeOmitted(), alignmentRules.isIncludeExcluded()));
 		}
+		return factory.createTierDescription(tierName, tierType, tierParams, tierAlignmentRules);
 	}
 
-	private TierViewItem copyTierViewItem(SessionFactory factory, TierViewType tvt) {
+	private TierViewItem readTierViewItem(SessionFactory factory, TierViewType tvt) {
 		final boolean locked = tvt.isLocked();
 		final boolean visible = tvt.isVisible();
 		final String name = tvt.getTierName();
@@ -350,7 +341,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		return factory.createTierViewItem(name, visible, font, locked);
 	}
 	
-	private MediaSegment copySegment(SessionFactory factory, MediaType st) {
+	private MediaSegment readMediaSegment(SessionFactory factory, MediaType st) {
 		final MediaSegment segment = factory.createMediaSegment();
 		final float startVal = st.getStart().floatValue();
 		final float endVal = st.getEnd().floatValue();
@@ -365,7 +356,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 	}
 
 	// copy comment data
-	private Comment copyComment(SessionFactory factory, CommentType ct) {
+	private Comment readComment(SessionFactory factory, CommentType ct) {
 		final ca.phon.session.CommentType type = switch (ct.getType()) {
 			case ACTIVITIES -> ca.phon.session.CommentType.Activities;
 			case BCK -> ca.phon.session.CommentType.Bck;
@@ -418,18 +409,9 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		return factory.createComment(type, userTierData);
 	}
 
-	Record copyRecord(SessionFactory factory, Session session, RecordType rt) {
+	Record readRecord(SessionFactory factory, Session session, RecordType rt) {
 		final Record retVal = factory.createRecord();
-
 		retVal.setExcludeFromSearches(rt.isExcludeFromSearches());
-
-		if(rt.getLanguage() != null) {
-			try {
-				Language l = Language.parseLanguage(rt.getLanguage());
-				retVal.setLanguage(l);
-			} catch (IllegalArgumentException e) {
-			}
-		}
 
 		try {
 			if(rt.getId() != null) {
@@ -456,160 +438,111 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		}
 
 		// orthography
-		final OrthographyType ot = rt.getOrthography();
-		final Tier<Orthography> orthoTier = copyOrthography(factory, ot);
-		retVal.setOrthography(orthoTier);
+		final OrthographyTierType ot = rt.getOrthography();
+		final Orthography orthography = readOrthography(factory, ot);
+		retVal.setOrthography(orthography);
 
 		// ipa target/actual
-		for(IpaTierType ipaTt:rt.getIpaTier()) {
-			final Tier<IPATranscript> ipaTranscript = copyTranscript(factory, ipaTt);
-			if(ipaTt.getForm() == PhoTypeType.ACTUAL) {
-				retVal.setIPAActual(ipaTranscript);
-			} else {
-				retVal.setIPATarget(ipaTranscript);
-			}
+		if(rt.getIpaTarget() != null) {
+			final IPATranscript ipaTarget = readTranscript(factory, rt.getIpaTarget());
+			final AlternativeTranscript blindTranscription = readBlindTranscriptions(factory, rt.getIpaTarget().getBlindTranscription());
+			retVal.setIPATarget(ipaTarget);
+			retVal.getIPATargetTier().putExtension(AlternativeTranscript.class, blindTranscription);
+		} else {
+			retVal.setIPATarget(new IPATranscript());
 		}
 
-		Tier<IPATranscript> ipaTargetTier = retVal.getIPATargetTier();
-		while(ipaTargetTier.numberOfGroups() < retVal.numberOfGroups()) ipaTargetTier.addGroup();
-
-		Tier<IPATranscript> ipaActualTier = retVal.getIPAActualTier();
-		while(ipaActualTier.numberOfGroups() < retVal.numberOfGroups()) ipaActualTier.addGroup();
-
-		// blind transcriptions
-		for(BlindTierType btt:rt.getBlindTranscription()) {
-			// get the correct ipa object from our new record
-			final Tier<IPATranscript> ipaTier =
-					(btt.getForm() == PhoTypeType.MODEL ? retVal.getIPATargetTier() : retVal.getIPAActualTier());
-			int gidx = 0;
-			for(BgType bgt:btt.getBg()) {
-				final StringBuffer buffer = new StringBuffer();
-				for(ca.phon.session.io.xml.v13.WordType wt:bgt.getW()) {
-					if(buffer.length() > 0)
-						buffer.append(" ");
-					buffer.append(wt.getContent());
-				}
-
-				final IPATranscript ipa = (gidx < ipaTier.numberOfGroups() ? ipaTier.getGroup(gidx) : null);
-
-				if(ipa != null) {
-					try {
-						final IPATranscript blindTranscript =
-								IPATranscript.parseIPATranscript(buffer.toString());
-						final TranscriberType tt = (TranscriberType)btt.getUser();
-						final String name = tt.getId();
-
-						AlternativeTranscript at = ipa.getExtension(AlternativeTranscript.class);
-						if(at == null) {
-							at = new AlternativeTranscript();
-							ipa.putExtension(AlternativeTranscript.class, at);
-						}
-						at.put(name, blindTranscript);
-					} catch (ParseException e) {
-						LOGGER.info(
-								e.getLocalizedMessage(), e);
-					}
-				}
-				gidx++;
-			}
+		if(rt.getIpaActual() != null) {
+			final IPATranscript ipaActual = readTranscript(factory, rt.getIpaActual());
+			final AlternativeTranscript blindTranscription = readBlindTranscriptions(factory, rt.getIpaActual().getBlindTranscription());
+			retVal.setIPAActual(ipaActual);
+			retVal.getIPAActualTier().putExtension(AlternativeTranscript.class, blindTranscription);
+		} else {
+			retVal.setIPAActual(new IPATranscript());
 		}
 
 		// notes
-		if(rt.getNotes() != null)
-			retVal.getNotesTier().setGroup(0, new TierString(rt.getNotes().getContent()));
+		if(rt.getNotes() != null) {
+			final UserTierData notesData = readNotes(factory, rt.getNotes());
+			retVal.setNotes(notesData);
+		}
 
 		// segment
 		if(rt.getSegment() != null) {
-			final MediaSegment segment = copySegment(factory, rt.getSegment());
+			final MediaSegment segment = readMediaSegment(factory, rt.getSegment());
 			retVal.setMediaSegment(segment);
-
-			for (ca.phon.session.io.xml.v13.GroupSegment gseg : rt.getSegment().getGseg()) {
-				retVal.getGroupSegment().addGroup(new GroupSegment(retVal,
-						gseg.getStart(), gseg.getEnd()));
-			}
 		} else {
 			retVal.setMediaSegment(factory.createMediaSegment());
 		}
-		if(retVal.getGroupSegment().numberOfGroups() == 0) {
-			// setup default group segment lengths as these are not stored prior to phonbank 1.3
-			float start = 0.0f;
-			float gwidth = (orthoTier.numberOfGroups() > 0 ? 1.0f / orthoTier.numberOfGroups() : 1.0f);
-			for(int i = 0; i < orthoTier.numberOfGroups(); i++) {
-				float end = Math.min(1.0f, start + gwidth);
-				retVal.getGroupSegment().addGroup(new GroupSegment(retVal, start, end));
-				start = end;
-			}
-		}
 
 		// alignment
-		for(AlignmentTierType att:rt.getAlignment()) {
-			final Tier<PhoneMap> alignment = copyAlignment(factory, retVal, att);
-			while(alignment.numberOfGroups() < retVal.numberOfGroups()) alignment.addGroup();
+		if(rt.getAlignment() != null) {
+			final PhoneAlignment alignment = readAlignment(factory, retVal, rt.getAlignment());
 			retVal.setPhoneAlignment(alignment);
-			break; // only processing the first alignment element (which should be the only one)
 		}
 
 		// user tiers
-		for(FlatTierType ftt:rt.getFlatTier()) {
-			final Tier<TierString> flatTier = factory.createTier(ftt.getTierName(), TierString.class, false);
-			flatTier.setGroup(0, new TierString(ftt.getContent()));
-			retVal.putTier(flatTier);
-		}
-
-		for(GroupTierType gtt:rt.getGroupTier()) {
-			final Tier<TierString> groupTier = factory.createTier(gtt.getTierName(), TierString.class, true);
-			int gidx = 0;
-			for(TgType tgt:gtt.getTg()) {
-				final StringBuffer buffer = new StringBuffer();
-				for(ca.phon.session.io.xml.v13.WordType wt:tgt.getW()) {
-					if(buffer.length() > 0)
-						buffer.append(" ");
-					buffer.append(wt.getContent());
-				}
-				groupTier.setGroup(gidx++, new TierString(buffer.toString()));
+		for(UserTierType utt:rt.getUserTier()) {
+			final UserTierData tierData = readUserTier(factory, utt);
+			final TierDescription td = findTierDescription(session, utt.getName());
+			if(td == null) {
+				throw new IllegalStateException("Invalid user tier " + utt.getName());
 			}
-			// ensure the dependent tier has the correct number of groups
-			while(groupTier.numberOfGroups() < retVal.numberOfGroups()) {
-				groupTier.addGroup();
-			}
-			retVal.putTier(groupTier);
+			final Tier<UserTierData> userTier = factory.createTier(utt.getName(), UserTierData.class,
+					td.getTierAlignmentRules());
+			userTier.setValue(tierData);
+			retVal.putTier(userTier);
 		}
 
 		return retVal;
 	}
 
+	private TierDescription findTierDescription(Session session, String tierName) {
+		for(TierDescription td:session.getUserTiers()) {
+			if(td.getName().equals(tierName))
+				return td;
+		}
+		return null;
+	}
+
 	/**
-	 * Copy orthography
+	 * Read orthography tier in record
 	 *
 	 * @param factory
 	 * @param ot
 	 * @return
 	 */
-	private Tier<Orthography> copyOrthography(SessionFactory factory, OrthographyType ot) {
-		final Tier<Orthography> retVal = factory.createTier(SystemTierType.Orthography.getName(), Orthography.class, SystemTierType.Orthography.isGrouped());
+	private Orthography readOrthography(SessionFactory factory, OrthographyTierType ot) {
+		Orthography utt = new Orthography();
+		if(ot.getU() != null) {
+			utt = readOrthography(ot.getU());
+		} else {
+			utt.putExtension(UnvalidatedValue.class, new UnvalidatedValue(ot.getUnparsable()));
+		}
+		return utt;
+	}
 
-		for(Object uttGrp:ot.getUOrUnparsable()) {
-			if(uttGrp instanceof XMLOrthographyUtteranceType) {
-				final XMLOrthographyUtteranceType utt = (XMLOrthographyUtteranceType) uttGrp;
-				final XmlOrthographyVisitor visitor = new XmlOrthographyVisitor();
-				utt.getLinker().forEach(visitor::visit);
-				utt.getWOrGOrPg().forEach(visitor::visit);
-				if(utt.getT() != null)
-					visitor.visit(utt.getT());
-				utt.getPostcode().forEach(visitor::visit);
-				retVal.addGroup(visitor.getOrthography());
-			} else if(uttGrp instanceof String) {
-				final Orthography ortho = new Orthography();
-				ortho.putExtension(UnvalidatedValue.class, new UnvalidatedValue(uttGrp.toString()));
-				retVal.addGroup(ortho);
+	private Orthography readOrthography(UtteranceType ut) {
+		final OrthographyBuilder builder = new OrthographyBuilder();
+		final XmlOrthographyVisitor visitor = new XmlOrthographyVisitor();
+		if(ut.getLang() != null) {
+			try {
+				final Language lang = Language.parseLanguage(ut.getLang());
+				builder.append(new UtteranceLanguage(lang));
+			} catch (IllegalArgumentException e) {
+				LOGGER.warn(e);
 			}
 		}
-
-		return retVal;
+		ut.getLinker().forEach(visitor::visit);
+		ut.getWOrGOrPg().forEach(visitor::visit);
+		if(ut.getT() != null)
+			visitor.visitTerminator(ut.getT());
+		ut.getPostcode().forEach(visitor::visit);
+		return builder.toOrthography();
 	}
 
 	/**
-	 * Copy ipa data.
+	 * Read ipa data.
 	 *
 	 * Attempts to copy phone objects as-is, if not possible
 	 * the transcription is re-parsed.
@@ -617,146 +550,117 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 	 * @param factory
 	 * @param itt
 	 */
-	private Tier<IPATranscript> copyTranscript(SessionFactory factory, IpaTierType itt) {
-		final SystemTierType tierType =
-				(itt.getForm() == PhoTypeType.MODEL ? SystemTierType.IPATarget : SystemTierType.IPAActual);
-		final Tier<IPATranscript> retVal = factory.createTier(tierType.getName(), IPATranscript.class, tierType.isGrouped());
-
-		// attempt an exact copy first
-		for(PhoType pt:itt.getPg()) {
-
-			if(pt != null && pt.getW() != null) {
-				final StringBuffer groupBuffer = new StringBuffer();
-				for(WordType wt:pt.getW()) {
-					if(groupBuffer.length() > 0)
-						groupBuffer.append(" ");
-					groupBuffer.append(wt.getContent());
-				}
-
-				if(groupBuffer.toString().trim().length() == 0) {
-					retVal.addGroup(new IPATranscript());
-				} else {
-					try {
-						final IPATranscript transcript = IPATranscript.parseIPATranscript(groupBuffer.toString());
-						// copy syllabification if transcript is the same size as our provided syllabification
-						if(pt.getSb() != null && pt.getSb().getPh() != null
-								&& transcript.length() == pt.getSb().getPh().size()) {
-							final CopyTranscriptVisitor visitor = new CopyTranscriptVisitor(pt.getSb().getPh());
-							transcript.accept(visitor);
-						}
-						retVal.addGroup(transcript);
-					} catch (ParseException pe) {
-						LOGGER.info( pe.getLocalizedMessage(), pe);
-
-						final IPATranscript ipa = new IPATranscript();
-						ipa.putExtension(UnvalidatedValue.class, new UnvalidatedValue(groupBuffer.toString(), pe));
-						retVal.addGroup(ipa);
-					}
-				}
-			} else {
-				retVal.addGroup(new IPATranscript());
-			}
+	private IPATranscript readTranscript(SessionFactory factory, IpaTierType itt) {
+		IPATranscript retVal = new IPATranscript();
+		if (itt.getPho() != null) {
+			retVal = readTranscript(itt.getPho());
+		} else {
+			retVal.putExtension(UnvalidatedValue.class, new UnvalidatedValue(itt.getUnparsable()));
 		}
-
 		return retVal;
 	}
 
-	public class CopyTranscriptVisitor extends VisitorAdapter<IPAElement> {
-
-		int eleIdx = 0;
-
-		final List<ConstituentType> syllabification;
-
-		public CopyTranscriptVisitor(List<ConstituentType> syllabification) {
-			super();
-			this.syllabification = syllabification;
+	private IPATranscript readTranscript(PhoneticTranscriptionType pho) {
+		final XmlPhoneticTranscriptVisitor visitor = new XmlPhoneticTranscriptVisitor();
+		pho.getPwOrPause().forEach(visitor::visit);
+		try {
+			return visitor.toIPATranscript();
+		} catch (ParseException pe) {
+			LOGGER.warn(pe);
+			final IPATranscript retVal = new IPATranscript();
+			retVal.putExtension(UnvalidatedValue.class, new UnvalidatedValue(visitor.toString(), pe));
+			return retVal;
 		}
+	}
 
-		@Override
-		public void fallbackVisit(IPAElement obj) {
-			eleIdx++;
-		}
-
-		@Visits
-		public void visitPhone(Phone phone) {
-			final ConstituentType ct =
-					(eleIdx < syllabification.size() ? syllabification.get(eleIdx++) : null);
-			if(ct != null) {
-				final ConstituentTypeType ctt = ct.getScType();
-				final SyllableConstituentType scType = SyllableConstituentType.fromString(ctt.toString());
-				final SyllabificationInfo info = phone.getExtension(SyllabificationInfo.class);
-				if(scType != null) {
-					info.setConstituentType(scType);
-					if(scType == SyllableConstituentType.NUCLEUS) {
-						info.setDiphthongMember(!ct.isHiatus());
-					}
-					phone.putExtension(SyllabificationInfo.class, info);
-				}
+	private AlternativeTranscript readBlindTranscriptions(SessionFactory factory, List<BlindTranscriptionType> bts) {
+		final AlternativeTranscript retVal = new AlternativeTranscript();
+		for(BlindTranscriptionType btt:bts) {
+			IPATranscript ipa = new IPATranscript();
+			if (btt.getPho() != null) {
+				ipa = readTranscript(btt.getPho());
+			} else {
+				ipa.putExtension(UnvalidatedValue.class, new UnvalidatedValue(btt.getUnparsable()));
 			}
+			retVal.put(btt.getTranscriber(), ipa);
 		}
-
-		@Visits
-		public void visitCompoundPhone(CompoundPhone cp) {
-			final ConstituentType ct =
-					(eleIdx < syllabification.size() ? syllabification.get(eleIdx++) : null);
-			if(ct != null) {
-				final ConstituentTypeType ctt = ct.getScType();
-				final SyllabificationInfo info = cp.getExtension(SyllabificationInfo.class);
-				final SyllableConstituentType scType = SyllableConstituentType.fromString(ctt.toString());
-				if(scType != null) {
-					info.setConstituentType(scType);
-					if(scType == SyllableConstituentType.NUCLEUS) {
-						info.setDiphthongMember(!ct.isHiatus());
-					}
-				}
-			}
-		}
-
+		return retVal;
 	}
 
 	/**
-	 * Copy alignment data
+	 * Read alignment data
 	 */
-	private Tier<PhoneMap> copyAlignment(SessionFactory factory, Record record, AlignmentTierType att) {
-		final Tier<PhoneMap> retVal = factory.createTier(SystemTierType.SyllableAlignment.getName(), PhoneMap.class, true);
-
-		// create 'sound-only' lists from the ipa transcripts.  These are used for alignment
-		// indices
+	private PhoneAlignment readAlignment(SessionFactory factory, Record record, AlignmentTierType att) {
 		final Tier<IPATranscript> ipaT = record.getIPATargetTier();
+		final List<IPATranscript> targetWords = ipaT.hasValue() ? ipaT.getValue().words() : new ArrayList<>();
 		final Tier<IPATranscript> ipaA = record.getIPAActualTier();
+		final List<IPATranscript> actualWords = ipaA.hasValue() ? ipaA.getValue().words() : new ArrayList<>();
 
-		int gidx = 0;
-		for(AlignmentType at:att.getAg()) {
-			final IPATranscript ipaTGrp = (ipaT.numberOfGroups() > gidx && ipaT.getGroup(gidx) != null ?
-					ipaT.getGroup(gidx) : new IPATranscript());
-			final IPATranscript ipaAGrp = (ipaA.numberOfGroups() > gidx && ipaA.getGroup(gidx) != null ?
-					ipaA.getGroup(gidx) : new IPATranscript());
-
-			final PhoneMap pm = new PhoneMap(ipaTGrp, ipaAGrp);
+		final List<PhoneMap> alignments = new ArrayList<>();
+		for(PhoneMapType pmType:att.getPm()) {
+			final int tidx = pmType.getTarget().intValue();
+			final int aidx = pmType.getActual().intValue();
+			final IPATranscript ipaTw = tidx >= 0 && tidx < targetWords.size() ? targetWords.get(tidx) : new IPATranscript();
+			final IPATranscript ipaAw = aidx >= 0 && aidx < actualWords.size() ? actualWords.get(aidx) : new IPATranscript();
+			final PhoneMap pm = new PhoneMap(ipaTw, ipaAw);
 
 			final Integer[][] alignmentData = new Integer[2][];
-			alignmentData[0] = new Integer[at.getLength()];
-			alignmentData[1] = new Integer[at.getLength()];
-
-			for(int i = 0; i < at.getPhomap().size(); i++) {
-				final MappingType mt = at.getPhomap().get(i);
-				alignmentData[0][i] =
-						(mt.getValue().size() > 0 ? mt.getValue().get(0) : null);
-				alignmentData[1][i] =
-						(mt.getValue().size() > 1 ? mt.getValue().get(1) : null);
+			alignmentData[0] = pmType.getTop().toArray(new Integer[0]);
+			alignmentData[1] = pmType.getBottom().toArray(new Integer[0]);
+			if(alignmentData[0].length != alignmentData[1].length) {
+				throw new IllegalStateException("Invalid alignment");
 			}
 			pm.setTopAlignment(alignmentData[0]);
 			pm.setBottomAlignment(alignmentData[1]);
-//
-			retVal.addGroup(pm);
-			gidx++;
+			alignments.add(pm);
 		}
 
+		return new PhoneAlignment(alignments);
+	}
+
+	private UserTierData readUserTier(SessionFactory factory, UserTierType utt) {
+		UserTierData retVal = new UserTierData();
+		if(utt.getTierData() != null) {
+			retVal = readUserTierData(factory, utt.getTierData());
+		} else if(utt.getUnparsable() != null) {
+			retVal.putExtension(UnvalidatedValue.class, new UnvalidatedValue(utt.getUnparsable()));
+		}
 		return retVal;
 	}
 
+	private UserTierData readNotes(SessionFactory factory, NotesTierType ntt) {
+		UserTierData retVal = new UserTierData();
+		if(ntt.getTierData() != null) {
+			retVal = readUserTierData(factory, ntt.getTierData());
+		} else if(ntt.getUnparsable() != null) {
+			retVal.putExtension(UnvalidatedValue.class, new UnvalidatedValue(ntt.getUnparsable()));
+		}
+		return retVal;
+	}
+
+	private UserTierData readUserTierData(SessionFactory factory, ca.phon.session.io.xml.v13.UserTierData utd) {
+		final List<UserTierElement> elements = new ArrayList<>();
+		// all allowed objects are wrapped in JAXBElements
+		for(Object obj:utd.getTwOrTcOrInternalMedia()) {
+			if(!(obj instanceof JAXBElement<?>)) continue;
+			final JAXBElement<?> ele = (JAXBElement<?>) obj;
+			if(ele.getName().equals("tw")) {
+				elements.add(new TierString(ele.getValue().toString()));
+			} else if(ele.getName().equals("tc")) {
+				elements.add(new UserTierComment(ele.getValue().toString()));
+			} else if(ele.getName().equals("internal-media")) {
+				final MediaType mt = (MediaType) ele.getValue();
+				final MediaSegment seg = readMediaSegment(factory, mt);
+				elements.add(new UserTierInternalMedia(new InternalMedia(seg.getStartValue(), seg.getEndValue())));
+			} else {
+				LOGGER.warn("Invalid element " + ele.getName());
+			}
+		}
+		return new UserTierData(elements);
+	}
+
 	/**
-	 * Get an dom version of the xml stream
+	 * Get a dom version of the xml stream
 	 *
 	 * @param stream
 	 * @return dom document

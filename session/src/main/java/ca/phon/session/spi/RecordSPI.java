@@ -16,11 +16,9 @@
 package ca.phon.session.spi;
 
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.util.Language;
 
 import java.util.*;
 
@@ -90,7 +88,7 @@ public interface RecordSPI {
 	 * @see Record#getPhoneAlignmentTier()
 	 * @return
 	 */
-	public Tier<PhoneMap> getPhoneAlignmentTier();
+	public Tier<PhoneAlignment> getPhoneAlignmentTier();
 
 	/**
 	 * @see Record#getNotesTier()

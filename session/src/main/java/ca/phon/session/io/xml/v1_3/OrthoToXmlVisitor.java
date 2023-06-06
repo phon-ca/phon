@@ -16,15 +16,13 @@
 package ca.phon.session.io.xml.v1_3;
 
 import ca.phon.orthography.*;
-import ca.phon.orthography.xml.*;
+import ca.phon.session.io.xml.v13.ObjectFactory;
+import ca.phon.session.io.xml.v13.UtteranceType;
 import ca.phon.util.Language;
 import ca.phon.visitor.annotation.Visits;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.sql.Array;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -33,7 +31,7 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 
 	private final ObjectFactory factory = new ObjectFactory();
 
-	private final XMLOrthographyUtteranceType u;
+	private final UtteranceType u;
 
 	public OrthoToXmlVisitor() {
 		this.u = factory.createXMLOrthographyUtteranceType();

@@ -1,10 +1,32 @@
 package ca.phon.session.io.xml.v1_3;
 
 import ca.phon.orthography.*;
+import ca.phon.orthography.Action;
+import ca.phon.orthography.Freecode;
+import ca.phon.orthography.Italic;
+import ca.phon.orthography.Linker;
+import ca.phon.orthography.LinkerType;
+import ca.phon.orthography.LongFeature;
+import ca.phon.orthography.Nonvocal;
+import ca.phon.orthography.OtherSpokenEvent;
+import ca.phon.orthography.OverlapPoint;
+import ca.phon.orthography.Pause;
+import ca.phon.orthography.Postcode;
+import ca.phon.orthography.Quotation;
+import ca.phon.orthography.SeparatorType;
+import ca.phon.orthography.TagMarker;
+import ca.phon.orthography.TagMarkerType;
+import ca.phon.orthography.TerminatorType;
+import ca.phon.orthography.ToneMarker;
+import ca.phon.orthography.ToneMarkerType;
+import ca.phon.orthography.Underline;
+import ca.phon.orthography.UntranscribedType;
+import ca.phon.orthography.WordFormType;
 import ca.phon.orthography.WordType;
-import ca.phon.orthography.xml.*;
+import ca.phon.session.io.xml.v13.*;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
+import jakarta.xml.bind.JAXBElement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +36,7 @@ public class XmlOrthographyVisitor extends VisitorAdapter<Object> {
     private OrthographyBuilder builder = new OrthographyBuilder();
 
     @Visits
-    public void visitWord(XMLOrthographyW word) {
+    public void visitWord(W word) {
         final WordType wordType = word.getType() == null ? null : switch (word.getType()) {
             case FILLER -> WordType.FILLER;
             case FRAGMENT -> WordType.FRAGMENT;
@@ -79,7 +101,7 @@ public class XmlOrthographyVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitLinker(XMLOrthographyLinker xmlLinker) {
+    public void visitLinker(ca.phon.session.io.xml.v13.Linker xmlLinker) {
         final LinkerType type = switch (xmlLinker.getType()) {
             case LAZY_OVERLAP_MARK -> LinkerType.LAZY_OVERLAP_MARK;
             case NO_BREAK_TCU_COMPLETION -> LinkerType.NO_BREAK_TCU_COMPLETION;
@@ -93,7 +115,7 @@ public class XmlOrthographyVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitGroup(XMLOrthographyG xmlGroup) {
+    public void visitGroup(G xmlGroup) {
         final XmlOrthographyVisitor innerVisitor = new XmlOrthographyVisitor();
         xmlGroup.getWOrGOrPg().forEach(innerVisitor::visit);
         final XmlOrthographyAnnotationVisitor annotationVisitor = new XmlOrthographyAnnotationVisitor();
@@ -102,21 +124,21 @@ public class XmlOrthographyVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitPhoneticGroup(XMLOrthographyPg xmlPg) {
+    public void visitPhoneticGroup(Pg xmlPg) {
         final XmlOrthographyVisitor innerVisitor = new XmlOrthographyVisitor();
         xmlPg.getWOrGOrE().forEach(innerVisitor::visit);
         builder.append(new PhoneticGroup(innerVisitor.getOrthography().toList()));
     }
 
     @Visits
-    public void visitQuotation(XMLOrthographyQuotation xmlQuotation) {
+    public void visitQuotation(ca.phon.session.io.xml.v13.Quotation xmlQuotation) {
         final BeginEnd beginEnd =
-                (xmlQuotation.getType() == XMLOrthographyBeginEndType.BEGIN ? BeginEnd.BEGIN : BeginEnd.END);
+                (xmlQuotation.getType() == BeginEndType.BEGIN ? BeginEnd.BEGIN : BeginEnd.END);
         builder.append(new Quotation(beginEnd));
     }
 
     @Visits
-    public void visitPause(XMLOrthographyPause xmlPause) {
+    public void visitPause(ca.phon.session.io.xml.v13.Pause xmlPause) {
         if(xmlPause.getSymbolicLength() != null) {
             final PauseLength length = switch (xmlPause.getSymbolicLength()) {
                 case SIMPLE -> PauseLength.SIMPLE;
@@ -130,25 +152,25 @@ public class XmlOrthographyVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitInternalMedia(XMLOrthographyMediaType xmlMedia) {
+    public void visitInternalMedia(MediaType xmlMedia) {
         float start = xmlMedia.getStart().floatValue();
-        if(xmlMedia.getUnit() == XMLOrthographyMediaUnitType.MS) {
+        if(xmlMedia.getUnit() == MediaUnitType.MS) {
             start /= 1000.0f;
         }
         float end = xmlMedia.getEnd().floatValue();
-        if(xmlMedia.getUnit() == XMLOrthographyMediaUnitType.MS) {
+        if(xmlMedia.getUnit() == MediaUnitType.MS) {
             end /= 1000.0f;
         }
         builder.append(new InternalMedia(start, end));
     }
 
     @Visits
-    public void visitFreecode(XMLOrthographyFreecode xmlFreecode) {
+    public void visitFreecode(ca.phon.session.io.xml.v13.Freecode xmlFreecode) {
         builder.append(new Freecode(xmlFreecode.getValue()));
     }
 
     @Visits
-    public void visitEvent(XMLOrthographyE xmlEvent) {
+    public void visitEvent(E xmlEvent) {
         final XmlOrthographyAnnotationVisitor annotationVisitor = new XmlOrthographyAnnotationVisitor();
         xmlEvent.getKOrErrorOrOverlap().forEach(annotationVisitor::visit);
         if(xmlEvent.getAction() != null) {
@@ -161,7 +183,7 @@ public class XmlOrthographyVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitSeparator(XMLOrthographyS xmlSeparator) {
+    public void visitSeparator(S xmlSeparator) {
         final SeparatorType sType = switch (xmlSeparator.getType()) {
             case CLAUSE_DELIMITER -> SeparatorType.CLAUSE_DELIMITER;
             case COLON -> SeparatorType.COLON;
@@ -174,7 +196,7 @@ public class XmlOrthographyVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitToneMarker(XMLOrthographyToneMarker xmlToneMarker) {
+    public void visitToneMarker(ca.phon.session.io.xml.v13.ToneMarker xmlToneMarker) {
         final ToneMarkerType tType = switch (xmlToneMarker.getType()) {
             case FALLING_TO_LOW -> ToneMarkerType.FALLING_TO_LOW;
             case FALLING_TO_MID -> ToneMarkerType.FALLING_TO_MID;
@@ -186,7 +208,7 @@ public class XmlOrthographyVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitTagMarker(XMLOrthographyTagMarker xmlTagMarker) {
+    public void visitTagMarker(ca.phon.session.io.xml.v13.TagMarker xmlTagMarker) {
         final TagMarkerType type = switch (xmlTagMarker.getType()) {
             case COMMA -> TagMarkerType.COMMA;
             case TAG -> TagMarkerType.TAG;
@@ -196,7 +218,7 @@ public class XmlOrthographyVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitOverlapPoint(XMLOrthographyOverlapPoint xmlOverlapPt) {
+    public void visitOverlapPoint(ca.phon.session.io.xml.v13.OverlapPoint xmlOverlapPt) {
         final String topBottom = switch (xmlOverlapPt.getTopBottom()) {
             case TOP -> "top";
             case BOTTOM -> "bottom";
@@ -211,14 +233,14 @@ public class XmlOrthographyVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitLongFeature(XMLOrthographyLongFeature xmlLongFeature) {
+    public void visitLongFeature(ca.phon.session.io.xml.v13.LongFeature xmlLongFeature) {
         final BeginEnd beginEnd =
-                (xmlLongFeature.getType() == XMLOrthographyBeginEndType.BEGIN ? BeginEnd.BEGIN : BeginEnd.END);
+                (xmlLongFeature.getType() == BeginEndType.BEGIN ? BeginEnd.BEGIN : BeginEnd.END);
         builder.append(new LongFeature(beginEnd, xmlLongFeature.getValue()));
     }
 
     @Visits
-    public void visitNonvocal(XMLOrthographyNonvocal xmlNonvocal) {
+    public void visitNonvocal(ca.phon.session.io.xml.v13.Nonvocal xmlNonvocal) {
         final BeginEndSimple beginEnd = switch (xmlNonvocal.getType()) {
             case SIMPLE -> BeginEndSimple.SIMPLE;
             case END -> BeginEndSimple.END;
@@ -228,21 +250,21 @@ public class XmlOrthographyVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitUnderline(XMLOrthographyUnderline xmlUnderline) {
+    public void visitUnderline(ca.phon.session.io.xml.v13.Underline xmlUnderline) {
         final BeginEnd beginEnd =
-                (xmlUnderline.getType() == XMLOrthographyBeginEndType.BEGIN ? BeginEnd.BEGIN : BeginEnd.END);
+                (xmlUnderline.getType() == BeginEndType.BEGIN ? BeginEnd.BEGIN : BeginEnd.END);
         builder.append(new Underline(beginEnd));
     }
 
     @Visits
-    public void visitItalic(XMLOrthographyItalic xmlItalic) {
+    public void visitItalic(ca.phon.session.io.xml.v13.Italic xmlItalic) {
         final BeginEnd beginEnd =
-                (xmlItalic.getType() == XMLOrthographyBeginEndType.BEGIN ? BeginEnd.BEGIN : BeginEnd.END);
+                (xmlItalic.getType() == BeginEndType.BEGIN ? BeginEnd.BEGIN : BeginEnd.END);
         builder.append(new Italic(beginEnd));
     }
 
     @Visits
-    public void visitTerminator(XMLOrthographyT xmlTerminator) {
+    public void visitTerminator(T xmlTerminator) {
         final TerminatorType type = switch (xmlTerminator.getType()) {
             case BROKEN_FOR_CODING -> TerminatorType.BROKEN_FOR_CODING;
             case E -> TerminatorType.EXCLAMATION;
@@ -266,7 +288,7 @@ public class XmlOrthographyVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitPostcode(XMLOrthographyPostcode xmlPostcode) {
+    public void visitPostcode(ca.phon.session.io.xml.v13.Postcode xmlPostcode) {
         builder.append(new Postcode(xmlPostcode.getValue()));
     }
 
