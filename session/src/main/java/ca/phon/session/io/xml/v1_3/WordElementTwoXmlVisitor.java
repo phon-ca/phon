@@ -1,8 +1,6 @@
 package ca.phon.session.io.xml.v1_3;
 
 import ca.phon.orthography.*;
-import ca.phon.orthography.xml.*;
-import ca.phon.session.Word;
 import ca.phon.visitor.annotation.Visits;
 
 import java.math.BigInteger;

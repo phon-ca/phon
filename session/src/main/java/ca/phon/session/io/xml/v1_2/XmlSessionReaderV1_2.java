@@ -368,7 +368,6 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 			// get the correct ipa object from our new record
 			final Tier<IPATranscript> ipaTier =
 					(btt.getForm() == PhoTypeType.MODEL ? retVal.getIPATargetTier() : retVal.getIPAActualTier());
-			int gidx = 0;
 			for(BgType bgt:btt.getBg()) {
 				final StringBuffer buffer = new StringBuffer();
 				for(WordType wt:bgt.getW()) {
@@ -377,26 +376,18 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 					buffer.append(wt.getContent());
 				}
 
-				final IPATranscript ipa = ipaTier.getValue();
-				if(ipa != null) {
-					try {
-						final IPATranscript blindTranscript =
-								IPATranscript.parseIPATranscript(buffer.toString());
-						final TranscriberType tt = (TranscriberType)btt.getUser();
-						final String name = tt.getId();
-
-						AlternativeTranscript at = ipa.getExtension(AlternativeTranscript.class);
-						if(at == null) {
-							at = new AlternativeTranscript();
-							ipa.putExtension(AlternativeTranscript.class, at);
-						}
-						at.put(name, blindTranscript);
-					} catch (ParseException e) {
-						LOGGER.info(
-								e.getLocalizedMessage(), e);
-					}
+				final AlternativeTranscript at = new AlternativeTranscript();
+				try {
+					final IPATranscript blindTranscript =
+							IPATranscript.parseIPATranscript(buffer.toString());
+					final TranscriberType tt = (TranscriberType)btt.getUser();
+					final String name = tt.getId();
+					at.put(name, blindTranscript);
+				} catch (ParseException e) {
+					LOGGER.info(
+							e.getLocalizedMessage(), e);
 				}
-				gidx++;
+				ipaTier.putExtension(AlternativeTranscript.class, at);
 			}
 		}
 
