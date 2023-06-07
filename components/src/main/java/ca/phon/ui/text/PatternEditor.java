@@ -34,8 +34,8 @@ public class PatternEditor extends RSyntaxTextArea implements Scrollable {
 	}
 	
 	private static void installSyntaxStyles() {
-		AbstractTokenMakerFactory atmf = (AbstractTokenMakerFactory)TokenMakerFactory.getDefaultInstance();
-		atmf.putMapping("text/phonex", PhonexTokenMaker.class.getName());
+//		AbstractTokenMakerFactory atmf = (AbstractTokenMakerFactory)TokenMakerFactory.getDefaultInstance();
+//		atmf.putMapping("text/phonex", PhonexTokenMaker.class.getName());
 	}
 	
 	private boolean autoCompleteEnabled = true;
