@@ -72,55 +72,55 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 	@Override
 	public boolean checkSession(SessionValidator validator, Session session) {
 		boolean modified = false;
-		Syllabifier syllabifier = SyllabifierLibrary.getInstance().defaultSyllabifier();
-		if(isResetSyllabification() && getSyllabifierLang() != null) {
-			syllabifier = SyllabifierLibrary.getInstance().getSyllabifierForLanguage(getSyllabifierLang());
-		}
-		
-		for(int i = 0; i < session.getRecordCount(); i++) {
-			final Record r = session.getRecord(i);
-			for(Tier<IPATranscript> tier:r.getTiersOfType(IPATranscript.class)) {
-				for(int gIdx = 0; gIdx < r.numberOfGroups(); gIdx++) {
-					final IPATranscript ipa = tier.getGroup(gIdx);
-					final UnvalidatedValue uv = ipa.getExtension(UnvalidatedValue.class);
-					if(uv != null) {
-						// can we fix this issue?
-						SessionQuickFix[] quickFixes = getQuickFixes(uv);
-						
-						// error in this transcription
-						final ValidationEvent ve = new ValidationEvent(session, i, tier.getName(), gIdx,
-								uv.getParseError().getMessage(), quickFixes);
-						validator.fireValidationEvent(ve);
-					} else {
-						if(isResetSyllabification() && syllabifier != null) {
-							String prev = ipa.toString(true);
-							ipa.resetSyllabification();
-							syllabifier.syllabify(ipa.toList());
-							
-							boolean changed = !prev.equals(ipa.toString(true));
-							
-							if(changed) {
-								ValidationEvent evt = new ValidationEvent(session, i, tier.getName(), gIdx,
-										String.format("Reset syllabification (%s)", syllabifier.getName()), new ResetSyllabificationQuickFix(syllabifier));
-								validator.fireValidationEvent(evt);
-							}
-							
-							modified |= changed;
-						}
-						
-						// check syllabification, see if any elements are unassigned
-						Optional<IPAElement> unknownEle = ipa.toList().stream()
-							.filter( (ele) -> (new IPATranscript(ele)).matches("\\w") && ele.getScType() == SyllableConstituentType.UNKNOWN )
-							.findFirst();
-						if(unknownEle.isPresent()) {
-							ValidationEvent evt = new ValidationEvent(session, i, tier.getName(), gIdx,
-									String.format("Incomplete syllabification: %s", ipa.toString(true)), new ResetSyllabificationQuickFix(syllabifier));
-							validator.fireValidationEvent(evt);
-						}
-					}
-				}
-			}
-		}
+//		Syllabifier syllabifier = SyllabifierLibrary.getInstance().defaultSyllabifier();
+//		if(isResetSyllabification() && getSyllabifierLang() != null) {
+//			syllabifier = SyllabifierLibrary.getInstance().getSyllabifierForLanguage(getSyllabifierLang());
+//		}
+//
+//		for(int i = 0; i < session.getRecordCount(); i++) {
+//			final Record r = session.getRecord(i);
+//			for(Tier<IPATranscript> tier:r.getTiersOfType(IPATranscript.class)) {
+//				for(int gIdx = 0; gIdx < r.numberOfGroups(); gIdx++) {
+//					final IPATranscript ipa = tier.getGroup(gIdx);
+//					final UnvalidatedValue uv = ipa.getExtension(UnvalidatedValue.class);
+//					if(uv != null) {
+//						// can we fix this issue?
+//						SessionQuickFix[] quickFixes = getQuickFixes(uv);
+//
+//						// error in this transcription
+//						final ValidationEvent ve = new ValidationEvent(session, i, tier.getName(), gIdx,
+//								uv.getParseError().getMessage(), quickFixes);
+//						validator.fireValidationEvent(ve);
+//					} else {
+//						if(isResetSyllabification() && syllabifier != null) {
+//							String prev = ipa.toString(true);
+//							ipa.resetSyllabification();
+//							syllabifier.syllabify(ipa.toList());
+//
+//							boolean changed = !prev.equals(ipa.toString(true));
+//
+//							if(changed) {
+//								ValidationEvent evt = new ValidationEvent(session, i, tier.getName(), gIdx,
+//										String.format("Reset syllabification (%s)", syllabifier.getName()), new ResetSyllabificationQuickFix(syllabifier));
+//								validator.fireValidationEvent(evt);
+//							}
+//
+//							modified |= changed;
+//						}
+//
+//						// check syllabification, see if any elements are unassigned
+//						Optional<IPAElement> unknownEle = ipa.toList().stream()
+//							.filter( (ele) -> (new IPATranscript(ele)).matches("\\w") && ele.getScType() == SyllableConstituentType.UNKNOWN )
+//							.findFirst();
+//						if(unknownEle.isPresent()) {
+//							ValidationEvent evt = new ValidationEvent(session, i, tier.getName(), gIdx,
+//									String.format("Incomplete syllabification: %s", ipa.toString(true)), new ResetSyllabificationQuickFix(syllabifier));
+//							validator.fireValidationEvent(evt);
+//						}
+//					}
+//				}
+//			}
+//		}
 		return modified;
 	}
 
@@ -180,10 +180,10 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 
 		@Override
 		public boolean fix(ValidationEvent evt) {
-			Record r = evt.getSession().getRecord(evt.getRecord());
-			Group g = r.getGroup(evt.getGroup());
-			IPATranscript ipa = g.getTier(evt.getTierName(), IPATranscript.class);
-			syllabifier.syllabify(ipa.toList());
+//			Record r = evt.getSession().getRecord(evt.getRecord());
+//			Group g = r.getGroup(evt.getGroup());
+//			IPATranscript ipa = g.getTier(evt.getTierName(), IPATranscript.class);
+//			syllabifier.syllabify(ipa.toList());
 			
 			return true;
 		}
@@ -203,18 +203,18 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 
 		@Override
 		public boolean fix(ValidationEvent evt) {
-			Record r = evt.getSession().getRecord(evt.getRecord());
-			Group g = r.getGroup(evt.getGroup());
-			IPATranscript ipa = g.getTier(evt.getTierName(), IPATranscript.class);
-			if(ipa.getExtension(UnvalidatedValue.class) == null) return false;
-			
-			var uv = ipa.getExtension(UnvalidatedValue.class);
-			var err = (StrayDiacriticException)uv.getParseError().getSuppressed()[0];
-			
-			String txt = ipa.getExtension(UnvalidatedValue.class).getValue();
-			var v = txt.substring(0, err.getPositionInLine()) + txt.substring(err.getPositionInLine()+1);
-			var newIpa = (new IPATranscriptBuilder()).append(v).toIPATranscript();
-			g.setTier(evt.getTierName(), IPATranscript.class, newIpa);
+//			Record r = evt.getSession().getRecord(evt.getRecord());
+//			Group g = r.getGroup(evt.getGroup());
+//			IPATranscript ipa = g.getTier(evt.getTierName(), IPATranscript.class);
+//			if(ipa.getExtension(UnvalidatedValue.class) == null) return false;
+//
+//			var uv = ipa.getExtension(UnvalidatedValue.class);
+//			var err = (StrayDiacriticException)uv.getParseError().getSuppressed()[0];
+//
+//			String txt = ipa.getExtension(UnvalidatedValue.class).getValue();
+//			var v = txt.substring(0, err.getPositionInLine()) + txt.substring(err.getPositionInLine()+1);
+//			var newIpa = (new IPATranscriptBuilder()).append(v).toIPATranscript();
+//			g.setTier(evt.getTierName(), IPATranscript.class, newIpa);
 			
 			return true;
 		}

@@ -76,6 +76,10 @@ public final class TypeAlignmentRules {
         return filter.elements;
     }
 
+    public List<AlignableType> getAlignableTypes() {
+        return Collections.unmodifiableList(this.alignableTypes);
+    }
+
     public boolean isIncludeXXX() {
         return includeXXX;
     }

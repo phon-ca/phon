@@ -114,7 +114,7 @@ public final class LazyRecord implements RecordSPI {
 		return internalRecord.getIPAActualTier();
 	}
 
-	public Tier<PhoneMap> getPhoneAlignmentTier() {
+	public Tier<PhoneAlignment> getPhoneAlignmentTier() {
 		loadRecord();
 		return internalRecord.getPhoneAlignmentTier();
 	}

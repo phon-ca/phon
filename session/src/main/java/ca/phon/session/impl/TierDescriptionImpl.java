@@ -19,6 +19,11 @@ import ca.phon.session.TierAlignmentRules;
 import ca.phon.session.UserTierData;
 import ca.phon.session.spi.TierDescriptionSPI;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 /**
  * Basic description of a tier.
  */
@@ -30,23 +35,30 @@ public class TierDescriptionImpl implements TierDescriptionSPI {
 
 	private final TierAlignmentRules tierAlignmentRules;
 
+	private final Map<String, String> tierParams;
+
 	TierDescriptionImpl(String name) {
 		this(name, UserTierData.class, new TierAlignmentRules());
 	}
 	
 	TierDescriptionImpl(String name, TierAlignmentRules tierAlignmentRules) {
-		this(name, UserTierData.class, tierAlignmentRules);
+		this(name, UserTierData.class, new HashMap<>(), tierAlignmentRules);
 	}
 
 	TierDescriptionImpl(String name, Class<?> declaredType) {
-		this(name, declaredType, new TierAlignmentRules());
+		this(name, declaredType, new HashMap<>(), new TierAlignmentRules());
+	}
+
+	TierDescriptionImpl(String name, Class<?> declaredType, TierAlignmentRules alignmentRules) {
+		this(name, declaredType, new HashMap<>(), alignmentRules);
 	}
 	
-	TierDescriptionImpl(String name, Class<?> declaredType, TierAlignmentRules tierAlignmentRules) {
+	TierDescriptionImpl(String name, Class<?> declaredType, Map<String, String> tierParams, TierAlignmentRules tierAlignmentRules) {
 		super();
 		this.name = name;
 		this.declaredType = declaredType;
 		this.tierAlignmentRules = tierAlignmentRules;
+		this.tierParams = new LinkedHashMap<>(tierParams);
 	}
 
 	@Override
@@ -60,7 +72,13 @@ public class TierDescriptionImpl implements TierDescriptionSPI {
 	}
 
 	@Override
+	public Map<String, String> getTierParameters() {
+		return Collections.unmodifiableMap(this.tierParams);
+	}
+
+	@Override
 	public TierAlignmentRules getTierAlignmentRules() {
 		return this.tierAlignmentRules;
 	}
+
 }

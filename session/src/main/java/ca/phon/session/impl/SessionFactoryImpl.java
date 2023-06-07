@@ -54,8 +54,8 @@ public class SessionFactoryImpl implements SessionFactorySPI, IPluginExtensionPo
 	}
 
 	@Override
-	public TierDescriptionSPI createTierDescription(String name, Class<?> type, TierAlignmentRules tierAlignmentRules) {
-		return new TierDescriptionImpl(name, type, tierAlignmentRules);
+	public TierDescriptionSPI createTierDescription(String name, Class<?> type, Map<String, String> tierParameters, TierAlignmentRules tierAlignmentRules) {
+		return new TierDescriptionImpl(name, type, tierParameters, tierAlignmentRules);
 	}
 
 	@Override

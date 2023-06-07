@@ -28,9 +28,8 @@ public enum SystemTierType {
 	TargetSyllables("Target Syllables", IPATranscript.class),
 	IPAActual("IPA Actual", IPATranscript.class),
 	ActualSyllables("Actual Syllables", IPATranscript.class),
-	SyllableAlignment("Alignment", PhoneMap.class),
+	SyllableAlignment("Alignment", PhoneAlignment.class),
 	Segment("Segment", MediaSegment.class),
-	GroupSegment("Group Segment", GroupSegment.class),
 	Notes("Notes", UserTierData.class);
 	
 	private String tierName;
