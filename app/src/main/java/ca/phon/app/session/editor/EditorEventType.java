@@ -145,7 +145,7 @@ public record EditorEventType<T>(String eventName, Class<T> type) {
 	public final static EditorEventType<SpeakerChangedData> SpeakerChanged =
 			new EditorEventType<>(EditorEventName.SPEAKER_CHANGE_EVT.getEventName(), SpeakerChangedData.class);
 
-	public record TierChangeData(Tier<?> tier, int group, Object oldValue, Object newValue) { }
+	public record TierChangeData(Tier<?> tier, Object oldValue, Object newValue) { }
 	/**
 	 * Changes in tier data, usually fired during value adjustments.
 	 *

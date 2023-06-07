@@ -15,6 +15,7 @@
  */
 package ca.phon.app.ipalookup;
 
+import ca.phon.ipa.IPAElementFactory;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.orthography.*;
 import ca.phon.visitor.VisitorAdapter;
@@ -47,6 +48,11 @@ public class OrthoLookupVisitor extends VisitorAdapter<OrthographyElement> {
 	@Visits
 	public void visitWord(Word word) {
 		updateAnnotation(word);
+	}
+
+	@Visits
+	public void visitPause(Pause pause) {
+		updateAnnotation(pause);
 	}
 	
 	@Visits
@@ -128,5 +134,16 @@ public class OrthoLookupVisitor extends VisitorAdapter<OrthographyElement> {
 		}
 		return ext;
 	}
-	
+
+	private OrthoWordIPAOptions updateAnnotation(Pause pause) {
+		OrthoWordIPAOptions ext = pause.getExtension(OrthoWordIPAOptions.class);
+		if(ext == null || ext.getDictLang() != dictionary.getLanguage()) {
+			String[] opts = new String[]{pause.text()};
+			ext = new OrthoWordIPAOptions(opts);
+			ext.setDictLang(dictionary.getLanguage());
+			pause.putExtension(OrthoWordIPAOptions.class, ext);
+		}
+		return ext;
+	}
+
 }

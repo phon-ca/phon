@@ -36,8 +36,8 @@ public class IPALookupEdit extends TierEdit<IPATranscript> {
 	 * @param newValue
 	 */
 	public IPALookupEdit(SessionEditor editor, IPADictionary dictionary, String orthography,
-	                     Tier<IPATranscript> tier, int groupIndex, IPATranscript newValue) {
-		super(editor, tier, groupIndex, newValue);
+	                     Tier<IPATranscript> tier, IPATranscript newValue) {
+		super(editor, tier, newValue);
 
 		this.dictionary = dictionary;
 		this.orthography = orthography;

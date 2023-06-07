@@ -31,9 +31,8 @@ public class BlindTierEdit extends TierEdit<IPATranscript> {
 	
 	private final IPATranscript newValue;
 
-	public BlindTierEdit(SessionEditor editor, Tier<IPATranscript> tier,
-			int groupIndex, Transcriber transcriber, IPATranscript newValue, IPATranscript ipa) {
-		super(editor, tier, groupIndex, ipa);
+	public BlindTierEdit(SessionEditor editor, Tier<IPATranscript> tier, Transcriber transcriber, IPATranscript newValue, IPATranscript ipa) {
+		super(editor, tier, ipa);
 		this.ipa = ipa;
 		this.transcriber = transcriber;
 		this.newValue = newValue;

@@ -32,11 +32,6 @@ public class TierEdit<T> extends SessionEditorUndoableEdit {
 	private final Tier<T> tier;
 	
 	/**
-	 * Group
-	 */
-	private final int groupIndex;
-	
-	/**
 	 * Old value
 	 */
 	private T oldValue;
@@ -60,10 +55,9 @@ public class TierEdit<T> extends SessionEditorUndoableEdit {
 	 * @param groupIndex
 	 * @param newValue
 	 */
-	public TierEdit(SessionEditor editor, Tier<T> tier, int groupIndex, T newValue) {
+	public TierEdit(SessionEditor editor, Tier<T> tier, T newValue) {
 		super(editor);
 		this.tier = tier;
-		this.groupIndex = groupIndex;
 		this.newValue = newValue;
 	}
 	
@@ -89,10 +83,6 @@ public class TierEdit<T> extends SessionEditorUndoableEdit {
 		return tier;
 	}
 
-	public int getGroupIndex() {
-		return groupIndex;
-	}
-	
 	public T getNewValue() {
 		return newValue;
 	}
@@ -110,10 +100,10 @@ public class TierEdit<T> extends SessionEditorUndoableEdit {
 		super.undo();
 
 		final T oldVal = getOldValue();
-		tier.setGroup(groupIndex, oldVal);
+		tier.setValue(oldVal);
 		
 		if(getEditor() != null) {
-			final EditorEventType.TierChangeData tcd = new EditorEventType.TierChangeData(tier, groupIndex, newValue, oldVal);
+			final EditorEventType.TierChangeData tcd = new EditorEventType.TierChangeData(tier, newValue, oldVal);
 			final EditorEvent<EditorEventType.TierChangeData> tierChangeEvt =
 					new EditorEvent<>(EditorEventType.TierChange, getEditor(), tcd);
 			getEditor().getEventManager().queueEvent(tierChangeEvt);
@@ -127,19 +117,12 @@ public class TierEdit<T> extends SessionEditorUndoableEdit {
 	
 	@Override
 	public void doIt() {
-		int groupIndex = getGroupIndex();
 		Tier<T> tier = getTier();
 		T newValue = getNewValue();
-		if(getGroupIndex() < tier.numberOfGroups()) {
-			setOldValue(tier.getGroup(groupIndex));
-			tier.setGroup(groupIndex, newValue);
-		} else {
-			while(tier.numberOfGroups() < groupIndex) tier.addGroup();
-			tier.addGroup(newValue);
-		}
-		
+		tier.setValue(newValue);
+
 		if(getEditor() != null) {
-			final EditorEventType.TierChangeData tcd = new EditorEventType.TierChangeData(tier, groupIndex, getOldValue(), newValue);
+			final EditorEventType.TierChangeData tcd = new EditorEventType.TierChangeData(tier, getOldValue(), newValue);
 			final EditorEvent<EditorEventType.TierChangeData> tierChangeEvt =
 					new EditorEvent<>(EditorEventType.TierChange, getEditor(), tcd);
 			getEditor().getEventManager().queueEvent(tierChangeEvt);
