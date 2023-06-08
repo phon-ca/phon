@@ -48,10 +48,6 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class RecordLookupPanel extends JPanel {
 
-	final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(RecordLookupPanel.class.getName());
-
-	private static final long serialVersionUID = 1358496790602657797L;
-
 	private final AtomicReference<Record> recordRef = new AtomicReference<Record>();
 
 	final Tier<IPATranscript> lookupTier;
@@ -78,7 +74,7 @@ public class RecordLookupPanel extends JPanel {
 		super();
 
 		final SessionFactory factory = SessionFactory.newFactory();
-		lookupTier = factory.createTier("IPA Lookup", IPATranscript.class, true);
+		lookupTier = factory.createTier("IPA Lookup", IPATranscript.class, TierAlignmentRules.ipaTierRules());
 
 		editorRef = new WeakReference<SessionEditor>(editor);
 
@@ -150,31 +146,26 @@ public class RecordLookupPanel extends JPanel {
 	}
 
 	void updateLookupTier() {
-		lookupTier.removeAll();
-
+		lookupTier.clear();
 		final Record r = getRecord();
 		if(r == null) return;
 
-		for(int i = 0; i < r.numberOfGroups(); i++) {
-			final Group g = r.getGroup(i);
-			final Orthography ortho = g.getOrthography();
-			lookupTier.addGroup(new IPATranscript());
-			final OrthoLookupVisitor orthoLookup = new OrthoLookupVisitor(getDictionary());
-			ortho.accept(orthoLookup);
-			final WordLookupVisitor visitor = new WordLookupVisitor(this);
-			ortho.accept(visitor);
+		final Orthography ortho = r.getOrthography();
+		final OrthoLookupVisitor orthoLookup = new OrthoLookupVisitor(getDictionary());
+		ortho.accept(orthoLookup);
+		final WordLookupVisitor visitor = new WordLookupVisitor(this);
+		ortho.accept(visitor);
 
-			// do post processing
-			if(getDictionary() != null) {
-				List<IPluginExtensionPoint<IPALookupPostProcessor>> extPts =
-						PluginManager.getInstance().getExtensionPoints(IPALookupPostProcessor.class);
-				IPATranscript ipa = lookupTier.getGroup(lookupTier.numberOfGroups() - 1);
-				for (var extPt : extPts) {
-					IPALookupPostProcessor postprocessor = extPt.getFactory().createObject();
-					ipa = postprocessor.postProcess(getDictionary(), ortho.toString(), ipa);
-				}
-				lookupTier.setGroup(lookupTier.numberOfGroups() - 1, ipa);
+		// do post processing
+		if(getDictionary() != null) {
+			List<IPluginExtensionPoint<IPALookupPostProcessor>> extPts =
+					PluginManager.getInstance().getExtensionPoints(IPALookupPostProcessor.class);
+			IPATranscript ipa = lookupTier.getValue();
+			for (var extPt : extPts) {
+				IPALookupPostProcessor postprocessor = extPt.getFactory().createObject();
+				ipa = postprocessor.postProcess(getDictionary(), ortho.toString(), ipa);
 			}
+			lookupTier.setGroup(lookupTier.numberOfGroups() - 1, ipa);
 		}
 	}
 

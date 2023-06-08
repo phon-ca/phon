@@ -60,27 +60,14 @@ public class WordLookupVisitor extends VisitorAdapter<OrthographyElement> {
 		addWordToTier(t1 + wordnet.getMarker().toString() + t2);
 	}
 	
-//	@Visits
-//	public void visitComment(OrthographyComment comment) {
-//		if(comment.getData().matches("\\.{1,3}")) {
-//			OrthoWordIPAOptions ext = comment.getExtension(OrthoWordIPAOptions.class);
-//			if(ext == null) ext = new OrthoWordIPAOptions();
-//
-//			final String txt = (ext.getOptions().size() > 0 ? ext.getOptions().get(ext.getSelectedOption())
-//					: "(" + comment.getData() + ")");
-//			addWordToTier(txt);
-//		}
-//	}
-
 	private void addWordToTier(String txt) {
-		int grpIdx = recordLookupPanel.lookupTier.numberOfGroups()-1;
-		IPATranscript grp = recordLookupPanel.lookupTier.getGroup(grpIdx);
+		IPATranscript ipa = recordLookupPanel.lookupTier.getValue();
 		final IPATranscriptBuilder builder = new IPATranscriptBuilder();
-		builder.append(grp);
+		builder.append(ipa);
 		if(builder.size() > 0)
 			builder.appendWordBoundary();
 		builder.append(txt, true);
-		recordLookupPanel.lookupTier.setGroup(grpIdx, builder.toIPATranscript());
+		recordLookupPanel.lookupTier.setValue(builder.toIPATranscript());
 	}
 
 }
