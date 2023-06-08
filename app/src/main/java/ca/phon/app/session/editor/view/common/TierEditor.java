@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Interface used to load tier editors.
  */
-public interface TierEditor {
+public interface TierEditor<T> {
 
 	/**
 	 * Get the editor component
@@ -33,16 +33,16 @@ public interface TierEditor {
 	/**
 	 * Add tier editor listener
 	 */
-	public void addTierEditorListener(TierEditorListener listener);
+	public void addTierEditorListener(TierEditorListener<T> listener);
 	
 	/**
 	 * remove tier editor listener
 	 */
-	public void removeTierEditorListener(TierEditorListener listener);
+	public void removeTierEditorListener(TierEditorListener<T> listener);
 	
 	/**
 	 * Get tier editor listeners
 	 */
-	public List<TierEditorListener> getTierEditorListeners();
+	public List<TierEditorListener<T>> getTierEditorListeners();
 	
 }

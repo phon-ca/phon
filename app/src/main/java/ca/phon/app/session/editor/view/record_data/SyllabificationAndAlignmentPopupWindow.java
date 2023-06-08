@@ -2,6 +2,7 @@ package ca.phon.app.session.editor.view.record_data;
 
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.session.PhoneAlignment;
 import ca.phon.session.Tier;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
@@ -16,9 +17,11 @@ import java.util.Optional;
 
 public class SyllabificationAndAlignmentPopupWindow extends JFrame {
 
-	private int groupIndex = 0;
 	private Tier<IPATranscript> ipaTier;
-	private Optional<Tier<PhoneMap>> alignmentTier;
+
+	private Optional<Tier<PhoneAlignment>> alignmentTier;
+
+	private int wordIndex;
 
 	private JLabel label;
 	private SyllabificationDisplay syllabificationDisplay;
@@ -26,16 +29,16 @@ public class SyllabificationAndAlignmentPopupWindow extends JFrame {
 
 	private final PropertyChangeSupport propSupport = new PropertyChangeSupport(this);
 
-	public SyllabificationAndAlignmentPopupWindow(Tier<IPATranscript> ipaTier, int groupIndex) {
-		this(ipaTier, Optional.empty(), groupIndex);
+	public SyllabificationAndAlignmentPopupWindow(Tier<IPATranscript> ipaTier, int wordIndex) {
+		this(ipaTier, Optional.empty(), wordIndex);
 	}
 
-	public SyllabificationAndAlignmentPopupWindow(Tier<IPATranscript> ipaTier, Optional<Tier<PhoneMap>> alignmentTierOpt, int groupIndex) {
+	public SyllabificationAndAlignmentPopupWindow(Tier<IPATranscript> ipaTier, Optional<Tier<PhoneAlignment>> alignmentTierOpt, int wordIndex) {
 		super();
 
 		this.ipaTier = ipaTier;
 		this.alignmentTier = alignmentTierOpt;
-		this.groupIndex = groupIndex;
+		this.wordIndex = wordIndex;
 
 		setUndecorated(true);
 		setResizable(true);
@@ -50,12 +53,12 @@ public class SyllabificationAndAlignmentPopupWindow extends JFrame {
 		return this.syllabificationDisplay;
 	}
 
-	public int getGroupIndex() {
-		return this.groupIndex;
+	public int getWordIndex() {
+		return this.wordIndex;
 	}
 
-	public IPATranscript getGroupValue() {
-		return this.ipaTier.getGroup(getGroupIndex());
+	public IPATranscript getValue() {
+		return this.ipaTier.getValue();
 	}
 
 	private void init() {
@@ -64,7 +67,7 @@ public class SyllabificationAndAlignmentPopupWindow extends JFrame {
 		JPanel contentPanel = new JPanel(new VerticalLayout());
 		contentPanel.setBackground(Color.WHITE);
 
-		IPATranscript value = getGroupValue();
+		IPATranscript value = getValue();
 		if (value != null) {
 			syllabificationDisplay = new SyllabificationDisplay();
 			syllabificationDisplay.setFont(FontPreferences.getTierFont());
@@ -75,7 +78,8 @@ public class SyllabificationAndAlignmentPopupWindow extends JFrame {
 			contentPanel.add(syllabificationDisplay);
 		}
 		if (alignmentTier.isPresent()) {
-			PhoneMap alignment = alignmentTier.get().getGroup(getGroupIndex());
+			final PhoneAlignment phoneAlignment = alignmentTier.get().getValue();
+			final PhoneMap alignment = wordIndex < phoneAlignment.getAlignments().size() ? phoneAlignment.getAlignments().get(wordIndex) : new PhoneMap();
 			if (alignment.getTargetRep().length() > 0
 					&& alignment.getActualRep().length() > 0
 					&& alignment.getAlignmentLength() > 0) {

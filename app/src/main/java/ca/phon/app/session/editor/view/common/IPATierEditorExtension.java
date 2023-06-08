@@ -33,7 +33,7 @@ import java.beans.*;
  * Editor for IPATranscript tiers 
  */
 @TierEditorInfo(type=IPATranscript.class)
-public class IPATierEditorExtension implements IPluginExtensionPoint<TierEditor> {
+public class IPATierEditorExtension implements IPluginExtensionPoint<TierEditor<IPATranscript>> {
 
 	@Override
 	public Class<?> getExtensionType() {
@@ -41,86 +41,80 @@ public class IPATierEditorExtension implements IPluginExtensionPoint<TierEditor>
 	}
 
 	@Override
-	public IPluginExtensionFactory<TierEditor> getFactory() {
+	public IPluginExtensionFactory<TierEditor<IPATranscript>> getFactory() {
 		return factory;
 	}
 	
-	private final IPluginExtensionFactory<TierEditor> factory = new IPluginExtensionFactory<TierEditor>() {
-		
-		@Override
-		public TierEditor createObject(Object... args) {
-			final SessionEditor editor = SessionEditor.class.cast(args[TierEditorFactory.EDITOR]);
-			final Record record = Record.class.cast(args[TierEditorFactory.RECORD]);
-			final Tier<?> tier = Tier.class.cast(args[TierEditorFactory.TIER]);
-			final Integer group = Integer.class.cast(args[TierEditorFactory.GROUP]);
-			
-			if(tier.getDeclaredType() != IPATranscript.class) {
-				throw new IllegalArgumentException("Tier type must be " + IPATranscript.class.getName());
-			}
-			
-			@SuppressWarnings("unchecked")
-			final Tier<IPATranscript> ipaTier = (Tier<IPATranscript>)tier;
+	private final IPluginExtensionFactory<TierEditor<IPATranscript>> factory = args -> {
+		final SessionEditor editor = SessionEditor.class.cast(args[TierEditorFactory.EDITOR]);
+		final Record record = Record.class.cast(args[TierEditorFactory.RECORD]);
+		final Tier<?> tier = Tier.class.cast(args[TierEditorFactory.TIER]);
 
-			final Tier<PhoneMap> alignmentTier = record.getPhoneAlignmentTier();
-			PhoneMap alignment = alignmentTier.getGroup(group);
-			
-			Syllabifier syllabifier = null;
-			final SyllabifierInfo info = editor.getSession().getExtension(SyllabifierInfo.class);
-			if(info != null && info.getSyllabifierLanguageForTier(tier.getName()) != null) {
-				syllabifier = SyllabifierLibrary.getInstance().getSyllabifierForLanguage(
-						info.getSyllabifierLanguageForTier(tier.getName()));
-			}
-			
-			IPAGroupField retVal = new IPAGroupField(ipaTier, group, editor.getDataModel().getTranscriber(), syllabifier);
-
-			IPAFieldTooltip tooltip = new IPAFieldTooltip();
-			tooltip.setAlignmentTier(alignmentTier);
-			tooltip.install(retVal);
-			tooltip.addPropertyChangeListener(SyllabificationDisplay.SYLLABIFICATION_PROP_ID, new PropertyChangeListener() {
-
-				@Override
-				public void propertyChange(PropertyChangeEvent evt) {
-					final SyllabificationDisplay.SyllabificationChangeData newVal = (SyllabificationDisplay.SyllabificationChangeData)evt.getNewValue();
-					final SyllabificationDisplay display = (SyllabificationDisplay)evt.getSource();
-					final ScTypeEdit edit = new ScTypeEdit(editor, display.getTranscript(), newVal.getPosition(), newVal.getScType());
-					editor.getUndoSupport().postEdit(edit);
-				}
-
-			});
-
-			tooltip.addPropertyChangeListener(SyllabificationDisplay.HIATUS_CHANGE_PROP_ID, new PropertyChangeListener() {
-
-				@Override
-				public void propertyChange(PropertyChangeEvent evt) {
-					final SyllabificationDisplay display = (SyllabificationDisplay)evt.getSource();
-					final ToggleDiphthongEdit edit = new ToggleDiphthongEdit(editor, display.getTranscript(), (Integer)evt.getNewValue());
-					editor.getUndoSupport().postEdit(edit);
-				}
-
-			});
-
-			tooltip.addPropertyChangeListener(PhoneMapDisplay.ALIGNMENT_CHANGE_PROP, new PropertyChangeListener() {
-
-				@Override
-				public void propertyChange(PropertyChangeEvent evt) {
-					final PhoneMapDisplay.AlignmentChangeData newVal = (PhoneMapDisplay.AlignmentChangeData)evt.getNewValue();
-					final PhoneMapDisplay display = (PhoneMapDisplay)evt.getSource();
-
-					final PhoneMap pm = new PhoneMap(record.getIPATargetTier().getGroup(group), record.getIPAActualTier().getGroup(group));
-					pm.setTopAlignment(newVal.getAlignment()[0]);
-					pm.setBottomAlignment(newVal.getAlignment()[1]);
-
-					final TierEdit<PhoneMap> edit = new TierEdit<PhoneMap>(editor, alignmentTier, group, pm);
-					edit.setFireHardChangeOnUndo(true);
-					editor.getUndoSupport().postEdit(edit);
-				}
-
-			});
-
-
-			return retVal;
+		if(tier.getDeclaredType() != IPATranscript.class) {
+			throw new IllegalArgumentException("Tier type must be " + IPATranscript.class.getName());
 		}
-		
+
+		@SuppressWarnings("unchecked")
+		final Tier<IPATranscript> ipaTier = (Tier<IPATranscript>)tier;
+
+		final Tier<PhoneAlignment> alignmentTier = record.getPhoneAlignmentTier();
+		final PhoneAlignment alignment = alignmentTier.getValue();
+
+		Syllabifier syllabifier = null;
+		final SyllabifierInfo info = editor.getSession().getExtension(SyllabifierInfo.class);
+		if(info != null && info.getSyllabifierLanguageForTier(tier.getName()) != null) {
+			syllabifier = SyllabifierLibrary.getInstance().getSyllabifierForLanguage(
+					info.getSyllabifierLanguageForTier(tier.getName()));
+		}
+
+		IPAGroupField retVal = new IPAGroupField(ipaTier, editor.getDataModel().getTranscriber(), syllabifier);
+
+		IPAFieldTooltip tooltip = new IPAFieldTooltip();
+		tooltip.setAlignmentTier(alignmentTier);
+		tooltip.install(retVal);
+		tooltip.addPropertyChangeListener(SyllabificationDisplay.SYLLABIFICATION_PROP_ID, new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				final SyllabificationDisplay.SyllabificationChangeData newVal = (SyllabificationDisplay.SyllabificationChangeData)evt.getNewValue();
+				final SyllabificationDisplay display = (SyllabificationDisplay)evt.getSource();
+				final ScTypeEdit edit = new ScTypeEdit(editor, display.getTranscript(), newVal.getPosition(), newVal.getScType());
+				editor.getUndoSupport().postEdit(edit);
+			}
+
+		});
+
+		tooltip.addPropertyChangeListener(SyllabificationDisplay.HIATUS_CHANGE_PROP_ID, new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				final SyllabificationDisplay display = (SyllabificationDisplay)evt.getSource();
+				final ToggleDiphthongEdit edit = new ToggleDiphthongEdit(editor, display.getTranscript(), (Integer)evt.getNewValue());
+				editor.getUndoSupport().postEdit(edit);
+			}
+
+		});
+
+		tooltip.addPropertyChangeListener(PhoneMapDisplay.ALIGNMENT_CHANGE_PROP, new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				final PhoneMapDisplay.AlignmentChangeData newVal = (PhoneMapDisplay.AlignmentChangeData)evt.getNewValue();
+				final PhoneMapDisplay display = (PhoneMapDisplay)evt.getSource();
+
+				final PhoneMap pm = new PhoneMap(record.getIPATargetTier().getGroup(group), record.getIPAActualTier().getGroup(group));
+				pm.setTopAlignment(newVal.getAlignment()[0]);
+				pm.setBottomAlignment(newVal.getAlignment()[1]);
+
+				final TierEdit<PhoneMap> edit = new TierEdit<PhoneMap>(editor, alignmentTier, group, pm);
+				edit.setFireHardChangeOnUndo(true);
+				editor.getUndoSupport().postEdit(edit);
+			}
+
+		});
+
+
+		return retVal;
 	};
 	
 }

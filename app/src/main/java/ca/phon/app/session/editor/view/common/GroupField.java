@@ -41,7 +41,7 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * Text field for editing tier data for a group.
  */
-public class GroupField<T> extends JTextArea implements TierEditor {
+public class GroupField<T> extends JTextArea implements TierEditor<T> {
 
 	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(GroupField.class.getName());
 
@@ -509,22 +509,22 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		return this;
 	}
 
-	private final List<TierEditorListener> listeners =
-			Collections.synchronizedList(new ArrayList<TierEditorListener>());
+	private final List<TierEditorListener<T>> listeners =
+			Collections.synchronizedList(new ArrayList<>());
 
 	@Override
-	public void addTierEditorListener(TierEditorListener<IPATranscript> listener) {
+	public void addTierEditorListener(TierEditorListener<T> listener) {
 		if(!listeners.contains(listener))
 			listeners.add(listener);
 	}
 
 	@Override
-	public void removeTierEditorListener(TierEditorListener listener) {
+	public void removeTierEditorListener(TierEditorListener<T> listener) {
 		listeners.remove(listener);
 	}
 
 	@Override
-	public List<TierEditorListener> getTierEditorListeners() {
+	public List<TierEditorListener<T>> getTierEditorListeners() {
 		return listeners;
 	}
 

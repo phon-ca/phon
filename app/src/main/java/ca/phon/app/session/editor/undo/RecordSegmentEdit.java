@@ -47,7 +47,7 @@ public class RecordSegmentEdit extends SessionEditorUndoableEdit {
     private void fireChangeEvent(MediaSegment prevSegment, MediaSegment segment) {
         final EditorEvent<EditorEventType.TierChangeData> segChangeEvt =
                 new EditorEvent<>(isFireHardChangeOnUndo() ? EditorEventType.TierChanged : EditorEventType.TierChange, getEditor(),
-                        new EditorEventType.TierChangeData(record.getSegmentTier(), 0, prevSegment, segment));
+                        new EditorEventType.TierChangeData(record.getSegmentTier(), prevSegment, segment));
         getEditor().getEventManager().queueEvent(segChangeEvt);
     }
 

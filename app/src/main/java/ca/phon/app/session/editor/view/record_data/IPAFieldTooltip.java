@@ -2,7 +2,7 @@ package ca.phon.app.session.editor.view.record_data;
 
 import ca.phon.app.session.editor.view.common.IPAGroupField;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.session.PhoneAlignment;
 import ca.phon.session.Tier;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.ipa.*;
@@ -11,6 +11,7 @@ import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.Point2D;
 import java.beans.*;
 import java.util.Optional;
 
@@ -20,7 +21,7 @@ public class IPAFieldTooltip {
 
 	private SyllabificationAndAlignmentPopupWindow currentFrame;
 
-	private Optional<Tier<PhoneMap>> alignmentTier;
+	private Optional<Tier<PhoneAlignment>> alignmentTier;
 
 	private final PropertyChangeSupport propSupport = new PropertyChangeSupport(this);
 
@@ -42,7 +43,7 @@ public class IPAFieldTooltip {
 		actionMap.put(id, PhonUIAction.runnable(this::showWindow));
 	}
 
-	public void setAlignmentTier(Tier<PhoneMap> alignment) {
+	public void setAlignmentTier(Tier<PhoneAlignment> alignment) {
 		this.alignmentTier = Optional.of(alignment);
 	}
 
@@ -56,10 +57,28 @@ public class IPAFieldTooltip {
 			field.validateAndUpdate();
 		}
 
-		int groupIndex = this.field.getGroupIndex();
 		Tier<IPATranscript> ipaTier = this.field.getTier();
+		int wordIndex = 0;
+		final Point mousePt = MouseInfo.getPointerInfo().getLocation();
+		if(this.field != null) {
+			SwingUtilities.convertPointFromScreen(mousePt, this.field);
+			int pos = this.field.viewToModel2D(new Point2D.Float(mousePt.x, mousePt.y));
+			final java.util.List<IPATranscript> words = ipaTier.getValue().words();
+			int idx = 0;
+			for(int i = 0; i < words.size(); i++) {
+				if(idx >= pos) {
+					wordIndex = i;
+					break;
+				}
+				if(pos <= (idx + words.get(i).toString().length())) {
+					wordIndex = i;
+					break;
+				}
+				idx++; // word boundary
+			}
+		}
 
-		SyllabificationAndAlignmentPopupWindow window = new SyllabificationAndAlignmentPopupWindow(ipaTier, alignmentTier, groupIndex);
+		SyllabificationAndAlignmentPopupWindow window = new SyllabificationAndAlignmentPopupWindow(ipaTier, alignmentTier, wordIndex);
 		window.pack();
 		window.setFocusableWindowState(false);
 
