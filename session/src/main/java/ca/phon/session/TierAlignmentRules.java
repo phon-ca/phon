@@ -1,5 +1,8 @@
 package ca.phon.session;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public final class TierAlignmentRules {
 
     public enum TierAlignmentType {
@@ -57,6 +60,51 @@ public final class TierAlignmentRules {
 
     public TypeAlignmentRules getWordAlignmentRules() {
         return typeAlignmentRules;
+    }
+
+    /**
+     * Create alignment rules for Orthography tier
+     *
+     * @return orthography alignment rules (default: no alignment)
+     */
+    public static TierAlignmentRules orthographyTierRules() {
+        final TierAlignmentRules retval = new TierAlignmentRules();
+        return retval;
+    }
+
+    /**
+     * Create alignment rules for IPATranscript tiers
+     *
+     * @return default ipa alignment rules
+     */
+    public static TierAlignmentRules ipaTierRules() {
+        final List<TypeAlignmentRules.AlignableType> alignableTypes =
+                List.of(TypeAlignmentRules.AlignableType.Word, TypeAlignmentRules.AlignableType.Pause, TypeAlignmentRules.AlignableType.PhoneticGroup);
+        final TypeAlignmentRules typeAlignmentRules = new TypeAlignmentRules(alignableTypes,
+                true, false, true, false, false);
+        return new TierAlignmentRules(typeAlignmentRules);
+    }
+
+    /**
+     * Create alignment rules for notes tier
+     *
+     * @return default notes alignment rules (none)
+     */
+    public static TierAlignmentRules notesTierRules() {
+        final TierAlignmentRules retval = new TierAlignmentRules();
+        return retval;
+    }
+
+    /**
+     * Create default alignment rules for user-defined tiers
+     *
+     * @param default user defined tier rules
+     */
+    public static TierAlignmentRules userTierRules() {
+        final List<TypeAlignmentRules.AlignableType> alignableTypes = List.of(TypeAlignmentRules.AlignableType.Word);
+        final TypeAlignmentRules typeAlignmentRules = new TypeAlignmentRules(alignableTypes,
+                false, false, false, false, false);
+        return new TierAlignmentRules(typeAlignmentRules);
     }
 
 }

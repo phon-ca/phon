@@ -1096,7 +1096,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 					getEditor().getUndoSupport().beginUpdate();
 				} else {
 					getEditor().getUndoSupport().endUpdate();
-					final EditorEventType.TierChangeData data = new EditorEventType.TierChangeData(r.getSegmentTier(), 0, r.getSegmentTier().getGroup(0), r.getSegmentTier().getGroup(0));
+					final EditorEventType.TierChangeData data = new EditorEventType.TierChangeData(r.getSegmentTier(), r.getMediaSegment(), r.getMediaSegment());
 					getEditor().getEventManager().queueEvent(new EditorEvent(EditorEventType.TierChanged, SpeechAnalysisEditorView.this, data));
 				}
 			} else if(evt.getPropertyName().endsWith("time")) {

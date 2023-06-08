@@ -59,8 +59,8 @@ public class ValidationEditorView extends EditorView {
 		super(editor);
 		
 		final SessionFactory factory = SessionFactory.newFactory();
-		targetCandidateTier = factory.createTier("Target Validation", IPATranscript.class, true);
-		actualCandidateTier = factory.createTier("Actual Validation", IPATranscript.class, true);
+		targetCandidateTier = factory.createTier("Target Validation", IPATranscript.class, TierAlignmentRules.ipaTierRules());
+		actualCandidateTier = factory.createTier("Actual Validation", IPATranscript.class, TierAlignmentRules.ipaTierRules());
 		
 		targetValidationPanel = new TierDataLayoutPanel();
 		targetValidationPanel.getTierLayout().setLayoutType(TierDataLayoutType.ALIGN_GROUPS);
@@ -120,34 +120,31 @@ public class ValidationEditorView extends EditorView {
 	
 	
 	private void updateCandidateTier(Tier<IPATranscript> tier, Tier<IPATranscript> candidateTier) {
-		candidateTier.removeAll();
-		
-		for(IPATranscript t:tier) {
-			final AlternativeTranscript alts = t.getExtension(AlternativeTranscript.class);
-			IPATranscript candidate = new IPATranscript();
-			if(alts != null) {
-				if(alts.getSelected() != null) {
-					candidate = alts.get(alts.getSelected());
-				} else if(alts.size() == 1) {
-					final Iterator<String> keyItr = alts.keySet().iterator();
-					while(keyItr.hasNext()) {
-						final String key = keyItr.next();
-						final IPATranscript tr = alts.get(key);
-						if(candidate.length() == 0) {
-							candidate = tr;
-							alts.setSelected(key);
-						} else {
-							if(!candidate.toString().equals(tr.toString())) {
-								candidate = new IPATranscript();
-								alts.setSelected(null);
-								break;
-							}
+		final IPATranscript t = tier.getValue();
+		final AlternativeTranscript alts = t.getExtension(AlternativeTranscript.class);
+		IPATranscript candidate = new IPATranscript();
+		if(alts != null) {
+			if(alts.getSelected() != null) {
+				candidate = alts.get(alts.getSelected());
+			} else if(alts.size() == 1) {
+				final Iterator<String> keyItr = alts.keySet().iterator();
+				while(keyItr.hasNext()) {
+					final String key = keyItr.next();
+					final IPATranscript tr = alts.get(key);
+					if(candidate.length() == 0) {
+						candidate = tr;
+						alts.setSelected(key);
+					} else {
+						if(!candidate.toString().equals(tr.toString())) {
+							candidate = new IPATranscript();
+							alts.setSelected(null);
+							break;
 						}
 					}
 				}
 			}
-			candidateTier.addGroup(candidate);
 		}
+		candidateTier.setValue(candidate);
 	}
 	
 	private void updateValidationPanel(TierDataLayoutPanel panel, Tier<IPATranscript> tier, Tier<IPATranscript> candidateTier) {
@@ -170,56 +167,52 @@ public class ValidationEditorView extends EditorView {
 			panel.add(transLabel, tdc);
 		}
 		
-		for(int i = 0; i < tier.numberOfGroups(); i++) {
-			// add candidate field object
-			final IPAGroupField candidateField = new IPAGroupField(candidateTier, i);
-			candidateField.setFont(FontPreferences.getTierFont());
-			candidateField.addTierEditorListener(tierListener);
-			
-			final SetGroupData data = new SetGroupData();
-			data.tier = tier;
-			data.candidateTier = candidateTier;
-			data.group = i;
-			
-			final PhonUIAction<SetGroupData> setGrpAct = PhonUIAction.consumer(this::onSetGroup, data);
-			setGrpAct.putValue(PhonUIAction.NAME, "Set");
-			setGrpAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Set group IPA");
-			final JButton btn = new JButton(setGrpAct);
+		// add candidate field object
+		final IPAGroupField candidateField = new IPAGroupField(candidateTier);
+		candidateField.setFont(FontPreferences.getTierFont());
+		candidateField.addTierEditorListener(tierListener);
 
-			final JPanel p = new JPanel(new HorizontalLayout(3));
-			p.add(candidateField);
-			p.add(btn);
-			p.setOpaque(false);
-			
-			final TierDataConstraint candidateRestraint = new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN+i, row);
-			panel.add(p, candidateRestraint);
+		final SetValueData data = new SetValueData();
+		data.tier = tier;
+		data.candidateTier = candidateTier;
 
-			final IPATranscript ipa = tier.getGroup(i);
-			final AlternativeTranscript alts = ipa.getExtension(AlternativeTranscript.class);
-			final ButtonGroup btnGrp = new ButtonGroup();
-			j = row;
-			for(Transcriber t:transcribers) {
-				final IPATranscript opt = (alts != null && alts.containsKey(t.getUsername()) ? alts.get(t.getUsername()) : new IPATranscript());
-				
-				final SelectIPAData selectData = new SelectIPAData();
-				selectData.tier = tier;
-				selectData.candidateTier = candidateTier;
-				selectData.group = i;
-				selectData.transcriber = t.getUsername();
-				
-				final PhonUIAction<SelectIPAData> optAct = PhonUIAction.consumer(this::onSelectIPA, selectData);
-				optAct.putValue(PhonUIAction.NAME, opt.toString());
-				if(alts != null && alts.getSelected() != null && alts.getSelected().equals(t.getUsername())) {
-					optAct.putValue(PhonUIAction.SELECTED_KEY, true);
-				}
-				
-				final JRadioButton optBtn = new JRadioButton(optAct);
-				optBtn.setFont(FontPreferences.getTierFont());
-				optBtn.setOpaque(false);
-				btnGrp.add(optBtn);
-				final TierDataConstraint tdc = new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN+i, ++j);
-				panel.add(optBtn, tdc);
+		final PhonUIAction<SetValueData> setGrpAct = PhonUIAction.consumer(this::onSetValue, data);
+		setGrpAct.putValue(PhonUIAction.NAME, "Set");
+		setGrpAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Set group IPA");
+		final JButton btn = new JButton(setGrpAct);
+
+		final JPanel p = new JPanel(new HorizontalLayout(3));
+		p.add(candidateField);
+		p.add(btn);
+		p.setOpaque(false);
+
+		final TierDataConstraint candidateRestraint = new TierDataConstraint(TierDataConstraint.FLAT_TIER_COLUMN, row);
+		panel.add(p, candidateRestraint);
+
+		final IPATranscript ipa = tier.getValue();
+		final AlternativeTranscript alts = ipa.getExtension(AlternativeTranscript.class);
+		final ButtonGroup btnGrp = new ButtonGroup();
+		j = row;
+		for(Transcriber t:transcribers) {
+			final IPATranscript opt = (alts != null && alts.containsKey(t.getUsername()) ? alts.get(t.getUsername()) : new IPATranscript());
+
+			final SelectIPAData selectData = new SelectIPAData();
+			selectData.tier = tier;
+			selectData.candidateTier = candidateTier;
+			selectData.transcriber = t.getUsername();
+
+			final PhonUIAction<SelectIPAData> optAct = PhonUIAction.consumer(this::onSelectIPA, selectData);
+			optAct.putValue(PhonUIAction.NAME, opt.toString());
+			if(alts != null && alts.getSelected() != null && alts.getSelected().equals(t.getUsername())) {
+				optAct.putValue(PhonUIAction.SELECTED_KEY, true);
 			}
+
+			final JRadioButton optBtn = new JRadioButton(optAct);
+			optBtn.setFont(FontPreferences.getTierFont());
+			optBtn.setOpaque(false);
+			btnGrp.add(optBtn);
+			final TierDataConstraint tdc = new TierDataConstraint(TierDataConstraint.FLAT_TIER_COLUMN, ++j);
+			panel.add(optBtn, tdc);
 		}
 		panel.revalidate();
 		panel.repaint();
@@ -244,34 +237,28 @@ public class ValidationEditorView extends EditorView {
 	/**
 	 * Data passed to onSetGroup method
 	 */
-	public final class SetGroupData {
+	public final class SetValueData {
 		Tier<IPATranscript> tier;
 		Tier<IPATranscript> candidateTier;
-		int group;
 	}
 	
 	private void validateTier(Tier<IPATranscript> tier, Tier<IPATranscript> candidateTier) {
 		getEditor().getUndoSupport().beginUpdate();
-		for(int i = 0; i < tier.numberOfGroups(); i++) {
-			final SetGroupData data = new SetGroupData();
-			data.tier = tier;
-			data.candidateTier = candidateTier;
-			data.group = i;
+		final SetValueData data = new SetValueData();
+		data.tier = tier;
+		data.candidateTier = candidateTier;
 
-			final Tuple<TierEdit<IPATranscript>, TierEdit<PhoneMap>> edits = setGroup(data);
-
-			final boolean fireTierChanged = i == tier.numberOfGroups() - 1;
-			edits.getObj1().setFireHardChangeOnUndo(fireTierChanged);
-			edits.getObj2().setFireHardChangeOnUndo(fireTierChanged);
-			getEditor().getUndoSupport().postEdit(edits.getObj1());
-			getEditor().getUndoSupport().postEdit(edits.getObj2());
-		}
+		final Tuple<TierEdit<IPATranscript>, TierEdit<PhoneAlignment>> edits = setValue(data);
+		edits.getObj1().setFireHardChangeOnUndo(true);
+		edits.getObj2().setFireHardChangeOnUndo(true);
+		getEditor().getUndoSupport().postEdit(edits.getObj1());
+		getEditor().getUndoSupport().postEdit(edits.getObj2());
 		getEditor().getUndoSupport().endUpdate();
 	}
 	
-	private Tuple<TierEdit<IPATranscript>, TierEdit<PhoneMap>> setGroup(SetGroupData data) {
+	private Tuple<TierEdit<IPATranscript>, TierEdit<PhoneAlignment>> setValue(SetValueData data) {
 		final Tier<IPATranscript> tier = data.tier;
-		final IPATranscript ipa = data.candidateTier.getGroup(data.group);
+		final IPATranscript ipa = data.candidateTier.getValue();
 		final SyllabifierInfo info = getEditor().getSession().getExtension(SyllabifierInfo.class);
 		final SyllabifierLibrary library = SyllabifierLibrary.getInstance();
 		final Language lang = 
@@ -281,17 +268,14 @@ public class ValidationEditorView extends EditorView {
 		if(syllabifier != null) {
 			syllabifier.syllabify(ipa.toList());
 		}
-		ipa.putExtension(AlternativeTranscript.class, tier.getGroup(data.group).getExtension(AlternativeTranscript.class));
+		ipa.putExtension(AlternativeTranscript.class, tier.getValue().getExtension(AlternativeTranscript.class));
 		
-		final TierEdit<IPATranscript> edit = new TierEdit<IPATranscript>(getEditor(),
-				data.tier, data.group, ipa);
+		final TierEdit<IPATranscript> edit = new TierEdit<IPATranscript>(getEditor(), data.tier, ipa);
 		
 		final Record r = getEditor().currentRecord();
-		final Tier<PhoneMap> alignmentTier = r.getPhoneAlignmentTier();
-		final PhoneAligner aligner = new PhoneAligner();
-		final PhoneMap pm = aligner.calculatePhoneAlignment(r.getIPATargetTier().getGroup(data.group), r.getIPAActualTier().getGroup(data.group));
-		
-		final TierEdit<PhoneMap> pmEdit = new TierEdit<PhoneMap>(getEditor(), alignmentTier, data.group, pm);
+		final Tier<PhoneAlignment> alignmentTier = r.getPhoneAlignmentTier();
+		final PhoneAlignment phoneAlignment = PhoneAlignment.fromTiers(r.getIPATargetTier(), r.getIPAActualTier());
+		final TierEdit<PhoneAlignment> pmEdit = new TierEdit<>(getEditor(), alignmentTier, phoneAlignment);
 
 		return new Tuple<>(edit, pmEdit);
 	}
@@ -300,8 +284,8 @@ public class ValidationEditorView extends EditorView {
 	 * Set ipa for a group
 	 * @param data
 	 */
-	public void onSetGroup(SetGroupData data) {
-		final Tuple<TierEdit<IPATranscript>, TierEdit<PhoneMap>> edits = setGroup(data);
+	public void onSetValue(SetValueData data) {
+		final Tuple<TierEdit<IPATranscript>, TierEdit<PhoneAlignment>> edits = setValue(data);
 		getEditor().getUndoSupport().beginUpdate();
 		edits.getObj1().setFireHardChangeOnUndo(true);
 		edits.getObj2().setFireHardChangeOnUndo(true);
@@ -325,13 +309,12 @@ public class ValidationEditorView extends EditorView {
 	 * @param data
 	 */
 	public void onSelectIPA(SelectIPAData data) {
-		final IPATranscript grp = data.tier.getGroup(data.group);
+		final IPATranscript grp = data.tier.getValue();
 		final AlternativeTranscript alts = grp.getExtension(AlternativeTranscript.class);
 		if(alts != null && alts.containsKey(data.transcriber)) {
 			final IPATranscript selected = alts.get(data.transcriber);
 			alts.setSelected(data.transcriber);
-			
-			data.candidateTier.setGroup(data.group, selected);
+			data.candidateTier.setValue(selected);
 		}
 	}
 	
@@ -346,23 +329,15 @@ public class ValidationEditorView extends EditorView {
 		update();
 	}
 	
-	private final TierEditorListener tierListener = new TierEditorListener() {
-		
-		@Override
-		public <T> void tierValueChange(Tier<T> tier, int groupIndex, T newValue,
-				T oldValue) {
-			final TierEdit<T> edit = new TierEdit<T>(getEditor(), tier, groupIndex, newValue);
+	private final TierEditorListener<IPATranscript> tierListener = (tier, newValue, oldValue, valueIsAdjusting) -> {
+		if(valueIsAdjusting) {
+			final TierEdit<IPATranscript> edit = new TierEdit<>(getEditor(), tier, newValue);
 			getEditor().getUndoSupport().postEdit(edit);
-		}
-
-		@Override
-		public <T> void tierValueChanged(Tier<T> tier, int groupIndex,
-				T newValue, T oldValue) {
+		} else {
 			final EditorEvent<EditorEventType.TierChangeData> ee = new EditorEvent<>(EditorEventType.TierChanged, ValidationEditorView.this,
-					new EditorEventType.TierChangeData(tier, groupIndex, oldValue, newValue));
+					new EditorEventType.TierChangeData(tier, oldValue, newValue));
 			getEditor().getEventManager().queueEvent(ee);
 		}
-		
 	};
 	
 	@Override

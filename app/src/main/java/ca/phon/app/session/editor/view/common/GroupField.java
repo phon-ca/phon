@@ -19,6 +19,7 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.extensions.*;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.*;
+import ca.phon.ipa.IPATranscript;
 import ca.phon.session.*;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
@@ -48,8 +49,6 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 
 	private final Tier<T> tier;
 
-	private final int groupIndex;
-
 	private final UndoManager undoManager = new UndoManager();
 
 	private volatile boolean hasChanges = false;
@@ -60,14 +59,13 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 
 	private final GroupFieldBorder groupFieldBorder = new GroupFieldBorder();
 
-	public GroupField(Tier<T> tier, int groupIndex) {
-		this(tier, groupIndex, false);
+	public GroupField(Tier<T> tier) {
+		this(tier, false);
 	}
 
-	public GroupField(Tier<T> tier, int groupIndex, boolean allowNewLine) {
+	public GroupField(Tier<T> tier, boolean allowNewLine) {
 		super();
 		this.tier = tier;
-		this.groupIndex = groupIndex;
 		this.allowNewline = allowNewLine;
 
 		setupInputMap();
@@ -182,10 +180,6 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		return this.tier;
 	}
 
-	public int getGroupIndex() {
-		return this.groupIndex;
-	}
-
 	public void onUndo() {
 		if(undoManager.canUndo() && hasChanges) {
 			undoManager.undo();
@@ -229,7 +223,7 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 			if(validateText()) {
 				update();
 				for(TierEditorListener listener:getTierEditorListeners()) {
-					listener.tierValueChanged(getTier(), getGroupIndex(), getValidatedObject(), initialGroupVal);
+					listener.tierValueChanged(getTier(), getValidatedObject(), initialGroupVal, false);
 				}
 				hasChanges = false;
 			} else {
@@ -379,11 +373,7 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 	 * @return current group value
 	 */
 	public T getGroupValue() {
-		T retVal = null;
-		if(groupIndex < tier.numberOfGroups()) {
-			retVal = tier.getGroup(groupIndex);
-		}
-		return retVal;
+		return getTier().getValue();
 	}
 
 	/**
@@ -401,7 +391,7 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 				if(validateText()) {
 					update();
 					for(TierEditorListener listener:getTierEditorListeners()) {
-						listener.tierValueChanged(getTier(), getGroupIndex(), getValidatedObject(), initialGroupVal);
+						listener.tierValueChanged(getTier(), getValidatedObject(), initialGroupVal, false);
 					}
 					hasChanges = false;
 				} else {
@@ -446,7 +436,7 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 		final T validatedObj = getValidatedObject();
 		if(validatedObj != null) {
 			for(TierEditorListener listener:getTierEditorListeners()) {
-				listener.tierValueChange(getTier(), getGroupIndex(), validatedObj, initialGroupVal);
+				listener.tierValueChanged(getTier(),  validatedObj, initialGroupVal, true);
 			}
 		}
 	}
@@ -474,7 +464,7 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 				if(hasChanges) {
 					update();
 					for(TierEditorListener listener:getTierEditorListeners()) {
-						listener.tierValueChanged(getTier(), getGroupIndex(), getValidatedObject(), initialGroupVal);
+						listener.tierValueChanged(getTier(), getValidatedObject(), initialGroupVal, false);
 					}
 				}
 			} else {
@@ -523,7 +513,7 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 			Collections.synchronizedList(new ArrayList<TierEditorListener>());
 
 	@Override
-	public void addTierEditorListener(TierEditorListener listener) {
+	public void addTierEditorListener(TierEditorListener<IPATranscript> listener) {
 		if(!listeners.contains(listener))
 			listeners.add(listener);
 	}
@@ -541,46 +531,31 @@ public class GroupField<T> extends JTextArea implements TierEditor {
 	private final TierListener<T> tierListener = new TierListener<T>() {
 
 		@Override
-		public void groupAdded(Tier<T> tier, int index, T value) {
-		}
-
-		@Override
-		public void groupRemoved(Tier<T> tier, int index, T value) {
-		}
-
-		@Override
-		public void groupChanged(Tier<T> tier, int index, T oldValue, T value) {
-			if(getGroupIndex() == index) {
-				final T val = getGroupValue();
-				String text = new String();
-				if(val != null) {
-					@SuppressWarnings("unchecked")
-					final Formatter<T> formatter =
-							(Formatter<T>)FormatterFactory.createFormatter(tier.getDeclaredType());
-					if(formatter != null) {
-						text = formatter.format(val);
-					} else {
-						text = val.toString();
-					}
-
-					// XXX if text length is 0, check to see if there's an
-					// UnvalidatedValue assigned to this object
-					if(val instanceof IExtendable) {
-						final IExtendable extVal = (IExtendable)val;
-						final UnvalidatedValue unvalidatedValue = extVal.getExtension(UnvalidatedValue.class);
-						if(unvalidatedValue != null) {
-							text = unvalidatedValue.getValue();
-						}
-					}
+		public void tierValueChanged(Tier<T> tier, T oldValue, T newValue) {
+			final T val = getGroupValue();
+			String text = new String();
+			if(val != null) {
+				@SuppressWarnings("unchecked")
+				final Formatter<T> formatter =
+						(Formatter<T>)FormatterFactory.createFormatter(tier.getDeclaredType());
+				if(formatter != null) {
+					text = formatter.format(val);
+				} else {
+					text = val.toString();
 				}
 
-
-				setText(text);
+				// XXX if text length is 0, check to see if there's an
+				// UnvalidatedValue assigned to this object
+				if(val instanceof IExtendable) {
+					final IExtendable extVal = (IExtendable)val;
+					final UnvalidatedValue unvalidatedValue = extVal.getExtension(UnvalidatedValue.class);
+					if(unvalidatedValue != null) {
+						text = unvalidatedValue.getValue();
+					}
+				}
 			}
-		}
 
-		@Override
-		public void groupsCleared(Tier<T> tier) {
+			setText(text);
 		}
 
 	};

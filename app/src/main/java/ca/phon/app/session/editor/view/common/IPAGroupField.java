@@ -31,25 +31,20 @@ import java.text.ParseException;
  */
 public class IPAGroupField extends GroupField<IPATranscript> {
 	
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(IPAGroupField.class.getName());
-
-	private static final long serialVersionUID = 3938081453789426396L;
-	
 	private final Syllabifier syllabifier;
 	
 	private final WeakReference<Transcriber> transcriberRef;
 	
-	public IPAGroupField(Tier<IPATranscript> tier,
-			int groupIndex) {
-		this(tier, groupIndex, null);
+	public IPAGroupField(Tier<IPATranscript> tier) {
+		this(tier, null);
 	}
 	
-	public IPAGroupField(Tier<IPATranscript> tier, int groupIndex, Transcriber transcriber) {
-		this(tier, groupIndex, transcriber, null);
+	public IPAGroupField(Tier<IPATranscript> tier, Transcriber transcriber) {
+		this(tier, transcriber, null);
 	}
 	
-	public IPAGroupField(Tier<IPATranscript> tier, int groupIndex, Transcriber transcriber, Syllabifier syllabifier) {
-		super(tier, groupIndex);
+	public IPAGroupField(Tier<IPATranscript> tier, Transcriber transcriber, Syllabifier syllabifier) {
+		super(tier);
 		this.syllabifier = syllabifier;
 		this.transcriberRef = new WeakReference<Transcriber>(transcriber);
 		// init after transcriber is set
@@ -64,24 +59,14 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 	protected void _init() {
 		if(transcriberRef == null) return;
 		super._init();
-		addTierEditorListener(new TierEditorListener() {
-			
-			@Override
-			public <T> void tierValueChanged(Tier<T> tier, int groupIndex, T newValue,
-					T oldValue) {
-				if(syllabifier != null) {
-					final IPATranscript transcript = (IPATranscript)newValue;
-					if(transcript != null && syllabifier != null)
-						syllabifier.syllabify(transcript.toList());
-				}
+		addTierEditorListener((Tier<IPATranscript> tier, IPATranscript newValue, IPATranscript oldValue, boolean valueIsAdjusting) -> {
+			if(syllabifier != null) {
+				final IPATranscript transcript = (IPATranscript)newValue;
+				if(transcript != null && syllabifier != null)
+					syllabifier.syllabify(transcript.toList());
 			}
-			
-			@Override
-			public <T> void tierValueChange(Tier<T> tier, int groupIndex, T newValue,
-					T oldValue) {
-			}
-			
 		});
+
 	}
 	
 	@Override

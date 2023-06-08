@@ -15,7 +15,6 @@
  */
 package ca.phon.app.session.editor.view.record_data.actions;
 
-import ca.phon.app.session.editor.undo.MergeAllGroupsEdit;
 import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.session.Record;
 import ca.phon.util.OSInfo;
