@@ -397,7 +397,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 				}
 				final PhoneMapDisplay pmDisplay = getAlignmentDisplay(gIndex);
 				pmDisplay.setFont(FontPreferences.getTierFont());
-				pmDisplay.setPhoneMapForGroup(0, pm);
+				pmDisplay.setPhoneMapForWord(0, pm);
 				pmDisplay.setFocusedPosition(0);
 				pmDisplay.setPaintPhoneBackground(colorInAlignment);
 				pmDisplay.setShowDiacritics(showDiacritics);

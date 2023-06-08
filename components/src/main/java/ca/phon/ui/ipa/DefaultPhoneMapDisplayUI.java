@@ -183,13 +183,13 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 
 	public void movePhoneRight(PhonActionEvent<Void> pae) {
 		Tuple<Integer, Integer> alignmentPos =
-				display.positionToGroupPos(display.getFocusedPosition());
+				display.positionToWordIndex(display.getFocusedPosition());
 		display.movePhoneRight(alignmentPos.getObj1(), alignmentPos.getObj2(), lockTop);
 	}
 
 	public void movePhoneLeft(PhonActionEvent<Void> pae) {
 		Tuple<Integer, Integer> alignmentPos =
-				display.positionToGroupPos(display.getFocusedPosition());
+				display.positionToWordIndex(display.getFocusedPosition());
 		display.movePhoneLeft(alignmentPos.getObj1(), alignmentPos.getObj2(), lockTop);
 	}
 
@@ -296,7 +296,7 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 		g.setColor(Color.black);
 
 		for(int gIdx = 0; gIdx < display.getNumberOfGroups(); gIdx++) {
-			PhoneMap pm = display.getPhoneMapForGroup(gIdx);
+			PhoneMap pm = display.getPhoneMapForWord(gIdx);
 			if(pm == null) continue;
 			
 			final IPATranscript ipaTarget = pm.getTargetRep();
@@ -476,7 +476,7 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 			// paint focus
 			if(display.hasFocus()) {
 				Tuple<Integer, Integer> groupLocation =
-						display.positionToGroupPos(display.getFocusedPosition());
+						display.positionToWordIndex(display.getFocusedPosition());
 				if(groupLocation.getObj1() == gIdx) {
 					Area tArea = targetPhoneAreas[groupLocation.getObj2()];
 					Area aArea = actualPhoneAreas[groupLocation.getObj2()];
@@ -651,7 +651,7 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 
 	public Rectangle phoneRectForPosition(int pos) {
 		Tuple<Integer, Integer> alignmentPos =
-				display.positionToGroupPos(pos);
+				display.positionToWordIndex(pos);
 
 		int currentX = display.getInsets().left + insetSize;
 		int widthPerPhone =
@@ -659,7 +659,7 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 				phoneBoxSize.width;
 
 		for(int gIdx = 0; gIdx < alignmentPos.getObj1(); gIdx++) {
-			PhoneMap pm = display.getPhoneMapForGroup(gIdx);
+			PhoneMap pm = display.getPhoneMapForWord(gIdx);
 			currentX += pm.getAlignmentLength() * widthPerPhone;
 			currentX += groupSpace;
 		}
@@ -683,7 +683,7 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 			}
 
 			Tuple<Integer, Integer> alignmentPos =
-					display.positionToGroupPos(pIdx);
+					display.positionToWordIndex(pIdx);
 			if(alignmentPos.getObj1() != currentGrp) {
 				currentX += groupSpace;
 				currentGrp = alignmentPos.getObj1();
@@ -791,7 +791,7 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 		public void mouseDragged(MouseEvent me) {
 			if(isDragging) {
 				if(me.getPoint().getX() > dragRightEdge) {
-					final Tuple<Integer, Integer> groupPos = display.positionToGroupPos(display.getFocusedPosition());
+					final Tuple<Integer, Integer> groupPos = display.positionToWordIndex(display.getFocusedPosition());
 					display.movePhoneRight(
 							groupPos.getObj1(), groupPos.getObj2(), lockTop);
 					Rectangle newPRect = phoneRectForPosition(
@@ -800,7 +800,7 @@ public class DefaultPhoneMapDisplayUI extends PhoneMapDisplayUI {
 					dragRightEdge = newPRect.x + newPRect.width;
 				}
 				if(me.getPoint().getX() < dragLeftEdge) {
-					final Tuple<Integer, Integer> groupPos = display.positionToGroupPos(display.getFocusedPosition());
+					final Tuple<Integer, Integer> groupPos = display.positionToWordIndex(display.getFocusedPosition());
 					display.movePhoneLeft(
 							groupPos.getObj1(), groupPos.getObj2(), lockTop);
 					Rectangle newPRect = phoneRectForPosition(

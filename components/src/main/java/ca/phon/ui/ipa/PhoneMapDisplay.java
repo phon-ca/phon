@@ -43,7 +43,7 @@ public class PhoneMapDisplay extends JComponent {
 	/** List of phone maps *
 	 *
 	 */
-	private List<PhoneMap> groups =
+	private List<PhoneMap> alignments =
 			new ArrayList<PhoneMap>();
 
 	/**
@@ -104,7 +104,7 @@ public class PhoneMapDisplay extends JComponent {
 	public int getNumberOfAlignmentPositions() {
 		int retVal = 0;
 
-		for(PhoneMap pm:groups) {
+		for(PhoneMap pm: alignments) {
 			if(pm == null) continue;
 			retVal += pm.getAlignmentLength();
 		}
@@ -113,31 +113,31 @@ public class PhoneMapDisplay extends JComponent {
 	}
 
 	public int getNumberOfGroups() {
-		return groups.size();
+		return alignments.size();
 	}
 
-	public PhoneMap getPhoneMapForGroup(int gIdx) {
+	public PhoneMap getPhoneMapForWord(int wordIndex) {
 		PhoneMap retVal = null;
 
-		if(gIdx >=0 && gIdx < groups.size()) {
-			retVal = groups.get(gIdx);
+		if(wordIndex >=0 && wordIndex < alignments.size()) {
+			retVal = alignments.get(wordIndex);
 
 		}
 
 		return retVal;
 	}
 
-	public void setPhoneMapForGroup(int gIdx, PhoneMap pm) {
-		if(gIdx < groups.size()) {
-			groups.remove(gIdx);
+	public void setPhoneMapForWord(int wordIndex, PhoneMap pm) {
+		if(wordIndex < alignments.size()) {
+			alignments.remove(wordIndex);
 		}
-		groups.add(gIdx, pm);
+		alignments.add(wordIndex, pm);
 
 		super.invalidate();
 	}
 
 	public void clear() {
-		groups.clear();
+		alignments.clear();
 		repaint();
 	}
 
@@ -153,12 +153,12 @@ public class PhoneMapDisplay extends JComponent {
 		}
 	}
 
-	public Tuple<Integer, Integer> positionToGroupPos(int pos) {
+	public Tuple<Integer, Integer> positionToWordIndex(int pos) {
 		Tuple<Integer, Integer> retVal = new Tuple<Integer, Integer>(0, 0);
 
 		int gIdx = 0;
 		int cPos = pos;
-		for(PhoneMap pm:groups) {
+		for(PhoneMap pm: alignments) {
 			if(pm.getAlignmentLength() <= cPos) {
 				cPos -= pm.getAlignmentLength();
 				gIdx++;
@@ -179,10 +179,10 @@ public class PhoneMapDisplay extends JComponent {
 	 *
 	 * Indels are indicated by null.
 	 *
-	 * @param idx
+	 * @param wordIndex
 	 * @return the aligned phones at the given position
 	 */
-	public Tuple<IPAElement, IPAElement> getAlignedPhones(int idx) {
+	public Tuple<IPAElement, IPAElement> getAlignedPhones(int wordIndex) {
 		Tuple<IPAElement, IPAElement> retVal = new Tuple<IPAElement, IPAElement>();
 
 		int gIdx = 0;
@@ -190,17 +190,17 @@ public class PhoneMapDisplay extends JComponent {
 		int currentIdx = 0;
 
 		PhoneMap currentGrp = null;
-		while(gIdx < groups.size() && currentIdx <= idx) {
+		while(gIdx < alignments.size() && currentIdx <= wordIndex) {
 
 			if(currentGrp == null) {
-				currentGrp = groups.get(gIdx);
+				currentGrp = alignments.get(gIdx);
 				pIdx = 0;
 			}
 
 			if(pIdx >= currentGrp.getAlignmentLength()) {
 				gIdx++;
 				currentGrp = null;
-			} else if(currentIdx == idx) {
+			} else if(currentIdx == wordIndex) {
 
 				List<IPAElement> ps = 
 						currentGrp.getAlignedElements(pIdx);
@@ -315,12 +315,12 @@ public class PhoneMapDisplay extends JComponent {
 
 	/**
 	 * Move specified phone one position right
-	 * @param groupIndex
+	 * @param wordIndex
 	 * @param alignmentIndex
 	 * @param top <code>true</code> if top side of alignment, <code>false</code> if bottom
 	 */
-	public void movePhoneRight(int groupIndex, int alignmentIndex, boolean top) {
-		PhoneMap pm = groups.get(groupIndex);
+	public void movePhoneRight(int wordIndex, int alignmentIndex, boolean top) {
+		PhoneMap pm = alignments.get(wordIndex);
 		int pos = alignmentIndex;
 
 		IPAElement phoneToMove =
@@ -357,9 +357,9 @@ public class PhoneMapDisplay extends JComponent {
 			setFocusedPosition(getFocusedPosition()+1);
 		}
 		AlignmentChangeData oldData =
-				new AlignmentChangeData(groupIndex, oldAlignment);
+				new AlignmentChangeData(wordIndex, oldAlignment);
 		AlignmentChangeData newData =
-				new AlignmentChangeData(groupIndex, newAlignment);
+				new AlignmentChangeData(wordIndex, newAlignment);
 		
 		if(oldAlignment[0].length != newAlignment[0].length) {
 			revalidate();
@@ -369,8 +369,8 @@ public class PhoneMapDisplay extends JComponent {
 		super.firePropertyChange(ALIGNMENT_CHANGE_PROP, oldData, newData);
 	}
 
-	public void movePhoneLeft(int groupIndex, int alignmentIndex, boolean top) {
-		PhoneMap pm = groups.get(groupIndex);
+	public void movePhoneLeft(int wordIndex, int alignmentIndex, boolean top) {
+		PhoneMap pm = alignments.get(wordIndex);
 		int pos = alignmentIndex;
 
 		IPAElement phoneToMove =
@@ -442,9 +442,9 @@ public class PhoneMapDisplay extends JComponent {
 		}
 
 		AlignmentChangeData oldData =
-				new AlignmentChangeData(groupIndex, oldAlignment);
+				new AlignmentChangeData(wordIndex, oldAlignment);
 		AlignmentChangeData newData =
-				new AlignmentChangeData(groupIndex, newAlignment);
+				new AlignmentChangeData(wordIndex, newAlignment);
 		
 		if(oldAlignment[0].length != newAlignment[0].length) {
 			revalidate();
@@ -461,16 +461,16 @@ public class PhoneMapDisplay extends JComponent {
 	/** Class for alignment change events */
 	public static class AlignmentChangeData extends Tuple<Integer, Integer[][]> {
 
-		public AlignmentChangeData(Integer gIdx, Integer[][] alignment) {
-			super(gIdx, alignment);
+		public AlignmentChangeData(Integer wordIndex, Integer[][] alignment) {
+			super(wordIndex, alignment);
 		}
 		
-		public int getGroupIndex() {
+		public int getWordIndex() {
 			return super.getObj1();
 		}
 		
-		public void setGroupIndex(int gIdx) {
-			super.setObj1(gIdx);
+		public void setWordIndex(int wordIndex) {
+			super.setObj1(wordIndex);
 		}
 		
 		public Integer[][] getAlignment() {

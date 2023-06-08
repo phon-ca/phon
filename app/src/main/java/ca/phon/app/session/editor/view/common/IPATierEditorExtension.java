@@ -69,7 +69,7 @@ public class IPATierEditorExtension implements IPluginExtensionPoint<TierEditor<
 
 		IPAGroupField retVal = new IPAGroupField(ipaTier, editor.getDataModel().getTranscriber(), syllabifier);
 
-		IPAFieldTooltip tooltip = new IPAFieldTooltip();
+		final IPAFieldTooltip tooltip = new IPAFieldTooltip();
 		tooltip.setAlignmentTier(alignmentTier);
 		tooltip.install(retVal);
 		tooltip.addPropertyChangeListener(SyllabificationDisplay.SYLLABIFICATION_PROP_ID, new PropertyChangeListener() {
@@ -95,24 +95,19 @@ public class IPATierEditorExtension implements IPluginExtensionPoint<TierEditor<
 
 		});
 
-		tooltip.addPropertyChangeListener(PhoneMapDisplay.ALIGNMENT_CHANGE_PROP, new PropertyChangeListener() {
+		tooltip.addPropertyChangeListener(PhoneMapDisplay.ALIGNMENT_CHANGE_PROP, (evt) -> {
+			final PhoneMapDisplay.AlignmentChangeData newVal = (PhoneMapDisplay.AlignmentChangeData)evt.getNewValue();
+			final PhoneAlignment phoneAlignment = PhoneAlignment.fromTiers(record.getIPATargetTier(), record.getIPAActualTier());
+			final int wordIndex = newVal.getWordIndex();
+			final PhoneMap pm = wordIndex <= phoneAlignment.getAlignments().size() ? phoneAlignment.getAlignments().get(wordIndex) : null;
+			if(pm == null) return; // should not happen
+			pm.setTopAlignment(newVal.getAlignment()[0]);
+			pm.setBottomAlignment(newVal.getAlignment()[1]);
 
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				final PhoneMapDisplay.AlignmentChangeData newVal = (PhoneMapDisplay.AlignmentChangeData)evt.getNewValue();
-				final PhoneMapDisplay display = (PhoneMapDisplay)evt.getSource();
-
-				final PhoneMap pm = new PhoneMap(record.getIPATargetTier().getGroup(group), record.getIPAActualTier().getGroup(group));
-				pm.setTopAlignment(newVal.getAlignment()[0]);
-				pm.setBottomAlignment(newVal.getAlignment()[1]);
-
-				final TierEdit<PhoneMap> edit = new TierEdit<PhoneMap>(editor, alignmentTier, group, pm);
-				edit.setFireHardChangeOnUndo(true);
-				editor.getUndoSupport().postEdit(edit);
-			}
-
+			final TierEdit<PhoneAlignment> edit = new TierEdit<>(editor, alignmentTier, phoneAlignment);
+			edit.setFireHardChangeOnUndo(true);
+			editor.getUndoSupport().postEdit(edit);
 		});
-
 
 		return retVal;
 	};

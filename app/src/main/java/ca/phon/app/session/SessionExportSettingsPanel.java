@@ -209,7 +209,7 @@ public class SessionExportSettingsPanel extends JPanel {
 		includeAlignmentBox.setSelected(settings.isIncludeAlignment());
 		
 		alignmentDisplay = new PhoneMapDisplay();
-		alignmentDisplay.setPhoneMapForGroup(0, alignment);
+		alignmentDisplay.setPhoneMapForWord(0, alignment);
 		alignmentDisplay.setBackground(Color.WHITE);
 		alignmentDisplay.setFont(FontPreferences.getTierFont());
 		

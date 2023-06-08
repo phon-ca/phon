@@ -91,7 +91,7 @@ public class SyllabificationAndAlignmentPopupWindow extends JFrame {
 
 				PhoneMapDisplay alignmentDisplay = new PhoneMapDisplay();
 				alignmentDisplay.setFont(FontPreferences.getTierFont());
-				alignmentDisplay.setPhoneMapForGroup(0, pm);
+				alignmentDisplay.setPhoneMapForWord(0, pm);
 				alignmentDisplay.addPropertyChangeListener(PhoneMapDisplay.ALIGNMENT_CHANGE_PROP,
 						(e) -> {
 							revalidate();

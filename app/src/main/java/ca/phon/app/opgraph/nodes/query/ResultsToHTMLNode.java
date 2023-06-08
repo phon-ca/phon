@@ -423,7 +423,7 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 			includeAlignmentBox.setEnabled(includeTierData);
 			
 			alignmentDisplay = new PhoneMapDisplay();
-			alignmentDisplay.setPhoneMapForGroup(0, alignment);
+			alignmentDisplay.setPhoneMapForWord(0, alignment);
 			alignmentDisplay.setBackground(Color.WHITE);
 			alignmentDisplay.setFont(FontPreferences.getTierFont());
 			alignmentDisplay.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 5));

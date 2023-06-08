@@ -125,7 +125,7 @@ public abstract class SessionExporter {
 		
 		try {
 			SwingUtilities.invokeAndWait( () -> {
-				display.setPhoneMapForGroup(0, alignment);
+				display.setPhoneMapForWord(0, alignment);
 				display.revalidate();
 				
 				Dimension prefSize = display.getPreferredSize();
