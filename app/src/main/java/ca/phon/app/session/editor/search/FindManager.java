@@ -246,8 +246,7 @@ public class FindManager {
 		int tierIdx = searchTiers.indexOf(pos.getRecordLocation().getTier());
 		if(tierIdx < 0)
 			tierIdx = 0;
-		int grpIdx = pos.getRecordLocation().getCharPositionInLine().getGroupIndex();
-		int charIdx = pos.getRecordLocation().getCharPositionInLine().getCharIndex();
+		int charIdx = pos.getRecordLocation().getCharPositionInLine();
 
 		final FindExpr anyExpr = getAnyExpr();
 		while(uttIdx < session.getRecordCount()) {
@@ -259,47 +258,43 @@ public class FindManager {
 				final Tier<?> tier = currentUtt.getTier(searchTier);
 				if(tier == null) {
 					tierIdx++;
-					grpIdx = 0;
 					continue;
 				}
 				
-				for(int i = grpIdx; i < tier.numberOfGroups(); i++) {
-					Range charRange = null;
-					Range tierExprRange = null;
-					Range anyExprRange = null;
-					
-					final FindExpr tierExpr = getExprForTier(tier.getName());
-					if(tierExpr != null) {
-						tierExprRange = tierExpr.findNext(tier.getGroup(i), charIdx);
-					} 
-					if(anyExpr != null) {
-						anyExprRange = anyExpr.findNext(tier.getGroup(i), charIdx);
-					}
-					
-					lastExpr = (tierExprRange != null ? tierExpr : 
-						(anyExprRange != null ? anyExpr : null));
-					
-					if(tierExprRange != null && anyExprRange != null) {
-						charRange = 
-								(tierExprRange.getFirst() <= anyExprRange.getFirst() ? tierExprRange : anyExprRange);
-					} else {
-						charRange =
-								(tierExprRange != null ? tierExprRange : anyExprRange);
-					}
-					
-					if(charRange != null) {
-						charRange.setExcludesEnd(true);
-						final RecordRange recRange =
-								new RecordRange(tier.getName(), new TierRange(i, charRange));
-						retVal = new SessionRange(uttIdx, recRange);
-						break;
-					}
-					// reset charIdx
-					charIdx = 0;
+				Range charRange = null;
+				Range tierExprRange = null;
+				Range anyExprRange = null;
+
+				final FindExpr tierExpr = getExprForTier(tier.getName());
+				if(tierExpr != null) {
+					tierExprRange = tierExpr.findNext(tier.getValue(), charIdx);
 				}
+				if(anyExpr != null) {
+					anyExprRange = anyExpr.findNext(tier.getValue(), charIdx);
+				}
+
+				lastExpr = (tierExprRange != null ? tierExpr :
+					(anyExprRange != null ? anyExpr : null));
+
+				if(tierExprRange != null && anyExprRange != null) {
+					charRange =
+							(tierExprRange.getFirst() <= anyExprRange.getFirst() ? tierExprRange : anyExprRange);
+				} else {
+					charRange =
+							(tierExprRange != null ? tierExprRange : anyExprRange);
+				}
+
+				if(charRange != null) {
+					charRange.setExcludesEnd(true);
+					final RecordRange recRange = new RecordRange(tier.getName(), charRange);
+					retVal = new SessionRange(uttIdx, recRange);
+					break;
+				}
+				// reset charIdx
+				charIdx = 0;
+
 				if(retVal != null) break;
 				tierIdx++;
-				grpIdx = 0;
 			}
 			if(retVal != null) break;
 			uttIdx++;
@@ -316,8 +311,7 @@ public class FindManager {
 		int tierIdx = searchTiers.indexOf(pos.getRecordLocation().getTier());
 		if(tierIdx < 0)
 			tierIdx = 0;
-		int grpIdx = pos.getRecordLocation().getCharPositionInLine().getGroupIndex();
-		int charIdx = pos.getRecordLocation().getCharPositionInLine().getCharIndex();
+		int charIdx = pos.getRecordLocation().getCharPositionInLine();
 
 		final FindExpr anyExpr = getAnyExpr();
 		while(uttIdx >= 0) {
@@ -328,54 +322,46 @@ public class FindManager {
 
 				final Tier<?> tier = currentUtt.getTier(searchTier);
 				if(tier == null) continue;
-				
-				if(grpIdx == Integer.MAX_VALUE) {
-					grpIdx = currentUtt.numberOfGroups() - 1;
+
+				Range charRange = null;
+				Range tierExprRange = null;
+				Range anyExprRange = null;
+
+				Object grpVal = tier.getValue();
+				if(charIdx == Integer.MAX_VALUE) {
+					final String grpTxt = FormatterUtil.format(grpVal);
+					charIdx = grpTxt.length();
 				}
-				
-				for(int i = grpIdx; i >= 0 && tier.numberOfGroups() > i; i--) {
-					Range charRange = null;
-					Range tierExprRange = null;
-					Range anyExprRange = null;
-										
-					Object grpVal = tier.getGroup(i);
-					if(charIdx == Integer.MAX_VALUE) {
-						final String grpTxt = FormatterUtil.format(grpVal);
-						charIdx = grpTxt.length();
-					}
-					
-					final FindExpr tierExpr = getExprForTier(tier.getName());
-					if(tierExpr != null) {
-						tierExprRange = tierExpr.findPrev(tier.getGroup(i), charIdx);
-					} 
-					if(anyExpr != null) {
-						anyExprRange = anyExpr.findPrev(tier.getGroup(i), charIdx);
-					}
-					
-					lastExpr = (tierExprRange != null ? tierExpr : 
-						(anyExprRange != null ? anyExpr : null));
-					
-					if(tierExprRange != null && anyExprRange != null) {
-						charRange = 
-								(tierExprRange.getFirst() >= anyExprRange.getFirst() ? tierExprRange : anyExprRange);
-					} else {
-						charRange =
-								(tierExprRange != null ? tierExprRange : anyExprRange);
-					}
-					
-					if(charRange != null) {
-						charRange.setExcludesEnd(true);
-						final RecordRange recRange =
-								new RecordRange(tier.getName(), new TierRange(i, charRange));
-						retVal = new SessionRange(uttIdx, recRange);
-						break;
-					}
-					// reset char idx
-					charIdx = Integer.MAX_VALUE;
+
+				final FindExpr tierExpr = getExprForTier(tier.getName());
+				if(tierExpr != null) {
+					tierExprRange = tierExpr.findPrev(tier.getValue(), charIdx);
 				}
+				if(anyExpr != null) {
+					anyExprRange = anyExpr.findPrev(tier.getValue(), charIdx);
+				}
+
+				lastExpr = (tierExprRange != null ? tierExpr :
+					(anyExprRange != null ? anyExpr : null));
+
+				if(tierExprRange != null && anyExprRange != null) {
+					charRange =
+							(tierExprRange.getFirst() >= anyExprRange.getFirst() ? tierExprRange : anyExprRange);
+				} else {
+					charRange =
+							(tierExprRange != null ? tierExprRange : anyExprRange);
+				}
+
+				if(charRange != null) {
+					charRange.setExcludesEnd(true);
+					final RecordRange recRange = new RecordRange(tier.getName(), charRange);
+					retVal = new SessionRange(uttIdx, recRange);
+					break;
+				}
+				// reset char idx
+				charIdx = Integer.MAX_VALUE;
 				if(retVal != null) break;
 				tierIdx--;
-				grpIdx = Integer.MAX_VALUE;
 			}
 			if(retVal != null) break;
 			uttIdx--;
@@ -404,29 +390,20 @@ public class FindManager {
 			int AtIdx = searchTiers.indexOf(Ar.getTier());
 			int BtIdx = searchTiers.indexOf(Br.getTier());
 			
-			int AgIdx = Ar.getCharPositionInLine().getGroupIndex();
-			int BgIdx = Br.getCharPositionInLine().getGroupIndex();
-			
-			int AcIdx = Ar.getCharPositionInLine().getCharIndex();
-			int BcIdx = Br.getCharPositionInLine().getCharIndex();
+			int AcIdx = Ar.getCharPositionInLine();
+			int BcIdx = Br.getCharPositionInLine();
 
 			if(AtIdx < BtIdx) {
 				retVal = -1;
 			} else if(AtIdx > BtIdx) {
 				retVal = 1;
 			} else {
-				if(AgIdx < BgIdx) {
+				if(AcIdx < BcIdx) {
 					retVal = -1;
-				} else if (AgIdx > BgIdx) {
+				} else if(AcIdx > BcIdx) {
 					retVal = 1;
 				} else {
-					if(AcIdx < BcIdx) {
-						retVal = -1;
-					} else if(AcIdx > BcIdx) {
-						retVal = 1;
-					} else {
-						retVal = 0;
-					}
+					retVal = 0;
 				}
 			}
 		}
