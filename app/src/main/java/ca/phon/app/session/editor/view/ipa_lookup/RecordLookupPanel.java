@@ -31,7 +31,6 @@ import ca.phon.syllabifier.*;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import com.jgoodies.forms.layout.*;
-import org.apache.logging.log4j.LogManager;
 import org.jdesktop.swingx.HorizontalLayout;
 
 import javax.swing.*;
@@ -156,7 +155,6 @@ public class RecordLookupPanel extends JPanel {
 		final WordLookupVisitor visitor = new WordLookupVisitor(this);
 		ortho.accept(visitor);
 
-		// do post processing
 		if(getDictionary() != null) {
 			List<IPluginExtensionPoint<IPALookupPostProcessor>> extPts =
 					PluginManager.getInstance().getExtensionPoints(IPALookupPostProcessor.class);
@@ -165,7 +163,7 @@ public class RecordLookupPanel extends JPanel {
 				IPALookupPostProcessor postprocessor = extPt.getFactory().createObject();
 				ipa = postprocessor.postProcess(getDictionary(), ortho.toString(), ipa);
 			}
-			lookupTier.setGroup(lookupTier.numberOfGroups() - 1, ipa);
+			lookupTier.setValue(ipa);
 		}
 	}
 
@@ -177,68 +175,51 @@ public class RecordLookupPanel extends JPanel {
 		if(r == null) return;
 
 		int row = 0;
-		int col = 0;
 		candidatePanel.add(controlPanel, new TierDataConstraint(TierDataConstraint.FLAT_TIER_PREF_COLUMN, row));
 
 		++row;
 		final JLabel transLbl = new JLabel("Transcription");
 		transLbl.setHorizontalAlignment(SwingConstants.RIGHT);
 		candidatePanel.add(transLbl, new TierDataConstraint(TierDataConstraint.TIER_LABEL_COLUMN, row));
-		for(int i = 0; i < lookupTier.numberOfGroups(); i++) {
-			final IPAGroupField ipaField = new IPAGroupField(lookupTier, i);
-			ipaField.setFont(FontPreferences.getTierFont());
-			ipaField.addTierEditorListener(tierListener);
-			candidatePanel.add(ipaField, new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN+i, row));
-		}
-		candidatePanel.add(setButton, new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN+lookupTier.numberOfGroups(), row));
+		final IPAGroupField ipaField = new IPAGroupField(lookupTier);
+		ipaField.setFont(FontPreferences.getTierFont());
+		ipaField.addTierEditorListener(tierListener);
+		candidatePanel.add(ipaField, new TierDataConstraint(TierDataConstraint.FLAT_TIER_COLUMN, row++));
+		candidatePanel.add(setButton, new TierDataConstraint(TierDataConstraint.FLAT_TIER_COLUMN, row));
 
-		row = 0;
-		col = 0;
 		// create group sections
 		final Tier<Orthography> orthoTier = r.getOrthographyTier();
 		final TierDataLayout groupLayout = (TierDataLayout)groupPanel.getLayout();
-		for(int i = 0; i < lookupTier.numberOfGroups(); i++) {
-			if(i > 0) {
-				final JSeparator sep = new JSeparator(SwingConstants.HORIZONTAL);
-				groupPanel.add(sep, new TierDataConstraint(TierDataConstraint.FULL_TIER_COLUMN, row++));
-			}
-			final JLabel groupLabel = new JLabel("<html><b>Group #" + (i+1) + "</b></html>");
-			final JLabel tLbl = new JLabel("Transcription");
-			tLbl.setHorizontalAlignment(SwingConstants.RIGHT);
-			final JPanel pnl = new JPanel(new BorderLayout());
-			pnl.setOpaque(false);
-			pnl.add(groupLabel, BorderLayout.WEST);
-			pnl.add(tLbl, BorderLayout.EAST);
-			groupPanel.add(pnl, new TierDataConstraint(TierDataConstraint.TIER_LABEL_COLUMN, row));
+		final JLabel tLbl = new JLabel("Transcription");
+		tLbl.setHorizontalAlignment(SwingConstants.RIGHT);
+		final JPanel pnl = new JPanel(new BorderLayout());
+		pnl.setOpaque(false);
+		pnl.add(tLbl, BorderLayout.EAST);
+		groupPanel.add(pnl, new TierDataConstraint(TierDataConstraint.TIER_LABEL_COLUMN, row));
 
-			final IPAGroupField grpField = new IPAGroupField(lookupTier, i);
-			grpField.setFont(FontPreferences.getTierFont());
-			grpField.addTierEditorListener(tierListener);
+		final IPAGroupField grpField = new IPAGroupField(lookupTier);
+		grpField.setFont(FontPreferences.getTierFont());
+		grpField.addTierEditorListener(tierListener);
 
-			final PhonUIAction<Integer> setGrpAct = PhonUIAction.consumer(this::onSetGroup, i);
-			setGrpAct.putValue(PhonUIAction.NAME, "Set");
-			setGrpAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Set transcription for group " + (i+1));
-			final JButton setGrpBtn = new JButton(setGrpAct);
+		final PhonUIAction<Void> setGrpAct = PhonUIAction.runnable(this::onSetValue);
+		setGrpAct.putValue(PhonUIAction.NAME, "Set");
+		setGrpAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Set transcription");
+		final JButton setGrpBtn = new JButton(setGrpAct);
 
-			final String colLayout = "pref, " + groupLayout.getHorizontalGap() + "px, pref";
-			final FormLayout formLayout = new FormLayout(colLayout, "pref");
-			final CellConstraints cc = new CellConstraints();
-			final JPanel grpPanel = new JPanel(formLayout);
-			grpPanel.setOpaque(false);
-			grpPanel.add(grpField, cc.xy(1, 1));
-			grpPanel.add(setGrpBtn, cc.xy(3, 1));
+		final String colLayout = "pref, " + groupLayout.getHorizontalGap() + "px, pref";
+		final FormLayout formLayout = new FormLayout(colLayout, "pref");
+		final CellConstraints cc = new CellConstraints();
+		final JPanel grpPanel = new JPanel(formLayout);
+		grpPanel.setOpaque(false);
+		grpPanel.add(grpField, cc.xy(1, 1));
+		grpPanel.add(setGrpBtn, cc.xy(3, 1));
 
-			groupPanel.add(grpPanel, new TierDataConstraint(TierDataConstraint.FLAT_TIER_PREF_COLUMN, row));
+		groupPanel.add(grpPanel, new TierDataConstraint(TierDataConstraint.FLAT_TIER_PREF_COLUMN, row));
 
-			++row;
-			final int startRows = groupLayout.getRowCount();
-			final Orthography ortho = orthoTier.getGroup(i);
-			final OptionBoxVisitior visitor = new OptionBoxVisitior(this, groupPanel, row);
-			ortho.accept(visitor);
-			final int endRows = groupLayout.getRowCount();
-
-			row += (endRows - startRows);
-		}
+		++row;
+		final Orthography ortho = orthoTier.getValue();
+		final OptionBoxVisitior visitor = new OptionBoxVisitior(this, groupPanel, row);
+		ortho.accept(visitor);
 
 		repaint();
 	}
@@ -250,15 +231,10 @@ public class RecordLookupPanel extends JPanel {
 		final SessionEditor editor = getEditor();
 		if(editor == null) return;
 
-		boolean groupsNumsMatch = (r.numberOfGroups() == lookupTier.numberOfGroups());
-		if(!groupsNumsMatch) return;
-
-		for(int i = 0; i < r.numberOfGroups(); i++) {
-			onSetGroup(i);
-		}
+		onSetValue();
 	}
 
-	public void onSetGroup(Integer i) {
+	public void onSetValue() {
 		final Transcriber transcriber = getEditor().getDataModel().getTranscriber();
 		final Record r = getRecord();
 		if(r == null) return;
@@ -269,7 +245,7 @@ public class RecordLookupPanel extends JPanel {
 		final Tier<IPATranscript> ipaTarget = r.getIPATargetTier();
 		final Tier<IPATranscript> ipaActual = r.getIPAActualTier();
 
-		final IPATranscript ipa = lookupTier.getGroup(i);
+		final IPATranscript ipa = lookupTier.getValue();
 		final IPATranscript ipaA = (new IPATranscriptBuilder()).append(ipa.toString()).toIPATranscript();
 		if(ipa.getExtension(UnvalidatedValue.class) != null) {
 			final UnvalidatedValue uv = ipa.getExtension(UnvalidatedValue.class);
@@ -289,7 +265,7 @@ public class RecordLookupPanel extends JPanel {
 		}
 
 		getEditor().getUndoSupport().beginUpdate();
-		IPATranscript targetIpa = (ipaTarget.numberOfGroups() > i ? ipaTarget.getGroup(i) : new IPATranscript());
+		IPATranscript targetIpa = ipaTarget.getValue();
 		if(ipaTargetBox.isSelected()) {
 			if(transcriber != null) {
 				boolean set = true;
@@ -302,11 +278,11 @@ public class RecordLookupPanel extends JPanel {
 					set = (overwriteBox.isSelected() || !hasData);
 				}
 				if(set) {
-					final BlindTierEdit blindEdit = new BlindTierEdit(getEditor(), ipaTarget, i, transcriber, ipa, targetIpa);
+					final BlindTierEdit blindEdit = new BlindTierEdit(getEditor(), ipaTarget, transcriber, ipa, targetIpa);
 					getEditor().getUndoSupport().postEdit(blindEdit);
 				}
 			} else {
-				IPATranscript oldIpa = ipaTarget.getGroup(i);
+				IPATranscript oldIpa = ipaTarget.getValue();
 				boolean hasData = 
 						(oldIpa != null && oldIpa.length() > 0) 
 						|| (oldIpa != null && oldIpa.getExtension(UnvalidatedValue.class) != null && oldIpa.getExtension(UnvalidatedValue.class).getValue().trim().length() > 0);
@@ -314,14 +290,14 @@ public class RecordLookupPanel extends JPanel {
 					final AlternativeTranscript alts = targetIpa.getExtension(AlternativeTranscript.class);
 					if(alts != null) ipa.putExtension(AlternativeTranscript.class, alts);
 
-					final TierEdit<IPATranscript> ipaTargetEdit = new TierEdit<>(editor, ipaTarget, i, ipa);
+					final TierEdit<IPATranscript> ipaTargetEdit = new TierEdit<>(editor, ipaTarget, ipa);
 					getEditor().getUndoSupport().postEdit(ipaTargetEdit);
 					targetIpa = ipa;
 				}
 			}
 		}
 
-		IPATranscript actualIpa = (ipaActual.numberOfGroups() > i ? ipaActual.getGroup(i) : new IPATranscript());
+		IPATranscript actualIpa = ipaActual.getValue();
 		if(ipaActualBox.isSelected()) {
 			if(transcriber != null) {
 				boolean set = true;
@@ -334,11 +310,11 @@ public class RecordLookupPanel extends JPanel {
 					set = (overwriteBox.isSelected() || !hasData);
 				}
 				if(set) {
-					final BlindTierEdit blindEdit = new BlindTierEdit(getEditor(), ipaActual, i, transcriber, ipa, actualIpa);
+					final BlindTierEdit blindEdit = new BlindTierEdit(getEditor(), ipaActual, transcriber, ipa, actualIpa);
 					getEditor().getUndoSupport().postEdit(blindEdit);
 				}
 			} else {
-				IPATranscript oldIpa = ipaActual.getGroup(i);
+				IPATranscript oldIpa = ipaActual.getValue();
 				boolean hasData = 
 						(oldIpa != null && oldIpa.length() > 0) 
 						|| (oldIpa != null && oldIpa.getExtension(UnvalidatedValue.class) != null && oldIpa.getExtension(UnvalidatedValue.class).getValue().trim().length() > 0);
@@ -346,7 +322,7 @@ public class RecordLookupPanel extends JPanel {
 					final AlternativeTranscript alts = actualIpa.getExtension(AlternativeTranscript.class);
 					if(alts != null) ipaA.putExtension(AlternativeTranscript.class, alts);
 
-					final TierEdit<IPATranscript> ipaActualEdit = new TierEdit<>(editor, ipaActual, i, ipaA);
+					final TierEdit<IPATranscript> ipaActualEdit = new TierEdit<>(editor, ipaActual, ipaA);
 					getEditor().getUndoSupport().postEdit(ipaActualEdit);
 					actualIpa = ipaA;
 				}
@@ -357,7 +333,8 @@ public class RecordLookupPanel extends JPanel {
 			final PhoneAligner aligner = new PhoneAligner();
 			final PhoneMap pm = aligner.calculatePhoneAlignment(targetIpa, actualIpa);
 
-			final TierEdit<PhoneMap> pmEdit = new TierEdit<PhoneMap>(editor, r.getPhoneAlignmentTier(), i, pm);
+			final PhoneAlignment phoneAlignment = PhoneAlignment.fromTiers(r.getIPATargetTier(), r.getIPAActualTier());
+			final TierEdit<PhoneAlignment> pmEdit = new TierEdit<>(editor, r.getPhoneAlignmentTier(), phoneAlignment);
 			pmEdit.setFireHardChangeOnUndo(true);
 			getEditor().getUndoSupport().postEdit(pmEdit);
 		}
@@ -365,23 +342,15 @@ public class RecordLookupPanel extends JPanel {
 		getEditor().getUndoSupport().endUpdate();
 	}
 
-	private final TierEditorListener tierListener = new TierEditorListener() {
-
-		@Override
-		public <T> void tierValueChange(Tier<T> tier, int groupIndex, T newValue,
-				T oldValue) {
-			final TierEdit<T> edit = new TierEdit<T>(getEditor(), tier, groupIndex, newValue);
+	private final TierEditorListener<IPATranscript> tierListener = (tier, newValue, oldValue, valueIsAdjusting) ->  {
+		if(valueIsAdjusting) {
+			final TierEdit<IPATranscript> edit = new TierEdit<>(getEditor(), tier, newValue);
 			getEditor().getUndoSupport().postEdit(edit);
-		}
-
-		@Override
-		public <T> void tierValueChanged(Tier<T> tier, int groupIndex,
-				T newValue, T oldValue) {
+		} else {
 			final EditorEvent<EditorEventType.TierChangeData> ee =
-					new EditorEvent<>(EditorEventType.TierChanged, RecordLookupPanel.this, new EditorEventType.TierChangeData(tier, groupIndex, oldValue, newValue));
+					new EditorEvent<>(EditorEventType.TierChanged, RecordLookupPanel.this, new EditorEventType.TierChangeData(tier, oldValue, newValue));
 			getEditor().getEventManager().queueEvent(ee);
 		}
-
 	};
 
 }

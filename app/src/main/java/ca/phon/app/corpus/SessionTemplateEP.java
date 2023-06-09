@@ -51,7 +51,6 @@ public class SessionTemplateEP extends SessionEditorEP {
 			template.setName("__sessiontemplate");
 			
 			final Record r = factory.createRecord();
-			r.addGroup();
 			template.addRecord(r);
 			
 			final List<TierViewItem> tierView = new ArrayList<TierViewItem>();
