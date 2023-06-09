@@ -483,7 +483,7 @@ public class FindAndReplaceEditorView extends EditorView {
 				@SuppressWarnings({ "unchecked", "rawtypes" })
 				final TierEdit<?> tierEdit = new TierEdit(getEditor(), 
 						getEditor().currentRecord().getTier(sr.getRecordRange().getTier()),
-						sr.getRecordRange().getGroupRange().getGroupIndex(), newVal);
+						sr.getRecordRange().getRange().getStart(), newVal);
 				
 				if(newVal instanceof IPATranscript) {
 					final IPATranscript ipa = (IPATranscript)newVal;
@@ -496,11 +496,11 @@ public class FindAndReplaceEditorView extends EditorView {
 					
 					final CompoundEdit edit = new CompoundEdit();
 					final PhoneMap pm = (new PhoneAligner()).calculatePhoneMap(
-							record.getIPATargetTier().getGroup(sr.getRecordRange().getGroupRange().getGroupIndex()),
-							record.getIPAActualTier().getGroup(sr.getRecordRange().getGroupRange().getGroupIndex()));
+							record.getIPATargetTier().getGroup(sr.getRecordRange().getRange().getStart()),
+							record.getIPAActualTier().getGroup(sr.getRecordRange().getRange().getStart()));
 					final TierEdit<PhoneMap> alignmentEdit = 
 							new TierEdit<PhoneMap>(getEditor(), record.getPhoneAlignmentTier(),
-									sr.getRecordRange().getGroupRange().getGroupIndex(), pm);
+									sr.getRecordRange().getRange().getStart(), pm);
 					tierEdit.doIt();
 					edit.addEdit(tierEdit);
 					alignmentEdit.doIt();
@@ -565,7 +565,7 @@ public class FindAndReplaceEditorView extends EditorView {
 			// re-syllabify if an IPA tier
 			@SuppressWarnings({ "unchecked", "rawtypes" })
 			final TierEdit<?> tierEdit = new TierEdit(getEditor(), tier,
-					currentRange.getRecordRange().getGroupRange().getGroupIndex(), newVal);
+					currentRange.getRecordRange().getRange().getStart(), newVal);
 			tierEdit.doIt();
 			edit.addEdit(tierEdit);
 			
@@ -579,11 +579,11 @@ public class FindAndReplaceEditorView extends EditorView {
 				// update alignment
 				
 				final PhoneMap pm = (new PhoneAligner()).calculatePhoneMap(
-						r.getIPATargetTier().getGroup(currentRange.getRecordRange().getGroupRange().getGroupIndex()),
-						r.getIPAActualTier().getGroup(currentRange.getRecordRange().getGroupRange().getGroupIndex()));
+						r.getIPATargetTier().getGroup(currentRange.getRecordRange().getRange().getStart()),
+						r.getIPAActualTier().getGroup(currentRange.getRecordRange().getRange().getStart()));
 				final TierEdit<PhoneMap> alignmentEdit = 
 						new TierEdit<PhoneMap>(getEditor(), r.getPhoneAlignmentTier(),
-								currentRange.getRecordRange().getGroupRange().getGroupIndex(), pm);
+								currentRange.getRecordRange().getRange().getStart(), pm);
 				alignmentEdit.doIt();
 
 				edit.addEdit(alignmentEdit);
@@ -615,8 +615,8 @@ public class FindAndReplaceEditorView extends EditorView {
 	private void setupSessionSelection(SessionRange sessionRange) {
 		final SessionEditorSelection selection = 
 				new SessionEditorSelection(sessionRange.getRecordIndex(), sessionRange.getRecordRange().getTier(),
-						sessionRange.getRecordRange().getGroupRange().getGroupIndex(),
-						sessionRange.getRecordRange().getGroupRange().getRange());
+						sessionRange.getRecordRange().getRange().getStart(),
+						sessionRange.getRecordRange().getRange().getEnd());
 		getEditor().getSelectionModel().setSelection(selection);
 		getEditor().setCurrentRecordIndex(sessionRange.getRecordIndex());
 	}

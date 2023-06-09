@@ -21,7 +21,6 @@ import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.actions.PlaySegmentAction;
 import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.common.*;
-import ca.phon.app.session.editor.view.record_data.actions.*;
 import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.*;
@@ -1195,7 +1194,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 	public void onGroupsChange(EditorEvent<Void> event) {
 		final SessionLocation location = getSessionLocation();
 		if(location != null &&
-				location.getRecordLocation().getGroupLocation().getGroupIndex() >= getEditor().currentRecord().numberOfGroups()) {
+				location.getRecordLocation().getCharPositionInLine().getGroupIndex() >= getEditor().currentRecord().numberOfGroups()) {
 			currentGroupIndex.set(getEditor().currentRecord().numberOfGroups()-1);
 			currentCharIndex.set(0);
 			fireSessionLocationChanged();

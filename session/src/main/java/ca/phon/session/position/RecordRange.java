@@ -15,11 +15,12 @@
  */
 package ca.phon.session.position;
 
+import ca.phon.util.Range;
 import ca.phon.util.Tuple;
 
-public class RecordRange extends Tuple<String, GroupRange> {
+public class RecordRange extends Tuple<String, Range> {
 
-	public RecordRange(String tier, GroupRange r) {
+	public RecordRange(String tier, Range r) {
 		super(tier, r);
 	}
 
@@ -31,20 +32,20 @@ public class RecordRange extends Tuple<String, GroupRange> {
 		super.setObj1(tier);
 	}
 
-	public GroupRange getGroupRange() {
+	public Range getRange() {
 		return super.getObj2();
 	}
 
-	public void setGroupRange(GroupRange r) {
+	public void setRange(Range r) {
 		super.setObj2(r);
 	}
 	
 	public RecordLocation start() {
-		return new RecordLocation(getTier(), getGroupRange().start());
+		return new RecordLocation(getTier(), getRange().getStart());
 	}
 	
 	public RecordLocation end() {
-		return new RecordLocation(getTier(), getGroupRange().end());
+		return new RecordLocation(getTier(), getRange().getEnd());
 	}
 	
 }

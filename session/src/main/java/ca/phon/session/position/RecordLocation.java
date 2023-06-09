@@ -17,10 +17,10 @@ package ca.phon.session.position;
 
 import ca.phon.util.Tuple;
 
-public class RecordLocation extends Tuple<String, GroupLocation> {
+public class RecordLocation extends Tuple<String, Integer> {
 
-	public RecordLocation(String tier, GroupLocation pos) {
-		super(tier, pos);
+	public RecordLocation(String tier, Integer charPositionInLine) {
+		super(tier, charPositionInLine);
 	}
 
 	public String getTier() {
@@ -31,11 +31,11 @@ public class RecordLocation extends Tuple<String, GroupLocation> {
 		super.setObj1(tier);
 	}
 
-	public GroupLocation getGroupLocation() {
+	public Integer getCharPositionInLine() {
 		return super.getObj2();
 	}
 
-	public void setGroupLocation(GroupLocation loc) {
+	public void setCharPositionInLine(Integer loc) {
 		super.setObj2(loc);
 	}
 }

@@ -246,8 +246,8 @@ public class FindManager {
 		int tierIdx = searchTiers.indexOf(pos.getRecordLocation().getTier());
 		if(tierIdx < 0)
 			tierIdx = 0;
-		int grpIdx = pos.getRecordLocation().getGroupLocation().getGroupIndex();
-		int charIdx = pos.getRecordLocation().getGroupLocation().getCharIndex();
+		int grpIdx = pos.getRecordLocation().getCharPositionInLine().getGroupIndex();
+		int charIdx = pos.getRecordLocation().getCharPositionInLine().getCharIndex();
 
 		final FindExpr anyExpr = getAnyExpr();
 		while(uttIdx < session.getRecordCount()) {
@@ -290,7 +290,7 @@ public class FindManager {
 					if(charRange != null) {
 						charRange.setExcludesEnd(true);
 						final RecordRange recRange =
-								new RecordRange(tier.getName(), new GroupRange(i, charRange));
+								new RecordRange(tier.getName(), new TierRange(i, charRange));
 						retVal = new SessionRange(uttIdx, recRange);
 						break;
 					}
@@ -316,8 +316,8 @@ public class FindManager {
 		int tierIdx = searchTiers.indexOf(pos.getRecordLocation().getTier());
 		if(tierIdx < 0)
 			tierIdx = 0;
-		int grpIdx = pos.getRecordLocation().getGroupLocation().getGroupIndex();
-		int charIdx = pos.getRecordLocation().getGroupLocation().getCharIndex();
+		int grpIdx = pos.getRecordLocation().getCharPositionInLine().getGroupIndex();
+		int charIdx = pos.getRecordLocation().getCharPositionInLine().getCharIndex();
 
 		final FindExpr anyExpr = getAnyExpr();
 		while(uttIdx >= 0) {
@@ -366,7 +366,7 @@ public class FindManager {
 					if(charRange != null) {
 						charRange.setExcludesEnd(true);
 						final RecordRange recRange =
-								new RecordRange(tier.getName(), new GroupRange(i, charRange));
+								new RecordRange(tier.getName(), new TierRange(i, charRange));
 						retVal = new SessionRange(uttIdx, recRange);
 						break;
 					}
@@ -404,11 +404,11 @@ public class FindManager {
 			int AtIdx = searchTiers.indexOf(Ar.getTier());
 			int BtIdx = searchTiers.indexOf(Br.getTier());
 			
-			int AgIdx = Ar.getGroupLocation().getGroupIndex();
-			int BgIdx = Br.getGroupLocation().getGroupIndex();
+			int AgIdx = Ar.getCharPositionInLine().getGroupIndex();
+			int BgIdx = Br.getCharPositionInLine().getGroupIndex();
 			
-			int AcIdx = Ar.getGroupLocation().getCharIndex();
-			int BcIdx = Br.getGroupLocation().getCharIndex();
+			int AcIdx = Ar.getCharPositionInLine().getCharIndex();
+			int BcIdx = Br.getCharPositionInLine().getCharIndex();
 
 			if(AtIdx < BtIdx) {
 				retVal = -1;
