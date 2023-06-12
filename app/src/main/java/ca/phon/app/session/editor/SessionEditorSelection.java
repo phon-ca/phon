@@ -32,18 +32,14 @@ public class SessionEditorSelection implements IExtendable {
 	
 	private final String tierName;
 	
-	private final int groupIndex;
-	
 	private final Range groupRange;
 	
 	private final ExtensionSupport extSupport = new ExtensionSupport(SessionEditorSelection.class, this);
 
-	public SessionEditorSelection(int recordIndex, String tierName,
-			int groupIndex, Range groupRange) {
+	public SessionEditorSelection(int recordIndex, String tierName, Range groupRange) {
 		super();
 		this.recordIndex = recordIndex;
 		this.tierName = tierName;
-		this.groupIndex = groupIndex;
 		this.groupRange = groupRange;
 		
 		extSupport.initExtensions();

@@ -80,12 +80,12 @@ public class FindAndReplacePanel extends JPanel {
 		setLayout(new BorderLayout());
 		
 		final SessionFactory factory = SessionFactory.newFactory();
-		findTier = factory.createTier(FIND_TIER_NAME, String.class, false);
-		findField = new GroupField<String>(findTier, 0);
+		findTier = factory.createTier(FIND_TIER_NAME, String.class);
+		findField = new GroupField<>(findTier);
 		findField.addTierEditorListener(tierEditorListener);
 		
-		replaceTier = factory.createTier(REPLACE_TIER_NAME, String.class, false);
-		replaceField = new GroupField<String>(replaceTier, 0);
+		replaceTier = factory.createTier(REPLACE_TIER_NAME, String.class);
+		replaceField = new GroupField<>(replaceTier);
 		replaceField.addTierEditorListener(tierEditorListener);
 		
 		tierNameBox = new JComboBox<>();
@@ -169,10 +169,10 @@ public class FindAndReplacePanel extends JPanel {
 	/* Find and replace methods */
 	private FindExpr getFindExpr() {
 		final Tier<String> tier = findTier;
-		if(tier == null || tier.getGroup(0).length() == 0) return null;
+		if(tier == null || tier.getValue().length() == 0) return null;
 				
 		final FindExpr retVal = new FindExpr();
-		retVal.setExpr(tier.getGroup(0));
+		retVal.setExpr(tier.getValue());
 		retVal.setCaseSensitive(findOptsPanel.caseSensitiveBox.isSelected());
 		retVal.setType((SearchType)findOptsPanel.typeBox.getSelectedItem());
 		
@@ -192,7 +192,7 @@ public class FindAndReplacePanel extends JPanel {
 	}
 		
 	private void setupFindManager(FindManager findManager) {
-		String queryText = findTier.getGroup(0);
+		String queryText = findTier.getValue();
 		
 		if(tierNameBox.getSelectedIndex() == 0) {
 			findManager.setAnyExpr(getFindExpr());
@@ -216,8 +216,7 @@ public class FindAndReplacePanel extends JPanel {
 				(findManager.getSearchTiers().length > 0 ? findManager.getSearchTiers()[0] :
 					SystemTierType.Orthography.getName());
 		
-		return new SessionLocation(0, 
-				new RecordLocation(tier, new GroupLocation(0, 0)));
+		return new SessionLocation(0, new RecordLocation(tier, 0));
 	}
 
 	/*
@@ -234,10 +233,7 @@ public class FindAndReplacePanel extends JPanel {
 					SystemTierType.Notes.getName());
 		final Record r = session.getRecord(session.getRecordCount()-1);
 		final Tier<String> tier = r.getTier(tierName, String.class);
-		final String grp = tier.getGroup(tier.numberOfGroups()-1);
-		
-		return new SessionLocation(session.getRecordCount()-1, new RecordLocation(tierName, 
-				new GroupLocation(tier.numberOfGroups()-1, grp.length())));
+		return new SessionLocation(session.getRecordCount()-1, new RecordLocation(tierName, tier.getValue().length()));
 	}
 	
 	private void setupSessionSelection(SessionRange sessionRange) {
