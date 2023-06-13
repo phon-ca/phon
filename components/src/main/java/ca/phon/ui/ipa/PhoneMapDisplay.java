@@ -43,8 +43,7 @@ public class PhoneMapDisplay extends JComponent {
 	/** List of phone maps *
 	 *
 	 */
-	private List<PhoneMap> alignments =
-			new ArrayList<PhoneMap>();
+	private List<PhoneMap> alignments = new ArrayList<>();
 
 	/**
 	 * The currently focused position

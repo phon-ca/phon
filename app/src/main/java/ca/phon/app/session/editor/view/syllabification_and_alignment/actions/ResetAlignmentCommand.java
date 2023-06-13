@@ -41,19 +41,12 @@ public class ResetAlignmentCommand extends SyllabificationAlignmentCommand {
 	@Override
 	public void hookableActionPerformed(ActionEvent e) {
 		final Record r = getEditor().currentRecord();
-		final Tier<PhoneMap> alignmentTier = r.getPhoneAlignmentTier();
-		
-		final PhoneAligner aligner = new PhoneAligner();
-
+		final Tier<PhoneAlignment> alignmentTier = r.getPhoneAlignmentTier();
 		getEditor().getUndoSupport().beginUpdate();
-		for(int i = 0; i < r.numberOfGroups(); i++) {
-			final Group group = r.getGroup(i);
-			final PhoneMap newPm = aligner.calculatePhoneAlignment(group.getIPATarget(), group.getIPAActual());
-			
-			final TierEdit<PhoneMap> ed = new TierEdit<>(getEditor(), alignmentTier, i, newPm);
-			ed.setFireHardChangeOnUndo(i == r.numberOfGroups() - 1);
-			getEditor().getUndoSupport().postEdit(ed);
-		}
+		final PhoneAlignment phoneAlignment = PhoneAlignment.fromTiers(r.getIPATargetTier(), r.getIPAActualTier());
+		final TierEdit<PhoneAlignment> ed = new TierEdit<>(getEditor(), alignmentTier, phoneAlignment);
+		ed.setFireHardChangeOnUndo(true);
+		getEditor().getUndoSupport().postEdit(ed);
 		getEditor().getUndoSupport().endUpdate();
 	}
 

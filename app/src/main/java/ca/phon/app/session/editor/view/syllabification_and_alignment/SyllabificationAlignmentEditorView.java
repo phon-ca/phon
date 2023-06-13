@@ -19,6 +19,7 @@ import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.common.*;
 import ca.phon.app.session.editor.view.syllabification_and_alignment.actions.*;
+import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.session.Record;
@@ -76,9 +77,9 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 	private JScrollPane scroller;
 
 	// components
-	private final List<SyllabificationDisplay> targetDisplays = new ArrayList<SyllabificationDisplay>();
-	private final List<SyllabificationDisplay> actualDisplays = new ArrayList<SyllabificationDisplay>();
-	private final List<PhoneMapDisplay> alignmentDisplays = new ArrayList<PhoneMapDisplay>();
+	private SyllabificationDisplay targetDisplay;
+	private SyllabificationDisplay actualDisplay;
+	private PhoneMapDisplay alignmentDisplay;
 
 	public SyllabificationAlignmentEditorView(SessionEditor editor) {
 		super(editor);
@@ -185,30 +186,22 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		eventManager.registerActionForEvent(ScEdit, this::onScChange, EditorEventManager.RunOn.AWTEventDispatchThread);
 	}
 
-	private SyllabificationDisplay getIPATargetDisplay(int group) {
-		SyllabificationDisplay retVal = null;
-		if(group < targetDisplays.size()) {
-			retVal = targetDisplays.get(group);
-		} else {
-			retVal = new SyllabificationDisplay();
-			retVal.addPropertyChangeListener(SyllabificationDisplay.SYLLABIFICATION_PROP_ID, syllabificationDisplayListener);
-			retVal.addPropertyChangeListener(SyllabificationDisplay.HIATUS_CHANGE_PROP_ID, hiatusChangeListener);
-			targetDisplays.add(retVal);
+	private SyllabificationDisplay getIPATargetDisplay() {
+		if(this.targetDisplay == null) {
+			this.targetDisplay = new SyllabificationDisplay();
+			this.targetDisplay.addPropertyChangeListener(SyllabificationDisplay.SYLLABIFICATION_PROP_ID, syllabificationDisplayListener);
+			this.targetDisplay.addPropertyChangeListener(SyllabificationDisplay.HIATUS_CHANGE_PROP_ID, hiatusChangeListener);
 		}
-		return retVal;
+		return this.targetDisplay;
 	}
 
-	private SyllabificationDisplay getIPAActualDisplay(int group) {
-		SyllabificationDisplay retVal = null;
-		if(group < actualDisplays.size()) {
-			retVal = actualDisplays.get(group);
-		} else {
-			retVal = new SyllabificationDisplay();
-			retVal.addPropertyChangeListener(SyllabificationDisplay.SYLLABIFICATION_PROP_ID, syllabificationDisplayListener);
-			retVal.addPropertyChangeListener(SyllabificationDisplay.HIATUS_CHANGE_PROP_ID, hiatusChangeListener);
-			actualDisplays.add(retVal);
+	private SyllabificationDisplay getIPAActualDisplay() {
+		if(this.actualDisplay == null) {
+			this.actualDisplay = new SyllabificationDisplay();
+			this.actualDisplay.addPropertyChangeListener(SyllabificationDisplay.SYLLABIFICATION_PROP_ID, syllabificationDisplayListener);
+			this.actualDisplay.addPropertyChangeListener(SyllabificationDisplay.HIATUS_CHANGE_PROP_ID, hiatusChangeListener);
 		}
-		return retVal;
+		return this.actualDisplay;
 	}
 
 	private final PropertyChangeListener syllabificationDisplayListener = new PropertyChangeListener() {
@@ -234,16 +227,12 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 
 	};
 
-	private PhoneMapDisplay getAlignmentDisplay(int group) {
-		PhoneMapDisplay retVal = null;
-		if(group < alignmentDisplays.size()) {
-			retVal = alignmentDisplays.get(group);
-		} else {
-			retVal = new PhoneMapDisplay();
-			retVal.addPropertyChangeListener(PhoneMapDisplay.ALIGNMENT_CHANGE_PROP, alignmentDisplayListener);
-			alignmentDisplays.add(retVal);
+	private PhoneMapDisplay getAlignmentDisplay() {
+		if(this.alignmentDisplay == null) {
+			this.alignmentDisplay = new PhoneMapDisplay();
+			this.alignmentDisplay.addPropertyChangeListener(PhoneMapDisplay.ALIGNMENT_CHANGE_PROP, alignmentDisplayListener);
 		}
-		return retVal;
+		return this.alignmentDisplay;
 	}
 
 	private final PropertyChangeListener alignmentDisplayListener = new PropertyChangeListener() {
@@ -251,18 +240,27 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			final AlignmentChangeData newVal = (AlignmentChangeData)evt.getNewValue();
-			final PhoneMapDisplay display = (PhoneMapDisplay)evt.getSource();
-
-			final int gIdx = alignmentDisplays.indexOf(display);
-
-			final SyllabificationDisplay tDisplay = targetDisplays.get(gIdx);
-			final SyllabificationDisplay aDisplay = actualDisplays.get(gIdx);
-			final PhoneMap pm = new PhoneMap(tDisplay.getTranscript(), aDisplay.getTranscript());
+			final Record r = getEditor().currentRecord();
+			final int wIdx = newVal.getWordIndex();
+			final List<IPATranscript> targetWords = targetDisplay.getTranscript().words();
+			final List<IPATranscript> actualWords = actualDisplay.getTranscript().words();
+			final IPATranscript ipaTarget = wIdx < targetWords.size() ? targetWords.get(wIdx) : new IPATranscript();
+			final IPATranscript ipaActual = wIdx < actualWords.size() ? actualWords.get(wIdx) : new IPATranscript();
+			final PhoneMap pm = new PhoneMap(ipaTarget, ipaActual);
 			pm.setTopAlignment(newVal.getAlignment()[0]);
 			pm.setBottomAlignment(newVal.getAlignment()[1]);
 
-			final Record r = getEditor().currentRecord();
-			final TierEdit<PhoneMap> edit = new TierEdit<PhoneMap>(getEditor(), r.getPhoneAlignmentTier(), gIdx, pm);
+			final PhoneAlignment phoneAlignment = PhoneAlignment.fromTiers(r.getIPATargetTier(), r.getIPAActualTier());
+			final List<PhoneMap> modifiedAlignments = new ArrayList<>();
+			for(int i = 0; i < phoneAlignment.getAlignments().size(); i++) {
+				if(i == wIdx)
+					modifiedAlignments.add(pm);
+				else
+					modifiedAlignments.add(phoneAlignment.getAlignments().get(i));
+			}
+
+			final TierEdit<PhoneAlignment> edit = new TierEdit<>(getEditor(), r.getPhoneAlignmentTier(),
+					new PhoneAlignment(modifiedAlignments));
 			getEditor().getUndoSupport().postEdit(edit);
 		}
 
@@ -284,10 +282,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		final Record record = editor.currentRecord();
 		if(record == null) return;
 
-		int maxExtra = Math.max(targetDisplays.size(), actualDisplays.size());
-		maxExtra = Math.max(maxExtra, alignmentDisplays.size());
 		contentPane.removeAll();
-
 		final ImageIcon reloadIcn = IconManager.getInstance().getIcon("actions/reload", IconSize.SMALL);
 
 		if(showTarget) {
@@ -353,58 +348,53 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		}
 
 		final TierDataLayout layout = TierDataLayout.class.cast(contentPane.getLayout());
-		for(int gIndex = 0; gIndex < record.numberOfGroups(); gIndex++) {
-			final Group group = record.getGroup(gIndex);
+		if(showTarget) {
+			// target
+			final IPATranscript ipaTarget = record.getIPATarget();
+			final SyllabificationDisplay ipaTargetDisplay = getIPATargetDisplay();
+			ipaTargetDisplay.setFont(FontPreferences.getTierFont());
+			ipaTargetDisplay.setTranscript(ipaTarget);
+			ipaTargetDisplay.setShowDiacritics(showDiacritics);
 
-			if(showTarget) {
-				// target
-				final IPATranscript ipaTarget = group.getIPATarget();
-				final SyllabificationDisplay ipaTargetDisplay = getIPATargetDisplay(gIndex);
-				ipaTargetDisplay.setFont(FontPreferences.getTierFont());
-				ipaTargetDisplay.setTranscript(ipaTarget);
-				ipaTargetDisplay.setShowDiacritics(showDiacritics);
-
-				if(!layout.hasLayoutComponent(ipaTargetDisplay)) {
-					final TierDataConstraint ipaTargetConstraint =
-							new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN + gIndex, 0);
-					contentPane.add(ipaTargetDisplay, ipaTargetConstraint);
-				}
+			if(!layout.hasLayoutComponent(ipaTargetDisplay)) {
+				final TierDataConstraint ipaTargetConstraint =
+						new TierDataConstraint(TierDataConstraint.FLAT_TIER_COLUMN, 0);
+				contentPane.add(ipaTargetDisplay, ipaTargetConstraint);
 			}
+		}
 
-			if(showActual) {
-				// actual
-				final IPATranscript ipaActual = group.getIPAActual();
-				final SyllabificationDisplay ipaActualDisplay = getIPAActualDisplay(gIndex);
-				ipaActualDisplay.setFont(FontPreferences.getTierFont());
-				ipaActualDisplay.setTranscript(ipaActual);
-				ipaActualDisplay.setShowDiacritics(showDiacritics);
+		if(showActual) {
+			// actual
+			final IPATranscript ipaActual = record.getIPAActual();
+			final SyllabificationDisplay ipaActualDisplay = getIPAActualDisplay();
+			ipaActualDisplay.setFont(FontPreferences.getTierFont());
+			ipaActualDisplay.setTranscript(ipaActual);
+			ipaActualDisplay.setShowDiacritics(showDiacritics);
 
-				if(!layout.hasLayoutComponent(ipaActualDisplay)) {
-					final TierDataConstraint ipaActualConstraint =
-							new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN + gIndex, 1);
-					contentPane.add(ipaActualDisplay, ipaActualConstraint);
-				}
+			if(!layout.hasLayoutComponent(ipaActualDisplay)) {
+				final TierDataConstraint ipaActualConstraint =
+						new TierDataConstraint(TierDataConstraint.FLAT_TIER_COLUMN, 1);
+				contentPane.add(ipaActualDisplay, ipaActualConstraint);
 			}
+		}
 
-			if(showAlignment) {
-				// alignment
-				final PhoneMap grp = group.getPhoneAlignment();
-				PhoneMap pm = null;
-				if(grp != null) {
-					pm = new PhoneMap(grp.getTargetRep(), grp.getActualRep());
-					pm.setTopAlignment(Arrays.copyOf(grp.getTopAlignment(), grp.getAlignmentLength()));
-					pm.setBottomAlignment(Arrays.copyOf(grp.getBottomAlignment(), grp.getAlignmentLength()));
-				}
-				final PhoneMapDisplay pmDisplay = getAlignmentDisplay(gIndex);
-				pmDisplay.setFont(FontPreferences.getTierFont());
-				pmDisplay.setPhoneMapForWord(0, pm);
+		if(showAlignment) {
+			// alignment
+			PhoneAlignment phoneAlignment = record.getPhoneAlignment();
+			if(phoneAlignment == null) {
+				phoneAlignment = PhoneAlignment.fromTiers(record.getIPATargetTier(), record.getIPAActualTier());
+			}
+			final PhoneMapDisplay pmDisplay = getAlignmentDisplay();
+			pmDisplay.setFont(FontPreferences.getTierFont());
+			for(int i = 0; i < phoneAlignment.getAlignments().size(); i++) {
+				pmDisplay.setPhoneMapForWord(0, phoneAlignment.getAlignments().get(i));
 				pmDisplay.setFocusedPosition(0);
 				pmDisplay.setPaintPhoneBackground(colorInAlignment);
 				pmDisplay.setShowDiacritics(showDiacritics);
 
-				if(!layout.hasLayoutComponent(pmDisplay)) {
+				if (!layout.hasLayoutComponent(pmDisplay)) {
 					final TierDataConstraint pmConstraint =
-							new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN + gIndex, 3);
+							new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN + i, 3);
 					contentPane.add(pmDisplay, pmConstraint);
 				}
 			}
@@ -448,21 +438,18 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 	private void onScChange(EditorEvent<ScEditData> ee) {
 		final IPATranscript ipa = ee.data().ipa();
 		final Record r = getEditor().currentRecord();
-		for(int i = 0; i < r.numberOfGroups(); i++) {
-			final SyllabificationDisplay targetDisplay = targetDisplays.get(i);
-			final SyllabificationDisplay actualDisplay = actualDisplays.get(i);
-			boolean found = false;
-			if(targetDisplay.getTranscript() == ipa) {
-				targetDisplay.repaint();
-				found = true;
-			} else if(actualDisplay.getTranscript() == ipa) {
-				actualDisplay.repaint();
-				found = true;
-			}
-			if(found) {
-				alignmentDisplays.get(i).repaint();
-				return;
-			}
+		final SyllabificationDisplay targetDisplay = getIPATargetDisplay();
+		final SyllabificationDisplay actualDisplay = getIPAActualDisplay();
+		boolean found = false;
+		if(targetDisplay.getTranscript() == ipa) {
+			targetDisplay.repaint();
+			found = true;
+		} else if(actualDisplay.getTranscript() == ipa) {
+			actualDisplay.repaint();
+			found = true;
+		}
+		if(found) {
+			getAlignmentDisplay().repaint();
 		}
 	}
 
