@@ -58,8 +58,6 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 	private TimeUIModel.Interval currentRecordInterval = null;
 
-	private int splitGroupIdx = -1;
-
 	private SplitMarker splitMarker = null;
 	
 	private JButton splitButton;
@@ -307,15 +305,6 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		final KeyStroke acceptSplitRecordKs = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
 		inputMap.put(acceptSplitRecordKs, acceptSplitId);
 		actionMap.put(acceptSplitId, acceptSplitRecordAct);
-
-		// modify record split
-		final String splitAtGroupId = "split_record_at_group_";
-		for (int i = 0; i < 10; i++) {
-			final PhonUIAction<Integer> splitRecordAtGrpAct = PhonUIAction.eventConsumer(this::onSplitRecordOnGroup, i);
-			final KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_0 + i, 0);
-			inputMap.put(ks, splitAtGroupId + i);
-			actionMap.put(splitAtGroupId + i, splitRecordAtGrpAct);
-		}
 
 		recordGrid.setInputMap(WHEN_FOCUSED, inputMap);
 		recordGrid.setActionMap(actionMap);
@@ -858,9 +847,6 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 			endSplitMode(false);
 		}
 
-		// reset split group idx
-		splitGroupIdx = -1;
-
 		final TimelineView timelineView = getParentView();
 		final TimeUIModel timeModel = timelineView.getTimeModel();
 
@@ -935,11 +921,6 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		recordGrid.setSplitMode(false);
 	}
 
-	public void onSplitRecordOnGroup(PhonActionEvent<Integer> pae) {
-		this.splitGroupIdx = (Integer) pae.getData();
-		updateSplitRecords();
-	}
-
 	private void updateSplitRecords() {
 		if (splitMarker == null)
 			return;
@@ -975,7 +956,6 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		leftRecord.getMediaSegment().setEndValue(splitTime * 1000.0f);
 
 		Record rightRecord = sessionFactory.createRecord();
-		rightRecord.addGroup();
 		MediaSegment rightSeg = sessionFactory.createMediaSegment();
 		long segOffset = (long) Math.ceil(timeAtX(getTimeModel().getTimeInsets().left + 1) * 1000.0f);
 		rightSeg.setStartValue((splitTime * 1000.0f) + segOffset);
@@ -984,38 +964,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 		for (String tierName : leftRecord.getUserDefinedTierNames()) {
 			Tier<?> tier = leftRecord.getTier(tierName);
-			rightRecord.putTier(sessionFactory.createTier(tierName, tier.getDeclaredType(), tier.isGrouped()));
-		}
-
-		if (splitGroupIdx >= 0) {
-			// special case - reverse records
-			if (splitGroupIdx == 0) {
-				Record t = leftRecord;
-				leftRecord = rightRecord;
-				rightRecord = t;
-
-				MediaSegment ls = leftRecord.getMediaSegment();
-				MediaSegment rs = rightRecord.getMediaSegment();
-
-				leftRecord.setMediaSegment(rs);
-				rightRecord.setMediaSegment(ls);
-			} else if (splitGroupIdx <= leftRecord.numberOfGroups()) {
-				MediaSegment ls = leftRecord.getMediaSegment();
-				MediaSegment rs = rightRecord.getMediaSegment();
-
-				rightRecord = sessionFactory.cloneRecord(recordToSplit);
-
-				for (int i = leftRecord.numberOfGroups() - 1; i >= splitGroupIdx; i--) {
-					leftRecord.removeGroup(i);
-				}
-
-				for (int i = splitGroupIdx - 1; i >= 0; i--) {
-					rightRecord.removeGroup(i);
-				}
-
-				leftRecord.setMediaSegment(ls);
-				rightRecord.setMediaSegment(rs);
-			}
+			rightRecord.putTier(sessionFactory.createTier(tierName, tier.getDeclaredType(), tier.getTierAlignmentRules()));
 		}
 
 		leftRecord.setSpeaker(recordToSplit.getSpeaker());
@@ -1203,29 +1152,6 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 				endSplitModeAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0));
 			builder.addItem(".", endSplitModeAct);
 
-			// split after group actions
-			Record r = getParentView().getEditor().currentRecord();
-			if (r != null) {
-				JMenu splitMenu = builder.addMenu(".", "Split data after group");
-				for (int i = 0; i <= r.numberOfGroups(); i++) {
-					final PhonUIAction<Integer> splitAfterGroupAct = PhonUIAction.eventConsumer(this::onSplitRecordOnGroup, i);
-					if (i == 0) {
-						splitAfterGroupAct.putValue(PhonUIAction.NAME, "All data to new record");
-					} else {
-						splitAfterGroupAct.putValue(PhonUIAction.NAME, "Group " + i);
-					}
-					if (includeAccel)
-						splitAfterGroupAct.putValue(PhonUIAction.ACCELERATOR_KEY,
-								KeyStroke.getKeyStroke(KeyEvent.VK_0 + i, 0));
-					if (splitGroupIdx >= 0) {
-						splitAfterGroupAct.putValue(PhonUIAction.SELECTED_KEY, i == splitGroupIdx);
-					} else {
-						splitAfterGroupAct.putValue(PhonUIAction.SELECTED_KEY, i >= r.numberOfGroups());
-					}
-					splitMenu.add(new JCheckBoxMenuItem(splitAfterGroupAct));
-				}
-			}
-
 			builder.addSeparator(".", "split_actions");
 		} else {
 			final PhonUIAction<Void> enterSplitModeAct = PhonUIAction.runnable(this::beginSplitMode);
@@ -1344,7 +1270,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 					getParentView().getEditor().getUndoSupport().endUpdate();
 					getParentView().getEditor().getEventManager().queueEvent(
 							new EditorEvent<>(EditorEventType.TierChanged, TimelineRecordTier.this,
-									new EditorEventType.TierChangeData(r.getSegmentTier(), 0, segment, segment)));
+									new EditorEventType.TierChangeData(r.getSegmentTier(), segment, segment)));
 				}
 			} else if(evt.getPropertyName().endsWith("time")) {
 				MediaSegment newSegment = factory.createMediaSegment();

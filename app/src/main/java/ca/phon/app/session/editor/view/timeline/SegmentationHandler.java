@@ -327,8 +327,6 @@ public final class SegmentationHandler {
 			m.setEndValue(segmentEnd);
 			
 			// setup orthography
-			utt.addGroup();
-			utt.getOrthographyTier().setGroup(0, new Orthography());
 			utt.setMediaSegment(m);
 
 			SegmentationMode mode = getSegmentationMode();
