@@ -185,7 +185,6 @@ public class XMLResult implements Result, JAXBWrapper<ResultType> {
 			// convert type
 			final XMLResultValue xmlResultVal = new XMLResultValue();
 			xmlResultVal.setData(resultValue.getData());
-			xmlResultVal.setGroupIndex(resultValue.getGroupIndex());
 			xmlResultVal.setTierName(resultValue.getTierName());
 			xmlResultVal.setRange(resultValue.getRange());
 			return addResultValue(xmlResultVal);

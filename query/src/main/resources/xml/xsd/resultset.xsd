@@ -88,7 +88,6 @@
             <xs:element ref="matcherGroup" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="tier_name" type="nonEmptyString" use="required"/>
-        <xs:attribute name="group_index" type="groupIndex" use="required"/>
     	<xs:attribute name="name" type="xs:string" use="optional"/>
     </xs:complexType>
 
@@ -137,16 +136,6 @@
 
 
     <!-- Simple type for a non-empty extension of string -->
-
-    <xs:simpleType name="groupIndex">
-        <xs:annotation>
-            <xs:documentation>An xs:int for group indicies. Includes -1 as a possible
-                value.</xs:documentation>
-        </xs:annotation>
-        <xs:restriction base="xs:int">
-            <xs:minInclusive value="-1"/>
-        </xs:restriction>
-    </xs:simpleType>
 
     <xs:simpleType name="unsignedJavaInt">
         <xs:annotation>

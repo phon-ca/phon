@@ -77,16 +77,6 @@ public class XMLResultValue implements ResultValue, JAXBWrapper<ResultValueType>
 	}
 
 	@Override
-	public int getGroupIndex() {
-		return resultValue.getGroupIndex();
-	}
-
-	@Override
-	public void setGroupIndex(int groupIndex) {
-		resultValue.setGroupIndex(groupIndex);
-	}
-
-	@Override
 	public String getData() {
 		return resultValue.getData();
 	}

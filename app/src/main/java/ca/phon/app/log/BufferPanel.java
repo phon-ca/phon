@@ -727,8 +727,7 @@ public class BufferPanel extends JPanel implements IExtendable {
 					for(ResultValue rv:result) {
 						final Range range = new Range(rv.getRange().getFirst(), rv.getRange().getLast(), false);
 						final SessionEditorSelection selection =
-								new SessionEditorSelection(result.getRecordIndex(), rv.getTierName(),
-										rv.getGroupIndex(), range);
+								new SessionEditorSelection(result.getRecordIndex(), rv.getTierName(), range);
 						selectionModel.addSelection(selection);
 					}
 				}

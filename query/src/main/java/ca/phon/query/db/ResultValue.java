@@ -69,19 +69,6 @@ public interface ResultValue {
 	 */
 	public abstract void setRange(Range range);
 
-	/**
-	 * Gets the group index for this result value.
-	 *
-	 * @return the group index
-	 */
-	public abstract int getGroupIndex();
-
-	/**
-	 * Sets the group index for this result value.
-	 *
-	 * @param groupIndex  the group index
-	 */
-	public abstract void setGroupIndex(int groupIndex);
 
 	/**
 	 * Gets the data for this result value.
