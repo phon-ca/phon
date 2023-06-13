@@ -29,14 +29,12 @@ public class TierOrderingTableModel extends AbstractTableModel {
 		LOCK_TIER,
 		SHOW_TIER,
 		TIER_NAME,
-		GROUP_TIER,
 		TIER_FONT;
 		
 		private final String[] columnNames = {
 				"Locked",
 				"Show Tier",
 				"Tier Name",
-				"Grouped",
 				"Tier Font"
 		};
 		
@@ -44,7 +42,6 @@ public class TierOrderingTableModel extends AbstractTableModel {
 			Boolean.class,
 			Boolean.class,
 			String.class,
-			Boolean.class,
 			String.class
 		};
 		
@@ -127,32 +124,26 @@ public class TierOrderingTableModel extends AbstractTableModel {
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		final TierViewItem tv = getTierView()[rowIndex];
 		final TierDescription tierDesc = getTierDescription(tv.getTierName());
-		
 		Object retVal = null;
-		
 		if (columnIndex == TierOrderingTableColumn.LOCK_TIER.ordinal()) {
 			retVal = tv.isTierLocked();
 		} else if (columnIndex == TierOrderingTableColumn.SHOW_TIER.ordinal()) {
 			retVal = tv.isVisible();
 		}  else if (columnIndex == TierOrderingTableColumn.TIER_NAME.ordinal()) {
 			retVal = tv.getTierName();
-		} else if (columnIndex == TierOrderingTableColumn.GROUP_TIER.ordinal()) {
-			retVal = (tierDesc == null ? false : tierDesc.isGrouped());
 		} else if (columnIndex == TierOrderingTableColumn.TIER_FONT.ordinal()) {
 			retVal = (tv.getTierFont().equals("default") ?
 					PrefHelper.get(FontPreferences.TIER_FONT, FontPreferences.DEFAULT_TIER_FONT) : tv.getTierFont());
 		}
-		
 		return retVal;
 	}
 
 	private TierDescription getTierDescription(String tierName) {
 		TierDescription retVal = null;
-		
 		final SystemTierType systemTier = SystemTierType.tierFromString(tierName);
 		if(systemTier != null) {
 			final SessionFactory factory = SessionFactory.newFactory();
-			retVal = factory.createTierDescription(tierName, systemTier.isGrouped());
+			retVal = factory.createTierDescription(systemTier);
 		} else {
 			for(TierDescription userTier:session.getUserTiers()) {
 				if(userTier.getName().equals(tierName)) { 
@@ -160,20 +151,7 @@ public class TierOrderingTableModel extends AbstractTableModel {
 				}
 			}
 		}
-		
 		return retVal;
 	}
-	
-//	private void toggleTierLock(int rowIndex) {
-//		final SessionFactory factory = SessionFactory.newFactory();
-//		final TierViewItem[] tierView = getTierView();
-//		final TierViewItem tv = tierView[rowIndex];
-//		final TierViewItem newItem = factory.createTierViewItem(tv.getTierName(), tv.isVisible(), tv.getTierFont(), !tv.isTierLocked());
-//		tierView[rowIndex] = newItem;
-//		setTierView(tierView);
-//		super.fireTableCellUpdated(rowIndex, 
-//				TierOrderingTableColumn.LOCK_TIER.ordinal());
-//	}
-	
 	
 }

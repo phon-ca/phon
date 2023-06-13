@@ -16,7 +16,6 @@
 package ca.phon.session;
 
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.Orthography;
 
 /**
@@ -28,7 +27,7 @@ public enum SystemTierType {
 	TargetSyllables("Target Syllables", IPATranscript.class),
 	IPAActual("IPA Actual", IPATranscript.class),
 	ActualSyllables("Actual Syllables", IPATranscript.class),
-	SyllableAlignment("Alignment", PhoneAlignment.class),
+	PhoneAlignment("Alignment", PhoneAlignment.class),
 	Segment("Segment", MediaSegment.class),
 	Notes("Notes", UserTierData.class);
 	

@@ -62,7 +62,7 @@ public class RecordImpl implements RecordSPI {
 		ipaActual = factory.createTier(SystemTierType.IPAActual.getName(), IPATranscript.class);
 		segmentTier = factory.createTier(SystemTierType.Segment.getName(), MediaSegment.class);
 		notes = factory.createTier(SystemTierType.Notes.getName(), UserTierData.class);
-		alignment = factory.createTier(SystemTierType.SyllableAlignment.getName(), PhoneAlignment.class);
+		alignment = factory.createTier(SystemTierType.PhoneAlignment.getName(), PhoneAlignment.class);
 		userDefined = Collections.synchronizedMap(new HashMap<>());
 	}
 
@@ -182,7 +182,7 @@ public class RecordImpl implements RecordSPI {
 				systemTier = getIPAActualTier();
 				break;
 
-			case SyllableAlignment:
+			case PhoneAlignment:
 				systemTier = getPhoneAlignmentTier();
 				break;
 

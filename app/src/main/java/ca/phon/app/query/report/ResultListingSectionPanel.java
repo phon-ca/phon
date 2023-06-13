@@ -344,7 +344,7 @@ public class ResultListingSectionPanel extends SectionPanel<ResultListing> {
 				sttField.getFieldValue().setScript(SYLLABIFICATION_SCRIPT.replaceAll("\\$\\{TIER\\}", "0"));
 			} else if(stt == SystemTierType.ActualSyllables) {
 				sttField.getFieldValue().setScript(SYLLABIFICATION_SCRIPT.replaceAll("\\$\\{TIER\\}", "1"));
-			} else if(stt == SystemTierType.SyllableAlignment) {
+			} else if(stt == SystemTierType.PhoneAlignment) {
 				sttField.getFieldValue().setScript(ALIGNMENT_SCRIPT);
 			} else {
 				sttField.getFieldValue().setScript(RECORD_TIER_SCRIPT.replaceAll("\\$\\{TIER\\}", stt.getName()));

@@ -51,8 +51,6 @@ public class SessionToExcel extends SessionExporter {
 	
 	private WritableCellFormat tierNameFormat;
 	
-//	private Map<TierViewItem, WritableCellFormat> tierFormats = new HashMap<>();
-	
 	public SessionToExcel() {
 		super();
 	}
@@ -312,8 +310,7 @@ public class SessionToExcel extends SessionExporter {
 		int maxCol = 0;
 		int colIdx = 0;
 		int recordNum = recordIndex + 1;
-		var groupCount = record.numberOfGroups();
-		
+
 		String titleString = String.format("%d. %s", recordNum, record.getSpeaker());
 		if(getSettings().isIncludeQueryResults() && resultsForRecord.size() > 0) {
 			titleString += String.format(" (%d result%s)", 
@@ -367,30 +364,21 @@ public class SessionToExcel extends SessionExporter {
 				Label lbl = new Label(colIdx++, rowIdx, tvi.getTierName(), tierNameFormat);
 				sheet.addCell(lbl);
 				if(tier != null) {
-					if(tier.isGrouped()) {
-						for(var i = 0; i < record.numberOfGroups(); i++) {
-							var groupVal = tier.getGroup(i);
-							Label grpLbl = new Label(colIdx++, rowIdx, groupVal.toString(), tierFormat);
-							sheet.addCell(grpLbl);
-						}
-					} else {
-						Label grpLbl = new Label(colIdx, rowIdx, tier.getGroup(0).toString(), tierFormat);
-						sheet.addCell(grpLbl);
-						sheet.mergeCells(colIdx, rowIdx, groupCount, rowIdx);
-					}
+					String txt = tier.isUnvalidated() ? tier.getUnvalidatedValue().getValue() :
+							tier.hasValue() ? tier.getValue().toString() : "";
+					Label grpLbl = new Label(colIdx, rowIdx, txt, tierFormat);
+					sheet.addCell(grpLbl);
 				}
 				++rowIdx;
 				
 				if(getSettings().isIncludeSyllabification() && (tvi.getTierName().equals("IPA Target") || tvi.getTierName().equals("IPA Actual"))) {
 					colIdx = 1;
-					for(var i = 0; i < record.numberOfGroups(); i++) {
-						IPATranscript ipa = (IPATranscript)tier.getGroup(i);
-						BufferedImage img = createSyllabificationImage(ipa);
-						byte[] imgData = imgToByteArray(img);
-						if(imgData.length > 0) {
-							WritableImage xlsImg = new WritableImage(colIdx++, rowIdx, 1, 1, imgData);
-							sheet.addImage(xlsImg);
-						}
+					IPATranscript ipa = (IPATranscript)tier.getValue();
+					BufferedImage img = createSyllabificationImage(ipa);
+					byte[] imgData = imgToByteArray(img);
+					if(imgData.length > 0) {
+						WritableImage xlsImg = new WritableImage(colIdx++, rowIdx, 1, 1, imgData);
+						sheet.addImage(xlsImg);
 					}
 					rowIdx++;
 				}
@@ -402,9 +390,9 @@ public class SessionToExcel extends SessionExporter {
 				sheet.addCell(alignLbl);
 				
 				var alignmentTier = record.getTier("Alignment");
-				for(var i = 0; i < record.numberOfGroups(); i++) {
-					final PhoneMap alignment = (PhoneMap)alignmentTier.getGroup(i);
-					BufferedImage img = createAlignmentImage(alignment);
+				final PhoneAlignment alignment = (PhoneAlignment) alignmentTier.getValue();
+				for(var i = 0; i <  alignment.getAlignments().size(); i++) {
+					BufferedImage img = createAlignmentImage(alignment.getAlignments().get(i));
 					byte[] imgData = imgToByteArray(img);
 					if(imgData.length > 0) {
 						WritableImage xlsImg = new WritableImage(colIdx++, rowIdx, 1, 1, imgData);

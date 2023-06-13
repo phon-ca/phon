@@ -25,6 +25,7 @@ import com.jgoodies.forms.layout.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
 
 /**
  * Displays a UI for editing tier name,
@@ -34,12 +35,8 @@ import java.awt.*;
  */
 public class TierInfoEditor extends JPanel {
 
-	private static final long serialVersionUID = 733398380982206648L;
-
 	/* UI */
 	private JTextField nameField;
-	
-	private JCheckBox groupBox;
 	
 	private JFontPanel fontPanel;
 	
@@ -70,10 +67,6 @@ public class TierInfoEditor extends JPanel {
 		add(new JLabel("Tier Name"), cc.xy(2,1));
 		nameField = new JTextField();
 		add(nameField, cc.xy(4, 1));
-		
-		groupBox = new JCheckBox("Grouped (word-aligned)");
-		groupBox.setEnabled(!editMode);
-		add(groupBox, cc.xy(4, 3));
 		
 		final PhonUIAction<Void> defaultFontAction = PhonUIAction.runnable(this::useDefaultFont);
 		defaultFontAction.putValue(PhonUIAction.NAME, "Use default font");
@@ -109,14 +102,6 @@ public class TierInfoEditor extends JPanel {
 		fontPanel.setSelectedFont(font);
 	}
 	
-	public boolean isGrouped() {
-		return groupBox.isSelected();
-	}
-	
-	public void setGrouped(boolean grouped) {
-		groupBox.setSelected(grouped);
-	}
-	
 	public void useDefaultFont() {
 		fontPanel.setSelectedFont(FontPreferences.getTierFont());
 	}
@@ -127,7 +112,6 @@ public class TierInfoEditor extends JPanel {
 	
 	public void setEditMode(boolean editMode) {
 		this.editMode = editMode;
-		groupBox.setEnabled(!editMode);
 	}
 	
 	public TierViewItem createTierViewItem() {
@@ -144,7 +128,7 @@ public class TierInfoEditor extends JPanel {
 	
 	public TierDescription createTierDescription() {
 		final SessionFactory factory = SessionFactory.newFactory();
-		return factory.createTierDescription(getTierName().trim(), isGrouped(), TierString.class);
+		return factory.createTierDescription(getTierName().trim(), UserTierData.class, new HashMap<>(), TierAlignmentRules.userTierRules());
 	}
 	
 }

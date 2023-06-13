@@ -498,6 +498,21 @@ public final class SessionFactory extends ExtendableObject {
 		return createTierDescription(tierDescriptionImpl);
 	}
 
+	/**
+	 * Create tier description for system tier
+	 *
+	 * @param tierDescriptionImpl
+	 * @return
+	 */
+	public TierDescription createTierDescription(SystemTierType systemTier) {
+		final TierAlignmentRules alignmentRules = switch (systemTier) {
+			case IPATarget, IPAActual, PhoneAlignment -> TierAlignmentRules.ipaTierRules();
+			case Notes -> TierAlignmentRules.notesTierRules();
+			default -> TierAlignmentRules.noAlignment();
+		};
+		return createTierDescription(systemTier.getName(), systemTier.getDeclaredType(), new HashMap<>(), alignmentRules);
+	}
+
 	public TierDescription createTierDescription(TierDescriptionSPI tierDescriptionImpl) {
 		return new TierDescription(tierDescriptionImpl);
 	}

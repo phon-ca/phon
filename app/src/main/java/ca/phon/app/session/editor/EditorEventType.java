@@ -5,6 +5,7 @@ import ca.phon.query.db.ResultSet;
 import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.session.position.SessionLocation;
+import ca.phon.util.Language;
 
 import javax.print.attribute.standard.Media;
 import java.time.*;
@@ -50,7 +51,7 @@ public record EditorEventType<T>(String eventName, Class<T> type) {
 	public final static EditorEventType<SessionDateChangedData> SessionDateChanged =
 			new EditorEventType<>(EditorEventName.SESSION_DATE_CHANGED.getEventName(), SessionDateChangedData.class);
 
-	public record SessionLangChangedData(String oldLang, String newLang) { }
+	public record SessionLangChangedData(List<Language> oldLang, List<Language> newLang) { }
 	/**
 	 * Session language change
 	 */

@@ -29,6 +29,7 @@ import ca.phon.ui.menu.*;
 import ca.phon.ui.participant.ParticipantsTableModel;
 import ca.phon.ui.text.*;
 import ca.phon.ui.text.PromptedTextField.FieldState;
+import ca.phon.util.Language;
 import ca.phon.util.icons.*;
 import com.jgoodies.forms.layout.*;
 import org.apache.commons.lang3.StringUtils;
@@ -43,6 +44,9 @@ import java.beans.*;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 
@@ -86,8 +90,11 @@ public class SessionInfoEditorView extends EditorView {
 		
 		private void updateLang() {
 			final String newVal = languageField.getText();
-			
-			final SessionLanguageEdit edit = new SessionLanguageEdit(getEditor(), newVal);
+
+			final String[] split = newVal.split("\\p{Space}");
+			final List<Language> langs = Arrays.stream(split).map(Language::parseLanguage).toList();
+
+			final SessionLanguageEdit edit = new SessionLanguageEdit(getEditor(), langs);
 			edit.setSource(languageField);
 			getEditor().getUndoSupport().postEdit(edit);
 		}
@@ -301,7 +308,8 @@ public class SessionInfoEditorView extends EditorView {
 		updateMediaFieldStatus();
 		
 		languageField.getDocument().removeDocumentListener(languageFieldListener);
-		languageField.setText(session.getLanguages());
+		final String langs = session.getLanguages().stream().map(Language::toString).collect(Collectors.joining(" "));
+		languageField.setText(langs);
 		languageField.getDocument().addDocumentListener(languageFieldListener);
 		
 		ParticipantsTableModel tableModel = new ParticipantsTableModel(session);
@@ -413,9 +421,10 @@ public class SessionInfoEditorView extends EditorView {
 	
 	private void onLangChanged(EditorEvent<EditorEventType.SessionLangChangedData> ee) {
 		if(languageField != null && !languageField.hasFocus()) {
-			final String newVal = ee.data().newLang();
+			final List<Language> newVal = ee.data().newLang();
+			final String txt = newVal.stream().map(Language::toString).collect(Collectors.joining(" "));
 			languageField.getDocument().removeDocumentListener(languageFieldListener);
-			languageField.setText(newVal);
+			languageField.setText(txt);
 			languageField.getDocument().addDocumentListener(languageFieldListener);
 		}
 	}

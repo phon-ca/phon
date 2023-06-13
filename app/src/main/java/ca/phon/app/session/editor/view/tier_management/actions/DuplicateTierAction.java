@@ -11,10 +11,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.text.ParseException;
 
 public class DuplicateTierAction extends TierManagementAction {
-
-	private static final long serialVersionUID = -25622911440669271L;
 
 	private final static String CMD_NAME = "Duplicate tier...";
 
@@ -46,7 +45,6 @@ public class DuplicateTierAction extends TierManagementAction {
 	public void hookableActionPerformed(ActionEvent e) {
 		TierEditorDialog newTierDialog = new TierEditorDialog(true);
 		TierInfoEditor tierEditor = newTierDialog.getTierEditor();
-		tierEditor.setGrouped(td.isGrouped());
 		newTierDialog.add(tierEditor);
 		newTierDialog.setTitle("Duplicate Tier");
 		newTierDialog.getHeader().setHeaderText("Duplicate Tier");
@@ -92,14 +90,14 @@ public class DuplicateTierAction extends TierManagementAction {
 			editor.getUndoSupport().postEdit(edit);
 
 			for(Record r:getEditor().getSession().getRecords()) {
-				Tier<TierString> existingTier = r.getTier(td.getName(), TierString.class);
-				Tier<TierString> dupTier = r.getTier(tierDescription.getName(), TierString.class);
+				Tier<UserTierData> existingTier = r.getTier(td.getName(), UserTierData.class);
+				Tier<UserTierData> dupTier = r.getTier(tierDescription.getName(), UserTierData.class);
 
-				for(int gIdx = 0; gIdx < r.numberOfGroups(); gIdx++) {
-					Object existingVal = (gIdx < existingTier.numberOfGroups() ? existingTier.getGroup(gIdx) : "");
-					TierEdit<TierString> tierEdit = new TierEdit<>(getEditor(), dupTier, gIdx, new TierString(existingVal.toString()));
+				UserTierData existingVal = existingTier.getValue();
+				try {
+					TierEdit<UserTierData> tierEdit = new TierEdit<>(getEditor(), dupTier, UserTierData.parseTierData(existingVal.toString()));
 					getEditor().getUndoSupport().postEdit(tierEdit);
-				}
+				} catch (ParseException pe) {}
 			}
 
 			getEditor().getUndoSupport().endUpdate();

@@ -19,7 +19,6 @@ import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.common.*;
 import ca.phon.app.session.editor.view.syllabification_and_alignment.actions.*;
-import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.session.Record;
@@ -131,7 +130,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		actualIPABox = new JCheckBox(toggleActualAct);
 
 		final PhonUIAction<Void> toggleAlignmentAct = PhonUIAction.runnable(this::toggleCheckbox);
-		toggleAlignmentAct.putValue(PhonUIAction.NAME, SystemTierType.SyllableAlignment.getName());
+		toggleAlignmentAct.putValue(PhonUIAction.NAME, SystemTierType.PhoneAlignment.getName());
 		toggleAlignmentAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle alignment");
 		toggleAlignmentAct.putValue(PhonUIAction.SELECTED_KEY, PrefHelper.getBoolean(SHOW_ALIGNMENT, DEFAULT_SHOW_ALIGNMENT));
 		alignmentBox = new JCheckBox(toggleAlignmentAct);
@@ -334,7 +333,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 			final TierDataConstraint sepConstraint = new TierDataConstraint(TierDataConstraint.FULL_TIER_COLUMN, 2);
 			contentPane.add(separator, sepConstraint);
 
-			final JLabel alignSyllLbl = new JLabel(SystemTierType.SyllableAlignment.getName());
+			final JLabel alignSyllLbl = new JLabel(SystemTierType.PhoneAlignment.getName());
 			alignSyllLbl.setHorizontalAlignment(SwingConstants.RIGHT);
 			alignSyllLbl.setHorizontalTextPosition(SwingConstants.RIGHT);
 
@@ -429,7 +428,7 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 		final String tierName = ee.data().tier().getName();
 		if(SystemTierType.IPATarget.getName().equals(tierName) ||
 				SystemTierType.IPAActual.getName().equals(tierName) ||
-				SystemTierType.SyllableAlignment.getName().equals(tierName)) {
+				SystemTierType.PhoneAlignment.getName().equals(tierName)) {
 			update();
 			repaint();
 		}

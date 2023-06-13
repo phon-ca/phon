@@ -52,7 +52,7 @@ public class TierSelectionScriptParamPanel extends JPanel  {
 		ipaActualButton.addActionListener(actionListener);
 		btnGrp.add(ipaActualButton);
 
-		alignmentButton = new JRadioButton(SystemTierType.SyllableAlignment.getName());
+		alignmentButton = new JRadioButton(SystemTierType.PhoneAlignment.getName());
 		alignmentButton.addActionListener(actionListener);
 		btnGrp.add(alignmentButton);
 
@@ -95,7 +95,7 @@ public class TierSelectionScriptParamPanel extends JPanel  {
 		} else if(ipaActualButton.isSelected()) {
 			return SystemTierType.IPAActual.getName();
 		} else if(alignmentButton.isSelected()) {
-			return SystemTierType.SyllableAlignment.getName();
+			return SystemTierType.PhoneAlignment.getName();
 		} else if(notesButton.isSelected()) {
 			return SystemTierType.Notes.getName();
 		} else {
@@ -169,7 +169,7 @@ public class TierSelectionScriptParamPanel extends JPanel  {
 				ipaTargetButton.setSelected(true);
 			} else if(SystemTierType.IPAActual.getName().equals(selectedTier)) {
 				ipaActualButton.setSelected(true);
-			} else if(SystemTierType.SyllableAlignment.getName().equals(selectedTier)) {
+			} else if(SystemTierType.PhoneAlignment.getName().equals(selectedTier)) {
 				alignmentButton.setSelected(true);
 			} else if(SystemTierType.Notes.getName().equals(selectedTier)) {
 				notesButton.setSelected(true);

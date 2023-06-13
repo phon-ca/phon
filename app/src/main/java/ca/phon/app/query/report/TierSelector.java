@@ -103,7 +103,7 @@ public class TierSelector extends JComponent {
 						if(stt != SystemTierType.Segment &&
 								stt != SystemTierType.ActualSyllables &&
 								stt != SystemTierType.TargetSyllables &&
-								stt != SystemTierType.SyllableAlignment) {
+								stt != SystemTierType.PhoneAlignment) {
 							synchronized(tiers) {
 								tiers.put(stt.getName(), false);
 							}

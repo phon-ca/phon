@@ -51,7 +51,7 @@ public class TierListScriptParamPanel extends JPanel {
 			param.setTiers(selectedTiers());
 		});
 		
-		alignmentBox = new JCheckBox(SystemTierType.SyllableAlignment.getName());
+		alignmentBox = new JCheckBox(SystemTierType.PhoneAlignment.getName());
 		alignmentBox.addActionListener( (e) -> {
 			param.setTiers(selectedTiers());
 		});
@@ -171,7 +171,7 @@ public class TierListScriptParamPanel extends JPanel {
 		orthographyBox.setSelected(tierSet.contains(SystemTierType.Orthography.getName()));
 		ipaTargetBox.setSelected(tierSet.contains(SystemTierType.IPATarget.getName()));
 		ipaActualBox.setSelected(tierSet.contains(SystemTierType.IPAActual.getName()));
-		alignmentBox.setSelected(tierSet.contains(SystemTierType.SyllableAlignment.getName()));
+		alignmentBox.setSelected(tierSet.contains(SystemTierType.PhoneAlignment.getName()));
 		notesBox.setSelected(tierSet.contains(SystemTierType.Notes.getName()));
 		
 		for(SystemTierType stt:SystemTierType.values())
@@ -192,7 +192,7 @@ public class TierListScriptParamPanel extends JPanel {
 		if(ipaActualBox.isSelected())
 			retVal.add(SystemTierType.IPAActual.getName());
 		if(alignmentBox.isSelected())
-			retVal.add(SystemTierType.SyllableAlignment.getName());
+			retVal.add(SystemTierType.PhoneAlignment.getName());
 		if(notesBox.isSelected())
 			retVal.add(SystemTierType.Notes.getName());
 		

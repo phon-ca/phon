@@ -128,32 +128,10 @@ public class TierOrderingEditorView extends EditorView {
 			
 		};
 		tierOrderingTable = new JXTable(tableModel);
-//		tierOrderingTable = new JXTable(new TierOrderingTableModel(getModel().getSession(), tierOrder));
-		
+
 		tierOrderingTable.setSortable(false);
 		tierOrderingTable.setVisibleRowCount(5);
 		tierOrderingTable.addMouseListener(new TierContextMenuListener());
-		
-		tierOrderingTable.getColumn(TierOrderingTableModel.TierOrderingTableColumn.GROUP_TIER.ordinal()).setCellRenderer(new DefaultTableCellRenderer() {
-
-			@Override
-			public Component getTableCellRendererComponent(JTable table,
-					Object value, boolean isSelected, boolean hasFocus,
-					int row, int column) {
-				JLabel retVal = (JLabel)super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
-						row, column);
-				
-				Boolean val = (Boolean)value;
-				
-				if(val)
-					retVal.setText("Yes");
-				else
-					retVal.setText("No");
-				
-				return retVal;
-			}
-			
-		});
 		
 		// setup tier odering table action map
 		ActionMap tierOrderActionMap = new ActionMap();
@@ -315,17 +293,12 @@ public class TierOrderingEditorView extends EditorView {
 					.filter( td -> td.getName().equals(tvi.getTierName()) )
 					.findAny();
 		TierDescription td = (tierDesc.isPresent() ? tierDesc.get() :
-				SessionFactory.newFactory().createTierDescription(tvi.getTierName(),
-						(systemTier != null ? systemTier.isGrouped() : false), TierString.class));
+				(systemTier != null ? SessionFactory.newFactory().createTierDescription(systemTier) :
+					SessionFactory.newFactory().createTierDescription(tvi.getTierName()))
+			);
 
 		final DuplicateTierAction dupTierAction = new DuplicateTierAction(getEditor(), this, td, tierViewIdx+1);
 		builder.addItem(".", dupTierAction);
-
-		if(!SystemTierType.Segment.getName().equals(td.getName()) &&
-				!SystemTierType.Notes.getName().equals(td.getName()) && !td.isGrouped()) {
-			final ConvertFlatTierAction convertFlatTierAction = new ConvertFlatTierAction(getEditor(), td.getName());
-			builder.addItem(".", convertFlatTierAction);
-		}
 
 		if(tierDesc.isPresent()) {
 			final RemoveTierAction removeTierAction = new RemoveTierAction(getEditor(), this, tierDesc.get(), tvi);

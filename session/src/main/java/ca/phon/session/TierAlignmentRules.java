@@ -73,6 +73,15 @@ public final class TierAlignmentRules {
     }
 
     /**
+     * Create alignment rules for a tier with no alignment
+     *
+     * @return rules for a flat tier
+     */
+    public static TierAlignmentRules noAlignment() {
+        return new TierAlignmentRules();
+    }
+
+    /**
      * Create alignment rules for IPATranscript tiers
      *
      * @return default ipa alignment rules
