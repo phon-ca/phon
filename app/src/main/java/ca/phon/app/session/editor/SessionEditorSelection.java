@@ -32,15 +32,15 @@ public class SessionEditorSelection implements IExtendable {
 	
 	private final String tierName;
 	
-	private final Range groupRange;
+	private final Range range;
 	
 	private final ExtensionSupport extSupport = new ExtensionSupport(SessionEditorSelection.class, this);
 
-	public SessionEditorSelection(int recordIndex, String tierName, Range groupRange) {
+	public SessionEditorSelection(int recordIndex, String tierName, Range range) {
 		super();
 		this.recordIndex = recordIndex;
 		this.tierName = tierName;
-		this.groupRange = groupRange;
+		this.range = range;
 		
 		extSupport.initExtensions();
 	}
@@ -53,12 +53,8 @@ public class SessionEditorSelection implements IExtendable {
 		return tierName;
 	}
 
-	public int getGroupIndex() {
-		return groupIndex;
-	}
-
-	public Range getGroupRange() {
-		return groupRange;
+	public Range getRange() {
+		return range;
 	}
 
 	public Set<Class<?>> getExtensions() {

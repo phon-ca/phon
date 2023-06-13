@@ -29,6 +29,7 @@ import ca.phon.session.position.*;
 import ca.phon.syllabifier.*;
 import ca.phon.ui.toast.*;
 import ca.phon.util.Language;
+import ca.phon.util.Range;
 
 import javax.swing.*;
 import javax.swing.undo.CompoundEdit;
@@ -239,8 +240,7 @@ public class FindAndReplacePanel extends JPanel {
 	private void setupSessionSelection(SessionRange sessionRange) {
 		final SessionEditorSelection selection = 
 				new SessionEditorSelection(sessionRange.getRecordIndex(), sessionRange.getRecordRange().getTier(),
-						sessionRange.getRecordRange().getRange().getStart(),
-						sessionRange.getRecordRange().getRange().getEnd());
+						sessionRange.getRecordRange().getRange());
 		getEditor().getSelectionModel().setSelection(selection);
 		getEditor().setCurrentRecordIndex(sessionRange.getRecordIndex());
 	}
@@ -331,38 +331,26 @@ public class FindAndReplacePanel extends JPanel {
 	public void replace() {
 		final FindManager findManager = getFindManager();
 		setupFindManager(findManager);
-		
 		if(findManager.getMatchedExpr() != null && findManager.getMatchedRange() != null) {
-			if(replaceTier != null && replaceTier.numberOfGroups() > 0) {
-				final String replaceExpr = replaceTier.getGroup(0);
+			if(replaceTier != null && replaceTier.hasValue()) {
+				final String replaceExpr = replaceTier.getValue();
 				final Object newVal = findManager.getMatchedExpr().replace(replaceExpr);
-				
 				// re-syllabify if an IPA tier
 				final SessionRange sr = findManager.getMatchedRange();
-				
 				final Record record = getEditor().getSession().getRecord(sr.getRecordIndex());
-				
 				@SuppressWarnings({ "unchecked", "rawtypes" })
 				final TierEdit<?> tierEdit = new TierEdit(getEditor(), 
-						getEditor().currentRecord().getTier(sr.getRecordRange().getTier()),
-						sr.getRecordRange().getRange().getStart(), newVal);
-				
+						getEditor().currentRecord().getTier(sr.getRecordRange().getTier()), newVal);
 				if(newVal instanceof IPATranscript) {
 					final IPATranscript ipa = (IPATranscript)newVal;
 					final Syllabifier syllabifier = getSyllabifier(sr.getRecordRange().getTier());
 					if(syllabifier != null) {
 						syllabifier.syllabify(ipa.toList());
 					}
-					
 					// update alignment
-					
 					final CompoundEdit edit = new CompoundEdit();
-					final PhoneMap pm = (new PhoneAligner()).calculatePhoneMap(
-							record.getIPATargetTier().getGroup(sr.getRecordRange().getRange().getStart()),
-							record.getIPAActualTier().getGroup(sr.getRecordRange().getRange().getStart()));
-					final TierEdit<PhoneMap> alignmentEdit = 
-							new TierEdit<PhoneMap>(getEditor(), record.getPhoneAlignmentTier(),
-									sr.getRecordRange().getRange().getStart(), pm);
+					final PhoneAlignment phoneAlignment = PhoneAlignment.fromTiers(record.getIPATargetTier(), record.getIPAActualTier());
+					final TierEdit<PhoneAlignment> alignmentEdit = new TierEdit<>(getEditor(), record.getPhoneAlignmentTier(), phoneAlignment);
 					tierEdit.doIt();
 					edit.addEdit(tierEdit);
 					alignmentEdit.doIt();
@@ -372,10 +360,7 @@ public class FindAndReplacePanel extends JPanel {
 				} else {
 					getEditor().getUndoSupport().postEdit(tierEdit);
 				}
-				
 				getEditor().getSelectionModel().clear();
-				
-				
 			}
 		}
 	}
@@ -394,18 +379,15 @@ public class FindAndReplacePanel extends JPanel {
 	}
 	
 	public void replaceAll() {
-		final String replaceExpr = replaceTier.getGroup(0);
-
+		final String replaceExpr = replaceTier.getValue();
 		// create a new find manager
 		final Session session = getEditor().getSession();
 		final FindManager findManager = new FindManager(session);
 		setupFindManager(findManager);
 		final SessionLocation startLoc = 
-				new SessionLocation(0, new RecordLocation(findManager.getSearchTiers()[0],
-						new GroupLocation(0, 0)));
+				new SessionLocation(0, new RecordLocation(findManager.getSearchTiers()[0], 0));
 		findManager.setCurrentLocation(startLoc);
-		
-		
+
 		final CompoundEdit edit = new CompoundEdit();
 		int occurrences = 0;
 		
@@ -420,8 +402,7 @@ public class FindAndReplacePanel extends JPanel {
 			
 			// re-syllabify if an IPA tier
 			@SuppressWarnings({ "unchecked", "rawtypes" })
-			final TierEdit<?> tierEdit = new TierEdit(getEditor(), tier,
-					currentRange.getRecordRange().getRange().getStart(), newVal);
+			final TierEdit<?> tierEdit = new TierEdit(getEditor(), tier, newVal);
 			tierEdit.doIt();
 			edit.addEdit(tierEdit);
 			
@@ -433,15 +414,9 @@ public class FindAndReplacePanel extends JPanel {
 				}
 				
 				// update alignment
-				
-				final PhoneMap pm = (new PhoneAligner()).calculatePhoneMap(
-						r.getIPATargetTier().getGroup(currentRange.getRecordRange().getRange().getStart()),
-						r.getIPAActualTier().getGroup(currentRange.getRecordRange().getRange().getStart()));
-				final TierEdit<PhoneMap> alignmentEdit = 
-						new TierEdit<PhoneMap>(getEditor(), r.getPhoneAlignmentTier(),
-								currentRange.getRecordRange().getRange().getStart(), pm);
+				final PhoneAlignment phoneAlignment = PhoneAlignment.fromTiers(r.getIPATargetTier(), r.getIPAActualTier());
+				final TierEdit<PhoneAlignment> alignmentEdit = new TierEdit<>(getEditor(), r.getPhoneAlignmentTier(), phoneAlignment);
 				alignmentEdit.doIt();
-
 				edit.addEdit(alignmentEdit);
 				edit.end();
 			}
@@ -453,7 +428,6 @@ public class FindAndReplacePanel extends JPanel {
 			getEditor().getEventManager().queueEvent(ee);
 			final EditorEvent<EditorEventType.RecordChangedData> refresh = new EditorEvent<>(EditorEventType.RecordRefresh, this, new EditorEventType.RecordChangedData(getEditor().getCurrentRecordIndex(), getEditor().currentRecord()));
 			getEditor().getEventManager().queueEvent(refresh);
-			
 			getEditor().getUndoSupport().postEdit(edit);
 		}
 		
@@ -503,27 +477,9 @@ public class FindAndReplacePanel extends JPanel {
 		
 	}
 	
-	private final TierEditorListener tierEditorListener = new TierEditorListener() {
-		
-		@Override
-		public <T> void tierValueChanged(Tier<T> tier, int groupIndex, T newValue,
-				T oldValue) {
-			
-		}
-		
-		@Override
-		public <T> void tierValueChange(Tier<T> tier, int groupIndex, T newValue,
-				T oldValue) {
-			tier.setGroup(groupIndex, newValue);
-//			if(findManager != null) {
-//				if(tier.getName().equals(ANY_TIER_NAME)) {
-//					findManager.setAnyExpr(getAnyTierExpr());
-//				} else {
-//					findManager.setExprForTier(tier.getName(), exprForTier(tier.getName()));
-//				}
-//				findManager.setSearchTier(getSearchTiers());
-//			}
-		}
-		
+	private final TierEditorListener<String> tierEditorListener = (tier, newValue, oldValue, valueIsAdjusting) -> {
+		if(valueIsAdjusting)
+			tier.setValue(newValue);
 	};
+
 }

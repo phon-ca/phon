@@ -502,7 +502,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 					final JComponent tierComp = editor.getEditorComponent();
 					if(tierComp instanceof JTextComponent) {
 						final Highlighter hl = ((JTextComponent) tierComp).getHighlighter();
-						final Range r = selection.getGroupRange();
+						final Range r = selection.getRange();
 						try {
 							HighlightPainter painter = selection.getExtension(HighlightPainter.class);
 							if(painter == null)
@@ -534,7 +534,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 				}
 		}
 		for(SessionEditorSelection selection:selections) {
-			final Range r = selection.getGroupRange();
+			final Range r = selection.getRange();
 			try {
 				HighlightPainter painter = selection.getExtension(HighlightPainter.class);
 				if(painter == null)
