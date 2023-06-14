@@ -190,7 +190,6 @@ public class SessionToHTML extends SessionExporter {
 		buffer.append("</span>").append(nl);
 		
 		// setup table
-		var groupCount = record.numberOfGroups();
 		if(getSettings().isShowQueryResultsFirst() && getSettings().isIncludeQueryResults() && resultSet != null) {
 			int rIdx = 0;
 			buffer.append("<table class='result-table'>").append(nl);
@@ -221,16 +220,11 @@ public class SessionToHTML extends SessionExporter {
 				var tier = record.getTier(tvi.getTierName());
 				if(tier == null) {
 					buffer.append("<td class='tier-name'><em>").append(tvi.getTierName()).append("</em></td>").append(nl);
-					buffer.append("<td class='tier-value' colspan='").append(groupCount).append("'>&nbsp;</td>").append(nl);
+					buffer.append("<td class='tier-value'").append(">&nbsp;</td>").append(nl);
 				} else {
 					buffer.append("<td class='tier-name'><em>").append(tier.getName()).append("</em></td>").append(nl);
-					if(tier.isGrouped()) {
-						for(var i = 0; i < record.numberOfGroups(); i++) {
-							buffer.append("<td class='tier-value'>").append(tier.getGroup(i)).append("</td>").append(nl);
-						}
-					} else {
-						buffer.append("<td class='tier-value' colspan='").append(groupCount).append("'>").append(tier.getGroup(0)).append("</td>").append(nl);
-					}
+					final String tierTxt = tier.isUnvalidated() ? tier.getUnvalidatedValue().getValue() : tier.getValue().toString();
+					buffer.append("<td class='tier-value'").append(">").append(tierTxt).append("</td>").append(nl);
 				}
 				
 				buffer.append("</tr>").append(nl);
@@ -239,16 +233,14 @@ public class SessionToHTML extends SessionExporter {
 					buffer.append("<tr class='").append(tierClass).append("'>").append(nl);
 					
 					buffer.append("<td class='tier-name'>&nbsp;</td>").append(nl);
-					for(var i = 0; i < record.numberOfGroups(); i++) {
-						IPATranscript ipa = (IPATranscript)tier.getGroup(i);
-						String imgData = createSyllabificationImageBase64(ipa);
-						if(imgData.length() > 0) {
-							buffer.append("<td><img src='data:image/png;base64,").append(imgData).append("'/></td>").append(nl);
-						} else {
-							buffer.append("<td>&nbsp</td>").append(nl);
-						}
+					IPATranscript ipa = (IPATranscript)tier.getValue();
+					String imgData = createSyllabificationImageBase64(ipa);
+					if(imgData.length() > 0) {
+						buffer.append("<td><img src='data:image/png;base64,").append(imgData).append("'/></td>").append(nl);
+					} else {
+						buffer.append("<td>&nbsp</td>").append(nl);
 					}
-					
+
 					buffer.append("</tr>").append(nl);
 				}
 				
@@ -259,14 +251,12 @@ public class SessionToHTML extends SessionExporter {
 				var alignmentTier = record.getTier("Alignment");
 				buffer.append("<tr class='tier-row'>").append(nl);
 				buffer.append("<td class='tier-name'><em>Alignment</em></td>").append(nl);
-				for(var i = 0; i < record.numberOfGroups(); i++) {
-					final PhoneMap alignment = (PhoneMap)alignmentTier.getGroup(i);
-					String imgData = createAlignmentImageBase64(alignment);
-					if(imgData.length() > 0) {
-						buffer.append("<td><img src='data:image/png;base64,").append(imgData).append("'/></td>").append(nl);
-					} else {
-						buffer.append("<td>&nbsp</td>").append(nl);
-					}
+				final PhoneMap alignment = (PhoneMap)alignmentTier.getValue();
+				String imgData = createAlignmentImageBase64(alignment);
+				if(imgData.length() > 0) {
+					buffer.append("<td><img src='data:image/png;base64,").append(imgData).append("'/></td>").append(nl);
+				} else {
+					buffer.append("<td>&nbsp</td>").append(nl);
 				}
 				buffer.append("</tr>").append(nl);
 			}
@@ -333,7 +323,7 @@ public class SessionToHTML extends SessionExporter {
 				var rv = result.getResultValue(i);
 				if(i > 0)
 					sb.append(",");
-				sb.append(String.format("['%s', %d, '%s']", rv.getTierName(), rv.getGroupIndex(), rv.getRange().toString()));
+				sb.append(String.format("['%s', '%s']", rv.getTierName(), rv.getRange().toString()));
 			}
 			sb.append("]");
 			
@@ -365,7 +355,7 @@ public class SessionToHTML extends SessionExporter {
 				// create javascript array of result values
 				StringBuilder sb = new StringBuilder();
 				sb.append("[");
-				sb.append(String.format("['%s', %d, '%s']", rv.getTierName(), rv.getGroupIndex(), rv.getRange().toString()));
+				sb.append(String.format("['%s', '%s']", rv.getTierName(), rv.getRange().toString()));
 				sb.append("]");
 				
 				buffer.append(",").append(sb);

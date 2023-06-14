@@ -33,6 +33,7 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.toast.*;
 import ca.phon.util.Language;
+import ca.phon.util.Range;
 import ca.phon.util.icons.*;
 import org.jdesktop.swingx.VerticalLayout;
 
@@ -160,12 +161,11 @@ public class FindAndReplaceEditorView extends EditorView {
 	private void updateTierView() {
 		tierPanel.removeAll();
 		int rowIdx = 0;
-		
+
 		final SessionFactory factory = SessionFactory.newFactory();
 		Tier<String> anyTier = searchTiers.get(ANY_TIER_NAME);
 		if(anyTier == null) {
-			anyTier = factory.createTier(ANY_TIER_NAME, String.class, true);
-			anyTier.addGroup();
+			anyTier = factory.createTier(ANY_TIER_NAME, String.class);
 			searchTiers.put(ANY_TIER_NAME, anyTier);
 		}
 		FindOptionsPanel anyOptsPanel = searchOptions.get(ANY_TIER_NAME);
@@ -175,7 +175,7 @@ public class FindAndReplaceEditorView extends EditorView {
 			anyOptsListener.install(anyOptsPanel);
 			searchOptions.put(ANY_TIER_NAME, anyOptsPanel);
 		}
-		final GroupField<String> anyTierField = new GroupField<String>(anyTier, 0);
+		final GroupField<String> anyTierField = new GroupField<String>(anyTier, false);
 		anyTierField.setFont(FontPreferences.getTierFont());
 		anyTierField.addTierEditorListener(tierEditorListener);
 		final JLabel anyTierLbl = new JLabel("Any tier");
@@ -197,8 +197,7 @@ public class FindAndReplaceEditorView extends EditorView {
 			
 			Tier<String> tier = searchTiers.get(tvi.getTierName());
 			if(tier == null) {
-				tier = factory.createTier(tvi.getTierName(), String.class, true);
-				tier.addGroup();
+				tier = factory.createTier(tvi.getTierName(), String.class);
 				searchTiers.put(tvi.getTierName(), tier);
 			}
 			FindOptionsPanel optsPanel = searchOptions.get(tvi.getTierName());
@@ -216,7 +215,7 @@ public class FindAndReplaceEditorView extends EditorView {
 				
 				searchOptions.put(tvi.getTierName(), optsPanel);
 			}
-			final GroupField<String> tierField = new GroupField<String>(tier, 0);
+			final GroupField<String> tierField = new GroupField<String>(tier, false);
 			
 			final String fontString = tvi.getTierFont();
 			Font tierFont = FontPreferences.getTierFont();
@@ -240,18 +239,17 @@ public class FindAndReplaceEditorView extends EditorView {
 		
 		Tier<String> replaceTier = searchTiers.get(REPLACE_TIER_NAME);
 		if(replaceTier == null) {
-			replaceTier = factory.createTier(REPLACE_TIER_NAME, String.class, true);
-			replaceTier.addGroup();
+			replaceTier = factory.createTier(REPLACE_TIER_NAME, String.class);
 			searchTiers.put(REPLACE_TIER_NAME, replaceTier);
 		}
-		final GroupField<String> replaceTierField = new GroupField<String>(replaceTier, 0);
+		final GroupField<String> replaceTierField = new GroupField<String>(replaceTier, false);
 		replaceTierField.setFont(FontPreferences.getTierFont());
 		replaceTierField.addTierEditorListener(tierEditorListener);
 		final JLabel replaceLbl = new JLabel("Replace");
 		replaceLbl.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		tierPanel.add(replaceLbl, new TierDataConstraint(TierDataConstraint.TIER_LABEL_COLUMN, rowIdx));
-		tierPanel.add(replaceTierField, new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN, rowIdx++));
+		tierPanel.add(replaceTierField, new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN, rowIdx));
 	}
 	
 	/* Editor Actions */
@@ -301,13 +299,13 @@ public class FindAndReplaceEditorView extends EditorView {
 	
 	public FindExpr exprForTier(String tierName) {
 		final Tier<String> tier = searchTiers.get(tierName);
-		if(tier == null || tier.getGroup(0).length() == 0) return null;
+		if(tier == null || tier.hasValue() && tier.getValue().toString().length() == 0) return null;
 		
 		final FindOptionsPanel optsPanel = searchOptions.get(tierName);
 		if(optsPanel == null) return null;
 		
 		final FindExpr retVal = new FindExpr();
-		retVal.setExpr(tier.getGroup(0));
+		retVal.setExpr(tier.getValue());
 		retVal.setCaseSensitive(optsPanel.caseSensitiveBox.isSelected());
 		retVal.setType((SearchType)optsPanel.typeBox.getSelectedItem());
 		
@@ -322,7 +320,7 @@ public class FindAndReplaceEditorView extends EditorView {
 		final Session session = getEditor().getSession();
 		final List<TierViewItem> tierView = session.getTierView();
 		final List<String> findManagerTiers = new ArrayList<String>();
-		final String anyExpr = searchTiers.get(ANY_TIER_NAME).getGroup(0);
+		final String anyExpr = searchTiers.get(ANY_TIER_NAME).getValue();
 		if(anyExpr.length() != 0) {
 			// add all tiers to find manager
 			for(TierViewItem tvi:tierView) {
@@ -353,13 +351,10 @@ public class FindAndReplaceEditorView extends EditorView {
 	 */
 	private SessionLocation startLocation() {
 		final FindManager findManager = getFindManager();
-		
-		final String tier = 
+		final String tier =
 				(findManager.getSearchTiers().length > 0 ? findManager.getSearchTiers()[0] :
 					SystemTierType.Orthography.getName());
-		
-		return new SessionLocation(0, 
-				new RecordLocation(tier, new GroupLocation(0, 0)));
+		return new SessionLocation(0, new RecordLocation(tier, 0));
 	}
 
 	/*
@@ -370,16 +365,13 @@ public class FindAndReplaceEditorView extends EditorView {
 	private SessionLocation endLocation() {
 		final Session session = getEditor().getSession();
 		final FindManager findManager = getFindManager();
-		
-		final String tierName = 
+		final String tierName =
 				(findManager.getSearchTiers().length > 0 ? findManager.getSearchTiers()[findManager.getSearchTiers().length-1] :
 					SystemTierType.Notes.getName());
 		final Record r = session.getRecord(session.getRecordCount()-1);
 		final Tier<String> tier = r.getTier(tierName, String.class);
-		final String grp = tier.getGroup(tier.numberOfGroups()-1);
-		
-		return new SessionLocation(session.getRecordCount()-1, new RecordLocation(tierName, 
-				new GroupLocation(tier.numberOfGroups()-1, grp.length())));
+		final String grp = tier.getValue();
+		return new SessionLocation(session.getRecordCount()-1, new RecordLocation(tierName, grp.length()));
 	}
 	
 	/*
@@ -387,12 +379,10 @@ public class FindAndReplaceEditorView extends EditorView {
 	 */
 	public void findNext() {
 		final FindManager findManager = getFindManager();
-		
 		if(findManager.getCurrentLocation() == null) {
 			findManager.setCurrentLocation(
 					findManager.getDirection() == FindDirection.FORWARDS ? startLocation() : endLocation());
 		}
-		
 		SessionRange nextInstance = findManager.findNext();
 		if(nextInstance != null) {
 			setupSessionSelection(nextInstance);
@@ -468,39 +458,27 @@ public class FindAndReplaceEditorView extends EditorView {
 	
 	public void replace() {
 		final FindManager findManager = getFindManager();
-		
 		if(findManager.getMatchedExpr() != null && findManager.getMatchedRange() != null) {
 			final Tier<String> replaceTier = searchTiers.get(REPLACE_TIER_NAME);
-			if(replaceTier != null && replaceTier.numberOfGroups() > 0) {
-				final String replaceExpr = replaceTier.getGroup(0);
+			if(replaceTier != null && replaceTier.hasValue() && replaceTier.getValue().toString().length() > 0) {
+				final String replaceExpr = replaceTier.getValue();
 				final Object newVal = findManager.getMatchedExpr().replace(replaceExpr);
-				
 				// re-syllabify if an IPA tier
 				final SessionRange sr = findManager.getMatchedRange();
-				
 				final Record record = getEditor().getSession().getRecord(sr.getRecordIndex());
-				
 				@SuppressWarnings({ "unchecked", "rawtypes" })
-				final TierEdit<?> tierEdit = new TierEdit(getEditor(), 
-						getEditor().currentRecord().getTier(sr.getRecordRange().getTier()),
-						sr.getRecordRange().getRange().getStart(), newVal);
-				
+				final TierEdit<?> tierEdit = new TierEdit(getEditor(), getEditor().currentRecord().getTier(sr.getRecordRange().getTier()), newVal);
 				if(newVal instanceof IPATranscript) {
 					final IPATranscript ipa = (IPATranscript)newVal;
 					final Syllabifier syllabifier = getSyllabifier(sr.getRecordRange().getTier());
 					if(syllabifier != null) {
 						syllabifier.syllabify(ipa.toList());
 					}
-					
 					// update alignment
-					
 					final CompoundEdit edit = new CompoundEdit();
-					final PhoneMap pm = (new PhoneAligner()).calculatePhoneMap(
-							record.getIPATargetTier().getGroup(sr.getRecordRange().getRange().getStart()),
-							record.getIPAActualTier().getGroup(sr.getRecordRange().getRange().getStart()));
-					final TierEdit<PhoneMap> alignmentEdit = 
-							new TierEdit<PhoneMap>(getEditor(), record.getPhoneAlignmentTier(),
-									sr.getRecordRange().getRange().getStart(), pm);
+					final PhoneAlignment phoneAlignment = PhoneAlignment.fromTiers(record.getIPATargetTier(), record.getIPAActualTier());
+					final TierEdit<PhoneAlignment> alignmentEdit =
+							new TierEdit<>(getEditor(), record.getPhoneAlignmentTier(), phoneAlignment);
 					tierEdit.doIt();
 					edit.addEdit(tierEdit);
 					alignmentEdit.doIt();
@@ -510,10 +488,7 @@ public class FindAndReplaceEditorView extends EditorView {
 				} else {
 					getEditor().getUndoSupport().postEdit(tierEdit);
 				}
-				
 				getEditor().getSelectionModel().clear();
-				
-				
 			}
 		}
 	}
@@ -533,7 +508,7 @@ public class FindAndReplaceEditorView extends EditorView {
 	
 	public void replaceAll() {
 		final Tier<String> replaceTier = searchTiers.get(REPLACE_TIER_NAME);
-		final String replaceExpr = replaceTier.getGroup(0);
+		final String replaceExpr = replaceTier.hasValue() ? replaceTier.getValue() : "";
 
 		// create a new find manager
 		final Session session = getEditor().getSession();
@@ -545,11 +520,9 @@ public class FindAndReplaceEditorView extends EditorView {
 		}
 		findManager.setDirection(FindDirection.FORWARDS);
 		final SessionLocation startLoc = 
-				new SessionLocation(0, new RecordLocation(findManager.getSearchTiers()[0],
-						new GroupLocation(0, 0)));
+				new SessionLocation(0, new RecordLocation(findManager.getSearchTiers()[0], 0));
 		findManager.setCurrentLocation(startLoc);
-		
-		
+
 		final CompoundEdit edit = new CompoundEdit();
 		int occurrences = 0;
 		
@@ -564,8 +537,7 @@ public class FindAndReplaceEditorView extends EditorView {
 			
 			// re-syllabify if an IPA tier
 			@SuppressWarnings({ "unchecked", "rawtypes" })
-			final TierEdit<?> tierEdit = new TierEdit(getEditor(), tier,
-					currentRange.getRecordRange().getRange().getStart(), newVal);
+			final TierEdit<?> tierEdit = new TierEdit(getEditor(), tier, newVal);
 			tierEdit.doIt();
 			edit.addEdit(tierEdit);
 			
@@ -575,17 +547,11 @@ public class FindAndReplaceEditorView extends EditorView {
 				if(syllabifier != null) {
 					syllabifier.syllabify(ipa.toList());
 				}
-				
 				// update alignment
-				
-				final PhoneMap pm = (new PhoneAligner()).calculatePhoneMap(
-						r.getIPATargetTier().getGroup(currentRange.getRecordRange().getRange().getStart()),
-						r.getIPAActualTier().getGroup(currentRange.getRecordRange().getRange().getStart()));
-				final TierEdit<PhoneMap> alignmentEdit = 
-						new TierEdit<PhoneMap>(getEditor(), r.getPhoneAlignmentTier(),
-								currentRange.getRecordRange().getRange().getStart(), pm);
+				final PhoneAlignment phoneAlignment = PhoneAlignment.fromTiers(r.getIPATargetTier(), r.getIPAActualTier());
+				final TierEdit<PhoneAlignment> alignmentEdit =
+						new TierEdit<>(getEditor(), r.getPhoneAlignmentTier(), phoneAlignment);
 				alignmentEdit.doIt();
-
 				edit.addEdit(alignmentEdit);
 				edit.end();
 			}
@@ -615,15 +581,14 @@ public class FindAndReplaceEditorView extends EditorView {
 	private void setupSessionSelection(SessionRange sessionRange) {
 		final SessionEditorSelection selection = 
 				new SessionEditorSelection(sessionRange.getRecordIndex(), sessionRange.getRecordRange().getTier(),
-						sessionRange.getRecordRange().getRange().getStart(),
-						sessionRange.getRecordRange().getRange().getEnd());
+						new Range(sessionRange.getRecordRange().start().getCharPositionInLine(),
+								sessionRange.getRecordRange().end().getCharPositionInLine()));
 		getEditor().getSelectionModel().setSelection(selection);
 		getEditor().setCurrentRecordIndex(sessionRange.getRecordIndex());
 	}
 	
 	private SessionLocation getSessionLocation() {
 		SessionLocation retVal = null;
-		
 		if(getEditor().getViewModel().isShowing(RecordDataEditorView.VIEW_NAME)) {
 			final RecordDataEditorView recordDataView = 
 					(RecordDataEditorView)getEditor().getViewModel().getView(RecordDataEditorView.VIEW_NAME);
@@ -631,18 +596,12 @@ public class FindAndReplaceEditorView extends EditorView {
 				retVal = recordDataView.getSessionLocation();
 			}
 		}
-		
 		if(retVal == null) {
 			final String[] searchTiers = findManager.getSearchTiers();
-			
-			final GroupLocation grpLocation = new GroupLocation(0, 0);
-			grpLocation.setGroupIndex(0);
-			grpLocation.setCharIndex(0);
 			final RecordLocation recordLocation = new RecordLocation(
-					(searchTiers.length > 0 ? searchTiers[0] : SystemTierType.Orthography.getName()), grpLocation);
+					(searchTiers.length > 0 ? searchTiers[0] : SystemTierType.Orthography.getName()), 0);
 			retVal = new SessionLocation(getEditor().getCurrentRecordIndex(), recordLocation);
 		}
-		
 		return retVal;
 	}
 
@@ -674,18 +633,10 @@ public class FindAndReplaceEditorView extends EditorView {
 		
 	}
 	
-	private final TierEditorListener tierEditorListener = new TierEditorListener() {
-		
+	private final TierEditorListener<String> tierEditorListener = new TierEditorListener<>() {
 		@Override
-		public <T> void tierValueChanged(Tier<T> tier, int groupIndex, T newValue,
-				T oldValue) {
-			
-		}
-		
-		@Override
-		public <T> void tierValueChange(Tier<T> tier, int groupIndex, T newValue,
-				T oldValue) {
-			tier.setGroup(groupIndex, newValue);
+		public void tierValueChanged(Tier<String> tier, String newValue, String oldValue, boolean valueIsAdjusting) {
+			tier.setValue(newValue);
 			if(findManager != null) {
 				if(tier.getName().equals(ANY_TIER_NAME)) {
 					findManager.setAnyExpr(getAnyTierExpr());
@@ -695,7 +646,6 @@ public class FindAndReplaceEditorView extends EditorView {
 				findManager.setSearchTier(getSearchTiers());
 			}
 		}
-		
 	};
 	
 	private class FindOptionsListener implements ItemListener, ActionListener {

@@ -107,52 +107,48 @@ public class AutoValidateTask extends ca.phon.worker.PhonTask {
 	private UndoableEdit validateIPA(Tier<IPATranscript> tier) {
 		final CompoundEdit retVal = new CompoundEdit();
 		
-		for(int i = 0; i < tier.numberOfGroups(); i++) {
-			final IPATranscript grp = tier.getGroup(i);
-			final AlternativeTranscript alts = grp.getExtension(AlternativeTranscript.class);
-			
-			if(alts == null) continue;
-			
-			if(!overwriteData && grp.length() > 0) {
-					continue;
-			}
-			
-			IPATranscript setV = null;
-			for(Transcriber t:session.getTranscribers()) {
-				final IPATranscript ipa = alts.get(t.getUsername());
-				
-				if(ipa != null && ipa.length() > 0) {
-					if(setV == null) {
-						setV = ipa;
-					} else {
-						if(!setV.toString().equals(ipa.toString())) {
-							final IPATranscript alt = alts.get(getPreferredTranscriber().getUsername());
-							if(alt != null) {
-								setV = alt;
-							}
-							break;
+		final IPATranscript grp = tier.getValue();
+		final AlternativeTranscript alts = grp.getExtension(AlternativeTranscript.class);
+
+		if(!overwriteData && grp.length() > 0) {
+				return retVal;
+		}
+
+		IPATranscript setV = null;
+		for(Transcriber t:session.getTranscribers()) {
+			final IPATranscript ipa = alts.get(t.getUsername());
+
+			if(ipa != null && ipa.length() > 0) {
+				if(setV == null) {
+					setV = ipa;
+				} else {
+					if(!setV.toString().equals(ipa.toString())) {
+						final IPATranscript alt = alts.get(getPreferredTranscriber().getUsername());
+						if(alt != null) {
+							setV = alt;
 						}
+						break;
 					}
 				}
 			}
-			
-			if(setV != null) {
-				setV.putExtension(AlternativeTranscript.class, alts);
-				final SyllabifierInfo info = session.getExtension(SyllabifierInfo.class);
-				final SyllabifierLibrary syllabifierLibrary = SyllabifierLibrary.getInstance();
-				final Language lang = (info != null && info.getSyllabifierLanguageForTier(tier.getName()) != null ?
-						info.getSyllabifierLanguageForTier(tier.getName()) : syllabifierLibrary.defaultSyllabifierLanguage());
-				final Syllabifier syllabifier = syllabifierLibrary.getSyllabifierForLanguage(lang);
-				if(syllabifier != null) {
-					syllabifier.syllabify(setV.toList());
-				}
-				
-				final TierEdit<IPATranscript> tierEdit = new TierEdit<IPATranscript>(null, tier, i, setV);
-				tierEdit.doIt();
-				retVal.addEdit(tierEdit);
-			}
 		}
-		
+
+		if(setV != null) {
+			setV.putExtension(AlternativeTranscript.class, alts);
+			final SyllabifierInfo info = session.getExtension(SyllabifierInfo.class);
+			final SyllabifierLibrary syllabifierLibrary = SyllabifierLibrary.getInstance();
+			final Language lang = (info != null && info.getSyllabifierLanguageForTier(tier.getName()) != null ?
+					info.getSyllabifierLanguageForTier(tier.getName()) : syllabifierLibrary.defaultSyllabifierLanguage());
+			final Syllabifier syllabifier = syllabifierLibrary.getSyllabifierForLanguage(lang);
+			if(syllabifier != null) {
+				syllabifier.syllabify(setV.toList());
+			}
+
+			final TierEdit<IPATranscript> tierEdit = new TierEdit<IPATranscript>(null, tier, setV);
+			tierEdit.doIt();
+			retVal.addEdit(tierEdit);
+		}
+
 		retVal.end();
 		return retVal;
 	}
