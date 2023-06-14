@@ -79,8 +79,6 @@ public interface EditorSelectionModel {
 	
 	public List<SessionEditorSelection> getSelectionsForTier(int recordIndex, String tierName);
 	
-	public List<SessionEditorSelection> getSelectionsForGroup(int recordIndex, String tierName, int groupIndex);
-	
 	/**
 	 * Add a listener for this model.
 	 * 

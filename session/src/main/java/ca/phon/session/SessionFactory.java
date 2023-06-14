@@ -444,7 +444,20 @@ public final class SessionFactory extends ExtendableObject {
 	 * @param <T>
 	 */
 	public <T> Tier<T> createTier(String name, Class<T> type, TierAlignmentRules tierAlignmentRules) {
-		final TierSPI<T> tierImpl = sessionFactoryImpl.createTier(name, type, new HashMap<>(), tierAlignmentRules);
+		return createTier(name, type, new HashMap<>(), tierAlignmentRules);
+	}
+
+	/**
+	 * Create a new tier object with the specified type and alignment rules
+	 *
+	 * @param name
+	 * @param type
+	 * @param tierAlignmentRules
+	 * @return the new tier
+	 * @param <T>
+	 */
+	public <T> Tier<T> createTier(String name, Class<T> type, Map<String, String> tierParameters, TierAlignmentRules tierAlignmentRules) {
+		final TierSPI<T> tierImpl = sessionFactoryImpl.createTier(name, type, tierParameters, tierAlignmentRules);
 		return createTier(type, tierImpl);
 	}
 

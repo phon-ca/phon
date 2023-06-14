@@ -132,7 +132,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 
 	private final AtomicInteger currentCharIndex = new AtomicInteger(-1);
 
-	private final Map<String, List<TierEditor>> editorMap = new LinkedHashMap<>();
+	private final Map<String, TierEditor<?>> editorMap = new LinkedHashMap<>();
 
 	public RecordDataEditorView(SessionEditor editor) {
 		super(editor);
@@ -236,8 +236,6 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.SpeakerChanged, this::onSpeakerChange, EditorEventManager.RunOn.AWTEventDispatchThread);
 
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.GroupListChange, this::onGroupsChange, EditorEventManager.RunOn.AWTEventDispatchThread);
-
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.ParticipantAdded, this::onParticipantsChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.ParticipantRemoved, this::onParticipantsChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 
@@ -312,7 +310,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 
 			final SessionFactory factory = SessionFactory.newFactory();
 			if(systemTier != null) {
-				tierDesc = factory.createTierDescription(tierName, systemTier.isGrouped());
+				tierDesc = factory.createTierDescription(systemTier);
 			} else {
 				for(TierDescription userTier:session.getUserTiers()) {
 					if(userTier.getName().equals(tierName)) {
@@ -323,8 +321,6 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 			}
 
 			if(tierDesc == null) continue;
-
-			boolean isGrouped = tierDesc.isGrouped();
 
 			// load tier font
 			final String fontString = tierItem.getTierFont();
@@ -340,94 +336,58 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 
 			Tier<?> tier = record.getTier(tierName);
 			if(tier == null) {
-				tier = factory.createTier(tierDesc.getName(), tierDesc.getDeclaredType(), isGrouped);
+				tier = factory.createTier(tierDesc.getName(), tierDesc.getDeclaredType(), tierDesc.getTierParameters(), tierDesc.getTierAlignmentRules());
 				record.putTier(tier);
 			}
-			if(isGrouped) {
-				List<TierEditor> editors = new ArrayList<>();
-				editorMap.put(tier.getName(), editors);
-				for(int gIdx = 0; gIdx < record.numberOfGroups(); gIdx++) {
-					final TierEditor tierEditor = tierEditorFactory.createTierEditor(getEditor(), tierDesc, record, tier, gIdx);
-					tierEditor.addTierEditorListener(tierEditorListener);
-					final Component tierComp = tierEditor.getEditorComponent();
-					if(tierFont != null)
-						tierComp.setFont(tierFont);
-					tierComp.addFocusListener(new TierEditorComponentFocusListener(tier, gIdx));
-					contentPane.add(tierComp, new TierDataConstraint(TierDataConstraint.GROUP_START_COLUMN + gIdx, row));
+			final TierEditor<?> tierEditor = tierEditorFactory.createTierEditor(getEditor(), tierDesc, record, tier);
+			tierEditor.addTierEditorListener(tierEditorListener);
+			Component tierComp = tierEditor.getEditorComponent();
+			if(tierFont != null)
+				tierComp.setFont(tierFont);
+			tierComp.addFocusListener(new TierEditorComponentFocusListener(tier, 0));
 
-					if(tierComp instanceof JTextComponent) {
-						final JTextComponent textComp = (JTextComponent)tierComp;
-						addSelectionHighlights(textComp, editor.getCurrentRecordIndex(), tierName, gIdx);
-						textComp.addCaretListener(caretListener);
+			if(SystemTierType.Segment.getName().contentEquals(tierName)) {
+				JPanel segmentPanel = new JPanel(new GridBagLayout());
+				segmentPanel.setOpaque(false);
 
-						if(tierItem.isTierLocked()) {
-							textComp.setEditable(false);
-						}
-					} else if(tierItem.isTierLocked()) {
-						tierComp.setEnabled(false);
-					}
+				GridBagConstraints gbc = new GridBagConstraints();
+				gbc.gridx = 0;
+				gbc.gridy = 0;
+				gbc.anchor = GridBagConstraints.WEST;
 
-					if(currentFocusTier != null && toFocus == null
-							&& (currentFocusTier.getName().equals(tier.getName()))) {
-						if(grpIdx >= record.numberOfGroups() || grpIdx == gIdx) {
-							toFocus = tierEditor.getEditorComponent();
-						}
-					}
+				segmentPanel.add(tierComp, gbc);
 
-					editors.add(tierEditor);
-				}
-			} else {
-				final TierEditor tierEditor = tierEditorFactory.createTierEditor(getEditor(), tierDesc, record, tier, 0);
-				tierEditor.addTierEditorListener(tierEditorListener);
-				Component tierComp = tierEditor.getEditorComponent();
-				if(tierFont != null)
-					tierComp.setFont(tierFont);
-				tierComp.addFocusListener(new TierEditorComponentFocusListener(tier, 0));
-				
-				if(SystemTierType.Segment.getName().contentEquals(tierName)) {
-					JPanel segmentPanel = new JPanel(new GridBagLayout());
-					segmentPanel.setOpaque(false);
-					
-					GridBagConstraints gbc = new GridBagConstraints();
-					gbc.gridx = 0;
-					gbc.gridy = 0;
-					gbc.anchor = GridBagConstraints.WEST;
-					
-					segmentPanel.add(tierComp, gbc);
-					
-					++gbc.gridx;
-					segmentPanel.add(playButton, gbc);
+				++gbc.gridx;
+				segmentPanel.add(playButton, gbc);
 
-					++gbc.gridx;
-					gbc.fill = GridBagConstraints.HORIZONTAL;
-					gbc.weightx = 1.0;
-					segmentPanel.add(Box.createHorizontalGlue(), gbc);
-					
-					tierComp = segmentPanel;
-				}
-				
-				contentPane.add(tierComp, new TierDataConstraint(TierDataConstraint.FLAT_TIER_COLUMN, row));
+				++gbc.gridx;
+				gbc.fill = GridBagConstraints.HORIZONTAL;
+				gbc.weightx = 1.0;
+				segmentPanel.add(Box.createHorizontalGlue(), gbc);
 
-				if(tierComp instanceof JTextComponent) {
-					final JTextComponent textComp = (JTextComponent)tierComp;
-					addSelectionHighlights(textComp, editor.getCurrentRecordIndex(), tierName, 0);
-					textComp.addCaretListener(caretListener);
-
-					if(tierItem.isTierLocked()) {
-						textComp.setEditable(false);
-					}
-				} else if(tierItem.isTierLocked()) {
-					tierComp.setEnabled(false);
-				}
-
-				if(currentFocusTier != null && toFocus == null
-						&& (currentFocusTier.getName().equals(tier.getName()))) {
-					toFocus = tierEditor.getEditorComponent();
-				}
-
-				editorMap.put(tierName, Collections.singletonList(tierEditor));
+				tierComp = segmentPanel;
 			}
-			row++;
+
+			contentPane.add(tierComp, new TierDataConstraint(TierDataConstraint.FLAT_TIER_COLUMN, row));
+
+			if(tierComp instanceof JTextComponent) {
+				final JTextComponent textComp = (JTextComponent)tierComp;
+				addSelectionHighlights(textComp, editor.getCurrentRecordIndex(), tierName);
+				textComp.addCaretListener(caretListener);
+
+				if(tierItem.isTierLocked()) {
+					textComp.setEditable(false);
+				}
+			} else if(tierItem.isTierLocked()) {
+				tierComp.setEnabled(false);
+			}
+
+			if(currentFocusTier != null && toFocus == null
+					&& (currentFocusTier.getName().equals(tier.getName()))) {
+				toFocus = tierEditor.getEditorComponent();
+			}
+
+			editorMap.put(tierName, tierEditor);
 		}
 
 		if(viewFocused && toFocus != null) {
@@ -473,14 +433,12 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 		@Override
 		public void selectionsCleared(EditorSelectionModel model) {
 			for(String tierName:editorMap.keySet()) {
-				final List<TierEditor> editors = editorMap.get(tierName);
-				for(TierEditor editor:editors) {
-					final JComponent tierComp = editor.getEditorComponent();
-					if(tierComp instanceof JTextComponent) {
-						// clear highlights
-						final Highlighter hl = ((JTextComponent) tierComp).getHighlighter();
-						hl.removeAllHighlights();
-					}
+				final TierEditor<?> tierEditor = editorMap.get(tierName);
+				final JComponent tierComp = tierEditor.getEditorComponent();
+				if(tierComp instanceof JTextComponent) {
+					// clear highlights
+					final Highlighter hl = ((JTextComponent) tierComp).getHighlighter();
+					hl.removeAllHighlights();
 				}
 			}
 		}
@@ -496,21 +454,18 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 		public void selectionAdded(EditorSelectionModel model,
 				SessionEditorSelection selection) {
 			if(selection.getRecordIndex() == getEditor().getCurrentRecordIndex()) {
-				final List<TierEditor> editors = editorMap.get(selection.getTierName());
-				if(editors != null && editors.size() > selection.getGroupIndex()) {
-					final TierEditor editor = editors.get(selection.getGroupIndex());
-					final JComponent tierComp = editor.getEditorComponent();
-					if(tierComp instanceof JTextComponent) {
-						final Highlighter hl = ((JTextComponent) tierComp).getHighlighter();
-						final Range r = selection.getRange();
-						try {
-							HighlightPainter painter = selection.getExtension(HighlightPainter.class);
-							if(painter == null)
-								painter = new DefaultHighlighter.DefaultHighlightPainter(PhonGuiConstants.PHON_SELECTED);
-							hl.addHighlight(r.getFirst(), r.getLast()+1, painter);
-						} catch (BadLocationException e) {
-							LogUtil.info( e.getLocalizedMessage(), e);
-						}
+				final TierEditor<?> editor = editorMap.get(selection.getTierName());
+				final JComponent tierComp = editor.getEditorComponent();
+				if(tierComp instanceof JTextComponent) {
+					final Highlighter hl = ((JTextComponent) tierComp).getHighlighter();
+					final Range r = selection.getRange();
+					try {
+						HighlightPainter painter = selection.getExtension(HighlightPainter.class);
+						if(painter == null)
+							painter = new DefaultHighlighter.DefaultHighlightPainter(PhonGuiConstants.PHON_SELECTED);
+						hl.addHighlight(r.getFirst(), r.getLast()+1, painter);
+					} catch (BadLocationException e) {
+						LogUtil.info( e.getLocalizedMessage(), e);
 					}
 				}
 			}
@@ -518,10 +473,9 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 
 	};
 
-	private void addSelectionHighlights(JTextComponent textComp, int recordIndex, String tierName, int groupIndex) {
+	private void addSelectionHighlights(JTextComponent textComp, int recordIndex, String tierName) {
 		final List<SessionEditorSelection> selections =
-				getEditor().getSelectionModel().getSelectionsForGroup(recordIndex,
-						tierName, groupIndex);
+				getEditor().getSelectionModel().getSelectionsForTier(recordIndex, tierName);
 		final Highlighter hl = new GroupFieldHighlighter();
 		final Highlighter origHighlighter = textComp.getHighlighter();
 		textComp.setHighlighter(hl);
@@ -636,27 +590,6 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 			// create group management buttons
 			final JPanel btnPanel = new JPanel(new HorizontalLayout());
 
-			final NewGroupCommand newGroupAct = new NewGroupCommand(this);
-			newGroupAct.putValue(NewGroupCommand.SHORT_DESCRIPTION, newGroupAct.getValue(NewGroupCommand.NAME));
-			newGroupAct.putValue(NewGroupCommand.NAME, null);
-			final JButton newGroupBtn = new JButton(newGroupAct);
-			newGroupBtn.setFocusable(false);
-			btnPanel.add(newGroupBtn);
-
-			final MergeGroupCommand mergeGroupAct = new MergeGroupCommand(this);
-			mergeGroupAct.putValue(MergeGroupCommand.SHORT_DESCRIPTION, mergeGroupAct.getValue(MergeGroupCommand.NAME));
-			mergeGroupAct.putValue(MergeGroupCommand.NAME, null);
-			final JButton mergeGroupBtn = new JButton(mergeGroupAct);
-			mergeGroupBtn.setFocusable(false);
-			btnPanel.add(mergeGroupBtn);
-
-			final SplitGroupCommand splitGroupAct = new SplitGroupCommand(this);
-			splitGroupAct.putValue(SplitGroupCommand.SHORT_DESCRIPTION, splitGroupAct.getValue(SplitGroupCommand.NAME));
-			splitGroupAct.putValue(SplitGroupCommand.NAME, null);
-			final JButton splitGroupBtn = new JButton(splitGroupAct);
-			splitGroupBtn.setFocusable(false);
-			btnPanel.add(splitGroupBtn);
-			
 			final PhonUIAction<Void> toggleFindAndReplaceAct = PhonUIAction.eventConsumer(this::onToggleFindAndReplace);
 			toggleFindAndReplaceAct.putValue(PhonUIAction.NAME, "");
 			toggleFindAndReplaceAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/edit-find-replace", IconSize.SMALL));
@@ -755,17 +688,11 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 			speakerBox.setSelectedItem(selected);
 	}
 	
-	private TierEdit<PhoneMap> updateRecordAlignment(Record record, int group) {
+	private TierEdit<PhoneAlignment> updateRecordAlignment(Record record) {
 		final Tier<IPATranscript> ipaTarget = record.getIPATargetTier();
 		final Tier<IPATranscript> ipaActual = record.getIPAActualTier();
-
-		final IPATranscript targetGroup = (group < ipaTarget.numberOfGroups() ? ipaTarget.getGroup(group) : new IPATranscript());
-		final IPATranscript actualGroup = (group < ipaActual.numberOfGroups() ? ipaActual.getGroup(group) : new IPATranscript());
-		final PhoneAligner aligner = new PhoneAligner();
-		final PhoneMap pm = aligner.calculatePhoneMap(targetGroup, actualGroup);
-
-		final TierEdit<PhoneMap> pmEdit = new TierEdit<PhoneMap>(getEditor(), record.getPhoneAlignmentTier(), group, pm);
-
+		final PhoneAlignment phoneAlignment = PhoneAlignment.fromTiers(ipaTarget, ipaActual);
+		final TierEdit<PhoneAlignment> pmEdit = new TierEdit<>(getEditor(), record.getPhoneAlignmentTier(), phoneAlignment);
 		return pmEdit;
 	}
 
@@ -774,7 +701,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 
 	}
 
-	private class RecordTierEditorListener implements TierEditorListener {
+	private class RecordTierEditorListener<T> implements TierEditorListener<T> {
 
 		private final Record record;
 
@@ -783,45 +710,41 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 		}
 
 		@Override
-		public <T> void tierValueChange(Tier<T> tier, int groupIndex, T newValue,
-				T oldValue) {
-			final TierEdit<T> tierEdit = new TierEdit<T>(getEditor(), tier, groupIndex, newValue);
-			tierEdit.setFireHardChangeOnUndo(true);
+		public void tierValueChanged(Tier<T> tier, T newValue, T oldValue, boolean valueIsAdjusting) {
+			if(valueIsAdjusting) {
+				final TierEdit<T> tierEdit = new TierEdit<T>(getEditor(), tier, newValue);
+				tierEdit.setFireHardChangeOnUndo(true);
 
-			UndoableEdit edit = tierEdit;
+				UndoableEdit edit = tierEdit;
 
-			// XXX
-			// Special case for IPA tiers, alignment must be updated as well
-			if(SystemTierType.IPATarget.getName().equals(tier.getName()) ||
-					SystemTierType.IPAActual.getName().equals(tier.getName())) {
-				edit = new CompoundEdit();
-				tierEdit.doIt();
-				edit.addEdit(tierEdit);
+				// XXX
+				// Special case for IPA tiers, alignment must be updated as well
+				if(SystemTierType.IPATarget.getName().equals(tier.getName()) ||
+						SystemTierType.IPAActual.getName().equals(tier.getName())) {
+					edit = new CompoundEdit();
+					tierEdit.doIt();
+					edit.addEdit(tierEdit);
 
-				final TierEdit<PhoneMap> alignEdit = updateRecordAlignment(record, groupIndex);
-				alignEdit.doIt();
-				edit.addEdit(alignEdit);
+					final TierEdit<PhoneAlignment> alignEdit = updateRecordAlignment(record);
+					alignEdit.doIt();
+					edit.addEdit(alignEdit);
 
-				((CompoundEdit)edit).end();
+					((CompoundEdit)edit).end();
 
-				// we also need to send out a TIER_DATA_CHANGED event so the syllabification/alignment view updates
-				final EditorEvent<EditorEventType.TierChangeData> ee =
-						new EditorEvent(EditorEventType.TierChanged, RecordDataEditorView.this,
-								new EditorEventType.TierChangeData(record.getPhoneAlignmentTier(), groupIndex, alignEdit.getOldValue(), alignEdit.getNewValue()));
+					// we also need to send out a TIER_DATA_CHANGED event so the syllabification/alignment view updates
+					final EditorEvent<EditorEventType.TierChangeData> ee =
+							new EditorEvent(EditorEventType.TierChanged, RecordDataEditorView.this,
+									new EditorEventType.TierChangeData(record.getPhoneAlignmentTier(), alignEdit.getOldValue(), alignEdit.getNewValue()));
+					getEditor().getEventManager().queueEvent(ee);
+				}
+
+				getEditor().getUndoSupport().postEdit(edit);
+			} else {
+				final EditorEvent<EditorEventType.TierChangeData> ee = new EditorEvent<>(EditorEventType.TierChanged, RecordDataEditorView.this,
+						new EditorEventType.TierChangeData(tier, oldValue, newValue));
 				getEditor().getEventManager().queueEvent(ee);
 			}
-
-			getEditor().getUndoSupport().postEdit(edit);
 		}
-
-		@Override
-		public <T> void tierValueChanged(Tier<T> tier, int groupIndex,
-				T newValue, T oldValue) {
-			final EditorEvent<EditorEventType.TierChangeData> ee = new EditorEvent<>(EditorEventType.TierChanged, RecordDataEditorView.this,
-					new EditorEventType.TierChangeData(tier, groupIndex, oldValue, newValue));
-			getEditor().getEventManager().queueEvent(ee);
-		}
-
 	};
 
 	private final DefaultListCellRenderer speakerRenderer = new DefaultListCellRenderer() {
@@ -949,8 +872,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 
 	public SessionLocation getSessionLocation() {
 		if(currentTierRef.get() == null) return null;
-		final GroupLocation grpLoc = new GroupLocation(currentGroupIndex(), currentCharIndex());
-		final RecordLocation recLoc = new RecordLocation(currentTier().getName(), grpLoc);
+		final RecordLocation recLoc = new RecordLocation(currentTier().getName(), currentCharIndex());
 		final SessionLocation sessionLoc = new SessionLocation(currentRecordIndex(), recLoc);
 		return sessionLoc;
 	}
@@ -1021,7 +943,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 		if(transferable.isDataFlavorSupported(TierTransferrable.FLAVOR)) {
 			try {
 				TierTransferrable tierTransferrable = (TierTransferrable) transferable.getTransferData(TierTransferrable.FLAVOR);
-				pasteTier(destRecord, tierTransferrable.getTier(), destTier);
+				pasteTier(destRecord, destTier, tierTransferrable.getTier().toString());
 			} catch (IOException | UnsupportedFlavorException e) {
 				Toolkit.getDefaultToolkit().beep();
 				LogUtil.warning(e);
@@ -1029,23 +951,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 		} else if(transferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
 			try {
 				String clipboardText = Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor).toString();
-				String noBrackets = clipboardText.replaceAll("\\[", "").replaceAll("\\]", "");
-
-				Tier<TierString> srcTier = SessionFactory.newFactory().createTier("temp", TierString.class, destTier.isGrouped());
-				if(destTier.isGrouped()) {
-					if(clipboardText.matches(GROUPED_TIER_PATTERN)) {
-						Pattern grpPattern = Pattern.compile(GROUP_DATA_PATTERN);
-						Matcher m = grpPattern.matcher(clipboardText);
-						while(m.find()) {
-							srcTier.addGroup(new TierString(m.group(1)));
-						}
-					} else {
-						srcTier.addGroup(new TierString(noBrackets));
-					}
-				} else {
-					srcTier.addGroup(new TierString(noBrackets));
-				}
-				pasteTier(destRecord, srcTier, destTier);
+				pasteTier(destRecord, destTier, clipboardText);
 			} catch (IOException | UnsupportedFlavorException e) {
 				Toolkit.getDefaultToolkit().beep();
 				LogUtil.severe(e);
@@ -1056,101 +962,38 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 		}
 	}
 
-	private void pasteTier(Record destRecord, Tier<?> sourceTier, Tier<?> destTier) {
+	private void pasteTier(Record destRecord, Tier<?> destTier, String text) {
 		getEditor().getUndoSupport().beginUpdate();
-		if (destTier.isGrouped()) {
-			while (sourceTier.numberOfGroups() > destRecord.numberOfGroups()) {
-				AddGroupEdit edit = new AddGroupEdit(getEditor(), destRecord, destRecord.numberOfGroups());
-				getEditor().getUndoSupport().postEdit(edit);
-			}
-			for (int i = 0; i < sourceTier.numberOfGroups(); i++) {
-				if (destTier.getDeclaredType() == Orthography.class) {
-					try {
-						Orthography copyOrtho = Orthography.parseOrthography(sourceTier.getGroup(i).toString());
-
-						TierEdit<Orthography> edit = new TierEdit<>(getEditor(), (Tier<Orthography>) destTier, i, copyOrtho);
-						edit.setFireHardChangeOnUndo(i == 0);
-						getEditor().getUndoSupport().postEdit(edit);
-					} catch (ParseException pe) {
-						LogUtil.warning(pe);
-					}
-				} else if (destTier.getDeclaredType() == IPATranscript.class) {
-					IPATranscriptBuilder builder = new IPATranscriptBuilder();
-					if (sourceTier.getDeclaredType() == IPATranscript.class) {
-						IPATranscript src = ((Tier<IPATranscript>) sourceTier).getGroup(i);
-						builder.append(src);
-					} else {
-						builder.append(sourceTier.getGroup(i).toString());
-					}
-
-					IPATranscript ipa = builder.toIPATranscript();
-					SyllabifierInfo info = getEditor().getSession().getExtension(SyllabifierInfo.class);
-					SyllabifierLibrary library = SyllabifierLibrary.getInstance();
-					Syllabifier syllabifier = library.defaultSyllabifier();
-					if (info != null) {
-						Syllabifier tierSyllabifier = library.getSyllabifierForLanguage(info.getSyllabifierLanguageForTier(destTier.getName()));
-						if (tierSyllabifier != null) {
-							syllabifier = tierSyllabifier;
-						}
-					}
-					syllabifier.syllabify(ipa.toList());
-
-					TierEdit<IPATranscript> edit = new TierEdit<>(getEditor(), (Tier<IPATranscript>) destTier, i, ipa);
-					edit.setFireHardChangeOnUndo(i == 0);
-					getEditor().getUndoSupport().postEdit(edit);
-
-					PhoneMap pm = (new PhoneAligner()).calculatePhoneAlignment(destRecord.getIPATargetTier().getGroup(i),
-							destRecord.getIPAActualTier().getGroup(i));
-					TierEdit<PhoneMap> alignEdit = new TierEdit<>(getEditor(), destRecord.getPhoneAlignmentTier(), i, pm);
-					getEditor().getUndoSupport().postEdit(alignEdit);
-				} else if (destTier.getDeclaredType() == TierString.class) {
-					TierString copyTxt = new TierString(sourceTier.getGroup(i).toString());
-
-					TierEdit<TierString> edit = new TierEdit<>(getEditor(), (Tier<TierString>) destTier, i, copyTxt);
-					edit.setFireHardChangeOnUndo(i == 0);
-					getEditor().getUndoSupport().postEdit(edit);
-				} else {
-					LogUtil.warning("Unknown tier type: " + destTier.getDeclaredType());
-				}
-			}
-		} else {
-			if (destTier.getDeclaredType() == MediaSegment.class) {
-				if (sourceTier.getDeclaredType() == MediaSegment.class) {
-					MediaSegment origSeg = ((Tier<MediaSegment>) sourceTier).getGroup(0);
-					MediaSegment copySeg = SessionFactory.newFactory().createMediaSegment();
-					copySeg.setStartValue(origSeg.getStartValue());
-					copySeg.setEndValue(origSeg.getEndValue());
-
-					TierEdit<MediaSegment> edit = new TierEdit<>(getEditor(), (Tier<MediaSegment>) destTier, 0, copySeg);
-					edit.setFireHardChangeOnUndo(true);
-					getEditor().getUndoSupport().postEdit(edit);
-				} else {
-					Formatter<MediaSegment> segmentFormatter = FormatterFactory.createFormatter(MediaSegment.class);
-					if (segmentFormatter != null) {
-						try {
-							MediaSegment seg = segmentFormatter.parse(sourceTier.getGroup(0).toString());
-
-							TierEdit<MediaSegment> edit = new TierEdit<>(getEditor(), (Tier<MediaSegment>) destTier, 0, seg);
-							edit.setFireHardChangeOnUndo(true);
-							getEditor().getUndoSupport().postEdit(edit);
-						} catch (ParseException e) {
-							LogUtil.warning(e);
-						}
-					}
-				}
-			} else if (destTier.getDeclaredType() == TierString.class) {
-				String tierTxt = sourceTier.toString();
-				tierTxt = tierTxt.replaceAll("\\[", "").replaceAll("\\]", "");
-
-				TierEdit<TierString> edit = new TierEdit<>(getEditor(), (Tier<TierString>) destTier, 0, new TierString(tierTxt));
-				edit.setFireHardChangeOnUndo(true);
-				getEditor().getUndoSupport().postEdit(edit);
-			} else {
-				Toolkit.getDefaultToolkit().beep();
-				LogUtil.warning("Unknown tier type: " + destTier.getDeclaredType());
-			}
+		final TierEdit<?> tierEdit = new TierEdit<>(getEditor(), destTier, text);
+		getEditor().getUndoSupport().postEdit(tierEdit);
+		if(destTier.getDeclaredType() == IPATranscript.class) {
+			updateIPATier(destRecord, (Tier<IPATranscript>) destTier);
 		}
 		getEditor().getUndoSupport().endUpdate();
+	}
+
+	private void updateIPATier(Record record, Tier<IPATranscript> ipaTier) {
+		final IPATranscript ipa = ipaTier.getValue();
+		SyllabifierInfo info = getEditor().getSession().getExtension(SyllabifierInfo.class);
+		SyllabifierLibrary library = SyllabifierLibrary.getInstance();
+		Syllabifier syllabifier = library.defaultSyllabifier();
+		if (info != null) {
+			Syllabifier tierSyllabifier = library.getSyllabifierForLanguage(info.getSyllabifierLanguageForTier(ipaTier.getName()));
+			if (tierSyllabifier != null) {
+				syllabifier = tierSyllabifier;
+			}
+		}
+		syllabifier.syllabify(ipa.toList());
+		final SystemTierType systemTier = SystemTierType.tierFromString(ipaTier.getName());
+		if(systemTier == SystemTierType.IPATarget || systemTier == SystemTierType.IPAActual) {
+			final Tier<IPATranscript> targetTier =
+					systemTier == SystemTierType.IPATarget ? ipaTier : record.getIPATargetTier();
+			final Tier<IPATranscript> actualTier =
+					systemTier == SystemTierType.IPAActual ? ipaTier : record.getIPAActualTier();
+			final PhoneAlignment phoneAlignment = PhoneAlignment.fromTiers(targetTier, actualTier);
+			final TierEdit<PhoneAlignment> alignmentTierEdit = new TierEdit<>(getEditor(), record.getPhoneAlignmentTier(), phoneAlignment);
+			getEditor().getUndoSupport().postEdit(alignmentTierEdit);
+		}
 	}
 
 	/*
@@ -1191,18 +1034,6 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 		updating = false;
 	}
 	
-	public void onGroupsChange(EditorEvent<Void> event) {
-		final SessionLocation location = getSessionLocation();
-		if(location != null &&
-				location.getRecordLocation().getCharPositionInLine().getGroupIndex() >= getEditor().currentRecord().numberOfGroups()) {
-			currentGroupIndex.set(getEditor().currentRecord().numberOfGroups()-1);
-			currentCharIndex.set(0);
-			fireSessionLocationChanged();
-		}
-		update();
-		repaint();
-	}
-
 	public void onParticipantsChanged(EditorEvent<Participant> event) {
 		updating = true;
 		setupSpeakerBoxModel();

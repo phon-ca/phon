@@ -46,8 +46,8 @@ public final class Tier<T> extends ExtendableObject {
 	/**
 	 * @return tier type
 	 */
-	public Class<?> getDeclaredType() {
-		return tierImpl.getDeclaredType();
+	public Class<T> getDeclaredType() {
+		return (Class<T>) tierImpl.getDeclaredType();
 	}
 
 	/**

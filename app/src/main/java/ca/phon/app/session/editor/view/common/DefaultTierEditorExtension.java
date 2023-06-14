@@ -39,15 +39,14 @@ public class DefaultTierEditorExtension implements IPluginExtensionPoint<TierEdi
 		@Override
 		public TierEditor createObject(Object... args) {
 			final Tier<?> tier = Tier.class.cast(args[TierEditorFactory.TIER]);
-			final Integer group = Integer.class.cast(args[TierEditorFactory.GROUP]);
-			
+
 			if(tier.getDeclaredType() != String.class) {
 				throw new IllegalArgumentException("Tier type must be " + String.class.getName());
 			}
 			
 			@SuppressWarnings("unchecked")
 			final Tier<String> stringTier = (Tier<String>)tier;
-			return new GroupField<String>(stringTier, group, !tier.isGrouped());
+			return new GroupField<String>(stringTier);
 		}
 		
 	};

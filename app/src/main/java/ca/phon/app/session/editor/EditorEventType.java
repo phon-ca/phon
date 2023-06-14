@@ -169,12 +169,6 @@ public record EditorEventType<T>(String eventName, Class<T> type) {
 			new EditorEventType<>(EditorEventName.RECORD_EXCLUDE_CHANGE_EVT.getEventName(), RecordExcludedChangedData.class);
 
 	/**
-	 * Fired when the number of phonetic groups changes
-	 */
-	public final static EditorEventType<Void> GroupListChange =
-			new EditorEventType<>(EditorEventName.GROUP_LIST_CHANGE_EVT.getEventName(), Void.class);
-
-	/**
 	 * Notifies on changes to the modification flag
 	 */
 	public final static EditorEventType<Boolean> ModifiedFlagChanged =

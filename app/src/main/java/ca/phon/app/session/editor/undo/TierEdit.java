@@ -16,7 +16,15 @@
 package ca.phon.app.session.editor.undo;
 
 import ca.phon.app.session.editor.*;
+import ca.phon.extensions.IExtendable;
+import ca.phon.extensions.UnvalidatedValue;
+import ca.phon.formatter.Formatter;
+import ca.phon.formatter.FormatterFactory;
+import ca.phon.session.SessionFactory;
 import ca.phon.session.Tier;
+
+import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 
 /**
  * A change to the value of a group in a tier.
@@ -39,7 +47,7 @@ public class TierEdit<T> extends SessionEditorUndoableEdit {
 	/**
 	 * New value
 	 */
-	private final T newValue;
+	private T newValue;
 	
 	/**
 	 * Tells this edit to fire a 'hard' change on undo.
@@ -52,13 +60,31 @@ public class TierEdit<T> extends SessionEditorUndoableEdit {
 	 * 
 	 * @param editor
 	 * @param tier
-	 * @param groupIndex
 	 * @param newValue
 	 */
 	public TierEdit(SessionEditor editor, Tier<T> tier, T newValue) {
 		super(editor);
 		this.tier = tier;
 		this.newValue = newValue;
+	}
+
+	public TierEdit(SessionEditor editor, Tier<T> tier, String text) {
+		super(editor);
+		this.tier = tier;
+
+		final Formatter<T> formatter = FormatterFactory.createFormatter(tier.getDeclaredType());
+		try {
+			final T parsedValue = formatter.parse(text);
+			this.newValue = parsedValue;
+		} catch (ParseException pe) {
+			// attempt to create a new instance of the object
+			try {
+				final T val = tier.getDeclaredType().getDeclaredConstructor().newInstance();
+				if(val instanceof IExtendable) {
+					((IExtendable) val).putExtension(UnvalidatedValue.class, new UnvalidatedValue(text, pe));
+				}
+			} catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {}
+		}
 	}
 	
 	@Override

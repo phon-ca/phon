@@ -32,7 +32,6 @@ public class TierEditorFactory {
 	public final static int EDITOR = 0;
 	public final static int RECORD = 1;
 	public final static int TIER = 2;
-	public final static int GROUP = 3;
 
 	public TierEditorFactory() {
 		
@@ -44,8 +43,7 @@ public class TierEditorFactory {
 	 * @param tier
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public TierEditor createTierEditor(SessionEditor editor, TierDescription tierDescription,
-	                                   Record record, Tier<?> tier, int group) {
+	public <T> TierEditor<T> createTierEditor(SessionEditor editor, TierDescription tierDescription, Record record, Tier<T> tier) {
 		TierEditor retVal = null;
 		
 		final Class<?> tierType = tier.getDeclaredType();
@@ -59,7 +57,7 @@ public class TierEditorFactory {
 					if(info.tierName().length() > 0) {
 						if(!info.tierName().equals(tier.getName())) continue;
 					}
-					retVal = extPt.getFactory().createObject(editor, record, tier, group);
+					retVal = extPt.getFactory().createObject(editor, record, tier);
 					// don't continue to look use this editor
 					if(info.tierName().equalsIgnoreCase(tier.getName())) {
 						break;

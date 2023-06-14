@@ -736,8 +736,7 @@ public class ResultSetEditor extends ProjectFrame {
 						ResultValue rv = r.getResultValue(rvIdx);
 						final Range range = new Range(rv.getRange().getFirst(), rv.getRange().getLast(), false);
 						final SessionEditorSelection selection = 
-								new SessionEditorSelection(r.getRecordIndex(), rv.getTierName(),
-										rv.getGroupIndex(), range);
+								new SessionEditorSelection(r.getRecordIndex(), rv.getTierName(), range);
 						
 						if(rvIdx >= numPrimaryRvs) {
 							// draw secondary highlights with a box instead of 
