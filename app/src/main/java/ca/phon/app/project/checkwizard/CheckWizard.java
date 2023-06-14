@@ -148,18 +148,15 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 		}
 		
 		private void checkTier(int record, Tier<IPATranscript> tier, OutputStreamWriter out) throws IOException {
-			for(int gIdx = 0; gIdx < tier.numberOfGroups(); gIdx++) {
-				final IPATranscript ipa = tier.getGroup(gIdx);
-				// check for 'UnvalidatedValue's
-				final UnvalidatedValue uv = ipa.getExtension(UnvalidatedValue.class);
-				if(uv != null) {
-					out.write("\"" + corpusName + "." + sessionName + "\",");
-					out.write("\"" + (record+1) + "\",");
-					out.write("\"" + tier.getName() + "\",");
-					out.write("\"" + (gIdx+1) + "\",");
-					out.write("\"" + uv.getValue() + "\",");
-					out.write("\"" + uv.getParseError().getLocalizedMessage() + "\"\n");
-				}
+			final IPATranscript ipa = tier.hasValue() ? tier.getValue() : new IPATranscript();
+			// check for 'UnvalidatedValue's
+			final UnvalidatedValue uv = ipa.getExtension(UnvalidatedValue.class);
+			if(uv != null) {
+				out.write("\"" + corpusName + "." + sessionName + "\",");
+				out.write("\"" + (record+1) + "\",");
+				out.write("\"" + tier.getName() + "\",");
+				out.write("\"" + uv.getValue() + "\",");
+				out.write("\"" + uv.getParseError().getLocalizedMessage() + "\"\n");
 			}
 			out.flush();
 		}
@@ -217,19 +214,8 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 				resetSyllabification(ipaActual);
 				
 				if(isResetAlignment) {
-					if(ipaTarget.numberOfGroups() != ipaActual.numberOfGroups()) {
-						out.println("Alignment error in record " + (i+1));
-						continue;
-					}
-					
-					final Tier<PhoneMap> alignmentTier = record.getPhoneAlignmentTier();
-					for(int j = 0; j < ipaTarget.numberOfGroups(); j++) {
-						final IPATranscript target = ipaTarget.getGroup(j);
-						final IPATranscript actual = ipaActual.getGroup(j);
-						
-						final PhoneMap pm = phoneAligner.calculatePhoneMap(target, actual);
-						alignmentTier.setGroup(j, pm);
-					}
+					final PhoneAlignment phoneAlignment = PhoneAlignment.fromTiers(record.getIPATargetTier(), record.getIPAActualTier());
+					record.setPhoneAlignment(phoneAlignment);
 				}
 			}
 			
@@ -262,7 +248,8 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 		}
 		
 		private void resetSyllabification(Tier<IPATranscript> tier) {
-			for(IPATranscript ipa:tier) {
+			if(tier.hasValue()) {
+				final IPATranscript ipa = tier.getValue();
 				ipa.resetSyllabification();
 				syllabifier.syllabify(ipa.toList());
 			}
@@ -313,20 +300,8 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 				
 				final Tier<IPATranscript> ipaTarget = record.getIPATargetTier();
 				final Tier<IPATranscript> ipaActual = record.getIPAActualTier();
-				
-				if(ipaTarget.numberOfGroups() != ipaActual.numberOfGroups()) {
-					out.println("Alignment error in record " + (i+1));
-					continue;
-				}
-				
-				final Tier<PhoneMap> alignmentTier = record.getPhoneAlignmentTier();
-				for(int j = 0; j < ipaTarget.numberOfGroups(); j++) {
-					final IPATranscript target = ipaTarget.getGroup(j);
-					final IPATranscript actual = ipaActual.getGroup(j);
-					
-					final PhoneMap pm = phoneAligner.calculatePhoneMap(target, actual);
-					alignmentTier.setGroup(j, pm);
-				}
+				final PhoneAlignment phoneAlignment = PhoneAlignment.fromTiers(ipaTarget, ipaActual);
+				record.setPhoneAlignment(phoneAlignment);
 			}
 			
 			// save xml to project
@@ -363,7 +338,6 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 		sb.append('\"').append("Session").append('\"').append(',');
 		sb.append('\"').append("Record #").append('\"').append(',');
 		sb.append('\"').append("Tier").append('\"').append(',');
-		sb.append('\"').append("Group").append('\"').append(',');
 		sb.append('\"').append("Value").append('\"').append(',');
 		sb.append('\"').append("Error").append('\"').append('\n');
 		out.write(sb.toString());

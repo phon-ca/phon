@@ -127,7 +127,6 @@ public class SessionCheckNode extends OpNode implements NodeSettings{
 		warningsTable.setColumnTitle(col++, "Session");
 		warningsTable.setColumnTitle(col++, "Record #");
 		warningsTable.setColumnTitle(col++, "Tier");
-		warningsTable.setColumnTitle(col++, "Group #");
 		warningsTable.setColumnTitle(col++, "Value");
 		warningsTable.setColumnTitle(col++, "Message");
 		
@@ -142,9 +141,8 @@ public class SessionCheckNode extends OpNode implements NodeSettings{
 			row[c++] = spRef.get();
 			row[c++] = ve.getRecord() + 1;
 			row[c++] = ve.getTierName();
-			row[c++] = ve.getGroup() + 1;
-			
-			var groupVal = ve.getSession().getRecord(ve.getRecord()).getGroup(ve.getGroup()).getTier(ve.getTierName());
+
+			var groupVal = ve.getSession().getRecord(ve.getRecord()).getTier(ve.getTierName()).getValue();
 			if(groupVal instanceof IExtendable) {
 				if(((IExtendable)groupVal).getExtension(UnvalidatedValue.class) != null) {
 					groupVal = ((IExtendable)groupVal).getExtension(UnvalidatedValue.class).getValue();

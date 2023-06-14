@@ -39,15 +39,14 @@ public class OrthographyTierEditorExtension implements IPluginExtensionPoint<Tie
 		public TierEditor createObject(Object... args) {
 			final SessionEditor editor = SessionEditor.class.cast(args[TierEditorFactory.EDITOR]);
 			final Tier<?> tier = Tier.class.cast(args[TierEditorFactory.TIER]);
-			final Integer group = Integer.class.cast(args[TierEditorFactory.GROUP]);
-			
+
 			if(tier.getDeclaredType() != Orthography.class) {
 				throw new IllegalArgumentException("Tier type must be " + Orthography.class.getName());
 			}
 			
 			@SuppressWarnings("unchecked")
 			final Tier<Orthography> orthoTier = (Tier<Orthography>)tier;
-			return new OrthoGroupField(orthoTier, group);
+			return new OrthoGroupField(orthoTier);
 		}
 		
 	};

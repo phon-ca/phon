@@ -15,34 +15,29 @@
  */
 package ca.phon.app.session.editor.view.syllabification_and_alignment;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.SessionEditorUndoableEdit;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.session.Tier;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllable.*;
+import org.apache.commons.logging.Log;
 import org.apache.logging.log4j.LogManager;
 
 import java.text.ParseException;
 
 public class SyllabifyEdit extends SessionEditorUndoableEdit {
 
-	private static final long serialVersionUID = 4846772248441893228L;
-
-	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(SyllabifyEdit.class.getName());
-
 	private final Tier<IPATranscript> tier;
 	
 	private final Syllabifier syllabifier;
 	
-	private final int groupIndex;
-	
 	private String oldVal = null;
 	
-	public SyllabifyEdit(SessionEditor editor, Tier<IPATranscript> ipaTier, int groupIndex, Syllabifier syllabifier) {
+	public SyllabifyEdit(SessionEditor editor, Tier<IPATranscript> ipaTier,Syllabifier syllabifier) {
 		super(editor);
 		this.tier = ipaTier;
-		this.groupIndex = groupIndex;
 		this.syllabifier = syllabifier;
 	}
 	
@@ -51,7 +46,7 @@ public class SyllabifyEdit extends SessionEditorUndoableEdit {
 		if(oldVal == null) return;
 		try {
 			final IPATranscript oldTranscript = IPATranscript.parseIPATranscript(oldVal);
-			final IPATranscript grp = tier.getGroup(groupIndex);
+			final IPATranscript grp = tier.getValue();
 			
 			if(oldTranscript.length() != grp.length()) return;
 			for(int j = 0; j < oldTranscript.length(); j++) {
@@ -64,13 +59,13 @@ public class SyllabifyEdit extends SessionEditorUndoableEdit {
 							new SyllabificationAlignmentEditorView.ScEditData(grp, -1, SyllableConstituentType.UNKNOWN, SyllableConstituentType.UNKNOWN));
 			getEditor().getEventManager().queueEvent(ee);
 		} catch (ParseException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.severe( e.getLocalizedMessage(), e);
 		}
 	}
 
 	@Override
 	public void doIt() {
-		final IPATranscript ipa = tier.getGroup(groupIndex);
+		final IPATranscript ipa = tier.getValue();
 		oldVal = ipa.toString(true);
 		
 		final StripSyllabifcationVisitor visitor = new StripSyllabifcationVisitor();

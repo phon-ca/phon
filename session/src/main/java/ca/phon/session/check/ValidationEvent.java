@@ -38,8 +38,6 @@ public class ValidationEvent implements IExtendable {
 	
 	private String tierName;
 	
-	private int group;
-	
 	private String message;
 	
 	private List<SessionQuickFix> quickFixes;
@@ -86,24 +84,22 @@ public class ValidationEvent implements IExtendable {
 		this(Severity.WARNING, session, record, message, quickFixes);
 	}
 
-	public ValidationEvent(Session session, int record, String tierName,
-			int group, String message) {
-		this(session, record, tierName, group, message, new SessionQuickFix[0]);
+	public ValidationEvent(Session session, int record, String tierName, String message) {
+		this(session, record, tierName, message, new SessionQuickFix[0]);
 	}
 
 	public ValidationEvent(Session session, int record, String tierName,
-	                       int group, String message, SessionQuickFix ... quickFixes) {
-		this(Severity.WARNING, session, record, tierName, group, message, quickFixes);
+	                       String message, SessionQuickFix ... quickFixes) {
+		this(Severity.WARNING, session, record, tierName, message, quickFixes);
 	}
 
 	public ValidationEvent(Severity severity, Session session, int record, String tierName,
-			int group, String message, SessionQuickFix ... quickFixes) {
+			String message, SessionQuickFix ... quickFixes) {
 		super();
 		this.severity = severity;
 		this.session = session;
 		this.record = record;
 		this.tierName = tierName;
-		this.group = group;
 		this.message = message;
 		this.quickFixes = List.of(quickFixes);
 	}
@@ -138,14 +134,6 @@ public class ValidationEvent implements IExtendable {
 
 	public void setTierName(String tierName) {
 		this.tierName = tierName;
-	}
-
-	public int getGroup() {
-		return group;
-	}
-
-	public void setGroup(int group) {
-		this.group = group;
 	}
 
 	public String getMessage() {

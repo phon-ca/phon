@@ -16,15 +16,12 @@
 package ca.phon.app.session.editor.view.common;
 
 import ca.phon.session.Tier;
+import ca.phon.session.UserTierData;
 
-public class NotesField extends GroupField<String> {
+public class NotesField extends GroupField<UserTierData> {
 
-
-	private static final long serialVersionUID = 7309167333058601139L;
-
-	public NotesField(Tier<String> tier) {
-		super(tier, 0, true);
+	public NotesField(Tier<UserTierData> tier) {
+		super(tier, true);
 	}
-	
-	
+
 }

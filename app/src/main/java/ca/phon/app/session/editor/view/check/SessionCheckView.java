@@ -218,7 +218,7 @@ public class SessionCheckView extends EditorView {
 		private OutputStreamWriter out;
 		private CSVWriter writer;
 		
-		final String[] cols = new String[] { "Session", "Record #", "Group", "Tier", "Message" };
+		final String[] cols = new String[] { "Session", "Record #", "Tier", "Message" };
 		
 		public SessionCheckWorker() {
 			try {
@@ -265,7 +265,6 @@ public class SessionCheckView extends EditorView {
 			for(var ve:chunks) {
 				row[0] = ve.getSession().getCorpus() + "." + ve.getSession().getName();
 				row[1] = "" + (ve.getRecord()+1);
-				row[2] = "" + (ve.getGroup()+1);
 				row[3] = ve.getTierName();
 				row[4] = ve.getMessage();
 				

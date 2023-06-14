@@ -32,8 +32,6 @@ import java.text.ParseException;
  */
 public class OrthoGroupField extends GroupField<Orthography> {
 
-	private static final long serialVersionUID = -7358501453702966912L;
-	
 	private final HighlightPainter prefixPainter = new DefaultHighlighter.DefaultHighlightPainter(
 			new Color(255, 255, 0, 100));
 	
@@ -48,9 +46,8 @@ public class OrthoGroupField extends GroupField<Orthography> {
 	
 	private final HighlightPainter untranscribedPainter = commentPainter;
 
-	public OrthoGroupField(Tier<Orthography> tier,
-			int groupIndex) {
-		super(tier, groupIndex);
+	public OrthoGroupField(Tier<Orthography> tier) {
+		super(tier);
 		getGroupValue().accept(new HighlightVisitor(getText()));
 	}
 	

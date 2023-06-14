@@ -67,12 +67,12 @@ public class SessionValidator implements IExtendable {
 		fireValidationEvent(new ValidationEvent(session, record, message));
 	}
 
-	public void fireValidationEvent(ValidationEvent.Severity severity, Session session, int record, String tierName, int group, String message) {
-		fireValidationEvent(new ValidationEvent(severity, session, record, tierName, group, message));
+	public void fireValidationEvent(ValidationEvent.Severity severity, Session session, int record, String tierName, String message) {
+		fireValidationEvent(new ValidationEvent(severity, session, record, tierName, message));
 	}
 
-	public void fireValidationEvent(Session session, int record, String tierName, int group, String message) {
-		fireValidationEvent(new ValidationEvent(session, record, tierName, group, message));
+	public void fireValidationEvent(Session session, int record, String tierName, String message) {
+		fireValidationEvent(new ValidationEvent(session, record, tierName, message));
 	}
 
 	public void fireValidationEvent(final ValidationEvent evt) {

@@ -45,8 +45,6 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 	public record ScEditData(IPATranscript ipa, int eleIdx, SyllableConstituentType oldType, SyllableConstituentType newType) { }
 	public final static EditorEventType<ScEditData> ScEdit = new EditorEventType<>(EditorEventName.MODIFICATION_EVENT + "_SC_TYPE_", ScEditData.class);
 
-	private static final long serialVersionUID = -1757697054252181347L;
-
 	private final static String VIEW_NAME = "Syllabification & Alignment";
 
 	private JPanel topPanel;
@@ -177,7 +175,6 @@ public class SyllabificationAlignmentEditorView extends EditorView {
 
 		eventManager.registerActionForEvent(EditorEventType.RecordChanged, this::onRecordChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 		eventManager.registerActionForEvent(EditorEventType.RecordRefresh, this::onRecordChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
-		eventManager.registerActionForEvent(EditorEventType.GroupListChange, this::onGroupListChange, EditorEventManager.RunOn.AWTEventDispatchThread);
 
 		eventManager.registerActionForEvent(EditorEventType.TierChange, this::onTierChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 		eventManager.registerActionForEvent(EditorEventType.TierChanged, this::onTierChanged, EditorEventManager.RunOn.AWTEventDispatchThread);

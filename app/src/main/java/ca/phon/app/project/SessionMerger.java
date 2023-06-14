@@ -15,6 +15,7 @@
  */
 package ca.phon.app.project;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.project.Project;
 import ca.phon.session.Record;
 import ca.phon.session.*;
@@ -29,8 +30,6 @@ import java.util.*;
  *
  */
 public class SessionMerger extends PhonTask {
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(SessionMerger.class.getName());
 
 	private final Project project;
 
@@ -160,7 +159,7 @@ public class SessionMerger extends PhonTask {
 
 			if(newDesc == null) {
 				// add new dep tier
-				newDesc = factory.createTierDescription(tierDesc.getName(), tierDesc.isGrouped());
+				newDesc = factory.createTierDescription(tierDesc.getName(), tierDesc.getDeclaredType(), tierDesc.getTierParameters(), tierDesc.getTierAlignmentRules());
 				dest.addUserTier(newDesc);
 				
 				final TierViewItem tvi = factory.createTierViewItem(tierDesc.getName(), true);
@@ -208,7 +207,7 @@ public class SessionMerger extends PhonTask {
 		} catch (IOException e) {
 			super.err = e;
 			setStatus(TaskStatus.ERROR);
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.severe( e.getLocalizedMessage(), e);
 		}
 	}
 

@@ -31,19 +31,16 @@ public class PhonURI {
 
     private int recordIndex;
 
-    private List<Integer> groups;
-
     private List<String> tierNames;
 
     private List<Range> ranges;
 
-    public PhonURI(String projectLocation, String corpus, String session, int recordIndex, List<Integer> groups, List<String> tierNames, List<Range> ranges) {
+    public PhonURI(String projectLocation, String corpus, String session, int recordIndex, List<String> tierNames, List<Range> ranges) {
         super();
 
         this.projectLocation = (new File(projectLocation)).toURI().getPath();
         this.corpus = corpus;
         this.session = session;
-        this.groups = groups;
         this.recordIndex = recordIndex;
         this.tierNames = tierNames;
         this.ranges = ranges;
@@ -64,34 +61,26 @@ public class PhonURI {
         s.append("/").append(encodeURIPathComponent(session));
         s.append("?");
         s.append("record=").append(recordIndex);
-        if (groups.size() >= 0) {
-            if (ranges.size() > 0 && ranges.size() == tierNames.size()) {
-                final StringBuilder tierBuilder = new StringBuilder();
-                final StringBuilder rangeBuilder = new StringBuilder();
-                final StringBuilder groupBuilder = new StringBuilder();
-                for(int i = 0; i < ranges.size(); i++) {
-                    final int group = groups.get(i);
-                    final Range range = ranges.get(i);
-                    final String tier = tierNames.get(i);
-                    if(range.getLast() >= range.getFirst()) {
-                        if(tierBuilder.length() == 0) {
-                            groupBuilder.append("&group=");
-                            tierBuilder.append("&tier=");
-                            rangeBuilder.append("&range=");
-                        } else {
-                            groupBuilder.append(",");
-                            tierBuilder.append(",");
-                            rangeBuilder.append(",");
-                        }
-                        groupBuilder.append(group);
-                        tierBuilder.append(encodeURIPathComponent(tier));
-                        rangeBuilder.append(range.toString());
+        if(ranges.size() > 0 && ranges.size() == tierNames.size()) {
+            final StringBuilder tierBuilder = new StringBuilder();
+            final StringBuilder rangeBuilder = new StringBuilder();
+            for(int i = 0; i < ranges.size(); i++) {
+                final Range range = ranges.get(i);
+                final String tier = tierNames.get(i);
+                if(range.getLast() >= range.getFirst()) {
+                    if(tierBuilder.length() == 0) {
+                        tierBuilder.append("&tier=");
+                        rangeBuilder.append("&range=");
+                    } else {
+                        tierBuilder.append(",");
+                        rangeBuilder.append(",");
                     }
+                    tierBuilder.append(encodeURIPathComponent(tier));
+                    rangeBuilder.append(range);
                 }
-                s.append(groupBuilder);
-                s.append(tierBuilder);
-                s.append(rangeBuilder);
             }
+            s.append(tierBuilder);
+            s.append(rangeBuilder);
         }
         return new URI(s.toString());
     }

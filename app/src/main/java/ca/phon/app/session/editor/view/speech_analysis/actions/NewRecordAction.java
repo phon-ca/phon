@@ -40,7 +40,6 @@ public class NewRecordAction extends SpeechAnalysisEditorViewAction {
 	public void hookableActionPerformed(ActionEvent ae) {
 		if(getView().getSelectionInterval() == null) return;
 		
-		
 		final float startTime = getView().getSelectionInterval().getStartMarker().getTime();
 		final float endTime = getView().getSelectionInterval().getEndMarker().getTime();
 		
@@ -48,8 +47,7 @@ public class NewRecordAction extends SpeechAnalysisEditorViewAction {
 		final Record record = factory.createRecord();
 		final Record currentRecord = getEditor().currentRecord();
 		record.setSpeaker((currentRecord != null ? currentRecord.getSpeaker() : Participant.UNKNOWN));
-		record.addGroup();
-		
+
 		final MediaSegment segment = factory.createMediaSegment();
 		segment.setStartValue(startTime*1000.0f);
 		segment.setEndValue(endTime*1000.0f);

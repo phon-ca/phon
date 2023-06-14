@@ -28,8 +28,6 @@ import java.awt.event.ActionEvent;
 
 public class ResetSyllabificationCommand extends SyllabificationAlignmentCommand {
 	
-	private static final long serialVersionUID = 5422818175227127233L;
-	
 	private final String ipaTier;
 
 	public ResetSyllabificationCommand(SessionEditor editor,
@@ -57,11 +55,9 @@ public class ResetSyllabificationCommand extends SyllabificationAlignmentCommand
 		final Syllabifier syllabifier = library.getSyllabifierForLanguage(syllabifierLanguage);
 		
 		final CompoundEdit edit = new CompoundEdit();
-		for(int i = 0; i < tier.numberOfGroups(); i++) {
-			final SyllabifyEdit ed = new SyllabifyEdit(getEditor(), tier, i, syllabifier);
-			ed.doIt();
-			edit.addEdit(ed);
-		}
+		final SyllabifyEdit ed = new SyllabifyEdit(getEditor(), tier, syllabifier);
+		ed.doIt();
+		edit.addEdit(ed);
 		edit.end();
 		
 		getEditor().getUndoSupport().postEdit(edit);

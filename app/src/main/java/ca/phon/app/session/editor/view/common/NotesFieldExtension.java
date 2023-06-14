@@ -18,8 +18,9 @@ package ca.phon.app.session.editor.view.common;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.plugin.*;
 import ca.phon.session.Tier;
+import ca.phon.session.UserTierData;
 
-@TierEditorInfo(type=String.class,tierName="Notes")
+@TierEditorInfo(type= UserTierData.class, tierName="Notes")
 public class NotesFieldExtension implements IPluginExtensionPoint<TierEditor> {
 
 	@Override
@@ -38,14 +39,13 @@ public class NotesFieldExtension implements IPluginExtensionPoint<TierEditor> {
 		public TierEditor createObject(Object... args) {
 			final SessionEditor editor = SessionEditor.class.cast(args[TierEditorFactory.EDITOR]);
 			final Tier<?> tier = Tier.class.cast(args[TierEditorFactory.TIER]);
-			final Integer group = Integer.class.cast(args[TierEditorFactory.GROUP]);
-			
-			if(tier.getDeclaredType() != String.class) {
-				throw new IllegalArgumentException("Tier type must be " + String.class.getName());
+
+			if(tier.getDeclaredType() != UserTierData.class) {
+				throw new IllegalArgumentException("Tier type must be " + UserTierData.class.getName());
 			}
 			
 			@SuppressWarnings("unchecked")
-			final Tier<String> stringTier = (Tier<String>)tier;
+			final Tier<UserTierData> stringTier = (Tier<UserTierData>)tier;
 			return new NotesField(stringTier);
 		}
 		

@@ -90,7 +90,6 @@ public class ResultTableUtil {
         int recordNum = Integer.parseInt(recordTxt) - 1;
         if(recordNum < 0) return;
 
-        List<Integer> groups = new ArrayList<>();
         List<String> tiers = new ArrayList<>();
         List<Range> ranges = new ArrayList<>();
 
@@ -103,15 +102,13 @@ public class ResultTableUtil {
                 // setup highlighting
                 for(ResultValue rv:result) {
                     final Range range = new Range(rv.getRange().getFirst(), rv.getRange().getLast(), false);
-                    groups.add(rv.getGroupIndex());
                     tiers.add(rv.getTierName());
                     ranges.add(range);
                 }
             }
         }
 
-        final PhonURI phonURI = new PhonURI(project.getLocation(), sp.getCorpus(), sp.getSession(), recordNum,
-                groups, tiers, ranges);
+        final PhonURI phonURI = new PhonURI(project.getLocation(), sp.getCorpus(), sp.getSession(), recordNum, tiers, ranges);
         final PhonURISchemeHandler schemeHandler = new PhonURISchemeHandler();
         try {
             schemeHandler.openURI(phonURI.toURI());
