@@ -167,37 +167,35 @@ public class SessionRowFilter extends RowFilter<TableModel, Integer> {
 		throws PhonexPatternException {
 		final PhonexPattern pattern = PhonexPattern.compile(expr);
 		boolean retVal = false;
-		
-		for(IPATranscript ipa:ipaTier) {
-			if(retVal) break;
-			final PhonexMatcher matcher = pattern.matcher(ipa);
+
+		if(ipaTier.hasValue()) {
+			final PhonexMatcher matcher = pattern.matcher(ipaTier.getValue());
 			retVal = matcher.find();
 		}
-		
+
 		return retVal;
 	}
 	
 	private boolean checkStringTier(Tier<String> tier, String expr) {
 		boolean retVal = false;
-		
-		for(String grp:tier) {			
-			if(retVal) break;
-			if(searchType == SearchType.REGEX) {
+
+		if(tier.hasValue()) {
+			if (searchType == SearchType.REGEX) {
 				try {
 					final Pattern pattern = Pattern.compile(expr, (caseSensitive ? 0 : Pattern.CASE_INSENSITIVE));
-					final Matcher matcher = pattern.matcher(grp);
+					final Matcher matcher = pattern.matcher(tier.getValue());
 					retVal = matcher.find();
 				} catch (PatternSyntaxException e) {
-					
+
 				}
-			} else if(searchType == SearchType.PLAIN) {
-				String grpVal = (caseSensitive ? grp.toString() : grp.toString().toLowerCase());
+			} else if (searchType == SearchType.PLAIN) {
+				String grpVal = (caseSensitive ? tier.getValue() : tier.getValue().toLowerCase());
 				String exprVal = (caseSensitive ? expr : expr.toString().toLowerCase());
-				
+
 				retVal = grpVal.contains(exprVal);
 			}
 		}
-		
+
 		return retVal;
 	}
 	

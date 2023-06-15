@@ -16,7 +16,6 @@
 package ca.phon.app.session.editor.view.tier_management;
 
 import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.actions.ConvertFlatTierAction;
 import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.tier_management.actions.*;
 import ca.phon.session.*;
@@ -32,7 +31,6 @@ import org.jdesktop.swingx.JXTable;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
-import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;

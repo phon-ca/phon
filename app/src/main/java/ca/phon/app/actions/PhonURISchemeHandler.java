@@ -23,16 +23,15 @@ import java.util.*;
  *  2) /path/to/session/file - session file or project folder to open
  *  3) ?GETVARS - information about record number and search result highlight
  *     a) record=#
- *     b) group=#[,#...]
- *     c) tier=tier1[,tier2...]
+ *     b) tier=tier1[,tier2...]
  *     c) range=(#..#)[,(#..#)...]
  */
 public final class PhonURISchemeHandler {
 
 	public final static String PHON_URI_SCHEME = "phon";
 
-	private final static List<String> GET_VARS = List.of("record",  "tier", "group","range");
-	private final static List<String> GET_VAR_PATTERNS = List.of("[0-9]+", "\\w[ \\w]+(,\\w[ \\w]+)*", "[0-9]+(,[0-9]+)*", "\\([0-9]+\\.{2,3}[0-9]+\\)(,\\([0-9]+\\.{2,3}[0-9]+\\))*");
+	private final static List<String> GET_VARS = List.of("record",  "tier", "range");
+	private final static List<String> GET_VAR_PATTERNS = List.of("[0-9]+", "\\w[ \\w]+(,\\w[ \\w]+)*", "\\([0-9]+\\.{2,3}[0-9]+\\)(,\\([0-9]+\\.{2,3}[0-9]+\\))*");
 
 	public PhonURISchemeHandler() {
 
@@ -48,7 +47,7 @@ public final class PhonURISchemeHandler {
 	 *
 	 * @return path to open along with a map of query variables
 	 */
-	private Tuple<String, Map<String, String>> parseURI(URI uri) throws MalformedURLException, FileNotFoundException {
+	private Tuple<String, Map<String, String>> parseURI(URI uri) throws MalformedURLException {
 		if(!uri.getScheme().equals(PHON_URI_SCHEME)) {
 			throw new MalformedURLException("URI scheme must be phon");
 		}
@@ -86,21 +85,16 @@ public final class PhonURISchemeHandler {
 				final String tierVal = queryVars.get("tier");
 				final String[] tiers = tierVal.split(",");
 
-				final String groupVal = queryVars.get("group");
-				final String[] groups = groupVal.split(",");
-
 				final String rangeVal = queryVars.get("range");
 				final String[] ranges = rangeVal.split(",");
 
-				if(tiers.length == groups.length && groups.length == ranges.length) {
+				if(tiers.length == ranges.length) {
 					for(int i = 0; i < tiers.length; i++) {
 						final String tier = tiers[i];
-						final String group = groups[i];
 						final String range = ranges[i];
 
 						final ResultValue rv = factory.createResultValue();
 						rv.setTierName(tier);
-						rv.setGroupIndex(Integer.parseInt(group));
 						rv.setRange(Range.fromString(range));
 
 						tempResult.addResultValue(rv);

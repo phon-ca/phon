@@ -37,10 +37,6 @@ import java.util.stream.StreamSupport;
  */
 public class PasteRecordAction extends SessionEditorAction {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(PasteRecordAction.class.getName());
-
-	private static final long serialVersionUID = 4581031841588720169L;
-
 	private final static String CMD_NAME = "Paste record";
 	
 	private final static String SHORT_DESC = "Paste record from clipboard after current record";
@@ -143,7 +139,7 @@ public class PasteRecordAction extends SessionEditorAction {
 		for(TierDescription td:copyTiers) {
 			Optional<TierDescription> existingTier =
 					StreamSupport.stream(currentTiers.spliterator(), false)
-							.filter( desc -> td.getName().equals(desc.getName()) && td.isGrouped() == desc.isGrouped() )
+							.filter( desc -> td.getName().equals(desc.getName()))
 							.findAny();
 			if(!existingTier.isPresent()) {
 				toAdd.add(td);
@@ -152,7 +148,7 @@ public class PasteRecordAction extends SessionEditorAction {
 
 		if(toAdd.size() > 0) {
 			for (TierDescription td : toAdd) {
-				TierViewItem tvi = sessionFactory.createTierViewItem(td.getName(), td.isGrouped(), true);
+				TierViewItem tvi = sessionFactory.createTierViewItem(td.getName(), true);
 				AddTierEdit addTierEdit = new AddTierEdit(getEditor(), td, sessionFactory.createTierViewItem(td.getName()) );
 				getEditor().getUndoSupport().postEdit(addTierEdit);
 			}

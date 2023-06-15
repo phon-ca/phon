@@ -16,8 +16,6 @@
 
 package ca.phon.app.session.editor.view.common;
 
-import ca.phon.app.session.editor.EditorEvent;
-import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.*;
@@ -40,7 +38,7 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * Editor for media segments.
  */
-public class MediaSegmentTierComponent extends JComponent implements TierEditor {
+public class MediaSegmentTierComponent extends JComponent implements TierEditor<MediaSegment> {
 
     private final static String DEFAULT_SEGMENT_TEXT = "000:00.000-000:00.000";
 
@@ -50,11 +48,9 @@ public class MediaSegmentTierComponent extends JComponent implements TierEditor 
 
     private Tier<MediaSegment> segmentTier;
 
-    private int groupIndex = 0;
-
     private final SegmentField segmentField;
 
-    public MediaSegmentTierComponent(SessionEditor editor, Record record, Tier<MediaSegment> tier, int groupIndex) {
+    public MediaSegmentTierComponent(SessionEditor editor, Record record, Tier<MediaSegment> tier) {
         super();
         setOpaque(false);
         setFocusable(false);
@@ -63,7 +59,6 @@ public class MediaSegmentTierComponent extends JComponent implements TierEditor 
         this.record = record;
         this.segmentTier = tier;
         segmentTier.addTierListener(tierListener);
-        this.groupIndex = groupIndex;
 
         segmentField = new SegmentField() {
 
@@ -160,7 +155,7 @@ public class MediaSegmentTierComponent extends JComponent implements TierEditor 
                     prevRecord = r;
             }
             if(prevRecord != null) {
-                MediaSegment prevSegment = prevRecord.getSegmentTier().getGroup(0);
+                MediaSegment prevSegment = prevRecord.getMediaSegment();
                 if(prevSegment != null) {
                     final float diffMs = validated.getStartValue() - prevSegment.getEndValue();
 
@@ -191,7 +186,7 @@ public class MediaSegmentTierComponent extends JComponent implements TierEditor 
     }
 
     public void updateText() {
-        final MediaSegment segment = getGroupValue();
+        final MediaSegment segment = getSegment();
         final Formatter<MediaSegment> segmentFormatter = FormatterFactory.createFormatter(MediaSegment.class);
 
         String tierTxt =
@@ -200,36 +195,26 @@ public class MediaSegmentTierComponent extends JComponent implements TierEditor 
     }
 
     public void onEnter() {
-        if(!getGroupValue().equals(initialGroupVal)) {
-            for(TierEditorListener listener:getTierEditorListeners()) {
-                listener.tierValueChanged(segmentTier, 0, getValidatedObject(), initialGroupVal);
+        if(!getSegment().equals(initialGroupVal)) {
+            for(TierEditorListener<MediaSegment> listener:getTierEditorListeners()) {
+                listener.tierValueChanged(segmentTier, getValidatedObject(), initialGroupVal, false);
             }
-            initialGroupVal.setSegment(getGroupValue());
+            initialGroupVal.setSegment(getSegment());
         }
     }
 
     private void updateTier() {
-        final MediaSegment oldVal = getGroupValue();
+        final MediaSegment oldVal = getSegment();
         final MediaSegment newVal = getValidatedObject();
         if(newVal != null) {
             for(TierEditorListener listener:listeners) {
-                listener.tierValueChange(segmentTier, groupIndex, newVal, oldVal);
-            }
-            for(int gidx = 0; gidx < this.record.numberOfGroups(); gidx++) {
-                final GroupSegment prevSeg = this.record.getGroupSegment().getGroup(gidx);
-                final GroupSegment gseg = new GroupSegment(record, prevSeg.getStart(), prevSeg.getEnd());
-                this.record.getGroupSegment().setGroup(gidx, gseg);
-
-                final EditorEvent<EditorEventType.TierChangeData> gsegChangeEvt =
-                        new EditorEvent<>(EditorEventType.TierChanged, getEditor(),
-                                new EditorEventType.TierChangeData(record.getGroupSegment(), gidx, prevSeg, gseg));
-                getEditor().getEventManager().queueEvent(gsegChangeEvt);
+                listener.tierValueChanged(segmentTier, newVal, oldVal, true);
             }
         }
     }
 
-    private MediaSegment getGroupValue() {
-        return segmentTier.getGroup(groupIndex);
+    private MediaSegment getSegment() {
+        return segmentTier.getValue();
     }
 
     private MediaSegment initialGroupVal = SessionFactory.newFactory().createMediaSegment();
@@ -237,16 +222,16 @@ public class MediaSegmentTierComponent extends JComponent implements TierEditor 
 
         @Override
         public void focusLost(FocusEvent e) {
-            if(!getGroupValue().equals(initialGroupVal)) {
+            if(!getSegment().equals(initialGroupVal)) {
                 for(TierEditorListener listener:getTierEditorListeners()) {
-                    listener.tierValueChanged(segmentTier, 0, getValidatedObject(), initialGroupVal);
+                    listener.tierValueChanged(segmentTier, getValidatedObject(), initialGroupVal, false);
                 }
             }
         }
 
         @Override
         public void focusGained(FocusEvent e) {
-            initialGroupVal.setSegment(getGroupValue());
+            initialGroupVal.setSegment(getSegment());
         }
 
     };
@@ -269,31 +254,14 @@ public class MediaSegmentTierComponent extends JComponent implements TierEditor 
 
     };
 
-    private final TierListener<MediaSegment> tierListener = new TierListener<MediaSegment>() {
-
+    private final TierListener<MediaSegment> tierListener = new TierListener<>() {
         @Override
-        public void groupsCleared(Tier<MediaSegment> tier) {
-        }
-
-        @Override
-        public void groupRemoved(Tier<MediaSegment> tier, int index,
-                                 MediaSegment value) {
-        }
-
-        @Override
-        public void groupChanged(Tier<MediaSegment> tier, int index,
-                                 MediaSegment oldValue, MediaSegment value) {
-            if(!segmentField.hasFocus() && index == groupIndex) {
+        public void tierValueChanged(Tier<MediaSegment> tier, MediaSegment oldValue, MediaSegment newValue) {
+            if(!segmentField.hasFocus()) {
                 updateText();
             }
             validateText();
         }
-
-        @Override
-        public void groupAdded(Tier<MediaSegment> tier, int index,
-                               MediaSegment value) {
-        }
-
     };
 
     @Override
@@ -301,22 +269,22 @@ public class MediaSegmentTierComponent extends JComponent implements TierEditor 
         return this;
     }
 
-    private final List<TierEditorListener> listeners =
-            Collections.synchronizedList(new ArrayList<TierEditorListener>());
+    private final List<TierEditorListener<MediaSegment>> listeners =
+            Collections.synchronizedList(new ArrayList<>());
 
     @Override
-    public void addTierEditorListener(TierEditorListener listener) {
+    public void addTierEditorListener(TierEditorListener<MediaSegment> listener) {
         if(!listeners.contains(listener))
             listeners.add(listener);
     }
 
     @Override
-    public void removeTierEditorListener(TierEditorListener listener) {
+    public void removeTierEditorListener(TierEditorListener<MediaSegment> listener) {
         listeners.remove(listener);
     }
 
     @Override
-    public List<TierEditorListener> getTierEditorListeners() {
+    public List<TierEditorListener<MediaSegment>> getTierEditorListeners() {
         return listeners;
     }
 

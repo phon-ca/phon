@@ -41,7 +41,7 @@ public class RecordsTransferable implements Transferable {
             clonedSpeakerList.add(clonedParticipant);
 
         for(TierDescription td:session.getUserTiers()) {
-            this.session.addUserTier(factory.createTierDescription(td.getName(), td.isGrouped(), td.getDeclaredType()));
+            this.session.addUserTier(factory.createTierDescription(td.getName(), td.getDeclaredType(), td.getTierParameters(), td.getTierAlignmentRules()));
         }
 
         final List<TierViewItem> tv = new ArrayList<>(session.getTierView());
@@ -139,16 +139,11 @@ public class RecordsTransferable implements Transferable {
         rowData[colIdx++] = record.getIPATargetTier().toString();
         rowData[colIdx++] = record.getIPAActualTier().toString();
         rowData[colIdx++] = record.getMediaSegment().toString();
-        rowData[colIdx++] = record.getGroupSegment().toString();
-        rowData[colIdx++] = record.getNotesTier().getGroup(0).toString();
+        rowData[colIdx++] = record.getNotes().toString();
 
         for(TierDescription userTier:session.getUserTiers()) {
             Tier<?> tier = record.getTier(userTier.getName());
-            if(userTier.isGrouped()) {
-                rowData[colIdx++] = (tier != null ? tier.toString() : "");
-            } else {
-                rowData[colIdx++] = (tier != null && tier.numberOfGroups() > 0 ? tier.getGroup(0).toString() : "");
-            }
+            rowData[colIdx++] = (tier != null && tier.hasValue() ? tier.getValue().toString() : "");
         }
 
         writer.writeNext(rowData);

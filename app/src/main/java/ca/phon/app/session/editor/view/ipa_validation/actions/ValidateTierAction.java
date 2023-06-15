@@ -26,8 +26,6 @@ import java.awt.event.ActionEvent;
 
 public class ValidateTierAction extends ValidationAction {
 
-	private static final long serialVersionUID = 8542450495447309480L;
-
 	private final Tier<IPATranscript> tier;
 	
 	private final Transcriber transcriber;
@@ -42,21 +40,17 @@ public class ValidateTierAction extends ValidationAction {
 	@Override
 	public void hookableActionPerformed(ActionEvent e) {
 		final CompoundEdit edit = new CompoundEdit();
-		
-		for(int i = 0; i < tier.numberOfGroups(); i++) {
-			final IPATranscript grp = tier.getGroup(i);
-			final AlternativeTranscript alts = grp.getExtension(AlternativeTranscript.class);
-			if(alts != null && alts.get(transcriber.getUsername()) != null) {
-				final IPATranscript ipa = alts.get(transcriber.getUsername());
-				alts.setSelected(transcriber.getUsername());
-				ipa.putExtension(AlternativeTranscript.class, alts);
-				
-				final TierEdit<IPATranscript> tierEdit = new TierEdit<IPATranscript>(getEditor(), tier, i, ipa);
-				tierEdit.doIt();
-				edit.addEdit(tierEdit);
-			}
+		final IPATranscript grp = tier.getValue();
+		final AlternativeTranscript alts = grp.getExtension(AlternativeTranscript.class);
+		if(alts != null && alts.get(transcriber.getUsername()) != null) {
+			final IPATranscript ipa = alts.get(transcriber.getUsername());
+			alts.setSelected(transcriber.getUsername());
+			ipa.putExtension(AlternativeTranscript.class, alts);
+
+			final TierEdit<IPATranscript> tierEdit = new TierEdit<IPATranscript>(getEditor(), tier, ipa);
+			tierEdit.doIt();
+			edit.addEdit(tierEdit);
 		}
-		
 		edit.end();
 		getEditor().getUndoSupport().postEdit(edit);
 	}

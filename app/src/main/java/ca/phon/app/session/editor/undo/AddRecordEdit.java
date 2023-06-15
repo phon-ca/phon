@@ -93,7 +93,6 @@ public class AddRecordEdit extends SessionEditorUndoableEdit {
 			final SessionFactory factory = SessionFactory.newFactory();
 			record = factory.createRecord();
 			record.setSpeaker(Participant.UNKNOWN);
-			record.addGroup();
 		}
 		
 		if(index < 0) {

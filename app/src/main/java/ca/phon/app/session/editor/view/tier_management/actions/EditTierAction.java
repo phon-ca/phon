@@ -28,8 +28,6 @@ import java.awt.event.ActionEvent;
 
 public class EditTierAction extends TierManagementAction {
 
-	private static final long serialVersionUID = -3730161807560410262L;
-	
 	private final TierViewItem tierItem;
 
 	public EditTierAction(SessionEditor editor, TierOrderingEditorView view,
@@ -47,7 +45,7 @@ public class EditTierAction extends TierManagementAction {
 			
 			TierDescription depTierDesc  = null;
 			if(systemTierType != null) {
-				depTierDesc = factory.createTierDescription(systemTierType.getName(), systemTierType.isGrouped());
+				depTierDesc = factory.createTierDescription(systemTierType);
 			} else {
 				final SessionEditor editor = getEditor();
 				final Session session = editor.getSession();
@@ -69,7 +67,6 @@ public class EditTierAction extends TierManagementAction {
 
 				TierEditorDialog tierDialog = new TierEditorDialog(true);
 				TierInfoEditor tierEditor = tierDialog.getTierEditor();
-				tierEditor.setGrouped(depTierDesc.isGrouped());
 				tierEditor.setTierName(tierItem.getTierName());
 				tierEditor.setTierFont(transcriptFont);
 				

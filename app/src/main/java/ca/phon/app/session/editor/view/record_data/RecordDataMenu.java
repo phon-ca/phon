@@ -28,8 +28,6 @@ import javax.swing.event.*;
  */
 public class RecordDataMenu extends JMenu implements MenuListener {
 
-	private static final long serialVersionUID = -2095672949678390961L;
-
 	private final RecordDataEditorView editor;
 	
 	public RecordDataMenu(RecordDataEditorView editor) {
@@ -48,30 +46,6 @@ public class RecordDataMenu extends JMenu implements MenuListener {
 		findAndReplaceAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/edit-find-replace", IconSize.SMALL));
 		findAndReplaceAct.putValue(PhonUIAction.SELECTED_KEY, editor.isFindAndReplaceVisible());
 		add(new JCheckBoxMenuItem(findAndReplaceAct));
-		addSeparator();
-		
-		// new group action
-		final NewGroupCommand newGroupCommand = new NewGroupCommand(editor);
-		final JMenuItem newGroupItem = new JMenuItem(newGroupCommand);
-		add(newGroupItem);
-		
-		// merge group action
-		final MergeGroupCommand mergeGroupCommand = new MergeGroupCommand(editor);
-		final JMenuItem mergeGroupItem = new JMenuItem(mergeGroupCommand);
-		add(mergeGroupItem);
-		
-		// split group action
-		final SplitGroupCommand splitGroupCommand = new SplitGroupCommand(editor);
-		final JMenuItem splitGroupItem = new JMenuItem(splitGroupCommand);
-		
-		add(splitGroupItem);
-		
-		final DeleteGroupCommand delGroupCommand = new DeleteGroupCommand(editor);
-		final JMenuItem delGroupItem = new JMenuItem(delGroupCommand);
-		add(delGroupItem);
-		
-		addSeparator();
-		add(new MergeAllGroupsCommand(editor));
 	}
 
 	@Override

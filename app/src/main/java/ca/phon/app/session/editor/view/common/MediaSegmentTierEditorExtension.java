@@ -21,7 +21,7 @@ import ca.phon.session.*;
 import ca.phon.session.Record;
 
 @TierEditorInfo(type=MediaSegment.class)
-public class MediaSegmentTierEditorExtension implements IPluginExtensionPoint<TierEditor> {
+public class MediaSegmentTierEditorExtension implements IPluginExtensionPoint<TierEditor<MediaSegment>> {
 
     @Override
     public Class<?> getExtensionType() {
@@ -29,26 +29,20 @@ public class MediaSegmentTierEditorExtension implements IPluginExtensionPoint<Ti
     }
 
     @Override
-    public IPluginExtensionFactory<TierEditor> getFactory() {
+    public IPluginExtensionFactory<TierEditor<MediaSegment>> getFactory() {
         return factory;
     }
 
-    private final IPluginExtensionFactory<TierEditor> factory = new IPluginExtensionFactory<TierEditor>() {
+    private final IPluginExtensionFactory<TierEditor<MediaSegment>> factory = args -> {
+        final SessionEditor editor = SessionEditor.class.cast(args[TierEditorFactory.EDITOR]);
+        final Record record = Record.class.cast(args[TierEditorFactory.RECORD]);
+        final Tier<?> tier = Tier.class.cast(args[TierEditorFactory.TIER]);
 
-        @SuppressWarnings("unchecked")
-        @Override
-        public TierEditor createObject(Object... args) {
-            final SessionEditor editor = SessionEditor.class.cast(args[TierEditorFactory.EDITOR]);
-            final Record record = Record.class.cast(args[TierEditorFactory.RECORD]);
-            final Tier<?> tier = Tier.class.cast(args[TierEditorFactory.TIER]);
-            final Integer group = Integer.class.cast(args[TierEditorFactory.GROUP]);
-
-            if(tier.getDeclaredType() != MediaSegment.class) {
-                throw new IllegalArgumentException("Tier type must be " + MediaSegment.class.getName());
-            }
-
-            return new MediaSegmentTierComponent(editor, record, (Tier<MediaSegment>)tier, group);
+        if(tier.getDeclaredType() != MediaSegment.class) {
+            throw new IllegalArgumentException("Tier type must be " + MediaSegment.class.getName());
         }
 
+        return new MediaSegmentTierComponent(editor, record, (Tier<MediaSegment>)tier);
     };
+
 }

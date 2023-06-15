@@ -266,7 +266,6 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 
 		if(includeTierInfo) {
 			columnNames.add("Record #");
-			columnNames.add("Group #");
 			columnNames.add("Tier");
 			columnNames.add("Range");
 		}
@@ -328,7 +327,6 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 
 					if(includeTierInfo) {
 						rowData.add(result.getRecordIndex()+1);
-						rowData.add(result.getResultValue(0).getGroupIndex()+1);
 						rowData.add(ReportHelper.createReportString(tierNames.toArray(new String[0]), result.getSchema()));
 						final String[] rvVals = new String[result.getNumberOfResultValues()];
 						for(int i = 0; i < result.getNumberOfResultValues(); i++) {
@@ -351,8 +349,7 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 						StringBuffer buffer = new StringBuffer();
 
 						for(ResultValue rv:resultValues) {
-							final Group group = record.getGroup(rv.getGroupIndex());
-							Object tierValue = group.getTier(rv.getTierName());
+							Object tierValue = record.getTier(rv.getTierName()).getValue();
 							if(tierValue == null) tierValue = "";
 
 							// attempt to find a formatter
