@@ -23,6 +23,7 @@ import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginException;
 import ca.phon.util.OSInfo;
 import ca.phon.util.PrefHelper;
+import ca.phon.util.VersionInfo;
 import ca.phon.worker.PhonWorker;
 import com.sun.jna.*;
 import com.sun.jna.platform.win32.*;

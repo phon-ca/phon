@@ -15,19 +15,16 @@
  */
 package ca.phon.project;
 
-import ca.phon.extensions.ExtensionSupport;
 import ca.phon.project.exceptions.ProjectConfigurationException;
 import ca.phon.project.io.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.io.*;
 import ca.phon.util.VersionInfo;
-import jakarta.xml.bind.*;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.*;
-import javax.xml.stream.*;
 import javax.xml.xpath.*;
 import java.io.*;
 import java.net.URI;
@@ -202,7 +199,8 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 		final Properties properties = getExtension(Properties.class);
 		if(properties != null) {
 			final File propFile = new File(getFolder(), PROJECT_PROPERTIES_FILE);
-			properties.store(new FileOutputStream(propFile), "Phon " + VersionInfo.getInstance().getLongVersion());
+			properties.store(new FileOutputStream(propFile),
+					String.format("Project: %s @ %s", getName(), LocalDateTime.now()));
 		}
 	}
 

@@ -21,8 +21,8 @@ import ca.phon.app.log.*;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.welcome.WelcomeWindowEP;
 import ca.phon.plugin.*;
-import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.PrefHelper;
+import ca.phon.util.VersionInfo;
 import ca.phon.worker.PhonWorker;
 import org.apache.commons.io.FileUtils;
 

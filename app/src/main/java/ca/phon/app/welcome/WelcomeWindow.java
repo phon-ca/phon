@@ -16,7 +16,7 @@
 package ca.phon.app.welcome;
 
 import ca.hedlund.desktopicons.*;
-import ca.phon.app.VersionInfo;
+import ca.phon.util.VersionInfo;
 import ca.phon.app.menu.edit.PreferencesCommand;
 import ca.phon.app.menu.file.*;
 import ca.phon.app.project.*;
@@ -53,10 +53,6 @@ public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 	public final static boolean DEFAULT_COLLAPSE_WORKSPACE_PROJECTS =
 			(!Workspace.userWorkspaceFolder().exists() || Workspace.userWorkspace().getProjects().size() == 0);
 	private boolean showWorkspaceProjects = PrefHelper.getBoolean(WORKSPACE_PROJECTS_COLLAPSED, DEFAULT_COLLAPSE_WORKSPACE_PROJECTS);
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(WelcomeWindow.class.getName());
-
-	private static final long serialVersionUID = -8877301049044343272L;
 
 	private DialogHeader header;
 

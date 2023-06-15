@@ -15,128 +15,178 @@
  */
 package ca.phon.util;
 
+import com.github.zafarkhaja.semver.Version;
+
 import java.io.*;
 import java.util.Properties;
+import java.util.regex.*;
 
 /**
  * Methods for determining the version number of the application.
- *
- * Version information is read from the file: build.properties
+ * 
+ * Version information is read from the file: phon.build.properties
  * which should be located in the root of the class loader.
  */
-public class VersionInfo {
+public class VersionInfo implements Comparable<VersionInfo> {
 
+	/* semantic version */
+	private Version semver;
+	
+	public final static String PHON_VERSION_PROP = "phon.app.version";
+	
 	/**
-	 * Properties file
+	 * Properties file 
 	 */
-	private final static String VERSION_PROP_FILE = "/build.properties";
-
-	/**
-	 * Major version prop name
+	private final static String VERSION_PROP_FILE = "phon.build.properties";
+		
+	// dev version
+	private final static String DEV_VERSION = "4.0.0-dev";
+	
+	/*
+	 * regex pattern for syntax of previous versions
 	 */
-	private final static String MAJOR_VERSION = "build.major";
-
-	/**
-	 * Minor version prop name
-	 */
-	private final static String BUILD_MINOR = "build.minor";
-
-	/**
-	 * Revision
-	 */
-	private final static String BUILD_REVISION = "build.revision";
-
-	/**
-	 * Source Control revision
-	 */
-	private final static String BUILD_SCREVISION = "build.screvision";
-
-	/**
-	 * The shared instance
-	 */
-	private static VersionInfo _instance;
-
-	/**
-	 * Loaded properties
-	 */
-	private Properties versionProps;
-
+	private final static String PREV_VERSION_REGEX = "([0-9]+\\.[0-9]+\\.[0-9]+)(([ab])([0-9]+))?( \\(([a-zA-Z0-9.]+)\\))?";
+	
 	/**
 	 * Get the shared instance
 	 */
 	public static VersionInfo getInstance() {
-		if(_instance == null) {
-			_instance = new VersionInfo();
-			_instance.versionProps = new Properties();
-
+		String versionStr = PrefHelper.get(PHON_VERSION_PROP, DEV_VERSION);
+		
+		InputStream is = VersionInfo.class.getClassLoader().getResourceAsStream(VERSION_PROP_FILE);
+		if(is != null) {
+			Properties props = new Properties();
 			try {
-				InputStream is = VersionInfo.class.getResourceAsStream(VERSION_PROP_FILE);
-				if(is == null) {
-					_instance.versionProps.put(MAJOR_VERSION, "2");
-					_instance.versionProps.put(BUILD_MINOR, "2");
-					_instance.versionProps.put(BUILD_REVISION, "0");
-					_instance.versionProps.put(BUILD_SCREVISION, "XXXXXXXXXXXX");
-				} else {
-					_instance.versionProps.load(is);
-				}
+				props.load(is);
 			} catch (IOException e) {
 				e.printStackTrace();
-				org.apache.logging.log4j.LogManager.getLogger(VersionInfo.class.getName()).error(e.getMessage());
+			}
+			
+			if(props.containsKey(PHON_VERSION_PROP)) {
+				versionStr = props.getProperty(PHON_VERSION_PROP);
 			}
 		}
-		return _instance;
+		
+		return new VersionInfo(versionStr);
 	}
-
+		
+	
+	public VersionInfo(String version) {
+		super();
+		
+		// convert to semantic version format if necessary
+		version = convertIfNecessary(version);
+		
+		this.semver = Version.valueOf(version);
+	}
+	
+	private String convertIfNecessary(String version) {
+		final Pattern p = Pattern.compile(PREV_VERSION_REGEX);
+		final Matcher m = p.matcher(version);
+		if(m.matches()) {
+			StringBuilder sb = new StringBuilder();
+			sb.append(m.group(1));
+			
+			if(m.group(2) != null) {
+				sb.append('-')
+					.append(m.group(3))
+					.append('.')
+					.append(m.group(4));
+			}
+			
+			if(m.group(5) != null) {
+				sb.append('+')
+					.append(m.group(6));
+			}
+			return sb.toString();
+		} else {
+			return version;
+		}
+	}
+		
+	public boolean isDevVersion() {
+		return semver.getPreReleaseVersion().startsWith("dev");
+	}
+	
 	/**
-	 * Get major version
+	 * Check if this version matches the given
+	 * version test string.
+	 * 
+	 * See {@link Version#satisfies(java.lang.String)}
+	 * 
+	 * @param vertest
+	 * @return <code>true</code> if this version matches given
+	 *  test string, <code>false</code> otherwise
 	 */
-	public String getMajorVersion() {
-		return versionProps.getProperty(MAJOR_VERSION);
+	public boolean check(String vertest) {
+		return semver.satisfies(vertest);
 	}
-
-	/**
-	 * Get minor version
-	 */
-	public String getMinorVersion() {
-		return versionProps.getProperty(BUILD_MINOR);
+	
+	public int getMajorVersion() {
+		return semver.getMajorVersion();
 	}
-
-	/**
-	 * Revision
-	 */
-	public String getRevision() {
-		return versionProps.getProperty(BUILD_REVISION);
+	
+	public int getMinorVersion() {
+		return semver.getMinorVersion();
 	}
-
-	/**
-	 * Source control number
-	 */
-	public String getScRevision() {
-		return versionProps.getProperty(BUILD_SCREVISION);
+	
+	public int getPatchVersion() {
+		return semver.getPatchVersion();
 	}
-
+	
+	public String getPreRelease() {
+		return semver.getPreReleaseVersion();
+	}
+	
+	public String getBuild() {
+		return semver.getBuildMetadata();
+	}
+	
 	/**
-	 * Return version as:
-	 *
-	 * <major>.<minor>.<build>
+	 * Returns full version text including prerelease and
+	 * build values.
+	 * 
+	 * @return
 	 */
 	public String getVersion() {
-		String retVal =
-			getMajorVersion() + "." +
-			getMinorVersion() + "." +
-			getRevision();
-		return retVal;
+		return this.semver.toString();
 	}
-
+	
 	/**
-	 * Return long version
-	 *
-	 * <major>.<minor>.<build> <revision>
+	 * Return the version w/o build
+	 * 
+	 * @return version string w/o build 
 	 */
-	public String getLongVersion() {
-		String retVal =
-			getVersion() + " " + getScRevision();
-		return retVal;
+	public String getVersionNoBuild() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(getNumericalVersion());
+		if(getPreRelease().length() > 0) {
+			sb.append('-').append(getPreRelease());
+		}
+		return sb.toString();
+	}
+	
+	/**
+	 * Return the numerical version (major.minor.patch)
+	 * 
+	 * @return
+	 */
+	public String getNumericalVersion() {
+		return getMajorVersion() + "." + getMinorVersion() + "." + getPatchVersion();
+	}
+	
+	@Override
+	public String toString() {
+		return getVersion();
 	}
 
+	@Override
+	public int compareTo(VersionInfo o) {
+		return semver.compareTo(o.semver);
+	}
+	
+	public int compareTo(String version) {
+		return compareTo(new VersionInfo(version));
+	}
+	
 }

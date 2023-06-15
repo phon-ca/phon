@@ -50,9 +50,16 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-1.2-api</artifactId>
         </dependency>
+
         <dependency>
             <groupId>ca.hedlund</groupId>
             <artifactId>tst</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.zafarkhaja</groupId>
+            <artifactId>java-semver</artifactId>
+            <version>0.9.0</version>
         </dependency>
 
         <dependency>

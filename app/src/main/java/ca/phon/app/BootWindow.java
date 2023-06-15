@@ -19,6 +19,7 @@ import ca.phon.app.hooks.PhonBootHook;
 import ca.phon.plugin.*;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.nativedialogs.OSInfo;
+import ca.phon.util.VersionInfo;
 
 import javax.swing.*;
 import java.awt.*;
