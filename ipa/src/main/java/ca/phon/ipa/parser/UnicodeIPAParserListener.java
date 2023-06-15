@@ -144,7 +144,7 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 	
 	@Override
 	public void exitGroupNumberRef(GroupNumberRefContext ctx) {
-		Integer groupIndex = Integer.parseInt(ctx.NUMBER().getText());
+		Integer groupIndex = Integer.parseInt(ctx.INT().getText());
 
 		Diacritic[] combining = null;
 
@@ -362,7 +362,7 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 
 	@Override
 	public void exitSimplePause(SimplePauseContext ctx) {
-		super.exitSimplePause(ctx);
+		builder.append(factory.createPause(PauseLength.SIMPLE));
 	}
 
 	@Override
@@ -372,7 +372,7 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 
 	@Override
 	public void exitVeryLongPause(VeryLongPauseContext ctx) {
-		super.exitVeryLongPause(ctx);
+		builder.append(factory.createPause(PauseLength.VERY_LONG));
 	}
 
 	@Override

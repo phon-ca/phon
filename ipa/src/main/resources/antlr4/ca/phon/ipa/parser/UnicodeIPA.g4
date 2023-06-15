@@ -146,7 +146,7 @@ number
  * Phonex matcher references are used in find and replace expressions.
  */
 phonex_matcher_ref
-	: prefix_section? BACKSLASH NUMBER COMBINING_DIACRITIC* suffix_section?         # GroupNumberRef
+	: prefix_section? BACKSLASH INT COMBINING_DIACRITIC* suffix_section?         # GroupNumberRef
 	| prefix_section? BACKSLASH GROUP_NAME COMBINING_DIACRITIC* suffix_section?    # GroupNameRef
 	;
 
