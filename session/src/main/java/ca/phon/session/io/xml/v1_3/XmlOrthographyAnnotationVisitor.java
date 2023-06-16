@@ -3,8 +3,6 @@ package ca.phon.session.io.xml.v1_3;
 import ca.phon.orthography.*;
 import ca.phon.orthography.Error;
 import ca.phon.orthography.OverlapType;
-import ca.phon.session.io.xml.v1_3.Ga;
-import ca.phon.session.io.xml.v1_3.K;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
@@ -63,8 +61,16 @@ public class XmlOrthographyAnnotationVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitLangs(ca.phon.session.io.xml.v1_3.Langs langs) {
-        // TODO
+    public void visitLangs(ca.phon.session.io.xml.v1_3.Langs xmlLangs) {
+        ca.phon.orthography.Langs langs = new ca.phon.orthography.Langs();
+        if(xmlLangs.getSingle() != null) {
+            langs = new ca.phon.orthography.Langs(ca.phon.orthography.Langs.LangsType.SINGLE, xmlLangs.getSingle());
+        } else if(xmlLangs.getMultiple() != null) {
+            langs = new ca.phon.orthography.Langs(ca.phon.orthography.Langs.LangsType.MULTIPLE, xmlLangs.getMultiple().toArray(new String[0]));
+        } else if(xmlLangs.getAmbiguous() != null) {
+            langs = new ca.phon.orthography.Langs(ca.phon.orthography.Langs.LangsType.AMBIGUOUS, xmlLangs.getAmbiguous().toArray(new String[0]));
+        }
+        annotations.add(new LangsAnnotation(langs));
     }
 
     @Override

@@ -17,14 +17,8 @@ public class OrthoAnnotationToXmlVisitor extends AbstractOrthographyAnnotationVi
 
     private List<Object> annotations;
 
-    private ca.phon.session.io.xml.v1_3.Langs langs;
-
     public OrthoAnnotationToXmlVisitor() {
         this(new ArrayList<>());
-    }
-
-    public ca.phon.session.io.xml.v1_3.Langs getLangs() {
-        return this.langs;
     }
 
     public OrthoAnnotationToXmlVisitor(List<Object> annotations) {
@@ -104,7 +98,7 @@ public class OrthoAnnotationToXmlVisitor extends AbstractOrthographyAnnotationVi
         } else if(langs.getType() == Langs.LangsType.AMBIGUOUS) {
             langs.getLangs().stream().map(Language::toString).forEach(xmlLangs.getAmbiguous()::add);
         }
-        this.langs = xmlLangs;
+        annotations.add(xmlLangs);
     }
 
     @Override

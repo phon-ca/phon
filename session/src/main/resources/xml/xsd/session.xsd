@@ -2631,9 +2631,9 @@
                     <xs:element ref="duration"/>
                     <xs:element ref="ga"/>
                     <xs:element ref="overlap"/>
+                    <xs:element ref="langs"/>
                 </xs:choice>
 
-                <xs:element ref="langs" minOccurs="0" maxOccurs="1"/>
 
             </xs:sequence>
         </xs:complexType>

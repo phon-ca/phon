@@ -223,7 +223,7 @@ public final class Record extends ExtendableObject {
 			return SystemTierType.tierFromString(name).getDeclaredType();
 		} else {
 			for(String tierName:getUserDefinedTierNames()) {
-				final Tier<?> t = getTier(tierName);
+				final Tier<?> t = getTier(tierName, UserTierData.class);
 				if(t.getName().equals(name)) {
 					return t.getDeclaredType();
 				}
@@ -247,8 +247,7 @@ public final class Record extends ExtendableObject {
 	}
 
 	/**
-	 * Get the given tier (type unspecified).  Optional will
-	 * be empty if ties does not exist.
+	 * Get the given tier (type unspecified)
 	 *
 	 * @return name
 	 */

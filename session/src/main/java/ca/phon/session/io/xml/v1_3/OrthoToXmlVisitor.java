@@ -192,7 +192,6 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 		innerGVisitor.getU().getWOrGOrPg().forEach(xmlG.getWOrGOrPg()::add);
 		final OrthoAnnotationToXmlVisitor annotationVisitor = new OrthoAnnotationToXmlVisitor(xmlG.getKOrErrorOrDuration());
 		group.getAnnotations().forEach(annotationVisitor::visit);
-		xmlG.setLangs(annotationVisitor.getLangs());
 		u.getWOrGOrPg().add(xmlG);
 	}
 
