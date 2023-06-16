@@ -527,7 +527,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 
 	private Orthography readOrthography(UtteranceType ut) {
 		final OrthographyBuilder builder = new OrthographyBuilder();
-		final XmlOrthographyVisitor visitor = new XmlOrthographyVisitor();
+		final XmlOrthographyVisitor visitor = new XmlOrthographyVisitor(builder);
 		if(ut.getLang() != null) {
 			try {
 				final Language lang = Language.parseLanguage(ut.getLang());

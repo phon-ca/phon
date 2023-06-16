@@ -2,10 +2,8 @@ package ca.phon.session.io.xml.v1_3;
 
 import ca.phon.orthography.*;
 import ca.phon.orthography.Error;
-import ca.phon.session.io.xml.v1_3.Ga;
-import ca.phon.session.io.xml.v1_3.GroupAnnotationTypeType;
-import ca.phon.session.io.xml.v1_3.K;
-import ca.phon.session.io.xml.v1_3.ObjectFactory;
+import ca.phon.orthography.Langs;
+import ca.phon.util.Language;
 import ca.phon.visitor.annotation.Visits;
 
 import java.math.BigDecimal;
@@ -19,8 +17,14 @@ public class OrthoAnnotationToXmlVisitor extends AbstractOrthographyAnnotationVi
 
     private List<Object> annotations;
 
+    private ca.phon.session.io.xml.v1_3.Langs langs;
+
     public OrthoAnnotationToXmlVisitor() {
         this(new ArrayList<>());
+    }
+
+    public ca.phon.session.io.xml.v1_3.Langs getLangs() {
+        return this.langs;
     }
 
     public OrthoAnnotationToXmlVisitor(List<Object> annotations) {
@@ -86,6 +90,21 @@ public class OrthoAnnotationToXmlVisitor extends AbstractOrthographyAnnotationVi
         if(overlap.getIndex() >= 0)
             xmlOverlap.setIndex(BigInteger.valueOf(overlap.getIndex()));
         annotations.add(xmlOverlap);
+    }
+
+    @Visits
+    @Override
+    public void visitLangs(LangsAnnotation langsAnnotation) {
+        final Langs langs = langsAnnotation.getLangs();
+        final ca.phon.session.io.xml.v1_3.Langs xmlLangs = factory.createLangs();
+        if(langs.getType() == Langs.LangsType.SINGLE) {
+            xmlLangs.setSingle(langs.getLangs().get(0).toString());
+        } else if(langs.getType() == Langs.LangsType.MULTIPLE) {
+            langs.getLangs().stream().map(Language::toString).forEach(xmlLangs.getMultiple()::add);
+        } else if(langs.getType() == Langs.LangsType.AMBIGUOUS) {
+            langs.getLangs().stream().map(Language::toString).forEach(xmlLangs.getAmbiguous()::add);
+        }
+        this.langs = xmlLangs;
     }
 
     @Override

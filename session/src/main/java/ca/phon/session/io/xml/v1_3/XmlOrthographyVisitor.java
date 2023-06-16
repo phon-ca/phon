@@ -31,7 +31,15 @@ import java.util.List;
 
 public class XmlOrthographyVisitor extends VisitorAdapter<Object> {
 
-    private OrthographyBuilder builder = new OrthographyBuilder();
+    private final OrthographyBuilder builder;
+
+    public XmlOrthographyVisitor() {
+        this(new OrthographyBuilder());
+    }
+
+    public XmlOrthographyVisitor(OrthographyBuilder builder) {
+        this.builder = builder;
+    }
 
     @Visits
     public void visitWord(W word) {

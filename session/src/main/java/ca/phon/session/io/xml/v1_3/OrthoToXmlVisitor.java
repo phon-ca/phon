@@ -192,6 +192,7 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 		innerGVisitor.getU().getWOrGOrPg().forEach(xmlG.getWOrGOrPg()::add);
 		final OrthoAnnotationToXmlVisitor annotationVisitor = new OrthoAnnotationToXmlVisitor(xmlG.getKOrErrorOrDuration());
 		group.getAnnotations().forEach(annotationVisitor::visit);
+		xmlG.setLangs(annotationVisitor.getLangs());
 		u.getWOrGOrPg().add(xmlG);
 	}
 
@@ -434,6 +435,12 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 		final ca.phon.session.io.xml.v1_3.Postcode xmlPostcode = factory.createPostcode();
 		xmlPostcode.setValue(postcode.getCode());
 		u.getPostcode().add(xmlPostcode);
+	}
+
+	@Visits
+	@Override
+	public void visitUtteranceLanguage(UtteranceLanguage utteranceLanguage) {
+		u.setLang(utteranceLanguage.getLanguage().toString());
 	}
 
 	public UtteranceType getU() {

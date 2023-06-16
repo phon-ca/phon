@@ -20,4 +20,7 @@ public abstract class AbstractOrthographyAnnotationVisitor extends VisitorAdapte
     @Visits
     public void visitOverlap(Overlap overlap) {}
 
+    @Visits
+    public void visitLangs(LangsAnnotation langs) {}
+
 }
