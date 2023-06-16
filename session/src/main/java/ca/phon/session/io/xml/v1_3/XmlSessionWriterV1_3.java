@@ -414,12 +414,22 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 
 		if(com.getValue().getExtension(UnvalidatedValue.class) != null) {
 			final UnvalidatedValue uv = com.getValue().getExtension(UnvalidatedValue.class);
-			retVal.setUnparsable(uv.getValue());
+			retVal.setUnparsed(writeUnparsed(factory, uv));
 		} else {
 			final UserTierData tierData = writeUserTierData(factory, com.getValue());
 			retVal.setTierData(tierData);
 		}
 
+		return retVal;
+	}
+
+	private UnparsedData writeUnparsed(ObjectFactory factory, UnvalidatedValue unvalidatedValue) {
+		final UnparsedData retVal = factory.createUnparsedData();
+		retVal.setUv(unvalidatedValue.getValue());
+		final ParseError pe = factory.createParseError();
+		pe.setCharPositionInLine(unvalidatedValue.getParseError().getErrorOffset());
+		pe.setContent(unvalidatedValue.getParseError().getMessage());
+		retVal.setPe(pe);
 		return retVal;
 	}
 
@@ -499,7 +509,7 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 	private OrthographyTierType writeOrthographyTier(ObjectFactory factory, Tier<Orthography> orthoTier) {
 		final OrthographyTierType retVal = factory.createOrthographyTierType();
 		if(orthoTier.isUnvalidated()) {
-			retVal.setUnparsable(orthoTier.getUnvalidatedValue().getValue());
+			retVal.setUnparsed(writeUnparsed(factory, orthoTier.getUnvalidatedValue()));
 		} else {
 			// default utterance if action followed by terminator
 			Orthography orthography = orthoTier.getValue().length() == 0
@@ -530,7 +540,7 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 	public IpaTierType writeIPATier(ObjectFactory factory, Tier<IPATranscript> ipaTier) {
 		final IpaTierType retVal = factory.createIpaTierType();
 		if(ipaTier.isUnvalidated()) {
-			retVal.setUnparsable(ipaTier.getUnvalidatedValue().getValue());
+			retVal.setUnparsed(writeUnparsed(factory, ipaTier.getUnvalidatedValue()));
 		} else {
 			retVal.setPho(writeIPA(factory, ipaTier.getValue()));
 		}
@@ -542,7 +552,7 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 				btt.setTranscriber(transcriber);
 				final IPATranscript ipa = alternativeTranscripts.get(transcriber);
 				if(ipa.getExtension(UnvalidatedValue.class) != null) {
-					btt.setUnparsable(ipa.getExtension(UnvalidatedValue.class).getValue());
+					btt.setUnparsed(writeUnparsed(factory, ipa.getExtension(UnvalidatedValue.class)));
 				} else {
 					btt.setPho(writeIPA(factory, ipa));
 				}
@@ -586,7 +596,7 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 	private NotesTierType writeNotesTier(ObjectFactory factory, Tier<ca.phon.session.UserTierData> notesTier) {
 		final NotesTierType retVal = factory.createNotesTierType();
 		if(notesTier.isUnvalidated()) {
-			retVal.setUnparsable(notesTier.getUnvalidatedValue().getValue());
+			retVal.setUnparsed(writeUnparsed(factory, notesTier.getUnvalidatedValue()));
 		} else {
 			retVal.setTierData(writeUserTierData(factory, notesTier.getValue()));
 		}
@@ -596,7 +606,7 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 	private UserTierType writeUserTier(ObjectFactory factory, Tier<ca.phon.session.UserTierData> userTier) {
 		final UserTierType retVal = factory.createUserTierType();
 		if(userTier.isUnvalidated()) {
-			retVal.setUnparsable(userTier.getUnvalidatedValue().getValue());
+			retVal.setUnparsed(writeUnparsed(factory, userTier.getUnvalidatedValue()));
 		} else {
 			retVal.setTierData(writeUserTierData(factory, userTier.getValue()));
 		}

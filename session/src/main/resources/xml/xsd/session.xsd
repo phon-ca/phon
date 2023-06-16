@@ -377,7 +377,7 @@
         </xs:annotation>
         <xs:choice minOccurs="1" maxOccurs="1">
             <xs:element ref="tierData"/>
-            <xs:element ref="unparsable"/>
+            <xs:element ref="unparsed"/>
         </xs:choice>
         <xs:attribute type="commentTypeType" name="type" use="required"/>
     </xs:complexType>
@@ -648,9 +648,9 @@
         <xs:attribute name="excludeFromSearches" type="xs:boolean" default="false"/>
     </xs:complexType>
 
-    <xs:element name="unparsable" type="unparsableData"/>
+    <xs:element name="unparsed" type="unparsedData"/>
     <xs:element name="uv" type="nonemptyStringType"/>
-    <xs:complexType name="unparsableData">
+    <xs:complexType name="unparsedData">
         <xs:annotation>
             <xs:documentation>Unparsed data for a tier with error</xs:documentation>
         </xs:annotation>
@@ -680,7 +680,7 @@
         </xs:annotation>
         <xs:choice maxOccurs="1" minOccurs="1">
             <xs:element ref="u"/>
-            <xs:element ref="unparsable"/>
+            <xs:element ref="unparsed"/>
         </xs:choice>
     </xs:complexType>
 
@@ -694,7 +694,7 @@
         <xs:sequence>
             <xs:choice minOccurs="1" maxOccurs="1">
                 <xs:element ref="pho"/>
-                <xs:element ref="unparsable"/>
+                <xs:element ref="unparsed"/>
             </xs:choice>
             <xs:element ref="blindTranscription" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
@@ -707,7 +707,7 @@
         </xs:annotation>
         <xs:choice maxOccurs="1" minOccurs="1">
             <xs:element ref="pho"/>
-            <xs:element ref="unparsable"/>
+            <xs:element ref="unparsed"/>
         </xs:choice>
         <xs:attribute name="transcriber" type="xs:string"/>
     </xs:complexType>
@@ -962,7 +962,7 @@
         </xs:annotation>
         <xs:choice minOccurs="1" maxOccurs="1">
             <xs:element ref="tierData"/>
-            <xs:element ref="unparsable"/>
+            <xs:element ref="unparsed"/>
         </xs:choice>
     </xs:complexType>
 
@@ -976,7 +976,7 @@
             <xs:element ref="u"/>
             <xs:element ref="pho"/>
             <xs:element ref="tierData"/>
-            <xs:element ref="unparsable"/>
+            <xs:element ref="unparsed"/>
         </xs:choice>
         <xs:attribute name="name" type="xs:string" use="required"/>
     </xs:complexType>

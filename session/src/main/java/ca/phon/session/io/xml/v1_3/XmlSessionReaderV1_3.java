@@ -502,7 +502,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		return null;
 	}
 
-	private UnvalidatedValue readParseError(UnparsableData unparsableData) {
+	private UnvalidatedValue readParseError(UnparsedData unparsableData) {
 		final ParseException pe = new ParseException(unparsableData.getPe().getContent(),
 				unparsableData.getPe().getCharPositionInLine());
 		return new UnvalidatedValue(unparsableData.getUv(), pe);
@@ -520,7 +520,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		if(ot.getU() != null) {
 			utt = readOrthography(ot.getU());
 		} else {
-			utt.putExtension(UnvalidatedValue.class, readParseError(ot.getUnparsable()));
+			utt.putExtension(UnvalidatedValue.class, readParseError(ot.getUnparsed()));
 		}
 		return utt;
 	}
@@ -558,7 +558,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		if (itt.getPho() != null) {
 			retVal = readTranscript(itt.getPho());
 		} else {
-			retVal.putExtension(UnvalidatedValue.class, readParseError(itt.getUnparsable()));
+			retVal.putExtension(UnvalidatedValue.class, readParseError(itt.getUnparsed()));
 		}
 		return retVal;
 	}
@@ -583,7 +583,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 			if (btt.getPho() != null) {
 				ipa = readTranscript(btt.getPho());
 			} else {
-				ipa.putExtension(UnvalidatedValue.class, readParseError(btt.getUnparsable()));
+				ipa.putExtension(UnvalidatedValue.class, readParseError(btt.getUnparsed()));
 			}
 			retVal.put(btt.getTranscriber(), ipa);
 		}
@@ -625,8 +625,8 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		UserTierData retVal = new UserTierData();
 		if(utt.getTierData() != null) {
 			retVal = readUserTierData(factory, utt.getTierData());
-		} else if(utt.getUnparsable() != null) {
-			retVal.putExtension(UnvalidatedValue.class, readParseError(utt.getUnparsable()));
+		} else if(utt.getUnparsed() != null) {
+			retVal.putExtension(UnvalidatedValue.class, readParseError(utt.getUnparsed()));
 		}
 		return retVal;
 	}
@@ -635,8 +635,8 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		UserTierData retVal = new UserTierData();
 		if(ntt.getTierData() != null) {
 			retVal = readUserTierData(factory, ntt.getTierData());
-		} else if(ntt.getUnparsable() != null) {
-			retVal.putExtension(UnvalidatedValue.class, readParseError(ntt.getUnparsable()));
+		} else if(ntt.getUnparsed() != null) {
+			retVal.putExtension(UnvalidatedValue.class, readParseError(ntt.getUnparsed()));
 		}
 		return retVal;
 	}
