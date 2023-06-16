@@ -18,6 +18,7 @@ package ca.phon.session;
 import ca.phon.extensions.*;
 import ca.phon.session.spi.TierSPI;
 
+import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.*;
 
@@ -80,7 +81,16 @@ public final class Tier<T> extends ExtendableObject {
 			setValue(obj);
 		} catch (ParseException pe) {
 			final UnvalidatedValue uv = new UnvalidatedValue(text, pe);
-			putExtension(UnvalidatedValue.class, uv);
+			if(IExtendable.class.isAssignableFrom(getDeclaredType())) {
+				try {
+					IExtendable obj = (IExtendable) getDeclaredType().getDeclaredConstructor().newInstance();
+					obj.putExtension(UnvalidatedValue.class, uv);
+				} catch (InvocationTargetException | InstantiationException | IllegalAccessException |
+						 NoSuchMethodException e) {
+				}
+			} else {
+				putExtension(UnvalidatedValue.class, uv);
+			}
 		}
 	}
 
@@ -90,7 +100,11 @@ public final class Tier<T> extends ExtendableObject {
 	 * @return boolean
 	 */
 	public boolean isUnvalidated() {
-		return getExtension(UnvalidatedValue.class) != null;
+		if(IExtendable.class.isAssignableFrom(getDeclaredType())) {
+			return hasValue() && ((IExtendable)getValue()).getExtension(UnvalidatedValue.class) != null;
+		} else {
+			return getExtension(UnvalidatedValue.class) != null;
+		}
 	}
 
 	/**
@@ -98,7 +112,11 @@ public final class Tier<T> extends ExtendableObject {
 	 * @return unvalidated value or null
 	 */
 	public UnvalidatedValue getUnvalidatedValue() {
-		return getExtension(UnvalidatedValue.class);
+		if(IExtendable.class.isAssignableFrom(getDeclaredType())) {
+			return hasValue() ? ((IExtendable)getValue()).getExtension(UnvalidatedValue.class) : null;
+		} else {
+			return getExtension(UnvalidatedValue.class);
+		}
 	}
 
 	/**

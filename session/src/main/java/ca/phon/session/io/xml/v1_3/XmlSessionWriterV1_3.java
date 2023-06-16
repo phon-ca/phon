@@ -466,20 +466,20 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 
 		// ipa
 		final Tier<IPATranscript> ipaTarget = record.getIPATargetTier();
-		if(ipaTarget.hasValue() && ipaTarget.getValue().length() > 0) {
+		if(ipaTarget.hasValue()) {
 			final IpaTierType targetType = writeIPATier(factory, ipaTarget);
 			retVal.setIpaTarget(targetType);
 		}
 
 		final Tier<IPATranscript> ipaActual = record.getIPAActualTier();
-		if(ipaActual.hasValue() && ipaActual.getValue().length() > 0) {
+		if(ipaActual.hasValue()) {
 			final IpaTierType actualType = writeIPATier(factory, ipaActual);
 			retVal.setIpaActual(actualType);
 		}
 
 		// notes
 		final Tier<ca.phon.session.UserTierData> notesTier = record.getNotesTier();
-		if(notesTier.hasValue() && notesTier.getValue().getElements().size() > 0) {
+		if(notesTier.hasValue()) {
 			final NotesTierType notesTierType = writeNotesTier(factory, notesTier);
 			retVal.setNotes(notesTierType);
 		}

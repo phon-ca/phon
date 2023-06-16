@@ -147,6 +147,9 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 	}
 
 	public PhoneticTranscriptionType getPho() {
+		if(this.currentWord.getStressOrPhOrPp().size() > 0) {
+			this.pho.getPwOrPause().add(this.currentWord);
+		}
 		return this.pho;
 	}
 
