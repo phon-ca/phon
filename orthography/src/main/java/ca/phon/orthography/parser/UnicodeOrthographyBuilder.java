@@ -405,7 +405,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
 
     @Override
     public void exitOverlap(UnicodeOrthographyParser.OverlapContext ctx) {
-        final OverlapType overlapType = ctx.getText().charAt(1) == '<' ? OverlapType.OVERLAP_PRECEEDS : OverlapType.OVERLAP_FOLLOWS;
+        final OverlapType overlapType = ctx.getText().charAt(1) == '<' ? OverlapType.OVERLAP_PRECEDES : OverlapType.OVERLAP_FOLLOWS;
         final int index = (ctx.number() != null ? Integer.parseInt(ctx.number().getText()) : -1);
         final Overlap overlap = new Overlap(overlapType, index);
         annotateLastElement(overlap);

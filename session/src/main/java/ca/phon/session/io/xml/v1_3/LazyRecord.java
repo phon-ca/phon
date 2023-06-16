@@ -20,8 +20,9 @@ import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.Record;
 import ca.phon.session.*;
-import ca.phon.session.io.xml.v13.ParticipantType;
-import ca.phon.session.io.xml.v13.RecordType;
+import ca.phon.session.UserTierData;
+import ca.phon.session.io.xml.v1_3.ParticipantType;
+import ca.phon.session.io.xml.v1_3.RecordType;
 import ca.phon.session.spi.RecordSPI;
 
 import java.util.Set;

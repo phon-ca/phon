@@ -27,9 +27,6 @@ import ca.phon.session.*;
 import ca.phon.session.UserTierData;
 import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionReader;
-import ca.phon.session.io.xml.v13.*;
-import ca.phon.session.io.xml.v13.CommentType;
-import ca.phon.session.io.xml.v13.TierAlignmentRules;
 import ca.phon.util.Language;
 import ca.phon.xml.XMLObjectReader;
 import ca.phon.xml.annotation.XMLSerial;
@@ -638,7 +635,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		return retVal;
 	}
 
-	private UserTierData readUserTierData(SessionFactory factory, ca.phon.session.io.xml.v13.UserTierData utd) {
+	private UserTierData readUserTierData(SessionFactory factory, ca.phon.session.io.xml.v1_3.UserTierData utd) {
 		final List<UserTierElement> elements = new ArrayList<>();
 		// all allowed objects are wrapped in JAXBElements
 		for(Object obj:utd.getTwOrTcOrInternalMedia()) {

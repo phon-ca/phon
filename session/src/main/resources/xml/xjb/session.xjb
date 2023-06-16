@@ -21,7 +21,7 @@
     
     <jxb:bindings schemaLocation="../xsd/session.xsd" node="/xs:schema">
         <jxb:schemaBindings>
-            <jxb:package name="ca.phon.session.io.xml.v13"/>
+            <jxb:package name="ca.phon.session.io.xml.v1_3"/>
         </jxb:schemaBindings>
     </jxb:bindings>
     

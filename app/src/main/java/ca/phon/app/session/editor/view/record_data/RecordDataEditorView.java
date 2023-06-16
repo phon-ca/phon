@@ -368,7 +368,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 				tierComp = segmentPanel;
 			}
 
-			contentPane.add(tierComp, new TierDataConstraint(TierDataConstraint.FLAT_TIER_COLUMN, row));
+			contentPane.add(tierComp, new TierDataConstraint(TierDataConstraint.FLAT_TIER_COLUMN, row++));
 
 			if(tierComp instanceof JTextComponent) {
 				final JTextComponent textComp = (JTextComponent)tierComp;

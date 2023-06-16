@@ -18,9 +18,6 @@ package ca.phon.session.io.xml.v1_3;
 import ca.phon.ipa.*;
 import ca.phon.ipa.Linker;
 import ca.phon.ipa.Pause;
-import ca.phon.session.io.xml.v13.*;
-import ca.phon.session.io.xml.v13.StressType;
-import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
@@ -50,14 +47,14 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 		final PhoneType phoneType = factory.createPhoneType();
 		phoneType.setContent(phone.getText());
 		if(phone.getScType() != SyllableConstituentType.UNKNOWN) {
-			final ca.phon.session.io.xml.v13.SyllableConstituentType scType = switch (phone.getScType()) {
-				case AMBISYLLABIC -> ca.phon.session.io.xml.v13.SyllableConstituentType.AMBISYLLABIC;
-				case CODA -> ca.phon.session.io.xml.v13.SyllableConstituentType.CODA;
-				case LEFTAPPENDIX -> ca.phon.session.io.xml.v13.SyllableConstituentType.LEFT_APPENDIX;
-				case NUCLEUS -> ca.phon.session.io.xml.v13.SyllableConstituentType.NUCLEUS;
-				case OEHS -> ca.phon.session.io.xml.v13.SyllableConstituentType.OEHS;
-				case ONSET -> ca.phon.session.io.xml.v13.SyllableConstituentType.ONSET;
-				case RIGHTAPPENDIX -> ca.phon.session.io.xml.v13.SyllableConstituentType.RIGHT_APPENDIX;
+			final ca.phon.session.io.xml.v1_3.SyllableConstituentType scType = switch (phone.getScType()) {
+				case AMBISYLLABIC -> ca.phon.session.io.xml.v1_3.SyllableConstituentType.AMBISYLLABIC;
+				case CODA -> ca.phon.session.io.xml.v1_3.SyllableConstituentType.CODA;
+				case LEFTAPPENDIX -> ca.phon.session.io.xml.v1_3.SyllableConstituentType.LEFT_APPENDIX;
+				case NUCLEUS -> ca.phon.session.io.xml.v1_3.SyllableConstituentType.NUCLEUS;
+				case OEHS -> ca.phon.session.io.xml.v1_3.SyllableConstituentType.OEHS;
+				case ONSET -> ca.phon.session.io.xml.v1_3.SyllableConstituentType.ONSET;
+				case RIGHTAPPENDIX -> ca.phon.session.io.xml.v1_3.SyllableConstituentType.RIGHT_APPENDIX;
 				case UNKNOWN, WORDBOUNDARYMARKER, SYLLABLESTRESSMARKER, SYLLABLEBOUNDARYMARKER -> null;
 			};
 			phoneType.setScType(scType);
@@ -123,7 +120,7 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 
 	@Visits
 	public void visitPause(Pause pause) {
-		final ca.phon.session.io.xml.v13.Pause p = factory.createPause();
+		final ca.phon.session.io.xml.v1_3.Pause p = factory.createPause();
 		final PauseSymbolicLengthType type = switch(pause.getLength()) {
 			case SIMPLE -> PauseSymbolicLengthType.SIMPLE;
 			case LONG -> PauseSymbolicLengthType.LONG;

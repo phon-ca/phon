@@ -1,7 +1,7 @@
 package ca.phon.orthography;
 
 public enum OverlapType {
-    OVERLAP_PRECEEDS("[<", "overlap preceeds"),
+    OVERLAP_PRECEDES("[<", "overlap precedes"),
     OVERLAP_FOLLOWS("[>", "overlap follows");
 
     private String prefix;

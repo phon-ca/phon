@@ -28,14 +28,9 @@ import ca.phon.orthography.Pause;
 import ca.phon.orthography.Postcode;
 import ca.phon.orthography.Quotation;
 import ca.phon.orthography.Replacement;
-import ca.phon.orthography.SeparatorType;
 import ca.phon.orthography.TagMarker;
-import ca.phon.orthography.TagMarkerType;
-import ca.phon.orthography.TerminatorType;
 import ca.phon.orthography.ToneMarker;
-import ca.phon.orthography.ToneMarkerType;
 import ca.phon.orthography.Underline;
-import ca.phon.session.io.xml.v13.*;
 import ca.phon.util.Language;
 import ca.phon.visitor.annotation.Visits;
 
@@ -69,50 +64,50 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
     @Visits
 	public void visitWord(Word word) {
 		final W w = factory.createW();
-		final ca.phon.session.io.xml.v13.WordType wordType = word.getPrefix() == null ? null : switch (word.getPrefix().getType()) {
-			case FILLER -> ca.phon.session.io.xml.v13.WordType.FILLER;
-			case FRAGMENT -> ca.phon.session.io.xml.v13.WordType.FRAGMENT;
-			case NONWORD -> ca.phon.session.io.xml.v13.WordType.NONWORD;
-			case OMISSION -> ca.phon.session.io.xml.v13.WordType.OMISSION;
+		final ca.phon.session.io.xml.v1_3.WordType wordType = word.getPrefix() == null ? null : switch (word.getPrefix().getType()) {
+			case FILLER -> ca.phon.session.io.xml.v1_3.WordType.FILLER;
+			case FRAGMENT -> ca.phon.session.io.xml.v1_3.WordType.FRAGMENT;
+			case NONWORD -> ca.phon.session.io.xml.v1_3.WordType.NONWORD;
+			case OMISSION -> ca.phon.session.io.xml.v1_3.WordType.OMISSION;
 		};
 		w.setType(wordType);
 
 		if(word.getSuffix() != null) {
-			final ca.phon.session.io.xml.v13.WordFormType wordFormType = word.getSuffix().getType() == null
+			final ca.phon.session.io.xml.v1_3.WordFormType wordFormType = word.getSuffix().getType() == null
 					? null : switch (word.getSuffix().getType()) {
-				case ADDITION -> ca.phon.session.io.xml.v13.WordFormType.ADDITION;
-				case BABBLING -> ca.phon.session.io.xml.v13.WordFormType.BABBLING;
-				case CHILD_INVENTED -> ca.phon.session.io.xml.v13.WordFormType.CHILD_INVENTED;
-				case DIALECT -> ca.phon.session.io.xml.v13.WordFormType.DIALECT;
-				case ECHOLALIA -> ca.phon.session.io.xml.v13.WordFormType.ECHOLALIA;
-				case FAMILY_SPECIFIC -> ca.phon.session.io.xml.v13.WordFormType.FAMILY_SPECIFIC;
-				case FILLED_PAUSE -> ca.phon.session.io.xml.v13.WordFormType.FILLED_PAUSE;
-				case GENERIC -> ca.phon.session.io.xml.v13.WordFormType.GENERIC;
-				case INTERJECTION -> ca.phon.session.io.xml.v13.WordFormType.INTERJECTION;
-				case KANA -> ca.phon.session.io.xml.v13.WordFormType.KANA;
-				case LETTER -> ca.phon.session.io.xml.v13.WordFormType.LETTER;
-				case NEOLOGISM -> ca.phon.session.io.xml.v13.WordFormType.NEOLOGISM;
-				case NO_VOICE -> ca.phon.session.io.xml.v13.WordFormType.NO_VOICE;
-				case ONOMATOPOEIA -> ca.phon.session.io.xml.v13.WordFormType.ONOMATOPOEIA;
-				case PHONOLOGY_CONSISTENT -> ca.phon.session.io.xml.v13.WordFormType.PHONOLOGY_CONSISTENT;
-				case QUOTED_METAREFERENCE -> ca.phon.session.io.xml.v13.WordFormType.QUOTED_METAREFERENCE;
-				case SIGNED_LANGUAGE -> ca.phon.session.io.xml.v13.WordFormType.SIGNED_LANGUAGE;
-				case SIGN_SPEECH -> ca.phon.session.io.xml.v13.WordFormType.SIGN_SPEECH;
-				case SINGING -> ca.phon.session.io.xml.v13.WordFormType.SINGING;
-				case TEST -> ca.phon.session.io.xml.v13.WordFormType.TEST;
-				case UNIBET -> ca.phon.session.io.xml.v13.WordFormType.UNIBET;
-				case WORDS_TO_BE_EXCLUDED -> ca.phon.session.io.xml.v13.WordFormType.WORDS_TO_BE_EXCLUDED;
-				case WORD_PLAY -> ca.phon.session.io.xml.v13.WordFormType.WORD_PLAY;
+				case ADDITION -> ca.phon.session.io.xml.v1_3.WordFormType.ADDITION;
+				case BABBLING -> ca.phon.session.io.xml.v1_3.WordFormType.BABBLING;
+				case CHILD_INVENTED -> ca.phon.session.io.xml.v1_3.WordFormType.CHILD_INVENTED;
+				case DIALECT -> ca.phon.session.io.xml.v1_3.WordFormType.DIALECT;
+				case ECHOLALIA -> ca.phon.session.io.xml.v1_3.WordFormType.ECHOLALIA;
+				case FAMILY_SPECIFIC -> ca.phon.session.io.xml.v1_3.WordFormType.FAMILY_SPECIFIC;
+				case FILLED_PAUSE -> ca.phon.session.io.xml.v1_3.WordFormType.FILLED_PAUSE;
+				case GENERIC -> ca.phon.session.io.xml.v1_3.WordFormType.GENERIC;
+				case INTERJECTION -> ca.phon.session.io.xml.v1_3.WordFormType.INTERJECTION;
+				case KANA -> ca.phon.session.io.xml.v1_3.WordFormType.KANA;
+				case LETTER -> ca.phon.session.io.xml.v1_3.WordFormType.LETTER;
+				case NEOLOGISM -> ca.phon.session.io.xml.v1_3.WordFormType.NEOLOGISM;
+				case NO_VOICE -> ca.phon.session.io.xml.v1_3.WordFormType.NO_VOICE;
+				case ONOMATOPOEIA -> ca.phon.session.io.xml.v1_3.WordFormType.ONOMATOPOEIA;
+				case PHONOLOGY_CONSISTENT -> ca.phon.session.io.xml.v1_3.WordFormType.PHONOLOGY_CONSISTENT;
+				case QUOTED_METAREFERENCE -> ca.phon.session.io.xml.v1_3.WordFormType.QUOTED_METAREFERENCE;
+				case SIGNED_LANGUAGE -> ca.phon.session.io.xml.v1_3.WordFormType.SIGNED_LANGUAGE;
+				case SIGN_SPEECH -> ca.phon.session.io.xml.v1_3.WordFormType.SIGN_SPEECH;
+				case SINGING -> ca.phon.session.io.xml.v1_3.WordFormType.SINGING;
+				case TEST -> ca.phon.session.io.xml.v1_3.WordFormType.TEST;
+				case UNIBET -> ca.phon.session.io.xml.v1_3.WordFormType.UNIBET;
+				case WORDS_TO_BE_EXCLUDED -> ca.phon.session.io.xml.v1_3.WordFormType.WORDS_TO_BE_EXCLUDED;
+				case WORD_PLAY -> ca.phon.session.io.xml.v1_3.WordFormType.WORD_PLAY;
 			};
 			w.setFormType(wordFormType);
 			w.setFormSuffix(word.getSuffix().getFormSuffix());
 			if(word.getSuffix().isSeparatedPrefix())
 				w.setSeparatedPrefix(word.getSuffix().isSeparatedPrefix());
 			if(word.isUntranscribed()) {
-				final ca.phon.session.io.xml.v13.UntranscribedType untranscribed = switch (word.getUntranscribedType()) {
-					case UNTRANSCRIBED -> ca.phon.session.io.xml.v13.UntranscribedType.UNTRANSCRIBED;
-					case UNINTELLIGIBLE -> ca.phon.session.io.xml.v13.UntranscribedType.UNINTELLIGIBLE;
-					case UNINTELLIGIBLE_WORD_WITH_PHO -> ca.phon.session.io.xml.v13.UntranscribedType.UNINTELLIGIBLE_WITH_PHO;
+				final ca.phon.session.io.xml.v1_3.UntranscribedType untranscribed = switch (word.getUntranscribedType()) {
+					case UNTRANSCRIBED -> ca.phon.session.io.xml.v1_3.UntranscribedType.UNTRANSCRIBED;
+					case UNINTELLIGIBLE -> ca.phon.session.io.xml.v1_3.UntranscribedType.UNINTELLIGIBLE;
+					case UNINTELLIGIBLE_WORD_WITH_PHO -> ca.phon.session.io.xml.v1_3.UntranscribedType.UNINTELLIGIBLE_WITH_PHO;
 				};
 				w.setUntranscribed(untranscribed);
 			}
@@ -122,7 +117,7 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 
 		// add langs
 		if(word.getLangs() != null) {
-			ca.phon.session.io.xml.v13.Langs langs = factory.createLangs();
+			ca.phon.session.io.xml.v1_3.Langs langs = factory.createLangs();
 			switch(word.getLangs().getType()) {
 				case SINGLE:
 					langs.setSingle(word.getLangs().getLangs().get(0).toString());
@@ -161,7 +156,7 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 		}
 
 		for(Replacement replacement:word.getReplacements()) {
-			final ca.phon.session.io.xml.v13.Replacement xmlReplacement = factory.createReplacement();
+			final ca.phon.session.io.xml.v1_3.Replacement xmlReplacement = factory.createReplacement();
 			xmlReplacement.setReal(replacement.isReal());
 			final OrthoToXmlVisitor wordVisitor = new OrthoToXmlVisitor();
 			replacement.getWords().forEach(wordVisitor::visitWord);
@@ -174,15 +169,15 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 	@Override
     @Visits
 	public void visitLinker(Linker linker) {
-		final ca.phon.session.io.xml.v13.Linker xmlLinker = factory.createLinker();
-		final ca.phon.session.io.xml.v13.LinkerType type = switch (linker.getType()) {
-			case LAZY_OVERLAP_MARK -> ca.phon.session.io.xml.v13.LinkerType.LAZY_OVERLAP_MARK;
-			case NO_BREAK_TCU_COMPLETION -> ca.phon.session.io.xml.v13.LinkerType.NO_BREAK_TCU_COMPLETION;
-			case OTHER_COMPLETION -> ca.phon.session.io.xml.v13.LinkerType.OTHER_COMPLETION;
-			case QUICK_UPTAKE -> ca.phon.session.io.xml.v13.LinkerType.QUICK_UPTAKE;
-			case QUOTED_UTTERANCE_NEXT -> ca.phon.session.io.xml.v13.LinkerType.QUOTED_UTTERANCE_NEXT;
-			case SELF_COMPLETION -> ca.phon.session.io.xml.v13.LinkerType.SELF_COMPLETION;
-			case TECHNICAL_BREAK_TCU_COMPLETION -> ca.phon.session.io.xml.v13.LinkerType.TECHNICAL_BREAK_TCU_COMPLETION;
+		final ca.phon.session.io.xml.v1_3.Linker xmlLinker = factory.createLinker();
+		final ca.phon.session.io.xml.v1_3.LinkerType type = switch (linker.getType()) {
+			case LAZY_OVERLAP_MARK -> ca.phon.session.io.xml.v1_3.LinkerType.LAZY_OVERLAP_MARK;
+			case NO_BREAK_TCU_COMPLETION -> ca.phon.session.io.xml.v1_3.LinkerType.NO_BREAK_TCU_COMPLETION;
+			case OTHER_COMPLETION -> ca.phon.session.io.xml.v1_3.LinkerType.OTHER_COMPLETION;
+			case QUICK_UPTAKE -> ca.phon.session.io.xml.v1_3.LinkerType.QUICK_UPTAKE;
+			case QUOTED_UTTERANCE_NEXT -> ca.phon.session.io.xml.v1_3.LinkerType.QUOTED_UTTERANCE_NEXT;
+			case SELF_COMPLETION -> ca.phon.session.io.xml.v1_3.LinkerType.SELF_COMPLETION;
+			case TECHNICAL_BREAK_TCU_COMPLETION -> ca.phon.session.io.xml.v1_3.LinkerType.TECHNICAL_BREAK_TCU_COMPLETION;
 		};
 		xmlLinker.setType(type);
 		u.getLinker().add(xmlLinker);
@@ -213,7 +208,7 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 	@Override
     @Visits
 	public void visitQuotation(Quotation quotation) {
-		final ca.phon.session.io.xml.v13.Quotation xmlQuotation = factory.createQuotation();
+		final ca.phon.session.io.xml.v1_3.Quotation xmlQuotation = factory.createQuotation();
 		final BeginEndType beginEnd = switch (quotation.getBeginEnd()) {
 			case BEGIN -> BeginEndType.BEGIN;
 			case END -> BeginEndType.END;
@@ -225,7 +220,7 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 	@Override
     @Visits
 	public void visitPause(Pause pause) {
-		final ca.phon.session.io.xml.v13.Pause xmlPause = factory.createPause();
+		final ca.phon.session.io.xml.v1_3.Pause xmlPause = factory.createPause();
 		final PauseSymbolicLengthType type = switch (pause.getType()) {
 			case SIMPLE -> PauseSymbolicLengthType.SIMPLE;
 			case LONG -> PauseSymbolicLengthType.LONG;
@@ -255,7 +250,7 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 	@Override
     @Visits
 	public void visitFreecode(Freecode freecode) {
-		final ca.phon.session.io.xml.v13.Freecode xmlFreecode = factory.createFreecode();
+		final ca.phon.session.io.xml.v1_3.Freecode xmlFreecode = factory.createFreecode();
 		xmlFreecode.setValue(freecode.getCode());
 		u.getWOrGOrPg().add(xmlFreecode);
 	}
@@ -287,7 +282,7 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
     @Visits
 	public void visitOtherSpokenEvent(OtherSpokenEvent otherSpokenEvent) {
 		final E xmlEvent = factory.createE();
-		final ca.phon.session.io.xml.v13.OtherSpokenEvent xmlOte = factory.createOtherSpokenEvent();
+		final ca.phon.session.io.xml.v1_3.OtherSpokenEvent xmlOte = factory.createOtherSpokenEvent();
 		xmlOte.setWho(otherSpokenEvent.getWho());
 		xmlOte.setSaid(otherSpokenEvent.getData());
 		xmlEvent.setOtherSpokenEvent(xmlOte);
@@ -299,12 +294,12 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
     @Visits
 	public void visitSeparator(Separator separator) {
 		final S xmlS = factory.createS();
-		final ca.phon.session.io.xml.v13.SeparatorType type = switch (separator.getType()) {
-			case CLAUSE_DELIMITER -> ca.phon.session.io.xml.v13.SeparatorType.CLAUSE_DELIMITER;
-			case COLON -> ca.phon.session.io.xml.v13.SeparatorType.COLON;
-			case SEMICOLON -> ca.phon.session.io.xml.v13.SeparatorType.SEMICOLON;
-			case UNMARKED_ENDING -> ca.phon.session.io.xml.v13.SeparatorType.UNMARKED_ENDING;
-			case UPTAKE -> ca.phon.session.io.xml.v13.SeparatorType.UPTAKE;
+		final ca.phon.session.io.xml.v1_3.SeparatorType type = switch (separator.getType()) {
+			case CLAUSE_DELIMITER -> ca.phon.session.io.xml.v1_3.SeparatorType.CLAUSE_DELIMITER;
+			case COLON -> ca.phon.session.io.xml.v1_3.SeparatorType.COLON;
+			case SEMICOLON -> ca.phon.session.io.xml.v1_3.SeparatorType.SEMICOLON;
+			case UNMARKED_ENDING -> ca.phon.session.io.xml.v1_3.SeparatorType.UNMARKED_ENDING;
+			case UPTAKE -> ca.phon.session.io.xml.v1_3.SeparatorType.UPTAKE;
 		};
 		xmlS.setType(type);
 		u.getWOrGOrPg().add(xmlS);
@@ -313,13 +308,13 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 	@Override
     @Visits
 	public void visitToneMarker(ToneMarker toneMarker) {
-		final ca.phon.session.io.xml.v13.ToneMarker xmlToneMarker = factory.createToneMarker();
-		final ca.phon.session.io.xml.v13.ToneMarkerType type = switch (toneMarker.getType()) {
-			case FALLING_TO_LOW -> ca.phon.session.io.xml.v13.ToneMarkerType.FALLING_TO_LOW;
-			case FALLING_TO_MID -> ca.phon.session.io.xml.v13.ToneMarkerType.FALLING_TO_MID;
-			case LEVEL -> ca.phon.session.io.xml.v13.ToneMarkerType.LEVEL;
-			case RISING_TO_HIGH -> ca.phon.session.io.xml.v13.ToneMarkerType.RISING_TO_HIGH;
-			case RISING_TO_MID -> ca.phon.session.io.xml.v13.ToneMarkerType.RISING_TO_MID;
+		final ca.phon.session.io.xml.v1_3.ToneMarker xmlToneMarker = factory.createToneMarker();
+		final ca.phon.session.io.xml.v1_3.ToneMarkerType type = switch (toneMarker.getType()) {
+			case FALLING_TO_LOW -> ca.phon.session.io.xml.v1_3.ToneMarkerType.FALLING_TO_LOW;
+			case FALLING_TO_MID -> ca.phon.session.io.xml.v1_3.ToneMarkerType.FALLING_TO_MID;
+			case LEVEL -> ca.phon.session.io.xml.v1_3.ToneMarkerType.LEVEL;
+			case RISING_TO_HIGH -> ca.phon.session.io.xml.v1_3.ToneMarkerType.RISING_TO_HIGH;
+			case RISING_TO_MID -> ca.phon.session.io.xml.v1_3.ToneMarkerType.RISING_TO_MID;
 		};
 		xmlToneMarker.setType(type);
 		u.getWOrGOrPg().add(xmlToneMarker);
@@ -328,11 +323,11 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 	@Override
     @Visits
 	public void visitTagMarker(TagMarker tagMarker) {
-		final ca.phon.session.io.xml.v13.TagMarker xmlTagMarker = factory.createTagMarker();
-		final ca.phon.session.io.xml.v13.TagMarkerType type = switch (tagMarker.getType()) {
-			case COMMA -> ca.phon.session.io.xml.v13.TagMarkerType.COMMA;
-			case TAG -> ca.phon.session.io.xml.v13.TagMarkerType.TAG;
-			case VOCATIVE -> ca.phon.session.io.xml.v13.TagMarkerType.VOCATIVE;
+		final ca.phon.session.io.xml.v1_3.TagMarker xmlTagMarker = factory.createTagMarker();
+		final ca.phon.session.io.xml.v1_3.TagMarkerType type = switch (tagMarker.getType()) {
+			case COMMA -> ca.phon.session.io.xml.v1_3.TagMarkerType.COMMA;
+			case TAG -> ca.phon.session.io.xml.v1_3.TagMarkerType.TAG;
+			case VOCATIVE -> ca.phon.session.io.xml.v1_3.TagMarkerType.VOCATIVE;
 		};
 		xmlTagMarker.setType(type);
 		u.getWOrGOrPg().add(xmlTagMarker);
@@ -341,7 +336,7 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 	@Override
     @Visits
 	public void visitOverlapPoint(OverlapPoint overlapPoint) {
-		final ca.phon.session.io.xml.v13.OverlapPoint xmlOverlapPt = factory.createOverlapPoint();
+		final ca.phon.session.io.xml.v1_3.OverlapPoint xmlOverlapPt = factory.createOverlapPoint();
 		final StartEndType startEnd = switch (overlapPoint.getType()) {
 			case TOP_END,BOTTOM_END -> StartEndType.END;
 			case TOP_START,BOTTOM_START -> StartEndType.START;
@@ -360,7 +355,7 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 	@Override
     @Visits
 	public void visitUnderline(Underline underline) {
-		final ca.phon.session.io.xml.v13.Underline xmlUnderline = factory.createUnderline();
+		final ca.phon.session.io.xml.v1_3.Underline xmlUnderline = factory.createUnderline();
 		final BeginEndType beginEnd = switch (underline.getBeginEnd()) {
 			case END -> BeginEndType.END;
 			case BEGIN -> BeginEndType.BEGIN;
@@ -372,7 +367,7 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 	@Override
     @Visits
 	public void visitItalic(Italic italic) {
-		final ca.phon.session.io.xml.v13.Italic xmlItalic = factory.createItalic();
+		final ca.phon.session.io.xml.v1_3.Italic xmlItalic = factory.createItalic();
 		final BeginEndType beginEnd = switch (italic.getBeginEnd()) {
 			case END -> BeginEndType.END;
 			case BEGIN -> BeginEndType.BEGIN;
@@ -384,7 +379,7 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 	@Override
     @Visits
 	public void visitLongFeature(LongFeature longFeature) {
-		final ca.phon.session.io.xml.v13.LongFeature xmlLongFeature = factory.createLongFeature();
+		final ca.phon.session.io.xml.v1_3.LongFeature xmlLongFeature = factory.createLongFeature();
 		final BeginEndType beginEnd = switch (longFeature.getBeginEnd()) {
 			case BEGIN -> BeginEndType.BEGIN;
 			case END -> BeginEndType.END;
@@ -397,7 +392,7 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 	@Override
     @Visits
 	public void visitNonvocal(Nonvocal nonvocal) {
-		final ca.phon.session.io.xml.v13.Nonvocal xmlNonvocal = factory.createNonvocal();
+		final ca.phon.session.io.xml.v1_3.Nonvocal xmlNonvocal = factory.createNonvocal();
 		final BeginEndSimpleType beginEndSimple = switch (nonvocal.getBeginEndSimple()) {
 			case BEGIN -> BeginEndSimpleType.BEGIN;
 			case END -> BeginEndSimpleType.END;
@@ -412,22 +407,22 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
     @Visits
 	public void visitTerminator(Terminator terminator) {
 		final T xmlT = factory.createT();
-		final ca.phon.session.io.xml.v13.TerminatorType type = switch (terminator.getType()) {
-			case BROKEN_FOR_CODING -> ca.phon.session.io.xml.v13.TerminatorType.BROKEN_FOR_CODING;
-			case EXCLAMATION -> ca.phon.session.io.xml.v13.TerminatorType.E;
-			case INTERRUPTION -> ca.phon.session.io.xml.v13.TerminatorType.INTERRUPTION;
-			case INTERRUPTION_QUESTION -> ca.phon.session.io.xml.v13.TerminatorType.INTERRUPTION_QUESTION;
-			case NO_BREAK_TCU_CONTINUATION -> ca.phon.session.io.xml.v13.TerminatorType.NO_BREAK_TCU_CONTINUATION;
-			case PERIOD -> ca.phon.session.io.xml.v13.TerminatorType.P;
-			case QUESTION -> ca.phon.session.io.xml.v13.TerminatorType.Q;
-			case QUESTION_EXCLAMATION -> ca.phon.session.io.xml.v13.TerminatorType.QUESTION_EXCLAMATION;
-			case QUOTATION_NEXT_LINE -> ca.phon.session.io.xml.v13.TerminatorType.QUOTATION_NEXT_LINE;
-			case QUOTATION_PRECEDES -> ca.phon.session.io.xml.v13.TerminatorType.QUOTATION_PRECEDES;
-			case SELF_INTERRUPTION -> ca.phon.session.io.xml.v13.TerminatorType.SELF_INTERRUPTION;
-			case SELF_INTERRUPTION_QUESTION -> ca.phon.session.io.xml.v13.TerminatorType.SELF_INTERRUPTION_QUESTION;
-			case TECHNICAL_BREAK_TCU_CONTINUATION -> ca.phon.session.io.xml.v13.TerminatorType.TECHNICAL_BREAK_TCU_CONTINUATION;
-			case TRAIL_OFF -> ca.phon.session.io.xml.v13.TerminatorType.TRAIL_OFF;
-			case TRAIL_OFF_QUESTION -> ca.phon.session.io.xml.v13.TerminatorType.TRAIL_OFF_QUESTION;
+		final ca.phon.session.io.xml.v1_3.TerminatorType type = switch (terminator.getType()) {
+			case BROKEN_FOR_CODING -> ca.phon.session.io.xml.v1_3.TerminatorType.BROKEN_FOR_CODING;
+			case EXCLAMATION -> ca.phon.session.io.xml.v1_3.TerminatorType.E;
+			case INTERRUPTION -> ca.phon.session.io.xml.v1_3.TerminatorType.INTERRUPTION;
+			case INTERRUPTION_QUESTION -> ca.phon.session.io.xml.v1_3.TerminatorType.INTERRUPTION_QUESTION;
+			case NO_BREAK_TCU_CONTINUATION -> ca.phon.session.io.xml.v1_3.TerminatorType.NO_BREAK_TCU_CONTINUATION;
+			case PERIOD -> ca.phon.session.io.xml.v1_3.TerminatorType.P;
+			case QUESTION -> ca.phon.session.io.xml.v1_3.TerminatorType.Q;
+			case QUESTION_EXCLAMATION -> ca.phon.session.io.xml.v1_3.TerminatorType.QUESTION_EXCLAMATION;
+			case QUOTATION_NEXT_LINE -> ca.phon.session.io.xml.v1_3.TerminatorType.QUOTATION_NEXT_LINE;
+			case QUOTATION_PRECEDES -> ca.phon.session.io.xml.v1_3.TerminatorType.QUOTATION_PRECEDES;
+			case SELF_INTERRUPTION -> ca.phon.session.io.xml.v1_3.TerminatorType.SELF_INTERRUPTION;
+			case SELF_INTERRUPTION_QUESTION -> ca.phon.session.io.xml.v1_3.TerminatorType.SELF_INTERRUPTION_QUESTION;
+			case TECHNICAL_BREAK_TCU_CONTINUATION -> ca.phon.session.io.xml.v1_3.TerminatorType.TECHNICAL_BREAK_TCU_CONTINUATION;
+			case TRAIL_OFF -> ca.phon.session.io.xml.v1_3.TerminatorType.TRAIL_OFF;
+			case TRAIL_OFF_QUESTION -> ca.phon.session.io.xml.v1_3.TerminatorType.TRAIL_OFF_QUESTION;
 		};
 		xmlT.setType(type);
 		u.setT(xmlT);
@@ -436,7 +431,7 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 	@Override
     @Visits
 	public void visitPostcode(Postcode postcode) {
-		final ca.phon.session.io.xml.v13.Postcode xmlPostcode = factory.createPostcode();
+		final ca.phon.session.io.xml.v1_3.Postcode xmlPostcode = factory.createPostcode();
 		xmlPostcode.setValue(postcode.getCode());
 		u.getPostcode().add(xmlPostcode);
 	}

@@ -554,7 +554,7 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 
 						//  overlap
 						if (txt.matches("[<>][0-9]*")) {
-							final OverlapType type = (txt.charAt(0) == '<' ? OverlapType.OVERLAP_PRECEEDS : OverlapType.OVERLAP_FOLLOWS);
+							final OverlapType type = (txt.charAt(0) == '<' ? OverlapType.OVERLAP_PRECEDES : OverlapType.OVERLAP_FOLLOWS);
 							final String remainder = (txt.length() > 1 ? txt.substring(1) : null);
 							int index = (remainder == null ? -1 : Integer.parseInt(remainder));
 							builder.append(new Overlap(type, index));

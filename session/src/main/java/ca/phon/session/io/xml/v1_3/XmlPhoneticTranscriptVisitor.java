@@ -1,7 +1,6 @@
 package ca.phon.session.io.xml.v1_3;
 
 import ca.phon.ipa.IPATranscript;
-import ca.phon.session.io.xml.v13.*;
 import ca.phon.syllable.SyllableStress;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;

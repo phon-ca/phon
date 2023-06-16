@@ -2,8 +2,9 @@ package ca.phon.session.io.xml.v1_3;
 
 import ca.phon.orthography.*;
 import ca.phon.orthography.Error;
-import ca.phon.session.io.xml.v13.Ga;
-import ca.phon.session.io.xml.v13.K;
+import ca.phon.orthography.OverlapType;
+import ca.phon.session.io.xml.v1_3.Ga;
+import ca.phon.session.io.xml.v1_3.K;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
@@ -17,16 +18,16 @@ public class XmlOrthographyAnnotationVisitor extends VisitorAdapter<Object> {
 
     @Visits
     public void visitMarker(K xmlMarker) {
-        final MarkerType type = switch (xmlMarker.getType()) {
-            case BEST_GUESS -> MarkerType.BEST_GUESS;
-            case CONTRASTIVE_STRESSING -> MarkerType.CONTRASTIVE_STRESSING;
-            case FALSE_START -> MarkerType.FALSE_START;
-            case MOR_EXCLUDE -> MarkerType.EXCLUDE;
-            case RETRACING -> MarkerType.RETRACING;
-            case RETRACING_REFORMULATION -> MarkerType.RETRACING_REFORMULATION;
-            case RETRACING_UNCLEAR -> MarkerType.RETRACING_UNCLEAR;
-            case RETRACING_WITH_CORRECTION -> MarkerType.RETRACING_WITH_CORRECTION;
-            case STRESSING -> MarkerType.STRESSING;
+        final ca.phon.orthography.MarkerType type = switch (xmlMarker.getType()) {
+            case BEST_GUESS -> ca.phon.orthography.MarkerType.BEST_GUESS;
+            case CONTRASTIVE_STRESSING -> ca.phon.orthography.MarkerType.CONTRASTIVE_STRESSING;
+            case FALSE_START -> ca.phon.orthography.MarkerType.FALSE_START;
+            case MOR_EXCLUDE -> ca.phon.orthography.MarkerType.EXCLUDE;
+            case RETRACING -> ca.phon.orthography.MarkerType.RETRACING;
+            case RETRACING_REFORMULATION -> ca.phon.orthography.MarkerType.RETRACING_REFORMULATION;
+            case RETRACING_UNCLEAR -> ca.phon.orthography.MarkerType.RETRACING_UNCLEAR;
+            case RETRACING_WITH_CORRECTION -> ca.phon.orthography.MarkerType.RETRACING_WITH_CORRECTION;
+            case STRESSING -> ca.phon.orthography.MarkerType.STRESSING;
         };
         annotations.add(new Marker(type));
     }
@@ -53,16 +54,16 @@ public class XmlOrthographyAnnotationVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitOverlap(ca.phon.session.io.xml.v13.Overlap xmlOverlap) {
+    public void visitOverlap(ca.phon.session.io.xml.v1_3.Overlap xmlOverlap) {
         final OverlapType type = switch (xmlOverlap.getType()) {
-            case OVERLAP_FOLLOWS -> OverlapType.OVERLAP_FOLLOWS;
-            case OVERLAP_PRECEDES -> OverlapType.OVERLAP_PRECEEDS;
+            case OVERLAP_FOLLOWS -> ca.phon.orthography.OverlapType.OVERLAP_FOLLOWS;
+            case OVERLAP_PRECEDES -> ca.phon.orthography.OverlapType.OVERLAP_PRECEDES;
         };
-        annotations.add(new Overlap(type));
+        annotations.add(new ca.phon.orthography.Overlap(type));
     }
 
     @Visits
-    public void visitLangs(ca.phon.session.io.xml.v13.Langs langs) {
+    public void visitLangs(ca.phon.session.io.xml.v1_3.Langs langs) {
         // TODO
     }
 

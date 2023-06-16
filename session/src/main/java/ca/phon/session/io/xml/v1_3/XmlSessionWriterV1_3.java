@@ -28,10 +28,6 @@ import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionWriter;
-import ca.phon.session.io.xml.v13.*;
-import ca.phon.session.io.xml.v13.CommentType;
-import ca.phon.session.io.xml.v13.TierAlignmentRules;
-import ca.phon.session.io.xml.v13.UserTierData;
 import ca.phon.util.Language;
 import ca.phon.xml.annotation.XMLSerial;
 import jakarta.xml.bind.JAXBContext;
@@ -39,6 +35,7 @@ import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import org.apache.commons.lang3.StringUtils;
+import org.glassfish.jaxb.runtime.marshaller.NamespacePrefixMapper;
 
 import javax.xml.datatype.*;
 import java.io.IOException;
@@ -107,14 +104,6 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 		}
 		retVal.setHeader(headerData);
 
-		final TranscriptType transcript = factory.createTranscriptType();
-		// commets
-		for(int i = 0; i < session.getMetadata().getNumberOfComments(); i++) {
-			final Comment c = session.getMetadata().getComment(i);
-			final CommentType ct = copyComment(factory, c);
-			transcript.getROrComment().add(ct);
-		}
-
 		// participants
 		final ParticipantsType parts = factory.createParticipantsType();
 		for(int i = 0; i < session.getParticipantCount(); i++) {
@@ -149,16 +138,18 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 		}
 		retVal.setTierOrder(tot);
 
+		final TranscriptType transcript = factory.createTranscriptType();
+		retVal.setTranscript(transcript);
 		// session data
 		for(int i = 0; i < session.getTranscript().getNumberOfElements(); i++) {
 			final var ele = session.getTranscript().getElementAt(i);
 			if(ele.isComment()) {
 				final Comment comment = ele.asComment();
 				final CommentType commentType = copyComment(factory, comment);
-				retVal.getTranscript().getROrComment().add(commentType);
+				transcript.getROrComment().add(commentType);
 			} else if(ele.isRecord()) {
 				final RecordType recordType = copyRecord(factory, retVal, ele.asRecord());
-				retVal.getTranscript().getROrComment().add(recordType);
+				transcript.getROrComment().add(recordType);
 			} else {
 				// should not happen
 			}
@@ -210,8 +201,6 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 			final CommentType ct = copyComment(factory, com);
 			transcript.getROrComment().add(ct);
 		}
-
-		retVal.setTranscript(transcript);
 
 		return factory.createSession(retVal);
 	}
@@ -385,9 +374,9 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 		final MediaType segType = factory.createMediaType();
 		segType.setStart(BigDecimal.valueOf(segment.getStartValue()));
 		segType.setEnd(BigDecimal.valueOf(segment.getEndValue()));
-		final MediaUnitType unitType = switch (segType.getUnit()) {
-			case MS -> MediaUnitType.MS;
-			case S -> MediaUnitType.S;
+		final MediaUnitType unitType = switch (segment.getUnitType()) {
+			case Second -> MediaUnitType.S;
+			default -> MediaUnitType.MS;
 		};
 		segType.setUnit(unitType);
 		return segType;
@@ -623,6 +612,19 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 			final JAXBContext context = JAXBContext.newInstance(ObjectFactory.class);
 			final Marshaller marshaller = context.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+			NamespacePrefixMapper prefixMapper = new NamespacePrefixMapper() {
+				@Override
+				public String getPreferredPrefix(String namespace, String suggestion, boolean b) {
+					System.out.println("NS: " + namespace);
+					if(namespace.equals("https://phon.ca/ns/session")) {
+						return "phon";
+					} else {
+						return suggestion;
+					}
+				}
+			};
+			marshaller.setProperty("org.glassfish.jaxb.namespacePrefixMapper", prefixMapper);
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			marshaller.marshal(ele, out);
 		} catch(JAXBException e) {
 			LOGGER.error( e.getMessage(), e);
