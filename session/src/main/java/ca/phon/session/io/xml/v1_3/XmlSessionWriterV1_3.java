@@ -607,7 +607,6 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 	public void writeSession(Session session, OutputStream out)
 			throws IOException {
 		final JAXBElement<SessionType> ele = toSessionType(session);
-
 		try {
 			final JAXBContext context = JAXBContext.newInstance(ObjectFactory.class);
 			final Marshaller marshaller = context.createMarshaller();
@@ -615,7 +614,6 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 			NamespacePrefixMapper prefixMapper = new NamespacePrefixMapper() {
 				@Override
 				public String getPreferredPrefix(String namespace, String suggestion, boolean b) {
-					System.out.println("NS: " + namespace);
 					if(namespace.equals("https://phon.ca/ns/session")) {
 						return "phon";
 					} else {

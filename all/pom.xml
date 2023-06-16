@@ -72,11 +72,11 @@
 			<version>${ca.phon.phon-dict-data.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>ca.phon</groupId>
-			<artifactId>phon-csv-plugin</artifactId>
-			<version>${ca.phon.csv.plugin.version}</version>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>ca.phon</groupId>-->
+<!--			<artifactId>phon-csv-plugin</artifactId>-->
+<!--			<version>${ca.phon.csv.plugin.version}</version>-->
+<!--		</dependency>-->
 
 		<dependency>
 			<groupId>ca.phon</groupId>
@@ -90,17 +90,17 @@
 			<version>${ca.phon.phon-groovy-plugin.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>ca.phon</groupId>
-			<artifactId>phon-praat-plugin</artifactId>
-			<version>${ca.phon.phon-praat-plugin.version}</version>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>ca.phon</groupId>-->
+<!--			<artifactId>phon-praat-plugin</artifactId>-->
+<!--			<version>${ca.phon.phon-praat-plugin.version}</version>-->
+<!--		</dependency>-->
 
-		<dependency>
-			<groupId>ca.phon</groupId>
-			<artifactId>phontalk-plugin</artifactId>
-			<version>${ca.phon.phontalk.version}</version>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>ca.phon</groupId>-->
+<!--			<artifactId>phontalk-plugin</artifactId>-->
+<!--			<version>${ca.phon.phontalk.version}</version>-->
+<!--		</dependency>-->
 
 		<dependency>
 			<groupId>ca.phon</groupId>

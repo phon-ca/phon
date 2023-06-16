@@ -649,15 +649,28 @@
     </xs:complexType>
 
     <xs:element name="unparsable" type="unparsableData"/>
-    <xs:simpleType name="unparsableData">
+    <xs:element name="uv" type="nonemptyStringType"/>
+    <xs:complexType name="unparsableData">
         <xs:annotation>
-            <xs:documentation>Un-parsable data for a tier.  This is a storage class for information
-                which needs to be retained but failed parsing for some reason.</xs:documentation>
+            <xs:documentation>Unparsed data for a tier with error</xs:documentation>
         </xs:annotation>
-        <xs:restriction base="xs:string">
-            <xs:minLength value="1"/>
-        </xs:restriction>
-    </xs:simpleType>
+        <xs:sequence>
+            <xs:element ref="uv" minOccurs="1" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>Unvalidated value - text entered by user</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element ref="pe" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="pe" type="parseError"/>
+    <xs:complexType name="parseError" mixed="true">
+        <xs:annotation>
+            <xs:documentation>Parse error</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="charPositionInLine" type="xs:int"/>
+    </xs:complexType>
 
     <xs:element name="orthography" type="orthographyTierType"/>
     <xs:complexType name="orthographyTierType" mixed="false">
