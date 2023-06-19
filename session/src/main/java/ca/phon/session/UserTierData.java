@@ -19,6 +19,9 @@ public final class UserTierData extends ExtendableObject {
     private final List<UserTierElement> elements;
 
     public static UserTierData parseTierData(String text) throws ParseException {
+        if(text == null || text.length() == 0) {
+            return new UserTierData();
+        }
         final String[] parts = text.split("\\p{Space}");
         final String commentPattern = "\\((.+)\\)";
         final String internalMediaPattern = InternalMedia.MEDIA_BULLET
@@ -61,13 +64,15 @@ public final class UserTierData extends ExtendableObject {
                         elements.add(new TierString(part));
                     }
                 } else {
-                    final char lastChar = part.charAt(part.length()-1);
-                    final TagMarkerType tagMarkerType = TagMarkerType.fromChar(lastChar);
-                    if(tagMarkerType != null) {
-                        elements.add(new TierString(part.substring(part.length()-1)));
-                        elements.add(new UserTierTagMarker(tagMarkerType));
-                    } else {
-                        elements.add(new TierString(part));
+                    if(part.length() > 0) {
+                        final char lastChar = part.charAt(part.length() - 1);
+                        final TagMarkerType tagMarkerType = TagMarkerType.fromChar(lastChar);
+                        if (tagMarkerType != null) {
+                            elements.add(new TierString(part.substring(part.length() - 1)));
+                            elements.add(new UserTierTagMarker(tagMarkerType));
+                        } else {
+                            elements.add(new TierString(part));
+                        }
                     }
                 }
             }

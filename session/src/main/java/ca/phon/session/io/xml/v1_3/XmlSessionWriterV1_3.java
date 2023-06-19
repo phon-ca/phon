@@ -39,6 +39,7 @@ import org.glassfish.jaxb.runtime.marshaller.NamespacePrefixMapper;
 
 import javax.xml.datatype.*;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -437,17 +438,21 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 		final UserTierData retVal = factory.createUserTierData();
 		for(UserTierElement ele:tierData.getElements()) {
 			if(ele instanceof TierString) {
-				retVal.getTwOrTcOrInternalMedia().add(factory.createTc(ele.toString()));
+				final TierWordType tw = factory.createTierWordType();
+				tw.setContent(ele.toString());
+				retVal.getTwOrTcOrInternalMedia().add(tw);
 			} else if(ele instanceof UserTierComment) {
 				final String commentText = ((UserTierComment)ele).text();
-				retVal.getTwOrTcOrInternalMedia().add(factory.createTc(commentText));
+				final TierCommentType tc = factory.createTierCommentType();
+				tc.setContent(commentText);
+				retVal.getTwOrTcOrInternalMedia().add(tc);
 			} else if(ele instanceof UserTierInternalMedia) {
 				final UserTierInternalMedia im = (UserTierInternalMedia) ele;
 				final MediaType mediaType = factory.createMediaType();
 				mediaType.setStart(BigDecimal.valueOf(im.getInternalMedia().getStartTime()));
 				mediaType.setEnd(BigDecimal.valueOf(im.getInternalMedia().getEndTime()));
 				mediaType.setUnit(MediaUnitType.S);
-				retVal.getTwOrTcOrInternalMedia().add(factory.createInternalMedia(mediaType));
+				retVal.getTwOrTcOrInternalMedia().add(mediaType);
 			}
 		}
 		return retVal;

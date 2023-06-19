@@ -643,20 +643,16 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 
 	private UserTierData readUserTierData(SessionFactory factory, ca.phon.session.io.xml.v1_3.UserTierData utd) {
 		final List<UserTierElement> elements = new ArrayList<>();
-		// all allowed objects are wrapped in JAXBElements
 		for(Object obj:utd.getTwOrTcOrInternalMedia()) {
-			if(!(obj instanceof JAXBElement<?>)) continue;
-			final JAXBElement<?> ele = (JAXBElement<?>) obj;
-			if(ele.getName().equals("tw")) {
-				elements.add(new TierString(ele.getValue().toString()));
-			} else if(ele.getName().equals("tc")) {
-				elements.add(new UserTierComment(ele.getValue().toString()));
-			} else if(ele.getName().equals("internal-media")) {
-				final MediaType mt = (MediaType) ele.getValue();
+			if(obj instanceof TierWordType tierWordType) {
+				elements.add(new TierString(tierWordType.getContent()));
+			} else if(obj instanceof TierCommentType tierCommentType) {
+				elements.add(new UserTierComment(tierCommentType.getContent()));
+			} else if(obj instanceof MediaType mt) {
 				final MediaSegment seg = readMediaSegment(factory, mt);
 				elements.add(new UserTierInternalMedia(new InternalMedia(seg.getStartValue(), seg.getEndValue())));
 			} else {
-				LOGGER.warn("Invalid element " + ele.getName());
+				LOGGER.warn("Invalid element " + obj.toString());
 			}
 		}
 		return new UserTierData(elements);

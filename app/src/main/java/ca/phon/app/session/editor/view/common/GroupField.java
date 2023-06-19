@@ -33,6 +33,7 @@ import javax.swing.undo.UndoManager;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.util.List;
 import java.util.*;
@@ -411,13 +412,16 @@ public class GroupField<T> extends JTextArea implements TierEditor<T> {
 	private final AtomicReference<T> validatedObjRef = new AtomicReference<T>();
 	protected boolean validateText() {
 		boolean retVal = true;
-
 		final String text = getText();
-
+		System.out.println(text);
+//		getTier().setText(text);
+//		if(getTier().isUnvalidated()) {
+//			int offset = getTier().getUnvalidatedValue().getParseError().getErrorOffset();
+//			addErrorHighlight(offset, offset+1);
+//			retVal = false;
+//		}
 		// look for a formatter
-		@SuppressWarnings("unchecked")
-		final Formatter<T> formatter =
-				(Formatter<T>)FormatterFactory.createFormatter(tier.getDeclaredType());
+		final Formatter<T> formatter = FormatterFactory.createFormatter(tier.getDeclaredType());
 		if(formatter != null) {
 			try {
 				final T validatedObj = formatter.parse(text);
@@ -428,7 +432,6 @@ public class GroupField<T> extends JTextArea implements TierEditor<T> {
 			}
 		}
 		getGroupFieldBorder().setShowWarningIcon(!retVal);
-
 		return retVal;
 	}
 

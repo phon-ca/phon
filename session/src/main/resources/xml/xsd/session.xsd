@@ -982,16 +982,21 @@
     </xs:complexType>
 
     <xs:element name="tierData" type="userTierData"/>
-    <xs:element name="tw" type="nonemptyStringType">
+
+    <xs:element name="tw" type="tierWordType"/>
+    <xs:complexType name="tierWordType" mixed="true">
         <xs:annotation>
             <xs:documentation>Tier word</xs:documentation>
         </xs:annotation>
-    </xs:element>
-    <xs:element name="tc" type="nonemptyStringType">
+    </xs:complexType>
+
+    <xs:element name="tc" type="tierCommentType"/>
+    <xs:complexType name="tierCommentType" mixed="true">
         <xs:annotation>
             <xs:documentation>Tier comment (data enclosed in parentheses)</xs:documentation>
         </xs:annotation>
-    </xs:element>
+    </xs:complexType>
+
     <xs:complexType name="userTierData" mixed="false">
         <xs:annotation>
             <xs:documentation>User tier data</xs:documentation>
@@ -2633,7 +2638,6 @@
                     <xs:element ref="overlap"/>
                     <xs:element ref="langs"/>
                 </xs:choice>
-
 
             </xs:sequence>
         </xs:complexType>
