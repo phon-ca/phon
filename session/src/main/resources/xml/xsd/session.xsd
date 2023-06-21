@@ -1082,7 +1082,7 @@
         </xs:sequence>
     </xs:complexType>
 
-    <xs:element name="linker">
+    <xs:complexType name="linkerType">
         <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
             <xs:documentation> Utterance initiators or linkers; they indicate the way to fit the current
                 utterance with an earlier one. </xs:documentation>
@@ -1091,10 +1091,9 @@
                     on this topic...</a>
             </xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="false">
-            <xs:attribute name="type" type="linkerType"/>
-        </xs:complexType>
-    </xs:element>
+        <xs:attribute name="type" type="linkerTypeType"/>
+    </xs:complexType>
+    <xs:element name="linker" type="linkerType"/>
 
     <xs:element name="lang" type="languageType">
         <xs:annotation>
@@ -1102,7 +1101,7 @@
         </xs:annotation>
     </xs:element>
 
-    <xs:simpleType name="linkerType">
+    <xs:simpleType name="linkerTypeType">
         <xs:restriction base="xs:string">
             <xs:enumeration value="quoted utterance next">
                 <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
@@ -1170,7 +1169,7 @@
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:element name="w">
+    <xs:complexType name="wType" mixed="true">
         <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
             <xs:documentation> A word. Note that there are lexical restrictions on what characters are
                 allowed in the text of a word. </xs:documentation>
@@ -1199,81 +1198,75 @@
                     topic...</a>
             </xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
-            <xs:sequence>
-                <xs:element ref="langs" minOccurs="0"/>
-                <xs:choice minOccurs="0" maxOccurs="unbounded">
-                    <xs:element ref="ca-delimiter"/>
-                    <xs:element ref="ca-element"/>
-                    <xs:element ref="long-feature"/>
-                    <xs:element ref="overlap-point"/>
-                    <xs:element ref="p"/>
-                    <xs:element ref="shortening"/>
-                    <xs:element ref="wk"/>
+        <xs:sequence>
+            <xs:element ref="langs" minOccurs="0"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="ca-delimiter"/>
+                <xs:element ref="ca-element"/>
+                <xs:element ref="long-feature"/>
+                <xs:element ref="overlap-point"/>
+                <xs:element ref="p"/>
+                <xs:element ref="shortening"/>
+                <xs:element ref="wk"/>
+                <xs:element ref="pos"/>
+                <xs:element ref="replacement"/>
+                <xs:element ref="italic"/>
+                <xs:element ref="underline"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="separated-prefix" type="xs:boolean">
+            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                <xs:documentation>word# indicates the word is a separated prefix</xs:documentation>
+                <xs:documentation>
+                    <a href="https://talkbank.org/manuals/CHAT.html#Separated_Prefix">CHAT manual
+                        section on this topic...</a>
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
 
-                    <xs:element ref="pos"/>
-                    <xs:element ref="replacement"/>
+        <xs:attribute name="user-special-form" type="xs:string">
+            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                <xs:documentation>@z:code user-specified code</xs:documentation>
+                <xs:documentation>
+                    <a href="https://talkbank.org/manuals/CHAT.html#User_Special_Form">CHAT manual
+                        section on this topic...</a>
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
 
-                    <!-- Styles not used in Phon - supported for round-trip only -->
-                    <xs:element ref="italic"/>
-                    <xs:element ref="underline"/>
-                </xs:choice>
+        <xs:attribute name="formSuffix" type="xs:string">
+            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                <xs:documentation>-s and similar after a form marker</xs:documentation>
+                <xs:documentation>
+                    <a href="https://talkbank.org/manuals/CHAT.html#Special_Form_Suffix">CHAT manual
+                        section on this topic...</a>
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
 
-            </xs:sequence>
+        <xs:attribute name="formType" type="wordFormType">
+            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                <xs:documentation> Form marker: an attribute for a word. </xs:documentation>
+                <xs:documentation>
+                    <a href="https://talkbank.org/manuals/CHAT.html#Special_Form_Markers">CHAT manual
+                        section on this topic...</a>
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
 
-            <xs:attribute name="separated-prefix" type="xs:boolean">
-                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                    <xs:documentation>word# indicates the word is a separated prefix</xs:documentation>
-                    <xs:documentation>
-                        <a href="https://talkbank.org/manuals/CHAT.html#Separated_Prefix">CHAT manual
-                            section on this topic...</a>
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:attribute>
+        <xs:attribute name="type" type="wordType">
+            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                <xs:documentation> Optional attribute for a word. </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
 
-            <xs:attribute name="user-special-form" type="xs:string">
-                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                    <xs:documentation>@z:code user-specified code</xs:documentation>
-                    <xs:documentation>
-                        <a href="https://talkbank.org/manuals/CHAT.html#User_Special_Form">CHAT manual
-                            section on this topic...</a>
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:attribute>
-
-            <xs:attribute name="formSuffix" type="xs:string">
-                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                    <xs:documentation>-s and similar after a form marker</xs:documentation>
-                    <xs:documentation>
-                        <a href="https://talkbank.org/manuals/CHAT.html#Special_Form_Suffix">CHAT manual
-                            section on this topic...</a>
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:attribute>
-
-            <xs:attribute name="formType" type="wordFormType">
-                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                    <xs:documentation> Form marker: an attribute for a word. </xs:documentation>
-                    <xs:documentation>
-                        <a href="https://talkbank.org/manuals/CHAT.html#Special_Form_Markers">CHAT manual
-                            section on this topic...</a>
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:attribute>
-
-            <xs:attribute name="type" type="wordType">
-                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                    <xs:documentation> Optional attribute for a word. </xs:documentation>
-                </xs:annotation>
-            </xs:attribute>
-
-            <xs:attribute name="untranscribed" type="untranscribedType">
-                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                    <xs:documentation>Mark as untranscribed non-word.</xs:documentation>
-                </xs:annotation>
-            </xs:attribute>
-        </xs:complexType>
-    </xs:element>
+        <xs:attribute name="untranscribed" type="untranscribedType">
+            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                <xs:documentation>Mark as untranscribed non-word.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:element name="w" type="wType"/>
 
     <xs:simpleType name="untranscribedType">
         <xs:restriction base="xs:string">

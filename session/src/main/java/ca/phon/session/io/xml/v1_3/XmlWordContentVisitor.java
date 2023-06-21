@@ -4,14 +4,17 @@ import ca.phon.orthography.*;
 import ca.phon.orthography.ProsodyType;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
+import jakarta.xml.bind.JAXB;
+import jakarta.xml.bind.JAXBElement;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-public final class XmlWordContentVisitor extends VisitorAdapter<Object> {
+public final class XmlWordContentVisitor extends VisitorAdapter<Serializable> {
 
-    private ca.phon.orthography.Langs langs = new ca.phon.orthography.Langs();
+    private Langs langs = new Langs();
 
     private final List<WordPos> wordPos = new ArrayList<>();
 
@@ -26,70 +29,71 @@ public final class XmlWordContentVisitor extends VisitorAdapter<Object> {
     private final Stack<CompoundWordMarkerType> compoundWordMarkerTypes = new Stack<>();
 
     @Visits
-    public void visitLangs(ca.phon.session.io.xml.v1_3.Langs xmlLangs) {
+    public void visitLangs(XmlLangsType xmlLangs) {
         if(xmlLangs.getSingle() != null) {
-            langs = new ca.phon.orthography.Langs(ca.phon.orthography.Langs.LangsType.SINGLE, xmlLangs.getSingle());
+            langs = new Langs(Langs.LangsType.SINGLE, xmlLangs.getSingle());
         } else if(xmlLangs.getMultiple() != null) {
-            langs = new ca.phon.orthography.Langs(ca.phon.orthography.Langs.LangsType.MULTIPLE, xmlLangs.getMultiple().toArray(new String[0]));
+            langs = new Langs(Langs.LangsType.MULTIPLE, xmlLangs.getMultiple().toArray(new String[0]));
         } else if(xmlLangs.getAmbiguous() != null) {
-            langs = new ca.phon.orthography.Langs(ca.phon.orthography.Langs.LangsType.AMBIGUOUS, xmlLangs.getAmbiguous().toArray(new String[0]));
+            langs = new Langs(Langs.LangsType.AMBIGUOUS, xmlLangs.getAmbiguous().toArray(new String[0]));
         }
     }
 
     @Visits
     public void visitText(String text) {
-        wordElements.add(new WordText(text));
+        if(text.trim().length() > 0)
+            wordElements.add(new WordText(text.trim()));
     }
 
     @Visits
-    public void visitCaDelimiter(ca.phon.session.io.xml.v1_3.CaDelimiter xmlCaDelim) {
+    public void visitCaDelimiter(XmlCaDelimiterType xmlCaDelim) {
         final BeginEnd beginEnd =
-                (xmlCaDelim.getType() == BeginEndType.BEGIN ? BeginEnd.BEGIN : BeginEnd.END);
-        final ca.phon.orthography.CaDelimiterType caDelimiterType = switch(xmlCaDelim.getLabel()) {
-            case BREATHY_VOICE ->  ca.phon.orthography.CaDelimiterType.BREATHY_VOICE;
-            case CREAKY -> ca.phon.orthography.CaDelimiterType.CREAKY;
-            case FASTER -> ca.phon.orthography.CaDelimiterType.FASTER;
-            case HIGH_PITCH -> ca.phon.orthography.CaDelimiterType.HIGH_PITCH;
-            case LOUDER -> ca.phon.orthography.CaDelimiterType.LOUDER;
-            case LOW_PITCH -> ca.phon.orthography.CaDelimiterType.LOW_PITCH;
-            case PRECISE -> ca.phon.orthography.CaDelimiterType.PRECISE;
-            case REPEATED_SEGMENT -> ca.phon.orthography.CaDelimiterType.REPEATED_SEGMENT;
-            case SINGING -> ca.phon.orthography.CaDelimiterType.SINGING;
-            case SLOWER -> ca.phon.orthography.CaDelimiterType.SLOWER;
-            case SMILE_VOICE -> ca.phon.orthography.CaDelimiterType.SMILE_VOICE;
-            case SOFTER -> ca.phon.orthography.CaDelimiterType.SOFTER;
-            case UNSURE -> ca.phon.orthography.CaDelimiterType.UNSURE;
-            case WHISPER -> ca.phon.orthography.CaDelimiterType.WHISPER;
-            case YAWN -> ca.phon.orthography.CaDelimiterType.YAWN;
+                (xmlCaDelim.getType() == XmlBeginEndType.BEGIN ? BeginEnd.BEGIN : BeginEnd.END);
+        final CaDelimiterType caDelimiterType = switch(xmlCaDelim.getLabel()) {
+            case BREATHY_VOICE ->  CaDelimiterType.BREATHY_VOICE;
+            case CREAKY -> CaDelimiterType.CREAKY;
+            case FASTER -> CaDelimiterType.FASTER;
+            case HIGH_PITCH -> CaDelimiterType.HIGH_PITCH;
+            case LOUDER -> CaDelimiterType.LOUDER;
+            case LOW_PITCH -> CaDelimiterType.LOW_PITCH;
+            case PRECISE -> CaDelimiterType.PRECISE;
+            case REPEATED_SEGMENT -> CaDelimiterType.REPEATED_SEGMENT;
+            case SINGING -> CaDelimiterType.SINGING;
+            case SLOWER -> CaDelimiterType.SLOWER;
+            case SMILE_VOICE -> CaDelimiterType.SMILE_VOICE;
+            case SOFTER -> CaDelimiterType.SOFTER;
+            case UNSURE -> CaDelimiterType.UNSURE;
+            case WHISPER -> CaDelimiterType.WHISPER;
+            case YAWN -> CaDelimiterType.YAWN;
         };
-        wordElements.add(new ca.phon.orthography.CaDelimiter(beginEnd, caDelimiterType));
+        wordElements.add(new CaDelimiter(beginEnd, caDelimiterType));
     }
 
     @Visits
-    public void visitCaElement(ca.phon.session.io.xml.v1_3.CaElement xmlCaEle) {
-        final ca.phon.orthography.CaElementType caElementType = switch(xmlCaEle.getType()) {
-            case BLOCKED_SEGMENTS -> ca.phon.orthography.CaElementType.BLOCKED_SEGMENTS;
-            case CONSTRICTION -> ca.phon.orthography.CaElementType.CONSTRICTION;
-            case INHALATION -> ca.phon.orthography.CaElementType.INHALATION;
-            case LAUGH_IN_WORD -> ca.phon.orthography.CaElementType.LAUGH_IN_WORD;
-            case PITCH_DOWN -> ca.phon.orthography.CaElementType.PITCH_DOWN;
-            case PITCH_RESET -> ca.phon.orthography.CaElementType.PITCH_RESET;
-            case PITCH_UP -> ca.phon.orthography.CaElementType.PITCH_UP;
-            case PRIMARY_STRESS -> ca.phon.orthography.CaElementType.PRIMARY_STRESS;
-            case SECONDARY_STRESS -> ca.phon.orthography.CaElementType.SECONDARY_STRESS;
+    public void visitCaElement(XmlCaElementType xmlCaEle) {
+        final CaElementType caElementType = switch(xmlCaEle.getType()) {
+            case BLOCKED_SEGMENTS -> CaElementType.BLOCKED_SEGMENTS;
+            case CONSTRICTION -> CaElementType.CONSTRICTION;
+            case INHALATION -> CaElementType.INHALATION;
+            case LAUGH_IN_WORD -> CaElementType.LAUGH_IN_WORD;
+            case PITCH_DOWN -> CaElementType.PITCH_DOWN;
+            case PITCH_RESET -> CaElementType.PITCH_RESET;
+            case PITCH_UP -> CaElementType.PITCH_UP;
+            case PRIMARY_STRESS -> CaElementType.PRIMARY_STRESS;
+            case SECONDARY_STRESS -> CaElementType.SECONDARY_STRESS;
         };
-        wordElements.add(new ca.phon.orthography.CaElement(caElementType));
+        wordElements.add(new CaElement(caElementType));
     }
 
     @Visits
-    public void visitLongFeature(ca.phon.session.io.xml.v1_3.LongFeature xmlLongFeature) {
+    public void visitLongFeature(XmlLongFeatureType xmlLongFeature) {
         final BeginEnd beginEnd =
-                (xmlLongFeature.getType() == BeginEndType.BEGIN ? BeginEnd.BEGIN : BeginEnd.END);
-        wordElements.add(new ca.phon.orthography.LongFeature(beginEnd, xmlLongFeature.getValue()));
+                (xmlLongFeature.getType() == XmlBeginEndType.BEGIN ? BeginEnd.BEGIN : BeginEnd.END);
+        wordElements.add(new LongFeature(beginEnd, xmlLongFeature.getContent()));
     }
 
     @Visits
-    public void visitOverlapPoint(ca.phon.session.io.xml.v1_3.OverlapPoint xmlOverlapPt) {
+    public void visitOverlapPoint(XmlOverlapPointType xmlOverlapPt) {
         final String topBottom = switch (xmlOverlapPt.getTopBottom()) {
             case TOP -> "top";
             case BOTTOM -> "bottom";
@@ -100,26 +104,26 @@ public final class XmlWordContentVisitor extends VisitorAdapter<Object> {
         };
         final OverlapPointType type = OverlapPointType.fromDescription(topBottom, startEnd);
         final int index = xmlOverlapPt.getIndex() != null ? xmlOverlapPt.getIndex().intValue() : -1;
-        wordElements.add(new ca.phon.orthography.OverlapPoint(type, index));
+        wordElements.add(new OverlapPoint(type, index));
     }
 
     @Visits
-    public void visitProsody(P xmlP) {
-        final ca.phon.orthography.ProsodyType type = switch (xmlP.getType()) {
-            case BLOCKING -> ca.phon.orthography.ProsodyType.BLOCKING;
-            case DRAWL -> ca.phon.orthography.ProsodyType.DRAWL;
-            case PAUSE -> ca.phon.orthography.ProsodyType.PAUSE;
+    public void visitProsody(XmlProsodyType xmlP) {
+        final ProsodyType type = switch (xmlP.getType()) {
+            case BLOCKING -> ProsodyType.BLOCKING;
+            case DRAWL -> ProsodyType.DRAWL;
+            case PAUSE -> ProsodyType.PAUSE;
         };
         wordElements.add(new Prosody(type));
     }
 
     @Visits
-    public void visitShortening(ca.phon.session.io.xml.v1_3.Shortening xmlShortening) {
-        wordElements.add(new ca.phon.orthography.Shortening(xmlShortening.getValue()));
+    public void visitShortening(XmlShorteningType xmlShortening) {
+        wordElements.add(new Shortening(xmlShortening.getValue()));
     }
 
     @Visits
-    public void visitWk(Wk xmlWk) {
+    public void visitWk(XmlCompoundType xmlWk) {
         final CompoundWordMarkerType type = switch(xmlWk.getType()) {
             case CLI -> CompoundWordMarkerType.CLITIC;
             case CMP -> CompoundWordMarkerType.COMPOUND;
@@ -133,43 +137,51 @@ public final class XmlWordContentVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitUnderline(ca.phon.session.io.xml.v1_3.Underline xmlUnderline) {
+    public void visitUnderline(XmlUnderlineType xmlUnderline) {
         final BeginEnd beginEnd =
-                (xmlUnderline.getType() == BeginEndType.BEGIN ? BeginEnd.BEGIN : BeginEnd.END);
-        wordElements.add(new ca.phon.orthography.Underline(beginEnd));
+                (xmlUnderline.getType() == XmlBeginEndType.BEGIN ? BeginEnd.BEGIN : BeginEnd.END);
+        wordElements.add(new Underline(beginEnd));
     }
 
     @Visits
-    public void visitItalic(ca.phon.session.io.xml.v1_3.Italic xmlItalic) {
+    public void visitItalic(XmlItalicType xmlItalic) {
         final BeginEnd beginEnd =
-                (xmlItalic.getType() == BeginEndType.BEGIN ? BeginEnd.BEGIN : BeginEnd.END);
-        wordElements.add(new ca.phon.orthography.Italic(beginEnd));
+                (xmlItalic.getType() == XmlBeginEndType.BEGIN ? BeginEnd.BEGIN : BeginEnd.END);
+        wordElements.add(new Italic(beginEnd));
     }
 
     @Visits
-    public void visitPos(Pos xmlPos) {
-        wordPos.add(new WordPos(xmlPos.getC(), xmlPos.getS()));
+    public void visitPos(XmlPosType xmlPos) {
+        wordPos.add(new WordPos(xmlPos.getC().getValue(),
+                xmlPos.getSubc().stream().map(XmlSubcategoryType::getValue).toList()));
     }
 
     @Visits
-    public void visitReplacement(ca.phon.session.io.xml.v1_3.Replacement xmlReplacement) {
+    public void visitReplacement(XmlReplacementType xmlReplacement) {
         final XmlOrthographyVisitor orthoVisitor = new XmlOrthographyVisitor();
         xmlReplacement.getW().forEach(orthoVisitor::visitWord);
         final Orthography ortho = orthoVisitor.getOrthography();
         final List<Word> wordList = new ArrayList<>();
         for(OrthographyElement ele:ortho) {
-            if(!(ele instanceof Word)) throw new IllegalArgumentException();
-            wordList.add((Word)ele);
+            if(!(ele instanceof Word word)) throw new IllegalArgumentException();
+            wordList.add(word);
         }
         replacements.add(new ca.phon.orthography.Replacement(xmlReplacement.isReal(), wordList));
     }
 
     @Override
-    public void fallbackVisit(Object obj) {
+    public void fallbackVisit(Serializable obj) {
+        if(obj instanceof JAXBElement<?>) {
+            if(((JAXBElement<?>) obj).getDeclaredType() == Serializable.class) {
+                final JAXBElement<Serializable> ele = (JAXBElement<Serializable>) obj;
+                visit(ele.getValue());
+                return;
+            }
+        }
         throw new IllegalArgumentException(obj.getClass().getName());
     }
 
-    public ca.phon.orthography.Langs getLangs() {
+    public Langs getLangs() {
         return langs;
     }
 

@@ -12,20 +12,20 @@ public class XmlPhoneticTranscriptVisitor extends VisitorAdapter<Object> {
     final StringBuilder builder = new StringBuilder();
 
     @Visits
-    public void visitPw(PhoneticWord pw) {
+    public void visitPw(XmlPhoneticWord pw) {
         if(builder.length() > 0)
             builder.append(' ');
         pw.getStressOrPhOrPp().forEach(this::visit);
     }
 
     @Visits
-    public void visitStress(StressType stressType) {
-        builder.append(stressType.getType() == StressTypeType.PRIMARY ?
+    public void visitStress(XmlStressType stressType) {
+        builder.append(stressType.getType() == XmlStressTypeType.PRIMARY ?
                 SyllableStress.PrimaryStress.getIpa() : SyllableStress.SecondaryStress.getIpa());
     }
 
     @Visits
-    public void visitPhone(PhoneType phoneType) {
+    public void visitPhone(XmlPhoneType phoneType) {
         final String phoneText = phoneType.getContent();
         String scType = "";
         if(phoneType.getScType() != null) {
@@ -44,7 +44,7 @@ public class XmlPhoneticTranscriptVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitProsody(PhoneticProsodyType ppType) {
+    public void visitProsody(XmlPhoneticProsodyType ppType) {
         final String p = switch (ppType.getType()) {
             case PAUSE, BLOCKING -> "^";
             case CMP -> "+";
@@ -56,7 +56,7 @@ public class XmlPhoneticTranscriptVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitSandhi(SandhiType sandhiType) {
+    public void visitSandhi(XmlSandhiType sandhiType) {
         final String tie = switch (sandhiType.getType()) {
             case LINKER -> "‿";
             case CONTRACTION -> "⁀";
@@ -65,12 +65,12 @@ public class XmlPhoneticTranscriptVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitToneNumber(ToneNumberType toneNumberType) {
+    public void visitToneNumber(XmlToneNumberType toneNumberType) {
         // TODO
     }
 
     @Visits
-    public void visitPause(Pause pause) {
+    public void visitPause(XmlPauseType pause) {
 
     }
 

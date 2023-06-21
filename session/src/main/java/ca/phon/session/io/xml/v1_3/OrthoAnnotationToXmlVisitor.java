@@ -29,29 +29,33 @@ public class OrthoAnnotationToXmlVisitor extends AbstractOrthographyAnnotationVi
     @Visits
     public void visitDuration(Duration duration) {
         final long durationMs = (long)(duration.getDuration() * 1000.0f);
-        annotations.add(factory.createDuration(BigDecimal.valueOf(durationMs)));
+        final XmlDurationType xmlDurationType = factory.createXmlDurationType();
+        xmlDurationType.setValue(BigDecimal.valueOf(durationMs));
+        annotations.add(xmlDurationType);
     }
 
     @Override
     @Visits
     public void visitError(Error error) {
-        annotations.add(factory.createError(error.getData()));
+        final XmlErrorType xmlErrorType = factory.createXmlErrorType();
+        xmlErrorType.setValue(error.getData());
+        annotations.add(xmlErrorType);
     }
 
     @Override
     @Visits
     public void visitMarker(Marker marker) {
-        final K xmlMarker = factory.createK();
-        final ca.phon.session.io.xml.v1_3.MarkerType type = switch (marker.getType()) {
-            case BEST_GUESS -> ca.phon.session.io.xml.v1_3.MarkerType.BEST_GUESS;
-            case CONTRASTIVE_STRESSING -> ca.phon.session.io.xml.v1_3.MarkerType.CONTRASTIVE_STRESSING;
-            case EXCLUDE -> ca.phon.session.io.xml.v1_3.MarkerType.MOR_EXCLUDE;
-            case FALSE_START -> ca.phon.session.io.xml.v1_3.MarkerType.FALSE_START;
-            case RETRACING -> ca.phon.session.io.xml.v1_3.MarkerType.RETRACING;
-            case RETRACING_REFORMULATION -> ca.phon.session.io.xml.v1_3.MarkerType.RETRACING_REFORMULATION;
-            case RETRACING_UNCLEAR -> ca.phon.session.io.xml.v1_3.MarkerType.RETRACING_UNCLEAR;
-            case RETRACING_WITH_CORRECTION -> ca.phon.session.io.xml.v1_3.MarkerType.RETRACING_WITH_CORRECTION;
-            case STRESSING -> ca.phon.session.io.xml.v1_3.MarkerType.STRESSING;
+        final XmlMarkerType xmlMarker = factory.createXmlMarkerType();
+        final XmlMarkerTypeType type = switch (marker.getType()) {
+            case BEST_GUESS -> XmlMarkerTypeType.BEST_GUESS;
+            case CONTRASTIVE_STRESSING -> XmlMarkerTypeType.CONTRASTIVE_STRESSING;
+            case EXCLUDE -> XmlMarkerTypeType.MOR_EXCLUDE;
+            case FALSE_START -> XmlMarkerTypeType.FALSE_START;
+            case RETRACING -> XmlMarkerTypeType.RETRACING;
+            case RETRACING_REFORMULATION -> XmlMarkerTypeType.RETRACING_REFORMULATION;
+            case RETRACING_UNCLEAR -> XmlMarkerTypeType.RETRACING_UNCLEAR;
+            case RETRACING_WITH_CORRECTION -> XmlMarkerTypeType.RETRACING_WITH_CORRECTION;
+            case STRESSING -> XmlMarkerTypeType.STRESSING;
         };
         xmlMarker.setType(type);
         annotations.add(xmlMarker);
@@ -60,12 +64,12 @@ public class OrthoAnnotationToXmlVisitor extends AbstractOrthographyAnnotationVi
     @Override
     @Visits
     public void visitGroupAnnotation(GroupAnnotation groupAnnotation) {
-        final Ga xmlGa = factory.createGa();
-        final GroupAnnotationTypeType type = switch (groupAnnotation.getType()) {
-            case ALTERNATIVE -> GroupAnnotationTypeType.ALTERNATIVE;
-            case COMMENTS -> GroupAnnotationTypeType.COMMENTS;
-            case EXPLANATION -> GroupAnnotationTypeType.EXPLANATION;
-            case PARALINGUISTICS -> GroupAnnotationTypeType.PARALINGUISTICS;
+        final XmlGroupAnnotationType xmlGa = factory.createXmlGroupAnnotationType();
+        final XmlGroupAnnotationTypeType type = switch (groupAnnotation.getType()) {
+            case ALTERNATIVE -> XmlGroupAnnotationTypeType.ALTERNATIVE;
+            case COMMENTS -> XmlGroupAnnotationTypeType.COMMENTS;
+            case EXPLANATION -> XmlGroupAnnotationTypeType.EXPLANATION;
+            case PARALINGUISTICS -> XmlGroupAnnotationTypeType.PARALINGUISTICS;
         };
         xmlGa.setType(type);
         xmlGa.setContent(groupAnnotation.getData());
@@ -75,10 +79,10 @@ public class OrthoAnnotationToXmlVisitor extends AbstractOrthographyAnnotationVi
     @Override
     @Visits
     public void visitOverlap(ca.phon.orthography.Overlap overlap) {
-        final ca.phon.session.io.xml.v1_3.Overlap xmlOverlap = factory.createOverlap();
-        final ca.phon.session.io.xml.v1_3.OverlapType type = switch (overlap.getType()) {
-            case OVERLAP_FOLLOWS -> ca.phon.session.io.xml.v1_3.OverlapType.OVERLAP_FOLLOWS;
-            case OVERLAP_PRECEDES -> ca.phon.session.io.xml.v1_3.OverlapType.OVERLAP_PRECEDES;
+        final XmlOverlapType xmlOverlap = factory.createXmlOverlapType();
+        final XmlOverlapTypeType type = switch (overlap.getType()) {
+            case OVERLAP_FOLLOWS -> XmlOverlapTypeType.OVERLAP_FOLLOWS;
+            case OVERLAP_PRECEDES -> XmlOverlapTypeType.OVERLAP_PRECEDES;
         };
         xmlOverlap.setType(type);
         if(overlap.getIndex() >= 0)
@@ -90,7 +94,7 @@ public class OrthoAnnotationToXmlVisitor extends AbstractOrthographyAnnotationVi
     @Override
     public void visitLangs(LangsAnnotation langsAnnotation) {
         final Langs langs = langsAnnotation.getLangs();
-        final ca.phon.session.io.xml.v1_3.Langs xmlLangs = factory.createLangs();
+        final XmlLangsType xmlLangs = factory.createXmlLangsType();
         if(langs.getType() == Langs.LangsType.SINGLE) {
             xmlLangs.setSingle(langs.getLangs().get(0).toString());
         } else if(langs.getType() == Langs.LangsType.MULTIPLE) {

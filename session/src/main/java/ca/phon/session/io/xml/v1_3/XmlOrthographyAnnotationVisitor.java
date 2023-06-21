@@ -15,17 +15,17 @@ public class XmlOrthographyAnnotationVisitor extends VisitorAdapter<Object> {
     private final List<OrthographyAnnotation> annotations = new ArrayList<>();
 
     @Visits
-    public void visitMarker(K xmlMarker) {
-        final ca.phon.orthography.MarkerType type = switch (xmlMarker.getType()) {
-            case BEST_GUESS -> ca.phon.orthography.MarkerType.BEST_GUESS;
-            case CONTRASTIVE_STRESSING -> ca.phon.orthography.MarkerType.CONTRASTIVE_STRESSING;
-            case FALSE_START -> ca.phon.orthography.MarkerType.FALSE_START;
-            case MOR_EXCLUDE -> ca.phon.orthography.MarkerType.EXCLUDE;
-            case RETRACING -> ca.phon.orthography.MarkerType.RETRACING;
-            case RETRACING_REFORMULATION -> ca.phon.orthography.MarkerType.RETRACING_REFORMULATION;
-            case RETRACING_UNCLEAR -> ca.phon.orthography.MarkerType.RETRACING_UNCLEAR;
-            case RETRACING_WITH_CORRECTION -> ca.phon.orthography.MarkerType.RETRACING_WITH_CORRECTION;
-            case STRESSING -> ca.phon.orthography.MarkerType.STRESSING;
+    public void visitMarker(XmlMarkerType xmlMarker) {
+        final MarkerType type = switch (xmlMarker.getType()) {
+            case BEST_GUESS -> MarkerType.BEST_GUESS;
+            case CONTRASTIVE_STRESSING -> MarkerType.CONTRASTIVE_STRESSING;
+            case FALSE_START -> MarkerType.FALSE_START;
+            case MOR_EXCLUDE -> MarkerType.EXCLUDE;
+            case RETRACING -> MarkerType.RETRACING;
+            case RETRACING_REFORMULATION -> MarkerType.RETRACING_REFORMULATION;
+            case RETRACING_UNCLEAR -> MarkerType.RETRACING_UNCLEAR;
+            case RETRACING_WITH_CORRECTION -> MarkerType.RETRACING_WITH_CORRECTION;
+            case STRESSING -> MarkerType.STRESSING;
         };
         annotations.add(new Marker(type));
     }
@@ -41,7 +41,7 @@ public class XmlOrthographyAnnotationVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitGroupAnnotation(Ga xmlGa) {
+    public void visitGroupAnnotation(XmlGroupAnnotationType xmlGa) {
         final GroupAnnotationType type = switch (xmlGa.getType()) {
             case COMMENTS -> GroupAnnotationType.COMMENTS;
             case ALTERNATIVE -> GroupAnnotationType.ALTERNATIVE;
@@ -52,7 +52,7 @@ public class XmlOrthographyAnnotationVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitOverlap(ca.phon.session.io.xml.v1_3.Overlap xmlOverlap) {
+    public void visitOverlap(XmlOverlapType xmlOverlap) {
         final OverlapType type = switch (xmlOverlap.getType()) {
             case OVERLAP_FOLLOWS -> ca.phon.orthography.OverlapType.OVERLAP_FOLLOWS;
             case OVERLAP_PRECEDES -> ca.phon.orthography.OverlapType.OVERLAP_PRECEDES;
@@ -61,7 +61,7 @@ public class XmlOrthographyAnnotationVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitLangs(ca.phon.session.io.xml.v1_3.Langs xmlLangs) {
+    public void visitLangs(XmlLangsType xmlLangs) {
         ca.phon.orthography.Langs langs = new ca.phon.orthography.Langs();
         if(xmlLangs.getSingle() != null) {
             langs = new ca.phon.orthography.Langs(ca.phon.orthography.Langs.LangsType.SINGLE, xmlLangs.getSingle());

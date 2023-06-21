@@ -9,7 +9,9 @@ import ca.phon.orthography.OverlapPoint;
 import ca.phon.orthography.Shortening;
 import ca.phon.orthography.Underline;
 import ca.phon.visitor.annotation.Visits;
+import jakarta.xml.bind.JAXBElement;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,13 +20,13 @@ public class WordElementTwoXmlVisitor extends AbstractWordElementVisitor {
 
     private final ObjectFactory factory = new ObjectFactory();
 
-    private final List<Object> wordElements;
+    private final List<Serializable> wordElements;
 
     public WordElementTwoXmlVisitor() {
         this(new ArrayList<>());
     }
 
-    public WordElementTwoXmlVisitor(List<Object> wordElements) {
+    public WordElementTwoXmlVisitor(List<Serializable> wordElements) {
         this.wordElements = wordElements;
     }
 
@@ -37,142 +39,141 @@ public class WordElementTwoXmlVisitor extends AbstractWordElementVisitor {
     @Override
     @Visits
     public void visitCaDelimiter(CaDelimiter caDelimiter) {
-        final ca.phon.session.io.xml.v1_3.CaDelimiter xmlCaDelimiter = factory.createCaDelimiter();
-        final BeginEndType beginEndType = switch (caDelimiter.getBeginEnd()) {
-            case BEGIN -> BeginEndType.BEGIN;
-            case END -> BeginEndType.END;
+        final XmlCaDelimiterType xmlCaDelimiter = factory.createXmlCaDelimiterType();
+        final XmlBeginEndType beginEndType = switch (caDelimiter.getBeginEnd()) {
+            case BEGIN -> XmlBeginEndType.BEGIN;
+            case END -> XmlBeginEndType.END;
         };
         xmlCaDelimiter.setType(beginEndType);
-        final ca.phon.session.io.xml.v1_3.CaDelimiterType type = switch (caDelimiter.getType()) {
-            case BREATHY_VOICE -> ca.phon.session.io.xml.v1_3.CaDelimiterType.BREATHY_VOICE;
-            case CREAKY -> ca.phon.session.io.xml.v1_3.CaDelimiterType.CREAKY;
-            case FASTER -> ca.phon.session.io.xml.v1_3.CaDelimiterType.FASTER;
-            case HIGH_PITCH -> ca.phon.session.io.xml.v1_3.CaDelimiterType.HIGH_PITCH;
-            case LOUDER -> ca.phon.session.io.xml.v1_3.CaDelimiterType.LOUDER;
-            case LOW_PITCH -> ca.phon.session.io.xml.v1_3.CaDelimiterType.LOW_PITCH;
-            case PRECISE -> ca.phon.session.io.xml.v1_3.CaDelimiterType.PRECISE;
-            case REPEATED_SEGMENT -> ca.phon.session.io.xml.v1_3.CaDelimiterType.REPEATED_SEGMENT;
-            case SINGING -> ca.phon.session.io.xml.v1_3.CaDelimiterType.SINGING;
-            case SLOWER -> ca.phon.session.io.xml.v1_3.CaDelimiterType.SLOWER;
-            case SMILE_VOICE -> ca.phon.session.io.xml.v1_3.CaDelimiterType.SMILE_VOICE;
-            case SOFTER -> ca.phon.session.io.xml.v1_3.CaDelimiterType.SOFTER;
-            case UNSURE -> ca.phon.session.io.xml.v1_3.CaDelimiterType.UNSURE;
-            case WHISPER -> ca.phon.session.io.xml.v1_3.CaDelimiterType.WHISPER;
-            case YAWN -> ca.phon.session.io.xml.v1_3.CaDelimiterType.YAWN;
+        final XmlCaDelimiterTypeType type = switch (caDelimiter.getType()) {
+            case BREATHY_VOICE -> XmlCaDelimiterTypeType.BREATHY_VOICE;
+            case CREAKY -> XmlCaDelimiterTypeType.CREAKY;
+            case FASTER -> XmlCaDelimiterTypeType.FASTER;
+            case HIGH_PITCH -> XmlCaDelimiterTypeType.HIGH_PITCH;
+            case LOUDER -> XmlCaDelimiterTypeType.LOUDER;
+            case LOW_PITCH -> XmlCaDelimiterTypeType.LOW_PITCH;
+            case PRECISE -> XmlCaDelimiterTypeType.PRECISE;
+            case REPEATED_SEGMENT -> XmlCaDelimiterTypeType.REPEATED_SEGMENT;
+            case SINGING -> XmlCaDelimiterTypeType.SINGING;
+            case SLOWER -> XmlCaDelimiterTypeType.SLOWER;
+            case SMILE_VOICE -> XmlCaDelimiterTypeType.SMILE_VOICE;
+            case SOFTER -> XmlCaDelimiterTypeType.SOFTER;
+            case UNSURE -> XmlCaDelimiterTypeType.UNSURE;
+            case WHISPER -> XmlCaDelimiterTypeType.WHISPER;
+            case YAWN -> XmlCaDelimiterTypeType.YAWN;
         };
         xmlCaDelimiter.setLabel(type);
-        wordElements.add(xmlCaDelimiter);
+        wordElements.add(factory.createCaDelimiter(xmlCaDelimiter));
     }
 
     @Override
     @Visits
     public void visitCaElement(CaElement caElement) {
-        final ca.phon.session.io.xml.v1_3.CaElement xmlCaElement = factory.createCaElement();
-        final ca.phon.session.io.xml.v1_3.CaElementType type = switch (caElement.getType()) {
-            case BLOCKED_SEGMENTS -> ca.phon.session.io.xml.v1_3.CaElementType.BLOCKED_SEGMENTS;
-            case CONSTRICTION -> ca.phon.session.io.xml.v1_3.CaElementType.CONSTRICTION;
-            case INHALATION -> ca.phon.session.io.xml.v1_3.CaElementType.INHALATION;
-            case LAUGH_IN_WORD -> ca.phon.session.io.xml.v1_3.CaElementType.LAUGH_IN_WORD;
-            case PITCH_DOWN -> ca.phon.session.io.xml.v1_3.CaElementType.PITCH_DOWN;
-            case PITCH_RESET -> ca.phon.session.io.xml.v1_3.CaElementType.PITCH_RESET;
-            case PITCH_UP -> ca.phon.session.io.xml.v1_3.CaElementType.PITCH_UP;
-            case PRIMARY_STRESS -> ca.phon.session.io.xml.v1_3.CaElementType.PRIMARY_STRESS;
-            case SECONDARY_STRESS -> ca.phon.session.io.xml.v1_3.CaElementType.SECONDARY_STRESS;
+        final XmlCaElementType xmlCaElement = factory.createXmlCaElementType();
+        final XmlCaElementTypeType type = switch (caElement.getType()) {
+            case BLOCKED_SEGMENTS -> XmlCaElementTypeType.BLOCKED_SEGMENTS;
+            case CONSTRICTION -> XmlCaElementTypeType.CONSTRICTION;
+            case INHALATION -> XmlCaElementTypeType.INHALATION;
+            case LAUGH_IN_WORD -> XmlCaElementTypeType.LAUGH_IN_WORD;
+            case PITCH_DOWN -> XmlCaElementTypeType.PITCH_DOWN;
+            case PITCH_RESET -> XmlCaElementTypeType.PITCH_RESET;
+            case PITCH_UP -> XmlCaElementTypeType.PITCH_UP;
+            case PRIMARY_STRESS -> XmlCaElementTypeType.PRIMARY_STRESS;
+            case SECONDARY_STRESS -> XmlCaElementTypeType.SECONDARY_STRESS;
         };
         xmlCaElement.setType(type);
-        wordElements.add(xmlCaElement);
+        wordElements.add(factory.createCaElement(xmlCaElement));
     }
 
     @Override
     @Visits
     public void visitLongFeature(LongFeature longFeature) {
-        final ca.phon.session.io.xml.v1_3.LongFeature xmlLongFeature = factory.createLongFeature();
-        final BeginEndType beginEndType = switch (longFeature.getBeginEnd()) {
-            case BEGIN -> BeginEndType.BEGIN;
-            case END -> BeginEndType.END;
+        final XmlLongFeatureType xmlLongFeature = factory.createXmlLongFeatureType();
+        final XmlBeginEndType beginEndType = switch (longFeature.getBeginEnd()) {
+            case BEGIN -> XmlBeginEndType.BEGIN;
+            case END -> XmlBeginEndType.END;
         };
         xmlLongFeature.setType(beginEndType);
-        xmlLongFeature.setValue(longFeature.getLabel());
-        wordElements.add(xmlLongFeature);
+        xmlLongFeature.setContent(longFeature.getLabel());
+        wordElements.add(factory.createLongFeature(xmlLongFeature));
     }
 
     @Override
     @Visits
     public void visitOverlapPoint(OverlapPoint overlapPoint) {
-        final StartEndType startEnd =
+        final XmlStartEndType startEnd =
                 overlapPoint.getType() == OverlapPointType.TOP_START || overlapPoint.getType() == OverlapPointType.BOTTOM_START
-                ? StartEndType.START : StartEndType.END;
-        final TopBottomType topBottom =
+                ? XmlStartEndType.START : XmlStartEndType.END;
+        final XmlTopBottomType topBottom =
                 overlapPoint.getType() == OverlapPointType.TOP_START || overlapPoint.getType() == OverlapPointType.TOP_END
-                ? TopBottomType.TOP : TopBottomType.BOTTOM;
-        final ca.phon.session.io.xml.v1_3.OverlapPoint xmlOverlapPt = factory.createOverlapPoint();
+                ? XmlTopBottomType.TOP : XmlTopBottomType.BOTTOM;
+        final XmlOverlapPointType xmlOverlapPt = factory.createXmlOverlapPointType();
         xmlOverlapPt.setTopBottom(topBottom);
         xmlOverlapPt.setStartEnd(startEnd);
         if(overlapPoint.getIndex() >= 0)
             xmlOverlapPt.setIndex(BigInteger.valueOf(overlapPoint.getIndex()));
-        wordElements.add(xmlOverlapPt);
+        wordElements.add(factory.createOverlapPoint(xmlOverlapPt));
     }
 
     @Override
     @Visits
     public void visitProsody(Prosody prosody) {
-        final P xmlP = factory.createP();
-        final ca.phon.session.io.xml.v1_3.ProsodyType xmlType = switch (prosody.getType()) {
-            case BLOCKING -> ca.phon.session.io.xml.v1_3.ProsodyType.BLOCKING;
-            case DRAWL -> ca.phon.session.io.xml.v1_3.ProsodyType.DRAWL;
-            case PAUSE -> ca.phon.session.io.xml.v1_3.ProsodyType.PAUSE;
+        final XmlProsodyType xmlP = factory.createXmlProsodyType();
+        final XmlProsodyTypeType xmlType = switch (prosody.getType()) {
+            case BLOCKING -> XmlProsodyTypeType.BLOCKING;
+            case DRAWL -> XmlProsodyTypeType.DRAWL;
+            case PAUSE -> XmlProsodyTypeType.PAUSE;
         };
         xmlP.setType(xmlType);
-        wordElements.add(xmlP);
+        wordElements.add(factory.createP(xmlP));
     }
 
     @Override
     @Visits
     public void vistShortening(Shortening shortening) {
-        final ca.phon.session.io.xml.v1_3.Shortening xmlShortening = factory.createShortening();
+        final XmlShorteningType xmlShortening = factory.createXmlShorteningType();
         xmlShortening.setValue(shortening.getOrthoText().text());
-        wordElements.add(xmlShortening);
+        wordElements.add(factory.createShortening(xmlShortening));
     }
 
     @Override
     @Visits
     public void visitCompoundWordMarker(CompoundWordMarker compoundWordMarker) {
-        final Wk xmlWk = factory.createWk();
-        final WkType type = switch (compoundWordMarker.getType()) {
-            case CLITIC -> WkType.CLI;
-            case COMPOUND -> WkType.CMP;
+        final XmlCompoundType xmlWk = factory.createXmlCompoundType();
+        final XmlWkType type = switch (compoundWordMarker.getType()) {
+            case CLITIC -> XmlWkType.CLI;
+            case COMPOUND -> XmlWkType.CMP;
         };
         xmlWk.setType(type);
-        wordElements.add(xmlWk);
+        wordElements.add(factory.createWk(xmlWk));
     }
 
     @Override
     @Visits
     public void visitUnderline(Underline underline) {
-        final ca.phon.session.io.xml.v1_3.Underline xmlUnderline = factory.createUnderline();
-        final BeginEndType beginEndType = switch (underline.getBeginEnd()) {
-            case BEGIN -> BeginEndType.BEGIN;
-            case END -> BeginEndType.END;
+        final XmlUnderlineType xmlUnderline = factory.createXmlUnderlineType();
+        final XmlBeginEndType beginEndType = switch (underline.getBeginEnd()) {
+            case BEGIN -> XmlBeginEndType.BEGIN;
+            case END -> XmlBeginEndType.END;
         };
         xmlUnderline.setType(beginEndType);
-        wordElements.add(xmlUnderline);
+        wordElements.add(factory.createUnderline(xmlUnderline));
     }
 
     @Override
     @Visits
     public void visitItalic(Italic italic) {
-        final ca.phon.session.io.xml.v1_3.Italic xmlItalic = factory.createItalic();
-        final BeginEndType beginEndType = switch (italic.getBeginEnd()) {
-            case BEGIN -> BeginEndType.BEGIN;
-            case END -> BeginEndType.END;
+        final XmlItalicType xmlItalic = factory.createXmlItalicType();
+        final XmlBeginEndType beginEndType = switch (italic.getBeginEnd()) {
+            case BEGIN -> XmlBeginEndType.BEGIN;
+            case END -> XmlBeginEndType.END;
         };
         xmlItalic.setType(beginEndType);
-        wordElements.add(xmlItalic);
+        wordElements.add(factory.createItalic(xmlItalic));
     }
 
     @Override
     public void fallbackVisit(WordElement obj) {
-
     }
 
 }

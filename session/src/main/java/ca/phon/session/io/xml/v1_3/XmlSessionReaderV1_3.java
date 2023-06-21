@@ -93,12 +93,12 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		try {
 			final JAXBContext context = JAXBContext.newInstance(xmlFactory.getClass());
 			final Unmarshaller unmarshaller = context.createUnmarshaller();
-			final JAXBElement<SessionType> sessionTypeEle =
-					unmarshaller.unmarshal(doc.getDocumentElement(), SessionType.class);
+			final JAXBElement<XmlSessionType> XmlSessionTypeEle =
+					unmarshaller.unmarshal(doc.getDocumentElement(), XmlSessionType.class);
 
-			if(sessionTypeEle != null && sessionTypeEle.getValue() != null) {
-				final SessionType sessionType = sessionTypeEle.getValue();
-				retVal = readSessionType(sessionType);
+			if(XmlSessionTypeEle != null && XmlSessionTypeEle.getValue() != null) {
+				final XmlSessionType XmlSessionType = XmlSessionTypeEle.getValue();
+				retVal = readXmlSessionType(XmlSessionType);
 			}
 		} catch (JAXBException e) {
 			throw new IOException(e);
@@ -108,90 +108,86 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 	}
 
 	/**
-	 * Read session in from given xml {@link SessionType} object.
+	 * Read session in from given xml {@link XmlSessionType} object.
 	 *
-	 * @param sessionType
+	 * @param xmlSessionType
 	 *
 	 * @return session
 	 */
-	private Session readSessionType(SessionType sessionType) {
+	private Session readXmlSessionType(XmlSessionType xmlSessionType) {
 		final SessionFactory factory = SessionFactory.newFactory();
 		final Session retVal = factory.createSession();
 
 		// copy header info
-		retVal.setName(sessionType.getId());
-		retVal.setCorpus(sessionType.getCorpus());
+		retVal.setName(xmlSessionType.getId());
+		retVal.setCorpus(xmlSessionType.getCorpus());
 
-		final HeaderType headerData = sessionType.getHeader();
-		if(headerData != null) {
-			if(headerData.getMedia() != null && headerData.getMedia().length() > 0) {
-				retVal.setMediaLocation(headerData.getMedia());
-			}
-			if(headerData.getDate() != null) {
-				final XMLGregorianCalendar xmlDate = headerData.getDate();
-				final LocalDate dateTime = LocalDate.of(
-						xmlDate.getYear(),
-						xmlDate.getMonth(),
-						xmlDate.getDay());
-				retVal.setDate(dateTime);
-			}
-			if(headerData.getLanguages().size() > 0) {
-				List<Language> langs = new ArrayList<>();
-				for(String lang:headerData.getLanguages()) {
-					try {
-						Language l = Language.parseLanguage(lang);
-						langs.add(l);
-					} catch (IllegalArgumentException e) {
-						LOGGER.warn(e);
-					}
+		if(xmlSessionType.getMedia() != null && xmlSessionType.getMedia().length() > 0) {
+			retVal.setMediaLocation(xmlSessionType.getMedia());
+		}
+		if(xmlSessionType.getDate() != null) {
+			final XMLGregorianCalendar xmlDate = xmlSessionType.getDate();
+			final LocalDate dateTime = LocalDate.of(
+					xmlDate.getYear(),
+					xmlDate.getMonth(),
+					xmlDate.getDay());
+			retVal.setDate(dateTime);
+		}
+		if(xmlSessionType.getLanguages().size() > 0) {
+			List<Language> langs = new ArrayList<>();
+			for(String lang:xmlSessionType.getLanguages()) {
+				try {
+					Language l = Language.parseLanguage(lang);
+					langs.add(l);
+				} catch (IllegalArgumentException e) {
+					LOGGER.warn(e);
 				}
-				retVal.setLanguages(langs);
 			}
+			retVal.setLanguages(langs);
 		}
 
 		// copy participant information
-		final ParticipantsType participants = sessionType.getParticipants();
+		final XmlParticipantsType participants = xmlSessionType.getParticipants();
 		if(participants != null) {
-			for(ParticipantType pt:participants.getParticipant()) {
+			for(XmlParticipantType pt:participants.getParticipant()) {
 				final Participant p = readParticipant(factory, pt, retVal.getDate());
 				retVal.addParticipant(p);
 			}
 		}
 
 		// copy transcriber information
-		final TranscribersType transcribers = sessionType.getTranscribers();
+		final XmlTranscribersType transcribers = xmlSessionType.getTranscribers();
 		if(transcribers != null) {
-			for(TranscriberType tt:transcribers.getTranscriber()) {
+			for(XmlTranscriberType tt:transcribers.getTranscriber()) {
 				final Transcriber t = copyTranscriber(factory, tt);
 				retVal.addTranscriber(t);
 			}
 		}
 
 		// copy tier information
-		final UserTiersType userTiers = sessionType.getUserTiers();
+		final XmlUserTiersType userTiers = xmlSessionType.getUserTiers();
 		if(userTiers != null) {
-			for(TierDescriptionType tdt:userTiers.getTd()) {
+			for(XmlTierDescriptionType tdt:userTiers.getTd()) {
 				final TierDescription td = readTierDescription(factory, tdt);
 				retVal.addUserTier(td);
 			}
 		}
 
 		final List<TierViewItem> tierOrder = new ArrayList<TierViewItem>();
-		for(TierViewType tot:sessionType.getTierOrder().getTv()) {
+		for(XmlTierViewType tot:xmlSessionType.getTierOrder().getTierView()) {
 			final TierViewItem toi = readTierViewItem(factory, tot);
 			tierOrder.add(toi);
 		}
 		retVal.setTierView(tierOrder);
 
 		// read transcript data
-		if(sessionType.getTranscript() != null) {
-			for(Object uOrComment:sessionType.getTranscript().getROrComment()) {
-				if(uOrComment instanceof CommentType) {
-					final CommentType ct = (CommentType)uOrComment;
+		if(xmlSessionType.getTranscript() != null) {
+			for(Object uOrComment:xmlSessionType.getTranscript().getROrCommentOrGem()) {
+				if(uOrComment instanceof XmlCommentType ct) {
 					final Comment comment = readComment(factory, ct);
 					retVal.getTranscript().addComment(comment);
 				} else {
-					final RecordType rt = (RecordType)uOrComment;
+					final XmlRecordType rt = (XmlRecordType) uOrComment;
 					Record record = null;
 					try {
 						record = factory.createRecord(new LazyRecord(factory, retVal, rt));
@@ -203,6 +199,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 					}
 					retVal.addRecord(record);
 				}
+				// TODO: gems
 			}
 		}
 
@@ -210,7 +207,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 	}
 
 	// participants
-	Participant readParticipant(SessionFactory factory, ParticipantType pt, LocalDate sessionDate) {
+	Participant readParticipant(SessionFactory factory, XmlParticipantType pt, LocalDate sessionDate) {
 		final Participant retVal = factory.createParticipant();
 
 		retVal.setId(pt.getId());
@@ -251,9 +248,9 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 			retVal.setFirstLanguage(pt.getFirstLanguage());
 		}
 
-		if(pt.getSex() == SexType.MALE)
+		if(pt.getSex() == XmlSexType.MALE)
 			retVal.setSex(Sex.MALE);
-		else if(pt.getSex() == SexType.FEMALE)
+		else if(pt.getSex() == XmlSexType.FEMALE)
 			retVal.setSex(Sex.FEMALE);
 		else
 			retVal.setSex(Sex.UNSPECIFIED);
@@ -273,7 +270,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 	}
 
 	// transcribers
-	private Transcriber copyTranscriber(SessionFactory factory, TranscriberType tt) {
+	private Transcriber copyTranscriber(SessionFactory factory, XmlTranscriberType tt) {
 		final Transcriber retVal = factory.createTranscriber();
 
 		retVal.setUsername(tt.getId());
@@ -288,7 +285,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 	}
 
 	// tier descriptions
-	private TierDescription readTierDescription(SessionFactory factory, TierDescriptionType tdt) {
+	private TierDescription readTierDescription(SessionFactory factory, XmlTierDescriptionType tdt) {
 		final String tierName = tdt.getTierName();
 		final Class<?> tierType = switch (tdt.getType()) {
 			case CHAT -> Orthography.class;
@@ -297,13 +294,13 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		};
 		final Map<String, String> tierParams = new LinkedHashMap<>();
 		if(tdt.getTierParameters() != null) {
-			for (TierParameterType tp : tdt.getTierParameters().getParam()) {
+			for (XmlTierParameterType tp : tdt.getTierParameters().getParam()) {
 				tierParams.put(tp.getName(), tp.getContent());
 			}
 		}
 		ca.phon.session.TierAlignmentRules tierAlignmentRules = new ca.phon.session.TierAlignmentRules();
 		if(tdt.getTierAlignment() != null) {
-			final TierAlignmentRules alignmentRules = tdt.getTierAlignment();
+			final XmlTierAlignmentRules alignmentRules = tdt.getTierAlignment();
 
 			final List<TypeAlignmentRules.AlignableType> alignableTypes = new ArrayList<>();
 			for(var alignableType:tdt.getTierAlignment().getAlignWith()) {
@@ -329,7 +326,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		return factory.createTierDescription(tierName, tierType, tierParams, tierAlignmentRules);
 	}
 
-	private TierViewItem readTierViewItem(SessionFactory factory, TierViewType tvt) {
+	private TierViewItem readTierViewItem(SessionFactory factory, XmlTierViewType tvt) {
 		final boolean locked = tvt.isLocked();
 		final boolean visible = tvt.isVisible();
 		final String name = tvt.getTierName();
@@ -338,7 +335,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		return factory.createTierViewItem(name, visible, font, locked);
 	}
 	
-	private MediaSegment readMediaSegment(SessionFactory factory, MediaType st) {
+	private MediaSegment readMediaSegment(SessionFactory factory, XmlMediaType st) {
 		final MediaSegment segment = factory.createMediaSegment();
 		final float startVal = st.getStart().floatValue();
 		final float endVal = st.getEnd().floatValue();
@@ -353,60 +350,37 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 	}
 
 	// copy comment data
-	private Comment readComment(SessionFactory factory, CommentType ct) {
-		final ca.phon.session.CommentType type = switch (ct.getType()) {
-			case ACTIVITIES -> ca.phon.session.CommentType.Activities;
-			case BCK -> ca.phon.session.CommentType.Bck;
-			case BEGIN_GEM -> ca.phon.session.CommentType.Bg;
-			case BLANK -> ca.phon.session.CommentType.Blank;
-			case DATE -> ca.phon.session.CommentType.Date;
-			case END_GEM -> ca.phon.session.CommentType.Eg;
-			case GENERIC -> ca.phon.session.CommentType.Generic;
-			case LAZY_GEM -> ca.phon.session.CommentType.G;
-			case LOCATION -> ca.phon.session.CommentType.Location;
-			case NEW_EPISODE -> ca.phon.session.CommentType.NewEpisode;
-			case NUMBER -> ca.phon.session.CommentType.Number;
-			case PAGE -> ca.phon.session.CommentType.Page;
-			case RECORDING_QUALITY -> ca.phon.session.CommentType.RecordingQuality;
-			case ROOM_LAYOUT -> ca.phon.session.CommentType.RoomLayout;
-			case SITUATION -> ca.phon.session.CommentType.Situation;
-			case T -> ca.phon.session.CommentType.T;
-			case TAPE_LOCATION -> ca.phon.session.CommentType.TapeLocation;
-			case TIME_DURATION -> ca.phon.session.CommentType.TimeDuration;
-			case TIME_START -> ca.phon.session.CommentType.TimeStart;
-			case TRANSCRIBER -> ca.phon.session.CommentType.Transcriber;
-			case TRANSCRIPTION -> ca.phon.session.CommentType.Transcription;
-			case TYPES -> ca.phon.session.CommentType.Types;
-			case WARNING -> ca.phon.session.CommentType.Warning;
+	private Comment readComment(SessionFactory factory, XmlCommentType ct) {
+		final CommentType type = switch (ct.getType()) {
+			case ACTIVITIES -> CommentType.Activities;
+			case BCK -> CommentType.Bck;
+			case BEGIN_GEM -> CommentType.Bg;
+			case BLANK -> CommentType.Blank;
+			case DATE -> CommentType.Date;
+			case END_GEM -> CommentType.Eg;
+			case GENERIC -> CommentType.Generic;
+			case LAZY_GEM -> CommentType.G;
+			case LOCATION -> CommentType.Location;
+			case NEW_EPISODE -> CommentType.NewEpisode;
+			case NUMBER -> CommentType.Number;
+			case PAGE -> CommentType.Page;
+			case RECORDING_QUALITY -> CommentType.RecordingQuality;
+			case ROOM_LAYOUT -> CommentType.RoomLayout;
+			case SITUATION -> CommentType.Situation;
+			case T -> CommentType.T;
+			case TAPE_LOCATION -> CommentType.TapeLocation;
+			case TIME_DURATION -> CommentType.TimeDuration;
+			case TIME_START -> CommentType.TimeStart;
+			case TRANSCRIBER -> CommentType.Transcriber;
+			case TRANSCRIPTION -> CommentType.Transcription;
+			case TYPES -> CommentType.Types;
+			case WARNING -> CommentType.Warning;
 		};
-		final List<UserTierElement> elements = new ArrayList<>();
-		for(Object obj:ct.getTierData().getTwOrTcOrInternalMedia()) {
-			if(!(obj instanceof JAXBElement<?> ele)) continue;
-			if(ele.getName().getLocalPart().equals("tw")) {
-				elements.add(new TierString(((JAXBElement<String>)ele).getValue()));
-			} else if(ele.getName().getLocalPart().equals("tc")) {
-				elements.add(new UserTierComment(((JAXBElement<String>)ele).getValue()));
-			} else if(ele.getName().getLocalPart().equals("internal-media")) {
-				final MediaType mediaType = ((JAXBElement<MediaType>)ele).getValue();
-				float start = mediaType.getStart().floatValue();
-				float end = mediaType.getEnd().floatValue();
-				final MediaUnit unit = switch (mediaType.getUnit()) {
-					case S -> MediaUnit.Second;
-					case MS -> MediaUnit.Millisecond;
-				};
-				if(unit == MediaUnit.Millisecond) {
-					start /= 1000.0f;
-					end /= 1000.0f;
-				}
-				final InternalMedia imedia = new InternalMedia(start, end);
-				elements.add(new UserTierInternalMedia(imedia));
-			}
-		}
-		final UserTierData userTierData = new UserTierData(elements);
+		final UserTierData userTierData = readUserTierData(factory, ct.getTierData());
 		return factory.createComment(type, userTierData);
 	}
 
-	Record readRecord(SessionFactory factory, Session session, RecordType rt) {
+	Record readRecord(SessionFactory factory, Session session, XmlRecordType rt) {
 		final Record retVal = factory.createRecord();
 		retVal.setExcludeFromSearches(rt.isExcludeFromSearches());
 
@@ -419,7 +393,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		}
 
 		if(rt.getSpeaker() != null) {
-			final ParticipantType pt = (ParticipantType)rt.getSpeaker();
+			final XmlParticipantType pt = (XmlParticipantType) rt.getSpeaker();
 			for(int pIdx = 0; pIdx < session.getParticipantCount(); pIdx++) {
 				final Participant participant = session.getParticipant(pIdx);
 				if(participant.getName() != null  && participant.getName().equals(pt.getName())) {
@@ -435,7 +409,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		}
 
 		// orthography
-		final OrthographyTierType ot = rt.getOrthography();
+		final XmlOrthographyTierType ot = rt.getOrthography();
 		final Orthography orthography = readOrthography(factory, ot);
 		retVal.setOrthography(orthography);
 
@@ -479,7 +453,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		}
 
 		// user tiers
-		for(UserTierType utt:rt.getUserTier()) {
+		for(XmlUserTierType utt:rt.getUserTier()) {
 			final UserTierData tierData = readUserTier(factory, utt);
 			final TierDescription td = findTierDescription(session, utt.getName());
 			if(td == null) {
@@ -502,10 +476,10 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		return null;
 	}
 
-	private UnvalidatedValue readParseError(UnparsedData unparsableData) {
-		final ParseException pe = new ParseException(unparsableData.getPe().getContent(),
-				unparsableData.getPe().getCharPositionInLine());
-		return new UnvalidatedValue(unparsableData.getUv(), pe);
+	private UnvalidatedValue readParseError(XmlUnparsedData unparsableData) {
+		final ParseException pe = new ParseException(unparsableData.getParseError().getContent(),
+				unparsableData.getParseError().getCharPositionInLine());
+		return new UnvalidatedValue(unparsableData.getUnparsedValue(), pe);
 	}
 
 	/**
@@ -515,7 +489,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 	 * @param ot
 	 * @return
 	 */
-	private Orthography readOrthography(SessionFactory factory, OrthographyTierType ot) {
+	private Orthography readOrthography(SessionFactory factory, XmlOrthographyTierType ot) {
 		Orthography utt = new Orthography();
 		if(ot.getU() != null) {
 			utt = readOrthography(ot.getU());
@@ -525,7 +499,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		return utt;
 	}
 
-	private Orthography readOrthography(UtteranceType ut) {
+	private Orthography readOrthography(XmlUtteranceType ut) {
 		final OrthographyBuilder builder = new OrthographyBuilder();
 		final XmlOrthographyVisitor visitor = new XmlOrthographyVisitor(builder);
 		if(ut.getLang() != null) {
@@ -553,7 +527,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 	 * @param factory
 	 * @param itt
 	 */
-	private IPATranscript readTranscript(SessionFactory factory, IpaTierType itt) {
+	private IPATranscript readTranscript(SessionFactory factory, XmlIpaTierType itt) {
 		IPATranscript retVal = new IPATranscript();
 		if (itt.getPho() != null) {
 			retVal = readTranscript(itt.getPho());
@@ -563,7 +537,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		return retVal;
 	}
 
-	private IPATranscript readTranscript(PhoneticTranscriptionType pho) {
+	private IPATranscript readTranscript(XmlPhoneticTranscriptionType pho) {
 		final XmlPhoneticTranscriptVisitor visitor = new XmlPhoneticTranscriptVisitor();
 		pho.getPwOrPause().forEach(visitor::visit);
 		try {
@@ -576,9 +550,9 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		}
 	}
 
-	private AlternativeTranscript readBlindTranscriptions(SessionFactory factory, List<BlindTranscriptionType> bts) {
+	private AlternativeTranscript readBlindTranscriptions(SessionFactory factory, List<XmlBlindTranscriptionType> bts) {
 		final AlternativeTranscript retVal = new AlternativeTranscript();
-		for(BlindTranscriptionType btt:bts) {
+		for(XmlBlindTranscriptionType btt:bts) {
 			IPATranscript ipa = new IPATranscript();
 			if (btt.getPho() != null) {
 				ipa = readTranscript(btt.getPho());
@@ -593,14 +567,14 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 	/**
 	 * Read alignment data
 	 */
-	private PhoneAlignment readAlignment(SessionFactory factory, Record record, AlignmentTierType att) {
+	private PhoneAlignment readAlignment(SessionFactory factory, Record record, XmlAlignmentTierType att) {
 		final Tier<IPATranscript> ipaT = record.getIPATargetTier();
 		final List<IPATranscript> targetWords = ipaT.hasValue() ? ipaT.getValue().words() : new ArrayList<>();
 		final Tier<IPATranscript> ipaA = record.getIPAActualTier();
 		final List<IPATranscript> actualWords = ipaA.hasValue() ? ipaA.getValue().words() : new ArrayList<>();
 
 		final List<PhoneMap> alignments = new ArrayList<>();
-		for(PhoneMapType pmType:att.getPm()) {
+		for(XmlPhoneMapType pmType:att.getPm()) {
 			final int tidx = pmType.getTarget().intValue();
 			final int aidx = pmType.getActual().intValue();
 			final IPATranscript ipaTw = tidx >= 0 && tidx < targetWords.size() ? targetWords.get(tidx) : new IPATranscript();
@@ -621,7 +595,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		return new PhoneAlignment(alignments);
 	}
 
-	private UserTierData readUserTier(SessionFactory factory, UserTierType utt) {
+	private UserTierData readUserTier(SessionFactory factory, XmlUserTierType utt) {
 		UserTierData retVal = new UserTierData();
 		if(utt.getTierData() != null) {
 			retVal = readUserTierData(factory, utt.getTierData());
@@ -631,7 +605,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		return retVal;
 	}
 
-	private UserTierData readNotes(SessionFactory factory, NotesTierType ntt) {
+	private UserTierData readNotes(SessionFactory factory, XmlNotesTierType ntt) {
 		UserTierData retVal = new UserTierData();
 		if(ntt.getTierData() != null) {
 			retVal = readUserTierData(factory, ntt.getTierData());
@@ -641,14 +615,14 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		return retVal;
 	}
 
-	private UserTierData readUserTierData(SessionFactory factory, ca.phon.session.io.xml.v1_3.UserTierData utd) {
+	private UserTierData readUserTierData(SessionFactory factory, XmlUserTierData utd) {
 		final List<UserTierElement> elements = new ArrayList<>();
 		for(Object obj:utd.getTwOrTcOrInternalMedia()) {
-			if(obj instanceof TierWordType tierWordType) {
+			if(obj instanceof XmlTierWordType tierWordType) {
 				elements.add(new TierString(tierWordType.getContent()));
-			} else if(obj instanceof TierCommentType tierCommentType) {
+			} else if(obj instanceof XmlTierCommentType tierCommentType) {
 				elements.add(new UserTierComment(tierCommentType.getContent()));
-			} else if(obj instanceof MediaType mt) {
+			} else if(obj instanceof XmlMediaType mt) {
 				final MediaSegment seg = readMediaSegment(factory, mt);
 				elements.add(new UserTierInternalMedia(new InternalMedia(seg.getStartValue(), seg.getEndValue())));
 			} else {

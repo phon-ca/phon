@@ -31,47 +31,47 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 	
 	private final ObjectFactory factory = new ObjectFactory();
 	
-	private PhoneticTranscriptionType pho;
+	private XmlPhoneticTranscriptionType pho;
 
-	private PhoneticWord currentWord;
+	private XmlPhoneticWord currentWord;
 
 	private int currentIndex = 0;
 	
 	public IpaToXmlVisitor() {
-		this.pho = factory.createPhoneticTranscriptionType();
-		this.currentWord = factory.createPhoneticWord();
+		this.pho = factory.createXmlPhoneticTranscriptionType();
+		this.currentWord = factory.createXmlPhoneticWord();
 	}
 
 	@Visits
 	public void visitPhone(Phone phone) {
-		final PhoneType phoneType = factory.createPhoneType();
+		final XmlPhoneType phoneType = factory.createXmlPhoneType();
 		phoneType.setContent(phone.getText());
 		if(phone.getScType() != SyllableConstituentType.UNKNOWN) {
-			final ca.phon.session.io.xml.v1_3.SyllableConstituentType scType = switch (phone.getScType()) {
-				case AMBISYLLABIC -> ca.phon.session.io.xml.v1_3.SyllableConstituentType.AMBISYLLABIC;
-				case CODA -> ca.phon.session.io.xml.v1_3.SyllableConstituentType.CODA;
-				case LEFTAPPENDIX -> ca.phon.session.io.xml.v1_3.SyllableConstituentType.LEFT_APPENDIX;
-				case NUCLEUS -> ca.phon.session.io.xml.v1_3.SyllableConstituentType.NUCLEUS;
-				case OEHS -> ca.phon.session.io.xml.v1_3.SyllableConstituentType.OEHS;
-				case ONSET -> ca.phon.session.io.xml.v1_3.SyllableConstituentType.ONSET;
-				case RIGHTAPPENDIX -> ca.phon.session.io.xml.v1_3.SyllableConstituentType.RIGHT_APPENDIX;
+			final XmlSyllableConstituentType scType = switch (phone.getScType()) {
+				case AMBISYLLABIC -> XmlSyllableConstituentType.AMBISYLLABIC;
+				case CODA -> XmlSyllableConstituentType.CODA;
+				case LEFTAPPENDIX -> XmlSyllableConstituentType.LEFT_APPENDIX;
+				case NUCLEUS -> XmlSyllableConstituentType.NUCLEUS;
+				case OEHS -> XmlSyllableConstituentType.OEHS;
+				case ONSET -> XmlSyllableConstituentType.ONSET;
+				case RIGHTAPPENDIX -> XmlSyllableConstituentType.RIGHT_APPENDIX;
 				case UNKNOWN, WORDBOUNDARYMARKER, SYLLABLESTRESSMARKER, SYLLABLEBOUNDARYMARKER -> null;
 			};
 			phoneType.setScType(scType);
 		}
 		this.currentWord.getStressOrPhOrPp().add(phoneType);
 		if(phone.getToneNumberDiacritics().length > 0) {
-			final ToneNumberType toneNumberType = factory.createToneNumberType();
+			final XmlToneNumberType toneNumberType = factory.createXmlToneNumberType();
 			// TODO
 		}
 	}
 
 	@Visits
 	public void visitStress(StressMarker stressMarker) {
-		final StressType stressType = factory.createStressType();
-		final StressTypeType stt = switch (stressMarker.getType()) {
-			case PRIMARY -> StressTypeType.PRIMARY;
-			case SECONDARY -> StressTypeType.SECONDARY;
+		final XmlStressType stressType = factory.createXmlStressType();
+		final XmlStressTypeType stt = switch (stressMarker.getType()) {
+			case PRIMARY -> XmlStressTypeType.PRIMARY;
+			case SECONDARY -> XmlStressTypeType.SECONDARY;
 		};
 		stressType.setType(stt);
 		this.currentWord.getStressOrPhOrPp().add(stressType);
@@ -79,57 +79,57 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 
 	@Visits
 	public void visitIntraWordPause(IntraWordPause pause) {
-		final PhoneticProsodyType pp = factory.createPhoneticProsodyType();
+		final XmlPhoneticProsodyType pp = factory.createXmlPhoneticProsodyType();
 		if(this.currentWord.getStressOrPhOrPp().size() == 0)
-			pp.setType(PhoneticProsodyTypeType.BLOCKING);
+			pp.setType(XmlPhoneticProsodyTypeType.BLOCKING.BLOCKING);
 		else
-			pp.setType(PhoneticProsodyTypeType.PAUSE);
+			pp.setType(XmlPhoneticProsodyTypeType.PAUSE.PAUSE);
 		this.currentWord.getStressOrPhOrPp().add(pp);
 	}
 
 	@Visits
 	public void visitContraction(Contraction sandhi) {
-		final SandhiType sandhiType = factory.createSandhiType();
-		sandhiType.setType(SandhiTypeType.CONTRACTION);
+		final XmlSandhiType sandhiType = factory.createXmlSandhiType();
+		sandhiType.setType(XmlSandhiTypeType.CONTRACTION);
 		this.currentWord.getStressOrPhOrPp().add(sandhiType);
 	}
 
 	@Visits
 	public void visitLinker(Linker linker) {
-		final SandhiType sandhiType = factory.createSandhiType();
-		sandhiType.setType(SandhiTypeType.LINKER);
+		final XmlSandhiType sandhiType = factory.createXmlSandhiType();
+		sandhiType.setType(XmlSandhiTypeType.LINKER);
 		this.currentWord.getStressOrPhOrPp().add(sandhiType);
 	}
 
 	@Visits
 	public void visitIntonationGroup(IntonationGroup ig) {
-		final PhoneticProsodyType pp = factory.createPhoneticProsodyType();
-		final PhoneticProsodyTypeType ptt = switch (ig.getType()) {
-			case MAJOR -> PhoneticProsodyTypeType.MAJOR_INTONATION_GROUP;
-			case MINOR -> PhoneticProsodyTypeType.MINOR_INTONATION_GROUP;
+		final XmlPhoneticProsodyType pp = factory.createXmlPhoneticProsodyType();
+		final XmlPhoneticProsodyTypeType ptt = switch (ig.getType()) {
+			case MAJOR -> XmlPhoneticProsodyTypeType.MAJOR_INTONATION_GROUP;
+			case MINOR -> XmlPhoneticProsodyTypeType.MINOR_INTONATION_GROUP;
 		};
 		this.currentWord.getStressOrPhOrPp().add(pp);
 	}
 
 	@Visits
 	public void visitSyllableBoundary(SyllableBoundary sb) {
-		final PhoneticProsodyType pp = factory.createPhoneticProsodyType();
-		pp.setType(PhoneticProsodyTypeType.SYLLABLE_BREAK);
+		final XmlPhoneticProsodyType pp = factory.createXmlPhoneticProsodyType();
+		pp.setType(XmlPhoneticProsodyTypeType.SYLLABLE_BREAK);
 		this.currentWord.getStressOrPhOrPp().add(pp);
 	}
 
 	@Visits
 	public void visitPause(Pause pause) {
-		final ca.phon.session.io.xml.v1_3.Pause p = factory.createPause();
-		final PauseSymbolicLengthType type = switch(pause.getLength()) {
-			case SIMPLE -> PauseSymbolicLengthType.SIMPLE;
-			case LONG -> PauseSymbolicLengthType.LONG;
-			case VERY_LONG -> PauseSymbolicLengthType.VERY_LONG;
+		final XmlPauseType p = factory.createXmlPauseType();
+		final XmlPauseSymbolicLengthType type = switch(pause.getLength()) {
+			case SIMPLE -> XmlPauseSymbolicLengthType.SIMPLE;
+			case LONG -> XmlPauseSymbolicLengthType.LONG;
+			case VERY_LONG -> XmlPauseSymbolicLengthType.VERY_LONG;
 		};
 		p.setSymbolicLength(type);
 		if(this.currentWord.getStressOrPhOrPp().size() > 0) {
 			this.pho.getPwOrPause().add(this.currentWord);
-			this.currentWord = factory.createPhoneticWord();
+			this.currentWord = factory.createXmlPhoneticWord();
 		}
 		this.pho.getPwOrPause().add(p);
 	}
@@ -138,7 +138,7 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 	public void visitWordBoundary(WordBoundary wb) {
 		if(this.currentWord.getStressOrPhOrPp().size() > 0) {
 			this.pho.getPwOrPause().add(this.currentWord);
-			this.currentWord = factory.createPhoneticWord();
+			this.currentWord = factory.createXmlPhoneticWord();
 		}
 	}
 
@@ -146,7 +146,7 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 	public void fallbackVisit(IPAElement obj) {
 	}
 
-	public PhoneticTranscriptionType getPho() {
+	public XmlPhoneticTranscriptionType getPho() {
 		if(this.currentWord.getStressOrPhOrPp().size() > 0) {
 			this.pho.getPwOrPause().add(this.currentWord);
 		}
