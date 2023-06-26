@@ -19,7 +19,7 @@ import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.Record;
 import ca.phon.session.*;
-import ca.phon.session.UserTierData;
+import ca.phon.session.usertier.UserTierData;
 import ca.phon.session.spi.RecordSPI;
 
 import java.util.Set;

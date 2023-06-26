@@ -16,7 +16,7 @@
 package ca.phon.session.impl;
 
 import ca.phon.session.TierAlignmentRules;
-import ca.phon.session.UserTierData;
+import ca.phon.session.usertier.UserTierData;
 import ca.phon.session.spi.TierDescriptionSPI;
 
 import java.util.Collections;

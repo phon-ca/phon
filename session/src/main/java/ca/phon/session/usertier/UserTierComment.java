@@ -1,4 +1,4 @@
-package ca.phon.session;
+package ca.phon.session.usertier;
 
 import ca.phon.extensions.ExtendableObject;
 

@@ -5,6 +5,7 @@ import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.tier_management.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.session.usertier.UserTierData;
 import ca.phon.ui.toast.*;
 import ca.phon.util.icons.*;
 import org.apache.commons.lang3.StringUtils;

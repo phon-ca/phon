@@ -18,7 +18,7 @@ package ca.phon.app.session.editor.view.common;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.plugin.*;
 import ca.phon.session.Tier;
-import ca.phon.session.UserTierData;
+import ca.phon.session.usertier.UserTierData;
 
 @TierEditorInfo(type= UserTierData.class, tierName="Notes")
 public class NotesFieldExtension implements IPluginExtensionPoint<TierEditor> {

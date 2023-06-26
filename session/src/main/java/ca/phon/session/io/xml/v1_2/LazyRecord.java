@@ -16,14 +16,13 @@
 package ca.phon.session.io.xml.v1_2;
 
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.io.xml.v12.ParticipantType;
 import ca.phon.session.io.xml.v12.RecordType;
 import ca.phon.session.spi.RecordSPI;
-import ca.phon.util.Language;
+import ca.phon.session.usertier.UserTierData;
 
 import java.util.*;
 

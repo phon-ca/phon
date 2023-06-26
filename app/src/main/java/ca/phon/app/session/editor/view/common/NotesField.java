@@ -16,7 +16,7 @@
 package ca.phon.app.session.editor.view.common;
 
 import ca.phon.session.Tier;
-import ca.phon.session.UserTierData;
+import ca.phon.session.usertier.UserTierData;
 
 public class NotesField extends GroupField<UserTierData> {
 

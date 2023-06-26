@@ -16,7 +16,7 @@
 package ca.phon.session.spi;
 
 import ca.phon.session.CommentType;
-import ca.phon.session.UserTierData;
+import ca.phon.session.usertier.UserTierData;
 
 public interface CommentSPI {
 	

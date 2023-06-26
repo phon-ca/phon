@@ -17,6 +17,7 @@ package ca.phon.session;
 
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
+import ca.phon.session.usertier.UserTierData;
 
 /**
  * Tier descriptions for default tiers.

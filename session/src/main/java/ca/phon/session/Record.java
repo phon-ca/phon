@@ -21,6 +21,7 @@ import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.*;
 import ca.phon.session.spi.RecordSPI;
+import ca.phon.session.usertier.UserTierData;
 import ca.phon.util.Language;
 
 import java.util.*;

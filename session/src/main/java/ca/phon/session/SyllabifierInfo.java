@@ -18,6 +18,7 @@ package ca.phon.session;
 import ca.phon.extensions.Extension;
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.session.usertier.UserTierData;
 import ca.phon.util.Language;
 
 import java.text.ParseException;

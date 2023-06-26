@@ -28,7 +28,10 @@ import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionWriter;
-import ca.phon.session.io.xml.v12.SexType;
+import ca.phon.session.usertier.UserTierComment;
+import ca.phon.session.usertier.UserTierData;
+import ca.phon.session.usertier.UserTierElement;
+import ca.phon.session.usertier.UserTierInternalMedia;
 import ca.phon.util.Language;
 import ca.phon.xml.annotation.XMLSerial;
 import jakarta.xml.bind.JAXBContext;
@@ -36,11 +39,9 @@ import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import org.apache.commons.lang3.StringUtils;
-import org.glassfish.jaxb.runtime.marshaller.NamespacePrefixMapper;
 
 import javax.xml.datatype.*;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -433,7 +434,7 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 		return retVal;
 	}
 
-	private XmlUserTierData writeUserTierData(ObjectFactory factory, ca.phon.session.UserTierData tierData) {
+	private XmlUserTierData writeUserTierData(ObjectFactory factory, UserTierData tierData) {
 		final XmlUserTierData retVal = factory.createXmlUserTierData();
 		for(UserTierElement ele:tierData.getElements()) {
 			if(ele instanceof TierString ts) {
@@ -481,7 +482,7 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 		}
 
 		// notes
-		final Tier<ca.phon.session.UserTierData> notesTier = record.getNotesTier();
+		final Tier<UserTierData> notesTier = record.getNotesTier();
 		if(notesTier.hasValue()) {
 			final XmlNotesTierType notesTierType = writeNotesTier(factory, notesTier);
 			retVal.setNotes(notesTierType);
@@ -499,7 +500,7 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 		}
 
 		for(String tierName:record.getUserDefinedTierNames()) {
-			Tier<ca.phon.session.UserTierData> userTier = record.getTier(tierName, ca.phon.session.UserTierData.class);
+			Tier<UserTierData> userTier = record.getTier(tierName, UserTierData.class);
 			if(userTier != null && userTier.hasValue() && userTier.getValue().getElements().size() > 0) {
 				final XmlUserTierType utt = writeUserTier(factory, userTier);
 				utt.setName(userTier.getName());
@@ -597,7 +598,7 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 		return retVal;
 	}
 
-	private XmlNotesTierType writeNotesTier(ObjectFactory factory, Tier<ca.phon.session.UserTierData> notesTier) {
+	private XmlNotesTierType writeNotesTier(ObjectFactory factory, Tier<UserTierData> notesTier) {
 		final XmlNotesTierType retVal = factory.createXmlNotesTierType();
 		if(notesTier.isUnvalidated()) {
 			retVal.setUnparsed(writeUnparsed(factory, notesTier.getUnvalidatedValue()));
@@ -607,7 +608,7 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 		return retVal;
 	}
 
-	private XmlUserTierType writeUserTier(ObjectFactory factory, Tier<ca.phon.session.UserTierData> userTier) {
+	private XmlUserTierType writeUserTier(ObjectFactory factory, Tier<UserTierData> userTier) {
 		final XmlUserTierType retVal = factory.createXmlUserTierType();
 		if(userTier.isUnvalidated()) {
 			retVal.setUnparsed(writeUnparsed(factory, userTier.getUnvalidatedValue()));

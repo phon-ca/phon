@@ -22,6 +22,7 @@ import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.*;
 import ca.phon.session.spi.RecordSPI;
+import ca.phon.session.usertier.UserTierData;
 
 import java.util.*;
 
