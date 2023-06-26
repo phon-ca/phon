@@ -16,10 +16,10 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<xs:schema xmlns="https://phon.ca/ns/session"
-           targetNamespace="https://phon.ca/ns/session"
-           xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           id="PhonBank" version="1.3">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+       targetNamespace="https://phon.ca/ns/session"
+       xmlns="https://phon.ca/ns/session"
+       id="PhonBank" version="1.3">
 
     <xs:element name="session" type="SessionType">
         <!-- constraints -->
@@ -307,6 +307,7 @@
     </xs:complexType>
 
     <xs:element name="tierAlignment" type="tierAlignmentRules"/>
+    <xs:element name="alignWith" type="listOfAlignableTypes"/>
     <xs:complexType name="tierAlignmentRules">
         <xs:annotation>
             <xs:documentation>
@@ -314,7 +315,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="alignWith" type="listOfAlignableTypes" minOccurs="1" maxOccurs="1"/>
+            <xs:element ref="alignWith" minOccurs="1" maxOccurs="1"/>
         </xs:sequence>
         <xs:attribute name="includeOmitted" type="xs:boolean" default="false">
             <xs:annotation>

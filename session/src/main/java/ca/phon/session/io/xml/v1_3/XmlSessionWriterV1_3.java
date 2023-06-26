@@ -625,17 +625,6 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 			final JAXBContext context = JAXBContext.newInstance(ObjectFactory.class);
 			final Marshaller marshaller = context.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
-			NamespacePrefixMapper prefixMapper = new NamespacePrefixMapper() {
-				@Override
-				public String getPreferredPrefix(String namespace, String suggestion, boolean b) {
-					if(namespace.equals("https://phon.ca/ns/session")) {
-						return "phon";
-					} else {
-						return suggestion;
-					}
-				}
-			};
-			marshaller.setProperty("org.glassfish.jaxb.namespacePrefixMapper", prefixMapper);
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			marshaller.marshal(ele, out);
 		} catch(JAXBException e) {
