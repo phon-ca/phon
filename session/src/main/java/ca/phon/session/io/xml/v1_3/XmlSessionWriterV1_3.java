@@ -42,6 +42,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
@@ -371,7 +372,11 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 	private XmlMediaType writeSegment(ObjectFactory factory, MediaSegment segment) {
 		final XmlMediaType segType = factory.createXmlMediaType();
 		segType.setStart(BigDecimal.valueOf(segment.getStartValue()));
+		if(segment.getUnitType() == MediaUnit.Second)
+			segType.getStart().setScale(3, RoundingMode.HALF_UP);
 		segType.setEnd(BigDecimal.valueOf(segment.getEndValue()));
+		if(segment.getUnitType() == MediaUnit.Second)
+			segType.getEnd().setScale(3, RoundingMode.HALF_UP);
 		final XmlMediaUnitType unitType = switch (segment.getUnitType()) {
 			case Second -> XmlMediaUnitType.S;
 			default -> XmlMediaUnitType.MS;
@@ -445,8 +450,8 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 				retVal.getTwOrTcOrInternalMedia().add(tc);
 			} else if(ele instanceof UserTierInternalMedia im) {
 				final XmlMediaType mediaType = factory.createXmlMediaType();
-				mediaType.setStart(BigDecimal.valueOf(im.getInternalMedia().getStartTime()));
-				mediaType.setEnd(BigDecimal.valueOf(im.getInternalMedia().getEndTime()));
+				mediaType.setStart(BigDecimal.valueOf(im.getInternalMedia().getStartTime()).setScale(3, RoundingMode.HALF_UP));
+				mediaType.setEnd(BigDecimal.valueOf(im.getInternalMedia().getEndTime()).setScale(3, RoundingMode.HALF_UP));
 				mediaType.setUnit(XmlMediaUnitType.S);
 				retVal.getTwOrTcOrInternalMedia().add(mediaType);
 			}
@@ -584,6 +589,7 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 			pmType.setTarget(BigInteger.valueOf(tidx));
 			pmType.setActual(BigInteger.valueOf(aidx));
 			retVal.getPm().add(pmType);
+			alignIdx++;
 		}
 		return retVal;
 	}
