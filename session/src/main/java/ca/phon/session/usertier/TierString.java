@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.session;
+package ca.phon.session.usertier;
 
 import ca.phon.extensions.ExtendableObject;
-import ca.phon.session.usertier.UserTierElement;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;

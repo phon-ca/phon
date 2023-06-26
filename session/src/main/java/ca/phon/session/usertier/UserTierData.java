@@ -4,7 +4,6 @@ import ca.phon.extensions.ExtendableObject;
 import ca.phon.orthography.InternalMedia;
 import ca.phon.orthography.MediaTimeFormat;
 import ca.phon.orthography.TagMarkerType;
-import ca.phon.session.TierString;
 
 import java.text.ParseException;
 import java.util.ArrayList;
