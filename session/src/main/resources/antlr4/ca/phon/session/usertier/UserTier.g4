@@ -16,7 +16,7 @@ element
     ;
 
 word
-    :   (CHAR | DIGIT | MINUS | COLON | END_COMMENT)+
+    :   (CHAR | DIGIT | MINUS | COLON | PERIOD | END_COMMENT)+
     ;
 
 comment
@@ -36,10 +36,10 @@ number
     ;
 
 CHAR
-    :   [a-zA-Z]
+    :   [!"#$%&'()*+,/;<=>?@A-Z[\\^_`a-z{|}~]
     |   [\u00bf-\u024f]
     |   [\u0250-\u02af]
-    |   [\u02b0-\u02c7\u02c9-\u02cb\u02cd-\u02ff]
+    |   [\u02b0-\u02ff]
     |   [\u0300-\u036f]
     ;
 
