@@ -16,7 +16,9 @@
    limitations under the License.
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-  elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.5">
+           xmlns="https://phon.ca/ns/project"
+           targetNamespace="https://phon.ca/ns/project"
+           elementFormDefault="qualified" version="1.6">
 
   <xs:annotation>
     <xs:documentation> This file describes the current project file structure of a Phon project. </xs:documentation>
