@@ -1,0 +1,76 @@
+grammar UserTier;
+
+usertier
+    :   tierdata* EOF
+    ;
+
+tierdata
+    :   tierdata WS tierdata
+    |   element
+    ;
+
+element
+    :   word
+    |   comment
+    |   internal_media
+    ;
+
+word
+    :   (CHAR | DIGIT | MINUS | COLON | END_COMMENT)+
+    ;
+
+comment
+    :   BEGIN_COMMENT WS? ('\\]' | .)*? END_COMMENT
+    ;
+
+internal_media
+    :   BULLET time_in_minutes_seconds MINUS time_in_minutes_seconds BULLET
+    ;
+
+time_in_minutes_seconds
+    :   (number COLON)? number PERIOD number?
+    ;
+
+number
+    :   DIGIT+
+    ;
+
+CHAR
+    :   [a-zA-Z]
+    |   [\u00bf-\u024f]
+    |   [\u0250-\u02af]
+    |   [\u02b0-\u02c7\u02c9-\u02cb\u02cd-\u02ff]
+    |   [\u0300-\u036f]
+    ;
+
+DIGIT
+    :   '0'..'9'
+    ;
+
+COLON
+    :   ':'
+    ;
+
+PERIOD
+    :   '.'
+    ;
+
+MINUS
+    :   '-'
+    ;
+
+WS
+    :   [ \t\r\n]
+    ;
+
+BULLET
+    :   '\u2022'
+    ;
+
+BEGIN_COMMENT
+    :   '[%'
+    ;
+
+END_COMMENT
+    :   ']'
+    ;

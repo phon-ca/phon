@@ -8,9 +8,9 @@ import ca.phon.extensions.ExtendableObject;
  */
 public final class UserTierComment extends ExtendableObject implements UserTierElement {
 
-    public final static String PREFIX = "(";
+    public final static String PREFIX = "[%";
 
-    public final static String SUFFIX = ")";
+    public final static String SUFFIX = "]";
 
     private final String text;
 
@@ -26,7 +26,7 @@ public final class UserTierComment extends ExtendableObject implements UserTierE
 
     @Override
     public String toString() {
-        return String.format("%s%s%s", PREFIX, text(), SUFFIX);
+        return String.format("%s %s%s", PREFIX, text(), SUFFIX);
     }
 
 }
