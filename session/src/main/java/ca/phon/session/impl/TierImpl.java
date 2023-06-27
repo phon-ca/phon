@@ -15,6 +15,8 @@
  */
 package ca.phon.session.impl;
 
+import ca.phon.formatter.Formatter;
+import ca.phon.formatter.FormatterFactory;
 import ca.phon.formatter.FormatterUtil;
 import ca.phon.session.TierAlignmentRules;
 import ca.phon.session.spi.TierSPI;
@@ -81,7 +83,12 @@ public class TierImpl<T> implements TierSPI<T> {
 
 	@Override
 	public T parse(String text) throws ParseException {
-		return null;
+		final Formatter<T> factory = FormatterFactory.createFormatter(getDeclaredType());
+		if(factory != null) {
+			return factory.parse(text);
+		} else {
+			throw new ParseException("No parser available for type " + getDeclaredType(), 0);
+		}
 	}
 
 	@Override

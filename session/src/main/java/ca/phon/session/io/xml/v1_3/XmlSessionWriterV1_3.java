@@ -422,7 +422,6 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 			final XmlUserTierData tierData = writeUserTierData(factory, com.getValue());
 			retVal.setTierData(tierData);
 		}
-
 		return retVal;
 	}
 

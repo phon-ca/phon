@@ -85,6 +85,7 @@ public final class Tier<T> extends ExtendableObject {
 				try {
 					IExtendable obj = (IExtendable) getDeclaredType().getDeclaredConstructor().newInstance();
 					obj.putExtension(UnvalidatedValue.class, uv);
+					setValue((T)obj);
 				} catch (InvocationTargetException | InstantiationException | IllegalAccessException |
 						 NoSuchMethodException e) {
 				}
