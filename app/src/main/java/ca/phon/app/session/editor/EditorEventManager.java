@@ -119,7 +119,6 @@ public class EditorEventManager {
 	 * @param eventName
 	 * @param action
 	 * @param runOn
-	 * @param blocking
 	 */
 	public <T> void registerActionForEvent(EditorEventType<T> eventName, EditorAction<T> action, RunOn runOn) {
 		synchronized (actionMap) {
