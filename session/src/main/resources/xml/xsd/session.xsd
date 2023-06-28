@@ -946,27 +946,144 @@
     </xs:simpleType>
 
     <xs:element name="toneNumber" type="toneNumberType"/>
-    <xs:complexType name="toneNumberType">
+    <xs:simpleType name="toneNumberType">
         <xs:annotation>
             <xs:documentation>Superscript tone number in a transcription</xs:documentation>
             <xs:documentation>See https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#phone__tone_number
                 for more information.</xs:documentation>
         </xs:annotation>
-        <xs:attribute name="value" type="toneNumberValue"/>
-    </xs:complexType>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[⁰¹²³⁴⁵⁶⁷⁸⁹]+"/>
+        </xs:restriction>
+    </xs:simpleType>
 
-    <xs:simpleType name="toneNumberValue">
-        <xs:restriction base="xs:positiveInteger"/>
+    <xs:simpleType name="vowelType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[ʄʅiıyɨʉɯuɪɩʏʊɷʮeøɘɵɤoəɛœɜʚɞʌɔɚɝæaɶɐαɑɒ]"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="consonantType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[pbʬƀƥɓtdʭƫȶʈʇƭɖɗᶑcɟƈkgɡƙʞɠqɢʠʛʡʔʖʗπʘǀǃ¡ǁǂɸβfƒvθðδszʑʪʫɬɮʃʆʒʓƪʂʐçɕʝƺxɣɧχħʕƹʜʢhɦʩʦʣʨʥʧʤƛλmɱƞnɳɲȵŋɴlɫɭȴʎʟⱱʙɾɿrɺɼɹɻɽʀʁʍʋ]"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="coverSymbol">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[ABCDEFGHIJKLMNOPQRSTUVWXYZ*]"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="base" type="baseType"/>
+    <xs:simpleType name="baseType">
+        <xs:union memberTypes="consonantType vowelType coverSymbol"/>
+    </xs:simpleType>
+
+    <xs:simpleType name="prefixDiacriticType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[ᵐᶬⁿᶯᶮᵑᶰ]"/>
+            <xs:pattern value="[·ˀˁ˞ʰʱʻʼʽᵖᵇᵗᵈᵏᵍᶿˢᶻᶴᶾˣˠˤˡʳʴʵʶʷʲʸᶦᶷᵊ⁼ʾʿ˭ꜝꜞ˥˦˧˨˩˂˃˄˅ˬ˯˰˱˲˖˗˜]̵"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="prefix" type="prefixDiacriticsType"/>
+    <xs:simpleType name="prefixDiacriticsType">
+        <xs:list itemType="prefixDiacriticType"/>
+    </xs:simpleType>
+
+    <xs:simpleType name="combiningDiacriticType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[˸̥̣̤̃̊ͪ̇̈ͭͩͨͮͯͫͬͥͧͤͦͣ̽͝͠˹˺˻˼̚ꜛꜜ᷄᷅᷆᷇᷈᷉ˆˇˉˊˋ˵˶̀́̂̋̌̏˔˕͟͞˽˾˿̴̡̢̖̘̙̜̝̞̟̠̩̪̫̬̮̯̰̱̲̳̹̺̻̼͇͈͉͍͎͓͔͕͖̉̄̆̑̒̔̐̾̿͆͊͋͌͐͑͒͗]"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="combining" type="combiningDiacriticsType"/>
+    <xs:simpleType name="combiningDiacriticsType">
+        <xs:list itemType="combiningDiacriticType"/>
+    </xs:simpleType>
+
+    <xs:simpleType name="suffixDiacriticType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[·ˀˁ˞ʰʱʻʼʽᵖᵇᵗᵈᵏᵍᶿˢᶻᶴᶾˣˠˤˡʳʴʵʶʷʲʸᶦᶷᵊ⁼ʾʿ˭ꜝꜞ˥˦˧˨˩˂˃˄˅ˬ˯˰˱˲˖˗˜]"/>
+            <xs:pattern value="[ᵐᶬⁿᶯᶮᵑᶰ]̵"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="suffix" type="suffixDiacriticsType"/>
+    <xs:simpleType name="suffixDiacriticsType">
+        <xs:list itemType="suffixDiacriticType"/>
+    </xs:simpleType>
+
+    <xs:element name="phlen" type="phoneLengthType"/>
+    <xs:simpleType name="phoneLengthType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="ː+ˑ?"/>
+            <xs:pattern value="ˑ"/>
+        </xs:restriction>
     </xs:simpleType>
 
     <xs:element name="ph" type="phoneType"/>
-    <xs:complexType name="phoneType" mixed="true">
+    <xs:complexType name="phoneType">
         <xs:annotation>
             <xs:documentation>A single phone in an ipa transcription including all diacritics</xs:documentation>
             <xs:documentation>See https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#phone
                 for more information.</xs:documentation>
         </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="prefix" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="base" minOccurs="1" maxOccurs="1"/>
+            <xs:element ref="combining" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="phlen" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="suffix" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="toneNumber" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
         <xs:attribute name="scType" type="syllableConstituentType"/>
+    </xs:complexType>
+
+    <xs:element name="lig" type="ligatureType"/>
+    <xs:complexType name="ligatureType">
+        <xs:annotation>
+            <xs:documentation>Ligature between compound phones</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="type" type="ligatureTypeType"/>
+    </xs:complexType>
+
+    <xs:simpleType name="ligatureTypeType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="breve below">
+                <xs:annotation>
+                    <xs:documentation>&#x035c; combining double breve below</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="breve">
+                <xs:annotation>
+                    <xs:documentation>&#x0361; combining double inverted breve</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="right arrow below">
+                <xs:annotation>
+                    <xs:documentation>&#0362; combining double rightwards arrow below</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="cmph" type="compoundPhoneType"/>
+    <xs:complexType name="compoundPhoneType">
+        <xs:annotation>
+            <xs:documentation>Phone composed of one or more phones connected by ligatures.</xs:documentation>
+            <xs:documentation>See https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#phone
+                for more information.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="ph" minOccurs="1" maxOccurs="1"/>
+            <xs:element ref="lig" minOccurs="1" maxOccurs="1"/>
+            <xs:choice>
+                <xs:element ref="ph" minOccurs="1" maxOccurs="1"/>
+                <xs:element ref="cmph" minOccurs="1" maxOccurs="1"/>
+            </xs:choice>
+        </xs:sequence>
     </xs:complexType>
 
     <xs:simpleType name="syllableConstituentType">
