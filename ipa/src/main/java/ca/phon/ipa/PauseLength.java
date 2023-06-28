@@ -19,56 +19,31 @@ package ca.phon.ipa;
  * Pause lengths
  */
 public enum PauseLength {
-	SIMPLE("."),
-	LONG(".."),
-	VERY_LONG("...");
-	
-	private String image;
-	
-	private PauseLength(String image) {
-		this.image = image;
+	SIMPLE("(.)", "simple"),
+	LONG("(..)", "long"),
+	VERY_LONG("(...)", "very-long"),
+	NUMERIC("(%s)", "numeric");
+
+	private String text;
+
+	private String displayName;
+
+	private PauseLength(String text, String displayName) {
+		this.text = text;
+		this.displayName = displayName;
 	}
-	
-	/**
-	 * Length from string
-	 * 
-	 * @param text valid values must match the regex
-	 *  <code>'\.{1,3}'</code>
-	 * @return the detected PauseLength
-	 * @throws IllegalArgumentException if the given text
-	 *  is not a valid length string
-	 */
-	public static PauseLength lengthFromString(String text) {
-		PauseLength retVal = null;
-		if(!text.matches("\\.{1,3}")) {
-			throw new IllegalArgumentException("Invalid length string '" + text + "'");
-		}
-		int len = text.length();
-		switch(len) {
-		case 1:
-			retVal = SIMPLE;
-			break;
-			
-		case 2:
-			retVal = LONG;
-			break;
-			
-		case 3:
-			retVal = VERY_LONG;
-			break;
-			
-		default:
-			throw new IllegalArgumentException("Invalid length string '" + text + "'");	
-		}
-		return retVal;
-	}
-	
-	/**
-	 * Get the length string for
-	 * 
-	 * @return the text for this length
-	 */
+
 	public String getText() {
-		return this.image;
+		return this.text;
 	}
+
+	public String getDisplayName() {
+		return this.displayName;
+	}
+
+	@Override
+	public String toString() {
+		return this.getText();
+	}
+
 }

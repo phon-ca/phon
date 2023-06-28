@@ -839,9 +839,9 @@
         <xs:choice minOccurs="1" maxOccurs="unbounded">
             <xs:element ref="stress"/>
             <xs:element ref="ph"/>
+            <xs:element ref="cmph"/>
             <xs:element ref="pp"/>
             <xs:element ref="sandhi"/>
-            <xs:element ref="toneNumber"/>
         </xs:choice>
     </xs:complexType>
     
@@ -1077,12 +1077,12 @@
                 for more information.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element ref="ph" minOccurs="1" maxOccurs="1"/>
-            <xs:element ref="lig" minOccurs="1" maxOccurs="1"/>
             <xs:choice>
                 <xs:element ref="ph" minOccurs="1" maxOccurs="1"/>
                 <xs:element ref="cmph" minOccurs="1" maxOccurs="1"/>
             </xs:choice>
+            <xs:element ref="lig" minOccurs="1" maxOccurs="1"/>
+            <xs:element ref="ph" minOccurs="1" maxOccurs="1"/>
         </xs:sequence>
     </xs:complexType>
 

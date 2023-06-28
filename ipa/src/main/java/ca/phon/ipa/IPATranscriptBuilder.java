@@ -193,6 +193,31 @@ public class IPATranscriptBuilder {
 		}
 		return this;
 	}
+
+	/**
+	 * Append a phone
+	 *
+	 * @param prefixDiacritics
+	 * @param basePhone
+	 * @param combiningDiacritics
+	 * @param suffixDiacritics
+	 */
+	public IPATranscriptBuilder appendPhone(Diacritic[] prefixDiacritics, Character basePhone,
+											Diacritic[] combiningDiacritics,
+											Diacritic[] suffixDiacritics) {
+		append(factory.createPhone(prefixDiacritics, basePhone, combiningDiacritics, suffixDiacritics));
+		return this;
+	}
+
+	public IPATranscriptBuilder appendPause(PauseLength len) {
+		append(factory.createPause(len));
+		return this;
+	}
+
+	public IPATranscriptBuilder appendPause(float secs) {
+		append(factory.createPause(secs));
+		return this;
+	}
 	
 	/**
 	 * Append a word boundary.
@@ -262,7 +287,17 @@ public class IPATranscriptBuilder {
 		append(factory.createMajorIntonationGroup());
 		return this;
 	}
-	
+
+	/**
+	 * Append stress
+	 *
+	 * @param type
+	 */
+	public IPATranscriptBuilder appendStress(StressType type) {
+		append(factory.createStress(type));
+		return this;
+	}
+
 	/**
 	 * Return the {@link IPATranscript} object
 	 * 

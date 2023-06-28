@@ -18,11 +18,17 @@ package ca.phon.session.io.xml.v1_3;
 import ca.phon.ipa.*;
 import ca.phon.ipa.Linker;
 import ca.phon.ipa.Pause;
+import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
+import com.ibm.icu.text.ArabicShaping;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * 
@@ -45,9 +51,19 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 	@Visits
 	public void visitPhone(Phone phone) {
 		final XmlPhoneType phoneType = factory.createXmlPhoneType();
-		phoneType.setContent(phone.getText());
+		if(phone.getPrefixDiacritics().length > 0)
+			Arrays.stream(phone.getPrefixDiacritics()).map(Diacritic::getText).forEach(phoneType.getPrefix()::add);
+		phoneType.setBase(phone.getBase());
+		if(phone.getCombiningDiacritics().length > 0)
+			Arrays.stream(phone.getCombiningDiacritics()).map(Diacritic::getText).forEach(phoneType.getCombining()::add);
+		String phLen = Arrays.stream(phone.getLengthDiacritics()).map(Diacritic::getText).collect(Collectors.joining());
+		if(phLen.length() > 0) phoneType.setPhlen(phLen);
+		String toneNum = Arrays.stream(phone.getToneNumberDiacritics()).map(Diacritic::getText).collect(Collectors.joining());
+		if(toneNum.length() > 0) phoneType.setToneNumber(toneNum);
+		if(phone.getSuffixDiacritics().length > 0)
+			Arrays.stream(phone.getSuffixDiacritics()).map(Diacritic::getText).forEach(phoneType.getSuffix()::add);
 		if(phone.getScType() != SyllableConstituentType.UNKNOWN) {
-			final XmlSyllableConstituentType scType = switch (phone.getScType()) {
+			XmlSyllableConstituentType scType = switch (phone.getScType()) {
 				case AMBISYLLABIC -> XmlSyllableConstituentType.AMBISYLLABIC;
 				case CODA -> XmlSyllableConstituentType.CODA;
 				case LEFTAPPENDIX -> XmlSyllableConstituentType.LEFT_APPENDIX;
@@ -57,13 +73,41 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 				case RIGHTAPPENDIX -> XmlSyllableConstituentType.RIGHT_APPENDIX;
 				case UNKNOWN, WORDBOUNDARYMARKER, SYLLABLESTRESSMARKER, SYLLABLEBOUNDARYMARKER -> null;
 			};
+			if(scType == XmlSyllableConstituentType.NUCLEUS) {
+				final SyllabificationInfo info = phone.getExtension(SyllabificationInfo.class);
+				if(info.isDiphthongMember())
+					scType = XmlSyllableConstituentType.DIPHTHONG;
+			}
 			phoneType.setScType(scType);
 		}
-		this.currentWord.getStressOrPhOrPp().add(phoneType);
-		if(phone.getToneNumberDiacritics().length > 0) {
-			final XmlToneNumberType toneNumberType = factory.createXmlToneNumberType();
-			// TODO
+		this.currentWord.getStressOrPhOrCmph().add(phoneType);
+	}
+
+	@Visits
+	public void visitCompoundPhone(CompoundPhone cmpPhone) {
+		final XmlCompoundPhoneType xmlCompoundPhoneType = factory.createXmlCompoundPhoneType();
+		visit(cmpPhone.getFirstPhone());
+		final Object firstPhoneXmlType = this.currentWord.getStressOrPhOrCmph().remove(this.currentWord.getStressOrPhOrCmph().size()-1);
+		visit(cmpPhone.getSecondPhone());
+		final Object secondPhoneXmlType = this.currentWord.getStressOrPhOrCmph().remove(this.currentWord.getStressOrPhOrCmph().size()-1);
+
+		if(firstPhoneXmlType instanceof XmlPhoneType) {
+			xmlCompoundPhoneType.getContent().add(factory.createPh(((XmlPhoneType) firstPhoneXmlType)));
+		} else {
+			xmlCompoundPhoneType.getContent().add(factory.createCmph(((XmlCompoundPhoneType) firstPhoneXmlType)));
 		}
+
+		XmlLigatureTypeType ligType = switch (cmpPhone.getLigature()) {
+			case '\u035c' -> XmlLigatureTypeType.BREVE_BELOW;
+			case '\u0362' -> XmlLigatureTypeType.RIGHT_ARROW_BELOW;
+			default -> XmlLigatureTypeType.BREVE;
+		};
+		final XmlLigatureType lig = factory.createXmlLigatureType();
+		lig.setType(ligType);
+		xmlCompoundPhoneType.getContent().add(factory.createLig(lig));
+
+		xmlCompoundPhoneType.getContent().add(factory.createPh(((XmlPhoneType) secondPhoneXmlType)));
+		this.currentWord.getStressOrPhOrCmph().add(xmlCompoundPhoneType);
 	}
 
 	@Visits
@@ -74,31 +118,31 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 			case SECONDARY -> XmlStressTypeType.SECONDARY;
 		};
 		stressType.setType(stt);
-		this.currentWord.getStressOrPhOrPp().add(stressType);
+		this.currentWord.getStressOrPhOrCmph().add(stressType);
 	}
 
 	@Visits
 	public void visitIntraWordPause(IntraWordPause pause) {
 		final XmlPhoneticProsodyType pp = factory.createXmlPhoneticProsodyType();
-		if(this.currentWord.getStressOrPhOrPp().size() == 0)
+		if(this.currentWord.getStressOrPhOrCmph().size() == 0)
 			pp.setType(XmlPhoneticProsodyTypeType.BLOCKING.BLOCKING);
 		else
 			pp.setType(XmlPhoneticProsodyTypeType.PAUSE.PAUSE);
-		this.currentWord.getStressOrPhOrPp().add(pp);
+		this.currentWord.getStressOrPhOrCmph().add(pp);
 	}
 
 	@Visits
 	public void visitContraction(Contraction sandhi) {
 		final XmlSandhiType sandhiType = factory.createXmlSandhiType();
 		sandhiType.setType(XmlSandhiTypeType.CONTRACTION);
-		this.currentWord.getStressOrPhOrPp().add(sandhiType);
+		this.currentWord.getStressOrPhOrCmph().add(sandhiType);
 	}
 
 	@Visits
 	public void visitLinker(Linker linker) {
 		final XmlSandhiType sandhiType = factory.createXmlSandhiType();
 		sandhiType.setType(XmlSandhiTypeType.LINKER);
-		this.currentWord.getStressOrPhOrPp().add(sandhiType);
+		this.currentWord.getStressOrPhOrCmph().add(sandhiType);
 	}
 
 	@Visits
@@ -108,26 +152,31 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 			case MAJOR -> XmlPhoneticProsodyTypeType.MAJOR_INTONATION_GROUP;
 			case MINOR -> XmlPhoneticProsodyTypeType.MINOR_INTONATION_GROUP;
 		};
-		this.currentWord.getStressOrPhOrPp().add(pp);
+		this.currentWord.getStressOrPhOrCmph().add(pp);
 	}
 
 	@Visits
 	public void visitSyllableBoundary(SyllableBoundary sb) {
 		final XmlPhoneticProsodyType pp = factory.createXmlPhoneticProsodyType();
 		pp.setType(XmlPhoneticProsodyTypeType.SYLLABLE_BREAK);
-		this.currentWord.getStressOrPhOrPp().add(pp);
+		this.currentWord.getStressOrPhOrCmph().add(pp);
 	}
 
 	@Visits
 	public void visitPause(Pause pause) {
 		final XmlPauseType p = factory.createXmlPauseType();
-		final XmlPauseSymbolicLengthType type = switch(pause.getLength()) {
+		final XmlPauseSymbolicLengthType type = switch(pause.getType()) {
 			case SIMPLE -> XmlPauseSymbolicLengthType.SIMPLE;
 			case LONG -> XmlPauseSymbolicLengthType.LONG;
 			case VERY_LONG -> XmlPauseSymbolicLengthType.VERY_LONG;
+			case NUMERIC -> null;
 		};
-		p.setSymbolicLength(type);
-		if(this.currentWord.getStressOrPhOrPp().size() > 0) {
+		if(type != null) {
+			p.setSymbolicLength(type);
+		} else {
+			p.setLength(BigDecimal.valueOf(pause.getLength()).setScale(3, RoundingMode.HALF_UP));
+		}
+		if(this.currentWord.getStressOrPhOrCmph().size() > 0) {
 			this.pho.getPwOrPause().add(this.currentWord);
 			this.currentWord = factory.createXmlPhoneticWord();
 		}
@@ -136,7 +185,7 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 
 	@Visits
 	public void visitWordBoundary(WordBoundary wb) {
-		if(this.currentWord.getStressOrPhOrPp().size() > 0) {
+		if(this.currentWord.getStressOrPhOrCmph().size() > 0) {
 			this.pho.getPwOrPause().add(this.currentWord);
 			this.currentWord = factory.createXmlPhoneticWord();
 		}
@@ -147,7 +196,7 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 	}
 
 	public XmlPhoneticTranscriptionType getPho() {
-		if(this.currentWord.getStressOrPhOrPp().size() > 0) {
+		if(this.currentWord.getStressOrPhOrCmph().size() > 0) {
 			this.pho.getPwOrPause().add(this.currentWord);
 		}
 		return this.pho;

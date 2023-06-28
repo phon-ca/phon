@@ -224,9 +224,13 @@ public class IPAElementFactory {
 	public Pause createPause(PauseLength length) {
 		return new Pause(length);
 	}
+
+	public Pause createPause(float secs) {
+		return new Pause(PauseLength.NUMERIC, secs);
+	}
 	
 	public Pause clonePause(Pause pause) {
-		return new Pause(pause.getLength());
+		return new Pause(pause.getType(), pause.getLength());
 	}
 	
 	/**

@@ -7,6 +7,7 @@ import ca.phon.syllable.*;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ErrorNode;
 
+import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -377,7 +378,15 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 
 	@Override
 	public void exitNumericPause(NumericPauseContext ctx) {
-		super.exitNumericPause(ctx);
+		if(ctx.time_in_minutes_seconds().getText().matches(MediaTimeFormat.PATTERN)) {
+			final MediaTimeFormat format = new MediaTimeFormat();
+			try {
+				Float seconds = (Float) format.parseObject(ctx.time_in_minutes_seconds().getText());
+				builder.append(factory.createPause(seconds));
+			} catch (ParseException pe) {
+				throw new IllegalArgumentException(pe);
+			}
+		}
 	}
 
 	@Override
