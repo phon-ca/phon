@@ -36,6 +36,7 @@ import ca.phon.visitor.annotation.Visits;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 
 /**
  *
@@ -237,7 +238,7 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 			case NUMERIC -> null;
 		};
 		if(type == null) {
-			xmlPause.setLength(BigDecimal.valueOf(pause.getLength() * 1000.0f));
+			xmlPause.setLength(BigDecimal.valueOf(pause.getLength()).setScale(3, RoundingMode.HALF_UP));
 		} else {
 			xmlPause.setSymbolicLength(type);
 		}

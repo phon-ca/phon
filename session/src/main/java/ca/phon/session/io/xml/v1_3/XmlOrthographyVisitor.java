@@ -154,7 +154,7 @@ public class XmlOrthographyVisitor extends VisitorAdapter<Object> {
             };
             builder.append(new Pause(length));
         } else if(xmlPause.getLength() != null) {
-            builder.append(new Pause(PauseLength.NUMERIC, xmlPause.getLength().floatValue() / 1000.0f));
+            builder.append(new Pause(PauseLength.NUMERIC, xmlPause.getLength().floatValue()));
         }
     }
 

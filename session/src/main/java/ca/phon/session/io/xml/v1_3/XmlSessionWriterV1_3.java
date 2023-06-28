@@ -153,47 +153,6 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 				// should not happen
 			}
 		}
-//		for(int i = 0; i < session.getRecordCount(); i++) {
-//			final Record record = session.getRecord(i);
-//
-//			// insert comments first
-//			for(int j = 0; j < record.getNumberOfComments(); j++) {
-//				final Comment com = record.getComment(j);
-//				final CommentType ct = copyComment(factory, com);
-//				transcript.getROrComment().add(ct);
-//			}
-//
-//			// copy record data
-//			try {
-//				final RecordType rt = copyRecord(factory, retVal, record);
-//
-//				rt.setId(record.getUuid().toString());
-//
-//				if(record.isExcludeFromSearches())
-//					rt.setExcludeFromSearches(record.isExcludeFromSearches());
-//
-//				// setup participant
-//				if(record.getSpeaker() != null) {
-//					for(ParticipantType pt:parts.getParticipant()) {
-//						if(pt.getId().equals(record.getSpeaker().getId())) {
-//							rt.setSpeaker(pt);
-//							break;
-//						}
-//					}
-//				}
-//
-//				transcript.getROrComment().add(rt);
-//			} catch (Exception e) {
-//				// catch all record-specific errors and recover
-//				LOGGER.error( "Record #" + (i+1) + " " + e.getLocalizedMessage(), e);
-//				SerializationWarnings warnings = session.getExtension(SerializationWarnings.class);
-//				if(warnings == null) {
-//					warnings = new SerializationWarnings();
-//					session.putExtension(SerializationWarnings.class, warnings);
-//				}
-//				warnings.add(new SerializationWarning(i, e));
-//			}
-//		}
 
 		for(int tcIdx = 0; tcIdx < session.getMetadata().getNumberOfTrailingComments(); tcIdx++) {
 			final Comment com = session.getMetadata().getTrailingComment(tcIdx);
@@ -507,9 +466,22 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 		return retVal;
 	}
 
+	private XmlParticipantType findXmlParticipant(XmlSessionType sessionType, Participant participant) {
+		for(XmlParticipantType participantType:sessionType.getParticipants().getParticipant()) {
+			if(participantType.getId().equals(participant.getId())) {
+				return participantType;
+			}
+		}
+		return null;
+	}
+
 	// record
 	private XmlRecordType copyRecord(ObjectFactory factory, XmlSessionType session, Record record) {
 		final XmlRecordType retVal = factory.createXmlRecordType();
+
+		retVal.setId(record.getUuid().toString());
+		if(record.getSpeaker() != Participant.UNKNOWN)
+			retVal.setSpeaker(findXmlParticipant(session, record.getSpeaker()));
 
 		retVal.setExcludeFromSearches(record.isExcludeFromSearches());
 
