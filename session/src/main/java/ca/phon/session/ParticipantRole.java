@@ -69,48 +69,6 @@ public enum ParticipantRole {
 	NARRATOR("Narrator", "NAR"),
 	SPEAKER("Speaker", "SPE"),
 	AUDIENCE("Audience", "AUD"),
-	
-	/*
-	 * Removed as of TalkBank 2.10.0
-	 */
-	@Deprecated
-	AUNT("Aunt", "AUN"),
-	@Deprecated
-	BABYSITTER("Babysitter", "SIT"),
-	@Deprecated
-	CALLER("Caller", "CAL"),
-	@Deprecated
-	CAMERA_OPERATOR("Camera Operator", "CAM"),
-	@Deprecated
-	CLINICIAN("Clinician", "CLI"),
-	@Deprecated
-	COUSIN("Cousin", "COU"),
-	@Deprecated
-	FAMILY_FRIEND("Family Friend", "FAM"),
-	@Deprecated
-	HOUSEKEEPER("Housekeeper", "HOU"),
-	@Deprecated
-	INTERVIEWER("Interviewer", "INT"),
-	@Deprecated
-	JUDGE("Judge", "JUD"),
-	@Deprecated
-	NON_HUMAN("Non Human", "NOH"),
-	@Deprecated
-	OBSERVER("Observer", "OBS"),
-	@Deprecated
-	OFFSCRIPT("Offscript", "OFF"),
-	@Deprecated
-	OPERATOR("Operator", "OPR"),
-	@Deprecated
-	PATIENT("Patient", "PAT"),
-	@Deprecated
-	SHOWGUEST("ShowGuest", "SHG"),
-	@Deprecated
-	SHOWHOST("ShowHost", "SHO"),
-	@Deprecated
-	TOY("Toy", "TOY"),
-	@Deprecated
-	UNCLE("Uncle", "UNC")
 	;
 
 	private String title;

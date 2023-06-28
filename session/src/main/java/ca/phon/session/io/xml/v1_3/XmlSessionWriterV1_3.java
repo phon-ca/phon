@@ -263,8 +263,59 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 
 		ParticipantRole prole = part.getRole();
 		if(prole == null)
-			prole = ParticipantRole.TARGET_CHILD;
-		retVal.setRole(prole.toString());
+			prole = ParticipantRole.PARTICIPANT;
+		XmlParticipantRoleType role = switch (prole) {
+			case ADULT -> XmlParticipantRoleType.ADULT;
+			case ATTORNEY -> XmlParticipantRoleType.ATTORNEY;
+			case AUDIENCE -> XmlParticipantRoleType.AUDIENCE;
+			case BOY -> XmlParticipantRoleType.BOY;
+			case BROTHER -> XmlParticipantRoleType.BROTHER;
+			case CARETAKER -> XmlParticipantRoleType.CARETAKER;
+			case CHILD -> XmlParticipantRoleType.CHILD;
+			case DOCTOR -> XmlParticipantRoleType.DOCTOR;
+			case ENVIRONMENT -> XmlParticipantRoleType.ENVIRONMENT;
+			case FATHER -> XmlParticipantRoleType.FATHER;
+			case FEMALE -> XmlParticipantRoleType.FEMALE;
+			case FRIEND -> XmlParticipantRoleType.FRIEND;
+			case GIRL -> XmlParticipantRoleType.GIRL;
+			case GRANDFATHER -> XmlParticipantRoleType.GRANDFATHER;
+			case GRANDMOTHER -> XmlParticipantRoleType.GRANDMOTHER;
+			case GROUP -> XmlParticipantRoleType.GROUP;
+			case GUEST -> XmlParticipantRoleType.GUEST;
+			case HOST -> XmlParticipantRoleType.HOST;
+			case INFORMANT -> XmlParticipantRoleType.INFORMANT;
+			case INVESTIGATOR -> XmlParticipantRoleType.INVESTIGATOR;
+			case JUSTICE -> XmlParticipantRoleType.JUSTICE;
+			case LEADER -> XmlParticipantRoleType.LEADER;
+			case LENA -> XmlParticipantRoleType.LENA;
+			case MALE -> XmlParticipantRoleType.MALE;
+			case MEDIA -> XmlParticipantRoleType.MEDIA;
+			case MEMBER -> XmlParticipantRoleType.MEMBER;
+			case MOTHER -> XmlParticipantRoleType.MOTHER;
+			case NARRATOR -> XmlParticipantRoleType.NARRATOR;
+			case NURSE -> XmlParticipantRoleType.NURSE;
+			case OTHER -> XmlParticipantRoleType.OTHER;
+			case PARTICIPANT -> XmlParticipantRoleType.PARTICIPANT;
+			case PARTNER -> XmlParticipantRoleType.PARTNER;
+			case PLAYMATE -> XmlParticipantRoleType.PLAYMATE;
+			case PLAYROLE -> XmlParticipantRoleType.PLAY_ROLE;
+			case RELATIVE -> XmlParticipantRoleType.RELATIVE;
+			case SIBLING -> XmlParticipantRoleType.SIBLING;
+			case SISTER -> XmlParticipantRoleType.SISTER;
+			case SPEAKER -> XmlParticipantRoleType.SPEAKER;
+			case STUDENT -> XmlParticipantRoleType.STUDENT;
+			case SUBJECT -> XmlParticipantRoleType.SUBJECT;
+			case TARGET_ADULT -> XmlParticipantRoleType.TARGET_ADULT;
+			case TARGET_CHILD -> XmlParticipantRoleType.TARGET_CHILD;
+			case TEACHER -> XmlParticipantRoleType.TEACHER;
+			case TEENAGER -> XmlParticipantRoleType.TEENAGER;
+			case TEXT -> XmlParticipantRoleType.TEXT;
+			case THERAPIST -> XmlParticipantRoleType.THERAPIST;
+			case UNCERTAIN -> XmlParticipantRoleType.UNCERTAIN;
+			case UNIDENTIFIED -> XmlParticipantRoleType.UNIDENTIFIED;
+			case VISITOR -> XmlParticipantRoleType.VISITOR;
+		};
+		retVal.setRole(role);
 
 		// create ID based on role if possible
 		if(retVal.getId() == null && prole != null) {
@@ -274,8 +325,6 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 				retVal.setId("MOT");
 			} else if(prole == ParticipantRole.FATHER) {
 				retVal.setId("FAT");
-			} else if(prole == ParticipantRole.INTERVIEWER) {
-				retVal.setId("INT");
 			} else {
 				retVal.setId("p" + (++pIdx));
 			}

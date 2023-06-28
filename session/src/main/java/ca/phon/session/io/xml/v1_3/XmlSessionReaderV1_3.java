@@ -255,11 +255,58 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		else
 			retVal.setSex(Sex.UNSPECIFIED);
 
-		ParticipantRole prole = ParticipantRole.fromString(pt.getRole());
-		if(prole == null)
-			prole = ParticipantRole.TARGET_CHILD;
+		ParticipantRole prole = switch (pt.getRole()) {
+			case ADULT -> ParticipantRole.ADULT;
+			case ATTORNEY -> ParticipantRole.ATTORNEY;
+			case AUDIENCE -> ParticipantRole.AUDIENCE;
+			case BOY -> ParticipantRole.BOY;
+			case BROTHER -> ParticipantRole.BROTHER;
+			case CARETAKER -> ParticipantRole.CARETAKER;
+			case CHILD -> ParticipantRole.CHILD;
+			case DOCTOR -> ParticipantRole.DOCTOR;
+			case ENVIRONMENT -> ParticipantRole.ENVIRONMENT;
+			case FATHER -> ParticipantRole.FATHER;
+			case FEMALE -> ParticipantRole.FEMALE;
+			case FRIEND -> ParticipantRole.FRIEND;
+			case GIRL -> ParticipantRole.GIRL;
+			case GRANDFATHER -> ParticipantRole.GRANDFATHER;
+			case GRANDMOTHER -> ParticipantRole.GRANDMOTHER;
+			case GROUP -> ParticipantRole.GROUP;
+			case GUEST -> ParticipantRole.GUEST;
+			case HOST -> ParticipantRole.HOST;
+			case INFORMANT -> ParticipantRole.INFORMANT;
+			case INVESTIGATOR -> ParticipantRole.INVESTIGATOR;
+			case JUSTICE -> ParticipantRole.JUSTICE;
+			case LEADER -> ParticipantRole.LEADER;
+			case LENA -> ParticipantRole.LENA;
+			case MALE -> ParticipantRole.MALE;
+			case MEDIA -> ParticipantRole.MEDIA;
+			case MEMBER -> ParticipantRole.MEMBER;
+			case MOTHER -> ParticipantRole.MOTHER;
+			case NARRATOR -> ParticipantRole.NARRATOR;
+			case NURSE -> ParticipantRole.NURSE;
+			case OTHER -> ParticipantRole.OTHER;
+			case PARTICIPANT -> ParticipantRole.PARTICIPANT;
+			case PARTNER -> ParticipantRole.PARTNER;
+			case PLAYMATE -> ParticipantRole.PLAYMATE;
+			case PLAY_ROLE -> ParticipantRole.PLAYROLE;
+			case RELATIVE -> ParticipantRole.RELATIVE;
+			case SIBLING -> ParticipantRole.SIBLING;
+			case SISTER -> ParticipantRole.SISTER;
+			case SPEAKER -> ParticipantRole.SPEAKER;
+			case STUDENT -> ParticipantRole.STUDENT;
+			case SUBJECT -> ParticipantRole.SUBJECT;
+			case TARGET_ADULT -> ParticipantRole.TARGET_ADULT;
+			case TARGET_CHILD -> ParticipantRole.TARGET_CHILD;
+			case TEACHER -> ParticipantRole.TEACHER;
+			case TEENAGER -> ParticipantRole.TEENAGER;
+			case TEXT -> ParticipantRole.TEXT;
+			case THERAPIST -> ParticipantRole.THERAPIST;
+			case UNCERTAIN -> ParticipantRole.UNCERTAIN;
+			case UNIDENTIFIED -> ParticipantRole.UNIDENTIFIED;
+			case VISITOR -> ParticipantRole.VISITOR;
+		};
 		retVal.setRole(prole);
-
 		retVal.setSES(pt.getSES());
 
 		if(pt.getOther() != null) {

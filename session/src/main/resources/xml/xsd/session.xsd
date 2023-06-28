@@ -140,8 +140,8 @@
     </xs:simpleType>
 
     <xs:element name="participant" type="participantType"/>
-    <xs:element name="role" type="xs:string"/>
     <xs:element name="name" type="xs:string"/>
+    <xs:element name="role" type="participantRoleType"/>
     <xs:element name="group" type="xs:string"/>
     <xs:element name="sex" type="sexType"/>
     <xs:element name="SES" type="xs:string"/>
@@ -173,6 +173,66 @@
         <!-- Changed id to xs:ID for constraints -->
         <xs:attribute name="id" type="xs:ID" use="required"/>
     </xs:complexType>
+
+    <xs:simpleType name="participantRoleType">
+        <xs:annotation>
+            <xs:documentation>List of possible participant roles</xs:documentation>
+            <xs:documentation>
+                <a href="http://childes.talkbank.org/manuals/chat.html#Role">CHAT manual section on this topic...</a>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Target_Child"/>
+            <xs:enumeration value="Target_Adult"/>
+            <xs:enumeration value="Child"/>
+            <xs:enumeration value="Mother"/>
+            <xs:enumeration value="Father"/>
+            <xs:enumeration value="Brother"/>
+            <xs:enumeration value="Sister"/>
+            <xs:enumeration value="Sibling"/>
+            <xs:enumeration value="Grandfather"/>
+            <xs:enumeration value="Grandmother"/>
+            <xs:enumeration value="Relative"/>
+            <xs:enumeration value="Participant"/>
+            <xs:enumeration value="Therapist"/>
+            <xs:enumeration value="Informant"/>
+            <xs:enumeration value="Subject"/>
+            <xs:enumeration value="Investigator"/>
+            <xs:enumeration value="Partner"/>
+            <xs:enumeration value="Boy"/>
+            <xs:enumeration value="Girl"/>
+            <xs:enumeration value="Adult"/>
+            <xs:enumeration value="Teenager"/>
+            <xs:enumeration value="Male"/>
+            <xs:enumeration value="Female"/>
+            <xs:enumeration value="Visitor"/>
+            <xs:enumeration value="Friend"/>
+            <xs:enumeration value="Playmate"/>
+            <xs:enumeration value="Caretaker"/>
+            <xs:enumeration value="Environment"/>
+            <xs:enumeration value="Group"/>
+            <xs:enumeration value="Unidentified"/>
+            <xs:enumeration value="Uncertain"/>
+            <xs:enumeration value="Other"/>
+            <xs:enumeration value="Text"/>
+            <xs:enumeration value="Media"/>
+            <xs:enumeration value="PlayRole"/>
+            <xs:enumeration value="LENA"/>
+            <xs:enumeration value="Justice"/>
+            <xs:enumeration value="Attorney"/>
+            <xs:enumeration value="Doctor"/>
+            <xs:enumeration value="Nurse"/>
+            <xs:enumeration value="Student"/>
+            <xs:enumeration value="Teacher"/>
+            <xs:enumeration value="Host"/>
+            <xs:enumeration value="Guest"/>
+            <xs:enumeration value="Leader"/>
+            <xs:enumeration value="Member"/>
+            <xs:enumeration value="Narrator"/>
+            <xs:enumeration value="Speaker"/>
+            <xs:enumeration value="Audience"/>
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:simpleType name="ageType">
         <xs:restriction base="xs:duration">
