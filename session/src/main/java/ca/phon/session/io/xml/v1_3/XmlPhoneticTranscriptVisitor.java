@@ -15,6 +15,8 @@ public class XmlPhoneticTranscriptVisitor extends VisitorAdapter<Object> {
 
     final IPATranscriptBuilder builder = new IPATranscriptBuilder();
 
+    final IPAElementFactory factory = new IPAElementFactory();
+
     @Visits
     public void visitPw(XmlPhoneticWord pw) {
         if(builder.size() > 0)
@@ -115,21 +117,21 @@ public class XmlPhoneticTranscriptVisitor extends VisitorAdapter<Object> {
 
     @Visits
     public void visitProsody(XmlPhoneticProsodyType ppType) {
-        final String p = switch (ppType.getType()) {
-            case PAUSE, BLOCKING -> "^";
-            case CMP -> "+";
-            case SYLLABLE_BREAK -> ".";
-            case MAJOR_INTONATION_GROUP -> "‖";
-            case MINOR_INTONATION_GROUP -> "|";
+        final IPAElement p = switch (ppType.getType()) {
+            case PAUSE, BLOCKING -> factory.createIntraWordPause();
+            case CMP -> factory.createCompoundWordMarker();
+            case SYLLABLE_BREAK -> factory.createSyllableBoundary();
+            case MAJOR_INTONATION_GROUP -> factory.createMajorIntonationGroup();
+            case MINOR_INTONATION_GROUP -> factory.createMinorIntonationGroup();
         };
         builder.append(p);
     }
 
     @Visits
     public void visitSandhi(XmlSandhiType sandhiType) {
-        final String tie = switch (sandhiType.getType()) {
-            case LINKER -> "‿";
-            case CONTRACTION -> "⁀";
+        final IPAElement tie = switch (sandhiType.getType()) {
+            case LINKER -> factory.createLinker();
+            case CONTRACTION -> factory.createContraction();
         };
         builder.append(tie);
     }
