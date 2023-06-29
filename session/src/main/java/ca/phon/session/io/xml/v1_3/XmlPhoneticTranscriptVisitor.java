@@ -42,11 +42,13 @@ public class XmlPhoneticTranscriptVisitor extends VisitorAdapter<Object> {
 
         final Character basePhone = phoneType.getBase().charAt(0);
 
-        final List<Character> combiningDiacriticChars = phoneType.getSuffix() != null
-                ? phoneType.getSuffix().stream().map(s -> s.charAt(0)).toList()
-                : new ArrayList<>();
-        final Diacritic[] combiningDiacritics =
-                combiningDiacriticChars.stream().map(factory::createDiacritic).toArray(Diacritic[]::new);
+        final List<Character> combiningDiacriticChars = new ArrayList<>();
+        if(phoneType.getCombining() != null) {
+            for(String comb:phoneType.getCombining()) {
+                combiningDiacriticChars.add(comb.charAt(0));
+            }
+        }
+        final Diacritic[] combiningDiacritics = combiningDiacriticChars.stream().map(factory::createDiacritic).toArray(Diacritic[]::new);
 
         final List<Character> lengthDiacriticChars = new ArrayList<>();
         if(phoneType.getPhlen() != null) {
