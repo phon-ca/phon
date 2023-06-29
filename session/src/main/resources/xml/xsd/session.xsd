@@ -25,7 +25,7 @@
         <!-- constraints -->
         <xs:key name="uIDKey">
             <xs:selector xpath="transcript/r"/>
-            <xs:field xpath="@id"/>
+            <xs:field xpath="@uuid"/>
         </xs:key>
 
         <xs:key name="partIDKey">
@@ -116,8 +116,8 @@
         </xs:sequence>
 
         <!-- ID = session name in Phon -->
-        <xs:attribute name="id" type="xs:ID"/>
-        <xs:attribute name="corpus" type="xs:string"/>
+        <xs:attribute name="name" type="nonemptyStringType"/>
+        <xs:attribute name="corpus" type="nonemptyStringType"/>
         <xs:attribute name="version" type="xs:string"/>
     </xs:complexType>
 
@@ -743,7 +743,7 @@
             <xs:element ref="userTier" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="speaker" type="xs:IDREF"/>
-        <xs:attribute name="id" type="xs:ID"/>
+        <xs:attribute name="uuid" type="nonemptyStringType"/>
         <xs:attribute name="excludeFromSearches" type="xs:boolean" default="false"/>
     </xs:complexType>
 

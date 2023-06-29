@@ -119,7 +119,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		final Session retVal = factory.createSession();
 
 		// copy header info
-		retVal.setName(xmlSessionType.getId());
+		retVal.setName(xmlSessionType.getName());
 		retVal.setCorpus(xmlSessionType.getCorpus());
 
 		if(xmlSessionType.getMedia() != null && xmlSessionType.getMedia().length() > 0) {
@@ -192,7 +192,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 					try {
 						record = factory.createRecord(new LazyRecord(factory, retVal, rt));
 					} catch (Exception e) {
-						LOGGER.info(rt.getId());
+						LOGGER.info(rt.getUuid());
 						LOGGER.error(
 								e.getLocalizedMessage(), e);
 
@@ -432,8 +432,8 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		retVal.setExcludeFromSearches(rt.isExcludeFromSearches());
 
 		try {
-			if(rt.getId() != null) {
-				UUID uuid = UUID.fromString(rt.getId());
+			if(rt.getUuid() != null) {
+				UUID uuid = UUID.fromString(rt.getUuid());
 				retVal.setUuid(uuid);
 			}
 		} catch (IllegalArgumentException e) {

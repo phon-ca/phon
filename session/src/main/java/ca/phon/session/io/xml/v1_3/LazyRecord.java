@@ -37,7 +37,7 @@ public final class LazyRecord implements RecordSPI {
 
 	public UUID getUuid() {
 		if(internalRecord == null) {
-			final String idStr = recordElement.getId();
+			final String idStr = recordElement.getUuid();
 			return UUID.fromString(idStr);
 		} else {
 			return internalRecord.getUuid();

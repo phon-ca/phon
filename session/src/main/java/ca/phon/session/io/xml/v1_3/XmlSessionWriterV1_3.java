@@ -79,7 +79,7 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 
 		// header data
 		retVal.setVersion("1.3");
-		retVal.setId(session.getName());
+		retVal.setName(session.getName());
 		retVal.setCorpus(session.getCorpus());
 
 		if(session.getMediaLocation() != null && session.getMediaLocation().length() > 0) {
@@ -479,7 +479,7 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 	private XmlRecordType copyRecord(ObjectFactory factory, XmlSessionType session, Record record) {
 		final XmlRecordType retVal = factory.createXmlRecordType();
 
-		retVal.setId(record.getUuid().toString());
+		retVal.setUuid(record.getUuid().toString());
 		if(record.getSpeaker() != Participant.UNKNOWN)
 			retVal.setSpeaker(findXmlParticipant(session, record.getSpeaker()));
 
