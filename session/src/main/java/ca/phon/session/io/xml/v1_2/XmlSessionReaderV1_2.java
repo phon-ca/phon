@@ -433,7 +433,8 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 		for(GroupTierType gtt:rt.getGroupTier()) {
 			final TierDescription td = session.getUserTier(gtt.getTierName());
 			if(td == null) {
-				throw new IllegalStateException("User tier not found in session " + gtt.getTierName());
+				//LOGGER.warning("User tier " + gtt.getTierName() + " not in session tier list");
+				continue;
 			}
 			final Tier<UserTierData> userTier = factory.createTier(gtt.getTierName(), UserTierData.class,
 					new TierAlignmentRules(new TypeAlignmentRules()));

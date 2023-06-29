@@ -28,6 +28,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -60,8 +61,10 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 		if(phLen.length() > 0) phoneType.setPhlen(phLen);
 		String toneNum = Arrays.stream(phone.getToneNumberDiacritics()).map(Diacritic::getText).collect(Collectors.joining());
 		if(toneNum.length() > 0) phoneType.setToneNumber(toneNum);
-		if(phone.getSuffixDiacritics().length > 0)
-			Arrays.stream(phone.getSuffixDiacritics()).map(Diacritic::getText).forEach(phoneType.getSuffix()::add);
+		final List<Diacritic> filteredSuffixDiacritics =
+				Arrays.stream(phone.getSuffixDiacritics()).filter(d -> d.getType() == DiacriticType.SUFFIX).toList();
+		if(filteredSuffixDiacritics.size() > 0)
+			filteredSuffixDiacritics.stream().map(Diacritic::getText).forEach(phoneType.getSuffix()::add);
 		if(phone.getScType() != SyllableConstituentType.UNKNOWN) {
 			XmlSyllableConstituentType scType = switch (phone.getScType()) {
 				case AMBISYLLABIC -> XmlSyllableConstituentType.AMBISYLLABIC;
