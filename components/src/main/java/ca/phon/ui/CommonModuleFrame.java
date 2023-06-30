@@ -41,8 +41,6 @@ import java.util.*;
  */
 public class CommonModuleFrame extends JFrame implements IExtendable {
 
-	private static final long serialVersionUID = 2112769368100535156L;
-
 	private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(CommonModuleFrame.class.getName());
 
 	/**
@@ -158,6 +156,7 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 	 */
 	public CommonModuleFrame(String title) {
 		super(title);
+		this.windowName = title;
 		
 		super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
