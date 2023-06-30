@@ -739,15 +739,17 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 		final Integer[][] alignmentData = new Integer[2][];
 		alignmentData[0] = new Integer[alignLength];
 		alignmentData[1] = new Integer[alignLength];
+		int alignOffset = 0;
 		for(AlignmentType at:att.getAg()) {
 			for(int i = 0; i < at.getPhomap().size(); i++) {
 				final MappingType mt = at.getPhomap().get(i);
 				alignmentData[0][alignIdx] =
-						(mt.getValue().size() > 0 ? mt.getValue().get(0) : null);
+						(mt.getValue().size() > 0 ? mt.getValue().get(0) >= 0 ? mt.getValue().get(0) + alignOffset : -1 : null);
 				alignmentData[1][alignIdx] =
-						(mt.getValue().size() > 1 ? mt.getValue().get(1) : null);
+						(mt.getValue().size() > 1 ? mt.getValue().get(1) >= 0 ? mt.getValue().get(1) + alignOffset : -1 :  null);
 				++alignIdx;
 			}
+			alignOffset = alignIdx-1;
 		}
 		pm.setTopAlignment(alignmentData[0]);
 		pm.setBottomAlignment(alignmentData[1]);
