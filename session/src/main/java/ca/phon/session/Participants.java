@@ -61,6 +61,21 @@ public final class Participants extends ExtendableObject implements Iterable<Par
 		}
 		
 	}
+
+	/**
+	 * Return participant for given id
+	 *
+	 * @param id
+	 * @return participant with given id or null
+	 */
+	public Participant getParticipantById(String id) {
+		for(Participant p:this) {
+			if(p.getId().equals(id)) {
+				return p;
+			}
+		}
+		return null;
+	}
 	
 	@Override
 	public void accept(Visitor<Participant> visitor) {
