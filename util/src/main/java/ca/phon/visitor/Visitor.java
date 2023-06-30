@@ -21,6 +21,7 @@ package ca.phon.visitor;
  * 
  * @param T the base type of the objects to visit
  */
+@FunctionalInterface
 public interface Visitor<T> {
 	
 	/**
