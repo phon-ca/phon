@@ -119,7 +119,8 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 			final XmlTranscriberType trt = writeTranscriber(factory, tr);
 			tt.getTranscriber().add(trt);
 		}
-		retVal.setTranscribers(tt);
+		if(session.getTranscriberCount() > 0)
+			retVal.setTranscribers(tt);
 
 		// tier info/ordering
 		final XmlUserTiersType utt = factory.createXmlUserTiersType();
@@ -144,10 +145,10 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 			final var ele = session.getTranscript().getElementAt(i);
 			if(ele.isComment()) {
 				final Comment comment = ele.asComment();
-				final XmlCommentType commentType = copyComment(factory, comment);
+				final XmlCommentType commentType = writeComment(factory, comment);
 				transcript.getROrCommentOrGem().add(commentType);
 			} else if(ele.isRecord()) {
-				final XmlRecordType recordType = copyRecord(factory, retVal, ele.asRecord());
+				final XmlRecordType recordType = writeRecord(factory, retVal, ele.asRecord());
 				transcript.getROrCommentOrGem().add(recordType);
 			} else {
 				// should not happen
@@ -156,7 +157,7 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 
 		for(int tcIdx = 0; tcIdx < session.getMetadata().getNumberOfTrailingComments(); tcIdx++) {
 			final Comment com = session.getMetadata().getTrailingComment(tcIdx);
-			final XmlCommentType ct = copyComment(factory, com);
+			final XmlCommentType ct = writeComment(factory, com);
 			transcript.getROrCommentOrGem().add(ct);
 		}
 
@@ -203,13 +204,16 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 			}
 		}
 
-		retVal.setEducation(part.getEducation());
-		retVal.setGroup(part.getGroup());
+		if(part.getEducation() != null && part.getEducation().length() > 0)
+			retVal.setEducation(part.getEducation());
+		if(part.getGroup() != null && part.getGroup().length() > 0)
+			retVal.setGroup(part.getGroup());
 
 		final String lang = part.getLanguage();
-		final String langs[] = (lang != null ? lang.split(",") : new String[0]);
+		final String langs[] = (lang != null ? lang.split(" ") : new String[0]);
 		for(String l:langs) {
-			retVal.getLanguages().add(StringUtils.strip(l));
+			if(l.trim().length() > 0)
+				retVal.getLanguages().add(StringUtils.strip(l));
 		}
 
 		if(part.getFirstLanguage() != null)
@@ -394,7 +398,7 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 	}
 
 	// copy comment data
-	private XmlCommentType copyComment(ObjectFactory factory, Comment com) {
+	private XmlCommentType writeComment(ObjectFactory factory, Comment com) {
 		final XmlCommentType retVal = factory.createXmlCommentType();
 		final XmlCommentTypeType ct = switch (com.getType()) {
 			case Activities -> XmlCommentTypeType.ACTIVITIES;
@@ -476,7 +480,7 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 	}
 
 	// record
-	private XmlRecordType copyRecord(ObjectFactory factory, XmlSessionType session, Record record) {
+	private XmlRecordType writeRecord(ObjectFactory factory, XmlSessionType session, Record record) {
 		final XmlRecordType retVal = factory.createXmlRecordType();
 
 		retVal.setUuid(record.getUuid().toString());
@@ -492,20 +496,20 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 
 		// ipa
 		final Tier<IPATranscript> ipaTarget = record.getIPATargetTier();
-		if(ipaTarget.hasValue()) {
+		if(ipaTarget.hasValue() && ipaTarget.getValue().length() > 0) {
 			final XmlIpaTierType targetType = writeIPATier(factory, ipaTarget);
 			retVal.setIpaTarget(targetType);
 		}
 
 		final Tier<IPATranscript> ipaActual = record.getIPAActualTier();
-		if(ipaActual.hasValue()) {
+		if(ipaActual.hasValue() && ipaActual.getValue().length() > 0) {
 			final XmlIpaTierType actualType = writeIPATier(factory, ipaActual);
 			retVal.setIpaActual(actualType);
 		}
 
 		// notes
 		final Tier<UserTierData> notesTier = record.getNotesTier();
-		if(notesTier.hasValue()) {
+		if(notesTier.hasValue() && notesTier.getValue().length() > 0) {
 			final XmlNotesTierType notesTierType = writeNotesTier(factory, notesTier);
 			retVal.setNotes(notesTierType);
 		}
@@ -516,7 +520,7 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 
 		// alignment
 		final Tier<PhoneAlignment> alignmentTier = record.getPhoneAlignmentTier();
-		if(alignmentTier != null) {
+		if(alignmentTier != null && alignmentTier.getValue().getAlignments().size() > 0) {
 			final XmlAlignmentTierType att = writeAlignmentTier(factory, record, alignmentTier);
 			retVal.setAlignment(att);
 		}

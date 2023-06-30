@@ -107,10 +107,10 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element ref="participants"/>
-            <xs:element ref="transcribers"/>
-            <xs:element ref="userTiers"/>
-            <xs:element ref="tierOrder"/>
+            <xs:element ref="participants" minOccurs="0"/>
+            <xs:element ref="transcribers" minOccurs="0"/>
+            <xs:element ref="userTiers" minOccurs="0"/>
+            <xs:element ref="tierOrder" minOccurs="0"/>
             <xs:element ref="transcript"/>
             <xs:element ref="timeline" minOccurs="0"/>
         </xs:sequence>
