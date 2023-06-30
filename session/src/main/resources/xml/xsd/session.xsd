@@ -3329,13 +3329,23 @@
     </xs:simpleType>
 
     <!-- timeline -->
+    <xs:element name="recordTimelineTier" type="nonemptyStringType"/>
     <xs:element name="timeline" type="timelineType"/>
     <xs:complexType name="timelineType">
         <xs:annotation>
-            <xs:documentation></xs:documentation>
+            <xs:documentation>Timeline information for the session.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element ref="timelineTier" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="recordTimelineTier" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>Name of record tier. Inline media segments from the tier will be displayed in the timeline view.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element ref="timelineTier" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>Session level timeline information unassociated with record data</xs:documentation>
+                </xs:annotation>
+            </xs:element>
         </xs:sequence>
         <xs:attribute name="length" type="xs:float" use="required"/>
         <xs:attribute name="unit" type="mediaUnitType" use="required"/>
