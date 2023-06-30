@@ -13,9 +13,6 @@ public enum CommentType {
     Transcription("Transcription"),
     Types("Types"),
     Blank("Blank"),
-    Bg("Bg"), // begin-gem
-    Eg("Eg"), // end-gem
-    G("G"), // lazy-gem
     T("T"),
     Generic("Generic"),
     Location("Location"),

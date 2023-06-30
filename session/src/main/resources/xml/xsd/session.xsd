@@ -465,8 +465,16 @@
         <xs:annotation>
             <xs:documentation></xs:documentation>
         </xs:annotation>
-        <xs:attribute name="type" use="required" type="beginEndSimpleType"/>
+        <xs:attribute name="type" use="required" type="beginEndLazyType"/>
     </xs:complexType>
+
+    <xs:simpleType name="beginEndLazyType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="begin"/>
+            <xs:enumeration value="end"/>
+            <xs:enumeration value="lazy"/>
+        </xs:restriction>
+    </xs:simpleType>
 
     <!-- Comments - Comments types are derived from the CHAT transcription format -->
     <xs:element name="comment" type="commentType"/>
@@ -685,39 +693,6 @@
                     <xs:documentation> Page. </xs:documentation>
                     <xs:documentation>
                         <a href="https://talkbank.org/manuals/CHAT.html#Page_Header">CHAT manual section
-                            on this topic...</a>
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:enumeration>
-
-            <!-- Phon includes gems as comment types -->
-            <xs:enumeration value="BeginGem">
-                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                    <xs:documentation> Begin a gem (requires matching end of gem). </xs:documentation>
-                    <xs:documentation>
-                        <a href="https://talkbank.org/manuals/CHAT.html#Bg_Header">CHAT manual section
-                            on this topic...</a>
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:enumeration>
-
-            <xs:enumeration value="EndGem">
-                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                    <xs:documentation> End a gem (requires earlier begin of gem). </xs:documentation>
-                    <xs:documentation>
-                        <a href="https://talkbank.org/manuals/CHAT.html#Eg_Header">CHAT manual section
-                            on this topic...</a>
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:enumeration>
-
-            <xs:enumeration value="LazyGem">
-                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                    <xs:documentation> Begin a lazy gem; does not require a matching end gem, but its
-                        scope is up to the next lazy gem header, or the end of the transcript if there is no
-                        further lazy gem header. </xs:documentation>
-                    <xs:documentation>
-                        <a href="https://talkbank.org/manuals/CHAT.html#G_Header">CHAT manual section
                             on this topic...</a>
                     </xs:documentation>
                 </xs:annotation>

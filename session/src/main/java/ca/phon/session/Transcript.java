@@ -1,5 +1,6 @@
 package ca.phon.session;
 
+import ca.phon.GemType;
 import ca.phon.extensions.ExtendableObject;
 import ca.phon.session.spi.TranscriptSPI;
 
@@ -13,15 +14,24 @@ public final class Transcript extends ExtendableObject {
     public final static class Element {
         final Comment comment;
         final Record record;
+        final Gem gem;
 
         Element(Comment comment) {
             this.comment = comment;
             this.record = null;
+            this.gem = null;
         }
 
         Element(Record record) {
             this.record = record;
             this.comment = null;
+            this.gem = null;
+        }
+
+        Element(Gem gem) {
+            this.record = null;
+            this.comment = null;
+            this.gem = gem;
         }
 
         public boolean isComment() { return this.comment != null; }
@@ -32,15 +42,23 @@ public final class Transcript extends ExtendableObject {
 
         public Record asRecord() { return this.record; }
 
+        public boolean isGem() { return this.gem != null; }
+
+        public Gem asGem() { return this.gem; }
+
         @Override
         public int hashCode() {
-            return (isComment() ? asComment().hashCode() : asRecord().hashCode());
+            return (isComment()
+                    ? asComment().hashCode() : isGem()
+                        ? asGem().hashCode() : asRecord().hashCode());
         }
 
         @Override
         public boolean equals(Object obj) {
             if(!(obj instanceof Element)) return false;
-            return (isComment() ? asComment() == ((Element)obj).asComment() : asRecord() == ((Element)obj).asRecord());
+            return (isComment()
+                    ? asComment() == ((Element)obj).asComment() : isGem()
+                        ? asGem() == ((Element)obj).asGem() : asRecord() == ((Element)obj).asRecord());
         }
     }
 
@@ -126,7 +144,7 @@ public final class Transcript extends ExtendableObject {
     }
 
     /**
-     * Add a new record to end of the transcript
+     * Add a new comment to end of the transcript
      *
      * @param comment
      */
@@ -159,6 +177,79 @@ public final class Transcript extends ExtendableObject {
             return removeElement(eleIdx).asComment();
         }
         return null;
+    }
+
+    /**
+     * Add a new gem to the end of the transcript
+     *
+     * @param gem
+     */
+    public void addGem(Gem gem) { addElement(new Element(gem)); }
+
+    /**
+     * Add gem at given position in transcript
+     *
+     * @param elementIndex
+     * @param gem
+     */
+    public void addGem(int elementIndex, Gem gem) {
+        addElement(elementIndex, new Element(gem));
+    }
+
+    public Gem removeGem(Gem gem) {
+        int eleIdx = getElementIndex(new Element(gem));
+        if(eleIdx >= 0) {
+            return removeElement(eleIdx).asGem();
+        }
+        return null;
+    }
+
+    /**
+     * Return element index for start of given gem label
+     *
+     * @param label
+     * @return element index of BeginGem (@Bg) or -1 if not found
+     */
+    public int findBeginGem(String label) {
+        for(int i = 0; i < getNumberOfElements(); i++) {
+            final Element ele = getElementAt(i);
+            if(ele.isGem() && ele.asGem().getType() == GemType.Begin && ele.asGem().getLabel().equals(label)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Return element index for end of given gem label
+     *
+     * @param label
+     * @return element index of EndGem (@Eg) or -1 if not found
+     */
+    public int findEndGem(String label) {
+        for(int i = 0; i < getNumberOfElements(); i++) {
+            final Element ele = getElementAt(i);
+            if(ele.isGem() && ele.asGem().getType() == GemType.End && ele.asGem().getLabel().equals(label)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Return element index for lazy gem with given label
+     *
+     * @param label
+     * @return element index of EndGem (@Eg) or -1 if not found
+     */
+    public int findLazyGem(String label) {
+        for(int i = 0; i < getNumberOfElements(); i++) {
+            final Element ele = getElementAt(i);
+            if(ele.isGem() && ele.asGem().getType() == GemType.Lazy && ele.asGem().getLabel().equals(label)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     /**

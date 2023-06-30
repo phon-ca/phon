@@ -147,6 +147,9 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 				final Comment comment = ele.asComment();
 				final XmlCommentType commentType = writeComment(factory, comment);
 				transcript.getROrCommentOrGem().add(commentType);
+			} else if(ele.isGem()) {
+				final XmlGemType gemType = writeGem(factory, ele.asGem());
+				transcript.getROrCommentOrGem().add(gemType);
 			} else if(ele.isRecord()) {
 				final XmlRecordType recordType = writeRecord(factory, retVal, ele.asRecord());
 				transcript.getROrCommentOrGem().add(recordType);
@@ -397,17 +400,26 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 		return segType;
 	}
 
+	private XmlGemType writeGem(ObjectFactory factory, Gem gem) {
+		final XmlBeginEndLazyType type = switch (gem.getType()) {
+			case End -> XmlBeginEndLazyType.END;
+			case Lazy -> XmlBeginEndLazyType.LAZY;
+			case Begin -> XmlBeginEndLazyType.BEGIN;
+		};
+		final XmlGemType retVal = factory.createXmlGemType();
+		retVal.setType(type);
+		retVal.setContent(gem.getLabel());
+		return retVal;
+	}
+
 	// copy comment data
 	private XmlCommentType writeComment(ObjectFactory factory, Comment com) {
 		final XmlCommentType retVal = factory.createXmlCommentType();
 		final XmlCommentTypeType ct = switch (com.getType()) {
 			case Activities -> XmlCommentTypeType.ACTIVITIES;
 			case Bck -> XmlCommentTypeType.BCK;
-			case Bg -> XmlCommentTypeType.BEGIN_GEM;
 			case Blank -> XmlCommentTypeType.BLANK;
 			case Date -> XmlCommentTypeType.DATE;
-			case Eg -> XmlCommentTypeType.END_GEM;
-			case G -> XmlCommentTypeType.LAZY_GEM;
 			case Generic -> XmlCommentTypeType.GENERIC;
 			case Location -> XmlCommentTypeType.LOCATION;
 			case NewEpisode -> XmlCommentTypeType.NEW_EPISODE;

@@ -15,6 +15,7 @@
  */
 package ca.phon.session;
 
+import ca.phon.GemType;
 import ca.phon.extensions.ExtendableObject;
 import ca.phon.plugin.*;
 import ca.phon.session.io.*;
@@ -195,6 +196,10 @@ public final class SessionFactory extends ExtendableObject {
 		retVal.setType(comment.getType());
 		retVal.setValue(comment.getValue());
 		return retVal;
+	}
+
+	public Gem createGem(GemType gem, String label) {
+		return new Gem(gem, label);
 	}
 
 	public Transcript createSessionTranscript() {

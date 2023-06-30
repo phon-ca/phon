@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Gregory Hedlund & Yvan Rose
+ * Copyright (C) 2005-2023 Gregory Hedlund & Yvan Rose
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package ca.phon.session.io.xml.v1_3;
 
+import ca.phon.GemType;
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.PhoneMap;
@@ -186,6 +187,13 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 				if(uOrComment instanceof XmlCommentType ct) {
 					final Comment comment = readComment(factory, ct);
 					retVal.getTranscript().addComment(comment);
+				} else if(uOrComment instanceof XmlGemType gt) {
+					final GemType type = switch (gt.getType()) {
+						case BEGIN -> GemType.Begin;
+						case END -> GemType.End;
+						case LAZY -> GemType.Lazy;
+					};
+					retVal.getTranscript().addGem(factory.createGem(type, gt.getContent()));
 				} else {
 					final XmlRecordType rt = (XmlRecordType) uOrComment;
 					Record record = null;
@@ -199,7 +207,6 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 					}
 					retVal.addRecord(record);
 				}
-				// TODO: gems
 			}
 		}
 
@@ -401,12 +408,9 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		final CommentType type = switch (ct.getType()) {
 			case ACTIVITIES -> CommentType.Activities;
 			case BCK -> CommentType.Bck;
-			case BEGIN_GEM -> CommentType.Bg;
 			case BLANK -> CommentType.Blank;
 			case DATE -> CommentType.Date;
-			case END_GEM -> CommentType.Eg;
 			case GENERIC -> CommentType.Generic;
-			case LAZY_GEM -> CommentType.G;
 			case LOCATION -> CommentType.Location;
 			case NEW_EPISODE -> CommentType.NewEpisode;
 			case NUMBER -> CommentType.Number;
