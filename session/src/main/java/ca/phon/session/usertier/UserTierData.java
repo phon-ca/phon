@@ -47,6 +47,8 @@ public final class UserTierData extends ExtendableObject {
         return elements.size();
     }
 
+    public int length() { return elements.size(); }
+
     public UserTierElement elementAt(int index) {
         return elements.get(index);
     }
