@@ -91,6 +91,11 @@ public class RemoteProject extends AbstractProject {
 	}
 
 	@Override
+	public void addCorpus(String name) throws IOException {
+		addCorpus(name, "");
+	}
+
+	@Override
 	public void addCorpus(String name, String description) throws IOException {
 		throw new IOException(new UnsupportedOperationException());
 	}

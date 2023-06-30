@@ -103,6 +103,14 @@ public interface Project extends IExtendable {
 	public List<String> getCorpora();
 
 	/**
+	 * Add corpus with given name
+	 *
+	 * @param nbame
+	 * @throws IOException
+	 */
+	public void addCorpus(String name) throws IOException;
+
+	/**
 	 * Add a new corpus with the specified name.
 	 *
 	 * @param name

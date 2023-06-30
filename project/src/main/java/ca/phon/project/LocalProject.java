@@ -271,6 +271,11 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 	}
 
 	@Override
+	public void addCorpus(String name) throws IOException {
+		addCorpus(name, "");
+	}
+
+	@Override
 	public void addCorpus(String name, String description) throws IOException {
 		final File corpusFolder = new File(getFolder(), name);
 		if(corpusFolder.exists()) {
@@ -279,6 +284,10 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 
 		if(!corpusFolder.mkdirs()) {
 			throw new IOException("Unable to create corpus folder.");
+		}
+
+		if(description != null && description.trim().length() > 0) {
+			setCorpusDescription(name, description);
 		}
 
 		final ProjectEvent pe = ProjectEvent.newCorpusAddedEvent(name);
