@@ -1,0 +1,658 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Schema documentation for </title>
+      <link rel="stylesheet" href="docHtml.css" type="text/css" /><script type="text/javascript"><!--
+        
+      
+        var button_prefix = 'button_';
+        
+        /**
+        * Returns an element in the current HTML document.
+        *
+        * @param elementID Identifier of HTML element
+        * @return               HTML element object
+        */
+        function getElementObject(elementID) {
+            var elemObj = null;
+            if (document.getElementById) {
+                elemObj = document.getElementById(elementID);
+            }
+            return elemObj;
+        }
+        
+        /**
+        * Switches the state of a collapseable box, e.g.
+        * if it's opened, it'll be closed, and vice versa.
+        *
+        * @param boxID Identifier of box
+        */
+        function switchState(boxID) {
+            var boxObj = getElementObject(boxID);
+            var buttonObj = getElementObject(button_prefix + boxID);
+            if (boxObj == null || buttonObj == null) {
+                // Box or button not found
+            } else if (boxObj.style.display == "none") {
+                // Box is closed, so open it
+                openBox(boxObj, buttonObj);
+            } else if (boxObj.style.display == "block") {
+                // Box is opened, so close it
+                closeBox(boxObj, buttonObj);
+            }
+        }
+        
+        /**
+        * Opens a collapseable box.
+        *
+        * @param boxObj       Collapseable box
+        * @param buttonObj Button controlling box
+        */
+        function openBox(boxObj, buttonObj) {
+            if (boxObj == null || buttonObj == null) {
+                // Box or button not found
+            } else {
+                // Change 'display' CSS property of box
+                boxObj.style.display = "block";
+                
+                // Change text of button
+                if (boxObj.style.display == "block") {
+                    buttonObj.src = "img/btM.gif";
+                }
+            }
+        }
+        
+        /**
+        * Closes a collapseable box.
+        *
+        * @param boxObj       Collapseable box
+        * @param buttonObj Button controlling box
+        */
+        function closeBox(boxObj, buttonObj) {
+            if (boxObj == null || buttonObj == null) {
+                // Box or button not found
+            } else {
+                // Change 'display' CSS property of box
+                boxObj.style.display = "none";
+                
+                // Change text of button
+                if (boxObj.style.display == "none") {
+                    buttonObj.src = "img/btP.gif";
+                }
+            }
+        }
+    
+       function switchStateForAll(buttonObj, boxList) {
+            if (buttonObj == null) {
+                // button not found
+            } else if (buttonObj.value == "+") {
+                // Expand all
+                expandAll(boxList);
+                buttonObj.value = "-";
+            } else if (buttonObj.value == "-") {
+                // Collapse all
+                collapseAll(boxList);
+                buttonObj.value = "+";
+            }
+        }
+        
+        /**
+        * Closes all boxes in a given list.
+        *
+        * @param boxList Array of box IDs
+        */
+        function collapseAll(boxList) {
+            var idx;
+            for (idx = 0; idx < boxList.length; idx++) {
+                var boxObj = getElementObject(boxList[idx]);
+                var buttonObj = getElementObject(button_prefix + boxList[idx]);
+                closeBox(boxObj, buttonObj);
+            }
+        }
+            
+        /**
+        * Open all boxes in a given list.
+        *
+        * @param boxList Array of box IDs
+        */
+        function expandAll(boxList) {
+            var idx;
+            for (idx = 0; idx < boxList.length; idx++) {
+                var boxObj = getElementObject(boxList[idx]);
+                var buttonObj = getElementObject(button_prefix + boxList[idx]);
+                openBox(boxObj, buttonObj);
+            }
+        }
+        
+        /**
+         * Update the message presented in the title of the html page.
+         * - If the documentation was splited by namespace we present something like: "Documentation for namespace 'ns'"
+         * - If the documentation was splited by location we present somehing like: "Documentation for 'Schema.xsd'"
+         * - If no split we always present: "Documentation for 'MainSchema.xsd'"
+         */
+        function updatePageTitle(message) {
+            top.document.title = message;
+        }
+        
+          
+                    
+         /**
+          * Finds an HTML element by its ID and makes it floatable over the normal content.
+          *
+          * @param x_displacement The difference in pixels to the right side of the window from 
+          *           the left side of the element.
+          * @param y_displacement The difference in pixels to the right side of the window from 
+          *           the top of the element.          
+          */
+         function findAndFloat(id, x_displacement, y_displacement){
+
+            var element = getElementObject(id);            
+            
+            window[id + "_obj"] = element;
+            
+            if(document.layers) {
+               element.style = element;
+            }
+            
+            element.current_y = y_displacement;      
+            element.first_time = true;
+         
+            element.floatElement = function(){
+               // It may be closed by an user action.
+                
+               // Target X and Y coordinates.
+               var x, y;
+               
+               var myWidth = 0, myHeight = 0;
+               if( typeof( window.innerWidth ) == 'number' ) {
+                  //Non-IE
+                  myWidth = window.innerWidth;
+                  myHeight = window.innerHeight;
+               } else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
+                  //IE 6+ in 'standards compliant mode'
+                  myWidth = document.documentElement.clientWidth;
+                  myHeight = document.documentElement.clientHeight;
+               } else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
+                  //IE 4 compatible
+                  myWidth = document.body.clientWidth;
+                  myHeight = document.body.clientHeight;
+               }
+               
+               
+               x = myWidth - x_displacement;
+               
+               var ns = (navigator.appName.indexOf("Netscape") != -1);               
+               y = ns ? pageYOffset : document.documentElement && document.documentElement.scrollTop ? 
+                  document.documentElement.scrollTop : document.body.scrollTop;               
+               y = y + y_displacement;               
+               
+               // The current y is the current coordinate of the floating element.
+               // This should be at the limit the y target coordinate.
+               this.current_y += (y - this.current_y)/1.25;
+               
+               // Add the pixels constant after the values
+               // and move the element.
+               var px = document.layers ? "" : "px";
+               this.style.left =  x + px;
+               this.style.top =  this.current_y + px;
+                              
+               setTimeout(this.id + "_obj.floatElement()", 100);
+            }
+            
+            element.floatElement();
+            return element;
+          }
+
+         /**
+          * Finds an HTML element by its ID and makes it floatable over the normal content.
+          *
+          * @param x_displacement The difference in pixels to the right side of the window from 
+          *           the left side of the element.
+          * @param y_displacement The difference in pixels to the right side of the window from 
+          *           the top of the element.          
+          */
+         function selectTOCGroupBy(id, isChunked, indexFileLocation, indexFileNamespace, indexFileComponent){
+
+            if (!isChunked) {
+             var selectIds = new Array('toc_group_by_namespace', 'toc_group_by_location', 'toc_group_by_component_type');
+             // Make all the tabs invisible.
+               for (i = 0; i < 3; i++){
+                  var tab = getElementObject(selectIds[i]);
+                  tab.style.display = 'none';
+               }
+               var selTab = getElementObject(id);
+               selTab.style.display = 'block';
+            } else {
+             if (id == 'toc_group_by_namespace') {
+               parent.indexFrame.location = indexFileNamespace;
+             } else  if (id == 'toc_group_by_location') {
+               parent.indexFrame.location = indexFileLocation;
+             } else  if (id == 'toc_group_by_component_type') {
+              parent.indexFrame.location = indexFileComponent;
+             }
+            }
+         }
+          
+
+    
+                        //--></script></head>
+   <body>
+      <h2><a id="INDEX">Table of Contents</a></h2>
+      <div class="toc">
+         <form action="none">
+            <div><span> Group by: <select id="selectTOC" onchange="selectTOCGroupBy(this.options[this.selectedIndex].value, true, 'session.indexList.html', 'session.indexListns.html', 'session.indexListcomp.html');">
+                     <option value="toc_group_by_namespace" selected="selected">Namespace</option>
+                     <option value="toc_group_by_location">Location</option>
+                     <option value="toc_group_by_component_type">Component Type</option></select></span></div>
+         </form>
+         <div class="level1" id="toc_group_by_namespace" style="display:block">
+            <div>
+               <div class="level2">
+                  <p><input id="button_boxIdNamespace1" type="image" value="-" src="img/btM.gif" onclick="switchState('boxIdNamespace1');" class="control" /><span class="indexGroupTitle">https://phon.ca/ns/session</span></p>
+                  <div id="boxIdNamespace1" style="display:block">
+                     <div class="horizontalLayout">
+                        <table class="rt">
+                           <tr>
+                              <td class="rt_cornerTopLeft"></td>
+                              <td class="rt_lineTop"></td>
+                              <td class="rt_cornerTopRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_lineLeft"></td>
+                              <td class="rt_content">
+                                 <table class="componentGroup">
+                                    <tbody>
+                                       <tr>
+                                          <td class="componentGroup"><input id="button_boxIdNamespace1Main_schema" type="image" value="-" src="img/btM.gif" onclick="switchState('boxIdNamespace1Main_schema');" class="control" /></td>
+                                          <td class="componentGroup">
+                                             <div class="componentGroupTitle">Main Schema</div>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td class="componentGroup"></td>
+                                          <td class="componentGroup">
+                                             <div id="boxIdNamespace1Main_schema" class="componentGroup" style="display:block">
+                                                <div><b><a href="session_xsd.html#session.xsd" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">session.xsd</a></b></div>
+                                             </div>
+                                          </td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </td>
+                              <td class="rt_lineRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_cornerBottomLeft"></td>
+                              <td class="rt_lineBottom"></td>
+                              <td class="rt_cornerBottomRight"></td>
+                           </tr>
+                        </table>
+                     </div>
+                     <div class="horizontalLayout">
+                        <table class="rt">
+                           <tr>
+                              <td class="rt_cornerTopLeft"></td>
+                              <td class="rt_lineTop"></td>
+                              <td class="rt_cornerTopRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_lineLeft"></td>
+                              <td class="rt_content">
+                                 <table class="componentGroup">
+                                    <tbody>
+                                       <tr>
+                                          <td class="componentGroup"><input id="button_boxIdNamespace1Element" type="image" value="-" src="img/btM.gif" onclick="switchState('boxIdNamespace1Element');" class="control" /></td>
+                                          <td class="componentGroup">
+                                             <div class="componentGroupTitle">Elements</div>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td class="componentGroup"></td>
+                                          <td class="componentGroup">
+                                             <div id="boxIdNamespace1Element" class="componentGroup" style="display:block">
+                                                <div><b><a href="session_xsd.html#SES" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">SES</a></b></div>
+                                                <div><b><a href="session_xsd.html#action" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">action</a></b></div>
+                                                <div><b><a href="session_xsd.html#age" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">age</a></b></div>
+                                                <div><b><a href="session_xsd.html#alignWith" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">alignWith</a></b></div>
+                                                <div><b><a href="session_xsd.html#alignment" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">alignment</a></b></div>
+                                                <div><b><a href="session_xsd.html#ambiguous" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">ambiguous</a></b></div>
+                                                <div><b><a href="session_xsd.html#base" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">base</a></b></div>
+                                                <div><b><a href="session_xsd.html#birthday" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">birthday</a></b></div>
+                                                <div><b><a href="session_xsd.html#birthplace" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">birthplace</a></b></div>
+                                                <div><b><a href="session_xsd.html#blindTranscription" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">blindTranscription</a></b></div>
+                                                <div><b><a href="session_xsd.html#bottom" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">bottom</a></b></div>
+                                                <div><b><a href="session_xsd.html#c" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">c</a></b></div>
+                                                <div><b><a href="session_xsd.html#ca-delimiter" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">ca-delimiter</a></b></div>
+                                                <div><b><a href="session_xsd.html#ca-element" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">ca-element</a></b></div>
+                                                <div><b><a href="session_xsd.html#cmph" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">cmph</a></b></div>
+                                                <div><b><a href="session_xsd.html#combining" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">combining</a></b></div>
+                                                <div><b><a href="session_xsd.html#comment" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">comment</a></b></div>
+                                                <div><b><a href="session_xsd.html#date" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">date</a></b></div>
+                                                <div><b><a href="session_xsd.html#dictionary" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">dictionary</a></b></div>
+                                                <div><b><a href="session_xsd.html#duration" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">duration</a></b></div>
+                                                <div><b><a href="session_xsd.html#e" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">e</a></b></div>
+                                                <div><b><a href="session_xsd.html#education" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">education</a></b></div>
+                                                <div><b><a href="session_xsd.html#error" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">error</a></b></div>
+                                                <div><b><a href="session_xsd.html#first-language" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">first-language</a></b></div>
+                                                <div><b><a href="session_xsd.html#freecode" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">freecode</a></b></div>
+                                                <div><b><a href="session_xsd.html#g" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">g</a></b></div>
+                                                <div><b><a href="session_xsd.html#ga" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">ga</a></b></div>
+                                                <div><b><a href="session_xsd.html#gem" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">gem</a></b></div>
+                                                <div><b><a href="session_xsd.html#group" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">group</a></b></div>
+                                                <div><b><a href="session_xsd.html#happening" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">happening</a></b></div>
+                                                <div><b><a href="session_xsd.html#internal-media" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">internal-media</a></b></div>
+                                                <div><b><a href="session_xsd.html#interval" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">interval</a></b></div>
+                                                <div><b><a href="session_xsd.html#ipaActual" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">ipaActual</a></b></div>
+                                                <div><b><a href="session_xsd.html#ipaTarget" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">ipaTarget</a></b></div>
+                                                <div><b><a href="session_xsd.html#italic" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">italic</a></b></div>
+                                                <div><b><a href="session_xsd.html#k" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">k</a></b></div>
+                                                <div><b><a href="session_xsd.html#lang" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">lang</a></b></div>
+                                                <div><b><a href="session_xsd.html#langs" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">langs</a></b></div>
+                                                <div><b><a href="session_xsd.html#languages" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">languages</a></b></div>
+                                                <div><b><a href="session_xsd.html#lig" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">lig</a></b></div>
+                                                <div><b><a href="session_xsd.html#linker" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">linker</a></b></div>
+                                                <div><b><a href="session_xsd.html#long-feature" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">long-feature</a></b></div>
+                                                <div><b><a href="session_xsd.html#media" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">media</a></b></div>
+                                                <div><b><a href="session_xsd.html#multiple" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">multiple</a></b></div>
+                                                <div><b><a href="session_xsd.html#name" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">name</a></b></div>
+                                                <div><b><a href="session_xsd.html#nonvocal" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">nonvocal</a></b></div>
+                                                <div><b><a href="session_xsd.html#notes" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">notes</a></b></div>
+                                                <div><b><a href="session_xsd.html#orthography" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">orthography</a></b></div>
+                                                <div><b><a href="session_xsd.html#other" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">other</a></b></div>
+                                                <div><b><a href="session_xsd.html#otherSpokenEvent" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">otherSpokenEvent</a></b></div>
+                                                <div><b><a href="session_xsd.html#overlap" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">overlap</a></b></div>
+                                                <div><b><a href="session_xsd.html#overlap-point" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">overlap-point</a></b></div>
+                                                <div><b><a href="session_xsd.html#p" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">p</a></b></div>
+                                                <div><b><a href="session_xsd.html#param" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">param</a></b></div>
+                                                <div><b><a href="session_xsd.html#parseError" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">parseError</a></b></div>
+                                                <div><b><a href="session_xsd.html#participant" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">participant</a></b></div>
+                                                <div><b><a href="session_xsd.html#participants" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">participants</a></b></div>
+                                                <div><b><a href="session_xsd.html#password" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">password</a></b></div>
+                                                <div><b><a href="session_xsd.html#pause" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">pause</a></b></div>
+                                                <div><b><a href="session_xsd.html#pg" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">pg</a></b></div>
+                                                <div><b><a href="session_xsd.html#ph" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">ph</a></b></div>
+                                                <div><b><a href="session_xsd.html#phlen" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">phlen</a></b></div>
+                                                <div><b><a href="session_xsd.html#pho" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">pho</a></b></div>
+                                                <div><b><a href="session_xsd.html#pm" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">pm</a></b></div>
+                                                <div><b><a href="session_xsd.html#point" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">point</a></b></div>
+                                                <div><b><a href="session_xsd.html#pos" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">pos</a></b></div>
+                                                <div><b><a href="session_xsd.html#postcode" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">postcode</a></b></div>
+                                                <div><b><a href="session_xsd.html#pp" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">pp</a></b></div>
+                                                <div><b><a href="session_xsd.html#prefix" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">prefix</a></b></div>
+                                                <div><b><a href="session_xsd.html#pw" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">pw</a></b></div>
+                                                <div><b><a href="session_xsd.html#quotation" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">quotation</a></b></div>
+                                                <div><b><a href="session_xsd.html#r" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">r</a></b></div>
+                                                <div><b><a href="session_xsd.html#recordTimelineTier" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">recordTimelineTier</a></b></div>
+                                                <div><b><a href="session_xsd.html#replacement" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">replacement</a></b></div>
+                                                <div><b><a href="session_xsd.html#role" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">role</a></b></div>
+                                                <div><b><a href="session_xsd.html#s" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">s</a></b></div>
+                                                <div><b><a href="session_xsd.html#sandhi" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">sandhi</a></b></div>
+                                                <div><b><a href="session_xsd.html#segment" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">segment</a></b></div>
+                                                <div><b><a href="session_xsd.html#session" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">session</a></b></div>
+                                                <div><b><a href="session_xsd.html#sex" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">sex</a></b></div>
+                                                <div><b><a href="session_xsd.html#shortening" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">shortening</a></b></div>
+                                                <div><b><a href="session_xsd.html#single" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">single</a></b></div>
+                                                <div><b><a href="session_xsd.html#stress" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">stress</a></b></div>
+                                                <div><b><a href="session_xsd.html#subc" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">subc</a></b></div>
+                                                <div><b><a href="session_xsd.html#suffix" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">suffix</a></b></div>
+                                                <div><b><a href="session_xsd.html#syllabifier" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">syllabifier</a></b></div>
+                                                <div><b><a href="session_xsd.html#t" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">t</a></b></div>
+                                                <div><b><a href="session_xsd.html#tagMarker" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">tagMarker</a></b></div>
+                                                <div><b><a href="session_xsd.html#tc" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">tc</a></b></div>
+                                                <div><b><a href="session_xsd.html#td" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">td</a></b></div>
+                                                <div><b><a href="session_xsd.html#tierAlignment" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">tierAlignment</a></b></div>
+                                                <div><b><a href="session_xsd.html#tierData" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">tierData</a></b></div>
+                                                <div><b><a href="session_xsd.html#tierOrder" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">tierOrder</a></b></div>
+                                                <div><b><a href="session_xsd.html#tierParameters" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">tierParameters</a></b></div>
+                                                <div><b><a href="session_xsd.html#tierView" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">tierView</a></b></div>
+                                                <div><b><a href="session_xsd.html#timeline" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">timeline</a></b></div>
+                                                <div><b><a href="session_xsd.html#timelineTier" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">timelineTier</a></b></div>
+                                                <div><b><a href="session_xsd.html#tone-marker" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">tone-marker</a></b></div>
+                                                <div><b><a href="session_xsd.html#toneNumber" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">toneNumber</a></b></div>
+                                                <div><b><a href="session_xsd.html#top" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">top</a></b></div>
+                                                <div><b><a href="session_xsd.html#transcriber" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">transcriber</a></b></div>
+                                                <div><b><a href="session_xsd.html#transcribers" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">transcribers</a></b></div>
+                                                <div><b><a href="session_xsd.html#transcript" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">transcript</a></b></div>
+                                                <div><b><a href="session_xsd.html#tw" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">tw</a></b></div>
+                                                <div><b><a href="session_xsd.html#u" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">u</a></b></div>
+                                                <div><b><a href="session_xsd.html#underline" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">underline</a></b></div>
+                                                <div><b><a href="session_xsd.html#unparsed" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">unparsed</a></b></div>
+                                                <div><b><a href="session_xsd.html#unparsedValue" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">unparsedValue</a></b></div>
+                                                <div><b><a href="session_xsd.html#userTier" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">userTier</a></b></div>
+                                                <div><b><a href="session_xsd.html#userTiers" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">userTiers</a></b></div>
+                                                <div><b><a href="session_xsd.html#w" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">w</a></b></div>
+                                                <div><b><a href="session_xsd.html#wk" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">wk</a></b></div>
+                                             </div>
+                                          </td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </td>
+                              <td class="rt_lineRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_cornerBottomLeft"></td>
+                              <td class="rt_lineBottom"></td>
+                              <td class="rt_cornerBottomRight"></td>
+                           </tr>
+                        </table>
+                     </div>
+                     <div class="horizontalLayout">
+                        <table class="rt">
+                           <tr>
+                              <td class="rt_cornerTopLeft"></td>
+                              <td class="rt_lineTop"></td>
+                              <td class="rt_cornerTopRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_lineLeft"></td>
+                              <td class="rt_content">
+                                 <table class="componentGroup">
+                                    <tbody>
+                                       <tr>
+                                          <td class="componentGroup"><input id="button_boxIdNamespace1Complex_Type" type="image" value="-" src="img/btM.gif" onclick="switchState('boxIdNamespace1Complex_Type');" class="control" /></td>
+                                          <td class="componentGroup">
+                                             <div class="componentGroupTitle">Complex Types</div>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td class="componentGroup"></td>
+                                          <td class="componentGroup">
+                                             <div id="boxIdNamespace1Complex_Type" class="componentGroup" style="display:block">
+                                                <div><b><a href="session_xsd.html#SessionType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">SessionType</a></b></div>
+                                                <div><b><a href="session_xsd.html#actionType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">actionType</a></b></div>
+                                                <div><b><a href="session_xsd.html#alignmentTierType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">alignmentTierType</a></b></div>
+                                                <div><b><a href="session_xsd.html#baseTerminatorType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">baseTerminatorType</a></b></div>
+                                                <div><b><a href="session_xsd.html#blindTranscriptionType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">blindTranscriptionType</a></b></div>
+                                                <div><b><a href="session_xsd.html#caDelimiterType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">caDelimiterType</a></b></div>
+                                                <div><b><a href="session_xsd.html#caElementType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">caElementType</a></b></div>
+                                                <div><b><a href="session_xsd.html#categoryType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">categoryType</a></b></div>
+                                                <div><b><a href="session_xsd.html#commentType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">commentType</a></b></div>
+                                                <div><b><a href="session_xsd.html#compoundPhoneType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">compoundPhoneType</a></b></div>
+                                                <div><b><a href="session_xsd.html#compoundType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">compoundType</a></b></div>
+                                                <div><b><a href="session_xsd.html#durationType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">durationType</a></b></div>
+                                                <div><b><a href="session_xsd.html#errorType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">errorType</a></b></div>
+                                                <div><b><a href="session_xsd.html#eventType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">eventType</a></b></div>
+                                                <div><b><a href="session_xsd.html#freecodeType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">freecodeType</a></b></div>
+                                                <div><b><a href="session_xsd.html#gemType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">gemType</a></b></div>
+                                                <div><b><a href="session_xsd.html#groupAnnotationType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">groupAnnotationType</a></b></div>
+                                                <div><b><a href="session_xsd.html#groupType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">groupType</a></b></div>
+                                                <div><b><a href="session_xsd.html#happeningType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">happeningType</a></b></div>
+                                                <div><b><a href="session_xsd.html#intervalType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">intervalType</a></b></div>
+                                                <div><b><a href="session_xsd.html#ipaTierType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">ipaTierType</a></b></div>
+                                                <div><b><a href="session_xsd.html#italicType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">italicType</a></b></div>
+                                                <div><b><a href="session_xsd.html#langsType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">langsType</a></b></div>
+                                                <div><b><a href="session_xsd.html#ligatureType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">ligatureType</a></b></div>
+                                                <div><b><a href="session_xsd.html#linkerType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">linkerType</a></b></div>
+                                                <div><b><a href="session_xsd.html#longFeatureType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">longFeatureType</a></b></div>
+                                                <div><b><a href="session_xsd.html#markerType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">markerType</a></b></div>
+                                                <div><b><a href="session_xsd.html#mediaType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">mediaType</a></b></div>
+                                                <div><b><a href="session_xsd.html#nonvocalType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">nonvocalType</a></b></div>
+                                                <div><b><a href="session_xsd.html#notesTierType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">notesTierType</a></b></div>
+                                                <div><b><a href="session_xsd.html#orthographyTierType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">orthographyTierType</a></b></div>
+                                                <div><b><a href="session_xsd.html#otherSpokenEventType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">otherSpokenEventType</a></b></div>
+                                                <div><b><a href="session_xsd.html#overlapPointType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">overlapPointType</a></b></div>
+                                                <div><b><a href="session_xsd.html#overlapType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">overlapType</a></b></div>
+                                                <div><b><a href="session_xsd.html#parseErrorType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">parseErrorType</a></b></div>
+                                                <div><b><a href="session_xsd.html#participantType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">participantType</a></b></div>
+                                                <div><b><a href="session_xsd.html#participantsType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">participantsType</a></b></div>
+                                                <div><b><a href="session_xsd.html#passwordType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">passwordType</a></b></div>
+                                                <div><b><a href="session_xsd.html#pauseType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">pauseType</a></b></div>
+                                                <div><b><a href="session_xsd.html#phoneMapType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">phoneMapType</a></b></div>
+                                                <div><b><a href="session_xsd.html#phoneType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">phoneType</a></b></div>
+                                                <div><b><a href="session_xsd.html#phoneticGroupType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">phoneticGroupType</a></b></div>
+                                                <div><b><a href="session_xsd.html#phoneticProsodyType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">phoneticProsodyType</a></b></div>
+                                                <div><b><a href="session_xsd.html#phoneticTranscriptionType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">phoneticTranscriptionType</a></b></div>
+                                                <div><b><a href="session_xsd.html#phoneticWord" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">phoneticWord</a></b></div>
+                                                <div><b><a href="session_xsd.html#pointType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">pointType</a></b></div>
+                                                <div><b><a href="session_xsd.html#posType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">posType</a></b></div>
+                                                <div><b><a href="session_xsd.html#postcodeType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">postcodeType</a></b></div>
+                                                <div><b><a href="session_xsd.html#prosodyType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">prosodyType</a></b></div>
+                                                <div><b><a href="session_xsd.html#quotationType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">quotationType</a></b></div>
+                                                <div><b><a href="session_xsd.html#recordType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">recordType</a></b></div>
+                                                <div><b><a href="session_xsd.html#replacementType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">replacementType</a></b></div>
+                                                <div><b><a href="session_xsd.html#sandhiType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">sandhiType</a></b></div>
+                                                <div><b><a href="session_xsd.html#separatorType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">separatorType</a></b></div>
+                                                <div><b><a href="session_xsd.html#shorteningType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">shorteningType</a></b></div>
+                                                <div><b><a href="session_xsd.html#stressType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">stressType</a></b></div>
+                                                <div><b><a href="session_xsd.html#subcategoryType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">subcategoryType</a></b></div>
+                                                <div><b><a href="session_xsd.html#tagMarkerType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">tagMarkerType</a></b></div>
+                                                <div><b><a href="session_xsd.html#tierAlignmentRules" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">tierAlignmentRules</a></b></div>
+                                                <div><b><a href="session_xsd.html#tierCommentType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">tierCommentType</a></b></div>
+                                                <div><b><a href="session_xsd.html#tierDescriptionType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">tierDescriptionType</a></b></div>
+                                                <div><b><a href="session_xsd.html#tierOrderType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">tierOrderType</a></b></div>
+                                                <div><b><a href="session_xsd.html#tierParameterType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">tierParameterType</a></b></div>
+                                                <div><b><a href="session_xsd.html#tierParametersType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">tierParametersType</a></b></div>
+                                                <div><b><a href="session_xsd.html#tierViewType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">tierViewType</a></b></div>
+                                                <div><b><a href="session_xsd.html#tierWordType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">tierWordType</a></b></div>
+                                                <div><b><a href="session_xsd.html#timelineTierType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">timelineTierType</a></b></div>
+                                                <div><b><a href="session_xsd.html#timelineType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">timelineType</a></b></div>
+                                                <div><b><a href="session_xsd.html#toneMarkerType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">toneMarkerType</a></b></div>
+                                                <div><b><a href="session_xsd.html#transcriberType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">transcriberType</a></b></div>
+                                                <div><b><a href="session_xsd.html#transcribersType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">transcribersType</a></b></div>
+                                                <div><b><a href="session_xsd.html#transcriptType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">transcriptType</a></b></div>
+                                                <div><b><a href="session_xsd.html#underlineType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">underlineType</a></b></div>
+                                                <div><b><a href="session_xsd.html#unparsedData" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">unparsedData</a></b></div>
+                                                <div><b><a href="session_xsd.html#userTierData" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">userTierData</a></b></div>
+                                                <div><b><a href="session_xsd.html#userTierType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">userTierType</a></b></div>
+                                                <div><b><a href="session_xsd.html#userTiersType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">userTiersType</a></b></div>
+                                                <div><b><a href="session_xsd.html#utteranceType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">utteranceType</a></b></div>
+                                                <div><b><a href="session_xsd.html#wType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">wType</a></b></div>
+                                             </div>
+                                          </td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </td>
+                              <td class="rt_lineRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_cornerBottomLeft"></td>
+                              <td class="rt_lineBottom"></td>
+                              <td class="rt_cornerBottomRight"></td>
+                           </tr>
+                        </table>
+                     </div>
+                     <div class="horizontalLayout">
+                        <table class="rt">
+                           <tr>
+                              <td class="rt_cornerTopLeft"></td>
+                              <td class="rt_lineTop"></td>
+                              <td class="rt_cornerTopRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_lineLeft"></td>
+                              <td class="rt_content">
+                                 <table class="componentGroup">
+                                    <tbody>
+                                       <tr>
+                                          <td class="componentGroup"><input id="button_boxIdNamespace1Simple_Type" type="image" value="-" src="img/btM.gif" onclick="switchState('boxIdNamespace1Simple_Type');" class="control" /></td>
+                                          <td class="componentGroup">
+                                             <div class="componentGroupTitle">Simple Types</div>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td class="componentGroup"></td>
+                                          <td class="componentGroup">
+                                             <div id="boxIdNamespace1Simple_Type" class="componentGroup" style="display:block">
+                                                <div><b><a href="session_xsd.html#ageType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">ageType</a></b></div>
+                                                <div><b><a href="session_xsd.html#alignableType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">alignableType</a></b></div>
+                                                <div><b><a href="session_xsd.html#baseType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">baseType</a></b></div>
+                                                <div><b><a href="session_xsd.html#beginEndLazyType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">beginEndLazyType</a></b></div>
+                                                <div><b><a href="session_xsd.html#beginEndSimpleType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">beginEndSimpleType</a></b></div>
+                                                <div><b><a href="session_xsd.html#beginEndType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">beginEndType</a></b></div>
+                                                <div><b><a href="session_xsd.html#caDelimiterTypeType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">caDelimiterTypeType</a></b></div>
+                                                <div><b><a href="session_xsd.html#caElementTypeType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">caElementTypeType</a></b></div>
+                                                <div><b><a href="session_xsd.html#combiningDiacriticType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">combiningDiacriticType</a></b></div>
+                                                <div><b><a href="session_xsd.html#combiningDiacriticsType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">combiningDiacriticsType</a></b></div>
+                                                <div><b><a href="session_xsd.html#commentTypeType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">commentTypeType</a></b></div>
+                                                <div><b><a href="session_xsd.html#consonantType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">consonantType</a></b></div>
+                                                <div><b><a href="session_xsd.html#coverSymbol" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">coverSymbol</a></b></div>
+                                                <div><b><a href="session_xsd.html#groupAnnotationTypeType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">groupAnnotationTypeType</a></b></div>
+                                                <div><b><a href="session_xsd.html#ipaTierTypeType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">ipaTierTypeType</a></b></div>
+                                                <div><b><a href="session_xsd.html#languageType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">languageType</a></b></div>
+                                                <div><b><a href="session_xsd.html#languagesType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">languagesType</a></b></div>
+                                                <div><b><a href="session_xsd.html#ligatureTypeType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">ligatureTypeType</a></b></div>
+                                                <div><b><a href="session_xsd.html#linkerTypeType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">linkerTypeType</a></b></div>
+                                                <div><b><a href="session_xsd.html#listOfAlignableTypes" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">listOfAlignableTypes</a></b></div>
+                                                <div><b><a href="session_xsd.html#listOfIntegers" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">listOfIntegers</a></b></div>
+                                                <div><b><a href="session_xsd.html#listOfLanguages" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">listOfLanguages</a></b></div>
+                                                <div><b><a href="session_xsd.html#markerTypeType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">markerTypeType</a></b></div>
+                                                <div><b><a href="session_xsd.html#mediaUnitType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">mediaUnitType</a></b></div>
+                                                <div><b><a href="session_xsd.html#nonemptyStringType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">nonemptyStringType</a></b></div>
+                                                <div><b><a href="session_xsd.html#overlapTypeType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">overlapTypeType</a></b></div>
+                                                <div><b><a href="session_xsd.html#participantRoleType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">participantRoleType</a></b></div>
+                                                <div><b><a href="session_xsd.html#pauseNumericLengthType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">pauseNumericLengthType</a></b></div>
+                                                <div><b><a href="session_xsd.html#pauseSymbolicLengthType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">pauseSymbolicLengthType</a></b></div>
+                                                <div><b><a href="session_xsd.html#phoneLengthType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">phoneLengthType</a></b></div>
+                                                <div><b><a href="session_xsd.html#phoneticProsodyTypeType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">phoneticProsodyTypeType</a></b></div>
+                                                <div><b><a href="session_xsd.html#prefixDiacriticType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">prefixDiacriticType</a></b></div>
+                                                <div><b><a href="session_xsd.html#prefixDiacriticsType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">prefixDiacriticsType</a></b></div>
+                                                <div><b><a href="session_xsd.html#prosodyTypeType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">prosodyTypeType</a></b></div>
+                                                <div><b><a href="session_xsd.html#sandhiTypeType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">sandhiTypeType</a></b></div>
+                                                <div><b><a href="session_xsd.html#separatorTypeType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">separatorTypeType</a></b></div>
+                                                <div><b><a href="session_xsd.html#sexType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">sexType</a></b></div>
+                                                <div><b><a href="session_xsd.html#startEndType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">startEndType</a></b></div>
+                                                <div><b><a href="session_xsd.html#stressTypeType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">stressTypeType</a></b></div>
+                                                <div><b><a href="session_xsd.html#suffixDiacriticType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">suffixDiacriticType</a></b></div>
+                                                <div><b><a href="session_xsd.html#suffixDiacriticsType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">suffixDiacriticsType</a></b></div>
+                                                <div><b><a href="session_xsd.html#syllableConstituentType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">syllableConstituentType</a></b></div>
+                                                <div><b><a href="session_xsd.html#tagMarkerTypeType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">tagMarkerTypeType</a></b></div>
+                                                <div><b><a href="session_xsd.html#terminatorType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">terminatorType</a></b></div>
+                                                <div><b><a href="session_xsd.html#toneMarkerTypeType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">toneMarkerTypeType</a></b></div>
+                                                <div><b><a href="session_xsd.html#toneNumberType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">toneNumberType</a></b></div>
+                                                <div><b><a href="session_xsd.html#topBottomType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">topBottomType</a></b></div>
+                                                <div><b><a href="session_xsd.html#untranscribedType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">untranscribedType</a></b></div>
+                                                <div><b><a href="session_xsd.html#userTierTypeType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">userTierTypeType</a></b></div>
+                                                <div><b><a href="session_xsd.html#vowelType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">vowelType</a></b></div>
+                                                <div><b><a href="session_xsd.html#wkType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">wkType</a></b></div>
+                                                <div><b><a href="session_xsd.html#wordFormType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">wordFormType</a></b></div>
+                                                <div><b><a href="session_xsd.html#wordType" target="mainFrame" title="https://phon.ca/ns/session" onclick="updatePageTitle('Schema documentation for session.xsd')">wordType</a></b></div>
+                                             </div>
+                                          </td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </td>
+                              <td class="rt_lineRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_cornerBottomLeft"></td>
+                              <td class="rt_lineBottom"></td>
+                              <td class="rt_cornerBottomRight"></td>
+                           </tr>
+                        </table>
+                     </div>
+                     <div style="clear:left"></div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="footer">
+         <hr />
+         <div align="center">XML Schema documentation generated by <a href="http://www.oxygenxml.com" target="_parent"><span class="oXygenLogo"><span class="redX">&lt;</span>o<span class="redX">X</span>ygen<span class="redX">/&gt;</span></span></a><sup>®</sup> XML Editor.</div>
+      </div>
+   </body>
+</html>
