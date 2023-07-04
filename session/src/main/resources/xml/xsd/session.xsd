@@ -1027,8 +1027,21 @@
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[ᵐᶬⁿᶯᶮᵑᶰ]"/>
-            <xs:pattern value="[·ˀˁ˞ʰʱʻʼʽᵖᵇᵗᵈᵏᵍᶿˢᶻᶴᶾˣˠˤˡʳʴʵʶʷʲʸᶦᶷᵊ⁼ʾʿ˭ꜝꜞ˥˦˧˨˩˂˃˄˅ˬ˯˰˱˲˖˗˜]̵"/>
+            <xs:pattern value="[ᵐᶬⁿᶯᶮᵑᶰ][˸̥̣̤̃̊ͪ̇̈ͭͩͨͮͯͫͬͥͧͤͦͣ̽͝͠˹˺˻˼̚ꜛꜜ᷄᷅᷆᷇᷈᷉ˆˇˉˊˋ˵˶̀́̂̋̌̏˔˕͟͞˽˾˿̴̡̢̖̘̙̜̝̞̟̠̩̪̫̬̮̯̰̱̲̳̹̺̻̼͇͈͉͍͎͓͔͕͖̉̄̆̑̒̔̐̾̿͆͊͋͌͐͑͒͗]*">
+                <xs:annotation>
+                    <xs:documentation>Prefix diacritic + combining diacritics</xs:documentation>
+                </xs:annotation>
+            </xs:pattern>
+            <xs:pattern value="[·ˀˁ˞ʰʱʻʼʽᵖᵇᵗᵈᵏᵍᶿˢᶻᶴᶾˣˠˤˡʳʴʵʶʷʲʸᶦᶷᵊ⁼ʾʿ˭ꜝꜞ˥˦˧˨˩˂˃˄˅ˬ˯˰˱˲˖˗˜]̵[˸̥̣̤̃̊ͪ̇̈ͭͩͨͮͯͫͬͥͧͤͦͣ̽͝͠˹˺˻˼̚ꜛꜜ᷄᷅᷆᷇᷈᷉ˆˇˉˊˋ˵˶̀́̂̋̌̏˔˕͟͞˽˾˿̴̡̢̖̘̙̜̝̞̟̠̩̪̫̬̮̯̰̱̲̳̹̺̻̼͇͈͉͍͎͓͔͕͖̉̄̆̑̒̔̐̾̿͆͊͋͌͐͑͒͗]*">
+                <xs:annotation>
+                    <xs:documentation>Suffix diacritic + role reversal diacritic + combining diacritics</xs:documentation>
+                </xs:annotation>
+            </xs:pattern>
+            <xs:pattern value="[·ˀˁ˞ʰʱʻʼʽᵖᵇᵗᵈᵏᵍᶿˢᶻᶴᶾˣˠˤˡʳʴʵʶʷʲʸᶦᶷᵊ⁼ʾʿ˭ꜝꜞ˥˦˧˨˩˂˃˄˅ˬ˯˰˱˲˖˗˜][˸̥̣̤̃̊ͪ̇̈ͭͩͨͮͯͫͬͥͧͤͦͣ̽͝͠˹˺˻˼̚ꜛꜜ᷄᷅᷆᷇᷈᷉ˆˇˉˊˋ˵˶̀́̂̋̌̏˔˕͟͞˽˾˿̴̡̢̖̘̙̜̝̞̟̠̩̪̫̬̮̯̰̱̲̳̹̺̻̼͇͈͉͍͎͓͔͕͖̉̄̆̑̒̔̐̾̿͆͊͋͌͐͑͒͗]*[͜͢͡]">
+                <xs:annotation>
+                    <xs:documentation>Suffix diacritic + combining diacritics + ligature</xs:documentation>
+                </xs:annotation>
+            </xs:pattern>
         </xs:restriction>
     </xs:simpleType>
 
@@ -1060,8 +1073,21 @@
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[·ˀˁ˞ʰʱʻʼʽᵖᵇᵗᵈᵏᵍᶿˢᶻᶴᶾˣˠˤˡʳʴʵʶʷʲʸᶦᶷᵊ⁼ʾʿ˭ꜝꜞ˥˦˧˨˩˂˃˄˅ˬ˯˰˱˲˖˗˜]"/>
-            <xs:pattern value="[ᵐᶬⁿᶯᶮᵑᶰ]̵"/>
+            <xs:pattern value="[·ˀˁ˞ʰʱʻʼʽᵖᵇᵗᵈᵏᵍᶿˢᶻᶴᶾˣˠˤˡʳʴʵʶʷʲʸᶦᶷᵊ⁼ʾʿ˭ꜝꜞ˥˦˧˨˩˂˃˄˅ˬ˯˰˱˲˖˗˜][˸̥̣̤̃̊ͪ̇̈ͭͩͨͮͯͫͬͥͧͤͦͣ̽͝͠˹˺˻˼̚ꜛꜜ᷄᷅᷆᷇᷈᷉ˆˇˉˊˋ˵˶̀́̂̋̌̏˔˕͟͞˽˾˿̴̡̢̖̘̙̜̝̞̟̠̩̪̫̬̮̯̰̱̲̳̹̺̻̼͇͈͉͍͎͓͔͕͖̉̄̆̑̒̔̐̾̿͆͊͋͌͐͑͒͗]*">
+                <xs:annotation>
+                    <xs:documentation>Suffix diacritic + combining diacritics</xs:documentation>
+                </xs:annotation>
+            </xs:pattern>
+            <xs:pattern value="[ᵐᶬⁿᶯᶮᵑᶰ]̵[˸̥̣̤̃̊ͪ̇̈ͭͩͨͮͯͫͬͥͧͤͦͣ̽͝͠˹˺˻˼̚ꜛꜜ᷄᷅᷆᷇᷈᷉ˆˇˉˊˋ˵˶̀́̂̋̌̏˔˕͟͞˽˾˿̴̡̢̖̘̙̜̝̞̟̠̩̪̫̬̮̯̰̱̲̳̹̺̻̼͇͈͉͍͎͓͔͕͖̉̄̆̑̒̔̐̾̿͆͊͋͌͐͑͒͗]*">
+                <xs:annotation>
+                    <xs:documentation>Prefix diacritic + role reversal + combining diacritics</xs:documentation>
+                </xs:annotation>
+            </xs:pattern>
+            <xs:pattern value="[ᵐᶬⁿᶯᶮᵑᶰ][˸̥̣̤̃̊ͪ̇̈ͭͩͨͮͯͫͬͥͧͤͦͣ̽͝͠˹˺˻˼̚ꜛꜜ᷄᷅᷆᷇᷈᷉ˆˇˉˊˋ˵˶̀́̂̋̌̏˔˕͟͞˽˾˿̴̡̢̖̘̙̜̝̞̟̠̩̪̫̬̮̯̰̱̲̳̹̺̻̼͇͈͉͍͎͓͔͕͖̉̄̆̑̒̔̐̾̿͆͊͋͌͐͑͒͗]*[͜͢͡]">
+                <xs:annotation>
+                    <xs:documentation>Prefix diacritic + combining diacritics + ligature</xs:documentation>
+                </xs:annotation>
+            </xs:pattern>
         </xs:restriction>
     </xs:simpleType>
 
