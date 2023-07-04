@@ -902,7 +902,7 @@
                 <xs:annotation>
                     <xs:documentation>\u2016 - Major intonation group</xs:documentation>
                     <xs:documentation>
-                        <a href="https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#intonation_group"></a>
+                        <a href="https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#intonation_group">Phon manual section on this topic...</a>
                     </xs:documentation>
                 </xs:annotation>
             </xs:enumeration>
@@ -910,7 +910,7 @@
                 <xs:annotation>
                     <xs:documentation>\007c - Minor intonation group</xs:documentation>
                     <xs:documentation>
-                        <a href="https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#intonation_group"></a>
+                        <a href="https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#intonation_group">Phon manual section on this topic...</a>
                     </xs:documentation>
                 </xs:annotation>
             </xs:enumeration>
@@ -918,7 +918,7 @@
                 <xs:annotation>
                     <xs:documentation>+ - Compound word marker</xs:documentation>
                     <xs:documentation>
-                        <a href="https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#compound_word"></a>
+                        <a href="https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#compound_word">Phon manual section on this topic...</a>
                     </xs:documentation>
                 </xs:annotation>
             </xs:enumeration>
@@ -926,7 +926,7 @@
                 <xs:annotation>
                     <xs:documentation>^ - intra-word pause</xs:documentation>
                     <xs:documentation>
-                        <a href="https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#intra-word_pause"></a>
+                        <a href="https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#intra-word_pause">Phon manual section on this topic...</a>
                     </xs:documentation>
                 </xs:annotation>
             </xs:enumeration>
@@ -934,7 +934,7 @@
                 <xs:annotation>
                     <xs:documentation>^ - at beginning</xs:documentation>
                     <xs:documentation>
-                        <a href="https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#intra-word_pause"></a>
+                        <a href="https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#intra-word_pause">Phon manual section on this topic...</a>
                     </xs:documentation>
                 </xs:annotation>
             </xs:enumeration>
@@ -945,7 +945,7 @@
     <xs:complexType name="sandhiType">
         <xs:annotation>
             <xs:documentation>
-                <a href="https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#sandhi"></a>
+                <a href="https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#sandhi">Phon manual section on this topic...</a>
             </xs:documentation>
         </xs:annotation>
         <xs:attribute name="type" type="sandhiTypeType" use="required"/>
@@ -971,10 +971,10 @@
         <xs:annotation>
             <xs:documentation>Superscript tone number in a transcription</xs:documentation>
             <xs:documentation>
-                <a href="https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#phone__tone_number"></a>
+                <a href="https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#phone__tone_number">Phon manual section on this topic...</a>
             </xs:documentation>
             <xs:documentation>
-                <a href="https://www.phon.ca/phon-manual/transcription/ipa.html"></a>
+                <a href="https://www.phon.ca/phon-manual/transcription/ipa.html">Phon manual section on this topic...</a>
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
@@ -985,7 +985,7 @@
     <xs:simpleType name="vowelType">
         <xs:annotation>
             <xs:documentation>
-                <a href="https://www.phon.ca/phon-manual/transcription/ipa.html"></a>
+                <a href="https://www.phon.ca/phon-manual/transcription/ipa.html">Phon manual section on this topic...</a>
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
@@ -996,7 +996,7 @@
     <xs:simpleType name="consonantType">
         <xs:annotation>
             <xs:documentation>
-                <a href="https://www.phon.ca/phon-manual/transcription/ipa.html"></a>
+                <a href="https://www.phon.ca/phon-manual/transcription/ipa.html">Phon manual section on this topic...</a>
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
@@ -1007,7 +1007,7 @@
     <xs:simpleType name="coverSymbol">
         <xs:annotation>
             <xs:documentation>
-                <a href="https://www.phon.ca/phon-manual/transcription/ipa.html"></a>
+                <a href="https://www.phon.ca/phon-manual/transcription/ipa.html">Phon manual section on this topic...</a>
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
@@ -1023,7 +1023,7 @@
     <xs:simpleType name="prefixDiacriticType">
         <xs:annotation>
             <xs:documentation>
-                <a href="https://www.phon.ca/phon-manual/transcription/ipa.html"></a>
+                <a href="https://www.phon.ca/phon-manual/transcription/ipa.html">Phon manual section on this topic...</a>
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
@@ -1053,7 +1053,7 @@
     <xs:simpleType name="combiningDiacriticType">
         <xs:annotation>
             <xs:documentation>
-                <a href="https://www.phon.ca/phon-manual/transcription/ipa.html"></a>
+                <a href="https://www.phon.ca/phon-manual/transcription/ipa.html">Phon manual section on this topic...</a>
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
@@ -1069,7 +1069,7 @@
     <xs:simpleType name="suffixDiacriticType">
         <xs:annotation>
             <xs:documentation>
-                <a href="https://www.phon.ca/phon-manual/transcription/ipa.html"></a>
+                <a href="https://www.phon.ca/phon-manual/transcription/ipa.html">Phon manual section on this topic...</a>
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
@@ -1100,7 +1100,7 @@
     <xs:simpleType name="phoneLengthType">
         <xs:annotation>
             <xs:documentation>
-                <a href="https://www.phon.ca/phon-manual/transcription/ipa.html"></a>
+                <a href="https://www.phon.ca/phon-manual/transcription/ipa.html">Phon manual section on this topic...</a>
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
@@ -1114,7 +1114,7 @@
         <xs:annotation>
             <xs:documentation>A single phone in an ipa transcription including all diacritics</xs:documentation>
             <xs:documentation>
-                <a href="https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#phone"></a>
+                <a href="https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#phone">Phon manual section on this topic...</a>
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
@@ -1133,7 +1133,7 @@
         <xs:annotation>
             <xs:documentation>Ligature between compound phones</xs:documentation>
             <xs:documentation>
-                <a href="https://www.phon.ca/phon-manual/transcription/ipa.html"></a>
+                <a href="https://www.phon.ca/phon-manual/transcription/ipa.html">Phon manual section on this topic...</a>
             </xs:documentation>
         </xs:annotation>
         <xs:attribute name="type" type="ligatureTypeType"/>
@@ -1163,7 +1163,7 @@
     <xs:complexType name="compoundPhoneType">
         <xs:annotation>
             <xs:documentation>Phone composed of one or more phones connected by ligatures.</xs:documentation>
-            <xs:documentation><a href="https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#phone"></a></xs:documentation>
+            <xs:documentation><a href="https://www.phon.ca/phon-manual/transcription/ipa_transcription.html#phone">Phon manual section on this topic...</a></xs:documentation>
         </xs:annotation>
         <xs:sequence>
             <xs:choice>
@@ -1179,7 +1179,7 @@
         <xs:annotation>
             <xs:documentation>Syllable constituent type for a phone.</xs:documentation>
             <xs:documentation>
-                <a href="https://www.phon.ca/phon-manual/session_editor/syllabification_and_alignment_view.html?hl=syllabification"></a>
+                <a href="https://www.phon.ca/phon-manual/session_editor/syllabification_and_alignment_view.html?hl=syllabification">Phon manual section on this topic...</a>
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
@@ -1232,7 +1232,7 @@
         <xs:annotation>
             <xs:documentation>For IPA Target/Actual alignment.</xs:documentation>
             <xs:documentation>
-                <a href="https://www.phon.ca/phon-manual/session_editor/syllabification_and_alignment_view.html?hl=syllabification"></a>
+                <a href="https://www.phon.ca/phon-manual/session_editor/syllabification_and_alignment_view.html?hl=syllabification">Phon manual section on this topic...</a>
             </xs:documentation>
         </xs:annotation>
         <xs:sequence minOccurs="1" maxOccurs="unbounded">
@@ -1271,7 +1271,7 @@
         <xs:annotation>
             <xs:documentation>Notes tier (uses same format as user-defined tiers)</xs:documentation>
             <xs:documentation>
-                <a href="https://www.phon.ca/phon-manual/transcription/record_data.html"></a>
+                <a href="https://www.phon.ca/phon-manual/transcription/record_data.html">Phon manual section on this topic...</a>
             </xs:documentation>
         </xs:annotation>
         <xs:choice minOccurs="1" maxOccurs="1">
@@ -1286,7 +1286,7 @@
         <xs:annotation>
             <xs:documentation>User defined tier</xs:documentation>
             <xs:documentation>
-                <a href="https://www.phon.ca/phon-manual/session_editor/tier_management_view.html"></a>
+                <a href="https://www.phon.ca/phon-manual/session_editor/tier_management_view.html">Phon manual section on this topic...</a>
             </xs:documentation>
         </xs:annotation>
         <xs:choice minOccurs="1" maxOccurs="1">
