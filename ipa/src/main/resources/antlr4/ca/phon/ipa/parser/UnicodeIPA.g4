@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2021 Gregory Hedlund & Yvan Rose
+ * Copyright (C) 2012-2023 Gregory Hedlund & Yvan Rose
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ start
 transcription 
 	: transcription word_boundary transcription
 	| word
+	| pause
 	;
 
 word_boundary
@@ -41,7 +42,6 @@ word_boundary
 word
 	: word compound_word_marker word    # CompoundWord
 	| ipa_element+                      # SimpleWord
-	| pause                             # WordPause
 	;
 
 ipa_element
