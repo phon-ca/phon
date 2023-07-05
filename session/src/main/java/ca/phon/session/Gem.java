@@ -1,6 +1,5 @@
 package ca.phon.session;
 
-import ca.phon.GemType;
 import ca.phon.extensions.ExtendableObject;
 
 public final class Gem extends ExtendableObject {

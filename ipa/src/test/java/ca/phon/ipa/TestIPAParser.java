@@ -259,13 +259,25 @@ public class TestIPAParser {
 	@Test
 	public void testInterWordPause() throws Exception {
 		for(PauseLength pl:PauseLength.values()) {
-			final String txt = "hello (" + pl.getText() + ") world";
+			if(pl == PauseLength.NUMERIC) continue;
+			final String txt = "hello " + pl.getText() + " world";
 			final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
 			
 			Assert.assertEquals(3, ipa.words().size());
 			Assert.assertEquals(Pause.class, ipa.words().get(1).elementAt(0).getClass());
-			Assert.assertEquals(pl, ((Pause)ipa.words().get(1).elementAt(0)).getLength());
+			Assert.assertEquals(pl, ((Pause)ipa.words().get(1).elementAt(0)).getType());
 		}
+	}
+
+	@Test
+	public void testNumericPause() throws Exception {
+		final String txt = "hello (0.5) world";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
+
+		Assert.assertEquals(3, ipa.words().size());
+		Assert.assertEquals(Pause.class, ipa.words().get(1).elementAt(0).getClass());
+		Assert.assertEquals(PauseLength.NUMERIC, ((Pause)ipa.words().get(1).elementAt(0)).getType());
+		Assert.assertEquals(0.5f, ((Pause)ipa.words().get(1).elementAt(0)).getLength(), 0.001f);
 	}
 	
 	@Test

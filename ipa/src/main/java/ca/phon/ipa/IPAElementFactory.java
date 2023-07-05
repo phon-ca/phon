@@ -15,7 +15,12 @@
  */
 package ca.phon.ipa;
 
+import ca.phon.ipa.parser.IPATokenType;
+import ca.phon.ipa.parser.IPATokens;
 import ca.phon.syllable.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A factory for creating various types of {@link IPAElement}
@@ -97,15 +102,78 @@ public class IPAElementFactory {
 		else
 			return new Phone(p.getPrefixDiacritics(), p.getBasePhone(), p.getCombiningDiacritics(), p.getSuffixDiacritics());
 	}
-	
+
+	/**
+	 * <p>Create diacritic from given string.
+	 * Given string must match one of:
+	 * <ul>
+	 *    <li>PREFIX COMBINING*</li>
+	 *    <li>SUFFIX ROLE_REVERSAL COMBINING*</li>
+	 *    <li>SUFFIX COMBINING* LIGATURE</li>
+	 *    <li>SUFFIX COMBINING*</li>
+	 *    <li>PREFIX ROLE_REVERSAL COMBINING*</li>
+	 *    <li>LIGATURE PREFIX COMBINING*</li>
+	 * </ul>
+	 * </p>
+	 *
+	 * @param text
+	 * @return diacritic for given string
+	 * @throws IllegalArgumentException if text does not match prefix/suffix diacritic rules
+	 */
+	public Diacritic createDiacritic(String text) {
+		final IPATokens tokens = IPATokens.getSharedInstance();
+
+		if(text.length() == 1) {
+			return createDiacritic(text.charAt(0));
+		} else {
+			Diacritic[] prefix = new Diacritic[0];
+			Character dia = null;
+			Diacritic[] suffix = new Diacritic[0];
+
+			IPATokenType firstType = tokens.getTokenType(text.charAt(0));
+			switch (firstType) {
+				case PREFIX_DIACRITIC, SUFFIX_DIACRITIC:
+					dia = text.charAt(0);
+					suffix = new Diacritic[text.length()-1];
+					for(int i = 1; i < text.length(); i++) suffix[i-1] = createDiacritic(text.charAt(i));
+					break;
+
+				case LIGATURE:
+					prefix = new Diacritic[]{ createDiacritic(text.charAt(0)) };
+					dia = text.charAt(1);
+					suffix = new Diacritic[text.length()-2];
+					for(int i = 2; i < text.length(); i++) suffix[i-2] = createDiacritic(text.charAt(i));
+					break;
+
+				default:
+					throw new IllegalArgumentException("Invalid diacritic text " + text);
+			}
+			return createDiacritic(prefix, dia, suffix);
+		}
+	}
+
+	/**
+	 * Create diacritic from given char
+	 *
+	 * @param dia
+	 * @return
+	 */
 	public Diacritic createDiacritic(Character dia) {
 		return new Diacritic(dia);
 	}
-	
+
+	/**
+	 * Create diacritic from prefix diacritics, dia, and suffix (or combining) diacritics
+	 *
+	 * @param prefix
+	 * @param dia
+	 * @param suffix
+	 * @return
+	 */
 	public Diacritic createDiacritic(Diacritic[] prefix, Character dia, Diacritic[] suffix) {
 		return new Diacritic(prefix, dia, suffix);
 	}
-	
+
 	public Diacritic copyDiacritic(Diacritic dia) {
 		return new Diacritic(dia.getPrefixDiacritics(), dia.getCharacter(), dia.getSuffixDiacritics());
 	}

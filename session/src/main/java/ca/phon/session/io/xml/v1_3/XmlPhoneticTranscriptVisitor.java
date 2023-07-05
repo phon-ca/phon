@@ -36,8 +36,8 @@ public class XmlPhoneticTranscriptVisitor extends VisitorAdapter<Object> {
     @Visits
     public void visitPhone(XmlPhoneType phoneType) {
         final IPAElementFactory factory = new IPAElementFactory();
-        final List<Character> prefixDiacriticChars = phoneType.getPrefix() != null
-                ? phoneType.getPrefix().stream().map(s -> s.charAt(0)).toList()
+        final List<String> prefixDiacriticChars = phoneType.getPrefix() != null
+                ? phoneType.getPrefix().stream().toList()
                 : new ArrayList<>();
         final Diacritic[] prefixDiacritics =
                 prefixDiacriticChars.stream().map(factory::createDiacritic).toArray(Diacritic[]::new);
@@ -66,16 +66,16 @@ public class XmlPhoneticTranscriptVisitor extends VisitorAdapter<Object> {
             }
         }
 
-        final List<Character> suffixDiacriticChars = new ArrayList<>();
-        suffixDiacriticChars.addAll(lengthDiacriticChars);
+        final List<Object> suffixDiacriticChars = new ArrayList<>();
         if(phoneType.getSuffix() != null) {
             for(String s:phoneType.getSuffix()) {
-                suffixDiacriticChars.add(s.charAt(0));
+                suffixDiacriticChars.add(s);
             }
         }
+        suffixDiacriticChars.addAll(lengthDiacriticChars);
         suffixDiacriticChars.addAll(toneNumberDiacriticChars);
         final Diacritic[] suffixDiacritics =
-                suffixDiacriticChars.stream().map(factory::createDiacritic).toArray(Diacritic[]::new);
+                suffixDiacriticChars.stream().map(obj -> factory.createDiacritic(obj.toString())).toArray(Diacritic[]::new);
 
         SyllableConstituentType scType = SyllableConstituentType.UNKNOWN;
         if(phoneType.getScType() != null) {

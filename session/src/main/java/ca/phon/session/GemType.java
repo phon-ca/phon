@@ -1,4 +1,4 @@
-package ca.phon;
+package ca.phon.session;
 
 public enum GemType {
     Begin("Bg"),

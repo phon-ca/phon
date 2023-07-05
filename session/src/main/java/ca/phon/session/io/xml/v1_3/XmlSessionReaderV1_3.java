@@ -15,7 +15,7 @@
  */
 package ca.phon.session.io.xml.v1_3;
 
-import ca.phon.GemType;
+import ca.phon.session.GemType;
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.PhoneMap;

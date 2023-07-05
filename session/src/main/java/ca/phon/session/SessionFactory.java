@@ -15,7 +15,6 @@
  */
 package ca.phon.session;
 
-import ca.phon.GemType;
 import ca.phon.extensions.ExtendableObject;
 import ca.phon.plugin.*;
 import ca.phon.session.io.*;
