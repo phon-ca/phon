@@ -1,0 +1,1620 @@
+{
+    "$schema": "http://json-schema.org/draft/2020-12/schema",
+    "$id": "https://phon.ca/ns/session#",
+    "properties": {
+        "pp": {"$ref": "#/$defs/phoneticProsodyType"},
+        "education": {"type": "string"},
+        "underline": {"$ref": "#/$defs/underlineType"},
+        "prefix": {
+            "type": "array",
+            "items": {"type": "string"}
+        },
+        "pw": {"$ref": "#/$defs/phoneticWord"},
+        "parseError": {"$ref": "#/$defs/parseErrorType"},
+        "ambiguous": {
+            "type": "array",
+            "items": {"type": "string"}
+        },
+        "ca-delimiter": {"$ref": "#/$defs/caDelimiterType"},
+        "freecode": {"$ref": "#/$defs/freecodeType"},
+        "password": {"$ref": "#/$defs/passwordType"},
+        "subc": {"$ref": "#/$defs/subcategoryType"},
+        "action": {"$ref": "#/$defs/actionType"},
+        "otherSpokenEvent": {"$ref": "#/$defs/otherSpokenEventType"},
+        "recordTimelineTier": {"type": "string"},
+        "toneNumber": {"type": "string"},
+        "ipaActual": {"$ref": "#/$defs/ipaTierType"},
+        "dictionary": {"type": "string"},
+        "birthplace": {"type": "string"},
+        "nonvocal": {"$ref": "#/$defs/nonvocalType"},
+        "shortening": {"$ref": "#/$defs/shorteningType"},
+        "tierParameters": {"$ref": "#/$defs/tierParametersType"},
+        "happening": {"$ref": "#/$defs/happeningType"},
+        "interval": {"$ref": "#/$defs/intervalType"},
+        "alignWith": {
+            "type": "array",
+            "items": {"$ref": "#/$defs/alignableType"}
+        },
+        "overlap-point": {"$ref": "#/$defs/overlapPointType"},
+        "SES": {"type": "string"},
+        "ca-element": {"$ref": "#/$defs/caElementType"},
+        "other": {"type": "string"},
+        "sandhi": {"$ref": "#/$defs/sandhiType"},
+        "role": {"$ref": "#/$defs/participantRoleType"},
+        "phlen": {"type": "string"},
+        "tone-marker": {"$ref": "#/$defs/toneMarkerType"},
+        "blindTranscription": {"$ref": "#/$defs/blindTranscriptionType"},
+        "syllabifier": {"type": "string"},
+        "gem": {"$ref": "#/$defs/gemType"},
+        "userTier": {"$ref": "#/$defs/userTierType"},
+        "internal-media": {"$ref": "#/$defs/mediaType"},
+        "transcript": {"$ref": "#/$defs/transcriptType"},
+        "top": {
+            "type": "array",
+            "items": {"type": "integer"}
+        },
+        "pos": {"$ref": "#/$defs/posType"},
+        "userTiers": {"$ref": "#/$defs/userTiersType"},
+        "langs": {"$ref": "#/$defs/langsType"},
+        "participants": {"$ref": "#/$defs/participantsType"},
+        "stress": {"$ref": "#/$defs/stressType"},
+        "linker": {"$ref": "#/$defs/linkerType"},
+        "c": {"$ref": "#/$defs/categoryType"},
+        "languages": {
+            "type": "array",
+            "items": {"type": "string"}
+        },
+        "e": {"$ref": "#/$defs/eventType"},
+        "sex": {"$ref": "#/$defs/sexType"},
+        "g": {"$ref": "#/$defs/groupType"},
+        "unparsed": {"$ref": "#/$defs/unparsedData"},
+        "combining": {
+            "type": "array",
+            "items": {"type": "string"}
+        },
+        "k": {"$ref": "#/$defs/markerType"},
+        "tc": {"$ref": "#/$defs/tierCommentType"},
+        "td": {"$ref": "#/$defs/tierDescriptionType"},
+        "single": {"type": "string"},
+        "p": {"$ref": "#/$defs/prosodyType"},
+        "r": {"$ref": "#/$defs/recordType"},
+        "s": {"$ref": "#/$defs/separatorType"},
+        "t": {"$ref": "#/$defs/baseTerminatorType"},
+        "u": {"$ref": "#/$defs/utteranceType"},
+        "pho": {"$ref": "#/$defs/phoneticTranscriptionType"},
+        "w": {"$ref": "#/$defs/wType"},
+        "timeline": {"$ref": "#/$defs/timelineType"},
+        "date": {
+            "type": "string",
+            "format": "date"
+        },
+        "notes": {"$ref": "#/$defs/notesTierType"},
+        "tw": {"$ref": "#/$defs/tierWordType"},
+        "lig": {"$ref": "#/$defs/ligatureType"},
+        "suffix": {
+            "type": "array",
+            "items": {"type": "string"}
+        },
+        "italic": {"$ref": "#/$defs/italicType"},
+        "participant": {"$ref": "#/$defs/participantType"},
+        "tagMarker": {"$ref": "#/$defs/tagMarkerType"},
+        "segment": {"$ref": "#/$defs/mediaType"},
+        "tierView": {"$ref": "#/$defs/tierViewType"},
+        "tierData": {"$ref": "#/$defs/userTierData"},
+        "group": {"type": "string"},
+        "bottom": {
+            "type": "array",
+            "items": {"type": "integer"}
+        },
+        "postcode": {"$ref": "#/$defs/postcodeType"},
+        "timelineTier": {"$ref": "#/$defs/timelineTierType"},
+        "pause": {"$ref": "#/$defs/pauseType"},
+        "overlap": {"$ref": "#/$defs/overlapType"},
+        "transcribers": {"$ref": "#/$defs/transcribersType"},
+        "name": {"type": "string"},
+        "unparsedValue": {"type": "string"},
+        "alignment": {"$ref": "#/$defs/alignmentTierType"},
+        "replacement": {"$ref": "#/$defs/replacementType"},
+        "birthday": {
+            "type": "string",
+            "format": "date"
+        },
+        "first-language": {"type": "string"},
+        "transcriber": {"$ref": "#/$defs/transcriberType"},
+        "session": {"$ref": "#/$defs/SessionType"},
+        "tierOrder": {"$ref": "#/$defs/tierOrderType"},
+        "orthography": {"$ref": "#/$defs/orthographyTierType"},
+        "media": {"type": "string"},
+        "cmph": {"$ref": "#/$defs/compoundPhoneType"},
+        "error": {"$ref": "#/$defs/errorType"},
+        "long-feature": {"$ref": "#/$defs/longFeatureType"},
+        "point": {"$ref": "#/$defs/pointType"},
+        "duration": {"$ref": "#/$defs/durationType"},
+        "wk": {"$ref": "#/$defs/compoundType"},
+        "param": {"$ref": "#/$defs/tierParameterType"},
+        "ga": {"$ref": "#/$defs/groupAnnotationType"},
+        "lang": {"type": "string"},
+        "tierAlignment": {"$ref": "#/$defs/tierAlignmentRules"},
+        "multiple": {
+            "type": "array",
+            "items": {"type": "string"}
+        },
+        "pg": {"$ref": "#/$defs/phoneticGroupType"},
+        "ph": {"$ref": "#/$defs/phoneType"},
+        "comment": {"$ref": "#/$defs/commentType"},
+        "pm": {"$ref": "#/$defs/phoneMapType"},
+        "quotation": {"$ref": "#/$defs/quotationType"},
+        "age": {"type": "string"},
+        "ipaTarget": {"$ref": "#/$defs/ipaTierType"},
+        "base": {"type": "string"}
+    },
+    "$defs": {
+        "phoneticProsodyType": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+                "type": {"$ref": "#/$defs/phoneticProsodyTypeType"}
+            }
+        },
+        "underlineType": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+                "type": {"$ref": "#/$defs/beginEndType"}
+            }
+        },
+        "stressType": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+                "type": {"$ref": "#/$defs/stressTypeType"}
+            }
+        },
+        "phoneType": {
+            "type": "object",
+            "required": ["base"],
+            "properties": {
+                "prefix": {
+                    "type": "array",
+                    "items": {"type": "string"}
+                },
+                "base": {"type": "string"},
+                "combining": {
+                    "type": "array",
+                    "items": {"type": "string"}
+                },
+                "phlen": {"type": "string"},
+                "suffix": {
+                    "type": "array",
+                    "items": {"type": "string"}
+                },
+                "toneNumber": {"type": "string"},
+                "scType": {"$ref": "#/$defs/syllableConstituentType"}
+            }
+        },
+        "ligatureType": {
+            "type": "object",
+            "properties": {
+                "type": {"$ref": "#/$defs/ligatureTypeType"}
+            }
+        },
+        "compoundPhoneType": {
+            "type": "object",
+            "required": ["Content"],
+            "properties": {
+                "Content": {
+                    "type": "array",
+                    "items": {
+                        "anyOf": [
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "cmph": {"$ref": "#/$defs/compoundPhoneType"}
+                                }
+                            },
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "ph": {"$ref": "#/$defs/phoneType"}
+                                }
+                            },
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "lig": {"$ref": "#/$defs/ligatureType"}
+                                }
+                            }
+                        ]
+                    },
+                    "maxItems": 3,
+                    "minItems": 3
+                }
+            }
+        },
+        "sandhiType": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+                "type": {"$ref": "#/$defs/sandhiTypeType"}
+            }
+        },
+        "phoneticWord": {
+            "type": "object",
+            "required": ["stressOrphOrcmph"],
+            "properties": {
+                "stressOrphOrcmph": {
+                    "type": "array",
+                    "items": {
+                        "anyOf": [
+                            {"$ref": "#/$defs/stressType"},
+                            {"$ref": "#/$defs/phoneType"},
+                            {"$ref": "#/$defs/compoundPhoneType"},
+                            {"$ref": "#/$defs/phoneticProsodyType"},
+                            {"$ref": "#/$defs/sandhiType"}
+                        ]
+                    },
+                    "minItems": 1
+                }
+            }
+        },
+        "parseErrorType": {
+            "type": "object",
+            "properties": {
+                "Content": {"type": "string"},
+                "charPositionInLine": {"type": "integer"}
+            }
+        },
+        "caDelimiterType": {
+            "type": "object",
+            "required": [
+                "type",
+                "label"
+            ],
+            "properties": {
+                "type": {"$ref": "#/$defs/beginEndType"},
+                "label": {"$ref": "#/$defs/caDelimiterTypeType"}
+            }
+        },
+        "freecodeType": {
+            "type": "object",
+            "properties": {
+                "Value": {"type": "string"}
+            }
+        },
+        "passwordType": {
+            "type": "object",
+            "properties": {
+                "Content": {"type": "string"},
+                "use": {
+                    "type": "boolean",
+                    "default": "false"
+                }
+            }
+        },
+        "subcategoryType": {
+            "type": "object",
+            "properties": {
+                "Value": {"type": "string"}
+            }
+        },
+        "actionType": {
+            "type": "object",
+            "properties": {}
+        },
+        "otherSpokenEventType": {
+            "type": "object",
+            "required": [
+                "who",
+                "said"
+            ],
+            "properties": {
+                "who": {"type": "string"},
+                "said": {"type": "string"}
+            }
+        },
+        "pauseType": {
+            "type": "object",
+            "required": ["symboliclength"],
+            "properties": {
+                "symboliclength": {"$ref": "#/$defs/pauseSymbolicLengthType"},
+                "length": {"type": "number"}
+            }
+        },
+        "phoneticTranscriptionType": {
+            "type": "object",
+            "properties": {
+                "pwOrpause": {
+                    "type": "array",
+                    "items": {
+                        "anyOf": [
+                            {"$ref": "#/$defs/phoneticWord"},
+                            {"$ref": "#/$defs/pauseType"}
+                        ]
+                    },
+                    "minItems": 0
+                }
+            }
+        },
+        "unparsedData": {
+            "type": "object",
+            "required": [
+                "unparsedValue",
+                "parseError"
+            ],
+            "properties": {
+                "unparsedValue": {"type": "string"},
+                "parseError": {"$ref": "#/$defs/parseErrorType"}
+            }
+        },
+        "blindTranscriptionType": {
+            "type": "object",
+            "required": [
+                "pho",
+                "unparsed"
+            ],
+            "properties": {
+                "pho": {"$ref": "#/$defs/phoneticTranscriptionType"},
+                "unparsed": {"$ref": "#/$defs/unparsedData"},
+                "transcriber": {"type": "string"}
+            }
+        },
+        "ipaTierType": {
+            "type": "object",
+            "required": [
+                "pho",
+                "unparsed"
+            ],
+            "properties": {
+                "pho": {"$ref": "#/$defs/phoneticTranscriptionType"},
+                "unparsed": {"$ref": "#/$defs/unparsedData"},
+                "blindTranscription": {
+                    "type": "array",
+                    "items": {"$ref": "#/$defs/blindTranscriptionType"},
+                    "minItems": 0
+                }
+            }
+        },
+        "nonvocalType": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+                "Content": {"type": "string"},
+                "type": {"$ref": "#/$defs/beginEndSimpleType"}
+            }
+        },
+        "shorteningType": {
+            "type": "object",
+            "properties": {
+                "Value": {"type": "string"}
+            }
+        },
+        "tierParameterType": {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+                "Content": {"type": "string"},
+                "name": {"type": "string"}
+            }
+        },
+        "tierParametersType": {
+            "type": "object",
+            "properties": {
+                "param": {
+                    "type": "array",
+                    "items": {"$ref": "#/$defs/tierParameterType"},
+                    "minItems": 0
+                }
+            }
+        },
+        "happeningType": {
+            "type": "object",
+            "properties": {
+                "Value": {"type": "string"}
+            }
+        },
+        "intervalType": {
+            "type": "object",
+            "required": [
+                "start",
+                "end"
+            ],
+            "properties": {
+                "Content": {"type": "string"},
+                "start": {"type": "number"},
+                "end": {"type": "number"}
+            }
+        },
+        "overlapPointType": {
+            "type": "object",
+            "required": [
+                "startend",
+                "topbottom"
+            ],
+            "properties": {
+                "index": {"type": "integer"},
+                "startend": {"$ref": "#/$defs/startEndType"},
+                "topbottom": {"$ref": "#/$defs/topBottomType"}
+            }
+        },
+        "caElementType": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+                "type": {"$ref": "#/$defs/caElementTypeType"}
+            }
+        },
+        "toneMarkerType": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+                "type": {"$ref": "#/$defs/toneMarkerTypeType"}
+            }
+        },
+        "gemType": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+                "Content": {"type": "string"},
+                "type": {"$ref": "#/$defs/beginEndLazyType"}
+            }
+        },
+        "linkerType": {
+            "type": "object",
+            "properties": {
+                "type": {"$ref": "#/$defs/linkerTypeType"}
+            }
+        },
+        "longFeatureType": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+                "Content": {"type": "string"},
+                "type": {"$ref": "#/$defs/beginEndType"}
+            }
+        },
+        "italicType": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+                "type": {"$ref": "#/$defs/beginEndType"}
+            }
+        },
+        "langsType": {
+            "type": "object",
+            "required": [
+                "single",
+                "multiple",
+                "ambiguous"
+            ],
+            "properties": {
+                "single": {"type": "string"},
+                "multiple": {
+                    "type": "array",
+                    "items": {"type": "string"}
+                },
+                "ambiguous": {
+                    "type": "array",
+                    "items": {"type": "string"}
+                }
+            }
+        },
+        "replacementType": {
+            "type": "object",
+            "required": ["w"],
+            "properties": {
+                "w": {
+                    "type": "array",
+                    "items": {"$ref": "#/$defs/wType"},
+                    "minItems": 1
+                },
+                "real": {"type": "boolean"}
+            }
+        },
+        "categoryType": {
+            "type": "object",
+            "properties": {
+                "Value": {"type": "string"}
+            }
+        },
+        "posType": {
+            "type": "object",
+            "required": ["c"],
+            "properties": {
+                "c": {"$ref": "#/$defs/categoryType"},
+                "subc": {
+                    "type": "array",
+                    "items": {"$ref": "#/$defs/subcategoryType"},
+                    "minItems": 0
+                }
+            }
+        },
+        "prosodyType": {
+            "type": "object",
+            "properties": {
+                "type": {"$ref": "#/$defs/prosodyTypeType"}
+            }
+        },
+        "compoundType": {
+            "type": "object",
+            "properties": {
+                "type": {"$ref": "#/$defs/wkType"}
+            }
+        },
+        "wType": {
+            "type": "object",
+            "properties": {
+                "Content": {
+                    "type": "array",
+                    "items": {
+                        "anyOf": [
+                            {"type": "string"},
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "long-feature": {"$ref": "#/$defs/longFeatureType"}
+                                }
+                            },
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "italic": {"$ref": "#/$defs/italicType"}
+                                }
+                            },
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "underline": {"$ref": "#/$defs/underlineType"}
+                                }
+                            },
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "langs": {"$ref": "#/$defs/langsType"}
+                                }
+                            },
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "shortening": {"$ref": "#/$defs/shorteningType"}
+                                }
+                            },
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "replacement": {"$ref": "#/$defs/replacementType"}
+                                }
+                            },
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "pos": {"$ref": "#/$defs/posType"}
+                                }
+                            },
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "p": {"$ref": "#/$defs/prosodyType"}
+                                }
+                            },
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "ca-delimiter": {"$ref": "#/$defs/caDelimiterType"}
+                                }
+                            },
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "ca-element": {"$ref": "#/$defs/caElementType"}
+                                }
+                            },
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "overlap-point": {"$ref": "#/$defs/overlapPointType"}
+                                }
+                            },
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "wk": {"$ref": "#/$defs/compoundType"}
+                                }
+                            }
+                        ]
+                    }
+                },
+                "separatedprefix": {"type": "boolean"},
+                "userspecialform": {"type": "string"},
+                "formSuffix": {"type": "string"},
+                "formType": {"$ref": "#/$defs/wordFormType"},
+                "type": {"$ref": "#/$defs/wordType"},
+                "untranscribed": {"$ref": "#/$defs/untranscribedType"}
+            }
+        },
+        "markerType": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+                "type": {"$ref": "#/$defs/markerTypeType"}
+            }
+        },
+        "errorType": {
+            "type": "object",
+            "properties": {
+                "Value": {"type": "string"}
+            }
+        },
+        "overlapType": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+                "index": {"type": "integer"},
+                "type": {"$ref": "#/$defs/overlapTypeType"}
+            }
+        },
+        "groupAnnotationType": {
+            "type": "object",
+            "properties": {
+                "Content": {"type": "string"},
+                "type": {"$ref": "#/$defs/groupAnnotationTypeType"}
+            }
+        },
+        "durationType": {
+            "type": "object",
+            "properties": {
+                "Value": {"type": "number"}
+            }
+        },
+        "eventType": {
+            "type": "object",
+            "required": [
+                "action",
+                "happening",
+                "otherSpokenEvent"
+            ],
+            "properties": {
+                "action": {"$ref": "#/$defs/actionType"},
+                "happening": {"$ref": "#/$defs/happeningType"},
+                "otherSpokenEvent": {"$ref": "#/$defs/otherSpokenEventType"},
+                "kOrerrorOroverlap": {
+                    "type": "array",
+                    "items": {
+                        "anyOf": [
+                            {"$ref": "#/$defs/markerType"},
+                            {"$ref": "#/$defs/errorType"},
+                            {"$ref": "#/$defs/overlapType"},
+                            {"$ref": "#/$defs/groupAnnotationType"},
+                            {"$ref": "#/$defs/durationType"}
+                        ]
+                    },
+                    "minItems": 0
+                }
+            }
+        },
+        "mediaType": {
+            "type": "object",
+            "required": [
+                "start",
+                "end",
+                "unit"
+            ],
+            "properties": {
+                "start": {"type": "number"},
+                "end": {"type": "number"},
+                "unit": {"$ref": "#/$defs/mediaUnitType"}
+            }
+        },
+        "separatorType": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+                "type": {"$ref": "#/$defs/separatorTypeType"}
+            }
+        },
+        "tagMarkerType": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+                "type": {"$ref": "#/$defs/tagMarkerTypeType"}
+            }
+        },
+        "quotationType": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+                "type": {"$ref": "#/$defs/beginEndType"}
+            }
+        },
+        "phoneticGroupType": {
+            "type": "object",
+            "required": ["wOrgOre"],
+            "properties": {
+                "wOrgOre": {
+                    "type": "array",
+                    "items": {
+                        "anyOf": [
+                            {"$ref": "#/$defs/wType"},
+                            {"$ref": "#/$defs/groupType"},
+                            {"$ref": "#/$defs/eventType"},
+                            {"$ref": "#/$defs/freecodeType"},
+                            {"$ref": "#/$defs/mediaType"},
+                            {"$ref": "#/$defs/longFeatureType"},
+                            {"$ref": "#/$defs/nonvocalType"},
+                            {"$ref": "#/$defs/overlapPointType"},
+                            {"$ref": "#/$defs/pauseType"},
+                            {"$ref": "#/$defs/separatorType"},
+                            {"$ref": "#/$defs/toneMarkerType"},
+                            {"$ref": "#/$defs/tagMarkerType"},
+                            {"$ref": "#/$defs/quotationType"},
+                            {"$ref": "#/$defs/italicType"},
+                            {"$ref": "#/$defs/underlineType"}
+                        ]
+                    },
+                    "minItems": 1
+                }
+            }
+        },
+        "groupType": {
+            "type": "object",
+            "required": ["wOrgOrpg"],
+            "properties": {
+                "wOrgOrpg": {
+                    "type": "array",
+                    "items": {
+                        "anyOf": [
+                            {"$ref": "#/$defs/wType"},
+                            {"$ref": "#/$defs/groupType"},
+                            {"$ref": "#/$defs/phoneticGroupType"},
+                            {"$ref": "#/$defs/quotationType"},
+                            {"$ref": "#/$defs/pauseType"},
+                            {"$ref": "#/$defs/mediaType"},
+                            {"$ref": "#/$defs/freecodeType"},
+                            {"$ref": "#/$defs/eventType"},
+                            {"$ref": "#/$defs/separatorType"},
+                            {"$ref": "#/$defs/toneMarkerType"},
+                            {"$ref": "#/$defs/tagMarkerType"},
+                            {"$ref": "#/$defs/longFeatureType"},
+                            {"$ref": "#/$defs/nonvocalType"},
+                            {"$ref": "#/$defs/overlapPointType"},
+                            {"$ref": "#/$defs/underlineType"},
+                            {"$ref": "#/$defs/italicType"}
+                        ]
+                    },
+                    "minItems": 1
+                },
+                "kOrerrorOrduration": {
+                    "type": "array",
+                    "items": {
+                        "anyOf": [
+                            {"$ref": "#/$defs/markerType"},
+                            {"$ref": "#/$defs/errorType"},
+                            {"$ref": "#/$defs/durationType"},
+                            {"$ref": "#/$defs/groupAnnotationType"},
+                            {"$ref": "#/$defs/overlapType"},
+                            {"$ref": "#/$defs/langsType"}
+                        ]
+                    },
+                    "minItems": 0
+                }
+            }
+        },
+        "baseTerminatorType": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+                "type": {"$ref": "#/$defs/terminatorType"}
+            }
+        },
+        "postcodeType": {
+            "type": "object",
+            "properties": {
+                "Value": {"type": "string"}
+            }
+        },
+        "utteranceType": {
+            "type": "object",
+            "required": ["wOrgOrpg"],
+            "properties": {
+                "lang": {"type": "string"},
+                "linker": {
+                    "type": "array",
+                    "items": {"$ref": "#/$defs/linkerType"},
+                    "minItems": 0
+                },
+                "wOrgOrpg": {
+                    "type": "array",
+                    "items": {
+                        "anyOf": [
+                            {"$ref": "#/$defs/wType"},
+                            {"$ref": "#/$defs/groupType"},
+                            {"$ref": "#/$defs/phoneticGroupType"},
+                            {"$ref": "#/$defs/quotationType"},
+                            {"$ref": "#/$defs/pauseType"},
+                            {"$ref": "#/$defs/mediaType"},
+                            {"$ref": "#/$defs/freecodeType"},
+                            {"$ref": "#/$defs/eventType"},
+                            {"$ref": "#/$defs/separatorType"},
+                            {"$ref": "#/$defs/toneMarkerType"},
+                            {"$ref": "#/$defs/tagMarkerType"},
+                            {"$ref": "#/$defs/overlapPointType"},
+                            {"$ref": "#/$defs/underlineType"},
+                            {"$ref": "#/$defs/italicType"},
+                            {"$ref": "#/$defs/longFeatureType"},
+                            {"$ref": "#/$defs/nonvocalType"}
+                        ]
+                    },
+                    "minItems": 1
+                },
+                "t": {"$ref": "#/$defs/baseTerminatorType"},
+                "postcode": {
+                    "type": "array",
+                    "items": {"$ref": "#/$defs/postcodeType"},
+                    "minItems": 0
+                }
+            }
+        },
+        "tierWordType": {
+            "type": "object",
+            "properties": {
+                "Content": {"type": "string"}
+            }
+        },
+        "tierCommentType": {
+            "type": "object",
+            "properties": {
+                "Content": {"type": "string"}
+            }
+        },
+        "userTierData": {
+            "type": "object",
+            "required": ["twOrtcOrinternalmedia"],
+            "properties": {
+                "twOrtcOrinternalmedia": {
+                    "type": "array",
+                    "items": {
+                        "anyOf": [
+                            {"$ref": "#/$defs/tierWordType"},
+                            {"$ref": "#/$defs/tierCommentType"},
+                            {"$ref": "#/$defs/mediaType"}
+                        ]
+                    },
+                    "minItems": 1
+                }
+            }
+        },
+        "userTierType": {
+            "type": "object",
+            "required": [
+                "u",
+                "pho",
+                "tierData",
+                "unparsed",
+                "name"
+            ],
+            "properties": {
+                "u": {"$ref": "#/$defs/utteranceType"},
+                "pho": {"$ref": "#/$defs/phoneticTranscriptionType"},
+                "tierData": {"$ref": "#/$defs/userTierData"},
+                "unparsed": {"$ref": "#/$defs/unparsedData"},
+                "name": {"type": "string"}
+            }
+        },
+        "orthographyTierType": {
+            "type": "object",
+            "required": [
+                "u",
+                "unparsed"
+            ],
+            "properties": {
+                "u": {"$ref": "#/$defs/utteranceType"},
+                "unparsed": {"$ref": "#/$defs/unparsedData"}
+            }
+        },
+        "phoneMapType": {
+            "type": "object",
+            "required": [
+                "top",
+                "bottom",
+                "target",
+                "actual"
+            ],
+            "properties": {
+                "top": {
+                    "type": "array",
+                    "items": {"type": "integer"}
+                },
+                "bottom": {
+                    "type": "array",
+                    "items": {"type": "integer"}
+                },
+                "target": {"type": "integer"},
+                "actual": {"type": "integer"}
+            }
+        },
+        "alignmentTierType": {
+            "type": "object",
+            "required": ["pm"],
+            "properties": {
+                "pm": {
+                    "type": "array",
+                    "items": {"$ref": "#/$defs/phoneMapType"},
+                    "minItems": 1
+                }
+            }
+        },
+        "notesTierType": {
+            "type": "object",
+            "required": [
+                "tierData",
+                "unparsed"
+            ],
+            "properties": {
+                "tierData": {"$ref": "#/$defs/userTierData"},
+                "unparsed": {"$ref": "#/$defs/unparsedData"}
+            }
+        },
+        "recordType": {
+            "type": "object",
+            "required": ["orthography"],
+            "properties": {
+                "orthography": {"$ref": "#/$defs/orthographyTierType"},
+                "ipaTarget": {"$ref": "#/$defs/ipaTierType"},
+                "ipaActual": {"$ref": "#/$defs/ipaTierType"},
+                "alignment": {"$ref": "#/$defs/alignmentTierType"},
+                "segment": {"$ref": "#/$defs/mediaType"},
+                "notes": {"$ref": "#/$defs/notesTierType"},
+                "userTier": {
+                    "type": "array",
+                    "items": {"$ref": "#/$defs/userTierType"},
+                    "minItems": 0
+                },
+                "speaker": {"type": "string"},
+                "uuid": {"type": "string"},
+                "excludeFromSearches": {
+                    "type": "boolean",
+                    "default": "false"
+                }
+            }
+        },
+        "commentType": {
+            "type": "object",
+            "required": [
+                "tierData",
+                "unparsed",
+                "type"
+            ],
+            "properties": {
+                "tierData": {"$ref": "#/$defs/userTierData"},
+                "unparsed": {"$ref": "#/$defs/unparsedData"},
+                "type": {"$ref": "#/$defs/commentTypeType"}
+            }
+        },
+        "transcriptType": {
+            "type": "object",
+            "properties": {
+                "rOrcommentOrgem": {
+                    "type": "array",
+                    "items": {
+                        "anyOf": [
+                            {"$ref": "#/$defs/recordType"},
+                            {"$ref": "#/$defs/commentType"},
+                            {"$ref": "#/$defs/gemType"}
+                        ]
+                    },
+                    "minItems": 0
+                }
+            }
+        },
+        "tierAlignmentRules": {
+            "type": "object",
+            "required": ["alignWith"],
+            "properties": {
+                "alignWith": {
+                    "type": "array",
+                    "items": {"$ref": "#/$defs/alignableType"}
+                },
+                "includeOmitted": {
+                    "type": "boolean",
+                    "default": "false"
+                },
+                "includeXXX": {
+                    "type": "boolean",
+                    "default": "false"
+                },
+                "includeYYY": {
+                    "type": "boolean",
+                    "default": "false"
+                },
+                "includeWWW": {
+                    "type": "boolean",
+                    "default": "false"
+                },
+                "includeExcluded": {
+                    "type": "boolean",
+                    "default": "false"
+                }
+            }
+        },
+        "tierDescriptionType": {
+            "type": "object",
+            "properties": {
+                "tierAlignment": {"$ref": "#/$defs/tierAlignmentRules"},
+                "tierParameters": {"$ref": "#/$defs/tierParametersType"},
+                "tierName": {"type": "string"},
+                "type": {
+                    "$ref": "#/$defs/userTierTypeType",
+                    "default": "simple"
+                }
+            }
+        },
+        "userTiersType": {
+            "type": "object",
+            "required": ["td"],
+            "properties": {
+                "td": {
+                    "type": "array",
+                    "items": {"$ref": "#/$defs/tierDescriptionType"},
+                    "minItems": 1
+                }
+            }
+        },
+        "participantType": {
+            "type": "object",
+            "required": ["id"],
+            "properties": {
+                "role": {"$ref": "#/$defs/participantRoleType"},
+                "name": {"type": "string"},
+                "group": {"type": "string"},
+                "sex": {"$ref": "#/$defs/sexType"},
+                "SES": {"type": "string"},
+                "education": {"type": "string"},
+                "birthday": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "birthplace": {"type": "string"},
+                "age": {"type": "string"},
+                "languages": {
+                    "type": "array",
+                    "items": {"type": "string"}
+                },
+                "firstlanguage": {"type": "string"},
+                "syllabifier": {"type": "string"},
+                "dictionary": {"type": "string"},
+                "other": {"type": "string"},
+                "id": {"type": "string"}
+            }
+        },
+        "participantsType": {
+            "type": "object",
+            "required": ["participant"],
+            "properties": {
+                "participant": {
+                    "type": "array",
+                    "items": {"$ref": "#/$defs/participantType"},
+                    "minItems": 1
+                }
+            }
+        },
+        "pointType": {
+            "type": "object",
+            "required": ["value"],
+            "properties": {
+                "Content": {"type": "string"},
+                "value": {"type": "number"}
+            }
+        },
+        "timelineTierType": {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+                "pointOrinterval": {
+                    "type": "array",
+                    "items": {
+                        "anyOf": [
+                            {"$ref": "#/$defs/pointType"},
+                            {"$ref": "#/$defs/intervalType"}
+                        ]
+                    },
+                    "minItems": 0
+                },
+                "name": {"type": "string"}
+            }
+        },
+        "timelineType": {
+            "type": "object",
+            "required": [
+                "length",
+                "unit"
+            ],
+            "properties": {
+                "recordTimelineTier": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "minItems": 0
+                },
+                "timelineTier": {
+                    "type": "array",
+                    "items": {"$ref": "#/$defs/timelineTierType"},
+                    "minItems": 0
+                },
+                "length": {"type": "number"},
+                "unit": {"$ref": "#/$defs/mediaUnitType"}
+            }
+        },
+        "tierViewType": {
+            "type": "object",
+            "properties": {
+                "tierName": {"type": "string"},
+                "visible": {"type": "boolean"},
+                "locked": {
+                    "type": "boolean",
+                    "default": "false"
+                },
+                "font": {
+                    "type": "string",
+                    "default": "default"
+                }
+            }
+        },
+        "transcriberType": {
+            "type": "object",
+            "required": [
+                "name",
+                "password",
+                "id"
+            ],
+            "properties": {
+                "name": {"type": "string"},
+                "password": {"$ref": "#/$defs/passwordType"},
+                "id": {"type": "string"}
+            }
+        },
+        "transcribersType": {
+            "type": "object",
+            "required": ["transcriber"],
+            "properties": {
+                "transcriber": {
+                    "type": "array",
+                    "items": {"$ref": "#/$defs/transcriberType"},
+                    "minItems": 1
+                }
+            }
+        },
+        "tierOrderType": {
+            "type": "object",
+            "required": ["tierView"],
+            "properties": {
+                "tierView": {
+                    "type": "array",
+                    "items": {"$ref": "#/$defs/tierViewType"},
+                    "minItems": 1
+                }
+            }
+        },
+        "SessionType": {
+            "type": "object",
+            "required": ["transcript"],
+            "properties": {
+                "date": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "languages": {
+                    "type": "array",
+                    "items": {"type": "string"}
+                },
+                "media": {"type": "string"},
+                "participants": {"$ref": "#/$defs/participantsType"},
+                "transcribers": {"$ref": "#/$defs/transcribersType"},
+                "userTiers": {"$ref": "#/$defs/userTiersType"},
+                "tierOrder": {"$ref": "#/$defs/tierOrderType"},
+                "transcript": {"$ref": "#/$defs/transcriptType"},
+                "timeline": {"$ref": "#/$defs/timelineType"},
+                "name": {"type": "string"},
+                "corpus": {"type": "string"},
+                "version": {"type": "string"}
+            }
+        },
+        "phoneticProsodyTypeType": {
+            "type": "string",
+            "enum": [
+                "syllable break",
+                "major intonation group",
+                "minor intonation group",
+                "cmp",
+                "pause",
+                "blocking"
+            ]
+        },
+        "beginEndType": {
+            "type": "string",
+            "enum": [
+                "begin",
+                "end"
+            ]
+        },
+        "stressTypeType": {
+            "type": "string",
+            "enum": [
+                "primary",
+                "secondary"
+            ]
+        },
+        "syllableConstituentType": {
+            "type": "string",
+            "enum": [
+                "left appendix",
+                "onset",
+                "nucleus",
+                "diphthong",
+                "coda",
+                "right appendix",
+                "OEHS",
+                "ambisyllabic"
+            ]
+        },
+        "ligatureTypeType": {
+            "type": "string",
+            "enum": [
+                "breve below",
+                "breve",
+                "right arrow below"
+            ]
+        },
+        "sandhiTypeType": {
+            "type": "string",
+            "enum": [
+                "contraction",
+                "linker"
+            ]
+        },
+        "caDelimiterTypeType": {
+            "type": "string",
+            "enum": [
+                "breathy voice",
+                "creaky",
+                "faster",
+                "high-pitch",
+                "louder",
+                "low-pitch",
+                "precise",
+                "repeated-segment",
+                "singing",
+                "slower",
+                "smile voice",
+                "softer",
+                "unsure",
+                "whisper",
+                "yawn"
+            ]
+        },
+        "pauseSymbolicLengthType": {
+            "type": "string",
+            "enum": [
+                "simple",
+                "long",
+                "very long"
+            ]
+        },
+        "beginEndSimpleType": {
+            "type": "string",
+            "enum": [
+                "begin",
+                "end",
+                "simple"
+            ]
+        },
+        "startEndType": {
+            "type": "string",
+            "enum": [
+                "start",
+                "end"
+            ]
+        },
+        "topBottomType": {
+            "type": "string",
+            "enum": [
+                "top",
+                "bottom"
+            ]
+        },
+        "caElementTypeType": {
+            "type": "string",
+            "enum": [
+                "blocked segments",
+                "constriction",
+                "inhalation",
+                "laugh in word",
+                "pitch down",
+                "pitch reset",
+                "pitch up",
+                "primary stress",
+                "secondary stress"
+            ]
+        },
+        "toneMarkerTypeType": {
+            "type": "string",
+            "enum": [
+                "rising to high",
+                "rising to mid",
+                "level",
+                "falling to mid",
+                "falling to low"
+            ]
+        },
+        "beginEndLazyType": {
+            "type": "string",
+            "enum": [
+                "begin",
+                "end",
+                "lazy"
+            ]
+        },
+        "linkerTypeType": {
+            "type": "string",
+            "enum": [
+                "quoted utterance next",
+                "quick uptake",
+                "lazy overlap mark",
+                "self completion",
+                "other completion",
+                "technical break TCU completion",
+                "no break TCU completion"
+            ]
+        },
+        "prosodyTypeType": {
+            "type": "string",
+            "enum": [
+                "drawl",
+                "pause",
+                "blocking"
+            ]
+        },
+        "wkType": {
+            "type": "string",
+            "enum": [
+                "cmp",
+                "cli"
+            ]
+        },
+        "wordFormType": {
+            "type": "string",
+            "enum": [
+                "addition",
+                "babbling",
+                "child-invented",
+                "dialect",
+                "echolalia",
+                "family-specific",
+                "filled pause",
+                "generic",
+                "interjection",
+                "kana",
+                "letter",
+                "neologism",
+                "no voice",
+                "onomatopoeia",
+                "phonology consistent",
+                "quoted metareference",
+                "sign speech",
+                "singing",
+                "signed language",
+                "test",
+                "UNIBET",
+                "words to be excluded",
+                "word play"
+            ]
+        },
+        "wordType": {
+            "type": "string",
+            "enum": [
+                "omission",
+                "nonword",
+                "filler",
+                "fragment"
+            ]
+        },
+        "untranscribedType": {
+            "type": "string",
+            "enum": [
+                "unintelligible",
+                "unintelligible-with-pho",
+                "untranscribed"
+            ]
+        },
+        "markerTypeType": {
+            "type": "string",
+            "enum": [
+                "stressing",
+                "contrastive stressing",
+                "best guess",
+                "retracing",
+                "retracing with correction",
+                "retracing reformulation",
+                "retracing unclear",
+                "false start",
+                "mor exclude"
+            ]
+        },
+        "overlapTypeType": {
+            "type": "string",
+            "enum": [
+                "overlap follows",
+                "overlap precedes"
+            ]
+        },
+        "groupAnnotationTypeType": {
+            "type": "string",
+            "enum": [
+                "alternative",
+                "comments",
+                "explanation",
+                "paralinguistics"
+            ]
+        },
+        "mediaUnitType": {
+            "type": "string",
+            "enum": [
+                "s",
+                "ms"
+            ]
+        },
+        "separatorTypeType": {
+            "type": "string",
+            "enum": [
+                "semicolon",
+                "colon",
+                "clause delimiter",
+                "unmarked ending",
+                "uptake"
+            ]
+        },
+        "tagMarkerTypeType": {
+            "type": "string",
+            "enum": [
+                "comma",
+                "tag",
+                "vocative"
+            ]
+        },
+        "terminatorType": {
+            "type": "string",
+            "enum": [
+                "p",
+                "q",
+                "e",
+                "broken for coding",
+                "trail off",
+                "trail off question",
+                "question exclamation",
+                "interruption",
+                "interruption question",
+                "self interruption",
+                "self interruption question",
+                "quotation next line",
+                "quotation precedes",
+                "missing CA terminator",
+                "technical break TCU continuation",
+                "no break TCU continuation"
+            ]
+        },
+        "commentTypeType": {
+            "type": "string",
+            "enum": [
+                "Activities",
+                "Bck",
+                "Date",
+                "Number",
+                "Recording Quality",
+                "Transcription",
+                "Types",
+                "Blank",
+                "T",
+                "Generic",
+                "Location",
+                "New Episode",
+                "Room Layout",
+                "Situation",
+                "Tape Location",
+                "Time Duration",
+                "Time Start",
+                "Transcriber",
+                "Warning",
+                "Page"
+            ]
+        },
+        "alignableType": {
+            "type": "string",
+            "enum": [
+                "linker",
+                "word",
+                "pause",
+                "group",
+                "phoneticGroup",
+                "internal-media",
+                "tagMarker",
+                "terminator",
+                "freecode",
+                "postcode"
+            ]
+        },
+        "userTierTypeType": {
+            "type": "string",
+            "enum": [
+                "chat",
+                "ipa",
+                "simple"
+            ]
+        },
+        "participantRoleType": {
+            "type": "string",
+            "enum": [
+                "Target_Child",
+                "Target_Adult",
+                "Child",
+                "Mother",
+                "Father",
+                "Brother",
+                "Sister",
+                "Sibling",
+                "Grandfather",
+                "Grandmother",
+                "Relative",
+                "Participant",
+                "Therapist",
+                "Informant",
+                "Subject",
+                "Investigator",
+                "Partner",
+                "Boy",
+                "Girl",
+                "Adult",
+                "Teenager",
+                "Male",
+                "Female",
+                "Visitor",
+                "Friend",
+                "Playmate",
+                "Caretaker",
+                "Environment",
+                "Group",
+                "Unidentified",
+                "Uncertain",
+                "Other",
+                "Text",
+                "Media",
+                "PlayRole",
+                "LENA",
+                "Justice",
+                "Attorney",
+                "Doctor",
+                "Nurse",
+                "Student",
+                "Teacher",
+                "Host",
+                "Guest",
+                "Leader",
+                "Member",
+                "Narrator",
+                "Speaker",
+                "Audience"
+            ]
+        },
+        "sexType": {
+            "type": "string",
+            "enum": [
+                "male",
+                "female",
+                "unspecified"
+            ]
+        },
+        "ipaTierTypeType": {
+            "type": "string",
+            "enum": [
+                "IPA Target",
+                "IPA Actual"
+            ]
+        }
+    }
+}
