@@ -50,7 +50,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 @XMLSerial(
-	namespace="https://phon.ca/ns/phonbank",
+	namespace="https://phon.ca/ns/session",
 	elementName="session",
 	bindType=Session.class
 )
@@ -64,6 +64,10 @@ import java.util.List;
 )
 @Rank(0)
 public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoint<SessionWriter> {
+
+	private final static String DEFAULT_NAMESPACE = "https://phon.ca/ns/session";
+
+	private final static String DEFAULT_NAMESPACE_LOCATION = "https://phon.ca/xml/xsd/session/v1_3/sesison.xsd";
 
 	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(XmlSessionWriterV1_3.class.getName());
 
@@ -110,7 +114,8 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 			final XmlParticipantType pt = writeParticipant(factory, part);
 			parts.getParticipant().add(pt);
 		}
-		retVal.setParticipants(parts);
+		if(session.getParticipantCount() > 0)
+			retVal.setParticipants(parts);
 
 		// transcribers
 		final XmlTranscribersType tt = factory.createXmlTranscribersType();
@@ -129,14 +134,16 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 			final XmlTierDescriptionType tierType = writeTierDescription(factory, td);
 			utt.getTd().add(tierType);
 		}
-		retVal.setUserTiers(utt);
+		if(session.getUserTierCount() > 0)
+			retVal.setUserTiers(utt);
 
 		final XmlTierOrderType tot = factory.createXmlTierOrderType();
 		for(TierViewItem tvi:session.getTierView()) {
 			final XmlTierViewType tvt = writeTierViewItem(factory, tvi);
 			tot.getTierView().add(tvt);
 		}
-		retVal.setTierOrder(tot);
+		if(session.getTierView().size() > 0)
+			retVal.setTierOrder(tot);
 
 		final XmlTranscriptType transcript = factory.createXmlTranscriptType();
 		retVal.setTranscript(transcript);
@@ -666,6 +673,7 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 			final Marshaller marshaller = context.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, String.format("%s %s", DEFAULT_NAMESPACE, DEFAULT_NAMESPACE_LOCATION));
 			marshaller.marshal(ele, out);
 		} catch(JAXBException e) {
 			LOGGER.error( e.getMessage(), e);

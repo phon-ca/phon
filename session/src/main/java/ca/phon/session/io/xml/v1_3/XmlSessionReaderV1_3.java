@@ -64,7 +64,7 @@ import java.util.*;
  *
  */
 @XMLSerial(
-	namespace="https://phon.ca/ns/phonbank",
+	namespace="https://phon.ca/ns/session",
 	elementName="session",
 	bindType=Session.class
 )
@@ -175,11 +175,13 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		}
 
 		final List<TierViewItem> tierOrder = new ArrayList<TierViewItem>();
-		for(XmlTierViewType tot:xmlSessionType.getTierOrder().getTierView()) {
-			final TierViewItem toi = readTierViewItem(factory, tot);
-			tierOrder.add(toi);
+		if(xmlSessionType.getTierOrder() != null) {
+			for (XmlTierViewType tot : xmlSessionType.getTierOrder().getTierView()) {
+				final TierViewItem toi = readTierViewItem(factory, tot);
+				tierOrder.add(toi);
+			}
+			retVal.setTierView(tierOrder);
 		}
-		retVal.setTierView(tierOrder);
 
 		// read transcript data
 		if(xmlSessionType.getTranscript() != null) {

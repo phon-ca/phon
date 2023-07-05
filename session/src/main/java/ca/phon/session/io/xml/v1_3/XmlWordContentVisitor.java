@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-public final class XmlWordContentVisitor extends VisitorAdapter<Serializable> {
+public final class XmlWordContentVisitor extends VisitorAdapter<Object> {
 
     private Langs langs = new Langs();
 
@@ -32,10 +32,12 @@ public final class XmlWordContentVisitor extends VisitorAdapter<Serializable> {
     public void visitLangs(XmlLangsType xmlLangs) {
         if(xmlLangs.getSingle() != null) {
             langs = new Langs(Langs.LangsType.SINGLE, xmlLangs.getSingle());
-        } else if(xmlLangs.getMultiple() != null) {
+        } else if(xmlLangs.getMultiple().size() > 0) {
             langs = new Langs(Langs.LangsType.MULTIPLE, xmlLangs.getMultiple().toArray(new String[0]));
-        } else if(xmlLangs.getAmbiguous() != null) {
+        } else if(xmlLangs.getAmbiguous().size() > 0) {
             langs = new Langs(Langs.LangsType.AMBIGUOUS, xmlLangs.getAmbiguous().toArray(new String[0]));
+        } else {
+            langs = new Langs(Langs.LangsType.SECONDARY);
         }
     }
 
@@ -170,13 +172,11 @@ public final class XmlWordContentVisitor extends VisitorAdapter<Serializable> {
     }
 
     @Override
-    public void fallbackVisit(Serializable obj) {
+    public void fallbackVisit(Object obj) {
         if(obj instanceof JAXBElement<?>) {
-            if(((JAXBElement<?>) obj).getDeclaredType() == Serializable.class) {
-                final JAXBElement<Serializable> ele = (JAXBElement<Serializable>) obj;
-                visit(ele.getValue());
-                return;
-            }
+            final JAXBElement<?> ele = (JAXBElement<?>) obj;
+            visit(ele.getValue());
+            return;
         }
         throw new IllegalArgumentException(obj.getClass().getName());
     }

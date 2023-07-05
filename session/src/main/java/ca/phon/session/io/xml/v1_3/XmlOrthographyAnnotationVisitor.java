@@ -31,8 +31,8 @@ public class XmlOrthographyAnnotationVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitError(String error) {
-        annotations.add(new Error(error));
+    public void visitError(XmlErrorType xmlErrorType) {
+        annotations.add(new Error(xmlErrorType.getValue()));
     }
 
     @Visits
@@ -57,7 +57,8 @@ public class XmlOrthographyAnnotationVisitor extends VisitorAdapter<Object> {
             case OVERLAP_FOLLOWS -> ca.phon.orthography.OverlapType.OVERLAP_FOLLOWS;
             case OVERLAP_PRECEDES -> ca.phon.orthography.OverlapType.OVERLAP_PRECEDES;
         };
-        annotations.add(new ca.phon.orthography.Overlap(type));
+        final int index = xmlOverlap.getIndex() != null ? xmlOverlap.getIndex().intValue() : -1;
+        annotations.add(new ca.phon.orthography.Overlap(type, index));
     }
 
     @Visits
@@ -71,6 +72,13 @@ public class XmlOrthographyAnnotationVisitor extends VisitorAdapter<Object> {
             langs = new ca.phon.orthography.Langs(ca.phon.orthography.Langs.LangsType.AMBIGUOUS, xmlLangs.getAmbiguous().toArray(new String[0]));
         }
         annotations.add(new LangsAnnotation(langs));
+    }
+
+    @Visits
+    public void visitDuration(XmlDurationType xmlDuration) {
+        final float value = xmlDuration.getValue().floatValue();
+        final Duration duration = new Duration(value / 1000.0f);
+        annotations.add(duration);
     }
 
     @Override

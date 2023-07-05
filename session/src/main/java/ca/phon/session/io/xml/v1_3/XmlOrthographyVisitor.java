@@ -82,11 +82,11 @@ public class XmlOrthographyVisitor extends VisitorAdapter<Object> {
             case UNINTELLIGIBLE_WITH_PHO -> UntranscribedType.UNINTELLIGIBLE_WORD_WITH_PHO;
         };
         final List<WordPos> wordPos = new ArrayList<>();
-
         final boolean isSeparatedPrefix = word.isSeparatedPrefix() != null && word.isSeparatedPrefix();
         final WordSuffix suffix = new WordSuffix(isSeparatedPrefix, formType, word.getFormSuffix(), userSpecialForm, wordPos);
         final XmlWordContentVisitor visitor = new XmlWordContentVisitor();
         word.getContent().forEach(visitor::visit);
+        wordPos.addAll(visitor.getWordPos());
         if(visitor.isCompound()) {
             List<WordElement> w1Eles = visitor.getCompoundWordStack().pop();
             List<WordElement> w2Eles = visitor.getWordElements();
@@ -97,7 +97,7 @@ public class XmlOrthographyVisitor extends VisitorAdapter<Object> {
                 type = visitor.getCompoundWordMarkerTypes().pop();
                 compoundWord = new CompoundWord(new Word(w1Eles.toArray(new WordElement[0])), compoundWord, type);
             }
-            compoundWord = new CompoundWord(visitor.getLangs(), prefix, suffix,
+            compoundWord = new CompoundWord(visitor.getLangs(), visitor.getReplacements(), prefix, suffix,
                     compoundWord.getWord1(), compoundWord.getWord2(), compoundWord.getMarker());
             builder.append(compoundWord);
         } else {

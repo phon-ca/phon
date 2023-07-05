@@ -52,7 +52,21 @@ public final class CompoundWord extends Word {
 		this.word2 = word2;
 		this.marker = marker;
 	}
-	
+
+	public CompoundWord(Langs langs, List<Replacement> replacements, WordPrefix prefix, WordSuffix suffix, Word word1, Word word2, CompoundWordMarker marker) {
+		super(langs, replacements, prefix, suffix, null, new WordElement[0]);
+		this.word1 = word1;
+		this.word2 = word2;
+		this.marker = marker;
+	}
+
+	public CompoundWord(Langs langs, List<Replacement> replacements, WordPrefix prefix, WordSuffix suffix, UntranscribedType untranscribedType, Word word1, Word word2, CompoundWordMarker marker) {
+		super(langs, replacements, prefix, suffix, untranscribedType, new WordElement[0]);
+		this.word1 = word1;
+		this.word2 = word2;
+		this.marker = marker;
+	}
+
 	public Word getWord1() {
 		return word1;
 	}
