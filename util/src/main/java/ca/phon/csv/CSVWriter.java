@@ -83,6 +83,10 @@ public class CSVWriter implements AutoCloseable, Closeable {
         if (writer != null) writer.close();
     }
 
+    public void flush() throws IOException {
+        writer.flush();
+    }
+
     /**
      * Adds a listener to the CSVWriter.
      * */
@@ -169,4 +173,5 @@ public class CSVWriter implements AutoCloseable, Closeable {
             listener.endUnescaped(writer, recordCount, fieldCount, field);
         }
     }
+
 }
