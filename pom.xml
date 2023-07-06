@@ -92,8 +92,8 @@
 		<net.lingala.zip4j.version>2.10.0</net.lingala.zip4j.version>
 		<net.sourceforge.jexcelapi.version>2.6.12</net.sourceforge.jexcelapi.version>
 		<org.antlr.stringtemplate.version>3.2.1</org.antlr.stringtemplate.version>
-		<org.antlr.antlr.version>3.5.2</org.antlr.antlr.version>
-		<org.antlr.antlr4.version>4.7.2</org.antlr.antlr4.version>
+		<org.antlr.antlr.version>3.5.3</org.antlr.antlr.version>
+		<org.antlr.antlr4.version>4.13.0</org.antlr.antlr4.version>
 		<org.apache.commons.commons-lang3.version>3.1</org.apache.commons.commons-lang3.version>
 		<commons-io.version>2.7</commons-io.version>
 		<org.apache.commons.commons-collections4.version>4.1</org.apache.commons.commons-collections4.version>

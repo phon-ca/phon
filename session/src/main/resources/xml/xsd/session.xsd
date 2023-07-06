@@ -344,6 +344,11 @@
                     <xs:documentation>Tier will use same format as ipa tier</xs:documentation>
                 </xs:annotation>
             </xs:enumeration>
+            <xs:enumeration value="phone alignment">
+                <xs:annotation>
+                    <xs:documentation>Custom phone alignment using user-defined ipa tiers</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
             <xs:enumeration value="simple">
                 <xs:annotation>
                     <xs:documentation>Tier will use a simplified parser into types separated by spaces.
@@ -1292,6 +1297,7 @@
         <xs:choice minOccurs="1" maxOccurs="1">
             <xs:element ref="u"/>
             <xs:element ref="pho"/>
+            <xs:element ref="alignment"/>
             <xs:element ref="tierData"/>
             <xs:element ref="unparsed"/>
         </xs:choice>

@@ -346,6 +346,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		final Class<?> tierType = switch (tdt.getType()) {
 			case CHAT -> Orthography.class;
 			case IPA -> IPATranscript.class;
+			case PHONE_ALIGNMENT -> PhoneAlignment.class;
 			case SIMPLE -> UserTierData.class;
 		};
 		final Map<String, String> tierParams = new LinkedHashMap<>();
