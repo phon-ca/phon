@@ -15,12 +15,13 @@
  */
 package ca.phon.query.report.datasource;
 
-import au.com.bytecode.opencsv.CSVWriter;
+import ca.phon.csv.CSVWriter;
 import ca.phon.formatter.*;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.util.PhonConstants;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 
 @FormatterType(value=TableDataSource.class)
@@ -67,15 +68,10 @@ public class TableDataSourceFormatter implements Formatter<TableDataSource> {
 				}
 				csvWriter.writeNext(row);
 			}
-		} catch (IOException e) {
-
+		} catch (IOException ignored) {
 		}
 
-		String retVal = new String();
-		try {
-			retVal = bout.toString("UTF-8");
-		} catch (UnsupportedEncodingException e) {}
-		return retVal;
+		return bout.toString(StandardCharsets.UTF_8);
 	}
 
 	@Override

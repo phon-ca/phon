@@ -15,7 +15,7 @@
  */
 package ca.phon.ipa.features;
 
-import au.com.bytecode.opencsv.CSVReader;
+import ca.phon.csv.CSVReader;
 
 import java.io.*;
 import java.util.Map;

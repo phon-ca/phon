@@ -15,7 +15,8 @@
  */
 package ca.phon.query.report.csv;
 
-import au.com.bytecode.opencsv.CSVWriter;
+import ca.phon.csv.CSVQuoteType;
+import ca.phon.csv.CSVWriter;
 import ca.phon.project.Project;
 import ca.phon.query.db.*;
 import ca.phon.query.report.*;
@@ -81,9 +82,9 @@ public class CSVReportBuilder extends ReportBuilder {
 		Object retVal = null;
 		
 		if(propName.equals(PRINT_SECTION_NAMES)) {
-			retVal = new Boolean(true);
+			retVal = Boolean.TRUE;
 		} else if(propName.equals(INDENT_CONTENT)) {
-			retVal = new Boolean(false);
+			retVal = Boolean.FALSE;
 		}
 		
 		return (retVal == null ? super.getPropertyDefault(propName) : retVal);
@@ -138,14 +139,14 @@ public class CSVReportBuilder extends ReportBuilder {
 			Query query, ResultSet[] resultSets, OutputStream stream) throws ReportBuilderException {
 		
 		char sep = (Character)getProperty(CSV_SEP_CHAR);
-		char quote = (Character)getProperty(CSV_QUOTE_CHAR);
+		CSVQuoteType quote = (Character)getProperty(CSV_QUOTE_CHAR) == '"' ? CSVQuoteType.DOUBLE_QUOTE : CSVQuoteType.SINGLE_QUOTE;
 		String lineTerm = (String)getProperty(CSV_LINE_TERM);
 		
 		try {
 			OutputStreamWriter fWriter = 
 				new OutputStreamWriter(stream, getProperty(FILE_ENCODING).toString());
 			
-			writer = new CSVWriter(fWriter, sep, quote, lineTerm);
+			writer = new CSVWriter(fWriter, sep, quote, true, lineTerm.length() != 2, false);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			throw new ReportBuilderException(e);
@@ -159,9 +160,13 @@ public class CSVReportBuilder extends ReportBuilder {
 			Section section = sectionEle.getValue();
 			
 			if(isPrintSectionNames()) {
-				// output newline then a single line with the section name
-				writer.writeNext(new String[0]);
-				writer.writeNext(new String[]{ section.getName() });
+				try {
+					// output newline then a single line with the section name
+					writer.writeNext(new String[0]);
+					writer.writeNext(new String[]{section.getName()});
+				} catch (IOException e) {
+					throw new ReportBuilderException(e);
+				}
 			}
 			
 			CSVSectionWriter sectionWriter = null;
@@ -199,14 +204,18 @@ public class CSVReportBuilder extends ReportBuilder {
 						Section groupSection = groupSectionEle.getValue();
 						
 						if(isPrintSectionNames()) {
-							// output newline then a single line with the section name
-							writer.writeNext(new String[0]);
-							List<String> groupTitleLine = new ArrayList<String>();
-							for(int i = 0; i < getIndentLevel(); i++) groupTitleLine.add("");
-							groupTitleLine.add(groupSection.getName());
-							writer.writeNext(groupTitleLine.toArray(new String[0]));
-							
-							if(isIndentContent()) nextIndentLevel();
+							try {
+								// output newline then a single line with the section name
+								writer.writeNext(new String[0]);
+								List<String> groupTitleLine = new ArrayList<String>();
+								for (int i = 0; i < getIndentLevel(); i++) groupTitleLine.add("");
+								groupTitleLine.add(groupSection.getName());
+								writer.writeNext(groupTitleLine.toArray(new String[0]));
+
+								if (isIndentContent()) nextIndentLevel();
+							} catch (IOException e) {
+								throw new ReportBuilderException(e);
+							}
 						}
 						
 						if(groupSection instanceof ResultListing) {
@@ -216,19 +225,31 @@ public class CSVReportBuilder extends ReportBuilder {
 							
 							CSVSectionWriter groupSectionWriter = new CSVTableDataSourceWriter(this, tblInvDs);
 							groupSectionWriter.writeSection(writer, getIndentLevel());
-							writer.writeNext(new String[0]);
+							try {
+								writer.writeNext(new String[0]);
+							} catch (IOException e) {
+								throw new ReportBuilderException(e);
+							}
 						} else if (groupSection instanceof CommentSection) {
 							CommentSection commentSection = (CommentSection)groupSection;
 							CSVCommentWriter commentWriter = new CSVCommentWriter(commentSection);
 							commentWriter.writeSection(writer, getIndentLevel());
-							writer.writeNext(new String[0]);
+							try {
+								writer.writeNext(new String[0]);
+							} catch (IOException e) {
+								throw new ReportBuilderException(e);
+							}
 						} else if(groupSection instanceof InventorySection) {
 							InventorySection invSection = (InventorySection)groupSection;
 							
 							InventoryDataSource invDs = new InventoryDataSource(new ResultSet[]{resultSet}, invSection);
 							CSVTableDataSourceWriter dsWriter = new CSVTableDataSourceWriter(this, invDs);
 							dsWriter.writeSection(writer, getIndentLevel());
-							writer.writeNext(new String[0]);
+							try {
+								writer.writeNext(new String[0]);
+							} catch (IOException e) {
+								throw new ReportBuilderException(e);
+							}
 						}
 						
 						if(isPrintSectionNames() && 
@@ -240,7 +261,12 @@ public class CSVReportBuilder extends ReportBuilder {
 			
 			if(sectionWriter != null) {
 				sectionWriter.writeSection(writer, getIndentLevel());
-				writer.writeNext(new String[0]);
+				try {
+					writer.writeNext(new String[0]);
+				} catch (IOException e) {
+					throw new ReportBuilderException(e);
+				}
+
 				try {
 					writer.flush();
 				} catch (IOException e) {
@@ -268,7 +294,11 @@ public class CSVReportBuilder extends ReportBuilder {
 		for(int i = 0; i < getIndentLevel(); i++) sessionNameLine.add("");
 		sessionNameLine.add("Session:");
 		sessionNameLine.add(resultSet.getSessionPath());
-		writer.writeNext(sessionNameLine.toArray(new String[0]));
+		try {
+			writer.writeNext(sessionNameLine.toArray(new String[0]));
+		} catch (IOException e) {
+			LOGGER.warn(e);
+		}
 		
 		if(group.isPrintParticipantInformation()) {
 			try {

@@ -1,13 +1,14 @@
 package ca.phon.app.session;
 
-import au.com.bytecode.opencsv.CSVWriter;
 import ca.phon.app.log.LogUtil;
+import ca.phon.csv.CSVWriter;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 
 import java.awt.datatransfer.*;
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class RecordsTransferable implements Transferable {
@@ -98,7 +99,7 @@ public class RecordsTransferable implements Transferable {
     private String recordsToCSV() {
         final ByteArrayOutputStream bout = new ByteArrayOutputStream();
         try {
-            final CSVWriter writer = new CSVWriter(new OutputStreamWriter(bout, "UTF-8"), ',', '\"');
+            final CSVWriter writer = new CSVWriter(new OutputStreamWriter(bout, StandardCharsets.UTF_8));
 
             int numColumns = writeHeader(writer, session);
             for(Record record:getRecords()) {
@@ -110,7 +111,7 @@ public class RecordsTransferable implements Transferable {
         } catch (IOException e) {
             LogUtil.severe( e.getLocalizedMessage(), e);
         }
-        return new String(bout.toByteArray(), Charset.forName("UTF-8"));
+        return bout.toString(StandardCharsets.UTF_8);
     }
 
     private int writeHeader(CSVWriter writer, Session session) throws IOException {

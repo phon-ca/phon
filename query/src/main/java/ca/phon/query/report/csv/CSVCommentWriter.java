@@ -15,9 +15,11 @@
  */
 package ca.phon.query.report.csv;
 
-import au.com.bytecode.opencsv.CSVWriter;
+import ca.phon.csv.CSVWriter;
 import ca.phon.query.report.io.CommentSection;
 import org.apache.commons.lang3.StringUtils;
+
+import java.io.IOException;
 
 /**
  * Write out comments to the csv report.
@@ -59,9 +61,15 @@ public class CSVCommentWriter implements CSVSectionWriter {
 				for(int i = indentLevel; i < indentedOutput.length; i++) {
 					indentedOutput[i] = outputLine[i-indentLevel];
 				}
-				writer.writeNext(indentedOutput);
+				try {
+					writer.writeNext(indentedOutput);
+				} catch (IOException ignored) {
+				}
 			} else {
-				writer.writeNext(outputLine);
+				try {
+					writer.writeNext(outputLine);
+				} catch (IOException ignored) {
+				}
 			}
 		}
 	}

@@ -15,10 +15,10 @@
  */
 package ca.phon.app.session.editor.view.check;
 
-import au.com.bytecode.opencsv.CSVWriter;
 import ca.phon.app.log.*;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.view.check.actions.SessionCheckRefreshAction;
+import ca.phon.csv.CSVWriter;
 import ca.phon.plugin.*;
 import ca.phon.session.Session;
 import ca.phon.session.check.*;
@@ -33,6 +33,7 @@ import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -222,7 +223,7 @@ public class SessionCheckView extends EditorView {
 		
 		public SessionCheckWorker() {
 			try {
-				out = new OutputStreamWriter(bufferPanel.getLogBuffer().getStdOutStream(), "UTF-8");
+				out = new OutputStreamWriter(bufferPanel.getLogBuffer().getStdOutStream(), StandardCharsets.UTF_8);
 				
 				out.flush();
 				out.write(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.SHOW_BUSY);
@@ -267,9 +268,9 @@ public class SessionCheckView extends EditorView {
 				row[1] = "" + (ve.getRecord()+1);
 				row[3] = ve.getTierName();
 				row[4] = ve.getMessage();
-				
-				writer.writeNext(row);
+
 				try {
+					writer.writeNext(row);
 					writer.flush();
 				} catch (IOException e) {
 					LogUtil.warning(e);

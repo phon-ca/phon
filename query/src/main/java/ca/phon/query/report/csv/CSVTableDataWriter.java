@@ -15,7 +15,8 @@
  */
 package ca.phon.query.report.csv;
 
-import au.com.bytecode.opencsv.CSVWriter;
+import ca.phon.csv.CSVQuoteType;
+import ca.phon.csv.CSVWriter;
 import ca.phon.util.OSInfo;
 
 import javax.swing.*;
@@ -61,9 +62,8 @@ public class CSVTableDataWriter {
 	
 	public void writeTableToFile(JTable table, File file) 
 		throws IOException {
-		final CSVWriter writer = 
-				new CSVWriter(new PrintWriter(file, charEncoding), ',', '\"', 
-						(OSInfo.isWindows() ? "\r\n" : "\n"));
+		final CSVWriter writer =
+				new CSVWriter(new PrintWriter(file, charEncoding), ',', CSVQuoteType.DOUBLE_QUOTE, true, OSInfo.isWindows() ? false : true, false);
 		// output column names
 		final String[] colnames = new String[table.getColumnCount()];
 		for(int i = 0; i < table.getColumnCount(); i++) {

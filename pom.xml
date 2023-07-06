@@ -90,7 +90,6 @@
 		<de.susebox.jtopas.version>0.8</de.susebox.jtopas.version>
 		<junit.junit.version>4.13.1</junit.junit.version>
 		<net.lingala.zip4j.version>2.10.0</net.lingala.zip4j.version>
-		<net.sf.opencsv.opencsv.version>2.3</net.sf.opencsv.opencsv.version>
 		<net.sourceforge.jexcelapi.version>2.6.12</net.sourceforge.jexcelapi.version>
 		<org.antlr.stringtemplate.version>3.2.1</org.antlr.stringtemplate.version>
 		<org.antlr.antlr.version>3.5.2</org.antlr.antlr.version>
@@ -261,12 +260,6 @@
 				<groupId>org.antlr</groupId>
 				<artifactId>antlr4</artifactId>
 				<version>${org.antlr.antlr4.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>net.sf.opencsv</groupId>
-				<artifactId>opencsv</artifactId>
-				<version>${net.sf.opencsv.opencsv.version}</version>
 			</dependency>
 
 			<dependency>

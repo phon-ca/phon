@@ -15,9 +15,10 @@
  */
 package ca.phon.query.report.csv;
 
-import au.com.bytecode.opencsv.CSVWriter;
+import ca.phon.csv.CSVWriter;
 import ca.phon.query.report.datasource.TableDataSource;
 
+import java.io.IOException;
 import java.util.*;
 /**
  * Write the data for the tabular data sources
@@ -55,7 +56,9 @@ public class CSVTableDataSourceWriter implements CSVSectionWriter {
 		for(int col = 0; col < dataSource.getColumnCount(); col++) {
 			currentLine.add(dataSource.getColumnTitle(col));
 		}
-		writer.writeNext(currentLine.toArray(new String[0]));
+		try {
+			writer.writeNext(currentLine.toArray(new String[0]));
+		} catch (IOException ignored) {}
 		
 		for(int row = 0; row < dataSource.getRowCount(); row++) {
 			
@@ -69,7 +72,9 @@ public class CSVTableDataSourceWriter implements CSVSectionWriter {
 				String txt = (val == null ? "" : val.toString());
 				currentLine.add(txt);
 			}
-			writer.writeNext(currentLine.toArray(new String[0]));
+			try {
+				writer.writeNext(currentLine.toArray(new String[0]));
+			} catch (IOException ignored) {}
 		}
 	}
 

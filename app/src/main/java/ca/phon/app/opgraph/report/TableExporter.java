@@ -1,10 +1,9 @@
 package ca.phon.app.opgraph.report;
 
-import au.com.bytecode.opencsv.CSVWriter;
 import ca.phon.app.excel.WorkbookUtils;
 import ca.phon.app.log.LogUtil;
+import ca.phon.csv.CSVWriter;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
-import ca.phon.util.OSInfo;
 import jxl.Workbook;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
@@ -51,9 +50,7 @@ public class TableExporter {
     }
 
     public static void writeTableToCSVFile(DefaultTableDataSource table, List<String> columns, File file, String encoding, boolean useIntegerForBoolean) throws IOException {
-        final CSVWriter writer =
-                new CSVWriter(new PrintWriter(file, encoding), ',', '\"',
-                        (OSInfo.isWindows() ? "\r\n" : "\n"));
+        final CSVWriter writer = new CSVWriter(new PrintWriter(file, encoding));
 
         // write column header
         final String[] colnames = columns.toArray(new String[columns.size()]);

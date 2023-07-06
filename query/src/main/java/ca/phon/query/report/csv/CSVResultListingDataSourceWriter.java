@@ -15,11 +15,12 @@
  */
 package ca.phon.query.report.csv;
 
-import au.com.bytecode.opencsv.CSVWriter;
+import ca.phon.csv.CSVWriter;
 import ca.phon.query.report.datasource.ResultListingDataSource;
 import ca.phon.query.report.io.ResultListingFormatType;
 import org.apache.logging.log4j.LogManager;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.regex.*;
 
@@ -44,7 +45,11 @@ public class CSVResultListingDataSourceWriter extends CSVTableDataSourceWriter {
 			for(int col = 0; col < rsDs.getColumnCount(); col++) {
 				currentLine.add(rsDs.getColumnTitle(col));
 			}
-			writer.writeNext(currentLine.toArray(new String[0]));
+			try {
+				writer.writeNext(currentLine.toArray(new String[0]));
+			} catch (IOException e) {
+				LOGGER.warn(e);
+			}
 			
 			for(int row = 0; row < rsDs.getRowCount(); row++) {
 				currentLine.clear();
@@ -66,7 +71,11 @@ public class CSVResultListingDataSourceWriter extends CSVTableDataSourceWriter {
 						currentLine.add(txt);
 					}
 				}
-				writer.writeNext(currentLine.toArray(new String[0]));
+				try {
+					writer.writeNext(currentLine.toArray(new String[0]));
+				} catch (IOException e) {
+					LOGGER.warn(e);
+				}
 			}
 		}
 	}

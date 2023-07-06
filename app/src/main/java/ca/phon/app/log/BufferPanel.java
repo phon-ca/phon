@@ -15,11 +15,11 @@
  */
 package ca.phon.app.log;
 
-import au.com.bytecode.opencsv.CSVReader;
 import ca.phon.app.JCefHelper;
 import ca.phon.app.excel.WorkbookUtils;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.session.editor.*;
+import ca.phon.csv.CSVReader;
 import ca.phon.extensions.*;
 import ca.phon.plugin.*;
 import ca.phon.project.Project;

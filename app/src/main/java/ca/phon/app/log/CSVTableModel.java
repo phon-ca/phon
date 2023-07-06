@@ -15,7 +15,7 @@
  */
 package ca.phon.app.log;
 
-import au.com.bytecode.opencsv.CSVReader;
+import ca.phon.csv.CSVReader;
 
 import javax.swing.table.AbstractTableModel;
 import java.io.IOException;
