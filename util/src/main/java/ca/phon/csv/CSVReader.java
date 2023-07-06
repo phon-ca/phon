@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.List;
 
 // https://datatracker.ietf.org/doc/html/rfc4180
 
@@ -28,17 +30,17 @@ public class CSVReader implements AutoCloseable, Closeable {
      * Constructs a new CSVReader.
      * @param reader The reader that the data is read from.
      * */
-    public CSVReader(BufferedReader reader) {
+    public CSVReader(Reader reader) {
         this(reader, new char[]{ DEFAULT_SEPARATOR }, DEFAULT_QUOTE_CHAR, DEFAULT_TRIM_SPACES);
     }
 
-    public CSVReader(BufferedReader reader, char[] separators) {
+    public CSVReader(Reader reader, char[] separators) {
         this(reader, separators, DEFAULT_QUOTE_CHAR, DEFAULT_TRIM_SPACES);
     }
-    public CSVReader(BufferedReader reader, CSVQuoteType quoteChar) {
+    public CSVReader(Reader reader, CSVQuoteType quoteChar) {
         this(reader, new char[]{ DEFAULT_SEPARATOR }, quoteChar, DEFAULT_TRIM_SPACES);
     }
-    public CSVReader(BufferedReader reader, boolean trimSpaces) {
+    public CSVReader(Reader reader, boolean trimSpaces) {
         this(reader, new char[]{ DEFAULT_SEPARATOR }, DEFAULT_QUOTE_CHAR, trimSpaces);
     }
 
@@ -83,4 +85,18 @@ public class CSVReader implements AutoCloseable, Closeable {
         String[] record = this.csvParser.record();
         return record;
     }
+
+    /**
+     * Read all records in csv data
+     * @return list of string arrays
+     */
+    public List<String[]> readAll() throws IOException {
+        final List<String[]> retVal = new ArrayList<>();
+        String[] row = null;
+        while((row = readNext()) != null) {
+            retVal.add(row);
+        }
+        return retVal;
+    }
+
 }
