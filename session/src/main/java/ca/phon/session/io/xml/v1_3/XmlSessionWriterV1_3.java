@@ -490,9 +490,11 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 	}
 
 	private XmlParticipantType findXmlParticipant(XmlSessionType sessionType, Participant participant) {
-		for(XmlParticipantType participantType:sessionType.getParticipants().getParticipant()) {
-			if(participantType.getId().equals(participant.getId())) {
-				return participantType;
+		if(sessionType.getParticipants() != null) {
+			for (XmlParticipantType participantType : sessionType.getParticipants().getParticipant()) {
+				if (participantType.getId().equals(participant.getId())) {
+					return participantType;
+				}
 			}
 		}
 		return null;
