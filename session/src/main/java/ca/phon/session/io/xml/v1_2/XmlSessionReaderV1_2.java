@@ -465,23 +465,17 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 	private Orthography copyOrthography(SessionFactory factory, OrthographyType ot) {
 		final OrthographyBuilder builder = new OrthographyBuilder();
 
-		// insert commas unless we have the situation of one word in each group
-		boolean allOnes = true;
-		for(Object otEle: ot.getWOrGOrP()) {
-			if (!(otEle instanceof GroupType gt)) continue;
-			allOnes &= gt.getWOrComOrE().size() == 1;
-		}
-		final boolean insertCommas = !allOnes;
-
-		for(Object otEle:ot.getWOrGOrP()) {
+		for(int i = 0 ;i < ot.getWOrGOrP().size(); i++) {
+			final Object otEle = ot.getWOrGOrP().get(i);
 			if(!(otEle instanceof GroupType gt)) continue;
-			if(insertCommas && builder.size() > 0) {
-				builder.append(new TagMarker(TagMarkerType.COMMA));
-			}
+			boolean insertComma = gt.getWOrComOrE().size() > 1 && i < ot.getWOrGOrP().size()-1;
 			for(Object ele:gt.getWOrComOrE()) {
 				if(ele instanceof WordType) {
 					final WordType wt = (WordType)ele;
 					builder.append(new ca.phon.orthography.Word(new WordText(wt.getContent())));
+					if(wt.getContent().contains(",")) {
+						insertComma = false;
+					}
 				} else if(ele instanceof EventType) {
 					final EventType et = (EventType) ele;
 					final String txt = et.getContent();
@@ -633,6 +627,11 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 						case "COMMA" -> builder.append(new TagMarker(TagMarkerType.COMMA));
 					}
 				}
+			}
+
+			// insert commas between multi-word groups
+			if(insertComma && builder.size() > 0) {
+				builder.append(new TagMarker(TagMarkerType.COMMA));
 			}
 		}
 
