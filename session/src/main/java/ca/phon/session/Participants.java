@@ -19,6 +19,8 @@ import ca.phon.extensions.ExtendableObject;
 import ca.phon.visitor.*;
 
 import java.util.*;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Helper class providing iterator and visitor methods
@@ -144,4 +146,18 @@ public final class Participants extends ExtendableObject implements Iterable<Par
 		dest.setSES(src.getSES());
 		dest.setSex(src.getSex());
 	}
+
+	public Stream<Participant> stream() {
+		return stream(false);
+	}
+
+	/**
+	 * Return participant stream
+	 *
+	 * @param parallel
+	 */
+	public Stream<Participant> stream(boolean parallel) {
+		return StreamSupport.stream(spliterator(), parallel);
+	}
+
 }

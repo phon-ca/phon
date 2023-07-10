@@ -19,6 +19,8 @@ import ca.phon.extensions.ExtendableObject;
 import ca.phon.visitor.*;
 
 import java.util.Iterator;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Iteratable/visitable access for {@link Session} {@link Record}s
@@ -64,6 +66,20 @@ public final class Records extends ExtendableObject implements Iterable<Record>,
 		for(Record r:this) {
 			visitor.visit(r);
 		}
+	}
+
+	public Stream<Record> stream() {
+		return stream(false);
+	}
+
+	/**
+	 * Get stream of records
+	 *
+	 * @param parallel
+	 * @return record stream
+	 */
+	public Stream<Record> stream(boolean parallel) {
+		return StreamSupport.stream(spliterator(), parallel);
 	}
 	
 }
