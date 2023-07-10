@@ -563,11 +563,7 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 		if(orthoTier.isUnvalidated()) {
 			retVal.setUnparsed(writeUnparsed(factory, orthoTier.getUnvalidatedValue()));
 		} else {
-			// default utterance if action followed by terminator
-			Orthography orthography = orthoTier.getValue().length() == 0
-					? new Orthography(List.of(new ca.phon.orthography.Action(), new Terminator(ca.phon.orthography.TerminatorType.PERIOD)))
-					: orthoTier.getValue();
-			retVal.setU(writeOrthography(factory, orthography));
+			retVal.setU(writeOrthography(factory, orthoTier.getValue()));
 		}
 		return retVal;
 	}
