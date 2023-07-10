@@ -127,6 +127,7 @@ public class CSVWriter implements AutoCloseable, Closeable {
      * @param field The data to write.
      * */
     private void writeField(String field) throws IOException {
+        if(field == null) field = "";
         listenerList.forEach(l -> l.startField(writer, recordCount, fieldCount));
         String processedField = trimSpaces ? field.trim() : field;
         boolean containsQuoteChar = processedField.contains(Character.toString(this.quoteType.getQuoteChar()));
