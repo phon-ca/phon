@@ -83,7 +83,12 @@ public final class Participants extends ExtendableObject implements Iterable<Par
 			visitor.visit(p);
 		}
 	}
-	
+
+	/**
+	 * Count participant roles in session
+	 *
+	 * @return map of participant roles to count
+	 */
 	public Map<ParticipantRole, Integer> getRoleCount() {
 		final Map<ParticipantRole, Integer> retVal = new HashMap<ParticipantRole, Integer>();
 		
@@ -97,6 +102,18 @@ public final class Participants extends ExtendableObject implements Iterable<Par
 		}
 		
 		return retVal;
+	}
+
+	/**
+	 * Get next particpant id based on role
+	 *
+	 * @param role
+	 * @return next preferred participant id
+	 */
+	public String getPreferredParticipantId(ParticipantRole role) {
+		final Map<ParticipantRole, Integer> roleCount = getRoleCount();
+		return !roleCount.containsKey(role) || roleCount.get(role) == 0 ? role.getId()
+				: role.getId().substring(0, 2) + roleCount.get(role);
 	}
 	
 	/**
