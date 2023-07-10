@@ -1126,8 +1126,8 @@
             <xs:element ref="prefix" minOccurs="0" maxOccurs="1"/>
             <xs:element ref="base" minOccurs="1" maxOccurs="1"/>
             <xs:element ref="combining" minOccurs="0" maxOccurs="1"/>
-            <xs:element ref="phlen" minOccurs="0" maxOccurs="1"/>
             <xs:element ref="suffix" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="phlen" minOccurs="0" maxOccurs="1"/>
             <xs:element ref="toneNumber" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
         <xs:attribute name="scType" type="syllableConstituentType"/>
