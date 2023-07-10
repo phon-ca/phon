@@ -114,8 +114,16 @@ public final class Participants extends ExtendableObject implements Iterable<Par
 	 */
 	public String getPreferredParticipantId(ParticipantRole role) {
 		final Map<ParticipantRole, Integer> roleCount = getRoleCount();
-		return !roleCount.containsKey(role) || roleCount.get(role) == 0 ? role.getId()
-				: role.getId().substring(0, 2) + roleCount.get(role);
+		String id = role.getId();
+		int idx = roleCount.getOrDefault(role, 0);
+		if(getParticipantById(id) != null || idx > 0) {
+			id = role.getId().substring(0, 2) + idx;
+			while (getParticipantById(id) != null) {
+				++idx;
+				id = role.getId().substring(0, 2) + idx;
+			}
+		}
+		return id;
 	}
 	
 	/**
