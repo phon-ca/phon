@@ -168,6 +168,8 @@ public final class Tier<T> extends ExtendableObject {
 		final StringBuffer buffer = new StringBuffer();
 		if(hasValue())
 			buffer.append(getValue());
+		else if(isUnvalidated())
+			buffer.append(getUnvalidatedValue().getValue());
 		return buffer.toString();
 	}
 	
