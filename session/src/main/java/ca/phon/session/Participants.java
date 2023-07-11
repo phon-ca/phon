@@ -18,6 +18,7 @@ package ca.phon.session;
 import ca.phon.extensions.ExtendableObject;
 import ca.phon.visitor.*;
 
+import java.time.Period;
 import java.util.*;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -107,7 +108,7 @@ public final class Participants extends ExtendableObject implements Iterable<Par
 	}
 
 	/**
-	 * Get next particpant id based on role
+	 * Get next participant id based on role
 	 *
 	 * @param role
 	 * @return next preferred participant id
@@ -125,18 +126,36 @@ public final class Participants extends ExtendableObject implements Iterable<Par
 		}
 		return id;
 	}
-	
+
+	/**
+	 * Determine age for a participant based on the following rules:
+	 * <ul>
+	 *     <li>If session date and participant birthday is available, return calculated period</li>
+	 *     <li>If participant age has been manually set, return specified age</li>
+	 *     <li>return Optional.empty()</li>
+	 * </ul>
+	 *
+	 * @param participant age if available
+	 */
+	public Period determineParticipantAge(Participant participant) {
+		if(session.getDate() != null && participant.getBirthDate() != null) {
+			return participant.getAge(session.getDate());
+		} else {
+			return participant.getAge(null);
+		}
+	}
+
 	/**
 	 * Returns a list of participants which does not include
 	 * the given participant.
 	 * 
-	 * @param part
-	 * @return
+	 * @param participant
+	 * @return all other participants in session
 	 */
-	public List<Participant> otherParticipants(Participant part) {
+	public List<Participant> otherParticipants(Participant participant) {
 		List<Participant> retVal = new ArrayList<Participant>();
 		for(Participant p:this) {
-			if(p == part) continue;
+			if(p == participant) continue;
 			retVal.add(p);
 		}
 		return retVal;
