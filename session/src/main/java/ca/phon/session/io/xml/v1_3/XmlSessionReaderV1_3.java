@@ -364,10 +364,15 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 			final List<TypeAlignmentRules.AlignableType> alignableTypes = new ArrayList<>();
 			for(var alignableType:tdt.getTierAlignment().getAlignWith()) {
 				final TypeAlignmentRules.AlignableType type = switch (alignableType) {
+					case ACTION -> TypeAlignmentRules.AlignableType.Action;
 					case FREECODE -> TypeAlignmentRules.AlignableType.Freecode;
 					case GROUP -> TypeAlignmentRules.AlignableType.Group;
+					case HAPPENING -> TypeAlignmentRules.AlignableType.Happening;
 					case INTERNAL_MEDIA -> TypeAlignmentRules.AlignableType.InternalMedia;
 					case LINKER -> TypeAlignmentRules.AlignableType.Linker;
+					case LONG_FEATURE -> TypeAlignmentRules.AlignableType.LongFeature;
+					case NONVOCAL -> TypeAlignmentRules.AlignableType.Nonvocal;
+					case OTHER_SPOKEN_EVENT -> TypeAlignmentRules.AlignableType.OtherSpokenEvent;
 					case PAUSE -> TypeAlignmentRules.AlignableType.Pause;
 					case PHONETIC_GROUP -> TypeAlignmentRules.AlignableType.PhoneticGroup;
 					case POSTCODE -> TypeAlignmentRules.AlignableType.Postcode;

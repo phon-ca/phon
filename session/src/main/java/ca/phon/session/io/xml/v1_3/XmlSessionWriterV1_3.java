@@ -19,6 +19,7 @@ import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.AlternativeTranscript;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
+import ca.phon.orthography.Happening;
 import ca.phon.orthography.Orthography;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
@@ -353,10 +354,15 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 			final XmlTierAlignmentRules alignmentRules = factory.createXmlTierAlignmentRules();
 			for(var type:td.getTierAlignmentRules().getWordAlignmentRules().getAlignableTypes()) {
 				final XmlAlignableType at = switch(type) {
+					case Action -> XmlAlignableType.ACTION;
 					case Freecode -> XmlAlignableType.FREECODE;
 					case Group -> XmlAlignableType.GROUP;
+					case Happening -> XmlAlignableType.HAPPENING;
 					case InternalMedia -> XmlAlignableType.INTERNAL_MEDIA;
 					case Linker -> XmlAlignableType.LINKER;
+					case LongFeature -> XmlAlignableType.LONG_FEATURE;
+					case Nonvocal -> XmlAlignableType.NONVOCAL;
+					case OtherSpokenEvent -> XmlAlignableType.OTHER_SPOKEN_EVENT;
 					case Pause -> XmlAlignableType.PAUSE;
 					case PhoneticGroup -> XmlAlignableType.PHONETIC_GROUP;
 					case Postcode -> XmlAlignableType.POSTCODE;
