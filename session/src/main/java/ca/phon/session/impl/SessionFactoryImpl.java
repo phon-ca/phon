@@ -16,7 +16,7 @@
 package ca.phon.session.impl;
 
 import ca.phon.plugin.*;
-import ca.phon.session.TierAlignmentRules;
+import ca.phon.session.alignment.TierAlignmentRules;
 import ca.phon.session.spi.*;
 
 import java.util.Map;

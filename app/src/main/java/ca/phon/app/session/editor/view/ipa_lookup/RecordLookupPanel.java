@@ -27,6 +27,7 @@ import ca.phon.orthography.Orthography;
 import ca.phon.plugin.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.session.alignment.TierAlignmentRules;
 import ca.phon.syllabifier.*;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;

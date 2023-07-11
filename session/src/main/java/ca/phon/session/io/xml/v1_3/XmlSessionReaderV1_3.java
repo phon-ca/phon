@@ -25,6 +25,8 @@ import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.Rank;
 import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.session.alignment.TierAlignmentRules;
+import ca.phon.session.alignment.TypeAlignmentRules;
 import ca.phon.session.usertier.*;
 import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionReader;
@@ -355,7 +357,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 				tierParams.put(tp.getName(), tp.getContent());
 			}
 		}
-		ca.phon.session.TierAlignmentRules tierAlignmentRules = new ca.phon.session.TierAlignmentRules();
+		TierAlignmentRules tierAlignmentRules = new TierAlignmentRules();
 		if(tdt.getTierAlignment() != null) {
 			final XmlTierAlignmentRules alignmentRules = tdt.getTierAlignment();
 
@@ -375,7 +377,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 				};
 				alignableTypes.add(type);
 			}
-			tierAlignmentRules = new ca.phon.session.TierAlignmentRules(
+			tierAlignmentRules = new TierAlignmentRules(
 					new TypeAlignmentRules(alignableTypes, alignmentRules.isIncludeXXX(),
 							alignmentRules.isIncludeYYY(), alignmentRules.isIncludeWWW(),
 							alignmentRules.isIncludeOmitted(), alignmentRules.isIncludeExcluded()));

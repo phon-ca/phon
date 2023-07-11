@@ -16,6 +16,7 @@
 package ca.phon.session;
 
 import ca.phon.extensions.ExtendableObject;
+import ca.phon.session.alignment.TierAlignmentRules;
 import ca.phon.session.spi.TierDescriptionSPI;
 
 import java.util.Map;

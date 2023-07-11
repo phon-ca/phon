@@ -17,8 +17,7 @@ package ca.phon.session.impl;
 
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
-import ca.phon.formatter.FormatterUtil;
-import ca.phon.session.TierAlignmentRules;
+import ca.phon.session.alignment.TierAlignmentRules;
 import ca.phon.session.spi.TierSPI;
 
 import java.text.ParseException;

@@ -11,7 +11,7 @@ exports.SearchByOptions = function(id) {
     var searchByParamInfo = {
         "id" : id + ".searchBy",
         "title": "Search by",
-        "desc": [ "Group", "Word" ],
+        "desc": [ "Tier", "Word" ],
         "def": 0,
         "type": "radiobutton",
         "cols": 0
@@ -19,7 +19,7 @@ exports.SearchByOptions = function(id) {
     var searchByParam;
     this.searchBy = {
         "index": 0,
-        "toString": "Group"
+        "toString": "Tier"
     };
 
     this.includeSyllableOption = false;

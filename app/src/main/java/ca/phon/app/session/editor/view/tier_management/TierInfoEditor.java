@@ -17,6 +17,7 @@ package ca.phon.app.session.editor.view.tier_management;
 
 import ca.phon.formatter.*;
 import ca.phon.session.*;
+import ca.phon.session.alignment.TierAlignmentRules;
 import ca.phon.session.usertier.UserTierData;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.dialogs.JFontPanel;

@@ -66,31 +66,10 @@ exports.TierFilter = function (id) {
 		this.patternFilter.setVisible(visible);
 	};
 
-	this.check_group = function (record, groupIdx) {
-		var group = record.getGroup(groupIdx);
-		var tier = group.getTier(this.tier);
-		return this.patternFilter.check_filter(tier);
-	};
-
 	this.set_required = function (required) {
 		tierParam.setRequired(true);
 		this.patternFilter.set_required(true);
 	}
-
-	this.filter_groups = function (record, groups) {
-		var retVal = new Array();
-
-		for (var i = 0; i < groups.length; i++) {
-			var group = groups[i];
-			var tier = group.getTier(this.tier);
-
-			if (this.patternFilter.check_filter(tier)) {
-				retVal.push(group);
-			}
-		}
-
-		return retVal;
-	};
 
 	this.check_word = function (word) {
 		var retVal = false;
@@ -102,4 +81,5 @@ exports.TierFilter = function (id) {
 
 		return retVal;
 	};
+
 }

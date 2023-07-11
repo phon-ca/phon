@@ -1,4 +1,4 @@
-package ca.phon.session;
+package ca.phon.session.alignment;
 
 import ca.phon.orthography.*;
 import ca.phon.orthography.Word;
@@ -18,25 +18,21 @@ public final class TypeAlignmentRules {
      * Types in orthography which may be used in alignment
      */
     public static enum AlignableType {
-        Linker,
-        /**
-         * words, including words inside groups and phonetic groups
-         */
-        Word,
-        /**
-         * groups, if selected only one aligned type will be required for the entire group
-         */
-        Group,
-        /**
-         * Phonetic groups, if selected only one aligned type will be required for the entire group
-         */
-        PhoneticGroup,
+        Action,
         Freecode,
-        Pause,
-        TagMarker,
+        Group,
+        Happening,
         InternalMedia,
+        Linker,
+        LongFeature,
+        Nonvocal,
+        OtherSpokenEvent,
+        Pause,
+        PhoneticGroup,
+        Postcode,
+        TagMarker,
         Terminator,
-        Postcode
+        Word,
     };
 
     private final List<AlignableType> alignableTypes;

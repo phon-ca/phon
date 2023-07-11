@@ -16,6 +16,7 @@
 package ca.phon.session;
 
 import ca.phon.extensions.*;
+import ca.phon.session.alignment.TierAlignmentRules;
 import ca.phon.session.spi.TierSPI;
 
 import java.lang.reflect.InvocationTargetException;

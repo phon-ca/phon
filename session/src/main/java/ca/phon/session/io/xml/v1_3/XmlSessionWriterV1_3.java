@@ -20,12 +20,12 @@ import ca.phon.ipa.AlternativeTranscript;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.Orthography;
-import ca.phon.orthography.Terminator;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.Rank;
 import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.session.alignment.TierAlignmentRules;
 import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionWriter;
 import ca.phon.session.usertier.*;
@@ -349,7 +349,7 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 			retVal.getTierParameters().getParam().add(param);
 		}
 
-		if(td.getTierAlignmentRules().getType() != ca.phon.session.TierAlignmentRules.TierAlignmentType.None) {
+		if(td.getTierAlignmentRules().getType() != TierAlignmentRules.TierAlignmentType.None) {
 			final XmlTierAlignmentRules alignmentRules = factory.createXmlTierAlignmentRules();
 			for(var type:td.getTierAlignmentRules().getWordAlignmentRules().getAlignableTypes()) {
 				final XmlAlignableType at = switch(type) {

@@ -4,8 +4,7 @@ params =
 ;
  */
 
-var GroupFilter = require("lib/GroupFilter").GroupFilter;
-var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
+var AlignedTierFilter = require("lib/TierFilter").TierFilter;
 var WordFilter = require("lib/WordFilter").WordFilter;
 var TierList = require("lib/TierList").TierList;
 var AlignedWordFilter = require("lib/TierFilter").TierFilter;
@@ -25,10 +24,9 @@ var filters = {
 	"searchBy": new SearchByOptions("filters.searchBy"),
 	"targetResultFilter": new PatternFilter("filters.targetResultFilter"),
 	"actualResultFilter": new PatternFilter("filters.actualResultFilter"),
-	"group": new GroupFilter("filters.group"),
 	"groupTiers": new TierList("filters.groupTiers"),
 	"groupPattern": new PatternFilter("filters.groupPattern"),
-	"alignedGroup": new AlignedGroupFilter("filters.alignedGroup"),
+	"alignedTier": new AlignedTierFilter("filters.alignedTier"),
 	"word": new WordFilter("filters.word"),
 	"wordTiers": new TierList("filters.wordTiers"),
 	"wordPattern": new PatternFilter("filters.wordPattern"),

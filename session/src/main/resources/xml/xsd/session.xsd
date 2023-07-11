@@ -442,8 +442,13 @@
             <xs:enumeration value="internal-media"/>
             <xs:enumeration value="tagMarker"/>
             <xs:enumeration value="terminator"/>
+            <xs:enumeration value="action"/>
+            <xs:enumeration value="happening"/>
+            <xs:enumeration value="otherSpokenEvent"/>
             <xs:enumeration value="freecode"/>
             <xs:enumeration value="postcode"/>
+            <xs:enumeration value="longFeature"/>
+            <xs:enumeration value="nonvocal"/>
         </xs:restriction>
     </xs:simpleType>
 

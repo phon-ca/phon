@@ -28,6 +28,8 @@ import ca.phon.plugin.*;
 import ca.phon.session.Comment;
 import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.session.alignment.TierAlignmentRules;
+import ca.phon.session.alignment.TypeAlignmentRules;
 import ca.phon.session.io.*;
 import ca.phon.session.io.xml.v12.*;
 import ca.phon.session.io.xml.v12.CommentType;

@@ -1,6 +1,5 @@
-package ca.phon.session;
+package ca.phon.session.alignment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public final class TierAlignmentRules {
@@ -68,7 +67,9 @@ public final class TierAlignmentRules {
      * @return orthography alignment rules (default: no alignment)
      */
     public static TierAlignmentRules orthographyTierRules() {
-        final TierAlignmentRules retval = new TierAlignmentRules();
+        final List<TypeAlignmentRules.AlignableType> alignableTypes =
+                List.of(TypeAlignmentRules.AlignableType.Word, TypeAlignmentRules.AlignableType.Pause);
+        final TierAlignmentRules retval = new TierAlignmentRules(new TypeAlignmentRules(alignableTypes, true, true, true, false, false));
         return retval;
     }
 
