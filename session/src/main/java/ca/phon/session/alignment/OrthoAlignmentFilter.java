@@ -6,13 +6,13 @@ import ca.phon.visitor.annotation.Visits;
 import java.util.ArrayList;
 import java.util.List;
 
-class OrthoAlignmentVisitor extends AbstractOrthographyVisitor {
+class OrthoAlignmentFilter extends AbstractOrthographyVisitor {
 
     private final TierAlignmentRules alignmentRules;
 
     private final List<OrthographyElement> elements;
 
-    public OrthoAlignmentVisitor(TierAlignmentRules rules) {
+    public OrthoAlignmentFilter(TierAlignmentRules rules) {
         this.alignmentRules = rules;
         this.elements = new ArrayList<>();
     }
