@@ -2,13 +2,20 @@ package ca.phon.session;
 
 import ca.phon.extensions.ExtendableObject;
 import ca.phon.session.spi.TranscriptSPI;
+import ca.phon.visitor.Visitable;
+import ca.phon.visitor.Visitor;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Iterator;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * A collection of interleaved {@link Comment}s and {@link Record}s
  *
  *
  */
-public final class Transcript extends ExtendableObject {
+public final class Transcript extends ExtendableObject implements Iterable<Transcript.Element>, Visitable<Transcript.Element> {
 
     public final static class Element {
         final Comment comment;
@@ -404,6 +411,46 @@ public final class Transcript extends ExtendableObject {
         } else {
             throw new ArrayIndexOutOfBoundsException(eleIdx);
         }
+    }
+
+    private final class TranscriptIterator implements Iterator<Element> {
+
+        private int currentElement = 0;
+
+        @Override
+        public boolean hasNext() {
+            return currentElement < getNumberOfElements();
+        }
+
+        @Override
+        public Element next() {
+            return getElementAt(currentElement++);
+        }
+
+        @Override
+        public void remove() {
+            removeElement(currentElement-1);
+        }
+
+    }
+
+    @Override
+    public void accept(Visitor<Transcript.Element> visitor) {
+        for(Element ele:this) visitor.visit(ele);
+    }
+
+    @NotNull
+    @Override
+    public Iterator<Element> iterator() {
+        return new TranscriptIterator();
+    }
+
+    public Stream<Transcript.Element> stream() {
+        return stream(false);
+    }
+
+    public Stream<Transcript.Element> stream(boolean parallel) {
+        return StreamSupport.stream(spliterator(), parallel);
     }
 
 }
