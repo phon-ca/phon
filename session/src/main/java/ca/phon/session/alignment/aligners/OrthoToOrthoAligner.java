@@ -1,10 +1,12 @@
-package ca.phon.session.alignment;
+package ca.phon.session.alignment.aligners;
 
 import ca.phon.orthography.*;
 import ca.phon.session.Tier;
+import ca.phon.session.alignment.ITierAligner;
+import ca.phon.session.alignment.TierAligner;
+import ca.phon.session.alignment.TierAlignment;
 import ca.phon.util.Tuple;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class OrthoToOrthoAligner

@@ -23,11 +23,22 @@ public class TierAlignment<T, S, B, C> {
 
     private final List<Tuple<S, C>> alignedElements;
 
+    private final List<Tuple<String, String>> alignedSubTypes;
+
     public TierAlignment(Tier<T> topTier, Tier<B> bottomTier, List<Tuple<S, C>> alignedElements) {
+        this(topTier, bottomTier, alignedElements, null);
+    }
+
+    public TierAlignment(Tier<T> topTier, Tier<B> bottomTier, List<Tuple<S, C>> alignedElements, List<Tuple<String, String>> alignedSubTypes) {
         super();
         this.topTier = topTier;
         this.bottomTier = bottomTier;
         this.alignedElements = alignedElements;
+        this.alignedSubTypes = alignedSubTypes;
+    }
+
+    public int length() {
+        return this.alignedElements.size();
     }
 
     public Tier<T> getTopTier() {
@@ -40,6 +51,14 @@ public class TierAlignment<T, S, B, C> {
 
     public List<Tuple<S, C>> getAlignedElements() {
         return Collections.unmodifiableList(this.alignedElements);
+    }
+
+    public boolean hasAlignedSubTypes() {
+        return this.alignedSubTypes != null && this.alignedSubTypes.size() > 0;
+    }
+
+    public List<Tuple<String, String>> getAlignedSubTypes() {
+        return this.alignedSubTypes;
     }
 
 }

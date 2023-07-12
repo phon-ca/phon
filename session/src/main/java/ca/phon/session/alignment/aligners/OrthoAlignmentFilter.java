@@ -1,6 +1,8 @@
-package ca.phon.session.alignment;
+package ca.phon.session.alignment.aligners;
 
 import ca.phon.orthography.*;
+import ca.phon.session.alignment.TierAlignmentRules;
+import ca.phon.session.alignment.TypeAlignmentRules;
 import ca.phon.visitor.annotation.Visits;
 
 import java.util.ArrayList;
