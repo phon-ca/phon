@@ -1,0 +1,34 @@
+package ca.phon.formatter;
+
+import java.text.ParseException;
+import java.time.Period;
+
+@FormatterType(Period.class)
+public class PeriodFormatter implements Formatter<Period> {
+
+    private final PeriodFormatStyle formatStyle;
+
+    public PeriodFormatter() {
+        this(PeriodFormatStyle.PHON);
+    }
+
+    public PeriodFormatter(PeriodFormatStyle formatStyle) {
+        super();
+        this.formatStyle = formatStyle;
+    }
+
+    @Override
+    public String format(Period obj) {
+        return (new PeriodFormat(formatStyle)).format(obj);
+    }
+
+    @Override
+    public Period parse(String text) throws ParseException {
+        try {
+            return (Period) (new PeriodFormat(formatStyle)).parseObject(text);
+        } catch (IllegalArgumentException e) {
+            throw new ParseException(e.getLocalizedMessage(), 0);
+        }
+    }
+
+}

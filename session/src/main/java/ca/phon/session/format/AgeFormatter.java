@@ -24,6 +24,7 @@ import java.util.regex.*;
 /**
  * Create formatters for ages stored in {@link Period} objects.
  *
+ * @deprecated use ca.phon.formatter.PeriodFormat instead
  */
 @FormatterType(Period.class)
 public class AgeFormatter implements Formatter<Period> {

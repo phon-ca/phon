@@ -15,7 +15,8 @@
  */
 package ca.phon.ipadictionary.ui;
 
-import ca.phon.formatter.MsFormatter;
+import ca.phon.formatter.MediaTimeFormatter;
+import ca.phon.ipadictionary.cmd.*;
 import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
 import ca.phon.util.*;
 import ca.phon.worker.PhonTask;
@@ -104,7 +105,7 @@ public class IPALookupPanel extends JPanel {
 			long et = System.currentTimeMillis();
 
 			String msg =
-					"Query completed in " + MsFormatter.msToDisplayString(et-st);
+					"Query completed in " + MediaTimeFormatter.timeToMinutesAndSeconds(et-st);
 			context.fireMessage(msg);
 		}
 		

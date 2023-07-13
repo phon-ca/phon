@@ -5,6 +5,7 @@ import java.text.ParseException;
 /**
  * Media time formatter for numbers
  */
+@FormatterType(Number.class)
 public class MediaTimeFormatter implements Formatter<Number> {
 
     /**
@@ -53,7 +54,11 @@ public class MediaTimeFormatter implements Formatter<Number> {
     @Override
     public Number parse(String text) throws ParseException {
         MediaTimeFormat format = new MediaTimeFormat();
-        return (Long)format.parseObject(text);
+        try {
+            return (Long) format.parseObject(text);
+        } catch (IllegalArgumentException e) {
+            throw new ParseException(e.getLocalizedMessage(), 0);
+        }
     }
 
 }

@@ -17,20 +17,31 @@ package ca.phon.session.format;
 
 import ca.phon.formatter.*;
 import ca.phon.session.*;
-import ca.phon.formatter.MsFormatter;
 
 import java.text.ParseException;
 
 @FormatterType(MediaSegment.class)
 public class MediaSegmentFormatter implements Formatter<MediaSegment> {
 
+	private final MediaTimeFormatStyle formatStyle;
+
+	public MediaSegmentFormatter() {
+		this(MediaTimeFormatStyle.MINUTES_AND_SECONDS);
+	}
+
+	public MediaSegmentFormatter(MediaTimeFormatStyle formatStyle) {
+		super();
+		this.formatStyle = formatStyle;
+	}
+
 	@Override
 	public String format(MediaSegment obj) {
 		final long startTime = ((Float)obj.getStartValue()).longValue();
 		final long endTime = ((Float)obj.getEndValue()).longValue();
-		
-		final String startTimeText = MsFormatter.msToDisplayString(startTime);
-		final String endTimeText = MsFormatter.msToDisplayString(endTime);
+
+		final MediaTimeFormat format = new MediaTimeFormat(formatStyle);
+		final String startTimeText = format.format(startTime);
+		final String endTimeText = format.format(endTime);
 		
 		return String.format("%s-%s", startTimeText, endTimeText);
 	}
