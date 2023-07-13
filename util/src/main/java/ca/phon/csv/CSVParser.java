@@ -82,7 +82,15 @@ public class CSVParser {
         ArrayList<String> retVal = new ArrayList<>();
 
         while (tokenStream.LA(1) != CSVTokenType.EOF && tokenStream.LA(1) != CSVTokenType.NEWLINE) {
-            retVal.add(field());
+            String field = field();
+            retVal.add(field);
+            if (tokenStream.LA(1) == CSVTokenType.SEPARATOR) {
+                tokenStream.nextToken();
+                // check for empty field at end of record
+                if(tokenStream.LA(1) == CSVTokenType.NEWLINE) {
+                    retVal.add("");
+                }
+            }
         }
 
         if (tokenStream.LA(1) == CSVTokenType.NEWLINE) {
@@ -108,9 +116,6 @@ public class CSVParser {
             retVal = escaped();
         } else {
             retVal = unescaped();
-        }
-        if (tokenStream.LA(1) == CSVTokenType.SEPARATOR) {
-            tokenStream.nextToken();
         }
         if (this.trimSpaces) {
             retVal = retVal.trim();
