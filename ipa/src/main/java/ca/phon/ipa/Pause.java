@@ -15,6 +15,9 @@
  */
 package ca.phon.ipa;
 
+import ca.phon.formatter.MediaTimeFormat;
+import ca.phon.formatter.MediaTimeFormatStyle;
+import ca.phon.formatter.MediaTimeFormatter;
 import ca.phon.ipa.features.FeatureSet;
 import ca.phon.syllable.SyllableConstituentType;
 
@@ -49,8 +52,7 @@ public final class Pause extends IPAElement {
 	}
 
 	private String lengthToString() {
-		final MediaTimeFormat pauseFormat = new MediaTimeFormat();
-		return pauseFormat.sToDisplayString(getLength());
+		return MediaTimeFormatter.timeToMinutesAndSeconds(getLength());
 	}
 
 	public String text() {

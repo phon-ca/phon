@@ -1,5 +1,7 @@
 package ca.phon.orthography;
 
+import ca.phon.formatter.MediaTimeFormatter;
+
 public final class Duration extends AbstractOrthographyElement implements OrthographyAnnotation {
 
     /**
@@ -18,8 +20,7 @@ public final class Duration extends AbstractOrthographyElement implements Orthog
 
     @Override
     public String text() {
-        final MediaTimeFormat timeFormat = new MediaTimeFormat();
-        return String.format("[# %s]", timeFormat.format(getDuration()));
+        return String.format("[# %s]", MediaTimeFormatter.timeToMinutesAndSeconds(getDuration()));
     }
 
 }

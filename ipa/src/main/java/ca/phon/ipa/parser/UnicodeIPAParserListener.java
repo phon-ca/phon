@@ -1,5 +1,7 @@
 package ca.phon.ipa.parser;
 
+import ca.phon.formatter.MediaTimeFormatStyle;
+import ca.phon.formatter.MediaTimeFormatter;
 import ca.phon.ipa.*;
 import ca.phon.ipa.parser.UnicodeIPAParser.*;
 import ca.phon.ipa.parser.exceptions.*;
@@ -378,10 +380,9 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 
 	@Override
 	public void exitNumericPause(NumericPauseContext ctx) {
-		if(ctx.time_in_minutes_seconds().getText().matches(MediaTimeFormat.PATTERN)) {
-			final MediaTimeFormat format = new MediaTimeFormat();
+		if(ctx.time_in_minutes_seconds().getText().matches(MediaTimeFormatStyle.MINUTES_AND_SECONDS.getRegex())) {
 			try {
-				Float seconds = (Float) format.parseObject(ctx.time_in_minutes_seconds().getText());
+				float seconds = MediaTimeFormatter.parseTimeToSeconds(ctx.time_in_minutes_seconds().getText());
 				builder.append(factory.createPause(seconds));
 			} catch (ParseException pe) {
 				throw new IllegalArgumentException(pe);

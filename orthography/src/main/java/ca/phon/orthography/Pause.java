@@ -1,6 +1,8 @@
 package ca.phon.orthography;
 
 
+import ca.phon.formatter.MediaTimeFormatter;
+
 public final class Pause extends AbstractOrthographyElement {
 
     private final PauseLength type;
@@ -28,8 +30,7 @@ public final class Pause extends AbstractOrthographyElement {
     }
 
     private String lengthToString() {
-        final MediaTimeFormat pauseFormat = new MediaTimeFormat();
-        return pauseFormat.sToDisplayString(getLength());
+        return MediaTimeFormatter.timeToMinutesAndSeconds(getLength());
     }
 
     @Override

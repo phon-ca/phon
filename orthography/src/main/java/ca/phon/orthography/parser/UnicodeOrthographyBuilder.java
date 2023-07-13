@@ -1,5 +1,7 @@
 package ca.phon.orthography.parser;
 
+import ca.phon.formatter.MediaTimeFormatStyle;
+import ca.phon.formatter.MediaTimeFormatter;
 import ca.phon.orthography.*;
 import ca.phon.orthography.Error;
 import ca.phon.orthography.parser.exceptions.OrthoParserException;
@@ -299,10 +301,9 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
 
     @Override
     public void exitNumeric_pause(UnicodeOrthographyParser.Numeric_pauseContext ctx) {
-        if(ctx.time_in_minutes_seconds().getText().matches(MediaTimeFormat.PATTERN)) {
-            final MediaTimeFormat format = new MediaTimeFormat();
+        if(ctx.time_in_minutes_seconds().getText().matches(MediaTimeFormatStyle.MINUTES_AND_SECONDS.getRegex())) {
             try {
-                Float seconds = (Float) format.parseObject(ctx.time_in_minutes_seconds().getText());
+                float seconds = MediaTimeFormatter.parseTimeToSeconds(ctx.time_in_minutes_seconds().getText());
                 builder.append(new Pause(PauseLength.NUMERIC, seconds));
             } catch (ParseException pe) {
                 throw new OrthoParserException(pe.getMessage(), pe.getErrorOffset());
@@ -320,16 +321,15 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
 
     @Override
     public void exitInternal_media(UnicodeOrthographyParser.Internal_mediaContext ctx) {
-        final MediaTimeFormat timeFormat = new MediaTimeFormat();
         float startTime = 0.0f;
         try {
-            startTime = (float)timeFormat.parseObject(ctx.mediasegment().time_in_minutes_seconds(0).getText());
+            startTime = MediaTimeFormatter.parseTimeToSeconds(ctx.mediasegment().time_in_minutes_seconds(0).getText());
         } catch(ParseException e) {
             throw new OrthoParserException("Invalid start time", ctx.mediasegment().time_in_minutes_seconds(0).getStart().getCharPositionInLine());
         }
         float endTime = startTime;
         try {
-            endTime = (float)timeFormat.parseObject(ctx.mediasegment().time_in_minutes_seconds(1).getText());
+            endTime = MediaTimeFormatter.parseTimeToSeconds(ctx.mediasegment().time_in_minutes_seconds(1).getText());
         } catch(ParseException e) {
             throw new OrthoParserException("Invalid start time", ctx.mediasegment().time_in_minutes_seconds(1).getStart().getCharPositionInLine());
         }
@@ -445,10 +445,9 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
 
     @Override
     public void exitDuration(UnicodeOrthographyParser.DurationContext ctx) {
-        final MediaTimeFormat timeFormat = new MediaTimeFormat();
         float duration = 0.0f;
         try {
-            duration = (float) timeFormat.parseObject(ctx.time_in_minutes_seconds().getText());
+            duration = MediaTimeFormatter.parseTimeToSeconds(ctx.time_in_minutes_seconds().getText());
         } catch (ParseException pe) {
             throw new OrthoParserException(pe.getMessage(), ctx.time_in_minutes_seconds().getStart().getCharPositionInLine());
         }

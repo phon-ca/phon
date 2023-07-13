@@ -1,7 +1,7 @@
 package ca.phon.session.usertier;
 
+import ca.phon.formatter.MediaTimeFormatter;
 import ca.phon.orthography.InternalMedia;
-import ca.phon.orthography.MediaTimeFormat;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -27,10 +27,9 @@ public class UserTierParserListener extends UserTierBaseListener {
         final String startText = ctx.time_in_minutes_seconds(0).getText();
         final String endText = ctx.time_in_minutes_seconds(1).getText();
 
-        final MediaTimeFormat timeFormat = new MediaTimeFormat();
         try {
-            final float startTime = (Float) timeFormat.parseObject(startText);
-            final float endTime = (Float) timeFormat.parseObject(endText);
+            final float startTime = MediaTimeFormatter.parseTimeToSeconds(startText);
+            final float endTime = MediaTimeFormatter.parseTimeToSeconds(endText);
 
             final InternalMedia internalMedia = new InternalMedia(startTime, endTime);
             elementList.add(new UserTierInternalMedia(internalMedia));

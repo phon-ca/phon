@@ -1,5 +1,7 @@
 package ca.phon.orthography;
 
+import ca.phon.formatter.MediaTimeFormatter;
+
 public final class InternalMedia extends AbstractOrthographyElement {
 
     public final static char MEDIA_BULLET = '•';
@@ -30,11 +32,10 @@ public final class InternalMedia extends AbstractOrthographyElement {
 
     @Override
     public String text() {
-        final MediaTimeFormat timeFormat = new MediaTimeFormat();
         return String.format("%c%s-%s%c",
                 MEDIA_BULLET,
-                timeFormat.sToDisplayString(getStartTime()),
-                timeFormat.sToDisplayString(getEndTime()),
+                MediaTimeFormatter.timeToMinutesAndSeconds(getStartTime()),
+                MediaTimeFormatter.timeToMinutesAndSeconds(getEndTime()),
                 MEDIA_BULLET);
     }
 
