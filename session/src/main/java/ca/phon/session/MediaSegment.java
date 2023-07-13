@@ -17,6 +17,7 @@
 package ca.phon.session;
 
 import ca.phon.extensions.ExtendableObject;
+import ca.phon.formatter.MediaTimeFormatStyle;
 import ca.phon.session.format.MediaSegmentFormatter;
 import ca.phon.session.spi.MediaSegmentSPI;
 
@@ -79,7 +80,7 @@ public final class MediaSegment extends ExtendableObject {
 	}
 
 	public String toString() {
-		return (new MediaSegmentFormatter()).format(this);
+		return (new MediaSegmentFormatter(MediaTimeFormatStyle.MINUTES_AND_SECONDS)).format(this);
 	}
 	
 }

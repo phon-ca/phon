@@ -26,7 +26,7 @@ public class MediaSegmentFormatter implements Formatter<MediaSegment> {
 	private final MediaTimeFormatStyle formatStyle;
 
 	public MediaSegmentFormatter() {
-		this(MediaTimeFormatStyle.MINUTES_AND_SECONDS);
+		this(MediaTimeFormatStyle.PADDED_MINUTES_AND_SECONDS);
 	}
 
 	public MediaSegmentFormatter(MediaTimeFormatStyle formatStyle) {
@@ -50,8 +50,10 @@ public class MediaSegmentFormatter implements Formatter<MediaSegment> {
 	public MediaSegment parse(String text) throws ParseException {
 		final String[] parts = text.split("-");
 		if(parts.length != 2) throw new ParseException(text, 0);
-		final long startTime = MsFormatter.displayStringToMs(parts[0]);
-		final long endTime = MsFormatter.displayStringToMs(parts[1]);
+
+		final MediaTimeFormat format = new MediaTimeFormat(formatStyle);
+		final long startTime = (long)format.parseObject(parts[0]);
+		final long endTime = (long)format.parseObject(parts[1]);
 		
 		final SessionFactory factory = SessionFactory.newFactory();
 		final MediaSegment retVal = factory.createMediaSegment();

@@ -15,6 +15,8 @@
  */
 package ca.phon.app.session.editor.view.common;
 
+import ca.phon.app.log.LogUtil;
+import ca.phon.formatter.MediaTimeFormatStyle;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.format.MediaSegmentFormatter;
 import org.apache.logging.log4j.LogManager;
@@ -28,13 +30,6 @@ import java.text.ParseException;
 public class SegmentField extends JFormattedTextField {
 	
 	private final Highlighter errHighlighter = new DefaultHighlighter();
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5405525676580970609L;
-
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(SegmentField.class.getName());
 
 	public SegmentField() {
 		super();
@@ -65,7 +60,7 @@ public class SegmentField extends JFormattedTextField {
 	
 	public void validateText() {
 		errHighlighter.removeAllHighlights();
-		final MediaSegmentFormatter formatter = new MediaSegmentFormatter();
+		final MediaSegmentFormatter formatter = new MediaSegmentFormatter(MediaTimeFormatStyle.PADDED_MINUTES_AND_SECONDS);
 		try {
 			final MediaSegment seg = formatter.parse(getText());
 			
@@ -75,7 +70,7 @@ public class SegmentField extends JFormattedTextField {
 				try {
 					errHighlighter.addHighlight(0, getText().length(), errPainter);
 				} catch (BadLocationException e) {
-					LOGGER.error(e.getLocalizedMessage(), e);
+					LogUtil.severe(e.getLocalizedMessage(), e);
 				}
 			} else {
 				((GroupFieldBorder)getBorder()).setShowWarningIcon(false);
@@ -116,7 +111,7 @@ public class SegmentField extends JFormattedTextField {
 				retVal = new MaskFormatter("###:##.###-###:##.###");
 				((MaskFormatter)retVal).setPlaceholderCharacter('0');
 			} catch (ParseException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.severe(e.getLocalizedMessage(), e);
 			}
 			return retVal;
 		}

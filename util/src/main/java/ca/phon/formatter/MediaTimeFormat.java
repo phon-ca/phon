@@ -61,10 +61,10 @@ public class MediaTimeFormat extends Format {
 
     protected String msToDisplayString(long ms, boolean padded)
             throws IllegalArgumentException {
-        if(ms < 0)
-            throw new IllegalArgumentException("Time cannot be negative.");
-        boolean negative = true;
-        ms *= -1;
+        boolean negative = ms < 0;
+        if(negative) {
+            ms *= -1;
+        }
 
         long numSeconds = ms / 1000;
         long numMSecondsLeft = ms % 1000;
