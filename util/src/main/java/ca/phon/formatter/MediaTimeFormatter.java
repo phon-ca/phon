@@ -15,15 +15,19 @@ public class MediaTimeFormatter implements Formatter<Number> {
      * @return formatted time value
      */
     public static String timeToMinutesAndSeconds(Number number) {
-        return (new MediaTimeFormatter()).format(number);
+        return timeToString(number, MediaTimeFormatStyle.MINUTES_AND_SECONDS);
     }
 
     public static String timeToPaddedMinutesAndSeconds(Number number) {
-        return (new MediaTimeFormatter(MediaTimeFormatStyle.PADDED_MINUTES_AND_SECONDS)).format(number);
+        return timeToString(number, MediaTimeFormatStyle.PADDED_MINUTES_AND_SECONDS);
     }
 
     public static String timeToMilliseconds(Number number) {
-        return (new MediaTimeFormatter(MediaTimeFormatStyle.MILLISECONDS)).format(number);
+        return timeToString(number, MediaTimeFormatStyle.MILLISECONDS);
+    }
+
+    public static String timeToString(Number number, MediaTimeFormatStyle formatStyle) {
+        return (new MediaTimeFormatter(formatStyle)).format(number);
     }
 
     public static float parseTimeToSeconds(String text) throws ParseException {

@@ -6,6 +6,14 @@ import java.time.Period;
 @FormatterType(Period.class)
 public class PeriodFormatter implements Formatter<Period> {
 
+    public static String periodToString(Period period, PeriodFormatStyle formatStyle) {
+        return (new PeriodFormatter(formatStyle)).format(period);
+    }
+
+    public static Period stringToPeriod(String text) throws ParseException {
+        return (new PeriodFormatter()).parse(text);
+    }
+
     private final PeriodFormatStyle formatStyle;
 
     public PeriodFormatter() {
