@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.util;
+package ca.phon.formatter;
 
 import java.text.*;
 import java.util.regex.*;
@@ -22,7 +22,9 @@ import java.util.regex.*;
 /**
  * Text formatter for milliseconds.
  *
+ * @deprecated Use MediaTimeFormat instead
  */
+@Deprecated
 public class MsFormat extends Format {
 
 	private static final long serialVersionUID = 4432179935812692306L;

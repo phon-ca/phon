@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.util;
-
-import ca.phon.formatter.Formatter;
+package ca.phon.formatter;
 
 import java.text.*;
 
 
 /**
- * Format time values in miliseconds into parseable strings.
+ * Format time values in milliseconds into parseable strings.
+ *
+ * @deprecated Use MediaTimeFormat instead
  */
+@Deprecated
 public class MsFormatter implements Formatter<Long> {
 	
 	/**
@@ -34,7 +35,7 @@ public class MsFormatter implements Formatter<Long> {
 	}
 	
 	/**
-	 * Convert a value in miliseconds into a string.
+	 * Convert a value in milliseconds into a string.
 	 * 
 	 * @param ms
 	 * @return ms as a readable string
@@ -45,10 +46,10 @@ public class MsFormatter implements Formatter<Long> {
 	}
 	
 	/**
-	 * Parse the given string into a value in miliseconds.
+	 * Parse the given string into a value in milliseconds.
 	 * 
 	 * @param msText
-	 * @return time in miliseconds
+	 * @return time in milliseconds
 	 * 
 	 * @throws ParseException
 	 */

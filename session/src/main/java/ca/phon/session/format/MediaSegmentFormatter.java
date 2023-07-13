@@ -17,7 +17,7 @@ package ca.phon.session.format;
 
 import ca.phon.formatter.*;
 import ca.phon.session.*;
-import ca.phon.util.MsFormatter;
+import ca.phon.formatter.MsFormatter;
 
 import java.text.ParseException;
 

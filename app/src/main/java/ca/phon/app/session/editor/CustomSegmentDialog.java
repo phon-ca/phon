@@ -15,6 +15,7 @@
  */
 package ca.phon.app.session.editor;
 
+import ca.phon.formatter.MsFormatter;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.position.SegmentCalculator;
@@ -147,7 +148,7 @@ public class CustomSegmentDialog extends JDialog {
 		final MediaSegment segment = getSegment();
 		
 		final String txt = 
-				MsFormatter.msToDisplayString(Float.valueOf(segment.getStartValue()).longValue()) + 
+				MsFormatter.msToDisplayString(Float.valueOf(segment.getStartValue()).longValue()) +
 				"-" +
 				MsFormatter.msToDisplayString(Float.valueOf(segment.getEndValue()).longValue());
 		segmentField.setText(txt);

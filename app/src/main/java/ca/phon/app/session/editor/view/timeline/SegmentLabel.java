@@ -16,7 +16,7 @@
 
 package ca.phon.app.session.editor.view.timeline;
 
-import ca.phon.util.MsFormatter;
+import ca.phon.formatter.MsFormatter;
 import ca.phon.util.icons.*;
 
 import javax.swing.*;

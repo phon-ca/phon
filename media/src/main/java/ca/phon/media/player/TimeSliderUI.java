@@ -16,7 +16,7 @@
 package ca.phon.media.player;
 
 import ca.phon.ui.PhonGuiConstants;
-import ca.phon.util.MsFormatter;
+import ca.phon.formatter.MsFormatter;
 
 import javax.swing.*;
 import javax.swing.event.*;

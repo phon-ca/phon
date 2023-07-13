@@ -15,7 +15,7 @@
  */
 package ca.phon.ui;
 
-import ca.phon.util.MsFormat;
+import ca.phon.formatter.MsFormat;
 import com.jgoodies.forms.layout.*;
 
 import javax.swing.*;

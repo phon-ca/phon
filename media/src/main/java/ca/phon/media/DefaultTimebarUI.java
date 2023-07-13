@@ -16,7 +16,7 @@
 package ca.phon.media;
 
 import ca.phon.media.TimeUIModel.Marker;
-import ca.phon.util.MsFormatter;
+import ca.phon.formatter.MsFormatter;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;

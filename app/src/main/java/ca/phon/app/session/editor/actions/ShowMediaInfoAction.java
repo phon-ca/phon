@@ -19,6 +19,7 @@ import ca.phon.app.log.*;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.audio.*;
+import ca.phon.formatter.MsFormatter;
 import ca.phon.util.*;
 import uk.co.caprica.vlcj.media.*;
 

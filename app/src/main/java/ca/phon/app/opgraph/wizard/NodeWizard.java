@@ -34,6 +34,7 @@ import ca.phon.app.opgraph.wizard.WizardOptionalsCheckboxTree.CheckedOpNode;
 import ca.phon.app.opgraph.wizard.actions.*;
 import ca.phon.app.script.ScriptPanel;
 import ca.phon.formatter.FormatterUtil;
+import ca.phon.formatter.MsFormatter;
 import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.OpgraphIO;
 import ca.phon.opgraph.app.extensions.NodeSettings;

@@ -15,7 +15,7 @@
  */
 package ca.phon.ipadictionary.ui;
 
-import ca.phon.ipadictionary.cmd.*;
+import ca.phon.formatter.MsFormatter;
 import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
 import ca.phon.util.*;
 import ca.phon.worker.PhonTask;

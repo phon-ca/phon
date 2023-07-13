@@ -4,10 +4,7 @@ import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.PhoneAlignment;
 import ca.phon.session.Tier;
-import ca.phon.session.alignment.aligners.OrthoToIPAAligner;
-import ca.phon.session.alignment.aligners.OrthoToOrthoAligner;
-import ca.phon.session.alignment.aligners.OrthoToPhoneAlignmentAligner;
-import ca.phon.session.alignment.aligners.OrthoToUserTierAligner;
+import ca.phon.session.alignment.aligners.*;
 import ca.phon.session.usertier.UserTierData;
 import ca.phon.util.Tuple;
 
@@ -78,7 +75,34 @@ public final class TierAligner {
                 }
             } else if(topType == IPATranscript.class || bottomType == IPATranscript.class) {
                 mirror = topType != IPATranscript.class;
-
+                final Tier<IPATranscript> tier1 = !mirror ? (Tier<IPATranscript>)topTier : (Tier<IPATranscript>)bottomTier;
+                final Tier<?> tier2 = !mirror ? bottomTier : topTier;
+                final Class<?> otherType = mirror ? topType : bottomType;
+                if(otherType == IPATranscript.class) {
+                    var aligner = new IPAtoIPAAligner();
+                    alignment = aligner.calculateAlignment(tier1, (Tier<IPATranscript>) tier2);
+                } else if(otherType == PhoneAlignment.class) {
+                    var aligner = new IPAToPhoneAlignmentAligner();
+                    alignment = aligner.calculateAlignment(tier1, (Tier<PhoneAlignment>) tier2);
+                } else if(otherType == UserTierData.class) {
+                    var aligner = new IPAToUserTierAligner();
+                    alignment = aligner.calculateAlignment(tier1, (Tier<UserTierData>)tier2);
+                }
+            } else if(topType == PhoneAlignment.class || bottomType == PhoneAlignment.class) {
+                mirror = topType != PhoneAlignment.class;
+                final Tier<PhoneAlignment> tier1 = !mirror ? (Tier<PhoneAlignment>) topTier : (Tier<PhoneAlignment>) bottomTier;
+                final Tier<?> tier2 = !mirror ? bottomTier : topTier;
+                final Class<?> otherType = mirror ? topType : bottomType;
+                if(otherType == PhoneAlignment.class) {
+                    var aligner = new PhoneAlignmentToPhoneAlignmentAligner();
+                    alignment = aligner.calculateAlignment(tier1, (Tier<PhoneAlignment>) tier2);
+                } else if(otherType == UserTierData.class) {
+                    var aligner = new PhoneAlignmentToUserTierAligner();
+                    alignment = aligner.calculateAlignment(tier1, (Tier<UserTierData>) tier2);
+                }
+            } else if(topType == UserTierData.class && bottomType == UserTierData.class) {
+                var aligner = new UserTierToUserTierAligner();
+                alignment = aligner.calculateAlignment((Tier<UserTierData>)topTier, (Tier<UserTierData>) bottomTier);
             }
         }
         return mirror ? mirrorTierAlignment(alignment) : alignment;

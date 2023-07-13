@@ -4,6 +4,7 @@ import ca.phon.session.Tier;
 import ca.phon.session.alignment.ITierAligner;
 import ca.phon.session.alignment.TierAligner;
 import ca.phon.session.alignment.TierAlignment;
+import ca.phon.session.alignment.TierAlignmentRules;
 import ca.phon.session.usertier.UserTierData;
 import ca.phon.session.usertier.UserTierElement;
 import ca.phon.util.Tuple;
@@ -21,6 +22,13 @@ public class UserTierToUserTierAligner implements ITierAligner<UserTierData, Use
         bottomTier.getValue().accept(filter2);
         final List<UserTierElement> bottomElements = filter2.getElements();
         final List<Tuple<UserTierElement, UserTierElement>> elements = TierAligner.mapAlignedElements(topElements, bottomElements);
+
+        // setup sub-type alignments
+        if(topTier.getTierAlignmentRules().getType() == TierAlignmentRules.TierAlignmentType.ByTypeThenSubType
+            && bottomTier.getTierAlignmentRules().getType() == TierAlignmentRules.TierAlignmentType.ByTypeThenSubType) {
+            // TODO
+        }
+
         return new TierAlignment<>(topTier, bottomTier, elements);
     }
 

@@ -26,6 +26,7 @@ import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView
 import ca.phon.app.session.editor.view.session_information.actions.NewParticipantAction;
 import ca.phon.app.session.editor.view.timeline.RecordGrid.GhostMarker;
 import ca.phon.app.session.editor.view.timeline.actions.*;
+import ca.phon.formatter.MsFormatter;
 import ca.phon.media.TimeUIModel;
 import ca.phon.media.TimeUIModel.*;
 import ca.phon.query.db.ResultSet;
