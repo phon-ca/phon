@@ -8,7 +8,7 @@ import ca.phon.visitor.annotation.Visits;
 import java.util.ArrayList;
 import java.util.List;
 
-class OrthoAlignmentFilter extends AbstractOrthographyVisitor {
+public class OrthoAlignmentFilter extends AbstractOrthographyVisitor {
 
     private final TierAlignmentRules alignmentRules;
 
@@ -37,7 +37,7 @@ class OrthoAlignmentFilter extends AbstractOrthographyVisitor {
     @Override
     public void visitWord(Word word) {
         if (alignmentRules.getWordAlignmentRules().isIncluded(TypeAlignmentRules.AlignableType.Word)) {
-            if (word.getPrefix().getType() == WordType.OMISSION && !alignmentRules.getWordAlignmentRules().isIncludeOmitted())
+            if (word.getPrefix() != null && word.getPrefix().getType() == WordType.OMISSION && !alignmentRules.getWordAlignmentRules().isIncludeOmitted())
                 return;
             if (word.getExtension(Marker.class) != null && word.getExtension(Marker.class).getType() == MarkerType.EXCLUDE
                     && !alignmentRules.getWordAlignmentRules().isIncludeExcluded())

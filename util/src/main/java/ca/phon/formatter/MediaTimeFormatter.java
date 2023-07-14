@@ -11,7 +11,7 @@ public class MediaTimeFormatter implements Formatter<Number> {
     /**
      * Return times in minutes and seconds (short form: e.g., 1:3.5)
      *
-     * @param number if number is a float times is interpreted as a values in seconds, milliseconds otherwise
+     * @param number if number is a float time is interpreted as a values in seconds, milliseconds otherwise
      * @return formatted time value
      */
     public static String timeToMinutesAndSeconds(Number number) {
