@@ -31,6 +31,9 @@ public class TestTierAlignment {
         final Tier<Orthography> testTier2 = factory.createTier("Test2", Orthography.class, TierAlignmentRules.orthographyTierRules());
         testTier2.setText("goodbye (.) sanity !");
         record.putTier(testTier2);
+        final Tier<UserTierData> testTier3 = factory.createTier("Test3", UserTierData.class, TierAlignmentRules.userTierRules());
+        testTier3.setText("1 [% test] 2");
+        record.putTier(testTier3);
         return record;
     }
 
@@ -141,6 +144,30 @@ public class TestTierAlignment {
         Assert.assertEquals("V", alignment.getAlignedElements().get(0).getObj2().toString());
         Assert.assertEquals("world", alignment.getAlignedElements().get(1).getObj1().toString());
         Assert.assertEquals("N", alignment.getAlignedElements().get(1).getObj2().toString());
+    }
+
+    @Test
+    public void testPhoneAlignmentToUserTierAligner() {
+        final Record testRecord = createTestRecord();
+        final Tier<PhoneAlignment> tier1 = testRecord.getPhoneAlignmentTier();
+        final Tier<UserTierData> tier2 = testRecord.getTier("Test1", UserTierData.class);
+        final PhoneAlignmentToUserTierAligner aligner = new PhoneAlignmentToUserTierAligner();
+        var alignment = aligner.calculateAlignment(tier1, tier2, tier2.getTierAlignmentRules());
+//        Assert.assertEquals(2, alignment.length());
+    }
+
+    @Test
+    public void testUserTierToUserTierAligner() {
+        final Record testRecord = createTestRecord();
+        final Tier<UserTierData> tier1 = testRecord.getTier("Test1", UserTierData.class);
+        final Tier<UserTierData> tier2 = testRecord.getTier("Test3", UserTierData.class);
+        final UserTierToUserTierAligner aligner = new UserTierToUserTierAligner();
+        var alignment = aligner.calculateAlignment(tier1, tier2, tier2.getTierAlignmentRules());
+        Assert.assertEquals(2, alignment.length());
+        Assert.assertEquals("V", alignment.getAlignedElements().get(0).getObj1().toString());
+        Assert.assertEquals("1", alignment.getAlignedElements().get(0).getObj2().toString());
+        Assert.assertEquals("N", alignment.getAlignedElements().get(1).getObj1().toString());
+        Assert.assertEquals("2", alignment.getAlignedElements().get(1).getObj2().toString());
     }
 
 }
