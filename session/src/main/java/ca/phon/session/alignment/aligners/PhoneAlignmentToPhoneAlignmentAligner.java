@@ -6,6 +6,7 @@ import ca.phon.session.Tier;
 import ca.phon.session.alignment.ITierAligner;
 import ca.phon.session.alignment.TierAligner;
 import ca.phon.session.alignment.TierAlignment;
+import ca.phon.session.alignment.TierAlignmentRules;
 import ca.phon.util.Tuple;
 
 import java.util.List;
@@ -13,7 +14,8 @@ import java.util.List;
 public class PhoneAlignmentToPhoneAlignmentAligner implements ITierAligner<PhoneAlignment, PhoneMap, PhoneAlignment, PhoneMap> {
 
     @Override
-    public TierAlignment<PhoneAlignment, PhoneMap, PhoneAlignment, PhoneMap> calculateAlignment(Tier<PhoneAlignment> topTier, Tier<PhoneAlignment> bottomTier) {
+    public TierAlignment<PhoneAlignment, PhoneMap, PhoneAlignment, PhoneMap>
+        calculateAlignment(Tier<PhoneAlignment> topTier, Tier<PhoneAlignment> bottomTier, TierAlignmentRules alignmentRules) {
         final List<Tuple<PhoneMap, PhoneMap>> elements = TierAligner.mapAlignedElements(topTier.getValue().getAlignments(), bottomTier.getValue().getAlignments());
         return new TierAlignment<>(topTier, bottomTier, elements);
     }

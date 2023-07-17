@@ -8,13 +8,14 @@ import ca.phon.session.usertier.UserTierInternalMedia;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserTierAlignmentFilter extends VisitorAdapter<UserTierElement> {
 
     private final TierAlignmentRules alignmentRules;
 
-    private List<UserTierElement> elements;
+    private final List<UserTierElement> elements = new ArrayList<>();
 
     public UserTierAlignmentFilter(TierAlignmentRules alignmentRules) {
         super();

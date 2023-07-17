@@ -12,6 +12,6 @@ import ca.phon.session.Tier;
  */
 public interface ITierAligner<T, S, B, C> {
 
-    public TierAlignment<T, S, B, C> calculateAlignment(Tier<T> topTier, Tier<B> bottomTier);
+    public TierAlignment<T, S, B, C> calculateAlignment(Tier<T> topTier, Tier<B> bottomTier, TierAlignmentRules alignmentRules);
 
 }

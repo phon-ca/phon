@@ -285,7 +285,7 @@ public final class Record extends ExtendableObject {
 			retVal.add((Tier<T>) getSegmentTier());
 		} else if(type == UserTierData.class) {
 			retVal.add((Tier<T>) getNotesTier());
-		} else if(type == PhoneMap.class) {
+		} else if(type == PhoneAlignment.class) {
 			retVal.add((Tier<T>) getPhoneAlignmentTier());
 		}
 		for(String tierName:getUserDefinedTierNames()) {

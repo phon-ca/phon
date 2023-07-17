@@ -14,11 +14,12 @@ import java.util.List;
 public class UserTierToUserTierAligner implements ITierAligner<UserTierData, UserTierElement, UserTierData, UserTierElement> {
 
     @Override
-    public TierAlignment<UserTierData, UserTierElement, UserTierData, UserTierElement> calculateAlignment(Tier<UserTierData> topTier, Tier<UserTierData> bottomTier) {
-        final UserTierAlignmentFilter filter1 = new UserTierAlignmentFilter(topTier.getTierAlignmentRules());
+    public TierAlignment<UserTierData, UserTierElement, UserTierData, UserTierElement>
+        calculateAlignment(Tier<UserTierData> topTier, Tier<UserTierData> bottomTier, TierAlignmentRules alignmentRules) {
+        final UserTierAlignmentFilter filter1 = new UserTierAlignmentFilter(alignmentRules);
         topTier.getValue().accept(filter1);
         final List<UserTierElement> topElements = filter1.getElements();
-        final UserTierAlignmentFilter filter2 = new UserTierAlignmentFilter(bottomTier.getTierAlignmentRules());
+        final UserTierAlignmentFilter filter2 = new UserTierAlignmentFilter(alignmentRules);
         bottomTier.getValue().accept(filter2);
         final List<UserTierElement> bottomElements = filter2.getElements();
         final List<Tuple<UserTierElement, UserTierElement>> elements = TierAligner.mapAlignedElements(topElements, bottomElements);

@@ -8,6 +8,7 @@ import ca.phon.session.Tier;
 import ca.phon.session.alignment.ITierAligner;
 import ca.phon.session.alignment.TierAligner;
 import ca.phon.session.alignment.TierAlignment;
+import ca.phon.session.alignment.TierAlignmentRules;
 import ca.phon.util.Tuple;
 
 import java.util.List;
@@ -16,8 +17,8 @@ public class OrthoToPhoneAlignmentAligner implements ITierAligner<Orthography, O
 
     @Override
     public TierAlignment<Orthography, OrthographyElement, PhoneAlignment, PhoneMap>
-        calculateAlignment(Tier<Orthography> topTier, Tier<PhoneAlignment> bottomTier) {
-        final OrthoAlignmentFilter orthoVisitor = new OrthoAlignmentFilter(bottomTier.getTierAlignmentRules());
+        calculateAlignment(Tier<Orthography> topTier, Tier<PhoneAlignment> bottomTier, TierAlignmentRules alignmentRules) {
+        final OrthoAlignmentFilter orthoVisitor = new OrthoAlignmentFilter(alignmentRules);
         topTier.getValue().accept(orthoVisitor);
         final List<OrthographyElement> orthoElements = orthoVisitor.getAlignmentElements();
         final List<PhoneMap> alignments = bottomTier.getValue().getAlignments();

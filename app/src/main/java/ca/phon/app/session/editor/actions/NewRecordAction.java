@@ -29,8 +29,6 @@ import java.awt.event.*;
  */
 public class NewRecordAction extends SessionEditorAction {
 	
-	private static final long serialVersionUID = 8872975443044409650L;
-
 	private final static String CMD_NAME = "New record";
 	
 	private final static String SHORT_DESC = "New record after current";

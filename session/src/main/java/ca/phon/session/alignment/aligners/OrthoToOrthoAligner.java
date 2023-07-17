@@ -5,6 +5,7 @@ import ca.phon.session.Tier;
 import ca.phon.session.alignment.ITierAligner;
 import ca.phon.session.alignment.TierAligner;
 import ca.phon.session.alignment.TierAlignment;
+import ca.phon.session.alignment.TierAlignmentRules;
 import ca.phon.util.Tuple;
 
 import java.util.List;
@@ -14,13 +15,12 @@ public class OrthoToOrthoAligner
 
     @Override
     public TierAlignment<Orthography, OrthographyElement, Orthography, OrthographyElement>
-        calculateAlignment(Tier<Orthography> topTier, Tier<Orthography> bottomTier) {
-
-        final OrthoAlignmentFilter topVisitor = new OrthoAlignmentFilter(bottomTier.getTierAlignmentRules());
+        calculateAlignment(Tier<Orthography> topTier, Tier<Orthography> bottomTier, TierAlignmentRules alignmentRules) {
+        final OrthoAlignmentFilter topVisitor = new OrthoAlignmentFilter(alignmentRules);
         topTier.getValue().accept(topVisitor);
         final List<OrthographyElement> topElements = topVisitor.getAlignmentElements();
 
-        final OrthoAlignmentFilter bottomVisitor = new OrthoAlignmentFilter(topTier.getTierAlignmentRules());
+        final OrthoAlignmentFilter bottomVisitor = new OrthoAlignmentFilter(alignmentRules);
         bottomTier.getValue().accept(bottomVisitor);
         final List<OrthographyElement> bottomElements = bottomVisitor.getAlignmentElements();
 

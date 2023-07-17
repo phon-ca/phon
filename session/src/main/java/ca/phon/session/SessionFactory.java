@@ -52,7 +52,7 @@ public final class SessionFactory extends ExtendableObject {
 		if(sessionFactoryExtPts.size() > 0) {
 			return new SessionFactory(sessionFactoryExtPts.get(0).getFactory().createObject(new Object[0]));
 		} else {
-			return null;
+			throw new IllegalStateException("No session factory available");
 		}
 	}
 
@@ -520,11 +520,12 @@ public final class SessionFactory extends ExtendableObject {
 	/**
 	 * Create tier description for system tier
 	 *
-	 * @param tierDescriptionImpl
+	 * @param systemTier
 	 * @return
 	 */
 	public TierDescription createTierDescription(SystemTierType systemTier) {
 		final TierAlignmentRules alignmentRules = switch (systemTier) {
+			case Orthography -> TierAlignmentRules.orthographyTierRules();
 			case IPATarget, IPAActual, PhoneAlignment -> TierAlignmentRules.ipaTierRules();
 			case Notes -> TierAlignmentRules.notesTierRules();
 			default -> TierAlignmentRules.noAlignment();
@@ -614,4 +615,5 @@ public final class SessionFactory extends ExtendableObject {
 		
 		return retVal;
 	}
+
 }
