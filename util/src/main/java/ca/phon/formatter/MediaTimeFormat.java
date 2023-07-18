@@ -2,6 +2,8 @@ package ca.phon.formatter;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.NumberFormat;
@@ -46,7 +48,7 @@ public class MediaTimeFormat extends Format {
         } else if(obj instanceof Long) {
             value = (Long) obj;
         } else {
-            value = Float.valueOf((Float)obj * 1000.0f).longValue();
+            value = (long)Math.round((float)obj * 1000.0f);
         }
 
         StringBuffer retVal = new StringBuffer();
