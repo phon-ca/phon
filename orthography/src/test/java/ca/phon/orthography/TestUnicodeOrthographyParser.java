@@ -555,15 +555,21 @@ public class TestUnicodeOrthographyParser {
 
     @Test
     public void testDuration() {
-        final String text = Happening.PREFIX + "foo [# 1.2]";
+        final String text = Happening.PREFIX + "foo [# 1.2] bar [# 2.]";
         final Orthography ortho = roundTrip(text);
-        Assert.assertEquals(1, ortho.length());
+        Assert.assertEquals(2, ortho.length());
         Assert.assertEquals(Happening.class, ortho.elementAt(0).getClass());
         final Happening happening = (Happening) ortho.elementAt(0);
         Assert.assertEquals(1, happening.getAnnotations().size());
         Assert.assertEquals(Duration.class, happening.getAnnotations().get(0).getClass());
         final Duration duration = (Duration) happening.getAnnotations().get(0);
         Assert.assertEquals(1.2f, duration.getDuration(), 0.0001f);
+        Assert.assertEquals(OrthoGroup.class, ortho.elementAt(1).getClass());
+        final OrthoGroup g = (OrthoGroup) ortho.elementAt(1);
+        Assert.assertEquals(1, g.getAnnotations().size());
+        Assert.assertEquals(Duration.class, g.getAnnotations().get(0).getClass());
+        final Duration duration1 = (Duration) g.getAnnotations().get(0);
+        Assert.assertEquals(2.0f, duration1.getDuration(), 0.0001f);
     }
 
     @Test
