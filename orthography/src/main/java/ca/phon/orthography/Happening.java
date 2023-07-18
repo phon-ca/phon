@@ -23,8 +23,8 @@ public final class Happening extends Event {
     }
 
     @Override
-    public String text() {
-        return String.format("%s%s", PREFIX, getData()) + getAnnotationText();
+    public String elementText() {
+        return String.format("%s%s", PREFIX, getData());
     }
 
     @Override

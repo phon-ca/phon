@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Entity class for phone alignment tier.
@@ -105,6 +106,11 @@ public class PhoneAlignment implements Iterable<PhoneMap> {
     @Override
     public Iterator<PhoneMap> iterator() {
         return getAlignments().iterator();
+    }
+
+    @Override
+    public String toString() {
+        return getAlignments().stream().map(PhoneMap::toString).collect(Collectors.joining(" "));
     }
 
 }

@@ -117,7 +117,14 @@ public final class Orthography implements Iterable<OrthographyElement>, Visitabl
 			visitor.visit(ele);
 		}
 	}
-	
+
+	/**
+	 * Return a new Orthography instance with the given range of elements
+	 *
+	 * @param start
+	 * @param end
+	 * @return
+	 */
 	public Orthography subsection(int start, int end) {
 		int len = end - start;
 		if(len > 0) {
@@ -134,7 +141,14 @@ public final class Orthography implements Iterable<OrthographyElement>, Visitabl
 	public OrthographyElement elementAt(int idx) {
 		return elements[idx];
 	}
-	
+
+	/**
+	 * Get element index of the given element.  This function does not recurse
+	 * into groups or phonetic groups.
+	 *
+	 * @param ele
+	 * @return
+	 */
 	public int indexOf(OrthographyElement ele) {
 		for(int i = 0; i < length(); i++) {
 			final OrthographyElement e = elementAt(i);
@@ -144,7 +158,20 @@ public final class Orthography implements Iterable<OrthographyElement>, Visitabl
 		}
 		return -1;
 	}
-	
+
+	/**
+	 * Get the string index of the given element.
+	 * This method will recurse into groups and phonetic groups
+	 *
+	 * @param ele
+	 * @return string index or -1 element is not part of this Orthography instance
+	 */
+	public int stringIndexOf(OrthographyElement ele) {
+		final OrthoElementLocator locator = new OrthoElementLocator(ele);
+		accept(locator);
+		return locator.getStringIndex();
+	}
+
 	@Override
 	public String toString() {
 		final StringBuffer buffer = new StringBuffer();

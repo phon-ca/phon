@@ -5,6 +5,8 @@ import java.util.List;
 
 public final class Action extends Event {
 
+    public final static String ACTION_TEXT = "0";
+
     public Action() {
         this(new ArrayList<>());
     }
@@ -21,8 +23,8 @@ public final class Action extends Event {
     }
 
     @Override
-    public String text() {
-        return "0" + getAnnotationText();
+    public String elementText() {
+        return ACTION_TEXT;
     }
 
 }

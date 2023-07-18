@@ -20,7 +20,7 @@ public abstract class AnnotatedOrthographyElement extends AbstractOrthographyEle
 
     protected String getAnnotationText() {
         if(getAnnotations().size() > 0) {
-            return " " + getAnnotations().stream()
+            return getAnnotations().stream()
                     .map(annotation -> annotation.text())
                     .collect(Collectors.joining(" "));
         } else
@@ -28,5 +28,22 @@ public abstract class AnnotatedOrthographyElement extends AbstractOrthographyEle
     }
 
     public abstract AnnotatedOrthographyElement cloneAppendingAnnotation(OrthographyAnnotation annotation);
+
+    /**
+     * Text for primary element without annotations
+     *
+     * @return text for primary element without annotations, subclasses should implement this method
+     * instead of text()
+     */
+    public abstract String elementText();
+
+    @Override
+    public String text() {
+        if(getAnnotations().size() > 0) {
+            return String.format("%s %s", elementText(), getAnnotationText());
+        } else {
+            return elementText();
+        }
+    }
 
 }

@@ -26,12 +26,12 @@ public final class OrthoGroup extends AnnotatedOrthographyElement {
     }
 
     @Override
-    public String text() {
+    public String elementText() {
         final String groupTxt = getElements().stream().map(ele -> ele.text()).collect(Collectors.joining(" "));
         if(getElements().size() == 1 && getElements().get(0) instanceof Word)
-            return groupTxt + getAnnotationText();
+            return groupTxt;
         else
-            return String.format("<%s>%s", groupTxt, getAnnotationText());
+            return String.format("<%s>", groupTxt);
     }
 
 }

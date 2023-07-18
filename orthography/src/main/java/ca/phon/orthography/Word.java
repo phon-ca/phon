@@ -155,15 +155,27 @@ public class Word extends AbstractOrthographyElement {
 		return Collections.unmodifiableList(this.wordElements);
 	}
 
+	/**
+	 * Element text without replacements
+	 *
+	 * @return word text without replacements
+	 */
+	public String elementText() {
+		return (this.getPrefix() == null ? "" : this.getPrefix()) +
+					this.getWordElements().stream().map((ele) -> ele.text()).collect(Collectors.joining()) +
+					(this.getLangs() == null ? "" : this.getLangs()) +
+					(this.getSuffix() == null ? "" : this.getSuffix());
+	}
+
+	public String getReplacementsText() {
+		return getReplacements().stream().map(Replacement::text).collect(Collectors.joining(" "));
+	}
+
 	@Override
 	public String text() {
-		String retVal =
-				(this.getPrefix() == null ? "" : this.getPrefix()) +
-						this.getWordElements().stream().map((ele) -> ele.text()).collect(Collectors.joining()) +
-						(this.getLangs() == null ? "" : this.getLangs()) +
-						(this.getSuffix() == null ? "" : this.getSuffix());
+		String retVal = elementText();
 		if(getReplacements().size() > 0) {
-			retVal += " " + getReplacements().stream().map(r -> r.text()).collect(Collectors.joining(" "));
+			retVal += " " + getReplacementsText();
 		}
 		return retVal;
 	}

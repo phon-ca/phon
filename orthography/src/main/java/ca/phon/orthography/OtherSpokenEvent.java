@@ -30,8 +30,8 @@ public final class OtherSpokenEvent extends Event {
     }
 
     @Override
-    public String text() {
-        return String.format("%s%s:%s", PREFIX, getWho(), getData()) + getAnnotationText();
+    public String elementText() {
+        return String.format("%s%s:%s", PREFIX, getWho(), getData());
     }
 
     @Override
