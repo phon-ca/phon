@@ -169,14 +169,26 @@ public class MultiActionButton extends JXPanel implements Scrollable {
 		
 		return retVal;
 	}
+
+	/**
+	 * Display context menu with default action
+	 *
+	 * @param p
+	 */
+	public void displayContextMenu(Point p) {
+		displayContextMenu(p, true);
+	}
 	
 	/**
-	 * Display context menu 
+	 * Display context menu
+	 *
+	 * @param p
+	 * @param includeDefaultAction
 	 */
-	private void displayContextMenu(Point p) {
+	public void displayContextMenu(Point p, boolean includeDefaultAction) {
 		JPopupMenu popupMenu = new JPopupMenu();
 		
-		if(defaultAction != null) {
+		if(includeDefaultAction && defaultAction != null) {
 			JMenuItem defaultItem = new JMenuItem(defaultAction);
 			popupMenu.add(defaultItem);
 		}
