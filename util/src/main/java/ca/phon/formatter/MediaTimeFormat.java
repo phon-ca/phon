@@ -77,8 +77,9 @@ public class MediaTimeFormat extends Format {
             nf.setMinimumIntegerDigits(2);
 
         NumberFormat msNf = NumberFormat.getIntegerInstance();
-        if(padded)
+        if(padded) {
             msNf.setMinimumIntegerDigits(3);
+        }
 
         String minuteString = msNf.format(numMinutes) + ":";
 
@@ -88,8 +89,12 @@ public class MediaTimeFormat extends Format {
                         : (nf.format(numSecondsLeft) + ".")
                 );
 
-        String msString =
-                (msNf.format(numMSecondsLeft));
+        String msString = (msNf.format(numMSecondsLeft));
+        if(!padded) {
+            while(msString.endsWith("0")) {
+                msString = msString.substring(0, msString.length()-1);
+            }
+        }
 
         String timeString =
                 (negative ? "-" : "") +
@@ -119,8 +124,9 @@ public class MediaTimeFormat extends Format {
                 final String secString = matcher.group(2);
                 final int secs = Integer.parseInt(secString);
 
-                final String msString = matcher.group(3);
-                final int ms = Integer.parseInt(msString);
+                StringBuilder msString = new StringBuilder(matcher.group(3));
+                while(msString.length() < 3)  msString.append("0");
+                final int ms = Integer.parseInt(msString.toString());
 
                 value = Long.valueOf(
                         ms + (secs * 1000) + (mins * 60 * 1000));
