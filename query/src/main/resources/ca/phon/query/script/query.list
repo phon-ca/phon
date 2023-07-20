@@ -3,4 +3,5 @@ ca/phon/query/script/Data Tiers.js
 ca/phon/query/script/Deletion.xml
 ca/phon/query/script/Epenthesis.xml
 ca/phon/query/script/Phones.js
+ca/phon/query/script/Phones_4.js
 ca/phon/query/script/Segmental Relations.js

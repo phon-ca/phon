@@ -39,7 +39,7 @@ import java.util.*;
  */
 public class QueryMenuListener implements MenuListener {
 	
-	private final static String STOCK_MENU_QUERIES[] = new String[] { "Data Tiers", "Deletion", "Epenthesis", "Phones", "Segmental Relations" };
+	private final static String STOCK_MENU_QUERIES[] = new String[] { "Data Tiers", "Deletion", "Epenthesis", "Phones_4", "Segmental Relations" };
 	
 	public void menuCanceled(MenuEvent e) {
 		

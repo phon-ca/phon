@@ -72,7 +72,8 @@ exports.SearchByOptions = function(id) {
                 searchByParam.setValue(searchByParamInfo.id, new java.lang.Integer(selection));
             }
         };
-        searchByWordParam.addPropertyChangeListener(searchByWordParam.getParamId(), searchByWordListener);
+        if(searchByWordParam != null)
+            searchByWordParam.addPropertyChangeListener(searchByWordParam.getParamId(), searchByWordListener);
 
         var searchByParamListener = new java.beans.PropertyChangeListener() {
 			propertyChange: function (e) {

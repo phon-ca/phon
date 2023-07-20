@@ -65,7 +65,7 @@ exports.PatternFilter = function (id) {
 	};
 
 	var matchGroupParamInfo = {
-		"id":[id + ".caseSensitive", id + ".exactMatch"],
+		"id": [id + ".caseSensitive", id + ".exactMatch"],
 		"title": "",
 		"desc":[ "Case sensitive", "Exact match"],
 		"def":[ false, false ],
@@ -87,7 +87,7 @@ exports.PatternFilter = function (id) {
 	"Enter phonex",
 	"Enter stress pattern",
 	"Enter CGV pattern"];
-	
+
 	var filterMimetype = [
 		"text/plain",
 		"text/regex",
@@ -567,7 +567,7 @@ exports.PatternFilter = function (id) {
 				if (obj instanceof IPATranscript) {
 					var startIpaIdx = obj.ipaIndexOf(regexMatcher.start());
 					var endIpaIdx = obj.ipaIndexOf(regexMatcher.end() -1);
-					
+
 					if(startIpaIdx >= 0 && startIpaIdx < obj.length()
 						&& endIpaIdx >= 0 && endIpaIdx >= startIpaIdx && endIpaIdx < obj.length()) {
 						myValue = obj.subsection(startIpaIdx, endIpaIdx + 1);
@@ -603,7 +603,7 @@ exports.PatternFilter = function (id) {
 					v = {
 						start: regexMatcher.start(), end: regexMatcher.end(), value: myValue, matcher: regexMatcher, position: position
 					};
-	
+
 					retVal.push(v);
 				}
 			}
