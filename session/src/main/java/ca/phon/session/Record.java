@@ -324,17 +324,31 @@ public final class Record extends ExtendableObject {
 	}
 
 	/**
+	 * Get value for tier with type unspecified
+	 *
+	 * @param tierName
+	 * @return tier value if present, null otherwise
+	 */
+	public Object getTierValue(String tierName) {
+		final Tier<?> tier = getTier(tierName);
+		if(tier != null && tier.hasValue()) {
+			return tier.getValue();
+		}
+		return null;
+	}
+
+	/**
 	 * Get value for tier with name and type.  No effect
 	 * if the specified tier was not found.
 	 *
-	 * @param name
+	 * @param tierName
 	 * @param type
 	 *
 	 * @return value for tier or null if specified tier was not found
 	 * @param <T>
 	 */
-	public <T> T getTierValue(String name, Class<T> type) {
-		final Tier<T> tier = getTier(name, type);
+	public <T> T getTierValue(String tierName, Class<T> type) {
+		final Tier<T> tier = getTier(tierName, type);
 		if(tier != null) {
 			return tier.getValue();
 		} else {
