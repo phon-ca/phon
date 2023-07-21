@@ -47,6 +47,10 @@ public class CrossTierAlignment {
         this.tierAlignments = alignmentMap;
     }
 
+    public Tier<?> getTopTier() {
+        return topTier;
+    }
+
     /**
      * Return a map of alignments for the given object
      *
