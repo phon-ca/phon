@@ -1,3 +1,9 @@
+/*
+params =
+{enum, searchTier, "IPA Target"|"IPA Actual", 0, "Search Tier"}
+;
+ */
+
 var AlignedTierFilter = require("lib/TierFilter").TierFilter;
 var WordFilter = require("lib/WordFilter").WordFilter;
 var TierList = require("lib/TierList").TierList;
@@ -15,7 +21,7 @@ var filters = {
     "targetResultFilter": new PatternFilter("filters.targetResultFilter"),
     "actualResultFilter": new PatternFilter("filters.actualResultFilter"),
     "alignedTierFilter": new AlignedTierFilter("filters.alignedTierFilter"),
-    "tierPattern": new PatternFilter("filters.tierPattern"),
+    "tierFilter": new PatternFilter("filters.tierFilter"),
     "word": new WordFilter("filters.word"),
     "addTiers": new TierList("filters.addTiers"),
     "wordTiers": new TierList("filters.wordTiers"),
@@ -63,7 +69,7 @@ function setup_params(params) {
 
     var tierFilterSection = new SeparatorScriptParam("tierFilterHeader", "Tier Options", true);
     params.add(tierFilterSection);
-    filters.tierPattern.param_setup(params);
+    filters.tierFilter.param_setup(params);
 
     var alignedTierHeader = new LabelScriptParam("", "<html><b>Aligned Tier Filter</b></html>");
     params.add(alignedTierHeader);
@@ -105,4 +111,55 @@ function setup_params(params) {
     filters.wordTiers.setEnabled(enabled);
 
     filters.speaker.param_setup(params);
+}
+
+/*
+ * Globals
+ */
+var session;
+
+function begin_search(s) {
+    session = s;
+}
+
+
+/**
+ * query_record
+ * @param recordIndex
+ * @param record
+ */
+function query_record(recordIndex, record) {
+    // check participant filter
+    if (! filters.speaker.check_speaker(record.speaker, session.date)) return;
+
+    const tier = searchTier === "IPA Target" ? record.getIPATargetTier() : record.getIPAActualTier();
+    const alignedTier = searchTier === "IPA Target" ? record.getIPAActualTier() : record.getIPATargetTier();
+    const phoneAlignment = record.getPhoneAlignment();
+
+    if(filters.tierFilter.isUseFilter()) {
+        if(!filters.tierFilter.check_filter(tier.getValue())) return;
+    }
+
+    if(filters.alignedTierFilter.isUseFilter()) {
+        if(!filters.alignedTierFilter.check_filter(record)) return;
+    }
+
+    // search by word
+    if(filters.word.isUseFilter()) {
+        const crossTierAlignment = TierAligner.calculateCrossTierAlignment(record, tier);
+        const topElements = crossTierAlignment.getTopAlignmentElements();
+        const selectedElements = filters.word.getRequestedWords(topElements);
+        for(eleIdx = 0; eleIdx < selectedElements.length; eleIdx++) {
+            var elementData = selectedElements[eleIdx];
+            var element = elementData.word;
+
+            var elementAlignedMeta = new java.util.LinkedHashMap();
+
+            var elementAlignedResults = new Array();
+            var elementAlignedData = filters.wordTiers.getAlignedTierData(crossTierAlignment, element, "Word");
+            var test = "";
+
+        }
+    }
+
 }

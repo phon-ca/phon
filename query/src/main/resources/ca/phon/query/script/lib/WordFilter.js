@@ -16,12 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-/**
- * Code for specifying word by position.
- */
-
-var PatternFilter = require("lib/PatternFilter").PatternFilter;
-
 exports.WordFilter = function (id) {
 
 	var sectionTitle = "Word Options";
@@ -116,9 +110,9 @@ exports.WordFilter = function (id) {
 	 * Returns a list of words for the given
 	 * group which match the criteria in the form.
 	 *
-	 * @param group
+	 * @param tier
 	 *
-	 * @return array of object conforming to the following
+	 * @return array of objects conforming to the following
 	 *  protocol
 	 *
 	 * {
@@ -127,16 +121,12 @@ exports.WordFilter = function (id) {
 	 *   word: obj
 	 * }
 	 */
-	this.getRequestedWords = function (group, tierName) {
+	this.getRequestedWords = function (words) {
 		var retVal = new java.util.ArrayList();
-		var retIdx = 0;
 
-		tierName = tierName || (searchTier || "Orthography");
-
-		var words = new Array();
-		var wordCount = group.getWordCount(tierName);
+		var wordCount = words.size();
 		for (var wIndex = 0; wIndex < wordCount; wIndex++) {
-			var word = group.getAlignedWord(wIndex);
+			var word = words.get(wIndex);
 			var position = "unknown";
 
 			var posOk = false;

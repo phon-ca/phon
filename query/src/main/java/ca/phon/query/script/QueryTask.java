@@ -225,6 +225,9 @@ public class QueryTask extends PhonTask {
 
 						final Context jsctx = debugCtx.enter();
 						final Scriptable debugScope = debugCtx.getEvaluatedScope();
+						if(debugCtx.hasBeginSearch(scope)) {
+							debugCtx.callBeginSearch(debugScope, session);
+						}
 						jsctx.setOptimizationLevel(-1);
 						debugger.attachTo(jsctx.getFactory());
 						debugger.setScope(debugScope);

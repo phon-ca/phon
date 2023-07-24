@@ -73,42 +73,46 @@ exports.TierList = function(id) {
 	/**
 	 * Returns a tuple of tier data.
 	 *
+	 * @param crossTierAlignment
+	 * @param topElement
+	 * @param label to add to result tier name
+	 *
 	 * @return [resultValues, metadata]
 	 */
-	this.getAlignedTierData = function(record, obj, label) {
+	this.getAlignedTierData = function(crossTierAlignment, topElement, label) {
 		var resultValues = new Array();
 		var metadata = new java.util.LinkedHashMap();
 		
-		if(typeof obj.getTier !== "function") return [ [], new java.util.HashMap() ];
-
 		var extraTiers = this.getTiers()
+		var alignedElementMap = crossTierAlignment.getAlignedElements(topElement);
 		for(var j = 0; j < extraTiers.length; j++) {
-			var tierName = extraTiers[j];
-			var tierVal = null;
-			if(record.hasTier(tierName)) {
-				var tierVal = obj.getTier(tierName);
-
+			var alignedTierName = extraTiers[j];
+			var alignedTierVal = alignedElementMap.get(alignedTierName);
+			if(alignedTierVal != null) {
 				var tierResultValue = factory.createResultValue();
-				tierResultValue.name = tierName + " ("  + label + ")";
-				tierResultValue.tierName = tierName;
-				tierResultValue.groupIndex = (obj.getGroupIndex ? obj.groupIndex : obj.group.groupIndex);
-				tierResultValue.data = tierVal || "";
+				tierResultValue.name = alignedTierName + " ("  + label + ")";
+				tierResultValue.tierName = alignedTierName;
+				tierResultValue.data = alignedTierVal || "";
 
 				var startIndex = 0;
-				var length = (tierVal ? tierVal.toString().length() : 0);
-
-				if(tierVal != null && obj.getGroup) {
-					var systemTierType = SystemTierType.tierFromString(tierName);
+				var length = (alignedTierVal ? alignedTierVal.toString().length() : 0);
+				var tierAlignment = crossTierAlignment.getTierAlignment(alignedTierName);
+				var alignedTier = tierAlignment.getBottomTier();
+				if(alignedTierVal != null && alignedTier != null) {
 					var wordOffset = 0;
 
-					if(systemTierType == SystemTierType.Orthography) {
-						wordOffset = obj.getOrthographyWordLocation();
-					} else if(systemTierType == SystemTierType.IPATarget) {
-						wordOffset = obj.getIPATargetWordLocation();
-					} else if(systemTierType == SystemTierType.IPAActual) {
-						wordOffset = obj.getIPAActualWordLocation();
+					if(alignedTier.declaredType === Orthography) {
+						wordOffset = alignedTier.value.stringIndexOf(alignedTierVal);
+					} else if(alignedTier.declaredType === IPATranscript) {
+						wordOffset = alignedTier.value.stringIndexOf(alignedTierVal);
+					} else if(alignedTier.declaredType === PhoneAlignment) {
+						// TODO
+						wordOffset = 0;
+					} else if(alignedTier.declaredType === UserTierData) {
+						// TODO
+						wordOffset = 0;
 					} else {
-						wordOffset = obj.getTierWordLocation(tierName);
+						// unknown tier type
 					}
 
 					startIndex += wordOffset;
@@ -117,41 +121,41 @@ exports.TierList = function(id) {
 				tierResultValue.range = new Range(startIndex, startIndex + length, true);
 				resultValues.push(tierResultValue);
 			} else {
-				if(tierName == "Phone Alignment") {
+				if(alignedTierName == "Phone Alignment") {
 					var align = obj.phoneAlignment;
-					tierVal = (align != null ? align.toString(false) : "");
-				} else if(tierName == "Target CV") {
+					alignedTierVal = (align != null ? align.toString(false) : "");
+				} else if(alignedTierName == "Target CV") {
 					var ipaT = obj.IPATarget;
-					tierVal = (ipaT != null ? ipaT.cvPattern : "");
-				} else if(tierName == "Actual CV") {
+					alignedTierVal = (ipaT != null ? ipaT.cvPattern : "");
+				} else if(alignedTierName == "Actual CV") {
 					var ipaA = obj.IPAActual;
-					tierVal = (ipaA != null ? ipaA.cvPattern : "");
-				} else if(tierName == "Target Stress") {
+					alignedTierVal = (ipaA != null ? ipaA.cvPattern : "");
+				} else if(alignedTierName == "Target Stress") {
 					var ipaT = obj.IPATarget;
-					tierVal = (ipaT != null ? ipaT.stressPattern : "");
-				} else if(tierName == "Actual Stress") {
+					alignedTierVal = (ipaT != null ? ipaT.stressPattern : "");
+				} else if(alignedTierName == "Actual Stress") {
 					var ipaA = obj.IPAActual;
-					tierVal = (ipaA != null ? ipaA.stressPattern : "");
-				} else if(tierName == "Target Syllabification") {
+					alignedTierVal = (ipaA != null ? ipaA.stressPattern : "");
+				} else if(alignedTierName == "Target Syllabification") {
 					var ipaT = obj.IPATarget;
-					tierVal = (ipaT != null ? ipaT.toString(true) : "");
-				} else if(tierName == "Actual Syllabification") {
+					alignedTierVal = (ipaT != null ? ipaT.toString(true) : "");
+				} else if(alignedTierName == "Actual Syllabification") {
 					var ipaA = obj.IPAActual;
-					tierVal = (ipaA != null ? ipaA.toString(true) : "");
-				} else if(tierName.match(coverRegex)) {
-				    var groupData = coverRegex.exec(tierName);
+					alignedTierVal = (ipaA != null ? ipaA.toString(true) : "");
+				} else if(alignedTierName.match(coverRegex)) {
+				    var groupData = coverRegex.exec(alignedTierName);
 				    
 				    var phonTier = groupData[1].trim();
 				    var reportTier = groupData[3].trim();
 				    var symbolMap = groupData[4].trim();
 	
 	                var ipa = obj.getTier(phonTier);
-	                tierVal = (ipa != null ? ipa.cover(symbolMap) : "");
+	                alignedTierVal = (ipa != null ? ipa.cover(symbolMap) : "");
 	                
-	                tierName = reportTier;
+	                alignedTierName = reportTier;
 				}
-				if(tierVal != null)
-					metadata.put(tierName + " (" + label + ")", tierVal.toString());
+				if(alignedTierVal != null)
+					metadata.put(alignedTierName + " (" + label + ")", alignedTierVal.toString());
 			}
 		}
 

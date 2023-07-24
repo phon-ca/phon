@@ -71,6 +71,10 @@ exports.TierFilter = function (id) {
 		this.patternFilter.set_required(true);
 	}
 
+	this.check_filter = function (record) {
+		return this.patternFilter.check_filter(record.getTierValue(this.tier));
+	}
+
 	this.check_word = function (word) {
 		var retVal = false;
 
