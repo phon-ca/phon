@@ -1,17 +1,16 @@
 package ca.phon.session;
 
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.*;
-import ca.phon.session.alignment.TierAlignment;
 import ca.phon.session.alignment.TierAlignmentRules;
 import ca.phon.session.alignment.aligners.*;
 import ca.phon.session.usertier.UserTierData;
-import ca.phon.session.usertier.UserTierElement;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+
+import java.util.Map;
 
 @RunWith(JUnit4.class)
 public class TestTierAlignment {

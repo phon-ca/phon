@@ -3,13 +3,17 @@ package ca.phon.session.alignment;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.PhoneAlignment;
+import ca.phon.session.Record;
+import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
 import ca.phon.session.alignment.aligners.*;
 import ca.phon.session.usertier.UserTierData;
 import ca.phon.util.Tuple;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public final class TierAligner {
 
@@ -50,7 +54,7 @@ public final class TierAligner {
     public static TierAlignment<?, ?, ?, ?> alignTiers(Tier<?> topTier, Tier<?> bottomTier) {
         boolean mirror = false;
         final Class<?> topType = topTier.getDeclaredType();
-        final Class<?> bottomType = topType.getComponentType();
+        final Class<?> bottomType = bottomTier.getDeclaredType();
         // default tier alignment
         final Tuple<?, ?> tuple = new Tuple<>(topTier.getValue(), bottomTier.getValue());
         TierAlignment<?, ?, ?, ?> alignment = new TierAlignment<>(topTier, bottomTier, List.of(tuple));
@@ -107,6 +111,33 @@ public final class TierAligner {
             }
         }
         return mirror ? mirrorTierAlignment(alignment) : alignment;
+    }
+
+    /**
+     * Calculate cross tier alignment for all tiers which align by type
+     *
+     * @param record
+     * @param topTier
+     *
+     * @return cross tier alignment for record
+     */
+    public static CrossTierAlignment calculateCrossTierAlignment(Record record, Tier<?> topTier) {
+        Map<String, TierAlignment<?,?,?,?>> alignmentMap = new LinkedHashMap<>();
+        alignmentMap.put(SystemTierType.Orthography.getName(),
+                TierAligner.alignTiers(topTier, record.getOrthographyTier()));
+        alignmentMap.put(SystemTierType.IPATarget.getName(),
+                TierAligner.alignTiers(topTier, record.getIPATargetTier()));
+        alignmentMap.put(SystemTierType.IPAActual.getName(),
+                TierAligner.alignTiers(topTier, record.getIPAActualTier()));
+        alignmentMap.put(SystemTierType.PhoneAlignment.getName(),
+                TierAligner.alignTiers(topTier, record.getPhoneAlignmentTier()));
+        for(String tierName:record.getUserDefinedTierNames()) {
+            final Tier<?> bottomTier = record.getTier(tierName);
+            if(bottomTier != null) {
+                alignmentMap.put(tierName, TierAligner.alignTiers(topTier, bottomTier));
+            }
+        }
+        return new CrossTierAlignment(topTier, alignmentMap);
     }
 
 }

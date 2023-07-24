@@ -13,30 +13,6 @@ import java.util.*;
  */
 public class CrossTierAlignment {
 
-    /**
-     * Calculate alignment for all tiers which align by type
-     *
-     * @param record
-     * @param topTier
-     *
-     * @return cross tier alignment for record
-     */
-    public static CrossTierAlignment calculateAlignment(Record record, Tier<?> topTier) {
-        Map<String, TierAlignment<?,?,?,?>> alignmentMap = new LinkedHashMap<>();
-        alignmentMap.put(SystemTierType.Orthography.getName(),
-                TierAligner.alignTiers(topTier, record.getOrthographyTier()));
-        alignmentMap.put(SystemTierType.IPATarget.getName(),
-                TierAligner.alignTiers(topTier, record.getIPATargetTier()));
-        alignmentMap.put(SystemTierType.IPAActual.getName(),
-                TierAligner.alignTiers(topTier, record.getIPAActualTier()));
-        alignmentMap.put(SystemTierType.PhoneAlignment.getName(),
-                TierAligner.alignTiers(topTier, record.getPhoneAlignmentTier()));
-        for(String tierName:record.getUserDefinedTierNames()) {
-            alignmentMap.put(tierName, TierAligner.alignTiers(topTier, record.getTier(tierName)));
-        }
-        return new CrossTierAlignment(topTier, alignmentMap);
-    }
-
     private final Tier<?> topTier;
 
     private final Map<String, TierAlignment<?, ?, ?, ?>> tierAlignments;
@@ -61,10 +37,10 @@ public class CrossTierAlignment {
         for(String tierName:tierAlignments.keySet()) {
             final TierAlignment<?,?,?,?> tierAlignment = tierAlignments.get(tierName);
             if(tierAlignment != null) {
-                Optional<?> alignedEle = tierAlignment.getAlignedElements().stream()
-                        .filter(ae -> ae.getObj1() == obj).map(Tuple::getObj2).findAny();
-                if(alignedEle.isPresent()) {
-                    retVal.put(tierName, alignedEle.get());
+                Optional<? extends Tuple<?, ?>> alignedEle = tierAlignment.getAlignedElements().stream()
+                        .filter(ae -> ae.getObj1() == obj).findAny();
+                if(alignedEle.isPresent() && alignedEle.get().getObj2() != null) {
+                    retVal.put(tierName, alignedEle.get().getObj2());
                 }
             }
         }

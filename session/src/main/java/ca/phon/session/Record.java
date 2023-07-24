@@ -225,7 +225,7 @@ public final class Record extends ExtendableObject {
 		} else {
 			for(String tierName:getUserDefinedTierNames()) {
 				final Tier<?> t = getTier(tierName, UserTierData.class);
-				if(t.getName().equals(name)) {
+				if(t != null && t.getName().equals(name)) {
 					return t.getDeclaredType();
 				}
 			}
