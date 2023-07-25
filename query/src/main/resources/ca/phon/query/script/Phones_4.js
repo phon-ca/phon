@@ -132,33 +132,132 @@ function query_record(recordIndex, record) {
     // check participant filter
     if (! filters.speaker.check_speaker(record.speaker, session.date)) return;
 
-    const tier = searchTier === "IPA Target" ? record.getIPATargetTier() : record.getIPAActualTier();
-    const alignedTier = searchTier === "IPA Target" ? record.getIPAActualTier() : record.getIPATargetTier();
-    const phoneAlignment = record.getPhoneAlignment();
+    const tier = searchTier == "IPA Target" ? record.getIPATargetTier() : record.getIPAActualTier();
+    const ipa = tier.hasValue() ? tier.value : new IPATranscript();
+    const alignedTier = searchTier == "IPA Target" ? record.getIPAActualTier() : record.getIPATargetTier();
+    const alignedIpa = alignedTier.getValue();
 
     if(filters.tierFilter.isUseFilter()) {
         if(!filters.tierFilter.check_filter(tier.getValue())) return;
     }
 
+    var tierAlignedResults = new Array();
+    var tierAlignedMeta = new java.util.LinkedHashMap();
     if(filters.alignedTierFilter.isUseFilter()) {
         if(!filters.alignedTierFilter.check_filter(record)) return;
     }
 
+    var toSearch = new Array();
+    toSearch.push({
+        element: tier.value,
+        alignedResults: tierAlignedResults,
+        alignedMeta: tierAlignedMeta
+    });
     // search by word
     if(filters.word.isUseFilter()) {
+        toSearch.length = 0;
         const crossTierAlignment = TierAligner.calculateCrossTierAlignment(record, tier);
         const topElements = crossTierAlignment.getTopAlignmentElements();
         const selectedElements = filters.word.getRequestedWords(topElements);
-        for(eleIdx = 0; eleIdx < selectedElements.length; eleIdx++) {
+        for(var eleIdx = 0; eleIdx < selectedElements.length; eleIdx++) {
             var elementData = selectedElements[eleIdx];
             var element = elementData.word;
 
             var elementAlignedMeta = new java.util.LinkedHashMap();
+            if(filters.searchBy.includePositionalInfo == true) {
+                elementAlignedMeta.put("Word Position", elementData.position);
+            }
 
             var elementAlignedResults = new Array();
             var elementAlignedData = filters.wordTiers.getAlignedTierData(crossTierAlignment, element, "Word");
-            var test = "";
+            for(var i = 0; i < elementAlignedData[0].length; i++) {
+                elementAlignedResults.push(elementAlignedData[0][i]);
+            }
+            elementAlignedMeta.putAll(elementAlignedData[1]);
 
+            var addWord = (element != null);
+            if(filters.wordPattern.isUseFilter()) {
+                addWord = filters.wordPattern.check_filter(element);
+            }
+
+            if(addWord) {
+                toSearch.push({
+                    element: element,
+                    alignedResults: elementAlignedResults,
+                    alignedMeta: elementAlignedMeta
+                });
+            }
+        }
+    }
+
+    // TODO by syllable
+
+    // perform query
+    for(var i = 0; i < toSearch.length; i++) {
+        var element = toSearch[i].element;
+        var alignedResults = toSearch[i].alignedResults;
+        var alignedMeta = toSearch[i].alignedMeta;
+        var matches = filters.primary.find_pattern(element);
+        var primaryFilter = (searchTier == "IPA Target" ? filters.targetResultFilter: filters.actualResultFilter);
+        var alignedFilter = (searchTier == "IPA Target" ? filters.actualResultFilter: filters.targetResultFilter);
+
+        for(var j = 0; j < matches.length; j++) {
+            var match = matches[j];
+
+            if(match.groups) {
+                var xgrp = match.groups["X"];
+                if(xgrp) {
+                    var newMatch = {
+                        start: xgrp.start,
+                        end: xgrp.end,
+                        value: xgrp.value,
+                        groups: match.groups,
+                        position: match.position
+                    };
+                    match = newMatch;
+                }
+            }
+
+            if(primaryFilter.isUseFilter()) {
+                if(!primaryFilter.check_filter(new IPATranscript(match.value))) {
+                    continue;
+                }
+            }
+
+            var result = factory.createResult();
+            var startIndex = ipa.stringIndexOf(match.value);
+            var length = match.value.toString().length();
+
+            result.recordIndex = recordIndex;
+            result.schema = "LINEAR";
+
+            var rv = factory.createResultValue();
+            rv.tierName = searchTier;
+            rv.range = new Range(startIndex, startIndex + length, true);
+            rv.data = (match.value != null ? new IPATranscript(match.value) : new IPATranscript());
+            result.addResultValue(rv);
+
+            if(filters.searchBy.includePositionalInfo == true) {
+                var searchBy = (filters.searchBy.searchBySyllable == true ? "Syllable" : filters.searchBy.searchBy);
+                result.metadata.put("Position in " + searchBy, match.position);
+            }
+
+            for(var alignedResultIdx = 0; alignedResultIdx < alignedResults.length; alignedResultIdx++) {
+                result.addResultValue(alignedResults[alignedResultIdx]);
+            }
+            result.metadata.putAll(alignedMeta);
+
+            if (match.groups) {
+                groupKeys = Object.keys(match.groups);
+                for (keyIdx = 0; keyIdx < groupKeys.length; keyIdx++) {
+                    var key = groupKeys[keyIdx];
+                    if (/^[a-zA-Z]\w*$/.test(key) && key != 'X') {
+                        result.metadata.put(key, match.groups[key].value.toString());
+                    }
+                }
+            }
+
+            results.addResult(result);
         }
     }
 
