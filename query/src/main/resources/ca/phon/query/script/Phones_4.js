@@ -136,6 +136,7 @@ function query_record(recordIndex, record) {
     const ipa = tier.hasValue() ? tier.value : new IPATranscript();
     const alignedTier = searchTier == "IPA Target" ? record.getIPAActualTier() : record.getIPATargetTier();
     const alignedIpa = alignedTier.getValue();
+    var alignment = record.getPhoneAlignment();
 
     if(filters.tierFilter.isUseFilter()) {
         if(!filters.tierFilter.check_filter(tier.getValue())) return;
@@ -236,6 +237,44 @@ function query_record(recordIndex, record) {
             rv.range = new Range(startIndex, startIndex + length, true);
             rv.data = (match.value != null ? new IPATranscript(match.value) : new IPATranscript());
             result.addResultValue(rv);
+
+            var aligned = (alignment != null ? alignment.getAligned(match.value.audiblePhones()): null);
+            var alignedIpaElements = (aligned != null ? new IPATranscript(aligned) : new IPATranscript());
+
+            var alignedStartIdx = (alignedIpaElements.length() > 0 ? alignedIpa.indexOf(alignedIpaElements.elementAt(0)) : 0);
+            var alignedEndIdx = (alignedIpaElements.length() > 0 ? alignedIpa.indexOf(alignedIpaElements.elementAt(alignedIpaElements.length() - 1)): 0);
+            var alignedSubIpa = (alignedIpaElements.length() > 0 ? alignedIpa.subsection(alignedStartIdx, alignedEndIdx + 1) : new IPATranscript());
+
+            if(alignedFilter.isUseFilter()) {
+                if(!alignedFilter.check_filter(alignedSubIpa)) {
+                    continue;
+                }
+            }
+
+            if (includeAligned == true) {
+                var targetIPA = (searchTier == "IPA Target" ? match.value : alignedIpaElements);
+                var actualIPA = (searchTier == "IPA Target" ? alignedIpaElements : match.value);
+
+                var subAlignment = (alignment != null ? alignment.getSubAlignment(targetIPA, actualIPA) : new PhoneMap(targetIPA, actualIPA));
+
+                var alignedRv = factory.createResultValue();
+                alignedRv.tierName = (searchTier == "IPA Target" ? "IPA Actual": "IPA Target");
+                if (aligned != null && aligned.size() > 0) {
+                    var alignedStart = alignedIpa.stringIndexOf(alignedSubIpa);
+                    var alignedLength = alignedSubIpa.toString().length();
+
+                    alignedRv.range = new Range(alignedStart, alignedStart + alignedLength, true);
+                    alignedRv.data = alignedSubIpa;
+                } else {
+                    alignedRv.range = new Range(0, 0, true);
+                    alignedRv.data = "";
+                }
+
+                result.addResultValue(alignedRv);
+                result.schema = "ALIGNED";
+
+                result.metadata.put("Alignment", subAlignment.toString());
+            }
 
             if(filters.searchBy.includePositionalInfo == true) {
                 var searchBy = (filters.searchBy.searchBySyllable == true ? "Syllable" : filters.searchBy.searchBy);
