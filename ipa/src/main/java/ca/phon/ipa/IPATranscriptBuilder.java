@@ -168,6 +168,7 @@ public class IPATranscriptBuilder {
 	 * @return builder
 	 */
 	public IPATranscriptBuilder append(String ipa) {
+		System.out.println(ipa);
 		return append(ipa, false);
 	}
 	

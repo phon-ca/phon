@@ -659,14 +659,47 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 	 */
 	private IPATranscript copyTranscript(SessionFactory factory, IpaTierType itt) {
 		final IPATranscriptBuilder builder = new IPATranscriptBuilder();
-		// attempt an exact copy first
 		for(PhoType pt:itt.getPg()) {
+			final IPATranscriptBuilder groupBuilder = new IPATranscriptBuilder();
 			if(pt != null && pt.getW() != null) {
 				for(WordType wt:pt.getW()) {
-					if(builder.size() > 0)
-						builder.appendWordBoundary();
-					builder.append(wt.getContent());
+					if(wt.getContent().trim().length() > 0) {
+						if (groupBuilder.size() > 0 && wt.getContent().trim().length() > 0)
+							groupBuilder.appendWordBoundary();
+						groupBuilder.append(wt.getContent().trim());
+					}
 				}
+			}
+			final IPATranscript groupTranscript = groupBuilder.toIPATranscript();
+			// only assign syllabification if possible
+			if(groupTranscript.length() != pt.getSb().getPh().size()) {
+				for(int i = 0; i < pt.getSb().getPh().size(); i++) {
+					var ph = pt.getSb().getPh().get(i);
+					final SyllableConstituentType scType = switch (ph.getScType()) {
+						case C -> SyllableConstituentType.CODA;
+						case N -> SyllableConstituentType.NUCLEUS;
+						case AS -> SyllableConstituentType.AMBISYLLABIC;
+						case O -> SyllableConstituentType.ONSET;
+						case LA -> SyllableConstituentType.LEFTAPPENDIX;
+						case RA -> SyllableConstituentType.RIGHTAPPENDIX;
+						case OEHS -> SyllableConstituentType.OEHS;
+						case SB -> SyllableConstituentType.SYLLABLEBOUNDARYMARKER;
+						case SS -> SyllableConstituentType.SYLLABLESTRESSMARKER;
+						case WB -> SyllableConstituentType.WORDBOUNDARYMARKER;
+						case UK -> SyllableConstituentType.UNKNOWN;
+					};
+					final IPAElement element = groupTranscript.elementAt(i);
+					final SyllabificationInfo info = element.getExtension(SyllabificationInfo.class);
+					info.setConstituentType(scType);
+					if(scType == SyllableConstituentType.NUCLEUS) {
+						info.setDiphthongMember(!ph.isHiatus());
+					}
+				}
+			}
+			if(groupTranscript.length() > 0) {
+				if (builder.size() > 0)
+					builder.appendWordBoundary();
+				builder.append(groupTranscript);
 			}
 		}
 		return builder.toIPATranscript();
