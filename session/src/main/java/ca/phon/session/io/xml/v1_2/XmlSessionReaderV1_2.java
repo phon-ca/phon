@@ -740,17 +740,25 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 		final Integer[][] alignmentData = new Integer[2][];
 		alignmentData[0] = new Integer[alignLength];
 		alignmentData[1] = new Integer[alignLength];
-		int alignOffset = 0;
+		int targetOffset = 0;
+		int actualOffset = 0;
 		for(AlignmentType at:att.getAg()) {
+			int maxTarget = targetOffset;
+			int maxActual = actualOffset;
 			for(int i = 0; i < at.getPhomap().size(); i++) {
 				final MappingType mt = at.getPhomap().get(i);
 				alignmentData[0][alignIdx] =
-						(mt.getValue().size() > 0 ? mt.getValue().get(0) >= 0 ? mt.getValue().get(0) + alignOffset : -1 : null);
+						(mt.getValue().size() > 0 ? mt.getValue().get(0) >= 0 ? mt.getValue().get(0) + targetOffset : -1 : null);
+				if(alignmentData[0][alignIdx] != null)
+					maxTarget = Math.max(maxTarget, alignmentData[0][alignIdx]);
 				alignmentData[1][alignIdx] =
-						(mt.getValue().size() > 1 ? mt.getValue().get(1) >= 0 ? mt.getValue().get(1) + alignOffset : -1 :  null);
+						(mt.getValue().size() > 1 ? mt.getValue().get(1) >= 0 ? mt.getValue().get(1) + actualOffset : -1 :  null);
+				if(alignmentData[1][alignIdx] != null)
+					maxActual = Math.max(maxActual, alignmentData[1][alignIdx]);
 				++alignIdx;
 			}
-			alignOffset = alignIdx-1;
+			targetOffset = maxTarget + 1;
+			actualOffset = maxActual + 1;
 		}
 		pm.setTopAlignment(alignmentData[0]);
 		pm.setBottomAlignment(alignmentData[1]);
@@ -761,8 +769,8 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 		final int numAlignments = Math.max(targetWords.size(), actualWords.size());
 		final List<PhoneMap> alignments = new ArrayList<>();
 		for(int i = 0; i < numAlignments; i++) {
-			final IPATranscript tw = i < targetWords.size() ? targetWords.get(i) : new IPATranscript();
-			final IPATranscript aw = i < actualWords.size() ? actualWords.get(i) : new IPATranscript();
+			final IPATranscript tw = i < targetWords.size() ? targetWords.get(i).audiblePhones() : new IPATranscript();
+			final IPATranscript aw = i < actualWords.size() ? actualWords.get(i).audiblePhones() : new IPATranscript();
 			final PhoneMap subAlignment = pm.getSubAlignment(tw, aw);
 			alignments.add(subAlignment);
 		}
