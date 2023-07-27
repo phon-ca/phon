@@ -197,7 +197,26 @@ function query_record(recordIndex, record) {
         for(i = 0; i < toSearch.length; i++) {
             var obj = toSearch[i].element;
             var sylls = filters.syllable.getRequestedSyllables(obj, alignment);
+
+            for(var j = 0; j < sylls.length; j++) {
+                var syllData = sylls[j];
+                var syll = syllData.syllable;
+
+                var syllMeta = new java.util.LinkedHashMap();
+                syllMeta.putAll(toSearch[i].alignedMeta);
+
+                if(filters.searchBy.includePositionalInfo == true) {
+                    syllMeta.put("Syllable Position", syllData.position);
+                }
+
+                syllList.push({
+                    element: syll,
+                    alignedMeta: syllMeta,
+                    alignedResults: toSearch[i].alignedResults
+                });
+            }
         }
+        toSearch = syllList;
     }
 
     // perform query
