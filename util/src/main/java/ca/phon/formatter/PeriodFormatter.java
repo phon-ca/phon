@@ -39,4 +39,9 @@ public class PeriodFormatter implements Formatter<Period> {
         }
     }
 
+    public static void main(String [] args) throws ParseException {
+        PeriodFormatter formatter = new PeriodFormatter(PeriodFormatStyle.PHON);
+        System.out.println(formatter.parse("02;02.15"));
+    }
+
 }

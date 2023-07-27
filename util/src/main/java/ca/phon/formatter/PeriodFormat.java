@@ -40,8 +40,10 @@ public class PeriodFormat extends Format {
     @Override
     public Object parseObject(String source, @NotNull ParsePosition pos) {
         if(source.matches(PeriodFormatStyle.ISO.getRegex())) {
+            pos.setIndex(source.length());
             return parsePeriod(source, PeriodFormatStyle.ISO.getRegex());
         } else if(source.matches(PeriodFormatStyle.PHON.getRegex())) {
+            pos.setIndex(source.length());
             return parsePeriod(source, PeriodFormatStyle.PHON.getRegex());
         } else {
             throw new IllegalArgumentException("Invalid period text " + source);
@@ -49,7 +51,7 @@ public class PeriodFormat extends Format {
     }
 
     protected Period parsePeriod(String text, String regex) {
-        final Pattern pattern = Pattern.compile(PeriodFormatStyle.ISO.getRegex());
+        final Pattern pattern = Pattern.compile(regex);
         final Matcher matcher = pattern.matcher(text);
         if(!matcher.matches()) throw new IllegalArgumentException("Invalid period text " + text);
         final int years = Integer.parseInt(matcher.group(1));
