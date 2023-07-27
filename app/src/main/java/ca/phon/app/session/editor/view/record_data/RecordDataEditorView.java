@@ -120,6 +120,8 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 	private JToggleButton findAndReplaceButton;
 	private FindAndReplacePanel findAndReplacePanel;
 
+	private CrossTierAlignmentView crossTierAlignmentView;
+
 	/*
 	 * Keep track of 'current' group and tier.  This is done by tracking
 	 * focus of the various TierEditors.
@@ -211,12 +213,16 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 		playSegAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play current record segment");
 		playSegAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-start", IconSize.SMALL));
 		playButton = new JButton(playSegAct);
-		
+
+		crossTierAlignmentView = new CrossTierAlignmentView();
+		add(crossTierAlignmentView, BorderLayout.EAST);
+		crossTierAlignmentView.setVisible(PrefHelper.getBoolean("phon.debug", false));
+
 		update();
 		updateStatus();
 		setupEditorActions();
 		getEditor().getSelectionModel().addSelectionModelListener(selectionListener);
-		
+
 		getEditor().getMediaModel().getSegmentPlayback().addPropertyChangeListener(segmentPlaybackListener);
 
 		addPropertyChangeListener("fontSizeDelta", e -> {
@@ -224,6 +230,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 			update();
 			repaint();
 		});
+
 	}
 
 	private void setupEditorActions() {
@@ -252,6 +259,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 	private void update() {
 		updating = true;
 
+
 		Component keyboardFocusedComp = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
 		boolean viewFocused =
 				(keyboardFocusedComp != null && (this == getEditor().getViewModel().getFocusedView() && SwingUtilities.isDescendingFrom(keyboardFocusedComp, this)));
@@ -265,6 +273,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 		final Session session = editor.getSession();
 		final Record record = editor.currentRecord();
 		if(record == null) return;
+		crossTierAlignmentView.setRecord(record);
 
 		final RecordTierEditorListener tierEditorListener = new RecordTierEditorListener(record);
 
