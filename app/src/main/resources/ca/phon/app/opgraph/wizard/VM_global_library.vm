@@ -69,7 +69,7 @@
 	#set($tiers = $rv.tierName)
 	#set($groups = $rv.groupIndex + "")
 	#set($ranges = $rv.range + "")
-<td class='$type session-link'><span onclick="openSessionWithHighlightedValues('$sessionPath.corpus', '$sessionPath.session', $result.recordIndex, '$groups', '$tiers', '$ranges' )">$txt</span></td>
+<td class='$type session-link'><span onclick="openSessionWithHighlightedValues('$sessionPath.corpus', '$sessionPath.session', '$groups', '$tiers', '$ranges' )">$txt</span></td>
 	#end
 #end
 

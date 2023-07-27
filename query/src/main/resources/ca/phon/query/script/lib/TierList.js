@@ -71,13 +71,47 @@ exports.TierList = function(id) {
 	var coverRegex = /Cover (IPA (Target|Actual)) \(([^;]+);\s?(.+)\)/;
 
 	/**
-	 * Returns a tuple of tier data.
+	 * Returns a tuple of resultValues and metadata
+	 *
+	 * @param record
+	 * @param label to add to result value name
+	 *
+	 * @return {
+	 *     resultValues,
+	 *     metadata
+	 * }
+	 */
+	this.getAlignedTiers = function(record, label) {
+		var resultValues = new Array();
+		var metadata = new java.util.LinkedHashMap();
+
+		var tierList = this.getTiers();
+		for(var i = 0; i < tierList.length; i++) {
+			var tier = record.getTier(tierList[i]);
+			if(tier != null) {
+				var rv = factory.createResultValue();
+				rv.tierName = tierList[i];
+				rv.name = tierList[i] + " (" + label + ")";
+				rv.data = tier.hasValue() ? tier.value : "";
+				rv.range = new Range(0, rv.data.toString().length(), true);
+				resultValues.push(rv);
+			}
+		}
+
+		return { resultValues: resultValues, metadata: metadata };
+	}
+
+	/**
+	 * Returns a tuple of resultValues and metadata.
 	 *
 	 * @param crossTierAlignment
 	 * @param topElement
-	 * @param label to add to result tier name
+	 * @param label to add to result value name
 	 *
-	 * @return [resultValues, metadata]
+	 * @return {
+	 *     resultValues,
+	 *     metadata
+	 * }
 	 */
 	this.getAlignedTierData = function(crossTierAlignment, topElement, label) {
 		var resultValues = new Array();
@@ -159,7 +193,7 @@ exports.TierList = function(id) {
 			}
 		}
 
-		return [resultValues, metadata];
+		return { resultValues: resultValues, metadata: metadata }
 	};
 
 };

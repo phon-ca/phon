@@ -37,6 +37,11 @@ public class AudiblePhoneVisitor extends VisitorAdapter<IPAElement> {
 	public void visitPhone(Phone p) {
 		phones.add(p);
 	}
+
+	@Visits
+	public void visitPause(Pause pause) {
+		phones.add(pause);
+	}
 	
 	@Visits
 	public void visitCompoundPhone(CompoundPhone cp) {

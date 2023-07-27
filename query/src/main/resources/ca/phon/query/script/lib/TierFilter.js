@@ -75,10 +75,10 @@ exports.TierFilter = function (id) {
 		return this.patternFilter.check_filter(record.getTierValue(this.tier));
 	}
 
-	this.check_word = function (word) {
+	this.check_aligned_element = function (crossTierAlignment, topElement) {
 		var retVal = false;
 
-		var tierVal = (word != null ? word.getTier(this.tier) : null);
+		var tierVal = crossTierAlignment.getAlignedElements(topElement).get(this.tier);
 		if (tierVal != null) {
 			retVal = this.patternFilter.check_filter(tierVal);
 		}

@@ -178,6 +178,9 @@ public class XMLResult implements Result, JAXBWrapper<ResultType> {
 
 	@Override
 	public int addResultValue(ResultValue resultValue) {
+		if(getResultValue(resultValue.getName()).isPresent()) {
+			return -1;
+		}
 		if(resultValue instanceof XMLResultValue) {
 			result.getResultValue().add(((XMLResultValue)resultValue).getXMLObject());
 			return result.getResultValue().size() - 1;
