@@ -328,7 +328,7 @@ function query_record(recordIndex, record) {
                 result.addResultValue(alignedRv);
                 result.schema = "ALIGNED";
 
-                result.metadata.put("Alignment", subAlignment.toString());
+                result.metadata.put("Alignment", subAlignment ? subAlignment.toString() : "");
             }
 
             if(filters.searchBy.includePositionalInfo == true) {
