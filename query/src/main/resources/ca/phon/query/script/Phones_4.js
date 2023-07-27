@@ -191,7 +191,14 @@ function query_record(recordIndex, record) {
         }
     }
 
-    // TODO by syllable
+    // search by syllable
+    if(filters.syllable.isUseFilter()) {
+        var syllList = new Array();
+        for(i = 0; i < toSearch.length; i++) {
+            var obj = toSearch[i].element;
+            var sylls = filters.syllable.getRequestedSyllables(obj, alignment);
+        }
+    }
 
     // perform query
     for(var i = 0; i < toSearch.length; i++) {

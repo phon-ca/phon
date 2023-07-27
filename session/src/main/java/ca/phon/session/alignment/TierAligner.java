@@ -133,7 +133,7 @@ public final class TierAligner {
                 TierAligner.alignTiers(topTier, record.getPhoneAlignmentTier()));
         for(String tierName:record.getUserDefinedTierNames()) {
             final Tier<?> bottomTier = record.getTier(tierName);
-            if(bottomTier != null) {
+            if(bottomTier != null && bottomTier.getTierAlignmentRules().getType() != TierAlignmentRules.TierAlignmentType.None) {
                 alignmentMap.put(tierName, TierAligner.alignTiers(topTier, bottomTier));
             }
         }

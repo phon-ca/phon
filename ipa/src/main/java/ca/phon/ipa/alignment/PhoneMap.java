@@ -269,8 +269,12 @@ public class PhoneMap extends AlignmentMap<IPAElement> implements IExtendable {
 		final int ipaAAlignStart =
 				(ipaA.length() > 0 ? getBottomAlignmentElements().indexOf(ipaA.elementAt(0)) : ipaTAlignStart);
 
-		final int alignStart = Math.min(ipaTAlignStart, ipaAAlignStart);
-		return alignStart;
+		if(ipaTAlignStart == -1)
+			return ipaAAlignStart;
+		else if(ipaAAlignStart == -1)
+			return ipaTAlignStart;
+		else
+			return Math.min(ipaTAlignStart, ipaAAlignStart);
 	}
 
 	public int getSubAlignmentEnd(IPATranscript ipaT, IPATranscript ipaA) {
