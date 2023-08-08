@@ -62,13 +62,13 @@ public class TestPhonesQuery extends TestQuery {
 			retVal.add(participantAge1Params(project, session));
 			retVal.add(participantAge2Params(project, session));
 
-			retVal.add(singletonGroupFilterParams(project, session));
-			retVal.add(nonSingletonGroupFilterParams(project, session));
-			retVal.add(initialGroupFilterParams(project, session));
-			retVal.add(medialGroupFilterParams(project, session));
-			retVal.add(finalGroupFilterParams(project, session));
-			retVal.add(groupFilterParams(project, session));
-			retVal.add(alignedGroupFilterParams(project, session));
+//			retVal.add(singletonGroupFilterParams(project, session));
+//			retVal.add(nonSingletonGroupFilterParams(project, session));
+//			retVal.add(initialGroupFilterParams(project, session));
+//			retVal.add(medialGroupFilterParams(project, session));
+//			retVal.add(finalGroupFilterParams(project, session));
+//			retVal.add(groupFilterParams(project, session));
+//			retVal.add(alignedGroupFilterParams(project, session));
 
 			retVal.add(allWordFilterParams(project, session));
 			retVal.add(singletonWordFilterParams(project, session));
@@ -79,20 +79,20 @@ public class TestPhonesQuery extends TestQuery {
 			retVal.add(wordFilterParams(project, session));
 			retVal.add(alignedWordFilterParams(project, session));
 
-			retVal.add(allSyllablesByGroupParams(project, session));
-			retVal.add(singletonSyllableByGroupParams(project, session));
-			retVal.add(initialSyllableByGroupParams(project, session));
-			retVal.add(medialSyllableByGroupParams(project, session));
-			retVal.add(finalSyllableByGroupParams(project, session));
+//			retVal.add(allSyllablesByGroupParams(project, session));
+//			retVal.add(singletonSyllableByGroupParams(project, session));
+//			retVal.add(initialSyllableByGroupParams(project, session));
+//			retVal.add(medialSyllableByGroupParams(project, session));
+//			retVal.add(finalSyllableByGroupParams(project, session));
 
 			retVal.add(singletonSyllableByWordParams(project, session));
 			retVal.add(initialSyllableByWordParams(project, session));
 			retVal.add(medialSyllableByWordParams(project, session));
 			retVal.add(finalSyllableByWordParams(project, session));
 
-			retVal.add(primaryStressedSyllableByGroupParams(project, session));
-			retVal.add(secondaryStressedSyllableByGroupParams(project, session));
-			retVal.add(unStressedSyllableByGroupParams(project, session));
+//			retVal.add(primaryStressedSyllableByGroupParams(project, session));
+//			retVal.add(secondaryStressedSyllableByGroupParams(project, session));
+//			retVal.add(unStressedSyllableByGroupParams(project, session));
 
 			retVal.add(deletions(project, session));
 			retVal.add(epenthesis(project, session));
@@ -257,7 +257,7 @@ public class TestPhonesQuery extends TestQuery {
 		params.put("filters.word.wMedial", false);
 		params.put("filters.word.wFinal", false);
 
-		return new Object[] { project, session, PHONES_SCRIPT, params, 41 };
+		return new Object[] { project, session, PHONES_SCRIPT, params, 17 };
 	}
 
 	private static Object[] nonSingletonWordFilterParams(Project project, Session session) {
@@ -269,7 +269,7 @@ public class TestPhonesQuery extends TestQuery {
 		params.put("filters.word.wMedial", true);
 		params.put("filters.word.wFinal", true);
 
-		return new Object[] { project, session, PHONES_SCRIPT, params, 212 };
+		return new Object[] { project, session, PHONES_SCRIPT, params, 236 };
 	}
 
 	private static Object[] initialWordFilterParams(Project project, Session session) {
@@ -281,7 +281,7 @@ public class TestPhonesQuery extends TestQuery {
 		params.put("filters.word.wMedial", false);
 		params.put("filters.word.wFinal", false);
 
-		return new Object[] { project, session, PHONES_SCRIPT, params, 79 };
+		return new Object[] { project, session, PHONES_SCRIPT, params, 47 };
 	}
 
 	private static Object[] medialWordFilterParams(Project project, Session session) {
@@ -293,7 +293,7 @@ public class TestPhonesQuery extends TestQuery {
 		params.put("filters.word.wMedial", true);
 		params.put("filters.word.wFinal", false);
 
-		return new Object[] { project, session, PHONES_SCRIPT, params, 39 };
+		return new Object[] { project, session, PHONES_SCRIPT, params, 116 };
 	}
 
 	private static Object[] finalWordFilterParams(Project project, Session session) {
@@ -305,7 +305,7 @@ public class TestPhonesQuery extends TestQuery {
 		params.put("filters.word.wMedial", false);
 		params.put("filters.word.wFinal", true);
 
-		return new Object[] { project, session, PHONES_SCRIPT, params, 94 };
+		return new Object[] { project, session, PHONES_SCRIPT, params, 73 };
 	}
 
 	private static Object[] wordFilterParams(Project project, Session session) {

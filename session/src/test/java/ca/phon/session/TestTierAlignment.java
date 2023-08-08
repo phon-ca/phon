@@ -80,7 +80,7 @@ public class TestTierAlignment {
         Assert.assertEquals("hello", alignment.getAlignedElements().get(0).getObj1().toString());
         Assert.assertEquals("h↔h,e↔e,l↔l,l↔l,o↔o", alignment.getAlignedElements().get(0).getObj2().toString());
         Assert.assertEquals("(.)", alignment.getAlignedElements().get(1).getObj1().toString());
-        Assert.assertEquals("", alignment.getAlignedElements().get(1).getObj2().toString());
+        Assert.assertEquals("(.)↔(.)", alignment.getAlignedElements().get(1).getObj2().toString());
         Assert.assertEquals("world", alignment.getAlignedElements().get(2).getObj1().toString());
         Assert.assertEquals("w↔∅,o↔∅,r↔∅,l↔∅,d↔∅", alignment.getAlignedElements().get(2).getObj2().toString());
     }
@@ -126,7 +126,7 @@ public class TestTierAlignment {
         Assert.assertEquals("hello", alignment.getAlignedElements().get(0).getObj1().toString());
         Assert.assertEquals("h↔h,e↔e,l↔l,l↔l,o↔o", alignment.getAlignedElements().get(0).getObj2().toString());
         Assert.assertEquals("(.)", alignment.getAlignedElements().get(1).getObj1().toString());
-        Assert.assertEquals("", alignment.getAlignedElements().get(1).getObj2().toString());
+        Assert.assertEquals("(.)↔(.)", alignment.getAlignedElements().get(1).getObj2().toString());
         Assert.assertEquals("world", alignment.getAlignedElements().get(2).getObj1().toString());
         Assert.assertEquals("w↔∅,o↔∅,r↔∅,l↔∅,d↔∅", alignment.getAlignedElements().get(2).getObj2().toString());
     }

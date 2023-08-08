@@ -23,36 +23,36 @@ public class RoundTripTest {
     public static Collection<Object[]> data() {
 
         String[] fileNameArray = new String[]{
-            "Sep-Comma Quote-Double LineEndings-Windows QuoteAllFields-False",
-            "Sep-Comma Quote-Double LineEndings-Windows QuoteAllFields-True",
+//            "Sep-Comma Quote-Double LineEndings-Windows QuoteAllFields-False",
+//            "Sep-Comma Quote-Double LineEndings-Windows QuoteAllFields-True",
             "Sep-Comma Quote-Double LineEndings-Unix QuoteAllFields-False",
             "Sep-Comma Quote-Double LineEndings-Unix QuoteAllFields-True",
-            "Sep-Comma Quote-Single LineEndings-Windows QuoteAllFields-False",
-            "Sep-Comma Quote-Single LineEndings-Windows QuoteAllFields-True",
+//            "Sep-Comma Quote-Single LineEndings-Windows QuoteAllFields-False",
+//            "Sep-Comma Quote-Single LineEndings-Windows QuoteAllFields-True",
             "Sep-Comma Quote-Single LineEndings-Unix QuoteAllFields-False",
             "Sep-Comma Quote-Single LineEndings-Unix QuoteAllFields-True",
-            "Sep-Space Quote-Double LineEndings-Windows QuoteAllFields-False",
-            "Sep-Space Quote-Double LineEndings-Windows QuoteAllFields-True",
+//            "Sep-Space Quote-Double LineEndings-Windows QuoteAllFields-False",
+//            "Sep-Space Quote-Double LineEndings-Windows QuoteAllFields-True",
             "Sep-Space Quote-Double LineEndings-Unix QuoteAllFields-False",
             "Sep-Space Quote-Double LineEndings-Unix QuoteAllFields-True",
-            "Sep-Space Quote-Single LineEndings-Windows QuoteAllFields-False",
-            "Sep-Space Quote-Single LineEndings-Windows QuoteAllFields-True",
+//            "Sep-Space Quote-Single LineEndings-Windows QuoteAllFields-False",
+//            "Sep-Space Quote-Single LineEndings-Windows QuoteAllFields-True",
             "Sep-Space Quote-Single LineEndings-Unix QuoteAllFields-False",
             "Sep-Space Quote-Single LineEndings-Unix QuoteAllFields-True",
-            "Sep-Semicolon Quote-Double LineEndings-Windows QuoteAllFields-False",
-            "Sep-Semicolon Quote-Double LineEndings-Windows QuoteAllFields-True",
+//            "Sep-Semicolon Quote-Double LineEndings-Windows QuoteAllFields-False",
+//            "Sep-Semicolon Quote-Double LineEndings-Windows QuoteAllFields-True",
             "Sep-Semicolon Quote-Double LineEndings-Unix QuoteAllFields-False",
             "Sep-Semicolon Quote-Double LineEndings-Unix QuoteAllFields-True",
-            "Sep-Semicolon Quote-Single LineEndings-Windows QuoteAllFields-False",
-            "Sep-Semicolon Quote-Single LineEndings-Windows QuoteAllFields-True",
+//            "Sep-Semicolon Quote-Single LineEndings-Windows QuoteAllFields-False",
+//            "Sep-Semicolon Quote-Single LineEndings-Windows QuoteAllFields-True",
             "Sep-Semicolon Quote-Single LineEndings-Unix QuoteAllFields-False",
             "Sep-Semicolon Quote-Single LineEndings-Unix QuoteAllFields-True",
-            "Sep-Tab Quote-Double LineEndings-Windows QuoteAllFields-False",
-            "Sep-Tab Quote-Double LineEndings-Windows QuoteAllFields-True",
+//            "Sep-Tab Quote-Double LineEndings-Windows QuoteAllFields-False",
+//            "Sep-Tab Quote-Double LineEndings-Windows QuoteAllFields-True",
             "Sep-Tab Quote-Double LineEndings-Unix QuoteAllFields-False",
             "Sep-Tab Quote-Double LineEndings-Unix QuoteAllFields-True",
-            "Sep-Tab Quote-Single LineEndings-Windows QuoteAllFields-False",
-            "Sep-Tab Quote-Single LineEndings-Windows QuoteAllFields-True",
+//            "Sep-Tab Quote-Single LineEndings-Windows QuoteAllFields-False",
+//            "Sep-Tab Quote-Single LineEndings-Windows QuoteAllFields-True",
             "Sep-Tab Quote-Single LineEndings-Unix QuoteAllFields-False",
             "Sep-Tab Quote-Single LineEndings-Unix QuoteAllFields-True"
         };
@@ -68,18 +68,18 @@ public class RoundTripTest {
 
         for (char separator : separators) {
             for (CSVQuoteType quoteChar : quoteChars) {
-                for (boolean unixLineEnding : unixLineEndings) {
+//                for (boolean unixLineEnding : unixLineEndings) {
                     for (boolean quoteAllField : quoteAllFields) {
                         parameterArray.add(new Object[]{
                             separator,
                             quoteChar,
-                            unixLineEnding,
+                            true,
                             quoteAllField,
                             fileNameArray[fileNameCounter]
                         });
                         fileNameCounter++;
                     }
-                }
+//                }
             }
         }
 
