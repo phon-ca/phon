@@ -56,7 +56,14 @@ public class CrossTierAlignment {
         List<Object> retVal = new ArrayList<>();
         for(String alignedTier: tierAlignments.keySet()) {
             for(var alignedElements:tierAlignments.get(alignedTier).getAlignedElements()) {
-                if(!retVal.contains(alignedElements.getObj1()))
+                boolean include = true;
+                for(Object existingValue:retVal) {
+                    if(existingValue == alignedElements.getObj1()) {
+                        include = false;
+                        break;
+                    }
+                }
+                if(include)
                     retVal.add(alignedElements.getObj1());
             }
         }
