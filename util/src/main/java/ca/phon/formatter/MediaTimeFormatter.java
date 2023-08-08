@@ -31,7 +31,7 @@ public class MediaTimeFormatter implements Formatter<Number> {
     /**
      * Convert milliseconds to string in minutes and seconds (short form: e.g., 1:3.5)
      *
-     * @param seconds time value in seconds
+     * @param ms time value in seconds
      * @return formatted time value
      */
     public static String msToMinutesAndSeconds(Number ms) {
