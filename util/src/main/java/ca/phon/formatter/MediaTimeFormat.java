@@ -74,22 +74,25 @@ public class MediaTimeFormat extends Format {
         long numMinutes = numSeconds / 60;
         long numSecondsLeft = numSeconds % 60;
 
-        NumberFormat nf = NumberFormat.getIntegerInstance();
-        if(padded)
-            nf.setMinimumIntegerDigits(2);
-
-        NumberFormat msNf = NumberFormat.getIntegerInstance();
+        NumberFormat minNf = NumberFormat.getIntegerInstance();
         if(padded) {
-            msNf.setMinimumIntegerDigits(3);
+            minNf.setMinimumIntegerDigits(3);
         }
 
-        String minuteString = msNf.format(numMinutes) + ":";
+        NumberFormat sNf = NumberFormat.getIntegerInstance();
+        if(padded)
+            sNf.setMinimumIntegerDigits(2);
+
+        NumberFormat msNf = NumberFormat.getIntegerInstance();
+        msNf.setMinimumIntegerDigits(3);
+
+        String minuteString = minNf.format(numMinutes) + ":";
 
         String secondString =
-                (numMinutes == 0
-                        ? (nf.format(numSeconds) + ".")
-                        : (nf.format(numSecondsLeft) + ".")
-                );
+            (numMinutes == 0
+                ? (sNf.format(numSeconds) + ".")
+                : (sNf.format(numSecondsLeft) + ".")
+            );
 
         String msString = (msNf.format(numMSecondsLeft));
         if(!padded) {
