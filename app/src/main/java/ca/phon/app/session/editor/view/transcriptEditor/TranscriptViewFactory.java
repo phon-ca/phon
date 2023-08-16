@@ -1,4 +1,4 @@
-package ca.phon.app.session.editor.transcriptEditor;
+package ca.phon.app.session.editor.view.transcriptEditor;
 
 import ca.phon.session.Tier;
 import ca.phon.ui.ipa.SyllabificationDisplay;
@@ -12,11 +12,8 @@ import java.util.Map;
 public class TranscriptViewFactory implements ViewFactory {
 
     private Map<String, Integer> counterMap;
-    private int labelColumnWidth = -1;
 
-    public TranscriptViewFactory(int labelColumnWidth) {
-        this.labelColumnWidth = labelColumnWidth;
-
+    public TranscriptViewFactory() {
         counterMap = new HashMap<>();
         counterMap.put("label", 0);
         counterMap.put("paragraph", 0);
@@ -44,7 +41,7 @@ public class TranscriptViewFactory implements ViewFactory {
                 var component = StyleConstants.getComponent(elem.getAttributes());
                 if (component instanceof JLabel) {
                     JLabel label = ((JLabel) component);
-                    return new TierLabelView(elem, label);
+                    return new TierLabelView(elem);
                 }
                 return new ComponentView(elem);
             } else if (kind.equals(StyleConstants.IconElementName)) {
@@ -73,9 +70,8 @@ public class TranscriptViewFactory implements ViewFactory {
     }
 
     private class TierLabelView extends ComponentView {
-        public TierLabelView(Element elem, JLabel labelPanel) {
+        public TierLabelView(Element elem) {
             super(elem);
-            labelPanel.setMaximumSize(new Dimension(labelColumnWidth, labelPanel.getPreferredSize().height));
         }
     }
 }

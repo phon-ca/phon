@@ -1,5 +1,6 @@
-package ca.phon.app.session.editor.transcriptEditor;
+package ca.phon.app.session.editor.view.transcriptEditor;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.formatter.MediaTimeFormatter;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
@@ -17,31 +18,34 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.*;
 import java.util.List;
+import java.util.function.Function;
 
 public class TranscriptDocument extends DefaultStyledDocument {
-    private final Session session;
-    private OpenLabelPopup openLabelPopup;
+    private Session session;
     private boolean targetSyllablesVisible = false;
     private boolean actualSyllablesVisible = false;
     private boolean alignmentVisible = false;
+    private Function<String, JComponent> tierLabelFactory = this::createTierLabel;
+    private final SessionFactory sessionFactory;
 
-    public int getLabelMaxWidth() {
-        return labelMaxWidth;
+    public TranscriptDocument() {
+        super(new StyleContext());
+        sessionFactory = SessionFactory.newFactory();
+        //setDocumentFilter(new TranscriptDocumentFilter());
     }
 
-    private int labelMaxWidth = -1;
+    private JComponent createTierLabel(String tierName) {
+        JLabel tierLabel = new JLabel(tierName + ":");
+        var labelFont = new Font(tierLabel.getFont().getFontName(), tierLabel.getFont().getStyle(), 12);
+        tierLabel.setFont(labelFont);
+        tierLabel.setAlignmentY(.8f);
+        tierLabel.setMaximumSize(new Dimension(150, tierLabel.getPreferredSize().height));
+        tierLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        EmptyBorder tierLabelPadding = new EmptyBorder(0,8,0,8);
+        tierLabel.setBorder(tierLabelPadding);
 
-    // region Get/Set Caret Pos
-
-    public interface OpenLabelPopup {
-        public void op(JLabel tierLabel, MouseEvent e);
+        return tierLabel;
     }
-
-    public void setOpenLabelPopup(OpenLabelPopup lambda) {
-        openLabelPopup = lambda;
-    }
-
-    // endregion Get/Set Caret Pos
 
     // region Visible Getters/Setters
 
@@ -76,17 +80,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
     // endregion Visible Getters/Setters
 
-    public TranscriptDocument(Session session) {
-        super(new StyleContext());
-        this.session = session;
-
-        try {
-            populate();
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+    // region Attribute Getters
 
     private SimpleAttributeSet getTierAttributes(Tier tier) {
         final SimpleAttributeSet retVal = new SimpleAttributeSet();
@@ -135,155 +129,119 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return retVal;
     }
 
-    private SimpleAttributeSet getTierLabelAttributes(String tierName) {
+    private SimpleAttributeSet getTierLabelAttributes(TierViewItem tierViewItem) {
         final SimpleAttributeSet retVal = new SimpleAttributeSet();
-        JLabel tierLabel = new JLabel(tierName + ":");
-        var labelFont = new Font(tierLabel.getFont().getFontName(), tierLabel.getFont().getStyle(), 12);
-        tierLabel.setFont(labelFont);
-        tierLabel.setAlignmentY(.8f);
-        tierLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        EmptyBorder tierLabelPadding = new EmptyBorder(0,8,0,8);
-        tierLabel.setBorder(tierLabelPadding);
-        labelMaxWidth = Math.max(
-            labelMaxWidth,
-            tierLabel.getPreferredSize().width +
-                tierLabelPadding.getBorderInsets().left +
-                tierLabelPadding.getBorderInsets().right
-        );
-        tierLabel.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                openLabelPopup.op(tierLabel, e);
-            }
 
-            // region unused
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
-
-            // endregion unused
-        });
+        var tierLabel = tierLabelFactory.apply(tierViewItem.getTierName());
         StyleConstants.setComponent(retVal, tierLabel);
+
+        retVal.addAttribute("locked", tierViewItem.isTierLocked());
+
         return retVal;
     }
-
-    // region Hide/Move Tiers
-
-    public void hideTier (int tierStartIndex, String tierName) {
-        var startingTierView = session.getTierView();
-
-        List<TierViewItem> newTierVew = new ArrayList<>();
-        for (var tv : startingTierView) {
-            newTierVew.add(tv);
-        }
-        newTierVew.remove(tierStartIndex);
-        session.setTierView(newTierVew);
-        // Reload the contents of the editor
-        int recordCount = session.getRecordCount();
-        for (int i = 0; i < recordCount; i++) {
-            int startOffset = getTierStart(i, tierName) - 1;
-            int endOffset = getTierEnd(i, tierName) + 1;
-            try {
-                remove(startOffset, endOffset - startOffset);
-            }
-            catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    public void moveTierUp (int tierStartIndex, String tierName, String aboveTierName) {
-        var startingTierView = session.getTierView();
-
-        // Move the tier
-        List<TierViewItem> newTierVew = new ArrayList<>();
-        for (var tv : startingTierView) {
-            newTierVew.add(tv);
-        }
-        var movedTV = newTierVew.remove(tierStartIndex);
-        newTierVew.add(tierStartIndex - 1, movedTV);
-        session.setTierView(newTierVew);
-        // Reload the contents of the editor
-        int recordCount = session.getRecordCount();
-        for (int i = 0; i < recordCount; i++) {
-            try {
-
-                int movingStartOffset = getTierStart(i, tierName) - 1;
-                int movingEndOffset = getTierEnd(i, tierName) + 1;
-                remove(movingStartOffset, movingEndOffset - movingStartOffset);
-
-                int aboveStartOffset = getTierStart(i, aboveTierName) - 1;
-                int aboveEndOffset = getTierEnd(i, aboveTierName) + 1;
-                remove(aboveStartOffset, aboveEndOffset - aboveStartOffset);
-
-                int newOffset = insertTier(i, tierName, aboveStartOffset);
-
-                insertTier(i, aboveTierName, newOffset);
-            }
-            catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    public void moveTierDown (int tierStartIndex, String tierName, String belowTierName) {
-        var startingTierView = session.getTierView();
-
-        // Move the tier
-        List<TierViewItem> newTierVew = new ArrayList<>();
-        for (var tv : startingTierView) {
-            newTierVew.add(tv);
-        }
-        var movedTV = newTierVew.remove(tierStartIndex);
-        newTierVew.add(tierStartIndex + 1, movedTV);
-        session.setTierView(newTierVew);
-        // Reload the contents of the editor
-        int recordCount = session.getRecordCount();
-        for (int i = 0; i < recordCount; i++) {
-            try {
-
-                int belowStartOffset = getTierStart(i, belowTierName) - 1;
-                int belowEndOffset = getTierEnd(i, belowTierName) + 1;
-                remove(belowStartOffset, belowEndOffset - belowStartOffset);
-
-                int movingStartOffset = getTierStart(i, tierName) - 1;
-                int movingEndOffset = getTierEnd(i, tierName) + 1;
-                remove(movingStartOffset, movingEndOffset - movingStartOffset);
-
-                int newOffset = insertTier(i, belowTierName, movingStartOffset);
-
-                insertTier(i, tierName, newOffset);
-            }
-            catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    // endregion Hide/Move Tiers
 
     private SimpleAttributeSet getSeparatorAttributes() {
         final SimpleAttributeSet retVal = new SimpleAttributeSet();
         StyleConstants.setComponent(retVal, new JSeparator(JSeparator.HORIZONTAL));
         return retVal;
     }
+
+    // endregion Attribute Getters
+
+    // region Hide/Move Tiers
+
+//    public void hideTier (int tierStartIndex, String tierName) {
+//        var startingTierView = session.getTierView();
+//
+//        List<TierViewItem> newTierVew = new ArrayList<>();
+//        for (var tv : startingTierView) {
+//            newTierVew.add(tv);
+//        }
+//        newTierVew.remove(tierStartIndex);
+//        session.setTierView(newTierVew);
+//        // Reload the contents of the editor
+//        int recordCount = session.getRecordCount();
+//        for (int i = 0; i < recordCount; i++) {
+//            int startOffset = getTierStart(i, tierName) - 1;
+//            int endOffset = getTierEnd(i, tierName) + 1;
+//            try {
+//                remove(startOffset, endOffset - startOffset);
+//            }
+//            catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//    }
+//
+//    public void moveTierUp (int tierStartIndex, String tierName, String aboveTierName) {
+//        var startingTierView = session.getTierView();
+//
+//        // Move the tier
+//        List<TierViewItem> newTierVew = new ArrayList<>();
+//        for (var tv : startingTierView) {
+//            newTierVew.add(tv);
+//        }
+//        var movedTV = newTierVew.remove(tierStartIndex);
+//        newTierVew.add(tierStartIndex - 1, movedTV);
+//        session.setTierView(newTierVew);
+//        // Reload the contents of the editor
+//        int recordCount = session.getRecordCount();
+//        for (int i = 0; i < recordCount; i++) {
+//            try {
+//
+//                int movingStartOffset = getTierStart(i, tierName) - 1;
+//                int movingEndOffset = getTierEnd(i, tierName) + 1;
+//                remove(movingStartOffset, movingEndOffset - movingStartOffset);
+//
+//                int aboveStartOffset = getTierStart(i, aboveTierName) - 1;
+//                int aboveEndOffset = getTierEnd(i, aboveTierName) + 1;
+//                remove(aboveStartOffset, aboveEndOffset - aboveStartOffset);
+//
+//                int newOffset = insertTier(i, tierName, aboveStartOffset);
+//
+//                insertTier(i, aboveTierName, newOffset);
+//            }
+//            catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//    }
+//
+//    public void moveTierDown (int tierStartIndex, String tierName, String belowTierName) {
+//        var startingTierView = session.getTierView();
+//
+//        // Move the tier
+//        List<TierViewItem> newTierVew = new ArrayList<>();
+//        for (var tv : startingTierView) {
+//            newTierVew.add(tv);
+//        }
+//        var movedTV = newTierVew.remove(tierStartIndex);
+//        newTierVew.add(tierStartIndex + 1, movedTV);
+//        session.setTierView(newTierVew);
+//        // Reload the contents of the editor
+//        int recordCount = session.getRecordCount();
+//        for (int i = 0; i < recordCount; i++) {
+//            try {
+//
+//                int belowStartOffset = getTierStart(i, belowTierName) - 1;
+//                int belowEndOffset = getTierEnd(i, belowTierName) + 1;
+//                remove(belowStartOffset, belowEndOffset - belowStartOffset);
+//
+//                int movingStartOffset = getTierStart(i, tierName) - 1;
+//                int movingEndOffset = getTierEnd(i, tierName) + 1;
+//                remove(movingStartOffset, movingEndOffset - movingStartOffset);
+//
+//                int newOffset = insertTier(i, belowTierName, movingStartOffset);
+//
+//                insertTier(i, tierName, newOffset);
+//            }
+//            catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//    }
+
+    // endregion Hide/Move Tiers
 
     public void reload() {
         try {
@@ -522,8 +480,9 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
     // endregion Get Record/Tier Start/End
 
-    private int insertTier(int recordIndex, String tierName, int offset) throws BadLocationException {
-        insertString(offset++, " ", getTierLabelAttributes(tierName));
+    private int insertTier(int recordIndex, TierViewItem tierViewItem, int offset) throws BadLocationException {
+        String tierName = tierViewItem.getTierName();
+        insertString(offset++, " ", getTierLabelAttributes(tierViewItem));
         Record record = session.getRecord(recordIndex);
         Tier tier = record.getTier(tierName);
 
@@ -577,6 +536,26 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return offset;
     }
 
+    public void setTierItemViewLocked(String tierName, boolean locked) {
+        var currentTierVIew = session.getTierView();
+        List<TierViewItem> newTierView = new ArrayList<>();
+        for (TierViewItem oldItem : currentTierVIew) {
+            if (oldItem.getTierName().equals(tierName)) {
+                final TierViewItem newItem = sessionFactory.createTierViewItem(
+                    oldItem.getTierName(),
+                    oldItem.isVisible(),
+                    oldItem.getTierFont(),
+                    locked
+                );
+                newTierView.add(newItem);
+            }
+            else {
+                newTierView.add(oldItem);
+            }
+        }
+        session.setTierView(newTierView);
+    }
+
     private void populate() throws BadLocationException {
 
         Transcript transcript = session.getTranscript();
@@ -591,12 +570,12 @@ public class TranscriptDocument extends DefaultStyledDocument {
             Record record = records.get(i);
             int recordElementIndex = transcript.getRecordElementIndex(record);
 
-            for (var tv : tierView) {
-                if (!tv.isVisible()) continue;
+            for (var item : tierView) {
+                if (!item.isVisible()) continue;
 
-                String tierName = tv.getTierName();
+                //String tierName = tv.getTierName();
 
-                len = insertTier(i, tierName, len);
+                len = insertTier(i, item, len);
             }
 
             if (i < records.size() - 1) {
@@ -611,13 +590,43 @@ public class TranscriptDocument extends DefaultStyledDocument {
         }
     }
 
-    @Override
-    protected void insert(int offset, ElementSpec[] data) throws BadLocationException {
-        super.insert(offset, data);
+    // region Getters and Setters
+
+    public Session getSession() {
+        return session;
     }
 
-    @Override
-    public void removeElement(Element elem) {
-        super.removeElement(elem);
+    public void setSession(Session session) {
+        this.session = session;
+        try {
+            populate();
+        }
+        catch (Exception e) {
+            LogUtil.severe(e);
+        }
+    }
+
+    public Function<String, JComponent> getTierLabelFactory() {
+        return tierLabelFactory;
+    }
+
+    public void setTierLabelFactory(Function<String, JComponent> tierLabelFactory) {
+        this.tierLabelFactory = tierLabelFactory;
+        reload();
+    }
+
+    // endregion Getters and Setters
+
+    private class TranscriptDocumentFilter extends DocumentFilter {
+        @Override
+        public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+            if (attr != null) {
+                Tier tier = (Tier)attr.getAttribute("tier");
+                if (tier != null && tier.getName().equals("Orthography")) {
+                    return;
+                }
+            }
+            super.insertString(fb, offset, string, attr);
+        }
     }
 }
