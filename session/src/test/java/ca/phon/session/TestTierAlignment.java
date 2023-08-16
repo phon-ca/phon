@@ -8,7 +8,6 @@ import org.junit.runners.JUnit4;
 
 import java.util.Map;
 
-@RunWith(JUnit4.class)
 public class TestTierAlignment {
 
 //    private Record createTestRecord() {
