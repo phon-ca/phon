@@ -29,7 +29,7 @@ import ca.phon.session.Comment;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.alignment.TierAlignmentRules;
-import ca.phon.session.alignment.TypeAlignmentRules;
+import ca.phon.session.alignment.OrthographyTierElementFilter;
 import ca.phon.session.io.*;
 import ca.phon.session.io.xml.v12.*;
 import ca.phon.session.io.xml.v12.CommentType;
@@ -277,7 +277,7 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 		
 		try {
 			Class<?> type = Class.forName(utt.getType(), true, PluginManager.getInstance());
-			return factory.createTierDescription(name, type, new HashMap<>(), new TierAlignmentRules(new TypeAlignmentRules()));
+			return factory.createTierDescription(name, type, new HashMap<>(), false);
 		} catch (ClassNotFoundException e) {
 			throw new IllegalArgumentException(e);
 		}
@@ -438,8 +438,7 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 				//LOGGER.warning("User tier " + gtt.getTierName() + " not in session tier list");
 				continue;
 			}
-			final Tier<UserTierData> userTier = factory.createTier(gtt.getTierName(), UserTierData.class,
-					new TierAlignmentRules(new TypeAlignmentRules()));
+			final Tier<UserTierData> userTier = factory.createTier(gtt.getTierName(), UserTierData.class, new LinkedHashMap<>(), false);
 			final StringBuffer buffer = new StringBuffer();
 			for(TgType tgt:gtt.getTg()) {
 				if(buffer.length() > 0)

@@ -16,9 +16,10 @@
 package ca.phon.session;
 
 import ca.phon.extensions.ExtendableObject;
-import ca.phon.session.alignment.TierAlignmentRules;
 import ca.phon.session.spi.TierDescriptionSPI;
+import ca.phon.session.usertier.UserTierData;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -54,10 +55,61 @@ public final class TierDescription extends ExtendableObject {
 	}
 
 	/**
-	 * Alignment rules for this tier with respect to the Orthography
+	 * Should this tier be excluded from cross tier alignment
 	 *
-	 * @return tier alignment rules
+	 * @return true if tier is not part of cross tier alignment
 	 */
-	public TierAlignmentRules getTierAlignmentRules() { return tierDescriptionImpl.getTierAlignmentRules(); }
+	public boolean isExcludeFromAlignment() {
+		return tierDescriptionImpl.isExcludeFromAlignment();
+	}
+
+	/**
+	 * Does this tier have subtype information.  This means either subtypeDelim
+	 * or subtypeExpr have been specified.
+	 *
+	 * @return true if subtype delimiters or regular expression is available and
+	 * the declared type of the tier is {@link ca.phon.session.usertier.UserTierData}
+	 */
+	public boolean hasSubtypeInformation() {
+		return getDeclaredType() == UserTierData.class &&
+				(hasSubtypeDelim() || hasSubtypeExpr());
+	}
+
+	/**
+	 * Return true if this tier include subtype delimiters
+	 *
+	 * @return true if the number of subtype delimiters > 0
+	 */
+	public boolean hasSubtypeDelim() {
+		return getSubtypeDelim() != null && !getSubtypeDelim().isEmpty();
+	}
+
+	/**
+	 * Return true if a subtype expression has been specified.
+	 *
+	 * @return true if this tier specified a subtype expression
+	 */
+	public boolean hasSubtypeExpr() {
+		return getSubtypeExpr() != null && !getSubtypeExpr().isEmpty();
+	}
+
+	/**
+	 * Get subtype delimiters (if any)
+	 *
+	 * @return list of subtype delimiters
+	 */
+	public List<String> getSubtypeDelim() {
+		return tierDescriptionImpl.getSubtypeDelim();
+	}
+
+	/**
+	 * Get subtype regluar expression. Groups in the expression will be used to
+	 * identify part of the expression to use
+	 *
+	 * @return subtype expr or null if not set
+	 */
+	public String getSubtypeExpr() {
+		return tierDescriptionImpl.getSubtypeExpr();
+	}
 	
 }

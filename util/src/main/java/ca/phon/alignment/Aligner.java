@@ -19,7 +19,7 @@ package ca.phon.alignment;
  * Calculates pairwise alignment of two sequences of
  * objects.
  * 
- * @param T the type of object being aligned
+ * @param <T> the type of object being aligned
  */
 public interface Aligner<T> {
 

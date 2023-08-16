@@ -66,6 +66,11 @@ public class Tuple<T, S> implements Comparable<Tuple<? extends T, ? extends S>> 
 		this.obj2 = obj2;
 	}
 
+	public boolean contains(Object obj) {
+		return getObj1() != null && getObj1().equals(obj) ||
+				getObj2() != null && getObj2().equals(obj);
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		
@@ -111,26 +116,4 @@ public class Tuple<T, S> implements Comparable<Tuple<? extends T, ? extends S>> 
 		return toString().compareTo(o.toString());
 	}
 
-//	@Override
-//	public int hashCode() {
-//		int hash = 0;
-//		int nullHash = super.hashCode();
-//		
-//		if(getObj1() != null) {
-//			hash = getObj1().hashCode();
-//		} else {
-//			hash = nullHash;
-//		}
-//		
-//		if(getObj2() != null) {
-//			hash |= getObj2().hashCode();
-//		} else {
-//			hash |= nullHash;
-//		}
-//		
-//		return hash;
-//	}
-	
-	
-	
 }

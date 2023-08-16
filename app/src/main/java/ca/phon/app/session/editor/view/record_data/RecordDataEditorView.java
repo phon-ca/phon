@@ -345,7 +345,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 
 			Tier<?> tier = record.getTier(tierName);
 			if(tier == null) {
-				tier = factory.createTier(tierDesc.getName(), tierDesc.getDeclaredType(), tierDesc.getTierParameters(), tierDesc.getTierAlignmentRules());
+				tier = factory.createTier(tierDesc.getName(), tierDesc.getDeclaredType(), tierDesc.getTierParameters(), tierDesc.isExcludeFromAlignment());
 				record.putTier(tier);
 			}
 			final TierEditor<?> tierEditor = tierEditorFactory.createTierEditor(getEditor(), tierDesc, record, tier);

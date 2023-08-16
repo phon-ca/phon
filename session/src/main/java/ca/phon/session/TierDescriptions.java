@@ -19,6 +19,9 @@ import ca.phon.extensions.*;
 import ca.phon.visitor.*;
 
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Iterable/visitor access for {@link Session} {@link TierDescription}s.
@@ -96,6 +99,14 @@ public final class TierDescriptions implements IExtendable, Iterable<TierDescrip
 		for(TierDescription td:this) {
 			visitor.visit(td);
 		}
+	}
+
+	public Stream<TierDescription> stream() {
+		return stream(false);
+	}
+
+	public Stream<TierDescription> stream(boolean parallel) {
+		return StreamSupport.stream(this.spliterator(), parallel);
 	}
 	
 }

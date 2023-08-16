@@ -965,7 +965,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 		for (String tierName : leftRecord.getUserDefinedTierNames()) {
 			Tier<?> tier = leftRecord.getTier(tierName);
-			rightRecord.putTier(sessionFactory.createTier(tierName, tier.getDeclaredType(), tier.getTierAlignmentRules()));
+			rightRecord.putTier(sessionFactory.createTier(tierName, tier.getDeclaredType(), tier.getTierParameters(), tier.isExcludeFromAlignment()));
 		}
 
 		leftRecord.setSpeaker(recordToSplit.getSpeaker());

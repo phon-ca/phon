@@ -1,120 +1,55 @@
 package ca.phon.session.alignment;
 
-import java.util.List;
+import ca.phon.session.Tier;
+import ca.phon.util.Tuple;
 
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Cross tier alignment rules for a user-defined tier.  These rules define which elements
+ * from each tier are included in the alignment.  If noalign is true, the user defined tier
+ * is not included in cross tier alignment at all.
+ *
+ */
 public final class TierAlignmentRules {
 
-    public enum TierAlignmentType {
-        /**
-         * no alignment between word elements (a.k.a, 'flat' tiers)
-         */
-        None,
-        /**
-         * Alignment based on TypeAlignmentRules
-         */
-        ByType,
-        /**
-         * Use for user-defined tiers which include parameters
-         * for identifying subtypes in the user data
-         */
-        ByTypeThenSubType;
-    };
-
-    private final TierAlignmentType type;
-
-    private final TypeAlignmentRules typeAlignmentRules;
-
-    private final String[] subtypeDelim;
-
-    private final String subtypeExpr;
-
-    public TierAlignmentRules() {
-        this(TierAlignmentType.None, null, null, null);
+    /**
+     * Create default tier alignment rules for given tiers.
+     *
+     * @param tier1
+     * @param tier2
+     *
+     * @return default tier alignment rules for given tiers
+     */
+    public static TierAlignmentRules defaultTierAlignmentRules(Tier<?> tier1, Tier<?> tier2) {
+        return new TierAlignmentRules(tier1.getName(), TierElementFilter.defaultElementFilter(tier1),
+                tier2.getName(), TierElementFilter.defaultElementFilter(tier2));
     }
 
-    public TierAlignmentRules(TypeAlignmentRules typeAlignmentRules) {
-        this(TierAlignmentType.ByType, typeAlignmentRules, null, null);
-    }
+    private final Map<String, TierElementFilter> tierElementFilterMap = new LinkedHashMap<>();
 
-    public TierAlignmentRules(TypeAlignmentRules typeAlignmentRules, String[] subtypeDelim) {
-        this(TierAlignmentType.ByTypeThenSubType, typeAlignmentRules, subtypeDelim, null);
-    }
-
-    public TierAlignmentRules(TypeAlignmentRules typeAlignmentRules, String subtypeExpr) {
-        this(TierAlignmentType.ByTypeThenSubType, typeAlignmentRules, null, subtypeExpr);
-    }
-
-    private TierAlignmentRules(TierAlignmentType type, TypeAlignmentRules typeAlignmentRules,
-                               String[] subtypeDelim, String subtypeExpr) {
+    public TierAlignmentRules(String tier1, TierElementFilter filter1,
+                              String tier2, TierElementFilter filter2) {
         super();
-        this.type = type;
-        this.typeAlignmentRules = typeAlignmentRules;
-        this.subtypeDelim = subtypeDelim;
-        this.subtypeExpr = subtypeExpr;
+        this.tierElementFilterMap.put(tier1, filter1);
+        this.tierElementFilterMap.put(tier2, filter2);
     }
 
-    public TierAlignmentType getType() {
-        return type;
-    }
-
-    public TypeAlignmentRules getWordAlignmentRules() {
-        return typeAlignmentRules;
+    public Tuple<String, String> getTierNames() {
+        var nameList = tierElementFilterMap.keySet().stream().toList();
+        return new Tuple<>(nameList.get(0), nameList.get(1));
     }
 
     /**
-     * Create alignment rules for Orthography tier
+     * Return element filter for given tierName, null if not in found
      *
-     * @return orthography alignment rules (default: no alignment)
+     * @param tierName
+     * @return element filter or null
      */
-    public static TierAlignmentRules orthographyTierRules() {
-        final List<TypeAlignmentRules.AlignableType> alignableTypes =
-                List.of(TypeAlignmentRules.AlignableType.Word, TypeAlignmentRules.AlignableType.Pause);
-        final TierAlignmentRules retval = new TierAlignmentRules(new TypeAlignmentRules(alignableTypes, true, true, true, false, false));
-        return retval;
-    }
-
-    /**
-     * Create alignment rules for a tier with no alignment
-     *
-     * @return rules for a flat tier
-     */
-    public static TierAlignmentRules noAlignment() {
-        return new TierAlignmentRules();
-    }
-
-    /**
-     * Create alignment rules for IPATranscript tiers
-     *
-     * @return default ipa alignment rules
-     */
-    public static TierAlignmentRules ipaTierRules() {
-        final List<TypeAlignmentRules.AlignableType> alignableTypes =
-                List.of(TypeAlignmentRules.AlignableType.Word, TypeAlignmentRules.AlignableType.Pause, TypeAlignmentRules.AlignableType.PhoneticGroup);
-        final TypeAlignmentRules typeAlignmentRules = new TypeAlignmentRules(alignableTypes,
-                true, false, true, false, false);
-        return new TierAlignmentRules(typeAlignmentRules);
-    }
-
-    /**
-     * Create alignment rules for notes tier
-     *
-     * @return default notes alignment rules (none)
-     */
-    public static TierAlignmentRules notesTierRules() {
-        final TierAlignmentRules retval = new TierAlignmentRules();
-        return retval;
-    }
-
-    /**
-     * Create default alignment rules for user-defined tiers
-     *
-     * @param default user defined tier rules
-     */
-    public static TierAlignmentRules userTierRules() {
-        final List<TypeAlignmentRules.AlignableType> alignableTypes = List.of(TypeAlignmentRules.AlignableType.Word);
-        final TypeAlignmentRules typeAlignmentRules = new TypeAlignmentRules(alignableTypes,
-                false, false, false, false, false);
-        return new TierAlignmentRules(typeAlignmentRules);
+    public TierElementFilter getFilterForTier(String tierName) {
+        return tierElementFilterMap.get(tierName);
     }
 
 }

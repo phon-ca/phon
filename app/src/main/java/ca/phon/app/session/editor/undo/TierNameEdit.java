@@ -64,7 +64,7 @@ public class TierNameEdit extends SessionEditorUndoableEdit {
 			final TierDescription td = session.getUserTier(i);
 			
 			if(td.getName().equals(tierName)) {
-				final TierDescription newDesc = factory.createTierDescription(newTierName, td.getDeclaredType(), td.getTierParameters(), td.getTierAlignmentRules());
+				final TierDescription newDesc = factory.createTierDescription(newTierName, td.getDeclaredType(), td.getTierParameters(), td.isExcludeFromAlignment());
 				session.removeUserTier(td);
 				session.addUserTier(i, newDesc);
 			}
@@ -90,7 +90,7 @@ public class TierNameEdit extends SessionEditorUndoableEdit {
 				final Tier<?> oldTier = r.getTier(tierName);
 				r.removeTier(tierName);
 				
-				final Tier<?> newTier = factory.createTier(newTierName, oldTier.getDeclaredType(), oldTier.getTierParameters(), oldTier.getTierAlignmentRules());
+				final Tier<?> newTier = factory.createTier(newTierName, oldTier.getDeclaredType(), oldTier.getTierParameters(), oldTier.isExcludeFromAlignment());
 				r.putTier(newTier);
 			}
 		}

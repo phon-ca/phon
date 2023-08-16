@@ -16,6 +16,7 @@
 package ca.phon.session;
 
 import ca.phon.extensions.ExtendableObject;
+import ca.phon.session.alignment.TierAlignmentRules;
 import ca.phon.session.spi.SessionSPI;
 import ca.phon.util.Language;
 
@@ -213,6 +214,57 @@ public final class Session extends ExtendableObject {
 	 */
 	public TierDescriptions getUserTiers() {
 		return new TierDescriptions(this);
+	}
+
+	/**
+	 * Get the unmodifiable list of tier alignment rules
+	 *
+	 * @return list of tier alignment rules
+	 */
+	public List<TierAlignmentRules> getTierAlignmentRules() {
+		return sessionImpl.getTierAlignmentRules();
+	}
+
+	/**
+	 * Return custom tier alignment rules for given tiers.
+	 *
+	 * @param tier1
+	 * @param tier2
+	 *
+	 * @return custom tier alignment rules for given tiers or null if none
+	 */
+	public TierAlignmentRules getTierAlignmentRules(String tier1, String tier2) {
+		return sessionImpl.getTierAlignmentRules(tier1, tier2);
+	}
+
+	/**
+	 * Set alignment rules for a pair of tiers. If alignment rules already exist for the
+	 * tuple of tier names they are overwritten.
+	 *
+	 * @param tierAlignmentRules
+	 */
+	public void putTierAlignmentRules(TierAlignmentRules tierAlignmentRules) {
+		sessionImpl.putTierAlignmentRules(tierAlignmentRules);
+	}
+
+	/**
+	 * Delete tier alignment rules for a pair of tiers.
+	 *
+	 * @param tier1
+	 * @param tier2
+	 *
+	 */
+	public void deleteTierAlignmentRules(String tier1, String tier2) {
+		sessionImpl.deleteTierAlignmentRules(tier1, tier2);
+	}
+
+	/**
+	 * Delete given tier alignment rules
+	 *
+	 * @param tierAlignmentRules
+	 */
+	public void deleteTierAlignmentRules(TierAlignmentRules tierAlignmentRules) {
+		deleteTierAlignmentRules(tierAlignmentRules.getTierNames().getObj1(), tierAlignmentRules.getTierNames().getObj2());
 	}
 
 	/* Transcribers (blind transcription) */

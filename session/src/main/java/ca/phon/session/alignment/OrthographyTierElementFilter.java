@@ -3,7 +3,6 @@ package ca.phon.session.alignment;
 import ca.phon.orthography.*;
 import ca.phon.orthography.Word;
 import ca.phon.session.Tier;
-import ca.phon.session.alignment.aligners.TierElementFilter;
 import ca.phon.visitor.annotation.Visits;
 
 import java.util.ArrayList;
@@ -109,7 +108,7 @@ public final class OrthographyTierElementFilter implements TierElementFilter {
         return filterOrthography((Orthography) tier.getValue());
     }
 
-    private final class OrthographyFilter extends AbstractOrthographyVisitor {
+    public final class OrthographyFilter extends AbstractOrthographyVisitor {
 
         final List<OrthographyElement> elements = new ArrayList<>();
 
@@ -117,7 +116,7 @@ public final class OrthographyTierElementFilter implements TierElementFilter {
         @Override
         public void visitWord(Word word) {
             boolean includeWord = isIncluded(AlignableType.Word);
-            if(word.getPrefix().getType() == WordType.OMISSION) {
+            if(word.getPrefix() != null && word.getPrefix().getType() == WordType.OMISSION) {
                 includeWord = isIncludeOmitted();
             }
             if(word.isUntranscribed()) {
@@ -142,7 +141,9 @@ public final class OrthographyTierElementFilter implements TierElementFilter {
         public void visitOrthoGroup(OrthoGroup group) {
             if(isIncluded(AlignableType.Group))
                 elements.add(group);
-            group.getElements().forEach(this::visit);
+            else {
+                group.getElements().forEach(this::visit);
+            }
         }
 
         @Override

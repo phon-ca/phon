@@ -264,7 +264,7 @@ public final class SessionFactory extends ExtendableObject {
 	public void copySessionTierInformation(Session session, Session dest) {
 		for(TierDescription tierDesc:session.getUserTiers()) {
 			final TierDescription tierCopy =
-					createTierDescription(tierDesc.getName(), tierDesc.getDeclaredType(), new HashMap<>(), tierDesc.getTierAlignmentRules());
+					createTierDescription(tierDesc.getName(), tierDesc.getDeclaredType(), tierDesc.getTierParameters(), tierDesc.isExcludeFromAlignment(), tierDesc.getSubtypeDelim(), tierDesc.getSubtypeExpr());
 			dest.addUserTier(tierCopy);
 		}
 		final List<TierViewItem> tierView = session.getTierView();
@@ -445,12 +445,11 @@ public final class SessionFactory extends ExtendableObject {
 	 * 
 	 * @param name
 	 * @param type
-	 * @param tierAlignmentRules
 	 * @return the new tier
 	 * @param <T>
 	 */
-	public <T> Tier<T> createTier(String name, Class<T> type, TierAlignmentRules tierAlignmentRules) {
-		return createTier(name, type, new HashMap<>(), tierAlignmentRules);
+	public <T> Tier<T> createTier(String name, Class<T> type) {
+		return createTier(name, type, new HashMap<>(), false);
 	}
 
 	/**
@@ -458,27 +457,14 @@ public final class SessionFactory extends ExtendableObject {
 	 *
 	 * @param name
 	 * @param type
-	 * @param tierAlignmentRules
 	 * @return the new tier
 	 * @param <T>
 	 */
-	public <T> Tier<T> createTier(String name, Class<T> type, Map<String, String> tierParameters, TierAlignmentRules tierAlignmentRules) {
-		final TierSPI<T> tierImpl = sessionFactoryImpl.createTier(name, type, tierParameters, tierAlignmentRules);
+	public <T> Tier<T> createTier(String name, Class<T> type, Map<String, String> tierParameters, boolean excludeFromAlignment) {
+		final TierSPI<T> tierImpl = sessionFactoryImpl.createTier(name, type, tierParameters, excludeFromAlignment, new ArrayList<>(), null);
 		return createTier(type, tierImpl);
 	}
 
-	/**
-	 * Create new tier with name, type and default tier alignment rules
-	 *
-	 * @param name
-	 * @param type
-	 * @return
-	 * @param <T>
-	 */
-	public <T> Tier<T> createTier(String name, Class<T> type) {
-		return createTier(name, type, new TierAlignmentRules());
-	}
-	
 	public <T> Tier<T> createTier(Class<T> type, TierSPI<T> tierImpl) {
 		return new Tier<T>(tierImpl);
 	}
@@ -500,7 +486,43 @@ public final class SessionFactory extends ExtendableObject {
 	 * @return new tier description
 	 */
 	public TierDescription createTierDescription(String name) {
-		return createTierDescription(name, UserTierData.class, new HashMap<>(), new TierAlignmentRules());
+		return createTierDescription(name, UserTierData.class, new HashMap<>(), false);
+	}
+
+	/**
+	 * Create a new string tier description.
+	 *
+	 * @param name
+	 * @param excludeFromAlignment
+	 * @return new tier description
+	 */
+	public TierDescription createTierDescription(String name, boolean excludeFromAlignment) {
+		return createTierDescription(name, UserTierData.class, new HashMap<>(), excludeFromAlignment, new ArrayList<>(), null);
+	}
+
+	/**
+	 * Create tier description.
+	 *
+	 * @param name
+	 * @param type
+	 * @param tierParameters
+	 * @return new tier description
+	 */
+	public TierDescription createTierDescription(String name, Class<?> type, Map<String, String> tierParameters) {
+		return createTierDescription(name, type, tierParameters, false);
+	}
+
+	/**
+	 * Create tier description.
+	 *
+	 * @param name
+	 * @param type
+	 * @param tierParameters
+	 * @param excludeFromAlignment
+	 * @return new tier description
+	 */
+	public TierDescription createTierDescription(String name, Class<?> type, Map<String, String> tierParameters, boolean excludeFromAlignment) {
+		return createTierDescription(name, type, tierParameters, excludeFromAlignment, new ArrayList<>(), null);
 	}
 	
 	/**
@@ -509,11 +531,13 @@ public final class SessionFactory extends ExtendableObject {
 	 * @param name
 	 * @param type
 	 * @param tierParameters
-	 * @param tierAlignmentRules
+	 * @param excludeFromAlignment
+	 * @param subtypeDelim
+	 * @param subtypeExpr
 	 * @return new tier description
 	 */
-	public TierDescription createTierDescription(String name, Class<?> type, Map<String, String> tierParameters, TierAlignmentRules tierAlignmentRules) {
-		final TierDescriptionSPI tierDescriptionImpl = sessionFactoryImpl.createTierDescription(name, type, tierParameters, tierAlignmentRules);
+	public TierDescription createTierDescription(String name, Class<?> type, Map<String, String> tierParameters, boolean excludeFromAlignment, List<String> subtypeDelim, String subtypeExpr) {
+		final TierDescriptionSPI tierDescriptionImpl = sessionFactoryImpl.createTierDescription(name, type, tierParameters, excludeFromAlignment, subtypeDelim, subtypeExpr);
 		return createTierDescription(tierDescriptionImpl);
 	}
 
@@ -524,13 +548,8 @@ public final class SessionFactory extends ExtendableObject {
 	 * @return
 	 */
 	public TierDescription createTierDescription(SystemTierType systemTier) {
-		final TierAlignmentRules alignmentRules = switch (systemTier) {
-			case Orthography -> TierAlignmentRules.orthographyTierRules();
-			case IPATarget, IPAActual, PhoneAlignment -> TierAlignmentRules.ipaTierRules();
-			case Notes -> TierAlignmentRules.notesTierRules();
-			default -> TierAlignmentRules.noAlignment();
-		};
-		return createTierDescription(systemTier.getName(), systemTier.getDeclaredType(), new HashMap<>(), alignmentRules);
+		boolean excludeFromAlignment = SystemTierType.Notes == systemTier;
+		return createTierDescription(systemTier.getName(), systemTier.getDeclaredType(), new HashMap<>(), excludeFromAlignment, new ArrayList<>(), null);
 	}
 
 	public TierDescription createTierDescription(TierDescriptionSPI tierDescriptionImpl) {

@@ -61,12 +61,12 @@ public final class Tier<T> extends ExtendableObject {
 	}
 
 	/**
-	 * Tier alignment rules as setup in the session {@link TierDescription}
+	 * Is tier excluded from cross tier alignment
 	 *
-	 * @return tier alignment rules
+	 * @return true if tier is not part of cross tier alignment
 	 */
-	public TierAlignmentRules getTierAlignmentRules() {
-		return tierImpl.getTierAlignmentRules();
+	public boolean isExcludeFromAlignment() {
+		return tierImpl.isExcludeFromAlignment();
 	}
 
 	/**

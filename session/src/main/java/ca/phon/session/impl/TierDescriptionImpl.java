@@ -15,14 +15,10 @@
  */
 package ca.phon.session.impl;
 
-import ca.phon.session.alignment.TierAlignmentRules;
 import ca.phon.session.usertier.UserTierData;
 import ca.phon.session.spi.TierDescriptionSPI;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Basic description of a tier.
@@ -33,52 +29,77 @@ public class TierDescriptionImpl implements TierDescriptionSPI {
 	
 	private final Class<?> declaredType;
 
-	private final TierAlignmentRules tierAlignmentRules;
-
 	private final Map<String, String> tierParams;
 
-	TierDescriptionImpl(String name) {
-		this(name, UserTierData.class, new TierAlignmentRules());
-	}
+	private final boolean excludeFromAlignment;
+
+	private final List<String> subtypeDelim;
+
+	private final String subtypeExpr;
 	
-	TierDescriptionImpl(String name, TierAlignmentRules tierAlignmentRules) {
-		this(name, UserTierData.class, new HashMap<>(), tierAlignmentRules);
+	TierDescriptionImpl(String name) {
+		this(name, UserTierData.class);
+	}
+
+	TierDescriptionImpl(String name, boolean excludeFromAlignment) {
+		this(name, UserTierData.class, excludeFromAlignment);
 	}
 
 	TierDescriptionImpl(String name, Class<?> declaredType) {
-		this(name, declaredType, new HashMap<>(), new TierAlignmentRules());
+		this(name, declaredType, new HashMap<>());
 	}
 
-	TierDescriptionImpl(String name, Class<?> declaredType, TierAlignmentRules alignmentRules) {
-		this(name, declaredType, new HashMap<>(), alignmentRules);
+	TierDescriptionImpl(String name, Class<?> declaredType, boolean excludeFromAlignment) {
+		this(name, declaredType, new HashMap<>(), excludeFromAlignment, new ArrayList<>(), null);
 	}
-	
-	TierDescriptionImpl(String name, Class<?> declaredType, Map<String, String> tierParams, TierAlignmentRules tierAlignmentRules) {
+
+	TierDescriptionImpl(String name, Class<?> declaredType, Map<String, String> tierParams) {
+		this(name, declaredType, tierParams, false, new ArrayList<>(), null);
+	}
+
+	TierDescriptionImpl(String name, Class<?> declaredType, Map<String, String> tierParams, boolean excludeFromAlignment) {
+		this(name, declaredType, tierParams, excludeFromAlignment, new ArrayList<>(), null);
+	}
+
+	TierDescriptionImpl(String name, Class<?> declaredType, Map<String, String> tierParams, boolean excludeFromAlignment, List<String> subtypeDelim, String subtypeExpr) {
 		super();
 		this.name = name;
 		this.declaredType = declaredType;
-		this.tierAlignmentRules = tierAlignmentRules;
 		this.tierParams = new LinkedHashMap<>(tierParams);
+		this.excludeFromAlignment = excludeFromAlignment;
+		this.subtypeDelim = subtypeDelim;
+		this.subtypeExpr = subtypeExpr;
 	}
+
 
 	@Override
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	@Override
 	public Class<?> getDeclaredType() {
-		return declaredType;
+		return this.declaredType;
 	}
 
 	@Override
 	public Map<String, String> getTierParameters() {
-		return Collections.unmodifiableMap(this.tierParams);
+		return this.tierParams;
 	}
 
 	@Override
-	public TierAlignmentRules getTierAlignmentRules() {
-		return this.tierAlignmentRules;
+	public boolean isExcludeFromAlignment() {
+		return this.excludeFromAlignment;
+	}
+
+	@Override
+	public List<String> getSubtypeDelim() {
+		return Collections.unmodifiableList(this.subtypeDelim);
+	}
+
+	@Override
+	public String getSubtypeExpr() {
+		return this.subtypeExpr;
 	}
 
 }

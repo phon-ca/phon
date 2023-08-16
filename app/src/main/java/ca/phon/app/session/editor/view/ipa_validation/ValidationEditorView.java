@@ -33,6 +33,7 @@ import org.jdesktop.swingx.HorizontalLayout;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 
 /**
  * Editor view used to validate double-blind transcriptions.  References
@@ -59,8 +60,8 @@ public class ValidationEditorView extends EditorView {
 		super(editor);
 		
 		final SessionFactory factory = SessionFactory.newFactory();
-		targetCandidateTier = factory.createTier("Target Validation", IPATranscript.class, TierAlignmentRules.ipaTierRules());
-		actualCandidateTier = factory.createTier("Actual Validation", IPATranscript.class, TierAlignmentRules.ipaTierRules());
+		targetCandidateTier = factory.createTier("Target Validation", IPATranscript.class);
+		actualCandidateTier = factory.createTier("Actual Validation", IPATranscript.class);
 		
 		targetValidationPanel = new TierDataLayoutPanel();
 		targetValidationPanel.getTierLayout().setLayoutType(TierDataLayoutType.ALIGN_GROUPS);

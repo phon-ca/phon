@@ -100,7 +100,7 @@ public class AddTierEdit extends SessionEditorUndoableEdit {
 		SessionFactory factory = SessionFactory.newFactory();
 		for(Record r:session.getRecords()) {
 			if(!r.hasTier(tierViewItem.getTierName())) {
-				Tier<?> tier = factory.createTier(tierDescription.getName(), tierDescription.getDeclaredType(), tierDescription.getTierParameters(), tierDescription.getTierAlignmentRules());
+				Tier<?> tier = factory.createTier(tierDescription.getName(), tierDescription.getDeclaredType(), tierDescription.getTierParameters(), tierDescription.isExcludeFromAlignment());
 				r.putTier(tier);
 			}
 		}

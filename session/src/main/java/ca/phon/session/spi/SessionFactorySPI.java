@@ -17,6 +17,7 @@ package ca.phon.session.spi;
 
 import ca.phon.session.alignment.TierAlignmentRules;
 
+import java.util.List;
 import java.util.Map;
 
 public interface SessionFactorySPI {
@@ -77,21 +78,26 @@ public interface SessionFactorySPI {
 	 * @param name
 	 * @param type
 	 * @param tierParameters
-	 * @param tierAlignmentRules
+	 * @param excludeFromAlignment
+	 * @param subtypeDelim
+	 * @param subtypeExpr
 	 * @return the new tier
 	 */
-	public <T> TierSPI<T> createTier(String name, Class<T> type, Map<String, String> tierParameters, TierAlignmentRules tierAlignmentRules);
+	public <T> TierSPI<T> createTier(String name, Class<T> type, Map<String, String> tierParameters, boolean excludeFromAlignment, List<String> subtypeDelim, String subtypeExpr);
 	
 	/**
 	 * Create tier description.
 	 * 
 	 * @param name
 	 * @param type
-	 * @param tierAlignmentRules
+	 * @param tierParameters
+	 * @param excludeFromAlignment true if tier is excluded from cross tier alignment
+	 * @param subtypeDelim
+	 * @param subtypExpr
 	 * 
 	 * @return new tier description
 	 */
-	public TierDescriptionSPI createTierDescription(String name, Class<?> type, Map<String, String> tierParameters, TierAlignmentRules tierAlignmentRules);
+	public TierDescriptionSPI createTierDescription(String name, Class<?> type, Map<String, String> tierParameters, boolean excludeFromAlignment, List<String> subtypeDelim, String subtypExpr);
 	
 	/**
 	 * Create a tier display and ordering object

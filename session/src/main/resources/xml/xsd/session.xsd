@@ -315,21 +315,25 @@
         </xs:annotation>
         <xs:sequence>
             <xs:element ref="td" maxOccurs="unbounded"/>
+            <xs:element ref="tierAlignmentRules" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 
     <xs:element name="td" type="tierDescriptionType"/>
     <xs:complexType name="tierDescriptionType">
         <xs:annotation>
-            <xs:documentation>User defined tiers. Can either be group-alinged or
-                flat.</xs:documentation>
+            <xs:documentation>User defined tiers</xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element ref="tierAlignment" minOccurs="0" maxOccurs="1"/>
             <xs:element ref="tierParameters" minOccurs="0" maxOccurs="1"/>
+            <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="subtypeDelim" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="subtypeExpr"/>
+            </xs:choice>
         </xs:sequence>
         <xs:attribute name="tierName" type="xs:ID"/>
-        <xs:attribute name="type" type="userTierTypeType" default="simple"/>
+        <xs:attribute name="type" type="userTierTypeType" default="default"/>
+        <xs:attribute name="excludeFromAlignment" type="xs:boolean" default="false"/>
     </xs:complexType>
     
     <xs:simpleType name="userTierTypeType">
@@ -349,7 +353,7 @@
                     <xs:documentation>Custom phone alignment using user-defined ipa tiers</xs:documentation>
                 </xs:annotation>
             </xs:enumeration>
-            <xs:enumeration value="simple">
+            <xs:enumeration value="default">
                 <xs:annotation>
                     <xs:documentation>Tier will use a simplified parser into types separated by spaces.
                         Comments '[% ...]' and inline-media are also parsed. This is the default for
@@ -377,49 +381,66 @@
         <xs:attribute name="name" type="nonemptyStringType" use="required"/>
     </xs:complexType>
 
-    <xs:element name="tierAlignment" type="tierAlignmentRules"/>
-    <xs:element name="alignWith" type="listOfAlignableTypes"/>
-    <xs:complexType name="tierAlignmentRules">
-        <xs:annotation>
-            <xs:documentation>
-                Alignment rules between a user-defined tier and orthography.
-            </xs:documentation>
-        </xs:annotation>
+    <xs:element name="tierAlignmentRules" type="tierAlignmentRulesType"/>
+    <xs:complexType name="tierAlignmentRulesType">
         <xs:sequence>
-            <xs:element ref="alignWith" minOccurs="1" maxOccurs="1"/>
+            <xs:element ref="tierElementFilter" minOccurs="2" maxOccurs="2"/>
         </xs:sequence>
-        <xs:attribute name="includeOmitted" type="xs:boolean" default="false">
-            <xs:annotation>
-                <xs:documentation>Include words which have been marked as omitted '0word'</xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
-        <xs:attribute name="includeXXX" type="xs:boolean" default="false">
-            <xs:annotation>
-                <xs:documentation>Include xxx (untranscribed)</xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
-        <xs:attribute name="includeYYY" type="xs:boolean" default="false">
-            <xs:annotation>
-                <xs:documentation>Include yyy</xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
-        <xs:attribute name="includeWWW" type="xs:boolean" default="false">
-            <xs:annotation>
-                <xs:documentation>Include ww</xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
-        <xs:attribute name="includeExcluded" type="xs:boolean" default="false">
-            <xs:annotation>
-                <xs:documentation>Include excluded content '[e]'</xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
     </xs:complexType>
 
-    <xs:simpleType name="listOfAlignableTypes">
-        <xs:list itemType="alignableType"/>
+    <xs:element name="tierElementFilter" type="tierElementFilterType"/>
+    <xs:complexType name="tierElementFilterType">
+        <xs:annotation>
+            <xs:documentation>Tier filter for any tier</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="tier" type="nonemptyStringType" use="required"/>
+    </xs:complexType>
+
+    <xs:element name="orthographyElementFilter" type="orthographyElementFilterType"
+        substitutionGroup="tierElementFilter"/>
+    <xs:complexType name="orthographyElementFilterType">
+        <xs:annotation>
+            <xs:documentation>Orthography element filter for cross tier alignment</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="tierElementFilterType">
+                <xs:sequence>
+                    <xs:element xmlns="https://phon.ca/ns/session" name="alignWith" type="listOfAlignableOrthographyTypes"/>
+                </xs:sequence>
+                <xs:attribute name="includeOmitted" type="xs:boolean" default="false">
+                    <xs:annotation>
+                        <xs:documentation>Include words which have been marked as omitted '0word'</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="includeXXX" type="xs:boolean" default="false">
+                    <xs:annotation>
+                        <xs:documentation>Include xxx (untranscribed)</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="includeYYY" type="xs:boolean" default="false">
+                    <xs:annotation>
+                        <xs:documentation>Include yyy</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="includeWWW" type="xs:boolean" default="false">
+                    <xs:annotation>
+                        <xs:documentation>Include ww</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="includeExcluded" type="xs:boolean" default="false">
+                    <xs:annotation>
+                        <xs:documentation>Include excluded content '[e]'</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:simpleType name="listOfAlignableOrthographyTypes">
+        <xs:list itemType="alignableOrthographyTypes"/>
     </xs:simpleType>
 
-    <xs:simpleType name="alignableType">
+    <xs:simpleType name="alignableOrthographyTypes">
         <xs:annotation>
             <xs:documentation>List of alignment utterance types</xs:documentation>
         </xs:annotation>
@@ -449,6 +470,51 @@
             <xs:enumeration value="postcode"/>
             <xs:enumeration value="longFeature"/>
             <xs:enumeration value="nonvocal"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="IPATierElementFilter" type="IPATierElementFilterType" substitutionGroup="tierElementFilter"/>
+    <xs:complexType name="IPATierElementFilterType">
+        <xs:complexContent>
+            <xs:extension base="tierElementFilterType">
+                <xs:sequence>
+                    <xs:element xmlns="https://phon.ca/ns/session" name="alignWith" type="listOfAlignableIPATierTypes"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:simpleType name="listOfAlignableIPATierTypes">
+        <xs:list itemType="alignableIPATierTypes"/>
+    </xs:simpleType>
+    <xs:simpleType name="alignableIPATierTypes">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="word"/>
+            <xs:enumeration value="pause"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="uerTierElementFilter" type="userTierElementFilterType"/>
+    <xs:element name="subtypeDelim" type="nonemptyStringType"/>
+    <xs:element name="subtypeExpr" type="nonemptyStringType"/>
+    <xs:complexType name="userTierElementFilterType">
+        <xs:complexContent>
+            <xs:extension base="tierElementFilterType">
+                <xs:sequence>
+                    <xs:element xmlns="https://phon.ca/ns/session" name="alignWith" type="listofAlignableUserTierTypes"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:simpleType name="listofAlignableUserTierTypes">
+        <xs:list itemType="alignableUserTierTypes"/>
+    </xs:simpleType>
+    <xs:simpleType name="alignableUserTierTypes">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="type"/>
+            <xs:enumeration value="internal-media"/>
+            <xs:enumeration value="comment"/>
         </xs:restriction>
     </xs:simpleType>
 

@@ -15,9 +15,9 @@ public class CrossTierAlignment {
 
     private final Tier<?> topTier;
 
-    private final Map<String, TierAlignment<?, ?, ?, ?>> tierAlignments;
+    private final Map<String, TierAlignment> tierAlignments;
 
-    public CrossTierAlignment(Tier<?> topTier, Map<String, TierAlignment<?,?,?,?>> alignmentMap) {
+    public CrossTierAlignment(Tier<?> topTier, Map<String, TierAlignment> alignmentMap) {
         super();
         this.topTier = topTier;
         this.tierAlignments = alignmentMap;
@@ -35,7 +35,7 @@ public class CrossTierAlignment {
     public Map<String, Object> getAlignedElements(Object obj) {
         Map<String, Object> retVal = new LinkedHashMap<>();
         for(String tierName:tierAlignments.keySet()) {
-            final TierAlignment<?,?,?,?> tierAlignment = tierAlignments.get(tierName);
+            final TierAlignment tierAlignment = tierAlignments.get(tierName);
             if(tierAlignment != null) {
                 Optional<? extends Tuple<?, ?>> alignedEle = tierAlignment.getAlignedElements().stream()
                         .filter(ae -> ae.getObj1() == obj).findAny();
@@ -76,7 +76,7 @@ public class CrossTierAlignment {
      *
      * @param tierName
      */
-    public TierAlignment<?,?,?,?> getTierAlignment(String tierName) {
+    public TierAlignment getTierAlignment(String tierName) {
         return tierAlignments.get(tierName);
     }
 
@@ -87,7 +87,7 @@ public class CrossTierAlignment {
      * @return alignment elements for tier
      */
     public List<Object> getBottomAlignmentElements(String tierName) {
-        final TierAlignment<?,?,?,?> tierAlignment = tierAlignments.get(tierName);
+        final TierAlignment tierAlignment = tierAlignments.get(tierName);
         List<Object> retVal = new ArrayList<>();
         if(tierAlignment != null)
             retVal.addAll(tierAlignment.getAlignedElements().stream().map(Tuple::getObj2).toList());

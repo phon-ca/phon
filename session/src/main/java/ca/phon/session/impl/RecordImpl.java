@@ -59,17 +59,17 @@ public class RecordImpl implements RecordSPI {
 	RecordImpl() {
 		super();
 		final SessionFactory factory = SessionFactory.newFactory();
-		orthography = factory.createTier(SystemTierType.Orthography.getName(), Orthography.class, TierAlignmentRules.orthographyTierRules());
+		orthography = factory.createTier(SystemTierType.Orthography.getName(), Orthography.class);
 		orthography.setValue(new Orthography());
-		ipaTarget = factory.createTier(SystemTierType.IPATarget.getName(), IPATranscript.class, TierAlignmentRules.ipaTierRules());
+		ipaTarget = factory.createTier(SystemTierType.IPATarget.getName(), IPATranscript.class);
 		ipaTarget.setValue(new IPATranscript());
-		ipaActual = factory.createTier(SystemTierType.IPAActual.getName(), IPATranscript.class, TierAlignmentRules.ipaTierRules());
+		ipaActual = factory.createTier(SystemTierType.IPAActual.getName(), IPATranscript.class);
 		ipaActual.setValue(new IPATranscript());
-		segmentTier = factory.createTier(SystemTierType.Segment.getName(), MediaSegment.class);
+		segmentTier = factory.createTier(SystemTierType.Segment.getName(), MediaSegment.class, new HashMap<>(), true);
 		segmentTier.setValue(SessionFactory.newFactory().createMediaSegment(new MediaSegmentImpl(0.0f, 0.0f, MediaUnit.Millisecond)));
-		notes = factory.createTier(SystemTierType.Notes.getName(), UserTierData.class, TierAlignmentRules.notesTierRules());
+		notes = factory.createTier(SystemTierType.Notes.getName(), UserTierData.class, new HashMap<>(), true);
 		notes.setValue(new UserTierData());
-		alignment = factory.createTier(SystemTierType.PhoneAlignment.getName(), PhoneAlignment.class, TierAlignmentRules.ipaTierRules());
+		alignment = factory.createTier(SystemTierType.PhoneAlignment.getName(), PhoneAlignment.class);
 		PhoneAlignment phoneAlignment = PhoneAlignment.fromTiers(ipaTarget, ipaActual);
 		alignment.setValue(phoneAlignment);
 		userDefined = Collections.synchronizedMap(new HashMap<>());

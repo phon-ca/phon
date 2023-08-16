@@ -159,7 +159,7 @@ public class SessionMerger extends PhonTask {
 
 			if(newDesc == null) {
 				// add new dep tier
-				newDesc = factory.createTierDescription(tierDesc.getName(), tierDesc.getDeclaredType(), tierDesc.getTierParameters(), tierDesc.getTierAlignmentRules());
+				newDesc = factory.createTierDescription(tierDesc.getName(), tierDesc.getDeclaredType(), tierDesc.getTierParameters(), tierDesc.isExcludeFromAlignment());
 				dest.addUserTier(newDesc);
 				
 				final TierViewItem tvi = factory.createTierViewItem(tierDesc.getName(), true);

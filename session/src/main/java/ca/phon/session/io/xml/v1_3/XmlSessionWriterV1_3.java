@@ -335,7 +335,7 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 		final String name = td.getName();
 		retVal.setTierName(name);
 
-		XmlUserTierTypeType tierType = XmlUserTierTypeType.SIMPLE;
+		XmlUserTierTypeType tierType = XmlUserTierTypeType.DEFAULT;
 		if(td.getDeclaredType() == Orthography.class) {
 			tierType = XmlUserTierTypeType.CHAT;
 		} else if(td.getDeclaredType() == IPATranscript.class) {
@@ -350,35 +350,7 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 			retVal.getTierParameters().getParam().add(param);
 		}
 
-		if(td.getTierAlignmentRules().getType() != TierAlignmentRules.TierAlignmentType.None) {
-			final XmlTierAlignmentRules alignmentRules = factory.createXmlTierAlignmentRules();
-			for(var type:td.getTierAlignmentRules().getWordAlignmentRules().getAlignableTypes()) {
-				final XmlAlignableType at = switch(type) {
-					case Action -> XmlAlignableType.ACTION;
-					case Freecode -> XmlAlignableType.FREECODE;
-					case Group -> XmlAlignableType.GROUP;
-					case Happening -> XmlAlignableType.HAPPENING;
-					case InternalMedia -> XmlAlignableType.INTERNAL_MEDIA;
-					case Linker -> XmlAlignableType.LINKER;
-					case LongFeature -> XmlAlignableType.LONG_FEATURE;
-					case Nonvocal -> XmlAlignableType.NONVOCAL;
-					case OtherSpokenEvent -> XmlAlignableType.OTHER_SPOKEN_EVENT;
-					case Pause -> XmlAlignableType.PAUSE;
-					case PhoneticGroup -> XmlAlignableType.PHONETIC_GROUP;
-					case Postcode -> XmlAlignableType.POSTCODE;
-					case TagMarker -> XmlAlignableType.TAG_MARKER;
-					case Terminator -> XmlAlignableType.TERMINATOR;
-					case Word -> XmlAlignableType.WORD;
-				};
-				alignmentRules.getAlignWith().add(at);
-			}
-			alignmentRules.setIncludeExcluded(td.getTierAlignmentRules().getWordAlignmentRules().isIncludeExcluded());
-			alignmentRules.setIncludeOmitted(td.getTierAlignmentRules().getWordAlignmentRules().isIncludeOmitted());
-			alignmentRules.setIncludeXXX(td.getTierAlignmentRules().getWordAlignmentRules().isIncludeXXX());
-			alignmentRules.setIncludeWWW(td.getTierAlignmentRules().getWordAlignmentRules().isIncludeWWW());
-			alignmentRules.setIncludeYYY(td.getTierAlignmentRules().getWordAlignmentRules().isIncludeYYY());
-			retVal.setTierAlignment(alignmentRules);
-		}
+		retVal.setExcludeFromAlignment(td.isExcludeFromAlignment());
 
 		return retVal;
 	}

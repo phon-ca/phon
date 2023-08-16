@@ -42,7 +42,7 @@ public class RecordsTransferable implements Transferable {
             clonedSpeakerList.add(clonedParticipant);
 
         for(TierDescription td:session.getUserTiers()) {
-            this.session.addUserTier(factory.createTierDescription(td.getName(), td.getDeclaredType(), td.getTierParameters(), td.getTierAlignmentRules()));
+            this.session.addUserTier(factory.createTierDescription(td.getName(), td.getDeclaredType(), td.getTierParameters(), td.isExcludeFromAlignment()));
         }
 
         final List<TierViewItem> tv = new ArrayList<>(session.getTierView());

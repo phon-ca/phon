@@ -38,8 +38,12 @@ public class TierImpl<T> implements TierSPI<T> {
 
 	private final Map<String, String> tierParameters;
 
-	private final TierAlignmentRules tierAlignmentRules;
-	
+	private final boolean excludeFromAlignment;
+
+	private final List<String> subtypeDelim;
+
+	private final String subtypeExpr;
+
 	/**
 	 * Group data
 	 */
@@ -50,14 +54,19 @@ public class TierImpl<T> implements TierSPI<T> {
 	 * 
 	 * @param name
 	 * @param type
-	 * @param grouped
+	 * @param tierParameters
+	 * @param excludeFromAlignment
+	 * @param subtypeDelim
+	 * @param subtypeExpr
 	 */
-	TierImpl(String name, Class<T> type, Map<String, String> tierParameters, TierAlignmentRules tierAlignmentRules) {
+	TierImpl(String name, Class<T> type, Map<String, String> tierParameters, boolean excludeFromAlignment, List<String> subtypeDelim, String subtypeExpr) {
 		super();
 		this.tierName = name;
 		this.declaredType = type;
 		this.tierParameters = tierParameters;
-		this.tierAlignmentRules = tierAlignmentRules;
+		this.excludeFromAlignment = excludeFromAlignment;
+		this.subtypeDelim = subtypeDelim;
+		this.subtypeExpr = subtypeExpr;
 	}
 
 	@Override
@@ -76,8 +85,18 @@ public class TierImpl<T> implements TierSPI<T> {
 	}
 
 	@Override
-	public TierAlignmentRules getTierAlignmentRules() {
-		return this.tierAlignmentRules;
+	public boolean isExcludeFromAlignment() {
+		return this.excludeFromAlignment;
+	}
+
+	@Override
+	public List<String> getSubtypeDelim() {
+		return Collections.unmodifiableList(subtypeDelim);
+	}
+
+	@Override
+	public String getSubtypeExpr() {
+		return subtypeExpr;
 	}
 
 	@Override

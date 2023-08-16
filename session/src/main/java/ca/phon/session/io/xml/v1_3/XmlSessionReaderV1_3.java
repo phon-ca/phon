@@ -26,11 +26,12 @@ import ca.phon.plugin.Rank;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.alignment.TierAlignmentRules;
-import ca.phon.session.alignment.TypeAlignmentRules;
+import ca.phon.session.alignment.TierElementFilter;
 import ca.phon.session.usertier.*;
 import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionReader;
 import ca.phon.util.Language;
+import ca.phon.util.Tuple;
 import ca.phon.xml.XMLObjectReader;
 import ca.phon.xml.annotation.XMLSerial;
 import jakarta.xml.bind.*;
@@ -174,6 +175,15 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 				final TierDescription td = readTierDescription(factory, tdt);
 				retVal.addUserTier(td);
 			}
+
+			// TODO
+			for(XmlTierAlignmentRulesType xmlTierAlignmentRules:userTiers.getTierAlignmentRules()) {
+				final Map<String, TierElementFilter> elementFilterMap = new LinkedHashMap<>();
+				for (var xmlEleFilter : xmlTierAlignmentRules.getTierElementFilter()) {
+					final Tuple<String, TierElementFilter> elementFilter = readTierElementFilter(xmlEleFilter);
+					elementFilterMap.put(elementFilter.getObj1(), elementFilter.getObj2());
+				}
+			}
 		}
 
 		final List<TierViewItem> tierOrder = new ArrayList<TierViewItem>();
@@ -215,6 +225,10 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		}
 
 		return retVal;
+	}
+
+	Tuple<String, TierElementFilter> readTierElementFilter(Object obj) {
+		return null;
 	}
 
 	// participants
@@ -349,7 +363,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 			case CHAT -> Orthography.class;
 			case IPA -> IPATranscript.class;
 			case PHONE_ALIGNMENT -> PhoneAlignment.class;
-			case SIMPLE -> UserTierData.class;
+			case DEFAULT -> UserTierData.class;
 		};
 		final Map<String, String> tierParams = new LinkedHashMap<>();
 		if(tdt.getTierParameters() != null) {
@@ -357,37 +371,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 				tierParams.put(tp.getName(), tp.getContent());
 			}
 		}
-		TierAlignmentRules tierAlignmentRules = new TierAlignmentRules();
-		if(tdt.getTierAlignment() != null) {
-			final XmlTierAlignmentRules alignmentRules = tdt.getTierAlignment();
-
-			final List<TypeAlignmentRules.AlignableType> alignableTypes = new ArrayList<>();
-			for(var alignableType:tdt.getTierAlignment().getAlignWith()) {
-				final TypeAlignmentRules.AlignableType type = switch (alignableType) {
-					case ACTION -> TypeAlignmentRules.AlignableType.Action;
-					case FREECODE -> TypeAlignmentRules.AlignableType.Freecode;
-					case GROUP -> TypeAlignmentRules.AlignableType.Group;
-					case HAPPENING -> TypeAlignmentRules.AlignableType.Happening;
-					case INTERNAL_MEDIA -> TypeAlignmentRules.AlignableType.InternalMedia;
-					case LINKER -> TypeAlignmentRules.AlignableType.Linker;
-					case LONG_FEATURE -> TypeAlignmentRules.AlignableType.LongFeature;
-					case NONVOCAL -> TypeAlignmentRules.AlignableType.Nonvocal;
-					case OTHER_SPOKEN_EVENT -> TypeAlignmentRules.AlignableType.OtherSpokenEvent;
-					case PAUSE -> TypeAlignmentRules.AlignableType.Pause;
-					case PHONETIC_GROUP -> TypeAlignmentRules.AlignableType.PhoneticGroup;
-					case POSTCODE -> TypeAlignmentRules.AlignableType.Postcode;
-					case TAG_MARKER -> TypeAlignmentRules.AlignableType.TagMarker;
-					case TERMINATOR -> TypeAlignmentRules.AlignableType.Terminator;
-					case WORD -> TypeAlignmentRules.AlignableType.Word;
-				};
-				alignableTypes.add(type);
-			}
-			tierAlignmentRules = new TierAlignmentRules(
-					new TypeAlignmentRules(alignableTypes, alignmentRules.isIncludeXXX(),
-							alignmentRules.isIncludeYYY(), alignmentRules.isIncludeWWW(),
-							alignmentRules.isIncludeOmitted(), alignmentRules.isIncludeExcluded()));
-		}
-		return factory.createTierDescription(tierName, tierType, tierParams, tierAlignmentRules);
+		return factory.createTierDescription(tierName, tierType, tierParams, tdt.isExcludeFromAlignment());
 	}
 
 	private TierViewItem readTierViewItem(SessionFactory factory, XmlTierViewType tvt) {
@@ -520,8 +504,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 			if(td == null) {
 				throw new IllegalStateException("Invalid user tier " + utt.getName());
 			}
-			final Tier<UserTierData> userTier = factory.createTier(utt.getName(), UserTierData.class,
-					td.getTierAlignmentRules());
+			final Tier<UserTierData> userTier = factory.createTier(utt.getName(), UserTierData.class, new HashMap<>(), td.isExcludeFromAlignment());
 			userTier.setValue(tierData);
 			retVal.putTier(userTier);
 		}

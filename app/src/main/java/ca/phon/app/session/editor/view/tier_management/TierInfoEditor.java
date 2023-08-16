@@ -130,7 +130,7 @@ public class TierInfoEditor extends JPanel {
 	
 	public TierDescription createTierDescription() {
 		final SessionFactory factory = SessionFactory.newFactory();
-		return factory.createTierDescription(getTierName().trim(), UserTierData.class, new HashMap<>(), TierAlignmentRules.userTierRules());
+		return factory.createTierDescription(getTierName().trim(), UserTierData.class, new HashMap<>(), false);
 	}
 	
 }

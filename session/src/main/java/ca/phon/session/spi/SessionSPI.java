@@ -17,6 +17,7 @@
 package ca.phon.session.spi;
 
 import ca.phon.session.*;
+import ca.phon.session.alignment.TierAlignmentRules;
 import ca.phon.util.Language;
 
 import java.time.LocalDate;
@@ -98,7 +99,15 @@ public interface SessionSPI {
 	public void addUserTier(TierDescription tierDescription);
 
 	public void addUserTier(int idx, TierDescription tierDescription);
-	
+
+	public List<TierAlignmentRules> getTierAlignmentRules();
+
+	public TierAlignmentRules getTierAlignmentRules(String tier1, String tier2);
+
+	public void putTierAlignmentRules(TierAlignmentRules tierAlignmentRules);
+
+	public void deleteTierAlignmentRules(String tier1, String tier2);
+
 	/**
 	 * Get the number of transcribers
 	 */

@@ -17,6 +17,7 @@ package ca.phon.session.impl;
 
 import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.session.alignment.TierAlignmentRules;
 import ca.phon.session.spi.SessionSPI;
 import ca.phon.util.Language;
 
@@ -52,6 +53,9 @@ public class SessionImpl implements SessionSPI {
 			Collections.synchronizedList(new ArrayList<>());
 	
 	private final List<TierDescription> userTiers =
+			Collections.synchronizedList(new ArrayList<>());
+
+	private final List<TierAlignmentRules> tierAlignmentRules =
 			Collections.synchronizedList(new ArrayList<>());
 	
 	private final Transcript transcript;
@@ -245,7 +249,43 @@ public class SessionImpl implements SessionSPI {
 	public void addUserTier(int idx, TierDescription tierDescription) {
 		userTiers.add(idx, tierDescription);
 	}
-	
+
+	@Override
+	public List<TierAlignmentRules> getTierAlignmentRules() {
+		return Collections.unmodifiableList(this.tierAlignmentRules);
+	}
+
+	@Override
+	public TierAlignmentRules getTierAlignmentRules(String tier1, String tier2) {
+		for(TierAlignmentRules alignmentRules:this.tierAlignmentRules) {
+			if(alignmentRules.getTierNames().contains(tier1) &&
+					alignmentRules.getTierNames().contains(tier2)) {
+				return alignmentRules;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public void putTierAlignmentRules(TierAlignmentRules tierAlignmentRules) {
+		final TierAlignmentRules currentRules = getTierAlignmentRules(tierAlignmentRules.getTierNames().getObj1(),
+				tierAlignmentRules.getTierNames().getObj2());
+		int idx = this.tierAlignmentRules.size();
+		if(currentRules != null) {
+			idx = this.tierAlignmentRules.indexOf(currentRules);
+			this.tierAlignmentRules.remove(currentRules);
+		}
+		this.tierAlignmentRules.add(idx, currentRules);
+	}
+
+	@Override
+	public void deleteTierAlignmentRules(String tier1, String tier2) {
+		final TierAlignmentRules currentRules = getTierAlignmentRules(tier1, tier2);
+		if(currentRules != null) {
+			this.tierAlignmentRules.remove(currentRules);
+		}
+	}
+
 	@Override
 	public int getTranscriberCount() {
 		return transcribers.size();

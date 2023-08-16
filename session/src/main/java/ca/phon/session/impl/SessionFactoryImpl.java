@@ -19,6 +19,8 @@ import ca.phon.plugin.*;
 import ca.phon.session.alignment.TierAlignmentRules;
 import ca.phon.session.spi.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -48,14 +50,13 @@ public class SessionFactoryImpl implements SessionFactorySPI, IPluginExtensionPo
 	}
 
 	@Override
-	public <T> TierSPI<T> createTier(String name, Class<T> type, Map<String, String> tierParameters, TierAlignmentRules tierAlignmentRules) {
-		final TierImpl<T> retVal = new TierImpl<T>(name, type, tierParameters, tierAlignmentRules);
-		return retVal;
+	public <T> TierSPI<T> createTier(String name, Class<T> type, Map<String, String> tierParameters, boolean excludeFromAlignment, List<String> subtypeDelim, String subtypeExpr) {
+        return new TierImpl<T>(name, type, tierParameters, excludeFromAlignment, subtypeDelim, subtypeExpr);
 	}
 
 	@Override
-	public TierDescriptionSPI createTierDescription(String name, Class<?> type, Map<String, String> tierParameters, TierAlignmentRules tierAlignmentRules) {
-		return new TierDescriptionImpl(name, type, tierParameters, tierAlignmentRules);
+	public TierDescriptionSPI createTierDescription(String name, Class<?> type, Map<String, String> tierParameters, boolean excludeFromAlignment, List<String> subtypeDelim, String subtypeExpr) {
+		return new TierDescriptionImpl(name, type, tierParameters, excludeFromAlignment, subtypeDelim, subtypeExpr);
 	}
 
 	@Override
