@@ -398,6 +398,7 @@
 
     <xs:element name="orthographyElementFilter" type="orthographyElementFilterType"
         substitutionGroup="tierElementFilter"/>
+    <xs:element name="selectedOrthographyElements" type="listOfAlignableOrthographyTypes"/>
     <xs:complexType name="orthographyElementFilterType">
         <xs:annotation>
             <xs:documentation>Orthography element filter for cross tier alignment</xs:documentation>
@@ -405,7 +406,7 @@
         <xs:complexContent>
             <xs:extension base="tierElementFilterType">
                 <xs:sequence>
-                    <xs:element xmlns="https://phon.ca/ns/session" name="alignWith" type="listOfAlignableOrthographyTypes"/>
+                    <xs:element ref="selectedOrthographyElements"/>
                 </xs:sequence>
                 <xs:attribute name="includeOmitted" type="xs:boolean" default="false">
                     <xs:annotation>
@@ -474,11 +475,12 @@
     </xs:simpleType>
 
     <xs:element name="IPATierElementFilter" type="IPATierElementFilterType" substitutionGroup="tierElementFilter"/>
+    <xs:element name="selectedIPAElements" type="listOfAlignableIPATierTypes"/>
     <xs:complexType name="IPATierElementFilterType">
         <xs:complexContent>
             <xs:extension base="tierElementFilterType">
                 <xs:sequence>
-                    <xs:element xmlns="https://phon.ca/ns/session" name="alignWith" type="listOfAlignableIPATierTypes"/>
+                    <xs:element ref="selectedIPAElements"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -497,11 +499,12 @@
     <xs:element name="uerTierElementFilter" type="userTierElementFilterType"/>
     <xs:element name="subtypeDelim" type="nonemptyStringType"/>
     <xs:element name="subtypeExpr" type="nonemptyStringType"/>
+    <xs:element name="selectedUserTierElements" type="listofAlignableUserTierTypes"/>
     <xs:complexType name="userTierElementFilterType">
         <xs:complexContent>
             <xs:extension base="tierElementFilterType">
                 <xs:sequence>
-                    <xs:element xmlns="https://phon.ca/ns/session" name="alignWith" type="listofAlignableUserTierTypes"/>
+                    <xs:element ref="selectedUserTierElements"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>

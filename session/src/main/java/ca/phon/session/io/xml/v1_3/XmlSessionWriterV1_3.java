@@ -68,7 +68,7 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 
 	private final static String DEFAULT_NAMESPACE = "https://phon.ca/ns/session";
 
-	private final static String DEFAULT_NAMESPACE_LOCATION = "https://phon.ca/xml/xsd/session/v1_3/sesison.xsd";
+	private final static String DEFAULT_NAMESPACE_LOCATION = "https://phon.ca/xml/xsd/session/v1_3/session.xsd";
 
 	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(XmlSessionWriterV1_3.class.getName());
 
