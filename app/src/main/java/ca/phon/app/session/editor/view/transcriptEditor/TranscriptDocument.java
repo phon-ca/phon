@@ -1,5 +1,7 @@
-package ca.phon.app.session.editor.transcriptEditor;
+package ca.phon.app.session.editor.view.transcriptEditor;
 
+import ca.phon.app.log.LogUtil;
+import ca.phon.formatter.MediaTimeFormatter;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.session.*;
@@ -16,38 +18,34 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.*;
 import java.util.List;
+import java.util.function.Function;
 
 public class TranscriptDocument extends DefaultStyledDocument {
-    private final Session session;
-    private final List<List<String>> tierOrder;
-    private SetCaretCallback setCaretPos;
-    private GetCaretCallback getCaretPos;
+    private Session session;
     private boolean targetSyllablesVisible = false;
     private boolean actualSyllablesVisible = false;
     private boolean alignmentVisible = false;
+    private Function<String, JComponent> tierLabelFactory = this::createTierLabel;
+    private final SessionFactory sessionFactory;
 
-    public int getLabelMaxWidth() {
-        return labelMaxWidth;
+    public TranscriptDocument() {
+        super(new StyleContext());
+        sessionFactory = SessionFactory.newFactory();
+        //setDocumentFilter(new TranscriptDocumentFilter());
     }
 
-    private int labelMaxWidth = -1;
+    private JComponent createTierLabel(String tierName) {
+        JLabel tierLabel = new JLabel(tierName + ":");
+        var labelFont = new Font(tierLabel.getFont().getFontName(), tierLabel.getFont().getStyle(), 12);
+        tierLabel.setFont(labelFont);
+        tierLabel.setAlignmentY(.8f);
+        tierLabel.setMaximumSize(new Dimension(150, tierLabel.getPreferredSize().height));
+        tierLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        EmptyBorder tierLabelPadding = new EmptyBorder(0,8,0,8);
+        tierLabel.setBorder(tierLabelPadding);
 
-    // region Get/Set Caret Pos
-
-    public interface GetCaretCallback {
-        public int op();
+        return tierLabel;
     }
-    public interface SetCaretCallback {
-        public void op(int pos);
-    }
-    public void setGetCaretPosCallback(GetCaretCallback lambda) {
-        getCaretPos = lambda;
-    }
-    public void setSetCaretPosCallback(SetCaretCallback lambda) {
-        setCaretPos = lambda;
-    }
-
-    // endregion Get/Set Caret Pos
 
     // region Visible Getters/Setters
 
@@ -76,50 +74,13 @@ public class TranscriptDocument extends DefaultStyledDocument {
     public void setAlignmentVisible(boolean alignmentVisible) {
         if (alignmentVisible != this.alignmentVisible) {
             this.alignmentVisible = alignmentVisible;
-            for (var recordTierOrder : tierOrder) {
-                if (alignmentVisible) {
-                    recordTierOrder.add("Alignment");
-                }
-                else {
-                    recordTierOrder.remove("Alignment");
-                }
-            }
             reload();
         }
     }
 
     // endregion Visible Getters/Setters
 
-    public TranscriptDocument(Session session) {
-        super(new StyleContext());
-        this.session = session;
-        this.tierOrder = new ArrayList<>();
-        initTierOrderMap();
-
-        try {
-            populate();
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void initTierOrderMap() {
-        List<TierViewItem> tierViewList = session.getTierView();
-        List<Record> records = session.getRecords().stream().toList();
-
-        for (Record record : records) {
-            List<String> recordTierOrder = new ArrayList<>();
-
-            for (var tv : tierViewList) {
-                if (tv.isVisible()) {
-                    recordTierOrder.add(tv.getTierName());
-                }
-            }
-
-            tierOrder.add(recordTierOrder);
-        }
-    }
+    // region Attribute Getters
 
     private SimpleAttributeSet getTierAttributes(Tier tier) {
         final SimpleAttributeSet retVal = new SimpleAttributeSet();
@@ -139,6 +100,20 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return retVal;
     }
 
+    private SimpleAttributeSet getSegmentTimeAttributes() {
+        SimpleAttributeSet retVal = new SimpleAttributeSet();
+
+        return retVal;
+    }
+
+    private SimpleAttributeSet getSegmentDashAttributes() {
+        SimpleAttributeSet retVal = new SimpleAttributeSet();
+
+        StyleConstants.setForeground(retVal, Color.GRAY);
+
+        return retVal;
+    }
+
     private SimpleAttributeSet getAlignmentAttributes(PhoneAlignment alignment) {
         SimpleAttributeSet retVal = new SimpleAttributeSet();
 
@@ -154,192 +129,119 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return retVal;
     }
 
-    private SimpleAttributeSet getTierLabelAttributes(int recordIndex, String tierName) {
+    private SimpleAttributeSet getTierLabelAttributes(TierViewItem tierViewItem) {
         final SimpleAttributeSet retVal = new SimpleAttributeSet();
-        JLabel tierLabel = new JLabel(tierName + ":");
-        var labelFont = new Font(tierLabel.getFont().getFontName(), tierLabel.getFont().getStyle(), 12);
-        tierLabel.setFont(labelFont);
-        tierLabel.setAlignmentY(.8f);
-        tierLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        EmptyBorder tierLabelPadding = new EmptyBorder(0,8,0,8);
-        tierLabel.setBorder(tierLabelPadding);
-        labelMaxWidth = Math.max(
-            labelMaxWidth,
-            tierLabel.getPreferredSize().width +
-                tierLabelPadding.getBorderInsets().left +
-                tierLabelPadding.getBorderInsets().right
-        );
-        tierLabel.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                createTierLabelPopup(recordIndex, tierLabel, e);
-            }
 
-            // region unused
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
-
-            // endregion unused
-        });
+        var tierLabel = tierLabelFactory.apply(tierViewItem.getTierName());
         StyleConstants.setComponent(retVal, tierLabel);
+
+        retVal.addAttribute("locked", tierViewItem.isTierLocked());
+
         return retVal;
     }
-
-    private void createTierLabelPopup(int recordIndex, JLabel tierLabel, MouseEvent mouseEvent) {
-        JPopupMenu menu = new JPopupMenu();
-
-        var recordTierOrder = tierOrder.get(recordIndex);
-        String tierName = tierLabel.getText().substring(0, tierLabel.getText().length()-1);
-        int tierStartIndex = recordTierOrder.indexOf(tierName);
-
-        JMenuItem hideTier = new JMenuItem("Hide tier");
-        menu.add(hideTier);
-        hideTier.addActionListener(e -> hideTier(recordIndex, tierName, tierStartIndex));
-
-        // If it's not the top tier in a record
-        if (tierStartIndex > 0) {
-            JMenuItem moveUp = new JMenuItem("Move up");
-            menu.add(moveUp);
-            moveUp.addActionListener(e -> moveTierUp(recordIndex, tierName, tierStartIndex));
-        }
-
-        // If it's not the bottom tier in a record
-        if (tierStartIndex < recordTierOrder.size() - 1) {
-            JMenuItem moveDown = new JMenuItem("Move down");
-            menu.add(moveDown);
-            moveDown.addActionListener(e -> moveTierDown(recordIndex, tierName, tierStartIndex));
-        }
-
-        menu.show(tierLabel, mouseEvent.getX(), mouseEvent.getY());
-    }
-
-    // region Hide/Move Tiers
-
-    private void hideTier (int recordIndex, String tierName, int tierStartIndex) {
-        var recordTierOrder = tierOrder.get(recordIndex);
-
-        int startCaretPos = getCaretPos.op();
-        var elem = getCharacterElement(startCaretPos);
-        Tier caretTier = (Tier)elem.getAttributes().getAttribute("tier");
-        Integer caretRecordIndex = (Integer)elem.getAttributes().getAttribute("recordIndex");
-
-        int caretTierOffset = -1;
-        // If the caret has a valid tier and record index
-        if (caretTier != null && caretRecordIndex != null) {
-            String caretTierName = caretTier.getName();
-            int caretTierIndex = recordTierOrder.indexOf(caretTierName);
-            // If the caret is on a later line
-            if (caretRecordIndex > recordIndex ||
-                (caretRecordIndex == recordIndex && caretTierIndex > tierStartIndex)
-            ) {
-                caretTierOffset = startCaretPos - elem.getStartOffset();
-            }
-        }
-
-        // Remove the tier
-        recordTierOrder.remove(tierName);
-        // Reload the contents of the editor
-        reload();
-
-        if (caretTierOffset > -1) {
-            // Move the caret so that it has the same offset from the tiers new pos
-            setCaretPos.op(getTierStart(caretTier) + caretTierOffset);
-        }
-        else {
-            // Put the caret back where it was before the move
-            setCaretPos.op(startCaretPos);
-        }
-    }
-
-    private void moveTierUp (int recordIndex, String tierName, int tierStartIndex) {
-        var recordTierOrder = tierOrder.get(recordIndex);
-
-        int startCaretPos = getCaretPos.op();
-        var elem = getCharacterElement(startCaretPos);
-        Tier caretTier = (Tier)elem.getAttributes().getAttribute("tier");
-        Integer caretRecordIndex = (Integer)elem.getAttributes().getAttribute("recordIndex");
-        int caretTierOffset = -1;
-
-        if (caretTier != null && caretRecordIndex != null && caretRecordIndex == recordIndex) {
-            String caretTierName = caretTier.getName();
-            if (caretTierName.equals(tierName) || caretTierName.equals(recordTierOrder.get(tierStartIndex - 1))) {
-                caretTierOffset = startCaretPos - elem.getStartOffset();
-            }
-        }
-
-        // Move the tier
-        recordTierOrder.remove(tierName);
-        recordTierOrder.add(tierStartIndex - 1, tierName);
-        // Reload the contents of the editor
-        reload();
-
-        if (caretTierOffset > -1) {
-            // Move the caret so that it has the same offset from the tiers new pos
-            setCaretPos.op(getTierStart(caretTier) + caretTierOffset);
-        }
-        else {
-            // Put the caret back where it was before the move
-            setCaretPos.op(startCaretPos);
-        }
-    }
-
-    private void moveTierDown (int recordIndex, String tierName, int tierStartIndex) {
-        var recordTierOrder = tierOrder.get(recordIndex);
-
-        int startCaretPos = getCaretPos.op();
-        var elem = getCharacterElement(startCaretPos);
-        Tier caretTier = (Tier)elem.getAttributes().getAttribute("tier");
-        Integer caretRecordIndex = (Integer)elem.getAttributes().getAttribute("recordIndex");
-        int caretTierOffset = -1;
-
-        if (caretTier != null && caretRecordIndex != null && caretRecordIndex == recordIndex) {
-            String caretTierName = caretTier.getName();
-            if (caretTierName.equals(tierName) || caretTierName.equals(recordTierOrder.get(tierStartIndex + 1))) {
-                caretTierOffset = startCaretPos - elem.getStartOffset();
-            }
-        }
-
-        // Move the tier
-        recordTierOrder.remove(tierName);
-        recordTierOrder.add(tierStartIndex + 1, tierName);
-        // Reload the contents of the editor
-        reload();
-
-        if (caretTierOffset > -1) {
-            // Move the caret so that it has the same offset from the tiers new pos
-            setCaretPos.op(getTierStart(caretTier) + caretTierOffset);
-        }
-        else {
-            // Put the caret back where it was before the move
-            setCaretPos.op(startCaretPos);
-        }
-    }
-
-    // endregion Hide/Move Tiers
 
     private SimpleAttributeSet getSeparatorAttributes() {
         final SimpleAttributeSet retVal = new SimpleAttributeSet();
         StyleConstants.setComponent(retVal, new JSeparator(JSeparator.HORIZONTAL));
         return retVal;
     }
+
+    // endregion Attribute Getters
+
+    // region Hide/Move Tiers
+
+//    public void hideTier (int tierStartIndex, String tierName) {
+//        var startingTierView = session.getTierView();
+//
+//        List<TierViewItem> newTierVew = new ArrayList<>();
+//        for (var tv : startingTierView) {
+//            newTierVew.add(tv);
+//        }
+//        newTierVew.remove(tierStartIndex);
+//        session.setTierView(newTierVew);
+//        // Reload the contents of the editor
+//        int recordCount = session.getRecordCount();
+//        for (int i = 0; i < recordCount; i++) {
+//            int startOffset = getTierStart(i, tierName) - 1;
+//            int endOffset = getTierEnd(i, tierName) + 1;
+//            try {
+//                remove(startOffset, endOffset - startOffset);
+//            }
+//            catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//    }
+//
+//    public void moveTierUp (int tierStartIndex, String tierName, String aboveTierName) {
+//        var startingTierView = session.getTierView();
+//
+//        // Move the tier
+//        List<TierViewItem> newTierVew = new ArrayList<>();
+//        for (var tv : startingTierView) {
+//            newTierVew.add(tv);
+//        }
+//        var movedTV = newTierVew.remove(tierStartIndex);
+//        newTierVew.add(tierStartIndex - 1, movedTV);
+//        session.setTierView(newTierVew);
+//        // Reload the contents of the editor
+//        int recordCount = session.getRecordCount();
+//        for (int i = 0; i < recordCount; i++) {
+//            try {
+//
+//                int movingStartOffset = getTierStart(i, tierName) - 1;
+//                int movingEndOffset = getTierEnd(i, tierName) + 1;
+//                remove(movingStartOffset, movingEndOffset - movingStartOffset);
+//
+//                int aboveStartOffset = getTierStart(i, aboveTierName) - 1;
+//                int aboveEndOffset = getTierEnd(i, aboveTierName) + 1;
+//                remove(aboveStartOffset, aboveEndOffset - aboveStartOffset);
+//
+//                int newOffset = insertTier(i, tierName, aboveStartOffset);
+//
+//                insertTier(i, aboveTierName, newOffset);
+//            }
+//            catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//    }
+//
+//    public void moveTierDown (int tierStartIndex, String tierName, String belowTierName) {
+//        var startingTierView = session.getTierView();
+//
+//        // Move the tier
+//        List<TierViewItem> newTierVew = new ArrayList<>();
+//        for (var tv : startingTierView) {
+//            newTierVew.add(tv);
+//        }
+//        var movedTV = newTierVew.remove(tierStartIndex);
+//        newTierVew.add(tierStartIndex + 1, movedTV);
+//        session.setTierView(newTierVew);
+//        // Reload the contents of the editor
+//        int recordCount = session.getRecordCount();
+//        for (int i = 0; i < recordCount; i++) {
+//            try {
+//
+//                int belowStartOffset = getTierStart(i, belowTierName) - 1;
+//                int belowEndOffset = getTierEnd(i, belowTierName) + 1;
+//                remove(belowStartOffset, belowEndOffset - belowStartOffset);
+//
+//                int movingStartOffset = getTierStart(i, tierName) - 1;
+//                int movingEndOffset = getTierEnd(i, tierName) + 1;
+//                remove(movingStartOffset, movingEndOffset - movingStartOffset);
+//
+//                int newOffset = insertTier(i, belowTierName, movingStartOffset);
+//
+//                insertTier(i, tierName, newOffset);
+//            }
+//            catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//    }
+
+    // endregion Hide/Move Tiers
 
     public void reload() {
         try {
@@ -380,7 +282,9 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return ((Tier)tier);
     }
 
-    private int getRecordStart(int recordIndex, String tierName) {
+    // region Get Record/Tier Start/End
+
+    public int getRecordStart(int recordIndex, String tierName) {
         Element root = getDefaultRootElement();
 
         int retVal = -1;
@@ -402,7 +306,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return retVal;
     }
 
-    private int getRecordStart(Tier tier) {
+    public int getRecordStart(Tier tier) {
         Element root = getDefaultRootElement();
 
         int retVal = -1;
@@ -431,7 +335,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return retVal;
     }
 
-    private int getRecordEnd(int recordIndex, String tierName) {
+    public int getRecordEnd(int recordIndex, String tierName) {
         Element root = getDefaultRootElement();
 
         int retVal = -1;
@@ -448,7 +352,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return retVal;
     }
 
-    private int getRecordEnd(Tier tier) {
+    public int getRecordEnd(Tier tier) {
         Element root = getDefaultRootElement();
 
         for (int i = 0; i < root.getElementCount(); i++) {
@@ -470,7 +374,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return -1;
     }
 
-    private int getTierStart(int recordIndex, String tierName) {
+    public int getTierStart(int recordIndex, String tierName) {
         Element root = getDefaultRootElement();
 
         int retVal = -1;
@@ -499,7 +403,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return retVal;
     }
 
-    private int getTierStart(Tier tier) {
+    public int getTierStart(Tier tier) {
         Element root = getDefaultRootElement();
 
         int retVal = -1;
@@ -528,7 +432,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return retVal;
     }
 
-    private int getTierEnd(int recordIndex, String tierName) {
+    public int getTierEnd(int recordIndex, String tierName) {
         Element root = getDefaultRootElement();
 
         int retVal = -1;
@@ -552,7 +456,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return retVal;
     }
 
-    private int getTierEnd(Tier tier) {
+    public int getTierEnd(Tier tier) {
         Element root = getDefaultRootElement();
 
         for (int i = 0; i < root.getElementCount(); i++) {
@@ -574,46 +478,104 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return -1;
     }
 
+    // endregion Get Record/Tier Start/End
+
+    private int insertTier(int recordIndex, TierViewItem tierViewItem, int offset) throws BadLocationException {
+        String tierName = tierViewItem.getTierName();
+        insertString(offset++, " ", getTierLabelAttributes(tierViewItem));
+        Record record = session.getRecord(recordIndex);
+        Tier tier = record.getTier(tierName);
+
+        if (tier == null) return offset;
+
+        if (tierName.equals("IPA Target") && targetSyllablesVisible) {
+            String ipaTarget = ((Tier<IPATranscript>)tier).getValue().toString(true);
+            insertString(offset++, ipaTarget, getIPATierAttributes(tier));
+        }
+        else if (tierName.equals("IPA Actual") && actualSyllablesVisible) {
+            String ipaActual = ((Tier<IPATranscript>)tier).getValue().toString(true);
+            insertString(offset++, ipaActual, getIPATierAttributes(tier));
+        }
+        else if (tierName.equals("Alignment")) {
+            insertString(offset++, " ", getAlignmentAttributes(record.getPhoneAlignment()));
+        }
+        else if (tierName.equals("Segment")) {
+            MediaSegment segment = record.getMediaSegment();
+            String start = MediaTimeFormatter.msToPaddedMinutesAndSeconds(segment.getStartValue());
+
+            SimpleAttributeSet tierAttrs = getTierAttributes(tier);
+
+            var segmentTimeAttrs = getSegmentTimeAttributes();
+            segmentTimeAttrs.addAttributes(tierAttrs);
+
+            insertString(offset, start, segmentTimeAttrs);
+            offset += start.length();
+
+            var segmentDashAttrs = getSegmentDashAttributes();
+            segmentDashAttrs.addAttributes(tierAttrs);
+
+            insertString(offset++, "-", segmentDashAttrs);
+
+            String end = MediaTimeFormatter.msToPaddedMinutesAndSeconds(segment.getEndValue());
+
+            insertString(offset, end, segmentTimeAttrs);
+            offset += end.length();
+        }
+        else {
+            String tierContent = tier.toString();
+            if (tierContent.strip().equals("")) tierContent = "FILLER";
+
+            SimpleAttributeSet tierAttrs = getTierAttributes(tier);
+            insertString(offset, tierContent, tierAttrs);
+
+            offset += tierContent.length();
+        }
+
+        insertString(offset++, "\n", null);
+
+        return offset;
+    }
+
+    public void setTierItemViewLocked(String tierName, boolean locked) {
+        var currentTierVIew = session.getTierView();
+        List<TierViewItem> newTierView = new ArrayList<>();
+        for (TierViewItem oldItem : currentTierVIew) {
+            if (oldItem.getTierName().equals(tierName)) {
+                final TierViewItem newItem = sessionFactory.createTierViewItem(
+                    oldItem.getTierName(),
+                    oldItem.isVisible(),
+                    oldItem.getTierFont(),
+                    locked
+                );
+                newTierView.add(newItem);
+            }
+            else {
+                newTierView.add(oldItem);
+            }
+        }
+        session.setTierView(newTierView);
+    }
+
     private void populate() throws BadLocationException {
 
         Transcript transcript = session.getTranscript();
 
         List<Record> records = session.getRecords().stream().toList();
+        var tierView = session.getTierView();
 
         int len = 0;
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < records.size(); i++) {
             int recordStart = len;
             Record record = records.get(i);
             int recordElementIndex = transcript.getRecordElementIndex(record);
 
-            for (String tierName : tierOrder.get(i)) {
-                Tier tier = record.getTier(tierName);
+            for (var item : tierView) {
+                if (!item.isVisible()) continue;
 
-                if (tier != null || tierName.equals("Alignment")) {
-                    insertString(len++, " ", getTierLabelAttributes(i, tierName));
+                //String tierName = tv.getTierName();
 
-                    if (tierName.equals("IPA Target") && targetSyllablesVisible) {
-                        insertString(len++, " ", getIPATierAttributes(tier));
-                    }
-                    else if (tierName.equals("IPA Actual") && actualSyllablesVisible) {
-                        insertString(len++, " ", getIPATierAttributes(tier));
-                    }
-                    else if (tierName.equals("Alignment")) {
-                        insertString(len++, " ", getAlignmentAttributes(record.getPhoneAlignment()));
-                    }
-                    else {
-                        String tierContent = tier.toString();
-                        if (tierContent.strip().equals("")) tierContent = "FILLER";
-
-                        SimpleAttributeSet tierAttrs = getTierAttributes(tier);
-                        insertString(len, tierContent, tierAttrs);
-
-                        len += tierContent.length();
-                    }
-                }
-
-                insertString(len++, "\n ", null);
+                len = insertTier(i, item, len);
             }
 
             if (i < records.size() - 1) {
@@ -628,13 +590,43 @@ public class TranscriptDocument extends DefaultStyledDocument {
         }
     }
 
-    @Override
-    protected void insert(int offset, ElementSpec[] data) throws BadLocationException {
-        super.insert(offset, data);
+    // region Getters and Setters
+
+    public Session getSession() {
+        return session;
     }
 
-    @Override
-    public void removeElement(Element elem) {
-        super.removeElement(elem);
+    public void setSession(Session session) {
+        this.session = session;
+        try {
+            populate();
+        }
+        catch (Exception e) {
+            LogUtil.severe(e);
+        }
+    }
+
+    public Function<String, JComponent> getTierLabelFactory() {
+        return tierLabelFactory;
+    }
+
+    public void setTierLabelFactory(Function<String, JComponent> tierLabelFactory) {
+        this.tierLabelFactory = tierLabelFactory;
+        reload();
+    }
+
+    // endregion Getters and Setters
+
+    private class TranscriptDocumentFilter extends DocumentFilter {
+        @Override
+        public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+            if (attr != null) {
+                Tier tier = (Tier)attr.getAttribute("tier");
+                if (tier != null && tier.getName().equals("Orthography")) {
+                    return;
+                }
+            }
+            super.insertString(fb, offset, string, attr);
+        }
     }
 }
