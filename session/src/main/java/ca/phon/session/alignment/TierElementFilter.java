@@ -10,27 +10,67 @@ import java.util.List;
 
 public interface TierElementFilter {
 
-    public static TierElementFilter defaultElementFilter(Tier<?> tier) {
-        if(tier.getDeclaredType() == Orthography.class) {
-            return defaultOrthographyElementFilter();
-        } else if(tier.getDeclaredType() == IPATranscript.class || tier.getDeclaredType() == PhoneAlignment.class) {
-            return defaultIPAElementFilter();
-        } else if(tier.getDeclaredType() == UserTierData.class) {
+    public static TierElementFilter defaultElementFilterForAlignedTypes(Class<?> tierType, Class<?> alignedType) {
+        if(tierType == Orthography.class) {
+            if(alignedType == Orthography.class) {
+                return orthographyFilterForOrthographyAlignment();
+            } else if(alignedType == IPATranscript.class || alignedType == PhoneAlignment.class) {
+                return orthographyFilterForIPAAlignment();
+            } else if(alignedType == UserTierData.class) {
+                return orthographyFilterForUserTierAlignment();
+            } else {
+                throw new IllegalArgumentException("Invalid aligned tier type " + alignedType);
+            }
+        } else if(tierType == IPATranscript.class || tierType == PhoneAlignment.class) {
+            if(alignedType == Orthography.class) {
+                return ipaFilterForOOrthographyAlignment();
+            } else if(alignedType == IPATranscript.class || alignedType == PhoneAlignment.class) {
+                return ipaFilterForIPAAlignment();
+            } else if(alignedType == UserTierData.class) {
+                return ipaFilterForUserTierAlignment();
+            } else {
+                throw new IllegalArgumentException("Invalid aligned tier type " + alignedType);
+            }
+        } else if(tierType == UserTierData.class) {
             return defaultUserTierElementFilter();
         } else {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Invalid tier type " + tierType);
         }
     }
 
-    public static OrthographyTierElementFilter defaultOrthographyElementFilter() {
+    public static OrthographyTierElementFilter orthographyFilterForOrthographyAlignment() {
+        final List<OrthographyTierElementFilter.AlignableType> alignableTypes =
+                List.of(OrthographyTierElementFilter.AlignableType.Word, OrthographyTierElementFilter.AlignableType.Pause, OrthographyTierElementFilter.AlignableType.Terminator);
+        return new OrthographyTierElementFilter(alignableTypes, true, true, true, false, false);
+    }
+
+    public static OrthographyTierElementFilter orthographyFilterForIPAAlignment() {
         final List<OrthographyTierElementFilter.AlignableType> alignableTypes =
             List.of(OrthographyTierElementFilter.AlignableType.Word, OrthographyTierElementFilter.AlignableType.Pause);
         return new OrthographyTierElementFilter(alignableTypes, true, true, true, false, false);
     }
 
-    public static IPATierElementFilter defaultIPAElementFilter() {
+    public static OrthographyTierElementFilter orthographyFilterForUserTierAlignment() {
+        final List<OrthographyTierElementFilter.AlignableType> alignableTypes =
+                List.of(OrthographyTierElementFilter.AlignableType.Word);
+        return new OrthographyTierElementFilter(alignableTypes, true, true, true, false, false);
+    }
+
+    public static IPATierElementFilter ipaFilterForIPAAlignment() {
         final List<IPATierElementFilter.AlignableType> alignableTypes =
                 List.of(IPATierElementFilter.AlignableType.Word, IPATierElementFilter.AlignableType.Pause);
+        return new IPATierElementFilter(alignableTypes);
+    }
+
+    public static IPATierElementFilter ipaFilterForOOrthographyAlignment() {
+        final List<IPATierElementFilter.AlignableType> alignableTypes =
+                List.of(IPATierElementFilter.AlignableType.Word, IPATierElementFilter.AlignableType.Pause);
+        return new IPATierElementFilter(alignableTypes);
+    }
+
+    public static IPATierElementFilter ipaFilterForUserTierAlignment() {
+        final List<IPATierElementFilter.AlignableType> alignableTypes =
+                List.of(IPATierElementFilter.AlignableType.Word);
         return new IPATierElementFilter(alignableTypes);
     }
 
