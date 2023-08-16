@@ -22,6 +22,7 @@ import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.*;
 import ca.phon.ipadictionary.IPADictionary;
+import ca.phon.orthography.Orthography;
 import ca.phon.orthography.OrthographyElement;
 import ca.phon.session.Record;
 import ca.phon.session.*;
@@ -149,7 +150,7 @@ public class AutoTranscriber {
 				(record.getIPAActual().getExtension(UnvalidatedValue.class) != null
 					&& record.getIPAActual().getExtension(UnvalidatedValue.class).getValue().length() > 0);
 
-		final List<OrthographyElement> orthoWords = TierElementFilter.defaultOrthographyAndIPAElementFilter().filterOrthography(record.getOrthography());
+		final List<OrthographyElement> orthoWords = TierElementFilter.orthographyFilterForIPAAlignment().filterOrthography(record.getOrthography());
 		for(int i = 0; i < orthoWords.size(); i++) {
 			final OrthographyElement ele = orthoWords.get(i);
 			final OrthoLookupVisitor visitor = new OrthoLookupVisitor(getDictionary());
@@ -247,7 +248,7 @@ public class AutoTranscriber {
 		}
 			
 		if(getTranscriber() == null) {
-			final List<OrthographyElement> orthoWords = TierElementFilter.defaultOrthographyAndIPAElementFilter().filterOrthography(record.getOrthography());
+			final List<OrthographyElement> orthoWords = TierElementFilter.orthographyFilterForIPAAlignment().filterOrthography(record.getOrthography());
 			final List<IPATranscript> targetWords = record.getIPATarget().words();
 			final List<IPATranscript> actualWords = record.getIPAActual().words();
 
