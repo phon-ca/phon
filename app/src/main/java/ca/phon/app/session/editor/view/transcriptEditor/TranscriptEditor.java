@@ -1,24 +1,18 @@
-package ca.phon.app.session.editor.transcriptEditor;
+package ca.phon.app.session.editor.view.transcriptEditor;
 
 import ca.phon.app.project.DesktopProject;
+import ca.phon.plugin.PluginManager;
 import ca.phon.session.Session;
 import ca.phon.session.Tier;
-import ca.phon.session.TierViewItem;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.menu.MenuBuilder;
 import org.jdesktop.swingx.HorizontalLayout;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.text.Document;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TranscriptEditor extends JEditorPane {
     private final Session session;
@@ -42,8 +36,7 @@ public class TranscriptEditor extends JEditorPane {
             TranscriptEditor editorPane = new TranscriptEditor(session);
 
             // This should be different somehow
-            TranscriptDocument doc = (TranscriptDocument)editorPane.getDocument();
-            doc.setOpenLabelPopup((tierLabel, e) -> editorPane.createTierLabelPopup(tierLabel, e));
+            var doc = editorPane.getTranscriptDocument();
 
             editorPane.addCaretListener(e -> {
                 int cursorPos = e.getDot();
@@ -60,12 +53,6 @@ public class TranscriptEditor extends JEditorPane {
             scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
             frame.add(scrollPane, BorderLayout.CENTER);
             JPanel bottomButtonPanel = new JPanel(new HorizontalLayout());
-
-            /*JButton debugButton = new JButton("Debug");
-            debugButton.addActionListener(e -> {
-                ((TranscriptEditorKit)editorPane.getEditorKit()).debugInfo();
-            });
-            bottomButtonPanel.add(debugButton);*/
 
             JButton toggleTargetSyllablesButton = new JButton("Target");
             toggleTargetSyllablesButton.addActionListener(e -> {
@@ -96,23 +83,25 @@ public class TranscriptEditor extends JEditorPane {
     }
 
     public boolean getTargetSyllablesVisible() {
-        return ((TranscriptDocument)getDocument()).getTargetSyllablesVisible();
+        return getTranscriptDocument().getTargetSyllablesVisible();
     }
     public boolean getActualSyllablesVisible() {
-        return ((TranscriptDocument)getDocument()).getActualSyllablesVisible();
+        return getTranscriptDocument().getActualSyllablesVisible();
     }
     public boolean getAlignmentVisible() {
-        return ((TranscriptDocument)getDocument()).getAlignmentVisible();
+        return getTranscriptDocument().getAlignmentVisible();
     }
     public void setTargetSyllablesVisible(boolean visible) {
-        ((TranscriptDocument)getDocument()).setTargetSyllablesVisible(visible);
+        getTranscriptDocument().setTargetSyllablesVisible(visible);
     }
     public void setActualSyllablesVisible(boolean visible) {
-        ((TranscriptDocument)getDocument()).setActualSyllablesVisible(visible);
+        getTranscriptDocument().setActualSyllablesVisible(visible);
     }
     public void setAlignmentVisible(boolean visible) {
-        ((TranscriptDocument)getDocument()).setAlignmentVisible(visible);
+        getTranscriptDocument().setAlignmentVisible(visible);
     }
+
+    // region Input Actions
 
     private void initActions() {
         InputMap inputMap = super.getInputMap(JComponent.WHEN_FOCUSED);
@@ -130,7 +119,7 @@ public class TranscriptEditor extends JEditorPane {
     }
 
     public void nextTierOrElement() {
-        TranscriptDocument doc = (TranscriptDocument) getDocument();
+        TranscriptDocument doc = getTranscriptDocument();
 
         int caretPos = getCaretPosition();
         var elem = doc.getCharacterElement(caretPos);
@@ -163,7 +152,7 @@ public class TranscriptEditor extends JEditorPane {
     }
 
     public void prevTierOrElement() {
-        TranscriptDocument doc = (TranscriptDocument) getDocument();
+        TranscriptDocument doc = getTranscriptDocument();
 
         int caretPos = getCaretPosition();
         var elem = doc.getCharacterElement(caretPos);
@@ -201,34 +190,17 @@ public class TranscriptEditor extends JEditorPane {
         setCaretPosition(newCaretPos);
     }
 
+    // endregion Input Actions
+
     private void createTierLabelPopup(JLabel tierLabel, MouseEvent mouseEvent) {
         JPopupMenu menu = new JPopupMenu();
+        MenuBuilder builder = new MenuBuilder(menu);
 
-        var tierView = session.getTierView();
-        String tierName = tierLabel.getText().substring(0, tierLabel.getText().length()-1);
-        var selectedTierView = tierView
-                .stream()
-                .filter(tv -> tv.getTierName().equals(tierName))
-                .findFirst()
-                .orElse(null);
-        int tierStartIndex = tierView.indexOf(selectedTierView);
+        var extPts = PluginManager.getInstance().getExtensionPoints(TierLabelMenuHandler.class);
 
-        JMenuItem hideTier = new JMenuItem("Hide tier");
-        menu.add(hideTier);
-        hideTier.addActionListener(e -> hideTier(tierStartIndex, tierName));
-
-        // If it's not the top tier in a record
-        if (tierStartIndex > 0) {
-            JMenuItem moveUp = new JMenuItem("Move up");
-            menu.add(moveUp);
-            moveUp.addActionListener(e -> moveTierUp(tierStartIndex));
-        }
-
-        // If it's not the bottom tier in a record
-        if (tierStartIndex < tierView.size() - 1) {
-            JMenuItem moveDown = new JMenuItem("Move down");
-            menu.add(moveDown);
-            moveDown.addActionListener(e -> moveTierDown(tierStartIndex));
+        for (var extPt : extPts) {
+            var menuHandler = extPt.getFactory().createObject();
+            menuHandler.addMenuItems(builder);
         }
 
         menu.show(tierLabel, mouseEvent.getX(), mouseEvent.getY());
@@ -236,104 +208,107 @@ public class TranscriptEditor extends JEditorPane {
 
     // region Hide/Move Tiers
 
-    private void hideTier(int tierStartIndex, String tierName) {
-        var startingTierView = session.getTierView();
-        TranscriptDocument doc = (TranscriptDocument) getDocument();
-
-        int startCaretPos = getCaretPosition();
-        var elem = doc.getCharacterElement(startCaretPos);
-        Tier caretTier = (Tier)elem.getAttributes().getAttribute("tier");
-
-        int caretTierOffset = -1;
-        // If the caret has a valid tier and record index
-        if (caretTier != null) {
-            String caretTierName = caretTier.getName();
-            var caretTierView = startingTierView
-                .stream()
-                .filter(tv -> tv.getTierName().equals(caretTierName))
-                .findFirst()
-                .orElse(null);
-            int caretTierIndex = startingTierView.indexOf(caretTierView);
-            // If the caret is on a later line
-            if (caretTierIndex > tierStartIndex) {
-                caretTierOffset = startCaretPos - elem.getStartOffset();
-            }
-        }
-
-        // Hide the tier in the document
-        doc.hideTier(tierStartIndex, tierName);
-
-        if (caretTierOffset > -1) {
-            // Move the caret so that it has the same offset from the tiers new pos
-            setCaretPosition(doc.getTierStart(caretTier) + caretTierOffset);
-        }
-        else {
-            // Put the caret back where it was before the move
-            setCaretPosition(startCaretPos);
-        }
-    }
-    private void moveTierUp(int tierStartIndex) {
-        var startingTierView = session.getTierView();
-        TranscriptDocument doc = (TranscriptDocument) getDocument();
-        String movingTierName = startingTierView.get(tierStartIndex).getTierName();
-        String aboveTierName = startingTierView.get(tierStartIndex - 1).getTierName();
-
-        int startCaretPos = getCaretPosition();
-        var elem = doc.getCharacterElement(startCaretPos);
-        Tier caretTier = (Tier)elem.getAttributes().getAttribute("tier");
-        int caretTierOffset = -1;
-
-        if (caretTier != null) {
-            String caretTierName = caretTier.getName();
-
-            if (caretTierName.equals(movingTierName) || caretTierName.equals(aboveTierName)) {
-                caretTierOffset = startCaretPos - elem.getStartOffset();
-            }
-        }
-
-        // Move the tier in the document
-        doc.moveTierUp(tierStartIndex, movingTierName, aboveTierName);
-
-        if (caretTierOffset > -1) {
-            // Move the caret so that it has the same offset from the tiers new pos
-            setCaretPosition(doc.getTierStart(caretTier) + caretTierOffset);
-        }
-        else {
-            // Put the caret back where it was before the move
-            setCaretPosition(startCaretPos);
-        }
-    }
-    private void moveTierDown(int tierStartIndex) {
-        var startingTierView = session.getTierView();
-        TranscriptDocument doc = (TranscriptDocument) getDocument();
-        String movingTierName = startingTierView.get(tierStartIndex).getTierName();
-        String belowTierName = startingTierView.get(tierStartIndex + 1).getTierName();
-
-        int startCaretPos = getCaretPosition();
-        var elem = doc.getCharacterElement(startCaretPos);
-        Tier caretTier = (Tier)elem.getAttributes().getAttribute("tier");
-        int caretTierOffset = -1;
-
-        if (caretTier != null) {
-            String caretTierName = caretTier.getName();
-            if (caretTierName.equals(movingTierName) || caretTierName.equals(belowTierName)) {
-                caretTierOffset = startCaretPos - elem.getStartOffset();
-            }
-        }
-
-        // Move the tier in the document
-        doc.moveTierDown(tierStartIndex, movingTierName, belowTierName);
-
-        if (caretTierOffset > -1) {
-            // Move the caret so that it has the same offset from the tiers new pos
-            setCaretPosition(doc.getTierStart(caretTier) + caretTierOffset);
-        }
-        else {
-            // Put the caret back where it was before the move
-            setCaretPosition(startCaretPos);
-        }
-    }
+//    private void hideTier(int tierStartIndex, String tierName) {
+//        var startingTierView = session.getTierView();
+//        TranscriptDocument doc = getTranscriptDocument();
+//
+//        int startCaretPos = getCaretPosition();
+//        var elem = doc.getCharacterElement(startCaretPos);
+//        Tier caretTier = (Tier)elem.getAttributes().getAttribute("tier");
+//
+//        int caretTierOffset = -1;
+//        // If the caret has a valid tier and record index
+//        if (caretTier != null) {
+//            String caretTierName = caretTier.getName();
+//            var caretTierView = startingTierView
+//                .stream()
+//                .filter(tv -> tv.getTierName().equals(caretTierName))
+//                .findFirst()
+//                .orElse(null);
+//            int caretTierIndex = startingTierView.indexOf(caretTierView);
+//            // If the caret is on a later line
+//            if (caretTierIndex > tierStartIndex) {
+//                caretTierOffset = startCaretPos - elem.getStartOffset();
+//            }
+//        }
+//
+//        // Hide the tier in the document
+//        doc.hideTier(tierStartIndex, tierName);
+//
+//        if (caretTierOffset > -1) {
+//            // Move the caret so that it has the same offset from the tiers new pos
+//            setCaretPosition(doc.getTierStart(caretTier) + caretTierOffset);
+//        }
+//        else {
+//            // Put the caret back where it was before the move
+//            setCaretPosition(startCaretPos);
+//        }
+//    }
+//    private void moveTierUp(int tierStartIndex) {
+//        var startingTierView = session.getTierView();
+//        TranscriptDocument doc = getTranscriptDocument();
+//        String movingTierName = startingTierView.get(tierStartIndex).getTierName();
+//        String aboveTierName = startingTierView.get(tierStartIndex - 1).getTierName();
+//
+//        int startCaretPos = getCaretPosition();
+//        var elem = doc.getCharacterElement(startCaretPos);
+//        Tier caretTier = (Tier)elem.getAttributes().getAttribute("tier");
+//        int caretTierOffset = -1;
+//
+//        if (caretTier != null) {
+//            String caretTierName = caretTier.getName();
+//
+//            if (caretTierName.equals(movingTierName) || caretTierName.equals(aboveTierName)) {
+//                caretTierOffset = startCaretPos - elem.getStartOffset();
+//            }
+//        }
+//
+//        // Move the tier in the document
+//        doc.moveTierUp(tierStartIndex, movingTierName, aboveTierName);
+//
+//        if (caretTierOffset > -1) {
+//            // Move the caret so that it has the same offset from the tiers new pos
+//            setCaretPosition(doc.getTierStart(caretTier) + caretTierOffset);
+//        }
+//        else {
+//            // Put the caret back where it was before the move
+//            setCaretPosition(startCaretPos);
+//        }
+//    }
+//    private void moveTierDown(int tierStartIndex) {
+//        var startingTierView = session.getTierView();
+//        TranscriptDocument doc = getTranscriptDocument();
+//        String movingTierName = startingTierView.get(tierStartIndex).getTierName();
+//        String belowTierName = startingTierView.get(tierStartIndex + 1).getTierName();
+//
+//        int startCaretPos = getCaretPosition();
+//        var elem = doc.getCharacterElement(startCaretPos);
+//        Tier caretTier = (Tier)elem.getAttributes().getAttribute("tier");
+//        int caretTierOffset = -1;
+//
+//        if (caretTier != null) {
+//            String caretTierName = caretTier.getName();
+//            if (caretTierName.equals(movingTierName) || caretTierName.equals(belowTierName)) {
+//                caretTierOffset = startCaretPos - elem.getStartOffset();
+//            }
+//        }
+//
+//        // Move the tier in the document
+//        doc.moveTierDown(tierStartIndex, movingTierName, belowTierName);
+//
+//        if (caretTierOffset > -1) {
+//            // Move the caret so that it has the same offset from the tiers new pos
+//            setCaretPosition(doc.getTierStart(caretTier) + caretTierOffset);
+//        }
+//        else {
+//            // Put the caret back where it was before the move
+//            setCaretPosition(startCaretPos);
+//        }
+//    }
 
     // endregion Hide/Move Tiers
 
+    public TranscriptDocument getTranscriptDocument() {
+        return (TranscriptDocument) getDocument();
+    }
 }
