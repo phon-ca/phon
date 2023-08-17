@@ -52,7 +52,6 @@ public class TranscriptEditorView extends EditorView {
             @Override
             public void mouseClicked(MouseEvent e) {
                 transcriptEditor.getTranscriptDocument().setTierItemViewLocked(tierName, true);
-                System.out.println("Testing");
                 createTierLabelPopup(tierLabel, e);
             }
         });
