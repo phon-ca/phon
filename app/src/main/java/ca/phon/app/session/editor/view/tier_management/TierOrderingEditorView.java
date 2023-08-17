@@ -140,6 +140,8 @@ public class TierOrderingEditorView extends EditorView {
 		tierOrderingTable.setTransferHandler(new TierTableTransferHandler());
 		tierOrderingTable.setDropMode(DropMode.INSERT_ROWS);
 		tierOrderingTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tierOrderingTable.getColumn(0).setMaxWidth(75);
+		tierOrderingTable.getColumn(1).setMaxWidth(75);
 		
 		// setup tier odering table action map
 		ActionMap tierOrderActionMap = new ActionMap();
@@ -160,7 +162,7 @@ public class TierOrderingEditorView extends EditorView {
 		newTierButton.setFocusable(false);
 		
 		final ImageIcon removeIcon = 
-			IconManager.getInstance().getIcon("actions/list-remove", IconSize.XSMALL);
+			IconManager.getInstance().getIcon("actions/list-remove", IconSize.SMALL);
 		deleteAction.putValue(PhonUIAction.SMALL_ICON, removeIcon);
 		deleteTierButton = new JButton(deleteAction);
 		deleteTierButton.setFocusable(false);
@@ -198,13 +200,14 @@ public class TierOrderingEditorView extends EditorView {
 		
 		FormLayout layout = new FormLayout(
 				"pref, pref, fill:pref:grow, pref, pref, pref",
-				"pref, pref, pref, pref, fill:pref:grow");
+				"pref, pref, pref, pref, pref, fill:pref:grow");
 		CellConstraints cc = new CellConstraints();
 		setLayout(layout);
 		
-		add(new JScrollPane(tierOrderingTable), cc.xywh(1, 2, 5, 4));
-		add(moveUpButton, cc.xy(6, 2));
-		add(moveDownButton, cc.xy(6, 3));
+		add(new JScrollPane(tierOrderingTable), cc.xywh(1, 2, 5, 5));
+		add(deleteTierButton, cc.xy(6, 2));
+		add(moveUpButton, cc.xy(6, 3));
+		add(moveDownButton, cc.xy(6, 4));
 		add(editButton, cc.xy(5, 1));
 		
 		add(newTierButton, cc.xy(4, 1));
@@ -712,19 +715,14 @@ public class TierOrderingEditorView extends EditorView {
 			final TierMoveEdit edit = new TierMoveEdit(getEditor(), item, row);
 			getEditor().getUndoSupport().postEdit(edit);
 
+			tierOrderingTable.getSelectionModel().setSelectionInterval(row, row);
+
 			return true;
 		}
 
 		@Override
 		public int getSourceActions(JComponent c) {
 			return TransferHandler.COPY_OR_MOVE;
-		}
-
-		@Override
-		protected void exportDone(JComponent c, Transferable t, int act) {
-			if ((act == TransferHandler.MOVE) || (act == TransferHandler.NONE)) {
-				tierOrderingTable.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-			}
 		}
 
 		@Nullable
