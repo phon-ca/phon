@@ -68,7 +68,7 @@ public class AddTierEdit extends SessionEditorUndoableEdit {
 		
 		session.removeUserTier(tierDescription);
 		
-		final List<TierViewItem> tierView = session.getTierView();
+		final List<TierViewItem> tierView = new ArrayList<>(session.getTierView());
 		final List<TierViewItem> newView = new ArrayList<TierViewItem>(tierView);
 		newView.remove(this.tierViewItem);
 		session.setTierView(newView);
@@ -78,7 +78,8 @@ public class AddTierEdit extends SessionEditorUndoableEdit {
 		}
 
 		final EditorEvent<EditorEventType.TierViewChangedData> ee =
-				new EditorEvent<>(EditorEventType.TierViewChanged, getSource(), new EditorEventType.TierViewChangedData(tierView, newView));
+				new EditorEvent<>(EditorEventType.TierViewChanged, getSource(),
+						new EditorEventType.TierViewChangedData(tierView, newView, EditorEventType.TierViewChangeType.DELETE_TIER, List.of(tierDescription.getName()), List.of(tierView.indexOf(this.tierViewItem))));
 		getEditor().getEventManager().queueEvent(ee);
 	}
 
@@ -89,7 +90,7 @@ public class AddTierEdit extends SessionEditorUndoableEdit {
 		
 		session.addUserTier(tierDescription);
 		
-		final List<TierViewItem> tierView = session.getTierView();
+		final List<TierViewItem> tierView = new ArrayList<>(session.getTierView());
 		final List<TierViewItem> newView = new ArrayList<TierViewItem>(tierView);
 		if(this.index >= 0)
 			newView.add(index, this.tierViewItem);
@@ -106,7 +107,8 @@ public class AddTierEdit extends SessionEditorUndoableEdit {
 		}
 
 		final EditorEvent<EditorEventType.TierViewChangedData> ee =
-				new EditorEvent<>(EditorEventType.TierViewChanged, getSource(), new EditorEventType.TierViewChangedData(tierView, newView));
+				new EditorEvent<>(EditorEventType.TierViewChanged, getSource(),
+						new EditorEventType.TierViewChangedData(tierView, newView, EditorEventType.TierViewChangeType.ADD_TIER, List.of(tierDescription.getName()), List.of(newView.indexOf(this.tierViewItem))));
 		getEditor().getEventManager().queueEvent(ee);
 	}
 

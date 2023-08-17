@@ -65,7 +65,33 @@ public record EditorEventType<T>(String eventName, Class<T> type) {
 	public final static EditorEventType<SessionMediaChangedData> SessionMediaChanged =
 			new EditorEventType<>(EditorEventName.SESSION_MEDIA_CHANGED.getEventName(), SessionMediaChangedData.class);
 
-	public record TierViewChangedData(List<TierViewItem> oldTierView, List<TierViewItem> newTierView) { }
+	/**
+	 * View change event type.
+	 * In most cases multiple tiers may be specified in TierViewChangedData.tierNames along with a matching set of viewIndices
+	 */
+	public static enum TierViewChangeType {
+		/**
+		 * Reload tier view
+		 * TierViewChangedData.tierNames and TierViewChangeData.viewIndices will be empty
+		 */
+		RELOAD,
+		TIER_NAME_CHANGE,
+		TIER_FONT_CHANGE,
+		HIDE_TIER,
+		SHOW_TIER,
+		LOCK_TIER,
+		UNLOCK_TIER,
+		ADD_TIER,
+		DELETE_TIER,
+		/**
+		 * Will be called for only one tier at a time.
+		 * TierViewChangedData.viewIndices will contain two values, the first will be the original view index the second
+		 * wll be the new view index.
+		 */
+		MOVE_TIER
+	}
+	public record TierViewChangedData(List<TierViewItem> oldTierView, List<TierViewItem> newTierView,
+									  TierViewChangeType changeType, List<String> tierNames, List<Integer> viewIndices) { }
 	/**
 	 * Tier view has changed
 	 */

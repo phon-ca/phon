@@ -17,6 +17,7 @@ package ca.phon.app.session.editor.undo;
 
 import ca.phon.app.session.editor.*;
 import ca.phon.session.*;
+import com.kitfox.svg.A;
 
 import javax.swing.undo.CannotUndoException;
 import java.util.*;
@@ -70,7 +71,7 @@ public class TierViewEdit extends SessionEditorUndoableEdit {
 		session.setTierView(oldView);
 
 		final EditorEvent<EditorEventType.TierViewChangedData> ee =
-				new EditorEvent<>(EditorEventType.TierViewChanged, getSource(), new EditorEventType.TierViewChangedData(newView, oldView));
+				new EditorEvent<>(EditorEventType.TierViewChanged, getSource(), new EditorEventType.TierViewChangedData(newView, oldView, EditorEventType.TierViewChangeType.RELOAD, new ArrayList<>(), new ArrayList<>()));
 		getEditor().getEventManager().queueEvent(ee);
 	}
 
@@ -81,7 +82,7 @@ public class TierViewEdit extends SessionEditorUndoableEdit {
 		session.setTierView(newView);
 
 		final EditorEvent<EditorEventType.TierViewChangedData> ee =
-				new EditorEvent<>(EditorEventType.TierViewChanged, getSource(), new EditorEventType.TierViewChangedData(oldView, newView));
+				new EditorEvent<>(EditorEventType.TierViewChanged, getSource(), new EditorEventType.TierViewChangedData(oldView, newView, EditorEventType.TierViewChangeType.RELOAD, new ArrayList<>(), new ArrayList<>()));
 		getEditor().getEventManager().queueEvent(ee);
 	}
 	

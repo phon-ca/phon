@@ -16,6 +16,7 @@
 package ca.phon.app.session.editor.view.tier_management.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.undo.TierMoveEdit;
 import ca.phon.app.session.editor.undo.TierViewEdit;
 import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
 import ca.phon.session.TierViewItem;
@@ -49,10 +50,10 @@ public class MoveTierAction extends TierManagementAction {
 		if(nextIndex >= 0 && nextIndex < view.size()) {
 			newView.remove(currentIndex);
 			newView.add(nextIndex, item);
-			
-			final TierViewEdit edit = new TierViewEdit(getEditor(), view, newView);
+
+			final TierMoveEdit edit = new TierMoveEdit(getEditor(), item, nextIndex);
 			getEditor().getUndoSupport().postEdit(edit);
-			
+
 			getView().getTierOrderingTable().getSelectionModel().setSelectionInterval(nextIndex, nextIndex);
 		}
 	}
