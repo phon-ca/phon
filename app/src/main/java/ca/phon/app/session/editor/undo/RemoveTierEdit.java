@@ -18,6 +18,7 @@ package ca.phon.app.session.editor.undo;
 import ca.phon.app.session.editor.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;
+import com.kitfox.svg.A;
 
 import javax.swing.undo.CannotUndoException;
 import java.util.*;
@@ -61,7 +62,7 @@ public class RemoveTierEdit extends SessionEditorUndoableEdit {
 		else
 			session.addUserTier(tierDescription);
 
-		final List<TierViewItem> oldTierView = session.getTierView();
+		final List<TierViewItem> oldTierView = new ArrayList<>(session.getTierView());
 		final List<TierViewItem> tierView = new ArrayList<>(oldTierView);
 		if(tierViewIdx >= 0) {
 			tierView.add(tierViewIdx, tierViewItem);
@@ -78,7 +79,7 @@ public class RemoveTierEdit extends SessionEditorUndoableEdit {
 		}
 
 		final EditorEvent<EditorEventType.TierViewChangedData> ee =
-				new EditorEvent<>(EditorEventType.TierViewChanged, getSource(), new EditorEventType.TierViewChangedData(oldTierView, tierView));
+				new EditorEvent<>(EditorEventType.TierViewChanged, getSource(), new EditorEventType.TierViewChangedData(oldTierView, tierView, EditorEventType.TierViewChangeType.ADD_TIER, List.of(tierDescription.getName()), List.of(tierViewIdx)));
 		getEditor().getEventManager().queueEvent(ee);
 	}
 
@@ -102,14 +103,14 @@ public class RemoveTierEdit extends SessionEditorUndoableEdit {
 		}
 		session.removeUserTier(tierIdx);
 
-		final List<TierViewItem> oldTierView = session.getTierView();
+		final List<TierViewItem> oldTierView = new ArrayList<>(session.getTierView());
 		final List<TierViewItem> tierView = new ArrayList<>(oldTierView);
 		tierViewIdx = tierView.indexOf(this.tierViewItem);
 		tierView.remove(this.tierViewItem);
 		session.setTierView(tierView);
 
 		final EditorEvent<EditorEventType.TierViewChangedData> ee =
-				new EditorEvent<>(EditorEventType.TierViewChanged, getSource(), new EditorEventType.TierViewChangedData(oldTierView, tierView));
+				new EditorEvent<>(EditorEventType.TierViewChanged, getSource(), new EditorEventType.TierViewChangedData(oldTierView, tierView, EditorEventType.TierViewChangeType.DELETE_TIER, List.of(tierDescription.getName()), List.of(tierViewIdx)));
 		getEditor().getEventManager().queueEvent(ee);
 	}
 	

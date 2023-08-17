@@ -73,10 +73,13 @@ public class TierNameEdit extends SessionEditorUndoableEdit {
 		// fix name in tier view
 		final List<TierViewItem> oldTierView = session.getTierView();
 		final List<TierViewItem> newTierView = new ArrayList<TierViewItem>();
-		for(TierViewItem tv:oldTierView) {
+		int idx = -1;
+		for(int i = 0; i < oldTierView.size(); i++) {
+			final TierViewItem tv = oldTierView.get(i);
 			if(tv.getTierName().equals(tierName)) {
 				final TierViewItem newItem = 
 						factory.createTierViewItem(newTierName, tv.isVisible(), tv.getTierFont(), tv.isTierLocked());
+				idx = i;
 				newTierView.add(newItem);
 			} else {
 				newTierView.add(tv);
@@ -96,7 +99,7 @@ public class TierNameEdit extends SessionEditorUndoableEdit {
 		}
 
 		final EditorEvent<EditorEventType.TierViewChangedData> ee =
-				new EditorEvent<>(EditorEventType.TierViewChanged, getSource(), new EditorEventType.TierViewChangedData(oldTierView, newTierView));
+				new EditorEvent<>(EditorEventType.TierViewChanged, getSource(), new EditorEventType.TierViewChangedData(oldTierView, newTierView, EditorEventType.TierViewChangeType.TIER_NAME_CHANGE, List.of(newTierName), List.of(idx)));
 		getEditor().getEventManager().queueEvent(ee);
 	}
 }
