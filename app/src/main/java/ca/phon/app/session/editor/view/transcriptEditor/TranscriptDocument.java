@@ -9,13 +9,14 @@ import ca.phon.session.Record;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.ipa.PhoneMapDisplay;
 import ca.phon.ui.ipa.SyllabificationDisplay;
+import org.jdesktop.swingx.HorizontalLayout;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.*;
 import java.util.List;
 import java.util.function.Function;
@@ -25,16 +26,16 @@ public class TranscriptDocument extends DefaultStyledDocument {
     private boolean targetSyllablesVisible = false;
     private boolean actualSyllablesVisible = false;
     private boolean alignmentVisible = false;
-    private Function<String, JComponent> tierLabelFactory = this::createTierLabel;
+    private Function<String, JComponent> tierLabelFactory = this::createLabel;
     private final SessionFactory sessionFactory;
 
     public TranscriptDocument() {
         super(new StyleContext());
         sessionFactory = SessionFactory.newFactory();
-        //setDocumentFilter(new TranscriptDocumentFilter());
+        setDocumentFilter(new TranscriptDocumentFilter());
     }
 
-    private JComponent createTierLabel(String tierName) {
+    private JComponent createLabel(String tierName) {
         JLabel tierLabel = new JLabel(tierName + ":");
         var labelFont = new Font(tierLabel.getFont().getFontName(), tierLabel.getFont().getStyle(), 12);
         tierLabel.setFont(labelFont);
@@ -140,9 +141,127 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return retVal;
     }
 
-    private SimpleAttributeSet getSeparatorAttributes() {
+    private SimpleAttributeSet getSeparatorAttributes(Record record, int recordIndex) {
         final SimpleAttributeSet retVal = new SimpleAttributeSet();
-        StyleConstants.setComponent(retVal, new JSeparator(JSeparator.HORIZONTAL));
+        JPanel separatorPanel = new JPanel(new HorizontalLayout());
+        separatorPanel.setBorder(new EmptyBorder(0,8,0,8));
+        separatorPanel.setBackground(Color.WHITE);
+
+
+
+
+
+        JLabel recordNumberLabel = new JLabel("#" + (recordIndex+1));
+        var labelFont = new Font(
+            recordNumberLabel.getFont().getFontName(),
+            recordNumberLabel.getFont().getStyle(),
+            12
+        );
+        recordNumberLabel.setFont(labelFont);
+        recordNumberLabel.setAlignmentY(.8f);
+        separatorPanel.add(recordNumberLabel);
+        recordNumberLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                JPopupMenu menu = new JPopupMenu();
+                JCheckBoxMenuItem excludeMenuItem = new JCheckBoxMenuItem("Exclude");
+                menu.add(excludeMenuItem);
+                excludeMenuItem.setState(record.isExcludeFromSearches());
+                excludeMenuItem.addActionListener(evt -> {
+                    record.setExcludeFromSearches(excludeMenuItem.getState());
+                });
+                menu.add(new JMenuItem("Move"));
+                menu.show(recordNumberLabel, e.getX(), e.getY());
+            }
+        });
+        JLabel speakerNameLabel = new JLabel(record.getSpeaker().getName());
+        speakerNameLabel.setFont(labelFont);
+        speakerNameLabel.setAlignmentY(.8f);
+        separatorPanel.add(speakerNameLabel);
+        speakerNameLabel.setBorder(new EmptyBorder(0,8,0,8));
+        speakerNameLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                JPopupMenu menu = new JPopupMenu();
+                ButtonGroup buttonGroup = new ButtonGroup();
+
+                var unknownMenuItem = new JRadioButtonMenuItem(Participant.UNKNOWN.getName());
+                buttonGroup.add(unknownMenuItem);
+                if (Participant.UNKNOWN.equals(record.getSpeaker())) {
+                    buttonGroup.setSelected(unknownMenuItem.getModel(), true);
+                }
+                menu.add(unknownMenuItem);
+
+                for (Participant participant : session.getParticipants()) {
+                    var menuItem = new JRadioButtonMenuItem(participant.getName());
+                    buttonGroup.add(menuItem);
+                    if (participant.equals(record.getSpeaker())) {
+                        buttonGroup.setSelected(menuItem.getModel(), true);
+                    }
+                    menu.add(menuItem);
+                }
+
+                menu.show(recordNumberLabel, e.getX(), e.getY());
+            }
+        });
+        var sep = new JSeparator(JSeparator.HORIZONTAL);
+        sep.setPreferredSize(new Dimension(10000, 1));
+        separatorPanel.add(sep);
+        StyleConstants.setComponent(retVal, separatorPanel);
+        return retVal;
+    }
+
+    private SimpleAttributeSet getCommentAttributes() {
+        SimpleAttributeSet retVal = new SimpleAttributeSet();
+
+        //StyleConstants.setForeground(retVal, Color.decode("#FFD700"));
+
+        return retVal;
+    }
+
+    private SimpleAttributeSet getCommentLabelAttributes(String commentType) {
+        SimpleAttributeSet retVal = new SimpleAttributeSet();
+
+        JLabel commentLabel = (JLabel) createLabel(commentType);
+        commentLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                JPopupMenu menu = new JPopupMenu();
+
+                menu.add(new JMenuItem("Comment Menu"));
+
+                menu.show(commentLabel, e.getX(), e.getY());
+            }
+        });
+        StyleConstants.setComponent(retVal, commentLabel);
+
+        return retVal;
+    }
+
+    private SimpleAttributeSet getGemAttributes() {
+        SimpleAttributeSet retVal = new SimpleAttributeSet();
+
+        //StyleConstants.setForeground(retVal, Color.orange);
+
+        return retVal;
+    }
+
+    private SimpleAttributeSet getGemLabelAttributes(String gemType) {
+        SimpleAttributeSet retVal = new SimpleAttributeSet();
+
+        JLabel gemLabel = (JLabel) createLabel(gemType);
+        gemLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                JPopupMenu menu = new JPopupMenu();
+
+                menu.add(new JMenuItem("Gem Menu"));
+
+                menu.show(gemLabel, e.getX(), e.getY());
+            }
+        });
+        StyleConstants.setComponent(retVal, gemLabel);
+
         return retVal;
     }
 
@@ -559,35 +678,60 @@ public class TranscriptDocument extends DefaultStyledDocument {
     private void populate() throws BadLocationException {
 
         Transcript transcript = session.getTranscript();
-
-        List<Record> records = session.getRecords().stream().toList();
         var tierView = session.getTierView();
 
         int len = 0;
 
-        for (int i = 0; i < records.size(); i++) {
-            int recordStart = len;
-            Record record = records.get(i);
-            int recordElementIndex = transcript.getRecordElementIndex(record);
+        for (Transcript.Element elem : transcript) {
+            if (elem.isRecord()) {
+                int recordStart = len;
+                Record record = elem.asRecord();
+                int recordIndex = transcript.getRecordPosition(record);
+                int recordElementIndex = transcript.getRecordElementIndex(record);
 
-            for (var item : tierView) {
-                if (!item.isVisible()) continue;
-
-                //String tierName = tv.getTierName();
-
-                len = insertTier(i, item, len);
-            }
-
-            if (i < records.size() - 1) {
-                insertString(len, "-\n", getSeparatorAttributes());
+                insertString(len, "-\n", getSeparatorAttributes(record, recordIndex));
                 len += 2;
-            }
 
-            SimpleAttributeSet recordAttrs = new SimpleAttributeSet();
-            recordAttrs.addAttribute("recordIndex", i);
-            recordAttrs.addAttribute("recordElementIndex", recordElementIndex);
-            setParagraphAttributes(recordStart, len - recordStart, recordAttrs, false);
+                for (var item : tierView) {
+                    if (!item.isVisible()) continue;
+
+                    //String tierName = tv.getTierName();
+
+                    len = insertTier(recordIndex, item, len);
+                }
+
+                SimpleAttributeSet recordAttrs = new SimpleAttributeSet();
+                recordAttrs.addAttribute("recordIndex", recordIndex);
+                recordAttrs.addAttribute("recordElementIndex", recordElementIndex);
+                setParagraphAttributes(recordStart, len - recordStart, recordAttrs, false);
+            }
+            else if (elem.isComment()) {
+                Comment comment = elem.asComment();
+
+                String text = comment.getValue().toString();
+
+                insertString(len++, " ", getCommentLabelAttributes(comment.getType().getLabel()));
+
+                insertString(len, text, getCommentAttributes());
+                len += text.length();
+
+                insertString(len++, "\n", null);
+            }
+            else {
+                Gem gem = elem.asGem();
+
+                String text = gem.getLabel();
+
+                insertString(len++, " ", getGemLabelAttributes(gem.getType().toString()));
+
+                insertString(len, text, getGemAttributes());
+                len += text.length();
+
+                insertString(len++, "\n", null);
+            }
         }
+
+
     }
 
     // region Getters and Setters
@@ -619,14 +763,22 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
     private class TranscriptDocumentFilter extends DocumentFilter {
         @Override
-        public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
-            if (attr != null) {
-                Tier tier = (Tier)attr.getAttribute("tier");
-                if (tier != null && tier.getName().equals("Orthography")) {
-                    return;
+        public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+            if (attrs != null) {
+                Tier tier = (Tier)attrs.getAttribute("tier");
+                if (tier != null) {
+                    String tierName = tier.getName();
+                    var tierViewItem = session
+                        .getTierView()
+                        .stream()
+                        .filter(item -> item.getTierName().equals(tierName))
+                        .findFirst();
+                    if (tierViewItem.isPresent() && tierViewItem.get().isTierLocked()) {
+                        return;
+                    }
                 }
             }
-            super.insertString(fb, offset, string, attr);
+            super.replace(fb, offset, length, text, attrs);
         }
     }
 }

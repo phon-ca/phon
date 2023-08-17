@@ -38,7 +38,7 @@ public class TranscriptEditorRowHeader extends JComponent {
                 var innerElem = elem.getElement(j);
                 JComponent component = (JComponent)StyleConstants.getComponent(innerElem.getAttributes());
                 if (component != null) {
-                    if (component instanceof JSeparator) {
+                    /*if (component instanceof JSeparator) {
                         try {
                             var sepRect = editor.modelToView2D(innerElem.getStartOffset());
                             Integer recordIndex = (Integer)innerElem.getAttributes().getAttribute("recordIndex");
@@ -53,7 +53,7 @@ public class TranscriptEditorRowHeader extends JComponent {
                             throw new RuntimeException(e);
                         }
                     }
-                    else if (component instanceof JLabel) {
+                    else*/ if (component instanceof JLabel) {
                         try {
                             var tierLabelRect = editor.modelToView2D(innerElem.getStartOffset());
 
@@ -66,9 +66,11 @@ public class TranscriptEditorRowHeader extends JComponent {
                                 g.drawImage(lockImage, getWidth()-16, (int)tierLabelRect.getMinY()+1, null);
                             }
 
-                            g.setColor(Color.RED);
-                            g.drawString("◉", getWidth()-32, (int)tierLabelRect.getMaxY()-3);
-                            g.setColor(Color.BLACK);
+                            if (false) {
+                                g.setColor(Color.RED);
+                                g.drawString("◉", getWidth()-32, (int)tierLabelRect.getMaxY()-3);
+                                g.setColor(Color.BLACK);
+                            }
                         } catch (BadLocationException e) {
                             throw new RuntimeException(e);
                         }
