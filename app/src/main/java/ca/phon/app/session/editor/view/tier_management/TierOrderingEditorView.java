@@ -28,11 +28,17 @@ import ca.phon.util.Tuple;
 import ca.phon.util.icons.*;
 import com.jgoodies.forms.layout.*;
 import org.jdesktop.swingx.JXTable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.*;
+import java.io.IOException;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -130,6 +136,10 @@ public class TierOrderingEditorView extends EditorView {
 		tierOrderingTable.setSortable(false);
 		tierOrderingTable.setVisibleRowCount(5);
 		tierOrderingTable.addMouseListener(new TierContextMenuListener());
+		tierOrderingTable.setDragEnabled(true);
+		tierOrderingTable.setTransferHandler(new TierTableTransferHandler());
+		tierOrderingTable.setDropMode(DropMode.INSERT_ROWS);
+		tierOrderingTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		// setup tier odering table action map
 		ActionMap tierOrderActionMap = new ActionMap();
@@ -675,6 +685,78 @@ public class TierOrderingEditorView extends EditorView {
 		
 		return retVal;
 	}
-	
-	
+
+	private final class TierTableTransferHandler extends TransferHandler {
+
+		final static DataFlavor dataFlavor = new DataFlavor(TierViewItem.class, "Tier name");
+
+		@Override
+		public boolean canImport(TransferSupport support) {
+			return support.isDataFlavorSupported(dataFlavor);
+		}
+
+		@Override
+		public boolean importData(TransferSupport support) {
+			if(!canImport(support)) return false;
+
+			final JTable.DropLocation dropLocation = (JTable.DropLocation) support.getDropLocation();
+			int row = dropLocation.getRow();
+
+			TierViewItem item = null;
+			try {
+				item = (TierViewItem) support.getTransferable().getTransferData(dataFlavor);
+			} catch (UnsupportedFlavorException | IOException e) {
+				return false;
+			}
+
+			final TierMoveEdit edit = new TierMoveEdit(getEditor(), item, row);
+			getEditor().getUndoSupport().postEdit(edit);
+
+			return true;
+		}
+
+		@Override
+		public int getSourceActions(JComponent c) {
+			return TransferHandler.COPY_OR_MOVE;
+		}
+
+		@Override
+		protected void exportDone(JComponent c, Transferable t, int act) {
+			if ((act == TransferHandler.MOVE) || (act == TransferHandler.NONE)) {
+				tierOrderingTable.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+			}
+		}
+
+		@Nullable
+		@Override
+		protected Transferable createTransferable(JComponent c) {
+			if(c != tierOrderingTable) {
+				return null;
+			}
+
+			final int selectedRow = tierOrderingTable.getSelectedRow();
+			if(selectedRow >= 0 && selectedRow < tierOrderingTable.getRowCount()) {
+				return new Transferable() {
+					@Override
+					public DataFlavor[] getTransferDataFlavors() {
+						return new DataFlavor[]{dataFlavor};
+					}
+
+					@Override
+					public boolean isDataFlavorSupported(DataFlavor flavor) {
+						return flavor == dataFlavor;
+					}
+
+					@NotNull
+					@Override
+					public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
+						return getEditor().getSession().getTierView().get(selectedRow);
+					}
+				};
+			} else {
+				return null;
+			}
+		}
+	}
+
 }
