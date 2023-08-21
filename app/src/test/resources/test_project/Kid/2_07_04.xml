@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<session xmlns="https://phon.ca/ns/session" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="2_07_04" corpus="Catootje" version="1.3" xsi:schemaLocation="https://phon.ca/ns/session https://phon.ca/xml/xsd/session/v1_3/session.xsd">
+<session xmlns="https://phon.ca/ns/session" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="2_07_04" corpus="Kid" version="1.3" xsi:schemaLocation="https://phon.ca/ns/session https://phon.ca/xml/xsd/session/v1_3/session.xsd">
     <date>1991-05-29</date>
     <languages>nld</languages>
-    <media>Catootje-1991-05-29.wav</media>
+    <media>/Users/cyates/Movies/__res/media/Lily_sample.mov</media>
     <participants>
         <participant id="p0">
             <role>Target_Child</role>
@@ -17,7 +17,7 @@
         <td tierName="MorphCat" type="default" excludeFromAlignment="false"/>
     </userTiers>
     <tierOrder>
-        <tierView tierName="Orthography" visible="true" locked="false" font="default"/>
+        <tierView tierName="Orthography" visible="true" locked="false" font="Times New Roman-PLAIN-18"/>
         <tierView tierName="IPA Target" visible="true" locked="false" font="default"/>
         <tierView tierName="IPA Actual" visible="true" locked="false" font="default"/>
         <tierView tierName="Notes" visible="true" locked="false" font="default"/>
@@ -28,13 +28,21 @@
     </tierOrder>
     <transcript>
         <comment type="Location">
-            <tierData><tw>Nijmegan,</tw><tw>NL</tw></tierData>
+            <tierData>
+                <tw>Nijmegan,</tw>
+                <tw>NL</tw>
+            </tierData>
         </comment>
         <comment type="Situation">
-            <tierData><tw>Guided</tw><tw>speech</tw></tierData>
+            <tierData>
+                <tw>Guided</tw>
+                <tw>speech</tw>
+            </tierData>
         </comment>
         <comment type="Recording Quality">
-            <tierData><tw>24bit-Stereo-PCM-44100Hz</tw></tierData>
+            <tierData>
+                <tw>24bit-Stereo-PCM-44100Hz</tw>
+            </tierData>
         </comment>
         <gem type="lazy">Start</gem>
         <r speaker="p0" uuid="e4340ad5-2f2a-4d7a-909e-056a296e155b" excludeFromSearches="false">
@@ -42,6 +50,7 @@
                 <u>
                     <w>wat</w>
                     <w>een</w>
+                    <pause symbolic-length="simple"/>
                     <w>andere</w>
                     <w>radiio</w>
                 </u>
@@ -68,6 +77,7 @@
                             <base>n</base>
                         </ph>
                     </pw>
+                    <pause symbolic-length="simple"/>
                     <pw>
                         <stress type="primary"/>
                         <ph scType="nucleus">
@@ -100,7 +110,7 @@
                         <ph scType="onset">
                             <base>d</base>
                         </ph>
-                        <ph scType="diphthong">
+                        <ph scType="nucleus">
                             <base>i</base>
                         </ph>
                         <ph scType="onset">
@@ -134,6 +144,7 @@
                             <base>n</base>
                         </ph>
                     </pw>
+                    <pause symbolic-length="simple"/>
                     <pw>
                         <stress type="primary"/>
                         <ph scType="nucleus">
@@ -183,10 +194,14 @@
                     <bottom>0 1</bottom>
                 </pm>
                 <pm target="2" actual="2">
+                    <top>0</top>
+                    <bottom>0</bottom>
+                </pm>
+                <pm target="3" actual="3">
                     <top>0 1 2 3 4 5</top>
                     <bottom>0 1 2 3 4 5</bottom>
                 </pm>
-                <pm target="3" actual="3">
+                <pm target="4" actual="4">
                     <top>0 1 2 3 4 5</top>
                     <bottom>0 1 -1 -1 2 3</bottom>
                 </pm>

@@ -21,9 +21,9 @@ public class TranscriptEditorView extends EditorView {
 
     public TranscriptEditorView(SessionEditor editor) {
         super(editor);
-        this.transcriptEditor = new TranscriptEditor(editor.getSession());
+        this.transcriptEditor = new TranscriptEditor(editor.getSession(), editor.getEventManager());
+        this.transcriptEditor.setSegmentPlayback(editor.getMediaModel().getSegmentPlayback());
         initUI();
-        registerEditorActions();
     }
 
     private void initUI() {
@@ -40,7 +40,7 @@ public class TranscriptEditorView extends EditorView {
     }
 
     private JComponent createTierLabel(String tierName) {
-        JLabel tierLabel = new JLabel(tierName + ":");
+        JLabel tierLabel = new JLabel(tierName);
         var labelFont = new Font(tierLabel.getFont().getFontName(), tierLabel.getFont().getStyle(), 12);
         tierLabel.setFont(labelFont);
         tierLabel.setAlignmentY(.8f);
@@ -74,18 +74,7 @@ public class TranscriptEditorView extends EditorView {
         return new JMenu();
     }
 
-    private void registerEditorActions() {
-        getEditor().getEventManager().registerActionForEvent(EditorEventType.SessionChanged, this::onSessionChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
-        getEditor().getEventManager().registerActionForEvent(EditorEventType.TierViewChanged, this::onTierViewChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
-    }
 
-    private void onSessionChanged(EditorEvent<Session> editorEvent) {
-
-    }
-
-    private void onTierViewChanged(EditorEvent<EditorEventType.TierViewChangedData> editorEvent) {
-        transcriptEditor.getTranscriptDocument().reload();
-    }
 
     private void createTierLabelPopup(JLabel tierLabel, MouseEvent mouseEvent) {
 
