@@ -24,8 +24,6 @@ import java.awt.event.*;
 
 public class CutRecordAction extends CopyRecordAction {
 
-	private static final long serialVersionUID = 6386824370678974804L;
-	
 	private static final String CMD_NAME = "Cut record";
 	
 	private static final String SHORT_DESC = "Copy record to clipboard and remove record";
@@ -48,7 +46,7 @@ public class CutRecordAction extends CopyRecordAction {
 	public void hookableActionPerformed(ActionEvent e) {
 		super.hookableActionPerformed(e);
 		
-		final DeleteRecordEdit edit = new DeleteRecordEdit(getEditor());
+		final DeleteRecordEdit edit = new DeleteRecordEdit(getEditor(), getEditor().getCurrentRecordIndex());
 		getEditor().getUndoSupport().postEdit(edit);
 	}
 

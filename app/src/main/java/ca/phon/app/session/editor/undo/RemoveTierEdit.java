@@ -18,12 +18,11 @@ package ca.phon.app.session.editor.undo;
 import ca.phon.app.session.editor.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;
-import com.kitfox.svg.A;
 
 import javax.swing.undo.CannotUndoException;
 import java.util.*;
 
-public class RemoveTierEdit extends SessionEditorUndoableEdit {
+public class RemoveTierEdit extends SessionUndoableEdit {
 
 	private final TierDescription tierDescription;
 	
@@ -35,9 +34,13 @@ public class RemoveTierEdit extends SessionEditorUndoableEdit {
 	
 	private Map<UUID, Tier<?>> tierMap = new HashMap<>();
 
-	public RemoveTierEdit(SessionEditor editor, TierDescription tierDesc,
+	public RemoveTierEdit(SessionEditor editor, TierDescription tierDesc, TierViewItem tvi) {
+		this(editor.getSession(), editor.getEventManager(), tierDesc, tvi);
+	}
+
+	public RemoveTierEdit(Session session, EditorEventManager editorEventManager, TierDescription tierDesc,
 			TierViewItem tvi) {
-		super(editor);
+		super(session, editorEventManager);
 		
 		this.tierDescription = tierDesc;
 		this.tierViewItem = tvi;
@@ -55,7 +58,7 @@ public class RemoveTierEdit extends SessionEditorUndoableEdit {
 
 	@Override
 	public void undo() throws CannotUndoException {
-		Session session = getEditor().getSession();
+		Session session = getSession();
 		
 		if(tierIdx >= 0)
 			session.addUserTier(tierIdx, tierDescription);
@@ -80,12 +83,12 @@ public class RemoveTierEdit extends SessionEditorUndoableEdit {
 
 		final EditorEvent<EditorEventType.TierViewChangedData> ee =
 				new EditorEvent<>(EditorEventType.TierViewChanged, getSource(), new EditorEventType.TierViewChangedData(oldTierView, tierView, EditorEventType.TierViewChangeType.ADD_TIER, List.of(tierDescription.getName()), List.of(tierViewIdx)));
-		getEditor().getEventManager().queueEvent(ee);
+		getEditorEventManager().queueEvent(ee);
 	}
 
 	@Override
 	public void doIt() {
-		Session session = getEditor().getSession();
+		Session session = getSession();
 
 		tierMap.clear();
 		for(Record r:session.getRecords()) {
@@ -111,7 +114,7 @@ public class RemoveTierEdit extends SessionEditorUndoableEdit {
 
 		final EditorEvent<EditorEventType.TierViewChangedData> ee =
 				new EditorEvent<>(EditorEventType.TierViewChanged, getSource(), new EditorEventType.TierViewChangedData(oldTierView, tierView, EditorEventType.TierViewChangeType.DELETE_TIER, List.of(tierDescription.getName()), List.of(tierViewIdx)));
-		getEditor().getEventManager().queueEvent(ee);
+		getEditorEventManager().queueEvent(ee);
 	}
 	
 }

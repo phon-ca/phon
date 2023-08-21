@@ -1,12 +1,14 @@
 package ca.phon.app.session.editor.undo;
 
 import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Record;
+import ca.phon.session.Session;
 
-public class RecordSegmentEdit extends SessionEditorUndoableEdit {
+public class RecordSegmentEdit extends SessionUndoableEdit {
 
     private final Record record;
 
@@ -17,7 +19,11 @@ public class RecordSegmentEdit extends SessionEditorUndoableEdit {
     private boolean fireHardChangeOnUndo = false;
 
     public RecordSegmentEdit(SessionEditor editor, Record record, MediaSegment segment) {
-        super(editor);
+        this(editor.getSession(), editor.getEventManager(), record, segment);
+    }
+
+    public RecordSegmentEdit(Session session, EditorEventManager editorEventManager, Record record, MediaSegment segment) {
+        super(session, editorEventManager);
 
         this.record = record;
         this.segment = segment;
@@ -46,9 +52,9 @@ public class RecordSegmentEdit extends SessionEditorUndoableEdit {
 
     private void fireChangeEvent(MediaSegment prevSegment, MediaSegment segment) {
         final EditorEvent<EditorEventType.TierChangeData> segChangeEvt =
-                new EditorEvent<>(isFireHardChangeOnUndo() ? EditorEventType.TierChanged : EditorEventType.TierChange, getEditor(),
+                new EditorEvent<>(isFireHardChangeOnUndo() ? EditorEventType.TierChanged : EditorEventType.TierChange, getSource(),
                         new EditorEventType.TierChangeData(record.getSegmentTier(), prevSegment, segment));
-        getEditor().getEventManager().queueEvent(segChangeEvt);
+        getEditorEventManager().queueEvent(segChangeEvt);
     }
 
 }

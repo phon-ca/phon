@@ -22,16 +22,20 @@ import ca.phon.session.*;
 import javax.swing.undo.CannotUndoException;
 import java.awt.*;
 
-public class ChangeSpeakerEdit extends SessionEditorUndoableEdit {
+public class ChangeSpeakerEdit extends SessionUndoableEdit {
 
 	private final Record record;
 	
 	private final Participant speaker;
 	
 	private final Participant oldSpeaker;
-	
-	public ChangeSpeakerEdit(SessionEditor editor, Record record, Participant speaker) {
-		super(editor);
+
+	public ChangeSpeakerEdit(SessionEditor editor, Record record, Participant participant) {
+		this(editor.getSession(), editor.getEventManager(), record, participant);
+	}
+
+	public ChangeSpeakerEdit(Session session, EditorEventManager editorEventManager, Record record, Participant speaker) {
+		super(session, editorEventManager);
 		this.record = record;
 		oldSpeaker = record.getSpeaker();
 		this.speaker = speaker;
@@ -55,7 +59,7 @@ public class ChangeSpeakerEdit extends SessionEditorUndoableEdit {
 
 		final EditorEvent<EditorEventType.SpeakerChangedData> ee =
 				new EditorEvent<>(EditorEventType.SpeakerChanged, (Component) getSource(), new EditorEventType.SpeakerChangedData(record, speaker, oldSpeaker));
-		getEditor().getEventManager().queueEvent(ee);
+		getEditorEventManager().queueEvent(ee);
 	}
 
 	@Override
@@ -64,7 +68,7 @@ public class ChangeSpeakerEdit extends SessionEditorUndoableEdit {
 
 		final EditorEvent<EditorEventType.SpeakerChangedData> ee =
 				new EditorEvent<>(EditorEventType.SpeakerChanged, (Component) getSource(), new EditorEventType.SpeakerChangedData(record, oldSpeaker, speaker));
-		getEditor().getEventManager().queueEvent(ee);
+		getEditorEventManager().queueEvent(ee);
 	}
 
 }

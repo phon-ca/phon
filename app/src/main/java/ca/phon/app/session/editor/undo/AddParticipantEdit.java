@@ -24,15 +24,19 @@ import javax.swing.undo.CannotUndoException;
  * Undo-able edit for adding participants in a {@link Session}.
  *
  */
-public class AddParticipantEdit extends SessionEditorUndoableEdit {
+public class AddParticipantEdit extends SessionUndoableEdit {
 
 	private final Participant participant;
-	
+
+	public AddParticipantEdit(SessionEditor editor, Participant participant) {
+		this(editor.getSession(), editor.getEventManager(), participant);
+	}
+
 	/**
 	 * Constructor
 	 */
-	public AddParticipantEdit(SessionEditor editor, Participant participant) {
-		super(editor);
+	public AddParticipantEdit(Session session, EditorEventManager editorEventManager, Participant participant) {
+		super(session, editorEventManager);
 		this.participant = participant;
 	}
 	
@@ -42,8 +46,8 @@ public class AddParticipantEdit extends SessionEditorUndoableEdit {
 
 	@Override
 	public boolean canRedo() {
-		final SessionEditor editor = getEditor();
-		final Session session = editor.getSession();
+		final EditorEventManager editorEventManager = getEditorEventManager();
+		final Session session = getSession();
 		
 		boolean retVal = true;
 		for(int i = 0; i < session.getParticipantCount(); i++) {
@@ -58,8 +62,8 @@ public class AddParticipantEdit extends SessionEditorUndoableEdit {
 
 	@Override
 	public boolean canUndo() {
-		final SessionEditor editor = getEditor();
-		final Session session = editor.getSession();
+		final EditorEventManager editor = getEditorEventManager();
+		final Session session = getSession();
 		
 		boolean retVal = false;
 		for(int i = 0; i < session.getParticipantCount(); i++) {
@@ -97,22 +101,22 @@ public class AddParticipantEdit extends SessionEditorUndoableEdit {
 	public void undo() throws CannotUndoException {
 		super.undo();
 		
-		final SessionEditor editor = getEditor();
-		final Session session = editor.getSession();
+		final EditorEventManager editorEventManager = getEditorEventManager();
+		final Session session = getSession();
 		session.removeParticipant(getParticipant());
 
 		final EditorEvent<Participant> ee = new EditorEvent<>(EditorEventType.ParticipantRemoved, getSource(), getParticipant());
-		getEditor().getEventManager().queueEvent(ee);
+		editorEventManager.queueEvent(ee);
 	}
 
 	@Override
 	public void doIt() {
-		final SessionEditor editor = getEditor();
-		final Session session = editor.getSession();
+		final EditorEventManager editorEventManager = getEditorEventManager();
+		final Session session = getSession();
 		session.addParticipant(getParticipant());
 
 		final EditorEvent<Participant> ee = new EditorEvent<>(EditorEventType.ParticipantAdded, getSource(), getParticipant());
-		getEditor().getEventManager().queueEvent(ee);
+		editorEventManager.queueEvent(ee);
 	}
 	
 }

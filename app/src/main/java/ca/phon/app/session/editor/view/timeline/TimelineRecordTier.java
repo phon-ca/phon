@@ -898,7 +898,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 			int recordIdx = getParentView().getEditor().getCurrentRecordIndex();
 
-			DeleteRecordEdit delRecord = new DeleteRecordEdit(getParentView().getEditor());
+			DeleteRecordEdit delRecord = new DeleteRecordEdit(getParentView().getEditor(), getParentView().getEditor().getCurrentRecordIndex());
 			getParentView().getEditor().getUndoSupport().postEdit(delRecord);
 
 			AddRecordEdit rightRecordEdit = new AddRecordEdit(getParentView().getEditor(),

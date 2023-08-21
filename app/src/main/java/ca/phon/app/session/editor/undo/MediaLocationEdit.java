@@ -21,14 +21,18 @@ import ca.phon.session.Session;
 import javax.swing.undo.CannotUndoException;
 import java.awt.*;
 
-public class MediaLocationEdit extends SessionEditorUndoableEdit {
+public class MediaLocationEdit extends SessionUndoableEdit {
 
 	private final String mediaLocation;
 	
 	private String oldLocation;
-	
+
 	public MediaLocationEdit(SessionEditor editor, String mediaLocation) {
-		super(editor);
+		this(editor.getSession(), editor.getEventManager(), mediaLocation);
+	}
+
+	public MediaLocationEdit(Session session, EditorEventManager editorEventManager, String mediaLocation) {
+		super(session, editorEventManager);
 		this.mediaLocation = mediaLocation;
 	}
 	
@@ -42,25 +46,22 @@ public class MediaLocationEdit extends SessionEditorUndoableEdit {
 
 	@Override
 	public void undo() throws CannotUndoException {
-		final SessionEditor editor = getEditor();
-		final Session session = editor.getSession();
+		final Session session = getSession();
 		
 		if(session.getMediaLocation() == null && getOldLocation() != null
 				|| session.getMediaLocation() != null && getOldLocation() == null
 				|| session.getMediaLocation() != null && !session.getMediaLocation().equals(getOldLocation())
 				|| getOldLocation() != null && !getOldLocation().equals(session.getMediaLocation())) {
 			session.setMediaLocation(getOldLocation());
-			getEditor().getMediaModel().resetAudioCheck();
 			final EditorEvent<EditorEventType.SessionMediaChangedData> ee =
 					new EditorEvent<>(EditorEventType.SessionMediaChanged, (Component) getSource(), new EditorEventType.SessionMediaChangedData(getMediaLocation(), getOldLocation()));
-			getEditor().getEventManager().queueEvent(ee);
+			getEditorEventManager().queueEvent(ee);
 		}
 	}
 
 	@Override
 	public void doIt() {
-		final SessionEditor editor = getEditor();
-		final Session session = editor.getSession();
+		final Session session = getSession();
 		
 		if(session == null) return;
 		
@@ -71,10 +72,9 @@ public class MediaLocationEdit extends SessionEditorUndoableEdit {
 				|| oldLocation != null && mediaLocation == null
 				|| oldLocation != null && !oldLocation.equals(mediaLocation)) {
 			session.setMediaLocation(mediaLocation);
-			getEditor().getMediaModel().resetAudioCheck();
 			final EditorEvent<EditorEventType.SessionMediaChangedData> ee =
 					new EditorEvent<>(EditorEventType.SessionMediaChanged, (Component) getSource(), new EditorEventType.SessionMediaChangedData(getOldLocation(), getMediaLocation()));
-			getEditor().getEventManager().queueEvent(ee);
+			getEditorEventManager().queueEvent(ee);
 		}
 	}
 

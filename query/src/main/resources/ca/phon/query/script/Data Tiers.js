@@ -37,7 +37,7 @@ function begin_search(s) {
 	session = s;
 }
 
-function setup_params(params) {
+function setup_params(params, selectedSessions) {
 	filters.primary.param_setup(params);
 	filters.primary.set_required(true);
 	

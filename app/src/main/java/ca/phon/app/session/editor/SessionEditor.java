@@ -54,7 +54,7 @@ import java.util.concurrent.atomic.AtomicReference;
  *
  * <p>This window supports plug-ins.  Plug-ins can provide custom EditorViews.</p>
  */
-public class SessionEditor extends ProjectFrame implements ISessionEditor, ClipboardOwner {
+public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 
 	public final static String BACKUP_WHEN_SAVING =
 			SessionEditor.class.getName() + ".backupWhenSaving";
@@ -253,6 +253,8 @@ public class SessionEditor extends ProjectFrame implements ISessionEditor, Clipb
 
 		final EditorAction<Void> onClosingAct = this::onEditorClosing;
 		getEventManager().registerActionForEvent(EditorEventType.EditorClosing, onClosingAct, EditorEventManager.RunOn.AWTEventDispatchThread);
+
+		getEventManager().registerActionForEvent(EditorEventType.SessionMediaChanged, this::onSessionMediaChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 	}
 
 	/**
@@ -682,6 +684,10 @@ public class SessionEditor extends ProjectFrame implements ISessionEditor, Clipb
 			LogUtil.severe(e);
 			showMessageDialog("Unable to reload session", e.getLocalizedMessage(), MessageDialogProperties.okOptions);
 		}
+	}
+
+	public void onSessionMediaChanged(EditorEvent<EditorEventType.SessionMediaChangedData> ee) {
+		getMediaModel().resetAudioCheck();
 	}
 
 	@Override

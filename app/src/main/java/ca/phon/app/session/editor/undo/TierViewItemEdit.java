@@ -16,19 +16,23 @@
 package ca.phon.app.session.editor.undo;
 
 import ca.phon.app.session.editor.*;
+import ca.phon.session.Session;
 import ca.phon.session.TierViewItem;
-import org.antlr.v4.codegen.model.chunk.QRetValueRef;
 
 import java.util.*;
 
-public class TierViewItemEdit extends SessionEditorUndoableEdit {
+public class TierViewItemEdit extends SessionUndoableEdit {
 
 	private final TierViewItem oldItem;
 	
 	private final TierViewItem newItem;
-	
+
 	public TierViewItemEdit(SessionEditor editor, TierViewItem oldItem, TierViewItem newItem) {
-		super(editor);
+		this(editor.getSession(), editor.getEventManager(), oldItem, newItem);
+	}
+
+	public TierViewItemEdit(Session session, EditorEventManager editorEventManager, TierViewItem oldItem, TierViewItem newItem) {
+		super(session, editorEventManager);
 		this.oldItem = oldItem;
 		this.newItem = newItem;
 	}
@@ -51,31 +55,31 @@ public class TierViewItemEdit extends SessionEditorUndoableEdit {
 		final List<EditorEventType.TierViewChangeType> changes = calculateChanges(tierView.get(idx), oldView.get(idx));
 		for(EditorEventType.TierViewChangeType change:changes) {
 			final EditorEvent<EditorEventType.TierViewChangedData> ee =
-					new EditorEvent<>(EditorEventType.TierViewChanged, getEditor(), new EditorEventType.TierViewChangedData(tierView, oldView, change,
-							List.of(newItem.getTierName()), List.of(getEditor().getSession().getTierView().indexOf(newItem))));
-			getEditor().getEventManager().queueEvent(ee);
+					new EditorEvent<>(EditorEventType.TierViewChanged, getSource(), new EditorEventType.TierViewChangedData(tierView, oldView, change,
+							List.of(newItem.getTierName()), List.of(getSession().getTierView().indexOf(newItem))));
+			getEditorEventManager().queueEvent(ee);
 		}
 	}
 	
 	@Override
 	public void undo() {
-		final List<TierViewItem> oldView = new ArrayList<>(getEditor().getSession().getTierView());
+		final List<TierViewItem> oldView = new ArrayList<>(getSession().getTierView());
 		final List<TierViewItem> tierView = new ArrayList<>(oldView);
 		final int idx = tierView.indexOf(newItem);
 		tierView.remove(idx);
 		tierView.add(idx, oldItem);
-		getEditor().getSession().setTierView(tierView);
+		getSession().setTierView(tierView);
 		fireChangeEvents(tierView, oldView, idx);
 	}
 
 	@Override
 	public void doIt() {
-		final List<TierViewItem> oldView = new ArrayList<>(getEditor().getSession().getTierView());
+		final List<TierViewItem> oldView = new ArrayList<>(getSession().getTierView());
         final List<TierViewItem> tierView = new ArrayList<>(oldView);
 		final int idx = tierView.indexOf(oldItem);
 		tierView.remove(idx);
 		tierView.add(idx, newItem);
-		getEditor().getSession().setTierView(tierView);
+		getSession().setTierView(tierView);
 		fireChangeEvents(tierView, oldView, idx);
 	}
 

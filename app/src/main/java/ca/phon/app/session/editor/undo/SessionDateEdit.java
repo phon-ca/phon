@@ -19,17 +19,20 @@ import ca.phon.app.session.editor.*;
 import ca.phon.session.Session;
 
 import javax.swing.undo.CannotUndoException;
-import java.awt.*;
 import java.time.LocalDate;
 
-public class SessionDateEdit extends SessionEditorUndoableEdit {
+public class SessionDateEdit extends SessionUndoableEdit {
 	
 	private final LocalDate newDate;
 	
 	private final LocalDate prevDate;
-	
+
 	public SessionDateEdit(SessionEditor editor, LocalDate newDate, LocalDate prevDate) {
-		super(editor);
+		this(editor.getSession(), editor.getEventManager(), newDate, prevDate);
+	}
+	
+	public SessionDateEdit(Session session, EditorEventManager editorEventManager, LocalDate newDate, LocalDate prevDate) {
+		super(session, editorEventManager);
 		this.newDate = newDate;
 		this.prevDate = prevDate;
 	}
@@ -69,24 +72,22 @@ public class SessionDateEdit extends SessionEditorUndoableEdit {
 	
 	@Override
 	public void undo() throws CannotUndoException {
-		final SessionEditor editor = getEditor();
-		final Session session = editor.getSession();
+		final Session session = getSession();
 		session.setDate(getPrevDate());
 
 		final EditorEvent<EditorEventType.SessionDateChangedData> ee =
-				new EditorEvent<>(EditorEventType.SessionDateChanged, editor, new EditorEventType.SessionDateChangedData(getNewDate(), getPrevDate()));
-		getEditor().getEventManager().queueEvent(ee);
+				new EditorEvent<>(EditorEventType.SessionDateChanged, getSource(), new EditorEventType.SessionDateChangedData(getNewDate(), getPrevDate()));
+		getEditorEventManager().queueEvent(ee);
 	}
 
 	@Override
 	public void doIt() {
-		final SessionEditor editor = getEditor();
-		final Session session = editor.getSession();
+		final Session session = getSession();
 		session.setDate(getNewDate());
 
 		final EditorEvent<EditorEventType.SessionDateChangedData> ee =
 				new EditorEvent<>(EditorEventType.SessionDateChanged, getSource(), new EditorEventType.SessionDateChangedData(getPrevDate(), getNewDate()));
-		getEditor().getEventManager().queueEvent(ee);
+		getEditorEventManager().queueEvent(ee);
 	}
 
 }

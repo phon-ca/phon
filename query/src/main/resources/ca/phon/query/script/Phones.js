@@ -40,7 +40,7 @@ var includeAlignedParamInfo = {
 var includeAlignedParam;
 var includeAligned = includeAlignedParamInfo.def;
 
-function setup_params(params) {
+function setup_params(params, selectedSessions) {
     filters.primary.setSelectedPatternType(PatternType.PHONEX);
     filters.primary.param_setup(params);
     filters.primary.set_required(true);
@@ -111,6 +111,10 @@ function setup_params(params) {
     filters.wordTiers.setEnabled(enabled);
 
     filters.speaker.param_setup(params);
+}
+
+function update_sessions(selectedSessions) {
+
 }
 
 /*

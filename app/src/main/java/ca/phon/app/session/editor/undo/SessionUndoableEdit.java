@@ -29,14 +29,16 @@ import java.util.Set;
  * {@link Session} should go through the {@link UndoManager}.
  *
  */
-public abstract class SessionEditorUndoableEdit extends AbstractUndoableEdit implements IExtendable {
+public abstract class SessionUndoableEdit extends AbstractUndoableEdit implements IExtendable {
 
-	private final ExtensionSupport extSupport = new ExtensionSupport(SessionEditorUndoableEdit.class, this);
+	private final ExtensionSupport extSupport = new ExtensionSupport(SessionUndoableEdit.class, this);
+
+	private final Session session;
 
 	/**
-	 * Reference to the session editor
+	 * Reference to the session editor event manager
 	 */
-	private final WeakReference<SessionEditor> editorRef;
+	private final WeakReference<EditorEventManager> editorEventManagerRef;
 	
 	/**
 	 * Optional 'source' for edit.
@@ -48,16 +50,20 @@ public abstract class SessionEditorUndoableEdit extends AbstractUndoableEdit imp
 	 * 
 	 * @param editor
 	 */
-	public SessionEditorUndoableEdit(SessionEditor editor) {
+	public SessionUndoableEdit(Session session, EditorEventManager editorEventManager) {
 		super();
-		this.editorRef = new WeakReference<>(editor);
-		setSource(editor);
-		
+		this.session = session;
+		this.editorEventManagerRef = new WeakReference<>(editorEventManager);
+
 		extSupport.initExtensions();
 	}
+
+	public Session getSession() {
+		return this.session;
+	}
 	
-	public SessionEditor getEditor() {
-		return editorRef.get();
+	public EditorEventManager getEditorEventManager() {
+		return editorEventManagerRef.get();
 	}
 	
 	/**
@@ -83,31 +89,32 @@ public abstract class SessionEditorUndoableEdit extends AbstractUndoableEdit imp
 	public void setSource(Component source) {
 		this.source = source;
 	}
+
+	// TODO - this logic needs to go into session editor somehow
+//	@Override
+//	public void redo() {
+//		final Component oldSource = getSource();
+//		if(getEditor() != null) {
+//			setSource(getEditor());
+//			final Integer recordIdx = getExtension(Integer.class);
+//			if(recordIdx != null && getEditor().getCurrentRecordIndex() != recordIdx.intValue()) {
+//				getEditor().setCurrentRecordIndex(recordIdx.intValue());
+//			}
+//		}
+//		doIt();
+//		setSource(oldSource);
+//	}
 	
-	@Override
-	public void redo() {
-		final Component oldSource = getSource();
-		if(getEditor() != null) {
-			setSource(getEditor());
-			final Integer recordIdx = getExtension(Integer.class);
-			if(recordIdx != null && getEditor().getCurrentRecordIndex() != recordIdx.intValue()) {
-				getEditor().setCurrentRecordIndex(recordIdx.intValue());
-			}
-		}
-		doIt();
-		setSource(oldSource);
-	}
-	
-	@Override
-	public void undo() {
-		if(getEditor() != null) {
-			final Integer recordIdx = getExtension(Integer.class);
-			if(recordIdx != null && getEditor().getCurrentRecordIndex() != recordIdx.intValue()) {
-				getEditor().setCurrentRecordIndex(recordIdx.intValue());
-			}
-		}
-		super.undo();
-	}
+//	@Override
+//	public void undo() {
+//		if(getEditor() != null) {
+//			final Integer recordIdx = getExtension(Integer.class);
+//			if(recordIdx != null && getEditor().getCurrentRecordIndex() != recordIdx.intValue()) {
+//				getEditor().setCurrentRecordIndex(recordIdx.intValue());
+//			}
+//		}
+//		super.undo();
+//	}
 	
 	/**
 	 * 'Do' the specified action.  The method is called by the
@@ -124,11 +131,6 @@ public abstract class SessionEditorUndoableEdit extends AbstractUndoableEdit imp
 
 	@Override
 	public boolean canUndo() {
-		return true;
-	}
-
-	@Override
-	public boolean isSignificant() {
 		return true;
 	}
 

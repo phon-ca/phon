@@ -23,7 +23,7 @@ import ca.phon.session.*;
  * Edit performed when a new record is added.
  * 
  */
-public class AddRecordEdit extends SessionEditorUndoableEdit {
+public class AddRecordEdit extends SessionUndoableEdit {
 
 	// the added record
 	private Record record;
@@ -37,15 +37,27 @@ public class AddRecordEdit extends SessionEditorUndoableEdit {
 	private boolean fireEvent = true;
 
 	public AddRecordEdit(SessionEditor editor) {
-		this(editor, null, -1);
+		this(editor.getSession(), editor.getEventManager());
 	}
-	
+
+	public AddRecordEdit(Session session, EditorEventManager editorEventManager) {
+		this(session, editorEventManager, null, -1);
+	}
+
 	public AddRecordEdit(SessionEditor editor, Record record) {
-		this(editor, record, -1);
+		this(editor.getSession(), editor.getEventManager(), record);
+	}
+
+	public AddRecordEdit(Session session, EditorEventManager editorEventManager, Record record) {
+		this(session, editorEventManager, record, -1);
+	}
+
+	public AddRecordEdit(SessionEditor editor, Record record, int recordIndex) {
+		this(editor.getSession(), editor.getEventManager(), record, recordIndex);
 	}
 	
-	public AddRecordEdit(SessionEditor editor, Record record, int recordIndex) {
-		super(editor);
+	public AddRecordEdit(Session session, EditorEventManager editorEventManager, Record record, int recordIndex) {
+		super(session, editorEventManager);
 		this.record = record;
 		this.recordIndex = recordIndex;
 	}
@@ -76,21 +88,21 @@ public class AddRecordEdit extends SessionEditorUndoableEdit {
 	public void undo() {
 		super.undo();
 		
-		final SessionEditor editor = getEditor();
-		final Session session = editor.getSession();
+		final EditorEventManager editorEventManager = getEditorEventManager();
+		final Session session = getSession();
 		
 		session.removeRecord(record);
 		if(isFireEvent()) {
 			final EditorEvent<EditorEventType.RecordDeletedData> ee =
 					new EditorEvent<>(EditorEventType.RecordDeleted, getSource(), new EditorEventType.RecordDeletedData(record, elementIndex, recordIndex));
-			getEditor().getEventManager().queueEvent(ee);
+			editorEventManager.queueEvent(ee);
 		}
 	}
 	
 	@Override
 	public void doIt() {
-		final SessionEditor editor = getEditor();
-		final Session session = editor.getSession();
+		final EditorEventManager editorEventManager = getEditorEventManager();
+		final Session session = getSession();
 		
 		if(record == null) {
 			final SessionFactory factory = SessionFactory.newFactory();
@@ -108,7 +120,7 @@ public class AddRecordEdit extends SessionEditorUndoableEdit {
 		if(isFireEvent()) {
 			final EditorEvent<EditorEventType.RecordAddedData> ee =
 					new EditorEvent<>(EditorEventType.RecordAdded, getSource(), new EditorEventType.RecordAddedData(record, elementIndex, recordIndex));
-			getEditor().getEventManager().queueEvent(ee);
+			editorEventManager.queueEvent(ee);
 		}
 	}
 

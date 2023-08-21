@@ -17,10 +17,11 @@ package ca.phon.app.session.editor.undo;
 
 import ca.phon.app.session.editor.*;
 import ca.phon.session.Record;
+import ca.phon.session.Session;
 
 import javax.swing.undo.CannotUndoException;
 
-public class RecordExcludeEdit extends SessionEditorUndoableEdit {
+public class RecordExcludeEdit extends SessionUndoableEdit {
 
 	private final Record record;
 	
@@ -29,7 +30,11 @@ public class RecordExcludeEdit extends SessionEditorUndoableEdit {
 	private final boolean wasExcluded;
 	
 	public RecordExcludeEdit(SessionEditor editor, Record record, boolean exclude) {
-		super(editor);
+		this(editor.getSession(), editor.getEventManager(), record, exclude);
+	}
+
+	public RecordExcludeEdit(Session session, EditorEventManager editorEventManager, Record record, boolean exclude) {
+		super(session, editorEventManager);
 		this.record = record;
 		this.exclude = exclude;
 		this.wasExcluded = record.isExcludeFromSearches();
@@ -52,8 +57,8 @@ public class RecordExcludeEdit extends SessionEditorUndoableEdit {
 		record.setExcludeFromSearches(wasExcluded);
 
 		final EditorEvent<EditorEventType.RecordExcludedChangedData> ee =
-				new EditorEvent<>(EditorEventType.RecordExcludedChanged, getEditor(), new EditorEventType.RecordExcludedChangedData(record, wasExcluded));
-		getEditor().getEventManager().queueEvent(ee);
+				new EditorEvent<>(EditorEventType.RecordExcludedChanged, getSource(), new EditorEventType.RecordExcludedChangedData(record, wasExcluded));
+		getEditorEventManager().queueEvent(ee);
 	}
 
 	@Override
@@ -61,8 +66,8 @@ public class RecordExcludeEdit extends SessionEditorUndoableEdit {
 		record.setExcludeFromSearches(this.exclude);
 
 		final EditorEvent<EditorEventType.RecordExcludedChangedData> ee =
-				new EditorEvent<>(EditorEventType.RecordExcludedChanged, getEditor(), new EditorEventType.RecordExcludedChangedData(record, exclude));
-		getEditor().getEventManager().queueEvent(ee);
+				new EditorEvent<>(EditorEventType.RecordExcludedChanged, getSource(), new EditorEventType.RecordExcludedChangedData(record, exclude));
+		getEditorEventManager().queueEvent(ee);
 	}
 
 }

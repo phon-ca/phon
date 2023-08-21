@@ -16,38 +16,43 @@
 package ca.phon.app.session.editor.undo;
 
 import ca.phon.app.session.editor.*;
+import ca.phon.session.Session;
 import ca.phon.util.Language;
 
 import java.util.List;
 
-public class SessionLanguageEdit extends SessionEditorUndoableEdit {
+public class SessionLanguageEdit extends SessionUndoableEdit {
 
 	private final List<Language> newLangs;
 	
 	private List<Language> oldLangs;
-	
+
 	public SessionLanguageEdit(SessionEditor editor, List<Language> newLangs) {
-		super(editor);
+		this(editor.getSession(), editor.getEventManager(), newLangs);
+	}
+
+	public SessionLanguageEdit(Session session, EditorEventManager editorEventManager, List<Language> newLangs) {
+		super(session, editorEventManager);
 		this.newLangs = newLangs;
 	}
 
 	@Override
 	public void undo() {
-		getEditor().getSession().setLanguages(oldLangs);
+		getSession().setLanguages(oldLangs);
 
 		final EditorEvent<EditorEventType.SessionLangChangedData> ee =
-				new EditorEvent<>(EditorEventType.SessionLangChanged, getEditor(), new EditorEventType.SessionLangChangedData(newLangs, oldLangs));
-		getEditor().getEventManager().queueEvent(ee);
+				new EditorEvent<>(EditorEventType.SessionLangChanged, getSource(), new EditorEventType.SessionLangChangedData(newLangs, oldLangs));
+		getEditorEventManager().queueEvent(ee);
 	}
 	
 	@Override
 	public void doIt() {
-		oldLangs= getEditor().getSession().getLanguages();
-		getEditor().getSession().setLanguages(newLangs);
+		oldLangs= getSession().getLanguages();
+		getSession().setLanguages(newLangs);
 
 		final EditorEvent<EditorEventType.SessionLangChangedData> ee =
 				new EditorEvent<>(EditorEventType.SessionLangChanged, getSource(), new EditorEventType.SessionLangChangedData(oldLangs, newLangs));
-		getEditor().getEventManager().queueEvent(ee);
+		getEditorEventManager().queueEvent(ee);
 	}
 
 }

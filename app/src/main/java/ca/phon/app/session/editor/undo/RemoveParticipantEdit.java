@@ -20,12 +20,16 @@ import ca.phon.session.*;
 
 import javax.swing.undo.CannotUndoException;
 
-public class RemoveParticipantEdit extends SessionEditorUndoableEdit {
+public class RemoveParticipantEdit extends SessionUndoableEdit {
 	
 	private final Participant participant;
-	
+
 	public RemoveParticipantEdit(SessionEditor editor, Participant participant) {
-		super(editor);
+		this(editor.getSession(), editor.getEventManager(), participant);
+	}
+	
+	public RemoveParticipantEdit(Session session, EditorEventManager editorEventManager, Participant participant) {
+		super(session, editorEventManager);
 		this.participant = participant;
 	}
 	
@@ -35,8 +39,7 @@ public class RemoveParticipantEdit extends SessionEditorUndoableEdit {
 	
 	@Override
 	public boolean canRedo() {
-		final SessionEditor editor = getEditor();
-		final Session session = editor.getSession();
+		final Session session = getSession();
 		
 		boolean retVal = false;
 		for(int i = 0; i < session.getParticipantCount(); i++) {
@@ -51,8 +54,7 @@ public class RemoveParticipantEdit extends SessionEditorUndoableEdit {
 
 	@Override
 	public boolean canUndo() {
-		final SessionEditor editor = getEditor();
-		final Session session = editor.getSession();
+		final Session session = getSession();
 		
 		boolean retVal = true;
 		for(int i = 0; i < session.getParticipantCount(); i++) {
@@ -88,26 +90,24 @@ public class RemoveParticipantEdit extends SessionEditorUndoableEdit {
 
 	@Override
 	public void undo() throws CannotUndoException {
-		final SessionEditor editor = getEditor();
-		final Session session = editor.getSession();
+		final Session session = getSession();
 		final Participant participant = getParticipant();
 		
 		session.addParticipant(participant);
 
 		final EditorEvent<Participant> ee = new EditorEvent<>(EditorEventType.ParticipantAdded, getSource(), getParticipant());
-		getEditor().getEventManager().queueEvent(ee);
+		getEditorEventManager().queueEvent(ee);
 	}
 
 	@Override
 	public void doIt() {
-		final SessionEditor editor = getEditor();
-		final Session session = editor.getSession();
+		final Session session = getSession();
 		final Participant participant = getParticipant();
 		
 		session.removeParticipant(participant);
 
 		final EditorEvent<Participant> ee = new EditorEvent<>(EditorEventType.ParticipantRemoved, getSource(), getParticipant());
-		getEditor().getEventManager().queueEvent(ee);
+		getEditorEventManager().queueEvent(ee);
 	}
 
 }

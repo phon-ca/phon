@@ -20,7 +20,7 @@ import ca.phon.extensions.IExtendable;
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
-import ca.phon.session.SessionFactory;
+import ca.phon.session.Session;
 import ca.phon.session.Tier;
 
 import java.lang.reflect.InvocationTargetException;
@@ -30,10 +30,8 @@ import java.text.ParseException;
  * A change to the value of a group in a tier.
  * 
  */
-public class TierEdit<T> extends SessionEditorUndoableEdit {
+public class TierEdit<T> extends SessionUndoableEdit {
 	
-	private static final long serialVersionUID = -3236844601334798650L;
-
 	/**
 	 * tier
 	 */
@@ -54,22 +52,31 @@ public class TierEdit<T> extends SessionEditorUndoableEdit {
 	 * A 'hard' change calls TIER_CHANGED_EVENT after TIER_CHANGE_EVENT
 	 */
 	private boolean fireHardChangeOnUndo = false;
-	
+
+	public TierEdit(SessionEditor editor, Tier<T> tier, T newValue) {
+		this(editor.getSession(), editor.getEventManager(), tier, newValue);
+	}
+
 	/**
 	 * Constructor 
 	 * 
-	 * @param editor
+	 * @param session
+	 * @param editorEventManager
 	 * @param tier
 	 * @param newValue
 	 */
-	public TierEdit(SessionEditor editor, Tier<T> tier, T newValue) {
-		super(editor);
+	public TierEdit(Session session, EditorEventManager editorEventManager, Tier<T> tier, T newValue) {
+		super(session, editorEventManager);
 		this.tier = tier;
 		this.newValue = newValue;
 	}
 
 	public TierEdit(SessionEditor editor, Tier<T> tier, String text) {
-		super(editor);
+		this(editor.getSession(), editor.getEventManager(), tier, text);
+	}
+
+	public TierEdit(Session session, EditorEventManager editorEventManager, Tier<T> tier, String text) {
+		super(session, editorEventManager);
 		this.tier = tier;
 
 		final Formatter<T> formatter = FormatterFactory.createFormatter(tier.getDeclaredType());
@@ -128,15 +135,15 @@ public class TierEdit<T> extends SessionEditorUndoableEdit {
 		final T oldVal = getOldValue();
 		tier.setValue(oldVal);
 		
-		if(getEditor() != null) {
+		if(getEditorEventManager() != null) {
 			final EditorEventType.TierChangeData tcd = new EditorEventType.TierChangeData(tier, newValue, oldVal);
 			final EditorEvent<EditorEventType.TierChangeData> tierChangeEvt =
-					new EditorEvent<>(EditorEventType.TierChange, getEditor(), tcd);
-			getEditor().getEventManager().queueEvent(tierChangeEvt);
+					new EditorEvent<>(EditorEventType.TierChange, getSource(), tcd);
+			getEditorEventManager().queueEvent(tierChangeEvt);
 			if(isFireHardChangeOnUndo()) {
 				final EditorEvent<EditorEventType.TierChangeData> tierChangedEvt =
-						new EditorEvent<>(EditorEventType.TierChange, getEditor(), tcd);
-				getEditor().getEventManager().queueEvent(tierChangedEvt);
+						new EditorEvent<>(EditorEventType.TierChange, getSource(), tcd);
+				getEditorEventManager().queueEvent(tierChangedEvt);
 			}
 		}
 	}
@@ -147,15 +154,15 @@ public class TierEdit<T> extends SessionEditorUndoableEdit {
 		T newValue = getNewValue();
 		tier.setValue(newValue);
 
-		if(getEditor() != null) {
+		if(getEditorEventManager() != null) {
 			final EditorEventType.TierChangeData tcd = new EditorEventType.TierChangeData(tier, getOldValue(), newValue);
 			final EditorEvent<EditorEventType.TierChangeData> tierChangeEvt =
-					new EditorEvent<>(EditorEventType.TierChange, getEditor(), tcd);
-			getEditor().getEventManager().queueEvent(tierChangeEvt);
+					new EditorEvent<>(EditorEventType.TierChange, getSource(), tcd);
+			getEditorEventManager().queueEvent(tierChangeEvt);
 			if(isFireHardChangeOnUndo()) {
 				final EditorEvent<EditorEventType.TierChangeData> tierChangedEvt =
-						new EditorEvent<>(EditorEventType.TierChange, getEditor(), tcd);
-				getEditor().getEventManager().queueEvent(tierChangedEvt);
+						new EditorEvent<>(EditorEventType.TierChange, getSource(), tcd);
+				getEditorEventManager().queueEvent(tierChangedEvt);
 			}
 		}
 	}

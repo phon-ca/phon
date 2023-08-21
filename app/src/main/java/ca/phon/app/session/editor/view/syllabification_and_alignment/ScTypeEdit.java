@@ -16,11 +16,11 @@
 package ca.phon.app.session.editor.view.syllabification_and_alignment;
 
 import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.undo.SessionEditorUndoableEdit;
+import ca.phon.app.session.editor.undo.SessionUndoableEdit;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.syllable.SyllableConstituentType;
 
-public class ScTypeEdit extends SessionEditorUndoableEdit {
+public class ScTypeEdit extends SessionUndoableEdit {
 
 	private final IPATranscript transcript;
 	
@@ -31,7 +31,7 @@ public class ScTypeEdit extends SessionEditorUndoableEdit {
 	private SyllableConstituentType prevScType;
 	
 	public ScTypeEdit(SessionEditor editor, IPATranscript transcript, int index, SyllableConstituentType scType) {
-		super(editor);
+		super(editor.getSession(), editor.getEventManager());
 		this.transcript = transcript;
 		this.index = index;
 		this.scType = scType;
@@ -43,9 +43,9 @@ public class ScTypeEdit extends SessionEditorUndoableEdit {
 			transcript.elementAt(index).setScType(prevScType);
 		
 			final EditorEvent<SyllabificationAlignmentEditorView.ScEditData> ee =
-					new EditorEvent<>(SyllabificationAlignmentEditorView.ScEdit, getEditor(),
+					new EditorEvent<>(SyllabificationAlignmentEditorView.ScEdit, getSource(),
 							new SyllabificationAlignmentEditorView.ScEditData(transcript, index, scType, prevScType));
-			getEditor().getEventManager().queueEvent(ee);
+			getEditorEventManager().queueEvent(ee);
 		}
 	}
 	
@@ -56,9 +56,9 @@ public class ScTypeEdit extends SessionEditorUndoableEdit {
 			transcript.elementAt(index).setScType(scType);
 
 			final EditorEvent<SyllabificationAlignmentEditorView.ScEditData> ee =
-					new EditorEvent<>(SyllabificationAlignmentEditorView.ScEdit, getEditor(),
+					new EditorEvent<>(SyllabificationAlignmentEditorView.ScEdit, getSource(),
 							new SyllabificationAlignmentEditorView.ScEditData(transcript, index, prevScType, scType));
-			getEditor().getEventManager().queueEvent(ee);
+			getEditorEventManager().queueEvent(ee);
 		}
 	}
 

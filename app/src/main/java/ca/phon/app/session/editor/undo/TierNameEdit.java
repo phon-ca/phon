@@ -22,14 +22,18 @@ import ca.phon.session.*;
 import javax.swing.undo.CannotUndoException;
 import java.util.*;
 
-public class TierNameEdit extends SessionEditorUndoableEdit {
+public class TierNameEdit extends SessionUndoableEdit {
 
 	private final String newTierName;
 	
 	private final String oldTierName;
 
 	public TierNameEdit(SessionEditor editor, String newTierName, String oldTierName) {
-		super(editor);
+		this(editor.getSession(), editor.getEventManager(), newTierName, oldTierName);
+	}
+
+	public TierNameEdit(Session session, EditorEventManager editorEventManager, String newTierName, String oldTierName) {
+		super(session, editorEventManager);
 		this.newTierName = newTierName;
 		this.oldTierName = oldTierName;
 	}
@@ -56,8 +60,7 @@ public class TierNameEdit extends SessionEditorUndoableEdit {
 
 	private void changeTierName(String tierName, String newTierName) {
 		final SessionFactory factory = SessionFactory.newFactory();
-		final SessionEditor editor = getEditor();
-		final Session session = editor.getSession();
+		final Session session = getSession();
 		
 		// replace tier description
 		for(int i = 0; i < session.getUserTierCount(); i++) {
@@ -100,6 +103,6 @@ public class TierNameEdit extends SessionEditorUndoableEdit {
 
 		final EditorEvent<EditorEventType.TierViewChangedData> ee =
 				new EditorEvent<>(EditorEventType.TierViewChanged, getSource(), new EditorEventType.TierViewChangedData(oldTierView, newTierView, EditorEventType.TierViewChangeType.TIER_NAME_CHANGE, List.of(newTierName), List.of(idx)));
-		getEditor().getEventManager().queueEvent(ee);
+		getEditorEventManager().queueEvent(ee);
 	}
 }

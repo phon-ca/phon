@@ -17,17 +17,15 @@ package ca.phon.app.session.editor.view.syllabification_and_alignment;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.undo.SessionEditorUndoableEdit;
+import ca.phon.app.session.editor.undo.SessionUndoableEdit;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.session.Tier;
 import ca.phon.syllabifier.Syllabifier;
 import ca.phon.syllable.*;
-import org.apache.commons.logging.Log;
-import org.apache.logging.log4j.LogManager;
 
 import java.text.ParseException;
 
-public class SyllabifyEdit extends SessionEditorUndoableEdit {
+public class SyllabifyEdit extends SessionUndoableEdit {
 
 	private final Tier<IPATranscript> tier;
 	
@@ -36,7 +34,7 @@ public class SyllabifyEdit extends SessionEditorUndoableEdit {
 	private String oldVal = null;
 	
 	public SyllabifyEdit(SessionEditor editor, Tier<IPATranscript> ipaTier,Syllabifier syllabifier) {
-		super(editor);
+		super(editor.getSession(), editor.getEventManager());
 		this.tier = ipaTier;
 		this.syllabifier = syllabifier;
 	}
@@ -55,9 +53,9 @@ public class SyllabifyEdit extends SessionEditorUndoableEdit {
 			}
 
 			final EditorEvent<SyllabificationAlignmentEditorView.ScEditData> ee =
-					new EditorEvent<>(SyllabificationAlignmentEditorView.ScEdit, getEditor(),
+					new EditorEvent<>(SyllabificationAlignmentEditorView.ScEdit, getSource(),
 							new SyllabificationAlignmentEditorView.ScEditData(grp, -1, SyllableConstituentType.UNKNOWN, SyllableConstituentType.UNKNOWN));
-			getEditor().getEventManager().queueEvent(ee);
+			getEditorEventManager().queueEvent(ee);
 		} catch (ParseException e) {
 			LogUtil.severe( e.getLocalizedMessage(), e);
 		}
@@ -74,9 +72,9 @@ public class SyllabifyEdit extends SessionEditorUndoableEdit {
 		syllabifier.syllabify(ipa.toList());
 
 		final EditorEvent<SyllabificationAlignmentEditorView.ScEditData> ee =
-				new EditorEvent<>(SyllabificationAlignmentEditorView.ScEdit, getEditor(),
+				new EditorEvent<>(SyllabificationAlignmentEditorView.ScEdit, getSource(),
 						new SyllabificationAlignmentEditorView.ScEditData(ipa, -1, SyllableConstituentType.UNKNOWN, SyllableConstituentType.UNKNOWN));
-		getEditor().getEventManager().queueEvent(ee);
+		getEditorEventManager().queueEvent(ee);
 	}
 	
 }

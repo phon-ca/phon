@@ -38,7 +38,7 @@ public class SessionEditorUndoSupport extends UndoableEditSupport {
 	
 	@Override
 	public synchronized void postEdit(UndoableEdit e) {
-		if(e instanceof SessionEditorUndoableEdit edit) {
+		if(e instanceof SessionUndoableEdit edit) {
 			edit.putExtension(Integer.class, getEditor().getCurrentRecordIndex());
 			edit.doIt();
 		}
