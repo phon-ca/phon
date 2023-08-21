@@ -21,20 +21,26 @@ import ca.phon.session.*;
 
 import javax.swing.undo.CannotUndoException;
 
-public class RecordMoveEdit extends SessionEditorUndoableEdit {
-
-	private static final long serialVersionUID = -1153685660041411904L;
+public class RecordMoveEdit extends SessionUndoableEdit {
 
 	private final Record record;
 	
 	private final int position;
 	
 	private int oldPosition = -1;
+
+	private int oldElementIndex = -1;
+
+	private int newElementIndex = -1;
 	
 	private boolean issueRefresh = true;
-	
+
 	public RecordMoveEdit(SessionEditor editor, Record record, int position) {
-		super(editor);
+		this(editor.getSession(), editor.getEventManager(), record, position);
+	}
+
+	public RecordMoveEdit(Session session, EditorEventManager editorEventManager, Record record, int position) {
+		super(session, editorEventManager);
 		this.record = record;
 		this.position = position;
 	}
@@ -64,37 +70,38 @@ public class RecordMoveEdit extends SessionEditorUndoableEdit {
 	
 	@Override
 	public void undo() throws CannotUndoException {
-		final SessionEditor editor = getEditor();
-		final Session session = editor.getSession();
+		final Session session = getSession();
 		
 		session.setRecordPosition(record, oldPosition);
 
 		final EditorEvent<EditorEventType.RecordMovedData> ee =
 				new EditorEvent<>(EditorEventType.RecordMoved, getSource(),
-						new EditorEventType.RecordMovedData(position, oldPosition, record));
-		getEditor().getEventManager().queueEvent(ee);
+						new EditorEventType.RecordMovedData(record, newElementIndex, position, oldElementIndex, oldPosition));
+		getEditorEventManager().queueEvent(ee);
 		if(issueRefresh) {
-			getEditor().getEventManager().queueEvent(
+			getEditorEventManager().queueEvent(
 					new EditorEvent<>(EditorEventType.RecordRefresh, getSource(),
-							new EditorEventType.RecordChangedData(oldPosition, record)));
-			getEditor().setCurrentRecordIndex(oldPosition);
+							new EditorEventType.RecordChangedData(record, oldElementIndex, oldPosition)));
+//			getEditorEventManager().setCurrentRecordIndex(oldPosition);
 		}
 	}
 
 	@Override
 	public void doIt() {
-		oldPosition = getEditor().getSession().getRecordPosition(record);
-		getEditor().getSession().setRecordPosition(record, position);
+		oldPosition = getSession().getRecordPosition(record);
+		oldElementIndex = getSession().getRecordElementIndex(record);
+		getSession().setRecordPosition(record, position);
+		newElementIndex = getSession().getRecordElementIndex(record);
 
 		final EditorEvent<EditorEventType.RecordMovedData> ee =
 				new EditorEvent<>(EditorEventType.RecordMoved, getSource(),
-						new EditorEventType.RecordMovedData(oldPosition, position, record));
-		getEditor().getEventManager().queueEvent(ee);
+						new EditorEventType.RecordMovedData(record, oldElementIndex, oldPosition, newElementIndex, position));
+		getEditorEventManager().queueEvent(ee);
 		if(issueRefresh) {
-			getEditor().getEventManager().queueEvent(
+			getEditorEventManager().queueEvent(
 					new EditorEvent<>(EditorEventType.RecordRefresh, getSource(),
-							new EditorEventType.RecordChangedData(position, record)));
-			getEditor().setCurrentRecordIndex(position);
+							new EditorEventType.RecordChangedData(record, newElementIndex, position)));
+//			getEditorEventManager().setCurrentRecordIndex(position);
 		}
 	}
 

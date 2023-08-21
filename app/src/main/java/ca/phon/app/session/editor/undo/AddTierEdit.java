@@ -15,12 +15,12 @@
  */
 package ca.phon.app.session.editor.undo;
 
+import ca.phon.app.session.TierTransferrable;
 import ca.phon.app.session.editor.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 
 import javax.swing.undo.CannotUndoException;
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 
@@ -29,7 +29,7 @@ import java.util.List;
  * to each record.
  *
  */
-public class AddTierEdit extends SessionEditorUndoableEdit {
+public class AddTierEdit extends SessionUndoableEdit {
 
 	private final TierDescription tierDescription;
 	
@@ -38,12 +38,19 @@ public class AddTierEdit extends SessionEditorUndoableEdit {
 	private int index = -1;
 
 	public AddTierEdit(SessionEditor editor, TierDescription tierDesc, TierViewItem tvi) {
-		this(editor, tierDesc, tvi, -1);
+		this(editor.getSession(), editor.getEventManager(), tierDesc, tvi);
 	}
 
+	public AddTierEdit(Session session, EditorEventManager editorEventManager, TierDescription tierDesc, TierViewItem tvi) {
+		this(session, editorEventManager, tierDesc, tvi, -1);
+	}
 
 	public AddTierEdit(SessionEditor editor, TierDescription tierDesc, TierViewItem tvi, int index) {
-		super(editor);
+		this(editor.getSession(), editor.getEventManager(), tierDesc, tvi, index);
+	}
+
+	public AddTierEdit(Session session, EditorEventManager editorEventManager, TierDescription tierDesc, TierViewItem tvi, int index) {
+		super(session, editorEventManager);
 		this.tierDescription = tierDesc;
 		this.tierViewItem = tvi;
 		this.index = index;
@@ -63,8 +70,8 @@ public class AddTierEdit extends SessionEditorUndoableEdit {
 	public void undo() throws CannotUndoException {
 		super.undo();
 		
-		final SessionEditor editor = getEditor();
-		final Session session = editor.getSession();
+		final EditorEventManager editorEventManager = getEditorEventManager();
+		final Session session = getSession();
 		
 		session.removeUserTier(tierDescription);
 		
@@ -80,13 +87,13 @@ public class AddTierEdit extends SessionEditorUndoableEdit {
 		final EditorEvent<EditorEventType.TierViewChangedData> ee =
 				new EditorEvent<>(EditorEventType.TierViewChanged, getSource(),
 						new EditorEventType.TierViewChangedData(tierView, newView, EditorEventType.TierViewChangeType.DELETE_TIER, List.of(tierDescription.getName()), List.of(tierView.indexOf(this.tierViewItem))));
-		getEditor().getEventManager().queueEvent(ee);
+		editorEventManager.queueEvent(ee);
 	}
 
 	@Override
 	public void doIt() {
-		final SessionEditor editor = getEditor();
-		final Session session = editor.getSession();
+		final EditorEventManager editorEventManager = getEditorEventManager();
+		final Session session = getSession();
 		
 		session.addUserTier(tierDescription);
 		
@@ -109,7 +116,7 @@ public class AddTierEdit extends SessionEditorUndoableEdit {
 		final EditorEvent<EditorEventType.TierViewChangedData> ee =
 				new EditorEvent<>(EditorEventType.TierViewChanged, getSource(),
 						new EditorEventType.TierViewChangedData(tierView, newView, EditorEventType.TierViewChangeType.ADD_TIER, List.of(tierDescription.getName()), List.of(newView.indexOf(this.tierViewItem))));
-		getEditor().getEventManager().queueEvent(ee);
+		editorEventManager.queueEvent(ee);
 	}
 
 }

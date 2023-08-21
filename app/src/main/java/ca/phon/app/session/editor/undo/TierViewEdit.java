@@ -17,7 +17,6 @@ package ca.phon.app.session.editor.undo;
 
 import ca.phon.app.session.editor.*;
 import ca.phon.session.*;
-import com.kitfox.svg.A;
 
 import javax.swing.undo.CannotUndoException;
 import java.util.*;
@@ -26,7 +25,7 @@ import java.util.*;
  * Changes to the tier view including order, visibility and locking.
  *
  */
-public class TierViewEdit extends SessionEditorUndoableEdit {
+public class TierViewEdit extends SessionUndoableEdit {
 
 	/**
 	 * Old view
@@ -37,9 +36,13 @@ public class TierViewEdit extends SessionEditorUndoableEdit {
 	 * New view
 	 */
 	private final List<TierViewItem> newView;
-	
+
 	public TierViewEdit(SessionEditor editor, List<TierViewItem> oldView, List<TierViewItem> newView) {
-		super(editor);
+		this(editor.getSession(), editor.getEventManager(), oldView, newView);
+	}
+
+	public TierViewEdit(Session session, EditorEventManager editorEventManager, List<TierViewItem> oldView, List<TierViewItem> newView) {
+		super(session, editorEventManager);
 		this.oldView = new ArrayList<>(oldView);
 		this.newView = newView;
 	}
@@ -66,24 +69,22 @@ public class TierViewEdit extends SessionEditorUndoableEdit {
 	
 	@Override
 	public void undo() throws CannotUndoException {
-		final SessionEditor editor = getEditor();
-		final Session session = editor.getSession();
+		final Session session = getSession();
 		session.setTierView(oldView);
 
 		final EditorEvent<EditorEventType.TierViewChangedData> ee =
 				new EditorEvent<>(EditorEventType.TierViewChanged, getSource(), new EditorEventType.TierViewChangedData(newView, oldView, EditorEventType.TierViewChangeType.RELOAD, new ArrayList<>(), new ArrayList<>()));
-		getEditor().getEventManager().queueEvent(ee);
+		getEditorEventManager().queueEvent(ee);
 	}
 
 	@Override
 	public void doIt() {
-		final SessionEditor editor = getEditor();
-		final Session session = editor.getSession();
+		final Session session = getSession();
 		session.setTierView(newView);
 
 		final EditorEvent<EditorEventType.TierViewChangedData> ee =
 				new EditorEvent<>(EditorEventType.TierViewChanged, getSource(), new EditorEventType.TierViewChangedData(oldView, newView, EditorEventType.TierViewChangeType.RELOAD, new ArrayList<>(), new ArrayList<>()));
-		getEditor().getEventManager().queueEvent(ee);
+		getEditorEventManager().queueEvent(ee);
 	}
 	
 }

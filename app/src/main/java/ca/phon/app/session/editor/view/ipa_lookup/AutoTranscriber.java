@@ -22,7 +22,6 @@ import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.*;
 import ca.phon.ipadictionary.IPADictionary;
-import ca.phon.orthography.Orthography;
 import ca.phon.orthography.OrthographyElement;
 import ca.phon.session.Record;
 import ca.phon.session.*;
@@ -202,7 +201,7 @@ public class AutoTranscriber {
 		final Tuple<IPATranscript, IPATranscript> autoTranscription = transcribe(record);
 			
 		if(isSetIPATarget() && autoTranscription.getObj1() != null) {
-			SessionEditorUndoableEdit targetEdit = null;
+			SessionUndoableEdit targetEdit = null;
 			if(getTranscriber() != null) {
 				IPATranscript grpVal = (record.getIPATarget() != null ? record.getIPATarget() : new IPATranscript());
 				targetEdit =
@@ -225,7 +224,7 @@ public class AutoTranscriber {
 		}
 			
 		if(isSetIPAActual() && autoTranscription.getObj2() != null) {
-			SessionEditorUndoableEdit actualEdit = null;
+			SessionUndoableEdit actualEdit = null;
 			if(getTranscriber() != null) {
 				IPATranscript grpVal = (record.getIPAActual() != null ? record.getIPAActual() : new IPATranscript());
 				actualEdit =

@@ -608,7 +608,9 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		getParentView().getEditor().getUndoSupport().endUpdate();
 
 		EditorEvent<EditorEventType.RecordChangedData> ee = new EditorEvent(EditorEventType.RecordRefresh, this,
-				new EditorEventType.RecordChangedData(getParentView().getEditor().getCurrentRecordIndex(), getParentView().getEditor().currentRecord()));
+				new EditorEventType.RecordChangedData(getParentView().getEditor().currentRecord(),
+						getParentView().getEditor().getSession().getRecordElementIndex(getParentView().getEditor().currentRecord()),
+						getParentView().getEditor().getCurrentRecordIndex()));
 		getParentView().getEditor().getEventManager().queueEvent(ee);
 
 		onCancelMoveSegments(new PhonActionEvent<>(pae.getActionEvent()));
@@ -896,7 +898,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 			int recordIdx = getParentView().getEditor().getCurrentRecordIndex();
 
-			DeleteRecordEdit delRecord = new DeleteRecordEdit(getParentView().getEditor());
+			DeleteRecordEdit delRecord = new DeleteRecordEdit(getParentView().getEditor(), getParentView().getEditor().getCurrentRecordIndex());
 			getParentView().getEditor().getUndoSupport().postEdit(delRecord);
 
 			AddRecordEdit rightRecordEdit = new AddRecordEdit(getParentView().getEditor(),

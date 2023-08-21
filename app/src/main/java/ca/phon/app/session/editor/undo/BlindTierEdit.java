@@ -15,14 +15,13 @@
  */
 package ca.phon.app.session.editor.undo;
 
+import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.ipa.*;
 import ca.phon.session.*;
 
 public class BlindTierEdit extends TierEdit<IPATranscript> {
 
-	private static final long serialVersionUID = 3332539046795927372L;
-	
 	private final Transcriber transcriber;
 	
 	private final IPATranscript ipa;
@@ -32,7 +31,11 @@ public class BlindTierEdit extends TierEdit<IPATranscript> {
 	private final IPATranscript newValue;
 
 	public BlindTierEdit(SessionEditor editor, Tier<IPATranscript> tier, Transcriber transcriber, IPATranscript newValue, IPATranscript ipa) {
-		super(editor, tier, ipa);
+		this(editor.getSession(), editor.getEventManager(), tier, transcriber, newValue, ipa);
+	}
+
+	public BlindTierEdit(Session session, EditorEventManager editorEventManager, Tier<IPATranscript> tier, Transcriber transcriber, IPATranscript newValue, IPATranscript ipa) {
+		super(session, editorEventManager, tier, ipa);
 		this.ipa = ipa;
 		this.transcriber = transcriber;
 		this.newValue = newValue;

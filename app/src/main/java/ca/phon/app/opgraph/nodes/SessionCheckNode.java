@@ -164,7 +164,9 @@ public class SessionCheckNode extends OpNode implements NodeSettings{
 				SwingUtilities.invokeLater( () -> spRef.get().getExtension(SessionEditor.class).setModified(true) );
 				
 				final EditorEvent<EditorEventType.RecordChangedData> evt2 = new EditorEvent<>(EditorEventType.RecordRefresh, editor,
-						new EditorEventType.RecordChangedData(editor.getCurrentRecordIndex(), editor.currentRecord()));
+						new EditorEventType.RecordChangedData(editor.currentRecord(),
+								editor.getSession().getRecordElementIndex(editor.getCurrentRecordIndex()),
+								editor.getCurrentRecordIndex()));
 				editor.getEventManager().queueEvent(evt2);
 			} else {
 				try {

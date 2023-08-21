@@ -23,7 +23,7 @@ import java.awt.*;
 /**
  * {@link Session} edits involving participants.
  */
-public class ParticipantUndoableEdit extends SessionEditorUndoableEdit {
+public class ParticipantUndoableEdit extends SessionUndoableEdit {
 
 	/**
 	 * Participant involved in the edit
@@ -33,9 +33,13 @@ public class ParticipantUndoableEdit extends SessionEditorUndoableEdit {
 	private Participant template;
 	
 	private Participant oldVals;
-	
+
 	public ParticipantUndoableEdit(SessionEditor editor, Participant participant, Participant template) {
-		super(editor);
+		this(editor.getSession(), editor.getEventManager(), participant, template);
+	}
+
+	public ParticipantUndoableEdit(Session session, EditorEventManager editorEventManager, Participant participant, Participant template) {
+		super(session, editorEventManager);
 		this.participant = participant;
 		this.template = template;
 	}
@@ -49,8 +53,8 @@ public class ParticipantUndoableEdit extends SessionEditorUndoableEdit {
 		Participants.copyParticipantInfo(oldVals, participant);
 
 		final EditorEvent<Participant> ee =
-				new EditorEvent<>(EditorEventType.ParticipantChanged, (Component) getSource(), participant);
-		getEditor().getEventManager().queueEvent(ee);
+				new EditorEvent<>(EditorEventType.ParticipantChanged, getSource(), participant);
+		getEditorEventManager().queueEvent(ee);
 	}
 
 	@Override
@@ -63,8 +67,8 @@ public class ParticipantUndoableEdit extends SessionEditorUndoableEdit {
 		Participants.copyParticipantInfo(template, participant);
 
 		final EditorEvent<Participant> ee =
-				new EditorEvent<>(EditorEventType.ParticipantChanged, (Component) getSource(), participant);
-		getEditor().getEventManager().queueEvent(ee);
+				new EditorEvent<>(EditorEventType.ParticipantChanged, getSource(), participant);
+		getEditorEventManager().queueEvent(ee);
 	}
 	
 }

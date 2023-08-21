@@ -65,7 +65,9 @@ public class EditParticipantAction extends SessionInfoAction {
 
 						final EditorEvent<EditorEventType.RecordChangedData> ee =
 								new EditorEvent<>(EditorEventType.RecordRefresh, getEditor(),
-										new EditorEventType.RecordChangedData(getEditor().getCurrentRecordIndex(), getEditor().currentRecord()));
+										new EditorEventType.RecordChangedData(getEditor().currentRecord(),
+												getEditor().getSession().getRecordElementIndex(getEditor().getCurrentRecordIndex()),
+												getEditor().getCurrentRecordIndex()));
 						getEditor().getEventManager().queueEvent(ee);
 					}
 				});

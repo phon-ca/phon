@@ -426,7 +426,8 @@ public class FindAndReplacePanel extends JPanel {
 		if(occurrences > 0) {
 			final EditorEvent<Void> ee = new EditorEvent<>(new EditorEventType<>(EditorEventName.MODIFICATION_EVENT.getEventName(), Void.class), this, null);
 			getEditor().getEventManager().queueEvent(ee);
-			final EditorEvent<EditorEventType.RecordChangedData> refresh = new EditorEvent<>(EditorEventType.RecordRefresh, this, new EditorEventType.RecordChangedData(getEditor().getCurrentRecordIndex(), getEditor().currentRecord()));
+			final EditorEvent<EditorEventType.RecordChangedData> refresh = new EditorEvent<>(EditorEventType.RecordRefresh, this,
+					new EditorEventType.RecordChangedData(getEditor().currentRecord(), getEditor().getSession().getRecordElementIndex(getEditor().getCurrentRecordIndex()), getEditor().getCurrentRecordIndex()));
 			getEditor().getEventManager().queueEvent(refresh);
 			getEditor().getUndoSupport().postEdit(edit);
 		}

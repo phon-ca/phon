@@ -17,28 +17,28 @@ package ca.phon.app.session.editor.undo;
 
 import ca.phon.app.session.editor.*;
 import ca.phon.session.Record;
-
-import java.awt.*;
+import ca.phon.session.Session;
+import ca.phon.ui.CommonModuleFrame;
 
 /**
  * Delete the current record.
  */
-public class DeleteRecordEdit extends SessionEditorUndoableEdit {
-
-	private static final long serialVersionUID = -4840525709931298024L;
+public class DeleteRecordEdit extends SessionUndoableEdit {
 
 	private int recordIndex = -1;
+
+	private int elementIndex = -1;
 
 	private Record deletedRecord = null;
 
 	private boolean fireEvent = true;
 
-	public DeleteRecordEdit(SessionEditor editor) {
-		super(editor);
-	}
-	
 	public DeleteRecordEdit(SessionEditor editor, int recordIndex) {
-		super(editor);
+		this(editor.getSession(), editor.getEventManager(), recordIndex);
+	}
+
+	public DeleteRecordEdit(Session session, EditorEventManager editorEventManager, int recordIndex) {
+		super(session, editorEventManager);
 		
 		this.recordIndex = recordIndex;
 	}
@@ -52,31 +52,27 @@ public class DeleteRecordEdit extends SessionEditorUndoableEdit {
 		super.undo();
 
 		if(deletedRecord == null || recordIndex < 0) return;
-
-		final SessionEditor editor = getEditor();
-		editor.getSession().addRecord(recordIndex, deletedRecord);
+		getSession().addRecord(recordIndex, deletedRecord);
 
 		if(fireEvent) {
 			final EditorEvent<EditorEventType.RecordAddedData> ee =
-					new EditorEvent<>(EditorEventType.RecordAdded, (Component) getSource(), new EditorEventType.RecordAddedData(recordIndex, deletedRecord));
-			getEditor().getEventManager().queueEvent(ee);
+					new EditorEvent<>(EditorEventType.RecordAdded, getSource(), new EditorEventType.RecordAddedData(deletedRecord, elementIndex, recordIndex));
+			getEditorEventManager().queueEvent(ee);
 		}
 	}
 
 	@Override
 	public void doIt() {
-		final SessionEditor editor = getEditor();
+		if(recordIndex < 0 || recordIndex >= getSession().getRecordCount()) return;
 
-		if(recordIndex < 0) {
-			recordIndex = editor.getCurrentRecordIndex();
-		}
-		deletedRecord = editor.getSession().getRecord(recordIndex);
-		editor.getSession().removeRecord(deletedRecord);
+		elementIndex = getSession().getRecordElementIndex(recordIndex);
+		deletedRecord = getSession().getRecord(recordIndex);
+		getSession().removeRecord(deletedRecord);
 
 		if(fireEvent) {
 			final EditorEvent<EditorEventType.RecordDeletedData> ee =
-					new EditorEvent<>(EditorEventType.RecordDeleted, (Component) getSource(), new EditorEventType.RecordDeletedData(recordIndex, deletedRecord));
-			getEditor().getEventManager().queueEvent(ee);
+					new EditorEvent<>(EditorEventType.RecordDeleted, getSource(), new EditorEventType.RecordDeletedData(deletedRecord, elementIndex, recordIndex));
+			getEditorEventManager().queueEvent(ee);
 		}
 	}
 

@@ -562,7 +562,10 @@ public class FindAndReplaceEditorView extends EditorView {
 			getEditor().getEventManager().queueEvent(
 					new EditorEvent<>(new EditorEventType<>(EditorEventName.MODIFICATION_EVENT.getEventName(), Void.class), this, null));
 			final EditorEvent<EditorEventType.RecordChangedData> refresh =
-					new EditorEvent<>(EditorEventType.RecordRefresh, this, new EditorEventType.RecordChangedData(getEditor().getCurrentRecordIndex(), getEditor().currentRecord()));
+					new EditorEvent<>(EditorEventType.RecordRefresh, this,
+							new EditorEventType.RecordChangedData(getEditor().currentRecord(),
+									getEditor().getSession().getRecordElementIndex(getEditor().getCurrentRecordIndex()),
+									getEditor().getCurrentRecordIndex()));
 			getEditor().getEventManager().queueEvent(refresh);
 			
 			getEditor().getUndoSupport().postEdit(edit);

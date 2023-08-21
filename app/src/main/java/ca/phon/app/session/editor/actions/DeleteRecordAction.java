@@ -30,8 +30,6 @@ import java.awt.event.*;
  */
 public class DeleteRecordAction extends SessionEditorAction {
 
-	private static final long serialVersionUID = -6995854542145591135L;
-	
 	private final static String CMD_NAME = "Delete record";
 	
 	private final static String SHORT_DESC = "Delete current record";
@@ -69,7 +67,7 @@ public class DeleteRecordAction extends SessionEditorAction {
 			int retVal = NativeDialogs.showMessageDialog(props);
 			if(retVal == 1) return;
 		}
-		final DeleteRecordEdit edit = new DeleteRecordEdit(getEditor());
+		final DeleteRecordEdit edit = new DeleteRecordEdit(getEditor(), getEditor().getCurrentRecordIndex());
 		getEditor().getUndoSupport().postEdit(edit);
 	}
 

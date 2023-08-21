@@ -97,7 +97,10 @@ public class DeleteParticipantAction extends SessionInfoAction {
 				SwingUtilities.invokeLater( () -> {
 					getEditor().getUndoManager().undo();
 					final EditorEvent<EditorEventType.RecordChangedData> ee =
-							new EditorEvent<>(EditorEventType.RecordRefresh, getEditor(), new EditorEventType.RecordChangedData(getEditor().getCurrentRecordIndex(), getEditor().currentRecord()));
+							new EditorEvent<>(EditorEventType.RecordRefresh, getEditor(),
+									new EditorEventType.RecordChangedData(getEditor().currentRecord(),
+											getEditor().getSession().getRecordElementIndex(getEditor().getCurrentRecordIndex()),
+											getEditor().getCurrentRecordIndex()));
 					getEditor().getEventManager().queueEvent(ee);
 				});
 			}
