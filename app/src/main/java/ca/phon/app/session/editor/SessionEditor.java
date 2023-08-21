@@ -20,7 +20,7 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.menu.edit.*;
 import ca.phon.app.project.ProjectFrame;
 import ca.phon.app.session.editor.actions.*;
-import ca.phon.app.session.editor.undo.SessionEditorUndoSupport;
+import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.media.VolumeModel;
 import ca.phon.project.Project;
@@ -101,7 +101,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	/**
 	 * Undo support for the editor
 	 */
-	private final SessionEditorUndoSupport undoSupport = new SessionEditorUndoSupport(this);
+	private final SessionEditUndoSupport undoSupport = new SessionEditUndoSupport();
 
 	/**
 	 * Undo manager
@@ -568,7 +568,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	 *
 	 * @return undo support
 	 */
-	public SessionEditorUndoSupport getUndoSupport() {
+	public SessionEditUndoSupport getUndoSupport() {
 		return this.undoSupport;
 	}
 

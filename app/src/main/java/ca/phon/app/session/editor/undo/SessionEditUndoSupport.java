@@ -15,31 +15,23 @@
  */
 package ca.phon.app.session.editor.undo;
 
-import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.EditorEventManager;
 
 import javax.swing.undo.*;
 import java.lang.ref.WeakReference;
 
 /**
- * Undo support for the {@link SessionEditor}
+ * Undo support for the {@link EditorEventManager}
  *
  */
-public class SessionEditorUndoSupport extends UndoableEditSupport {
+public class SessionEditUndoSupport extends UndoableEditSupport {
 	
-	private final WeakReference<SessionEditor> editorRef;
-	
-	public SessionEditorUndoSupport(SessionEditor sessionEditor) {
-		editorRef = new WeakReference<SessionEditor>(sessionEditor);
+	public SessionEditUndoSupport() {
 	}
 
-	public SessionEditor getEditor() {
-		return editorRef.get();
-	}
-	
 	@Override
 	public synchronized void postEdit(UndoableEdit e) {
 		if(e instanceof SessionUndoableEdit edit) {
-			edit.putExtension(Integer.class, getEditor().getCurrentRecordIndex());
 			edit.doIt();
 		}
 		super.postEdit(e);
