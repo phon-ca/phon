@@ -140,7 +140,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 				new AtomicReference<EditorDataModel>(new DefaultEditorDataModel(session));
 		getDataModel().setTranscriber(transcriber);
 		this.eventManagerRef =
-				new AtomicReference<EditorEventManager>(new EditorEventManager(this));
+				new AtomicReference<EditorEventManager>(new EditorEventManager());
 		this.selectionModelRef =
 				new AtomicReference<EditorSelectionModel>(new DefaultEditorSelectionModel());
 		this.viewModelRef =
