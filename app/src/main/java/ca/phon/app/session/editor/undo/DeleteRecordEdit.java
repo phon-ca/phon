@@ -25,9 +25,9 @@ import java.awt.*;
  */
 public class DeleteRecordEdit extends SessionEditorUndoableEdit {
 
-	private static final long serialVersionUID = -4840525709931298024L;
-
 	private int recordIndex = -1;
+
+	private int elementIndex = -1;
 
 	private Record deletedRecord = null;
 
@@ -58,7 +58,7 @@ public class DeleteRecordEdit extends SessionEditorUndoableEdit {
 
 		if(fireEvent) {
 			final EditorEvent<EditorEventType.RecordAddedData> ee =
-					new EditorEvent<>(EditorEventType.RecordAdded, (Component) getSource(), new EditorEventType.RecordAddedData(recordIndex, deletedRecord));
+					new EditorEvent<>(EditorEventType.RecordAdded, getSource(), new EditorEventType.RecordAddedData(deletedRecord, elementIndex, recordIndex));
 			getEditor().getEventManager().queueEvent(ee);
 		}
 	}
@@ -70,12 +70,13 @@ public class DeleteRecordEdit extends SessionEditorUndoableEdit {
 		if(recordIndex < 0) {
 			recordIndex = editor.getCurrentRecordIndex();
 		}
+		elementIndex = editor.getSession().getRecordElementIndex(recordIndex);
 		deletedRecord = editor.getSession().getRecord(recordIndex);
 		editor.getSession().removeRecord(deletedRecord);
 
 		if(fireEvent) {
 			final EditorEvent<EditorEventType.RecordDeletedData> ee =
-					new EditorEvent<>(EditorEventType.RecordDeleted, (Component) getSource(), new EditorEventType.RecordDeletedData(recordIndex, deletedRecord));
+					new EditorEvent<>(EditorEventType.RecordDeleted, getSource(), new EditorEventType.RecordDeletedData(deletedRecord, elementIndex, recordIndex));
 			getEditor().getEventManager().queueEvent(ee);
 		}
 	}

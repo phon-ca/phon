@@ -54,7 +54,7 @@ import java.util.concurrent.atomic.AtomicReference;
  *
  * <p>This window supports plug-ins.  Plug-ins can provide custom EditorViews.</p>
  */
-public class SessionEditor extends ProjectFrame implements ClipboardOwner {
+public class SessionEditor extends ProjectFrame implements ISessionEditor, ClipboardOwner {
 
 	public final static String BACKUP_WHEN_SAVING =
 			SessionEditor.class.getName() + ".backupWhenSaving";
@@ -544,7 +544,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		}
 		this.currentRecord = index;
 		final EditorEvent<EditorEventType.RecordChangedData> ee = new EditorEvent<>(EditorEventType.RecordChanged, this,
-				new EditorEventType.RecordChangedData(this.currentRecord, currentRecord()));
+				new EditorEventType.RecordChangedData(currentRecord(), getSession().getRecordElementIndex(this.currentRecord), this.currentRecord));
 		getEventManager().queueEvent(ee);
 	}
 
@@ -656,7 +656,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 			setCurrentRecordIndex(-1);
 		} else {
 			final EditorEvent<EditorEventType.RecordChangedData> refreshAct = new EditorEvent<>(EditorEventType.RecordRefresh, this,
-					new EditorEventType.RecordChangedData(this.currentRecord, currentRecord()));
+					new EditorEventType.RecordChangedData(currentRecord(), getSession().getRecordElementIndex(currentRecord), this.currentRecord));
 			getEventManager().queueEvent(refreshAct);
 		}
 	}

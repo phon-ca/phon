@@ -21,8 +21,6 @@ import ca.phon.session.*;
 
 public class BlindTierEdit extends TierEdit<IPATranscript> {
 
-	private static final long serialVersionUID = 3332539046795927372L;
-	
 	private final Transcriber transcriber;
 	
 	private final IPATranscript ipa;

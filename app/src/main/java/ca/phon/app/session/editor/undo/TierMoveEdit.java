@@ -37,7 +37,7 @@ public class TierMoveEdit extends SessionEditorUndoableEdit {
         getEditor().getSession().setTierView(newView);
         final EditorEvent<EditorEventType.TierViewChangedData> ee =
                 new EditorEvent<>(EditorEventType.TierViewChanged, getSource(),
-                        new EditorEventType.TierViewChangedData(newView, oldView,
+                        new EditorEventType.TierViewChangedData(oldView, newView,
                                 EditorEventType.TierViewChangeType.MOVE_TIER,
                                 List.of(tierViewItem.getTierName()), List.of(newViewIndex, oldViewIndex)));
         getEditor().getEventManager().queueEvent(ee);
@@ -52,7 +52,7 @@ public class TierMoveEdit extends SessionEditorUndoableEdit {
         getEditor().getSession().setTierView(newView);
         final EditorEvent<EditorEventType.TierViewChangedData> ee =
                 new EditorEvent<>(EditorEventType.TierViewChanged, getSource(),
-                        new EditorEventType.TierViewChangedData(newView, oldView,
+                        new EditorEventType.TierViewChangedData(oldView, newView,
                                 EditorEventType.TierViewChangeType.MOVE_TIER,
                                 List.of(tierViewItem.getTierName()), List.of(oldViewIndex, newViewIndex)));
         getEditor().getEventManager().queueEvent(ee);

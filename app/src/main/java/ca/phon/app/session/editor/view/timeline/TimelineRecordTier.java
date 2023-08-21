@@ -608,7 +608,9 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		getParentView().getEditor().getUndoSupport().endUpdate();
 
 		EditorEvent<EditorEventType.RecordChangedData> ee = new EditorEvent(EditorEventType.RecordRefresh, this,
-				new EditorEventType.RecordChangedData(getParentView().getEditor().getCurrentRecordIndex(), getParentView().getEditor().currentRecord()));
+				new EditorEventType.RecordChangedData(getParentView().getEditor().currentRecord(),
+						getParentView().getEditor().getSession().getRecordElementIndex(getParentView().getEditor().currentRecord()),
+						getParentView().getEditor().getCurrentRecordIndex()));
 		getParentView().getEditor().getEventManager().queueEvent(ee);
 
 		onCancelMoveSegments(new PhonActionEvent<>(pae.getActionEvent()));

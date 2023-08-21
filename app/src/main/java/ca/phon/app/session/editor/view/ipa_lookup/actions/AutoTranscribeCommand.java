@@ -80,7 +80,9 @@ public class AutoTranscribeCommand extends IPALookupViewAction {
 
 					final EditorEvent<EditorEventType.RecordChangedData> ee =
 							new EditorEvent<>(EditorEventType.RecordRefresh, sessionEditor,
-									new EditorEventType.RecordChangedData(sessionEditor.getCurrentRecordIndex(), sessionEditor.currentRecord()));
+									new EditorEventType.RecordChangedData(sessionEditor.currentRecord(),
+											sessionEditor.getSession().getRecordElementIndex(sessionEditor.getCurrentRecordIndex()),
+											sessionEditor.getCurrentRecordIndex()));
 					sessionEditor.getEventManager().queueEvent(ee);
 					
 					setStatus(TaskStatus.FINISHED);

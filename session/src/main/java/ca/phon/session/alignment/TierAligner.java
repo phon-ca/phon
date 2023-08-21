@@ -67,7 +67,7 @@ public final class TierAligner {
             }
             for(String tierName:record.getUserDefinedTierNames()) {
                 final Tier<?> bottomTier = record.getTier(tierName);
-                if(bottomTier != null && !bottomTier.isExcludeFromAlignment()) {
+                if(bottomTier != null && bottomTier.hasValue() && !bottomTier.isExcludeFromAlignment()) {
                     alignmentMap.put(tierName, TierAligner.alignTiers(topTier, bottomTier));
                 }
             }

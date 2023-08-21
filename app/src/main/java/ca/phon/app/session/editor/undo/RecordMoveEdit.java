@@ -30,6 +30,10 @@ public class RecordMoveEdit extends SessionEditorUndoableEdit {
 	private final int position;
 	
 	private int oldPosition = -1;
+
+	private int oldElementIndex = -1;
+
+	private int newElementIndex = -1;
 	
 	private boolean issueRefresh = true;
 	
@@ -71,12 +75,12 @@ public class RecordMoveEdit extends SessionEditorUndoableEdit {
 
 		final EditorEvent<EditorEventType.RecordMovedData> ee =
 				new EditorEvent<>(EditorEventType.RecordMoved, getSource(),
-						new EditorEventType.RecordMovedData(position, oldPosition, record));
+						new EditorEventType.RecordMovedData(record, newElementIndex, position, oldElementIndex, oldPosition));
 		getEditor().getEventManager().queueEvent(ee);
 		if(issueRefresh) {
 			getEditor().getEventManager().queueEvent(
 					new EditorEvent<>(EditorEventType.RecordRefresh, getSource(),
-							new EditorEventType.RecordChangedData(oldPosition, record)));
+							new EditorEventType.RecordChangedData(record, oldElementIndex, oldPosition)));
 			getEditor().setCurrentRecordIndex(oldPosition);
 		}
 	}
@@ -84,16 +88,18 @@ public class RecordMoveEdit extends SessionEditorUndoableEdit {
 	@Override
 	public void doIt() {
 		oldPosition = getEditor().getSession().getRecordPosition(record);
+		oldElementIndex = getEditor().getSession().getRecordElementIndex(record);
 		getEditor().getSession().setRecordPosition(record, position);
+		newElementIndex = getEditor().getSession().getRecordElementIndex(record);
 
 		final EditorEvent<EditorEventType.RecordMovedData> ee =
 				new EditorEvent<>(EditorEventType.RecordMoved, getSource(),
-						new EditorEventType.RecordMovedData(oldPosition, position, record));
+						new EditorEventType.RecordMovedData(record, oldElementIndex, oldPosition, newElementIndex, position));
 		getEditor().getEventManager().queueEvent(ee);
 		if(issueRefresh) {
 			getEditor().getEventManager().queueEvent(
 					new EditorEvent<>(EditorEventType.RecordRefresh, getSource(),
-							new EditorEventType.RecordChangedData(position, record)));
+							new EditorEventType.RecordChangedData(record, newElementIndex, position)));
 			getEditor().setCurrentRecordIndex(position);
 		}
 	}

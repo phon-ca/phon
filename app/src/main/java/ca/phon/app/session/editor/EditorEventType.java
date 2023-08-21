@@ -123,34 +123,30 @@ public record EditorEventType<T>(String eventName, Class<T> type) {
 	public final static EditorEventType<Participant> ParticipantChanged =
 			new EditorEventType<>(EditorEventName.PARTICIPANT_CHANGED.getEventName(), Participant.class);
 
-	public record RecordAddedData(int index, Record record) { }
+	public record RecordAddedData(Record recrod, int elementIndex, int recordIndex) { }
 	/**
 	 * Called when a new record is added to the open session
 	 */
 	public final static EditorEventType<RecordAddedData> RecordAdded =
 			new EditorEventType<>(EditorEventName.RECORD_ADDED_EVT.getEventName(), RecordAddedData.class);
-	public record RecordDeletedData(int index, Record record) { }
+	public record RecordDeletedData(Record record, int elementIndex, int recordIndex) { }
 	/**
 	 * Called when a record is removed from the open session
 	 */
 	public final static EditorEventType<RecordDeletedData> RecordDeleted =
 			new EditorEventType<>(EditorEventName.RECORD_DELETED_EVT.getEventName(), RecordDeletedData.class);
-	public record RecordMovedData(int fromIndex, int toIndex, Record record) { }
+	public record RecordMovedData(Record record, int fromElementIndex, int fromRecordIndex, int toElementIndex, int toRecordIndex) { }
 	/**
 	 * Called when a record is moved
 	 */
 	public final static EditorEventType<RecordMovedData> RecordMoved =
 			new EditorEventType<>(EditorEventName.RECORD_MOVED_EVT.getEventName(), RecordMovedData.class);
-	public record RecordChangedData(int index, Record record) { }
+	public record RecordChangedData(Record record, int elementIndex, int recordIndex) { }
 	/**
 	 * Current record has changed in editor
 	 */
 	public final static EditorEventType<RecordChangedData> RecordChanged =
 			new EditorEventType<>(EditorEventName.RECORD_CHANGED_EVT.getEventName(), RecordChangedData.class);
-
-//	public record RecordSegmentChangedData(Record record, float segmentStart, float segmentEnd) { }
-//	public final static EditorEventType<RecordSegmentChangedData> RecordSegmentChanged =
-//			new EditorEventType<>(EditorEventName.RECORD_SEGMENT_CHANGED_EVT.getEventName(), RecordSegmentChangedData.class);
 
 	/**
 	 * Called when the editor wants a refresh of the view for the

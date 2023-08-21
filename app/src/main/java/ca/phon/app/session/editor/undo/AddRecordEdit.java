@@ -27,9 +27,12 @@ public class AddRecordEdit extends SessionEditorUndoableEdit {
 
 	// the added record
 	private Record record;
-	
+
 	// the insertion point
-	private int index;
+	private int elementIndex;
+
+	// record index
+	private int recordIndex;
 	
 	private boolean fireEvent = true;
 
@@ -41,10 +44,10 @@ public class AddRecordEdit extends SessionEditorUndoableEdit {
 		this(editor, record, -1);
 	}
 	
-	public AddRecordEdit(SessionEditor editor, Record record, int index) {
+	public AddRecordEdit(SessionEditor editor, Record record, int recordIndex) {
 		super(editor);
 		this.record = record;
-		this.index = index;
+		this.recordIndex = recordIndex;
 	}
 
 	public void setFireEvent(boolean fireEvent) {
@@ -79,7 +82,7 @@ public class AddRecordEdit extends SessionEditorUndoableEdit {
 		session.removeRecord(record);
 		if(isFireEvent()) {
 			final EditorEvent<EditorEventType.RecordDeletedData> ee =
-					new EditorEvent<>(EditorEventType.RecordDeleted, getSource(), new EditorEventType.RecordDeletedData(index, record));
+					new EditorEvent<>(EditorEventType.RecordDeleted, getSource(), new EditorEventType.RecordDeletedData(record, elementIndex, recordIndex));
 			getEditor().getEventManager().queueEvent(ee);
 		}
 	}
@@ -95,15 +98,16 @@ public class AddRecordEdit extends SessionEditorUndoableEdit {
 			record.setSpeaker(Participant.UNKNOWN);
 		}
 		
-		if(index < 0) {
+		if(recordIndex < 0) {
 			session.addRecord(record);
-			index = session.getRecordCount() - 1;
+			recordIndex = session.getRecordCount() - 1;
+			elementIndex = session.getRecordElementIndex(record);
 		} else
-			session.addRecord(index, record);
+			session.addRecord(recordIndex, record);
 		
 		if(isFireEvent()) {
 			final EditorEvent<EditorEventType.RecordAddedData> ee =
-					new EditorEvent<>(EditorEventType.RecordAdded, getSource(), new EditorEventType.RecordAddedData(index, record));
+					new EditorEvent<>(EditorEventType.RecordAdded, getSource(), new EditorEventType.RecordAddedData(record, elementIndex, recordIndex));
 			getEditor().getEventManager().queueEvent(ee);
 		}
 	}
