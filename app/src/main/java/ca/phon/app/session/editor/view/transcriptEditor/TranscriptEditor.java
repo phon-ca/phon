@@ -3,7 +3,7 @@ package ca.phon.app.session.editor.view.transcriptEditor;
 import ca.phon.app.project.DesktopProject;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
-import ca.phon.app.session.editor.undo.RecordExcludeEdit;
+import ca.phon.app.session.editor.undo.ExcludeRecordEdit;
 import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
 import ca.phon.plugin.PluginManager;
 import ca.phon.session.*;
@@ -86,7 +86,7 @@ public class TranscriptEditor extends JEditorPane {
     }
 
     public TranscriptEditor(Session session) {
-        this(session, new EditorEventManager(null), new SessionEditUndoSupport(), new UndoManager());
+        this(session, new EditorEventManager(), new SessionEditUndoSupport(), new UndoManager());
     }
 
      public static void main(String[] args) {
@@ -745,7 +745,7 @@ public class TranscriptEditor extends JEditorPane {
                 menu.add(excludeMenuItem);
                 excludeMenuItem.setState(record.isExcludeFromSearches());
                 excludeMenuItem.addActionListener(evt -> {
-                    RecordExcludeEdit excludeEdit = new RecordExcludeEdit(
+                    ExcludeRecordEdit excludeEdit = new ExcludeRecordEdit(
                         session,
                         eventManager,
                         record,
