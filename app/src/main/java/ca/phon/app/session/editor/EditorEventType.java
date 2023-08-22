@@ -11,7 +11,7 @@ import javax.print.attribute.standard.Media;
 import java.time.*;
 import java.util.List;
 
-public record EditorEventType<T>(String eventName, Class<T> type) {
+public record  EditorEventType<T>(String eventName, Class<T> type) {
 
 	/**
 	 * Fired after the editor has been initialized
@@ -122,6 +122,49 @@ public record EditorEventType<T>(String eventName, Class<T> type) {
 	 */
 	public final static EditorEventType<Participant> ParticipantChanged =
 			new EditorEventType<>(EditorEventName.PARTICIPANT_CHANGED.getEventName(), Participant.class);
+
+	public record ElementAddedData(Transcript.Element element, int elementIndex) { }
+	public final static EditorEventType<ElementAddedData> ElementAdded =
+			new EditorEventType<>(EditorEventName.ELEMENT_ADDED_EVT.getEventName(), ElementAddedData.class);
+
+	public record ElementDeletedData(Transcript.Element element, int elementIndex) { }
+	public final static EditorEventType<ElementDeletedData> ElementDeleted =
+			new EditorEventType<>(EditorEventName.ELEMENT_DELETED_EVT.getEventName(), ElementDeletedData.class);
+
+	public record ElementMovedData(Transcript.Element element, int fromElementIndex, int toElementIndex) { }
+	public final static EditorEventType<ElementMovedData> ElementMoved =
+			new EditorEventType<>(EditorEventName.ELEMENT_MOVED_EVT.getEventName(), ElementMovedData.class);
+
+	public record CommentAddedData(Comment record, int elementIndex) { }
+	/**
+	 * A comment was added
+	 */
+	public final static EditorEventType<CommentAddedData> CommentAdded =
+			new EditorEventType<>(EditorEventName.COMMENT_ADDED_EVT.getEventName(), CommentAddedData.class);
+
+	public record CommentDeletedData(Comment comment, int elementIndex) { }
+	/**
+	 * A comment was removed
+	 */
+	public final static EditorEventType<CommentDeletedData> CommentDeleted =
+			new EditorEventType<>(EditorEventName.COMMENT_DELETED_EVT.getEventName(), CommentDeletedData.class);
+
+	public record CommentMovedData(Comment comment, int oldElementIndex, int newElementIndex) { }
+	public final static EditorEventType<CommentMovedData> CommentMoved =
+			new EditorEventType<>(EditorEventName.COMMENT_MOVED_EVT.getEventName(), CommentMovedData.class);
+
+	public record GemAddedData(Gem gem, int elementIndex) { }
+	public final static EditorEventType<GemAddedData> GemAdded =
+			new EditorEventType<>(EditorEventName.GEM_ADDED_EVT.getEventName(), GemAddedData.class);
+
+	public record GemDeletedData(Gem gem, int elementIndex) { }
+	public final static EditorEventType<GemDeletedData> GemDeleted =
+			new EditorEventType<>(EditorEventName.GEM_DELETED_EVT.getEventName(), GemDeletedData.class);
+
+	public record GemMovedData(Gem gem, int oldElementIndex, int newElementIndex) { }
+	public final static EditorEventType<GemMovedData> GemMoved =
+			new EditorEventType<>(EditorEventName.GEM_MOVED_EVT.getEventName(), GemMovedData.class);
+
 
 	public record RecordAddedData(Record recrod, int elementIndex, int recordIndex) { }
 	/**

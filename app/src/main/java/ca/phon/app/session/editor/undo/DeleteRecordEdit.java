@@ -18,6 +18,7 @@ package ca.phon.app.session.editor.undo;
 import ca.phon.app.session.editor.*;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
+import ca.phon.session.Transcript;
 import ca.phon.ui.CommonModuleFrame;
 
 /**
@@ -55,6 +56,10 @@ public class DeleteRecordEdit extends SessionUndoableEdit {
 		getSession().addRecord(recordIndex, deletedRecord);
 
 		if(fireEvent) {
+			final EditorEvent<EditorEventType.ElementAddedData> elementAddedEvt =
+					new EditorEvent<>(EditorEventType.ElementAdded, getSource(),
+							new EditorEventType.ElementAddedData(getSession().getTranscript().getElementAt(elementIndex), elementIndex));
+			getEditorEventManager().queueEvent(elementAddedEvt);
 			final EditorEvent<EditorEventType.RecordAddedData> ee =
 					new EditorEvent<>(EditorEventType.RecordAdded, getSource(), new EditorEventType.RecordAddedData(deletedRecord, elementIndex, recordIndex));
 			getEditorEventManager().queueEvent(ee);
@@ -66,10 +71,15 @@ public class DeleteRecordEdit extends SessionUndoableEdit {
 		if(recordIndex < 0 || recordIndex >= getSession().getRecordCount()) return;
 
 		elementIndex = getSession().getRecordElementIndex(recordIndex);
+		final Transcript.Element removedElement = getSession().getTranscript().getElementAt(elementIndex);
 		deletedRecord = getSession().getRecord(recordIndex);
 		getSession().removeRecord(deletedRecord);
 
 		if(fireEvent) {
+			final EditorEvent<EditorEventType.ElementDeletedData> elementDeletedEvt =
+					new EditorEvent<>(EditorEventType.ElementDeleted, getSource(),
+							new EditorEventType.ElementDeletedData(removedElement, elementIndex));
+			getEditorEventManager().queueEvent(elementDeletedEvt);
 			final EditorEvent<EditorEventType.RecordDeletedData> ee =
 					new EditorEvent<>(EditorEventType.RecordDeleted, getSource(), new EditorEventType.RecordDeletedData(deletedRecord, elementIndex, recordIndex));
 			getEditorEventManager().queueEvent(ee);

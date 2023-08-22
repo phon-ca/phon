@@ -74,6 +74,11 @@ public class RecordMoveEdit extends SessionUndoableEdit {
 		
 		session.setRecordPosition(record, oldPosition);
 
+		final EditorEvent<EditorEventType.ElementMovedData> elementMovedEvt =
+				new EditorEvent<>(EditorEventType.ElementMoved, getSource(),
+						new EditorEventType.ElementMovedData(getSession().getTranscript().getElementAt(oldElementIndex), newElementIndex, oldElementIndex));
+		getEditorEventManager().queueEvent(elementMovedEvt);
+
 		final EditorEvent<EditorEventType.RecordMovedData> ee =
 				new EditorEvent<>(EditorEventType.RecordMoved, getSource(),
 						new EditorEventType.RecordMovedData(record, newElementIndex, position, oldElementIndex, oldPosition));
@@ -92,6 +97,11 @@ public class RecordMoveEdit extends SessionUndoableEdit {
 		oldElementIndex = getSession().getRecordElementIndex(record);
 		getSession().setRecordPosition(record, position);
 		newElementIndex = getSession().getRecordElementIndex(record);
+
+		final EditorEvent<EditorEventType.ElementMovedData> elementMovedEvt =
+				new EditorEvent<>(EditorEventType.ElementMoved, getSource(),
+						new EditorEventType.ElementMovedData(getSession().getTranscript().getElementAt(newElementIndex), oldElementIndex, newElementIndex));
+		getEditorEventManager().queueEvent(elementMovedEvt);
 
 		final EditorEvent<EditorEventType.RecordMovedData> ee =
 				new EditorEvent<>(EditorEventType.RecordMoved, getSource(),
