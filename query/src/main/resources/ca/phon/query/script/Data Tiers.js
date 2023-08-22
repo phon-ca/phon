@@ -1,14 +1,12 @@
 // param setup
 
-var FeatureFilter = require("lib/FeatureFilter").FeatureFilter;
-var GroupFilter = require("lib/GroupFilter").GroupFilter;
+var PatternFilter = require("lib/PatternFilter").PatternFilter;
 var WordFilter = require("lib/WordFilter").WordFilter;
 var AlignedWordFilter = require("lib/TierFilter").TierFilter;
 var TierFilter = require("lib/TierFilter").TierFilter;
 var TierList = require("lib/TierList").TierList;
-var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
+var AlignedTierFilter = require("lib/TierFilter").TierFilter;
 var WordFilter = require("lib/WordFilter").WordFilter;
-var SyllableFilter = require("lib/SyllableFilter").SyllableFilter;
 var ParticipantFilter = require("lib/ParticipantFilter").ParticipantFilter;
 var SearchByOptions = require("lib/SearchByOptions").SearchByOptions;
 
@@ -19,12 +17,12 @@ var SearchByOptions = require("lib/SearchByOptions").SearchByOptions;
 var filters = {
 	"primary": new TierFilter("filters.primary"),
 	"searchBy": new SearchByOptions("filters.searchBy"),
-	"group": new GroupFilter("filters.group"),
-	"groupTiers": new TierList("filters.groupTiers"),
+	"tierFilter": new PatternFilter("filters.tierFilter"),
+	"alignedTierFilter": new AlignedTierFilter("filters.alignedTierFilter"),
 	"word": new WordFilter("filters.word"),
-	"wordTiers": new TierList("filters.wordTiers"),
 	"alignedWord": new AlignedWordFilter("filters.alignedWord"),
-	"alignedGroup": new AlignedGroupFilter("filters.alignedGroup"),
+	"addTiers": new TierList("filters.addTiers"),
+	"wordTiers": new TierList("filters.wordTiers"),
 	"speaker": new ParticipantFilter("filters.speaker")
 };
 
@@ -37,17 +35,19 @@ function begin_search(s) {
 	session = s;
 }
 
-function setup_params(params, selectedSessions) {
+function setup_params(params) {
 	filters.primary.param_setup(params);
 	filters.primary.set_required(true);
 	
 	var insertIdx = 1;
 
-	filters.group.param_setup(params);
+	var tierFilterSection = new SeparatorScriptParam("tierFilterHeader", "Tier Options", true);
+	params.add(tierFilterSection);
+	filters.tierFilter.param_setup(params);
 
-	var alignedGroupHeader = new LabelScriptParam("", "<html><b>Aligned Group Filter</b></html>");
-	params.add(alignedGroupHeader);
-	filters.alignedGroup.param_setup(params);
+	var alignedTierHeader = new LabelScriptParam("", "<html><b>Aligned Tier Filter</b></html>");
+	params.add(alignedTierHeader);
+	filters.alignedTierFilter.param_setup(params);
 
 	// change default status of word filter for this query
 	filters.word.searchByWord = false;
@@ -74,7 +74,7 @@ function setup_params(params, selectedSessions) {
 	params.add(otherDataHeader);
 	var sep = new LabelScriptParam("", "<html><b>Add aligned groups</b></html>");
 	params.add(sep);
-	filters.groupTiers.param_setup(params);
+	filters.addTiers.param_setup(params);
 	var wordsep = new LabelScriptParam("", "<html><b>Add aligned words</b></html>");
 	params.add(wordsep);
 	filters.wordTiers.param_setup(params);
