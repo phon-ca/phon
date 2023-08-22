@@ -6,9 +6,9 @@ import ca.phon.session.Transcript;
 
 import javax.swing.undo.CannotUndoException;
 
-public class RemoveTranscriptElementEdit extends AddTranscriptElementEdit {
+public class DeleteTranscriptElementEdit extends AddTranscriptElementEdit {
 
-    public RemoveTranscriptElementEdit(Session session, EditorEventManager editorEventManager, Transcript.Element element, int elementIndex) {
+    public DeleteTranscriptElementEdit(Session session, EditorEventManager editorEventManager, Transcript.Element element, int elementIndex) {
         super(session, editorEventManager, element, elementIndex);
     }
 
