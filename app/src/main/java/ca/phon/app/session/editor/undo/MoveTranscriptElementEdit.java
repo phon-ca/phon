@@ -6,6 +6,8 @@ import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.session.Session;
 import ca.phon.session.Transcript;
 
+import javax.swing.undo.CannotUndoException;
+
 public class MoveTranscriptElementEdit extends SessionUndoableEdit {
 
     private final Transcript.Element element;
@@ -43,6 +45,13 @@ public class MoveTranscriptElementEdit extends SessionUndoableEdit {
                             new EditorEventType.RecordMovedData(this.element.asRecord(), this.oldElementIndex, this.oldRecordIndex, this.newElementIndex, recordIndex));
             getEditorEventManager().queueEvent(recordMovedEvt);
         }
+    }
+
+    @Override
+    public void undo() throws CannotUndoException {
+        getSession().getTranscript().removeElement(this.element);
+        getSession().getTranscript().addElement(this.oldElementIndex, this.element);
+        fireMoveEvents(this.newElementIndex, this.oldElementIndex);
     }
 
     @Override
