@@ -51,7 +51,8 @@ public class MoveTranscriptElementEdit extends SessionUndoableEdit {
         if(this.element.isRecord())
             oldRecordIndex = getSession().getTranscript().getRecordPosition(this.element.asRecord());
         getSession().getTranscript().removeElement(this.oldElementIndex);
-        getSession().getTranscript().addElement(this.newElementIndex, this.element);
+        int addIndex = newElementIndex > oldElementIndex ? newElementIndex - 1 : newElementIndex;
+        getSession().getTranscript().addElement(addIndex, this.element);
         fireMoveEvents(this.oldElementIndex, this.newElementIndex);
     }
 

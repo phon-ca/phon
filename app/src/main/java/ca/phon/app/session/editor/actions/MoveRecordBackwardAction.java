@@ -16,7 +16,7 @@
 package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.undo.RecordMoveEdit;
+import ca.phon.app.session.editor.undo.MoveRecordEdit;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 
@@ -46,7 +46,7 @@ public class MoveRecordBackwardAction extends SessionEditorAction {
 		final int position = editor.getCurrentRecordIndex() - 1;
 		
 		if(position >= 0 && position < session.getRecordCount()) {
-			final RecordMoveEdit edit = new RecordMoveEdit(getEditor(), record, position);
+			final MoveRecordEdit edit = new MoveRecordEdit(getEditor(), record, position);
 			getEditor().getUndoSupport().postEdit(edit);
 		}
 	}

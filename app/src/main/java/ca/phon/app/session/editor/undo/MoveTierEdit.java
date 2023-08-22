@@ -10,7 +10,7 @@ import ca.phon.session.TierViewItem;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TierMoveEdit extends SessionUndoableEdit {
+public class MoveTierEdit extends SessionUndoableEdit {
 
     private final TierViewItem tierViewItem;
 
@@ -18,11 +18,11 @@ public class TierMoveEdit extends SessionUndoableEdit {
 
     private final int newViewIndex;
 
-    public TierMoveEdit(SessionEditor editor, TierViewItem tierViewItem, int newViewIndex) {
+    public MoveTierEdit(SessionEditor editor, TierViewItem tierViewItem, int newViewIndex) {
         this(editor.getSession(), editor.getEventManager(), tierViewItem, newViewIndex);
     }
 
-    public TierMoveEdit(Session session, EditorEventManager editorEventManager, TierViewItem tierViewItem, int newViewIndex) {
+    public MoveTierEdit(Session session, EditorEventManager editorEventManager, TierViewItem tierViewItem, int newViewIndex) {
         super(session, editorEventManager);
         this.tierViewItem = tierViewItem;
         this.oldViewIndex = getSession().getTierView().indexOf(tierViewItem);

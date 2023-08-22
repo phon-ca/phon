@@ -21,7 +21,7 @@ import ca.phon.session.*;
 
 import javax.swing.undo.CannotUndoException;
 
-public class RecordMoveEdit extends SessionUndoableEdit {
+public class MoveRecordEdit extends SessionUndoableEdit {
 
 	private final Record record;
 	
@@ -35,11 +35,11 @@ public class RecordMoveEdit extends SessionUndoableEdit {
 	
 	private boolean issueRefresh = true;
 
-	public RecordMoveEdit(SessionEditor editor, Record record, int position) {
+	public MoveRecordEdit(SessionEditor editor, Record record, int position) {
 		this(editor.getSession(), editor.getEventManager(), record, position);
 	}
 
-	public RecordMoveEdit(Session session, EditorEventManager editorEventManager, Record record, int position) {
+	public MoveRecordEdit(Session session, EditorEventManager editorEventManager, Record record, int position) {
 		super(session, editorEventManager);
 		this.record = record;
 		this.position = position;
