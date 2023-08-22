@@ -83,195 +83,40 @@ function setup_params(params) {
 	filters.speaker.param_setup(params);
 }
 
-function isGroupedTier(tierName) {
-	var retVal = true;
-
-	var systemTierType =
-	(SystemTierType.isSystemTier(tierName) ? SystemTierType.tierFromString(tierName): null);
-
-	retVal = (systemTierType != null ? systemTierType.isGrouped(): false);
-
-	if (systemTierType == null) {
-		for (var i = 0; i < session.userTierCount; i++) {
-			var userTier = session.getUserTier(i);
-			if (userTier.name == tierName) {
-				retVal = userTier.isGrouped();
-				break;
-			}
-		}
-	}
-
-	return retVal;
-}
-
 function query_record(recordIndex, record) {
 	if (! filters.speaker.check_speaker(record.speaker, session.date)) return;
 
-	var searchTier = filters.primary.tier;
-	var tierGrouped = isGroupedTier(searchTier);
+	const searchTier = filters.primary.tier;
+	const tier = record.getTier(searchTier);
+	if(tier == null || !tier.hasValue()) return;
 
-	var groups = filters.group.getRequestedGroups(record);
-
-	if (! tierGrouped && groups.length > 0) {
-		// take only first group
-		var tmp = new Array();
-		tmp.push(groups[0]);
-		groups = tmp;
+	if(filters.tierFilter.isUseFilter()) {
+		if(!filters.tierFilter.check_filter(tier.value)) return;
 	}
 
-	// check aligned group for each group returned
-	if (filters.alignedGroup.isUseFilter()) {
-		groups = filters.alignedGroup.filter_groups(record, groups);
+	var tierAlignedData = filters.addTiers.getAlignedTiers(record, "Tier");
+	var tierAlignedResults = tierAlignedData.resultValues;
+	var tierAlignedMeta = tierAlignedData.metadata;
+	if(filters.alignedTierFilter.isUseFilter()) {
+		if(!filters.alignedTierFilter.check_filter(record)) return;
+
+		var tierList = new TierList("tier");
+		tierList.setTiers(filters.alignedTierFilter.tier);
+
+		var alignedTierData = tierList.getAlignedTiers(record, "Tier");
+		for(var i = 0; i < alignedTierData.resultValues.length; i++) {
+			tierAlignedResults.push(alignedTierData.resultValues[i]);
+		}
+		tierAlignedMeta.putAll(alignedTierData.metadata);
 	}
 
-	for (var gIdx = 0; gIdx < groups.length; gIdx++) {
-		var group = groups[gIdx];
-		var groupAlignedResults = new Array();
-
-		if (filters.alignedGroup.isUseFilter()) {
-			var tierList = new TierList("group");
-			tierList.setTiers(filters.alignedGroup.tier);
-
-			var alignedGroupData = tierList.getAlignedTierData(record, group, "Group");
-			for(var j = 0; j < alignedGroupData[0].length; j++) {
-				groupAlignedResults.push(alignedGroupData[0][j]);
-			}
-		}
-
-		if (filters.word.isUseFilter()) {
-			var words = filters.word.getRequestedWords(group, searchTier);
-
-			for (var wIdx = 0; wIdx < words.length; wIdx++) {
-				var wordData = words[wIdx];
-				var word = wordData.word;
-				var checkWord = true;
-				var wordAlignedResults = new Array();
-
-				if (filters.alignedWord.isUseFilter()) {
-					var aligned = word.getTier(filters.alignedWord.tier);
-					checkWord = filters.alignedWord.patternFilter.check_filter(aligned);
-
-					if(checkWord == true) {
-						var tierList = new TierList("word");
-						tierList.setTiers(filters.alignedWord.tier);
-
-						var alignedWordData = tierList.getAlignedTierData(record, word, "Word");
-						for(var k = 0; k < alignedWordData[0].length; k++) {
-							wordAlignedResults.push(alignedWordData[0][k]);
-						}
-					}
-				}
-				if (checkWord == true) {
-					var vals = filters.primary.patternFilter.find_pattern(word.getTier(searchTier));
-
-					// get start index of word
-					var wordOffset = 0;
-					if (searchTier == "Orthography") {
-						wordOffset = word.getOrthographyWordLocation();
-					} else if (searchTier == "IPA Target") {
-						wordOffset = word.getIPATargetWordLocation();
-					} else if (searchTier == "IPA Actual") {
-						wordOffset = word.getIPAActualWordLocation();
-					} else {
-						wordOffset = word.getTierWordLocation(searchTier);
-					}
-
-					for (var i = 0; i < vals.length; i++) {
-						var v = vals[i];
-
-						var result = factory.createResult();
-						result.recordIndex = recordIndex;
-						result.schema = "LINEAR";
-
-						var startIdx = wordOffset + v.start;
-						var endIdx = wordOffset + v.end;
-
-						if (v.value instanceof IPATranscript) {
-							startIdx = wordOffset + word.getTier(searchTier).stringIndexOf(v.value);
-							endIdx = startIdx + v.value.toString().length();
-						}
-
-						var rv = factory.createResultValue();
-						rv.tierName = searchTier;
-						rv.groupIndex = group.groupIndex;
-						rv.range = new Range(startIdx, endIdx, true);
-						rv.data = v.value;
-						result.addResultValue(rv);
-
-						for(var j = 0; j < groupAlignedResults.length; j++) {
-							result.addResultValue(groupAlignedResults[j]);
-						}
-						for(var j = 0; j < wordAlignedResults.length; j++) {
-							result.addResultValue(wordAlignedResults[j]);
-						}
-
-						if(filters.searchBy.includePositionalInfo == true) {
-							var searchBy = (filters.searchBy.searchBySyllable == true ? "Syllable" : filters.searchBy.searchBy);
-							result.metadata.put("Position in " + searchBy, v.position);
-							result.metadata.put("Word Position", wordData.position);
-						}
-
-						var alignedGroupData = filters.groupTiers.getAlignedTierData(record, group, "Group");
-						for(var j = 0; j < alignedGroupData[0].length; j++) {
-							result.addResultValue(alignedGroupData[0][j]);
-						}
-						result.metadata.putAll(alignedGroupData[1]);
-
-						// add metadata
-						var alignedWordData = filters.wordTiers.getAlignedTierData(record, word, "Word");
-						for(var j = 0; j < alignedWordData[0].length; j++) {
-							result.addResultValue(alignedWordData[0][j]);
-						}
-						result.metadata.putAll(alignedWordData[1]);
-
-						results.addResult(result);
-					}
-				}
-			}
-		} else {
-			var vals = filters.primary.patternFilter.find_pattern(group.getTier(searchTier));
-
-			for (var i = 0; i < vals.length; i++) {
-				var v = vals[i];
-
-				var result = factory.createResult();
-				result.recordIndex = recordIndex;
-				result.schema = "LINEAR";
-
-				var startIdx = v.start;
-				var endIdx = v.end;
-
-				if (v.value instanceof IPATranscript) {
-					// we need to convert phone to string range
-					startIdx = group.getTier(searchTier).stringIndexOf(v.value);
-					endIdx = startIdx + v.value.toString().length();
-				}
-
-				var rv = factory.createResultValue();
-				rv.tierName = searchTier;
-				rv.groupIndex = group.groupIndex;
-				rv.range = new Range(startIdx, endIdx, true);
-				rv.data = v.value;
-				result.addResultValue(rv);
-
-				for(var j = 0; j < groupAlignedResults.length; j++) {
-					result.addResultValue(groupAlignedResults[j]);
-				}
-
-				var alignedGroupData = filters.groupTiers.getAlignedTierData(record, group, "Group");
-				for(var j = 0; j < alignedGroupData[0].length; j++) {
-					result.addResultValue(alignedGroupData[0][j]);
-				}
-
-				if(filters.searchBy.includePositionalInfo == true) {
-					var searchBy = (filters.searchBy.searchBySyllable == true ? "Syllable" : filters.searchBy.searchBy);
-					result.metadata.put("Position in " + searchBy, v.position);
-				}
-
-				result.metadata.putAll(alignedGroupData[1]);
-
-				results.addResult(result);
-			}
-		}
+	var toSearch = new Array();
+	toSearch.push({
+		element: tier.value,
+		alignedResults: tierAlignedResults,
+		alignedMeta: tierAlignedMeta
+	});
+	if(filters.word.isUseFilter()) {
+		// search by word
 	}
 }

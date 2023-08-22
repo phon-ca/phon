@@ -147,7 +147,6 @@ function query_record(recordIndex, record) {
     }
 
     var tierAlignedData = filters.addTiers.getAlignedTiers(record, "Tier");
-
     var tierAlignedResults = tierAlignedData.resultValues;
     var tierAlignedMeta = tierAlignedData.metadata;
     if(filters.alignedTierFilter.isUseFilter()) {
