@@ -55,7 +55,7 @@ public class TierViewItemEdit extends SessionUndoableEdit {
 		final List<EditorEventType.TierViewChangeType> changes = calculateChanges(tierView.get(idx), oldView.get(idx));
 		for(EditorEventType.TierViewChangeType change:changes) {
 			final EditorEvent<EditorEventType.TierViewChangedData> ee =
-					new EditorEvent<>(EditorEventType.TierViewChanged, getSource(), new EditorEventType.TierViewChangedData(tierView, oldView, change,
+					new EditorEvent<>(EditorEventType.TierViewChanged, getSource(), new EditorEventType.TierViewChangedData(oldView, tierView, change,
 							List.of(newItem.getTierName()), List.of(getSession().getTierView().indexOf(newItem))));
 			getEditorEventManager().queueEvent(ee);
 		}
