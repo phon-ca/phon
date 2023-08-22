@@ -47,29 +47,20 @@ public class EditorEventManager {
 	private final PhonWorker dispatchThread = PhonWorker.createWorker();
 	
 	/**
-	 * Weak reference to {@link SessionEditor}
-	 */
-	private final WeakReference<SessionEditor> editorRef;
-	
-	/**
 	 * action map
 	 */
 	private final Map<EditorEventType<?>, List<EditorEventHandler<?>>> actionMap = Collections.synchronizedMap(new HashMap<>());
 	
 	/**
 	 * Constructor
-	 * 
-	 * @param editor
 	 */
-	public EditorEventManager(SessionEditor editor) {
+	public EditorEventManager() {
 		super();
-		this.editorRef = new WeakReference<>(editor);
-		dispatchThread.setName("EET (" + editor.getTitle() + ")");
+		dispatchThread.setName("Editor Event Thread");
 	}
 	
 	/**
 	 * Shutdown the even thread.
-	 * 
 	 * 
 	 */
 	public void shutdown() {
@@ -81,13 +72,6 @@ public class EditorEventManager {
 		
 		actionMap.clear();
 		eventQueue.clear();
-	}
-	
-	/**
-	 * Get the session editor we are dispatching events for
-	 */
-	public SessionEditor getEditor() {
-		return editorRef.get();
 	}
 	
 	/**

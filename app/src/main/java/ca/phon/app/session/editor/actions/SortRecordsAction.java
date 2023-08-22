@@ -16,7 +16,7 @@
 package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.undo.RecordMoveEdit;
+import ca.phon.app.session.editor.undo.MoveRecordEdit;
 import ca.phon.session.Record;
 
 import javax.swing.undo.CompoundEdit;
@@ -68,7 +68,7 @@ public class SortRecordsAction extends SessionEditorAction {
 		for(int i = 0; i < sortedRecords.size(); i++) {
 			final Record r = sortedRecords.get(i);
 			
-			final RecordMoveEdit edit = new RecordMoveEdit(getEditor(), r, i);
+			final MoveRecordEdit edit = new MoveRecordEdit(getEditor(), r, i);
 			edit.setIssueRefresh(i == (sortedRecords.size()-1));
 			edit.doIt();
 			

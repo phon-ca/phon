@@ -86,6 +86,8 @@ public class AddRecordEdit extends SessionUndoableEdit {
 
 	@Override
 	public void undo() {
+		final Transcript.Element removedElement = getSession().getTranscript().getElementAt(elementIndex);
+
 		super.undo();
 		
 		final EditorEventManager editorEventManager = getEditorEventManager();
@@ -93,6 +95,10 @@ public class AddRecordEdit extends SessionUndoableEdit {
 		
 		session.removeRecord(record);
 		if(isFireEvent()) {
+			final EditorEvent<EditorEventType.ElementDeletedData> elementDeletedEvt =
+					new EditorEvent<>(EditorEventType.ElementDeleted, getSource(),
+							new EditorEventType.ElementDeletedData(removedElement, elementIndex));
+			getEditorEventManager().queueEvent(elementDeletedEvt);
 			final EditorEvent<EditorEventType.RecordDeletedData> ee =
 					new EditorEvent<>(EditorEventType.RecordDeleted, getSource(), new EditorEventType.RecordDeletedData(record, elementIndex, recordIndex));
 			editorEventManager.queueEvent(ee);
@@ -118,6 +124,10 @@ public class AddRecordEdit extends SessionUndoableEdit {
 			session.addRecord(recordIndex, record);
 		
 		if(isFireEvent()) {
+			final EditorEvent<EditorEventType.ElementAddedData> elementAddedEvt =
+					new EditorEvent<>(EditorEventType.ElementAdded, getSource(),
+							new EditorEventType.ElementAddedData(getSession().getTranscript().getElementAt(elementIndex), elementIndex));
+			getEditorEventManager().queueEvent(elementAddedEvt);
 			final EditorEvent<EditorEventType.RecordAddedData> ee =
 					new EditorEvent<>(EditorEventType.RecordAdded, getSource(), new EditorEventType.RecordAddedData(record, elementIndex, recordIndex));
 			editorEventManager.queueEvent(ee);

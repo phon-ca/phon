@@ -21,7 +21,7 @@ import ca.phon.session.Session;
 
 import javax.swing.undo.CannotUndoException;
 
-public class RecordExcludeEdit extends SessionUndoableEdit {
+public class ExcludeRecordEdit extends SessionUndoableEdit {
 
 	private final Record record;
 	
@@ -29,11 +29,11 @@ public class RecordExcludeEdit extends SessionUndoableEdit {
 	
 	private final boolean wasExcluded;
 	
-	public RecordExcludeEdit(SessionEditor editor, Record record, boolean exclude) {
+	public ExcludeRecordEdit(SessionEditor editor, Record record, boolean exclude) {
 		this(editor.getSession(), editor.getEventManager(), record, exclude);
 	}
 
-	public RecordExcludeEdit(Session session, EditorEventManager editorEventManager, Record record, boolean exclude) {
+	public ExcludeRecordEdit(Session session, EditorEventManager editorEventManager, Record record, boolean exclude) {
 		super(session, editorEventManager);
 		this.record = record;
 		this.exclude = exclude;

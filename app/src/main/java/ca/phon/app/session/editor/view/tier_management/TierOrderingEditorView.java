@@ -712,7 +712,7 @@ public class TierOrderingEditorView extends EditorView {
 				return false;
 			}
 
-			final TierMoveEdit edit = new TierMoveEdit(getEditor(), item, row);
+			final MoveTierEdit edit = new MoveTierEdit(getEditor(), item, row);
 			getEditor().getUndoSupport().postEdit(edit);
 
 			tierOrderingTable.getSelectionModel().setSelectionInterval(row, row);

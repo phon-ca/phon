@@ -76,26 +76,12 @@ public class EditTierAction extends TierManagementAction {
 				tierDialog.pack();
 				
 				if(tierDialog.showDialog()) {
-					final CompoundEdit edit = new CompoundEdit();
-					// change of tier name
-					if(!depTierDesc.getName().equals(tierEditor.getTierName())) {
-						String oldTierName = depTierDesc.getName();
-						
-						final TierNameEdit tierNameEdit = new TierNameEdit(getEditor(), tierEditor.getTierName(), oldTierName);
-						tierNameEdit.doIt();
-						edit.addEdit(tierNameEdit);
-					}
-					
 					final Formatter<Font> fontFormatter = FormatterFactory.createFormatter(Font.class);
 					final String fontString = fontFormatter.format(tierEditor.getTierFont());
 					final TierViewItem newViewItem = factory.createTierViewItem(
 							tierEditor.getTierName(), tierEditor.isVisible(), fontString, tierItem.isTierLocked());
 					final TierViewItemEdit tierViewItemEdit = new TierViewItemEdit(getEditor(), tierItem, newViewItem);
-					tierViewItemEdit.doIt();
-					edit.addEdit(tierViewItemEdit);
-					
-					edit.end();
-					getEditor().getUndoSupport().postEdit(edit);
+					getEditor().getUndoSupport().postEdit(tierViewItemEdit);
 				} // if (showDialog())
 			} // if (depTierDesc != null)
 	}

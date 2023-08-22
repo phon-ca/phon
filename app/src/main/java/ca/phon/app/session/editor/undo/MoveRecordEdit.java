@@ -21,7 +21,7 @@ import ca.phon.session.*;
 
 import javax.swing.undo.CannotUndoException;
 
-public class RecordMoveEdit extends SessionUndoableEdit {
+public class MoveRecordEdit extends SessionUndoableEdit {
 
 	private final Record record;
 	
@@ -35,11 +35,11 @@ public class RecordMoveEdit extends SessionUndoableEdit {
 	
 	private boolean issueRefresh = true;
 
-	public RecordMoveEdit(SessionEditor editor, Record record, int position) {
+	public MoveRecordEdit(SessionEditor editor, Record record, int position) {
 		this(editor.getSession(), editor.getEventManager(), record, position);
 	}
 
-	public RecordMoveEdit(Session session, EditorEventManager editorEventManager, Record record, int position) {
+	public MoveRecordEdit(Session session, EditorEventManager editorEventManager, Record record, int position) {
 		super(session, editorEventManager);
 		this.record = record;
 		this.position = position;
@@ -74,6 +74,11 @@ public class RecordMoveEdit extends SessionUndoableEdit {
 		
 		session.setRecordPosition(record, oldPosition);
 
+		final EditorEvent<EditorEventType.ElementMovedData> elementMovedEvt =
+				new EditorEvent<>(EditorEventType.ElementMoved, getSource(),
+						new EditorEventType.ElementMovedData(getSession().getTranscript().getElementAt(oldElementIndex), newElementIndex, oldElementIndex));
+		getEditorEventManager().queueEvent(elementMovedEvt);
+
 		final EditorEvent<EditorEventType.RecordMovedData> ee =
 				new EditorEvent<>(EditorEventType.RecordMoved, getSource(),
 						new EditorEventType.RecordMovedData(record, newElementIndex, position, oldElementIndex, oldPosition));
@@ -92,6 +97,11 @@ public class RecordMoveEdit extends SessionUndoableEdit {
 		oldElementIndex = getSession().getRecordElementIndex(record);
 		getSession().setRecordPosition(record, position);
 		newElementIndex = getSession().getRecordElementIndex(record);
+
+		final EditorEvent<EditorEventType.ElementMovedData> elementMovedEvt =
+				new EditorEvent<>(EditorEventType.ElementMoved, getSource(),
+						new EditorEventType.ElementMovedData(getSession().getTranscript().getElementAt(newElementIndex), oldElementIndex, newElementIndex));
+		getEditorEventManager().queueEvent(elementMovedEvt);
 
 		final EditorEvent<EditorEventType.RecordMovedData> ee =
 				new EditorEvent<>(EditorEventType.RecordMoved, getSource(),

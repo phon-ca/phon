@@ -20,8 +20,8 @@ var filters = {
     "searchBy": new SearchByOptions("filters.searchBy"),
     "targetResultFilter": new PatternFilter("filters.targetResultFilter"),
     "actualResultFilter": new PatternFilter("filters.actualResultFilter"),
-    "alignedTierFilter": new AlignedTierFilter("filters.alignedTierFilter"),
     "tierFilter": new PatternFilter("filters.tierFilter"),
+    "alignedTierFilter": new AlignedTierFilter("filters.alignedTierFilter"),
     "word": new WordFilter("filters.word"),
     "addTiers": new TierList("filters.addTiers"),
     "wordTiers": new TierList("filters.wordTiers"),
@@ -40,7 +40,7 @@ var includeAlignedParamInfo = {
 var includeAlignedParam;
 var includeAligned = includeAlignedParamInfo.def;
 
-function setup_params(params, selectedSessions) {
+function setup_params(params) {
     filters.primary.setSelectedPatternType(PatternType.PHONEX);
     filters.primary.param_setup(params);
     filters.primary.set_required(true);
@@ -147,7 +147,6 @@ function query_record(recordIndex, record) {
     }
 
     var tierAlignedData = filters.addTiers.getAlignedTiers(record, "Tier");
-
     var tierAlignedResults = tierAlignedData.resultValues;
     var tierAlignedMeta = tierAlignedData.metadata;
     if(filters.alignedTierFilter.isUseFilter()) {

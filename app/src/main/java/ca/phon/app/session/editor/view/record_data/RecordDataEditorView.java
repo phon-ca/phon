@@ -22,11 +22,7 @@ import ca.phon.app.session.editor.actions.PlaySegmentAction;
 import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.common.*;
 import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
-import ca.phon.formatter.Formatter;
-import ca.phon.formatter.*;
 import ca.phon.ipa.*;
-import ca.phon.ipa.alignment.*;
-import ca.phon.orthography.Orthography;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.position.*;
@@ -51,11 +47,9 @@ import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.beans.*;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.atomic.*;
-import java.util.regex.*;
 
 /**
  * Editor view for tier data.
@@ -821,7 +815,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 
 	public void onExclude() {
 		final boolean exclude = excludeFromSearchesBox.isSelected();
-		final RecordExcludeEdit edit = new RecordExcludeEdit(getEditor(), getEditor().currentRecord(), exclude);
+		final ExcludeRecordEdit edit = new ExcludeRecordEdit(getEditor(), getEditor().currentRecord(), exclude);
 		getEditor().getUndoSupport().postEdit(edit);
 	}
 
@@ -1057,7 +1051,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 		final Integer newRecordNumber = Integer.parseInt(recNumField.getText())-1;
 
 		if(newRecordNumber >= 0 && newRecordNumber < getEditor().getSession().getRecordCount()) {
-			final RecordMoveEdit edit = new RecordMoveEdit(getEditor(), getEditor().currentRecord(), newRecordNumber);
+			final MoveRecordEdit edit = new MoveRecordEdit(getEditor(), getEditor().currentRecord(), newRecordNumber);
 			getEditor().getUndoSupport().postEdit(edit);
 		}
 	}
