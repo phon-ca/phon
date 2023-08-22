@@ -23,7 +23,7 @@
         <tierView tierName="Notes" visible="true" locked="false" font="default"/>
         <tierView tierName="Segment" visible="true" locked="false" font="default"/>
         <tierView tierName="MorphCat" visible="false" locked="false" font="default"/>
-        <tierView tierName="Translation" visible="true" locked="false" font="default"/>
+        <tierView tierName="Translation" visible="true" locked="false" font="Dialog-PLAIN-12"/>
         <tierView tierName="SegType" visible="true" locked="false" font="default"/>
     </tierOrder>
     <transcript>

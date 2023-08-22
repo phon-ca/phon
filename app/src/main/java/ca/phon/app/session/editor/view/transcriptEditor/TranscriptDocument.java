@@ -6,21 +6,17 @@ import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.ui.DropDownIcon;
-import ca.phon.ui.EmptyIcon;
+import ca.phon.session.usertier.*;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.ipa.PhoneMapDisplay;
 import ca.phon.ui.ipa.SyllabificationDisplay;
-import org.jdesktop.swingx.HorizontalLayout;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.text.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.*;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class TranscriptDocument extends DefaultStyledDocument {
@@ -28,26 +24,16 @@ public class TranscriptDocument extends DefaultStyledDocument {
     private boolean targetSyllablesVisible = false;
     private boolean actualSyllablesVisible = false;
     private boolean alignmentVisible = false;
-    private Function<String, JComponent> tierLabelFactory = this::createLabel;
+    private BiFunction<Tier<?>, TierViewItem, JComponent> tierLabelFactory;
+    private Function<Comment, JComponent> commentLabelFactory;
+    private Function<Gem, JComponent> gemLabelFactory;
+    private BiFunction<Record, Integer, JComponent> separatorFactory;
     private final SessionFactory sessionFactory;
 
     public TranscriptDocument() {
         super(new StyleContext());
         sessionFactory = SessionFactory.newFactory();
         setDocumentFilter(new TranscriptDocumentFilter());
-    }
-
-    private JComponent createLabel(String tierName) {
-        JLabel tierLabel = new JLabel(tierName + ":");
-        var labelFont = new Font(tierLabel.getFont().getFontName(), tierLabel.getFont().getStyle(), 12);
-        tierLabel.setFont(labelFont);
-        tierLabel.setAlignmentY(.8f);
-        tierLabel.setMaximumSize(new Dimension(150, tierLabel.getPreferredSize().height));
-        tierLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        EmptyBorder tierLabelPadding = new EmptyBorder(0,8,0,8);
-        tierLabel.setBorder(tierLabelPadding);
-
-        return tierLabel;
     }
 
     // region Visible Getters/Setters
@@ -95,7 +81,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return retVal;
     }
 
-    private SimpleAttributeSet getTierAttributes(Tier tier, TierViewItem item) {
+    private SimpleAttributeSet getTierAttributes(Tier<?> tier, TierViewItem item) {
         final SimpleAttributeSet retVal = new SimpleAttributeSet();
         retVal.addAttribute("tier", tier);
         String fontString = item.getTierFont();
@@ -127,7 +113,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         SimpleAttributeSet retVal = new SimpleAttributeSet();
         retVal.addAttribute("tier", tier);
 
-        StyleConstants.setForeground(retVal, Color.blue);
+        StyleConstants.setForeground(retVal, Color.black);
 
         return retVal;
     }
@@ -136,7 +122,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         SimpleAttributeSet retVal = new SimpleAttributeSet();
         retVal.addAttribute("tier", tier);
 
-        StyleConstants.setForeground(retVal, Color.red);
+        StyleConstants.setForeground(retVal, Color.gray);
 
         return retVal;
     }
@@ -151,6 +137,30 @@ public class TranscriptDocument extends DefaultStyledDocument {
         SimpleAttributeSet retVal = new SimpleAttributeSet();
 
         StyleConstants.setForeground(retVal, Color.GRAY);
+
+        return retVal;
+    }
+
+    private SimpleAttributeSet getUserTierStringAttributes() {
+        SimpleAttributeSet retVal = new SimpleAttributeSet();
+
+        StyleConstants.setForeground(retVal, Color.black);
+
+        return retVal;
+    }
+
+    private SimpleAttributeSet getUserTierCommentAttributes() {
+        SimpleAttributeSet retVal = new SimpleAttributeSet();
+
+        StyleConstants.setForeground(retVal, Color.gray);
+
+        return retVal;
+    }
+
+    private SimpleAttributeSet getUserTierInternalMediaAttributes() {
+        SimpleAttributeSet retVal = new SimpleAttributeSet();
+
+        StyleConstants.setForeground(retVal, Color.gray);
 
         return retVal;
     }
@@ -170,99 +180,28 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return retVal;
     }
 
-    private SimpleAttributeSet getTierLabelAttributes(TierViewItem tierViewItem) {
+    private SimpleAttributeSet getTierLabelAttributes(Tier<?> tier, TierViewItem tierViewItem) {
         final SimpleAttributeSet retVal = new SimpleAttributeSet();
 
-        JLabel tierLabel = (JLabel) tierLabelFactory.apply(tierViewItem.getTierName());
-        tierLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        DropDownIcon dropDownIcon = new DropDownIcon(new EmptyIcon(0, 16), 0, SwingConstants.BOTTOM);
-        tierLabel.setHorizontalTextPosition(SwingConstants.LEFT);
-        tierLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        tierLabel.setIcon(dropDownIcon);
-        StyleConstants.setComponent(retVal, tierLabel);
+        if (tierLabelFactory != null) {
+            JLabel tierLabel = (JLabel) tierLabelFactory.apply(tier, tierViewItem);
+            StyleConstants.setComponent(retVal, tierLabel);
+        }
 
         retVal.addAttribute("locked", tierViewItem.isTierLocked());
-
         retVal.addAttribute("label", true);
+        retVal.addAttribute("tier", tier);
 
         return retVal;
     }
 
     private SimpleAttributeSet getSeparatorAttributes(Record record, int recordIndex) {
         final SimpleAttributeSet retVal = new SimpleAttributeSet();
-        JPanel separatorPanel = new JPanel(new HorizontalLayout());
-        separatorPanel.setBorder(new EmptyBorder(0,8,0,8));
-        separatorPanel.setBackground(Color.WHITE);
 
-        DropDownIcon dropDownIcon = new DropDownIcon(new EmptyIcon(0, 16), 0, SwingConstants.BOTTOM);
+        if (separatorFactory != null) {
+            StyleConstants.setComponent(retVal, separatorFactory.apply(record, recordIndex));
+        }
 
-        JLabel recordNumberLabel = new JLabel("#" + (recordIndex+1));
-        recordNumberLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        recordNumberLabel.setHorizontalTextPosition(SwingConstants.LEFT);
-        recordNumberLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        recordNumberLabel.setIcon(dropDownIcon);
-        var labelFont = new Font(
-            recordNumberLabel.getFont().getFontName(),
-            recordNumberLabel.getFont().getStyle(),
-            12
-        );
-        recordNumberLabel.setFont(labelFont);
-        recordNumberLabel.setAlignmentY(.8f);
-        separatorPanel.add(recordNumberLabel);
-        recordNumberLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                JPopupMenu menu = new JPopupMenu();
-                JCheckBoxMenuItem excludeMenuItem = new JCheckBoxMenuItem("Exclude");
-                menu.add(excludeMenuItem);
-                excludeMenuItem.setState(record.isExcludeFromSearches());
-                excludeMenuItem.addActionListener(evt -> {
-                    record.setExcludeFromSearches(excludeMenuItem.getState());
-                });
-                menu.add(new JMenuItem("Move"));
-                menu.show(recordNumberLabel, e.getX(), e.getY());
-            }
-        });
-
-        JLabel speakerNameLabel = new JLabel(record.getSpeaker().getName());
-        speakerNameLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        speakerNameLabel.setHorizontalTextPosition(SwingConstants.LEFT);
-        speakerNameLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        speakerNameLabel.setIcon(dropDownIcon);
-        speakerNameLabel.setFont(labelFont);
-        speakerNameLabel.setAlignmentY(.8f);
-        separatorPanel.add(speakerNameLabel);
-        speakerNameLabel.setBorder(new EmptyBorder(0,8,0,8));
-        speakerNameLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                JPopupMenu menu = new JPopupMenu();
-                ButtonGroup buttonGroup = new ButtonGroup();
-
-                var unknownMenuItem = new JRadioButtonMenuItem(Participant.UNKNOWN.getName());
-                buttonGroup.add(unknownMenuItem);
-                if (Participant.UNKNOWN.equals(record.getSpeaker())) {
-                    buttonGroup.setSelected(unknownMenuItem.getModel(), true);
-                }
-                menu.add(unknownMenuItem);
-
-                for (Participant participant : session.getParticipants()) {
-                    var menuItem = new JRadioButtonMenuItem(participant.getName());
-                    buttonGroup.add(menuItem);
-                    if (participant.equals(record.getSpeaker())) {
-                        buttonGroup.setSelected(menuItem.getModel(), true);
-                    }
-                    menu.add(menuItem);
-                }
-
-                menu.show(recordNumberLabel, e.getX(), e.getY());
-            }
-        });
-
-        var sep = new JSeparator(JSeparator.HORIZONTAL);
-        sep.setPreferredSize(new Dimension(10000, 1));
-        separatorPanel.add(sep);
-        StyleConstants.setComponent(retVal, separatorPanel);
         return retVal;
     }
 
@@ -272,27 +211,15 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return retVal;
     }
 
-    private SimpleAttributeSet getCommentLabelAttributes(String commentType) {
+    private SimpleAttributeSet getCommentLabelAttributes(Comment comment) {
         SimpleAttributeSet retVal = new SimpleAttributeSet();
 
-        JLabel commentLabel = (JLabel) createLabel(commentType);
-        commentLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        DropDownIcon dropDownIcon = new DropDownIcon(new EmptyIcon(0, 16), 0, SwingConstants.BOTTOM);
-        commentLabel.setHorizontalTextPosition(SwingConstants.LEFT);
-        commentLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        commentLabel.setIcon(dropDownIcon);
-        commentLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                JPopupMenu menu = new JPopupMenu();
+        if (commentLabelFactory != null) {
+            JLabel commentLabel = (JLabel) commentLabelFactory.apply(comment);
+            StyleConstants.setComponent(retVal, commentLabel);
+        }
 
-                menu.add(new JMenuItem("Comment Menu"));
-
-                menu.show(commentLabel, e.getX(), e.getY());
-            }
-        });
-        StyleConstants.setComponent(retVal, commentLabel);
-
+        retVal.addAttribute("comment", comment);
         retVal.addAttribute("label", true);
 
         return retVal;
@@ -304,29 +231,15 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return retVal;
     }
 
-    private SimpleAttributeSet getGemLabelAttributes(String gemType) {
+    private SimpleAttributeSet getGemLabelAttributes(Gem gem) {
         SimpleAttributeSet retVal = new SimpleAttributeSet();
 
-        JLabel gemLabel = (JLabel) createLabel(gemType);
+        if (gemLabelFactory != null) {
+            JLabel gemLabel = (JLabel) gemLabelFactory.apply(gem);
+            StyleConstants.setComponent(retVal, gemLabel);
+        }
 
-        gemLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        DropDownIcon dropDownIcon = new DropDownIcon(new EmptyIcon(0, 16), 0, SwingConstants.BOTTOM);
-        gemLabel.setHorizontalTextPosition(SwingConstants.LEFT);
-        gemLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        gemLabel.setIcon(dropDownIcon);
-
-        gemLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                JPopupMenu menu = new JPopupMenu();
-
-                menu.add(new JMenuItem("Gem Menu"));
-
-                menu.show(gemLabel, e.getX(), e.getY());
-            }
-        });
-        StyleConstants.setComponent(retVal, gemLabel);
-
+        retVal.addAttribute("gem", gem);
         retVal.addAttribute("label", true);
 
         return retVal;
@@ -382,7 +295,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 for (String tierName : deletedTiers) {
                     int labelLength = tierName.length() + 2;
                     int tierStartOffset = getTierStart(i, tierName) - labelLength;
-                    int tierEndOffset = getTierEnd(i, tierName) + 1;
+                    int tierEndOffset = getTierEnd(i, tierName);
                     remove(tierStartOffset, tierEndOffset - tierStartOffset);
                 }
             }
@@ -415,13 +328,14 @@ public class TranscriptDocument extends DefaultStyledDocument {
     }
 
     public void hideTier(List<String> hiddenTiers) {
+        System.out.println(hiddenTiers);
         int recordCount = session.getRecordCount();
         for (int i = 0; i < recordCount; i++) {
             try {
                 for (String tierName : hiddenTiers) {
                     int labelLength = tierName.length() + 2;
                     int tierStartOffset = getTierStart(i, tierName) - labelLength;
-                    int tierEndOffset = getTierEnd(i, tierName) + 1;
+                    int tierEndOffset = getTierEnd(i, tierName);
                     remove(tierStartOffset, tierEndOffset - tierStartOffset);
                 }
             }
@@ -441,16 +355,42 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 }
                 int recordStart = getRecordStart(i, null);
                 setParagraphAttributes(
-                        recordStart,
-                        offset - recordStart,
-                        getRecordAttributes(i),
-                        true
+                    recordStart,
+                    offset - recordStart,
+                    getRecordAttributes(i),
+                    true
                 );
             }
             catch (Exception e) {
                 LogUtil.severe(e);
             }
         }
+    }
+
+    public void tierFontChanged(List<TierViewItem> changedTiers) {
+        int recordCount = session.getRecordCount();
+        for (int i = 0; i < recordCount; i++) {
+            try {
+                for (TierViewItem item : changedTiers) {
+                    String tierName = item.getTierName();
+                    int labelLength = tierName.length() + 2;
+                    int tierStartOffset = getTierStart(i, tierName) - labelLength;
+                    int tierEndOffset = getTierEnd(i, tierName);
+
+                    remove(tierStartOffset, tierEndOffset - tierStartOffset);
+
+                    insertTier(i, item, tierStartOffset);
+                }
+            }
+            catch (Exception e) {
+                System.out.println(i);
+                LogUtil.severe(e);
+            }
+        }
+    }
+
+    public void tierNameChanged(List<TierViewItem> changedTiers) {
+
     }
 
     public void reload() {
@@ -483,13 +423,13 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return (int)index;
     }
 
-    public Tier getTier(int offset) {
+    public Tier<?> getTier(int offset) {
         AttributeSet attributes = getCharacterElement(offset).getAttributes();
-        var tier = attributes.getAttribute("tier");
+        Tier<?> tier = (Tier<?>) attributes.getAttribute("tier");
         if (tier == null) {
             return null;
         }
-        return ((Tier)tier);
+        return tier;
     }
 
     // region Get Record/Tier Start/End
@@ -516,7 +456,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return retVal;
     }
 
-    public int getRecordStart(Tier tier) {
+    public int getRecordStart(Tier<?> tier) {
         Element root = getDefaultRootElement();
 
         int retVal = -1;
@@ -529,7 +469,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 for (int j = 0; j < elem.getElementCount(); j++) {
                     Element innerElem = elem.getElement(j);
                     AttributeSet attrs = innerElem.getAttributes();
-                    Tier currentTier = (Tier)attrs.getAttribute("tier");
+                    Tier<?> currentTier = (Tier<?>)attrs.getAttribute("tier");
                     Boolean isLabel = (Boolean) attrs.getAttribute("label");
                     // If correct tier
                     if (currentTier != null && currentTier == tier) {
@@ -564,7 +504,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return retVal;
     }
 
-    public int getRecordEnd(Tier tier) {
+    public int getRecordEnd(Tier<?> tier) {
         Element root = getDefaultRootElement();
 
         for (int i = 0; i < root.getElementCount(); i++) {
@@ -599,10 +539,10 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 for (int j = 0; j < elem.getElementCount(); j++) {
                     Element innerElem = elem.getElement(j);
                     AttributeSet attrs = innerElem.getAttributes();
-                    Tier tier = (Tier) attrs.getAttribute("tier");
+                    Tier<?> tier = (Tier<?>) attrs.getAttribute("tier");
                     Boolean isLabel = (Boolean)attrs.getAttribute("label");
                     // If correct tier name
-                    if (isLabel == null && tier != null && ((Tier)tier).getName().equals(tierName)) {
+                    if (isLabel == null && tier != null && tier.getName().equals(tierName)) {
                         if (retVal == -1) {
                             retVal = innerElem.getStartOffset();
                         }
@@ -617,7 +557,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return retVal;
     }
 
-    public int getTierStart(Tier tier) {
+    public int getTierStart(Tier<?> tier) {
         Element root = getDefaultRootElement();
 
         int retVal = -1;
@@ -630,7 +570,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 for (int j = 0; j < elem.getElementCount(); j++) {
                     Element innerElem = elem.getElement(j);
                     AttributeSet attrs = innerElem.getAttributes();
-                    Tier currentTier = (Tier)attrs.getAttribute("tier");
+                    Tier<?> currentTier = (Tier<?>)attrs.getAttribute("tier");
                     Boolean isLabel = (Boolean)attrs.getAttribute("label");
                     // If correct tier
                     if (isLabel == null && currentTier != null && currentTier == tier) {
@@ -661,7 +601,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 for (int j = 0; j < elem.getElementCount(); j++) {
                     Element innerElem = elem.getElement(j);
                     AttributeSet attrs = innerElem.getAttributes();
-                    Tier tier = (Tier)attrs.getAttribute("tier");
+                    Tier<?> tier = (Tier<?>)attrs.getAttribute("tier");
                     Boolean isLabel = (Boolean)attrs.getAttribute("label");
                     // If correct tier name
                     if (isLabel == null && tier != null && tier.getName().equals(tierName)) {
@@ -674,7 +614,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return retVal;
     }
 
-    public int getTierEnd(Tier tier) {
+    public int getTierEnd(Tier<?> tier) {
         Element root = getDefaultRootElement();
 
         for (int i = 0; i < root.getElementCount(); i++) {
@@ -684,7 +624,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
             if (currentRecordIndex != null) {
                 for (int j = 0; j < elem.getElementCount(); j++) {
                     Element innerElem = elem.getElement(j);
-                    Tier currentTier = (Tier)innerElem.getAttributes().getAttribute("tier");
+                    Tier<?> currentTier = (Tier<?>)innerElem.getAttributes().getAttribute("tier");
                     // If correct tier
                     if (currentTier != null && currentTier == tier) {
                         return getTierEnd(currentRecordIndex, tier.getName());
@@ -701,44 +641,72 @@ public class TranscriptDocument extends DefaultStyledDocument {
     private int insertTier(int recordIndex, TierViewItem tierViewItem, int offset) throws BadLocationException {
         String tierName = tierViewItem.getTierName();
         Record record = session.getRecord(recordIndex);
-        Tier tier = record.getTier(tierName);
+        Tier<?> tier = record.getTier(tierName);
         if (tier == null) return offset;
 
         SimpleAttributeSet tierAttrs = getTierAttributes(tier, tierViewItem);
 
-        SimpleAttributeSet labelAttrs = getTierLabelAttributes(tierViewItem);
-        labelAttrs.addAttribute("tier", tier);
+        SimpleAttributeSet labelAttrs = getTierLabelAttributes(tier, tierViewItem);
 
         insertString(offset, tierName + ": ", labelAttrs);
         offset += tierName.length() + 2;
 
-        if (tierName.equals("IPA Target") && targetSyllablesVisible) {
-            String ipaTarget = ((Tier<IPATranscript>)tier).getValue().toString(true);
-            insertString(offset++, ipaTarget, getIPATierAttributes(tier));
-        }
-        else if (tierName.equals("IPA Actual")) {
-            if (actualSyllablesVisible) {
-                String ipaActual = ((Tier<IPATranscript>)tier).getValue().toString(true);
-                insertString(offset++, ipaActual, getIPATierAttributes(tier));
+        if (tierName.equals("IPA Target")) {
+            Tier<IPATranscript> ipaTier = (Tier<IPATranscript>)tier;
+            if (targetSyllablesVisible) {
+                String ipaTarget = ipaTier.getValue().toString(true);
+                insertString(offset++, ipaTarget, getIPATierAttributes(ipaTier));
             }
             else {
-                var ipa = ((Tier<IPATranscript>)tier).getValue();
-                for (var word : ipa.words()) {
+                List<IPATranscript> words = (ipaTier).getValue().words();
+                for (var word : words) {
                     SimpleAttributeSet attrs;
                     if (word.matches("\\P")) {
                         // Pause
-                        attrs = getIPAPauseAttributes(((Tier<IPATranscript>)tier));
-                    }
-                    else {
+                        attrs = getIPAPauseAttributes(ipaTier);
+                    } else {
                         // Word
-                        attrs = getIPAWordAttributes(((Tier<IPATranscript>)tier));
+                        attrs = getIPAWordAttributes(ipaTier);
                     }
                     attrs.addAttributes(tierAttrs);
                     String content = word.toString();
                     insertString(offset, content, attrs);
                     offset += content.length();
+
+                    insertString(offset++, " ", tierAttrs);
                 }
 
+                remove(offset - 1, 1);
+                offset--;
+            }
+        }
+        else if (tierName.equals("IPA Actual")) {
+            Tier<IPATranscript> ipaTier = (Tier<IPATranscript>)tier;
+            if (actualSyllablesVisible) {
+                String ipaActual = ipaTier.getValue().toString(true);
+                insertString(offset++, ipaActual, getIPATierAttributes(ipaTier));
+            }
+            else {
+                List<IPATranscript> words = (ipaTier).getValue().words();
+                for (var word : words) {
+                    SimpleAttributeSet attrs;
+                    if (word.matches("\\P")) {
+                        // Pause
+                        attrs = getIPAPauseAttributes(ipaTier);
+                    }
+                    else {
+                        // Word
+                        attrs = getIPAWordAttributes(ipaTier);
+                    }
+                    attrs.addAttributes(tierAttrs);
+                    String content = word.toString();
+                    insertString(offset, content, attrs);
+                    offset += content.length();
+
+                    insertString(offset++, " ", tierAttrs);
+                }
+                remove(offset - 1, 1);
+                offset--;
             }
 
         }
@@ -751,12 +719,13 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
             var segmentTimeAttrs = getSegmentTimeAttributes();
             segmentTimeAttrs.addAttributes(tierAttrs);
+            var segmentDashAttrs = getSegmentDashAttributes();
+            segmentDashAttrs.addAttributes(tierAttrs);
+
+            insertString(offset++, "•", segmentDashAttrs);
 
             insertString(offset, start, segmentTimeAttrs);
             offset += start.length();
-
-            var segmentDashAttrs = getSegmentDashAttributes();
-            segmentDashAttrs.addAttributes(tierAttrs);
 
             insertString(offset++, "-", segmentDashAttrs);
 
@@ -764,13 +733,47 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
             insertString(offset, end, segmentTimeAttrs);
             offset += end.length();
+
+            insertString(offset++, "•", segmentDashAttrs);
         }
-        else {
+        else if (tierName.equals("Orthography")) {
             String tierContent = tier.toString();
 
             insertString(offset, tierContent, tierAttrs);
 
             offset += tierContent.length();
+        }
+        else {
+            Tier<UserTierData> notesTier = (Tier<UserTierData>) tier;
+            UserTierData tierData = notesTier.getValue();
+            for (int i = 0; i < tierData.length(); i++) {
+                UserTierElement elem = tierData.elementAt(i);
+                String text;
+                SimpleAttributeSet attrs;
+                if (elem instanceof TierString tierString) {
+                    text = tierString.text();
+                    attrs = getUserTierStringAttributes();
+                }
+                else if (elem instanceof UserTierComment comment) {
+                    text = "[%" + comment.text() + "]";
+                    attrs = getUserTierCommentAttributes();
+                }
+                else {
+                    UserTierInternalMedia internalMedia = (UserTierInternalMedia) elem;
+                    text = "•" + internalMedia.text() + "•";
+                    attrs = getUserTierInternalMediaAttributes();
+                }
+
+                attrs.addAttributes(tierAttrs);
+
+                insertString(offset, text, attrs);
+                offset += text.length();
+
+                insertString(offset++, " ", tierAttrs);
+            }
+
+            remove(offset - 1, 1);
+            offset--;
         }
 
         insertString(offset++, "\n", tierAttrs);
@@ -831,13 +834,39 @@ public class TranscriptDocument extends DefaultStyledDocument {
             }
             else if (elem.isComment()) {
                 Comment comment = elem.asComment();
+                UserTierData tierData = comment.getValue();
 
-                String text = comment.getValue().toString();
+                String labelText = comment.getType().getLabel() + ": ";
+                insertString(len, labelText, getCommentLabelAttributes(comment));
+                len += labelText.length();
 
-                insertString(len++, " ", getCommentLabelAttributes(comment.getType().getLabel()));
+                for (int i = 0; i < tierData.length(); i++) {
+                    UserTierElement userTierElement = tierData.elementAt(i);
+                    String text;
+                    SimpleAttributeSet attrs;
+                    if (userTierElement instanceof TierString tierString) {
+                        // Text
+                        text = tierString.text();
+                        attrs = getUserTierStringAttributes();
+                    } else if (userTierElement instanceof UserTierComment userTierComment) {
+                        // Comment
+                        text = "[%" + userTierComment.text() + "]";
+                        attrs = getUserTierCommentAttributes();
+                    } else {
+                        // Internal media
+                        UserTierInternalMedia internalMedia = (UserTierInternalMedia) userTierElement;
+                        text = "•" + internalMedia.text() + "•";
+                        attrs = getUserTierInternalMediaAttributes();
+                    }
 
-                insertString(len, text, getCommentAttributes());
-                len += text.length();
+                    insertString(len, text, attrs);
+                    len += text.length();
+
+                    insertString(len++, " ", attrs);
+                }
+
+                remove(len - 1, 1);
+                len--;
 
                 insertString(len++, "\n", null);
             }
@@ -846,7 +875,9 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
                 String text = gem.getLabel();
 
-                insertString(len++, " ", getGemLabelAttributes(gem.getType().toString()));
+                String labelText = gem.getType().toString() + ": ";
+                insertString(len, labelText, getGemLabelAttributes(gem));
+                len += labelText.length();
 
                 insertString(len, text, getGemAttributes());
                 len += text.length();
@@ -874,13 +905,36 @@ public class TranscriptDocument extends DefaultStyledDocument {
         }
     }
 
-    public Function<String, JComponent> getTierLabelFactory() {
+    public BiFunction<Tier<?>, TierViewItem, JComponent> getTierLabelFactory() {
         return tierLabelFactory;
     }
 
-    public void setTierLabelFactory(Function<String, JComponent> tierLabelFactory) {
+    public void setTierLabelFactory(BiFunction<Tier<?>, TierViewItem, JComponent> tierLabelFactory) {
         this.tierLabelFactory = tierLabelFactory;
-        reload();
+    }
+
+    public Function<Comment, JComponent> getCommentLabelFactory() {
+        return commentLabelFactory;
+    }
+
+    public void setCommentLabelFactory(Function<Comment, JComponent> commentLabelFactory) {
+        this.commentLabelFactory = commentLabelFactory;
+    }
+
+    public Function<Gem, JComponent> getGemLabelFactory() {
+        return gemLabelFactory;
+    }
+
+    public void setGemLabelFactory(Function<Gem, JComponent> gemLabelFactory) {
+        this.gemLabelFactory = gemLabelFactory;
+    }
+
+    public BiFunction<Record, Integer, JComponent> getSeparatorFactory() {
+        return separatorFactory;
+    }
+
+    public void setSeparatorFactory(BiFunction<Record, Integer, JComponent> separatorFactory) {
+        this.separatorFactory = separatorFactory;
     }
 
     // endregion Getters and Setters
@@ -889,7 +943,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         @Override
         public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
             if (attrs != null) {
-                Tier tier = (Tier)attrs.getAttribute("tier");
+                Tier<?> tier = (Tier<?>)attrs.getAttribute("tier");
                 if (tier != null) {
                     String tierName = tier.getName();
                     var tierViewItem = session
