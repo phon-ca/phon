@@ -114,7 +114,7 @@
                 </xs:annotation>
             </xs:element>
             <xs:element ref="participants" minOccurs="0"/>
-            <xs:element ref="transcribers" minOccurs="0"/>
+            <xs:element ref="blindMode" minOccurs="0"/>
             <xs:element ref="userTiers" minOccurs="0"/>
             <xs:element ref="tierOrder" minOccurs="0"/>
             <xs:element ref="transcript"/>
@@ -260,6 +260,22 @@
     </xs:simpleType>
 
     <!-- Blind transcribers -->
+    <xs:element name="blindTiers" type="listOfTierNames"/>
+    <xs:simpleType name="listOfTierNames">
+        <xs:list itemType="nonemptyStringType"/>
+    </xs:simpleType>
+
+    <xs:element name="blindMode" type="blindModeType"/>
+    <xs:complexType name="blindModeType">
+        <xs:annotation>
+            <xs:documentation>Information</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="blindTiers" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="transcribers" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
     <xs:element name="transcribers" type="transcribersType"/>
     <xs:complexType name="transcribersType" mixed="false">
         <xs:annotation>
