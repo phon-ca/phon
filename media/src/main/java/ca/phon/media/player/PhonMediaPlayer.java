@@ -381,8 +381,9 @@ public class PhonMediaPlayer extends JPanel {
 					mediaPlayer.videoSurface().set(
 							mediaPlayerFactory.videoSurfaces().newVideoSurface( new BufferFormatCallback(), new MediaPlayerRenderCallback(), true));
 					mediaPlayer.events().addMediaPlayerEventListener(loadListener);
+					mediaPlayer.audio().setMute(true);
 					mediaPlayer.controls().play();
-					
+
 					mediaPlayerCanvas.setToolTipText(getMediaFile());
 				} else {
 					mediaPlayerCanvas.setBufferedImage(noMediaImage);
@@ -451,6 +452,7 @@ public class PhonMediaPlayer extends JPanel {
 		public void playing(final MediaPlayer mediaPlayer) {
 			mediaPlayer.submit( () -> {
 				mediaPlayer.controls().pause();
+				mediaPlayer.audio().setMute(false);
 				mediaPlayer.events().removeMediaPlayerEventListener(loadListener);
 				
 				final int sliderMax = (int)mediaPlayer.status().length();
