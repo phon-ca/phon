@@ -64,6 +64,15 @@ public final class TierDescription extends ExtendableObject {
 	}
 
 	/**
+	 * Is this tier a 'blind' tier or included in blind transcription.  Blind tiers
+	 * are invisible for different transcribers (if blind mode is active) and may
+	 * be validated when not in blind mode.
+	 *
+	 * @return true if tier is included in blind transcription
+	 */
+	public boolean isBlind() { return tierDescriptionImpl.isBlind(); }
+
+	/**
 	 * Does this tier have subtype information.  This means either subtypeDelim
 	 * or subtypeExpr have been specified.
 	 *

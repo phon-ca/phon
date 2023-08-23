@@ -16,7 +16,6 @@
 package ca.phon.session;
 
 import ca.phon.extensions.*;
-import ca.phon.session.alignment.TierAlignmentRules;
 import ca.phon.session.spi.TierSPI;
 
 import java.lang.reflect.InvocationTargetException;
@@ -67,6 +66,80 @@ public final class Tier<T> extends ExtendableObject {
 	 */
 	public boolean isExcludeFromAlignment() {
 		return tierImpl.isExcludeFromAlignment();
+	}
+
+	/**
+	 * Is tier a blind tier?
+	 *
+	 * @return true if tier is included in blind transcription
+	 */
+	public boolean isBlind() { return tierImpl.isBlind(); }
+
+	/**
+	 * Return true if this tier include subtype delimiters
+	 *
+	 * @return true if the number of subtype delimiters > 0
+	 */
+	public boolean hasSubtypeDelim() {
+		return getSubtypeDelim() != null && !getSubtypeDelim().isEmpty();
+	}
+
+	/**
+	 * Return true if a subtype expression has been specified.
+	 *
+	 * @return true if this tier specified a subtype expression
+	 */
+	public boolean hasSubtypeExpr() {
+		return getSubtypeExpr() != null && !getSubtypeExpr().isEmpty();
+	}
+
+	/**
+	 * Get subtype delimiters (if any)
+	 *
+	 * @return list of subtype delimiters
+	 */
+	public List<String> getSubtypeDelim() {
+		return tierImpl.getSubtypeDelim();
+	}
+
+	/**
+	 * Get subtype regex. Groups in the expression will be used to
+	 * identify part of the expression to use
+	 *
+	 * @return subtype expr or null if not set
+	 */
+	public String getSubtypeExpr() {
+		return tierImpl.getSubtypeExpr();
+	}
+
+	/**
+	 * Does this tier have a blind transcription for given transcriber
+	 *
+	 * @param transcriberId
+	 * @return true if getBlindTranscription(transcriberId) != null
+	 */
+	public boolean hasBlindTranscription(String transcriberId) {
+		return getBlindTranscription(transcriberId) != null;
+	}
+
+	/**
+	 * Set blind transcription
+	 *
+	 * @param transcriberId
+	 * @param value
+	 */
+	public void setBlindTranscription(String transcriberId, T value) {
+		tierImpl.setBlindTranscription(transcriberId, value);
+	}
+
+	/**
+	 * Get blind transcription for given transcriber
+	 *
+	 * @param transcriberId
+	 * @return blind transcription for transcriber or null if none or isBlind() is false
+	 */
+	public T getBlindTranscription(String transcriberId) {
+		return tierImpl.getBlindTranscription(transcriberId);
 	}
 
 	/**

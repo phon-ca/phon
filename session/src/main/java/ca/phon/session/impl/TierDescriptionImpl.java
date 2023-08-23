@@ -33,6 +33,8 @@ public class TierDescriptionImpl implements TierDescriptionSPI {
 
 	private final boolean excludeFromAlignment;
 
+	private final boolean blind;
+
 	private final List<String> subtypeDelim;
 
 	private final String subtypeExpr;
@@ -50,23 +52,28 @@ public class TierDescriptionImpl implements TierDescriptionSPI {
 	}
 
 	TierDescriptionImpl(String name, Class<?> declaredType, boolean excludeFromAlignment) {
-		this(name, declaredType, new HashMap<>(), excludeFromAlignment, new ArrayList<>(), null);
+		this(name, declaredType, new HashMap<>(), excludeFromAlignment, false, new ArrayList<>(), null);
 	}
 
 	TierDescriptionImpl(String name, Class<?> declaredType, Map<String, String> tierParams) {
-		this(name, declaredType, tierParams, false, new ArrayList<>(), null);
+		this(name, declaredType, tierParams, false, false, new ArrayList<>(), null);
 	}
 
 	TierDescriptionImpl(String name, Class<?> declaredType, Map<String, String> tierParams, boolean excludeFromAlignment) {
-		this(name, declaredType, tierParams, excludeFromAlignment, new ArrayList<>(), null);
+		this(name, declaredType, tierParams, excludeFromAlignment, false, new ArrayList<>(), null);
 	}
 
-	TierDescriptionImpl(String name, Class<?> declaredType, Map<String, String> tierParams, boolean excludeFromAlignment, List<String> subtypeDelim, String subtypeExpr) {
+	TierDescriptionImpl(String name, Class<?> declaredType, Map<String, String> tierParams, boolean excludeFromAlignment, boolean blind) {
+		this(name, declaredType, tierParams, excludeFromAlignment, blind, new ArrayList<>(), null);
+	}
+
+	TierDescriptionImpl(String name, Class<?> declaredType, Map<String, String> tierParams, boolean excludeFromAlignment, boolean blind, List<String> subtypeDelim, String subtypeExpr) {
 		super();
 		this.name = name;
 		this.declaredType = declaredType;
 		this.tierParams = new LinkedHashMap<>(tierParams);
 		this.excludeFromAlignment = excludeFromAlignment;
+		this.blind = blind;
 		this.subtypeDelim = subtypeDelim;
 		this.subtypeExpr = subtypeExpr;
 	}
@@ -90,6 +97,11 @@ public class TierDescriptionImpl implements TierDescriptionSPI {
 	@Override
 	public boolean isExcludeFromAlignment() {
 		return this.excludeFromAlignment;
+	}
+
+	@Override
+	public boolean isBlind() {
+		return this.blind;
 	}
 
 	@Override

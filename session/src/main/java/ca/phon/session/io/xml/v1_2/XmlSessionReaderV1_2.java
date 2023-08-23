@@ -161,6 +161,9 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 				final Transcriber t = copyTranscriber(factory, tt);
 				retVal.addTranscriber(t);
 			}
+			// set default blind tiers
+			final List<String> blindTiers = List.of(SystemTierType.IPATarget.getName(), SystemTierType.IPAActual.getName());
+			retVal.setBlindTiers(blindTiers);
 		}
 
 		// copy tier information
@@ -379,18 +382,16 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 					buffer.append(wt.getContent());
 				}
 
-				final AlternativeTranscript at = new AlternativeTranscript();
 				try {
 					final IPATranscript blindTranscript =
 							IPATranscript.parseIPATranscript(buffer.toString());
 					final TranscriberType tt = (TranscriberType)btt.getUser();
 					final String name = tt.getId();
-					at.put(name, blindTranscript);
+					ipaTier.setBlindTranscription(name, blindTranscript);
 				} catch (ParseException e) {
 					LOGGER.info(
 							e.getLocalizedMessage(), e);
 				}
-				ipaTier.putExtension(AlternativeTranscript.class, at);
 			}
 		}
 

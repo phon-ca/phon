@@ -79,11 +79,12 @@ public interface SessionFactorySPI {
 	 * @param type
 	 * @param tierParameters
 	 * @param excludeFromAlignment
+	 * @param blind
 	 * @param subtypeDelim
 	 * @param subtypeExpr
 	 * @return the new tier
 	 */
-	public <T> TierSPI<T> createTier(String name, Class<T> type, Map<String, String> tierParameters, boolean excludeFromAlignment, List<String> subtypeDelim, String subtypeExpr);
+	public <T> TierSPI<T> createTier(String name, Class<T> type, Map<String, String> tierParameters, boolean excludeFromAlignment, boolean blind, List<String> subtypeDelim, String subtypeExpr);
 	
 	/**
 	 * Create tier description.
@@ -92,12 +93,13 @@ public interface SessionFactorySPI {
 	 * @param type
 	 * @param tierParameters
 	 * @param excludeFromAlignment true if tier is excluded from cross tier alignment
+	 * @param blind
 	 * @param subtypeDelim
 	 * @param subtypExpr
 	 * 
 	 * @return new tier description
 	 */
-	public TierDescriptionSPI createTierDescription(String name, Class<?> type, Map<String, String> tierParameters, boolean excludeFromAlignment, List<String> subtypeDelim, String subtypExpr);
+	public TierDescriptionSPI createTierDescription(String name, Class<?> type, Map<String, String> tierParameters, boolean excludeFromAlignment, boolean blind, List<String> subtypeDelim, String subtypExpr);
 	
 	/**
 	 * Create a tier display and ordering object

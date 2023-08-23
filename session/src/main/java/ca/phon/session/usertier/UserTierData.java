@@ -65,6 +65,24 @@ public final class UserTierData extends ExtendableObject implements Iterable<Use
         return elements.get(index);
     }
 
+    /**
+     * Return string index of given element
+     *
+     * @param element
+     *
+     * @return string index or -1 if not found
+     */
+    public int stringIndexOf(UserTierElement element) {
+        int idx = 0;
+        for(var ele:getElements()) {
+            if(idx > 0) ++idx; // space between elements
+            if(ele == element)
+                return idx;
+            idx += ele.toString().length();
+        }
+        return -1;
+    }
+
     @Override
     public String toString() {
         return getElements().stream().map(ele -> ele.toString()).collect(Collectors.joining(" "));

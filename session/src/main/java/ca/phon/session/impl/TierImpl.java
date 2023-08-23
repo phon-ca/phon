@@ -40,9 +40,13 @@ public class TierImpl<T> implements TierSPI<T> {
 
 	private final boolean excludeFromAlignment;
 
+	private final boolean blind;
+
 	private final List<String> subtypeDelim;
 
 	private final String subtypeExpr;
+
+	private final Map<String, T> blindTranscriptions = new LinkedHashMap<>();
 
 	/**
 	 * Group data
@@ -59,12 +63,13 @@ public class TierImpl<T> implements TierSPI<T> {
 	 * @param subtypeDelim
 	 * @param subtypeExpr
 	 */
-	TierImpl(String name, Class<T> type, Map<String, String> tierParameters, boolean excludeFromAlignment, List<String> subtypeDelim, String subtypeExpr) {
+	TierImpl(String name, Class<T> type, Map<String, String> tierParameters, boolean excludeFromAlignment, boolean blind, List<String> subtypeDelim, String subtypeExpr) {
 		super();
 		this.tierName = name;
 		this.declaredType = type;
 		this.tierParameters = tierParameters;
 		this.excludeFromAlignment = excludeFromAlignment;
+		this.blind = blind;
 		this.subtypeDelim = subtypeDelim;
 		this.subtypeExpr = subtypeExpr;
 	}
@@ -90,6 +95,11 @@ public class TierImpl<T> implements TierSPI<T> {
 	}
 
 	@Override
+	public boolean isBlind() {
+		return blind;
+	}
+
+	@Override
 	public List<String> getSubtypeDelim() {
 		return Collections.unmodifiableList(subtypeDelim);
 	}
@@ -97,6 +107,18 @@ public class TierImpl<T> implements TierSPI<T> {
 	@Override
 	public String getSubtypeExpr() {
 		return subtypeExpr;
+	}
+
+	@Override
+	public void setBlindTranscription(String transcriberId, T value) {
+		if(!isBlind()) return;
+		blindTranscriptions.put(transcriberId, value);
+	}
+
+	@Override
+	public T getBlindTranscription(String transcriberId) {
+		if(!isBlind()) return null;
+		return blindTranscriptions.get(transcriberId);
 	}
 
 	@Override

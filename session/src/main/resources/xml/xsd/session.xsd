@@ -114,7 +114,7 @@
                 </xs:annotation>
             </xs:element>
             <xs:element ref="participants" minOccurs="0"/>
-            <xs:element ref="transcribers" minOccurs="0"/>
+            <xs:element ref="blindMode" minOccurs="0"/>
             <xs:element ref="userTiers" minOccurs="0"/>
             <xs:element ref="tierOrder" minOccurs="0"/>
             <xs:element ref="transcript"/>
@@ -260,16 +260,19 @@
     </xs:simpleType>
 
     <!-- Blind transcribers -->
-    <xs:element name="transcribers" type="transcribersType"/>
-    <xs:complexType name="transcribersType" mixed="false">
+    <xs:element name="blindTiers" type="listOfTierNames"/>
+    <xs:simpleType name="listOfTierNames">
+        <xs:list itemType="nonemptyStringType"/>
+    </xs:simpleType>
+
+    <xs:element name="blindMode" type="blindModeType"/>
+    <xs:complexType name="blindModeType">
         <xs:annotation>
-            <xs:documentation>Blind transcribers</xs:documentation>
-            <xs:documentation>
-                <a href="https://www.phon.ca/phon-manual/session_editor/blind_transcription.html?hl=blind%2Ctranscription">Phon manual section on this topic...</a>
-            </xs:documentation>
+            <xs:documentation>Information</xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element ref="transcriber" maxOccurs="unbounded"/>
+            <xs:element ref="blindTiers" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="transcriber" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -866,10 +869,13 @@
                 transcription format.</xs:documentation>
             <xs:documentation><a href="https://www.phon.ca/phon-manual/transcription/orthography.html">Phon manual section on this topic...</a></xs:documentation>
         </xs:annotation>
-        <xs:choice maxOccurs="1" minOccurs="1">
-            <xs:element ref="u"/>
-            <xs:element ref="unparsed"/>
-        </xs:choice>
+        <xs:sequence>
+            <xs:choice maxOccurs="1" minOccurs="1">
+                <xs:element ref="u"/>
+                <xs:element ref="unparsed"/>
+            </xs:choice>
+            <xs:element ref="blindTranscription" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
     </xs:complexType>
 
     <!-- IPA Transcriptions -->
@@ -896,7 +902,9 @@
             <xs:documentation><a href="https://www.phon.ca/phon-manual/session_editor/blind_transcription.html?hl=blind%2Ctranscription">Phon manual section on this topic...</a></xs:documentation>
         </xs:annotation>
         <xs:choice maxOccurs="1" minOccurs="1">
+            <xs:element ref="u"/>
             <xs:element ref="pho"/>
+            <xs:element ref="tierData"/>
             <xs:element ref="unparsed"/>
         </xs:choice>
         <xs:attribute name="transcriber" type="xs:string"/>
@@ -1353,10 +1361,14 @@
                 <a href="https://www.phon.ca/phon-manual/transcription/record_data.html">Phon manual section on this topic...</a>
             </xs:documentation>
         </xs:annotation>
-        <xs:choice minOccurs="1" maxOccurs="1">
-            <xs:element ref="tierData"/>
-            <xs:element ref="unparsed"/>
-        </xs:choice>
+        <xs:sequence>
+            <xs:choice minOccurs="1" maxOccurs="1">
+                <xs:element ref="tierData"/>
+                <xs:element ref="unparsed"/>
+            </xs:choice>
+            <xs:element ref="blindTranscription" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+
     </xs:complexType>
 
     <!-- User defined tiers -->
@@ -1368,13 +1380,16 @@
                 <a href="https://www.phon.ca/phon-manual/session_editor/tier_management_view.html">Phon manual section on this topic...</a>
             </xs:documentation>
         </xs:annotation>
-        <xs:choice minOccurs="1" maxOccurs="1">
-            <xs:element ref="u"/>
-            <xs:element ref="pho"/>
-            <xs:element ref="alignment"/>
-            <xs:element ref="tierData"/>
-            <xs:element ref="unparsed"/>
-        </xs:choice>
+        <xs:sequence>
+            <xs:choice minOccurs="1" maxOccurs="1">
+                <xs:element ref="u"/>
+                <xs:element ref="pho"/>
+                <xs:element ref="alignment"/>
+                <xs:element ref="tierData"/>
+                <xs:element ref="unparsed"/>
+            </xs:choice>
+            <xs:element ref="blindTranscription" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
         <xs:attribute name="name" type="xs:string" use="required"/>
     </xs:complexType>
 

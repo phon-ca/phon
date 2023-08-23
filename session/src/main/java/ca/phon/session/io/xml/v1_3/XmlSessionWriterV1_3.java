@@ -119,14 +119,18 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 			retVal.setParticipants(parts);
 
 		// transcribers
-		final XmlTranscribersType tt = factory.createXmlTranscribersType();
+
+		final XmlBlindModeType tt = factory.createXmlBlindModeType();
 		for(int i = 0; i < session.getTranscriberCount(); i++) {
 			final Transcriber tr = session.getTranscriber(i);
 			final XmlTranscriberType trt = writeTranscriber(factory, tr);
 			tt.getTranscriber().add(trt);
 		}
-		if(session.getTranscriberCount() > 0)
-			retVal.setTranscribers(tt);
+		if(session.getTranscriberCount() > 0 || !session.getBlindTiers().isEmpty()) {
+			tt.getBlindTiers().clear();
+			tt.getBlindTiers().addAll(session.getBlindTiers());
+			retVal.setBlindMode(tt);
+		}
 
 		// tier info/ordering
 		final XmlUserTiersType utt = factory.createXmlUserTiersType();

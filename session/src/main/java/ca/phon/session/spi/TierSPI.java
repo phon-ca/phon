@@ -39,4 +39,20 @@ public interface TierSPI<T>  extends TierDescriptionSPI {
 	 */
 	public void setValue(T value);
 
+	/**
+	 * Set blind transcription
+	 *
+	 * @param transcriberId
+	 * @param value
+	 */
+	public void setBlindTranscription(String transcriberId, T value);
+
+	/**
+	 * Get blind transcription for given transcriber
+	 *
+	 * @param transcriberId
+	 * @return blind transcription for transcriber or null if none or isBlind() is false
+	 */
+	public T getBlindTranscription(String transcriberId);
+
 }
