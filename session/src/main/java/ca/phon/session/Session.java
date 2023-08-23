@@ -123,6 +123,15 @@ public final class Session extends ExtendableObject {
 		sessionImpl.setTierView(view);
 	}
 
+	/**
+	 * Return a list of tier descriptions which include all system tiers and all user defined tiers.
+	 *
+	 * @return list of tiers in session
+	 */
+	public List<TierDescription> getTiers() {
+		return sessionImpl.getTiers();
+	}
+
 	/* User-defined tiers */
 	/**
 	 * Get number of user-defined tiers setup in session
@@ -265,6 +274,24 @@ public final class Session extends ExtendableObject {
 	 */
 	public void deleteTierAlignmentRules(TierAlignmentRules tierAlignmentRules) {
 		deleteTierAlignmentRules(tierAlignmentRules.getTierNames().getObj1(), tierAlignmentRules.getTierNames().getObj2());
+	}
+
+	/**
+	 * Get list of blind tier names
+	 * @return blind tier names
+	 */
+	public List<String> getBlindTiers() {
+		return sessionImpl.getBlindTiers();
+	}
+
+	/**
+	 * Set list of tiers included in blind transcription
+	 *
+	 * @return list of blind mode tiers
+	 * @throws IllegalArgumentException if any tier name is not in list provided by getTiers()
+	 */
+	public void setBlindTiers(List<String> blindTiers) {
+		sessionImpl.setBlindTiers(blindTiers);
 	}
 
 	/* Transcribers (blind transcription) */

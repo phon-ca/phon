@@ -45,7 +45,10 @@ public class SessionImpl implements SessionSPI {
 	
 	private final List<Participant> participants =
 			Collections.synchronizedList(new ArrayList<>());
-	
+
+	private final List<String> blindTiers =
+			Collections.synchronizedList(new ArrayList<>());
+
 	private final List<Transcriber> transcribers =
 			Collections.synchronizedList(new ArrayList<>());
 	
@@ -192,6 +195,22 @@ public class SessionImpl implements SessionSPI {
 	}
 
 	@Override
+	public List<TierDescription> getTiers() {
+		final SessionFactory factory = SessionFactory.newFactory();
+		final List<TierDescription> retVal = new ArrayList<>();
+		retVal.add(factory.createTierDescription(SystemTierType.Orthography, blindTiers.contains(SystemTierType.Orthography.getName())));
+		retVal.add(factory.createTierDescription(SystemTierType.IPATarget, blindTiers.contains(SystemTierType.IPATarget.getName())));
+		retVal.add(factory.createTierDescription(SystemTierType.IPAActual, blindTiers.contains(SystemTierType.IPAActual.getName())));
+		retVal.add(factory.createTierDescription(SystemTierType.PhoneAlignment, blindTiers.contains(SystemTierType.PhoneAlignment.getName())));
+		retVal.add(factory.createTierDescription(SystemTierType.Segment, blindTiers.contains(SystemTierType.Segment.getName())));
+		retVal.add(factory.createTierDescription(SystemTierType.Notes, blindTiers.contains(SystemTierType.Notes.getName())));
+		for(int i = 0; i < getUserTierCount(); i++) {
+			retVal.add(getUserTier(i));
+		}
+		return Collections.unmodifiableList(retVal);
+	}
+
+	@Override
 	public void addTranscriber(Transcriber t) {
 		transcribers.add(t);
 	}
@@ -284,6 +303,23 @@ public class SessionImpl implements SessionSPI {
 		if(currentRules != null) {
 			this.tierAlignmentRules.remove(currentRules);
 		}
+	}
+
+	@Override
+	public List<String> getBlindTiers() {
+		return Collections.unmodifiableList(this.blindTiers);
+	}
+
+	@Override
+	public void setBlindTiers(List<String> blindTiers) {
+		this.blindTiers.clear();
+		final List<TierDescription> possibleTiers = getTiers();
+		for(String tierName:blindTiers) {
+			final Optional<TierDescription> td = possibleTiers.stream().filter(desc -> desc.getName().equals(tierName)).findAny();
+			if(!td.isPresent())
+				throw new IllegalArgumentException("Invalid tier name " + tierName);
+		}
+		this.blindTiers.addAll(blindTiers);
 	}
 
 	@Override

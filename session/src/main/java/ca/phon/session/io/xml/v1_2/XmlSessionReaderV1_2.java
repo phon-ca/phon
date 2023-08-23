@@ -161,6 +161,9 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 				final Transcriber t = copyTranscriber(factory, tt);
 				retVal.addTranscriber(t);
 			}
+			// set default blind tiers
+			final List<String> blindTiers = List.of(SystemTierType.IPATarget.getName(), SystemTierType.IPAActual.getName());
+			retVal.setBlindTiers(blindTiers);
 		}
 
 		// copy tier information

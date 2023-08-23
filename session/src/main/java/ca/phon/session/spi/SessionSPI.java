@@ -66,6 +66,13 @@ public interface SessionSPI {
 	 * @param view
 	 */
 	public void setTierView(List<TierViewItem> view);
+
+	/**
+	 * Get list of all tiers including system tiers
+	 *
+	 * @return list of all tiers including system tiers and user defined tiers
+	 */
+	public List<TierDescription> getTiers();
 	
 	/*
 	 * Custom tiers defined for the session
@@ -107,6 +114,22 @@ public interface SessionSPI {
 	public void putTierAlignmentRules(TierAlignmentRules tierAlignmentRules);
 
 	public void deleteTierAlignmentRules(String tier1, String tier2);
+
+	/**
+	 * Get list of blind tier names
+	 *
+	 * @return blind tier names
+	 */
+	public List<String> getBlindTiers();
+
+	/**
+	 * Set list of blind tier names
+	 *
+	 * @param list of tier names
+	 * @throws IllegalArgumentException if tier names in list cannot be found in the list of tiers returned by getTiers
+	 */
+	public void setBlindTiers(List<String> blindTiers);
+
 
 	/**
 	 * Get the number of transcribers

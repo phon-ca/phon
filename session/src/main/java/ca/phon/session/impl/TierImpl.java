@@ -40,6 +40,8 @@ public class TierImpl<T> implements TierSPI<T> {
 
 	private final boolean excludeFromAlignment;
 
+	private final boolean blind;
+
 	private final List<String> subtypeDelim;
 
 	private final String subtypeExpr;
@@ -59,12 +61,13 @@ public class TierImpl<T> implements TierSPI<T> {
 	 * @param subtypeDelim
 	 * @param subtypeExpr
 	 */
-	TierImpl(String name, Class<T> type, Map<String, String> tierParameters, boolean excludeFromAlignment, List<String> subtypeDelim, String subtypeExpr) {
+	TierImpl(String name, Class<T> type, Map<String, String> tierParameters, boolean excludeFromAlignment, boolean blind, List<String> subtypeDelim, String subtypeExpr) {
 		super();
 		this.tierName = name;
 		this.declaredType = type;
 		this.tierParameters = tierParameters;
 		this.excludeFromAlignment = excludeFromAlignment;
+		this.blind = blind;
 		this.subtypeDelim = subtypeDelim;
 		this.subtypeExpr = subtypeExpr;
 	}
@@ -87,6 +90,11 @@ public class TierImpl<T> implements TierSPI<T> {
 	@Override
 	public boolean isExcludeFromAlignment() {
 		return this.excludeFromAlignment;
+	}
+
+	@Override
+	public boolean isBlind() {
+		return blind;
 	}
 
 	@Override

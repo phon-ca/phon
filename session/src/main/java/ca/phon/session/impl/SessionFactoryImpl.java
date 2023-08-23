@@ -50,13 +50,13 @@ public class SessionFactoryImpl implements SessionFactorySPI, IPluginExtensionPo
 	}
 
 	@Override
-	public <T> TierSPI<T> createTier(String name, Class<T> type, Map<String, String> tierParameters, boolean excludeFromAlignment, List<String> subtypeDelim, String subtypeExpr) {
-        return new TierImpl<T>(name, type, tierParameters, excludeFromAlignment, subtypeDelim, subtypeExpr);
+	public <T> TierSPI<T> createTier(String name, Class<T> type, Map<String, String> tierParameters, boolean excludeFromAlignment, boolean blind, List<String> subtypeDelim, String subtypeExpr) {
+        return new TierImpl<T>(name, type, tierParameters, excludeFromAlignment, blind, subtypeDelim, subtypeExpr);
 	}
 
 	@Override
-	public TierDescriptionSPI createTierDescription(String name, Class<?> type, Map<String, String> tierParameters, boolean excludeFromAlignment, List<String> subtypeDelim, String subtypeExpr) {
-		return new TierDescriptionImpl(name, type, tierParameters, excludeFromAlignment, subtypeDelim, subtypeExpr);
+	public TierDescriptionSPI createTierDescription(String name, Class<?> type, Map<String, String> tierParameters, boolean excludeFromAlignment, boolean blind, List<String> subtypeDelim, String subtypeExpr) {
+		return new TierDescriptionImpl(name, type, tierParameters, excludeFromAlignment, blind, subtypeDelim, subtypeExpr);
 	}
 
 	@Override

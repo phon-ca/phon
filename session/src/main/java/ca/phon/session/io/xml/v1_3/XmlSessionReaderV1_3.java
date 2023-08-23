@@ -159,15 +159,6 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 			}
 		}
 
-		// copy transcriber information
-		final XmlTranscribersType transcribers = xmlSessionType.getTranscribers();
-		if(transcribers != null) {
-			for(XmlTranscriberType tt:transcribers.getTranscriber()) {
-				final Transcriber t = copyTranscriber(factory, tt);
-				retVal.addTranscriber(t);
-			}
-		}
-
 		// copy tier information
 		final XmlUserTiersType userTiers = xmlSessionType.getUserTiers();
 		if(userTiers != null) {
@@ -183,6 +174,15 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 					final Tuple<String, TierElementFilter> elementFilter = readTierElementFilter(xmlEleFilter);
 					elementFilterMap.put(elementFilter.getObj1(), elementFilter.getObj2());
 				}
+			}
+		}
+
+		// copy transcriber information
+		if(xmlSessionType.getBlindMode() != null) {
+			retVal.setBlindTiers(xmlSessionType.getBlindMode().getBlindTiers());
+			for (XmlTranscriberType tt : xmlSessionType.getBlindMode().getTranscriber()) {
+				final Transcriber t = copyTranscriber(factory, tt);
+				retVal.addTranscriber(t);
 			}
 		}
 

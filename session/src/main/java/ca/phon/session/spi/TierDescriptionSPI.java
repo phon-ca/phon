@@ -37,6 +37,8 @@ public interface TierDescriptionSPI {
 
 	public boolean isExcludeFromAlignment();
 
+	public boolean isBlind();
+
 	public List<String> getSubtypeDelim();
 
 	public String getSubtypeExpr();

@@ -272,20 +272,7 @@
         </xs:annotation>
         <xs:sequence>
             <xs:element ref="blindTiers" minOccurs="0" maxOccurs="1"/>
-            <xs:element ref="transcribers" minOccurs="0" maxOccurs="unbounded"/>
-        </xs:sequence>
-    </xs:complexType>
-
-    <xs:element name="transcribers" type="transcribersType"/>
-    <xs:complexType name="transcribersType" mixed="false">
-        <xs:annotation>
-            <xs:documentation>Blind transcribers</xs:documentation>
-            <xs:documentation>
-                <a href="https://www.phon.ca/phon-manual/session_editor/blind_transcription.html?hl=blind%2Ctranscription">Phon manual section on this topic...</a>
-            </xs:documentation>
-        </xs:annotation>
-        <xs:sequence>
-            <xs:element ref="transcriber" maxOccurs="unbounded"/>
+            <xs:element ref="transcriber" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 
