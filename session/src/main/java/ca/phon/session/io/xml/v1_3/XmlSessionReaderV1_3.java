@@ -457,22 +457,30 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		final XmlOrthographyTierType ot = rt.getOrthography();
 		final Orthography orthography = readOrthography(factory, ot);
 		retVal.setOrthography(orthography);
+		for(var xmlBlindTranscription:rt.getIpaTarget().getBlindTranscription()) {
+			final Orthography blindOrtho = readBlindOrthography(factory, xmlBlindTranscription);
+			retVal.getOrthographyTier().setBlindTranscription(xmlBlindTranscription.getTranscriber(), blindOrtho);
+		}
 
 		// ipa target/actual
 		if(rt.getIpaTarget() != null) {
 			final IPATranscript ipaTarget = readTranscript(factory, rt.getIpaTarget());
-			final AlternativeTranscript blindTranscription = readBlindTranscriptions(factory, rt.getIpaTarget().getBlindTranscription());
 			retVal.setIPATarget(ipaTarget);
-			retVal.getIPATargetTier().putExtension(AlternativeTranscript.class, blindTranscription);
+			for(var xmlBlindTranscription:rt.getIpaTarget().getBlindTranscription()) {
+				final IPATranscript blindIpa = readBlindIPATranscript(factory, xmlBlindTranscription);
+				retVal.getIPATargetTier().setBlindTranscription(xmlBlindTranscription.getTranscriber(), blindIpa);
+			}
 		} else {
 			retVal.setIPATarget(new IPATranscript());
 		}
 
 		if(rt.getIpaActual() != null) {
 			final IPATranscript ipaActual = readTranscript(factory, rt.getIpaActual());
-			final AlternativeTranscript blindTranscription = readBlindTranscriptions(factory, rt.getIpaActual().getBlindTranscription());
 			retVal.setIPAActual(ipaActual);
-			retVal.getIPAActualTier().putExtension(AlternativeTranscript.class, blindTranscription);
+			for(var xmlBlindTranscription:rt.getIpaActual().getBlindTranscription()) {
+				final IPATranscript blindIpa = readBlindIPATranscript(factory, xmlBlindTranscription);
+				retVal.getIPATargetTier().setBlindTranscription(xmlBlindTranscription.getTranscriber(), blindIpa);
+			}
 		} else {
 			retVal.setIPAActual(new IPATranscript());
 		}
@@ -481,6 +489,10 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		if(rt.getNotes() != null) {
 			final UserTierData notesData = readNotes(factory, rt.getNotes());
 			retVal.setNotes(notesData);
+			for(var xmlBlindTranscription:rt.getNotes().getBlindTranscription()) {
+				final UserTierData blindNotes = readBlindUserTierTranscript(factory, xmlBlindTranscription);
+				retVal.getNotesTier().setBlindTranscription(xmlBlindTranscription.getTranscriber(), blindNotes);
+			}
 		}
 
 		// segment
@@ -499,13 +511,21 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 
 		// user tiers
 		for(XmlUserTierType utt:rt.getUserTier()) {
-			final UserTierData tierData = readUserTier(factory, utt);
+//			final UserTierData tierData = readUserTier(factory, utt);
 			final TierDescription td = findTierDescription(session, utt.getName());
+			Tier<?> userTier = factory.createTier(utt.getName(), td.getDeclaredType(), td.getTierParameters(), td.isExcludeFromAlignment(), td.isBlind());
+			if(td.getDeclaredType() == Orthography.class) {
+				((Tier<Orthography>)userTier).setValue(readUserTierOrthography(factory, utt));
+			} else if(td.getDeclaredType() == IPATranscript.class) {
+				((Tier<IPATranscript>)userTier).setValue(readUserTierIPATranscript(factory, utt));
+			} else if(td.getDeclaredType() == UserTierData.class) {
+				((Tier<UserTierData>)userTier).setValue(readUserTier(factory, utt));
+			} else {
+				throw new IllegalArgumentException("Unsupported user tier type");
+			}
 			if(td == null) {
 				throw new IllegalStateException("Invalid user tier " + utt.getName());
 			}
-			final Tier<UserTierData> userTier = factory.createTier(utt.getName(), UserTierData.class, new HashMap<>(), td.isExcludeFromAlignment());
-			userTier.setValue(tierData);
 			retVal.putTier(userTier);
 		}
 
@@ -575,7 +595,57 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		IPATranscript retVal = new IPATranscript();
 		if (itt.getPho() != null) {
 			retVal = readTranscript(itt.getPho());
+		} else if(itt.getUnparsed() != null) {
+			retVal.putExtension(UnvalidatedValue.class, readParseError(itt.getUnparsed()));
+		}
+		return retVal;
+	}
+
+	private Orthography readUserTierOrthography(SessionFactory factory, XmlUserTierType utt) {
+		Orthography retVal = new Orthography();
+		if(utt.getU() != null) {
+			retVal = readOrthography(utt.getU());
+		} else if(utt.getUnparsed() != null) {
+			retVal.putExtension(UnvalidatedValue.class, readParseError(utt.getUnparsed()));
+		}
+		return retVal;
+	}
+
+	private Orthography readBlindOrthography(SessionFactory factory, XmlBlindTranscriptionType itt) {
+		Orthography retVal = new Orthography();
+		if(itt.getU() != null) {
+			retVal = readOrthography(itt.getU());
+		} else if(itt.getUnparsed() != null) {
+			retVal.putExtension(UnvalidatedValue.class, readParseError(itt.getUnparsed()));
+		}
+		return retVal;
+	}
+
+	private IPATranscript readUserTierIPATranscript(SessionFactory factory, XmlUserTierType utt) {
+		IPATranscript retVal = new IPATranscript();
+		if (utt.getPho() != null) {
+			retVal = readTranscript(utt.getPho());
 		} else {
+			retVal.putExtension(UnvalidatedValue.class, readParseError(utt.getUnparsed()));
+		}
+		return retVal;
+	}
+
+	private IPATranscript readBlindIPATranscript(SessionFactory factory, XmlBlindTranscriptionType itt) {
+		IPATranscript retVal = new IPATranscript();
+		if (itt.getPho() != null) {
+			retVal = readTranscript(itt.getPho());
+		} else {
+			retVal.putExtension(UnvalidatedValue.class, readParseError(itt.getUnparsed()));
+		}
+		return retVal;
+	}
+
+	private UserTierData readBlindUserTierTranscript(SessionFactory factory, XmlBlindTranscriptionType itt) {
+		UserTierData retVal = new UserTierData();
+		if(itt.getTierData() != null) {
+			retVal = readUserTierData(factory, itt.getTierData());
+		} else if(itt.getUnparsed() != null) {
 			retVal.putExtension(UnvalidatedValue.class, readParseError(itt.getUnparsed()));
 		}
 		return retVal;
@@ -592,20 +662,6 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 			retVal.putExtension(UnvalidatedValue.class, new UnvalidatedValue(visitor.toString(), pe));
 			return retVal;
 		}
-	}
-
-	private AlternativeTranscript readBlindTranscriptions(SessionFactory factory, List<XmlBlindTranscriptionType> bts) {
-		final AlternativeTranscript retVal = new AlternativeTranscript();
-		for(XmlBlindTranscriptionType btt:bts) {
-			IPATranscript ipa = new IPATranscript();
-			if (btt.getPho() != null) {
-				ipa = readTranscript(btt.getPho());
-			} else {
-				ipa.putExtension(UnvalidatedValue.class, readParseError(btt.getUnparsed()));
-			}
-			retVal.put(btt.getTranscriber(), ipa);
-		}
-		return retVal;
 	}
 
 	/**

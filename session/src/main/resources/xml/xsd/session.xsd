@@ -1361,10 +1361,14 @@
                 <a href="https://www.phon.ca/phon-manual/transcription/record_data.html">Phon manual section on this topic...</a>
             </xs:documentation>
         </xs:annotation>
-        <xs:choice minOccurs="1" maxOccurs="1">
-            <xs:element ref="tierData"/>
-            <xs:element ref="unparsed"/>
-        </xs:choice>
+        <xs:sequence>
+            <xs:choice minOccurs="1" maxOccurs="1">
+                <xs:element ref="tierData"/>
+                <xs:element ref="unparsed"/>
+            </xs:choice>
+            <xs:element ref="blindTranscription" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+
     </xs:complexType>
 
     <!-- User defined tiers -->

@@ -382,18 +382,16 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 					buffer.append(wt.getContent());
 				}
 
-				final AlternativeTranscript at = new AlternativeTranscript();
 				try {
 					final IPATranscript blindTranscript =
 							IPATranscript.parseIPATranscript(buffer.toString());
 					final TranscriberType tt = (TranscriberType)btt.getUser();
 					final String name = tt.getId();
-					at.put(name, blindTranscript);
+					ipaTier.setBlindTranscription(name, blindTranscript);
 				} catch (ParseException e) {
 					LOGGER.info(
 							e.getLocalizedMessage(), e);
 				}
-				ipaTier.putExtension(AlternativeTranscript.class, at);
 			}
 		}
 
