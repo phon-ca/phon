@@ -1,5 +1,6 @@
 package ca.phon.app.session.editor.view.transcriptEditor;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.DesktopProject;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
@@ -41,6 +42,7 @@ public class TranscriptEditor extends JEditorPane {
     private boolean controlPressed = false;
     private Object currentHighlight;
     DefaultHighlighter.DefaultHighlightPainter highlightPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
+    private int currentRecordIndex = -1;
 
     public TranscriptEditor(
         Session session,
@@ -84,8 +86,14 @@ public class TranscriptEditor extends JEditorPane {
                 }
             }
         });
+//        addPropertyChangeListener("currentRecord", e -> {
+//            eventManager.queueEvent();
+//        });
         // FOR DEBUG PURPOSES ONLY
         addCaretListener(e -> {
+
+            //setCurrentRecordIndex();
+
             /*int cursorPos = e.getDot();
             int recordIndex = doc.getRecordIndex(cursorPos);
             int recordElementIndex = doc.getRecordElementIndex(cursorPos);
@@ -599,11 +607,13 @@ public class TranscriptEditor extends JEditorPane {
     private void registerEditorActions() {
         this.eventManager.registerActionForEvent(EditorEventType.SessionChanged, this::onSessionChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
         this.eventManager.registerActionForEvent(EditorEventType.TierViewChanged, this::onTierViewChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+        this.eventManager.registerActionForEvent(EditorEventType.RecordChanged, this::onRecordChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
     }
 
     public void removeEditorActions() {
         this.eventManager.removeActionForEvent(EditorEventType.SessionChanged, this::onSessionChanged);
         this.eventManager.removeActionForEvent(EditorEventType.TierViewChanged, this::onTierViewChanged);
+        this.eventManager.removeActionForEvent(EditorEventType.RecordChanged, this::onRecordChanged);
     }
 
     private void onSessionChanged(EditorEvent<Session> editorEvent) {
@@ -834,5 +844,23 @@ public class TranscriptEditor extends JEditorPane {
         if (currentHighlight != null) {
             getHighlighter().removeHighlight(currentHighlight);
         }
+    }
+
+    private void onRecordChanged(EditorEvent<EditorEventType.RecordChangedData> editorEvent) {
+        if (hasFocus()) return;
+
+        int recordStartPos = getTranscriptDocument().getRecordStart(editorEvent.data().recordIndex());
+        try {
+            super.scrollRectToVisible((Rectangle) modelToView2D(recordStartPos));
+        }
+        catch (BadLocationException e) {
+            LogUtil.severe(e);
+        }
+    }
+
+    private void setCurrentRecordIndex(int index) {
+        int oldIndex = this.currentRecordIndex;
+        this.currentRecordIndex = index;
+        super.firePropertyChange("currentRecordIndex", oldIndex, this.currentRecordIndex);
     }
 }

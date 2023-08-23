@@ -10,6 +10,7 @@ import ca.phon.session.usertier.*;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.ipa.PhoneMapDisplay;
 import ca.phon.ui.ipa.SyllabificationDisplay;
+import ca.phon.worker.PhonWorker;
 
 import javax.swing.*;
 import javax.swing.text.*;
@@ -308,12 +309,12 @@ public class TranscriptDocument extends DefaultStyledDocument {
     public void addTier(List<TierViewItem> addedTiers) {
         int recordCount = session.getRecordCount();
         for (int i = 0; i < recordCount; i++) {
-            int offset = getRecordEnd(i, null);
+            int offset = getRecordEnd(i);
             try {
                 for (TierViewItem item : addedTiers) {
                     offset = insertTier(i, item, offset);
                 }
-                int recordStart = getRecordStart(i, null);
+                int recordStart = getRecordStart(i);
                 setParagraphAttributes(
                         recordStart,
                     offset - recordStart,
@@ -348,12 +349,12 @@ public class TranscriptDocument extends DefaultStyledDocument {
     public void showTier(List<TierViewItem> shownTiers) {
         int recordCount = session.getRecordCount();
         for (int i = 0; i < recordCount; i++) {
-            int offset = getRecordEnd(i, null);
+            int offset = getRecordEnd(i);
             try {
                 for (TierViewItem item : shownTiers) {
                     offset = insertTier(i, item, offset);
                 }
-                int recordStart = getRecordStart(i, null);
+                int recordStart = getRecordStart(i);
                 setParagraphAttributes(
                     recordStart,
                     offset - recordStart,
@@ -422,8 +423,14 @@ public class TranscriptDocument extends DefaultStyledDocument {
         try {
             // Remove the old stuff
             remove(0, getLength());
-            // Put the new stuff back
-            populate();
+            PhonWorker.invokeOnNewWorker(() -> {
+                try {
+                    populate();
+                }
+                catch (BadLocationException e) {
+                    LogUtil.severe(e);
+                }
+            });
         }
         catch (Exception e) {
             throw new RuntimeException(e);
@@ -459,7 +466,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
     // region Get Record/Tier Start/End
 
-    public int getRecordStart(int recordIndex, String tierName) {
+    public int getRecordStart(int recordIndex) {
         Element root = getDefaultRootElement();
 
         int retVal = -1;
@@ -512,7 +519,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return retVal;
     }
 
-    public int getRecordEnd(int recordIndex, String tierName) {
+    public int getRecordEnd(int recordIndex) {
         Element root = getDefaultRootElement();
 
         int retVal = -1;
@@ -542,7 +549,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
                     var currentTier = innerElem.getAttributes().getAttribute("tier");
                     // If correct tier
                     if (currentTier != null && currentTier == tier) {
-                        return getRecordEnd((int)currentRecordIndex, tier.getName());
+                        return getRecordEnd((int)currentRecordIndex);
                     }
                 }
             }
@@ -828,6 +835,8 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
     private void populate() throws BadLocationException {
 
+        super.writeLock();
+
         Transcript transcript = session.getTranscript();
         var tierView = session.getTierView();
 
@@ -911,7 +920,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
             }
         }
 
-
+        super.writeUnlock();
     }
 
     // region Getters and Setters
