@@ -117,6 +117,7 @@ function query_record(recordIndex, record) {
 	var toSearch = new Array();
 	toSearch.push({
 		element: tier.value,
+		offset: 0,
 		alignedResults: tierAlignedResults,
 		alignedMeta: tierAlignedMeta
 	});
@@ -165,9 +166,16 @@ function query_record(recordIndex, record) {
 					elementAlignedMeta.putAll(alignedWordData.metadata);
 				}
 
+				// get word offset
+				var wordOffset = -1;
+				if(tier.declaredType === Orthography || tier.declaredType === IPATranscript || tier.declaredType === UserTierData) {
+					wordOffset = tier.value.stringIndexOf(element);
+				}
+
 				if(addWord) {
 					toSearch.push({
 						element: element,
+						offset: wordOffset,
 						alignedResults: elementAlignedResults,
 						alignedMeta: elementAlignedMeta
 					});
@@ -176,5 +184,59 @@ function query_record(recordIndex, record) {
 		}
 	}
 
+	for(var i = 0; i < toSearch.length; i++) {
+		var element = toSearch[i].element;
+		var offset = toSearch[i].offset;
+		var alignedResults = toSearch[i].alignedResults;
+		var alignedMeta = toSearch[i].alignedMeta;
+		var matches = filters.primary.patternFilter.find_pattern(element);
 
+		for(var j = 0; j < matches.length; j++) {
+			var match = matches[j];
+
+			if(match.groups) {
+				var xgrp = match.groups["X"];
+				if(xgrp) {
+					var newMatch = {
+						start: xgrp.start,
+						end: xgrp.end,
+						value: xgrp.value,
+						groups: match.groups,
+						position: match.position
+					};
+					match = newMatch;
+				}
+			}
+
+			var result = factory.createResult();
+			var startIndex = offset + match.start;
+			var length = match.value.toString().length();
+
+			result.recordIndex = recordIndex;
+			result.schema = "LINEAR";
+
+			var rv = factory.createResultValue();
+			rv.tierName = searchTier;
+			rv.range = new Range(startIndex, startIndex + length, true);
+			rv.data = (match.value != null ? match.value : "");
+			result.addResultValue(rv);
+
+			for(var alignedResultIdx = 0; alignedResultIdx < alignedResults.length; alignedResultIdx++) {
+				result.addResultValue(alignedResults[alignedResultIdx]);
+			}
+			result.metadata.putAll(alignedMeta);
+
+			if (match.groups) {
+				groupKeys = Object.keys(match.groups);
+				for (keyIdx = 0; keyIdx < groupKeys.length; keyIdx++) {
+					var key = groupKeys[keyIdx];
+					if (/^[a-zA-Z]\w*$/.test(key) && key != 'X') {
+						result.metadata.put(key, match.groups[key].value.toString());
+					}
+				}
+			}
+
+			results.addResult(result);
+		}
+	}
 }
