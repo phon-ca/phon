@@ -389,8 +389,33 @@ public class TranscriptDocument extends DefaultStyledDocument {
         }
     }
 
-    public void tierNameChanged(List<TierViewItem> changedTiers) {
+    public void tierNameChanged(List<TierViewItem> oldTiers, List<TierViewItem> newTiers) {
+        int recordCount = session.getRecordCount();
+        for (int i = 0; i < recordCount; i++) {
+            try {
+                Record record = session.getRecord(i);
+                for (int j = 0; j < oldTiers.size(); j++) {
+                    String oldTierName = oldTiers.get(j).getTierName();
+                    TierViewItem newTier = newTiers.get(j);
+                    System.out.println(record.getUserDefinedTierNames());
 
+                    int oldTierLabelLength = oldTierName.length() + 2;
+                    int tierStartOffset = getTierStart(i, oldTierName) - oldTierLabelLength;
+                    int tierEndOffset = getTierEnd(i, oldTierName);
+
+                    if (tierStartOffset < 0 || tierEndOffset < 0) continue;
+
+                    System.out.println("Removing " + oldTierName + " from " + tierStartOffset + " to " + tierEndOffset + " in record " + i);
+
+                    remove(tierStartOffset, tierEndOffset - tierStartOffset);
+
+                    System.out.println(insertTier(i, newTier, tierStartOffset));
+                }
+            }
+            catch (Exception e) {
+                LogUtil.severe(e);
+            }
+        }
     }
 
     public void reload() {

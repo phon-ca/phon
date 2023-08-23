@@ -66,10 +66,22 @@ public class TranscriptEditor extends JEditorPane {
         addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
-                if (!controlPressed) {
-                    return;
-                }
+                if (!controlPressed) return;
                 highlightElementAtPoint(e.getPoint());
+            }
+        });
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (!controlPressed) return;
+                int mousePosInDoc = viewToModel2D(e.getPoint());
+                var elem = getTranscriptDocument().getCharacterElement(mousePosInDoc);
+                Tier<?> tier = (Tier<?>)elem.getAttributes().getAttribute("tier");
+                if (tier != null && tier.getValue() instanceof MediaSegment mediaSegment) {
+                    if (segmentPlayback != null) {
+                        segmentPlayback.playSegment(mediaSegment);
+                    }
+                }
             }
         });
         // FOR DEBUG PURPOSES ONLY
@@ -544,17 +556,19 @@ public class TranscriptEditor extends JEditorPane {
         System.out.println(data.oldTierView().stream().map(item -> item.getTierName()).toList());
         System.out.println(data.newTierView().stream().map(item -> item.getTierName()).toList());
 
-        List<TierViewItem> changedTiers = new ArrayList<>();
+        List<TierViewItem> oldTiers = new ArrayList<>();
+        List<TierViewItem> newTiers = new ArrayList<>();
         for (Integer index : data.viewIndices()) {
             TierViewItem item = data.newTierView().get(index);
             if (item.isVisible()) {
-                changedTiers.add(item);
+                oldTiers.add(data.oldTierView().get(index));
+                newTiers.add(item);
             }
         }
 
-        if (changedTiers.isEmpty()) return;
+        if (newTiers.isEmpty()) return;
 
-        getTranscriptDocument().tierNameChanged(changedTiers);
+        getTranscriptDocument().tierNameChanged(oldTiers, newTiers);
     }
 
     public void tierFontChanged(EditorEventType.TierViewChangedData data) {
@@ -811,7 +825,6 @@ public class TranscriptEditor extends JEditorPane {
                 elem.getEndOffset(),
                 highlightPainter
             );
-            System.out.println(currentHighlight);
         } catch (BadLocationException ex) {
             throw new RuntimeException(ex);
         }
