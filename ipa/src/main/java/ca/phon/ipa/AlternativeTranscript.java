@@ -23,11 +23,12 @@ import java.util.HashMap;
  * Extension for alternative forms for an IPATranscript.
  * 
  * This is most often used for mutl-blind transcription methods.
+ *
+ * @deprecated Since 4.0.0
  */
 @Extension(IPATranscript.class)
+@Deprecated
 public class AlternativeTranscript extends HashMap<String, IPATranscript> {
-	
-	private static final long serialVersionUID = -9179068664990132970L;
 	
 	private String selected = null;
 

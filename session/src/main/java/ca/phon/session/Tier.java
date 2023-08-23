@@ -103,13 +103,43 @@ public final class Tier<T> extends ExtendableObject {
 	}
 
 	/**
-	 * Get subtype regluar expression. Groups in the expression will be used to
+	 * Get subtype regex. Groups in the expression will be used to
 	 * identify part of the expression to use
 	 *
 	 * @return subtype expr or null if not set
 	 */
 	public String getSubtypeExpr() {
 		return tierImpl.getSubtypeExpr();
+	}
+
+	/**
+	 * Does this tier have a blind transcription for given transcriber
+	 *
+	 * @param transcriberId
+	 * @return true if getBlindTranscription(transcriberId) != null
+	 */
+	public boolean hasBlindTranscription(String transcriberId) {
+		return getBlindTranscription(transcriberId) != null;
+	}
+
+	/**
+	 * Set blind transcription
+	 *
+	 * @param transcriberId
+	 * @param value
+	 */
+	public void setBlindTranscription(String transcriberId, T value) {
+		tierImpl.setBlindTranscription(transcriberId, value);
+	}
+
+	/**
+	 * Get blind transcription for given transcriber
+	 *
+	 * @param transcriberId
+	 * @return blind transcription for transcriber or null if none or isBlind() is false
+	 */
+	public T getBlindTranscription(String transcriberId) {
+		return tierImpl.getBlindTranscription(transcriberId);
 	}
 
 	/**

@@ -46,6 +46,8 @@ public class TierImpl<T> implements TierSPI<T> {
 
 	private final String subtypeExpr;
 
+	private final Map<String, T> blindTranscriptions = new LinkedHashMap<>();
+
 	/**
 	 * Group data
 	 */
@@ -105,6 +107,18 @@ public class TierImpl<T> implements TierSPI<T> {
 	@Override
 	public String getSubtypeExpr() {
 		return subtypeExpr;
+	}
+
+	@Override
+	public void setBlindTranscription(String transcriberId, T value) {
+		if(!isBlind()) return;
+		blindTranscriptions.put(transcriberId, value);
+	}
+
+	@Override
+	public T getBlindTranscription(String transcriberId) {
+		if(!isBlind()) return null;
+		return blindTranscriptions.get(transcriberId);
 	}
 
 	@Override

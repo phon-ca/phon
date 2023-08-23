@@ -316,7 +316,9 @@ public class SessionImpl implements SessionSPI {
 		final List<TierDescription> possibleTiers = getTiers();
 		for(String tierName:blindTiers) {
 			final Optional<TierDescription> td = possibleTiers.stream().filter(desc -> desc.getName().equals(tierName)).findAny();
-			if(!td.isPresent())
+			if(!td.isPresent()
+				|| SystemTierType.Segment.getName().equals(tierName)
+				|| SystemTierType.PhoneAlignment.getName().equals(tierName))
 				throw new IllegalArgumentException("Invalid tier name " + tierName);
 		}
 		this.blindTiers.addAll(blindTiers);
