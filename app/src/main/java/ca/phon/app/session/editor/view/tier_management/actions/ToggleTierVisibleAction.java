@@ -49,7 +49,7 @@ public class ToggleTierVisibleAction extends TierManagementAction {
 	@Override
 	public void hookableActionPerformed(ActionEvent e) {
 		final SessionFactory factory = SessionFactory.newFactory();
-		final TierViewItem newItem = factory.createTierViewItem(item.getTierName(), !item.isVisible(), item.isTierLocked());
+		final TierViewItem newItem = factory.createTierViewItem(item.getTierName(), !item.isVisible(), item.getTierFont(), item.isTierLocked());
 		
 		final TierViewItemEdit edit = new TierViewItemEdit(getEditor(), item, newItem);
 		getEditor().getUndoSupport().postEdit(edit);
