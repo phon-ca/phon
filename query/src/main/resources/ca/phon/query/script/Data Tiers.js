@@ -20,6 +20,7 @@ var filters = {
 	"tierFilter": new PatternFilter("filters.tierFilter"),
 	"alignedTierFilter": new AlignedTierFilter("filters.alignedTierFilter"),
 	"word": new WordFilter("filters.word"),
+	"wordPattern": new PatternFilter("filters.wordPattern"),
 	"alignedWord": new AlignedWordFilter("filters.alignedWord"),
 	"addTiers": new TierList("filters.addTiers"),
 	"wordTiers": new TierList("filters.wordTiers"),
@@ -52,6 +53,8 @@ function setup_params(params) {
 	// change default status of word filter for this query
 	filters.word.searchByWord = false;
 	filters.word.param_setup(params);
+	filters.wordPattern.param_setup(params);
+	filters.wordPattern.setEnabled(false);
 	
 	filters.searchBy.param_setup(params, filters.word.searchByWordParam, null, insertIdx);
 
@@ -68,6 +71,7 @@ function setup_params(params) {
 		}
 	};
 	filters.word.searchByWordParam.addPropertyChangeListener(alignedWordListener);
+	filters.wordPattern.setEnabled(filters.word.searchByWord);
 	filters.alignedWord.setEnabled(filters.word.searchByWord);
 
 	var otherDataHeader = new SeparatorScriptParam("otherDataHeader", "Additional Tier Data", true);
@@ -117,6 +121,60 @@ function query_record(recordIndex, record) {
 		alignedMeta: tierAlignedMeta
 	});
 	if(filters.word.isUseFilter()) {
-		// search by word
+		if(!tier.isExcludeFromAlignment()) {
+			toSearch.length = 0;
+			const crossTierAlignment = TierAligner.calculateCrossTierAlignment(record, tier);
+			const topElements = crossTierAlignment.getTopAlignmentElements();
+			const selectedElements = filters.word.getRequestedWords(topElements);
+			for(var eleIdx = 0; eleIdx < selectedElements.length; eleIdx++) {
+				var elementData = selectedElements[eleIdx];
+				var element = elementData.word;
+
+				var elementAlignedMeta = new java.util.LinkedHashMap();
+				elementAlignedMeta.putAll(tierAlignedMeta);
+				if(filters.searchBy.includePositionalInfo == true) {
+					elementAlignedMeta.put("Word Position", elementData.position);
+				}
+
+				var elementAlignedResults = new Array();
+				for(var i = 0; i < tierAlignedResults.length; i++) {
+					elementAlignedResults.push(tierAlignedResults[i]);
+				}
+				var elementAlignedData = filters.wordTiers.getAlignedTierData(crossTierAlignment, element, "Word");
+				for(var i = 0; i < elementAlignedData.resultValues.length; i++) {
+					elementAlignedResults.push(elementAlignedData.resultValues[i]);
+				}
+				elementAlignedMeta.putAll(elementAlignedData.metadata);
+
+				var addWord = (element != null);
+				if(filters.wordPattern.isUseFilter()) {
+					addWord = filters.wordPattern.check_filter(element);
+				}
+
+				// check aligned word pattern if necessary
+				if (filters.alignedWord.isUseFilter()) {
+					addWord = filters.alignedWord.check_aligned_element(crossTierAlignment, element);
+
+					var tierList = new TierList("word");
+					tierList.setTiers(filters.alignedWord.tier);
+
+					var alignedWordData = tierList.getAlignedTierData(crossTierAlignment, element, "Word");
+					for(var k = 0; k < alignedWordData.resultValues.length; k++) {
+						elementAlignedResults.push(alignedWordData.resultValues[k]);
+					}
+					elementAlignedMeta.putAll(alignedWordData.metadata);
+				}
+
+				if(addWord) {
+					toSearch.push({
+						element: element,
+						alignedResults: elementAlignedResults,
+						alignedMeta: elementAlignedMeta
+					});
+				}
+			}
+		}
 	}
+
+
 }
