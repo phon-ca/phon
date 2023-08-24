@@ -150,6 +150,51 @@ public final class Transcript extends ExtendableObject implements Iterable<Trans
     }
 
     /**
+     * Return the element index
+     *
+     * @param r
+     * @return element index in transcript or -1 if not found
+     */
+    public int getElementIndex(Record r) {
+        final Element testEle = new Element(r);
+        for(int i = 0; i < getNumberOfElements(); i++) {
+            if(getElementAt(i).equals(testEle))
+                return i;
+        }
+        return -1;
+    }
+
+    /**
+     * Return the element index
+     *
+     * @param comment
+     * @return element index in transcript or -1 if not found
+     */
+    public int getElementIndex(Comment comment) {
+        final Element testEle = new Element(comment);
+        for(int i = 0; i < getNumberOfElements(); i++) {
+            if(getElementAt(i).equals(testEle))
+                return i;
+        }
+        return -1;
+    }
+
+    /**
+     * Return the element index
+     *
+     * @param gem
+     * @return element index in transcript or -1 if not found
+     */
+    public int getElementIndex(Gem gem) {
+        final Element testEle = new Element(gem);
+        for(int i = 0; i < getNumberOfElements(); i++) {
+            if(getElementAt(i).equals(testEle))
+                return i;
+        }
+        return -1;
+    }
+
+    /**
      * Add a new comment to end of the transcript
      *
      * @param comment
