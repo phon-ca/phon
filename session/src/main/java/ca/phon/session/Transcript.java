@@ -333,16 +333,6 @@ public final class Transcript extends ExtendableObject implements Iterable<Trans
     }
 
     /**
-     * Get index of record
-     *
-     * @param record
-     * @return element index of record, or -1 if not found
-     */
-    public int getRecordElementIndex(Record record) {
-        return getElementIndex(new Element(record));
-    }
-
-    /**
      * Add a new record to the list in the given position.
      *
      * @param recordIndex
@@ -375,7 +365,7 @@ public final class Transcript extends ExtendableObject implements Iterable<Trans
      * @param record
      */
     public void removeRecord(Record record) {
-        final int eleIdx = getRecordElementIndex(record);
+        final int eleIdx = getElementIndex(record);
         if(eleIdx >= 0) {
             removeElement(eleIdx);
         }
@@ -426,7 +416,7 @@ public final class Transcript extends ExtendableObject implements Iterable<Trans
     }
 
     /**
-     * Get the position of the given record.
+     * Get the record index of the given record.
      *
      * @param record
      * @return record index or -1 if not found
