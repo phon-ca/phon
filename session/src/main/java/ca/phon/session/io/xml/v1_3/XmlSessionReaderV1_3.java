@@ -457,7 +457,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		final XmlOrthographyTierType ot = rt.getOrthography();
 		final Orthography orthography = readOrthography(factory, ot);
 		retVal.setOrthography(orthography);
-		for(var xmlBlindTranscription:rt.getIpaTarget().getBlindTranscription()) {
+		for(var xmlBlindTranscription:rt.getOrthography().getBlindTranscription()) {
 			final Orthography blindOrtho = readBlindOrthography(factory, xmlBlindTranscription);
 			retVal.getOrthographyTier().setBlindTranscription(xmlBlindTranscription.getTranscriber(), blindOrtho);
 		}
