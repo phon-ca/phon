@@ -1,24 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<query xmlns="http://phon.ling.mun.ca/ns/query" uuid="6b5cc7e5-5455-4192-9eb7-0212c5989128" name="Epenthesis.xml" date="2014-10-15T12:25:18.617-02:30">
+<query xmlns="http://phon.ling.mun.ca/ns/query" uuid="829c63d2-ccbf-4e0e-94cf-0d3dafc6d4c4" name="Phones" date="2023-08-24T07:42:22.055-02:30">
     <script>
         <url rel="stock" ref="Phones"/>
-        <param id="filters.actualResultFilter.filterType">Phonex</param>
-        <param id="filters.alignedGroup.patternFilter.filterType">Plain text</param>
-        <param id="filters.alignedWord.patternFilter.filterType">Plain text</param>
-        <param id="filters.groupPattern.filterType">Plain text</param>
-        <param id="filters.primary.filter">[\c\v]</param>
-        <param id="filters.primary.filterType">Phonex</param>
-        <param id="filters.speaker.age1Comparator">equal to</param>
-        <param id="filters.speaker.age2Comparator">equal to</param>
-        <param id="filters.speaker.ageOperator">(select operator)</param>
-        <param id="filters.speaker.participantRole">(select role)</param>
+        <param id="alignedPhonesHeader.collapsed">false</param>
+        <param id="filters.primary.filter">\w</param>
+        <param id="filters.searchBy.searchBy">Word</param>
         <param id="filters.targetResultFilter.caseSensitive">false</param>
         <param id="filters.targetResultFilter.exactMatch">true</param>
         <param id="filters.targetResultFilter.filter">^$</param>
-        <param id="filters.targetResultFilter.filterType">Phonex</param>
-        <param id="filters.wordPattern.filterType">Plain text</param>
+        <param id="filters.wordTiers.tiers">Orthography,IPA Target,IPA Actual</param>
         <param id="searchTier">IPA Actual</param>
-    	<param id="otherDataHeader.collapsed">false</param>
-    	<param id="filters.wordTiers.tiers">Orthography,IPA Target,IPA Actual</param>
     </script>
 </query>
