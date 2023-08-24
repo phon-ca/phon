@@ -21,7 +21,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
-import javax.swing.text.StyleConstants;
+import javax.swing.text.Element;
+import javax.swing.text.SimpleAttributeSet;
 import javax.swing.undo.UndoManager;
 import java.awt.*;
 import java.awt.event.InputEvent;
@@ -57,14 +58,14 @@ public class TranscriptEditor extends JEditorPane {
         this.undoManager = undoManager;
         initActions();
         registerEditorActions();
-        super.setEditorKitForContentType(TranscriptEditorKit.CONTENT_TYPE, new TranscriptEditorKit(session));
+        super.setEditorKitForContentType(TranscriptEditorKit.CONTENT_TYPE, new TranscriptEditorKit());
         setContentType(TranscriptEditorKit.CONTENT_TYPE);
         var doc = getTranscriptDocument();
         doc.setTierLabelFactory(this::createTierLabel);
         doc.setCommentLabelFactory(this::createCommentLabel);
         doc.setGemLabelFactory(this::createGemLabel);
         doc.setSeparatorFactory(this::createSeparator);
-        doc.reload();
+        doc.setSession(session);
         addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
@@ -92,8 +93,9 @@ public class TranscriptEditor extends JEditorPane {
         // FOR DEBUG PURPOSES ONLY
         addCaretListener(e -> {
 
-            //setCurrentRecordIndex();
+            setCurrentRecordIndex(doc.getRecordIndex(e.getDot()));
 
+            //System.out.println(e.getDot());
             /*int cursorPos = e.getDot();
             int recordIndex = doc.getRecordIndex(cursorPos);
             int recordElementIndex = doc.getRecordElementIndex(cursorPos);
@@ -102,6 +104,8 @@ public class TranscriptEditor extends JEditorPane {
             System.out.println("Record " + recordIndex + " (Element: " + recordElementIndex + ") : " + tierName);
             System.out.println("Cursor Pos: " + cursorPos);
             System.out.println(doc.getRecordEnd(recordIndex, null));*/
+            SimpleAttributeSet attrs = new SimpleAttributeSet(doc.getCharacterElement(e.getDot()).getAttributes().copyAttributes());
+            System.out.println(attrs);
         });
     }
 
@@ -547,7 +551,7 @@ public class TranscriptEditor extends JEditorPane {
                 shownTiers.add(item);
             }
         }
-        getTranscriptDocument().showTier(shownTiers);
+        getTranscriptDocument().showTier(shownTiers, data.newTierView());
 
         // Correct caret
         if (caretTierOffset > -1) {
@@ -583,7 +587,7 @@ public class TranscriptEditor extends JEditorPane {
         int caretPos = getCaretPosition();
 
         List<TierViewItem> changedTiers = data
-            .oldTierView()
+            .newTierView()
             .stream()
             .filter(item -> data.tierNames().contains(item.getTierName()))
             .toList();
@@ -703,7 +707,21 @@ public class TranscriptEditor extends JEditorPane {
             @Override
             public void mouseClicked(MouseEvent e) {
                 JPopupMenu menu = new JPopupMenu();
-                menu.add(new JMenuItem("Comment Menu"));
+
+                JMenu addComment = new JMenu("Add comment");
+                addComment.add("Add comment above");
+                addComment.add("Add comment below");
+                addComment.add("Add comment at bottom");
+                menu.add(addComment);
+
+                JMenu addGem = new JMenu("Add gem");
+                addGem.add("Add gem above");
+                addGem.add("Add gem below");
+                addGem.add("Add gem at bottom");
+                menu.add(addGem);
+
+                menu.add("Delete me");
+
                 menu.show(commentLabel, e.getX(), e.getY());
             }
         });
@@ -733,7 +751,21 @@ public class TranscriptEditor extends JEditorPane {
             @Override
             public void mouseClicked(MouseEvent e) {
                 JPopupMenu menu = new JPopupMenu();
-                menu.add(new JMenuItem("Gem Menu"));
+
+                JMenu addComment = new JMenu("Add comment");
+                addComment.add("Add comment above");
+                addComment.add("Add comment below");
+                addComment.add("Add comment at bottom");
+                menu.add(addComment);
+
+                JMenu addGem = new JMenu("Add gem");
+                addGem.add("Add gem above");
+                addGem.add("Add gem below");
+                addGem.add("Add gem at bottom");
+                menu.add(addGem);
+
+                menu.add("Delete me");
+
                 menu.show(gemLabel, e.getX(), e.getY());
             }
         });
@@ -850,11 +882,91 @@ public class TranscriptEditor extends JEditorPane {
         if (hasFocus()) return;
 
         int recordStartPos = getTranscriptDocument().getRecordStart(editorEvent.data().recordIndex());
+        int recordEndPos = getTranscriptDocument().getRecordEnd(editorEvent.data().recordIndex());
         try {
-            super.scrollRectToVisible((Rectangle) modelToView2D(recordStartPos));
+            var startRect = modelToView2D(recordStartPos);
+            var endRect = modelToView2D(recordEndPos);
+
+            Rectangle scrollToRect = new Rectangle(
+                (int) startRect.getMinX(),
+                (int) startRect.getMinY(),
+                (int) (endRect.getMaxX() - startRect.getMinX()),
+                (int) (endRect.getMaxY() - startRect.getMinY())
+            );
+
+            super.scrollRectToVisible(scrollToRect);
         }
         catch (BadLocationException e) {
             LogUtil.severe(e);
+        }
+    }
+
+    private int getCurrentElementIndex() {
+        Element elem = getTranscriptDocument().getCharacterElement(getCaretPosition());
+        if (elem == null) return -1;
+
+        String elementType = (String) elem.getAttributes().getAttribute("elementType");
+        if (elementType == null) return -1;
+
+        if (elementType.equals("comment")) {
+            Comment comment = (Comment) elem.getAttributes().getAttribute("comment");
+            if (comment != null) {
+                for (Transcript.Element transcriptElem : session.getTranscript()) {
+                    if (transcriptElem.isComment() && transcriptElem.asComment().equals(comment)) {
+                        return session.getTranscript().getElementIndex(transcriptElem);
+                    }
+                }
+            }
+        }
+        else if (elementType.equals("gem")) {
+            Gem gem = (Gem) elem.getAttributes().getAttribute("gem");
+            if (gem != null) {
+                for (Transcript.Element transcriptElem : session.getTranscript()) {
+                    if (transcriptElem.isGem() && transcriptElem.asGem().equals(gem)) {
+                        return session.getTranscript().getElementIndex(transcriptElem);
+                    }
+                }
+            }
+        }
+        else if (elementType.equals("record")) {
+            Integer recordIndex = (Integer) elem.getAttributes().getAttribute("recordIndex");
+            if (recordIndex != null) {
+                return session.getRecordElementIndex(recordIndex);
+            }
+        }
+
+        return -1;
+    }
+
+    private void setCurrentElementIndex(int index) {
+
+        Transcript.Element transcriptElem = session.getTranscript().getElementAt(index);
+        String transcriptElemType;
+        if (transcriptElem.isComment()) {transcriptElemType = "comment";}
+        else if (transcriptElem.isGem()) {transcriptElemType = "gem";}
+        else {transcriptElemType = "record";}
+
+        var root = getTranscriptDocument().getDefaultRootElement();
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            for (int j = 0; j < elem.getElementCount(); j++) {
+                Element innerElem = elem.getElement(j);
+                String elemType = (String) innerElem.getAttributes().getAttribute("type");
+                if (elemType != null && elemType.equals(transcriptElemType)) {
+                    if (transcriptElem.isComment()) {
+                        Comment comment = (Comment) innerElem.getAttributes().getAttribute("comment");
+                        if (comment.equals(transcriptElem.asComment())) setCaretPosition(innerElem.getStartOffset());
+                    }
+                    else if (transcriptElem.isGem()) {
+                        Gem gem = (Gem) innerElem.getAttributes().getAttribute("gem");
+                        if (gem.equals(transcriptElem.asGem())) setCaretPosition(innerElem.getStartOffset());
+                    }
+                    else {
+                        Record record = (Record) innerElem.getAttributes().getAttribute("record");
+                        if (record.equals(transcriptElem.asRecord())) setCaretPosition(innerElem.getStartOffset());
+                    }
+                }
+            }
         }
     }
 
@@ -862,5 +974,9 @@ public class TranscriptEditor extends JEditorPane {
         int oldIndex = this.currentRecordIndex;
         this.currentRecordIndex = index;
         super.firePropertyChange("currentRecordIndex", oldIndex, this.currentRecordIndex);
+    }
+
+    public int getCurrentRecordIndex() {
+        return currentRecordIndex;
     }
 }

@@ -78,6 +78,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         int recordElementIndex = session.getRecordElementIndex(recordIndex);
         retVal.addAttribute("recordIndex", recordIndex);
         retVal.addAttribute("recordElementIndex", recordElementIndex);
+        retVal.addAttribute("elementType", "record");
 
         return retVal;
     }
@@ -206,8 +207,15 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return retVal;
     }
 
-    private SimpleAttributeSet getCommentAttributes() {
+    private SimpleAttributeSet getCommentAttributes(Comment comment) {
         SimpleAttributeSet retVal = new SimpleAttributeSet();
+
+        retVal.addAttribute("elementType", "comment");
+        retVal.addAttribute("comment", comment);
+
+//        StyleConstants.setLineSpacing(retVal, 200);
+//        StyleConstants.setFirstLineIndent(retVal, -200);
+//        StyleConstants.setLeftIndent(retVal, 200);
 
         return retVal;
     }
@@ -220,14 +228,18 @@ public class TranscriptDocument extends DefaultStyledDocument {
             StyleConstants.setComponent(retVal, commentLabel);
         }
 
+        retVal.addAttribute("elementType", "comment");
         retVal.addAttribute("comment", comment);
         retVal.addAttribute("label", true);
 
         return retVal;
     }
 
-    private SimpleAttributeSet getGemAttributes() {
+    private SimpleAttributeSet getGemAttributes(Gem gem) {
         SimpleAttributeSet retVal = new SimpleAttributeSet();
+
+        retVal.addAttribute("elementType", "gem");
+        retVal.addAttribute("gem", gem);
 
         return retVal;
     }
@@ -240,6 +252,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
             StyleConstants.setComponent(retVal, gemLabel);
         }
 
+        retVal.addAttribute("elementType", "gem");
         retVal.addAttribute("gem", gem);
         retVal.addAttribute("label", true);
 
@@ -249,6 +262,8 @@ public class TranscriptDocument extends DefaultStyledDocument {
     // endregion Attribute Getters
 
     public void moveTier(List<TierViewItem> movedTiers) {
+
+        if (movedTiers.stream().anyMatch(item -> !item.isVisible())) return;
 
         List<TierViewItem> movedTiersNewOrder = new ArrayList<>();
         for (TierViewItem item : session.getTierView()) {
@@ -260,21 +275,32 @@ public class TranscriptDocument extends DefaultStyledDocument {
         // Reload the contents of the editor
         int recordCount = session.getRecordCount();
         for (int i = 0; i < recordCount; i++) {
+            Record record = session.getRecord(i);
+            if (movedTiers.stream().anyMatch(item -> !record.hasTier(item.getTierName()))) continue;
+
             int offset = -1;
             for (TierViewItem item : movedTiers) {
                 try {
+
+
                     String tierName = item.getTierName();
                     int labelLength = tierName.length() + 2;
 
                     int tierStartOffset = getTierStart(i, tierName) - labelLength;
                     int tierEndOffset = getTierEnd(i, tierName);
+
+                    if (record.getTier(tierName).getValue().toString().strip().equals("")) {
+                        tierStartOffset += 1;
+                    }
+
                     remove(tierStartOffset, tierEndOffset - tierStartOffset);
 
                     if (offset == -1) {
+                        System.out.println(tierStartOffset);
                         offset = tierStartOffset;
                     }
                 }
-                catch (Exception e) {
+                catch (BadLocationException e) {
                     throw new RuntimeException(e);
                 }
             }
@@ -282,7 +308,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 try {
                     offset = insertTier(i, item, offset);
                 }
-                catch (Exception e) {
+                catch (BadLocationException e) {
                     throw new RuntimeException(e);
                 }
             }
@@ -297,10 +323,13 @@ public class TranscriptDocument extends DefaultStyledDocument {
                     int labelLength = tierName.length() + 2;
                     int tierStartOffset = getTierStart(i, tierName) - labelLength;
                     int tierEndOffset = getTierEnd(i, tierName);
+
+                    if (tierStartOffset < 0 || tierEndOffset < 0) continue;
+
                     remove(tierStartOffset, tierEndOffset - tierStartOffset);
                 }
             }
-            catch (Exception e) {
+            catch (BadLocationException e) {
                 LogUtil.severe(e);
             }
         }
@@ -322,36 +351,55 @@ public class TranscriptDocument extends DefaultStyledDocument {
                     true
                 );
             }
-            catch (Exception e) {
+            catch (BadLocationException e) {
                 LogUtil.severe(e);
             }
         }
     }
 
     public void hideTier(List<String> hiddenTiers) {
-        System.out.println(hiddenTiers);
         int recordCount = session.getRecordCount();
         for (int i = 0; i < recordCount; i++) {
+            Record record = session.getRecord(i);
             try {
                 for (String tierName : hiddenTiers) {
+                    if (!record.hasTier(tierName)) continue;
+
                     int labelLength = tierName.length() + 2;
                     int tierStartOffset = getTierStart(i, tierName) - labelLength;
                     int tierEndOffset = getTierEnd(i, tierName);
                     remove(tierStartOffset, tierEndOffset - tierStartOffset);
                 }
             }
-            catch (Exception e) {
+            catch (BadLocationException e) {
                 LogUtil.severe(e);
             }
         }
     }
 
-    public void showTier(List<TierViewItem> shownTiers) {
+    public void showTier(List<TierViewItem> shownTiers, List<TierViewItem> newTierView) {
         int recordCount = session.getRecordCount();
         for (int i = 0; i < recordCount; i++) {
-            int offset = getRecordEnd(i);
+            Record record = session.getRecord(i);
+            int offset = getRecordStart(i);
             try {
                 for (TierViewItem item : shownTiers) {
+                    if (!record.hasTier(item.getTierName())) continue;
+
+                    TierViewItem itemBeforeShownItem = null;
+                    for (TierViewItem newItem : newTierView) {
+                        if (newItem.equals(item)) {
+                            break;
+                        }
+                        if (newItem.isVisible() && record.hasTier(newItem.getTierName())) {
+                            itemBeforeShownItem = newItem;
+                        }
+                    }
+
+                    if (itemBeforeShownItem != null) {
+                        offset = getTierEnd(i, itemBeforeShownItem.getTierName());
+                    }
+
                     offset = insertTier(i, item, offset);
                 }
                 int recordStart = getRecordStart(i);
@@ -362,7 +410,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
                     true
                 );
             }
-            catch (Exception e) {
+            catch (BadLocationException e) {
                 LogUtil.severe(e);
             }
         }
@@ -371,9 +419,12 @@ public class TranscriptDocument extends DefaultStyledDocument {
     public void tierFontChanged(List<TierViewItem> changedTiers) {
         int recordCount = session.getRecordCount();
         for (int i = 0; i < recordCount; i++) {
+            Record record = session.getRecord(i);
             try {
                 for (TierViewItem item : changedTiers) {
                     String tierName = item.getTierName();
+                    if (!record.hasTier(tierName)) continue;
+
                     int labelLength = tierName.length() + 2;
                     int tierStartOffset = getTierStart(i, tierName) - labelLength;
                     int tierEndOffset = getTierEnd(i, tierName);
@@ -383,8 +434,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
                     insertTier(i, item, tierStartOffset);
                 }
             }
-            catch (Exception e) {
-                System.out.println(i);
+            catch (BadLocationException e) {
                 LogUtil.severe(e);
             }
         }
@@ -413,7 +463,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
                     System.out.println(insertTier(i, newTier, tierStartOffset));
                 }
             }
-            catch (Exception e) {
+            catch (BadLocationException e) {
                 LogUtil.severe(e);
             }
         }
@@ -432,8 +482,8 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 }
             });
         }
-        catch (Exception e) {
-            throw new RuntimeException(e);
+        catch (BadLocationException e) {
+            LogUtil.severe(e);
         }
     }
 
@@ -679,7 +729,6 @@ public class TranscriptDocument extends DefaultStyledDocument {
         SimpleAttributeSet tierAttrs = getTierAttributes(tier, tierViewItem);
 
         SimpleAttributeSet labelAttrs = getTierLabelAttributes(tier, tierViewItem);
-
         insertString(offset, tierName + ": ", labelAttrs);
         offset += tierName.length() + 2;
 
@@ -776,36 +825,38 @@ public class TranscriptDocument extends DefaultStyledDocument {
             offset += tierContent.length();
         }
         else {
-            Tier<UserTierData> notesTier = (Tier<UserTierData>) tier;
-            UserTierData tierData = notesTier.getValue();
-            for (int i = 0; i < tierData.length(); i++) {
-                UserTierElement elem = tierData.elementAt(i);
-                String text;
-                SimpleAttributeSet attrs;
-                if (elem instanceof TierString tierString) {
-                    text = tierString.text();
-                    attrs = getUserTierStringAttributes();
-                }
-                else if (elem instanceof UserTierComment comment) {
-                    text = "[%" + comment.text() + "]";
-                    attrs = getUserTierCommentAttributes();
-                }
-                else {
-                    UserTierInternalMedia internalMedia = (UserTierInternalMedia) elem;
-                    text = "•" + internalMedia.text() + "•";
-                    attrs = getUserTierInternalMediaAttributes();
+            Tier<UserTierData> userTier = (Tier<UserTierData>) tier;
+            UserTierData tierData = userTier.getValue();
+            if (tierData != null) {
+                for (int i = 0; i < tierData.length(); i++) {
+                    UserTierElement elem = tierData.elementAt(i);
+                    String text;
+                    SimpleAttributeSet attrs;
+                    if (elem instanceof TierString tierString) {
+                        text = tierString.text();
+                        attrs = getUserTierStringAttributes();
+                    }
+                    else if (elem instanceof UserTierComment comment) {
+                        text = "[%" + comment.text() + "]";
+                        attrs = getUserTierCommentAttributes();
+                    }
+                    else {
+                        UserTierInternalMedia internalMedia = (UserTierInternalMedia) elem;
+                        text = "•" + internalMedia.text() + "•";
+                        attrs = getUserTierInternalMediaAttributes();
+                    }
+
+                    attrs.addAttributes(tierAttrs);
+
+                    insertString(offset, text, attrs);
+                    offset += text.length();
+
+                    insertString(offset++, " ", tierAttrs);
                 }
 
-                attrs.addAttributes(tierAttrs);
-
-                insertString(offset, text, attrs);
-                offset += text.length();
-
-                insertString(offset++, " ", tierAttrs);
+                remove(offset - 1, 1);
+                offset--;
             }
-
-            remove(offset - 1, 1);
-            offset--;
         }
 
         insertString(offset++, "\n", tierAttrs);
@@ -893,6 +944,10 @@ public class TranscriptDocument extends DefaultStyledDocument {
                         attrs = getUserTierInternalMediaAttributes();
                     }
 
+                    attrs.addAttributes(getCommentAttributes(comment));
+
+                    System.out.println(attrs);
+
                     insertString(len, text, attrs);
                     len += text.length();
 
@@ -913,7 +968,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 insertString(len, labelText, getGemLabelAttributes(gem));
                 len += labelText.length();
 
-                insertString(len, text, getGemAttributes());
+                insertString(len, text, getGemAttributes(gem));
                 len += text.length();
 
                 insertString(len++, "\n", null);
@@ -934,7 +989,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         try {
             populate();
         }
-        catch (Exception e) {
+        catch (BadLocationException e) {
             LogUtil.severe(e);
         }
     }

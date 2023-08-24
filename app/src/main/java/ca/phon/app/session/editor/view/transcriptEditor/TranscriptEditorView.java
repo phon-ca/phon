@@ -23,6 +23,9 @@ public class TranscriptEditorView extends EditorView {
         super(editor);
         this.transcriptEditor = new TranscriptEditor(editor.getSession(), editor.getEventManager(), editor.getUndoSupport(), editor.getUndoManager());
         this.transcriptEditor.setSegmentPlayback(editor.getMediaModel().getSegmentPlayback());
+        this.transcriptEditor.addPropertyChangeListener("currentRecordIndex", e -> {
+            editor.setCurrentRecordIndex((Integer) e.getNewValue());
+        });
         initUI();
     }
 
