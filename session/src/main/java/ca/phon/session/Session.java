@@ -394,7 +394,7 @@ public final class Session extends ExtendableObject {
 	}
 
 	public int getRecordElementIndex(Record record) {
-		return getTranscript().getRecordElementIndex(record);
+		return getTranscript().getElementIndex(record);
 	}
 
 	public void addRecord(int recordIndex, Record record) {

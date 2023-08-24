@@ -143,6 +143,15 @@ public final class Tier<T> extends ExtendableObject {
 	}
 
 	/**
+	 * Return list of blind transcribers for this tier
+	 *
+	 * @param list of transcriberIds
+	 */
+	public List<String> getTranscribers() {
+		return tierImpl.getTranscribers();
+	}
+
+	/**
 	 * Set the tier text. If the text can be parsed into the appropriate object type
 	 * the tier value will be updated with the new value. If the text cannot be parsed
 	 * the tier value will be cleared and the tier become unvalidated.

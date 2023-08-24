@@ -381,8 +381,8 @@ public class PhonMediaPlayer extends JPanel {
 					mediaPlayer.videoSurface().set(
 							mediaPlayerFactory.videoSurfaces().newVideoSurface( new BufferFormatCallback(), new MediaPlayerRenderCallback(), true));
 					mediaPlayer.events().addMediaPlayerEventListener(loadListener);
-					mediaPlayer.audio().setMute(true);
 					mediaPlayer.controls().play();
+					mediaPlayer.audio().setMute(true);
 
 					mediaPlayerCanvas.setToolTipText(getMediaFile());
 				} else {

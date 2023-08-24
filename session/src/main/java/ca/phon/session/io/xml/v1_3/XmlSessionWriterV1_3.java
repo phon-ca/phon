@@ -15,18 +15,16 @@
  */
 package ca.phon.session.io.xml.v1_3;
 
+import ca.phon.extensions.IExtendable;
 import ca.phon.extensions.UnvalidatedValue;
-import ca.phon.ipa.AlternativeTranscript;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
-import ca.phon.orthography.Happening;
 import ca.phon.orthography.Orthography;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.Rank;
 import ca.phon.session.Record;
 import ca.phon.session.*;
-import ca.phon.session.alignment.TierAlignmentRules;
 import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionWriter;
 import ca.phon.session.usertier.*;
@@ -529,8 +527,8 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 		}
 
 		for(String tierName:record.getUserDefinedTierNames()) {
-			Tier<UserTierData> userTier = record.getTier(tierName, UserTierData.class);
-			if(userTier != null && userTier.hasValue() && userTier.getValue().getElements().size() > 0) {
+			Tier<?> userTier = record.getTier(tierName);
+			if(userTier != null && userTier.hasValue() && !userTier.getValue().toString().isEmpty()) {
 				final XmlUserTierType utt = writeUserTier(factory, userTier);
 				utt.setName(userTier.getName());
 				retVal.getUserTier().add(utt);
@@ -547,6 +545,20 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 		} else {
 			retVal.setU(writeOrthography(factory, orthoTier.getValue()));
 		}
+
+		if(orthoTier.isBlind()) {
+			for(String transcriberId:orthoTier.getTranscribers()) {
+				final Orthography blindOrtho = orthoTier.getBlindTranscription(transcriberId);
+				final XmlBlindTranscriptionType xmlBlindTranscription = factory.createXmlBlindTranscriptionType();
+				if(blindOrtho.getExtension(UnvalidatedValue.class) != null) {
+					xmlBlindTranscription.setUnparsed(writeUnparsed(factory, blindOrtho.getExtension(UnvalidatedValue.class)));
+				} else {
+					xmlBlindTranscription.setU(writeOrthography(factory, blindOrtho));
+				}
+				retVal.getBlindTranscription().add(xmlBlindTranscription);
+			}
+		}
+
 		return retVal;
 	}
 
@@ -575,18 +587,16 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 			retVal.setPho(writeIPA(factory, ipaTier.getValue()));
 		}
 
-		final AlternativeTranscript alternativeTranscripts = ipaTier.getExtension(AlternativeTranscript.class);
-		if(alternativeTranscripts != null) {
-			for(String transcriber:alternativeTranscripts.keySet()) {
-				final XmlBlindTranscriptionType btt = factory.createXmlBlindTranscriptionType();
-				btt.setTranscriber(transcriber);
-				final IPATranscript ipa = alternativeTranscripts.get(transcriber);
-				if(ipa.getExtension(UnvalidatedValue.class) != null) {
-					btt.setUnparsed(writeUnparsed(factory, ipa.getExtension(UnvalidatedValue.class)));
+		if(ipaTier.isBlind()) {
+			for(String transcriberId:ipaTier.getTranscribers()) {
+				final IPATranscript blindIpa = ipaTier.getBlindTranscription(transcriberId);
+				final XmlBlindTranscriptionType xmlBlindTranscription = factory.createXmlBlindTranscriptionType();
+				if(blindIpa.getExtension(UnvalidatedValue.class) != null) {
+					xmlBlindTranscription.setUnparsed(writeUnparsed(factory, blindIpa.getExtension(UnvalidatedValue.class)));
 				} else {
-					btt.setPho(writeIPA(factory, ipa));
+					xmlBlindTranscription.setPho(writeIPA(factory, blindIpa));
 				}
-				retVal.getBlindTranscription().add(btt);
+				retVal.getBlindTranscription().add(xmlBlindTranscription);
 			}
 		}
 
@@ -631,16 +641,46 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 		} else {
 			retVal.setTierData(writeUserTierData(factory, notesTier.getValue()));
 		}
+
+
+
 		return retVal;
 	}
 
-	private XmlUserTierType writeUserTier(ObjectFactory factory, Tier<UserTierData> userTier) {
+	private XmlUserTierType writeUserTier(ObjectFactory factory, Tier<?> userTier) {
 		final XmlUserTierType retVal = factory.createXmlUserTierType();
+		final Class<?> tierType = userTier.getDeclaredType();
 		if(userTier.isUnvalidated()) {
 			retVal.setUnparsed(writeUnparsed(factory, userTier.getUnvalidatedValue()));
 		} else {
-			retVal.setTierData(writeUserTierData(factory, userTier.getValue()));
+			if(tierType == Orthography.class) {
+				retVal.setU(writeOrthography(factory, (Orthography) userTier.getValue()));
+			} else if(tierType == IPATranscript.class) {
+				retVal.setPho(writeIPA(factory, (IPATranscript) userTier.getValue()));
+			} else if(tierType == UserTierData.class) {
+				retVal.setTierData(writeUserTierData(factory, (UserTierData) userTier.getValue()));
+			} else {
+				throw new IllegalArgumentException("Unsupported tier type " + tierType);
+			}
 		}
+
+		if(userTier.isBlind()) {
+			for(String transcriberId:userTier.getTranscribers()) {
+				final XmlBlindTranscriptionType xmlBlindTranscription = factory.createXmlBlindTranscriptionType();
+				Object blindVal = userTier.getBlindTranscription(transcriberId);
+				if(blindVal instanceof Orthography blindOrtho) {
+					xmlBlindTranscription.setU(writeOrthography(factory, blindOrtho));
+				} else if(blindVal instanceof IPATranscript blindIpa) {
+					xmlBlindTranscription.setPho(writeIPA(factory, blindIpa));
+				} else if(blindVal instanceof UserTierData tierData) {
+					xmlBlindTranscription.setTierData(writeUserTierData(factory, tierData));
+				} else {
+					throw new IllegalArgumentException("Unsupported blind tier type " + blindVal.getClass());
+				}
+				retVal.getBlindTranscription().add(xmlBlindTranscription);
+			}
+		}
+
 		return retVal;
 	}
 

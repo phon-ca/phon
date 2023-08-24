@@ -16,6 +16,7 @@
 package ca.phon.session.spi;
 
 import java.text.ParseException;
+import java.util.List;
 
 public interface TierSPI<T>  extends TierDescriptionSPI {
 
@@ -54,5 +55,12 @@ public interface TierSPI<T>  extends TierDescriptionSPI {
 	 * @return blind transcription for transcriber or null if none or isBlind() is false
 	 */
 	public T getBlindTranscription(String transcriberId);
+
+	/**
+	 * Return list of blind transcribers for this tier
+	 *
+	 * @param list of transcriberIds
+	 */
+	public List<String> getTranscribers();
 
 }

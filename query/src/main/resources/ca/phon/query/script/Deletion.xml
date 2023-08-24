@@ -1,24 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<query xmlns="http://phon.ling.mun.ca/ns/query" uuid="909ea40d-9bbc-49d3-a35c-512e25295349" name="Deletions.xml" date="2014-10-15T12:24:54.362-02:30">
+<query xmlns="http://phon.ling.mun.ca/ns/query" uuid="ca3a54b4-e174-4d24-8ffe-3c6e010e6da4" name="Phones" date="2023-08-24T07:41:56.083-02:30">
     <script>
         <url rel="stock" ref="Phones"/>
+        <param id="alignedPhonesHeader.collapsed">false</param>
         <param id="filters.actualResultFilter.caseSensitive">false</param>
         <param id="filters.actualResultFilter.exactMatch">true</param>
         <param id="filters.actualResultFilter.filter">^$</param>
-        <param id="filters.actualResultFilter.filterType">Phonex</param>
-        <param id="filters.alignedGroup.patternFilter.filterType">Plain text</param>
-        <param id="filters.alignedWord.patternFilter.filterType">Plain text</param>
-        <param id="filters.groupPattern.filterType">Plain text</param>
-        <param id="filters.primary.filter">[\c\v]</param>
-        <param id="filters.primary.filterType">Phonex</param>
-        <param id="filters.speaker.age1Comparator">equal to</param>
-        <param id="filters.speaker.age2Comparator">equal to</param>
-        <param id="filters.speaker.ageOperator">(select operator)</param>
-        <param id="filters.speaker.participantRole">(select role)</param>
-        <param id="filters.targetResultFilter.filterType">Phonex</param>
-        <param id="filters.wordPattern.filterType">Plain text</param>
+        <param id="filters.primary.filter">\w</param>
+        <param id="filters.searchBy.searchBy">Word</param>
+        <param id="filters.wordTiers.tiers">Orthography,IPA Target,IPA Actual</param>
         <param id="searchTier">IPA Target</param>
-    	<param id="otherDataHeader.collapsed">false</param>
-    	<param id="filters.wordTiers.tiers">Orthography,IPA Target,IPA Actual</param>
     </script>
 </query>

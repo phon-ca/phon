@@ -457,7 +457,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		final XmlOrthographyTierType ot = rt.getOrthography();
 		final Orthography orthography = readOrthography(factory, ot);
 		retVal.setOrthography(orthography);
-		for(var xmlBlindTranscription:rt.getIpaTarget().getBlindTranscription()) {
+		for(var xmlBlindTranscription:rt.getOrthography().getBlindTranscription()) {
 			final Orthography blindOrtho = readBlindOrthography(factory, xmlBlindTranscription);
 			retVal.getOrthographyTier().setBlindTranscription(xmlBlindTranscription.getTranscriber(), blindOrtho);
 		}
@@ -511,8 +511,10 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 
 		// user tiers
 		for(XmlUserTierType utt:rt.getUserTier()) {
-//			final UserTierData tierData = readUserTier(factory, utt);
 			final TierDescription td = findTierDescription(session, utt.getName());
+			if(td == null) {
+				throw new IllegalStateException("Invalid user tier " + utt.getName());
+			}
 			Tier<?> userTier = factory.createTier(utt.getName(), td.getDeclaredType(), td.getTierParameters(), td.isExcludeFromAlignment(), td.isBlind());
 			if(td.getDeclaredType() == Orthography.class) {
 				((Tier<Orthography>)userTier).setValue(readUserTierOrthography(factory, utt));
@@ -522,9 +524,6 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 				((Tier<UserTierData>)userTier).setValue(readUserTier(factory, utt));
 			} else {
 				throw new IllegalArgumentException("Unsupported user tier type");
-			}
-			if(td == null) {
-				throw new IllegalStateException("Invalid user tier " + utt.getName());
 			}
 			retVal.putTier(userTier);
 		}

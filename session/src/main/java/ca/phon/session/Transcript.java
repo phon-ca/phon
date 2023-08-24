@@ -11,12 +11,15 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
- * A collection of interleaved {@link Comment}s and {@link Record}s
+ * A collection of interleaved {@link Comment}s, {@link Gem}s and {@link Record}s
  *
  *
  */
 public final class Transcript extends ExtendableObject implements Iterable<Transcript.Element>, Visitable<Transcript.Element> {
 
+    /**
+     * Wrapper object for transcript elements including Comments, Gems and Records
+     */
     public final static class Element {
         final Comment comment;
         final Record record;
@@ -56,7 +59,7 @@ public final class Transcript extends ExtendableObject implements Iterable<Trans
         public int hashCode() {
             return (isComment()
                     ? asComment().hashCode() : isGem()
-                        ? asGem().hashCode() : asRecord().hashCode());
+                        ? asGem().hashCode() : isRecord() ? asRecord().hashCode() : 0);
         }
 
         @Override
@@ -144,6 +147,51 @@ public final class Transcript extends ExtendableObject implements Iterable<Trans
     public int getElementIndex(Element ele) {
         for(int i = 0; i < getNumberOfElements(); i++) {
             if(getElementAt(i).equals(ele))
+                return i;
+        }
+        return -1;
+    }
+
+    /**
+     * Return the element index
+     *
+     * @param r
+     * @return element index in transcript or -1 if not found
+     */
+    public int getElementIndex(Record r) {
+        final Element testEle = new Element(r);
+        for(int i = 0; i < getNumberOfElements(); i++) {
+            if(getElementAt(i).equals(testEle))
+                return i;
+        }
+        return -1;
+    }
+
+    /**
+     * Return the element index
+     *
+     * @param comment
+     * @return element index in transcript or -1 if not found
+     */
+    public int getElementIndex(Comment comment) {
+        final Element testEle = new Element(comment);
+        for(int i = 0; i < getNumberOfElements(); i++) {
+            if(getElementAt(i).equals(testEle))
+                return i;
+        }
+        return -1;
+    }
+
+    /**
+     * Return the element index
+     *
+     * @param gem
+     * @return element index in transcript or -1 if not found
+     */
+    public int getElementIndex(Gem gem) {
+        final Element testEle = new Element(gem);
+        for(int i = 0; i < getNumberOfElements(); i++) {
+            if(getElementAt(i).equals(testEle))
                 return i;
         }
         return -1;
@@ -285,16 +333,6 @@ public final class Transcript extends ExtendableObject implements Iterable<Trans
     }
 
     /**
-     * Get index of record
-     *
-     * @param record
-     * @return element index of record, or -1 if not found
-     */
-    public int getRecordElementIndex(Record record) {
-        return getElementIndex(new Element(record));
-    }
-
-    /**
      * Add a new record to the list in the given position.
      *
      * @param recordIndex
@@ -327,7 +365,7 @@ public final class Transcript extends ExtendableObject implements Iterable<Trans
      * @param record
      */
     public void removeRecord(Record record) {
-        final int eleIdx = getRecordElementIndex(record);
+        final int eleIdx = getElementIndex(record);
         if(eleIdx >= 0) {
             removeElement(eleIdx);
         }
@@ -378,7 +416,7 @@ public final class Transcript extends ExtendableObject implements Iterable<Trans
     }
 
     /**
-     * Get the position of the given record.
+     * Get the record index of the given record.
      *
      * @param record
      * @return record index or -1 if not found

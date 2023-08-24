@@ -122,6 +122,11 @@ public class TierImpl<T> implements TierSPI<T> {
 	}
 
 	@Override
+	public List<String> getTranscribers() {
+		return blindTranscriptions.keySet().stream().toList();
+	}
+
+	@Override
 	public T parse(String text) throws ParseException {
 		final Formatter<T> factory = FormatterFactory.createFormatter(getDeclaredType());
 		if(factory != null) {
