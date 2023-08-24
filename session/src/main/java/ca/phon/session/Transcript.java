@@ -11,12 +11,15 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
- * A collection of interleaved {@link Comment}s and {@link Record}s
+ * A collection of interleaved {@link Comment}s, {@link Gem}s and {@link Record}s
  *
  *
  */
 public final class Transcript extends ExtendableObject implements Iterable<Transcript.Element>, Visitable<Transcript.Element> {
 
+    /**
+     * Wrapper object for transcript elements including Comments, Gems and Records
+     */
     public final static class Element {
         final Comment comment;
         final Record record;
@@ -56,7 +59,7 @@ public final class Transcript extends ExtendableObject implements Iterable<Trans
         public int hashCode() {
             return (isComment()
                     ? asComment().hashCode() : isGem()
-                        ? asGem().hashCode() : asRecord().hashCode());
+                        ? asGem().hashCode() : isRecord() ? asRecord().hashCode() : 0);
         }
 
         @Override
