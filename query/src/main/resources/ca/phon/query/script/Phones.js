@@ -12,7 +12,6 @@ var SyllableFilter = require("lib/SyllableFilter").SyllableFilter;
 var ParticipantFilter = require("lib/ParticipantFilter").ParticipantFilter;
 var PatternFilter = require("lib/PatternFilter").PatternFilter;
 var PatternType = require("lib/PatternFilter").PatternType;
-// var ResultType = require("lib/PhonScriptConstants").ResultType;
 var SearchByOptions = require("lib/SearchByOptions").SearchByOptions;
 
 var filters = {
@@ -23,9 +22,9 @@ var filters = {
     "tierFilter": new PatternFilter("filters.tierFilter"),
     "alignedTierFilter": new AlignedTierFilter("filters.alignedTierFilter"),
     "word": new WordFilter("filters.word"),
+    "wordPattern": new PatternFilter("filters.wordPattern"),
     "addTiers": new TierList("filters.addTiers"),
     "wordTiers": new TierList("filters.wordTiers"),
-    "wordPattern": new PatternFilter("filters.wordPattern"),
     "alignedWord": new AlignedWordFilter("filters.alignedWord"),
     "syllable": new SyllableFilter("filters.syllable"),
     "speaker": new ParticipantFilter("filters.speaker")
