@@ -88,12 +88,23 @@ public class TranscriptEditor extends JEditorPane {
             }
         });
 //        addPropertyChangeListener("currentRecord", e -> {
-//            eventManager.queueEvent();
+//            Record record = session.getRecord((Integer) e.getNewValue());
+//            Transcript transcript = session.getTranscript();
+//            EditorEvent<EditorEventType.RecordChangedData> event = new EditorEvent<>(
+//                EditorEventType.RecordChanged,
+//                TranscriptEditor.this,
+//                new EditorEventType.RecordChangedData(record, transcript.getElementIndex(record), transcript.getRecordPosition(record))
+//            );
+//            eventManager.queueEvent(event);
 //        });
-        // FOR DEBUG PURPOSES ONLY
-        addCaretListener(e -> {
 
-            setCurrentRecordIndex(doc.getRecordIndex(e.getDot()));
+        addCaretListener(e -> {
+            String transcriptElementType = (String) doc.getCharacterElement(e.getDot()).getAttributes().getAttribute("elementType");
+            if (transcriptElementType != null && transcriptElementType.equals("record")) {
+                setCurrentRecordIndex(doc.getRecordIndex(e.getDot()));
+            }
+
+            // FOR DEBUG PURPOSES ONLY
 
             //System.out.println(e.getDot());
             /*int cursorPos = e.getDot();
@@ -901,7 +912,7 @@ public class TranscriptEditor extends JEditorPane {
         }
     }
 
-    private int getCurrentElementIndex() {
+    public int getCurrentElementIndex() {
         Element elem = getTranscriptDocument().getCharacterElement(getCaretPosition());
         if (elem == null) return -1;
 
@@ -938,7 +949,7 @@ public class TranscriptEditor extends JEditorPane {
         return -1;
     }
 
-    private void setCurrentElementIndex(int index) {
+    public void setCurrentElementIndex(int index) {
 
         Transcript.Element transcriptElem = session.getTranscript().getElementAt(index);
         String transcriptElemType;
@@ -951,7 +962,7 @@ public class TranscriptEditor extends JEditorPane {
             Element elem = root.getElement(i);
             for (int j = 0; j < elem.getElementCount(); j++) {
                 Element innerElem = elem.getElement(j);
-                String elemType = (String) innerElem.getAttributes().getAttribute("type");
+                String elemType = (String) innerElem.getAttributes().getAttribute("elementType");
                 if (elemType != null && elemType.equals(transcriptElemType)) {
                     if (transcriptElem.isComment()) {
                         Comment comment = (Comment) innerElem.getAttributes().getAttribute("comment");
@@ -970,13 +981,27 @@ public class TranscriptEditor extends JEditorPane {
         }
     }
 
-    private void setCurrentRecordIndex(int index) {
+    public void setCurrentRecordIndex(int index) {
         int oldIndex = this.currentRecordIndex;
         this.currentRecordIndex = index;
         super.firePropertyChange("currentRecordIndex", oldIndex, this.currentRecordIndex);
     }
 
     public int getCurrentRecordIndex() {
-        return currentRecordIndex;
+        Element elem = getTranscriptDocument().getCharacterElement(getCaretPosition());
+        Integer recordIndex = (Integer) elem.getAttributes().getAttribute("recordIndex");
+        if (recordIndex != null) {
+            return recordIndex;
+        }
+
+        Transcript transcript = session.getTranscript();
+        for (int i = getCurrentElementIndex(); i < transcript.getNumberOfElements(); i++) {
+            Transcript.Element transcriptElem = transcript.getElementAt(i);
+            if (transcriptElem.isRecord()) {
+                return transcript.getRecordPosition(transcriptElem.asRecord());
+            }
+        }
+
+        return -1;
     }
 }

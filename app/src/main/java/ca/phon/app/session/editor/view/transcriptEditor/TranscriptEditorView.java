@@ -30,7 +30,7 @@ public class TranscriptEditorView extends EditorView {
     }
 
     private void initUI() {
-        JScrollPane scrollPane = new JScrollPane(transcriptEditor);
+        TranscriptEditorScrollPane scrollPane = new TranscriptEditorScrollPane(transcriptEditor);
         scrollPane.setRowHeaderView(new TranscriptEditorRowHeader(transcriptEditor));
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.getVerticalScrollBar().addAdjustmentListener(e -> {
@@ -38,6 +38,7 @@ public class TranscriptEditorView extends EditorView {
         });
         setLayout(new BorderLayout());
         add(scrollPane, BorderLayout.CENTER);
+        add(new TranscriptEditorStatusBar(transcriptEditor), BorderLayout.SOUTH);
     }
 
     @Override

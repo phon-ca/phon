@@ -718,6 +718,68 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return -1;
     }
 
+    public int getCommentStart(Comment comment) {
+        Element root = getDefaultRootElement();
+
+        int retVal = -1;
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            String transcriptElementType = (String) elem.getAttributes().getAttribute("elementType");
+            // If transcript element type
+            if (transcriptElementType != null && transcriptElementType.equals("comment")) {
+                for (int j = 0; j < elem.getElementCount(); j++) {
+                    Element innerElem = elem.getElement(j);
+                    AttributeSet attrs = innerElem.getAttributes();
+                    Comment currentComment = (Comment)attrs.getAttribute("comment");
+                    Boolean isLabel = (Boolean)attrs.getAttribute("label");
+                    // If correct tier
+                    if (isLabel == null && currentComment != null && currentComment == comment) {
+                        if (retVal == -1) {
+                            retVal = innerElem.getStartOffset();
+                        }
+                        else {
+                            retVal = Math.min(retVal, innerElem.getStartOffset());
+                        }
+                    }
+                }
+            }
+        }
+
+        return retVal;
+    }
+
+    public int getGemStart(Gem gem) {
+        Element root = getDefaultRootElement();
+
+        int retVal = -1;
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            String transcriptElementType = (String) elem.getAttributes().getAttribute("elementType");
+            // If transcript element type
+            if (transcriptElementType != null && transcriptElementType.equals("gem")) {
+                for (int j = 0; j < elem.getElementCount(); j++) {
+                    Element innerElem = elem.getElement(j);
+                    AttributeSet attrs = innerElem.getAttributes();
+                    Gem currentGem = (Gem)attrs.getAttribute("gem");
+                    Boolean isLabel = (Boolean)attrs.getAttribute("label");
+                    // If correct tier
+                    if (isLabel == null && currentGem != null && currentGem == gem) {
+                        if (retVal == -1) {
+                            retVal = innerElem.getStartOffset();
+                        }
+                        else {
+                            retVal = Math.min(retVal, innerElem.getStartOffset());
+                        }
+                    }
+                }
+            }
+        }
+
+        return retVal;
+    }
+
     // endregion Get Record/Tier Start/End
 
     private int insertTier(int recordIndex, TierViewItem tierViewItem, int offset) throws BadLocationException {
@@ -884,6 +946,37 @@ public class TranscriptDocument extends DefaultStyledDocument {
         session.setTierView(newTierView);
     }
 
+    public int getOffsetInContent(int pos) {
+        Element elem = getCharacterElement(pos);
+        String transcriptElementType = (String) elem.getAttributes().getAttribute("elementType");
+        if (transcriptElementType == null) return -1;
+
+        System.out.println(transcriptElementType);
+
+        switch (transcriptElementType) {
+            case "record" -> {
+                Tier<?> tier = (Tier<?>) elem.getAttributes().getAttribute("tier");
+                if (tier == null) return -1;
+                return pos - getTierStart(tier);
+            }
+            case "comment" -> {
+                Comment comment = (Comment) elem.getAttributes().getAttribute("comment");
+                if (comment == null) return -1;
+                System.out.println(getCommentStart(comment));
+                System.out.println(pos - getCommentStart(comment));
+                return pos - getCommentStart(comment);
+            }
+            case "gem" -> {
+                Gem gem = (Gem) elem.getAttributes().getAttribute("gem");
+                if (gem == null) return -1;
+                return pos - getGemStart(gem);
+            }
+            default -> {
+                return -1;
+            }
+        }
+    }
+
     private void populate() throws BadLocationException {
 
         super.writeLock();
@@ -918,12 +1011,16 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 );
             }
             else if (elem.isComment()) {
+                int commentStart = len;
+
                 Comment comment = elem.asComment();
                 UserTierData tierData = comment.getValue();
 
                 String labelText = comment.getType().getLabel() + ": ";
                 insertString(len, labelText, getCommentLabelAttributes(comment));
                 len += labelText.length();
+
+                SimpleAttributeSet commentAttrs = getCommentAttributes(comment);
 
                 for (int i = 0; i < tierData.length(); i++) {
                     UserTierElement userTierElement = tierData.elementAt(i);
@@ -944,7 +1041,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
                         attrs = getUserTierInternalMediaAttributes();
                     }
 
-                    attrs.addAttributes(getCommentAttributes(comment));
+                    attrs.addAttributes(commentAttrs);
 
                     System.out.println(attrs);
 
@@ -957,21 +1054,38 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 remove(len - 1, 1);
                 len--;
 
-                insertString(len++, "\n", null);
+                insertString(len++, "\n", commentAttrs);
+
+                setParagraphAttributes(
+                    commentStart,
+                    len - commentStart,
+                    commentAttrs,
+                    false
+                );
             }
             else {
+                int gemStart = len;
                 Gem gem = elem.asGem();
 
                 String text = gem.getLabel();
+
+                SimpleAttributeSet gemAttrs = getGemAttributes(gem);
 
                 String labelText = gem.getType().toString() + ": ";
                 insertString(len, labelText, getGemLabelAttributes(gem));
                 len += labelText.length();
 
-                insertString(len, text, getGemAttributes(gem));
+                insertString(len, text, gemAttrs);
                 len += text.length();
 
-                insertString(len++, "\n", null);
+                insertString(len++, "\n", gemAttrs);
+
+                setParagraphAttributes(
+                    gemStart,
+                    len - gemStart,
+                    gemAttrs,
+                    false
+                );
             }
         }
 
