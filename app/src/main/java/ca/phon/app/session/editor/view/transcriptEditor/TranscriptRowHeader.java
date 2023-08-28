@@ -6,15 +6,14 @@ import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
-import javax.swing.text.BadLocationException;
 import javax.swing.text.StyleConstants;
 import java.awt.*;
 
-public class TranscriptEditorRowHeader extends JComponent {
+public class TranscriptRowHeader extends JComponent {
 
     private final TranscriptEditor editor;
 
-    public TranscriptEditorRowHeader(TranscriptEditor editor) {
+    public TranscriptRowHeader(TranscriptEditor editor) {
         this.editor = editor;
         setPreferredSize(new Dimension(150, editor.getPreferredSize().height));
     }

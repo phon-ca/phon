@@ -3,19 +3,18 @@ package ca.phon.app.session.editor.view.transcriptEditor;
 import ca.phon.session.Tier;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import org.jdesktop.swingx.HorizontalLayout;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class TranscriptEditorStatusBar extends JPanel {
+public class TranscriptStatusBar extends JPanel {
     private final TranscriptEditor transcriptEditor;
     private JLabel transcriptElementIndexLabel;
     private JLabel recordIndexLabel;
     private JLabel tierNameLabel;
     private JLabel offsetInContentLabel;
 
-    public TranscriptEditorStatusBar(TranscriptEditor transcriptEditor) {
+    public TranscriptStatusBar(TranscriptEditor transcriptEditor) {
         this.transcriptEditor = transcriptEditor;
         initUI();
         transcriptEditor.addCaretListener(e -> {

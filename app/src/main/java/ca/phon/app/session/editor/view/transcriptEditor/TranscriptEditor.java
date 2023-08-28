@@ -44,6 +44,7 @@ public class TranscriptEditor extends JEditorPane {
     private Object currentHighlight;
     DefaultHighlighter.DefaultHighlightPainter highlightPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
     private int currentRecordIndex = -1;
+    private boolean singleRecordView = false;
 
     public TranscriptEditor(
         Session session,
@@ -60,12 +61,6 @@ public class TranscriptEditor extends JEditorPane {
         registerEditorActions();
         super.setEditorKitForContentType(TranscriptEditorKit.CONTENT_TYPE, new TranscriptEditorKit());
         setContentType(TranscriptEditorKit.CONTENT_TYPE);
-        var doc = getTranscriptDocument();
-        doc.setTierLabelFactory(this::createTierLabel);
-        doc.setCommentLabelFactory(this::createCommentLabel);
-        doc.setGemLabelFactory(this::createGemLabel);
-        doc.setSeparatorFactory(this::createSeparator);
-        doc.setSession(session);
         addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
@@ -99,6 +94,7 @@ public class TranscriptEditor extends JEditorPane {
 //        });
 
         addCaretListener(e -> {
+            TranscriptDocument doc = getTranscriptDocument();
             String transcriptElementType = (String) doc.getCharacterElement(e.getDot()).getAttributes().getAttribute("elementType");
             if (transcriptElementType != null && transcriptElementType.equals("record")) {
                 setCurrentRecordIndex(doc.getRecordIndex(e.getDot()));
@@ -1003,5 +999,23 @@ public class TranscriptEditor extends JEditorPane {
         }
 
         return -1;
+    }
+
+    public boolean isSingleRecordView() {
+        return singleRecordView;
+    }
+
+    public void setSingleRecordView(boolean singleRecordView) {
+        this.singleRecordView = singleRecordView;
+    }
+
+    public void setSession() {
+        TranscriptDocument doc = (TranscriptDocument) getEditorKit().createDefaultDocument();
+        doc.setTierLabelFactory(this::createTierLabel);
+        doc.setCommentLabelFactory(this::createCommentLabel);
+        doc.setGemLabelFactory(this::createGemLabel);
+        doc.setSeparatorFactory(this::createSeparator);
+        doc.setSession(session);
+        setDocument(doc);
     }
 }

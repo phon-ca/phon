@@ -30,11 +30,39 @@ public class TranscriptDocument extends DefaultStyledDocument {
     private Function<Gem, JComponent> gemLabelFactory;
     private BiFunction<Record, Integer, JComponent> separatorFactory;
     private final SessionFactory sessionFactory;
+    private boolean singleRecordView = false;
+    private int singleRecordIndex = 0;
+    private static final char[] EOL_ARRAY = { '\n' };
+    private ArrayList<ElementSpec> batch;
 
     public TranscriptDocument() {
         super(new StyleContext());
         sessionFactory = SessionFactory.newFactory();
         setDocumentFilter(new TranscriptDocumentFilter());
+        batch = new ArrayList<>();
+    }
+
+    public void appendBatchString(String str, AttributeSet a) {
+        // We could synchronize this if multiple threads
+        // would be in here. Since we're trying to boost speed,
+        // we'll leave it off for now.
+
+        // Make a copy of the attributes, since we will hang onto
+        // them indefinitely and the caller might change them
+        // before they are processed.
+        a = a.copyAttributes();
+        char[] chars = str.toCharArray();
+        batch.add(new ElementSpec(a, ElementSpec.ContentType, chars, 0, str.length()));
+    }
+
+    public void processBatchUpdates(int offs) throws BadLocationException {
+        // As with insertBatchString, this could be synchronized if
+        // there was a chance multiple threads would be in here.
+        ElementSpec[] inserts = new ElementSpec[batch.size()];
+        batch.toArray(inserts);
+
+        // Process all the inserts in bulk
+        super.insert(offs, inserts);
     }
 
     // region Visible Getters/Setters
@@ -984,112 +1012,136 @@ public class TranscriptDocument extends DefaultStyledDocument {
         Transcript transcript = session.getTranscript();
         var tierView = session.getTierView();
 
-        int len = 0;
+        if (singleRecordView) {
+            writeRecord(0, session.getRecord(singleRecordIndex), transcript, tierView);
+        }
+        else {
+            int offset = 0;
 
-        for (Transcript.Element elem : transcript) {
-            if (elem.isRecord()) {
-                int recordStart = len;
-                Record record = elem.asRecord();
-                int recordIndex = transcript.getRecordPosition(record);
-
-                insertString(len, "-\n", getSeparatorAttributes(record, recordIndex));
-                len += 2;
-
-                for (var item : tierView) {
-                    if (!item.isVisible()) continue;
-
-                    //String tierName = tv.getTierName();
-
-                    len = insertTier(recordIndex, item, len);
+            for (Transcript.Element elem : transcript) {
+                if (elem.isRecord()) {
+                    offset = writeRecord(offset, elem.asRecord(), transcript, tierView);
                 }
-
-                setParagraphAttributes(
-                    recordStart,
-                    len - recordStart,
-                    getRecordAttributes(recordIndex),
-                    false
-                );
-            }
-            else if (elem.isComment()) {
-                int commentStart = len;
-
-                Comment comment = elem.asComment();
-                UserTierData tierData = comment.getValue();
-
-                String labelText = comment.getType().getLabel() + ": ";
-                insertString(len, labelText, getCommentLabelAttributes(comment));
-                len += labelText.length();
-
-                SimpleAttributeSet commentAttrs = getCommentAttributes(comment);
-
-                for (int i = 0; i < tierData.length(); i++) {
-                    UserTierElement userTierElement = tierData.elementAt(i);
-                    String text;
-                    SimpleAttributeSet attrs;
-                    if (userTierElement instanceof TierString tierString) {
-                        // Text
-                        text = tierString.text();
-                        attrs = getUserTierStringAttributes();
-                    } else if (userTierElement instanceof UserTierComment userTierComment) {
-                        // Comment
-                        text = "[%" + userTierComment.text() + "]";
-                        attrs = getUserTierCommentAttributes();
-                    } else {
-                        // Internal media
-                        UserTierInternalMedia internalMedia = (UserTierInternalMedia) userTierElement;
-                        text = "•" + internalMedia.text() + "•";
-                        attrs = getUserTierInternalMediaAttributes();
-                    }
-
-                    attrs.addAttributes(commentAttrs);
-
-                    System.out.println(attrs);
-
-                    insertString(len, text, attrs);
-                    len += text.length();
-
-                    insertString(len++, " ", attrs);
+                else if (elem.isComment()) {
+                    offset = writeComment(offset, elem.asComment());
                 }
-
-                remove(len - 1, 1);
-                len--;
-
-                insertString(len++, "\n", commentAttrs);
-
-                setParagraphAttributes(
-                    commentStart,
-                    len - commentStart,
-                    commentAttrs,
-                    false
-                );
-            }
-            else {
-                int gemStart = len;
-                Gem gem = elem.asGem();
-
-                String text = gem.getLabel();
-
-                SimpleAttributeSet gemAttrs = getGemAttributes(gem);
-
-                String labelText = gem.getType().toString() + ": ";
-                insertString(len, labelText, getGemLabelAttributes(gem));
-                len += labelText.length();
-
-                insertString(len, text, gemAttrs);
-                len += text.length();
-
-                insertString(len++, "\n", gemAttrs);
-
-                setParagraphAttributes(
-                    gemStart,
-                    len - gemStart,
-                    gemAttrs,
-                    false
-                );
+                else {
+                    offset = writeGem(offset, elem.asGem());
+                }
             }
         }
 
         super.writeUnlock();
+    }
+
+    private int writeRecord(
+        int offset,
+        Record record,
+        Transcript transcript,
+        List<TierViewItem> tierView
+    ) throws BadLocationException {
+
+        int recordStart = offset;
+        int recordIndex = transcript.getRecordPosition(record);
+
+        insertString(offset, "-\n", getSeparatorAttributes(record, recordIndex));
+        offset += 2;
+
+        for (var item : tierView) {
+            if (!item.isVisible()) continue;
+
+            offset = insertTier(recordIndex, item, offset);
+        }
+
+        setParagraphAttributes(
+                recordStart,
+                offset - recordStart,
+                getRecordAttributes(recordIndex),
+                false
+        );
+
+        return offset;
+    }
+
+    private int writeComment(int offset, Comment comment) throws BadLocationException {
+        int commentStart = offset;
+
+        UserTierData tierData = comment.getValue();
+
+        String labelText = comment.getType().getLabel() + ": ";
+        insertString(offset, labelText, getCommentLabelAttributes(comment));
+        offset += labelText.length();
+
+        SimpleAttributeSet commentAttrs = getCommentAttributes(comment);
+
+        for (int i = 0; i < tierData.length(); i++) {
+            UserTierElement userTierElement = tierData.elementAt(i);
+            String text;
+            SimpleAttributeSet attrs;
+            if (userTierElement instanceof TierString tierString) {
+                // Text
+                text = tierString.text();
+                attrs = getUserTierStringAttributes();
+            } else if (userTierElement instanceof UserTierComment userTierComment) {
+                // Comment
+                text = "[%" + userTierComment.text() + "]";
+                attrs = getUserTierCommentAttributes();
+            } else {
+                // Internal media
+                UserTierInternalMedia internalMedia = (UserTierInternalMedia) userTierElement;
+                text = "•" + internalMedia.text() + "•";
+                attrs = getUserTierInternalMediaAttributes();
+            }
+
+            attrs.addAttributes(commentAttrs);
+
+            System.out.println(attrs);
+
+            insertString(offset, text, attrs);
+            offset += text.length();
+
+            insertString(offset++, " ", attrs);
+        }
+
+        remove(offset - 1, 1);
+        offset--;
+
+        insertString(offset++, "\n", commentAttrs);
+
+        setParagraphAttributes(
+            commentStart,
+            offset - commentStart,
+            commentAttrs,
+            false
+        );
+
+        return offset;
+    }
+
+    private int writeGem(int offset, Gem gem) throws BadLocationException {
+        int gemStart = offset;
+
+        String text = gem.getLabel();
+
+        SimpleAttributeSet gemAttrs = getGemAttributes(gem);
+
+        String labelText = gem.getType().toString() + ": ";
+        insertString(offset, labelText, getGemLabelAttributes(gem));
+        offset += labelText.length();
+
+        insertString(offset, text, gemAttrs);
+        offset += text.length();
+
+        insertString(offset++, "\n", gemAttrs);
+
+        setParagraphAttributes(
+            gemStart,
+            offset - gemStart,
+            gemAttrs,
+            false
+        );
+
+        return offset;
     }
 
     // region Getters and Setters
