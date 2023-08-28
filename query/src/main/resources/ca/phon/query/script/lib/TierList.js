@@ -28,7 +28,7 @@ exports.TierList = function(id) {
 		"id": id + ".tiers",
 		"title": "Tier names:",
 		"prompt": "Enter tier names, separated by ','",
-		"def": ""
+		"def": new java.lang.String("")
 	};
 	this.tiersParam;
 	this.tiers = tiersParamInfo.def;

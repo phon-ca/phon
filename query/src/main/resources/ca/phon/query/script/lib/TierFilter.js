@@ -30,7 +30,7 @@ exports.TierFilter = function (id) {
 		"id": id + ".tier",
 		"title": "Tier name:",
 		"prompt": "Enter a single tier name",
-		"def": ""
+		"def": new java.lang.String("")
 	};
 	var tierParam;
 	this.tier = tierParamInfo.def;
