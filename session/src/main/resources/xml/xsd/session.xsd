@@ -50,12 +50,12 @@
         </xs:key>
 
         <xs:keyref refer="transcriberKey" name="transcriberTargetKeyRef">
-            <xs:selector xpath="transcript/r/ipaTarget/blindTranscription"/>
+            <xs:selector xpath="transcript/r/*/blindTranscription"/>
             <xs:field xpath="@transcriber"/>
         </xs:keyref>
 
         <xs:keyref refer="transcriberKey" name="transcriberActualKeyRef">
-            <xs:selector xpath="transcript/r/ipaActual/blindTranscription"/>
+            <xs:selector xpath="transcript/r/*/blindTranscription"/>
             <xs:field xpath="@transcriber"/>
         </xs:keyref>
 
@@ -260,18 +260,14 @@
     </xs:simpleType>
 
     <!-- Blind transcribers -->
-    <xs:element name="blindTiers" type="listOfTierNames"/>
-    <xs:simpleType name="listOfTierNames">
-        <xs:list itemType="nonemptyStringType"/>
-    </xs:simpleType>
-
+    <xs:element name="blindTier" type="nonemptyStringType"/>
     <xs:element name="blindMode" type="blindModeType"/>
     <xs:complexType name="blindModeType">
         <xs:annotation>
             <xs:documentation>Information</xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element ref="blindTiers" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="blindTier" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="transcriber" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>

@@ -179,7 +179,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 
 		// copy transcriber information
 		if(xmlSessionType.getBlindMode() != null) {
-			retVal.setBlindTiers(xmlSessionType.getBlindMode().getBlindTiers());
+			retVal.setBlindTiers(xmlSessionType.getBlindMode().getBlindTier());
 			for (XmlTranscriberType tt : xmlSessionType.getBlindMode().getTranscriber()) {
 				final Transcriber t = copyTranscriber(factory, tt);
 				retVal.addTranscriber(t);

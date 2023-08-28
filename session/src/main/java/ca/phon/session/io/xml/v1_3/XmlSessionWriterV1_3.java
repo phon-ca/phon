@@ -125,8 +125,8 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 			tt.getTranscriber().add(trt);
 		}
 		if(session.getTranscriberCount() > 0 || !session.getBlindTiers().isEmpty()) {
-			tt.getBlindTiers().clear();
-			tt.getBlindTiers().addAll(session.getBlindTiers());
+			tt.getBlindTier().clear();
+			tt.getBlindTier().addAll(session.getBlindTiers());
 			retVal.setBlindMode(tt);
 		}
 
