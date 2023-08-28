@@ -138,7 +138,7 @@ function query_record(recordIndex, record) {
     const tier = searchTier == "IPA Target" ? record.getIPATargetTier() : record.getIPAActualTier();
     const ipa = tier.hasValue() ? tier.value : new IPATranscript();
     const alignedTier = searchTier == "IPA Target" ? record.getIPAActualTier() : record.getIPATargetTier();
-    const alignedIpa = alignedTier.getValue();
+    const alignedIpa = alignedTier.hasValue() ? alignedTier.getValue() : new IPATranscript();
     var alignment = record.getPhoneAlignment();
 
     if(filters.tierFilter.isUseFilter()) {
