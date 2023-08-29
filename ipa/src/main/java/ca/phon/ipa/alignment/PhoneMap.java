@@ -290,8 +290,8 @@ public class PhoneMap extends AlignmentMap<IPAElement> implements IExtendable {
 	/**
 	 * Get the sub-alignment from the given elements.
 	 *
-	 * @param topElements
-	 * @param btmElements
+	 * @param ipaT
+	 * @param ipaA
 	 *
 	 * @return sub-alignment containing the given top/bottom elements
 	 */
@@ -340,6 +340,52 @@ public class PhoneMap extends AlignmentMap<IPAElement> implements IExtendable {
 			retVal.setBottomAlignment(new Integer[0]);
 		}
 
+		return retVal;
+	}
+
+	/**
+	 * Create a new PhoneMap by appending another.  A word boundary will be placed before the new content
+	 * and all alignment indices will be updated.
+	 *
+	 * @param phoneMap
+	 * @return new phonemap with appended data
+	 */
+	public PhoneMap append(PhoneMap phoneMap) {
+		final IPATranscriptBuilder tb = new IPATranscriptBuilder();
+		tb.append(getTargetRep());
+		tb.appendWordBoundary();
+		tb.append(phoneMap.getTargetRep());
+		final IPATranscript ipaT = tb.toIPATranscript();
+
+		final IPATranscriptBuilder ab = new IPATranscriptBuilder();
+		ab.append(getActualRep());
+		ab.appendWordBoundary();
+		ab.append(phoneMap.getActualRep());
+		final IPATranscript ipaA = ab.toIPATranscript();
+
+		// build new alignment arrays
+		final PhoneMap retVal = new PhoneMap(ipaT, ipaA);
+		final int alignLength = getAlignmentLength() + phoneMap.getAlignmentLength();
+		final Integer[] topAlign = new Integer[alignLength];
+		final Integer[] btmAlign = new Integer[alignLength];
+
+		int idx = 0;
+		for(int i = 0; i < getAlignmentLength(); i++) {
+			topAlign[idx] = getTopAlignment()[i];
+			btmAlign[idx++] = getBottomAlignment()[i];
+		}
+
+		int targetOffset = getTopAlignmentElements().size();
+		int actualOffset = getBottomAlignmentElements().size();
+		for(int i = 0; i < phoneMap.getAlignmentLength(); i++) {
+			int tidx = phoneMap.getTopAlignment()[i];
+			topAlign[idx] = tidx >= 0 ? tidx + targetOffset : -1;
+			int aidx = phoneMap.getBottomAlignment()[i];
+			btmAlign[idx++] = aidx >= 0 ? aidx + actualOffset : -1;
+		}
+
+		retVal.setTopAlignment(topAlign);
+		retVal.setBottomAlignment(btmAlign);
 		return retVal;
 	}
 

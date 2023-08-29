@@ -6,6 +6,7 @@ import ca.phon.ipa.alignment.PhoneAligner;
 import ca.phon.ipa.alignment.PhoneMap;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.text.html.Option;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -113,13 +114,41 @@ public class PhoneAlignment implements Iterable<PhoneMap> {
      * @return list of elements aligned with the given elements.  list must be contiguous
      */
     public List<IPAElement> getAligned(List<IPAElement> elements) {
-        final Optional<PhoneMap> phoneMapOpt = findPhoneMap(elements);
-        List<IPAElement> retVal = new ArrayList<>();
-        if(phoneMapOpt.isPresent()) {
-            final PhoneMap pm = phoneMapOpt.get();
+        // first check if all elements are in the same word
+        final PhoneMap pm = getPhoneMapForElements(elements);
+        if(pm != null) {
             return pm.getAligned(elements);
+        } else {
+            return null;
         }
-        return retVal;
+    }
+
+    /**
+     * Get the phone map containing the given elements.  If elements span multiple words
+     * a new phone map is created.
+     *
+     * @param elements
+     * @return
+     */
+    private PhoneMap getPhoneMapForElements(List<IPAElement> elements) {
+        PhoneMap tpm1 = null;
+        PhoneMap tpm2 = null;
+        if(elements.size() > 0) {
+            final Optional<PhoneMap> m1 = findPhoneMap(List.of(elements.get(0)));
+            final Optional<PhoneMap> m2 = findPhoneMap(List.of(elements.get(elements.size()-1)));
+            if(m1.isEmpty() || m2.isEmpty()) return null;
+            tpm1 = m1.get();
+            tpm2 = m2.get();
+        }
+        final int firstPhoneMapIdx = tpm1 != null ? getAlignments().indexOf(tpm1) : -1;
+        final int lastPhoneMapIdx = tpm2 != null ? getAlignments().indexOf(tpm2) : -1;
+        if(firstPhoneMapIdx < 0 || lastPhoneMapIdx < 0) return null;
+
+        PhoneMap pm = getAlignments().get(firstPhoneMapIdx);
+        for(int i = firstPhoneMapIdx + 1; i <= lastPhoneMapIdx; i++) {
+            pm = pm.append(getAlignments().get(i));
+        }
+        return pm;
     }
 
     public List<IPAElement> getAligned(IPAElement[] elements) {
@@ -138,14 +167,40 @@ public class PhoneAlignment implements Iterable<PhoneMap> {
      * @return sub-alignment (as a PhoneMap) for the given ipa elements, null if not found
      */
     public PhoneMap getSubAlignment(IPATranscript ipaTarget, IPATranscript ipaActual) {
-        Optional<PhoneMap> phoneMapOpt = findPhoneMap(ipaTarget.toList());
-        if(phoneMapOpt.isEmpty())
-            phoneMapOpt = findPhoneMap(ipaActual.toList());
-        if(phoneMapOpt.isPresent()) {
-            final PhoneMap pm = phoneMapOpt.get();
-            return pm.getSubAlignment(ipaTarget, ipaActual);
+        PhoneMap tpm1 = null;
+        PhoneMap tpm2 = null;
+        PhoneMap apm1 = null;
+        PhoneMap apm2 = null;
+        if(ipaTarget.length() > 0) {
+            final Optional<PhoneMap> m1 = findPhoneMap(List.of(ipaTarget.elementAt(0)));
+            final Optional<PhoneMap> m2 = findPhoneMap(List.of(ipaTarget.elementAt(ipaTarget.length() - 1)));
+            if(m1.isEmpty() || m2.isEmpty()) return null;
+            tpm1 = m1.get();
+            tpm2 = m2.get();
         }
-        return null;
+        if(ipaActual.length() > 0) {
+            final Optional<PhoneMap> m1 = findPhoneMap(List.of(ipaActual.elementAt(0)));
+            final Optional<PhoneMap> m2 = findPhoneMap(List.of(ipaActual.elementAt(ipaActual.length() - 1)));
+            if(m1.isEmpty() || m2.isEmpty()) return null;
+            apm1 = m1.get();
+            apm2 = m2.get();
+            if(ipaTarget.length() == 0) {
+                tpm1 = apm1;
+                tpm2 = apm2;
+            }
+        } else {
+            apm1 = tpm1;
+            apm2 = tpm2;
+        }
+        final int firstPhoneMapIdx = Math.min(getAlignments().indexOf(tpm1), getAlignments().indexOf(apm1));
+        final int lastPhoneMapIdx = Math.max(getAlignments().indexOf(tpm2), getAlignments().indexOf(apm2));
+        if(firstPhoneMapIdx < 0 || lastPhoneMapIdx < 0) return null;
+
+        PhoneMap pm = getAlignments().get(firstPhoneMapIdx);
+        for(int i = firstPhoneMapIdx + 1; i <= lastPhoneMapIdx; i++) {
+            pm = pm.append(getAlignments().get(i));
+        }
+        return pm.getSubAlignment(ipaTarget, ipaActual);
     }
 
     @Override
