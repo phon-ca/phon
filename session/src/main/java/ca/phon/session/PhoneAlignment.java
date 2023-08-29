@@ -2,6 +2,7 @@ package ca.phon.session;
 
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.ipa.alignment.PhoneAligner;
 import ca.phon.ipa.alignment.PhoneMap;
 import org.jetbrains.annotations.NotNull;
@@ -201,6 +202,21 @@ public class PhoneAlignment implements Iterable<PhoneMap> {
             pm = pm.append(getAlignments().get(i));
         }
         return pm.getSubAlignment(ipaTarget, ipaActual);
+    }
+
+    /**
+     * Get phone alignment as a single phone map
+     *
+     * @return phone alignment as a single phone map
+     */
+    public PhoneMap getFullAlignment() {
+        PhoneMap retVal = new PhoneMap(new IPATranscript(), new IPATranscript());
+        retVal.setTopAlignment(new Integer[0]);
+        retVal.setBottomAlignment(new Integer[0]);
+        for(PhoneMap pm:getAlignments()) {
+            retVal = retVal.append(pm);
+        }
+        return retVal;
     }
 
     @Override
