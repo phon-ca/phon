@@ -80,13 +80,22 @@ public interface Result extends Iterable<ResultValue> {
 	public abstract int getNumberOfResultValues();
 	
 	/**
-	 * Get the result value by name
+	 * Get the result value by name, this will return the first
+	 * result value for the given name if there are multiple.
 	 * 
 	 * @param name
 	 * @return result value optional
 	 */
 	public abstract Optional<ResultValue> getResultValue(String name);
-	
+
+	/**
+	 * Get all result values for the given name
+	 *
+	 * @param name
+	 * @return list of result values for given name
+	 */
+	public List<ResultValue> getResultValues(String name);
+
 	/**
 	 * Get the specified result value
 	 * 

@@ -178,9 +178,9 @@ public class XMLResult implements Result, JAXBWrapper<ResultType> {
 
 	@Override
 	public int addResultValue(ResultValue resultValue) {
-		if(getResultValue(resultValue.getName()).isPresent()) {
-			return -1;
-		}
+//		if(getResultValue(resultValue.getName()).isPresent()) {
+//			return -1;
+//		}
 		if(resultValue instanceof XMLResultValue) {
 			result.getResultValue().add(((XMLResultValue)resultValue).getXMLObject());
 			return result.getResultValue().size() - 1;
@@ -213,6 +213,18 @@ public class XMLResult implements Result, JAXBWrapper<ResultType> {
 			result.getResultValue().remove(idx);
 		}
 		
+	}
+
+	@Override
+	public List<ResultValue> getResultValues(String name) {
+		final List<ResultValue> retVal = new ArrayList<>();
+		for(int i = 0; i < getNumberOfResultValues(); i++) {
+			var rv = getResultValue(i);
+			if(rv.getName().equals(name)) {
+				retVal.add(rv);
+			}
+		}
+		return retVal;
 	}
 
 	@Override

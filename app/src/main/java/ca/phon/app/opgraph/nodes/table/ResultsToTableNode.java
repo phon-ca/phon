@@ -363,7 +363,7 @@ public class ResultsToTableNode extends OpNode implements NodeSettings {
 							if(tierValue instanceof IPATranscript) {
 								IPATranscript origIPA = (IPATranscript)tierValue;
 								
-								// attempt to use result value to find phone indicies
+								// attempt to use result value to find phone indices
 								IPATranscriptBuilder builder = new IPATranscriptBuilder();
 								int startidx = -1;
 								int endidx = -1;

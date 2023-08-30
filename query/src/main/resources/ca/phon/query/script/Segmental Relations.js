@@ -215,6 +215,7 @@ function query_record(recordIndex, record) {
 		var relations = detector.detect(obj);
 		for(k = 0; k < relations.size(); k++) {
 			var relation = relations.get(k);
+			// modify alignment positions by offset of ipa subsection
 			var offset = phoneMap.getSubAlignmentIndex(obj.targetRep.audiblePhones(), obj.actualRep.audiblePhones());
 			relation.phoneMap = phoneMap;
 			relation.position1 += offset;
