@@ -331,8 +331,6 @@ public class PhoneMap extends AlignmentMap<IPAElement> implements IExtendable {
 				btmElements[i] = aIdx;
 			}
 
-			retVal.setTargetRep(target.toIPATranscript());
-			retVal.setActualRep(actual.toIPATranscript());
 			retVal.setTopAlignment(topElements);
 			retVal.setBottomAlignment(btmElements);
 		} else {

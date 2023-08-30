@@ -802,8 +802,8 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 		final int numAlignments = Math.max(targetWords.size(), actualWords.size());
 		final List<PhoneMap> alignments = new ArrayList<>();
 		for(int i = 0; i < numAlignments; i++) {
-			final IPATranscript tw = i < targetWords.size() ? targetWords.get(i).audiblePhones() : new IPATranscript();
-			final IPATranscript aw = i < actualWords.size() ? actualWords.get(i).audiblePhones() : new IPATranscript();
+			final IPATranscript tw = i < targetWords.size() ? targetWords.get(i) : new IPATranscript();
+			final IPATranscript aw = i < actualWords.size() ? actualWords.get(i) : new IPATranscript();
 			final PhoneMap subAlignment = pm.getSubAlignment(tw, aw);
 			alignments.add(subAlignment);
 		}
