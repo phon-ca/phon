@@ -352,15 +352,27 @@ public class PhoneMap extends AlignmentMap<IPAElement> implements IExtendable {
 	 */
 	public PhoneMap append(PhoneMap phoneMap) {
 		final IPATranscriptBuilder tb = new IPATranscriptBuilder();
-		tb.append(getTargetRep());
-		tb.appendWordBoundary();
-		tb.append(phoneMap.getTargetRep());
+		if(getTargetRep().length() > 0) {
+			tb.append(getTargetRep());
+		}
+		if(getTargetRep().length() > 0 && phoneMap.getTargetRep().length() > 0) {
+			tb.appendWordBoundary();
+		}
+		if(phoneMap.getTargetRep().length() > 0) {
+			tb.append(phoneMap.getTargetRep());
+		}
 		final IPATranscript ipaT = tb.toIPATranscript();
 
 		final IPATranscriptBuilder ab = new IPATranscriptBuilder();
-		ab.append(getActualRep());
-		ab.appendWordBoundary();
-		ab.append(phoneMap.getActualRep());
+		if(getActualRep().length() > 0) {
+			ab.append(getActualRep());
+		}
+		if(getActualRep().length() > 0 && phoneMap.getActualRep().length() > 0) {
+			ab.appendWordBoundary();
+		}
+		if(phoneMap.getActualRep().length() > 0) {
+			ab.append(phoneMap.getActualRep());
+		}
 		final IPATranscript ipaA = ab.toIPATranscript();
 
 		// build new alignment arrays

@@ -302,10 +302,9 @@ exports.SegmentalRelationsOptions = function(id) {
 		return retVal;
 	};
 
-	this.createResultValue = function(phoneMap, groupIndex, isTarget, index) {
+	this.createResultValue = function(phoneMap, isTarget, index) {
 	    var rv = factory.createResultValue();
 		rv.tierName = (isTarget == true ? "IPA Target" : "IPA Actual");
-		rv.groupIndex = groupIndex;
 
 		var ipaE = null;
 		if(index >= 0) {
@@ -322,7 +321,7 @@ exports.SegmentalRelationsOptions = function(id) {
 		return rv;
 	};
 
-	this.createQueryResult = function (recordIndex, groupIndex, relation) {
+	this.createQueryResult = function (recordIndex, relation) {
 		var SCHEMA = "DETECTOR";
 
 		var retVal = factory.createResult();
@@ -337,10 +336,10 @@ exports.SegmentalRelationsOptions = function(id) {
 		var p2 = Math.max(relation.position1, relation.position2);
 
 		// result values
-		var rv1 = this.createResultValue(phoneMap, groupIndex, true, p1);
-		var rv2 = this.createResultValue(phoneMap, groupIndex, true, p2);
-		var rv3 = this.createResultValue(phoneMap, groupIndex, false, p1);
-		var rv4 = this.createResultValue(phoneMap, groupIndex, false, p2);
+		var rv1 = this.createResultValue(phoneMap, true, p1);
+		var rv2 = this.createResultValue(phoneMap, true, p2);
+		var rv3 = this.createResultValue(phoneMap, false, p1);
+		var rv4 = this.createResultValue(phoneMap, false, p2);
 
 		retVal.addResultValue(rv1);
 		retVal.addResultValue(rv2);

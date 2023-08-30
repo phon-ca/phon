@@ -117,7 +117,7 @@ function query_record(recordIndex, record) {
 
 	var toSearch = new Array();
 	toSearch.push({
-		element: tier.value,
+		element: alignment.fullAlignment,
 		alignedResults: tierAlignedResults,
 		alignedMeta: tierAlignedMeta
 	});
@@ -125,7 +125,7 @@ function query_record(recordIndex, record) {
 	// search by word
 	if(filters.word.isUseFilter()) {
 		toSearch.length = 0;
-		const crossTierAlignment = TierAligner.calculateCrossTierAlignment(record, tier);
+		const crossTierAlignment = TierAligner.calculateCrossTierAlignment(record, record.getPhoneAlignmentTier());
 		const topElements = crossTierAlignment.getTopAlignmentElements();
 		const selectedElements = filters.word.getRequestedWords(topElements);
 		for(var eleIdx = 0; eleIdx < selectedElements.length; eleIdx++) {
@@ -205,140 +205,32 @@ function query_record(recordIndex, record) {
 		toSearch = syllList;
 	}
 
-	// if (! filters.speaker.check_speaker(record.speaker, session.date)) return;
-	//
-	// // check group+groupPattern filters
-	// var groups = filters.group.getRequestedGroups(record);
-	// if (filters.groupPattern.isUseFilter()) {
-	// 	groups = filters.groupPattern.filter_groups(groups, searchTier);
-	// }
-	//
-	// // check aligned group for each group returned
-	// if (filters.alignedGroup.isUseFilter()) {
-	// 	groups = filters.alignedGroup.filter_groups(record, groups);
-	// }
-	//
-	// // perform searches
-	// for (var i = 0; i < groups.length; i++) {
-	// 	var group = groups[i];
-	//
-	// 	var groupAlignedData = filters.groupTiers.getAlignedTierData(record, group, "Group");
-	//
-	// 	var groupAlignedResults = groupAlignedData[0];
-	// 	var groupAlignedMeta = groupAlignedData[1];
-	//
-	// 	if (filters.alignedGroup.isUseFilter()) {
-	// 		var tierList = new TierList("group");
-	// 		tierList.setTiers(filters.alignedGroup.tier);
-	//
-	// 		var alignedGroupData = tierList.getAlignedTierData(record, group, "Group");
-	// 		for(var j = 0; j < alignedGroupData[0].length; j++) {
-	// 			groupAlignedResults.push(alignedGroupData[0][j]);
-	// 		}
-	// 	}
-	//
-	// 	var ipa = (searchTier == "IPA Target" ? group.IPATarget: group.IPAActual);
-	// 	var phoneMap = group.phoneAlignment;
-	//
-	// 	var toSearch = new Array();
-	// 	toSearch.push([phoneMap, groupAlignedResults, groupAlignedMeta]);
-	//
-	// 	// search by word?
-	// 	if (filters.word.isUseFilter()) {
-	// 		toSearch.length = 0;
-	// 		var selectedWords = filters.word.getRequestedWords(group, searchTier);
-	// 		for (j = 0; j < selectedWords.length; j++) {
-	// 			var wordData = selectedWords[j];
-	// 			var word = wordData.word;
-	//
-	// 			var wordAlignedMeta = new java.util.LinkedHashMap();
-	// 			wordAlignedMeta.putAll(groupAlignedMeta);
-	//
-	// 			var wordAlignedResults = new Array();
-	// 			for(var k = 0; k < groupAlignedResults.length; k++) {
-	// 				wordAlignedResults.push(groupAlignedResults[k]);
-	// 			}
-	//
-	// 			var wordAlignedData = filters.wordTiers.getAlignedTierData(record, word, "Word");
-	// 			for(var k = 0; k < wordAlignedData[0].length; k++) {
-	// 				wordAlignedResults.push(wordAlignedData[0][k]);
-	// 			}
-	// 			wordAlignedMeta.putAll(wordAlignedData[1]);
-	//
-	// 			var wordIpa = (searchTier == "IPA Target" ? word.IPATarget: word.IPAActual);
-	// 			var addWord = (wordIpa != null);
-	// 			// check word pattern if necessary
-	// 			if (filters.wordPattern.isUseFilter()) {
-	// 				addWord = filters.wordPattern.check_filter(wordIpa);
-	// 			}
-	//
-	// 			// check aligned word pattern if necessary
-	// 			if (filters.alignedWord.isUseFilter()) {
-	// 				addWord = filters.alignedWord.check_word(word);
-	//
-	// 				var tierList = new TierList("word");
-	// 				tierList.setTiers(filters.alignedWord.tier);
-	//
-	// 				var alignedWordData = tierList.getAlignedTierData(record, word, "Word");
-	// 				for(var k = 0; k < alignedWordData[0].length; k++) {
-	// 					wordAlignedResults.push(alignedWordData[0][k]);
-	// 				}
-	// 			}
-	//
-    //             var wordPhoneAlignment = word.phoneAlignment;
-	// 			if (addWord == true) {
-	// 				toSearch.push([wordPhoneAlignment, wordAlignedResults, wordAlignedMeta]);
-	// 			}
-	// 		}
-	// 	}
-	//
-	// 	// search by syllable?
-	// 	if (filters.syllable.isUseFilter()) {
-	// 		var syllList = new Array();
-	// 		for (j = 0; j < toSearch.length; j++) {
-	// 			var obj = toSearch[j][0];
-	// 			var aligned = (phoneMap != null ? phoneMap: new Packages.ca.phon.ipa.alignment.PhoneMap());
-	// 			var sylls = filters.syllable.getRequestedSyllables(obj.targetRep, aligned);
-	//
-	// 			for (k = 0; k < sylls.length; k++) {
-	// 				var syllData = sylls[k];
-	// 				var syll = syllData.syllable;
-	//
-	// 			    var alignedEles = aligned.getAligned(syll.removePunctuation());
-	// 			    var syllPhoneAlignment = aligned.getSubAlignment(syll, new IPATranscript(alignedEles));
-	//
-	// 				syllList.push([syllPhoneAlignment, toSearch[j][1], toSearch[j][2]]);
-	// 			}
-	// 		}
-	// 		toSearch = syllList;
-	// 	}
-	//
-	// 	var detector = filters.segmentalRelationsOptions.createDetector();
-    // 	for (j = 0; j < toSearch.length; j++) {
-    //     	var obj = toSearch[j][0];
-    //     	var alignedResults = toSearch[j][1];
-    //     	var alignedMetadata = toSearch[j][2];
-    //
-    //     	var relations = detector.detect(obj);
-    //     	for(k = 0; k < relations.size(); k++) {
-    //     		var relation = relations.get(k);
-    //     		var offset = phoneMap.getSubAlignmentIndex(obj.targetRep, obj.actualRep);
-    //     		relation.phoneMap = phoneMap;
-    //     		relation.position1 += offset;
-    //     		relation.position2 += offset;
-    //
-    //     		var includeRelation = filters.segmentalRelationsOptions.filterRelation(relation);
-    //     		if(includeRelation == true) {
-	//         		var result = filters.segmentalRelationsOptions.createQueryResult(recordIndex, i, relation);
-	//
-	//         		for(var alignedResultIdx = 0; alignedResultIdx < alignedResults.length; alignedResultIdx++) {
-	//     				result.addResultValue(alignedResults[alignedResultIdx]);
-	//     			}
-	//     			result.metadata.putAll(alignedMetadata);
-	//
-	//         		results.addResult(result);
-    //     		}
-    //     	}
-	// 	}
-	// }
+	var detector = filters.segmentalRelationsOptions.createDetector();
+	for (j = 0; j < toSearch.length; j++) {
+		var obj = toSearch[j].element;
+		var alignedResults = toSearch[j].alignedResults;
+		var alignedMetadata = toSearch[j].alignedMeta;
+		var phoneMap = alignment.fullAlignment;
+
+		var relations = detector.detect(obj);
+		for(k = 0; k < relations.size(); k++) {
+			var relation = relations.get(k);
+			var offset = phoneMap.getSubAlignmentIndex(obj.targetRep.audiblePhones(), obj.actualRep.audiblePhones());
+			relation.phoneMap = phoneMap;
+			relation.position1 += offset;
+			relation.position2 += offset;
+
+			var includeRelation = filters.segmentalRelationsOptions.filterRelation(relation);
+			if(includeRelation == true) {
+				var result = filters.segmentalRelationsOptions.createQueryResult(recordIndex, relation);
+
+				for(var alignedResultIdx = 0; alignedResultIdx < alignedResults.length; alignedResultIdx++) {
+					result.addResultValue(alignedResults[alignedResultIdx]);
+				}
+				result.metadata.putAll(alignedMetadata);
+
+				results.addResult(result);
+			}
+		}
+	}
 }
