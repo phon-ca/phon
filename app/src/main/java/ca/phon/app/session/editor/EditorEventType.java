@@ -5,6 +5,7 @@ import ca.phon.query.db.ResultSet;
 import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.session.position.SessionLocation;
+import ca.phon.session.usertier.UserTierData;
 import ca.phon.util.Language;
 
 import javax.print.attribute.standard.Media;
@@ -153,6 +154,14 @@ public record  EditorEventType<T>(String eventName, Class<T> type) {
 	public final static EditorEventType<CommentMovedData> CommentMoved =
 			new EditorEventType<>(EditorEventName.COMMENT_MOVED_EVT.getEventName(), CommentMovedData.class);
 
+	public record CommentTypeChangedData(Comment comment, int elementIndex, CommentType oldType, CommentType newType) { }
+	public final static EditorEventType<CommentTypeChangedData> CommenTypeChanged =
+			new EditorEventType<>(EditorEventName.COMMENT_TYPE_CHANGED_EVT.getEventName(), CommentTypeChangedData.class);
+
+	public record CommentChangedData(Comment comment, int elementIndex, UserTierData oldComment, UserTierData newComment) { }
+	public final static EditorEventType<CommentChangedData> CommentChanged =
+			new EditorEventType<>(EditorEventName.COMMENT_CHANGED_EVT.getEventName(), CommentChangedData.class);
+
 	public record GemAddedData(Gem gem, int elementIndex) { }
 	public final static EditorEventType<GemAddedData> GemAdded =
 			new EditorEventType<>(EditorEventName.GEM_ADDED_EVT.getEventName(), GemAddedData.class);
@@ -165,6 +174,13 @@ public record  EditorEventType<T>(String eventName, Class<T> type) {
 	public final static EditorEventType<GemMovedData> GemMoved =
 			new EditorEventType<>(EditorEventName.GEM_MOVED_EVT.getEventName(), GemMovedData.class);
 
+	public record GemChangedData(Gem gem, int elementIndex, String oldLabel, String newLabel) { }
+	public final static EditorEventType<GemChangedData> GemChanged =
+			new EditorEventType<>(EditorEventName.GEM_CHANGED_EVT.getEventName(), GemChangedData.class);
+
+	public record GemTypeChangedData(Gem gem, int elementIndex, GemType oldType, GemType newType) { }
+	public final static EditorEventType<GemTypeChangedData> GemTypeChanged =
+			new EditorEventType<>(EditorEventName.GEM_TYPE_CHANGED_EVT.getEventName(), GemTypeChangedData.class);
 
 	public record RecordAddedData(Record recrod, int elementIndex, int recordIndex) { }
 	/**
