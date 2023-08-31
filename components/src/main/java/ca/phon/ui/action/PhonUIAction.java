@@ -26,8 +26,6 @@ import java.util.function.Consumer;
  */
 public class PhonUIAction<T> extends AbstractAction {
 
-	private static final long serialVersionUID = -3566788828631450043L;
-
 	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(PhonUIAction.class
 			.getName());
 
