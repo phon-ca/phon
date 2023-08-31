@@ -225,7 +225,7 @@ function query_record(recordIndex, record) {
 			for(var j = 0; j < sylls.length; j++) {
 				var syllData = sylls[j];
 				var syll = syllData.syllable;
-				var alignedData = new IPATranscript(phoneMap.getAligned(syll));
+				var alignedData = new IPATranscript(phoneMap.getAligned(syll.audiblePhones()));
 
 				var syllMeta = new java.util.LinkedHashMap();
 				syllMeta.putAll(toSearch[i].alignedMeta);
