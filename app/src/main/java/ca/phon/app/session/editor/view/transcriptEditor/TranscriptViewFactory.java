@@ -6,6 +6,7 @@ import ca.phon.ui.ipa.SyllabificationDisplay;
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
+import java.text.AttributedCharacterIterator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,6 +27,7 @@ public class TranscriptViewFactory implements ViewFactory {
     @Override
     public View create(Element elem) {
         String kind = elem.getName();
+
         if (kind != null) {
             if (kind.equals(AbstractDocument.ContentElementName)) {
                 incrementCounter("label");
@@ -67,6 +69,26 @@ public class TranscriptViewFactory implements ViewFactory {
         public TierView(Element elem) {
             super(elem);
         }
+
+//        @Override
+//        public void paint(Graphics g, Shape allocation) {
+//            float leftIndent = StyleConstants.getLeftIndent(getElement().getAttributes());
+//
+//            System.out.println("Left Indent: " + leftIndent);
+//
+////            if (leftIndent == null) {
+////                super.paint(g, allocation);
+////                return;
+////            }
+//
+//            // Adjust the allocation for the left indent
+//            Rectangle newAlloc = new Rectangle(allocation.getBounds());
+//            newAlloc.x += leftIndent;
+//            newAlloc.width -= leftIndent;
+//
+//            // Call the super's paint with the adjusted allocation
+//            super.paint(g, newAlloc);
+//        }
     }
 
     private class TierLabelView extends ComponentView {

@@ -8,19 +8,15 @@ import javax.swing.text.ViewFactory;
 
 public class TranscriptEditorKit extends StyledEditorKit {
     public static String CONTENT_TYPE = "phon/transcript";
-    public Session session;
     private final TranscriptViewFactory viewFactory;
 
-    public TranscriptEditorKit(Session session) {
-        this.session = session;
+    public TranscriptEditorKit() {
         viewFactory = new TranscriptViewFactory();
     }
 
     @Override
     public Document createDefaultDocument() {
-        TranscriptDocument doc = new TranscriptDocument();
-        doc.setSession(session);
-        return doc;
+        return new TranscriptDocument();
     }
 
     @Override

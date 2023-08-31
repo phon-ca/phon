@@ -8,8 +8,8 @@ import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PhonPlugin;
 
-@PhonPlugin(name=TranscriptEditorView.VIEW_NAME)
-@EditorViewInfo(name=TranscriptEditorView.VIEW_NAME, category= EditorViewCategory.RECORD, icon=TranscriptEditorView.VIEW_ICON)
+@PhonPlugin(name= TranscriptView.VIEW_NAME)
+@EditorViewInfo(name= TranscriptView.VIEW_NAME, category= EditorViewCategory.RECORD, icon= TranscriptView.VIEW_ICON)
 public class TranscriptEditorViewExtPt implements IPluginExtensionPoint<EditorView>, IPluginExtensionFactory<EditorView> {
 
     @Override
@@ -18,7 +18,7 @@ public class TranscriptEditorViewExtPt implements IPluginExtensionPoint<EditorVi
             throw new IllegalArgumentException();
         }
         if (args[0] instanceof SessionEditor editor) {
-            return new TranscriptEditorView(editor);
+            return new TranscriptView(editor);
         }
         else {
             throw new IllegalArgumentException();
