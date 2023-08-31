@@ -1,32 +1,37 @@
 package ca.phon.session;
 
 import ca.phon.extensions.ExtendableObject;
+import ca.phon.session.spi.GemSPI;
 
 public final class Gem extends ExtendableObject {
 
-    private final GemType type;
+    private final GemSPI spi;
 
-    private final String label;
-
-    Gem(GemType type, String label) {
-        super();
-        this.type = type;
-        this.label = label;
+    Gem(GemSPI spi) {
+        this.spi = spi;
     }
 
     public GemType getType() {
-        return type;
+        return spi.getType();
+    }
+
+    public void setType(GemType gemType) {
+        spi.setType(gemType);
     }
 
     public String getLabel() {
-        return label;
+        return spi.getLabel();
+    }
+
+    public void setLabel(String label) {
+        spi.setLabel(label);
     }
 
     @Override
     public boolean equals(Object obj) {
         if(!(obj instanceof Gem)) return false;
         Gem b = (Gem) obj;
-        return type == b.type && label.equals(b.label);
+        return getType() == b.getType() && getLabel().equals(b.getLabel());
     }
 
 }

@@ -16,8 +16,11 @@
 package ca.phon.session.impl;
 
 import ca.phon.plugin.*;
+import ca.phon.session.CommentType;
+import ca.phon.session.GemType;
 import ca.phon.session.alignment.TierAlignmentRules;
 import ca.phon.session.spi.*;
+import ca.phon.session.usertier.UserTierData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,8 +74,13 @@ public class SessionFactoryImpl implements SessionFactorySPI, IPluginExtensionPo
 	}
 
 	@Override
-	public CommentSPI createComment() {
-		return new CommentImpl();
+	public GemSPI createGem(GemType gemType, String label) {
+		return new GemImpl(gemType, label);
+	}
+
+	@Override
+	public CommentSPI createComment(CommentType commentType, UserTierData value) {
+		return new CommentImpl(commentType, value);
 	}
 
 	@Override

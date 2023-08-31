@@ -18,6 +18,7 @@ package ca.phon.session;
 import ca.phon.extensions.ExtendableObject;
 import ca.phon.plugin.*;
 import ca.phon.session.alignment.TierAlignmentRules;
+import ca.phon.session.impl.GemImpl;
 import ca.phon.session.io.*;
 import ca.phon.session.spi.*;
 import ca.phon.session.usertier.UserTierData;
@@ -163,32 +164,48 @@ public final class SessionFactory extends ExtendableObject {
 	}
 	
 	/**
-	 * Create comment
+	 * Create empty generic comment
 	 * 
-	 * 
+	 * @return empty generic comment
 	 */
 	public Comment createComment() {
-		final CommentSPI commentImpl = sessionFactoryImpl.createComment();
-		return createComment(commentImpl);
+		return createComment(CommentType.Generic);
 	}
-	
-	public Comment createComment(CommentSPI commentImpl) {
-		return new Comment(commentImpl);
-	}
-	
+
 	/**
-	 * Create comment
-	 * 
+	 * Create generic comment with value
+	 *
+	 * @param value
+	 * @return comment
+	 */
+	public Comment createComment(UserTierData value) {
+		return createComment(CommentType.Generic, value);
+	}
+
+	/**
+	 * Create new empty comment of given type
+	 *
+	 * @param commentType
+	 * @return comment
+	 */
+	public Comment createComment(CommentType commentType) {
+		return createComment(commentType, new UserTierData());
+	}
+
+	/**
+	 * Create comment with type and value
+	 *
 	 * @param commentType
 	 * @param value
-	 * 
+	 *
 	 * @return new comment
 	 */
 	public Comment createComment(CommentType commentType, UserTierData value) {
-		final Comment retVal = createComment();
-		retVal.setType(commentType);
-		retVal.setValue(value);
-		return retVal;
+		return createComment(sessionFactoryImpl.createComment(commentType, value));
+	}
+
+	public Comment createComment(CommentSPI commentImpl) {
+		return new Comment(commentImpl);
 	}
 
 	public Comment cloneComment(Comment comment) {
@@ -198,8 +215,38 @@ public final class SessionFactory extends ExtendableObject {
 		return retVal;
 	}
 
-	public Gem createGem(GemType gem, String label) {
-		return new Gem(gem, label);
+	/**
+	 * Create empty lazy gem
+	 *
+	 * @return empty lazy gem
+	 */
+	public Gem createGem() {
+		return createGem("");
+	}
+
+	/**
+	 * Create lazy gem with label
+	 *
+	 * @param label
+	 * @return label gem with label
+	 */
+	public Gem createGem(String label) {
+		return createGem(GemType.Lazy, label);
+	}
+
+	/**
+	 * Create gem of given type with label
+	 *
+	 * @param gemType
+	 * @param label
+	 * @return gem
+	 */
+	public Gem createGem(GemType gemType, String label) {
+		return createGem(new GemImpl(gemType, label));
+	}
+
+	public Gem createGem(GemSPI spi) {
+		return new Gem(spi);
 	}
 
 	public Transcript createSessionTranscript() {

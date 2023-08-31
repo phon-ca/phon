@@ -15,7 +15,10 @@
  */
 package ca.phon.session.spi;
 
+import ca.phon.session.CommentType;
+import ca.phon.session.GemType;
 import ca.phon.session.alignment.TierAlignmentRules;
+import ca.phon.session.usertier.UserTierData;
 
 import java.util.List;
 import java.util.Map;
@@ -32,10 +35,21 @@ public interface SessionFactorySPI {
 	
 	/**
 	 * Create comment
-	 * 
+	 *
+	 * @param commentType
+	 * @param value
 	 * @return new comment impl
 	 */
-	public CommentSPI createComment();
+	public CommentSPI createComment(CommentType commentType, UserTierData value);
+
+	/**
+	 * Create gem
+	 *
+	 * @param gemType
+	 * @param label
+	 * @return new gem impl
+	 */
+	public GemSPI createGem(GemType gemType, String label);
 	
 	/**
 	 * Session metadata
