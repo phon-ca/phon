@@ -102,11 +102,11 @@ public class ResultsToTable {
                                 .filter( (rv) -> rv.getName().equals(tierName) )
                                 .collect(Collectors.toList());
 
-                        Object resultVal = new String();
+                        List<Object> resultVals = new ArrayList<>();
                         ca.phon.formatter.Formatter<Object> formatter = null;
                         StringBuffer buffer = new StringBuffer();
-
                         for(ResultValue rv:resultValues) {
+                            buffer.setLength(0);
                             Object tierValue = record.getTier(rv.getTierName()).getValue();
                             if(tierValue == null) tierValue = "";
 
@@ -163,7 +163,7 @@ public class ResultsToTable {
                                                 tierTxt.substring( rv.getRange().getStart(), rv.getRange().getEnd() ) : "");
 
                                 if(result.getSchema().equals("DETECTOR") && resultTxt.length() == 0) {
-                                    resultTxt = "\u2205";
+                                    resultTxt = "∅";
                                 }
 
                                 if(ignoreDiacritics) {
@@ -173,14 +173,22 @@ public class ResultsToTable {
                                 if(buffer.length() > 0) buffer.append("..");
                                 buffer.append(resultTxt);
                             }
+                            Object resultVal = buffer.toString();
+                            if(formatter != null) {
+                                try {
+                                    resultVal = formatter.parse(buffer.toString());
+                                } catch (ParseException e) {}
+                            }
+                            resultVals.add(resultVal);
                         }
-                        resultVal = buffer.toString();
-                        if(formatter != null) {
-                            try {
-                                resultVal = formatter.parse(buffer.toString());
-                            } catch (ParseException e) {}
+                        if(resultVals.size() == 1)
+                            rowData.add(resultVals.get(0));
+                        else if(resultVals.size() > 1) {
+                            String[] txt = resultVals.stream().map(Object::toString).toArray(String[]::new);
+                            rowData.add(ReportHelper.createReportString(txt, result.getSchema()));
+                        } else {
+                            rowData.add(new String());
                         }
-                        rowData.add(resultVal);
                     }
 
                     if(includeMetadata) {
