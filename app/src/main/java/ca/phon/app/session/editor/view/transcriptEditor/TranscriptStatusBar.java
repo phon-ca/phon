@@ -41,7 +41,7 @@ public class TranscriptStatusBar extends JPanel {
                 offsetInContentLabel.setText("Character: ");
             }
             else {
-                offsetInContentLabel.setText("Character: " + (offsetInContent + 1));
+                offsetInContentLabel.setText("Character: " + offsetInContent);
             }
         });
     }

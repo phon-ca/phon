@@ -19,10 +19,7 @@ import org.jdesktop.swingx.HorizontalLayout;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultHighlighter;
-import javax.swing.text.Element;
-import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.*;
 import javax.swing.undo.UndoManager;
 import java.awt.*;
 import java.awt.event.InputEvent;
@@ -32,6 +29,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class TranscriptEditor extends JEditorPane {
@@ -101,8 +99,6 @@ public class TranscriptEditor extends JEditorPane {
             }
 
             // FOR DEBUG PURPOSES ONLY
-
-            //System.out.println(e.getDot());
             /*int cursorPos = e.getDot();
             int recordIndex = doc.getRecordIndex(cursorPos);
             int recordElementIndex = doc.getRecordElementIndex(cursorPos);
@@ -112,7 +108,9 @@ public class TranscriptEditor extends JEditorPane {
             System.out.println("Cursor Pos: " + cursorPos);
             System.out.println(doc.getRecordEnd(recordIndex, null));*/
             SimpleAttributeSet attrs = new SimpleAttributeSet(doc.getCharacterElement(e.getDot()).getAttributes().copyAttributes());
+            System.out.println(e.getDot() + ": " + doc.getCharAtPos(e.getDot()));
             System.out.println(attrs);
+            System.out.println("Next editable: " + getNextEditableIndex(e.getDot()));
         });
     }
 
@@ -216,76 +214,44 @@ public class TranscriptEditor extends JEditorPane {
         inputMap.put(releasedControl, "releasedControl");
         PhonUIAction<Void> releasedControlAct = PhonUIAction.runnable(this::releasedControl);
         actionMap.put("releasedControl", releasedControlAct);
+
+
+        KeyStroke right = KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0);
+        inputMap.put(right, "nextEditableIndex");
+        PhonUIAction<Void> rightAct = PhonUIAction.runnable(() -> setCaretPosition(getNextEditableIndex(getCaretPosition() + 1)));
+        actionMap.put("nextEditableIndex", rightAct);
+
+        KeyStroke left = KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0);
+        inputMap.put(left, "prevEditableIndex");
+        PhonUIAction<Void> leftAct = PhonUIAction.runnable(() -> setCaretPosition(getPrevEditableIndex(getCaretPosition() - 1)));
+        actionMap.put("prevEditableIndex", leftAct);
+
+
+        KeyStroke up = KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0);
+        inputMap.put(up, "sameOffsetPrevTier");
+        PhonUIAction<Void> upAct = PhonUIAction.runnable(this::sameOffsetInPrevTierOrElement);
+        actionMap.put("sameOffsetPrevTier", upAct);
+
+        KeyStroke down = KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0);
+        inputMap.put(down, "sameOffsetNextTier");
+        PhonUIAction<Void> downAct = PhonUIAction.runnable(this::sameOffsetInNextTierOrElement);
+        actionMap.put("sameOffsetNextTier", downAct);
     }
 
     public void nextTierOrElement() {
-        TranscriptDocument doc = getTranscriptDocument();
-
         int caretPos = getCaretPosition();
-        var elem = doc.getCharacterElement(caretPos);
 
-        Integer recordIndex = (Integer) elem.getAttributes().getAttribute("recordIndex");
-        Tier tier = (Tier)elem.getAttributes().getAttribute("tier");
-        if (recordIndex == null || tier == null) return;
-
-        String tierName = tier.getName();
-        var effectiveTierView = session.getTierView().stream().filter(tv -> tv.isVisible()).toList();
-        var tierViewItem = effectiveTierView
-            .stream()
-            .filter(tv -> tv.getTierName().equals(tierName))
-            .findFirst()
-            .orElse(null);
-        int tierIndex = effectiveTierView.indexOf(tierViewItem);
-
-        int newCaretPos;
-
-        if (tierIndex == effectiveTierView.size() - 1) {
-            int newRecordIndex = (recordIndex + 1) % session.getRecordCount();
-            newCaretPos = doc.getTierStart(newRecordIndex, effectiveTierView.get(0).getTierName());
-        }
-        else {
-            int newTierIndex = (tierIndex + 1) % effectiveTierView.size();
-            newCaretPos = doc.getTierStart(recordIndex, effectiveTierView.get(newTierIndex).getTierName());
-        }
+        int newCaretPos = getStartOfNextTierOrElement(caretPos);
+        if (newCaretPos == -1) return;
 
         setCaretPosition(newCaretPos);
     }
 
     public void prevTierOrElement() {
-        TranscriptDocument doc = getTranscriptDocument();
-
         int caretPos = getCaretPosition();
-        var elem = doc.getCharacterElement(caretPos);
 
-        Integer recordIndex = (Integer) elem.getAttributes().getAttribute("recordIndex");
-        Tier tier = (Tier)elem.getAttributes().getAttribute("tier");
-        if (recordIndex == null || tier == null) return;
-
-        String tierName = tier.getName();
-        var effectiveTierView = session.getTierView().stream().filter(tv -> tv.isVisible()).toList();
-        var tierViewItem = effectiveTierView
-            .stream()
-            .filter(tv -> tv.getTierName().equals(tierName))
-            .findFirst()
-            .orElse(null);
-        int tierIndex = effectiveTierView.indexOf(tierViewItem);
-
-        int newCaretPos;
-
-        if (tierIndex == 0) {
-            int newRecordIndex = recordIndex - 1;
-            if (newRecordIndex < 0) {
-                newRecordIndex = session.getRecordCount() - 1;
-            }
-            newCaretPos = doc.getTierStart(
-                newRecordIndex,
-                effectiveTierView.get(effectiveTierView.size() - 1).getTierName()
-            );
-        }
-        else {
-            int newTierIndex = (tierIndex - 1) % effectiveTierView.size();
-            newCaretPos = doc.getTierStart(recordIndex, effectiveTierView.get(newTierIndex).getTierName());
-        }
+        int newCaretPos = getStartOfPrevTierOrElement(caretPos);
+        if (newCaretPos == -1) return;
 
         setCaretPosition(newCaretPos);
     }
@@ -326,6 +292,7 @@ public class TranscriptEditor extends JEditorPane {
     }
 
     public void moveTier(EditorEventType.TierViewChangedData data) {
+        long startTimeMS = new Date().getTime();
 
         // Switch this when fixed
         var startTierView = data.oldTierView();
@@ -357,14 +324,19 @@ public class TranscriptEditor extends JEditorPane {
             }
         }
 
+        Document blank = new DefaultStyledDocument();
+        setDocument(blank);
         // Move tier in doc
         doc.moveTier(movedTiers);
+        setDocument(doc);
 
         // Correct caret
         if (caretTierOffset > -1) {
             // Move the caret so that it has the same offset from the tiers new pos
             setCaretPosition(doc.getTierStart(caretTier) + caretTierOffset);
         }
+
+        System.out.println("Time to move tiers: " + (new Date().getTime() - startTimeMS)/1000f + " seconds");
     }
 
     public void deleteTier(EditorEventType.TierViewChangedData data) {
@@ -910,39 +882,30 @@ public class TranscriptEditor extends JEditorPane {
 
     public int getCurrentElementIndex() {
         Element elem = getTranscriptDocument().getCharacterElement(getCaretPosition());
+
         if (elem == null) return -1;
 
         String elementType = (String) elem.getAttributes().getAttribute("elementType");
+
         if (elementType == null) return -1;
 
-        if (elementType.equals("comment")) {
-            Comment comment = (Comment) elem.getAttributes().getAttribute("comment");
-            if (comment != null) {
-                for (Transcript.Element transcriptElem : session.getTranscript()) {
-                    if (transcriptElem.isComment() && transcriptElem.asComment().equals(comment)) {
-                        return session.getTranscript().getElementIndex(transcriptElem);
-                    }
-                }
+        switch (elementType) {
+            case "comment" -> {
+                Comment comment = (Comment) elem.getAttributes().getAttribute("comment");
+                return session.getTranscript().getElementIndex(comment);
+            }
+            case "gem" -> {
+                Gem gem = (Gem) elem.getAttributes().getAttribute("gem");
+                return session.getTranscript().getElementIndex(gem);
+            }
+            case "record" -> {
+                Integer recordIndex = (Integer) elem.getAttributes().getAttribute("recordIndex");
+                return session.getTranscript().getRecordElementIndex(recordIndex);
+            }
+            default -> {
+                return -1;
             }
         }
-        else if (elementType.equals("gem")) {
-            Gem gem = (Gem) elem.getAttributes().getAttribute("gem");
-            if (gem != null) {
-                for (Transcript.Element transcriptElem : session.getTranscript()) {
-                    if (transcriptElem.isGem() && transcriptElem.asGem().equals(gem)) {
-                        return session.getTranscript().getElementIndex(transcriptElem);
-                    }
-                }
-            }
-        }
-        else if (elementType.equals("record")) {
-            Integer recordIndex = (Integer) elem.getAttributes().getAttribute("recordIndex");
-            if (recordIndex != null) {
-                return session.getRecordElementIndex(recordIndex);
-            }
-        }
-
-        return -1;
     }
 
     public void setCurrentElementIndex(int index) {
@@ -985,9 +948,12 @@ public class TranscriptEditor extends JEditorPane {
 
     public int getCurrentRecordIndex() {
         Element elem = getTranscriptDocument().getCharacterElement(getCaretPosition());
-        Integer recordIndex = (Integer) elem.getAttributes().getAttribute("recordIndex");
-        if (recordIndex != null) {
-            return recordIndex;
+        Element firstInnerElem = elem.getElement(0);
+        if (firstInnerElem != null) {
+            Integer recordIndex = (Integer) firstInnerElem.getAttributes().getAttribute("recordIndex");
+            if (recordIndex != null) {
+                return recordIndex;
+            }
         }
 
         Transcript transcript = session.getTranscript();
@@ -1017,5 +983,143 @@ public class TranscriptEditor extends JEditorPane {
         doc.setSeparatorFactory(this::createSeparator);
         doc.setSession(session);
         setDocument(doc);
+    }
+
+    public int getNextEditableIndex(int currentPos) {
+        TranscriptDocument doc = getTranscriptDocument();
+
+        int docLen = doc.getLength();
+
+        Element elem = doc.getCharacterElement(currentPos);
+        while (elem.getAttributes().getAttribute("notEditable") != null && currentPos < docLen) {
+            currentPos++;
+            elem = doc.getCharacterElement(currentPos);
+        }
+
+        if (currentPos == docLen) return -1;
+
+        return currentPos;
+    }
+
+    public int getPrevEditableIndex(int currentPos) {
+        TranscriptDocument doc = getTranscriptDocument();
+
+        Element elem = doc.getCharacterElement(currentPos);
+        while (elem.getAttributes().getAttribute("notEditable") != null && currentPos >= 0) {
+            currentPos--;
+            elem = doc.getCharacterElement(currentPos);
+        }
+
+        return currentPos;
+    }
+
+    private int getStartOfPrevTierOrElement(int caretPos) {
+        TranscriptDocument doc = getTranscriptDocument();
+
+        var elem = doc.getCharacterElement(caretPos);
+
+        Integer recordIndex = (Integer) elem.getAttributes().getAttribute("recordIndex");
+        Tier tier = (Tier)elem.getAttributes().getAttribute("tier");
+        if (recordIndex == null || tier == null) return -1;
+
+        String tierName = tier.getName();
+        var effectiveTierView = session.getTierView().stream().filter(tv -> tv.isVisible()).toList();
+        var tierViewItem = effectiveTierView
+                .stream()
+                .filter(tv -> tv.getTierName().equals(tierName))
+                .findFirst()
+                .orElse(null);
+        int tierIndex = effectiveTierView.indexOf(tierViewItem);
+
+        int newCaretPos;
+
+        if (tierIndex == 0) {
+            int newRecordIndex = recordIndex - 1;
+            if (newRecordIndex < 0) {
+                newRecordIndex = session.getRecordCount() - 1;
+            }
+            newCaretPos = doc.getTierStart(
+                    newRecordIndex,
+                    effectiveTierView.get(effectiveTierView.size() - 1).getTierName()
+            );
+        }
+        else {
+            int newTierIndex = (tierIndex - 1) % effectiveTierView.size();
+            newCaretPos = doc.getTierStart(recordIndex, effectiveTierView.get(newTierIndex).getTierName());
+        }
+
+        return newCaretPos;
+    }
+
+    private int getStartOfNextTierOrElement(int caretPos) {
+        TranscriptDocument doc = getTranscriptDocument();
+
+        var elem = doc.getCharacterElement(caretPos);
+
+        Integer recordIndex = (Integer) elem.getAttributes().getAttribute("recordIndex");
+        Tier tier = (Tier)elem.getAttributes().getAttribute("tier");
+        if (recordIndex == null || tier == null) return -1;
+
+        String tierName = tier.getName();
+        var effectiveTierView = session.getTierView().stream().filter(tv -> tv.isVisible()).toList();
+        var tierViewItem = effectiveTierView
+                .stream()
+                .filter(tv -> tv.getTierName().equals(tierName))
+                .findFirst()
+                .orElse(null);
+        int tierIndex = effectiveTierView.indexOf(tierViewItem);
+
+        int newCaretPos;
+
+        if (tierIndex == effectiveTierView.size() - 1) {
+            int newRecordIndex = (recordIndex + 1) % session.getRecordCount();
+            newCaretPos = doc.getTierStart(newRecordIndex, effectiveTierView.get(0).getTierName());
+        }
+        else {
+            int newTierIndex = (tierIndex + 1) % effectiveTierView.size();
+            newCaretPos = doc.getTierStart(recordIndex, effectiveTierView.get(newTierIndex).getTierName());
+        }
+
+        return newCaretPos;
+    }
+
+    public void sameOffsetInPrevTierOrElement() {
+        TranscriptDocument doc = getTranscriptDocument();
+        int docLen = doc.getLength();
+
+        int caretPos = getCaretPosition();
+        int offsetInContent = doc.getOffsetInContent(caretPos);
+
+        int start = getStartOfPrevTierOrElement(caretPos);
+        if (start == -1) return;
+
+        for (caretPos = start; (caretPos < start + offsetInContent) && (caretPos < docLen); caretPos++) {
+            if (doc.getCharacterElement(caretPos).getAttributes().getAttribute("label") != null) {
+                caretPos--;
+                break;
+            }
+        }
+
+        setCaretPosition(caretPos);
+    }
+
+    public void sameOffsetInNextTierOrElement() {
+        TranscriptDocument doc = getTranscriptDocument();
+        int docLen = doc.getLength();
+
+        int caretPos = getCaretPosition();
+        int offsetInContent = doc.getOffsetInContent(caretPos);
+
+        int start = getStartOfNextTierOrElement(caretPos);
+        if (start == -1) return;
+
+        for (caretPos = start; (caretPos < start + offsetInContent) && (caretPos < docLen); caretPos++) {
+            if (doc.getCharacterElement(caretPos).getAttributes().getAttribute("label") != null) {
+                caretPos--;
+                break;
+            }
+        }
+
+        setCaretPosition(caretPos);
     }
 }

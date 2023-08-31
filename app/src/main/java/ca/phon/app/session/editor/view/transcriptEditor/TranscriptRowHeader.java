@@ -15,7 +15,7 @@ public class TranscriptRowHeader extends JComponent {
 
     public TranscriptRowHeader(TranscriptEditor editor) {
         this.editor = editor;
-        setPreferredSize(new Dimension(150, editor.getPreferredSize().height));
+        setPreferredSize(new Dimension(24, editor.getPreferredSize().height));
     }
 
     @Override
@@ -23,7 +23,7 @@ public class TranscriptRowHeader extends JComponent {
         Rectangle drawHere = g.getClipBounds();
 
         // Fill clipping area with dirty brown/orange.
-        g.setColor(PhonGuiConstants.PHON_UI_STRIP_COLOR);
+        g.setColor(Color.decode("#eeeeee"));
         g.fillRect(drawHere.x, drawHere.y, drawHere.width, drawHere.height);
 
         g.setColor(Color.BLACK);

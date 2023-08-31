@@ -342,16 +342,14 @@ public class CSVImporter {
             tierDescription = sessionFactory.createTierDescription(
                 tierName,
                 UserTierData.class,
-                new HashMap<>(),
-                TierAlignmentRules.userTierRules()
+                new HashMap<>()
             );
             session.addUserTier(tierDescription);
         }
 
         var userTier = sessionFactory.createTier(
             tierDescription.getName(),
-            tierDescription.getDeclaredType(),
-            tierDescription.getTierAlignmentRules()
+            tierDescription.getDeclaredType()
         );
         userTier.setText(field);
         record.putTier(userTier);

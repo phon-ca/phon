@@ -1,6 +1,7 @@
 package ca.phon.app.session.editor.view.transcriptEditor;
 
 import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.view.transcriptEditor.actions.ToggleSingleRecordAction;
 import ca.phon.plugin.PluginManager;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.icons.IconManager;
@@ -51,7 +52,11 @@ public class TranscriptView extends EditorView {
 
     @Override
     public JMenu getMenu() {
-        return new JMenu();
+        final JMenu retVal = new JMenu();
+
+        retVal.add(new ToggleSingleRecordAction(getEditor(), this));
+
+        return retVal;
     }
 
     private void createTierLabelPopup(JLabel tierLabel, MouseEvent mouseEvent) {
@@ -71,5 +76,13 @@ public class TranscriptView extends EditorView {
 
     private void onEditorFinishedLoading(EditorEvent<Void> event) {
         transcriptEditor.setSession();
+    }
+
+    public boolean isSingleRecordActive() {
+        return transcriptEditor.getTranscriptDocument().getSingleRecordView();
+    }
+
+    public void toggleSingleRecordActive() {
+        transcriptEditor.getTranscriptDocument().setSingleRecordView(!isSingleRecordActive());
     }
 }
