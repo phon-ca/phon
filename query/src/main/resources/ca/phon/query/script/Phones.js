@@ -163,7 +163,7 @@ function query_record(recordIndex, record) {
 
     var toSearch = new Array();
     toSearch.push({
-        element: tier.value,
+        element: ipa,
         alignedResults: tierAlignedResults,
         alignedMeta: tierAlignedMeta
     });
