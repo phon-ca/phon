@@ -123,7 +123,7 @@ public class TestIPAParserErrors {
 	@Test
 	public void testInvalidCompound2() {
 		String txt = "ʰ͡|ˑeːː͡ɪ̃n";
-		testError(txt, 2, IPAParserException.class);
+		testError(txt, 1, IPAParserException.class);
 	}
 	
 	@Test

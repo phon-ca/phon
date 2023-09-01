@@ -123,7 +123,7 @@ public class TestIPAParser {
 	public void testReversedDiacritics() throws ParseException {
 		final IPATokens tokens = IPATokens.getSharedInstance();
 		final List<Character> testChars = new ArrayList<Character>();
-		final char[] roleReversers = new char[]{'\u0335', '\u0361'};
+		final char[] roleReversers = new char[]{'\u0335'};
 		testChars.addAll(tokens.getCharactersForType(IPATokenType.CONSONANT));
 		testChars.addAll(tokens.getCharactersForType(IPATokenType.VOWEL));
 		final Set<Character> prefixChars = tokens.getCharactersForType(IPATokenType.PREFIX_DIACRITIC);
@@ -176,14 +176,70 @@ public class TestIPAParser {
 	
 	@Test
 	public void testCompoundPhoneChaining() throws ParseException {
-		final String txt = "ɪ\u0361ʰ\u0361ʙ\u0361c";
+		final String txt = "iʰ͡b͡c";
 		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
 		
 		Assert.assertEquals(txt, ipa.toString());
 		Assert.assertEquals(1, ipa.length());
 		Assert.assertEquals(CompoundPhone.class, ipa.elementAt(0).getClass());
 	}
-	
+
+	@Test
+	public void testCompoundPhonePrefixDiacritics() throws ParseException {
+		final String txt = "ᵐt͡s";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
+
+		Assert.assertEquals(txt, ipa.toString());
+		Assert.assertEquals(1, ipa.length());
+		Assert.assertEquals(CompoundPhone.class, ipa.elementAt(0).getClass());
+		final CompoundPhone cp = (CompoundPhone) ipa.elementAt(0);
+		Assert.assertEquals("t", cp.getFirstPhone().getBasePhone().toString());
+		Assert.assertEquals("ᵐ", cp.getFirstPhone().getPrefix());
+		Assert.assertEquals("s", cp.getSecondPhone().getBasePhone().toString());
+	}
+
+	@Test
+	public void testCompoundPhoneSuffixDiacritics() throws ParseException {
+		final String txt = "t͡sʰ";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
+
+		Assert.assertEquals(txt, ipa.toString());
+		Assert.assertEquals(1, ipa.length());
+		Assert.assertEquals(CompoundPhone.class, ipa.elementAt(0).getClass());
+		final CompoundPhone cp = (CompoundPhone) ipa.elementAt(0);
+		Assert.assertEquals("t", cp.getFirstPhone().getBasePhone().toString());
+		Assert.assertEquals("s", cp.getSecondPhone().getBasePhone().toString());
+		Assert.assertEquals("ʰ", cp.getSecondPhone().getSuffix());
+	}
+
+	@Test
+	public void testCompoundPhoneInnerSuffixDiacritics() throws ParseException {
+		final String txt = "tʰ͡s";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
+
+		Assert.assertEquals(txt, ipa.toString());
+		Assert.assertEquals(1, ipa.length());
+		Assert.assertEquals(CompoundPhone.class, ipa.elementAt(0).getClass());
+		final CompoundPhone cp = (CompoundPhone) ipa.elementAt(0);
+		Assert.assertEquals("t", cp.getFirstPhone().getBasePhone().toString());
+		Assert.assertEquals("ʰ", cp.getFirstPhone().getSuffix());
+		Assert.assertEquals("s", cp.getSecondPhone().getBasePhone().toString());
+	}
+
+	@Test
+	public void testCompoundPhoneInnerPrefixDiacritics()  throws ParseException {
+		final String txt = "t͡ᵐs";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
+
+		Assert.assertEquals(txt, ipa.toString());
+		Assert.assertEquals(1, ipa.length());
+		Assert.assertEquals(CompoundPhone.class, ipa.elementAt(0).getClass());
+		final CompoundPhone cp = (CompoundPhone) ipa.elementAt(0);
+		Assert.assertEquals("t", cp.getFirstPhone().getBasePhone().toString());
+		Assert.assertEquals("ᵐ", cp.getSecondPhone().getPrefix());
+		Assert.assertEquals("s", cp.getSecondPhone().getBasePhone().toString());
+	}
+
 	@Test
 	public void testCompoundMarker() throws Exception {
 		final String testString = "yes+sir";

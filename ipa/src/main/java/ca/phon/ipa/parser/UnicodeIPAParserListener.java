@@ -273,22 +273,22 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 		prefixCache.add(prefixDia);
 	}
 	
-	@Override
-	public void exitPrefixDiacriticLigature(PrefixDiacriticLigatureContext ctx) {
-		char prefixChar = ctx.SUFFIX_DIACRITIC().getText().charAt(0);
-		Diacritic lig = factory.createDiacritic(ctx.LIGATURE().getText().charAt(0));
-		List<Diacritic> combining = new ArrayList<>();
-		
-		if(ctx.COMBINING_DIACRITIC() != null) {
-			combining = ctx.COMBINING_DIACRITIC().stream()
-					.map( tn -> factory.createDiacritic(tn.getText().charAt(0)) )
-					.collect(Collectors.toList());
-		}
-		combining.add(lig);
-		
-		Diacritic prefixDia = factory.createDiacritic(new Diacritic[0], prefixChar, combining.toArray(Diacritic[]::new));
-		prefixCache.add(prefixDia);
-	}
+//	@Override
+//	public void exitPrefixDiacriticLigature(PrefixDiacriticLigatureContext ctx) {
+//		char prefixChar = ctx.SUFFIX_DIACRITIC().getText().charAt(0);
+//		Diacritic lig = factory.createDiacritic(ctx.LIGATURE().getText().charAt(0));
+//		List<Diacritic> combining = new ArrayList<>();
+//
+//		if(ctx.COMBINING_DIACRITIC() != null) {
+//			combining = ctx.COMBINING_DIACRITIC().stream()
+//					.map( tn -> factory.createDiacritic(tn.getText().charAt(0)) )
+//					.collect(Collectors.toList());
+//		}
+//		combining.add(lig);
+//
+//		Diacritic prefixDia = factory.createDiacritic(new Diacritic[0], prefixChar, combining.toArray(Diacritic[]::new));
+//		prefixCache.add(prefixDia);
+//	}
 	
 	@Override
 	public void exitSuffixDiacritic(SuffixDiacriticContext ctx) {
@@ -322,22 +322,22 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 		suffixCache.add(prefixDia);
 	}
 	
-	@Override
-	public void exitSuffixDiacriticLigature(SuffixDiacriticLigatureContext ctx) {
-		char suffixChar = ctx.PREFIX_DIACRITIC().getText().charAt(0);
-		Diacritic lig = factory.createDiacritic(ctx.LIGATURE().getText().charAt(0));
-		Diacritic[] combining = new Diacritic[0];
-		
-		if(ctx.COMBINING_DIACRITIC() != null) {
-			combining = ctx.COMBINING_DIACRITIC().stream()
-					.map( tn -> factory.createDiacritic(tn.getText().charAt(0)) )
-					.collect(Collectors.toList())
-					.toArray(Diacritic[]::new);
-		}
-		
-		Diacritic suffixDia = factory.createDiacritic(new Diacritic[] {lig}, suffixChar, combining);
-		suffixCache.add(suffixDia);
-	}
+//	@Override
+//	public void exitSuffixDiacriticLigature(SuffixDiacriticLigatureContext ctx) {
+//		char suffixChar = ctx.PREFIX_DIACRITIC().getText().charAt(0);
+//		Diacritic lig = factory.createDiacritic(ctx.LIGATURE().getText().charAt(0));
+//		Diacritic[] combining = new Diacritic[0];
+//
+//		if(ctx.COMBINING_DIACRITIC() != null) {
+//			combining = ctx.COMBINING_DIACRITIC().stream()
+//					.map( tn -> factory.createDiacritic(tn.getText().charAt(0)) )
+//					.collect(Collectors.toList())
+//					.toArray(Diacritic[]::new);
+//		}
+//
+//		Diacritic suffixDia = factory.createDiacritic(new Diacritic[] {lig}, suffixChar, combining);
+//		suffixCache.add(suffixDia);
+//	}
 
 	@Override
 	public void exitTone_number(UnicodeIPAParser.Tone_numberContext ctx) {
