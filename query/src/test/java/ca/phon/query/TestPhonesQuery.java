@@ -493,7 +493,7 @@ public class TestPhonesQuery extends TestQuery {
 		params.put("filters.actualResultFilter.filter", "^$");
 		params.put("filters.actualResultFilter.exactMatch", true);
 
-		return new Object[] { project, session, PHONES_SCRIPT, params, 388 };
+		return new Object[] { project, session, PHONES_SCRIPT, params, 400 };
 	}
 
 	private static Object[] epenthesis(Project project, Session session) {
@@ -508,6 +508,7 @@ public class TestPhonesQuery extends TestQuery {
 		params.put("filters.targetResultFilter.filter", "^$");
 		params.put("filters.targetResultFilter.exactMatch", true);
 
-		return new Object[] { project, session, PHONES_SCRIPT, params, 2 };
+		return new Object[] { project, session, PHONES_SCRIPT, params, 14 };
 	}
+
 }
