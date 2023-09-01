@@ -56,7 +56,7 @@ public class FontPreferences {
 	public static final float MIN_FONT_SIZE = 2.0f;
 	public static final float MAX_FONT_SIZE = 40.0f;
 
-	public static final Float DEFAULT_FONT_SIZE = 12.0f;
+	public static final Float DEFAULT_FONT_SIZE = 14.0f;
 	public final static String DEFAULT_FONT_SIZE_PROP = FontPreferences.class.getName() + ".defaultFontSize";
 	public static float getDefaultFontSize() {
 		return PrefHelper.getFloat(DEFAULT_FONT_SIZE_PROP, DEFAULT_FONT_SIZE);
@@ -172,7 +172,7 @@ public class FontPreferences {
 			}
 			fontFileName += ".ttf";
 			return (PROVIDED_FONTS.containsKey(fontFileName) ? PROVIDED_FONTS.get(fontFileName).deriveFont(fontSize) :
-					Font.decode("Dialog-12-PLAIN"));
+					Font.decode("Dialog-14-PLAIN"));
 		} else {
 			return Font.decode(fontDesc);
 		}
@@ -190,7 +190,7 @@ public class FontPreferences {
 	 */
 	public final static String TIER_FONT = FontPreferences.class.getName() + ".tierFont";
 
-	public final static String DEFAULT_TIER_FONT = "Noto Sans-PLAIN-12";
+	public final static String DEFAULT_TIER_FONT = "Noto Sans-PLAIN-14";
 	
 	public static Font getTierFont() {
 		return _getFont(TIER_FONT, DEFAULT_TIER_FONT);
@@ -262,7 +262,7 @@ public class FontPreferences {
 	public static final String UI_IPA_FONT = FontPreferences.class.getName() + ".uiIpaFont";
 
 	@Deprecated
-	public static final String DEFAULT_UI_IPA_FONT = "Noto Sans-PLAIN-12";
+	public static final String DEFAULT_UI_IPA_FONT = "Noto Sans-PLAIN-14";
 
 	@Deprecated
 	public static Font getUIIpaFont() {
