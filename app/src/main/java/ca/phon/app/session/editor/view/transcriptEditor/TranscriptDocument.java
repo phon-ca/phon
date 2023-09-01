@@ -262,6 +262,8 @@ public class TranscriptDocument extends DefaultStyledDocument {
         }
 
         retVal.addAttribute("notEditable", true);
+        retVal.addAttribute("label", true);
+        retVal.addAttribute("sep", true);
 
         return retVal;
     }
@@ -1065,6 +1067,8 @@ public class TranscriptDocument extends DefaultStyledDocument {
         SimpleAttributeSet recordAttrs = getRecordAttributes(recordIndex);
 
         SimpleAttributeSet sepAttrs = getSeparatorAttributes(record, recordIndex);
+
+        sepAttrs.addAttributes(recordAttrs);
 
         appendBatchString("-", sepAttrs);
         offset++;

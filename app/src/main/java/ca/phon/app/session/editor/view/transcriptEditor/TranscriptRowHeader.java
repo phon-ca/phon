@@ -8,14 +8,18 @@ import ca.phon.util.icons.IconSize;
 import javax.swing.*;
 import javax.swing.text.StyleConstants;
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 
 public class TranscriptRowHeader extends JComponent {
-
     private final TranscriptEditor editor;
+    private boolean showRecordNumbers = true;
+    private final int DEFAULT_WIDTH = 36;
+    private final int RECORD_NUMBER_WIDTH = 24;
 
     public TranscriptRowHeader(TranscriptEditor editor) {
         this.editor = editor;
-        setPreferredSize(new Dimension(24, editor.getPreferredSize().height));
+        setPreferredSize(new Dimension(DEFAULT_WIDTH + RECORD_NUMBER_WIDTH, editor.getPreferredSize().height));
+        System.out.println(editor.getPreferredSize().height);
     }
 
     @Override
@@ -38,6 +42,7 @@ public class TranscriptRowHeader extends JComponent {
                 try {
                     var innerElem = elem.getElement(j);
                     var elemRect = editor.modelToView2D(innerElem.getStartOffset());
+                    if (elemRect == null) return;
                     boolean topVisible = elemRect.getMinY() > drawHere.getMinY() && elemRect.getMinY() < drawHere.getMaxY();
                     boolean bottomVisible = elemRect.getMaxY() > drawHere.getMinY() && elemRect.getMaxY() < drawHere.getMaxY();
                     if (topVisible || bottomVisible) {
@@ -59,6 +64,16 @@ public class TranscriptRowHeader extends JComponent {
                                     g.setColor(Color.BLACK);
                                 }
                             }
+                            else if (component instanceof JPanel) {
+                                Integer recordNumber = (Integer) innerElem.getAttributes().getAttribute("recordIndex");
+                                if (recordNumber != null) {
+                                    var sepRect = editor.modelToView2D(innerElem.getStartOffset());
+                                    String recordNumberText = String.valueOf(recordNumber);
+                                    int stringWidth = g.getFontMetrics().stringWidth(recordNumberText);
+
+                                    g.drawString(recordNumberText, getWidth() - stringWidth, (int) sepRect.getMaxY());
+                                }
+                            }
                         }
                     }
                 }
@@ -67,5 +82,17 @@ public class TranscriptRowHeader extends JComponent {
                 }
             }
         }
+    }
+
+    public boolean isShowRecordNumbers() {
+        return showRecordNumbers;
+    }
+
+    public void setShowRecordNumbers(boolean showRecordNumbers) {
+        this.showRecordNumbers = showRecordNumbers;
+    }
+
+    public void setHeight(int height) {
+        setSize(new Dimension(getWidth(), height));
     }
 }

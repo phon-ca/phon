@@ -5,7 +5,6 @@ import javax.swing.*;
 public class TranscriptScrollPane extends JScrollPane {
     private final TranscriptEditor transcriptEditor;
     private TranscriptRowHeader transcriptRowHeader;
-    private TranscriptStatusBar transcriptStatusBar;
 
     public TranscriptScrollPane(TranscriptEditor transcriptEditor) {
         super(transcriptEditor);
@@ -13,22 +12,13 @@ public class TranscriptScrollPane extends JScrollPane {
         initUI();
     }
 
-    public TranscriptRowHeader getTranscriptEditorRowHeader() {
+    public TranscriptRowHeader getTranscriptRowHeader() {
         return transcriptRowHeader;
     }
 
-    public void setTranscriptEditorRowHeader(TranscriptRowHeader transcriptRowHeader) {
+    public void setTranscriptRowHeader(TranscriptRowHeader transcriptRowHeader) {
         this.transcriptRowHeader = transcriptRowHeader;
         setRowHeaderView(transcriptRowHeader);
-    }
-
-    public TranscriptStatusBar getTranscriptEditorStatusBar() {
-        return transcriptStatusBar;
-    }
-
-    public void setTranscriptEditorStatusBar(TranscriptStatusBar transcriptStatusBar) {
-        this.transcriptStatusBar = transcriptStatusBar;
-        setColumnHeaderView(transcriptStatusBar);
     }
 
     private void initUI() {

@@ -16,6 +16,7 @@ public class TranscriptView extends EditorView {
     public final static String VIEW_NAME = "Transcript Editor";
     public final static String VIEW_ICON = "blank";
     private final TranscriptEditor transcriptEditor;
+    private TranscriptScrollPane transcriptScrollPane;
 
     public TranscriptView(SessionEditor editor) {
         super(editor);
@@ -29,14 +30,14 @@ public class TranscriptView extends EditorView {
     }
 
     private void initUI() {
-        TranscriptScrollPane scrollPane = new TranscriptScrollPane(transcriptEditor);
-        scrollPane.setRowHeaderView(new TranscriptRowHeader(transcriptEditor));
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.getVerticalScrollBar().addAdjustmentListener(e -> {
-            scrollPane.getRowHeader().setViewPosition(new Point(0, e.getValue()));
+        transcriptScrollPane = new TranscriptScrollPane(transcriptEditor);
+        transcriptScrollPane.setTranscriptRowHeader(new TranscriptRowHeader(transcriptEditor));
+        transcriptScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        transcriptScrollPane.getVerticalScrollBar().addAdjustmentListener(e -> {
+            transcriptScrollPane.getRowHeader().setViewPosition(new Point(0, e.getValue()));
         });
         setLayout(new BorderLayout());
-        add(scrollPane, BorderLayout.CENTER);
+        add(transcriptScrollPane, BorderLayout.CENTER);
         add(new TranscriptStatusBar(transcriptEditor), BorderLayout.SOUTH);
     }
 
@@ -76,6 +77,8 @@ public class TranscriptView extends EditorView {
 
     private void onEditorFinishedLoading(EditorEvent<Void> event) {
         transcriptEditor.setSession();
+        System.out.println("Transcript height: " + transcriptEditor.getHeight());
+        transcriptScrollPane.getTranscriptRowHeader().setHeight(transcriptEditor.getHeight());
     }
 
     public boolean isSingleRecordActive() {
