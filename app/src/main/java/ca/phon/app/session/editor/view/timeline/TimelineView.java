@@ -896,7 +896,7 @@ public final class TimelineView extends EditorView {
 		} else {
 			SessionMediaModel mediaModel = getEditor().getMediaModel();
 			if(!mediaModel.isSessionMediaAvailable()) {
-				getEditor().showMessageDialog("Unable to start segmentation",
+				CommonModuleFrame.getCurrentFrame().showMessageDialog("Unable to start segmentation",
 						"Please assign session media file before starting segmentation.",
 						MessageDialogProperties.okOptions);
 				return;
@@ -919,7 +919,7 @@ public final class TimelineView extends EditorView {
 
 				// check for speech analysis view
 				if(getEditor().getViewModel().isShowing(SpeechAnalysisEditorView.VIEW_TITLE)) {
-					int result = getEditor().showMessageDialog("Segmentation Performance", "The Speech Analysis view may cause performance issues with segmentation.", new String[] {
+					int result = CommonModuleFrame.getCurrentFrame().showMessageDialog("Segmentation Performance", "The Speech Analysis view may cause performance issues with segmentation.", new String[] {
 							"Close Speech Analysis and continue", "Continue without closing", "Cancel" });
 					switch(result) {
 					case 0:

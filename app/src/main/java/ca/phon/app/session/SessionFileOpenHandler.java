@@ -56,7 +56,8 @@ public class SessionFileOpenHandler implements XMLOpenHandler, IPluginExtensionP
 
 	@Override
 	public boolean canRead(StartElement startEle) {
-		if(startEle.getName().getNamespaceURI().equals("http://phon.ling.mun.ca/ns/phonbank") 
+		if((startEle.getName().getNamespaceURI().equals("http://phon.ling.mun.ca/ns/phonbank")
+				|| startEle.getName().getNamespaceURI().equals("https://phon.ca/ns/session"))
 				&& startEle.getName().getLocalPart().equals("session")) {
 			return true;
 		} else {
@@ -66,8 +67,8 @@ public class SessionFileOpenHandler implements XMLOpenHandler, IPluginExtensionP
 
 	private SessionEditor findEditorForFile(File file) {
 		for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
-			if(cmf instanceof SessionEditor) {
-				SessionEditor editor = (SessionEditor)cmf;
+			if(cmf instanceof SessionEditorWindow sessionEditorWindow) {
+				SessionEditor editor = sessionEditorWindow.getSessionEditor();
 				
 				Project project = editor.getProject();
 				Session session = editor.getSession();

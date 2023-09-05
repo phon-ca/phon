@@ -1,6 +1,7 @@
 package ca.phon.app.session.editor;
 
 import ca.phon.session.Session;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
 
 import java.awt.event.*;
@@ -48,14 +49,14 @@ public class SessionEditorModificationListener implements WindowFocusListener {
 	private void showReloadDialog() {
 		MessageDialogProperties props = new MessageDialogProperties();
 		props.setRunAsync(true);
-		props.setParentWindow(this.editor);
+		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 		props.setHeader(DLG1_HEADER_TXT);
-		props.setMessage(DLG1_MESSAGE_TXT + (editor.hasUnsavedChanges() ? DLG1_MESSAGE_SUFFIX : ""));
+		props.setMessage(DLG1_MESSAGE_TXT + (editor.isModified() ? DLG1_MESSAGE_SUFFIX : ""));
 		props.setOptions(MessageDialogProperties.yesNoOptions);
 		props.setTitle("Reload Session");
 		props.setListener(nativeDialogEvent -> {
 			if(nativeDialogEvent.getDialogResult() == 0 /* Yes */) {
-				if (editor.hasUnsavedChanges()) {
+				if (editor.isModified()) {
 					showLoseChangesDialog();
 				} else {
 					editor.getEventManager().queueEvent(new EditorEvent<>(EditorEventType.EditorReloadFromDisk, editor, null));
@@ -68,7 +69,7 @@ public class SessionEditorModificationListener implements WindowFocusListener {
 	private void showLoseChangesDialog() {
 		MessageDialogProperties props = new MessageDialogProperties();
 		props.setRunAsync(true);
-		props.setParentWindow(this.editor);
+		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 		props.setHeader(DLG2_HEADER_TXT);
 		props.setMessage(DLG2_MESSAGE_TEXT);
 		props.setOptions(DLG2_OPTIONS);

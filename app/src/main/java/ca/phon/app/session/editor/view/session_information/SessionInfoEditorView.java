@@ -413,10 +413,6 @@ public class SessionInfoEditorView extends EditorView {
 	
 	private void onParticipantListChanged(EditorEvent<Participant> ee) {
 		((ParticipantsTableModel)participantTable.getModel()).fireTableDataChanged();
-		
-		// setup menu for editor so that new participant actions for
-		// segmentation are available
-		getEditor().setJMenuBar(MenuManager.createWindowMenuBar(getEditor()));
 	}
 	
 	private void onLangChanged(EditorEvent<EditorEventType.SessionLangChangedData> ee) {

@@ -134,12 +134,12 @@ public class ResultSetEditor extends ProjectFrame {
 		if(getParentFrame() == null) {
 			// look for parent frames
 			for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
-				if(cmf instanceof SessionEditor) {
-					final Session transcript = ((SessionEditor)cmf).getSession();
+				if(cmf instanceof SessionEditorWindow sessionEditorWindow) {
+					final Session transcript = sessionEditorWindow.getSession();
 					if(transcript.getCorpus().equals(resultSet.getCorpus())
 							&& transcript.getName().equals(resultSet.getSession())) {
-						super.setParentFrame(cmf);
-						final SessionEditor editor = getEditor();
+						super.setParentFrame(sessionEditorWindow);
+						final SessionEditor editor = sessionEditorWindow.getSessionEditor();
 
 						editor.getEventManager().registerActionForEvent(EditorEventType.RecordChanged, this::onRecordChange, EditorEventManager.RunOn.AWTEventDispatchThread);
 						
@@ -159,7 +159,10 @@ public class ResultSetEditor extends ProjectFrame {
 	}
 	
 	public SessionEditor getEditor() {
-		return (attachToEditor() ? (SessionEditor)getParentFrame() : null);
+		if(attachToEditor() && (getParentFrame() instanceof SessionEditorWindow sessionEditorWindow))
+			return sessionEditorWindow.getSessionEditor();
+		else
+			return null;
 	}
 	
 	private void init() {

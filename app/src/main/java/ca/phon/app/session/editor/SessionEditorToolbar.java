@@ -36,8 +36,6 @@ import java.util.List;
  */
 public class SessionEditorToolbar extends JPanel {
 
-	private static final long serialVersionUID = 8875349433878914528L;
-
 	private final WeakReference<SessionEditor> editorRef;
 	
 	/**
@@ -82,7 +80,7 @@ public class SessionEditorToolbar extends JPanel {
 		final SaveSessionAction saveAction = new SaveSessionAction(getEditor());
 		saveButton = new JButton(saveAction);
 		saveButton.setText(null);
-		saveButton.setEnabled(getEditor().hasUnsavedChanges());
+		saveButton.setEnabled(getEditor().isModified());
 		add(saveButton, gbc);
 
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.ModifiedFlagChanged, this::onModifiedChanged, EditorEventManager.RunOn.AWTEventDispatchThread);

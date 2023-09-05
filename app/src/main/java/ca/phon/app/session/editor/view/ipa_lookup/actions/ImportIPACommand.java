@@ -16,6 +16,7 @@
 package ca.phon.app.session.editor.view.ipa_lookup.actions;
 
 import ca.phon.app.session.editor.view.ipa_lookup.IPALookupView;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
 
 import java.awt.event.ActionEvent;
@@ -37,7 +38,7 @@ public class ImportIPACommand extends IPALookupViewAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		final OpenDialogProperties props = new OpenDialogProperties();
-		props.setParentWindow(getLookupView().getEditor());
+		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 		props.setRunAsync(false);
 		props.setTitle("Select CSV file with IPA entries");
 		props.setFileFilter(FileFilter.csvFilter);

@@ -694,11 +694,11 @@ public class BufferPanel extends JPanel implements IExtendable {
 
 		// find session editor
 		for(CommonModuleFrame openWindow:CommonModuleFrame.getOpenWindows()) {
-			if(openWindow instanceof SessionEditor) {
-				final SessionEditor currentEditor = (SessionEditor)openWindow;
+			if(openWindow instanceof SessionEditorWindow) {
+				final SessionEditorWindow currentEditor = (SessionEditorWindow)openWindow;
 				if(currentEditor.getSession().getCorpus().equals(sp.getCorpus())
 						&& currentEditor.getSession().getName().equals(sp.getSession())) {
-					editor = (SessionEditor)openWindow;
+					editor = ((SessionEditorWindow)openWindow).getSessionEditor();
 					break;
 				}
 			}

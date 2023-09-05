@@ -16,6 +16,7 @@
 package ca.phon.app.session.editor.view.ipa_lookup.actions;
 
 import ca.phon.app.session.editor.view.ipa_lookup.IPALookupView;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
 
 import java.awt.event.ActionEvent;
@@ -40,7 +41,7 @@ public class ExportIPACommand extends IPALookupViewAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		final SaveDialogProperties props = new SaveDialogProperties();
-		props.setParentWindow(getLookupView().getEditor());
+		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 		props.setRunAsync(false);
 		props.setCanCreateDirectories(true);
 		props.setFileFilter(FileFilter.csvFilter);

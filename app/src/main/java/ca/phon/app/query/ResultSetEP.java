@@ -15,6 +15,7 @@
  */
 package ca.phon.app.query;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.session.editor.*;
 import ca.phon.plugin.*;
@@ -34,8 +35,6 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 @PhonPlugin(name="default")
 public class ResultSetEP implements IPluginEntryPoint {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ResultSetEP.class.getName());
 	
 	public final static String EP_NAME = "ResultSetViewer";
 
@@ -90,8 +89,8 @@ public class ResultSetEP implements IPluginEntryPoint {
 				if(sameResultSet) {
 					windowRef.set(rsViewer);
 				}
-			} else if(sessionEditorRef.get() == null && cmf instanceof SessionEditor) {
-				SessionEditor editor = (SessionEditor)cmf;
+			} else if(sessionEditorRef.get() == null && cmf instanceof SessionEditorWindow sessionEditorWindow) {
+				SessionEditor editor = sessionEditorWindow.getSessionEditor();
 				if(editor.getProject() == projectRef.get() &&
 						editor.getSession().getCorpus().equals(resultSetRef.get().getCorpus()) &&
 						editor.getSession().getName().equals(resultSetRef.get().getSession()) ) {
@@ -115,7 +114,7 @@ public class ResultSetEP implements IPluginEntryPoint {
 	
 				// setup location next to editor if attached
 				if(window.getEditor() != null) {
-					window.positionRelativeTo(SwingConstants.RIGHT, SwingConstants.LEADING, window.getEditor());
+					window.positionRelativeTo(SwingConstants.RIGHT, SwingConstants.LEADING, CommonModuleFrame.getCurrentFrame());
 				} else {
 					window.setLocationByPlatform(true);
 				}
@@ -135,8 +134,8 @@ public class ResultSetEP implements IPluginEntryPoint {
 			
 			if(sessionEditorRef.get() == null) {
 				CommonModuleFrame.addNewWindowListener(this, (cmf) -> {
-					if(cmf instanceof SessionEditor) {
-						SessionEditor editor = (SessionEditor)cmf;
+					if(cmf instanceof SessionEditorWindow sessionEditorWindow) {
+						SessionEditor editor = sessionEditorWindow.getSessionEditor();
 						if(editor.getSession().getCorpus().equals(resultSetRef.get().getCorpus())
 								&& editor.getSession().getName().equals(resultSetRef.get().getSession())) {
 							onEDT.run();
@@ -167,7 +166,7 @@ public class ResultSetEP implements IPluginEntryPoint {
 		try {
 			PluginEntryPointRunner.executePlugin(SessionEditorEP.EP_NAME, epArgs);
 		} catch (PluginException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.severe( e.getLocalizedMessage(), e);
 		}
 	}
 

@@ -37,8 +37,6 @@ import java.util.*;
  */
 public class SessionSelector extends TristateCheckBoxTree {
 
-	private static final long serialVersionUID = 5336741342440773144L;
-
 	public static TristateCheckBoxTreeModel createModel(Project project, boolean hideEmptyCorpora) {
 		if(project == null)
 			return new TristateCheckBoxTreeModel(new DefaultMutableTreeNode("No project"));
@@ -226,7 +224,7 @@ public class SessionSelector extends TristateCheckBoxTree {
 					if(editor != null) {
 						StringBuffer lblTxt = new StringBuffer();
 						lblTxt.append("(O) ").append(sp.getSession());
-						if(editor.hasUnsavedChanges()) {
+						if(editor.isModified()) {
 							lblTxt.append("*");
 						}
 						panel.getLabel().setText(lblTxt.toString());

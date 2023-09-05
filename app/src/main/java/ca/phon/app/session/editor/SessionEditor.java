@@ -15,13 +15,17 @@
  */
 package ca.phon.app.session.editor;
 
-import ca.hedlund.desktopicons.*;
+import ca.hedlund.desktopicons.MacOSStockIcon;
+import ca.hedlund.desktopicons.StockIcon;
+import ca.hedlund.desktopicons.WindowsStockIcon;
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.menu.edit.*;
-import ca.phon.app.project.ProjectFrame;
+import ca.phon.app.menu.edit.EditMenuModifier;
+import ca.phon.app.menu.edit.PreferencesCommand;
 import ca.phon.app.session.editor.actions.*;
 import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
 import ca.phon.media.VolumeModel;
 import ca.phon.project.Project;
 import ca.phon.session.Record;
@@ -30,22 +34,32 @@ import ca.phon.session.io.*;
 import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.menu.MenuManager;
-import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.toast.ToastFactory;
+import ca.phon.util.ByteSize;
+import ca.phon.util.Language;
 import ca.phon.util.OSInfo;
-import ca.phon.util.*;
-import ca.phon.util.icons.*;
-import org.apache.logging.log4j.LogManager;
+import ca.phon.util.PrefHelper;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 import org.jdesktop.swingx.JXStatusBar;
 
 import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.undo.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.UndoManager;
+import javax.swing.undo.UndoableEditSupport;
 import java.awt.*;
-import java.awt.datatransfer.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.Transferable;
 import java.io.IOException;
-import java.util.*;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -54,15 +68,18 @@ import java.util.concurrent.atomic.AtomicReference;
  *
  * <p>This window supports plug-ins.  Plug-ins can provide custom EditorViews.</p>
  */
-public class SessionEditor extends ProjectFrame implements ClipboardOwner {
+public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner {
 
 	public final static String BACKUP_WHEN_SAVING =
 			SessionEditor.class.getName() + ".backupWhenSaving";
 	private boolean backupWhenSaving = PrefHelper.getBoolean(BACKUP_WHEN_SAVING, Boolean.TRUE);
 
-	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(SessionEditor.class.getName());
+	private final static String TITLE = "Session Editor";
 
-	private final static String WINDOW_NAME = "Session Editor";
+	/**
+	 * Extension support
+	 */
+	private final ExtensionSupport extensionSupport = new ExtensionSupport(SessionEditor.class, this);
 
 	/**
 	 * UI Model
@@ -130,14 +147,24 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	private SessionEditorStatusBar statusBar;
 
 	/**
+	 * Editor title
+	 */
+	private String title;
+
+	/**
+	 * Modified
+	 */
+	private boolean modified = false;
+
+	/**
 	 * Constructor
 	 */
 	public SessionEditor(Project project, Session session, Transcriber transcriber) {
-		super(project);
+		super();
 		putExtension(Session.class, session);
 
 		this.dataModelRef =
-				new AtomicReference<EditorDataModel>(new DefaultEditorDataModel(session));
+				new AtomicReference<EditorDataModel>(new DefaultEditorDataModel(project, session));
 		getDataModel().setTranscriber(transcriber);
 		this.eventManagerRef =
 				new AtomicReference<EditorEventManager>(new EditorEventManager());
@@ -152,10 +179,6 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		if(session.getTierView() == null || session.getTierView().size() == 0) {
 			session.setTierView(SessionFactory.newFactory().createDefaultTierView(session));
 		}
-
-		// setup title
-		final String title = generateTitle();
-		setTitle(title);
 
 		// add default undo listener
 		undoSupport.addUndoableEditListener(undoListener);
@@ -175,47 +198,21 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 
 		init();
 
-		final JMenuBar menuBar = MenuManager.createWindowMenuBar(this);
-		setJMenuBar(menuBar);
+		// TODO move to SessionEditorWindow
+//		final JMenuBar menuBar = MenuManager.createWindowMenuBar(this);
+//		setJMenuBar(menuBar);
 	}
 
-	@Override
 	public String getTitle() {
-		return generateTitle();
-	}
-
-	private void _dispose() {
-		setVisible(false);
-		CommonModuleFrame.getOpenWindows().remove(this);
-		setJMenuBar(null);
-		getEventManager().shutdown();
-		getViewModel().cleanup();
-		
-		undoManager.discardAllEdits();
-		undoSupport.removeUndoableEditListener(undoListener);
-
-		eventManagerRef.set(null);
-		viewModelRef.set(null);
-		selectionModelRef.set(null);
-		dataModelRef.set(null);
-
-		System.gc();
-
-		super.dispose();
-	}
-
-	@Override
-	public void dispose() {
-		getEventManager().registerActionForEvent(EditorEventType.EditorClosing, (ee) -> SwingUtilities.invokeLater(this::_dispose));
-		// send out closing event
-		final EditorEvent<Void> ee = new EditorEvent<>(EditorEventType.EditorClosing, this, null);
-		getEventManager().queueEvent(ee);
+		if (this.title == null) {
+			return generateTitle();
+		}
+		return this.title;
 	}
 
 	private void init() {
 		final BorderLayout layout = new BorderLayout();
-		final Container contentPane = getContentPane();
-		contentPane.setLayout(layout);
+		setLayout(layout);
 
 		// window has 3 main elements: toolbar, dock area, status bar
 		// each element is retrieved using the view model
@@ -231,11 +228,9 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 
 		// setup content/dock area
 		final Container dock = viewModel.getRoot();
-		contentPane.add(dock, BorderLayout.CENTER);
+		add(dock, BorderLayout.CENTER);
 
 		setupEditorActions();
-
-		this.addWindowFocusListener(new SessionEditorModificationListener(this));
 	}
 
 	private void setupEditorActions() {
@@ -255,6 +250,12 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		getEventManager().registerActionForEvent(EditorEventType.EditorClosing, onClosingAct, EditorEventManager.RunOn.AWTEventDispatchThread);
 
 		getEventManager().registerActionForEvent(EditorEventType.SessionMediaChanged, this::onSessionMediaChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+	}
+
+	public void setTitle(String title) {
+		var oldTitle = this.title;
+		this.title = title;
+		firePropertyChange("title", oldTitle, title);
 	}
 
 	/**
@@ -282,190 +283,6 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	}
 
 	/*---- Menu Setup ------------------------------*/
-	/**
-	 * Setup editor window menu
-	 *
-	 * @param menuBar
-	 */
-	@Override
-	public void setJMenuBar(JMenuBar menuBar) {
-		if(menuBar != null)
-			setupMenu(menuBar);
-		super.setJMenuBar(menuBar);
-	}
-	
-	public void setupMenu(JMenuBar menuBar) {
-		// get 'File' menu reference
-		final JMenu fileMenu = menuBar.getMenu(0);
-		final SaveSessionAction saveAct = new SaveSessionAction(this);
-		final JMenuItem saveItem = new JMenuItem(saveAct);
-		fileMenu.add(saveItem, 0);
-		fileMenu.addMenuListener(new MenuListener() {
-
-			@Override
-			public void menuSelected(MenuEvent e) {
-				saveItem.setEnabled(hasUnsavedChanges());
-			}
-
-			@Override
-			public void menuDeselected(MenuEvent e) {
-			}
-
-			@Override
-			public void menuCanceled(MenuEvent e) {
-			}
-
-		});
-		
-		// save as.. menu
-		final JMenu saveAsMenu = new JMenu("Save as...");
-		final SessionOutputFactory factory = new SessionOutputFactory();
-		for(SessionIO sessionIO:factory.availableSessionIOs()) {
-			saveAsMenu.add(new JMenuItem(new SaveAsAction(this, sessionIO)));
-		}
-		fileMenu.add(saveAsMenu, 1);
-		fileMenu.add(new JSeparator(), 2);
-		
-		fileMenu.add(new JMenuItem(new ExportAsHTMLAction(this)), 3);
-		
-		putExtension(EditMenuModifier.class, (editMenu) -> {
-			editMenu.add(new JMenuItem(new FindAndReplaceAction(SessionEditor.this)), 3);
-			editMenu.add(new JSeparator(), 4);
-		});
-
-		// setup 'Session' menu
-		final JMenu sessionMenu = new JMenu("Session");
-		sessionMenu.add(new NewRecordAction(SessionEditor.this));
-		sessionMenu.add(new DuplicateRecordAction(SessionEditor.this));
-		sessionMenu.add(new DeleteRecordAction(SessionEditor.this));
-		sessionMenu.addSeparator();
-
-		sessionMenu.add(new MoveRecordToBeginningAction(SessionEditor.this));
-		sessionMenu.add(new MoveRecordBackwardAction(SessionEditor.this));
-		sessionMenu.add(new MoveRecordForwardAction(SessionEditor.this));
-		sessionMenu.add(new MoveRecordToEndAction(SessionEditor.this));
-		sessionMenu.add(new SortRecordsAction(SessionEditor.this));
-		sessionMenu.addSeparator();
-
-		sessionMenu.add(new CutRecordAction(SessionEditor.this));
-		sessionMenu.add(new CopyRecordAction(SessionEditor.this));
-		sessionMenu.add(new PasteRecordAction(SessionEditor.this));
-		sessionMenu.addSeparator();
-
-		sessionMenu.add(new FirstRecordAction(SessionEditor.this));
-		sessionMenu.add(new PreviousRecordAction(SessionEditor.this));
-		sessionMenu.add(new NextRecordAction(SessionEditor.this));
-		sessionMenu.add(new LastRecordAction(SessionEditor.this));
-
-		if(getSession() != null) {
-			sessionMenu.addSeparator();
-			JMenuItem itrItem = new JMenuItem(new ITRAction(SessionEditor.this));
-			itrItem.setEnabled(getDataModel().getTranscriber() == null && getSession().getTranscriberCount() > 1);
-			sessionMenu.add(itrItem);
-		}
-
-		// setup 'View' menu, this menu must be created dynamically
-		// as the view model is not available when the menu bar is
-		// setup
-		final JMenu viewMenu = new JMenu("View");
-		final MenuListener viewMenuListener = new MenuListener() {
-			@Override
-			public void menuSelected(MenuEvent e) {
-				viewMenu.removeAll();
-				getViewModel().setupPerspectiveMenu(viewMenu);
-				viewMenu.addSeparator();
-				getViewModel().setupViewMenu(viewMenu);
-			}
-
-			@Override
-			public void menuDeselected(MenuEvent e) {
-			}
-
-			@Override
-			public void menuCanceled(MenuEvent e) {
-			}
-		};
-		viewMenu.addMenuListener(viewMenuListener);
-
-		if(getViewModel() != null) {
-			final MenuEvent me = new MenuEvent(viewMenu);
-			viewMenuListener.menuSelected(me);
-		}
-		
-		final JMenu mediaMenu = new JMenu("Media");
-		final MenuListener mediaMenuListener = new MenuListener() {
-			
-			@Override
-			public void menuSelected(MenuEvent e) {
-				mediaMenu.removeAll();
-
-				SessionMediaModel mediaModel = getMediaModel();
-				mediaMenu.add(new AssignMediaAction(SessionEditor.this));
-				mediaMenu.add(new UnassignMediaAction(SessionEditor.this)).setEnabled(mediaModel.isSessionMediaAvailable());
-				JMenuItem genAudioItem = new JMenuItem(mediaModel.getGenerateSessionAudioAction());
-				genAudioItem.setEnabled(mediaModel.isSessionMediaAvailable());
-				mediaMenu.add(genAudioItem);
-				mediaMenu.add(new ShowMediaInfoAction(SessionEditor.this)).setEnabled(mediaModel.isSessionMediaAvailable());;
-				mediaMenu.addSeparator();
-
-				JMenu volumeMenu = new JMenu("Volume");
-				volumeMenu.add(new JCheckBoxMenuItem(new ToggleMuteAction(SessionEditor.this)));
-				volumeMenu.addSeparator();
-				for(float level = 0.25f; level <= VolumeModel.MAX_LEVEL; level += 0.25f) {
-					volumeMenu.add(new JMenuItem(new AdjustVolumeAction(SessionEditor.this, level)));
-				}
-				mediaMenu.add(volumeMenu);
-
-				JMenu playbackRateMenu = new JMenu("Playback rate");
-				for(float rate = 0.25f; rate <= 2.0f; rate += 0.25f) {
-					playbackRateMenu.add(new JCheckBoxMenuItem(new AdjustPlaybackRate(SessionEditor.this, rate)));
-				}
-				mediaMenu.add(playbackRateMenu);
-
-				mediaMenu.addSeparator();
-
-				boolean enabled = (mediaModel.isSessionAudioAvailable() || 
-						(mediaModel.isSessionMediaAvailable() && getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)));
-				mediaMenu.add(new PlaySegmentAction(SessionEditor.this)).setEnabled(enabled);
-				mediaMenu.add(new PlayCustomSegmentAction(SessionEditor.this)).setEnabled(enabled);
-				mediaMenu.add(new PlaySpeechTurnAction(SessionEditor.this)).setEnabled(enabled);
-				mediaMenu.add(new PlayAdjacencySequenceAction(SessionEditor.this)).setEnabled(enabled);
-				mediaMenu.addSeparator();
-				
-				mediaMenu.add(new ExportSegmentAction(SessionEditor.this)).setEnabled(mediaModel.isSessionAudioAvailable());
-				mediaMenu.add(new ExportCustomSegmentAction(SessionEditor.this)).setEnabled(mediaModel.isSessionAudioAvailable());
-				mediaMenu.add(new ExportSpeechTurnAction(SessionEditor.this)).setEnabled(mediaModel.isSessionAudioAvailable());
-				mediaMenu.add(new ExportAdjacencySequenceAction(SessionEditor.this)).setEnabled(mediaModel.isSessionAudioAvailable());
-				mediaMenu.addSeparator();
-				
-				final StockIcon prefIcon =
-						OSInfo.isMacOs() ? MacOSStockIcon.ToolbarCustomizeIcon
-								: OSInfo.isWindows() ?  WindowsStockIcon.APPLICATION : null;
-				final String defIcn = "categories/preferences";
-				ImageIcon prefsIcn = IconManager.getInstance().getSystemStockIcon(prefIcon, defIcn, IconSize.SMALL);
-				final PreferencesCommand prefsAct = new PreferencesCommand("Media");
-				prefsAct.putValue(PhonUIAction.NAME, "Edit media folders...");
-				prefsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Modify global media folders...");
-				prefsAct.putValue(PhonUIAction.SMALL_ICON, prefsIcn);
-				mediaMenu.add(prefsAct);
-			}
-			
-			@Override
-			public void menuDeselected(MenuEvent e) {
-			}
-			
-			@Override
-			public void menuCanceled(MenuEvent e) {
-			}
-			
-		};
-		mediaMenu.addMenuListener(mediaMenuListener);
-		
-		menuBar.add(mediaMenu, 3);
-		menuBar.add(viewMenu, 3);
-		menuBar.add(sessionMenu, 3);
-	}
-
 	/**
 	 * Retrieve the data model
 	 *
@@ -510,6 +327,10 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	 */
 	public SessionMediaModel getMediaModel() {
 		return (mediaModelRef != null ? mediaModelRef.get() : null);
+	}
+
+	public Project getProject() {
+		return getDataModel().getProject();
 	}
 	
 	/**
@@ -587,13 +408,17 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	 * @param modified
 	 */
 	public void setModified(boolean modified) {
-		final boolean lastVal = super.hasUnsavedChanges();
-		super.setModified(modified);
-
+		final boolean lastVal = this.modified;
+		this.modified = modified;
 		if(lastVal != modified) {
 			final EditorEvent<Boolean> ee = new EditorEvent(EditorEventType.ModifiedFlagChanged, this, modified);
 			getEventManager().queueEvent(ee);
 		}
+		firePropertyChange("modified", lastVal, modified);
+	}
+
+	public boolean isModified() {
+		return this.modified;
 	}
 
 	/**
@@ -603,10 +428,10 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	 */
 	private String generateTitle() {
 		final Session session = getSession();
-		String retVal = WINDOW_NAME;
+		String retVal = TITLE;
 		if(session != null) {
 			retVal += " : " + session.getCorpus() + "." + session.getName();
-			if(hasUnsavedChanges())
+			if(isModified())
 				retVal += "*";
 		}
 		return retVal;
@@ -670,7 +495,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 	 * @param ee
 	 */
 	private void onReloadSessionFromDisk(EditorEvent<Void> ee) {
-		final Project project = getProject();
+		final Project project = getDataModel().getProject();
 		final Session currentSession = getSession();
 
 		try {
@@ -682,7 +507,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		} catch (IOException e) {
 			Toolkit.getDefaultToolkit().beep();
 			LogUtil.severe(e);
-			showMessageDialog("Unable to reload session", e.getLocalizedMessage(), MessageDialogProperties.okOptions);
+			Objects.requireNonNull(CommonModuleFrame.getCurrentFrame()).showMessageDialog("Unable to reload session", e.getLocalizedMessage(), MessageDialogProperties.okOptions);
 		}
 	}
 
@@ -690,10 +515,181 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 		getMediaModel().resetAudioCheck();
 	}
 
-	@Override
+	public void setupMenu(JMenuBar menuBar) {
+		// get 'File' menu reference
+		final JMenu fileMenu = menuBar.getMenu(0);
+		final SaveSessionAction saveAct = new SaveSessionAction(this);
+		final JMenuItem saveItem = new JMenuItem(saveAct);
+		fileMenu.add(saveItem, 0);
+		fileMenu.addMenuListener(new MenuListener() {
+
+			@Override
+			public void menuSelected(MenuEvent e) {
+				saveItem.setEnabled(isModified());
+			}
+
+			@Override
+			public void menuDeselected(MenuEvent e) {
+			}
+
+			@Override
+			public void menuCanceled(MenuEvent e) {
+			}
+
+		});
+
+		// save as.. menu
+		final JMenu saveAsMenu = new JMenu("Save as...");
+		final SessionOutputFactory factory = new SessionOutputFactory();
+		for(SessionIO sessionIO:factory.availableSessionIOs()) {
+			saveAsMenu.add(new JMenuItem(new SaveAsAction(this, sessionIO)));
+		}
+		fileMenu.add(saveAsMenu, 1);
+		fileMenu.add(new JSeparator(), 2);
+
+		fileMenu.add(new JMenuItem(new ExportAsHTMLAction(this)), 3);
+
+		putExtension(EditMenuModifier.class, (editMenu) -> {
+			editMenu.add(new JMenuItem(new FindAndReplaceAction(this)), 3);
+			editMenu.add(new JSeparator(), 4);
+		});
+
+		// setup 'Session' menu
+		final JMenu sessionMenu = new JMenu("Session");
+		sessionMenu.add(new NewRecordAction(this));
+		sessionMenu.add(new DuplicateRecordAction(this));
+		sessionMenu.add(new DeleteRecordAction(this));
+		sessionMenu.addSeparator();
+
+		sessionMenu.add(new MoveRecordToBeginningAction(this));
+		sessionMenu.add(new MoveRecordBackwardAction(this));
+		sessionMenu.add(new MoveRecordForwardAction(this));
+		sessionMenu.add(new MoveRecordToEndAction(this));
+		sessionMenu.add(new SortRecordsAction(this));
+		sessionMenu.addSeparator();
+
+		sessionMenu.add(new CutRecordAction(this));
+		sessionMenu.add(new CopyRecordAction(this));
+		sessionMenu.add(new PasteRecordAction(this));
+		sessionMenu.addSeparator();
+
+		sessionMenu.add(new FirstRecordAction(this));
+		sessionMenu.add(new PreviousRecordAction(this));
+		sessionMenu.add(new NextRecordAction(this));
+		sessionMenu.add(new LastRecordAction(this));
+
+		if(this.getSession() != null) {
+			sessionMenu.addSeparator();
+			JMenuItem itrItem = new JMenuItem(new ITRAction(this));
+			itrItem.setEnabled(this.getDataModel().getTranscriber() == null && this.getSession().getTranscriberCount() > 1);
+			sessionMenu.add(itrItem);
+		}
+
+		// setup 'View' menu, this menu must be created dynamically
+		// as the view model is not available when the menu bar is
+		// setup
+		final JMenu viewMenu = new JMenu("View");
+		final MenuListener viewMenuListener = new MenuListener() {
+			@Override
+			public void menuSelected(MenuEvent e) {
+				viewMenu.removeAll();
+				SessionEditor.this.getViewModel().setupPerspectiveMenu(viewMenu);
+				viewMenu.addSeparator();
+				SessionEditor.this.getViewModel().setupViewMenu(viewMenu);
+			}
+
+			@Override
+			public void menuDeselected(MenuEvent e) {
+			}
+
+			@Override
+			public void menuCanceled(MenuEvent e) {
+			}
+		};
+		viewMenu.addMenuListener(viewMenuListener);
+
+		if(getViewModel() != null) {
+			final MenuEvent me = new MenuEvent(viewMenu);
+			viewMenuListener.menuSelected(me);
+		}
+
+		final JMenu mediaMenu = new JMenu("Media");
+		final MenuListener mediaMenuListener = new MenuListener() {
+
+			@Override
+			public void menuSelected(MenuEvent e) {
+				mediaMenu.removeAll();
+
+				SessionMediaModel mediaModel = SessionEditor.this.getMediaModel();
+				mediaMenu.add(new AssignMediaAction(SessionEditor.this));
+				mediaMenu.add(new UnassignMediaAction(SessionEditor.this)).setEnabled(mediaModel.isSessionMediaAvailable());
+				JMenuItem genAudioItem = new JMenuItem(mediaModel.getGenerateSessionAudioAction());
+				genAudioItem.setEnabled(mediaModel.isSessionMediaAvailable());
+				mediaMenu.add(genAudioItem);
+				mediaMenu.add(new ShowMediaInfoAction(SessionEditor.this)).setEnabled(mediaModel.isSessionMediaAvailable());;
+				mediaMenu.addSeparator();
+
+				JMenu volumeMenu = new JMenu("Volume");
+				volumeMenu.add(new JCheckBoxMenuItem(new ToggleMuteAction(SessionEditor.this)));
+				volumeMenu.addSeparator();
+				for(float level = 0.25f; level <= VolumeModel.MAX_LEVEL; level += 0.25f) {
+					volumeMenu.add(new JMenuItem(new AdjustVolumeAction(SessionEditor.this, level)));
+				}
+				mediaMenu.add(volumeMenu);
+
+				JMenu playbackRateMenu = new JMenu("Playback rate");
+				for(float rate = 0.25f; rate <= 2.0f; rate += 0.25f) {
+					playbackRateMenu.add(new JCheckBoxMenuItem(new AdjustPlaybackRate(SessionEditor.this, rate)));
+				}
+				mediaMenu.add(playbackRateMenu);
+
+				mediaMenu.addSeparator();
+
+				boolean enabled = (mediaModel.isSessionAudioAvailable() ||
+						(mediaModel.isSessionMediaAvailable() && SessionEditor.this.getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)));
+				mediaMenu.add(new PlaySegmentAction(SessionEditor.this)).setEnabled(enabled);
+				mediaMenu.add(new PlayCustomSegmentAction(SessionEditor.this)).setEnabled(enabled);
+				mediaMenu.add(new PlaySpeechTurnAction(SessionEditor.this)).setEnabled(enabled);
+				mediaMenu.add(new PlayAdjacencySequenceAction(SessionEditor.this)).setEnabled(enabled);
+				mediaMenu.addSeparator();
+
+				mediaMenu.add(new ExportSegmentAction(SessionEditor.this)).setEnabled(mediaModel.isSessionAudioAvailable());
+				mediaMenu.add(new ExportCustomSegmentAction(SessionEditor.this)).setEnabled(mediaModel.isSessionAudioAvailable());
+				mediaMenu.add(new ExportSpeechTurnAction(SessionEditor.this)).setEnabled(mediaModel.isSessionAudioAvailable());
+				mediaMenu.add(new ExportAdjacencySequenceAction(SessionEditor.this)).setEnabled(mediaModel.isSessionAudioAvailable());
+				mediaMenu.addSeparator();
+
+				final StockIcon prefIcon =
+						OSInfo.isMacOs() ? MacOSStockIcon.ToolbarCustomizeIcon
+								: OSInfo.isWindows() ?  WindowsStockIcon.APPLICATION : null;
+				final String defIcn = "categories/preferences";
+				ImageIcon prefsIcn = IconManager.getInstance().getSystemStockIcon(prefIcon, defIcn, IconSize.SMALL);
+				final PreferencesCommand prefsAct = new PreferencesCommand("Media");
+				prefsAct.putValue(PhonUIAction.NAME, "Edit media folders...");
+				prefsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Modify global media folders...");
+				prefsAct.putValue(PhonUIAction.SMALL_ICON, prefsIcn);
+				mediaMenu.add(prefsAct);
+			}
+
+			@Override
+			public void menuDeselected(MenuEvent e) {
+			}
+
+			@Override
+			public void menuCanceled(MenuEvent e) {
+			}
+
+		};
+		mediaMenu.addMenuListener(mediaMenuListener);
+
+		menuBar.add(mediaMenu, 3);
+		menuBar.add(viewMenu, 3);
+		menuBar.add(sessionMenu, 3);
+	}
+
 	public boolean saveData()
 			throws IOException {
-		final Project project = getProject();
+		final Project project = getDataModel().getProject();
 		final Session session = getSession();
 
 		/*
@@ -722,7 +718,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 				props.setHeader("Save session");
 				props.setMessage("Use original format or save in Phon format? Some information such as tier font and ordering may not be saved if using the original format.");
 				props.setRunAsync(false);
-				props.setParentWindow(this);
+				props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 				props.setTitle(props.getHeader());
 
 				int retVal = NativeDialogs.showMessageDialog(props);
@@ -745,7 +741,7 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 
 		UUID writeLock = null;
 		try {
-			LOGGER.info("Saving " + session.getCorpus() + "." + session.getName() + "...");
+			LogUtil.info("Saving " + session.getCorpus() + "." + session.getName() + "...");
 			writeLock = project.getSessionWriteLock(session);
 			project.saveSession(session.getCorpus(), session.getName(), session, sessionWriter, writeLock);
 
@@ -753,16 +749,16 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 
 			final String msg = "Save finished.  " +
 					ByteSize.humanReadableByteCount(byteSize, true) + " written to disk.";
-			LOGGER.info(msg);
-			
+			LogUtil.info(msg);
+
 			final SerializationWarnings warnings = session.getExtension(SerializationWarnings.class);
 			ToastFactory.makeToast(msg).start(getToolbar());
 			setModified(false);
 			if(warnings != null && warnings.size() > 0) {
 				warnings.clear();
-				
+
 				// show message
-				int retVal = showMessageDialog("Save", "Session saved with errors, see log for details.", MessageDialogProperties.okCancelOptions);
+				int retVal = CommonModuleFrame.getCurrentFrame().showMessageDialog("Save", "Session saved with errors, see log for details.", MessageDialogProperties.okCancelOptions);
 				if(retVal == 1) return false;
 			}
 
@@ -789,5 +785,25 @@ public class SessionEditor extends ProjectFrame implements ClipboardOwner {
 
 	@Override
 	public void lostOwnership(Clipboard clipboard, Transferable contents) {}
+
+	@Override
+	public Set<Class<?>> getExtensions() {
+		return extensionSupport.getExtensions();
+	}
+
+	@Override
+	public <T> T getExtension(Class<T> cap) {
+		return extensionSupport.getExtension(cap);
+	}
+
+	@Override
+	public <T> T putExtension(Class<T> cap, T impl) {
+		return extensionSupport.putExtension(cap, impl);
+	}
+
+	@Override
+	public <T> T removeExtension(Class<T> cap) {
+		return extensionSupport.removeExtension(cap);
+	}
 
 }

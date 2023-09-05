@@ -18,6 +18,7 @@ package ca.phon.app.session.editor.actions;
 import ca.phon.app.session.SessionToHTMLWizard;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.project.Project;
+import ca.phon.ui.CommonModuleFrame;
 
 import java.awt.event.ActionEvent;
 
@@ -34,11 +35,10 @@ public class ExportAsHTMLAction extends SessionEditorAction {
 	public void hookableActionPerformed(ActionEvent ae) {
 		final SessionToHTMLWizard wizard = new SessionToHTMLWizard("Export as HTML", getEditor().getProject(), getEditor().getSession());
 		wizard.putExtension(Project.class, getEditor().getProject());
-		wizard.setParentFrame(getEditor());
+		wizard.setParentFrame(CommonModuleFrame.getCurrentFrame());
 		wizard.pack();
 		wizard.setSize(1024, 768);
 		wizard.centerWindow();
-		wizard.setParentFrame(getEditor());
 		wizard.setVisible(true);
 	}
 

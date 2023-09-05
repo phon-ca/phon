@@ -178,13 +178,13 @@ public class SessionEditorEP implements IPluginEntryPoint {
 	public SessionEditor showEditor(Project project, Session session, boolean blindMode, boolean grabFocus) {
 		// look for an already open editor
 		for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
-			if(cmf instanceof SessionEditor) {
-				final SessionEditor editor = (SessionEditor)cmf;
+			if(cmf instanceof SessionEditorWindow sessionEditorWindow) {
+				final SessionEditor editor = sessionEditorWindow.getSessionEditor();
 				if(editor.getProject().getLocation().equals(project.getLocation()) &&
 						(editor.getSession().getCorpus().equals(session.getCorpus()) &&
 								editor.getSession().getName().equals(session.getName()))) {
 					editor.requestFocus();
-					editor.toFront();
+					sessionEditorWindow.toFront();
 					return editor;
 				}
 			}

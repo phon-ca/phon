@@ -18,6 +18,7 @@ package ca.phon.app.session.editor.view.syllabification_and_alignment.actions;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.syllabification_and_alignment.*;
 import ca.phon.session.*;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.decorations.DialogHeader;
 
 import javax.swing.*;
@@ -27,8 +28,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SyllabificationSettingsCommand extends SyllabificationAlignmentCommand {
 	
-	private static final long serialVersionUID = -5741712114218933203L;
-
 	private final static String TEXT = "Syllabifier Settings";
 
 	private final static String DESC = "Edit syllabifier settings...";
@@ -43,7 +42,7 @@ public class SyllabificationSettingsCommand extends SyllabificationAlignmentComm
 
 	@Override
 	public void hookableActionPerformed(ActionEvent e) {
-		final JDialog settingsDialog = new JDialog(getEditor());
+		final JDialog settingsDialog = new JDialog(CommonModuleFrame.getCurrentFrame());
 		settingsDialog.setModal(true);
 		
 		settingsDialog.setLayout(new BorderLayout());

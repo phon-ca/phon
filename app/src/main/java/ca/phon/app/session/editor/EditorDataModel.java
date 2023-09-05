@@ -15,6 +15,7 @@
  */
 package ca.phon.app.session.editor;
 
+import ca.phon.project.Project;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 
@@ -23,6 +24,20 @@ import ca.phon.session.*;
  *
  */
 public interface EditorDataModel {
+
+	/**
+	 * Get project of editor (if any)
+	 *
+	 * @return project of null if session is headless
+	 */
+	public Project getProject();
+
+	/**
+	 * Set project of editor
+	 *
+	 * @param project null if session is headless
+	 */
+	public void setProject(Project project);
 
 	/**
 	 * Get the session (if any) associated with the editor.

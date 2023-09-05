@@ -19,6 +19,7 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.AddParticipantEdit;
 import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
 import ca.phon.session.*;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.participant.ParticipantEditor;
 import ca.phon.util.icons.*;
 
@@ -46,7 +47,7 @@ public class NewParticipantAction extends SessionInfoAction {
 	public void hookableActionPerformed(ActionEvent e) {
 		final SessionFactory factory = SessionFactory.newFactory();
 		final Participant part = factory.createParticipant();
-		ParticipantEditor.editNewParticipant(getEditor(), part,
+		ParticipantEditor.editNewParticipant(CommonModuleFrame.getCurrentFrame(), part,
 				getEditor().getDataModel().getSession().getDate(),
 				getEditor().getDataModel().getSession().getParticipants().otherParticipants(null),
 				(wasCanceled) -> {

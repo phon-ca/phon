@@ -20,6 +20,7 @@ import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
 import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.icons.*;
 
@@ -52,7 +53,7 @@ public class DeleteParticipantAction extends SessionInfoAction {
 		props.setTitle("Delete Participant");
 		props.setMessage("Are you sure you wish to delete participant '" + participant + "'?");
 		props.setRunAsync(true);
-		props.setParentWindow(getEditor());
+		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 		props.setListener( (evt) -> {
 			if(evt.getDialogResult() == 0) {
 				SwingUtilities.invokeLater( () -> deleteParticipant() );
@@ -91,7 +92,7 @@ public class DeleteParticipantAction extends SessionInfoAction {
 		props.setHeader(String.format("%d Records Modified", recordsChanged));
 		props.setMessage("Speaker assigned to 'Unidentified'.");
 		props.setRunAsync(true);
-		props.setParentWindow(getEditor());
+		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 		props.setListener( (e) -> {
 			if(e.getDialogResult() == 1) {
 				SwingUtilities.invokeLater( () -> {

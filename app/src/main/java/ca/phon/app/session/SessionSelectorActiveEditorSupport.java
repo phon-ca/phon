@@ -17,6 +17,7 @@ package ca.phon.app.session;
 
 import ca.phon.app.session.SessionSelector.SessionTreeNode;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.SessionEditorWindow;
 import ca.phon.project.Project;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.*;
@@ -48,15 +49,14 @@ public class SessionSelectorActiveEditorSupport {
 				var treePath = selector.sessionPathToTreePath(sessionPath);
 				if(treePath != null && treePath.getLastPathComponent() instanceof SessionSelector.SessionTreeNode) {
 					SessionPath sp = (SessionPath)((SessionTreeNode)treePath.getLastPathComponent()).getUserObject();
-					SessionEditor editor  = findEditorForSession(project, sessionPath);
-					
+					SessionEditorWindow editorWindow  = findEditorWindowForSession(project, sessionPath);
+					if(editorWindow == null) continue;
+
 					if(sp.getExtension(SessionEditor.class) != null
-							&& sp.getExtension(SessionEditor.class) == editor) continue;
+							&& sp.getExtension(SessionEditor.class) == editorWindow.getSessionEditor()) continue;
 					
-					if(editor != null) {
-						editor.addWindowListener(new EditorWindowListener(selector, sp));
-					}
-					sp.putExtension(SessionEditor.class, editor);
+					editorWindow.addWindowListener(new EditorWindowListener(selector, sp));
+					sp.putExtension(SessionEditor.class, editorWindow.getSessionEditor());
 					
 					TristateCheckBoxTreeModel model = (TristateCheckBoxTreeModel)selector.getModel();
 					model.valueForPathChanged(treePath, sp);
@@ -65,10 +65,9 @@ public class SessionSelectorActiveEditorSupport {
 		}
 	}
 
-	private SessionEditor findEditorForSession(Project project, SessionPath sessionPath) {
+	private SessionEditorWindow findEditorWindowForSession(Project project, SessionPath sessionPath) {
 		for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
-			if(cmf instanceof SessionEditor) {
-				SessionEditor e = (SessionEditor)cmf;
+			if(cmf instanceof SessionEditorWindow e) {
 				if(e.getProject() == project
 						&& e.getSession().getCorpus().equals(sessionPath.getCorpus())
 						&& e.getSession().getName().equals(sessionPath.getSession())) {
@@ -91,7 +90,7 @@ public class SessionSelectorActiveEditorSupport {
 		@Override
 		public void newWindow(CommonModuleFrame cmf) {
 			if(cmf.getExtension(Project.class) == selector.getProject()
-					&& cmf instanceof SessionEditor) {
+					&& cmf instanceof SessionEditorWindow) {
 				updateActiveEditors(selector);
 			}
 		}

@@ -21,6 +21,7 @@ import ca.phon.audio.*;
 import ca.phon.media.*;
 import ca.phon.project.Project;
 import ca.phon.session.*;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.PrefHelper;
 import org.apache.commons.io.FilenameUtils;
@@ -179,7 +180,7 @@ public class SessionMediaModel {
 				
 				if(audioFileStatus != AudioFileStatus.OK) {
 					final MessageDialogProperties props = new MessageDialogProperties();
-					props.setParentWindow(getEditor());
+					props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 					String[] options = {"Re-encode audio", "Do nothing"};
 					props.setOptions(options);
 					props.setHeader("Audio File Error");

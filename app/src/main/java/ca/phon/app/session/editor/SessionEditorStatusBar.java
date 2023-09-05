@@ -35,8 +35,6 @@ import java.time.format.DateTimeFormatter;
 
 public class SessionEditorStatusBar extends JXStatusBar {
 
-	private static final long serialVersionUID = 286465072395883742L;
-
 	/**
 	 * Status bar progress
 	 */
@@ -116,7 +114,7 @@ public class SessionEditorStatusBar extends JXStatusBar {
 
 		modifiedIcon = IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL);
 		unmodifiedIcon = IconManager.getInstance().getDisabledIcon("actions/document-save", IconSize.SMALL);
-		if(getEditor().hasUnsavedChanges()) {
+		if(getEditor().isModified()) {
 			statusLabel.setIcon(modifiedIcon);
 		} else {
 			statusLabel.setIcon(unmodifiedIcon);
@@ -186,7 +184,7 @@ public class SessionEditorStatusBar extends JXStatusBar {
 		final Project project = editor.getProject();
 		final Session session = editor.getSession();
 
-		if(editor.hasUnsavedChanges()) {
+		if(editor.isModified()) {
 			buf.append("*modified* ");
 		}
 
