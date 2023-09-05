@@ -25,7 +25,9 @@ import java.util.Set;
  * in a project.
  */
 public class SessionPath extends Tuple<String, String> implements IExtendable {
-	
+
+	public final static String PATH_SEP = "/";
+
 	private final ExtensionSupport extSupport = new ExtensionSupport(SessionPath.class, this);
 
 	/**
@@ -37,10 +39,10 @@ public class SessionPath extends Tuple<String, String> implements IExtendable {
 
 	public SessionPath(String path) {
 		super();
-		int dotIdx = path.indexOf('.');
-		if(dotIdx < 0) throw new IllegalArgumentException(path);
-		setObj1(path.substring(0, dotIdx));
-		setObj2(path.substring(dotIdx+1));
+		int sepIdx = path.lastIndexOf(PATH_SEP);
+		if(sepIdx < 0) throw new IllegalArgumentException(path);
+		setObj1(path.substring(0, sepIdx));
+		setObj2(path.substring(sepIdx+1));
 		
 		extSupport.initExtensions();
 	}
@@ -88,7 +90,7 @@ public class SessionPath extends Tuple<String, String> implements IExtendable {
 
 	@Override
 	public String toString() {
-		return getCorpus() + "." + getSession();
+		return getCorpus() + PATH_SEP + getSession();
 	}
 
 	public Set<Class<?>> getExtensions() {

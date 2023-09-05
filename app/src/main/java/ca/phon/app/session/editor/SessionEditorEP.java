@@ -79,11 +79,9 @@ public class SessionEditorEP implements IPluginEntryPoint {
 		String sessionLoc = (String)epArgs.get(EntryPointArgs.SESSION_NAME);
 		String sessionName = sessionLoc;
 		if(corpusName == null && sessionLoc != null) {
-			int firstDot = sessionLoc.indexOf('.');
-			if(firstDot > 0) {
-				corpusName = sessionLoc.substring(0, firstDot);
-				sessionName = sessionLoc.substring(firstDot+1);
-			}
+			final SessionPath sessionPath = new SessionPath(sessionLoc);
+			corpusName = sessionPath.getCorpus();
+			sessionName = sessionPath.getSession();
 		}
 
 		final AtomicReference<Session> sessionRef = new AtomicReference<>();

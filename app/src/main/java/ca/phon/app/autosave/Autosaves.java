@@ -55,7 +55,7 @@ public class Autosaves {
 	 */
 	public String getAutosavePath(String corpus, String session) {
 		final File projectFolder = new File(getProject().getLocation());
-		final File corpusFolder = new File(projectFolder, corpus);
+		final File corpusFolder = ".".equals(corpus) ? projectFolder : new File(projectFolder, corpus);
 		final File autosaveFile = new File(corpusFolder, AutosaveManager.AUTOSAVE_PREFIX + session + ".xml");
 		return autosaveFile.getAbsolutePath();
 	}

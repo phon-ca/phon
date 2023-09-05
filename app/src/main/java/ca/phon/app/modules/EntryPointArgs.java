@@ -20,6 +20,7 @@ import ca.phon.app.workspace.Workspace;
 import ca.phon.project.*;
 import ca.phon.project.exceptions.ProjectConfigurationException;
 import ca.phon.session.Session;
+import ca.phon.session.SessionPath;
 import org.apache.commons.cli.*;
 
 import java.io.*;
@@ -178,11 +179,9 @@ public class EntryPointArgs extends HashMap<String, Object> {
 			
 			if(project != null) {
 				if(corpus == null) {
-					int firstDot = session.indexOf('.');
-					if(firstDot > 0) {
-						corpus = session.substring(0, firstDot);
-						session = session.substring(firstDot+1);
-					}
+					final SessionPath sessionPath = new SessionPath(session);
+					corpus = sessionPath.getCorpus();
+					session = sessionPath.getSession();
 				}
 				if(corpus != null && session != null) {
 					retVal = project.openSession(corpus, session);

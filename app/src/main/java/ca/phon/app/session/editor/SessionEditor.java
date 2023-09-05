@@ -430,7 +430,8 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 		final Session session = getSession();
 		String retVal = TITLE;
 		if(session != null) {
-			retVal += " : " + session.getCorpus() + "." + session.getName();
+			final SessionPath sessionPath = new SessionPath(session.getCorpus(), session.getName());
+			retVal += " : " + (sessionPath.toString());
 			if(isModified())
 				retVal += "*";
 		}
