@@ -426,7 +426,7 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 	 *
 	 * @return window title
 	 */
-	private String generateTitle() {
+	public String generateTitle() {
 		final Session session = getSession();
 		String retVal = TITLE;
 		if(session != null) {

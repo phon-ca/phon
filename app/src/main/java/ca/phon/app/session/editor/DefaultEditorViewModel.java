@@ -121,7 +121,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 	private CControl getDockControl() {
 		if(dockControl == null) {
 			dockControl = new CControl( windows );
-			windows.add(SwingUtilities.getWindowAncestor(getEditor()));
+			//windows.add(SwingUtilities.getWindowAncestor(getEditor()));
 			setupDockControl();
 			rootArea = dockControl.createContentArea( "root" );
 		}

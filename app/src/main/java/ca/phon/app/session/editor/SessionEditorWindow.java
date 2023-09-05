@@ -41,6 +41,8 @@ public class SessionEditorWindow extends ProjectFrame  {
         sessionEditor.getEventManager().registerActionForEvent(EditorEventType.ParticipantChanged, this::onParticipantListChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 
         this.addWindowFocusListener(new SessionEditorModificationListener(this.sessionEditor));
+
+        super.setWindowName(sessionEditor.generateTitle());
     }
 
     private void onParticipantListChanged(EditorEvent<Participant> ee) {
