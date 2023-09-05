@@ -18,7 +18,7 @@ package ca.phon.session;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.alignment.TierAlignmentRules;
-import ca.phon.session.usertier.UserTierData;
+import ca.phon.session.tierdata.TierData;
 
 /**
  * Tier descriptions for default tiers.
@@ -31,7 +31,7 @@ public enum SystemTierType {
 	ActualSyllables("Actual Syllables", IPATranscript.class),
 	PhoneAlignment("Alignment", PhoneAlignment.class),
 	Segment("Segment", MediaSegment.class),
-	Notes("Notes", UserTierData.class);
+	Notes("Notes", TierData.class);
 	
 	private String tierName;
 	

@@ -1,13 +1,13 @@
-package ca.phon.session.usertier;
+package ca.phon.session.tierdata;
 
 import ca.phon.extensions.ExtendableObject;
 import ca.phon.orthography.InternalMedia;
 
-public class UserTierInternalMedia extends ExtendableObject implements UserTierElement {
+public class TierInternalMedia extends ExtendableObject implements TierElement {
 
     private final InternalMedia internalMedia;
 
-    public UserTierInternalMedia(InternalMedia internalMedia) {
+    public TierInternalMedia(InternalMedia internalMedia) {
         super();
 
         this.internalMedia = internalMedia;

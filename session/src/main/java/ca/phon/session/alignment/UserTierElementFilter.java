@@ -1,7 +1,7 @@
 package ca.phon.session.alignment;
 
 import ca.phon.session.Tier;
-import ca.phon.session.usertier.*;
+import ca.phon.session.tierdata.*;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
@@ -37,17 +37,17 @@ public class UserTierElementFilter implements TierElementFilter {
 
     @Override
     public List<?> filterTier(Tier<?> tier) {
-        if(tier.getDeclaredType() != UserTierData.class)
+        if(tier.getDeclaredType() != TierData.class)
             throw new IllegalArgumentException();
         final UserTierAlignmentFilter alignmentFilter = new UserTierAlignmentFilter();
-        UserTierData tierData = (UserTierData) tier.getValue();
+        TierData tierData = (TierData) tier.getValue();
         tierData.accept(alignmentFilter);
         return alignmentFilter.getElements();
     }
 
-    public class UserTierAlignmentFilter extends VisitorAdapter<UserTierElement> {
+    public class UserTierAlignmentFilter extends VisitorAdapter<TierElement> {
 
-        private final List<UserTierElement> elements = new ArrayList<>();
+        private final List<TierElement> elements = new ArrayList<>();
 
         @Visits
         public void visitTierString(TierString tierString) {
@@ -56,23 +56,23 @@ public class UserTierElementFilter implements TierElementFilter {
         }
 
         @Visits
-        public void visitInternalMedia(UserTierInternalMedia internalMedia) {
+        public void visitInternalMedia(TierInternalMedia internalMedia) {
             if(isIncluded(UserTierElementFilter.AlignableType.InternalMedia))
                 elements.add(internalMedia);
         }
 
         @Visits
-        public void visitComment(UserTierComment comment) {
+        public void visitComment(TierComment comment) {
             if(isIncluded(UserTierElementFilter.AlignableType.Comment))
                 elements.add(comment);
         }
 
         @Override
-        public void fallbackVisit(UserTierElement obj) {
+        public void fallbackVisit(TierElement obj) {
 
         }
 
-        public List<UserTierElement> getElements() {
+        public List<TierElement> getElements() {
             return elements;
         }
 

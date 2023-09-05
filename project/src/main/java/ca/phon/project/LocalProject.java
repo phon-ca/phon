@@ -254,7 +254,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 		} catch (IOException e) {
 			LOGGER.error(e);
 		}
-//		Collections.sort(corpusList);
+		Collections.sort(corpusList);
 
 		return corpusList;
 	}

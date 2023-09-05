@@ -17,8 +17,7 @@ package ca.phon.app.session.editor.view.tier_management;
 
 import ca.phon.formatter.*;
 import ca.phon.session.*;
-import ca.phon.session.alignment.TierAlignmentRules;
-import ca.phon.session.usertier.UserTierData;
+import ca.phon.session.tierdata.TierData;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.dialogs.JFontPanel;
 import ca.phon.ui.fonts.FontPreferences;
@@ -130,7 +129,7 @@ public class TierInfoEditor extends JPanel {
 	
 	public TierDescription createTierDescription() {
 		final SessionFactory factory = SessionFactory.newFactory();
-		return factory.createTierDescription(getTierName().trim(), UserTierData.class, new HashMap<>(), false);
+		return factory.createTierDescription(getTierName().trim(), TierData.class, new HashMap<>(), false);
 	}
 	
 }

@@ -1,4 +1,4 @@
-grammar UserTier;
+grammar TierData;
 
 usertier
     :   tierdata* EOF

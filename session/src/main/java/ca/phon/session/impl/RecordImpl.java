@@ -21,9 +21,8 @@ import ca.phon.formatter.*;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.*;
-import ca.phon.session.alignment.TierAlignmentRules;
 import ca.phon.session.spi.RecordSPI;
-import ca.phon.session.usertier.UserTierData;
+import ca.phon.session.tierdata.TierData;
 
 import java.util.*;
 
@@ -49,7 +48,7 @@ public class RecordImpl implements RecordSPI {
 
 	private final Tier<MediaSegment> segmentTier;
 
-	private final Tier<UserTierData> notes;
+	private final Tier<TierData> notes;
 
 	private final Tier<PhoneAlignment> alignment;
 
@@ -67,8 +66,8 @@ public class RecordImpl implements RecordSPI {
 		ipaActual.setValue(new IPATranscript());
 		segmentTier = factory.createTier(SystemTierType.Segment.getName(), MediaSegment.class, new HashMap<>(), true);
 		segmentTier.setValue(SessionFactory.newFactory().createMediaSegment(new MediaSegmentImpl(0.0f, 0.0f, MediaUnit.Millisecond)));
-		notes = factory.createTier(SystemTierType.Notes.getName(), UserTierData.class, new HashMap<>(), true);
-		notes.setValue(new UserTierData());
+		notes = factory.createTier(SystemTierType.Notes.getName(), TierData.class, new HashMap<>(), true);
+		notes.setValue(new TierData());
 		alignment = factory.createTier(SystemTierType.PhoneAlignment.getName(), PhoneAlignment.class);
 		PhoneAlignment phoneAlignment = PhoneAlignment.fromTiers(ipaTarget, ipaActual);
 		alignment.setValue(phoneAlignment);
@@ -131,7 +130,7 @@ public class RecordImpl implements RecordSPI {
 	}
 
 	@Override
-	public Tier<UserTierData> getNotesTier() {
+	public Tier<TierData> getNotesTier() {
 		return this.notes;
 	}
 

@@ -18,7 +18,7 @@ package ca.phon.session;
 import ca.phon.extensions.Extension;
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.session.usertier.UserTierData;
+import ca.phon.session.tierdata.TierData;
 import ca.phon.util.Language;
 
 import java.text.ParseException;
@@ -65,7 +65,7 @@ public class SyllabifierInfo {
 		for(int i = 0; i < session.getMetadata().getNumberOfComments(); i++) {
 			final Comment comment = session.getMetadata().getComment(i);
 			if(comment.getType() == CommentType.Generic) {
-				final UserTierData commentValue = comment.getValue();
+				final TierData commentValue = comment.getValue();
 				final String commentText = commentValue.toString();
 				final Matcher matcher = commentPattern.matcher(commentText);
 				if(matcher.matches()) {
@@ -88,7 +88,7 @@ public class SyllabifierInfo {
 		for(int i = 0; i < session.getMetadata().getNumberOfComments(); i++) {
 			final Comment comment = session.getMetadata().getComment(i);
 			if(comment.getType() == CommentType.Generic) {
-				final UserTierData commentValue = comment.getValue();
+				final TierData commentValue = comment.getValue();
 				final String commentText = commentValue.toString();
 				final Matcher matcher = commentPattern.matcher(commentText);
 				if(matcher.matches()) {
@@ -97,9 +97,9 @@ public class SyllabifierInfo {
 					if(syllabifierMap.containsKey(tierName)) {
 						updatedTiers.add(tierName);
 						final String updatedText = String.format(COMMENT_FORMAT, syllabifierMap.get(tierName).toString(), tierName);
-						UserTierData tierData = new UserTierData();
+						TierData tierData = new TierData();
 						try {
-							tierData = UserTierData.parseTierData(updatedText);
+							tierData = TierData.parseTierData(updatedText);
 						} catch (ParseException pe) {
 							tierData.putExtension(UnvalidatedValue.class, new UnvalidatedValue(updatedText, pe));
 						}
@@ -124,9 +124,9 @@ public class SyllabifierInfo {
 		for(String tierName:set) {
 			if(tierName == null) break;
 			final String commentText = String.format(COMMENT_FORMAT, syllabifierMap.get(tierName).toString(), tierName);
-			UserTierData tierData = new UserTierData();
+			TierData tierData = new TierData();
 			try {
-				tierData = UserTierData.parseTierData(commentText);
+				tierData = TierData.parseTierData(commentText);
 			} catch (ParseException pe) {
 				tierData.putExtension(UnvalidatedValue.class, new UnvalidatedValue(commentText, pe));
 			}

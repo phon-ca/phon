@@ -19,7 +19,7 @@ import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.usertier.UserTierData;
+import ca.phon.session.tierdata.TierData;
 
 import java.util.*;
 
@@ -95,7 +95,7 @@ public interface RecordSPI {
 	 * @see Record#getNotesTier()
 	 * @return
 	 */
-	public Tier<UserTierData> getNotesTier();
+	public Tier<TierData> getNotesTier();
 	
 	/**
 	 * @see Record#getTier(String, Class)

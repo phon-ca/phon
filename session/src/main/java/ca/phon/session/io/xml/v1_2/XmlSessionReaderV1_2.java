@@ -28,13 +28,11 @@ import ca.phon.plugin.*;
 import ca.phon.session.Comment;
 import ca.phon.session.Record;
 import ca.phon.session.*;
-import ca.phon.session.alignment.TierAlignmentRules;
-import ca.phon.session.alignment.OrthographyTierElementFilter;
 import ca.phon.session.io.*;
 import ca.phon.session.io.xml.v12.*;
 import ca.phon.session.io.xml.v12.CommentType;
 import ca.phon.session.io.xml.v12.WordType;
-import ca.phon.session.usertier.UserTierData;
+import ca.phon.session.tierdata.TierData;
 import ca.phon.syllable.*;
 import ca.phon.util.Language;
 import ca.phon.visitor.VisitorAdapter;
@@ -315,11 +313,11 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 			buffer.append(obj.toString());
 		}
 		try {
-			final UserTierData tierData = UserTierData.parseTierData(buffer.toString());
+			final TierData tierData = TierData.parseTierData(buffer.toString());
 			return factory.createComment(type, tierData);
 		} catch (ParseException e) {
 			LOGGER.warn(e);
-			return factory.createComment(type, new UserTierData());
+			return factory.createComment(type, new TierData());
 		}
 	}
 
@@ -398,12 +396,12 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 		// notes
 		if(rt.getNotes() != null) {
 			try {
-				final UserTierData notesData = UserTierData.parseTierData(rt.getNotes().getContent());
+				final TierData notesData = TierData.parseTierData(rt.getNotes().getContent());
 				retVal.setNotes(notesData);
 			} catch (ParseException pe) {
-				final UserTierData userTierData = new UserTierData();
-				userTierData.putExtension(UnvalidatedValue.class, new UnvalidatedValue(rt.getNotes().getContent(), pe));
-				retVal.setNotes(userTierData);
+				final TierData tierData = new TierData();
+				tierData.putExtension(UnvalidatedValue.class, new UnvalidatedValue(rt.getNotes().getContent(), pe));
+				retVal.setNotes(tierData);
 			}
 		}
 
@@ -428,7 +426,7 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 			if(td == null) {
 				throw new IllegalStateException("User tier not found in session " + ftt.getTierName());
 			}
-			final Tier<UserTierData> userTier = factory.createTier(ftt.getTierName());
+			final Tier<TierData> userTier = factory.createTier(ftt.getTierName());
 			userTier.setText(ftt.getContent());
 			retVal.putTier(userTier);
 		}
@@ -439,7 +437,7 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 				//LOGGER.warning("User tier " + gtt.getTierName() + " not in session tier list");
 				continue;
 			}
-			final Tier<UserTierData> userTier = factory.createTier(gtt.getTierName(), UserTierData.class, new LinkedHashMap<>(), false);
+			final Tier<TierData> userTier = factory.createTier(gtt.getTierName(), TierData.class, new LinkedHashMap<>(), false);
 			final StringBuffer buffer = new StringBuffer();
 			for(TgType tgt:gtt.getTg()) {
 				if(buffer.length() > 0)

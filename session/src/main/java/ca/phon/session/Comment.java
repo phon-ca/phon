@@ -18,7 +18,7 @@ package ca.phon.session;
 
 import ca.phon.extensions.ExtendableObject;
 import ca.phon.session.spi.CommentSPI;
-import ca.phon.session.usertier.UserTierData;
+import ca.phon.session.tierdata.TierData;
 
 /**
  * Entity class for comments.  See {@link CommentType} for more information
@@ -38,7 +38,7 @@ public final class Comment extends ExtendableObject {
 	 * Get the comment data.
 	 * @return tier data for comment
 	 */
-	public UserTierData getValue() {
+	public TierData getValue() {
 		return commentImpl.getValue();
 	}
 	
@@ -46,7 +46,7 @@ public final class Comment extends ExtendableObject {
 	 * Set the comment value.
 	 * @param comment
 	 */
-	public void setValue(UserTierData comment) {
+	public void setValue(TierData comment) {
 		commentImpl.setValue(comment);
 	}
 

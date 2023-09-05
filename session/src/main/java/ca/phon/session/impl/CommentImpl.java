@@ -16,7 +16,7 @@
 package ca.phon.session.impl;
 
 import ca.phon.session.CommentType;
-import ca.phon.session.usertier.UserTierData;
+import ca.phon.session.tierdata.TierData;
 import ca.phon.session.spi.CommentSPI;
 
 /**
@@ -25,7 +25,7 @@ import ca.phon.session.spi.CommentSPI;
  */
 public class CommentImpl implements CommentSPI {
 	
-	private UserTierData value;
+	private TierData value;
 	
 	private CommentType type;
 	
@@ -33,19 +33,19 @@ public class CommentImpl implements CommentSPI {
 		super();
 	}
 	
-	CommentImpl(CommentType type, UserTierData value) {
+	CommentImpl(CommentType type, TierData value) {
 		super();
 		this.value = value;
 		this.type = type;
 	}
 	
 	@Override
-	public UserTierData getValue() {
-		return (value == null ? new UserTierData() : value);
+	public TierData getValue() {
+		return (value == null ? new TierData() : value);
 	}
 
 	@Override
-	public void setValue(UserTierData comment) {
+	public void setValue(TierData comment) {
 		this.value = comment;
 	}
 

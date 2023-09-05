@@ -1,4 +1,4 @@
-package ca.phon.session.usertier;
+package ca.phon.session.tierdata;
 
 import ca.phon.extensions.ExtendableObject;
 import ca.phon.visitor.Visitable;
@@ -11,22 +11,21 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public final class UserTierData extends ExtendableObject implements Iterable<UserTierElement>, Visitable<UserTierElement> {
+public final class TierData extends ExtendableObject implements Iterable<TierElement>, Visitable<TierElement> {
 
-    private final List<UserTierElement> elements;
+    private final List<TierElement> elements;
 
-    public static UserTierData parseTierData(String text) throws ParseException {
+    public static TierData parseTierData(String text) throws ParseException {
         CharStream charStream = CharStreams.fromString(text);
-        UserTierLexer lexer = new UserTierLexer(charStream);
+        TierDataLexer lexer = new TierDataLexer(charStream);
         TokenStream tokenStream = new CommonTokenStream(lexer);
 
-        UserTierParserListener userTierBuilder = new UserTierParserListener();
-        UserTierParser parser = new UserTierParser(tokenStream);
+        TierDataParserListener userTierBuilder = new TierDataParserListener();
+        TierDataParser parser = new TierDataParser(tokenStream);
         parser.addParseListener(userTierBuilder);
 
         try {
@@ -37,16 +36,16 @@ public final class UserTierData extends ExtendableObject implements Iterable<Use
         return userTierBuilder.toTierData();
     }
 
-    public UserTierData(UserTierElement ... elements) {
+    public TierData(TierElement... elements) {
         this(Arrays.asList(elements));
     }
 
-    public UserTierData(List<UserTierElement> elements) {
+    public TierData(List<TierElement> elements) {
         super();
         this.elements = Collections.unmodifiableList(elements);
     }
 
-    public List<UserTierElement> getElements() {
+    public List<TierElement> getElements() {
         return elements;
     }
 
@@ -61,7 +60,7 @@ public final class UserTierData extends ExtendableObject implements Iterable<Use
 
     public int length() { return elements.size(); }
 
-    public UserTierElement elementAt(int index) {
+    public TierElement elementAt(int index) {
         return elements.get(index);
     }
 
@@ -72,7 +71,7 @@ public final class UserTierData extends ExtendableObject implements Iterable<Use
      *
      * @return string index or -1 if not found
      */
-    public int stringIndexOf(UserTierElement element) {
+    public int stringIndexOf(TierElement element) {
         int idx = 0;
         for(var ele:getElements()) {
             if(idx > 0) ++idx; // space between elements
@@ -89,17 +88,17 @@ public final class UserTierData extends ExtendableObject implements Iterable<Use
     }
 
     @Override
-    public void accept(Visitor<UserTierElement> visitor) {
-        for(UserTierElement ele:this) visitor.visit(ele);
+    public void accept(Visitor<TierElement> visitor) {
+        for(TierElement ele:this) visitor.visit(ele);
     }
 
     @NotNull
     @Override
-    public Iterator<UserTierElement> iterator() {
+    public Iterator<TierElement> iterator() {
         return new UserTierElementIterator();
     }
 
-    private class UserTierElementIterator implements Iterator<UserTierElement> {
+    private class UserTierElementIterator implements Iterator<TierElement> {
 
         private int currentElement = 0;
 
@@ -109,17 +108,17 @@ public final class UserTierData extends ExtendableObject implements Iterable<Use
         }
 
         @Override
-        public UserTierElement next() {
+        public TierElement next() {
             return elementAt(currentElement++);
         }
 
     }
 
-    public Stream<UserTierElement> stream() {
+    public Stream<TierElement> stream() {
         return stream(false);
     }
 
-    public Stream<UserTierElement> stream(boolean parallel) {
+    public Stream<TierElement> stream(boolean parallel) {
         return StreamSupport.stream(spliterator(), parallel);
     }
 

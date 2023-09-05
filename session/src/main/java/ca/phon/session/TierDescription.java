@@ -17,7 +17,7 @@ package ca.phon.session;
 
 import ca.phon.extensions.ExtendableObject;
 import ca.phon.session.spi.TierDescriptionSPI;
-import ca.phon.session.usertier.UserTierData;
+import ca.phon.session.tierdata.TierData;
 
 import java.util.List;
 import java.util.Map;
@@ -77,10 +77,10 @@ public final class TierDescription extends ExtendableObject {
 	 * or subtypeExpr have been specified.
 	 *
 	 * @return true if subtype delimiters or regular expression is available and
-	 * the declared type of the tier is {@link ca.phon.session.usertier.UserTierData}
+	 * the declared type of the tier is {@link TierData}
 	 */
 	public boolean hasSubtypeInformation() {
-		return getDeclaredType() == UserTierData.class &&
+		return getDeclaredType() == TierData.class &&
 				(hasSubtypeDelim() || hasSubtypeExpr());
 	}
 

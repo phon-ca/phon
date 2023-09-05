@@ -6,7 +6,7 @@ import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.usertier.*;
+import ca.phon.session.tierdata.*;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.ipa.PhoneMapDisplay;
 import ca.phon.ui.ipa.SyllabificationDisplay;
@@ -930,23 +930,23 @@ public class TranscriptDocument extends DefaultStyledDocument {
             offset += tierContent.length();
         }
         else {
-            Tier<UserTierData> userTier = (Tier<UserTierData>) tier;
-            UserTierData tierData = userTier.getValue();
+            Tier<TierData> userTier = (Tier<TierData>) tier;
+            TierData tierData = userTier.getValue();
             if (tierData != null) {
                 for (int i = 0; i < tierData.length(); i++) {
-                    UserTierElement elem = tierData.elementAt(i);
+                    TierElement elem = tierData.elementAt(i);
                     String text;
                     SimpleAttributeSet attrs;
                     if (elem instanceof TierString tierString) {
                         text = tierString.text();
                         attrs = getUserTierStringAttributes();
                     }
-                    else if (elem instanceof UserTierComment comment) {
+                    else if (elem instanceof TierComment comment) {
                         text = "[%" + comment.text() + "]";
                         attrs = getUserTierCommentAttributes();
                     }
                     else {
-                        UserTierInternalMedia internalMedia = (UserTierInternalMedia) elem;
+                        TierInternalMedia internalMedia = (TierInternalMedia) elem;
                         text = "•" + internalMedia.text() + "•";
                         attrs = getUserTierInternalMediaAttributes();
                     }
@@ -1084,27 +1084,27 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
         SimpleAttributeSet commentAttrs = getCommentAttributes(comment);
 
-        UserTierData tierData = comment.getValue();
+        TierData tierData = comment.getValue();
 
         String labelText = comment.getType().getLabel() + ": ";
         appendBatchString(labelText, getCommentLabelAttributes(comment));
         offset += labelText.length();
 
         for (int i = 0; i < tierData.length(); i++) {
-            UserTierElement userTierElement = tierData.elementAt(i);
+            TierElement tierElement = tierData.elementAt(i);
             String text;
             SimpleAttributeSet attrs;
-            if (userTierElement instanceof TierString tierString) {
+            if (tierElement instanceof TierString tierString) {
                 // Text
                 text = tierString.text();
                 attrs = getUserTierStringAttributes();
-            } else if (userTierElement instanceof UserTierComment userTierComment) {
+            } else if (tierElement instanceof TierComment tierComment) {
                 // Comment
-                text = "[%" + userTierComment.text() + "]";
+                text = "[%" + tierComment.text() + "]";
                 attrs = getUserTierCommentAttributes();
             } else {
                 // Internal media
-                UserTierInternalMedia internalMedia = (UserTierInternalMedia) userTierElement;
+                TierInternalMedia internalMedia = (TierInternalMedia) tierElement;
                 text = "•" + internalMedia.text() + "•";
                 attrs = getUserTierInternalMediaAttributes();
             }

@@ -17,11 +17,10 @@ package ca.phon.session;
 
 import ca.phon.extensions.ExtendableObject;
 import ca.phon.plugin.*;
-import ca.phon.session.alignment.TierAlignmentRules;
 import ca.phon.session.impl.GemImpl;
 import ca.phon.session.io.*;
 import ca.phon.session.spi.*;
-import ca.phon.session.usertier.UserTierData;
+import ca.phon.session.tierdata.TierData;
 import org.apache.logging.log4j.LogManager;
 
 import java.io.*;
@@ -178,7 +177,7 @@ public final class SessionFactory extends ExtendableObject {
 	 * @param value
 	 * @return comment
 	 */
-	public Comment createComment(UserTierData value) {
+	public Comment createComment(TierData value) {
 		return createComment(CommentType.Generic, value);
 	}
 
@@ -189,7 +188,7 @@ public final class SessionFactory extends ExtendableObject {
 	 * @return comment
 	 */
 	public Comment createComment(CommentType commentType) {
-		return createComment(commentType, new UserTierData());
+		return createComment(commentType, new TierData());
 	}
 
 	/**
@@ -200,7 +199,7 @@ public final class SessionFactory extends ExtendableObject {
 	 *
 	 * @return new comment
 	 */
-	public Comment createComment(CommentType commentType, UserTierData value) {
+	public Comment createComment(CommentType commentType, TierData value) {
 		return createComment(sessionFactoryImpl.createComment(commentType, value));
 	}
 
@@ -373,7 +372,7 @@ public final class SessionFactory extends ExtendableObject {
 		
 		// add extra tiers
 		for(String tierName:record.getUserDefinedTierNames()) {
-			final Tier<UserTierData> extraTier = record.getTier(tierName, UserTierData.class);
+			final Tier<TierData> extraTier = record.getTier(tierName, TierData.class);
 			
 			final TierDescription td = createTierDescription(tierName);
 			tempSession.addUserTier(td);
@@ -526,8 +525,8 @@ public final class SessionFactory extends ExtendableObject {
 	 * @param name
 	 * @return the new tier
 	 */
-	public Tier<UserTierData> createTier(String name) {
-		return createTier(name, UserTierData.class);
+	public Tier<TierData> createTier(String name) {
+		return createTier(name, TierData.class);
 	}
 	
 	/**
@@ -537,7 +536,7 @@ public final class SessionFactory extends ExtendableObject {
 	 * @return new tier description
 	 */
 	public TierDescription createTierDescription(String name) {
-		return createTierDescription(name, UserTierData.class, new HashMap<>(), false);
+		return createTierDescription(name, TierData.class, new HashMap<>(), false);
 	}
 
 	/**
@@ -548,11 +547,11 @@ public final class SessionFactory extends ExtendableObject {
 	 * @return new tier description
 	 */
 	public TierDescription createTierDescription(String name, boolean excludeFromAlignment) {
-		return createTierDescription(name, UserTierData.class, new HashMap<>(), excludeFromAlignment, false);
+		return createTierDescription(name, TierData.class, new HashMap<>(), excludeFromAlignment, false);
 	}
 
 	public TierDescription createTierDescription(String name, boolean excludeFromAlignment, boolean blind) {
-		return createTierDescription(name, UserTierData.class, new HashMap<>(), excludeFromAlignment, blind, new ArrayList<>(), null);
+		return createTierDescription(name, TierData.class, new HashMap<>(), excludeFromAlignment, blind, new ArrayList<>(), null);
 	}
 
 	/**

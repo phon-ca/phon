@@ -3,14 +3,11 @@ package ca.phon.session;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.*;
 import ca.phon.session.alignment.TierAligner;
-import ca.phon.session.alignment.TierAlignmentRules;
-import ca.phon.session.usertier.UserTierData;
+import ca.phon.session.tierdata.TierData;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import java.util.Map;
 
 @RunWith(JUnit4.class)
 public class TestTierAlignment {
@@ -24,13 +21,13 @@ public class TestTierAlignment {
         final PhoneAlignment phoneAlignment = PhoneAlignment.fromTiers(record.getIPATargetTier(), record.getIPAActualTier());
         record.setPhoneAlignment(phoneAlignment);
         record.getNotesTier().setText("This is a test");
-        final Tier<UserTierData> testTier1 = factory.createTier("Test1", UserTierData.class);
+        final Tier<TierData> testTier1 = factory.createTier("Test1", TierData.class);
         testTier1.setText("V N");
         record.putTier(testTier1);
         final Tier<Orthography> testTier2 = factory.createTier("Test2", Orthography.class);
         testTier2.setText("goodbye (.) sanity !");
         record.putTier(testTier2);
-        final Tier<UserTierData> testTier3 = factory.createTier("Test3", UserTierData.class);
+        final Tier<TierData> testTier3 = factory.createTier("Test3", TierData.class);
         testTier3.setText("1 [% test] 2");
         record.putTier(testTier3);
         return record;
@@ -86,7 +83,7 @@ public class TestTierAlignment {
     public void testOrthoToUserTierAligner() {
         final Record testRecord = createTestRecord();
         final Tier<Orthography> tier1 = testRecord.getOrthographyTier();
-        final Tier<UserTierData> tier2 = testRecord.getTier("Test1", UserTierData.class);
+        final Tier<TierData> tier2 = testRecord.getTier("Test1", TierData.class);
         var alignment = TierAligner.alignTiers(tier1, tier2);
         Assert.assertEquals(2, alignment.length());
         Assert.assertEquals("hello", alignment.getAlignedElements().get(0).getObj1().toString());
@@ -129,7 +126,7 @@ public class TestTierAlignment {
     public void testIPAtoUserTierAligner() {
         final Record testRecord = createTestRecord();
         final Tier<IPATranscript> tier1 = testRecord.getIPATargetTier();
-        final Tier<UserTierData> tier2 = testRecord.getTier("Test1", UserTierData.class);
+        final Tier<TierData> tier2 = testRecord.getTier("Test1", TierData.class);
         var alignment = TierAligner.alignTiers(tier1, tier2);
         Assert.assertEquals(2, alignment.length());
         Assert.assertEquals("hello", alignment.getAlignedElements().get(0).getObj1().toString());
@@ -142,7 +139,7 @@ public class TestTierAlignment {
     public void testPhoneAlignmentToUserTierAligner() {
         final Record testRecord = createTestRecord();
         final Tier<PhoneAlignment> tier1 = testRecord.getPhoneAlignmentTier();
-        final Tier<UserTierData> tier2 = testRecord.getTier("Test1", UserTierData.class);
+        final Tier<TierData> tier2 = testRecord.getTier("Test1", TierData.class);
         var alignment = TierAligner.alignTiers(tier1, tier2);
         Assert.assertEquals(2, alignment.length());
     }
@@ -150,8 +147,8 @@ public class TestTierAlignment {
     @Test
     public void testUserTierToUserTierAligner() {
         final Record testRecord = createTestRecord();
-        final Tier<UserTierData> tier1 = testRecord.getTier("Test1", UserTierData.class);
-        final Tier<UserTierData> tier2 = testRecord.getTier("Test3", UserTierData.class);
+        final Tier<TierData> tier1 = testRecord.getTier("Test1", TierData.class);
+        final Tier<TierData> tier2 = testRecord.getTier("Test3", TierData.class);
         var alignment = TierAligner.alignTiers(tier1, tier2);
         Assert.assertEquals(2, alignment.length());
         Assert.assertEquals("V", alignment.getAlignedElements().get(0).getObj1().toString());

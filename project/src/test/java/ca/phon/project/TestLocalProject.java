@@ -23,6 +23,7 @@ import org.junit.runners.JUnit4;
 
 import java.io.*;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Tests for the LocalProject implementation.
@@ -52,7 +53,7 @@ public class TestLocalProject {
 		final Project project = projectFactory.openProject(new File("src/test/resources/TestCorpus"));
 		
 		Assert.assertNotNull(project);
-		Assert.assertEquals(Collections.singleton("Anne").toString(), project.getCorpora().toString());
+		Assert.assertEquals(List.of(".", "Anne").toString(), project.getCorpora().toString());
 	}
 	
 	@Test

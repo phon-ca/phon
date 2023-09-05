@@ -18,10 +18,9 @@ package ca.phon.session;
 
 import ca.phon.extensions.ExtendableObject;
 import ca.phon.ipa.*;
-import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.*;
 import ca.phon.session.spi.RecordSPI;
-import ca.phon.session.usertier.UserTierData;
+import ca.phon.session.tierdata.TierData;
 import ca.phon.util.Language;
 
 import java.util.*;
@@ -201,15 +200,15 @@ public final class Record extends ExtendableObject {
 		return recordImpl.getPhoneAlignmentTier();
 	}
 
-	public UserTierData getNotes() {
+	public TierData getNotes() {
 		return getNotesTier().getValue();
 	}
 
-	public void setNotes(UserTierData tierData) {
+	public void setNotes(TierData tierData) {
 		getNotesTier().setValue(tierData);
 	}
 
-	public Tier<UserTierData> getNotesTier() {
+	public Tier<TierData> getNotesTier() {
 		return recordImpl.getNotesTier();
 	}
 
@@ -224,7 +223,7 @@ public final class Record extends ExtendableObject {
 			return SystemTierType.tierFromString(name).getDeclaredType();
 		} else {
 			for(String tierName:getUserDefinedTierNames()) {
-				final Tier<?> t = getTier(tierName, UserTierData.class);
+				final Tier<?> t = getTier(tierName, TierData.class);
 				if(t != null && t.getName().equals(name)) {
 					return t.getDeclaredType();
 				}
@@ -283,7 +282,7 @@ public final class Record extends ExtendableObject {
 			retVal.add((Tier<T>) getIPAActualTier());
 		} else if(type == MediaSegment.class) {
 			retVal.add((Tier<T>) getSegmentTier());
-		} else if(type == UserTierData.class) {
+		} else if(type == TierData.class) {
 			retVal.add((Tier<T>) getNotesTier());
 		} else if(type == PhoneAlignment.class) {
 			retVal.add((Tier<T>) getPhoneAlignmentTier());
