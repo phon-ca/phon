@@ -62,7 +62,7 @@ public class TestLocalProject {
 		final Project project = projectFactory.openProject(new File("src/test/resources/TestCorpus"));
 		
 		Assert.assertNotNull(project);
-		Assert.assertEquals(Collections.singleton("TestSession").toString(), project.getCorpusSessions("Anne").toString());
+		Assert.assertEquals(Collections.singleton("TestSession.xml").toString(), project.getCorpusSessions("Anne").toString());
 	}
 	
 }
