@@ -67,8 +67,6 @@ import java.util.*;
  */
 public class ProjectWindow extends CommonModuleFrame {
 
-	private static final long serialVersionUID = -4771564010497815447L;
-
 	private DialogHeader header;
 
 	private JPanel projectInfoPanel;
