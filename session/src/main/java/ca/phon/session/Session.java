@@ -32,11 +32,38 @@ import java.util.List;
  */
 public final class Session extends ExtendableObject {
 
+	/**
+	 * Session path provided by project, this is not saved with session data
+	 */
+	private SessionPath sessionPath;
+
 	private SessionSPI sessionImpl;
 	
 	Session(SessionSPI sessionImpl) {
 		super();
 		this.sessionImpl = sessionImpl;
+	}
+
+	/**
+	 * Set session path relative to project
+	 *
+	 * @param sessionPath path
+	 */
+	public void setSessionPath(SessionPath sessionPath) {
+		this.sessionPath = sessionPath;
+	}
+
+	/**
+	 * Get session path.  If session path has not been set this will be created from
+	 * the corpus and session name stored in the file.
+	 *
+	 * @return sessionPath
+	 */
+	public SessionPath getSessionPath() {
+		if(this.sessionPath == null) {
+			return new SessionPath(getCorpus(), getName());
+		}
+		return this.sessionPath;
 	}
 	
 	/* Delegates */

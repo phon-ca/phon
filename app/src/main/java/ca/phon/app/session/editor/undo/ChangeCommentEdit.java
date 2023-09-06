@@ -5,7 +5,7 @@ import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.session.Comment;
 import ca.phon.session.Session;
-import ca.phon.session.usertier.UserTierData;
+import ca.phon.session.tierdata.TierData;
 
 import javax.swing.undo.CannotUndoException;
 
@@ -13,10 +13,10 @@ public class ChangeCommentEdit extends SessionUndoableEdit {
 
     private final Comment comment;
     private final int elementIndex;
-    private final UserTierData oldValue;
-    private final UserTierData newValue;
+    private final TierData oldValue;
+    private final TierData newValue;
 
-    public ChangeCommentEdit(Session session, EditorEventManager editorEventManager, Comment comment, UserTierData newValue) {
+    public ChangeCommentEdit(Session session, EditorEventManager editorEventManager, Comment comment, TierData newValue) {
         super(session, editorEventManager);
         this.comment = comment;
         this.elementIndex = session.getTranscript().getElementIndex(comment);

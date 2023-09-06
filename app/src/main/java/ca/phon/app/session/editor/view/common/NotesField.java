@@ -16,11 +16,11 @@
 package ca.phon.app.session.editor.view.common;
 
 import ca.phon.session.Tier;
-import ca.phon.session.usertier.UserTierData;
+import ca.phon.session.tierdata.TierData;
 
-public class NotesField extends GroupField<UserTierData> {
+public class NotesField extends GroupField<TierData> {
 
-	public NotesField(Tier<UserTierData> tier) {
+	public NotesField(Tier<TierData> tier) {
 		super(tier, true);
 	}
 

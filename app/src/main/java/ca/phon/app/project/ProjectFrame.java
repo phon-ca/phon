@@ -32,8 +32,6 @@ import ca.phon.ui.CommonModuleFrame;
  */
 public class ProjectFrame extends CommonModuleFrame {
 	
-	private static final long serialVersionUID = 4160918049917672755L;
-
 	public ProjectFrame() {
 		this(null);
 	}

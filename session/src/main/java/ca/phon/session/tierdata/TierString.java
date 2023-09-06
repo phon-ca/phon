@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.session.usertier;
+package ca.phon.session.tierdata;
 
 import ca.phon.extensions.ExtendableObject;
 
@@ -26,7 +26,7 @@ import java.util.*;
  * 
  */
 public class TierString extends ExtendableObject
-	implements java.io.Serializable, Comparable<String>, CharSequence, UserTierElement {
+	implements java.io.Serializable, Comparable<String>, CharSequence, TierElement {
 	
 	private static final long serialVersionUID = 7079791690885598508L;
 

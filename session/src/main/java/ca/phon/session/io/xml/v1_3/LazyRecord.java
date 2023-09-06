@@ -19,7 +19,7 @@ import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.Record;
 import ca.phon.session.*;
-import ca.phon.session.usertier.UserTierData;
+import ca.phon.session.tierdata.TierData;
 import ca.phon.session.spi.RecordSPI;
 
 import java.util.Set;
@@ -117,7 +117,7 @@ public final class LazyRecord implements RecordSPI {
 		return internalRecord.getPhoneAlignmentTier();
 	}
 
-	public Tier<UserTierData> getNotesTier() {
+	public Tier<TierData> getNotesTier() {
 		loadRecord();
 		return internalRecord.getNotesTier();
 	}

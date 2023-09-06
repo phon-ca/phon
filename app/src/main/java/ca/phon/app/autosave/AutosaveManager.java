@@ -15,7 +15,8 @@
  */
 package ca.phon.app.autosave;
 
-import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.log.LogUtil;
+import ca.phon.app.session.editor.SessionEditorWindow;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
 import ca.phon.ui.CommonModuleFrame;
@@ -33,8 +34,6 @@ import java.util.Calendar;
  */
 public class AutosaveManager {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(AutosaveManager.class.getName());
-
 	/**
 	 * Autosave property
 	 */
@@ -99,7 +98,7 @@ public class AutosaveManager {
 		
 		if(interval == 0) {
 			if(timer != null) {
-				LOGGER.info("Stopping autosave manager.");
+				LogUtil.info("Stopping autosave manager.");
 				timer.stop();
 				timer = null;
 			}
@@ -107,13 +106,13 @@ public class AutosaveManager {
 		}
 		
 		if(timer == null) {
-			LOGGER.info("Starting autosave manager.");
+			LogUtil.info("Starting autosave manager.");
 			timer = new Timer((int)interval, new AutosaveAction());
 			timer.start();
 		} else {
 			timer.setDelay((int)interval);
 		}
-		LOGGER.info("Autosaving every " + (ms/1000/60) + " minutes");
+		LogUtil.info("Autosaving every " + (ms/1000/60) + " minutes");
 	}
 	
 	
@@ -125,7 +124,7 @@ public class AutosaveManager {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			
-			LOGGER.info("Starting autosave at " + 
+			LogUtil.info("Starting autosave at " + 
 					Calendar.getInstance().getTime().toString() + "...");
 			
 			Runtime runtime = Runtime.getRuntime();
@@ -135,34 +134,34 @@ public class AutosaveManager {
 			int totalMemory = (int)(runtime.totalMemory() / 1024);
 			int usedMemory = (totalMemory - freeMemory);
 			
-			LOGGER.info("Java heap: " + usedMemory + "Kb / "
+			LogUtil.info("Java heap: " + usedMemory + "Kb / "
 					+ totalMemory + "Kb, " + (usedMemory * 100 / totalMemory)
 					+ "%");
 			
 			// find all open sessions
 			for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
-				if(cmf instanceof SessionEditor) {
-					final SessionEditor editor = (SessionEditor)cmf;
+				if(cmf instanceof SessionEditorWindow) {
+					final SessionEditorWindow editor = (SessionEditorWindow)cmf;
 					
 					if(editor.hasUnsavedChanges()) {
 						final Project project = editor.getProject();
 						final Session session = editor.getSession();
 						final Autosaves autosaves = project.getExtension(Autosaves.class);
 						
-						LOGGER.info("Autosaving session '" + 
+						LogUtil.info("Autosaving session '" + 
 								session.getCorpus() + "." + session.getName() + "'...");
 						
 						try {
 							autosaves.createAutosave(session);
 						} catch (IOException e1) {
-							LOGGER.error(
+							LogUtil.severe(
 									e1.getLocalizedMessage(), e1);
 						}
 					}
 				}
 			}
 			
-			LOGGER.info(
+			LogUtil.info(
 					"Autosave action finished at " + Calendar.getInstance().getTime().toString());
 		}
 		

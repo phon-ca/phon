@@ -15,7 +15,9 @@
  */
 package ca.phon.app.session.editor.view.common;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.SessionEditorWindow;
 import ca.phon.extensions.*;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.*;
@@ -43,10 +45,6 @@ import java.util.concurrent.atomic.AtomicReference;
  * Text field for editing tier data for a group.
  */
 public class GroupField<T> extends JTextArea implements TierEditor<T> {
-
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(GroupField.class.getName());
-
-	private static final long serialVersionUID = -5541784214656593497L;
 
 	private final Tier<T> tier;
 
@@ -112,8 +110,8 @@ public class GroupField<T> extends JTextArea implements TierEditor<T> {
 		getDocument().addUndoableEditListener( (e) -> {
 			if(hasChanges && hasFocus()) {
 				CommonModuleFrame cmf = CommonModuleFrame.getCurrentFrame();
-				if(cmf != null && cmf instanceof SessionEditor) {
-					SessionEditor editor = (SessionEditor)cmf;
+				if(cmf != null && cmf instanceof SessionEditorWindow sessionEditorWindow) {
+					SessionEditor editor = sessionEditorWindow.getSessionEditor();
 					editor.setModified(true);
 				}
 			}
@@ -262,7 +260,7 @@ public class GroupField<T> extends JTextArea implements TierEditor<T> {
 				try {
 					cmf.saveData();
 				} catch (IOException e) {
-					LOGGER.error(e.getLocalizedMessage(), e);
+					LogUtil.severe(e.getLocalizedMessage(), e);
 				}
 			}
 		} else {
@@ -270,7 +268,7 @@ public class GroupField<T> extends JTextArea implements TierEditor<T> {
 			try {
 				cmf.saveData();
 			} catch (IOException e) {
-				LOGGER.error(e.getLocalizedMessage(), e);
+				LogUtil.severe(e.getLocalizedMessage(), e);
 			}
 		}
 	}
@@ -342,7 +340,7 @@ public class GroupField<T> extends JTextArea implements TierEditor<T> {
 		try {
 			retVal = errHighlighter.addHighlight(p0, p1, errPainter);
 		} catch (BadLocationException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.severe( e.getLocalizedMessage(), e);
 		}
 
 		return retVal;
@@ -360,7 +358,7 @@ public class GroupField<T> extends JTextArea implements TierEditor<T> {
 		try {
 			errHighlighter.changeHighlight(tag, p0, p1);
 		} catch (BadLocationException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.severe( e.getLocalizedMessage(), e);
 		}
 	}
 

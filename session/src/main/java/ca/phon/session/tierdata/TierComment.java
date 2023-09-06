@@ -1,4 +1,4 @@
-package ca.phon.session.usertier;
+package ca.phon.session.tierdata;
 
 import ca.phon.extensions.ExtendableObject;
 
@@ -6,7 +6,7 @@ import ca.phon.extensions.ExtendableObject;
  * Tier data enclosed in parentheses. Comments are not included
  * in tier alignment.
  */
-public final class UserTierComment extends ExtendableObject implements UserTierElement {
+public final class TierComment extends ExtendableObject implements TierElement {
 
     public final static String PREFIX = "[%";
 
@@ -14,7 +14,7 @@ public final class UserTierComment extends ExtendableObject implements UserTierE
 
     private final String text;
 
-    public UserTierComment(String text) {
+    public TierComment(String text) {
         super();
         this.text = text;
     }

@@ -1,14 +1,11 @@
 package ca.phon.app.session.editor;
 
-import ca.phon.app.query.EditQueryDialog;
-import ca.phon.query.db.ResultSet;
 import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.session.position.SessionLocation;
-import ca.phon.session.usertier.UserTierData;
+import ca.phon.session.tierdata.TierData;
 import ca.phon.util.Language;
 
-import javax.print.attribute.standard.Media;
 import java.time.*;
 import java.util.List;
 
@@ -158,7 +155,7 @@ public record  EditorEventType<T>(String eventName, Class<T> type) {
 	public final static EditorEventType<CommentTypeChangedData> CommenTypeChanged =
 			new EditorEventType<>(EditorEventName.COMMENT_TYPE_CHANGED_EVT.getEventName(), CommentTypeChangedData.class);
 
-	public record CommentChangedData(Comment comment, int elementIndex, UserTierData oldComment, UserTierData newComment) { }
+	public record CommentChangedData(Comment comment, int elementIndex, TierData oldComment, TierData newComment) { }
 	public final static EditorEventType<CommentChangedData> CommentChanged =
 			new EditorEventType<>(EditorEventName.COMMENT_CHANGED_EVT.getEventName(), CommentChangedData.class);
 

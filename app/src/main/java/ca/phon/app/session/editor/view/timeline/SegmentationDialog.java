@@ -19,6 +19,7 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.timeline.SegmentationHandler.*;
 import ca.phon.formatter.Formatter;
 import ca.phon.session.Participant;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.text.FormatterTextField;
@@ -75,7 +76,7 @@ public class SegmentationDialog extends JDialog {
 	private final SessionEditor editor;
 	
 	public SegmentationDialog(SessionEditor editor) {
-		super(editor);
+		super(CommonModuleFrame.getCurrentFrame());
 		
 		setTitle("Start Segmentation");
 		

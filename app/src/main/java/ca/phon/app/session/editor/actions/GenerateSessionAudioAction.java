@@ -143,7 +143,7 @@ public class GenerateSessionAudioAction extends SessionEditorAction {
 					final File originalFile = new File(movFile.getParentFile(), originalFileName);
 					// already a wav, do nothing!
 					int selectedOption = 
-							getEditor().showMessageDialog("Re-encode wav", "Original file will be renamed " + 
+							CommonModuleFrame.getCurrentFrame().showMessageDialog("Re-encode wav", "Original file will be renamed " +
 									originalFileName, MessageDialogProperties.okCancelOptions);
 					if(selectedOption == 1) {
 						return null;

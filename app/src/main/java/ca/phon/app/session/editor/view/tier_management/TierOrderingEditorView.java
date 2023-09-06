@@ -19,6 +19,7 @@ import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.tier_management.actions.*;
 import ca.phon.session.*;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.FontFormatter;
 import ca.phon.ui.action.*;
 import ca.phon.ui.fonts.FontPreferences;
@@ -400,7 +401,7 @@ public class TierOrderingEditorView extends EditorView {
 		props.setFontSize(currentFont.getSize());
 		props.setBold(currentFont.isBold());
 		props.setItalic(currentFont.isItalic());
-		props.setParentWindow(getEditor());
+		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 
 		NativeDialogs.showFontDialog(props);
 	}
@@ -555,7 +556,7 @@ public class TierOrderingEditorView extends EditorView {
 			if(tierDesc != null) {
 				final TierDescription td = tierDesc;
 				final MessageDialogProperties props = new MessageDialogProperties();
-				props.setParentWindow(getEditor());
+				props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 				props.setHeader("Delete Tier");
 				props.setMessage("Delete tier " + td.getName() + "?");
 				props.setRunAsync(true);

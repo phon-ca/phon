@@ -3,6 +3,7 @@ package ca.phon.app.session.editor.view.timeline.actions;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.DeleteRecordEdit;
 import ca.phon.app.session.editor.view.timeline.*;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.icons.*;
 
@@ -42,7 +43,7 @@ public class DeleteRecordsAction extends TimelineAction  {
         if(showConfirmation) {
             final MessageDialogProperties props = new MessageDialogProperties();
             props.setRunAsync(false);
-            props.setParentWindow(editor);
+            props.setParentWindow(CommonModuleFrame.getCurrentFrame());
             props.setTitle("Delete record" + (recordsToDelete.length > 0 ? "s" : ""));
             props.setHeader("Confirm delete record" + (recordsToDelete.length > 0 ? "s" : ""));
             props.setMessage("Delete record " + String.format("%d", editor.getCurrentRecordIndex() + 1)

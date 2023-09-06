@@ -362,7 +362,7 @@ Schema for Phon sessions.
         </xs:annotation>
         <xs:attribute name="tierName" type="xs:ID"/>
         <xs:attribute name="grouped" type="xs:boolean"/>
-    	<xs:attribute name="type" type="xs:string" use="optional" default="ca.phon.session.usertier.TierString"/>
+    	<xs:attribute name="type" type="xs:string" use="optional" default="ca.phon.session.tierdata.TierString"/>
     </xs:complexType>
 
     <xs:element name="transcriber" type="transcriberType"/>

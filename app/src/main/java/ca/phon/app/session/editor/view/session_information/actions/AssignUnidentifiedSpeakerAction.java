@@ -20,6 +20,7 @@ import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
 import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
 import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.icons.*;
 
@@ -75,7 +76,7 @@ public class AssignUnidentifiedSpeakerAction extends SessionInfoAction {
 			props.setHeader(props.getTitle());
 			props.setMessage("Speaker for records assigned to participant " + participant);
 			props.setOptions(new String[]{"Ok", "Undo"});
-			props.setParentWindow(getEditor());
+			props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 			props.setListener(new NativeDialogListener() {
 				
 				@Override

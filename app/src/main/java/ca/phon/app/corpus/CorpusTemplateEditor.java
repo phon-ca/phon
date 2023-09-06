@@ -24,8 +24,6 @@ import java.net.URL;
 
 public class CorpusTemplateEditor extends SessionEditor {
 
-	private static final long serialVersionUID = -5676865486332827373L;
-
 	private final static String PERSPECTIVE_NAME = "CorpusTemplate";
 	private final static String PERSPECTIVE_FILE = "CorpusTemplate.xml";
 	
@@ -47,9 +45,9 @@ public class CorpusTemplateEditor extends SessionEditor {
 	public String getTitle() {
 		return "Session Template : " + getSession().getCorpus();
 	}
-	
+
 	@Override
-	public boolean saveData() 
+	public boolean saveData()
 			throws IOException {
 		final Project project = getProject();
 		project.saveSessionTemplate(getSession().getCorpus(), getSession());

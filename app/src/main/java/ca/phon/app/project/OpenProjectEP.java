@@ -15,12 +15,14 @@
  */
 package ca.phon.app.project;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.session.editor.SessionEditorEP;
 import ca.phon.plugin.*;
 import ca.phon.project.*;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
+import ca.phon.util.PrefHelper;
 import org.apache.logging.log4j.Level;
 
 import javax.swing.*;
@@ -32,8 +34,6 @@ import java.util.*;
 @PhonPlugin(name="default")
 public class OpenProjectEP implements IPluginEntryPoint {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(OpenProjectEP.class.getName());
-	
 	public static final String EP_NAME = "OpenProject";
 
 	/**
@@ -41,6 +41,8 @@ public class OpenProjectEP implements IPluginEntryPoint {
 	 * the provided entry point args which should point to an existing session in the project
 	 */
 	public static final String OPEN_WITH_SESSION = "open_with_session";
+
+	public static final String USE_NEW_UI_PROP = "ca.phon.app.useNewUI";
 
 	@Override
 	public String getName() {
@@ -93,10 +95,15 @@ public class OpenProjectEP implements IPluginEntryPoint {
 				NativeDialogs.showMessageDialog(props);
 				return false;
 			}
-			
+
+			final boolean isUseNewUI = PrefHelper.getBoolean(USE_NEW_UI_PROP, false);
 			// check to see if the project is already open...
 			for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
-				if(!(cmf instanceof ProjectWindow)) continue;
+				if(isUseNewUI) {
+					if(!(cmf instanceof UnifiedProjectWindow)) continue;
+				} else {
+					if(!(cmf instanceof ProjectWindow)) continue;
+				}
 				final Project pfe = cmf.getExtension(Project.class);
 				if(pfe != null && pfe.getLocation().equals(project.getLocation())) {
 					if(requestFocus) {
@@ -135,8 +142,8 @@ public class OpenProjectEP implements IPluginEntryPoint {
 				}
 				return true;
 			}
-			
-			final ProjectWindow pwindow = new ProjectWindow(project, project.getLocation());
+
+			final CommonModuleFrame pwindow = isUseNewUI ? new UnifiedProjectWindow(project) : new ProjectWindow(project, project.getLocation());
     		pwindow.pack();
     		pwindow.setSize(800, 600);
     		pwindow.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
@@ -145,7 +152,7 @@ public class OpenProjectEP implements IPluginEntryPoint {
     		return true;
 		} catch (Exception e) {
 			// catch anything and report
-			LOGGER.error(e.getMessage());
+			LogUtil.severe(e.getMessage());
 			e.printStackTrace();
 			props.setMessage(e.getLocalizedMessage());
 			NativeDialogs.showMessageDialog(props);
@@ -158,11 +165,11 @@ public class OpenProjectEP implements IPluginEntryPoint {
 		final File oldPropsFile = new File(project.getLocation(), LocalProject.PREV_PROJECT_PROPERTIES_FILE);
 		final File newPropsFile = new File(project.getLocation(), LocalProject.PROJECT_PROPERTIES_FILE);
 		if(oldPropsFile.exists() && !newPropsFile.exists()) {
-			LOGGER.log(Level.INFO, "Moving old .properties file to new project.properties");
+			LogUtil.log(Level.INFO, "Moving old .properties file to new project.properties");
 			try {
 				Files.move(oldPropsFile.toPath(), newPropsFile.toPath(), StandardCopyOption.ATOMIC_MOVE);
 			} catch (IOException e) {
-				LOGGER.log(Level.ERROR, e.getLocalizedMessage(), e);
+				LogUtil.log(Level.ERROR, e.getLocalizedMessage(), e);
 			}
 		}
     }

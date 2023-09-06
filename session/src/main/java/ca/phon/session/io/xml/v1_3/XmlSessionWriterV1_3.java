@@ -15,7 +15,6 @@
  */
 package ca.phon.session.io.xml.v1_3;
 
-import ca.phon.extensions.IExtendable;
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
@@ -27,7 +26,7 @@ import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionWriter;
-import ca.phon.session.usertier.*;
+import ca.phon.session.tierdata.*;
 import ca.phon.util.Language;
 import ca.phon.xml.annotation.XMLSerial;
 import jakarta.xml.bind.JAXBContext;
@@ -430,7 +429,7 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 			final UnvalidatedValue uv = com.getValue().getExtension(UnvalidatedValue.class);
 			retVal.setUnparsed(writeUnparsed(factory, uv));
 		} else {
-			final XmlUserTierData tierData = writeUserTierData(factory, com.getValue());
+			final XmlTierData tierData = writeUserTierData(factory, com.getValue());
 			retVal.setTierData(tierData);
 		}
 		return retVal;
@@ -446,19 +445,19 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 		return retVal;
 	}
 
-	private XmlUserTierData writeUserTierData(ObjectFactory factory, UserTierData tierData) {
-		final XmlUserTierData retVal = factory.createXmlUserTierData();
-		for(UserTierElement ele:tierData.getElements()) {
+	private XmlTierData writeUserTierData(ObjectFactory factory, TierData tierData) {
+		final XmlTierData retVal = factory.createXmlTierData();
+		for(TierElement ele:tierData.getElements()) {
 			if(ele instanceof TierString ts) {
 				final XmlTierWordType tw = factory.createXmlTierWordType();
 				tw.setContent(ts.toString());
 				retVal.getTwOrTcOrInternalMedia().add(tw);
-			} else if(ele instanceof UserTierComment tierComment) {
+			} else if(ele instanceof TierComment tierComment) {
 				final String commentText = tierComment.text();
 				final XmlTierCommentType tc = factory.createXmlTierCommentType();
 				tc.setContent(commentText);
 				retVal.getTwOrTcOrInternalMedia().add(tc);
-			} else if(ele instanceof UserTierInternalMedia im) {
+			} else if(ele instanceof TierInternalMedia im) {
 				final XmlMediaType mediaType = factory.createXmlMediaType();
 				mediaType.setStart(BigDecimal.valueOf(im.getInternalMedia().getStartTime()).setScale(3, RoundingMode.HALF_UP));
 				mediaType.setEnd(BigDecimal.valueOf(im.getInternalMedia().getEndTime()).setScale(3, RoundingMode.HALF_UP));
@@ -509,7 +508,7 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 		}
 
 		// notes
-		final Tier<UserTierData> notesTier = record.getNotesTier();
+		final Tier<TierData> notesTier = record.getNotesTier();
 		if(notesTier.hasValue() && notesTier.getValue().length() > 0) {
 			final XmlNotesTierType notesTierType = writeNotesTier(factory, notesTier);
 			retVal.setNotes(notesTierType);
@@ -634,7 +633,7 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 		return retVal;
 	}
 
-	private XmlNotesTierType writeNotesTier(ObjectFactory factory, Tier<UserTierData> notesTier) {
+	private XmlNotesTierType writeNotesTier(ObjectFactory factory, Tier<TierData> notesTier) {
 		final XmlNotesTierType retVal = factory.createXmlNotesTierType();
 		if(notesTier.isUnvalidated()) {
 			retVal.setUnparsed(writeUnparsed(factory, notesTier.getUnvalidatedValue()));
@@ -657,8 +656,8 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 				retVal.setU(writeOrthography(factory, (Orthography) userTier.getValue()));
 			} else if(tierType == IPATranscript.class) {
 				retVal.setPho(writeIPA(factory, (IPATranscript) userTier.getValue()));
-			} else if(tierType == UserTierData.class) {
-				retVal.setTierData(writeUserTierData(factory, (UserTierData) userTier.getValue()));
+			} else if(tierType == TierData.class) {
+				retVal.setTierData(writeUserTierData(factory, (TierData) userTier.getValue()));
 			} else {
 				throw new IllegalArgumentException("Unsupported tier type " + tierType);
 			}
@@ -672,7 +671,7 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 					xmlBlindTranscription.setU(writeOrthography(factory, blindOrtho));
 				} else if(blindVal instanceof IPATranscript blindIpa) {
 					xmlBlindTranscription.setPho(writeIPA(factory, blindIpa));
-				} else if(blindVal instanceof UserTierData tierData) {
+				} else if(blindVal instanceof TierData tierData) {
 					xmlBlindTranscription.setTierData(writeUserTierData(factory, tierData));
 				} else {
 					throw new IllegalArgumentException("Unsupported blind tier type " + blindVal.getClass());

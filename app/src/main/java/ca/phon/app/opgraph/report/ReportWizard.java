@@ -21,6 +21,7 @@ import ca.phon.app.query.ResultSetSelector;
 import ca.phon.opgraph.*;
 import ca.phon.project.Project;
 import ca.phon.query.db.*;
+import ca.phon.session.SessionFactory;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.decorations.TitledPanel;
 import ca.phon.ui.wizard.WizardStep;
@@ -37,8 +38,6 @@ import java.util.stream.Collectors;
 
 public class ReportWizard extends NodeWizard {
 
-	private static final long serialVersionUID = 3616649077398530316L;
-
 	private WizardStep selectResultSetsStep;
 	private ResultSetSelector resultSetSelector;
 
@@ -54,7 +53,7 @@ public class ReportWizard extends NodeWizard {
 		final ResultSet[] selectedResultSets = resultSetSelector.getSelectedSearches();
 		
 		return Arrays.stream(selectedResultSets)
-					.map( (rs) -> new SessionPath(rs.getSessionPath()) )
+					.map( (rs) -> SessionFactory.newFactory().createSessionPath(rs.getSessionPath()))
 					.sorted()
 					.collect( Collectors.toList() );
 	}

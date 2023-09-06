@@ -15,7 +15,7 @@
  */
 package ca.phon.session.impl;
 
-import ca.phon.session.usertier.UserTierData;
+import ca.phon.session.tierdata.TierData;
 import ca.phon.session.spi.TierDescriptionSPI;
 
 import java.util.*;
@@ -40,11 +40,11 @@ public class TierDescriptionImpl implements TierDescriptionSPI {
 	private final String subtypeExpr;
 	
 	TierDescriptionImpl(String name) {
-		this(name, UserTierData.class);
+		this(name, TierData.class);
 	}
 
 	TierDescriptionImpl(String name, boolean excludeFromAlignment) {
-		this(name, UserTierData.class, excludeFromAlignment);
+		this(name, TierData.class, excludeFromAlignment);
 	}
 
 	TierDescriptionImpl(String name, Class<?> declaredType) {

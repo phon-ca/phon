@@ -23,6 +23,7 @@ import ca.phon.media.*;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.*;
 import ca.phon.ui.nativedialogs.*;
 import uk.co.caprica.vlcj.player.base.*;
@@ -673,7 +674,7 @@ public final class SegmentationHandler {
 					// TODO improve message in dialog
 					if(beepCount >= MAX_BEEPS) {
 						final MessageDialogProperties props = new MessageDialogProperties();
-						props.setParentWindow(editor);
+						props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 						props.setRunAsync(true);
 						props.setTitle("Segmentation Mode");
 						props.setHeader("Segmentation Mode");

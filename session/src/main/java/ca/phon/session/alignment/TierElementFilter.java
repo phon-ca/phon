@@ -4,7 +4,7 @@ import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.PhoneAlignment;
 import ca.phon.session.Tier;
-import ca.phon.session.usertier.UserTierData;
+import ca.phon.session.tierdata.TierData;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ public interface TierElementFilter {
                 return orthographyFilterForOrthographyAlignment();
             } else if(alignedType == IPATranscript.class || alignedType == PhoneAlignment.class) {
                 return orthographyFilterForIPAAlignment();
-            } else if(alignedType == UserTierData.class) {
+            } else if(alignedType == TierData.class) {
                 return orthographyFilterForUserTierAlignment();
             } else {
                 throw new IllegalArgumentException("Invalid aligned tier type " + alignedType);
@@ -26,12 +26,12 @@ public interface TierElementFilter {
                 return ipaFilterForOOrthographyAlignment();
             } else if(alignedType == IPATranscript.class || alignedType == PhoneAlignment.class) {
                 return ipaFilterForIPAAlignment();
-            } else if(alignedType == UserTierData.class) {
+            } else if(alignedType == TierData.class) {
                 return ipaFilterForUserTierAlignment();
             } else {
                 throw new IllegalArgumentException("Invalid aligned tier type " + alignedType);
             }
-        } else if(tierType == UserTierData.class) {
+        } else if(tierType == TierData.class) {
             return defaultUserTierElementFilter();
         } else {
             throw new IllegalArgumentException("Invalid tier type " + tierType);

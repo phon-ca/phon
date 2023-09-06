@@ -7,9 +7,8 @@ import ca.phon.ipa.Phone;
 import ca.phon.project.Project;
 import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.alignment.TierAlignmentRules;
 import ca.phon.session.format.MediaSegmentFormatter;
-import ca.phon.session.usertier.UserTierData;
+import ca.phon.session.tierdata.TierData;
 import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.util.Language;
@@ -341,7 +340,7 @@ public class CSVImporter {
         else {
             tierDescription = sessionFactory.createTierDescription(
                 tierName,
-                UserTierData.class,
+                TierData.class,
                 new HashMap<>()
             );
             session.addUserTier(tierDescription);

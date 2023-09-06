@@ -22,6 +22,7 @@ import ca.phon.media.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.position.SegmentCalculator;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.icons.*;
@@ -40,7 +41,7 @@ public class ExportSegmentAction extends SessionEditorAction {
 		SPEAKER_TURN,
 		CONVERSATION_PERIOD,
 		CUSTOM
-	};
+	}
 	
 	private SegmentType segmentType = SegmentType.CUSTOM;
 	
@@ -177,7 +178,7 @@ public class ExportSegmentAction extends SessionEditorAction {
 	public void hookableActionPerformed(ActionEvent ae) {
 		if(outputPath == null) {
 			SaveDialogProperties saveProps = new SaveDialogProperties();
-			saveProps.setParentWindow(getEditor());
+			saveProps.setParentWindow(CommonModuleFrame.getCurrentFrame());
 			saveProps.setCanCreateDirectories(true);
 			saveProps.setFileFilter(getFileFilter());
 			saveProps.setMessage("Export audio");
@@ -226,14 +227,14 @@ public class ExportSegmentAction extends SessionEditorAction {
 					
 					LogUtil.info("Export segment complete: " + outputFile + " " + outputFile.length() + "B");
 					SwingUtilities.invokeLater( () -> {
-						getEditor().showOkDialog("Export segment", "Export segment complete: " + outputFile + " " + outputFile.length() + "B");
+						CommonModuleFrame.getCurrentFrame().showOkDialog("Export segment", "Export segment complete: " + outputFile + " " + outputFile.length() + "B");
 					});
 				} catch (IOException e) {
 					LogUtil.severe(e);
 					super.err = e;
 					setStatus(TaskStatus.ERROR);
 					SwingUtilities.invokeLater( () -> {
-						getEditor().showOkDialog("Export segment failed", "Export segment failed: " + e.getLocalizedMessage());
+						CommonModuleFrame.getCurrentFrame().showOkDialog("Export segment failed", "Export segment failed: " + e.getLocalizedMessage());
 					});
 					return;
 				}

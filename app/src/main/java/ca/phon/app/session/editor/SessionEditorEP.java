@@ -16,6 +16,7 @@
 package ca.phon.app.session.editor;
 
 import ca.phon.app.autosave.Autosaves;
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.menu.file.OpenFileHistory;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.session.editor.view.check.SessionCheckView;
@@ -50,8 +51,6 @@ import java.util.concurrent.atomic.AtomicReference;
 @PhonPlugin(name="Session Info")
 public class SessionEditorEP implements IPluginEntryPoint {
 
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(SessionEditorEP.class.getName());
-
 	public final static String RECORD_INDEX_PROPERY = "recordIndex";
 
 	public final static String RESULT_VALUES_PROPERTY = "resultValues";
@@ -80,11 +79,9 @@ public class SessionEditorEP implements IPluginEntryPoint {
 		String sessionLoc = (String)epArgs.get(EntryPointArgs.SESSION_NAME);
 		String sessionName = sessionLoc;
 		if(corpusName == null && sessionLoc != null) {
-			int firstDot = sessionLoc.indexOf('.');
-			if(firstDot > 0) {
-				corpusName = sessionLoc.substring(0, firstDot);
-				sessionName = sessionLoc.substring(firstDot+1);
-			}
+			final SessionPath sessionPath = SessionFactory.newFactory().createSessionPath(sessionLoc);
+			corpusName = sessionPath.getCorpus();
+			sessionName = sessionPath.getSession();
 		}
 
 		final AtomicReference<Session> sessionRef = new AtomicReference<>();
@@ -92,7 +89,7 @@ public class SessionEditorEP implements IPluginEntryPoint {
 			sessionRef.set(epArgs.getSession());
 		} catch (IOException e1) {
 			Toolkit.getDefaultToolkit().beep();
-			LOGGER.error( e1.getLocalizedMessage(), e1);
+			LogUtil.severe( e1.getLocalizedMessage(), e1);
 			final MessageDialogProperties props = new MessageDialogProperties();
 			props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 			props.setRunAsync(false);
@@ -112,7 +109,7 @@ public class SessionEditorEP implements IPluginEntryPoint {
 					final Session autosaveSession = autosaves.openAutosave(corpusName, sessionName);
 					sessionRef.set(autosaveSession);
 				} catch (IOException e2) {
-					LOGGER.error( e2.getLocalizedMessage(), e2);
+					LogUtil.severe( e2.getLocalizedMessage(), e2);
 				}
 			} else {
 				props.setMessage(e1.getLocalizedMessage());
@@ -140,7 +137,8 @@ public class SessionEditorEP implements IPluginEntryPoint {
 
 		final Runnable onEdt = new Runnable() {
 			public void run() {
-				final SessionEditor editor = showEditor(project, sessionRef.get(), blindMode, grabFocus);
+				final SessionEditorWindow sessionEditorWindow = showEditor(project, sessionRef.get(), blindMode, grabFocus);
+				final SessionEditor editor = sessionEditorWindow.getSessionEditor();
 
 				if(openAtRecord >= 0 && openAtRecord < editor.getSession().getRecordCount()) {
 					editor.setCurrentRecordIndex(openAtRecord);
@@ -163,29 +161,27 @@ public class SessionEditorEP implements IPluginEntryPoint {
 		else
 			try {
 				SwingUtilities.invokeAndWait(onEdt);
-			} catch (InterruptedException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
-			} catch (InvocationTargetException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+			} catch (InterruptedException | InvocationTargetException e) {
+				LogUtil.severe( e.getLocalizedMessage(), e);
 			}
-	}
+    }
 
 	/**
 	 * @param project
 	 * @param session
 	 * @param blindMode
 	 */
-	public SessionEditor showEditor(Project project, Session session, boolean blindMode, boolean grabFocus) {
+	public SessionEditorWindow showEditor(Project project, Session session, boolean blindMode, boolean grabFocus) {
 		// look for an already open editor
 		for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
-			if(cmf instanceof SessionEditor) {
-				final SessionEditor editor = (SessionEditor)cmf;
+			if(cmf instanceof SessionEditorWindow sessionEditorWindow) {
+				final SessionEditor editor = sessionEditorWindow.getSessionEditor();
 				if(editor.getProject().getLocation().equals(project.getLocation()) &&
 						(editor.getSession().getCorpus().equals(session.getCorpus()) &&
 								editor.getSession().getName().equals(session.getName()))) {
 					editor.requestFocus();
-					editor.toFront();
-					return editor;
+					sessionEditorWindow.toFront();
+					return sessionEditorWindow;
 				}
 			}
 		}
@@ -245,16 +241,15 @@ public class SessionEditorEP implements IPluginEntryPoint {
 			}
 		}
 
-		final SessionEditor editor = new SessionEditor(project, session, transcriber);
+		final SessionEditorWindow sessionEditorWindow = new SessionEditorWindow(project, session, transcriber);
 		final RecordEditorPerspective prevPerspective =
 				RecordEditorPerspective.getPerspective(RecordEditorPerspective.LAST_USED_PERSPECTIVE_NAME);
 		final RecordEditorPerspective perspective =
 				(prevPerspective != null ? prevPerspective : RecordEditorPerspective.getPerspective(RecordEditorPerspective.DEFAULT_PERSPECTIVE_NAME));
-		editor.getViewModel().setupWindows(perspective);
-		
+		final SessionEditor editor = sessionEditorWindow.getSessionEditor();
 		editor.getStatusBar().getProgressBar().setIndeterminate(true);
-		
-		editor.setVisible(true);
+		editor.getViewModel().setupWindows(perspective);
+		sessionEditorWindow.setVisible(true);
 
 		SwingUtilities.invokeLater( () -> {
 			editor.getViewModel().applyPerspective(perspective);
@@ -288,7 +283,7 @@ public class SessionEditorEP implements IPluginEntryPoint {
 			fileHistory.saveHistory();
 		}
 
-		return editor;
+		return sessionEditorWindow;
 	}
 
 	private class PasswordDialog extends JDialog {

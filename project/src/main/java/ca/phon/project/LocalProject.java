@@ -20,6 +20,7 @@ import ca.phon.project.io.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.io.*;
+import ca.phon.util.OSInfo;
 import ca.phon.util.VersionInfo;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
@@ -247,27 +248,46 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 		final List<String> corpusList = new ArrayList<String>();
 
 		Path projectPath = getFolder().toPath();
-		try(DirectoryStream<Path> stream = Files.newDirectoryStream(projectPath)) {
-			for(Path path:stream) {
-				if(Files.isDirectory(path)) {
-					if(!Files.isHidden(path)) {
-						String folderName = path.getFileName().toString();
-						if(!folderName.startsWith("~")
-								&& !folderName.endsWith("~")
-								&& !folderName.startsWith(".")
-								&& !folderName.startsWith("__")) {
-							corpusList.add(folderName);
-						}	
-					}
-				}
-			}
-			
-			Collections.sort(corpusList);
+		corpusList.add(".");
+		try {
+			scanForCorpusFolders(projectPath, corpusList);
 		} catch (IOException e) {
 			LOGGER.error(e);
 		}
-		
+		Collections.sort(corpusList);
+
 		return corpusList;
+	}
+
+	private void scanForCorpusFolders(Path path, List<String> corpusList) throws IOException {
+		try(DirectoryStream<Path> stream = Files.newDirectoryStream(path)) {
+			for(Path subFolder:stream) {
+				if (Files.isDirectory(subFolder)) {
+					if (!Files.isHidden(subFolder)) {
+						String folderName = subFolder.getFileName().toString();
+						if (!folderName.startsWith("~")
+								&& !folderName.endsWith("~")
+								&& !folderName.startsWith(".")
+								&& !folderName.startsWith("__")) {
+							corpusList.add(corpusNameFromPath(subFolder));
+							scanForCorpusFolders(subFolder, corpusList);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private String corpusNameFromPath(Path path) {
+		final Path projectPath = getFolder().toPath();
+		final Path relativePath = projectPath.relativize(path);
+
+		String retVal = relativePath.toString();
+		if(OSInfo.isWindows()) {
+			retVal.replaceAll("[\\]", "/");
+		}
+
+		return relativePath.toString();
 	}
 
 	@Override
@@ -468,7 +488,10 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 						if(lastDot > 0) {
 							String ext = filename.substring(lastDot+1);
 							if(validexts.contains(ext)) {
-								retVal.add(filename.substring(0, lastDot));
+								final SessionReader reader = (new SessionInputFactory()).createReaderForFile(path.toFile());
+								if(reader != null) {
+									retVal.add(filename);
+								}
 							}
 						}
 					}
@@ -489,16 +512,18 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 	}
 
 	public File getSessionFile(String corpus, String session) {
-		final List<File> potentialFiles =
-				SessionInputFactory.getSessionExtensions().stream()
-					.map( (ext) -> new File(getCorpusFolder(corpus), session + "." + ext) )
-					.collect( Collectors.toList() );
-		final Optional<File> optionalFile = potentialFiles.stream()
-					.filter( File::exists )
+		if(session.lastIndexOf('.') < 0) {
+			final List<File> potentialFiles =
+					SessionInputFactory.getSessionExtensions().stream()
+							.map((ext) -> new File(getCorpusFolder(corpus), session + "." + ext))
+							.collect(Collectors.toList());
+			final Optional<File> optionalFile = potentialFiles.stream()
+					.filter(File::exists)
 					.findFirst();
-		File retVal = optionalFile.orElse(new File(getCorpusFolder(corpus), session + ".xml"));
-
-		return retVal;
+			return optionalFile.orElse(new File(getCorpusFolder(corpus), session + ".xml"));
+		} else {
+			return new File(getCorpusFolder(corpus), session);
+		}
 	}
 
 	private String sessionProjectPath(String corpus, String session) {
@@ -532,9 +557,15 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 			if(!retVal.getCorpus().equals(corpus)) {
 				retVal.setCorpus(corpus);
 			}
-			if(retVal.getName() == null || !retVal.getName().equals(session)) {
-				retVal.setName(session);
+			final int extIdx = session.lastIndexOf('.');
+			String sessionName = session;
+			if(extIdx >= 0) {
+				sessionName = session.substring(0, extIdx);
 			}
+			if(retVal.getName() == null || !retVal.getName().equals(sessionName)) {
+				retVal.setName(sessionName);
+			}
+			retVal.setSessionPath(SessionFactory.newFactory().createSessionPath(corpus, session));
 
 			return retVal;
 		} catch (Exception e) {

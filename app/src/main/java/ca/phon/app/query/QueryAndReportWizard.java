@@ -1082,7 +1082,7 @@ public class QueryAndReportWizard extends NodeWizard {
 		
 		final List<ResultSet> resultSets = rsManager.getResultSetsForQuery(runnerPanel.getTempProject(), q);
 		for(ResultSet rs:resultSets) {
-			final SessionPath sp = new SessionPath(rs.getSessionPath());
+			final SessionPath sp = SessionFactory.newFactory().createSessionPath(rs.getSessionPath());
 			final TreePath treePath = sessionSelector.sessionPathToTreePath(sp);
 			
 			final TristateCheckBoxTreeNode sessionNode = (TristateCheckBoxTreeNode)treePath.getLastPathComponent();
@@ -1102,7 +1102,7 @@ public class QueryAndReportWizard extends NodeWizard {
 		
 		final List<ResultSet> resultSets = rsManager.getResultSetsForQuery(runnerPanel.getTempProject(), q);
 		for(ResultSet rs:resultSets) {
-			final SessionPath sp = new SessionPath(rs.getSessionPath());
+			final SessionPath sp = SessionFactory.newFactory().createSessionPath(rs.getSessionPath());
 			final TreePath treePath = sessionSelector.sessionPathToTreePath(sp);
 			
 			final TristateCheckBoxTreeNode sessionNode = (TristateCheckBoxTreeNode)treePath.getLastPathComponent();

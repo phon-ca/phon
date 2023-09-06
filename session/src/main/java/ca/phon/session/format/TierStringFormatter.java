@@ -16,7 +16,7 @@
 package ca.phon.session.format;
 
 import ca.phon.formatter.*;
-import ca.phon.session.usertier.TierString;
+import ca.phon.session.tierdata.TierString;
 
 import java.text.ParseException;
 

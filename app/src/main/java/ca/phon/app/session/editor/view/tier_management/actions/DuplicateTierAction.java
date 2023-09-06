@@ -5,7 +5,7 @@ import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.tier_management.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;
-import ca.phon.session.usertier.UserTierData;
+import ca.phon.session.tierdata.TierData;
 import ca.phon.ui.toast.*;
 import ca.phon.util.icons.*;
 import org.apache.commons.lang3.StringUtils;
@@ -91,12 +91,12 @@ public class DuplicateTierAction extends TierManagementAction {
 			editor.getUndoSupport().postEdit(edit);
 
 			for(Record r:getEditor().getSession().getRecords()) {
-				Tier<UserTierData> existingTier = r.getTier(td.getName(), UserTierData.class);
-				Tier<UserTierData> dupTier = r.getTier(tierDescription.getName(), UserTierData.class);
+				Tier<TierData> existingTier = r.getTier(td.getName(), TierData.class);
+				Tier<TierData> dupTier = r.getTier(tierDescription.getName(), TierData.class);
 
-				UserTierData existingVal = existingTier.getValue();
+				TierData existingVal = existingTier.getValue();
 				try {
-					TierEdit<UserTierData> tierEdit = new TierEdit<>(getEditor(), dupTier, UserTierData.parseTierData(existingVal.toString()));
+					TierEdit<TierData> tierEdit = new TierEdit<>(getEditor(), dupTier, TierData.parseTierData(existingVal.toString()));
 					getEditor().getUndoSupport().postEdit(tierEdit);
 				} catch (ParseException pe) {}
 			}

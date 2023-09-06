@@ -17,6 +17,7 @@ package ca.phon.session;
 
 import ca.phon.extensions.*;
 import ca.phon.util.Tuple;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
@@ -24,30 +25,37 @@ import java.util.Set;
  * Helper class for holding location for sessions
  * in a project.
  */
-public class SessionPath extends Tuple<String, String> implements IExtendable {
-	
+public class SessionPath implements IExtendable, Comparable<SessionPath> {
+
+	public final static String PATH_SEP = "/";
+
+	private String corpus;
+
+	private String session;
+
 	private final ExtensionSupport extSupport = new ExtensionSupport(SessionPath.class, this);
 
 	/**
 	 * Constructor
 	 */
-	public SessionPath() {
+	SessionPath() {
 		this("", "");
 	}
 
-	public SessionPath(String path) {
+	SessionPath(String path) {
 		super();
-		int dotIdx = path.indexOf('.');
-		if(dotIdx < 0) throw new IllegalArgumentException(path);
-		setObj1(path.substring(0, dotIdx));
-		setObj2(path.substring(dotIdx+1));
+		int sepIdx = path.lastIndexOf(PATH_SEP);
+		if(sepIdx < 0) throw new IllegalArgumentException(path);
+		setCorpus(path.substring(0, sepIdx));
+		setSession(path.substring(sepIdx+1));
 		
 		extSupport.initExtensions();
 	}
 
 	public SessionPath(String corpus, String session) {
-		super(corpus, session);
-		
+		super();
+		this.corpus = corpus;
+		this.session = session;
 		extSupport.initExtensions();
 	}
 
@@ -55,40 +63,39 @@ public class SessionPath extends Tuple<String, String> implements IExtendable {
 	 * Get corpus
 	 */
 	public String getCorpus() {
-		return getObj1();
+		return this.corpus;
 	}
 
 	/**
 	 * Set corpus
 	 */
 	public void setCorpus(String corpus) {
-		setObj1(corpus);
+		this.corpus = corpus;
 	}
 
 	/**
 	 * Get session
 	 */
 	public String getSession() {
-		return getObj2();
+		return this.session;
 	}
 
 	/**
 	 * Set session
 	 */
-	public void setSession(String session) {
-		setObj2(session);
+	public void setSession(String session) {this.session = session;
 	}
 
 	@Override
 	public int hashCode() {
-		long hash = getObj1().hashCode();
-		hash = hash * 31 + getObj2().hashCode();
+		long hash = getCorpus().hashCode();
+		hash = hash * 31 + getSession().hashCode();
 		return (int)hash;
 	}
 
 	@Override
 	public String toString() {
-		return getCorpus() + "." + getSession();
+		return getCorpus() + PATH_SEP + getSession();
 	}
 
 	public Set<Class<?>> getExtensions() {
@@ -107,6 +114,10 @@ public class SessionPath extends Tuple<String, String> implements IExtendable {
 		return extSupport.removeExtension(cap);
 	}
 
-	
-	
+
+	@Override
+	public int compareTo(@NotNull SessionPath o) {
+		return toString().compareTo(o.toString());
+	}
+
 }

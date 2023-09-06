@@ -15,11 +15,14 @@
  */
 package ca.phon.app.session.editor.actions;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.session.io.*;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.icons.*;
+import org.apache.commons.logging.Log;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -31,10 +34,6 @@ import java.io.*;
  */
 public class SaveAsAction extends SessionEditorAction {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(SaveAsAction.class.getName());
-
-	private static final long serialVersionUID = -168218633218148720L;
-
 	private final static String TXT = "Save as ";
 	
 	private final static String DESC = "Save session as ";
@@ -62,7 +61,7 @@ public class SaveAsAction extends SessionEditorAction {
 	public void hookableActionPerformed(ActionEvent ae) {
 		// ask for a filename
 		final SaveDialogProperties props = new SaveDialogProperties();
-		props.setParentWindow(getEditor());
+		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 		final FileFilter filter = new FileFilter(sessionIO.name(), sessionIO.extension());
 		props.setFileFilter(filter);
 		props.setCanCreateDirectories(true);
@@ -86,8 +85,8 @@ public class SaveAsAction extends SessionEditorAction {
 		try {
 			writer.writeSession(getEditor().getSession(), new FileOutputStream(filename));
 		} catch (IOException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
-			getEditor().showErrorMessage("Save session failed: " + e.getLocalizedMessage());
+			LogUtil.severe( e.getLocalizedMessage(), e);
+			CommonModuleFrame.getCurrentFrame().showErrorMessage("Save session failed: " + e.getLocalizedMessage());
 		}
 	}
 }

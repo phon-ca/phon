@@ -1,4 +1,4 @@
-package ca.phon.session.usertier;
+package ca.phon.session.tierdata;
 
 import ca.phon.formatter.MediaTimeFormatter;
 import ca.phon.orthography.InternalMedia;
@@ -7,23 +7,23 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserTierParserListener extends UserTierBaseListener {
+public class TierDataParserListener extends TierDataBaseListener {
 
-    final List<UserTierElement> elementList = new ArrayList<>();
+    final List<TierElement> elementList = new ArrayList<>();
 
     @Override
-    public void exitWord(UserTierParser.WordContext ctx) {
+    public void exitWord(TierDataParser.WordContext ctx) {
         elementList.add(new TierString(ctx.getText()));
     }
 
     @Override
-    public void exitComment(UserTierParser.CommentContext ctx) {
+    public void exitComment(TierDataParser.CommentContext ctx) {
         final String commentText = ctx.getText().substring(2, ctx.getText().length()-1).trim();
-        elementList.add(new UserTierComment(commentText));
+        elementList.add(new TierComment(commentText));
     }
 
     @Override
-    public void exitInternal_media(UserTierParser.Internal_mediaContext ctx) {
+    public void exitInternal_media(TierDataParser.Internal_mediaContext ctx) {
         final String startText = ctx.time_in_minutes_seconds(0).getText();
         final String endText = ctx.time_in_minutes_seconds(1).getText();
 
@@ -32,15 +32,15 @@ public class UserTierParserListener extends UserTierBaseListener {
             final float endTime = MediaTimeFormatter.parseTimeToSeconds(endText);
 
             final InternalMedia internalMedia = new InternalMedia(startTime, endTime);
-            elementList.add(new UserTierInternalMedia(internalMedia));
+            elementList.add(new TierInternalMedia(internalMedia));
         } catch (ParseException pe) {
             throw new IllegalArgumentException(pe);
         }
 
     }
 
-    public UserTierData toTierData() {
-        return new UserTierData(elementList);
+    public TierData toTierData() {
+        return new TierData(elementList);
     }
 
 }

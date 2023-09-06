@@ -1,13 +1,7 @@
 package ca.phon.session;
 
-import ca.phon.orthography.Orthography;
 import ca.phon.session.alignment.CrossTierAlignment;
 import ca.phon.session.alignment.TierAligner;
-import ca.phon.session.alignment.TierAlignmentRules;
-import ca.phon.session.usertier.UserTierData;
-import ca.phon.syllabifier.Syllabifier;
-import ca.phon.syllabifier.SyllabifierLibrary;
-import junit.framework.AssertionFailedError;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

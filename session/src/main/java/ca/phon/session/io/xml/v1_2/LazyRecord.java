@@ -22,7 +22,7 @@ import ca.phon.session.*;
 import ca.phon.session.io.xml.v12.ParticipantType;
 import ca.phon.session.io.xml.v12.RecordType;
 import ca.phon.session.spi.RecordSPI;
-import ca.phon.session.usertier.UserTierData;
+import ca.phon.session.tierdata.TierData;
 
 import java.util.*;
 
@@ -123,7 +123,7 @@ public final class LazyRecord implements RecordSPI {
 		return internalRecord.getPhoneAlignmentTier();
 	}
 
-	public Tier<UserTierData> getNotesTier() {
+	public Tier<TierData> getNotesTier() {
 		loadRecord();
 		return internalRecord.getNotesTier();
 	}

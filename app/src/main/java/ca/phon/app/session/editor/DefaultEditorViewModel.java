@@ -111,7 +111,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		super();
 
 		editorRef = new WeakReference<SessionEditor>(editor);
-		editor.addWindowListener(windowChangeListener);
+//		editor.addWindowListener(windowChangeListener);
 		getDockControl();
 		
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.EditorFinishedLoading,
@@ -121,7 +121,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 	private CControl getDockControl() {
 		if(dockControl == null) {
 			dockControl = new CControl( windows );
-			windows.add(getEditor());
+			//windows.add(SwingUtilities.getWindowAncestor(getEditor()));
 			setupDockControl();
 			rootArea = dockControl.createContentArea( "root" );
 		}
@@ -394,7 +394,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		registeredViews.clear();
 		dockables.clear();
 
-		windows.remove(getEditor());
+		windows.remove(SwingUtilities.getWindowAncestor(getEditor()));
 	}
 
 	@Override
@@ -457,9 +457,12 @@ public class DefaultEditorViewModel implements EditorViewModel {
 
 			savePreviousPerspective();
 
-			getEditor().setJMenuBar(MenuManager.createWindowMenuBar(getEditor()));
-			for(AccessoryWindow accWin:accessoryWindows) {
-				accWin.setJMenuBar(MenuManager.createWindowMenuBar(accWin));
+			Window parentWin = SwingUtilities.getWindowAncestor(getEditor());
+			if(parentWin instanceof CommonModuleFrame commonModuleFrame) {
+				commonModuleFrame.setJMenuBar(MenuManager.createWindowMenuBar(commonModuleFrame));
+				for (AccessoryWindow accWin : accessoryWindows) {
+					accWin.setJMenuBar(MenuManager.createWindowMenuBar(accWin));
+				}
 			}
 		}
 	}
@@ -489,7 +492,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 	 */
 	public void onDeletePerspective(RecordEditorPerspective perspective) {
 		final MessageDialogProperties props = new MessageDialogProperties();
-		props.setParentWindow(getEditor());
+		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 		props.setTitle("Delete Layout");
 		props.setHeader("Delete Layout");
 		props.setMessage("Delete layout '" + perspective.getName() + "'?");
@@ -518,6 +521,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 				final XElement xele = XIO.readUTF(is);
 
 				final XElement boundsEle = xele.getElement("bounds");
+				Window win = SwingUtilities.getWindowAncestor(getEditor());
 				if(boundsEle != null) {
 					int x = boundsEle.getAttribute("x").getInt();
 					int y = boundsEle.getAttribute("y").getInt();
@@ -529,14 +533,16 @@ public class DefaultEditorViewModel implements EditorViewModel {
 						extendedState = extendedStateAttr.getInt();
 					}
 
-					if(width >= 0 && height >= 0) {
-						getEditor().setSize(width, height);
+					if(win instanceof CommonModuleFrame commonModuleFrame) {
+						if (width >= 0 && height >= 0) {
+							commonModuleFrame.setSize(width, height);
+						}
+						commonModuleFrame.setLocation(x, y);
+						commonModuleFrame.setExtendedState(extendedState);
 					}
-					getEditor().setLocation(x, y);
-					getEditor().setExtendedState(extendedState);
 				} else {
-					if(!getEditor().isVisible())
-						getEditor().cascadeWindow(CommonModuleFrame.getCurrentFrame());
+					if(!getEditor().isVisible() && win instanceof CommonModuleFrame cmf)
+						cmf.cascadeWindow(CommonModuleFrame.getCurrentFrame());
 				}
 
 				final XElement windowsEle = xele.getElement("windows");
@@ -589,11 +595,14 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			perspective.storeLocations();
 			dockControl.load(editorPerspective.getName());
 
-			getEditor().setJMenuBar(MenuManager.createWindowMenuBar(getEditor()));
-			for(AccessoryWindow accWin:accessoryWindows) {
-				accWin.setJMenuBar(MenuManager.createWindowMenuBar(accWin));
+			Window win = SwingUtilities.getWindowAncestor(getEditor());
+			if(win instanceof CommonModuleFrame cmf) {
+				cmf.setJMenuBar(MenuManager.createWindowMenuBar(cmf));
+				for(AccessoryWindow accWin:accessoryWindows) {
+					accWin.setJMenuBar(MenuManager.createWindowMenuBar(accWin));
+				}
 			}
-			
+
 			for(var station:dockControl.getStations()) {
 				if(station instanceof StackDockStation) {
 					((StackDockStation)station).addDockableStateListener(new DockableStateListener() {
@@ -610,6 +619,14 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		}
 	}
 
+	private CommonModuleFrame getFrameForEditor() {
+		final Window window = SwingUtilities.getWindowAncestor(getEditor());
+		if(window instanceof  CommonModuleFrame commonModuleFrame)
+			return commonModuleFrame;
+		else
+			return null;
+	}
+
 	@Override
 	public void savePerspective(RecordEditorPerspective editorPerspective) {
 		if(dockControl == null) return;
@@ -620,7 +637,10 @@ public class DefaultEditorViewModel implements EditorViewModel {
 
 				// add position of window as attributes
 				final XElement rootBoundsEle = root.addElement("bounds");
-				writeBoundsInfo(rootBoundsEle, getEditor());
+
+				final CommonModuleFrame cmf = getFrameForEditor();
+				if(cmf != null)
+					writeBoundsInfo(rootBoundsEle, cmf);
 
 				final XElement accessoryWindowsEle = root.addElement("windows");
 				for(AccessoryWindow window:accessoryWindows) {
@@ -636,12 +656,10 @@ public class DefaultEditorViewModel implements EditorViewModel {
 
 				final File f = new File(editorPerspective.getLocation().toURI());
 				XIO.writeUTF(root, new FileOutputStream(f));
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (URISyntaxException e) {
-				e.printStackTrace();
+			} catch (IOException | URISyntaxException e) {
+				LogUtil.severe(e);
 			}
-		}
+        }
 	}
 
 	private void writeBoundsInfo(XElement rootBoundsEle, JFrame frame) {
@@ -1175,8 +1193,6 @@ public class DefaultEditorViewModel implements EditorViewModel {
 	private List<AccessoryWindow> accessoryWindows = new ArrayList<AccessoryWindow>();
 	private class AccessoryWindow extends CommonModuleFrame {
 
-		private static final long serialVersionUID = -8637239684975912272L;
-
 		private CContentArea contentArea;
 
 		private UUID uuid;
@@ -1190,10 +1206,10 @@ public class DefaultEditorViewModel implements EditorViewModel {
 
 			this.uuid = uuid;
 
-			setWindowName("(" + (accessoryWindows.size()+1) + ") " + getEditor().getWindowName());
+			setWindowName("(" + (accessoryWindows.size()+1) + ") " + getEditor().getTitle());
 
 			setShowInWindowMenu(false);
-			setParentFrame(getEditor());
+			setParentFrame(getFrameForEditor());
 
 			putExtension(Project.class, getEditor().getProject());
 			putExtension(UndoManager.class, getEditor().getUndoManager());
@@ -1251,7 +1267,7 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			String retVal = "(" + (accessoryWindows.indexOf(this)+1) + ") Session Editor";
 			if(session != null) {
 				retVal += " : " + session.getCorpus() + "." + session.getName();
-				if(getEditor().hasUnsavedChanges())
+				if(getEditor().isModified())
 					retVal += "*";
 			}
 			return retVal;

@@ -35,8 +35,6 @@ import java.time.format.DateTimeFormatter;
 
 public class SessionEditorStatusBar extends JXStatusBar {
 
-	private static final long serialVersionUID = 286465072395883742L;
-
 	/**
 	 * Status bar progress
 	 */
@@ -116,7 +114,7 @@ public class SessionEditorStatusBar extends JXStatusBar {
 
 		modifiedIcon = IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL);
 		unmodifiedIcon = IconManager.getInstance().getDisabledIcon("actions/document-save", IconSize.SMALL);
-		if(getEditor().hasUnsavedChanges()) {
+		if(getEditor().isModified()) {
 			statusLabel.setIcon(modifiedIcon);
 		} else {
 			statusLabel.setIcon(unmodifiedIcon);
@@ -124,8 +122,7 @@ public class SessionEditorStatusBar extends JXStatusBar {
 		statusLabel.setToolTipText(getStatusTooltipText());
 		add(statusLabel, new JXStatusBar.Constraint(IconSize.SMALL.getWidth()));
 
-		sessionPathLabel = new JLabel(getEditor().getSession().getCorpus() + "/" +
-				getEditor().getSession().getName());
+		sessionPathLabel = new JLabel(getEditor().getSession().getSessionPath().toString() );
 		sessionPathLabel.setFont(sessionPathLabel.getFont().deriveFont(10.0f));
 		sessionPathLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		sessionPathLabel.setToolTipText(
@@ -186,7 +183,7 @@ public class SessionEditorStatusBar extends JXStatusBar {
 		final Project project = editor.getProject();
 		final Session session = editor.getSession();
 
-		if(editor.hasUnsavedChanges()) {
+		if(editor.isModified()) {
 			buf.append("*modified* ");
 		}
 

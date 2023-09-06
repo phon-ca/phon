@@ -19,6 +19,7 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.media.*;
 import ca.phon.session.*;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import uk.co.caprica.vlcj.player.base.*;
 
@@ -81,11 +82,11 @@ public class SegmentPlayback {
 		EditorViewModel viewModel = getEditor().getViewModel();
 		SessionMediaModel mediaModel = getEditor().getMediaModel();
 		if(!mediaModel.isSessionMediaAvailable()) {
-			getEditor().showMessageDialog("Unable to play segment", "No media available", MessageDialogProperties.okOptions);
+			CommonModuleFrame.getCurrentFrame().showMessageDialog("Unable to play segment", "No media available", MessageDialogProperties.okOptions);
 			return;
 		} else if(!mediaModel.isSessionAudioAvailable() 
 				&& !viewModel.isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
-			getEditor().showMessageDialog("Unable to play segment", "Media player view must be visible", MessageDialogProperties.okOptions);
+			CommonModuleFrame.getCurrentFrame().showMessageDialog("Unable to play segment", "Media player view must be visible", MessageDialogProperties.okOptions);
 			return;
 		}
 		

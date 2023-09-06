@@ -16,6 +16,7 @@ import ca.phon.query.db.Result;
 import ca.phon.query.db.ResultValue;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.query.report.datasource.TableDataSource;
+import ca.phon.session.SessionFactory;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.util.Range;
@@ -75,14 +76,11 @@ public class ResultTableUtil {
         if(sessionColumn == -1) return;
         if(recordColumn == -1) return;
 
-        SessionPath sp = new SessionPath();
+        SessionPath sp = null;
         if(sessionColumn >= 0) {
             String sessionTxt = table.getValueAt(row, sessionColumn).toString();
-            if(sessionTxt == null || sessionTxt.length() == 0 || sessionTxt.indexOf('.') < 0) return;
-            String[] sessionPath = sessionTxt.split("\\.");
-            if(sessionPath.length != 2) return;
-            sp.setCorpus(sessionPath[0]);
-            sp.setSession(sessionPath[1]);
+            if(sessionTxt == null || sessionTxt.length() == 0) return;
+            sp = SessionFactory.newFactory().createSessionPath(sessionTxt);
         }
 
         // get record index

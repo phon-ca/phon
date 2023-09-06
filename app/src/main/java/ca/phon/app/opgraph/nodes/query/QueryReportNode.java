@@ -28,6 +28,7 @@ import ca.phon.opgraph.nodes.general.MacroNode;
 import ca.phon.project.Project;
 import ca.phon.project.exceptions.ProjectConfigurationException;
 import ca.phon.query.db.*;
+import ca.phon.session.SessionFactory;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
 
@@ -116,7 +117,7 @@ public class QueryReportNode extends OpNode implements NodeSettings {
 			
 			for(ResultSet resultSet:results) {
 				manager.saveResultSet(tempProject, query, resultSet);
-				sessions.add(new SessionPath(resultSet.getSessionPath()));
+				sessions.add(SessionFactory.newFactory().createSessionPath(resultSet.getSessionPath()));
 			}
 			
 			final ReportTree reportTree = new ReportTree();

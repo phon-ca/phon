@@ -25,9 +25,8 @@ import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.Rank;
 import ca.phon.session.Record;
 import ca.phon.session.*;
-import ca.phon.session.alignment.TierAlignmentRules;
 import ca.phon.session.alignment.TierElementFilter;
-import ca.phon.session.usertier.*;
+import ca.phon.session.tierdata.*;
 import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionReader;
 import ca.phon.util.Language;
@@ -363,7 +362,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 			case CHAT -> Orthography.class;
 			case IPA -> IPATranscript.class;
 			case PHONE_ALIGNMENT -> PhoneAlignment.class;
-			case DEFAULT -> UserTierData.class;
+			case DEFAULT -> TierData.class;
 		};
 		final Map<String, String> tierParams = new LinkedHashMap<>();
 		if(tdt.getTierParameters() != null) {
@@ -421,8 +420,8 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 			case TYPES -> CommentType.Types;
 			case WARNING -> CommentType.Warning;
 		};
-		final UserTierData userTierData = readUserTierData(factory, ct.getTierData());
-		return factory.createComment(type, userTierData);
+		final TierData tierData = readUserTierData(factory, ct.getTierData());
+		return factory.createComment(type, tierData);
 	}
 
 	Record readRecord(SessionFactory factory, Session session, XmlRecordType rt) {
@@ -487,10 +486,10 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 
 		// notes
 		if(rt.getNotes() != null) {
-			final UserTierData notesData = readNotes(factory, rt.getNotes());
+			final TierData notesData = readNotes(factory, rt.getNotes());
 			retVal.setNotes(notesData);
 			for(var xmlBlindTranscription:rt.getNotes().getBlindTranscription()) {
-				final UserTierData blindNotes = readBlindUserTierTranscript(factory, xmlBlindTranscription);
+				final TierData blindNotes = readBlindUserTierTranscript(factory, xmlBlindTranscription);
 				retVal.getNotesTier().setBlindTranscription(xmlBlindTranscription.getTranscriber(), blindNotes);
 			}
 		}
@@ -520,8 +519,8 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 				((Tier<Orthography>)userTier).setValue(readUserTierOrthography(factory, utt));
 			} else if(td.getDeclaredType() == IPATranscript.class) {
 				((Tier<IPATranscript>)userTier).setValue(readUserTierIPATranscript(factory, utt));
-			} else if(td.getDeclaredType() == UserTierData.class) {
-				((Tier<UserTierData>)userTier).setValue(readUserTier(factory, utt));
+			} else if(td.getDeclaredType() == TierData.class) {
+				((Tier<TierData>)userTier).setValue(readUserTier(factory, utt));
 			} else {
 				throw new IllegalArgumentException("Unsupported user tier type");
 			}
@@ -640,8 +639,8 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		return retVal;
 	}
 
-	private UserTierData readBlindUserTierTranscript(SessionFactory factory, XmlBlindTranscriptionType itt) {
-		UserTierData retVal = new UserTierData();
+	private TierData readBlindUserTierTranscript(SessionFactory factory, XmlBlindTranscriptionType itt) {
+		TierData retVal = new TierData();
 		if(itt.getTierData() != null) {
 			retVal = readUserTierData(factory, itt.getTierData());
 		} else if(itt.getUnparsed() != null) {
@@ -694,8 +693,8 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		return new PhoneAlignment(alignments);
 	}
 
-	private UserTierData readUserTier(SessionFactory factory, XmlUserTierType utt) {
-		UserTierData retVal = new UserTierData();
+	private TierData readUserTier(SessionFactory factory, XmlUserTierType utt) {
+		TierData retVal = new TierData();
 		if(utt.getTierData() != null) {
 			retVal = readUserTierData(factory, utt.getTierData());
 		} else if(utt.getUnparsed() != null) {
@@ -704,8 +703,8 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		return retVal;
 	}
 
-	private UserTierData readNotes(SessionFactory factory, XmlNotesTierType ntt) {
-		UserTierData retVal = new UserTierData();
+	private TierData readNotes(SessionFactory factory, XmlNotesTierType ntt) {
+		TierData retVal = new TierData();
 		if(ntt.getTierData() != null) {
 			retVal = readUserTierData(factory, ntt.getTierData());
 		} else if(ntt.getUnparsed() != null) {
@@ -714,21 +713,21 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		return retVal;
 	}
 
-	private UserTierData readUserTierData(SessionFactory factory, XmlUserTierData utd) {
-		final List<UserTierElement> elements = new ArrayList<>();
+	private TierData readUserTierData(SessionFactory factory, XmlTierData utd) {
+		final List<TierElement> elements = new ArrayList<>();
 		for(Object obj:utd.getTwOrTcOrInternalMedia()) {
 			if(obj instanceof XmlTierWordType tierWordType) {
 				elements.add(new TierString(tierWordType.getContent()));
 			} else if(obj instanceof XmlTierCommentType tierCommentType) {
-				elements.add(new UserTierComment(tierCommentType.getContent()));
+				elements.add(new TierComment(tierCommentType.getContent()));
 			} else if(obj instanceof XmlMediaType mt) {
 				final MediaSegment seg = readMediaSegment(factory, mt);
-				elements.add(new UserTierInternalMedia(new InternalMedia(seg.getStartValue(), seg.getEndValue())));
+				elements.add(new TierInternalMedia(new InternalMedia(seg.getStartValue(), seg.getEndValue())));
 			} else {
 				LOGGER.warn("Invalid element " + obj.toString());
 			}
 		}
-		return new UserTierData(elements);
+		return new TierData(elements);
 	}
 
 	/**

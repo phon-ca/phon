@@ -17,6 +17,7 @@ package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.DeleteRecordEdit;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.*;
@@ -59,7 +60,7 @@ public class DeleteRecordAction extends SessionEditorAction {
 		if(confirm) {
 			final MessageDialogProperties props = new MessageDialogProperties();
 			props.setRunAsync(false);
-			props.setParentWindow(getEditor());
+			props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 			props.setTitle("Delete record");
 			props.setHeader("Confirm delete record");
 			props.setMessage("Delete record " + (getEditor().getCurrentRecordIndex()+1) + "?");

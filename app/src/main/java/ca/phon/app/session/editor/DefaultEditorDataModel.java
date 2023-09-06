@@ -15,8 +15,10 @@
  */
 package ca.phon.app.session.editor;
 
+import ca.phon.project.Project;
 import ca.phon.session.Record;
 import ca.phon.session.*;
+import com.kitfox.svg.A;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -25,6 +27,11 @@ import java.util.concurrent.atomic.AtomicReference;
  * 
  */
 public class DefaultEditorDataModel implements EditorDataModel {
+
+	/**
+	 * Project
+	 */
+	private final AtomicReference<Project> projectRef;
 
 	/**
 	 * Reference to session
@@ -39,9 +46,20 @@ public class DefaultEditorDataModel implements EditorDataModel {
 	/**
 	 * Constructor
 	 */
-	public DefaultEditorDataModel(Session session) {
+	public DefaultEditorDataModel(Project project, Session session) {
 		super();
+		this.projectRef = new AtomicReference<>(project);
 		this.sessionRef = new AtomicReference<>(session);
+	}
+
+	@Override
+	public Project getProject() {
+		return this.projectRef.get();
+	}
+
+	@Override
+	public void setProject(Project project) {
+		this.projectRef.set(project);
 	}
 
 	@Override
