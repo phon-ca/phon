@@ -490,7 +490,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 							if(validexts.contains(ext)) {
 								final SessionReader reader = (new SessionInputFactory()).createReaderForFile(path.toFile());
 								if(reader != null) {
-									retVal.add(filename.substring(0, lastDot));
+									retVal.add(filename);
 								}
 							}
 						}
@@ -512,16 +512,18 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 	}
 
 	public File getSessionFile(String corpus, String session) {
-		final List<File> potentialFiles =
-				SessionInputFactory.getSessionExtensions().stream()
-					.map( (ext) -> new File(getCorpusFolder(corpus), session + "." + ext) )
-					.collect( Collectors.toList() );
-		final Optional<File> optionalFile = potentialFiles.stream()
-					.filter( File::exists )
+		if(session.lastIndexOf('.') < 0) {
+			final List<File> potentialFiles =
+					SessionInputFactory.getSessionExtensions().stream()
+							.map((ext) -> new File(getCorpusFolder(corpus), session + "." + ext))
+							.collect(Collectors.toList());
+			final Optional<File> optionalFile = potentialFiles.stream()
+					.filter(File::exists)
 					.findFirst();
-		File retVal = optionalFile.orElse(new File(getCorpusFolder(corpus), session + ".xml"));
-
-		return retVal;
+			return optionalFile.orElse(new File(getCorpusFolder(corpus), session + ".xml"));
+		} else {
+			return new File(getCorpusFolder(corpus), session);
+		}
 	}
 
 	private String sessionProjectPath(String corpus, String session) {
