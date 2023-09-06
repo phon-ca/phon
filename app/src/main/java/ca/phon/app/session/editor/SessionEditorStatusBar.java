@@ -122,8 +122,7 @@ public class SessionEditorStatusBar extends JXStatusBar {
 		statusLabel.setToolTipText(getStatusTooltipText());
 		add(statusLabel, new JXStatusBar.Constraint(IconSize.SMALL.getWidth()));
 
-		sessionPathLabel = new JLabel(getEditor().getSession().getCorpus() + "/" +
-				getEditor().getSession().getName());
+		sessionPathLabel = new JLabel(getEditor().getSession().getSessionPath().toString() );
 		sessionPathLabel.setFont(sessionPathLabel.getFont().deriveFont(10.0f));
 		sessionPathLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		sessionPathLabel.setToolTipText(

@@ -36,7 +36,6 @@ public final class SessionFactory extends ExtendableObject {
 	
 	private final SessionFactorySPI sessionFactoryImpl;
 	
-	
 	/**
 	 * Create a new session factory.
 	 * 
@@ -60,7 +59,28 @@ public final class SessionFactory extends ExtendableObject {
 		super();
 		this.sessionFactoryImpl = impl;
 	}
-	
+
+	/**
+	 * Create a session path object
+	 *
+	 * @param path of sesion as corpus/session
+	 * @return session path object
+	 */
+	public SessionPath createSessionPath(String path) {
+		return new SessionPath(path);
+	}
+
+	/**
+	 * Create new session path
+	 *
+	 * @param corpus name starting from project location
+	 * @param session name including extension
+	 * @return new session path
+	 */
+	public SessionPath createSessionPath(String corpus, String session) {
+		return new SessionPath(corpus, session);
+	}
+
 	/**
 	 * Create a new empty session.
 	 * Tier view 

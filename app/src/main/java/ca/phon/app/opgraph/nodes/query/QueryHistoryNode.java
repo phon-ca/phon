@@ -19,6 +19,7 @@ import ca.phon.opgraph.*;
 import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.project.Project;
 import ca.phon.query.db.*;
+import ca.phon.session.SessionFactory;
 import ca.phon.session.SessionPath;
 
 import java.util.*;
@@ -102,7 +103,7 @@ public class QueryHistoryNode extends OpNode {
 					(selectedResults == null || selectedResults.size() == 0
 						? allResultSets
 						: allResultSets.stream()
-								.filter( (rs) -> selectedResults.contains(new SessionPath(rs.getSessionPath())) )
+								.filter( (rs) -> selectedResults.contains(SessionFactory.newFactory().createSessionPath(rs.getSessionPath())) )
 								.collect( Collectors.toList() ) 
 					);
 			

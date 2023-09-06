@@ -79,7 +79,7 @@ public class SessionEditorEP implements IPluginEntryPoint {
 		String sessionLoc = (String)epArgs.get(EntryPointArgs.SESSION_NAME);
 		String sessionName = sessionLoc;
 		if(corpusName == null && sessionLoc != null) {
-			final SessionPath sessionPath = new SessionPath(sessionLoc);
+			final SessionPath sessionPath = SessionFactory.newFactory().createSessionPath(sessionLoc);
 			corpusName = sessionPath.getCorpus();
 			sessionName = sessionPath.getSession();
 		}

@@ -557,9 +557,15 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 			if(!retVal.getCorpus().equals(corpus)) {
 				retVal.setCorpus(corpus);
 			}
-			if(retVal.getName() == null || !retVal.getName().equals(session)) {
-				retVal.setName(session);
+			final int extIdx = session.lastIndexOf('.');
+			String sessionName = session;
+			if(extIdx >= 0) {
+				sessionName = session.substring(0, extIdx);
 			}
+			if(retVal.getName() == null || !retVal.getName().equals(sessionName)) {
+				retVal.setName(sessionName);
+			}
+			retVal.setSessionPath(SessionFactory.newFactory().createSessionPath(corpus, session));
 
 			return retVal;
 		} catch (Exception e) {

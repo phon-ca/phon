@@ -20,6 +20,7 @@ import ca.phon.app.workspace.Workspace;
 import ca.phon.project.*;
 import ca.phon.project.exceptions.ProjectConfigurationException;
 import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
 import ca.phon.session.SessionPath;
 import org.apache.commons.cli.*;
 
@@ -179,7 +180,7 @@ public class EntryPointArgs extends HashMap<String, Object> {
 			
 			if(project != null) {
 				if(corpus == null) {
-					final SessionPath sessionPath = new SessionPath(session);
+					final SessionPath sessionPath = SessionFactory.newFactory().createSessionPath(session);
 					corpus = sessionPath.getCorpus();
 					session = sessionPath.getSession();
 				}

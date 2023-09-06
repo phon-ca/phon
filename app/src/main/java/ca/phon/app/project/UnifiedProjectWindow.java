@@ -111,7 +111,7 @@ public final class UnifiedProjectWindow extends ProjectFrame {
     }
 
     public void showSessionEditor(final SessionEditor editor) {
-        final SessionPath sessionPath = new SessionPath(editor.getSession().getCorpus(), editor.getSession().getName());
+        final SessionPath sessionPath = editor.getSession().getSessionPath();
         final DefaultSingleCDockable singleCDockable = new DefaultSingleCDockable(sessionPath.toString(), sessionPath.toString(), editor);
         singleCDockable.setCloseable(true);
         singleCDockable.addFocusListener(new CFocusListener() {
@@ -132,7 +132,7 @@ public final class UnifiedProjectWindow extends ProjectFrame {
 
     private void openPath(Path path) {
         final String corpusName = path.getParent().toString();
-        final String sessionName = FilenameUtils.removeExtension(path.getFileName().toString());
+        final String sessionName = path.getFileName().toString();
         try {
             final Session session = getProject().openSession(corpusName, sessionName);
             final SessionEditor editor = new SessionEditor(getProject(), session, null);

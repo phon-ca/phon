@@ -667,18 +667,11 @@ public class BufferPanel extends JPanel implements IExtendable {
 		SessionEditor editor = null;
 		// get values for each column
 
-		SessionPath sp = new SessionPath();
-
+		SessionPath sp = primarySession != null ? primarySession.getSessionPath() : null;
 		if(sessionColumn >= 0 && primarySession == null) {
 			String sessionTxt = tblModel.getValueAt(row, sessionColumn).toString();
-			if(sessionTxt == null || sessionTxt.length() == 0 || sessionTxt.indexOf('.') < 0) return;
-			String[] sessionPath = sessionTxt.split("\\.");
-			if(sessionPath.length != 2) return;
-			sp.setCorpus(sessionPath[0]);
-			sp.setSession(sessionPath[1]);
-		} else if(primarySession != null) {
-			sp.setCorpus(primarySession.getCorpus());
-			sp.setSession(primarySession.getName());
+			if(sessionTxt == null || sessionTxt.isEmpty()) return;
+			sp = SessionFactory.newFactory().createSessionPath(sessionTxt);
 		}
 		// load session editor (if necessary)
 		final EntryPointArgs epArgs = new EntryPointArgs();

@@ -96,7 +96,7 @@ public class OpenProjectEP implements IPluginEntryPoint {
 				return false;
 			}
 
-			final boolean isUseNewUI = PrefHelper.getUserPreferences().getBoolean(USE_NEW_UI_PROP, false);
+			final boolean isUseNewUI = PrefHelper.getBoolean(USE_NEW_UI_PROP, false);
 			// check to see if the project is already open...
 			for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
 				if(isUseNewUI) {
