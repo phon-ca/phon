@@ -15,6 +15,7 @@ import ca.phon.session.Record;
 import ca.phon.ui.DropDownIcon;
 import ca.phon.ui.EmptyIcon;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.OSInfo;
 import ca.phon.util.Tuple;
@@ -46,6 +47,7 @@ public class TranscriptEditor extends JEditorPane {
     DefaultHighlighter.DefaultHighlightPainter highlightPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
     private int currentRecordIndex = -1;
     private boolean singleRecordView = false;
+    public final static EditorEventType<Void> recordChangedInSingleRecordMode = new EditorEventType<>("recordChangedInSingleRecordMode", Void.class);
 
     public TranscriptEditor(
         Session session,
@@ -112,7 +114,7 @@ public class TranscriptEditor extends JEditorPane {
             System.out.println(doc.getRecordEnd(recordIndex, null));*/
             SimpleAttributeSet attrs = new SimpleAttributeSet(doc.getCharacterElement(e.getDot()).getAttributes().copyAttributes());
             System.out.println(e.getDot() + ": " + doc.getCharAtPos(e.getDot()));
-            System.out.println(attrs);
+            //System.out.println(attrs);
         });
     }
 
@@ -140,24 +142,6 @@ public class TranscriptEditor extends JEditorPane {
             frame.add(scrollPane, BorderLayout.CENTER);
             JPanel bottomButtonPanel = new JPanel(new HorizontalLayout());
 
-            JButton toggleTargetSyllablesButton = new JButton("Target");
-            toggleTargetSyllablesButton.addActionListener(e -> {
-                editorPane.setTargetSyllablesVisible(!editorPane.getTargetSyllablesVisible());
-            });
-            bottomButtonPanel.add(toggleTargetSyllablesButton);
-
-            JButton toggleActualSyllablesButton = new JButton("Actual");
-            toggleActualSyllablesButton.addActionListener(e -> {
-                editorPane.setActualSyllablesVisible(!editorPane.getActualSyllablesVisible());
-            });
-            bottomButtonPanel.add(toggleActualSyllablesButton);
-
-            JButton toggleAlignmentButton = new JButton("Alignment");
-            toggleAlignmentButton.addActionListener(e -> {
-                editorPane.setAlignmentVisible(!editorPane.getAlignmentVisible());
-            });
-            bottomButtonPanel.add(toggleAlignmentButton);
-
             frame.add(bottomButtonPanel, BorderLayout.SOUTH);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setLocationRelativeTo(null);
@@ -166,22 +150,6 @@ public class TranscriptEditor extends JEditorPane {
         catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public boolean getTargetSyllablesVisible() {
-        return getTranscriptDocument().getTargetSyllablesVisible();
-    }
-    public boolean getActualSyllablesVisible() {
-        return getTranscriptDocument().getActualSyllablesVisible();
-    }
-    public boolean getAlignmentVisible() {
-        return getTranscriptDocument().getAlignmentVisible();
-    }
-    public void setTargetSyllablesVisible(boolean visible) {
-        getTranscriptDocument().setTargetSyllablesVisible(visible);
-    }
-    public void setActualSyllablesVisible(boolean visible) {
-        getTranscriptDocument().setActualSyllablesVisible(visible);
     }
     public void setAlignmentVisible(boolean visible) {
         getTranscriptDocument().setAlignmentVisible(visible);
@@ -369,7 +337,13 @@ public class TranscriptEditor extends JEditorPane {
         }
 
 
-        getTranscriptDocument().deleteTier(data.tierNames());
+
+        Document blank = new DefaultStyledDocument();
+        setDocument(blank);
+        // Delete tier in doc
+        doc.deleteTier(data.tierNames());
+        setDocument(doc);
+
 
 
         // Correct caret
@@ -431,7 +405,12 @@ public class TranscriptEditor extends JEditorPane {
                 addedTiers.add(item);
             }
         }
+
+        Document blank = new DefaultStyledDocument();
+        setDocument(blank);
+        // Add tier in doc
         doc.addTier(addedTiers);
+        setDocument(doc);
 
         // Correct caret
         if (caretTierOffset > -1) {
@@ -471,7 +450,11 @@ public class TranscriptEditor extends JEditorPane {
             caretTierOffset = startCaretPos - elem.getStartOffset();
         }
 
+        Document blank = new DefaultStyledDocument();
+        setDocument(blank);
+        // Hide tier in doc
         doc.hideTier(data.tierNames());
+        setDocument(doc);
 
         // Correct caret
         if (caretTier != null) {
@@ -532,7 +515,12 @@ public class TranscriptEditor extends JEditorPane {
                 shownTiers.add(item);
             }
         }
-        getTranscriptDocument().showTier(shownTiers, data.newTierView());
+
+        Document blank = new DefaultStyledDocument();
+        setDocument(blank);
+        // Show tier in doc
+        doc.showTier(shownTiers, data.newTierView());
+        setDocument(doc);
 
         // Correct caret
         if (caretTierOffset > -1) {
@@ -565,6 +553,7 @@ public class TranscriptEditor extends JEditorPane {
     }
 
     public void tierFontChanged(EditorEventType.TierViewChangedData data) {
+        TranscriptDocument doc = getTranscriptDocument();
         int caretPos = getCaretPosition();
 
         List<TierViewItem> changedTiers = data
@@ -575,7 +564,11 @@ public class TranscriptEditor extends JEditorPane {
 
         if (changedTiers.isEmpty()) return;
 
+        Document blank = new DefaultStyledDocument();
+        setDocument(blank);
+        // Change tier font in doc
         getTranscriptDocument().tierFontChanged(changedTiers);
+        setDocument(doc);
 
         setCaretPosition(caretPos);
     }
@@ -640,8 +633,7 @@ public class TranscriptEditor extends JEditorPane {
         String tierName = item.getTierName();
         JLabel tierLabel = new JLabel(tierName);
 
-        var labelFont = new Font(tierLabel.getFont().getFontName(), tierLabel.getFont().getStyle(), 12);
-        tierLabel.setFont(labelFont);
+        tierLabel.setFont(FontPreferences.getTierFont());
 
         tierLabel.setAlignmentY(.8f);
         tierLabel.setMaximumSize(new Dimension(150, tierLabel.getPreferredSize().height));
@@ -669,8 +661,7 @@ public class TranscriptEditor extends JEditorPane {
     private JComponent createCommentLabel(Comment comment) {
         JLabel commentLabel = new JLabel(comment.getType().getLabel());
 
-        var labelFont = new Font(commentLabel.getFont().getFontName(), commentLabel.getFont().getStyle(), 12);
-        commentLabel.setFont(labelFont);
+        commentLabel.setFont(FontPreferences.getTierFont());
 
         commentLabel.setAlignmentY(.8f);
         commentLabel.setMaximumSize(new Dimension(150, commentLabel.getPreferredSize().height));
@@ -713,8 +704,7 @@ public class TranscriptEditor extends JEditorPane {
     private JComponent createGemLabel(Gem gem) {
         JLabel gemLabel = new JLabel(gem.getType().toString());
 
-        var labelFont = new Font(gemLabel.getFont().getFontName(), gemLabel.getFont().getStyle(), 12);
-        gemLabel.setFont(labelFont);
+        gemLabel.setFont(FontPreferences.getTierFont());
 
         gemLabel.setAlignmentY(.8f);
         gemLabel.setMaximumSize(new Dimension(150, gemLabel.getPreferredSize().height));
@@ -758,20 +748,13 @@ public class TranscriptEditor extends JEditorPane {
         JPanel separatorPanel = new JPanel(new HorizontalLayout());
         separatorPanel.setBorder(new EmptyBorder(0,8,0,8));
         separatorPanel.setBackground(Color.WHITE);
-
         DropDownIcon dropDownIcon = new DropDownIcon(new EmptyIcon(0, 16), 0, SwingConstants.BOTTOM);
-
         JLabel speakerNameLabel = new JLabel(record.getSpeaker().getName());
-        var labelFont = new Font(
-            speakerNameLabel.getFont().getFontName(),
-            speakerNameLabel.getFont().getStyle(),
-            12
-        );
         speakerNameLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         speakerNameLabel.setHorizontalTextPosition(SwingConstants.LEFT);
         speakerNameLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         speakerNameLabel.setIcon(dropDownIcon);
-        speakerNameLabel.setFont(labelFont);
+        speakerNameLabel.setFont(FontPreferences.getTierFont());
         speakerNameLabel.setAlignmentY(.8f);
         separatorPanel.add(speakerNameLabel);
         speakerNameLabel.setBorder(new EmptyBorder(0,0,0,8));
@@ -806,7 +789,7 @@ public class TranscriptEditor extends JEditorPane {
         segmentLabelTextBuilder.append(MediaTimeFormatter.timeToString(segment.getEndValue(), MediaTimeFormatStyle.PADDED_MINUTES_AND_SECONDS));
         segmentLabelTextBuilder.append("•");
         segmentLabel.setText(segmentLabelTextBuilder.toString());
-        segmentLabel.setFont(labelFont);
+        segmentLabel.setFont(FontPreferences.getTierFont());
         segmentLabel.setAlignmentY(.8f);
         segmentLabel.setHorizontalTextPosition(SwingConstants.LEFT);
         segmentLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -842,10 +825,20 @@ public class TranscriptEditor extends JEditorPane {
     }
 
     private void onRecordChanged(EditorEvent<EditorEventType.RecordChangedData> editorEvent) {
+        TranscriptDocument doc = getTranscriptDocument();
+
+        doc.setSingleRecordIndex(editorEvent.data().recordIndex());
+
+        if (doc.getSingleRecordView()) {
+            final EditorEvent<Void> e = new EditorEvent<>(recordChangedInSingleRecordMode, this, null);
+            eventManager.queueEvent(e);
+        }
+
         if (hasFocus()) return;
 
-        int recordStartPos = getTranscriptDocument().getRecordStart(editorEvent.data().recordIndex());
-        int recordEndPos = getTranscriptDocument().getRecordEnd(editorEvent.data().recordIndex());
+        int recordStartPos = doc.getRecordStart(editorEvent.data().recordIndex());
+        int recordEndPos = doc.getRecordEnd(editorEvent.data().recordIndex());
+
         try {
             var startRect = modelToView2D(recordStartPos);
             var endRect = modelToView2D(recordEndPos);
@@ -999,32 +992,43 @@ public class TranscriptEditor extends JEditorPane {
 
     public void sameOffsetInPrevTierOrElement() {
         TranscriptDocument doc = getTranscriptDocument();
-        int docLen = doc.getLength();
 
         int caretPos = getCaretPosition();
         int offsetInContent = doc.getOffsetInContent(caretPos);
 
         int start = getStartOfPrevTierOrElement(caretPos);
+
         if (start == -1) return;
 
-        // TODO: Remove the "- 1" after docLen when the newline character at the end of the document has been removed
-        for (caretPos = start; (caretPos < start + offsetInContent) && (caretPos < docLen - 1); caretPos++) {
-            boolean isLabel = doc.getCharacterElement(caretPos).getAttributes().getAttribute("label") != null;
-            if (isLabel) {
-                if (doc.getCharAtPos(caretPos) == '\n') {
-                    caretPos--;
-                }
-                caretPos--;
-                break;
-            }
+        int end;
+
+        AttributeSet prevElementAttributes = doc.getCharacterElement(start).getAttributes();
+
+        String elementType = (String) prevElementAttributes.getAttribute("elementType");
+
+        if (elementType == null) {
+            return;
+        }
+        else if (elementType.equals("record")) {
+            end = doc.getTierEnd((Tier<?>) prevElementAttributes.getAttribute("tier"));
+        }
+        else if (elementType.equals("comment")) {
+            end = doc.getCommentEnd((Comment) prevElementAttributes.getAttribute("comment"));
+        }
+        else if (elementType.equals("gem")) {
+            end = doc.getGemEnd((Gem) prevElementAttributes.getAttribute("gem"));
+        }
+        else {
+            return;
         }
 
-        setCaretPosition(caretPos);
+        int newCaretPos = Math.min(end - 1, start + offsetInContent);
+
+        setCaretPosition(newCaretPos);
     }
 
     public void sameOffsetInNextTierOrElement() {
         TranscriptDocument doc = getTranscriptDocument();
-        int docLen = doc.getLength();
 
         int caretPos = getCaretPosition();
         int offsetInContent = doc.getOffsetInContent(caretPos);
@@ -1032,19 +1036,31 @@ public class TranscriptEditor extends JEditorPane {
         int start = getStartOfNextTierOrElement(caretPos);
         if (start == -1) return;
 
-        // TODO: Remove the "- 1" after docLen when the newline character at the end of the document has been removed
-        for (caretPos = start; (caretPos < start + offsetInContent) && (caretPos < docLen - 1); caretPos++) {
-            boolean isLabel = doc.getCharacterElement(caretPos).getAttributes().getAttribute("label") != null;
-            if (isLabel) {
-                if (doc.getCharAtPos(caretPos) == '\n') {
-                    caretPos--;
-                }
-                caretPos--;
-                break;
-            }
+        int end;
+
+        AttributeSet nextElementAttributes = doc.getCharacterElement(start).getAttributes();
+
+        String elementType = (String) nextElementAttributes.getAttribute("elementType");
+
+        if (elementType == null) {
+            return;
+        }
+        else if (elementType.equals("record")) {
+            end = doc.getTierEnd((Tier<?>) nextElementAttributes.getAttribute("tier"));
+        }
+        else if (elementType.equals("comment")) {
+            end = doc.getCommentEnd((Comment) nextElementAttributes.getAttribute("comment"));
+        }
+        else if (elementType.equals("gem")) {
+            end = doc.getGemEnd((Gem) nextElementAttributes.getAttribute("gem"));
+        }
+        else {
+            return;
         }
 
-        setCaretPosition(caretPos);
+        int newCaretPos = Math.min(end - 1, start + offsetInContent);
+
+        setCaretPosition(newCaretPos);
     }
 
     public int getStartOfPrevTierOrElement(int caretPos) {
@@ -1293,5 +1309,61 @@ public class TranscriptEditor extends JEditorPane {
                 }
             }
         }
+    }
+
+    public boolean isSyllabificationVisible() {
+        return getTranscriptDocument().isSyllabificationVisible();
+    }
+
+    public void setSyllabificationVisible(boolean visible) {
+        TranscriptDocument doc = getTranscriptDocument();
+
+        var oldVal = doc.isSyllabificationVisible();
+        doc.setSyllabificationVisible(visible);
+
+        super.firePropertyChange("syllabificationVisible", oldVal, visible);
+    }
+
+    public boolean isSyllabificationComponent() {
+        return getTranscriptDocument().isSyllabificationComponent();
+    }
+
+    public void setSyllabificationIsComponent(boolean isComponent) {
+        TranscriptDocument doc = getTranscriptDocument();
+
+        var oldVal = doc.isSyllabificationComponent();
+        doc.setSyllabificationIsComponent(isComponent);
+
+        super.firePropertyChange("syllabificationIsComponent", oldVal, isComponent);
+    }
+
+    public boolean isAlignmentVisible() {
+        return getTranscriptDocument().isAlignmentVisible();
+    }
+
+    public void setAlignmentIsVisible(boolean visible) {
+        TranscriptDocument doc = getTranscriptDocument();
+
+        var oldVal = doc.isAlignmentVisible();
+        doc.setAlignmentVisible(visible);
+
+        super.firePropertyChange("alignmentVisible", oldVal, visible);
+    }
+
+    public boolean isAlignmentComponent() {
+        return getTranscriptDocument().isSyllabificationComponent();
+    }
+
+    public void setAlignmentIsComponent(boolean isComponent) {
+        TranscriptDocument doc = getTranscriptDocument();
+
+        var oldVal = doc.isSyllabificationComponent();
+        doc.setAlignmentIsComponent(isComponent);
+
+        super.firePropertyChange("alignmentIsComponent", oldVal, isComponent);
+    }
+
+    public EditorEventManager getEventManager() {
+        return eventManager;
     }
 }

@@ -23,8 +23,14 @@ public class TranscriptStatusBar extends JPanel {
             transcriptElementIndexLabel.setText("Transcript element index: " + (transcriptElementIndex + 1));
 
             // Record index
-            int recordIndex = transcriptEditor.getCurrentRecordIndex();
-            recordIndexLabel.setText("Record index: " + (recordIndex + 1));
+            try {
+                int recordIndex = transcriptEditor.getCurrentRecordIndex();
+                recordIndexLabel.setText("Record index: " + (recordIndex + 1));
+            }
+            catch (Exception exception) {
+                recordIndexLabel.setText("Record index: ");
+            }
+
 
             // Tier (if available)
             Tier<?> tier = transcriptEditor.getTranscriptDocument().getTier(e.getDot());

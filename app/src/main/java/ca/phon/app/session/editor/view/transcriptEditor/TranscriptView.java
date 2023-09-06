@@ -1,7 +1,7 @@
 package ca.phon.app.session.editor.view.transcriptEditor;
 
 import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.view.transcriptEditor.actions.ToggleSingleRecordAction;
+import ca.phon.app.session.editor.view.transcriptEditor.actions.*;
 import ca.phon.plugin.PluginManager;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.icons.IconManager;
@@ -31,11 +31,7 @@ public class TranscriptView extends EditorView {
 
     private void initUI() {
         transcriptScrollPane = new TranscriptScrollPane(transcriptEditor);
-        transcriptScrollPane.setTranscriptRowHeader(new TranscriptRowHeader(transcriptEditor));
         transcriptScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        transcriptScrollPane.getVerticalScrollBar().addAdjustmentListener(e -> {
-            transcriptScrollPane.getRowHeader().setViewPosition(new Point(0, e.getValue()));
-        });
         setLayout(new BorderLayout());
         add(transcriptScrollPane, BorderLayout.CENTER);
         add(new TranscriptStatusBar(transcriptEditor), BorderLayout.SOUTH);
@@ -56,6 +52,12 @@ public class TranscriptView extends EditorView {
         final JMenu retVal = new JMenu();
 
         retVal.add(new ToggleSingleRecordAction(getEditor(), this));
+        retVal.add(new ToggleRecordNumbersAction(getEditor(), this));
+        retVal.add(new ToggleLabelsVisibleAction(getEditor(), this));
+        retVal.add(new ToggleSyllabificationVisibleAction(getEditor(), this));
+        retVal.add(new ToggleSyllabificationIsComponent(getEditor(), this));
+        retVal.add(new ToggleAlignmentVisibleAction(getEditor(), this));
+        retVal.add(new ToggleAlignmentIsComponentAction(getEditor(), this));
 
         return retVal;
     }
@@ -77,8 +79,6 @@ public class TranscriptView extends EditorView {
 
     private void onEditorFinishedLoading(EditorEvent<Void> event) {
         transcriptEditor.setSession();
-        System.out.println("Transcript height: " + transcriptEditor.getHeight());
-        transcriptScrollPane.getTranscriptRowHeader().setHeight(transcriptEditor.getHeight());
     }
 
     public boolean isSingleRecordActive() {
@@ -87,5 +87,53 @@ public class TranscriptView extends EditorView {
 
     public void toggleSingleRecordActive() {
         transcriptEditor.getTranscriptDocument().setSingleRecordView(!isSingleRecordActive());
+    }
+
+    public boolean getShowRecordNumbers() {
+        return transcriptScrollPane.getTranscriptRowHeader().getShowRecordNumbers();
+    }
+
+    public void toggleShowRecordNumbers() {
+        transcriptScrollPane.getTranscriptRowHeader().setShowRecordNumbers(!getShowRecordNumbers());
+    }
+
+    public boolean getLabelsVisible() {
+        return transcriptEditor.getTranscriptDocument().getLabelsVisible();
+    }
+
+    public void toggleLabelsVisible() {
+        transcriptEditor.getTranscriptDocument().setLabelsVisible(!getLabelsVisible());
+    }
+
+    public boolean isSyllabificationVisible() {
+        return transcriptEditor.isSyllabificationVisible();
+    }
+
+    public void toggleSyllabificationVisible() {
+        transcriptEditor.setSyllabificationVisible(!isSyllabificationVisible());
+    }
+
+    public boolean isSyllabificationComponent() {
+        return transcriptEditor.isSyllabificationComponent();
+    }
+
+    public void toggleSyllabificationIsComponent() {
+        transcriptEditor.setSyllabificationIsComponent(!isSyllabificationComponent());
+    }
+
+    public boolean isAlignmentVisible() {
+        return transcriptEditor.isAlignmentVisible();
+    }
+
+    public void toggleAlignmentVisible() {
+        transcriptEditor.setAlignmentIsVisible(!isAlignmentVisible());
+    }
+
+    public boolean isAlignmentComponent() {
+        return transcriptEditor.isAlignmentComponent();
+    }
+
+    public void toggleAlignmentIsComponent() {
+        transcriptEditor.setAlignmentIsComponent(!isAlignmentComponent());
     }
 }
