@@ -248,13 +248,17 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 		final List<String> corpusList = new ArrayList<String>();
 
 		Path projectPath = getFolder().toPath();
-		corpusList.add(".");
 		try {
 			scanForCorpusFolders(projectPath, corpusList);
 		} catch (IOException e) {
 			LOGGER.error(e);
 		}
 		Collections.sort(corpusList);
+
+		// add '' corpus if project folder includes session files
+		if(!getCorpusSessions("").isEmpty()) {
+			corpusList.add(0, "");
+		}
 
 		return corpusList;
 	}
@@ -951,6 +955,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 
 	@Override
 	public String getCorpusPath(String corpus) {
+		if(corpus.isEmpty()) corpus = ".";
 		return new File(getFolder(), corpus).getAbsolutePath();
 	}
 

@@ -77,7 +77,10 @@ public class EditTierAction extends TierManagementAction {
 				
 				if(tierDialog.showDialog()) {
 					final Formatter<Font> fontFormatter = FormatterFactory.createFormatter(Font.class);
-					final String fontString = fontFormatter.format(tierEditor.getTierFont());
+					final String defaultFont = fontFormatter.format(FontPreferences.getTierFont());
+					String fontString = fontFormatter.format(tierEditor.getTierFont());
+					if(defaultFont.equals(fontString))
+						fontString = "default";
 					final TierViewItem newViewItem = factory.createTierViewItem(
 							tierEditor.getTierName(), tierEditor.isVisible(), fontString, tierItem.isTierLocked());
 					final TierViewItemEdit tierViewItemEdit = new TierViewItemEdit(getEditor(), tierItem, newViewItem);

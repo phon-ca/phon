@@ -1555,15 +1555,18 @@ public class ProjectWindow extends CommonModuleFrame {
 					cellHasFocus);
 
 			final String corpus = comp.getText();
+			if(corpus.isEmpty()) {
+				comp.setText("<html><i>default</i></html>");
+			}
 			final String corpusPath = getProject().getCorpusPath(corpus);
 
 			ImageIcon icon = IconManager.getInstance().getSystemIconForPath(corpusPath, "places/folder", IconSize.SMALL);
 
 			if(gitController.hasGitFolder() && gitController.isOpen()) {
 				try {
-					final Status status = gitController.status(corpus);
+					final Status status = gitController.status(corpusPath);
 
-					if(status.hasUncommittedChanges() || status.getUntracked().size() > 0) {
+					if(status.hasUncommittedChanges() || !status.getUntracked().isEmpty()) {
 						ImageIcon modifiedIcn =
 								IconManager.getInstance().createGlyphIcon('*',
 										FontPreferences.getTitleFont(), comp.getForeground(), comp.getBackground());

@@ -53,7 +53,7 @@ public class TestLocalProject {
 		final Project project = projectFactory.openProject(new File("src/test/resources/TestCorpus"));
 		
 		Assert.assertNotNull(project);
-		Assert.assertEquals(List.of(".", "Anne").toString(), project.getCorpora().toString());
+		Assert.assertEquals(List.of("Anne").toString(), project.getCorpora().toString());
 	}
 	
 	@Test

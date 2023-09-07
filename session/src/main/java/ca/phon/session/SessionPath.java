@@ -16,6 +16,7 @@
 package ca.phon.session;
 
 import ca.phon.extensions.*;
+import ca.phon.util.OSInfo;
 import ca.phon.util.Tuple;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,7 +28,7 @@ import java.util.Set;
  */
 public class SessionPath implements IExtendable, Comparable<SessionPath> {
 
-	public final static String PATH_SEP = "/";
+	public final static String PATH_SEP = OSInfo.isWindows() ? "\\" : "/";
 
 	private String corpus;
 
@@ -45,9 +46,13 @@ public class SessionPath implements IExtendable, Comparable<SessionPath> {
 	SessionPath(String path) {
 		super();
 		int sepIdx = path.lastIndexOf(PATH_SEP);
-		if(sepIdx < 0) throw new IllegalArgumentException(path);
-		setCorpus(path.substring(0, sepIdx));
-		setSession(path.substring(sepIdx+1));
+		if(sepIdx < 0) {
+			setCorpus("");
+			setSession(path);
+		} else {
+			setCorpus(path.substring(0, sepIdx));
+			setSession(path.substring(sepIdx + 1));
+		}
 		
 		extSupport.initExtensions();
 	}
@@ -95,7 +100,12 @@ public class SessionPath implements IExtendable, Comparable<SessionPath> {
 
 	@Override
 	public String toString() {
-		return getCorpus() + PATH_SEP + getSession();
+		final StringBuilder builder = new StringBuilder();
+		if(getCorpus() != null && !getCorpus().isEmpty()) {
+			builder.append(getCorpus()).append(PATH_SEP);
+		}
+		builder.append(getSession());
+		return builder.toString();
 	}
 
 	public Set<Class<?>> getExtensions() {
