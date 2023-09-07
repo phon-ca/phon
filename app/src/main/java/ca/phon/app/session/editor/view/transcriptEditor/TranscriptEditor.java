@@ -97,24 +97,29 @@ public class TranscriptEditor extends JEditorPane {
 //        });
 
         addCaretListener(e -> {
-            TranscriptDocument doc = getTranscriptDocument();
-            String transcriptElementType = (String) doc.getCharacterElement(e.getDot()).getAttributes().getAttribute("elementType");
-            if (transcriptElementType != null && transcriptElementType.equals("record")) {
-                setCurrentRecordIndex(doc.getRecordIndex(e.getDot()));
-            }
+            try {
+                TranscriptDocument doc = getTranscriptDocument();
+                String transcriptElementType = (String) doc.getCharacterElement(e.getDot()).getAttributes().getAttribute("elementType");
+                if (transcriptElementType != null && transcriptElementType.equals("record")) {
+                    setCurrentRecordIndex(doc.getRecordIndex(e.getDot()));
+                }
 
-            // FOR DEBUG PURPOSES ONLY
-            /*int cursorPos = e.getDot();
-            int recordIndex = doc.getRecordIndex(cursorPos);
-            int recordElementIndex = doc.getRecordElementIndex(cursorPos);
-            Tier tier = doc.getTier(cursorPos);
-            String tierName = tier != null ? tier.getName() : "null";
-            System.out.println("Record " + recordIndex + " (Element: " + recordElementIndex + ") : " + tierName);
-            System.out.println("Cursor Pos: " + cursorPos);
-            System.out.println(doc.getRecordEnd(recordIndex, null));*/
-            SimpleAttributeSet attrs = new SimpleAttributeSet(doc.getCharacterElement(e.getDot()).getAttributes().copyAttributes());
-            System.out.println(e.getDot() + ": " + doc.getCharAtPos(e.getDot()));
-            //System.out.println(attrs);
+                // FOR DEBUG PURPOSES ONLY
+                /*int cursorPos = e.getDot();
+                int recordIndex = doc.getRecordIndex(cursorPos);
+                int recordElementIndex = doc.getRecordElementIndex(cursorPos);
+                Tier tier = doc.getTier(cursorPos);
+                String tierName = tier != null ? tier.getName() : "null";
+                System.out.println("Record " + recordIndex + " (Element: " + recordElementIndex + ") : " + tierName);
+                System.out.println("Cursor Pos: " + cursorPos);
+                System.out.println(doc.getRecordEnd(recordIndex, null));*/
+                SimpleAttributeSet attrs = new SimpleAttributeSet(doc.getCharacterElement(e.getDot()).getAttributes().copyAttributes());
+                System.out.println(e.getDot() + ": " + doc.getCharAtPos(e.getDot()));
+                //System.out.println(attrs);
+            }
+            catch (Exception exception) {
+                System.out.println(exception);
+            }
         });
     }
 
@@ -749,7 +754,7 @@ public class TranscriptEditor extends JEditorPane {
         separatorPanel.setBorder(new EmptyBorder(0,8,0,8));
         separatorPanel.setBackground(Color.WHITE);
         DropDownIcon dropDownIcon = new DropDownIcon(new EmptyIcon(0, 16), 0, SwingConstants.BOTTOM);
-        JLabel speakerNameLabel = new JLabel(record.getSpeaker().getName());
+        JLabel speakerNameLabel = new JLabel(record.getSpeaker().toString());
         speakerNameLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         speakerNameLabel.setHorizontalTextPosition(SwingConstants.LEFT);
         speakerNameLabel.setHorizontalAlignment(SwingConstants.RIGHT);

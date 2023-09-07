@@ -34,7 +34,7 @@ public class TranscriptView extends EditorView {
         transcriptScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         setLayout(new BorderLayout());
         add(transcriptScrollPane, BorderLayout.CENTER);
-        add(new TranscriptStatusBar(transcriptEditor), BorderLayout.SOUTH);
+        //add(new TranscriptStatusBar(transcriptEditor), BorderLayout.SOUTH);
     }
 
     @Override

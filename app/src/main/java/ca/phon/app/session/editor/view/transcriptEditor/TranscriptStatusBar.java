@@ -19,8 +19,13 @@ public class TranscriptStatusBar extends JPanel {
         initUI();
         transcriptEditor.addCaretListener(e -> {
             // Transcript element index
-            int transcriptElementIndex = transcriptEditor.getCurrentElementIndex();
-            transcriptElementIndexLabel.setText("Transcript element index: " + (transcriptElementIndex + 1));
+            try {
+                int transcriptElementIndex = transcriptEditor.getCurrentElementIndex();
+                transcriptElementIndexLabel.setText("Transcript element index: " + (transcriptElementIndex + 1));
+            }
+            catch (Exception exception) {
+                transcriptElementIndexLabel.setText("Transcript element index: ");
+            }
 
             // Record index
             try {

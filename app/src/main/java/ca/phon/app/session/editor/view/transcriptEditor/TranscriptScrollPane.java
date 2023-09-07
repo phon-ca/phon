@@ -2,7 +2,6 @@ package ca.phon.app.session.editor.view.transcriptEditor;
 
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventManager;
-import ca.phon.app.session.editor.EditorEventType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,7 +30,10 @@ public class TranscriptScrollPane extends JScrollPane {
         transcriptEditor.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                transcriptRowHeader.setPreferredSize(new Dimension((int)transcriptRowHeader.getPreferredSize().getWidth(), transcriptEditor.getHeight()));
+                transcriptRowHeader.setPreferredSize(new Dimension(
+                    (int)transcriptRowHeader.getPreferredSize().getWidth(),
+                    transcriptEditor.getHeight())
+                );
                 revalidate();
                 repaint();
             }
@@ -39,7 +41,11 @@ public class TranscriptScrollPane extends JScrollPane {
     }
 
     private void registerEditorActions() {
-        transcriptEditor.getEventManager().registerActionForEvent(TranscriptEditor.recordChangedInSingleRecordMode, this::onRecordChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+        transcriptEditor.getEventManager().registerActionForEvent(
+            TranscriptEditor.recordChangedInSingleRecordMode,
+            this::onRecordChanged,
+            EditorEventManager.RunOn.AWTEventDispatchThread
+        );
     }
 
     private void onRecordChanged(EditorEvent<Void> editorEvent) {

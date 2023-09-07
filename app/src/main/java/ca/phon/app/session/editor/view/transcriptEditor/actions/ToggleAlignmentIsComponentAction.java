@@ -11,12 +11,12 @@ public class ToggleAlignmentIsComponentAction extends TranscriptAction{
     public ToggleAlignmentIsComponentAction(SessionEditor editor, TranscriptView view) {
         super(editor, view);
 
-        final boolean alignmentIsComponent = view.isSyllabificationComponent();
+        final boolean alignmentIsComponent = view.isAlignmentComponent();
         putValue(NAME, "Show alignment as " + (alignmentIsComponent ? "text" : "component"));
     }
 
     @Override
     public void hookableActionPerformed(ActionEvent e) {
-        this.getView().toggleSyllabificationIsComponent();
+        this.getView().toggleAlignmentIsComponent();
     }
 }

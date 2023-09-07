@@ -40,42 +40,44 @@ public class TranscriptRowHeader extends JComponent {
             for (int j = 0; j < elem.getElementCount(); j++) {
                 try {
                     var innerElem = elem.getElement(j);
+                    var innerElemAttrs = innerElem.getAttributes();
                     var elemRect = editor.modelToView2D(innerElem.getStartOffset());
                     if (elemRect == null) return;
                     boolean topVisible = elemRect.getMinY() > drawHere.getMinY() && elemRect.getMinY() < drawHere.getMaxY();
                     boolean bottomVisible = elemRect.getMaxY() > drawHere.getMinY() && elemRect.getMaxY() < drawHere.getMaxY();
                     if (topVisible || bottomVisible) {
-                        JComponent component = (JComponent)StyleConstants.getComponent(innerElem.getAttributes());
+                        JComponent component = (JComponent)StyleConstants.getComponent(innerElemAttrs);
                         if (component != null) {
                             if (component instanceof JLabel) {
                                 var tierLabelRect = editor.modelToView2D(innerElem.getStartOffset());
 
-                                var locked = (Boolean)innerElem.getAttributes().getAttribute("locked");
+                                var locked = (Boolean) innerElemAttrs.getAttribute("locked");
                                 if (locked != null && locked) {
                                     var lockIcon = IconManager.getInstance().getIcon("actions/lock", IconSize.XSMALL);
                                     Image lockImage = lockIcon.getImage();
-                                    g.drawImage(lockImage, getWidth()-16, (int)tierLabelRect.getMinY()+1, null);
+                                    g.drawImage(lockImage, getWidth() - 16, (int) tierLabelRect.getMinY() + 1, null);
                                 }
 
                                 if (false) {
                                     g.setColor(Color.RED);
-                                    g.drawString("◉", getWidth()-32, (int)tierLabelRect.getMaxY()-3);
+                                    g.drawString("◉", getWidth() - 32, (int) tierLabelRect.getMaxY() - 3);
                                     g.setColor(Color.BLACK);
                                 }
                             }
-                            else if (component instanceof JPanel) {
-                                Integer recordNumber = (Integer) innerElem.getAttributes().getAttribute("recordIndex");
-                                if (showRecordNumbers && recordNumber != null) {
-                                    var sepRect = editor.modelToView2D(innerElem.getStartOffset());
+                        }
+                        if (innerElemAttrs.getAttribute("sep") != null) {
+                            Integer recordNumber = (Integer) innerElem.getAttributes().getAttribute("recordIndex");
+                            if (showRecordNumbers && recordNumber != null) {
+                                var sepRect = editor.modelToView2D(innerElem.getStartOffset());
 
-                                    String recordNumberText = String.valueOf(recordNumber + 1);
-                                    var fontMetrics = g.getFontMetrics();
-                                    int stringWidth = fontMetrics.stringWidth(recordNumberText);
-                                    int stringBaselineHeight = (int)(sepRect.getCenterY() + 0.8f * (fontMetrics.getFont().getSize() / 2.0f));
+                                String recordNumberText = String.valueOf(recordNumber + 1);
+                                var fontMetrics = g.getFontMetrics();
+                                int stringWidth = fontMetrics.stringWidth(recordNumberText);
+                                int stringBaselineHeight = (int)(sepRect.getCenterY() + 0.8f * (fontMetrics.getFont().getSize() / 2.0f));
 
-                                    g.drawString(recordNumberText, getWidth() - stringWidth - PADDING, stringBaselineHeight);
-                                }
+                                g.drawString(recordNumberText, getWidth() - stringWidth - PADDING, stringBaselineHeight);
                             }
+
                         }
                     }
                 }
