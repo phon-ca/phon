@@ -131,7 +131,8 @@ public final class UnifiedProjectWindow extends ProjectFrame {
     }
 
     private void openPath(Path path) {
-        final String corpusName = path.getParent().toString();
+        Path parentPath = path.getParent();
+        final String corpusName = parentPath != null ? parentPath.toString() : ".";
         final String sessionName = path.getFileName().toString();
         try {
             final Session session = getProject().openSession(corpusName, sessionName);
