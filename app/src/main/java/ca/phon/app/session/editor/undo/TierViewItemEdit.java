@@ -16,8 +16,8 @@
 package ca.phon.app.session.editor.undo;
 
 import ca.phon.app.session.editor.*;
-import ca.phon.session.Session;
-import ca.phon.session.TierViewItem;
+import ca.phon.session.*;
+import ca.phon.session.Record;
 
 import java.util.*;
 
@@ -37,22 +37,24 @@ public class TierViewItemEdit extends SessionUndoableEdit {
 		this.newItem = newItem;
 	}
 
-	private List<EditorEventType.TierViewChangeType> calculateChanges(TierViewItem newItem, TierViewItem oldItem) {
+	private List<EditorEventType.TierViewChangeType> calculateChanges(TierViewItem oldItem, TierViewItem newItem) {
 		final List<EditorEventType.TierViewChangeType> changes = new ArrayList<>();
 		if (!newItem.getTierFont().equals(oldItem.getTierFont())) {
 			changes.add(EditorEventType.TierViewChangeType.TIER_FONT_CHANGE);
-		} else if(!newItem.getTierName().equals(oldItem.getTierName())) {
+		}
+		if(!newItem.getTierName().equals(oldItem.getTierName())) {
 			changes.add(EditorEventType.TierViewChangeType.TIER_NAME_CHANGE);
-		} else if(newItem.isTierLocked() != oldItem.isTierLocked()) {
+		}
+		if(newItem.isTierLocked() != oldItem.isTierLocked()) {
 			changes.add(newItem.isTierLocked() ? EditorEventType.TierViewChangeType.LOCK_TIER : EditorEventType.TierViewChangeType.UNLOCK_TIER);
-		} else if(newItem.isVisible() != oldItem.isVisible()) {
+		}
+		if(newItem.isVisible() != oldItem.isVisible()) {
 			changes.add(newItem.isVisible() ? EditorEventType.TierViewChangeType.SHOW_TIER : EditorEventType.TierViewChangeType.HIDE_TIER);
 		}
 		return changes;
 	}
 
-	private void fireChangeEvents(List<TierViewItem> tierView, List<TierViewItem> oldView, int idx) {
-		final List<EditorEventType.TierViewChangeType> changes = calculateChanges(tierView.get(idx), oldView.get(idx));
+	private void fireChangeEvents(List<EditorEventType.TierViewChangeType> changes, List<TierViewItem> tierView, List<TierViewItem> oldView, int idx) {
 		for(EditorEventType.TierViewChangeType change:changes) {
 			final EditorEvent<EditorEventType.TierViewChangedData> ee =
 					new EditorEvent<>(EditorEventType.TierViewChanged, getSource(), new EditorEventType.TierViewChangedData(oldView, tierView, change,
@@ -60,27 +62,66 @@ public class TierViewItemEdit extends SessionUndoableEdit {
 			getEditorEventManager().queueEvent(ee);
 		}
 	}
+
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	private void changeTierNames(Session session, String oldName, String newName) {
+		// replace tier description
+		for(int i = 0; i < getSession().getUserTierCount(); i++) {
+			final TierDescription td = getSession().getUserTier(i);
+
+			if(td.getName().equals(oldName)) {
+				final TierDescription newDesc = SessionFactory.newFactory().createTierDescription(newName, td.getDeclaredType(), td.getTierParameters(), td.isExcludeFromAlignment(),
+						td.isBlind(), td.getSubtypeDelim(), td.getSubtypeExpr());
+				session.removeUserTier(td);
+				session.addUserTier(i, newDesc);
+			}
+		}
+
+		// change tier name in records
+		for(Record r:getSession().getRecords()) {
+			if(r.hasTier(oldName)) {
+				final Tier<?> oldTier = r.getTier(oldName);
+				r.removeTier(oldName);
+
+				final Tier<?> newTier = SessionFactory.newFactory().createTier(newName, oldTier.getDeclaredType(), oldTier.getTierParameters(), oldTier.isExcludeFromAlignment());
+				newTier.setText(oldTier.toString());
+				r.putTier(newTier);
+			}
+		}
+	}
 	
 	@Override
 	public void undo() {
+		final List<EditorEventType.TierViewChangeType> changes = calculateChanges(oldItem, newItem);
 		final List<TierViewItem> oldView = new ArrayList<>(getSession().getTierView());
 		final List<TierViewItem> tierView = new ArrayList<>(oldView);
 		final int idx = tierView.indexOf(newItem);
+		if(changes.contains(EditorEventType.TierViewChangeType.TIER_NAME_CHANGE)) {
+			// we need to change the tier name in all tiers in the session
+			changeTierNames(getSession(), newItem.getTierName(), oldItem.getTierName());
+		}
 		tierView.remove(idx);
 		tierView.add(idx, oldItem);
 		getSession().setTierView(tierView);
-		fireChangeEvents(tierView, oldView, idx);
+		fireChangeEvents(changes, tierView, oldView, idx);
 	}
 
 	@Override
 	public void doIt() {
+		final List<EditorEventType.TierViewChangeType> changes = calculateChanges(oldItem, newItem);
 		final List<TierViewItem> oldView = new ArrayList<>(getSession().getTierView());
         final List<TierViewItem> tierView = new ArrayList<>(oldView);
+
+		if(changes.contains(EditorEventType.TierViewChangeType.TIER_NAME_CHANGE)) {
+			// we need to change the tier name in all tiers in the session
+			changeTierNames(getSession(), oldItem.getTierName(), newItem.getTierName());
+		}
+
 		final int idx = tierView.indexOf(oldItem);
 		tierView.remove(idx);
 		tierView.add(idx, newItem);
 		getSession().setTierView(tierView);
-		fireChangeEvents(tierView, oldView, idx);
+		fireChangeEvents(changes, tierView, oldView, idx);
 	}
 
 }
