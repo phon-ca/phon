@@ -1566,7 +1566,7 @@ public class ProjectWindow extends CommonModuleFrame {
 				try {
 					final Status status = gitController.status(corpusPath);
 
-					if(status.hasUncommittedChanges() || status.getUntracked().size() > 0) {
+					if(status.hasUncommittedChanges() || !status.getUntracked().isEmpty()) {
 						ImageIcon modifiedIcn =
 								IconManager.getInstance().createGlyphIcon('*',
 										FontPreferences.getTitleFont(), comp.getForeground(), comp.getBackground());
