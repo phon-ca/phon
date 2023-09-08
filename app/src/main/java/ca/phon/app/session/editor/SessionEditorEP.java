@@ -255,7 +255,7 @@ public class SessionEditorEP implements IPluginEntryPoint {
 			editor.getViewModel().applyPerspective(perspective);
 
 			if(grabFocus) {
-				// XXX this code causes issues with result set editor focus in macosx
+				// XXX this code causes issues with result set editor focus in macos
 				if(editor.getViewModel().isShowing(RecordDataEditorView.VIEW_NAME)) {
 					editor.getViewModel().getView(RecordDataEditorView.VIEW_NAME).requestFocus();
 				} else {

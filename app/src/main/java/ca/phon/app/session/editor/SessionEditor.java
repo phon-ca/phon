@@ -157,6 +157,13 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 	private boolean modified = false;
 
 	/**
+	 * Editor finished loading.  This is expected to be set to true after all initial views
+	 * have been loaded and the editor is on screen.  Classes which use SessionEditor should
+	 * fire an {@link EditorEventType.EditorFinishedLoading} event.
+	 */
+	private volatile boolean finishedLoading = false;
+
+	/**
 	 * Constructor
 	 */
 	public SessionEditor(Project project, Session session, Transcriber transcriber) {
@@ -197,10 +204,6 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 		session.putExtension(SyllabifierInfo.class, info);
 
 		init();
-
-		// TODO move to SessionEditorWindow
-//		final JMenuBar menuBar = MenuManager.createWindowMenuBar(this);
-//		setJMenuBar(menuBar);
 	}
 
 	public String getTitle() {
@@ -250,6 +253,23 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 		getEventManager().registerActionForEvent(EditorEventType.EditorClosing, onClosingAct, EditorEventManager.RunOn.AWTEventDispatchThread);
 
 		getEventManager().registerActionForEvent(EditorEventType.SessionMediaChanged, this::onSessionMediaChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+
+		getEventManager().registerActionForEvent(EditorEventType.EditorFinishedLoading, this::onEditorFinishedLoading, EditorEventManager.RunOn.EditorEventDispatchThread);
+	}
+
+	private void onEditorFinishedLoading(EditorEvent<Void> ee) {
+		var oldVal = this.finishedLoading;
+		this.finishedLoading = true;
+		firePropertyChange("finishedLoading", oldVal, finishedLoading);
+	}
+
+	/**
+	 * Has the editor finished loaing all initial views
+	 *
+	 * @return true if EditorEventType.EditorFinishedLoading has been called
+	 */
+	public boolean isFinishedLoading() {
+		return this.finishedLoading;
 	}
 
 	public void setTitle(String title) {
