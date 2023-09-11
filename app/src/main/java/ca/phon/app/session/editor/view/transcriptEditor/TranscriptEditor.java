@@ -1053,7 +1053,7 @@ public class TranscriptEditor extends JEditorPane {
         this.singleRecordView = singleRecordView;
     }
 
-    public void setSession() {
+    public void loadSession() {
         TranscriptDocument doc = (TranscriptDocument) getEditorKit().createDefaultDocument();
         doc.setSession(session);
         setDocument(doc);

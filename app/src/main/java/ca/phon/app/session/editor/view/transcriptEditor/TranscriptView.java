@@ -25,6 +25,9 @@ public class TranscriptView extends EditorView {
         this.transcriptEditor.addPropertyChangeListener("currentRecordIndex", e -> editor.setCurrentRecordIndex((Integer) e.getNewValue()));
         initUI();
         editor.getEventManager().registerActionForEvent(EditorEventType.EditorFinishedLoading, this::onEditorFinishedLoading, EditorEventManager.RunOn.EditorEventDispatchThread);
+        if (editor.isFinishedLoading()) {
+            transcriptEditor.loadSession();
+        }
     }
 
     private void initUI() {
@@ -75,7 +78,7 @@ public class TranscriptView extends EditorView {
     }
 
     private void onEditorFinishedLoading(EditorEvent<Void> event) {
-        transcriptEditor.setSession();
+        transcriptEditor.loadSession();
     }
 
     public boolean isSingleRecordActive() {
