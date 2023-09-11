@@ -264,7 +264,7 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 	}
 
 	/**
-	 * Has the editor finished loaing all initial views
+	 * Has the editor finished loading all initial views
 	 *
 	 * @return true if EditorEventType.EditorFinishedLoading has been called
 	 */
