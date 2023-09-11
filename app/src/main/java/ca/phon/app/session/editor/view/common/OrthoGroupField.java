@@ -102,7 +102,7 @@ public class OrthoGroupField extends GroupField<Orthography> {
 		
 		@Visits
 		public void visitWord(Word word) {
-			if(word.getPrefix() != null) {
+			if(word.getPrefix() != null && !word.getPrefix().toString().isBlank()) {
 				try {
 					getHighlighter().addHighlight(currentPos,
 							currentPos + word.getPrefix().toString().length(), prefixPainter);
@@ -110,7 +110,7 @@ public class OrthoGroupField extends GroupField<Orthography> {
 					
 				}
 			}
-			if(word.getSuffix() != null) {
+			if(word.getSuffix() != null && !word.getSuffix().toString().isBlank()) {
 				try {
 					int i = currentPos + (word.getPrefix() != null ? word.getPrefix().toString().length() : 0) + word.getWord().length();
 					getHighlighter().addHighlight(i, i+word.getSuffix().toString().length(), suffixPainter);
