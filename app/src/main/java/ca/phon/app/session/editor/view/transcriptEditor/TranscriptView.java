@@ -22,9 +22,7 @@ public class TranscriptView extends EditorView {
         super(editor);
         this.transcriptEditor = new TranscriptEditor(editor.getSession(), editor.getEventManager(), editor.getUndoSupport(), editor.getUndoManager());
         this.transcriptEditor.setSegmentPlayback(editor.getMediaModel().getSegmentPlayback());
-        this.transcriptEditor.addPropertyChangeListener("currentRecordIndex", e -> {
-            editor.setCurrentRecordIndex((Integer) e.getNewValue());
-        });
+        this.transcriptEditor.addPropertyChangeListener("currentRecordIndex", e -> editor.setCurrentRecordIndex((Integer) e.getNewValue()));
         initUI();
         editor.getEventManager().registerActionForEvent(EditorEventType.EditorFinishedLoading, this::onEditorFinishedLoading, EditorEventManager.RunOn.EditorEventDispatchThread);
     }
@@ -53,7 +51,6 @@ public class TranscriptView extends EditorView {
 
         retVal.add(new ToggleSingleRecordAction(getEditor(), this));
         retVal.add(new ToggleRecordNumbersAction(getEditor(), this));
-        retVal.add(new ToggleLabelsVisibleAction(getEditor(), this));
         retVal.add(new ToggleSyllabificationVisibleAction(getEditor(), this));
         retVal.add(new ToggleSyllabificationIsComponent(getEditor(), this));
         retVal.add(new ToggleAlignmentVisibleAction(getEditor(), this));
@@ -95,14 +92,6 @@ public class TranscriptView extends EditorView {
 
     public void toggleShowRecordNumbers() {
         transcriptScrollPane.getTranscriptRowHeader().setShowRecordNumbers(!getShowRecordNumbers());
-    }
-
-    public boolean getLabelsVisible() {
-        return transcriptEditor.getTranscriptDocument().getLabelsVisible();
-    }
-
-    public void toggleLabelsVisible() {
-        transcriptEditor.getTranscriptDocument().setLabelsVisible(!getLabelsVisible());
     }
 
     public boolean isSyllabificationVisible() {

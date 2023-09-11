@@ -1,5 +1,6 @@
 package ca.phon.app.session.editor.view.transcriptEditor;
 
+import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.session.Session;
 
 import javax.swing.text.Document;

@@ -4,16 +4,11 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.DesktopProject;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
-import ca.phon.app.session.editor.undo.ExcludeRecordEdit;
 import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
-import ca.phon.formatter.MediaTimeFormat;
-import ca.phon.formatter.MediaTimeFormatStyle;
-import ca.phon.formatter.MediaTimeFormatter;
 import ca.phon.plugin.PluginManager;
 import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.ui.DropDownIcon;
-import ca.phon.ui.EmptyIcon;
+import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
@@ -22,7 +17,6 @@ import ca.phon.util.Tuple;
 import org.jdesktop.swingx.HorizontalLayout;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.text.*;
 import javax.swing.undo.UndoManager;
 import java.awt.*;
@@ -33,6 +27,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -48,6 +43,7 @@ public class TranscriptEditor extends JEditorPane {
     private int currentRecordIndex = -1;
     private boolean singleRecordView = false;
     public final static EditorEventType<Void> recordChangedInSingleRecordMode = new EditorEventType<>("recordChangedInSingleRecordMode", Void.class);
+    private int prevMousePosInDoc = -1;
 
     public TranscriptEditor(
         Session session,
@@ -64,23 +60,90 @@ public class TranscriptEditor extends JEditorPane {
         registerEditorActions();
         super.setEditorKitForContentType(TranscriptEditorKit.CONTENT_TYPE, new TranscriptEditorKit());
         setContentType(TranscriptEditorKit.CONTENT_TYPE);
+        setOpaque(false);
         addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
-                if (!controlPressed) return;
-                highlightElementAtPoint(e.getPoint());
+                TranscriptDocument doc = getTranscriptDocument();
+
+                if (controlPressed) {
+                    highlightElementAtPoint(e.getPoint());
+                }
+
+//                int mousePosInDoc = viewToModel2D(e.getPoint());
+//
+//                Element elem = doc.getCharacterElement(mousePosInDoc);
+//                if (elem != null) {
+//                    if (elem.equals(doc.getHoverLabel())) return;
+//                    AttributeSet attrs = elem.getAttributes();
+//                    boolean isLabel = attrs.getAttribute("label") != null;
+//                    boolean isWhitespace = doc.getCharAtPos(mousePosInDoc).equals(' ');
+//                    if (isLabel && !isWhitespace) {
+//                        doc.setHoverLabel(elem);
+//                        return;
+//                    }
+//                }
+//                if (doc.getHoverLabel() != null) {
+//                    doc.setHoverLabel(null);
+//                }
             }
         });
+        NavigationFilter filter = new NavigationFilter() {
+            public void setDot(NavigationFilter.FilterBypass fb, int dot, Position.Bias bias) {
+                TranscriptDocument doc = getTranscriptDocument();
+                Element elem = doc.getCharacterElement(dot);
+                AttributeSet attrs = elem.getAttributes();
+                boolean isLabel = attrs.getAttribute("label") != null;
+
+                if (isLabel) return;
+
+                System.out.println("Setting: " + dot);
+                fb.setDot(dot, bias);
+            }
+
+            public void moveDot(NavigationFilter.FilterBypass fb, int dot, Position.Bias bias) {
+                System.out.println("Moving: " + dot);
+                fb.setDot(dot, bias);
+            }
+        };
+
+        setNavigationFilter(filter);
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (!controlPressed) return;
+                TranscriptDocument doc = getTranscriptDocument();
                 int mousePosInDoc = viewToModel2D(e.getPoint());
-                var elem = getTranscriptDocument().getCharacterElement(mousePosInDoc);
-                Tier<?> tier = (Tier<?>)elem.getAttributes().getAttribute("tier");
-                if (tier != null && tier.getValue() instanceof MediaSegment mediaSegment) {
-                    if (segmentPlayback != null) {
-                        segmentPlayback.playSegment(mediaSegment);
+
+                Element elem = doc.getCharacterElement(mousePosInDoc);
+                AttributeSet attrs = elem.getAttributes();
+                if (attrs.getAttribute("label") != null) {
+                    String elementType = (String) attrs.getAttribute("elementType");
+                    if (elementType != null) {
+
+                        switch (elementType) {
+                            case "record" -> setCaretPosition(doc.getTierStart((Tier<?>) attrs.getAttribute("tier")));
+                            case "comment" -> setCaretPosition(doc.getCommentStart((Comment) attrs.getAttribute("comment")));
+                            case "gem" -> setCaretPosition(doc.getGemStart((Gem) attrs.getAttribute("gem")));
+                        }
+
+                        char clickedChar = doc.getCharAtPos(mousePosInDoc - 1);
+                        boolean isWhitespace = clickedChar == ' ' || clickedChar == '\n';
+                        if (!isWhitespace) {
+                            switch (elementType) {
+                                case "record" -> onClickTierLabel(e.getPoint());
+                                case "comment" -> onClickCommentLabel(e.getPoint());
+                                case "gem" -> onClickGemLabel(e.getPoint());
+                            }
+                        }
+                    }
+                }
+
+                if (controlPressed) {
+                    Tier<?> tier = (Tier<?>)elem.getAttributes().getAttribute("tier");
+                    if (tier != null && tier.getValue() instanceof MediaSegment mediaSegment) {
+                        if (segmentPlayback != null) {
+                            segmentPlayback.playSegment(mediaSegment);
+                        }
                     }
                 }
             }
@@ -95,7 +158,6 @@ public class TranscriptEditor extends JEditorPane {
 //            );
 //            eventManager.queueEvent(event);
 //        });
-
         addCaretListener(e -> {
             try {
                 TranscriptDocument doc = getTranscriptDocument();
@@ -115,7 +177,8 @@ public class TranscriptEditor extends JEditorPane {
                 System.out.println(doc.getRecordEnd(recordIndex, null));*/
                 SimpleAttributeSet attrs = new SimpleAttributeSet(doc.getCharacterElement(e.getDot()).getAttributes().copyAttributes());
                 System.out.println(e.getDot() + ": " + doc.getCharAtPos(e.getDot()));
-                //System.out.println(attrs);
+                System.out.println(attrs);
+                //getCaret().setVisible(attrs.getAttribute("notEditable") == null);
             }
             catch (Exception exception) {
                 System.out.println(exception);
@@ -136,9 +199,6 @@ public class TranscriptEditor extends JEditorPane {
             Session session = project.openSession(corpus, sessionName);
             JFrame frame = new JFrame("Transcript Editor");
             TranscriptEditor editorPane = new TranscriptEditor(session);
-
-            // This should be different somehow
-            var doc = editorPane.getTranscriptDocument();
 
             frame.setSize(350, 275);
             frame.setLayout(new BorderLayout());
@@ -193,12 +253,12 @@ public class TranscriptEditor extends JEditorPane {
 
         KeyStroke right = KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0);
         inputMap.put(right, "nextEditableIndex");
-        PhonUIAction<Void> rightAct = PhonUIAction.runnable(() -> setCaretPosition(getNextEditableIndex(getCaretPosition() + 1)));
+        PhonUIAction<Void> rightAct = PhonUIAction.runnable(() -> setCaretPosition(getNextEditableIndex(getCaretPosition() + 1, true)));
         actionMap.put("nextEditableIndex", rightAct);
 
         KeyStroke left = KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0);
         inputMap.put(left, "prevEditableIndex");
-        PhonUIAction<Void> leftAct = PhonUIAction.runnable(() -> setCaretPosition(getPrevEditableIndex(getCaretPosition() - 1)));
+        PhonUIAction<Void> leftAct = PhonUIAction.runnable(() -> setCaretPosition(getPrevEditableIndex(getCaretPosition() - 1, true)));
         actionMap.put("prevEditableIndex", leftAct);
 
 
@@ -251,20 +311,6 @@ public class TranscriptEditor extends JEditorPane {
     }
 
     // endregion Input Actions
-
-    private void createTierLabelPopup(JLabel tierLabel, MouseEvent mouseEvent) {
-        JPopupMenu menu = new JPopupMenu();
-        MenuBuilder builder = new MenuBuilder(menu);
-
-        var extPts = PluginManager.getInstance().getExtensionPoints(TierLabelMenuHandler.class);
-
-        for (var extPt : extPts) {
-            var menuHandler = extPt.getFactory().createObject();
-            menuHandler.addMenuItems(builder);
-        }
-
-        menu.show(tierLabel, mouseEvent.getX(), mouseEvent.getY());
-    }
 
     public void moveTier(EditorEventType.TierViewChangedData data) {
         long startTimeMS = new Date().getTime();
@@ -539,8 +585,6 @@ public class TranscriptEditor extends JEditorPane {
     }
 
     public void tierNameChanged(EditorEventType.TierViewChangedData data) {
-        System.out.println(data.oldTierView().stream().map(item -> item.getTierName()).toList());
-        System.out.println(data.newTierView().stream().map(item -> item.getTierName()).toList());
 
         List<TierViewItem> oldTiers = new ArrayList<>();
         List<TierViewItem> newTiers = new ArrayList<>();
@@ -554,7 +598,15 @@ public class TranscriptEditor extends JEditorPane {
 
         if (newTiers.isEmpty()) return;
 
-        getTranscriptDocument().tierNameChanged(oldTiers, newTiers);
+        int caretPos = getCaretPosition();
+
+        TranscriptDocument doc = getTranscriptDocument();
+        DefaultStyledDocument blank = new DefaultStyledDocument();
+        setDocument(blank);
+        doc.tierNameChanged(oldTiers, newTiers);
+        setDocument(doc);
+
+        setCaretPosition(caretPos);
     }
 
     public void tierFontChanged(EditorEventType.TierViewChangedData data) {
@@ -572,7 +624,7 @@ public class TranscriptEditor extends JEditorPane {
         Document blank = new DefaultStyledDocument();
         setDocument(blank);
         // Change tier font in doc
-        getTranscriptDocument().tierFontChanged(changedTiers);
+        doc.tierFontChanged(changedTiers);
         setDocument(doc);
 
         setCaretPosition(caretPos);
@@ -584,6 +636,50 @@ public class TranscriptEditor extends JEditorPane {
 
     @Override
     protected void paintComponent(Graphics g) {
+        TranscriptDocument doc = getTranscriptDocument();
+        Rectangle drawHere = g.getClipBounds();
+
+        g.setColor(Color.white);
+        g.fillRect(drawHere.x, drawHere.y, drawHere.width, drawHere.height);
+
+        g.setColor(PhonGuiConstants.PHON_UI_STRIP_COLOR);
+        FontMetrics fontMetrics = g.getFontMetrics(FontPreferences.getMonospaceFont().deriveFont(14.0f));
+        char[] template = new char[getTranscriptDocument().getLabelColumnWidth() + 1];
+        Arrays.fill(template, ' ');
+        int labelColWidth = fontMetrics.stringWidth(new String(template));
+        g.fillRect(drawHere.x, drawHere.y, labelColWidth, drawHere.height);
+
+
+        g.setColor(Color.gray);
+        int sepLineHeight = 1;
+        int fontHeight = fontMetrics.getHeight();
+        Element root = doc.getDefaultRootElement();
+        if (root.getElementCount() == 0) return;
+        float lineSpacing = StyleConstants.getLineSpacing(root.getElement(0).getAttributes());
+        int sepLineOffset = (int) (((fontHeight * lineSpacing) + sepLineHeight) / 2);
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() == 0) continue;
+            Element innerElem = elem.getElement(0);
+            AttributeSet attrs = innerElem.getAttributes();
+            if (attrs.getAttribute("sep") != null) {
+                try {
+                    var sepRect = modelToView2D(innerElem.getStartOffset());
+                    boolean topVisible = sepRect.getMinY() > drawHere.getMinY() && sepRect.getMinY() < drawHere.getMaxY();
+                    boolean bottomVisible = sepRect.getMaxY() > drawHere.getMinY() && sepRect.getMaxY() < drawHere.getMaxY();
+                    if (!topVisible && !bottomVisible) continue;
+                    g.fillRect(
+                        drawHere.x,
+                        ((int) sepRect.getMinY()) - sepLineOffset,
+                        drawHere.width,
+                        sepLineHeight
+                    );
+                } catch (BadLocationException e) {
+                    LogUtil.severe(e);
+                }
+            }
+        }
+
         super.paintComponent(g);
     }
 
@@ -634,7 +730,7 @@ public class TranscriptEditor extends JEditorPane {
         return undoManager;
     }
 
-    private JComponent createTierLabel(Tier<?> tier, TierViewItem item) {
+    /*private JComponent createTierLabel(Tier<?> tier, TierViewItem item) {
         String tierName = item.getTierName();
         JLabel tierLabel = new JLabel(tierName);
 
@@ -661,9 +757,9 @@ public class TranscriptEditor extends JEditorPane {
         });
 
         return tierLabel;
-    }
+    }*/
 
-    private JComponent createCommentLabel(Comment comment) {
+    /*private JComponent createCommentLabel(Comment comment) {
         JLabel commentLabel = new JLabel(comment.getType().getLabel());
 
         commentLabel.setFont(FontPreferences.getTierFont());
@@ -801,7 +897,7 @@ public class TranscriptEditor extends JEditorPane {
         separatorPanel.add(segmentLabel);
 
         return separatorPanel;
-    }
+    }*/
 
     public void changeSpeaker(Tuple<Record, Participant> data) {
         ChangeSpeakerEdit edit = new ChangeSpeakerEdit(session, eventManager, data.getObj1(), data.getObj2());
@@ -959,15 +1055,11 @@ public class TranscriptEditor extends JEditorPane {
 
     public void setSession() {
         TranscriptDocument doc = (TranscriptDocument) getEditorKit().createDefaultDocument();
-        doc.setTierLabelFactory(this::createTierLabel);
-        doc.setCommentLabelFactory(this::createCommentLabel);
-        doc.setGemLabelFactory(this::createGemLabel);
-        doc.setSeparatorFactory(this::createSeparator);
         doc.setSession(session);
         setDocument(doc);
     }
 
-    public int getNextEditableIndex(int currentPos) {
+    public int getNextEditableIndex(int currentPos, boolean looping) {
         TranscriptDocument doc = getTranscriptDocument();
 
         int docLen = doc.getLength();
@@ -978,18 +1070,29 @@ public class TranscriptEditor extends JEditorPane {
             elem = doc.getCharacterElement(currentPos);
         }
 
-        if (currentPos == docLen) return -1;
+        if (currentPos == docLen) {
+            if (looping) {
+                return getNextEditableIndex(0, true);
+            }
+            else {
+                return -1;
+            }
+        }
 
         return currentPos;
     }
 
-    public int getPrevEditableIndex(int currentPos) {
+    public int getPrevEditableIndex(int currentPos, boolean looping) {
         TranscriptDocument doc = getTranscriptDocument();
 
         Element elem = doc.getCharacterElement(currentPos);
         while (elem.getAttributes().getAttribute("notEditable") != null && currentPos >= 0) {
             currentPos--;
             elem = doc.getCharacterElement(currentPos);
+        }
+
+        if (looping && currentPos < 0) {
+            return getPrevEditableIndex(doc.getLength()-1, true);
         }
 
         return currentPos;
@@ -1370,5 +1473,59 @@ public class TranscriptEditor extends JEditorPane {
 
     public EditorEventManager getEventManager() {
         return eventManager;
+    }
+
+    private void onClickTierLabel(Point2D point) {
+        JPopupMenu menu = new JPopupMenu();
+        MenuBuilder builder = new MenuBuilder(menu);
+
+        var extPts = PluginManager.getInstance().getExtensionPoints(TierLabelMenuHandler.class);
+
+        for (var extPt : extPts) {
+            var menuHandler = extPt.getFactory().createObject();
+            menuHandler.addMenuItems(builder);
+        }
+
+        menu.show(this, (int) point.getX(), (int) point.getY());
+    }
+
+    private void onClickCommentLabel(Point2D point) {
+        JPopupMenu menu = new JPopupMenu();
+
+        JMenu addComment = new JMenu("Add comment");
+        addComment.add("Add comment above");
+        addComment.add("Add comment below");
+        addComment.add("Add comment at bottom");
+        menu.add(addComment);
+
+        JMenu addGem = new JMenu("Add gem");
+        addGem.add("Add gem above");
+        addGem.add("Add gem below");
+        addGem.add("Add gem at bottom");
+        menu.add(addGem);
+
+        menu.add("Delete me");
+
+        menu.show(this, (int) point.getX(), (int) point.getY());
+    }
+
+    private void onClickGemLabel(Point2D point) {
+        JPopupMenu menu = new JPopupMenu();
+
+        JMenu addComment = new JMenu("Add comment");
+        addComment.add("Add comment above");
+        addComment.add("Add comment below");
+        addComment.add("Add comment at bottom");
+        menu.add(addComment);
+
+        JMenu addGem = new JMenu("Add gem");
+        addGem.add("Add gem above");
+        addGem.add("Add gem below");
+        addGem.add("Add gem at bottom");
+        menu.add(addGem);
+
+        menu.add("Delete me");
+
+        menu.show(this, (int) point.getX(), (int) point.getY());
     }
 }

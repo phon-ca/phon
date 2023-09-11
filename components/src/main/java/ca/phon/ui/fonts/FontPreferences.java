@@ -220,7 +220,7 @@ public class FontPreferences {
 	 */
 	public final static String MONOSPACE_FONT = FontPreferences.class.getName() + ".monospaceFont";
 
-	public final static String DEFAULT_MONOSPACE_FONT = "Noto Sans Mono-PLAIN-12";
+	public final static String DEFAULT_MONOSPACE_FONT = "Noto Sans Mono-PLAIN-14";
 
 	public static Font getMonospaceFont() {
 		return _getFont(MONOSPACE_FONT, DEFAULT_MONOSPACE_FONT);
