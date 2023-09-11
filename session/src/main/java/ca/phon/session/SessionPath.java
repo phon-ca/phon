@@ -78,10 +78,26 @@ public class SessionPath implements IExtendable, Comparable<SessionPath> {
 	}
 
 	/**
-	 * Get session
+	 * Get session filename
+	 *
+	 * @return session file name with extension
 	 */
 	public String getSessionFile() {
 		return this.sessionFile;
+	}
+
+	/**
+	 * Get session name
+	 *
+	 * @return session name (same as filename without extension)
+	 */
+	public String getSessionName() {
+		final int lastDotIdx = getSessionFile().lastIndexOf('.');
+		if(lastDotIdx >= 0) {
+			return getSessionName().substring(0, lastDotIdx);
+		} else {
+			return getSessionFile();
+		}
 	}
 
 	/**

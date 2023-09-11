@@ -114,19 +114,18 @@ public class CSVImporter {
             boolean sessionChanged = false;
 
             if (isImported(sessionPathTier)) {
-                String[] splitSessionPath = row[sessionPathTier.get().csvColumnIndex]
-                    .split("\\.");
+                final SessionPath sp = sessionFactory.createSessionPath(row[sessionPathTier.get().csvColumnIndex]);
 
-                if (!currentCorpus.equals(splitSessionPath[0])) {
-                    currentCorpus = splitSessionPath[0];
+                if (!currentCorpus.equals(sp.getFolder())) {
+                    currentCorpus = sp.getFolder();
                     corpusChanged = true;
                     if (!project.getCorpora().contains(currentCorpus)) {
                         project.addCorpus(currentCorpus);
                     }
                 }
 
-                if (!currentSessionName.equals(splitSessionPath[1])) {
-                    currentSessionName = splitSessionPath[1];
+                if (!currentSessionName.equals(sp.getSessionName())) {
+                    currentSessionName = sp.getSessionName();
                     sessionChanged = true;
                 }
             }
