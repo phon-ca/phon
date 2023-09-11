@@ -564,7 +564,9 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 			if(retVal.getName() == null || !retVal.getName().equals(sessionName)) {
 				retVal.setName(sessionName);
 			}
-			retVal.setSessionPath(SessionFactory.newFactory().createSessionPath(corpus, session));
+			final SessionPath sp = SessionFactory.newFactory().createSessionPath(corpus, session);
+			sp.putExtension(Project.class, this);
+			retVal.setSessionPath(sp);
 
 			return retVal;
 		} catch (Exception e) {
