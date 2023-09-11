@@ -24,6 +24,11 @@ public class TranscriptRowHeader extends JComponent {
 
     @Override
     protected void paintComponent(Graphics g) {
+        final Graphics2D g2 = (Graphics2D)g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+
         Rectangle drawHere = g.getClipBounds();
 
         // Fill clipping area with dirty brown/orange.
@@ -34,6 +39,8 @@ public class TranscriptRowHeader extends JComponent {
         var doc = editor.getTranscriptDocument();
 
         var root = doc.getDefaultRootElement();
+
+        int currentSepHeight = -1;
 
         for (int i = 0; i < root.getElementCount(); i++) {
             var elem = root.getElement(i);
@@ -75,7 +82,10 @@ public class TranscriptRowHeader extends JComponent {
                                 int stringWidth = fontMetrics.stringWidth(recordNumberText);
                                 int stringBaselineHeight = (int)(sepRect.getCenterY() + 0.8f * (fontMetrics.getFont().getSize() / 2.0f));
 
+                                if (stringBaselineHeight <= currentSepHeight) continue;
+
                                 g.drawString(recordNumberText, getWidth() - stringWidth - PADDING, stringBaselineHeight);
+                                currentSepHeight = stringBaselineHeight;
                             }
 
                         }
