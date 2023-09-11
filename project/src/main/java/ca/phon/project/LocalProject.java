@@ -287,10 +287,6 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 		final Path relativePath = projectPath.relativize(path);
 
 		String retVal = relativePath.toString();
-		if(OSInfo.isWindows()) {
-			retVal.replaceAll("[\\]", "/");
-		}
-
 		return relativePath.toString();
 	}
 
