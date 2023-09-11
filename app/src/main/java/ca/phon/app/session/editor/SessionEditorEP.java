@@ -19,6 +19,7 @@ import ca.phon.app.autosave.Autosaves;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.menu.file.OpenFileHistory;
 import ca.phon.app.modules.EntryPointArgs;
+import ca.phon.app.project.UnifiedProjectWindow;
 import ca.phon.app.session.editor.view.check.SessionCheckView;
 import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.plugin.*;
@@ -131,10 +132,25 @@ public class SessionEditorEP implements IPluginEntryPoint {
 			this.highlightResults = (Result[])args.get(RESULT_VALUES_PROPERTY);
 		}
 
+		final boolean isUseNewUI = PrefHelper.getBoolean("ca.phon.app.useNewUI", false);
+
 		final Runnable onEdt = new Runnable() {
 			public void run() {
-				final SessionEditorWindow sessionEditorWindow = showEditor(project, sessionRef.get(), blindMode, grabFocus);
-				final SessionEditor editor = sessionEditorWindow.getSessionEditor();
+				SessionEditor editor = null;
+				boolean openedInProject = false;
+				if(isUseNewUI) {
+					for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
+						if(cmf instanceof UnifiedProjectWindow unifiedProjectWindow && unifiedProjectWindow.getProject().getLocation().equalsIgnoreCase(project.getLocation())) {
+							unifiedProjectWindow.openSession(sessionRef.get().getSessionPath());
+							openedInProject = true;
+						}
+					}
+				}
+
+				if(!openedInProject) {
+					final SessionEditorWindow sessionEditorWindow = showEditor(project, sessionRef.get(), blindMode, grabFocus);
+					editor = sessionEditorWindow.getSessionEditor();
+				}
 
 				if(openAtRecord >= 0 && openAtRecord < editor.getSession().getRecordCount()) {
 					editor.setCurrentRecordIndex(openAtRecord);
