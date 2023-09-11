@@ -90,12 +90,12 @@ public class ParticipantCache {
 	public void loadSession(SessionPath sessionPath) {
 		final ZonedDateTime lastScanModTime = sessionMap.get(sessionPath);
 		if(lastScanModTime != null) {
-			final ZonedDateTime currentModTime = project.getSessionModificationTime(sessionPath.getCorpus(), sessionPath.getSession());
+			final ZonedDateTime currentModTime = project.getSessionModificationTime(sessionPath.getFolder(), sessionPath.getSessionFile());
 			if(currentModTime.isEqual(lastScanModTime) || currentModTime.isBefore(lastScanModTime))
 				return;
 		}
 		try {
-			Session session = project.openSession(sessionPath.getCorpus(), sessionPath.getSession());
+			Session session = project.openSession(sessionPath.getFolder(), sessionPath.getSessionFile());
 			Collection<Participant> participants = new ArrayList<>();
 
 			participants.add( SessionFactory.newFactory().cloneParticipant(Participant.UNKNOWN) );

@@ -128,7 +128,7 @@ public class SessionSelector extends TristateCheckBoxTree {
 		final TristateCheckBoxTreeNode root = (TristateCheckBoxTreeNode)getModel().getRoot();
 		for(int i = 0; i < root.getChildCount(); i++) {
 			final TristateCheckBoxTreeNode corpusNode = (TristateCheckBoxTreeNode)root.getChildAt(i);
-			if(corpusNode.getUserObject().equals(sessionPath.getCorpus())) {
+			if(corpusNode.getUserObject().equals(sessionPath.getFolder())) {
 				for(int j = 0; j < corpusNode.getChildCount(); j++) {
 					final TristateCheckBoxTreeNode sessionNode = (TristateCheckBoxTreeNode)corpusNode.getChildAt(j);
 					if(sessionNode.getUserObject().equals(sessionPath)) {
@@ -220,10 +220,10 @@ public class SessionSelector extends TristateCheckBoxTree {
 				if(node instanceof SessionTreeNode) {
 					SessionPath sp = (SessionPath)node.getUserObject();
 					SessionEditor editor = (SessionEditor)sp.getExtension(SessionEditor.class);
-					panel.getLabel().setText(sp.getSession());
+					panel.getLabel().setText(sp.getSessionFile());
 					if(editor != null) {
 						StringBuffer lblTxt = new StringBuffer();
-						lblTxt.append("(O) ").append(sp.getSession());
+						lblTxt.append("(O) ").append(sp.getSessionFile());
 						if(editor.isModified()) {
 							lblTxt.append("*");
 						}

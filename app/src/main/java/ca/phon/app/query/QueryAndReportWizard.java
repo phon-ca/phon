@@ -51,9 +51,6 @@ import ca.phon.util.*;
 import ca.phon.util.icons.*;
 import ca.phon.worker.PhonTask.TaskStatus;
 import ca.phon.worker.PhonWorker;
-import org.apache.commons.lang.StringEscapeUtils;
-import org.cef.browser.CefBrowser;
-import org.cef.handler.CefLoadHandlerAdapter;
 import org.jdesktop.swingx.HorizontalLayout;
 
 import javax.swing.*;
@@ -62,7 +59,6 @@ import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.net.*;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -1284,7 +1280,7 @@ public class QueryAndReportWizard extends NodeWizard {
 		List<SessionPath> selectedSessions = sessionSelector.getSelectedSessions();
 		Map<SessionPath, ZonedDateTime> sessionModTimes = new HashMap<>();
 		for(SessionPath sp:selectedSessions) {
-			ZonedDateTime modTime = project.getSessionModificationTime(sp.getCorpus(), sp.getSession());
+			ZonedDateTime modTime = project.getSessionModificationTime(sp.getFolder(), sp.getSessionFile());
 			sessionModTimes.put(sp, modTime);
 		}
 			

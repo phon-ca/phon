@@ -121,7 +121,7 @@ public class AnonymizeParticipantInfoWizard extends WizardFrame {
 			final Project project = getExtension(Project.class);
 			for(SessionPath sp:sessionSelector.getSelectedSessions()) {
 				try {
-					final Session session = project.openSession(sp.getCorpus(), sp.getSession());
+					final Session session = project.openSession(sp.getFolder(), sp.getSessionFile());
 					final Participants parts = session.getParticipants();
 					
 					// XXX we need to ensure all records are loaded

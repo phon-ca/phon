@@ -32,7 +32,7 @@ public interface RecordContainer {
 		if(obj instanceof SessionPath) {
 			SessionPath sessionLoc = (SessionPath)obj;
 			try {
-				Session session = project.openSession(sessionLoc.getCorpus(), sessionLoc.getSession());
+				Session session = project.openSession(sessionLoc.getFolder(), sessionLoc.getSessionFile());
 				retVal.add(new SessionRecordContainer(session, selectedParticipants));
 			} catch (IOException e) {
 				LOGGER.error( e.getLocalizedMessage(), e);

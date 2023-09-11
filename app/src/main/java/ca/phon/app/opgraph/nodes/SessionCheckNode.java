@@ -110,7 +110,7 @@ public class SessionCheckNode extends OpNode implements NodeSettings{
 				session = spRef.get().getExtension(SessionEditor.class).getSession();
 			} else {
 				try {
-					session = project.openSession(spRef.get().getCorpus(), spRef.get().getSession());
+					session = project.openSession(spRef.get().getFolder(), spRef.get().getSessionFile());
 				} catch (IOException e) {
 					throw new ProcessingException(null, e);
 				}

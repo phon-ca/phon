@@ -17,13 +17,17 @@ package ca.phon.app.project;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.modules.EntryPointArgs;
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.SessionEditorEP;
 import ca.phon.plugin.*;
 import ca.phon.project.*;
+import ca.phon.session.Session;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.PrefHelper;
+import com.jcraft.jsch.IO;
 import org.apache.logging.log4j.Level;
+import org.pushingpixels.lafwidget.contrib.blogofbug.swing.SwingBugUtilities;
 
 import javax.swing.*;
 import java.awt.*;
@@ -54,20 +58,24 @@ public class OpenProjectEP implements IPluginEntryPoint {
 		super();
 	}
 			
-	public void loadProject(EntryPointArgs epArgs) {
+	public void loadProject(EntryPointArgs epArgs) throws IOException {
 		final Project project = epArgs.getProject();
+		final Session session = epArgs.getSession();
 		if(project != null) {
 			moveOldPropertiesFile(project);
 
 			final boolean openWithSession =
-					epArgs.containsKey(OPEN_WITH_SESSION) ? (Boolean)epArgs.get(OPEN_WITH_SESSION) : false;
-			loadLocalProject(project, !openWithSession);
-
-			if(openWithSession) {
-				try {
-					PluginEntryPointRunner.executePlugin(SessionEditorEP.EP_NAME, epArgs);
-				} catch (PluginException e) {
-					throw new RuntimeException(e);
+					epArgs.containsKey(OPEN_WITH_SESSION) ? (Boolean)epArgs.get(OPEN_WITH_SESSION) :
+					session != null;
+			if(loadLocalProject(project, !openWithSession)) {
+				if (openWithSession) {
+					SwingUtilities.invokeLater(() -> {
+						try {
+							PluginEntryPointRunner.executePlugin(SessionEditorEP.EP_NAME, epArgs);
+						} catch (PluginException e) {
+							throw new RuntimeException(e);
+						}
+					});
 				}
 			}
 		}
@@ -145,7 +153,11 @@ public class OpenProjectEP implements IPluginEntryPoint {
 
 			final CommonModuleFrame pwindow = isUseNewUI ? new UnifiedProjectWindow(project) : new ProjectWindow(project, project.getLocation());
     		pwindow.pack();
-    		pwindow.setSize(800, 600);
+			if(isUseNewUI) {
+				pwindow.setExtendedState(Frame.MAXIMIZED_BOTH);
+			} else {
+				pwindow.setSize(800, 600);
+			}
     		pwindow.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
     		pwindow.setVisible(true);
     		
@@ -180,8 +192,13 @@ public class OpenProjectEP implements IPluginEntryPoint {
 		
 		final EntryPointArgs epArgs = new EntryPointArgs(args);
 		final Runnable openProject = () -> {
-
-			loadProject(epArgs);
+			try {
+				loadProject(epArgs);
+			} catch (IOException e) {
+				Toolkit.getDefaultToolkit().beep();
+				LogUtil.severe(e);
+				CommonModuleFrame.getCurrentFrame().showMessageDialog("Open project", e.getMessage(), MessageDialogProperties.okOptions);
+			}
 		};
 
 		if(SwingUtilities.isEventDispatchThread()) {

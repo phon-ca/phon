@@ -27,7 +27,7 @@ public class TestOrthographyRoundTrip {
     public static Collection<Object[]> testData() {
         List<Object[]> retVal = new ArrayList<>();
         try(BufferedReader in = new BufferedReader(
-                new InputStreamReader(TestOrthographyRoundTrip.class.getResourceAsStream(TEST_FILE)))) {
+                new InputStreamReader(TestOrthographyRoundTrip.class.getResourceAsStream(TEST_FILE), "UTF-8"))) {
             String line = null;
             while((line = in.readLine()) != null) {
                 retVal.add(new String[]{line});

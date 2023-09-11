@@ -236,7 +236,7 @@ public class QueryRunnerPanel extends JPanel {
 						sessionLocation.toString();
 
 				final Session session =
-						project.openSession(sessionLocation.getCorpus(), sessionLocation.getSession());
+						project.openSession(sessionLocation.getFolder(), sessionLocation.getSessionFile());
 
 				final QueryScript clonedScript = (QueryScript)queryScript.clone();
 				final QueryTask queryTask = new QueryTask(project, session, clonedScript, serial++);
@@ -380,7 +380,7 @@ public class QueryRunnerPanel extends JPanel {
 				if(selectedIndex >= 0) {
 					final SessionPath location = tableModel.sessions.get(selectedIndex);
 
-					final String sessionName = location.getCorpus() + "." + location.getSession();
+					final String sessionName = location.getFolder() + "." + location.getSessionFile();
 					final QueryManager qm = QueryManager.getSharedInstance();
 					final ResultSetManager rsManager = qm.createResultSetManager();
 					

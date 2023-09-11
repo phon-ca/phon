@@ -19,6 +19,7 @@ import ca.phon.app.autosave.Autosaves;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.menu.file.OpenFileHistory;
 import ca.phon.app.modules.EntryPointArgs;
+import ca.phon.app.project.UnifiedProjectWindow;
 import ca.phon.app.session.editor.view.check.SessionCheckView;
 import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.plugin.*;
@@ -29,13 +30,9 @@ import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.*;
-import ca.phon.util.OSInfo;
 import com.jgoodies.forms.layout.*;
-import org.apache.logging.log4j.LogManager;
 
 import javax.swing.*;
-import javax.swing.text.DefaultHighlighter;
-import javax.swing.text.Highlighter;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -80,8 +77,8 @@ public class SessionEditorEP implements IPluginEntryPoint {
 		String sessionName = sessionLoc;
 		if(corpusName == null && sessionLoc != null) {
 			final SessionPath sessionPath = SessionFactory.newFactory().createSessionPath(sessionLoc);
-			corpusName = sessionPath.getCorpus();
-			sessionName = sessionPath.getSession();
+			corpusName = sessionPath.getFolder();
+			sessionName = sessionPath.getSessionFile();
 		}
 
 		final AtomicReference<Session> sessionRef = new AtomicReference<>();
@@ -135,10 +132,25 @@ public class SessionEditorEP implements IPluginEntryPoint {
 			this.highlightResults = (Result[])args.get(RESULT_VALUES_PROPERTY);
 		}
 
+		final boolean isUseNewUI = PrefHelper.getBoolean("ca.phon.app.useNewUI", false);
+
 		final Runnable onEdt = new Runnable() {
 			public void run() {
-				final SessionEditorWindow sessionEditorWindow = showEditor(project, sessionRef.get(), blindMode, grabFocus);
-				final SessionEditor editor = sessionEditorWindow.getSessionEditor();
+				SessionEditor editor = null;
+				boolean openedInProject = false;
+				if(isUseNewUI) {
+					for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
+						if(cmf instanceof UnifiedProjectWindow unifiedProjectWindow && unifiedProjectWindow.getProject().getLocation().equalsIgnoreCase(project.getLocation())) {
+							unifiedProjectWindow.openSession(sessionRef.get().getSessionPath());
+							openedInProject = true;
+						}
+					}
+				}
+
+				if(!openedInProject) {
+					final SessionEditorWindow sessionEditorWindow = showEditor(project, sessionRef.get(), blindMode, grabFocus);
+					editor = sessionEditorWindow.getSessionEditor();
+				}
 
 				if(openAtRecord >= 0 && openAtRecord < editor.getSession().getRecordCount()) {
 					editor.setCurrentRecordIndex(openAtRecord);
@@ -255,7 +267,7 @@ public class SessionEditorEP implements IPluginEntryPoint {
 			editor.getViewModel().applyPerspective(perspective);
 
 			if(grabFocus) {
-				// XXX this code causes issues with result set editor focus in macosx
+				// XXX this code causes issues with result set editor focus in macos
 				if(editor.getViewModel().isShowing(RecordDataEditorView.VIEW_NAME)) {
 					editor.getViewModel().getView(RecordDataEditorView.VIEW_NAME).requestFocus();
 				} else {

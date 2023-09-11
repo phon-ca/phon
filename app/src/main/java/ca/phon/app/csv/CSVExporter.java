@@ -160,7 +160,7 @@ public class CSVExporter {
     }
 
     private String getSessionPath(Session session) {
-        return session.getCorpus() + "." + session.getName();
+        return session.getSessionPath().toString();
     }
 
     private String getCorpus(Session session) {

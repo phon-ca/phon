@@ -20,7 +20,6 @@ import ca.phon.project.io.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.io.*;
-import ca.phon.util.OSInfo;
 import ca.phon.util.VersionInfo;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
@@ -287,10 +286,6 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 		final Path relativePath = projectPath.relativize(path);
 
 		String retVal = relativePath.toString();
-		if(OSInfo.isWindows()) {
-			retVal.replaceAll("[\\]", "/");
-		}
-
 		return relativePath.toString();
 	}
 
@@ -569,7 +564,9 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 			if(retVal.getName() == null || !retVal.getName().equals(sessionName)) {
 				retVal.setName(sessionName);
 			}
-			retVal.setSessionPath(SessionFactory.newFactory().createSessionPath(corpus, session));
+			final SessionPath sp = SessionFactory.newFactory().createSessionPath(corpus, session);
+			sp.putExtension(Project.class, this);
+			retVal.setSessionPath(sp);
 
 			return retVal;
 		} catch (Exception e) {
@@ -862,7 +859,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 
 		for(SessionPath sessionPath:sessions) {
 			try {
-				Session session = openSession(sessionPath.getCorpus(), sessionPath.getSession());
+				Session session = openSession(sessionPath.getFolder(), sessionPath.getSessionFile());
 				Collection<Participant> participants = new ArrayList<>();
 
 				participants.add( SessionFactory.newFactory().cloneParticipant(Participant.UNKNOWN) );

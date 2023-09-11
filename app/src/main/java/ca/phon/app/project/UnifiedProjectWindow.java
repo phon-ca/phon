@@ -1,18 +1,19 @@
 package ca.phon.app.project;
 
 import bibliothek.gui.dock.common.*;
-import bibliothek.gui.dock.common.event.CDockableAdapter;
 import bibliothek.gui.dock.common.event.CFocusListener;
 import bibliothek.gui.dock.common.intern.CDockable;
 import ca.phon.app.log.LogUtil;
+import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.RecordEditorPerspective;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
+import ca.phon.app.session.editor.view.transcriptEditor.TranscriptView;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
 import ca.phon.session.SessionPath;
-import ca.phon.session.io.SessionInputFactory;
-import ca.phon.session.io.SessionReader;
 import ca.phon.ui.menu.MenuManager;
-import org.apache.commons.io.FilenameUtils;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -22,8 +23,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -136,13 +135,33 @@ public final class UnifiedProjectWindow extends ProjectFrame {
         final String sessionName = path.getFileName().toString();
         try {
             final Session session = getProject().openSession(corpusName, sessionName);
-            final SessionEditor editor = new SessionEditor(getProject(), session, null);
-            showSessionEditor(editor);
+            openSession(session);
         } catch (IOException e) {
             Toolkit.getDefaultToolkit().beep();
             LogUtil.severe(e);
             showErrorMessage(e.getMessage());
         }
+    }
+
+    public void openSession(SessionPath sessionPath) {
+        try {
+            final Session session = getProject().openSession(sessionPath.getFolder(), sessionPath.getSessionFile());
+            openSession(session);
+        } catch (IOException e) {
+            Toolkit.getDefaultToolkit().beep();
+            LogUtil.severe(e);
+            showErrorMessage(e.getMessage());
+        }
+    }
+
+    private void openSession(Session session) {
+        final SessionEditor editor = new SessionEditor(getProject(), session, null);
+        editor.getViewModel().applyPerspective(RecordEditorPerspective.getPerspective("test"));
+        showSessionEditor(editor);
+        SwingUtilities.invokeLater(() -> {
+            final EditorEvent<Void> ee = new EditorEvent<>(EditorEventType.EditorFinishedLoading, this, null);
+            editor.getEventManager().queueEvent(ee);
+        });
     }
 
 }

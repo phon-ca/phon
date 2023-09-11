@@ -220,7 +220,7 @@ public class DeriveSessionWizard extends WizardFrame {
 				final Session t = step2.getSessionAtLocation(loc);
 				final RecordFilter filter = step2.getFilterForLocation(loc);
 
-				out.println("Merging data from session '" + loc.getCorpus() + "." + loc.getSession() + "'");
+				out.println("Merging data from session '" + loc.getFolder() + "." + loc.getSessionFile() + "'");
 				out.flush();
 				if(checkDate) {
 					String tDate = pdf.format(t.getDate());

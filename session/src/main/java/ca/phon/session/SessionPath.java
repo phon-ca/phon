@@ -17,7 +17,6 @@ package ca.phon.session;
 
 import ca.phon.extensions.*;
 import ca.phon.util.OSInfo;
-import ca.phon.util.Tuple;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -30,9 +29,9 @@ public class SessionPath implements IExtendable, Comparable<SessionPath> {
 
 	public final static String PATH_SEP = OSInfo.isWindows() ? "\\" : "/";
 
-	private String corpus;
+	private String folder;
 
-	private String session;
+	private String sessionFile;
 
 	private final ExtensionSupport extSupport = new ExtensionSupport(SessionPath.class, this);
 
@@ -47,64 +46,80 @@ public class SessionPath implements IExtendable, Comparable<SessionPath> {
 		super();
 		int sepIdx = path.lastIndexOf(PATH_SEP);
 		if(sepIdx < 0) {
-			setCorpus("");
-			setSession(path);
+			setFolder("");
+			setSessionFile(path);
 		} else {
-			setCorpus(path.substring(0, sepIdx));
-			setSession(path.substring(sepIdx + 1));
+			setFolder(path.substring(0, sepIdx));
+			setSessionFile(path.substring(sepIdx + 1));
 		}
 		
 		extSupport.initExtensions();
 	}
 
-	public SessionPath(String corpus, String session) {
+	public SessionPath(String folder, String sessionFile) {
 		super();
-		this.corpus = corpus;
-		this.session = session;
+		this.folder = folder;
+		this.sessionFile = sessionFile;
 		extSupport.initExtensions();
 	}
 
 	/**
 	 * Get corpus
 	 */
-	public String getCorpus() {
-		return this.corpus;
+	public String getFolder() {
+		return this.folder;
 	}
 
 	/**
 	 * Set corpus
 	 */
-	public void setCorpus(String corpus) {
-		this.corpus = corpus;
+	public void setFolder(String folder) {
+		this.folder = folder;
 	}
 
 	/**
-	 * Get session
+	 * Get session filename
+	 *
+	 * @return session file name with extension
 	 */
-	public String getSession() {
-		return this.session;
+	public String getSessionFile() {
+		return this.sessionFile;
+	}
+
+	/**
+	 * Get session name
+	 *
+	 * @return session name (same as filename without extension)
+	 */
+	public String getSessionName() {
+		final int lastDotIdx = getSessionFile().lastIndexOf('.');
+		if(lastDotIdx >= 0) {
+			return getSessionName().substring(0, lastDotIdx);
+		} else {
+			return getSessionFile();
+		}
 	}
 
 	/**
 	 * Set session
 	 */
-	public void setSession(String session) {this.session = session;
+	public void setSessionFile(String sessionFile) {this.sessionFile = sessionFile;
 	}
 
 	@Override
 	public int hashCode() {
-		long hash = getCorpus().hashCode();
-		hash = hash * 31 + getSession().hashCode();
+		long hash = getFolder().hashCode();
+		hash = hash * 31 + getSessionFile().hashCode();
 		return (int)hash;
 	}
 
 	@Override
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
-		if(getCorpus() != null && !getCorpus().isEmpty()) {
-			builder.append(getCorpus()).append(PATH_SEP);
+		if(getFolder() != null && !getFolder().isEmpty()) {
+			builder.append(getFolder()).append(PATH_SEP);
 		}
-		builder.append(getSession());
+		builder.append(getSessionFile());
 		return builder.toString();
 	}
 
