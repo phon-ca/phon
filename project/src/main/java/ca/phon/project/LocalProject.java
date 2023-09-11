@@ -20,7 +20,6 @@ import ca.phon.project.io.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.io.*;
-import ca.phon.util.OSInfo;
 import ca.phon.util.VersionInfo;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
@@ -858,7 +857,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 
 		for(SessionPath sessionPath:sessions) {
 			try {
-				Session session = openSession(sessionPath.getCorpus(), sessionPath.getSession());
+				Session session = openSession(sessionPath.getFolder(), sessionPath.getSessionFile());
 				Collection<Participant> participants = new ArrayList<>();
 
 				participants.add( SessionFactory.newFactory().cloneParticipant(Participant.UNKNOWN) );

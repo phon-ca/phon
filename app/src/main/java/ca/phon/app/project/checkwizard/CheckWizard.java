@@ -400,12 +400,12 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 		
 		Operation op = step1.getOperation();
 		if(op == Operation.CHECK_IPA) {
-			return new CheckIPA(location.getCorpus(), location.getSession(), bufferPanel);
+			return new CheckIPA(location.getFolder(), location.getSessionFile(), bufferPanel);
 		} else if(op == Operation.RESET_SYLLABIFICATION) {
-			return new ResetSyllabification(location.getCorpus(), location.getSession(),
+			return new ResetSyllabification(location.getFolder(), location.getSessionFile(),
 					step1.getSyllabifier(), step1.isResetAlignment(), bufferPanel);
 		} else if(op == Operation.RESET_ALIGNMENT) {
-			return new ResetAlignment(location.getCorpus(), location.getSession(), bufferPanel);
+			return new ResetAlignment(location.getFolder(), location.getSessionFile(), bufferPanel);
 		}
 		
 		return retVal;

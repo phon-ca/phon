@@ -69,8 +69,8 @@ public class SessionSelectorActiveEditorSupport {
 		for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
 			if(cmf instanceof SessionEditorWindow e) {
 				if(e.getProject() == project
-						&& e.getSession().getCorpus().equals(sessionPath.getCorpus())
-						&& e.getSession().getName().equals(sessionPath.getSession())) {
+						&& e.getSession().getCorpus().equals(sessionPath.getFolder())
+						&& e.getSession().getName().equals(sessionPath.getSessionFile())) {
 					return e;
 				}
 			}

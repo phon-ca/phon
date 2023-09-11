@@ -162,7 +162,7 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 			SessionPath sp = new SessionPath(rs.getCorpus(), rs.getSession());
 			
 			try {
-				Session session = project.openSession(sp.getCorpus(), sp.getSession());
+				Session session = project.openSession(sp.getFolder(), sp.getSessionFile());
 				SessionFactory factory = SessionFactory.newFactory();
 				
 				List<String> tierNames = getTierNames();
@@ -581,7 +581,7 @@ public class ResultsToHTMLNode extends OpNode implements NodeSettings {
 		@Override
 		public void addToWorkbook(WritableWorkbook wb) throws WriteException {
 			try {
-				Session session = project.openSession(sessionPath.getCorpus(), sessionPath.getSession());
+				Session session = project.openSession(sessionPath.getFolder(), sessionPath.getSessionFile());
 				
 				SessionToExcel converter = new SessionToExcel(settings);
 				converter.createSheetInWorkbook(wb, session);

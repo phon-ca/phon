@@ -110,7 +110,7 @@ public class SessionMerger extends PhonTask {
 
 	public Session mergeSessions() throws IOException {
 		for(SessionPath sessionPath:getSessionPaths()) {
-			final Session session = project.openSession(sessionPath.getCorpus(), sessionPath.getSession());
+			final Session session = project.openSession(sessionPath.getFolder(), sessionPath.getSessionFile());
 			
 			final RecordFilter filter = getRecordFilter(sessionPath);
 			if(filter instanceof RangeRecordFilter) {

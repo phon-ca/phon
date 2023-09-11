@@ -36,8 +36,6 @@ import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
@@ -533,7 +531,7 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
 
         for (SessionPath sessionPath : sessionSelector.getSelectedSessions()) {
             try {
-                Session session = getProject().openSession(sessionPath.getCorpus(), sessionPath.getSession());
+                Session session = getProject().openSession(sessionPath.getFolder(), sessionPath.getSessionFile());
                 StreamSupport
                     .stream(session.getUserTiers().spliterator(), false)
                     .map(td -> td.getName())
@@ -581,8 +579,8 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
             if (exportFilePath == null) {
                 System.out.println("Export single file");
                 for (SessionPath sessionPath : sessionSelector.getSelectedSessions()) {
-                    String sessionName = sessionPath.getSession();
-                    String corpusName = sessionPath.getCorpus();
+                    String sessionName = sessionPath.getSessionFile();
+                    String corpusName = sessionPath.getFolder();
                     Session session = getProject().openSession(corpusName, sessionName);
                     String filePath = exportFolderPath + "/" + corpusName + "_" + sessionName + ".csv";
                     csvExporter.exportCSV(new Session[]{session}, settings, filePath);
@@ -592,8 +590,8 @@ public class CSVExportWizard extends BreadcrumbWizardFrame {
                 System.out.println("Export one file per session");
                 List<Session> selectedSessionList = new ArrayList<>();
                 for (SessionPath sessionPath : sessionSelector.getSelectedSessions()) {
-                    String sessionName = sessionPath.getSession();
-                    String corpusName = sessionPath.getCorpus();
+                    String sessionName = sessionPath.getSessionFile();
+                    String corpusName = sessionPath.getFolder();
                     Session session = getProject().openSession(corpusName, sessionName);
                     selectedSessionList.add(session);
                 }

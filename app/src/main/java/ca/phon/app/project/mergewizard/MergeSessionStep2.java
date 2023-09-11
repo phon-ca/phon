@@ -177,7 +177,7 @@ public class MergeSessionStep2 extends WizardStep {
 		for(SessionPath loc:sessions) {
 			if(!panels.containsKey(loc)) {
 				try {
-					final Session t = project.openSession(loc.getCorpus(), loc.getSession());
+					final Session t = project.openSession(loc.getFolder(), loc.getSessionFile());
 	
 					RecordFilterPanel panel = new RecordFilterPanel(project, t);
 					panels.put(loc, panel);
@@ -242,7 +242,7 @@ public class MergeSessionStep2 extends WizardStep {
 			
 			SessionPath loc = (SessionPath)value;
 			
-			String txt = loc.getCorpus() + "." + loc.getSession();
+			String txt = loc.getFolder() + "." + loc.getSessionFile();
 			
 			retVal.setText(txt);
 			

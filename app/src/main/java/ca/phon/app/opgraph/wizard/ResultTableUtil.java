@@ -2,19 +2,11 @@ package ca.phon.app.opgraph.wizard;
 
 import ca.phon.app.PhonURI;
 import ca.phon.app.actions.PhonURISchemeHandler;
-import ca.phon.app.log.BufferPanel;
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.app.session.editor.EditorSelectionModel;
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.SessionEditorEP;
-import ca.phon.app.session.editor.SessionEditorSelection;
-import ca.phon.plugin.PluginEntryPointRunner;
 import ca.phon.plugin.PluginException;
 import ca.phon.project.Project;
 import ca.phon.query.db.Result;
 import ca.phon.query.db.ResultValue;
-import ca.phon.query.report.datasource.DefaultTableDataSource;
 import ca.phon.query.report.datasource.TableDataSource;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.SessionPath;
@@ -106,7 +98,7 @@ public class ResultTableUtil {
             }
         }
 
-        final PhonURI phonURI = new PhonURI(project.getLocation(), sp.getCorpus(), sp.getSession(), recordNum, tiers, ranges);
+        final PhonURI phonURI = new PhonURI(project.getLocation(), sp.getFolder(), sp.getSessionFile(), recordNum, tiers, ranges);
         final PhonURISchemeHandler schemeHandler = new PhonURISchemeHandler();
         try {
             schemeHandler.openURI(phonURI.toURI());

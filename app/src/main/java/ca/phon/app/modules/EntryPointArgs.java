@@ -181,8 +181,8 @@ public class EntryPointArgs extends HashMap<String, Object> {
 			if(project != null) {
 				if(corpus == null) {
 					final SessionPath sessionPath = SessionFactory.newFactory().createSessionPath(session);
-					corpus = sessionPath.getCorpus();
-					session = sessionPath.getSession();
+					corpus = sessionPath.getFolder();
+					session = sessionPath.getSessionFile();
 				}
 				if(corpus != null && session != null) {
 					retVal = project.openSession(corpus, session);

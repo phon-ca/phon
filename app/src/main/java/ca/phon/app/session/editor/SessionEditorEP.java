@@ -29,13 +29,9 @@ import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.*;
-import ca.phon.util.OSInfo;
 import com.jgoodies.forms.layout.*;
-import org.apache.logging.log4j.LogManager;
 
 import javax.swing.*;
-import javax.swing.text.DefaultHighlighter;
-import javax.swing.text.Highlighter;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -80,8 +76,8 @@ public class SessionEditorEP implements IPluginEntryPoint {
 		String sessionName = sessionLoc;
 		if(corpusName == null && sessionLoc != null) {
 			final SessionPath sessionPath = SessionFactory.newFactory().createSessionPath(sessionLoc);
-			corpusName = sessionPath.getCorpus();
-			sessionName = sessionPath.getSession();
+			corpusName = sessionPath.getFolder();
+			sessionName = sessionPath.getSessionFile();
 		}
 
 		final AtomicReference<Session> sessionRef = new AtomicReference<>();

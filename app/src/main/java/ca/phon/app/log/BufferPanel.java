@@ -676,8 +676,8 @@ public class BufferPanel extends JPanel implements IExtendable {
 		// load session editor (if necessary)
 		final EntryPointArgs epArgs = new EntryPointArgs();
 		epArgs.put(EntryPointArgs.PROJECT_OBJECT, project);
-		epArgs.put(EntryPointArgs.CORPUS_NAME, sp.getCorpus());
-		epArgs.put(EntryPointArgs.SESSION_NAME, sp.getSession());
+		epArgs.put(EntryPointArgs.CORPUS_NAME, sp.getFolder());
+		epArgs.put(EntryPointArgs.SESSION_NAME, sp.getSessionFile());
 		try {
 			PluginEntryPointRunner.executePlugin(SessionEditorEP.EP_NAME, epArgs);
 		} catch (PluginException e) {
@@ -689,8 +689,8 @@ public class BufferPanel extends JPanel implements IExtendable {
 		for(CommonModuleFrame openWindow:CommonModuleFrame.getOpenWindows()) {
 			if(openWindow instanceof SessionEditorWindow) {
 				final SessionEditorWindow currentEditor = (SessionEditorWindow)openWindow;
-				if(currentEditor.getSession().getCorpus().equals(sp.getCorpus())
-						&& currentEditor.getSession().getName().equals(sp.getSession())) {
+				if(currentEditor.getSession().getCorpus().equals(sp.getFolder())
+						&& currentEditor.getSession().getName().equals(sp.getSessionFile())) {
 					editor = ((SessionEditorWindow)openWindow).getSessionEditor();
 					break;
 				}
