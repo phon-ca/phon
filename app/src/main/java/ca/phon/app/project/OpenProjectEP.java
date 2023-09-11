@@ -145,7 +145,11 @@ public class OpenProjectEP implements IPluginEntryPoint {
 
 			final CommonModuleFrame pwindow = isUseNewUI ? new UnifiedProjectWindow(project) : new ProjectWindow(project, project.getLocation());
     		pwindow.pack();
-    		pwindow.setSize(800, 600);
+			if(isUseNewUI) {
+				pwindow.setExtendedState(Frame.MAXIMIZED_BOTH);
+			} else {
+				pwindow.setSize(800, 600);
+			}
     		pwindow.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
     		pwindow.setVisible(true);
     		

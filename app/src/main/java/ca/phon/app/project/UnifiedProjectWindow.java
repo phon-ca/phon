@@ -4,7 +4,12 @@ import bibliothek.gui.dock.common.*;
 import bibliothek.gui.dock.common.event.CFocusListener;
 import bibliothek.gui.dock.common.intern.CDockable;
 import ca.phon.app.log.LogUtil;
+import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.RecordEditorPerspective;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
+import ca.phon.app.session.editor.view.transcriptEditor.TranscriptView;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
 import ca.phon.session.SessionPath;
@@ -131,7 +136,12 @@ public final class UnifiedProjectWindow extends ProjectFrame {
         try {
             final Session session = getProject().openSession(corpusName, sessionName);
             final SessionEditor editor = new SessionEditor(getProject(), session, null);
+            editor.getViewModel().applyPerspective(RecordEditorPerspective.getPerspective("test"));
             showSessionEditor(editor);
+            SwingUtilities.invokeLater(() -> {
+                final EditorEvent<Void> ee = new EditorEvent<>(EditorEventType.EditorFinishedLoading, this, null);
+                editor.getEventManager().queueEvent(ee);
+            });
         } catch (IOException e) {
             Toolkit.getDefaultToolkit().beep();
             LogUtil.severe(e);
