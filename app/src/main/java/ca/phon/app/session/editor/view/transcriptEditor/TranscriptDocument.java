@@ -974,7 +974,14 @@ public class TranscriptDocument extends DefaultStyledDocument {
         String tierName = tierViewItem.getTierName();
         Record record = session.getRecord(recordIndex);
         Tier<?> tier = record.getTier(tierName);
-        if (tier == null) tier = sessionFactory.createTier(tierName);
+        if (tier == null) {
+            Optional<TierDescription> td = session
+                .getUserTiers()
+                .stream()
+                .filter(item -> item.getName().equals(tierName))
+                .findFirst();
+            sessionFactory.createTier(td.get());
+        }
 
         SimpleAttributeSet tierAttrs = getTierAttributes(tier, tierViewItem);
         if (recordAttrs != null) {
