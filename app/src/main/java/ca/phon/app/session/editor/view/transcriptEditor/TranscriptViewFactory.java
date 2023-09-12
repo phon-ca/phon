@@ -5,6 +5,7 @@ import ca.phon.app.session.editor.EditorEventManager;
 
 import javax.swing.*;
 import javax.swing.text.*;
+import java.awt.*;
 
 public class TranscriptViewFactory implements ViewFactory {
 
@@ -18,18 +19,8 @@ public class TranscriptViewFactory implements ViewFactory {
         var attrs = elem.getAttributes();
 
         var componentFactory = attrs.getAttribute("componentFactory");
-        if (componentFactory instanceof ComponentFactory factory) {
-            if (StyleConstants.getComponent(attrs) == null) {
-                var component = factory.createComponent(attrs);
-                if (attrs instanceof MutableAttributeSet mutableAttrs) {
-                    System.out.println(Thread.currentThread().getName());
-                    StyleConstants.setComponent(mutableAttrs, component);
-                }
-                else {
-                    System.out.println(attrs);
-                }
-            }
-            kind = StyleConstants.ComponentElementName;
+        if (componentFactory instanceof ComponentFactory) {
+            kind = "componentFactory";
         }
 
         if (kind != null) {
@@ -48,6 +39,8 @@ public class TranscriptViewFactory implements ViewFactory {
                 return new ComponentView(elem);
             } else if (kind.equals(StyleConstants.IconElementName)) {
                 return new IconView(elem);
+            } else if (kind.equals("componentFactory")) {
+                return new ComponentFactoryView(elem);
             }
         }
 
@@ -64,6 +57,23 @@ public class TranscriptViewFactory implements ViewFactory {
     private class TierLabelView extends ComponentView {
         public TierLabelView(Element elem) {
             super(elem);
+        }
+    }
+
+    private class ComponentFactoryView extends ComponentView {
+        public ComponentFactoryView(Element elem) {
+            super(elem);
+        }
+
+        @Override
+        protected Component createComponent() {
+            AttributeSet attrs = getAttributes();
+            var componentFactory = attrs.getAttribute("componentFactory");
+            if (componentFactory instanceof ComponentFactory factory) {
+                return factory.createComponent(attrs);
+            }
+
+            return null;
         }
     }
 }

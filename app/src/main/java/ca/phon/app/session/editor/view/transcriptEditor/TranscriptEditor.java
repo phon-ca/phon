@@ -44,6 +44,9 @@ public class TranscriptEditor extends JEditorPane {
     private boolean singleRecordView = false;
     public final static EditorEventType<Void> recordChangedInSingleRecordMode = new EditorEventType<>("recordChangedInSingleRecordMode", Void.class);
     private int prevMousePosInDoc = -1;
+    private Element hoverElem = null;
+    private Object currentUnderline;
+    Highlighter.HighlightPainter underlinePainter;
 
     public TranscriptEditor(
         Session session,
@@ -70,22 +73,24 @@ public class TranscriptEditor extends JEditorPane {
                     highlightElementAtPoint(e.getPoint());
                 }
 
-//                int mousePosInDoc = viewToModel2D(e.getPoint());
-//
-//                Element elem = doc.getCharacterElement(mousePosInDoc);
-//                if (elem != null) {
-//                    if (elem.equals(doc.getHoverLabel())) return;
-//                    AttributeSet attrs = elem.getAttributes();
-//                    boolean isLabel = attrs.getAttribute("label") != null;
-//                    boolean isWhitespace = doc.getCharAtPos(mousePosInDoc).equals(' ');
-//                    if (isLabel && !isWhitespace) {
-//                        doc.setHoverLabel(elem);
-//                        return;
-//                    }
-//                }
-//                if (doc.getHoverLabel() != null) {
-//                    doc.setHoverLabel(null);
-//                }
+                int mousePosInDoc = viewToModel2D(e.getPoint());
+
+                Element elem = doc.getCharacterElement(mousePosInDoc);
+                if (elem != null) {
+                    if (elem.equals(hoverElem)) return;
+                    AttributeSet attrs = elem.getAttributes();
+                    boolean isLabel = attrs.getAttribute("clickable") != null;
+                    boolean isWhitespace = doc.getCharAtPos(mousePosInDoc).equals(' ');
+                    if (isLabel && !isWhitespace) {
+                        hoverElem = elem;
+                        underlineElement(elem);
+                        return;
+                    }
+                }
+                if (hoverElem != null) {
+                    hoverElem = null;
+                    removeCurrentUnderline();
+                }
             }
         });
         NavigationFilter filter = new NavigationFilter() {
@@ -97,13 +102,13 @@ public class TranscriptEditor extends JEditorPane {
 
                 if (isLabel) return;
 
-                System.out.println("Setting: " + dot);
+                //System.out.println("Setting: " + dot);
                 fb.setDot(dot, bias);
             }
 
             public void moveDot(NavigationFilter.FilterBypass fb, int dot, Position.Bias bias) {
-                System.out.println("Moving: " + dot);
-                fb.setDot(dot, bias);
+                //System.out.println("Moving: " + dot);
+                fb.moveDot(dot, bias);
             }
         };
 
@@ -119,16 +124,31 @@ public class TranscriptEditor extends JEditorPane {
                 if (attrs.getAttribute("label") != null) {
                     String elementType = (String) attrs.getAttribute("elementType");
                     if (elementType != null) {
-
-                        switch (elementType) {
-                            case "record" -> setCaretPosition(doc.getTierStart((Tier<?>) attrs.getAttribute("tier")));
-                            case "comment" -> setCaretPosition(doc.getCommentStart((Comment) attrs.getAttribute("comment")));
-                            case "gem" -> setCaretPosition(doc.getGemStart((Gem) attrs.getAttribute("gem")));
+                        if (e.getClickCount() > 1) {
+                            switch (elementType) {
+                                case "record" -> {
+                                    Tier<?> tier = (Tier<?>) attrs.getAttribute("tier");
+                                    select(doc.getTierStart(tier), doc.getTierEnd(tier));
+                                }
+                                case "comment" -> {
+                                    Comment comment = (Comment) attrs.getAttribute("comment");
+                                    select(doc.getCommentStart(comment), doc.getCommentEnd(comment));
+                                }
+                                case "gem" -> {
+                                    Gem gem = (Gem) attrs.getAttribute("gem");
+                                    select(doc.getGemStart(gem), doc.getGemEnd(gem));
+                                }
+                            }
+                        }
+                        else {
+                            switch (elementType) {
+                                case "record" -> setCaretPosition(doc.getTierStart((Tier<?>) attrs.getAttribute("tier")));
+                                case "comment" -> setCaretPosition(doc.getCommentStart((Comment) attrs.getAttribute("comment")));
+                                case "gem" -> setCaretPosition(doc.getGemStart((Gem) attrs.getAttribute("gem")));
+                            }
                         }
 
-                        char clickedChar = doc.getCharAtPos(mousePosInDoc - 1);
-                        boolean isWhitespace = clickedChar == ' ' || clickedChar == '\n';
-                        if (!isWhitespace) {
+                        if (attrs.getAttribute("clickable") != null) {
                             switch (elementType) {
                                 case "record" -> onClickTierLabel(e.getPoint());
                                 case "comment" -> onClickCommentLabel(e.getPoint());
@@ -184,6 +204,17 @@ public class TranscriptEditor extends JEditorPane {
                 System.out.println(exception);
             }
         });
+        underlinePainter = (g, p0, p1, bounds, c) -> {
+            try {
+                var firstCharRect = modelToView2D(p0);
+                var lastCharRect = modelToView2D(p1);
+                g.setColor(Color.black);
+                int lineY = ((int) firstCharRect.getMaxY()) - 9;
+                g.drawLine((int) firstCharRect.getMinX(), lineY, (int) lastCharRect.getMaxX(), lineY);
+            } catch (BadLocationException e) {
+                throw new RuntimeException(e);
+            }
+        };
     }
 
     public TranscriptEditor(Session session) {
@@ -345,7 +376,7 @@ public class TranscriptEditor extends JEditorPane {
             }
         }
 
-        Document blank = new DefaultStyledDocument();
+        Document blank = getEditorKit().createDefaultDocument();
         setDocument(blank);
         // Move tier in doc
         doc.moveTier(movedTiers);
@@ -389,7 +420,7 @@ public class TranscriptEditor extends JEditorPane {
 
 
 
-        Document blank = new DefaultStyledDocument();
+        Document blank = getEditorKit().createDefaultDocument();
         setDocument(blank);
         // Delete tier in doc
         doc.deleteTier(data.tierNames());
@@ -457,7 +488,7 @@ public class TranscriptEditor extends JEditorPane {
             }
         }
 
-        Document blank = new DefaultStyledDocument();
+        Document blank = getEditorKit().createDefaultDocument();
         setDocument(blank);
         // Add tier in doc
         doc.addTier(addedTiers);
@@ -501,7 +532,7 @@ public class TranscriptEditor extends JEditorPane {
             caretTierOffset = startCaretPos - elem.getStartOffset();
         }
 
-        Document blank = new DefaultStyledDocument();
+        Document blank = getEditorKit().createDefaultDocument();
         setDocument(blank);
         // Hide tier in doc
         doc.hideTier(data.tierNames());
@@ -567,7 +598,7 @@ public class TranscriptEditor extends JEditorPane {
             }
         }
 
-        Document blank = new DefaultStyledDocument();
+        Document blank = getEditorKit().createDefaultDocument();
         setDocument(blank);
         // Show tier in doc
         doc.showTier(shownTiers, data.newTierView());
@@ -601,7 +632,7 @@ public class TranscriptEditor extends JEditorPane {
         int caretPos = getCaretPosition();
 
         TranscriptDocument doc = getTranscriptDocument();
-        DefaultStyledDocument blank = new DefaultStyledDocument();
+        Document blank = getEditorKit().createDefaultDocument();
         setDocument(blank);
         doc.tierNameChanged(oldTiers, newTiers);
         setDocument(doc);
@@ -621,7 +652,7 @@ public class TranscriptEditor extends JEditorPane {
 
         if (changedTiers.isEmpty()) return;
 
-        Document blank = new DefaultStyledDocument();
+        Document blank = getEditorKit().createDefaultDocument();
         setDocument(blank);
         // Change tier font in doc
         doc.tierFontChanged(changedTiers);
@@ -639,16 +670,15 @@ public class TranscriptEditor extends JEditorPane {
         TranscriptDocument doc = getTranscriptDocument();
         Rectangle drawHere = g.getClipBounds();
 
-        g.setColor(Color.white);
-        g.fillRect(drawHere.x, drawHere.y, drawHere.width, drawHere.height);
-
         g.setColor(PhonGuiConstants.PHON_UI_STRIP_COLOR);
         FontMetrics fontMetrics = g.getFontMetrics(FontPreferences.getMonospaceFont().deriveFont(14.0f));
         char[] template = new char[getTranscriptDocument().getLabelColumnWidth() + 1];
         Arrays.fill(template, ' ');
         int labelColWidth = fontMetrics.stringWidth(new String(template));
-        g.fillRect(drawHere.x, drawHere.y, labelColWidth, drawHere.height);
-
+        Rectangle labelColRect = new Rectangle(0, 0, labelColWidth, getHeight());
+        if (labelColRect.intersects(drawHere)) {
+            g.fillRect(0, 0, labelColWidth, getHeight());
+        }
 
         g.setColor(Color.gray);
         int sepLineHeight = 1;
@@ -665,6 +695,7 @@ public class TranscriptEditor extends JEditorPane {
             if (attrs.getAttribute("sep") != null) {
                 try {
                     var sepRect = modelToView2D(innerElem.getStartOffset());
+                    if (sepRect == null) continue;
                     boolean topVisible = sepRect.getMinY() > drawHere.getMinY() && sepRect.getMinY() < drawHere.getMaxY();
                     boolean bottomVisible = sepRect.getMaxY() > drawHere.getMinY() && sepRect.getMaxY() < drawHere.getMaxY();
                     if (!topVisible && !bottomVisible) continue;
@@ -1527,5 +1558,25 @@ public class TranscriptEditor extends JEditorPane {
         menu.add("Delete me");
 
         menu.show(this, (int) point.getX(), (int) point.getY());
+    }
+
+    private void underlineElement(Element elem) {
+        try {
+            removeCurrentUnderline();
+            currentUnderline = getHighlighter().addHighlight(
+                elem.getStartOffset(),
+                elem.getEndOffset(),
+                underlinePainter
+            );
+        } catch (BadLocationException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    private void removeCurrentUnderline() {
+        if (currentUnderline != null) {
+            getHighlighter().removeHighlight(currentUnderline);
+            currentUnderline = null;
+        }
     }
 }

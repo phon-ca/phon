@@ -974,7 +974,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         String tierName = tierViewItem.getTierName();
         Record record = session.getRecord(recordIndex);
         Tier<?> tier = record.getTier(tierName);
-        if (tier == null) return new SimpleAttributeSet();
+        if (tier == null) tier = sessionFactory.createTier(tierName);
 
         SimpleAttributeSet tierAttrs = getTierAttributes(tier, tierViewItem);
         if (recordAttrs != null) {
@@ -985,8 +985,24 @@ public class TranscriptDocument extends DefaultStyledDocument {
         if (recordAttrs != null) {
             labelAttrs.addAttributes(recordAttrs);
         }
-        appendBatchString(formatLabelText(tierName) + ": ", labelAttrs);
-        //offset += tierName.length() + 2;
+
+        String labelText = tierName;
+        if (labelText.length() < labelColumnWidth) {
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < (labelColumnWidth - labelText.length()); i++) {
+                builder.append(' ');
+            }
+            appendBatchString(builder.toString(), labelAttrs);
+        }
+        else {
+            labelText = formatLabelText(labelText);
+        }
+
+        labelAttrs.addAttribute("clickable", true);
+        appendBatchString(labelText, labelAttrs);
+
+        labelAttrs.removeAttribute("clickable");
+        appendBatchString(": ", labelAttrs);
 
         if (tierName.equals("IPA Target")) {
             Tier<IPATranscript> ipaTier = (Tier<IPATranscript>)tier;
@@ -1286,8 +1302,24 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
         TierData tierData = comment.getValue();
 
-        String labelText = formatLabelText(comment.getType().getLabel()) + ": ";
-        appendBatchString(labelText, getCommentLabelAttributes(comment));
+        SimpleAttributeSet labelAttrs = getCommentLabelAttributes(comment);
+        String labelText = comment.getType().getLabel();
+        if (labelText.length() < labelColumnWidth) {
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < (labelColumnWidth - labelText.length()); i++) {
+                builder.append(' ');
+            }
+            appendBatchString(builder.toString(), labelAttrs);
+        }
+        else {
+            labelText = formatLabelText(labelText);
+        }
+
+        labelAttrs.addAttribute("clickable", true);
+        appendBatchString(labelText, labelAttrs);
+
+        labelAttrs.removeAttribute("clickable");
+        appendBatchString(": ", labelAttrs);
 
         for (int i = 0; i < tierData.length(); i++) {
             TierElement userTierElement = tierData.elementAt(i);
@@ -1326,14 +1358,26 @@ public class TranscriptDocument extends DefaultStyledDocument {
         SimpleAttributeSet gemAttrs = getGemAttributes(gem);
         gemAttrs.addAttributes(getStandardFontAttributes());
 
-        String labelText = formatLabelText(gem.getType().toString()) + ": ";
-        appendBatchString(labelText, getGemLabelAttributes(gem));
-        //offset += labelText.length();
+        SimpleAttributeSet labelAttrs = getGemLabelAttributes(gem);
+        String labelText = gem.getType().toString();
+        if (labelText.length() < labelColumnWidth) {
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < (labelColumnWidth - labelText.length()); i++) {
+                builder.append(' ');
+            }
+            appendBatchString(builder.toString(), labelAttrs);
+        }
+        else {
+            labelText = formatLabelText(labelText);
+        }
+
+        labelAttrs.addAttribute("clickable", true);
+        appendBatchString(labelText, labelAttrs);
+
+        labelAttrs.removeAttribute("clickable");
+        appendBatchString(": ", labelAttrs);
 
         appendBatchString(text, gemAttrs);
-        //offset += text.length();
-
-        //offset++;
 
         return gemAttrs;
     }
