@@ -9,6 +9,7 @@ import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.menu.MenuManager;
 
 import javax.swing.*;
+import javax.swing.undo.UndoManager;
 import java.awt.*;
 import java.io.IOException;
 
@@ -43,6 +44,7 @@ public class SessionEditorWindow extends ProjectFrame  {
         this.addWindowFocusListener(new SessionEditorModificationListener(this.sessionEditor));
 
         super.setWindowName(sessionEditor.generateTitle());
+        putExtension(UndoManager.class, sessionEditor.getUndoManager());
     }
 
     private void onParticipantListChanged(EditorEvent<Participant> ee) {
