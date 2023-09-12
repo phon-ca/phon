@@ -505,6 +505,16 @@ public final class SessionFactory extends ExtendableObject {
 	public MediaSegment createMediaSegment(MediaSegmentSPI mediaSegmentImpl) {
 		return new MediaSegment(mediaSegmentImpl);
 	}
+
+	/**
+	 * Create a new tier object from given description
+	 *
+	 * @param tierDescription
+	 * @return tier
+	 */
+	public Tier<?> createTier(TierDescription tierDescription) {
+		return createTier(tierDescription.getName(), tierDescription.getDeclaredType(), tierDescription.getTierParameters(), tierDescription.isExcludeFromAlignment(), tierDescription.isBlind());
+	}
 	
 	/**
 	 * Create a new tier object with the specified type and alignment rules
