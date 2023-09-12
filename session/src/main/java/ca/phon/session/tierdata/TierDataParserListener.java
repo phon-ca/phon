@@ -18,7 +18,13 @@ public class TierDataParserListener extends TierDataBaseListener {
 
     @Override
     public void exitComment(TierDataParser.CommentContext ctx) {
-        final String commentText = ctx.getText().substring(2, ctx.getText().length()-1).trim();
+        String commentText = ctx.getText();
+        // we may need to recover from a missing end bracket
+        if(ctx.END_COMMENT() != null) {
+            commentText = commentText.substring(2, commentText.length()-ctx.END_COMMENT().getText().length()).trim();
+        } else {
+            commentText = commentText.substring(2).trim();
+        }
         elementList.add(new TierComment(commentText));
     }
 
