@@ -39,11 +39,7 @@ public class ColorPaletteMenuHandler implements IPluginMenuFilter, IPluginExtens
     }
 
     private void showColorPaletteDesigner(Window owner) {
-        final CommonModuleFrame cmf = new CommonModuleFrame("Color Palette Designer");
-        cmf.getContentPane().setLayout(new BorderLayout());
-        final ColorPaletteDesigner designer = new ColorPaletteDesigner();
-        cmf.getContentPane().add(designer);
-        cmf.putExtension(UndoManager.class, designer.getUndoManager());
+        final CommonModuleFrame cmf = new ColorPaletteWindow();
         cmf.pack();
         if(owner instanceof CommonModuleFrame parent) {
             cmf.setParentFrame(parent);
