@@ -10,7 +10,7 @@ import java.awt.event.ComponentEvent;
 
 public class TranscriptScrollPane extends JScrollPane {
     private final TranscriptEditor transcriptEditor;
-    private TranscriptRowHeader transcriptRowHeader;
+    private TranscriptScrollPaneGutter gutter;
 
     public TranscriptScrollPane(TranscriptEditor transcriptEditor) {
         super(transcriptEditor);
@@ -19,19 +19,19 @@ public class TranscriptScrollPane extends JScrollPane {
         initUI();
     }
 
-    public TranscriptRowHeader getTranscriptRowHeader() {
-        return transcriptRowHeader;
+    public TranscriptScrollPaneGutter getGutter() {
+        return gutter;
     }
 
     private void initUI() {
-        this.transcriptRowHeader = new TranscriptRowHeader(transcriptEditor);
-        setRowHeaderView(transcriptRowHeader);
+        this.gutter = new TranscriptScrollPaneGutter(transcriptEditor);
+        setRowHeaderView(gutter);
 
         transcriptEditor.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                transcriptRowHeader.setPreferredSize(new Dimension(
-                    (int)transcriptRowHeader.getPreferredSize().getWidth(),
+                gutter.setPreferredSize(new Dimension(
+                    (int) gutter.getPreferredSize().getWidth(),
                     transcriptEditor.getHeight())
                 );
                 revalidate();

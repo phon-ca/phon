@@ -207,6 +207,12 @@
                 </pm>
             </alignment>
             <segment start="0.0" end="4379.0" unit="ms"/>
+            <notes>
+                <tierData>
+                    <tw>word</tw>
+                    <tc>comment</tc>
+                </tierData>
+            </notes>
             <userTier name="Translation">
                 <tierData>
                     <tw>what</tw>

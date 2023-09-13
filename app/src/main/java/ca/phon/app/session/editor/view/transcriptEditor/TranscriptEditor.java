@@ -677,7 +677,7 @@ public class TranscriptEditor extends JEditorPane {
         int labelColWidth = fontMetrics.stringWidth(new String(template));
         Rectangle labelColRect = new Rectangle(0, 0, labelColWidth, getHeight());
         if (labelColRect.intersects(drawHere)) {
-            g.fillRect(0, 0, labelColWidth, getHeight());
+            g.fillRect(0, (int) drawHere.getMinY(), labelColWidth, drawHere.height);
         }
 
         g.setColor(Color.gray);
@@ -718,6 +718,14 @@ public class TranscriptEditor extends JEditorPane {
         this.eventManager.registerActionForEvent(EditorEventType.SessionChanged, this::onSessionChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
         this.eventManager.registerActionForEvent(EditorEventType.TierViewChanged, this::onTierViewChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
         this.eventManager.registerActionForEvent(EditorEventType.RecordChanged, this::onRecordChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+
+        this.eventManager.registerActionForEvent(EditorEventType.RecordAdded, this::onRecordAdded, EditorEventManager.RunOn.AWTEventDispatchThread);
+        this.eventManager.registerActionForEvent(EditorEventType.RecordDeleted, this::onRecordDeleted, EditorEventManager.RunOn.AWTEventDispatchThread);
+        this.eventManager.registerActionForEvent(EditorEventType.RecordMoved, this::onRecordMoved, EditorEventManager.RunOn.AWTEventDispatchThread);
+
+        this.eventManager.registerActionForEvent(EditorEventType.SpeakerChanged, this::onSpeakerChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+
+        this.eventManager.registerActionForEvent(EditorEventType.TierChanged, this::onTierDataChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
     }
 
     public void removeEditorActions() {
@@ -1578,5 +1586,49 @@ public class TranscriptEditor extends JEditorPane {
             getHighlighter().removeHighlight(currentUnderline);
             currentUnderline = null;
         }
+    }
+
+    private void onRecordAdded(EditorEvent<EditorEventType.RecordAddedData> editorEvent) {
+        System.out.println("Added record");
+        var data = editorEvent.data();
+        Record addedRecord = session.getRecord(data.recordIndex());
+        getTranscriptDocument().addRecord(addedRecord);
+    }
+
+    private void onRecordDeleted(EditorEvent<EditorEventType.RecordDeletedData> editorEvent) {
+        System.out.println("Deleted record");
+
+        int caretPos = getCaretPosition();
+
+        var data = editorEvent.data();
+        getTranscriptDocument().deleteRecord(data.recordIndex(), data.elementIndex());
+
+        setCaretPosition(getNextEditableIndex(caretPos, false));
+    }
+
+    private void onRecordMoved(EditorEvent<EditorEventType.RecordMovedData> editorEvent) {
+        System.out.println("Moved record");
+
+        int caretPos = getCaretPosition();
+
+        var data = editorEvent.data();
+        getTranscriptDocument().moveRecord(
+            data.fromRecordIndex(),
+            data.toRecordIndex(),
+            data.fromElementIndex(),
+            data.toElementIndex()
+        );
+
+        setCaretPosition(getNextEditableIndex(caretPos, false));
+    }
+
+    private void onSpeakerChanged(EditorEvent<EditorEventType.SpeakerChangedData> editorEvent) {
+        var data = editorEvent.data();
+        getTranscriptDocument().changeSpeaker(data.record());
+    }
+
+    private void onTierDataChanged(EditorEvent<EditorEventType.TierChangeData> editorEvent) {
+        var data = editorEvent.data();
+        getTranscriptDocument().onTierDataChanged(data.tier());
     }
 }

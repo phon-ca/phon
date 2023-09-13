@@ -292,6 +292,8 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
     // endregion Attribute Getters
 
+    // region Tier View Changes
+
     public void moveTier(List<TierViewItem> movedTiers) {
 
         movedTiers = movedTiers.stream().filter(item -> item.isVisible()).toList();
@@ -583,6 +585,164 @@ public class TranscriptDocument extends DefaultStyledDocument {
             LogUtil.severe(e);
         }
     }
+
+    // endregion Tier View Changes
+
+    // region Record Changes
+
+    public void addRecord(Record addedRecord) {
+        try {
+            appendBatchEndStart();
+            AttributeSet attrs = writeRecord(addedRecord, session.getTranscript(), session.getTierView());
+            appendBatchLineFeed(attrs);
+            processBatchUpdates(getLength());
+        }
+        catch (BadLocationException e) {
+            LogUtil.severe(e);
+        }
+    }
+
+    public void deleteRecord(int removedRecordIndex, int removedRecordElementIndex) {
+        try {
+            Transcript transcript = session.getTranscript();
+            var tierView = session.getTierView();
+            AttributeSet newLineAttrs;
+
+            int start = getRecordStart(removedRecordIndex);
+
+            remove(start, getLength() - start);
+
+            appendBatchEndStart();
+
+            for (int i = removedRecordElementIndex; i < transcript.getNumberOfElements(); i++) {
+                Transcript.Element elem = transcript.getElementAt(i);
+                if (elem.isRecord()) {
+                    newLineAttrs = writeRecord(elem.asRecord(), transcript, tierView);
+                }
+                else if (elem.isComment()) {
+                    newLineAttrs = writeComment(elem.asComment());
+                }
+                else {
+                    newLineAttrs = writeGem(elem.asGem());
+                }
+
+                appendBatchLineFeed(newLineAttrs);
+            }
+
+            processBatchUpdates(start);
+
+            setGlobalParagraphAttributes();
+        }
+        catch (BadLocationException e) {
+            LogUtil.severe(e);
+        }
+    }
+
+    public void moveRecord(int oldRecordIndex, int newRecordIndex, int oldElementIndex, int newElementIndex) {
+        try {
+            Transcript transcript = session.getTranscript();
+            var tierView = session.getTierView();
+            AttributeSet newLineAttrs;
+
+            int start = getRecordStart(Math.min(oldRecordIndex, newRecordIndex));
+            int end = getRecordEnd(Math.max(oldRecordIndex, newRecordIndex));
+
+            remove(start, end - start);
+
+            appendBatchEndStart();
+
+            int startElementIndex = Math.min(oldElementIndex, newElementIndex);
+            int endElementIndex = Math.max(oldElementIndex, newElementIndex);
+
+            for (int i = startElementIndex; i < endElementIndex + 1; i++) {
+                Transcript.Element elem = transcript.getElementAt(i);
+                if (elem.isRecord()) {
+                    newLineAttrs = writeRecord(elem.asRecord(), transcript, tierView);
+                }
+                else if (elem.isComment()) {
+                    newLineAttrs = writeComment(elem.asComment());
+                }
+                else {
+                    newLineAttrs = writeGem(elem.asGem());
+                }
+
+                appendBatchLineFeed(newLineAttrs);
+            }
+
+            processBatchUpdates(start);
+
+            setGlobalParagraphAttributes();
+        }
+        catch (BadLocationException e) {
+            LogUtil.severe(e);
+        }
+    }
+
+    public void changeSpeaker(Record record) {
+        try {
+            int recordIndex = session.getRecordPosition(record);
+            int start = getRecordStart(recordIndex);
+
+            var tierView = session.getTierView();
+            String firstVisibleTierName = tierView
+                .stream()
+                .filter(item -> item.isVisible())
+                .findFirst()
+                .get()
+                .getTierName();
+            int end = getTierStart(recordIndex, firstVisibleTierName) - (labelColumnWidth + 2);
+
+            remove(start, end - start);
+
+
+            SimpleAttributeSet sepAttrs = getSeparatorAttributes();
+            sepAttrs.addAttributes(getRecordAttributes(recordIndex));
+
+            appendBatchEndStart();
+
+            appendBatchString(formatLabelText(record.getSpeaker().toString()) + "  ", sepAttrs);
+
+            MediaSegment segment = record.getMediaSegment();
+
+            sepAttrs.addAttributes(getStandardFontAttributes());
+            formatSegment(segment, sepAttrs);
+            processBatchUpdates(start);
+
+            setGlobalParagraphAttributes();
+        }
+        catch (BadLocationException e) {
+            LogUtil.severe(e);
+        }
+    }
+
+    public void onTierDataChanged(Tier<?> tier) {
+        try {
+            int start = getTierStart(tier);
+            int recordIndex = getRecordIndex(start);
+            start -= (labelColumnWidth + 2);
+            int end = getTierEnd(tier);
+
+            remove(start, end - start);
+
+            var tierView = session.getTierView();
+            TierViewItem tierViewItem =  tierView.stream().filter(item -> item.getTierName().equals(tier.getName())).findFirst().get();
+
+            appendBatchEndStart();
+
+            SimpleAttributeSet attrs = insertTier(recordIndex, tierViewItem, getRecordAttributes(recordIndex));
+
+            appendBatchLineFeed(attrs);
+
+            processBatchUpdates(start);
+
+            setGlobalParagraphAttributes();
+        }
+        catch (BadLocationException e) {
+            LogUtil.severe(e);
+        }
+    }
+
+    // endregion Record Changes
 
     private TierViewItem getAlignmentTierView() {
         List<TierViewItem> visibleTierView = session.getTierView().stream().filter(item -> item.isVisible()).toList();
@@ -970,6 +1130,12 @@ public class TranscriptDocument extends DefaultStyledDocument {
         //offset++;
     }
 
+    private void setGlobalParagraphAttributes() {
+        SimpleAttributeSet paragraphAttrs = new SimpleAttributeSet();
+        StyleConstants.setLineSpacing(paragraphAttrs, .2f);
+        setParagraphAttributes(0, getLength(), paragraphAttrs, false);
+    }
+
     private SimpleAttributeSet insertTier(int recordIndex, TierViewItem tierViewItem, AttributeSet recordAttrs) {
         String tierName = tierViewItem.getTierName();
         Record record = session.getRecord(recordIndex);
@@ -980,7 +1146,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 .stream()
                 .filter(item -> item.getName().equals(tierName))
                 .findFirst();
-            sessionFactory.createTier(td.get());
+            tier = sessionFactory.createTier(td.get());
         }
 
         SimpleAttributeSet tierAttrs = getTierAttributes(tier, tierViewItem);
@@ -1098,12 +1264,12 @@ public class TranscriptDocument extends DefaultStyledDocument {
                         attrs = getTierStringAttributes();
                     }
                     else if (elem instanceof TierComment comment) {
-                        text = "[%" + comment.text() + "]";
+                        text = comment.toString();
                         attrs = getTierCommentAttributes();
                     }
                     else {
                         TierInternalMedia internalMedia = (TierInternalMedia) elem;
-                        text = "•" + internalMedia.text() + "•";
+                        text = internalMedia.toString();
                         attrs = getTierInternalMediaAttributes();
                     }
 
@@ -1188,7 +1354,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         Transcript transcript = session.getTranscript();
         var tierView = session.getTierView();
 
-        SimpleAttributeSet newLineAttrs = null;
+        SimpleAttributeSet newLineAttrs;
 
         if (singleRecordView) {
             Record record = session.getRecord(singleRecordIndex);
@@ -1219,11 +1385,9 @@ public class TranscriptDocument extends DefaultStyledDocument {
             int transcriptElementCount = transcript.getNumberOfElements();
             while (nextElementIndex < transcriptElementCount) {
                 Transcript.Element nextElement = transcript.getElementAt(nextElementIndex);
+                appendBatchLineFeed(newLineAttrs);
                 if (nextElement.isRecord()) {
                     break;
-                }
-                else {
-                    appendBatchLineFeed(newLineAttrs);
                 }
 
                 if (nextElement.isComment()) {
@@ -1249,20 +1413,13 @@ public class TranscriptDocument extends DefaultStyledDocument {
                     newLineAttrs = writeGem(elem.asGem());
                 }
 
-                if (i < transcript.getNumberOfElements() - 1) {
-                    appendBatchLineFeed(newLineAttrs);
-                }
+                appendBatchLineFeed(newLineAttrs);
             }
         }
 
-        appendBatchLineFeed(newLineAttrs);
-
         processBatchUpdates(0);
 
-        SimpleAttributeSet paragraphAttrs = new SimpleAttributeSet();
-        // TODO: Set this to a non-zero value if appropriate
-        StyleConstants.setLineSpacing(paragraphAttrs, .2f);
-        setParagraphAttributes(0, getLength(), paragraphAttrs, false);
+        setGlobalParagraphAttributes();
     }
 
     private SimpleAttributeSet writeRecord(
@@ -1283,7 +1440,6 @@ public class TranscriptDocument extends DefaultStyledDocument {
         sepAttrs.addAttributes(getStandardFontAttributes());
         formatSegment(segment, sepAttrs);
         appendBatchLineFeed(sepAttrs);
-        //offset++;
 
         SimpleAttributeSet tierAttrs = null;
 
@@ -1338,12 +1494,12 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 attrs = getTierStringAttributes();
             } else if (userTierElement instanceof TierComment userTierComment) {
                 // Comment
-                text = "[%" + userTierComment.text() + "]";
+                text = userTierComment.toString();
                 attrs = getTierCommentAttributes();
             } else {
                 // Internal media
                 TierInternalMedia internalMedia = (TierInternalMedia) userTierElement;
-                text = "•" + internalMedia.text() + "•";
+                text = internalMedia.toString();
                 attrs = getTierInternalMediaAttributes();
             }
 
