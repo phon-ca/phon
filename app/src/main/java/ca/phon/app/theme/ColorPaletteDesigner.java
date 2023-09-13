@@ -285,6 +285,7 @@ public class ColorPaletteDesigner extends JPanel {
 			public void undoableEditHappened(UndoableEditEvent e) {
 				undoManager.addEdit(e.getEdit());
 				setModified(true);
+				repaintWindows();
 			}
 
 		};

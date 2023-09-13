@@ -670,6 +670,9 @@ public class TranscriptEditor extends JEditorPane {
         TranscriptDocument doc = getTranscriptDocument();
         Rectangle drawHere = g.getClipBounds();
 
+        g.setColor(UIManager.getColor("TranscriptEditor.background"));
+        g.fillRect(0, drawHere.y, drawHere.width, drawHere.height);
+
         g.setColor(PhonGuiConstants.PHON_UI_STRIP_COLOR);
         FontMetrics fontMetrics = g.getFontMetrics(FontPreferences.getMonospaceFont().deriveFont(14.0f));
         char[] template = new char[getTranscriptDocument().getLabelColumnWidth() + 1];
