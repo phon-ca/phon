@@ -3,3 +3,4 @@ ca.phon.app.menu.DefaultMenuFilterExtensionPt
 #ca.phon.app.opgraph.wizard.NodeWizardMenuHandler
 ca.phon.app.opgraph.editor.NodeEditorMenuHandler
 ca.phon.app.about.HelpMenuHandler
+ca.phon.app.theme.ColorPaletteMenuHandler
