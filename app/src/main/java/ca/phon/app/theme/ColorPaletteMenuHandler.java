@@ -9,6 +9,7 @@ import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.PrefHelper;
 
 import javax.swing.*;
+import javax.swing.undo.UndoManager;
 import java.awt.*;
 
 /**
@@ -40,7 +41,9 @@ public class ColorPaletteMenuHandler implements IPluginMenuFilter, IPluginExtens
     private void showColorPaletteDesigner(Window owner) {
         final CommonModuleFrame cmf = new CommonModuleFrame("Color Palette Designer");
         cmf.getContentPane().setLayout(new BorderLayout());
-        cmf.getContentPane().add(new ColorPaletteDesigner());
+        final ColorPaletteDesigner designer = new ColorPaletteDesigner();
+        cmf.getContentPane().add(designer);
+        cmf.putExtension(UndoManager.class, designer.getUndoManager());
         cmf.pack();
         if(owner instanceof CommonModuleFrame parent) {
             cmf.setParentFrame(parent);
