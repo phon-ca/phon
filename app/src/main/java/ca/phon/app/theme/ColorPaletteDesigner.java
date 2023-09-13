@@ -1,6 +1,9 @@
 package ca.phon.app.theme;
 
+import ca.phon.ui.CommonModuleFrame;
+
 import javax.swing.*;
+import java.util.Comparator;
 import java.util.List;
 
 public class ColorPaletteDesigner extends JPanel {
@@ -261,5 +264,9 @@ public class ColorPaletteDesigner extends JPanel {
 		"windowBorder",
 		"windowText"
 	);
+
+	private void repaintWindows() {
+		CommonModuleFrame.getOpenWindows().forEach(CommonModuleFrame::repaint);
+	}
 
 }
