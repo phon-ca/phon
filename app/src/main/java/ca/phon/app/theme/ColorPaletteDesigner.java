@@ -3,6 +3,7 @@ package ca.phon.app.theme;
 import ca.phon.ui.CommonModuleFrame;
 
 import javax.swing.*;
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 
@@ -267,6 +268,25 @@ public class ColorPaletteDesigner extends JPanel {
 
 	private void repaintWindows() {
 		CommonModuleFrame.getOpenWindows().forEach(CommonModuleFrame::repaint);
+	}
+
+	/**
+	 * Save all ui manager properties to file
+	 * @param filename
+	 * @throws IOException
+	 */
+	public void saveProperties(String filename) throws IOException {
+
+	}
+
+	/**
+	 * Load all ui manager properties from file
+	 *
+	 * @param filename
+	 * @throws IOException
+	 */
+	public void loadProperties(String filename) throws IOException {
+
 	}
 
 }
