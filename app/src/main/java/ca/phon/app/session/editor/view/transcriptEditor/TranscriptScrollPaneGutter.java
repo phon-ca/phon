@@ -9,14 +9,14 @@ import javax.swing.*;
 import javax.swing.text.StyleConstants;
 import java.awt.*;
 
-public class TranscriptRowHeader extends JComponent {
+public class TranscriptScrollPaneGutter extends JComponent {
     private final TranscriptEditor editor;
     private boolean showRecordNumbers = true;
     private final int DEFAULT_WIDTH = 36;
     private final int RECORD_NUMBER_WIDTH = 24;
     private final int PADDING = 4;
 
-    public TranscriptRowHeader(TranscriptEditor editor) {
+    public TranscriptScrollPaneGutter(TranscriptEditor editor) {
         this.editor = editor;
         setPreferredSize(new Dimension(DEFAULT_WIDTH + PADDING + RECORD_NUMBER_WIDTH + PADDING, getPreferredSize().height));
         setFont(FontPreferences.getTierFont());
