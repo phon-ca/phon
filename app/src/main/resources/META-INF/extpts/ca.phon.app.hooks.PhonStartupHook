@@ -7,7 +7,7 @@ ca.phon.app.autosave.AutosaveStartupHook
 # Fonts
 ca.phon.app.FontStartupHook
 # Theme
-ca.phon.app.ThemeHook
+ca.phon.app.theme.ThemeHook
 # VLC
 ca.phon.app.VLCInitHook
 # IPA Dictionaries

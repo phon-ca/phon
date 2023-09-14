@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app;
+package ca.phon.app.theme;
 
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.app.log.LogUtil;
@@ -42,6 +42,7 @@ public class ThemeHook implements PhonStartupHook,
 		try {
 			SwingUtilities.invokeAndWait(new Runnable() {
 				public void run() {
+					setupCustomUIDefaults();
 					final Map<String, Object> uiMap = new HashMap<String, Object>();
 					// don't change theme on mac
 					if (OSInfo.isMacOs()) {
@@ -76,10 +77,17 @@ public class ThemeHook implements PhonStartupHook,
 
 	}
 
+	private void setupCustomUIDefaults() {
+		for(var pluginExtPt:PluginManager.getInstance().getExtensionPoints(UIDefaultsHandler.class)) {
+			final UIDefaultsHandler uiDefaultsHandler = pluginExtPt.getFactory().createObject();
+			uiDefaultsHandler.setupDefaults();
+		}
+	}
+
 	// macos system colors
 	final static private Color MACOS_GRAPHITE = new Color(109, 109, 109);
 	final static private Color MACOS_BLUE = new Color(7, 73, 217);
-	
+
 	private void setupMacosCustomizations() {
 		// check list selection colours, change breadcrumb selection color to MACOS_BLUE if 
 		// user selection is not 'blue' or 'graphite' in system preferences
