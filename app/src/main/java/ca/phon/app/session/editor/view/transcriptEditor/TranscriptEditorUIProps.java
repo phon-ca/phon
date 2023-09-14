@@ -11,8 +11,7 @@ import java.awt.*;
 
 public class TranscriptEditorUIProps implements UIDefaultsHandler, IPluginExtensionPoint<UIDefaultsHandler> {
     public final static String BACKGROUND = "TranscriptEditor.background";
-    public final static Color DEFAULT_BACKGROUND = Color.darkGray;
-        //UIManager.getColor("EditorPane.background");
+    public final static Color DEFAULT_BACKGROUND = UIManager.getColor("EditorPane.background");
 
     public final static String LABEL_BACKGROUND = "TranscriptEditor.labelBackground";
     public final static Color DEFAULT_LABEL_BACKGROUND = PhonGuiConstants.PHON_UI_STRIP_COLOR;
