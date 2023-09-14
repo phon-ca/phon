@@ -78,9 +78,10 @@ public class ThemeHook implements PhonStartupHook,
 	}
 
 	private void setupCustomUIDefaults() {
+		final UIDefaults uiDefaults = UIDefaults.getInstance();
 		for(var pluginExtPt:PluginManager.getInstance().getExtensionPoints(UIDefaultsHandler.class)) {
 			final UIDefaultsHandler uiDefaultsHandler = pluginExtPt.getFactory().createObject();
-			uiDefaultsHandler.setupDefaults();
+			uiDefaultsHandler.setupDefaults(uiDefaults);
 		}
 	}
 

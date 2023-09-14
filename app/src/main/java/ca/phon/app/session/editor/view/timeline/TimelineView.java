@@ -34,6 +34,7 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.*;
 import ca.phon.worker.*;
@@ -919,8 +920,13 @@ public final class TimelineView extends EditorView {
 
 				// check for speech analysis view
 				if(getEditor().getViewModel().isShowing(SpeechAnalysisEditorView.VIEW_TITLE)) {
-					int result = CommonModuleFrame.getCurrentFrame().showMessageDialog("Segmentation Performance", "The Speech Analysis view may cause performance issues with segmentation.", new String[] {
+					final MessageDialogProperties props = new MessageDialogProperties();
+					props.setHeader("Segmentation Performance");
+					props.setMessage("The Speech Analysis view may cause performance issues with segmentation.");
+					props.setOptions(new String[] {
 							"Close Speech Analysis and continue", "Continue without closing", "Cancel" });
+					props.setRunAsync(false);
+					int result = NativeDialogs.showMessageDialog(props);
 					switch(result) {
 					case 0:
 						getEditor().getViewModel().getCloseAction(SpeechAnalysisEditorView.VIEW_TITLE).actionPerformed(new ActionEvent(this, -1, "close"));

@@ -117,7 +117,7 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 		for(CommonModuleFrame f:openWindows)
 			if(f.isActive())
 				return f;
-		return new CommonModuleFrame();
+		return null;
 	}
 
 	protected String title;
