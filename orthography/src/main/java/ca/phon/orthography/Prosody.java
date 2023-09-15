@@ -3,6 +3,7 @@ package ca.phon.orthography;
 /**
  * Prosody inside word
  */
+@CHATReference("https://talkbank.org/manuals/CHAT.html#Prosody")
 public final class Prosody extends AbstractWordElement {
 
     private ProsodyType type;

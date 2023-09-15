@@ -5,6 +5,20 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * <p>
+ * [: word1 ...]; indicate replacement of a word by one or more words instead.
+ * [:: word1 ...] to indicate that the word is a real word
+ *
+ * <a href="https://talkbank.org/manuals/CHAT.html#Replacement_Scope">CHAT manual section
+ *                     on this topic...</a>
+ * <a href="https://talkbank.org/manuals/CHAT.html#Assimilations">CHAT manual section on
+ *                     this topic...</a>
+ * <a href="https://talkbank.org/manuals/CHAT.html#DialectalVariations">CHAT manual
+ *                     section on this topic...</a>
+ * </p>
+ */
+@CHATReference("https://talkbank.org/manuals/CHAT.html#Replacements")
 public final class Replacement extends AbstractOrthographyElement {
 
     public static final String PREFIX_REAL = "[::";

@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Multiple words with a single phonetic transcription.
+ * Multiple words with a single phonetic transcription.  Note that there are no main
+ * line annotations allowed for the group.
  */
+@CHATReference("https://talkbank.org/manuals/CHAT.html#Phonological_Group")
 public final class PhoneticGroup extends AbstractOrthographyElement {
 
     public final static String PHONETIC_GROUP_START = "\u2039";

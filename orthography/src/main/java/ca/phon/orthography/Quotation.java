@@ -1,5 +1,9 @@
 package ca.phon.orthography;
 
+/**
+ * Begin or end quoted material; &#x201C; and &#x201D;
+ */
+@CHATReference("https://talkbank.org/manuals/CHAT.html#Quotation")
 public final class Quotation extends AbstractOrthographyElement {
 
     public final static String QUOTATION_BEGIN = "\u201c";

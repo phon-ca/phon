@@ -1,8 +1,11 @@
 package ca.phon.orthography;
 
 public enum PauseLength {
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#Pause_Default_Length")
     SIMPLE("(.)", "simple"),
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#Pause_Long_Length")
     LONG("(..)", "long"),
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#Pause_Very_Long_Length")
     VERY_LONG("(...)", "very-long"),
     NUMERIC("(%s)", "numeric");
 

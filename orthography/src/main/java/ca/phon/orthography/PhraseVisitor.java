@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * This visitor will split an utterance into separate Orthography instances
+ * This visitor will split an utterance into separate Orthography instances based on tag markers.
  *
  */
 public class PhraseVisitor extends AbstractOrthographyVisitor {

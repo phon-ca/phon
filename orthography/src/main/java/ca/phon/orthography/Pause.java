@@ -3,6 +3,16 @@ package ca.phon.orthography;
 
 import ca.phon.formatter.MediaTimeFormatter;
 
+/**
+ * Pause at a point in an utterance.  May be symbolic or numeric.
+ * e.g.,
+ * <pre>(.), (..), or (...)</pre>
+ * or
+ * <pre>(3.5)</pre>
+ *
+ * Numeric values are printed in minutes and seconds
+ */
+@CHATReference("https://talkbank.org/manuals/CHAT.html#Pause_Marker")
 public final class Pause extends AbstractOrthographyElement {
 
     private final PauseLength type;
