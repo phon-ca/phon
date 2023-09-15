@@ -1,14 +1,26 @@
 package ca.phon.orthography;
 
 public enum MarkerType {
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#Stressing_Scope")
     STRESSING("[!]", "stressing"),
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#ContrastiveStressing_Scope")
     CONTRASTIVE_STRESSING("[!!]", "contrastive stressing"),
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#BestGuess_Scope")
     BEST_GUESS("[?]", "best guess"),
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#Repetition_Scope")
     RETRACING("[/]", "retracing"),
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#Retracing_Scope")
     RETRACING_WITH_CORRECTION("[//]", "retracing with correction"),
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#Reformulation_Scope")
     RETRACING_REFORMULATION("[///]", "retracing reformulation"),
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#UnclearRetracing_Scope")
     RETRACING_UNCLEAR("[/?]", "retracing unclear"),
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#FalseStart_Scope")
     FALSE_START("[/-]", "false start"),
+    /**
+     * Content to be excluded, mor exclude in CLAN
+     */
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#MorExclude_Scope")
     EXCLUDE("[e]", "exclude");
 
     private String text;

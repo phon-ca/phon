@@ -1,5 +1,9 @@
 package ca.phon.orthography;
 
+/**
+ * Long event
+ */
+@CHATReference("https://talkbank.org/manuals/CHAT.html#LongEvent")
 public final class LongFeature extends AbstractOrthographyElement implements WordElement {
 
     public final static String LONG_FEATURE_START = "&{l=";

@@ -1,5 +1,9 @@
 package ca.phon.orthography;
 
+/**
+ * Nonvocal material.
+ */
+@CHATReference("https://talkbank.org/manuals/CHAT.html#LongNonverbalEvent")
 public final class Nonvocal extends AbstractOrthographyElement  {
 
     public final static String NONVOCAL_START = "&{n=";

@@ -1,5 +1,9 @@
 package ca.phon.orthography;
 
+/**
+ * Retracing and other markers.
+ */
+@CHATReference("https://talkbank.org/manuals/CHAT.html#Markers")
 public final class Marker extends AbstractOrthographyElement implements OrthographyAnnotation {
 
     private final MarkerType type;

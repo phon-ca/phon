@@ -1,12 +1,19 @@
 package ca.phon.orthography;
 
 public enum LinkerType {
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#QuotedUtterance_Linker")
     QUOTED_UTTERANCE_NEXT("+\"", "quoted utterance next"),
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#QuickUptake_Linker")
     QUICK_UPTAKE("+^", "quick uptake"),
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#LazyOverlap_Linker")
     LAZY_OVERLAP_MARK("+<", "lazy overlap mark"),
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#SelfCompletion_Linker")
     SELF_COMPLETION("+,", "self completion"),
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#OtherCompletion_Linker")
     OTHER_COMPLETION("++", "other completion"),
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#TechnicalBreakTCUCompletion_Linker")
     TECHNICAL_BREAK_TCU_COMPLETION("+\u224b", "technical completion"),
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#NoBreakTCUCompletion_Linker")
     NO_BREAK_TCU_COMPLETION("+\u2248", "no break completion");
 
     private String text;

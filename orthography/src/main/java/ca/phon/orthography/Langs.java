@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 /**
  * Language specified at the word level
  */
+@CHATReference("https://talkbank.org/manuals/CHAT.html#SecondLanguage_Marker")
 public final class Langs {
 
     public final static String PREFIX = "@s";
