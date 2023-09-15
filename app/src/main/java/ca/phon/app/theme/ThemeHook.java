@@ -20,6 +20,8 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.prefs.PhonProperties;
 import ca.phon.plugin.*;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.theme.UIDefaults;
+import ca.phon.ui.theme.UIDefaultsHandler;
 import ca.phon.util.*;
 
 import javax.swing.*;
@@ -78,11 +80,7 @@ public class ThemeHook implements PhonStartupHook,
 	}
 
 	private void setupCustomUIDefaults() {
-		final UIDefaults uiDefaults = UIDefaults.getInstance();
-		for(var pluginExtPt:PluginManager.getInstance().getExtensionPoints(UIDefaultsHandler.class)) {
-			final UIDefaultsHandler uiDefaultsHandler = pluginExtPt.getFactory().createObject();
-			uiDefaultsHandler.setupDefaults(uiDefaults);
-		}
+		UIDefaults.setupDefaults();
 	}
 
 	// macos system colors

@@ -1,14 +1,13 @@
 package ca.phon.app.theme;
 
-import ca.phon.app.session.editor.view.transcriptEditor.TranscriptEditorUIProps;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.theme.UIDefaults;
 import org.jdesktop.swingx.HorizontalLayout;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
-import javax.swing.plaf.ColorUIResource;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeNode;
@@ -350,7 +349,7 @@ public class ColorPaletteDesigner extends JPanel {
 			}
 		}
 
-		for (String key : UIDefaults.getInstance().getColorKeys()) {
+		for (String key : ca.phon.ui.theme.UIDefaults.getInstance().getColorKeys()) {
 			if (key.contains(".")) {
 				String[] splitKey = key.split("\\.");
 				if (!nodeMap.containsKey(splitKey[0])) {

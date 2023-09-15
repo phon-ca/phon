@@ -1,7 +1,7 @@
 package ca.phon.app.session.editor.view.transcriptEditor;
 
-import ca.phon.app.theme.UIDefaults;
-import ca.phon.app.theme.UIDefaultsHandler;
+import ca.phon.ui.theme.UIDefaults;
+import ca.phon.ui.theme.UIDefaultsHandler;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.ui.PhonGuiConstants;

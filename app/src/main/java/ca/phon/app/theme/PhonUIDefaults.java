@@ -2,6 +2,8 @@ package ca.phon.app.theme;
 
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.ui.theme.UIDefaults;
+import ca.phon.ui.theme.UIDefaultsHandler;
 
 import java.awt.*;
 

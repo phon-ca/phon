@@ -1,6 +1,4 @@
-package ca.phon.app.theme;
-
-import javax.swing.*;
+package ca.phon.ui.theme;
 
 /**
  * Installs custom UI defaults to the java {@link javax.swing.UIManager} on application startup.

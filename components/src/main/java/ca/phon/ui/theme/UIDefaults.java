@@ -1,4 +1,6 @@
-package ca.phon.app.theme;
+package ca.phon.ui.theme;
+
+import ca.phon.plugin.PluginManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,7 +25,16 @@ public final class UIDefaults {
         return _instance;
     }
 
+    public static void setupDefaults() {
+        final ca.phon.ui.theme.UIDefaults uiDefaults = UIDefaults.getInstance();
+        for(var pluginExtPt: PluginManager.getInstance().getExtensionPoints(UIDefaultsHandler.class)) {
+            final UIDefaultsHandler uiDefaultsHandler = pluginExtPt.getFactory().createObject();
+            uiDefaultsHandler.setupDefaults(uiDefaults);
+        }
+    }
+
     private final HashMap<String, Object> defaultMap = new LinkedHashMap<>();
+
 
     private UIDefaults() {}
 
