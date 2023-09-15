@@ -1,5 +1,9 @@
 package ca.phon.orthography;
 
+/**
+ * Unscoped complex local events in the middle of an utterance.
+ */
+@CHATReference("https://talkbank.org/manuals/CHAT.html#ComplexLocalEvents")
 public final class Freecode extends AbstractOrthographyElement {
 
     public final static String PREFIX = "[^";

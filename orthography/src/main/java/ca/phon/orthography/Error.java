@@ -1,5 +1,9 @@
 package ca.phon.orthography;
 
+/**
+ * Error coding
+ */
+@CHATReference("https://talkbank.org/manuals/CHAT.html#ErrorMarking_Scope")
 public final class Error extends AbstractOrthographyElement implements OrthographyAnnotation {
 
     public final static String PREFIX = "[*";

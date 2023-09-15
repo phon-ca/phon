@@ -3,6 +3,10 @@ package ca.phon.orthography;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * happening, such as sneeze
+ */
+@CHATReference("https://talkbank.org/manuals/CHAT.html#Local_Event")
 public final class Happening extends Event {
 
     public final static String PREFIX = "&=";

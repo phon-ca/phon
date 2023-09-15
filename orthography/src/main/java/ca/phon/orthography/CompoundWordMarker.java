@@ -1,5 +1,9 @@
 package ca.phon.orthography;
 
+/**
+ * Marker between compound words
+ */
+@CHATReference("https://talkbank.org/manuals/CHAT.html#Compounds")
 public final class CompoundWordMarker extends AbstractWordElement {
 
     private final CompoundWordMarkerType type;

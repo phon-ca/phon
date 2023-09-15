@@ -21,9 +21,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- *
- * 
+ * Base class for simple events
  */
+@CHATReference("https://talkbank.org/manuals/CHAT.html#SimpleEvents")
 public abstract class Event extends AnnotatedOrthographyElement {
 
 	public Event(List<OrthographyAnnotation> annotations) {

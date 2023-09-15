@@ -19,7 +19,9 @@ package ca.phon.orthography;
  * Symbols used to create wordnets.
  */
 public enum CompoundWordMarkerType {
+	@CHATReference("https://talkbank.org/manuals/MOR.html#SimpleCompound")
 	COMPOUND('+'),
+	@CHATReference("https://talkbank.org/manuals/MOR.html#Clitic_Compound")
 	CLITIC('~');
 	
 	private char marker;

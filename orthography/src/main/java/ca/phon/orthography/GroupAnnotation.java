@@ -1,5 +1,9 @@
 package ca.phon.orthography;
 
+/**
+ * Inlined dependent tier: scoped annotation that applies to a group.
+ */
+@CHATReference("https://talkbank.org/manuals/CHAT.html#Group_Scopes")
 public final class GroupAnnotation extends AbstractOrthographyElement implements OrthographyAnnotation {
 
     private final GroupAnnotationType type;
