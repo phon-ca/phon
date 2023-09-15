@@ -5,6 +5,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Abstract class for OrthographyElements with attached annotations
+ */
 public abstract class AnnotatedOrthographyElement extends AbstractOrthographyElement {
 
     private List<OrthographyAnnotation> annotations;

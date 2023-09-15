@@ -3,6 +3,13 @@ package ca.phon.orthography;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents an action within the transcription.
+ *
+ * <p>
+ * <a href="https://talkbank.org/manuals/CHAT.html#Action_Code">CHAT manual section on this topic</a>
+ * </p>
+ */
 public final class Action extends Event {
 
     public final static String ACTION_TEXT = "0";

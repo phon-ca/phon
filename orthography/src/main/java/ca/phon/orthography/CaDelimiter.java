@@ -1,5 +1,13 @@
 package ca.phon.orthography;
 
+/**
+ * CA delimited material with begin/end.
+ *
+ * <p>
+ *     <a href="https://talkbank.org/manuals/CHAT.html#CA_Delimiters">CHAT manual section on
+ *                     this topic...</a>
+ * </p>
+ */
 public final class CaDelimiter extends AbstractWordElement {
 
     private final BeginEnd beginEnd;
