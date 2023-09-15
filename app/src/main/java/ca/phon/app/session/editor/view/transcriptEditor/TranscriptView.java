@@ -20,11 +20,22 @@ public class TranscriptView extends EditorView {
 
     public TranscriptView(SessionEditor editor) {
         super(editor);
-        this.transcriptEditor = new TranscriptEditor(editor.getSession(), editor.getEventManager(), editor.getUndoSupport(), editor.getUndoManager());
+        this.transcriptEditor = new TranscriptEditor(
+            editor.getSession(),
+            editor.getEventManager(),
+            editor.getUndoSupport(),
+            editor.getUndoManager()
+        );
         this.transcriptEditor.setSegmentPlayback(editor.getMediaModel().getSegmentPlayback());
-        this.transcriptEditor.addPropertyChangeListener("currentRecordIndex", e -> editor.setCurrentRecordIndex((Integer) e.getNewValue()));
+        this.transcriptEditor.addPropertyChangeListener(
+            "currentRecordIndex", e -> editor.setCurrentRecordIndex((Integer) e.getNewValue())
+        );
         initUI();
-        editor.getEventManager().registerActionForEvent(EditorEventType.EditorFinishedLoading, this::onEditorFinishedLoading, EditorEventManager.RunOn.EditorEventDispatchThread);
+        editor.getEventManager().registerActionForEvent(
+            EditorEventType.EditorFinishedLoading,
+            this::onEditorFinishedLoading,
+            EditorEventManager.RunOn.EditorEventDispatchThread
+        );
         if (editor.isFinishedLoading()) {
             transcriptEditor.loadSession();
         }
@@ -37,6 +48,8 @@ public class TranscriptView extends EditorView {
         add(transcriptScrollPane, BorderLayout.CENTER);
         add(new TranscriptStatusBar(transcriptEditor), BorderLayout.SOUTH);
     }
+
+    // region Getters and Setters
 
     @Override
     public String getName() {
@@ -60,21 +73,6 @@ public class TranscriptView extends EditorView {
         retVal.add(new ToggleAlignmentIsComponentAction(getEditor(), this));
 
         return retVal;
-    }
-
-    private void createTierLabelPopup(JLabel tierLabel, MouseEvent mouseEvent) {
-
-        JPopupMenu menu = new JPopupMenu();
-        MenuBuilder builder = new MenuBuilder(menu);
-
-        var extPts = PluginManager.getInstance().getExtensionPoints(TierLabelMenuHandler.class);
-
-        for (var extPt : extPts) {
-            var menuHandler = extPt.getFactory().createObject(getEditor());
-            menuHandler.addMenuItems(builder);
-        }
-
-        menu.show(tierLabel, mouseEvent.getX(), mouseEvent.getY());
     }
 
     private void onEditorFinishedLoading(EditorEvent<Void> event) {
@@ -128,4 +126,6 @@ public class TranscriptView extends EditorView {
     public void toggleAlignmentIsComponent() {
         transcriptEditor.setAlignmentIsComponent(!isAlignmentComponent());
     }
+
+    //endregion Getters and Setters
 }

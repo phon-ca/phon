@@ -9,6 +9,7 @@ import ca.phon.session.tierdata.*;
 import ca.phon.ui.FontFormatter;
 import ca.phon.ui.fonts.FontPreferences;
 
+import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
 import java.util.*;
@@ -26,7 +27,6 @@ public class TranscriptDocument extends DefaultStyledDocument {
     private boolean alignmentVisible = false;
     private boolean alignmentIsComponent = true;
     private int labelColumnWidth = 20;
-    private Element hoverLabel;
 
     public TranscriptDocument() {
         super(new TranscriptStyleContext());
@@ -35,62 +35,93 @@ public class TranscriptDocument extends DefaultStyledDocument {
         batch = new ArrayList<>();
     }
 
-    public void appendBatchString(String str, AttributeSet a) {
-        // We could synchronize this if multiple threads
-        // would be in here. Since we're trying to boost speed,
-        // we'll leave it off for now.
+    // region Getters and Setters
 
-        // Make a copy of the attributes, since we will hang onto
-        // them indefinitely and the caller might change them
-        // before they are processed.
-        a = a.copyAttributes();
-        char[] chars = str.toCharArray();
-        batch.add(new ElementSpec(a, ElementSpec.ContentType, chars, 0, str.length()));
+    public Session getSession() {
+        return session;
     }
 
-    public void appendBatchLineFeed(AttributeSet a) {
-        // See sync notes above. In the interest of speed, this
-        // isn't synchronized.
-
-        // Add a spec with the linefeed characters
-        batch.add(new ElementSpec(a, ElementSpec.ContentType, EOL_ARRAY, 0, 1));
-
-        appendBatchEndStart();
-    }
-
-    public void appendBatchEndStart() {
-        batch.add(new ElementSpec(null, ElementSpec.EndTagType));
-        batch.add(new ElementSpec(null, ElementSpec.StartTagType));
-    }
-
-    public void processBatchUpdates(int offs) throws BadLocationException {
-        // As with insertBatchString, this could be synchronized if
-        // there was a chance multiple threads would be in here.
-        ElementSpec[] inserts = new ElementSpec[batch.size()];
-        batch.toArray(inserts);
-
-        // Process all the inserts in bulk
-        super.insert(offs, inserts);
-
-        ElementSpec last = batch.get(batch.size() - 1);
-        //System.out.println(last.getArray());
-
-        // Empty batch the list
-        batch.clear();
-
-        System.out.println(getCharAtPos(getLength() - 1));
-        System.out.println(getLength());
-    }
-
-    public Character getCharAtPos(int pos) {
+    public void setSession(Session session) {
+        this.session = session;
         try {
-            return getText(pos, 1).charAt(0);
+            populate();
         }
         catch (BadLocationException e) {
-            LogUtil.warning(e);
-            return null;
+            LogUtil.severe(e);
         }
     }
+
+    public boolean getSingleRecordView() {
+        return singleRecordView;
+    }
+
+    public void setSingleRecordView(boolean singleRecordView) {
+        if (this.singleRecordView == singleRecordView) return;
+        this.singleRecordView = singleRecordView;
+        reload();
+    }
+
+    public int getSingleRecordIndex() {
+        return singleRecordIndex;
+    }
+
+    public void setSingleRecordIndex(int singleRecordIndex) {
+        this.singleRecordIndex = singleRecordIndex;
+        if (singleRecordView) {
+            reload();
+        }
+    }
+
+    public boolean isSyllabificationVisible() {
+        return syllabificationVisible;
+    }
+
+    public void setSyllabificationVisible(boolean syllabificationVisible) {
+        this.syllabificationVisible = syllabificationVisible;
+        reload();
+    }
+
+    public boolean isSyllabificationComponent() {
+        return syllabificationIsComponent;
+    }
+
+    public void setSyllabificationIsComponent(boolean syllabificationIsComponent) {
+        this.syllabificationIsComponent = syllabificationIsComponent;
+        if (syllabificationVisible) {
+            reload();
+        }
+    }
+
+    public boolean isAlignmentVisible() {
+        return alignmentVisible;
+    }
+
+    public void setAlignmentVisible(boolean alignmentVisible) {
+        this.alignmentVisible = alignmentVisible;
+        reload();
+    }
+
+    public boolean isAlignmentComponent() {
+        return alignmentIsComponent;
+    }
+
+    public void setAlignmentIsComponent(boolean alignmentIsComponent) {
+        this.alignmentIsComponent = alignmentIsComponent;
+        if (alignmentVisible) {
+            reload();
+        }
+    }
+
+    public int getLabelColumnWidth() {
+        return labelColumnWidth;
+    }
+
+    public void setLabelColumnWidth(int labelColumnWidth) {
+        this.labelColumnWidth = labelColumnWidth;
+    }
+
+    // endregion Getters and Setters
+
 
     // region Attribute Getters
 
@@ -147,7 +178,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         SimpleAttributeSet retVal = new SimpleAttributeSet();
         retVal.addAttribute("tier", tier);
 
-        StyleConstants.setForeground(retVal, Color.black);
+        StyleConstants.setForeground(retVal, UIManager.getColor(TranscriptEditorUIProps.IPA_WORD));
 
         return retVal;
     }
@@ -156,7 +187,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         SimpleAttributeSet retVal = new SimpleAttributeSet();
         retVal.addAttribute("tier", tier);
 
-        StyleConstants.setForeground(retVal, Color.gray);
+        StyleConstants.setForeground(retVal, UIManager.getColor(TranscriptEditorUIProps.IPA_PAUSE));
 
         return retVal;
     }
@@ -170,7 +201,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
     private SimpleAttributeSet getSegmentDashAttributes() {
         SimpleAttributeSet retVal = new SimpleAttributeSet();
 
-        StyleConstants.setForeground(retVal, Color.GRAY);
+        StyleConstants.setForeground(retVal, UIManager.getColor(TranscriptEditorUIProps.SEGMENT_DASH));
 
         return retVal;
     }
@@ -186,7 +217,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
     private SimpleAttributeSet getTierCommentAttributes() {
         SimpleAttributeSet retVal = new SimpleAttributeSet();
 
-        StyleConstants.setForeground(retVal, Color.gray);
+        StyleConstants.setForeground(retVal, UIManager.getColor(TranscriptEditorUIProps.TIER_COMMENT));
 
         return retVal;
     }
@@ -194,7 +225,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
     private SimpleAttributeSet getTierInternalMediaAttributes() {
         SimpleAttributeSet retVal = new SimpleAttributeSet();
 
-        StyleConstants.setForeground(retVal, Color.gray);
+        StyleConstants.setForeground(retVal, UIManager.getColor(TranscriptEditorUIProps.DEFAULT_INTERNAL_MEDIA));
 
         return retVal;
     }
@@ -291,6 +322,465 @@ public class TranscriptDocument extends DefaultStyledDocument {
     }
 
     // endregion Attribute Getters
+
+
+    // region Batching
+
+    public void appendBatchString(String str, AttributeSet a) {
+        a = a.copyAttributes();
+        char[] chars = str.toCharArray();
+        batch.add(new ElementSpec(a, ElementSpec.ContentType, chars, 0, str.length()));
+    }
+
+    public void appendBatchLineFeed(AttributeSet a) {
+        // Add a spec with the linefeed characters
+        batch.add(new ElementSpec(a, ElementSpec.ContentType, EOL_ARRAY, 0, 1));
+
+        appendBatchEndStart();
+    }
+
+    public void appendBatchEndStart() {
+        batch.add(new ElementSpec(null, ElementSpec.EndTagType));
+        batch.add(new ElementSpec(null, ElementSpec.StartTagType));
+    }
+
+    public void processBatchUpdates(int offs) throws BadLocationException {
+        // As with insertBatchString, this could be synchronized if
+        // there was a chance multiple threads would be in here.
+        ElementSpec[] inserts = new ElementSpec[batch.size()];
+        batch.toArray(inserts);
+
+        // Process all the inserts in bulk
+        super.insert(offs, inserts);
+
+        ElementSpec last = batch.get(batch.size() - 1);
+
+        // Empty batch the list
+        batch.clear();
+
+        System.out.println(getCharAtPos(getLength() - 1));
+        System.out.println(getLength());
+    }
+
+    // endregion Batching
+
+
+    // region Write Transcript Element
+
+    private SimpleAttributeSet writeRecord(
+            Record record,
+            Transcript transcript,
+            List<TierViewItem> tierView
+    ) {
+        int recordIndex = transcript.getRecordPosition(record);
+        SimpleAttributeSet recordAttrs = getRecordAttributes(recordIndex);
+
+        SimpleAttributeSet sepAttrs = getSeparatorAttributes();
+        sepAttrs.addAttributes(recordAttrs);
+
+        appendBatchString(formatLabelText(record.getSpeaker().toString()) + "  ", sepAttrs);
+
+        MediaSegment segment = record.getMediaSegment();
+
+        sepAttrs.addAttributes(getStandardFontAttributes());
+        formatSegment(segment, sepAttrs);
+        appendBatchLineFeed(sepAttrs);
+
+        SimpleAttributeSet tierAttrs = null;
+
+        List<TierViewItem> visibleTierView = tierView.stream().filter(item -> item.isVisible()).toList();
+
+        for (int i = 0; i < visibleTierView.size(); i++) {
+            TierViewItem item = visibleTierView.get(i);
+
+            tierAttrs = insertTier(recordIndex, item, recordAttrs);
+
+            if (i < visibleTierView.size() - 1) {
+                appendBatchLineFeed(tierAttrs);
+            }
+        }
+
+        return (tierAttrs != null) ? tierAttrs : sepAttrs;
+    }
+
+    private SimpleAttributeSet writeComment(Comment comment) {
+
+        SimpleAttributeSet commentAttrs = getCommentAttributes(comment);
+        commentAttrs.addAttributes(getStandardFontAttributes());
+
+        TierData tierData = comment.getValue();
+
+        SimpleAttributeSet labelAttrs = getCommentLabelAttributes(comment);
+        String labelText = comment.getType().getLabel();
+        if (labelText.length() < labelColumnWidth) {
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < (labelColumnWidth - labelText.length()); i++) {
+                builder.append(' ');
+            }
+            appendBatchString(builder.toString(), labelAttrs);
+        }
+        else {
+            labelText = formatLabelText(labelText);
+        }
+
+        labelAttrs.addAttribute("clickable", true);
+        appendBatchString(labelText, labelAttrs);
+
+        labelAttrs.removeAttribute("clickable");
+        appendBatchString(": ", labelAttrs);
+
+        for (int i = 0; i < tierData.length(); i++) {
+            TierElement userTierElement = tierData.elementAt(i);
+            String text;
+            SimpleAttributeSet attrs;
+            if (userTierElement instanceof TierString tierString) {
+                // Text
+                text = tierString.text();
+                attrs = getTierStringAttributes();
+            } else if (userTierElement instanceof TierComment userTierComment) {
+                // Comment
+                text = userTierComment.toString();
+                attrs = getTierCommentAttributes();
+            } else {
+                // Internal media
+                TierInternalMedia internalMedia = (TierInternalMedia) userTierElement;
+                text = internalMedia.toString();
+                attrs = getTierInternalMediaAttributes();
+            }
+
+            attrs.addAttributes(commentAttrs);
+
+            appendBatchString(text, attrs);
+
+            if (i < tierData.length() - 1) {
+                appendBatchString(" ", attrs);
+            }
+        }
+
+        return commentAttrs;
+    }
+
+    private SimpleAttributeSet writeGem(Gem gem) {
+        String text = gem.getLabel();
+
+        SimpleAttributeSet gemAttrs = getGemAttributes(gem);
+        gemAttrs.addAttributes(getStandardFontAttributes());
+
+        SimpleAttributeSet labelAttrs = getGemLabelAttributes(gem);
+        String labelText = gem.getType().toString();
+        if (labelText.length() < labelColumnWidth) {
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < (labelColumnWidth - labelText.length()); i++) {
+                builder.append(' ');
+            }
+            appendBatchString(builder.toString(), labelAttrs);
+        }
+        else {
+            labelText = formatLabelText(labelText);
+        }
+
+        labelAttrs.addAttribute("clickable", true);
+        appendBatchString(labelText, labelAttrs);
+
+        labelAttrs.removeAttribute("clickable");
+        appendBatchString(": ", labelAttrs);
+
+        appendBatchString(text, gemAttrs);
+
+        return gemAttrs;
+    }
+
+    // endregion Write Transcript Element
+
+
+    // region Get Record/Tier Start/End
+
+    public int getRecordStart(int recordIndex) {
+        Element root = getDefaultRootElement();
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() < 1) continue;
+            AttributeSet attrs = elem.getElement(0).getAttributes();
+            var currentRecordIndex = attrs.getAttribute("recordIndex");
+            if (currentRecordIndex != null && recordIndex == (int)currentRecordIndex) {
+                return elem.getStartOffset();
+            }
+        }
+
+        return -1;
+    }
+
+    public int getRecordStart(Tier<?> tier) {
+        Element root = getDefaultRootElement();
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() < 1) continue;
+            Integer currentRecordIndex = (Integer) elem.getElement(0).getAttributes().getAttribute("recordIndex");
+            // If correct record index
+            if (currentRecordIndex != null) {
+                for (int j = 0; j < elem.getElementCount(); j++) {
+                    Element innerElem = elem.getElement(j);
+                    AttributeSet attrs = innerElem.getAttributes();
+                    Tier<?> currentTier = (Tier<?>)attrs.getAttribute("tier");
+                    // If correct tier
+                    if (currentTier != null && currentTier == tier) {
+                        return elem.getStartOffset();
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    public int getRecordEnd(int recordIndex) {
+        Element root = getDefaultRootElement();
+
+        int retVal = -1;
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() < 1) continue;
+            AttributeSet attrs = elem.getElement(0).getAttributes();
+            var currentRecordIndex = attrs.getAttribute("recordIndex");
+            if (currentRecordIndex != null && recordIndex == (int)currentRecordIndex) {
+                retVal = Math.max(retVal, elem.getEndOffset());
+            }
+        }
+
+        return retVal;
+    }
+
+    public int getRecordEnd(Tier<?> tier) {
+        Element root = getDefaultRootElement();
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() < 1) continue;
+            var currentRecordIndex = elem.getElement(0).getAttributes().getAttribute("recordIndex");
+            // If correct record index
+            if (currentRecordIndex != null) {
+                for (int j = 0; j < elem.getElementCount(); j++) {
+                    Element innerElem = elem.getElement(j);
+                    var currentTier = innerElem.getAttributes().getAttribute("tier");
+                    // If correct tier
+                    if (currentTier != null && currentTier == tier) {
+                        return getRecordEnd((int)currentRecordIndex);
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    public int getTierStart(int recordIndex, String tierName) {
+        Element root = getDefaultRootElement();
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() < 1) continue;
+            Integer currentRecordIndex = (Integer)elem.getElement(0).getAttributes().getAttribute("recordIndex");
+            // If correct record index
+            if (currentRecordIndex != null && currentRecordIndex == recordIndex) {
+                for (int j = 0; j < elem.getElementCount(); j++) {
+                    Element innerElem = elem.getElement(j);
+                    AttributeSet attrs = innerElem.getAttributes();
+                    Tier<?> tier = (Tier<?>) attrs.getAttribute("tier");
+                    Boolean isLabel = (Boolean)attrs.getAttribute("label");
+                    // If correct tier name
+                    if (isLabel == null && tier != null && tier.getName().equals(tierName)) {
+                        return innerElem.getStartOffset();
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    public int getTierStart(Tier<?> tier) {
+        Element root = getDefaultRootElement();
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() == 0) continue;
+            String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute("elementType");
+            // If correct record index
+            if (transcriptElementType != null && transcriptElementType.equals("record")) {
+                for (int j = 0; j < elem.getElementCount(); j++) {
+                    Element innerElem = elem.getElement(j);
+                    AttributeSet attrs = innerElem.getAttributes();
+                    Tier<?> currentTier = (Tier<?>)attrs.getAttribute("tier");
+                    Boolean isLabel = (Boolean)attrs.getAttribute("label");
+                    // If correct tier
+                    if (isLabel == null && currentTier != null && currentTier == tier) {
+                        return innerElem.getStartOffset();
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    public int getTierEnd(int recordIndex, String tierName) {
+        Element root = getDefaultRootElement();
+
+        int retVal = -1;
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() < 1) continue;
+            var currentRecordIndex = elem.getElement(0).getAttributes().getAttribute("recordIndex");
+            // If correct record index
+            if (currentRecordIndex != null && ((int)currentRecordIndex) == recordIndex) {
+                for (int j = 0; j < elem.getElementCount(); j++) {
+                    Element innerElem = elem.getElement(j);
+                    AttributeSet attrs = innerElem.getAttributes();
+                    Tier<?> tier = (Tier<?>)attrs.getAttribute("tier");
+                    Boolean isLabel = (Boolean)attrs.getAttribute("label");
+                    if (isLabel == null && tier != null && tier.getName().equals(tierName)) {
+                        retVal = Math.max(retVal, innerElem.getEndOffset());
+                    }
+                }
+            }
+        }
+
+        return retVal;
+    }
+
+    public int getTierEnd(Tier<?> tier) {
+        Element root = getDefaultRootElement();
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() < 1) continue;
+            Integer currentRecordIndex = (Integer) elem.getElement(0).getAttributes().getAttribute("recordIndex");
+            // If correct record index
+            if (currentRecordIndex != null) {
+                for (int j = 0; j < elem.getElementCount(); j++) {
+                    Element innerElem = elem.getElement(j);
+                    Tier<?> currentTier = (Tier<?>)innerElem.getAttributes().getAttribute("tier");
+                    // If correct tier
+                    if (currentTier != null && currentTier == tier) {
+                        return getTierEnd(currentRecordIndex, tier.getName());
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    public int getCommentStart(Comment comment) {
+        Element root = getDefaultRootElement();
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() == 0) continue;
+            String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute("elementType");
+            // If transcript element type is comment
+            if (transcriptElementType != null && transcriptElementType.equals("comment")) {
+                for (int j = 0; j < elem.getElementCount(); j++) {
+                    Element innerElem = elem.getElement(j);
+                    AttributeSet attrs = innerElem.getAttributes();
+                    Comment currentComment = (Comment)attrs.getAttribute("comment");
+                    Boolean isLabel = (Boolean)attrs.getAttribute("label");
+                    // If correct tier
+                    if (isLabel == null && currentComment != null && currentComment == comment) {
+                        return innerElem.getStartOffset();
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    public int getCommentEnd(Comment comment) {
+        Element root = getDefaultRootElement();
+
+        int retVal = -1;
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() < 1) continue;
+            String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute("elementType");
+            // If transcript element type is comment
+            if (transcriptElementType != null && transcriptElementType.equals("comment")) {
+                for (int j = 0; j < elem.getElementCount(); j++) {
+                    Element innerElem = elem.getElement(j);
+                    AttributeSet attrs = innerElem.getAttributes();
+                    Comment currentComment = (Comment)attrs.getAttribute("comment");
+                    Boolean isLabel = (Boolean)attrs.getAttribute("label");
+                    // If correct tier name
+                    if (isLabel == null && currentComment != null && currentComment == comment) {
+                        retVal = Math.max(retVal, innerElem.getEndOffset());
+                    }
+                }
+            }
+        }
+
+        return retVal;
+    }
+
+    public int getGemStart(Gem gem) {
+        Element root = getDefaultRootElement();
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() == 0) continue;
+            String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute("elementType");
+            // If transcript element type is gem
+            if (transcriptElementType != null && transcriptElementType.equals("gem")) {
+                for (int j = 0; j < elem.getElementCount(); j++) {
+                    Element innerElem = elem.getElement(j);
+                    AttributeSet attrs = innerElem.getAttributes();
+                    Gem currentGem = (Gem)attrs.getAttribute("gem");
+                    Boolean isLabel = (Boolean)attrs.getAttribute("label");
+                    // If correct tier
+                    if (isLabel == null && currentGem != null && currentGem == gem) {
+                        return innerElem.getStartOffset();
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    public int getGemEnd(Gem gem) {
+        Element root = getDefaultRootElement();
+
+        int retVal = -1;
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() < 1) continue;
+            String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute("elementType");
+            // If transcript element type is gem
+            if (transcriptElementType != null && transcriptElementType.equals("gem")) {
+                for (int j = 0; j < elem.getElementCount(); j++) {
+                    Element innerElem = elem.getElement(j);
+                    AttributeSet attrs = innerElem.getAttributes();
+                    Gem currentGem = (Gem) attrs.getAttribute("gem");
+                    Boolean isLabel = (Boolean)attrs.getAttribute("label");
+                    // If correct tier name
+                    if (isLabel == null && currentGem != null && currentGem == gem) {
+                        retVal = Math.max(retVal, innerElem.getEndOffset());
+                    }
+                }
+            }
+        }
+
+        return retVal;
+    }
+
+    // endregion Get Record/Tier Start/End
+
 
     // region Tier View Changes
 
@@ -588,6 +1078,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
     // endregion Tier View Changes
 
+
     // region Record Changes
 
     public void addRecord(Record addedRecord) {
@@ -744,6 +1235,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
     // endregion Record Changes
 
+
     private TierViewItem getAlignmentTierView() {
         List<TierViewItem> visibleTierView = session.getTierView().stream().filter(item -> item.isVisible()).toList();
 
@@ -754,6 +1246,16 @@ public class TranscriptDocument extends DefaultStyledDocument {
         if (retVal.isPresent()) return retVal.get();
 
         return visibleTierView.get(visibleTierView.size()-1);
+    }
+
+    public Character getCharAtPos(int pos) {
+        try {
+            return getText(pos, 1).charAt(0);
+        }
+        catch (BadLocationException e) {
+            LogUtil.warning(e);
+            return null;
+        }
     }
 
     private String formatLabelText(String labelText) {
@@ -810,298 +1312,6 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return tier;
     }
 
-    // region Get Record/Tier Start/End
-
-    public int getRecordStart(int recordIndex) {
-        Element root = getDefaultRootElement();
-
-        for (int i = 0; i < root.getElementCount(); i++) {
-            Element elem = root.getElement(i);
-            if (elem.getElementCount() < 1) continue;
-            AttributeSet attrs = elem.getElement(0).getAttributes();
-            var currentRecordIndex = attrs.getAttribute("recordIndex");
-            if (currentRecordIndex != null && recordIndex == (int)currentRecordIndex) {
-                return elem.getStartOffset();
-            }
-        }
-
-        return -1;
-    }
-
-    public int getRecordStart(Tier<?> tier) {
-        Element root = getDefaultRootElement();
-
-        for (int i = 0; i < root.getElementCount(); i++) {
-            Element elem = root.getElement(i);
-            if (elem.getElementCount() < 1) continue;
-            Integer currentRecordIndex = (Integer) elem.getElement(0).getAttributes().getAttribute("recordIndex");
-            // If correct record index
-            if (currentRecordIndex != null) {
-                for (int j = 0; j < elem.getElementCount(); j++) {
-                    Element innerElem = elem.getElement(j);
-                    AttributeSet attrs = innerElem.getAttributes();
-                    Tier<?> currentTier = (Tier<?>)attrs.getAttribute("tier");
-                    // If correct tier
-                    if (currentTier != null && currentTier == tier) {
-                        return elem.getStartOffset();
-                    }
-                }
-            }
-        }
-
-        return -1;
-    }
-
-    public int getRecordEnd(int recordIndex) {
-        Element root = getDefaultRootElement();
-
-        int retVal = -1;
-
-        for (int i = 0; i < root.getElementCount(); i++) {
-            Element elem = root.getElement(i);
-            if (elem.getElementCount() < 1) continue;
-            AttributeSet attrs = elem.getElement(0).getAttributes();
-            var currentRecordIndex = attrs.getAttribute("recordIndex");
-            if (currentRecordIndex != null && recordIndex == (int)currentRecordIndex) {
-                retVal = Math.max(retVal, elem.getEndOffset());
-            }
-        }
-
-        return retVal;
-    }
-
-    public int getRecordEnd(Tier<?> tier) {
-        Element root = getDefaultRootElement();
-
-        for (int i = 0; i < root.getElementCount(); i++) {
-            Element elem = root.getElement(i);
-            if (elem.getElementCount() < 1) continue;
-            var currentRecordIndex = elem.getElement(0).getAttributes().getAttribute("recordIndex");
-            // If correct record index
-            if (currentRecordIndex != null) {
-                for (int j = 0; j < elem.getElementCount(); j++) {
-                    Element innerElem = elem.getElement(j);
-                    var currentTier = innerElem.getAttributes().getAttribute("tier");
-                    // If correct tier
-                    if (currentTier != null && currentTier == tier) {
-                        return getRecordEnd((int)currentRecordIndex);
-                    }
-                }
-            }
-        }
-
-        return -1;
-    }
-
-    public int getTierStart(int recordIndex, String tierName) {
-        Element root = getDefaultRootElement();
-
-        for (int i = 0; i < root.getElementCount(); i++) {
-            Element elem = root.getElement(i);
-            if (elem.getElementCount() < 1) continue;
-            Integer currentRecordIndex = (Integer)elem.getElement(0).getAttributes().getAttribute("recordIndex");
-            // If correct record index
-            if (currentRecordIndex != null && currentRecordIndex == recordIndex) {
-                for (int j = 0; j < elem.getElementCount(); j++) {
-                    Element innerElem = elem.getElement(j);
-                    AttributeSet attrs = innerElem.getAttributes();
-                    Tier<?> tier = (Tier<?>) attrs.getAttribute("tier");
-                    Boolean isLabel = (Boolean)attrs.getAttribute("label");
-                    // If correct tier name
-                    if (isLabel == null && tier != null && tier.getName().equals(tierName)) {
-                        return innerElem.getStartOffset();
-                    }
-                }
-            }
-        }
-
-        return -1;
-    }
-
-    public int getTierStart(Tier<?> tier) {
-        Element root = getDefaultRootElement();
-
-        for (int i = 0; i < root.getElementCount(); i++) {
-            Element elem = root.getElement(i);
-            if (elem.getElementCount() == 0) continue;
-            String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute("elementType");
-            // If correct record index
-            if (transcriptElementType != null && transcriptElementType.equals("record")) {
-                for (int j = 0; j < elem.getElementCount(); j++) {
-                    Element innerElem = elem.getElement(j);
-                    AttributeSet attrs = innerElem.getAttributes();
-                    Tier<?> currentTier = (Tier<?>)attrs.getAttribute("tier");
-                    Boolean isLabel = (Boolean)attrs.getAttribute("label");
-                    // If correct tier
-                    if (isLabel == null && currentTier != null && currentTier == tier) {
-                        return innerElem.getStartOffset();
-                    }
-                }
-            }
-        }
-
-        return -1;
-    }
-
-    public int getTierEnd(int recordIndex, String tierName) {
-        Element root = getDefaultRootElement();
-
-        int retVal = -1;
-
-        for (int i = 0; i < root.getElementCount(); i++) {
-            Element elem = root.getElement(i);
-            if (elem.getElementCount() < 1) continue;
-            var currentRecordIndex = elem.getElement(0).getAttributes().getAttribute("recordIndex");
-            // If correct record index
-            if (currentRecordIndex != null && ((int)currentRecordIndex) == recordIndex) {
-                for (int j = 0; j < elem.getElementCount(); j++) {
-                    Element innerElem = elem.getElement(j);
-                    AttributeSet attrs = innerElem.getAttributes();
-                    Tier<?> tier = (Tier<?>)attrs.getAttribute("tier");
-                    Boolean isLabel = (Boolean)attrs.getAttribute("label");
-                    if (isLabel == null && tier != null && tier.getName().equals(tierName)) {
-                        retVal = Math.max(retVal, innerElem.getEndOffset());
-                    }
-                }
-            }
-        }
-
-        return retVal;
-    }
-
-    public int getTierEnd(Tier<?> tier) {
-        Element root = getDefaultRootElement();
-
-        for (int i = 0; i < root.getElementCount(); i++) {
-            Element elem = root.getElement(i);
-            if (elem.getElementCount() < 1) continue;
-            Integer currentRecordIndex = (Integer) elem.getElement(0).getAttributes().getAttribute("recordIndex");
-            // If correct record index
-            if (currentRecordIndex != null) {
-                for (int j = 0; j < elem.getElementCount(); j++) {
-                    Element innerElem = elem.getElement(j);
-                    Tier<?> currentTier = (Tier<?>)innerElem.getAttributes().getAttribute("tier");
-                    // If correct tier
-                    if (currentTier != null && currentTier == tier) {
-                        return getTierEnd(currentRecordIndex, tier.getName());
-                    }
-                }
-            }
-        }
-
-        return -1;
-    }
-
-    public int getCommentStart(Comment comment) {
-        Element root = getDefaultRootElement();
-
-        for (int i = 0; i < root.getElementCount(); i++) {
-            Element elem = root.getElement(i);
-            if (elem.getElementCount() == 0) continue;
-            String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute("elementType");
-            // If transcript element type is comment
-            if (transcriptElementType != null && transcriptElementType.equals("comment")) {
-                for (int j = 0; j < elem.getElementCount(); j++) {
-                    Element innerElem = elem.getElement(j);
-                    AttributeSet attrs = innerElem.getAttributes();
-                    Comment currentComment = (Comment)attrs.getAttribute("comment");
-                    Boolean isLabel = (Boolean)attrs.getAttribute("label");
-                    // If correct tier
-                    if (isLabel == null && currentComment != null && currentComment == comment) {
-                        return innerElem.getStartOffset();
-                    }
-                }
-            }
-        }
-
-        return -1;
-    }
-
-    public int getCommentEnd(Comment comment) {
-        Element root = getDefaultRootElement();
-
-        int retVal = -1;
-
-        for (int i = 0; i < root.getElementCount(); i++) {
-            Element elem = root.getElement(i);
-            if (elem.getElementCount() < 1) continue;
-            String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute("elementType");
-            // If transcript element type is comment
-            if (transcriptElementType != null && transcriptElementType.equals("comment")) {
-                for (int j = 0; j < elem.getElementCount(); j++) {
-                    Element innerElem = elem.getElement(j);
-                    AttributeSet attrs = innerElem.getAttributes();
-                    Comment currentComment = (Comment)attrs.getAttribute("comment");
-                    Boolean isLabel = (Boolean)attrs.getAttribute("label");
-                    // If correct tier name
-                    if (isLabel == null && currentComment != null && currentComment == comment) {
-                        retVal = Math.max(retVal, innerElem.getEndOffset());
-                    }
-                }
-            }
-        }
-
-        return retVal;
-    }
-
-    public int getGemStart(Gem gem) {
-        Element root = getDefaultRootElement();
-
-        for (int i = 0; i < root.getElementCount(); i++) {
-            Element elem = root.getElement(i);
-            if (elem.getElementCount() == 0) continue;
-            String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute("elementType");
-            // If transcript element type is gem
-            if (transcriptElementType != null && transcriptElementType.equals("gem")) {
-                for (int j = 0; j < elem.getElementCount(); j++) {
-                    Element innerElem = elem.getElement(j);
-                    AttributeSet attrs = innerElem.getAttributes();
-                    Gem currentGem = (Gem)attrs.getAttribute("gem");
-                    Boolean isLabel = (Boolean)attrs.getAttribute("label");
-                    // If correct tier
-                    if (isLabel == null && currentGem != null && currentGem == gem) {
-                        return innerElem.getStartOffset();
-                    }
-                }
-            }
-        }
-
-        return -1;
-    }
-
-    public int getGemEnd(Gem gem) {
-        Element root = getDefaultRootElement();
-
-        int retVal = -1;
-
-        for (int i = 0; i < root.getElementCount(); i++) {
-            Element elem = root.getElement(i);
-            if (elem.getElementCount() < 1) continue;
-            String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute("elementType");
-            // If transcript element type is gem
-            if (transcriptElementType != null && transcriptElementType.equals("gem")) {
-                for (int j = 0; j < elem.getElementCount(); j++) {
-                    Element innerElem = elem.getElement(j);
-                    AttributeSet attrs = innerElem.getAttributes();
-                    Gem currentGem = (Gem) attrs.getAttribute("gem");
-                    Boolean isLabel = (Boolean)attrs.getAttribute("label");
-                    // If correct tier name
-                    if (isLabel == null && currentGem != null && currentGem == gem) {
-                        retVal = Math.max(retVal, innerElem.getEndOffset());
-                    }
-                }
-            }
-        }
-
-        return retVal;
-    }
-
-    // endregion Get Record/Tier Start/End
-
-    private void formatSegment(MediaSegment segment) {
-        formatSegment(segment, null);
-    }
-
     private void formatSegment(MediaSegment segment, AttributeSet additionalAttrs) {
         String start = MediaTimeFormatter.msToPaddedMinutesAndSeconds(segment.getStartValue());
 
@@ -1113,26 +1323,22 @@ public class TranscriptDocument extends DefaultStyledDocument {
         }
 
         appendBatchString("•", segmentDashAttrs);
-        //offset++;
 
         appendBatchString(start, segmentTimeAttrs);
-        //offset += start.length();
 
         appendBatchString("-", segmentDashAttrs);
-        //offset++;
 
         String end = MediaTimeFormatter.msToPaddedMinutesAndSeconds(segment.getEndValue());
 
         appendBatchString(end, segmentTimeAttrs);
-        //offset += end.length();
 
         appendBatchString("•", segmentDashAttrs);
-        //offset++;
     }
 
     private void setGlobalParagraphAttributes() {
         SimpleAttributeSet paragraphAttrs = new SimpleAttributeSet();
         StyleConstants.setLineSpacing(paragraphAttrs, .2f);
+        StyleConstants.setForeground(paragraphAttrs, UIManager.getColor(TranscriptEditorUIProps.FOREGROUND));
         setParagraphAttributes(0, getLength(), paragraphAttrs, false);
     }
 
@@ -1193,19 +1399,15 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 attrs.addAttributes(tierAttrs);
                 String content = word.toString();
                 appendBatchString(content, attrs);
-                //offset += content.length();
 
                 if (i < words.size() - 1) {
                     appendBatchString(" ", tierAttrs);
-                    //offset++;
                 }
             }
             if (syllabificationVisible) {
                 appendBatchLineFeed(getTierAttributes(ipaTier, tierViewItem));
-                //offset++;
                 String ipaTarget = ipaTier.getValue().toString(true);
                 appendBatchString(ipaTarget, getIPATierAttributes(ipaTier, recordIndex));
-                //offset += ipaTarget.length();
             }
         }
         else if (tierName.equals("IPA Actual")) {
@@ -1225,19 +1427,15 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 attrs.addAttributes(tierAttrs);
                 String content = word.toString();
                 appendBatchString(content, attrs);
-                //offset += content.length();
 
                 if (i < words.size() - 1) {
                     appendBatchString(" ", tierAttrs);
-                    //offset++;
                 }
             }
             if (syllabificationVisible) {
                 appendBatchLineFeed(getTierAttributes(ipaTier, tierViewItem));
-                //offset++;
                 String ipaActual = ipaTier.getValue().toString(true);
                 appendBatchString(ipaActual, getIPATierAttributes(ipaTier, recordIndex));
-                //offset += ipaActual.length();
             }
         }
         else if (tierName.equals("Segment")) {
@@ -1248,8 +1446,6 @@ public class TranscriptDocument extends DefaultStyledDocument {
             String tierContent = tier.toString();
 
             appendBatchString(tierContent, tierAttrs);
-
-            //offset += tierContent.length();
         }
         else {
             Tier<TierData> userTier = (Tier<TierData>) tier;
@@ -1276,11 +1472,9 @@ public class TranscriptDocument extends DefaultStyledDocument {
                     attrs.addAttributes(tierAttrs);
 
                     appendBatchString(text, attrs);
-                    //offset += text.length();
 
                     if (i < tierData.length() - 1) {
                         appendBatchString(" ", tierAttrs);
-                        //offset++;
                     }
                 }
             }
@@ -1288,13 +1482,9 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
         if (alignmentVisible && tierName.equals(getAlignmentTierView().getTierName())) {
             appendBatchLineFeed(getTierAttributes(tier, tierViewItem));
-            //offset++;
             String alignment = record.getPhoneAlignment().toString();
             appendBatchString(alignment, getAlignmentAttributes(record.getPhoneAlignmentTier()));
-            //offset += alignment.length();
         }
-
-        //offset++;
 
         return tierAttrs;
     }
@@ -1421,262 +1611,6 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
         setGlobalParagraphAttributes();
     }
-
-    private SimpleAttributeSet writeRecord(
-        Record record,
-        Transcript transcript,
-        List<TierViewItem> tierView
-    ) {
-        int recordIndex = transcript.getRecordPosition(record);
-        SimpleAttributeSet recordAttrs = getRecordAttributes(recordIndex);
-
-        SimpleAttributeSet sepAttrs = getSeparatorAttributes();
-        sepAttrs.addAttributes(recordAttrs);
-
-        appendBatchString(formatLabelText(record.getSpeaker().toString()) + "  ", sepAttrs);
-
-        MediaSegment segment = record.getMediaSegment();
-
-        sepAttrs.addAttributes(getStandardFontAttributes());
-        formatSegment(segment, sepAttrs);
-        appendBatchLineFeed(sepAttrs);
-
-        SimpleAttributeSet tierAttrs = null;
-
-        List<TierViewItem> visibleTierView = tierView.stream().filter(item -> item.isVisible()).toList();
-
-        for (int i = 0; i < visibleTierView.size(); i++) {
-            TierViewItem item = visibleTierView.get(i);
-
-            tierAttrs = insertTier(recordIndex, item, recordAttrs);
-
-            if (i < visibleTierView.size() - 1) {
-                appendBatchLineFeed(tierAttrs);
-            }
-        }
-
-        return (tierAttrs != null) ? tierAttrs : sepAttrs;
-    }
-
-    private SimpleAttributeSet writeComment(Comment comment) {
-
-        SimpleAttributeSet commentAttrs = getCommentAttributes(comment);
-        commentAttrs.addAttributes(getStandardFontAttributes());
-
-        TierData tierData = comment.getValue();
-
-        SimpleAttributeSet labelAttrs = getCommentLabelAttributes(comment);
-        String labelText = comment.getType().getLabel();
-        if (labelText.length() < labelColumnWidth) {
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < (labelColumnWidth - labelText.length()); i++) {
-                builder.append(' ');
-            }
-            appendBatchString(builder.toString(), labelAttrs);
-        }
-        else {
-            labelText = formatLabelText(labelText);
-        }
-
-        labelAttrs.addAttribute("clickable", true);
-        appendBatchString(labelText, labelAttrs);
-
-        labelAttrs.removeAttribute("clickable");
-        appendBatchString(": ", labelAttrs);
-
-        for (int i = 0; i < tierData.length(); i++) {
-            TierElement userTierElement = tierData.elementAt(i);
-            String text;
-            SimpleAttributeSet attrs;
-            if (userTierElement instanceof TierString tierString) {
-                // Text
-                text = tierString.text();
-                attrs = getTierStringAttributes();
-            } else if (userTierElement instanceof TierComment userTierComment) {
-                // Comment
-                text = userTierComment.toString();
-                attrs = getTierCommentAttributes();
-            } else {
-                // Internal media
-                TierInternalMedia internalMedia = (TierInternalMedia) userTierElement;
-                text = internalMedia.toString();
-                attrs = getTierInternalMediaAttributes();
-            }
-
-            attrs.addAttributes(commentAttrs);
-
-            appendBatchString(text, attrs);
-
-            if (i < tierData.length() - 1) {
-                appendBatchString(" ", attrs);
-            }
-        }
-
-        return commentAttrs;
-    }
-
-    private SimpleAttributeSet writeGem(Gem gem) {
-        String text = gem.getLabel();
-
-        SimpleAttributeSet gemAttrs = getGemAttributes(gem);
-        gemAttrs.addAttributes(getStandardFontAttributes());
-
-        SimpleAttributeSet labelAttrs = getGemLabelAttributes(gem);
-        String labelText = gem.getType().toString();
-        if (labelText.length() < labelColumnWidth) {
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < (labelColumnWidth - labelText.length()); i++) {
-                builder.append(' ');
-            }
-            appendBatchString(builder.toString(), labelAttrs);
-        }
-        else {
-            labelText = formatLabelText(labelText);
-        }
-
-        labelAttrs.addAttribute("clickable", true);
-        appendBatchString(labelText, labelAttrs);
-
-        labelAttrs.removeAttribute("clickable");
-        appendBatchString(": ", labelAttrs);
-
-        appendBatchString(text, gemAttrs);
-
-        return gemAttrs;
-    }
-
-    // region Getters and Setters
-
-    public Session getSession() {
-        return session;
-    }
-
-    public void setSession(Session session) {
-        this.session = session;
-        try {
-            populate();
-        }
-        catch (BadLocationException e) {
-            LogUtil.severe(e);
-        }
-    }
-
-    public boolean getSingleRecordView() {
-        return singleRecordView;
-    }
-
-    public void setSingleRecordView(boolean singleRecordView) {
-        if (this.singleRecordView == singleRecordView) return;
-        this.singleRecordView = singleRecordView;
-        reload();
-    }
-
-    public int getSingleRecordIndex() {
-        return singleRecordIndex;
-    }
-
-    public void setSingleRecordIndex(int singleRecordIndex) {
-        this.singleRecordIndex = singleRecordIndex;
-        if (singleRecordView) {
-            reload();
-        }
-    }
-
-    public boolean isSyllabificationVisible() {
-        return syllabificationVisible;
-    }
-
-    public void setSyllabificationVisible(boolean syllabificationVisible) {
-        this.syllabificationVisible = syllabificationVisible;
-        reload();
-    }
-
-    public boolean isSyllabificationComponent() {
-        return syllabificationIsComponent;
-    }
-
-    public void setSyllabificationIsComponent(boolean syllabificationIsComponent) {
-        this.syllabificationIsComponent = syllabificationIsComponent;
-        if (syllabificationVisible) {
-            reload();
-        }
-    }
-
-    public boolean isAlignmentVisible() {
-        return alignmentVisible;
-    }
-
-    public void setAlignmentVisible(boolean alignmentVisible) {
-        this.alignmentVisible = alignmentVisible;
-        reload();
-    }
-
-    public boolean isAlignmentComponent() {
-        return alignmentIsComponent;
-    }
-
-    public void setAlignmentIsComponent(boolean alignmentIsComponent) {
-        this.alignmentIsComponent = alignmentIsComponent;
-        if (alignmentVisible) {
-            reload();
-        }
-    }
-
-    public int getLabelColumnWidth() {
-        return labelColumnWidth;
-    }
-
-    public void setLabelColumnWidth(int labelColumnWidth) {
-        this.labelColumnWidth = labelColumnWidth;
-    }
-
-    public Element getHoverLabel() {
-        return hoverLabel;
-    }
-
-    public void setHoverLabel(Element hoverLabel) {
-//        // Remove any existing underline
-//        if (this.hoverLabel != null) {
-//            try {
-//                int start = this.hoverLabel.getStartOffset();
-//                int end = this.hoverLabel.getEndOffset();
-//                System.out.println("Start: " + start + ", end: " + end);
-//                String text = getText(start, end - start);
-//                System.out.println("Stop hover: " + text);
-//                SimpleAttributeSet attrs = new SimpleAttributeSet(this.hoverLabel.getAttributes());
-//                StyleConstants.setUnderline(attrs, false);
-//                StyleConstants.setForeground(attrs, Color.BLACK);
-//                remove(start, end - start);
-//                insertString(start, text, attrs);
-//            }
-//            catch (BadLocationException e) {
-//                LogUtil.warning(e);
-//            }
-//        }
-
-        // Add any new underline
-        if (hoverLabel != null) {
-            try {
-                int start = hoverLabel.getStartOffset();
-                int end = hoverLabel.getEndOffset();
-                System.out.println("Start: " + start + ", end: " + end);
-                String text = getText(start, end - start);
-                System.out.println("Start hover: " + text);
-                SimpleAttributeSet attrs = new SimpleAttributeSet(hoverLabel.getAttributes());
-                StyleConstants.setUnderline(attrs, true);
-                StyleConstants.setForeground(attrs, Color.BLUE);
-                remove(start, end - start);
-                insertString(start, text, attrs);
-            }
-            catch (BadLocationException e) {
-                LogUtil.warning(e);
-            }
-        }
-
-        this.hoverLabel = hoverLabel == null ? null : getCharacterElement(hoverLabel.getStartOffset());
-    }
-
-    // endregion Getters and Setters
 
     private class TranscriptDocumentFilter extends DocumentFilter {
         @Override
