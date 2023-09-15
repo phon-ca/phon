@@ -17,6 +17,9 @@ package ca.phon.orthography;
 
 import ca.phon.extensions.IExtendable;
 
+/**
+ * Base class for all elements in {@link Orthography}
+ */
 public interface OrthographyElement extends IExtendable {
 
 	/**

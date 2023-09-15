@@ -26,9 +26,12 @@ import java.text.ParseException;
 import java.util.*;
 
 /**
- * Container for orthographic transcriptions.  This class is immutable after being created.
+ * Container for orthographic transcriptions. This class is immutable after being created.
  * To append/modify the data in the Orthography, use the {@link OrthographyBuilder} class to create
  * a modified {@link Orthography} instance.
+ *
+ * The parseOrthography method accepts Strings in the
+ * <a href="http://childes.talkbank.org/manuals/chat.html">CHAT Transcription Format</a>
  */
 public final class Orthography implements Iterable<OrthographyElement>, Visitable<OrthographyElement>, IExtendable {
 	

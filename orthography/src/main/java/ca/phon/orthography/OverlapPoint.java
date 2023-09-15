@@ -1,5 +1,9 @@
 package ca.phon.orthography;
 
+/**
+ * CA-style overlap with optional integer label to distinguish among different overlaps over the same text.
+ */
+@CHATReference("https://talkbank.org/manuals/CHAT.html#CA_Overlaps")
 public final class OverlapPoint extends AbstractOrthographyElement implements WordElement {
 
     private final OverlapPointType type;

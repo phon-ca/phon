@@ -3,6 +3,13 @@ package ca.phon.orthography;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * word spoken by someone else during an utterance.
+ *
+ * Writen as <pre>&*</pre> plus the participant ID
+ * e.g., <pre>&*MOT</pre>
+ */
+@CHATReference("https://talkbank.org/manuals/CHAT.html#InterposedWords")
 public final class OtherSpokenEvent extends Event {
 
     public static final String PREFIX = "&*";

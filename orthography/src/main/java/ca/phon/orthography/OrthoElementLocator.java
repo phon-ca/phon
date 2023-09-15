@@ -4,6 +4,18 @@ import ca.phon.visitor.annotation.Visits;
 
 import java.util.stream.Collectors;
 
+/**
+ * Find string index of {@link OrthographyElement}s
+ *
+ * Usage:
+ * <pre>
+ *     ortho = Orthography.parseOrthography("hello world");
+ *     var visitor = new OrthoElementLocator(ortho.elementAt(1));
+ *     ortho.accept(visitor);
+ *     // stringIndex will be 6
+ *     int stringIndex = visitor.getStringIndex()
+ * </pre>
+ */
 public class OrthoElementLocator extends AbstractOrthographyVisitor {
 
     private int currentIndex = 0;
