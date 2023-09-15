@@ -31,8 +31,6 @@ import java.awt.*;
  */
 public class PhonTaskButton extends MultiActionButton {
 	
-	private static final long serialVersionUID = 7756765374858429477L;
-
 	/** Busy label */
 	private JXBusyLabel busyLabel;
 	
@@ -77,9 +75,6 @@ public class PhonTaskButton extends MultiActionButton {
 		
 		busyLabel = new JXBusyLabel(new Dimension(16, 16));
 		busyLabel.setBusy(false);
-		
-		//		super.setTopLabelText();
-//		super.getTopLabel().setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
 		
 		topPanel.add(busyLabel);
 		topPanel.add(Box.createHorizontalStrut(hgap));
