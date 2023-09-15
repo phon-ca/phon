@@ -62,19 +62,6 @@ public class XmlOrthographyAnnotationVisitor extends VisitorAdapter<Object> {
     }
 
     @Visits
-    public void visitLangs(XmlLangsType xmlLangs) {
-        ca.phon.orthography.Langs langs = new ca.phon.orthography.Langs();
-        if(xmlLangs.getSingle() != null) {
-            langs = new ca.phon.orthography.Langs(ca.phon.orthography.Langs.LangsType.SINGLE, xmlLangs.getSingle());
-        } else if(xmlLangs.getMultiple() != null) {
-            langs = new ca.phon.orthography.Langs(ca.phon.orthography.Langs.LangsType.MULTIPLE, xmlLangs.getMultiple().toArray(new String[0]));
-        } else if(xmlLangs.getAmbiguous() != null) {
-            langs = new ca.phon.orthography.Langs(ca.phon.orthography.Langs.LangsType.AMBIGUOUS, xmlLangs.getAmbiguous().toArray(new String[0]));
-        }
-        annotations.add(new LangsAnnotation(langs));
-    }
-
-    @Visits
     public void visitDuration(XmlDurationType xmlDuration) {
         final float value = xmlDuration.getValue().floatValue();
         final Duration duration = new Duration(value / 1000.0f);

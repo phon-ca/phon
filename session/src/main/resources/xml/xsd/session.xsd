@@ -3010,7 +3010,6 @@
                 <xs:element ref="duration"/>
                 <xs:element ref="ga"/>
                 <xs:element ref="overlap"/>
-                <xs:element ref="langs"/>
             </xs:choice>
         </xs:sequence>
     </xs:complexType>

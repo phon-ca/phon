@@ -160,39 +160,6 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
     }
 
     @Override
-    public void exitSingleLangsAnnotation(UnicodeOrthographyParser.SingleLangsAnnotationContext ctx) {
-        if(langList.size() == 0)
-            throw new OrthoParserException("no language specified",
-                    ctx.LANGUAGE_START().getSymbol().getCharPositionInLine());
-        if(langList.size() > 1)
-            throw new OrthoParserException("too many languages",
-                    ctx.language().getStart().getCharPositionInLine());
-        final LangsAnnotation langsAnnotation = new LangsAnnotation(new Langs(Langs.LangsType.SINGLE, langList));
-        annotateLastElement(langsAnnotation);
-        langList = new ArrayList<>();
-    }
-
-    @Override
-    public void exitMultiLangsAnnotation(UnicodeOrthographyParser.MultiLangsAnnotationContext ctx) {
-        if(langList.size() == 0)
-            throw new OrthoParserException("no language specified",
-                    ctx.multi_lang_list().getStart().getCharPositionInLine());
-        final LangsAnnotation langsAnnotation = new LangsAnnotation(new Langs(Langs.LangsType.MULTIPLE, langList));
-        annotateLastElement(langsAnnotation);
-        langList = new ArrayList<>();
-    }
-
-    @Override
-    public void exitAmbigLangsAnnotation(UnicodeOrthographyParser.AmbigLangsAnnotationContext ctx) {
-        if(langList.size() == 0)
-            throw new OrthoParserException("no language specified",
-                    ctx.ambig_lang_list().getStart().getCharPositionInLine());
-        final LangsAnnotation langsAnnotation = new LangsAnnotation(new Langs(Langs.LangsType.AMBIGUOUS, langList));
-        annotateLastElement(langsAnnotation);
-        langList = new ArrayList<>();
-    }
-
-    @Override
     public void exitSecondaryLanguage(UnicodeOrthographyParser.SecondaryLanguageContext ctx) {
         langs = new Langs(Langs.LangsType.SECONDARY);
     }

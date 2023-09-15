@@ -90,21 +90,6 @@ public class OrthoAnnotationToXmlVisitor extends AbstractOrthographyAnnotationVi
         annotations.add(xmlOverlap);
     }
 
-    @Visits
-    @Override
-    public void visitLangs(LangsAnnotation langsAnnotation) {
-        final Langs langs = langsAnnotation.getLangs();
-        final XmlLangsType xmlLangs = factory.createXmlLangsType();
-        if(langs.getType() == Langs.LangsType.SINGLE) {
-            xmlLangs.setSingle(langs.getLangs().get(0).toString());
-        } else if(langs.getType() == Langs.LangsType.MULTIPLE) {
-            langs.getLangs().stream().map(Language::toString).forEach(xmlLangs.getMultiple()::add);
-        } else if(langs.getType() == Langs.LangsType.AMBIGUOUS) {
-            langs.getLangs().stream().map(Language::toString).forEach(xmlLangs.getAmbiguous()::add);
-        }
-        annotations.add(xmlLangs);
-    }
-
     @Override
     public void fallbackVisit(OrthographyAnnotation obj) {
 

@@ -3,6 +3,9 @@ package ca.phon.orthography;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
+/**
+ * Visit annotations on an {@link AnnotatedOrthographyElement}
+ */
 public abstract class AbstractOrthographyAnnotationVisitor extends VisitorAdapter<OrthographyAnnotation> {
 
     @Visits
@@ -19,8 +22,5 @@ public abstract class AbstractOrthographyAnnotationVisitor extends VisitorAdapte
 
     @Visits
     public void visitOverlap(Overlap overlap) {}
-
-    @Visits
-    public void visitLangs(LangsAnnotation langs) {}
 
 }
