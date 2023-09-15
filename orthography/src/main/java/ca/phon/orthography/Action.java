@@ -10,6 +10,7 @@ import java.util.List;
  * <a href="https://talkbank.org/manuals/CHAT.html#Action_Code">CHAT manual section on this topic</a>
  * </p>
  */
+@CHATReference("https://talkbank.org/manuals/CHAT.html#Action_Code")
 public final class Action extends Event {
 
     public final static String ACTION_TEXT = "0";

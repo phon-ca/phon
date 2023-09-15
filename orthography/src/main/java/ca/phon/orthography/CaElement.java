@@ -1,5 +1,13 @@
 package ca.phon.orthography;
 
+/**
+ * CA subwords that must occur inside a word.
+ * <p>
+ *     <a href="https://talkbank.org/manuals/CHAT.html#CA_Subwords">CHAT manual section on
+ *                     this topic...</a>
+ * </p>
+ */
+@CHATReference("https://talkbank.org/manuals/CHAT.html#CA_Subwords")
 public final class CaElement extends AbstractWordElement {
 
     private final CaElementType type;

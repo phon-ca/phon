@@ -1,65 +1,35 @@
 package ca.phon.orthography;
 
 public enum CaDelimiterType {
-    /**
-     * <a href="https://talkbank.org/manuals/CHAT.html#BreathyVoice_Delimiter">CHAT manual section on this topic...</a>
-     */
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#BreathyVoice_Delimiter")
     BREATHY_VOICE('\u264b', "breathy voice"),
-    /**
-     * <a href="https://talkbank.org/manuals/CHAT.html#Creaky_Delimiter">CHAT manual section on this topic...</a>
-     */
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#Creaky_Delimiter")
     CREAKY('\u204e', "creaky"),
-    /**
-     * <a href="https://talkbank.org/manuals/CHAT.html#Faster_Delimiter">CHAT manual section on this topic...</a>
-     */
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#Faster_Delimiter")
     FASTER('\u2206', "faster"),
-    /**
-     * <a href="https://talkbank.org/manuals/CHAT.html#HighPitch_Delimiter">CHAT manual section on this topic...</a>
-     */
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#HighPitch_Delimiter")
     HIGH_PITCH('\u2594', "high-pitch"),
-    /**
-     * <a href="https://talkbank.org/manuals/CHAT.html#Louder_Delimiter">CHAT manual section on this topic...</a>
-     */
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#Louder_Delimiter")
     LOUDER('\u25c9', "louder"),
-    /**
-     * <a href="https://talkbank.org/manuals/CHAT.html#LowPitch_Delimiter">CHAT manual section on this topic...</a>
-     */
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#LowPitch_Delimiter")
     LOW_PITCH('\u2581', "low-pitch"),
-    /**
-     * <a href="https://talkbank.org/manuals/CHAT.html#Precise_Delimiter">CHAT manual section on this topic...</a>
-     */
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#Precise_Delimiter")
     PRECISE('\u00a7', "precise"),
-    /**
-     * <a href="https://talkbank.org/manuals/CHAT.html#RepeatedSegment_Delimiter">CHAT manual section on this topic...</a>
-     */
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#RepeatedSegment_Delimiter")
     REPEATED_SEGMENT('\u21ab', "repeated-segment"),
-    /**
-     * <a href="https://talkbank.org/manuals/CHAT.html#Singing_Delimiter">CHAT manual section on this topic...</a>
-     */
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#Singing_Delimiter")
     SINGING('\u222e', "singing"),
-    /**
-     * <a href="https://talkbank.org/manuals/CHAT.html#Slower_Delimiter">CHAT manual section on this topic...</a>
-     */
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#Slower_Delimiter")
     SLOWER('\u2207', "slower"),
-    /**
-     * <a href="https://talkbank.org/manuals/CHAT.html#SmileVoice_Delimiter">CHAT manual section on this topic...</a>
-     */
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#SmileVoice_Delimiter")
     SMILE_VOICE('\u263a', "smile voice"),
-    /**
-     * <a href="https://talkbank.org/manuals/CHAT.html#Softer_Delimiter">CHAT manual section on this topic...</a>
-     */
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#Softer_Delimiter")
     SOFTER('\u00b0', "softer"),
-    /**
-     * <a href="https://talkbank.org/manuals/CHAT.html#Unsure_Delimiter">CHAT manual section on this topic...</a>
-     */
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#Unsure_Delimiter")
     UNSURE('\u2047', "unsure"),
-    /**
-     * <a href="https://talkbank.org/manuals/CHAT.html#Whisper_Delimiter">CHAT manual section on this topic...</a>
-     */
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#Whisper_Delimiter")
     WHISPER('\u222c', "whisper"),
-    /**
-     * <a href="https://talkbank.org/manuals/CHAT.html#Yawn_Delimiter">CHAT manual section on this topic...</a>
-     */
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#Yawn_Delimiter")
     YAWN('\u03ab', "yawn");
 
     private char ch;
