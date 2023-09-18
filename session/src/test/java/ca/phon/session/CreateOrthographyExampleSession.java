@@ -8,6 +8,7 @@ import ca.phon.session.Session;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.io.SessionOutputFactory;
 import ca.phon.session.io.SessionWriter;
+import ca.phon.session.tierdata.TierData;
 import ca.phon.visitor.annotation.Visits;
 
 import java.io.*;
@@ -365,6 +366,8 @@ public class CreateOrthographyExampleSession {
         chi.setRole(ParticipantRole.TARGET_CHILD);
         session.addParticipant(chi);
 
+        Set<String> allKeywords = new LinkedHashSet<>();
+
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(filename)))) {
             String line = null;
             while ((line = reader.readLine()) != null) {
@@ -374,11 +377,21 @@ public class CreateOrthographyExampleSession {
 
                 KeywordVisitor visitor = new KeywordVisitor();
                 ortho.accept(visitor);
+                allKeywords.addAll(visitor.keywords);
                 String notes = visitor.keywords.stream().collect(Collectors.joining(" "));
                 r.getNotesTier().setText(notes);
 
                 session.addRecord(r);
             }
+
+            Comment comment = factory.createComment();
+            comment.setValue(TierData.parseTierData("keywords: " + allKeywords.stream().collect(Collectors.joining(" "))));
+            session.getTranscript().addComment(0, comment);
+
+            comment = factory.createComment();
+            comment.setValue(TierData.parseTierData("# of unique keywords: " + allKeywords.size()));
+            session.getTranscript().addComment(0, comment);
+
             final SessionWriter writer = (new SessionOutputFactory()).createWriter();
             writer.writeSession(session, new FileOutputStream(outputFile));
         } catch (IOException | ParseException e) {
