@@ -1,9 +1,11 @@
 package ca.phon.orthography;
 
+import ca.phon.util.Documentation;
+
 public enum OverlapType {
-    @CHATReference("https://talkbank.org/manuals/CHAT.html#OverlapPrecedes_Scope")
+    @Documentation("https://talkbank.org/manuals/CHAT.html#OverlapPrecedes_Scope")
     OVERLAP_PRECEDES("[<", "overlap precedes"),
-    @CHATReference("https://talkbank.org/manuals/CHAT.html#OverlapFollows_Scope")
+    @Documentation("https://talkbank.org/manuals/CHAT.html#OverlapFollows_Scope")
     OVERLAP_FOLLOWS("[>", "overlap follows");
 
     private String prefix;

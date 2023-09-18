@@ -1,9 +1,11 @@
 package ca.phon.orthography;
 
+import ca.phon.util.Documentation;
+
 /**
  * Prosody inside word
  */
-@CHATReference("https://talkbank.org/manuals/CHAT.html#Prosody")
+@Documentation("https://talkbank.org/manuals/CHAT.html#Prosody")
 public final class Prosody extends AbstractWordElement {
 
     private ProsodyType type;

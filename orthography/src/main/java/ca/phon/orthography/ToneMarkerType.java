@@ -1,15 +1,17 @@
 package ca.phon.orthography;
 
+import ca.phon.util.Documentation;
+
 public enum ToneMarkerType {
-    @CHATReference("https://talkbank.org/manuals/CHAT.html#RisingToHigh")
+    @Documentation("https://talkbank.org/manuals/CHAT.html#RisingToHigh")
     RISING_TO_HIGH('\u21d7', "rising to high"),
-    @CHATReference("https://talkbank.org/manuals/CHAT.html#RisingToMid")
+    @Documentation("https://talkbank.org/manuals/CHAT.html#RisingToMid")
     RISING_TO_MID('\u2197', "rising to mid"),
-    @CHATReference("https://talkbank.org/manuals/CHAT.html#Level")
+    @Documentation("https://talkbank.org/manuals/CHAT.html#Level")
     LEVEL('\u2192', "level"),
-    @CHATReference("https://talkbank.org/manuals/CHAT.html#FallingToMid")
+    @Documentation("https://talkbank.org/manuals/CHAT.html#FallingToMid")
     FALLING_TO_MID('\u2198', "falling to mid"),
-    @CHATReference("https://talkbank.org/manuals/CHAT.html#FallingToLow")
+    @Documentation("https://talkbank.org/manuals/CHAT.html#FallingToLow")
     FALLING_TO_LOW('\u21d8', "falling to low");
 
     private char ch;

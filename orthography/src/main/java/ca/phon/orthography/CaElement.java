@@ -1,5 +1,7 @@
 package ca.phon.orthography;
 
+import ca.phon.util.Documentation;
+
 /**
  * CA subwords that must occur inside a word.
  * <p>
@@ -7,7 +9,7 @@ package ca.phon.orthography;
  *                     this topic...</a>
  * </p>
  */
-@CHATReference("https://talkbank.org/manuals/CHAT.html#CA_Subwords")
+@Documentation("https://talkbank.org/manuals/CHAT.html#CA_Subwords")
 public final class CaElement extends AbstractWordElement {
 
     private final CaElementType type;

@@ -1,5 +1,7 @@
 package ca.phon.orthography;
 
+import ca.phon.util.Documentation;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -20,7 +22,7 @@ import java.util.stream.Collectors;
  *                     section on this topic...</a>
  * </p>
  */
-@CHATReference("https://talkbank.org/manuals/CHAT.html#Replacements")
+@Documentation("https://talkbank.org/manuals/CHAT.html#Replacements")
 public final class Replacement extends AbstractOrthographyElement {
 
     public static final String PREFIX_REAL = "[::";

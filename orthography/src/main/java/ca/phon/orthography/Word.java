@@ -16,6 +16,8 @@
 package ca.phon.orthography;
 
 
+import ca.phon.util.Documentation;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,7 +29,7 @@ import java.util.stream.Collectors;
  * Words may have prefix and/or suffix
  * codes.
  */
-@CHATReference({"https://talkbank.org/manuals/CHAT.html#Word", "https://talkbank.org/manuals/CHAT.html#Capitalization",
+@Documentation({"https://talkbank.org/manuals/CHAT.html#Word", "https://talkbank.org/manuals/CHAT.html#Capitalization",
 		"https://talkbank.org/manuals/CHAT.html#Numbers", "https://talkbank.org/manuals/CHAT.html#Acronyms",
 		"https://talkbank.org/manuals/CHAT.html#Titles", "https://talkbank.org/manuals/CHAT.html#Linkages"})
 public class Word extends AbstractOrthographyElement {

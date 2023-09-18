@@ -1,5 +1,7 @@
 package ca.phon.orthography;
 
+import ca.phon.util.Documentation;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -7,7 +9,7 @@ import java.util.stream.Collectors;
 /**
  * Morphological tag for word
  */
-@CHATReference("https://talkbank.org/manuals/MOR.html#Mor_POS")
+@Documentation("https://talkbank.org/manuals/MOR.html#Mor_POS")
 public final class WordPos {
 
     private final String category;

@@ -16,17 +16,19 @@
 
 package ca.phon.orthography;
 
+import ca.phon.util.Documentation;
+
 /**
  * Codes for word prefix.
  */
 public enum WordType {
-	@CHATReference("https://talkbank.org/manuals/CHAT.html#OmittedWord_Code")
+	@Documentation("https://talkbank.org/manuals/CHAT.html#OmittedWord_Code")
 	OMISSION("0", "omission"),
-	@CHATReference("https://talkbank.org/manuals/CHAT.html#Nonword")
+	@Documentation("https://talkbank.org/manuals/CHAT.html#Nonword")
 	NONWORD("&~", "nonword"),
-	@CHATReference("https://talkbank.org/manuals/CHAT.html#Filler_Code")
+	@Documentation("https://talkbank.org/manuals/CHAT.html#Filler_Code")
 	FILLER("&-", "filler"),
-	@CHATReference("https://talkbank.org/manuals/CHAT.html#PhonologicalFragment_Code")
+	@Documentation("https://talkbank.org/manuals/CHAT.html#PhonologicalFragment_Code")
 	FRAGMENT("&+", "fragment");
 	
 	private String code;

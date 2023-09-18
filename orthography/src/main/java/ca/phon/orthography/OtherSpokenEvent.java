@@ -1,5 +1,7 @@
 package ca.phon.orthography;
 
+import ca.phon.util.Documentation;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +11,7 @@ import java.util.List;
  * Writen as <pre>&*</pre> plus the participant ID
  * e.g., <pre>&*MOT</pre>
  */
-@CHATReference("https://talkbank.org/manuals/CHAT.html#InterposedWords")
+@Documentation("https://talkbank.org/manuals/CHAT.html#InterposedWords")
 public final class OtherSpokenEvent extends Event {
 
     public static final String PREFIX = "&*";

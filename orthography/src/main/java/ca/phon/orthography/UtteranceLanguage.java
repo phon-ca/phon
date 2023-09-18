@@ -1,5 +1,6 @@
 package ca.phon.orthography;
 
+import ca.phon.util.Documentation;
 import ca.phon.util.Language;
 
 /**
@@ -10,7 +11,7 @@ import ca.phon.util.Language;
  *
  * e.g., <pre>eng</pre>, <pre>fra-ca</pre>
  */
-@CHATReference("https://talkbank.org/manuals/CHAT.html#_Toc133061328")
+@Documentation("https://talkbank.org/manuals/CHAT.html#_Toc133061328")
 public class UtteranceLanguage extends AbstractOrthographyElement {
 
     public final static String PREFIX = "[-";

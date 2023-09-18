@@ -1,11 +1,12 @@
 package ca.phon.orthography;
 
 import ca.phon.formatter.MediaTimeFormatter;
+import ca.phon.util.Documentation;
 
 /**
  * Duration annotation, printed in minutes and seconds.
  */
-@CHATReference("https://talkbank.org/manuals/CHAT.html#Duration_Scope")
+@Documentation("https://talkbank.org/manuals/CHAT.html#Duration_Scope")
 public final class Duration extends AbstractOrthographyElement implements OrthographyAnnotation {
 
     /**

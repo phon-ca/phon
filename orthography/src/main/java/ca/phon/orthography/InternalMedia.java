@@ -1,11 +1,12 @@
 package ca.phon.orthography;
 
 import ca.phon.formatter.MediaTimeFormatter;
+import ca.phon.util.Documentation;
 
 /**
  * Media bullet used only before a terminator.
  */
-@CHATReference("https://talkbank.org/manuals/CHAT.html#Internal_Media")
+@Documentation("https://talkbank.org/manuals/CHAT.html#Internal_Media")
 public final class InternalMedia extends AbstractOrthographyElement {
 
     public final static char MEDIA_BULLET = '•';

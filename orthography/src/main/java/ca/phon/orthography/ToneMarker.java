@@ -1,9 +1,11 @@
 package ca.phon.orthography;
 
+import ca.phon.util.Documentation;
+
 /**
  * Tone marker
  */
-@CHATReference("https://talkbank.org/manuals/CHAT.html#ToneDirection_Marker")
+@Documentation("https://talkbank.org/manuals/CHAT.html#ToneDirection_Marker")
 public final class ToneMarker extends AbstractOrthographyElement {
 
     private final ToneMarkerType type;

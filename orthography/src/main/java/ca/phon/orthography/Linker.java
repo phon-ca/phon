@@ -1,10 +1,12 @@
 package ca.phon.orthography;
 
+import ca.phon.util.Documentation;
+
 /**
  * Utterance initiators or linkers; they indicate the way to fit the current
  * utterance with an earlier one.
  */
-@CHATReference("https://talkbank.org/manuals/CHAT.html#Utterance_Linkers")
+@Documentation("https://talkbank.org/manuals/CHAT.html#Utterance_Linkers")
 public final class Linker extends AbstractOrthographyElement {
 
     private final LinkerType type;

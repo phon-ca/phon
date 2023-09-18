@@ -1,5 +1,7 @@
 package ca.phon.orthography;
 
+import ca.phon.util.Documentation;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,7 +12,7 @@ import java.util.stream.Collectors;
  * A group of material that is annotated. May be nested, i.e., a group may
  * contain groups as well as words and other material.
  */
-@CHATReference("https://talkbank.org/manuals/CHAT.html#Group")
+@Documentation("https://talkbank.org/manuals/CHAT.html#Group")
 public final class OrthoGroup extends AnnotatedOrthographyElement {
 
     private final List<OrthographyElement> elements;

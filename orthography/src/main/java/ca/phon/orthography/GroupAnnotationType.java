@@ -1,17 +1,19 @@
 package ca.phon.orthography;
 
+import ca.phon.util.Documentation;
+
 /**
  * Type of group annotation on main line.
  */
-@CHATReference("https://talkbank.org/manuals/CHAT.html#DependentOnMain_Scope")
+@Documentation("https://talkbank.org/manuals/CHAT.html#DependentOnMain_Scope")
 public enum GroupAnnotationType {
-    @CHATReference("https://talkbank.org/manuals/CHAT.html#AlternativeTranscription_Scope")
+    @Documentation("https://talkbank.org/manuals/CHAT.html#AlternativeTranscription_Scope")
     ALTERNATIVE("=?", "alternative"),
-    @CHATReference("https://talkbank.org/manuals/CHAT.html#Comment_Scope")
+    @Documentation("https://talkbank.org/manuals/CHAT.html#Comment_Scope")
     COMMENTS("%", "comments"),
-    @CHATReference("https://talkbank.org/manuals/CHAT.html#Explanation_Scope")
+    @Documentation("https://talkbank.org/manuals/CHAT.html#Explanation_Scope")
     EXPLANATION("=", "explanation"),
-    @CHATReference("https://talkbank.org/manuals/CHAT.html#ParalinguisticMaterial_Scope")
+    @Documentation("https://talkbank.org/manuals/CHAT.html#ParalinguisticMaterial_Scope")
     PARALINGUISTICS("=!", "paralinguistics");
 
     private String prefix;

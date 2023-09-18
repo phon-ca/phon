@@ -1,5 +1,7 @@
 package ca.phon.orthography;
 
+import ca.phon.util.Documentation;
+
 /**
  * Code that can only occur at the end of an utterance. Currently arbitrary
  * information, although there are some conventions.
@@ -9,7 +11,7 @@ package ca.phon.orthography;
  * <a href="https://talkbank.org/manuals/CHAT.html#ExcludedUtterancePostcode">CHAT manual
  *                     section on this topic...</a>
  */
-@CHATReference("https://talkbank.org/manuals/CHAT.html#Postcodes")
+@Documentation("https://talkbank.org/manuals/CHAT.html#Postcodes")
 public final class Postcode extends AbstractOrthographyElement {
 
     public final static String POSTCODE_PREFIX = "[+";

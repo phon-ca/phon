@@ -15,16 +15,18 @@
  */
 package ca.phon.orthography;
 
+import ca.phon.util.Documentation;
+
 /**
  * Word which have not been transcribed.
  *
  */
 public enum UntranscribedType {
-	@CHATReference("https://talkbank.org/manuals/CHAT.html#UnintelligibleSpeech_Code")
+	@Documentation("https://talkbank.org/manuals/CHAT.html#UnintelligibleSpeech_Code")
 	UNINTELLIGIBLE("xxx", "unintelligible"),
-	@CHATReference("https://talkbank.org/manuals/CHAT.html#PhonologicalCoding_Code")
+	@Documentation("https://talkbank.org/manuals/CHAT.html#PhonologicalCoding_Code")
 	UNINTELLIGIBLE_WORD_WITH_PHO("yyy", "unintelligible-with-pho"),
-	@CHATReference("https://talkbank.org/manuals/CHAT.html#UntranscribedMaterial_Code")
+	@Documentation("https://talkbank.org/manuals/CHAT.html#UntranscribedMaterial_Code")
 	UNTRANSCRIBED("www", "untranscribed");
 	
 	private String code;

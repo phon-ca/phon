@@ -15,15 +15,14 @@
  */
 package ca.phon.orthography;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import ca.phon.util.Documentation;
+
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Base class for simple events
  */
-@CHATReference("https://talkbank.org/manuals/CHAT.html#SimpleEvents")
+@Documentation("https://talkbank.org/manuals/CHAT.html#SimpleEvents")
 public abstract class Event extends AnnotatedOrthographyElement {
 
 	public Event(List<OrthographyAnnotation> annotations) {

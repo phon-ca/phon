@@ -1,9 +1,11 @@
 package ca.phon.orthography;
 
+import ca.phon.util.Documentation;
+
 /**
  * Main line terminator
  */
-@CHATReference({"https://talkbank.org/manuals/CHAT.html#Terminators", "https://talkbank.org/manuals/MOR.html#Terminator_Alignment"})
+@Documentation({"https://talkbank.org/manuals/CHAT.html#Terminators", "https://talkbank.org/manuals/MOR.html#Terminator_Alignment"})
 public final class Terminator extends AbstractOrthographyElement {
 
     private final TerminatorType type;

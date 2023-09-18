@@ -1,10 +1,12 @@
 package ca.phon.orthography;
 
+import ca.phon.util.Documentation;
+
 /**
  * Separator or tone direction marker.
  *
  */
-@CHATReference("https://talkbank.org/manuals/CHAT.html#Separators")
+@Documentation("https://talkbank.org/manuals/CHAT.html#Separators")
 public final class Separator extends AbstractOrthographyElement {
 
     private final SeparatorType type;

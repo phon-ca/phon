@@ -15,13 +15,15 @@
  */
 package ca.phon.orthography;
 
+import ca.phon.util.Documentation;
+
 /**
  * Symbols used to create wordnets.
  */
 public enum CompoundWordMarkerType {
-	@CHATReference("https://talkbank.org/manuals/MOR.html#SimpleCompound")
+	@Documentation("https://talkbank.org/manuals/MOR.html#SimpleCompound")
 	COMPOUND('+'),
-	@CHATReference("https://talkbank.org/manuals/MOR.html#Clitic_Compound")
+	@Documentation("https://talkbank.org/manuals/MOR.html#Clitic_Compound")
 	CLITIC('~');
 	
 	private char marker;

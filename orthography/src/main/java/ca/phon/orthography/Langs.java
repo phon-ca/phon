@@ -1,5 +1,6 @@
 package ca.phon.orthography;
 
+import ca.phon.util.Documentation;
 import ca.phon.util.Language;
 import java.util.Arrays;
 import java.util.Collections;
@@ -9,7 +10,7 @@ import java.util.stream.Collectors;
 /**
  * Language specified at the word level
  */
-@CHATReference("https://talkbank.org/manuals/CHAT.html#SecondLanguage_Marker")
+@Documentation("https://talkbank.org/manuals/CHAT.html#SecondLanguage_Marker")
 public final class Langs {
 
     public final static String PREFIX = "@s";

@@ -1,5 +1,7 @@
 package ca.phon.orthography;
 
+import ca.phon.util.Documentation;
+
 /**
  * CA delimited material with begin/end.
  *
@@ -8,7 +10,7 @@ package ca.phon.orthography;
  *                     this topic...</a>
  * </p>
  */
-@CHATReference("https://talkbank.org/manuals/CHAT.html#CA_Delimiters")
+@Documentation("https://talkbank.org/manuals/CHAT.html#CA_Delimiters")
 public final class CaDelimiter extends AbstractWordElement {
 
     private final BeginEnd beginEnd;

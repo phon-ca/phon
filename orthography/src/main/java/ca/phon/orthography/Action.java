@@ -1,5 +1,7 @@
 package ca.phon.orthography;
 
+import ca.phon.util.Documentation;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +12,7 @@ import java.util.List;
  * <a href="https://talkbank.org/manuals/CHAT.html#Action_Code">CHAT manual section on this topic</a>
  * </p>
  */
-@CHATReference("https://talkbank.org/manuals/CHAT.html#Action_Code")
+@Documentation("https://talkbank.org/manuals/CHAT.html#Action_Code")
 public final class Action extends Event {
 
     public final static String ACTION_TEXT = "0";
