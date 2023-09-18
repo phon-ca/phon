@@ -1,2 +1,3 @@
 ca.phon.app.theme.PhonUIDefaults
 ca.phon.app.session.editor.view.transcriptEditor.TranscriptEditorUIProps
+ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisViewColors

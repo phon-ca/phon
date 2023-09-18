@@ -40,7 +40,8 @@ public final class UIDefaults {
 
     public void put(String key, Object value) {
         defaultMap.put(key, value);
-        UIManager.put(key, value);
+        if(UIManager.get(key) == null)
+            UIManager.put(key, value);
     }
 
     public Set<String> getKeys() {

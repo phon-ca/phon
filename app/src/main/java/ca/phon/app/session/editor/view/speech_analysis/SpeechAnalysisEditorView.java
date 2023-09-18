@@ -64,10 +64,6 @@ public class SpeechAnalysisEditorView extends EditorView {
 	private final static long CLIP_EXTENSION_MAX = 1000L;
 
 	private TierPanel tierPane;
-
-	static {
-		SpeechAnalysisViewColors.install();
-	}
 	
 	/**
 	 * Time model for the view

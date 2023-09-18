@@ -15,19 +15,15 @@
  */
 package ca.phon.app.session.editor.view.speech_analysis;
 
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.ui.theme.UIDefaults;
+import ca.phon.ui.theme.UIDefaultsHandler;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class SpeechAnalysisViewColors {
-
-	public static void install() {
-		UIManager.put(INTERVAL_BACKGROUND, DEFAULT_INTERVAL_BACKGROUND);
-		UIManager.put(SELECTED_INTERVAL_BACKGROUND, DEFAULT_SELECTED_INTERVAL_BACKGROUND);
-		UIManager.put(INTERVAL_MARKER_COLOR, DEFAULT_INTERVAL_MARKER_COLOR);
-		UIManager.put(SELECTED_INTERVAL_MARKER_COLOR, DEFAULT_SELECTED_INTERVAL_MARKER_COLOR);
-		UIManager.put(CURSOR_MARKER_COLOR, DEFAULT_CURSOR_MARKER_COLOR);
-		UIManager.put(PLAYBACK_MARKER_COLOR, DEFAULT_PLAYBACK_MARKER_COLOR);
-	}
+public class SpeechAnalysisViewColors implements UIDefaultsHandler, IPluginExtensionPoint<UIDefaultsHandler> {
 
 	/**
 	 *  Interval background 
@@ -65,5 +61,24 @@ public class SpeechAnalysisViewColors {
 	 */
 	public final static String PLAYBACK_MARKER_COLOR = "SpeechAnalysisView.playbackMarkerColor";
 	public final static Color DEFAULT_PLAYBACK_MARKER_COLOR = Color.blue;
-	
+
+	@Override
+	public void setupDefaults(UIDefaults defaults) {
+		defaults.put(INTERVAL_BACKGROUND, DEFAULT_INTERVAL_BACKGROUND);
+		defaults.put(SELECTED_INTERVAL_BACKGROUND, DEFAULT_SELECTED_INTERVAL_BACKGROUND);
+		defaults.put(INTERVAL_MARKER_COLOR, DEFAULT_INTERVAL_MARKER_COLOR);
+		defaults.put(SELECTED_INTERVAL_MARKER_COLOR, DEFAULT_SELECTED_INTERVAL_MARKER_COLOR);
+		defaults.put(CURSOR_MARKER_COLOR, DEFAULT_CURSOR_MARKER_COLOR);
+		defaults.put(PLAYBACK_MARKER_COLOR, DEFAULT_PLAYBACK_MARKER_COLOR);
+	}
+
+	@Override
+	public Class<?> getExtensionType() {
+		return UIDefaultsHandler.class;
+	}
+
+	@Override
+	public IPluginExtensionFactory<UIDefaultsHandler> getFactory() {
+		return args -> this;
+	}
 }
