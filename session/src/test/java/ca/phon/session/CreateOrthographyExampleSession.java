@@ -323,8 +323,7 @@ public class CreateOrthographyExampleSession {
         chi.setRole(ParticipantRole.TARGET_CHILD);
         session.addParticipant(chi);
 
-        try (
-                BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(filename)))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(filename)))) {
             String line = null;
             while ((line = reader.readLine()) != null) {
                 final Record r = factory.createRecord(chi);
