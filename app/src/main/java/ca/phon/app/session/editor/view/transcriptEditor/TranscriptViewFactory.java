@@ -28,11 +28,6 @@ public class TranscriptViewFactory implements ViewFactory {
             } else if (kind.equals(AbstractDocument.SectionElementName)) {
                 return new BoxView(elem, View.Y_AXIS);
             } else if (kind.equals(StyleConstants.ComponentElementName)) {
-                var component = StyleConstants.getComponent(elem.getAttributes());
-                if (component instanceof JLabel) {
-                    JLabel label = ((JLabel) component);
-                    return new TierLabelView(elem);
-                }
                 return new ComponentView(elem);
             } else if (kind.equals(StyleConstants.IconElementName)) {
                 return new IconView(elem);
@@ -71,6 +66,17 @@ public class TranscriptViewFactory implements ViewFactory {
             }
 
             return null;
+        }
+    }
+
+    private class IPATierView extends LabelView {
+        public IPATierView(Element elem) {
+            super(elem);
+        }
+
+        @Override
+        protected void setPropertiesFromAttributes() {
+            super.setPropertiesFromAttributes();
         }
     }
 }
