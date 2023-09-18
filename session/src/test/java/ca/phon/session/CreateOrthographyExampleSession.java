@@ -21,6 +21,11 @@ import java.util.stream.Collectors;
 /* main */
 public class CreateOrthographyExampleSession {
 
+    /**
+     * Creates a list of keywords, one keyword for every element type in CHAT.  This class is an example of how to
+     * iterate through data in tiers with the Orthography type.  Some types have inner-elements: OrthoGroup and PhoneticGrouip,
+     * and some have annotations: groups and events (action, happening, other spoken events.)
+     */
     public static class KeywordVisitor extends AbstractOrthographyVisitor {
 
         final Set<String> keywords = new LinkedHashSet<>();
@@ -43,6 +48,10 @@ public class CreateOrthographyExampleSession {
             keywords.add("compound-word");
         }
 
+        /**
+         * Visit word, words are composed of elements which use another listener defined below
+         * @param word
+         */
         @Visits
         @Override
         public void visitWord(Word word) {
@@ -59,6 +68,10 @@ public class CreateOrthographyExampleSession {
             }
         }
 
+        /**
+         * Groups have inner-elements and annotations
+         * @param group
+         */
         @Visits
         @Override
         public void visitOrthoGroup(OrthoGroup group) {
@@ -67,6 +80,10 @@ public class CreateOrthographyExampleSession {
             visitAnnotations(group);
         }
 
+        /**
+         * Phonetic groups only have inner-elements
+         * @param phoneticGroup
+         */
         @Visits
         @Override
         public void visitPhoneticGroup(PhoneticGroup phoneticGroup) {
@@ -105,6 +122,9 @@ public class CreateOrthographyExampleSession {
             keywords.addAll(visitor.keywords);
         }
 
+        /**
+         * Event - events have possible annotations
+         */
         @Visits
         @Override
         public void visitAction(Action action) {
@@ -112,6 +132,9 @@ public class CreateOrthographyExampleSession {
             visitAnnotations(action);
         }
 
+        /**
+         * Event - events have possible annotations
+         */
         @Visits
         @Override
         public void visitHappening(Happening happening) {
@@ -119,6 +142,9 @@ public class CreateOrthographyExampleSession {
             visitAnnotations(happening);
         }
 
+        /**
+         * Event - events have possible annotations
+         */
         @Visits
         @Override
         public void visitOtherSpokenEvent(OtherSpokenEvent otherSpokenEvent) {
@@ -150,12 +176,22 @@ public class CreateOrthographyExampleSession {
             keywords.add("overlap-point");
         }
 
+        /**
+         * Italic and underline are stored as objects in the Orthography data structure with zero text and a begin/end
+         * attribute.  They may also appear as word elements.
+         * @param italic
+         */
         @Visits
         @Override
         public void visitUnderline(Underline underline) {
             keywords.add("underline");
         }
 
+        /**
+         * Italic and underline are stored as objects in the Orthography data structure with zero text and a begin/end
+         * attribute.  They may also appear as word elements.
+         * @param italic
+         */
         @Visits
         @Override
         public void visitItalic(Italic italic) {
@@ -192,6 +228,9 @@ public class CreateOrthographyExampleSession {
         }
     }
 
+    /**
+     * Visit possible word elements
+     */
     public static class WordElementVisitor extends AbstractWordElementVisitor {
 
         Set<String> keywords = new LinkedHashSet<>();
@@ -261,6 +300,9 @@ public class CreateOrthographyExampleSession {
         }
     }
 
+    /**
+     * Visit possible annotations
+     */
     public static class AnnotationVisitor extends AbstractOrthographyAnnotationVisitor {
 
         Set<String> keywords = new LinkedHashSet<>();
