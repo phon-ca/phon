@@ -19,6 +19,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Suffix of word including type form suffix and user special forms
+ */
 public final class WordSuffix {
 
 	private final boolean separatedPrefix;

@@ -1,5 +1,9 @@
 package ca.phon.orthography;
 
+/**
+ * Unspoken segment in a word enclosed in parentheses.
+ */
+@CHATReference({"https://talkbank.org/manuals/CHAT.html#Shortenings","https://talkbank.org/manuals/CHAT.html#Noncompletion_Code"})
 public final class Shortening extends AbstractWordElement {
 
     private final WordText orthoText;

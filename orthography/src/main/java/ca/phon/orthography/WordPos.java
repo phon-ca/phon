@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 /**
  * Morphological tag for word
  */
+@CHATReference("https://talkbank.org/manuals/MOR.html#Mor_POS")
 public final class WordPos {
 
     private final String category;

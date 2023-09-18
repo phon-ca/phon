@@ -1,10 +1,15 @@
 package ca.phon.orthography;
 
 public enum SeparatorType {
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#Semicolon")
     SEMICOLON(";", "semicolon"),
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#Colon")
     COLON(":", "colon"),
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#ClauseDelimiter_Scope")
     CLAUSE_DELIMITER("[^c]", "clause delimiter"),
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#UnmarkedEnding")
     UNMARKED_ENDING("\u221e", "unmarked ending"),
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#Uptake")
     UPTAKE("\u2261", "uptake");
 
     private String text;

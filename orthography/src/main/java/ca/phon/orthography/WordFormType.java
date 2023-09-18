@@ -21,29 +21,51 @@ package ca.phon.orthography;
  * after a '@' character.
  */
 public enum WordFormType {
-	// w attribute:formType
+	@CHATReference("https://talkbank.org/manuals/CHAT.html#Addition_Marker")
 	ADDITION("@a", "addition"),
+	@CHATReference("https://talkbank.org/manuals/CHAT.html#Babbling_Marker")
 	BABBLING("@b", "babbling"),
+	@CHATReference("https://talkbank.org/manuals/CHAT.html#ChildInvented_Marker")
 	CHILD_INVENTED("@c", "child-invented"),
+	@CHATReference("https://talkbank.org/manuals/CHAT.html#DialectForm_Marker")
 	DIALECT("@d", "dialect"),
+	@CHATReference("https://talkbank.org/manuals/CHAT.html#EcholaliaForm_Marker")
 	ECHOLALIA("@e", "echolalia"),
+	@CHATReference("https://talkbank.org/manuals/CHAT.html#FamilySpecificForm_Marker")
 	FAMILY_SPECIFIC("@f", "family-specific"),
+	@CHATReference("https://talkbank.org/manuals/CHAT.html#FilledPause_Marker")
 	FILLED_PAUSE("@fp", "filled pause"),
+	@CHATReference("https://talkbank.org/manuals/CHAT.html#GeneralSpecialForm_Marker")
 	GENERIC("@g", "generic"),
+	@CHATReference("https://talkbank.org/manuals/CHAT.html#Interjection_Marker")
 	INTERJECTION("@i", "interjection"),
+	@CHATReference("https://talkbank.org/manuals/CHAT.html#Kana_Marker")
 	KANA("@k", "kana"),
+	@CHATReference("https://talkbank.org/manuals/CHAT.html#Letter_Marker")
 	LETTER("@l", "letter"),
+	@CHATReference("https://talkbank.org/manuals/CHAT.html#Neologism_Marker")
 	NEOLOGISM("@n", "neologism"),
+	@CHATReference("https://talkbank.org/manuals/CHAT.html#NonvoicedForm_Marker")
 	NO_VOICE("@nv", "no voice"),
+	@CHATReference("https://talkbank.org/manuals/CHAT.html#Onomatopoeia_Marker")
 	ONOMATOPOEIA("@o", "onomatopoeia"),
+	@CHATReference("https://talkbank.org/manuals/CHAT.html#PCF_Marker")
 	PHONOLOGY_CONSISTENT("@p", "phonology consistent"),
+	@CHATReference("https://talkbank.org/manuals/CHAT.html#MetalinguisticReference_Marker")
 	QUOTED_METAREFERENCE("@q", "quoted metareference"),
+	@CHATReference("https://talkbank.org/manuals/CHAT.html#SignAndSpeech_Marker")
 	SIGN_SPEECH("@sas", "sign speech"),
+	@CHATReference("https://talkbank.org/manuals/CHAT.html#Singing_Marker")
 	SINGING("@si", "singing"),
+	@CHATReference("https://talkbank.org/manuals/CHAT.html#SignLanguage_Marker")
 	SIGNED_LANGUAGE("@sl", "signed language"),
+	@CHATReference("https://talkbank.org/manuals/CHAT.html#TestWord_Marker")
 	TEST("@t", "test"),
+	@CHATReference("https://talkbank.org/manuals/CHAT.html#Unibet_Marker")
 	UNIBET("@u", "UNIBET"),
+	@CHATReference("https://talkbank.org/manuals/CHAT.html#Excluded_Marker")
 	WORDS_TO_BE_EXCLUDED("@x", "words to be excluded"),
+	@CHATReference("https://talkbank.org/manuals/CHAT.html#WordPlay_Marker")
 	WORD_PLAY("@wp", "word play")
 	;
 	

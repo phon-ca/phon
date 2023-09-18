@@ -432,6 +432,12 @@
                         <xs:documentation>Include excluded content '[e]'</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
+                <xs:attribute name="useReplacement" type="xs:boolean" default="false">
+                    <xs:annotation>
+                        <xs:documentation>Use replacment instead of word e.g., in <pre>gonna [: going to]</pre>,
+                        align with <pre>going to</pre>.</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -1467,7 +1473,7 @@
 
     <xs:element name="lang" type="languageType">
         <xs:annotation>
-            <xs:documentation>[- lang] - Language switch inside utterance.</xs:documentation>
+            <xs:documentation>[- lang] - Utterance language, specified at beginning of main line.</xs:documentation>
         </xs:annotation>
     </xs:element>
 

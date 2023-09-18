@@ -1,5 +1,9 @@
 package ca.phon.orthography;
 
+/**
+ * Tag marker
+ */
+@CHATReference({"https://talkbank.org/manuals/CHAT.html#Satellite_Marker", "https://talkbank.org/manuals/MOR.html#MorphologicalTagMarker"})
 public final class TagMarker extends AbstractOrthographyElement {
 
     private final TagMarkerType type;

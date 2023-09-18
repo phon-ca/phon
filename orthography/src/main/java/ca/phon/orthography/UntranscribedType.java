@@ -20,8 +20,11 @@ package ca.phon.orthography;
  *
  */
 public enum UntranscribedType {
+	@CHATReference("https://talkbank.org/manuals/CHAT.html#UnintelligibleSpeech_Code")
 	UNINTELLIGIBLE("xxx", "unintelligible"),
+	@CHATReference("https://talkbank.org/manuals/CHAT.html#PhonologicalCoding_Code")
 	UNINTELLIGIBLE_WORD_WITH_PHO("yyy", "unintelligible-with-pho"),
+	@CHATReference("https://talkbank.org/manuals/CHAT.html#UntranscribedMaterial_Code")
 	UNTRANSCRIBED("www", "untranscribed");
 	
 	private String code;

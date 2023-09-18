@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
  * [: word1 ...]; indicate replacement of a word by one or more words instead.
  * [:: word1 ...] to indicate that the word is a real word
  *
+ * e.g., <pre>gonna [: going to]</pre>
+ *
  * <a href="https://talkbank.org/manuals/CHAT.html#Replacement_Scope">CHAT manual section
  *                     on this topic...</a>
  * <a href="https://talkbank.org/manuals/CHAT.html#Assimilations">CHAT manual section on

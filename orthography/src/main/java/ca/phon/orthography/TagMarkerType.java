@@ -3,8 +3,11 @@ package ca.phon.orthography;
 import javax.swing.text.html.HTML;
 
 public enum TagMarkerType {
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#Comma")
     COMMA(',', "comma"),
+    @CHATReference({"https://talkbank.org/manuals/CHAT.html#Tag_Satellite_Marker","https://talkbank.org/manuals/MOR.html#MorphologicalTagMarker_Tag"})
     VOCATIVE('‡', "vocative"),
+    @CHATReference("https://talkbank.org/manuals/CHAT.html#Tag_Satellite_Marker")
     TAG('„', "tag");
 
     private char ch;
