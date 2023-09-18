@@ -910,8 +910,8 @@ public class TranscriptEditor extends JEditorPane {
                 try {
                     var sepRect = modelToView2D(innerElem.getStartOffset());
                     if (sepRect == null) continue;
-                    boolean topVisible = sepRect.getMinY() > drawHere.getMinY() && sepRect.getMinY() < drawHere.getMaxY();
-                    boolean bottomVisible = sepRect.getMaxY() > drawHere.getMinY() && sepRect.getMaxY() < drawHere.getMaxY();
+                    boolean topVisible = sepRect.getMinY() >= drawHere.getMinY() && sepRect.getMinY() <= drawHere.getMaxY();
+                    boolean bottomVisible = sepRect.getMaxY() >= drawHere.getMinY() && sepRect.getMaxY() <= drawHere.getMaxY();
                     // And it's onscreen
                     if (!topVisible && !bottomVisible) continue;
                     // Draw the separator line
