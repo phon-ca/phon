@@ -98,7 +98,7 @@
 		<org.dockingframes.docking-frames-core.version>1.1.3p1</org.dockingframes.docking-frames-core.version>
 		<org.jsoup.jsoup.version>1.15.3</org.jsoup.jsoup.version>
 		<org.jvnet.jaxb2.maven2.maven-jaxb2-plugin.version>0.15.1</org.jvnet.jaxb2.maven2.maven-jaxb2-plugin.version>
-		<org.eclipse.jgit.version>4.0.0.201506020755-rc3</org.eclipse.jgit.version>
+		<org.eclipse.jgit.version>6.6.1.202309021850-r</org.eclipse.jgit.version>
 		<org.mozilla.rhino.version>1.7.13</org.mozilla.rhino.version>
 		<org.swinglabs.swingx.swingx-all.version>1.6.5-1</org.swinglabs.swingx.swingx-all.version>
 		<uk.co.caprica.vlcj.version>4.7.3</uk.co.caprica.vlcj.version>
