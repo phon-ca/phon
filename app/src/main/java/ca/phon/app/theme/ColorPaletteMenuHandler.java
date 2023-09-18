@@ -47,7 +47,7 @@ public class ColorPaletteMenuHandler implements IPluginMenuFilter, IPluginExtens
         } else {
             cmf.centerWindow();
         }
-        cmf.setSize(600, 800);
+        cmf.setSize(700, 800);
         cmf.setVisible(true);
     }
 

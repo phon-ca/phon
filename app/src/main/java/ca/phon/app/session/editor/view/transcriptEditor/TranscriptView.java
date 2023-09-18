@@ -3,13 +3,17 @@ package ca.phon.app.session.editor.view.transcriptEditor;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.view.transcriptEditor.actions.*;
 import ca.phon.plugin.PluginManager;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+import org.jdesktop.swingx.HorizontalLayout;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Arrays;
 
 public class TranscriptView extends EditorView {
 
@@ -47,6 +51,21 @@ public class TranscriptView extends EditorView {
         setLayout(new BorderLayout());
         add(transcriptScrollPane, BorderLayout.CENTER);
         add(new TranscriptStatusBar(transcriptEditor), BorderLayout.SOUTH);
+
+        JPanel toolbar = new JPanel(new HorizontalLayout());
+        add(toolbar, BorderLayout.NORTH);
+        JButton menuButton = new JButton("Menu");
+        menuButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                JMenu menu = getMenu();
+                JPopupMenu popupMenu = new JPopupMenu();
+                Arrays.stream(menu.getMenuComponents()).forEach(menuItem -> popupMenu.add(menuItem));
+                popupMenu.show(menuButton, e.getX(),e.getY());
+            }
+        });
+        menuButton.setToolTipText("Show transcript editor menu");
+        toolbar.add(menuButton);
     }
 
     // region Getters and Setters

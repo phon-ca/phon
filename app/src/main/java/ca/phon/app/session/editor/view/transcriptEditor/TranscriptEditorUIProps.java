@@ -28,10 +28,10 @@ public class TranscriptEditorUIProps implements UIDefaultsHandler, IPluginExtens
     public final static String INTERNAL_MEDIA = "TranscriptEditor.internalMedia";
     public final static Color DEFAULT_INTERNAL_MEDIA = Color.GRAY;
 
-    public final static String IPA_WORD = "TranscriptEditor.ipaWords";
+    public final static String IPA_WORD = "TranscriptEditor.ipa.words";
     public final static Color DEFAULT_IPA_WORD = Color.BLACK;
 
-    public final static String IPA_PAUSE = "TranscriptEditor.ipaPause";
+    public final static String IPA_PAUSE = "TranscriptEditor.ipa.pause";
     public final static Color DEFAULT_IPA_PAUSE = Color.GRAY;
 
     public final static String CLICKABLE_HOVER_UNDERLINE = "TranscriptEditor.clickableHoverUnderline";

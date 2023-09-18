@@ -23,9 +23,9 @@ public class TranscriptDocument extends DefaultStyledDocument {
     private static final char[] EOL_ARRAY = { '\n' };
     private ArrayList<ElementSpec> batch;
     private boolean syllabificationVisible = false;
-    private boolean syllabificationIsComponent = true;
+    private boolean syllabificationIsComponent = false;
     private boolean alignmentVisible = false;
-    private boolean alignmentIsComponent = true;
+    private boolean alignmentIsComponent = false;
     private int labelColumnWidth = 20;
 
     public TranscriptDocument() {
@@ -847,6 +847,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 insertTier(recordIndex, item, recordAttrs);
             }
             processBatchUpdates(offsetBeforeInsert);
+            setGlobalParagraphAttributes();
         }
         catch (BadLocationException e) {
             LogUtil.severe(e);
@@ -902,6 +903,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 insertTier(recordIndex, item, getRecordAttributes(recordIndex));
             }
             processBatchUpdates(offset);
+            setGlobalParagraphAttributes();
         }
         catch (BadLocationException e) {
             LogUtil.severe(e);
@@ -994,6 +996,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 appendBatchEndStart();
                 insertTier(recordIndex, item, recordAttrs);
                 processBatchUpdates(offsetBeforeInsert);
+                setGlobalParagraphAttributes();
             }
         }
         catch (BadLocationException e) {
@@ -1031,6 +1034,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 appendBatchEndStart();
                 insertTier(recordIndex, item, recordAttrs);
                 processBatchUpdates(tierStartOffset);
+                setGlobalParagraphAttributes();
             }
         }
         catch (BadLocationException e) {
@@ -1069,6 +1073,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 appendBatchEndStart();
                 insertTier(recordIndex, newTier, recordAttrs);
                 processBatchUpdates(tierStartOffset);
+                setGlobalParagraphAttributes();
             }
         }
         catch (BadLocationException e) {
@@ -1087,6 +1092,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
             AttributeSet attrs = writeRecord(addedRecord, session.getTranscript(), session.getTierView());
             appendBatchLineFeed(attrs);
             processBatchUpdates(getLength());
+            setGlobalParagraphAttributes();
         }
         catch (BadLocationException e) {
             LogUtil.severe(e);
@@ -1121,7 +1127,6 @@ public class TranscriptDocument extends DefaultStyledDocument {
             }
 
             processBatchUpdates(start);
-
             setGlobalParagraphAttributes();
         }
         catch (BadLocationException e) {
@@ -1161,7 +1166,6 @@ public class TranscriptDocument extends DefaultStyledDocument {
             }
 
             processBatchUpdates(start);
-
             setGlobalParagraphAttributes();
         }
         catch (BadLocationException e) {
@@ -1197,8 +1201,8 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
             sepAttrs.addAttributes(getStandardFontAttributes());
             formatSegment(segment, sepAttrs);
-            processBatchUpdates(start);
 
+            processBatchUpdates(start);
             setGlobalParagraphAttributes();
         }
         catch (BadLocationException e) {
@@ -1225,7 +1229,6 @@ public class TranscriptDocument extends DefaultStyledDocument {
             appendBatchLineFeed(attrs);
 
             processBatchUpdates(start);
-
             setGlobalParagraphAttributes();
         }
         catch (BadLocationException e) {
@@ -1608,7 +1611,6 @@ public class TranscriptDocument extends DefaultStyledDocument {
         }
 
         processBatchUpdates(0);
-
         setGlobalParagraphAttributes();
     }
 

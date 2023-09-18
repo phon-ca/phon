@@ -1,11 +1,17 @@
 package ca.phon.app.theme;
 
+import ca.phon.session.Comment;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.nativedialogs.*;
+import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.theme.UIDefaults;
 import org.jdesktop.swingx.HorizontalLayout;
+import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.colorchooser.AbstractColorChooserPanel;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -288,6 +294,8 @@ public class ColorPaletteDesigner extends JPanel {
 
 	private boolean modified;
 	private final Map<String, List<String>> commonMap;
+	private final Map<String, DefaultMutableTreeNode> nodeMap;
+	private JPanel colorChooserPanel;
 
 	public ColorPaletteDesigner() {
 		super();
@@ -318,6 +326,8 @@ public class ColorPaletteDesigner extends JPanel {
 		Arrays.stream(commonKeys).forEach(key -> commonMap.put(key, new ArrayList<>()));
 		this.commonMap = commonMap;
 
+		nodeMap = new HashMap<>();
+
 		init();
 	}
 
@@ -325,14 +335,14 @@ public class ColorPaletteDesigner extends JPanel {
 
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("All");
 
-		Map<String, DefaultMutableTreeNode> nodeMap = new HashMap<>();
+		List<DefaultMutableTreeNode> notNestedNodes = new ArrayList<>();
 
+		// Process default UI keys
 		for (String key : DEFAULT_UI_MANAGER_KEYS) {
 			if (key.contains(".")) {
 				String[] splitKey = key.split("\\.");
 				if (!nodeMap.containsKey(splitKey[0])) {
 					DefaultMutableTreeNode branchNode = new DefaultMutableTreeNode(splitKey[0]);
-					root.add(branchNode);
 					nodeMap.put(splitKey[0], branchNode);
 				}
 
@@ -345,36 +355,33 @@ public class ColorPaletteDesigner extends JPanel {
 			}
 			else {
 				DefaultMutableTreeNode leafNode = new DefaultMutableTreeNode((key));
-				root.add(leafNode);
+				notNestedNodes.add(leafNode);
 			}
 		}
 
-		for (String key : ca.phon.ui.theme.UIDefaults.getInstance().getColorKeys()) {
-			if (key.contains(".")) {
-				String[] splitKey = key.split("\\.");
-				if (!nodeMap.containsKey(splitKey[0])) {
-					DefaultMutableTreeNode branchNode = new DefaultMutableTreeNode(splitKey[0]);
-					root.add(branchNode);
-					nodeMap.put(splitKey[0], branchNode);
-				}
-				DefaultMutableTreeNode leafNode = new DefaultMutableTreeNode(splitKey[1]);
-				nodeMap.get(splitKey[0]).add(leafNode);
-			}
-			else {
-				DefaultMutableTreeNode leafNode = new DefaultMutableTreeNode(key);
-				root.add(leafNode);
-			}
-		}
-
+		// Add common nodes
 		DefaultMutableTreeNode commonNode = new DefaultMutableTreeNode("Common");
-
 		for (String key : commonMap.keySet()) {
 			if (commonMap.get(key).size() == 0) continue;
 			DefaultMutableTreeNode leafNode = new DefaultMutableTreeNode(key);
 			commonNode.add(leafNode);
 		}
-
 		root.add(commonNode);
+
+		// Add nodes that are not nested
+		for (DefaultMutableTreeNode node : notNestedNodes) {
+			root.add(node);
+		}
+
+		// Add nodes that are nested
+		for (String key : nodeMap.keySet()) {
+			root.add(nodeMap.get(key));
+		}
+
+		// Process and add custom keys
+		for (String key : ca.phon.ui.theme.UIDefaults.getInstance().getColorKeys()) {
+			propagateTree(key, root);
+		}
 
 		JTree tree = new JTree(root);
 
@@ -402,26 +409,28 @@ public class ColorPaletteDesigner extends JPanel {
 							color = UIManager.getColor(colorKey);
 						}
 
-						JColorChooser colorChooser = new JColorChooser(color);
-						JDialog colorChooserDialog = JColorChooser.createDialog(
-							ColorPaletteDesigner.this,
-							isCommon ? "All " + path.getPathComponent(2).toString() : colorKey,
-							false,
-							colorChooser,
-							(_evt) -> {
-								if (isCommon) {
-									List<String> commonKeys = commonMap.get(path.getPathComponent(2).toString());
-									for (String commonKey : commonKeys) {
-										changeColor(commonKey, colorChooser.getColor());
-									}
-								}
-								else {
-									changeColor(colorKey, colorChooser.getColor());
-								}
-							},
-							(evt) -> System.out.println("Cancelled"));
 
-						colorChooserDialog.setVisible(true);
+						setupColorChooser(color, colorKey, path, isCommon);
+
+//						JDialog colorChooserDialog = JColorChooser.createDialog(
+//							ColorPaletteDesigner.this,
+//							isCommon ? "All " + path.getPathComponent(2).toString() : colorKey,
+//							false,
+//							colorChooser,
+//							(_evt) -> {
+//								if (isCommon) {
+//									List<String> commonKeys = commonMap.get(path.getPathComponent(2).toString());
+//									for (String commonKey : commonKeys) {
+//										changeColor(commonKey, colorChooser.getColor());
+//									}
+//								}
+//								else {
+//									changeColor(colorKey, colorChooser.getColor());
+//								}
+//							},
+//							(evt) -> System.out.println("Cancelled"));
+//
+//						colorChooserDialog.setVisible(true);
 					}
 					else {
 						if (tree.isCollapsed(path)) {
@@ -441,6 +450,45 @@ public class ColorPaletteDesigner extends JPanel {
 		tree.setBorder(new EmptyBorder(8,8,8,8));
 		JScrollPane treeScrollPane = new JScrollPane(tree);
 		add(treeScrollPane, BorderLayout.CENTER);
+
+
+		// region Toolbar
+
+		JPanel toolbar = new JPanel(new HorizontalLayout());
+		add(toolbar, BorderLayout.NORTH);
+		toolbar.setBorder(new EmptyBorder(4,0,4,0));
+
+		JButton saveButton = new JButton("Save");
+		PhonUIAction<Void> saveAction = PhonUIAction.runnable(this::showSaveDialog);
+		saveAction.putValue(
+			PhonUIAction.NAME,
+			"Save"
+		);
+		saveAction.putValue(
+			PhonUIAction.SHORT_DESCRIPTION,
+			"Save"
+		);
+		saveButton.setAction(saveAction);
+		toolbar.add(saveButton);
+
+		JButton loadButton = new JButton("Load");
+		PhonUIAction<Void> loadAction = PhonUIAction.runnable(this::showLoadDialog);
+		loadAction.putValue(
+			PhonUIAction.NAME,
+			"Load"
+		);
+		loadAction.putValue(
+			PhonUIAction.SHORT_DESCRIPTION,
+			"Load"
+		);
+		loadButton.setAction(loadAction);
+		toolbar.add(loadButton);
+
+		// endregion Toolbar
+
+
+		colorChooserPanel = new JPanel(new VerticalLayout());
+		add(colorChooserPanel, BorderLayout.SOUTH);
 	}
 
 	public boolean isModified() {
@@ -470,14 +518,35 @@ public class ColorPaletteDesigner extends JPanel {
 		Properties props = new Properties();
 
 		for (String key : DEFAULT_UI_MANAGER_KEYS) {
-			props.put(key, UIManager.getColor(key));
+			props.put(key, colorToARGBString(UIManager.getColor(key)));
 		}
 
 		for (String key : UIDefaults.getInstance().getColorKeys()) {
-			props.put(key, UIManager.getColor(key));
+			props.put(key, colorToARGBString(UIManager.getColor(key)));
 		}
 
 		props.save(Files.newOutputStream(Path.of(filename)), null);
+	}
+
+	private void showSaveDialog() {
+		SaveDialogProperties props = new SaveDialogProperties();
+		props.setRunAsync(true);
+		props.setCanCreateDirectories(true);
+		props.setTitle("Save as...");
+		props.setListener(nativeDialogEvent -> {
+			if (nativeDialogEvent.getDialogResult() == NativeDialogEvent.OK_OPTION) {
+				final String filePath = (String)nativeDialogEvent.getDialogData();
+				SwingUtilities.invokeLater(() -> {
+					try {
+						saveProperties(filePath);
+					}
+					catch (Exception e) {
+						throw new RuntimeException(e);
+					}
+				});
+			}
+		});
+		NativeDialogs.showSaveDialog(props);
 	}
 
 	/**
@@ -491,8 +560,32 @@ public class ColorPaletteDesigner extends JPanel {
 		props.load(Files.newInputStream(Path.of(filename)));
 
 		for (Object key : props.keySet()) {
-			UIManager.put(key, props.get(key));
+			System.out.println(key + ": " + props.get(key));
+			UIManager.put(key, argbStringToColor((String) props.get(key)));
 		}
+
+		repaintWindows();
+	}
+
+	private void showLoadDialog() {
+		OpenDialogProperties props = new OpenDialogProperties();
+		props.setRunAsync(true);
+		props.setCanCreateDirectories(false);
+		props.setTitle("Load...");
+		props.setListener(nativeDialogEvent -> {
+			if (nativeDialogEvent.getDialogResult() == NativeDialogEvent.OK_OPTION) {
+				final String filePath = (String)nativeDialogEvent.getDialogData();
+				SwingUtilities.invokeLater(() -> {
+					try {
+						loadProperties(filePath);
+					}
+					catch (Exception e) {
+						throw new RuntimeException(e);
+					}
+				});
+			}
+		});
+		NativeDialogs.showOpenDialog(props);
 	}
 
 	/**
@@ -519,6 +612,116 @@ public class ColorPaletteDesigner extends JPanel {
 		}
 
 		return builder.toString();
+	}
+
+	private void propagateTree(String key, DefaultMutableTreeNode root) {
+		String[] splitKey = key.split("\\.");
+		if (!nodeMap.containsKey(splitKey[0])) {
+			DefaultMutableTreeNode branchNode = new DefaultMutableTreeNode(splitKey[0]);
+			root.add(branchNode);
+			nodeMap.put(splitKey[0], branchNode);
+		}
+
+		DefaultMutableTreeNode parentNode = nodeMap.get(splitKey[0]);
+
+		for (int depth = 1; depth < splitKey.length; depth++) {
+			DefaultMutableTreeNode childInPath = null;
+			for (int i = 0; i < parentNode.getChildCount(); i++) {
+				DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) parentNode.getChildAt(i);
+				if (childNode.toString().equals(splitKey[depth])) {
+					childInPath = childNode;
+				}
+			}
+
+			if (childInPath == null) {
+				DefaultMutableTreeNode newChildNode = new DefaultMutableTreeNode(splitKey[depth]);
+				parentNode.add(newChildNode);
+				parentNode = newChildNode;
+			}
+			else {
+				parentNode = childInPath;
+			}
+		}
+	}
+
+	private String colorToARGBString(Color color) {
+		int argb = color.getRGB();  // This already contains the alpha value
+		return String.format("#%08X", argb);
+	}
+
+	private Color argbStringToColor(String colorString) {
+		if (!colorString.startsWith("#") || (colorString.length() != 9)) {
+			throw new IllegalArgumentException("Invalid ARGB color string format.");
+		}
+		int argb = (int) Long.parseLong(colorString.substring(1), 16);
+		return new Color(argb, true);  // The "true" argument denotes that it has alpha
+	}
+
+	private void setupColorChooser(Color startingColor, String colorKey, TreePath path, boolean isCommon) {
+		JColorChooser colorChooser = new JColorChooser(startingColor);
+
+		// Make the RGB panel the first one in the tabs
+		AbstractColorChooserPanel[] panels = colorChooser.getChooserPanels();
+		AbstractColorChooserPanel rgbPanel = panels[3];
+		AbstractColorChooserPanel temp = panels[0];
+		panels[0] = rgbPanel;
+		panels[3] = temp;
+		colorChooser.setChooserPanels(panels);
+
+		JTextField hexField = (JTextField) rgbPanel.getComponent(2);
+
+		colorChooserPanel.removeAll();
+		colorChooserPanel.add(colorChooser);
+
+		JPanel buttonPanel = new JPanel(new HorizontalLayout());
+		buttonPanel.setBorder(new EmptyBorder(0,4,4,4));
+		colorChooserPanel.add(buttonPanel);
+
+		JButton applyButton = new JButton("Apply");
+		PhonUIAction<Void> applyColorChoiceAction = PhonUIAction.runnable(() -> {
+			if (isCommon) {
+				List<String> commonKeys = commonMap.get(path.getPathComponent(2).toString());
+				for (String commonKey : commonKeys) {
+					changeColor(commonKey, colorChooser.getColor());
+				}
+			}
+			else {
+				changeColor(colorKey, colorChooser.getColor());
+			}
+			colorChooserPanel.removeAll();
+			colorChooserPanel.setVisible(false);
+		});
+		applyColorChoiceAction.putValue(
+			PhonUIAction.NAME,
+			"Apply"
+		);
+		applyColorChoiceAction.putValue(
+			PhonUIAction.SHORT_DESCRIPTION,
+			"Apply color choice"
+		);
+		applyButton.setAction(applyColorChoiceAction);
+		buttonPanel.add(applyButton);
+
+		JButton revertButton = new JButton("Revert");
+		PhonUIAction<Void> revertColorChoiceAction = PhonUIAction.runnable(() -> {
+			colorChooser.setColor(startingColor);
+		});
+		revertColorChoiceAction.putValue(
+			PhonUIAction.NAME,
+			"Revert"
+		);
+		revertColorChoiceAction.putValue(
+			PhonUIAction.SHORT_DESCRIPTION,
+			"Revert color choice"
+		);
+		revertButton.setAction(revertColorChoiceAction);
+		buttonPanel.add(revertButton);
+
+		colorChooserPanel.setVisible(true);
+		colorChooserPanel.revalidate();
+		colorChooserPanel.repaint();
+
+		hexField.requestFocus();
 	}
 
 	private class ChangeColorEdit extends AbstractUndoableEdit {
