@@ -27,6 +27,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
     private boolean alignmentVisible = false;
     private boolean alignmentIsComponent = false;
     private int labelColumnWidth = 20;
+    private float lineSpacing = 0.2f;
 
     public TranscriptDocument() {
         super(new TranscriptStyleContext());
@@ -118,6 +119,14 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
     public void setLabelColumnWidth(int labelColumnWidth) {
         this.labelColumnWidth = labelColumnWidth;
+    }
+
+    public float getLineSpacing() {
+        return lineSpacing;
+    }
+
+    public void setLineSpacing(float lineSpacing) {
+        this.lineSpacing = lineSpacing;
     }
 
     // endregion Getters and Setters
@@ -1340,7 +1349,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
     private void setGlobalParagraphAttributes() {
         SimpleAttributeSet paragraphAttrs = new SimpleAttributeSet();
-        StyleConstants.setLineSpacing(paragraphAttrs, .2f);
+        StyleConstants.setLineSpacing(paragraphAttrs, getLineSpacing());
         StyleConstants.setForeground(paragraphAttrs, UIManager.getColor(TranscriptEditorUIProps.FOREGROUND));
         setParagraphAttributes(0, getLength(), paragraphAttrs, false);
     }

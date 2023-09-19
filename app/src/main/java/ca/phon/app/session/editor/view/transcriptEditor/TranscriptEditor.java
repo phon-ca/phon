@@ -51,6 +51,10 @@ public class TranscriptEditor extends JEditorPane {
         UndoManager undoManager
     ) {
         super();
+        final TranscriptEditorCaret caret = new TranscriptEditorCaret();
+        setCaret(caret);
+        getCaret().deinstall(this);
+        caret.install(this);
         this.session = session;
         this.eventManager = eventManager;
         this.undoSupport = undoSupport;
