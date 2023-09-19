@@ -506,7 +506,10 @@ public class ColorPaletteDesigner extends JPanel {
 	}
 
 	private void repaintWindows() {
-		CommonModuleFrame.getOpenWindows().forEach(CommonModuleFrame::repaint);
+		SwingUtilities.invokeLater(() -> {
+			for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows())
+				SwingUtilities.updateComponentTreeUI(cmf);
+		});
 	}
 
 	/**
