@@ -10,25 +10,11 @@ import java.awt.*;
  */
 public class TranscriptEditorCaret extends DefaultCaret {
 
-    enum Mode {
-        DEFAULT,
-        BOX
-    }
-
-    private Mode mode;
+    private int cursorWidth = 1;
 
     public TranscriptEditorCaret() {
         super();
         setBlinkRate(500);
-        this.mode = Mode.DEFAULT;
-    }
-
-    public Mode getMode() {
-        return mode;
-    }
-
-    public void setMode(Mode mode) {
-        this.mode = mode;
     }
 
     private boolean _contains(int X, int Y, int W, int H) {
@@ -91,7 +77,7 @@ public class TranscriptEditorCaret extends DefaultCaret {
             try {
                 TextUI mapper = component.getUI();
                 Rectangle r = mapper.modelToView(component, getDot(), getDotBias());
-                Rectangle pr = mapper.modelToView(component, getDot()-1, getDotBias());
+                Rectangle pr = mapper.modelToView(component, getDot()+1, getDotBias());
                 if ((r == null) || ((r.width == 0) && (r.height == 0))) {
                     return;
                 }
@@ -112,7 +98,7 @@ public class TranscriptEditorCaret extends DefaultCaret {
                     damage(r);
                 }
                 Element ele = component.getTranscriptDocument().getCharacterElement(getDot());
-                float actualLineHeight = g.getFontMetrics().getHeight();
+                int actualLineHeight = g.getFontMetrics().getHeight();
                 if(ele != null) {
                     final AttributeSet attrs = ele.getAttributes();
                     if(StyleConstants.getFontFamily(attrs) != null) {
@@ -122,17 +108,11 @@ public class TranscriptEditorCaret extends DefaultCaret {
                         actualLineHeight = g.getFontMetrics(f).getHeight();
                     }
                 }
-                r.height = (int) actualLineHeight;
+                r.height = actualLineHeight;
                 g.setColor(component.getCaretColor());
-                if(getMode() == Mode.DEFAULT) {
-                    int paintWidth = 1;
-                    r.x -= paintWidth >> 1;
-                    g.fillRect(r.x, r.y, paintWidth, r.height);
-                } else if(getMode() == Mode.BOX) {
-                    final Rectangle boxRect = new Rectangle(pr.x, r.y, r.x-pr.x + 1, r.height);
-                    damage(boxRect);
-                    g.drawRect(boxRect.x, boxRect.y, boxRect.width, boxRect.height);
-                }
+                int paintWidth = cursorWidth;
+                r.x -= paintWidth >> 1;
+                g.fillRect(r.x, r.y, paintWidth, r.height);
             } catch (BadLocationException e) {
                 // can't render I guess
                 //System.err.println("Can't render cursor");
