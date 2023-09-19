@@ -422,8 +422,6 @@ public final class Session extends ExtendableObject {
 	// endregion Transcript
 
 	// region Records (old api)
-	/* Record quick access */
-
 	/**
 	 * Return {@link Records} wrapper object allowing for enumeration
 	 * of records
