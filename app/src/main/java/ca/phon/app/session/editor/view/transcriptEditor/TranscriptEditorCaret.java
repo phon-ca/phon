@@ -77,7 +77,6 @@ public class TranscriptEditorCaret extends DefaultCaret {
             try {
                 TextUI mapper = component.getUI();
                 Rectangle r = mapper.modelToView(component, getDot(), getDotBias());
-                Rectangle pr = mapper.modelToView(component, getDot()+1, getDotBias());
                 if ((r == null) || ((r.width == 0) && (r.height == 0))) {
                     return;
                 }
