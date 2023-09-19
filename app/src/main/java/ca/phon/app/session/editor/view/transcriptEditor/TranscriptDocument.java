@@ -146,13 +146,20 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return retVal;
     }
 
+    private SimpleAttributeSet getTierAttributes(Tier<?> tier) {
+        return getTierAttributes(tier, null);
+    }
     private SimpleAttributeSet getTierAttributes(Tier<?> tier, TierViewItem item) {
         final SimpleAttributeSet retVal = new SimpleAttributeSet();
         retVal.addAttribute("tier", tier);
-        String fontString = item.getTierFont();
+        String fontString = "default";
+        if (item != null) {
+            fontString = item.getTierFont();
+        }
         if ("default".equalsIgnoreCase(fontString)) {
             fontString = new FontFormatter().format(FontPreferences.getTierFont());
         }
+
         var font = Font.decode(fontString);
 
         StyleConstants.setFontFamily(retVal, font.getFamily());
@@ -163,21 +170,14 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return retVal;
     }
 
-    private SimpleAttributeSet getIPATierAttributes(Tier<IPATranscript> tier, int recordIndex) {
+    private SimpleAttributeSet getSyllabificationAttributes() {
         final SimpleAttributeSet retVal = new SimpleAttributeSet();
-        retVal.addAttribute("tier", tier);
-
-        retVal.addAttributes(getRecordAttributes(recordIndex));
-
         retVal.addAttribute("componentFactory", new SyllabificationComponentFactory());
-
         return retVal;
     }
 
-    private SimpleAttributeSet getAlignmentAttributes(Tier<PhoneAlignment> tier) {
+    private SimpleAttributeSet getAlignmentAttributes() {
         final SimpleAttributeSet retVal = new SimpleAttributeSet();
-
-        retVal.addAttribute("tier", tier);
 
         retVal.addAttribute("componentFactory", new AlignmentComponentFactory());
 
@@ -240,10 +240,15 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return retVal;
     }
 
+    private SimpleAttributeSet getTierLabelAttributes(Tier<?> tier) {
+        return getTierLabelAttributes(tier, null);
+    }
     private SimpleAttributeSet getTierLabelAttributes(Tier<?> tier, TierViewItem tierViewItem) {
         final SimpleAttributeSet retVal = new SimpleAttributeSet();
 
-        retVal.addAttribute("locked", tierViewItem.isTierLocked());
+        if (tierViewItem == null || tierViewItem.isTierLocked()) {
+            retVal.addAttribute("locked", true);
+        }
         retVal.addAttribute("label", true);
         retVal.addAttribute("notEditable", true);
         retVal.addAttribute("tier", tier);
@@ -312,7 +317,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
         Font font = FontPreferences.getTierFont();
         StyleConstants.setFontFamily(retVal, font.getFamily());
-        StyleConstants.setFontSize(retVal, font.getSize());
+        StyleConstants.setFontSize(retVal, 14);
         StyleConstants.setBold(retVal, font.isBold());
         StyleConstants.setItalic(retVal, font.isItalic());
 
@@ -592,14 +597,14 @@ public class TranscriptDocument extends DefaultStyledDocument {
         for (int i = 0; i < root.getElementCount(); i++) {
             Element elem = root.getElement(i);
             if (elem.getElementCount() < 1) continue;
-            Integer currentRecordIndex = (Integer)elem.getElement(0).getAttributes().getAttribute("recordIndex");
+            Integer currentRecordIndex = (Integer) elem.getElement(0).getAttributes().getAttribute("recordIndex");
             // If correct record index
             if (currentRecordIndex != null && currentRecordIndex == recordIndex) {
                 for (int j = 0; j < elem.getElementCount(); j++) {
                     Element innerElem = elem.getElement(j);
                     AttributeSet attrs = innerElem.getAttributes();
                     Tier<?> tier = (Tier<?>) attrs.getAttribute("tier");
-                    Boolean isLabel = (Boolean)attrs.getAttribute("label");
+                    Boolean isLabel = (Boolean) attrs.getAttribute("label");
                     // If correct tier name
                     if (isLabel == null && tier != null && tier.getName().equals(tierName)) {
                         return innerElem.getStartOffset();
@@ -1249,7 +1254,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
     // endregion Record Changes
 
 
-    private TierViewItem getAlignmentTierView() {
+    public TierViewItem getAlignmentTierView() {
         List<TierViewItem> visibleTierView = session.getTierView().stream().filter(item -> item.isVisible()).toList();
 
         var retVal = visibleTierView.stream().filter(item -> item.getTierName().equals("IPA Actual")).findFirst();
@@ -1418,9 +1423,32 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 }
             }
             if (syllabificationVisible) {
-                appendBatchLineFeed(getTierAttributes(ipaTier, tierViewItem));
-                String ipaTarget = ipaTier.getValue().toString(true);
-                appendBatchString(ipaTarget, getIPATierAttributes(ipaTier, recordIndex));
+                // Add a newline at the end of the regular tier content
+                appendBatchLineFeed(tierAttrs);
+                // Create a dummy tier for the syllabification
+                IPATranscript ipaTarget = ipaTier.getValue();
+                Tier<IPATranscript> syllableTier = sessionFactory.createTier(SystemTierType.TargetSyllables.getName(), IPATranscript.class);
+                syllableTier.setValue(ipaTarget);
+                // Set up the tier attributes for the dummy tier
+                tierAttrs = new SimpleAttributeSet(tierAttrs);
+                tierAttrs.addAttributes(getTierAttributes(syllableTier));
+                // Set up the attributes for its label
+                SimpleAttributeSet syllabificationLabelAttrs = getTierLabelAttributes(syllableTier);
+                if (recordAttrs != null) {
+                    syllabificationLabelAttrs.addAttributes(recordAttrs);
+                }
+                // Get the string for the label
+                String syllabificationLabelText = formatLabelText("Syllabification");
+                // Add the label
+                appendBatchString(syllabificationLabelText + ": ", syllabificationLabelAttrs);
+                // Get the string version of the syllabification
+                String ipaTargetContent = ipaTarget.toString(true);
+                // Add component factory if needed
+                if (syllabificationIsComponent) {
+                    tierAttrs.addAttributes(getSyllabificationAttributes());
+                }
+                // Append the content
+                appendBatchString(ipaTargetContent, tierAttrs);
             }
         }
         else if (tierName.equals("IPA Actual")) {
@@ -1446,9 +1474,32 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 }
             }
             if (syllabificationVisible) {
-                appendBatchLineFeed(getTierAttributes(ipaTier, tierViewItem));
-                String ipaActual = ipaTier.getValue().toString(true);
-                appendBatchString(ipaActual, getIPATierAttributes(ipaTier, recordIndex));
+                // Add a newline at the end of the regular tier content
+                appendBatchLineFeed(tierAttrs);
+                // Create a dummy tier for the syllabification
+                IPATranscript ipaActual = ipaTier.getValue();
+                Tier<IPATranscript> syllableTier = sessionFactory.createTier(SystemTierType.ActualSyllables.getName(), IPATranscript.class);
+                syllableTier.setValue(ipaActual);
+                // Set up the tier attributes for the dummy tier
+                tierAttrs = new SimpleAttributeSet(tierAttrs);
+                tierAttrs.addAttributes(getTierAttributes(syllableTier));
+                // Set up the attributes for its label
+                SimpleAttributeSet syllabificationLabelAttrs = getTierLabelAttributes(syllableTier);
+                if (recordAttrs != null) {
+                    syllabificationLabelAttrs.addAttributes(recordAttrs);
+                }
+                // Get the string for the label
+                String syllabificationLabelText = formatLabelText("Syllabification");
+                // Add the label
+                appendBatchString(syllabificationLabelText + ": ", syllabificationLabelAttrs);
+                // Get the string version of the syllabification
+                String ipaActualContent = ipaActual.toString(true);
+                // Add component factory if needed
+                if (syllabificationIsComponent) {
+                    tierAttrs.addAttributes(getSyllabificationAttributes());
+                }
+                // Append the content
+                appendBatchString(ipaActualContent, tierAttrs);
             }
         }
         else if (tierName.equals("Segment")) {
@@ -1494,11 +1545,33 @@ public class TranscriptDocument extends DefaultStyledDocument {
         }
 
         if (alignmentVisible && tierName.equals(getAlignmentTierView().getTierName())) {
-            appendBatchLineFeed(getTierAttributes(tier, tierViewItem));
-            String alignment = record.getPhoneAlignment().toString();
-            appendBatchString(alignment, getAlignmentAttributes(record.getPhoneAlignmentTier()));
+            tierAttrs.removeAttribute("componentFactory");
+            // Add a newline at the end of the regular tier content
+            appendBatchLineFeed(tierAttrs);
+            // Get the alignment tier
+            Tier<PhoneAlignment> alignmentTier = record.getPhoneAlignmentTier();
+            // Set up the tier attributes for the dummy tier
+            tierAttrs = new SimpleAttributeSet(tierAttrs);
+            tierAttrs.addAttributes(getTierAttributes(alignmentTier));
+            // Set up the attributes for its label
+            SimpleAttributeSet alignmentLabelAttrs = getTierLabelAttributes(alignmentTier);
+            if (recordAttrs != null) {
+                alignmentLabelAttrs.addAttributes(recordAttrs);
+            }
+            // Get the string for the label
+            String alignmentLabelText = formatLabelText("Alignment");
+            // Add the label
+            appendBatchString(alignmentLabelText + ": ", alignmentLabelAttrs);
+            // Get the string version of the alignment
+            String alignmentContent = alignmentTier.getValue().toString();
+            // Add component factory if needed
+            if (alignmentIsComponent) {
+                tierAttrs.addAttributes(getAlignmentAttributes());
+            }
+            appendBatchString(alignmentContent, tierAttrs);
         }
 
+        tierAttrs.removeAttribute("componentFactory");
         return tierAttrs;
     }
 
