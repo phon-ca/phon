@@ -65,7 +65,8 @@ public final class Session extends ExtendableObject {
 		}
 		return this.sessionPath;
 	}
-	
+
+	// region Header information
 	/* Delegates */
 	/**
 	 * @return corpus name
@@ -127,6 +128,18 @@ public final class Session extends ExtendableObject {
 		sessionImpl.setMediaLocation(mediaLocation);
 	}
 
+	/**
+	 * Additional metadata
+	 *
+	 * @return session metadata
+	 */
+	public SessionMetadata getMetadata() {
+		return sessionImpl.getMetadata();
+	}
+
+	// endregion Header information
+
+	// region Tiers
 	/* Tier View */
 	/**
 	 * Get tier view for session. Tier view controls tier ordering, visiblity,
@@ -303,6 +316,10 @@ public final class Session extends ExtendableObject {
 		deleteTierAlignmentRules(tierAlignmentRules.getTierNames().getObj1(), tierAlignmentRules.getTierNames().getObj2());
 	}
 
+	// endregion Tiers
+
+	// region Blind transcription
+
 	/**
 	 * Get list of blind tier names
 	 * @return blind tier names
@@ -354,10 +371,9 @@ public final class Session extends ExtendableObject {
 		return new Transcribers(this);
 	}
 
-	public SessionMetadata getMetadata() {
-		return sessionImpl.getMetadata();
-	}
+	// endregion Blind transcription
 
+	// region Participants
 	/* Participants */
 	public int getParticipantCount() {
 		return sessionImpl.getParticipantCount();
@@ -391,8 +407,11 @@ public final class Session extends ExtendableObject {
 		sessionImpl.removeParticipant(idx);
 	}
 
+	// endregion Participants
+
+	// region Transcript
 	/**
-	 * Return session transcript
+	 * Return session transcript which includes comments, gems and records.
 	 *
 	 * @return session transcript
 	 */
@@ -400,6 +419,9 @@ public final class Session extends ExtendableObject {
 		return sessionImpl.getTranscript();
 	}
 
+	// endregion Transcript
+
+	// region Records (old api)
 	/* Record quick access */
 
 	/**
@@ -452,4 +474,5 @@ public final class Session extends ExtendableObject {
 		getTranscript().setRecordPosition(record, recordIndex);
 	}
 
+	// endregion Records (old api)
 }
