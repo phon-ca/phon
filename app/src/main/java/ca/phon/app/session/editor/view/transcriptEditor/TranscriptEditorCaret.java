@@ -1,5 +1,8 @@
 package ca.phon.app.session.editor.view.transcriptEditor;
 
+import ca.phon.app.log.LogUtil;
+import org.apache.logging.log4j.Level;
+
 import javax.swing.*;
 import javax.swing.plaf.TextUI;
 import javax.swing.text.*;
@@ -100,7 +103,7 @@ public class TranscriptEditorCaret extends DefaultCaret {
                 int actualLineHeight = g.getFontMetrics().getHeight();
                 if(ele != null) {
                     final AttributeSet attrs = ele.getAttributes();
-                    if(StyleConstants.getFontFamily(attrs) != null) {
+                    if(StyleConstants.getFontFamily(attrs) != null && StyleConstants.getFontSize(attrs) > 0) {
                         int style = (StyleConstants.isBold(attrs) ? Font.BOLD : 0) |
                                 (StyleConstants.isItalic(attrs) ? Font.ITALIC : 0);
                         final Font f = new Font(StyleConstants.getFontFamily(attrs), style, StyleConstants.getFontSize(attrs));
@@ -113,8 +116,7 @@ public class TranscriptEditorCaret extends DefaultCaret {
                 r.x -= paintWidth >> 1;
                 g.fillRect(r.x, r.y, paintWidth, r.height);
             } catch (BadLocationException e) {
-                // can't render I guess
-                //System.err.println("Can't render cursor");
+                LogUtil.log(Level.DEBUG, e.getLocalizedMessage(), e);
             }
         }
     }
