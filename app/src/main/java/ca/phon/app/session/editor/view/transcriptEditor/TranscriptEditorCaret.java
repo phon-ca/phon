@@ -3,7 +3,6 @@ package ca.phon.app.session.editor.view.transcriptEditor;
 import ca.phon.app.log.LogUtil;
 import org.apache.logging.log4j.Level;
 
-import javax.swing.*;
 import javax.swing.plaf.TextUI;
 import javax.swing.text.*;
 import java.awt.*;
@@ -13,7 +12,7 @@ import java.awt.*;
  */
 public class TranscriptEditorCaret extends DefaultCaret {
 
-    private int cursorWidth = 1;
+    private int caretWidth = 1;
 
     public TranscriptEditorCaret() {
         super();
@@ -112,7 +111,7 @@ public class TranscriptEditorCaret extends DefaultCaret {
                 }
                 r.height = actualLineHeight;
                 g.setColor(component.getCaretColor());
-                int paintWidth = cursorWidth;
+                int paintWidth = caretWidth;
                 r.x -= paintWidth >> 1;
                 g.fillRect(r.x, r.y, paintWidth, r.height);
             } catch (BadLocationException e) {
