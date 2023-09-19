@@ -3,6 +3,7 @@ package ca.phon.app.session.editor.view.transcriptEditor;
 import ca.phon.app.log.LogUtil;
 import ca.phon.formatter.MediaTimeFormatter;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.orthography.Orthography;
 import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.session.tierdata.*;
@@ -1455,9 +1456,9 @@ public class TranscriptDocument extends DefaultStyledDocument {
             formatSegment(segment, tierAttrs);
         }
         else if (tierName.equals("Orthography")) {
-            String tierContent = tier.toString();
-
-            appendBatchString(tierContent, tierAttrs);
+            Tier<Orthography> orthographyTier = (Tier<Orthography>) tier;
+            orthographyTier.getValue().accept(new TranscriptOrthographyVisitors.KeywordVisitor(this, tierAttrs));
+            //appendBatchString(tierContent, tierAttrs);
         }
         else {
             Tier<TierData> userTier = (Tier<TierData>) tier;
