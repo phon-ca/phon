@@ -24,24 +24,33 @@ import ca.phon.session.tierdata.TierData;
  * Tier descriptions for default tiers.
  */
 public enum SystemTierType {
-	Orthography("Orthography", Orthography.class),
-	IPATarget("IPA Target", IPATranscript.class),
-	TargetSyllables("Target Syllables", IPATranscript.class),
-	IPAActual("IPA Actual", IPATranscript.class),
-	ActualSyllables("Actual Syllables", IPATranscript.class),
-	PhoneAlignment("Alignment", PhoneAlignment.class),
-	Segment("Segment", MediaSegment.class),
-	Notes("Notes", TierData.class);
+	Orthography("Orthography", Orthography.class, false),
+	/**
+	 * word segment information, each word in orthography will be reproduced along with an
+	 * internal-media element, this tier is not directly editable.  Tier name comes
+	 * from CLAN
+	 */
+	Wor("%wor", Orthography.class, true),
+	IPATarget("IPA Target", IPATranscript.class, false),
+	TargetSyllables("Target Syllables", IPATranscript.class, true),
+	IPAActual("IPA Actual", IPATranscript.class, false),
+	ActualSyllables("Actual Syllables", IPATranscript.class, true),
+	PhoneAlignment("Alignment", PhoneAlignment.class, true),
+	Segment("Segment", MediaSegment.class, true),
+	Notes("Notes", TierData.class, false);
 	
 	private String tierName;
 	
 	private Class<?> type;
 
+	private boolean hiddenTier;
+
 	private TierAlignmentRules tierAlignmentRules;
 	
-	private SystemTierType(String tierName, Class<?> type) {
+	private SystemTierType(String tierName, Class<?> type, boolean hiddenTier) {
 		this.tierName = tierName;
 		this.type = type;
+		this.hiddenTier = hiddenTier;
 	}
 	
 	public static boolean isSystemTier(String tierName) {
@@ -59,6 +68,10 @@ public enum SystemTierType {
 
 	public String getName() {
 		return this.tierName;
+	}
+
+	public boolean isHiddenTier() {
+		return this.hiddenTier;
 	}
 
 	public Class<?> getDeclaredType() {

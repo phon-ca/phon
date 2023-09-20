@@ -5,6 +5,7 @@ import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.ui.theme.UIDefaults;
 import ca.phon.ui.theme.UIDefaultsHandler;
 
+import javax.swing.*;
 import java.awt.*;
 
 /**
@@ -13,7 +14,7 @@ import java.awt.*;
 public final class PhonUIDefaults implements UIDefaultsHandler, IPluginExtensionPoint<UIDefaultsHandler> {
 
     public final static String LIGHT_BLUE = "Phon.lightBlue";
-    public final static Color DEFAULT_LIGHT_BLUE = new Color(240, 248, 255);
+    public final static Color DEFAULT_LIGHT_BLUE = UIManager.getColor("Phon.darkBlue");
 
     public final static String DARK_BLUE = "Phon.darkBlue";
     public final static Color DEFAULT_DARK_BLUE = new Color(17, 75, 122);
