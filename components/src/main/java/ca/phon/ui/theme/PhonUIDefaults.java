@@ -9,12 +9,12 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Install
+ * Install Phon UI defaults
  */
 public final class PhonUIDefaults implements UIDefaultsHandler, IPluginExtensionPoint<UIDefaultsHandler> {
 
     public final static String LIGHT_BLUE = "Phon.lightBlue";
-    public final static Color DEFAULT_LIGHT_BLUE = Color.decode("0xF0F8FF");
+    public final static Color DEFAULT_LIGHT_BLUE = new Color(240, 248, 255);
 
     public final static String DARK_BLUE = "Phon.darkBlue";
     public final static Color DEFAULT_DARK_BLUE = new Color(17, 75, 122);
