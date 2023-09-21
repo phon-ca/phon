@@ -152,6 +152,9 @@ public class TranscriptEditorUIProps implements UIDefaultsHandler, IPluginExtens
     public final static String ORTHOGRAPHY_OVERLAP = "TranscriptEditor.orthography.annotation.overlap";
     public final static Color DEFAULT_ORTHOGRAPHY_OVERLAP = Color.GRAY;
 
+    public final static String SEGMENT_SELECTION = "TranscriptEditor.segment.selection";
+    public final static Color DEFAULT_SEGMENT_SELECTION = UIManager.getColor("Phon.darkBlue");
+
 
 
     @Override

@@ -1,6 +1,8 @@
 package ca.phon.app.session.editor.view.transcriptEditor;
 
 import ca.phon.app.log.LogUtil;
+import ca.phon.app.session.editor.EditorEventManager;
+import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -8,6 +10,8 @@ import ca.phon.util.icons.IconSize;
 import javax.swing.*;
 import javax.swing.text.StyleConstants;
 import java.awt.*;
+import java.awt.font.TextAttribute;
+import java.util.Collections;
 
 public class TranscriptScrollPaneGutter extends JComponent {
     private final TranscriptEditor editor;
@@ -15,11 +19,17 @@ public class TranscriptScrollPaneGutter extends JComponent {
     private final int DEFAULT_WIDTH = 36;
     private final int RECORD_NUMBER_WIDTH = 24;
     private final int PADDING = 4;
+    private int currentRecord = -1;
 
     public TranscriptScrollPaneGutter(TranscriptEditor editor) {
         this.editor = editor;
         setPreferredSize(new Dimension(DEFAULT_WIDTH + PADDING + RECORD_NUMBER_WIDTH + PADDING, getPreferredSize().height));
         setFont(FontPreferences.getTierFont());
+        editor.getEventManager().registerActionForEvent(
+            EditorEventType.RecordChanged,
+            (e) -> currentRecord = e.data().recordIndex(),
+            EditorEventManager.RunOn.AWTEventDispatchThread
+        );
     }
 
     @Override
@@ -35,6 +45,8 @@ public class TranscriptScrollPaneGutter extends JComponent {
         g.setColor(Color.decode("#eeeeee"));
         g.fillRect(drawHere.x, drawHere.y, drawHere.width, drawHere.height);
         g.setColor(Color.BLACK);
+
+        final Font font = g.getFont();
 
         var doc = editor.getTranscriptDocument();
 
@@ -78,6 +90,10 @@ public class TranscriptScrollPaneGutter extends JComponent {
                                 var sepRect = editor.modelToView2D(innerElem.getStartOffset());
 
                                 String recordNumberText = String.valueOf(recordNumber + 1);
+                                if (recordNumber == currentRecord) {
+                                    g.setFont(font.deriveFont(Font.BOLD));
+                                }
+
                                 var fontMetrics = g.getFontMetrics();
                                 int stringWidth = fontMetrics.stringWidth(recordNumberText);
                                 int stringBaselineHeight = (int)(sepRect.getCenterY() + 0.8f * (fontMetrics.getFont().getSize() / 2.0f));
@@ -86,6 +102,9 @@ public class TranscriptScrollPaneGutter extends JComponent {
 
                                 g.drawString(recordNumberText, getWidth() - stringWidth - PADDING, stringBaselineHeight);
                                 currentSepHeight = stringBaselineHeight;
+                                if (recordNumber == currentRecord) {
+                                    g.setFont(font);
+                                }
                             }
 
                         }

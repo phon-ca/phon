@@ -17,10 +17,7 @@ import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.undo.UndoManager;
 import java.awt.*;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,6 +40,7 @@ public class TranscriptEditor extends JEditorPane {
     private Element hoverElem = null;
     private Object currentUnderline;
     TranscriptUnderlinePainter underlinePainter = new TranscriptUnderlinePainter();
+    private MediaSegment selectedSegment = null;
 
     public TranscriptEditor(
         Session session,
@@ -68,6 +66,16 @@ public class TranscriptEditor extends JEditorPane {
         TranscriptMouseAdapter mouseAdapter = new TranscriptMouseAdapter();
         addMouseMotionListener(mouseAdapter);
         addMouseListener(mouseAdapter);
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (selectedSegment != null && e.getKeyCode() == KeyEvent.VK_SPACE) {
+                    if (getSegmentPlayback() != null) {
+                        getSegmentPlayback().playSegment(selectedSegment);
+                    }
+                }
+            }
+        });
         addCaretListener(e -> {
             TranscriptDocument doc = getTranscriptDocument();
             String transcriptElementType = (String) doc.getCharacterElement(e.getDot()).getAttributes().getAttribute("elementType");
@@ -77,7 +85,8 @@ public class TranscriptEditor extends JEditorPane {
 
             // FOR DEBUG PURPOSES ONLY
 //            SimpleAttributeSet attrs = new SimpleAttributeSet(doc.getCharacterElement(e.getDot()).getAttributes().copyAttributes());
-//            System.out.println(e.getDot() + ": " + doc.getCharAtPos(e.getDot()));
+//            System.out.println("Font size: " + StyleConstants.getFontSize(attrs));
+            System.out.println("Dot: " + e.getDot());
 //            System.out.println(attrs);
         });
     }
@@ -338,6 +347,14 @@ public class TranscriptEditor extends JEditorPane {
 
     public EditorEventManager getEventManager() {
         return eventManager;
+    }
+
+    public MediaSegment getSelectedSegment() {
+        return selectedSegment;
+    }
+
+    public void setSelectedSegment(MediaSegment selectedSegment) {
+        this.selectedSegment = selectedSegment;
     }
 
     // endregion Getters and Setters
@@ -1104,7 +1121,7 @@ public class TranscriptEditor extends JEditorPane {
         int prevTranscriptElementIndex = -1;
         int prevTierIndex = -1;
 
-        List<TierViewItem> recordVisibleTierView = null;
+        List<String> recordVisibleTierNames = new ArrayList<>();
 
         // Try to get the current record index
         Integer currentRecordIndex = (Integer) currentPosAttrs.getAttribute("recordIndex");
@@ -1133,22 +1150,31 @@ public class TranscriptEditor extends JEditorPane {
             // Get a reference to the record
             Record record = session.getRecord(currentRecordIndex);
             // Get a list of all the visible tiers in the record
-            recordVisibleTierView = session.getTierView()
+            recordVisibleTierNames.addAll(session.getTierView()
                 .stream()
                 .filter(item -> record.hasTier(item.getTierName()) && item.isVisible())
-                .toList();
+                .map(item -> item.getTierName())
+                .toList()
+            );
+
+            int ipaTargetIndex = recordVisibleTierNames.indexOf("IPA Target");
+            if (ipaTargetIndex != -1 && isSyllabificationVisible()) {
+                recordVisibleTierNames.add(ipaTargetIndex + 1, SystemTierType.TargetSyllables.getName());
+            }
+            int ipaActualIndex = recordVisibleTierNames.indexOf("IPA Actual");
+            if (ipaActualIndex != -1 && isSyllabificationVisible()) {
+                recordVisibleTierNames.add(ipaActualIndex + 1, SystemTierType.ActualSyllables.getName());
+            }
+
+            if (isAlignmentVisible()) {
+                int alignmentIndex = recordVisibleTierNames.indexOf(doc.getAlignmentTierView().getTierName()) + 1;
+                recordVisibleTierNames.add(alignmentIndex, SystemTierType.PhoneAlignment.getName());
+            }
 
             // Get the current tier from the current position attributes
             Tier<?> currentTier = (Tier<?>) currentPosAttrs.getAttribute("tier");
-
             // Get the index of the current tier among the visible tiers of the record
-            int currentTierIndex = -1;
-            for (int i = 0; i < recordVisibleTierView.size(); i++) {
-                if (recordVisibleTierView.get(i).getTierName().equals(currentTier.getName())) {
-                    currentTierIndex = i;
-                    break;
-                }
-            }
+            int currentTierIndex = recordVisibleTierNames.indexOf(currentTier.getName());
 
             // If it's still -1, return -1
             if (currentTierIndex == -1) {
@@ -1181,7 +1207,7 @@ public class TranscriptEditor extends JEditorPane {
         // Movement within a record
         if (currentTranscriptElementIndex == -1) {
             // Get the name of the previous tier
-            String prevTierName = recordVisibleTierView.get(prevTierIndex).getTierName();
+            String prevTierName = recordVisibleTierNames.get(prevTierIndex);
             // Return the start of the previous tier
             return doc.getTierStart(currentRecordIndex, prevTierName);
         }
@@ -1193,12 +1219,31 @@ public class TranscriptEditor extends JEditorPane {
                 // Get a reference to the record and get its index
                 Record record = prevTranscriptElement.asRecord();
                 int recordIndex = transcript.getRecordPosition(record);
+
                 // Get a list of all the visible tiers in the record and use it to get the last visible tier name
-                recordVisibleTierView = session.getTierView()
-                    .stream()
-                    .filter(item -> record.hasTier(item.getTierName()) && item.isVisible())
-                    .toList();
-                String prevTierName = recordVisibleTierView.get(recordVisibleTierView.size() - 1).getTierName();
+                recordVisibleTierNames.addAll(
+                    session.getTierView()
+                        .stream()
+                        .filter(item -> record.hasTier(item.getTierName()) && item.isVisible())
+                        .map(item -> item.getTierName())
+                        .toList()
+                );
+
+                int ipaTargetIndex = recordVisibleTierNames.indexOf("IPA Target");
+                if (ipaTargetIndex != -1 && isSyllabificationVisible()) {
+                    recordVisibleTierNames.add(ipaTargetIndex + 1, SystemTierType.TargetSyllables.getName());
+                }
+                int ipaActualIndex = recordVisibleTierNames.indexOf("IPA Actual");
+                if (ipaActualIndex != -1 && isSyllabificationVisible()) {
+                    recordVisibleTierNames.add(ipaActualIndex + 1, SystemTierType.ActualSyllables.getName());
+                }
+
+                if (isAlignmentVisible()) {
+                    int alignmentIndex = recordVisibleTierNames.indexOf(doc.getAlignmentTierView().getTierName()) + 1;
+                    recordVisibleTierNames.add(alignmentIndex, SystemTierType.PhoneAlignment.getName());
+                }
+
+                String prevTierName = recordVisibleTierNames.get(recordVisibleTierNames.size() - 1);
                 // Return the start of the previous tier
                 return doc.getTierStart(recordIndex, prevTierName);
             }
@@ -1228,7 +1273,7 @@ public class TranscriptEditor extends JEditorPane {
         int nextTranscriptElementIndex = -1;
         int nextTierIndex = -1;
 
-        List<TierViewItem> recordVisibleTierView = null;
+        List<String> recordVisibleTierNames = new ArrayList<>();
 
         // Try to get the current record index
         Integer currentRecordIndex = (Integer) currentPosAttrs.getAttribute("recordIndex");
@@ -1256,30 +1301,41 @@ public class TranscriptEditor extends JEditorPane {
         else {
             // Get a reference to the record
             Record record = session.getRecord(currentRecordIndex);
+
             // Get a list of all the visible tiers in the record
-            recordVisibleTierView = session.getTierView()
-                .stream()
-                .filter(item -> record.hasTier(item.getTierName()) && item.isVisible())
-                .toList();
+            recordVisibleTierNames.addAll(
+                session.getTierView()
+                    .stream()
+                    .filter(item -> record.hasTier(item.getTierName()) && item.isVisible())
+                    .map(item -> item.getTierName())
+                    .toList()
+            );
+
+            int ipaTargetIndex = recordVisibleTierNames.indexOf("IPA Target");
+            if (ipaTargetIndex != -1 && isSyllabificationVisible()) {
+                recordVisibleTierNames.add(ipaTargetIndex + 1, SystemTierType.TargetSyllables.getName());
+            }
+            int ipaActualIndex = recordVisibleTierNames.indexOf("IPA Actual");
+            if (ipaActualIndex != -1 && isSyllabificationVisible()) {
+                recordVisibleTierNames.add(ipaActualIndex + 1, SystemTierType.ActualSyllables.getName());
+            }
+
+            if (isAlignmentVisible()) {
+                int alignmentIndex = recordVisibleTierNames.indexOf(doc.getAlignmentTierView().getTierName()) + 1;
+                recordVisibleTierNames.add(alignmentIndex, SystemTierType.PhoneAlignment.getName());
+            }
 
             // Get the current tier from the current position attributes
             Tier<?> currentTier = (Tier<?>) currentPosAttrs.getAttribute("tier");
-
             // Get the index of the current tier among the visible tiers of the record
-            int currentTierIndex = -1;
-            for (int i = 0; i < recordVisibleTierView.size(); i++) {
-                if (recordVisibleTierView.get(i).getTierName().equals(currentTier.getName())) {
-                    currentTierIndex = i;
-                    break;
-                }
-            }
+            int currentTierIndex = recordVisibleTierNames.indexOf(currentTier.getName());
 
             // If it's still -1, return -1
             if (currentTierIndex == -1) {
                 return -1;
             }
             // If it's the last visible tier in the record
-            else if (currentTierIndex == recordVisibleTierView.size() - 1) {
+            else if (currentTierIndex == recordVisibleTierNames.size() - 1) {
                 // Get the current element index since we will be moving between elements
                 currentTranscriptElementIndex = transcript.getElementIndex(record);
             }
@@ -1305,7 +1361,7 @@ public class TranscriptEditor extends JEditorPane {
         // Movement within a record
         if (currentTranscriptElementIndex == -1) {
             // Get the name of the next tier
-            String nextTierName = recordVisibleTierView.get(nextTierIndex).getTierName();
+            String nextTierName = recordVisibleTierNames.get(nextTierIndex);
             // Return the start of the next tier
             return doc.getTierStart(currentRecordIndex, nextTierName);
         }
@@ -1317,12 +1373,31 @@ public class TranscriptEditor extends JEditorPane {
                 // Get a reference to the record and get its index
                 Record record = nextTranscriptElement.asRecord();
                 int recordIndex = transcript.getRecordPosition(record);
+
                 // Get a list of all the visible tiers in the record and use it to get the first visible tier name
-                recordVisibleTierView = session.getTierView()
-                    .stream()
-                    .filter(item -> record.hasTier(item.getTierName()) && item.isVisible())
-                    .toList();
-                String nextTierName = recordVisibleTierView.get(0).getTierName();
+                recordVisibleTierNames.addAll(
+                    session.getTierView()
+                        .stream()
+                        .filter(item -> record.hasTier(item.getTierName()) && item.isVisible())
+                        .map(item -> item.getTierName())
+                        .toList()
+                );
+
+                int ipaTargetIndex = recordVisibleTierNames.indexOf("IPA Target");
+                if (ipaTargetIndex != -1 && isSyllabificationVisible()) {
+                    recordVisibleTierNames.add(ipaTargetIndex + 1, SystemTierType.TargetSyllables.getName());
+                }
+                int ipaActualIndex = recordVisibleTierNames.indexOf("IPA Actual");
+                if (ipaActualIndex != -1 && isSyllabificationVisible()) {
+                    recordVisibleTierNames.add(ipaActualIndex + 1, SystemTierType.ActualSyllables.getName());
+                }
+
+                if (isAlignmentVisible()) {
+                    int alignmentIndex = recordVisibleTierNames.indexOf(doc.getAlignmentTierView().getTierName()) + 1;
+                    recordVisibleTierNames.add(alignmentIndex, SystemTierType.PhoneAlignment.getName());
+                }
+
+                String nextTierName = recordVisibleTierNames.get(0);
                 // Return the start of the next tier
                 return doc.getTierStart(recordIndex, nextTierName);
             }
@@ -1366,12 +1441,14 @@ public class TranscriptEditor extends JEditorPane {
     private class TranscriptNavigationFilter extends NavigationFilter {
         @Override
         public void setDot(NavigationFilter.FilterBypass fb, int dot, Position.Bias bias) {
+            setSelectedSegment(null);
             TranscriptDocument doc = getTranscriptDocument();
             Element elem = doc.getCharacterElement(dot);
             AttributeSet attrs = elem.getAttributes();
             boolean isLabel = attrs.getAttribute("label") != null;
+            boolean isSegment = attrs.getAttribute("mediaSegment") != null;
 
-            if (isLabel) return;
+            if (isLabel && !isSegment) return;
 
             fb.setDot(dot, bias);
         }
@@ -1432,6 +1509,17 @@ public class TranscriptEditor extends JEditorPane {
 
             Element elem = doc.getCharacterElement(mousePosInDoc);
             AttributeSet attrs = elem.getAttributes();
+
+            MediaSegment mediaSegment = (MediaSegment) attrs.getAttribute("mediaSegment");
+            if (mediaSegment != null) {
+                var segmentBounds = doc.getSegmentBounds(mediaSegment, elem);
+                System.out.println("Segment bounds: " + segmentBounds);
+                setCaretPosition(segmentBounds.getObj1());
+                setSelectedSegment(mediaSegment);
+                moveCaretPosition(segmentBounds.getObj2()+1);
+                return;
+            }
+
             if (attrs.getAttribute("label") != null) {
                 String elementType = (String) attrs.getAttribute("elementType");
                 if (elementType != null) {
@@ -1465,15 +1553,6 @@ public class TranscriptEditor extends JEditorPane {
                             case "comment" -> onClickCommentLabel(e.getPoint());
                             case "gem" -> onClickGemLabel(e.getPoint());
                         }
-                    }
-                }
-            }
-
-            if (controlPressed) {
-                Tier<?> tier = (Tier<?>)elem.getAttributes().getAttribute("tier");
-                if (tier != null && tier.getValue() instanceof MediaSegment mediaSegment) {
-                    if (getSegmentPlayback() != null) {
-                        getSegmentPlayback().playSegment(mediaSegment);
                     }
                 }
             }
