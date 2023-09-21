@@ -9,6 +9,7 @@ import ca.phon.session.Record;
 import ca.phon.session.tierdata.*;
 import ca.phon.ui.FontFormatter;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.util.Tuple;
 
 import javax.swing.*;
 import javax.swing.text.*;
@@ -202,14 +203,16 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return retVal;
     }
 
-    private SimpleAttributeSet getSegmentTimeAttributes() {
+    private SimpleAttributeSet getSegmentTimeAttributes(MediaSegment segment) {
         SimpleAttributeSet retVal = new SimpleAttributeSet();
+        retVal.addAttribute("mediaSegment", segment);
 
         return retVal;
     }
 
-    private SimpleAttributeSet getSegmentDashAttributes() {
+    private SimpleAttributeSet getSegmentDashAttributes(MediaSegment segment) {
         SimpleAttributeSet retVal = new SimpleAttributeSet();
+        retVal.addAttribute("mediaSegment", segment);
 
         StyleConstants.setForeground(retVal, UIManager.getColor(TranscriptEditorUIProps.SEGMENT_DASH));
 
@@ -794,6 +797,53 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return retVal;
     }
 
+    public Tuple<Integer, Integer> getSegmentBounds(MediaSegment segment, Element includedElem) {
+        Element root = getDefaultRootElement();
+
+        int indexInSegment = -1;
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() < 1) continue;
+            String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute("elementType");
+            // If correct record index
+            if (transcriptElementType != null && transcriptElementType.equals("record")) {
+                for (int j = 0; j < elem.getElementCount(); j++) {
+                    Element innerElem = elem.getElement(j);
+                    MediaSegment elemSegment = (MediaSegment) innerElem.getAttributes().getAttribute("mediaSegment");
+                    if (elemSegment != null && elemSegment == segment && innerElem == includedElem) {
+                        indexInSegment = innerElem.getStartOffset();
+                        i = root.getElementCount();;
+                        j = elem.getElementCount();
+                    }
+                }
+            }
+        }
+
+        Tuple<Integer, Integer> retVal = new Tuple<>(-1, -1);
+
+        if (indexInSegment == -1) return retVal;
+
+        int segmentStart = indexInSegment;
+
+        AttributeSet attrs = getCharacterElement(segmentStart).getAttributes();
+        while (attrs.getAttribute("mediaSegment") != null) {
+            segmentStart--;
+            attrs = getCharacterElement(segmentStart).getAttributes();
+        }
+        retVal.setObj1(segmentStart + 1);
+
+        int segmentEnd = indexInSegment;
+        attrs = getCharacterElement(segmentEnd).getAttributes();
+        while (attrs.getAttribute("mediaSegment") != null) {
+            segmentEnd++;
+            attrs = getCharacterElement(segmentEnd).getAttributes();
+        }
+        retVal.setObj2(segmentEnd - 1);
+
+        return retVal;
+    }
+
     // endregion Get Record/Tier Start/End
 
 
@@ -1331,10 +1381,13 @@ public class TranscriptDocument extends DefaultStyledDocument {
     }
 
     private void formatSegment(MediaSegment segment, AttributeSet additionalAttrs) {
+
         String start = MediaTimeFormatter.msToPaddedMinutesAndSeconds(segment.getStartValue());
 
-        var segmentTimeAttrs = getSegmentTimeAttributes();
-        var segmentDashAttrs = getSegmentDashAttributes();
+        var segmentTimeAttrs = getSegmentTimeAttributes(segment);
+        var segmentDashAttrs = getSegmentDashAttributes(segment);
+//        segmentTimeAttrs.removeAttribute("notEditable");
+//        segmentDashAttrs.removeAttribute("notEditable");
         if (additionalAttrs != null) {
             segmentTimeAttrs.addAttributes(additionalAttrs);
             segmentDashAttrs.addAttributes(additionalAttrs);

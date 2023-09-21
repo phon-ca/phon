@@ -11,12 +11,20 @@ import java.awt.*;
  * Custom caret implementation for {@link TranscriptEditor}
  */
 public class TranscriptEditorCaret extends DefaultCaret {
-
     private int caretWidth = 1;
+    private boolean selectingSegment = false;
 
     public TranscriptEditorCaret() {
         super();
         setBlinkRate(500);
+    }
+
+    public boolean isSelectingSegment() {
+        return selectingSegment;
+    }
+
+    public void setSelectingSegment(boolean selectingSegment) {
+        this.selectingSegment = selectingSegment;
     }
 
     private boolean _contains(int X, int Y, int W, int H) {
@@ -120,4 +128,34 @@ public class TranscriptEditorCaret extends DefaultCaret {
         }
     }
 
+    @Override
+    protected Highlighter.HighlightPainter getSelectionPainter() {
+
+        if (!selectingSegment) {
+            return super.getSelectionPainter();
+        }
+
+        return new Highlighter.HighlightPainter() {
+            @Override
+            public void paint(Graphics g, int p0, int p1, Shape bounds, JTextComponent c) {
+                final TranscriptEditor component = (TranscriptEditor) getComponent();
+                g.setColor(Color.BLUE);
+                try {
+                    var p0Rect = component.modelToView2D(p0);
+                    var p1Rect = component.modelToView2D(p1);
+
+                    int topY = (int) p0Rect.getMinY();
+                    int bottomY = g.getFontMetrics().getHeight() + topY;
+
+                    g.drawLine((int) p0Rect.getMinX(), topY, (int) p1Rect.getMaxX(), topY);
+                    g.drawLine((int) p0Rect.getMinX(), bottomY, (int) p1Rect.getMaxX(), bottomY);
+                    g.drawLine((int) p0Rect.getMinX(), topY, (int) p0Rect.getMinX(), bottomY);
+                    g.drawLine((int) p1Rect.getMaxX(), topY, (int) p1Rect.getMaxX(), bottomY);
+                } catch (BadLocationException e) {
+                    LogUtil.severe(e);
+                }
+
+            }
+        };
+    }
 }

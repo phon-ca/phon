@@ -78,7 +78,7 @@ public class TranscriptEditor extends JEditorPane {
             // FOR DEBUG PURPOSES ONLY
 //            SimpleAttributeSet attrs = new SimpleAttributeSet(doc.getCharacterElement(e.getDot()).getAttributes().copyAttributes());
 //            System.out.println("Font size: " + StyleConstants.getFontSize(attrs));
-//            System.out.println(e.getDot() + ": " + doc.getCharAtPos(e.getDot()));
+            System.out.println("Dot: " + e.getDot());
 //            System.out.println(attrs);
         });
     }
@@ -1419,12 +1419,14 @@ public class TranscriptEditor extends JEditorPane {
     private class TranscriptNavigationFilter extends NavigationFilter {
         @Override
         public void setDot(NavigationFilter.FilterBypass fb, int dot, Position.Bias bias) {
+            ((TranscriptEditorCaret)getCaret()).setSelectingSegment(false);
             TranscriptDocument doc = getTranscriptDocument();
             Element elem = doc.getCharacterElement(dot);
             AttributeSet attrs = elem.getAttributes();
             boolean isLabel = attrs.getAttribute("label") != null;
+            boolean isSegment = attrs.getAttribute("mediaSegment") != null;
 
-            if (isLabel) return;
+            if (isLabel && !isSegment) return;
 
             fb.setDot(dot, bias);
         }
@@ -1485,6 +1487,17 @@ public class TranscriptEditor extends JEditorPane {
 
             Element elem = doc.getCharacterElement(mousePosInDoc);
             AttributeSet attrs = elem.getAttributes();
+
+            MediaSegment mediaSegment = (MediaSegment) attrs.getAttribute("mediaSegment");
+            if (mediaSegment != null) {
+                var segmentBounds = doc.getSegmentBounds(mediaSegment, elem);
+                System.out.println("Segment bounds: " + segmentBounds);
+                setCaretPosition(segmentBounds.getObj1());
+                ((TranscriptEditorCaret)getCaret()).setSelectingSegment(true);
+                moveCaretPosition(segmentBounds.getObj2()+1);
+                return;
+            }
+
             if (attrs.getAttribute("label") != null) {
                 String elementType = (String) attrs.getAttribute("elementType");
                 if (elementType != null) {
@@ -1522,14 +1535,15 @@ public class TranscriptEditor extends JEditorPane {
                 }
             }
 
-            if (controlPressed) {
-                Tier<?> tier = (Tier<?>)elem.getAttributes().getAttribute("tier");
-                if (tier != null && tier.getValue() instanceof MediaSegment mediaSegment) {
-                    if (segmentPlayback != null) {
-                        segmentPlayback.playSegment(mediaSegment);
-                    }
-                }
-            }
+
+
+//            if (controlPressed) {
+//                if (tier != null && tier.getValue() instanceof MediaSegment mediaSegment) {
+//                    if (segmentPlayback != null) {
+//                        segmentPlayback.playSegment(mediaSegment);
+//                    }
+//                }
+//            }
         }
     }
 }
