@@ -3,6 +3,10 @@ package ca.phon.app.session.editor.view.transcriptEditor;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.view.transcriptEditor.actions.*;
 import ca.phon.plugin.PluginManager;
+import ca.phon.session.MediaSegment;
+import ca.phon.session.MediaUnit;
+import ca.phon.session.SessionFactory;
+import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.icons.IconManager;
@@ -30,7 +34,7 @@ public class TranscriptView extends EditorView {
             editor.getUndoSupport(),
             editor.getUndoManager()
         );
-        this.transcriptEditor.setSegmentPlayback(editor.getMediaModel().getSegmentPlayback());
+        this.transcriptEditor.setMediaModel(editor.getMediaModel());
         this.transcriptEditor.addPropertyChangeListener(
             "currentRecordIndex", e -> editor.setCurrentRecordIndex((Integer) e.getNewValue())
         );
@@ -66,6 +70,22 @@ public class TranscriptView extends EditorView {
         });
         menuButton.setToolTipText("Show transcript editor menu");
         toolbar.add(menuButton);
+
+        PhonUIAction<Void> showMediaAct = PhonUIAction.eventConsumer(this::showMediaPopup, null);
+        showMediaAct.putValue(PhonUIAction.NAME, "Test media popup");
+        toolbar.add(new JButton(showMediaAct));
+    }
+
+    private void showMediaPopup(PhonActionEvent<Void> pae) {
+        final SessionFactory factory = SessionFactory.newFactory();
+        final MediaSegment testSegment = factory.createMediaSegment();
+        testSegment.setStartValue(1000.0f);
+        testSegment.setEndValue(3000.0f);
+        testSegment.setUnitType(MediaUnit.Millisecond);
+
+        JComponent source = (JComponent) pae.getActionEvent().getSource();
+        final SegmentEditorPopup popup = new SegmentEditorPopup(transcriptEditor.getMediaModel(), testSegment);
+        popup.showPopup(source, 0, source.getHeight());
     }
 
     // region Getters and Setters

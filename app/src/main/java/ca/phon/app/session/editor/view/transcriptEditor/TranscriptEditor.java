@@ -30,7 +30,7 @@ import java.util.List;
 public class TranscriptEditor extends JEditorPane {
     private final Session session;
     private final EditorEventManager eventManager;
-    private SegmentPlayback segmentPlayback;
+    private SessionMediaModel mediaModel;
     private SessionEditUndoSupport undoSupport;
     private UndoManager undoManager;
     private boolean controlPressed = false;
@@ -167,12 +167,18 @@ public class TranscriptEditor extends JEditorPane {
         getTranscriptDocument().setAlignmentVisible(visible);
     }
 
-    public SegmentPlayback getSegmentPlayback() {
-        return segmentPlayback;
+    public void setMediaModel(SessionMediaModel mediaModel) {
+        var oldModel = this.mediaModel;
+        this.mediaModel = mediaModel;
+        firePropertyChange("mediaModel", oldModel, mediaModel);
     }
 
-    public void setSegmentPlayback(SegmentPlayback segmentPlayback) {
-        this.segmentPlayback = segmentPlayback;
+    public SessionMediaModel getMediaModel() {
+        return this.mediaModel;
+    }
+
+    public SegmentPlayback getSegmentPlayback() {
+        return (mediaModel != null ? mediaModel.getSegmentPlayback() : null);
     }
 
     public SessionEditUndoSupport getUndoSupport() {
@@ -1466,8 +1472,8 @@ public class TranscriptEditor extends JEditorPane {
             if (controlPressed) {
                 Tier<?> tier = (Tier<?>)elem.getAttributes().getAttribute("tier");
                 if (tier != null && tier.getValue() instanceof MediaSegment mediaSegment) {
-                    if (segmentPlayback != null) {
-                        segmentPlayback.playSegment(mediaSegment);
+                    if (getSegmentPlayback() != null) {
+                        getSegmentPlayback().playSegment(mediaSegment);
                     }
                 }
             }
