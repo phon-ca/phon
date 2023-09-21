@@ -12,19 +12,10 @@ import java.awt.*;
  */
 public class TranscriptEditorCaret extends DefaultCaret {
     private int caretWidth = 1;
-    private boolean selectingSegment = false;
 
     public TranscriptEditorCaret() {
         super();
         setBlinkRate(500);
-    }
-
-    public boolean isSelectingSegment() {
-        return selectingSegment;
-    }
-
-    public void setSelectingSegment(boolean selectingSegment) {
-        this.selectingSegment = selectingSegment;
     }
 
     private boolean _contains(int X, int Y, int W, int H) {
@@ -131,14 +122,16 @@ public class TranscriptEditorCaret extends DefaultCaret {
     @Override
     protected Highlighter.HighlightPainter getSelectionPainter() {
 
-        if (!selectingSegment) {
+        final TranscriptEditor component = (TranscriptEditor) getComponent();
+
+        if (component.getSelectedSegment() == null) {
             return super.getSelectionPainter();
         }
 
         return new Highlighter.HighlightPainter() {
             @Override
             public void paint(Graphics g, int p0, int p1, Shape bounds, JTextComponent c) {
-                final TranscriptEditor component = (TranscriptEditor) getComponent();
+
                 g.setColor(Color.BLUE);
                 try {
                     var p0Rect = component.modelToView2D(p0);

@@ -1386,8 +1386,8 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
         var segmentTimeAttrs = getSegmentTimeAttributes(segment);
         var segmentDashAttrs = getSegmentDashAttributes(segment);
-//        segmentTimeAttrs.removeAttribute("notEditable");
-//        segmentDashAttrs.removeAttribute("notEditable");
+        segmentTimeAttrs.addAttribute("notEditable", true);
+        segmentDashAttrs.addAttribute("notEditable", true);
         if (additionalAttrs != null) {
             segmentTimeAttrs.addAttributes(additionalAttrs);
             segmentDashAttrs.addAttributes(additionalAttrs);

@@ -17,10 +17,7 @@ import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.undo.UndoManager;
 import java.awt.*;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,6 +40,7 @@ public class TranscriptEditor extends JEditorPane {
     private Element hoverElem = null;
     private Object currentUnderline;
     TranscriptUnderlinePainter underlinePainter = new TranscriptUnderlinePainter();
+    private MediaSegment selectedSegment = null;
 
     public TranscriptEditor(
         Session session,
@@ -68,6 +66,16 @@ public class TranscriptEditor extends JEditorPane {
         TranscriptMouseAdapter mouseAdapter = new TranscriptMouseAdapter();
         addMouseMotionListener(mouseAdapter);
         addMouseListener(mouseAdapter);
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (selectedSegment != null && e.getKeyCode() == KeyEvent.VK_SPACE) {
+                    if (segmentPlayback != null) {
+                        segmentPlayback.playSegment(selectedSegment);
+                    }
+                }
+            }
+        });
         addCaretListener(e -> {
             TranscriptDocument doc = getTranscriptDocument();
             String transcriptElementType = (String) doc.getCharacterElement(e.getDot()).getAttributes().getAttribute("elementType");
@@ -333,6 +341,14 @@ public class TranscriptEditor extends JEditorPane {
 
     public EditorEventManager getEventManager() {
         return eventManager;
+    }
+
+    public MediaSegment getSelectedSegment() {
+        return selectedSegment;
+    }
+
+    public void setSelectedSegment(MediaSegment selectedSegment) {
+        this.selectedSegment = selectedSegment;
     }
 
     // endregion Getters and Setters
@@ -1419,7 +1435,7 @@ public class TranscriptEditor extends JEditorPane {
     private class TranscriptNavigationFilter extends NavigationFilter {
         @Override
         public void setDot(NavigationFilter.FilterBypass fb, int dot, Position.Bias bias) {
-            ((TranscriptEditorCaret)getCaret()).setSelectingSegment(false);
+            setSelectedSegment(null);
             TranscriptDocument doc = getTranscriptDocument();
             Element elem = doc.getCharacterElement(dot);
             AttributeSet attrs = elem.getAttributes();
@@ -1493,7 +1509,7 @@ public class TranscriptEditor extends JEditorPane {
                 var segmentBounds = doc.getSegmentBounds(mediaSegment, elem);
                 System.out.println("Segment bounds: " + segmentBounds);
                 setCaretPosition(segmentBounds.getObj1());
-                ((TranscriptEditorCaret)getCaret()).setSelectingSegment(true);
+                setSelectedSegment(mediaSegment);
                 moveCaretPosition(segmentBounds.getObj2()+1);
                 return;
             }
