@@ -61,11 +61,11 @@ import java.util.List;
 		name="Phon 4.0+ (.xml)"
 )
 @Rank(0)
-public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoint<SessionWriter> {
+public final class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoint<SessionWriter> {
 
-	private final static String DEFAULT_NAMESPACE = "https://phon.ca/ns/session";
+	public final static String DEFAULT_NAMESPACE = "https://phon.ca/ns/session";
 
-	private final static String DEFAULT_NAMESPACE_LOCATION = "https://phon.ca/xml/xsd/session/v1_3/session.xsd";
+	public final static String DEFAULT_NAMESPACE_LOCATION = "https://phon.ca/xml/xsd/session/v1_3/session.xsd";
 
 	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(XmlSessionWriterV1_3.class.getName());
 
@@ -567,7 +567,7 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 	 * @param orthography
 	 * @return
 	 */
-	private XmlUtteranceType writeOrthography(ObjectFactory factory, Orthography orthography) {
+	public XmlUtteranceType writeOrthography(ObjectFactory factory, Orthography orthography) {
 		final OrthoToXmlVisitor visitor = new OrthoToXmlVisitor();
 		orthography.accept(visitor);
 		return visitor.getU();

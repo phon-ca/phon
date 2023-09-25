@@ -79,7 +79,7 @@ import java.util.*;
 		name="Phon 4.0+ (.xml)"
 )
 @Rank(0)
-public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Session>, IPluginExtensionPoint<SessionReader> {
+public final class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Session>, IPluginExtensionPoint<SessionReader> {
 
 	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(XmlSessionReaderV1_3.class.getName());
 
@@ -561,7 +561,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		return utt;
 	}
 
-	private Orthography readOrthography(XmlUtteranceType ut) {
+	public Orthography readOrthography(XmlUtteranceType ut) {
 		final OrthographyBuilder builder = new OrthographyBuilder();
 		final XmlOrthographyVisitor visitor = new XmlOrthographyVisitor(builder);
 		if(ut.getLang() != null) {
