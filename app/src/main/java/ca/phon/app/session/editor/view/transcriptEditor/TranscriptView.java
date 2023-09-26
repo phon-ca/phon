@@ -6,12 +6,14 @@ import ca.phon.plugin.PluginManager;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.MediaUnit;
 import ca.phon.session.SessionFactory;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import org.jdesktop.swingx.HorizontalLayout;
+import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
 import java.awt.*;
@@ -74,6 +76,21 @@ public class TranscriptView extends EditorView {
         PhonUIAction<Void> showMediaAct = PhonUIAction.eventConsumer(this::showMediaPopup, null);
         showMediaAct.putValue(PhonUIAction.NAME, "Test media popup");
         toolbar.add(new JButton(showMediaAct));
+
+        JButton showCalloutButton = new JButton("Test callout");
+        showCalloutButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                CalloutWindow.showCallout(
+                    CommonModuleFrame.getCurrentFrame(),
+                    new JLabel("Testing some stuff..."),
+                    SwingConstants.NORTH,
+                    SwingConstants.CENTER,
+                    e.getLocationOnScreen()
+                );
+            }
+        });
+        toolbar.add(showCalloutButton);
     }
 
     private void showMediaPopup(PhonActionEvent<Void> pae) {

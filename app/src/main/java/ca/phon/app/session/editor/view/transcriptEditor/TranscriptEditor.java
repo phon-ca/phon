@@ -41,6 +41,8 @@ public class TranscriptEditor extends JEditorPane {
     private Object currentUnderline;
     TranscriptUnderlinePainter underlinePainter = new TranscriptUnderlinePainter();
     private MediaSegment selectedSegment = null;
+    private Tier<?> caretTier;
+
 
     public TranscriptEditor(
         Session session,
@@ -147,6 +149,12 @@ public class TranscriptEditor extends JEditorPane {
         inputMap.put(down, "sameOffsetNextTier");
         PhonUIAction<Void> downAct = PhonUIAction.runnable(this::sameOffsetInNextTierOrElement);
         actionMap.put("sameOffsetNextTier", downAct);
+
+
+        KeyStroke enter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+        inputMap.put(enter, "pressedEnter");
+        PhonUIAction<Void> enterAct = PhonUIAction.runnable(this::pressedEnter);
+        actionMap.put("pressedEnter", enterAct);
     }
 
     private void registerEditorActions() {
@@ -396,6 +404,30 @@ public class TranscriptEditor extends JEditorPane {
             System.out.println("Release");
             controlPressed = false;
             removeCurrentHighlight();
+        }
+    }
+
+    public void pressedEnter() {
+        if (selectedSegment != null) {
+            System.out.println("Do the thing");
+            return;
+        }
+
+        TranscriptDocument doc = getTranscriptDocument();
+
+        var attrs = doc.getCharacterElement(getCaretPosition()).getAttributes();
+        Tier<?> tier = (Tier<?>) attrs.getAttribute("tier");
+        if (tier != null) {
+            try {
+                int start = doc.getTierStart(tier);
+                int end = doc.getTierEnd(tier);
+                String newValue = doc.getText(start, end - start);
+
+                tierDataChanged(tier, tier.getValue().toString(), newValue);
+            }
+            catch (BadLocationException e) {
+                LogUtil.severe(e);
+            }
         }
     }
 
@@ -972,6 +1004,15 @@ public class TranscriptEditor extends JEditorPane {
         undoSupport.postEdit(edit);
     }
 
+    public void tierDataChanged(Tier<?> tier, String oldData, String newData) {
+        final EditorEvent<EditorEventType.TierChangeData> e = new EditorEvent<>(
+            EditorEventType.TierChanged,
+            this,
+            new EditorEventType.TierChangeData(tier, oldData, newData)
+        );
+        eventManager.queueEvent(e);
+    }
+
     private void highlightElementAtPoint(Point2D point) {
         int mousePosInDoc = viewToModel2D(point);
         var elem = getTranscriptDocument().getCharacterElement(mousePosInDoc);
@@ -1449,6 +1490,22 @@ public class TranscriptEditor extends JEditorPane {
             boolean isSegment = attrs.getAttribute("mediaSegment") != null;
 
             if (isLabel && !isSegment) return;
+
+            Tier<?> prevTier = (Tier<?>) doc.getCharacterElement(fb.getCaret().getDot()).getAttributes().getAttribute("tier");
+            Tier<?> nextTier = (Tier<?>) doc.getCharacterElement(dot).getAttributes().getAttribute("tier");
+
+            if (prevTier != null && prevTier.getName().equals(nextTier.getName())) {
+                try {
+                    int start = doc.getTierStart(prevTier);
+                    int end = doc.getTierEnd(prevTier);
+                    String newValue = doc.getText(start, end - start);
+
+                    tierDataChanged(prevTier, prevTier.getValue().toString(), newValue);
+                }
+                catch (BadLocationException e) {
+                    LogUtil.severe(e);
+                }
+            }
 
             fb.setDot(dot, bias);
         }
