@@ -374,10 +374,10 @@ public final class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensi
 		final XmlMediaType segType = factory.createXmlMediaType();
 		segType.setStart(BigDecimal.valueOf(segment.getStartValue()));
 		if(segment.getUnitType() == MediaUnit.Second)
-			segType.setStart(segType.getStart().setScale(3, RoundingMode.HALF_UP);
+			segType.setStart(segType.getStart().setScale(3, RoundingMode.HALF_UP));
 		segType.setEnd(BigDecimal.valueOf(segment.getEndValue()));
 		if(segment.getUnitType() == MediaUnit.Second)
-			segType.setEnd(segType.getEnd().setScale(3, RoundingMode.HALF_UP);
+			segType.setEnd(segType.getEnd().setScale(3, RoundingMode.HALF_UP));
 		final XmlMediaUnitType unitType = switch (segment.getUnitType()) {
 			case Second -> XmlMediaUnitType.S;
 			default -> XmlMediaUnitType.MS;
