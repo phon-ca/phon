@@ -21,6 +21,9 @@
        xmlns="https://phon.ca/ns/session"
        id="PhonBank" version="1.3">
 
+    <xs:import namespace="http://www.w3.org/XML/1998/namespace"
+               schemaLocation="http://www.w3.org/2001/xml.xsd"/>
+
     <xs:annotation>
         <xs:documentation>XML format specification for <a href="https://phon.ca">Phon</a></xs:documentation>
         <xs:documentation>Uses modified elements from the <a href="http://childes.talkbank.org/manuals/chat.html">CHAT Transcription Format</a>
@@ -1453,7 +1456,6 @@
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element ref="lang" minOccurs="0" maxOccurs="1"/>
             <xs:element ref="linker" minOccurs="0" maxOccurs="unbounded"/>
             <xs:choice maxOccurs="unbounded">
                 <xs:element ref="w"/>
@@ -1476,6 +1478,16 @@
             <xs:element ref="t" minOccurs="0" maxOccurs="1"/>
             <xs:element ref="postcode" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
+        <xs:attribute ref="xml:lang">
+            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                <xs:documentation> The language the entire utterance is in (unless individual words'
+                    languages are overridden explicitly). </xs:documentation>
+                <xs:documentation>
+                    <a href="https://talkbank.org/manuals/CHAT.html#Language_Precode">CHAT manual
+                        section on this topic...</a>
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
     </xs:complexType>
 
     <xs:complexType name="linkerType">
