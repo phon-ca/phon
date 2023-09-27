@@ -17,6 +17,7 @@ package ca.phon.session.io.xml.v1_3;
 
 import ca.phon.orthography.*;
 import ca.phon.orthography.Action;
+import ca.phon.orthography.Error;
 import ca.phon.orthography.Freecode;
 import ca.phon.orthography.Italic;
 import ca.phon.orthography.Linker;
@@ -452,6 +453,32 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 	@Override
 	public void visitUtteranceLanguage(UtteranceLanguage utteranceLanguage) {
 		u.setLang(utteranceLanguage.getLanguage().toString());
+	}
+
+	@Visits
+	public void visitError(Error error) {
+		final XmlErrorType xmlError = factory.createXmlErrorType();
+		if(error.getData() != null && !error.getData().isBlank())
+			xmlError.setValue(error.getData());
+		u.getKOrError().add(xmlError);
+	}
+
+	@Visits
+	public void visitMarker(Marker marker) {
+		final XmlMarkerType xmlMarker = factory.createXmlMarkerType();
+		final XmlMarkerTypeType type = switch (marker.getType()) {
+			case BEST_GUESS -> XmlMarkerTypeType.BEST_GUESS;
+			case CONTRASTIVE_STRESSING -> XmlMarkerTypeType.CONTRASTIVE_STRESSING;
+			case EXCLUDE -> XmlMarkerTypeType.MOR_EXCLUDE;
+			case FALSE_START -> XmlMarkerTypeType.FALSE_START;
+			case RETRACING -> XmlMarkerTypeType.RETRACING;
+			case RETRACING_REFORMULATION -> XmlMarkerTypeType.RETRACING_REFORMULATION;
+			case RETRACING_UNCLEAR -> XmlMarkerTypeType.RETRACING_UNCLEAR;
+			case RETRACING_WITH_CORRECTION -> XmlMarkerTypeType.RETRACING_WITH_CORRECTION;
+			case STRESSING -> XmlMarkerTypeType.STRESSING;
+		};
+		xmlMarker.setType(type);
+		u.getKOrError().add(xmlMarker);
 	}
 
 	public XmlUtteranceType getU() {

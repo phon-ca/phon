@@ -577,6 +577,7 @@ public final class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReade
 		if(ut.getT() != null)
 			visitor.visitTerminator(ut.getT());
 		ut.getPostcode().forEach(visitor::visit);
+		ut.getKOrError().forEach(visitor::visit);
 		return builder.toOrthography();
 	}
 

@@ -2,6 +2,7 @@ package ca.phon.session.io.xml.v1_3;
 
 import ca.phon.orthography.*;
 import ca.phon.orthography.Action;
+import ca.phon.orthography.Error;
 import ca.phon.orthography.Freecode;
 import ca.phon.orthography.Italic;
 import ca.phon.orthography.Linker;
@@ -297,6 +298,27 @@ public class XmlOrthographyVisitor extends VisitorAdapter<Object> {
     @Visits
     public void visitPostcode(XmlPostcodeType xmlPostcode) {
         builder.append(new Postcode(xmlPostcode.getValue()));
+    }
+
+    @Visits
+    public void visitError(XmlErrorType xmlErrorType) {
+        builder.append(new Error(xmlErrorType.getValue()));
+    }
+
+    @Visits
+    public void visitMarker(XmlMarkerType xmlMarker) {
+        final MarkerType type = switch (xmlMarker.getType()) {
+            case BEST_GUESS -> MarkerType.BEST_GUESS;
+            case CONTRASTIVE_STRESSING -> MarkerType.CONTRASTIVE_STRESSING;
+            case FALSE_START -> MarkerType.FALSE_START;
+            case MOR_EXCLUDE -> MarkerType.EXCLUDE;
+            case RETRACING -> MarkerType.RETRACING;
+            case RETRACING_REFORMULATION -> MarkerType.RETRACING_REFORMULATION;
+            case RETRACING_UNCLEAR -> MarkerType.RETRACING_UNCLEAR;
+            case RETRACING_WITH_CORRECTION -> MarkerType.RETRACING_WITH_CORRECTION;
+            case STRESSING -> MarkerType.STRESSING;
+        };
+        builder.append(new Marker(type));
     }
 
     public Orthography getOrthography() {

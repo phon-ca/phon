@@ -1477,6 +1477,10 @@
             </xs:choice>
             <xs:element ref="t" minOccurs="0" maxOccurs="1"/>
             <xs:element ref="postcode" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="k"/>
+                <xs:element ref="error"/>
+            </xs:choice>
         </xs:sequence>
         <xs:attribute ref="xml:lang">
             <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
