@@ -649,7 +649,7 @@ public final class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReade
 		return retVal;
 	}
 
-	private IPATranscript readTranscript(XmlPhoneticTranscriptionType pho) {
+	public IPATranscript readTranscript(XmlPhoneticTranscriptionType pho) {
 		final XmlPhoneticTranscriptVisitor visitor = new XmlPhoneticTranscriptVisitor();
 		pho.getPwOrPause().forEach(visitor::visit);
 		try {
