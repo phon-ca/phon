@@ -28,7 +28,7 @@
         </xs:documentation>
     </xs:annotation>
 
-    <!-- region Session -->
+    <!-- region Session header -->
     <xs:element name="session" type="SessionType">
         <xs:key name="uIDKey">
             <xs:selector xpath="transcript/r"/>
@@ -128,7 +128,6 @@
         <xs:attribute name="corpus" type="nonemptyStringType"/>
         <xs:attribute name="version" type="xs:string"/>
     </xs:complexType>
-    <!-- endregion Session  -->
 
     <!-- region Participants -->
     <xs:element name="participants" type="participantsType">
@@ -258,7 +257,6 @@
             <xs:enumeration value="unspecified"/>
         </xs:restriction>
     </xs:simpleType>
-
     <!-- endregion Participants -->
 
     <!-- region Blind transcription -->
@@ -547,6 +545,7 @@
         </xs:restriction>
     </xs:simpleType>
     <!-- endregion Cross-tier alignment -->
+    <!-- endregion Session header -->
 
     <!-- region Transcript -->
     <xs:element name="transcript" type="transcriptType"/>
@@ -3493,7 +3492,7 @@
             </xs:enumeration>
         </xs:restriction>
     </xs:simpleType>
-    <!-- endregion CHAT -->
+    <!-- endregion CHAT utterance -->
 
     <!-- region Timeline -->
     <xs:element name="recordTimelineTier" type="nonemptyStringType"/>
