@@ -724,6 +724,9 @@ public final class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReade
 			} else if(obj instanceof XmlMediaType mt) {
 				final MediaSegment seg = readMediaSegment(factory, mt);
 				elements.add(new TierInternalMedia(new InternalMedia(seg.getStartValue(), seg.getEndValue())));
+			} else if(obj instanceof XmlTierLinkType tl) {
+				final TierLink link = new TierLink(tl.getHref(), tl.getLabel());
+				elements.add(link);
 			} else {
 				LOGGER.warn("Invalid element " + obj.toString());
 			}

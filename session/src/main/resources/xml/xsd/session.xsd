@@ -1441,7 +1441,17 @@
             <xs:element ref="tw"/>
             <xs:element ref="tc"/>
             <xs:element ref="internal-media"/>
+            <xs:element ref="ta"/>
         </xs:choice>
+    </xs:complexType>
+
+    <xs:element name="ta" type="tierLinkType"/>
+    <xs:complexType name="tierLinkType">
+        <xs:annotation>
+            <xs:documentation>Link to external reference with optional type</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="href" type="xs:anyURI" use="required"/>
+        <xs:attribute name="label" type="nonemptyStringType" use="optional"/>
     </xs:complexType>
     <!-- endregion TierData -->
 

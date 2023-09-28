@@ -463,6 +463,11 @@ public final class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensi
 				mediaType.setEnd(BigDecimal.valueOf(im.getInternalMedia().getEndTime()).setScale(3, RoundingMode.HALF_UP));
 				mediaType.setUnit(XmlMediaUnitType.S);
 				retVal.getTwOrTcOrInternalMedia().add(mediaType);
+			} else if(ele instanceof TierLink tl) {
+				final XmlTierLinkType linkType = factory.createXmlTierLinkType();
+				linkType.setHref(tl.getHref());
+				linkType.setLabel(tl.getLabel());
+				retVal.getTwOrTcOrInternalMedia().add(linkType);
 			}
 		}
 		return retVal;
