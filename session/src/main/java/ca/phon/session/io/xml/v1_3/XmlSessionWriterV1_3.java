@@ -61,11 +61,11 @@ import java.util.List;
 		name="Phon 4.0+ (.xml)"
 )
 @Rank(0)
-public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoint<SessionWriter> {
+public final class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoint<SessionWriter> {
 
-	private final static String DEFAULT_NAMESPACE = "https://phon.ca/ns/session";
+	public final static String DEFAULT_NAMESPACE = "https://phon.ca/ns/session";
 
-	private final static String DEFAULT_NAMESPACE_LOCATION = "https://phon.ca/xml/xsd/session/v1_3/session.xsd";
+	public final static String DEFAULT_NAMESPACE_LOCATION = "https://phon.ca/xml/xsd/session/v1_3/session.xsd";
 
 	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(XmlSessionWriterV1_3.class.getName());
 
@@ -374,10 +374,10 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 		final XmlMediaType segType = factory.createXmlMediaType();
 		segType.setStart(BigDecimal.valueOf(segment.getStartValue()));
 		if(segment.getUnitType() == MediaUnit.Second)
-			segType.getStart().setScale(3, RoundingMode.HALF_UP);
+			segType.setStart(segType.getStart().setScale(3, RoundingMode.HALF_UP));
 		segType.setEnd(BigDecimal.valueOf(segment.getEndValue()));
 		if(segment.getUnitType() == MediaUnit.Second)
-			segType.getEnd().setScale(3, RoundingMode.HALF_UP);
+			segType.setEnd(segType.getEnd().setScale(3, RoundingMode.HALF_UP));
 		final XmlMediaUnitType unitType = switch (segment.getUnitType()) {
 			case Second -> XmlMediaUnitType.S;
 			default -> XmlMediaUnitType.MS;
@@ -463,6 +463,11 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 				mediaType.setEnd(BigDecimal.valueOf(im.getInternalMedia().getEndTime()).setScale(3, RoundingMode.HALF_UP));
 				mediaType.setUnit(XmlMediaUnitType.S);
 				retVal.getTwOrTcOrInternalMedia().add(mediaType);
+			} else if(ele instanceof TierLink tl) {
+				final XmlTierLinkType linkType = factory.createXmlTierLinkType();
+				linkType.setHref(tl.getHref());
+				linkType.setLabel(tl.getLabel());
+				retVal.getTwOrTcOrInternalMedia().add(linkType);
 			}
 		}
 		return retVal;
@@ -567,7 +572,7 @@ public class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoin
 	 * @param orthography
 	 * @return
 	 */
-	private XmlUtteranceType writeOrthography(ObjectFactory factory, Orthography orthography) {
+	public XmlUtteranceType writeOrthography(ObjectFactory factory, Orthography orthography) {
 		final OrthoToXmlVisitor visitor = new OrthoToXmlVisitor();
 		orthography.accept(visitor);
 		return visitor.getU();

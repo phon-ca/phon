@@ -5,7 +5,7 @@ usertier
     ;
 
 tierdata
-    :   tierdata WS tierdata
+    :   tierdata WS+ tierdata
     |   element
     ;
 
@@ -13,6 +13,7 @@ element
     :   word
     |   comment
     |   internal_media
+    |   link
     ;
 
 word
@@ -25,6 +26,14 @@ comment
 
 internal_media
     :   BULLET time_in_minutes_seconds MINUS time_in_minutes_seconds BULLET
+    ;
+
+label
+    :   CHAR (CHAR | DIGIT)*
+    ;
+
+link
+    :   LINK (label WS)? .+? LINK
     ;
 
 time_in_minutes_seconds
@@ -73,4 +82,8 @@ BEGIN_COMMENT
 
 END_COMMENT
     :   ']'
+    ;
+
+LINK
+    :   '\uD83D\uDD17'
     ;

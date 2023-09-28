@@ -45,6 +45,15 @@ public class TierDataParserListener extends TierDataBaseListener {
 
     }
 
+    @Override
+    public void exitLink(TierDataParser.LinkContext ctx) {
+        final String label = ctx.label() != null ? ctx.label().getText() : null;
+        int startIdx = TierLink.LINK_PREFIX.length() + (label != null ? label.length() + 1 : 0);
+        int endIdx = ctx.getText().length() - TierLink.LINK_PREFIX.length();
+        final String href = ctx.getText().substring(startIdx, endIdx);
+        elementList.add(new TierLink(href, label));
+    }
+
     public TierData toTierData() {
         return new TierData(elementList);
     }

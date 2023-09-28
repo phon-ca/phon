@@ -346,6 +346,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
                 Word word = (Word) lastEle;
                 builder.replaceLastElement(new OrthoGroup(Collections.singletonList(word), Collections.singletonList(ele)));
             } else {
+                // annotate utterance
                 builder.append(ele);
             }
         } else {

@@ -79,7 +79,7 @@ import java.util.*;
 		name="Phon 4.0+ (.xml)"
 )
 @Rank(0)
-public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Session>, IPluginExtensionPoint<SessionReader> {
+public final class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Session>, IPluginExtensionPoint<SessionReader> {
 
 	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(XmlSessionReaderV1_3.class.getName());
 
@@ -426,7 +426,6 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 
 	Record readRecord(SessionFactory factory, Session session, XmlRecordType rt) {
 		final Record retVal = factory.createRecord();
-		retVal.setExcludeFromSearches(rt.isExcludeFromSearches());
 
 		try {
 			if(rt.getUuid() != null) {
@@ -561,7 +560,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		return utt;
 	}
 
-	private Orthography readOrthography(XmlUtteranceType ut) {
+	public Orthography readOrthography(XmlUtteranceType ut) {
 		final OrthographyBuilder builder = new OrthographyBuilder();
 		final XmlOrthographyVisitor visitor = new XmlOrthographyVisitor(builder);
 		if(ut.getLang() != null) {
@@ -577,6 +576,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		if(ut.getT() != null)
 			visitor.visitTerminator(ut.getT());
 		ut.getPostcode().forEach(visitor::visit);
+		ut.getKOrError().forEach(visitor::visit);
 		return builder.toOrthography();
 	}
 
@@ -649,7 +649,7 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 		return retVal;
 	}
 
-	private IPATranscript readTranscript(XmlPhoneticTranscriptionType pho) {
+	public IPATranscript readTranscript(XmlPhoneticTranscriptionType pho) {
 		final XmlPhoneticTranscriptVisitor visitor = new XmlPhoneticTranscriptVisitor();
 		pho.getPwOrPause().forEach(visitor::visit);
 		try {
@@ -723,6 +723,9 @@ public class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Sess
 			} else if(obj instanceof XmlMediaType mt) {
 				final MediaSegment seg = readMediaSegment(factory, mt);
 				elements.add(new TierInternalMedia(new InternalMedia(seg.getStartValue(), seg.getEndValue())));
+			} else if(obj instanceof XmlTierLinkType tl) {
+				final TierLink link = new TierLink(tl.getHref(), tl.getLabel());
+				elements.add(link);
 			} else {
 				LOGGER.warn("Invalid element " + obj.toString());
 			}

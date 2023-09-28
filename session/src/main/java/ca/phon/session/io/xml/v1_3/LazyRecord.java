@@ -92,11 +92,6 @@ public final class LazyRecord implements RecordSPI {
 		return internalRecord.isExcludeFromSearches();
 	}
 
-	public void setExcludeFromSearches(boolean excluded) {
-		loadRecord();
-		internalRecord.setExcludeFromSearches(excluded);
-	}
-
 	public Tier<Orthography> getOrthographyTier() {
 		loadRecord();
 		return internalRecord.getOrthographyTier();

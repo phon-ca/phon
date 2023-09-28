@@ -19,6 +19,7 @@ package ca.phon.session;
 import ca.phon.extensions.ExtendableObject;
 import ca.phon.ipa.*;
 import ca.phon.orthography.*;
+import ca.phon.orthography.Error;
 import ca.phon.session.spi.RecordSPI;
 import ca.phon.session.tierdata.TierData;
 import ca.phon.util.Language;
@@ -129,16 +130,25 @@ public final class Record extends ExtendableObject {
 	}
 
 	/**
-	 * Should we exclude this record from searches?
+	 * Should we exclude this record from searches?  This will be true if utterance-level annotations in
+	 * the Orthography tier include <pre>[e]</pre> (exclude) or <pre>[* error]</pre> (error).
 	 *
 	 * @return true if record should be excluded
 	 */
 	public boolean isExcludeFromSearches() {
-		return recordImpl.isExcludeFromSearches();
-	}
-
-	public void setExcludeFromSearches(boolean excluded) {
-		recordImpl.setExcludeFromSearches(excluded);
+		final Orthography orthography = getOrthography();
+		boolean exclude = false;
+		for(OrthographyAnnotation annotation:orthography.getAnnotations()) {
+			if(annotation instanceof Error) {
+				exclude = true;
+				break;
+			}
+			if(annotation instanceof Marker marker && marker.getType() == MarkerType.EXCLUDE) {
+				exclude = true;
+				break;
+			}
+		}
+		return exclude;
 	}
 
 	/**

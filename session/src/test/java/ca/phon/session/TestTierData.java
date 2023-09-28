@@ -1,9 +1,6 @@
 package ca.phon.session;
 
-import ca.phon.session.tierdata.TierData;
-import ca.phon.session.tierdata.TierString;
-import ca.phon.session.tierdata.TierComment;
-import ca.phon.session.tierdata.TierInternalMedia;
+import ca.phon.session.tierdata.*;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -73,6 +70,29 @@ public class TestTierData {
         Assert.assertEquals(TierComment.class, tierData.elementAt(2).getClass());
         final TierComment tc2 = (TierComment) tierData.elementAt(2);
         Assert.assertEquals("sanity", tc2.text());
+    }
+
+    @Test
+    public void testLinkWithLabel() throws ParseException {
+        final String text = "goodbye \uD83D\uDD17pic __res/pics/test.png\uD83D\uDD17";
+        final TierData tierData = roundTripTest(text);
+        Assert.assertEquals(2, tierData.size());
+        Assert.assertEquals(TierString.class, tierData.elementAt(0).getClass());
+        Assert.assertEquals(TierLink.class, tierData.elementAt(1).getClass());
+        final TierLink link = (TierLink)tierData.elementAt(1);
+        Assert.assertEquals("pic", link.getLabel());
+        Assert.assertEquals("__res/pics/test.png", link.getHref());
+    }
+
+    @Test
+    public void testWebLink() throws ParseException {
+        final String text = "goodbye \uD83D\uDD17https://phon.ca/ns/session\uD83D\uDD17";
+        final TierData tierData = roundTripTest(text);
+        Assert.assertEquals(2, tierData.size());
+        Assert.assertEquals(TierString.class, tierData.elementAt(0).getClass());
+        Assert.assertEquals(TierLink.class, tierData.elementAt(1).getClass());
+        final TierLink link = (TierLink)tierData.elementAt(1);
+        Assert.assertEquals("https://phon.ca/ns/session", link.getHref());
     }
 
 }

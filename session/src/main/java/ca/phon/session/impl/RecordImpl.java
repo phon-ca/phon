@@ -37,8 +37,6 @@ public class RecordImpl implements RecordSPI {
 
 	private Participant participant = Participant.UNKNOWN;
 
-	private volatile boolean excludeFromSearches = false;
-
 	/* default tiers */
 	private final Tier<Orthography> orthography;
 
@@ -97,16 +95,6 @@ public class RecordImpl implements RecordSPI {
 	@Override
 	public Tier<MediaSegment> getSegmentTier() {
 		return this.segmentTier;
-	}
-
-	@Override
-	public boolean isExcludeFromSearches() {
-		return this.excludeFromSearches;
-	}
-
-	@Override
-	public void setExcludeFromSearches(boolean excluded) {
-		this.excludeFromSearches = excluded;
 	}
 
 	@Override

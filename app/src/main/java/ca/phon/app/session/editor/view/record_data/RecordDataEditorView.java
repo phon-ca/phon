@@ -578,7 +578,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 			speakerBox.setRenderer(speakerRenderer);
 			speakerBox.addItemListener(speakerListener);
 
-			final PhonUIAction<Void> excludeAct = PhonUIAction.runnable(this::onExclude);
+			final PhonUIAction<Void> excludeAct = PhonUIAction.runnable(() -> {});
 			excludeAct.putValue(PhonUIAction.NAME, excludeFromSearchesText);
 			excludeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Exclude record from queries");
 			excludeFromSearchesBox = new JCheckBox(excludeAct);
@@ -811,12 +811,6 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 	public void playSegment() {
 		PlaySegmentAction playSegAct = new PlaySegmentAction(getEditor());
 		playSegAct.actionPerformed(new ActionEvent(this, -1, "play_segment"));
-	}
-
-	public void onExclude() {
-		final boolean exclude = excludeFromSearchesBox.isSelected();
-		final ExcludeRecordEdit edit = new ExcludeRecordEdit(getEditor(), getEditor().currentRecord(), exclude);
-		getEditor().getUndoSupport().postEdit(edit);
 	}
 
 	/**

@@ -21,6 +21,9 @@
        xmlns="https://phon.ca/ns/session"
        id="PhonBank" version="1.3">
 
+    <xs:import namespace="http://www.w3.org/XML/1998/namespace"
+               schemaLocation="http://www.w3.org/2001/xml.xsd"/>
+
     <xs:annotation>
         <xs:documentation>XML format specification for <a href="https://phon.ca">Phon</a></xs:documentation>
         <xs:documentation>Uses modified elements from the <a href="http://childes.talkbank.org/manuals/chat.html">CHAT Transcription Format</a>
@@ -28,6 +31,7 @@
         </xs:documentation>
     </xs:annotation>
 
+    <!-- region Session header -->
     <xs:element name="session" type="SessionType">
         <xs:key name="uIDKey">
             <xs:selector xpath="transcript/r"/>
@@ -74,6 +78,7 @@
             <xs:field xpath="@tierName"/>
         </xs:keyref>
     </xs:element>
+
 
     <xs:element name="date" type="xs:date"/>
     <xs:element name="languages" type="listOfLanguages"/>
@@ -127,6 +132,7 @@
         <xs:attribute name="version" type="xs:string"/>
     </xs:complexType>
 
+    <!-- region Participants -->
     <xs:element name="participants" type="participantsType">
         <xs:annotation>
             <xs:documentation>Participants in session</xs:documentation>
@@ -254,12 +260,9 @@
             <xs:enumeration value="unspecified"/>
         </xs:restriction>
     </xs:simpleType>
+    <!-- endregion Participants -->
 
-    <xs:simpleType name="listOfIntegers">
-        <xs:list itemType="xs:int"/>
-    </xs:simpleType>
-
-    <!-- Blind transcribers -->
+    <!-- region Blind transcription -->
     <xs:element name="blindTier" type="nonemptyStringType"/>
     <xs:element name="blindMode" type="blindModeType"/>
     <xs:complexType name="blindModeType">
@@ -289,8 +292,9 @@
         </xs:sequence>
         <xs:attribute name="id" type="xs:ID" use="required"/>
     </xs:complexType>
+    <!-- endregion Blind transcription -->
 
-    <!-- User-defined tiers -->
+    <!-- region Tier view -->
     <xs:element name="tierView" type="tierViewType">
         <xs:annotation>
             <xs:documentation>Tier view settings</xs:documentation>
@@ -306,6 +310,22 @@
         <xs:attribute name="font" type="xs:string" use="optional" default="default"/>
     </xs:complexType>
 
+    <xs:element name="tierOrder" type="tierOrderType"/>
+    <xs:complexType name="tierOrderType" mixed="false">
+        <xs:annotation>
+            <xs:documentation>TierOrder; defining the tier ordering and visibility for the
+                session.</xs:documentation>
+            <xs:documentation>
+                <a href="https://www.phon.ca/phon-manual/session_editor/tier_management_view.html">Phon manual section on this topic...</a>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="tierView" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <!-- endregion Tier view -->
+
+    <!-- region User tiers -->
     <xs:element name="userTiers" type="userTiersType"/>
     <xs:complexType name="userTiersType" mixed="false">
         <xs:annotation>
@@ -379,7 +399,9 @@
         </xs:annotation>
         <xs:attribute name="name" type="nonemptyStringType" use="required"/>
     </xs:complexType>
+    <!-- endregion User tiers -->
 
+    <!-- region Cross-tier alignment -->
     <xs:element name="tierAlignmentRules" type="tierAlignmentRulesType"/>
     <xs:complexType name="tierAlignmentRulesType">
         <xs:sequence>
@@ -525,21 +547,10 @@
             <xs:enumeration value="comment"/>
         </xs:restriction>
     </xs:simpleType>
+    <!-- endregion Cross-tier alignment -->
+    <!-- endregion Session header -->
 
-    <xs:element name="tierOrder" type="tierOrderType"/>
-    <xs:complexType name="tierOrderType" mixed="false">
-        <xs:annotation>
-            <xs:documentation>TierOrder; defining the tier ordering and visibility for the
-                session.</xs:documentation>
-            <xs:documentation>
-                <a href="https://www.phon.ca/phon-manual/session_editor/tier_management_view.html">Phon manual section on this topic...</a>
-            </xs:documentation>
-        </xs:annotation>
-        <xs:sequence>
-            <xs:element ref="tierView" maxOccurs="unbounded"/>
-        </xs:sequence>
-    </xs:complexType>
-
+    <!-- region Transcript -->
     <xs:element name="transcript" type="transcriptType"/>
     <xs:complexType name="transcriptType" mixed="false">
         <xs:annotation>
@@ -552,7 +563,7 @@
         </xs:choice>
     </xs:complexType>
 
-    <!-- Gems -->
+    <!-- region Gems -->
     <xs:element name="gem" type="gemType"/>
     <xs:complexType name="gemType" mixed="true">
         <xs:annotation>
@@ -592,8 +603,9 @@
             </xs:enumeration>
         </xs:restriction>
     </xs:simpleType>
+    <!-- endregion Gems -->
 
-    <!-- Comments - Comments types are derived from the CHAT transcription format -->
+    <!-- region Comments -->
     <xs:element name="comment" type="commentType"/>
     <xs:complexType name="commentType">
         <xs:annotation>
@@ -816,8 +828,9 @@
             </xs:enumeration>
         </xs:restriction>
     </xs:simpleType>
+    <!-- endregion Comments -->
 
-    <!-- Record -->
+    <!-- region Records -->
     <xs:element name="r" type="recordType"/>
     <xs:element name="segment" type="mediaType"/>
     <xs:complexType name="recordType" mixed="false">
@@ -839,7 +852,11 @@
         <xs:attribute name="uuid" type="nonemptyStringType"/>
         <xs:attribute name="excludeFromSearches" type="xs:boolean" default="false"/>
     </xs:complexType>
+    <!-- endregion Records -->
+    <!-- endregion Transcript -->
 
+    <!-- region Tiers -->
+    <!-- region Errors -->
     <xs:element name="unparsed" type="unparsedData"/>
     <xs:element name="unparsedValue" type="nonemptyStringType"/>
     <xs:complexType name="unparsedData">
@@ -863,6 +880,7 @@
         </xs:annotation>
         <xs:attribute name="charPositionInLine" type="xs:int"/>
     </xs:complexType>
+    <!-- endregion Errors -->
 
     <xs:element name="orthography" type="orthographyTierType"/>
     <xs:complexType name="orthographyTierType" mixed="false">
@@ -919,6 +937,61 @@
         </xs:restriction>
     </xs:simpleType>
 
+    <xs:element name="alignment" type="alignmentTierType"/>
+    <xs:complexType name="alignmentTierType" mixed="false">
+        <xs:annotation>
+            <xs:documentation>For IPA Target/Actual alignment.</xs:documentation>
+            <xs:documentation>
+                <a href="https://www.phon.ca/phon-manual/session_editor/syllabification_and_alignment_view.html?hl=syllabification">Phon manual section on this topic...</a>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+            <xs:element ref="pm"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Notes -->
+    <xs:element name="notes" type="notesTierType"/>
+    <xs:complexType name="notesTierType">
+        <xs:annotation>
+            <xs:documentation>Notes tier (uses same format as user-defined tiers)</xs:documentation>
+            <xs:documentation>
+                <a href="https://www.phon.ca/phon-manual/transcription/record_data.html">Phon manual section on this topic...</a>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:choice minOccurs="1" maxOccurs="1">
+                <xs:element ref="tierData"/>
+                <xs:element ref="unparsed"/>
+            </xs:choice>
+            <xs:element ref="blindTranscription" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- User defined tiers -->
+    <xs:element name="userTier" type="userTierType"/>
+    <xs:complexType name="userTierType">
+        <xs:annotation>
+            <xs:documentation>User defined tier</xs:documentation>
+            <xs:documentation>
+                <a href="https://www.phon.ca/phon-manual/session_editor/tier_management_view.html">Phon manual section on this topic...</a>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:choice minOccurs="1" maxOccurs="1">
+                <xs:element ref="u"/>
+                <xs:element ref="pho"/>
+                <xs:element ref="alignment"/>
+                <xs:element ref="tierData"/>
+                <xs:element ref="unparsed"/>
+            </xs:choice>
+            <xs:element ref="blindTranscription" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+    <!-- endregion Tiers -->
+
+    <!-- region IPATranscript -->
     <xs:element name="pho" type="phoneticTranscriptionType"/>
     <xs:complexType name="phoneticTranscriptionType">
         <xs:annotation>
@@ -1314,21 +1387,9 @@
             </xs:enumeration>
         </xs:restriction>
     </xs:simpleType>
+    <!-- endregion IPATranscript -->
 
-    <!-- Phone alignment tier -->
-    <xs:element name="alignment" type="alignmentTierType"/>
-    <xs:complexType name="alignmentTierType" mixed="false">
-        <xs:annotation>
-            <xs:documentation>For IPA Target/Actual alignment.</xs:documentation>
-            <xs:documentation>
-                <a href="https://www.phon.ca/phon-manual/session_editor/syllabification_and_alignment_view.html?hl=syllabification">Phon manual section on this topic...</a>
-            </xs:documentation>
-        </xs:annotation>
-        <xs:sequence minOccurs="1" maxOccurs="unbounded">
-            <xs:element ref="pm"/>
-        </xs:sequence>
-    </xs:complexType>
-
+    <!-- region Phone alignment -->
     <xs:element name="pm" type="phoneMapType"/>
     <xs:element name="top" type="listOfIntegers"/>
     <xs:element name="bottom" type="listOfIntegers"/>
@@ -1353,48 +1414,9 @@
                 </xs:annotation>
         </xs:attribute>
     </xs:complexType>
+    <!-- endregion Phone alignment -->
 
-    <!-- Notes -->
-    <xs:element name="notes" type="notesTierType"/>
-    <xs:complexType name="notesTierType">
-        <xs:annotation>
-            <xs:documentation>Notes tier (uses same format as user-defined tiers)</xs:documentation>
-            <xs:documentation>
-                <a href="https://www.phon.ca/phon-manual/transcription/record_data.html">Phon manual section on this topic...</a>
-            </xs:documentation>
-        </xs:annotation>
-        <xs:sequence>
-            <xs:choice minOccurs="1" maxOccurs="1">
-                <xs:element ref="tierData"/>
-                <xs:element ref="unparsed"/>
-            </xs:choice>
-            <xs:element ref="blindTranscription" maxOccurs="unbounded" minOccurs="0"/>
-        </xs:sequence>
-
-    </xs:complexType>
-
-    <!-- User defined tiers -->
-    <xs:element name="userTier" type="userTierType"/>
-    <xs:complexType name="userTierType">
-        <xs:annotation>
-            <xs:documentation>User defined tier</xs:documentation>
-            <xs:documentation>
-                <a href="https://www.phon.ca/phon-manual/session_editor/tier_management_view.html">Phon manual section on this topic...</a>
-            </xs:documentation>
-        </xs:annotation>
-        <xs:sequence>
-            <xs:choice minOccurs="1" maxOccurs="1">
-                <xs:element ref="u"/>
-                <xs:element ref="pho"/>
-                <xs:element ref="alignment"/>
-                <xs:element ref="tierData"/>
-                <xs:element ref="unparsed"/>
-            </xs:choice>
-            <xs:element ref="blindTranscription" minOccurs="0" maxOccurs="unbounded"/>
-        </xs:sequence>
-        <xs:attribute name="name" type="xs:string" use="required"/>
-    </xs:complexType>
-
+    <!-- region TierData -->
     <xs:element name="tierData" type="tierData"/>
 
     <xs:element name="tw" type="tierWordType"/>
@@ -1419,10 +1441,21 @@
             <xs:element ref="tw"/>
             <xs:element ref="tc"/>
             <xs:element ref="internal-media"/>
+            <xs:element ref="ta"/>
         </xs:choice>
     </xs:complexType>
 
-    <!-- CHAT (orthography) -->
+    <xs:element name="ta" type="tierLinkType"/>
+    <xs:complexType name="tierLinkType">
+        <xs:annotation>
+            <xs:documentation>Link to external reference with optional type</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="href" type="xs:anyURI" use="required"/>
+        <xs:attribute name="label" type="nonemptyStringType" use="optional"/>
+    </xs:complexType>
+    <!-- endregion TierData -->
+
+    <!-- region CHAT utterance -->
     <xs:element name="u" type="utteranceType"/>
     <xs:complexType name="utteranceType" mixed="false">
         <xs:annotation>
@@ -1433,7 +1466,6 @@
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element ref="lang" minOccurs="0" maxOccurs="1"/>
             <xs:element ref="linker" minOccurs="0" maxOccurs="unbounded"/>
             <xs:choice maxOccurs="unbounded">
                 <xs:element ref="w"/>
@@ -1455,7 +1487,21 @@
             </xs:choice>
             <xs:element ref="t" minOccurs="0" maxOccurs="1"/>
             <xs:element ref="postcode" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="k"/>
+                <xs:element ref="error"/>
+            </xs:choice>
         </xs:sequence>
+        <xs:attribute ref="xml:lang">
+            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                <xs:documentation> The language the entire utterance is in (unless individual words'
+                    languages are overridden explicitly). </xs:documentation>
+                <xs:documentation>
+                    <a href="https://talkbank.org/manuals/CHAT.html#Language_Precode">CHAT manual
+                        section on this topic...</a>
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
     </xs:complexType>
 
     <xs:complexType name="linkerType">
@@ -3472,7 +3518,62 @@
             </xs:enumeration>
         </xs:restriction>
     </xs:simpleType>
+    <!-- endregion CHAT utterance -->
 
+    <!-- region Timeline -->
+    <xs:element name="recordTimelineTier" type="nonemptyStringType"/>
+    <xs:element name="timeline" type="timelineType"/>
+    <xs:complexType name="timelineType">
+        <xs:annotation>
+            <xs:documentation>Timeline information for the session.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="recordTimelineTier" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>Name of record tier. Inline media segments from the tier will be displayed in the timeline view.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element ref="timelineTier" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>Session level timeline information unassociated with record data</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="length" type="xs:float" use="required"/>
+        <xs:attribute name="unit" type="mediaUnitType" use="required"/>
+    </xs:complexType>
+
+    <xs:element name="timelineTier" type="timelineTierType"/>
+    <xs:complexType name="timelineTierType">
+        <xs:annotation>
+            <xs:documentation>A collection of points/intervals on the timeline</xs:documentation>
+        </xs:annotation>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="point"/>
+            <xs:element ref="interval"/>
+        </xs:choice>
+        <xs:attribute name="name" type="nonemptyStringType" use="required"/>
+    </xs:complexType>
+
+    <xs:element name="interval" type="intervalType"/>
+    <xs:complexType name="intervalType" mixed="true">
+        <xs:annotation>
+            <xs:documentation>Timeline interval with label</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="start" type="xs:float" use="required"/>
+        <xs:attribute name="end" type="xs:float" use="required"/>
+    </xs:complexType>
+
+    <xs:element name="point" type="pointType"/>
+    <xs:complexType name="pointType" mixed="true">
+        <xs:annotation>
+            <xs:documentation>Point on timeline with label</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="value" type="xs:float" use="required"/>
+    </xs:complexType>
+    <!-- endregion Timeline -->
+
+    <!-- region Simple types -->
     <xs:simpleType name="beginEndType">
         <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
             <xs:documentation> For use for delimited material. A workaround for lack of overlapping
@@ -3525,56 +3626,9 @@
         </xs:restriction>
     </xs:simpleType>
 
-    <!-- timeline -->
-    <xs:element name="recordTimelineTier" type="nonemptyStringType"/>
-    <xs:element name="timeline" type="timelineType"/>
-    <xs:complexType name="timelineType">
-        <xs:annotation>
-            <xs:documentation>Timeline information for the session.</xs:documentation>
-        </xs:annotation>
-        <xs:sequence>
-            <xs:element ref="recordTimelineTier" minOccurs="0" maxOccurs="unbounded">
-                <xs:annotation>
-                    <xs:documentation>Name of record tier. Inline media segments from the tier will be displayed in the timeline view.</xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element ref="timelineTier" minOccurs="0" maxOccurs="unbounded">
-                <xs:annotation>
-                    <xs:documentation>Session level timeline information unassociated with record data</xs:documentation>
-                </xs:annotation>
-            </xs:element>
-        </xs:sequence>
-        <xs:attribute name="length" type="xs:float" use="required"/>
-        <xs:attribute name="unit" type="mediaUnitType" use="required"/>
-    </xs:complexType>
-
-    <xs:element name="timelineTier" type="timelineTierType"/>
-    <xs:complexType name="timelineTierType">
-        <xs:annotation>
-            <xs:documentation>A collection of points/intervals on the timeline</xs:documentation>
-        </xs:annotation>
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:element ref="point"/>
-            <xs:element ref="interval"/>
-        </xs:choice>
-        <xs:attribute name="name" type="nonemptyStringType" use="required"/>
-    </xs:complexType>
-
-    <xs:element name="interval" type="intervalType"/>
-    <xs:complexType name="intervalType" mixed="true">
-        <xs:annotation>
-            <xs:documentation>Timeline interval with label</xs:documentation>
-        </xs:annotation>
-        <xs:attribute name="start" type="xs:float" use="required"/>
-        <xs:attribute name="end" type="xs:float" use="required"/>
-    </xs:complexType>
-
-    <xs:element name="point" type="pointType"/>
-    <xs:complexType name="pointType" mixed="true">
-        <xs:annotation>
-            <xs:documentation>Point on timeline with label</xs:documentation>
-        </xs:annotation>
-        <xs:attribute name="value" type="xs:float" use="required"/>
-    </xs:complexType>
+    <xs:simpleType name="listOfIntegers">
+        <xs:list itemType="xs:int"/>
+    </xs:simpleType>
+    <!-- endregion Simple types -->
 
 </xs:schema>
