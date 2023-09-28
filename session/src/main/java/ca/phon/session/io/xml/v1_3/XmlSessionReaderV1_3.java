@@ -426,7 +426,6 @@ public final class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReade
 
 	Record readRecord(SessionFactory factory, Session session, XmlRecordType rt) {
 		final Record retVal = factory.createRecord();
-		retVal.setExcludeFromSearches(rt.isExcludeFromSearches());
 
 		try {
 			if(rt.getUuid() != null) {

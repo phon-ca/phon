@@ -175,6 +175,45 @@ public final class Orthography implements Iterable<OrthographyElement>, Visitabl
 		return locator.getStringIndex();
 	}
 
+	/**
+	 * Does utterance have a terminator?
+	 *
+	 * @return true if terminator found, false otherwise
+	 */
+	public boolean hasTerminator() {
+		return getTerminator() != null;
+	}
+
+	/**
+	 * Get terminator for utterance (if any.)
+	 *
+	 * @return utterance terminator or null if not found
+	 */
+	public Terminator getTerminator() {
+		for(OrthographyElement ele:elements)
+			if(ele instanceof Terminator t) return t;
+		return null;
+	}
+
+	/**
+	 * Return utterance level annotations.  These annotations must appear after the terminator and postcodes.
+	 * Utterance level annotations may include markers and errors.
+	 *
+	 * @return unmodifiable list of annotations at end of utterance
+	 */
+	public List<OrthographyAnnotation> getAnnotations() {
+		final List<OrthographyAnnotation> retVal = new ArrayList<>();
+		boolean foundTerminator = false;
+        for (final OrthographyElement ele : elements) {
+            if (ele instanceof Terminator)
+                foundTerminator = true;
+            if (ele instanceof OrthographyAnnotation orthographyAnnotation && foundTerminator) {
+                retVal.add(orthographyAnnotation);
+            }
+        }
+		return retVal;
+	}
+
 	@Override
 	public String toString() {
 		final StringBuffer buffer = new StringBuffer();

@@ -324,8 +324,6 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 	Record copyRecord(SessionFactory factory, Session session, RecordType rt) {
 		final Record retVal = factory.createRecord();
 
-		retVal.setExcludeFromSearches(rt.isExcludeFromSearches());
-
 		try {
 			if(rt.getId() != null) {
 				UUID uuid = UUID.fromString(rt.getId());
@@ -352,7 +350,15 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 
 		// orthography
 		final OrthographyType ot = rt.getOrthography();
-		final Orthography orthography = copyOrthography(factory, ot);
+		Orthography orthography = copyOrthography(factory, ot);
+		if(rt.isExcludeFromSearches()) {
+			final OrthographyBuilder builder = new OrthographyBuilder();
+			builder.append(orthography);
+			if(!orthography.hasTerminator())
+				builder.append(new Terminator(TerminatorType.PERIOD));
+			builder.append(new Error(""));
+			orthography = builder.toOrthography();
+		}
 		retVal.setOrthography(orthography);
 
 		// ipa target/actual

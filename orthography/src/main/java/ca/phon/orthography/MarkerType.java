@@ -21,6 +21,7 @@ public enum MarkerType {
     FALSE_START("[/-]", "false start"),
     /**
      * Content to be excluded, mor exclude in CLAN
+     * If applied to the utterance, record.isExcludeFromSearhes() will return true
      */
     @Documentation("https://talkbank.org/manuals/CHAT.html#MorExclude_Scope")
     EXCLUDE("[e]", "exclude");

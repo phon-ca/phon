@@ -56,18 +56,6 @@ public interface RecordSPI {
 	public Tier<MediaSegment> getSegmentTier();
 
 	/**
-	 * @see Record#isExcludeFromSearches()
-	 * @return
-	 */
-	public boolean isExcludeFromSearches();
-
-	/**
-	 * @see Record#setExcludeFromSearches(boolean)
-	 * @param excluded
-	 */
-	public void setExcludeFromSearches(boolean excluded);
-
-	/**
 	 * @see Record#getOrthographyTier()
 	 * @return
 	 */
