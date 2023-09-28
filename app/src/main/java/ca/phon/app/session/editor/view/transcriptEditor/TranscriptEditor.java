@@ -4,9 +4,12 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
 import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
+import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.plugin.PluginManager;
 import ca.phon.session.*;
 import ca.phon.session.Record;
+import ca.phon.ui.CalloutWindow;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
@@ -86,9 +89,11 @@ public class TranscriptEditor extends JEditorPane {
             }
 
             // FOR DEBUG PURPOSES ONLY
-//            SimpleAttributeSet attrs = new SimpleAttributeSet(doc.getCharacterElement(e.getDot()).getAttributes().copyAttributes());
-//            System.out.println("Font size: " + StyleConstants.getFontSize(attrs));
+            SimpleAttributeSet attrs = new SimpleAttributeSet(doc.getCharacterElement(e.getDot()).getAttributes().copyAttributes());
+            System.out.println("Attrs: " + attrs);
             System.out.println("Dot: " + e.getDot());
+            Tier<?> tier = ((Tier<?>) attrs.getAttribute("tier"));
+            System.out.println(tier == null ? null : tier.getName());
 //            System.out.println(attrs);
         });
     }
@@ -409,8 +414,36 @@ public class TranscriptEditor extends JEditorPane {
 
     public void pressedEnter() {
         if (selectedSegment != null) {
-            System.out.println("Do the thing");
-            return;
+            try {
+                var segmentEditor = new SegmentEditorPopup(getMediaModel(), selectedSegment);
+                segmentEditor.setPreferredSize(new Dimension(segmentEditor.getPreferredPopupWidth(), (int) segmentEditor.getPreferredSize().getHeight()));
+
+                var start = modelToView2D(getSelectionStart());
+                var end = modelToView2D(getSelectionEnd());
+
+                Point point = new Point(
+                    (int) (((end.getBounds().getMaxX() - start.getBounds().getMinX()) / 2) + start.getBounds().getMinX()),
+                    (int) start.getCenterY()
+                );
+
+                point.x += getLocationOnScreen().x;
+                point.y += getLocationOnScreen().y;
+
+                System.out.println(point);
+                System.out.println(getLocationOnScreen());
+
+                CalloutWindow.showCallout(
+                    CommonModuleFrame.getCurrentFrame(),
+                    segmentEditor,
+                    SwingConstants.NORTH,
+                    SwingConstants.CENTER,
+                    point
+                );
+                return;
+            }
+            catch (BadLocationException e) {
+                LogUtil.severe(e);
+            }
         }
 
         TranscriptDocument doc = getTranscriptDocument();
@@ -423,7 +456,7 @@ public class TranscriptEditor extends JEditorPane {
                 int end = doc.getTierEnd(tier);
                 String newValue = doc.getText(start, end - start);
 
-                tierDataChanged(tier, tier.getValue().toString(), newValue);
+                tierDataChanged(tier, newValue);
             }
             catch (BadLocationException e) {
                 LogUtil.severe(e);
@@ -1004,13 +1037,11 @@ public class TranscriptEditor extends JEditorPane {
         undoSupport.postEdit(edit);
     }
 
-    public void tierDataChanged(Tier<?> tier, String oldData, String newData) {
-        final EditorEvent<EditorEventType.TierChangeData> e = new EditorEvent<>(
-            EditorEventType.TierChanged,
-            this,
-            new EditorEventType.TierChangeData(tier, oldData, newData)
-        );
-        eventManager.queueEvent(e);
+    public void tierDataChanged(Tier<?> tier, String newData) {
+        Tier<?> dummy = SessionFactory.newFactory().createTier("dummy", tier.getDeclaredType());
+        dummy.setText(newData);
+        TierEdit edit = new TierEdit(session, eventManager, tier, dummy.getValue());
+        getUndoSupport().postEdit(edit);
     }
 
     private void highlightElementAtPoint(Point2D point) {
@@ -1494,13 +1525,13 @@ public class TranscriptEditor extends JEditorPane {
             Tier<?> prevTier = (Tier<?>) doc.getCharacterElement(fb.getCaret().getDot()).getAttributes().getAttribute("tier");
             Tier<?> nextTier = (Tier<?>) doc.getCharacterElement(dot).getAttributes().getAttribute("tier");
 
-            if (prevTier != null && prevTier.getName().equals(nextTier.getName())) {
+            if (prevTier != null && (nextTier == null || !prevTier.getName().equals(nextTier.getName()))) {
                 try {
                     int start = doc.getTierStart(prevTier);
                     int end = doc.getTierEnd(prevTier);
                     String newValue = doc.getText(start, end - start);
 
-                    tierDataChanged(prevTier, prevTier.getValue().toString(), newValue);
+                    tierDataChanged(prevTier, newValue);
                 }
                 catch (BadLocationException e) {
                     LogUtil.severe(e);

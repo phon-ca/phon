@@ -1,41 +1,36 @@
-package ca.phon.app.session.editor.view.transcriptEditor;
+package ca.phon.ui;
 
-import ca.phon.app.log.LogUtil;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.theme.UIDefaults;
-import ca.phon.ui.theme.UIDefaultsHandler;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
-import org.jdesktop.swingx.HorizontalLayout;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.Ellipse2D;
+import java.awt.geom.Arc2D;
 import java.awt.geom.Path2D;
-import java.awt.geom.Point2D;
 
-public class CalloutWindow extends JDialog implements UIDefaultsHandler, IPluginExtensionPoint<UIDefaultsHandler> {
-    private final static int TRIANGLE_HEIGHT = 20;
-    private final static int PADDING = 8;
+public class CalloutWindow extends JDialog {
+    private final static int TRIANGLE_HEIGHT = 12;
+    private final static int TRIANGLE_BASE = 20;
+    private final static int ARROW_EDGE_PADDING = 4;
     private Component content;
     private Shape shape;
     private Point relativeArrowPoint = null;
+    private JPanel closePanel;
+    private JPanel contentPanel;
+    private int cornerRadius = 4;
+    private int arrowCornerRadius = 2;
 
     public CalloutWindow(JFrame frame, Component content, int sideOfWindow, int topMiddleBottom, Point pointAtPos) {
         super(frame, false);
         this.content = content;
-        setBackground(UIManager.getColor("CalloutWindow.background"));
-        init(frame, sideOfWindow, topMiddleBottom, pointAtPos);
-        // Set the location of the dialog relative to the frame
-
+        init(sideOfWindow, topMiddleBottom, pointAtPos);
+        getContentPane().setBackground(UIManager.getColor("CalloutWindow.background"));
     }
 
-    private void init(JFrame frame, int sideOfWindow, int topMiddleBottom, Point pointAtPos) {
+    private void init(int sideOfWindow, int topMiddleBottom, Point pointAtPos) {
         int topOfRect = sideOfWindow == SwingConstants.NORTH ? TRIANGLE_HEIGHT : 0;
         int bottomOfRect = sideOfWindow == SwingConstants.SOUTH ? TRIANGLE_HEIGHT : 0;
         int leftOfRect = sideOfWindow == SwingConstants.WEST ? TRIANGLE_HEIGHT : 0;
@@ -61,9 +56,9 @@ public class CalloutWindow extends JDialog implements UIDefaultsHandler, IPlugin
         // endregion Close button and panel
 
         shape = createShape(
-            (int) (d.getWidth() + (PADDING * 2)),
-            (int) (d.getHeight() + closePanel.getPreferredSize().getHeight() + PADDING),
-            20,
+            (int) (d.getWidth()),
+            (int) (d.getHeight() + closePanel.getPreferredSize().getHeight()),
+            TRIANGLE_BASE,
             TRIANGLE_HEIGHT,
             4,
             sideOfWindow,
@@ -74,29 +69,28 @@ public class CalloutWindow extends JDialog implements UIDefaultsHandler, IPlugin
         setLocationRelativeTo(null);
         setShape(shape);
         setSize(
-            (int) (d.getWidth() + (PADDING * 2) + leftOfRect + rightOfRect),
-            (int) (d.getHeight() + PADDING + topOfRect + bottomOfRect + closePanel.getPreferredSize().getHeight())
+            (int) (d.getWidth() + leftOfRect + rightOfRect),
+            (int) (d.getHeight() + topOfRect + bottomOfRect + closePanel.getPreferredSize().getHeight())
         );
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        JPanel innerPanel = new JPanel(new BorderLayout());
-        innerPanel.setSize(d);
-        innerPanel.setBorder(new EmptyBorder(
+        JPanel contentPanel = new JPanel(new BorderLayout());
+        contentPanel.setSize(d);
+        contentPanel.setBorder(new EmptyBorder(
             0,
-            PADDING + leftOfRect,
-            PADDING + bottomOfRect,
-            PADDING + rightOfRect
+            leftOfRect,
+            bottomOfRect,
+            rightOfRect
         ));
-        innerPanel.add(content, BorderLayout.CENTER);
-        add(innerPanel, BorderLayout.CENTER);
+        contentPanel.add(content, BorderLayout.CENTER);
+        add(contentPanel, BorderLayout.CENTER);
 
 
         add(closePanel, BorderLayout.NORTH);
 
-
-        innerPanel.setOpaque(false);
         closePanel.setOpaque(false);
+        contentPanel.setOpaque(false);
 
         addWindowFocusListener(new WindowAdapter() {
             @Override
@@ -107,30 +101,15 @@ public class CalloutWindow extends JDialog implements UIDefaultsHandler, IPlugin
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (!contains(e.getLocationOnScreen())) {
-                    dispose();
-                }
+            if (!getShape().contains(e.getPoint())) {
+                dispose();
+            }
             }
         });
-
-        System.out.println(relativeArrowPoint);
-        System.out.println(pointAtPos);
 
         if (pointAtPos != null) {
             setLocation(pointAtPos.x - relativeArrowPoint.x, pointAtPos.y - relativeArrowPoint.y);
         }
-    }
-
-
-    @Override
-    public void paint(Graphics g) {
-        super.paint(g);
-//        Graphics2D g2d = (Graphics2D) g;
-//        g2d.setColor(Color.BLACK);
-//        Stroke oldStroke = g2d.getStroke();
-//        g2d.setStroke(new BasicStroke(2)); // Set border thickness
-//        g2d.draw(shape); // Draw the border
-//        g2d.setStroke(oldStroke);
     }
 
     public static void showCallout(JFrame owner, Component content, int sideOfWindow, int topMiddleBottom, Point pointAtPos) {
@@ -147,20 +126,25 @@ public class CalloutWindow extends JDialog implements UIDefaultsHandler, IPlugin
         int leftOfRect = sideOfWindow == SwingConstants.WEST ? triangleHeight : 0;
 
         int horiOffset = 0;
-        if (topMiddleBottom == SwingConstants.LEADING) {
-            horiOffset = -(((width - triangleBase) / 2) - cornerRadius);
-        }
-        else if (topMiddleBottom == SwingConstants.TRAILING) {
-            horiOffset = (((width - triangleBase) / 2) - cornerRadius);
-        }
-
         int vertOffset = 0;
         if (topMiddleBottom == SwingConstants.LEADING) {
-            vertOffset = -(((height - triangleBase) / 2) - cornerRadius);
+            horiOffset = -(((width - triangleBase) / 2) - cornerRadius) + ARROW_EDGE_PADDING;
+            vertOffset = -(((height - triangleBase) / 2) - cornerRadius) + ARROW_EDGE_PADDING;
         }
         else if (topMiddleBottom == SwingConstants.TRAILING) {
-            vertOffset = (((height - triangleBase) / 2) - cornerRadius);
+            horiOffset = (((width - triangleBase) / 2) - cornerRadius) - ARROW_EDGE_PADDING;
+            vertOffset = (((height - triangleBase) / 2) - cornerRadius) - ARROW_EDGE_PADDING;
         }
+
+        double angleToArrow = Math.atan(2 * TRIANGLE_HEIGHT / (double)TRIANGLE_BASE);
+        double n = angleToArrow / (2 * Math.PI);
+        double dist = 4 * Math.atan2((2 * n), Math.PI) / 3;
+
+        System.out.println("Dist: " + dist);
+
+        System.out.println("Angle: " + Math.toDegrees(angleToArrow));
+
+        System.out.println("Width: " + width);
 
         // Start the path in the top-left corner of the rectangle, considering the corner radius
         shape.moveTo(leftOfRect + cornerRadius, topOfRect);
@@ -168,15 +152,55 @@ public class CalloutWindow extends JDialog implements UIDefaultsHandler, IPlugin
         // Top
         if (sideOfWindow == SwingConstants.NORTH) {
             System.out.println("Top");
-            shape.lineTo(horiOffset + (width + triangleBase) / 2, topOfRect);
+
+            // Prev corner to start of arrow curve
+            Point startArrowCurveStart = new Point(horiOffset + ((width - triangleBase) / 2), topOfRect);
+            shape.lineTo(startArrowCurveStart.getX(), startArrowCurveStart.getY());
+
+            /*double inverseAngleToArrow = Math.atan(-TRIANGLE_BASE / (2.0 * TRIANGLE_HEIGHT));
+
+            Point startArrowCurveEnd = new Point(
+                (int) (arrowCornerRadius * Math.cos(inverseAngleToArrow)) + startArrowCurveStart.x,
+                (int) (arrowCornerRadius * Math.sin(inverseAngleToArrow)) + startArrowCurveStart.y + arrowCornerRadius
+            );
+
+            Point startArrowCurveControlPoint1 = new Point(
+                (int) (startArrowCurveStart.x + (arrowCornerRadius * dist)),
+                startArrowCurveStart.y
+            );
+
+            Point startArrowCurveControlPoint2 = new Point(
+                (int) (startArrowCurveEnd.x - (Math.cos(angleToArrow) * dist)),
+                (int) (startArrowCurveEnd.y - (Math.sin(angleToArrow) * dist))
+            );
+
+            System.out.println("Point: " + startArrowCurveEnd);
+
+
+
+
+
+            // Start of arrow curve
+            shape.curveTo(
+                startArrowCurveControlPoint1.x,
+                startArrowCurveControlPoint1.y,
+                startArrowCurveControlPoint2.x,
+                startArrowCurveControlPoint2.y,
+                startArrowCurveEnd.x,
+                startArrowCurveEnd.y
+            );*/
+            // Start of arrow curve to point
             shape.lineTo(horiOffset + (width / 2), 0);
             relativeArrowPoint = new Point(horiOffset + (width / 2), 0);
-            shape.lineTo(horiOffset + (width - triangleBase) / 2, topOfRect);
+            // Point to end of arrow curve
+            shape.lineTo(horiOffset + (width + triangleBase) / 2, topOfRect);
+            // End of arrow curve
+            //shape.quadTo();
         }
-        shape.lineTo(leftOfRect+ width - cornerRadius, topOfRect);
+        shape.lineTo(leftOfRect + width - cornerRadius, topOfRect);
 
         // Top right corner
-        shape.quadTo(leftOfRect+width - cornerRadius, topOfRect, width + leftOfRect, topOfRect + cornerRadius);
+        shape.quadTo(leftOfRect + width - cornerRadius, topOfRect, width + leftOfRect, topOfRect + cornerRadius);
 
         // Right
         if (sideOfWindow == SwingConstants.EAST) {
@@ -219,20 +243,5 @@ public class CalloutWindow extends JDialog implements UIDefaultsHandler, IPlugin
         // Close path and return
         shape.closePath();
         return shape;
-    }
-
-    @Override
-    public Class<?> getExtensionType() {
-        return UIDefaultsHandler.class;
-    }
-
-    @Override
-    public IPluginExtensionFactory<UIDefaultsHandler> getFactory() {
-        return args -> this;
-    }
-
-    @Override
-    public void setupDefaults(UIDefaults defaults) {
-        defaults.put("CalloutWindow.background", UIManager.getColor("List.background"));
     }
 }

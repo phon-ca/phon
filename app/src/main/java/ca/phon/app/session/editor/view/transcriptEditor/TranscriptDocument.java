@@ -521,7 +521,8 @@ public class TranscriptDocument extends DefaultStyledDocument {
             if (elem.getElementCount() < 1) continue;
             AttributeSet attrs = elem.getElement(0).getAttributes();
             var currentRecordIndex = attrs.getAttribute("recordIndex");
-            if (currentRecordIndex != null && recordIndex == (int)currentRecordIndex) {
+            var tier = attrs.getAttribute("tier");
+            if (tier != null && currentRecordIndex != null && recordIndex == (int)currentRecordIndex) {
                 return elem.getStartOffset();
             }
         }
@@ -985,6 +986,39 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 hideTierInRecord(i, hiddenTiers);
             }
         }
+
+        for (String tierName : hiddenTiers) {
+            if ((tierName.equals("IPA Target") || tierName.equals("IPA Actual")) && syllabificationVisible) {
+                try {
+                    Element root = getDefaultRootElement();
+                    for (int i = 0; i < root.getElementCount(); i++) {
+                        Element elem = root.getElement(i);
+                        for (int j = 0; j < elem.getElementCount(); j++) {
+                            Element innerElem = elem.getElement(j);
+                            var attrs = innerElem.getAttributes();
+                            Tier<?> tier = (Tier<?>) attrs.getAttribute("tier");
+                            if (tier != null) {
+                                boolean correctTier;
+                                if (tierName.equals("IPA Target")) {
+                                    correctTier = tier.getName().equals(SystemTierType.TargetSyllables.getName());
+                                } else {
+                                    correctTier = tier.getName().equals(SystemTierType.ActualSyllables.getName());
+                                }
+                                if (correctTier) {
+                                    int tierStartOffset = getTierStart(tier) - labelColumnWidth - 2;
+                                    int tierEndOffset = getTierEnd(tier);
+                                    remove(tierStartOffset, tierEndOffset - tierStartOffset);
+                                }
+                            }
+
+                        }
+                    }
+                }
+                catch (BadLocationException e) {
+                    LogUtil.severe(e);
+                }
+            }
+        }
     }
 
     private void hideTierInRecord(int recordIndex, List<String> hiddenTiers) {
@@ -997,24 +1031,6 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 int tierStartOffset = getTierStart(recordIndex, tierName) - labelLength;
                 int tierEndOffset = getTierEnd(recordIndex, tierName);
                 remove(tierStartOffset, tierEndOffset - tierStartOffset);
-
-                if ((tierName.equals("IPA Target") || tierName.equals("IPA Actual")) && syllabificationVisible) {
-                    Element root = getDefaultRootElement();
-                    for (int i = 0; i < root.getElementCount(); i++) {
-                        Element elem = root.getElement(i);
-                        for (int j = 0; j < elem.getElementCount(); j++) {
-                            Element innerElem = elem.getElement(j);
-                            var attrs = innerElem.getAttributes();
-                            Tier<?> tier = (Tier<?>) attrs.getAttribute("tier");
-                            boolean correctTier = tier != null && tier.getName().equals(tierName);
-                            Integer recordNumber = (Integer) attrs.getAttribute("recordIndex");
-                            boolean correctRecord = recordNumber != null && recordNumber == recordIndex;
-                            if (correctRecord && correctTier) {
-                                removeElement(innerElem);
-                            }
-                        }
-                    }
-                }
             }
         }
         catch (BadLocationException e) {
@@ -1596,8 +1612,9 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 }
             }
         }
-
-        if (alignmentVisible && tierName.equals(getAlignmentTierView().getTierName())) {
+        String alignmentParentTierName = getAlignmentTierView().getTierName();
+        if (alignmentVisible && tierName.equals(alignmentParentTierName)) {
+            System.out.println(alignmentParentTierName);
             tierAttrs.removeAttribute("componentFactory");
             // Add a newline at the end of the regular tier content
             appendBatchLineFeed(tierAttrs);
