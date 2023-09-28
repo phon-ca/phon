@@ -35,7 +35,7 @@ public final class TierLink implements TierElement {
         final StringBuilder builder = new StringBuilder();
         builder.append(LINK_PREFIX);
         if(getLabel() != null && !getLabel().isBlank())
-            builder.append(getLabel()).append(":");
+            builder.append(getLabel()).append(" ");
         builder.append(href);
         builder.append(LINK_SUFFIX);
         return builder.toString();

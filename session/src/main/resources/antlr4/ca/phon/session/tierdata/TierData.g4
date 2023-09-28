@@ -33,7 +33,7 @@ label
     ;
 
 link
-    :   LINK (label COLON)? .+? LINK
+    :   LINK (label WS)? .+? LINK
     ;
 
 time_in_minutes_seconds

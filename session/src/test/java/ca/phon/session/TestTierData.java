@@ -74,7 +74,7 @@ public class TestTierData {
 
     @Test
     public void testLink() throws ParseException {
-        final String text = "goodbye \uD83D\uDD17pic:__res/pics/test.png\uD83D\uDD17";
+        final String text = "goodbye \uD83D\uDD17pic __res/pics/test.png\uD83D\uDD17";
         final TierData tierData = roundTripTest(text);
         Assert.assertEquals(2, tierData.size());
         Assert.assertEquals(TierString.class, tierData.elementAt(0).getClass());
