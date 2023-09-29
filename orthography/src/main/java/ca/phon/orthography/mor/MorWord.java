@@ -47,7 +47,7 @@ public final class MorWord extends MorElement {
         }
         builder.append(pos);
         builder.append("|");
-        builder.append("stem");
+        builder.append(stem);
         for(MorMarker marker:markers) {
             builder.append(marker);
         }
