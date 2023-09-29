@@ -5,9 +5,9 @@ package ca.phon.session.tierdata;
  */
 public final class TierLink implements TierElement {
 
-    public final static String LINK_PREFIX = "\uD83D\uDD17";
+    public final static String LINK_PREFIX = "[\uD83D\uDD17";
 
-    public final static String LINK_SUFFIX = LINK_PREFIX;
+    public final static String LINK_SUFFIX = "]";
 
     private final String href;
 
@@ -34,6 +34,7 @@ public final class TierLink implements TierElement {
     public String text() {
         final StringBuilder builder = new StringBuilder();
         builder.append(LINK_PREFIX);
+        builder.append(" ");
         if(getLabel() != null && !getLabel().isBlank())
             builder.append(getLabel()).append(" ");
         builder.append(href);

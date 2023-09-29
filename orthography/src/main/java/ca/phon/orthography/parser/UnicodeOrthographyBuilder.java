@@ -295,10 +295,12 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
             throw new OrthoParserException("Invalid start time", ctx.mediasegment().time_in_minutes_seconds(0).getStart().getCharPositionInLine());
         }
         float endTime = startTime;
-        try {
-            endTime = MediaTimeFormatter.parseTimeToSeconds(ctx.mediasegment().time_in_minutes_seconds(1).getText());
-        } catch(ParseException e) {
-            throw new OrthoParserException("Invalid start time", ctx.mediasegment().time_in_minutes_seconds(1).getStart().getCharPositionInLine());
+        if(ctx.mediasegment().time_in_minutes_seconds().size() > 1) {
+            try {
+                endTime = MediaTimeFormatter.parseTimeToSeconds(ctx.mediasegment().time_in_minutes_seconds(1).getText());
+            } catch (ParseException e) {
+                throw new OrthoParserException("Invalid start time", ctx.mediasegment().time_in_minutes_seconds(1).getStart().getCharPositionInLine());
+            }
         }
         builder.append(new InternalMedia(startTime, endTime));
     }

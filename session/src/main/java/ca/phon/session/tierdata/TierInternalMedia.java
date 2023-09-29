@@ -17,6 +17,22 @@ public class TierInternalMedia extends ExtendableObject implements TierElement {
         return internalMedia;
     }
 
+    public float getStartTime() {
+        return internalMedia.getStartTime();
+    }
+
+    public float getEndTime() {
+        return internalMedia.getEndTime();
+    }
+
+    public boolean isUnset() {
+        return internalMedia.isUnset();
+    }
+
+    public boolean isPoint() {
+        return internalMedia.isPoint();
+    }
+
     @Override
     public String text() {
         return internalMedia.text();

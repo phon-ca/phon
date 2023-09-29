@@ -428,6 +428,22 @@ public class TestUnicodeOrthographyParser {
     }
 
     @Test
+    public void testInternalMediaPoint() {
+        final String text = "hello \u20220.5\u2022 world \u202211:6.\u2022";
+        final Orthography ortho = roundTrip(text);
+        Assert.assertEquals(4, ortho.length());
+        Assert.assertEquals(InternalMedia.class, ortho.elementAt(1).getClass());
+        final InternalMedia media1 = (InternalMedia)ortho.elementAt(1);
+        Assert.assertEquals(0.5f, media1.getStartTime(), 0.0001);
+        Assert.assertEquals(0.5f, media1.getEndTime(), 0.0001);
+        Assert.assertEquals(InternalMedia.class, ortho.elementAt(3).getClass());
+        final InternalMedia media2 = (InternalMedia)ortho.elementAt(3);
+        Assert.assertEquals(666.0f, media2.getStartTime(), 0.0001);
+        Assert.assertEquals(666.0f, media2.getEndTime(), 0.0001);
+    }
+
+
+    @Test
     public void testSeparator() {
         for(SeparatorType type:SeparatorType.values()) {
             final String text = "hello " + type.getText() + " world";

@@ -18,6 +18,7 @@ package ca.phon.session;
 
 import ca.phon.extensions.ExtendableObject;
 import ca.phon.formatter.MediaTimeFormatStyle;
+import ca.phon.formatter.MediaTimeFormatter;
 import ca.phon.session.format.MediaSegmentFormatter;
 import ca.phon.session.spi.MediaSegmentSPI;
 
@@ -34,32 +35,79 @@ public final class MediaSegment extends ExtendableObject {
 		this.mediaSegmentImpl = impl;
 	}
 
+	/**
+	 * Get start value as a floating point number
+	 *
+	 * @return start value
+	 */
 	public float getStartValue() {
 		return mediaSegmentImpl.getStartValue();
 	}
 
+	/**
+	 * Set start value, unit is specified by getUnitType()
+	 *
+	 * @param start
+	 */
 	public void setStartValue(float start) {
 		mediaSegmentImpl.setStartValue(start);
 	}
 
+	/**
+	 * Get end value
+	 *
+	 * @return end value
+	 */
 	public float getEndValue() {
 		return mediaSegmentImpl.getEndValue();
 	}
 
+	/**
+	 * Set end value
+	 *
+	 * @param end
+	 */
 	public void setEndValue(float end) {
 		mediaSegmentImpl.setEndValue(end);
 	}
 
+	/**
+	 * Get media unit represented by getStartValue() and getEndValue()
+	 *
+	 * @return media unit
+	 */
 	public MediaUnit getUnitType() {
 		return mediaSegmentImpl.getUnitType();
 	}
 
-	public void setUnitType(MediaUnit type) {
-		mediaSegmentImpl.setUnitType(type);
+	/**
+	 * Set media unit for segment
+	 *
+	 * @param mediaUnit
+	 */
+	public void setUnitType(MediaUnit mediaUnit) {
+		mediaSegmentImpl.setUnitType(mediaUnit);
 	}
 
 	public void setSegment(float startValue, float endValue) {
 		setSegment(startValue, endValue, getUnitType());
+	}
+
+	/**
+	 * Is the media segment a single point
+	 * @return true if getStartValue() == getEndValue()
+	 */
+	public boolean isPoint() {
+		return getStartValue() == getEndValue();
+	}
+
+	/**
+	 * Is the media segment 'unset'
+	 *
+	 * @return true if isPoint() == true && getStartValue() == 0.0f
+	 */
+	public boolean isUnset() {
+		return isPoint() && getStartValue() == 0.0f;
 	}
 
 	public void setSegment(float startValue, float endValue, MediaUnit unit) {
