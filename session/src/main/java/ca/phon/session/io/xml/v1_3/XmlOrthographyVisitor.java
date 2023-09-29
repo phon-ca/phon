@@ -1,5 +1,6 @@
 package ca.phon.session.io.xml.v1_3;
 
+import ca.phon.orthography.mor.Pos;
 import ca.phon.orthography.*;
 import ca.phon.orthography.Action;
 import ca.phon.orthography.Error;
@@ -82,12 +83,12 @@ public class XmlOrthographyVisitor extends VisitorAdapter<Object> {
             case UNINTELLIGIBLE -> UntranscribedType.UNINTELLIGIBLE;
             case UNINTELLIGIBLE_WITH_PHO -> UntranscribedType.UNINTELLIGIBLE_WORD_WITH_PHO;
         };
-        final List<WordPos> wordPos = new ArrayList<>();
+        final List<Pos> pos = new ArrayList<>();
         final boolean isSeparatedPrefix = word.isSeparatedPrefix() != null && word.isSeparatedPrefix();
-        final WordSuffix suffix = new WordSuffix(isSeparatedPrefix, formType, word.getFormSuffix(), userSpecialForm, wordPos);
+        final WordSuffix suffix = new WordSuffix(isSeparatedPrefix, formType, word.getFormSuffix(), userSpecialForm, pos);
         final XmlWordContentVisitor visitor = new XmlWordContentVisitor();
         word.getContent().forEach(visitor::visit);
-        wordPos.addAll(visitor.getWordPos());
+        pos.addAll(visitor.getWordPos());
         if(visitor.isCompound()) {
             List<WordElement> w1Eles = visitor.getCompoundWordStack().pop();
             List<WordElement> w2Eles = visitor.getWordElements();

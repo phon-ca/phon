@@ -2,6 +2,7 @@ package ca.phon.orthography.parser;
 
 import ca.phon.formatter.MediaTimeFormatStyle;
 import ca.phon.formatter.MediaTimeFormatter;
+import ca.phon.orthography.mor.Pos;
 import ca.phon.orthography.*;
 import ca.phon.orthography.Error;
 import ca.phon.orthography.parser.exceptions.OrthoParserException;
@@ -53,7 +54,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
                 WordType wordType = null;
                 WordFormType formType = null;
                 String formSuffix = null;
-                List<WordPos> pos = new ArrayList<>();
+                List<Pos> pos = new ArrayList<>();
                 UntranscribedType untranscribedType = null;
                 if (ctx.wordprefix() != null) {
                     wordType = WordType.fromString(ctx.wordprefix().getText());
@@ -84,7 +85,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
                                 final String category = categories[0];
                                 final List<String> subcategories = new ArrayList<>();
                                 for(int i = 1; i < categories.length; i++) subcategories.add(categories[i]);
-                                pos.add(new WordPos(category, subcategories));
+                                pos.add(new Pos(category, subcategories));
                             } else {
                                 throw new OrthoParserException("Invalid pos", wordposctx.getStart().getCharPositionInLine());
                             }

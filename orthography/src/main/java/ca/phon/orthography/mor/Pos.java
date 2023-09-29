@@ -1,4 +1,4 @@
-package ca.phon.orthography;
+package ca.phon.orthography.mor;
 
 import ca.phon.util.Documentation;
 
@@ -10,13 +10,13 @@ import java.util.stream.Collectors;
  * Morphological tag for word
  */
 @Documentation("https://talkbank.org/manuals/MOR.html#Mor_POS")
-public final class WordPos {
+public final class Pos {
 
     private final String category;
 
     private final List<String> subCategories;
 
-    public WordPos(String category, List<String> subCategories) {
+    public Pos(String category, List<String> subCategories) {
         super();
         this.category = category;
         this.subCategories = Collections.unmodifiableList(subCategories);

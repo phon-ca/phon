@@ -15,6 +15,7 @@
  */
 package ca.phon.session.io.xml.v1_3;
 
+import ca.phon.orthography.mor.Pos;
 import ca.phon.orthography.*;
 import ca.phon.orthography.Action;
 import ca.phon.orthography.Error;
@@ -149,7 +150,7 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 		word.getWordElements().forEach(wordContentVisitor::visit);
 
 		if(word.getSuffix() != null) {
-			for (WordPos wordPos : word.getSuffix().getWordPos()) {
+			for (Pos wordPos : word.getSuffix().getWordPos()) {
 				final XmlPosType pos = factory.createXmlPosType();
 				final XmlCategoryType xmlCategoryType = factory.createXmlCategoryType();
 				xmlCategoryType.setValue(wordPos.getCategory());
