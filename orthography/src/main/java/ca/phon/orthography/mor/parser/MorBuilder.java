@@ -61,7 +61,11 @@ public class MorBuilder extends MorBaseListener {
             prefixList.add(pctx.string().getText());
         }
         final MorParser.PosContext posCtx = ctx.pos();
-        final Pos pos = readPos(posCtx);
+        Pos pos = readPos(posCtx);
+        if(pos.getCategory().startsWith("0")) {
+            pos = new Pos(pos.getCategory().substring(1), pos.getSubCategories());
+            morDataStack.peek().omittedRef().set(true);
+        }
         final String stem = ctx.stem().string().getText();
         final List<MorMarker> markers = new ArrayList<>();
         for(MorParser.MarkerContext mctx:ctx.marker()) {

@@ -39,6 +39,9 @@ public final class Mor extends MorphemicBaseType {
     @Override
     public String text() {
         final StringBuilder builder = new StringBuilder();
+        if(isOmitted()) {
+            builder.append("0");
+        }
         for(MorPre morPre:morPres)
             builder.append(morPre);
         builder.append(getElement().text());

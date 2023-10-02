@@ -42,15 +42,35 @@ public class TestMorParser {
     }
 
     @Test
+    public void testMorPrefix() throws ParseException {
+        final String text = "n:prop|Ethan-POSS n|fast mega#un#re#v|work .";
+        final Mor mor = roundTrip(text);
+    }
+
+    @Test
+    public void testMorContinuation() throws ParseException {
+        final String text = "co|ah co|oui=yes adv|alors pro:subj|je v:mdl|pouvoir&PRES&12s " +
+                "v|éteindre-INF prep|dans det:art|le&m&sg n|couloir&m co|oui=yes co|non=no " +
+                "pro:subj|elle v:mdl|aller&PRES&3s v|chercher-INF .";
+        final Mor mor = roundTrip(text);
+    }
+
+    @Test
     public void testMorCompound() throws ParseException {
         final String text = "n|+n|ice+n|cream .";
         final Mor mor = roundTrip(text);
     }
 
     @Test
-    public void testMorHyphen() throws ParseException {
+    public void testMorTranslationHyphen() throws ParseException {
         final String text = "co|danke=thank-you .";
         final Mor more = roundTrip(text);
+    }
+
+    @Test
+    public void testMorTranslationUnderscore() throws ParseException {
+        final String text = "N|perro-PL=dog_more .";
+        final Mor mor = roundTrip(text);
     }
 
     @Test
@@ -93,6 +113,18 @@ public class TestMorParser {
     @Test
     public void testMorTranslationsCompound() throws ParseException {
         final String text = "prep|be=in/at~det|ha=the .";
+        final Mor mor = roundTrip(text);
+    }
+
+    @Test
+    public void testMorNumber() throws ParseException {
+        final String text = "co|so v|dirty n|soldier~v|be&3S sfp|aa3 .";
+        final Mor mor = roundTrip(text);
+    }
+
+    @Test
+    public void testMorOmitted() throws ParseException {
+        final String text = "pro|I~v|be&1S det|a n|play 0det|the n|toy-PL .";
         final Mor mor = roundTrip(text);
     }
 

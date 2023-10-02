@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * %mor unit of one-to-one correspondence with main line. A single word or a compound word or a terminator.
  */
-@Documentation("https://talkbank.org/manuals/MOR.html#Morphological_Word")
+@Documentation({"https://talkbank.org/manuals/MOR.html#Morphological_Word", "https://talkbank.org/manuals/MOR.html#Mor_Translation"})
 public abstract class MorphemicBaseType {
 
     private final MorElement element;
