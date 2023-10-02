@@ -1,7 +1,8 @@
 grammar Mor;
 
 start
-    :    mortier? EOF;
+    :    mortier? EOF
+    ;
 
 mortier
     :   mortier WS mor
@@ -9,7 +10,7 @@ mortier
     ;
 
 mor
-    :   morelement (morpost)*
+    :   morelement (morpost)* (translation)*
     ;
 
 morelement
@@ -45,7 +46,7 @@ stem
 marker
     :   AMP fusionalsuffix
     |   HYPHEN suffix
-    |   EQUALS translation
+    |   COLON category
     ;
 
 fusionalsuffix
@@ -57,7 +58,7 @@ suffix
     ;
 
 translation
-    :   string
+    :   EQUALS string
     ;
 
 string
@@ -145,9 +146,9 @@ TILDE
     ;
 
 STRING
-    :   TEXT+
+    :   CHAR+
     ;
 
-fragment TEXT
+fragment CHAR
     :   ~('#'|'|'|'&'|'-'|'='|':'|'~'|'+'|[ \t\r\n])
     ;

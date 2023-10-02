@@ -49,6 +49,12 @@ public class TestMorParser {
     }
 
     @Test
+    public void testMorCliticTranslation() throws ParseException {
+        final String text = "pro:int|cosa=what v:imp|dice-2S&IMP~pro:clit|1S~pro:clit|3S&MASC=say .";
+        final Mor mor = roundTrip(text);
+    }
+
+    @Test
     public void testMorPost() throws ParseException {
         final String text = "pro|it~v|be&3S pro|me !";
         final Mor mor = roundTrip(text);

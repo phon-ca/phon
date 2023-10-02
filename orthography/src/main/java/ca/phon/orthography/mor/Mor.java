@@ -29,6 +29,9 @@ public final class Mor extends MorphemicBaseType {
         builder.append(getElement().text());
         for(MorPost mp:morPosts)
             builder.append(mp.text());
+        for(MorTranslation translation:getTranslations()) {
+            builder.append(translation);
+        }
         return builder.toString();
     }
 

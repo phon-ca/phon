@@ -110,6 +110,12 @@ public class MorBuilder extends MorBaseListener {
     }
 
     @Override
+    public void exitTranslation(MorParser.TranslationContext ctx) {
+        final String translation = ctx.getText().substring(1);
+        morDataStack.peek().translations().add(new MorTranslation(translation));
+    }
+
+    @Override
     public void enterMorpost(MorParser.MorpostContext ctx) {
         morDataStack.push(createEmptyData());
     }
