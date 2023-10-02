@@ -8,7 +8,10 @@ import ca.phon.session.tierdata.TierData;
  * An enumeration of suggested dependent tiers names and their
  * equivalents in CHAT
  */
-public enum DependentTier {
+public enum UserTierType {
+    /*
+     * Utterance-level dependent tiers
+     */
     Addressee("addressee", "%add", TierData.class, false),
     Actions("actions", "%act", TierData.class,false),
     Alternative("alternative", "%alt", TierData.class,false),
@@ -59,7 +62,7 @@ public enum DependentTier {
      */
     private final boolean alignable;
 
-    private DependentTier(String tierName, String chatTierName, Class<?> type, boolean alignable) {
+    private UserTierType(String tierName, String chatTierName, Class<?> type, boolean alignable) {
         this.tierName = tierName;
         this.chatTierName = chatTierName;
         this.type = type;

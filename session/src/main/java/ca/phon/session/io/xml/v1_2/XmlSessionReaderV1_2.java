@@ -31,6 +31,7 @@ import ca.phon.session.*;
 import ca.phon.session.io.*;
 import ca.phon.session.io.xml.v12.*;
 import ca.phon.session.io.xml.v12.CommentType;
+import ca.phon.session.io.xml.v12.UserTierType;
 import ca.phon.session.io.xml.v12.WordType;
 import ca.phon.session.tierdata.TierData;
 import ca.phon.syllable.*;
