@@ -14,6 +14,7 @@ mor
 
 morelement
     :   mw
+    |   mwc
     |   mt
     ;
 
@@ -61,6 +62,10 @@ translation
 
 string
     :   STRING
+    ;
+
+mwc
+    :   (prefix HASH)* pos PIPE (PLUS mw)+
     ;
 
 mt
