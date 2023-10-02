@@ -18,8 +18,6 @@ public class CalloutWindow extends JDialog {
     private Component content;
     private Shape shape;
     private Point relativeArrowPoint = null;
-    private JPanel closePanel;
-    private JPanel contentPanel;
     private int cornerRadius = 4;
     private int arrowCornerRadius = 2;
 
@@ -57,10 +55,10 @@ public class CalloutWindow extends JDialog {
 
         shape = createShape(
             (int) (d.getWidth()),
-            (int) (d.getHeight() + closePanel.getPreferredSize().getHeight()),
+            (int) (d.getHeight() + closePanel.getPreferredSize().getHeight() + cornerRadius),
             TRIANGLE_BASE,
             TRIANGLE_HEIGHT,
-            4,
+            cornerRadius,
             sideOfWindow,
             topMiddleBottom
         );
@@ -70,7 +68,7 @@ public class CalloutWindow extends JDialog {
         setShape(shape);
         setSize(
             (int) (d.getWidth() + leftOfRect + rightOfRect),
-            (int) (d.getHeight() + topOfRect + bottomOfRect + closePanel.getPreferredSize().getHeight())
+            (int) (d.getHeight() + topOfRect + bottomOfRect + closePanel.getPreferredSize().getHeight() + cornerRadius)
         );
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -80,7 +78,7 @@ public class CalloutWindow extends JDialog {
         contentPanel.setBorder(new EmptyBorder(
             0,
             leftOfRect,
-            bottomOfRect,
+            bottomOfRect + cornerRadius,
             rightOfRect
         ));
         contentPanel.add(content, BorderLayout.CENTER);
@@ -213,7 +211,7 @@ public class CalloutWindow extends JDialog {
         shape.lineTo(leftOfRect + width, height - cornerRadius + topOfRect);
 
         // Bottom right corner
-        shape.quadTo(leftOfRect + width, topOfRect + height, width - cornerRadius + leftOfRect, height + topOfRect);
+        shape.quadTo(leftOfRect + width, topOfRect + height - cornerRadius, width - cornerRadius + leftOfRect, height + topOfRect);
 
         // Bottom
         if (sideOfWindow == SwingConstants.SOUTH) {

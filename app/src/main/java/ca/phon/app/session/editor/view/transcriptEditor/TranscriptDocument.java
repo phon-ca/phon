@@ -30,6 +30,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
     private boolean alignmentIsComponent = false;
     private int labelColumnWidth = 20;
     private float lineSpacing = 0.2f;
+    private TierViewItem alignmentParent = null;
 
     public TranscriptDocument() {
         super(new TranscriptStyleContext());
@@ -101,6 +102,12 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
     public void setAlignmentVisible(boolean alignmentVisible) {
         this.alignmentVisible = alignmentVisible;
+        if (alignmentVisible) {
+            alignmentParent = calculateAlignmentParent();
+        }
+        else {
+            alignmentParent = null;
+        }
         reload();
     }
 
@@ -129,6 +136,14 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
     public void setLineSpacing(float lineSpacing) {
         this.lineSpacing = lineSpacing;
+    }
+
+    public TierViewItem getAlignmentParent() {
+        return alignmentParent;
+    }
+
+    public void setAlignmentParent(TierViewItem alignmentParent) {
+        this.alignmentParent = alignmentParent;
     }
 
     // endregion Getters and Setters
@@ -239,6 +254,12 @@ public class TranscriptDocument extends DefaultStyledDocument {
         SimpleAttributeSet retVal = new SimpleAttributeSet();
 
         StyleConstants.setForeground(retVal, UIManager.getColor(TranscriptEditorUIProps.DEFAULT_INTERNAL_MEDIA));
+
+        return retVal;
+    }
+
+    private SimpleAttributeSet getTierLinkAttributes() {
+        SimpleAttributeSet retVal = new SimpleAttributeSet();
 
         return retVal;
     }
@@ -371,13 +392,10 @@ public class TranscriptDocument extends DefaultStyledDocument {
         // Process all the inserts in bulk
         super.insert(offs, inserts);
 
-        ElementSpec last = batch.get(batch.size() - 1);
-
         // Empty batch the list
         batch.clear();
 
-        System.out.println(getCharAtPos(getLength() - 1));
-        System.out.println(getLength());
+        setGlobalParagraphAttributes();
     }
 
     // endregion Batching
@@ -459,11 +477,18 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 // Comment
                 text = userTierComment.toString();
                 attrs = getTierCommentAttributes();
-            } else {
+            } else if (userTierElement instanceof TierInternalMedia internalMedia) {
                 // Internal media
-                TierInternalMedia internalMedia = (TierInternalMedia) userTierElement;
                 text = internalMedia.toString();
                 attrs = getTierInternalMediaAttributes();
+            }
+            else if (userTierElement instanceof TierLink link) {
+                // Link
+                text = link.toString();
+                attrs = getTierLinkAttributes();
+            }
+            else {
+                throw new RuntimeException("Invalid type");
             }
 
             attrs.addAttributes(commentAttrs);
@@ -514,6 +539,10 @@ public class TranscriptDocument extends DefaultStyledDocument {
     // region Get Record/Tier Start/End
 
     public int getRecordStart(int recordIndex) {
+        return getRecordStart(recordIndex, false);
+    }
+
+    public int getRecordStart(int recordIndex, boolean includeSeparator) {
         Element root = getDefaultRootElement();
 
         for (int i = 0; i < root.getElementCount(); i++) {
@@ -522,7 +551,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
             AttributeSet attrs = elem.getElement(0).getAttributes();
             var currentRecordIndex = attrs.getAttribute("recordIndex");
             var tier = attrs.getAttribute("tier");
-            if (tier != null && currentRecordIndex != null && recordIndex == (int)currentRecordIndex) {
+            if ((tier != null || includeSeparator) && currentRecordIndex != null && recordIndex == (int)currentRecordIndex) {
                 return elem.getStartOffset();
             }
         }
@@ -855,10 +884,31 @@ public class TranscriptDocument extends DefaultStyledDocument {
         movedTiers = movedTiers.stream().filter(item -> item.isVisible()).toList();
         if (movedTiers.size() < 1) return;
 
+        boolean alignmentParentMoved = false;
         List<TierViewItem> movedTiersNewOrder = new ArrayList<>();
         for (TierViewItem item : session.getTierView()) {
             if (movedTiers.contains(item)) {
                 movedTiersNewOrder.add(item);
+
+                String tierName = item.getTierName();
+                // If one of the syllabification tiers are moved remove the syllabification
+                if ((tierName.equals("IPA Target") || tierName.equals("IPA Actual")) && syllabificationVisible) {
+                    try {
+                        removeSyllabification(tierName);
+                    }
+                    catch (BadLocationException e) {
+                        LogUtil.severe(e);
+                    }
+                }
+                // If the tier with alignment is hidden remove the alignment and set a flag to add it back correctly
+                if (alignmentVisible && alignmentParent != null && tierName.equals(alignmentParent.getTierName())) {
+                    try {
+                        removeAlignment();
+                    }
+                    catch (BadLocationException e) {
+                        LogUtil.severe(e);
+                    }
+                }
             }
         }
 
@@ -891,10 +941,6 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 int tierStartOffset = getTierStart(recordIndex, tierName) - labelLength;
                 int tierEndOffset = getTierEnd(recordIndex, tierName);
 
-                if (record.getTier(tierName).getValue().toString().strip().equals("")) {
-                    tierStartOffset += 1;
-                }
-
                 remove(tierStartOffset, tierEndOffset - tierStartOffset);
 
                 if (offset == -1) {
@@ -906,13 +952,15 @@ public class TranscriptDocument extends DefaultStyledDocument {
             }
         }
 
+
+
         try {
             appendBatchEndStart();
-            int offsetBeforeInsert = offset;
             for (TierViewItem item : movedTiersNewOrder) {
-                insertTier(recordIndex, item, recordAttrs);
+                var attrs = insertTier(recordIndex, item, recordAttrs);
+                appendBatchLineFeed(attrs);
             }
-            processBatchUpdates(offsetBeforeInsert);
+            processBatchUpdates(offset);
             setGlobalParagraphAttributes();
         }
         catch (BadLocationException e) {
@@ -959,6 +1007,22 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 addTierToRecord(i, addedTiers);
             }
         }
+
+        if (alignmentVisible && alignmentParent != null) {
+            TierViewItem calculatedAlignmentParent = calculateAlignmentParent();
+            if (!calculatedAlignmentParent.getTierName().equals(alignmentParent.getTierName())) {
+                System.out.println("Current alignment parent: " + alignmentParent.getTierName());
+                System.out.println("Calculated alignment parent: " + calculatedAlignmentParent.getTierName());
+                try {
+                    alignmentParent = calculatedAlignmentParent;
+                    removeAlignment();
+                    appendAlignmentToParent();
+                }
+                catch (BadLocationException e) {
+                    LogUtil.severe(e);
+                }
+            }
+        }
     }
 
     private void addTierToRecord(int recordIndex, List<TierViewItem> addedTiers) {
@@ -966,7 +1030,8 @@ public class TranscriptDocument extends DefaultStyledDocument {
         try {
             appendBatchEndStart();
             for (TierViewItem item : addedTiers) {
-                insertTier(recordIndex, item, getRecordAttributes(recordIndex));
+                var attrs = insertTier(recordIndex, item, getRecordAttributes(recordIndex));
+                appendBatchLineFeed(attrs);
             }
             processBatchUpdates(offset);
             setGlobalParagraphAttributes();
@@ -977,6 +1042,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
     }
 
     public void hideTier(List<String> hiddenTiers) {
+        // Hide the tiers
         if (singleRecordView) {
             hideTierInRecord(singleRecordIndex, hiddenTiers);
         }
@@ -987,37 +1053,35 @@ public class TranscriptDocument extends DefaultStyledDocument {
             }
         }
 
+        boolean alignmentParentRemoved = false;
         for (String tierName : hiddenTiers) {
+            // If a tier with syllabification enabled was hidden remove the syllabification
             if ((tierName.equals("IPA Target") || tierName.equals("IPA Actual")) && syllabificationVisible) {
                 try {
-                    Element root = getDefaultRootElement();
-                    for (int i = 0; i < root.getElementCount(); i++) {
-                        Element elem = root.getElement(i);
-                        for (int j = 0; j < elem.getElementCount(); j++) {
-                            Element innerElem = elem.getElement(j);
-                            var attrs = innerElem.getAttributes();
-                            Tier<?> tier = (Tier<?>) attrs.getAttribute("tier");
-                            if (tier != null) {
-                                boolean correctTier;
-                                if (tierName.equals("IPA Target")) {
-                                    correctTier = tier.getName().equals(SystemTierType.TargetSyllables.getName());
-                                } else {
-                                    correctTier = tier.getName().equals(SystemTierType.ActualSyllables.getName());
-                                }
-                                if (correctTier) {
-                                    int tierStartOffset = getTierStart(tier) - labelColumnWidth - 2;
-                                    int tierEndOffset = getTierEnd(tier);
-                                    remove(tierStartOffset, tierEndOffset - tierStartOffset);
-                                }
-                            }
-
-                        }
-                    }
+                    removeSyllabification(tierName);
                 }
                 catch (BadLocationException e) {
                     LogUtil.severe(e);
                 }
             }
+            // If the tier with alignment is hidden remove the alignment and set a flag to add it back correctly
+            if (alignmentVisible && alignmentParent != null && tierName.equals(alignmentParent.getTierName())) {
+                try {
+                    removeAlignment();
+                    alignmentParentRemoved = true;
+                }
+                catch (BadLocationException e) {
+                    LogUtil.severe(e);
+                }
+            }
+        }
+
+        // If needed, add the alignment back
+        if (alignmentParentRemoved) {
+            alignmentParent = calculateAlignmentParent();
+            System.out.println("Alignment parent removed");
+            System.out.println("Appending it to: " + alignmentParent.getTierName());
+            appendAlignmentToParent();
         }
     }
 
@@ -1049,6 +1113,22 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 showTierInRecord(i, shownTiers, newTierView);
             }
         }
+
+        if (alignmentVisible && alignmentParent != null) {
+            TierViewItem calculatedAlignmentParent = calculateAlignmentParent();
+            if (!calculatedAlignmentParent.getTierName().equals(alignmentParent.getTierName())) {
+                alignmentParent = calculatedAlignmentParent;
+                System.out.println("Alignment parent added");
+                System.out.println("Appending it to: " + alignmentParent.getTierName());
+                try {
+                    removeAlignment();
+                    appendAlignmentToParent();
+                }
+                catch (BadLocationException e) {
+                    LogUtil.severe(e);
+                }
+            }
+        }
     }
 
     private void showTierInRecord(int recordIndex, List<TierViewItem> shownTiers, List<TierViewItem> newTierView) {
@@ -1070,13 +1150,25 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 }
 
                 if (itemBeforeShownItem != null) {
-                    offset = getTierEnd(recordIndex, itemBeforeShownItem.getTierName());
+                    if (syllabificationVisible) {
+                        if (itemBeforeShownItem.getTierName().equals("IPA Target")) {
+                            offset = getTierEnd(recordIndex, SystemTierType.TargetSyllables.getName());
+                        }
+                        else if (itemBeforeShownItem.getTierName().equals("IPA Actual")) {
+                            offset = getTierEnd(recordIndex, SystemTierType.ActualSyllables.getName());
+                        }
+                        else {
+                            offset = getTierEnd(recordIndex, itemBeforeShownItem.getTierName());
+                        }
+                    }
+                    else {
+                        offset = getTierEnd(recordIndex, itemBeforeShownItem.getTierName());
+                    }
                 }
 
-                int offsetBeforeInsert = offset;
                 appendBatchEndStart();
                 insertTier(recordIndex, item, recordAttrs);
-                processBatchUpdates(offsetBeforeInsert);
+                processBatchUpdates(offset);
                 setGlobalParagraphAttributes();
             }
         }
@@ -1092,7 +1184,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         else {
             int recordCount = session.getRecordCount();
             for (int i = 0; i < recordCount; i++) {
-                tierFontChangedInRecord(singleRecordIndex, changedTiers);
+                tierFontChangedInRecord(i, changedTiers);
             }
         }
     }
@@ -1186,7 +1278,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
             var tierView = session.getTierView();
             AttributeSet newLineAttrs;
 
-            int start = getRecordStart(removedRecordIndex);
+            int start = getRecordStart(removedRecordIndex, true);
 
             remove(start, getLength() - start);
 
@@ -1257,7 +1349,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
     public void changeSpeaker(Record record) {
         try {
             int recordIndex = session.getRecordPosition(record);
-            int start = getRecordStart(recordIndex);
+            int start = getRecordStart(recordIndex, true);
 
             var tierView = session.getTierView();
             String firstVisibleTierName = tierView
@@ -1269,7 +1361,6 @@ public class TranscriptDocument extends DefaultStyledDocument {
             int end = getTierStart(recordIndex, firstVisibleTierName) - (labelColumnWidth + 2);
 
             remove(start, end - start);
-
 
             SimpleAttributeSet sepAttrs = getSeparatorAttributes();
             sepAttrs.addAttributes(getRecordAttributes(recordIndex));
@@ -1320,7 +1411,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
     // endregion Record Changes
 
 
-    public TierViewItem getAlignmentTierView() {
+    public TierViewItem calculateAlignmentParent() {
         List<TierViewItem> visibleTierView = session.getTierView().stream().filter(item -> item.isVisible()).toList();
 
         var retVal = visibleTierView.stream().filter(item -> item.getTierName().equals("IPA Actual")).findFirst();
@@ -1330,6 +1421,126 @@ public class TranscriptDocument extends DefaultStyledDocument {
         if (retVal.isPresent()) return retVal.get();
 
         return visibleTierView.get(visibleTierView.size()-1);
+    }
+
+    private void appendAlignmentToParent() {
+        try {
+            String appendingTierName = alignmentParent.getTierName();
+
+            System.out.println("Appending tier name: " + appendingTierName);
+
+            if (syllabificationVisible) {
+                if (appendingTierName.equals("IPA Target")) {
+                    appendingTierName = SystemTierType.TargetSyllables.getName();;
+                }
+                else if (appendingTierName.equals("IPA Actual")) {
+                    appendingTierName = SystemTierType.ActualSyllables.getName();
+                }
+            }
+
+            if (singleRecordView) {
+                System.out.println("Appending tier name: " + appendingTierName);
+                appendBatchEndStart();
+                Record record = session.getRecord(singleRecordIndex);
+                var attrs = appendAlignmentToTierInRecord(record.getTier(appendingTierName), record);
+                appendBatchLineFeed(attrs);
+                System.out.println("Appending tier name: " + appendingTierName);
+                int tierEnd = getTierEnd(singleRecordIndex, appendingTierName);
+                System.out.println("Process batch at: " + tierEnd);
+                processBatchUpdates(tierEnd);
+            }
+            else {
+                int recordCount = session.getRecordCount();
+                for (int i = 0; i < recordCount; i++) {
+                    appendBatchEndStart();
+                    Record record = session.getRecord(i);
+                    var attrs = appendAlignmentToTierInRecord(record.getTier(appendingTierName), record);
+                    appendBatchLineFeed(attrs);
+                    processBatchUpdates(getTierEnd(i, appendingTierName));
+                }
+            }
+        }
+        catch (BadLocationException e) {
+            LogUtil.severe(e);
+        }
+    }
+
+    private SimpleAttributeSet appendAlignmentToTierInRecord(Tier<?> tier, Record record) {
+        // Get the alignment tier
+        Tier<PhoneAlignment> alignmentTier = record.getPhoneAlignmentTier();
+        // Set up the tier attributes for the dummy tier
+        var tierAttrs = getTierAttributes(tier);
+        tierAttrs.addAttributes(getTierAttributes(alignmentTier));
+        // Set up the attributes for its label
+        SimpleAttributeSet alignmentLabelAttrs = getTierLabelAttributes(alignmentTier);
+        // Set up record attributes
+        SimpleAttributeSet recordAttrs = getRecordAttributes(session.getRecordPosition(record));
+        alignmentLabelAttrs.addAttributes(recordAttrs);
+        tierAttrs.addAttributes(recordAttrs);
+        // Get the string for the label
+        String alignmentLabelText = formatLabelText("Alignment");
+        // Add the label
+        appendBatchString(alignmentLabelText + ": ", alignmentLabelAttrs);
+        // Get the string version of the alignment
+        String alignmentContent = alignmentTier.getValue().toString();
+        // Add component factory if needed
+        if (alignmentIsComponent) {
+            tierAttrs.addAttributes(getAlignmentAttributes());
+        }
+        appendBatchString(alignmentContent, tierAttrs);
+
+        return tierAttrs;
+    }
+
+    private void removeAlignment() throws BadLocationException {
+        Element root = getDefaultRootElement();
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            for (int j = 0; j < elem.getElementCount(); j++) {
+                Element innerElem = elem.getElement(j);
+                var attrs = innerElem.getAttributes();
+                Tier<?> tier = (Tier<?>) attrs.getAttribute("tier");
+                if (tier != null) {
+                    boolean correctTier = tier.getName().equals("Alignment");
+                    if (correctTier) {
+                        int tierStartOffset = getTierStart(tier) - labelColumnWidth - 2;
+                        int tierEndOffset = getTierEnd(tier);
+                        if (tierStartOffset >= 0 && tierEndOffset >= 0) {
+                            System.out.println("Removed alignment ---------------------------");
+                            remove(tierStartOffset, tierEndOffset - tierStartOffset);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void removeSyllabification(String tierName) throws BadLocationException {
+        Element root = getDefaultRootElement();
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            for (int j = 0; j < elem.getElementCount(); j++) {
+                Element innerElem = elem.getElement(j);
+                var attrs = innerElem.getAttributes();
+                Tier<?> tier = (Tier<?>) attrs.getAttribute("tier");
+                if (tier != null) {
+                    boolean correctTier;
+                    if (tierName.equals("IPA Target")) {
+                        correctTier = tier.getName().equals(SystemTierType.TargetSyllables.getName());
+                    } else {
+                        correctTier = tier.getName().equals(SystemTierType.ActualSyllables.getName());
+                    }
+                    if (correctTier) {
+                        int tierStartOffset = getTierStart(tier) - labelColumnWidth - 2;
+                        int tierEndOffset = getTierEnd(tier);
+                        if (tierStartOffset >= 0 && tierEndOffset >= 0) {
+                            remove(tierStartOffset, tierEndOffset - tierStartOffset);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public Character getCharAtPos(int pos) {
@@ -1596,10 +1807,16 @@ public class TranscriptDocument extends DefaultStyledDocument {
                         text = comment.toString();
                         attrs = getTierCommentAttributes();
                     }
-                    else {
-                        TierInternalMedia internalMedia = (TierInternalMedia) elem;
+                    else if (elem instanceof TierInternalMedia internalMedia) {
                         text = internalMedia.toString();
                         attrs = getTierInternalMediaAttributes();
+                    }
+                    else if (elem instanceof TierLink link) {
+                        text = link.toString();
+                        attrs = getTierLinkAttributes();
+                    }
+                    else {
+                        throw new RuntimeException("Invalid type");
                     }
 
                     attrs.addAttributes(tierAttrs);
@@ -1612,33 +1829,12 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 }
             }
         }
-        String alignmentParentTierName = getAlignmentTierView().getTierName();
-        if (alignmentVisible && tierName.equals(alignmentParentTierName)) {
-            System.out.println(alignmentParentTierName);
+        if (alignmentVisible && alignmentParent != null && tierName.equals(alignmentParent.getTierName())) {
             tierAttrs.removeAttribute("componentFactory");
             // Add a newline at the end of the regular tier content
             appendBatchLineFeed(tierAttrs);
-            // Get the alignment tier
-            Tier<PhoneAlignment> alignmentTier = record.getPhoneAlignmentTier();
-            // Set up the tier attributes for the dummy tier
-            tierAttrs = new SimpleAttributeSet(tierAttrs);
-            tierAttrs.addAttributes(getTierAttributes(alignmentTier));
-            // Set up the attributes for its label
-            SimpleAttributeSet alignmentLabelAttrs = getTierLabelAttributes(alignmentTier);
-            if (recordAttrs != null) {
-                alignmentLabelAttrs.addAttributes(recordAttrs);
-            }
-            // Get the string for the label
-            String alignmentLabelText = formatLabelText("Alignment");
-            // Add the label
-            appendBatchString(alignmentLabelText + ": ", alignmentLabelAttrs);
-            // Get the string version of the alignment
-            String alignmentContent = alignmentTier.getValue().toString();
-            // Add component factory if needed
-            if (alignmentIsComponent) {
-                tierAttrs.addAttributes(getAlignmentAttributes());
-            }
-            appendBatchString(alignmentContent, tierAttrs);
+            // Append the alignment
+            tierAttrs = appendAlignmentToTierInRecord(tier, record);
         }
 
         tierAttrs.removeAttribute("componentFactory");

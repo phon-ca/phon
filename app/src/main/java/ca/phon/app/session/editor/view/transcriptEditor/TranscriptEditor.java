@@ -826,7 +826,7 @@ public class TranscriptEditor extends JEditorPane {
 
         try {
             // Get rects for the start and end positions of the record
-            int recordStartPos = doc.getRecordStart(editorEvent.data().recordIndex());
+            int recordStartPos = doc.getRecordStart(editorEvent.data().recordIndex(), true);
             int recordEndPos = doc.getRecordEnd(editorEvent.data().recordIndex());
             var startRect = modelToView2D(recordStartPos);
             var endRect = modelToView2D(recordEndPos);
@@ -1229,6 +1229,14 @@ public class TranscriptEditor extends JEditorPane {
                 .toList()
             );
 
+            if (isAlignmentVisible()) {
+                TierViewItem alignmentParent = doc.getAlignmentParent();
+                if (alignmentParent != null) {
+                    int alignmentIndex = recordVisibleTierNames.indexOf(alignmentParent.getTierName()) + 1;
+                    recordVisibleTierNames.add(alignmentIndex, SystemTierType.PhoneAlignment.getName());
+                }
+            }
+
             int ipaTargetIndex = recordVisibleTierNames.indexOf("IPA Target");
             if (ipaTargetIndex != -1 && isSyllabificationVisible()) {
                 recordVisibleTierNames.add(ipaTargetIndex + 1, SystemTierType.TargetSyllables.getName());
@@ -1236,11 +1244,6 @@ public class TranscriptEditor extends JEditorPane {
             int ipaActualIndex = recordVisibleTierNames.indexOf("IPA Actual");
             if (ipaActualIndex != -1 && isSyllabificationVisible()) {
                 recordVisibleTierNames.add(ipaActualIndex + 1, SystemTierType.ActualSyllables.getName());
-            }
-
-            if (isAlignmentVisible()) {
-                int alignmentIndex = recordVisibleTierNames.indexOf(doc.getAlignmentTierView().getTierName()) + 1;
-                recordVisibleTierNames.add(alignmentIndex, SystemTierType.PhoneAlignment.getName());
             }
 
             // Get the current tier from the current position attributes
@@ -1301,6 +1304,14 @@ public class TranscriptEditor extends JEditorPane {
                         .toList()
                 );
 
+                if (isAlignmentVisible()) {
+                    TierViewItem alignmentParent = doc.getAlignmentParent();
+                    if (alignmentParent != null) {
+                        int alignmentIndex = recordVisibleTierNames.indexOf(alignmentParent.getTierName()) + 1;
+                        recordVisibleTierNames.add(alignmentIndex, SystemTierType.PhoneAlignment.getName());
+                    }
+                }
+
                 int ipaTargetIndex = recordVisibleTierNames.indexOf("IPA Target");
                 if (ipaTargetIndex != -1 && isSyllabificationVisible()) {
                     recordVisibleTierNames.add(ipaTargetIndex + 1, SystemTierType.TargetSyllables.getName());
@@ -1308,11 +1319,6 @@ public class TranscriptEditor extends JEditorPane {
                 int ipaActualIndex = recordVisibleTierNames.indexOf("IPA Actual");
                 if (ipaActualIndex != -1 && isSyllabificationVisible()) {
                     recordVisibleTierNames.add(ipaActualIndex + 1, SystemTierType.ActualSyllables.getName());
-                }
-
-                if (isAlignmentVisible()) {
-                    int alignmentIndex = recordVisibleTierNames.indexOf(doc.getAlignmentTierView().getTierName()) + 1;
-                    recordVisibleTierNames.add(alignmentIndex, SystemTierType.PhoneAlignment.getName());
                 }
 
                 String prevTierName = recordVisibleTierNames.get(recordVisibleTierNames.size() - 1);
@@ -1383,6 +1389,14 @@ public class TranscriptEditor extends JEditorPane {
                     .toList()
             );
 
+            if (isAlignmentVisible()) {
+                TierViewItem alignmentParent = doc.getAlignmentParent();
+                if (alignmentParent != null) {
+                    int alignmentIndex = recordVisibleTierNames.indexOf(alignmentParent.getTierName()) + 1;
+                    recordVisibleTierNames.add(alignmentIndex, SystemTierType.PhoneAlignment.getName());
+                }
+            }
+
             int ipaTargetIndex = recordVisibleTierNames.indexOf("IPA Target");
             if (ipaTargetIndex != -1 && isSyllabificationVisible()) {
                 recordVisibleTierNames.add(ipaTargetIndex + 1, SystemTierType.TargetSyllables.getName());
@@ -1390,11 +1404,6 @@ public class TranscriptEditor extends JEditorPane {
             int ipaActualIndex = recordVisibleTierNames.indexOf("IPA Actual");
             if (ipaActualIndex != -1 && isSyllabificationVisible()) {
                 recordVisibleTierNames.add(ipaActualIndex + 1, SystemTierType.ActualSyllables.getName());
-            }
-
-            if (isAlignmentVisible()) {
-                int alignmentIndex = recordVisibleTierNames.indexOf(doc.getAlignmentTierView().getTierName()) + 1;
-                recordVisibleTierNames.add(alignmentIndex, SystemTierType.PhoneAlignment.getName());
             }
 
             // Get the current tier from the current position attributes
@@ -1455,6 +1464,14 @@ public class TranscriptEditor extends JEditorPane {
                         .toList()
                 );
 
+                if (isAlignmentVisible()) {
+                    TierViewItem alignmentParent = doc.getAlignmentParent();
+                    if (alignmentParent != null) {
+                        int alignmentIndex = recordVisibleTierNames.indexOf(alignmentParent.getTierName()) + 1;
+                        recordVisibleTierNames.add(alignmentIndex, SystemTierType.PhoneAlignment.getName());
+                    }
+                }
+
                 int ipaTargetIndex = recordVisibleTierNames.indexOf("IPA Target");
                 if (ipaTargetIndex != -1 && isSyllabificationVisible()) {
                     recordVisibleTierNames.add(ipaTargetIndex + 1, SystemTierType.TargetSyllables.getName());
@@ -1462,11 +1479,6 @@ public class TranscriptEditor extends JEditorPane {
                 int ipaActualIndex = recordVisibleTierNames.indexOf("IPA Actual");
                 if (ipaActualIndex != -1 && isSyllabificationVisible()) {
                     recordVisibleTierNames.add(ipaActualIndex + 1, SystemTierType.ActualSyllables.getName());
-                }
-
-                if (isAlignmentVisible()) {
-                    int alignmentIndex = recordVisibleTierNames.indexOf(doc.getAlignmentTierView().getTierName()) + 1;
-                    recordVisibleTierNames.add(alignmentIndex, SystemTierType.PhoneAlignment.getName());
                 }
 
                 String nextTierName = recordVisibleTierNames.get(0);
@@ -1531,7 +1543,10 @@ public class TranscriptEditor extends JEditorPane {
                     int end = doc.getTierEnd(prevTier);
                     String newValue = doc.getText(start, end - start);
 
-                    tierDataChanged(prevTier, newValue);
+                    // TODO figure out a better way of doing this
+//                    if (!newValue.equals(prevTier.getValue().toString())) {
+//                        tierDataChanged(prevTier, newValue);
+//                    }
                 }
                 catch (BadLocationException e) {
                     LogUtil.severe(e);

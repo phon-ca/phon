@@ -1,6 +1,7 @@
 package ca.phon.app.session.editor.view.transcriptEditor;
 
 import ca.phon.app.log.LogUtil;
+import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.ui.fonts.FontPreferences;
@@ -25,11 +26,14 @@ public class TranscriptScrollPaneGutter extends JComponent {
         this.editor = editor;
         setPreferredSize(new Dimension(DEFAULT_WIDTH + PADDING + RECORD_NUMBER_WIDTH + PADDING, getPreferredSize().height));
         setFont(FontPreferences.getTierFont());
+
+        currentRecord = editor.getTranscriptDocument().getSingleRecordIndex();
         editor.getEventManager().registerActionForEvent(
             EditorEventType.RecordChanged,
-            (e) -> currentRecord = e.data().recordIndex(),
+            this::onRecordChanged,
             EditorEventManager.RunOn.AWTEventDispatchThread
         );
+
     }
 
     @Override
@@ -90,9 +94,6 @@ public class TranscriptScrollPaneGutter extends JComponent {
                                 var sepRect = editor.modelToView2D(innerElem.getStartOffset());
 
                                 String recordNumberText = String.valueOf(recordNumber + 1);
-                                if (recordNumber == currentRecord) {
-                                    g.setFont(font.deriveFont(Font.BOLD));
-                                }
 
                                 var fontMetrics = g.getFontMetrics();
                                 int stringWidth = fontMetrics.stringWidth(recordNumberText);
@@ -100,8 +101,13 @@ public class TranscriptScrollPaneGutter extends JComponent {
 
                                 if (stringBaselineHeight <= currentSepHeight) continue;
 
+                                if (recordNumber == currentRecord) {
+                                    g.setFont(font.deriveFont(Font.BOLD));
+                                }
+
                                 g.drawString(recordNumberText, getWidth() - stringWidth - PADDING, stringBaselineHeight);
                                 currentSepHeight = stringBaselineHeight;
+
                                 if (recordNumber == currentRecord) {
                                     g.setFont(font);
                                 }
@@ -126,6 +132,11 @@ public class TranscriptScrollPaneGutter extends JComponent {
         int newWidth = show ? DEFAULT_WIDTH + PADDING + RECORD_NUMBER_WIDTH + PADDING: DEFAULT_WIDTH + PADDING;
         setPreferredSize(new Dimension(newWidth, getPreferredSize().height));
         revalidate();
+        repaint();
+    }
+
+    public void onRecordChanged(EditorEvent<EditorEventType.RecordChangedData> event) {
+        currentRecord = event.data().recordIndex();
         repaint();
     }
 }
