@@ -12,9 +12,12 @@ import java.util.Stack;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+/**
+ * Parser listener used for building mor tier data
+ */
 public class MorBuilder extends MorBaseListener {
 
-    private record MorData(List<MorElement> elements, List<MorTranslation> translations,
+    private record MorData(List<MorElement> elements, List<String> translations,
                            List<MorPre> morPres, List<MorPost> morPosts, AtomicReference<Boolean> omittedRef) {
     }
     private final Stack<MorData> morDataStack = new Stack<>();
@@ -110,9 +113,10 @@ public class MorBuilder extends MorBaseListener {
     }
 
     @Override
-    public void exitTranslation(MorParser.TranslationContext ctx) {
-        final String translation = ctx.getText().substring(1);
-        morDataStack.peek().translations().add(new MorTranslation(translation));
+    public void exitTranslations(MorParser.TranslationsContext ctx) {
+        for(MorParser.StringContext stringContext:ctx.string()) {
+            morDataStack.peek().translations().add(stringContext.getText());
+        }
     }
 
     @Override

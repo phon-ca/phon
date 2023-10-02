@@ -16,7 +16,7 @@ public final class Mor extends MorphemicBaseType {
 
     private final List<MorPost> morPosts;
 
-    public Mor(MorElement element, List<MorTranslation> translations, List<MorPre> morPres, List<MorPost> morPosts, boolean omitted) {
+    public Mor(MorElement element, List<String> translations, List<MorPre> morPres, List<MorPost> morPosts, boolean omitted) {
         super(element, translations);
         this.morPres = morPres;
         this.morPosts = morPosts;
@@ -27,11 +27,12 @@ public final class Mor extends MorphemicBaseType {
     public String text() {
         final StringBuilder builder = new StringBuilder();
         builder.append(getElement().text());
+        for(int i = 0; i < getTranslations().size(); i++) {
+            builder.append(i == 0 ? "=" : "/");
+            builder.append(getTranslations().get(i));
+        }
         for(MorPost mp:morPosts)
             builder.append(mp.text());
-        for(MorTranslation translation:getTranslations()) {
-            builder.append(translation);
-        }
         return builder.toString();
     }
 

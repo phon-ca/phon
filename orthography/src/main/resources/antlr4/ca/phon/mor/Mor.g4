@@ -10,7 +10,7 @@ mortier
     ;
 
 mor
-    :   morelement (morpost)* (translation)*
+    :   morelement (translations)* (morpost)*
     ;
 
 morelement
@@ -57,8 +57,8 @@ suffix
     :   string
     ;
 
-translation
-    :   EQUALS string
+translations
+    :   EQUALS string (FORWARD_SLASH string)*
     ;
 
 string
@@ -86,7 +86,7 @@ mt
    ;
 
 morpost
-    :   TILDE morelement
+    :   TILDE morelement (translations)*
     ;
 
 PLUS
@@ -150,5 +150,5 @@ STRING
     ;
 
 fragment CHAR
-    :   ~('#'|'|'|'&'|'-'|'='|':'|'~'|'+'|[ \t\r\n])
+    :   ~('#'|'|'|'&'|'-'|'='|':'|'~'|'+'|'/'|[ \t\r\n])
     ;

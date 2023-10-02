@@ -4,7 +4,7 @@ import java.util.List;
 
 public final class MorPre extends MorphemicBaseType {
 
-    public MorPre(MorElement element, List<MorTranslation> translations) {
+    public MorPre(MorElement element, List<String> translations) {
         super(element, translations);
     }
 

@@ -60,4 +60,16 @@ public class TestMorParser {
         final Mor mor = roundTrip(text);
     }
 
+    @Test
+    public void testTranslations() throws  ParseException {
+        final String text = "pro:poss|mi=my n|musica=musician/music pro:poss|mi=my .";
+        final Mor mor = roundTrip(text);
+    }
+
+    @Test
+    public void testMorTranslationsCompound() throws ParseException {
+        final String text = "prep|be=in/at~det|ha=the .";
+        final Mor mor = roundTrip(text);
+    }
+
 }

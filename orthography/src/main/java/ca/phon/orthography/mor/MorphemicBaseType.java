@@ -13,9 +13,9 @@ public abstract class MorphemicBaseType {
 
     private final MorElement element;
 
-    private final List<MorTranslation> translations;
+    private final List<String> translations;
 
-    public MorphemicBaseType(MorElement element, List<MorTranslation> translations) {
+    public MorphemicBaseType(MorElement element, List<String> translations) {
         super();
         this.element = element;
         this.translations = translations;
@@ -25,7 +25,7 @@ public abstract class MorphemicBaseType {
         return this.element;
     }
 
-    public List<MorTranslation> getTranslations() {
+    public List<String> getTranslations() {
         return Collections.unmodifiableList(translations);
     }
 

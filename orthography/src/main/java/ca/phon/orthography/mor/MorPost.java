@@ -12,13 +12,20 @@ public final class MorPost extends MorphemicBaseType {
 
     public final static String PREFIX = "~";
 
-    public MorPost(MorElement element, List<MorTranslation> translations) {
+    public MorPost(MorElement element, List<String> translations) {
         super(element, translations);
     }
 
     @Override
     public String text() {
-        return String.format("%s%s", PREFIX, getElement().text());
+        final StringBuilder builder = new StringBuilder();
+        builder.append(PREFIX);
+        builder.append(getElement());
+        for(int i = 0; i < getTranslations().size(); i++) {
+            builder.append(i == 0 ? "=" : "/");
+            builder.append(getTranslations().get(i));
+        }
+        return builder.toString();
     }
 
 }
