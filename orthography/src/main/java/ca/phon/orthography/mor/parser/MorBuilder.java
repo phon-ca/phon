@@ -8,10 +8,35 @@ import ca.phon.orthography.mor.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MorBuilder extends MorBaseListener {
 
-    final List<MorElement> elements = new ArrayList<>();
+    private record MorData(AtomicReference<MorElement> elementRef, List<MorTranslation> translations,
+                           List<MorPre> morPres, List<MorPost> morPosts, AtomicReference<Boolean> omittedRef) {
+    }
+    final Stack<MorData> morDataStack = new Stack<>();
+
+    private MorData createEmptyData() {
+        return new MorData(new AtomicReference<>(), new ArrayList<>(),
+                new ArrayList<>(), new ArrayList<>(), new AtomicReference<>(false));
+    }
+
+    private final List<Mor> mors = new ArrayList<>();
+
+    @Override
+    public void enterMor(MorParser.MorContext ctx) {
+        morDataStack.push(createEmptyData());
+    }
+
+    @Override
+    public void exitMor(MorParser.MorContext ctx) {
+        final MorData morData = morDataStack.pop();
+        final Mor mor = new Mor(morData.elementRef().get(), morData.translations(),
+                morData.morPres(), morData.morPosts(), morData.omittedRef().get());
+        mors.add(mor);
+    }
 
     @Override
     public void exitMw(MorParser.MwContext ctx) {
@@ -40,17 +65,29 @@ public class MorBuilder extends MorBaseListener {
             markers.add(morMarker);
         }
         final MorWord mw = new MorWord(prefixList, pos, stem, markers);
-        elements.add(mw);
+        morDataStack.peek().elementRef().set(mw);
     }
 
     @Override
     public void exitMt(MorParser.MtContext ctx) {
         final TerminatorType tt = TerminatorType.fromString(ctx.getText());
-        elements.add(new MorTerminator(tt));
+        morDataStack.peek().elementRef().set(new MorTerminator(tt));
     }
 
-    public List<MorElement> getElements() {
-        return this.elements;
+    @Override
+    public void enterMorpost(MorParser.MorpostContext ctx) {
+        morDataStack.push(createEmptyData());
+    }
+
+    @Override
+    public void exitMorpost(MorParser.MorpostContext ctx) {
+        final MorData morData = morDataStack.pop();
+        final MorPost morPost = new MorPost(morData.elementRef().get(), morData.translations());
+        morDataStack.peek().morPosts().add(morPost);
+    }
+
+    public List<Mor> getMors() {
+        return this.mors;
     }
 
 }

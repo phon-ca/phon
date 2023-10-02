@@ -13,7 +13,7 @@ public enum MorMarkerType {
     @Documentation("https://talkbank.org/manuals/MOR.html#Mor_Markers_Suffix")
     Suffix("sfx", "-"),
     /**
-     * uffix fusion marker, CHAT equivalent is &amp;suffix
+     * suffix fusion marker, CHAT equivalent is &amp;suffix
      */
     @Documentation("https://talkbank.org/manuals/MOR.html#Mor_Markers_Suffix_Fusional")
     SuffixFusion("sfxf", "&"),

@@ -1,11 +1,15 @@
 grammar Mor;
 
 start
-    :    mor? EOF;
+    :    mortier? EOF;
+
+mortier
+    :   mortier WS mor
+    |   mor
+    ;
 
 mor
-    :   mor WS morelement
-    |   morelement
+    :   morelement (morpost)*
     ;
 
 morelement
@@ -75,6 +79,10 @@ mt
    |   '\u2248'                                    // TCUContinuation
    ;
 
+morpost
+    :   TILDE morelement
+    ;
+
 PLUS
     :   '+'
     ;
@@ -127,12 +135,14 @@ HYPHEN
     :   '-'
     ;
 
-
+TILDE
+    :   '~'
+    ;
 
 STRING
     :   TEXT+
     ;
 
 fragment TEXT
-    :   ~('#'|'|'|'&'|'-'|'='|':'|[ \t\r\n])
+    :   ~('#'|'|'|'&'|'-'|'='|':'|'~'|'+'|[ \t\r\n])
     ;

@@ -53,4 +53,5 @@ public final class MorWord extends MorElement {
         }
         return builder.toString();
     }
+
 }
