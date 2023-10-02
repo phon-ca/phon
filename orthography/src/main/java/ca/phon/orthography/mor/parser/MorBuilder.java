@@ -107,6 +107,18 @@ public class MorBuilder extends MorBaseListener {
     }
 
     @Override
+    public void enterMorprefix(MorParser.MorprefixContext ctx) {
+        morDataStack.push(createEmptyData());
+    }
+
+    @Override
+    public void exitMorprefix(MorParser.MorprefixContext ctx) {
+        final MorData morData = morDataStack.pop();
+        final MorPre morPre = new MorPre(morData.elements().get(0), morData.translations());
+        morDataStack.peek().morPres().add(morPre);
+    }
+
+    @Override
     public void exitMt(MorParser.MtContext ctx) {
         final TerminatorType tt = TerminatorType.fromString(ctx.getText());
         morDataStack.peek().elements.add(new MorTerminator(tt));
@@ -114,8 +126,8 @@ public class MorBuilder extends MorBaseListener {
 
     @Override
     public void exitTranslations(MorParser.TranslationsContext ctx) {
-        for(MorParser.StringContext stringContext:ctx.string()) {
-            morDataStack.peek().translations().add(stringContext.getText());
+        for(MorParser.TranslationContext translationContext:ctx.translation()) {
+            morDataStack.peek().translations().add(translationContext.getText());
         }
     }
 

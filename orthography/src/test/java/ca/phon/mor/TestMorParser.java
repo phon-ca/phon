@@ -42,6 +42,30 @@ public class TestMorParser {
     }
 
     @Test
+    public void testMorCompound() throws ParseException {
+        final String text = "n|+n|ice+n|cream .";
+        final Mor mor = roundTrip(text);
+    }
+
+    @Test
+    public void testMorHyphen() throws ParseException {
+        final String text = "co|danke=thank-you .";
+        final Mor more = roundTrip(text);
+    }
+
+    @Test
+    public void testMorLong() throws ParseException {
+        final String text = "n:prop|Ethan-POSS n|fast anti#dis#v|establish-ment-ari-an-ism .";
+        final Mor mor = roundTrip(text);
+    }
+
+    @Test
+    public void testMorPre() throws ParseException {
+        final String text = "n:prop|Ethan-POSS n|fast v|da-give$pro|me&dat-me~pro|lo&acc-it .";
+        final Mor mor = roundTrip(text);
+    }
+
+    @Test
     public void testMorClitics() throws ParseException {
         final String text = "pro|you part|go-PROG~inf|to v|put&ZERO det|the " +
                 "n|+on|choo+on|choo~v:cop|be&3S n|wheel adv:loc|on ?";

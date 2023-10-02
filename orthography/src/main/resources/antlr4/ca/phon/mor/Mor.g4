@@ -10,7 +10,11 @@ mortier
     ;
 
 mor
-    :   morelement (translations)* (morpost)*
+    :   morprefix* morelement translations? morpost*
+    ;
+
+morprefix
+    :   morelement translations? DOLLAR_SIGN
     ;
 
 morelement
@@ -20,7 +24,7 @@ morelement
     ;
 
 mw
-    :   (prefix HASH)* pos PIPE stem (marker)*
+    :   (prefix HASH)* pos PIPE stem marker*
     ;
 
 prefix
@@ -58,7 +62,11 @@ suffix
     ;
 
 translations
-    :   EQUALS string (FORWARD_SLASH string)*
+    :   EQUALS translation (FORWARD_SLASH translation)*
+    ;
+
+translation
+    :   string (HYPHEN string)*
     ;
 
 string
@@ -86,7 +94,7 @@ mt
    ;
 
 morpost
-    :   TILDE morelement (translations)*
+    :   TILDE morelement translations?
     ;
 
 PLUS
@@ -145,10 +153,14 @@ TILDE
     :   '~'
     ;
 
+DOLLAR_SIGN
+    :   '$'
+    ;
+
 STRING
     :   CHAR+
     ;
 
 fragment CHAR
-    :   ~('#'|'|'|'&'|'-'|'='|':'|'~'|'+'|'/'|[ \t\r\n])
+    :   ~('#'|'|'|'&'|'$'|'-'|'='|':'|'~'|'+'|'/'|[ \t\r\n])
     ;

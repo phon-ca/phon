@@ -2,6 +2,7 @@ package ca.phon.orthography.mor;
 
 import ca.phon.util.Documentation;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -23,9 +24,23 @@ public final class Mor extends MorphemicBaseType {
         this.omitted = omitted;
     }
 
+    public boolean isOmitted() {
+        return omitted;
+    }
+
+    public List<MorPre> getMorPres() {
+        return Collections.unmodifiableList(morPres);
+    }
+
+    public List<MorPost> getMorPosts() {
+        return Collections.unmodifiableList(morPosts);
+    }
+
     @Override
     public String text() {
         final StringBuilder builder = new StringBuilder();
+        for(MorPre morPre:morPres)
+            builder.append(morPre);
         builder.append(getElement().text());
         for(int i = 0; i < getTranslations().size(); i++) {
             builder.append(i == 0 ? "=" : "/");
