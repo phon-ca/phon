@@ -57,7 +57,7 @@ import java.util.List;
 @SessionIO(
 		group="ca.phon",
 		id="phonbank",
-		version="1.3",
+		version="2.0",
 		mimetype="application/xml",
 		extension="xml",
 		name="Phon 4.0+ (.xml)"
@@ -82,7 +82,7 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 		final XmlSessionType retVal = factory.createXmlSessionType();
 
 		// header data
-		retVal.setVersion("1.3");
+		retVal.setVersion("2.0");
 		retVal.setName(session.getName());
 		retVal.setCorpus(session.getCorpus());
 

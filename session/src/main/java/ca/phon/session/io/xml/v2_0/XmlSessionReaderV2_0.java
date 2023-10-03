@@ -75,7 +75,7 @@ import java.util.*;
 @SessionIO(
 		group="ca.phon",
 		id="phonbank",
-		version="1.3",
+		version="2.0",
 		mimetype="application/xml",
 		extension="xml",
 		name="Phon 4.0+ (.xml)"
@@ -785,7 +785,7 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 			while(!(evt = reader.nextEvent()).isStartElement());
 			canRead =
 					evt.asStartElement().getName().getLocalPart().equals("session")
-					&& evt.asStartElement().getAttributeByName(new QName("version")).getValue().equals("1.3");
+					&& evt.asStartElement().getAttributeByName(new QName("version")).getValue().equals("2.0");
 		} catch (XMLStreamException e) {
 			throw new IOException(e);
 		}
