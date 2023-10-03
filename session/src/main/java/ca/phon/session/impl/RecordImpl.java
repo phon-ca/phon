@@ -128,6 +128,11 @@ public class RecordImpl implements RecordSPI {
 	}
 
 	@Override
+	public List<Tier<?>> getUserTiers() {
+		return userDefined.values().stream().toList();
+	}
+
+	@Override
 	public <T> Tier<T> getTier(String name, Class<T> type) {
 		final SystemTierType systemTierType = SystemTierType.tierFromString(name);
 		final Tier<T> systemTier = getSystemTier(systemTierType, type);

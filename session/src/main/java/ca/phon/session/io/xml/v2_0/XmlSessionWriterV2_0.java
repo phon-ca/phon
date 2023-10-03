@@ -19,6 +19,7 @@ import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.Orthography;
+import ca.phon.orthography.mor.Mor;
 import ca.phon.orthography.mor.MorTierData;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
@@ -67,7 +68,7 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 
 	public final static String DEFAULT_NAMESPACE = "https://phon.ca/ns/session";
 
-	public final static String DEFAULT_NAMESPACE_LOCATION = "https://phon.ca/xml/xsd/session/v1_3/session.xsd";
+	public final static String DEFAULT_NAMESPACE_LOCATION = "https://phon.ca/xml/xsd/session/v2_0/session.xsd";
 
 	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(XmlSessionWriterV2_0.class.getName());
 
@@ -477,6 +478,37 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 		return retVal;
 	}
 
+	public XmlMorTierData writeMorTierData(ObjectFactory factory, MorTierData tierData) {
+		final XmlMorTierData morTierData = factory.createXmlMorTierData();
+		final MorToXmlVisitor visitor = new MorToXmlVisitor(factory);
+		tierData.getMors().forEach(visitor::visit);
+		for(XmlMorType xmlMorType:visitor.getXmlMorTypes()) {
+			morTierData.getMor().add(xmlMorType);
+		}
+		return morTierData;
+	}
+
+	/**
+	 * Write mor to
+	 * @param factory
+	 * @param mor
+	 * @param type if not null, type attribute will be set
+	 *
+	 * @return xml mor type
+	 */
+	public XmlMorType writeMor(ObjectFactory factory, Mor mor, String type) {
+		final MorToXmlVisitor visitor = new MorToXmlVisitor(factory);
+		visitor.visit(mor);
+		if(visitor.getXmlMorTypes().size() != 1) {
+			throw new IllegalStateException("Error creating xml for " + mor.text());
+		}
+		final XmlMorType morType = visitor.getXmlMorTypes().get(0);
+		if(type != null && !type.isBlank()) {
+			morType.setType(type);
+		}
+		return morType;
+	}
+
 	private XmlParticipantType findXmlParticipant(XmlSessionType sessionType, Participant participant) {
 		if(sessionType.getParticipants() != null) {
 			for (XmlParticipantType participantType : sessionType.getParticipants().getParticipant()) {
@@ -649,9 +681,6 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 		} else {
 			retVal.setTierData(writeUserTierData(factory, notesTier.getValue()));
 		}
-
-
-
 		return retVal;
 	}
 
@@ -667,6 +696,8 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 				retVal.setPho(writeIPA(factory, (IPATranscript) userTier.getValue()));
 			} else if(tierType == TierData.class) {
 				retVal.setTierData(writeUserTierData(factory, (TierData) userTier.getValue()));
+			} else if(tierType == MorTierData.class) {
+				retVal.setMors(writeMorTierData(factory, (MorTierData) userTier.getValue()));
 			} else {
 				throw new IllegalArgumentException("Unsupported tier type " + tierType);
 			}

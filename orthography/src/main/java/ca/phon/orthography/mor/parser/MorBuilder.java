@@ -2,7 +2,6 @@ package ca.phon.orthography.mor.parser;
 
 import ca.phon.mor.MorBaseListener;
 import ca.phon.mor.MorParser;
-import ca.phon.orthography.Terminator;
 import ca.phon.orthography.TerminatorType;
 import ca.phon.orthography.mor.*;
 
@@ -10,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 /**
  * Parser listener used for building mor tier data

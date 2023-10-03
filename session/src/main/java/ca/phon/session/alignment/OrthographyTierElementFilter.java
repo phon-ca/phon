@@ -33,6 +33,7 @@ public final class OrthographyTierElementFilter implements TierElementFilter {
         Postcode,
         TagMarker,
         Terminator,
+        Quotation,
         Word,
     };
 
@@ -132,11 +133,25 @@ public final class OrthographyTierElementFilter implements TierElementFilter {
 
         @Visits
         @Override
+        public void visitCompoundWord(CompoundWord compoundWord) {
+            visitWord(compoundWord);
+        }
+
+        @Visits
+        @Override
+        public void visitQuotation(Quotation quotation) {
+            if(isIncluded(AlignableType.Quotation))
+                elements.add(quotation);
+        }
+
+        @Visits
+        @Override
         public void visitPause(Pause pause) {
             if(isIncluded(AlignableType.Pause))
                 elements.add(pause);
         }
 
+        @Visits
         @Override
         public void visitOrthoGroup(OrthoGroup group) {
             if(isIncluded(AlignableType.Group))
@@ -146,6 +161,7 @@ public final class OrthographyTierElementFilter implements TierElementFilter {
             }
         }
 
+        @Visits
         @Override
         public void visitPhoneticGroup(PhoneticGroup phoneticGroup) {
             if(isIncluded(AlignableType.PhoneticGroup)) {
@@ -155,18 +171,21 @@ public final class OrthographyTierElementFilter implements TierElementFilter {
             }
         }
 
+        @Visits
         @Override
         public void visitTerminator(Terminator terminator) {
             if(isIncluded(AlignableType.Terminator))
                 elements.add(terminator);
         }
 
+        @Visits
         @Override
         public void visitLinker(Linker linker) {
             if(isIncluded(AlignableType.Linker))
                 elements.add(linker);
         }
 
+        @Visits
         @Override
         public void visitPostcode(Postcode postcode) {
             if(isIncluded(AlignableType.Postcode))
@@ -175,7 +194,6 @@ public final class OrthographyTierElementFilter implements TierElementFilter {
 
         @Override
         public void fallbackVisit(OrthographyElement obj) {
-
         }
 
     }

@@ -2,6 +2,8 @@ package ca.phon.session.alignment;
 
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
+import ca.phon.orthography.Quotation;
+import ca.phon.orthography.mor.MorTierData;
 import ca.phon.session.PhoneAlignment;
 import ca.phon.session.Tier;
 import ca.phon.session.tierdata.TierData;
@@ -18,6 +20,8 @@ public interface TierElementFilter {
                 return orthographyFilterForIPAAlignment();
             } else if(alignedType == TierData.class) {
                 return orthographyFilterForUserTierAlignment();
+            } else if(alignedType == MorTierData.class) {
+                return orthographyFilterForMorTierAlignment();
             } else {
                 throw new IllegalArgumentException("Invalid aligned tier type " + alignedType);
             }
@@ -28,11 +32,15 @@ public interface TierElementFilter {
                 return ipaFilterForIPAAlignment();
             } else if(alignedType == TierData.class) {
                 return ipaFilterForUserTierAlignment();
+            } else if(alignedType == MorTierData.class) {
+                return ipaFilterForUserTierAlignment();
             } else {
                 throw new IllegalArgumentException("Invalid aligned tier type " + alignedType);
             }
         } else if(tierType == TierData.class) {
             return defaultUserTierElementFilter();
+        } else if(tierType == MorTierData.class) {
+            return defaultMorTierElementFilter();
         } else {
             throw new IllegalArgumentException("Invalid tier type " + tierType);
         }
@@ -54,6 +62,13 @@ public interface TierElementFilter {
         final List<OrthographyTierElementFilter.AlignableType> alignableTypes =
                 List.of(OrthographyTierElementFilter.AlignableType.Word);
         return new OrthographyTierElementFilter(alignableTypes, true, true, true, false, false);
+    }
+
+    public static OrthographyTierElementFilter orthographyFilterForMorTierAlignment() {
+        final List<OrthographyTierElementFilter.AlignableType> alignableTypes =
+                List.of(OrthographyTierElementFilter.AlignableType.Word, OrthographyTierElementFilter.AlignableType.Quotation,
+                        OrthographyTierElementFilter.AlignableType.TagMarker, OrthographyTierElementFilter.AlignableType.Terminator);
+        return new OrthographyTierElementFilter(alignableTypes, true, true, true, true, false);
     }
 
     public static IPATierElementFilter ipaFilterForIPAAlignment() {
@@ -78,6 +93,15 @@ public interface TierElementFilter {
         final List<UserTierElementFilter.AlignableType> alignableTypes =
                 List.of(UserTierElementFilter.AlignableType.Type);
         return new UserTierElementFilter(alignableTypes);
+    }
+
+    public static TierElementFilter defaultMorTierElementFilter() {
+        return new TierElementFilter() {
+            @Override
+            public List<?> filterTier(Tier<?> tier) {
+                return ((Tier<MorTierData>)tier).getValue().getMors();
+            }
+        };
     }
 
     /**

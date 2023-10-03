@@ -101,6 +101,13 @@ public interface RecordSPI {
 	public Set<String> getUserDefinedTierNames();
 
 	/**
+	 * Return all user-defined tiers in record
+	 *
+	 * @return unmodifiable list of user-defined tiers
+	 */
+	public List<Tier<?>> getUserTiers();
+
+	/**
 	 * @see Record#hasTier(String) 
 	 * @param name
 	 * @return

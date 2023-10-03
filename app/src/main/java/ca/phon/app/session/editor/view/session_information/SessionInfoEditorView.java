@@ -22,6 +22,7 @@ import ca.phon.app.session.editor.view.common.*;
 import ca.phon.app.session.editor.view.session_information.actions.*;
 import ca.phon.media.MediaLocator;
 import ca.phon.project.Project;
+import ca.phon.script.scripttable.AbstractScriptTableModel;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.ui.action.PhonUIAction;
@@ -284,9 +285,6 @@ public class SessionInfoEditorView extends EditorView {
 	private void update() {
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getDataModel().getSession();
-		
-		final Project project = editor.getExtension(Project.class);
-		if(project == null) return;
 		
 		final LocalDate sessionDate = getEditor().getSession().getDate();
 		if(sessionDate != null) {

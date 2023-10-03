@@ -20,6 +20,7 @@ import ca.phon.extensions.IExtendable;
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
+import ca.phon.session.Record;
 import ca.phon.session.Session;
 import ca.phon.session.Tier;
 
@@ -31,11 +32,21 @@ import java.text.ParseException;
  * 
  */
 public class TierEdit<T> extends SessionUndoableEdit {
-	
+
+	/**
+	 * record
+	 */
+	private final Record record;
+
 	/**
 	 * tier
 	 */
 	private final Tier<T> tier;
+
+	/**
+	 * did we add the tier to the record
+	 */
+	private boolean addedRecord = false;
 	
 	/**
 	 * Old value
@@ -54,7 +65,11 @@ public class TierEdit<T> extends SessionUndoableEdit {
 	private boolean fireHardChangeOnUndo = false;
 
 	public TierEdit(SessionEditor editor, Tier<T> tier, T newValue) {
-		this(editor.getSession(), editor.getEventManager(), tier, newValue);
+		this(editor, editor.currentRecord(), tier, newValue);
+	}
+
+	public TierEdit(SessionEditor editor, Record record, Tier<T> tier, T newValue) {
+		this(editor.getSession(), editor.getEventManager(), record, tier, newValue);
 	}
 
 	/**
@@ -65,19 +80,25 @@ public class TierEdit<T> extends SessionUndoableEdit {
 	 * @param tier
 	 * @param newValue
 	 */
-	public TierEdit(Session session, EditorEventManager editorEventManager, Tier<T> tier, T newValue) {
+	public TierEdit(Session session, EditorEventManager editorEventManager, Record record, Tier<T> tier, T newValue) {
 		super(session, editorEventManager);
 		this.tier = tier;
+		this.record = record;
 		this.newValue = newValue;
 	}
 
 	public TierEdit(SessionEditor editor, Tier<T> tier, String text) {
-		this(editor.getSession(), editor.getEventManager(), tier, text);
+		this(editor, editor.currentRecord(), tier, text);
 	}
 
-	public TierEdit(Session session, EditorEventManager editorEventManager, Tier<T> tier, String text) {
+	public TierEdit(SessionEditor editor, Record record, Tier<T> tier, String text) {
+		this(editor.getSession(), editor.getEventManager(), record, tier, text);
+	}
+
+	public TierEdit(Session session, EditorEventManager editorEventManager, Record record, Tier<T> tier, String text) {
 		super(session, editorEventManager);
 		this.tier = tier;
+		this.record = record;
 
 		final Formatter<T> formatter = FormatterFactory.createFormatter(tier.getDeclaredType());
 		try {
@@ -134,6 +155,10 @@ public class TierEdit<T> extends SessionUndoableEdit {
 
 		final T oldVal = getOldValue();
 		tier.setValue(oldVal);
+
+		if(this.record != null && addedRecord) {
+			this.record.removeTier(getTier().getName());
+		}
 		
 		if(getEditorEventManager() != null) {
 			final EditorEventType.TierChangeData tcd = new EditorEventType.TierChangeData(tier, newValue, oldVal);
@@ -142,7 +167,7 @@ public class TierEdit<T> extends SessionUndoableEdit {
 			getEditorEventManager().queueEvent(tierChangeEvt);
 			if(isFireHardChangeOnUndo()) {
 				final EditorEvent<EditorEventType.TierChangeData> tierChangedEvt =
-						new EditorEvent<>(EditorEventType.TierChange, getSource(), tcd);
+						new EditorEvent<>(EditorEventType.TierChanged, getSource(), tcd);
 				getEditorEventManager().queueEvent(tierChangedEvt);
 			}
 		}
@@ -154,6 +179,13 @@ public class TierEdit<T> extends SessionUndoableEdit {
 		T newValue = getNewValue();
 		tier.setValue(newValue);
 
+		if (this.record != null) {
+			if(this.record.getTier(tier.getName()) != tier) {
+				this.record.putTier(tier);
+				 addedRecord = true;
+			}
+		}
+
 		if(getEditorEventManager() != null) {
 			final EditorEventType.TierChangeData tcd = new EditorEventType.TierChangeData(tier, getOldValue(), newValue);
 			final EditorEvent<EditorEventType.TierChangeData> tierChangeEvt =
@@ -161,7 +193,7 @@ public class TierEdit<T> extends SessionUndoableEdit {
 			getEditorEventManager().queueEvent(tierChangeEvt);
 			if(isFireHardChangeOnUndo()) {
 				final EditorEvent<EditorEventType.TierChangeData> tierChangedEvt =
-						new EditorEvent<>(EditorEventType.TierChange, getSource(), tcd);
+						new EditorEvent<>(EditorEventType.TierChanged, getSource(), tcd);
 				getEditorEventManager().queueEvent(tierChangedEvt);
 			}
 		}

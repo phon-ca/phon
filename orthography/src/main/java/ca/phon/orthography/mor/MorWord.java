@@ -2,6 +2,7 @@ package ca.phon.orthography.mor;
 
 import ca.phon.util.Documentation;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -37,6 +38,22 @@ public final class MorWord extends MorElement {
         this.pos = pos;
         this.stem = stem;
         this.markers = markers;
+    }
+
+    public List<String> getPrefixList() {
+        return Collections.unmodifiableList(prefixList);
+    }
+
+    public Pos getPos() {
+        return pos;
+    }
+
+    public String getStem() {
+        return stem;
+    }
+
+    public List<MorMarker> getMarkers() {
+        return Collections.unmodifiableList(markers);
     }
 
     @Override

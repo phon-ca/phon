@@ -271,7 +271,7 @@ public class ValidationEditorView extends EditorView {
 		}
 		ipa.putExtension(AlternativeTranscript.class, tier.getValue().getExtension(AlternativeTranscript.class));
 		
-		final TierEdit<IPATranscript> edit = new TierEdit<IPATranscript>(getEditor(), data.tier, ipa);
+		final TierEdit<IPATranscript> edit = new TierEdit<IPATranscript>(getEditor(), getEditor().currentRecord(), data.tier, ipa);
 		
 		final Record r = getEditor().currentRecord();
 		final Tier<PhoneAlignment> alignmentTier = r.getPhoneAlignmentTier();

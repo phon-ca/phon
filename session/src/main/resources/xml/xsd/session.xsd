@@ -503,6 +503,7 @@
             <xs:enumeration value="postcode"/>
             <xs:enumeration value="longFeature"/>
             <xs:enumeration value="nonvocal"/>
+            <xs:enumeration value="quotation"/>.
         </xs:restriction>
     </xs:simpleType>
 
@@ -550,6 +551,7 @@
             <xs:enumeration value="type"/>
             <xs:enumeration value="internal-media"/>
             <xs:enumeration value="comment"/>
+            <xs:enumeration value="link"/>
         </xs:restriction>
     </xs:simpleType>
     <!-- endregion Cross-tier alignment -->
@@ -997,12 +999,13 @@
     </xs:complexType>
 
     <!-- Mor tiers -->
-    <xs:element name="mors"/>
+    <xs:element name="mors" type="morTierData"/>
     <xs:complexType name="morTierData">
         <xs:sequence>
             <xs:element ref="mor" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
+
     <!-- endregion Tiers -->
 
     <!-- region IPATranscript -->
@@ -3573,7 +3576,11 @@
                     <xs:element ref="mor-pre" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element ref="mor-post" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
-                <xs:attribute name="type" type="nonemptyStringType" use="required"/>
+                <xs:attribute name="type" type="nonemptyStringType">
+                    <xs:annotation>
+                        <xs:documentation>type made optional as Phon uses tier name as type, retained for compatibility</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
                 <xs:attribute name="omitted" type="xs:boolean"/>
             </xs:extension>
         </xs:complexContent>

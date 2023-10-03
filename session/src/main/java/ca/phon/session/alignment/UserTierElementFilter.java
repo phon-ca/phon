@@ -14,6 +14,7 @@ public class UserTierElementFilter implements TierElementFilter {
     public static enum AlignableType {
         Type,
         InternalMedia,
+        Link,
         Comment;
     };
 

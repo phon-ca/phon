@@ -8,6 +8,7 @@ import ca.phon.orthography.mor.parser.MorParserException;
 import org.antlr.v4.runtime.*;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,6 +38,10 @@ public final class MorTierData extends ExtendableObject {
     }
 
     private final List<Mor> mors;
+
+    public MorTierData() {
+        this(new ArrayList<>());
+    }
 
     public MorTierData(List<Mor> mors) {
         super();

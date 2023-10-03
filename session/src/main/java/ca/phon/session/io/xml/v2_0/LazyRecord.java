@@ -24,6 +24,7 @@ import ca.phon.session.io.xml.v2_0.XmlRecordType;
 import ca.phon.session.tierdata.TierData;
 import ca.phon.session.spi.RecordSPI;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -137,6 +138,12 @@ public final class LazyRecord implements RecordSPI {
 	public Set<String> getUserDefinedTierNames() {
 		loadRecord();
 		return internalRecord.getUserDefinedTierNames();
+	}
+
+	@Override
+	public List<Tier<?>> getUserTiers() {
+		loadRecord();
+		return internalRecord.getUserTiers();
 	}
 
 	public boolean hasTier(String name) {

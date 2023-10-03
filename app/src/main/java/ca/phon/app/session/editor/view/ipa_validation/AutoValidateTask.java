@@ -104,7 +104,7 @@ public class AutoValidateTask extends ca.phon.worker.PhonTask {
 	/**
 	 * Validate the given tier for a record
 	 */
-	private UndoableEdit validateIPA(Tier<IPATranscript> tier) {
+	private UndoableEdit validateIPA(Record record, Tier<IPATranscript> tier) {
 		final CompoundEdit retVal = new CompoundEdit();
 		
 		final IPATranscript grp = tier.getValue();
@@ -144,7 +144,7 @@ public class AutoValidateTask extends ca.phon.worker.PhonTask {
 				syllabifier.syllabify(setV.toList());
 			}
 
-			final TierEdit<IPATranscript> tierEdit = new TierEdit<IPATranscript>(null, tier, setV);
+			final TierEdit<IPATranscript> tierEdit = new TierEdit<IPATranscript>(session,null, record, tier, setV);
 			tierEdit.doIt();
 			retVal.addEdit(tierEdit);
 		}
@@ -161,10 +161,10 @@ public class AutoValidateTask extends ca.phon.worker.PhonTask {
 		for(Record utt:session.getRecords()) {
 			if(recordFilter != null && recordFilter.checkRecord(utt)) {
 				if(validateTarget) {
-					undoableEdit.addEdit(validateIPA(utt.getIPATargetTier()));
+					undoableEdit.addEdit(validateIPA(utt, utt.getIPATargetTier()));
 				}
 				if(validateActual) {
-					undoableEdit.addEdit(validateIPA(utt.getIPAActualTier()));
+					undoableEdit.addEdit(validateIPA(utt, utt.getIPAActualTier()));
 				}
 			}
 		}
