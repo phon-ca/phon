@@ -15,6 +15,7 @@
  */
 package ca.phon.session.io.xml.v1_3;
 
+import ca.phon.orthography.mor.MorTierData;
 import ca.phon.session.GemType;
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.*;
@@ -362,6 +363,7 @@ public final class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReade
 			case CHAT -> Orthography.class;
 			case IPA -> IPATranscript.class;
 			case PHONE_ALIGNMENT -> PhoneAlignment.class;
+			case MOR -> MorTierData.class;
 			case DEFAULT -> TierData.class;
 		};
 		final Map<String, String> tierParams = new LinkedHashMap<>();

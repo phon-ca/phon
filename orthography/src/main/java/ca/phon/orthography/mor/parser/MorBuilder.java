@@ -38,7 +38,7 @@ public class MorBuilder extends MorBaseListener {
     public void exitMor(MorParser.MorContext ctx) {
         final MorData morData = morDataStack.pop();
         if(morData.elements().size() != 1)
-            throw new IllegalStateException("Invalid number of elements for mor " + morData.elements().size());
+            throw new MorParserException("Invalid number of elements for mor " + morData.elements().size(), ctx.getStart().getCharPositionInLine());
         final Mor mor = new Mor(morData.elements().get(0), morData.translations(),
                 morData.morPres(), morData.morPosts(), morData.omittedRef().get());
         mors.add(mor);
@@ -74,7 +74,7 @@ public class MorBuilder extends MorBaseListener {
                 case '-' -> MorMarkerType.Suffix;
                 case '&' -> MorMarkerType.SuffixFusion;
                 case ':' -> MorMarkerType.MorCategory;
-                default -> throw new IllegalArgumentException("Invalid marker prefix " + typeCh);
+                default -> throw new MorParserException("Invalid marker prefix " + typeCh, mctx.getStart().getCharPositionInLine());
             };
             final MorMarker morMarker = new MorMarker(morMarkerType, mctx.getText().substring(1));
             markers.add(morMarker);
@@ -92,11 +92,11 @@ public class MorBuilder extends MorBaseListener {
     public void exitMwc(MorParser.MwcContext ctx) {
         final MorData morData = morDataStack.pop();
         if(morData.elements().isEmpty()) {
-            throw new IllegalStateException("Must have words in a compound");
+            throw new MorParserException("Must have words in a compound", ctx.getStart().getCharPositionInLine());
         }
         for(MorElement morElement:morData.elements()) {
             if(!(morElement instanceof MorWord)) {
-                throw new IllegalStateException("Mor content in compound must be a word");
+                throw new MorParserException("Mor content in compound must be a word", ctx.getStart().getCharPositionInLine());
             }
         }
         final List<MorWord> words = morData.elements().stream().map(ele -> (MorWord)ele).toList();

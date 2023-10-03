@@ -19,6 +19,7 @@ import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.Orthography;
+import ca.phon.orthography.mor.MorTierData;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.Rank;
@@ -341,6 +342,8 @@ public final class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensi
 			tierType = XmlUserTierTypeType.CHAT;
 		} else if(td.getDeclaredType() == IPATranscript.class) {
 			tierType = XmlUserTierTypeType.IPA;
+		} else if(td.getDeclaredType() == MorTierData.class) {
+			tierType = XmlUserTierTypeType.MOR;
 		}
 		retVal.setType(tierType);
 

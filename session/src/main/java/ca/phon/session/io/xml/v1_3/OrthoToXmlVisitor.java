@@ -420,7 +420,7 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 	@Override
     @Visits
 	public void visitTerminator(Terminator terminator) {
-		final XmlBaseTerminatorType xmlT = factory.createXmlBaseTerminatorType();
+		final XmlUtteranceTerminatorType xmlT = factory.createXmlUtteranceTerminatorType();
 		final XmlTerminatorType type = switch (terminator.getType()) {
 			case BROKEN_FOR_CODING -> XmlTerminatorType.BROKEN_FOR_CODING;
 			case EXCLAMATION -> XmlTerminatorType.E;
