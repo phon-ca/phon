@@ -1,4 +1,4 @@
-package ca.phon.session.io.xml.v1_3;
+package ca.phon.session.io.xml.v2_0;
 
 import ca.phon.orthography.mor.Pos;
 import ca.phon.orthography.*;
@@ -25,6 +25,7 @@ import ca.phon.orthography.Underline;
 import ca.phon.orthography.UntranscribedType;
 import ca.phon.orthography.WordFormType;
 import ca.phon.orthography.WordType;
+import ca.phon.session.io.xml.v2_0.*;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.session.io.xml.v1_3;
+package ca.phon.session.io.xml.v2_0;
 
 import ca.phon.orthography.mor.Pos;
 import ca.phon.orthography.*;
@@ -33,6 +33,7 @@ import ca.phon.orthography.Replacement;
 import ca.phon.orthography.TagMarker;
 import ca.phon.orthography.ToneMarker;
 import ca.phon.orthography.Underline;
+import ca.phon.session.io.xml.v2_0.*;
 import ca.phon.util.Language;
 import ca.phon.visitor.annotation.Visits;
 

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.session.io.xml.v1_3;
+package ca.phon.session.io.xml.v2_0;
 
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.IPATranscript;
@@ -27,6 +27,7 @@ import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionWriter;
+import ca.phon.session.io.xml.v2_0.*;
 import ca.phon.session.tierdata.*;
 import ca.phon.util.Language;
 import ca.phon.xml.annotation.XMLSerial;
@@ -62,13 +63,13 @@ import java.util.List;
 		name="Phon 4.0+ (.xml)"
 )
 @Rank(0)
-public final class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoint<SessionWriter> {
+public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensionPoint<SessionWriter> {
 
 	public final static String DEFAULT_NAMESPACE = "https://phon.ca/ns/session";
 
 	public final static String DEFAULT_NAMESPACE_LOCATION = "https://phon.ca/xml/xsd/session/v1_3/session.xsd";
 
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(XmlSessionWriterV1_3.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(XmlSessionWriterV2_0.class.getName());
 
 	/**
 	 * Create a new jaxb version of the session
@@ -714,7 +715,7 @@ public final class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensi
 
 	@Override
 	public IPluginExtensionFactory<SessionWriter> getFactory() {
-		return (args) -> { return new XmlSessionWriterV1_3(); };
+		return (args) -> { return new XmlSessionWriterV2_0(); };
 	}
 
 }
