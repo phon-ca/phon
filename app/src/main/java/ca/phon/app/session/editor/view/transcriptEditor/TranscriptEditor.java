@@ -8,6 +8,7 @@ import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.plugin.PluginManager;
 import ca.phon.session.*;
 import ca.phon.session.Record;
+import ca.phon.session.tierdata.TierData;
 import ca.phon.ui.CalloutWindow;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
@@ -44,7 +45,8 @@ public class TranscriptEditor extends JEditorPane {
     private Object currentUnderline;
     TranscriptUnderlinePainter underlinePainter = new TranscriptUnderlinePainter();
     private MediaSegment selectedSegment = null;
-    private Tier<?> caretTier;
+    private int upDownOffset = -1;
+    private boolean caretMoveFromUpDown = false;
 
 
     public TranscriptEditor(
@@ -537,30 +539,17 @@ public class TranscriptEditor extends JEditorPane {
     public void deleteTier(EditorEventType.TierViewChangedData data) {
         TranscriptDocument doc = getTranscriptDocument();
 
-        boolean pastDeletedTier = false;
-        List<TierViewItem> movedTiers = new ArrayList<>();
-        for (TierViewItem item : data.oldTierView()) {
-            if (!pastDeletedTier && data.tierNames().contains(item.getTierName())) {
-                pastDeletedTier = true;
-                continue;
-            }
-            if (pastDeletedTier) {
-                movedTiers.add(item);
-            }
-        }
+        List<String> deletedTiersNames = data.tierNames();
 
-        // Check if caret affected by move
         int startCaretPos = getCaretPosition();
         var elem = doc.getCharacterElement(startCaretPos);
-        Tier caretTier = (Tier)elem.getAttributes().getAttribute("tier");
-        Integer caretRecordIndex = (Integer) elem.getAttributes().getAttribute("recordIndex");
+        var caretAttrs = elem.getAttributes();
+        Tier caretTier = (Tier) caretAttrs.getAttribute("tier");
+        Integer caretRecordIndex = (Integer) caretAttrs.getAttribute("recordIndex");
 
-        int caretTierOffset = -1;
+        boolean caretInDeletedTier = caretTier != null && deletedTiersNames.contains(caretTier.getName());
 
-        if (caretTier != null) {
-            caretTierOffset = startCaretPos - elem.getStartOffset();
-        }
-
+        int caretOffset = doc.getOffsetInContent(startCaretPos);
 
 
         Document blank = getEditorKit().createDefaultDocument();
@@ -570,45 +559,46 @@ public class TranscriptEditor extends JEditorPane {
         setDocument(doc);
 
 
-
-        // Correct caret
+        // Caret in record / tier
         if (caretTier != null) {
-            List<TierViewItem> oldVisibleTierView = data
-                .oldTierView()
-                .stream()
-                .filter(item -> item.isVisible())
-                .toList();
-            int caretTierIndex = oldVisibleTierView
-                .stream()
-                .map(item -> item.getTierName())
-                .toList()
-                .indexOf(caretTier.getName());
-            boolean caretTierWasLast = caretTierIndex == oldVisibleTierView.size() - 1;
-            boolean caretTierWasDeleted = data
-                .tierNames()
-                .stream()
-                .anyMatch(tierName -> tierName.equals(caretTier.getName()));
-            boolean caretTierWasMoved = movedTiers
-                .stream()
-                .anyMatch(item -> item.getTierName().equals(caretTier.getName()));
+            // Caret in deleted tier
+            if (caretInDeletedTier) {
+                var oldTierView = data.oldTierView();
 
-            if (caretTierWasDeleted) {
-                String newCaretTierName;
+                boolean passedCaretTier = false;
+                TierViewItem newCaretTierViewItem = null;
+                for (TierViewItem item : oldTierView) {
+                    if (item.getTierName().equals(caretTier.getName())) {
+                        passedCaretTier = true;
+                    }
+                    else if (!deletedTiersNames.contains(item.getTierName()) && item.isVisible()) {
+                        newCaretTierViewItem = item;
+                        if (passedCaretTier) break;
+                    }
+                }
 
-                System.out.println(oldVisibleTierView.stream().map(item -> item.getTierName()).toList());
-                System.out.println("Caret tier was last: " + caretTierWasLast);
-                if (caretTierWasLast) {
-                    newCaretTierName = oldVisibleTierView.get(oldVisibleTierView.size() - 2).getTierName();
-                }
-                else {
-                    newCaretTierName = oldVisibleTierView.get(caretTierIndex + 1).getTierName();
-                }
-                System.out.println(newCaretTierName);
-                setCaretPosition(doc.getTierStart(caretRecordIndex, newCaretTierName) + caretTierOffset);
+                int newCaretTierStart = doc.getTierStart(caretRecordIndex, newCaretTierViewItem.getTierName());
+                int newCaretTierEnd = doc.getTierEnd(caretRecordIndex, newCaretTierViewItem.getTierName());
+
+                int newCaretPos = Math.min(newCaretTierStart + caretOffset, newCaretTierEnd - 1);
+                setCaretPosition(newCaretPos);
             }
-            else if (caretTierWasMoved) {
-                setCaretPosition(doc.getTierStart(caretTier) + caretTierOffset);
+            // Caret in tier not deleted
+            else {
+                setCaretPosition(doc.getTierStart(caretTier) + caretOffset);
             }
+        }
+        // Caret not in record / tier
+        else {
+            String elementType = (String) caretAttrs.getAttribute("elementType");
+            int start = -1;
+            switch (elementType) {
+                case "comment" -> start = doc.getCommentStart((Comment) caretAttrs.getAttribute("comment"));
+                case "gem" -> start = doc.getGemStart((Gem) caretAttrs.getAttribute("gem"));
+                case "generic" -> start = doc.getGenericStart((Tier<?>) caretAttrs.getAttribute("generic"));
+            }
+
+            setCaretPosition(start + caretOffset);
         }
     }
 
@@ -651,29 +641,18 @@ public class TranscriptEditor extends JEditorPane {
     public void hideTier(EditorEventType.TierViewChangedData data) {
         TranscriptDocument doc = getTranscriptDocument();
 
-        boolean pastHiddenTier = false;
-        List<TierViewItem> movedTiers = new ArrayList<>();
-        for (TierViewItem item : data.oldTierView()) {
-            if (!pastHiddenTier && data.tierNames().contains(item.getTierName())) {
-                pastHiddenTier = true;
-                continue;
-            }
-            if (pastHiddenTier) {
-                movedTiers.add(item);
-            }
-        }
+        List<String> hiddenTiersNames = data.tierNames();
 
-        // Check if caret affected by move
         int startCaretPos = getCaretPosition();
         var elem = doc.getCharacterElement(startCaretPos);
-        Tier caretTier = (Tier)elem.getAttributes().getAttribute("tier");
-        Integer caretRecordIndex = (Integer) elem.getAttributes().getAttribute("recordIndex");
+        var caretAttrs = elem.getAttributes();
+        Tier caretTier = (Tier) caretAttrs.getAttribute("tier");
+        Integer caretRecordIndex = (Integer) caretAttrs.getAttribute("recordIndex");
 
-        int caretTierOffset = -1;
+        boolean caretInHiddenTier = caretTier != null && hiddenTiersNames.contains(caretTier.getName());
 
-        if (caretTier != null) {
-            caretTierOffset = startCaretPos - elem.getStartOffset();
-        }
+        int caretOffset = doc.getOffsetInContent(startCaretPos);
+
 
         Document blank = getEditorKit().createDefaultDocument();
         setDocument(blank);
@@ -681,44 +660,47 @@ public class TranscriptEditor extends JEditorPane {
         doc.hideTier(data.tierNames());
         setDocument(doc);
 
-        // Correct caret
+
+        // Caret in record / tier
         if (caretTier != null) {
-            List<TierViewItem> oldVisibleTierView = data
-                .oldTierView()
-                .stream()
-                .filter(item -> item.isVisible())
-                .toList();
-            int caretTierIndex = oldVisibleTierView
-                .stream()
-                .map(item -> item.getTierName())
-                .toList()
-                .indexOf(caretTier.getName());
-            boolean caretTierWasLast = caretTierIndex == oldVisibleTierView.size() - 1;
-            boolean caretTierWasDeleted = data
-                .tierNames()
-                .stream()
-                .anyMatch(tierName -> tierName.equals(caretTier.getName()));
-            boolean caretTierWasMoved = movedTiers
-                .stream()
-                .anyMatch(item -> item.getTierName().equals(caretTier.getName()));
+            // Caret in hidden tier
+            if (caretInHiddenTier) {
+                var oldTierView = data.oldTierView();
 
-            if (caretTierWasDeleted) {
-                String newCaretTierName;
+                boolean passedCaretTier = false;
+                TierViewItem newCaretTierViewItem = null;
+                for (TierViewItem item : oldTierView) {
+                    if (item.getTierName().equals(caretTier.getName())) {
+                        passedCaretTier = true;
+                    }
+                    else if (!hiddenTiersNames.contains(item.getTierName()) && item.isVisible()) {
+                        newCaretTierViewItem = item;
+                        if (passedCaretTier) break;
+                    }
+                }
 
-                System.out.println(oldVisibleTierView.stream().map(item -> item.getTierName()).toList());
-                System.out.println("Caret tier was last: " + caretTierWasLast);
-                if (caretTierWasLast) {
-                    newCaretTierName = oldVisibleTierView.get(oldVisibleTierView.size() - 2).getTierName();
-                }
-                else {
-                    newCaretTierName = oldVisibleTierView.get(caretTierIndex + 1).getTierName();
-                }
-                System.out.println(newCaretTierName);
-                setCaretPosition(doc.getTierStart(caretRecordIndex, newCaretTierName) + caretTierOffset);
+                int newCaretTierStart = doc.getTierStart(caretRecordIndex, newCaretTierViewItem.getTierName());
+                int newCaretTierEnd = doc.getTierEnd(caretRecordIndex, newCaretTierViewItem.getTierName());
+
+                int newCaretPos = Math.min(newCaretTierStart + caretOffset, newCaretTierEnd - 1);
+                setCaretPosition(newCaretPos);
             }
-            else if (caretTierWasMoved) {
-                setCaretPosition(doc.getTierStart(caretTier) + caretTierOffset);
+            // Caret in tier not deleted
+            else {
+                setCaretPosition(doc.getTierStart(caretTier) + caretOffset);
             }
+        }
+        // Caret not in record / tier
+        else {
+            String elementType = (String) caretAttrs.getAttribute("elementType");
+            int start = -1;
+            switch (elementType) {
+                case "comment" -> start = doc.getCommentStart((Comment) caretAttrs.getAttribute("comment"));
+                case "gem" -> start = doc.getGemStart((Gem) caretAttrs.getAttribute("gem"));
+                case "generic" -> start = doc.getGenericStart((Tier<?>) caretAttrs.getAttribute("generic"));
+            }
+
+            setCaretPosition(start + caretOffset);
         }
     }
 
@@ -769,6 +751,7 @@ public class TranscriptEditor extends JEditorPane {
                 newTiers.add(item);
             }
         }
+
 
         if (newTiers.isEmpty()) return;
 
@@ -855,15 +838,57 @@ public class TranscriptEditor extends JEditorPane {
     }
 
     private void onRecordDeleted(EditorEvent<EditorEventType.RecordDeletedData> editorEvent) {
-        // Record caret pos
-        int caretPos = getCaretPosition();
+        TranscriptDocument doc = getTranscriptDocument();
+
+        int deletedRecordIndex = editorEvent.data().recordIndex();
+
+        int startCaretPos = getCaretPosition();
+        var elem = doc.getCharacterElement(startCaretPos);
+        var caretAttrs = elem.getAttributes();
+        Tier caretTier = (Tier) caretAttrs.getAttribute("tier");
+        Integer caretRecordIndex = (Integer) caretAttrs.getAttribute("recordIndex");
+
+        boolean caretInDeletedRecord = caretRecordIndex != null && caretRecordIndex == deletedRecordIndex;
+
+        int caretOffset = doc.getOffsetInContent(startCaretPos);
+
 
         // Delete the record from the doc
         var data = editorEvent.data();
         getTranscriptDocument().deleteRecord(data.recordIndex(), data.elementIndex());
 
-        // Set the caret to the editable pos closest to the original pos
-        setCaretPosition(getNextEditableIndex(caretPos, false));
+
+        // Caret in record / tier
+        if (caretTier != null) {
+            // Caret in deleted record
+            if (caretInDeletedRecord) {
+                boolean deletedRecordWasLast = deletedRecordIndex == session.getRecordCount();
+
+                int newCaretRecordIndex = deletedRecordWasLast ? deletedRecordIndex - 1 : deletedRecordIndex;
+
+                int newCaretTierStart = doc.getTierStart(newCaretRecordIndex, caretTier.getName());
+                int newCaretTierEnd = doc.getTierEnd(newCaretRecordIndex, caretTier.getName());
+
+                int newCaretPos = Math.min(newCaretTierStart + caretOffset, newCaretTierEnd - 1);
+                setCaretPosition(newCaretPos);
+            }
+            // Caret in record not deleted
+            else {
+                setCaretPosition(doc.getTierStart(caretTier) + caretOffset);
+            }
+        }
+        // Caret not in record / tier
+        else {
+            String elementType = (String) caretAttrs.getAttribute("elementType");
+            int start = -1;
+            switch (elementType) {
+                case "comment" -> start = doc.getCommentStart((Comment) caretAttrs.getAttribute("comment"));
+                case "gem" -> start = doc.getGemStart((Gem) caretAttrs.getAttribute("gem"));
+                case "generic" -> start = doc.getGenericStart((Tier<?>) caretAttrs.getAttribute("generic"));
+            }
+
+            setCaretPosition(start + caretOffset);
+        }
     }
 
     private void onRecordMoved(EditorEvent<EditorEventType.RecordMovedData> editorEvent) {
@@ -1114,9 +1139,18 @@ public class TranscriptEditor extends JEditorPane {
         TranscriptDocument doc = getTranscriptDocument();
 
         int caretPos = getCaretPosition();
-        int offsetInContent = doc.getOffsetInContent(caretPos);
+        int offsetInContent;
+        if (upDownOffset == -1) {
+            offsetInContent = doc.getOffsetInContent(caretPos);
+            upDownOffset = offsetInContent;
+        }
+        else {
+            offsetInContent = upDownOffset;
+        }
 
         int start = getStartOfPrevTierOrElement(caretPos);
+
+        System.out.println("Start of prev: " + start);
 
         if (start == -1) return;
 
@@ -1125,6 +1159,8 @@ public class TranscriptEditor extends JEditorPane {
         AttributeSet prevElementAttributes = doc.getCharacterElement(start).getAttributes();
 
         String elementType = (String) prevElementAttributes.getAttribute("elementType");
+
+        System.out.println("Prev element type: " + elementType);
 
         if (elementType == null) {
             return;
@@ -1136,7 +1172,16 @@ public class TranscriptEditor extends JEditorPane {
             end = doc.getCommentEnd((Comment) prevElementAttributes.getAttribute("comment"));
         }
         else if (elementType.equals("gem")) {
-            end = doc.getGemEnd((Gem) prevElementAttributes.getAttribute("gem"));
+            Gem gem = (Gem) prevElementAttributes.getAttribute("gem");
+            System.out.println("Gem: " + gem.getType() + " " + gem.getLabel());
+            end = doc.getGemEnd(gem);
+            System.out.println("Gem end: " + end);
+        }
+        else if (elementType.equals("generic")) {
+            Tier<?> genericTier = (Tier<?>) prevElementAttributes.getAttribute("generic");
+            System.out.println("tier data: " + genericTier.toString());
+            end = doc.getGenericEnd(genericTier);
+            System.out.println("End: " + end);
         }
         else {
             return;
@@ -1144,6 +1189,9 @@ public class TranscriptEditor extends JEditorPane {
 
         int newCaretPos = Math.min(end - 1, start + offsetInContent);
 
+        System.out.println("New caret pos: " + newCaretPos);
+
+        caretMoveFromUpDown = true;
         setCaretPosition(newCaretPos);
     }
 
@@ -1151,9 +1199,19 @@ public class TranscriptEditor extends JEditorPane {
         TranscriptDocument doc = getTranscriptDocument();
 
         int caretPos = getCaretPosition();
-        int offsetInContent = doc.getOffsetInContent(caretPos);
+        int offsetInContent;
+        if (upDownOffset == -1) {
+            offsetInContent = doc.getOffsetInContent(caretPos);
+            upDownOffset = offsetInContent;
+        }
+        else {
+            offsetInContent = upDownOffset;
+        }
 
         int start = getStartOfNextTierOrElement(caretPos);
+
+        System.out.println(start);
+
         if (start == -1) return;
 
         int end;
@@ -1161,6 +1219,7 @@ public class TranscriptEditor extends JEditorPane {
         AttributeSet nextElementAttributes = doc.getCharacterElement(start).getAttributes();
 
         String elementType = (String) nextElementAttributes.getAttribute("elementType");
+        System.out.println("Next element type: " + elementType);
 
         if (elementType == null) {
             return;
@@ -1174,331 +1233,129 @@ public class TranscriptEditor extends JEditorPane {
         else if (elementType.equals("gem")) {
             end = doc.getGemEnd((Gem) nextElementAttributes.getAttribute("gem"));
         }
+        else if (elementType.equals("generic")) {
+            end = doc.getGenericEnd((Tier<?>) nextElementAttributes.getAttribute("generic"));
+        }
         else {
             return;
         }
 
+        System.out.println("End: " + end);
+
         int newCaretPos = Math.min(end - 1, start + offsetInContent);
 
+        System.out.println("New caret pos: " + newCaretPos);
+
+        caretMoveFromUpDown = true;
         setCaretPosition(newCaretPos);
     }
 
     public int getStartOfPrevTierOrElement(int caretPos) {
         TranscriptDocument doc = getTranscriptDocument();
-        Transcript transcript = session.getTranscript();
         Element elem = doc.getCharacterElement(caretPos);
         AttributeSet currentPosAttrs = elem.getAttributes();
 
-        int currentTranscriptElementIndex = -1;
-        int prevTranscriptElementIndex = -1;
-        int prevTierIndex = -1;
-
-        List<String> recordVisibleTierNames = new ArrayList<>();
-
-        // Try to get the current record index
-        Integer currentRecordIndex = (Integer) currentPosAttrs.getAttribute("recordIndex");
-
-        // If the record index is null, you're not in a record
-        if (currentRecordIndex == null) {
-            // Get the type of transcript element you're currently in
-            String elementType = (String) currentPosAttrs.getAttribute("elementType");
-            // If it's a comment
-            if (elementType.equals("comment")) {
-                // Get a reference to it and get its transcript element index
-                Comment comment = (Comment) currentPosAttrs.getAttribute(elementType);
-                currentTranscriptElementIndex = transcript.getElementIndex(comment);
-            }
-            // If it's a gem
-            else if (elementType.equals("gem")) {
-                // Get a reference to it and get its transcript element index
-                Gem gem = (Gem) currentPosAttrs.getAttribute(elementType);
-                currentTranscriptElementIndex = transcript.getElementIndex(gem);
-            }
-            // If it's neither of those, return -1
-            else return -1;
+        Integer recordIndex = (Integer) currentPosAttrs.getAttribute("recordIndex");
+        String elementType = (String) currentPosAttrs.getAttribute("elementType");
+        Object content;
+        if (elementType.equals("record")) {
+            content = currentPosAttrs.getAttribute("tier");
         }
-        // Otherwise you're in a record
         else {
-            // Get a reference to the record
-            Record record = session.getRecord(currentRecordIndex);
-            // Get a list of all the visible tiers in the record
-            recordVisibleTierNames.addAll(session.getTierView()
-                .stream()
-                .filter(item -> record.hasTier(item.getTierName()) && item.isVisible())
-                .map(item -> item.getTierName())
-                .toList()
-            );
-
-            if (isAlignmentVisible()) {
-                TierViewItem alignmentParent = doc.getAlignmentParent();
-                if (alignmentParent != null) {
-                    int alignmentIndex = recordVisibleTierNames.indexOf(alignmentParent.getTierName()) + 1;
-                    recordVisibleTierNames.add(alignmentIndex, SystemTierType.PhoneAlignment.getName());
-                }
-            }
-
-            int ipaTargetIndex = recordVisibleTierNames.indexOf("IPA Target");
-            if (ipaTargetIndex != -1 && isSyllabificationVisible()) {
-                recordVisibleTierNames.add(ipaTargetIndex + 1, SystemTierType.TargetSyllables.getName());
-            }
-            int ipaActualIndex = recordVisibleTierNames.indexOf("IPA Actual");
-            if (ipaActualIndex != -1 && isSyllabificationVisible()) {
-                recordVisibleTierNames.add(ipaActualIndex + 1, SystemTierType.ActualSyllables.getName());
-            }
-
-            // Get the current tier from the current position attributes
-            Tier<?> currentTier = (Tier<?>) currentPosAttrs.getAttribute("tier");
-            // Get the index of the current tier among the visible tiers of the record
-            int currentTierIndex = recordVisibleTierNames.indexOf(currentTier.getName());
-
-            // If it's still -1, return -1
-            if (currentTierIndex == -1) {
-                return -1;
-            }
-            // If it's 0
-            else if (currentTierIndex == 0) {
-                // Get the current element index since we will be moving between elements
-                currentTranscriptElementIndex = transcript.getElementIndex(record);
-            }
-            // If it's not -1 or 0
-            else {
-                // Set the previous tier index to 1 less than the current tier index
-                prevTierIndex = currentTierIndex - 1;
-            }
+            content = currentPosAttrs.getAttribute(elementType);
         }
 
-        // If the previous transcript element index is still -1, we're just moving within a record
-        if (currentTranscriptElementIndex != -1) {
-            // If we're already at the first transcript element, loop back to the last
-            if (currentTranscriptElementIndex == 0) {
-                prevTranscriptElementIndex = transcript.getNumberOfElements() - 1;
-            }
-            // Otherwise, just subtract 1
-            else {
-                prevTranscriptElementIndex = currentTranscriptElementIndex - 1;
-            }
-        }
+        int currentDocElemIndex = doc.getDefaultRootElement().getElementIndex(caretPos);
 
-        // Movement within a record
-        if (currentTranscriptElementIndex == -1) {
-            // Get the name of the previous tier
-            String prevTierName = recordVisibleTierNames.get(prevTierIndex);
-            // Return the start of the previous tier
-            return doc.getTierStart(currentRecordIndex, prevTierName);
-        }
-        // Movement between elements
-        else {
-            Transcript.Element prevTranscriptElement = transcript.getElementAt(prevTranscriptElementIndex);
-            // Moving into a record
-            if (prevTranscriptElement.isRecord()) {
-                // Get a reference to the record and get its index
-                Record record = prevTranscriptElement.asRecord();
-                int recordIndex = transcript.getRecordPosition(record);
+        System.out.println(recordIndex);
+        System.out.println(elementType);
+        System.out.println(currentDocElemIndex);
 
-                // Get a list of all the visible tiers in the record and use it to get the last visible tier name
-                recordVisibleTierNames.addAll(
-                    session.getTierView()
-                        .stream()
-                        .filter(item -> record.hasTier(item.getTierName()) && item.isVisible())
-                        .map(item -> item.getTierName())
-                        .toList()
-                );
-
-                if (isAlignmentVisible()) {
-                    TierViewItem alignmentParent = doc.getAlignmentParent();
-                    if (alignmentParent != null) {
-                        int alignmentIndex = recordVisibleTierNames.indexOf(alignmentParent.getTierName()) + 1;
-                        recordVisibleTierNames.add(alignmentIndex, SystemTierType.PhoneAlignment.getName());
+        Element root = doc.getDefaultRootElement();
+        for (int i = currentDocElemIndex; i >= 0; i--) {
+            Element docElem = root.getElement(i);
+            if (docElem.getElementCount() == 0) continue;
+            for (int j = 0; j < docElem.getElementCount(); j++) {
+                Element innerDocElem = docElem.getElement(j);
+                AttributeSet attrs = innerDocElem.getAttributes();
+                Boolean isLabel = (Boolean) attrs.getAttribute("label");
+                String innerDocElemType = (String) attrs.getAttribute("elementType");
+                System.out.println(innerDocElemType);
+                if (isLabel == null && innerDocElemType != null) {
+                    if (!innerDocElemType.equals(elementType)) {
+                        System.out.println(innerDocElem.getStartOffset());
+                        return innerDocElem.getStartOffset();
+                    }
+                    if (innerDocElemType.equals("record")) {
+                        if (attrs.getAttribute("tier") != content) {
+                            return innerDocElem.getStartOffset();
+                        }
+                    }
+                    else {
+                        if (attrs.getAttribute(innerDocElemType) != content) {
+                            System.out.println(attrs.getAttribute(innerDocElemType));
+                            return innerDocElem.getStartOffset();
+                        }
                     }
                 }
-
-                int ipaTargetIndex = recordVisibleTierNames.indexOf("IPA Target");
-                if (ipaTargetIndex != -1 && isSyllabificationVisible()) {
-                    recordVisibleTierNames.add(ipaTargetIndex + 1, SystemTierType.TargetSyllables.getName());
-                }
-                int ipaActualIndex = recordVisibleTierNames.indexOf("IPA Actual");
-                if (ipaActualIndex != -1 && isSyllabificationVisible()) {
-                    recordVisibleTierNames.add(ipaActualIndex + 1, SystemTierType.ActualSyllables.getName());
-                }
-
-                String prevTierName = recordVisibleTierNames.get(recordVisibleTierNames.size() - 1);
-                // Return the start of the previous tier
-                return doc.getTierStart(recordIndex, prevTierName);
-            }
-            // Moving to a non-record element
-            else {
-                // If element is comment
-                if (prevTranscriptElement.isComment()) {
-                    // Return the start pos of that comment
-                    return doc.getCommentStart(prevTranscriptElement.asComment());
-                }
-                // If element is gem
-                else {
-                    // Return the start pos of that gem
-                    return doc.getGemStart(prevTranscriptElement.asGem());
-                }
             }
         }
+
+        return -1;
     }
 
     public int getStartOfNextTierOrElement(int caretPos) {
         TranscriptDocument doc = getTranscriptDocument();
-        Transcript transcript = session.getTranscript();
         Element elem = doc.getCharacterElement(caretPos);
         AttributeSet currentPosAttrs = elem.getAttributes();
 
-        int currentTranscriptElementIndex = -1;
-        int nextTranscriptElementIndex = -1;
-        int nextTierIndex = -1;
-
-        List<String> recordVisibleTierNames = new ArrayList<>();
-
-        // Try to get the current record index
-        Integer currentRecordIndex = (Integer) currentPosAttrs.getAttribute("recordIndex");
-
-        // If the record index is null, you're not in a record
-        if (currentRecordIndex == null) {
-            // Get the type of transcript element you're currently in
-            String elementType = (String) currentPosAttrs.getAttribute("elementType");
-            // If it's a comment
-            if (elementType.equals("comment")) {
-                // Get a reference to it and get its transcript element index
-                Comment comment = (Comment) currentPosAttrs.getAttribute(elementType);
-                currentTranscriptElementIndex = transcript.getElementIndex(comment);
-            }
-            // If it's a gem
-            else if (elementType.equals("gem")) {
-                // Get a reference to it and get its transcript element index
-                Gem gem = (Gem) currentPosAttrs.getAttribute(elementType);
-                currentTranscriptElementIndex = transcript.getElementIndex(gem);
-            }
-            // If it's neither of those, return -1
-            else return -1;
+        Integer recordIndex = (Integer) currentPosAttrs.getAttribute("recordIndex");
+        String elementType = (String) currentPosAttrs.getAttribute("elementType");
+        Object content;
+        if (elementType.equals("record")) {
+            content = currentPosAttrs.getAttribute("tier");
         }
-        // Otherwise you're in a record
         else {
-            // Get a reference to the record
-            Record record = session.getRecord(currentRecordIndex);
-
-            // Get a list of all the visible tiers in the record
-            recordVisibleTierNames.addAll(
-                session.getTierView()
-                    .stream()
-                    .filter(item -> record.hasTier(item.getTierName()) && item.isVisible())
-                    .map(item -> item.getTierName())
-                    .toList()
-            );
-
-            if (isAlignmentVisible()) {
-                TierViewItem alignmentParent = doc.getAlignmentParent();
-                if (alignmentParent != null) {
-                    int alignmentIndex = recordVisibleTierNames.indexOf(alignmentParent.getTierName()) + 1;
-                    recordVisibleTierNames.add(alignmentIndex, SystemTierType.PhoneAlignment.getName());
-                }
-            }
-
-            int ipaTargetIndex = recordVisibleTierNames.indexOf("IPA Target");
-            if (ipaTargetIndex != -1 && isSyllabificationVisible()) {
-                recordVisibleTierNames.add(ipaTargetIndex + 1, SystemTierType.TargetSyllables.getName());
-            }
-            int ipaActualIndex = recordVisibleTierNames.indexOf("IPA Actual");
-            if (ipaActualIndex != -1 && isSyllabificationVisible()) {
-                recordVisibleTierNames.add(ipaActualIndex + 1, SystemTierType.ActualSyllables.getName());
-            }
-
-            // Get the current tier from the current position attributes
-            Tier<?> currentTier = (Tier<?>) currentPosAttrs.getAttribute("tier");
-            // Get the index of the current tier among the visible tiers of the record
-            int currentTierIndex = recordVisibleTierNames.indexOf(currentTier.getName());
-
-            // If it's still -1, return -1
-            if (currentTierIndex == -1) {
-                return -1;
-            }
-            // If it's the last visible tier in the record
-            else if (currentTierIndex == recordVisibleTierNames.size() - 1) {
-                // Get the current element index since we will be moving between elements
-                currentTranscriptElementIndex = transcript.getElementIndex(record);
-            }
-            // If it's not -1 or the last visible tier
-            else {
-                // Set the next tier index to 1 more than the current tier index
-                nextTierIndex = currentTierIndex + 1;
-            }
+            content = currentPosAttrs.getAttribute(elementType);
         }
 
-        // If the next transcript element index is still -1, we're just moving within a record
-        if (currentTranscriptElementIndex != -1) {
-            // If we're already at the last transcript element, loop back to the first
-            if (currentTranscriptElementIndex == transcript.getNumberOfElements() - 1) {
-                nextTranscriptElementIndex = 0;
-            }
-            // Otherwise, just add 1
-            else {
-                nextTranscriptElementIndex = currentTranscriptElementIndex + 1;
-            }
-        }
+        int currentDocElemIndex = doc.getDefaultRootElement().getElementIndex(caretPos);
 
-        // Movement within a record
-        if (currentTranscriptElementIndex == -1) {
-            // Get the name of the next tier
-            String nextTierName = recordVisibleTierNames.get(nextTierIndex);
-            // Return the start of the next tier
-            return doc.getTierStart(currentRecordIndex, nextTierName);
-        }
-        // Movement between elements
-        else {
-            Transcript.Element nextTranscriptElement = transcript.getElementAt(nextTranscriptElementIndex);
-            // Moving into a record
-            if (nextTranscriptElement.isRecord()) {
-                // Get a reference to the record and get its index
-                Record record = nextTranscriptElement.asRecord();
-                int recordIndex = transcript.getRecordPosition(record);
+        System.out.println(recordIndex);
+        System.out.println(elementType);
+        System.out.println(currentDocElemIndex);
 
-                // Get a list of all the visible tiers in the record and use it to get the first visible tier name
-                recordVisibleTierNames.addAll(
-                    session.getTierView()
-                        .stream()
-                        .filter(item -> record.hasTier(item.getTierName()) && item.isVisible())
-                        .map(item -> item.getTierName())
-                        .toList()
-                );
-
-                if (isAlignmentVisible()) {
-                    TierViewItem alignmentParent = doc.getAlignmentParent();
-                    if (alignmentParent != null) {
-                        int alignmentIndex = recordVisibleTierNames.indexOf(alignmentParent.getTierName()) + 1;
-                        recordVisibleTierNames.add(alignmentIndex, SystemTierType.PhoneAlignment.getName());
+        Element root = doc.getDefaultRootElement();
+        for (int i = currentDocElemIndex; i < root.getElementCount(); i++) {
+            Element docElem = root.getElement(i);
+            if (docElem.getElementCount() == 0) continue;
+            for (int j = 0; j < docElem.getElementCount(); j++) {
+                Element innerDocElem = docElem.getElement(j);
+                AttributeSet attrs = innerDocElem.getAttributes();
+                Boolean isLabel = (Boolean) attrs.getAttribute("label");
+                String innerDocElemType = (String) attrs.getAttribute("elementType");
+                System.out.println(innerDocElemType);
+                if (isLabel == null && innerDocElemType != null) {
+                    if (!innerDocElemType.equals(elementType)) {
+                        System.out.println(innerDocElem.getStartOffset());
+                        return innerDocElem.getStartOffset();
+                    }
+                    if (innerDocElemType.equals("record")) {
+                        if (attrs.getAttribute("tier") != content) {
+                            return innerDocElem.getStartOffset();
+                        }
+                    }
+                    else {
+                        if (attrs.getAttribute(innerDocElemType) != content) {
+                            System.out.println(attrs.getAttribute(innerDocElemType));
+                            return innerDocElem.getStartOffset();
+                        }
                     }
                 }
-
-                int ipaTargetIndex = recordVisibleTierNames.indexOf("IPA Target");
-                if (ipaTargetIndex != -1 && isSyllabificationVisible()) {
-                    recordVisibleTierNames.add(ipaTargetIndex + 1, SystemTierType.TargetSyllables.getName());
-                }
-                int ipaActualIndex = recordVisibleTierNames.indexOf("IPA Actual");
-                if (ipaActualIndex != -1 && isSyllabificationVisible()) {
-                    recordVisibleTierNames.add(ipaActualIndex + 1, SystemTierType.ActualSyllables.getName());
-                }
-
-                String nextTierName = recordVisibleTierNames.get(0);
-                // Return the start of the next tier
-                return doc.getTierStart(recordIndex, nextTierName);
-            }
-            // Moving to a non-record element
-            else {
-                // If element is comment
-                if (nextTranscriptElement.isComment()) {
-                    // Return the start pos of that comment
-                    return doc.getCommentStart(nextTranscriptElement.asComment());
-                }
-                // If element is gem
-                else {
-                    // Return the start pos of that gem
-                    return doc.getGemStart(nextTranscriptElement.asGem());
-                }
             }
         }
+
+        return -1;
     }
 
     private void underlineElement(Element elem) {
@@ -1525,6 +1382,7 @@ public class TranscriptEditor extends JEditorPane {
     private class TranscriptNavigationFilter extends NavigationFilter {
         @Override
         public void setDot(NavigationFilter.FilterBypass fb, int dot, Position.Bias bias) {
+
             setSelectedSegment(null);
             TranscriptDocument doc = getTranscriptDocument();
             Element elem = doc.getCharacterElement(dot);
@@ -1553,10 +1411,16 @@ public class TranscriptEditor extends JEditorPane {
                 }
             }
 
+            if (doc.getLength() == dot) return;
+
+            if (!caretMoveFromUpDown) upDownOffset = -1;
+            caretMoveFromUpDown = false;
+
             fb.setDot(dot, bias);
         }
         @Override
         public void moveDot(NavigationFilter.FilterBypass fb, int dot, Position.Bias bias) {
+            if (getTranscriptDocument().getLength() == dot) return;
             fb.moveDot(dot, bias);
         }
     }

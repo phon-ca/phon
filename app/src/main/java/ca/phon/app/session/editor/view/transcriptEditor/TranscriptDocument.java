@@ -9,11 +9,13 @@ import ca.phon.session.Record;
 import ca.phon.session.tierdata.*;
 import ca.phon.ui.FontFormatter;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.util.Language;
 import ca.phon.util.Tuple;
 
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
 
@@ -336,6 +338,17 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return retVal;
     }
 
+    private SimpleAttributeSet getLabelAttributes() {
+        SimpleAttributeSet retVal = new SimpleAttributeSet();
+
+        retVal.addAttributes(getMonospaceFontAttributes());
+
+        retVal.addAttribute("label", true);
+        retVal.addAttribute("notEditable", true);
+
+        return retVal;
+    }
+
     private SimpleAttributeSet getStandardFontAttributes() {
         SimpleAttributeSet retVal = new SimpleAttributeSet();
 
@@ -531,6 +544,43 @@ public class TranscriptDocument extends DefaultStyledDocument {
         appendBatchString(text, gemAttrs);
 
         return gemAttrs;
+    }
+
+    private SimpleAttributeSet writeGeneric(String label, Tier<?> tier) {
+
+        SimpleAttributeSet attrs = new SimpleAttributeSet();
+        attrs.addAttribute("elementType", "generic");
+        attrs.addAttribute("generic", tier);
+        attrs.addAttributes(getStandardFontAttributes());
+
+        SimpleAttributeSet labelAttrs = new SimpleAttributeSet(attrs);
+        labelAttrs.addAttributes(getLabelAttributes());
+        String labelText = label;
+        if (labelText.length() < labelColumnWidth) {
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < (labelColumnWidth - labelText.length()); i++) {
+                builder.append(' ');
+            }
+            appendBatchString(builder.toString(), labelAttrs);
+        }
+        else {
+            labelText = formatLabelText(labelText);
+        }
+
+        labelAttrs.addAttribute("clickable", true);
+        appendBatchString(labelText, labelAttrs);
+
+        labelAttrs.removeAttribute("clickable");
+        appendBatchString(": ", labelAttrs);
+
+        if (tier.isUnvalidated()) {
+            appendBatchString(tier.getUnvalidatedValue().toString(), attrs);
+        }
+        else {
+            appendBatchString(tier.toString(), attrs);
+        }
+
+        return attrs;
     }
 
     // endregion Write Transcript Element
@@ -764,7 +814,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
                     AttributeSet attrs = innerElem.getAttributes();
                     Comment currentComment = (Comment)attrs.getAttribute("comment");
                     Boolean isLabel = (Boolean)attrs.getAttribute("label");
-                    // If correct tier name
+                    // If correct comment
                     if (isLabel == null && currentComment != null && currentComment == comment) {
                         retVal = Math.max(retVal, innerElem.getEndOffset());
                     }
@@ -818,6 +868,60 @@ public class TranscriptDocument extends DefaultStyledDocument {
                     Boolean isLabel = (Boolean)attrs.getAttribute("label");
                     // If correct tier name
                     if (isLabel == null && currentGem != null && currentGem == gem) {
+                        retVal = Math.max(retVal, innerElem.getEndOffset());
+                    }
+                }
+            }
+        }
+
+        return retVal;
+    }
+
+    public int getGenericStart(Tier<?> genericTier) {
+        Element root = getDefaultRootElement();
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() == 0) continue;
+            String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute("elementType");
+            // If transcript element type is tierData
+            if (transcriptElementType != null && transcriptElementType.equals("generic")) {
+                for (int j = 0; j < elem.getElementCount(); j++) {
+                    Element innerElem = elem.getElement(j);
+                    AttributeSet attrs = innerElem.getAttributes();
+                    Tier<?> currentGenericTier = (Tier<?>) attrs.getAttribute("generic");
+                    Boolean isLabel = (Boolean)attrs.getAttribute("label");
+                    // If correct tierData
+                    if (isLabel == null && currentGenericTier != null && currentGenericTier == genericTier) {
+                        return innerElem.getStartOffset();
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    public int getGenericEnd(Tier<?> genericTier) {
+        int retVal = -1;
+
+        Element root = getDefaultRootElement();
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() < 1) continue;
+            String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute("elementType");
+            System.out.println("First child element type: " + transcriptElementType);
+            // If transcript element type is tierData
+            if (transcriptElementType != null && transcriptElementType.equals("generic")) {
+                System.out.println("testing...");
+                for (int j = 0; j < elem.getElementCount(); j++) {
+                    Element innerElem = elem.getElement(j);
+                    AttributeSet attrs = innerElem.getAttributes();
+                    Tier<?> currentGenericTier = (Tier<?>) attrs.getAttribute("generic");
+                    Boolean isLabel = (Boolean)attrs.getAttribute("label");
+                    // If correct tierData
+                    if (isLabel == null && currentGenericTier != null && currentGenericTier.toString().equals(genericTier.toString())) {
                         retVal = Math.max(retVal, innerElem.getEndOffset());
                     }
                 }
@@ -1205,7 +1309,8 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 remove(tierStartOffset, tierEndOffset - tierStartOffset);
 
                 appendBatchEndStart();
-                insertTier(recordIndex, item, recordAttrs);
+                var attrs = insertTier(recordIndex, item, recordAttrs);
+                appendBatchLineFeed(attrs);
                 processBatchUpdates(tierStartOffset);
                 setGlobalParagraphAttributes();
             }
@@ -1244,7 +1349,8 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 remove(tierStartOffset, tierEndOffset - tierStartOffset);
 
                 appendBatchEndStart();
-                insertTier(recordIndex, newTier, recordAttrs);
+                var attrs = insertTier(recordIndex, newTier, recordAttrs);
+                appendBatchLineFeed(attrs);
                 processBatchUpdates(tierStartOffset);
                 setGlobalParagraphAttributes();
             }
@@ -1886,6 +1992,11 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 if (gem == null) return -1;
                 return pos - getGemStart(gem);
             }
+            case "generic" -> {
+                Tier<?> genericTier = (Tier<?>) elem.getAttributes().getAttribute("generic");
+                if (genericTier == null) return -1;
+                return pos - getGenericStart(genericTier);
+            }
             default -> {
                 return -1;
             }
@@ -1898,6 +2009,38 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
         SimpleAttributeSet newLineAttrs;
 
+//        // Add date line if present
+//        var sessionDate = session.getDate();
+//        if (sessionDate != null) {
+//            Tier<LocalDate> dateTier = sessionFactory.createTier("Date", LocalDate.class);
+//            dateTier.setValue(sessionDate);
+//            newLineAttrs = writeGeneric("Date", dateTier);
+//            appendBatchLineFeed(newLineAttrs);
+//        }
+
+        // Add media line if present
+        var sessionMedia = session.getMediaLocation();
+        if (sessionMedia != null) {
+            Tier<TierData> mediaTier = sessionFactory.createTier("Media", TierData.class);
+            mediaTier.setText(sessionMedia);
+            newLineAttrs = writeGeneric("Media", mediaTier);
+            appendBatchLineFeed(newLineAttrs);
+        }
+
+        // Add languages line if present
+        var sessionLanguages = session.getLanguages();
+        if (sessionLanguages != null && !sessionLanguages.isEmpty()) {
+            Tier<String> languagesTier = sessionFactory.createTier("Languages", String.class);
+            StringJoiner joiner = new StringJoiner(" ");
+            for (Language lang : sessionLanguages) {
+                joiner.add(lang.toString());
+            }
+            languagesTier.setText(joiner.toString());
+            newLineAttrs = writeGeneric("Languages", languagesTier);
+            appendBatchLineFeed(newLineAttrs);
+        }
+
+        // Single record
         if (singleRecordView) {
             Record record = session.getRecord(singleRecordIndex);
             int recordTranscriptElementIndex = transcript.getElementIndex(record);
@@ -1942,6 +2085,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 nextElementIndex++;
             }
         }
+        // All records
         else {
             for (int i = 0; i < transcript.getNumberOfElements(); i++) {
                 Transcript.Element elem = transcript.getElementAt(i);

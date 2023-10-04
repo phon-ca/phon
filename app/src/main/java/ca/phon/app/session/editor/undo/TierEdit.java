@@ -142,7 +142,7 @@ public class TierEdit<T> extends SessionUndoableEdit {
 			getEditorEventManager().queueEvent(tierChangeEvt);
 			if(isFireHardChangeOnUndo()) {
 				final EditorEvent<EditorEventType.TierChangeData> tierChangedEvt =
-						new EditorEvent<>(EditorEventType.TierChange, getSource(), tcd);
+						new EditorEvent<>(EditorEventType.TierChanged, getSource(), tcd);
 				getEditorEventManager().queueEvent(tierChangedEvt);
 			}
 		}
@@ -161,7 +161,7 @@ public class TierEdit<T> extends SessionUndoableEdit {
 			getEditorEventManager().queueEvent(tierChangeEvt);
 			if(isFireHardChangeOnUndo()) {
 				final EditorEvent<EditorEventType.TierChangeData> tierChangedEvt =
-						new EditorEvent<>(EditorEventType.TierChange, getSource(), tcd);
+						new EditorEvent<>(EditorEventType.TierChanged, getSource(), tcd);
 				getEditorEventManager().queueEvent(tierChangedEvt);
 			}
 		}
