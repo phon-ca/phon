@@ -55,20 +55,24 @@ public final class TierAligner {
     public static CrossTierAlignment calculateCrossTierAlignment(Record record, Tier<?> topTier) {
         Map<String, TierAlignment> alignmentMap = new LinkedHashMap<>();
         if(!topTier.isExcludeFromAlignment()) {
-            alignmentMap.put(SystemTierType.Orthography.getName(),
-                    TierAligner.alignTiers(topTier, record.getOrthographyTier()));
-            alignmentMap.put(SystemTierType.IPATarget.getName(),
-                    TierAligner.alignTiers(topTier, record.getIPATargetTier()));
-            alignmentMap.put(SystemTierType.IPAActual.getName(),
-                    TierAligner.alignTiers(topTier, record.getIPAActualTier()));
+            if(topTier != record.getOrthographyTier())
+                alignmentMap.put(SystemTierType.Orthography.getName(),
+                        TierAligner.alignTiers(topTier, record.getOrthographyTier()));
+            if(topTier != record.getIPATargetTier())
+                alignmentMap.put(SystemTierType.IPATarget.getName(),
+                        TierAligner.alignTiers(topTier, record.getIPATargetTier()));
+            if(topTier != record.getIPAActualTier())
+                alignmentMap.put(SystemTierType.IPAActual.getName(),
+                        TierAligner.alignTiers(topTier, record.getIPAActualTier()));
             if(record.getPhoneAlignmentTier() != null) {
-                alignmentMap.put(SystemTierType.PhoneAlignment.getName(),
-                        TierAligner.alignTiers(topTier, record.getPhoneAlignmentTier()));
+                if(topTier != record.getPhoneAlignmentTier())
+                    alignmentMap.put(SystemTierType.PhoneAlignment.getName(),
+                            TierAligner.alignTiers(topTier, record.getPhoneAlignmentTier()));
             }
             for(String tierName:record.getUserDefinedTierNames()) {
                 final Tier<?> bottomTier = record.getTier(tierName);
-                if(bottomTier != null && bottomTier.hasValue() && !bottomTier.isExcludeFromAlignment()) {
-                    alignmentMap.put(tierName, TierAligner.alignTiers(topTier, bottomTier));
+                if(topTier != bottomTier && bottomTier != null && bottomTier.hasValue() && !bottomTier.isExcludeFromAlignment()) {
+                        alignmentMap.put(tierName, TierAligner.alignTiers(topTier, bottomTier));
                 }
             }
         }

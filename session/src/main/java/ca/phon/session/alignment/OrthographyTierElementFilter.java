@@ -1,6 +1,7 @@
 package ca.phon.session.alignment;
 
 import ca.phon.orthography.*;
+import ca.phon.orthography.Error;
 import ca.phon.orthography.Word;
 import ca.phon.session.Tier;
 import ca.phon.visitor.annotation.Visits;
@@ -40,32 +41,26 @@ public final class OrthographyTierElementFilter implements TierElementFilter {
     private final List<AlignableType> alignableTypes;
 
     public static final boolean DEFAULT_INCLUDE_WORD_XXX = false;
-    private final boolean includeXXX;
-
     public static final boolean DEFAULT_INCLUDE_WORD_YYY = false;
-    private final boolean includeYYY;
-
     public static final boolean DEFAULT_INCLUDE_WORD_WWW = false;
-    private final boolean includeWWW;
-
     public static final boolean DEFAULT_INCLUDE_OMITTED = false;
-    private final boolean includeOmitted;
-
+    public static final boolean DEFAULT_USE_REPLACEMENT = false;
     public static final boolean DEFAULT_INCLUDE_EXCLUDED = false;
-    private final boolean includeExcluded;
+    public static final boolean DEFAULT_INCLUDE_RETRACED = false;
+    public static final boolean DEFAULT_INCLUDE_ERROR = false;
+    public record Options(boolean includeXXX, boolean includeYYY, boolean includeWWW, boolean includeOmitted,
+                          boolean useReplacement, boolean includeExcluded, boolean includeRetraced, boolean includeError) { }
+    private final Options options;
 
     public OrthographyTierElementFilter() {
-        this(Collections.singletonList(AlignableType.Word), DEFAULT_INCLUDE_WORD_XXX, DEFAULT_INCLUDE_WORD_YYY,
-                DEFAULT_INCLUDE_WORD_WWW, DEFAULT_INCLUDE_OMITTED, DEFAULT_INCLUDE_EXCLUDED);
+        this(Collections.singletonList(AlignableType.Word),
+                new Options(DEFAULT_INCLUDE_WORD_XXX, DEFAULT_INCLUDE_WORD_YYY, DEFAULT_INCLUDE_WORD_WWW, DEFAULT_INCLUDE_OMITTED,
+                        DEFAULT_USE_REPLACEMENT, DEFAULT_INCLUDE_EXCLUDED, DEFAULT_INCLUDE_RETRACED, DEFAULT_INCLUDE_ERROR));
     }
 
-    public OrthographyTierElementFilter(List<AlignableType> alignableTypes, boolean includeXXX, boolean includeYYY, boolean includeWWW, boolean includeOmitted, boolean includeExcluded) {
+    public OrthographyTierElementFilter(List<AlignableType> alignableTypes, Options options) {
         this.alignableTypes = alignableTypes;
-        this.includeXXX = includeXXX;
-        this.includeYYY = includeYYY;
-        this.includeWWW = includeWWW;
-        this.includeOmitted = includeOmitted;
-        this.includeExcluded = includeExcluded;
+        this.options = options;
     }
 
     public List<OrthographyElement> filterOrthography(Orthography orthography) {
@@ -78,24 +73,8 @@ public final class OrthographyTierElementFilter implements TierElementFilter {
         return Collections.unmodifiableList(this.alignableTypes);
     }
 
-    public boolean isIncludeXXX() {
-        return includeXXX;
-    }
-
-    public boolean isIncludeYYY() {
-        return includeYYY;
-    }
-
-    public boolean isIncludeWWW() {
-        return includeWWW;
-    }
-
-    public boolean isIncludeOmitted() {
-        return includeOmitted;
-    }
-
-    public boolean isIncludeExcluded() {
-        return includeExcluded;
+    public Options getOptions() {
+        return this.options;
     }
 
     public boolean isIncluded(AlignableType type) {
@@ -116,19 +95,25 @@ public final class OrthographyTierElementFilter implements TierElementFilter {
         @Visits
         @Override
         public void visitWord(Word word) {
-            boolean includeWord = isIncluded(AlignableType.Word);
-            if(word.getPrefix() != null && word.getPrefix().getType() == WordType.OMISSION) {
-                includeWord = isIncludeOmitted();
+            if(options.useReplacement && word.getReplacements().size() > 0) {
+                // align with first replacement
+                final Replacement replacement = word.getReplacements().get(0);
+                replacement.getWords().forEach(this::visit);
+            } else {
+                boolean includeWord = isIncluded(AlignableType.Word);
+                if (word.getPrefix() != null && word.getPrefix().getType() == WordType.OMISSION) {
+                    includeWord = options.includeOmitted;
+                }
+                if (word.isUntranscribed()) {
+                    includeWord = switch (word.getUntranscribedType()) {
+                        case UNINTELLIGIBLE -> options.includeXXX;
+                        case UNTRANSCRIBED -> options.includeWWW;
+                        case UNINTELLIGIBLE_WORD_WITH_PHO -> options.includeYYY;
+                    };
+                }
+                if (includeWord)
+                    elements.add(word);
             }
-            if(word.isUntranscribed()) {
-                includeWord = switch (word.getUntranscribedType()) {
-                    case UNINTELLIGIBLE -> isIncludeXXX();
-                    case UNTRANSCRIBED -> isIncludeWWW();
-                    case UNINTELLIGIBLE_WORD_WITH_PHO -> isIncludeYYY();
-                };
-            }
-            if(includeWord)
-                elements.add(word);
         }
 
         @Visits
@@ -154,6 +139,30 @@ public final class OrthographyTierElementFilter implements TierElementFilter {
         @Visits
         @Override
         public void visitOrthoGroup(OrthoGroup group) {
+            boolean isError = false;
+            boolean isRetraced = false;
+            boolean isExcluded = false;
+            for(OrthographyAnnotation annotation:group.getAnnotations()) {
+                if(annotation instanceof Error)
+                    isError = true;
+                else if(annotation instanceof Marker marker) {
+                    switch (marker.getType()) {
+                        case RETRACING, RETRACING_REFORMULATION, RETRACING_UNCLEAR, RETRACING_WITH_CORRECTION, FALSE_START:
+                            isRetraced = true;
+                            break;
+
+                        case EXCLUDE:
+                            isExcluded = true;
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+            }
+            if(isError && !options.includeError) return;
+            if(isRetraced && !options.includeRetraced) return;
+            if(isExcluded && !options.includeExcluded) return;
             if(isIncluded(AlignableType.Group))
                 elements.add(group);
             else {
@@ -190,6 +199,13 @@ public final class OrthographyTierElementFilter implements TierElementFilter {
         public void visitPostcode(Postcode postcode) {
             if(isIncluded(AlignableType.Postcode))
                 elements.add(postcode);
+        }
+
+        @Visits
+        @Override
+        public void visitTagMarker(TagMarker tagMarker) {
+            if(isIncluded(AlignableType.TagMarker))
+                elements.add(tagMarker);
         }
 
         @Override

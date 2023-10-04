@@ -49,26 +49,34 @@ public interface TierElementFilter {
     public static OrthographyTierElementFilter orthographyFilterForOrthographyAlignment() {
         final List<OrthographyTierElementFilter.AlignableType> alignableTypes =
                 List.of(OrthographyTierElementFilter.AlignableType.Word, OrthographyTierElementFilter.AlignableType.Pause, OrthographyTierElementFilter.AlignableType.Terminator);
-        return new OrthographyTierElementFilter(alignableTypes, true, true, true, false, false);
+        final OrthographyTierElementFilter.Options options = new OrthographyTierElementFilter.Options(
+                true, true, true, false,  false,false, false, false);
+        return new OrthographyTierElementFilter(alignableTypes, options);
     }
 
     public static OrthographyTierElementFilter orthographyFilterForIPAAlignment() {
         final List<OrthographyTierElementFilter.AlignableType> alignableTypes =
             List.of(OrthographyTierElementFilter.AlignableType.Word, OrthographyTierElementFilter.AlignableType.Pause);
-        return new OrthographyTierElementFilter(alignableTypes, true, true, true, false, false);
+        final OrthographyTierElementFilter.Options options = new OrthographyTierElementFilter.Options(
+                true, true, true, false, false, false, false, false);
+        return new OrthographyTierElementFilter(alignableTypes, options);
     }
 
     public static OrthographyTierElementFilter orthographyFilterForUserTierAlignment() {
         final List<OrthographyTierElementFilter.AlignableType> alignableTypes =
                 List.of(OrthographyTierElementFilter.AlignableType.Word);
-        return new OrthographyTierElementFilter(alignableTypes, true, true, true, false, false);
+        final OrthographyTierElementFilter.Options options = new OrthographyTierElementFilter.Options(
+                true, true, true, false, false, false, false, false);
+        return new OrthographyTierElementFilter(alignableTypes, options);
     }
 
     public static OrthographyTierElementFilter orthographyFilterForMorTierAlignment() {
         final List<OrthographyTierElementFilter.AlignableType> alignableTypes =
                 List.of(OrthographyTierElementFilter.AlignableType.Word, OrthographyTierElementFilter.AlignableType.Quotation,
                         OrthographyTierElementFilter.AlignableType.TagMarker, OrthographyTierElementFilter.AlignableType.Terminator);
-        return new OrthographyTierElementFilter(alignableTypes, true, true, true, true, false);
+        final OrthographyTierElementFilter.Options options = new OrthographyTierElementFilter.Options(
+                true, true, true, true, true, false, false, false);
+        return new OrthographyTierElementFilter(alignableTypes, options);
     }
 
     public static IPATierElementFilter ipaFilterForIPAAlignment() {

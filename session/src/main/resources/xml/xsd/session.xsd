@@ -503,7 +503,7 @@
             <xs:enumeration value="postcode"/>
             <xs:enumeration value="longFeature"/>
             <xs:enumeration value="nonvocal"/>
-            <xs:enumeration value="quotation"/>.
+            <xs:enumeration value="quotation"/>
         </xs:restriction>
     </xs:simpleType>
 
