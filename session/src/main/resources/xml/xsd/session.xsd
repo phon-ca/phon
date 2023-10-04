@@ -377,6 +377,11 @@
                     <xs:documentation>Tier data will be in CHAT %mor/%trn format.</xs:documentation>
                 </xs:annotation>
             </xs:enumeration>
+            <xs:enumeration value="gra">
+                <xs:annotation>
+                    <xs:documentation>Tier data will be in CHAT %gra/%grt format.</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
             <xs:enumeration value="default">
                 <xs:annotation>
                     <xs:documentation>Tier will use a simplified parser into types separated by spaces.
@@ -862,7 +867,7 @@
     <!-- endregion Records -->
     <!-- endregion Transcript -->
 
-    <!-- region Tiers -->
+    <!-- region Record data -->
     <!-- region Errors -->
     <xs:element name="unparsed" type="unparsedData"/>
     <xs:element name="unparsedValue" type="nonemptyStringType"/>
@@ -991,6 +996,7 @@
                 <xs:element ref="alignment"/>
                 <xs:element ref="tierData"/>
                 <xs:element ref="mors"/>
+                <xs:element ref="gras"/>
                 <xs:element ref="unparsed"/>
             </xs:choice>
             <xs:element ref="blindTranscription" minOccurs="0" maxOccurs="unbounded"/>
@@ -1006,7 +1012,13 @@
         </xs:sequence>
     </xs:complexType>
 
-    <!-- endregion Tiers -->
+    <xs:element name="gras" type="graspTierData"/>
+    <xs:complexType name="graspTierData">
+        <xs:sequence>
+            <xs:element ref="gra" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <!-- endregion Record data -->
 
     <!-- region IPATranscript -->
     <xs:element name="pho" type="phoneticTranscriptionType"/>
@@ -3586,7 +3598,8 @@
         </xs:complexContent>
     </xs:complexType>
 
-    <xs:element name="gra" type="graType" >
+    <xs:element name="gra" type="graType"/>
+    <xs:complexType name="graType" mixed="false">
         <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
             <xs:documentation>GRASP data for a single word in %gra or %grt</xs:documentation>
             <xs:documentation>
@@ -3598,9 +3611,11 @@
                     section on this topic...</a>
             </xs:documentation>
         </xs:annotation>
-    </xs:element>
-    <xs:complexType name="graType" mixed="false">
-        <xs:attribute name="type" type="nonemptyStringType" use="required"/>
+        <xs:attribute name="type" type="nonemptyStringType" use="optional">
+            <xs:annotation>
+                <xs:documentation>type made optional as Phon uses tier name as type, retained for compatibility</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
         <xs:attribute name="index" type="xs:int" use="required"/>
         <xs:attribute name="head" type="xs:int" use="required"/>
         <xs:attribute name="relation" type="nonemptyStringType" use="required"/>

@@ -6,17 +6,17 @@ import ca.phon.mor.MorParser;
 import ca.phon.orthography.mor.parser.MorBuilder;
 import ca.phon.orthography.mor.parser.MorParserException;
 import org.antlr.v4.runtime.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
  * Container for a list of Mor items used for tier data
  */
-public final class MorTierData extends ExtendableObject {
+public final class MorTierData extends ExtendableObject implements Iterable<Mor> {
 
     /**
      * Parser mor tier data
@@ -75,6 +75,22 @@ public final class MorTierData extends ExtendableObject {
     @Override
     public String toString() {
         return getMors().stream().map(Mor::text).collect(Collectors.joining(" "));
+    }
+
+    @NotNull
+    @Override
+    public Iterator<Mor> iterator() {
+        return mors.iterator();
+    }
+
+    @Override
+    public void forEach(Consumer<? super Mor> action) {
+        Iterable.super.forEach(action);
+    }
+
+    @Override
+    public Spliterator<Mor> spliterator() {
+        return Iterable.super.spliterator();
     }
 
 }

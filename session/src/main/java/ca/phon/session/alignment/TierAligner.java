@@ -1,8 +1,10 @@
 package ca.phon.session.alignment;
 
+import ca.phon.orthography.mor.MorTierData;
 import ca.phon.session.Record;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
+import ca.phon.session.UserTierType;
 import ca.phon.util.Tuple;
 
 import java.util.ArrayList;
@@ -71,8 +73,16 @@ public final class TierAligner {
             }
             for(String tierName:record.getUserDefinedTierNames()) {
                 final Tier<?> bottomTier = record.getTier(tierName);
-                if(topTier != bottomTier && bottomTier != null && bottomTier.hasValue() && !bottomTier.isExcludeFromAlignment()) {
+                // handle morphology special cases
+                if(topTier == record.getOrthographyTier() && bottomTier.getDeclaredType() == MorTierData.class) {
+                    final UserTierType userTierType = UserTierType.fromPhonTierName(tierName);
+                    if(userTierType == UserTierType.Mor || userTierType == UserTierType.Trn) {
+                        // align with orthography only
                         alignmentMap.put(tierName, TierAligner.alignTiers(topTier, bottomTier));
+                    }
+                }
+                if(topTier != bottomTier && bottomTier != null && bottomTier.hasValue() && !bottomTier.isExcludeFromAlignment()) {
+                    alignmentMap.put(tierName, TierAligner.alignTiers(topTier, bottomTier));
                 }
             }
         }

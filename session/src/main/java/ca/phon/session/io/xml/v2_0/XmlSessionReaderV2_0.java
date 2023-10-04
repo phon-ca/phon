@@ -365,6 +365,7 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 			case IPA -> IPATranscript.class;
 			case PHONE_ALIGNMENT -> PhoneAlignment.class;
 			case MOR -> MorTierData.class;
+			case GRA -> GraspTierData.class;
 			case DEFAULT -> TierData.class;
 		};
 		final Map<String, String> tierParams = new LinkedHashMap<>();
@@ -524,7 +525,9 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 			} else if(td.getDeclaredType() == TierData.class) {
 				((Tier<TierData>) userTier).setValue(readUserTier(factory, utt));
 			} else if(td.getDeclaredType() == MorTierData.class) {
-				((Tier<MorTierData>)userTier).setValue(readMorUserTier(factory, utt));
+				((Tier<MorTierData>) userTier).setValue(readMorUserTier(factory, utt));
+			} else if(td.getDeclaredType() == GraspTierData.class) {
+				((Tier<GraspTierData>) userTier).setValue(readGraUserTier(factory, utt));
 			} else {
 				throw new IllegalArgumentException("Unsupported user tier type");
 			}
@@ -736,6 +739,28 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 			}
 		}
 		return new TierData(elements);
+	}
+
+	private GraspTierData readGraUserTier(SessionFactory factory, XmlUserTierType utt) {
+		GraspTierData retVal = new GraspTierData();
+		if(utt.getGras() != null) {
+			retVal = readGraspTierData(factory, utt.getGras());
+		} else if(utt.getUnparsed() != null) {
+			retVal.putExtension(UnvalidatedValue.class, readParseError(utt.getUnparsed()));
+		}
+		return retVal;
+	}
+
+	private GraspTierData readGraspTierData(SessionFactory factory, XmlGraspTierData utt) {
+		List<Grasp> grasps = new ArrayList<>();
+		for(XmlGraType xmlGraType:utt.getGra()) {
+			grasps.add(readGra(factory, xmlGraType));
+		}
+		return new GraspTierData(grasps);
+	}
+
+	private Grasp readGra(SessionFactory factory, XmlGraType xmlGraType) {
+		return new Grasp(xmlGraType.getIndex(), xmlGraType.getHead(), xmlGraType.getRelation());
 	}
 
 	private MorTierData readMorUserTier(SessionFactory factory, XmlUserTierType utt) {

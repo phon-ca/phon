@@ -19,6 +19,8 @@ import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.Orthography;
+import ca.phon.orthography.mor.Grasp;
+import ca.phon.orthography.mor.GraspTierData;
 import ca.phon.orthography.mor.Mor;
 import ca.phon.orthography.mor.MorTierData;
 import ca.phon.plugin.IPluginExtensionFactory;
@@ -346,6 +348,8 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 			tierType = XmlUserTierTypeType.IPA;
 		} else if(td.getDeclaredType() == MorTierData.class) {
 			tierType = XmlUserTierTypeType.MOR;
+		} else if(td.getDeclaredType() == GraspTierData.class) {
+			tierType = XmlUserTierTypeType.GRA;
 		}
 		retVal.setType(tierType);
 
@@ -476,6 +480,23 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 			}
 		}
 		return retVal;
+	}
+
+	public XmlGraspTierData writeGraTierData(ObjectFactory factory, GraspTierData graspTierData) {
+		final XmlGraspTierData xmlGraspTierData = factory.createXmlGraspTierData();
+		for(Grasp grasp:graspTierData) {
+			xmlGraspTierData.getGra().add(writeGra(factory, grasp, null));
+		}
+		return xmlGraspTierData;
+	}
+
+	public XmlGraType writeGra(ObjectFactory factory, Grasp grasp, String type) {
+		final XmlGraType graType = factory.createXmlGraType();
+		graType.setType(type);
+		graType.setIndex(grasp.getIndex());
+		graType.setHead(grasp.getHead());
+		graType.setRelation(grasp.getRelation());
+		return graType;
 	}
 
 	public XmlMorTierData writeMorTierData(ObjectFactory factory, MorTierData tierData) {
@@ -698,6 +719,8 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 				retVal.setTierData(writeUserTierData(factory, (TierData) userTier.getValue()));
 			} else if(tierType == MorTierData.class) {
 				retVal.setMors(writeMorTierData(factory, (MorTierData) userTier.getValue()));
+			} else if(tierType == GraspTierData.class) {
+				retVal.setGras(writeGraTierData(factory, (GraspTierData) userTier.getValue()));
 			} else {
 				throw new IllegalArgumentException("Unsupported tier type " + tierType);
 			}

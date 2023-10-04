@@ -1,6 +1,8 @@
 package ca.phon.session;
 
 import ca.phon.orthography.Orthography;
+import ca.phon.orthography.mor.Grasp;
+import ca.phon.orthography.mor.GraspTierData;
 import ca.phon.orthography.mor.MorTierData;
 import ca.phon.session.tierdata.TierData;
 
@@ -39,8 +41,13 @@ public enum UserTierType {
     /**
      * Morphological tiers from CHAT
      */
-    Mor("Morphology", "%mor", MorTierData.class, true),
-    Trn("Speech Turn", "%trn", MorTierData.class, true);
+    Mor("Morphology", "%mor", MorTierData.class, false),
+    Trn("Speech Turn", "%trn", MorTierData.class, false),
+    /**;
+     * GRASP tiers
+     */
+    Gra("GRASP", "%gra", GraspTierData.class, false),
+    Grt("GRASP Turn", "%grt", GraspTierData.class, false);
 
     /**
      * tier name in Phon
@@ -83,6 +90,24 @@ public enum UserTierType {
 
     public boolean isAlignable() {
         return alignable;
+    }
+
+    public static UserTierType fromPhonTierName(String tierName) {
+        for(UserTierType tierType:values()) {
+            if(tierType.getTierName().equals(tierName)) {
+                return tierType;
+            }
+        }
+        return null;
+    }
+
+    public static UserTierType fromChatTierName(String tierName) {
+        for(UserTierType tierType:values()) {
+            if(tierType.getChatTierName().equals(tierName)) {
+                return tierType;
+            }
+        }
+        return null;
     }
 
 }

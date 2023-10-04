@@ -3,6 +3,7 @@ package ca.phon.session.alignment;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
 import ca.phon.orthography.Quotation;
+import ca.phon.orthography.mor.GraspTierData;
 import ca.phon.orthography.mor.MorTierData;
 import ca.phon.session.PhoneAlignment;
 import ca.phon.session.Tier;
@@ -20,7 +21,7 @@ public interface TierElementFilter {
                 return orthographyFilterForIPAAlignment();
             } else if(alignedType == TierData.class) {
                 return orthographyFilterForUserTierAlignment();
-            } else if(alignedType == MorTierData.class) {
+            } else if(alignedType == MorTierData.class || alignedType == GraspTierData.class) {
                 return orthographyFilterForMorTierAlignment();
             } else {
                 throw new IllegalArgumentException("Invalid aligned tier type " + alignedType);
@@ -32,7 +33,7 @@ public interface TierElementFilter {
                 return ipaFilterForIPAAlignment();
             } else if(alignedType == TierData.class) {
                 return ipaFilterForUserTierAlignment();
-            } else if(alignedType == MorTierData.class) {
+            } else if(alignedType == MorTierData.class || alignedType == GraspTierData.class) {
                 return ipaFilterForUserTierAlignment();
             } else {
                 throw new IllegalArgumentException("Invalid aligned tier type " + alignedType);
@@ -41,6 +42,8 @@ public interface TierElementFilter {
             return defaultUserTierElementFilter();
         } else if(tierType == MorTierData.class) {
             return defaultMorTierElementFilter();
+        } else if(tierType == GraspTierData.class) {
+            return defaultGraTierElementFilter();
         } else {
             throw new IllegalArgumentException("Invalid tier type " + tierType);
         }
@@ -108,6 +111,15 @@ public interface TierElementFilter {
             @Override
             public List<?> filterTier(Tier<?> tier) {
                 return ((Tier<MorTierData>)tier).getValue().getMors();
+            }
+        };
+    }
+
+    public static TierElementFilter defaultGraTierElementFilter() {
+        return new TierElementFilter() {
+            @Override
+            public List<?> filterTier(Tier<?> tier) {
+                return ((Tier<GraspTierData>)tier).getValue().getGrasps();
             }
         };
     }
