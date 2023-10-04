@@ -46,8 +46,8 @@ public enum UserTierType {
     /**;
      * GRASP tiers
      */
-    Gra("GRASP", "%gra", GraspTierData.class, false),
-    Grt("GRASP Turn", "%grt", GraspTierData.class, false);
+    Gra("Grasp", "%gra", GraspTierData.class, false),
+    Grt("Grasp Turn", "%grt", GraspTierData.class, false);
 
     /**
      * tier name in Phon

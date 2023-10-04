@@ -1,16 +1,15 @@
 package ca.phon.session.alignment;
 
-import ca.phon.orthography.mor.MorTierData;
+import ca.phon.orthography.Orthography;
+import ca.phon.orthography.OrthographyElement;
+import ca.phon.orthography.mor.*;
 import ca.phon.session.Record;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
 import ca.phon.session.UserTierType;
 import ca.phon.util.Tuple;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class TierAligner {
 
@@ -78,6 +77,52 @@ public final class TierAligner {
                     final UserTierType userTierType = UserTierType.fromPhonTierName(tierName);
                     if(userTierType == UserTierType.Mor || userTierType == UserTierType.Trn) {
                         // align with orthography only
+                        alignmentMap.put(tierName, TierAligner.alignTiers(topTier, bottomTier));
+                    }
+                }
+                if(topTier == record.getOrthographyTier() && bottomTier.getDeclaredType() == GraspTierData.class) {
+                    // align with morphology then orthography
+                    final UserTierType graType = UserTierType.fromPhonTierName(tierName);
+                    Tier<MorTierData> morTier = null;
+                    if(graType == UserTierType.Gra) {
+                        morTier = record.getTier(UserTierType.Mor.getTierName(), MorTierData.class);
+                    } else if(graType == UserTierType.Grt) {
+                        morTier = record.getTier(UserTierType.Trn.getTierName(), MorTierData.class);
+                    }
+                    if(morTier != null) {
+                        final TierAlignment orthoMorAlignment = TierAligner.alignTiers(topTier, morTier);
+                        final TierAlignment morGraAlignment = TierAligner.alignTiers(morTier, bottomTier);
+                        final List<Tuple<?, ?>> orthoGraMap = new ArrayList<>();
+                        for(Tuple alignedElements:orthoMorAlignment.getAlignedElements()) {
+                            final OrthographyElement orthoEle = (OrthographyElement) alignedElements.getObj1();
+                            final Mor morEle = (Mor) alignedElements.getObj2();
+                            final List<Grasp> graEles = new ArrayList<>();
+                            for(MorPre morPre:morEle.getMorPres()) {
+                                final Grasp grasp = (Grasp) morGraAlignment.getAlignedElement(morPre);
+                                if(grasp != null)
+                                    graEles.add(grasp);
+                            }
+                            final Grasp grasp = (Grasp) morGraAlignment.getAlignedElement(morEle);
+                            if(grasp != null)
+                                graEles.add(grasp);
+                            for(MorPost morPost:morEle.getMorPosts()) {
+                                final Grasp gra = (Grasp) morGraAlignment.getAlignedElement(morPost);
+                                if(gra != null)
+                                    graEles.add(gra);
+                            }
+
+                            if(graEles.size() > 0) {
+                                orthoGraMap.add(new Tuple<>(orthoEle, new GraspTierData(graEles)));
+                            }
+                        }
+                        alignmentMap.put(tierName, new TierAlignment(topTier, bottomTier, orthoGraMap));
+                    }
+                }
+                if(topTier.getDeclaredType() == MorTierData.class && bottomTier.getDeclaredType() == GraspTierData.class) {
+                    final UserTierType morType = UserTierType.fromPhonTierName(topTier.getName());
+                    final UserTierType graType = UserTierType.fromPhonTierName(bottomTier.getName());
+                    if((morType == UserTierType.Mor && graType == UserTierType.Gra)
+                        || (morType == UserTierType.Trn && graType == UserTierType.Grt)) {
                         alignmentMap.put(tierName, TierAligner.alignTiers(topTier, bottomTier));
                     }
                 }

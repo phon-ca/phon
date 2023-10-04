@@ -4,11 +4,14 @@ import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
 import ca.phon.orthography.Quotation;
 import ca.phon.orthography.mor.GraspTierData;
+import ca.phon.orthography.mor.Mor;
 import ca.phon.orthography.mor.MorTierData;
+import ca.phon.orthography.mor.MorphemicBaseType;
 import ca.phon.session.PhoneAlignment;
 import ca.phon.session.Tier;
 import ca.phon.session.tierdata.TierData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface TierElementFilter {
@@ -41,7 +44,11 @@ public interface TierElementFilter {
         } else if(tierType == TierData.class) {
             return defaultUserTierElementFilter();
         } else if(tierType == MorTierData.class) {
-            return defaultMorTierElementFilter();
+            if(alignedType == GraspTierData.class) {
+                return morFilterForGraspTierAlignment();
+            } else {
+                return defaultMorTierElementFilter();
+            }
         } else if(tierType == GraspTierData.class) {
             return defaultGraTierElementFilter();
         } else {
@@ -111,6 +118,22 @@ public interface TierElementFilter {
             @Override
             public List<?> filterTier(Tier<?> tier) {
                 return ((Tier<MorTierData>)tier).getValue().getMors();
+            }
+        };
+    }
+
+    public static TierElementFilter morFilterForGraspTierAlignment() {
+        return new TierElementFilter() {
+            @Override
+            public List<?> filterTier(Tier<?> tier) {
+                List<MorphemicBaseType> retVal = new ArrayList<>();
+                final MorTierData morTierData = (MorTierData) tier.getValue();
+                for(Mor mor:morTierData) {
+                    mor.getMorPres().forEach(retVal::add);
+                    retVal.add(mor);
+                    mor.getMorPosts().forEach(retVal::add);
+                }
+                return retVal;
             }
         };
     }
