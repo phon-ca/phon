@@ -13,15 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.session.io.xml.v1_3;
+package ca.phon.session.io.xml.v2_0;
 
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.session.io.xml.v2_0.XmlParticipantType;
+import ca.phon.session.io.xml.v2_0.XmlRecordType;
 import ca.phon.session.tierdata.TierData;
 import ca.phon.session.spi.RecordSPI;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -137,6 +140,12 @@ public final class LazyRecord implements RecordSPI {
 		return internalRecord.getUserDefinedTierNames();
 	}
 
+	@Override
+	public List<Tier<?>> getUserTiers() {
+		loadRecord();
+		return internalRecord.getUserTiers();
+	}
+
 	public boolean hasTier(String name) {
 		loadRecord();
 		return internalRecord.hasTier(name);
@@ -161,7 +170,7 @@ public final class LazyRecord implements RecordSPI {
 	
 	private void loadRecord() {
 		if(internalRecord != null) return;
-		final XmlSessionReaderV1_3 reader = new XmlSessionReaderV1_3();
+		final XmlSessionReaderV2_0 reader = new XmlSessionReaderV2_0();
 		internalRecord = reader.readRecord(factory, session, recordElement);
 	}
 

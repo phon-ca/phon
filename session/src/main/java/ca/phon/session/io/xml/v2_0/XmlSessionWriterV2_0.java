@@ -13,12 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.session.io.xml.v1_3;
+package ca.phon.session.io.xml.v2_0;
 
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.orthography.Orthography;
+import ca.phon.orthography.mor.Grasp;
+import ca.phon.orthography.mor.GraspTierData;
+import ca.phon.orthography.mor.Mor;
+import ca.phon.orthography.mor.MorTierData;
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.Rank;
@@ -26,6 +30,7 @@ import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionWriter;
+import ca.phon.session.io.xml.v2_0.*;
 import ca.phon.session.tierdata.*;
 import ca.phon.util.Language;
 import ca.phon.xml.annotation.XMLSerial;
@@ -55,19 +60,19 @@ import java.util.List;
 @SessionIO(
 		group="ca.phon",
 		id="phonbank",
-		version="1.3",
+		version="2.0",
 		mimetype="application/xml",
 		extension="xml",
 		name="Phon 4.0+ (.xml)"
 )
 @Rank(0)
-public final class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensionPoint<SessionWriter> {
+public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensionPoint<SessionWriter> {
 
 	public final static String DEFAULT_NAMESPACE = "https://phon.ca/ns/session";
 
-	public final static String DEFAULT_NAMESPACE_LOCATION = "https://phon.ca/xml/xsd/session/v1_3/session.xsd";
+	public final static String DEFAULT_NAMESPACE_LOCATION = "https://phon.ca/xml/xsd/session/v2_0/session.xsd";
 
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(XmlSessionWriterV1_3.class.getName());
+	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(XmlSessionWriterV2_0.class.getName());
 
 	/**
 	 * Create a new jaxb version of the session
@@ -80,7 +85,7 @@ public final class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensi
 		final XmlSessionType retVal = factory.createXmlSessionType();
 
 		// header data
-		retVal.setVersion("1.3");
+		retVal.setVersion("2.0");
 		retVal.setName(session.getName());
 		retVal.setCorpus(session.getCorpus());
 
@@ -341,6 +346,10 @@ public final class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensi
 			tierType = XmlUserTierTypeType.CHAT;
 		} else if(td.getDeclaredType() == IPATranscript.class) {
 			tierType = XmlUserTierTypeType.IPA;
+		} else if(td.getDeclaredType() == MorTierData.class) {
+			tierType = XmlUserTierTypeType.MOR;
+		} else if(td.getDeclaredType() == GraspTierData.class) {
+			tierType = XmlUserTierTypeType.GRA;
 		}
 		retVal.setType(tierType);
 
@@ -471,6 +480,54 @@ public final class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensi
 			}
 		}
 		return retVal;
+	}
+
+	public XmlGraspTierData writeGraTierData(ObjectFactory factory, GraspTierData graspTierData) {
+		final XmlGraspTierData xmlGraspTierData = factory.createXmlGraspTierData();
+		for(Grasp grasp:graspTierData) {
+			xmlGraspTierData.getGra().add(writeGra(factory, grasp, null));
+		}
+		return xmlGraspTierData;
+	}
+
+	public XmlGraType writeGra(ObjectFactory factory, Grasp grasp, String type) {
+		final XmlGraType graType = factory.createXmlGraType();
+		graType.setType(type);
+		graType.setIndex(grasp.getIndex());
+		graType.setHead(grasp.getHead());
+		graType.setRelation(grasp.getRelation());
+		return graType;
+	}
+
+	public XmlMorTierData writeMorTierData(ObjectFactory factory, MorTierData tierData) {
+		final XmlMorTierData morTierData = factory.createXmlMorTierData();
+		final MorToXmlVisitor visitor = new MorToXmlVisitor(factory);
+		tierData.getMors().forEach(visitor::visit);
+		for(XmlMorType xmlMorType:visitor.getXmlMorTypes()) {
+			morTierData.getMor().add(xmlMorType);
+		}
+		return morTierData;
+	}
+
+	/**
+	 * Write mor to
+	 * @param factory
+	 * @param mor
+	 * @param type if not null, type attribute will be set
+	 *
+	 * @return xml mor type
+	 */
+	public XmlMorType writeMor(ObjectFactory factory, Mor mor, String type) {
+		final MorToXmlVisitor visitor = new MorToXmlVisitor(factory);
+		visitor.visit(mor);
+		if(visitor.getXmlMorTypes().size() != 1) {
+			throw new IllegalStateException("Error creating xml for " + mor.text());
+		}
+		final XmlMorType morType = visitor.getXmlMorTypes().get(0);
+		if(type != null && !type.isBlank()) {
+			morType.setType(type);
+		}
+		return morType;
 	}
 
 	private XmlParticipantType findXmlParticipant(XmlSessionType sessionType, Participant participant) {
@@ -645,9 +702,6 @@ public final class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensi
 		} else {
 			retVal.setTierData(writeUserTierData(factory, notesTier.getValue()));
 		}
-
-
-
 		return retVal;
 	}
 
@@ -663,6 +717,10 @@ public final class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensi
 				retVal.setPho(writeIPA(factory, (IPATranscript) userTier.getValue()));
 			} else if(tierType == TierData.class) {
 				retVal.setTierData(writeUserTierData(factory, (TierData) userTier.getValue()));
+			} else if(tierType == MorTierData.class) {
+				retVal.setMors(writeMorTierData(factory, (MorTierData) userTier.getValue()));
+			} else if(tierType == GraspTierData.class) {
+				retVal.setGras(writeGraTierData(factory, (GraspTierData) userTier.getValue()));
 			} else {
 				throw new IllegalArgumentException("Unsupported tier type " + tierType);
 			}
@@ -711,7 +769,7 @@ public final class XmlSessionWriterV1_3 implements SessionWriter, IPluginExtensi
 
 	@Override
 	public IPluginExtensionFactory<SessionWriter> getFactory() {
-		return (args) -> { return new XmlSessionWriterV1_3(); };
+		return (args) -> { return new XmlSessionWriterV2_0(); };
 	}
 
 }

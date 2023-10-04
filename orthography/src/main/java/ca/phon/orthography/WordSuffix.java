@@ -15,6 +15,8 @@
  */
 package ca.phon.orthography;
 
+import ca.phon.orthography.mor.Pos;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -32,22 +34,22 @@ public final class WordSuffix {
 
 	private final String userSpecialForm;
 
-	private List<WordPos> wordPos;
+	private List<Pos> pos;
 	
 	public WordSuffix(WordFormType type) {
 		this(false, type, null, null);
 	}
 
-	public WordSuffix(boolean separatedPrefix, WordFormType type, String formSuffix, String userSpecialForm, WordPos ... wordPos) {
-		this(separatedPrefix, type, formSuffix, userSpecialForm, Arrays.asList(wordPos));
+	public WordSuffix(boolean separatedPrefix, WordFormType type, String formSuffix, String userSpecialForm, Pos... pos) {
+		this(separatedPrefix, type, formSuffix, userSpecialForm, Arrays.asList(pos));
 	}
 	
-	public WordSuffix(boolean separatedPrefix, WordFormType type, String formSuffix, String userSpecialForm, List<WordPos> wordPos) {
+	public WordSuffix(boolean separatedPrefix, WordFormType type, String formSuffix, String userSpecialForm, List<Pos> pos) {
 		this.separatedPrefix = separatedPrefix;
 		this.type = type;
 		this.formSuffix = formSuffix;
 		this.userSpecialForm = userSpecialForm;
-		this.wordPos = Collections.unmodifiableList(wordPos);
+		this.pos = Collections.unmodifiableList(pos);
 	}
 
 	public WordFormType getType() {
@@ -58,8 +60,8 @@ public final class WordSuffix {
 		return userSpecialForm;
 	}
 
-	public List<WordPos> getPos() {
-		return this.wordPos;
+	public List<Pos> getPos() {
+		return this.pos;
 	}
 
 	public String getFormSuffix() {
@@ -70,8 +72,8 @@ public final class WordSuffix {
 		return separatedPrefix;
 	}
 
-	public List<WordPos> getWordPos() {
-		return wordPos;
+	public List<Pos> getWordPos() {
+		return pos;
 	}
 
 	@Override
@@ -85,7 +87,7 @@ public final class WordSuffix {
 			buffer.append("-").append(formSuffix);
 		if(userSpecialForm != null && userSpecialForm.length() > 0)
 			buffer.append("@z:").append(userSpecialForm);
-		for(WordPos pos:wordPos) {
+		for(Pos pos: pos) {
 			buffer.append("$").append(pos);
 		}
 		return buffer.toString();

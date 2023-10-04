@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.session.io.xml.v1_3;
+package ca.phon.session.io.xml.v2_0;
 
+import ca.phon.orthography.mor.*;
 import ca.phon.session.GemType;
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.*;
@@ -26,6 +27,7 @@ import ca.phon.plugin.Rank;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.alignment.TierElementFilter;
+import ca.phon.session.io.xml.v2_0.*;
 import ca.phon.session.tierdata.*;
 import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionReader;
@@ -73,15 +75,15 @@ import java.util.*;
 @SessionIO(
 		group="ca.phon",
 		id="phonbank",
-		version="1.3",
+		version="2.0",
 		mimetype="application/xml",
 		extension="xml",
 		name="Phon 4.0+ (.xml)"
 )
 @Rank(0)
-public final class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReader<Session>, IPluginExtensionPoint<SessionReader> {
+public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReader<Session>, IPluginExtensionPoint<SessionReader> {
 
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(XmlSessionReaderV1_3.class.getName());
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(XmlSessionReaderV2_0.class.getName());
 
 	@Override
 	public Session read(Document doc, Element ele)
@@ -362,6 +364,8 @@ public final class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReade
 			case CHAT -> Orthography.class;
 			case IPA -> IPATranscript.class;
 			case PHONE_ALIGNMENT -> PhoneAlignment.class;
+			case MOR -> MorTierData.class;
+			case GRA -> GraspTierData.class;
 			case DEFAULT -> TierData.class;
 		};
 		final Map<String, String> tierParams = new LinkedHashMap<>();
@@ -519,7 +523,11 @@ public final class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReade
 			} else if(td.getDeclaredType() == IPATranscript.class) {
 				((Tier<IPATranscript>)userTier).setValue(readUserTierIPATranscript(factory, utt));
 			} else if(td.getDeclaredType() == TierData.class) {
-				((Tier<TierData>)userTier).setValue(readUserTier(factory, utt));
+				((Tier<TierData>) userTier).setValue(readUserTier(factory, utt));
+			} else if(td.getDeclaredType() == MorTierData.class) {
+				((Tier<MorTierData>) userTier).setValue(readMorUserTier(factory, utt));
+			} else if(td.getDeclaredType() == GraspTierData.class) {
+				((Tier<GraspTierData>) userTier).setValue(readGraUserTier(factory, utt));
 			} else {
 				throw new IllegalArgumentException("Unsupported user tier type");
 			}
@@ -733,6 +741,164 @@ public final class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReade
 		return new TierData(elements);
 	}
 
+	private GraspTierData readGraUserTier(SessionFactory factory, XmlUserTierType utt) {
+		GraspTierData retVal = new GraspTierData();
+		if(utt.getGras() != null) {
+			retVal = readGraspTierData(factory, utt.getGras());
+		} else if(utt.getUnparsed() != null) {
+			retVal.putExtension(UnvalidatedValue.class, readParseError(utt.getUnparsed()));
+		}
+		return retVal;
+	}
+
+	private GraspTierData readGraspTierData(SessionFactory factory, XmlGraspTierData utt) {
+		List<Grasp> grasps = new ArrayList<>();
+		for(XmlGraType xmlGraType:utt.getGra()) {
+			grasps.add(readGra(factory, xmlGraType));
+		}
+		return new GraspTierData(grasps);
+	}
+
+	private Grasp readGra(SessionFactory factory, XmlGraType xmlGraType) {
+		return new Grasp(xmlGraType.getIndex(), xmlGraType.getHead(), xmlGraType.getRelation());
+	}
+
+	private MorTierData readMorUserTier(SessionFactory factory, XmlUserTierType utt) {
+		MorTierData retVal = new MorTierData();
+		if(utt.getMors() != null) {
+			retVal = readMorTierData(factory, utt.getMors());
+		} else if(utt.getUnparsed() != null) {
+			retVal.putExtension(UnvalidatedValue.class, readParseError(utt.getUnparsed()));
+		}
+		return retVal;
+	}
+	
+	private MorTierData readMorTierData(SessionFactory factory, XmlMorTierData xmlTierData) {
+		final List<Mor> mors = new ArrayList<>();
+		for(XmlMorType xmlMorType:xmlTierData.getMor()) {
+			mors.add(readMor(factory, xmlMorType));
+		}
+		return new MorTierData(mors);
+	}
+
+	private Mor readMor(SessionFactory factory, XmlMorType xmlMorType) {
+		final List<MorPre> morPres = new ArrayList<>();
+		for(XmlMorphemicBaseType xmlMorphemicBaseType:xmlMorType.getMorPre()) {
+			morPres.add(readMorPre(factory, xmlMorphemicBaseType));
+		}
+		MorElement morElement = readMorElement(factory, xmlMorType);
+		final List<MorPost> morPosts = new ArrayList<>();
+		for(XmlMorphemicBaseType xmlMorphemicBaseType:xmlMorType.getMorPost()) {
+			morPosts.add(readMorPost(factory, xmlMorphemicBaseType));
+		}
+		final List<String> translations = new ArrayList<>();
+		for(Menx menx:xmlMorType.getMenx()) {
+			translations.add(menx.getValue());
+		}
+		final boolean omitted = xmlMorType.isOmitted() != null ? xmlMorType.isOmitted() : false;
+		return new Mor(morElement, translations, morPres, morPosts, omitted);
+	}
+
+	private MorElement readMorElement(SessionFactory factory, XmlMorphemicBaseType xmlMorType) {
+		MorElement morElement = null;
+		if(xmlMorType.getMw() != null) {
+			morElement = readMorWord(factory, xmlMorType.getMw());
+		} else if(xmlMorType.getMwc() != null) {
+			morElement = readMwc(factory, xmlMorType.getMwc());
+		} else if(xmlMorType.getMt() != null) {
+			morElement = readMt(factory, xmlMorType.getMt());
+		}
+		return morElement;
+	}
+
+	private MorPre readMorPre(SessionFactory factory, XmlMorphemicBaseType xmlMorType) {
+		MorElement morElement = readMorElement(factory, xmlMorType);
+		final List<String> translations = new ArrayList<>();
+		for(Menx menx:xmlMorType.getMenx()) {
+			translations.add(menx.getValue());
+		}
+		return new MorPre(morElement, translations);
+	}
+
+	private MorPost readMorPost(SessionFactory factory, XmlMorphemicBaseType xmlMorType) {
+		MorElement morElement = readMorElement(factory, xmlMorType);
+		final List<String> translations = new ArrayList<>();
+		for(Menx menx:xmlMorType.getMenx()) {
+			translations.add(menx.getValue());
+		}
+		return new MorPost(morElement, translations);
+	}
+
+	private MorWord readMorWord(SessionFactory factory, Mw mw) {
+		final List<String> prefixList = new ArrayList<>();
+		for(Mpfx mpfx:mw.getMpfx()) {
+			prefixList.add(mpfx.getValue());
+		}
+		final Pos pos = readPos(factory, mw.getPos());
+		final String stem = mw.getStem();
+		final List<MorMarker> markers = new ArrayList<>();
+		for(XmlMkType xmlMkType:mw.getMk()) {
+			markers.add(readMk(factory, xmlMkType));
+		}
+		return new MorWord(prefixList, pos, stem, markers);
+	}
+
+	private Pos readPos(SessionFactory factory, XmlPosType xmlPosType) {
+		final List<String> subc = new ArrayList<>();
+		for(XmlSubcategoryType xmlSubc:xmlPosType.getSubc()) {
+			subc.add(xmlSubc.getValue());
+		}
+		return new Pos(xmlPosType.getC().getValue(), subc);
+	}
+
+	private MorMarker readMk(SessionFactory factory, XmlMkType xmlMkType) {
+		final MorMarkerType type = switch (xmlMkType.getType()) {
+			case MC -> MorMarkerType.MorCategory;
+			case SFX -> MorMarkerType.Suffix;
+			case SFXF -> MorMarkerType.SuffixFusion;
+		};
+		return new MorMarker(type, xmlMkType.getValue());
+	}
+
+	private MorWordCompound readMwc(SessionFactory factory, Mwc mwc) {
+		final List<String> prefixList = new ArrayList<>();
+		for(Mpfx mpfx:mwc.getMpfx()) {
+			prefixList.add(mpfx.getValue());
+		}
+		final Pos pos = readPos(factory, mwc.getPos());
+		final List<MorWord> morWords = new ArrayList<>();
+		for(Mw mw:mwc.getMw()) {
+			morWords.add(readMorWord(factory, mw));
+		}
+		return new MorWordCompound(prefixList, pos, morWords);
+	}
+
+	private MorTerminator readMt(SessionFactory factory, XmlBaseTerminatorType mt) {
+		final TerminatorType tt = switch (mt.getType()) {
+			case TECHNICAL_BREAK_TCU_CONTINUATION -> TerminatorType.TECHNICAL_BREAK_TCU_CONTINUATION;
+			case SELF_INTERRUPTION_QUESTION -> TerminatorType.SELF_INTERRUPTION_QUESTION;
+			case INTERRUPTION -> TerminatorType.INTERRUPTION;
+			case NO_BREAK_TCU_CONTINUATION -> TerminatorType.NO_BREAK_TCU_CONTINUATION;
+			case INTERRUPTION_QUESTION -> TerminatorType.INTERRUPTION_QUESTION;
+			case Q -> TerminatorType.QUESTION;
+			case QUESTION_EXCLAMATION -> TerminatorType.QUESTION_EXCLAMATION;
+			case QUOTATION_NEXT_LINE -> TerminatorType.QUOTATION_NEXT_LINE;
+			case TRAIL_OFF -> TerminatorType.TRAIL_OFF;
+			case TRAIL_OFF_QUESTION -> TerminatorType.TRAIL_OFF_QUESTION;
+			case QUOTATION_PRECEDES -> TerminatorType.QUOTATION_PRECEDES;
+			case SELF_INTERRUPTION -> TerminatorType.SELF_INTERRUPTION;
+			case BROKEN_FOR_CODING -> TerminatorType.BROKEN_FOR_CODING;
+			case E -> TerminatorType.EXCLAMATION;
+			case P -> TerminatorType.PERIOD;
+			case MISSING_CA_TERMINATOR -> null;
+		};
+		if(tt != null) {
+			return new MorTerminator(tt);
+		} else {
+			return null;
+		}
+	}
+
 	/**
 	 * Get a dom version of the xml stream
 	 *
@@ -774,7 +940,6 @@ public final class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReade
 		XMLInputFactory factory = XMLInputFactory.newInstance();
 		XMLEventReader reader = null;
 		try(FileInputStream source = new FileInputStream(file)) {
-			//BufferedReader in = new BufferedReader(new InputStreamReader(source, "UTF-8"));
 			XMLEventReader xmlReader = factory.createXMLEventReader(source, "UTF-8");
 			reader = factory.createFilteredReader(xmlReader, new XMLWhitespaceFilter());
 
@@ -782,7 +947,7 @@ public final class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReade
 			while(!(evt = reader.nextEvent()).isStartElement());
 			canRead =
 					evt.asStartElement().getName().getLocalPart().equals("session")
-					&& evt.asStartElement().getAttributeByName(new QName("version")).getValue().equals("1.3");
+					&& evt.asStartElement().getAttributeByName(new QName("version")).getValue().equals("2.0");
 		} catch (XMLStreamException e) {
 			throw new IOException(e);
 		}
@@ -815,7 +980,7 @@ public final class XmlSessionReaderV1_3 implements SessionReader, XMLObjectReade
 
 	@Override
 	public IPluginExtensionFactory<SessionReader> getFactory() {
-		return (args) -> { return new XmlSessionReaderV1_3(); };
+		return (args) -> { return new XmlSessionReaderV2_0(); };
 	}
 
 }

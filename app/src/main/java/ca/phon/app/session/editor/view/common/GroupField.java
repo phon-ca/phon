@@ -411,13 +411,6 @@ public class GroupField<T> extends JTextArea implements TierEditor<T> {
 	protected boolean validateText() {
 		boolean retVal = true;
 		final String text = getText();
-		System.out.println(text);
-//		getTier().setText(text);
-//		if(getTier().isUnvalidated()) {
-//			int offset = getTier().getUnvalidatedValue().getParseError().getErrorOffset();
-//			addErrorHighlight(offset, offset+1);
-//			retVal = false;
-//		}
 		// look for a formatter
 		final Formatter<T> formatter = FormatterFactory.createFormatter(tier.getDeclaredType());
 		if(formatter != null) {

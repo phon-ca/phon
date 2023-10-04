@@ -1,1 +1,3 @@
 ca.phon.orthography.OrthographyFormatter
+ca.phon.orthography.mor.parser.MorTierDataFormatter
+ca.phon.orthography.mor.parser.GraspTierDataFormatter

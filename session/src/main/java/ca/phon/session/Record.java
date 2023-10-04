@@ -20,6 +20,7 @@ import ca.phon.extensions.ExtendableObject;
 import ca.phon.ipa.*;
 import ca.phon.orthography.*;
 import ca.phon.orthography.Error;
+import ca.phon.orthography.mor.MorTierData;
 import ca.phon.session.spi.RecordSPI;
 import ca.phon.session.tierdata.TierData;
 import ca.phon.util.Language;
@@ -223,6 +224,15 @@ public final class Record extends ExtendableObject {
 	}
 
 	/**
+	 * Get an unmodifiable list of all user tiers
+	 *
+	 * @return list of all user-defined tiers in record
+	 */
+	public List<Tier<?>> getUserTiers() {
+		return recordImpl.getUserTiers();
+	}
+
+	/**
 	 * Get the register type of the given tier.
 	 *
 	 * @param name
@@ -232,11 +242,9 @@ public final class Record extends ExtendableObject {
 		if(SystemTierType.isSystemTier(name)) {
 			return SystemTierType.tierFromString(name).getDeclaredType();
 		} else {
-			for(String tierName:getUserDefinedTierNames()) {
-				final Tier<?> t = getTier(tierName, TierData.class);
-				if(t != null && t.getName().equals(name)) {
-					return t.getDeclaredType();
-				}
+			final Optional<Tier<?>> userTierOpt = getUserTiers().stream().filter(t -> t.getName().equals(name)).findAny();
+			if (userTierOpt.isPresent()) {
+				return userTierOpt.get().getDeclaredType();
 			}
 		}
 		return null;

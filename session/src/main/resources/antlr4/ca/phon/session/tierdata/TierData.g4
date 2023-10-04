@@ -21,11 +21,11 @@ word
     ;
 
 comment
-    :   BEGIN_COMMENT WS? ('\\]' | .)*? END_COMMENT
+    :   BEGIN_COMMENT WS? ('\\]' | .)*? END_BRACKET
     ;
 
 internal_media
-    :   BULLET time_in_minutes_seconds MINUS time_in_minutes_seconds BULLET
+    :   BULLET time_in_minutes_seconds (MINUS time_in_minutes_seconds)? BULLET
     ;
 
 label
@@ -33,7 +33,11 @@ label
     ;
 
 link
-    :   LINK (label WS)? .+? LINK
+    :   LINK WS? (label WS)? href END_BRACKET
+    ;
+
+href
+    :   ('\\]' | .)+?
     ;
 
 time_in_minutes_seconds
@@ -69,7 +73,7 @@ MINUS
     ;
 
 WS
-    :   [ \t\r\n]
+    :   [ \t\r\n]+
     ;
 
 BULLET
@@ -80,10 +84,11 @@ BEGIN_COMMENT
     :   '[%'
     ;
 
-END_COMMENT
+END_BRACKET
     :   ']'
     ;
 
+
 LINK
-    :   '\uD83D\uDD17'
+    :   '[\uD83D\uDD17'
     ;

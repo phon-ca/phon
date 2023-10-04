@@ -74,7 +74,7 @@ public class TestTierData {
 
     @Test
     public void testLinkWithLabel() throws ParseException {
-        final String text = "goodbye \uD83D\uDD17pic __res/pics/test.png\uD83D\uDD17";
+        final String text = "goodbye [\uD83D\uDD17 pic __res/pics/test.png]";
         final TierData tierData = roundTripTest(text);
         Assert.assertEquals(2, tierData.size());
         Assert.assertEquals(TierString.class, tierData.elementAt(0).getClass());
@@ -86,7 +86,7 @@ public class TestTierData {
 
     @Test
     public void testWebLink() throws ParseException {
-        final String text = "goodbye \uD83D\uDD17https://phon.ca/ns/session\uD83D\uDD17";
+        final String text = "goodbye [\uD83D\uDD17 https://phon.ca/ns/session]";
         final TierData tierData = roundTripTest(text);
         Assert.assertEquals(2, tierData.size());
         Assert.assertEquals(TierString.class, tierData.elementAt(0).getClass());

@@ -19,7 +19,7 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
        targetNamespace="https://phon.ca/ns/session"
        xmlns="https://phon.ca/ns/session"
-       id="PhonBank" version="1.3">
+       id="PhonBank" version="2.0">
 
     <xs:import namespace="http://www.w3.org/XML/1998/namespace"
                schemaLocation="http://www.w3.org/2001/xml.xsd"/>
@@ -372,6 +372,16 @@
                     <xs:documentation>Custom phone alignment using user-defined ipa tiers</xs:documentation>
                 </xs:annotation>
             </xs:enumeration>
+            <xs:enumeration value="mor">
+                <xs:annotation>
+                    <xs:documentation>Tier data will be in CHAT %mor/%trn format.</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="gra">
+                <xs:annotation>
+                    <xs:documentation>Tier data will be in CHAT %gra/%grt format.</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
             <xs:enumeration value="default">
                 <xs:annotation>
                     <xs:documentation>Tier will use a simplified parser into types separated by spaces.
@@ -456,7 +466,7 @@
                 </xs:attribute>
                 <xs:attribute name="useReplacement" type="xs:boolean" default="false">
                     <xs:annotation>
-                        <xs:documentation>Use replacment instead of word e.g., in <pre>gonna [: going to]</pre>,
+                        <xs:documentation>Use replacement instead of word e.g., in <pre>gonna [: going to]</pre>,
                         align with <pre>going to</pre>.</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
@@ -498,6 +508,7 @@
             <xs:enumeration value="postcode"/>
             <xs:enumeration value="longFeature"/>
             <xs:enumeration value="nonvocal"/>
+            <xs:enumeration value="quotation"/>
         </xs:restriction>
     </xs:simpleType>
 
@@ -545,6 +556,7 @@
             <xs:enumeration value="type"/>
             <xs:enumeration value="internal-media"/>
             <xs:enumeration value="comment"/>
+            <xs:enumeration value="link"/>
         </xs:restriction>
     </xs:simpleType>
     <!-- endregion Cross-tier alignment -->
@@ -855,7 +867,7 @@
     <!-- endregion Records -->
     <!-- endregion Transcript -->
 
-    <!-- region Tiers -->
+    <!-- region Record data -->
     <!-- region Errors -->
     <xs:element name="unparsed" type="unparsedData"/>
     <xs:element name="unparsedValue" type="nonemptyStringType"/>
@@ -983,13 +995,30 @@
                 <xs:element ref="pho"/>
                 <xs:element ref="alignment"/>
                 <xs:element ref="tierData"/>
+                <xs:element ref="mors"/>
+                <xs:element ref="gras"/>
                 <xs:element ref="unparsed"/>
             </xs:choice>
             <xs:element ref="blindTranscription" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="name" type="xs:string" use="required"/>
     </xs:complexType>
-    <!-- endregion Tiers -->
+
+    <!-- Mor tiers -->
+    <xs:element name="mors" type="morTierData"/>
+    <xs:complexType name="morTierData">
+        <xs:sequence>
+            <xs:element ref="mor" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="gras" type="graspTierData"/>
+    <xs:complexType name="graspTierData">
+        <xs:sequence>
+            <xs:element ref="gra" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <!-- endregion Record data -->
 
     <!-- region IPATranscript -->
     <xs:element name="pho" type="phoneticTranscriptionType"/>
@@ -1634,6 +1663,12 @@
                 <xs:element ref="replacement"/>
                 <xs:element ref="italic"/>
                 <xs:element ref="underline"/>
+
+                <xs:element ref="mor">
+                    <xs:annotation>
+                        <xs:documentation>Phon stores mor data in its own tier, this element remains for compatibility when exporting to TalkBank.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
             </xs:choice>
         </xs:sequence>
         <xs:attribute name="separated-prefix" type="xs:boolean">
@@ -2833,6 +2868,13 @@
                     this topic...</a>
             </xs:documentation>
         </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="mor" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>Phon stores mor data in its own tier, this element remains for compatibility when exporting to TalkBank.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
         <xs:attribute name="type" use="required" type="tagMarkerTypeType"/>
     </xs:complexType>
     <xs:element name="tagMarker" type="tagMarkerType"/>
@@ -3126,21 +3168,6 @@
     </xs:complexType>
     <xs:element name="subc" type="subcategoryType"/>
 
-    <xs:complexType name="posType">
-        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-            <xs:documentation>part of speech</xs:documentation>
-            <xs:documentation>
-                <a href="https://talkbank.org/manuals/MOR.html#Mor_POS">MOR manual section on this
-                    topic...</a>
-            </xs:documentation>
-        </xs:annotation>
-        <xs:sequence>
-            <xs:element ref="c"/>
-            <xs:element ref="subc" minOccurs="0" maxOccurs="unbounded"/>
-        </xs:sequence>
-    </xs:complexType>
-    <xs:element name="pos" type="posType"/>
-
     <xs:complexType name="replacementType">
         <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
             <xs:documentation> [: word1 ...]; indicate replacement of a word by one or more words instead. [:: word1 ...] to indicate that the word is a real word</xs:documentation>
@@ -3247,6 +3274,13 @@
                     on this topic...</a>
             </xs:documentation>
         </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="mor" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>Phon stores mor data in its own tier, this element remains for compatibility when exporting to TalkBank.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
         <xs:attribute name="type" type="beginEndType" use="required"/>
     </xs:complexType>
     <xs:element name="quotation" type="quotationType"/>
@@ -3324,7 +3358,7 @@
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:element name="t" type="baseTerminatorType">
+    <xs:element name="t" type="utteranceTerminatorType">
         <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
             <xs:documentation> Main line terminator with optional %mor information. </xs:documentation>
             <xs:documentation>
@@ -3337,6 +3371,19 @@
             </xs:documentation>
         </xs:annotation>
     </xs:element>
+    <xs:complexType name="utteranceTerminatorType">
+        <xs:complexContent>
+            <xs:extension base="baseTerminatorType">
+                <xs:sequence>
+                    <xs:element ref="mor" minOccurs="0" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:documentation>Phon stores mor data in its own tier, this element remains for compatibility when exporting to TalkBank.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
 
     <xs:complexType name="baseTerminatorType">
         <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
@@ -3519,6 +3566,263 @@
         </xs:restriction>
     </xs:simpleType>
     <!-- endregion CHAT utterance -->
+
+    <!-- region Mor -->
+    <xs:element name="mor" type="morType">
+        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+            <xs:documentation> A group of words in %mor or %trn. </xs:documentation>
+            <xs:documentation>
+                <a href="https://talkbank.org/manuals/CHAT.html#Morphological_Tier">CHAT manual
+                    section on this topic...</a>
+            </xs:documentation>
+            <xs:documentation>
+                <a href="https://talkbank.org/manuals/CHAT.html#Training_Tier">CHAT manual
+                    section on this topic...</a>
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:complexType name="morType" mixed="false">
+        <xs:complexContent>
+            <xs:extension base="morphemicBaseType">
+                <xs:sequence>
+                    <xs:element ref="mor-pre" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element ref="mor-post" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+                <xs:attribute name="type" type="nonemptyStringType">
+                    <xs:annotation>
+                        <xs:documentation>type made optional as Phon uses tier name as type, retained for compatibility</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="omitted" type="xs:boolean"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="gra" type="graType"/>
+    <xs:complexType name="graType" mixed="false">
+        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+            <xs:documentation>GRASP data for a single word in %gra or %grt</xs:documentation>
+            <xs:documentation>
+                <a href="https://talkbank.org/manuals/CHAT.html#GrammaticalRelations_Tier">CHAT manual
+                    section on this topic...</a>
+            </xs:documentation>
+            <xs:documentation>
+                <a href="https://talkbank.org/manuals/CHAT.html#GrammaticalRelationsTraining_Tier">CHAT manual
+                    section on this topic...</a>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="type" type="nonemptyStringType" use="optional">
+            <xs:annotation>
+                <xs:documentation>type made optional as Phon uses tier name as type, retained for compatibility</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="index" type="xs:int" use="required"/>
+        <xs:attribute name="head" type="xs:int" use="required"/>
+        <xs:attribute name="relation" type="nonemptyStringType" use="required"/>
+    </xs:complexType>
+
+    <xs:element name="menx">
+        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+            <xs:documentation>Morphemic translation: =word</xs:documentation>
+            <xs:documentation>
+                <a href="https://talkbank.org/manuals/MOR.html#Mor_Translation">MOR manual section
+                    on this topic...</a>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="false">
+            <xs:simpleContent>
+                <xs:extension base="nonemptyStringType"/>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="mpfx">
+        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+            <xs:documentation>Morphemix prefix: word#</xs:documentation>
+            <xs:documentation>
+                <a href="https://talkbank.org/manuals/MOR.html#Mor_Prefix">MOR manual section on
+                    this topic...</a>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="false">
+            <xs:simpleContent>
+                <xs:extension base="nonemptyStringType"/>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="pos" type="posType"/>
+    <xs:complexType name="posType">
+        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+            <xs:documentation>part of speech</xs:documentation>
+            <xs:documentation>
+                <a href="https://talkbank.org/manuals/MOR.html#Mor_POS">MOR manual section on this
+                    topic...</a>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="c"/>
+            <xs:element ref="subc" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>%mor POS subcategory</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/MOR.html#Mor_Subcategory">MOR manual
+                            section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="mw">
+        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+            <xs:documentation>Morphemic "word": the unit of a %mor line corresponding to a single non-compound word on the
+                main line. </xs:documentation>
+            <xs:documentation>
+                <a href="https://talkbank.org/manuals/MOR.html#Mor_Simple_Word">MOR manual section
+                    on this topic...</a>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="false">
+            <xs:sequence>
+                <xs:element ref="mpfx" minOccurs="0" maxOccurs="unbounded"/>
+
+                <xs:element ref="pos"/>
+
+                <xs:element ref="stem"/>
+
+                <!-- TODO suffix-->
+                <xs:element ref="mk" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="stem" type="nonemptyStringType">
+        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+            <xs:documentation>Morphological stem, alphanumeric</xs:documentation>
+            <xs:documentation>
+                <a href="https://talkbank.org/manuals/MOR.html#MorphologicalStem">MOR manual section
+                    on this topic...</a>
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="mk" type="mkType">
+        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+            <xs:documentation>morphemes</xs:documentation>
+            <xs:documentation>
+                <a href="https://talkbank.org/manuals/MOR.html#Mor_Markers">MOR manual section on
+                    this topic...</a>
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:complexType name="mkType" mixed="false">
+        <xs:simpleContent>
+            <xs:extension base="nonemptyStringType">
+                <xs:attribute name="type" type="mkTypeType" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:simpleType name="mkTypeType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="sfx">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation> suffix marker, CHAT equivalent is -suffix </xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/MOR.html#Mor_Markers_Suffix">MOR
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="sfxf">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation> suffix fusion marker, CHAT equivalent is &amp;suffix </xs:documentation>
+                    <xs:documentation>
+                        <a
+                                href="https://talkbank.org/manuals/MOR.html#Mor_Markers_Suffix_Fusional"
+                        >MOR manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="mc">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation> morphological category, CHAT equivalent is :suffix </xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/MOR.html#Mor_Markers_Category">MOR
+                            manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="mwc">
+        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+            <xs:documentation>Morphemic "compound word" using +</xs:documentation>
+            <xs:documentation>
+                <a href="https://talkbank.org/manuals/MOR.html#MorphologicalCompound">MOR manual
+                    section on this topic...</a>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="false">
+            <xs:sequence>
+                <xs:element ref="mpfx" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="pos"/>
+
+                <xs:element ref="mw" minOccurs="2" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="mt" type="baseTerminatorType">
+        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+            <xs:documentation>Terminator on %mor line, important for %gra.</xs:documentation>
+            <xs:documentation>
+                <a href="https://talkbank.org/manuals/MOR.html#Mor_Terminators">MOR manual section
+                    on this topic...</a>
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:complexType name="morphemicBaseType" mixed="false">
+        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+            <xs:documentation> %mor unit of one-to-one correspondence with main line. A single word or a compound word or a terminator. </xs:documentation>
+            <xs:documentation>
+                <a href="https://talkbank.org/manuals/MOR.html#Morphological_Word">MOR manual
+                    section on this topic...</a>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:choice>
+                <xs:element ref="mw"/>
+                <xs:element ref="mwc"/>
+                <xs:element ref="mt"/>
+            </xs:choice>
+            <xs:element ref="menx" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="gra" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="mor-pre" type="morphemicBaseType">
+        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+            <xs:documentation>mor preclitic</xs:documentation>
+            <xs:documentation>
+                <a href="https://talkbank.org/manuals/MOR.html#MorphologicalPreclitic">MOR manual
+                    section on this topic...</a>
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="mor-post" type="morphemicBaseType">
+        <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+            <xs:documentation>mor postclitic</xs:documentation>
+            <xs:documentation>
+                <a href="https://talkbank.org/manuals/MOR.html#MorphologicalPostclitic">MOR manual
+                    section on this topic...</a>
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <!-- endregion Mor -->
 
     <!-- region Timeline -->
     <xs:element name="recordTimelineTier" type="nonemptyStringType"/>

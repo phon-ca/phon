@@ -35,13 +35,28 @@ public final class InternalMedia extends AbstractOrthographyElement {
         return endTime;
     }
 
+    public boolean isUnset() {
+        return isPoint() && startTime == 0.0f;
+    }
+
+    public boolean isPoint() {
+        return startTime == endTime;
+    }
+
     @Override
     public String text() {
-        return String.format("%c%s-%s%c",
-                MEDIA_BULLET,
-                MediaTimeFormatter.timeToMinutesAndSeconds(getStartTime()),
-                MediaTimeFormatter.timeToMinutesAndSeconds(getEndTime()),
-                MEDIA_BULLET);
+        if(isPoint()) {
+            return String.format("%c%s%c",
+                    MEDIA_BULLET,
+                    MediaTimeFormatter.timeToMinutesAndSeconds(getStartTime()),
+                    MEDIA_BULLET);
+        } else {
+            return String.format("%c%s-%s%c",
+                    MEDIA_BULLET,
+                    MediaTimeFormatter.timeToMinutesAndSeconds(getStartTime()),
+                    MediaTimeFormatter.timeToMinutesAndSeconds(getEndTime()),
+                    MEDIA_BULLET);
+        }
     }
 
 }

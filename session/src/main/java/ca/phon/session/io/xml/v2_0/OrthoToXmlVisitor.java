@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.session.io.xml.v1_3;
+package ca.phon.session.io.xml.v2_0;
 
+import ca.phon.orthography.mor.Pos;
 import ca.phon.orthography.*;
 import ca.phon.orthography.Action;
 import ca.phon.orthography.Error;
@@ -32,6 +33,7 @@ import ca.phon.orthography.Replacement;
 import ca.phon.orthography.TagMarker;
 import ca.phon.orthography.ToneMarker;
 import ca.phon.orthography.Underline;
+import ca.phon.session.io.xml.v2_0.*;
 import ca.phon.util.Language;
 import ca.phon.visitor.annotation.Visits;
 
@@ -149,7 +151,7 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 		word.getWordElements().forEach(wordContentVisitor::visit);
 
 		if(word.getSuffix() != null) {
-			for (WordPos wordPos : word.getSuffix().getWordPos()) {
+			for (Pos wordPos : word.getSuffix().getWordPos()) {
 				final XmlPosType pos = factory.createXmlPosType();
 				final XmlCategoryType xmlCategoryType = factory.createXmlCategoryType();
 				xmlCategoryType.setValue(wordPos.getCategory());
@@ -419,7 +421,7 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 	@Override
     @Visits
 	public void visitTerminator(Terminator terminator) {
-		final XmlBaseTerminatorType xmlT = factory.createXmlBaseTerminatorType();
+		final XmlUtteranceTerminatorType xmlT = factory.createXmlUtteranceTerminatorType();
 		final XmlTerminatorType type = switch (terminator.getType()) {
 			case BROKEN_FOR_CODING -> XmlTerminatorType.BROKEN_FOR_CODING;
 			case EXCLAMATION -> XmlTerminatorType.E;

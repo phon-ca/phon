@@ -33,6 +33,16 @@ public class TierAlignment {
         this.alignedSubTypes = alignedSubTypes;
     }
 
+    public Object getAlignedElement(Object element) {
+        for(Tuple tuple:alignedElements) {
+            if(tuple.getObj1() == element)
+                return tuple.getObj2();
+            else if(tuple.getObj2() == element)
+                return tuple.getObj1();
+        }
+        return null;
+    }
+
     public int length() {
         return this.alignedElements.size();
     }

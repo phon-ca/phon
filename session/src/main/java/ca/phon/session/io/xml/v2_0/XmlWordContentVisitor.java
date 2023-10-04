@@ -1,13 +1,13 @@
-package ca.phon.session.io.xml.v1_3;
+package ca.phon.session.io.xml.v2_0;
 
+import ca.phon.orthography.mor.Pos;
 import ca.phon.orthography.*;
 import ca.phon.orthography.ProsodyType;
+import ca.phon.session.io.xml.v2_0.*;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
-import jakarta.xml.bind.JAXB;
 import jakarta.xml.bind.JAXBElement;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -16,7 +16,7 @@ public final class XmlWordContentVisitor extends VisitorAdapter<Object> {
 
     private Langs langs = new Langs();
 
-    private final List<WordPos> wordPos = new ArrayList<>();
+    private final List<Pos> pos = new ArrayList<>();
 
     private final List<ca.phon.orthography.Replacement> replacements = new ArrayList<>();
 
@@ -154,7 +154,7 @@ public final class XmlWordContentVisitor extends VisitorAdapter<Object> {
 
     @Visits
     public void visitPos(XmlPosType xmlPos) {
-        wordPos.add(new WordPos(xmlPos.getC().getValue(),
+        pos.add(new Pos(xmlPos.getC().getValue(),
                 xmlPos.getSubc().stream().map(XmlSubcategoryType::getValue).toList()));
     }
 
@@ -185,8 +185,8 @@ public final class XmlWordContentVisitor extends VisitorAdapter<Object> {
         return langs;
     }
 
-    public List<WordPos> getWordPos() {
-        return wordPos;
+    public List<Pos> getWordPos() {
+        return pos;
     }
 
     public List<ca.phon.orthography.Replacement> getReplacements() {

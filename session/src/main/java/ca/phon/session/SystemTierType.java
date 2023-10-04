@@ -17,6 +17,7 @@ package ca.phon.session;
 
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
+import ca.phon.orthography.mor.MorTierData;
 import ca.phon.session.alignment.TierAlignmentRules;
 import ca.phon.session.tierdata.TierData;
 
@@ -25,12 +26,6 @@ import ca.phon.session.tierdata.TierData;
  */
 public enum SystemTierType {
 	Orthography("Orthography", Orthography.class, false),
-	/**
-	 * word segment information, each word in orthography will be reproduced along with an
-	 * internal-media element, this tier is not directly editable.  Tier name comes
-	 * from CLAN
-	 */
-	Wor("%wor", Orthography.class, true),
 	IPATarget("IPA Target", IPATranscript.class, false),
 	TargetSyllables("Target Syllables", IPATranscript.class, true),
 	IPAActual("IPA Actual", IPATranscript.class, false),

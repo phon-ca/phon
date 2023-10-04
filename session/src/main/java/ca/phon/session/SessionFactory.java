@@ -392,9 +392,8 @@ public final class SessionFactory extends ExtendableObject {
 		
 		// add extra tiers
 		for(String tierName:record.getUserDefinedTierNames()) {
-			final Tier<TierData> extraTier = record.getTier(tierName, TierData.class);
-			
-			final TierDescription td = createTierDescription(tierName);
+			final Tier<?> extraTier = record.getTier(tierName);
+			final TierDescription td = createTierDescription(tierName, extraTier.getDeclaredType(), extraTier.getTierParameters());
 			tempSession.addUserTier(td);
 		}
 		
@@ -405,7 +404,7 @@ public final class SessionFactory extends ExtendableObject {
 		final SessionWriter writer = outputFactory.createWriter();
 		
 		final SessionInputFactory inputFactory = new SessionInputFactory();
-		final SessionReader reader = inputFactory.createReader("phonbank", "1.3");
+		final SessionReader reader = inputFactory.createReader("phonbank", "2.0");
 		
 		final ByteArrayOutputStream out = new ByteArrayOutputStream();
 		try {

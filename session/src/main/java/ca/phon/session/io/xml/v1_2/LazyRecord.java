@@ -143,6 +143,12 @@ public final class LazyRecord implements RecordSPI {
 		return internalRecord.getUserDefinedTierNames();
 	}
 
+	@Override
+	public List<Tier<?>> getUserTiers() {
+		loadRecord();
+		return internalRecord.getUserTiers();
+	}
+
 	public boolean hasTier(String name) {
 		loadRecord();
 		return internalRecord.hasTier(name);

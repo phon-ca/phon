@@ -17,8 +17,6 @@ package ca.phon.orthography.parser.exceptions;
 
 public class OrthoParserException extends RuntimeException {
 
-	private static final long serialVersionUID = 8246804092533836151L;
-
 	/**
 	 * Position in line of error
 	 */

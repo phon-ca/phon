@@ -247,7 +247,7 @@ internal_media
     ;
 
 mediasegment
-    :   time_in_minutes_seconds MINUS time_in_minutes_seconds
+    :   time_in_minutes_seconds (MINUS time_in_minutes_seconds)?
     ;
 
 separator
@@ -289,13 +289,13 @@ nonvocal
 marker
     :   OPEN_BRACKET EXCLAMATION CLOSE_BRACKET                                  // stressing
     |   OPEN_BRACKET EXCLAMATION EXCLAMATION CLOSE_BRACKET                      // contrasive stressing
-    |   OPEN_BRACKET QUESTION CLOSE_BRACKET                                    // best guess
+    |   OPEN_BRACKET QUESTION CLOSE_BRACKET                                     // best guess
     |   OPEN_BRACKET FORWARD_SLASH CLOSE_BRACKET                                // retracing
     |   OPEN_BRACKET FORWARD_SLASH FORWARD_SLASH CLOSE_BRACKET                  // retracing with correction
     |   OPEN_BRACKET FORWARD_SLASH FORWARD_SLASH FORWARD_SLASH CLOSE_BRACKET    // retraction reformulation
     |   OPEN_BRACKET FORWARD_SLASH QUESTION CLOSE_BRACKET                       // retracing unclear
     |   OPEN_BRACKET FORWARD_SLASH MINUS CLOSE_BRACKET                          // false start
-    |   MOR_EXCLUDE                                                             // mor exclude
+    |   EXCLUDE                                                                 // mor exclude
     ;
 
 error
@@ -363,7 +363,7 @@ CLAUSE_DELIMITER
     :   '[^c]'
     ;
 
-MOR_EXCLUDE
+EXCLUDE
     :   '[e]'
     ;
 

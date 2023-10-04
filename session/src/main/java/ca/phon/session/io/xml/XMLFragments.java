@@ -5,15 +5,15 @@ import ca.phon.orthography.Orthography;
 import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionInputFactory;
 import ca.phon.session.io.SessionOutputFactory;
-import ca.phon.session.io.xml.v1_3.*;
+import ca.phon.session.io.xml.v2_0.*;
+import ca.phon.session.io.xml.v2_0.XmlSessionReaderV2_0;
+import ca.phon.session.io.xml.v2_0.XmlSessionWriterV2_0;
 import com.sun.xml.txw2.output.IndentingXMLStreamWriter;
 import jakarta.xml.bind.*;
 
-import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Iterator;
 
 public final class XMLFragments {
 
@@ -33,13 +33,13 @@ public final class XMLFragments {
             if(formatted)
                 xmlStreamWriter = new IndentingXMLStreamWriter(xmlStreamWriter);
             if(!includeNamespace)
-                xmlStreamWriter.setDefaultNamespace(XmlSessionWriterV1_3.DEFAULT_NAMESPACE);
+                xmlStreamWriter.setDefaultNamespace(XmlSessionWriterV2_0.DEFAULT_NAMESPACE);
             final JAXBContext context = JAXBContext.newInstance(ObjectFactory.class);
             final Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
             marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
             if(includeNamespace)
-                marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, String.format("%s %s", XmlSessionWriterV1_3.DEFAULT_NAMESPACE, XmlSessionWriterV1_3.DEFAULT_NAMESPACE_LOCATION));
+                marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, String.format("%s %s", XmlSessionWriterV2_0.DEFAULT_NAMESPACE, XmlSessionWriterV2_0.DEFAULT_NAMESPACE_LOCATION));
             marshaller.marshal(jaxbElement, xmlStreamWriter);
         } catch(JAXBException | XMLStreamException e) {
             throw new IOException(e);
@@ -55,8 +55,8 @@ public final class XMLFragments {
      * @throws IOException on error
      */
     public static String toXml(Orthography orthography, boolean includeNamespace, boolean formatted) throws IOException {
-        XmlSessionWriterV1_3 writer = (XmlSessionWriterV1_3) (new SessionOutputFactory())
-                .createWriter(XmlSessionWriterV1_3.class.getAnnotation(SessionIO.class));
+        XmlSessionWriterV2_0 writer = (XmlSessionWriterV2_0) (new SessionOutputFactory())
+                .createWriter(XmlSessionWriterV2_0.class.getAnnotation(SessionIO.class));
         XmlUtteranceType u = writer.writeOrthography(new ObjectFactory(), orthography);
         final ObjectFactory objectFactory = new ObjectFactory();
         final JAXBElement<XmlUtteranceType> ele = objectFactory.createU(u);
@@ -75,8 +75,8 @@ public final class XMLFragments {
      * @throws IOException on error
      */
     public static String toXml(IPATranscript ipa, boolean includeNamespace, boolean formatted) throws IOException {
-        XmlSessionWriterV1_3 writer = (XmlSessionWriterV1_3) (new SessionOutputFactory())
-                .createWriter(XmlSessionWriterV1_3.class.getAnnotation(SessionIO.class));
+        XmlSessionWriterV2_0 writer = (XmlSessionWriterV2_0) (new SessionOutputFactory())
+                .createWriter(XmlSessionWriterV2_0.class.getAnnotation(SessionIO.class));
         XmlPhoneticTranscriptionType pho = writer.writeIPA(new ObjectFactory(), ipa);
         final ObjectFactory objectFactory = new ObjectFactory();
         final JAXBElement<XmlPhoneticTranscriptionType> ele = objectFactory.createPho(pho);
@@ -121,11 +121,11 @@ public final class XMLFragments {
     public static Orthography orthographyFromXml(String xml) throws IOException {
         // special case if <u> has no namespace
         if(xml.startsWith("<u>")) {
-            xml = String.format("<u xmlns=\"%s\">", XmlSessionWriterV1_3.DEFAULT_NAMESPACE)
+            xml = String.format("<u xmlns=\"%s\">", XmlSessionWriterV2_0.DEFAULT_NAMESPACE)
                     + xml.substring(3);
         }
         XmlUtteranceType u = readFragment(new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)), XmlUtteranceType.class);
-        XmlSessionReaderV1_3 xmlReader = (XmlSessionReaderV1_3) (new SessionInputFactory()).createReader(XmlSessionReaderV1_3.class.getAnnotation(SessionIO.class));
+        XmlSessionReaderV2_0 xmlReader = (XmlSessionReaderV2_0) (new SessionInputFactory()).createReader(XmlSessionReaderV2_0.class.getAnnotation(SessionIO.class));
         return xmlReader.readOrthography(u);
     }
 
@@ -133,11 +133,11 @@ public final class XMLFragments {
         final XMLInputFactory inputFactory = XMLInputFactory.newFactory();
         // special case if <u> has no namespace
         if(xml.startsWith("<pho>")) {
-            xml = String.format("<pho xmlns=\"%s\">", XmlSessionWriterV1_3.DEFAULT_NAMESPACE)
+            xml = String.format("<pho xmlns=\"%s\">", XmlSessionWriterV2_0.DEFAULT_NAMESPACE)
                     + xml.substring(3);
         }
         XmlPhoneticTranscriptionType pho = readFragment(new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)), XmlPhoneticTranscriptionType.class);
-        XmlSessionReaderV1_3 xmlReader = (XmlSessionReaderV1_3) (new SessionInputFactory()).createReader(XmlSessionReaderV1_3.class.getAnnotation(SessionIO.class));
+        XmlSessionReaderV2_0 xmlReader = (XmlSessionReaderV2_0) (new SessionInputFactory()).createReader(XmlSessionReaderV2_0.class.getAnnotation(SessionIO.class));
         return xmlReader.readTranscript(pho);
     }
 

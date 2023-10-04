@@ -2,10 +2,16 @@ package ca.phon.session.alignment;
 
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
+import ca.phon.orthography.Quotation;
+import ca.phon.orthography.mor.GraspTierData;
+import ca.phon.orthography.mor.Mor;
+import ca.phon.orthography.mor.MorTierData;
+import ca.phon.orthography.mor.MorphemicBaseType;
 import ca.phon.session.PhoneAlignment;
 import ca.phon.session.Tier;
 import ca.phon.session.tierdata.TierData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface TierElementFilter {
@@ -18,6 +24,8 @@ public interface TierElementFilter {
                 return orthographyFilterForIPAAlignment();
             } else if(alignedType == TierData.class) {
                 return orthographyFilterForUserTierAlignment();
+            } else if(alignedType == MorTierData.class || alignedType == GraspTierData.class) {
+                return orthographyFilterForMorTierAlignment();
             } else {
                 throw new IllegalArgumentException("Invalid aligned tier type " + alignedType);
             }
@@ -28,11 +36,21 @@ public interface TierElementFilter {
                 return ipaFilterForIPAAlignment();
             } else if(alignedType == TierData.class) {
                 return ipaFilterForUserTierAlignment();
+            } else if(alignedType == MorTierData.class || alignedType == GraspTierData.class) {
+                return ipaFilterForUserTierAlignment();
             } else {
                 throw new IllegalArgumentException("Invalid aligned tier type " + alignedType);
             }
         } else if(tierType == TierData.class) {
             return defaultUserTierElementFilter();
+        } else if(tierType == MorTierData.class) {
+            if(alignedType == GraspTierData.class) {
+                return morFilterForGraspTierAlignment();
+            } else {
+                return defaultMorTierElementFilter();
+            }
+        } else if(tierType == GraspTierData.class) {
+            return defaultGraTierElementFilter();
         } else {
             throw new IllegalArgumentException("Invalid tier type " + tierType);
         }
@@ -41,19 +59,34 @@ public interface TierElementFilter {
     public static OrthographyTierElementFilter orthographyFilterForOrthographyAlignment() {
         final List<OrthographyTierElementFilter.AlignableType> alignableTypes =
                 List.of(OrthographyTierElementFilter.AlignableType.Word, OrthographyTierElementFilter.AlignableType.Pause, OrthographyTierElementFilter.AlignableType.Terminator);
-        return new OrthographyTierElementFilter(alignableTypes, true, true, true, false, false);
+        final OrthographyTierElementFilter.Options options = new OrthographyTierElementFilter.Options(
+                true, true, true, false,  false,false, false, false);
+        return new OrthographyTierElementFilter(alignableTypes, options);
     }
 
     public static OrthographyTierElementFilter orthographyFilterForIPAAlignment() {
         final List<OrthographyTierElementFilter.AlignableType> alignableTypes =
             List.of(OrthographyTierElementFilter.AlignableType.Word, OrthographyTierElementFilter.AlignableType.Pause);
-        return new OrthographyTierElementFilter(alignableTypes, true, true, true, false, false);
+        final OrthographyTierElementFilter.Options options = new OrthographyTierElementFilter.Options(
+                true, true, true, false, false, false, false, false);
+        return new OrthographyTierElementFilter(alignableTypes, options);
     }
 
     public static OrthographyTierElementFilter orthographyFilterForUserTierAlignment() {
         final List<OrthographyTierElementFilter.AlignableType> alignableTypes =
                 List.of(OrthographyTierElementFilter.AlignableType.Word);
-        return new OrthographyTierElementFilter(alignableTypes, true, true, true, false, false);
+        final OrthographyTierElementFilter.Options options = new OrthographyTierElementFilter.Options(
+                true, true, true, false, false, false, false, false);
+        return new OrthographyTierElementFilter(alignableTypes, options);
+    }
+
+    public static OrthographyTierElementFilter orthographyFilterForMorTierAlignment() {
+        final List<OrthographyTierElementFilter.AlignableType> alignableTypes =
+                List.of(OrthographyTierElementFilter.AlignableType.Word, OrthographyTierElementFilter.AlignableType.Quotation,
+                        OrthographyTierElementFilter.AlignableType.TagMarker, OrthographyTierElementFilter.AlignableType.Terminator);
+        final OrthographyTierElementFilter.Options options = new OrthographyTierElementFilter.Options(
+                true, true, true, true, true, false, false, false);
+        return new OrthographyTierElementFilter(alignableTypes, options);
     }
 
     public static IPATierElementFilter ipaFilterForIPAAlignment() {
@@ -78,6 +111,40 @@ public interface TierElementFilter {
         final List<UserTierElementFilter.AlignableType> alignableTypes =
                 List.of(UserTierElementFilter.AlignableType.Type);
         return new UserTierElementFilter(alignableTypes);
+    }
+
+    public static TierElementFilter defaultMorTierElementFilter() {
+        return new TierElementFilter() {
+            @Override
+            public List<?> filterTier(Tier<?> tier) {
+                return ((Tier<MorTierData>)tier).getValue().getMors();
+            }
+        };
+    }
+
+    public static TierElementFilter morFilterForGraspTierAlignment() {
+        return new TierElementFilter() {
+            @Override
+            public List<?> filterTier(Tier<?> tier) {
+                List<MorphemicBaseType> retVal = new ArrayList<>();
+                final MorTierData morTierData = (MorTierData) tier.getValue();
+                for(Mor mor:morTierData) {
+                    mor.getMorPres().forEach(retVal::add);
+                    retVal.add(mor);
+                    mor.getMorPosts().forEach(retVal::add);
+                }
+                return retVal;
+            }
+        };
+    }
+
+    public static TierElementFilter defaultGraTierElementFilter() {
+        return new TierElementFilter() {
+            @Override
+            public List<?> filterTier(Tier<?> tier) {
+                return ((Tier<GraspTierData>)tier).getValue().getGrasps();
+            }
+        };
     }
 
     /**

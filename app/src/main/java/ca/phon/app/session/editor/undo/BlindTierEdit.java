@@ -19,6 +19,7 @@ import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.ipa.*;
 import ca.phon.session.*;
+import ca.phon.session.Record;
 
 public class BlindTierEdit extends TierEdit<IPATranscript> {
 
@@ -31,11 +32,15 @@ public class BlindTierEdit extends TierEdit<IPATranscript> {
 	private final IPATranscript newValue;
 
 	public BlindTierEdit(SessionEditor editor, Tier<IPATranscript> tier, Transcriber transcriber, IPATranscript newValue, IPATranscript ipa) {
-		this(editor.getSession(), editor.getEventManager(), tier, transcriber, newValue, ipa);
+		this(editor, editor.currentRecord(), tier, transcriber, newValue, ipa);
 	}
 
-	public BlindTierEdit(Session session, EditorEventManager editorEventManager, Tier<IPATranscript> tier, Transcriber transcriber, IPATranscript newValue, IPATranscript ipa) {
-		super(session, editorEventManager, tier, ipa);
+	public BlindTierEdit(SessionEditor editor, Record record, Tier<IPATranscript> tier, Transcriber transcriber, IPATranscript newValue, IPATranscript ipa) {
+		this(editor.getSession(), editor.getEventManager(), record, tier, transcriber, newValue, ipa);
+	}
+
+	public BlindTierEdit(Session session, EditorEventManager editorEventManager, Record record, Tier<IPATranscript> tier, Transcriber transcriber, IPATranscript newValue, IPATranscript ipa) {
+		super(session, editorEventManager, record, tier, ipa);
 		this.ipa = ipa;
 		this.transcriber = transcriber;
 		this.newValue = newValue;
