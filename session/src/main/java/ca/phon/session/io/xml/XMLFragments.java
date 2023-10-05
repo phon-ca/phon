@@ -213,19 +213,6 @@ public final class XMLFragments {
             TransformerFactory tf = TransformerFactory.newInstance();
             Transformer t = tf.newTransformer();
 
-//            if(reader.hasNext()) {
-//                reader.nextTag();
-//                if(reader.isStartElement() && XmlSessionWriterV2_0.DEFAULT_NAMESPACE.equals(reader.getNamespaceURI())) {
-//                    return text;
-//                }
-//                noXmlDeclWriter.writeStartElement(reader.getLocalName());
-//                noXmlDeclWriter.writeDefaultNamespace(XmlSessionWriterV2_0.DEFAULT_NAMESPACE);
-//                for(int i = 0; i < reader.getAttributeCount(); i++) {
-//                    noXmlDeclWriter.writeAttribute(reader.getAttributeLocalName(i), reader.getAttributeValue(i));
-//                }
-//                reader.nextTag();
-//            }
-
             StAXSource source = new StAXSource(reader);
             StAXResult result = new StAXResult(noXmlDeclWriter);
 
@@ -281,58 +268,5 @@ public final class XMLFragments {
     }
 
     // endregion xml -> Object
-
-    public static void main(String[] args) throws IOException {
-        String xml = """
-                <mors xmlns="https://phon.ca/ns/session">
-                                    <mor>
-                                        <mw>
-                                            <pos>
-                <c>det</c>
-                                            </pos>
-                                            <stem>the</stem>
-                                        </mw>
-                                    </mor>
-                                    <mor>
-                                        <mw>
-                                            <pos>
-                <c>n</c>
-                                            </pos>
-                                            <stem>people</stem>
-                                        </mw>
-                                    </mor>
-                                    <mor>
-                                        <mw>
-                                            <pos>
-                <c>v</c>
-                                            </pos>
-                                            <stem>be</stem>
-                                            <mk type="sfxf">PRES</mk>
-                                        </mw>
-                                    </mor>
-                                    <mor>
-                                        <mw>
-                                            <pos>
-                <c>v</c>
-                                            </pos>
-                                            <stem>make</stem>
-                                            <mk type="sfx">ING</mk>
-                                        </mw>
-                                    </mor>
-                                    <mor>
-                                        <mw>
-                                            <pos>
-                <c>n</c>
-                                            </pos>
-                                            <stem>cake</stem>
-                                            <mk type="sfx">PL</mk>
-                                        </mw>
-                                    </mor>
-                                    <mor>
-                                        <mt type="p"/>
-                                    </mor>
-                                </mors>""";
-        XMLFragments.morsFromXml(xml);
-    }
 
 }
