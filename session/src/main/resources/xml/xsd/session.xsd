@@ -118,10 +118,11 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
+            <xs:element ref="metadata" minOccurs="0"/>
             <xs:element ref="participants" minOccurs="0"/>
-            <xs:element ref="blindMode" minOccurs="0"/>
             <xs:element ref="userTiers" minOccurs="0"/>
             <xs:element ref="tierOrder" minOccurs="0"/>
+            <xs:element ref="blindMode" minOccurs="0"/>
             <xs:element ref="transcript"/>
             <xs:element ref="timeline" minOccurs="0"/>
         </xs:sequence>
@@ -130,6 +131,22 @@
         <xs:attribute name="name" type="nonemptyStringType"/>
         <xs:attribute name="corpus" type="nonemptyStringType"/>
         <xs:attribute name="version" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:element name="metadata" type="metadataType"/>
+    <xs:complexType name="metadataType">
+        <xs:sequence>
+            <xs:element ref="md" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="md" type="metadataValueType"/>
+    <xs:complexType name="metadataValueType">
+        <xs:simpleContent>
+            <xs:extension base="nonemptyStringType">
+                 <xs:attribute name="key" type="nonemptyStringType"/>
+            </xs:extension>
+        </xs:simpleContent>
     </xs:complexType>
 
     <!-- region Participants -->

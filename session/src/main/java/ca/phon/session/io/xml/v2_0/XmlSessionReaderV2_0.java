@@ -151,6 +151,13 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 			retVal.setLanguages(langs);
 		}
 
+		// metadata
+		if(xmlSessionType.getMetadata() != null) {
+			for(XmlMetadataValueType md:xmlSessionType.getMetadata().getMd()) {
+				retVal.getMetadata().put(md.getKey(), md.getValue());
+			}
+		}
+
 		// copy participant information
 		final XmlParticipantsType participants = xmlSessionType.getParticipants();
 		if(participants != null) {

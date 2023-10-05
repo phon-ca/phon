@@ -110,6 +110,20 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 			retVal.getLanguages().add(lang.toString());
 		}
 
+		// metadata
+		if(!session.getMetadata().isEmpty()) {
+			final XmlMetadataType metadataType = factory.createXmlMetadataType();
+			for(String key:session.getMetadata().keySet()) {
+				final String value = session.getMetadata().get(key);
+				if(!value.isBlank()) {
+					final XmlMetadataValueType md = factory.createXmlMetadataValueType();
+					md.setKey(key);
+					md.setValue(value);
+					metadataType.getMd().add(md);
+				}
+			}
+		}
+
 		// participants
 		final XmlParticipantsType parts = factory.createXmlParticipantsType();
 		for(int i = 0; i < session.getParticipantCount(); i++) {
