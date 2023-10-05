@@ -149,7 +149,6 @@ public final class SessionFactory extends ExtendableObject {
 		final Session retVal = createSession();
 		
 		copySessionInformation(session, retVal);
-		copySessionMetadata(session, retVal);
 		for(Participant part:session.getParticipants()) {
 			final Participant clonedPart = cloneParticipant(part);
 			retVal.addParticipant(clonedPart);
@@ -272,55 +271,6 @@ public final class SessionFactory extends ExtendableObject {
 		return null;
 	}
 
-	/**
-	 * Create session metadata object.
-	 * 
-	 * @return session metadata
-	 */
-	public SessionMetadata createSessionMetadata() {
-		final SessionMetadataSPI sessionMetadataImpl = sessionFactoryImpl.createSessionMetadata();
-		return createSessionMetadata(sessionMetadataImpl);
-	}
-	
-	public SessionMetadata createSessionMetadata(SessionMetadataSPI sessionMetadataImpl) {
-		return new SessionMetadata(sessionMetadataImpl);
-	}
-	
-	/**
-	 * Clone session metadata
-	 * 
-	 * @param session
-	 * @param dest
-	 */
-	public void copySessionMetadata(Session session, Session dest) {
-		final SessionMetadata metadata = session.getMetadata();
-		final SessionMetadata retVal = dest.getMetadata();
-		
-		retVal.setAppID(metadata.getAppID());
-		retVal.setContributor(metadata.getContributor());
-		retVal.setCoverage(metadata.getCoverage());
-		retVal.setCreator(metadata.getCreator());
-		retVal.setDate(metadata.getDate());
-		retVal.setDescription(metadata.getDescription());
-		retVal.setFormat(metadata.getFormat());
-		retVal.setIdentifier(metadata.getIdentifier());
-		retVal.setLanguage(metadata.getLanguage());
-		retVal.setPublisher(metadata.getPublisher());
-		retVal.setRelation(metadata.getRelation());
-		retVal.setRights(metadata.getRights());
-		retVal.setSource(metadata.getSource());
-		retVal.setSubject(metadata.getSubject());
-		retVal.setTitle(metadata.getTitle());
-		retVal.setType(metadata.getType());
-		retVal.setSubject(metadata.getSubject());
-		
-		for(int i = 0; i < metadata.getNumberOfComments(); i++) {
-			final Comment c = metadata.getComment(i);
-			final Comment clonedC = cloneComment(c);
-			retVal.addComment(clonedC);
-		}
-	}
-	
 	/**
 	 * Copy tier information from one session to another.
 	 * 

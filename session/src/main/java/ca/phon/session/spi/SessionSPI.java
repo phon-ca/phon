@@ -22,6 +22,7 @@ import ca.phon.util.Language;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 /**
  * service provider interface for sessions
@@ -162,7 +163,7 @@ public interface SessionSPI {
 	 * 
 	 * @return Metadata
 	 */
-	public SessionMetadata getMetadata();
+	public Map<String, String> getMetadata();
 	
 	/**
 	 * Get the number of participants

@@ -172,12 +172,6 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 			}
 		}
 
-		for(int tcIdx = 0; tcIdx < session.getMetadata().getNumberOfTrailingComments(); tcIdx++) {
-			final Comment com = session.getMetadata().getTrailingComment(tcIdx);
-			final XmlCommentType ct = writeComment(factory, com);
-			transcript.getROrCommentOrGem().add(ct);
-		}
-
 		return factory.createSession(retVal);
 	}
 

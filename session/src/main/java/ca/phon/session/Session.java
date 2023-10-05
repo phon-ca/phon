@@ -22,6 +22,7 @@ import ca.phon.util.Language;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A session, usually recording session, with participants, optional media and
@@ -133,7 +134,7 @@ public final class Session extends ExtendableObject {
 	 *
 	 * @return session metadata
 	 */
-	public SessionMetadata getMetadata() {
+	public Map<String, String> getMetadata() {
 		return sessionImpl.getMetadata();
 	}
 

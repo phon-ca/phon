@@ -82,11 +82,6 @@ public class SessionFactoryImpl implements SessionFactorySPI, IPluginExtensionPo
 	}
 
 	@Override
-	public SessionMetadataSPI createSessionMetadata() {
-		return new SessionMetadataImpl();
-	}
-
-	@Override
 	public TranscriptSPI createTranscript() { return new TranscriptImpl(); }
 
 	@Override

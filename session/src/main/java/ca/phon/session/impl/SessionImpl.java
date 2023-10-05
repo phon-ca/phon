@@ -38,7 +38,7 @@ public class SessionImpl implements SessionSPI {
 	
 	private final AtomicReference<String> mediaRef = new AtomicReference<String>();
 	
-	private final SessionMetadata metadata;
+	private final Map<String, String> metadata;
 
 	private final List<Language> languages =
 			Collections.synchronizedList(new ArrayList<>());
@@ -66,7 +66,7 @@ public class SessionImpl implements SessionSPI {
 	SessionImpl() {
 		super();
 		final SessionFactory factory = SessionFactory.newFactory();
-		metadata = factory.createSessionMetadata();
+		metadata = new LinkedHashMap<>();
 		transcript = factory.createTranscript();
 	}
 
@@ -132,7 +132,7 @@ public class SessionImpl implements SessionSPI {
 	}
 	
 	@Override
-	public SessionMetadata getMetadata() {
+	public Map<String, String> getMetadata() {
 		return metadata;
 	}
 

@@ -50,13 +50,6 @@ public interface SessionFactorySPI {
 	 */
 	public GemSPI createGem(GemType gemType, String label);
 	
-	/**
-	 * Session metadata
-	 * 
-	 * @return
-	 */
-	public SessionMetadataSPI createSessionMetadata();
-
 	public TranscriptSPI createTranscript();
 
 	/**
