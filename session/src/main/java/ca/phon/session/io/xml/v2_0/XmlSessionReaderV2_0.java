@@ -759,7 +759,7 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 		return new GraspTierData(grasps);
 	}
 
-	private Grasp readGra(SessionFactory factory, XmlGraType xmlGraType) {
+	public Grasp readGra(SessionFactory factory, XmlGraType xmlGraType) {
 		return new Grasp(xmlGraType.getIndex(), xmlGraType.getHead(), xmlGraType.getRelation());
 	}
 
@@ -773,7 +773,7 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 		return retVal;
 	}
 	
-	private MorTierData readMorTierData(SessionFactory factory, XmlMorTierData xmlTierData) {
+	public MorTierData readMorTierData(SessionFactory factory, XmlMorTierData xmlTierData) {
 		final List<Mor> mors = new ArrayList<>();
 		for(XmlMorType xmlMorType:xmlTierData.getMor()) {
 			mors.add(readMor(factory, xmlMorType));
@@ -781,7 +781,7 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 		return new MorTierData(mors);
 	}
 
-	private Mor readMor(SessionFactory factory, XmlMorType xmlMorType) {
+	public Mor readMor(SessionFactory factory, XmlMorType xmlMorType) {
 		final List<MorPre> morPres = new ArrayList<>();
 		for(XmlMorphemicBaseType xmlMorphemicBaseType:xmlMorType.getMorPre()) {
 			morPres.add(readMorPre(factory, xmlMorphemicBaseType));

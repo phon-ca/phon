@@ -45,6 +45,18 @@ public final class TierDescriptions implements IExtendable, Iterable<TierDescrip
 		extSupport.initExtensions();
 	}
 
+	/**
+	 * Get tier description by name
+	 *
+	 * @param tierName
+	 * @return tier description or null if not found
+	 */
+	public TierDescription get(String tierName) {
+		Optional<TierDescription> tdOpt =
+				stream().filter(td -> td.getName().equals(tierName)).findFirst();
+        return tdOpt.orElse(null);
+	}
+
 	@Override
 	public Iterator<TierDescription> iterator() {
 		return new TierDescriptionIterator();
