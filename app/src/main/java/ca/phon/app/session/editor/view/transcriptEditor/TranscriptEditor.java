@@ -2,9 +2,7 @@ package ca.phon.app.session.editor.view.transcriptEditor;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
-import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
-import ca.phon.app.session.editor.undo.TierEdit;
+import ca.phon.app.session.editor.undo.*;
 import ca.phon.plugin.PluginManager;
 import ca.phon.session.*;
 import ca.phon.session.Record;
@@ -40,7 +38,6 @@ public class TranscriptEditor extends JEditorPane {
     private int currentRecordIndex = -1;
     private boolean singleRecordView = false;
     public final static EditorEventType<Void> recordChangedInSingleRecordMode = new EditorEventType<>("recordChangedInSingleRecordMode", Void.class);
-    private int prevMousePosInDoc = -1;
     private Element hoverElem = null;
     private Object currentUnderline;
     TranscriptUnderlinePainter underlinePainter = new TranscriptUnderlinePainter();
@@ -176,6 +173,14 @@ public class TranscriptEditor extends JEditorPane {
         this.eventManager.registerActionForEvent(EditorEventType.SpeakerChanged, this::onSpeakerChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 
         this.eventManager.registerActionForEvent(EditorEventType.TierChanged, this::onTierDataChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+
+        this.eventManager.registerActionForEvent(EditorEventType.CommentAdded, this::onCommentAdded, EditorEventManager.RunOn.AWTEventDispatchThread);
+        this.eventManager.registerActionForEvent(EditorEventType.GemAdded, this::onGemAdded, EditorEventManager.RunOn.AWTEventDispatchThread);
+
+        this.eventManager.registerActionForEvent(EditorEventType.ElementDeleted, this::onTranscriptElementDeleted, EditorEventManager.RunOn.AWTEventDispatchThread);
+
+        this.eventManager.registerActionForEvent(EditorEventType.CommenTypeChanged, this::onCommentTypeChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+        this.eventManager.registerActionForEvent(EditorEventType.GemTypeChanged, this::onGemTypeChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
     }
 
     // endregion Init
@@ -462,6 +467,26 @@ public class TranscriptEditor extends JEditorPane {
             }
             catch (BadLocationException e) {
                 LogUtil.severe(e);
+            }
+        }
+
+        String elemType = (String) attrs.getAttribute("elementType");
+        System.out.println("Element type: " + elemType);
+        if (elemType != null && (elemType.equals("record") || elemType.equals("comment") || elemType.equals("gem"))) {
+            int elementIndex = -1;
+            if (elemType.equals("record")) {
+                elementIndex = (int) attrs.getAttribute("recordElementIndex");
+            }
+            else if (elemType.equals("comment")) {
+                Comment comment = (Comment) attrs.getAttribute("comment");
+                elementIndex = session.getTranscript().getElementIndex(comment);
+            }
+            else {
+                Gem gem = (Gem) attrs.getAttribute("gem");
+                elementIndex = session.getTranscript().getElementIndex(gem);
+            }
+            if (elementIndex > -1) {
+                showContextMenu(elementIndex);
             }
         }
     }
@@ -941,45 +966,77 @@ public class TranscriptEditor extends JEditorPane {
         menu.show(this, (int) point.getX(), (int) point.getY());
     }
 
-    private void onClickCommentLabel(Point2D point) {
+    private void onClickCommentLabel(Point2D point, Comment comment) {
+        int clickedElementIndex = session.getTranscript().getElementIndex(comment);
+
         // Build a new popup menu
         JPopupMenu menu = new JPopupMenu();
 
-        JMenu addComment = new JMenu("Add comment");
-        addComment.add("Add comment above");
-        addComment.add("Add comment below");
-        addComment.add("Add comment at bottom");
-        menu.add(addComment);
 
-        JMenu addGem = new JMenu("Add gem");
-        addGem.add("Add gem above");
-        addGem.add("Add gem below");
-        addGem.add("Add gem at bottom");
-        menu.add(addGem);
+        JMenu changeTypeMenu = new JMenu("Change type");
 
-        menu.add("Delete me");
+        ButtonGroup changeTypeButtonGroup = new ButtonGroup();
+        for (CommentType type : CommentType.values()) {
+            JRadioButtonMenuItem changeTypeItem = new JRadioButtonMenuItem();
+            changeTypeButtonGroup.add(changeTypeItem);
+            if (comment.getType().equals(type)) {
+                changeTypeButtonGroup.setSelected(changeTypeItem.getModel(), true);
+            }
+            PhonUIAction<Void> changeTypeAct = PhonUIAction.runnable(() -> {
+                ChangeCommentTypeEdit edit = new ChangeCommentTypeEdit(session, eventManager, comment, type);
+                undoSupport.postEdit(edit);
+            });
+            changeTypeAct.putValue(PhonUIAction.NAME, type.getLabel());
+            changeTypeItem.setAction(changeTypeAct);
+            changeTypeMenu.add(changeTypeItem);
+        }
+
+        menu.add(changeTypeMenu);
+
+
+        JMenuItem deleteThis = new JMenuItem();
+        PhonUIAction<Void> deleteThisAct = PhonUIAction.runnable(() -> deleteTranscriptElement(new Transcript.Element(comment)));
+        deleteThisAct.putValue(PhonUIAction.NAME, "Delete this comment");
+        deleteThis.setAction(deleteThisAct);
+        menu.add(deleteThis);
 
         // Show it where the user clicked
         menu.show(this, (int) point.getX(), (int) point.getY());
     }
 
-    private void onClickGemLabel(Point2D point) {
+    private void onClickGemLabel(Point2D point, Gem gem) {
+        int clickedElementIndex = session.getTranscript().getElementIndex(gem);
         // Build a new popup menu
         JPopupMenu menu = new JPopupMenu();
 
-        JMenu addComment = new JMenu("Add comment");
-        addComment.add("Add comment above");
-        addComment.add("Add comment below");
-        addComment.add("Add comment at bottom");
-        menu.add(addComment);
 
-        JMenu addGem = new JMenu("Add gem");
-        addGem.add("Add gem above");
-        addGem.add("Add gem below");
-        addGem.add("Add gem at bottom");
-        menu.add(addGem);
+        JMenu changeTypeMenu = new JMenu("Change type");
 
-        menu.add("Delete me");
+        ButtonGroup changeTypeButtonGroup = new ButtonGroup();
+        for (GemType type : GemType.values()) {
+            JRadioButtonMenuItem changeTypeItem = new JRadioButtonMenuItem();
+            changeTypeButtonGroup.add(changeTypeItem);
+            if (gem.getType().equals(type)) {
+                changeTypeButtonGroup.setSelected(changeTypeItem.getModel(), true);
+            }
+            PhonUIAction<Void> changeTypeAct = PhonUIAction.runnable(() -> {
+                ChangeGemTypeEdit edit = new ChangeGemTypeEdit(session, eventManager, gem, type);
+                undoSupport.postEdit(edit);
+            });
+            changeTypeAct.putValue(PhonUIAction.NAME, type.name());
+            changeTypeItem.setAction(changeTypeAct);
+            changeTypeMenu.add(changeTypeItem);
+        }
+
+        menu.add(changeTypeMenu);
+
+
+        JMenuItem deleteThis = new JMenuItem();
+        PhonUIAction<Void> deleteThisAct = PhonUIAction.runnable(() -> deleteTranscriptElement(new Transcript.Element(gem)));
+        deleteThisAct.putValue(PhonUIAction.NAME, "Delete this gem");
+        deleteThis.setAction(deleteThisAct);
+        menu.add(deleteThis);
+
 
         // Show it where the user clicked
         menu.show(this, (int) point.getX(), (int) point.getY());
@@ -987,6 +1044,61 @@ public class TranscriptEditor extends JEditorPane {
 
     // endregion On Click
 
+    private void showContextMenu(int transcriptElementIndex) {
+        JPopupMenu menu = new JPopupMenu();
+
+        JMenu addCommentMenu = new JMenu("Add comment");
+
+        JMenuItem addCommentAbove = new JMenuItem();
+        PhonUIAction<Void> addCommentAboveAct = PhonUIAction.runnable(() -> addComment(transcriptElementIndex, SwingConstants.PREVIOUS));
+        addCommentAboveAct.putValue(PhonUIAction.NAME, "Add comment above");
+        addCommentAbove.setAction(addCommentAboveAct);
+        addCommentMenu.add(addCommentAbove);
+
+        JMenuItem addCommentBelow = new JMenuItem();
+        PhonUIAction<Void> addCommentBelowAct = PhonUIAction.runnable(() -> addComment(transcriptElementIndex, SwingConstants.NEXT));
+        addCommentBelowAct.putValue(PhonUIAction.NAME, "Add comment below");
+        addCommentBelow.setAction(addCommentBelowAct);
+        addCommentMenu.add(addCommentBelow);
+
+        JMenuItem addCommentBottom = new JMenuItem();
+        PhonUIAction<Void> addCommentBottomAct = PhonUIAction.runnable(() -> addComment(transcriptElementIndex, SwingConstants.BOTTOM));
+        addCommentBottomAct.putValue(PhonUIAction.NAME, "Add comment at bottom");
+        addCommentBottom.setAction(addCommentBottomAct);
+        addCommentMenu.add(addCommentBottom);
+        menu.add(addCommentMenu);
+
+        JMenu addGemMenu = new JMenu("Add gem");
+
+        JMenuItem addGemAbove = new JMenuItem();
+        PhonUIAction<Void> addGemAboveAct = PhonUIAction.runnable(() -> addGem(transcriptElementIndex, SwingConstants.PREVIOUS));
+        addGemAboveAct.putValue(PhonUIAction.NAME, "Add gem above");
+        addGemAbove.setAction(addGemAboveAct);
+        addGemMenu.add(addGemAbove);
+
+        JMenuItem addGemBelow = new JMenuItem();
+        PhonUIAction<Void> addGemBelowAct = PhonUIAction.runnable(() -> addGem(transcriptElementIndex, SwingConstants.NEXT));
+        addGemBelowAct.putValue(PhonUIAction.NAME, "Add gem below");
+        addGemBelow.setAction(addGemBelowAct);
+        addGemMenu.add(addGemBelow);
+
+        JMenuItem addGemBottom = new JMenuItem();
+        PhonUIAction<Void> addGemBottomAct = PhonUIAction.runnable(() -> addGem(transcriptElementIndex, SwingConstants.BOTTOM));
+        addGemBottomAct.putValue(PhonUIAction.NAME, "Add gem at bottom");
+        addGemBottom.setAction(addGemBottomAct);
+        addGemMenu.add(addGemBottom);
+
+        menu.add(addGemMenu);
+
+        JMenuItem deleteThis = new JMenuItem();
+        PhonUIAction<Void> deleteThisAct = PhonUIAction.runnable(() -> deleteTranscriptElement(session.getTranscript().getElementAt(transcriptElementIndex)));
+        deleteThisAct.putValue(PhonUIAction.NAME, "Delete this element");
+        deleteThis.setAction(deleteThisAct);
+        menu.add(deleteThis);
+
+        var mousePos = MouseInfo.getPointerInfo().getLocation();
+        menu.show(this, (int) (mousePos.getX() - getLocationOnScreen().getX()), (int) (mousePos.getY() - getLocationOnScreen().getY()));
+    }
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -1065,7 +1177,10 @@ public class TranscriptEditor extends JEditorPane {
     public void tierDataChanged(Tier<?> tier, String newData) {
         Tier<?> dummy = SessionFactory.newFactory().createTier("dummy", tier.getDeclaredType());
         dummy.setText(newData);
-        TierEdit edit = new TierEdit(session, eventManager, tier, dummy.getValue());
+
+
+
+        TierEdit edit = new TierEdit(session, eventManager, null, tier, dummy.getValue());
         getUndoSupport().postEdit(edit);
     }
 
@@ -1378,6 +1493,79 @@ public class TranscriptEditor extends JEditorPane {
         }
     }
 
+    private void addComment(int relativeElementIndex, int position) {
+        Transcript transcript = session.getTranscript();
+        Tier<TierData> commentTier = SessionFactory.newFactory().createTier("Comment Tier", TierData.class);
+        commentTier.setText("New comment");
+        Comment newComment = SessionFactory.newFactory().createComment(CommentType.Blank, commentTier.getValue());
+
+        int newCommentIndex = -1;
+        switch (position) {
+            case SwingConstants.PREVIOUS -> newCommentIndex = relativeElementIndex;
+            case SwingConstants.NEXT -> newCommentIndex = relativeElementIndex + 1;
+            case SwingConstants.BOTTOM -> newCommentIndex = transcript.getNumberOfElements();
+        }
+
+        AddTranscriptElementEdit edit = new AddTranscriptElementEdit(
+            session,
+            eventManager,
+            new Transcript.Element(newComment),
+            newCommentIndex
+        );
+        undoSupport.postEdit(edit);
+    }
+
+    private void onCommentAdded(EditorEvent<EditorEventType.CommentAddedData> editorEvent) {
+        var data = editorEvent.data();
+        getTranscriptDocument().addComment(data.record(), data.elementIndex());
+    }
+
+    private void addGem(int relativeElementIndex, int position) {
+        Transcript transcript = session.getTranscript();
+        Gem newGem = SessionFactory.newFactory().createGem(GemType.Lazy, "New gem");
+
+        int newGemIndex = -1;
+        switch (position) {
+            case SwingConstants.PREVIOUS -> newGemIndex = relativeElementIndex;
+            case SwingConstants.NEXT -> newGemIndex = relativeElementIndex + 1;
+            case SwingConstants.BOTTOM -> newGemIndex = transcript.getNumberOfElements();
+        }
+
+        AddTranscriptElementEdit edit = new AddTranscriptElementEdit(
+            session,
+            eventManager,
+            new Transcript.Element(newGem),
+            newGemIndex
+        );
+        undoSupport.postEdit(edit);
+    }
+
+    private void onGemAdded(EditorEvent<EditorEventType.GemAddedData> editorEvent) {
+        var data = editorEvent.data();
+        getTranscriptDocument().addGem(data.gem(), data.elementIndex());
+    }
+
+    private void deleteTranscriptElement(Transcript.Element elem) {
+        DeleteTranscriptElementEdit edit = new DeleteTranscriptElementEdit(
+            session,
+            eventManager,
+            elem,
+            session.getTranscript().getElementIndex(elem)
+        );
+        undoSupport.postEdit(edit);
+    }
+
+    private void onTranscriptElementDeleted(EditorEvent<EditorEventType.ElementDeletedData> editorEvent) {
+        getTranscriptDocument().deleteTranscriptElement(editorEvent.data().element());
+    }
+
+    private void onCommentTypeChanged(EditorEvent<EditorEventType.CommentTypeChangedData> editorEvent) {
+        getTranscriptDocument().changeCommentType(editorEvent.data().comment());
+    }
+
+    private void onGemTypeChanged(EditorEvent<EditorEventType.GemTypeChangedData> editorEvent) {
+        getTranscriptDocument().changeGemType(editorEvent.data().gem());
+    }
 
     private class TranscriptNavigationFilter extends NavigationFilter {
         @Override
@@ -1420,7 +1608,20 @@ public class TranscriptEditor extends JEditorPane {
         }
         @Override
         public void moveDot(NavigationFilter.FilterBypass fb, int dot, Position.Bias bias) {
+            TranscriptDocument doc = getTranscriptDocument();
+
             if (getTranscriptDocument().getLength() == dot) return;
+
+            Tier<?> selectionStartTier = doc.getTier(getCaret().getDot());
+            if (selectionStartTier != null) {
+                AttributeSet attrs = doc.getCharacterElement(dot).getAttributes();
+                Tier<?> selectionEndTier = (Tier<?>) attrs.getAttribute("tier");
+                Boolean isLabel = (Boolean) attrs.getAttribute("label");
+                if (selectionStartTier != selectionEndTier || isLabel != null) {
+                    return;
+                }
+            }
+
             fb.moveDot(dot, bias);
         }
     }
@@ -1517,8 +1718,8 @@ public class TranscriptEditor extends JEditorPane {
                     if (attrs.getAttribute("clickable") != null) {
                         switch (elementType) {
                             case "record" -> onClickTierLabel(e.getPoint());
-                            case "comment" -> onClickCommentLabel(e.getPoint());
-                            case "gem" -> onClickGemLabel(e.getPoint());
+                            case "comment" -> onClickCommentLabel(e.getPoint(), (Comment) attrs.getAttribute("comment"));
+                            case "gem" -> onClickGemLabel(e.getPoint(), (Gem) attrs.getAttribute("gem"));
                         }
                     }
                 }

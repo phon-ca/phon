@@ -4,6 +4,10 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.formatter.MediaTimeFormatter;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
+import ca.phon.orthography.mor.Grasp;
+import ca.phon.orthography.mor.GraspTierData;
+import ca.phon.orthography.mor.Mor;
+import ca.phon.orthography.mor.MorTierData;
 import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.session.tierdata.*;
@@ -413,6 +417,174 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
     // endregion Batching
 
+    // region Add Comment / Gem
+
+    public void addComment(Comment comment, int transcriptElementIndex) {
+        int offset = -1;
+
+        if (transcriptElementIndex == 0) {
+            var elementAfterComment = session.getTranscript().getElementAt(1);
+            if (elementAfterComment.isRecord()) {
+                offset = getRecordStart(session.getRecordPosition(elementAfterComment.asRecord()));
+            }
+            else if (elementAfterComment.isComment()) {
+                offset = getCommentStart(elementAfterComment.asComment());
+            }
+            else if (elementAfterComment.isGem()) {
+                offset = getGemStart(elementAfterComment.asGem());
+            }
+            else {
+                throw new RuntimeException("Invalid transcript element");
+            }
+
+            offset -= labelColumnWidth + 2;
+        }
+        else {
+            var elementBeforeComment = session.getTranscript().getElementAt(transcriptElementIndex-1);
+            if (elementBeforeComment.isRecord()) {
+                offset = getRecordEnd(session.getRecordPosition(elementBeforeComment.asRecord()));
+            }
+            else if (elementBeforeComment.isComment()) {
+                offset = getCommentEnd(elementBeforeComment.asComment());
+            }
+            else if (elementBeforeComment.isGem()) {
+                offset = getGemEnd(elementBeforeComment.asGem());
+            }
+            else {
+                throw new RuntimeException("Invalid transcript element");
+            }
+        }
+
+        try {
+            appendBatchEndStart();
+            var attrs = writeComment(comment);
+            appendBatchLineFeed(attrs);
+            processBatchUpdates(offset);
+        }
+        catch (BadLocationException e) {
+            LogUtil.severe(e);
+        }
+    }
+
+    public void addGem(Gem gem, int transcriptElementIndex) {
+        int offset = -1;
+
+        if (transcriptElementIndex == 0) {
+            var elementAfterComment = session.getTranscript().getElementAt(1);
+            if (elementAfterComment.isRecord()) {
+                offset = getRecordStart(session.getRecordPosition(elementAfterComment.asRecord()));
+            }
+            else if (elementAfterComment.isComment()) {
+                offset = getCommentStart(elementAfterComment.asComment());
+            }
+            else if (elementAfterComment.isGem()) {
+                offset = getGemStart(elementAfterComment.asGem());
+            }
+            else {
+                throw new RuntimeException("Invalid transcript element");
+            }
+
+            offset -= labelColumnWidth + 2;
+        }
+        else {
+            var elementBeforeComment = session.getTranscript().getElementAt(transcriptElementIndex-1);
+            if (elementBeforeComment.isRecord()) {
+                offset = getRecordEnd(session.getRecordPosition(elementBeforeComment.asRecord()));
+            }
+            else if (elementBeforeComment.isComment()) {
+                offset = getCommentEnd(elementBeforeComment.asComment());
+            }
+            else if (elementBeforeComment.isGem()) {
+                offset = getGemEnd(elementBeforeComment.asGem());
+            }
+            else {
+                throw new RuntimeException("Invalid transcript element");
+            }
+        }
+
+        try {
+            appendBatchEndStart();
+            var attrs = writeGem(gem);
+            appendBatchLineFeed(attrs);
+            processBatchUpdates(offset);
+        }
+        catch (BadLocationException e) {
+            LogUtil.severe(e);
+        }
+    }
+
+    // endregion Add Comment / Gem
+
+    public void deleteTranscriptElement(Transcript.Element elem) {
+        int labelLength = labelColumnWidth + 2;
+        try {
+            int startOffset = -1;
+            int endOffset = -1;
+
+            if (elem.isComment()) {
+                startOffset = getCommentStart(elem.asComment());
+                endOffset = getCommentEnd(elem.asComment());
+            }
+            else if (elem.isGem()) {
+                startOffset = getGemStart(elem.asGem());
+                endOffset = getGemEnd(elem.asGem());
+            }
+            else if (elem.isRecord()) {
+                Transcript transcript = session.getTranscript();
+                int recordIndex = transcript.getRecordPosition(elem.asRecord());
+                int recordElementIndex = transcript.getRecordElementIndex(recordIndex);
+                deleteRecord(recordIndex, recordElementIndex);
+                return;
+            }
+
+            startOffset -= labelLength;
+
+            if (startOffset < 0 || endOffset < 0) return;
+
+            remove(startOffset, endOffset - startOffset);
+        }
+        catch (BadLocationException e) {
+            LogUtil.severe(e);
+        }
+    }
+
+    public void changeCommentType(Comment comment) {
+        int start = getCommentStart(comment);
+        int end = getCommentEnd(comment);
+
+        start -= labelColumnWidth + 2;
+
+        try {
+            remove(start, end - start);
+            appendBatchEndStart();
+            var attrs = writeComment(comment);
+            appendBatchLineFeed(attrs);
+            processBatchUpdates(start);
+            setGlobalParagraphAttributes();
+        }
+        catch (BadLocationException e) {
+            LogUtil.severe(e);
+        }
+    }
+
+    public void changeGemType(Gem gem) {
+        int start = getGemStart(gem);
+        int end = getGemEnd(gem);
+
+        start -= labelColumnWidth + 2;
+
+        try {
+            remove(start, end - start);
+            appendBatchEndStart();
+            var attrs = writeGem(gem);
+            appendBatchLineFeed(attrs);
+            processBatchUpdates(start);
+            setGlobalParagraphAttributes();
+        }
+        catch (BadLocationException e) {
+            LogUtil.severe(e);
+        }
+    }
 
     // region Write Transcript Element
 
@@ -441,8 +613,16 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
         for (int i = 0; i < visibleTierView.size(); i++) {
             TierViewItem item = visibleTierView.get(i);
+            Tier<?> tier = record.getTier(item.getTierName());
+            if (tier == null) {
+                var tdOpt = session.getUserTiers().stream().filter(td -> td.getName().equals(item.getTierName())).findAny();
+                if (tdOpt.isEmpty()) {
+                    continue;
+                }
+                tier = sessionFactory.createTier(tdOpt.get());
+            }
 
-            tierAttrs = insertTier(recordIndex, item, recordAttrs);
+            tierAttrs = insertTier(recordIndex, tier, item, recordAttrs);
 
             if (i < visibleTierView.size() - 1) {
                 appendBatchLineFeed(tierAttrs);
@@ -1061,7 +1241,8 @@ public class TranscriptDocument extends DefaultStyledDocument {
         try {
             appendBatchEndStart();
             for (TierViewItem item : movedTiersNewOrder) {
-                var attrs = insertTier(recordIndex, item, recordAttrs);
+                var tier = record.getTier(item.getTierName());
+                var attrs = insertTier(recordIndex, tier, item, recordAttrs);
                 appendBatchLineFeed(attrs);
             }
             processBatchUpdates(offset);
@@ -1131,10 +1312,12 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
     private void addTierToRecord(int recordIndex, List<TierViewItem> addedTiers) {
         int offset = getRecordEnd(recordIndex);
+        Record record = session.getRecord(recordIndex);
         try {
             appendBatchEndStart();
             for (TierViewItem item : addedTiers) {
-                var attrs = insertTier(recordIndex, item, getRecordAttributes(recordIndex));
+                var tier = record.getTier(item.getTierName());
+                var attrs = insertTier(recordIndex, tier, item, getRecordAttributes(recordIndex));
                 appendBatchLineFeed(attrs);
             }
             processBatchUpdates(offset);
@@ -1271,7 +1454,9 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 }
 
                 appendBatchEndStart();
-                insertTier(recordIndex, item, recordAttrs);
+                var tier = record.getTier(item.getTierName());
+                var attrs = insertTier(recordIndex, tier, item, recordAttrs);
+                appendBatchLineFeed(attrs);
                 processBatchUpdates(offset);
                 setGlobalParagraphAttributes();
             }
@@ -1309,7 +1494,8 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 remove(tierStartOffset, tierEndOffset - tierStartOffset);
 
                 appendBatchEndStart();
-                var attrs = insertTier(recordIndex, item, recordAttrs);
+                var tier = record.getTier(item.getTierName());
+                var attrs = insertTier(recordIndex, tier, item, recordAttrs);
                 appendBatchLineFeed(attrs);
                 processBatchUpdates(tierStartOffset);
                 setGlobalParagraphAttributes();
@@ -1349,7 +1535,8 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 remove(tierStartOffset, tierEndOffset - tierStartOffset);
 
                 appendBatchEndStart();
-                var attrs = insertTier(recordIndex, newTier, recordAttrs);
+                var tier = record.getTier(newTier.getTierName());
+                var attrs = insertTier(recordIndex, tier, newTier, recordAttrs);
                 appendBatchLineFeed(attrs);
                 processBatchUpdates(tierStartOffset);
                 setGlobalParagraphAttributes();
@@ -1502,7 +1689,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
             appendBatchEndStart();
 
-            SimpleAttributeSet attrs = insertTier(recordIndex, tierViewItem, getRecordAttributes(recordIndex));
+            SimpleAttributeSet attrs = insertTier(recordIndex, tier, tierViewItem, getRecordAttributes(recordIndex));
 
             appendBatchLineFeed(attrs);
 
@@ -1746,18 +1933,9 @@ public class TranscriptDocument extends DefaultStyledDocument {
         setParagraphAttributes(0, getLength(), paragraphAttrs, false);
     }
 
-    private SimpleAttributeSet insertTier(int recordIndex, TierViewItem tierViewItem, AttributeSet recordAttrs) {
+    private SimpleAttributeSet insertTier(int recordIndex, Tier<?> tier, TierViewItem tierViewItem, AttributeSet recordAttrs) {
         String tierName = tierViewItem.getTierName();
         Record record = session.getRecord(recordIndex);
-        Tier<?> tier = record.getTier(tierName);
-        if (tier == null) {
-            Optional<TierDescription> td = session
-                .getUserTiers()
-                .stream()
-                .filter(item -> item.getName().equals(tierName))
-                .findFirst();
-            tier = sessionFactory.createTier(td.get());
-        }
 
         SimpleAttributeSet tierAttrs = getTierAttributes(tier, tierViewItem);
         if (recordAttrs != null) {
@@ -1787,7 +1965,9 @@ public class TranscriptDocument extends DefaultStyledDocument {
         labelAttrs.removeAttribute("clickable");
         appendBatchString(": ", labelAttrs);
 
-        if (tierName.equals("IPA Target")) {
+        Class<?> tierType = tier.getDeclaredType();
+
+        if (tierType.equals(IPATranscript.class)) {
             Tier<IPATranscript> ipaTier = (Tier<IPATranscript>)tier;
             List<IPATranscript> words = (ipaTier).getValue().words();
             for (int i = 0; i < words.size(); i++) {
@@ -1808,7 +1988,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
                     appendBatchString(" ", tierAttrs);
                 }
             }
-            if (syllabificationVisible) {
+            if (tierName.equals("IPA Target") && syllabificationVisible) {
                 // Add a newline at the end of the regular tier content
                 appendBatchLineFeed(tierAttrs);
                 // Create a dummy tier for the syllabification
@@ -1836,30 +2016,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 // Append the content
                 appendBatchString(ipaTargetContent, tierAttrs);
             }
-        }
-        else if (tierName.equals("IPA Actual")) {
-            Tier<IPATranscript> ipaTier = (Tier<IPATranscript>)tier;
-            List<IPATranscript> words = (ipaTier).getValue().words();
-            for (int i = 0; i < words.size(); i++) {
-                var word = words.get(i);
-                SimpleAttributeSet attrs;
-                if (word.matches("\\P")) {
-                    // Pause
-                    attrs = getIPAPauseAttributes(ipaTier);
-                }
-                else {
-                    // Word
-                    attrs = getIPAWordAttributes(ipaTier);
-                }
-                attrs.addAttributes(tierAttrs);
-                String content = word.toString();
-                appendBatchString(content, attrs);
-
-                if (i < words.size() - 1) {
-                    appendBatchString(" ", tierAttrs);
-                }
-            }
-            if (syllabificationVisible) {
+            else if (tierName.equals("IPA Actual") && syllabificationVisible) {
                 // Add a newline at the end of the regular tier content
                 appendBatchLineFeed(tierAttrs);
                 // Create a dummy tier for the syllabification
@@ -1888,16 +2045,40 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 appendBatchString(ipaActualContent, tierAttrs);
             }
         }
-        else if (tierName.equals("Segment")) {
+        else if (tierType.equals(MediaSegment.class)) {
             MediaSegment segment = record.getMediaSegment();
             formatSegment(segment, tierAttrs);
         }
-        else if (tierName.equals("Orthography")) {
+        else if (tierType.equals(Orthography.class)) {
             Tier<Orthography> orthographyTier = (Tier<Orthography>) tier;
             orthographyTier.getValue().accept(new TranscriptOrthographyVisitors.KeywordVisitor(this, tierAttrs));
             //appendBatchString(tierContent, tierAttrs);
         }
-        else {
+        else if (tierType.equals(MorTierData.class)) {
+            Tier<MorTierData> morTier = (Tier<MorTierData>) tier;
+            MorTierData mors = morTier.getValue();
+
+            for (int i = 0; i < mors.size(); i++) {
+                Mor mor = mors.get(i);
+                appendBatchString(mor.toString(), tierAttrs);
+                if (i < mors.size() - 1) {
+                    appendBatchString(" ", tierAttrs);
+                }
+            }
+        }
+        else if (tierType.equals(GraspTierData.class)) {
+            Tier<GraspTierData> graspTier = (Tier<GraspTierData>) tier;
+            GraspTierData grasps = graspTier.getValue();
+
+            for (int i = 0; i < grasps.size(); i++) {
+                Grasp grasp = grasps.get(i);
+                appendBatchString(grasp.toString(), tierAttrs);
+                if (i < grasps.size() - 1) {
+                    appendBatchString(" ", tierAttrs);
+                }
+            }
+        }
+        else if (tierType.equals(TierData.class))  {
             Tier<TierData> userTier = (Tier<TierData>) tier;
             TierData tierData = userTier.getValue();
             if (tierData != null) {

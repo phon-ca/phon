@@ -47,6 +47,7 @@ public class AddTranscriptElementEdit extends SessionUndoableEdit {
             final EditorEvent<EditorEventType.GemDeletedData> gemDeletedEvt =
                     new EditorEvent<>(EditorEventType.GemDeleted, getSource(),
                             new EditorEventType.GemDeletedData(this.element.asGem(), this.elementIndex));
+            getEditorEventManager().queueEvent(gemDeletedEvt);
         } else if(this.element.isRecord()) {
             final EditorEvent<EditorEventType.RecordAddedData> recordAddedEvt =
                     new EditorEvent<>(EditorEventType.RecordAdded, getSource(),
@@ -70,6 +71,7 @@ public class AddTranscriptElementEdit extends SessionUndoableEdit {
             final EditorEvent<EditorEventType.GemAddedData> gemAddedEvt =
                     new EditorEvent<>(EditorEventType.GemAdded, getSource(),
                             new EditorEventType.GemAddedData(this.element.asGem(), this.elementIndex));
+            getEditorEventManager().queueEvent(gemAddedEvt);
         } else if(this.element.isRecord()) {
             final EditorEvent<EditorEventType.RecordAddedData> recordAddedEvt =
                     new EditorEvent<>(EditorEventType.RecordAdded, getSource(),

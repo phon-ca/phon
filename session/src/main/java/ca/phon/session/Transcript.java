@@ -25,7 +25,7 @@ public final class Transcript extends ExtendableObject implements Iterable<Trans
         final Record record;
         final Gem gem;
 
-        Element(Comment comment) {
+        public Element(Comment comment) {
             this.comment = comment;
             this.record = null;
             this.gem = null;
@@ -37,7 +37,7 @@ public final class Transcript extends ExtendableObject implements Iterable<Trans
             this.gem = null;
         }
 
-        Element(Gem gem) {
+        public Element(Gem gem) {
             this.record = null;
             this.comment = null;
             this.gem = gem;
