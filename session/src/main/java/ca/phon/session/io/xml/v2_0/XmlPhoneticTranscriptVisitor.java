@@ -19,8 +19,17 @@ public class XmlPhoneticTranscriptVisitor extends VisitorAdapter<Object> {
     final IPAElementFactory factory = new IPAElementFactory();
 
     @Visits
+    public void visitPhog(XmlPhoGroupType phog) {
+        builder.appendPgStart();
+        for(Object pwOrPause:phog.getPwOrPause()) {
+            visit(pwOrPause);
+        }
+        builder.appendPgEnd();
+    }
+
+    @Visits
     public void visitPw(XmlPhoneticWord pw) {
-        if(builder.size() > 0)
+        if(builder.size() > 0 && !(builder.last() instanceof PhoneticGroupMarker pgm && pgm.getType() == PhoneticGroupMarkerType.BEGIN))
             builder.appendWordBoundary();
         pw.getStressOrPhOrCmph().forEach(this::visit);
     }
@@ -139,7 +148,7 @@ public class XmlPhoneticTranscriptVisitor extends VisitorAdapter<Object> {
 
     @Visits
     public void visitPause(XmlPauseType pause) {
-        if(builder.size() > 0)
+        if(builder.size() > 0 && !(builder.last() instanceof PhoneticGroupMarker pgm && pgm.getType() == PhoneticGroupMarkerType.BEGIN))
             builder.appendWordBoundary();
         if(pause.getSymbolicLength() != null) {
             PauseLength len = switch (pause.getSymbolicLength()) {

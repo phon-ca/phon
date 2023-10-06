@@ -74,6 +74,10 @@
             <xs:enumeration value="BACKSLASH"/>
             <xs:enumeration value="GROUP_NAME"/>
             <xs:enumeration value="DIGIT"/>
+
+            <!-- phonetic groups -->
+            <xs:enumeration value="PG_START"/>
+            <xs:enumeration value="PG_END"/>
             
             <!-- denotes syllable constituent type -->
             <xs:enumeration value="COLON"/>

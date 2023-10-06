@@ -666,7 +666,7 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 
 	public IPATranscript readTranscript(XmlPhoneticTranscriptionType pho) {
 		final XmlPhoneticTranscriptVisitor visitor = new XmlPhoneticTranscriptVisitor();
-		pho.getPwOrPause().forEach(visitor::visit);
+		pho.getPwOrPauseOrPhog().forEach(visitor::visit);
 		try {
 			return visitor.toIPATranscript();
 		} catch (ParseException pe) {

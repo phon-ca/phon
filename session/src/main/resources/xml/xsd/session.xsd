@@ -1047,6 +1047,7 @@
         <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:element ref="pw"/>
             <xs:element ref="pause"/>
+            <xs:element ref="phog"/>
         </xs:choice>
     </xs:complexType>
 
@@ -1061,6 +1062,18 @@
             <xs:element ref="cmph"/>
             <xs:element ref="pp"/>
             <xs:element ref="sandhi"/>
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:element name="phog" type="phoGroupType"/>
+    <xs:complexType name="phoGroupType" mixed="false">
+        <xs:annotation>
+            <xs:documentation>A collection of phonetic words enclosed by &#x2039; and &#x203a;. Used for one to many
+            alignment between the main line and ipa.</xs:documentation>
+        </xs:annotation>
+        <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element ref="pw"/>
+            <xs:element ref="pause"/>
         </xs:choice>
     </xs:complexType>
     

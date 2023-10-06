@@ -389,6 +389,15 @@ public class TestIPAParser {
 		Assert.assertEquals("d", ipa.elementAt(2).toString());
 		Assert.assertEquals("a⁰", ipa.elementAt(3).toString());
 	}
+
+	@Test
+	public void testPg() throws Exception {
+		final String txt = "‹se le›";
+		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
+
+		Assert.assertEquals(7, ipa.length());
+		Assert.assertEquals(PhoneticGroupMarker.class, ipa.elementAt(0).getClass());
+	}
 	
 	@Test(expected=ParseException.class)
 	public void testInvalidConsitutentType() throws Exception {

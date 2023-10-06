@@ -89,6 +89,16 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 	}
 
 	@Override
+	public void enterPhonetic_group(Phonetic_groupContext ctx) {
+		builder.appendPgStart();
+	}
+
+	@Override
+	public void exitPhonetic_group(Phonetic_groupContext ctx) {
+		builder.appendPgEnd();
+	}
+
+	@Override
 	public void exitPrimaryStress(PrimaryStressContext ctx) {
 		if(builder.size() > 0) {
 			if (builder.last() instanceof SyllableBoundary

@@ -21,14 +21,20 @@ import ca.phon.visitor.annotation.Visits;
 import java.util.*;
 
 /**
- * Breaks a transcript into individual words.
+ * Breaks a transcript into individual words or phonetic groups.
  */
 public class WordVisitor extends VisitorAdapter<IPAElement> {
 
 	/**
-	 * list of detected syllables
+	 * list of words or phonetic groups
 	 */
-	private final List<IPATranscript> words = new ArrayList<IPATranscript>();
+	private final Stack<List<IPATranscript>> wordListStack;
+
+	public WordVisitor() {
+		super();
+		this.wordListStack = new Stack<>();
+		this.wordListStack.push(new ArrayList<>());
+	}
 	
 	/**
 	 * current syllable
@@ -45,21 +51,46 @@ public class WordVisitor extends VisitorAdapter<IPAElement> {
 	public void visitWordBoundary(WordBoundary wb) {
 		breakWord();
 	}
-	
+
+	@Visits
+	public void visitPgMarker(PhoneticGroupMarker pgm) {
+		if(pgm.getType() == PhoneticGroupMarkerType.BEGIN) {
+			wordListStack.push(new ArrayList<>());
+			this.currentWordBuilder.appendPgStart();
+		} else {
+			this.currentWordBuilder.appendPgEnd();
+			breakWord();
+			popPhoneticGroup();
+		}
+	}
+
+	private void popPhoneticGroup() {
+		final IPATranscriptBuilder builder = new IPATranscriptBuilder();
+		final List<IPATranscript> pgStack = wordListStack.pop();
+		for(IPATranscript pgWord:pgStack) {
+			if(builder.size() > 0) builder.appendWordBoundary();
+			builder.append(pgWord);
+		}
+		wordListStack.peek().add(builder.toIPATranscript());
+	}
+
 	private void appendWord(IPAElement e) {
 		currentWordBuilder.append(e);
 	}
 	
 	private void breakWord() {
 		if(currentWordBuilder.toIPATranscript().length() > 0) {
-			words.add(currentWordBuilder.toIPATranscript());
+			wordListStack.peek().add(currentWordBuilder.toIPATranscript());
 			currentWordBuilder = new IPATranscriptBuilder();
 		}
 	}
 	
 	public List<IPATranscript> getWords() {
 		breakWord();
-		return this.words;
+		while(wordListStack.size() > 1) {
+			popPhoneticGroup();
+		}
+		return this.wordListStack.peek();
 	}
 	
 }

@@ -300,6 +300,30 @@ public class IPATranscriptBuilder {
 	}
 
 	/**
+	 * Append phonetic group marker start
+	 *
+	 * @return this
+	 */
+	public IPATranscriptBuilder appendPgStart() {
+		return appendPg(PhoneticGroupMarkerType.BEGIN);
+	}
+
+	/**
+	 * Append phonetic group marker end
+	 *
+	 * @return this
+	 */
+	public IPATranscriptBuilder appendPgEnd() {
+		return appendPg(PhoneticGroupMarkerType.END);
+	}
+
+	public IPATranscriptBuilder appendPg(PhoneticGroupMarkerType type) {
+		buffer.add(new PhoneticGroupMarker(type));
+		return this;
+	}
+
+
+	/**
 	 * Return the {@link IPATranscript} object
 	 * 
 	 * @return ipa

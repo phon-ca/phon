@@ -41,6 +41,8 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 	
 	private XmlPhoneticTranscriptionType pho;
 
+	private XmlPhoGroupType phoGroup;
+
 	private XmlPhoneticWord currentWord;
 
 	private int currentIndex = 0;
@@ -180,18 +182,23 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 		} else {
 			p.setLength(BigDecimal.valueOf(pause.getLength()).setScale(3, RoundingMode.HALF_UP));
 		}
-		if(this.currentWord.getStressOrPhOrCmph().size() > 0) {
-			this.pho.getPwOrPause().add(this.currentWord);
-			this.currentWord = factory.createXmlPhoneticWord();
-		}
-		this.pho.getPwOrPause().add(p);
+		addCurrentWord();
+		this.pho.getPwOrPauseOrPhog().add(p);
 	}
 
 	@Visits
 	public void visitWordBoundary(WordBoundary wb) {
-		if(this.currentWord.getStressOrPhOrCmph().size() > 0) {
-			this.pho.getPwOrPause().add(this.currentWord);
-			this.currentWord = factory.createXmlPhoneticWord();
+		addCurrentWord();
+	}
+
+	@Visits
+	public void visitPhoneticGroupMarker(PhoneticGroupMarker pgm) {
+		if(pgm.getType() == PhoneticGroupMarkerType.BEGIN) {
+			this.phoGroup = factory.createXmlPhoGroupType();
+		} else {
+			if(this.phoGroup != null && !this.phoGroup.getPwOrPause().isEmpty()) {
+				this.pho.getPwOrPauseOrPhog().add(phoGroup);
+			}
 		}
 	}
 
@@ -199,10 +206,19 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 	public void fallbackVisit(IPAElement obj) {
 	}
 
-	public XmlPhoneticTranscriptionType getPho() {
-		if(this.currentWord.getStressOrPhOrCmph().size() > 0) {
-			this.pho.getPwOrPause().add(this.currentWord);
+	private void addCurrentWord() {
+		if(!this.currentWord.getStressOrPhOrCmph().isEmpty()) {
+			if(this.phoGroup != null) {
+				this.phoGroup.getPwOrPause().add(this.currentWord);
+			} else {
+				this.pho.getPwOrPauseOrPhog().add(this.currentWord);
+			}
+			this.currentWord = factory.createXmlPhoneticWord();
 		}
+	}
+
+	public XmlPhoneticTranscriptionType getPho() {
+		addCurrentWord();
 		return this.pho;
 	}
 

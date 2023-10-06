@@ -33,6 +33,7 @@ transcription
 	: transcription word_boundary transcription
 	| word
 	| pause
+	| phonetic_group
 	;
 
 word_boundary
@@ -43,6 +44,10 @@ word
 	: word compound_word_marker word    # CompoundWord
 	| ipa_element+                      # SimpleWord
 	;
+
+phonetic_group
+    : PG_START transcription PG_END
+    ;
 
 ipa_element
 	: stress
@@ -158,4 +163,12 @@ alignment
 
 INT
     :   [0-9]
+    ;
+
+PG_START
+    :   '\u2039'
+    ;
+
+PG_END
+    :   '\u203a'
     ;
