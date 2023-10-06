@@ -1062,6 +1062,10 @@
     <feature_set char=" ">punctuation</feature_set>
     <!--‿ (0x203f)-->
     <feature_set char="‿">punctuation sandhi</feature_set>
+    <!-- &#x2039; -->
+    <feature_set char="‹">punctuation</feature_set>
+    <!-- &#x203a; -->
+    <feature_set char="›">punctuation</feature_set>
     <!--⁀ (0x2040)-->
     <feature_set char="⁀">punctuation</feature_set>
     <!--̣ (0x323)-->

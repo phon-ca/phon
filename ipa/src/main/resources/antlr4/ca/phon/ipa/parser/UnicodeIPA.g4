@@ -30,8 +30,12 @@ start
 	;
 
 transcription 
-	: transcription word_boundary transcription
-	| word
+	: transcription word_boundary transcriptele
+	| transcriptele
+	;
+
+transcriptele
+	: word
 	| pause
 	| phonetic_group
 	;
@@ -165,10 +169,6 @@ INT
     :   [0-9]
     ;
 
-PG_START
-    :   '\u2039'
-    ;
-
-PG_END
-    :   '\u203a'
+COLON
+    :   ':'
     ;

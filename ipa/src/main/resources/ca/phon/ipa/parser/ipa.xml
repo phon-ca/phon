@@ -94,14 +94,14 @@
         <name>Left Right Arrow</name>
         <token>ALIGNMENT</token>
     </char>
-<!--    <char value="&#x2039;">-->
-<!--        <name>Single Left-Pointing Angle Quotation Mark</name>-->
-<!--        <token>PG_START</token>-->
-<!--    </char>-->
-<!--    <char value="&#x203a;">-->
-<!--        <name>Single Right-Pointing Angle Quotation Mark</name>-->
-<!--        <token>PG_END</token>-->
-<!--    </char>-->
+    <char value="&#x2039;">
+        <name>Single Left-Pointing Angle Quotation Mark</name>
+        <token>PG_START</token>
+    </char>
+    <char value="&#x203a;">
+        <name>Single Right-Pointing Angle Quotation Mark</name>
+        <token>PG_END</token>
+    </char>
     <char value="&#x01c3;">
         <name>Latin Letter Retroflex Click</name>
         <token>CONSONANT</token>

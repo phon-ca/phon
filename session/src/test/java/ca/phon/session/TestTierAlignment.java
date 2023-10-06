@@ -39,7 +39,7 @@ public class TestTierAlignment {
         final Tier<Orthography> tier1 = testRecord.getOrthographyTier();
         final Tier<Orthography> tier2 = testRecord.getTier("Test2", Orthography.class);
         var alignment = TierAligner.alignTiers(tier1, tier2);
-        Assert.assertEquals(3, alignment.length());
+        Assert.assertEquals(4, alignment.length());
         Assert.assertEquals("hello", alignment.getAlignedElements().get(0).getObj1().toString());
         Assert.assertEquals("goodbye", alignment.getAlignedElements().get(0).getObj2().toString());
         Assert.assertEquals("(.)", alignment.getAlignedElements().get(1).getObj1().toString());

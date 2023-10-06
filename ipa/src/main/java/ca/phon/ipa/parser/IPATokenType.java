@@ -48,6 +48,8 @@ public enum IPATokenType {
     TONE_NUMBER("Tone Number"),
     VOWEL("Vowel"),
     COLON("Colon"),
+	PG_START("Pg start"),
+	PG_END("Pg end"),
     SCTYPE("Syllable ConstituentType"),
     SANDHI("Sandhi"),
     BACKSLASH("Backslash"),
