@@ -14,6 +14,7 @@ import ca.phon.session.tierdata.*;
 import ca.phon.ui.FontFormatter;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.Language;
+import ca.phon.util.PrefHelper;
 import ca.phon.util.Tuple;
 
 import javax.swing.*;
@@ -185,7 +186,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         var font = Font.decode(fontString);
 
         StyleConstants.setFontFamily(retVal, font.getFamily());
-        StyleConstants.setFontSize(retVal, font.getSize());
+        StyleConstants.setFontSize(retVal, font.getSize() + (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
         StyleConstants.setBold(retVal, font.isBold());
         StyleConstants.setItalic(retVal, font.isItalic());
 
@@ -358,7 +359,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
         Font font = FontPreferences.getTierFont();
         StyleConstants.setFontFamily(retVal, font.getFamily());
-        StyleConstants.setFontSize(retVal, 14);
+        StyleConstants.setFontSize(retVal, 14 + (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
         StyleConstants.setBold(retVal, font.isBold());
         StyleConstants.setItalic(retVal, font.isItalic());
 

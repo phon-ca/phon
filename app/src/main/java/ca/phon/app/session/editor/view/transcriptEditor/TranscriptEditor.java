@@ -649,7 +649,7 @@ public class TranscriptEditor extends JEditorPane {
         Document blank = getEditorKit().createDefaultDocument();
         setDocument(blank);
         // Add tier in doc
-        doc.addTier(addedTiers);
+        doc.showTier(addedTiers, data.newTierView());
         setDocument(doc);
 
         // Correct caret
@@ -940,9 +940,19 @@ public class TranscriptEditor extends JEditorPane {
     }
 
     private void onTierDataChanged(EditorEvent<EditorEventType.TierChangeData> editorEvent) {
+        TranscriptDocument doc = getTranscriptDocument();
+
+        var caretStartAttrs = doc.getCharacterElement(getCaretPosition()).getAttributes();
+        Tier<?> caretStartTier = (Tier<?>) caretStartAttrs.getAttribute("tier");
+        int offset = doc.getOffsetInContent(getCaretPosition());
+
         var data = editorEvent.data();
         // Update the changed tier data in the doc
         getTranscriptDocument().onTierDataChanged(data.tier());
+
+        if (caretStartTier == null) return;
+
+        setCaretPosition(doc.getTierStart(caretStartTier) + offset);
     }
 
     // endregion Record Changes
@@ -950,7 +960,7 @@ public class TranscriptEditor extends JEditorPane {
 
     // region On Click
 
-    private void onClickTierLabel(Point2D point) {
+    private void onClickTierLabel(Point2D point, Tier<?> tier, int recordIndex) {
         // Build a new popup menu
         JPopupMenu menu = new JPopupMenu();
         MenuBuilder builder = new MenuBuilder(menu);
@@ -959,7 +969,7 @@ public class TranscriptEditor extends JEditorPane {
 
         for (var extPt : extPts) {
             var menuHandler = extPt.getFactory().createObject();
-            menuHandler.addMenuItems(builder);
+            menuHandler.addMenuItems(builder, session, eventManager, undoSupport, tier, recordIndex);
         }
 
         // Show it where the user clicked
@@ -967,8 +977,6 @@ public class TranscriptEditor extends JEditorPane {
     }
 
     private void onClickCommentLabel(Point2D point, Comment comment) {
-        int clickedElementIndex = session.getTranscript().getElementIndex(comment);
-
         // Build a new popup menu
         JPopupMenu menu = new JPopupMenu();
 
@@ -1005,7 +1013,6 @@ public class TranscriptEditor extends JEditorPane {
     }
 
     private void onClickGemLabel(Point2D point, Gem gem) {
-        int clickedElementIndex = session.getTranscript().getElementIndex(gem);
         // Build a new popup menu
         JPopupMenu menu = new JPopupMenu();
 
@@ -1717,7 +1724,13 @@ public class TranscriptEditor extends JEditorPane {
 
                     if (attrs.getAttribute("clickable") != null) {
                         switch (elementType) {
-                            case "record" -> onClickTierLabel(e.getPoint());
+                            case "record" -> {
+                                Tier<?> tier = (Tier<?>) attrs.getAttribute("tier");
+                                Integer recordIndex = (Integer) attrs.getAttribute("recordIndex");
+                                if (tier != null && recordIndex != null) {
+                                    onClickTierLabel(e.getPoint(), tier, recordIndex);
+                                }
+                            }
                             case "comment" -> onClickCommentLabel(e.getPoint(), (Comment) attrs.getAttribute("comment"));
                             case "gem" -> onClickGemLabel(e.getPoint(), (Gem) attrs.getAttribute("gem"));
                         }
