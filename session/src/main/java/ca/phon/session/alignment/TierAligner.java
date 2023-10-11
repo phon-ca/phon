@@ -46,6 +46,16 @@ public final class TierAligner {
     }
 
     /**
+     * Calculates cross tier alignment for all tiers against the Orthography tier
+     *
+     * @param record
+     * @return cross tier alignment for record against Orthography
+     */
+    public static CrossTierAlignment calculateCrossTierAlignment(Record record) {
+        return calculateCrossTierAlignment(record, record.getOrthographyTier());
+    }
+
+    /**
      * Calculate cross tier alignment for all tiers which align by type
      *
      * @param record

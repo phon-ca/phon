@@ -15,6 +15,8 @@
  */
 package ca.phon.session.io.xml.v2_0;
 
+import ca.phon.orthography.mor.Grasp;
+import ca.phon.orthography.mor.GraspTierData;
 import ca.phon.orthography.mor.Pos;
 import ca.phon.orthography.*;
 import ca.phon.orthography.Action;
@@ -33,13 +35,19 @@ import ca.phon.orthography.Replacement;
 import ca.phon.orthography.TagMarker;
 import ca.phon.orthography.ToneMarker;
 import ca.phon.orthography.Underline;
+import ca.phon.session.UserTierType;
+import ca.phon.session.io.xml.OneToOne;
 import ca.phon.session.io.xml.v2_0.*;
 import ca.phon.util.Language;
 import ca.phon.visitor.annotation.Visits;
 
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -176,7 +184,65 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 			w.getContent().add(factory.createReplacement(xmlReplacement));
 		}
 
+		final OneToOne oneToOne = word.getExtension(OneToOne.class);
+		if(oneToOne != null) {
+			final List<XmlMorType> morTiers = writeMorTierData(oneToOne);
+			for(XmlMorType mor:morTiers) {
+				w.getContent().add(factory.createMor(mor));
+			}
+		}
+
 		u.getWOrGOrPg().add(w);
+	}
+
+	private List<XmlMorType> writeMorTierData(OneToOne oneToOne) {
+		List<XmlMorType> retVal = new ArrayList<>();
+		for(String tierName:oneToOne.getMorTierData().keySet()) {
+			final UserTierType userTierType = UserTierType.fromPhonTierName(tierName);
+			if(userTierType == null) continue;
+			final String type = userTierType.getChatTierName().substring(1);
+			final XmlSessionWriterV2_0 writer = new XmlSessionWriterV2_0();
+			final XmlMorType xmlMorType = writer.writeMor(new ObjectFactory(), oneToOne.getMorTierData().get(tierName), type);
+			retVal.add(xmlMorType);
+
+			// check for grasp data
+			if(userTierType == UserTierType.Mor) {
+				final GraspTierData grasp = oneToOne.getGraspTierData().get(UserTierType.Gra.getTierName());
+				if(grasp != null) {
+					writeGraspTierData(writer, xmlMorType, grasp);
+				}
+			} else if(userTierType == UserTierType.Trn) {
+				final GraspTierData grasp = oneToOne.getGraspTierData().get(UserTierType.Grt.getTierName());
+				if(grasp != null) {
+					writeGraspTierData(writer, xmlMorType, grasp);
+				}
+			}
+		}
+		return retVal;
+	}
+
+	private void writeGraspTierData(XmlSessionWriterV2_0 writer, XmlMorType xmlMorType, GraspTierData grasp) {
+		int graIdx = 0;
+		for(XmlMorphemicBaseType morPre:xmlMorType.getMorPre()) {
+			if(graIdx >= grasp.size()) break;
+			final Grasp gra = grasp.get(graIdx++);
+			final XmlGraType graType = writer.writeGra(new ObjectFactory(), gra,
+					UserTierType.Gra.getChatTierName().substring(1));
+			morPre.getGra().add(graType);
+		}
+		if(graIdx < grasp.size()) {
+			final Grasp gra = grasp.get(graIdx++);
+			final XmlGraType graType = writer.writeGra(new ObjectFactory(), gra,
+					UserTierType.Gra.getChatTierName().substring(1));
+			xmlMorType.getGra().add(graType);
+			for (XmlMorphemicBaseType morPost : xmlMorType.getMorPost()) {
+				if (graIdx >= grasp.size()) break;
+				final Grasp gra1 = grasp.get(graIdx++);
+				final XmlGraType graType1 = writer.writeGra(new ObjectFactory(), gra1,
+						UserTierType.Gra.getChatTierName().substring(1));
+				morPost.getGra().add(graType1);
+			}
+		}
 	}
 
 	@Override
@@ -227,6 +293,15 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 			case END -> XmlBeginEndType.END;
 		};
 		xmlQuotation.setType(beginEnd);
+
+		final OneToOne oneToOne = quotation.getExtension(OneToOne.class);
+		if(oneToOne != null) {
+			final List<XmlMorType> morTiers = writeMorTierData(oneToOne);
+			for(XmlMorType mor:morTiers) {
+				xmlQuotation.getMor().add(mor);
+			}
+		}
+
 		u.getWOrGOrPg().add(xmlQuotation);
 	}
 
@@ -345,6 +420,15 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 			case VOCATIVE -> XmlTagMarkerTypeType.VOCATIVE;
 		};
 		xmlTagMarker.setType(type);
+
+		final OneToOne oneToOne = tagMarker.getExtension(OneToOne.class);
+		if(oneToOne != null) {
+			final List<XmlMorType> morTiers = writeMorTierData(oneToOne);
+			for(XmlMorType mor:morTiers) {
+				xmlTagMarker.getMor().add(mor);
+			}
+		}
+
 		u.getWOrGOrPg().add(xmlTagMarker);
 	}
 
@@ -440,6 +524,15 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 			case TRAIL_OFF_QUESTION -> XmlTerminatorType.TRAIL_OFF_QUESTION;
 		};
 		xmlT.setType(type);
+
+		final OneToOne oneToOne = terminator.getExtension(OneToOne.class);
+		if(oneToOne != null) {
+			final List<XmlMorType> morTiers = writeMorTierData(oneToOne);
+			for(XmlMorType mor:morTiers) {
+				xmlT.getMor().add(mor);
+			}
+		}
+
 		u.setT(xmlT);
 	}
 
