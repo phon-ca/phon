@@ -266,7 +266,6 @@ public final class XMLFragments {
         XmlSessionReaderV2_0 xmlReader = (XmlSessionReaderV2_0) (new SessionInputFactory()).createReader(XmlSessionReaderV2_0.class.getAnnotation(SessionIO.class));
         return xmlReader.readGra(SessionFactory.newFactory(), gra);
     }
-
     // endregion xml -> Object
 
 }

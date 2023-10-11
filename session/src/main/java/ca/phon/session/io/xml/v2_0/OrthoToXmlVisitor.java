@@ -209,37 +209,34 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 			if(userTierType == UserTierType.Mor) {
 				final GraspTierData grasp = oneToOne.getGraspTierData().get(UserTierType.Gra.getTierName());
 				if(grasp != null) {
-					writeGraspTierData(writer, xmlMorType, grasp);
+					writeGraspTierData(writer, xmlMorType, grasp, UserTierType.Gra.getChatTierName().substring(1));
 				}
 			} else if(userTierType == UserTierType.Trn) {
 				final GraspTierData grasp = oneToOne.getGraspTierData().get(UserTierType.Grt.getTierName());
 				if(grasp != null) {
-					writeGraspTierData(writer, xmlMorType, grasp);
+					writeGraspTierData(writer, xmlMorType, grasp, UserTierType.Grt.getChatTierName().substring(1));
 				}
 			}
 		}
 		return retVal;
 	}
 
-	private void writeGraspTierData(XmlSessionWriterV2_0 writer, XmlMorType xmlMorType, GraspTierData grasp) {
+	private void writeGraspTierData(XmlSessionWriterV2_0 writer, XmlMorType xmlMorType, GraspTierData grasp, String type) {
 		int graIdx = 0;
 		for(XmlMorphemicBaseType morPre:xmlMorType.getMorPre()) {
 			if(graIdx >= grasp.size()) break;
 			final Grasp gra = grasp.get(graIdx++);
-			final XmlGraType graType = writer.writeGra(new ObjectFactory(), gra,
-					UserTierType.Gra.getChatTierName().substring(1));
+			final XmlGraType graType = writer.writeGra(new ObjectFactory(), gra, type);
 			morPre.getGra().add(graType);
 		}
 		if(graIdx < grasp.size()) {
 			final Grasp gra = grasp.get(graIdx++);
-			final XmlGraType graType = writer.writeGra(new ObjectFactory(), gra,
-					UserTierType.Gra.getChatTierName().substring(1));
+			final XmlGraType graType = writer.writeGra(new ObjectFactory(), gra, type);
 			xmlMorType.getGra().add(graType);
 			for (XmlMorphemicBaseType morPost : xmlMorType.getMorPost()) {
 				if (graIdx >= grasp.size()) break;
 				final Grasp gra1 = grasp.get(graIdx++);
-				final XmlGraType graType1 = writer.writeGra(new ObjectFactory(), gra1,
-						UserTierType.Gra.getChatTierName().substring(1));
+				final XmlGraType graType1 = writer.writeGra(new ObjectFactory(), gra1, type);
 				morPost.getGra().add(graType1);
 			}
 		}

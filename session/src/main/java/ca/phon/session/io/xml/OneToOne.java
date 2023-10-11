@@ -6,9 +6,11 @@ import ca.phon.orthography.mor.Grasp;
 import ca.phon.orthography.mor.GraspTierData;
 import ca.phon.orthography.mor.Mor;
 import ca.phon.session.Record;
+import ca.phon.session.SystemTierType;
 import ca.phon.session.UserTierType;
 import ca.phon.session.alignment.CrossTierAlignment;
 import ca.phon.session.alignment.TierAligner;
+import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
 import java.util.Collections;
@@ -59,7 +61,7 @@ public class OneToOne {
         record.getOrthographyTier().getValue().accept(annotator);
     }
 
-    public static class OrthographyAnnotator extends AbstractOrthographyVisitor {
+    public static class OrthographyAnnotator extends VisitorAdapter<OrthographyElement> {
 
         private final CrossTierAlignment xTierAlignment;
 
@@ -82,6 +84,17 @@ public class OneToOne {
                 final GraspTierData grasp = (GraspTierData) alignedElements.get(UserTierType.Gra.getTierName());
                 graMap.put(UserTierType.Gra.getTierName(), grasp);
             }
+            if(alignedElements.containsKey(UserTierType.Trn.getTierName())) {
+                final Mor mor = (Mor)alignedElements.get(UserTierType.Trn.getTierName());
+                morMap.put(UserTierType.Trn.getTierName(), mor);
+            }
+            if(alignedElements.containsKey(UserTierType.Grt.getTierName())) {
+                final GraspTierData grasp = (GraspTierData) alignedElements.get(UserTierType.Grt.getTierName());
+                graMap.put(UserTierType.Grt.getTierName(), grasp);
+            }
+            // ipa tiers
+
+
             if(!morMap.isEmpty() || !graMap.isEmpty() || ipaMap.size() > 0) {
                 final OneToOne oneToOne = new OneToOne(morMap, graMap, ipaMap);
                 orthographyElement.putExtension(OneToOne.class, oneToOne);
@@ -89,7 +102,6 @@ public class OneToOne {
         }
 
         @Visits
-        @Override
         public void visitWord(Word word) {
             visitAlignableElement(word);
 
@@ -101,13 +113,11 @@ public class OneToOne {
         }
 
         @Visits
-        @Override
         public void visitOrthoGroup(OrthoGroup group) {
             group.getElements().forEach(this::visit);
         }
 
         @Visits
-        @Override
         public void visitPhoneticGroup(PhoneticGroup phoneticGroup) {
             visitAlignableElement(phoneticGroup);
             phoneticGroup.getElements().forEach(this::visit);
