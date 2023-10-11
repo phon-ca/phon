@@ -30,6 +30,7 @@ import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionWriter;
+import ca.phon.session.io.xml.SessionXMLStreamWriter;
 import ca.phon.session.io.xml.v2_0.*;
 import ca.phon.session.tierdata.*;
 import ca.phon.util.Language;
@@ -41,6 +42,10 @@ import jakarta.xml.bind.Marshaller;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.xml.datatype.*;
+import javax.xml.namespace.NamespaceContext;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
@@ -50,6 +55,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 
 @XMLSerial(
@@ -761,11 +767,30 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 		try {
 			final JAXBContext context = JAXBContext.newInstance(ObjectFactory.class);
 			final Marshaller marshaller = context.createMarshaller();
+			final XMLOutputFactory outputFactory = XMLOutputFactory.newFactory();
+			XMLStreamWriter writer = outputFactory.createXMLStreamWriter(out);
+			writer.setNamespaceContext(new NamespaceContext() {
+				@Override
+				public String getNamespaceURI(String prefix) {
+					return DEFAULT_NAMESPACE;
+				}
+
+				@Override
+				public String getPrefix(String namespaceURI) {
+					return "";
+				}
+
+				@Override
+				public Iterator<String> getPrefixes(String namespaceURI) {
+					return List.of("").iterator();
+				}
+			});
+			writer.setDefaultNamespace(DEFAULT_NAMESPACE);
+			writer = new SessionXMLStreamWriter(writer, true);
 			marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, String.format("%s %s", DEFAULT_NAMESPACE, DEFAULT_NAMESPACE_LOCATION));
-			marshaller.marshal(ele, out);
-		} catch(JAXBException e) {
+			marshaller.marshal(ele, writer);
+		} catch(XMLStreamException | JAXBException e) {
 			LOGGER.error( e.getMessage(), e);
 		}
 	}

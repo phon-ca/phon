@@ -43,8 +43,7 @@ public final class XMLFragments {
     public static void writeFragment(JAXBElement<?> jaxbElement, OutputStream out, boolean includeNamespace, boolean formatted) throws IOException {
         try(BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out))) {
             XMLStreamWriter xmlStreamWriter = XMLOutputFactory.newFactory().createXMLStreamWriter(writer);
-            if(formatted)
-                xmlStreamWriter = new IndentingXMLStreamWriter(xmlStreamWriter);
+            xmlStreamWriter = new SessionXMLStreamWriter(xmlStreamWriter, formatted);
             if(!includeNamespace)
                 xmlStreamWriter.setDefaultNamespace(XmlSessionWriterV2_0.DEFAULT_NAMESPACE);
             final JAXBContext context = JAXBContext.newInstance(ObjectFactory.class);
