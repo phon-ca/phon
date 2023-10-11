@@ -1038,6 +1038,11 @@
     <!-- endregion Record data -->
 
     <!-- region IPATranscript -->
+    <xs:element name="mod" type="phoneticTranscriptionType">
+        <xs:annotation>
+            <xs:documentation>%mod in CLAN, provided for compatibility with talkbank</xs:documentation>
+        </xs:annotation>
+    </xs:element>
     <xs:element name="pho" type="phoneticTranscriptionType"/>
     <xs:complexType name="phoneticTranscriptionType">
         <xs:annotation>
@@ -1700,6 +1705,16 @@
                     </xs:annotation>
                 </xs:element>
             </xs:choice>
+            <xs:element ref="mod" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>Phon stores ipa data in its own tier, this element remains for compatibility when exporting to TalkBank.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element ref="pho" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>Phon stores ipa data in its own tier, this element remains for compatibility when exporting to TalkBank.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
         </xs:sequence>
         <xs:attribute name="separated-prefix" type="xs:boolean">
             <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
@@ -3166,6 +3181,16 @@
                 <xs:element ref="italic"/>
                 <xs:element ref="underline"/>
             </xs:choice>
+            <xs:element ref="mod" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>Phon stores ipa data in its own tier, this element remains for compatibility when exporting to TalkBank.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element ref="pho" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>Phon stores ipa data in its own tier, this element remains for compatibility when exporting to TalkBank.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
         </xs:sequence>
     </xs:complexType>
     <xs:element name="pg" type="phoneticGroupType"/>
@@ -3241,6 +3266,18 @@
                     this topic...</a>
             </xs:documentation>
         </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="mod" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>Phon stores ipa data in its own tier, this element remains for compatibility when exporting to TalkBank.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element ref="pho" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>Phon stores ipa data in its own tier, this element remains for compatibility when exporting to TalkBank.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
         <xs:attribute name="symbolic-length" type="pauseSymbolicLengthType" use="required"/>
         <xs:attribute name="length" type="pauseNumericLengthType"/>
     </xs:complexType>

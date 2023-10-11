@@ -15,6 +15,7 @@
  */
 package ca.phon.session.io.xml.v2_0;
 
+import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.mor.Grasp;
 import ca.phon.orthography.mor.GraspTierData;
 import ca.phon.orthography.mor.Pos;
@@ -35,11 +36,14 @@ import ca.phon.orthography.Replacement;
 import ca.phon.orthography.TagMarker;
 import ca.phon.orthography.ToneMarker;
 import ca.phon.orthography.Underline;
+import ca.phon.session.SystemTierType;
 import ca.phon.session.UserTierType;
 import ca.phon.session.io.xml.OneToOne;
 import ca.phon.session.io.xml.v2_0.*;
 import ca.phon.util.Language;
 import ca.phon.visitor.annotation.Visits;
+import jakarta.xml.bind.JAXB;
+import jakarta.xml.bind.JAXBElement;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -190,9 +194,28 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 			for(XmlMorType mor:morTiers) {
 				w.getContent().add(factory.createMor(mor));
 			}
+
+			final List<JAXBElement<XmlPhoneticTranscriptionType>> ipaTiers = writePhoModData(oneToOne);
+			for(var ipaEle:ipaTiers) {
+				w.getContent().add(ipaEle);
+			}
 		}
 
 		u.getWOrGOrPg().add(w);
+	}
+
+	private List<JAXBElement<XmlPhoneticTranscriptionType>> writePhoModData(OneToOne oneToOne) {
+		List<JAXBElement<XmlPhoneticTranscriptionType>> retVal = new ArrayList<>();
+		for(String tierName:oneToOne.getIpaTierData().keySet()) {
+			final SystemTierType ipaTierType = SystemTierType.tierFromString(tierName);
+			if(ipaTierType == null) continue;
+			final XmlSessionWriterV2_0 writer = new XmlSessionWriterV2_0();
+			final XmlPhoneticTranscriptionType phoType = writer.writeIPA(new ObjectFactory(), oneToOne.getIpaTierData().get(tierName));
+			final JAXBElement<XmlPhoneticTranscriptionType> ipaEle =
+					(ipaTierType == SystemTierType.IPATarget ? factory.createMod(phoType) : factory.createPho(phoType));
+			retVal.add(ipaEle);
+		}
+		return retVal;
 	}
 
 	private List<XmlMorType> writeMorTierData(OneToOne oneToOne) {
@@ -317,6 +340,19 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 		} else {
 			xmlPause.setSymbolicLength(type);
 		}
+
+		final OneToOne oneToOne = pause.getExtension(OneToOne.class);
+		if(oneToOne != null) {
+			final List<JAXBElement<XmlPhoneticTranscriptionType>> ipaTiers = writePhoModData(oneToOne);
+			for (var ipaEle : ipaTiers) {
+				if(ipaEle.getName().getLocalPart().equals("mod")) {
+					xmlPause.setMod(ipaEle.getValue());
+				} else {
+					xmlPause.setPho(ipaEle.getValue());
+				}
+			}
+		}
+
 		u.getWOrGOrPg().add(xmlPause);
 	}
 

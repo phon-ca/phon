@@ -1,10 +1,7 @@
 package ca.phon.session;
 
-import ca.phon.orthography.mor.Grasp;
 import ca.phon.orthography.mor.GraspTierData;
 import ca.phon.orthography.mor.MorTierData;
-import ca.phon.session.alignment.CrossTierAlignment;
-import ca.phon.session.alignment.TierAligner;
 import ca.phon.session.io.xml.OneToOne;
 import ca.phon.session.io.xml.XMLFragments;
 import org.junit.Assert;
@@ -17,6 +14,100 @@ import java.util.HashMap;
 
 @RunWith(JUnit4.class)
 public class TestFragments {
+
+    @Test
+    public void testOrthographyIPA() throws IOException {
+        final String expected = """
+                <u>
+                  <w>hello
+                    <mod>
+                      <pw>
+                        <ph>
+                          <base>h</base>
+                        </ph>
+                        <ph>
+                          <base>e</base>
+                        </ph>
+                        <ph>
+                          <base>l</base>
+                        </ph>
+                        <ph>
+                          <base>l</base>
+                        </ph>
+                        <ph>
+                          <base>o</base>
+                        </ph>
+                      </pw>
+                    </mod>
+                    <pho>
+                      <pw>
+                        <ph>
+                          <base>e</base>
+                        </ph>
+                        <ph>
+                          <base>l</base>
+                        </ph>
+                        <ph>
+                          <base>o</base>
+                        </ph>
+                      </pw>
+                    </pho>
+                  </w>
+                  <pause symbolic-length="simple">
+                    <mod>
+                      <pause symbolic-length="simple"></pause>
+                    </mod>
+                    <pho>
+                      <pause symbolic-length="simple"></pause>
+                    </pho>
+                  </pause>
+                  <w>world
+                    <mod>
+                      <pw>
+                        <ph>
+                          <base>w</base>
+                        </ph>
+                        <ph>
+                          <base>o</base>
+                        </ph>
+                        <ph>
+                          <base>r</base>
+                        </ph>
+                        <ph>
+                          <base>l</base>
+                        </ph>
+                        <ph>
+                          <base>d</base>
+                        </ph>
+                      </pw>
+                    </mod>
+                    <pho>
+                      <pw>
+                        <ph>
+                          <base>o</base>
+                        </ph>
+                        <ph>
+                          <base>r</base>
+                        </ph>
+                        <ph>
+                          <base>d</base>
+                        </ph>
+                      </pw>
+                    </pho>
+                  </w>
+                  <t type="p"></t>
+                </u>""";
+
+        final SessionFactory factory = SessionFactory.newFactory();
+        final Record record = factory.createRecord();
+        record.getOrthographyTier().setText("hello (.) world .");
+        record.getIPATargetTier().setText("hello (.) world");
+        record.getIPAActualTier().setText("elo (.) ord");
+        OneToOne.annotateRecord(record);
+
+        final String xml = XMLFragments.toXml(record.getOrthography(), false, true);
+        Assert.assertEquals(expected, xml);
+    }
 
     @Test
     public void testOrthographyMor() throws IOException {

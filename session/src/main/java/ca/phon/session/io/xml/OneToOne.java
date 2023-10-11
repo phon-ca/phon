@@ -92,10 +92,18 @@ public class OneToOne {
                 final GraspTierData grasp = (GraspTierData) alignedElements.get(UserTierType.Grt.getTierName());
                 graMap.put(UserTierType.Grt.getTierName(), grasp);
             }
+
             // ipa tiers
+            if(alignedElements.containsKey(SystemTierType.IPATarget.getName())) {
+                final IPATranscript ipa = (IPATranscript) alignedElements.get(SystemTierType.IPATarget.getName());
+                ipaMap.put(SystemTierType.IPATarget.getName(), ipa);
+            }
+            if(alignedElements.containsKey(SystemTierType.IPAActual.getName())) {
+                final IPATranscript ipa = (IPATranscript) alignedElements.get(SystemTierType.IPAActual.getName());
+                ipaMap.put(SystemTierType.IPAActual.getName(), ipa);
+            }
 
-
-            if(!morMap.isEmpty() || !graMap.isEmpty() || ipaMap.size() > 0) {
+            if(!morMap.isEmpty() || !graMap.isEmpty() || !ipaMap.isEmpty()) {
                 final OneToOne oneToOne = new OneToOne(morMap, graMap, ipaMap);
                 orthographyElement.putExtension(OneToOne.class, oneToOne);
             }
