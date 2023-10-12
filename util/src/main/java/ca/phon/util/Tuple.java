@@ -18,7 +18,9 @@ package ca.phon.util;
 /**
  * Tuple of elements.
  *
+ * @deprecated use records instead
  */
+@Deprecated
 public class Tuple<T, S> implements Comparable<Tuple<? extends T, ? extends S>> {
 	
 	/**
