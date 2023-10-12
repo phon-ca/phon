@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="ALL">
+<Configuration status="off">
 	<Appenders>
-		<Console name="STDOUT" target="SYSTEM_OUT" additivity="false">
+		<Console name="STDERR" target="SYSTEM_ERR">
 			<PatternLayout pattern="(%p) %m %ex%n"/>
 		</Console>
 	</Appenders>
 	<Loggers>
 		<Root level="INFO">
-			<AppenderRef ref="STDOUT" level="INFO"/>
+			<AppenderRef ref="STDERR" level="INFO"/>
 		</Root>
 	</Loggers>
 </Configuration>
