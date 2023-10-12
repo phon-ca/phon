@@ -359,7 +359,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
         Font font = FontPreferences.getTierFont();
         StyleConstants.setFontFamily(retVal, font.getFamily());
-        StyleConstants.setFontSize(retVal, 14 + (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
+        StyleConstants.setFontSize(retVal, 14);
         StyleConstants.setBold(retVal, font.isBold());
         StyleConstants.setItalic(retVal, font.isItalic());
 
@@ -1968,155 +1968,161 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
         Class<?> tierType = tier.getDeclaredType();
 
-        if (tierType.equals(IPATranscript.class)) {
-            Tier<IPATranscript> ipaTier = (Tier<IPATranscript>)tier;
-            List<IPATranscript> words = (ipaTier).getValue().words();
-            for (int i = 0; i < words.size(); i++) {
-                var word = words.get(i);
-                SimpleAttributeSet attrs;
-                if (word.matches("\\P")) {
-                    // Pause
-                    attrs = getIPAPauseAttributes(ipaTier);
-                } else {
-                    // Word
-                    attrs = getIPAWordAttributes(ipaTier);
-                }
-                attrs.addAttributes(tierAttrs);
-                String content = word.toString();
-                appendBatchString(content, attrs);
-
-                if (i < words.size() - 1) {
-                    appendBatchString(" ", tierAttrs);
-                }
-            }
-            if (tierName.equals("IPA Target") && syllabificationVisible) {
-                // Add a newline at the end of the regular tier content
-                appendBatchLineFeed(tierAttrs);
-                // Create a dummy tier for the syllabification
-                IPATranscript ipaTarget = ipaTier.getValue();
-                Tier<IPATranscript> syllableTier = sessionFactory.createTier(SystemTierType.TargetSyllables.getName(), IPATranscript.class);
-                syllableTier.setValue(ipaTarget);
-                // Set up the tier attributes for the dummy tier
-                tierAttrs = new SimpleAttributeSet(tierAttrs);
-                tierAttrs.addAttributes(getTierAttributes(syllableTier));
-                // Set up the attributes for its label
-                SimpleAttributeSet syllabificationLabelAttrs = getTierLabelAttributes(syllableTier);
-                if (recordAttrs != null) {
-                    syllabificationLabelAttrs.addAttributes(recordAttrs);
-                }
-                // Get the string for the label
-                String syllabificationLabelText = formatLabelText("Syllabification");
-                // Add the label
-                appendBatchString(syllabificationLabelText + ": ", syllabificationLabelAttrs);
-                // Get the string version of the syllabification
-                String ipaTargetContent = ipaTarget.toString(true);
-                // Add component factory if needed
-                if (syllabificationIsComponent) {
-                    tierAttrs.addAttributes(getSyllabificationAttributes());
-                }
-                // Append the content
-                appendBatchString(ipaTargetContent, tierAttrs);
-            }
-            else if (tierName.equals("IPA Actual") && syllabificationVisible) {
-                // Add a newline at the end of the regular tier content
-                appendBatchLineFeed(tierAttrs);
-                // Create a dummy tier for the syllabification
-                IPATranscript ipaActual = ipaTier.getValue();
-                Tier<IPATranscript> syllableTier = sessionFactory.createTier(SystemTierType.ActualSyllables.getName(), IPATranscript.class);
-                syllableTier.setValue(ipaActual);
-                // Set up the tier attributes for the dummy tier
-                tierAttrs = new SimpleAttributeSet(tierAttrs);
-                tierAttrs.addAttributes(getTierAttributes(syllableTier));
-                // Set up the attributes for its label
-                SimpleAttributeSet syllabificationLabelAttrs = getTierLabelAttributes(syllableTier);
-                if (recordAttrs != null) {
-                    syllabificationLabelAttrs.addAttributes(recordAttrs);
-                }
-                // Get the string for the label
-                String syllabificationLabelText = formatLabelText("Syllabification");
-                // Add the label
-                appendBatchString(syllabificationLabelText + ": ", syllabificationLabelAttrs);
-                // Get the string version of the syllabification
-                String ipaActualContent = ipaActual.toString(true);
-                // Add component factory if needed
-                if (syllabificationIsComponent) {
-                    tierAttrs.addAttributes(getSyllabificationAttributes());
-                }
-                // Append the content
-                appendBatchString(ipaActualContent, tierAttrs);
-            }
+        if (tier.isUnvalidated()) {
+            appendBatchString(tier.getUnvalidatedValue().getValue(), tierAttrs);
         }
-        else if (tierType.equals(MediaSegment.class)) {
-            MediaSegment segment = record.getMediaSegment();
-            formatSegment(segment, tierAttrs);
-        }
-        else if (tierType.equals(Orthography.class)) {
-            Tier<Orthography> orthographyTier = (Tier<Orthography>) tier;
-            orthographyTier.getValue().accept(new TranscriptOrthographyVisitors.KeywordVisitor(this, tierAttrs));
-            //appendBatchString(tierContent, tierAttrs);
-        }
-        else if (tierType.equals(MorTierData.class)) {
-            Tier<MorTierData> morTier = (Tier<MorTierData>) tier;
-            MorTierData mors = morTier.getValue();
-
-            for (int i = 0; i < mors.size(); i++) {
-                Mor mor = mors.get(i);
-                appendBatchString(mor.toString(), tierAttrs);
-                if (i < mors.size() - 1) {
-                    appendBatchString(" ", tierAttrs);
-                }
-            }
-        }
-        else if (tierType.equals(GraspTierData.class)) {
-            Tier<GraspTierData> graspTier = (Tier<GraspTierData>) tier;
-            GraspTierData grasps = graspTier.getValue();
-
-            for (int i = 0; i < grasps.size(); i++) {
-                Grasp grasp = grasps.get(i);
-                appendBatchString(grasp.toString(), tierAttrs);
-                if (i < grasps.size() - 1) {
-                    appendBatchString(" ", tierAttrs);
-                }
-            }
-        }
-        else if (tierType.equals(TierData.class))  {
-            Tier<TierData> userTier = (Tier<TierData>) tier;
-            TierData tierData = userTier.getValue();
-            if (tierData != null) {
-                for (int i = 0; i < tierData.length(); i++) {
-                    TierElement elem = tierData.elementAt(i);
-                    String text;
+        else {
+            if (tierType.equals(IPATranscript.class)) {
+                Tier<IPATranscript> ipaTier = (Tier<IPATranscript>)tier;
+                List<IPATranscript> words = (ipaTier).getValue().words();
+                for (int i = 0; i < words.size(); i++) {
+                    var word = words.get(i);
                     SimpleAttributeSet attrs;
-                    if (elem instanceof TierString tierString) {
-                        text = tierString.text();
-                        attrs = getTierStringAttributes();
+                    if (word.matches("\\P")) {
+                        // Pause
+                        attrs = getIPAPauseAttributes(ipaTier);
+                    } else {
+                        // Word
+                        attrs = getIPAWordAttributes(ipaTier);
                     }
-                    else if (elem instanceof TierComment comment) {
-                        text = comment.toString();
-                        attrs = getTierCommentAttributes();
-                    }
-                    else if (elem instanceof TierInternalMedia internalMedia) {
-                        text = internalMedia.toString();
-                        attrs = getTierInternalMediaAttributes();
-                    }
-                    else if (elem instanceof TierLink link) {
-                        text = link.toString();
-                        attrs = getTierLinkAttributes();
-                    }
-                    else {
-                        throw new RuntimeException("Invalid type");
-                    }
-
                     attrs.addAttributes(tierAttrs);
+                    String content = word.toString();
+                    appendBatchString(content, attrs);
 
-                    appendBatchString(text, attrs);
+                    if (i < words.size() - 1) {
+                        appendBatchString(" ", tierAttrs);
+                    }
+                }
+                if (tierName.equals("IPA Target") && syllabificationVisible) {
+                    // Add a newline at the end of the regular tier content
+                    appendBatchLineFeed(tierAttrs);
+                    // Create a dummy tier for the syllabification
+                    IPATranscript ipaTarget = ipaTier.getValue();
+                    Tier<IPATranscript> syllableTier = sessionFactory.createTier(SystemTierType.TargetSyllables.getName(), IPATranscript.class);
+                    syllableTier.setValue(ipaTarget);
+                    // Set up the tier attributes for the dummy tier
+                    tierAttrs = new SimpleAttributeSet(tierAttrs);
+                    tierAttrs.addAttributes(getTierAttributes(syllableTier));
+                    // Set up the attributes for its label
+                    SimpleAttributeSet syllabificationLabelAttrs = getTierLabelAttributes(syllableTier);
+                    if (recordAttrs != null) {
+                        syllabificationLabelAttrs.addAttributes(recordAttrs);
+                    }
+                    // Get the string for the label
+                    String syllabificationLabelText = formatLabelText("Syllabification");
+                    // Add the label
+                    appendBatchString(syllabificationLabelText + ": ", syllabificationLabelAttrs);
+                    // Get the string version of the syllabification
+                    String ipaTargetContent = ipaTarget.toString(true);
+                    // Add component factory if needed
+                    if (syllabificationIsComponent) {
+                        tierAttrs.addAttributes(getSyllabificationAttributes());
+                    }
+                    // Append the content
+                    appendBatchString(ipaTargetContent, tierAttrs);
+                }
+                else if (tierName.equals("IPA Actual") && syllabificationVisible) {
+                    // Add a newline at the end of the regular tier content
+                    appendBatchLineFeed(tierAttrs);
+                    // Create a dummy tier for the syllabification
+                    IPATranscript ipaActual = ipaTier.getValue();
+                    Tier<IPATranscript> syllableTier = sessionFactory.createTier(SystemTierType.ActualSyllables.getName(), IPATranscript.class);
+                    syllableTier.setValue(ipaActual);
+                    // Set up the tier attributes for the dummy tier
+                    tierAttrs = new SimpleAttributeSet(tierAttrs);
+                    tierAttrs.addAttributes(getTierAttributes(syllableTier));
+                    // Set up the attributes for its label
+                    SimpleAttributeSet syllabificationLabelAttrs = getTierLabelAttributes(syllableTier);
+                    if (recordAttrs != null) {
+                        syllabificationLabelAttrs.addAttributes(recordAttrs);
+                    }
+                    // Get the string for the label
+                    String syllabificationLabelText = formatLabelText("Syllabification");
+                    // Add the label
+                    appendBatchString(syllabificationLabelText + ": ", syllabificationLabelAttrs);
+                    // Get the string version of the syllabification
+                    String ipaActualContent = ipaActual.toString(true);
+                    // Add component factory if needed
+                    if (syllabificationIsComponent) {
+                        tierAttrs.addAttributes(getSyllabificationAttributes());
+                    }
+                    // Append the content
+                    appendBatchString(ipaActualContent, tierAttrs);
+                }
+            }
+            else if (tierType.equals(MediaSegment.class)) {
+                MediaSegment segment = record.getMediaSegment();
+                formatSegment(segment, tierAttrs);
+            }
+            else if (tierType.equals(Orthography.class)) {
+                Tier<Orthography> orthographyTier = (Tier<Orthography>) tier;
+                orthographyTier.getValue().accept(new TranscriptOrthographyVisitors.KeywordVisitor(this, tierAttrs));
+                //appendBatchString(tierContent, tierAttrs);
+            }
+            else if (tierType.equals(MorTierData.class)) {
+                Tier<MorTierData> morTier = (Tier<MorTierData>) tier;
+                MorTierData mors = morTier.getValue();
 
-                    if (i < tierData.length() - 1) {
+                for (int i = 0; i < mors.size(); i++) {
+                    Mor mor = mors.get(i);
+                    appendBatchString(mor.toString(), tierAttrs);
+                    if (i < mors.size() - 1) {
                         appendBatchString(" ", tierAttrs);
                     }
                 }
             }
+            else if (tierType.equals(GraspTierData.class)) {
+                Tier<GraspTierData> graspTier = (Tier<GraspTierData>) tier;
+                GraspTierData grasps = graspTier.getValue();
+
+                for (int i = 0; i < grasps.size(); i++) {
+                    Grasp grasp = grasps.get(i);
+                    appendBatchString(grasp.toString(), tierAttrs);
+                    if (i < grasps.size() - 1) {
+                        appendBatchString(" ", tierAttrs);
+                    }
+                }
+            }
+            else if (tierType.equals(TierData.class))  {
+                Tier<TierData> userTier = (Tier<TierData>) tier;
+                TierData tierData = userTier.getValue();
+                if (tierData != null) {
+                    for (int i = 0; i < tierData.length(); i++) {
+                        TierElement elem = tierData.elementAt(i);
+                        String text;
+                        SimpleAttributeSet attrs;
+                        if (elem instanceof TierString tierString) {
+                            text = tierString.text();
+                            attrs = getTierStringAttributes();
+                        }
+                        else if (elem instanceof TierComment comment) {
+                            text = comment.toString();
+                            attrs = getTierCommentAttributes();
+                        }
+                        else if (elem instanceof TierInternalMedia internalMedia) {
+                            text = internalMedia.toString();
+                            attrs = getTierInternalMediaAttributes();
+                        }
+                        else if (elem instanceof TierLink link) {
+                            text = link.toString();
+                            attrs = getTierLinkAttributes();
+                        }
+                        else {
+                            throw new RuntimeException("Invalid type");
+                        }
+
+                        attrs.addAttributes(tierAttrs);
+
+                        appendBatchString(text, attrs);
+
+                        if (i < tierData.length() - 1) {
+                            appendBatchString(" ", tierAttrs);
+                        }
+                    }
+                }
+            }
         }
+
         if (alignmentVisible && alignmentParent != null && tierName.equals(alignmentParent.getTierName())) {
             tierAttrs.removeAttribute("componentFactory");
             // Add a newline at the end of the regular tier content

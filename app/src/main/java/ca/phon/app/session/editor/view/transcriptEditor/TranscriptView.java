@@ -60,7 +60,7 @@ public class TranscriptView extends EditorView {
 
         addPropertyChangeListener("fontSizeDelta", e -> {
             PrefHelper.getUserPreferences().putFloat(FONT_SIZE_DELTA_PROP, getFontSizeDelta());
-            transcriptEditor.getTranscriptDocument().reload();
+            transcriptEditor.repaint();
         });
     }
 
@@ -174,12 +174,13 @@ public class TranscriptView extends EditorView {
 
         JComponent source = (JComponent) pae.getActionEvent().getSource();
         Point point = source.getLocationOnScreen();
+        point.translate(source.getWidth() / 2, source.getHeight());
 
         CalloutWindow.showCallout(
             CommonModuleFrame.getCurrentFrame(),
             fontScaleMenu,
             SwingConstants.TOP,
-            SwingConstants.LEADING,
+            SwingConstants.CENTER,
             point
         );
     }

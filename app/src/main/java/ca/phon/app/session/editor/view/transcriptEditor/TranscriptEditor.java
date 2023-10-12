@@ -21,6 +21,7 @@ import javax.swing.undo.UndoManager;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -460,7 +461,7 @@ public class TranscriptEditor extends JEditorPane {
         if (tier != null) {
             try {
                 int start = doc.getTierStart(tier);
-                int end = doc.getTierEnd(tier);
+                int end = doc.getTierEnd(tier) - 1;
                 String newValue = doc.getText(start, end - start);
 
                 tierDataChanged(tier, newValue);
@@ -486,7 +487,14 @@ public class TranscriptEditor extends JEditorPane {
                 elementIndex = session.getTranscript().getElementIndex(gem);
             }
             if (elementIndex > -1) {
-                showContextMenu(elementIndex);
+                try {
+                    Rectangle2D caretRect = modelToView2D(getCaretPosition());
+                    Point point = new Point((int) caretRect.getCenterX(), (int) caretRect.getMaxY());
+                    showContextMenu(elementIndex, point);
+                }
+                catch (BadLocationException e) {
+                    LogUtil.severe(e);
+                }
             }
         }
     }
@@ -940,6 +948,9 @@ public class TranscriptEditor extends JEditorPane {
     }
 
     private void onTierDataChanged(EditorEvent<EditorEventType.TierChangeData> editorEvent) {
+
+        System.out.println("Testing tier changed");
+
         TranscriptDocument doc = getTranscriptDocument();
 
         var caretStartAttrs = doc.getCharacterElement(getCaretPosition()).getAttributes();
@@ -1051,7 +1062,7 @@ public class TranscriptEditor extends JEditorPane {
 
     // endregion On Click
 
-    private void showContextMenu(int transcriptElementIndex) {
+    private void showContextMenu(int transcriptElementIndex, Point pos) {
         JPopupMenu menu = new JPopupMenu();
 
         JMenu addCommentMenu = new JMenu("Add comment");
@@ -1104,7 +1115,7 @@ public class TranscriptEditor extends JEditorPane {
         menu.add(deleteThis);
 
         var mousePos = MouseInfo.getPointerInfo().getLocation();
-        menu.show(this, (int) (mousePos.getX() - getLocationOnScreen().getX()), (int) (mousePos.getY() - getLocationOnScreen().getY()));
+        menu.show(this, (int) pos.getX(), (int) pos.getY());
     }
 
     @Override
@@ -1128,11 +1139,61 @@ public class TranscriptEditor extends JEditorPane {
             g.fillRect(0, (int) drawHere.getMinY(), labelColWidth, drawHere.height);
         }
 
+        Element root = doc.getDefaultRootElement();
+        if (root.getElementCount() == 0) return;
+
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() == 0) continue;
+            Element innerElem = elem.getElement(0);
+            AttributeSet attrs = innerElem.getAttributes();
+            String elementType = (String) attrs.getAttribute("elementType");
+            if (elementType != null) {
+                int start = -1;
+
+                switch (elementType) {
+                    case "comment" -> {
+                        g.setColor(Color.decode("#ffffbf"));
+                        start = doc.getCommentStart((Comment) attrs.getAttribute("comment"));
+                    }
+                    case "gem" -> {
+                        g.setColor(Color.decode("#ffdfbf"));
+                        start = doc.getGemStart((Gem) attrs.getAttribute("gem"));
+                    }
+                    case "generic" -> {
+                        g.setColor(Color.decode("#ffffbf"));
+                        start = doc.getGenericStart((Tier<?>) attrs.getAttribute("generic"));
+                    }
+                }
+                if (start == -1) continue;
+                try {
+                    var startRect = modelToView2D(start - 1);
+                    var colorRect = new Rectangle(
+                        (int) startRect.getMinX(),
+                        (int) startRect.getMinY(),
+                        (int) (getWidth() - startRect.getMinX()),
+                        (int) (startRect.getMaxY() - startRect.getMinY())
+                    );
+                    if (!drawHere.intersects(colorRect)) continue;
+                    g.fillRect(
+                        (int) colorRect.getMinX(),
+                        (int) colorRect.getMinY(),
+                        (int) colorRect.getWidth(),
+                        (int) colorRect.getHeight()
+                    );
+                }
+                catch (BadLocationException e) {
+                    LogUtil.severe(e);
+                }
+            }
+        }
+
+
         g.setColor(UIManager.getColor(TranscriptEditorUIProps.SEPARATOR_LINE));
         int sepLineHeight = 1;
         int fontHeight = fontMetrics.getHeight();
-        Element root = doc.getDefaultRootElement();
-        if (root.getElementCount() == 0) return;
+
         float lineSpacing = StyleConstants.getLineSpacing(root.getElement(0).getAttributes());
         int sepLineOffset = (int) (((fontHeight * lineSpacing) + sepLineHeight) / 2);
         // For every element
@@ -1185,10 +1246,15 @@ public class TranscriptEditor extends JEditorPane {
         Tier<?> dummy = SessionFactory.newFactory().createTier("dummy", tier.getDeclaredType());
         dummy.setText(newData);
 
+        if (dummy.isUnvalidated()) {
+            // Error stuff
+        }
 
-
-        TierEdit edit = new TierEdit(session, eventManager, null, tier, dummy.getValue());
-        getUndoSupport().postEdit(edit);
+        SwingUtilities.invokeLater(() -> {
+            TierEdit<?> edit = new TierEdit(session, eventManager, null, tier, dummy.getValue());
+            edit.setFireHardChangeOnUndo(true);
+            getUndoSupport().postEdit(edit);
+        });
     }
 
     private void highlightElementAtPoint(Point2D point) {
@@ -1503,8 +1569,8 @@ public class TranscriptEditor extends JEditorPane {
     private void addComment(int relativeElementIndex, int position) {
         Transcript transcript = session.getTranscript();
         Tier<TierData> commentTier = SessionFactory.newFactory().createTier("Comment Tier", TierData.class);
-        commentTier.setText("New comment");
-        Comment newComment = SessionFactory.newFactory().createComment(CommentType.Blank, commentTier.getValue());
+        commentTier.setText("");
+        Comment newComment = SessionFactory.newFactory().createComment(CommentType.Generic, commentTier.getValue());
 
         int newCommentIndex = -1;
         switch (position) {
@@ -1524,12 +1590,12 @@ public class TranscriptEditor extends JEditorPane {
 
     private void onCommentAdded(EditorEvent<EditorEventType.CommentAddedData> editorEvent) {
         var data = editorEvent.data();
-        getTranscriptDocument().addComment(data.record(), data.elementIndex());
+        getTranscriptDocument().reload();
     }
 
     private void addGem(int relativeElementIndex, int position) {
         Transcript transcript = session.getTranscript();
-        Gem newGem = SessionFactory.newFactory().createGem(GemType.Lazy, "New gem");
+        Gem newGem = SessionFactory.newFactory().createGem(GemType.Lazy, "");
 
         int newGemIndex = -1;
         switch (position) {
@@ -1549,7 +1615,7 @@ public class TranscriptEditor extends JEditorPane {
 
     private void onGemAdded(EditorEvent<EditorEventType.GemAddedData> editorEvent) {
         var data = editorEvent.data();
-        getTranscriptDocument().addGem(data.gem(), data.elementIndex());
+        getTranscriptDocument().reload();
     }
 
     private void deleteTranscriptElement(Transcript.Element elem) {
@@ -1593,13 +1659,13 @@ public class TranscriptEditor extends JEditorPane {
             if (prevTier != null && (nextTier == null || !prevTier.getName().equals(nextTier.getName()))) {
                 try {
                     int start = doc.getTierStart(prevTier);
-                    int end = doc.getTierEnd(prevTier);
+                    int end = doc.getTierEnd(prevTier) - 1;
                     String newValue = doc.getText(start, end - start);
 
                     // TODO figure out a better way of doing this
-//                    if (!newValue.equals(prevTier.getValue().toString())) {
-//                        tierDataChanged(prevTier, newValue);
-//                    }
+                    if (prevTier.getValue() != null && !newValue.equals(prevTier.getValue().toString())) {
+                        tierDataChanged(prevTier, newValue);
+                    }
                 }
                 catch (BadLocationException e) {
                     LogUtil.severe(e);
@@ -1619,15 +1685,52 @@ public class TranscriptEditor extends JEditorPane {
 
             if (getTranscriptDocument().getLength() == dot) return;
 
-            Tier<?> selectionStartTier = doc.getTier(getCaret().getDot());
-            if (selectionStartTier != null) {
-                AttributeSet attrs = doc.getCharacterElement(dot).getAttributes();
-                Tier<?> selectionEndTier = (Tier<?>) attrs.getAttribute("tier");
-                Boolean isLabel = (Boolean) attrs.getAttribute("label");
-                if (selectionStartTier != selectionEndTier || isLabel != null) {
-                    return;
+            AttributeSet attrs = doc.getCharacterElement(getCaretPosition()).getAttributes();
+            String elementType = (String) attrs.getAttribute("elementType");
+
+            if (elementType != null) {
+                int start = -1;
+                int end = -1;
+
+                switch (elementType) {
+                    case "record" -> {
+                        Tier<?> tier = (Tier<?>) attrs.getAttribute("tier");
+                        if (tier != null) {
+                            start = doc.getTierStart(tier);
+                            end = doc.getTierEnd(tier);
+                        }
+                    }
+                    case "comment" -> {
+                        Comment comment = (Comment) attrs.getAttribute("comment");
+                        if (comment != null) {
+                            start = doc.getCommentStart(comment);
+                            end = doc.getCommentEnd(comment);
+                        }
+                    }
+                    case "gem" -> {
+                        Gem gem = (Gem) attrs.getAttribute("gem");
+                        if (gem != null) {
+                            start = doc.getGemStart(gem);
+                            end = doc.getGemEnd(gem);
+                        }
+                    }
+                    case "generic" -> {
+                        Tier<?> generic = (Tier<?>) attrs.getAttribute("generic");
+                        if (generic != null) {
+                            start = doc.getGenericStart(generic);
+                            end = doc.getGenericEnd(generic);
+                        }
+                    }
+                }
+
+                System.out.println("Start: " + start + ", End: " + end);
+
+                if (start != -1 && end != -1) {
+                    dot = Math.min(Math.max(dot, start), end-1);
                 }
             }
+
+
 
             fb.moveDot(dot, bias);
         }
@@ -1680,62 +1783,113 @@ public class TranscriptEditor extends JEditorPane {
         @Override
         public void mouseClicked(MouseEvent e) {
             TranscriptDocument doc = getTranscriptDocument();
-            int mousePosInDoc = viewToModel2D(e.getPoint());
+            int mouseButton = e.getButton();
 
-            Element elem = doc.getCharacterElement(mousePosInDoc);
-            AttributeSet attrs = elem.getAttributes();
+            // Left click
+            if (mouseButton == MouseEvent.BUTTON1) {
+                int mousePosInDoc = viewToModel2D(e.getPoint());
 
-            MediaSegment mediaSegment = (MediaSegment) attrs.getAttribute("mediaSegment");
-            if (mediaSegment != null) {
-                var segmentBounds = doc.getSegmentBounds(mediaSegment, elem);
-                System.out.println("Segment bounds: " + segmentBounds);
-                setCaretPosition(segmentBounds.getObj1());
-                setSelectedSegment(mediaSegment);
-                moveCaretPosition(segmentBounds.getObj2()+1);
-                return;
-            }
+                Element elem = doc.getCharacterElement(mousePosInDoc);
+                AttributeSet attrs = elem.getAttributes();
 
-            if (attrs.getAttribute("label") != null) {
-                String elementType = (String) attrs.getAttribute("elementType");
-                if (elementType != null) {
-                    if (e.getClickCount() > 1) {
-                        switch (elementType) {
-                            case "record" -> {
-                                Tier<?> tier = (Tier<?>) attrs.getAttribute("tier");
-                                select(doc.getTierStart(tier), doc.getTierEnd(tier));
-                            }
-                            case "comment" -> {
-                                Comment comment = (Comment) attrs.getAttribute("comment");
-                                select(doc.getCommentStart(comment), doc.getCommentEnd(comment));
-                            }
-                            case "gem" -> {
-                                Gem gem = (Gem) attrs.getAttribute("gem");
-                                select(doc.getGemStart(gem), doc.getGemEnd(gem));
-                            }
-                        }
-                    }
-                    else {
-                        switch (elementType) {
-                            case "record" -> setCaretPosition(doc.getTierStart((Tier<?>) attrs.getAttribute("tier")));
-                            case "comment" -> setCaretPosition(doc.getCommentStart((Comment) attrs.getAttribute("comment")));
-                            case "gem" -> setCaretPosition(doc.getGemStart((Gem) attrs.getAttribute("gem")));
-                        }
-                    }
+                MediaSegment mediaSegment = (MediaSegment) attrs.getAttribute("mediaSegment");
+                if (mediaSegment != null) {
+                    var segmentBounds = doc.getSegmentBounds(mediaSegment, elem);
+                    System.out.println("Segment bounds: " + segmentBounds);
+                    setCaretPosition(segmentBounds.getObj1());
+                    setSelectedSegment(mediaSegment);
+                    moveCaretPosition(segmentBounds.getObj2()+1);
+                    return;
+                }
 
-                    if (attrs.getAttribute("clickable") != null) {
-                        switch (elementType) {
-                            case "record" -> {
-                                Tier<?> tier = (Tier<?>) attrs.getAttribute("tier");
-                                Integer recordIndex = (Integer) attrs.getAttribute("recordIndex");
-                                if (tier != null && recordIndex != null) {
-                                    onClickTierLabel(e.getPoint(), tier, recordIndex);
+                if (attrs.getAttribute("label") != null) {
+                    String elementType = (String) attrs.getAttribute("elementType");
+                    if (elementType != null) {
+                        if (e.getClickCount() > 1) {
+                            switch (elementType) {
+                                case "record" -> {
+                                    Tier<?> tier = (Tier<?>) attrs.getAttribute("tier");
+                                    select(doc.getTierStart(tier), doc.getTierEnd(tier));
+                                }
+                                case "comment" -> {
+                                    Comment comment = (Comment) attrs.getAttribute("comment");
+                                    select(doc.getCommentStart(comment), doc.getCommentEnd(comment));
+                                }
+                                case "gem" -> {
+                                    Gem gem = (Gem) attrs.getAttribute("gem");
+                                    select(doc.getGemStart(gem), doc.getGemEnd(gem));
                                 }
                             }
-                            case "comment" -> onClickCommentLabel(e.getPoint(), (Comment) attrs.getAttribute("comment"));
-                            case "gem" -> onClickGemLabel(e.getPoint(), (Gem) attrs.getAttribute("gem"));
+                        }
+                        else {
+                            switch (elementType) {
+                                case "record" -> setCaretPosition(doc.getTierStart((Tier<?>) attrs.getAttribute("tier")));
+                                case "comment" -> setCaretPosition(doc.getCommentStart((Comment) attrs.getAttribute("comment")));
+                                case "gem" -> setCaretPosition(doc.getGemStart((Gem) attrs.getAttribute("gem")));
+                            }
+                        }
+
+                        if (attrs.getAttribute("clickable") != null) {
+                            switch (elementType) {
+                                case "record" -> {
+                                    Tier<?> tier = (Tier<?>) attrs.getAttribute("tier");
+                                    Integer recordIndex = (Integer) attrs.getAttribute("recordIndex");
+                                    if (tier != null && recordIndex != null) {
+                                        onClickTierLabel(e.getPoint(), tier, recordIndex);
+                                    }
+                                }
+                                case "comment" -> onClickCommentLabel(e.getPoint(), (Comment) attrs.getAttribute("comment"));
+                                case "gem" -> onClickGemLabel(e.getPoint(), (Gem) attrs.getAttribute("gem"));
+                            }
                         }
                     }
                 }
+
+                String elementType = (String) attrs.getAttribute("elementType");
+                if (elementType != null) {
+                    if (e.getClickCount() == 3) {
+                        switch (elementType) {
+                            case "record" -> {
+                                Tier<?> tier = (Tier<?>) attrs.getAttribute("tier");
+                                if (tier != null) {
+                                    System.out.println(tier.getName());
+                                    setSelectionStart(doc.getTierStart(tier));
+                                    setSelectionEnd(doc.getTierEnd(tier)-1);
+                                }
+                            }
+                            case "comment" -> {
+                                Comment comment = (Comment) attrs.getAttribute("comment");
+                                if (comment != null) {
+                                    System.out.println(comment.getType() + " " + comment.getValue());
+                                    setSelectionStart(doc.getCommentStart(comment));
+                                    setSelectionEnd(doc.getCommentEnd(comment)-1);
+                                }
+                            }
+                            case "gem" -> {
+                                Gem gem = (Gem) attrs.getAttribute("gem");
+                                if (gem != null) {
+                                    System.out.println(gem.getType() + " " + gem.getLabel());
+                                    setSelectionStart(doc.getGemStart(gem));
+                                    setSelectionEnd(doc.getGemEnd(gem)-1);
+                                }
+                            }
+                            case "generic" -> {
+                                Tier<?> generic = (Tier<?>) attrs.getAttribute("generic");
+                                if (generic != null) {
+                                    System.out.println(generic.getName());
+                                    setSelectionStart(doc.getGenericStart(generic));
+                                    setSelectionEnd(doc.getGenericEnd(generic)-1);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            // Right click
+            else if (mouseButton == MouseEvent.BUTTON3) {
+                System.out.println("Right click");
+//                Point mousePos = e.getLocationOnScreen();
+//                showContextMenu(, mousePos);
             }
         }
     }

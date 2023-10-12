@@ -1,10 +1,14 @@
 package ca.phon.app.session.editor.view.transcriptEditor;
 
+import ca.phon.util.PrefHelper;
+
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
+import java.util.HashMap;
 
 public class TranscriptViewFactory implements ViewFactory {
+    private HashMap<String, Font> fontCache = new HashMap<>();
 
     public TranscriptViewFactory() {
 
@@ -43,6 +47,24 @@ public class TranscriptViewFactory implements ViewFactory {
     private class TierView extends LabelView {
         public TierView(Element elem) {
             super(elem);
+        }
+
+        @Override
+        public Font getFont() {
+            Font superFont = super.getFont();
+            String fontString = superFont.toString();
+
+            Font derivedFont;
+
+            if (fontCache.containsKey(fontString)) {
+                derivedFont = fontCache.get(fontString);
+            }
+            else {
+                derivedFont = superFont.deriveFont(superFont.getSize() + PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
+                fontCache.put(fontString, derivedFont);
+            }
+
+            return derivedFont;
         }
     }
 
