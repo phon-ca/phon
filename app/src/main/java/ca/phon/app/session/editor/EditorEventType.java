@@ -133,7 +133,7 @@ public record  EditorEventType<T>(String eventName, Class<T> type) {
 	public final static EditorEventType<ElementMovedData> ElementMoved =
 			new EditorEventType<>(EditorEventName.ELEMENT_MOVED_EVT.getEventName(), ElementMovedData.class);
 
-	public record CommentAddedData(Comment record, int elementIndex) { }
+	public record CommentAddedData(Comment comment, int elementIndex) { }
 	/**
 	 * A comment was added
 	 */

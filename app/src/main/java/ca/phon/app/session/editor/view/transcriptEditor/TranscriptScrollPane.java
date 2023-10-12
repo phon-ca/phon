@@ -30,12 +30,12 @@ public class TranscriptScrollPane extends JScrollPane {
         transcriptEditor.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                gutter.setPreferredSize(new Dimension(
-                    (int) gutter.getPreferredSize().getWidth(),
-                    transcriptEditor.getHeight())
-                );
-                revalidate();
-                repaint();
+            gutter.setPreferredSize(new Dimension(
+                (int) gutter.getPreferredSize().getWidth(),
+                transcriptEditor.getHeight())
+            );
+            revalidate();
+            repaint();
             }
         });
     }

@@ -1,17 +1,13 @@
 package ca.phon.app.session.editor.view.transcriptEditor;
 
 import ca.phon.app.log.LogUtil;
+import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.session.Tier;
 import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
-
 import javax.swing.*;
-import javax.swing.text.StyleConstants;
 import java.awt.*;
-import java.awt.font.TextAttribute;
-import java.util.Collections;
 
 public class TranscriptScrollPaneGutter extends JComponent {
     private final TranscriptEditor editor;
@@ -19,15 +15,22 @@ public class TranscriptScrollPaneGutter extends JComponent {
     private final int DEFAULT_WIDTH = 36;
     private final int RECORD_NUMBER_WIDTH = 24;
     private final int PADDING = 4;
-    private int currentRecord = -1;
+    private int currentRecord;
 
     public TranscriptScrollPaneGutter(TranscriptEditor editor) {
         this.editor = editor;
         setPreferredSize(new Dimension(DEFAULT_WIDTH + PADDING + RECORD_NUMBER_WIDTH + PADDING, getPreferredSize().height));
         setFont(FontPreferences.getTierFont());
+
+        currentRecord = editor.getTranscriptDocument().getSingleRecordIndex();
         editor.getEventManager().registerActionForEvent(
             EditorEventType.RecordChanged,
-            (e) -> currentRecord = e.data().recordIndex(),
+            this::onRecordChanged,
+            EditorEventManager.RunOn.AWTEventDispatchThread
+        );
+        editor.getEventManager().registerActionForEvent(
+            EditorEventType.TierChanged,
+            this::onTierChanged,
             EditorEventManager.RunOn.AWTEventDispatchThread
         );
     }
@@ -61,54 +64,55 @@ public class TranscriptScrollPaneGutter extends JComponent {
                     var innerElem = elem.getElement(j);
                     var innerElemAttrs = innerElem.getAttributes();
                     var elemRect = editor.modelToView2D(innerElem.getStartOffset());
-                    if (elemRect == null) return;
-                    boolean topVisible = elemRect.getMinY() > drawHere.getMinY() && elemRect.getMinY() < drawHere.getMaxY();
-                    boolean bottomVisible = elemRect.getMaxY() > drawHere.getMinY() && elemRect.getMaxY() < drawHere.getMaxY();
-                    if (topVisible || bottomVisible) {
-                        JComponent component = (JComponent)StyleConstants.getComponent(innerElemAttrs);
-                        if (component != null) {
-                            if (component instanceof JLabel) {
-                                var tierLabelRect = editor.modelToView2D(innerElem.getStartOffset());
+                    if (elemRect == null) continue;
 
-                                var locked = (Boolean) innerElemAttrs.getAttribute("locked");
-                                if (locked != null && locked) {
-                                    var lockIcon = IconManager.getInstance().getIcon("actions/lock", IconSize.XSMALL);
-                                    Image lockImage = lockIcon.getImage();
-                                    g.drawImage(lockImage, getWidth() - 16, (int) tierLabelRect.getMinY() + 1, null);
-                                }
+                    if (innerElemAttrs.getAttribute("sep") != null) {
+                        Integer recordNumber = (Integer) innerElem.getAttributes().getAttribute("recordIndex");
+                        if (showRecordNumbers && recordNumber != null) {
+                            var sepRect = editor.modelToView2D(innerElem.getStartOffset());
 
-                                if (false) {
-                                    g.setColor(Color.RED);
-                                    g.drawString("◉", getWidth() - 32, (int) tierLabelRect.getMaxY() - 3);
-                                    g.setColor(Color.BLACK);
-                                }
+                            String recordNumberText = String.valueOf(recordNumber + 1);
+
+                            var fontMetrics = g.getFontMetrics();
+                            int stringWidth = fontMetrics.stringWidth(recordNumberText);
+                            int stringBaselineHeight = (int)(sepRect.getCenterY() + 0.8f * (fontMetrics.getFont().getSize() / 2.0f));
+
+                            if (stringBaselineHeight <= currentSepHeight) continue;
+
+                            if (recordNumber == currentRecord) {
+                                g.setFont(font.deriveFont(Font.BOLD));
+                            }
+
+                            g.drawString(recordNumberText, getWidth() - stringWidth - PADDING, stringBaselineHeight);
+                            currentSepHeight = stringBaselineHeight;
+
+                            if (recordNumber == currentRecord) {
+                                g.setFont(font);
                             }
                         }
-                        if (innerElemAttrs.getAttribute("sep") != null) {
-                            Integer recordNumber = (Integer) innerElem.getAttributes().getAttribute("recordIndex");
-                            if (showRecordNumbers && recordNumber != null) {
-                                var sepRect = editor.modelToView2D(innerElem.getStartOffset());
 
-                                String recordNumberText = String.valueOf(recordNumber + 1);
-                                if (recordNumber == currentRecord) {
-                                    g.setFont(font.deriveFont(Font.BOLD));
-                                }
+                    }
 
-                                var fontMetrics = g.getFontMetrics();
-                                int stringWidth = fontMetrics.stringWidth(recordNumberText);
-                                int stringBaselineHeight = (int)(sepRect.getCenterY() + 0.8f * (fontMetrics.getFont().getSize() / 2.0f));
 
-                                if (stringBaselineHeight <= currentSepHeight) continue;
+                    Tier<?> tier = (Tier<?>) innerElemAttrs.getAttribute("tier");
+                    if (tier != null) {
+//                        boolean locked = innerElemAttrs.getAttribute("locked") != null;
+//                        if (locked) {
+//                            var lockIcon = IconManager.getInstance().getIcon("actions/lock", IconSize.XSMALL);
+//                            Image lockImage = lockIcon.getImage();
+//                            g.drawImage(lockImage, getWidth() - 16, (int) elemRect.getMinY() + 1, null);
+//                        }
 
-                                g.drawString(recordNumberText, getWidth() - stringWidth - PADDING, stringBaselineHeight);
-                                currentSepHeight = stringBaselineHeight;
-                                if (recordNumber == currentRecord) {
-                                    g.setFont(font);
-                                }
-                            }
-
+                        if (tier.isUnvalidated()) {
+                            g.setColor(Color.RED);
+                            g.drawString("O", getWidth() - 32, (int) elemRect.getCenterY());
+                            g.setColor(Color.BLACK);
                         }
                     }
+
+
+
+
                 }
                 catch (Exception e) {
                     LogUtil.severe(e);
@@ -125,6 +129,20 @@ public class TranscriptScrollPaneGutter extends JComponent {
         this.showRecordNumbers = show;
         int newWidth = show ? DEFAULT_WIDTH + PADDING + RECORD_NUMBER_WIDTH + PADDING: DEFAULT_WIDTH + PADDING;
         setPreferredSize(new Dimension(newWidth, getPreferredSize().height));
+        revalidate();
+        repaint();
+    }
+
+    public void onRecordChanged(EditorEvent<EditorEventType.RecordChangedData> event) {
+        currentRecord = event.data().recordIndex();
+        repaint();
+    }
+
+    public void onTierChanged(EditorEvent<EditorEventType.TierChangeData> event) {
+
+        System.out.println("Repaint on tier data changed");
+
+
         revalidate();
         repaint();
     }

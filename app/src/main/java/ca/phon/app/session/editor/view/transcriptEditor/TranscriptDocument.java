@@ -4,16 +4,23 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.formatter.MediaTimeFormatter;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
+import ca.phon.orthography.mor.Grasp;
+import ca.phon.orthography.mor.GraspTierData;
+import ca.phon.orthography.mor.Mor;
+import ca.phon.orthography.mor.MorTierData;
 import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.session.tierdata.*;
 import ca.phon.ui.FontFormatter;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.util.Language;
+import ca.phon.util.PrefHelper;
 import ca.phon.util.Tuple;
 
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
 
@@ -30,6 +37,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
     private boolean alignmentIsComponent = false;
     private int labelColumnWidth = 20;
     private float lineSpacing = 0.2f;
+    private TierViewItem alignmentParent = null;
 
     public TranscriptDocument() {
         super(new TranscriptStyleContext());
@@ -101,6 +109,12 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
     public void setAlignmentVisible(boolean alignmentVisible) {
         this.alignmentVisible = alignmentVisible;
+        if (alignmentVisible) {
+            alignmentParent = calculateAlignmentParent();
+        }
+        else {
+            alignmentParent = null;
+        }
         reload();
     }
 
@@ -129,6 +143,14 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
     public void setLineSpacing(float lineSpacing) {
         this.lineSpacing = lineSpacing;
+    }
+
+    public TierViewItem getAlignmentParent() {
+        return alignmentParent;
+    }
+
+    public void setAlignmentParent(TierViewItem alignmentParent) {
+        this.alignmentParent = alignmentParent;
     }
 
     // endregion Getters and Setters
@@ -164,7 +186,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         var font = Font.decode(fontString);
 
         StyleConstants.setFontFamily(retVal, font.getFamily());
-        StyleConstants.setFontSize(retVal, font.getSize());
+        StyleConstants.setFontSize(retVal, font.getSize() + (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
         StyleConstants.setBold(retVal, font.isBold());
         StyleConstants.setItalic(retVal, font.isItalic());
 
@@ -243,6 +265,12 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return retVal;
     }
 
+    private SimpleAttributeSet getTierLinkAttributes() {
+        SimpleAttributeSet retVal = new SimpleAttributeSet();
+
+        return retVal;
+    }
+
     private SimpleAttributeSet getTierLabelAttributes(Tier<?> tier) {
         return getTierLabelAttributes(tier, null);
     }
@@ -315,6 +343,17 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return retVal;
     }
 
+    private SimpleAttributeSet getLabelAttributes() {
+        SimpleAttributeSet retVal = new SimpleAttributeSet();
+
+        retVal.addAttributes(getMonospaceFontAttributes());
+
+        retVal.addAttribute("label", true);
+        retVal.addAttribute("notEditable", true);
+
+        return retVal;
+    }
+
     private SimpleAttributeSet getStandardFontAttributes() {
         SimpleAttributeSet retVal = new SimpleAttributeSet();
 
@@ -371,17 +410,182 @@ public class TranscriptDocument extends DefaultStyledDocument {
         // Process all the inserts in bulk
         super.insert(offs, inserts);
 
-        ElementSpec last = batch.get(batch.size() - 1);
-
         // Empty batch the list
         batch.clear();
 
-        System.out.println(getCharAtPos(getLength() - 1));
-        System.out.println(getLength());
+        setGlobalParagraphAttributes();
     }
 
     // endregion Batching
 
+    // region Add Comment / Gem
+
+    public void addComment(Comment comment, int transcriptElementIndex) {
+        int offset = -1;
+
+        if (transcriptElementIndex == 0) {
+            var elementAfterComment = session.getTranscript().getElementAt(1);
+            if (elementAfterComment.isRecord()) {
+                offset = getRecordStart(session.getRecordPosition(elementAfterComment.asRecord()));
+            }
+            else if (elementAfterComment.isComment()) {
+                offset = getCommentStart(elementAfterComment.asComment());
+            }
+            else if (elementAfterComment.isGem()) {
+                offset = getGemStart(elementAfterComment.asGem());
+            }
+            else {
+                throw new RuntimeException("Invalid transcript element");
+            }
+
+            offset -= labelColumnWidth + 2;
+        }
+        else {
+            var elementBeforeComment = session.getTranscript().getElementAt(transcriptElementIndex-1);
+            if (elementBeforeComment.isRecord()) {
+                offset = getRecordEnd(session.getRecordPosition(elementBeforeComment.asRecord()));
+            }
+            else if (elementBeforeComment.isComment()) {
+                offset = getCommentEnd(elementBeforeComment.asComment());
+            }
+            else if (elementBeforeComment.isGem()) {
+                offset = getGemEnd(elementBeforeComment.asGem());
+            }
+            else {
+                throw new RuntimeException("Invalid transcript element");
+            }
+        }
+
+        try {
+            appendBatchEndStart();
+            var attrs = writeComment(comment);
+            appendBatchLineFeed(attrs);
+            processBatchUpdates(offset);
+        }
+        catch (BadLocationException e) {
+            LogUtil.severe(e);
+        }
+    }
+
+    public void addGem(Gem gem, int transcriptElementIndex) {
+        int offset = -1;
+
+        if (transcriptElementIndex == 0) {
+            var elementAfterComment = session.getTranscript().getElementAt(1);
+            if (elementAfterComment.isRecord()) {
+                offset = getRecordStart(session.getRecordPosition(elementAfterComment.asRecord()));
+            }
+            else if (elementAfterComment.isComment()) {
+                offset = getCommentStart(elementAfterComment.asComment());
+            }
+            else if (elementAfterComment.isGem()) {
+                offset = getGemStart(elementAfterComment.asGem());
+            }
+            else {
+                throw new RuntimeException("Invalid transcript element");
+            }
+
+            offset -= labelColumnWidth + 2;
+        }
+        else {
+            var elementBeforeComment = session.getTranscript().getElementAt(transcriptElementIndex-1);
+            if (elementBeforeComment.isRecord()) {
+                offset = getRecordEnd(session.getRecordPosition(elementBeforeComment.asRecord()));
+            }
+            else if (elementBeforeComment.isComment()) {
+                offset = getCommentEnd(elementBeforeComment.asComment());
+            }
+            else if (elementBeforeComment.isGem()) {
+                offset = getGemEnd(elementBeforeComment.asGem());
+            }
+            else {
+                throw new RuntimeException("Invalid transcript element");
+            }
+        }
+
+        try {
+            appendBatchEndStart();
+            var attrs = writeGem(gem);
+            appendBatchLineFeed(attrs);
+            processBatchUpdates(offset);
+        }
+        catch (BadLocationException e) {
+            LogUtil.severe(e);
+        }
+    }
+
+    // endregion Add Comment / Gem
+
+    public void deleteTranscriptElement(Transcript.Element elem) {
+        int labelLength = labelColumnWidth + 2;
+        try {
+            int startOffset = -1;
+            int endOffset = -1;
+
+            if (elem.isComment()) {
+                startOffset = getCommentStart(elem.asComment());
+                endOffset = getCommentEnd(elem.asComment());
+            }
+            else if (elem.isGem()) {
+                startOffset = getGemStart(elem.asGem());
+                endOffset = getGemEnd(elem.asGem());
+            }
+            else if (elem.isRecord()) {
+                Transcript transcript = session.getTranscript();
+                int recordIndex = transcript.getRecordPosition(elem.asRecord());
+                int recordElementIndex = transcript.getRecordElementIndex(recordIndex);
+                deleteRecord(recordIndex, recordElementIndex);
+                return;
+            }
+
+            startOffset -= labelLength;
+
+            if (startOffset < 0 || endOffset < 0) return;
+
+            remove(startOffset, endOffset - startOffset);
+        }
+        catch (BadLocationException e) {
+            LogUtil.severe(e);
+        }
+    }
+
+    public void changeCommentType(Comment comment) {
+        int start = getCommentStart(comment);
+        int end = getCommentEnd(comment);
+
+        start -= labelColumnWidth + 2;
+
+        try {
+            remove(start, end - start);
+            appendBatchEndStart();
+            var attrs = writeComment(comment);
+            appendBatchLineFeed(attrs);
+            processBatchUpdates(start);
+            setGlobalParagraphAttributes();
+        }
+        catch (BadLocationException e) {
+            LogUtil.severe(e);
+        }
+    }
+
+    public void changeGemType(Gem gem) {
+        int start = getGemStart(gem);
+        int end = getGemEnd(gem);
+
+        start -= labelColumnWidth + 2;
+
+        try {
+            remove(start, end - start);
+            appendBatchEndStart();
+            var attrs = writeGem(gem);
+            appendBatchLineFeed(attrs);
+            processBatchUpdates(start);
+            setGlobalParagraphAttributes();
+        }
+        catch (BadLocationException e) {
+            LogUtil.severe(e);
+        }
+    }
 
     // region Write Transcript Element
 
@@ -410,8 +614,16 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
         for (int i = 0; i < visibleTierView.size(); i++) {
             TierViewItem item = visibleTierView.get(i);
+            Tier<?> tier = record.getTier(item.getTierName());
+            if (tier == null) {
+                var tdOpt = session.getUserTiers().stream().filter(td -> td.getName().equals(item.getTierName())).findAny();
+                if (tdOpt.isEmpty()) {
+                    continue;
+                }
+                tier = sessionFactory.createTier(tdOpt.get());
+            }
 
-            tierAttrs = insertTier(recordIndex, item, recordAttrs);
+            tierAttrs = insertTier(recordIndex, tier, item, recordAttrs);
 
             if (i < visibleTierView.size() - 1) {
                 appendBatchLineFeed(tierAttrs);
@@ -459,11 +671,18 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 // Comment
                 text = userTierComment.toString();
                 attrs = getTierCommentAttributes();
-            } else {
+            } else if (userTierElement instanceof TierInternalMedia internalMedia) {
                 // Internal media
-                TierInternalMedia internalMedia = (TierInternalMedia) userTierElement;
                 text = internalMedia.toString();
                 attrs = getTierInternalMediaAttributes();
+            }
+            else if (userTierElement instanceof TierLink link) {
+                // Link
+                text = link.toString();
+                attrs = getTierLinkAttributes();
+            }
+            else {
+                throw new RuntimeException("Invalid type");
             }
 
             attrs.addAttributes(commentAttrs);
@@ -508,12 +727,53 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return gemAttrs;
     }
 
+    private SimpleAttributeSet writeGeneric(String label, Tier<?> tier) {
+
+        SimpleAttributeSet attrs = new SimpleAttributeSet();
+        attrs.addAttribute("elementType", "generic");
+        attrs.addAttribute("generic", tier);
+        attrs.addAttributes(getStandardFontAttributes());
+
+        SimpleAttributeSet labelAttrs = new SimpleAttributeSet(attrs);
+        labelAttrs.addAttributes(getLabelAttributes());
+        String labelText = label;
+        if (labelText.length() < labelColumnWidth) {
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < (labelColumnWidth - labelText.length()); i++) {
+                builder.append(' ');
+            }
+            appendBatchString(builder.toString(), labelAttrs);
+        }
+        else {
+            labelText = formatLabelText(labelText);
+        }
+
+        labelAttrs.addAttribute("clickable", true);
+        appendBatchString(labelText, labelAttrs);
+
+        labelAttrs.removeAttribute("clickable");
+        appendBatchString(": ", labelAttrs);
+
+        if (tier.isUnvalidated()) {
+            appendBatchString(tier.getUnvalidatedValue().toString(), attrs);
+        }
+        else {
+            appendBatchString(tier.toString(), attrs);
+        }
+
+        return attrs;
+    }
+
     // endregion Write Transcript Element
 
 
     // region Get Record/Tier Start/End
 
     public int getRecordStart(int recordIndex) {
+        return getRecordStart(recordIndex, false);
+    }
+
+    public int getRecordStart(int recordIndex, boolean includeSeparator) {
         Element root = getDefaultRootElement();
 
         for (int i = 0; i < root.getElementCount(); i++) {
@@ -521,7 +781,8 @@ public class TranscriptDocument extends DefaultStyledDocument {
             if (elem.getElementCount() < 1) continue;
             AttributeSet attrs = elem.getElement(0).getAttributes();
             var currentRecordIndex = attrs.getAttribute("recordIndex");
-            if (currentRecordIndex != null && recordIndex == (int)currentRecordIndex) {
+            var tier = attrs.getAttribute("tier");
+            if ((tier != null || includeSeparator) && currentRecordIndex != null && recordIndex == (int)currentRecordIndex) {
                 return elem.getStartOffset();
             }
         }
@@ -734,7 +995,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
                     AttributeSet attrs = innerElem.getAttributes();
                     Comment currentComment = (Comment)attrs.getAttribute("comment");
                     Boolean isLabel = (Boolean)attrs.getAttribute("label");
-                    // If correct tier name
+                    // If correct comment
                     if (isLabel == null && currentComment != null && currentComment == comment) {
                         retVal = Math.max(retVal, innerElem.getEndOffset());
                     }
@@ -788,6 +1049,60 @@ public class TranscriptDocument extends DefaultStyledDocument {
                     Boolean isLabel = (Boolean)attrs.getAttribute("label");
                     // If correct tier name
                     if (isLabel == null && currentGem != null && currentGem == gem) {
+                        retVal = Math.max(retVal, innerElem.getEndOffset());
+                    }
+                }
+            }
+        }
+
+        return retVal;
+    }
+
+    public int getGenericStart(Tier<?> genericTier) {
+        Element root = getDefaultRootElement();
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() == 0) continue;
+            String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute("elementType");
+            // If transcript element type is tierData
+            if (transcriptElementType != null && transcriptElementType.equals("generic")) {
+                for (int j = 0; j < elem.getElementCount(); j++) {
+                    Element innerElem = elem.getElement(j);
+                    AttributeSet attrs = innerElem.getAttributes();
+                    Tier<?> currentGenericTier = (Tier<?>) attrs.getAttribute("generic");
+                    Boolean isLabel = (Boolean)attrs.getAttribute("label");
+                    // If correct tierData
+                    if (isLabel == null && currentGenericTier != null && currentGenericTier == genericTier) {
+                        return innerElem.getStartOffset();
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    public int getGenericEnd(Tier<?> genericTier) {
+        int retVal = -1;
+
+        Element root = getDefaultRootElement();
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() < 1) continue;
+            String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute("elementType");
+            System.out.println("First child element type: " + transcriptElementType);
+            // If transcript element type is tierData
+            if (transcriptElementType != null && transcriptElementType.equals("generic")) {
+                System.out.println("testing...");
+                for (int j = 0; j < elem.getElementCount(); j++) {
+                    Element innerElem = elem.getElement(j);
+                    AttributeSet attrs = innerElem.getAttributes();
+                    Tier<?> currentGenericTier = (Tier<?>) attrs.getAttribute("generic");
+                    Boolean isLabel = (Boolean)attrs.getAttribute("label");
+                    // If correct tierData
+                    if (isLabel == null && currentGenericTier != null && currentGenericTier.toString().equals(genericTier.toString())) {
                         retVal = Math.max(retVal, innerElem.getEndOffset());
                     }
                 }
@@ -854,10 +1169,31 @@ public class TranscriptDocument extends DefaultStyledDocument {
         movedTiers = movedTiers.stream().filter(item -> item.isVisible()).toList();
         if (movedTiers.size() < 1) return;
 
+        boolean alignmentParentMoved = false;
         List<TierViewItem> movedTiersNewOrder = new ArrayList<>();
         for (TierViewItem item : session.getTierView()) {
             if (movedTiers.contains(item)) {
                 movedTiersNewOrder.add(item);
+
+                String tierName = item.getTierName();
+                // If one of the syllabification tiers are moved remove the syllabification
+                if ((tierName.equals("IPA Target") || tierName.equals("IPA Actual")) && syllabificationVisible) {
+                    try {
+                        removeSyllabification(tierName);
+                    }
+                    catch (BadLocationException e) {
+                        LogUtil.severe(e);
+                    }
+                }
+                // If the tier with alignment is hidden remove the alignment and set a flag to add it back correctly
+                if (alignmentVisible && alignmentParent != null && tierName.equals(alignmentParent.getTierName())) {
+                    try {
+                        removeAlignment();
+                    }
+                    catch (BadLocationException e) {
+                        LogUtil.severe(e);
+                    }
+                }
             }
         }
 
@@ -890,10 +1226,6 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 int tierStartOffset = getTierStart(recordIndex, tierName) - labelLength;
                 int tierEndOffset = getTierEnd(recordIndex, tierName);
 
-                if (record.getTier(tierName).getValue().toString().strip().equals("")) {
-                    tierStartOffset += 1;
-                }
-
                 remove(tierStartOffset, tierEndOffset - tierStartOffset);
 
                 if (offset == -1) {
@@ -905,13 +1237,16 @@ public class TranscriptDocument extends DefaultStyledDocument {
             }
         }
 
+
+
         try {
             appendBatchEndStart();
-            int offsetBeforeInsert = offset;
             for (TierViewItem item : movedTiersNewOrder) {
-                insertTier(recordIndex, item, recordAttrs);
+                var tier = record.getTier(item.getTierName());
+                var attrs = insertTier(recordIndex, tier, item, recordAttrs);
+                appendBatchLineFeed(attrs);
             }
-            processBatchUpdates(offsetBeforeInsert);
+            processBatchUpdates(offset);
             setGlobalParagraphAttributes();
         }
         catch (BadLocationException e) {
@@ -958,14 +1293,33 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 addTierToRecord(i, addedTiers);
             }
         }
+
+        if (alignmentVisible && alignmentParent != null) {
+            TierViewItem calculatedAlignmentParent = calculateAlignmentParent();
+            if (!calculatedAlignmentParent.getTierName().equals(alignmentParent.getTierName())) {
+                System.out.println("Current alignment parent: " + alignmentParent.getTierName());
+                System.out.println("Calculated alignment parent: " + calculatedAlignmentParent.getTierName());
+                try {
+                    alignmentParent = calculatedAlignmentParent;
+                    removeAlignment();
+                    appendAlignmentToParent();
+                }
+                catch (BadLocationException e) {
+                    LogUtil.severe(e);
+                }
+            }
+        }
     }
 
     private void addTierToRecord(int recordIndex, List<TierViewItem> addedTiers) {
         int offset = getRecordEnd(recordIndex);
+        Record record = session.getRecord(recordIndex);
         try {
             appendBatchEndStart();
             for (TierViewItem item : addedTiers) {
-                insertTier(recordIndex, item, getRecordAttributes(recordIndex));
+                var tier = record.getTier(item.getTierName());
+                var attrs = insertTier(recordIndex, tier, item, getRecordAttributes(recordIndex));
+                appendBatchLineFeed(attrs);
             }
             processBatchUpdates(offset);
             setGlobalParagraphAttributes();
@@ -976,6 +1330,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
     }
 
     public void hideTier(List<String> hiddenTiers) {
+        // Hide the tiers
         if (singleRecordView) {
             hideTierInRecord(singleRecordIndex, hiddenTiers);
         }
@@ -984,6 +1339,37 @@ public class TranscriptDocument extends DefaultStyledDocument {
             for (int i = 0; i < recordCount; i++) {
                 hideTierInRecord(i, hiddenTiers);
             }
+        }
+
+        boolean alignmentParentRemoved = false;
+        for (String tierName : hiddenTiers) {
+            // If a tier with syllabification enabled was hidden remove the syllabification
+            if ((tierName.equals("IPA Target") || tierName.equals("IPA Actual")) && syllabificationVisible) {
+                try {
+                    removeSyllabification(tierName);
+                }
+                catch (BadLocationException e) {
+                    LogUtil.severe(e);
+                }
+            }
+            // If the tier with alignment is hidden remove the alignment and set a flag to add it back correctly
+            if (alignmentVisible && alignmentParent != null && tierName.equals(alignmentParent.getTierName())) {
+                try {
+                    removeAlignment();
+                    alignmentParentRemoved = true;
+                }
+                catch (BadLocationException e) {
+                    LogUtil.severe(e);
+                }
+            }
+        }
+
+        // If needed, add the alignment back
+        if (alignmentParentRemoved) {
+            alignmentParent = calculateAlignmentParent();
+            System.out.println("Alignment parent removed");
+            System.out.println("Appending it to: " + alignmentParent.getTierName());
+            appendAlignmentToParent();
         }
     }
 
@@ -997,24 +1383,6 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 int tierStartOffset = getTierStart(recordIndex, tierName) - labelLength;
                 int tierEndOffset = getTierEnd(recordIndex, tierName);
                 remove(tierStartOffset, tierEndOffset - tierStartOffset);
-
-                if ((tierName.equals("IPA Target") || tierName.equals("IPA Actual")) && syllabificationVisible) {
-                    Element root = getDefaultRootElement();
-                    for (int i = 0; i < root.getElementCount(); i++) {
-                        Element elem = root.getElement(i);
-                        for (int j = 0; j < elem.getElementCount(); j++) {
-                            Element innerElem = elem.getElement(j);
-                            var attrs = innerElem.getAttributes();
-                            Tier<?> tier = (Tier<?>) attrs.getAttribute("tier");
-                            boolean correctTier = tier != null && tier.getName().equals(tierName);
-                            Integer recordNumber = (Integer) attrs.getAttribute("recordIndex");
-                            boolean correctRecord = recordNumber != null && recordNumber == recordIndex;
-                            if (correctRecord && correctTier) {
-                                removeElement(innerElem);
-                            }
-                        }
-                    }
-                }
             }
         }
         catch (BadLocationException e) {
@@ -1031,6 +1399,22 @@ public class TranscriptDocument extends DefaultStyledDocument {
             int recordCount = session.getRecordCount();
             for (int i = 0; i < recordCount; i++) {
                 showTierInRecord(i, shownTiers, newTierView);
+            }
+        }
+
+        if (alignmentVisible && alignmentParent != null) {
+            TierViewItem calculatedAlignmentParent = calculateAlignmentParent();
+            if (!calculatedAlignmentParent.getTierName().equals(alignmentParent.getTierName())) {
+                alignmentParent = calculatedAlignmentParent;
+                System.out.println("Alignment parent added");
+                System.out.println("Appending it to: " + alignmentParent.getTierName());
+                try {
+                    removeAlignment();
+                    appendAlignmentToParent();
+                }
+                catch (BadLocationException e) {
+                    LogUtil.severe(e);
+                }
             }
         }
     }
@@ -1054,13 +1438,27 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 }
 
                 if (itemBeforeShownItem != null) {
-                    offset = getTierEnd(recordIndex, itemBeforeShownItem.getTierName());
+                    if (syllabificationVisible) {
+                        if (itemBeforeShownItem.getTierName().equals("IPA Target")) {
+                            offset = getTierEnd(recordIndex, SystemTierType.TargetSyllables.getName());
+                        }
+                        else if (itemBeforeShownItem.getTierName().equals("IPA Actual")) {
+                            offset = getTierEnd(recordIndex, SystemTierType.ActualSyllables.getName());
+                        }
+                        else {
+                            offset = getTierEnd(recordIndex, itemBeforeShownItem.getTierName());
+                        }
+                    }
+                    else {
+                        offset = getTierEnd(recordIndex, itemBeforeShownItem.getTierName());
+                    }
                 }
 
-                int offsetBeforeInsert = offset;
                 appendBatchEndStart();
-                insertTier(recordIndex, item, recordAttrs);
-                processBatchUpdates(offsetBeforeInsert);
+                var tier = record.getTier(item.getTierName());
+                var attrs = insertTier(recordIndex, tier, item, recordAttrs);
+                appendBatchLineFeed(attrs);
+                processBatchUpdates(offset);
                 setGlobalParagraphAttributes();
             }
         }
@@ -1076,7 +1474,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         else {
             int recordCount = session.getRecordCount();
             for (int i = 0; i < recordCount; i++) {
-                tierFontChangedInRecord(singleRecordIndex, changedTiers);
+                tierFontChangedInRecord(i, changedTiers);
             }
         }
     }
@@ -1097,7 +1495,9 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 remove(tierStartOffset, tierEndOffset - tierStartOffset);
 
                 appendBatchEndStart();
-                insertTier(recordIndex, item, recordAttrs);
+                var tier = record.getTier(item.getTierName());
+                var attrs = insertTier(recordIndex, tier, item, recordAttrs);
+                appendBatchLineFeed(attrs);
                 processBatchUpdates(tierStartOffset);
                 setGlobalParagraphAttributes();
             }
@@ -1136,7 +1536,9 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 remove(tierStartOffset, tierEndOffset - tierStartOffset);
 
                 appendBatchEndStart();
-                insertTier(recordIndex, newTier, recordAttrs);
+                var tier = record.getTier(newTier.getTierName());
+                var attrs = insertTier(recordIndex, tier, newTier, recordAttrs);
+                appendBatchLineFeed(attrs);
                 processBatchUpdates(tierStartOffset);
                 setGlobalParagraphAttributes();
             }
@@ -1170,7 +1572,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
             var tierView = session.getTierView();
             AttributeSet newLineAttrs;
 
-            int start = getRecordStart(removedRecordIndex);
+            int start = getRecordStart(removedRecordIndex, true);
 
             remove(start, getLength() - start);
 
@@ -1241,7 +1643,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
     public void changeSpeaker(Record record) {
         try {
             int recordIndex = session.getRecordPosition(record);
-            int start = getRecordStart(recordIndex);
+            int start = getRecordStart(recordIndex, true);
 
             var tierView = session.getTierView();
             String firstVisibleTierName = tierView
@@ -1253,7 +1655,6 @@ public class TranscriptDocument extends DefaultStyledDocument {
             int end = getTierStart(recordIndex, firstVisibleTierName) - (labelColumnWidth + 2);
 
             remove(start, end - start);
-
 
             SimpleAttributeSet sepAttrs = getSeparatorAttributes();
             sepAttrs.addAttributes(getRecordAttributes(recordIndex));
@@ -1289,7 +1690,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
             appendBatchEndStart();
 
-            SimpleAttributeSet attrs = insertTier(recordIndex, tierViewItem, getRecordAttributes(recordIndex));
+            SimpleAttributeSet attrs = insertTier(recordIndex, tier, tierViewItem, getRecordAttributes(recordIndex));
 
             appendBatchLineFeed(attrs);
 
@@ -1304,7 +1705,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
     // endregion Record Changes
 
 
-    public TierViewItem getAlignmentTierView() {
+    public TierViewItem calculateAlignmentParent() {
         List<TierViewItem> visibleTierView = session.getTierView().stream().filter(item -> item.isVisible()).toList();
 
         var retVal = visibleTierView.stream().filter(item -> item.getTierName().equals("IPA Actual")).findFirst();
@@ -1314,6 +1715,126 @@ public class TranscriptDocument extends DefaultStyledDocument {
         if (retVal.isPresent()) return retVal.get();
 
         return visibleTierView.get(visibleTierView.size()-1);
+    }
+
+    private void appendAlignmentToParent() {
+        try {
+            String appendingTierName = alignmentParent.getTierName();
+
+            System.out.println("Appending tier name: " + appendingTierName);
+
+            if (syllabificationVisible) {
+                if (appendingTierName.equals("IPA Target")) {
+                    appendingTierName = SystemTierType.TargetSyllables.getName();;
+                }
+                else if (appendingTierName.equals("IPA Actual")) {
+                    appendingTierName = SystemTierType.ActualSyllables.getName();
+                }
+            }
+
+            if (singleRecordView) {
+                System.out.println("Appending tier name: " + appendingTierName);
+                appendBatchEndStart();
+                Record record = session.getRecord(singleRecordIndex);
+                var attrs = appendAlignmentToTierInRecord(record.getTier(appendingTierName), record);
+                appendBatchLineFeed(attrs);
+                System.out.println("Appending tier name: " + appendingTierName);
+                int tierEnd = getTierEnd(singleRecordIndex, appendingTierName);
+                System.out.println("Process batch at: " + tierEnd);
+                processBatchUpdates(tierEnd);
+            }
+            else {
+                int recordCount = session.getRecordCount();
+                for (int i = 0; i < recordCount; i++) {
+                    appendBatchEndStart();
+                    Record record = session.getRecord(i);
+                    var attrs = appendAlignmentToTierInRecord(record.getTier(appendingTierName), record);
+                    appendBatchLineFeed(attrs);
+                    processBatchUpdates(getTierEnd(i, appendingTierName));
+                }
+            }
+        }
+        catch (BadLocationException e) {
+            LogUtil.severe(e);
+        }
+    }
+
+    private SimpleAttributeSet appendAlignmentToTierInRecord(Tier<?> tier, Record record) {
+        // Get the alignment tier
+        Tier<PhoneAlignment> alignmentTier = record.getPhoneAlignmentTier();
+        // Set up the tier attributes for the dummy tier
+        var tierAttrs = getTierAttributes(tier);
+        tierAttrs.addAttributes(getTierAttributes(alignmentTier));
+        // Set up the attributes for its label
+        SimpleAttributeSet alignmentLabelAttrs = getTierLabelAttributes(alignmentTier);
+        // Set up record attributes
+        SimpleAttributeSet recordAttrs = getRecordAttributes(session.getRecordPosition(record));
+        alignmentLabelAttrs.addAttributes(recordAttrs);
+        tierAttrs.addAttributes(recordAttrs);
+        // Get the string for the label
+        String alignmentLabelText = formatLabelText("Alignment");
+        // Add the label
+        appendBatchString(alignmentLabelText + ": ", alignmentLabelAttrs);
+        // Get the string version of the alignment
+        String alignmentContent = alignmentTier.getValue().toString();
+        // Add component factory if needed
+        if (alignmentIsComponent) {
+            tierAttrs.addAttributes(getAlignmentAttributes());
+        }
+        appendBatchString(alignmentContent, tierAttrs);
+
+        return tierAttrs;
+    }
+
+    private void removeAlignment() throws BadLocationException {
+        Element root = getDefaultRootElement();
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            for (int j = 0; j < elem.getElementCount(); j++) {
+                Element innerElem = elem.getElement(j);
+                var attrs = innerElem.getAttributes();
+                Tier<?> tier = (Tier<?>) attrs.getAttribute("tier");
+                if (tier != null) {
+                    boolean correctTier = tier.getName().equals("Alignment");
+                    if (correctTier) {
+                        int tierStartOffset = getTierStart(tier) - labelColumnWidth - 2;
+                        int tierEndOffset = getTierEnd(tier);
+                        if (tierStartOffset >= 0 && tierEndOffset >= 0) {
+                            System.out.println("Removed alignment ---------------------------");
+                            remove(tierStartOffset, tierEndOffset - tierStartOffset);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void removeSyllabification(String tierName) throws BadLocationException {
+        Element root = getDefaultRootElement();
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            for (int j = 0; j < elem.getElementCount(); j++) {
+                Element innerElem = elem.getElement(j);
+                var attrs = innerElem.getAttributes();
+                Tier<?> tier = (Tier<?>) attrs.getAttribute("tier");
+                if (tier != null) {
+                    boolean correctTier;
+                    if (tierName.equals("IPA Target")) {
+                        correctTier = tier.getName().equals(SystemTierType.TargetSyllables.getName());
+                    } else {
+                        correctTier = tier.getName().equals(SystemTierType.ActualSyllables.getName());
+                    }
+                    if (correctTier) {
+                        int tierStartOffset = getTierStart(tier) - labelColumnWidth - 2;
+                        int tierEndOffset = getTierEnd(tier);
+                        if (tierStartOffset >= 0 && tierEndOffset >= 0) {
+                            remove(tierStartOffset, tierEndOffset - tierStartOffset);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public Character getCharAtPos(int pos) {
@@ -1413,18 +1934,9 @@ public class TranscriptDocument extends DefaultStyledDocument {
         setParagraphAttributes(0, getLength(), paragraphAttrs, false);
     }
 
-    private SimpleAttributeSet insertTier(int recordIndex, TierViewItem tierViewItem, AttributeSet recordAttrs) {
+    private SimpleAttributeSet insertTier(int recordIndex, Tier<?> tier, TierViewItem tierViewItem, AttributeSet recordAttrs) {
         String tierName = tierViewItem.getTierName();
         Record record = session.getRecord(recordIndex);
-        Tier<?> tier = record.getTier(tierName);
-        if (tier == null) {
-            Optional<TierDescription> td = session
-                .getUserTiers()
-                .stream()
-                .filter(item -> item.getName().equals(tierName))
-                .findFirst();
-            tier = sessionFactory.createTier(td.get());
-        }
 
         SimpleAttributeSet tierAttrs = getTierAttributes(tier, tierViewItem);
         if (recordAttrs != null) {
@@ -1454,174 +1966,169 @@ public class TranscriptDocument extends DefaultStyledDocument {
         labelAttrs.removeAttribute("clickable");
         appendBatchString(": ", labelAttrs);
 
-        if (tierName.equals("IPA Target")) {
-            Tier<IPATranscript> ipaTier = (Tier<IPATranscript>)tier;
-            List<IPATranscript> words = (ipaTier).getValue().words();
-            for (int i = 0; i < words.size(); i++) {
-                var word = words.get(i);
-                SimpleAttributeSet attrs;
-                if (word.matches("\\P")) {
-                    // Pause
-                    attrs = getIPAPauseAttributes(ipaTier);
-                } else {
-                    // Word
-                    attrs = getIPAWordAttributes(ipaTier);
-                }
-                attrs.addAttributes(tierAttrs);
-                String content = word.toString();
-                appendBatchString(content, attrs);
+        Class<?> tierType = tier.getDeclaredType();
 
-                if (i < words.size() - 1) {
-                    appendBatchString(" ", tierAttrs);
-                }
-            }
-            if (syllabificationVisible) {
-                // Add a newline at the end of the regular tier content
-                appendBatchLineFeed(tierAttrs);
-                // Create a dummy tier for the syllabification
-                IPATranscript ipaTarget = ipaTier.getValue();
-                Tier<IPATranscript> syllableTier = sessionFactory.createTier(SystemTierType.TargetSyllables.getName(), IPATranscript.class);
-                syllableTier.setValue(ipaTarget);
-                // Set up the tier attributes for the dummy tier
-                tierAttrs = new SimpleAttributeSet(tierAttrs);
-                tierAttrs.addAttributes(getTierAttributes(syllableTier));
-                // Set up the attributes for its label
-                SimpleAttributeSet syllabificationLabelAttrs = getTierLabelAttributes(syllableTier);
-                if (recordAttrs != null) {
-                    syllabificationLabelAttrs.addAttributes(recordAttrs);
-                }
-                // Get the string for the label
-                String syllabificationLabelText = formatLabelText("Syllabification");
-                // Add the label
-                appendBatchString(syllabificationLabelText + ": ", syllabificationLabelAttrs);
-                // Get the string version of the syllabification
-                String ipaTargetContent = ipaTarget.toString(true);
-                // Add component factory if needed
-                if (syllabificationIsComponent) {
-                    tierAttrs.addAttributes(getSyllabificationAttributes());
-                }
-                // Append the content
-                appendBatchString(ipaTargetContent, tierAttrs);
-            }
-        }
-        else if (tierName.equals("IPA Actual")) {
-            Tier<IPATranscript> ipaTier = (Tier<IPATranscript>)tier;
-            List<IPATranscript> words = (ipaTier).getValue().words();
-            for (int i = 0; i < words.size(); i++) {
-                var word = words.get(i);
-                SimpleAttributeSet attrs;
-                if (word.matches("\\P")) {
-                    // Pause
-                    attrs = getIPAPauseAttributes(ipaTier);
-                }
-                else {
-                    // Word
-                    attrs = getIPAWordAttributes(ipaTier);
-                }
-                attrs.addAttributes(tierAttrs);
-                String content = word.toString();
-                appendBatchString(content, attrs);
-
-                if (i < words.size() - 1) {
-                    appendBatchString(" ", tierAttrs);
-                }
-            }
-            if (syllabificationVisible) {
-                // Add a newline at the end of the regular tier content
-                appendBatchLineFeed(tierAttrs);
-                // Create a dummy tier for the syllabification
-                IPATranscript ipaActual = ipaTier.getValue();
-                Tier<IPATranscript> syllableTier = sessionFactory.createTier(SystemTierType.ActualSyllables.getName(), IPATranscript.class);
-                syllableTier.setValue(ipaActual);
-                // Set up the tier attributes for the dummy tier
-                tierAttrs = new SimpleAttributeSet(tierAttrs);
-                tierAttrs.addAttributes(getTierAttributes(syllableTier));
-                // Set up the attributes for its label
-                SimpleAttributeSet syllabificationLabelAttrs = getTierLabelAttributes(syllableTier);
-                if (recordAttrs != null) {
-                    syllabificationLabelAttrs.addAttributes(recordAttrs);
-                }
-                // Get the string for the label
-                String syllabificationLabelText = formatLabelText("Syllabification");
-                // Add the label
-                appendBatchString(syllabificationLabelText + ": ", syllabificationLabelAttrs);
-                // Get the string version of the syllabification
-                String ipaActualContent = ipaActual.toString(true);
-                // Add component factory if needed
-                if (syllabificationIsComponent) {
-                    tierAttrs.addAttributes(getSyllabificationAttributes());
-                }
-                // Append the content
-                appendBatchString(ipaActualContent, tierAttrs);
-            }
-        }
-        else if (tierName.equals("Segment")) {
-            MediaSegment segment = record.getMediaSegment();
-            formatSegment(segment, tierAttrs);
-        }
-        else if (tierName.equals("Orthography")) {
-            Tier<Orthography> orthographyTier = (Tier<Orthography>) tier;
-            orthographyTier.getValue().accept(new TranscriptOrthographyVisitors.KeywordVisitor(this, tierAttrs));
-            //appendBatchString(tierContent, tierAttrs);
+        if (tier.isUnvalidated()) {
+            appendBatchString(tier.getUnvalidatedValue().getValue(), tierAttrs);
         }
         else {
-            Tier<TierData> userTier = (Tier<TierData>) tier;
-            TierData tierData = userTier.getValue();
-            if (tierData != null) {
-                for (int i = 0; i < tierData.length(); i++) {
-                    TierElement elem = tierData.elementAt(i);
-                    String text;
+            if (tierType.equals(IPATranscript.class)) {
+                Tier<IPATranscript> ipaTier = (Tier<IPATranscript>)tier;
+                List<IPATranscript> words = (ipaTier).getValue().words();
+                for (int i = 0; i < words.size(); i++) {
+                    var word = words.get(i);
                     SimpleAttributeSet attrs;
-                    if (elem instanceof TierString tierString) {
-                        text = tierString.text();
-                        attrs = getTierStringAttributes();
+                    if (word.matches("\\P")) {
+                        // Pause
+                        attrs = getIPAPauseAttributes(ipaTier);
+                    } else {
+                        // Word
+                        attrs = getIPAWordAttributes(ipaTier);
                     }
-                    else if (elem instanceof TierComment comment) {
-                        text = comment.toString();
-                        attrs = getTierCommentAttributes();
-                    }
-                    else {
-                        TierInternalMedia internalMedia = (TierInternalMedia) elem;
-                        text = internalMedia.toString();
-                        attrs = getTierInternalMediaAttributes();
-                    }
-
                     attrs.addAttributes(tierAttrs);
+                    String content = word.toString();
+                    appendBatchString(content, attrs);
 
-                    appendBatchString(text, attrs);
+                    if (i < words.size() - 1) {
+                        appendBatchString(" ", tierAttrs);
+                    }
+                }
+                if (tierName.equals("IPA Target") && syllabificationVisible) {
+                    // Add a newline at the end of the regular tier content
+                    appendBatchLineFeed(tierAttrs);
+                    // Create a dummy tier for the syllabification
+                    IPATranscript ipaTarget = ipaTier.getValue();
+                    Tier<IPATranscript> syllableTier = sessionFactory.createTier(SystemTierType.TargetSyllables.getName(), IPATranscript.class);
+                    syllableTier.setValue(ipaTarget);
+                    // Set up the tier attributes for the dummy tier
+                    tierAttrs = new SimpleAttributeSet(tierAttrs);
+                    tierAttrs.addAttributes(getTierAttributes(syllableTier));
+                    // Set up the attributes for its label
+                    SimpleAttributeSet syllabificationLabelAttrs = getTierLabelAttributes(syllableTier);
+                    if (recordAttrs != null) {
+                        syllabificationLabelAttrs.addAttributes(recordAttrs);
+                    }
+                    // Get the string for the label
+                    String syllabificationLabelText = formatLabelText("Syllabification");
+                    // Add the label
+                    appendBatchString(syllabificationLabelText + ": ", syllabificationLabelAttrs);
+                    // Get the string version of the syllabification
+                    String ipaTargetContent = ipaTarget.toString(true);
+                    // Add component factory if needed
+                    if (syllabificationIsComponent) {
+                        tierAttrs.addAttributes(getSyllabificationAttributes());
+                    }
+                    // Append the content
+                    appendBatchString(ipaTargetContent, tierAttrs);
+                }
+                else if (tierName.equals("IPA Actual") && syllabificationVisible) {
+                    // Add a newline at the end of the regular tier content
+                    appendBatchLineFeed(tierAttrs);
+                    // Create a dummy tier for the syllabification
+                    IPATranscript ipaActual = ipaTier.getValue();
+                    Tier<IPATranscript> syllableTier = sessionFactory.createTier(SystemTierType.ActualSyllables.getName(), IPATranscript.class);
+                    syllableTier.setValue(ipaActual);
+                    // Set up the tier attributes for the dummy tier
+                    tierAttrs = new SimpleAttributeSet(tierAttrs);
+                    tierAttrs.addAttributes(getTierAttributes(syllableTier));
+                    // Set up the attributes for its label
+                    SimpleAttributeSet syllabificationLabelAttrs = getTierLabelAttributes(syllableTier);
+                    if (recordAttrs != null) {
+                        syllabificationLabelAttrs.addAttributes(recordAttrs);
+                    }
+                    // Get the string for the label
+                    String syllabificationLabelText = formatLabelText("Syllabification");
+                    // Add the label
+                    appendBatchString(syllabificationLabelText + ": ", syllabificationLabelAttrs);
+                    // Get the string version of the syllabification
+                    String ipaActualContent = ipaActual.toString(true);
+                    // Add component factory if needed
+                    if (syllabificationIsComponent) {
+                        tierAttrs.addAttributes(getSyllabificationAttributes());
+                    }
+                    // Append the content
+                    appendBatchString(ipaActualContent, tierAttrs);
+                }
+            }
+            else if (tierType.equals(MediaSegment.class)) {
+                MediaSegment segment = record.getMediaSegment();
+                formatSegment(segment, tierAttrs);
+            }
+            else if (tierType.equals(Orthography.class)) {
+                Tier<Orthography> orthographyTier = (Tier<Orthography>) tier;
+                orthographyTier.getValue().accept(new TranscriptOrthographyVisitors.KeywordVisitor(this, tierAttrs));
+                //appendBatchString(tierContent, tierAttrs);
+            }
+            else if (tierType.equals(MorTierData.class)) {
+                Tier<MorTierData> morTier = (Tier<MorTierData>) tier;
+                MorTierData mors = morTier.getValue();
 
-                    if (i < tierData.length() - 1) {
+                for (int i = 0; i < mors.size(); i++) {
+                    Mor mor = mors.get(i);
+                    appendBatchString(mor.toString(), tierAttrs);
+                    if (i < mors.size() - 1) {
                         appendBatchString(" ", tierAttrs);
                     }
                 }
             }
+            else if (tierType.equals(GraspTierData.class)) {
+                Tier<GraspTierData> graspTier = (Tier<GraspTierData>) tier;
+                GraspTierData grasps = graspTier.getValue();
+
+                for (int i = 0; i < grasps.size(); i++) {
+                    Grasp grasp = grasps.get(i);
+                    appendBatchString(grasp.toString(), tierAttrs);
+                    if (i < grasps.size() - 1) {
+                        appendBatchString(" ", tierAttrs);
+                    }
+                }
+            }
+            else if (tierType.equals(TierData.class))  {
+                Tier<TierData> userTier = (Tier<TierData>) tier;
+                TierData tierData = userTier.getValue();
+                if (tierData != null) {
+                    for (int i = 0; i < tierData.length(); i++) {
+                        TierElement elem = tierData.elementAt(i);
+                        String text;
+                        SimpleAttributeSet attrs;
+                        if (elem instanceof TierString tierString) {
+                            text = tierString.text();
+                            attrs = getTierStringAttributes();
+                        }
+                        else if (elem instanceof TierComment comment) {
+                            text = comment.toString();
+                            attrs = getTierCommentAttributes();
+                        }
+                        else if (elem instanceof TierInternalMedia internalMedia) {
+                            text = internalMedia.toString();
+                            attrs = getTierInternalMediaAttributes();
+                        }
+                        else if (elem instanceof TierLink link) {
+                            text = link.toString();
+                            attrs = getTierLinkAttributes();
+                        }
+                        else {
+                            throw new RuntimeException("Invalid type");
+                        }
+
+                        attrs.addAttributes(tierAttrs);
+
+                        appendBatchString(text, attrs);
+
+                        if (i < tierData.length() - 1) {
+                            appendBatchString(" ", tierAttrs);
+                        }
+                    }
+                }
+            }
         }
 
-        if (alignmentVisible && tierName.equals(getAlignmentTierView().getTierName())) {
+        if (alignmentVisible && alignmentParent != null && tierName.equals(alignmentParent.getTierName())) {
             tierAttrs.removeAttribute("componentFactory");
             // Add a newline at the end of the regular tier content
             appendBatchLineFeed(tierAttrs);
-            // Get the alignment tier
-            Tier<PhoneAlignment> alignmentTier = record.getPhoneAlignmentTier();
-            // Set up the tier attributes for the dummy tier
-            tierAttrs = new SimpleAttributeSet(tierAttrs);
-            tierAttrs.addAttributes(getTierAttributes(alignmentTier));
-            // Set up the attributes for its label
-            SimpleAttributeSet alignmentLabelAttrs = getTierLabelAttributes(alignmentTier);
-            if (recordAttrs != null) {
-                alignmentLabelAttrs.addAttributes(recordAttrs);
-            }
-            // Get the string for the label
-            String alignmentLabelText = formatLabelText("Alignment");
-            // Add the label
-            appendBatchString(alignmentLabelText + ": ", alignmentLabelAttrs);
-            // Get the string version of the alignment
-            String alignmentContent = alignmentTier.getValue().toString();
-            // Add component factory if needed
-            if (alignmentIsComponent) {
-                tierAttrs.addAttributes(getAlignmentAttributes());
-            }
-            appendBatchString(alignmentContent, tierAttrs);
+            // Append the alignment
+            tierAttrs = appendAlignmentToTierInRecord(tier, record);
         }
 
         tierAttrs.removeAttribute("componentFactory");
@@ -1673,6 +2180,11 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 if (gem == null) return -1;
                 return pos - getGemStart(gem);
             }
+            case "generic" -> {
+                Tier<?> genericTier = (Tier<?>) elem.getAttributes().getAttribute("generic");
+                if (genericTier == null) return -1;
+                return pos - getGenericStart(genericTier);
+            }
             default -> {
                 return -1;
             }
@@ -1685,6 +2197,38 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
         SimpleAttributeSet newLineAttrs;
 
+//        // Add date line if present
+//        var sessionDate = session.getDate();
+//        if (sessionDate != null) {
+//            Tier<LocalDate> dateTier = sessionFactory.createTier("Date", LocalDate.class);
+//            dateTier.setValue(sessionDate);
+//            newLineAttrs = writeGeneric("Date", dateTier);
+//            appendBatchLineFeed(newLineAttrs);
+//        }
+
+        // Add media line if present
+        var sessionMedia = session.getMediaLocation();
+        if (sessionMedia != null) {
+            Tier<TierData> mediaTier = sessionFactory.createTier("Media", TierData.class);
+            mediaTier.setText(sessionMedia);
+            newLineAttrs = writeGeneric("Media", mediaTier);
+            appendBatchLineFeed(newLineAttrs);
+        }
+
+        // Add languages line if present
+        var sessionLanguages = session.getLanguages();
+        if (sessionLanguages != null && !sessionLanguages.isEmpty()) {
+            Tier<String> languagesTier = sessionFactory.createTier("Languages", String.class);
+            StringJoiner joiner = new StringJoiner(" ");
+            for (Language lang : sessionLanguages) {
+                joiner.add(lang.toString());
+            }
+            languagesTier.setText(joiner.toString());
+            newLineAttrs = writeGeneric("Languages", languagesTier);
+            appendBatchLineFeed(newLineAttrs);
+        }
+
+        // Single record
         if (singleRecordView) {
             Record record = session.getRecord(singleRecordIndex);
             int recordTranscriptElementIndex = transcript.getElementIndex(record);
@@ -1729,6 +2273,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 nextElementIndex++;
             }
         }
+        // All records
         else {
             for (int i = 0; i < transcript.getNumberOfElements(); i++) {
                 Transcript.Element elem = transcript.getElementAt(i);
