@@ -15,10 +15,27 @@
  */
 package ca.phon.session.spi;
 
+import ca.phon.formatter.Formatter;
+
 import java.text.ParseException;
 import java.util.List;
 
 public interface TierSPI<T>  extends TierDescriptionSPI {
+
+	/**
+	 * Return formatter used by parse and toString for converting between objects and text
+	 *
+	 * @return formatter, if no formatter is manually set will use the result of FormatterFactory.createFormatter,
+	 *  null if no formatter is set or found
+	 */
+	public Formatter<T> getFormatter();
+
+	/**
+	 * Set formatter used by parse and toString for converting between objects and text
+	 *
+	 * @param formatter, use null to use default (if any)
+	 */
+	public void setFormatter(Formatter<T> formatter);
 
 	/**
 	 * Validate text and return object of type T

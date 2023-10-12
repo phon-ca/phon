@@ -83,7 +83,7 @@ public final class TierAligner {
             for(String tierName:record.getUserDefinedTierNames()) {
                 final Tier<?> bottomTier = record.getTier(tierName);
                 // handle morphology special cases
-                if(topTier == record.getOrthographyTier() && bottomTier.getDeclaredType() == MorTierData.class) {
+                if(topTier == record.getOrthographyTier() && bottomTier.getDeclaredType() == MorTierData.class && bottomTier.hasValue()) {
                     final UserTierType userTierType = UserTierType.fromPhonTierName(tierName);
                     if(userTierType == UserTierType.Mor || userTierType == UserTierType.Trn) {
                         // align with orthography only
