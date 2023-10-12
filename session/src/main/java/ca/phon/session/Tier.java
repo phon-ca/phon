@@ -16,6 +16,7 @@
 package ca.phon.session;
 
 import ca.phon.extensions.*;
+import ca.phon.formatter.Formatter;
 import ca.phon.session.spi.TierSPI;
 
 import java.lang.reflect.InvocationTargetException;
@@ -31,7 +32,7 @@ public final class Tier<T> extends ExtendableObject {
 	private final TierSPI<T> tierImpl;
 
 	private final List<TierListener<T>> tierListeners = Collections.synchronizedList(new ArrayList<>());
-	
+
 	Tier(TierSPI<T> impl) {
 		super();
 		this.tierImpl = impl;
@@ -149,6 +150,25 @@ public final class Tier<T> extends ExtendableObject {
 	 */
 	public List<String> getTranscribers() {
 		return tierImpl.getTranscribers();
+	}
+
+	/**
+	 * Return formatter used by setText and toString for converting between objects and text
+	 *
+	 * @return formatter, if no formatter is manually set will use the result of FormatterFactory.createFormatter,
+	 *  null if no formatter is set or found
+	 */
+	public Formatter<T> getFormatter() {
+		return tierImpl.getFormatter();
+	}
+
+	/**
+	 * Set formatter used by parse and toString for converting between objects and text
+	 *
+	 * @param formatter, use null to use default (if any)
+	 */
+	public void setFormatter(Formatter<T> formatter) {
+		tierImpl.setFormatter(formatter);
 	}
 
 	/**

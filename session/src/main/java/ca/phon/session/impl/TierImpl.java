@@ -46,6 +46,8 @@ public class TierImpl<T> implements TierSPI<T> {
 
 	private final String subtypeExpr;
 
+	private Formatter<T> formatter;
+
 	private final Map<String, T> blindTranscriptions = new LinkedHashMap<>();
 
 	/**
@@ -127,8 +129,21 @@ public class TierImpl<T> implements TierSPI<T> {
 	}
 
 	@Override
+	public Formatter<T> getFormatter() {
+		if(formatter != null) return formatter;
+		else {
+			return FormatterFactory.createFormatter(getDeclaredType());
+		}
+	}
+
+	@Override
+	public void setFormatter(Formatter<T> formatter) {
+		this.formatter = formatter;
+	}
+
+	@Override
 	public T parse(String text) throws ParseException {
-		final Formatter<T> factory = FormatterFactory.createFormatter(getDeclaredType());
+		final Formatter<T> factory = getFormatter();
 		if(factory != null) {
 			return factory.parse(text);
 		} else {
@@ -145,4 +160,5 @@ public class TierImpl<T> implements TierSPI<T> {
 	public void setValue(T value) {
 		this.valueRef.set(value);
 	}
+
 }

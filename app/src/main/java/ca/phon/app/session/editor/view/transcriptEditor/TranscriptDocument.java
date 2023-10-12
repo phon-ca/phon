@@ -1968,7 +1968,10 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
         Class<?> tierType = tier.getDeclaredType();
 
-        if (tier.isUnvalidated()) {
+        if(!tier.hasValue()) {
+            appendBatchString("", tierAttrs);
+        }
+        else if (tier.isUnvalidated()) {
             appendBatchString(tier.getUnvalidatedValue().getValue(), tierAttrs);
         }
         else {
