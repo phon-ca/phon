@@ -215,5 +215,4 @@ public class SessionXMLStreamWriter extends DelegatingXMLStreamWriter {
         super.writeCData(data);
     }
 
-
 }
