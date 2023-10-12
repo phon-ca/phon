@@ -71,17 +71,28 @@ public class OneToOne {
         record.getOrthographyTier().getValue().accept(annotator);
     }
 
-    private static class OrthographyAnnotator extends VisitorAdapter<OrthographyElement> {
+    /**
+     * Add or remove OneToOne annotations to a record
+     */
+    public static class OrthographyAnnotator extends VisitorAdapter<OrthographyElement> {
 
         private final boolean removeAnnotations;
 
         private final CrossTierAlignment xTierAlignment;
 
+        /**
+         * Creates a visitor which remove OneToOne annotations
+         */
         public OrthographyAnnotator() {
             this.xTierAlignment = null;
             this.removeAnnotations = true;
         }
 
+        /**
+         * Create a visitor which adds OneToOne annotations
+         * based on given cross tier alignment
+         * @param xTierAlignment
+         */
         public OrthographyAnnotator(CrossTierAlignment xTierAlignment) {
             this.xTierAlignment = xTierAlignment;
             this.removeAnnotations = false;
