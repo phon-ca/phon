@@ -61,51 +61,73 @@ public class OneToOne {
         record.getOrthographyTier().getValue().accept(annotator);
     }
 
-    public static class OrthographyAnnotator extends VisitorAdapter<OrthographyElement> {
+    /**
+     * Remove any OneToOne annotations on given record
+     *
+     * @param record
+     */
+    public static void removeAnnotations(Record record) {
+        final OrthographyAnnotator annotator = new OrthographyAnnotator();
+        record.getOrthographyTier().getValue().accept(annotator);
+    }
+
+    private static class OrthographyAnnotator extends VisitorAdapter<OrthographyElement> {
+
+        private final boolean removeAnnotations;
 
         private final CrossTierAlignment xTierAlignment;
 
+        public OrthographyAnnotator() {
+            this.xTierAlignment = null;
+            this.removeAnnotations = true;
+        }
+
         public OrthographyAnnotator(CrossTierAlignment xTierAlignment) {
             this.xTierAlignment = xTierAlignment;
+            this.removeAnnotations = false;
         }
 
         private void visitAlignableElement(OrthographyElement orthographyElement) {
-            final Map<String, Object> alignedElements = xTierAlignment.getAlignedElements(orthographyElement);
+            if(removeAnnotations) {
+                orthographyElement.putExtension(OneToOne.class, null);
+            } else {
+                final Map<String, Object> alignedElements = xTierAlignment.getAlignedElements(orthographyElement);
 
-            final Map<String, Mor> morMap = new LinkedHashMap<>();
-            final Map<String, GraspTierData> graMap = new LinkedHashMap<>();
-            final Map<String, IPATranscript> ipaMap = new LinkedHashMap<>();
-            // check for mor tiers
-            if(alignedElements.containsKey(UserTierType.Mor.getTierName())) {
-                final Mor mor = (Mor)alignedElements.get(UserTierType.Mor.getTierName());
-                morMap.put(UserTierType.Mor.getTierName(), mor);
-            }
-            if(alignedElements.containsKey(UserTierType.Gra.getTierName())) {
-                final GraspTierData grasp = (GraspTierData) alignedElements.get(UserTierType.Gra.getTierName());
-                graMap.put(UserTierType.Gra.getTierName(), grasp);
-            }
-            if(alignedElements.containsKey(UserTierType.Trn.getTierName())) {
-                final Mor mor = (Mor)alignedElements.get(UserTierType.Trn.getTierName());
-                morMap.put(UserTierType.Trn.getTierName(), mor);
-            }
-            if(alignedElements.containsKey(UserTierType.Grt.getTierName())) {
-                final GraspTierData grasp = (GraspTierData) alignedElements.get(UserTierType.Grt.getTierName());
-                graMap.put(UserTierType.Grt.getTierName(), grasp);
-            }
+                final Map<String, Mor> morMap = new LinkedHashMap<>();
+                final Map<String, GraspTierData> graMap = new LinkedHashMap<>();
+                final Map<String, IPATranscript> ipaMap = new LinkedHashMap<>();
+                // check for mor tiers and their corresponding grasp tiers
+                if (alignedElements.containsKey(UserTierType.Mor.getTierName())) {
+                    final Mor mor = (Mor) alignedElements.get(UserTierType.Mor.getTierName());
+                    morMap.put(UserTierType.Mor.getTierName(), mor);
+                }
+                if (alignedElements.containsKey(UserTierType.Gra.getTierName())) {
+                    final GraspTierData grasp = (GraspTierData) alignedElements.get(UserTierType.Gra.getTierName());
+                    graMap.put(UserTierType.Gra.getTierName(), grasp);
+                }
+                if (alignedElements.containsKey(UserTierType.Trn.getTierName())) {
+                    final Mor mor = (Mor) alignedElements.get(UserTierType.Trn.getTierName());
+                    morMap.put(UserTierType.Trn.getTierName(), mor);
+                }
+                if (alignedElements.containsKey(UserTierType.Grt.getTierName())) {
+                    final GraspTierData grasp = (GraspTierData) alignedElements.get(UserTierType.Grt.getTierName());
+                    graMap.put(UserTierType.Grt.getTierName(), grasp);
+                }
 
-            // ipa tiers
-            if(alignedElements.containsKey(SystemTierType.IPATarget.getName())) {
-                final IPATranscript ipa = (IPATranscript) alignedElements.get(SystemTierType.IPATarget.getName());
-                ipaMap.put(SystemTierType.IPATarget.getName(), ipa);
-            }
-            if(alignedElements.containsKey(SystemTierType.IPAActual.getName())) {
-                final IPATranscript ipa = (IPATranscript) alignedElements.get(SystemTierType.IPAActual.getName());
-                ipaMap.put(SystemTierType.IPAActual.getName(), ipa);
-            }
+                // ipa tiers
+                if (alignedElements.containsKey(SystemTierType.IPATarget.getName())) {
+                    final IPATranscript ipa = (IPATranscript) alignedElements.get(SystemTierType.IPATarget.getName());
+                    ipaMap.put(SystemTierType.IPATarget.getName(), ipa);
+                }
+                if (alignedElements.containsKey(SystemTierType.IPAActual.getName())) {
+                    final IPATranscript ipa = (IPATranscript) alignedElements.get(SystemTierType.IPAActual.getName());
+                    ipaMap.put(SystemTierType.IPAActual.getName(), ipa);
+                }
 
-            if(!morMap.isEmpty() || !graMap.isEmpty() || !ipaMap.isEmpty()) {
-                final OneToOne oneToOne = new OneToOne(morMap, graMap, ipaMap);
-                orthographyElement.putExtension(OneToOne.class, oneToOne);
+                if (!morMap.isEmpty() || !graMap.isEmpty() || !ipaMap.isEmpty()) {
+                    final OneToOne oneToOne = new OneToOne(morMap, graMap, ipaMap);
+                    orthographyElement.putExtension(OneToOne.class, oneToOne);
+                }
             }
         }
 
