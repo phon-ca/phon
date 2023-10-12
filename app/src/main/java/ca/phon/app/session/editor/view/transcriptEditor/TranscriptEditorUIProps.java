@@ -155,6 +155,15 @@ public class TranscriptEditorUIProps implements UIDefaultsHandler, IPluginExtens
     public final static String SEGMENT_SELECTION = "TranscriptEditor.segment.selection";
     public final static Color DEFAULT_SEGMENT_SELECTION = UIManager.getColor("Phon.darkBlue");
 
+    public final static String COMMENT_BACKGROUND = "TranscriptEditor.commentBackground";
+    public final static Color DEFAULT_COMMENT_BACKGROUND = Color.decode("#ffffbf");
+
+    public final static String GEM_BACKGROUND = "TranscriptEditor.gemBackground";
+    public final static Color DEFAULT_GEM_BACKGROUND = Color.decode("#ffdfbf");
+
+    public final static String GENERIC_BACKGROUND = "TranscriptEditor.genericBackground";
+    public final static Color DEFAULT_GENERIC_BACKGROUND = Color.decode("#ffffbf");
+
 
 
     @Override
@@ -207,6 +216,10 @@ public class TranscriptEditorUIProps implements UIDefaultsHandler, IPluginExtens
         uiDefaults.put(ORTHOGRAPHY_MARKER, DEFAULT_ORTHOGRAPHY_MARKER);
         uiDefaults.put(ORTHOGRAPHY_GROUP_ANNOTATION, DEFAULT_ORTHOGRAPHY_GROUP_ANNOTATION);
         uiDefaults.put(ORTHOGRAPHY_OVERLAP, DEFAULT_ORTHOGRAPHY_OVERLAP);
+
+        uiDefaults.put(COMMENT_BACKGROUND, DEFAULT_COMMENT_BACKGROUND);
+        uiDefaults.put(GEM_BACKGROUND, DEFAULT_GEM_BACKGROUND);
+        uiDefaults.put(GENERIC_BACKGROUND, DEFAULT_GENERIC_BACKGROUND);
     }
 
     @Override

@@ -193,6 +193,10 @@ public class TranscriptEditor extends JEditorPane {
         return (TranscriptDocument) getDocument();
     }
 
+    public Session getSession() {
+        return session;
+    }
+
     public void setAlignmentVisible(boolean visible) {
         getTranscriptDocument().setAlignmentVisible(visible);
     }
@@ -238,8 +242,8 @@ public class TranscriptEditor extends JEditorPane {
                 return session.getTranscript().getElementIndex(gem);
             }
             case "record" -> {
-                Integer recordIndex = (Integer) elem.getAttributes().getAttribute("recordIndex");
-                return session.getTranscript().getRecordElementIndex(recordIndex);
+                Record record = (Record) elem.getAttributes().getAttribute("record");
+                return session.getRecordElementIndex(record);
             }
             default -> {
                 return -1;
@@ -283,9 +287,9 @@ public class TranscriptEditor extends JEditorPane {
         Element elem = getTranscriptDocument().getCharacterElement(getCaretPosition());
         Element firstInnerElem = elem.getElement(0);
         if (firstInnerElem != null) {
-            Integer recordIndex = (Integer) firstInnerElem.getAttributes().getAttribute("recordIndex");
-            if (recordIndex != null) {
-                return recordIndex;
+            Record record = (Record) firstInnerElem.getAttributes().getAttribute("record");
+            if (record != null) {
+                return session.getRecordPosition(record);
             }
         }
 
@@ -476,7 +480,7 @@ public class TranscriptEditor extends JEditorPane {
         if (elemType != null && (elemType.equals("record") || elemType.equals("comment") || elemType.equals("gem"))) {
             int elementIndex = -1;
             if (elemType.equals("record")) {
-                elementIndex = (int) attrs.getAttribute("recordElementIndex");
+                elementIndex = session.getRecordElementIndex((Record) attrs.getAttribute("record"));
             }
             else if (elemType.equals("comment")) {
                 Comment comment = (Comment) attrs.getAttribute("comment");
@@ -578,12 +582,10 @@ public class TranscriptEditor extends JEditorPane {
         var elem = doc.getCharacterElement(startCaretPos);
         var caretAttrs = elem.getAttributes();
         Tier caretTier = (Tier) caretAttrs.getAttribute("tier");
-        Integer caretRecordIndex = (Integer) caretAttrs.getAttribute("recordIndex");
 
         boolean caretInDeletedTier = caretTier != null && deletedTiersNames.contains(caretTier.getName());
 
         int caretOffset = doc.getOffsetInContent(startCaretPos);
-
 
         Document blank = getEditorKit().createDefaultDocument();
         setDocument(blank);
@@ -594,6 +596,9 @@ public class TranscriptEditor extends JEditorPane {
 
         // Caret in record / tier
         if (caretTier != null) {
+
+            int caretRecordIndex = session.getRecordPosition((Record) caretAttrs.getAttribute("record"));
+
             // Caret in deleted tier
             if (caretInDeletedTier) {
                 var oldTierView = data.oldTierView();
@@ -680,7 +685,6 @@ public class TranscriptEditor extends JEditorPane {
         var elem = doc.getCharacterElement(startCaretPos);
         var caretAttrs = elem.getAttributes();
         Tier caretTier = (Tier) caretAttrs.getAttribute("tier");
-        Integer caretRecordIndex = (Integer) caretAttrs.getAttribute("recordIndex");
 
         boolean caretInHiddenTier = caretTier != null && hiddenTiersNames.contains(caretTier.getName());
 
@@ -696,6 +700,9 @@ public class TranscriptEditor extends JEditorPane {
 
         // Caret in record / tier
         if (caretTier != null) {
+
+            int caretRecordIndex = session.getRecordPosition((Record) caretAttrs.getAttribute("record"));
+
             // Caret in hidden tier
             if (caretInHiddenTier) {
                 var oldTierView = data.oldTierView();
@@ -879,9 +886,9 @@ public class TranscriptEditor extends JEditorPane {
         var elem = doc.getCharacterElement(startCaretPos);
         var caretAttrs = elem.getAttributes();
         Tier caretTier = (Tier) caretAttrs.getAttribute("tier");
-        Integer caretRecordIndex = (Integer) caretAttrs.getAttribute("recordIndex");
+        Record caretRecord = (Record) caretAttrs.getAttribute("record");
 
-        boolean caretInDeletedRecord = caretRecordIndex != null && caretRecordIndex == deletedRecordIndex;
+        boolean caretInDeletedRecord = caretRecord != null && session.getRecordPosition(caretRecord) == deletedRecordIndex;
 
         int caretOffset = doc.getOffsetInContent(startCaretPos);
 
@@ -971,7 +978,7 @@ public class TranscriptEditor extends JEditorPane {
 
     // region On Click
 
-    private void onClickTierLabel(Point2D point, Tier<?> tier, int recordIndex) {
+    private void onClickTierLabel(Point2D point, Tier<?> tier, Record record) {
         // Build a new popup menu
         JPopupMenu menu = new JPopupMenu();
         MenuBuilder builder = new MenuBuilder(menu);
@@ -980,7 +987,7 @@ public class TranscriptEditor extends JEditorPane {
 
         for (var extPt : extPts) {
             var menuHandler = extPt.getFactory().createObject();
-            menuHandler.addMenuItems(builder, session, eventManager, undoSupport, tier, recordIndex);
+            menuHandler.addMenuItems(builder, session, eventManager, undoSupport, tier, record);
         }
 
         // Show it where the user clicked
@@ -1154,15 +1161,15 @@ public class TranscriptEditor extends JEditorPane {
 
                 switch (elementType) {
                     case "comment" -> {
-                        g.setColor(Color.decode("#ffffbf"));
+                        g.setColor(UIManager.getColor(TranscriptEditorUIProps.COMMENT_BACKGROUND));
                         start = doc.getCommentStart((Comment) attrs.getAttribute("comment"));
                     }
                     case "gem" -> {
-                        g.setColor(Color.decode("#ffdfbf"));
+                        g.setColor(UIManager.getColor(TranscriptEditorUIProps.GEM_BACKGROUND));
                         start = doc.getGemStart((Gem) attrs.getAttribute("gem"));
                     }
                     case "generic" -> {
-                        g.setColor(Color.decode("#ffffbf"));
+                        g.setColor(UIManager.getColor(TranscriptEditorUIProps.GENERIC_BACKGROUND));
                         start = doc.getGenericStart((Tier<?>) attrs.getAttribute("generic"));
                     }
                 }
@@ -1443,7 +1450,6 @@ public class TranscriptEditor extends JEditorPane {
         Element elem = doc.getCharacterElement(caretPos);
         AttributeSet currentPosAttrs = elem.getAttributes();
 
-        Integer recordIndex = (Integer) currentPosAttrs.getAttribute("recordIndex");
         String elementType = (String) currentPosAttrs.getAttribute("elementType");
         Object content;
         if (elementType.equals("record")) {
@@ -1455,7 +1461,6 @@ public class TranscriptEditor extends JEditorPane {
 
         int currentDocElemIndex = doc.getDefaultRootElement().getElementIndex(caretPos);
 
-        System.out.println(recordIndex);
         System.out.println(elementType);
         System.out.println(currentDocElemIndex);
 
@@ -1497,7 +1502,6 @@ public class TranscriptEditor extends JEditorPane {
         Element elem = doc.getCharacterElement(caretPos);
         AttributeSet currentPosAttrs = elem.getAttributes();
 
-        Integer recordIndex = (Integer) currentPosAttrs.getAttribute("recordIndex");
         String elementType = (String) currentPosAttrs.getAttribute("elementType");
         Object content;
         if (elementType.equals("record")) {
@@ -1509,7 +1513,6 @@ public class TranscriptEditor extends JEditorPane {
 
         int currentDocElemIndex = doc.getDefaultRootElement().getElementIndex(caretPos);
 
-        System.out.println(recordIndex);
         System.out.println(elementType);
         System.out.println(currentDocElemIndex);
 
@@ -1833,9 +1836,9 @@ public class TranscriptEditor extends JEditorPane {
                             switch (elementType) {
                                 case "record" -> {
                                     Tier<?> tier = (Tier<?>) attrs.getAttribute("tier");
-                                    Integer recordIndex = (Integer) attrs.getAttribute("recordIndex");
-                                    if (tier != null && recordIndex != null) {
-                                        onClickTierLabel(e.getPoint(), tier, recordIndex);
+                                    Record record = (Record) attrs.getAttribute("record");
+                                    if (tier != null && record != null) {
+                                        onClickTierLabel(e.getPoint(), tier, record);
                                     }
                                 }
                                 case "comment" -> onClickCommentLabel(e.getPoint(), (Comment) attrs.getAttribute("comment"));

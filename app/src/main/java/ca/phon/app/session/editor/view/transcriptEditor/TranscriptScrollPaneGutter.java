@@ -4,6 +4,7 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.session.Record;
 import ca.phon.session.Tier;
 import ca.phon.ui.fonts.FontPreferences;
 import javax.swing.*;
@@ -67,8 +68,10 @@ public class TranscriptScrollPaneGutter extends JComponent {
                     if (elemRect == null) continue;
 
                     if (innerElemAttrs.getAttribute("sep") != null) {
-                        Integer recordNumber = (Integer) innerElem.getAttributes().getAttribute("recordIndex");
-                        if (showRecordNumbers && recordNumber != null) {
+                        Record record = (Record) innerElem.getAttributes().getAttribute("record");
+                        if (showRecordNumbers && record != null) {
+                            int recordNumber = editor.getSession().getRecordPosition(record);
+
                             var sepRect = editor.modelToView2D(innerElem.getStartOffset());
 
                             String recordNumberText = String.valueOf(recordNumber + 1);

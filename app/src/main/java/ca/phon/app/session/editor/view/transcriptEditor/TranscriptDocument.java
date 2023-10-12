@@ -161,9 +161,9 @@ public class TranscriptDocument extends DefaultStyledDocument {
     private SimpleAttributeSet getRecordAttributes(int recordIndex) {
         SimpleAttributeSet retVal = new SimpleAttributeSet();
 
-        int recordElementIndex = session.getRecordElementIndex(recordIndex);
-        retVal.addAttribute("recordIndex", recordIndex);
-        retVal.addAttribute("recordElementIndex", recordElementIndex);
+        Record record = session.getRecord(recordIndex);
+        retVal.addAttribute("record", record);
+
         retVal.addAttribute("elementType", "record");
 
         return retVal;
@@ -780,9 +780,11 @@ public class TranscriptDocument extends DefaultStyledDocument {
             Element elem = root.getElement(i);
             if (elem.getElementCount() < 1) continue;
             AttributeSet attrs = elem.getElement(0).getAttributes();
-            var currentRecordIndex = attrs.getAttribute("recordIndex");
+            Record currentRecord = (Record) attrs.getAttribute("record");
+            if (currentRecord == null) continue;
+            int currentRecordIndex = session.getRecordPosition(currentRecord);
             var tier = attrs.getAttribute("tier");
-            if ((tier != null || includeSeparator) && currentRecordIndex != null && recordIndex == (int)currentRecordIndex) {
+            if ((tier != null || includeSeparator) && recordIndex == currentRecordIndex) {
                 return elem.getStartOffset();
             }
         }
@@ -796,9 +798,9 @@ public class TranscriptDocument extends DefaultStyledDocument {
         for (int i = 0; i < root.getElementCount(); i++) {
             Element elem = root.getElement(i);
             if (elem.getElementCount() < 1) continue;
-            Integer currentRecordIndex = (Integer) elem.getElement(0).getAttributes().getAttribute("recordIndex");
-            // If correct record index
-            if (currentRecordIndex != null) {
+            Record record = (Record) elem.getElement(0).getAttributes().getAttribute("record");
+            // If correct record
+            if (record != null) {
                 for (int j = 0; j < elem.getElementCount(); j++) {
                     Element innerElem = elem.getElement(j);
                     AttributeSet attrs = innerElem.getAttributes();
@@ -823,8 +825,10 @@ public class TranscriptDocument extends DefaultStyledDocument {
             Element elem = root.getElement(i);
             if (elem.getElementCount() < 1) continue;
             AttributeSet attrs = elem.getElement(0).getAttributes();
-            var currentRecordIndex = attrs.getAttribute("recordIndex");
-            if (currentRecordIndex != null && recordIndex == (int)currentRecordIndex) {
+            Record currentRecord = (Record) attrs.getAttribute("record");
+            if (currentRecord == null) continue;
+            int currentRecordIndex = session.getRecordPosition(currentRecord);
+            if (recordIndex == currentRecordIndex) {
                 retVal = Math.max(retVal, elem.getEndOffset());
             }
         }
@@ -838,15 +842,15 @@ public class TranscriptDocument extends DefaultStyledDocument {
         for (int i = 0; i < root.getElementCount(); i++) {
             Element elem = root.getElement(i);
             if (elem.getElementCount() < 1) continue;
-            var currentRecordIndex = elem.getElement(0).getAttributes().getAttribute("recordIndex");
+            Record currentRecord = (Record) elem.getElement(0).getAttributes().getAttribute("record");
             // If correct record index
-            if (currentRecordIndex != null) {
+            if (currentRecord != null) {
                 for (int j = 0; j < elem.getElementCount(); j++) {
                     Element innerElem = elem.getElement(j);
                     var currentTier = innerElem.getAttributes().getAttribute("tier");
                     // If correct tier
                     if (currentTier != null && currentTier == tier) {
-                        return getRecordEnd((int)currentRecordIndex);
+                        return getRecordEnd(tier);
                     }
                 }
             }
@@ -861,9 +865,11 @@ public class TranscriptDocument extends DefaultStyledDocument {
         for (int i = 0; i < root.getElementCount(); i++) {
             Element elem = root.getElement(i);
             if (elem.getElementCount() < 1) continue;
-            Integer currentRecordIndex = (Integer) elem.getElement(0).getAttributes().getAttribute("recordIndex");
+            Record currentRecord = (Record) elem.getElement(0).getAttributes().getAttribute("record");
+            if (currentRecord == null) continue;
+            int currentRecordIndex = session.getRecordPosition(currentRecord);
             // If correct record index
-            if (currentRecordIndex != null && currentRecordIndex == recordIndex) {
+            if (currentRecordIndex == recordIndex) {
                 for (int j = 0; j < elem.getElementCount(); j++) {
                     Element innerElem = elem.getElement(j);
                     AttributeSet attrs = innerElem.getAttributes();
@@ -913,9 +919,11 @@ public class TranscriptDocument extends DefaultStyledDocument {
         for (int i = 0; i < root.getElementCount(); i++) {
             Element elem = root.getElement(i);
             if (elem.getElementCount() < 1) continue;
-            var currentRecordIndex = elem.getElement(0).getAttributes().getAttribute("recordIndex");
+            Record currentRecord = (Record) elem.getElement(0).getAttributes().getAttribute("record");
+            if (currentRecord == null) continue;
+            int currentRecordIndex = session.getRecordPosition(currentRecord);
             // If correct record index
-            if (currentRecordIndex != null && ((int)currentRecordIndex) == recordIndex) {
+            if ((currentRecordIndex) == recordIndex) {
                 for (int j = 0; j < elem.getElementCount(); j++) {
                     Element innerElem = elem.getElement(j);
                     AttributeSet attrs = innerElem.getAttributes();
@@ -937,9 +945,10 @@ public class TranscriptDocument extends DefaultStyledDocument {
         for (int i = 0; i < root.getElementCount(); i++) {
             Element elem = root.getElement(i);
             if (elem.getElementCount() < 1) continue;
-            Integer currentRecordIndex = (Integer) elem.getElement(0).getAttributes().getAttribute("recordIndex");
+            Record currentRecord = (Record) elem.getElement(0).getAttributes().getAttribute("record");
             // If correct record index
-            if (currentRecordIndex != null) {
+            if (currentRecord != null) {
+                int currentRecordIndex = session.getRecordPosition(currentRecord);
                 for (int j = 0; j < elem.getElementCount(); j++) {
                     Element innerElem = elem.getElement(j);
                     Tier<?> currentTier = (Tier<?>)innerElem.getAttributes().getAttribute("tier");
@@ -1876,20 +1885,16 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
     public int getRecordIndex(int offset) {
         AttributeSet attributes = getCharacterElement(offset).getAttributes();
-        var index = attributes.getAttribute("recordIndex");
-        if (index == null) {
-            return -1;
-        }
-        return (int)index;
+        Record record = (Record) attributes.getAttribute("record");
+        if (record == null) return -1;
+        return session.getRecordPosition(record);
     }
 
     public int getRecordElementIndex(int offset) {
         AttributeSet attributes = getCharacterElement(offset).getAttributes();
-        var index = attributes.getAttribute("recordElementIndex");
-        if (index == null) {
-            return -1;
-        }
-        return (int)index;
+        Record record = (Record) attributes.getAttribute("record");
+        if (record == null) return -1;
+        return session.getRecordElementIndex(record);
     }
 
     public Tier<?> getTier(int offset) {
