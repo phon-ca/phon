@@ -55,7 +55,7 @@
 		<ca.phon.phon-groovy-plugin.version>8</ca.phon.phon-groovy-plugin.version>
 		<ca.phon.phon-praat-plugin.version>71-SNAPSHOT</ca.phon.phon-praat-plugin.version>
 		<ca.phon.phon-version-triggers.version>10</ca.phon.phon-version-triggers.version>
-		<ca.phon.phontalk.version>3.6.0-181-SNAPSHOT</ca.phon.phontalk.version>
+		<ca.phon.phontalk.version>4.0.0-181-SNAPSHOT</ca.phon.phontalk.version>
 	</properties>
 
 	<dependencies>
@@ -89,11 +89,11 @@
 			<version>${ca.phon.phon-praat-plugin.version}</version>
 		</dependency>
 
-<!--		<dependency>-->
-<!--			<groupId>ca.phon</groupId>-->
-<!--			<artifactId>phontalk-plugin</artifactId>-->
-<!--			<version>${ca.phon.phontalk.version}</version>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>ca.phon</groupId>
+			<artifactId>phontalk-plugin</artifactId>
+			<version>${ca.phon.phontalk.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>ca.phon</groupId>

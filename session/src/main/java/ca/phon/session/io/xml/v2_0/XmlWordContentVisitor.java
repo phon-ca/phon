@@ -168,7 +168,7 @@ public final class XmlWordContentVisitor extends VisitorAdapter<Object> {
             if(!(ele instanceof Word word)) throw new IllegalArgumentException();
             wordList.add(word);
         }
-        replacements.add(new ca.phon.orthography.Replacement(xmlReplacement.isReal(), wordList));
+        replacements.add(new ca.phon.orthography.Replacement(xmlReplacement.isReal() != null && xmlReplacement.isReal(), wordList));
     }
 
     @Override
