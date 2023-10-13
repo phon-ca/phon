@@ -143,9 +143,9 @@ public class TierImpl<T> implements TierSPI<T> {
 
 	@Override
 	public T parse(String text) throws ParseException {
-		final Formatter<T> factory = getFormatter();
-		if(factory != null) {
-			return factory.parse(text);
+		final Formatter<T> f = getFormatter();
+		if(f != null) {
+			return f.parse(text);
 		} else {
 			throw new ParseException("No parser available for type " + getDeclaredType(), 0);
 		}
