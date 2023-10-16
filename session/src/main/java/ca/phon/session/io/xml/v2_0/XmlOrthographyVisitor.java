@@ -194,28 +194,28 @@ public class XmlOrthographyVisitor extends VisitorAdapter<Object> {
 
     @Visits
     public void visitSeparator(XmlSeparatorType xmlSeparator) {
-        final SeparatorType sType = switch (xmlSeparator.getType()) {
-            case CLAUSE_DELIMITER -> SeparatorType.CLAUSE_DELIMITER;
-            case COLON -> SeparatorType.COLON;
-            case SEMICOLON -> SeparatorType.SEMICOLON;
-            case UNMARKED_ENDING -> SeparatorType.UNMARKED_ENDING;
-            case UPTAKE -> SeparatorType.UPTAKE;
-        };
-        builder.append(new Separator(sType));
-
+        final SeparatorType sType = SeparatorType.fromString(xmlSeparator.getType());
+        if(sType != null) {
+            builder.append(new Separator(sType));
+        } else {
+            final ToneMarkerType toneMarkerType = ToneMarkerType.fromString(xmlSeparator.getType());
+            if(toneMarkerType == null) {
+                throw new IllegalArgumentException("Invalid separator type " + xmlSeparator.getType());
+            }
+            builder.append(new ToneMarker(toneMarkerType));
+        }
     }
 
-    @Visits
-    public void visitToneMarker(XmlToneMarkerType xmlToneMarker) {
-        final ToneMarkerType tType = switch (xmlToneMarker.getType()) {
-            case FALLING_TO_LOW -> ToneMarkerType.FALLING_TO_LOW;
-            case FALLING_TO_MID -> ToneMarkerType.FALLING_TO_MID;
-            case LEVEL -> ToneMarkerType.LEVEL;
-            case RISING_TO_HIGH -> ToneMarkerType.RISING_TO_HIGH;
-            case RISING_TO_MID -> ToneMarkerType.RISING_TO_MID;
-        };
-        builder.append(new ToneMarker(tType));
-    }
+//    public void visitToneMarker(XmlToneMarkerType xmlToneMarker) {
+//        final ToneMarkerType tType = switch (xmlToneMarker.getType()) {
+//            case FALLING_TO_LOW -> ToneMarkerType.FALLING_TO_LOW;
+//            case FALLING_TO_MID -> ToneMarkerType.FALLING_TO_MID;
+//            case LEVEL -> ToneMarkerType.LEVEL;
+//            case RISING_TO_HIGH -> ToneMarkerType.RISING_TO_HIGH;
+//            case RISING_TO_MID -> ToneMarkerType.RISING_TO_MID;
+//        };
+//        builder.append(new ToneMarker(tType));
+//    }
 
     @Visits
     public void visitTagMarker(XmlTagMarkerType xmlTagMarker) {

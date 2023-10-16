@@ -422,22 +422,22 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 			case UNMARKED_ENDING -> XmlSeparatorTypeType.UNMARKED_ENDING;
 			case UPTAKE -> XmlSeparatorTypeType.UPTAKE;
 		};
-		xmlS.setType(type);
+		xmlS.setType(type.value());
 		u.getWOrGOrPg().add(xmlS);
 	}
 
 	@Override
     @Visits
 	public void visitToneMarker(ToneMarker toneMarker) {
-		final XmlToneMarkerType xmlToneMarker = factory.createXmlToneMarkerType();
-		final XmlToneMarkerTypeType type = switch (toneMarker.getType()) {
-			case FALLING_TO_LOW -> XmlToneMarkerTypeType.FALLING_TO_LOW;
-			case FALLING_TO_MID -> XmlToneMarkerTypeType.FALLING_TO_MID;
-			case LEVEL -> XmlToneMarkerTypeType.LEVEL;
-			case RISING_TO_HIGH -> XmlToneMarkerTypeType.RISING_TO_HIGH;
-			case RISING_TO_MID -> XmlToneMarkerTypeType.RISING_TO_MID;
+		final XmlSeparatorType xmlToneMarker = factory.createXmlSeparatorType();
+		final XmlToneMarkerType type = switch (toneMarker.getType()) {
+			case FALLING_TO_LOW -> XmlToneMarkerType.FALLING_TO_LOW;
+			case FALLING_TO_MID -> XmlToneMarkerType.FALLING_TO_MID;
+			case LEVEL -> XmlToneMarkerType.LEVEL;
+			case RISING_TO_HIGH -> XmlToneMarkerType.RISING_TO_HIGH;
+			case RISING_TO_MID -> XmlToneMarkerType.RISING_TO_MID;
 		};
-		xmlToneMarker.setType(type);
+		xmlToneMarker.setType(type.value());
 		u.getWOrGOrPg().add(xmlToneMarker);
 	}
 

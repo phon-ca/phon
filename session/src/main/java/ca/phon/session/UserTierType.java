@@ -22,6 +22,7 @@ public enum UserTierType {
     EnglishTranslation("english translation", "%eng", TierData.class,false),
     Errcoding("errcoding", "%err", TierData.class,false),
     Explanation("explanation", "%exp", TierData.class,false),
+    Facial("facial", "%fac", TierData.class, false),
     Flow("flow", "%flo", TierData.class,false),
     TargetGloss("target gloss", "%gls", TierData.class,false),
     Gesture("gesture", "%gpx", TierData.class,false),
