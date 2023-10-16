@@ -29,7 +29,7 @@ public class SessionXMLStreamWriter extends DelegatingXMLStreamWriter {
     private String resumeFormattingEleName = null;
     private int resumeFormattingStackSize = -1;
 
-    private final List<String> unformattedElements = List.of("w", "g", "pg", "pause", "pho", "mod", "mor", "tierData");
+    private final List<String> unformattedElements = List.of("a", "w", "g", "pg", "pause", "pho", "mod", "mor", "tierData");
 
     public SessionXMLStreamWriter(XMLStreamWriter writer) {
         this(writer, true);

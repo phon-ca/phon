@@ -69,7 +69,7 @@ public class RecordImpl implements RecordSPI {
 		alignment = factory.createTier(SystemTierType.PhoneAlignment.getName(), PhoneAlignment.class);
 		PhoneAlignment phoneAlignment = PhoneAlignment.fromTiers(ipaTarget, ipaActual);
 		alignment.setValue(phoneAlignment);
-		userDefined = Collections.synchronizedMap(new HashMap<>());
+		userDefined = Collections.synchronizedMap(new LinkedHashMap<>());
 	}
 
 	@Override

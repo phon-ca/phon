@@ -17,7 +17,7 @@ element
     ;
 
 word
-    :   (CHAR | DIGIT | MINUS | COLON | PERIOD | END_COMMENT)+
+    :   (CHAR | DIGIT | MINUS | COLON | PERIOD | '[' | ']')+
     ;
 
 comment
@@ -46,14 +46,6 @@ time_in_minutes_seconds
 
 number
     :   DIGIT+
-    ;
-
-CHAR
-    :   [!"#$%&'()*+,/;<=>?@A-Z[\\^_`a-z{|}~]
-    |   [\u00bf-\u024f]
-    |   [\u0250-\u02af]
-    |   [\u02b0-\u02ff]
-    |   [\u0300-\u036f]
     ;
 
 DIGIT
@@ -91,4 +83,8 @@ END_BRACKET
 
 LINK
     :   '[\uD83D\uDD17'
+    ;
+
+CHAR
+    :   .
     ;

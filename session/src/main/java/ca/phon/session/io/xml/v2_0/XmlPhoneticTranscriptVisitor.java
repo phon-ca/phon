@@ -150,7 +150,10 @@ public class XmlPhoneticTranscriptVisitor extends VisitorAdapter<Object> {
     public void visitPause(XmlPauseType pause) {
         if(builder.size() > 0 && !(builder.last() instanceof PhoneticGroupMarker pgm && pgm.getType() == PhoneticGroupMarkerType.BEGIN))
             builder.appendWordBoundary();
-        if(pause.getSymbolicLength() != null) {
+        if(pause.getLength() != null) {
+            float len = pause.getLength().floatValue();
+            builder.appendPause(len);
+        } else if(pause.getSymbolicLength() != null) {
             PauseLength len = switch (pause.getSymbolicLength()) {
                 case SIMPLE -> PauseLength.SIMPLE;
                 case VERY_LONG -> PauseLength.VERY_LONG;
@@ -158,8 +161,7 @@ public class XmlPhoneticTranscriptVisitor extends VisitorAdapter<Object> {
             };
             builder.appendPause(len);
         } else {
-            float len = pause.getLength().floatValue();
-            builder.appendPause(len);
+            builder.appendPause(PauseLength.SIMPLE);
         }
     }
 

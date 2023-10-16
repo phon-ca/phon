@@ -170,20 +170,18 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 
 	@Visits
 	public void visitPause(Pause pause) {
-		final XmlPauseType p = factory.createXmlPauseType();
-		final XmlPauseSymbolicLengthType type = switch(pause.getType()) {
-			case SIMPLE -> XmlPauseSymbolicLengthType.SIMPLE;
+		final XmlPauseType xmlPause = factory.createXmlPauseType();
+		final XmlPauseSymbolicLengthType type = switch (pause.getType()) {
+			case SIMPLE, NUMERIC -> XmlPauseSymbolicLengthType.SIMPLE;
 			case LONG -> XmlPauseSymbolicLengthType.LONG;
 			case VERY_LONG -> XmlPauseSymbolicLengthType.VERY_LONG;
-			case NUMERIC -> null;
 		};
-		if(type != null) {
-			p.setSymbolicLength(type);
-		} else {
-			p.setLength(BigDecimal.valueOf(pause.getLength()).setScale(3, RoundingMode.HALF_UP));
+		if(pause.getType() == ca.phon.ipa.PauseLength.NUMERIC) {
+			xmlPause.setLength(BigDecimal.valueOf(pause.getLength()).setScale(3, RoundingMode.HALF_UP));
 		}
+		xmlPause.setSymbolicLength(type);
 		addCurrentWord();
-		this.pho.getPwOrPauseOrPhog().add(p);
+		this.pho.getPwOrPauseOrPhog().add(xmlPause);
 	}
 
 	@Visits

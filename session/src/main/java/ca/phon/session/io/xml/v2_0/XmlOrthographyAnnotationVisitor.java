@@ -65,7 +65,7 @@ public class XmlOrthographyAnnotationVisitor extends VisitorAdapter<Object> {
     @Visits
     public void visitDuration(XmlDurationType xmlDuration) {
         final float value = xmlDuration.getValue().floatValue();
-        final Duration duration = new Duration(value / 1000.0f);
+        final Duration duration = new Duration(value);
         annotations.add(duration);
     }
 

@@ -269,9 +269,13 @@ public final class Tier<T> extends ExtendableObject {
 	@Override
 	public String toString() {
 		final StringBuffer buffer = new StringBuffer();
-		if(hasValue())
-			buffer.append(getFormatter().format(getValue()));
-		else if(isUnvalidated())
+		if(hasValue()) {
+			final Formatter<T> formatter = getFormatter();
+			if(formatter != null)
+				buffer.append(formatter.format(getValue()));
+			else
+				buffer.append(getValue());
+		} else if(isUnvalidated())
 			buffer.append(getUnvalidatedValue().getValue());
 		return buffer.toString();
 	}

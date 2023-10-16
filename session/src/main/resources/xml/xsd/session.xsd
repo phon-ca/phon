@@ -1541,7 +1541,6 @@
                 <xs:element ref="freecode"/>
                 <xs:element ref="e"/>
                 <xs:element ref="s"/>
-                <xs:element ref="tone-marker"/>
                 <xs:element ref="tagMarker"/>
                 <xs:element ref="overlap-point"/>
                 <xs:element ref="underline"/>
@@ -2778,18 +2777,13 @@
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:complexType name="toneMarkerType">
+    <xs:simpleType name="toneMarkerType">
         <xs:annotation>
             <xs:documentation>
                 <a href="https://talkbank.org/manuals/CHAT.html#ToneDirection_Marker">CHAT manual
                     section on this topic...</a>
             </xs:documentation>
         </xs:annotation>
-        <xs:attribute name="type" use="required" type="toneMarkerTypeType"/>
-    </xs:complexType>
-    <xs:element name="tone-marker" type="toneMarkerType"/>
-
-    <xs:simpleType name="toneMarkerTypeType">
         <xs:restriction base="xs:string">
             <xs:enumeration value="rising to high">
                 <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
@@ -2847,9 +2841,13 @@
                     this topic...</a>
             </xs:documentation>
         </xs:annotation>
-        <xs:attribute name="type" use="required" type="separatorTypeType"/>
+        <xs:attribute name="type" use="required" type="separatorOrToneMarkerType"/>
     </xs:complexType>
     <xs:element name="s" type="separatorType"/>
+
+    <xs:simpleType name="separatorOrToneMarkerType">
+        <xs:union memberTypes="separatorTypeType toneMarkerType"/>
+    </xs:simpleType>
 
     <xs:simpleType name="separatorTypeType">
         <xs:restriction base="xs:string">
@@ -3135,7 +3133,6 @@
                 <xs:element ref="freecode"/>
                 <xs:element ref="e"/>
                 <xs:element ref="s"/>
-                <xs:element ref="tone-marker"/>
                 <xs:element ref="tagMarker"/>
                 <xs:element ref="long-feature"/>
                 <xs:element ref="nonvocal"/>
@@ -3175,7 +3172,6 @@
                 <xs:element ref="overlap-point"/>
                 <xs:element ref="pause"/>
                 <xs:element ref="s"/>
-                <xs:element ref="tone-marker"/>
                 <xs:element ref="tagMarker"/>
                 <xs:element ref="quotation"/>
                 <xs:element ref="italic"/>

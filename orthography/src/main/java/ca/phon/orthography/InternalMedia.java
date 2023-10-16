@@ -48,13 +48,13 @@ public final class InternalMedia extends AbstractOrthographyElement {
         if(isPoint()) {
             return String.format("%c%s%c",
                     MEDIA_BULLET,
-                    MediaTimeFormatter.timeToMinutesAndSeconds(getStartTime()),
+                    MediaTimeFormatter.secondsToMinutesAndSeconds(getStartTime()),
                     MEDIA_BULLET);
         } else {
             return String.format("%c%s-%s%c",
                     MEDIA_BULLET,
-                    MediaTimeFormatter.timeToMinutesAndSeconds(getStartTime()),
-                    MediaTimeFormatter.timeToMinutesAndSeconds(getEndTime()),
+                    MediaTimeFormatter.secondsToMinutesAndSeconds(getStartTime()),
+                    MediaTimeFormatter.secondsToMinutesAndSeconds(getEndTime()),
                     MEDIA_BULLET);
         }
     }
