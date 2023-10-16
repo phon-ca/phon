@@ -76,7 +76,7 @@ public interface TierElementFilter {
         final List<OrthographyTierElementFilter.AlignableType> alignableTypes =
                 List.of(OrthographyTierElementFilter.AlignableType.Word);
         final OrthographyTierElementFilter.Options options = new OrthographyTierElementFilter.Options(
-                true, true, true, false, false, false, false, false);
+                false, true, true, false, false, false, false, false);
         return new OrthographyTierElementFilter(alignableTypes, options);
     }
 
@@ -85,7 +85,7 @@ public interface TierElementFilter {
                 List.of(OrthographyTierElementFilter.AlignableType.Word, OrthographyTierElementFilter.AlignableType.Quotation,
                         OrthographyTierElementFilter.AlignableType.TagMarker, OrthographyTierElementFilter.AlignableType.Terminator);
         final OrthographyTierElementFilter.Options options = new OrthographyTierElementFilter.Options(
-                true, true, true, true, true, false, false, false);
+                false, true, true, true, true, false, false, false);
         return new OrthographyTierElementFilter(alignableTypes, options);
     }
 
