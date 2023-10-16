@@ -146,7 +146,7 @@ public final class Tier<T> extends ExtendableObject {
 	/**
 	 * Return list of blind transcribers for this tier
 	 *
-	 * @param list of transcriberIds
+	 * @return list of transcriberIds
 	 */
 	public List<String> getTranscribers() {
 		return tierImpl.getTranscribers();
@@ -270,7 +270,7 @@ public final class Tier<T> extends ExtendableObject {
 	public String toString() {
 		final StringBuffer buffer = new StringBuffer();
 		if(hasValue())
-			buffer.append(getValue());
+			buffer.append(getFormatter().format(getValue()));
 		else if(isUnvalidated())
 			buffer.append(getUnvalidatedValue().getValue());
 		return buffer.toString();

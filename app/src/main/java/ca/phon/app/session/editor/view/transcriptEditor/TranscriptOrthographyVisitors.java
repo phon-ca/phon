@@ -171,7 +171,7 @@ public class TranscriptOrthographyVisitors {
         @Override
         public void visitInternalMedia(InternalMedia internalMedia) {
             StyleConstants.setForeground(attrs, UIManager.getColor(TranscriptEditorUIProps.ORTHOGRAPHY_INTERNAL_MEDIA));
-            doc.appendBatchString(internalMedia.text(), attrs);
+            doc.formatInternalMedia(internalMedia, attrs);
         }
 
         @Visits

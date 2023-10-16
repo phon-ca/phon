@@ -22,9 +22,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
 
 public class TranscriptEditor extends JEditorPane {
@@ -41,10 +39,12 @@ public class TranscriptEditor extends JEditorPane {
     public final static EditorEventType<Void> recordChangedInSingleRecordMode = new EditorEventType<>("recordChangedInSingleRecordMode", Void.class);
     private Element hoverElem = null;
     private Object currentUnderline;
-    TranscriptUnderlinePainter underlinePainter = new TranscriptUnderlinePainter();
+    HoverUnderlinePainter underlinePainter = new HoverUnderlinePainter();
     private MediaSegment selectedSegment = null;
     private int upDownOffset = -1;
     private boolean caretMoveFromUpDown = false;
+    private boolean internalEdit = false;
+    private Map<Tier<?>, Object> errorUnderlineHighlights = new HashMap<>();
 
 
     public TranscriptEditor(
@@ -89,11 +89,11 @@ public class TranscriptEditor extends JEditorPane {
             }
 
             // FOR DEBUG PURPOSES ONLY
-            SimpleAttributeSet attrs = new SimpleAttributeSet(doc.getCharacterElement(e.getDot()).getAttributes().copyAttributes());
-            System.out.println("Attrs: " + attrs);
+//            SimpleAttributeSet attrs = new SimpleAttributeSet(doc.getCharacterElement(e.getDot()).getAttributes().copyAttributes());
+//            System.out.println("Attrs: " + attrs);
             System.out.println("Dot: " + e.getDot());
-            Tier<?> tier = ((Tier<?>) attrs.getAttribute("tier"));
-            System.out.println(tier == null ? null : tier.getName());
+//            Tier<?> tier = ((Tier<?>) attrs.getAttribute("tier"));
+//            System.out.println(tier == null ? null : tier.getName());
 //            System.out.println(attrs);
         });
     }
@@ -160,6 +160,17 @@ public class TranscriptEditor extends JEditorPane {
         inputMap.put(enter, "pressedEnter");
         PhonUIAction<Void> enterAct = PhonUIAction.runnable(this::pressedEnter);
         actionMap.put("pressedEnter", enterAct);
+
+
+        KeyStroke home = KeyStroke.getKeyStroke(KeyEvent.VK_HOME, 0);
+        inputMap.put(home, "pressedHome");
+        PhonUIAction<Void> homeAct = PhonUIAction.runnable(this::pressedHome);
+        actionMap.put("pressedHome", homeAct);
+
+        KeyStroke end = KeyStroke.getKeyStroke(KeyEvent.VK_END, 0);
+        inputMap.put(end, "pressedEnd");
+        PhonUIAction<Void> endAct = PhonUIAction.runnable(this::pressedEnd);
+        actionMap.put("pressedEnd", endAct);
     }
 
     private void registerEditorActions() {
@@ -462,13 +473,35 @@ public class TranscriptEditor extends JEditorPane {
 
         var attrs = doc.getCharacterElement(getCaretPosition()).getAttributes();
         Tier<?> tier = (Tier<?>) attrs.getAttribute("tier");
+        boolean isGeneric = false;
+        if (tier == null) {
+            tier = (Tier<?>) attrs.getAttribute("generic");
+            isGeneric = true;
+        }
         if (tier != null) {
             try {
-                int start = doc.getTierStart(tier);
-                int end = doc.getTierEnd(tier) - 1;
+                int start;
+                int end;
+
+                if (isGeneric) {
+                    start = doc.getGenericStart(tier);
+                    end = doc.getGenericEnd(tier) - 1;
+                }
+                else {
+                    start = doc.getTierStart(tier);
+                    end = doc.getTierEnd(tier) - 1;
+                }
+
                 String newValue = doc.getText(start, end - start);
 
-                tierDataChanged(tier, newValue);
+                internalEdit = true;
+
+                if (isGeneric) {
+                    genericDataChanged(tier, newValue);
+                }
+                else {
+                    tierDataChanged(tier, newValue);
+                }
             }
             catch (BadLocationException e) {
                 LogUtil.severe(e);
@@ -500,6 +533,84 @@ public class TranscriptEditor extends JEditorPane {
                     LogUtil.severe(e);
                 }
             }
+        }
+    }
+
+    public void pressedHome() {
+        TranscriptDocument doc = getTranscriptDocument();
+
+        Element caretElem = doc.getCharacterElement(getCaretPosition());
+        AttributeSet attrs = caretElem.getAttributes();
+        String elementType = (String) attrs.getAttribute("elementType");
+        if (elementType == null) return;
+        int start = -1;
+        switch (elementType) {
+            case "record" -> {
+                Tier<?> tier = (Tier<?>) attrs.getAttribute("tier");
+                if (tier != null) {
+                    start = doc.getTierStart(tier);
+                }
+            }
+            case "comment" -> {
+                Comment comment = (Comment) attrs.getAttribute("comment");
+                if (comment != null) {
+                    start = doc.getCommentStart(comment);
+                }
+            }
+            case "gem" -> {
+                Gem gem = (Gem) attrs.getAttribute("gem");
+                if (gem != null) {
+                    start = doc.getGemStart(gem);
+                }
+            }
+            case "generic" -> {
+                Tier<?> genericTier = (Tier<?>) attrs.getAttribute("generic");
+                if (genericTier != null) {
+                    start = doc.getGenericStart(genericTier);
+                }
+            }
+        }
+        if (start != -1) {
+            setCaretPosition(start);
+        }
+    }
+
+    public void pressedEnd() {
+        TranscriptDocument doc = getTranscriptDocument();
+
+        Element caretElem = doc.getCharacterElement(getCaretPosition());
+        AttributeSet attrs = caretElem.getAttributes();
+        String elementType = (String) attrs.getAttribute("elementType");
+        if (elementType == null) return;
+        int end = -1;
+        switch (elementType) {
+            case "record" -> {
+                Tier<?> tier = (Tier<?>) attrs.getAttribute("tier");
+                if (tier != null) {
+                    end = doc.getTierEnd(tier);
+                }
+            }
+            case "comment" -> {
+                Comment comment = (Comment) attrs.getAttribute("comment");
+                if (comment != null) {
+                    end = doc.getCommentEnd(comment);
+                }
+            }
+            case "gem" -> {
+                Gem gem = (Gem) attrs.getAttribute("gem");
+                if (gem != null) {
+                    end = doc.getGemEnd(gem);
+                }
+            }
+            case "generic" -> {
+                Tier<?> genericTier = (Tier<?>) attrs.getAttribute("generic");
+                if (genericTier != null) {
+                    end = doc.getGenericEnd(genericTier);
+                }
+            }
+        }
+        if (end != -1) {
+            setCaretPosition(end-1);
         }
     }
 
@@ -955,18 +1066,44 @@ public class TranscriptEditor extends JEditorPane {
     }
 
     private void onTierDataChanged(EditorEvent<EditorEventType.TierChangeData> editorEvent) {
-
-        System.out.println("Testing tier changed");
-
         TranscriptDocument doc = getTranscriptDocument();
+        Tier<?> changedTier = editorEvent.data().tier();
+
+        if (errorUnderlineHighlights.containsKey(changedTier)) {
+            getHighlighter().removeHighlight(errorUnderlineHighlights.get(changedTier));
+            errorUnderlineHighlights.remove(changedTier);
+        }
+
+        if (changedTier.isUnvalidated()) {
+            try {
+                int start = doc.getTierStart(changedTier) + changedTier.getUnvalidatedValue().getParseError().getErrorOffset();
+                int end = doc.getTierEnd(changedTier)-1;
+
+                var errorUnderlineHighlight = getHighlighter().addHighlight(
+                    start,
+                    end,
+                    new ErrorUnderlinePainter()
+                );
+                errorUnderlineHighlights.put(changedTier, errorUnderlineHighlight);
+            }
+            catch (BadLocationException e) {
+                LogUtil.severe(e);
+            }
+        }
+
+
+        if (internalEdit) {
+            internalEdit = false;
+            return;
+        }
+
 
         var caretStartAttrs = doc.getCharacterElement(getCaretPosition()).getAttributes();
         Tier<?> caretStartTier = (Tier<?>) caretStartAttrs.getAttribute("tier");
         int offset = doc.getOffsetInContent(getCaretPosition());
 
-        var data = editorEvent.data();
         // Update the changed tier data in the doc
-        getTranscriptDocument().onTierDataChanged(data.tier());
+        getTranscriptDocument().onTierDataChanged(changedTier);
 
         if (caretStartTier == null) return;
 
@@ -1253,14 +1390,36 @@ public class TranscriptEditor extends JEditorPane {
         Tier<?> dummy = SessionFactory.newFactory().createTier("dummy", tier.getDeclaredType());
         dummy.setText(newData);
 
-        if (dummy.isUnvalidated()) {
-            // Error stuff
-        }
+        if (tier.getDeclaredType() == MediaSegment.class) return;
 
         SwingUtilities.invokeLater(() -> {
             TierEdit<?> edit = new TierEdit(session, eventManager, null, tier, dummy.getValue());
             edit.setFireHardChangeOnUndo(true);
             getUndoSupport().postEdit(edit);
+        });
+    }
+
+    public void genericDataChanged(Tier<?> genericTier, String newData) {
+        Tier dummy = SessionFactory.newFactory().createTier("dummy", genericTier.getDeclaredType());
+        // TODO Figure out what's going on here
+        dummy.setFormatter(genericTier.getFormatter());
+        dummy.setText(newData);
+
+        if (genericTier.getDeclaredType() == TranscriptDocument.Languages.class) {
+            Tier<TranscriptDocument.Languages> languagesTier = (Tier<TranscriptDocument.Languages>) dummy;
+            System.out.println("Language changed -----------------------");
+            System.out.println("Validated: " + !languagesTier.isUnvalidated());
+            if (languagesTier.hasValue()) {
+                SessionLanguageEdit edit = new SessionLanguageEdit(session, eventManager, languagesTier.getValue().languageList());
+                getUndoSupport().postEdit(edit);
+            }
+        }
+
+        SwingUtilities.invokeLater(() -> {
+            TierEdit<?> edit = new TierEdit(session, eventManager, null, genericTier, dummy.getValue());
+            edit.setFireHardChangeOnUndo(true);
+            getUndoSupport().postEdit(edit);
+            getUndoSupport().endUpdate();
         });
     }
 
@@ -1297,7 +1456,7 @@ public class TranscriptEditor extends JEditorPane {
         int docLen = doc.getLength();
 
         Element elem = doc.getCharacterElement(currentPos);
-        while (elem.getAttributes().getAttribute("notEditable") != null && currentPos < docLen) {
+        while (elem.getAttributes().getAttribute("label") != null && currentPos < docLen) {
             currentPos++;
             elem = doc.getCharacterElement(currentPos);
         }
@@ -1318,14 +1477,26 @@ public class TranscriptEditor extends JEditorPane {
         TranscriptDocument doc = getTranscriptDocument();
 
         Element elem = doc.getCharacterElement(currentPos);
-        while (elem.getAttributes().getAttribute("notEditable") != null && currentPos >= 0) {
+
+        MediaSegment segment = (MediaSegment) elem.getAttributes().getAttribute("mediaSegment");
+        System.out.println("Seg: " + segment != null);
+        if (segment != null) {
+            System.out.println("In segment");
+            elem = doc.getCharacterElement(doc.getSegmentBounds(segment, currentPos).getObj1());
+        }
+
+        AttributeSet attrs = elem.getAttributes();
+        while ((attrs.getAttribute("label") != null || attrs.getAttribute("mediaSegment") != null) && currentPos >= 0) {
             currentPos--;
             elem = doc.getCharacterElement(currentPos);
+            attrs = elem.getAttributes();
         }
 
         if (looping && currentPos < 0) {
             return getPrevEditableIndex(doc.getLength()-1, true);
         }
+
+        System.out.println("\n");
 
         return currentPos;
     }
@@ -1593,7 +1764,7 @@ public class TranscriptEditor extends JEditorPane {
 
     private void onCommentAdded(EditorEvent<EditorEventType.CommentAddedData> editorEvent) {
         var data = editorEvent.data();
-        getTranscriptDocument().reload();
+        getTranscriptDocument().addComment(data.comment(), data.elementIndex());
     }
 
     private void addGem(int relativeElementIndex, int position) {
@@ -1618,7 +1789,7 @@ public class TranscriptEditor extends JEditorPane {
 
     private void onGemAdded(EditorEvent<EditorEventType.GemAddedData> editorEvent) {
         var data = editorEvent.data();
-        getTranscriptDocument().reload();
+        getTranscriptDocument().addGem(data.gem(), data.elementIndex());
     }
 
     private void deleteTranscriptElement(Transcript.Element elem) {
@@ -1652,7 +1823,8 @@ public class TranscriptEditor extends JEditorPane {
             Element elem = doc.getCharacterElement(dot);
             AttributeSet attrs = elem.getAttributes();
             boolean isLabel = attrs.getAttribute("label") != null;
-            boolean isSegment = attrs.getAttribute("mediaSegment") != null;
+            MediaSegment segment = (MediaSegment) attrs.getAttribute("mediaSegment");
+            boolean isSegment = segment != null;
 
             if (isLabel && !isSegment) return;
 
@@ -1667,6 +1839,7 @@ public class TranscriptEditor extends JEditorPane {
 
                     // TODO figure out a better way of doing this
                     if (prevTier.getValue() != null && !newValue.equals(prevTier.getValue().toString())) {
+                        internalEdit = true;
                         tierDataChanged(prevTier, newValue);
                     }
                 }
@@ -1679,6 +1852,24 @@ public class TranscriptEditor extends JEditorPane {
 
             if (!caretMoveFromUpDown) upDownOffset = -1;
             caretMoveFromUpDown = false;
+
+            int segmentIncludedPos = dot;
+            if (!isSegment) {
+                segment = (MediaSegment) doc.getCharacterElement(dot - 1).getAttributes().getAttribute("mediaSegment");
+                segmentIncludedPos--;
+            }
+
+            if (segment != null) {
+                System.out.println(segment);
+                System.out.println("Select segment");
+                var segmentBounds = doc.getSegmentBounds(segment, segmentIncludedPos);
+                System.out.println(segmentBounds);
+                fb.setDot(segmentBounds.getObj1(), Position.Bias.Forward);
+                setSelectedSegment(segment);
+                fb.moveDot(segmentBounds.getObj2()+1, Position.Bias.Forward);
+                return;
+            }
+
 
             fb.setDot(dot, bias);
         }
@@ -1739,13 +1930,30 @@ public class TranscriptEditor extends JEditorPane {
         }
     }
 
-    private class TranscriptUnderlinePainter implements Highlighter.HighlightPainter {
+    private class HoverUnderlinePainter implements Highlighter.HighlightPainter {
+
         @Override
         public void paint(Graphics g, int p0, int p1, Shape bounds, JTextComponent c) {
             try {
                 var firstCharRect = modelToView2D(p0);
                 var lastCharRect = modelToView2D(p1);
                 g.setColor(UIManager.getColor(TranscriptEditorUIProps.CLICKABLE_HOVER_UNDERLINE));
+                int lineY = ((int) firstCharRect.getMaxY()) - 9;
+                g.drawLine((int) firstCharRect.getMinX(), lineY, (int) lastCharRect.getMaxX(), lineY);
+            } catch (BadLocationException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private class ErrorUnderlinePainter implements Highlighter.HighlightPainter {
+
+        @Override
+        public void paint(Graphics g, int p0, int p1, Shape bounds, JTextComponent c) {
+            try {
+                var firstCharRect = modelToView2D(p0);
+                var lastCharRect = modelToView2D(p1);
+                g.setColor(Color.RED);
                 int lineY = ((int) firstCharRect.getMaxY()) - 9;
                 g.drawLine((int) firstCharRect.getMinX(), lineY, (int) lastCharRect.getMaxX(), lineY);
             } catch (BadLocationException e) {
@@ -1797,8 +2005,9 @@ public class TranscriptEditor extends JEditorPane {
 
                 MediaSegment mediaSegment = (MediaSegment) attrs.getAttribute("mediaSegment");
                 if (mediaSegment != null) {
-                    var segmentBounds = doc.getSegmentBounds(mediaSegment, elem);
+                    var segmentBounds = doc.getSegmentBounds(mediaSegment, mousePosInDoc);
                     System.out.println("Segment bounds: " + segmentBounds);
+                    System.out.println(mediaSegment);
                     setCaretPosition(segmentBounds.getObj1());
                     setSelectedSegment(mediaSegment);
                     moveCaretPosition(segmentBounds.getObj2()+1);

@@ -1,8 +1,10 @@
 package ca.phon.app.session.editor.view.transcriptEditor;
 
 import ca.phon.app.log.LogUtil;
+import ca.phon.formatter.Formatter;
 import ca.phon.formatter.MediaTimeFormatter;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.orthography.InternalMedia;
 import ca.phon.orthography.Orthography;
 import ca.phon.orthography.mor.Grasp;
 import ca.phon.orthography.mor.GraspTierData;
@@ -13,16 +15,16 @@ import ca.phon.session.Record;
 import ca.phon.session.tierdata.*;
 import ca.phon.ui.FontFormatter;
 import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.util.Language;
-import ca.phon.util.PrefHelper;
-import ca.phon.util.Tuple;
+import ca.phon.util.*;
 
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TranscriptDocument extends DefaultStyledDocument {
     private Session session;
@@ -260,7 +262,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
     private SimpleAttributeSet getTierInternalMediaAttributes() {
         SimpleAttributeSet retVal = new SimpleAttributeSet();
 
-        StyleConstants.setForeground(retVal, UIManager.getColor(TranscriptEditorUIProps.DEFAULT_INTERNAL_MEDIA));
+        StyleConstants.setForeground(retVal, UIManager.getColor(TranscriptEditorUIProps.INTERNAL_MEDIA));
 
         return retVal;
     }
@@ -661,7 +663,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
         for (int i = 0; i < tierData.length(); i++) {
             TierElement userTierElement = tierData.elementAt(i);
-            String text;
+            String text = null;
             SimpleAttributeSet attrs;
             if (userTierElement instanceof TierString tierString) {
                 // Text
@@ -673,8 +675,8 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 attrs = getTierCommentAttributes();
             } else if (userTierElement instanceof TierInternalMedia internalMedia) {
                 // Internal media
-                text = internalMedia.toString();
                 attrs = getTierInternalMediaAttributes();
+                formatInternalMedia(internalMedia.getInternalMedia(), attrs);
             }
             else if (userTierElement instanceof TierLink link) {
                 // Link
@@ -687,7 +689,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
             attrs.addAttributes(commentAttrs);
 
-            appendBatchString(text, attrs);
+            if (text != null) appendBatchString(text, attrs);
 
             if (i < tierData.length() - 1) {
                 appendBatchString(" ", attrs);
@@ -1101,10 +1103,8 @@ public class TranscriptDocument extends DefaultStyledDocument {
             Element elem = root.getElement(i);
             if (elem.getElementCount() < 1) continue;
             String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute("elementType");
-            System.out.println("First child element type: " + transcriptElementType);
             // If transcript element type is tierData
             if (transcriptElementType != null && transcriptElementType.equals("generic")) {
-                System.out.println("testing...");
                 for (int j = 0; j < elem.getElementCount(); j++) {
                     Element innerElem = elem.getElement(j);
                     AttributeSet attrs = innerElem.getAttributes();
@@ -1121,7 +1121,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return retVal;
     }
 
-    public Tuple<Integer, Integer> getSegmentBounds(MediaSegment segment, Element includedElem) {
+    public Tuple<Integer, Integer> getSegmentBounds(MediaSegment segment, int includedPos) {
         Element root = getDefaultRootElement();
 
         int indexInSegment = -1;
@@ -1135,7 +1135,8 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 for (int j = 0; j < elem.getElementCount(); j++) {
                     Element innerElem = elem.getElement(j);
                     MediaSegment elemSegment = (MediaSegment) innerElem.getAttributes().getAttribute("mediaSegment");
-                    if (elemSegment != null && elemSegment == segment && innerElem == includedElem) {
+                    boolean includedPosInElem = includedPos < innerElem.getEndOffset() && includedPos >= innerElem.getStartOffset();
+                    if (elemSegment != null && elemSegment == segment && includedPosInElem) {
                         indexInSegment = innerElem.getStartOffset();
                         i = root.getElementCount();;
                         j = elem.getElementCount();
@@ -1910,6 +1911,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
         String start = MediaTimeFormatter.msToPaddedMinutesAndSeconds(segment.getStartValue());
 
+
         var segmentTimeAttrs = getSegmentTimeAttributes(segment);
         var segmentDashAttrs = getSegmentDashAttributes(segment);
         segmentTimeAttrs.addAttribute("notEditable", true);
@@ -1923,13 +1925,21 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
         appendBatchString(start, segmentTimeAttrs);
 
-        appendBatchString("-", segmentDashAttrs);
+        if (!segment.isPoint()) {
+            appendBatchString("-", segmentDashAttrs);
 
-        String end = MediaTimeFormatter.msToPaddedMinutesAndSeconds(segment.getEndValue());
+            String end = MediaTimeFormatter.msToPaddedMinutesAndSeconds(segment.getEndValue());
 
-        appendBatchString(end, segmentTimeAttrs);
+            appendBatchString(end, segmentTimeAttrs);
+        }
 
         appendBatchString("•", segmentDashAttrs);
+    }
+
+    public void formatInternalMedia(InternalMedia internalMedia, AttributeSet additionalAttrs) {
+        MediaSegment segment = sessionFactory.createMediaSegment();
+        segment.setSegment(internalMedia.getStartTime() * 1000, internalMedia.getEndTime() * 1000);
+        formatSegment(segment, additionalAttrs);
     }
 
     private void setGlobalParagraphAttributes() {
@@ -2097,7 +2107,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 if (tierData != null) {
                     for (int i = 0; i < tierData.length(); i++) {
                         TierElement elem = tierData.elementAt(i);
-                        String text;
+                        String text = null;
                         SimpleAttributeSet attrs;
                         if (elem instanceof TierString tierString) {
                             text = tierString.text();
@@ -2108,8 +2118,8 @@ public class TranscriptDocument extends DefaultStyledDocument {
                             attrs = getTierCommentAttributes();
                         }
                         else if (elem instanceof TierInternalMedia internalMedia) {
-                            text = internalMedia.toString();
                             attrs = getTierInternalMediaAttributes();
+                            formatInternalMedia(internalMedia.getInternalMedia(), attrs);
                         }
                         else if (elem instanceof TierLink link) {
                             text = link.toString();
@@ -2121,7 +2131,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
                         attrs.addAttributes(tierAttrs);
 
-                        appendBatchString(text, attrs);
+                        if (text != null) appendBatchString(text, attrs);
 
                         if (i < tierData.length() - 1) {
                             appendBatchString(" ", tierAttrs);
@@ -2226,12 +2236,33 @@ public class TranscriptDocument extends DefaultStyledDocument {
         // Add languages line if present
         var sessionLanguages = session.getLanguages();
         if (sessionLanguages != null && !sessionLanguages.isEmpty()) {
-            Tier<String> languagesTier = sessionFactory.createTier("Languages", String.class);
-            StringJoiner joiner = new StringJoiner(" ");
-            for (Language lang : sessionLanguages) {
-                joiner.add(lang.toString());
-            }
-            languagesTier.setText(joiner.toString());
+            Tier<Languages> languagesTier = sessionFactory.createTier("Languages", Languages.class);
+            languagesTier.setFormatter(new Formatter<>() {
+                @Override
+                public String format(Languages obj) {
+                    return obj
+                        .languageList()
+                        .stream()
+                        .map(Language::toString)
+                        .collect(Collectors.joining(" "));
+                }
+
+                @Override
+                public Languages parse(String text) throws ParseException {
+                    List<Language> languageList = new ArrayList<>();
+
+                    String[] languageStrings = text.split(" ");
+                    for (String languageString : languageStrings) {
+                        LanguageEntry languageEntry = LanguageParser.getInstance().getEntryById(languageString);
+                        if (languageEntry == null) throw new ParseException(text, text.indexOf(languageString));
+
+                        languageList.add(Language.parseLanguage(languageString));
+                    }
+
+                    return new Languages(languageList);
+                }
+            });
+            languagesTier.setValue(new Languages(sessionLanguages));
             newLineAttrs = writeGeneric("Languages", languagesTier);
             appendBatchLineFeed(newLineAttrs);
         }
@@ -2331,4 +2362,6 @@ public class TranscriptDocument extends DefaultStyledDocument {
             super.replace(fb, offset, length, text, attrs);
         }
     }
+
+    public record Languages(List<Language> languageList) {}
 }
