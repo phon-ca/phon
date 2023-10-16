@@ -17,7 +17,7 @@ element
     ;
 
 word
-    :   (CHAR | DIGIT | MINUS | COLON | PERIOD)+
+    :   (CHAR | DIGIT | MINUS | COLON | PERIOD | '[' | ']')+
     ;
 
 comment
