@@ -47,14 +47,19 @@ public final class OrthographyTierElementFilter implements TierElementFilter {
     public static final boolean DEFAULT_USE_REPLACEMENT = false;
     public static final boolean DEFAULT_INCLUDE_EXCLUDED = false;
     public static final boolean DEFAULT_INCLUDE_RETRACED = false;
+    public static final boolean DEFAULT_INCLUDE_FRAGMENT = true;
+    public static final boolean DEFAULT_INCLUDE_NONWORD = true;
+    public static final boolean DEFAULT_INCLUDE_FILLER = true;
     public static final boolean DEFAULT_INCLUDE_ERROR = false;
-    public record Options(boolean includeXXX, boolean includeYYY, boolean includeWWW, boolean includeOmitted,
+    public record Options(boolean includeXXX, boolean includeYYY, boolean includeWWW,
+                          boolean includeOmitted, boolean includeFrag, boolean includeNonword, boolean includeFiller,
                           boolean useReplacement, boolean includeExcluded, boolean includeRetraced, boolean includeError) { }
     private final Options options;
 
     public OrthographyTierElementFilter() {
         this(Collections.singletonList(AlignableType.Word),
-                new Options(DEFAULT_INCLUDE_WORD_XXX, DEFAULT_INCLUDE_WORD_YYY, DEFAULT_INCLUDE_WORD_WWW, DEFAULT_INCLUDE_OMITTED,
+                new Options(DEFAULT_INCLUDE_WORD_XXX, DEFAULT_INCLUDE_WORD_YYY, DEFAULT_INCLUDE_WORD_WWW,
+                        DEFAULT_INCLUDE_OMITTED, DEFAULT_INCLUDE_FRAGMENT, DEFAULT_INCLUDE_NONWORD, DEFAULT_INCLUDE_FILLER,
                         DEFAULT_USE_REPLACEMENT, DEFAULT_INCLUDE_EXCLUDED, DEFAULT_INCLUDE_RETRACED, DEFAULT_INCLUDE_ERROR));
     }
 
@@ -101,8 +106,13 @@ public final class OrthographyTierElementFilter implements TierElementFilter {
                 replacement.getWords().forEach(this::visit);
             } else {
                 boolean includeWord = isIncluded(AlignableType.Word);
-                if (word.getPrefix() != null && word.getPrefix().getType() == WordType.OMISSION) {
-                    includeWord = options.includeOmitted;
+                if(word.getPrefix() != null) {
+                    includeWord = switch (word.getPrefix().getType()) {
+                        case OMISSION -> options.includeOmitted;
+                        case FRAGMENT -> options.includeFrag;
+                        case FILLER -> options.includeFiller;
+                        case NONWORD -> options.includeNonword;
+                    };
                 }
                 if (word.isUntranscribed()) {
                     includeWord = switch (word.getUntranscribedType()) {
