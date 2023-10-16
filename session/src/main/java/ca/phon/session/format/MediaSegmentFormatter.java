@@ -36,12 +36,14 @@ public class MediaSegmentFormatter implements Formatter<MediaSegment> {
 
 	@Override
 	public String format(MediaSegment obj) {
-		final long startTime = ((Float)obj.getStartValue()).longValue();
-		final long endTime = ((Float)obj.getEndValue()).longValue();
+		final Number startVal = obj.getUnitType() == MediaUnit.Millisecond ?
+				((Float)obj.getStartValue()).longValue() : obj.getStartValue();
+		final Number endVal = obj.getUnitType() == MediaUnit.Millisecond ?
+				((Float)obj.getStartValue()).longValue() : obj.getEndValue();
 
 		final MediaTimeFormat format = new MediaTimeFormat(formatStyle);
-		final String startTimeText = format.format(startTime);
-		final String endTimeText = format.format(endTime);
+		final String startTimeText = format.format(startVal);
+		final String endTimeText = format.format(endVal);
 		
 		return String.format("%s-%s", startTimeText, endTimeText);
 	}

@@ -330,16 +330,14 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 	public void visitPause(Pause pause) {
 		final XmlPauseType xmlPause = factory.createXmlPauseType();
 		final XmlPauseSymbolicLengthType type = switch (pause.getType()) {
-			case SIMPLE -> XmlPauseSymbolicLengthType.SIMPLE;
+			case SIMPLE, NUMERIC -> XmlPauseSymbolicLengthType.SIMPLE;
 			case LONG -> XmlPauseSymbolicLengthType.LONG;
 			case VERY_LONG -> XmlPauseSymbolicLengthType.VERY_LONG;
-			case NUMERIC -> null;
 		};
-		if(type == null) {
+		if(pause.getType() == PauseLength.NUMERIC) {
 			xmlPause.setLength(BigDecimal.valueOf(pause.getLength()).setScale(3, RoundingMode.HALF_UP));
-		} else {
-			xmlPause.setSymbolicLength(type);
 		}
+		xmlPause.setSymbolicLength(type);
 
 		final OneToOne oneToOne = pause.getExtension(OneToOne.class);
 		if(oneToOne != null) {
@@ -360,11 +358,11 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
     @Visits
 	public void visitInternalMedia(InternalMedia internalMedia) {
 		final XmlMediaType xmlMedia = factory.createXmlMediaType();
-		xmlMedia.setUnit(XmlMediaUnitType.MS.MS);
-		float startTime = internalMedia.getStartTime() * 1000.0f;
-		float endTime = internalMedia.getEndTime() * 1000.0f;
-		xmlMedia.setStart(BigDecimal.valueOf(startTime));
-		xmlMedia.setEnd(BigDecimal.valueOf(endTime));
+		xmlMedia.setUnit(XmlMediaUnitType.S);
+		float startTime = internalMedia.getStartTime();
+		float endTime = internalMedia.getEndTime();
+		xmlMedia.setStart(BigDecimal.valueOf(startTime).setScale(3, RoundingMode.HALF_UP));
+		xmlMedia.setEnd(BigDecimal.valueOf(endTime).setScale(3, RoundingMode.HALF_UP));
 		u.getWOrGOrPg().add(xmlMedia);
 	}
 

@@ -149,15 +149,15 @@ public class XmlOrthographyVisitor extends VisitorAdapter<Object> {
 
     @Visits
     public void visitPause(XmlPauseType xmlPause) {
-        if(xmlPause.getSymbolicLength() != null) {
+        if(xmlPause.getLength() != null) {
+            builder.append(new Pause(PauseLength.NUMERIC, xmlPause.getLength().floatValue()));
+        } else if(xmlPause.getSymbolicLength() != null) {
             final PauseLength length = switch (xmlPause.getSymbolicLength()) {
                 case SIMPLE -> PauseLength.SIMPLE;
                 case LONG -> PauseLength.LONG;
                 case VERY_LONG -> PauseLength.VERY_LONG;
             };
             builder.append(new Pause(length));
-        } else if(xmlPause.getLength() != null) {
-            builder.append(new Pause(PauseLength.NUMERIC, xmlPause.getLength().floatValue()));
         }
     }
 
