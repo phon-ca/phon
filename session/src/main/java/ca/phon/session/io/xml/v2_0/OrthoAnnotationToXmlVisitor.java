@@ -9,6 +9,7 @@ import ca.phon.visitor.annotation.Visits;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,9 +30,8 @@ public class OrthoAnnotationToXmlVisitor extends AbstractOrthographyAnnotationVi
     @Override
     @Visits
     public void visitDuration(Duration duration) {
-        final long durationMs = (long)(duration.getDuration() * 1000.0f);
         final XmlDurationType xmlDurationType = factory.createXmlDurationType();
-        xmlDurationType.setValue(BigDecimal.valueOf(durationMs));
+        xmlDurationType.setValue(BigDecimal.valueOf(duration.getDuration()).setScale(3, RoundingMode.HALF_UP));
         annotations.add(xmlDurationType);
     }
 
