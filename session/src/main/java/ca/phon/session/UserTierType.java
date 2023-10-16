@@ -19,6 +19,7 @@ public enum UserTierType {
     Alternative("alternative", "%alt", TierData.class,false),
     Coding("coding", "%cod", TierData.class,false),
     Cohesion("cohesion", "%coh", TierData.class,false),
+    Comments("comments", "%com", TierData.class, false),
     EnglishTranslation("english translation", "%eng", TierData.class,false),
     Errcoding("errcoding", "%err", TierData.class,false),
     Explanation("explanation", "%exp", TierData.class,false),
