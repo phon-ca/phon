@@ -142,6 +142,11 @@ public class IPATranscriptBuilder {
 			unvalidatedValue.setValue(unvalidatedValue.getValue() + ipa);
 			return this;
 		}
+		if("+".equals(ipa)) {
+			appendCompoundWordMarker();
+			return this;
+		}
+
 		try {
 			String currentTxt = toIPATranscript().toString(true);
 

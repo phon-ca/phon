@@ -68,11 +68,12 @@ public interface TierElementFilter {
 
     public static OrthographyTierElementFilter orthographyFilterForIPAAlignment() {
         final List<OrthographyTierElementFilter.AlignableType> alignableTypes =
-            List.of(OrthographyTierElementFilter.AlignableType.Word, OrthographyTierElementFilter.AlignableType.Pause);
+            List.of(OrthographyTierElementFilter.AlignableType.Word, OrthographyTierElementFilter.AlignableType.Pause,
+                    OrthographyTierElementFilter.AlignableType.PhoneticGroup);
         final OrthographyTierElementFilter.Options options = new OrthographyTierElementFilter.Options(
                 true, true, true,
-                false, true, true, true,
-                false, false, false, false);
+                false, true, false, true,
+                false, false, true, false);
         return new OrthographyTierElementFilter(alignableTypes, options);
     }
 
@@ -92,8 +93,8 @@ public interface TierElementFilter {
                         OrthographyTierElementFilter.AlignableType.TagMarker, OrthographyTierElementFilter.AlignableType.Terminator);
         final OrthographyTierElementFilter.Options options = new OrthographyTierElementFilter.Options(
                 false, true, true,
-                true, false, true, true,
-                true, false, false, false);
+                true, false, false, true,
+                true, false, false, true);
         return new OrthographyTierElementFilter(alignableTypes, options);
     }
 
