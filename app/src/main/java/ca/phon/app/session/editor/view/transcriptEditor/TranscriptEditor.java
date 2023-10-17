@@ -472,65 +472,68 @@ public class TranscriptEditor extends JEditorPane {
         TranscriptDocument doc = getTranscriptDocument();
 
         var attrs = doc.getCharacterElement(getCaretPosition()).getAttributes();
-        Tier<?> tier = (Tier<?>) attrs.getAttribute("tier");
-        boolean isGeneric = false;
-        if (tier == null) {
-            tier = (Tier<?>) attrs.getAttribute("generic");
-            isGeneric = true;
-        }
-        if (tier != null) {
+        String elemType = (String) attrs.getAttribute("elementType");
+        System.out.println("Element type: " + elemType);
+
+        if (elemType != null) {
             try {
-                int start;
-                int end;
-
-                if (isGeneric) {
-                    start = doc.getGenericStart(tier);
-                    end = doc.getGenericEnd(tier) - 1;
-                }
-                else {
-                    start = doc.getTierStart(tier);
-                    end = doc.getTierEnd(tier) - 1;
-                }
-
-                String newValue = doc.getText(start, end - start);
-
-                internalEdit = true;
-
-                if (isGeneric) {
-                    genericDataChanged(tier, newValue);
-                }
-                else {
-                    tierDataChanged(tier, newValue);
+                switch (elemType) {
+                    case "record" -> {
+                        Tier<?> tier = (Tier<?>) attrs.getAttribute("tier");
+                        if (tier == null) return;
+                        int start = doc.getTierStart(tier);
+                        int end = doc.getTierEnd(tier) - 1;
+                        tierDataChanged(tier, doc.getText(start, end - start));
+                    }
+                    case "comment" -> {
+                        Comment comment = (Comment) attrs.getAttribute("comment");
+                        if (comment == null) return;
+                        int start = doc.getCommentStart(comment);
+                        int end = doc.getCommentEnd(comment) - 1;
+                        commentDataChanged(comment, doc.getText(start, end - start));
+                    }
+                    case "gem" -> {
+                        Gem gem = (Gem) attrs.getAttribute("gem");
+                        if (gem == null) return;
+                        int start = doc.getGemStart(gem);
+                        int end = doc.getGemEnd(gem) - 1;
+                        gemDataChanged(gem, doc.getText(start, end - start));
+                    }
+                    case "generic" -> {
+                        Tier<?> genericTier = (Tier<?>) attrs.getAttribute("generic");
+                        if (genericTier == null) return;
+                        int start = doc.getGenericStart(genericTier);
+                        int end = doc.getGenericEnd(genericTier) - 1;
+                        genericDataChanged(genericTier, doc.getText(start, end - start));
+                    }
                 }
             }
             catch (BadLocationException e) {
                 LogUtil.severe(e);
             }
-        }
 
-        String elemType = (String) attrs.getAttribute("elementType");
-        System.out.println("Element type: " + elemType);
-        if (elemType != null && (elemType.equals("record") || elemType.equals("comment") || elemType.equals("gem"))) {
-            int elementIndex = -1;
-            if (elemType.equals("record")) {
-                elementIndex = session.getRecordElementIndex((Record) attrs.getAttribute("record"));
-            }
-            else if (elemType.equals("comment")) {
-                Comment comment = (Comment) attrs.getAttribute("comment");
-                elementIndex = session.getTranscript().getElementIndex(comment);
-            }
-            else {
-                Gem gem = (Gem) attrs.getAttribute("gem");
-                elementIndex = session.getTranscript().getElementIndex(gem);
-            }
-            if (elementIndex > -1) {
-                try {
-                    Rectangle2D caretRect = modelToView2D(getCaretPosition());
-                    Point point = new Point((int) caretRect.getCenterX(), (int) caretRect.getMaxY());
-                    showContextMenu(elementIndex, point);
+            if (elemType.equals("record") || elemType.equals("comment") || elemType.equals("gem")) {
+                int elementIndex;
+                if (elemType.equals("record")) {
+                    elementIndex = session.getRecordElementIndex((Record) attrs.getAttribute("record"));
                 }
-                catch (BadLocationException e) {
-                    LogUtil.severe(e);
+                else if (elemType.equals("comment")) {
+                    Comment comment = (Comment) attrs.getAttribute("comment");
+                    elementIndex = session.getTranscript().getElementIndex(comment);
+                }
+                else {
+                    Gem gem = (Gem) attrs.getAttribute("gem");
+                    elementIndex = session.getTranscript().getElementIndex(gem);
+                }
+                if (elementIndex > -1) {
+                    try {
+                        Rectangle2D caretRect = modelToView2D(getCaretPosition());
+                        Point point = new Point((int) caretRect.getCenterX(), (int) caretRect.getMaxY());
+                        showContextMenu(elementIndex, point);
+                    }
+                    catch (BadLocationException e) {
+                        LogUtil.severe(e);
+                    }
                 }
             }
         }
@@ -1258,7 +1261,6 @@ public class TranscriptEditor extends JEditorPane {
         deleteThis.setAction(deleteThisAct);
         menu.add(deleteThis);
 
-        var mousePos = MouseInfo.getPointerInfo().getLocation();
         menu.show(this, (int) pos.getX(), (int) pos.getY());
     }
 
@@ -1295,29 +1297,37 @@ public class TranscriptEditor extends JEditorPane {
             String elementType = (String) attrs.getAttribute("elementType");
             if (elementType != null) {
                 int start = -1;
+                int end = -1;
 
                 switch (elementType) {
                     case "comment" -> {
                         g.setColor(UIManager.getColor(TranscriptEditorUIProps.COMMENT_BACKGROUND));
-                        start = doc.getCommentStart((Comment) attrs.getAttribute("comment"));
+                        Comment comment = (Comment) attrs.getAttribute("comment");
+                        start = doc.getCommentStart(comment);
+                        end = doc.getCommentEnd(comment);
                     }
                     case "gem" -> {
                         g.setColor(UIManager.getColor(TranscriptEditorUIProps.GEM_BACKGROUND));
-                        start = doc.getGemStart((Gem) attrs.getAttribute("gem"));
+                        Gem gem = (Gem) attrs.getAttribute("gem");
+                        start = doc.getGemStart(gem);
+                        end = doc.getGemEnd(gem);
                     }
                     case "generic" -> {
                         g.setColor(UIManager.getColor(TranscriptEditorUIProps.GENERIC_BACKGROUND));
-                        start = doc.getGenericStart((Tier<?>) attrs.getAttribute("generic"));
+                        Tier<?> genericTier = (Tier<?>) attrs.getAttribute("generic");
+                        start = doc.getGenericStart(genericTier);
+                        end = doc.getGenericEnd(genericTier);
                     }
                 }
                 if (start == -1) continue;
                 try {
                     var startRect = modelToView2D(start - 1);
+                    var endRect = modelToView2D(end-1);
                     var colorRect = new Rectangle(
                         (int) startRect.getMinX(),
                         (int) startRect.getMinY(),
                         (int) (getWidth() - startRect.getMinX()),
-                        (int) (startRect.getMaxY() - startRect.getMinY())
+                        (int) (endRect.getMaxY() - startRect.getMinY())
                     );
                     if (!drawHere.intersects(colorRect)) continue;
                     g.fillRect(
@@ -1401,25 +1411,42 @@ public class TranscriptEditor extends JEditorPane {
 
     public void genericDataChanged(Tier<?> genericTier, String newData) {
         Tier dummy = SessionFactory.newFactory().createTier("dummy", genericTier.getDeclaredType());
-        // TODO Figure out what's going on here
         dummy.setFormatter(genericTier.getFormatter());
         dummy.setText(newData);
 
-        if (genericTier.getDeclaredType() == TranscriptDocument.Languages.class) {
-            Tier<TranscriptDocument.Languages> languagesTier = (Tier<TranscriptDocument.Languages>) dummy;
-            System.out.println("Language changed -----------------------");
-            System.out.println("Validated: " + !languagesTier.isUnvalidated());
-            if (languagesTier.hasValue()) {
-                SessionLanguageEdit edit = new SessionLanguageEdit(session, eventManager, languagesTier.getValue().languageList());
-                getUndoSupport().postEdit(edit);
-            }
-        }
-
         SwingUtilities.invokeLater(() -> {
+            getUndoSupport().beginUpdate();
+
+            if (genericTier.getDeclaredType() == TranscriptDocument.Languages.class) {
+                Tier<TranscriptDocument.Languages> languagesTier = (Tier<TranscriptDocument.Languages>) dummy;
+                System.out.println("Language changed -----------------------");
+                System.out.println("Validated: " + !languagesTier.isUnvalidated());
+                if (languagesTier.hasValue()) {
+                    SessionLanguageEdit edit = new SessionLanguageEdit(session, eventManager, languagesTier.getValue().languageList());
+                    getUndoSupport().postEdit(edit);
+                }
+            }
+
             TierEdit<?> edit = new TierEdit(session, eventManager, null, genericTier, dummy.getValue());
             edit.setFireHardChangeOnUndo(true);
             getUndoSupport().postEdit(edit);
             getUndoSupport().endUpdate();
+        });
+    }
+
+    public void commentDataChanged(Comment comment, String newData) {
+        Tier<TierData> dummy = SessionFactory.newFactory().createTier("dummy", TierData.class);
+        dummy.setText(newData);
+        SwingUtilities.invokeLater(() -> {
+            ChangeCommentEdit edit = new ChangeCommentEdit(session, eventManager, comment, dummy.getValue());
+            getUndoSupport().postEdit(edit);
+        });
+    }
+
+    public void gemDataChanged(Gem gem, String newData) {
+        SwingUtilities.invokeLater(() -> {
+            ChangeGemEdit edit = new ChangeGemEdit(session, eventManager, gem, newData);
+            getUndoSupport().postEdit(edit);
         });
     }
 
@@ -1828,19 +1855,64 @@ public class TranscriptEditor extends JEditorPane {
 
             if (isLabel && !isSegment) return;
 
-            Tier<?> prevTier = (Tier<?>) doc.getCharacterElement(fb.getCaret().getDot()).getAttributes().getAttribute("tier");
-            Tier<?> nextTier = (Tier<?>) doc.getCharacterElement(dot).getAttributes().getAttribute("tier");
+            AttributeSet prevAttrs = doc.getCharacterElement(fb.getCaret().getDot()).getAttributes();
+            AttributeSet nextAttrs = doc.getCharacterElement(dot).getAttributes();
 
-            if (prevTier != null && (nextTier == null || !prevTier.getName().equals(nextTier.getName()))) {
+            String prevElemType = (String) prevAttrs.getAttribute("elementType");
+            String nextElemType = (String) nextAttrs.getAttribute("elementType");
+
+            if (prevElemType != null) {
                 try {
-                    int start = doc.getTierStart(prevTier);
-                    int end = doc.getTierEnd(prevTier) - 1;
-                    String newValue = doc.getText(start, end - start);
-
-                    // TODO figure out a better way of doing this
-                    if (prevTier.getValue() != null && !newValue.equals(prevTier.getValue().toString())) {
-                        internalEdit = true;
-                        tierDataChanged(prevTier, newValue);
+                    switch (prevElemType) {
+                        case "record" -> {
+                            Tier<?> prevTier = (Tier<?>) prevAttrs.getAttribute("tier");
+                            if (prevTier == null) break;
+                            if (nextElemType != null && nextElemType.equals("record")) {
+                                Tier<?> nextTier = (Tier<?>) nextAttrs.getAttribute("tier");
+                                if (nextTier != null && nextTier == prevTier) break;
+                            }
+                            int start = doc.getTierStart(prevTier);
+                            int end = doc.getTierEnd(prevTier) - 1;
+                            String newValue = doc.getText(start, end - start);
+                            internalEdit = true;
+                            tierDataChanged(prevTier, newValue);
+                        }
+                        case "comment" -> {
+                            Comment prevComment = (Comment) prevAttrs.getAttribute("comment");
+                            if (prevComment == null) break;
+                            if (nextElemType != null && nextElemType.equals("comment")) {
+                                Comment nextComment = (Comment) nextAttrs.getAttribute("comment");
+                                if (nextComment != null && nextComment == prevComment) break;
+                            }
+                            int start = doc.getCommentStart(prevComment);
+                            int end = doc.getCommentEnd(prevComment) - 1;
+                            String newValue = doc.getText(start, end - start);
+                            commentDataChanged(prevComment, newValue);
+                        }
+                        case "gem" -> {
+                            Gem prevGem = (Gem) prevAttrs.getAttribute("gem");
+                            if (prevGem == null) break;
+                            if (nextElemType != null && nextElemType.equals("gem")) {
+                                Gem nextGem = (Gem) nextAttrs.getAttribute("gem");
+                                if (nextGem != null && nextGem == prevGem) break;
+                            }
+                            int start = doc.getGemStart(prevGem);
+                            int end = doc.getGemEnd(prevGem) - 1;
+                            String newValue = doc.getText(start, end - start);
+                            gemDataChanged(prevGem, newValue);
+                        }
+                        case "generic" -> {
+                            Tier<?> prevGenericTier = (Tier<?>) prevAttrs.getAttribute("generic");
+                            if (prevGenericTier == null) break;
+                            if (nextElemType != null && nextElemType.equals("generic")) {
+                                Tier<?> nextGenericTier = (Tier<?>) nextAttrs.getAttribute("generic");
+                                if (nextGenericTier != null && nextGenericTier == prevGenericTier) break;
+                            }
+                            int start = doc.getGenericStart(prevGenericTier);
+                            int end = doc.getGenericEnd(prevGenericTier) - 1;
+                            String newValue = doc.getText(start, end - start);
+                            genericDataChanged(prevGenericTier, newValue);
+                        }
                     }
                 }
                 catch (BadLocationException e) {

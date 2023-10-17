@@ -37,7 +37,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
     private boolean syllabificationIsComponent = false;
     private boolean alignmentVisible = false;
     private boolean alignmentIsComponent = false;
-    private int labelColumnWidth = 20;
+    public static int labelColumnWidth = 20;
     private float lineSpacing = 0.2f;
     private TierViewItem alignmentParent = null;
 
@@ -1911,7 +1911,6 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
         String start = MediaTimeFormatter.msToPaddedMinutesAndSeconds(segment.getStartValue());
 
-
         var segmentTimeAttrs = getSegmentTimeAttributes(segment);
         var segmentDashAttrs = getSegmentDashAttributes(segment);
         segmentTimeAttrs.addAttribute("notEditable", true);
@@ -1947,6 +1946,13 @@ public class TranscriptDocument extends DefaultStyledDocument {
         StyleConstants.setLineSpacing(paragraphAttrs, getLineSpacing());
         StyleConstants.setForeground(paragraphAttrs, UIManager.getColor(TranscriptEditorUIProps.FOREGROUND));
         setParagraphAttributes(0, getLength(), paragraphAttrs, false);
+
+        var root = getDefaultRootElement();
+        for (int i = 0; i < root.getElementCount(); i++) {
+            var elem = root.getElement(i);
+            if (elem.getElementCount() == 0) continue;
+
+        }
     }
 
     private SimpleAttributeSet insertTier(int recordIndex, Tier<?> tier, TierViewItem tierViewItem, AttributeSet recordAttrs) {

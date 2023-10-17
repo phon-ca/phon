@@ -1,17 +1,34 @@
 package ca.phon.app.session.editor.view.transcriptEditor;
 
+import ca.phon.session.TierViewItem;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.PrefHelper;
 
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.util.HashMap;
 
 public class TranscriptViewFactory implements ViewFactory {
     private HashMap<String, Font> fontCache = new HashMap<>();
+    private TranscriptEditor transcriptEditor;
+    private short indent;
+    private short rightInset;
 
     public TranscriptViewFactory() {
+        Font font = FontPreferences.getMonospaceFont().deriveFont(14.0f);
 
+        int labelColumnWidth = TranscriptDocument.labelColumnWidth;
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < labelColumnWidth + 2; i++) {
+            builder.append(" ");
+        }
+
+        FontMetrics fm = new JLabel().getFontMetrics(font);
+
+        indent = (short) fm.stringWidth(builder.toString());
+        rightInset = (short) fm.stringWidth(" ");
     }
 
     @Override
@@ -26,9 +43,10 @@ public class TranscriptViewFactory implements ViewFactory {
 
         if (kind != null) {
             if (kind.equals(AbstractDocument.ContentElementName)) {
-                return new TierView(elem);
+                var view = new TierView(elem);
+                return view;
             } else if (kind.equals(AbstractDocument.ParagraphElementName)) {
-                return new ParagraphView(elem);
+                return new CustomParagraphView(elem);
             } else if (kind.equals(AbstractDocument.SectionElementName)) {
                 return new BoxView(elem, View.Y_AXIS);
             } else if (kind.equals(StyleConstants.ComponentElementName)) {
@@ -45,6 +63,7 @@ public class TranscriptViewFactory implements ViewFactory {
     }
 
     private class TierView extends LabelView {
+
         public TierView(Element elem) {
             super(elem);
         }
@@ -68,9 +87,19 @@ public class TranscriptViewFactory implements ViewFactory {
         }
     }
 
-    private class TierLabelView extends ComponentView {
-        public TierLabelView(Element elem) {
+    class CustomParagraphView extends ParagraphView {
+        public CustomParagraphView(Element elem) {
             super(elem);
+            setInsets((short) 0, indent, (short) 0, rightInset);
+            setFirstLineIndent(-indent);
+        }
+
+        @Override
+        public void paint(Graphics g, Shape a) {
+            super.paint(g, a);
+
+            var b = a.getBounds();
+            g.fillRect(b.x, b.y, 5, 5);
         }
     }
 
