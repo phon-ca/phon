@@ -100,30 +100,37 @@ public final class OrthographyTierElementFilter implements TierElementFilter {
         @Visits
         @Override
         public void visitWord(Word word) {
-            if(options.useReplacement && word.getReplacements().size() > 0) {
-                // align with first replacement
-                final Replacement replacement = word.getReplacements().get(0);
-                replacement.getWords().forEach(this::visit);
-            } else {
-                boolean includeWord = isIncluded(AlignableType.Word);
-                if(word.getPrefix() != null) {
-                    includeWord = switch (word.getPrefix().getType()) {
-                        case OMISSION -> options.includeOmitted;
-                        case FRAGMENT -> options.includeFrag;
-                        case FILLER -> options.includeFiller;
-                        case NONWORD -> options.includeNonword;
-                    };
+            if(options.useReplacement && !word.getReplacements().isEmpty()) {
+                Replacement replacement = null;
+                for(Replacement r:word.getReplacements()) {
+                    if(!r.isReal()) {
+                        replacement = r;
+                        break;
+                    }
                 }
-                if (word.isUntranscribed()) {
-                    includeWord = switch (word.getUntranscribedType()) {
-                        case UNINTELLIGIBLE -> options.includeXXX;
-                        case UNTRANSCRIBED -> options.includeWWW;
-                        case UNINTELLIGIBLE_WORD_WITH_PHO -> options.includeYYY;
-                    };
+                if(replacement != null) {
+                    replacement.getWords().forEach(this::visit);
+                    return;
                 }
-                if (includeWord)
-                    elements.add(word);
             }
+            boolean includeWord = isIncluded(AlignableType.Word);
+            if(word.getPrefix() != null) {
+                includeWord = switch (word.getPrefix().getType()) {
+                    case OMISSION -> options.includeOmitted;
+                    case FRAGMENT -> options.includeFrag;
+                    case FILLER -> options.includeFiller;
+                    case NONWORD -> options.includeNonword;
+                };
+            }
+            if (word.isUntranscribed()) {
+                includeWord = switch (word.getUntranscribedType()) {
+                    case UNINTELLIGIBLE -> options.includeXXX;
+                    case UNTRANSCRIBED -> options.includeWWW;
+                    case UNINTELLIGIBLE_WORD_WITH_PHO -> options.includeYYY;
+                };
+            }
+            if (includeWord)
+                elements.add(word);
         }
 
         @Visits

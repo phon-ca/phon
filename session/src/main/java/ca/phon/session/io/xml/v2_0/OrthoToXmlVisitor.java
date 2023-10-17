@@ -302,6 +302,18 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 		phoneticGroup.getElements().forEach(innnerGVisitor::visit);
 		innnerGVisitor.getU().getWOrGOrPg().forEach(xmlPg.getWOrGOrE()::add);
 		u.getWOrGOrPg().add(xmlPg);
+
+		final OneToOne oneToOne = phoneticGroup.getExtension(OneToOne.class);
+		if(oneToOne != null) {
+			final List<JAXBElement<XmlPhoneticTranscriptionType>> ipaTiers = writePhoModData(oneToOne);
+			for(var ipaEle:ipaTiers) {
+				if(ipaEle.getName().getLocalPart().equals("mod")) {
+					xmlPg.setMod(ipaEle.getValue());
+				} else {
+					xmlPg.setPho(ipaEle.getValue());
+				}
+			}
+		}
 	}
 
 	@Override
