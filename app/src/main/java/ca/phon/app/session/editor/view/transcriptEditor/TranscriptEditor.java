@@ -16,6 +16,8 @@ import ca.phon.util.OSInfo;
 import ca.phon.util.Tuple;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.*;
 import javax.swing.undo.UndoManager;
 import java.awt.*;
@@ -91,7 +93,7 @@ public class TranscriptEditor extends JEditorPane {
             // FOR DEBUG PURPOSES ONLY
 //            SimpleAttributeSet attrs = new SimpleAttributeSet(doc.getCharacterElement(e.getDot()).getAttributes().copyAttributes());
 //            System.out.println("Attrs: " + attrs);
-            System.out.println("Dot: " + e.getDot());
+//            System.out.println("Dot: " + e.getDot());
 //            Tier<?> tier = ((Tier<?>) attrs.getAttribute("tier"));
 //            System.out.println(tier == null ? null : tier.getName());
 //            System.out.println(attrs);
@@ -135,14 +137,14 @@ public class TranscriptEditor extends JEditorPane {
 
 
         KeyStroke right = KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0);
-        inputMap.put(right, "nextEditableIndex");
-        PhonUIAction<Void> rightAct = PhonUIAction.runnable(() -> setCaretPosition(getNextEditableIndex(getCaretPosition() + 1, true)));
-        actionMap.put("nextEditableIndex", rightAct);
+        inputMap.put(right, "nextValidIndex");
+        PhonUIAction<Void> rightAct = PhonUIAction.runnable(() -> setCaretPosition(getNextValidIndex(getCaretPosition() + 1, true)));
+        actionMap.put("nextValidIndex", rightAct);
 
         KeyStroke left = KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0);
-        inputMap.put(left, "prevEditableIndex");
-        PhonUIAction<Void> leftAct = PhonUIAction.runnable(() -> setCaretPosition(getPrevEditableIndex(getCaretPosition() - 1, true)));
-        actionMap.put("prevEditableIndex", leftAct);
+        inputMap.put(left, "prevValidIndex");
+        PhonUIAction<Void> leftAct = PhonUIAction.runnable(() -> setCaretPosition(getPrevValidIndex(getCaretPosition() - 1, true)));
+        actionMap.put("prevValidIndex", leftAct);
 
 
         KeyStroke up = KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0);
@@ -1059,7 +1061,7 @@ public class TranscriptEditor extends JEditorPane {
         );
 
         // Set the caret to the editable pos closest to the original pos
-        setCaretPosition(getNextEditableIndex(caretPos, false));
+        setCaretPosition(getNextValidIndex(caretPos, false));
     }
 
     private void onSpeakerChanged(EditorEvent<EditorEventType.SpeakerChangedData> editorEvent) {
@@ -1475,22 +1477,44 @@ public class TranscriptEditor extends JEditorPane {
         TranscriptDocument doc = (TranscriptDocument) getEditorKit().createDefaultDocument();
         doc.setSession(session);
         setDocument(doc);
+        doc.addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+//                TranscriptDocument doc = getTranscriptDocument();
+//                Element elem = doc.getCharacterElement(e.getOffset());
+//                AttributeSet attrs = elem.getAttributes();
+//                if (attrs.getAttribute("syllabification") != null) {
+//                    System.out.println("Stuff and things");
+//                    setCaretPosition(getNextValidIndex(getCaret().getMark() + 1, false));
+//                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+
+            }
+        });
     }
 
-    public int getNextEditableIndex(int currentPos, boolean looping) {
+    public int getNextValidIndex(int currentPos, boolean looping) {
         TranscriptDocument doc = getTranscriptDocument();
 
         int docLen = doc.getLength();
 
         Element elem = doc.getCharacterElement(currentPos);
-        while (elem.getAttributes().getAttribute("label") != null && currentPos < docLen) {
+        while (elem.getAttributes().getAttribute("notTraversable") != null && currentPos < docLen) {
             currentPos++;
             elem = doc.getCharacterElement(currentPos);
         }
 
         if (currentPos == docLen) {
             if (looping) {
-                return getNextEditableIndex(0, true);
+                return getNextValidIndex(0, true);
             }
             else {
                 return -1;
@@ -1500,27 +1524,41 @@ public class TranscriptEditor extends JEditorPane {
         return currentPos;
     }
 
-    public int getPrevEditableIndex(int currentPos, boolean looping) {
+    public int getPrevValidIndex(int currentPos, boolean looping) {
         TranscriptDocument doc = getTranscriptDocument();
 
         Element elem = doc.getCharacterElement(currentPos);
+        AttributeSet attrs = elem.getAttributes();
 
         MediaSegment segment = (MediaSegment) elem.getAttributes().getAttribute("mediaSegment");
-        System.out.println("Seg: " + segment != null);
+
         if (segment != null) {
             System.out.println("In segment");
             elem = doc.getCharacterElement(doc.getSegmentBounds(segment, currentPos).getObj1());
+            attrs = elem.getAttributes();
+        }
+        else if (attrs.getAttribute("tier") != null) {
+            System.out.println("test 1");
+            Tier<?> tier = (Tier<?>) attrs.getAttribute("tier");
+            Set<String> syllabificationTierNames = new HashSet<>();
+            syllabificationTierNames.add(SystemTierType.TargetSyllables.getName());
+            syllabificationTierNames.add(SystemTierType.ActualSyllables.getName());
+            if (syllabificationTierNames.contains(tier.getName()) && getSelectionStart() != getSelectionEnd()) {
+                System.out.println("Test 2");
+                currentPos--;
+                elem = doc.getCharacterElement(currentPos);
+                attrs = elem.getAttributes();
+            }
         }
 
-        AttributeSet attrs = elem.getAttributes();
-        while ((attrs.getAttribute("label") != null || attrs.getAttribute("mediaSegment") != null) && currentPos >= 0) {
+        while ((attrs.getAttribute("notTraversable") != null || attrs.getAttribute("mediaSegment") != null) && currentPos >= 0) {
             currentPos--;
             elem = doc.getCharacterElement(currentPos);
             attrs = elem.getAttributes();
         }
 
         if (looping && currentPos < 0) {
-            return getPrevEditableIndex(doc.getLength()-1, true);
+            return getPrevValidIndex(doc.getLength()-1, true);
         }
 
         System.out.println("\n");
@@ -1849,17 +1887,18 @@ public class TranscriptEditor extends JEditorPane {
             TranscriptDocument doc = getTranscriptDocument();
             Element elem = doc.getCharacterElement(dot);
             AttributeSet attrs = elem.getAttributes();
-            boolean isLabel = attrs.getAttribute("label") != null;
+            boolean notTraversable = attrs.getAttribute("notTraversable") != null;
             MediaSegment segment = (MediaSegment) attrs.getAttribute("mediaSegment");
             boolean isSegment = segment != null;
 
-            if (isLabel && !isSegment) return;
+            if (notTraversable && !isSegment) return;
 
             AttributeSet prevAttrs = doc.getCharacterElement(fb.getCaret().getDot()).getAttributes();
             AttributeSet nextAttrs = doc.getCharacterElement(dot).getAttributes();
 
             String prevElemType = (String) prevAttrs.getAttribute("elementType");
             String nextElemType = (String) nextAttrs.getAttribute("elementType");
+            Tier<?> nextTier = (Tier<?>) nextAttrs.getAttribute("tier");
 
             if (prevElemType != null) {
                 try {
@@ -1868,7 +1907,6 @@ public class TranscriptEditor extends JEditorPane {
                             Tier<?> prevTier = (Tier<?>) prevAttrs.getAttribute("tier");
                             if (prevTier == null) break;
                             if (nextElemType != null && nextElemType.equals("record")) {
-                                Tier<?> nextTier = (Tier<?>) nextAttrs.getAttribute("tier");
                                 if (nextTier != null && nextTier == prevTier) break;
                             }
                             int start = doc.getTierStart(prevTier);
@@ -1939,6 +1977,17 @@ public class TranscriptEditor extends JEditorPane {
                 fb.setDot(segmentBounds.getObj1(), Position.Bias.Forward);
                 setSelectedSegment(segment);
                 fb.moveDot(segmentBounds.getObj2()+1, Position.Bias.Forward);
+                return;
+            }
+
+            if (nextTier != null && nextAttrs.getAttribute("syllabification") != null) {
+
+                int tierEnd = doc.getTierEnd(nextTier)-1;
+                fb.setDot(dot, Position.Bias.Forward);
+                if (dot != tierEnd) {
+                    System.out.println("I hope it's not this");
+                    fb.moveDot(getCaretPosition() + 1, Position.Bias.Forward);
+                }
                 return;
             }
 
@@ -2086,7 +2135,7 @@ public class TranscriptEditor extends JEditorPane {
                     return;
                 }
 
-                if (attrs.getAttribute("label") != null) {
+                if (attrs.getAttribute("notTraversable") != null) {
                     String elementType = (String) attrs.getAttribute("elementType");
                     if (elementType != null) {
                         if (e.getClickCount() > 1) {
@@ -2106,11 +2155,12 @@ public class TranscriptEditor extends JEditorPane {
                             }
                         }
                         else {
-                            switch (elementType) {
-                                case "record" -> setCaretPosition(doc.getTierStart((Tier<?>) attrs.getAttribute("tier")));
-                                case "comment" -> setCaretPosition(doc.getCommentStart((Comment) attrs.getAttribute("comment")));
-                                case "gem" -> setCaretPosition(doc.getGemStart((Gem) attrs.getAttribute("gem")));
-                            }
+                                setCaretPosition(getNextValidIndex(mousePosInDoc, false));
+//                            switch (elementType) {
+//                                case "record" -> setCaretPosition(doc.getTierStart((Tier<?>) attrs.getAttribute("tier")));
+//                                case "comment" -> setCaretPosition(doc.getCommentStart((Comment) attrs.getAttribute("comment")));
+//                                case "gem" -> setCaretPosition(doc.getGemStart((Gem) attrs.getAttribute("gem")));
+//                            }
                         }
 
                         if (attrs.getAttribute("clickable") != null) {

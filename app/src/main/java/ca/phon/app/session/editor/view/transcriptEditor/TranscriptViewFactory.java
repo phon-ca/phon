@@ -12,24 +12,10 @@ import java.util.HashMap;
 
 public class TranscriptViewFactory implements ViewFactory {
     private HashMap<String, Font> fontCache = new HashMap<>();
-    private TranscriptEditor transcriptEditor;
-    private short indent;
-    private short rightInset;
+    private int indent = -1;
+    private int rightInset = -1;
 
-    public TranscriptViewFactory() {
-        Font font = FontPreferences.getMonospaceFont().deriveFont(14.0f);
-
-        int labelColumnWidth = TranscriptDocument.labelColumnWidth;
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < labelColumnWidth + 2; i++) {
-            builder.append(" ");
-        }
-
-        FontMetrics fm = new JLabel().getFontMetrics(font);
-
-        indent = (short) fm.stringWidth(builder.toString());
-        rightInset = (short) fm.stringWidth(" ");
-    }
+    public TranscriptViewFactory() {}
 
     @Override
     public View create(Element elem) {
@@ -46,6 +32,7 @@ public class TranscriptViewFactory implements ViewFactory {
                 var view = new TierView(elem);
                 return view;
             } else if (kind.equals(AbstractDocument.ParagraphElementName)) {
+                if (indent == -1) setupIndent((Integer) elem.getAttributes().getAttribute("labelColumnWidth"));
                 return new CustomParagraphView(elem);
             } else if (kind.equals(AbstractDocument.SectionElementName)) {
                 return new BoxView(elem, View.Y_AXIS);
@@ -60,6 +47,22 @@ public class TranscriptViewFactory implements ViewFactory {
 
         // default to text display
         return new LabelView(elem);
+    }
+
+    private void setupIndent(Integer labelColumnWidth) {
+        if (labelColumnWidth == null) labelColumnWidth = 20;
+
+        Font font = FontPreferences.getMonospaceFont().deriveFont(14.0f);
+
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < labelColumnWidth + 2; i++) {
+            builder.append(" ");
+        }
+
+        FontMetrics fm = new JLabel().getFontMetrics(font);
+
+        indent = (short) fm.stringWidth(builder.toString());
+        rightInset = (short) fm.stringWidth(" ");
     }
 
     private class TierView extends LabelView {
@@ -90,16 +93,8 @@ public class TranscriptViewFactory implements ViewFactory {
     class CustomParagraphView extends ParagraphView {
         public CustomParagraphView(Element elem) {
             super(elem);
-            setInsets((short) 0, indent, (short) 0, rightInset);
+            setInsets((short) 0, (short) indent, (short) 0, (short) rightInset);
             setFirstLineIndent(-indent);
-        }
-
-        @Override
-        public void paint(Graphics g, Shape a) {
-            super.paint(g, a);
-
-            var b = a.getBounds();
-            g.fillRect(b.x, b.y, 5, 5);
         }
     }
 
@@ -117,17 +112,6 @@ public class TranscriptViewFactory implements ViewFactory {
             }
 
             return null;
-        }
-    }
-
-    private class IPATierView extends LabelView {
-        public IPATierView(Element elem) {
-            super(elem);
-        }
-
-        @Override
-        protected void setPropertiesFromAttributes() {
-            super.setPropertiesFromAttributes();
         }
     }
 }

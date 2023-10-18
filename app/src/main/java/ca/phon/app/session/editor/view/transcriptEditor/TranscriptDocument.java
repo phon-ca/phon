@@ -3,7 +3,9 @@ package ca.phon.app.session.editor.view.transcriptEditor;
 import ca.phon.app.log.LogUtil;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.MediaTimeFormatter;
+import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.Phone;
 import ca.phon.orthography.InternalMedia;
 import ca.phon.orthography.Orthography;
 import ca.phon.orthography.mor.Grasp;
@@ -13,6 +15,8 @@ import ca.phon.orthography.mor.MorTierData;
 import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.session.tierdata.*;
+import ca.phon.syllable.SyllabificationInfo;
+import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.ui.FontFormatter;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.*;
@@ -37,7 +41,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
     private boolean syllabificationIsComponent = false;
     private boolean alignmentVisible = false;
     private boolean alignmentIsComponent = false;
-    public static int labelColumnWidth = 20;
+    public int labelColumnWidth = 20;
     private float lineSpacing = 0.2f;
     private TierViewItem alignmentParent = null;
 
@@ -283,6 +287,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
             retVal.addAttribute("locked", true);
         }
         retVal.addAttribute("label", true);
+        retVal.addAttribute("notTraversable", true);
         retVal.addAttribute("notEditable", true);
         retVal.addAttribute("tier", tier);
 
@@ -296,6 +301,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
         retVal.addAttribute("notEditable", true);
         retVal.addAttribute("label", true);
+        retVal.addAttribute("notTraversable", true);
         retVal.addAttribute("sep", true);
 
         retVal.addAttributes(getMonospaceFontAttributes());
@@ -319,6 +325,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         retVal.addAttributes(getMonospaceFontAttributes());
 
         retVal.addAttribute("label", true);
+        retVal.addAttribute("notTraversable", true);
         retVal.addAttribute("notEditable", true);
 
         return retVal;
@@ -340,6 +347,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         retVal.addAttributes(getMonospaceFontAttributes());
 
         retVal.addAttribute("label", true);
+        retVal.addAttribute("notTraversable", true);
         retVal.addAttribute("notEditable", true);
 
         return retVal;
@@ -351,6 +359,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         retVal.addAttributes(getMonospaceFontAttributes());
 
         retVal.addAttribute("label", true);
+        retVal.addAttribute("notTraversable", true);
         retVal.addAttribute("notEditable", true);
 
         return retVal;
@@ -1941,18 +1950,44 @@ public class TranscriptDocument extends DefaultStyledDocument {
         formatSegment(segment, additionalAttrs);
     }
 
+    private void formatSyllabification(IPATranscript ipaTranscript, AttributeSet additionalAttrs) {
+        SimpleAttributeSet attrs = new SimpleAttributeSet();
+        if (additionalAttrs != null) attrs.addAttributes(additionalAttrs);
+        attrs.addAttribute("syllabification", true);
+
+        Set<SyllableConstituentType> hiddenConstituent = new HashSet<>();
+        hiddenConstituent.add(SyllableConstituentType.SYLLABLESTRESSMARKER);
+        hiddenConstituent.add(SyllableConstituentType.UNKNOWN);
+        hiddenConstituent.add(SyllableConstituentType.WORDBOUNDARYMARKER);
+
+        for (IPAElement p : ipaTranscript) {
+            attrs.removeAttribute(StyleConstants.Foreground);
+            attrs.addAttribute("notTraversable", true);
+            attrs.addAttribute("notEditable", true);
+            appendBatchString(p.toString(), attrs);
+            final SyllabificationInfo sInfo = p.getExtension(SyllabificationInfo.class);
+            if (hiddenConstituent.contains(sInfo.getConstituentType())) continue;
+            appendBatchString(":", attrs);
+            attrs.removeAttribute("notTraversable");
+            attrs.removeAttribute("notEditable");
+            if(sInfo.getConstituentType() == SyllableConstituentType.NUCLEUS && sInfo.isDiphthongMember()) {
+                StyleConstants.setForeground(attrs, Color.RED);
+                appendBatchString("D", attrs);
+            }
+            else {
+                StyleConstants.setForeground(attrs, sInfo.getConstituentType().getColor());
+                appendBatchString(String.valueOf(sInfo.getConstituentType().getIdChar()), attrs);
+            }
+        }
+        attrs.removeAttribute(StyleConstants.Foreground);
+    }
+
     private void setGlobalParagraphAttributes() {
         SimpleAttributeSet paragraphAttrs = new SimpleAttributeSet();
         StyleConstants.setLineSpacing(paragraphAttrs, getLineSpacing());
         StyleConstants.setForeground(paragraphAttrs, UIManager.getColor(TranscriptEditorUIProps.FOREGROUND));
+        paragraphAttrs.addAttribute("labelColumnWidth", labelColumnWidth);
         setParagraphAttributes(0, getLength(), paragraphAttrs, false);
-
-        var root = getDefaultRootElement();
-        for (int i = 0; i < root.getElementCount(); i++) {
-            var elem = root.getElement(i);
-            if (elem.getElementCount() == 0) continue;
-
-        }
     }
 
     private SimpleAttributeSet insertTier(int recordIndex, Tier<?> tier, TierViewItem tierViewItem, AttributeSet recordAttrs) {
@@ -2036,14 +2071,12 @@ public class TranscriptDocument extends DefaultStyledDocument {
                     String syllabificationLabelText = formatLabelText("Syllabification");
                     // Add the label
                     appendBatchString(syllabificationLabelText + ": ", syllabificationLabelAttrs);
-                    // Get the string version of the syllabification
-                    String ipaTargetContent = ipaTarget.toString(true);
                     // Add component factory if needed
                     if (syllabificationIsComponent) {
                         tierAttrs.addAttributes(getSyllabificationAttributes());
                     }
                     // Append the content
-                    appendBatchString(ipaTargetContent, tierAttrs);
+                    formatSyllabification(syllableTier.getValue(), tierAttrs);
                 }
                 else if (tierName.equals("IPA Actual") && syllabificationVisible) {
                     // Add a newline at the end of the regular tier content
@@ -2064,14 +2097,12 @@ public class TranscriptDocument extends DefaultStyledDocument {
                     String syllabificationLabelText = formatLabelText("Syllabification");
                     // Add the label
                     appendBatchString(syllabificationLabelText + ": ", syllabificationLabelAttrs);
-                    // Get the string version of the syllabification
-                    String ipaActualContent = ipaActual.toString(true);
                     // Add component factory if needed
                     if (syllabificationIsComponent) {
                         tierAttrs.addAttributes(getSyllabificationAttributes());
                     }
                     // Append the content
-                    appendBatchString(ipaActualContent, tierAttrs);
+                    formatSyllabification(syllableTier.getValue(), tierAttrs);
                 }
             }
             else if (tierType.equals(MediaSegment.class)) {
@@ -2341,11 +2372,21 @@ public class TranscriptDocument extends DefaultStyledDocument {
     }
 
     private class TranscriptDocumentFilter extends DocumentFilter {
+        Set<Character> syllabificationChars;
+
+        public TranscriptDocumentFilter() {
+            syllabificationChars = new HashSet<>();
+            for (SyllableConstituentType type : SyllableConstituentType.values()) {
+                syllabificationChars.add(type.getIdChar());
+            }
+        }
+
         @Override
-        public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+        public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet _attrs) throws BadLocationException {
 
             // For some reason attrs gets the attributes from the previous character, so this fixes that
-            attrs = getCharacterElement(offset).getAttributes();
+            SimpleAttributeSet attrs = new SimpleAttributeSet();
+            attrs.addAttributes(getCharacterElement(offset).getAttributes());
 
             if (attrs != null) {
                 // Labels and stuff
@@ -2362,6 +2403,16 @@ public class TranscriptDocument extends DefaultStyledDocument {
                         .findFirst();
                     if (tierViewItem.isPresent() && tierViewItem.get().isTierLocked()) {
                         return;
+                    }
+
+                    // Syllabification tiers
+                    if (tierName.equals(SystemTierType.TargetSyllables.getName()) || tierName.equals(SystemTierType.ActualSyllables.getName())) {
+                        final String textUpper = text.toUpperCase();
+                        if (length > 1 || !syllabificationChars.contains(textUpper.charAt(0))) return;
+                        var type = Arrays.stream(SyllableConstituentType.values()).filter(item -> item.getIdChar() == textUpper.charAt(0)).findFirst().get();
+                        if (type == null) return;
+                        StyleConstants.setForeground(attrs, type.getColor());
+                        text = textUpper;
                     }
                 }
             }
