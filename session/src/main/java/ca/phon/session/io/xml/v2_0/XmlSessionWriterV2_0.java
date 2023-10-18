@@ -33,6 +33,7 @@ import ca.phon.session.io.SessionWriter;
 import ca.phon.session.io.xml.SessionXMLStreamWriter;
 import ca.phon.session.tierdata.*;
 import ca.phon.util.Language;
+import ca.phon.xml.EmptyTagXMLStreamWriter;
 import ca.phon.xml.annotation.XMLSerial;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBElement;
@@ -785,7 +786,7 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 				}
 			});
 			writer.setDefaultNamespace(DEFAULT_NAMESPACE);
-			writer = new SessionXMLStreamWriter(writer, true);
+			writer = new EmptyTagXMLStreamWriter(new SessionXMLStreamWriter(writer, true));
 			marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
 			marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, String.format("%s %s", DEFAULT_NAMESPACE, DEFAULT_NAMESPACE_LOCATION));
 			marshaller.marshal(ele, writer);

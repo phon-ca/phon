@@ -177,4 +177,8 @@ public class DelegatingXMLStreamWriter implements XMLStreamWriter {
     public Object getProperty(String name) throws IllegalArgumentException {
         return delegate.getProperty(name);
     }
+
+    public XMLStreamWriter getDelegate() {
+        return delegate;
+    }
 }

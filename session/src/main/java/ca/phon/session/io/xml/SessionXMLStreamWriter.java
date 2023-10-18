@@ -1,6 +1,7 @@
 package ca.phon.session.io.xml;
 
 import ca.phon.xml.DelegatingXMLStreamWriter;
+import ca.phon.xml.EmptyTagXMLStreamWriter;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -29,7 +30,7 @@ public class SessionXMLStreamWriter extends DelegatingXMLStreamWriter {
     private String resumeFormattingEleName = null;
     private int resumeFormattingStackSize = -1;
 
-    private final List<String> unformattedElements = List.of("a", "w", "g", "pg", "pause", "pho", "mod", "mor", "tierData");
+    private final List<String> unformattedElements = List.of("a", "w", "e", "t", "g", "pg", "pause", "pho", "mod", "mor", "tagMarker", "tierData");
 
     public SessionXMLStreamWriter(XMLStreamWriter writer) {
         this(writer, true);
