@@ -56,7 +56,7 @@ public class DefaultTierLabelMenuHandler implements TierLabelMenuHandler, IPlugi
 
 
     @Override
-    public void addMenuItems(MenuBuilder builder, Session session, EditorEventManager eventManager, SessionEditUndoSupport undoSupport, Tier<?> tier, int recordIndex) {
+    public void addMenuItems(MenuBuilder builder, Session session, EditorEventManager eventManager, SessionEditUndoSupport undoSupport, Tier<?> tier, Record record) {
         this.session = session;
         this.eventManager = eventManager;
         this.undoSupport = undoSupport;
@@ -77,7 +77,7 @@ public class DefaultTierLabelMenuHandler implements TierLabelMenuHandler, IPlugi
         if(Toolkit.getDefaultToolkit().getSystemClipboard().isDataFlavorAvailable(TierTransferrable.FLAVOR)
                 || Toolkit.getDefaultToolkit().getSystemClipboard().isDataFlavorAvailable(DataFlavor.stringFlavor)) {
             final PhonUIAction<Tuple<Record, Tier<?>>> pasteTierAct =
-                    PhonUIAction.eventConsumer(this::onPasteTier, new Tuple<>(session.getRecord(recordIndex), tier));
+                    PhonUIAction.eventConsumer(this::onPasteTier, new Tuple<>(record, tier));
             pasteTierAct.putValue(PhonUIAction.NAME, "Paste tier");
             pasteTierAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Paste tier data");
             builder.addItem(".", pasteTierAct);

@@ -1,18 +1,21 @@
 package ca.phon.app.session.editor.view.transcriptEditor;
 
+import ca.phon.session.TierViewItem;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.PrefHelper;
 
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.util.HashMap;
 
 public class TranscriptViewFactory implements ViewFactory {
     private HashMap<String, Font> fontCache = new HashMap<>();
+    private int indent = -1;
+    private int rightInset = -1;
 
-    public TranscriptViewFactory() {
-
-    }
+    public TranscriptViewFactory() {}
 
     @Override
     public View create(Element elem) {
@@ -26,9 +29,11 @@ public class TranscriptViewFactory implements ViewFactory {
 
         if (kind != null) {
             if (kind.equals(AbstractDocument.ContentElementName)) {
-                return new TierView(elem);
+                var view = new TierView(elem);
+                return view;
             } else if (kind.equals(AbstractDocument.ParagraphElementName)) {
-                return new ParagraphView(elem);
+                if (indent == -1) setupIndent((Integer) elem.getAttributes().getAttribute("labelColumnWidth"));
+                return new CustomParagraphView(elem);
             } else if (kind.equals(AbstractDocument.SectionElementName)) {
                 return new BoxView(elem, View.Y_AXIS);
             } else if (kind.equals(StyleConstants.ComponentElementName)) {
@@ -44,7 +49,24 @@ public class TranscriptViewFactory implements ViewFactory {
         return new LabelView(elem);
     }
 
+    private void setupIndent(Integer labelColumnWidth) {
+        if (labelColumnWidth == null) labelColumnWidth = 20;
+
+        Font font = FontPreferences.getMonospaceFont().deriveFont(14.0f);
+
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < labelColumnWidth + 2; i++) {
+            builder.append(" ");
+        }
+
+        FontMetrics fm = new JLabel().getFontMetrics(font);
+
+        indent = (short) fm.stringWidth(builder.toString());
+        rightInset = (short) fm.stringWidth(" ");
+    }
+
     private class TierView extends LabelView {
+
         public TierView(Element elem) {
             super(elem);
         }
@@ -68,9 +90,11 @@ public class TranscriptViewFactory implements ViewFactory {
         }
     }
 
-    private class TierLabelView extends ComponentView {
-        public TierLabelView(Element elem) {
+    class CustomParagraphView extends ParagraphView {
+        public CustomParagraphView(Element elem) {
             super(elem);
+            setInsets((short) 0, (short) indent, (short) 0, (short) rightInset);
+            setFirstLineIndent(-indent);
         }
     }
 
@@ -88,17 +112,6 @@ public class TranscriptViewFactory implements ViewFactory {
             }
 
             return null;
-        }
-    }
-
-    private class IPATierView extends LabelView {
-        public IPATierView(Element elem) {
-            super(elem);
-        }
-
-        @Override
-        protected void setPropertiesFromAttributes() {
-            super.setPropertiesFromAttributes();
         }
     }
 }

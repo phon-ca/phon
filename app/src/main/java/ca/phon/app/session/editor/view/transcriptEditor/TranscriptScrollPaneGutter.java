@@ -4,10 +4,15 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.session.Record;
 import ca.phon.session.Tier;
 import ca.phon.ui.fonts.FontPreferences;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TranscriptScrollPaneGutter extends JComponent {
     private final TranscriptEditor editor;
@@ -16,6 +21,9 @@ public class TranscriptScrollPaneGutter extends JComponent {
     private final int RECORD_NUMBER_WIDTH = 24;
     private final int PADDING = 4;
     private int currentRecord;
+    private Map<Rectangle, String> hoverRects = new HashMap();
+    private Rectangle currentHoverRect = null;
+    private Popup currentHoverPopup = null;
 
     public TranscriptScrollPaneGutter(TranscriptEditor editor) {
         this.editor = editor;
@@ -33,6 +41,34 @@ public class TranscriptScrollPaneGutter extends JComponent {
             this::onTierChanged,
             EditorEventManager.RunOn.AWTEventDispatchThread
         );
+
+        addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                for (Rectangle rect : hoverRects.keySet()) {
+                    if (rect.contains(e.getPoint())) {
+                        if (currentHoverRect != rect) {
+                            currentHoverRect = rect;
+                            Point mousePos = e.getLocationOnScreen();
+                            currentHoverPopup = PopupFactory.getSharedInstance().getPopup(
+                                TranscriptScrollPaneGutter.this,
+                                new JLabel(hoverRects.get(rect)),
+                                (int) mousePos.getX(),
+                                (int) mousePos.getY()
+                            );
+                            currentHoverPopup.show();
+                        }
+                        return;
+                    }
+                }
+                if (currentHoverRect != null) {
+                    currentHoverRect = null;
+                    currentHoverPopup.hide();
+                    currentHoverPopup = null;
+                }
+
+            }
+        });
     }
 
     @Override
@@ -57,6 +93,8 @@ public class TranscriptScrollPaneGutter extends JComponent {
 
         int currentSepHeight = -1;
 
+        hoverRects.clear();
+
         for (int i = 0; i < root.getElementCount(); i++) {
             var elem = root.getElement(i);
             for (int j = 0; j < elem.getElementCount(); j++) {
@@ -67,8 +105,10 @@ public class TranscriptScrollPaneGutter extends JComponent {
                     if (elemRect == null) continue;
 
                     if (innerElemAttrs.getAttribute("sep") != null) {
-                        Integer recordNumber = (Integer) innerElem.getAttributes().getAttribute("recordIndex");
-                        if (showRecordNumbers && recordNumber != null) {
+                        Record record = (Record) innerElem.getAttributes().getAttribute("record");
+                        if (showRecordNumbers && record != null) {
+                            int recordNumber = editor.getSession().getRecordPosition(record);
+
                             var sepRect = editor.modelToView2D(innerElem.getStartOffset());
 
                             String recordNumberText = String.valueOf(recordNumber + 1);
@@ -93,6 +133,7 @@ public class TranscriptScrollPaneGutter extends JComponent {
 
                     }
 
+                    FontMetrics fontMetrics = getFontMetrics(g.getFont());
 
                     Tier<?> tier = (Tier<?>) innerElemAttrs.getAttribute("tier");
                     if (tier != null) {
@@ -104,9 +145,16 @@ public class TranscriptScrollPaneGutter extends JComponent {
 //                        }
 
                         if (tier.isUnvalidated()) {
+                            Rectangle hoverRect = new Rectangle(getWidth() - 32, (int) elemRect.getCenterY() - fontMetrics.getHeight() / 2, fontMetrics.stringWidth("O"), fontMetrics.getHeight() / 2);
+//                            g.setColor(Color.BLUE);
+//                            g.fillRect(hoverRect.x, hoverRect.y, hoverRect.width, hoverRect.height);
                             g.setColor(Color.RED);
                             g.drawString("O", getWidth() - 32, (int) elemRect.getCenterY());
                             g.setColor(Color.BLACK);
+                            hoverRects.put(
+                                hoverRect,
+                                tier.getUnvalidatedValue().getParseError().toString()
+                            );
                         }
                     }
 

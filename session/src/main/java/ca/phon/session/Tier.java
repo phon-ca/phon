@@ -146,7 +146,7 @@ public final class Tier<T> extends ExtendableObject {
 	/**
 	 * Return list of blind transcribers for this tier
 	 *
-	 * @param list of transcriberIds
+	 * @return list of transcriberIds
 	 */
 	public List<String> getTranscribers() {
 		return tierImpl.getTranscribers();
