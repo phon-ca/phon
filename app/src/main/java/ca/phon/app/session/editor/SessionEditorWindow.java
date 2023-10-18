@@ -34,7 +34,7 @@ public class SessionEditorWindow extends ProjectFrame  {
 
         this.sessionEditor.addPropertyChangeListener("modified", e -> {
             setModified(sessionEditor.isModified());
-            setTitle(sessionEditor.getTitle());
+            setTitle(sessionEditor.generateTitle());
         });
 
         sessionEditor.getEventManager().registerActionForEvent(EditorEventType.ParticipantAdded, this::onParticipantListChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
