@@ -343,14 +343,6 @@ CARET
     :   '^'
     ;
 
-CHAR
-    :   [a-zA-Z]
-    |   [\u00bf-\u024f]
-    |   [\u0250-\u02af]
-    |   [\u02b0-\u02c7\u02c9-\u02cb\u02cd-\u02ff]
-    |   [\u0300-\u036f]
-    ;
-
 COLON
     :   ':'
     ;
@@ -615,4 +607,8 @@ SYMBOLIC_PAUSE
 
 WS
     :   [ \t\n]
+    ;
+
+CHAR
+    :   .
     ;

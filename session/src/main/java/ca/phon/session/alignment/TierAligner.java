@@ -106,6 +106,7 @@ public final class TierAligner {
                         for(Tuple alignedElements:orthoMorAlignment.getAlignedElements()) {
                             final OrthographyElement orthoEle = (OrthographyElement) alignedElements.getObj1();
                             final Mor morEle = (Mor) alignedElements.getObj2();
+                            if(morEle == null) continue;
                             final List<Grasp> graEles = new ArrayList<>();
                             for(MorPre morPre:morEle.getMorPres()) {
                                 final Grasp grasp = (Grasp) morGraAlignment.getAlignedElement(morPre);

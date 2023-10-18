@@ -31,7 +31,6 @@ import ca.phon.session.*;
 import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionWriter;
 import ca.phon.session.io.xml.SessionXMLStreamWriter;
-import ca.phon.session.io.xml.v2_0.*;
 import ca.phon.session.tierdata.*;
 import ca.phon.util.Language;
 import ca.phon.xml.annotation.XMLSerial;

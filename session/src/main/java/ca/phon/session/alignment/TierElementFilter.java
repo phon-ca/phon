@@ -93,7 +93,7 @@ public interface TierElementFilter {
                         OrthographyTierElementFilter.AlignableType.TagMarker, OrthographyTierElementFilter.AlignableType.Terminator);
         final OrthographyTierElementFilter.Options options = new OrthographyTierElementFilter.Options(
                 false, true, true,
-                true, false, false, true,
+                true, false, false, false,
                 true, false, false, true);
         return new OrthographyTierElementFilter(alignableTypes, options);
     }
