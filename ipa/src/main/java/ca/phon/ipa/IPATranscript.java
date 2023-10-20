@@ -42,6 +42,7 @@ import java.util.function.Predicate;
  */
 public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAElement>, IExtendable, Comparable<IPATranscript> {
 
+	// TODO the methods which use this should all throw exceptions
 	/** Static logger */
 	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(IPATranscript.class
 			.getName());
@@ -647,6 +648,21 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 		}
 	}
 
+	/**
+	 * Has this transcription been syllabified?
+	 *
+	 * @return true if any phones have syllabification info set to something other than UNKNOWN
+	 */
+	public boolean hasSyllableInformation() {
+		final PunctuationFilter filter = new PunctuationFilter();
+		accept(filter);
+		for(IPAElement ele:filter.getIPATranscript()) {
+			if(ele.getScType() != SyllableConstituentType.UNKNOWN)
+				return true;
+		}
+		return false;
+	}
+
 	private List<IPATranscript> wordList = null;
 	/**
 	 * Break the transcript into words
@@ -945,24 +961,6 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 	}
 
 	public String toString(final boolean includeScType) {
-//		final StringBuffer buffer = new StringBuffer();
-//		final Visitor<IPAElement> visitor = new Visitor<IPAElement>() {
-//
-//			@Override
-//			public void visit(IPAElement obj) {
-//				buffer.append(obj.toString());
-//				if(includeScType && obj.getScType() != SyllableConstituentType.WORDBOUNDARYMARKER
-//						&& obj.getScType() != SyllableConstituentType.SYLLABLESTRESSMARKER
-//						&& obj.getScType() != SyllableConstituentType.SYLLABLEBOUNDARYMARKER) {
-//					buffer.append(":");
-//					final SyllabificationInfo sInfo = obj.getExtension(SyllabificationInfo.class);
-//					if(sInfo.getConstituentType() == SyllableConstituentType.NUCLEUS && sInfo.isDiphthongMember())
-//						buffer.append("D");
-//					else
-//						buffer.append(sInfo.getConstituentType().getIdChar());
-//				}
-//			}
-//		};
 		final ToStringVisitor visitor = new ToStringVisitor(includeScType);
 		accept(visitor);
 		return visitor.buffer.toString();

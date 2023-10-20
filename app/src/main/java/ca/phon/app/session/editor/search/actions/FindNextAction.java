@@ -15,21 +15,18 @@
  */
 package ca.phon.app.session.editor.search.actions;
 
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.view.record_data.FindAndReplacePanel;
+import ca.phon.app.session.editor.search.FindAndReplacePanel;
 
 import java.awt.event.ActionEvent;
 
 public class FindNextAction extends FindAndReplaceAction {
 
-	private static final long serialVersionUID = -4650188145086839956L;
-	
 	private final static String CMD_NAME = "Find next";
 	
 	private final static String SHORT_DESC = "Find next";
 
-	public FindNextAction(SessionEditor editor, FindAndReplacePanel panel) {
-		super(editor, panel);
+	public FindNextAction(FindAndReplacePanel panel) {
+		super(panel);
 		
 		putValue(NAME, CMD_NAME);
 		putValue(SHORT_DESCRIPTION, SHORT_DESC);

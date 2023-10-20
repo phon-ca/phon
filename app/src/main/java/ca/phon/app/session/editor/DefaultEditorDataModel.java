@@ -41,7 +41,7 @@ public class DefaultEditorDataModel implements EditorDataModel {
 	/**
 	 * Transcriber
 	 */
-	private AtomicReference<Transcriber> transcriberRef = new AtomicReference<Transcriber>();
+	private AtomicReference<Transcriber> transcriberRef = new AtomicReference<Transcriber>(Transcriber.VALIDATOR);
 	
 	/**
 	 * Constructor

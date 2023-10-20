@@ -19,6 +19,7 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.TierTransferrable;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.actions.PlaySegmentAction;
+import ca.phon.app.session.editor.search.FindAndReplacePanel;
 import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.common.*;
 import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
@@ -444,6 +445,11 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 					hl.removeAllHighlights();
 				}
 			}
+		}
+
+		@Override
+		public void requestSwitchToRecord(EditorSelectionModel model, int recordIndex) {
+			getEditor().setCurrentRecordIndex(recordIndex);
 		}
 
 		@Override

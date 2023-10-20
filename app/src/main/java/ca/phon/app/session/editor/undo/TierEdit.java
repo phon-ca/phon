@@ -15,17 +15,26 @@
  */
 package ca.phon.app.session.editor.undo;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.*;
 import ca.phon.extensions.IExtendable;
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
+import ca.phon.ipa.IPAElement;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.Session;
-import ca.phon.session.Tier;
+import ca.phon.syllabifier.Syllabifier;
+import ca.phon.syllabifier.SyllabifierLibrary;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.util.Language;
 
+import javax.swing.undo.CompoundEdit;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * A change to the value of a group in a tier.
@@ -57,6 +66,11 @@ public class TierEdit<T> extends SessionUndoableEdit {
 	 * New value
 	 */
 	private T newValue;
+
+	/**
+	 * Map of dependent tier changes
+	 */
+	private final Map<String, Object> additionalTierChanges = new LinkedHashMap<>();
 	
 	/**
 	 * Tells this edit to fire a 'hard' change on undo.
@@ -171,6 +185,71 @@ public class TierEdit<T> extends SessionUndoableEdit {
 				getEditorEventManager().queueEvent(tierChangedEvt);
 			}
 		}
+
+		if(record != null)
+			performAdditionalTierChanges();
+	}
+
+	private Syllabifier getSyllabifier(Tier<IPATranscript> tier) {
+		Syllabifier retVal = null;
+		final Session session = getSession();
+		// new method
+		// TODO move this key somewhere sensible, currently unused
+		if(tier.getTierParameters().containsKey("syllabifier")) {
+			try {
+				final Language lang = Language.parseLanguage(tier.getTierParameters().get("syllabifier"));
+				if(lang != null && SyllabifierLibrary.getInstance().availableSyllabifierLanguages().contains(lang)) {
+					retVal = SyllabifierLibrary.getInstance().getSyllabifierForLanguage(lang);
+				}
+			} catch (IllegalArgumentException e) {
+				LogUtil.warning(e);
+			}
+		}
+		if(retVal == null) {
+			// old method
+			final SyllabifierInfo info = session.getExtension(SyllabifierInfo.class);
+			if (info != null) {
+				final Language lang = info.getSyllabifierLanguageForTier(tier.getName());
+				if (lang != null && SyllabifierLibrary.getInstance().availableSyllabifierLanguages().contains(lang)) {
+					retVal = SyllabifierLibrary.getInstance().getSyllabifierForLanguage(lang);
+				}
+			}
+		}
+		if(retVal == null) {
+			retVal = SyllabifierLibrary.getInstance().defaultSyllabifier();
+		}
+		return retVal;
+	}
+
+	/**
+	 * Called on doIt() and undo() this will apply any dependent tier changes such as
+	 * phone alignment or segment adjustments.
+	 */
+	protected void performAdditionalTierChanges() {
+		// if tier is IPATarget or IPAActual update default phone alignment
+		// TODO update potential user-defined tier alignments
+		final SystemTierType systemTierType = SystemTierType.tierFromString(tier.getName());
+		if(systemTierType == SystemTierType.IPATarget || systemTierType == SystemTierType.IPAActual) {
+			PhoneAlignment pm = null;
+			if(additionalTierChanges.containsKey(SystemTierType.PhoneAlignment.getName())) {
+				pm = (PhoneAlignment) additionalTierChanges.get(SystemTierType.PhoneAlignment.getName());
+			} else {
+				// update alignment
+				pm = PhoneAlignment.fromTiers(record.getIPATargetTier(), record.getIPAActualTier());
+			}
+			if(pm != null) {
+				final PhoneAlignment oldVal = record.getPhoneAlignment();
+				record.setPhoneAlignment(pm);
+				additionalTierChanges.put(SystemTierType.PhoneAlignment.getName(), oldVal);
+
+				// fire event for phone alignment tier change
+				final EditorEventType<EditorEventType.TierChangeData> tierChangedEvent =
+						isFireHardChangeOnUndo() ? EditorEventType.TierChanged : EditorEventType.TierChange;
+				final EditorEvent<EditorEventType.TierChangeData> pmEvent = new EditorEvent<>(tierChangedEvent,
+						CommonModuleFrame.getCurrentFrame(), new EditorEventType.TierChangeData(tier, oldVal, pm));
+				getEditorEventManager().queueEvent(pmEvent);
+			}
+		}
 	}
 	
 	@Override
@@ -186,6 +265,17 @@ public class TierEdit<T> extends SessionUndoableEdit {
 			}
 		}
 
+		if(tier.getDeclaredType() == IPATranscript.class && !((IPATranscript)tier.getValue()).hasSyllableInformation()) {
+			final IPATranscript ipa = (IPATranscript) tier.getValue();
+			@SuppressWarnings("unchecked")
+			final Syllabifier syllabifier = getSyllabifier((Tier<IPATranscript>) tier);
+			if (syllabifier != null) {
+				syllabifier.syllabify(ipa.toList());
+				// will apply additional annotations
+				ipa.syllables();
+			}
+		}
+
 		if(getEditorEventManager() != null) {
 			final EditorEventType.TierChangeData tcd = new EditorEventType.TierChangeData(tier, getOldValue(), newValue);
 			final EditorEvent<EditorEventType.TierChangeData> tierChangeEvt =
@@ -197,6 +287,9 @@ public class TierEdit<T> extends SessionUndoableEdit {
 				getEditorEventManager().queueEvent(tierChangedEvt);
 			}
 		}
+
+		if(record != null)
+			performAdditionalTierChanges();
 	}
 
 }

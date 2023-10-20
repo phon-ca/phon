@@ -99,5 +99,13 @@ public interface EditorSelectionModel {
 	 * @return listeners
 	 */
 	public List<EditorSelectionModelListener> getSelectionModelListeners();
-	
+
+	/**
+	 * Request that associated editor set current record index to the provided value.  This is a request
+	 * only and may be ignored.  There is no indication of success.
+	 *
+	 * @param recordIndex
+	 */
+	public void requestSwitchToRecord(int recordIndex);
+
 }
