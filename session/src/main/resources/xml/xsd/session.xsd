@@ -350,8 +350,8 @@
                 tiers.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element ref="td" maxOccurs="unbounded"/>
-            <xs:element ref="tierAlignmentRules" maxOccurs="unbounded"/>
+            <xs:element ref="td" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="tierAlignmentRules" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 
