@@ -15,18 +15,18 @@
  */
 package ca.phon.app.session.editor.search.actions;
 
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.actions.SessionEditorAction;
-import ca.phon.app.session.editor.view.record_data.FindAndReplacePanel;
+import ca.phon.app.hooks.HookableAction;
+import ca.phon.app.session.editor.search.FindAndReplacePanel;
 
-public abstract class FindAndReplaceAction extends SessionEditorAction {
+/**
+ * Base class for find and replace UI actions
+ */
+public abstract class FindAndReplaceAction extends HookableAction {
 
-	private static final long serialVersionUID = 9160680400724132644L;
+	private final FindAndReplacePanel findAndReplacePanel;
 	
-	private FindAndReplacePanel findAndReplacePanel;
-	
-	public FindAndReplaceAction(SessionEditor editor, FindAndReplacePanel panel) {
-		super(editor);
+	public FindAndReplaceAction(FindAndReplacePanel panel) {
+		super();
 		this.findAndReplacePanel = panel;
 	}
 	

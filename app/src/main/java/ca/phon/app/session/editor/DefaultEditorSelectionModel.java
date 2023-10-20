@@ -100,7 +100,14 @@ public class DefaultEditorSelectionModel implements EditorSelectionModel {
 	public List<EditorSelectionModelListener> getSelectionModelListeners() {
 		return Collections.unmodifiableList(listeners);
 	}
-	
+
+	@Override
+	public void requestSwitchToRecord(int recordIndex) {
+		for(EditorSelectionModelListener listener:getSelectionModelListeners()) {
+			listener.requestSwitchToRecord(this, recordIndex);
+		}
+	}
+
 	public void fireSelectionAdded(SessionEditorSelection selection) {
 		for(EditorSelectionModelListener listener:getSelectionModelListeners()) {
 			listener.selectionAdded(this, selection);

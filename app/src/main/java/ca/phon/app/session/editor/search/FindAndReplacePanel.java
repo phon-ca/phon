@@ -13,30 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.record_data;
+package ca.phon.app.session.editor.search;
 
 import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.search.*;
 import ca.phon.app.session.editor.search.FindManager.*;
 import ca.phon.app.session.editor.search.actions.*;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.common.*;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.alignment.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.position.*;
-import ca.phon.syllabifier.*;
 import ca.phon.ui.toast.*;
-import ca.phon.util.Language;
-import ca.phon.util.Range;
 
 import javax.swing.*;
-import javax.swing.undo.CompoundEdit;
+import javax.swing.undo.UndoableEditSupport;
 import java.awt.*;
 import java.util.List;
 import java.util.*;
 
+/**
+ * Find and replace panel for the session editor.
+ */
 public class FindAndReplacePanel extends JPanel {
 
 	private final static String ANY_TIER_NAME = "__any_tier__";
@@ -54,7 +51,7 @@ public class FindAndReplacePanel extends JPanel {
 	private GroupField<String> replaceField;
 	private Tier<String> replaceTier;
 	
-	// rigt-hand side
+	// right-hand side
 	private JPanel findActionsPanel;
 	private JCheckBox wrapBox;
 	private JButton nextBtn;
@@ -63,17 +60,38 @@ public class FindAndReplacePanel extends JPanel {
 	private JButton replaceFindBtn;
 	private JButton replaceAllBtn;
 	
-	private SessionEditor editor;
-	
 	// find manager
-	private FindManager findManager;
-	
+	private final FindManager findManager;
+	private final EditorDataModel editorDataModel;
+	private final EditorSelectionModel selectionModel;
+	private final EditorEventManager editorEventManager;
+	private final UndoableEditSupport undoableEditSupport;
+
+	/**
+	 * Create a new FindAndReplacePanel for the given session editor
+	 *
+	 * @param sessionEditor
+	 */
 	public FindAndReplacePanel(SessionEditor sessionEditor) {
+		this(sessionEditor.getDataModel(), sessionEditor.getSelectionModel(), sessionEditor.getEventManager(), sessionEditor.getUndoSupport());
+	}
+
+	/**
+	 * Create a new FindAndReplacePanel using the provided Session and EditorSelectionModel
+	 *
+	 * @param editorDataModel
+	 * @param selectionModel
+	 * @param eventManager
+	 */
+	public FindAndReplacePanel(EditorDataModel editorDataModel, EditorSelectionModel selectionModel, EditorEventManager eventManager, UndoableEditSupport undoSupport) {
 		super();
-		
-		this.editor = sessionEditor;
-		findManager = new FindManager(sessionEditor.getSession());
-		
+
+		this.editorDataModel = editorDataModel;
+		this.findManager = new FindManager(editorDataModel.getSession());
+		this.selectionModel = selectionModel;
+		this.editorEventManager = eventManager;
+		this.undoableEditSupport = undoSupport;
+
 		init();
 	}
 	
@@ -107,19 +125,35 @@ public class FindAndReplacePanel extends JPanel {
 	public FindManager getFindManager() {
 		return this.findManager;
 	}
-	
-	public SessionEditor getEditor() {
-		return this.editor;
+
+	public EditorDataModel getEditorDataModel() {
+		return editorDataModel;
 	}
-	
+
+	public EditorEventManager getEditorEventManager() {
+		return editorEventManager;
+	}
+
+	public Session getSession() {
+		return getEditorDataModel().getSession();
+	}
+
+	public EditorSelectionModel getSelectionModel() {
+		return selectionModel;
+	}
+
+	public UndoableEditSupport getUndoSupport() {
+		return undoableEditSupport;
+	}
+
 	private void setupSidePanel() {
 		findActionsPanel = new JPanel(new GridLayout(3, 2));
 		
-		nextBtn = new JButton(new FindNextAction(getEditor(), this));
-		prevBtn = new JButton(new FindPrevAction(getEditor(), this));
-		replaceBtn = new JButton(new ReplaceAction(getEditor(), this, false));
-		replaceFindBtn = new JButton(new ReplaceAction(getEditor(), this, true));
-		replaceAllBtn = new JButton(new ReplaceAllAction(getEditor(), this));
+		nextBtn = new JButton(new FindNextAction(this));
+		prevBtn = new JButton(new FindPrevAction(this));
+		replaceBtn = new JButton(new ReplaceAction(this, false));
+		replaceFindBtn = new JButton(new ReplaceAction(this, true));
+		replaceAllBtn = new JButton(new ReplaceAllAction(this));
 		
 		wrapBox = new JCheckBox("Wrap search");
 		wrapBox.setToolTipText("Wrap search when beginning/end of session is reached");
@@ -139,7 +173,7 @@ public class FindAndReplacePanel extends JPanel {
 		String selected = (selectedIdx >= 0 ? tierNameBox.getItemAt(selectedIdx).toString() : null);
 		List<String> tierNames = new ArrayList<>();
 		tierNames.add("Any tier");
-		getEditor().getSession().getTierView()
+		getSession().getTierView()
 			.stream()
 			.filter( TierViewItem::isVisible )
 			.filter( (tvi) -> !SystemTierType.Segment.getName().equals(tvi.getTierName()) )
@@ -226,7 +260,7 @@ public class FindAndReplacePanel extends JPanel {
 	 * @return endLocation
 	 */
 	private SessionLocation endLocation() {
-		final Session session = getEditor().getSession();
+		final Session session = getSession();
 		final FindManager findManager = getFindManager();
 		
 		final String tierName = 
@@ -241,8 +275,8 @@ public class FindAndReplacePanel extends JPanel {
 		final SessionEditorSelection selection = 
 				new SessionEditorSelection(sessionRange.getRecordIndex(), sessionRange.getRecordRange().getTier(),
 						sessionRange.getRecordRange().getRange());
-		getEditor().getSelectionModel().setSelection(selection);
-		getEditor().setCurrentRecordIndex(sessionRange.getRecordIndex());
+		getSelectionModel().setSelection(selection);
+		getSelectionModel().requestSwitchToRecord(sessionRange.getRecordIndex());
 	}
 	
 	public void findNext() {
@@ -335,104 +369,44 @@ public class FindAndReplacePanel extends JPanel {
 			if(replaceTier != null && replaceTier.hasValue()) {
 				final String replaceExpr = replaceTier.getValue();
 				final Object newVal = findManager.getMatchedExpr().replace(replaceExpr);
-				// re-syllabify if an IPA tier
 				final SessionRange sr = findManager.getMatchedRange();
-				final Record record = getEditor().getSession().getRecord(sr.getRecordIndex());
-				@SuppressWarnings({ "unchecked", "rawtypes" })
-				final TierEdit<?> tierEdit = new TierEdit(getEditor(), 
-						getEditor().currentRecord().getTier(sr.getRecordRange().getTier()), newVal);
-				if(newVal instanceof IPATranscript) {
-					final IPATranscript ipa = (IPATranscript)newVal;
-					final Syllabifier syllabifier = getSyllabifier(sr.getRecordRange().getTier());
-					if(syllabifier != null) {
-						syllabifier.syllabify(ipa.toList());
-					}
-					// update alignment
-					final CompoundEdit edit = new CompoundEdit();
-					final PhoneAlignment phoneAlignment = PhoneAlignment.fromTiers(record.getIPATargetTier(), record.getIPAActualTier());
-					final TierEdit<PhoneAlignment> alignmentEdit = new TierEdit<>(getEditor(), record.getPhoneAlignmentTier(), phoneAlignment);
-					tierEdit.doIt();
-					edit.addEdit(tierEdit);
-					alignmentEdit.doIt();
-					edit.addEdit(alignmentEdit);
-					edit.end();
-					getEditor().getUndoSupport().postEdit(edit);
-				} else {
-					getEditor().getUndoSupport().postEdit(tierEdit);
-				}
-				getEditor().getSelectionModel().clear();
+				final Record record = getSession().getRecord(sr.getRecordIndex());
+				final Tier<?> tier = record.getTier(sr.getRecordRange().getTier());
+				@SuppressWarnings({"unchecked", "rawtypes"})
+				final TierEdit tierEdit = new TierEdit(getSession(), getEditorEventManager(), record, tier, newVal);
+				getUndoSupport().postEdit(tierEdit);
+				getSelectionModel().clear();
 			}
 		}
-	}
-	
-	private Syllabifier getSyllabifier(String tier) {
-		Syllabifier retVal = SyllabifierLibrary.getInstance().defaultSyllabifier();
-		final Session session = getEditor().getSession();
-		final SyllabifierInfo info = session.getExtension(SyllabifierInfo.class);
-		if(info != null) {
-			final Language lang = info.getSyllabifierLanguageForTier(tier);
-			if(lang != null && SyllabifierLibrary.getInstance().availableSyllabifierLanguages().contains(lang)) {
-				retVal = SyllabifierLibrary.getInstance().getSyllabifierForLanguage(lang);
-			}
-		}
-		return retVal;
 	}
 	
 	public void replaceAll() {
 		final String replaceExpr = replaceTier.getValue();
 		// create a new find manager
-		final Session session = getEditor().getSession();
+		final Session session = getSession();
 		final FindManager findManager = new FindManager(session);
 		setupFindManager(findManager);
 		final SessionLocation startLoc = 
 				new SessionLocation(0, new RecordLocation(findManager.getSearchTiers()[0], 0));
 		findManager.setCurrentLocation(startLoc);
 
-		final CompoundEdit edit = new CompoundEdit();
 		int occurrences = 0;
-		
 		SessionRange currentRange = null;
 		while((currentRange = findManager.findNext()) != null) {
-			++occurrences;
-			
+			if(occurrences++ == 0)
+				getUndoSupport().beginUpdate();
+
 			final Record r = session.getRecord(currentRange.getRecordIndex());
 			final Tier<?> tier = r.getTier(currentRange.getRecordRange().getTier());
-			
 			final Object newVal = findManager.getMatchedExpr().replace(replaceExpr);
 			
-			// re-syllabify if an IPA tier
 			@SuppressWarnings({ "unchecked", "rawtypes" })
-			final TierEdit<?> tierEdit = new TierEdit(getEditor(), tier, newVal);
-			tierEdit.doIt();
-			edit.addEdit(tierEdit);
-			
-			if(newVal instanceof IPATranscript) {
-				final IPATranscript ipa = (IPATranscript)newVal;
-				final Syllabifier syllabifier = getSyllabifier(currentRange.getRecordRange().getTier());
-				if(syllabifier != null) {
-					syllabifier.syllabify(ipa.toList());
-				}
-				
-				// update alignment
-				final PhoneAlignment phoneAlignment = PhoneAlignment.fromTiers(r.getIPATargetTier(), r.getIPAActualTier());
-				final TierEdit<PhoneAlignment> alignmentEdit = new TierEdit<>(getEditor(), r.getPhoneAlignmentTier(), phoneAlignment);
-				alignmentEdit.doIt();
-				edit.addEdit(alignmentEdit);
-				edit.end();
-			}
+			final TierEdit<?> tierEdit = new TierEdit(getSession(), getEditorEventManager(), r, tier, newVal);
+			getUndoSupport().postEdit(tierEdit);
 		}
-		edit.end();
+		getUndoSupport().endUpdate();
 		
-		if(occurrences > 0) {
-			final EditorEvent<Void> ee = new EditorEvent<>(new EditorEventType<>(EditorEventName.MODIFICATION_EVENT.getEventName(), Void.class), this, null);
-			getEditor().getEventManager().queueEvent(ee);
-			final EditorEvent<EditorEventType.RecordChangedData> refresh = new EditorEvent<>(EditorEventType.RecordRefresh, this,
-					new EditorEventType.RecordChangedData(getEditor().currentRecord(), getEditor().getSession().getRecordElementIndex(getEditor().getCurrentRecordIndex()), getEditor().getCurrentRecordIndex()));
-			getEditor().getEventManager().queueEvent(refresh);
-			getEditor().getUndoSupport().postEdit(edit);
-		}
-		
-		final String message = 
+		final String message =
 				"Replaced " + occurrences + " occurrences with " + replaceExpr;
 		final Toast toast = ToastFactory.makeToast(message);
 		toast.start(replaceAllBtn);

@@ -16,22 +16,20 @@
 package ca.phon.app.session.editor.search.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.view.record_data.FindAndReplacePanel;
+import ca.phon.app.session.editor.search.FindAndReplacePanel;
 
 import java.awt.event.ActionEvent;
 
 public class ReplaceAction extends FindAndReplaceAction {
 
-	private static final long serialVersionUID = 2574281425626924879L;
-	
 	private final static String CMD_NAME = "Replace";
 	
 	private final static String SHORT_DESC = "Replace";
 	
 	private boolean andFind = false;
 	
-	public ReplaceAction(SessionEditor editor, FindAndReplacePanel view, boolean andFind) {
-		super(editor, view);
+	public ReplaceAction(FindAndReplacePanel view, boolean andFind) {
+		super(view);
 		
 		this.andFind = andFind;
 		

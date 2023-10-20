@@ -23,6 +23,19 @@ import ca.phon.session.spi.TranscriberSPI;
  *
  */
 public final class Transcriber extends ExtendableObject {
+
+	/**
+	 * ID of validator (default transcriber)
+	 */
+	public final static String VALIDATOR_ID = "__validator__";
+	/**
+	 * Default transcriber object
+	 */
+	public final static Transcriber VALIDATOR;
+	static {
+		VALIDATOR = SessionFactory.newFactory().createTranscriber();
+		VALIDATOR.setUsername(VALIDATOR_ID);
+	}
 	
 	private final TranscriberSPI transcriberImpl;
 	

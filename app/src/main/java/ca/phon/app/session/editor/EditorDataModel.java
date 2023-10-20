@@ -71,13 +71,14 @@ public interface EditorDataModel {
 	 * method will return the transcriber that is currently
 	 * making edits.
 	 * 
-	 * @return transcriber or <code>null</code> if not in
+	 * @return transcriber or {@link Transcriber#VALIDATOR} if not in
 	 *  blind mode
 	 */
 	public Transcriber getTranscriber();
 	
 	/**
-	 * Set the blind mode transcriber
+	 * Set the blind mode transcriber or {@link Transcriber#VALIDATOR} if returning to
+	 * default validation mode
 	 * 
 	 * @param transcriber
 	 */

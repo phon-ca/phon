@@ -195,7 +195,9 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 			this.phoGroup = factory.createXmlPhoGroupType();
 		} else {
 			if(this.phoGroup != null && !this.phoGroup.getPwOrPause().isEmpty()) {
+				addCurrentWord();
 				this.pho.getPwOrPauseOrPhog().add(phoGroup);
+				this.phoGroup = null;
 			}
 		}
 	}

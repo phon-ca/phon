@@ -73,7 +73,7 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 	public IPATranscript getGroupValue() {
 		IPATranscript retVal = super.getGroupValue();
 		final Transcriber transcriber = getTranscriber();
-		if(retVal != null && transcriber != null) {
+		if(retVal != null && transcriber != Transcriber.VALIDATOR) {
 			final AlternativeTranscript alts = retVal.getExtension(AlternativeTranscript.class);
 			if(alts != null) {
 				final IPATranscript t = alts.get(transcriber.getUsername());
@@ -92,7 +92,7 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 				(super.getGroupValue() != null ? super.getGroupValue() : new IPATranscript());
 		if(object == null) object = new IPATranscript();
 		
-		if(transcriber != null) {
+		if(transcriber != Transcriber.VALIDATOR) {
 			AlternativeTranscript alts = groupVal.getExtension(AlternativeTranscript.class);
 			if(alts == null) {
 				alts = new AlternativeTranscript();
@@ -121,7 +121,7 @@ public class IPAGroupField extends GroupField<IPATranscript> {
 			final IPATranscript validatedObj = getValidatedObject();
 			IPATranscript ipa = validatedObj;
 			if(validatedObj != null) {
-				if(getTranscriber() != null) {
+				if(getTranscriber() != Transcriber.VALIDATOR) {
 					final AlternativeTranscript alts = validatedObj.getExtension(AlternativeTranscript.class);
 					ipa = alts.get(getTranscriber().getUsername());
 				}

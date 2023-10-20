@@ -100,7 +100,17 @@ public class FontPreferences {
 	 * @return
 	 */
 	private static Font _getFont(String fontPref, String defaultValue) {
-		String fontDesc = PrefHelper.get(fontPref, defaultValue);
+		return getFont(PrefHelper.get(fontPref, defaultValue));
+	}
+
+	/**
+	 * Return font encoded in a string as 'FONTNAME-STYLE-SIZE'
+	 *
+	 * @param fontDesc
+	 *
+	 * @return font or default Dialog font if not found
+	 */
+	public static Font getFont(String fontDesc) {
 		String[] fontInfo = fontDesc.split("-");
 		String fontStyle = (fontInfo.length > 1 ? fontInfo[1] : "PLAIN");
 		float fontSize = (fontInfo.length > 2 ? Float.parseFloat(fontInfo[2]) : DEFAULT_FONT_SIZE);

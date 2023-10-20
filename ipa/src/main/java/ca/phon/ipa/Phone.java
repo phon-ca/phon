@@ -17,6 +17,8 @@ package ca.phon.ipa;
 
 import ca.phon.ipa.features.*;
 import ca.phon.ipa.parser.*;
+import ca.phon.syllable.SyllabificationInfo;
+import ca.phon.syllable.SyllableStress;
 
 import java.util.*;
 
@@ -270,7 +272,7 @@ public class Phone extends IPAElement implements PrefixDiacritics, SuffixDiacrit
 	/**
 	 * Set the prefix diacritics for this Phone.
 	 * 
-	 * @param prefixDiacritics
+	 * @param suffixDiacritics
 	 */
 	public void setSuffixDiacritics(Diacritic[] suffixDiacritics) {
 		this.suffixDiacritics = suffixDiacritics;
@@ -324,6 +326,49 @@ public class Phone extends IPAElement implements PrefixDiacritics, SuffixDiacrit
 		retVal = FeatureSet.union(retVal, getSuffixFeatures());
 		return retVal;
 	}
+
+	// region Syllabification info
+	/* This region defined methods which access the SyllabificationInfo extension for Phones */
+	/**
+	 * Is this phone part of a diphthong
+	 *
+	 * @return true if this phone has been flagged as a diphthong member
+	 */
+	public boolean isDiphthongMember() {
+		final SyllabificationInfo info = getExtension(SyllabificationInfo.class);
+		return (info != null && info.isDiphthongMember());
+	}
+
+	/**
+	 * Set the flag indicating that this phone is part of a diphthong member
+	 *
+	 * @param diphthongMember
+	 */
+	public void setDiphthongMember(boolean diphthongMember) {
+		final SyllabificationInfo info = getExtension(SyllabificationInfo.class);
+		if(info != null) info.setDiphthongMember(diphthongMember);
+	}
+
+	/**
+	 * Get this Phone's stress (applied when calling the syllables() function in IPATranscript after syllabification)
+	 *
+	 * @return stress if set, AnyStress otherwise
+	 */
+	public SyllableStress getStress() {
+		final SyllabificationInfo info = getExtension(SyllabificationInfo.class);
+		return info != null ? info.getStress() : SyllableStress.AnyStress;
+	}
+
+	/**
+	 * Get this Phone's tone number  (applied when calling the syllables() function in IPATranscript after syllabification)
+	 *
+	 * @return tone number if set, null otherwise
+	 */
+	public String getToneNumber() {
+		final SyllabificationInfo info = getExtension(SyllabificationInfo.class);
+		return info != null ? info.getToneNumber() : null;
+	}
+	// endregion
 
 	@Override
 	public String getText() {

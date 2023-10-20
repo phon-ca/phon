@@ -40,5 +40,13 @@ public interface EditorSelectionModelListener {
 	 * @param model
 	 */
 	public void selectionsCleared(EditorSelectionModel model);
+
+	/**
+	 * Called when a request to switch record occurs.
+	 *
+	 * @param model
+	 * @param recordIndex
+	 */
+	public void requestSwitchToRecord(EditorSelectionModel model, int recordIndex);
 	
 }
