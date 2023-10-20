@@ -172,7 +172,8 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 
 		this.dataModelRef =
 				new AtomicReference<EditorDataModel>(new DefaultEditorDataModel(project, session));
-		getDataModel().setTranscriber(transcriber);
+		if(transcriber != null)
+			getDataModel().setTranscriber(transcriber);
 		this.eventManagerRef =
 				new AtomicReference<EditorEventManager>(new EditorEventManager());
 		this.selectionModelRef =
