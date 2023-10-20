@@ -151,7 +151,7 @@ public class TranscriptEditorCaret extends DefaultCaret {
                         }
                     }
 
-                    g2d.drawRect((int) p0Rect.getMinX(), (int) p0Rect.getMinY(), (int) (p1Rect.getMaxX() - p0Rect.getMinX()), actualLineHeight);
+                    g2d.drawRect((int) p0Rect.getMinX(), (int) p0Rect.getMinY(), (int) (p1Rect.getMaxX() - p0Rect.getMinX()), actualLineHeight-1);
                 } catch (BadLocationException e) {
                     LogUtil.severe(e);
                 }

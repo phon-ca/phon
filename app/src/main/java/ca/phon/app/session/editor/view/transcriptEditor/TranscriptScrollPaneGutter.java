@@ -104,8 +104,8 @@ public class TranscriptScrollPaneGutter extends JComponent {
                     var elemRect = editor.modelToView2D(innerElem.getStartOffset());
                     if (elemRect == null) continue;
 
-                    if (innerElemAttrs.getAttribute("sep") != null) {
-                        Record record = (Record) innerElem.getAttributes().getAttribute("record");
+                    if (innerElemAttrs.getAttribute(TranscriptDocument.ATTR_KEY_SEPARATOR) != null) {
+                        Record record = (Record) innerElem.getAttributes().getAttribute(TranscriptDocument.ATTR_KEY_RECORD);
                         if (showRecordNumbers && record != null) {
                             int recordNumber = editor.getSession().getRecordPosition(record);
 
@@ -135,7 +135,7 @@ public class TranscriptScrollPaneGutter extends JComponent {
 
                     FontMetrics fontMetrics = getFontMetrics(g.getFont());
 
-                    Tier<?> tier = (Tier<?>) innerElemAttrs.getAttribute("tier");
+                    Tier<?> tier = (Tier<?>) innerElemAttrs.getAttribute(TranscriptDocument.ATTR_KEY_TIER);
                     if (tier != null) {
 //                        boolean locked = innerElemAttrs.getAttribute("locked") != null;
 //                        if (locked) {
@@ -187,10 +187,6 @@ public class TranscriptScrollPaneGutter extends JComponent {
     }
 
     public void onTierChanged(EditorEvent<EditorEventType.TierChangeData> event) {
-
-        System.out.println("Repaint on tier data changed");
-
-
         revalidate();
         repaint();
     }
