@@ -120,7 +120,7 @@ public class TranscriptEditorCaret extends DefaultCaret {
         }
     }
 
-    @Override
+    /*@Override
     protected Highlighter.HighlightPainter getSelectionPainter() {
 
         final TranscriptEditor component = (TranscriptEditor) getComponent();
@@ -158,5 +158,5 @@ public class TranscriptEditorCaret extends DefaultCaret {
 
             }
         };
-    }
+    }*/
 }

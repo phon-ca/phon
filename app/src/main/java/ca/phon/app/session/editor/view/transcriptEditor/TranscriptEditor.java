@@ -28,28 +28,39 @@ import java.util.*;
 import java.util.List;
 
 public class TranscriptEditor extends JEditorPane {
-    private final Session session;
+    private final EditorDataModel dataModel;
     private final EditorEventManager eventManager;
     private SessionMediaModel mediaModel;
     private SessionEditUndoSupport undoSupport;
     private UndoManager undoManager;
     private boolean controlPressed = false;
     private Object currentHighlight;
-    DefaultHighlighter.DefaultHighlightPainter highlightPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
+    private DefaultHighlighter.DefaultHighlightPainter highlightPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
     private int currentRecordIndex = -1;
     private boolean singleRecordView = false;
     public final static EditorEventType<Void> recordChangedInSingleRecordMode = new EditorEventType<>("recordChangedInSingleRecordMode", Void.class);
     private Element hoverElem = null;
     private Object currentUnderline;
-    HoverUnderlinePainter underlinePainter = new HoverUnderlinePainter();
+    private HoverUnderlinePainter underlinePainter = new HoverUnderlinePainter();
     private MediaSegment selectedSegment = null;
     private int upDownOffset = -1;
     private boolean caretMoveFromUpDown = false;
     private boolean internalEdit = false;
     private Map<Tier<?>, Object> errorUnderlineHighlights = new HashMap<>();
+    private BoxSelectHighlightPainter boxSelectPainter = new BoxSelectHighlightPainter();
+    private Object currentBoxSelect = null;
+
 
     public TranscriptEditor(
         Session session,
+        EditorEventManager eventManager,
+        SessionEditUndoSupport undoSupport,
+        UndoManager undoManager
+    ) {
+        this(new DefaultEditorDataModel(null, session), eventManager, undoSupport, undoManager);
+    }
+    public TranscriptEditor(
+        EditorDataModel dataModel,
         EditorEventManager eventManager,
         SessionEditUndoSupport undoSupport,
         UndoManager undoManager
@@ -59,7 +70,7 @@ public class TranscriptEditor extends JEditorPane {
         setCaret(caret);
         getCaret().deinstall(this);
         caret.install(this);
-        this.session = session;
+        this.dataModel = dataModel;
         this.eventManager = eventManager;
         this.undoSupport = undoSupport;
         this.undoManager = undoManager;
@@ -206,7 +217,7 @@ public class TranscriptEditor extends JEditorPane {
     }
 
     public Session getSession() {
-        return session;
+        return dataModel.getSession();
     }
 
     public void setAlignmentVisible(boolean visible) {
@@ -247,15 +258,15 @@ public class TranscriptEditor extends JEditorPane {
         switch (elementType) {
             case TranscriptDocument.ATTR_KEY_COMMENT -> {
                 Comment comment = (Comment) elem.getAttributes().getAttribute(TranscriptDocument.ATTR_KEY_COMMENT);
-                return session.getTranscript().getElementIndex(comment);
+                return getSession().getTranscript().getElementIndex(comment);
             }
             case TranscriptDocument.ATTR_KEY_GEM -> {
                 Gem gem = (Gem) elem.getAttributes().getAttribute(TranscriptDocument.ATTR_KEY_GEM);
-                return session.getTranscript().getElementIndex(gem);
+                return getSession().getTranscript().getElementIndex(gem);
             }
             case TranscriptDocument.ATTR_KEY_RECORD -> {
                 Record record = (Record) elem.getAttributes().getAttribute(TranscriptDocument.ATTR_KEY_RECORD);
-                return session.getRecordElementIndex(record);
+                return getSession().getRecordElementIndex(record);
             }
             default -> {
                 return -1;
@@ -265,7 +276,7 @@ public class TranscriptEditor extends JEditorPane {
 
     public void setCurrentElementIndex(int index) {
 
-        Transcript.Element transcriptElem = session.getTranscript().getElementAt(index);
+        Transcript.Element transcriptElem = getSession().getTranscript().getElementAt(index);
         String transcriptElemType;
         if (transcriptElem.isComment()) {transcriptElemType = TranscriptDocument.ATTR_KEY_COMMENT;}
         else if (transcriptElem.isGem()) {transcriptElemType = TranscriptDocument.ATTR_KEY_GEM;}
@@ -301,11 +312,11 @@ public class TranscriptEditor extends JEditorPane {
         if (firstInnerElem != null) {
             Record record = (Record) firstInnerElem.getAttributes().getAttribute(TranscriptDocument.ATTR_KEY_RECORD);
             if (record != null) {
-                return session.getRecordPosition(record);
+                return getSession().getRecordPosition(record);
             }
         }
 
-        Transcript transcript = session.getTranscript();
+        Transcript transcript = getSession().getTranscript();
         for (int i = getCurrentElementIndex(); i < transcript.getNumberOfElements(); i++) {
             Transcript.Element transcriptElem = transcript.getElementAt(i);
             if (transcriptElem.isRecord()) {
@@ -522,15 +533,15 @@ public class TranscriptEditor extends JEditorPane {
             if (elemType.equals(TranscriptDocument.ATTR_KEY_RECORD) || elemType.equals(TranscriptDocument.ATTR_KEY_COMMENT) || elemType.equals(TranscriptDocument.ATTR_KEY_GEM)) {
                 int elementIndex;
                 if (elemType.equals(TranscriptDocument.ATTR_KEY_RECORD)) {
-                    elementIndex = session.getRecordElementIndex((Record) attrs.getAttribute(TranscriptDocument.ATTR_KEY_RECORD));
+                    elementIndex = getSession().getRecordElementIndex((Record) attrs.getAttribute(TranscriptDocument.ATTR_KEY_RECORD));
                 }
                 else if (elemType.equals(TranscriptDocument.ATTR_KEY_COMMENT)) {
                     Comment comment = (Comment) attrs.getAttribute(TranscriptDocument.ATTR_KEY_COMMENT);
-                    elementIndex = session.getTranscript().getElementIndex(comment);
+                    elementIndex = getSession().getTranscript().getElementIndex(comment);
                 }
                 else {
                     Gem gem = (Gem) attrs.getAttribute(TranscriptDocument.ATTR_KEY_GEM);
-                    elementIndex = session.getTranscript().getElementIndex(gem);
+                    elementIndex = getSession().getTranscript().getElementIndex(gem);
                 }
                 if (elementIndex > -1) {
                     try {
@@ -718,7 +729,7 @@ public class TranscriptEditor extends JEditorPane {
         // Caret in record / tier
         if (caretTier != null) {
 
-            int caretRecordIndex = session.getRecordPosition((Record) caretAttrs.getAttribute(TranscriptDocument.ATTR_KEY_RECORD));
+            int caretRecordIndex = getSession().getRecordPosition((Record) caretAttrs.getAttribute(TranscriptDocument.ATTR_KEY_RECORD));
 
             // Caret in deleted tier
             if (caretInDeletedTier) {
@@ -822,7 +833,7 @@ public class TranscriptEditor extends JEditorPane {
         // Caret in record / tier
         if (caretTier != null) {
 
-            int caretRecordIndex = session.getRecordPosition((Record) caretAttrs.getAttribute(TranscriptDocument.ATTR_KEY_RECORD));
+            int caretRecordIndex = getSession().getRecordPosition((Record) caretAttrs.getAttribute(TranscriptDocument.ATTR_KEY_RECORD));
 
             // Caret in hidden tier
             if (caretInHiddenTier) {
@@ -993,7 +1004,7 @@ public class TranscriptEditor extends JEditorPane {
     private void onRecordAdded(EditorEvent<EditorEventType.RecordAddedData> editorEvent) {
         var data = editorEvent.data();
         // Get the new record
-        Record addedRecord = session.getRecord(data.recordIndex());
+        Record addedRecord = getSession().getRecord(data.recordIndex());
         // Add it to the doc
         getTranscriptDocument().addRecord(addedRecord);
     }
@@ -1009,7 +1020,7 @@ public class TranscriptEditor extends JEditorPane {
         Tier caretTier = (Tier) caretAttrs.getAttribute(TranscriptDocument.ATTR_KEY_TIER);
         Record caretRecord = (Record) caretAttrs.getAttribute(TranscriptDocument.ATTR_KEY_RECORD);
 
-        boolean caretInDeletedRecord = caretRecord != null && session.getRecordPosition(caretRecord) == deletedRecordIndex;
+        boolean caretInDeletedRecord = caretRecord != null && getSession().getRecordPosition(caretRecord) == deletedRecordIndex;
 
         int caretOffset = doc.getOffsetInContent(startCaretPos);
 
@@ -1023,7 +1034,7 @@ public class TranscriptEditor extends JEditorPane {
         if (caretTier != null) {
             // Caret in deleted record
             if (caretInDeletedRecord) {
-                boolean deletedRecordWasLast = deletedRecordIndex == session.getRecordCount();
+                boolean deletedRecordWasLast = deletedRecordIndex == getSession().getRecordCount();
 
                 int newCaretRecordIndex = deletedRecordWasLast ? deletedRecordIndex - 1 : deletedRecordIndex;
 
@@ -1137,7 +1148,7 @@ public class TranscriptEditor extends JEditorPane {
 
         for (var extPt : extPts) {
             var menuHandler = extPt.getFactory().createObject();
-            menuHandler.addMenuItems(builder, session, eventManager, undoSupport, tier, record);
+            menuHandler.addMenuItems(builder, getSession(), eventManager, undoSupport, tier, record);
         }
 
         // Show it where the user clicked
@@ -1159,7 +1170,7 @@ public class TranscriptEditor extends JEditorPane {
                 changeTypeButtonGroup.setSelected(changeTypeItem.getModel(), true);
             }
             PhonUIAction<Void> changeTypeAct = PhonUIAction.runnable(() -> {
-                ChangeCommentTypeEdit edit = new ChangeCommentTypeEdit(session, eventManager, comment, type);
+                ChangeCommentTypeEdit edit = new ChangeCommentTypeEdit(getSession(), eventManager, comment, type);
                 undoSupport.postEdit(edit);
             });
             changeTypeAct.putValue(PhonUIAction.NAME, type.getLabel());
@@ -1195,7 +1206,7 @@ public class TranscriptEditor extends JEditorPane {
                 changeTypeButtonGroup.setSelected(changeTypeItem.getModel(), true);
             }
             PhonUIAction<Void> changeTypeAct = PhonUIAction.runnable(() -> {
-                ChangeGemTypeEdit edit = new ChangeGemTypeEdit(session, eventManager, gem, type);
+                ChangeGemTypeEdit edit = new ChangeGemTypeEdit(getSession(), eventManager, gem, type);
                 undoSupport.postEdit(edit);
             });
             changeTypeAct.putValue(PhonUIAction.NAME, type.name());
@@ -1266,7 +1277,7 @@ public class TranscriptEditor extends JEditorPane {
         menu.add(addGemMenu);
 
         JMenuItem deleteThis = new JMenuItem();
-        PhonUIAction<Void> deleteThisAct = PhonUIAction.runnable(() -> deleteTranscriptElement(session.getTranscript().getElementAt(transcriptElementIndex)));
+        PhonUIAction<Void> deleteThisAct = PhonUIAction.runnable(() -> deleteTranscriptElement(getSession().getTranscript().getElementAt(transcriptElementIndex)));
         deleteThisAct.putValue(PhonUIAction.NAME, "Delete this element");
         deleteThis.setAction(deleteThisAct);
         menu.add(deleteThis);
@@ -1402,7 +1413,7 @@ public class TranscriptEditor extends JEditorPane {
     }
 
     public void changeSpeaker(Tuple<Record, Participant> data) {
-        ChangeSpeakerEdit edit = new ChangeSpeakerEdit(session, eventManager, data.getObj1(), data.getObj2());
+        ChangeSpeakerEdit edit = new ChangeSpeakerEdit(getSession(), eventManager, data.getObj1(), data.getObj2());
         undoSupport.postEdit(edit);
     }
 
@@ -1413,7 +1424,7 @@ public class TranscriptEditor extends JEditorPane {
         if (tier.getDeclaredType() == MediaSegment.class) return;
 
         SwingUtilities.invokeLater(() -> {
-            TierEdit<?> edit = new TierEdit(session, eventManager, null, tier, dummy.getValue());
+            TierEdit<?> edit = new TierEdit(getSession(), eventManager, null, tier, dummy.getValue());
             edit.setFireHardChangeOnUndo(true);
             getUndoSupport().postEdit(edit);
         });
@@ -1432,12 +1443,12 @@ public class TranscriptEditor extends JEditorPane {
                 System.out.println("Language changed -----------------------");
                 System.out.println("Validated: " + !languagesTier.isUnvalidated());
                 if (languagesTier.hasValue()) {
-                    SessionLanguageEdit edit = new SessionLanguageEdit(session, eventManager, languagesTier.getValue().languageList());
+                    SessionLanguageEdit edit = new SessionLanguageEdit(getSession(), eventManager, languagesTier.getValue().languageList());
                     getUndoSupport().postEdit(edit);
                 }
             }
 
-            TierEdit<?> edit = new TierEdit(session, eventManager, null, genericTier, dummy.getValue());
+            TierEdit<?> edit = new TierEdit(getSession(), eventManager, null, genericTier, dummy.getValue());
             edit.setFireHardChangeOnUndo(true);
             getUndoSupport().postEdit(edit);
             getUndoSupport().endUpdate();
@@ -1448,14 +1459,14 @@ public class TranscriptEditor extends JEditorPane {
         Tier<TierData> dummy = SessionFactory.newFactory().createTier("dummy", TierData.class);
         dummy.setText(newData);
         SwingUtilities.invokeLater(() -> {
-            ChangeCommentEdit edit = new ChangeCommentEdit(session, eventManager, comment, dummy.getValue());
+            ChangeCommentEdit edit = new ChangeCommentEdit(getSession(), eventManager, comment, dummy.getValue());
             getUndoSupport().postEdit(edit);
         });
     }
 
     public void gemDataChanged(Gem gem, String newData) {
         SwingUtilities.invokeLater(() -> {
-            ChangeGemEdit edit = new ChangeGemEdit(session, eventManager, gem, newData);
+            ChangeGemEdit edit = new ChangeGemEdit(getSession(), eventManager, gem, newData);
             getUndoSupport().postEdit(edit);
         });
     }
@@ -1483,7 +1494,7 @@ public class TranscriptEditor extends JEditorPane {
 
     public void loadSession() {
         TranscriptDocument doc = (TranscriptDocument) getEditorKit().createDefaultDocument();
-        doc.setSession(session);
+        doc.setSession(getSession());
         setDocument(doc);
         doc.addDocumentListener(new DocumentListener() {
             @Override
@@ -1817,8 +1828,28 @@ public class TranscriptEditor extends JEditorPane {
         }
     }
 
+    private void boxSelectBounds(Tuple<Integer, Integer> bounds) {
+        try {
+            removeCurrentBoxSelect();
+            currentBoxSelect = getHighlighter().addHighlight(
+                bounds.getObj1(),
+                bounds.getObj2()+1,
+                boxSelectPainter
+            );
+        } catch (BadLocationException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    private void removeCurrentBoxSelect() {
+        if (currentBoxSelect != null) {
+            getHighlighter().removeHighlight(currentBoxSelect);
+            currentBoxSelect = null;
+        }
+    }
+
     private void addComment(int relativeElementIndex, int position) {
-        Transcript transcript = session.getTranscript();
+        Transcript transcript = getSession().getTranscript();
         Tier<TierData> commentTier = SessionFactory.newFactory().createTier("Comment Tier", TierData.class);
         commentTier.setText("");
         Comment newComment = SessionFactory.newFactory().createComment(CommentType.Generic, commentTier.getValue());
@@ -1831,7 +1862,7 @@ public class TranscriptEditor extends JEditorPane {
         }
 
         AddTranscriptElementEdit edit = new AddTranscriptElementEdit(
-            session,
+                getSession(),
             eventManager,
             new Transcript.Element(newComment),
             newCommentIndex
@@ -1845,7 +1876,7 @@ public class TranscriptEditor extends JEditorPane {
     }
 
     private void addGem(int relativeElementIndex, int position) {
-        Transcript transcript = session.getTranscript();
+        Transcript transcript = getSession().getTranscript();
         Gem newGem = SessionFactory.newFactory().createGem(GemType.Lazy, "");
 
         int newGemIndex = -1;
@@ -1856,7 +1887,7 @@ public class TranscriptEditor extends JEditorPane {
         }
 
         AddTranscriptElementEdit edit = new AddTranscriptElementEdit(
-            session,
+                getSession(),
             eventManager,
             new Transcript.Element(newGem),
             newGemIndex
@@ -1871,10 +1902,10 @@ public class TranscriptEditor extends JEditorPane {
 
     private void deleteTranscriptElement(Transcript.Element elem) {
         DeleteTranscriptElementEdit edit = new DeleteTranscriptElementEdit(
-            session,
+            getSession(),
             eventManager,
             elem,
-            session.getTranscript().getElementIndex(elem)
+            getSession().getTranscript().getElementIndex(elem)
         );
         undoSupport.postEdit(edit);
     }
@@ -1895,7 +1926,6 @@ public class TranscriptEditor extends JEditorPane {
         @Override
         public void setDot(NavigationFilter.FilterBypass fb, int dot, Position.Bias bias) {
 
-            setSelectedSegment(null);
             TranscriptDocument doc = getTranscriptDocument();
             Element elem = doc.getCharacterElement(dot);
             AttributeSet attrs = elem.getAttributes();
@@ -1982,14 +2012,23 @@ public class TranscriptEditor extends JEditorPane {
             }
 
             if (segment != null) {
-                System.out.println(segment);
-                System.out.println("Select segment");
-                var segmentBounds = doc.getSegmentBounds(segment, segmentIncludedPos);
-                System.out.println(segmentBounds);
-                fb.setDot(segmentBounds.getObj1(), Position.Bias.Forward);
-                setSelectedSegment(segment);
-                fb.moveDot(segmentBounds.getObj2()+1, Position.Bias.Forward);
-                return;
+                System.out.println("Segment is present");
+                if (!segment.equals(selectedSegment)) {
+                    System.out.println(segment);
+                    System.out.println("Select segment");
+                    setSelectedSegment(segment);
+                    var segmentBounds = doc.getSegmentBounds(segment, segmentIncludedPos);
+                    boxSelectBounds(segmentBounds);
+                }
+            }
+            else {
+                System.out.println("Segment is not present");
+                System.out.println("Selected segment is null?: " + selectedSegment == null);
+                if (selectedSegment != null) {
+                    System.out.println("Deselect segment");
+                    removeCurrentBoxSelect();
+                    setSelectedSegment(null);
+                }
             }
 
             if (nextTier != null && nextAttrs.getAttribute("syllabification") != null) {
@@ -2090,6 +2129,37 @@ public class TranscriptEditor extends JEditorPane {
             } catch (BadLocationException e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    private class BoxSelectHighlightPainter implements Highlighter.HighlightPainter {
+
+        @Override
+        public void paint(Graphics g, int p0, int p1, Shape bounds, JTextComponent c) {
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.setColor(UIManager.getColor(TranscriptEditorUIProps.SEGMENT_SELECTION));
+
+            try {
+                var p0Rect = modelToView2D(p0);
+                var p1Rect = modelToView2D(p1);
+
+                Element ele = getTranscriptDocument().getCharacterElement(p0);
+                int actualLineHeight = g.getFontMetrics().getHeight();
+                if(ele != null) {
+                    final AttributeSet attrs = ele.getAttributes();
+                    if(StyleConstants.getFontFamily(attrs) != null && StyleConstants.getFontSize(attrs) > 0) {
+                        int style = (StyleConstants.isBold(attrs) ? Font.BOLD : 0) |
+                                (StyleConstants.isItalic(attrs) ? Font.ITALIC : 0);
+                        final Font f = new Font(StyleConstants.getFontFamily(attrs), style, StyleConstants.getFontSize(attrs));
+                        actualLineHeight = g.getFontMetrics(f).getHeight();
+                    }
+                }
+
+                g2d.drawRect((int) p0Rect.getMinX(), (int) p0Rect.getMinY(), (int) (p1Rect.getMaxX() - p0Rect.getMinX())-1, actualLineHeight-1);
+            } catch (BadLocationException e) {
+                LogUtil.severe(e);
+            }
+
         }
     }
 

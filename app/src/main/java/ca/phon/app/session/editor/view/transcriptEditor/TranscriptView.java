@@ -39,7 +39,7 @@ public class TranscriptView extends EditorView {
     public TranscriptView(SessionEditor editor) {
         super(editor);
         this.transcriptEditor = new TranscriptEditor(
-            editor.getSession(),
+            editor.getDataModel(),
             editor.getEventManager(),
             editor.getUndoSupport(),
             editor.getUndoManager()

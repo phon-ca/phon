@@ -78,6 +78,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         headerTierMap.put("participants", sessionFactory.createTier("Participants", TierData.class));
     }
 
+
     // region Getters and Setters
 
     public Session getSession() {
@@ -186,7 +187,6 @@ public class TranscriptDocument extends DefaultStyledDocument {
     }
 
     // endregion Getters and Setters
-
 
     // region Attribute Getters
 
@@ -426,7 +426,6 @@ public class TranscriptDocument extends DefaultStyledDocument {
     }
 
     // endregion Attribute Getters
-
 
     // region Batching
 
