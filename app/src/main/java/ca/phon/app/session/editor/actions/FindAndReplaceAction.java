@@ -17,6 +17,7 @@ package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
+import ca.phon.app.session.editor.view.transcriptEditor.TranscriptView;
 import ca.phon.util.icons.*;
 
 import javax.swing.*;
@@ -47,13 +48,13 @@ public class FindAndReplaceAction extends SessionEditorAction {
 	@Override
 	public void hookableActionPerformed(ActionEvent ae) {
 		SessionEditor editor = getEditor();
-		if(!editor.getViewModel().isShowing(RecordDataEditorView.VIEW_NAME)) {
-			editor.getViewModel().showView(RecordDataEditorView.VIEW_NAME);
+		if(!editor.getViewModel().isShowing(TranscriptView.VIEW_NAME)) {
+			editor.getViewModel().showView(TranscriptView.VIEW_NAME);
 		}
 
-		RecordDataEditorView recordDataEditorView = (RecordDataEditorView)editor.getViewModel().getView(RecordDataEditorView.VIEW_NAME);
-		boolean isVisible = recordDataEditorView.isFindAndReplaceVisible();
-		recordDataEditorView.setFindAndReplaceVisible(!isVisible);
+		TranscriptView recordDataEditorView = (TranscriptView) editor.getViewModel().getView(TranscriptView.VIEW_NAME);
+//		boolean isVisible = recordDataEditorView.isFindAndReplaceVisible();
+//		recordDataEditorView.setFindAndReplaceVisible(!isVisible);
 	}
 
 }

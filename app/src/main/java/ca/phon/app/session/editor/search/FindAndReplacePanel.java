@@ -94,7 +94,8 @@ public class FindAndReplacePanel extends JPanel {
 
 		init();
 	}
-	
+
+	// region UI
 	private void init() {
 		setLayout(new BorderLayout());
 		
@@ -121,29 +122,45 @@ public class FindAndReplacePanel extends JPanel {
 		add(tierView, BorderLayout.CENTER);
 		add(findActionsPanel, BorderLayout.EAST);
 	}
-	
-	public FindManager getFindManager() {
-		return this.findManager;
+
+	private class TierNameCellRenderer extends DefaultListCellRenderer {
+
+		@Override
+		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+													  boolean cellHasFocus) {
+			JLabel retVal = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+			retVal.setHorizontalAlignment(SwingConstants.RIGHT);
+			return retVal;
+		}
+
 	}
 
-	public EditorDataModel getEditorDataModel() {
-		return editorDataModel;
-	}
+	private class FindOptionsPanel extends JPanel {
 
-	public EditorEventManager getEditorEventManager() {
-		return editorEventManager;
-	}
+		JCheckBox caseSensitiveBox;
 
-	public Session getSession() {
-		return getEditorDataModel().getSession();
-	}
+		JComboBox<SearchType> typeBox;
 
-	public EditorSelectionModel getSelectionModel() {
-		return selectionModel;
-	}
+		public FindOptionsPanel() {
+			super();
+			init();
 
-	public UndoableEditSupport getUndoSupport() {
-		return undoableEditSupport;
+			setOpaque(false);
+			caseSensitiveBox.setOpaque(false);
+		}
+
+		private void init() {
+			setLayout(new FlowLayout(FlowLayout.LEFT));
+
+			caseSensitiveBox = new JCheckBox("Case sensitive");
+			caseSensitiveBox.setOpaque(false);
+			add(caseSensitiveBox);
+
+			typeBox = new JComboBox<>(SearchType.values());
+			typeBox.setSelectedItem(SearchType.PLAIN);
+			add(typeBox);
+		}
+
 	}
 
 	private void setupSidePanel() {
@@ -200,8 +217,9 @@ public class FindAndReplacePanel extends JPanel {
 		tierView.add(replaceLbl, new TierDataConstraint(TierDataConstraint.TIER_LABEL_COLUMN, 2));
 		tierView.add(replaceField, new TierDataConstraint(TierDataConstraint.FLAT_TIER_COLUMN, 2));
 	}
+	// endregion
 	
-	/* Find and replace methods */
+	// region Find/replace
 	private FindExpr getFindExpr() {
 		final Tier<String> tier = findTier;
 		if(tier == null || tier.getValue().length() == 0) return null;
@@ -372,10 +390,13 @@ public class FindAndReplacePanel extends JPanel {
 				final SessionRange sr = findManager.getMatchedRange();
 				final Record record = getSession().getRecord(sr.getRecordIndex());
 				final Tier<?> tier = record.getTier(sr.getRecordRange().getTier());
-				@SuppressWarnings({"unchecked", "rawtypes"})
-				final TierEdit tierEdit = new TierEdit(getSession(), getEditorEventManager(), record, tier, newVal);
-				getUndoSupport().postEdit(tierEdit);
-				getSelectionModel().clear();
+				if(getEditorDataModel().getTranscriber() == Transcriber.VALIDATOR) {
+					@SuppressWarnings({"unchecked", "rawtypes"})
+					final TierEdit tierEdit = new TierEdit(getSession(), getEditorEventManager(), record, tier, newVal);
+					getUndoSupport().postEdit(tierEdit);
+					getSelectionModel().clear();
+				} else {
+				}
 			}
 		}
 	}
@@ -411,47 +432,34 @@ public class FindAndReplacePanel extends JPanel {
 		final Toast toast = ToastFactory.makeToast(message);
 		toast.start(replaceAllBtn);
 	}
-	
-	private class TierNameCellRenderer extends DefaultListCellRenderer {
+	// endregion
 
-		@Override
-		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
-				boolean cellHasFocus) {
-			JLabel retVal = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-			retVal.setHorizontalAlignment(SwingConstants.RIGHT);
-			return retVal;
-		}
-		
+	// region Getters/Setters
+	public FindManager getFindManager() {
+		return this.findManager;
 	}
-	
-	private class FindOptionsPanel extends JPanel {
-		
-		JCheckBox caseSensitiveBox;
-		
-		JComboBox<SearchType> typeBox;
-		
-		public FindOptionsPanel() {
-			super();
-			init();
-			
-			setOpaque(false);
-			caseSensitiveBox.setOpaque(false);
-		}
-		
-		private void init() {
-			setLayout(new FlowLayout(FlowLayout.LEFT));
-			
-			caseSensitiveBox = new JCheckBox("Case sensitive");
-			caseSensitiveBox.setOpaque(false);
-			add(caseSensitiveBox);
-			
-			typeBox = new JComboBox<>(SearchType.values());
-			typeBox.setSelectedItem(SearchType.PLAIN);
-			add(typeBox);
-		}
-		
+
+	public EditorDataModel getEditorDataModel() {
+		return editorDataModel;
 	}
-	
+
+	public EditorEventManager getEditorEventManager() {
+		return editorEventManager;
+	}
+
+	public Session getSession() {
+		return getEditorDataModel().getSession();
+	}
+
+	public EditorSelectionModel getSelectionModel() {
+		return selectionModel;
+	}
+
+	public UndoableEditSupport getUndoSupport() {
+		return undoableEditSupport;
+	}
+	// end region
+
 	private final TierEditorListener<String> tierEditorListener = (tier, newValue, oldValue, valueIsAdjusting) -> {
 		if(valueIsAdjusting)
 			tier.setValue(newValue);
