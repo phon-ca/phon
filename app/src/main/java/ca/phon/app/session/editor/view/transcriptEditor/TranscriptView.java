@@ -39,6 +39,7 @@ public class TranscriptView extends EditorView {
     public float fontSizeDelta = PrefHelper.getFloat(FONT_SIZE_DELTA_PROP, DEFAULT_FONT_SIZE_DELTA);
     private boolean findAndReplaceVisible = false;
     private FindAndReplacePanel findAndReplacePanel;
+    private JPanel centerPanel;
 
     public TranscriptView(SessionEditor editor) {
         super(editor);
@@ -70,11 +71,16 @@ public class TranscriptView extends EditorView {
     }
 
     private void initUI() {
+
+        setLayout(new BorderLayout());
+        centerPanel = new JPanel(new BorderLayout());
+        add(centerPanel, BorderLayout.CENTER);
+
         transcriptScrollPane = new TranscriptScrollPane(transcriptEditor);
         transcriptScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        setLayout(new BorderLayout());
-        add(transcriptScrollPane, BorderLayout.CENTER);
-        add(new TranscriptStatusBar(transcriptEditor), BorderLayout.SOUTH);
+
+        centerPanel.add(transcriptScrollPane, BorderLayout.CENTER);
+        centerPanel.add(new TranscriptStatusBar(transcriptEditor), BorderLayout.SOUTH);
 
         JPanel toolbar = new JPanel(new HorizontalLayout());
         add(toolbar, BorderLayout.NORTH);
@@ -314,10 +320,10 @@ public class TranscriptView extends EditorView {
                 editor.getEventManager(),
                 editor.getUndoSupport()
             );
-            add(findAndReplacePanel, BorderLayout.NORTH);
+            centerPanel.add(findAndReplacePanel, BorderLayout.NORTH);
         }
         else {
-            remove(findAndReplacePanel);
+            centerPanel.remove(findAndReplacePanel);
             findAndReplacePanel = null;
         }
         revalidate();
