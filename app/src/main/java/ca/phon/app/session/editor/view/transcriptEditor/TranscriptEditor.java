@@ -199,7 +199,7 @@ public class TranscriptEditor extends JEditorPane {
 
         this.eventManager.registerActionForEvent(EditorEventType.SpeakerChanged, this::onSpeakerChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 
-        this.eventManager.registerActionForEvent(EditorEventType.TierChanged, this::onTierDataChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+        this.eventManager.registerActionForEvent(EditorEventType.TierChange, this::onTierDataChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 
         this.eventManager.registerActionForEvent(EditorEventType.CommentAdded, this::onCommentAdded, EditorEventManager.RunOn.AWTEventDispatchThread);
         this.eventManager.registerActionForEvent(EditorEventType.GemAdded, this::onGemAdded, EditorEventManager.RunOn.AWTEventDispatchThread);
@@ -503,7 +503,7 @@ public class TranscriptEditor extends JEditorPane {
                         System.out.println("New Val: " + newVal);
                         System.out.println("Equal: " + tier.toString().equals(newVal));
                         if (!tier.toString().equals(newVal)) {
-                            tierDataChanged(tier, newVal);
+                            tierDataChanged((Record)attrs.getAttribute(TranscriptDocument.ATTR_KEY_RECORD), tier, newVal);
                         }
                     }
                     case TranscriptDocument.ATTR_KEY_COMMENT -> {
@@ -1066,6 +1066,7 @@ public class TranscriptEditor extends JEditorPane {
     }
 
     private void onTierDataChanged(EditorEvent<EditorEventType.TierChangeData> editorEvent) {
+        if(editorEvent.data().valueAdjusting()) return;
 
         TranscriptDocument doc = getTranscriptDocument();
         Tier<?> changedTier = editorEvent.data().tier();
@@ -1396,7 +1397,7 @@ public class TranscriptEditor extends JEditorPane {
         undoSupport.postEdit(edit);
     }
 
-    public void tierDataChanged(Tier<?> tier, String newData) {
+    public void tierDataChanged(Record record, Tier<?> tier, String newData) {
         Tier<?> dummy = SessionFactory.newFactory().createTier("dummy", tier.getDeclaredType());
         dummy.setText(newData);
 
@@ -1404,7 +1405,7 @@ public class TranscriptEditor extends JEditorPane {
         if (tier.getValue().toString().equals(dummy.getValue().toString())) return;
 
         SwingUtilities.invokeLater(() -> {
-            TierEdit<?> edit = new TierEdit(getSession(), eventManager, null, tier, dummy.getValue());
+            TierEdit<?> edit = new TierEdit(getSession(), eventManager, record, tier, dummy.getValue());
             edit.setFireHardChangeOnUndo(true);
             getUndoSupport().postEdit(edit);
         });
@@ -1943,7 +1944,7 @@ public class TranscriptEditor extends JEditorPane {
                             int end = doc.getTierEnd(prevTier) - 1;
                             String newValue = doc.getText(start, end - start);
                             internalEdit = true;
-                            tierDataChanged(prevTier, newValue);
+                            tierDataChanged((Record)prevAttrs.getAttribute(TranscriptDocument.ATTR_KEY_RECORD), prevTier, newValue);
                         }
                         case TranscriptDocument.ATTR_KEY_COMMENT -> {
                             Comment prevComment = (Comment) prevAttrs.getAttribute(TranscriptDocument.ATTR_KEY_COMMENT);

@@ -799,7 +799,7 @@ public final class TimelineView extends EditorView {
 		
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordAdded, this::onRecordAdded, EditorEventManager.RunOn.AWTEventDispatchThread);
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordDeleted, this::onRecordDeleted, EditorEventManager.RunOn.AWTEventDispatchThread);
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.TierChanged, this::onTierChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.TierChange, this::onTierChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 		
 		getEditor().getEventManager().registerActionForEvent(MediaPlayerEditorView.MediaLoaded, this::onMediaLoaded, EditorEventManager.RunOn.AWTEventDispatchThread);
 	}
@@ -816,7 +816,7 @@ public final class TimelineView extends EditorView {
 		
 		getEditor().getEventManager().removeActionForEvent(EditorEventType.RecordAdded, this::onRecordAdded);
 		getEditor().getEventManager().removeActionForEvent(EditorEventType.RecordDeleted, this::onRecordDeleted);
-		getEditor().getEventManager().removeActionForEvent(EditorEventType.TierChanged, this::onTierChanged);
+		getEditor().getEventManager().removeActionForEvent(EditorEventType.TierChange, this::onTierChanged);
 		
 		getEditor().getEventManager().removeActionForEvent(MediaPlayerEditorView.MediaLoaded, this::onMediaLoaded);
 	}
@@ -884,6 +884,7 @@ public final class TimelineView extends EditorView {
 	}
 	
 	private void onTierChanged(EditorEvent<EditorEventType.TierChangeData> ee) {
+		if(ee.data().valueAdjusting()) return;
 		String tierName = ee.data().tier().getName();
 		if(SystemTierType.Segment.getName().equals(tierName)) {
 			setupTimeModel();

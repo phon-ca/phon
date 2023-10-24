@@ -332,11 +332,12 @@ public class ValidationEditorView extends EditorView {
 	
 	private final TierEditorListener<IPATranscript> tierListener = (tier, newValue, oldValue, valueIsAdjusting) -> {
 		if(valueIsAdjusting) {
-			final TierEdit<IPATranscript> edit = new TierEdit<>(getEditor(), tier, newValue);
+			final TierEdit<IPATranscript> edit = new TierEdit<>(getEditor().getDataModel().getSession(), getEditor().getEventManager(),
+					getEditor().getDataModel().getTranscriber(), getEditor().currentRecord(), tier, newValue, true);
 			getEditor().getUndoSupport().postEdit(edit);
 		} else {
-			final EditorEvent<EditorEventType.TierChangeData> ee = new EditorEvent<>(EditorEventType.TierChanged, ValidationEditorView.this,
-					new EditorEventType.TierChangeData(tier, oldValue, newValue));
+			final EditorEvent<EditorEventType.TierChangeData> ee = new EditorEvent<>(EditorEventType.TierChange, ValidationEditorView.this,
+					new EditorEventType.TierChangeData(getEditor().getDataModel().getTranscriber(), getEditor().currentRecord(), tier, oldValue, newValue, false));
 			getEditor().getEventManager().queueEvent(ee);
 		}
 	};
@@ -371,5 +372,4 @@ public class ValidationEditorView extends EditorView {
 		return retVal;
 	}
 
-	
 }

@@ -1,1 +1,2 @@
 ca.phon.app.autosave.AutosavesProvider
+ca.phon.app.session.editor.extensions.IPADependentTierChanges

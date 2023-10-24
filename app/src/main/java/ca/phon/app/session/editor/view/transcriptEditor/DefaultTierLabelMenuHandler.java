@@ -228,44 +228,9 @@ public class DefaultTierLabelMenuHandler implements TierLabelMenuHandler, IPlugi
     }
 
     private void pasteTier(Record destRecord, Tier<?> destTier, String text) {
-        undoSupport.beginUpdate();
         final TierEdit<?> tierEdit = new TierEdit<>(session, eventManager, destRecord, destTier, text);
         undoSupport.postEdit(tierEdit);
-        if(destTier.getDeclaredType() == IPATranscript.class) {
-            updateIPATier(destRecord, (Tier<IPATranscript>) destTier);
-        }
-        undoSupport.endUpdate();
-
-
-        var data = new EditorEventType.TierChangeData(destTier, null, null);
-        final EditorEvent<EditorEventType.TierChangeData> e = new EditorEvent<>(EditorEventType.TierChanged, null, data);
-        eventManager.queueEvent(e);
     }
-
-    private void updateIPATier(Record record, Tier<IPATranscript> ipaTier) {
-        final IPATranscript ipa = ipaTier.getValue();
-        SyllabifierInfo info = session.getExtension(SyllabifierInfo.class);
-        SyllabifierLibrary library = SyllabifierLibrary.getInstance();
-        Syllabifier syllabifier = library.defaultSyllabifier();
-        if (info != null) {
-            Syllabifier tierSyllabifier = library.getSyllabifierForLanguage(info.getSyllabifierLanguageForTier(ipaTier.getName()));
-            if (tierSyllabifier != null) {
-                syllabifier = tierSyllabifier;
-            }
-        }
-        syllabifier.syllabify(ipa.toList());
-        final SystemTierType systemTier = SystemTierType.tierFromString(ipaTier.getName());
-        if(systemTier == SystemTierType.IPATarget || systemTier == SystemTierType.IPAActual) {
-            final Tier<IPATranscript> targetTier =
-                    systemTier == SystemTierType.IPATarget ? ipaTier : record.getIPATargetTier();
-            final Tier<IPATranscript> actualTier =
-                    systemTier == SystemTierType.IPAActual ? ipaTier : record.getIPAActualTier();
-            final PhoneAlignment phoneAlignment = PhoneAlignment.fromTiers(targetTier, actualTier);
-            final TierEdit<PhoneAlignment> alignmentTierEdit = new TierEdit<>(session, eventManager, record, record.getPhoneAlignmentTier(), phoneAlignment);
-            undoSupport.postEdit(alignmentTierEdit);
-        }
-    }
-
     // endregion Copy / Paste
 
     // region Tier View Item

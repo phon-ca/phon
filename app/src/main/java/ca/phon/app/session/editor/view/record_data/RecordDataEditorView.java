@@ -722,35 +722,11 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 		public void tierValueChanged(Tier<T> tier, T newValue, T oldValue, boolean valueIsAdjusting) {
 			if(valueIsAdjusting) {
 				final TierEdit<T> tierEdit = new TierEdit<T>(getEditor(), tier, newValue);
-				tierEdit.setFireHardChangeOnUndo(true);
-
-				UndoableEdit edit = tierEdit;
-
-				// XXX
-				// Special case for IPA tiers, alignment must be updated as well
-				if(SystemTierType.IPATarget.getName().equals(tier.getName()) ||
-						SystemTierType.IPAActual.getName().equals(tier.getName())) {
-					edit = new CompoundEdit();
-					tierEdit.doIt();
-					edit.addEdit(tierEdit);
-
-					final TierEdit<PhoneAlignment> alignEdit = updateRecordAlignment(record);
-					alignEdit.doIt();
-					edit.addEdit(alignEdit);
-
-					((CompoundEdit)edit).end();
-
-					// we also need to send out a TIER_DATA_CHANGED event so the syllabification/alignment view updates
-					final EditorEvent<EditorEventType.TierChangeData> ee =
-							new EditorEvent(EditorEventType.TierChanged, RecordDataEditorView.this,
-									new EditorEventType.TierChangeData(record.getPhoneAlignmentTier(), alignEdit.getOldValue(), alignEdit.getNewValue()));
-					getEditor().getEventManager().queueEvent(ee);
-				}
-
-				getEditor().getUndoSupport().postEdit(edit);
+				getEditor().getUndoSupport().postEdit(tierEdit);
 			} else {
-				final EditorEvent<EditorEventType.TierChangeData> ee = new EditorEvent<>(EditorEventType.TierChanged, RecordDataEditorView.this,
-						new EditorEventType.TierChangeData(tier, oldValue, newValue));
+				final EditorEvent<EditorEventType.TierChangeData> ee = new EditorEvent<>(EditorEventType.TierChange, RecordDataEditorView.this,
+						new EditorEventType.TierChangeData(tier.isBlind() ? getEditor().getDataModel().getTranscriber() : Transcriber.VALIDATOR,
+								getEditor().currentRecord(), tier, oldValue, newValue, false));
 				getEditor().getEventManager().queueEvent(ee);
 			}
 		}

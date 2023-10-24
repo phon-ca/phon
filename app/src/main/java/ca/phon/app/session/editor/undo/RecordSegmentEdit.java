@@ -7,6 +7,7 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Record;
 import ca.phon.session.Session;
+import ca.phon.session.Transcriber;
 
 public class RecordSegmentEdit extends SessionUndoableEdit {
 
@@ -16,7 +17,7 @@ public class RecordSegmentEdit extends SessionUndoableEdit {
 
     private MediaSegment prevSegment;
 
-    private boolean fireHardChangeOnUndo = false;
+    private boolean valueAdjusting = true;
 
     public RecordSegmentEdit(SessionEditor editor, Record record, MediaSegment segment) {
         this(editor.getSession(), editor.getEventManager(), record, segment);
@@ -30,12 +31,22 @@ public class RecordSegmentEdit extends SessionUndoableEdit {
         this.prevSegment = record.getMediaSegment();
     }
 
-    public boolean isFireHardChangeOnUndo() {
-        return fireHardChangeOnUndo;
+    public boolean isValueAdjusting() {
+        return valueAdjusting;
     }
 
+    public void setValueAdjusting(boolean valueAdjusting) {
+        this.valueAdjusting = valueAdjusting;
+    }
+
+    @Deprecated
+    public boolean isFireHardChangeOnUndo() {
+        return !isValueAdjusting();
+    }
+
+    @Deprecated
     public void setFireHardChangeOnUndo(boolean fireHardChangeOnUndo) {
-        this.fireHardChangeOnUndo = fireHardChangeOnUndo;
+        setValueAdjusting(!fireHardChangeOnUndo);
     }
 
     @Override
@@ -52,8 +63,8 @@ public class RecordSegmentEdit extends SessionUndoableEdit {
 
     private void fireChangeEvent(MediaSegment prevSegment, MediaSegment segment) {
         final EditorEvent<EditorEventType.TierChangeData> segChangeEvt =
-                new EditorEvent<>(isFireHardChangeOnUndo() ? EditorEventType.TierChanged : EditorEventType.TierChange, getSource(),
-                        new EditorEventType.TierChangeData(record.getSegmentTier(), prevSegment, segment));
+                new EditorEvent<>(EditorEventType.TierChange, getSource(),
+                        new EditorEventType.TierChangeData(Transcriber.VALIDATOR, record, record.getSegmentTier(), prevSegment, segment, isValueAdjusting()));
         getEditorEventManager().queueEvent(segChangeEvt);
     }
 

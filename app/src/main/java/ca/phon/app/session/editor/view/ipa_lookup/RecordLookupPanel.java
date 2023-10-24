@@ -266,78 +266,26 @@ public class RecordLookupPanel extends JPanel {
 		}
 
 		getEditor().getUndoSupport().beginUpdate();
-		IPATranscript targetIpa = ipaTarget.getValue();
 		if(ipaTargetBox.isSelected()) {
-			if(transcriber != null) {
-				boolean set = true;
-				final AlternativeTranscript alts = targetIpa.getExtension(AlternativeTranscript.class);
-				if(alts != null) {
-					final IPATranscript oldIpa = alts.get(transcriber.getUsername());
-					boolean hasData = 
-							(oldIpa != null && oldIpa.length() > 0) 
-							|| (oldIpa != null && oldIpa.getExtension(UnvalidatedValue.class) != null && oldIpa.getExtension(UnvalidatedValue.class).getValue().trim().length() > 0);
-					set = (overwriteBox.isSelected() || !hasData);
-				}
-				if(set) {
-					final BlindTierEdit blindEdit = new BlindTierEdit(getEditor(), ipaTarget, transcriber, ipa, targetIpa);
-					getEditor().getUndoSupport().postEdit(blindEdit);
-				}
-			} else {
-				IPATranscript oldIpa = ipaTarget.getValue();
-				boolean hasData = 
-						(oldIpa != null && oldIpa.length() > 0) 
-						|| (oldIpa != null && oldIpa.getExtension(UnvalidatedValue.class) != null && oldIpa.getExtension(UnvalidatedValue.class).getValue().trim().length() > 0);
-				if(overwriteBox.isSelected() || !hasData) {
-					final AlternativeTranscript alts = targetIpa.getExtension(AlternativeTranscript.class);
-					if(alts != null) ipa.putExtension(AlternativeTranscript.class, alts);
-
-					final TierEdit<IPATranscript> ipaTargetEdit = new TierEdit<>(editor, ipaTarget, ipa);
-					getEditor().getUndoSupport().postEdit(ipaTargetEdit);
-					targetIpa = ipa;
-				}
+			IPATranscript oldIpa = ipaTarget.getValue();
+			boolean hasData =
+					(oldIpa != null && oldIpa.length() > 0)
+					|| (oldIpa != null && oldIpa.getExtension(UnvalidatedValue.class) != null && oldIpa.getExtension(UnvalidatedValue.class).getValue().trim().length() > 0);
+			if(overwriteBox.isSelected() || !hasData) {
+				final TierEdit<IPATranscript> ipaTargetEdit = new TierEdit<>(editor, ipaTarget, ipa);
+				getEditor().getUndoSupport().postEdit(ipaTargetEdit);
 			}
 		}
 
-		IPATranscript actualIpa = ipaActual.getValue();
 		if(ipaActualBox.isSelected()) {
-			if(transcriber != null) {
-				boolean set = true;
-				final AlternativeTranscript alts = targetIpa.getExtension(AlternativeTranscript.class);
-				if(alts != null) {
-					final IPATranscript oldIpa = alts.get(transcriber.getUsername());
-					boolean hasData = 
-							(oldIpa != null && oldIpa.length() > 0) 
-							|| (oldIpa != null && oldIpa.getExtension(UnvalidatedValue.class) != null && oldIpa.getExtension(UnvalidatedValue.class).getValue().trim().length() > 0);
-					set = (overwriteBox.isSelected() || !hasData);
-				}
-				if(set) {
-					final BlindTierEdit blindEdit = new BlindTierEdit(getEditor(), ipaActual, transcriber, ipa, actualIpa);
-					getEditor().getUndoSupport().postEdit(blindEdit);
-				}
-			} else {
-				IPATranscript oldIpa = ipaActual.getValue();
-				boolean hasData = 
-						(oldIpa != null && oldIpa.length() > 0) 
-						|| (oldIpa != null && oldIpa.getExtension(UnvalidatedValue.class) != null && oldIpa.getExtension(UnvalidatedValue.class).getValue().trim().length() > 0);
-				if(overwriteBox.isSelected() || !hasData) {
-					final AlternativeTranscript alts = actualIpa.getExtension(AlternativeTranscript.class);
-					if(alts != null) ipaA.putExtension(AlternativeTranscript.class, alts);
-
-					final TierEdit<IPATranscript> ipaActualEdit = new TierEdit<>(editor, ipaActual, ipaA);
-					getEditor().getUndoSupport().postEdit(ipaActualEdit);
-					actualIpa = ipaA;
-				}
+			IPATranscript oldIpa = ipaActual.getValue();
+			boolean hasData =
+					(oldIpa != null && oldIpa.length() > 0)
+					|| (oldIpa != null && oldIpa.getExtension(UnvalidatedValue.class) != null && oldIpa.getExtension(UnvalidatedValue.class).getValue().trim().length() > 0);
+			if(overwriteBox.isSelected() || !hasData) {
+				final TierEdit<IPATranscript> ipaActualEdit = new TierEdit<>(editor, ipaActual, ipaA);
+				getEditor().getUndoSupport().postEdit(ipaActualEdit);
 			}
-		}
-
-		if(transcriber == null) {
-			final PhoneAligner aligner = new PhoneAligner();
-			final PhoneMap pm = aligner.calculatePhoneAlignment(targetIpa, actualIpa);
-
-			final PhoneAlignment phoneAlignment = PhoneAlignment.fromTiers(r.getIPATargetTier(), r.getIPAActualTier());
-			final TierEdit<PhoneAlignment> pmEdit = new TierEdit<>(editor, r.getPhoneAlignmentTier(), phoneAlignment);
-			pmEdit.setFireHardChangeOnUndo(true);
-			getEditor().getUndoSupport().postEdit(pmEdit);
 		}
 
 		getEditor().getUndoSupport().endUpdate();
@@ -349,7 +297,9 @@ public class RecordLookupPanel extends JPanel {
 			getEditor().getUndoSupport().postEdit(edit);
 		} else {
 			final EditorEvent<EditorEventType.TierChangeData> ee =
-					new EditorEvent<>(EditorEventType.TierChanged, RecordLookupPanel.this, new EditorEventType.TierChangeData(tier, oldValue, newValue));
+					new EditorEvent<>(EditorEventType.TierChange, RecordLookupPanel.this,
+							new EditorEventType.TierChangeData(tier.isBlind() ? getEditor().getDataModel().getTranscriber() : Transcriber.VALIDATOR,
+									getRecord(), tier, oldValue, newValue, false));
 			getEditor().getEventManager().queueEvent(ee);
 		}
 	};

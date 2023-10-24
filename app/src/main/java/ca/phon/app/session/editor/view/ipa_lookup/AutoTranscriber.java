@@ -202,11 +202,11 @@ public class AutoTranscriber {
 			
 		if(isSetIPATarget() && autoTranscription.getObj1() != null) {
 			SessionUndoableEdit targetEdit = null;
-			if(getTranscriber() != null) {
-				IPATranscript grpVal = (record.getIPATarget() != null ? record.getIPATarget() : new IPATranscript());
-				targetEdit =
-						new BlindTierEdit(getEditor(), record.getIPATargetTier(), getTranscriber(),
-								autoTranscription.getObj1(), grpVal);
+			if(getTranscriber() != Transcriber.VALIDATOR) {
+//				IPATranscript grpVal = (record.getIPATarget() != null ? record.getIPATarget() : new IPATranscript());
+//				targetEdit =
+//						new BlindTierEdit(getEditor(), record.getIPATargetTier(), getTranscriber(),
+//								autoTranscription.getObj1(), grpVal);
 			} else {
 				IPATranscript currentValue = (record.getIPATarget() != null ? record.getIPATarget() : new IPATranscript());
 				IPATranscript newValue = autoTranscription.getObj1();
@@ -225,11 +225,11 @@ public class AutoTranscriber {
 			
 		if(isSetIPAActual() && autoTranscription.getObj2() != null) {
 			SessionUndoableEdit actualEdit = null;
-			if(getTranscriber() != null) {
-				IPATranscript grpVal = (record.getIPAActual() != null ? record.getIPAActual() : new IPATranscript());
-				actualEdit =
-						new BlindTierEdit(getEditor(), record.getIPAActualTier(), getTranscriber(),
-								autoTranscription.getObj2(), grpVal);
+			if(getTranscriber() != Transcriber.VALIDATOR) {
+//				IPATranscript grpVal = (record.getIPAActual() != null ? record.getIPAActual() : new IPATranscript());
+//				actualEdit =
+//						new BlindTierEdit(getEditor(), record.getIPAActualTier(), getTranscriber(),
+//								autoTranscription.getObj2(), grpVal);
 			} else {
 				IPATranscript currentValue = (record.getIPAActual() != null ? record.getIPAActual() : new IPATranscript());
 				IPATranscript newValue = autoTranscription.getObj2();

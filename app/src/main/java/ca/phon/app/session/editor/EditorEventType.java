@@ -6,6 +6,7 @@ import ca.phon.session.position.SessionLocation;
 import ca.phon.session.tierdata.TierData;
 import ca.phon.util.Language;
 
+import javax.annotation.Nullable;
 import java.time.*;
 import java.util.List;
 
@@ -224,20 +225,30 @@ public record  EditorEventType<T>(String eventName, Class<T> type) {
 	public final static EditorEventType<SpeakerChangedData> SpeakerChanged =
 			new EditorEventType<>(EditorEventName.SPEAKER_CHANGE_EVT.getEventName(), SpeakerChangedData.class);
 
-	public record TierChangeData(Tier<?> tier, Object oldValue, Object newValue) { }
+	/**
+	 * Tier change data.  Record and transcriber are optional, however transcriber() will return
+	 * {@link Transcriber#VALIDATOR} if not set.  valueAdjusting is true if this is one of a
+	 * sequence of change events for a tier (e.g., adjusting segment intervals using timeline ui.)
+	 *
+	 * @param transcriber
+	 * @param record
+	 * @param tier
+	 * @param oldValue
+	 * @param newValue
+	 * @param valueAdjusting
+	 */
+	public record TierChangeData(@Nullable Transcriber transcriber, @Nullable Record record, Tier<?> tier,
+								 Object oldValue, Object newValue, boolean valueAdjusting) {
+		public Transcriber transcriber() {
+			return transcriber == null ? Transcriber.VALIDATOR : transcriber;
+		}
+	}
 	/**
 	 * Changes in tier data, usually fired during value adjustments.
 	 *
 	 */
 	public final static EditorEventType<TierChangeData> TierChange =
 			new EditorEventType<>(EditorEventName.TIER_CHANGE_EVT.getEventName(), TierChangeData.class);
-
-	/**
-	 * Changes in tier data. This event is fired when tier data has been
-	 * committed (such as when the current record field is changed)
-	 */
-	public final static EditorEventType<TierChangeData> TierChanged =
-			new EditorEventType<>(EditorEventName.TIER_CHANGED_EVT.getEventName(), TierChangeData.class);
 
 	public record RecordExcludedChangedData(Record record, boolean excluded) { }
 	/**
