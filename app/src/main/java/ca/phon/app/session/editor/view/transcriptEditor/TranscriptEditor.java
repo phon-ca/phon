@@ -489,7 +489,7 @@ public class TranscriptEditor extends JEditorPane {
                         System.out.println("New Val: " + newVal);
                         System.out.println("Equal: " + tier.toString().equals(newVal));
                         if (!tier.toString().equals(newVal)) {
-                            tierDataChanged(tier, newVal);
+                            tierDataChanged((Record)attrs.getAttribute(TranscriptDocument.ATTR_KEY_RECORD), tier, newVal);
                         }
                     }
                     case TranscriptDocument.ATTR_KEY_COMMENT -> {
@@ -1407,14 +1407,14 @@ public class TranscriptEditor extends JEditorPane {
         undoSupport.postEdit(edit);
     }
 
-    public void tierDataChanged(Tier<?> tier, String newData) {
+    public void tierDataChanged(Record record, Tier<?> tier, String newData) {
         Tier<?> dummy = SessionFactory.newFactory().createTier("dummy", tier.getDeclaredType());
         dummy.setText(newData);
 
         if (tier.getDeclaredType() == MediaSegment.class) return;
 
         SwingUtilities.invokeLater(() -> {
-            TierEdit<?> edit = new TierEdit(session, eventManager, null, tier, dummy.getValue());
+            TierEdit<?> edit = new TierEdit(session, eventManager, record, tier, dummy.getValue());
             edit.setFireHardChangeOnUndo(true);
             getUndoSupport().postEdit(edit);
         });
@@ -1926,7 +1926,7 @@ public class TranscriptEditor extends JEditorPane {
                             int end = doc.getTierEnd(prevTier) - 1;
                             String newValue = doc.getText(start, end - start);
                             internalEdit = true;
-                            tierDataChanged(prevTier, newValue);
+                            tierDataChanged((Record)prevAttrs.getAttribute(TranscriptDocument.ATTR_KEY_RECORD), prevTier, newValue);
                         }
                         case TranscriptDocument.ATTR_KEY_COMMENT -> {
                             Comment prevComment = (Comment) prevAttrs.getAttribute(TranscriptDocument.ATTR_KEY_COMMENT);
