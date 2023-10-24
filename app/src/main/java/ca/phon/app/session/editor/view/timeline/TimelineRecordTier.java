@@ -624,7 +624,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 	private void setupEditorEvents() {
 		getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordChanged, this::onRecordChange, EditorEventManager.RunOn.AWTEventDispatchThread);
 		getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.SpeakerChanged, this::onSpeakerChange, EditorEventManager.RunOn.AWTEventDispatchThread);
-		getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.TierChanged, this::onTierChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.TierChange, this::onTierChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 		getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.TierViewChanged, this::onTierViewChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 		getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.ParticipantRemoved, this::onParticipantRemoved, EditorEventManager.RunOn.AWTEventDispatchThread);
 		getParentView().getEditor().getEventManager().registerActionForEvent(EditorEventType.ParticipantAdded, this::onParticipantAdded, EditorEventManager.RunOn.AWTEventDispatchThread);
@@ -634,7 +634,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 	private void deregisterEditorEvents() {
 		getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.RecordChanged, this::onRecordChange);
 		getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.SpeakerChanged, this::onSpeakerChange);
-		getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.TierChanged, this::onTierChanged);
+		getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.TierChange, this::onTierChanged);
 		getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.TierViewChanged, this::onTierViewChanged);
 		getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.ParticipantRemoved, this::onParticipantRemoved);
 		getParentView().getEditor().getEventManager().removeActionForEvent(EditorEventType.ParticipantAdded, this::onParticipantAdded);
@@ -745,6 +745,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 	}
 
 	private void onTierChanged(EditorEvent<EditorEventType.TierChangeData> ee) {
+		if(ee.data().valueAdjusting()) return;
 		final String tierName = ee.data().tier().getName();
 		if (SystemTierType.Orthography.getName().equals(tierName)
 				|| SystemTierType.Segment.getName().equals(tierName)) {
@@ -1272,8 +1273,8 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 				} else {
 					getParentView().getEditor().getUndoSupport().endUpdate();
 					getParentView().getEditor().getEventManager().queueEvent(
-							new EditorEvent<>(EditorEventType.TierChanged, TimelineRecordTier.this,
-									new EditorEventType.TierChangeData(r.getSegmentTier(), segment, segment)));
+							new EditorEvent<>(EditorEventType.TierChange, TimelineRecordTier.this,
+									new EditorEventType.TierChangeData(Transcriber.VALIDATOR, r, r.getSegmentTier(), segment, segment, false)));
 				}
 			} else if(evt.getPropertyName().endsWith("time")) {
 				MediaSegment newSegment = factory.createMediaSegment();

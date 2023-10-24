@@ -96,7 +96,7 @@ public class IPALookupView extends EditorView {
 		final SessionEditor editor = getEditor();
 		
 		editor.getEventManager().registerActionForEvent(EditorEventType.RecordChanged, this::onRecordChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
-		editor.getEventManager().registerActionForEvent(EditorEventType.TierChanged, this::onTierChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		editor.getEventManager().registerActionForEvent(EditorEventType.TierChange, this::onTierChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 	}
 	
 	private void setupToolbar() {
@@ -227,6 +227,7 @@ public class IPALookupView extends EditorView {
 	
 	private void onTierChanged(EditorEvent<EditorEventType.TierChangeData> ee) {
 		if(!getEditor().getViewModel().isShowingInStack(VIEW_NAME)) return;
+		if(ee.data().valueAdjusting()) return;
 		
 		if(SystemTierType.Orthography.getName().equals(ee.data().tier().getName())) {
 			recordLookupPanel.update();

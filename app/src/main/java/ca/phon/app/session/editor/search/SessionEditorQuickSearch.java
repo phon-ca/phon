@@ -304,7 +304,7 @@ public class SessionEditorQuickSearch {
 	}
 	
 	public void setupEditorActions() {
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.TierChanged, this::onTierDataChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.TierChange, this::onTierDataChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.TierViewChanged, this::onTierNumberChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 		
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordDeleted, this::onRecordDeleted, EditorEventManager.RunOn.AWTEventDispatchThread);
@@ -325,7 +325,8 @@ public class SessionEditorQuickSearch {
 	}
 
 	private void onTierDataChanged(EditorEvent<EditorEventType.TierChangeData> ee) {
-		tableModel.fireTableDataChanged();
+		if(!ee.data().valueAdjusting())
+			tableModel.fireTableDataChanged();
 	}
 	
 	private void onTierNumberChanged(EditorEvent<EditorEventType.TierViewChangedData> ee) {

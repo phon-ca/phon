@@ -37,7 +37,7 @@ public class TranscriptScrollPaneGutter extends JComponent {
             EditorEventManager.RunOn.AWTEventDispatchThread
         );
         editor.getEventManager().registerActionForEvent(
-            EditorEventType.TierChanged,
+            EditorEventType.TierChange,
             this::onTierChanged,
             EditorEventManager.RunOn.AWTEventDispatchThread
         );
@@ -187,6 +187,7 @@ public class TranscriptScrollPaneGutter extends JComponent {
     }
 
     public void onTierChanged(EditorEvent<EditorEventType.TierChangeData> event) {
+        if(event.data().valueAdjusting()) return;
         revalidate();
         repaint();
     }

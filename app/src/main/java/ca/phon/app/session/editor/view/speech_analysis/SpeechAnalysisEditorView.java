@@ -777,7 +777,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordChanged, this::onRecordChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.RecordRefresh, this::onRecordRefresh, EditorEventManager.RunOn.AWTEventDispatchThread);
 
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.TierChanged, this::onMediaSegmentChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.TierChange, this::onMediaSegmentChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 	}
 
 	private void onSessionChanged(EditorEvent ee) {
@@ -804,7 +804,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 	}
 
 	private void onMediaSegmentChanged(EditorEvent<EditorEventType.TierChangeData> ee) {
-		if(ee.data().tier().getName().equals(SystemTierType.Segment.getName())
+		if(!ee.data().valueAdjusting() && ee.data().tier().getName().equals(SystemTierType.Segment.getName())
 				&& getEditor().getViewModel().isShowingInStack(VIEW_TITLE))
 			setupTimeModel();
 	}
@@ -1092,8 +1092,8 @@ public class SpeechAnalysisEditorView extends EditorView {
 					getEditor().getUndoSupport().beginUpdate();
 				} else {
 					getEditor().getUndoSupport().endUpdate();
-					final EditorEventType.TierChangeData data = new EditorEventType.TierChangeData(r.getSegmentTier(), r.getMediaSegment(), r.getMediaSegment());
-					getEditor().getEventManager().queueEvent(new EditorEvent(EditorEventType.TierChanged, SpeechAnalysisEditorView.this, data));
+					final EditorEventType.TierChangeData data = new EditorEventType.TierChangeData(getEditor().getDataModel().getTranscriber(), r, r.getSegmentTier(), r.getMediaSegment(), r.getMediaSegment(), false);
+					getEditor().getEventManager().queueEvent(new EditorEvent<>(EditorEventType.TierChange, SpeechAnalysisEditorView.this, data));
 				}
 			} else if(evt.getPropertyName().endsWith("time")) {
 				MediaSegment newSegment = factory.createMediaSegment();
