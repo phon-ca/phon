@@ -254,6 +254,14 @@ public class TierEdit<T> extends SessionUndoableEdit {
 		this.valueAdjusting = valueAdjusting;
 	}
 
+	public void putAdditionalTierChange(String tierName, Object value) {
+		additionalTierChanges.put(tierName, value);
+	}
+
+	public Object getAdditionalTierChange(String tierName) {
+		return additionalTierChanges.get(tierName);
+	}
+
 	/**
 	 * @return !isValueIsAdjusting()z
 	 * @deprecated opposite of valueAdjusting
@@ -293,6 +301,41 @@ public class TierEdit<T> extends SessionUndoableEdit {
 		}
 	}
 
+	/**
+	 * Get the correct syllabifier (or default) for given ipa transcript tier.
+	 * @param tier
+	 * @return tier syllabifier
+	 */
+	private Syllabifier getSyllabifier(Session session, Tier<IPATranscript> tier) {
+		Syllabifier retVal = null;
+		// new method
+		// TODO move this key somewhere sensible, currently unused
+		if(tier.getTierParameters().containsKey("syllabifier")) {
+			try {
+				final Language lang = Language.parseLanguage(tier.getTierParameters().get("syllabifier"));
+				if(lang != null && SyllabifierLibrary.getInstance().availableSyllabifierLanguages().contains(lang)) {
+					retVal = SyllabifierLibrary.getInstance().getSyllabifierForLanguage(lang);
+				}
+			} catch (IllegalArgumentException e) {
+				LogUtil.warning(e);
+			}
+		}
+		if(retVal == null) {
+			// old method
+			final SyllabifierInfo info = session.getExtension(SyllabifierInfo.class);
+			if (info != null) {
+				final Language lang = info.getSyllabifierLanguageForTier(tier.getName());
+				if (lang != null && SyllabifierLibrary.getInstance().availableSyllabifierLanguages().contains(lang)) {
+					retVal = SyllabifierLibrary.getInstance().getSyllabifierForLanguage(lang);
+				}
+			}
+		}
+		if(retVal == null) {
+			retVal = SyllabifierLibrary.getInstance().defaultSyllabifier();
+		}
+		return retVal;
+	}
+
 	@Override
 	public void doIt() {
 		Tier<T> tier = getTier();
@@ -301,7 +344,7 @@ public class TierEdit<T> extends SessionUndoableEdit {
 		if(tier.getDeclaredType() == IPATranscript.class && !((IPATranscript)newValue).hasSyllableInformation()) {
 			final IPATranscript ipa = (IPATranscript) newValue;
 			@SuppressWarnings("unchecked")
-			final Syllabifier syllabifier = getSyllabifier((Tier<IPATranscript>) tier);
+			final Syllabifier syllabifier = getSyllabifier(getSession(), (Tier<IPATranscript>) tier);
 			if (syllabifier != null) {
 				syllabifier.syllabify(ipa.toList());
 				// will apply additional annotations
@@ -344,66 +387,10 @@ public class TierEdit<T> extends SessionUndoableEdit {
 	}
 
 	/**
-	 * Get the correct syllabifier (or default) for given ipa transcript tier.
-	 * @param tier
-	 * @return tier syllabifier
-	 */
-	private Syllabifier getSyllabifier(Tier<IPATranscript> tier) {
-		Syllabifier retVal = null;
-		final Session session = getSession();
-		// new method
-		// TODO move this key somewhere sensible, currently unused
-		if(tier.getTierParameters().containsKey("syllabifier")) {
-			try {
-				final Language lang = Language.parseLanguage(tier.getTierParameters().get("syllabifier"));
-				if(lang != null && SyllabifierLibrary.getInstance().availableSyllabifierLanguages().contains(lang)) {
-					retVal = SyllabifierLibrary.getInstance().getSyllabifierForLanguage(lang);
-				}
-			} catch (IllegalArgumentException e) {
-				LogUtil.warning(e);
-			}
-		}
-		if(retVal == null) {
-			// old method
-			final SyllabifierInfo info = session.getExtension(SyllabifierInfo.class);
-			if (info != null) {
-				final Language lang = info.getSyllabifierLanguageForTier(tier.getName());
-				if (lang != null && SyllabifierLibrary.getInstance().availableSyllabifierLanguages().contains(lang)) {
-					retVal = SyllabifierLibrary.getInstance().getSyllabifierForLanguage(lang);
-				}
-			}
-		}
-		if(retVal == null) {
-			retVal = SyllabifierLibrary.getInstance().defaultSyllabifier();
-		}
-		return retVal;
-	}
-
-	/**
 	 * Called on doIt() and undo() this will apply any dependent tier changes such as
 	 * phone alignment or segment adjustments.
 	 */
 	protected void performDependentTierChanges() {
-		// if tier is IPATarget or IPAActual update default phone alignment
-		// TODO update potential user-defined tier alignments
-		final SystemTierType systemTierType = SystemTierType.tierFromString(tier.getName());
-		if(systemTierType == SystemTierType.IPATarget || systemTierType == SystemTierType.IPAActual) {
-			PhoneAlignment pm = null;
-			if(additionalTierChanges.containsKey(SystemTierType.PhoneAlignment.getName())) {
-				pm = (PhoneAlignment) additionalTierChanges.get(SystemTierType.PhoneAlignment.getName());
-			} else {
-				// update alignment
-				pm = PhoneAlignment.fromTiers(record.getIPATargetTier(), record.getIPAActualTier());
-			}
-			if(pm != null) {
-				final PhoneAlignment oldVal = record.getPhoneAlignment();
-				record.setPhoneAlignment(pm);
-				additionalTierChanges.put(SystemTierType.PhoneAlignment.getName(), oldVal);
-				// fire event for phone alignment tier change
-				fireTierChange(record.getPhoneAlignmentTier(), oldVal, pm);
-			}
-		}
-
 		// perform any other tier changes specified by tier
 		@SuppressWarnings("unchecked")
 		final DependentTierChanges<T> otherTierChanges = tier.getExtension(DependentTierChanges.class);

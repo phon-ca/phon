@@ -17,6 +17,7 @@ package ca.phon.session;
 
 import ca.phon.extensions.*;
 import ca.phon.formatter.Formatter;
+import ca.phon.opgraph.extensions.Extendable;
 import ca.phon.session.spi.TierSPI;
 
 import java.lang.reflect.InvocationTargetException;
@@ -27,15 +28,18 @@ import java.util.*;
  * A tier in a record with name, parameters, alignment rules and value.
  * 
  */
-public final class Tier<T> extends ExtendableObject {
+public final class Tier<T> implements IExtendable {
 	
 	private final TierSPI<T> tierImpl;
 
 	private final List<TierListener<T>> tierListeners = Collections.synchronizedList(new ArrayList<>());
 
+	private final ExtensionSupport extensionSupport = new ExtensionSupport(Tier.class, this);
+
 	Tier(TierSPI<T> impl) {
 		super();
 		this.tierImpl = impl;
+		extensionSupport.initExtensions();
 	}
 
 	/**
@@ -297,4 +301,23 @@ public final class Tier<T> extends ExtendableObject {
 		}
 	}
 
+	@Override
+	public Set<Class<?>> getExtensions() {
+		return extensionSupport.getExtensions();
+	}
+
+	@Override
+	public <T> T getExtension(Class<T> cap) {
+		return extensionSupport.getExtension(cap);
+	}
+
+	@Override
+	public <T> T putExtension(Class<T> cap, T impl) {
+		return extensionSupport.putExtension(cap, impl);
+	}
+
+	@Override
+	public <T> T removeExtension(Class<T> cap) {
+		return extensionSupport.removeExtension(cap);
+	}
 }
