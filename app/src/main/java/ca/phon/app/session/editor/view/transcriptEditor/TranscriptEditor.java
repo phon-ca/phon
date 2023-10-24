@@ -49,6 +49,7 @@ public class TranscriptEditor extends JEditorPane {
     private Map<Tier<?>, Object> errorUnderlineHighlights = new HashMap<>();
     private BoxSelectHighlightPainter boxSelectPainter = new BoxSelectHighlightPainter();
     private Object currentBoxSelect = null;
+    private EditorSelectionModel selectionModel;
 
 
     public TranscriptEditor(
@@ -57,10 +58,11 @@ public class TranscriptEditor extends JEditorPane {
         SessionEditUndoSupport undoSupport,
         UndoManager undoManager
     ) {
-        this(new DefaultEditorDataModel(null, session), eventManager, undoSupport, undoManager);
+        this(new DefaultEditorDataModel(null, session), new DefaultEditorSelectionModel(), eventManager, undoSupport, undoManager);
     }
     public TranscriptEditor(
         EditorDataModel dataModel,
+        EditorSelectionModel selectionModel,
         EditorEventManager eventManager,
         SessionEditUndoSupport undoSupport,
         UndoManager undoManager
@@ -71,6 +73,7 @@ public class TranscriptEditor extends JEditorPane {
         getCaret().deinstall(this);
         caret.install(this);
         this.dataModel = dataModel;
+        this.selectionModel = selectionModel;
         this.eventManager = eventManager;
         this.undoSupport = undoSupport;
         this.undoManager = undoManager;
@@ -656,13 +659,8 @@ public class TranscriptEditor extends JEditorPane {
     }
 
     public void moveTier(EditorEventType.TierViewChangedData data) {
-        long startTimeMS = new Date().getTime();
-
         var startTierView = data.oldTierView();
         var endTierView = data.newTierView();
-
-        System.out.println(startTierView.stream().map(item -> item.getTierName()).toList());
-        System.out.println(endTierView.stream().map(item -> item.getTierName()).toList());
 
         List<TierViewItem> movedTiers = new ArrayList<>();
         for (int i = 0; i < startTierView.size(); i++) {
@@ -693,7 +691,7 @@ public class TranscriptEditor extends JEditorPane {
         Document blank = getEditorKit().createDefaultDocument();
         setDocument(blank);
         // Move tier in doc
-        doc.moveTier(movedTiers);
+        doc.reload();
         setDocument(doc);
 
         // Correct caret
@@ -701,8 +699,6 @@ public class TranscriptEditor extends JEditorPane {
             // Move the caret so that it has the same offset from the tiers new pos
             setCaretPosition(doc.getTierStart(caretTier) + caretTierOffset);
         }
-
-        System.out.println("Time to move tiers: " + (new Date().getTime() - startTimeMS)/1000f + " seconds");
     }
 
     public void deleteTier(EditorEventType.TierViewChangedData data) {
@@ -722,7 +718,7 @@ public class TranscriptEditor extends JEditorPane {
         Document blank = getEditorKit().createDefaultDocument();
         setDocument(blank);
         // Delete tier in doc
-        doc.deleteTier(data.tierNames());
+        doc.reload();
         setDocument(doc);
 
 
@@ -784,17 +780,10 @@ public class TranscriptEditor extends JEditorPane {
             caretTierOffset = startCaretPos - elem.getStartOffset();
         }
 
-        List<TierViewItem> addedTiers = new ArrayList<>();
-        for (TierViewItem item : data.newTierView()) {
-            if (!data.oldTierView().contains(item)) {
-                addedTiers.add(item);
-            }
-        }
-
         Document blank = getEditorKit().createDefaultDocument();
         setDocument(blank);
         // Add tier in doc
-        doc.showTier(addedTiers, data.newTierView());
+        doc.reload();
         setDocument(doc);
 
         // Correct caret
@@ -826,7 +815,7 @@ public class TranscriptEditor extends JEditorPane {
         Document blank = getEditorKit().createDefaultDocument();
         setDocument(blank);
         // Hide tier in doc
-        doc.hideTier(data.tierNames());
+        doc.reload();
         setDocument(doc);
 
 
@@ -888,17 +877,10 @@ public class TranscriptEditor extends JEditorPane {
             caretTierOffset = startCaretPos - elem.getStartOffset();
         }
 
-        List<TierViewItem> shownTiers = new ArrayList<>();
-        for (TierViewItem item : data.newTierView()) {
-            if (!data.oldTierView().contains(item)) {
-                shownTiers.add(item);
-            }
-        }
-
         Document blank = getEditorKit().createDefaultDocument();
         setDocument(blank);
         // Show tier in doc
-        doc.showTier(shownTiers, data.newTierView());
+        doc.reload();
         setDocument(doc);
 
         // Correct caret
@@ -914,25 +896,22 @@ public class TranscriptEditor extends JEditorPane {
 
     public void tierNameChanged(EditorEventType.TierViewChangedData data) {
 
-        List<TierViewItem> oldTiers = new ArrayList<>();
-        List<TierViewItem> newTiers = new ArrayList<>();
-        for (Integer index : data.viewIndices()) {
-            TierViewItem item = data.newTierView().get(index);
-            if (item.isVisible()) {
-                oldTiers.add(data.oldTierView().get(index));
-                newTiers.add(item);
+        boolean nothingChanged = true;
+        for (int i = 0; i < data.newTierView().size(); i++) {
+            if (!data.newTierView().get(i).getTierName().equals(data.oldTierView().get(i).getTierName())) {
+                nothingChanged = false;
+                break;
             }
         }
 
-
-        if (newTiers.isEmpty()) return;
+        if (nothingChanged) return;
 
         int caretPos = getCaretPosition();
 
         TranscriptDocument doc = getTranscriptDocument();
         Document blank = getEditorKit().createDefaultDocument();
         setDocument(blank);
-        doc.tierNameChanged(oldTiers, newTiers);
+        doc.reload();
         setDocument(doc);
 
         setCaretPosition(caretPos);
@@ -953,7 +932,7 @@ public class TranscriptEditor extends JEditorPane {
         Document blank = getEditorKit().createDefaultDocument();
         setDocument(blank);
         // Change tier font in doc
-        doc.tierFontChanged(changedTiers);
+        doc.reload();
         setDocument(doc);
 
         setCaretPosition(caretPos);
@@ -1422,6 +1401,7 @@ public class TranscriptEditor extends JEditorPane {
         dummy.setText(newData);
 
         if (tier.getDeclaredType() == MediaSegment.class) return;
+        if (tier.getValue().toString().equals(dummy.getValue().toString())) return;
 
         SwingUtilities.invokeLater(() -> {
             TierEdit<?> edit = new TierEdit(getSession(), eventManager, null, tier, dummy.getValue());
@@ -1434,6 +1414,8 @@ public class TranscriptEditor extends JEditorPane {
         Tier dummy = SessionFactory.newFactory().createTier("dummy", genericTier.getDeclaredType());
         dummy.setFormatter(genericTier.getFormatter());
         dummy.setText(newData);
+
+        if (genericTier.getValue().toString().equals(dummy.getValue().toString())) return;
 
         SwingUtilities.invokeLater(() -> {
             getUndoSupport().beginUpdate();
@@ -1458,6 +1440,9 @@ public class TranscriptEditor extends JEditorPane {
     public void commentDataChanged(Comment comment, String newData) {
         Tier<TierData> dummy = SessionFactory.newFactory().createTier("dummy", TierData.class);
         dummy.setText(newData);
+
+        if (comment.getValue().toString().equals(dummy.getValue().toString())) return;
+
         SwingUtilities.invokeLater(() -> {
             ChangeCommentEdit edit = new ChangeCommentEdit(getSession(), eventManager, comment, dummy.getValue());
             getUndoSupport().postEdit(edit);
@@ -1465,6 +1450,9 @@ public class TranscriptEditor extends JEditorPane {
     }
 
     public void gemDataChanged(Gem gem, String newData) {
+
+        if (gem.getLabel().equals(newData)) return;
+
         SwingUtilities.invokeLater(() -> {
             ChangeGemEdit edit = new ChangeGemEdit(getSession(), eventManager, gem, newData);
             getUndoSupport().postEdit(edit);

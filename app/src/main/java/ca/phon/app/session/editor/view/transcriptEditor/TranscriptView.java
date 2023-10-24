@@ -1,6 +1,8 @@
 package ca.phon.app.session.editor.view.transcriptEditor;
 
 import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.actions.FindAndReplaceAction;
+import ca.phon.app.session.editor.search.FindAndReplacePanel;
 import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.app.session.editor.view.transcriptEditor.actions.*;
 import ca.phon.session.MediaSegment;
@@ -35,11 +37,14 @@ public class TranscriptView extends EditorView {
     public final static String FONT_SIZE_DELTA_PROP = TranscriptView.class.getName() + ".fontSizeDelta";
     public final static float DEFAULT_FONT_SIZE_DELTA = 0.0f;
     public float fontSizeDelta = PrefHelper.getFloat(FONT_SIZE_DELTA_PROP, DEFAULT_FONT_SIZE_DELTA);
+    private boolean findAndReplaceVisible = false;
+    private FindAndReplacePanel findAndReplacePanel;
 
     public TranscriptView(SessionEditor editor) {
         super(editor);
         this.transcriptEditor = new TranscriptEditor(
             editor.getDataModel(),
+            editor.getSelectionModel(),
             editor.getEventManager(),
             editor.getUndoSupport(),
             editor.getUndoManager()
@@ -152,7 +157,24 @@ public class TranscriptView extends EditorView {
         scaleSlider.setMinorTickSpacing(2);
         scaleSlider.setSnapToTicks(true);
         scaleSlider.setPaintTicks(true);
-        scaleSlider.addChangeListener(changeEvent -> setFontSizeDelta(scaleSlider.getValue()));
+        scaleSlider.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (fontSizeDelta != scaleSlider.getValue()) {
+                    setFontSizeDelta(scaleSlider.getValue());
+                    transcriptEditor.getTranscriptDocument().reload();
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (fontSizeDelta != scaleSlider.getValue()) {
+                    setFontSizeDelta(scaleSlider.getValue());
+                    transcriptEditor.getTranscriptDocument().reload();
+                }
+            }
+        });
 
         JComponent fontComp = new JPanel(new HorizontalLayout());
         fontComp.setOpaque(false);
@@ -164,8 +186,11 @@ public class TranscriptView extends EditorView {
 
         JButton defaultSizeButton = new JButton();
         final PhonUIAction<Void> useDefaultFontSizeAct = PhonUIAction.runnable(() -> {
-            setFontSizeDelta(0.0f);
             scaleSlider.setValue(0);
+            if (fontSizeDelta != scaleSlider.getValue()) {
+                setFontSizeDelta(0);
+                transcriptEditor.getTranscriptDocument().reload();
+            }
         });
         useDefaultFontSizeAct.putValue(PhonUIAction.NAME, "Use default font size");
         useDefaultFontSizeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset font size");
@@ -207,6 +232,7 @@ public class TranscriptView extends EditorView {
         retVal.add(new ToggleSyllabificationIsComponent(getEditor(), this));
         retVal.add(new ToggleAlignmentVisibleAction(getEditor(), this));
         retVal.add(new ToggleAlignmentIsComponentAction(getEditor(), this));
+        retVal.add(new FindAndReplaceAction(getEditor()));
 
         return retVal;
     }
@@ -271,6 +297,31 @@ public class TranscriptView extends EditorView {
         float oldVal = this.fontSizeDelta;
         this.fontSizeDelta = fontSizeDelta;
         firePropertyChange("fontSizeDelta", oldVal, fontSizeDelta);
+    }
+
+    public boolean isFindAndReplaceVisible() {
+        return findAndReplaceVisible;
+    }
+
+    public void setFindAndReplaceVisible(boolean findAndReplaceVisible) {
+        this.findAndReplaceVisible = findAndReplaceVisible;
+        System.out.println("Find and replace visible?: " + findAndReplaceVisible);
+        if (findAndReplaceVisible) {
+            var editor = getEditor();
+            findAndReplacePanel = new FindAndReplacePanel(
+                editor.getDataModel(),
+                editor.getSelectionModel(),
+                editor.getEventManager(),
+                editor.getUndoSupport()
+            );
+            add(findAndReplacePanel, BorderLayout.NORTH);
+        }
+        else {
+            remove(findAndReplacePanel);
+            findAndReplacePanel = null;
+        }
+        revalidate();
+        repaint();
     }
 
     //endregion Getters and Setters

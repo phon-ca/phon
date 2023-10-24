@@ -23,6 +23,10 @@ public class TranscriptViewFactory implements ViewFactory {
             kind = "componentFactory";
         }
 
+//        if () {
+//            kind = "table";
+//        }
+
         if (kind != null) {
             if (kind.equals(AbstractDocument.ContentElementName)) {
                 var view = new TierView(elem);
@@ -38,6 +42,9 @@ public class TranscriptViewFactory implements ViewFactory {
             } else if (kind.equals("componentFactory")) {
                 return new ComponentFactoryView(elem);
             }
+//            else if (kind.equals("table")) {
+//                return new TableView(elem);
+//            }
         }
 
         // default to text display
