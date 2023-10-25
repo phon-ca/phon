@@ -132,7 +132,7 @@ public class QueryTask extends PhonTask {
 		final QueryManager qm = QueryManager.getSharedInstance();
 		final QueryFactory qf = qm.createQueryFactory();
 		final ResultSet retVal = qf.createResultSet();
-		retVal.setSessionPath(getSession().getCorpus(), getSession().getName());
+		retVal.setSessionPath(getSession().getSessionPath().toString());
 		return retVal;
 	}
 	

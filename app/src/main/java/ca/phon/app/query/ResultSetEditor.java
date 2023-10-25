@@ -136,8 +136,7 @@ public class ResultSetEditor extends ProjectFrame {
 			for(CommonModuleFrame cmf:CommonModuleFrame.getOpenWindows()) {
 				if(cmf instanceof SessionEditorWindow sessionEditorWindow) {
 					final Session transcript = sessionEditorWindow.getSession();
-					if(transcript.getCorpus().equals(resultSet.getCorpus())
-							&& transcript.getName().equals(resultSet.getSession())) {
+					if(transcript.getSessionPath().equals(resultSet.getSessionPath())) {
 						super.setParentFrame(sessionEditorWindow);
 						final SessionEditor editor = sessionEditorWindow.getSessionEditor();
 

@@ -139,6 +139,10 @@ public class SessionPath implements IExtendable, Comparable<SessionPath> {
 		return extSupport.removeExtension(cap);
 	}
 
+	@Override
+	public boolean equals(Object b) {
+		return toString().equals(b.toString());
+	}
 
 	@Override
 	public int compareTo(@NotNull SessionPath o) {

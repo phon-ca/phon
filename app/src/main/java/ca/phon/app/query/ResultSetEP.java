@@ -22,9 +22,11 @@ import ca.phon.plugin.*;
 import ca.phon.project.Project;
 import ca.phon.query.db.*;
 import ca.phon.ui.CommonModuleFrame;
+import org.apache.commons.logging.Log;
 
 import javax.swing.*;
 import java.awt.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -91,9 +93,7 @@ public class ResultSetEP implements IPluginEntryPoint {
 				}
 			} else if(sessionEditorRef.get() == null && cmf instanceof SessionEditorWindow sessionEditorWindow) {
 				SessionEditor editor = sessionEditorWindow.getSessionEditor();
-				if(editor.getProject() == projectRef.get() &&
-						editor.getSession().getCorpus().equals(resultSetRef.get().getCorpus()) &&
-						editor.getSession().getName().equals(resultSetRef.get().getSession()) ) {
+				if(editor.getProject() == projectRef.get() && editor.getSession().getSessionPath().equals(resultSetRef.get().getSessionPath())) {
 					sessionEditorRef.set(editor);
 				}
 			}
@@ -129,15 +129,19 @@ public class ResultSetEP implements IPluginEntryPoint {
 			Runnable openSessionRunnable = () -> { openSession(projectRef.get(), resultSetRef.get()); };
 			if(SwingUtilities.isEventDispatchThread())
 				openSessionRunnable.run();
-			else
-				SwingUtilities.invokeLater(openSessionRunnable);
+			else {
+				try {
+					SwingUtilities.invokeAndWait(openSessionRunnable);
+				} catch(InterruptedException | InvocationTargetException e) {
+					LogUtil.severe(e);
+				}
+			}
 			
 			if(sessionEditorRef.get() == null) {
 				CommonModuleFrame.addNewWindowListener(this, (cmf) -> {
 					if(cmf instanceof SessionEditorWindow sessionEditorWindow) {
 						SessionEditor editor = sessionEditorWindow.getSessionEditor();
-						if(editor.getSession().getCorpus().equals(resultSetRef.get().getCorpus())
-								&& editor.getSession().getName().equals(resultSetRef.get().getSession())) {
+						if(editor.getSession().getSessionPath().equals(resultSetRef.get().getSessionPath())) {
 							onEDT.run();
 						}
 					}

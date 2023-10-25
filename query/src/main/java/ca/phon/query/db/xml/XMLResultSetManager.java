@@ -20,6 +20,8 @@ import ca.phon.project.Project;
 import ca.phon.query.db.*;
 import ca.phon.query.db.xml.io.query.QueryType;
 import ca.phon.query.db.xml.io.resultset.ResultSetType;
+import ca.phon.session.SessionFactory;
+import ca.phon.session.SessionPath;
 import ca.phon.xml.XMLConstants;
 import jakarta.xml.bind.*;
 import org.apache.logging.log4j.LogManager;
@@ -28,6 +30,7 @@ import org.xml.sax.SAXException;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.*;
 import java.io.*;
+import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -91,24 +94,36 @@ public class XMLResultSetManager implements ResultSetManager {
 	@Override
 	public List<ResultSet> getResultSetsForQuery(Project project, Query query) {
 		File queryPath = getQueryPath(project, query);
-
 		List<ResultSet> resultSets = new ArrayList<ResultSet>();
 		if(!queryPath.exists() || !queryPath.isDirectory())
 			return resultSets;
-		for(File resultSetFile : queryPath.listFiles()) {
-			if(!resultSetFile.getName().equals("query.xml") && !resultSetFile.isHidden()) {
-				String fname = resultSetFile.getName();
-				try {
-					// XXX this substring computation is messy...
-					ResultSet resultSet = loadResultSet(project, query, fname.substring(0, fname.length() - 4));
-					resultSets.add(resultSet);
-				} catch(IOException exc) {
-					LOGGER.error( exc.getLocalizedMessage(), exc);
-				}
+		final List<SessionPath> resultSessionPaths = scanResultSets(queryPath.toPath(), queryPath);
+		for(SessionPath sp:resultSessionPaths) {
+			try {
+				ResultSet resultSet = loadResultSet(project, query, sp.toString());
+				resultSets.add(resultSet);
+			} catch(IOException exc) {
+				LOGGER.error( exc.getLocalizedMessage(), exc);
+			}
+		}
+		return resultSets;
+	}
+
+	private List<SessionPath> scanResultSets(Path queryPath, File folder) {
+		List<SessionPath> retVal = new ArrayList<>();
+
+		for(File child:folder.listFiles()) {
+			if(child.isDirectory() && !child.isHidden()) {
+				retVal.addAll(scanResultSets(queryPath, child));
+			} else if(child.isFile() && !child.isHidden() && !"query.xml".equals(child.getName()) && child.getName().endsWith(".xml")) {
+				final Path rsPath = child.toPath();
+				final Path relPath = queryPath.relativize(rsPath);
+				retVal.add(new SessionPath(relPath.getParent().toString(),
+						relPath.getFileName().toString().substring(0, relPath.getFileName().toString().length()-4)));
 			}
 		}
 
-		return resultSets;
+		return retVal;
 	}
 
 	@Override
@@ -179,9 +194,8 @@ public class XMLResultSetManager implements ResultSetManager {
 		resultSet.getMetadataKeys();
 
 		try {
-
-			if(!queryPath.exists()) {
-				queryPath.mkdirs();
+			if(!resultSetFile.getParentFile().exists()) {
+				resultSetFile.getParentFile().mkdirs();
 			}
 
 			// Use JAXBElement wrapper around object because they do not have
@@ -196,16 +210,14 @@ public class XMLResultSetManager implements ResultSetManager {
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 			marshaller.marshal(jaxbElem, resultSetFile);
 		} catch (JAXBException exc) {
-			//PhonLogger.severe(XMLResultSetManager.class, "Could not save result set to disk.");
-			//PhonLogger.severe(XMLResultSetManager.class, "JAXBException: " + exc.getLocalizedMessage());
 			throw new IOException("Could not save result set to disk", exc);
 		}
 	}
 
 	@Override
-	public ResultSet loadResultSet(Project project, Query query, String sessionName) throws IOException {
+	public ResultSet loadResultSet(Project project, Query query, String sessionPath) throws IOException {
 		File queryPath = getQueryPath(project, query);
-		File resultSetFile = new File(queryPath, sessionName + ".xml");
+		File resultSetFile = new File(queryPath, sessionPath + ".xml");
 		return new XMLLazyResultSet(this, resultSetFile);
 	}
 

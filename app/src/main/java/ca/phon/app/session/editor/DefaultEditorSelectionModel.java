@@ -18,7 +18,7 @@ package ca.phon.app.session.editor;
 import java.util.*;
 
 public class DefaultEditorSelectionModel implements EditorSelectionModel {
-	
+
 	private final List<SessionEditorSelection> selections =
 			Collections.synchronizedList(new ArrayList<SessionEditorSelection>());
 
@@ -29,12 +29,12 @@ public class DefaultEditorSelectionModel implements EditorSelectionModel {
 
 	@Override
 	public SessionEditorSelection getFirstSelection() {
-		return (selections.size() > 0 ? selections.get(0) : null);
+		return (!selections.isEmpty() ? selections.get(0) : null);
 	}
 
 	@Override
 	public SessionEditorSelection getLastSelection() {
-		return (selections.size() > 0 ? selections.get(selections.size()-1) : null);
+		return (!selections.isEmpty() ? selections.get(selections.size()-1) : null);
 	}
 
 	@Override

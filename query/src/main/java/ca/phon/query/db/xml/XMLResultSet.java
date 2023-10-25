@@ -18,6 +18,8 @@ package ca.phon.query.db.xml;
 
 import ca.phon.query.db.*;
 import ca.phon.query.db.xml.io.resultset.*;
+import ca.phon.session.SessionFactory;
+import ca.phon.session.SessionPath;
 
 import java.util.*;
 
@@ -54,12 +56,12 @@ public class XMLResultSet implements ResultSet, JAXBWrapper<ResultSetType> {
 	
 	@Override
 	public String getCorpus() {
-		return resultSet.getSessionPath().split("\\.")[0];
+		return (SessionFactory.newFactory().createSessionPath(resultSet.getSessionPath())).getFolder();
 	}
 
 	@Override
 	public String getSession() {
-		return resultSet.getSessionPath().split("\\.")[1];
+		return (SessionFactory.newFactory().createSessionPath(resultSet.getSessionPath())).getSessionFile();
 	}
 
 	@Override

@@ -226,14 +226,6 @@ public class TierEdit<T> extends SessionUndoableEdit {
 		return record;
 	}
 
-	public boolean isTierAddedToRecord() {
-		return tierAddedToRecord;
-	}
-
-	public void setTierAddedToRecord(boolean tierAddedToRecord) {
-		this.tierAddedToRecord = tierAddedToRecord;
-	}
-
 	public T getOldValue() {
 		return oldValue;
 	}
