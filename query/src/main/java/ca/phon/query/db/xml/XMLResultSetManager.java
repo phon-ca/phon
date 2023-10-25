@@ -118,7 +118,7 @@ public class XMLResultSetManager implements ResultSetManager {
 			} else if(child.isFile() && !child.isHidden() && !"query.xml".equals(child.getName()) && child.getName().endsWith(".xml")) {
 				final Path rsPath = child.toPath();
 				final Path relPath = queryPath.relativize(rsPath);
-				retVal.add(new SessionPath(relPath.getParent().toString(),
+				retVal.add(new SessionPath(relPath.getParent() != null ? relPath.getParent().toString() : "",
 						relPath.getFileName().toString().substring(0, relPath.getFileName().toString().length()-4)));
 			}
 		}
