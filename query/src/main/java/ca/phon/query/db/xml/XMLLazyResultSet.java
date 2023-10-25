@@ -45,10 +45,7 @@ public class XMLLazyResultSet extends XMLResultSet {
 	 */
 	XMLLazyResultSet(XMLResultSetManager manager, File resultSetFile) {
 		this.manager = manager;
-		this.resultSetFile = resultSetFile;
-		
-		String [] info = resultSetFile.getName().split("\\.");
-		super.setSessionPath(info[0], info[1]);
+		this.resultSetFile = resultSetFile;;
 	}
 	
 	/**
@@ -67,7 +64,25 @@ public class XMLLazyResultSet extends XMLResultSet {
 			}
 		}
 	}
-	
+
+	@Override
+	public String getSessionPath() {
+		loadData();
+		return super.getSessionPath();
+	}
+
+	@Override
+	public String getCorpus() {
+		loadData();
+		return super.getCorpus();
+	}
+
+	@Override
+	public String getSession() {
+		loadData();
+		return super.getSession();
+	}
+
 	@Override
 	public ResultSetType getXMLObject() {
 		loadData();

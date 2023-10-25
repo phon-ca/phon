@@ -41,11 +41,31 @@ public class PhoneAlignment implements Iterable<PhoneMap> {
      * @param targetTier
      * @param alignedTier
      *
-     * @return new PhoneAlignment tier object
+     * @return new PhoneAlignment object
      */
     public static PhoneAlignment fromTiers(Tier<IPATranscript> targetTier, Tier<IPATranscript> alignedTier) {
-        final List<IPATranscript> targetWords = targetTier.getValue().words();
-        final List<IPATranscript> alignedWords = alignedTier.getValue().words();
+        return fromTiers(targetTier, alignedTier, Transcriber.VALIDATOR);
+    }
+
+    /**
+     * Return phone alignment for tiers using transcription for provided transcriber
+     *
+     * @param targetTier
+     * @param alignedTier
+     * @param transcriber
+     * @return new PhoneAlignment object
+     */
+    public static PhoneAlignment fromTiers(Tier<IPATranscript> targetTier, Tier<IPATranscript> alignedTier, Transcriber transcriber) {
+        final IPATranscript targetIpa =
+                transcriber != Transcriber.VALIDATOR
+                        ? (targetTier.hasBlindTranscription(transcriber.getUsername()) ? targetTier.getBlindTranscription(transcriber.getUsername()) : new IPATranscript())
+                        : (targetTier.hasValue() ? targetTier.getValue() : new IPATranscript());
+        final IPATranscript alignedIpa =
+                transcriber != Transcriber.VALIDATOR
+                        ? (alignedTier.hasBlindTranscription(transcriber.getUsername()) ? alignedTier.getBlindTranscription(transcriber.getUsername()) : new IPATranscript())
+                        : (alignedTier.hasValue() ? alignedTier.getValue() : new IPATranscript());
+        final List<IPATranscript> targetWords = targetIpa.words();
+        final List<IPATranscript> alignedWords = alignedIpa.words();
         final int n = Math.max(targetWords.size(), alignedWords.size());
         final PhoneAligner aligner = new PhoneAligner();
         final List<PhoneMap> alignments = new ArrayList<>();

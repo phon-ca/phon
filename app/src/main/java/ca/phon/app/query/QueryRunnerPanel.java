@@ -386,7 +386,7 @@ public class QueryRunnerPanel extends JPanel {
 					
 					HashMap<String, Object> initInfo = new HashMap<String, Object>();
 					try {
-						final ResultSet rs = rsManager.loadResultSet((loadFromTemp ? tempProject : project), query, sessionName);
+						final ResultSet rs = rsManager.loadResultSet((loadFromTemp ? tempProject : project), query, location.toString());
 						initInfo.put("resultset", rs);
 					} catch (IOException e1) {
 						LogUtil.severe( e1.getLocalizedMessage(), e1);
@@ -413,7 +413,7 @@ public class QueryRunnerPanel extends JPanel {
 			final QueryTask queryTask = (QueryTask)task;
 			final Session session = queryTask.getSession();
 			
-			final SessionPath location = new SessionPath(session.getCorpus(), session.getName());
+			final SessionPath location = session.getSessionPath();
 			final int rowIdx = tableModel.sessions.indexOf(location);
 			tableModel.setValueAt(newStatus, rowIdx, 1);
 			
@@ -447,7 +447,7 @@ public class QueryRunnerPanel extends JPanel {
 			final QueryTask queryTask = (QueryTask)task;
 			final Session session = queryTask.getSession();
 			
-			final SessionPath location = new SessionPath(session.getCorpus(), session.getName());
+			final SessionPath location = session.getSessionPath();
 			final int rowIdx = tableModel.sessions.indexOf(location);
 			
 			if(property.equals(QueryTask.PROGRESS_PROP)) {
@@ -480,7 +480,7 @@ public class QueryRunnerPanel extends JPanel {
 			= new HashMap<SessionPath, Integer>();
 		
 		public RunnerTableModel(List<SessionPath> selectedSessions) {
-			sessions = new ArrayList<SessionPath>();
+			sessions = new ArrayList<>();
 			sessions.addAll(selectedSessions);
 			Collections.sort(sessions);
 		}

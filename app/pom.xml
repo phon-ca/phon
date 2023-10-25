@@ -142,6 +142,14 @@
 			<artifactId>jxl</artifactId>
 		</dependency>
 
+		<!-- PDF -->
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itext7-core</artifactId>
+			<version>8.0.2</version>
+			<type>pom</type>
+		</dependency>
+
 		<!-- Other -->
 		<dependency>
 			<groupId>org.jsoup</groupId>
