@@ -302,6 +302,17 @@ public final class SessionFactory extends ExtendableObject {
 		final RecordSPI recordImpl = sessionFactoryImpl.createRecord();
 		return createRecord(recordImpl);
 	}
+
+	/**
+	 * Create a new record with provided system tiers as blind tiers
+	 *
+	 * @param blindTiers
+	 * @return
+	 */
+	public Record createRecord(List<SystemTierType> blindTiers) {
+		final RecordSPI recordImpl = sessionFactoryImpl.createRecord(blindTiers);
+		return createRecord(recordImpl);
+	}
 	
 	public Record createRecord(RecordSPI recordImpl) {
 		return new Record(recordImpl);

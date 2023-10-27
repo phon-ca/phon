@@ -81,6 +81,15 @@ public final class Tier<T> implements IExtendable {
 	public boolean isBlind() { return tierImpl.isBlind(); }
 
 	/**
+	 * Set blind status of this tier
+	 *
+	 * @param blind
+	 */
+	public void setBlind(boolean blind) {
+		this.tierImpl.setBlind(blind);
+	}
+
+	/**
 	 * Return true if this tier include subtype delimiters
 	 *
 	 * @return true if the number of subtype delimiters > 0
@@ -128,6 +137,37 @@ public final class Tier<T> implements IExtendable {
 	}
 
 	/**
+	 * Is the blind transcription for the given transcriber unvalidated
+	 *
+	 * @param transcriberId
+	 * @return true if the blind transcription has a parse error
+	 */
+	public boolean isBlindTranscriptionUnvalidated(String transcriberId) {
+		final T value = getBlindTranscription(transcriberId);
+		if(value == null) return false;
+		if(value instanceof IExtendable extendable) {
+			return extendable.getExtension(UnvalidatedValue.class) != null;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Get the unvalidated value for the given blind transcriber (if any)
+	 *
+	 * @return unvalidated value for transcriber or null if isBlindTranscription(transcriberId) returns false
+	 */
+	public UnvalidatedValue getBlindUnvalidatedValue(String transcriberId) {
+		final T value = getBlindTranscription(transcriberId);
+		if(value == null) return null;
+		if(value instanceof IExtendable extendable) {
+			return extendable.getExtension(UnvalidatedValue.class);
+		} else {
+			return null;
+		}
+	}
+
+	/**
 	 * Set blind transcription
 	 *
 	 * @param transcriberId
@@ -135,6 +175,33 @@ public final class Tier<T> implements IExtendable {
 	 */
 	public void setBlindTranscription(String transcriberId, T value) {
 		tierImpl.setBlindTranscription(transcriberId, value);
+	}
+
+	/**
+	 * Set blind transcription using text
+	 *
+	 * @param transcriberId
+	 * @param text
+	 * @return true if successful, false if text has a parse error
+	 */
+	public boolean setBlindTranscription(String transcriberId, String text) {
+		try {
+			final T obj = tierImpl.parse(text);
+			setBlindTranscription(transcriberId, obj);
+			return true;
+		} catch (ParseException pe) {
+			final UnvalidatedValue uv = new UnvalidatedValue(text, pe);
+			if(IExtendable.class.isAssignableFrom(getDeclaredType())) {
+				try {
+					IExtendable obj = (IExtendable) getDeclaredType().getDeclaredConstructor().newInstance();
+					obj.putExtension(UnvalidatedValue.class, uv);
+					setBlindTranscription(transcriberId, (T)obj);
+				} catch (InvocationTargetException | InstantiationException | IllegalAccessException |
+						 NoSuchMethodException e) {
+				}
+			}
+			return false;
+		}
 	}
 
 	/**
@@ -181,11 +248,13 @@ public final class Tier<T> implements IExtendable {
 	 * the tier value will be cleared and the tier become unvalidated.
 	 *
 	 * @param text
+	 * @return true if successful, false if text has a parse error
 	 */
-	public void setText(String text) {
+	public boolean setText(String text) {
 		try {
 			final T obj = tierImpl.parse(text);
 			setValue(obj);
+			return true;
 		} catch (ParseException pe) {
 			final UnvalidatedValue uv = new UnvalidatedValue(text, pe);
 			if(IExtendable.class.isAssignableFrom(getDeclaredType())) {
@@ -199,6 +268,7 @@ public final class Tier<T> implements IExtendable {
 			} else {
 				putExtension(UnvalidatedValue.class, uv);
 			}
+			return false;
 		}
 	}
 

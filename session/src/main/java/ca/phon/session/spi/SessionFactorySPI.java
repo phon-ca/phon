@@ -17,6 +17,7 @@ package ca.phon.session.spi;
 
 import ca.phon.session.CommentType;
 import ca.phon.session.GemType;
+import ca.phon.session.SystemTierType;
 import ca.phon.session.tierdata.TierData;
 
 import java.util.List;
@@ -58,6 +59,14 @@ public interface SessionFactorySPI {
 	 * @return a new empty record
 	 */
 	public RecordSPI createRecord();
+
+	/**
+	 * Create a new record with given tiers as blind
+	 *
+	 * @param blindTiers
+	 * @return a new record with blind tiers
+	 */
+	public RecordSPI createRecord(List<SystemTierType> blindTiers);
 	
 	/**
 	 * Create a new participant object.

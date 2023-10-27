@@ -33,7 +33,7 @@ public class TierDescriptionImpl implements TierDescriptionSPI {
 
 	private final boolean excludeFromAlignment;
 
-	private final boolean blind;
+	private boolean blind;
 
 	private final List<String> subtypeDelim;
 
@@ -102,6 +102,11 @@ public class TierDescriptionImpl implements TierDescriptionSPI {
 	@Override
 	public boolean isBlind() {
 		return this.blind;
+	}
+
+	@Override
+	public void setBlind(boolean blind) {
+		this.blind = blind;
 	}
 
 	@Override

@@ -36,20 +36,19 @@ public enum UserTierType {
     TimeStamp("time stamp", "%tim", TierData.class,false),
     /**
      * word segment information, each word in orthography will be reproduced along with an
-     * internal-media element, this tier is not directly editable.  Tier name comes
-     * from CLAN
+     * internal-media element, this tier is not directly editable.
      */
-    Wor("Word segments", "%wor", Orthography.class, true),
+    Wor("Word intervals", "%wor", Orthography.class, true),
     /**
      * Morphological tiers from CHAT
      */
     Mor("Morphology", "%mor", MorTierData.class, false),
     Trn("Speech Turn", "%trn", MorTierData.class, false),
-    /**;
+    /**
      * GRASP tiers
      */
-    Gra("Grasp", "%gra", GraspTierData.class, false),
-    Grt("Grasp Turn", "%grt", GraspTierData.class, false);
+    Gra("GRASP", "%gra", GraspTierData.class, false),
+    Grt("GRASP Turn", "%grt", GraspTierData.class, false);
 
     /**
      * tier name in Phon
