@@ -2328,8 +2328,8 @@ public class TranscriptEditor extends JEditorPane {
                 if (tierStart == -1) return;
 
                 var selectionHighlight = getHighlighter().addHighlight(
-                    selection.getRange().getStart() + tierStart,
-                    selection.getRange().getEnd() + tierStart,
+                    selection.getRange().getFirst() + tierStart,
+                    selection.getRange().getLast() + tierStart,
                     painter
                 );
                 selectionHighlightList.add(selectionHighlight);
@@ -2358,8 +2358,8 @@ public class TranscriptEditor extends JEditorPane {
                 if (tierStart == -1) return;
 
                 var selectionHighlight = getHighlighter().addHighlight(
-                    selection.getRange().getStart() + tierStart,
-                    selection.getRange().getEnd() + tierStart,
+                    selection.getRange().getFirst() + tierStart,
+                    selection.getRange().getLast() + tierStart,
                     painter
                 );
                 selectionHighlightList.add(selectionHighlight);
