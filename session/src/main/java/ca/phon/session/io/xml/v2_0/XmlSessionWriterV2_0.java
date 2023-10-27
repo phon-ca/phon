@@ -625,6 +625,7 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 			for(String transcriberId:orthoTier.getTranscribers()) {
 				final Orthography blindOrtho = orthoTier.getBlindTranscription(transcriberId);
 				final XmlBlindTranscriptionType xmlBlindTranscription = factory.createXmlBlindTranscriptionType();
+				xmlBlindTranscription.setTranscriber(transcriberId);
 				if(blindOrtho.getExtension(UnvalidatedValue.class) != null) {
 					xmlBlindTranscription.setUnparsed(writeUnparsed(factory, blindOrtho.getExtension(UnvalidatedValue.class)));
 				} else {
@@ -666,6 +667,7 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 			for(String transcriberId:ipaTier.getTranscribers()) {
 				final IPATranscript blindIpa = ipaTier.getBlindTranscription(transcriberId);
 				final XmlBlindTranscriptionType xmlBlindTranscription = factory.createXmlBlindTranscriptionType();
+				xmlBlindTranscription.setTranscriber(transcriberId);
 				if(blindIpa.getExtension(UnvalidatedValue.class) != null) {
 					xmlBlindTranscription.setUnparsed(writeUnparsed(factory, blindIpa.getExtension(UnvalidatedValue.class)));
 				} else {
@@ -699,6 +701,27 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 			retVal.getPm().add(pmType);
 			alignIdx++;
 		}
+
+		if(alignmentTier.isBlind()) {
+			for(String id: alignmentTier.getTranscribers()) {
+				final PhoneAlignment blindAlign = alignmentTier.getBlindTranscription(id);
+				if(blindAlign.getAlignments().isEmpty()) continue;
+				final XmlBlindTranscriptionType xmlBlindTranscriptionType = factory.createXmlBlindTranscriptionType();
+				alignIdx = 0;
+				for(PhoneMap pm:blindAlign.getAlignments()) {
+					int tidx = pm.getTopElements().length == 0 ? -1 : alignIdx;
+					int aidx = pm.getBottomElements().length == 0 ? -1 : alignIdx;
+					xmlBlindTranscriptionType.setTranscriber(id);
+					final XmlPhoneMapType pmType = writePhoneMap(factory, pm);
+					pmType.setTarget(BigInteger.valueOf(tidx));
+					pmType.setActual(BigInteger.valueOf(aidx));
+					xmlBlindTranscriptionType.getPm().add(pmType);
+					alignIdx++;
+				}
+				retVal.getBlindTranscription().add(xmlBlindTranscriptionType);
+			}
+		}
+
 		return retVal;
 	}
 
@@ -743,6 +766,7 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 		if(userTier.isBlind()) {
 			for(String transcriberId:userTier.getTranscribers()) {
 				final XmlBlindTranscriptionType xmlBlindTranscription = factory.createXmlBlindTranscriptionType();
+				xmlBlindTranscription.setTranscriber(transcriberId);
 				Object blindVal = userTier.getBlindTranscription(transcriberId);
 				if(blindVal instanceof Orthography blindOrtho) {
 					xmlBlindTranscription.setU(writeOrthography(factory, blindOrtho));

@@ -36,8 +36,9 @@ import java.util.*;
  *     <li>IPA Target - model transcription of words in the utterance</li>
  *     <li>IPA Actual - actual transcription of words</li>
  *     <li>Segment - media segment time for record</li>
- *     <li>Notes - notes for record</li>
  * </ul>
+ *
+ * As of Phon 4.0 the Notes tiers has been deprecated, use {@link UserTierType#Comments} instead.
  *
  * Additional tiers, called user-defined tiers, may also be added to the record.
  */
@@ -117,6 +118,11 @@ public final class Record extends ExtendableObject {
 	 */
 	public MediaSegment getMediaSegment() { return getSegmentTier().getValue(); }
 
+	/**
+	 * Set media segment for record
+	 *
+	 * @param segment
+	 */
 	public void setMediaSegment(MediaSegment segment) {
 		getSegmentTier().setValue(segment);
 	}
@@ -175,50 +181,117 @@ public final class Record extends ExtendableObject {
 		return recordImpl.getOrthographyTier();
 	}
 
+	/**
+	 * Get validated value of IPA Target tier
+	 *
+	 * @return ipa target
+	 */
 	public IPATranscript getIPATarget() {
 		return getIPATargetTier().getValue();
 	}
 
+	/**
+	 * Set validated value of IPA Target tier
+	 *
+	 * @param ipa
+	 */
 	public void setIPATarget(IPATranscript ipa) {
 		getIPATargetTier().setValue(ipa);
 	}
 
+	/**
+	 * Get IPA Target tier
+	 *
+	 * @return ipa target tier
+	 */
 	public Tier<IPATranscript> getIPATargetTier() {
 		return recordImpl.getIPATargetTier();
 	}
 
+	/**
+	 * Get validated value of IPA Actual tier
+	 *
+	 * @return ipa target
+	 */
 	public IPATranscript getIPAActual() {
 		return getIPAActualTier().getValue();
 	}
 
+	/**
+	 * Set validated value of IPA Actual tier
+	 *
+	 * @param ipa
+	 */
 	public void setIPAActual(IPATranscript ipa) {
 		getIPAActualTier().setValue(ipa);
 	}
 
+	/**
+	 * Get IPA Actual tier
+	 *
+	 * @return IPA Actual tier
+	 */
 	public Tier<IPATranscript> getIPAActualTier() {
 		return recordImpl.getIPAActualTier();
 	}
 
+	/**
+	 * Get validated phone alignment between IPA Target and IPA Actual
+	 *
+	 * @return phone alignment
+	 */
 	public PhoneAlignment getPhoneAlignment() {
 		return getPhoneAlignmentTier().getValue();
 	}
 
+	/**
+	 * Set validated phone alignment between IPA Target and IPA Actual
+	 *
+	 * @param phoneAlignment
+	 */
 	public void setPhoneAlignment(PhoneAlignment phoneAlignment) {
 		getPhoneAlignmentTier().setValue(phoneAlignment);
 	}
 
+	/**
+	 * Get phone alignment tier
+	 *
+	 * @return phone alignment tier
+	 */
 	public Tier<PhoneAlignment> getPhoneAlignmentTier() {
 		return recordImpl.getPhoneAlignmentTier();
 	}
 
+	/**
+	 * Set validated value of Notes tier
+	 *
+	 * @return notes value
+	 * @deprecated since Phon 4.0, use 'Comments' tier instead
+	 */
+	@Deprecated
 	public TierData getNotes() {
 		return getNotesTier().getValue();
 	}
 
+	/**
+	 * Get validated value of Notes tier
+	 *
+	 * @param tierData
+	 * @deprecated since Phon 4.0, use 'Comments' tier instead
+	 */
+	@Deprecated
 	public void setNotes(TierData tierData) {
 		getNotesTier().setValue(tierData);
 	}
 
+
+	/**
+	 * Get Notes tier
+	 *
+	 * @return notes tier
+	 * @deprecated since Phon 4.0, use 'Comments' tier instead
+	 */
+	@Deprecated
 	public Tier<TierData> getNotesTier() {
 		return recordImpl.getNotesTier();
 	}

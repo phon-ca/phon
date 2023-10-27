@@ -81,9 +81,9 @@ public interface TierElementFilter {
         final List<OrthographyTierElementFilter.AlignableType> alignableTypes =
                 List.of(OrthographyTierElementFilter.AlignableType.Word);
         final OrthographyTierElementFilter.Options options = new OrthographyTierElementFilter.Options(
-                false, true, true,
+                true, true, true,
                 false, true, true, true,
-                false, false, false, false);
+                false, true, true, true);
         return new OrthographyTierElementFilter(alignableTypes, options);
     }
 

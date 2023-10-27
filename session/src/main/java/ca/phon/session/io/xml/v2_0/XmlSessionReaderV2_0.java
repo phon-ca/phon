@@ -61,10 +61,10 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
- * Session XML reader for session files with
- * version '1.3'
+ * Session XML reader for session files with starting element {https://phon.ca/ns/session}session (version '2.0'.)
  *
  */
 @XMLSerial(
@@ -167,6 +167,7 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 			}
 		}
 
+
 		// copy tier information
 		final XmlUserTiersType userTiers = xmlSessionType.getUserTiers();
 		if(userTiers != null) {
@@ -188,6 +189,12 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 		// copy transcriber information
 		if(xmlSessionType.getBlindMode() != null) {
 			retVal.setBlindTiers(xmlSessionType.getBlindMode().getBlindTier());
+			for(String tierName:retVal.getBlindTiers()) {
+				final TierDescription td = findTierDescription(retVal, tierName);
+				if(td != null && retVal.getBlindTiers().contains(tierName)) {
+					td.setBlind(true);
+				}
+			}
 			for (XmlTranscriberType tt : xmlSessionType.getBlindMode().getTranscriber()) {
 				final Transcriber t = copyTranscriber(factory, tt);
 				retVal.addTranscriber(t);
@@ -435,8 +442,13 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 		return factory.createComment(type, tierData);
 	}
 
+	@SuppressWarnings("unchecked")
 	Record readRecord(SessionFactory factory, Session session, XmlRecordType rt) {
-		final Record retVal = factory.createRecord();
+		final List<SystemTierType> blindSystemTiers =
+				session.getBlindTiers().stream()
+						.filter(tn -> SystemTierType.tierFromString(tn) != null)
+						.map(SystemTierType::tierFromString).toList();
+		final Record retVal = factory.createRecord(blindSystemTiers);
 
 		try {
 			if(rt.getUuid() != null) {
@@ -488,7 +500,7 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 			retVal.setIPAActual(ipaActual);
 			for(var xmlBlindTranscription:rt.getIpaActual().getBlindTranscription()) {
 				final IPATranscript blindIpa = readBlindIPATranscript(factory, xmlBlindTranscription);
-				retVal.getIPATargetTier().setBlindTranscription(xmlBlindTranscription.getTranscriber(), blindIpa);
+				retVal.getIPAActualTier().setBlindTranscription(xmlBlindTranscription.getTranscriber(), blindIpa);
 			}
 		} else {
 			retVal.setIPAActual(new IPATranscript());
@@ -516,9 +528,14 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 		if(rt.getAlignment() != null) {
 			final PhoneAlignment alignment = readAlignment(factory, retVal, rt.getAlignment());
 			retVal.setPhoneAlignment(alignment);
+			for(var xmlBlindTranscription:rt.getAlignment().getBlindTranscription()) {
+				final PhoneAlignment blindAlign = readBlindAlignment(factory, retVal, xmlBlindTranscription);
+				retVal.getPhoneAlignmentTier().setBlindTranscription(xmlBlindTranscription.getTranscriber(), blindAlign);
+			}
 		}
 
 		// user tiers
+
 		for(XmlUserTierType utt:rt.getUserTier()) {
 			final TierDescription td = findTierDescription(session, utt.getName());
 			if(td == null) {
@@ -527,10 +544,22 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 			Tier<?> userTier = factory.createTier(utt.getName(), td.getDeclaredType(), td.getTierParameters(), td.isExcludeFromAlignment(), td.isBlind());
 			if(td.getDeclaredType() == Orthography.class) {
 				((Tier<Orthography>)userTier).setValue(readUserTierOrthography(factory, utt));
+				for(var xmlBlindTranscription:utt.getBlindTranscription()) {
+					final Orthography blind = readBlindOrthography(factory, xmlBlindTranscription);
+					((Tier<Orthography>)userTier).setBlindTranscription(xmlBlindTranscription.getTranscriber(), blind);
+				}
 			} else if(td.getDeclaredType() == IPATranscript.class) {
 				((Tier<IPATranscript>)userTier).setValue(readUserTierIPATranscript(factory, utt));
+				for(var xmlBlindTranscription:utt.getBlindTranscription()) {
+					final IPATranscript blind = readBlindIPATranscript(factory, xmlBlindTranscription);
+					((Tier<IPATranscript>)userTier).setBlindTranscription(xmlBlindTranscription.getTranscriber(), blind);
+				}
 			} else if(td.getDeclaredType() == TierData.class) {
 				((Tier<TierData>) userTier).setValue(readUserTier(factory, utt));
+				for(var xmlBlindTranscription:utt.getBlindTranscription()) {
+					final TierData blind = readBlindUserTierTranscript(factory, xmlBlindTranscription);
+					((Tier<TierData>) userTier).setBlindTranscription(xmlBlindTranscription.getTranscriber(), blind);
+				}
 			} else if(td.getDeclaredType() == MorTierData.class) {
 				((Tier<MorTierData>) userTier).setValue(readMorUserTier(factory, utt));
 			} else if(td.getDeclaredType() == GraspTierData.class) {
@@ -681,13 +710,45 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 	 * Read alignment data
 	 */
 	private PhoneAlignment readAlignment(SessionFactory factory, Record record, XmlAlignmentTierType att) {
+		return readAlignment(factory, record, att.getPm());
+	}
+
+	private PhoneAlignment readAlignment(SessionFactory factory, Record record, List<XmlPhoneMapType> pmList) {
 		final Tier<IPATranscript> ipaT = record.getIPATargetTier();
 		final List<IPATranscript> targetWords = ipaT.hasValue() ? ipaT.getValue().words() : new ArrayList<>();
 		final Tier<IPATranscript> ipaA = record.getIPAActualTier();
 		final List<IPATranscript> actualWords = ipaA.hasValue() ? ipaA.getValue().words() : new ArrayList<>();
 
 		final List<PhoneMap> alignments = new ArrayList<>();
-		for(XmlPhoneMapType pmType:att.getPm()) {
+		for(XmlPhoneMapType pmType:pmList) {
+			final int tidx = pmType.getTarget().intValue();
+			final int aidx = pmType.getActual().intValue();
+			final IPATranscript ipaTw = tidx >= 0 && tidx < targetWords.size() ? targetWords.get(tidx) : new IPATranscript();
+			final IPATranscript ipaAw = aidx >= 0 && aidx < actualWords.size() ? actualWords.get(aidx) : new IPATranscript();
+			final PhoneMap pm = new PhoneMap(ipaTw, ipaAw);
+
+			final Integer[][] alignmentData = new Integer[2][];
+			alignmentData[0] = pmType.getTop().toArray(new Integer[0]);
+			alignmentData[1] = pmType.getBottom().toArray(new Integer[0]);
+			if(alignmentData[0].length != alignmentData[1].length) {
+				throw new IllegalStateException("Invalid alignment");
+			}
+			pm.setTopAlignment(alignmentData[0]);
+			pm.setBottomAlignment(alignmentData[1]);
+			alignments.add(pm);
+		}
+
+		return new PhoneAlignment(alignments);
+	}
+
+	private PhoneAlignment readBlindAlignment(SessionFactory factory, Record record, XmlBlindTranscriptionType xmlBlindTranscription) {
+		final IPATranscript ipaT = record.getIPATargetTier().getBlindTranscription(xmlBlindTranscription.getTranscriber());
+		final List<IPATranscript> targetWords = ipaT != null ? ipaT.words() : new ArrayList<>();
+		final IPATranscript ipaA = record.getIPAActualTier().getBlindTranscription(xmlBlindTranscription.getTranscriber());
+		final List<IPATranscript> actualWords = ipaA != null ? ipaA.words() : new ArrayList<>();
+
+		final List<PhoneMap> alignments = new ArrayList<>();
+		for(XmlPhoneMapType pmType:xmlBlindTranscription.getPm()) {
 			final int tidx = pmType.getTarget().intValue();
 			final int aidx = pmType.getActual().intValue();
 			final IPATranscript ipaTw = tidx >= 0 && tidx < targetWords.size() ? targetWords.get(tidx) : new IPATranscript();

@@ -18,6 +18,7 @@ package ca.phon.session.impl;
 import ca.phon.plugin.*;
 import ca.phon.session.CommentType;
 import ca.phon.session.GemType;
+import ca.phon.session.SystemTierType;
 import ca.phon.session.spi.*;
 import ca.phon.session.tierdata.TierData;
 
@@ -38,6 +39,11 @@ public class SessionFactoryImpl implements SessionFactorySPI, IPluginExtensionPo
 	@Override
 	public RecordSPI createRecord() {
 		return new RecordImpl();
+	}
+
+	@Override
+	public RecordSPI createRecord(List<SystemTierType> blindTiers) {
+		return new RecordImpl(blindTiers);
 	}
 
 	@Override

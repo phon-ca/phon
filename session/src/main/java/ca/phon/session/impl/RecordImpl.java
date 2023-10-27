@@ -54,19 +54,23 @@ public class RecordImpl implements RecordSPI {
 	private final Map<String, Tier<?>> userDefined;
 
 	RecordImpl() {
+		this(List.of());
+	}
+
+	RecordImpl(List<SystemTierType> blindTiers) {
 		super();
 		final SessionFactory factory = SessionFactory.newFactory();
-		orthography = factory.createTier(SystemTierType.Orthography.getName(), Orthography.class);
+		orthography = factory.createTier(SystemTierType.Orthography.getName(), Orthography.class, new HashMap<>(), false, blindTiers.contains(SystemTierType.Orthography));
 		orthography.setValue(new Orthography());
-		ipaTarget = factory.createTier(SystemTierType.IPATarget.getName(), IPATranscript.class);
+		ipaTarget = factory.createTier(SystemTierType.IPATarget.getName(), IPATranscript.class, new HashMap<>(), false, blindTiers.contains(SystemTierType.IPATarget));
 		ipaTarget.setValue(new IPATranscript());
-		ipaActual = factory.createTier(SystemTierType.IPAActual.getName(), IPATranscript.class);
+		ipaActual = factory.createTier(SystemTierType.IPAActual.getName(), IPATranscript.class, new HashMap<>(), false, blindTiers.contains(SystemTierType.IPAActual));
 		ipaActual.setValue(new IPATranscript());
 		segmentTier = factory.createTier(SystemTierType.Segment.getName(), MediaSegment.class, new HashMap<>(), true);
 		segmentTier.setValue(SessionFactory.newFactory().createMediaSegment(new MediaSegmentImpl(0.0f, 0.0f, MediaUnit.Millisecond)));
-		notes = factory.createTier(SystemTierType.Notes.getName(), TierData.class, new HashMap<>(), true);
+		notes = factory.createTier(SystemTierType.Notes.getName(), TierData.class, new HashMap<>(), true, blindTiers.contains(SystemTierType.Notes));
 		notes.setValue(new TierData());
-		alignment = factory.createTier(SystemTierType.PhoneAlignment.getName(), PhoneAlignment.class);
+		alignment = factory.createTier(SystemTierType.PhoneAlignment.getName(), PhoneAlignment.class, new HashMap<>(), false, blindTiers.contains(SystemTierType.IPATarget) || blindTiers.contains(SystemTierType.IPAActual));
 		PhoneAlignment phoneAlignment = PhoneAlignment.fromTiers(ipaTarget, ipaActual);
 		alignment.setValue(phoneAlignment);
 		userDefined = Collections.synchronizedMap(new LinkedHashMap<>());

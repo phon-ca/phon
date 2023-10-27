@@ -39,6 +39,8 @@ public interface TierDescriptionSPI {
 
 	public boolean isBlind();
 
+	public void setBlind(boolean blind);
+
 	public List<String> getSubtypeDelim();
 
 	public String getSubtypeExpr();

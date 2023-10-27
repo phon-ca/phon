@@ -73,6 +73,15 @@ public final class TierDescription extends ExtendableObject {
 	public boolean isBlind() { return tierDescriptionImpl.isBlind(); }
 
 	/**
+	 * Set the blind status for this tier
+	 *
+	 * @param blind
+	 */
+	public void setBlind(boolean blind) {
+		this.tierDescriptionImpl.setBlind(blind);
+	}
+
+	/**
 	 * Does this tier have subtype information.  This means either subtypeDelim
 	 * or subtypeExpr have been specified.
 	 *

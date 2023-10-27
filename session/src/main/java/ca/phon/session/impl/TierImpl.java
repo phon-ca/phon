@@ -40,7 +40,7 @@ public class TierImpl<T> implements TierSPI<T> {
 
 	private final boolean excludeFromAlignment;
 
-	private final boolean blind;
+	private boolean blind;
 
 	private final List<String> subtypeDelim;
 
@@ -99,6 +99,11 @@ public class TierImpl<T> implements TierSPI<T> {
 	@Override
 	public boolean isBlind() {
 		return blind;
+	}
+
+	@Override
+	public void setBlind(boolean blind) {
+		this.blind = blind;
 	}
 
 	@Override
