@@ -3,7 +3,6 @@ package ca.phon.app.session.editor.view.transcriptEditor;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.actions.FindAndReplaceAction;
 import ca.phon.app.session.editor.search.FindAndReplacePanel;
-import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.app.session.editor.view.transcriptEditor.actions.*;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.MediaUnit;
@@ -19,7 +18,6 @@ import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import org.jdesktop.swingx.HorizontalLayout;
-import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -239,6 +237,7 @@ public class TranscriptView extends EditorView {
         retVal.add(new ToggleAlignmentVisibleAction(getEditor(), this));
         retVal.add(new ToggleAlignmentIsComponentAction(getEditor(), this));
         retVal.add(new FindAndReplaceAction(getEditor()));
+        retVal.add(new ExportAsPDFAction(getEditor(), this));
 
         return retVal;
     }
@@ -328,6 +327,10 @@ public class TranscriptView extends EditorView {
         }
         revalidate();
         repaint();
+    }
+
+    public TranscriptEditor getTranscriptEditor() {
+        return transcriptEditor;
     }
 
     //endregion Getters and Setters

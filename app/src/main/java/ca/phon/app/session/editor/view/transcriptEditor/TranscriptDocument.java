@@ -55,6 +55,8 @@ public class TranscriptDocument extends DefaultStyledDocument {
         headerTierMap = new HashMap<>();
         headerTierMap.put("tiers", sessionFactory.createTier("Tiers", TierData.class));
         headerTierMap.put("participants", sessionFactory.createTier("Participants", TierData.class));
+        headerTierMap.put("languages", sessionFactory.createTier("Languages", Languages.class));
+        headerTierMap.put("media", sessionFactory.createTier("Media", TierData.class));
     }
 
 
@@ -163,6 +165,10 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
     public void setAlignmentParent(TierViewItem alignmentParent) {
         this.alignmentParent = alignmentParent;
+    }
+
+    public Map<String, Tier<?>> getHeaderTierMap() {
+        return headerTierMap;
     }
 
     // endregion Getters and Setters
@@ -556,11 +562,12 @@ public class TranscriptDocument extends DefaultStyledDocument {
                 endOffset = getGemEnd(elem.asGem());
             }
             else if (elem.isRecord()) {
-                Transcript transcript = session.getTranscript();
-                int recordIndex = transcript.getRecordPosition(elem.asRecord());
-                int recordElementIndex = transcript.getRecordElementIndex(recordIndex);
-                deleteRecord(recordIndex, recordElementIndex);
                 return;
+//                Transcript transcript = session.getTranscript();
+//                int recordIndex = transcript.getRecordPosition(elem.asRecord());
+//                int recordElementIndex = transcript.getRecordElementIndex(recordIndex);
+//                deleteRecord(recordIndex, recordElementIndex);
+//                return;
             }
 
             startOffset -= labelLength;
@@ -828,6 +835,28 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return -1;
     }
 
+    public int getRecordStart(Record record) {
+        return getRecordStart(record, false);
+    }
+
+    public int getRecordStart(Record record, boolean includeSeparator) {
+        Element root = getDefaultRootElement();
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() < 1) continue;
+            AttributeSet attrs = elem.getElement(0).getAttributes();
+            Record currentRecord = (Record) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
+            if (currentRecord == null) continue;
+            var tier = attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
+            if ((tier != null || includeSeparator) && currentRecord == record) {
+                return elem.getStartOffset();
+            }
+        }
+
+        return -1;
+    }
+
     public int getRecordStart(Tier<?> tier) {
         Element root = getDefaultRootElement();
 
@@ -865,6 +894,25 @@ public class TranscriptDocument extends DefaultStyledDocument {
             if (currentRecord == null) continue;
             int currentRecordIndex = session.getRecordPosition(currentRecord);
             if (recordIndex == currentRecordIndex) {
+                retVal = Math.max(retVal, elem.getEndOffset());
+            }
+        }
+
+        return retVal;
+    }
+
+    public int getRecordEnd(Record record) {
+        Element root = getDefaultRootElement();
+
+        int retVal = -1;
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() < 1) continue;
+            AttributeSet attrs = elem.getElement(0).getAttributes();
+            Record currentRecord = (Record) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
+            if (currentRecord == null) continue;
+            if (record == currentRecord) {
                 retVal = Math.max(retVal, elem.getEndOffset());
             }
         }
@@ -1627,39 +1675,13 @@ public class TranscriptDocument extends DefaultStyledDocument {
         }
     }
 
-    public void deleteRecord(int removedRecordIndex, int removedRecordElementIndex) {
+    public void deleteRecord(Record removedRecord) {
         try {
-            Transcript transcript = session.getTranscript();
-            var tierView = session.getTierView();
-            AttributeSet newLineAttrs;
-
-            int start = getRecordStart(removedRecordIndex, true);
+            int start = getRecordStart(removedRecord, true);
+            int end = getRecordEnd(removedRecord);
 
             bypassDocumentFilter = true;
-            remove(start, getLength() - start);
-
-            appendBatchEndStart();
-
-            for (int i = removedRecordElementIndex; i < transcript.getNumberOfElements(); i++) {
-                // TODO: Figure out what's going on here
-//                if (i < 0) continue;
-
-                Transcript.Element elem = transcript.getElementAt(i);
-                if (elem.isRecord()) {
-                    newLineAttrs = writeRecord(elem.asRecord(), transcript, tierView);
-                }
-                else if (elem.isComment()) {
-                    newLineAttrs = writeComment(elem.asComment());
-                }
-                else {
-                    newLineAttrs = writeGem(elem.asGem());
-                }
-
-                appendBatchLineFeed(newLineAttrs);
-            }
-
-            processBatchUpdates(start);
-            setGlobalParagraphAttributes();
+            remove(start, end - start);
         }
         catch (BadLocationException e) {
             LogUtil.severe(e);
@@ -2404,7 +2426,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         // Add media line if present
         var sessionMedia = session.getMediaLocation();
         if (sessionMedia != null) {
-            Tier<TierData> mediaTier = sessionFactory.createTier("Media", TierData.class);
+            Tier<TierData> mediaTier = (Tier<TierData>) headerTierMap.get("media");
             mediaTier.setText(sessionMedia);
             newLineAttrs = writeGeneric("Media", mediaTier);
             appendBatchLineFeed(newLineAttrs);
@@ -2413,7 +2435,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
         // Add languages line if present
         var sessionLanguages = session.getLanguages();
         if (sessionLanguages != null && !sessionLanguages.isEmpty()) {
-            Tier<Languages> languagesTier = sessionFactory.createTier("Languages", Languages.class);
+            Tier<Languages> languagesTier = (Tier<Languages>) headerTierMap.get("languages");
             languagesTier.setFormatter(new Formatter<>() {
                 @Override
                 public String format(Languages obj) {

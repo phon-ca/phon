@@ -1001,14 +1001,14 @@ public class TranscriptEditor extends JEditorPane {
         Tier caretTier = (Tier) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
         Record caretRecord = (Record) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
 
-        boolean caretInDeletedRecord = caretRecord != null && getSession().getRecordPosition(caretRecord) == deletedRecordIndex;
+        boolean caretInDeletedRecord = caretRecord != null && caretRecord == editorEvent.data().record();
 
         int caretOffset = doc.getOffsetInContent(startCaretPos);
 
 
         // Delete the record from the doc
         var data = editorEvent.data();
-        getTranscriptDocument().deleteRecord(data.recordIndex(), data.elementIndex());
+        getTranscriptDocument().deleteRecord(data.record());
 
 
         // Caret in record / tier
@@ -1402,6 +1402,9 @@ public class TranscriptEditor extends JEditorPane {
     }
 
     public void tierDataChanged(Record record, Tier<?> tier, String newData) {
+
+        System.out.println("Changed tier: " + tier.getName());
+
         Tier<?> dummy = SessionFactory.newFactory().createTier("dummy", tier.getDeclaredType());
         dummy.setText(newData);
 
@@ -1905,7 +1908,9 @@ public class TranscriptEditor extends JEditorPane {
     }
 
     private void onTranscriptElementDeleted(EditorEvent<EditorEventType.ElementDeletedData> editorEvent) {
-        getTranscriptDocument().deleteTranscriptElement(editorEvent.data().element());
+        if (!editorEvent.data().element().isRecord()) {
+            getTranscriptDocument().deleteTranscriptElement(editorEvent.data().element());
+        }
     }
 
     private void onCommentTypeChanged(EditorEvent<EditorEventType.CommentTypeChangedData> editorEvent) {
@@ -1946,7 +1951,7 @@ public class TranscriptEditor extends JEditorPane {
                     switch (prevElemType) {
                         case TranscriptStyleConstants.ATTR_KEY_RECORD -> {
                             Tier<?> prevTier = (Tier<?>) prevAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
-                            if (prevTier == null) break;
+                            if (prevTier == null || prevTier.getDeclaredType().equals(PhoneAlignment.class)) break;
                             if (nextElemType != null && nextElemType.equals(TranscriptStyleConstants.ATTR_KEY_RECORD)) {
                                 if (nextTier != null && nextTier == prevTier) break;
                             }
