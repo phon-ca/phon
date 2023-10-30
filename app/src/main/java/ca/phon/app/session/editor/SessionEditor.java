@@ -603,7 +603,7 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 		if(this.getSession() != null) {
 			sessionMenu.addSeparator();
 			JMenuItem itrItem = new JMenuItem(new ITRAction(this));
-			itrItem.setEnabled(this.getDataModel().getTranscriber() == null && this.getSession().getTranscriberCount() > 1);
+			itrItem.setEnabled(this.getDataModel().getTranscriber() == Transcriber.VALIDATOR && this.getSession().getTranscriberCount() > 1);
 			sessionMenu.add(itrItem);
 		}
 
