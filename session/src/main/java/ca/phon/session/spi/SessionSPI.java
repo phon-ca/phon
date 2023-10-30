@@ -74,6 +74,23 @@ public interface SessionSPI {
 	 * @return list of all tiers including system tiers and user defined tiers
 	 */
 	public List<TierDescription> getTiers();
+
+	/**
+	 * Get tier parameters for system tier
+	 *
+	 * @param systemTier
+	 * @return unmodifiable tier params for given system tier
+	 */
+	public Map<String, String> getSystemTierParameters(SystemTierType systemTier);
+
+	/**
+	 * Set tier parameter for system tier
+	 *
+	 * @param systemTier
+	 * @param key
+	 * @param value
+	 */
+	public void putSystemTierParam(SystemTierType systemTier, String key, String value);
 	
 	/*
 	 * Custom tiers defined for the session

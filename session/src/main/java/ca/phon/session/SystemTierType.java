@@ -32,6 +32,7 @@ public enum SystemTierType {
 	ActualSyllables("Actual Syllables", IPATranscript.class, true),
 	PhoneAlignment("Alignment", PhoneAlignment.class, true),
 	Segment("Segment", MediaSegment.class, true),
+	@Deprecated
 	Notes("Notes", TierData.class, false);
 	
 	private String tierName;

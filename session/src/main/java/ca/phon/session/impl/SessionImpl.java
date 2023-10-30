@@ -54,6 +54,9 @@ public class SessionImpl implements SessionSPI {
 	
 	private final List<TierViewItem> tierOrder =
 			Collections.synchronizedList(new ArrayList<>());
+
+	private final Map<SystemTierType, Map<String, String>> systemTierParamMap =
+			Collections.synchronizedMap(new LinkedHashMap<>());
 	
 	private final List<TierDescription> userTiers =
 			Collections.synchronizedList(new ArrayList<>());
@@ -208,6 +211,18 @@ public class SessionImpl implements SessionSPI {
 			retVal.add(getUserTier(i));
 		}
 		return Collections.unmodifiableList(retVal);
+	}
+
+	@Override
+	public Map<String, String> getSystemTierParameters(SystemTierType systemTier) {
+		final Map<String, String> systemParamMap = systemTierParamMap.computeIfAbsent(systemTier, t -> new LinkedHashMap<>());
+		return Collections.unmodifiableMap(systemParamMap);
+	}
+
+	@Override
+	public void putSystemTierParam(SystemTierType systemTier, String key, String value) {
+		final Map<String, String> systemParamMap = systemTierParamMap.computeIfAbsent(systemTier, t -> new LinkedHashMap<>());
+		systemParamMap.put(key, value);
 	}
 
 	@Override

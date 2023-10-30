@@ -959,7 +959,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		Record leftRecord = sessionFactory.cloneRecord(recordToSplit);
 		leftRecord.getMediaSegment().setEndValue(splitTime * 1000.0f);
 
-		Record rightRecord = sessionFactory.createRecord();
+		Record rightRecord = sessionFactory.createRecord(getParentView().getEditor().getSession());
 		MediaSegment rightSeg = sessionFactory.createMediaSegment();
 		long segOffset = (long) Math.ceil(timeAtX(getTimeModel().getTimeInsets().left + 1) * 1000.0f);
 		rightSeg.setStartValue((splitTime * 1000.0f) + segOffset);

@@ -224,9 +224,8 @@ public class TimelineWaveformTier extends TimelineTier  {
 		}
 		
 		final SessionFactory factory = SessionFactory.newFactory();
-		Record utt = factory.createRecord();
-		utt.setSpeaker(speaker);
-		
+		Record utt = factory.createRecord(getParentView().getEditor().getSession(), speaker);
+
 		MediaSegment m = factory.createMediaSegment();
 		m.setStartValue(selectionInterval.getStartMarker().getTime() * 1000.0f);
 		m.setEndValue(selectionInterval.getEndMarker().getTime() * 1000.0f);

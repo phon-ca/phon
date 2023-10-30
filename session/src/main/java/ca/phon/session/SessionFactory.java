@@ -25,6 +25,7 @@ import org.apache.logging.log4j.LogManager;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A factory for creating mutable session objects.
@@ -304,13 +305,43 @@ public final class SessionFactory extends ExtendableObject {
 	}
 
 	/**
+	 * Create a new record for the given session with current blind tier status and tier params setup
+	 * correctly for system tiers.
+	 *
+	 * @param session
+	 * @return new record based on session config
+	 */
+	public Record createRecord(Session session) {
+		// setup system tier param map
+		final Map<SystemTierType, Map<String, String>> systemTierParamMap = new LinkedHashMap<>();
+		systemTierParamMap.put(SystemTierType.Orthography, session.getSystemTierParameters(SystemTierType.Orthography));
+		systemTierParamMap.put(SystemTierType.IPATarget, session.getSystemTierParameters(SystemTierType.IPATarget));
+		systemTierParamMap.put(SystemTierType.IPAActual, session.getSystemTierParameters(SystemTierType.IPAActual));
+		systemTierParamMap.put(SystemTierType.PhoneAlignment, session.getSystemTierParameters(SystemTierType.PhoneAlignment));
+		systemTierParamMap.put(SystemTierType.Notes, session.getSystemTierParameters(SystemTierType.Notes));
+
+		// blind tiers
+		final List<SystemTierType> blindSystemTiers = Arrays.stream(SystemTierType.values())
+				.filter(stt -> session.getBlindTiers().contains(stt.getName())).toList();
+
+		final Record retVal = createRecord(blindSystemTiers, systemTierParamMap);
+
+		// add user tiers
+		for(TierDescription td:session.getUserTiers()) {
+			retVal.putTier(createTier(td));
+		}
+
+		return retVal;
+	}
+
+	/**
 	 * Create a new record with provided system tiers as blind tiers
 	 *
 	 * @param blindTiers
 	 * @return
 	 */
-	public Record createRecord(List<SystemTierType> blindTiers) {
-		final RecordSPI recordImpl = sessionFactoryImpl.createRecord(blindTiers);
+	public Record createRecord(List<SystemTierType> blindTiers, Map<SystemTierType, Map<String, String>> systemTierParamMap) {
+		final RecordSPI recordImpl = sessionFactoryImpl.createRecord(blindTiers, systemTierParamMap);
 		return createRecord(recordImpl);
 	}
 	
@@ -326,6 +357,19 @@ public final class SessionFactory extends ExtendableObject {
 	 */
 	public Record createRecord(Participant speaker) {
 		final Record retVal = createRecord();
+		retVal.setSpeaker(speaker);
+		return retVal;
+	}
+
+	/**
+	 * Create a new record for given session and speaker
+	 *
+	 * @param session
+	 * @param speaker
+	 * @return new record
+	 */
+	public Record createRecord(Session session, Participant speaker) {
+		final Record retVal = createRecord(session);
 		retVal.setSpeaker(speaker);
 		return retVal;
 	}

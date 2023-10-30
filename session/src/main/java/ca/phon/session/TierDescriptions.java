@@ -46,12 +46,51 @@ public final class TierDescriptions implements IExtendable, Iterable<TierDescrip
 	}
 
 	/**
-	 * Get tier description by name
+	 * Get  tier description by name
 	 *
 	 * @param tierName
-	 * @return tier description or null if not found
+	 * @return tier description or null if given tier name is not a user tier or a system tier
 	 */
 	public TierDescription get(String tierName) {
+		final SystemTierType systemTierType = SystemTierType.tierFromString(tierName);
+		if(systemTierType != null) {
+			return getSystemTierDescription(systemTierType);
+		} else {
+			return getUserTierDescription(tierName);
+		}
+	}
+
+	/**
+	 * Get tier description for system tier
+	 *
+	 * @param tierName
+	 * @return tier description for system tier, this will include any tier parameters and blind status
+	 */
+	public TierDescription getSystemTierDescription(String tierName) {
+        return getSystemTierDescription(SystemTierType.tierFromString(tierName));
+	}
+
+	/**
+	 * Get tier description for system tier
+	 *
+	 * @param systemTierType
+	 * @return tier description for system tier, this will include any tier parameters and blind status
+	 */
+	public TierDescription getSystemTierDescription(SystemTierType systemTierType) {
+		if(systemTierType == null) return null;
+		final SessionFactory factory = SessionFactory.newFactory();
+		final TierDescription td = factory.createTierDescription(systemTierType.getName(), systemTierType.getDeclaredType(),
+				new HashMap<>(), false, false);
+		return td;
+	}
+
+	/**
+	 * Get user tier description by name
+	 *
+	 * @param tierName
+	 * @return user tier description of null if given tier name is not a user tier
+	 */
+	public TierDescription getUserTierDescription(String tierName) {
 		Optional<TierDescription> tdOpt =
 				stream().filter(td -> td.getName().equals(tierName)).findFirst();
         return tdOpt.orElse(null);

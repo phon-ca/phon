@@ -232,7 +232,7 @@ public class CSVImporter {
             );
 
             // Record
-            Record record = sessionFactory.createRecord();
+            Record record = sessionFactory.createRecord(currentSession.get());
             record.setSpeaker(participant);
 
             if (segment != null) {
