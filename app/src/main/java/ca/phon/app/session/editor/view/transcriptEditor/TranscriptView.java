@@ -1,7 +1,8 @@
 package ca.phon.app.session.editor.view.transcriptEditor;
 
 import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
+import ca.phon.app.session.editor.actions.FindAndReplaceAction;
+import ca.phon.app.session.editor.search.FindAndReplacePanel;
 import ca.phon.app.session.editor.view.transcriptEditor.actions.*;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.MediaUnit;
@@ -17,7 +18,6 @@ import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import org.jdesktop.swingx.HorizontalLayout;
-import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -35,11 +35,15 @@ public class TranscriptView extends EditorView {
     public final static String FONT_SIZE_DELTA_PROP = TranscriptView.class.getName() + ".fontSizeDelta";
     public final static float DEFAULT_FONT_SIZE_DELTA = 0.0f;
     public float fontSizeDelta = PrefHelper.getFloat(FONT_SIZE_DELTA_PROP, DEFAULT_FONT_SIZE_DELTA);
+    private boolean findAndReplaceVisible = false;
+    private FindAndReplacePanel findAndReplacePanel;
+    private JPanel centerPanel;
 
     public TranscriptView(SessionEditor editor) {
         super(editor);
         this.transcriptEditor = new TranscriptEditor(
-            editor.getSession(),
+            editor.getDataModel(),
+            editor.getSelectionModel(),
             editor.getEventManager(),
             editor.getUndoSupport(),
             editor.getUndoManager()
@@ -65,11 +69,16 @@ public class TranscriptView extends EditorView {
     }
 
     private void initUI() {
+
+        setLayout(new BorderLayout());
+        centerPanel = new JPanel(new BorderLayout());
+        add(centerPanel, BorderLayout.CENTER);
+
         transcriptScrollPane = new TranscriptScrollPane(transcriptEditor);
         transcriptScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        setLayout(new BorderLayout());
-        add(transcriptScrollPane, BorderLayout.CENTER);
-        add(new TranscriptStatusBar(transcriptEditor), BorderLayout.SOUTH);
+
+        centerPanel.add(transcriptScrollPane, BorderLayout.CENTER);
+        centerPanel.add(new TranscriptStatusBar(transcriptEditor), BorderLayout.SOUTH);
 
         JPanel toolbar = new JPanel(new HorizontalLayout());
         add(toolbar, BorderLayout.NORTH);
@@ -152,7 +161,24 @@ public class TranscriptView extends EditorView {
         scaleSlider.setMinorTickSpacing(2);
         scaleSlider.setSnapToTicks(true);
         scaleSlider.setPaintTicks(true);
-        scaleSlider.addChangeListener(changeEvent -> setFontSizeDelta(scaleSlider.getValue()));
+        scaleSlider.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (fontSizeDelta != scaleSlider.getValue()) {
+                    setFontSizeDelta(scaleSlider.getValue());
+                    transcriptEditor.getTranscriptDocument().reload();
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (fontSizeDelta != scaleSlider.getValue()) {
+                    setFontSizeDelta(scaleSlider.getValue());
+                    transcriptEditor.getTranscriptDocument().reload();
+                }
+            }
+        });
 
         JComponent fontComp = new JPanel(new HorizontalLayout());
         fontComp.setOpaque(false);
@@ -164,8 +190,11 @@ public class TranscriptView extends EditorView {
 
         JButton defaultSizeButton = new JButton();
         final PhonUIAction<Void> useDefaultFontSizeAct = PhonUIAction.runnable(() -> {
-            setFontSizeDelta(0.0f);
             scaleSlider.setValue(0);
+            if (fontSizeDelta != scaleSlider.getValue()) {
+                setFontSizeDelta(0);
+                transcriptEditor.getTranscriptDocument().reload();
+            }
         });
         useDefaultFontSizeAct.putValue(PhonUIAction.NAME, "Use default font size");
         useDefaultFontSizeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset font size");
@@ -207,6 +236,8 @@ public class TranscriptView extends EditorView {
         retVal.add(new ToggleSyllabificationIsComponent(getEditor(), this));
         retVal.add(new ToggleAlignmentVisibleAction(getEditor(), this));
         retVal.add(new ToggleAlignmentIsComponentAction(getEditor(), this));
+        retVal.add(new FindAndReplaceAction(getEditor()));
+        retVal.add(new ExportAsPDFAction(getEditor(), this));
 
         return retVal;
     }
@@ -271,6 +302,35 @@ public class TranscriptView extends EditorView {
         float oldVal = this.fontSizeDelta;
         this.fontSizeDelta = fontSizeDelta;
         firePropertyChange("fontSizeDelta", oldVal, fontSizeDelta);
+    }
+
+    public boolean isFindAndReplaceVisible() {
+        return findAndReplaceVisible;
+    }
+
+    public void setFindAndReplaceVisible(boolean findAndReplaceVisible) {
+        this.findAndReplaceVisible = findAndReplaceVisible;
+        System.out.println("Find and replace visible?: " + findAndReplaceVisible);
+        if (findAndReplaceVisible) {
+            var editor = getEditor();
+            findAndReplacePanel = new FindAndReplacePanel(
+                editor.getDataModel(),
+                editor.getSelectionModel(),
+                editor.getEventManager(),
+                editor.getUndoSupport()
+            );
+            centerPanel.add(findAndReplacePanel, BorderLayout.NORTH);
+        }
+        else {
+            centerPanel.remove(findAndReplacePanel);
+            findAndReplacePanel = null;
+        }
+        revalidate();
+        repaint();
+    }
+
+    public TranscriptEditor getTranscriptEditor() {
+        return transcriptEditor;
     }
 
     //endregion Getters and Setters

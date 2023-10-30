@@ -52,9 +52,9 @@ public class FindAndReplaceAction extends SessionEditorAction {
 			editor.getViewModel().showView(TranscriptView.VIEW_NAME);
 		}
 
-		TranscriptView recordDataEditorView = (TranscriptView) editor.getViewModel().getView(TranscriptView.VIEW_NAME);
-//		boolean isVisible = recordDataEditorView.isFindAndReplaceVisible();
-//		recordDataEditorView.setFindAndReplaceVisible(!isVisible);
+		TranscriptView transcriptView = (TranscriptView) editor.getViewModel().getView(TranscriptView.VIEW_NAME);
+		boolean isVisible = transcriptView.isFindAndReplaceVisible();
+		transcriptView.setFindAndReplaceVisible(!isVisible);
 	}
 
 }

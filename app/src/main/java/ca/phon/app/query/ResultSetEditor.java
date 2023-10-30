@@ -19,6 +19,8 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.ProjectFrame;
 import ca.phon.app.query.report.*;
 import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.view.transcriptEditor.TranscriptEditor;
+import ca.phon.app.session.editor.view.transcriptEditor.TranscriptEditorUIProps;
 import ca.phon.project.Project;
 import ca.phon.query.db.*;
 import ca.phon.query.report.ResultSetListingManager;
@@ -771,17 +773,32 @@ public class ResultSetEditor extends ProjectFrame {
 
 		@Override
 		public void paint(Graphics g, int p0, int p1, Shape bounds, JTextComponent c) {
-			g.setColor(color);
-			Rectangle r = bounds.getBounds();
+			final TranscriptEditor component = (TranscriptEditor) c;
+
+			Graphics2D g2d = (Graphics2D) g;
+			g2d.setColor(UIManager.getColor(TranscriptEditorUIProps.SEGMENT_SELECTION));
+
 			try {
-				Rectangle2D p0r = c.modelToView2D(p0);
-				Rectangle2D p1r = c.modelToView2D(p1);
-				g.drawRect((int)p0r.getX(), r.y, (int)(p1r.getX()-p0r.getX()), r.height-1);
+				var p0Rect = component.modelToView2D(p0);
+				var p1Rect = component.modelToView2D(p1);
+
+				Element ele = component.getTranscriptDocument().getCharacterElement(p0);
+				int actualLineHeight = g.getFontMetrics().getHeight();
+				if(ele != null) {
+					final AttributeSet attrs = ele.getAttributes();
+					if(StyleConstants.getFontFamily(attrs) != null && StyleConstants.getFontSize(attrs) > 0) {
+						int style = (StyleConstants.isBold(attrs) ? Font.BOLD : 0) |
+								(StyleConstants.isItalic(attrs) ? Font.ITALIC : 0);
+						final Font f = new Font(StyleConstants.getFontFamily(attrs), style, StyleConstants.getFontSize(attrs));
+						actualLineHeight = g.getFontMetrics(f).getHeight();
+					}
+				}
+
+				g2d.drawRect((int) p0Rect.getMinX(), (int) p0Rect.getMinY(), (int) (p1Rect.getMaxX() - p0Rect.getMinX()), actualLineHeight-1);
 			} catch (BadLocationException e) {
-				LogUtil.warning(e);
+				LogUtil.severe(e);
 			}
 		}
-		
 	}
 	
 	/**

@@ -1,9 +1,5 @@
 package ca.phon.app.session.editor.view.transcriptEditor;
 
-import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.util.PrefHelper;
-
-import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
 import java.util.HashMap;
@@ -18,26 +14,38 @@ public class TranscriptViewFactory implements ViewFactory {
         String kind = elem.getName();
         var attrs = elem.getAttributes();
 
-        var componentFactory = attrs.getAttribute(TranscriptDocument.ATTR_KEY_COMPONENT_FACTORY);
+        var componentFactory = attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMPONENT_FACTORY);
         if (componentFactory instanceof ComponentFactory) {
             kind = "componentFactory";
         }
+
+//        if () {
+//            kind = "table";
+//        }
 
         if (kind != null) {
             if (kind.equals(AbstractDocument.ContentElementName)) {
                 var view = new TierView(elem);
                 return view;
-            } else if (kind.equals(AbstractDocument.ParagraphElementName)) {
+            }
+            else if (kind.equals(AbstractDocument.ParagraphElementName)) {
                 return new ParagraphView(elem);
-            } else if (kind.equals(AbstractDocument.SectionElementName)) {
+            }
+            else if (kind.equals(AbstractDocument.SectionElementName)) {
                 return new BoxView(elem, View.Y_AXIS);
-            } else if (kind.equals(StyleConstants.ComponentElementName)) {
+            }
+            else if (kind.equals(StyleConstants.ComponentElementName)) {
                 return new ComponentView(elem);
-            } else if (kind.equals(StyleConstants.IconElementName)) {
+            }
+            else if (kind.equals(StyleConstants.IconElementName)) {
                 return new IconView(elem);
-            } else if (kind.equals("componentFactory")) {
+            }
+            else if (kind.equals("componentFactory")) {
                 return new ComponentFactoryView(elem);
             }
+//            else if (kind.equals("table")) {
+//                return new TableView(elem);
+//            }
         }
 
         // default to text display
@@ -78,7 +86,7 @@ public class TranscriptViewFactory implements ViewFactory {
         @Override
         protected Component createComponent() {
             AttributeSet attrs = getAttributes();
-            var componentFactory = attrs.getAttribute(TranscriptDocument.ATTR_KEY_COMPONENT_FACTORY);
+            var componentFactory = attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMPONENT_FACTORY);
             if (componentFactory instanceof ComponentFactory factory) {
                 return factory.createComponent(attrs);
             }
