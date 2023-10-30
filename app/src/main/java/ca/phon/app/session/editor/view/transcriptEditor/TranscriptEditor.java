@@ -410,6 +410,18 @@ public class TranscriptEditor extends JEditorPane {
         this.selectedSegment = selectedSegment;
     }
 
+    public boolean isTranscriberValidator() {
+        return dataModel.getTranscriber() == Transcriber.VALIDATOR;
+    }
+
+    public boolean isValidationMode() {
+        return getTranscriptDocument().isValidationMode();
+    }
+
+    public void setValidationMode(boolean enabled) {
+        getTranscriptDocument().setValidationMode(enabled);
+    }
+
     // endregion Getters and Setters
 
 
@@ -1412,7 +1424,7 @@ public class TranscriptEditor extends JEditorPane {
         if (tier.getValue().toString().equals(dummy.getValue().toString())) return;
 
         SwingUtilities.invokeLater(() -> {
-            TierEdit<?> edit = new TierEdit(getSession(), eventManager, record, tier, dummy.getValue());
+            TierEdit<?> edit = new TierEdit(getSession(), eventManager, dataModel.getTranscriber(), record, tier, dummy.getValue());
             edit.setValueAdjusting(false);
             getUndoSupport().postEdit(edit);
             System.out.println("Tier data changed event posted");

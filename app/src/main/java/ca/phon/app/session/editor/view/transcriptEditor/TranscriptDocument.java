@@ -45,6 +45,7 @@ public class TranscriptDocument extends DefaultStyledDocument {
     private TierViewItem alignmentParent = null;
     private final Map<String, Tier<?>> headerTierMap;
     private boolean bypassDocumentFilter = false;
+    private boolean validationMode = false;
 
     public TranscriptDocument() {
         super(new TranscriptStyleContext());
@@ -169,6 +170,15 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
     public Map<String, Tier<?>> getHeaderTierMap() {
         return headerTierMap;
+    }
+
+    public boolean isValidationMode() {
+        return validationMode;
+    }
+
+    public void setValidationMode(boolean validationMode) {
+        this.validationMode = validationMode;
+        reload();
     }
 
     // endregion Getters and Setters
@@ -353,6 +363,16 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL, true);
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE, true);
+        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
+
+        return retVal;
+    }
+
+    private SimpleAttributeSet getBlindTranscriptionAttrs(Tier<Object> blindTranscriptionTier) {
+        SimpleAttributeSet retVal = new SimpleAttributeSet();
+
+        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE, TranscriptStyleConstants.ATTR_KEY_BLIND_TRANSCRIPTION);
+        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_BLIND_TRANSCRIPTION, blindTranscriptionTier);
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
 
         return retVal;
@@ -659,6 +679,17 @@ public class TranscriptDocument extends DefaultStyledDocument {
             }
 
             tierAttrs = insertTier(recordIndex, tier, item, recordAttrs);
+
+            if (validationMode && tier.isBlind()) {
+                List<String> transcribers = tier.getTranscribers();
+                for (String transcriber : transcribers) {
+                    Object blindTranscription = tier.getBlindTranscription(transcriber);
+                    Tier<Object> blindTranscriptionTier = sessionFactory.createTier(transcriber, Object.class);
+                    blindTranscriptionTier.setValue(blindTranscription);
+                    appendBatchLineFeed(tierAttrs);
+                    tierAttrs = insertBlindTranscription(blindTranscriptionTier);
+                }
+            }
 
             if (i < visibleTierView.size() - 1) {
                 appendBatchLineFeed(tierAttrs);
@@ -2299,6 +2330,37 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
         tierAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_COMPONENT_FACTORY);
         return tierAttrs;
+    }
+
+    private SimpleAttributeSet insertBlindTranscription(Tier<Object> blindTranscriptionTier) {
+
+        SimpleAttributeSet blindTranscriptionAttrs = getBlindTranscriptionAttrs(blindTranscriptionTier);
+        blindTranscriptionAttrs.addAttributes(getStandardFontAttributes());
+        StyleConstants.setForeground(blindTranscriptionAttrs, UIManager.getColor(TranscriptEditorUIProps.BLIND_TRANSCRIPTION_FOREGROUND));
+        SimpleAttributeSet labelAttrs = new SimpleAttributeSet(blindTranscriptionAttrs);
+        labelAttrs.addAttributes(getLabelAttributes());
+
+        String labelText = blindTranscriptionTier.getName();
+        if (labelText.length() < labelColumnWidth) {
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < (labelColumnWidth - labelText.length()); i++) {
+                builder.append(' ');
+            }
+            appendBatchString(builder.toString(), labelAttrs);
+        }
+        else {
+            labelText = formatLabelText(labelText);
+        }
+
+        labelAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE, true);
+        appendBatchString(labelText, labelAttrs);
+
+        labelAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE);
+        appendBatchString(": ", labelAttrs);
+
+        appendBatchString(blindTranscriptionTier.getValue().toString(), blindTranscriptionAttrs);
+
+        return blindTranscriptionAttrs;
     }
 
     public void setTierItemViewLocked(String tierName, boolean locked) {

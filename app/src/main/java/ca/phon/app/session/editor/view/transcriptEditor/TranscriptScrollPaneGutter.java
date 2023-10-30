@@ -6,24 +6,37 @@ import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.session.Record;
 import ca.phon.session.Tier;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.util.Tuple;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TranscriptScrollPaneGutter extends JComponent {
+
+    private enum IconType {
+        ERROR,
+        BLIND
+    }
+
     private final TranscriptEditor editor;
     private boolean showRecordNumbers = true;
     private final int DEFAULT_WIDTH = 36;
     private final int RECORD_NUMBER_WIDTH = 24;
     private final int PADDING = 4;
     private int currentRecord;
-    private Map<Rectangle, String> hoverRects = new HashMap();
-    private Rectangle currentHoverRect = null;
+    private Map<Rectangle, Tuple<Tier<?>, IconType>> iconRects = new HashMap();
+    private Rectangle currentIconRect = null;
     private Popup currentHoverPopup = null;
+    private JPopupMenu currentHoverMenu = null;
 
     public TranscriptScrollPaneGutter(TranscriptEditor editor) {
         this.editor = editor;
@@ -45,28 +58,73 @@ public class TranscriptScrollPaneGutter extends JComponent {
         addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
-                for (Rectangle rect : hoverRects.keySet()) {
+                for (Rectangle rect : iconRects.keySet()) {
                     if (rect.contains(e.getPoint())) {
-                        if (currentHoverRect != rect) {
-                            currentHoverRect = rect;
+                        if (currentIconRect != rect) {
+                            currentIconRect = rect;
                             Point mousePos = e.getLocationOnScreen();
-                            currentHoverPopup = PopupFactory.getSharedInstance().getPopup(
-                                TranscriptScrollPaneGutter.this,
-                                new JLabel(hoverRects.get(rect)),
-                                (int) mousePos.getX(),
-                                (int) mousePos.getY()
-                            );
-                            currentHoverPopup.show();
+                            var hoverRectData = iconRects.get(currentIconRect);
+                            IconType iconType = hoverRectData.getObj2();
+                            Tier<?> hoverRectTier = hoverRectData.getObj1();
+                            switch (iconType) {
+                                case ERROR -> {
+                                    String errorText = hoverRectTier.getUnvalidatedValue().getParseError().toString();
+                                    currentHoverPopup = PopupFactory.getSharedInstance().getPopup(
+                                        TranscriptScrollPaneGutter.this,
+                                        new JLabel(errorText),
+                                        (int) mousePos.getX(),
+                                        (int) mousePos.getY()
+                                    );
+                                    currentHoverPopup.show();
+                                }
+                                case BLIND -> {
+                                    currentHoverMenu = new JPopupMenu();
+                                    setupBlindIconToolTip(hoverRectTier);
+                                    currentHoverMenu.show(
+                                        TranscriptScrollPaneGutter.this,
+                                        (int) (currentIconRect.getMaxX()),
+                                        (int) (currentIconRect.getY())
+                                    );
+                                }
+                            }
+
                         }
                         return;
                     }
                 }
-                if (currentHoverRect != null) {
-                    currentHoverRect = null;
-                    currentHoverPopup.hide();
-                    currentHoverPopup = null;
+                if (currentIconRect != null) {
+                    var hoverRectData = iconRects.get(currentIconRect);
+                    switch (hoverRectData.getObj2()) {
+                        case ERROR -> {
+                            currentHoverPopup.hide();
+                            currentHoverPopup = null;
+                        }
+                        case BLIND -> {
+                            currentHoverMenu.setVisible(false);
+                            currentHoverMenu = null;
+                        }
+                    }
+                    currentIconRect = null;
                 }
 
+            }
+        });
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (currentIconRect != null && currentIconRect.contains(e.getPoint())) {
+                    System.out.println("Clicked on icon");
+                    var clickedRectData = iconRects.get(currentIconRect);
+                    IconType iconType = clickedRectData.getObj2();
+                    Tier<?> tier = clickedRectData.getObj1();
+                    switch (iconType) {
+                        case BLIND -> {
+                            currentHoverMenu.removeAll();
+                            currentHoverMenu.add("Testing 3");
+                            currentHoverMenu.setVisible(true);
+                        }
+                    }
+                }
             }
         });
     }
@@ -93,7 +151,7 @@ public class TranscriptScrollPaneGutter extends JComponent {
 
         int currentSepHeight = -1;
 
-        hoverRects.clear();
+        iconRects.clear();
 
         for (int i = 0; i < root.getElementCount(); i++) {
             var elem = root.getElement(i);
@@ -151,10 +209,30 @@ public class TranscriptScrollPaneGutter extends JComponent {
                             g.setColor(Color.RED);
                             g.drawString("O", getWidth() - 32, (int) elemRect.getCenterY());
                             g.setColor(Color.BLACK);
-                            hoverRects.put(
+                            iconRects.put(
                                 hoverRect,
-                                tier.getUnvalidatedValue().getParseError().toString()
+                                new Tuple<>(tier, IconType.ERROR)
                             );
+                        }
+
+                        if (tier.isBlind()) {
+                            int x = getWidth() - 48;
+                            g.setColor(Color.BLUE);
+                            g.drawString("I", x, (int) elemRect.getCenterY());
+                            g.setColor(Color.BLACK);
+                            if (editor.isTranscriberValidator()) {
+                                Rectangle hoverRect = new Rectangle(
+                                    x,
+                                    (int) elemRect.getCenterY() - fontMetrics.getHeight() / 2,
+                                    fontMetrics.stringWidth("I"),
+                                    fontMetrics.getHeight() / 2
+                                );
+                                iconRects.put(
+                                    hoverRect,
+                                    new Tuple<>(tier, IconType.BLIND)
+                                );
+                            }
+
                         }
                     }
 
@@ -190,5 +268,26 @@ public class TranscriptScrollPaneGutter extends JComponent {
         if(event.data().valueAdjusting()) return;
         revalidate();
         repaint();
+    }
+
+    private void setupBlindIconToolTip(Tier<?> tier) {
+        List<String> transcribers = tier.getTranscribers();
+        for (String transcriber : transcribers) {
+            var blindTranscription = tier.getBlindTranscription(transcriber);
+            System.out.println(transcriber + ": " + blindTranscription.toString());
+            JMenuItem item = new JMenuItem(blindTranscription.toString());
+            item.setEnabled(false);
+            currentHoverMenu.add(item);
+        }
+    }
+
+    private void setupBlindIconClickMenu() {
+        currentHoverMenu.removeAll();
+        JMenuItem toggleValidatorMode = new JMenuItem("Toggle validator mode");
+        PhonUIAction toggleValidatorModeAction = PhonUIAction.runnable(() -> {
+
+        });
+        toggleValidatorMode.setAction(toggleValidatorModeAction);
+        currentHoverMenu.add(toggleValidatorMode);
     }
 }

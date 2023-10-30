@@ -236,6 +236,7 @@ public class TranscriptView extends EditorView {
         retVal.add(new ToggleSyllabificationIsComponent(getEditor(), this));
         retVal.add(new ToggleAlignmentVisibleAction(getEditor(), this));
         retVal.add(new ToggleAlignmentIsComponentAction(getEditor(), this));
+        retVal.add(new ToggleValidationModeAction(getEditor(), this));
         retVal.add(new FindAndReplaceAction(getEditor()));
         retVal.add(new ExportAsPDFAction(getEditor(), this));
 
@@ -331,6 +332,14 @@ public class TranscriptView extends EditorView {
 
     public TranscriptEditor getTranscriptEditor() {
         return transcriptEditor;
+    }
+
+    public boolean isValidationMode() {
+        return transcriptEditor.isValidationMode();
+    }
+
+    public void toggleValidationMode() {
+        transcriptEditor.setValidationMode(!isValidationMode());
     }
 
     //endregion Getters and Setters

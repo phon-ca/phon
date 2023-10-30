@@ -164,6 +164,9 @@ public class TranscriptEditorUIProps implements UIDefaultsHandler, IPluginExtens
     public final static String GENERIC_BACKGROUND = "TranscriptEditor.genericBackground";
     public final static Color DEFAULT_GENERIC_BACKGROUND = Color.decode("#ffffbf");
 
+    public final static String BLIND_TRANSCRIPTION_FOREGROUND = "TranscriptEditor.blindTranscriptionForeground";
+    public final static Color DEFAULT_BLIND_TRANSCRIPTION_FOREGROUND = new Color(34, 49, 29);
+
 
 
     @Override
