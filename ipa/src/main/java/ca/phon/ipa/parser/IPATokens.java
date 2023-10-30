@@ -110,7 +110,7 @@ public final class IPATokens {
 	 * 
 	 * @return the token map
 	 */
-	private Map<Character, IPATokenType> tokenMap() {
+	private synchronized Map<Character, IPATokenType> tokenMap() {
 		if(tokenMap == null) {
 			tokenMap = new TreeMap<Character, IPATokenType>();
 			reverseMap = new TreeMap<IPATokenType, Set<Character>>();
