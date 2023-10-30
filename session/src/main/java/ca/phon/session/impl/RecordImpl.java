@@ -54,7 +54,7 @@ public class RecordImpl implements RecordSPI {
 	private final Map<String, Tier<?>> userDefined;
 
 	RecordImpl() {
-		this(List.of());
+		this(List.of(), new LinkedHashMap<>());
 	}
 
 	RecordImpl(List<SystemTierType> blindTiers, Map<SystemTierType, Map<String, String>> systemTierParamMap) {

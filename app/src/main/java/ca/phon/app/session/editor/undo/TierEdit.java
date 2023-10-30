@@ -94,7 +94,20 @@ public class TierEdit<T> extends SessionUndoableEdit {
 	private boolean valueAdjusting = false;
 
 	public TierEdit(SessionEditor editor, Tier<T> tier, T newValue) {
-		this(editor, editor.currentRecord(), tier, newValue);
+		this(editor, editor.getDataModel().getTranscriber(), editor.currentRecord(), tier, newValue);
+	}
+
+	/**
+	 * New tier editor event with transcriber specified
+	 * 
+	 * @param editor
+	 * @param transcriber
+	 * @param record
+	 * @param tier
+	 * @param newValue
+	 */
+	public TierEdit(SessionEditor editor, Transcriber transcriber, Record record, Tier<T> tier, T newValue) {
+		this(editor.getSession(), editor.getEventManager(), transcriber, record, tier, newValue);
 	}
 
 	/**

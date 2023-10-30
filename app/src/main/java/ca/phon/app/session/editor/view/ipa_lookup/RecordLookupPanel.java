@@ -246,23 +246,12 @@ public class RecordLookupPanel extends JPanel {
 		final Tier<IPATranscript> ipaTarget = r.getIPATargetTier();
 		final Tier<IPATranscript> ipaActual = r.getIPAActualTier();
 
-		final IPATranscript ipa = lookupTier.getValue();
-		final IPATranscript ipaA = (new IPATranscriptBuilder()).append(ipa.toString()).toIPATranscript();
-		if(ipa.getExtension(UnvalidatedValue.class) != null) {
-			final UnvalidatedValue uv = ipa.getExtension(UnvalidatedValue.class);
+		final IPATranscript ipaT = lookupTier.getValue();
+		final IPATranscript ipaA = (new IPATranscriptBuilder()).append(ipaT.toString()).toIPATranscript();
+		if(lookupTier.isUnvalidated()) {
+			final UnvalidatedValue uv = lookupTier.getUnvalidatedValue();
 			final UnvalidatedValue uv2 = new UnvalidatedValue(uv.getValue(), new ParseException(uv.getParseError().getMessage(), uv.getParseError().getErrorOffset()));
 			ipaA.putExtension(UnvalidatedValue.class, uv2);
-		}
-
-		final SyllabifierLibrary library = SyllabifierLibrary.getInstance();
-		final SyllabifierInfo info = getEditor().getSession().getExtension(SyllabifierInfo.class);
-		if(info.getSyllabifierLanguageForTier(SystemTierType.IPATarget.getName()) != null) {
-			final Syllabifier syllabifier = library.getSyllabifierForLanguage(info.getSyllabifierLanguageForTier(SystemTierType.IPATarget.getName()));
-			if(syllabifier != null) syllabifier.syllabify(ipa.toList());
-		}
-		if(info.getSyllabifierLanguageForTier(SystemTierType.IPAActual.getName()) != null) {
-			final Syllabifier syllabifier = library.getSyllabifierForLanguage(info.getSyllabifierLanguageForTier(SystemTierType.IPAActual.getName()));
-			if(syllabifier != null) syllabifier.syllabify(ipaA.toList());
 		}
 
 		getEditor().getUndoSupport().beginUpdate();
@@ -272,7 +261,7 @@ public class RecordLookupPanel extends JPanel {
 					(oldIpa != null && oldIpa.length() > 0)
 					|| (oldIpa != null && oldIpa.getExtension(UnvalidatedValue.class) != null && oldIpa.getExtension(UnvalidatedValue.class).getValue().trim().length() > 0);
 			if(overwriteBox.isSelected() || !hasData) {
-				final TierEdit<IPATranscript> ipaTargetEdit = new TierEdit<>(editor, ipaTarget, ipa);
+				final TierEdit<IPATranscript> ipaTargetEdit = new TierEdit<>(editor, ipaTarget, ipaT);
 				getEditor().getUndoSupport().postEdit(ipaTargetEdit);
 			}
 		}

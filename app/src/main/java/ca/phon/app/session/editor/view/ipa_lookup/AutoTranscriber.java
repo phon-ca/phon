@@ -32,7 +32,9 @@ import ca.phon.util.Tuple;
 
 import javax.swing.undo.*;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Utility for performing automatic IPA transcription for a {@link Record}.
@@ -126,16 +128,16 @@ public class AutoTranscriber {
 	public SessionEditor getEditor() {
 		return this.editor;
 	}
-	
+
 	/**
-	 * Transcribe the given group.
+	 * Transcribe the given record.
 	 * 
 	 * @param record
 	 *
 	 * @return tuple of containing the automatic transcription for
 	 *  IPA Target and IPA Actual respectively
 	 */
-	private Tuple<IPATranscript, IPATranscript> transcribe(Record record) {
+	private Map<Tier<IPATranscript>, IPATranscript> transcribe(Record record) {
 		final IPATranscriptBuilder ipaTBuilder = new IPATranscriptBuilder();
 		final IPATranscriptBuilder ipaABuilder = new IPATranscriptBuilder();
 		
@@ -182,10 +184,21 @@ public class AutoTranscriber {
 			getSyllabifier().syllabify(ipaT.toList());
 			getSyllabifier().syllabify(ipaA.toList());
 		}
-		
-		return new Tuple<IPATranscript, IPATranscript>(
-				(ipaTUnset && !ipaTUnvalidated) || isOverwrite() ? ipaT : null, 
-				(ipaAUnset && !ipaAUnvalidated) || isOverwrite() ? ipaA : null);
+
+		final Map<Tier<IPATranscript>, IPATranscript> retVal = new LinkedHashMap<>();
+		retVal.put(record.getIPATargetTier(), (ipaTUnset && !ipaTUnvalidated) || isOverwrite() ? ipaT : null);
+		retVal.put(record.getIPAActualTier(), (ipaAUnset && !ipaAUnvalidated) || isOverwrite() ? ipaA : null);
+		return retVal;
+	}
+
+	private boolean isSetTier(Tier<IPATranscript> tier) {
+		if(SystemTierType.IPATarget.getName().equals(tier.getName())) {
+			return isSetIPATarget();
+		} else if(SystemTierType.IPAActual.getName().equals(tier.getName())) {
+			return isSetIPAActual();
+		} else {
+			return false;
+		}
 	}
 	
 	/**
@@ -197,79 +210,16 @@ public class AutoTranscriber {
 	 */
 	public UndoableEdit transcribeRecord(Record record) {
 		final CompoundEdit retVal = new CompoundEdit();
-		
-		final Tuple<IPATranscript, IPATranscript> autoTranscription = transcribe(record);
-			
-		if(isSetIPATarget() && autoTranscription.getObj1() != null) {
-			SessionUndoableEdit targetEdit = null;
-			if(getTranscriber() != Transcriber.VALIDATOR) {
-//				IPATranscript grpVal = (record.getIPATarget() != null ? record.getIPATarget() : new IPATranscript());
-//				targetEdit =
-//						new BlindTierEdit(getEditor(), record.getIPATargetTier(), getTranscriber(),
-//								autoTranscription.getObj1(), grpVal);
-			} else {
-				IPATranscript currentValue = (record.getIPATarget() != null ? record.getIPATarget() : new IPATranscript());
-				IPATranscript newValue = autoTranscription.getObj1();
-
-				AlternativeTranscript alts =
-						(currentValue != null ? currentValue.getExtension(AlternativeTranscript.class) : null);
-				if(alts != null) newValue.putExtension(AlternativeTranscript.class, alts);
-
-				targetEdit =
-						new IPALookupEdit(getEditor(), getDictionary(), record.getOrthographyTier().toString(),
-								record.getIPATargetTier(), newValue);
-			}
-			targetEdit.doIt();
-			retVal.addEdit(targetEdit);
+		final var autoTranscriptionMap = transcribe(record);
+		for(Tier<IPATranscript> tier:autoTranscriptionMap.keySet()) {
+			if(!isSetTier(tier)) continue;
+			final IPATranscript newValue = autoTranscriptionMap.get(tier);
+			final IPALookupEdit edit =
+					new IPALookupEdit(getEditor(), getDictionary(), record.getOrthographyTier().toString(), tier, newValue);
+			edit.doIt();
+			retVal.addEdit(edit);
 		}
-			
-		if(isSetIPAActual() && autoTranscription.getObj2() != null) {
-			SessionUndoableEdit actualEdit = null;
-			if(getTranscriber() != Transcriber.VALIDATOR) {
-//				IPATranscript grpVal = (record.getIPAActual() != null ? record.getIPAActual() : new IPATranscript());
-//				actualEdit =
-//						new BlindTierEdit(getEditor(), record.getIPAActualTier(), getTranscriber(),
-//								autoTranscription.getObj2(), grpVal);
-			} else {
-				IPATranscript currentValue = (record.getIPAActual() != null ? record.getIPAActual() : new IPATranscript());
-				IPATranscript newValue = autoTranscription.getObj2();
-
-				AlternativeTranscript alts =
-						(currentValue != null ? currentValue.getExtension(AlternativeTranscript.class) : null);
-				if(alts != null) newValue.putExtension(AlternativeTranscript.class, alts);
-
-				actualEdit =
-						new IPALookupEdit(getEditor(), getDictionary(), record.getOrthographyTier().toString(),
-								record.getIPAActualTier(), newValue);
-			}
-			actualEdit.doIt();
-			retVal.addEdit(actualEdit);
-		}
-			
-		if(getTranscriber() == null) {
-			final List<OrthographyElement> orthoWords = TierElementFilter.orthographyFilterForIPAAlignment().filterOrthography(record.getOrthography());
-			final List<IPATranscript> targetWords = record.getIPATarget().words();
-			final List<IPATranscript> actualWords = record.getIPAActual().words();
-
-			final List<PhoneMap> alignments = new ArrayList<>();
-			final PhoneAligner aligner = new PhoneAligner();
-			for(int i = 0; i < orthoWords.size(); i++) {
-				final IPATranscript ipaTarget = i < targetWords.size() ? targetWords.get(i) : new IPATranscript();
-				final IPATranscript ipaActual = i < actualWords.size() ? actualWords.get(i) : new IPATranscript();
-				if(ipaTarget.length() == 0 && ipaActual.length() == 0) break;
-				final PhoneMap pm = aligner.calculatePhoneAlignment(ipaTarget, ipaActual);
-				alignments.add(pm);
-			}
-			final PhoneAlignment alignment = new PhoneAlignment(alignments);
-			final TierEdit<PhoneAlignment> alignmentEdit =
-					new TierEdit<>(getEditor(), record.getPhoneAlignmentTier(), alignment);
-			alignmentEdit.setFireHardChangeOnUndo(true);
-			alignmentEdit.doIt();
-			retVal.addEdit(alignmentEdit);
-		}
-
 		retVal.end();
-		
 		return retVal;
 	}
 	
