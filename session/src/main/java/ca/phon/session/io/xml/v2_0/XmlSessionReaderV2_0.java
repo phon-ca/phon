@@ -444,11 +444,7 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 
 	@SuppressWarnings("unchecked")
 	Record readRecord(SessionFactory factory, Session session, XmlRecordType rt) {
-		final List<SystemTierType> blindSystemTiers =
-				session.getBlindTiers().stream()
-						.filter(tn -> SystemTierType.tierFromString(tn) != null)
-						.map(SystemTierType::tierFromString).toList();
-		final Record retVal = factory.createRecord(blindSystemTiers);
+		final Record retVal = factory.createRecord(session);
 
 		try {
 			if(rt.getUuid() != null) {

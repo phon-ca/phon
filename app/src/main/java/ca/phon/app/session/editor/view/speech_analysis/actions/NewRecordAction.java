@@ -44,7 +44,7 @@ public class NewRecordAction extends SpeechAnalysisEditorViewAction {
 		final float endTime = getView().getSelectionInterval().getEndMarker().getTime();
 		
 		final SessionFactory factory = SessionFactory.newFactory();
-		final Record record = factory.createRecord();
+		final Record record = factory.createRecord(getEditor().getSession());
 		final Record currentRecord = getEditor().currentRecord();
 		record.setSpeaker((currentRecord != null ? currentRecord.getSpeaker() : Participant.UNKNOWN));
 

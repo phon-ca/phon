@@ -42,8 +42,8 @@ public class SessionFactoryImpl implements SessionFactorySPI, IPluginExtensionPo
 	}
 
 	@Override
-	public RecordSPI createRecord(List<SystemTierType> blindTiers) {
-		return new RecordImpl(blindTiers);
+	public RecordSPI createRecord(List<SystemTierType> blindTiers, Map<SystemTierType, Map<String, String>> systemTierParamMap) {
+		return new RecordImpl(blindTiers, systemTierParamMap);
 	}
 
 	@Override

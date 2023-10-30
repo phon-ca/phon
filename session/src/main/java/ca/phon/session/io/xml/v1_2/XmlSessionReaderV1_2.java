@@ -323,7 +323,7 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 	}
 
 	Record copyRecord(SessionFactory factory, Session session, RecordType rt) {
-		final Record retVal = factory.createRecord();
+		final Record retVal = factory.createRecord(session);
 
 		try {
 			if(rt.getId() != null) {

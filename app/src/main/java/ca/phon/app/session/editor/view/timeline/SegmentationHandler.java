@@ -321,7 +321,7 @@ public final class SegmentationHandler {
 			window.setStartLockMs(segmentEnd+segmentOffset);
 			
 			final SessionFactory factory = SessionFactory.newFactory();
-			Record utt = factory.createRecord();
+			Record utt = factory.createRecord(editor.getSession());
 			
 			MediaSegment m = factory.createMediaSegment();
 			m.setStartValue(segmentStart);

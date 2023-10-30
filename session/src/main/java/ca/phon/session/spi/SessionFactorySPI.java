@@ -64,9 +64,10 @@ public interface SessionFactorySPI {
 	 * Create a new record with given tiers as blind
 	 *
 	 * @param blindTiers
+	 * @param systemTierParamMap
 	 * @return a new record with blind tiers
 	 */
-	public RecordSPI createRecord(List<SystemTierType> blindTiers);
+	public RecordSPI createRecord(List<SystemTierType> blindTiers, Map<SystemTierType, Map<String, String>> systemTierParamMap);
 	
 	/**
 	 * Create a new participant object.

@@ -173,6 +173,27 @@ public final class Session extends ExtendableObject {
 		return sessionImpl.getTiers();
 	}
 
+	/**
+	 * Get tier parameters for system tier
+	 *
+	 * @param systemTier
+	 * @return unmodifiable tier params for given system tier
+	 */
+	public Map<String, String> getSystemTierParameters(SystemTierType systemTier) {
+		return sessionImpl.getSystemTierParameters(systemTier);
+	}
+
+	/**
+	 * Set tier parameter for system tier
+	 *
+	 * @param systemTier
+	 * @param key
+	 * @param value
+	 */
+	public void putSystemTierParam(SystemTierType systemTier, String key, String value) {
+		sessionImpl.putSystemTierParam(systemTier, key, value);
+	}
+
 	/* User-defined tiers */
 	/**
 	 * Get number of user-defined tiers setup in session

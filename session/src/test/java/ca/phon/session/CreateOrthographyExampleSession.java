@@ -371,7 +371,7 @@ public class CreateOrthographyExampleSession {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(filename)))) {
             String line = null;
             while ((line = reader.readLine()) != null) {
-                final Record r = factory.createRecord(chi);
+                final Record r = factory.createRecord(session, chi);
                 final Orthography ortho = Orthography.parseOrthography(line);
                 r.setOrthography(ortho);
 
