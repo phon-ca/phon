@@ -9,13 +9,11 @@ import ca.phon.session.Tier;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.Tuple;
+import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -85,6 +83,7 @@ public class TranscriptScrollPaneGutter extends JComponent {
                                         (int) (currentIconRect.getMaxX()),
                                         (int) (currentIconRect.getY())
                                     );
+//                                    setToolTipText("Testing\n something");
                                 }
                             }
 
@@ -105,6 +104,7 @@ public class TranscriptScrollPaneGutter extends JComponent {
                         }
                     }
                     currentIconRect = null;
+                    setToolTipText(null);
                 }
 
             }
@@ -116,17 +116,27 @@ public class TranscriptScrollPaneGutter extends JComponent {
                     System.out.println("Clicked on icon");
                     var clickedRectData = iconRects.get(currentIconRect);
                     IconType iconType = clickedRectData.getObj2();
-                    Tier<?> tier = clickedRectData.getObj1();
                     switch (iconType) {
                         case BLIND -> {
-                            currentHoverMenu.removeAll();
-                            currentHoverMenu.add("Testing 3");
+                            setupBlindIconClickMenu();
                             currentHoverMenu.setVisible(true);
                         }
                     }
                 }
             }
         });
+        Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
+                @Override
+                public void eventDispatched(AWTEvent event) {
+                    KeyEvent keyEvent = (KeyEvent) event;
+                    System.out.println("Does this work?");
+                    if (keyEvent.getKeyCode() == KeyEvent.VK_F2) {
+                        System.out.println("Woo!");
+                    }
+                }
+            },
+            AWTEvent.KEY_EVENT_MASK
+        );
     }
 
     @Override
@@ -271,11 +281,13 @@ public class TranscriptScrollPaneGutter extends JComponent {
     }
 
     private void setupBlindIconToolTip(Tier<?> tier) {
+        TranscriptDocument doc = editor.getTranscriptDocument();
+        currentHoverMenu.removeAll();
         List<String> transcribers = tier.getTranscribers();
         for (String transcriber : transcribers) {
             var blindTranscription = tier.getBlindTranscription(transcriber);
             System.out.println(transcriber + ": " + blindTranscription.toString());
-            JMenuItem item = new JMenuItem(blindTranscription.toString());
+            JMenuItem item = new JMenuItem(transcriber + ": " + doc.getTierText(tier, transcriber));
             item.setEnabled(false);
             currentHoverMenu.add(item);
         }
@@ -283,11 +295,29 @@ public class TranscriptScrollPaneGutter extends JComponent {
 
     private void setupBlindIconClickMenu() {
         currentHoverMenu.removeAll();
-        JMenuItem toggleValidatorMode = new JMenuItem("Toggle validator mode");
-        PhonUIAction toggleValidatorModeAction = PhonUIAction.runnable(() -> {
-
-        });
-        toggleValidatorMode.setAction(toggleValidatorModeAction);
-        currentHoverMenu.add(toggleValidatorMode);
+        boolean currentValidationMode = editor.isValidationMode();
+        JMenuItem toggleValidationMode = new JMenuItem();
+        PhonUIAction toggleValidationModeAction = PhonUIAction.runnable(() -> editor.setValidationMode(!currentValidationMode));
+        toggleValidationModeAction.putValue(
+            PhonUIAction.NAME,
+            (currentValidationMode ? "Disable" : "Enable") + " validation mode"
+        );
+        toggleValidationMode.setAction(toggleValidationModeAction);
+        currentHoverMenu.add(toggleValidationMode);
     }
+
+//    @Override
+//    public JToolTip createToolTip() {
+//        JToolTip toolTip = super.createToolTip();
+//        toolTip.setLayout(new VerticalLayout());
+//
+//        JMenu menu = new JMenu();
+//        menu.add(new JMenuItem("testing 1"));
+//        menu.add(new JMenuItem("testing 2"));
+//
+//
+//        toolTip.add(menu);
+//        toolTip.setPreferredSize(menu.getPreferredSize());
+//        return toolTip;
+//    }
 }

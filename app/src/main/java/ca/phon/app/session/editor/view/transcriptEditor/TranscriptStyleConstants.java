@@ -20,4 +20,5 @@ public class TranscriptStyleConstants {
     public static final String ATTR_KEY_PHONE = "phone";
     public static final String ATTR_KEY_COMMENT_TIER = "commentTier";
     public static final String ATTR_KEY_BLIND_TRANSCRIPTION = "blindTranscription";
+    public static final String ATTR_KEY_TRANSCRIBER = "transcriber";
 }

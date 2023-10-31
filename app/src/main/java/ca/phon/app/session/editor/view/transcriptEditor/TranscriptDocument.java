@@ -1,6 +1,8 @@
 package ca.phon.app.session.editor.view.transcriptEditor;
 
 import ca.phon.app.log.LogUtil;
+import ca.phon.app.session.editor.EditorEventManager;
+import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.MediaTimeFormatStyle;
 import ca.phon.ipa.IPAElement;
@@ -46,6 +48,8 @@ public class TranscriptDocument extends DefaultStyledDocument {
     private final Map<String, Tier<?>> headerTierMap;
     private boolean bypassDocumentFilter = false;
     private boolean validationMode = false;
+    private SessionEditUndoSupport undoSupport;
+    private EditorEventManager eventManager;
 
     public TranscriptDocument() {
         super(new TranscriptStyleContext());
@@ -58,6 +62,13 @@ public class TranscriptDocument extends DefaultStyledDocument {
         headerTierMap.put("participants", sessionFactory.createTier("Participants", TierData.class));
         headerTierMap.put("languages", sessionFactory.createTier("Languages", Languages.class));
         headerTierMap.put("media", sessionFactory.createTier("Media", TierData.class));
+
+
+
+        // TODO
+//        Session session2 = sessionFactory.createSession();
+//        session2.addRecord();
+//        sessionFactory.cloneRecord()
     }
 
 
@@ -181,6 +192,44 @@ public class TranscriptDocument extends DefaultStyledDocument {
         reload();
     }
 
+    public String getTierText(Tier<?> tier, String transcriber) {
+        if (tier.isBlind() && transcriber != null && !Transcriber.VALIDATOR.getUsername().equals(transcriber)) {
+
+            if (tier.hasBlindTranscription(transcriber)) {
+                if (tier.isBlindTranscriptionUnvalidated(transcriber)) {
+                    return tier.getBlindUnvalidatedValue(transcriber).getValue();
+                }
+                return tier.getBlindTranscription(transcriber).toString();
+            }
+        }
+        else {
+            if (tier.hasValue()) {
+                if (tier.isUnvalidated()) {
+                    return tier.getUnvalidatedValue().getValue();
+                }
+                return tier.getValue().toString();
+            }
+        }
+
+        return "";
+    }
+
+    public SessionEditUndoSupport getUndoSupport() {
+        return undoSupport;
+    }
+
+    public void setUndoSupport(SessionEditUndoSupport undoSupport) {
+        this.undoSupport = undoSupport;
+    }
+
+    public EditorEventManager getEventManager() {
+        return eventManager;
+    }
+
+    public void setEventManager(EditorEventManager eventManager) {
+        this.eventManager = eventManager;
+    }
+
     // endregion Getters and Setters
 
     // region Attribute Getters
@@ -230,6 +279,22 @@ public class TranscriptDocument extends DefaultStyledDocument {
         final SimpleAttributeSet retVal = new SimpleAttributeSet();
 
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_COMPONENT_FACTORY, new AlignmentComponentFactory());
+
+        return retVal;
+    }
+
+    private SimpleAttributeSet getTranscriptionSelectorAttributes(Record record, Tier<?> tier, String transcriptionText) {
+        final SimpleAttributeSet retVal = new SimpleAttributeSet();
+
+        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_COMPONENT_FACTORY, new TranscriptionSelectorComponentFactory(
+            session,
+            eventManager,
+            undoSupport,
+            record,
+            tier,
+            transcriptionText
+        ));
+        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
 
         return retVal;
     }
@@ -368,11 +433,12 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return retVal;
     }
 
-    private SimpleAttributeSet getBlindTranscriptionAttrs(Tier<Object> blindTranscriptionTier) {
+    private SimpleAttributeSet getBlindTranscriptionAttrs(Tier<?> tier, String transcriber) {
         SimpleAttributeSet retVal = new SimpleAttributeSet();
 
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE, TranscriptStyleConstants.ATTR_KEY_BLIND_TRANSCRIPTION);
-        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_BLIND_TRANSCRIPTION, blindTranscriptionTier);
+        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_TIER, tier);
+        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_TRANSCRIBER, transcriber);
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
 
         return retVal;
@@ -670,12 +736,12 @@ public class TranscriptDocument extends DefaultStyledDocument {
         for (int i = 0; i < visibleTierView.size(); i++) {
             TierViewItem item = visibleTierView.get(i);
             Tier<?> tier = record.getTier(item.getTierName());
+            // Create a tier if it doesn't exist in the record
+            // This tier will be added to the record when a change is made in the TierEdit
             if (tier == null) {
-                var tdOpt = session.getUserTiers().stream().filter(td -> td.getName().equals(item.getTierName())).findAny();
-                if (tdOpt.isEmpty()) {
-                    continue;
-                }
-                tier = sessionFactory.createTier(tdOpt.get());
+                TierDescription td = session.getUserTiers().get(item.getTierName());
+                if (td == null) continue;
+                tier = sessionFactory.createTier(td);
             }
 
             tierAttrs = insertTier(recordIndex, tier, item, recordAttrs);
@@ -683,11 +749,8 @@ public class TranscriptDocument extends DefaultStyledDocument {
             if (validationMode && tier.isBlind()) {
                 List<String> transcribers = tier.getTranscribers();
                 for (String transcriber : transcribers) {
-                    Object blindTranscription = tier.getBlindTranscription(transcriber);
-                    Tier<Object> blindTranscriptionTier = sessionFactory.createTier(transcriber, Object.class);
-                    blindTranscriptionTier.setValue(blindTranscription);
                     appendBatchLineFeed(tierAttrs);
-                    tierAttrs = insertBlindTranscription(blindTranscriptionTier);
+                    tierAttrs = insertBlindTranscription(tier, transcriber, record);
                 }
             }
 
@@ -972,6 +1035,29 @@ public class TranscriptDocument extends DefaultStyledDocument {
         }
 
         return -1;
+    }
+
+    public Record getRecord(Tier<?> tier) {
+        Element root = getDefaultRootElement();
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() < 1) continue;
+            Record currentRecord = (Record) elem.getElement(0).getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
+            // If correct record index
+            if (currentRecord != null) {
+                for (int j = 0; j < elem.getElementCount(); j++) {
+                    Element innerElem = elem.getElement(j);
+                    var currentTier = innerElem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
+                    // If correct tier
+                    if (currentTier != null && currentTier == tier) {
+                        return currentRecord;
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 
     public int getTierStart(int recordIndex, String tierName) {
@@ -1801,6 +1887,8 @@ public class TranscriptDocument extends DefaultStyledDocument {
 
         System.out.println(tier.getDeclaredType().getName());
 
+        if (tier.getDeclaredType().equals(PhoneAlignment.class) && !alignmentVisible) return;
+
         try {
             int start = getTierStart(tier);
             int recordIndex = getRecordIndex(start);
@@ -2332,15 +2420,15 @@ public class TranscriptDocument extends DefaultStyledDocument {
         return tierAttrs;
     }
 
-    private SimpleAttributeSet insertBlindTranscription(Tier<Object> blindTranscriptionTier) {
+    private SimpleAttributeSet insertBlindTranscription(Tier<?> tier, String transcriber, Record record) {
 
-        SimpleAttributeSet blindTranscriptionAttrs = getBlindTranscriptionAttrs(blindTranscriptionTier);
+        SimpleAttributeSet blindTranscriptionAttrs = getBlindTranscriptionAttrs(tier, transcriber);
         blindTranscriptionAttrs.addAttributes(getStandardFontAttributes());
         StyleConstants.setForeground(blindTranscriptionAttrs, UIManager.getColor(TranscriptEditorUIProps.BLIND_TRANSCRIPTION_FOREGROUND));
         SimpleAttributeSet labelAttrs = new SimpleAttributeSet(blindTranscriptionAttrs);
         labelAttrs.addAttributes(getLabelAttributes());
 
-        String labelText = blindTranscriptionTier.getName();
+        String labelText = transcriber;
         if (labelText.length() < labelColumnWidth) {
             StringBuilder builder = new StringBuilder();
             for (int i = 0; i < (labelColumnWidth - labelText.length()); i++) {
@@ -2358,7 +2446,10 @@ public class TranscriptDocument extends DefaultStyledDocument {
         labelAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE);
         appendBatchString(": ", labelAttrs);
 
-        appendBatchString(blindTranscriptionTier.getValue().toString(), blindTranscriptionAttrs);
+        String transcriptionText = getTierText(tier, transcriber);
+        appendBatchString(transcriptionText, blindTranscriptionAttrs);
+
+        appendBatchString(" ", getTranscriptionSelectorAttributes(record, tier, transcriptionText));
 
         return blindTranscriptionAttrs;
     }
@@ -2418,9 +2509,11 @@ public class TranscriptDocument extends DefaultStyledDocument {
             }
         }
     }
+
     public AttributeSet updateTiersHeader() {
         return updateTiersHeader(false);
     }
+
     public SimpleAttributeSet updateTiersHeader(boolean partOfBatch) {
         Tier<TierData> tiersTier = (Tier<TierData>) headerTierMap.get("tiers");
 

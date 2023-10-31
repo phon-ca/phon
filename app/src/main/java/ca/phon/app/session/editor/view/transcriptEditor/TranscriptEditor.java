@@ -9,6 +9,7 @@ import ca.phon.session.Record;
 import ca.phon.session.tierdata.TierData;
 import ca.phon.ui.CalloutWindow;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
@@ -175,7 +176,7 @@ public class TranscriptEditor extends JEditorPane {
 
         KeyStroke enter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
         inputMap.put(enter, "pressedEnter");
-        PhonUIAction<Void> enterAct = PhonUIAction.runnable(this::pressedEnter);
+        PhonUIAction<Void> enterAct = PhonUIAction.consumer(this::pressedEnter, null);
         actionMap.put("pressedEnter", enterAct);
 
 
@@ -464,7 +465,14 @@ public class TranscriptEditor extends JEditorPane {
         }
     }
 
-    public void pressedEnter() {
+    public void pressedEnter(PhonActionEvent<Void> pae) {
+
+//        PhonUIAction t = PhonUIAction.runnable(() -> {
+//            System.out.println("dfghkdfhjg");
+//        });
+
+//        t.actionPerformed(pae.getActionEvent());
+
         if (selectedSegment != null) {
             try {
                 var segmentEditor = new SegmentEditorPopup(getMediaModel(), selectedSegment);
@@ -1224,6 +1232,30 @@ public class TranscriptEditor extends JEditorPane {
         menu.show(this, (int) point.getX(), (int) point.getY());
     }
 
+    private void onClickBlindTranscriptionLabel(Point2D point, Record record, Tier<?> tier, String transcriber) {
+        System.out.println("Show blind transcription label menu");
+
+        JPopupMenu menu = new JPopupMenu();
+
+        JMenuItem select = new JMenuItem();
+        PhonUIAction selectAction = PhonUIAction.runnable(() -> {
+            selectTranscription(record, tier, transcriber);
+        });
+        selectAction.putValue(PhonUIAction.NAME, "Select transcription");
+        select.setAction(selectAction);
+        menu.add(select);
+
+        JMenuItem append = new JMenuItem();
+        PhonUIAction appendAction = PhonUIAction.runnable(() -> {
+           System.out.println("Append");
+        });
+        appendAction.putValue(PhonUIAction.NAME, "Append");
+        append.setAction(appendAction);
+        menu.add(append);
+
+        menu.show(this, (int) point.getX(), (int) point.getY());
+    }
+
     // endregion On Click
 
     private void showContextMenu(int transcriptElementIndex, Point pos) {
@@ -1414,6 +1446,8 @@ public class TranscriptEditor extends JEditorPane {
     }
 
     public void tierDataChanged(Record record, Tier<?> tier, String newData) {
+        TranscriptDocument doc = getTranscriptDocument();
+        String transcriber = dataModel.getTranscriber().getUsername();
 
         System.out.println("Changed tier: " + tier.getName());
 
@@ -1421,7 +1455,7 @@ public class TranscriptEditor extends JEditorPane {
         dummy.setText(newData);
 
         if (tier.getDeclaredType() == MediaSegment.class) return;
-        if (tier.getValue().toString().equals(dummy.getValue().toString())) return;
+        if (doc.getTierText(tier, transcriber).equals(doc.getTierText(dummy, transcriber))) return;
 
         SwingUtilities.invokeLater(() -> {
             TierEdit<?> edit = new TierEdit(getSession(), eventManager, dataModel.getTranscriber(), record, tier, dummy.getValue());
@@ -1432,11 +1466,14 @@ public class TranscriptEditor extends JEditorPane {
     }
 
     public void genericDataChanged(Tier<?> genericTier, String newData) {
+        TranscriptDocument doc = getTranscriptDocument();
+        String transcriber = dataModel.getTranscriber().getUsername();
+
         Tier dummy = SessionFactory.newFactory().createTier("dummy", genericTier.getDeclaredType());
         dummy.setFormatter(genericTier.getFormatter());
         dummy.setText(newData);
 
-        if (genericTier.getValue().toString().equals(dummy.getValue().toString())) return;
+        if (doc.getTierText(genericTier, transcriber).equals(doc.getTierText(dummy, transcriber))) return;
 
         SwingUtilities.invokeLater(() -> {
             getUndoSupport().beginUpdate();
@@ -1462,7 +1499,8 @@ public class TranscriptEditor extends JEditorPane {
         Tier<TierData> dummy = SessionFactory.newFactory().createTier("dummy", TierData.class);
         dummy.setText(newData);
 
-        if (comment.getValue().toString().equals(dummy.getValue().toString())) return;
+        String transcriber = dataModel.getTranscriber().getUsername();
+        if (comment.getValue().toString().equals(getTranscriptDocument().getTierText(dummy, transcriber))) return;
 
         SwingUtilities.invokeLater(() -> {
             ChangeCommentEdit edit = new ChangeCommentEdit(getSession(), eventManager, comment, dummy.getValue());
@@ -1477,6 +1515,22 @@ public class TranscriptEditor extends JEditorPane {
         SwingUtilities.invokeLater(() -> {
             ChangeGemEdit edit = new ChangeGemEdit(getSession(), eventManager, gem, newData);
             getUndoSupport().postEdit(edit);
+        });
+    }
+
+    private void selectTranscription(Record record, Tier<?> tier, String transcriber) {
+        System.out.println("Transcription selected");
+
+        TranscriptDocument doc = getTranscriptDocument();
+
+        Tier<?> dummy = SessionFactory.newFactory().createTier("dummy", tier.getDeclaredType());
+        dummy.setText(doc.getTierText(tier, transcriber));
+
+        SwingUtilities.invokeLater(() -> {
+            TierEdit<?> edit = new TierEdit(dataModel.getSession(), eventManager, Transcriber.VALIDATOR, record, tier, dummy.getValue());
+            edit.setValueAdjusting(false);
+            undoSupport.postEdit(edit);
+            System.out.println("Tier data changed event posted");
         });
     }
 
@@ -1503,6 +1557,8 @@ public class TranscriptEditor extends JEditorPane {
 
     public void loadSession() {
         TranscriptDocument doc = (TranscriptDocument) getEditorKit().createDefaultDocument();
+        doc.setUndoSupport(undoSupport);
+        doc.setEventManager(eventManager);
         doc.setSession(getSession());
         setDocument(doc);
         doc.addDocumentListener(new DocumentListener() {
@@ -2270,6 +2326,12 @@ public class TranscriptEditor extends JEditorPane {
                                 }
                                 case TranscriptStyleConstants.ATTR_KEY_COMMENT -> onClickCommentLabel(e.getPoint(), (Comment) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT));
                                 case TranscriptStyleConstants.ATTR_KEY_GEM -> onClickGemLabel(e.getPoint(), (Gem) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM));
+                                case TranscriptStyleConstants.ATTR_KEY_BLIND_TRANSCRIPTION -> {
+                                    Record record = (Record) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
+                                    Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
+                                    String transcriber = (String) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TRANSCRIBER);
+                                    onClickBlindTranscriptionLabel(e.getPoint(), record, tier, transcriber);
+                                }
                             }
                         }
                     }

@@ -1,5 +1,6 @@
 package ca.phon.app.session.editor.view.transcriptEditor;
 
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.theme.UIDefaults;
 import ca.phon.ui.theme.UIDefaultsHandler;
 import ca.phon.plugin.IPluginExtensionFactory;
@@ -225,6 +226,8 @@ public class TranscriptEditorUIProps implements UIDefaultsHandler, IPluginExtens
         uiDefaults.put(COMMENT_BACKGROUND, DEFAULT_COMMENT_BACKGROUND);
         uiDefaults.put(GEM_BACKGROUND, DEFAULT_GEM_BACKGROUND);
         uiDefaults.put(GENERIC_BACKGROUND, DEFAULT_GENERIC_BACKGROUND);
+
+        uiDefaults.put(BLIND_TRANSCRIPTION_FOREGROUND, DEFAULT_BLIND_TRANSCRIPTION_FOREGROUND);
     }
 
     @Override
