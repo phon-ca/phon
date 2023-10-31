@@ -3,6 +3,8 @@ package ca.phon.app.session.editor.view.transcriptEditor;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.MediaTimeFormatStyle;
 import ca.phon.ipa.IPAElement;
@@ -13,6 +15,7 @@ import ca.phon.orthography.mor.Grasp;
 import ca.phon.orthography.mor.GraspTierData;
 import ca.phon.orthography.mor.Mor;
 import ca.phon.orthography.mor.MorTierData;
+import ca.phon.plugin.PluginManager;
 import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.session.format.MediaSegmentFormatter;
@@ -31,7 +34,8 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class TranscriptDocument extends DefaultStyledDocument {
+public class TranscriptDocument extends DefaultStyledDocument implements IExtendable  {
+
     private Session session;
     private final SessionFactory sessionFactory;
     private boolean singleRecordView = false;
@@ -51,6 +55,11 @@ public class TranscriptDocument extends DefaultStyledDocument {
     private SessionEditUndoSupport undoSupport;
     private EditorEventManager eventManager;
 
+    /**
+     * extension support
+     */
+    private final ExtensionSupport extensionSupport = new ExtensionSupport(TranscriptDocument.class, this);
+
     public TranscriptDocument() {
         super(new TranscriptStyleContext());
         sessionFactory = SessionFactory.newFactory();
@@ -69,9 +78,9 @@ public class TranscriptDocument extends DefaultStyledDocument {
 //        Session session2 = sessionFactory.createSession();
 //        session2.addRecord();
 //        sessionFactory.cloneRecord()
+        extensionSupport.initExtensions();
+        loadRegisteredInsertionHooks();
     }
-
-
     // region Getters and Setters
 
     public Session getSession() {
@@ -501,9 +510,16 @@ public class TranscriptDocument extends DefaultStyledDocument {
     // region Batching
 
     public void appendBatchString(String str, AttributeSet a) {
+        final StringBuilder builder = new StringBuilder();
+        builder.append(str);
+        final List<ElementSpec> additionalInsertions = new ArrayList<>();
+        for(TranscriptDocumentInsertionHook hook:getInsertionHooks()) {
+            additionalInsertions.addAll(hook.batchInsertString(builder, (MutableAttributeSet) a));
+        }
         a = a.copyAttributes();
-        char[] chars = str.toCharArray();
+        char[] chars = builder.toString().toCharArray();
         batch.add(new ElementSpec(a, ElementSpec.ContentType, chars, 0, str.length()));
+        batch.addAll(additionalInsertions);
     }
 
     public void appendBatchLineFeed(AttributeSet a) {
@@ -2856,4 +2872,53 @@ public class TranscriptDocument extends DefaultStyledDocument {
     }
 
     public record Languages(List<Language> languageList) {}
+
+    // region TranscriptDocumentInsertionHook
+    /**
+     * Insertion hooks, these may be added dynamically but will also be loaded using
+     * from registered IPluginExtensionPoints
+     */
+    private final List<TranscriptDocumentInsertionHook> insertionHooks = new ArrayList<>();
+
+    private void loadRegisteredInsertionHooks() {
+        for(var hookExtPt: PluginManager.getInstance().getExtensionPoints(TranscriptDocumentInsertionHook.class)) {
+            final TranscriptDocumentInsertionHook hook = hookExtPt.getFactory().createObject();
+            addInsertionHook(hook);
+        }
+    }
+
+    public void addInsertionHook(TranscriptDocumentInsertionHook hook) {
+        this.insertionHooks.add(hook);
+    }
+
+    public boolean removeInsertionHook(TranscriptDocumentInsertionHook hook) {
+        return this.insertionHooks.remove(hook);
+    }
+
+    public List<TranscriptDocumentInsertionHook> getInsertionHooks() {
+        return Collections.unmodifiableList(this.insertionHooks);
+    }
+    // endregion TranscriptDocumentInsertionHook
+
+    // region IExtendable
+    @Override
+    public Set<Class<?>> getExtensions() {
+        return extensionSupport.getExtensions();
+    }
+
+    @Override
+    public <T> T getExtension(Class<T> cap) {
+        return extensionSupport.getExtension(cap);
+    }
+
+    @Override
+    public <T> T putExtension(Class<T> cap, T impl) {
+        return extensionSupport.putExtension(cap, impl);
+    }
+
+    @Override
+    public <T> T removeExtension(Class<T> cap) {
+        return extensionSupport.removeExtension(cap);
+    }
+    // endregion
 }
