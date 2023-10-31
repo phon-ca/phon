@@ -3,6 +3,8 @@ package ca.phon.app.session.editor.view.transcriptEditor;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.*;
+import ca.phon.extensions.ExtensionSupport;
+import ca.phon.extensions.IExtendable;
 import ca.phon.plugin.PluginManager;
 import ca.phon.session.*;
 import ca.phon.session.Record;
@@ -27,12 +29,22 @@ import java.awt.geom.Rectangle2D;
 import java.util.*;
 import java.util.List;
 
-public class TranscriptEditor extends JEditorPane {
+public class TranscriptEditor extends JEditorPane implements IExtendable {
+
+    /* Editor models */
     private final EditorDataModel dataModel;
     private final EditorEventManager eventManager;
     private SessionMediaModel mediaModel;
+    private EditorSelectionModel selectionModel;
+
+    /* Undo support */
     private SessionEditUndoSupport undoSupport;
     private UndoManager undoManager;
+
+    /* extension support */
+    private final ExtensionSupport extensionSupport = new ExtensionSupport(TranscriptEditor.class, this);
+
+    /* State */
     private boolean controlPressed = false;
     private Object currentHighlight;
     private DefaultHighlighter.DefaultHighlightPainter highlightPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
@@ -49,9 +61,7 @@ public class TranscriptEditor extends JEditorPane {
     private Map<Tier<?>, Object> errorUnderlineHighlights = new HashMap<>();
     private BoxSelectHighlightPainter boxSelectPainter = new BoxSelectHighlightPainter();
     private Object currentBoxSelect = null;
-    private EditorSelectionModel selectionModel;
     private List<Object> selectionHighlightList = new ArrayList<>();
-
 
     public TranscriptEditor(
         Session session,
@@ -87,16 +97,7 @@ public class TranscriptEditor extends JEditorPane {
         TranscriptMouseAdapter mouseAdapter = new TranscriptMouseAdapter();
         addMouseMotionListener(mouseAdapter);
         addMouseListener(mouseAdapter);
-        addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (selectedSegment != null && e.getKeyCode() == KeyEvent.VK_SPACE) {
-                    if (getSegmentPlayback() != null) {
-                        getSegmentPlayback().playSegment(selectedSegment);
-                    }
-                }
-            }
-        });
+
         addCaretListener(e -> {
             TranscriptDocument doc = getTranscriptDocument();
             String transcriptElementType = (String) doc.getCharacterElement(e.getDot()).getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
@@ -113,6 +114,9 @@ public class TranscriptEditor extends JEditorPane {
 //            System.out.println(attrs);
         });
         selectionModel.addSelectionModelListener(new TranscriptSelectionListener());
+
+        // init extensions
+        extensionSupport.initExtensions();
     }
 
     public TranscriptEditor(Session session) {
@@ -2386,4 +2390,32 @@ public class TranscriptEditor extends JEditorPane {
             eventManager.queueEvent(e);
         }
     }
+
+    // region IExtendable
+    @Override
+    public Set<Class<?>> getExtensions() {
+        return extensionSupport.getExtensions();
+    }
+
+    @Override
+    public <T> T getExtension(Class<T> cap) {
+        return extensionSupport.getExtension(cap);
+    }
+
+    @Override
+    public <T> T putExtension(Class<T> cap, T impl) {
+        return extensionSupport.putExtension(cap, impl);
+    }
+
+    @Override
+    public <T> T removeExtension(Class<T> cap) {
+        return extensionSupport.removeExtension(cap);
+    }
+    // endregion IExtendable
+
+    // TODO move all logic dealing with media segments to MediaSegmentExtensions
+    public MediaSegment getCurrentMediaSegment() {
+        return this.selectedSegment;
+    }
+
 }

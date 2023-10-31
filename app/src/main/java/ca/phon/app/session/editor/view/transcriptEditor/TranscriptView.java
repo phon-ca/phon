@@ -95,10 +95,6 @@ public class TranscriptView extends EditorView {
         menuButton.setToolTipText("Show transcript editor menu");
         toolbar.add(menuButton);
 
-        PhonUIAction<Void> showMediaAct = PhonUIAction.eventConsumer(this::showMediaPopup, null);
-        showMediaAct.putValue(PhonUIAction.NAME, "Test media popup");
-        toolbar.add(new JButton(showMediaAct));
-
         JButton showCalloutButton = new JButton("Test callout");
         showCalloutButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -128,18 +124,6 @@ public class TranscriptView extends EditorView {
         fontScaleMenuAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
         fontScaleMenuButton.setAction(fontScaleMenuAct);
         toolbar.add(fontScaleMenuButton);
-    }
-
-    private void showMediaPopup(PhonActionEvent<Void> pae) {
-        final SessionFactory factory = SessionFactory.newFactory();
-        final MediaSegment testSegment = factory.createMediaSegment();
-        testSegment.setStartValue(1000.0f);
-        testSegment.setEndValue(3000.0f);
-        testSegment.setUnitType(MediaUnit.Millisecond);
-
-        JComponent source = (JComponent) pae.getActionEvent().getSource();
-        final SegmentEditorPopup popup = new SegmentEditorPopup(transcriptEditor.getMediaModel(), testSegment);
-        popup.showPopup(source, 0, source.getHeight());
     }
 
     private void showFontScaleMenu(PhonActionEvent<Void> pae) {

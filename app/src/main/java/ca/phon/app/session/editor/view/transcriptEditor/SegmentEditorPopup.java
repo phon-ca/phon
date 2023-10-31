@@ -3,15 +3,14 @@ package ca.phon.app.session.editor.view.transcriptEditor;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.SessionMediaModel;
 import ca.phon.app.session.editor.view.common.SegmentField;
+import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisViewColors;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
-import ca.phon.media.TimeComponent;
-import ca.phon.media.TimeUIModel;
-import ca.phon.media.Timebar;
-import ca.phon.media.WaveformDisplay;
+import ca.phon.media.*;
 import ca.phon.session.MediaSegment;
+import ca.phon.session.MediaUnit;
+import ca.phon.session.SessionFactory;
 import ca.phon.ui.action.PhonUIAction;
-import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,19 +26,29 @@ public class SegmentEditorPopup extends TimeComponent {
 
     private final SegmentField segmentField;
 
+    private JScrollPane waveformScroller;
+
     private final WaveformDisplay waveformDisplay;
 
-    private final MediaSegment segment;
+    private MediaSegment segment;
+
+    private TimeUIModel.Interval currentRecordInterval;
 
     private final static int DEFAULT_POPUP_WIDTH = 400;
+
     private int preferredPopupWidth = DEFAULT_POPUP_WIDTH;
+
+    private Rectangle scrollToRect;
 
     private final static String DEFAULT_SEGMENT_TEXT = "000:00.000-000:00.000";
 
     public SegmentEditorPopup(SessionMediaModel mediaModel, MediaSegment segment) {
         super();
         this.mediaModel = mediaModel;
-        this.segment = segment;
+        this.segment = SessionFactory.newFactory().createMediaSegment();
+        this.segment.setStartValue(segment.getStartValue());
+        this.segment.setEndValue(segment.getEndValue());
+        this.segment.setUnitType(segment.getUnitType());
         this.waveformDisplay = new WaveformDisplay(getTimeModel());
         this.segmentField = new SegmentField();
         init();
@@ -68,27 +77,20 @@ public class SegmentEditorPopup extends TimeComponent {
         setLayout(new BorderLayout());
 
         updateText();
+        addPropertyChangeListener("segment", e -> updateText());
 
         final TimeUIModel timeUIModel = getTimeModel();
         if(mediaModel.isSessionAudioAvailable()) {
             try {
-                timeUIModel.setPixelsPerSecond(100.0f);
-                timeUIModel.setStartTime(0.0f);
-                timeUIModel.setEndTime(mediaModel.getSharedSessionAudio().length());
                 waveformDisplay.setLongSound(mediaModel.getSharedSessionAudio());
                 waveformDisplay.setPreferredChannelHeight(50);
                 waveformDisplay.setTrackViewportHeight(true);
                 waveformDisplay.setFocusable(true);
-                TimeUIModel.Interval segmentInterval = timeUIModel.addInterval(segment.getStartValue()/1000.0f, segment.getEndValue()/1000.0f);
-                segmentInterval.addPropertyChangeListener(e -> {
-                    this.segment.setStartValue(segmentInterval.getStartMarker().getTime() * 1000.0f);
-                    this.segment.setEndValue(segmentInterval.getEndMarker().getTime() * 1000.0f);
-                    updateText();
-                });
-                final JScrollPane scrollPane = new JScrollPane(waveformDisplay);
-                scrollPane.setColumnHeaderView(new Timebar(timeUIModel));
-                add(scrollPane, BorderLayout.CENTER);
-                add(this.segmentField, BorderLayout.SOUTH);
+                waveformScroller = new JScrollPane(waveformDisplay);
+                waveformScroller.setColumnHeaderView(new Timebar(timeUIModel));
+                add(waveformScroller, BorderLayout.CENTER);
+                add(segmentField, BorderLayout.SOUTH);
+                setupTimeModel();
             } catch (IOException e) {
                 Toolkit.getDefaultToolkit().beep();
                 LogUtil.severe(e);
@@ -99,36 +101,87 @@ public class SegmentEditorPopup extends TimeComponent {
         }
     }
 
+    private final static float CLIP_EXTENSION_MIN = 0.5f;
 
-    public JFrame showPopup(JComponent component, int x, int y) {
-        final JFrame retVal = new JFrame();
-        retVal.setUndecorated(true);
-        final Point p = new Point(x, y);
-        SwingUtilities.convertPointToScreen(p, component);
-        retVal.getContentPane().setLayout(new BorderLayout());
-        retVal.getContentPane().add(this, BorderLayout.CENTER);
-        retVal.pack();
-        retVal.setSize(getPreferredPopupWidth(), retVal.getPreferredSize().height);
-        retVal.setLocation(p);
-        retVal.setVisible(true);
-        retVal.addWindowFocusListener(new WindowFocusListener() {
-            @Override
-            public void windowGainedFocus(WindowEvent e) {
-            }
+    private final static float CLIP_EXTENSION_MAX = 1.0f;
+    private void setupTimeModel() {
+        float startTime = 0.0f;
+        float pxPerS = 100.0f;
+        float endTime = 0.0f;
+        float scrollTo = 0.0f;
 
-            @Override
-            public void windowLostFocus(WindowEvent e) {
-                retVal.setVisible(false);
-                retVal.dispose();
+        if(currentRecordInterval != null)
+            getTimeModel().removeInterval(currentRecordInterval);
+//        if(selectionInterval != null)
+//            clearSelection();
+
+        float segStart = segment.getUnitType() == MediaUnit.Millisecond ? segment.getStartValue() / 1000.0f : segment.getStartValue();
+        float segEnd = segment.getUnitType() == MediaUnit.Millisecond ? segment.getEndValue() / 1000.0f : segment.getEndValue();
+        float segLength = segEnd - segStart;
+
+        float preferredClipExtension = segLength * 0.4f;
+        if(preferredClipExtension < CLIP_EXTENSION_MIN)
+            preferredClipExtension = CLIP_EXTENSION_MIN;
+        if(preferredClipExtension > CLIP_EXTENSION_MAX)
+            preferredClipExtension = CLIP_EXTENSION_MAX;
+
+        float clipStart = segStart - preferredClipExtension;
+        float displayStart = Math.max(0.0f, clipStart);
+        float displayLength = segLength + (2*preferredClipExtension);
+
+        if(waveformDisplay.getLongSound() != null) {
+            if((displayStart + displayLength) > waveformDisplay.getLongSound().length()) {
+                displayStart = waveformDisplay.getLongSound().length() - displayLength;
+
+                if(displayStart < 0.0f) {
+                    displayStart = 0.0f;
+                    displayLength = waveformDisplay.getLongSound().length();
+                }
             }
+        }
+
+        int displayWidth = getPreferredPopupWidth();
+        if(displayWidth > 0)
+            pxPerS = displayWidth / displayLength;
+
+        currentRecordInterval = getTimeModel().addInterval(segStart, segEnd);
+        currentRecordInterval.setColor(UIManager.getColor(SpeechAnalysisViewColors.INTERVAL_BACKGROUND));
+        currentRecordInterval.getStartMarker().setColor(UIManager.getColor(SpeechAnalysisViewColors.INTERVAL_MARKER_COLOR));
+        currentRecordInterval.getEndMarker().setColor(UIManager.getColor(SpeechAnalysisViewColors.INTERVAL_MARKER_COLOR));
+        currentRecordInterval.setRepaintEntireInterval(true);
+        currentRecordInterval.addPropertyChangeListener(e -> {
+            float startVal = this.segment.getUnitType() == MediaUnit.Millisecond
+                    ? currentRecordInterval.getStartMarker().getTime() * 1000.0f
+                    : currentRecordInterval.getStartMarker().getTime();
+            float endVal = this.segment.getUnitType() == MediaUnit.Millisecond
+                    ? currentRecordInterval.getEndMarker().getTime() * 1000.0f
+                    : currentRecordInterval.getEndMarker().getTime();
+            setMediaSegment(startVal, endVal);
         });
-        final PhonUIAction<Void> closeAct = PhonUIAction.runnable(() -> retVal.setVisible(false));
-        final KeyStroke escKs = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
+        scrollTo = displayStart;
 
-        ((JComponent)retVal.getContentPane()).getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escKs, "close_popup");
-        ((JComponent)retVal.getContentPane()).getActionMap().put("close_popup", closeAct);
+        if(waveformDisplay.getLongSound() != null) {
+            endTime = waveformDisplay.getLongSound().length();
+        }
 
-        return retVal;
+        getTimeModel().setStartTime(startTime);
+        getTimeModel().setEndTime(endTime);
+        getTimeModel().setPixelsPerSecond(pxPerS);
+
+        final float scrollToTime = scrollTo;
+        final double xPos = getTimeModel().xForTime(scrollToTime);
+        final Rectangle scrollRect = new Rectangle((int)xPos, 0, displayWidth, 10);
+        scrollToRect = scrollRect;
+        SwingUtilities.invokeLater(() -> {waveformDisplay.scrollRectToVisible(scrollRect);});
+    }
+
+    private void setMediaSegment(float startTime, float endTime) {
+        var oldVal = this.segment;
+        this.segment = SessionFactory.newFactory().createMediaSegment();
+        this.segment.setStartValue(startTime);
+        this.segment.setEndValue(endTime);
+        this.segment.setUnitType(oldVal.getUnitType());
+        firePropertyChange("segment", oldVal, this.segment);
     }
 
 }
