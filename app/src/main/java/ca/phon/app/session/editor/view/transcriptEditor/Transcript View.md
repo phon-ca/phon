@@ -1,6 +1,6 @@
 # Transcript View
 
-## Toolbar & window menu
+## Toolbar & view menu
 
  * Session information
    * Show/hide headers
@@ -14,7 +14,7 @@
  * Media
    * Select media
    * Show media player (embedded - todo by Greg)
-   * Show timline view
+   * Show timeline view
    * Show media player view
    * Show speech analysis view
 
@@ -56,9 +56,11 @@ General:
  * cmt/ctrl+shift+s - same as above but for 'Save as'
 
 General movement:
- * Up/down - switch 'tier'
- * Tab/shift tab - switch 'tier'
- * Home/end - beg/end of tier
+ * up/down - switch 'tier'
+ * tab/shift+tab - switch 'tier'
+ * home/end - beg/end of tier
+ * pgup/pgdn - default (no override)
+ * left/right - current impl
 
 Selection:
  * cmd/ctrl+a - select tier
