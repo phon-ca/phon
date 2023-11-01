@@ -6,7 +6,7 @@
    * Show/hide headers
    * Set date
    * Languages
-     * Add language -> Language entry dialog with predictive text input to enter language with check using the Language class (Greg)
+     * Add language -> Language entry dialog with predictive text input with check using the Language class (Greg)
      * Remove item for each current language
    * View metadata (show editable table of metadata (i.e., string key->string value pairs) no restrictions)
    * Show session information view
