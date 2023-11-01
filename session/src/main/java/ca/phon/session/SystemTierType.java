@@ -25,17 +25,19 @@ import ca.phon.session.tierdata.TierData;
  * Tier descriptions for default tiers.
  */
 public enum SystemTierType {
-	Orthography("Orthography", Orthography.class, false),
-	IPATarget("IPA Target", IPATranscript.class, false),
-	TargetSyllables("Target Syllables", IPATranscript.class, true),
-	IPAActual("IPA Actual", IPATranscript.class, false),
-	ActualSyllables("Actual Syllables", IPATranscript.class, true),
-	PhoneAlignment("Alignment", PhoneAlignment.class, true),
-	Segment("Segment", MediaSegment.class, true),
+	Orthography("Orthography", "*<ID>", Orthography.class, false),
+	IPATarget("IPA Target", "%mod",IPATranscript.class, false),
+	TargetSyllables("Target Syllables", "%xmodsyll", IPATranscript.class, true),
+	IPAActual("IPA Actual", "%pho", IPATranscript.class, false),
+	ActualSyllables("Actual Syllables",  "%xphosyll", IPATranscript.class, true),
+	PhoneAlignment("Alignment", "%xphoalin", PhoneAlignment.class, true),
+	Segment("Segment", "", MediaSegment.class, true),
 	@Deprecated
-	Notes("Notes", TierData.class, false);
+	Notes("Notes", "%xNotes", TierData.class, false);
 	
 	private String tierName;
+
+	private String chatTierName;
 	
 	private Class<?> type;
 
@@ -43,8 +45,9 @@ public enum SystemTierType {
 
 	private TierAlignmentRules tierAlignmentRules;
 	
-	private SystemTierType(String tierName, Class<?> type, boolean hiddenTier) {
+	private SystemTierType(String tierName, String chatTierName, Class<?> type, boolean hiddenTier) {
 		this.tierName = tierName;
+		this.chatTierName = chatTierName;
 		this.type = type;
 		this.hiddenTier = hiddenTier;
 	}
@@ -64,6 +67,10 @@ public enum SystemTierType {
 
 	public String getName() {
 		return this.tierName;
+	}
+
+	public String getChatTierName() {
+		return this.chatTierName;
 	}
 
 	public boolean isHiddenTier() {
