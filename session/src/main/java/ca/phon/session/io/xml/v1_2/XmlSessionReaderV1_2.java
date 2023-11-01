@@ -176,6 +176,20 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 
 		final List<TierViewItem> tierOrder = new ArrayList<TierViewItem>();
 		for(TvType tot:sessionType.getTierOrder().getTier()) {
+			// remove segment tier view tier view
+			String tierName = tot.getTierName();
+			if(SystemTierType.Segment.getName().equals(tierName)) continue;
+			if(SystemTierType.Notes.getName().equals(tierName)) {
+				// convert Notes to Comments
+				tierName = ca.phon.session.UserTierType.Comments.getTierName();
+
+				// add comments to tier description if necessary
+				if(retVal.getUserTiers().getUserTierDescription(ca.phon.session.UserTierType.Comments.getTierName()) == null) {
+					final TierDescription td = factory.createTierDescription(ca.phon.session.UserTierType.Comments.getTierName(), true);
+					retVal.addUserTier(0, td);
+				}
+			}
+			tot.setTierName(tierName);
 			final TierViewItem toi = copyTierViewItem(factory, tot);
 			tierOrder.add(toi);
 		}
@@ -261,25 +275,21 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 	// transcribers
 	private Transcriber copyTranscriber(SessionFactory factory, TranscriberType tt) {
 		final Transcriber retVal = factory.createTranscriber();
-
 		retVal.setUsername(tt.getId());
 		retVal.setRealName(tt.getName());
-
 		if(tt.getPassword() != null) {
 			retVal.setPassword(tt.getPassword().getContent());
 			retVal.setUsePassword(tt.getPassword().isUse());
 		}
-
 		return retVal;
 	}
 
 	// tier descriptions
 	private TierDescription copyTierDescription(SessionFactory factory, UserTierType utt) {
 		final String name = utt.getTierName();
-		
 		try {
 			Class<?> type = Class.forName(utt.getType(), true, PluginManager.getInstance());
-			return factory.createTierDescription(name, type, new HashMap<>(), false);
+			return factory.createTierDescription(name, type, new HashMap<>(), !utt.isGrouped());
 		} catch (ClassNotFoundException e) {
 			throw new IllegalArgumentException(e);
 		}
@@ -290,7 +300,6 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 		final boolean visible = tvt.isVisible();
 		final String name = tvt.getTierName();
 		final String font = tvt.getFont();
-
 		return factory.createTierViewItem(name, visible, font, locked);
 	}
 	
@@ -402,14 +411,17 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 
 		// notes
 		if(rt.getNotes() != null) {
+			final Tier<TierData> commentsTier = factory.createTier(ca.phon.session.UserTierType.Comments.getTierName(),
+					TierData.class, new HashMap<>(), true, false);
 			try {
 				final TierData notesData = TierData.parseTierData(rt.getNotes().getContent());
-				retVal.setNotes(notesData);
+				commentsTier.setValue(notesData);
 			} catch (ParseException pe) {
 				final TierData tierData = new TierData();
 				tierData.putExtension(UnvalidatedValue.class, new UnvalidatedValue(rt.getNotes().getContent(), pe));
-				retVal.setNotes(tierData);
+				commentsTier.setValue(tierData);
 			}
+			retVal.putTier(commentsTier);
 		}
 
 		// segment

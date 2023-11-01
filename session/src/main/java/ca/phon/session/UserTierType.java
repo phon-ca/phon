@@ -14,46 +14,51 @@ public enum UserTierType {
     /*
      * Utterance-level dependent tiers
      */
-    Addressee("addressee", "%add", TierData.class, false),
-    Actions("actions", "%act", TierData.class,false),
-    Alternative("alternative", "%alt", TierData.class,false),
-    Coding("coding", "%cod", TierData.class,false),
-    Cohesion("cohesion", "%coh", TierData.class,false),
-    Comments("comments", "%com", TierData.class, false),
-    EnglishTranslation("english translation", "%eng", TierData.class,false),
-    Errcoding("errcoding", "%err", TierData.class,false),
-    Explanation("explanation", "%exp", TierData.class,false),
-    Facial("facial", "%fac", TierData.class, false),
-    Flow("flow", "%flo", TierData.class,false),
-    TargetGloss("target gloss", "%gls", TierData.class,false),
-    Gesture("gesture", "%gpx", TierData.class,false),
-    Intonation("intonation", "%int", TierData.class,false),
-    Orthography("orthography", "%ort", TierData.class,false),
-    Paralinguistics("paralinguistics", "%par", TierData.class,false),
-    SALT("SALT", "%def", TierData.class,false),
-    Situation("situation", "%sit", TierData.class,false),
-    SpeechAct("speech act", "%spa", TierData.class,false),
-    TimeStamp("time stamp", "%tim", TierData.class,false),
+    Addressee("Addressee", "addressee", "%add", TierData.class, false),
+    Actions("Actions", "actions", "%act", TierData.class,false),
+    Alternative("Alternative", "alternative", "%alt", TierData.class,false),
+    Coding("Coding", "coding", "%cod", TierData.class,false),
+    Cohesion("Cohesion", "cohesion", "%coh", TierData.class,false),
+    Comments("Comments", "comments", "%com", TierData.class, false),
+    EnglishTranslation("Eng translation", "english translation", "%eng", TierData.class,false),
+    Errcoding("Errcoding", "errcoding", "%err", TierData.class,false),
+    Explanation("Explanation", "explanation", "%exp", TierData.class,false),
+    Facial("Facial", "facial", "%fac", TierData.class, false),
+    Flow("Flow", "flow", "%flo", TierData.class,false),
+    TargetGloss("Target gloss", "target gloss", "%gls", TierData.class,false),
+    Gesture("Gesture", "gesture", "%gpx", TierData.class,false),
+    Intonation("Intonation", "intonation", "%int", TierData.class,false),
+    Orthography("Ort", "orthography", "%ort", TierData.class,false),
+    Paralinguistics("Paralinguistics", "paralinguistics", "%par", TierData.class,false),
+    SALT("SALT", "SALT", "%def", TierData.class,false),
+    Situation("Situation", "situation", "%sit", TierData.class,false),
+    SpeechAct("Speech act", "speech act", "%spa", TierData.class,false),
+    TimeStamp("Time stamp", "time stamp", "%tim", TierData.class,false),
     /**
      * word segment information, each word in orthography will be reproduced along with an
      * internal-media element, this tier is not directly editable.
      */
-    Wor("Word intervals", "%wor", Orthography.class, true),
+    Wor("Word intervals", "", "%wor", Orthography.class, true),
     /**
      * Morphological tiers from CHAT
      */
-    Mor("Morphology", "%mor", MorTierData.class, false),
-    Trn("Speech Turn", "%trn", MorTierData.class, false),
+    Mor("Morphology", "", "%mor", MorTierData.class, false),
+    Trn("Speech Turn", "", "%trn", MorTierData.class, false),
     /**
      * GRASP tiers
      */
-    Gra("GRASP", "%gra", GraspTierData.class, false),
-    Grt("GRASP Turn", "%grt", GraspTierData.class, false);
+    Gra("GRASP", "", "%gra", GraspTierData.class, false),
+    Grt("GRASP Turn", "", "%grt", GraspTierData.class, false);
 
     /**
      * tier name in Phon
      */
     private final String tierName;
+
+    /**
+     * talkbank xml tier type
+     */
+    private final String tbTierType;
 
     /**
      * Tier name in CHAT
@@ -70,8 +75,9 @@ public enum UserTierType {
      */
     private final boolean alignable;
 
-    private UserTierType(String tierName, String chatTierName, Class<?> type, boolean alignable) {
+    private UserTierType(String tierName, String tbTierType, String chatTierName, Class<?> type, boolean alignable) {
         this.tierName = tierName;
+        this.tbTierType = tbTierType;
         this.chatTierName = chatTierName;
         this.type = type;
         this.alignable = alignable;
@@ -80,6 +86,8 @@ public enum UserTierType {
     public String getTierName() {
         return tierName;
     }
+
+    public String getTalkbankTierType() { return tbTierType; }
 
     public String getChatTierName() {
         return chatTierName;
@@ -94,8 +102,12 @@ public enum UserTierType {
     }
 
     public static UserTierType fromPhonTierName(String tierName) {
+        return fromPhonTierName(tierName, false);
+    }
+
+    public static UserTierType fromPhonTierName(String tierName, boolean ignoreCase) {
         for(UserTierType tierType:values()) {
-            if(tierType.getTierName().equals(tierName)) {
+            if(ignoreCase ? tierType.getTierName().equalsIgnoreCase(tierName) : tierType.getTierName().equals(tierName)) {
                 return tierType;
             }
         }
@@ -105,6 +117,15 @@ public enum UserTierType {
     public static UserTierType fromChatTierName(String tierName) {
         for(UserTierType tierType:values()) {
             if(tierType.getChatTierName().equals(tierName)) {
+                return tierType;
+            }
+        }
+        return null;
+    }
+
+    public static UserTierType fromTalkbankTierType(String tbTierType) {
+        for(UserTierType tierType:values()) {
+            if(tierType.getTalkbankTierType().equals(tbTierType)) {
                 return tierType;
             }
         }

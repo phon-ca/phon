@@ -111,7 +111,6 @@ public final class SessionFactory extends ExtendableObject {
 		retVal.setCorpus(corpus);
 		retVal.setName(name);
 		setupDefaultTierView(retVal);
-		
 		return retVal;
 	}
 
@@ -120,7 +119,8 @@ public final class SessionFactory extends ExtendableObject {
 	}
 	
 	/**
-	 * Setup default tier view for session.
+	 * Setup default tier view for session.  As of Phon 4.0 Notes and Segment are not added to the default
+	 * tier view.
 	 * 
 	 * @param session
 	 */
@@ -129,13 +129,9 @@ public final class SessionFactory extends ExtendableObject {
 		tierView.add(createTierViewItem(SystemTierType.Orthography.getName(), true));
 		tierView.add(createTierViewItem(SystemTierType.IPATarget.getName(), true));
 		tierView.add(createTierViewItem(SystemTierType.IPAActual.getName(), true));
-		tierView.add(createTierViewItem(SystemTierType.Notes.getName(), true));
-		tierView.add(createTierViewItem(SystemTierType.Segment.getName(), true));
-		
 		for(TierDescription tierDesc:session.getUserTiers()) {
 			tierView.add(createTierViewItem(tierDesc.getName(), true, "default", false));
 		}
-		
 		session.setTierView(tierView);
 	}
 	
