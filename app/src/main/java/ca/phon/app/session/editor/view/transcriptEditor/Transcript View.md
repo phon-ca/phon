@@ -1,5 +1,28 @@
 # Transcript View
 
+## Insertion hooks
+
+ * Add following hook points.  These should be functions which are called at relevant points
+in TranscriptDocument and have matching methods in TranscriptDocumentInsertionHook:
+    * start session
+    * start header
+    * start header line
+    * end header line
+    * start transcript
+    * start comment
+    * end comment
+    * start gem
+    * end gem
+    * start record
+    * start record header
+    * end record header
+    * begin tier
+    * end tier
+    * end record
+    * end transcript
+    * end session
+  * Create abstract implementation for TranscriptDocumentInsertionHook
+
 ## Toolbar & view menu
 
  * Session information
