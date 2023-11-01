@@ -70,7 +70,7 @@ Tier specific:
    * cmd/ctrl+shift+t - auto transcribe
 
  * Syllabification
-   * enter - begin syllabification edit mode where we lock the caret selection, any movement out of the tier or enter, or esc will end mode
+   * enter - begin syllabification edit mode where we lock the caret selection, any movement out of the tier, or enter, or esc will end mode
 
 Element specific:
 
