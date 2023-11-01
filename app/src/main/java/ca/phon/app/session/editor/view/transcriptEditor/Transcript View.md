@@ -8,6 +8,7 @@ in TranscriptDocument and have matching methods in TranscriptDocumentInsertionHo
     * start header
     * start header line
     * end header line
+    * end header
     * start transcript
     * start comment
     * end comment
