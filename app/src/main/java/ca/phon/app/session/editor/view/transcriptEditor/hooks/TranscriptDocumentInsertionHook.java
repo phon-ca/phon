@@ -1,4 +1,4 @@
-package ca.phon.app.session.editor.view.transcriptEditor;
+package ca.phon.app.session.editor.view.transcriptEditor.hooks;
 
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.MutableAttributeSet;

@@ -3,14 +3,13 @@ package ca.phon.app.session.editor.view.transcriptEditor;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.*;
+import ca.phon.app.session.editor.view.transcriptEditor.hooks.TranscriptEditorCaretMovementHook;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.plugin.PluginManager;
 import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.session.tierdata.TierData;
-import ca.phon.ui.CalloutWindow;
-import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
@@ -42,7 +41,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     private SessionEditUndoSupport undoSupport;
     private UndoManager undoManager;
 
-    /* extension support */
+    /* Extension support */
     private final ExtensionSupport extensionSupport = new ExtensionSupport(TranscriptEditor.class, this);
 
     /* State */
@@ -55,7 +54,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     private Element hoverElem = null;
     private Object currentUnderline;
     private HoverUnderlinePainter underlinePainter = new HoverUnderlinePainter();
-    private MediaSegment selectedSegment = null;
+    //private MediaSegment selectedSegment = null;
     private int upDownOffset = -1;
     private boolean caretMoveFromUpDown = false;
     private boolean internalEdit = false;
@@ -63,6 +62,30 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     private BoxSelectHighlightPainter boxSelectPainter = new BoxSelectHighlightPainter();
     private Object currentBoxSelect = null;
     private List<Object> selectionHighlightList = new ArrayList<>();
+    private final List<TranscriptEditorCaretMovementHook> caretMovementHooks = new ArrayList<>();
+
+    // region TranscriptEditorCaretMovementHook
+
+    private void loadRegisteredCaretMovementHooks() {
+        for(var hookExtPt: PluginManager.getInstance().getExtensionPoints(TranscriptEditorCaretMovementHook.class)) {
+            final TranscriptEditorCaretMovementHook hook = hookExtPt.getFactory().createObject();
+            addCaretMovementHook(hook);
+        }
+    }
+
+    public void addCaretMovementHook(TranscriptEditorCaretMovementHook hook) {
+        this.caretMovementHooks.add(hook);
+    }
+
+    public boolean removeCaretMovementHook(TranscriptEditorCaretMovementHook hook) {
+        return this.caretMovementHooks.remove(hook);
+    }
+
+    public List<TranscriptEditorCaretMovementHook> getCaretMovementHooks() {
+        return Collections.unmodifiableList(this.caretMovementHooks);
+    }
+
+    // endregion TranscriptEditorCaretMovementHook
 
     public TranscriptEditor(
         Session session,
@@ -118,6 +141,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
 
         // init extensions
         extensionSupport.initExtensions();
+        loadRegisteredCaretMovementHooks();
     }
 
     public TranscriptEditor(Session session) {
@@ -180,7 +204,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
 
         KeyStroke enter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
         inputMap.put(enter, "pressedEnter");
-        PhonUIAction<Void> enterAct = PhonUIAction.consumer(this::pressedEnter, null);
+        PhonUIAction<Void> enterAct = PhonUIAction.eventConsumer(this::pressedEnter, null);
         actionMap.put("pressedEnter", enterAct);
 
 
@@ -407,14 +431,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         return eventManager;
     }
 
-    public MediaSegment getSelectedSegment() {
-        return selectedSegment;
-    }
-
-    public void setSelectedSegment(MediaSegment selectedSegment) {
-        this.selectedSegment = selectedSegment;
-    }
-
     public boolean isTranscriberValidator() {
         return dataModel.getTranscriber() == Transcriber.VALIDATOR;
     }
@@ -470,49 +486,14 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     }
 
     public void pressedEnter(PhonActionEvent<Void> pae) {
-
-//        PhonUIAction t = PhonUIAction.runnable(() -> {
-//            System.out.println("dfghkdfhjg");
-//        });
-
-//        t.actionPerformed(pae.getActionEvent());
-
-        if (selectedSegment != null) {
-            try {
-                var segmentEditor = new SegmentEditorPopup(getMediaModel(), selectedSegment);
-                segmentEditor.setPreferredSize(new Dimension(segmentEditor.getPreferredPopupWidth(), (int) segmentEditor.getPreferredSize().getHeight()));
-
-                var start = modelToView2D(getSelectionStart());
-                var end = modelToView2D(getSelectionEnd());
-
-                Point point = new Point(
-                    (int) (((end.getBounds().getMaxX() - start.getBounds().getMinX()) / 2) + start.getBounds().getMinX()),
-                    (int) start.getCenterY()
-                );
-
-                point.x += getLocationOnScreen().x;
-                point.y += getLocationOnScreen().y;
-
-                System.out.println(point);
-                System.out.println(getLocationOnScreen());
-
-                CalloutWindow.showCallout(
-                    CommonModuleFrame.getCurrentFrame(),
-                    segmentEditor,
-                    SwingConstants.NORTH,
-                    SwingConstants.CENTER,
-                    point
-                );
-                return;
-            }
-            catch (BadLocationException e) {
-                LogUtil.severe(e);
-            }
+        TranscriptDocument doc = getTranscriptDocument();
+        AttributeSet attrs = doc.getCharacterElement(getCaretPosition()).getAttributes();
+        var enterAct = attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_ENTER_ACTION);
+        if (enterAct instanceof Action action) {
+            action.actionPerformed(pae.getActionEvent());
+            return;
         }
 
-        TranscriptDocument doc = getTranscriptDocument();
-
-        var attrs = doc.getCharacterElement(getCaretPosition()).getAttributes();
         String elemType = (String) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
         System.out.println("Element type: " + elemType);
 
@@ -1599,7 +1580,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         int docLen = doc.getLength();
 
         Element elem = doc.getCharacterElement(currentPos);
-        while (elem.getAttributes().getAttribute("notTraversable") != null && currentPos < docLen) {
+        while (elem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE) != null && currentPos < docLen) {
             currentPos++;
             elem = doc.getCharacterElement(currentPos);
         }
@@ -1622,7 +1603,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         Element elem = doc.getCharacterElement(currentPos);
         AttributeSet attrs = elem.getAttributes();
 
-        MediaSegment segment = (MediaSegment) elem.getAttributes().getAttribute("mediaSegment");
+        MediaSegment segment = (MediaSegment) elem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_MEDIA_SEGMENT);
 
         if (segment != null) {
             System.out.println("In segment");
@@ -1643,7 +1624,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             }
         }
 
-        while ((attrs.getAttribute("notTraversable") != null || attrs.getAttribute("mediaSegment") != null) && currentPos >= 0) {
+        while ((attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE) != null || attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_MEDIA_SEGMENT) != null) && currentPos >= 0) {
             currentPos--;
             elem = doc.getCharacterElement(currentPos);
             attrs = elem.getAttributes();
@@ -1897,7 +1878,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         }
     }
 
-    private void boxSelectBounds(Tuple<Integer, Integer> bounds) {
+    public void boxSelectBounds(Tuple<Integer, Integer> bounds) {
         try {
             removeCurrentBoxSelect();
             currentBoxSelect = getHighlighter().addHighlight(
@@ -1910,7 +1891,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         }
     }
 
-    private void removeCurrentBoxSelect() {
+    public void removeCurrentBoxSelect() {
         if (currentBoxSelect != null) {
             getHighlighter().removeHighlight(currentBoxSelect);
             currentBoxSelect = null;
@@ -2005,11 +1986,15 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
 
             Element elem = doc.getCharacterElement(dot);
             AttributeSet attrs = elem.getAttributes();
-            boolean notTraversable = attrs.getAttribute("notTraversable") != null;
-            MediaSegment segment = (MediaSegment) attrs.getAttribute("mediaSegment");
-            boolean isSegment = segment != null;
+            if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE) != null) return;
 
-            if (notTraversable && !isSegment) return;
+            for (TranscriptEditorCaretMovementHook hook : getCaretMovementHooks()) {
+                hook.caretMoved(dot, attrs);
+            }
+
+
+
+
 
             AttributeSet prevAttrs = doc.getCharacterElement(fb.getCaret().getDot()).getAttributes();
             AttributeSet nextAttrs = doc.getCharacterElement(dot).getAttributes();
@@ -2081,31 +2066,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             if (!caretMoveFromUpDown) upDownOffset = -1;
             caretMoveFromUpDown = false;
 
-            int segmentIncludedPos = dot;
-            if (!isSegment) {
-                segment = (MediaSegment) doc.getCharacterElement(dot - 1).getAttributes().getAttribute("mediaSegment");
-                segmentIncludedPos--;
-            }
 
-            if (segment != null) {
-                System.out.println("Segment is present");
-                if (!segment.equals(selectedSegment)) {
-                    System.out.println(segment);
-                    System.out.println("Select segment");
-                    setSelectedSegment(segment);
-                    var segmentBounds = doc.getSegmentBounds(segment, segmentIncludedPos);
-                    boxSelectBounds(segmentBounds);
-                }
-            }
-            else {
-                System.out.println("Segment is not present");
-                System.out.println("Selected segment is null?: " + selectedSegment == null);
-                if (selectedSegment != null) {
-                    System.out.println("Deselect segment");
-                    removeCurrentBoxSelect();
-                    setSelectedSegment(null);
-                }
-            }
 
             if (nextTier != null && nextAttrs.getAttribute("syllabification") != null) {
 
@@ -2280,18 +2241,9 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                 Element elem = doc.getCharacterElement(mousePosInDoc);
                 AttributeSet attrs = elem.getAttributes();
 
-                MediaSegment mediaSegment = (MediaSegment) attrs.getAttribute("mediaSegment");
-                if (mediaSegment != null) {
-                    var segmentBounds = doc.getSegmentBounds(mediaSegment, mousePosInDoc);
-                    System.out.println("Segment bounds: " + segmentBounds);
-                    System.out.println(mediaSegment);
-                    setCaretPosition(segmentBounds.getObj1());
-                    setSelectedSegment(mediaSegment);
-                    moveCaretPosition(segmentBounds.getObj2()+1);
-                    return;
-                }
 
-                if (attrs.getAttribute("notTraversable") != null) {
+
+                if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE) != null) {
                     String elementType = (String) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
                     if (elementType != null) {
                         if (e.getClickCount() > 1) {
@@ -2485,11 +2437,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     public <T> T removeExtension(Class<T> cap) {
         return extensionSupport.removeExtension(cap);
     }
+
     // endregion IExtendable
-
-    // TODO move all logic dealing with media segments to MediaSegmentExtensions
-    public MediaSegment getCurrentMediaSegment() {
-        return this.selectedSegment;
-    }
-
 }

@@ -13,6 +13,9 @@ public class DefaultEditorExtensionProvider implements ExtensionProvider {
         if(obj instanceof TranscriptEditor editor) {
             final MediaSegmentExtensions segmentExtensions = new MediaSegmentExtensions();
             segmentExtensions.install(editor);
+
+            final SyllabificationExtensions syllabificationExtensions = new SyllabificationExtensions();
+            syllabificationExtensions.install(editor);
         }
     }
 

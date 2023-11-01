@@ -3,6 +3,8 @@ package ca.phon.app.session.editor.view.transcriptEditor;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
+import ca.phon.app.session.editor.view.transcriptEditor.hooks.TranscriptDocumentInsertedTierHook;
+import ca.phon.app.session.editor.view.transcriptEditor.hooks.TranscriptDocumentInsertionHook;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.formatter.Formatter;
@@ -80,7 +82,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 //        sessionFactory.cloneRecord()
         extensionSupport.initExtensions();
         loadRegisteredInsertionHooks();
+        loadRegisteredInsertedTierHooks();
     }
+
     // region Getters and Setters
 
     public Session getSession() {
@@ -239,6 +243,10 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         this.eventManager = eventManager;
     }
 
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+
     // endregion Getters and Setters
 
     // region Attribute Getters
@@ -254,7 +262,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         return retVal;
     }
 
-    private SimpleAttributeSet getTierAttributes(Tier<?> tier) {
+    public SimpleAttributeSet getTierAttributes(Tier<?> tier) {
         return getTierAttributes(tier, null);
     }
     private SimpleAttributeSet getTierAttributes(Tier<?> tier, TierViewItem item) {
@@ -278,7 +286,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         return retVal;
     }
 
-    private SimpleAttributeSet getSyllabificationAttributes() {
+    public SimpleAttributeSet getSyllabificationAttributes() {
         final SimpleAttributeSet retVal = new SimpleAttributeSet();
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_COMPONENT_FACTORY, new SyllabificationComponentFactory());
         return retVal;
@@ -372,7 +380,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         return retVal;
     }
 
-    private SimpleAttributeSet getTierLabelAttributes(Tier<?> tier) {
+    public SimpleAttributeSet getTierLabelAttributes(Tier<?> tier) {
         final SimpleAttributeSet retVal = new SimpleAttributeSet();
 
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL, true);
@@ -509,29 +517,37 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
     // region Batching
 
-    public void appendBatchString(String str, AttributeSet a) {
+    public void appendBatchString(String str, MutableAttributeSet a) {
         final StringBuilder builder = new StringBuilder();
         builder.append(str);
         final List<ElementSpec> additionalInsertions = new ArrayList<>();
-        for(TranscriptDocumentInsertionHook hook:getInsertionHooks()) {
-            additionalInsertions.addAll(hook.batchInsertString(builder, (MutableAttributeSet) a));
+        for (TranscriptDocumentInsertionHook hook : getInsertionHooks()) {
+            additionalInsertions.addAll(hook.batchInsertString(builder, a));
         }
-        a = a.copyAttributes();
+        a = new SimpleAttributeSet(a);
         char[] chars = builder.toString().toCharArray();
         batch.add(new ElementSpec(a, ElementSpec.ContentType, chars, 0, str.length()));
         batch.addAll(additionalInsertions);
     }
 
+    public List<ElementSpec> getBatchEndLineFeed(AttributeSet a) {
+        List<ElementSpec> retVal = new ArrayList<>();
+        retVal.add(new ElementSpec(a, ElementSpec.ContentType, EOL_ARRAY, 0, 1));
+        retVal.addAll(getBatchEndStart());
+        return retVal;
+    }
     public void appendBatchLineFeed(AttributeSet a) {
-        // Add a spec with the linefeed characters
-        batch.add(new ElementSpec(a, ElementSpec.ContentType, EOL_ARRAY, 0, 1));
-
-        appendBatchEndStart();
+        batch.addAll(getBatchEndLineFeed(a));
     }
 
+    public List<ElementSpec> getBatchEndStart() {
+        return new ArrayList<>(){{
+            new ElementSpec(null, ElementSpec.EndTagType);
+            new ElementSpec(null, ElementSpec.StartTagType);
+        }};
+    }
     public void appendBatchEndStart() {
-        batch.add(new ElementSpec(null, ElementSpec.EndTagType));
-        batch.add(new ElementSpec(null, ElementSpec.StartTagType));
+        batch.addAll(getBatchEndStart());
     }
 
     public void processBatchUpdates(int offs) throws BadLocationException {
@@ -2086,7 +2102,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         }
     }
 
-    private String formatLabelText(String labelText) {
+    public String formatLabelText(String labelText) {
         int labelTextLen = labelText.length();
         if (labelTextLen < labelColumnWidth) {
             StringBuilder builder = new StringBuilder();
@@ -2179,7 +2195,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         formatSegment(segment, additionalAttrs, MediaTimeFormatStyle.MINUTES_AND_SECONDS);
     }
 
-    private void formatSyllabification(IPATranscript ipaTranscript, AttributeSet additionalAttrs) {
+    public void formatSyllabification(IPATranscript ipaTranscript, AttributeSet additionalAttrs) {
         SimpleAttributeSet attrs = new SimpleAttributeSet();
         if (additionalAttrs != null) attrs.addAttributes(additionalAttrs);
         attrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_SYLLABIFICATION, true);
@@ -2874,6 +2890,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     public record Languages(List<Language> languageList) {}
 
     // region TranscriptDocumentInsertionHook
+
     /**
      * Insertion hooks, these may be added dynamically but will also be loaded using
      * from registered IPluginExtensionPoints
@@ -2898,7 +2915,40 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     public List<TranscriptDocumentInsertionHook> getInsertionHooks() {
         return Collections.unmodifiableList(this.insertionHooks);
     }
+
     // endregion TranscriptDocumentInsertionHook
+
+    // region TranscriptDocumentInsertedTierHook
+
+    private final List<TranscriptDocumentInsertedTierHook> insertedTierHooks = new ArrayList<>();
+
+    private void loadRegisteredInsertedTierHooks() {
+        for(var hookExtPt: PluginManager.getInstance().getExtensionPoints(TranscriptDocumentInsertedTierHook.class)) {
+            final TranscriptDocumentInsertedTierHook hook = hookExtPt.getFactory().createObject();
+            addInsertedTierHook(hook);
+        }
+    }
+
+    public void addInsertedTierHook(TranscriptDocumentInsertedTierHook hook) {
+        this.insertedTierHooks.add(hook);
+    }
+
+    public boolean removeInsertedTierHook(TranscriptDocumentInsertedTierHook hook) {
+        return this.insertedTierHooks.remove(hook);
+    }
+
+    public List<TranscriptDocumentInsertedTierHook> getInsertedTierHooks() {
+        return Collections.unmodifiableList(this.insertedTierHooks);
+    }
+
+    public void insertedTier(MutableAttributeSet attrs) {
+        final List<ElementSpec> additionalInsertions = new ArrayList<>();
+        for (var hook : getInsertedTierHooks()) {
+            additionalInsertions.addAll(hook.insertedTier(attrs));
+        }
+    }
+
+    // endregion TranscriptDocumentInsertedTierHook
 
     // region IExtendable
     @Override
@@ -2920,5 +2970,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     public <T> T removeExtension(Class<T> cap) {
         return extensionSupport.removeExtension(cap);
     }
+
     // endregion
 }
