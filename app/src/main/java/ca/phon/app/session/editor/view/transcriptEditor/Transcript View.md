@@ -30,7 +30,7 @@ in TranscriptDocument and have matching methods in TranscriptDocumentInsertionHo
    * Show/hide headers
    * Set date
    * Languages
-     * Add language -> Language entry dialog with predictive text input with check using the Language class (Greg)
+     * Set/add language -> Show method of selecting a valid language then insert Language header line if not present and move caret to end 
      * Remove item for each current language
    * View metadata (show editable table of metadata (i.e., string key->string value pairs) no restrictions)
    * Show session information view
