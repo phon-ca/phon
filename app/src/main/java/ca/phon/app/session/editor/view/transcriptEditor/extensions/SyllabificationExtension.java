@@ -2,15 +2,13 @@ package ca.phon.app.session.editor.view.transcriptEditor.extensions;
 
 import ca.phon.app.session.editor.view.transcriptEditor.TranscriptDocument;
 import ca.phon.app.session.editor.view.transcriptEditor.TranscriptStyleConstants;
-import ca.phon.app.session.editor.view.transcriptEditor.hooks.TranscriptDocumentInsertedTierHook;
-import ca.phon.app.session.editor.view.transcriptEditor.hooks.TranscriptDocumentInsertionHook;
+import ca.phon.app.session.editor.view.transcriptEditor.TranscriptDocumentInsertionHook;
 import ca.phon.app.session.editor.view.transcriptEditor.TranscriptEditor;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.session.Record;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
 
-import javax.swing.text.AttributeSet;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.SimpleAttributeSet;
@@ -31,9 +29,9 @@ public class SyllabificationExtensions implements TranscriptEditorExtension {
         this.editor = editor;
         this.doc = editor.getTranscriptDocument();
 
-        doc.addInsertedTierHook(new TranscriptDocumentInsertedTierHook() {
+        doc.addInsertionHook(new TranscriptDocumentInsertionHook() {
             @Override
-            public List<DefaultStyledDocument.ElementSpec> insertedTier(MutableAttributeSet attrs) {
+            public List<DefaultStyledDocument.ElementSpec> endTier(MutableAttributeSet attrs) {
                 List<DefaultStyledDocument.ElementSpec> retVal = new ArrayList<>();
 
                 if (!editor.isSyllabificationVisible()) return retVal;
@@ -64,7 +62,7 @@ public class SyllabificationExtensions implements TranscriptEditorExtension {
                         // Get the string for the label
                         String syllabificationLabelText = doc.formatLabelText("Syllabification");
                         // Add the label
-                        appendBatchString(syllabificationLabelText + ": ", syllabificationLabelAttrs);
+                        doc.getBatchString(syllabificationLabelText + ": ", syllabificationLabelAttrs);
                         // Add component factory if needed
                         if (doc.isSyllabificationComponent()) {
                             attrs.addAttributes(doc.getSyllabificationAttributes());

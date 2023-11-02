@@ -2,6 +2,7 @@ package ca.phon.app.session.editor.view.transcriptEditor.hooks;
 
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.MutableAttributeSet;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,7 +12,8 @@ import java.util.List;
  * a list of additional element specs which should be added after the
  * provided data.
  */
-public interface TranscriptDocumentInsertionHook {
+public abstract class TranscriptDocumentInsertionHook {
+    private final List<DefaultStyledDocument.ElementSpec> EMPTY_LIST = new ArrayList<>();
 
     /**
      * Hook into batch string insertions before they are performed.
@@ -20,6 +22,11 @@ public interface TranscriptDocumentInsertionHook {
      * @param attrs
      * @return list of additional element specs to add (if any)
      */
-    public List<DefaultStyledDocument.ElementSpec> batchInsertString(StringBuilder buffer, MutableAttributeSet attrs);
+    public List<DefaultStyledDocument.ElementSpec> batchInsertString(StringBuilder buffer, MutableAttributeSet attrs) {
+        return EMPTY_LIST;
+    }
 
+    public List<DefaultStyledDocument.ElementSpec> endTier(MutableAttributeSet attrs) {
+        return EMPTY_LIST;
+    }
 }

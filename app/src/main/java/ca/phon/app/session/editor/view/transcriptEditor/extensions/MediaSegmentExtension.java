@@ -2,19 +2,19 @@ package ca.phon.app.session.editor.view.transcriptEditor.extensions;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.view.transcriptEditor.*;
-import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.app.session.editor.view.transcriptEditor.TranscriptDocumentInsertionHook;
 import ca.phon.session.MediaSegment;
 import ca.phon.ui.CalloutWindow;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 
 import javax.swing.*;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,24 +35,49 @@ public class MediaSegmentExtensions implements TranscriptEditorExtension {
         this.editor = editor;
 
         editor.addKeyListener(onSpace);
+        editor.addCaretListener(onCaretMove);
 
-        editor.getTranscriptDocument().addInsertionHook((buffer, attrs) -> {
-            MediaSegment segment = (MediaSegment) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_MEDIA_SEGMENT);
-            if (segment != null) {
-                PhonUIAction<MediaSegment> showSegmentEditCalloutAct = PhonUIAction.consumer(MediaSegmentExtensions.this::showSegmentEditCallout, segment);
-                attrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_ENTER_ACTION, showSegmentEditCalloutAct);
+        editor.getTranscriptDocument().addInsertionHook(new TranscriptDocumentInsertionHook() {
+            @Override
+            public List<DefaultStyledDocument.ElementSpec> batchInsertString(StringBuilder buffer, MutableAttributeSet attrs) {
+                MediaSegment segment = (MediaSegment) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_MEDIA_SEGMENT);
+                if (segment != null) {
+                    PhonUIAction<MediaSegment> showSegmentEditCalloutAct = PhonUIAction.consumer(MediaSegmentExtensions.this::showSegmentEditCallout, segment);
+                    attrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_ENTER_ACTION, showSegmentEditCalloutAct);
+                }
+                return new ArrayList<>();
             }
-            return new ArrayList<>();
         });
-        editor.addCaretMovementHook((dot, attrs) -> {
+    }
+
+    // Add playback when pressing space while caret is inside a media segment
+    private final KeyAdapter onSpace = new KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (selectedSegment != null && e.getKeyCode() == KeyEvent.VK_SPACE) {
+                if (editor.getSegmentPlayback() != null) {
+                    if(editor.getSegmentPlayback().isPlaying()) {
+                        editor.getSegmentPlayback().stopPlaying();
+                    } else {
+                        editor.getSegmentPlayback().playSegment(selectedSegment);
+                    }
+                }
+            }
+        }
+    };
+
+    private final CaretListener onCaretMove = new CaretListener() {
+        @Override
+        public void caretUpdate(CaretEvent e) {
             TranscriptDocument doc = editor.getTranscriptDocument();
+            AttributeSet attrs = doc.getCharacterElement(e.getDot()).getAttributes();
 
             MediaSegment segment = (MediaSegment) attrs.getAttribute("mediaSegment");
             boolean isSegment = segment != null;
 
-            int segmentIncludedPos = dot;
+            int segmentIncludedPos = e.getDot();
             if (!isSegment) {
-                segment = (MediaSegment) doc.getCharacterElement(dot - 1).getAttributes().getAttribute("mediaSegment");
+                segment = (MediaSegment) doc.getCharacterElement(e.getDot() - 1).getAttributes().getAttribute("mediaSegment");
                 segmentIncludedPos--;
             }
 
@@ -75,22 +100,6 @@ public class MediaSegmentExtensions implements TranscriptEditorExtension {
                     selectedSegment = null;
                 }
             }
-        });
-    }
-
-    // Add playback when pressing space while caret is inside a media segment
-    private final KeyAdapter onSpace = new KeyAdapter() {
-        @Override
-        public void keyPressed(KeyEvent e) {
-        if (selectedSegment != null && e.getKeyCode() == KeyEvent.VK_SPACE) {
-            if (editor.getSegmentPlayback() != null) {
-                if(editor.getSegmentPlayback().isPlaying()) {
-                    editor.getSegmentPlayback().stopPlaying();
-                } else {
-                    editor.getSegmentPlayback().playSegment(selectedSegment);
-                }
-            }
-        }
         }
     };
 
