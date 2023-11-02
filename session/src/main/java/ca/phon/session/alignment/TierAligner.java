@@ -99,7 +99,7 @@ public final class TierAligner {
                     } else if(graType == UserTierType.Grt) {
                         morTier = record.getTier(UserTierType.Trn.getTierName(), MorTierData.class);
                     }
-                    if(morTier != null) {
+                    if(morTier != null && morTier.hasValue()) {
                         final TierAlignment orthoMorAlignment = TierAligner.alignTiers(topTier, morTier);
                         final TierAlignment morGraAlignment = TierAligner.alignTiers(morTier, bottomTier);
                         final List<Tuple<?, ?>> orthoGraMap = new ArrayList<>();

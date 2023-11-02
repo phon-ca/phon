@@ -375,7 +375,12 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 		float endTime = internalMedia.getEndTime();
 		xmlMedia.setStart(BigDecimal.valueOf(startTime).setScale(3, RoundingMode.HALF_UP));
 		xmlMedia.setEnd(BigDecimal.valueOf(endTime).setScale(3, RoundingMode.HALF_UP));
-		u.getWOrGOrPg().add(xmlMedia);
+		if(u.getT() != null) {
+			// write media element at end of utterance
+			u.setMedia(xmlMedia);
+		} else {
+			u.getWOrGOrPg().add(xmlMedia);
+		}
 	}
 
 	@Override
