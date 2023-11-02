@@ -3,7 +3,6 @@ package ca.phon.app.session.editor.view.transcriptEditor;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.*;
-import ca.phon.app.session.editor.view.transcriptEditor.hooks.TranscriptEditorCaretMovementHook;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.plugin.PluginManager;
@@ -62,30 +61,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     private BoxSelectHighlightPainter boxSelectPainter = new BoxSelectHighlightPainter();
     private Object currentBoxSelect = null;
     private List<Object> selectionHighlightList = new ArrayList<>();
-    private final List<TranscriptEditorCaretMovementHook> caretMovementHooks = new ArrayList<>();
-
-    // region TranscriptEditorCaretMovementHook
-
-    private void loadRegisteredCaretMovementHooks() {
-        for(var hookExtPt: PluginManager.getInstance().getExtensionPoints(TranscriptEditorCaretMovementHook.class)) {
-            final TranscriptEditorCaretMovementHook hook = hookExtPt.getFactory().createObject();
-            addCaretMovementHook(hook);
-        }
-    }
-
-    public void addCaretMovementHook(TranscriptEditorCaretMovementHook hook) {
-        this.caretMovementHooks.add(hook);
-    }
-
-    public boolean removeCaretMovementHook(TranscriptEditorCaretMovementHook hook) {
-        return this.caretMovementHooks.remove(hook);
-    }
-
-    public List<TranscriptEditorCaretMovementHook> getCaretMovementHooks() {
-        return Collections.unmodifiableList(this.caretMovementHooks);
-    }
-
-    // endregion TranscriptEditorCaretMovementHook
 
     public TranscriptEditor(
         Session session,
@@ -141,7 +116,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
 
         // init extensions
         extensionSupport.initExtensions();
-        loadRegisteredCaretMovementHooks();
     }
 
     public TranscriptEditor(Session session) {
@@ -255,7 +229,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     }
 
     public void setAlignmentVisible(boolean visible) {
-        getTranscriptDocument().setAlignmentVisible(visible);
+//        getTranscriptDocument().setAlignmentVisible(visible);
     }
 
     public void setMediaModel(SessionMediaModel mediaModel) {
@@ -376,55 +350,69 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     }
 
     public boolean isSyllabificationVisible() {
-        return getTranscriptDocument().isSyllabificationVisible();
+//        return getTranscriptDocument().isSyllabificationVisible();
+        return false;
     }
 
     public void setSyllabificationVisible(boolean visible) {
-        TranscriptDocument doc = getTranscriptDocument();
 
-        var oldVal = doc.isSyllabificationVisible();
-        doc.setSyllabificationVisible(visible);
+        System.out.println("Testing extension stuff");
 
-        super.firePropertyChange("syllabificationVisible", oldVal, visible);
+        System.out.println("Extension count: " + getExtensions().size());
+
+        for (var extension : getExtensions()) {
+            System.out.println(extension.getClass().getName());
+        }
+
+
+//        TranscriptDocument doc = getTranscriptDocument();
+//
+//        var oldVal = doc.isSyllabificationVisible();
+//        doc.setSyllabificationVisible(visible);
+//
+//        super.firePropertyChange("syllabificationVisible", oldVal, visible);
     }
 
     public boolean isSyllabificationComponent() {
-        return getTranscriptDocument().isSyllabificationComponent();
+//        return getTranscriptDocument().isSyllabificationComponent();
+        return false;
     }
 
     public void setSyllabificationIsComponent(boolean isComponent) {
         TranscriptDocument doc = getTranscriptDocument();
 
-        var oldVal = doc.isSyllabificationComponent();
-        doc.setSyllabificationIsComponent(isComponent);
+//        var oldVal = doc.isSyllabificationComponent();
+//        doc.setSyllabificationIsComponent(isComponent);
 
-        super.firePropertyChange("syllabificationIsComponent", oldVal, isComponent);
+//        super.firePropertyChange("syllabificationIsComponent", oldVal, isComponent);
     }
 
     public boolean isAlignmentVisible() {
-        return getTranscriptDocument().isAlignmentVisible();
+//        return getTranscriptDocument().isAlignmentVisible();
+        return false;
     }
 
     public void setAlignmentIsVisible(boolean visible) {
-        TranscriptDocument doc = getTranscriptDocument();
-
-        var oldVal = doc.isAlignmentVisible();
-        doc.setAlignmentVisible(visible);
-
-        super.firePropertyChange("alignmentVisible", oldVal, visible);
+//        TranscriptDocument doc = getTranscriptDocument();
+//
+//        var oldVal = doc.isAlignmentVisible();
+//        doc.setAlignmentVisible(visible);
+//
+//        super.firePropertyChange("alignmentVisible", oldVal, visible);
     }
 
     public boolean isAlignmentComponent() {
-        return getTranscriptDocument().isSyllabificationComponent();
+//        return getTranscriptDocument().isAlignmentComponent();
+        return false;
     }
 
     public void setAlignmentIsComponent(boolean isComponent) {
-        TranscriptDocument doc = getTranscriptDocument();
-
-        var oldVal = doc.isSyllabificationComponent();
-        doc.setAlignmentIsComponent(isComponent);
-
-        super.firePropertyChange("alignmentIsComponent", oldVal, isComponent);
+//        TranscriptDocument doc = getTranscriptDocument();
+//
+//        var oldVal = doc.isAlignmentComponent();
+//        doc.setAlignmentIsComponent(isComponent);
+//
+//        super.firePropertyChange("alignmentIsComponent", oldVal, isComponent);
     }
 
     public EditorEventManager getEventManager() {
@@ -1541,11 +1529,14 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     }
 
     public void loadSession() {
-        TranscriptDocument doc = (TranscriptDocument) getEditorKit().createDefaultDocument();
+        TranscriptDocument doc = getTranscriptDocument();
         doc.setUndoSupport(undoSupport);
         doc.setEventManager(eventManager);
+
+
+
         doc.setSession(getSession());
-        setDocument(doc);
+//        setDocument(doc);
         doc.addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -1572,6 +1563,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
 
             }
         });
+
     }
 
     public int getNextValidIndex(int currentPos, boolean looping) {
@@ -1987,12 +1979,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             Element elem = doc.getCharacterElement(dot);
             AttributeSet attrs = elem.getAttributes();
             if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE) != null) return;
-
-            for (TranscriptEditorCaretMovementHook hook : getCaretMovementHooks()) {
-                hook.caretMoved(dot, attrs);
-            }
-
-
 
 
 
@@ -2418,6 +2404,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     }
 
     // region IExtendable
+
     @Override
     public Set<Class<?>> getExtensions() {
         return extensionSupport.getExtensions();

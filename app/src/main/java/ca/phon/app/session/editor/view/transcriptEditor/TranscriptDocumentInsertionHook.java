@@ -1,4 +1,4 @@
-package ca.phon.app.session.editor.view.transcriptEditor.hooks;
+package ca.phon.app.session.editor.view.transcriptEditor;
 
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.MutableAttributeSet;
@@ -26,6 +26,65 @@ public abstract class TranscriptDocumentInsertionHook {
         return EMPTY_LIST;
     }
 
+    public List<DefaultStyledDocument.ElementSpec> startSession() {
+        return EMPTY_LIST;
+    }
+    public List<DefaultStyledDocument.ElementSpec> endSession() {
+        return EMPTY_LIST;
+    }
+
+    public List<DefaultStyledDocument.ElementSpec> startHeader() {
+        return EMPTY_LIST;
+    }
+    public List<DefaultStyledDocument.ElementSpec> endHeader() {
+        return EMPTY_LIST;
+    }
+
+    public List<DefaultStyledDocument.ElementSpec> startHeaderLine() {
+        return EMPTY_LIST;
+    }
+    public List<DefaultStyledDocument.ElementSpec> endHeaderLine() {
+        return EMPTY_LIST;
+    }
+
+    public List<DefaultStyledDocument.ElementSpec> startTranscript() {
+        return EMPTY_LIST;
+    }
+    public List<DefaultStyledDocument.ElementSpec> endTranscript() {
+        return EMPTY_LIST;
+    }
+
+    public List<DefaultStyledDocument.ElementSpec> startComment() {
+        return EMPTY_LIST;
+    }
+    public List<DefaultStyledDocument.ElementSpec> endComment() {
+        return EMPTY_LIST;
+    }
+
+    public List<DefaultStyledDocument.ElementSpec> startGem() {
+        return EMPTY_LIST;
+    }
+    public List<DefaultStyledDocument.ElementSpec> endGem() {
+        return EMPTY_LIST;
+    }
+
+    public List<DefaultStyledDocument.ElementSpec> startRecord() {
+        return EMPTY_LIST;
+    }
+    public List<DefaultStyledDocument.ElementSpec> endRecord() {
+        return EMPTY_LIST;
+    }
+
+    public List<DefaultStyledDocument.ElementSpec> startRecordHeader() {
+        return EMPTY_LIST;
+    }
+    public List<DefaultStyledDocument.ElementSpec> endRecordHeader() {
+        return EMPTY_LIST;
+    }
+
+    public List<DefaultStyledDocument.ElementSpec> beginTier() {
+        return EMPTY_LIST;
+    }
     public List<DefaultStyledDocument.ElementSpec> endTier(MutableAttributeSet attrs) {
         return EMPTY_LIST;
     }

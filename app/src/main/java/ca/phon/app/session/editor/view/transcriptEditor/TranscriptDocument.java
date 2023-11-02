@@ -3,8 +3,6 @@ package ca.phon.app.session.editor.view.transcriptEditor;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
-import ca.phon.app.session.editor.view.transcriptEditor.hooks.TranscriptDocumentInsertedTierHook;
-import ca.phon.app.session.editor.view.transcriptEditor.hooks.TranscriptDocumentInsertionHook;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.formatter.Formatter;
@@ -44,13 +42,10 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     private int singleRecordIndex = 0;
     private static final char[] EOL_ARRAY = { '\n' };
     private ArrayList<ElementSpec> batch;
-    private boolean syllabificationVisible = false;
-    private boolean syllabificationIsComponent = false;
     private boolean alignmentVisible = false;
     private boolean alignmentIsComponent = false;
     public int labelColumnWidth = 20;
     private float lineSpacing = 0.2f;
-    private TierViewItem alignmentParent = null;
     private final Map<String, Tier<?>> headerTierMap;
     private boolean bypassDocumentFilter = false;
     private boolean validationMode = false;
@@ -61,6 +56,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * extension support
      */
     private final ExtensionSupport extensionSupport = new ExtensionSupport(TranscriptDocument.class, this);
+
 
     public TranscriptDocument() {
         super(new TranscriptStyleContext());
@@ -82,7 +78,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 //        sessionFactory.cloneRecord()
         extensionSupport.initExtensions();
         loadRegisteredInsertionHooks();
-        loadRegisteredInsertedTierHooks();
     }
 
     // region Getters and Setters
@@ -94,6 +89,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     public void setSession(Session session) {
         this.session = session;
         try {
+            if (getLength() > 0) {
+                remove(0, getLength());
+            }
             populate();
         }
         catch (BadLocationException e) {
@@ -122,52 +120,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         }
     }
 
-    public boolean isSyllabificationVisible() {
-        return syllabificationVisible;
-    }
-
-    public void setSyllabificationVisible(boolean syllabificationVisible) {
-        this.syllabificationVisible = syllabificationVisible;
-        reload();
-    }
-
-    public boolean isSyllabificationComponent() {
-        return syllabificationIsComponent;
-    }
-
-    public void setSyllabificationIsComponent(boolean syllabificationIsComponent) {
-        this.syllabificationIsComponent = syllabificationIsComponent;
-        if (syllabificationVisible) {
-            reload();
-        }
-    }
-
-    public boolean isAlignmentVisible() {
-        return alignmentVisible;
-    }
-
-    public void setAlignmentVisible(boolean alignmentVisible) {
-        this.alignmentVisible = alignmentVisible;
-        if (alignmentVisible) {
-            alignmentParent = calculateAlignmentParent();
-        }
-        else {
-            alignmentParent = null;
-        }
-        reload();
-    }
-
-    public boolean isAlignmentComponent() {
-        return alignmentIsComponent;
-    }
-
-    public void setAlignmentIsComponent(boolean alignmentIsComponent) {
-        this.alignmentIsComponent = alignmentIsComponent;
-        if (alignmentVisible) {
-            reload();
-        }
-    }
-
     public int getLabelColumnWidth() {
         return labelColumnWidth;
     }
@@ -182,14 +134,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
     public void setLineSpacing(float lineSpacing) {
         this.lineSpacing = lineSpacing;
-    }
-
-    public TierViewItem getAlignmentParent() {
-        return alignmentParent;
-    }
-
-    public void setAlignmentParent(TierViewItem alignmentParent) {
-        this.alignmentParent = alignmentParent;
     }
 
     public Map<String, Tier<?>> getHeaderTierMap() {
@@ -247,11 +191,19 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         return sessionFactory;
     }
 
+    public ArrayList<ElementSpec> getBatch() {
+        return batch;
+    }
+
+    public void setBypassDocumentFilter(boolean bypassDocumentFilter) {
+        this.bypassDocumentFilter = bypassDocumentFilter;
+    }
+
     // endregion Getters and Setters
 
     // region Attribute Getters
 
-    private SimpleAttributeSet getRecordAttributes(int recordIndex) {
+    public SimpleAttributeSet getRecordAttributes(int recordIndex) {
         SimpleAttributeSet retVal = new SimpleAttributeSet();
 
         Record record = session.getRecord(recordIndex);
@@ -292,7 +244,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         return retVal;
     }
 
-    private SimpleAttributeSet getAlignmentAttributes() {
+    public SimpleAttributeSet getAlignmentAttributes() {
         final SimpleAttributeSet retVal = new SimpleAttributeSet();
 
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_COMPONENT_FACTORY, new AlignmentComponentFactory());
@@ -517,6 +469,10 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
     // region Batching
 
+    public ElementSpec getBatchString(String str, MutableAttributeSet a) {
+        char[] chars = str.toCharArray();
+        return new ElementSpec(new SimpleAttributeSet(a), ElementSpec.ContentType, chars, 0, str.length());
+    }
     public void appendBatchString(String str, MutableAttributeSet a) {
         final StringBuilder builder = new StringBuilder();
         builder.append(str);
@@ -524,9 +480,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         for (TranscriptDocumentInsertionHook hook : getInsertionHooks()) {
             additionalInsertions.addAll(hook.batchInsertString(builder, a));
         }
-        a = new SimpleAttributeSet(a);
-        char[] chars = builder.toString().toCharArray();
-        batch.add(new ElementSpec(a, ElementSpec.ContentType, chars, 0, str.length()));
+        batch.add(getBatchString(builder.toString(), a));
         batch.addAll(additionalInsertions);
     }
 
@@ -541,10 +495,10 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     }
 
     public List<ElementSpec> getBatchEndStart() {
-        return new ArrayList<>(){{
-            new ElementSpec(null, ElementSpec.EndTagType);
-            new ElementSpec(null, ElementSpec.StartTagType);
-        }};
+        List<ElementSpec> retVal = new ArrayList<>();
+        retVal.add(new ElementSpec(null, ElementSpec.EndTagType));
+        retVal.add(new ElementSpec(null, ElementSpec.StartTagType));
+        return retVal;
     }
     public void appendBatchEndStart() {
         batch.addAll(getBatchEndStart());
@@ -776,7 +730,16 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 tier = sessionFactory.createTier(td);
             }
 
+
             tierAttrs = insertTier(recordIndex, tier, item, recordAttrs);
+            List<ElementSpec> additionalInsertions = new ArrayList<>();
+            for (var hook : getInsertionHooks()) {
+                additionalInsertions.addAll(hook.endTier(tierAttrs));
+            }
+            if (!additionalInsertions.isEmpty()) {
+                batch.addAll(additionalInsertions);
+                tierAttrs = new SimpleAttributeSet(additionalInsertions.get(additionalInsertions.size()-1).getAttributes());
+            }
 
             if (validationMode && tier.isBlind()) {
                 List<String> transcribers = tier.getTranscribers();
@@ -1405,7 +1368,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
     // region Tier View Changes
 
-    public void moveTier(List<TierViewItem> movedTiers) {
+    /*public void moveTier(List<TierViewItem> movedTiers) {
 
         movedTiers = movedTiers.stream().filter(item -> item.isVisible()).toList();
         if (movedTiers.size() < 1) return;
@@ -1418,7 +1381,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
                 String tierName = item.getTierName();
                 // If one of the syllabification tiers are moved remove the syllabification
-                if ((tierName.equals("IPA Target") || tierName.equals("IPA Actual")) && syllabificationVisible) {
+                if ((tierName.equals("IPA Target") || tierName.equals("IPA Actual")) && isSyllabificationVisible()) {
                     try {
                         removeSyllabification(tierName);
                     }
@@ -1450,7 +1413,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         }
 
         updateTiersHeader();
-    }
+    }*/
 
     private void moveTierInRecord(int recordIndex, List<TierViewItem> movedTiers, List<TierViewItem> movedTiersNewOrder) {
         int labelLength = labelColumnWidth + 2;
@@ -1498,7 +1461,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         }
     }
 
-    public void deleteTier(List<String> deletedTiers) {
+    /*public void deleteTier(List<String> deletedTiers) {
         if (singleRecordView) {
             deleteTierFromRecord(singleRecordIndex, deletedTiers);
         }
@@ -1558,7 +1521,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         }
 
         updateTiersHeader();
-    }
+    }*/
 
     private void addTierToRecord(int recordIndex, List<TierViewItem> addedTiers) {
         int offset = getRecordEnd(recordIndex);
@@ -1578,7 +1541,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         }
     }
 
-    public void hideTier(List<String> hiddenTiers) {
+    /*public void hideTier(List<String> hiddenTiers) {
         // Hide the tiers
         if (singleRecordView) {
             hideTierInRecord(singleRecordIndex, hiddenTiers);
@@ -1593,7 +1556,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         boolean alignmentParentRemoved = false;
         for (String tierName : hiddenTiers) {
             // If a tier with syllabification enabled was hidden remove the syllabification
-            if ((tierName.equals("IPA Target") || tierName.equals("IPA Actual")) && syllabificationVisible) {
+            if ((tierName.equals("IPA Target") || tierName.equals("IPA Actual")) && isSyllabificationVisible()) {
                 try {
                     removeSyllabification(tierName);
                 }
@@ -1641,9 +1604,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             LogUtil.severe(e);
         }
 
-    }
+    }*/
 
-    public void showTier(List<TierViewItem> shownTiers, List<TierViewItem> newTierView) {
+    /*public void showTier(List<TierViewItem> shownTiers, List<TierViewItem> newTierView) {
         if (singleRecordView) {
             showTierInRecord(singleRecordIndex, shownTiers, newTierView);
         }
@@ -1692,7 +1655,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 }
 
                 if (itemBeforeShownItem != null) {
-                    if (syllabificationVisible) {
+                    if (isSyllabificationVisible()) {
                         if (itemBeforeShownItem.getTierName().equals("IPA Target")) {
                             offset = getTierEnd(recordIndex, SystemTierType.TargetSyllables.getName());
                         }
@@ -1719,7 +1682,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         catch (BadLocationException e) {
             LogUtil.severe(e);
         }
-    }
+    }*/
 
     public void tierFontChanged(List<TierViewItem> changedTiers) {
         if (singleRecordView) {
@@ -1919,7 +1882,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
         System.out.println(tier.getDeclaredType().getName());
 
-        if (tier.getDeclaredType().equals(PhoneAlignment.class) && !alignmentVisible) return;
+        if (tier.getDeclaredType().equals(PhoneAlignment.class)) return;
 
         try {
             int start = getTierStart(tier);
@@ -1931,19 +1894,11 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             remove(start, end - start);
 
             var tierView = session.getTierView();
-            TierViewItem tierViewItem =  tierView.stream().filter(item -> item.getTierName().equals(tier.getName())).findFirst().orElse(null);
+            TierViewItem tierViewItem = tierView.stream().filter(item -> item.getTierName().equals(tier.getName())).findFirst().orElse(null);
 
             appendBatchEndStart();
 
-            SimpleAttributeSet attrs;
-            if (tier.getDeclaredType().equals(PhoneAlignment.class)) {
-                Record record = session.getRecord(getRecordIndex(start));
-                attrs = appendAlignmentToTierInRecord(record.getTier(getAlignmentParent().getTierName()), record);
-            }
-            else {
-                attrs = insertTier(recordIndex, tier, tierViewItem, getRecordAttributes(recordIndex));
-            }
-
+            SimpleAttributeSet attrs = insertTier(recordIndex, tier, tierViewItem, getRecordAttributes(recordIndex));
 
             appendBatchLineFeed(attrs);
 
@@ -1957,26 +1912,13 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
     // endregion Record Changes
 
-
-    public TierViewItem calculateAlignmentParent() {
-        List<TierViewItem> visibleTierView = session.getTierView().stream().filter(item -> item.isVisible()).toList();
-
-        var retVal = visibleTierView.stream().filter(item -> item.getTierName().equals("IPA Actual")).findFirst();
-        if (retVal.isPresent()) return retVal.get();
-
-        retVal = visibleTierView.stream().filter(item -> item.getTierName().equals("IPA Target")).findFirst();
-        if (retVal.isPresent()) return retVal.get();
-
-        return visibleTierView.get(visibleTierView.size()-1);
-    }
-
-    private void appendAlignmentToParent() {
+    /*private void appendAlignmentToParent() {
         try {
             String appendingTierName = alignmentParent.getTierName();
 
             System.out.println("Appending tier name: " + appendingTierName);
 
-            if (syllabificationVisible) {
+            if (isSyllabificationVisible()) {
                 if (appendingTierName.equals("IPA Target")) {
                     appendingTierName = SystemTierType.TargetSyllables.getName();;
                 }
@@ -1989,7 +1931,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 System.out.println("Appending tier name: " + appendingTierName);
                 appendBatchEndStart();
                 Record record = session.getRecord(singleRecordIndex);
-                var attrs = appendAlignmentToTierInRecord(record.getTier(appendingTierName), record);
+                var attrs = appendFormattedAlignment(record.getTier(appendingTierName), record);
                 appendBatchLineFeed(attrs);
                 System.out.println("Appending tier name: " + appendingTierName);
                 int tierEnd = getTierEnd(singleRecordIndex, appendingTierName);
@@ -2001,7 +1943,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 for (int i = 0; i < recordCount; i++) {
                     appendBatchEndStart();
                     Record record = session.getRecord(i);
-                    var attrs = appendAlignmentToTierInRecord(record.getTier(appendingTierName), record);
+                    var attrs = appendFormattedAlignment(record.getTier(appendingTierName), record);
                     appendBatchLineFeed(attrs);
                     processBatchUpdates(getTierEnd(i, appendingTierName));
                 }
@@ -2010,87 +1952,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         catch (BadLocationException e) {
             LogUtil.severe(e);
         }
-    }
-
-    private SimpleAttributeSet appendAlignmentToTierInRecord(Tier<?> tier, Record record) {
-        // Get the alignment tier
-        Tier<PhoneAlignment> alignmentTier = record.getPhoneAlignmentTier();
-        // Set up the tier attributes for the dummy tier
-        var tierAttrs = getTierAttributes(tier);
-        tierAttrs.addAttributes(getTierAttributes(alignmentTier));
-        // Set up the attributes for its label
-        SimpleAttributeSet alignmentLabelAttrs = getTierLabelAttributes(alignmentTier);
-        // Set up record attributes
-        SimpleAttributeSet recordAttrs = getRecordAttributes(session.getRecordPosition(record));
-        alignmentLabelAttrs.addAttributes(recordAttrs);
-        tierAttrs.addAttributes(recordAttrs);
-        // Get the string for the label
-        String alignmentLabelText = formatLabelText("Alignment");
-        // Add the label
-        appendBatchString(alignmentLabelText + ": ", alignmentLabelAttrs);
-        // Get the string version of the alignment
-        String alignmentContent = alignmentTier.getValue().toString();
-        // Add component factory if needed
-        if (alignmentIsComponent) {
-            tierAttrs.addAttributes(getAlignmentAttributes());
-        }
-        appendBatchString(alignmentContent, tierAttrs);
-
-        return tierAttrs;
-    }
-
-    private void removeAlignment() throws BadLocationException {
-        Element root = getDefaultRootElement();
-        for (int i = 0; i < root.getElementCount(); i++) {
-            Element elem = root.getElement(i);
-            for (int j = 0; j < elem.getElementCount(); j++) {
-                Element innerElem = elem.getElement(j);
-                var attrs = innerElem.getAttributes();
-                Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
-                if (tier != null) {
-                    boolean correctTier = tier.getName().equals("Alignment");
-                    if (correctTier) {
-                        int tierStartOffset = getTierStart(tier) - labelColumnWidth - 2;
-                        int tierEndOffset = getTierEnd(tier);
-                        if (tierStartOffset >= 0 && tierEndOffset >= 0) {
-                            System.out.println("Removed alignment ---------------------------");
-                            bypassDocumentFilter = true;
-                            remove(tierStartOffset, tierEndOffset - tierStartOffset);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private void removeSyllabification(String tierName) throws BadLocationException {
-        Element root = getDefaultRootElement();
-        for (int i = 0; i < root.getElementCount(); i++) {
-            Element elem = root.getElement(i);
-            for (int j = 0; j < elem.getElementCount(); j++) {
-                Element innerElem = elem.getElement(j);
-                var attrs = innerElem.getAttributes();
-                Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
-                if (tier != null) {
-                    boolean correctTier;
-                    if (tierName.equals("IPA Target")) {
-                        correctTier = tier.getName().equals(SystemTierType.TargetSyllables.getName());
-                    } else {
-                        correctTier = tier.getName().equals(SystemTierType.ActualSyllables.getName());
-                    }
-                    if (correctTier) {
-                        int tierStartOffset = getTierStart(tier) - labelColumnWidth - 2;
-                        int tierEndOffset = getTierEnd(tier);
-                        if (tierStartOffset >= 0 && tierEndOffset >= 0) {
-                            bypassDocumentFilter = true;
-                            remove(tierStartOffset, tierEndOffset - tierStartOffset);
-                        }
-                    }
-                }
-            }
-        }
-    }
+    }*/
 
     public Character getCharAtPos(int pos) {
         try {
@@ -2195,43 +2057,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         formatSegment(segment, additionalAttrs, MediaTimeFormatStyle.MINUTES_AND_SECONDS);
     }
 
-    public void formatSyllabification(IPATranscript ipaTranscript, AttributeSet additionalAttrs) {
-        SimpleAttributeSet attrs = new SimpleAttributeSet();
-        if (additionalAttrs != null) attrs.addAttributes(additionalAttrs);
-        attrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_SYLLABIFICATION, true);
-
-        Set<SyllableConstituentType> hiddenConstituent = new HashSet<>();
-        hiddenConstituent.add(SyllableConstituentType.SYLLABLESTRESSMARKER);
-        hiddenConstituent.add(SyllableConstituentType.UNKNOWN);
-        hiddenConstituent.add(SyllableConstituentType.WORDBOUNDARYMARKER);
-
-        for (IPAElement p : ipaTranscript) {
-            attrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_PHONE, p);
-            attrs.removeAttribute(StyleConstants.Foreground);
-            attrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE, true);
-            attrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
-            if (p.getScType().equals(SyllableConstituentType.UNKNOWN)) {
-                StyleConstants.setForeground(attrs, UIManager.getColor(TranscriptEditorUIProps.IPA_PAUSE));
-            }
-            appendBatchString(p.toString(), attrs);
-            final SyllabificationInfo sInfo = p.getExtension(SyllabificationInfo.class);
-            if (hiddenConstituent.contains(sInfo.getConstituentType())) continue;
-            appendBatchString(":", attrs);
-            attrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE);
-            attrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE);
-            if(sInfo.getConstituentType() == SyllableConstituentType.NUCLEUS && sInfo.isDiphthongMember()) {
-                StyleConstants.setForeground(attrs, Color.RED);
-                appendBatchString("D", attrs);
-            }
-            else {
-                StyleConstants.setForeground(attrs, sInfo.getConstituentType().getColor());
-                appendBatchString(String.valueOf(sInfo.getConstituentType().getIdChar()), attrs);
-            }
-        }
-        attrs.removeAttribute(StyleConstants.Foreground);
-    }
-
-    private void setGlobalParagraphAttributes() {
+    public void setGlobalParagraphAttributes() {
         SimpleAttributeSet paragraphAttrs = new SimpleAttributeSet();
         StyleConstants.setLineSpacing(paragraphAttrs, getLineSpacing());
         StyleConstants.setForeground(paragraphAttrs, UIManager.getColor(TranscriptEditorUIProps.FOREGROUND));
@@ -2314,58 +2140,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                         appendBatchString(" ", tierAttrs);
                     }
                 }
-                if (tierName.equals("IPA Target") && syllabificationVisible) {
-                    // Add a newline at the end of the regular tier content
-                    appendBatchLineFeed(tierAttrs);
-                    // Create a dummy tier for the syllabification
-                    IPATranscript ipaTarget = ipaTier.getValue();
-                    Tier<IPATranscript> syllableTier = sessionFactory.createTier(SystemTierType.TargetSyllables.getName(), IPATranscript.class);
-                    syllableTier.setValue(ipaTarget);
-                    // Set up the tier attributes for the dummy tier
-                    tierAttrs = new SimpleAttributeSet(tierAttrs);
-                    tierAttrs.addAttributes(getTierAttributes(syllableTier));
-                    // Set up the attributes for its label
-                    SimpleAttributeSet syllabificationLabelAttrs = getTierLabelAttributes(syllableTier);
-                    if (recordAttrs != null) {
-                        syllabificationLabelAttrs.addAttributes(recordAttrs);
-                    }
-                    // Get the string for the label
-                    String syllabificationLabelText = formatLabelText("Syllabification");
-                    // Add the label
-                    appendBatchString(syllabificationLabelText + ": ", syllabificationLabelAttrs);
-                    // Add component factory if needed
-                    if (syllabificationIsComponent) {
-                        tierAttrs.addAttributes(getSyllabificationAttributes());
-                    }
-                    // Append the content
-                    formatSyllabification(syllableTier.getValue(), tierAttrs);
-                }
-                else if (tierName.equals("IPA Actual") && syllabificationVisible) {
-                    // Add a newline at the end of the regular tier content
-                    appendBatchLineFeed(tierAttrs);
-                    // Create a dummy tier for the syllabification
-                    IPATranscript ipaActual = ipaTier.getValue();
-                    Tier<IPATranscript> syllableTier = sessionFactory.createTier(SystemTierType.ActualSyllables.getName(), IPATranscript.class);
-                    syllableTier.setValue(ipaActual);
-                    // Set up the tier attributes for the dummy tier
-                    tierAttrs = new SimpleAttributeSet(tierAttrs);
-                    tierAttrs.addAttributes(getTierAttributes(syllableTier));
-                    // Set up the attributes for its label
-                    SimpleAttributeSet syllabificationLabelAttrs = getTierLabelAttributes(syllableTier);
-                    if (recordAttrs != null) {
-                        syllabificationLabelAttrs.addAttributes(recordAttrs);
-                    }
-                    // Get the string for the label
-                    String syllabificationLabelText = formatLabelText("Syllabification");
-                    // Add the label
-                    appendBatchString(syllabificationLabelText + ": ", syllabificationLabelAttrs);
-                    // Add component factory if needed
-                    if (syllabificationIsComponent) {
-                        tierAttrs.addAttributes(getSyllabificationAttributes());
-                    }
-                    // Append the content
-                    formatSyllabification(syllableTier.getValue(), tierAttrs);
-                }
             }
             else if (tierType.equals(MediaSegment.class)) {
                 MediaSegment segment = record.getMediaSegment();
@@ -2438,14 +2212,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                     }
                 }
             }
-        }
-
-        if (alignmentVisible && alignmentParent != null && tierName.equals(alignmentParent.getTierName())) {
-            tierAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_COMPONENT_FACTORY);
-            // Add a newline at the end of the regular tier content
-            appendBatchLineFeed(tierAttrs);
-            // Append the alignment
-            tierAttrs = appendAlignmentToTierInRecord(tier, record);
         }
 
         tierAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_COMPONENT_FACTORY);
@@ -2572,12 +2338,12 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                     .stream()
                     .filter(td -> td.getName().equals(item.getTierName()))
                     .anyMatch(td -> td.getDeclaredType().equals(IPATranscript.class));
-                if (syllabificationVisible && isIPATier) {
-                    joiner.add(item.getTierName() + " Syllabification");
-                }
-                if (alignmentVisible && alignmentParent == item) {
-                    joiner.add("Alignment");
-                }
+//                if (isSyllabificationVisible() && isIPATier) {
+//                    joiner.add(item.getTierName() + " Syllabification");
+//                }
+//                if (alignmentVisible && alignmentParent == item) {
+//                    joiner.add("Alignment");
+//                }
             }
             tiersTier.setText(joiner.toString());
 
@@ -2917,38 +2683,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     }
 
     // endregion TranscriptDocumentInsertionHook
-
-    // region TranscriptDocumentInsertedTierHook
-
-    private final List<TranscriptDocumentInsertedTierHook> insertedTierHooks = new ArrayList<>();
-
-    private void loadRegisteredInsertedTierHooks() {
-        for(var hookExtPt: PluginManager.getInstance().getExtensionPoints(TranscriptDocumentInsertedTierHook.class)) {
-            final TranscriptDocumentInsertedTierHook hook = hookExtPt.getFactory().createObject();
-            addInsertedTierHook(hook);
-        }
-    }
-
-    public void addInsertedTierHook(TranscriptDocumentInsertedTierHook hook) {
-        this.insertedTierHooks.add(hook);
-    }
-
-    public boolean removeInsertedTierHook(TranscriptDocumentInsertedTierHook hook) {
-        return this.insertedTierHooks.remove(hook);
-    }
-
-    public List<TranscriptDocumentInsertedTierHook> getInsertedTierHooks() {
-        return Collections.unmodifiableList(this.insertedTierHooks);
-    }
-
-    public void insertedTier(MutableAttributeSet attrs) {
-        final List<ElementSpec> additionalInsertions = new ArrayList<>();
-        for (var hook : getInsertedTierHooks()) {
-            additionalInsertions.addAll(hook.insertedTier(attrs));
-        }
-    }
-
-    // endregion TranscriptDocumentInsertedTierHook
 
     // region IExtendable
     @Override

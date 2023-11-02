@@ -21,12 +21,12 @@ import java.util.List;
 /**
  * Media segment extensions for the {@link TranscriptEditor}
  */
-public class MediaSegmentExtensions implements TranscriptEditorExtension {
+public class MediaSegmentExtension implements TranscriptEditorExtension {
 
     private TranscriptEditor editor;
     private MediaSegment selectedSegment = null;
 
-    public MediaSegmentExtensions() {
+    public MediaSegmentExtension() {
         super();
     }
 
@@ -42,7 +42,7 @@ public class MediaSegmentExtensions implements TranscriptEditorExtension {
             public List<DefaultStyledDocument.ElementSpec> batchInsertString(StringBuilder buffer, MutableAttributeSet attrs) {
                 MediaSegment segment = (MediaSegment) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_MEDIA_SEGMENT);
                 if (segment != null) {
-                    PhonUIAction<MediaSegment> showSegmentEditCalloutAct = PhonUIAction.consumer(MediaSegmentExtensions.this::showSegmentEditCallout, segment);
+                    PhonUIAction<MediaSegment> showSegmentEditCalloutAct = PhonUIAction.consumer(MediaSegmentExtension.this::showSegmentEditCallout, segment);
                     attrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_ENTER_ACTION, showSegmentEditCalloutAct);
                 }
                 return new ArrayList<>();
