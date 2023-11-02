@@ -127,8 +127,8 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 		retVal.setName(xmlSessionType.getName());
 		retVal.setCorpus(xmlSessionType.getCorpus());
 
-		if(xmlSessionType.getMedia() != null && xmlSessionType.getMedia().length() > 0) {
-			retVal.setMediaLocation(xmlSessionType.getMedia());
+		if(xmlSessionType.getMediaLocation() != null && !xmlSessionType.getMediaLocation().isEmpty()) {
+			retVal.setMediaLocation(xmlSessionType.getMediaLocation());
 		}
 		if(xmlSessionType.getDate() != null) {
 			final XMLGregorianCalendar xmlDate = xmlSessionType.getDate();

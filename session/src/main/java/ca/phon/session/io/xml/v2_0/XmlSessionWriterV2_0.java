@@ -96,7 +96,7 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 		retVal.setCorpus(session.getCorpus());
 
 		if(session.getMediaLocation() != null && session.getMediaLocation().length() > 0) {
-			retVal.setMedia(session.getMediaLocation());
+			retVal.setMediaLocation(session.getMediaLocation());
 		}
 		final LocalDate date = session.getDate();
 		if(date != null) {
