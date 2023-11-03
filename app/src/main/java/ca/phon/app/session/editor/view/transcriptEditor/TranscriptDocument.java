@@ -29,6 +29,8 @@ import ca.phon.util.*;
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.text.ParseException;
 import java.util.*;
 import java.util.List;
@@ -42,8 +44,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     private int singleRecordIndex = 0;
     private static final char[] EOL_ARRAY = { '\n' };
     private ArrayList<ElementSpec> batch;
-    private boolean alignmentVisible = false;
-    private boolean alignmentIsComponent = false;
     public int labelColumnWidth = 20;
     private float lineSpacing = 0.2f;
     private final Map<String, Tier<?>> headerTierMap;
@@ -51,6 +51,8 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     private boolean validationMode = false;
     private SessionEditUndoSupport undoSupport;
     private EditorEventManager eventManager;
+//    private List<PropertyChangeListener> documentPropertyChangeListeners = new ArrayList<>();
+    private final PropertyChangeSupport propertyChangeSupport;
 
     /**
      * extension support
@@ -70,7 +72,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         headerTierMap.put("languages", sessionFactory.createTier("Languages", Languages.class));
         headerTierMap.put("media", sessionFactory.createTier("Media", TierData.class));
 
-
+        propertyChangeSupport = new PropertyChangeSupport(this);
 
         // TODO
 //        Session session2 = sessionFactory.createSession();
@@ -2360,6 +2362,33 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         }
         return null;
     }
+
+    // region Document Properties
+
+    public Object getDocumentProperty(String key) {
+        return getProperty(key);
+    }
+
+    public Object getDocumentPropertyOrDefault(String key, Object defaultValue) {
+        Object value = getProperty(key);
+        return value == null ? defaultValue : value;
+    }
+
+    public void putDocumentProperty(String key, Object value) {
+        Object existingValue = getProperty(key);
+        putProperty(key, value);
+        propertyChangeSupport.firePropertyChange(key, existingValue, value);
+    }
+
+    public void addDocumentPropertyChangeListener(String propertyName, PropertyChangeListener propertyChangeListener) {
+        propertyChangeSupport.addPropertyChangeListener(propertyName, propertyChangeListener);
+    }
+
+    public void removeDocumentPropertyChangeListener(PropertyChangeListener propertyChangeListener) {
+        propertyChangeSupport.removePropertyChangeListener(propertyChangeListener);
+    }
+
+    // endregion Document Properties
 
     private void populate() throws BadLocationException {
         Transcript transcript = session.getTranscript();

@@ -17,6 +17,8 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.SimpleAttributeSet;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,9 +26,12 @@ public class AlignmentExtension implements TranscriptEditorExtension {
     private TranscriptEditor editor;
     private TranscriptDocument doc;
 
-    private boolean alignmentVisible = false;
-    private boolean alignmentIsComponent = false;
-    private TierViewItem alignmentParent = null;
+    public final static String ALIGNMENT_IS_VISIBLE = "isAlignmentVisible";
+    public final static boolean ALIGNMENT_IS_VISIBLE_DEFAULT = false;
+    public final static String ALIGNMENT_IS_COMPONENT = "isAlignmentComponent";
+    public final static boolean ALIGNMENT_IS_COMPONENT_DEFAULT = false;
+    public final static String ALIGNMENT_PARENT = "alignmentParent";
+    public final static TierViewItem ALIGNMENT_PARENT_DEFAULT = null;
 
     @Override
     public void install(TranscriptEditor editor) {
@@ -54,6 +59,21 @@ public class AlignmentExtension implements TranscriptEditorExtension {
 
         EditorEventManager eventManager = editor.getEventManager();
         eventManager.registerActionForEvent(EditorEventType.TierChange, this::onTierDataChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+
+        doc.addDocumentPropertyChangeListener(ALIGNMENT_IS_VISIBLE, evt -> {
+            if (isAlignmentVisible()) {
+                doc.putDocumentProperty(ALIGNMENT_PARENT, calculateAlignmentParent());
+            }
+            else {
+                doc.putDocumentProperty(ALIGNMENT_PARENT, ALIGNMENT_PARENT_DEFAULT);
+            }
+            doc.reload();
+        });
+        doc.addDocumentPropertyChangeListener(ALIGNMENT_IS_COMPONENT, evt -> {
+            if (isAlignmentVisible()) {
+                doc.reload();
+            }
+        });
     }
 
     private void onTierDataChanged(EditorEvent<EditorEventType.TierChangeData> editorEvent) {
@@ -133,37 +153,15 @@ public class AlignmentExtension implements TranscriptEditorExtension {
     // region Getters and Setters
 
     public boolean isAlignmentVisible() {
-        return alignmentVisible;
-    }
-
-    public void setAlignmentVisible(boolean alignmentVisible) {
-        this.alignmentVisible = alignmentVisible;
-        if (alignmentVisible) {
-            alignmentParent = calculateAlignmentParent();
-        }
-        else {
-            alignmentParent = null;
-        }
-        doc.reload();
+        return (boolean) doc.getDocumentPropertyOrDefault(ALIGNMENT_IS_VISIBLE, ALIGNMENT_IS_VISIBLE_DEFAULT);
     }
 
     public boolean isAlignmentComponent() {
-        return alignmentIsComponent;
-    }
-
-    public void setAlignmentIsComponent(boolean alignmentIsComponent) {
-        this.alignmentIsComponent = alignmentIsComponent;
-        if (alignmentVisible) {
-            doc.reload();
-        }
+        return (boolean) doc.getDocumentPropertyOrDefault(ALIGNMENT_IS_COMPONENT, ALIGNMENT_IS_COMPONENT_DEFAULT);
     }
 
     public TierViewItem getAlignmentParent() {
-        return alignmentParent;
-    }
-
-    public void setAlignmentParent(TierViewItem alignmentParent) {
-        this.alignmentParent = alignmentParent;
+        return (TierViewItem) doc.getDocumentPropertyOrDefault(ALIGNMENT_PARENT, ALIGNMENT_PARENT_DEFAULT);
     }
 
     // endregion Getters and Setters

@@ -19,10 +19,11 @@ import java.util.Set;
 
 public class SyllabificationExtension implements TranscriptEditorExtension {
 
-    private TranscriptEditor editor;
     private TranscriptDocument doc;
-    private boolean syllabificationVisible = false;
-    private boolean syllabificationIsComponent = false;
+    public final static String SYLLABIFICATION_IS_VISIBLE = "isSyllabificationVisible";
+    public final static boolean SYLLABIFICATION_IS_VISIBLE_DEFAULT = false;
+    public final static String SYLLABIFICATION_IS_COMPONENT = "isSyllabificationComponent";
+    public final static boolean SYLLABIFICATION_IS_COMPONENT_DEFAULT = false;
 
     public SyllabificationExtension() {
         super();
@@ -30,7 +31,6 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
 
     @Override
     public void install(TranscriptEditor editor) {
-        this.editor = editor;
         this.doc = editor.getTranscriptDocument();
 
         doc.addInsertionHook(new TranscriptDocumentInsertionHook() {
@@ -38,7 +38,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
             public List<DefaultStyledDocument.ElementSpec> endTier(MutableAttributeSet attrs) {
                 List<DefaultStyledDocument.ElementSpec> retVal = new ArrayList<>();
 
-                if (!syllabificationVisible) return retVal;
+                if (!isSyllabificationVisible()) return retVal;
 
                 Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
                 if (tier != null && tier.getDeclaredType().equals(IPATranscript.class)) {
@@ -68,7 +68,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                         // Add the label
                         retVal.add(doc.getBatchString(syllabificationLabelText + ": ", syllabificationLabelAttrs));
                         // Add component factory if needed
-                        if (syllabificationIsComponent) {
+                        if (isSyllabificationComponent()) {
                             attrs.addAttributes(doc.getSyllabificationAttributes());
                         }
                         // Append the content
@@ -79,30 +79,30 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                 return retVal;
             }
         });
+
+
+        doc.addDocumentPropertyChangeListener(SYLLABIFICATION_IS_VISIBLE, evt -> doc.reload());
+        doc.addDocumentPropertyChangeListener(SYLLABIFICATION_IS_COMPONENT, evt -> {
+            if (isSyllabificationVisible()) {
+                doc.reload();
+            }
+        });
     }
 
     // region Getters and Setters
 
     public boolean isSyllabificationVisible() {
-        return syllabificationVisible;
-    }
-
-    public void setSyllabificationVisible(boolean syllabificationVisible) {
-        this.syllabificationVisible = syllabificationVisible;
-        doc.putProperty("isSyllabificationVisible", syllabificationVisible);
-        doc.reload();
+        return (boolean) doc.getDocumentPropertyOrDefault(
+            SYLLABIFICATION_IS_VISIBLE,
+            SYLLABIFICATION_IS_VISIBLE_DEFAULT
+        );
     }
 
     public boolean isSyllabificationComponent() {
-        return syllabificationIsComponent;
-    }
-
-    public void setSyllabificationIsComponent(boolean syllabificationIsComponent) {
-        this.syllabificationIsComponent = syllabificationIsComponent;
-        doc.addExtensionProperty("isSyllabificationComponent", syllabificationIsComponent);
-        if (syllabificationVisible) {
-            doc.reload();
-        }
+        return (boolean) doc.getDocumentPropertyOrDefault(
+            SYLLABIFICATION_IS_COMPONENT,
+            SYLLABIFICATION_IS_COMPONENT_DEFAULT
+        );
     }
 
     private List<DefaultStyledDocument.ElementSpec> getFormattedSyllabification(IPATranscript ipaTranscript, AttributeSet additionalAttrs) {

@@ -4,9 +4,8 @@ import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.actions.FindAndReplaceAction;
 import ca.phon.app.session.editor.search.FindAndReplacePanel;
 import ca.phon.app.session.editor.view.transcriptEditor.actions.*;
-import ca.phon.session.MediaSegment;
-import ca.phon.session.MediaUnit;
-import ca.phon.session.SessionFactory;
+import ca.phon.app.session.editor.view.transcriptEditor.extensions.AlignmentExtension;
+import ca.phon.app.session.editor.view.transcriptEditor.extensions.SyllabificationExtension;
 import ca.phon.ui.CalloutWindow;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.DropDownButton;
@@ -248,35 +247,59 @@ public class TranscriptView extends EditorView {
     }
 
     public boolean isSyllabificationVisible() {
-        return transcriptEditor.isSyllabificationVisible();
+        return (boolean) transcriptEditor.getTranscriptDocument().getDocumentPropertyOrDefault(
+            SyllabificationExtension.SYLLABIFICATION_IS_VISIBLE,
+            SyllabificationExtension.SYLLABIFICATION_IS_VISIBLE_DEFAULT
+        );
     }
 
     public void toggleSyllabificationVisible() {
-        transcriptEditor.setSyllabificationVisible(!isSyllabificationVisible());
+        transcriptEditor.getTranscriptDocument().putDocumentProperty(
+            SyllabificationExtension.SYLLABIFICATION_IS_VISIBLE,
+            !isSyllabificationVisible()
+        );
     }
 
     public boolean isSyllabificationComponent() {
-        return transcriptEditor.isSyllabificationComponent();
+        return (boolean) transcriptEditor.getTranscriptDocument().getDocumentPropertyOrDefault(
+            SyllabificationExtension.SYLLABIFICATION_IS_COMPONENT,
+            SyllabificationExtension.SYLLABIFICATION_IS_COMPONENT_DEFAULT
+        );
     }
 
     public void toggleSyllabificationIsComponent() {
-        transcriptEditor.setSyllabificationIsComponent(!isSyllabificationComponent());
+        transcriptEditor.getTranscriptDocument().putDocumentProperty(
+            SyllabificationExtension.SYLLABIFICATION_IS_COMPONENT,
+            !isSyllabificationComponent()
+        );
     }
 
     public boolean isAlignmentVisible() {
-        return transcriptEditor.isAlignmentVisible();
+        return (boolean) transcriptEditor.getTranscriptDocument().getDocumentPropertyOrDefault(
+            AlignmentExtension.ALIGNMENT_IS_VISIBLE,
+            AlignmentExtension.ALIGNMENT_IS_VISIBLE_DEFAULT
+        );
     }
 
     public void toggleAlignmentVisible() {
-        transcriptEditor.setAlignmentIsVisible(!isAlignmentVisible());
+        transcriptEditor.getTranscriptDocument().putDocumentProperty(
+            AlignmentExtension.ALIGNMENT_IS_VISIBLE,
+            !isAlignmentVisible()
+        );
     }
 
     public boolean isAlignmentComponent() {
-        return transcriptEditor.isAlignmentComponent();
+        return (boolean) transcriptEditor.getTranscriptDocument().getDocumentPropertyOrDefault(
+            AlignmentExtension.ALIGNMENT_IS_COMPONENT,
+            AlignmentExtension.ALIGNMENT_IS_COMPONENT_DEFAULT
+        );
     }
 
     public void toggleAlignmentIsComponent() {
-        transcriptEditor.setAlignmentIsComponent(!isAlignmentComponent());
+        transcriptEditor.getTranscriptDocument().putDocumentProperty(
+            AlignmentExtension.ALIGNMENT_IS_COMPONENT,
+            !isAlignmentComponent()
+        );
     }
 
     public float getFontSizeDelta() {

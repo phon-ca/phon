@@ -349,30 +349,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         this.singleRecordView = singleRecordView;
     }
 
-    public boolean isSyllabificationVisible() {
-//        return getTranscriptDocument().isSyllabificationVisible();
-        return false;
-    }
-
-    public void setSyllabificationVisible(boolean visible) {
-
-        System.out.println("Testing extension stuff");
-
-        System.out.println("Extension count: " + getExtensions().size());
-
-        for (var extension : getExtensions()) {
-            System.out.println(extension.getClass().getName());
-        }
-
-
-//        TranscriptDocument doc = getTranscriptDocument();
-//
-//        var oldVal = doc.isSyllabificationVisible();
-//        doc.setSyllabificationVisible(visible);
-//
-//        super.firePropertyChange("syllabificationVisible", oldVal, visible);
-    }
-
     public boolean isSyllabificationComponent() {
 //        return getTranscriptDocument().isSyllabificationComponent();
         return false;
