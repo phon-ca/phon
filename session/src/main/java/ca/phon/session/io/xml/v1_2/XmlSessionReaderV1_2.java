@@ -64,6 +64,39 @@ import java.util.regex.Pattern;
  * Session XML reader for session files with
  * version 'PB1.2'
  *
+ * When reading in this older format alignment may be fixed.
+ *
+ * Fixing alignment
+ *
+ * Small pinchers for phonetic groups have been added to the IPA parser.  This was necessary for one-to-one alignment and is our solution for upgrading Phon data.  Currently, I don't do anything when reading the older version 1.3 files when alignment is not complete in groups.  We previously discussed using ',' but I think now that is a mistake. Here are some siuations.  In each example, I'm using upper case letters for words in orthography and smaller case for ipa.
+ *
+ * Old Phon:
+ * ```
+ * Orthography: [A] [B C] [D E F] [ ] [G H]
+ * IPA Target:  [1] [1  ] [1 2 3] [ ] [1  ]
+ * IPA Actual:  [a] [   ] [b c  ] [d] [e f]
+ * ```
+ *
+ * New Phon fixed alignment (spaces added for clarity):
+ * ```
+ * Orthography: A ‹B C› ‹D E F› yyy G H .
+ * IPA Actual:  a *     ‹b c›   d   e f
+ * ```
+ *
+ * New Phon don't fix alignment:
+ * ```
+ * Orthography: A B C D E F G H
+ * IPA Actual:  a b c d e f
+ * ```
+ *
+ * Rules:
+ *
+ *  * If # of words match between Orthography and IPA - just add content (group 1/5 above)
+ *  * If there is content in Orthography and not IPA, wrap orthography in phonetic group markers if more than one word and add * to IPA tier (group 2 above)
+ *  * If there is content in IPA and not orthography, wrap IPA in phonetic group markers if more than one word and add yyy to Orthography (group 4 above)
+ *  * If there is content in both IPA and orthography but the number of words do not match, wrap Orthography and IPA in phonetic group markers if they have more than one word (group 3 above)
+ *  * If no terminator specified one will be added (e.g., '.')
+ *
  */
 @XMLSerial(
 	namespace="http://phon.ling.mun.ca/ns/phonbank",
@@ -82,6 +115,16 @@ import java.util.regex.Pattern;
 public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Session>, IPluginExtensionPoint<SessionReader> {
 
 	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(XmlSessionReaderV1_2.class.getName());
+
+	private boolean fixAlignment = false;
+
+	public boolean isFixAlignment() {
+		return fixAlignment;
+	}
+
+	public void setFixAlignment(boolean fixAlignment) {
+		this.fixAlignment = fixAlignment;
+	}
 
 	@Override
 	public Session read(Document doc, Element ele)
@@ -360,28 +403,102 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 
 		// orthography
 		final OrthographyType ot = rt.getOrthography();
-		Orthography orthography = copyOrthography(factory, ot);
-		if(rt.isExcludeFromSearches()) {
-			final OrthographyBuilder builder = new OrthographyBuilder();
-			builder.append(orthography);
-			if(!orthography.hasTerminator())
-				builder.append(new Terminator(TerminatorType.PERIOD));
-			builder.append(new Error(""));
-			orthography = builder.toOrthography();
-		}
-		retVal.setOrthography(orthography);
+		final List<Orthography> orthoGroups = copyOrthography(factory, ot);
 
+		final Map<SystemTierType, List<IPATranscript>> ipaGroupMap = new LinkedHashMap<>();
 		// ipa target/actual
 		for(IpaTierType ipaTt:rt.getIpaTier()) {
 			final SystemTierType tierType =
 					(ipaTt.getForm() == PhoTypeType.MODEL ? SystemTierType.IPATarget : SystemTierType.IPAActual);
-			final IPATranscript ipaTranscript = copyTranscript(factory, ipaTt);
-			if(ipaTt.getForm() == PhoTypeType.ACTUAL) {
-				retVal.setIPAActual(ipaTranscript);
-			} else {
-				retVal.setIPATarget(ipaTranscript);
+			final List<IPATranscript> ipaGroups = copyTranscript(factory, ipaTt);
+			ipaGroupMap.put(tierType, ipaGroups);
+//			if(ipaTt.getForm() == PhoTypeType.ACTUAL) {
+//				retVal.setIPAActual(ipaTranscript);
+//			} else {
+//				retVal.setIPATarget(ipaTranscript);
+//			}
+		}
+
+		// build orthography and ipa data from groups
+		final OrthographyBuilder orthoBuilder = new OrthographyBuilder();
+		final IPATranscriptBuilder ipaTBuilder = new IPATranscriptBuilder();
+		final IPATranscriptBuilder ipaABuilder = new IPATranscriptBuilder();
+
+		if(isFixAlignment()) {
+			final int numGroups = orthoGroups.size();
+			final List<IPATranscript> ipaTList = ipaGroupMap.containsKey(SystemTierType.IPATarget)
+					? ipaGroupMap.get(SystemTierType.IPATarget) : new ArrayList<>();
+			final List<IPATranscript> ipaAList = ipaGroupMap.containsKey(SystemTierType.IPAActual)
+					? ipaGroupMap.get(SystemTierType.IPAActual) : new ArrayList<>();
+			for(int i = 0; i < numGroups; i++) {
+				final Orthography ortho = orthoGroups.get(i);
+				final IPATranscript ipaT = i < ipaTList.size() ? ipaTList.get(i) : new IPATranscript();
+				final IPATranscript ipaA = i < ipaAList.size() ? ipaAList.get(i) : new IPATranscript();
+
+				final OrthoWordExtractor wordExtractor = new OrthoWordExtractor(false);
+				ortho.accept(wordExtractor);
+				// basic case - add data directly to record
+				if(wordExtractor.getWordList().size() == ipaT.words().size()
+						&& ipaT.words().size() == ipaA.words().size()) {
+					orthoBuilder.append(ortho);
+					if(ipaTBuilder.size() > 0) ipaTBuilder.appendWordBoundary();
+					ipaTBuilder.append(ipaT);
+					if(ipaABuilder.size() > 0) ipaABuilder.appendWordBoundary();
+					ipaABuilder.append(ipaA);
+				} else {
+					if(wordExtractor.getWordList().isEmpty()) {
+						orthoBuilder.append("yyy");
+					} else if(wordExtractor.getWordList().size() == 1) {
+						orthoBuilder.append(ortho);
+					} else {
+						orthoBuilder.append(PhoneticGroup.PHONETIC_GROUP_START + ortho + PhoneticGroup.PHONETIC_GROUP_END);
+					}
+
+					if(ipaT.words().isEmpty()) {
+						if(ipaTBuilder.size() > 0) ipaTBuilder.appendWordBoundary();
+						ipaTBuilder.append("*");
+					} else if(ipaT.words().size() == 1) {
+						if(ipaTBuilder.size() > 0) ipaTBuilder.appendWordBoundary();
+						ipaTBuilder.append(ipaT);
+					} else {
+						if(ipaTBuilder.size() > 0) ipaTBuilder.appendWordBoundary();
+						ipaTBuilder.append(PhoneticGroupMarkerType.BEGIN.getMakerChar() + ipaT.toString(true) + PhoneticGroupMarkerType.END.getMakerChar());
+					}
+
+					if(ipaA.words().isEmpty()) {
+						if(ipaABuilder.size() > 0) ipaABuilder.appendWordBoundary();
+						ipaABuilder.append("*");
+					} else if(ipaA.words().size() == 1) {
+						if(ipaABuilder.size() > 0) ipaABuilder.appendWordBoundary();
+						ipaABuilder.append(ipaA);
+					} else {
+						if(ipaABuilder.size() > 0) ipaABuilder.appendWordBoundary();
+						ipaABuilder.append(PhoneticGroupMarkerType.BEGIN.getMakerChar() + ipaA.toString(true) + PhoneticGroupMarkerType.END.getMakerChar());
+					}
+				}
+			}
+		} else {
+			for(Orthography ortho:orthoGroups) {
+				orthoBuilder.append(ortho);
+			}
+			for(SystemTierType ipaTierType:ipaGroupMap.keySet()) {
+				final IPATranscriptBuilder builder = ipaTierType == SystemTierType.IPATarget ? ipaTBuilder : ipaABuilder;
+				final List<IPATranscript> ipas = ipaGroupMap.get(ipaTierType);
+				for(IPATranscript ipa:ipas) {
+					if(builder.size() > 0) builder.appendWordBoundary();
+					builder.append(ipa);
+				}
 			}
 		}
+
+		if(rt.isExcludeFromSearches()) {
+			if(!orthoBuilder.toOrthography().hasTerminator())
+				orthoBuilder.append(new Terminator(TerminatorType.PERIOD));
+			orthoBuilder.append(new Postcode(Record.RECORD_XCL_POSTCODE));
+		}
+		retVal.setOrthography(orthoBuilder.toOrthography());
+		retVal.setIPATarget(ipaTBuilder.toIPATranscript());
+		retVal.setIPAActual(ipaABuilder.toIPATranscript());
 
 		// blind transcriptions
 		for(BlindTierType btt:rt.getBlindTranscription()) {
@@ -481,20 +598,16 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 	 * @param ot
 	 * @return orthography
 	 */
-	private Orthography copyOrthography(SessionFactory factory, OrthographyType ot) {
-		final OrthographyBuilder builder = new OrthographyBuilder();
-
+	private List<Orthography> copyOrthography(SessionFactory factory, OrthographyType ot) {
+		final List<Orthography> retVal = new ArrayList<>();
 		for(int i = 0 ;i < ot.getWOrGOrP().size(); i++) {
+			final OrthographyBuilder builder = new OrthographyBuilder();
 			final Object otEle = ot.getWOrGOrP().get(i);
 			if(!(otEle instanceof GroupType gt)) continue;
-			boolean insertComma = gt.getWOrComOrE().size() > 1 && i < ot.getWOrGOrP().size()-1;
 			for(Object ele:gt.getWOrComOrE()) {
 				if(ele instanceof WordType) {
 					final WordType wt = (WordType)ele;
 					builder.append(new ca.phon.orthography.Word(new WordText(wt.getContent())));
-					if(wt.getContent().contains(",")) {
-						insertComma = false;
-					}
 				} else if(ele instanceof EventType) {
 					final EventType et = (EventType) ele;
 					final String txt = et.getContent();
@@ -647,22 +760,17 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 					}
 				}
 			}
-
-			// insert commas between multi-word groups
-			if(insertComma && builder.size() > 0) {
-				builder.append(new TagMarker(TagMarkerType.COMMA));
+			final String orthoTxt = builder.toOrthography().toString();
+			try {
+				Orthography ortho = Orthography.parseOrthography(orthoTxt);
+				retVal.add(ortho);
+			} catch (ParseException pe) {
+				final Orthography ortho = new Orthography();
+				ortho.putExtension(UnvalidatedValue.class, new UnvalidatedValue(orthoTxt, pe));
+				retVal.add(ortho);
 			}
 		}
-
-		final String orthoTxt = builder.toOrthography().toString();
-		try {
-			Orthography retVal = Orthography.parseOrthography(orthoTxt);
-			return retVal;
-		} catch (ParseException pe) {
-			final Orthography retVal = new Orthography();
-			retVal.putExtension(UnvalidatedValue.class, new UnvalidatedValue(orthoTxt, pe));
-			return retVal;
-		}
+		return retVal;
 	}
 
 	/**
@@ -674,8 +782,8 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 	 * @param factory
 	 * @param itt
 	 */
-	private IPATranscript copyTranscript(SessionFactory factory, IpaTierType itt) {
-		final IPATranscriptBuilder builder = new IPATranscriptBuilder();
+	private List<IPATranscript> copyTranscript(SessionFactory factory, IpaTierType itt) {
+		final List<IPATranscript> retVal = new ArrayList<>();
 		for(PhoType pt:itt.getPg()) {
 			final IPATranscriptBuilder groupBuilder = new IPATranscriptBuilder();
 			if(pt != null && pt.getW() != null) {
@@ -713,13 +821,9 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 					}
 				}
 			}
-			if(groupTranscript.length() > 0) {
-				if (builder.size() > 0)
-					builder.appendWordBoundary();
-				builder.append(groupTranscript);
-			}
+			retVal.add(groupTranscript);
 		}
-		return builder.toIPATranscript();
+		return retVal;
 	}
 
 	public class CopyTranscriptVisitor extends VisitorAdapter<IPAElement> {

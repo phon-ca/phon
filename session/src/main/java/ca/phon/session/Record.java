@@ -43,6 +43,8 @@ import java.util.*;
  * Additional tiers, called user-defined tiers, may also be added to the record.
  */
 public final class Record extends ExtendableObject {
+
+	public final static String RECORD_XCL_POSTCODE = "xcl";
 	
 	private final RecordSPI recordImpl;
 	
@@ -145,14 +147,9 @@ public final class Record extends ExtendableObject {
 	public boolean isExcludeFromSearches() {
 		final Orthography orthography = getOrthography();
 		boolean exclude = false;
-		for(OrthographyAnnotation annotation:orthography.getAnnotations()) {
-			if(annotation instanceof Error) {
-				exclude = true;
-				break;
-			}
-			if(annotation instanceof Marker marker && marker.getType() == MarkerType.EXCLUDE) {
-				exclude = true;
-				break;
+		for(OrthographyElement orthographyElement:orthography) {
+			if(orthographyElement instanceof Postcode postcode) {
+				exclude = postcode.getCode().equals(Record.RECORD_XCL_POSTCODE);
 			}
 		}
 		return exclude;
