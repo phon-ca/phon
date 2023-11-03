@@ -569,7 +569,8 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 		if(record.getSpeaker() != Participant.UNKNOWN)
 			retVal.setSpeaker(findXmlParticipant(session, record.getSpeaker()));
 
-		retVal.setExcludeFromSearches(record.isExcludeFromSearches());
+		if(record.isExcludeFromSearches())
+			retVal.setExcludeFromSearches(record.isExcludeFromSearches());
 
 		// orthography
 		final Tier<Orthography> orthoTier = record.getOrthographyTier();
