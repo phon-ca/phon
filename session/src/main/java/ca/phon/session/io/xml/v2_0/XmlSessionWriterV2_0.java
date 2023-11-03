@@ -226,13 +226,19 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 
 		final Period age = part.getAge(null);
 		if(age != null) {
-			try {
-				final DatatypeFactory df = DatatypeFactory.newInstance();
-				final Duration ageDuration = df.newDuration(true, age.getYears(), age.getMonths(), age.getDays(), 0, 0, 0);
-				retVal.setAge(ageDuration);
-			} catch (DatatypeConfigurationException e) {
-				LOGGER.warn( e.toString(), e);
+			final StringBuilder ageBuilder = new StringBuilder();
+			ageBuilder.append("P");
+			if(age.getYears() > 0) {
+				ageBuilder.append(age.getYears()).append("Y");
 			}
+			if(age.getMonths() > 0) {
+				ageBuilder.append(age.getMonths()).append("M");
+			}
+			if(age.getDays() > 0) {
+				ageBuilder.append(age.getDays()).append("D");
+			}
+			final String ageString = ageBuilder.toString();
+			retVal.setAge(ageString);
 		}
 
 		if(part.getEducation() != null && part.getEducation().length() > 0)

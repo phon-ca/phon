@@ -271,10 +271,10 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 			retVal.setBirthplace(pt.getBirthplace());
 		}
 
-		final Duration ageDuration = pt.getAge();
-		if(ageDuration != null) {
+		final String ageString = pt.getAge();
+		if(ageString != null) {
 			// convert to period
-			final Period age = Period.of(ageDuration.getYears(), ageDuration.getMonths(), ageDuration.getDays());
+			final Period age = Period.parse(ageString);
 			retVal.setAge(age);
 		}
 
