@@ -32,9 +32,6 @@ import java.util.*;
  */
 public class RecordImpl implements RecordSPI {
 
-	/* Attributes */
-	private UUID uuid = UUID.randomUUID();
-
 	private Participant participant = Participant.UNKNOWN;
 
 	/* default tiers */
@@ -87,16 +84,6 @@ public class RecordImpl implements RecordSPI {
 		alignment.setValue(phoneAlignment);
 
 		userDefined = Collections.synchronizedMap(new LinkedHashMap<>());
-	}
-
-	@Override
-	public UUID getUuid() {
-		return this.uuid;
-	}
-
-	@Override
-	public void setUuid(UUID id) {
-		this.uuid = id;
 	}
 
 	@Override

@@ -33,9 +33,9 @@
 
     <!-- region Session header -->
     <xs:element name="session" type="SessionType">
-        <xs:key name="uIDKey">
+        <xs:key name="IDKey">
             <xs:selector xpath="transcript/r"/>
-            <xs:field xpath="@uuid"/>
+            <xs:field xpath="@id"/>
         </xs:key>
 
         <xs:key name="partIDKey">
@@ -857,7 +857,7 @@
             <xs:element ref="userTier" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="speaker" type="xs:IDREF"/>
-        <xs:attribute name="uuid" type="nonemptyStringType"/>
+        <xs:attribute name="id" type="xs:ID" use="optional"/>
         <xs:attribute name="excludeFromSearches" type="xs:boolean" default="false"/>
     </xs:complexType>
     <!-- endregion Records -->

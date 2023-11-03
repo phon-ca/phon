@@ -47,6 +47,9 @@ public final class Record extends ExtendableObject {
 	public final static String RECORD_XCL_POSTCODE = "xcl";
 	
 	private final RecordSPI recordImpl;
+
+	// uuid should no longer be used
+	private UUID uuid;
 	
 	Record(RecordSPI impl) {
 		super();
@@ -57,13 +60,24 @@ public final class Record extends ExtendableObject {
 	 * Unique id for record
 	 *
 	 * @return id
+	 * @deprecated
 	 */
+	@Deprecated
 	public UUID getUuid() {
-		return recordImpl.getUuid();
+		if(this.uuid == null) {
+			this.uuid = UUID.randomUUID();
+		}
+		return this.uuid;
 	}
 
+	/**
+	 *
+	 * @param id
+	 * @deprecated
+	 */
+	@Deprecated
 	public void setUuid(UUID id) {
-		recordImpl.setUuid(id);
+		this.uuid = id;
 	}
 
 	/**

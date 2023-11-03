@@ -231,7 +231,7 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 					try {
 						record = factory.createRecord(new LazyRecord(factory, retVal, rt));
 					} catch (Exception e) {
-						LOGGER.info(rt.getUuid());
+//						LOGGER.info(rt.getUuid());
 						LOGGER.error(
 								e.getLocalizedMessage(), e);
 
@@ -448,13 +448,13 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 	Record readRecord(SessionFactory factory, Session session, XmlRecordType rt) {
 		final Record retVal = factory.createRecord(session);
 
-		try {
-			if(rt.getUuid() != null) {
-				UUID uuid = UUID.fromString(rt.getUuid());
-				retVal.setUuid(uuid);
-			}
-		} catch (IllegalArgumentException e) {
-		}
+//		try {
+//			if(rt.getUuid() != null) {
+//				UUID uuid = UUID.fromString(rt.getUuid());
+//				retVal.setUuid(uuid);
+//			}
+//		} catch (IllegalArgumentException e) {
+//		}
 
 		if(rt.getSpeaker() != null) {
 			final XmlParticipantType pt = (XmlParticipantType) rt.getSpeaker();

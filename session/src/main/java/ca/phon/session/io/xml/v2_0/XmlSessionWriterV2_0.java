@@ -565,7 +565,7 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 	private XmlRecordType writeRecord(ObjectFactory factory, XmlSessionType session, Record record) {
 		final XmlRecordType retVal = factory.createXmlRecordType();
 
-		retVal.setUuid(record.getUuid().toString());
+//		retVal.setUuid(record.getUuid().toString());
 		if(record.getSpeaker() != Participant.UNKNOWN)
 			retVal.setSpeaker(findXmlParticipant(session, record.getSpeaker()));
 

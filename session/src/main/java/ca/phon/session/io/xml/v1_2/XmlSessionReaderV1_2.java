@@ -377,13 +377,13 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 	Record copyRecord(SessionFactory factory, Session session, RecordType rt) {
 		final Record retVal = factory.createRecord(session);
 
-		try {
-			if(rt.getId() != null) {
-				UUID uuid = UUID.fromString(rt.getId());
-				retVal.setUuid(uuid);
-			}
-		} catch (IllegalArgumentException e) {
-		}
+//		try {
+//			if(rt.getId() != null) {
+//				UUID uuid = UUID.fromString(rt.getId());
+//				retVal.setUuid(uuid);
+//			}
+//		} catch (IllegalArgumentException e) {
+//		}
 
 		if(rt.getSpeaker() != null) {
 			final ParticipantType pt = (ParticipantType)rt.getSpeaker();
