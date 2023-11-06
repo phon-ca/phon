@@ -5,7 +5,6 @@ import ca.phon.formatter.MediaTimeFormatter;
 import ca.phon.orthography.mor.Pos;
 import ca.phon.orthography.*;
 import ca.phon.orthography.Error;
-import ca.phon.orthography.parser.exceptions.OrthoParserException;
 import ca.phon.util.Language;
 
 import java.text.ParseException;
@@ -33,6 +32,9 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
 
     @Override
     public void enterComplete_word(UnicodeOrthographyParser.Complete_wordContext ctx) {
+        if(builder.toOrthography().hasTerminator()) {
+            throw new OrthoParserException(OrthoParserException.Type.ContentAfterTerminator, "Content after terminator", ctx.getStart().getCharPositionInLine());
+        }
         langList = new ArrayList<>();
         langs = new Langs();
     }
@@ -249,6 +251,9 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
     @Override
     public void exitTerminator(UnicodeOrthographyParser.TerminatorContext ctx) {
         final TerminatorType tt = TerminatorType.fromString(ctx.getText());
+        if(builder.toOrthography().hasTerminator()) {
+            throw new OrthoParserException(OrthoParserException.Type.TooManyTerminators, "Terminator already specified", ctx.getStart().getCharPositionInLine());
+        }
         builder.append(new Terminator(tt));
     }
 

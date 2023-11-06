@@ -5,9 +5,10 @@ import org.antlr.v4.runtime.*;
 
 public class UnicodeIPAParserErrorStrategy extends DefaultErrorStrategy {
 
-	private UnicodeIPAParserListener listener;
+	private final UnicodeIPAParserListener listener;
 
 	public UnicodeIPAParserErrorStrategy(UnicodeIPAParserListener listener) {
+		super();
 		this.listener = listener;
 	}
 
