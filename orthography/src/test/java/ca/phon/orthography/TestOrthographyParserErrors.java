@@ -67,6 +67,60 @@ public class TestOrthographyParserErrors {
         final String txt = "hello . (3.)";
         testError(txt, OrthoParserException.Type.ContentAfterTerminator, 8);
     }
+
+    @Test
+    public void testFreecodeAfterTerminator() {
+        final String txt = "hello . [^ foobar]";
+        testError(txt, OrthoParserException.Type.ContentAfterTerminator, 8);
+    }
+
+    @Test
+    public void testOteAfterTeminator() {
+        final String txt = "hello . &*CHI=test";
+        testError(txt, OrthoParserException.Type.ContentAfterTerminator, 8);
+    }
+
+    @Test
+    public void testHappeningAfterTerminator() {
+        final String txt = "hello . &=test";
+        testError(txt, OrthoParserException.Type.ContentAfterTerminator, 8);
+    }
+
+    @Test
+    public void testSeparatorAfterTerminator() {
+        final String txt = "hello . ;";
+        testError(txt, OrthoParserException.Type.ContentAfterTerminator, 8);
+    }
+
+    @Test
+    public void testToneMarkerAfterTerminator() {
+        final String txt = "hello . ;";
+        testError(txt, OrthoParserException.Type.ContentAfterTerminator, 8);
+    }
+
+    @Test
+    public void testTagMarkerAfterTerminator() {
+        final String txt = "hello . ,";
+        testError(txt, OrthoParserException.Type.ContentAfterTerminator, 8);
+    }
+
+    @Test
+    public void testLongFeatureAfterTerminator() {
+        final String txt = "hello . &{l=Test hello &}l=Test";
+        testError(txt, OrthoParserException.Type.ContentAfterTerminator, 8);
+    }
+
+    @Test
+    public void testNonvocalAfterTerminator() {
+        final String txt = "hello . &{n=Test &}n=Test";
+        testError(txt, OrthoParserException.Type.ContentAfterTerminator, 8);
+    }
+
+    @Test
+    public void testQuotationAfterTerminator() {
+        final String txt = "hello . \u201c";
+        testError(txt, OrthoParserException.Type.ContentAfterTerminator, 8);
+    }
     // endregion Terminators
 
     // region InternalMedia
@@ -89,4 +143,9 @@ public class TestOrthographyParserErrors {
     }
     // endregion InternalMedia
 
+    @Test
+    public void testReplacmentWithoutContent() {
+        final String txt = "[: hello] .";
+        testError(txt, OrthoParserException.Type.ReplacementWithoutContent, 0);
+    }
 }
