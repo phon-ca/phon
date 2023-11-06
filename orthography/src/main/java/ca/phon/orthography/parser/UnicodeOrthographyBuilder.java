@@ -378,7 +378,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         builder.append(new OtherSpokenEvent(who, text));
     }
 
-    private void annotateLastElement(OrthographyAnnotation ele) {
+    private void annotateLastElement(OrthographyAnnotation ele, int idx) {
         if(builder.size() > 0) {
             OrthographyElement lastEle = builder.lastElement();
             if(lastEle instanceof AnnotatedOrthographyElement) {
@@ -388,8 +388,12 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
                 Word word = (Word) lastEle;
                 builder.replaceLastElement(new OrthoGroup(Collections.singletonList(word), Collections.singletonList(ele)));
             } else {
-                // annotate utterance
-                builder.append(ele);
+                if(builder.toOrthography().hasTerminator()) {
+                    // annotate utterance
+                    builder.append(ele);
+                } else {
+                    throw new OrthoParserException(OrthoParserException.Type.AnnotationWithoutContent, "Annotation without content", idx);
+                }
             }
         } else {
             builder.append(ele);
@@ -401,7 +405,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         final MarkerType type = MarkerType.fromString(ctx.getText());
         if(type != null) {
             final Marker marker = new Marker(type);
-            annotateLastElement(marker);
+            annotateLastElement(marker, ctx.getStart().getCharPositionInLine());
         } else {
             throw new OrthoParserException("Invalid marker", ctx.getStart().getCharPositionInLine());
         }
@@ -410,7 +414,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
     @Override
     public void exitError(UnicodeOrthographyParser.ErrorContext ctx) {
         final Error error = new Error(ctx.getText().substring(2, ctx.getText().length()-1));
-        annotateLastElement(error);
+        annotateLastElement(error, ctx.getStart().getCharPositionInLine());
     }
 
     @Override
@@ -418,39 +422,39 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         final OverlapType overlapType = ctx.getText().charAt(1) == '<' ? OverlapType.OVERLAP_PRECEDES : OverlapType.OVERLAP_FOLLOWS;
         final int index = (ctx.number() != null ? Integer.parseInt(ctx.number().getText()) : -1);
         final Overlap overlap = new Overlap(overlapType, index);
-        annotateLastElement(overlap);
+        annotateLastElement(overlap, ctx.getStart().getCharPositionInLine());
     }
 
-    private void addGroupAnnotation(GroupAnnotationType type, String data) {
-        annotateLastElement(new GroupAnnotation(type, data));
+    private void addGroupAnnotation(GroupAnnotationType type, String data, int idx) {
+        annotateLastElement(new GroupAnnotation(type, data), idx);
     }
 
     @Override
     public void exitComment(UnicodeOrthographyParser.CommentContext ctx) {
         final String data = ctx.getText().substring(GroupAnnotationType.COMMENTS.getPrefix().length()+1,
                 ctx.getText().length()-1);
-        addGroupAnnotation(GroupAnnotationType.COMMENTS, data.trim());
+        addGroupAnnotation(GroupAnnotationType.COMMENTS, data.trim(), ctx.getStart().getCharPositionInLine());
     }
 
     @Override
     public void exitAlternative(UnicodeOrthographyParser.AlternativeContext ctx) {
         final String data = ctx.getText().substring(GroupAnnotationType.ALTERNATIVE.getPrefix().length()+1,
                 ctx.getText().length()-1);
-        addGroupAnnotation(GroupAnnotationType.ALTERNATIVE, data.trim());
+        addGroupAnnotation(GroupAnnotationType.ALTERNATIVE, data.trim(), ctx.getStart().getCharPositionInLine());
     }
 
     @Override
     public void exitExplanation(UnicodeOrthographyParser.ExplanationContext ctx) {
         final String data = ctx.getText().substring(GroupAnnotationType.EXPLANATION.getPrefix().length()+1,
                 ctx.getText().length()-1);
-        addGroupAnnotation(GroupAnnotationType.EXPLANATION, data.trim());
+        addGroupAnnotation(GroupAnnotationType.EXPLANATION, data.trim(), ctx.getStart().getCharPositionInLine());
     }
 
     @Override
     public void exitParalinguistics(UnicodeOrthographyParser.ParalinguisticsContext ctx) {
         final String data = ctx.getText().substring(GroupAnnotationType.PARALINGUISTICS.getPrefix().length()+1,
                 ctx.getText().length()-1);
-        addGroupAnnotation(GroupAnnotationType.PARALINGUISTICS, data.trim());
+        addGroupAnnotation(GroupAnnotationType.PARALINGUISTICS, data.trim(), ctx.getStart().getCharPositionInLine());
     }
 
     @Override
@@ -461,7 +465,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         } catch (ParseException pe) {
             throw new OrthoParserException(pe.getMessage(), ctx.time_in_minutes_seconds().getStart().getCharPositionInLine());
         }
-        annotateLastElement(new Duration(duration));
+        annotateLastElement(new Duration(duration), ctx.getStart().getCharPositionInLine());
     }
 
     @Override
@@ -527,6 +531,9 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
 
     @Override
     public void exitPostcode(UnicodeOrthographyParser.PostcodeContext ctx) {
+        if(!builder.toOrthography().hasTerminator()) {
+            throw new OrthoParserException(OrthoParserException.Type.OutOfPlace, "Postcode must be at end", ctx.getStart().getCharPositionInLine());
+        }
         final String code = ctx.getText().substring(Postcode.POSTCODE_PREFIX.length(), ctx.getText().length()-1).trim();
         builder.append(new Postcode(code));
     }

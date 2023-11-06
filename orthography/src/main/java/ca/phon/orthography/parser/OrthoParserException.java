@@ -26,7 +26,8 @@ public class OrthoParserException extends RuntimeException {
 		ContentAfterTerminator,
 		MediaAlreadySpecified,
 		InvalidTimeString,
-		ReplacementWithoutContent
+		ReplacementWithoutContent,
+		AnnotationWithoutContent
 	}
 
 	private Type type;

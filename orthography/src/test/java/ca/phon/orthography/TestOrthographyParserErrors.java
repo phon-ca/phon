@@ -148,4 +148,17 @@ public class TestOrthographyParserErrors {
         final String txt = "[: hello] .";
         testError(txt, OrthoParserException.Type.ReplacementWithoutContent, 0);
     }
+
+    @Test
+    public void testErrorWithoutContent() {
+        final String txt = "[*] .";
+        testError(txt, OrthoParserException.Type.AnnotationWithoutContent, 0);
+    }
+
+    @Test
+    public void testPostcodeBeforeTerminator() {
+        final String txt = "hello [+ foo] .";
+        testError(txt, OrthoParserException.Type.OutOfPlace, 6);
+    }
+
 }
