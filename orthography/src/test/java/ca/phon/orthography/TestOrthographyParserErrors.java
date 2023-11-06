@@ -13,7 +13,7 @@ public class TestOrthographyParserErrors {
 
     public void testError(String text, OrthoParserException.Type type, int positionInLine) {
         try {
-            Orthography.parseOrthography(text);
+            final Orthography ortho = Orthography.parseOrthography(text);
             Assert.fail("Passed parsing");
         } catch (ParseException pe) {
             Assert.assertEquals(positionInLine, pe.getErrorOffset());
@@ -159,6 +159,30 @@ public class TestOrthographyParserErrors {
     public void testPostcodeBeforeTerminator() {
         final String txt = "hello [+ foo] .";
         testError(txt, OrthoParserException.Type.OutOfPlace, 6);
+    }
+
+    @Test
+    public void testHangingGroup() {
+        final String txt = "hello <goodbye .";
+        testError(txt, OrthoParserException.Type.MissingGroupEnd, 6);
+    }
+
+    @Test
+    public void testHangingPhoneticGroup() {
+        final String txt = "hello \u2039goodbye .";
+        testError(txt, OrthoParserException.Type.MissingPgEnd, 6);
+    }
+
+    @Test
+    public void testOpenGroup() {
+        final String txt = "hello> !";
+        testError(txt, OrthoParserException.Type.MissingGroupStart, 5);
+    }
+
+    @Test
+    public void testOpenPg() {
+        final String txt = "hello\u203a !";
+        testError(txt, OrthoParserException.Type.MissingPgStart, 5);
     }
 
 }

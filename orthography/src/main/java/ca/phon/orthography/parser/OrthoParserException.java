@@ -27,7 +27,11 @@ public class OrthoParserException extends RuntimeException {
 		MediaAlreadySpecified,
 		InvalidTimeString,
 		ReplacementWithoutContent,
-		AnnotationWithoutContent
+		AnnotationWithoutContent,
+		MissingGroupStart,
+		MissingGroupEnd,
+		MissingPgStart,
+		MissingPgEnd
 	}
 
 	private Type type;
