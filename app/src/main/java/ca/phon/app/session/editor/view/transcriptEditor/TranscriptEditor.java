@@ -349,62 +349,12 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         this.singleRecordView = singleRecordView;
     }
 
-    public boolean isSyllabificationComponent() {
-//        return getTranscriptDocument().isSyllabificationComponent();
-        return false;
-    }
-
-    public void setSyllabificationIsComponent(boolean isComponent) {
-        TranscriptDocument doc = getTranscriptDocument();
-
-//        var oldVal = doc.isSyllabificationComponent();
-//        doc.setSyllabificationIsComponent(isComponent);
-
-//        super.firePropertyChange("syllabificationIsComponent", oldVal, isComponent);
-    }
-
-    public boolean isAlignmentVisible() {
-//        return getTranscriptDocument().isAlignmentVisible();
-        return false;
-    }
-
-    public void setAlignmentIsVisible(boolean visible) {
-//        TranscriptDocument doc = getTranscriptDocument();
-//
-//        var oldVal = doc.isAlignmentVisible();
-//        doc.setAlignmentVisible(visible);
-//
-//        super.firePropertyChange("alignmentVisible", oldVal, visible);
-    }
-
-    public boolean isAlignmentComponent() {
-//        return getTranscriptDocument().isAlignmentComponent();
-        return false;
-    }
-
-    public void setAlignmentIsComponent(boolean isComponent) {
-//        TranscriptDocument doc = getTranscriptDocument();
-//
-//        var oldVal = doc.isAlignmentComponent();
-//        doc.setAlignmentIsComponent(isComponent);
-//
-//        super.firePropertyChange("alignmentIsComponent", oldVal, isComponent);
-    }
-
     public EditorEventManager getEventManager() {
         return eventManager;
     }
 
     public boolean isTranscriberValidator() {
         return dataModel.getTranscriber() == Transcriber.VALIDATOR;
-    }
-
-    public boolean isValidationMode() {
-        return getTranscriptDocument().isValidationMode();
-    }
-
-    public void setValidationMode(boolean enabled) {
-        getTranscriptDocument().setValidationMode(enabled);
     }
 
     // endregion Getters and Setters

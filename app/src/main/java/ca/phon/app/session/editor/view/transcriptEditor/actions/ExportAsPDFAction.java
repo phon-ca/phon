@@ -69,7 +69,7 @@ public class ExportAsPDFAction extends TranscriptAction {
 
             boolean inHeaders = true;
 
-            var headerTierMap = transcriptDoc.getHeaderTierMap();
+//            var headerTierMap = transcriptDoc.getHeaderTierMap();
 
             var root = transcriptDoc.getDefaultRootElement();
             for (int i = 0; i < root.getElementCount(); i++) {
@@ -81,17 +81,17 @@ public class ExportAsPDFAction extends TranscriptAction {
                     .getAttributes();
                 Record currentRecord = (Record) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
                 Tier<?> genericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
-                boolean isHeaderTier = false;
-                if (inHeaders) {
-                    isHeaderTier = headerTierMap.containsValue(genericTier);
-                }
-                if (record != currentRecord || (inHeaders && !isHeaderTier)) {
-                    if (inHeaders && !isHeaderTier) {
-                        inHeaders = false;
-                    }
-                    table.addCell(createSpacerCell());
-                    table.addCell(createSpacerCell());
-                }
+//                boolean isHeaderTier = false;
+//                if (inHeaders) {
+//                    isHeaderTier = headerTierMap.containsValue(genericTier);
+//                }
+//                if (record != currentRecord || (inHeaders && !isHeaderTier)) {
+//                    if (inHeaders && !isHeaderTier) {
+//                        inHeaders = false;
+//                    }
+//                    table.addCell(createSpacerCell());
+//                    table.addCell(createSpacerCell());
+//                }
                 record = currentRecord;
                 String labelText = elemText.substring(0, labelColumnWidth).strip();
                 String contentText = elemText.substring(labelColumnWidth + 2).strip();

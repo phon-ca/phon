@@ -12,7 +12,7 @@ import java.util.List;
  * a list of additional element specs which should be added after the
  * provided data.
  */
-public abstract class TranscriptDocumentInsertionHook {
+public abstract class DefaultInsertionHook implements InsertionHook {
     private final List<DefaultStyledDocument.ElementSpec> EMPTY_LIST = new ArrayList<>();
 
     /**
@@ -22,69 +22,88 @@ public abstract class TranscriptDocumentInsertionHook {
      * @param attrs
      * @return list of additional element specs to add (if any)
      */
+    @Override
     public List<DefaultStyledDocument.ElementSpec> batchInsertString(StringBuilder buffer, MutableAttributeSet attrs) {
         return EMPTY_LIST;
     }
 
+    @Override
     public List<DefaultStyledDocument.ElementSpec> startSession() {
         return EMPTY_LIST;
     }
+    @Override
     public List<DefaultStyledDocument.ElementSpec> endSession() {
         return EMPTY_LIST;
     }
 
+    @Override
     public List<DefaultStyledDocument.ElementSpec> startHeader() {
         return EMPTY_LIST;
     }
+    @Override
     public List<DefaultStyledDocument.ElementSpec> endHeader() {
         return EMPTY_LIST;
     }
 
+    @Override
     public List<DefaultStyledDocument.ElementSpec> startHeaderLine() {
         return EMPTY_LIST;
     }
+    @Override
     public List<DefaultStyledDocument.ElementSpec> endHeaderLine() {
         return EMPTY_LIST;
     }
 
+    @Override
     public List<DefaultStyledDocument.ElementSpec> startTranscript() {
         return EMPTY_LIST;
     }
+    @Override
     public List<DefaultStyledDocument.ElementSpec> endTranscript() {
         return EMPTY_LIST;
     }
 
+    @Override
     public List<DefaultStyledDocument.ElementSpec> startComment() {
         return EMPTY_LIST;
     }
+    @Override
     public List<DefaultStyledDocument.ElementSpec> endComment() {
         return EMPTY_LIST;
     }
 
+    @Override
     public List<DefaultStyledDocument.ElementSpec> startGem() {
         return EMPTY_LIST;
     }
+    @Override
     public List<DefaultStyledDocument.ElementSpec> endGem() {
         return EMPTY_LIST;
     }
 
+    @Override
     public List<DefaultStyledDocument.ElementSpec> startRecord() {
         return EMPTY_LIST;
     }
+    @Override
     public List<DefaultStyledDocument.ElementSpec> endRecord() {
         return EMPTY_LIST;
     }
 
+    @Override
     public List<DefaultStyledDocument.ElementSpec> startRecordHeader() {
         return EMPTY_LIST;
     }
+    @Override
     public List<DefaultStyledDocument.ElementSpec> endRecordHeader() {
         return EMPTY_LIST;
     }
 
+    @Override
     public List<DefaultStyledDocument.ElementSpec> beginTier() {
         return EMPTY_LIST;
     }
+    @Override
     public List<DefaultStyledDocument.ElementSpec> endTier(MutableAttributeSet attrs) {
         return EMPTY_LIST;
     }

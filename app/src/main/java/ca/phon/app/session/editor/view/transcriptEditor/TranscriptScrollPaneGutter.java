@@ -4,6 +4,7 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.view.transcriptEditor.extensions.BlindTranscriptionExtension;
 import ca.phon.session.Record;
 import ca.phon.session.Tier;
 import ca.phon.ui.action.PhonUIAction;
@@ -294,10 +295,18 @@ public class TranscriptScrollPaneGutter extends JComponent {
     }
 
     private void setupBlindIconClickMenu() {
+        TranscriptDocument doc = editor.getTranscriptDocument();
+
         currentHoverMenu.removeAll();
-        boolean currentValidationMode = editor.isValidationMode();
+        boolean currentValidationMode = (boolean) doc.getDocumentPropertyOrDefault(
+            BlindTranscriptionExtension.VALIDATION_MODE,
+            BlindTranscriptionExtension.VALIDATION_MODE_DEFAULT
+        );
         JMenuItem toggleValidationMode = new JMenuItem();
-        PhonUIAction toggleValidationModeAction = PhonUIAction.runnable(() -> editor.setValidationMode(!currentValidationMode));
+        PhonUIAction toggleValidationModeAction = PhonUIAction.runnable(() -> doc.putDocumentProperty(
+            BlindTranscriptionExtension.VALIDATION_MODE,
+            !currentValidationMode
+        ));
         toggleValidationModeAction.putValue(
             PhonUIAction.NAME,
             (currentValidationMode ? "Disable" : "Enable") + " validation mode"

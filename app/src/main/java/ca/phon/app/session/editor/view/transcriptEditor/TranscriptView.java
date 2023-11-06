@@ -5,6 +5,8 @@ import ca.phon.app.session.editor.actions.FindAndReplaceAction;
 import ca.phon.app.session.editor.search.FindAndReplacePanel;
 import ca.phon.app.session.editor.view.transcriptEditor.actions.*;
 import ca.phon.app.session.editor.view.transcriptEditor.extensions.AlignmentExtension;
+import ca.phon.app.session.editor.view.transcriptEditor.extensions.BlindTranscriptionExtension;
+import ca.phon.app.session.editor.view.transcriptEditor.extensions.HeaderTierExtension;
 import ca.phon.app.session.editor.view.transcriptEditor.extensions.SyllabificationExtension;
 import ca.phon.ui.CalloutWindow;
 import ca.phon.ui.CommonModuleFrame;
@@ -220,6 +222,7 @@ public class TranscriptView extends EditorView {
         retVal.add(new ToggleAlignmentVisibleAction(getEditor(), this));
         retVal.add(new ToggleAlignmentIsComponentAction(getEditor(), this));
         retVal.add(new ToggleValidationModeAction(getEditor(), this));
+        retVal.add(new ToggleHeadersVisibleAction(getEditor(), this));
         retVal.add(new FindAndReplaceAction(getEditor()));
         retVal.add(new ExportAsPDFAction(getEditor(), this));
 
@@ -342,11 +345,31 @@ public class TranscriptView extends EditorView {
     }
 
     public boolean isValidationMode() {
-        return transcriptEditor.isValidationMode();
+        return (boolean) transcriptEditor.getTranscriptDocument().getDocumentPropertyOrDefault(
+            BlindTranscriptionExtension.VALIDATION_MODE,
+            BlindTranscriptionExtension.VALIDATION_MODE_DEFAULT
+        );
     }
 
     public void toggleValidationMode() {
-        transcriptEditor.setValidationMode(!isValidationMode());
+        transcriptEditor.getTranscriptDocument().putDocumentProperty(
+            BlindTranscriptionExtension.VALIDATION_MODE,
+            !isValidationMode()
+        );
+    }
+
+    public boolean isHeadersVisible() {
+        return (boolean) transcriptEditor.getTranscriptDocument().getDocumentPropertyOrDefault(
+            HeaderTierExtension.HEADERS_VISIBLE,
+            HeaderTierExtension.DEFAULT_HEADERS_VISIBLE
+        );
+    }
+
+    public void toggleHeadersVisible() {
+        transcriptEditor.getTranscriptDocument().putDocumentProperty(
+            HeaderTierExtension.HEADERS_VISIBLE,
+            !isHeadersVisible()
+        );
     }
 
     //endregion Getters and Setters

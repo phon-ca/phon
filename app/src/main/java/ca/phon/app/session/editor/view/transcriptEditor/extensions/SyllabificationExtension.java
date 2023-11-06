@@ -33,7 +33,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
     public void install(TranscriptEditor editor) {
         this.doc = editor.getTranscriptDocument();
 
-        doc.addInsertionHook(new TranscriptDocumentInsertionHook() {
+        doc.addInsertionHook(new DefaultInsertionHook() {
             @Override
             public List<DefaultStyledDocument.ElementSpec> endTier(MutableAttributeSet attrs) {
                 List<DefaultStyledDocument.ElementSpec> retVal = new ArrayList<>();

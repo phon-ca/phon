@@ -4,21 +4,13 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.EditorEventType;
-import ca.phon.app.session.editor.view.transcriptEditor.TranscriptDocument;
-import ca.phon.app.session.editor.view.transcriptEditor.TranscriptDocumentInsertionHook;
-import ca.phon.app.session.editor.view.transcriptEditor.TranscriptEditor;
-import ca.phon.app.session.editor.view.transcriptEditor.TranscriptStyleConstants;
+import ca.phon.app.session.editor.view.transcriptEditor.*;
 import ca.phon.session.PhoneAlignment;
 import ca.phon.session.Record;
 import ca.phon.session.Tier;
 import ca.phon.session.TierViewItem;
 
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultStyledDocument;
-import javax.swing.text.MutableAttributeSet;
-import javax.swing.text.SimpleAttributeSet;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import javax.swing.text.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +30,7 @@ public class AlignmentExtension implements TranscriptEditorExtension {
         this.editor = editor;
         doc = editor.getTranscriptDocument();
 
-        doc.addInsertionHook(new TranscriptDocumentInsertionHook() {
+        doc.addInsertionHook(new DefaultInsertionHook() {
             @Override
             public List<DefaultStyledDocument.ElementSpec> endTier(MutableAttributeSet attrs) {
                 List<DefaultStyledDocument.ElementSpec> retVal = new ArrayList<>();
@@ -79,6 +71,8 @@ public class AlignmentExtension implements TranscriptEditorExtension {
     private void onTierDataChanged(EditorEvent<EditorEventType.TierChangeData> editorEvent) {
 
         Tier<?> tier = editorEvent.data().tier();
+
+        if (!tier.getDeclaredType().equals(PhoneAlignment.class) || !isAlignmentVisible()) return;
 
         try {
             int start = doc.getTierStart(tier);
@@ -133,9 +127,6 @@ public class AlignmentExtension implements TranscriptEditorExtension {
         retVal.add(doc.getBatchString(alignmentContent, tierAttrs));
 
         return retVal;
-    }
-    private void appendFormattedAlignment(Tier<?> tier, Record record) {
-        doc.getBatch().addAll(getFormattedAlignment(tier, record));
     }
 
     public TierViewItem calculateAlignmentParent() {

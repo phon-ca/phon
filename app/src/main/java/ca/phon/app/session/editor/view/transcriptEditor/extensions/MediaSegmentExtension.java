@@ -2,7 +2,7 @@ package ca.phon.app.session.editor.view.transcriptEditor.extensions;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.view.transcriptEditor.*;
-import ca.phon.app.session.editor.view.transcriptEditor.TranscriptDocumentInsertionHook;
+import ca.phon.app.session.editor.view.transcriptEditor.InsertionHook;
 import ca.phon.session.MediaSegment;
 import ca.phon.ui.CalloutWindow;
 import ca.phon.ui.CommonModuleFrame;
@@ -37,7 +37,7 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
         editor.addKeyListener(onSpace);
         editor.addCaretListener(onCaretMove);
 
-        editor.getTranscriptDocument().addInsertionHook(new TranscriptDocumentInsertionHook() {
+        editor.getTranscriptDocument().addInsertionHook(new DefaultInsertionHook() {
             @Override
             public List<DefaultStyledDocument.ElementSpec> batchInsertString(StringBuilder buffer, MutableAttributeSet attrs) {
                 MediaSegment segment = (MediaSegment) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_MEDIA_SEGMENT);

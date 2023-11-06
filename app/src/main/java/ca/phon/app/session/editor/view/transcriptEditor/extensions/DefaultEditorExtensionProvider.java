@@ -20,6 +20,12 @@ public class DefaultEditorExtensionProvider implements ExtensionProvider {
 
             final AlignmentExtension alignmentExtension = new AlignmentExtension();
             alignmentExtension.install(editor);
+
+            final BlindTranscriptionExtension blindTranscriptionExtension = new BlindTranscriptionExtension();
+            blindTranscriptionExtension.install(editor);
+
+            final HeaderTierExtension headerTierExtension = new HeaderTierExtension();
+            headerTierExtension.install(editor);
         }
     }
 

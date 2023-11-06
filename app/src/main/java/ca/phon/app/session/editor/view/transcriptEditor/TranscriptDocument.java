@@ -46,12 +46,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     private ArrayList<ElementSpec> batch;
     public int labelColumnWidth = 20;
     private float lineSpacing = 0.2f;
-    private final Map<String, Tier<?>> headerTierMap;
     private boolean bypassDocumentFilter = false;
-    private boolean validationMode = false;
     private SessionEditUndoSupport undoSupport;
     private EditorEventManager eventManager;
-//    private List<PropertyChangeListener> documentPropertyChangeListeners = new ArrayList<>();
     private final PropertyChangeSupport propertyChangeSupport;
 
     /**
@@ -66,11 +63,11 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         setDocumentFilter(new TranscriptDocumentFilter());
         batch = new ArrayList<>();
 
-        headerTierMap = new HashMap<>();
-        headerTierMap.put("tiers", sessionFactory.createTier("Tiers", TierData.class));
-        headerTierMap.put("participants", sessionFactory.createTier("Participants", TierData.class));
-        headerTierMap.put("languages", sessionFactory.createTier("Languages", Languages.class));
-        headerTierMap.put("media", sessionFactory.createTier("Media", TierData.class));
+//        headerTierMap = new HashMap<>();
+//        headerTierMap.put("tiers", sessionFactory.createTier("Tiers", TierData.class));
+//        headerTierMap.put("participants", sessionFactory.createTier("Participants", TierData.class));
+//        headerTierMap.put("languages", sessionFactory.createTier("Languages", Languages.class));
+//        headerTierMap.put("media", sessionFactory.createTier("Media", TierData.class));
 
         propertyChangeSupport = new PropertyChangeSupport(this);
 
@@ -138,18 +135,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         this.lineSpacing = lineSpacing;
     }
 
-    public Map<String, Tier<?>> getHeaderTierMap() {
-        return headerTierMap;
-    }
-
-    public boolean isValidationMode() {
-        return validationMode;
-    }
-
-    public void setValidationMode(boolean validationMode) {
-        this.validationMode = validationMode;
-        reload();
-    }
+//    public Map<String, Tier<?>> getHeaderTierMap() {
+//        return headerTierMap;
+//    }
 
     public String getTierText(Tier<?> tier, String transcriber) {
         if (tier.isBlind() && transcriber != null && !Transcriber.VALIDATOR.getUsername().equals(transcriber)) {
@@ -254,7 +242,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         return retVal;
     }
 
-    private SimpleAttributeSet getTranscriptionSelectorAttributes(Record record, Tier<?> tier, String transcriptionText) {
+    public SimpleAttributeSet getTranscriptionSelectorAttributes(Record record, Tier<?> tier, String transcriptionText) {
         final SimpleAttributeSet retVal = new SimpleAttributeSet();
 
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_COMPONENT_FACTORY, new TranscriptionSelectorComponentFactory(
@@ -404,7 +392,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         return retVal;
     }
 
-    private SimpleAttributeSet getBlindTranscriptionAttrs(Tier<?> tier, String transcriber) {
+    public SimpleAttributeSet getBlindTranscriptionAttrs(Tier<?> tier, String transcriber) {
         SimpleAttributeSet retVal = new SimpleAttributeSet();
 
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE, TranscriptStyleConstants.ATTR_KEY_BLIND_TRANSCRIPTION);
@@ -415,7 +403,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         return retVal;
     }
 
-    private SimpleAttributeSet getLabelAttributes() {
+    public SimpleAttributeSet getLabelAttributes() {
         SimpleAttributeSet retVal = new SimpleAttributeSet();
 
         retVal.addAttributes(getMonospaceFontAttributes());
@@ -427,7 +415,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         return retVal;
     }
 
-    private SimpleAttributeSet getStandardFontAttributes() {
+    public SimpleAttributeSet getStandardFontAttributes() {
         SimpleAttributeSet retVal = new SimpleAttributeSet();
 
         Font font = FontPreferences.getTierFont();
@@ -451,7 +439,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         return retVal;
     }
 
-    private SimpleAttributeSet getTiersHeaderAttributes() {
+    public SimpleAttributeSet getTiersHeaderAttributes() {
         SimpleAttributeSet retVal = new SimpleAttributeSet();
 
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
@@ -459,7 +447,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         return retVal;
     }
 
-    private SimpleAttributeSet getParticipantsHeaderAttributes() {
+    public SimpleAttributeSet getParticipantsHeaderAttributes() {
         SimpleAttributeSet retVal = new SimpleAttributeSet();
 
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
@@ -479,7 +467,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         final StringBuilder builder = new StringBuilder();
         builder.append(str);
         final List<ElementSpec> additionalInsertions = new ArrayList<>();
-        for (TranscriptDocumentInsertionHook hook : getInsertionHooks()) {
+        for (InsertionHook hook : getInsertionHooks()) {
             additionalInsertions.addAll(hook.batchInsertString(builder, a));
         }
         batch.add(getBatchString(builder.toString(), a));
@@ -743,13 +731,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 tierAttrs = new SimpleAttributeSet(additionalInsertions.get(additionalInsertions.size()-1).getAttributes());
             }
 
-            if (validationMode && tier.isBlind()) {
-                List<String> transcribers = tier.getTranscribers();
-                for (String transcriber : transcribers) {
-                    appendBatchLineFeed(tierAttrs);
-                    tierAttrs = insertBlindTranscription(tier, transcriber, record);
-                }
-            }
+            tierAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_COMPONENT_FACTORY);
 
             if (i < visibleTierView.size() - 1) {
                 appendBatchLineFeed(tierAttrs);
@@ -857,10 +839,8 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         return gemAttrs;
     }
 
-    private SimpleAttributeSet writeGeneric(String label, Tier<?> tier) {
-        return writeGeneric(label, tier, null);
-    }
-    private SimpleAttributeSet writeGeneric(String label, Tier<?> tier, AttributeSet additionalAttributes) {
+    public List<ElementSpec> getGeneric(String label, Tier<?> tier, AttributeSet additionalAttributes) {
+        List<ElementSpec> retVal = new ArrayList<>();
 
         SimpleAttributeSet attrs = new SimpleAttributeSet();
         attrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE, TranscriptStyleConstants.ATTR_KEY_GENERIC);
@@ -876,26 +856,36 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             for (int i = 0; i < (labelColumnWidth - labelText.length()); i++) {
                 builder.append(' ');
             }
-            appendBatchString(builder.toString(), labelAttrs);
+            retVal.add(getBatchString(builder.toString(), labelAttrs));
         }
         else {
             labelText = formatLabelText(labelText);
         }
 
         labelAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE, true);
-        appendBatchString(labelText, labelAttrs);
+        retVal.add(getBatchString(labelText, labelAttrs));
 
         labelAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE);
-        appendBatchString(": ", labelAttrs);
+        retVal.add(getBatchString(": ", labelAttrs));
 
         if (tier.isUnvalidated()) {
-            appendBatchString(tier.getUnvalidatedValue().toString(), attrs);
+            retVal.add(getBatchString(tier.getUnvalidatedValue().toString(), attrs));
         }
         else {
-            appendBatchString(tier.toString(), attrs);
+            retVal.add(getBatchString(tier.toString(), attrs));
         }
 
-        return attrs;
+        return retVal;
+    }
+    private SimpleAttributeSet writeGeneric(String label, Tier<?> tier) {
+        List<ElementSpec> elementSpecs = getGeneric(label, tier, null);
+        batch.addAll(elementSpecs);
+        return new SimpleAttributeSet(elementSpecs.get(elementSpecs.size() - 1).getAttributes());
+    }
+    private SimpleAttributeSet writeGeneric(String label, Tier<?> tier, AttributeSet additionalAttributes) {
+        List<ElementSpec> elementSpecs = getGeneric(label, tier, additionalAttributes);
+        batch.addAll(elementSpecs);
+        return new SimpleAttributeSet(elementSpecs.get(elementSpecs.size() - 1).getAttributes());
     }
 
     // endregion Write Transcript Element
@@ -1738,7 +1728,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             }
         }
 
-        updateTiersHeader();
+//        updateTiersHeader();
     }
 
     private void tierNameChangedInRecord(int recordIndex, List<TierViewItem> oldTiers, List<TierViewItem> newTiers) {
@@ -1891,6 +1881,10 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             int recordIndex = getRecordIndex(start);
             start -= labelColumnWidth + 2;
             int end = getTierEnd(tier);
+
+            System.out.println("Tier: " + tier.getName());
+            System.out.println("Start: " + start);
+            System.out.println("End: " + end);
 
             bypassDocumentFilter = true;
             remove(start, end - start);
@@ -2220,40 +2214,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         return tierAttrs;
     }
 
-    private SimpleAttributeSet insertBlindTranscription(Tier<?> tier, String transcriber, Record record) {
-
-        SimpleAttributeSet blindTranscriptionAttrs = getBlindTranscriptionAttrs(tier, transcriber);
-        blindTranscriptionAttrs.addAttributes(getStandardFontAttributes());
-        StyleConstants.setForeground(blindTranscriptionAttrs, UIManager.getColor(TranscriptEditorUIProps.BLIND_TRANSCRIPTION_FOREGROUND));
-        SimpleAttributeSet labelAttrs = new SimpleAttributeSet(blindTranscriptionAttrs);
-        labelAttrs.addAttributes(getLabelAttributes());
-
-        String labelText = transcriber;
-        if (labelText.length() < labelColumnWidth) {
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < (labelColumnWidth - labelText.length()); i++) {
-                builder.append(' ');
-            }
-            appendBatchString(builder.toString(), labelAttrs);
-        }
-        else {
-            labelText = formatLabelText(labelText);
-        }
-
-        labelAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE, true);
-        appendBatchString(labelText, labelAttrs);
-
-        labelAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE);
-        appendBatchString(": ", labelAttrs);
-
-        String transcriptionText = getTierText(tier, transcriber);
-        appendBatchString(transcriptionText, blindTranscriptionAttrs);
-
-        appendBatchString(" ", getTranscriptionSelectorAttributes(record, tier, transcriptionText));
-
-        return blindTranscriptionAttrs;
-    }
-
     public void setTierItemViewLocked(String tierName, boolean locked) {
         var currentTierVIew = session.getTierView();
         List<TierViewItem> newTierView = new ArrayList<>();
@@ -2310,57 +2270,61 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         }
     }
 
-    public AttributeSet updateTiersHeader() {
-        return updateTiersHeader(false);
-    }
 
-    public SimpleAttributeSet updateTiersHeader(boolean partOfBatch) {
-        Tier<TierData> tiersTier = (Tier<TierData>) headerTierMap.get("tiers");
 
-        int start = getGenericStart(tiersTier);
-        int end = getGenericEnd(tiersTier);
+//    public SimpleAttributeSet updateTiersHeader(boolean partOfBatch) {
+//        Tier<TierData> tiersTier = (Tier<TierData>) headerTierMap.get("tiers");
+//
+//        int start = getGenericStart(tiersTier);
+//        int end = getGenericEnd(tiersTier);
+//
+//        try {
+//            if (start != -1 && end != -1) {
+//                start -= labelColumnWidth + 2;
+//                bypassDocumentFilter = true;
+//                remove(start, end - start);
+//            }
+//
+//            List<TierViewItem> visibleTierView = session
+//                .getTierView()
+//                .stream()
+//                .filter(item -> item.isVisible())
+//                .toList();
+//            StringJoiner joiner = new StringJoiner(", ");
+//            for (TierViewItem item : visibleTierView) {
+//                joiner.add(item.getTierName());
+//                boolean isIPATier = session
+//                    .getTiers()
+//                    .stream()
+//                    .filter(td -> td.getName().equals(item.getTierName()))
+//                    .anyMatch(td -> td.getDeclaredType().equals(IPATranscript.class));
+////                if (isSyllabificationVisible() && isIPATier) {
+////                    joiner.add(item.getTierName() + " Syllabification");
+////                }
+////                if (alignmentVisible && alignmentParent == item) {
+////                    joiner.add("Alignment");
+////                }
+//            }
+//            tiersTier.setText(joiner.toString());
+//
+//            appendBatchEndStart();
+//            var newlineAttrs = writeGeneric("Tiers", tiersTier, getTiersHeaderAttributes());
+//            if (partOfBatch) {
+//                return newlineAttrs;
+//            }
+//            appendBatchLineFeed(newlineAttrs);
+//            processBatchUpdates(start);
+//        }
+//        catch (BadLocationException e) {
+//            LogUtil.severe(e);
+//        }
+//        return null;
+//    }
 
-        try {
-            if (start != -1 && end != -1) {
-                start -= labelColumnWidth + 2;
-                bypassDocumentFilter = true;
-                remove(start, end - start);
-            }
-
-            List<TierViewItem> visibleTierView = session
-                .getTierView()
-                .stream()
-                .filter(item -> item.isVisible())
-                .toList();
-            StringJoiner joiner = new StringJoiner(", ");
-            for (TierViewItem item : visibleTierView) {
-                joiner.add(item.getTierName());
-                boolean isIPATier = session
-                    .getTiers()
-                    .stream()
-                    .filter(td -> td.getName().equals(item.getTierName()))
-                    .anyMatch(td -> td.getDeclaredType().equals(IPATranscript.class));
-//                if (isSyllabificationVisible() && isIPATier) {
-//                    joiner.add(item.getTierName() + " Syllabification");
-//                }
-//                if (alignmentVisible && alignmentParent == item) {
-//                    joiner.add("Alignment");
-//                }
-            }
-            tiersTier.setText(joiner.toString());
-
-            appendBatchEndStart();
-            var newlineAttrs = writeGeneric("Tiers", tiersTier, getTiersHeaderAttributes());
-            if (partOfBatch) {
-                return newlineAttrs;
-            }
-            appendBatchLineFeed(newlineAttrs);
-            processBatchUpdates(start);
-        }
-        catch (BadLocationException e) {
-            LogUtil.severe(e);
-        }
-        return null;
+    public AttributeSet getTrailingAttributes(List<DefaultStyledDocument.ElementSpec> elementSpecs) {
+        if (elementSpecs.isEmpty()) return new SimpleAttributeSet();
+        AttributeSet attrs = elementSpecs.get(elementSpecs.size() - 1).getAttributes();
+        return attrs == null ? new SimpleAttributeSet() : attrs;
     }
 
     // region Document Properties
@@ -2394,79 +2358,13 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         Transcript transcript = session.getTranscript();
         var tierView = session.getTierView();
 
+        List<ElementSpec> additionalInsertions = new ArrayList<>();
+        for (var hook : insertionHooks) {
+            additionalInsertions.addAll(hook.startSession());
+        }
+        batch.addAll(additionalInsertions);
+
         SimpleAttributeSet newLineAttrs;
-
-//        // Add date line if present
-//        var sessionDate = session.getDate();
-//        if (sessionDate != null) {
-//            Tier<LocalDate> dateTier = sessionFactory.createTier("Date", LocalDate.class);
-//            dateTier.setValue(sessionDate);
-//            newLineAttrs = writeGeneric("Date", dateTier);
-//            appendBatchLineFeed(newLineAttrs);
-//        }
-
-        // Add media line if present
-        var sessionMedia = session.getMediaLocation();
-        if (sessionMedia != null) {
-            Tier<TierData> mediaTier = (Tier<TierData>) headerTierMap.get("media");
-            mediaTier.setText(sessionMedia);
-            newLineAttrs = writeGeneric("Media", mediaTier);
-            appendBatchLineFeed(newLineAttrs);
-        }
-
-        // Add languages line if present
-        var sessionLanguages = session.getLanguages();
-        if (sessionLanguages != null && !sessionLanguages.isEmpty()) {
-            Tier<Languages> languagesTier = (Tier<Languages>) headerTierMap.get("languages");
-            languagesTier.setFormatter(new Formatter<>() {
-                @Override
-                public String format(Languages obj) {
-                    return obj
-                        .languageList()
-                        .stream()
-                        .map(Language::toString)
-                        .collect(Collectors.joining(" "));
-                }
-
-                @Override
-                public Languages parse(String text) throws ParseException {
-                    List<Language> languageList = new ArrayList<>();
-
-                    String[] languageStrings = text.split(" ");
-                    for (String languageString : languageStrings) {
-                        LanguageEntry languageEntry = LanguageParser.getInstance().getEntryById(languageString);
-                        if (languageEntry == null) throw new ParseException(text, text.indexOf(languageString));
-
-                        languageList.add(Language.parseLanguage(languageString));
-                    }
-
-                    return new Languages(languageList);
-                }
-            });
-            languagesTier.setValue(new Languages(sessionLanguages));
-            newLineAttrs = writeGeneric("Languages", languagesTier);
-            appendBatchLineFeed(newLineAttrs);
-        }
-
-        // Add Tiers header
-        newLineAttrs = updateTiersHeader(true);
-        appendBatchLineFeed(newLineAttrs);
-
-        // Add Participants header
-        Tier<TierData> participantsTier = (Tier<TierData>) headerTierMap.get("participants");
-        var participants = session.getParticipants();
-        StringJoiner participantsJoiner = new StringJoiner(", ");
-        for (Participant participant : participants) {
-            if (participant.getName() != null) {
-                participantsJoiner.add(participant.getName() + " (" + participant.getId() + ")");
-            }
-            else {
-                participantsJoiner.add(participant.getId());
-            }
-        }
-        participantsTier.setText(participantsJoiner.toString());
-        newLineAttrs = writeGeneric("Participants", participantsTier, getParticipantsHeaderAttributes());
-        appendBatchLineFeed(newLineAttrs);
 
 
         // Single record
@@ -2690,24 +2588,24 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * Insertion hooks, these may be added dynamically but will also be loaded using
      * from registered IPluginExtensionPoints
      */
-    private final List<TranscriptDocumentInsertionHook> insertionHooks = new ArrayList<>();
+    private final List<InsertionHook> insertionHooks = new ArrayList<>();
 
     private void loadRegisteredInsertionHooks() {
-        for(var hookExtPt: PluginManager.getInstance().getExtensionPoints(TranscriptDocumentInsertionHook.class)) {
-            final TranscriptDocumentInsertionHook hook = hookExtPt.getFactory().createObject();
+        for(var hookExtPt: PluginManager.getInstance().getExtensionPoints(InsertionHook.class)) {
+            final InsertionHook hook = hookExtPt.getFactory().createObject();
             addInsertionHook(hook);
         }
     }
 
-    public void addInsertionHook(TranscriptDocumentInsertionHook hook) {
+    public void addInsertionHook(InsertionHook hook) {
         this.insertionHooks.add(hook);
     }
 
-    public boolean removeInsertionHook(TranscriptDocumentInsertionHook hook) {
+    public boolean removeInsertionHook(InsertionHook hook) {
         return this.insertionHooks.remove(hook);
     }
 
-    public List<TranscriptDocumentInsertionHook> getInsertionHooks() {
+    public List<InsertionHook> getInsertionHooks() {
         return Collections.unmodifiableList(this.insertionHooks);
     }
 
