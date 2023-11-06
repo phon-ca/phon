@@ -18,6 +18,7 @@ public class OrthoParserErrorStrategy extends DefaultErrorStrategy {
     @Override
     public void recover(Parser recognizer, RecognitionException e) {
         // TODO
+        System.out.println(String.format("Recover %s, %e", recognizer.toString(), e.toString()));
     }
 
     @Override

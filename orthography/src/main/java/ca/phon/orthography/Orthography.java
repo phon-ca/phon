@@ -200,6 +200,36 @@ public final class Orthography implements Iterable<OrthographyElement>, Visitabl
 	}
 
 	/**
+	 * Does this utterance have a media segment after the terminator?
+	 *
+	 * @return true if this utterance has an internal-media segment after the terminator
+	 */
+	public boolean hasUtteranceMedia() {
+		return getUtteranceMedia() != null;
+	}
+
+	/**
+	 * Return the utterance internal-media element after terminator (if any)
+	 *
+	 * @return utterance media or null
+	 */
+	public InternalMedia getUtteranceMedia() {
+		InternalMedia retVal = null;
+		boolean foundTerminator = false;
+		for(OrthographyElement ele:this) {
+			if(ele instanceof Terminator) {
+				foundTerminator = true;
+			} else if(ele instanceof InternalMedia) {
+				if(foundTerminator) {
+					retVal = (InternalMedia) ele;
+					break;
+				}
+			}
+		}
+		return retVal;
+	}
+
+	/**
 	 * Return utterance level annotations.  These annotations must appear after the terminator and postcodes.
 	 * Utterance level annotations may include markers and errors.
 	 *

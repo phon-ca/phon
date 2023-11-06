@@ -22,8 +22,10 @@ public class OrthoParserException extends RuntimeException {
 		InvalidToken,
 		OutOfPlace,
 		StrayAnnotation,
-		TooManyTerminators,
-		ContentAfterTerminator
+		TerminatorAlreadySpecified,
+		ContentAfterTerminator,
+		MediaAlreadySpecified,
+		InvalidTimeString
 	}
 
 	private Type type;
