@@ -144,7 +144,7 @@ public class TestOrthographyParserErrors {
     // endregion InternalMedia
 
     @Test
-    public void testReplacmentWithoutContent() {
+    public void testReplacementWithoutContent() {
         final String txt = "[: hello] .";
         testError(txt, OrthoParserException.Type.ReplacementWithoutContent, 0);
     }
@@ -183,6 +183,30 @@ public class TestOrthographyParserErrors {
     public void testOpenPg() {
         final String txt = "hello\u203a !";
         testError(txt, OrthoParserException.Type.MissingPgStart, 5);
+    }
+
+    @Test
+    public void testHangingBracket() {
+        final String txt = "hello [ world !";
+        testError(txt, OrthoParserException.Type.InvalidAnnotation, 7);
+    }
+
+    @Test
+    public void testHangingComment() {
+        final String txt = "hello [% world !";
+        testError(txt, OrthoParserException.Type.MissingCloseBracket, 7);
+    }
+
+    @Test
+    public void testHangingFreecode() {
+        final String txt = "hello [^ foobar !";
+        testError(txt, OrthoParserException.Type.MissingCloseBracket, 7);
+    }
+
+    @Test
+    public void testMissingOpenBracket() {
+        final String txt = "hello world] !";
+        testError(txt, OrthoParserException.Type.MissingOpenBracket, 11);
     }
 
 }

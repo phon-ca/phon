@@ -1,6 +1,10 @@
 package ca.phon.orthography.parser;
 
+import ca.phon.orthography.MarkerType;
 import org.antlr.v4.runtime.*;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class OrthoParserErrorStrategy extends DefaultErrorStrategy {
 
@@ -29,6 +33,17 @@ public class OrthoParserErrorStrategy extends DefaultErrorStrategy {
             throw new OrthoParserException(OrthoParserException.Type.MissingGroupStart, "Missing group start", e.getOffendingToken().getCharPositionInLine());
         } else if(e.getOffendingToken() != null && e.getOffendingToken().getType() == orthoTokens.getTokenType("PG_END")) {
             throw new OrthoParserException(OrthoParserException.Type.MissingPgStart, "Missing phonetic group start", e.getOffendingToken().getCharPositionInLine());
+        } else if(e.getCtx() instanceof UnicodeOrthographyParser.OrthoannotationContext annotationContext) {
+            if (e.getOffendingToken().getType() == orthoTokens.getTokenType("WS")) {
+                final String possibleMarkers = Arrays.stream(MarkerType.values()).map(MarkerType::getText).collect(Collectors.joining(" "));
+                throw new OrthoParserException(OrthoParserException.Type.InvalidAnnotation, "Expecting on of: " + possibleMarkers, e.getOffendingToken().getCharPositionInLine());
+            } else {
+                throw new OrthoParserException(OrthoParserException.Type.MissingCloseBracket, "Missing close bracket", e.getOffendingToken().getCharPositionInLine());
+            }
+        } else if(e.getOffendingToken() != null && e.getOffendingToken().getType() == orthoTokens.getTokenType("CLOSE_BRACKET")) {
+            throw new OrthoParserException(OrthoParserException.Type.MissingOpenBracket, "Missing open bracket", e.getOffendingToken().getCharPositionInLine());
+        } else {
+            throw new OrthoParserException(OrthoParserException.Type.InvalidToken, "Invalid token" + e.getOffendingToken().getText(), e.getOffendingToken().getCharPositionInLine());
         }
     }
 

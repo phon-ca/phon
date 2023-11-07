@@ -396,7 +396,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
                 }
             }
         } else {
-            builder.append(ele);
+            throw new OrthoParserException(OrthoParserException.Type.AnnotationWithoutContent, "Annotation without content", idx);
         }
     }
 
