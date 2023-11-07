@@ -2,6 +2,7 @@ package ca.phon.session.tierdata;
 
 import ca.phon.formatter.MediaTimeFormatter;
 import ca.phon.orthography.InternalMedia;
+import ca.phon.session.Tier;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -28,11 +29,29 @@ public class TierDataParserListener extends TierDataBaseListener {
         elementList.add(new TierComment(commentText));
     }
 
+
+    @Override
+    public void exitTime_in_minutes_seconds(TierDataParser.Time_in_minutes_secondsContext ctx) {
+        if(ctx.exception != null) {
+            if(ctx.getStart().getText().isBlank()) {
+                throw new TierDataParserException(TierDataParserException.Type.MissingMediaBullet, "Missing media bullet", ctx.getStop().getCharPositionInLine());
+            }
+            throw new TierDataParserException(TierDataParserException.Type.InvalidTimeString, "Invalid time string " + ctx.getText(), ctx.getStart().getCharPositionInLine());
+        }
+        super.exitTime_in_minutes_seconds(ctx);
+    }
+
     @Override
     public void exitInternal_media(TierDataParser.Internal_mediaContext ctx) {
         final String startText = ctx.time_in_minutes_seconds(0).getText();
         final String endText =
                 ctx.time_in_minutes_seconds().size() > 1 ? ctx.time_in_minutes_seconds(1).getText() : startText;
+        if(startText.isBlank() && endText.isBlank()
+            && ctx.getStart() == ctx.getStop()) {
+            // unique case where we are missing a start bullet
+            throw new TierDataParserException(TierDataParserException.Type.MissingMediaBullet, "Missing media bullet", ctx.getStart().getCharPositionInLine());
+        }
+
         float startTime = 0.0f;
         try {
             startTime = MediaTimeFormatter.parseTimeToSeconds(startText);

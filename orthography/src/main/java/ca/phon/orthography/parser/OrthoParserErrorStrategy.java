@@ -46,7 +46,7 @@ public class OrthoParserErrorStrategy extends DefaultErrorStrategy {
             }
         } else if(e.getOffendingToken() != null && e.getOffendingToken().getType() == orthoTokens.getTokenType("CLOSE_BRACKET")) {
             throw new OrthoParserException(OrthoParserException.Type.MissingOpenBracket, "Missing open bracket", e.getOffendingToken().getCharPositionInLine());
-        } else if(e.getOffendingToken() != null && e.getOffendingToken().getType() == orthoTokens.getTokenType("'[+'")) {
+        } else if(e.getOffendingToken() != null && e.getOffendingToken().getType() == orthoTokens.getTokenType("POSTCODE_START")) {
             throw new OrthoParserException(OrthoParserException.Type.MissingCloseBracket, "Missing close bracket", e.getOffendingToken().getCharPositionInLine());
         } else {
             throw new OrthoParserException(OrthoParserException.Type.InvalidToken, "Invalid token" + e.getOffendingToken().getText(), e.getOffendingToken().getCharPositionInLine());
