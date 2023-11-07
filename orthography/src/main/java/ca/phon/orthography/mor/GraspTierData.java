@@ -15,7 +15,7 @@ public final class GraspTierData extends ExtendableObject implements Iterable<Gr
 
     public static GraspTierData parseGraspTierData(String text) throws ParseException {
         final List<Grasp> grasps = new ArrayList<>();
-        for(String block:text.split("\\s")) {
+        for(String block:text.trim().split("\\s")) {
             Grasp grasp = Grasp.fromString(block);
             grasps.add(grasp);
         }

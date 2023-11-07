@@ -24,7 +24,7 @@ public final class MorTierData extends ExtendableObject implements Iterable<Mor>
      * Parser mor tier data
      */
     public static MorTierData parseMorTierData(String text) throws ParseException {
-        CharStream charStream = CharStreams.fromString(text);
+        CharStream charStream = CharStreams.fromString(text.trim());
         MorLexer lexer = new MorLexer(charStream);
         MorParserErrorListener errorListener = new MorParserErrorListener();
         lexer.addErrorListener(errorListener);
