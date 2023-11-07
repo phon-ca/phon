@@ -49,9 +49,9 @@
         <directory>src/main/resources</directory>
       </resource>
       <resource>
-        <directory>target/generated-sources/antlr3</directory>
+        <directory>target/generated-sources/antlr4</directory>
         <includes>
-          <include>Orthography.tokens</include>
+          <include>UnicodeOrthography.tokens</include>
         </includes>
       </resource>
     </resources>

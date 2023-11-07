@@ -161,7 +161,7 @@ word_text
     ;
 
 text
-    :   (CHAR | DIGIT | COLON | APOSTROPHE | MINUS | UNDERSCORE | AMP | FORWARD_SLASH)+
+    :   (CHAR | DIGIT | COLON | APOSTROPHE | MINUS | UNDERSCORE | AMP | FORWARD_SLASH | DOLLAR_SIGN)+
     ;
 
 replacement
