@@ -59,6 +59,19 @@
   </dependencies>
   
   <build>
+      <resources>
+          <resource>
+              <directory>src/main/resources</directory>
+          </resource>
+          <resource>
+              <directory>target/generated-sources/antlr4</directory>
+              <includes>
+                  <include>TierData.tokens</include>
+                  <include>TierDataLexer.tokens</include>
+              </includes>
+          </resource>
+      </resources>
+
     <plugins>
         <plugin>
             <groupId>org.codehaus.mojo</groupId>
