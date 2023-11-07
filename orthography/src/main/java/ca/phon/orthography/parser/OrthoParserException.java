@@ -13,9 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.orthography.parser.exceptions;
+package ca.phon.orthography.parser;
 
 public class OrthoParserException extends RuntimeException {
+
+	public enum Type {
+		Unknown,
+		InvalidToken,
+		OutOfPlace,
+		StrayAnnotation,
+		TerminatorAlreadySpecified,
+		ContentAfterTerminator,
+		MediaAlreadySpecified,
+		InvalidTimeString,
+		ReplacementWithoutContent,
+		AnnotationWithoutContent,
+		InvalidAnnotation,
+		MissingOpenBracket,
+		MissingCloseBracket,
+		MissingGroupStart,
+		MissingGroupEnd,
+		MissingPgStart,
+		MissingPgEnd,
+		MissingMediaBullet
+	}
+
+	private Type type;
 
 	/**
 	 * Position in line of error
@@ -28,19 +51,44 @@ public class OrthoParserException extends RuntimeException {
 	private int lineNumber = 0;
 
 	public OrthoParserException() {
+		this(Type.Unknown);
+	}
+
+	public OrthoParserException(Type type) {
 		super();
+		this.type = type;
 	}
 
 	public OrthoParserException(String message, Throwable cause) {
+		this(Type.Unknown, message, cause);
+	}
+
+	public OrthoParserException(Type type, String message, Throwable cause) {
 		super(message, cause);
+		this.type = type;
 	}
 
 	public OrthoParserException(String message) {
-		super(message);
+		this(Type.Unknown, message);
+	}
+
+	public OrthoParserException(Type type, String message) {
+		this(type, message, -1);
 	}
 
 	public OrthoParserException(String message, int charPositionInLine) {
+		this(Type.Unknown, message, charPositionInLine);
+	}
+
+	public OrthoParserException(Type type, String message, int charPositionInLine) {
 		super(message);
+		this.type = type;
+		this.positionInLine = charPositionInLine;
+	}
+
+	public OrthoParserException(Type type, String message, Throwable cause, int charPositionInLine) {
+		super(message, cause);
+		this.type = type;
 		this.positionInLine = charPositionInLine;
 	}
 
@@ -63,5 +111,13 @@ public class OrthoParserException extends RuntimeException {
 	public void setLineNumber(int lineNumber) {
 		this.lineNumber = lineNumber;
 	}
-	
+
+	public Type getType() {
+		return type;
+	}
+
+	public void setType(Type type) {
+		this.type = type;
+	}
+
 }

@@ -119,15 +119,11 @@ public class SessionXMLStreamWriter extends DelegatingXMLStreamWriter {
     }
 
     public void writeStartDocument() throws XMLStreamException {
-        super.writeStartDocument();
-        if(isFormattedOutput())
-            super.writeCharacters("\n");
+        writeStartDocument("1.0");
     }
 
     public void writeStartDocument(String version) throws XMLStreamException {
-        super.writeStartDocument(version);
-        if(isFormattedOutput())
-            super.writeCharacters("\n");
+        writeStartDocument("UTF-8", version);
     }
 
     public void writeStartDocument(String encoding, String version) throws XMLStreamException {

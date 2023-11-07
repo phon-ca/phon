@@ -27,8 +27,7 @@ public final class Grasp {
             final String relation = matcher.group(RELATION);
             return new Grasp(index, head, relation);
         } else {
-            // TODO better error handling
-            throw new ParseException("Invalid GRASP string " + text, 0);
+            throw new ParseException(String.format("%s does not match pattern %s", text, GRASP_REGEX), 0);
         }
     }
 

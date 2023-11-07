@@ -5,7 +5,6 @@ import ca.phon.formatter.MediaTimeFormatter;
 import ca.phon.orthography.mor.Pos;
 import ca.phon.orthography.*;
 import ca.phon.orthography.Error;
-import ca.phon.orthography.parser.exceptions.OrthoParserException;
 import ca.phon.util.Language;
 
 import java.text.ParseException;
@@ -27,12 +26,22 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
 
     @Override
     public void exitLinker(UnicodeOrthographyParser.LinkerContext ctx) {
+        if(builder.size() > 0) {
+            if(builder.size() == 1 && builder.lastElement() instanceof UtteranceLanguage) {
+                // do nothing
+            } else {
+                throw new OrthoParserException(OrthoParserException.Type.OutOfPlace, "Linker out of place", ctx.getStart().getCharPositionInLine());
+            }
+        }
         final LinkerType lt = LinkerType.fromString(ctx.getText());
         builder.append(new Linker(lt));
     }
 
     @Override
     public void enterComplete_word(UnicodeOrthographyParser.Complete_wordContext ctx) {
+        if(builder.toOrthography().hasTerminator()) {
+            throw new OrthoParserException(OrthoParserException.Type.ContentAfterTerminator, "Content after terminator", ctx.getStart().getCharPositionInLine());
+        }
         langList = new ArrayList<>();
         langs = new Langs();
     }
@@ -221,6 +230,9 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
 
     @Override
     public void exitTagMarker(UnicodeOrthographyParser.TagMarkerContext ctx) {
+        if(builder.toOrthography().hasTerminator()) {
+            throw new OrthoParserException(OrthoParserException.Type.ContentAfterTerminator, "Content after terminator", ctx.getStart().getCharPositionInLine());
+        }
         final TagMarkerType tmType = TagMarkerType.fromString(ctx.getText().charAt(0) + "");
         builder.append(new TagMarker(tmType));
     }
@@ -249,6 +261,9 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
     @Override
     public void exitTerminator(UnicodeOrthographyParser.TerminatorContext ctx) {
         final TerminatorType tt = TerminatorType.fromString(ctx.getText());
+        if(builder.toOrthography().hasTerminator()) {
+            throw new OrthoParserException(OrthoParserException.Type.TerminatorAlreadySpecified, "Terminator already specified", ctx.getStart().getCharPositionInLine());
+        }
         builder.append(new Terminator(tt));
     }
 
@@ -258,6 +273,9 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
 
     @Override
     public void exitSymbolic_pause(UnicodeOrthographyParser.Symbolic_pauseContext ctx) {
+        if(builder.toOrthography().hasTerminator()) {
+            throw new OrthoParserException(OrthoParserException.Type.ContentAfterTerminator, "Content after terminator", ctx.getStart().getCharPositionInLine());
+        }
         final PauseLength type = switch (ctx.getText()) {
             case "(.)" -> PauseLength.SIMPLE;
             case "(..)" -> PauseLength.LONG;
@@ -269,6 +287,9 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
 
     @Override
     public void exitNumeric_pause(UnicodeOrthographyParser.Numeric_pauseContext ctx) {
+        if(builder.toOrthography().hasTerminator()) {
+            throw new OrthoParserException(OrthoParserException.Type.ContentAfterTerminator, "Content after terminator", ctx.getStart().getCharPositionInLine());
+        }
         if(ctx.time_in_minutes_seconds().getText().matches(MediaTimeFormatStyle.MINUTES_AND_SECONDS.getRegex())) {
             try {
                 float seconds = MediaTimeFormatter.parseTimeToSeconds(ctx.time_in_minutes_seconds().getText());
@@ -283,6 +304,9 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
 
     @Override
     public void exitFreecode(UnicodeOrthographyParser.FreecodeContext ctx) {
+        if(builder.toOrthography().hasTerminator()) {
+            throw new OrthoParserException(OrthoParserException.Type.ContentAfterTerminator, "Content after terminator", ctx.getStart().getCharPositionInLine());
+        }
         final String data = ctx.getText().substring(2, ctx.getText().length()-1);
         builder.append(new Freecode(data.trim()));
     }
@@ -293,21 +317,27 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         try {
             startTime = MediaTimeFormatter.parseTimeToSeconds(ctx.mediasegment().time_in_minutes_seconds(0).getText());
         } catch(ParseException e) {
-            throw new OrthoParserException("Invalid start time", ctx.mediasegment().time_in_minutes_seconds(0).getStart().getCharPositionInLine());
+            throw new OrthoParserException(OrthoParserException.Type.InvalidTimeString, "Invalid start time", ctx.mediasegment().time_in_minutes_seconds(0).getStart().getCharPositionInLine());
         }
         float endTime = startTime;
         if(ctx.mediasegment().time_in_minutes_seconds().size() > 1) {
             try {
                 endTime = MediaTimeFormatter.parseTimeToSeconds(ctx.mediasegment().time_in_minutes_seconds(1).getText());
             } catch (ParseException e) {
-                throw new OrthoParserException("Invalid start time", ctx.mediasegment().time_in_minutes_seconds(1).getStart().getCharPositionInLine());
+                throw new OrthoParserException(OrthoParserException.Type.InvalidTimeString, "Invalid end time", ctx.mediasegment().time_in_minutes_seconds(1).getStart().getCharPositionInLine());
             }
+        }
+        if(builder.toOrthography().hasTerminator() && builder.toOrthography().hasUtteranceMedia()) {
+            throw new OrthoParserException(OrthoParserException.Type.MediaAlreadySpecified, "Media already specified", ctx.getStart().getCharPositionInLine());
         }
         builder.append(new InternalMedia(startTime, endTime));
     }
 
     @Override
     public void exitSeparator(UnicodeOrthographyParser.SeparatorContext ctx) {
+        if(builder.toOrthography().hasTerminator()) {
+            throw new OrthoParserException(OrthoParserException.Type.ContentAfterTerminator, "Content after terminator", ctx.getStart().getCharPositionInLine());
+        }
         final SeparatorType type = SeparatorType.fromString(ctx.getText());
         if(type != null) {
             builder.append(new Separator(type));
@@ -318,6 +348,9 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
 
     @Override
     public void exitToneMarker(UnicodeOrthographyParser.ToneMarkerContext ctx) {
+        if(builder.toOrthography().hasTerminator()) {
+            throw new OrthoParserException(OrthoParserException.Type.ContentAfterTerminator, "Content after terminator", ctx.getStart().getCharPositionInLine());
+        }
         final ToneMarkerType type = ToneMarkerType.fromString(ctx.getText());
         if(type != null) {
             builder.append(new ToneMarker(type));
@@ -328,18 +361,24 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
 
     @Override
     public void exitHappening(UnicodeOrthographyParser.HappeningContext ctx) {
+        if(builder.toOrthography().hasTerminator()) {
+            throw new OrthoParserException(OrthoParserException.Type.ContentAfterTerminator, "Content after terminator", ctx.getStart().getCharPositionInLine());
+        }
         final String text = ctx.text().getText();
         builder.append(new Happening(text));
     }
 
     @Override
     public void exitOtherSpokenEvent(UnicodeOrthographyParser.OtherSpokenEventContext ctx) {
+        if(builder.toOrthography().hasTerminator()) {
+            throw new OrthoParserException(OrthoParserException.Type.ContentAfterTerminator, "Content after terminator", ctx.getStart().getCharPositionInLine());
+        }
         final String who = ctx.who().getText();
         final String text = ctx.text().getText();
         builder.append(new OtherSpokenEvent(who, text));
     }
 
-    private void annotateLastElement(OrthographyAnnotation ele) {
+    private void annotateLastElement(OrthographyAnnotation ele, int idx) {
         if(builder.size() > 0) {
             OrthographyElement lastEle = builder.lastElement();
             if(lastEle instanceof AnnotatedOrthographyElement) {
@@ -349,11 +388,15 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
                 Word word = (Word) lastEle;
                 builder.replaceLastElement(new OrthoGroup(Collections.singletonList(word), Collections.singletonList(ele)));
             } else {
-                // annotate utterance
-                builder.append(ele);
+                if(builder.toOrthography().hasTerminator()) {
+                    // annotate utterance
+                    builder.append(ele);
+                } else {
+                    throw new OrthoParserException(OrthoParserException.Type.AnnotationWithoutContent, "Annotation without content", idx);
+                }
             }
         } else {
-            builder.append(ele);
+            throw new OrthoParserException(OrthoParserException.Type.AnnotationWithoutContent, "Annotation without content", idx);
         }
     }
 
@@ -362,7 +405,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         final MarkerType type = MarkerType.fromString(ctx.getText());
         if(type != null) {
             final Marker marker = new Marker(type);
-            annotateLastElement(marker);
+            annotateLastElement(marker, ctx.getStart().getCharPositionInLine());
         } else {
             throw new OrthoParserException("Invalid marker", ctx.getStart().getCharPositionInLine());
         }
@@ -371,7 +414,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
     @Override
     public void exitError(UnicodeOrthographyParser.ErrorContext ctx) {
         final Error error = new Error(ctx.getText().substring(2, ctx.getText().length()-1));
-        annotateLastElement(error);
+        annotateLastElement(error, ctx.getStart().getCharPositionInLine());
     }
 
     @Override
@@ -379,39 +422,39 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         final OverlapType overlapType = ctx.getText().charAt(1) == '<' ? OverlapType.OVERLAP_PRECEDES : OverlapType.OVERLAP_FOLLOWS;
         final int index = (ctx.number() != null ? Integer.parseInt(ctx.number().getText()) : -1);
         final Overlap overlap = new Overlap(overlapType, index);
-        annotateLastElement(overlap);
+        annotateLastElement(overlap, ctx.getStart().getCharPositionInLine());
     }
 
-    private void addGroupAnnotation(GroupAnnotationType type, String data) {
-        annotateLastElement(new GroupAnnotation(type, data));
+    private void addGroupAnnotation(GroupAnnotationType type, String data, int idx) {
+        annotateLastElement(new GroupAnnotation(type, data), idx);
     }
 
     @Override
     public void exitComment(UnicodeOrthographyParser.CommentContext ctx) {
         final String data = ctx.getText().substring(GroupAnnotationType.COMMENTS.getPrefix().length()+1,
                 ctx.getText().length()-1);
-        addGroupAnnotation(GroupAnnotationType.COMMENTS, data.trim());
+        addGroupAnnotation(GroupAnnotationType.COMMENTS, data.trim(), ctx.getStart().getCharPositionInLine());
     }
 
     @Override
     public void exitAlternative(UnicodeOrthographyParser.AlternativeContext ctx) {
         final String data = ctx.getText().substring(GroupAnnotationType.ALTERNATIVE.getPrefix().length()+1,
                 ctx.getText().length()-1);
-        addGroupAnnotation(GroupAnnotationType.ALTERNATIVE, data.trim());
+        addGroupAnnotation(GroupAnnotationType.ALTERNATIVE, data.trim(), ctx.getStart().getCharPositionInLine());
     }
 
     @Override
     public void exitExplanation(UnicodeOrthographyParser.ExplanationContext ctx) {
         final String data = ctx.getText().substring(GroupAnnotationType.EXPLANATION.getPrefix().length()+1,
                 ctx.getText().length()-1);
-        addGroupAnnotation(GroupAnnotationType.EXPLANATION, data.trim());
+        addGroupAnnotation(GroupAnnotationType.EXPLANATION, data.trim(), ctx.getStart().getCharPositionInLine());
     }
 
     @Override
     public void exitParalinguistics(UnicodeOrthographyParser.ParalinguisticsContext ctx) {
         final String data = ctx.getText().substring(GroupAnnotationType.PARALINGUISTICS.getPrefix().length()+1,
                 ctx.getText().length()-1);
-        addGroupAnnotation(GroupAnnotationType.PARALINGUISTICS, data.trim());
+        addGroupAnnotation(GroupAnnotationType.PARALINGUISTICS, data.trim(), ctx.getStart().getCharPositionInLine());
     }
 
     @Override
@@ -422,11 +465,14 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
         } catch (ParseException pe) {
             throw new OrthoParserException(pe.getMessage(), ctx.time_in_minutes_seconds().getStart().getCharPositionInLine());
         }
-        annotateLastElement(new Duration(duration));
+        annotateLastElement(new Duration(duration), ctx.getStart().getCharPositionInLine());
     }
 
     @Override
     public void enterGroup(UnicodeOrthographyParser.GroupContext ctx) {
+        if(builder.toOrthography().hasTerminator()) {
+            throw new OrthoParserException(OrthoParserException.Type.ContentAfterTerminator, "Content after terminator", ctx.getStart().getCharPositionInLine());
+        }
         builderStack.push(builder);
         builder = new OrthographyBuilder();
     }
@@ -434,12 +480,17 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
     @Override
     public void exitGroup(UnicodeOrthographyParser.GroupContext ctx) {
         final Orthography innerOrtho = builder.toOrthography();
-        builder = builderStack.pop();
-        builder.append(new OrthoGroup(innerOrtho.toList(), new ArrayList<>()));
+        if(!builderStack.isEmpty()) {
+            builder = builderStack.pop();
+            builder.append(new OrthoGroup(innerOrtho.toList(), new ArrayList<>()));
+        }
     }
 
     @Override
     public void enterPhonetic_group(UnicodeOrthographyParser.Phonetic_groupContext ctx) {
+        if(builder.toOrthography().hasTerminator()) {
+            throw new OrthoParserException(OrthoParserException.Type.ContentAfterTerminator, "Content after terminator", ctx.getStart().getCharPositionInLine());
+        }
         builderStack.push(builder);
         builder = new OrthographyBuilder();
     }
@@ -447,12 +498,17 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
     @Override
     public void exitPhonetic_group(UnicodeOrthographyParser.Phonetic_groupContext ctx) {
         final Orthography innerOrtho = builder.toOrthography();
-        builder = builderStack.pop();
-        builder.append(new PhoneticGroup(innerOrtho.toList()));
+        if(!builderStack.isEmpty()) {
+            builder = builderStack.pop();
+            builder.append(new PhoneticGroup(innerOrtho.toList()));
+        }
     }
 
     @Override
     public void exitLong_feature(UnicodeOrthographyParser.Long_featureContext ctx) {
+        if(builder.toOrthography().hasTerminator()) {
+            throw new OrthoParserException(OrthoParserException.Type.ContentAfterTerminator, "Content after terminator", ctx.getStart().getCharPositionInLine());
+        }
         final BeginEnd beginEnd =
                 ctx.getText().startsWith(LongFeature.LONG_FEATURE_START) ? BeginEnd.BEGIN : BeginEnd.END;
         final String label = ctx.text().getText();
@@ -461,6 +517,9 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
 
     @Override
     public void exitNonvocal(UnicodeOrthographyParser.NonvocalContext ctx) {
+        if(builder.toOrthography().hasTerminator()) {
+            throw new OrthoParserException(OrthoParserException.Type.ContentAfterTerminator, "Content after terminator", ctx.getStart().getCharPositionInLine());
+        }
         BeginEndSimple beginEndSimple =
                 ctx.getText().startsWith(Nonvocal.NONVOCAL_START) ? BeginEndSimple.BEGIN : BeginEndSimple.END;
         if(ctx.CLOSE_BRACE() != null) {
@@ -472,12 +531,18 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
 
     @Override
     public void exitPostcode(UnicodeOrthographyParser.PostcodeContext ctx) {
+        if(!builder.toOrthography().hasTerminator()) {
+            throw new OrthoParserException(OrthoParserException.Type.OutOfPlace, "Postcode must be at end", ctx.getStart().getCharPositionInLine());
+        }
         final String code = ctx.getText().substring(Postcode.POSTCODE_PREFIX.length(), ctx.getText().length()-1).trim();
         builder.append(new Postcode(code));
     }
 
     @Override
     public void exitQuotation(UnicodeOrthographyParser.QuotationContext ctx) {
+        if(builder.toOrthography().hasTerminator()) {
+            throw new OrthoParserException(OrthoParserException.Type.ContentAfterTerminator, "Content after terminator", ctx.getStart().getCharPositionInLine());
+        }
         final BeginEnd beginEnd = ctx.getText().equals(Quotation.QUOTATION_BEGIN) ? BeginEnd.BEGIN : BeginEnd.END;
         builder.append(new Quotation(beginEnd));
     }
@@ -492,18 +557,20 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
     public void exitReplacement(UnicodeOrthographyParser.ReplacementContext ctx) {
         final boolean real = ctx.getText().startsWith(Replacement.PREFIX_REAL);
         final Replacement replacement = new Replacement(real, builder.toOrthography().toList().stream().map(e -> (Word)e).toList());
-        builder = builderStack.pop();
+        if(!builderStack.isEmpty()) {
+            builder = builderStack.pop();
 
-        final OrthographyElement lastEle = builder.lastElement();
-        if (lastEle != null && lastEle instanceof Word) {
-            final Word w = (Word) lastEle;
-            final List<Replacement> replacements = new ArrayList<>(w.getReplacements());
-            replacements.add(replacement);
+            final OrthographyElement lastEle = builder.lastElement();
+            if (lastEle != null && lastEle instanceof Word) {
+                final Word w = (Word) lastEle;
+                final List<Replacement> replacements = new ArrayList<>(w.getReplacements());
+                replacements.add(replacement);
                 builder.replaceLastElement(new Word(w.getLangs(), replacements,
                         w.getPrefix(), w.getSuffix(), w.getUntranscribedType(),
                         w.getWordElements().toArray(new WordElement[0])));
-        } else {
-            throw new OrthoParserException("replacement without word", ctx.getStart().getCharPositionInLine());
+            } else {
+                throw new OrthoParserException(OrthoParserException.Type.ReplacementWithoutContent, "Replacement without content", ctx.getStart().getCharPositionInLine());
+            }
         }
     }
 

@@ -28,7 +28,7 @@ public class OrthoTokens {
 	
 	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(OrthoTokens.class.getName());
 	
-	private String tokenFile = "Orthography.tokens";
+	private String tokenFile = "UnicodeOrthography.tokens";
 	
 	/** Token map */
 	private Map<String, Integer> tokenMap =

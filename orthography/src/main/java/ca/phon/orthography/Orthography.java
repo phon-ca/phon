@@ -17,7 +17,7 @@ package ca.phon.orthography;
 
 import ca.phon.extensions.*;
 import ca.phon.orthography.parser.*;
-import ca.phon.orthography.parser.exceptions.OrthoParserException;
+import ca.phon.orthography.parser.OrthoParserException;
 import ca.phon.visitor.*;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.RecognitionException;
@@ -49,25 +49,29 @@ public final class Orthography implements Iterable<OrthographyElement>, Visitabl
 	 */
 	public static Orthography parseOrthography(String text) 
 		throws ParseException {
-		org.antlr.v4.runtime.CharStream charStream = CharStreams.fromString(text);
+		org.antlr.v4.runtime.CharStream charStream = CharStreams.fromString(text.trim());
 		UnicodeOrthographyLexer lexer = new UnicodeOrthographyLexer(charStream);
+		OrthoParserErrorListener errorListener = new OrthoParserErrorListener();
+		lexer.addErrorListener(errorListener);
 		org.antlr.v4.runtime.TokenStream tokenStream = new org.antlr.v4.runtime.CommonTokenStream(lexer);
 
 		UnicodeOrthographyBuilder orthoBuilder = new UnicodeOrthographyBuilder();
 		UnicodeOrthographyParser parser = new UnicodeOrthographyParser(tokenStream);
+		parser.setErrorHandler(new OrthoParserErrorStrategy(orthoBuilder));
 		parser.addParseListener(orthoBuilder);
 
 		try {
 			parser.start();
-		} catch (RecognitionException e) {
-			throw new ParseException(text, e.getOffendingToken().getCharPositionInLine());
-		} catch (OrthoParserException pe) {
-			if(pe.getCause() instanceof RecognitionException) {
-				RecognitionException re = (RecognitionException)pe.getCause();
-				throw new ParseException(text, re.getOffendingToken().getCharPositionInLine());
-			} else {
-				throw new ParseException(text, -1);
+
+			if(!errorListener.getParseExceptions().isEmpty()) {
+				throw errorListener.getParseExceptions().get(0);
 			}
+		} catch (RecognitionException e) {
+			throw new ParseException(e.getLocalizedMessage(), e.getOffendingToken().getCharPositionInLine());
+		} catch (OrthoParserException pe) {
+			final ParseException parseException = new ParseException(pe.getLocalizedMessage(), pe.getPositionInLine());
+			parseException.addSuppressed(pe);
+			throw parseException;
 		}
 
 		Orthography retVal = orthoBuilder.getOrthography();
@@ -193,6 +197,36 @@ public final class Orthography implements Iterable<OrthographyElement>, Visitabl
 		for(OrthographyElement ele:elements)
 			if(ele instanceof Terminator t) return t;
 		return null;
+	}
+
+	/**
+	 * Does this utterance have a media segment after the terminator?
+	 *
+	 * @return true if this utterance has an internal-media segment after the terminator
+	 */
+	public boolean hasUtteranceMedia() {
+		return getUtteranceMedia() != null;
+	}
+
+	/**
+	 * Return the utterance internal-media element after terminator (if any)
+	 *
+	 * @return utterance media or null
+	 */
+	public InternalMedia getUtteranceMedia() {
+		InternalMedia retVal = null;
+		boolean foundTerminator = false;
+		for(OrthographyElement ele:this) {
+			if(ele instanceof Terminator) {
+				foundTerminator = true;
+			} else if(ele instanceof InternalMedia) {
+				if(foundTerminator) {
+					retVal = (InternalMedia) ele;
+					break;
+				}
+			}
+		}
+		return retVal;
 	}
 
 	/**

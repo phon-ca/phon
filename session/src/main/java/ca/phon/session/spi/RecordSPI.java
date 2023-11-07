@@ -26,18 +26,6 @@ import java.util.*;
 public interface RecordSPI {
 
 	/**
-	 * @see Record#getUuid()
-	 * @return
-	 */
-	public UUID getUuid();
-
-	/**
-	 * @see Record#setUuid(UUID)
-	 * @param id
-	 */
-	public void setUuid(UUID id);
-
-	/**
 	 * @see Record#getSpeaker()
 	 * @return
 	 */
