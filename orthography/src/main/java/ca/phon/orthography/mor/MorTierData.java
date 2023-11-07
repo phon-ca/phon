@@ -4,6 +4,8 @@ import ca.phon.extensions.ExtendableObject;
 import ca.phon.mor.MorLexer;
 import ca.phon.mor.MorParser;
 import ca.phon.orthography.mor.parser.MorBuilder;
+import ca.phon.orthography.mor.parser.MorParserErrorListener;
+import ca.phon.orthography.mor.parser.MorParserErrorStrategy;
 import ca.phon.orthography.mor.parser.MorParserException;
 import org.antlr.v4.runtime.*;
 import org.jetbrains.annotations.NotNull;
@@ -21,20 +23,31 @@ public final class MorTierData extends ExtendableObject implements Iterable<Mor>
     /**
      * Parser mor tier data
      */
-    public static MorTierData parseMorTierData(String text) throws MorParserException {
+    public static MorTierData parseMorTierData(String text) throws ParseException {
         CharStream charStream = CharStreams.fromString(text);
         MorLexer lexer = new MorLexer(charStream);
+        MorParserErrorListener errorListener = new MorParserErrorListener();
+        lexer.addErrorListener(errorListener);
         TokenStream tokenStream = new CommonTokenStream(lexer);
         MorBuilder listener = new MorBuilder();
         MorParser parser = new MorParser(tokenStream);
+        parser.setErrorHandler(new MorParserErrorStrategy());
         parser.addParseListener(listener);
 
         try {
             parser.start();
-            return new MorTierData(listener.getMors());
+
+            if(!errorListener.getParseExceptions().isEmpty()) {
+                throw errorListener.getParseExceptions().get(0);
+            }
         } catch(RecognitionException e) {
-            throw new MorParserException(e.getLocalizedMessage(), e.getOffendingToken().getCharPositionInLine());
+            throw new ParseException(e.getLocalizedMessage(), e.getOffendingToken().getCharPositionInLine());
+        } catch (MorParserException pe) {
+            final ParseException parseException = new ParseException(pe.getLocalizedMessage(), pe.getPositionInLine());
+            parseException.addSuppressed(pe);
+            throw parseException;
         }
+        return new MorTierData(listener.getMors());
     }
 
     private final List<Mor> mors;

@@ -5,6 +5,13 @@ package ca.phon.orthography.mor.parser;
  */
 public class MorParserException extends RuntimeException {
 
+    public enum Type {
+        Unknown,
+        InvalidToken
+    }
+
+    private MorParserException.Type type;
+
     /**
      * Position in line of error
      */
@@ -16,19 +23,44 @@ public class MorParserException extends RuntimeException {
     private int lineNumber = 0;
 
     public MorParserException() {
+        this(MorParserException.Type.Unknown);
+    }
+
+    public MorParserException(MorParserException.Type type) {
         super();
+        this.type = type;
     }
 
     public MorParserException(String message, Throwable cause) {
+        this(MorParserException.Type.Unknown, message, cause);
+    }
+
+    public MorParserException(MorParserException.Type type, String message, Throwable cause) {
         super(message, cause);
+        this.type = type;
     }
 
     public MorParserException(String message) {
-        super(message);
+        this(MorParserException.Type.Unknown, message);
+    }
+
+    public MorParserException(MorParserException.Type type, String message) {
+        this(type, message, -1);
     }
 
     public MorParserException(String message, int charPositionInLine) {
+        this(MorParserException.Type.Unknown, message, charPositionInLine);
+    }
+
+    public MorParserException(MorParserException.Type type, String message, int charPositionInLine) {
         super(message);
+        this.type = type;
+        this.positionInLine = charPositionInLine;
+    }
+
+    public MorParserException(MorParserException.Type type, String message, Throwable cause, int charPositionInLine) {
+        super(message, cause);
+        this.type = type;
         this.positionInLine = charPositionInLine;
     }
 
@@ -50,6 +82,14 @@ public class MorParserException extends RuntimeException {
 
     public void setLineNumber(int lineNumber) {
         this.lineNumber = lineNumber;
+    }
+
+    public MorParserException.Type getType() {
+        return type;
+    }
+
+    public void setType(MorParserException.Type type) {
+        this.type = type;
     }
 
 }
