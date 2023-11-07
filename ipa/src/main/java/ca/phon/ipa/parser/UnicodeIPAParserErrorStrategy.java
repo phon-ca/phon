@@ -19,18 +19,6 @@ public class UnicodeIPAParserErrorStrategy extends DefaultErrorStrategy {
 	}
 
 	@Override
-	protected void reportInputMismatch(Parser recognizer, InputMismatchException e) {
-	}
-
-	@Override
-	protected void reportMissingToken(Parser recognizer) {
-	}
-
-	@Override
-	protected void reportUnwantedToken(Parser recognizer) {
-	}
-
-	@Override
 	public void recover(Parser recognizer, RecognitionException e) {
 		IPAParserException ex = null;
 		if (e.getOffendingToken().getType() == CommonToken.EOF
