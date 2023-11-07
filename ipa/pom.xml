@@ -53,7 +53,7 @@
 				</includes>
 			</resource>
 			<resource>
-				<directory>target/generated-sources/antlr3</directory>
+				<directory>target/generated-sources/antlr4</directory>
 				<includes>
 					<include>*.tokens</include>
 				</includes>
