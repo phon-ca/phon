@@ -53,7 +53,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     private Element hoverElem = null;
     private Object currentUnderline;
     private HoverUnderlinePainter underlinePainter = new HoverUnderlinePainter();
-    //private MediaSegment selectedSegment = null;
     private int upDownOffset = -1;
     private boolean caretMoveFromUpDown = false;
     private boolean internalEdit = false;
@@ -61,6 +60,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     private BoxSelectHighlightPainter boxSelectPainter = new BoxSelectHighlightPainter();
     private Object currentBoxSelect = null;
     private List<Object> selectionHighlightList = new ArrayList<>();
+    public final static EditorEventType<SessionLocationChangeData> sessionLocationChange = new EditorEventType<>("recordChangedInSingleRecordMode", SessionLocationChangeData.class);
 
     public TranscriptEditor(
         Session session,
@@ -1521,14 +1521,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         Element elem = doc.getCharacterElement(currentPos);
         AttributeSet attrs = elem.getAttributes();
 
-        MediaSegment segment = (MediaSegment) elem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_MEDIA_SEGMENT);
-
-        if (segment != null) {
-            System.out.println("In segment");
-            elem = doc.getCharacterElement(doc.getSegmentBounds(segment, currentPos).getObj1());
-            attrs = elem.getAttributes();
-        }
-        else if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER) != null) {
+        if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER) != null) {
             System.out.println("test 1");
             Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
             Set<String> syllabificationTierNames = new HashSet<>();
@@ -1542,7 +1535,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             }
         }
 
-        while ((attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE) != null || attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_MEDIA_SEGMENT) != null) && currentPos >= 0) {
+        while ((attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE) != null) && currentPos >= 0) {
             currentPos--;
             elem = doc.getCharacterElement(currentPos);
             attrs = elem.getAttributes();
@@ -1776,6 +1769,74 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         return -1;
     }
 
+    public SessionLocation charPosToSessionLocation(int charPos) {
+        TranscriptDocument doc = getTranscriptDocument();
+        Transcript transcript = getSession().getTranscript();
+
+        Element charElem = doc.getCharacterElement(charPos);
+        AttributeSet attrs = charElem.getAttributes();
+        String elementType = (String) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
+
+        int transcriptElementIndex = -1;
+        String label = null;
+        int posInTier = -1;
+
+        switch (elementType) {
+            case TranscriptStyleConstants.ATTR_KEY_RECORD -> {
+                Record record = (Record) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
+                transcriptElementIndex = transcript.getElementIndex(record);
+                Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
+                if (tier != null) {
+                    label = tier.getName();
+                    posInTier = charPos - doc.getTierStart(tier);
+                }
+            }
+            case TranscriptStyleConstants.ATTR_KEY_COMMENT -> {
+                Comment comment = (Comment) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT);
+                transcriptElementIndex = transcript.getElementIndex(comment);
+                label = comment.getType().getLabel();
+                posInTier = charPos - doc.getCommentStart(comment);
+            }
+            case TranscriptStyleConstants.ATTR_KEY_GEM -> {
+                Gem gem = (Gem) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM);
+                transcriptElementIndex = transcript.getElementIndex(gem);
+                label = gem.getType().name() + " Gem";
+                posInTier = doc.getGemStart(gem);
+            }
+            case TranscriptStyleConstants.ATTR_KEY_GENERIC -> {
+                Tier<?> genericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
+                if (genericTier != null) {
+                    label = genericTier.getName();
+                    posInTier = doc.getGenericStart(genericTier);
+                }
+            }
+        }
+
+        return new SessionLocation(transcriptElementIndex, label, posInTier);
+    }
+
+    public int sessionLocationToCharPos(SessionLocation sessionLocation) {
+        TranscriptDocument doc = getTranscriptDocument();
+        Transcript transcript = getSession().getTranscript();
+
+        if (sessionLocation.getElementIndex() > -1) {
+            Transcript.Element transcriptElement = transcript.getElementAt(sessionLocation.getElementIndex());
+
+            if (transcriptElement.isRecord()) {
+                int recordIndex = transcript.getRecordPosition(transcriptElement.asRecord());
+                return doc.getTierStart(recordIndex, sessionLocation.getLabel()) + sessionLocation.getPosInTier();
+            }
+            else if (transcriptElement.isComment()) {
+                return doc.getCommentStart(transcriptElement.asComment()) + sessionLocation.getPosInTier();
+            }
+            else if (transcriptElement.isGem()) {
+                return doc.getGemStart(transcriptElement.asGem()) + sessionLocation.getPosInTier();
+            }
+        }
+
+        return -1;
+    }
+
     private void underlineElement(Element elem) {
         try {
 //            removeCurrentUnderline();
@@ -1985,14 +2046,31 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                 int tierEnd = doc.getTierEnd(nextTier)-1;
                 fb.setDot(dot, Position.Bias.Forward);
                 if (dot != tierEnd) {
-                    System.out.println("I hope it's not this");
                     fb.moveDot(getCaretPosition() + 1, Position.Bias.Forward);
                 }
                 return;
             }
 
+            int prevCaretPos = getCaretPosition();
 
             fb.setDot(dot, bias);
+
+            SessionLocationChangeData sessionLocationChangeData = new SessionLocationChangeData(
+                charPosToSessionLocation(prevCaretPos),
+                charPosToSessionLocation(dot)
+            );
+
+            System.out.println(sessionLocationChangeData.old());
+            System.out.println(sessionLocationChangeData.newLoc());
+
+            SwingUtilities.invokeLater(() -> {
+                final EditorEvent<SessionLocationChangeData> e = new EditorEvent<>(
+                        sessionLocationChange,
+                        TranscriptEditor.this,
+                        sessionLocationChangeData
+                );
+                eventManager.queueEvent(e);
+            });
         }
         @Override
         public void moveDot(NavigationFilter.FilterBypass fb, int dot, Position.Bias bias) {
@@ -2328,6 +2406,8 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             eventManager.queueEvent(e);
         }
     }
+
+    public record SessionLocationChangeData(SessionLocation old, SessionLocation newLoc) {}
 
     // region IExtendable
 

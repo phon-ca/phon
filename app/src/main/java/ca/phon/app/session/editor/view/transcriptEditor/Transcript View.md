@@ -28,9 +28,9 @@ in TranscriptDocument and have matching methods in TranscriptDocumentInsertionHo
 
  * Session information
    * Show/hide headers
-   * Set date
+   * Set date -> Show date header tier, put caret there, default to todays date
    * Languages
-     * Set/add language -> Show method of selecting a valid language then insert Language header line if not present and move caret to end 
+     * Set/add language -> If it doesn't exist, show it and move the caret to the end of the insert Language header line if not present and move caret to end 
      * Remove item for each current language
    * View metadata (show editable table of metadata (i.e., string key->string value pairs) no restrictions)
    * Show session information view
@@ -83,6 +83,7 @@ General movement:
  * up/down - switch 'tier'
  * tab/shift+tab - switch 'tier'
  * home/end - beg/end of tier
+ * ctrl/cmd home / ctrl/cmd end - begin/end of doc
  * pgup/pgdn - default (no override)
  * left/right - current impl
 

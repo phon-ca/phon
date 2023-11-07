@@ -1,6 +1,9 @@
 package ca.phon.app.session.editor.view.transcriptEditor.extensions;
 
 import ca.phon.app.log.LogUtil;
+import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.EditorEventManager;
+import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.view.transcriptEditor.DefaultInsertionHook;
 import ca.phon.app.session.editor.view.transcriptEditor.TranscriptDocument;
 import ca.phon.app.session.editor.view.transcriptEditor.TranscriptEditor;
@@ -40,7 +43,7 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
         this.doc = editor.getTranscriptDocument();
         this.session = editor.getSession();
 
-//        headerTierMap.put("tiers", doc.getSessionFactory().createTier("Tiers", TierData.class));
+        headerTierMap.put("tiers", doc.getSessionFactory().createTier("Tiers", TierData.class));
         headerTierMap.put("participants", doc.getSessionFactory().createTier("Participants", TierData.class));
         headerTierMap.put("languages", doc.getSessionFactory().createTier("Languages", TranscriptDocument.Languages.class));
         headerTierMap.put("media", doc.getSessionFactory().createTier("Media", TierData.class));
@@ -72,10 +75,10 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
                             @Override
                             public String format(TranscriptDocument.Languages obj) {
                                 return obj
-                                        .languageList()
-                                        .stream()
-                                        .map(Language::toString)
-                                        .collect(Collectors.joining(" "));
+                                    .languageList()
+                                    .stream()
+                                    .map(Language::toString)
+                                    .collect(Collectors.joining(" "));
                             }
 
                             @Override
@@ -100,9 +103,10 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
                         retVal.addAll(doc.getBatchEndLineFeed(newLineAttrs));
                     }
 
-//                // Add Tiers header
-//                newLineAttrs = updateTiersHeader(true);
-//                appendBatchLineFeed(newLineAttrs);
+                    // Add Tiers header
+                    retVal.addAll(getTiersHeader());
+                    newLineAttrs = doc.getTrailingAttributes(retVal);
+                    retVal.addAll(doc.getBatchEndLineFeed(newLineAttrs));
 
                     // Add Participants header
                     Tier<TierData> participantsTier = (Tier<TierData>) headerTierMap.get("participants");
@@ -128,62 +132,68 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
         });
 
         doc.addDocumentPropertyChangeListener(HEADERS_VISIBLE, evt -> doc.reload());
+
+        editor.getEventManager().registerActionForEvent(EditorEventType.TierViewChanged, this::updateTiersHeader, EditorEventManager.RunOn.AWTEventDispatchThread);
     }
 
     private boolean isHeadersVisible() {
         return (boolean) doc.getDocumentPropertyOrDefault(HEADERS_VISIBLE, DEFAULT_HEADERS_VISIBLE);
     }
 
-//    public SimpleAttributeSet updateTiersHeader(boolean partOfBatch) {
-//        Tier<TierData> tiersTier = (Tier<TierData>) headerTierMap.get("tiers");
-//
-//        int start = doc.getGenericStart(tiersTier);
-//        int end = doc.getGenericEnd(tiersTier);
-//
-//        try {
-//            if (start != -1 && end != -1) {
-//                start -= doc.getLabelColumnWidth() + 2;
-//                doc.setBypassDocumentFilter(true);
-//                doc.remove(start, end - start);
-//            }
-//
-//            List<TierViewItem> visibleTierView = doc.getSession()
-//                .getTierView()
-//                .stream()
-//                .filter(item -> item.isVisible())
-//                .toList();
-//            StringJoiner joiner = new StringJoiner(", ");
-//            for (TierViewItem item : visibleTierView) {
-//                joiner.add(item.getTierName());
-//                boolean isIPATier = doc.getSession()
-//                        .getTiers()
-//                        .stream()
-//                        .filter(td -> td.getName().equals(item.getTierName()))
-//                        .anyMatch(td -> td.getDeclaredType().equals(IPATranscript.class));
-////                if (isSyllabificationVisible() && isIPATier) {
-////                    joiner.add(item.getTierName() + " Syllabification");
-////                }
-////                if (alignmentVisible && alignmentParent == item) {
-////                    joiner.add("Alignment");
-////                }
-//            }
-//            tiersTier.setText(joiner.toString());
-//
-//            appendBatchEndStart();
-//            var newlineAttrs = writeGeneric("Tiers", tiersTier, doc.getTiersHeaderAttributes());
-//            if (partOfBatch) {
-//                return newlineAttrs;
-//            }
-//            appendBatchLineFeed(newlineAttrs);
-//            processBatchUpdates(start);
-//        }
-//        catch (BadLocationException e) {
-//            LogUtil.severe(e);
-//        }
-//        return null;
-//    }
+    public List<DefaultStyledDocument.ElementSpec> getTiersHeader() {
 
-//    public AttributeSet updateTiersHeader() {
-//        return updateTiersHeader(false);
-//    }
+        List<DefaultStyledDocument.ElementSpec> retVal = new ArrayList<>();
+
+        Tier<TierData> tiersTier = (Tier<TierData>) headerTierMap.get("tiers");
+
+        int start = doc.getGenericStart(tiersTier);
+        int end = doc.getGenericEnd(tiersTier);
+
+        List<TierViewItem> visibleTierView = doc.getSession()
+            .getTierView()
+            .stream()
+            .filter(item -> item.isVisible())
+            .toList();
+        StringJoiner joiner = new StringJoiner(", ");
+        for (TierViewItem item : visibleTierView) {
+            joiner.add(item.getTierName());
+//                boolean isIPATier = doc.getSession()
+//                    .getTiers()
+//                    .stream()
+//                    .filter(td -> td.getName().equals(item.getTierName()))
+//                    .anyMatch(td -> td.getDeclaredType().equals(IPATranscript.class));
+//                if (isSyllabificationVisible() && isIPATier) {
+//                    joiner.add(item.getTierName() + " Syllabification");
+//                }
+//                if (alignmentVisible && alignmentParent == item) {
+//                    joiner.add("Alignment");
+//                }
+        }
+        tiersTier.setText(joiner.toString());
+
+        retVal.addAll(doc.getBatchEndStart());
+        retVal.addAll(doc.getGeneric("Tiers", tiersTier, doc.getTiersHeaderAttributes()));
+        return retVal;
+    }
+
+    public void updateTiersHeader(EditorEvent<EditorEventType.TierViewChangedData> event) {
+        try {
+            Tier<?> tiersHeaderTier = headerTierMap.get("tiers");
+            int start = doc.getGenericStart(tiersHeaderTier);
+            int end = doc.getGenericEnd(tiersHeaderTier);
+
+            if (start > -1 && end > -1) {
+                start -= doc.getLabelColumnWidth() + 2;
+                doc.setBypassDocumentFilter(true);
+                doc.remove(start, end - start);
+            }
+
+            List<DefaultStyledDocument.ElementSpec> inserts = getTiersHeader();
+            doc.getBatch().addAll(inserts);
+            doc.processBatchUpdates(start > -1 ? start : 0);
+        }
+        catch (BadLocationException e) {
+            LogUtil.severe(e);
+        }
+    }
 }

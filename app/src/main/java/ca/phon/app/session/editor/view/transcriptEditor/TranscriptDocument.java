@@ -5,7 +5,6 @@ import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
-import ca.phon.formatter.Formatter;
 import ca.phon.formatter.MediaTimeFormatStyle;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
@@ -31,10 +30,8 @@ import javax.swing.text.*;
 import java.awt.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.text.ParseException;
 import java.util.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class TranscriptDocument extends DefaultStyledDocument implements IExtendable  {
 
@@ -209,7 +206,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     }
     private SimpleAttributeSet getTierAttributes(Tier<?> tier, TierViewItem item) {
         final SimpleAttributeSet retVal = new SimpleAttributeSet();
+
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_TIER, tier);
+
         String fontString = "default";
         if (item != null) {
             fontString = item.getTierFont();
@@ -338,9 +337,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     private SimpleAttributeSet getSeparatorAttributes() {
         final SimpleAttributeSet retVal = new SimpleAttributeSet();
 
-        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
-        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL, true);
-        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE, true);
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_SEPARATOR, true);
 
         retVal.addAttributes(getMonospaceFontAttributes());
@@ -694,18 +690,23 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         int recordIndex = transcript.getRecordPosition(record);
         SimpleAttributeSet recordAttrs = getRecordAttributes(recordIndex);
 
-        SimpleAttributeSet sepAttrs = getSeparatorAttributes();
-        sepAttrs.addAttributes(recordAttrs);
+        SimpleAttributeSet tierAttrs = getTierAttributes(record.getSegmentTier());
+        tierAttrs.addAttributes(getSeparatorAttributes());
+        tierAttrs.addAttributes(recordAttrs);
 
-        appendBatchString(formatLabelText(record.getSpeaker().toString()) + "  ", sepAttrs);
+        SimpleAttributeSet labelAttrs = getTierLabelAttributes(record.getSegmentTier());
+        labelAttrs.addAttributes(getSeparatorAttributes());
+        labelAttrs.addAttributes(recordAttrs);
+
+        appendBatchString(formatLabelText(record.getSpeaker().toString()) + "  ", labelAttrs);
 
         MediaSegment segment = record.getMediaSegment();
 
-        sepAttrs.addAttributes(getStandardFontAttributes());
-        formatSegment(segment, sepAttrs);
-        appendBatchLineFeed(sepAttrs);
+        tierAttrs.addAttributes(getStandardFontAttributes());
+        appendFormattedSegment(segment, tierAttrs);
+        appendBatchLineFeed(tierAttrs);
 
-        SimpleAttributeSet tierAttrs = null;
+        tierAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_SEPARATOR);
 
         List<TierViewItem> visibleTierView = tierView.stream().filter(item -> item.isVisible()).toList();
 
@@ -738,7 +739,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             }
         }
 
-        return (tierAttrs != null) ? tierAttrs : sepAttrs;
+        return tierAttrs;
     }
 
     private SimpleAttributeSet writeComment(Comment comment) {
@@ -882,7 +883,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         batch.addAll(elementSpecs);
         return new SimpleAttributeSet(elementSpecs.get(elementSpecs.size() - 1).getAttributes());
     }
-    private SimpleAttributeSet writeGeneric(String label, Tier<?> tier, AttributeSet additionalAttributes) {
+    public SimpleAttributeSet writeGeneric(String label, Tier<?> tier, AttributeSet additionalAttributes) {
         List<ElementSpec> elementSpecs = getGeneric(label, tier, additionalAttributes);
         batch.addAll(elementSpecs);
         return new SimpleAttributeSet(elementSpecs.get(elementSpecs.size() - 1).getAttributes());
@@ -1849,17 +1850,24 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             bypassDocumentFilter = true;
             remove(start, end - start);
 
-            SimpleAttributeSet sepAttrs = getSeparatorAttributes();
-            sepAttrs.addAttributes(getRecordAttributes(recordIndex));
+            AttributeSet recordAttrs = getRecordAttributes(recordIndex);
+
+            SimpleAttributeSet tierAttrs = getTierAttributes(record.getSegmentTier());
+            tierAttrs.addAttributes(getSeparatorAttributes());
+            tierAttrs.addAttributes(recordAttrs);
+
+            SimpleAttributeSet labelAttrs = getTierLabelAttributes(record.getSegmentTier());
+            labelAttrs.addAttributes(getSeparatorAttributes());
+            labelAttrs.addAttributes(recordAttrs);
 
             appendBatchEndStart();
 
-            appendBatchString(formatLabelText(record.getSpeaker().toString()) + "  ", sepAttrs);
+            appendBatchString(formatLabelText(record.getSpeaker().toString()) + "  ", labelAttrs);
 
             MediaSegment segment = record.getMediaSegment();
 
-            sepAttrs.addAttributes(getStandardFontAttributes());
-            formatSegment(segment, sepAttrs);
+            tierAttrs.addAttributes(getStandardFontAttributes());
+            appendFormattedSegment(segment, tierAttrs);
 
             processBatchUpdates(start);
             setGlobalParagraphAttributes();
@@ -2011,11 +2019,30 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         return tier;
     }
 
-    private void formatSegment(MediaSegment segment, AttributeSet additionalAttrs) {
-        formatSegment(segment, additionalAttrs, MediaTimeFormatStyle.PADDED_MINUTES_AND_SECONDS);
-    }
+//    public void getFormattedSegment(MediaSegment segment, AttributeSet additionalAttrs, MediaTimeFormatStyle style) {
+//        var formatter = new MediaSegmentFormatter(style);
+//        String value = formatter.format(segment);
+//
+//        var segmentTimeAttrs = getSegmentTimeAttributes(segment);
+//        var segmentDashAttrs = getSegmentDashAttributes(segment);
+//        segmentTimeAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
+//        segmentDashAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
+//        if (additionalAttrs != null) {
+//            segmentTimeAttrs.addAttributes(additionalAttrs);
+//            segmentDashAttrs.addAttributes(additionalAttrs);
+//        }
+//
+//        appendBatchString("•", segmentDashAttrs);
+//
+//        appendBatchString(value, segmentTimeAttrs);
+//
+//        appendBatchString("•", segmentDashAttrs);
+//    }
 
-    private void formatSegment(MediaSegment segment, AttributeSet additionalAttrs, MediaTimeFormatStyle style) {
+    private void appendFormattedSegment(MediaSegment segment, AttributeSet additionalAttrs) {
+        appendFormattedSegment(segment, additionalAttrs, MediaTimeFormatStyle.PADDED_MINUTES_AND_SECONDS);
+    }
+    private void appendFormattedSegment(MediaSegment segment, AttributeSet additionalAttrs, MediaTimeFormatStyle style) {
 
         var formatter = new MediaSegmentFormatter(style);
         String value = formatter.format(segment);
@@ -2033,24 +2060,13 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
         appendBatchString(value, segmentTimeAttrs);
 
-//
-//        appendBatchString(start, segmentTimeAttrs);
-//
-//        if (!segment.isPoint()) {
-//            appendBatchString("-", segmentDashAttrs);
-//
-//            String end = MediaTimeFormatter.timeToString(segment.getEndValue(), style);
-//
-//            appendBatchString(end, segmentTimeAttrs);
-//        }
-//
         appendBatchString("•", segmentDashAttrs);
     }
 
     public void formatInternalMedia(InternalMedia internalMedia, AttributeSet additionalAttrs) {
         MediaSegment segment = sessionFactory.createMediaSegment();
         segment.setSegment(internalMedia.getStartTime(), internalMedia.getEndTime(), MediaUnit.Second);
-        formatSegment(segment, additionalAttrs, MediaTimeFormatStyle.MINUTES_AND_SECONDS);
+        appendFormattedSegment(segment, additionalAttrs, MediaTimeFormatStyle.MINUTES_AND_SECONDS);
     }
 
     public void setGlobalParagraphAttributes() {
@@ -2139,7 +2155,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             }
             else if (tierType.equals(MediaSegment.class)) {
                 MediaSegment segment = record.getMediaSegment();
-                formatSegment(segment, tierAttrs);
+                appendFormattedSegment(segment, tierAttrs);
             }
             else if (tierType.equals(Orthography.class)) {
                 Tier<Orthography> orthographyTier = (Tier<Orthography>) tier;

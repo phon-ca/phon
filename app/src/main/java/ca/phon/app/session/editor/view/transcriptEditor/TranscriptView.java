@@ -3,6 +3,7 @@ package ca.phon.app.session.editor.view.transcriptEditor;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.actions.FindAndReplaceAction;
 import ca.phon.app.session.editor.search.FindAndReplacePanel;
+import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.app.session.editor.view.transcriptEditor.actions.*;
 import ca.phon.app.session.editor.view.transcriptEditor.extensions.AlignmentExtension;
 import ca.phon.app.session.editor.view.transcriptEditor.extensions.BlindTranscriptionExtension;
@@ -225,6 +226,8 @@ public class TranscriptView extends EditorView {
         retVal.add(new ToggleHeadersVisibleAction(getEditor(), this));
         retVal.add(new FindAndReplaceAction(getEditor()));
         retVal.add(new ExportAsPDFAction(getEditor(), this));
+
+        getEditor().getViewModel().showView(RecordDataEditorView.VIEW_NAME);
 
         return retVal;
     }
