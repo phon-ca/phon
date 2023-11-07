@@ -34,7 +34,8 @@ public class OrthoParserException extends RuntimeException {
 		MissingGroupStart,
 		MissingGroupEnd,
 		MissingPgStart,
-		MissingPgEnd
+		MissingPgEnd,
+		MissingMediaBullet
 	}
 
 	private Type type;

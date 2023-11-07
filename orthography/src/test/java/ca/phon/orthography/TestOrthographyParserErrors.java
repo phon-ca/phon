@@ -141,6 +141,18 @@ public class TestOrthographyParserErrors {
         final String txt = "hello . •3.-4s.1•";
         testError(txt, OrthoParserException.Type.InvalidTimeString, 12);
     }
+
+    @Test
+    public void testMissingEndBullet() {
+        final String txt = "hello •3.-4.1 .";
+        testError(txt, OrthoParserException.Type.MissingMediaBullet, 13);
+    }
+
+    @Test
+    public void testMissingStartBullet() {
+        final String txt = "hello 3.-4.1• .";
+        testError(txt, OrthoParserException.Type.InvalidToken, 8);
+    }
     // endregion InternalMedia
 
     @Test
@@ -201,6 +213,12 @@ public class TestOrthographyParserErrors {
     public void testHangingFreecode() {
         final String txt = "hello [^ foobar !";
         testError(txt, OrthoParserException.Type.MissingCloseBracket, 7);
+    }
+
+    @Test
+    public void testHangingPostcode() {
+        final String txt = "hello foobar ! [+ xcl";
+        testError(txt, OrthoParserException.Type.MissingCloseBracket, 15);
     }
 
     @Test

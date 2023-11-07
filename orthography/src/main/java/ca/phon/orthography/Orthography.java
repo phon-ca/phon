@@ -49,7 +49,7 @@ public final class Orthography implements Iterable<OrthographyElement>, Visitabl
 	 */
 	public static Orthography parseOrthography(String text) 
 		throws ParseException {
-		org.antlr.v4.runtime.CharStream charStream = CharStreams.fromString(text);
+		org.antlr.v4.runtime.CharStream charStream = CharStreams.fromString(text.trim());
 		UnicodeOrthographyLexer lexer = new UnicodeOrthographyLexer(charStream);
 		OrthoParserErrorListener errorListener = new OrthoParserErrorListener();
 		lexer.addErrorListener(errorListener);
