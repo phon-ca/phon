@@ -50,4 +50,16 @@ public class TestTierDataErrors {
         testError(txt, TierDataParserException.Type.MissingMediaBullet, 12);
     }
 
+    @Test
+    public void testHangingComment() {
+        final String txt = "hello [% comment .";
+        testError(txt, TierDataParserException.Type.MissingCloseBracket, 6);
+    }
+
+    @Test
+    public void testHangingLink() {
+        final String txt = "hello [\uD83D\uDD17 phon https://www.phon.ca .";
+        testError(txt, TierDataParserException.Type.MissingCloseBracket, 6);
+    }
+
 }

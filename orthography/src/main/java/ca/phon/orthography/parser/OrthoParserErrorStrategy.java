@@ -22,6 +22,18 @@ public class OrthoParserErrorStrategy extends DefaultErrorStrategy {
     }
 
     @Override
+    protected void reportInputMismatch(Parser recognizer, InputMismatchException e) {
+    }
+
+    @Override
+    protected void reportMissingToken(Parser recognizer) {
+    }
+
+    @Override
+    protected void reportUnwantedToken(Parser recognizer) {
+    }
+
+    @Override
     public void recover(Parser recognizer, RecognitionException e) {
         if(e.getOffendingToken() != null && e.getOffendingToken().getType() == Token.EOF) {
             if(e.getCtx() instanceof UnicodeOrthographyParser.GroupContext grpCtx) {
