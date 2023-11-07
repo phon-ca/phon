@@ -33,17 +33,20 @@ public class TierDataParserListener extends TierDataBaseListener {
         final String startText = ctx.time_in_minutes_seconds(0).getText();
         final String endText =
                 ctx.time_in_minutes_seconds().size() > 1 ? ctx.time_in_minutes_seconds(1).getText() : startText;
-
+        float startTime = 0.0f;
         try {
-            final float startTime = MediaTimeFormatter.parseTimeToSeconds(startText);
-            final float endTime = MediaTimeFormatter.parseTimeToSeconds(endText);
-
+            startTime = MediaTimeFormatter.parseTimeToSeconds(startText);
+        } catch (ParseException pe) {
+            throw new TierDataParserException(TierDataParserException.Type.InvalidTimeString, startText, ctx.time_in_minutes_seconds(0).getStart().getCharPositionInLine() + pe.getErrorOffset());
+        }
+        float endTime = 0.0f;
+        try {
+            endTime = MediaTimeFormatter.parseTimeToSeconds(endText);
             final InternalMedia internalMedia = new InternalMedia(startTime, endTime);
             elementList.add(new TierInternalMedia(internalMedia));
         } catch (ParseException pe) {
-            throw new IllegalArgumentException(pe);
+            throw new TierDataParserException(TierDataParserException.Type.InvalidTimeString, endText, ctx.time_in_minutes_seconds(1).getStart().getCharPositionInLine() + pe.getErrorOffset());
         }
-
     }
 
     @Override

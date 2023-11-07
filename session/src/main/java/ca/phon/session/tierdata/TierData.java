@@ -21,18 +21,29 @@ public final class TierData extends ExtendableObject implements Iterable<TierEle
     private final List<TierElement> elements;
 
     public static TierData parseTierData(String text) throws ParseException {
-        CharStream charStream = CharStreams.fromString(text);
+        CharStream charStream = CharStreams.fromString(text.trim());
         TierDataLexer lexer = new TierDataLexer(charStream);
+        TierDataErrorListener errorListener = new TierDataErrorListener();
+        lexer.addErrorListener(errorListener);
         TokenStream tokenStream = new CommonTokenStream(lexer);
 
         TierDataParserListener userTierBuilder = new TierDataParserListener();
         TierDataParser parser = new TierDataParser(tokenStream);
+        parser.setErrorHandler(new TierDataParserErrorStrategy());
         parser.addParseListener(userTierBuilder);
 
         try {
             parser.usertier();
+
+            if(!errorListener.getParseExceptions().isEmpty()) {
+                throw errorListener.getParseExceptions().get(0);
+            }
         } catch (RecognitionException e) {
             throw new ParseException(text, e.getOffendingToken().getCharPositionInLine());
+        } catch (TierDataParserException pe) {
+            final ParseException parseException = new ParseException(pe.getLocalizedMessage(), pe.getPositionInLine());
+            parseException.addSuppressed(pe);
+            throw parseException;
         }
         return userTierBuilder.toTierData();
     }
