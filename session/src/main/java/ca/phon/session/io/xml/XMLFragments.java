@@ -268,4 +268,18 @@ public final class XMLFragments {
     }
     // endregion xml -> Object
 
+    public static void main(String[] args) throws Exception {
+        final String xml = """
+                <u xmlns="https://phon.ca/ns/session">
+                    <g><w>ryoote</w>
+                    <w>agete</w><ga type="paralinguistics">singing</ga></g>
+                    <t type="p"></t>
+                    <postcode>bch</postcode><postcode>foo</postcode>
+                    <media start="2041.689" end="2042.652" unit="s"></media>
+                   \s
+                  </u>""";
+        final Orthography orthography = XMLFragments.orthographyFromXml(xml);
+        System.out.println(orthography);
+    }
+
 }
