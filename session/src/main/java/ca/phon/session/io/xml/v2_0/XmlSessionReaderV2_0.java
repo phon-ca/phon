@@ -618,6 +618,8 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 		if(ut.getT() != null)
 			visitor.visitTerminator(ut.getT());
 		ut.getPostcode().forEach(visitor::visit);
+		if(ut.getMedia() != null)
+			visitor.visit(ut.getMedia());
 		ut.getKOrError().forEach(visitor::visit);
 		return builder.toOrthography();
 	}

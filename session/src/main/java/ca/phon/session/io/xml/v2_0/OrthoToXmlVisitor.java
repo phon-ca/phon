@@ -180,7 +180,8 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 
 		for(Replacement replacement:word.getReplacements()) {
 			final XmlReplacementType xmlReplacement = factory.createXmlReplacementType();
-			xmlReplacement.setReal(replacement.isReal());
+			if(replacement.isReal())
+				xmlReplacement.setReal(true);
 			final OrthoToXmlVisitor wordVisitor = new OrthoToXmlVisitor();
 			replacement.getWords().forEach(wordVisitor::visitWord);
 			wordVisitor.getU().getWOrGOrPg().stream()

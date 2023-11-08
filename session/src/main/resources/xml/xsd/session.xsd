@@ -1531,8 +1531,8 @@
                 <xs:element ref="nonvocal"/>
             </xs:choice>
             <xs:element ref="t" minOccurs="0" maxOccurs="1"/>
-            <xs:element ref="media" minOccurs="0" maxOccurs="1"/>
             <xs:element ref="postcode" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="media" minOccurs="0" maxOccurs="1"/>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element ref="k"/>
                 <xs:element ref="error"/>
