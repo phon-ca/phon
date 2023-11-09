@@ -634,10 +634,21 @@ public final class SessionFactory extends ExtendableObject {
 	 * Create tier description for system tier
 	 *
 	 * @param systemTier
-	 * @return
+	 * @return tierDesc
 	 */
 	public TierDescription createTierDescription(SystemTierType systemTier) {
 		return createTierDescription(systemTier, false);
+	}
+
+	/**
+	 * Create tier description from UserTierType
+	 *
+	 * @param userTier
+	 * @return tierDesc
+	 */
+	public TierDescription createTierDescription(UserTierType userTier) {
+		return createTierDescription(userTier.getTierName(), userTier.getType(),
+				new LinkedHashMap<>(), !userTier.isAlignable(), false);
 	}
 
 	public TierDescription createTierDescription(SystemTierType systemTier, boolean blind) {
