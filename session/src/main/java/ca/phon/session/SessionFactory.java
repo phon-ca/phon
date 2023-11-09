@@ -718,8 +718,8 @@ public final class SessionFactory extends ExtendableObject {
 		retVal.add(createTierViewItem(SystemTierType.Orthography.getName(), true, "default", false));
 		retVal.add(createTierViewItem(SystemTierType.IPATarget.getName(), true, "default", false));
 		retVal.add(createTierViewItem(SystemTierType.IPAActual.getName(), true, "default", false));
-		retVal.add(createTierViewItem(SystemTierType.Notes.getName(), true, "default", false));
-		retVal.add(createTierViewItem(SystemTierType.Segment.getName(), true, "default", false));
+//		retVal.add(createTierViewItem(SystemTierType.Notes.getName(), true, "default", false));
+//		retVal.add(createTierViewItem(SystemTierType.Segment.getName(), true, "default", false));
 		
 		for(TierDescription tierDesc:session.getUserTiers()) {
 			retVal.add(createTierViewItem(tierDesc.getName(), true, "default", false));
