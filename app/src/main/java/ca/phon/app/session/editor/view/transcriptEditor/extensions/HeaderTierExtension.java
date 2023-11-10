@@ -25,6 +25,7 @@ import javax.swing.text.SimpleAttributeSet;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -43,6 +44,7 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
         this.doc = editor.getTranscriptDocument();
         this.session = editor.getSession();
 
+        headerTierMap.put("date", doc.getSessionFactory().createTier("Date", LocalDate.class));
         headerTierMap.put("tiers", doc.getSessionFactory().createTier("Tiers", TierData.class));
         headerTierMap.put("participants", doc.getSessionFactory().createTier("Participants", TierData.class));
         headerTierMap.put("languages", doc.getSessionFactory().createTier("Languages", TranscriptDocument.Languages.class));
@@ -55,6 +57,13 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
 
                 if (isHeadersVisible()) {
                     AttributeSet newLineAttrs;
+
+                    // Add date line if present
+                    if (session.getDate() != null) {
+                        retVal.addAll(getDateHeader());
+                        newLineAttrs = doc.getTrailingAttributes(retVal);
+                        retVal.addAll(doc.getBatchEndLineFeed(newLineAttrs));
+                    }
 
                     // Add media line if present
                     var sessionMedia = session.getMediaLocation();
@@ -134,6 +143,7 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
         doc.addDocumentPropertyChangeListener(HEADERS_VISIBLE, evt -> doc.reload());
 
         editor.getEventManager().registerActionForEvent(EditorEventType.TierViewChanged, this::updateTiersHeader, EditorEventManager.RunOn.AWTEventDispatchThread);
+        editor.getEventManager().registerActionForEvent(EditorEventType.SessionDateChanged, this::updateDateHeader, EditorEventManager.RunOn.AWTEventDispatchThread);
     }
 
     private boolean isHeadersVisible() {
@@ -190,6 +200,41 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
 
             List<DefaultStyledDocument.ElementSpec> inserts = getTiersHeader();
             doc.getBatch().addAll(inserts);
+            doc.processBatchUpdates(start > -1 ? start : 0);
+        }
+        catch (BadLocationException e) {
+            LogUtil.severe(e);
+        }
+    }
+
+    private List<DefaultStyledDocument.ElementSpec> getDateHeader() {
+        List<DefaultStyledDocument.ElementSpec> retVal = new ArrayList<>();
+
+        Tier<LocalDate> dateTier = (Tier<LocalDate>) headerTierMap.get("date");
+        dateTier.setValue(editor.getSession().getDate());
+
+        retVal.addAll(doc.getBatchEndStart());
+        retVal.addAll(doc.getGeneric("Date", dateTier, null));
+
+        return retVal;
+    }
+
+    public void updateDateHeader(EditorEvent<EditorEventType.SessionDateChangedData> event) {
+        try {
+            Tier<?> dateHeaderTier = headerTierMap.get("date");
+            int start = doc.getGenericStart(dateHeaderTier);
+            int end = doc.getGenericEnd(dateHeaderTier);
+
+            if (start > -1 && end > -1) {
+                start -= doc.getLabelColumnWidth() + 2;
+                doc.setBypassDocumentFilter(true);
+                doc.remove(start, end - start);
+            }
+
+            List<DefaultStyledDocument.ElementSpec> inserts = getDateHeader();
+            doc.getBatch().addAll(inserts);
+            var newLineAttrs = doc.getTrailingAttributes(doc.getBatch());
+            doc.appendBatchLineFeed(newLineAttrs);
             doc.processBatchUpdates(start > -1 ? start : 0);
         }
         catch (BadLocationException e) {

@@ -44,7 +44,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     private final ExtensionSupport extensionSupport = new ExtensionSupport(TranscriptEditor.class, this);
 
     /* State */
-    private boolean controlPressed = false;
     private Object currentHighlight;
     private DefaultHighlighter.DefaultHighlightPainter highlightPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
     private int currentRecordIndex = -1;
@@ -61,6 +60,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     private Object currentBoxSelect = null;
     private List<Object> selectionHighlightList = new ArrayList<>();
     public final static EditorEventType<SessionLocationChangeData> sessionLocationChange = new EditorEventType<>("recordChangedInSingleRecordMode", SessionLocationChangeData.class);
+    private SessionLocation currentSessionLocation = null;
 
     public TranscriptEditor(
         Session session,
@@ -140,20 +140,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         actionMap.put("prevTierOrElement", shiftTabAct);
 
 
-        var controlKeyEvent = OSInfo.isMacOs() ? KeyEvent.VK_META : KeyEvent.VK_CONTROL;
-        var modifier = OSInfo.isMacOs() ? InputEvent.META_DOWN_MASK : InputEvent.CTRL_DOWN_MASK;
-
-        KeyStroke pressedControl = KeyStroke.getKeyStroke(controlKeyEvent, modifier, false);
-        inputMap.put(pressedControl, "pressedControl");
-        PhonUIAction<Void> pressedControlAct = PhonUIAction.runnable(this::pressedControl);
-        actionMap.put("pressedControl", pressedControlAct);
-
-        KeyStroke releasedControl = KeyStroke.getKeyStroke(controlKeyEvent, 0, true);
-        inputMap.put(releasedControl, "releasedControl");
-        PhonUIAction<Void> releasedControlAct = PhonUIAction.runnable(this::releasedControl);
-        actionMap.put("releasedControl", releasedControlAct);
-
-
         KeyStroke right = KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0);
         inputMap.put(right, "nextValidIndex");
         PhonUIAction<Void> rightAct = PhonUIAction.runnable(() -> setCaretPosition(getNextValidIndex(getCaretPosition() + 1, true)));
@@ -213,6 +199,8 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
 
         this.eventManager.registerActionForEvent(EditorEventType.CommenTypeChanged, this::onCommentTypeChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
         this.eventManager.registerActionForEvent(EditorEventType.GemTypeChanged, this::onGemTypeChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+
+        this.eventManager.registerActionForEvent(sessionLocationChange, this::onSessionLocationChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
     }
 
     // endregion Init
@@ -226,10 +214,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
 
     public Session getSession() {
         return dataModel.getSession();
-    }
-
-    public void setAlignmentVisible(boolean visible) {
-//        getTranscriptDocument().setAlignmentVisible(visible);
     }
 
     public void setMediaModel(SessionMediaModel mediaModel) {
@@ -357,6 +341,14 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         return dataModel.getTranscriber() == Transcriber.VALIDATOR;
     }
 
+    public SessionLocation getCurrentSessionLocation() {
+        return currentSessionLocation;
+    }
+
+    public void setCurrentSessionLocation(SessionLocation currentSessionLocation) {
+        this.currentSessionLocation = currentSessionLocation;
+    }
+
     // endregion Getters and Setters
 
 
@@ -378,25 +370,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         if (newCaretPos == -1) return;
 
         setCaretPosition(newCaretPos);
-    }
-
-    public void pressedControl() {
-        if (!controlPressed) {
-            System.out.println("Press");
-            controlPressed = true;
-            Point2D mousePoint = MouseInfo.getPointerInfo().getLocation();
-            System.out.println(viewToModel2D(mousePoint));
-            highlightElementAtPoint(mousePoint);
-            repaint();
-        }
-    }
-
-    public void releasedControl() {
-        if (controlPressed) {
-            System.out.println("Release");
-            controlPressed = false;
-            removeCurrentHighlight();
-        }
     }
 
     public void pressedEnter(PhonActionEvent<Void> pae) {
@@ -1451,6 +1424,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     private void removeCurrentHighlight() {
         if (currentHighlight != null) {
             getHighlighter().removeHighlight(currentHighlight);
+            SwingUtilities.invokeLater(this::repaint);
         }
     }
 
@@ -1953,6 +1927,10 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         getTranscriptDocument().changeGemType(editorEvent.data().gem());
     }
 
+    private void onSessionLocationChanged(EditorEvent<SessionLocationChangeData> editorEvent) {
+        setCurrentSessionLocation(editorEvent.data().newLoc);
+    }
+
     private class TranscriptNavigationFilter extends NavigationFilter {
         @Override
         public void setDot(NavigationFilter.FilterBypass fb, int dot, Position.Bias bias) {
@@ -2195,8 +2173,11 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         public void mouseMoved(MouseEvent e) {
             TranscriptDocument doc = getTranscriptDocument();
 
-            if (controlPressed) {
+            if ((e.getModifiersEx() & Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()) == Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()) {
                 highlightElementAtPoint(e.getPoint());
+            }
+            else if (currentHighlight != null) {
+                removeCurrentHighlight();
             }
 
             int mousePosInDoc = viewToModel2D(e.getPoint());
@@ -2254,11 +2235,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                         }
                         else {
                                 setCaretPosition(getNextValidIndex(mousePosInDoc, false));
-//                            switch (elementType) {
-//                                case TranscriptDocument.ATTR_KEY_RECORD -> setCaretPosition(doc.getTierStart((Tier<?>) attrs.getAttribute(TranscriptDocument.ATTR_KEY_TIER)));
-//                                case TranscriptDocument.ATTR_KEY_COMMENT -> setCaretPosition(doc.getCommentStart((Comment) attrs.getAttribute(TranscriptDocument.ATTR_KEY_COMMENT)));
-//                                case TranscriptDocument.ATTR_KEY_GEM -> setCaretPosition(doc.getGemStart((Gem) attrs.getAttribute(TranscriptDocument.ATTR_KEY_GEM)));
-//                            }
                         }
 
                         if (attrs.getAttribute("clickable") != null) {

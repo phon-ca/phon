@@ -55,8 +55,18 @@ public class DefaultTierLabelMenuHandler implements TierLabelMenuHandler, IPlugi
             IconManager.getInstance().getIcon("actions/edit-copy", IconSize.SMALL);
 
 
+
     @Override
     public void addMenuItems(MenuBuilder builder, Session session, EditorEventManager eventManager, SessionEditUndoSupport undoSupport, Tier<?> tier, Record record) {
+        appendMenuItems(builder, session, eventManager, undoSupport, tier.getName(), tier, record);
+    }
+
+    @Override
+    public void addMenuItems(MenuBuilder builder, Session session, EditorEventManager eventManager, SessionEditUndoSupport undoSupport, TierViewItem item) {
+        appendMenuItems(builder, session, eventManager, undoSupport, item.getTierName(), null, null);
+    }
+
+    private void appendMenuItems(MenuBuilder builder, Session session, EditorEventManager eventManager, SessionEditUndoSupport undoSupport, String tierName, Tier<?> tier, Record record) {
         this.session = session;
         this.eventManager = eventManager;
         this.undoSupport = undoSupport;
@@ -64,31 +74,33 @@ public class DefaultTierLabelMenuHandler implements TierLabelMenuHandler, IPlugi
         var tierView = session.getTierView();
         TierViewItem currentTVI = tierView
             .stream()
-            .filter(item -> item.getTierName().equals(tier.getName()))
+            .filter(item -> item.getTierName().equals(tierName))
             .findFirst()
             .orElse(null);
         if (currentTVI == null) return;
 
-        final PhonUIAction<Tier<?>> copyTierAct = PhonUIAction.eventConsumer(this::onCopyTier, tier);
-        copyTierAct.putValue(PhonUIAction.NAME, "Copy tier");
-        copyTierAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Copy tier contents to clipboard");
-        builder.addItem(".", copyTierAct);
+        if (tier != null && record != null) {
+            final PhonUIAction<Tier<?>> copyTierAct = PhonUIAction.eventConsumer(this::onCopyTier, tier);
+            copyTierAct.putValue(PhonUIAction.NAME, "Copy tier");
+            copyTierAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Copy tier contents to clipboard");
+            builder.addItem(".", copyTierAct);
 
-        if(Toolkit.getDefaultToolkit().getSystemClipboard().isDataFlavorAvailable(TierTransferrable.FLAVOR)
-                || Toolkit.getDefaultToolkit().getSystemClipboard().isDataFlavorAvailable(DataFlavor.stringFlavor)) {
-            final PhonUIAction<Tuple<Record, Tier<?>>> pasteTierAct =
-                    PhonUIAction.eventConsumer(this::onPasteTier, new Tuple<>(record, tier));
-            pasteTierAct.putValue(PhonUIAction.NAME, "Paste tier");
-            pasteTierAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Paste tier data");
-            builder.addItem(".", pasteTierAct);
+            if(Toolkit.getDefaultToolkit().getSystemClipboard().isDataFlavorAvailable(TierTransferrable.FLAVOR)
+                    || Toolkit.getDefaultToolkit().getSystemClipboard().isDataFlavorAvailable(DataFlavor.stringFlavor)) {
+                final PhonUIAction<Tuple<Record, Tier<?>>> pasteTierAct =
+                        PhonUIAction.eventConsumer(this::onPasteTier, new Tuple<>(record, tier));
+                pasteTierAct.putValue(PhonUIAction.NAME, "Paste tier");
+                pasteTierAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Paste tier data");
+                builder.addItem(".", pasteTierAct);
+            }
+
+            builder.addSeparator(".", "");
         }
-
-        builder.addSeparator(".", "");
 
         JMenuItem hideTier = new JMenuItem();
         PhonUIAction<TierViewItem> hideTierAct = PhonUIAction.eventConsumer(this::hideTier, currentTVI);
         hideTierAct.putValue(PhonUIAction.NAME, "Hide tier");
-        hideTierAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Hide " + tier.getName());
+        hideTierAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Hide " + currentTVI.getTierName());
         hideTier.setAction(hideTierAct);
         builder.addItem(".", hideTier);
 
@@ -110,8 +122,8 @@ public class DefaultTierLabelMenuHandler implements TierLabelMenuHandler, IPlugi
         PhonUIAction<TierViewItem> toggleLockTierAct = PhonUIAction.eventConsumer(this::toggleLockTier, currentTVI);
         toggleLockTierAct.putValue(PhonUIAction.NAME, currentTVI.isTierLocked() ? "Unlock tier" : "Lock tier");
         toggleLockTierAct.putValue(
-            PhonUIAction.SHORT_DESCRIPTION,
-            currentTVI.isTierLocked() ? "Unlock " : " Lock " + currentTVI.getTierName()
+                PhonUIAction.SHORT_DESCRIPTION,
+                currentTVI.isTierLocked() ? "Unlock " : " Lock " + currentTVI.getTierName()
         );
         toggleLockTier.setAction(toggleLockTierAct);
         builder.addItem(".", toggleLockTier);
@@ -154,7 +166,7 @@ public class DefaultTierLabelMenuHandler implements TierLabelMenuHandler, IPlugi
         builder.addSeparator(".", "");
 
         JMenuItem newTier = new JMenuItem();
-        PhonUIAction newTierAct = PhonUIAction.runnable(this::newTier);
+        PhonUIAction<Void> newTierAct = PhonUIAction.runnable(this::newTier);
         newTierAct.putValue(PhonUIAction.NAME, "New tier...");
         newTierAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Add a new tier to the session");
         newTierAct.putValue(PhonUIAction.SMALL_ICON, ADD_ICON);

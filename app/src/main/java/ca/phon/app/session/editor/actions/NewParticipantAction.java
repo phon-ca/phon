@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.session_information.actions;
+package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.AddParticipantEdit;
 import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
+import ca.phon.app.session.editor.view.session_information.actions.SessionInfoAction;
 import ca.phon.session.*;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.participant.ParticipantEditor;
@@ -26,7 +27,7 @@ import ca.phon.util.icons.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
-public class NewParticipantAction extends SessionInfoAction {
+public class NewParticipantAction extends SessionEditorAction {
 
 	private final static String TXT = "Add participant...";
 	
@@ -35,8 +36,8 @@ public class NewParticipantAction extends SessionInfoAction {
 	private final static ImageIcon ICON = 
 			IconManager.getInstance().getIcon("actions/add_user", IconSize.SMALL);
 
-	public NewParticipantAction(SessionEditor editor, SessionInfoEditorView view) {
-		super(editor, view);
+	public NewParticipantAction(SessionEditor editor) {
+		super(editor);
 		
 		putValue(NAME, TXT);
 		putValue(SHORT_DESCRIPTION, DESC);

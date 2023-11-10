@@ -40,7 +40,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     private boolean singleRecordView = false;
     private int singleRecordIndex = 0;
     private static final char[] EOL_ARRAY = { '\n' };
-    private ArrayList<ElementSpec> batch;
+    private final ArrayList<ElementSpec> batch;
     public int labelColumnWidth = 20;
     private float lineSpacing = 0.2f;
     private boolean bypassDocumentFilter = false;
@@ -131,10 +131,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     public void setLineSpacing(float lineSpacing) {
         this.lineSpacing = lineSpacing;
     }
-
-//    public Map<String, Tier<?>> getHeaderTierMap() {
-//        return headerTierMap;
-//    }
 
     public String getTierText(Tier<?> tier, String transcriber) {
         if (tier.isBlind() && transcriber != null && !Transcriber.VALIDATOR.getUsername().equals(transcriber)) {
@@ -621,11 +617,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             }
             else if (elem.isRecord()) {
                 return;
-//                Transcript transcript = session.getTranscript();
-//                int recordIndex = transcript.getRecordPosition(elem.asRecord());
-//                int recordElementIndex = transcript.getRecordElementIndex(recordIndex);
-//                deleteRecord(recordIndex, recordElementIndex);
-//                return;
             }
 
             startOffset -= labelLength;
@@ -1281,6 +1272,31 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         return -1;
     }
 
+    public int getGenericStart(String genericTierName) {
+        Element root = getDefaultRootElement();
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() == 0) continue;
+            String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
+            // If transcript element type is generic
+            if (transcriptElementType != null && transcriptElementType.equals(TranscriptStyleConstants.ATTR_KEY_GENERIC)) {
+                for (int j = 0; j < elem.getElementCount(); j++) {
+                    Element innerElem = elem.getElement(j);
+                    AttributeSet attrs = innerElem.getAttributes();
+                    Tier<?> currentGenericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
+                    Boolean isLabel = (Boolean)attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL);
+                    // If correct tier name
+                    if (isLabel == null && currentGenericTier != null && currentGenericTier.getName().equals(genericTierName)) {
+                        return innerElem.getStartOffset();
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
+
     public int getGenericEnd(Tier<?> genericTier) {
         int retVal = -1;
 
@@ -1299,6 +1315,33 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                     Boolean isLabel = (Boolean)attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL);
                     // If correct tierData
                     if (isLabel == null && currentGenericTier != null && currentGenericTier.toString().equals(genericTier.toString())) {
+                        retVal = Math.max(retVal, innerElem.getEndOffset());
+                    }
+                }
+            }
+        }
+
+        return retVal;
+    }
+
+    public int getGenericEnd(String genericTierName) {
+        int retVal = -1;
+
+        Element root = getDefaultRootElement();
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() < 1) continue;
+            String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
+            // If transcript element type is tierData
+            if (transcriptElementType != null && transcriptElementType.equals(TranscriptStyleConstants.ATTR_KEY_GENERIC)) {
+                for (int j = 0; j < elem.getElementCount(); j++) {
+                    Element innerElem = elem.getElement(j);
+                    AttributeSet attrs = innerElem.getAttributes();
+                    Tier<?> currentGenericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
+                    Boolean isLabel = (Boolean)attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL);
+                    // If correct tierData
+                    if (isLabel == null && currentGenericTier != null && currentGenericTier.getName().equals(genericTierName)) {
                         retVal = Math.max(retVal, innerElem.getEndOffset());
                     }
                 }
@@ -2019,26 +2062,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         return tier;
     }
 
-//    public void getFormattedSegment(MediaSegment segment, AttributeSet additionalAttrs, MediaTimeFormatStyle style) {
-//        var formatter = new MediaSegmentFormatter(style);
-//        String value = formatter.format(segment);
-//
-//        var segmentTimeAttrs = getSegmentTimeAttributes(segment);
-//        var segmentDashAttrs = getSegmentDashAttributes(segment);
-//        segmentTimeAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
-//        segmentDashAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
-//        if (additionalAttrs != null) {
-//            segmentTimeAttrs.addAttributes(additionalAttrs);
-//            segmentDashAttrs.addAttributes(additionalAttrs);
-//        }
-//
-//        appendBatchString("•", segmentDashAttrs);
-//
-//        appendBatchString(value, segmentTimeAttrs);
-//
-//        appendBatchString("•", segmentDashAttrs);
-//    }
-
     private void appendFormattedSegment(MediaSegment segment, AttributeSet additionalAttrs) {
         appendFormattedSegment(segment, additionalAttrs, MediaTimeFormatStyle.PADDED_MINUTES_AND_SECONDS);
     }
@@ -2160,7 +2183,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             else if (tierType.equals(Orthography.class)) {
                 Tier<Orthography> orthographyTier = (Tier<Orthography>) tier;
                 orthographyTier.getValue().accept(new TranscriptOrthographyVisitors.KeywordVisitor(this, tierAttrs));
-                //appendBatchString(tierContent, tierAttrs);
             }
             else if (tierType.equals(MorTierData.class)) {
                 Tier<MorTierData> morTier = (Tier<MorTierData>) tier;
@@ -2285,57 +2307,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             }
         }
     }
-
-
-
-//    public SimpleAttributeSet updateTiersHeader(boolean partOfBatch) {
-//        Tier<TierData> tiersTier = (Tier<TierData>) headerTierMap.get("tiers");
-//
-//        int start = getGenericStart(tiersTier);
-//        int end = getGenericEnd(tiersTier);
-//
-//        try {
-//            if (start != -1 && end != -1) {
-//                start -= labelColumnWidth + 2;
-//                bypassDocumentFilter = true;
-//                remove(start, end - start);
-//            }
-//
-//            List<TierViewItem> visibleTierView = session
-//                .getTierView()
-//                .stream()
-//                .filter(item -> item.isVisible())
-//                .toList();
-//            StringJoiner joiner = new StringJoiner(", ");
-//            for (TierViewItem item : visibleTierView) {
-//                joiner.add(item.getTierName());
-//                boolean isIPATier = session
-//                    .getTiers()
-//                    .stream()
-//                    .filter(td -> td.getName().equals(item.getTierName()))
-//                    .anyMatch(td -> td.getDeclaredType().equals(IPATranscript.class));
-////                if (isSyllabificationVisible() && isIPATier) {
-////                    joiner.add(item.getTierName() + " Syllabification");
-////                }
-////                if (alignmentVisible && alignmentParent == item) {
-////                    joiner.add("Alignment");
-////                }
-//            }
-//            tiersTier.setText(joiner.toString());
-//
-//            appendBatchEndStart();
-//            var newlineAttrs = writeGeneric("Tiers", tiersTier, getTiersHeaderAttributes());
-//            if (partOfBatch) {
-//                return newlineAttrs;
-//            }
-//            appendBatchLineFeed(newlineAttrs);
-//            processBatchUpdates(start);
-//        }
-//        catch (BadLocationException e) {
-//            LogUtil.severe(e);
-//        }
-//        return null;
-//    }
 
     public AttributeSet getTrailingAttributes(List<DefaultStyledDocument.ElementSpec> elementSpecs) {
         if (elementSpecs.isEmpty()) return new SimpleAttributeSet();

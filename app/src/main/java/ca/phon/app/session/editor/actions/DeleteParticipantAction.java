@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.session_information.actions;
+package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
+import ca.phon.app.session.editor.view.session_information.actions.SessionInfoAction;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.ui.CommonModuleFrame;
@@ -28,16 +29,15 @@ import javax.swing.*;
 import javax.swing.undo.CompoundEdit;
 import java.awt.event.ActionEvent;
 
-public class DeleteParticipantAction extends SessionInfoAction {
+public class DeleteParticipantAction extends SessionEditorAction {
 	
 	private final Participant participant;
 	
 	private final ImageIcon ICON = 
 			IconManager.getInstance().getIcon("actions/delete_user", IconSize.SMALL);
 
-	public DeleteParticipantAction(SessionEditor editor,
-			SessionInfoEditorView view, Participant participant) {
-		super(editor, view);
+	public DeleteParticipantAction(SessionEditor editor, Participant participant) {
+		super(editor);
 		this.participant = participant;
 		
 		putValue(NAME, "Delete " + participant.getName());
