@@ -78,7 +78,7 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
 
                     // Add languages line if present
                     var sessionLanguages = session.getLanguages();
-                    if (sessionLanguages != null && !sessionLanguages.isEmpty()) {
+                    if ((sessionLanguages != null && !sessionLanguages.isEmpty()) || isForceShowLanguageHeader()) {
                         Tier<TranscriptDocument.Languages> languagesTier = (Tier<TranscriptDocument.Languages>) headerTierMap.get("languages");
                         languagesTier.setFormatter(new Formatter<>() {
                             @Override
@@ -240,5 +240,9 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
         catch (BadLocationException e) {
             LogUtil.severe(e);
         }
+    }
+
+    private boolean isForceShowLanguageHeader() {
+        return (boolean) doc.getDocumentPropertyOrDefault("forceShowLanguageHeader", false);
     }
 }

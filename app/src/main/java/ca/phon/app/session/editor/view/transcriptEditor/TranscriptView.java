@@ -26,6 +26,7 @@ import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.Language;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -33,13 +34,14 @@ import org.jdesktop.swingx.HorizontalLayout;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.*;
 import java.util.List;
 
 public class TranscriptView extends EditorView {
@@ -268,21 +270,81 @@ public class TranscriptView extends EditorView {
 
         JMenu languagesMenu = menuBuilder.addMenu(".", "Languages");
 
+        List<Language> sessionLanguages = getEditor().getSession().getLanguages();
+
+        boolean sessionAlreadyHasLanguages = !sessionLanguages.isEmpty();
         JMenuItem addLanguageItem = new JMenuItem();
-        PhonUIAction<Void> addLanguageAct = PhonUIAction.runnable(() -> {System.out.println("Add language");});
-        addLanguageAct.putValue(PhonUIAction.NAME, "Add language");
+        PhonUIAction<Void> addLanguageAct = PhonUIAction.runnable(() -> {
+            if (!sessionAlreadyHasLanguages) {
+                getTranscriptEditor().getTranscriptDocument().putDocumentProperty("forceShowLanguageHeader", true);
+                getTranscriptEditor().getTranscriptDocument().reload();
+            }
+            SwingUtilities.invokeLater(() -> {
+                int end = getTranscriptEditor().getTranscriptDocument().getGenericEnd("Languages")-1;
+                System.out.println("Language header tier end: " + end);
+                if (end > -1) {
+                    getTranscriptEditor().setCaretPosition(end);
+                    getTranscriptEditor().requestFocus();
+                }
+            });
+        });
+        addLanguageAct.putValue(PhonUIAction.NAME, (sessionAlreadyHasLanguages ? "Add" : "Set") + " language");
         addLanguageItem.setAction(addLanguageAct);
         languagesMenu.add(addLanguageItem);
 
-        JMenuItem removeLanguageItem = new JMenuItem();
-        PhonUIAction<Void> removeLanguageAct = PhonUIAction.runnable(() -> {System.out.println("Remove language");});
-        removeLanguageAct.putValue(PhonUIAction.NAME, "Remove language");
-        removeLanguageItem.setAction(removeLanguageAct);
-        languagesMenu.add(removeLanguageItem);
+        if (sessionAlreadyHasLanguages) {
+            JMenu removeLanguageSubmenu = new JMenu("Remove language");
+
+            for (Language language : sessionLanguages) {
+                JMenuItem removeLanguageItem = new JMenuItem();
+                PhonUIAction<Void> removeLanguageAct = PhonUIAction.runnable(() -> {
+                    var newLangList = sessionLanguages.stream().filter(item -> item != language).toList();
+                    SessionLanguageEdit edit = new SessionLanguageEdit(getEditor(), newLangList);
+                    getEditor().getUndoSupport().postEdit(edit);
+                    SwingUtilities.invokeLater(() -> {
+                        getTranscriptEditor().getTranscriptDocument().reload();
+                    });
+                });
+                removeLanguageAct.putValue(PhonUIAction.NAME, "Remove " + language.getPrimaryLanguage().getName());
+                removeLanguageItem.setAction(removeLanguageAct);
+                removeLanguageSubmenu.add(removeLanguageItem);
+            }
+
+            languagesMenu.add(removeLanguageSubmenu);
+        }
 
 
         JMenuItem viewMetadataItem = new JMenuItem();
-        PhonUIAction<Void> viewMetadataAct = PhonUIAction.runnable(() -> {System.out.println("View metadata");});
+        PhonUIAction<Void> viewMetadataAct = PhonUIAction.runnable(() -> {
+            JDialog metadataDialog = new JDialog((Frame) null, "Metadata");
+            metadataDialog.setLayout(new BorderLayout());
+
+            String[] columnNames = { "Key", "Value" };
+
+            Map<String, String> metadataMap = getTranscriptEditor().getSession().getMetadata();
+            List<String[]> metadataList = new ArrayList<>();
+            for (var pair : metadataMap.entrySet()) {
+                metadataList.add(new String[]{pair.getKey(), pair.getValue()});
+            }
+            metadataList.sort(Comparator.comparing(array -> array[0]));
+
+            System.out.println("Metadata");
+            System.out.println(metadataList);
+
+            DefaultTableModel model = new DefaultTableModel(metadataList.toArray(String[][]::new), columnNames);
+            JTable metadataTable = new JTable(model);
+            metadataTable.setGridColor(Color.BLACK);
+//            model.addTableModelListener(new TableModelListener() {
+//                @Override
+//                public void tableChanged(TableModelEvent e) {
+//                    e.
+//                }
+//            });
+            metadataDialog.add(new JScrollPane(metadataTable), BorderLayout.CENTER);
+
+            metadataDialog.pack();
+            metadataDialog.setVisible(true);
+        });
         viewMetadataAct.putValue(PhonUIAction.NAME, "View metadata");
         viewMetadataItem.setAction(viewMetadataAct);
         menuBuilder.addItem(".", viewMetadataItem);
@@ -515,7 +577,11 @@ public class TranscriptView extends EditorView {
         for (UserTierType userTierType : availableUserTierTypes) {
             JMenuItem addTierItem = new JMenuItem();
             PhonUIAction<Void> addTierAct = PhonUIAction.runnable(() -> {
-//                getEditor().getSession().
+                TierDescription td = SessionFactory.newFactory().createTierDescription(userTierType);
+                TierViewItem tvi = SessionFactory.newFactory().createTierViewItem(td.getName());
+
+                AddTierEdit edit = new AddTierEdit(getEditor(), td, tvi);
+                getEditor().getUndoSupport().postEdit(edit);
             });
             addTierAct.putValue(PhonUIAction.NAME, userTierType.name());
             addTierItem.setAction(addTierAct);

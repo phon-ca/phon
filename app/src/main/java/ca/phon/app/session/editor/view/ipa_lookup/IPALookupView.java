@@ -115,7 +115,7 @@ public class IPALookupView extends EditorView {
 		});
 		updateLangBox();
 
-		autoTranscribeBtn = new JButton(new AutoTranscribeCommand(this));
+		//autoTranscribeBtn = new JButton(new AutoTranscribeCommand(this));
 		
 		importIPABtn = new JButton(new ImportIPACommand(this));
 		
@@ -126,7 +126,7 @@ public class IPALookupView extends EditorView {
 		toolbar.add(importIPABtn);
 		toolbar.add(exportIPABtn);
 		toolbar.addSeparator();
-		toolbar.add(autoTranscribeBtn);
+		//toolbar.add(autoTranscribeBtn);
 		toolbar.setFloatable(false);
 	}
 	

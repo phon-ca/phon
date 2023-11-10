@@ -1416,6 +1416,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                 elem.getEndOffset(),
                 highlightPainter
             );
+            repaint();
         } catch (BadLocationException ex) {
             throw new RuntimeException(ex);
         }
@@ -1424,6 +1425,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     private void removeCurrentHighlight() {
         if (currentHighlight != null) {
             getHighlighter().removeHighlight(currentHighlight);
+            currentHighlight = null;
             SwingUtilities.invokeLater(this::repaint);
         }
     }
@@ -1813,12 +1815,13 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
 
     private void underlineElement(Element elem) {
         try {
-//            removeCurrentUnderline();
+            removeCurrentUnderline();
             currentUnderline = getHighlighter().addHighlight(
                 elem.getStartOffset(),
                 elem.getEndOffset(),
                 underlinePainter
             );
+            repaint();
         } catch (BadLocationException ex) {
             throw new RuntimeException(ex);
         }
@@ -1828,6 +1831,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         if (currentUnderline != null) {
             getHighlighter().removeHighlight(currentUnderline);
             currentUnderline = null;
+            repaint();
         }
     }
 
@@ -2184,20 +2188,20 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
 
             Element elem = doc.getCharacterElement(mousePosInDoc);
             if (elem != null) {
-//                if (elem.equals(hoverElem)) return;
+                if (elem.equals(hoverElem)) return;
                 AttributeSet attrs = elem.getAttributes();
                 boolean isClickable = attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE) != null;
                 boolean isWhitespace = doc.getCharAtPos(mousePosInDoc).equals(' ');
                 if (isClickable && !isWhitespace) {
-//                    hoverElem = elem;
-//                    underlineElement(elem);
+                    hoverElem = elem;
+                    underlineElement(elem);
                     return;
                 }
             }
-//            if (hoverElem != null) {
-//                hoverElem = null;
-//                removeCurrentUnderline();
-//            }
+            if (hoverElem != null) {
+                hoverElem = null;
+                removeCurrentUnderline();
+            }
         }
 
         @Override

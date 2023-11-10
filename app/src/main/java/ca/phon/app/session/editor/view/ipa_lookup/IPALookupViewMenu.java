@@ -40,9 +40,9 @@ public class IPALookupViewMenu extends JMenu {
 		final ImportIPACommand importAct = new ImportIPACommand(lookupView);
 		add(importAct);
 		
-		addSeparator();
-		final AutoTranscribeCommand autoTranscribeAct = new AutoTranscribeCommand(lookupView);
-		add(autoTranscribeAct);
+		//addSeparator();
+		//final AutoTranscribeCommand autoTranscribeAct = new AutoTranscribeCommand(lookupView);
+		//add(autoTranscribeAct);
 	}
 
 }
