@@ -128,6 +128,7 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 					metadataType.getMd().add(md);
 				}
 			}
+			retVal.setMetadata(metadataType);
 		}
 
 		// participants

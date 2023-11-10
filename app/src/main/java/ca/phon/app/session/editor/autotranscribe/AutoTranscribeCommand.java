@@ -42,7 +42,7 @@ import java.util.Optional;
  */
 public class AutoTranscribeCommand extends HookableAction {
 	
-	private final static String CMD_NAME = "Auto-transcribe Session...";
+	private final static String CMD_NAME = "Auto-transcribe IPA tiers...";
 
 	private final static String DESC = "Automatically transcribe IPA tiers in session";
 
