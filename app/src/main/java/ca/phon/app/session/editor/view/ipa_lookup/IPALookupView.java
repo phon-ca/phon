@@ -115,7 +115,7 @@ public class IPALookupView extends EditorView {
 		});
 		updateLangBox();
 
-		autoTranscribeBtn = new JButton(new AutoTranscribeCommand(this));
+		autoTranscribeBtn = new JButton(new AutoTranscribeCommand(getEditor().getProject(), getEditor().getSession(), getEditor().getEventManager(), getEditor().getUndoSupport(), getEditor().getDataModel().getTranscriber()));
 		
 		importIPABtn = new JButton(new ImportIPACommand(this));
 		

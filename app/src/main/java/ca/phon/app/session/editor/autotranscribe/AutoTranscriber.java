@@ -24,6 +24,7 @@ import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.*;
 import ca.phon.ipadictionary.IPADictionary;
+import ca.phon.orthography.Orthography;
 import ca.phon.orthography.OrthographyElement;
 import ca.phon.session.Record;
 import ca.phon.session.*;
@@ -138,15 +139,49 @@ public class AutoTranscriber {
 		boolean isEmpty = (t == null || t.length() == 0 || t.matches("\\*+"));
 		return isEmpty;
 	}
-	
+
+	/**
+	 * Transcribe given orthography
+	 *
+	 * @param orthography
+	 * @return generated ipa transcript
+	 */
+	public static IPATranscript transcribe(Orthography orthography, IPADictionary dictionary) {
+		final IPATranscriptBuilder builder = new IPATranscriptBuilder();
+		final List<OrthographyElement> orthoWords = TierElementFilter.orthographyFilterForIPAAlignment().filterOrthography(orthography);
+		for(int i = 0; i < orthoWords.size(); i++) {
+			final OrthographyElement ele = orthoWords.get(i);
+			final OrthoLookupVisitor visitor = new OrthoLookupVisitor(dictionary);
+			visitor.visit(ele);
+
+			final OrthoWordIPAOptions ipaExt =
+					ele.getExtension(OrthoWordIPAOptions.class);
+			if(ipaExt == null) continue;
+
+			final List<String> ipaOpts = ipaExt.getOptions();
+			final int selectedOption =
+					(ipaExt.getSelectedOption() >= 0 && ipaExt.getSelectedOption() < ipaOpts.size() ?
+							ipaExt.getSelectedOption() : 0);
+
+			if(ipaOpts != null && ipaOpts.size() > 0) {
+				if(builder.size() > 0) builder.appendWordBoundary();
+				builder.append(ipaOpts.get(selectedOption));
+			} else {
+				builder.append("*");
+			}
+		}
+		return builder.toIPATranscript();
+	}
+
 	/**
 	 * Transcribe the given record.
 	 * 
 	 * @param record
 	 *
-	 * @return tuple of containing the automatic transcription for
-	 *  IPA Target and IPA Actual respectively
+	 * @return map containing the automatic transcription for all IPA tiers in record
+	 * @deprecated needs to work with all IPA tiers
 	 */
+	@Deprecated
 	private Map<Tier<IPATranscript>, IPATranscript> transcribe(Record record) {
 		final IPATranscriptBuilder ipaTBuilder = new IPATranscriptBuilder();
 		final IPATranscriptBuilder ipaABuilder = new IPATranscriptBuilder();
@@ -232,6 +267,36 @@ public class AutoTranscriber {
 		}
 		retVal.end();
 		return retVal;
+	}
+
+	/**
+	 * Transcribe tier.  This will return an undoable edit which has not yet been performed.  Either post the edit
+	 * directly to the editor undo support or call 'doIt' before adding to a compound edit.
+	 */
+	public IPALookupEdit transcribeTier(Record record, Tier<IPATranscript> ipaTier) {
+		final Orthography orthography = record.getOrthography();
+		final IPATranscript newValue = transcribe(orthography, getDictionary());
+		final IPALookupEdit edit =
+				new IPALookupEdit(getSession(), getEditorEventManager(), getTranscriber(), record, getDictionary(),
+						record.getOrthographyTier().toString(), ipaTier, newValue, false);
+		return edit;
+	}
+
+	/**
+	 * Transcribe tier.  This will return an undoable edit which has not yet been performed.  Either post the edit
+	 * directly to the editor undo support or call 'doIt' before adding to a compound edit.
+	 *
+	 * @param transcriptMap
+	 * @param record
+	 * @param ipaTier
+	 * @return undoable edit for ipa tier
+	 */
+	public IPALookupEdit transcribeTier(Map<Tier<IPATranscript>, IPATranscript> transcriptMap, Record record, Tier<IPATranscript> ipaTier) {
+		final IPATranscript newValue = transcriptMap.get(ipaTier);
+		final IPALookupEdit edit =
+				new IPALookupEdit(getSession(), getEditorEventManager(), getTranscriber(), record, getDictionary(),
+						record.getOrthographyTier().toString(), ipaTier, newValue, false);
+		return edit;
 	}
 	
 	/**

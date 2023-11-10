@@ -41,7 +41,11 @@ public class IPALookupViewMenu extends JMenu {
 		add(importAct);
 		
 		addSeparator();
-		final AutoTranscribeCommand autoTranscribeAct = new AutoTranscribeCommand(lookupView);
+		final AutoTranscribeCommand autoTranscribeAct = new AutoTranscribeCommand(
+				lookupView.getEditor().getProject(), lookupView.getEditor().getSession(),
+				lookupView.getEditor().getEventManager(), lookupView.getEditor().getUndoSupport(),
+				lookupView.getEditor().getDataModel().getTranscriber()
+		);
 		add(autoTranscribeAct);
 	}
 
