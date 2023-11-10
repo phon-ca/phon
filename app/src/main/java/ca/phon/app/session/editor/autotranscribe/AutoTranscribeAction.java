@@ -17,11 +17,6 @@ package ca.phon.app.session.editor.autotranscribe;
 
 import ca.phon.app.hooks.HookableAction;
 import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.actions.SessionEditorAction;
-import ca.phon.app.session.editor.autotranscribe.AutoTranscriber;
-import ca.phon.app.session.editor.autotranscribe.AutoTranscriptionDialog;
-import ca.phon.app.session.editor.view.ipa_lookup.*;
-import ca.phon.app.session.editor.view.ipa_lookup.actions.IPALookupViewAction;
 import ca.phon.ipadictionary.*;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
@@ -33,14 +28,13 @@ import ca.phon.worker.*;
 import javax.swing.undo.UndoableEdit;
 import javax.swing.undo.UndoableEditSupport;
 import java.awt.event.ActionEvent;
-import java.util.List;
 import java.util.Optional;
 
 /**
  * Action for auto-transcribing a {@link Session} using the
  * current {@link IPADictionary}.
  */
-public class AutoTranscribeCommand extends HookableAction {
+public class AutoTranscribeAction extends HookableAction {
 	
 	private final static String CMD_NAME = "Auto-transcribe IPA tiers...";
 
@@ -63,8 +57,8 @@ public class AutoTranscribeCommand extends HookableAction {
 	 * @param session
 	 * @param editorEventManager
 	 */
-	public AutoTranscribeCommand(Project project, Session session, EditorEventManager editorEventManager,
-								 UndoableEditSupport undoSupport, Transcriber transcriber) {
+	public AutoTranscribeAction(Project project, Session session, EditorEventManager editorEventManager,
+								UndoableEditSupport undoSupport, Transcriber transcriber) {
 		super();
 
 		putValue(NAME, CMD_NAME);

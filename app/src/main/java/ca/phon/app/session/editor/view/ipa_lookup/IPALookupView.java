@@ -18,7 +18,7 @@ package ca.phon.app.session.editor.view.ipa_lookup;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.EditorViewAdapter;
 import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.autotranscribe.AutoTranscribeCommand;
+import ca.phon.app.session.editor.autotranscribe.AutoTranscribeAction;
 import ca.phon.app.session.editor.view.ipa_lookup.actions.*;
 import ca.phon.ipadictionary.*;
 import ca.phon.ipadictionary.ui.*;
@@ -115,7 +115,7 @@ public class IPALookupView extends EditorView {
 		});
 		updateLangBox();
 
-		autoTranscribeBtn = new JButton(new AutoTranscribeCommand(getEditor().getProject(), getEditor().getSession(), getEditor().getEventManager(), getEditor().getUndoSupport(), getEditor().getDataModel().getTranscriber()));
+		autoTranscribeBtn = new JButton(new AutoTranscribeAction(getEditor().getProject(), getEditor().getSession(), getEditor().getEventManager(), getEditor().getUndoSupport(), getEditor().getDataModel().getTranscriber()));
 		
 		importIPABtn = new JButton(new ImportIPACommand(this));
 		
