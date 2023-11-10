@@ -1,6 +1,6 @@
 package ca.phon.app.opgraph.nodes;
 
-import ca.phon.app.session.editor.view.ipa_lookup.AutoTranscriptionForm;
+import ca.phon.app.session.editor.autotranscribe.AutoTranscriptionForm;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipadictionary.IPADictionaryLibrary;
 import ca.phon.opgraph.*;

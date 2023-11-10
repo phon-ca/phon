@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ca.phon.app.session.editor.view.ipa_lookup;
+package ca.phon.app.session.editor.autotranscribe;
 
 import ca.phon.app.session.RecordFilterPanel;
 import ca.phon.ipadictionary.IPADictionaryLibrary;

@@ -634,10 +634,21 @@ public final class SessionFactory extends ExtendableObject {
 	 * Create tier description for system tier
 	 *
 	 * @param systemTier
-	 * @return
+	 * @return tierDesc
 	 */
 	public TierDescription createTierDescription(SystemTierType systemTier) {
 		return createTierDescription(systemTier, false);
+	}
+
+	/**
+	 * Create tier description from UserTierType
+	 *
+	 * @param userTier
+	 * @return tierDesc
+	 */
+	public TierDescription createTierDescription(UserTierType userTier) {
+		return createTierDescription(userTier.getTierName(), userTier.getType(),
+				new LinkedHashMap<>(), !userTier.isAlignable(), false);
 	}
 
 	public TierDescription createTierDescription(SystemTierType systemTier, boolean blind) {
@@ -708,7 +719,7 @@ public final class SessionFactory extends ExtendableObject {
 	}
 	
 	/**
-	 * Get the default tier view for a given sesion.
+	 * Get the default tier view for a given session.
 	 * 
 	 * @param session
 	 */
@@ -718,9 +729,7 @@ public final class SessionFactory extends ExtendableObject {
 		retVal.add(createTierViewItem(SystemTierType.Orthography.getName(), true, "default", false));
 		retVal.add(createTierViewItem(SystemTierType.IPATarget.getName(), true, "default", false));
 		retVal.add(createTierViewItem(SystemTierType.IPAActual.getName(), true, "default", false));
-		retVal.add(createTierViewItem(SystemTierType.Notes.getName(), true, "default", false));
-		retVal.add(createTierViewItem(SystemTierType.Segment.getName(), true, "default", false));
-		
+
 		for(TierDescription tierDesc:session.getUserTiers()) {
 			retVal.add(createTierViewItem(tierDesc.getName(), true, "default", false));
 		}

@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.ipa_lookup;
+package ca.phon.app.session.editor.autotranscribe;
 
 import ca.phon.app.ipalookup.*;
+import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.*;
+import ca.phon.app.session.editor.view.ipa_lookup.IPALookupEdit;
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.*;
 import ca.phon.ipa.alignment.*;
@@ -56,14 +58,26 @@ public class AutoTranscriber {
 	private Syllabifier syllabifier;
 	
 	private Transcriber transcriber = null;
-	
-	private final SessionEditor editor;
-	
-	public AutoTranscriber(SessionEditor editor) {
+
+	private final Session session;
+
+	private final EditorEventManager editorEventManager;
+
+	public AutoTranscriber(Session session, EditorEventManager editorEventManager) {
 		super();
-		this.editor = editor;
+
+		this.session = session;
+		this.editorEventManager = editorEventManager;
 	}
-	
+
+	public Session getSession() {
+		return session;
+	}
+
+	public EditorEventManager getEditorEventManager() {
+		return editorEventManager;
+	}
+
 	public void setTranscriber(Transcriber transcriber) {
 		this.transcriber = transcriber;
 	}
@@ -125,10 +139,6 @@ public class AutoTranscriber {
 		return isEmpty;
 	}
 	
-	public SessionEditor getEditor() {
-		return this.editor;
-	}
-
 	/**
 	 * Transcribe the given record.
 	 * 
@@ -215,7 +225,8 @@ public class AutoTranscriber {
 			if(!isSetTier(tier)) continue;
 			final IPATranscript newValue = autoTranscriptionMap.get(tier);
 			final IPALookupEdit edit =
-					new IPALookupEdit(getEditor(), getDictionary(), record.getOrthographyTier().toString(), tier, newValue);
+					new IPALookupEdit(getSession(), getEditorEventManager(), getTranscriber(), record, getDictionary(),
+							record.getOrthographyTier().toString(), tier, newValue, false);
 			edit.doIt();
 			retVal.addEdit(edit);
 		}

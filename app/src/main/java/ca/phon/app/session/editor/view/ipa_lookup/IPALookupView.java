@@ -18,6 +18,7 @@ package ca.phon.app.session.editor.view.ipa_lookup;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.EditorViewAdapter;
 import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.autotranscribe.AutoTranscribeCommand;
 import ca.phon.app.session.editor.view.ipa_lookup.actions.*;
 import ca.phon.ipadictionary.*;
 import ca.phon.ipadictionary.ui.*;
@@ -25,7 +26,6 @@ import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.util.Language;
 import ca.phon.util.icons.*;
-import org.apache.commons.logging.Log;
 
 import javax.swing.*;
 import javax.swing.text.*;
