@@ -1,11 +1,15 @@
 package ca.phon.app.session.editor.view.ipa_lookup;
 
+import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.plugin.*;
+import ca.phon.session.Record;
+import ca.phon.session.Session;
 import ca.phon.session.Tier;
+import ca.phon.session.Transcriber;
 
 import java.util.List;
 
@@ -32,7 +36,6 @@ public class IPALookupEdit extends TierEdit<IPATranscript> {
 	 * @param editor
 	 * @param dictionary
 	 * @param tier
-	 * @param groupIndex
 	 * @param newValue
 	 */
 	public IPALookupEdit(SessionEditor editor, IPADictionary dictionary, String orthography,
@@ -42,6 +45,16 @@ public class IPALookupEdit extends TierEdit<IPATranscript> {
 		this.dictionary = dictionary;
 		this.orthography = orthography;
 	}
+
+
+	public IPALookupEdit(Session session, EditorEventManager editorEventManager, Transcriber transcriber,
+						 Record record, IPADictionary dictionary, String orthography,
+						 Tier<IPATranscript> tier, IPATranscript newValue, boolean valueAdjusting) {
+		super(session, editorEventManager, transcriber, record, tier, newValue, valueAdjusting);
+		this.dictionary = dictionary;
+		this.orthography = orthography;
+	}
+
 
 	public String getOrthography() {
 		return this.orthography;

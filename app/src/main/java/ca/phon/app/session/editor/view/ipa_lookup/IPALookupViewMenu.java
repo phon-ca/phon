@@ -15,6 +15,7 @@
  */
 package ca.phon.app.session.editor.view.ipa_lookup;
 
+import ca.phon.app.session.editor.autotranscribe.AutoTranscribeCommand;
 import ca.phon.app.session.editor.view.ipa_lookup.actions.*;
 
 import javax.swing.*;
