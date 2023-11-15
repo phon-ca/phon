@@ -54,6 +54,8 @@ in TranscriptDocument and have matching methods in TranscriptDocumentInsertionHo
    - Insert record above/below (current transcript element index)
    - Insert comment above/below
    - Insert gem above/below
+   - Auto transcribe IPA tiers
+     - AutoTranscribeAction
 
  - Tiers
    - Add tier
@@ -98,6 +100,7 @@ Tier specific:
 
  - IPA transcript
    - cmd/ctrl+shift+t - auto transcribe
+   - Create a new AutoTranscriber obj, call autoTranscriber.transcribeTier(record, tier), returns edit, post edit
 
  - Syllabification
    - enter - begin syllabification edit mode where we lock the caret selection, any movement out of the tier, or enter, or esc will end mode

@@ -19,40 +19,34 @@ public class TranscriptViewFactory implements ViewFactory {
             kind = "componentFactory";
         }
 
-//        if () {
-//            kind = "table";
-//        }
-
         if (kind != null) {
-            if (kind.equals(AbstractDocument.ContentElementName)) {
-                var view = new TierView(elem);
-                return view;
+            switch (kind) {
+                case AbstractDocument.ContentElementName -> {
+                    return new TierView(elem);
+                }
+                case AbstractDocument.ParagraphElementName -> {
+                    return new ParagraphView(elem);
+                }
+                case AbstractDocument.SectionElementName -> {
+                    return new BoxView(elem, View.Y_AXIS);
+                }
+                case StyleConstants.ComponentElementName -> {
+                    return new ComponentView(elem);
+                }
+                case StyleConstants.IconElementName -> {
+                    return new IconView(elem);
+                }
+                case "componentFactory" -> {
+                    return new ComponentFactoryView(elem);
+                }
             }
-            else if (kind.equals(AbstractDocument.ParagraphElementName)) {
-                return new ParagraphView(elem);
-            }
-            else if (kind.equals(AbstractDocument.SectionElementName)) {
-                return new BoxView(elem, View.Y_AXIS);
-            }
-            else if (kind.equals(StyleConstants.ComponentElementName)) {
-                return new ComponentView(elem);
-            }
-            else if (kind.equals(StyleConstants.IconElementName)) {
-                return new IconView(elem);
-            }
-            else if (kind.equals("componentFactory")) {
-                return new ComponentFactoryView(elem);
-            }
-//            else if (kind.equals("table")) {
-//                return new TableView(elem);
-//            }
         }
 
         // default to text display
         return new LabelView(elem);
     }
 
-    private class TierView extends LabelView {
+    private static class TierView extends LabelView {
 
         public TierView(Element elem) {
             super(elem);
@@ -78,7 +72,7 @@ public class TranscriptViewFactory implements ViewFactory {
         }
     }
 
-    private class ComponentFactoryView extends ComponentView {
+    private static class ComponentFactoryView extends ComponentView {
         public ComponentFactoryView(Element elem) {
             super(elem);
         }

@@ -5,7 +5,6 @@ import ca.phon.app.session.editor.actions.*;
 import ca.phon.app.session.editor.search.FindAndReplacePanel;
 import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
-import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
 import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
 import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
@@ -25,21 +24,29 @@ import ca.phon.ui.DropDownIcon;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogEvent;
+import ca.phon.ui.nativedialogs.NativeDialogListener;
+import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.Language;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import org.jdesktop.swingx.HorizontalLayout;
+import org.jdesktop.swingx.JXTable;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
@@ -316,32 +323,50 @@ public class TranscriptView extends EditorView {
 
         JMenuItem viewMetadataItem = new JMenuItem();
         PhonUIAction<Void> viewMetadataAct = PhonUIAction.runnable(() -> {
-            JDialog metadataDialog = new JDialog((Frame) null, "Metadata");
-            metadataDialog.setLayout(new BorderLayout());
-
-            String[] columnNames = { "Key", "Value" };
-
-            Map<String, String> metadataMap = getTranscriptEditor().getSession().getMetadata();
-            List<String[]> metadataList = new ArrayList<>();
-            for (var pair : metadataMap.entrySet()) {
-                metadataList.add(new String[]{pair.getKey(), pair.getValue()});
-            }
-            metadataList.sort(Comparator.comparing(array -> array[0]));
-
-            System.out.println("Metadata");
-            System.out.println(metadataList);
-
-            DefaultTableModel model = new DefaultTableModel(metadataList.toArray(String[][]::new), columnNames);
-            JTable metadataTable = new JTable(model);
-            metadataTable.setGridColor(Color.BLACK);
-//            model.addTableModelListener(new TableModelListener() {
+//            JDialog metadataDialog = new JDialog(CommonModuleFrame.getCurrentFrame(), "Metadata");
+//            metadataDialog.setLayout(new BorderLayout());
+//
+//            String[] columnNames = { "Key", "Value" };
+//
+//            Map<String, String> metadataMap = getTranscriptEditor().getSession().getMetadata();
+//            List<String[]> metadataList = new ArrayList<>();
+//            for (var pair : metadataMap.entrySet()) {
+//                metadataList.add(new String[]{pair.getKey(), pair.getValue()});
+//            }
+//            metadataList.sort(Comparator.comparing(array -> array[0]));
+//
+//            System.out.println("Metadata");
+//            System.out.println(metadataList);
+//
+//            DefaultTableModel model = new DefaultTableModel(metadataList.toArray(String[][]::new), columnNames);
+//            JXTable metadataTable = new JXTable(model);
+//            metadataTable.setGridColor(Color.BLACK);
+////            model.addTableModelListener(new TableModelListener() {
+////                @Override
+////                public void tableChanged(TableModelEvent e) {
+////                    e.
+////                }
+////            });
+//            metadataDialog.add(new JScrollPane(metadataTable), BorderLayout.CENTER);
+//
+//            metadataDialog.addWindowListener(new WindowAdapter() {
 //                @Override
-//                public void tableChanged(TableModelEvent e) {
-//                    e.
+//                public void windowClosing(WindowEvent e) {
+//                    super.windowClosing(e);
+//                    // TODO: Make the dialog its own class and override close and call close from windowClosing listener
 //                }
 //            });
-            metadataDialog.add(new JScrollPane(metadataTable), BorderLayout.CENTER);
+//
+//            // TODO: Set this up
+////            ButtonBarBuilder.buildOkCancelBar();
+//
+//            metadataDialog.pack();
+//            SwingUtilities.invokeLater(metadataTable::packAll);
+//            metadataDialog.setVisible(true);
 
+
+
+            MetadataDialog metadataDialog = new MetadataDialog(CommonModuleFrame.getCurrentFrame(), "Metadata");
             metadataDialog.pack();
             metadataDialog.setVisible(true);
         });
@@ -840,4 +865,152 @@ public class TranscriptView extends EditorView {
     }
 
     //endregion Getters and Setters
+
+    private class MetadataDialog extends JDialog {
+
+        private final Map<String, String> data;
+        private JXTable metadataTable;
+        private DefaultTableModel metadataTableModel;
+
+        public MetadataDialog(Frame owner, String title) {
+            super(owner, title);
+            this.data = new HashMap<>();
+            this.data.putAll(getTranscriptEditor().getSession().getMetadata());
+
+            setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+
+            addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    System.out.println("The window is trying to close");
+
+                    if (!isMetadataChanged()) {
+                        System.out.println("No changes, closing...");
+                        dispose();
+                        return;
+                    }
+
+                    MessageDialogProperties props = new MessageDialogProperties();
+                    props.setParentWindow(CommonModuleFrame.getCurrentFrame());
+                    props.setHeader("Unsaved changes");
+                    props.setOptions(MessageDialogProperties.yesNoCancelOptions);
+                    props.setMessage("Do you want to save your changes?");
+                    props.setRunAsync(true);
+                    props.setListener(nativeDialogEvent -> {
+                        int result = nativeDialogEvent.getDialogResult();
+                        switch (result) {
+                            case NativeDialogEvent.YES_OPTION -> saveChanges();
+                            case NativeDialogEvent.NO_OPTION -> dispose();
+                        }
+                    });
+
+                    NativeDialogs.showMessageDialog(props);
+                }
+            });
+
+            init();
+        }
+
+        private void init() {
+            setLayout(new BorderLayout());
+
+            // region Button Bar
+
+            JButton okButton = new JButton();
+            PhonUIAction<Void> okAction = PhonUIAction.runnable(() -> {System.out.println("Ok");});
+            okAction.putValue(PhonUIAction.NAME, "Ok");
+            okButton.setAction(okAction);
+
+            JButton cancelButton = new JButton();
+            PhonUIAction<Void> cancelAction = PhonUIAction.runnable(this::dispose);
+            cancelAction.putValue(PhonUIAction.NAME, "Cancel");
+            cancelButton.setAction(cancelAction);
+
+            JButton addRowButton = new JButton();
+            PhonUIAction<Void> addRowAction = PhonUIAction.runnable(this::addRow);
+            addRowAction.putValue(PhonUIAction.NAME, "Add row");
+            addRowButton.setAction(addRowAction);
+
+            JButton removeRowButton = new JButton();
+            PhonUIAction<Void> removeRowAction = PhonUIAction.runnable(this::removeRow);
+            removeRowAction.putValue(PhonUIAction.NAME, "Remove row");
+            removeRowButton.setAction(removeRowAction);
+            removeRowButton.setEnabled(false);
+
+            add(ButtonBarBuilder.buildOkCancelBar(okButton, cancelButton, addRowButton, removeRowButton), BorderLayout.SOUTH);
+
+            // endregion Button Bar
+
+            String[] columnNames = { "Key", "Value" };
+
+            List<String[]> metadataList = new ArrayList<>();
+            for (var pair : data.entrySet()) {
+                metadataList.add(new String[]{pair.getKey(), pair.getValue()});
+            }
+            metadataList.sort(Comparator.comparing(array -> array[0]));
+
+            metadataTableModel = new DefaultTableModel(metadataList.toArray(String[][]::new), columnNames);
+            metadataTable = new JXTable(metadataTableModel);
+            metadataTable.setGridColor(Color.BLACK);
+            add(new JScrollPane(metadataTable), BorderLayout.CENTER);
+
+            metadataTable.getSelectionModel().addListSelectionListener(e -> {
+                removeRowButton.setEnabled(metadataTable.getSelectedRow() != -1);
+            });
+        }
+
+        private void addRow() {
+            metadataTableModel.addRow(new String[]{"",""});
+        }
+
+        private void removeRow() {
+            int selectedRow = metadataTable.getSelectedRow();
+            if (selectedRow == -1) return;
+            metadataTableModel.removeRow(selectedRow);
+            if (metadataTable.getRowCount() == 0) {
+                metadataTable.getSelectionModel().clearSelection();
+            }
+            else {
+                int newSelectedRow = Math.max(selectedRow - 1, 0);
+                metadataTable.getSelectionModel().setSelectionInterval(newSelectedRow, newSelectedRow);
+            }
+        }
+
+        private void saveChanges() {
+            if (!isMetadataChanged()) {
+                dispose();
+                return;
+            }
+
+        }
+
+        private boolean isMetadataChanged() {
+            Map<String, String> existingMetadata = getTranscriptEditor().getSession().getMetadata();
+            Map<String, String> dialogMetadata = exportTableData();
+
+            if (existingMetadata.size() != dialogMetadata.size()) return true;
+
+            for (var key : dialogMetadata.keySet()) {
+                if (!existingMetadata.containsKey(key) || !existingMetadata.get(key).equals(dialogMetadata.get(key))) return true;
+            }
+
+            return false;
+        }
+
+        private Map<String, String> exportTableData() {
+            Map<String, String> retVal = new HashMap<>();
+
+            int rowCount = metadataTableModel.getRowCount();
+            for (int i = 0; i < rowCount; i++) {
+                String key = (String) metadataTableModel.getValueAt(i, 0);
+                String value = (String) metadataTableModel.getValueAt(i, 1);
+
+                if (key != null && !key.isBlank() && value != null && !value.isBlank()) {
+                    retVal.put(key, value);
+                }
+            }
+
+            return retVal;
+        }
+    }
 }
