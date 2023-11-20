@@ -1395,7 +1395,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
 
         JMenuItem append = new JMenuItem();
         PhonUIAction<Void> appendAction = PhonUIAction.runnable(() -> {
-           System.out.println("Append");
+            appendTranscription(record, tier, transcriber);
         });
         appendAction.putValue(PhonUIAction.NAME, "Append");
         append.setAction(appendAction);
@@ -1762,6 +1762,26 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
 
         Tier<?> dummy = SessionFactory.newFactory().createTier("dummy", tier.getDeclaredType());
         dummy.setText(doc.getTierText(tier, transcriber));
+
+        SwingUtilities.invokeLater(() -> {
+            TierEdit<?> edit = new TierEdit(dataModel.getSession(), eventManager, Transcriber.VALIDATOR, record, tier, dummy.getValue());
+            edit.setValueAdjusting(false);
+            undoSupport.postEdit(edit);
+        });
+    }
+
+    /**
+     * Appends the transcription of a given transcriber to the value of the given tier
+     *
+     * @param record the record that the tier belongs to
+     * @param tier the tier that the transcription is being appended to
+     * @param transcriber the name / id of the transcriber whose transcription is appended
+     * */
+    private void appendTranscription(Record record, Tier<?> tier, String transcriber) {
+        TranscriptDocument doc = getTranscriptDocument();
+
+        Tier<?> dummy = SessionFactory.newFactory().createTier("dummy", tier.getDeclaredType());
+        dummy.setText(tier.getValue().toString() + " " + doc.getTierText(tier, transcriber));
 
         SwingUtilities.invokeLater(() -> {
             TierEdit<?> edit = new TierEdit(dataModel.getSession(), eventManager, Transcriber.VALIDATOR, record, tier, dummy.getValue());
