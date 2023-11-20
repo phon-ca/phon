@@ -224,11 +224,11 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 			if(SystemTierType.Segment.getName().equals(tierName)) continue;
 			if(SystemTierType.Notes.getName().equals(tierName)) {
 				// convert Notes to Comments
-				tierName = ca.phon.session.UserTierType.Comments.getTierName();
+				tierName = ca.phon.session.UserTierType.Comments.getPhonTierName();
 
 				// add comments to tier description if necessary
-				if(retVal.getUserTiers().getUserTierDescription(ca.phon.session.UserTierType.Comments.getTierName()) == null) {
-					final TierDescription td = factory.createTierDescription(ca.phon.session.UserTierType.Comments.getTierName(), true);
+				if(retVal.getUserTiers().getUserTierDescription(ca.phon.session.UserTierType.Comments.getPhonTierName()) == null) {
+					final TierDescription td = factory.createTierDescription(ca.phon.session.UserTierType.Comments.getPhonTierName(), true);
 					retVal.addUserTier(0, td);
 				}
 			}
@@ -528,7 +528,7 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 
 		// notes
 		if(rt.getNotes() != null) {
-			final Tier<TierData> commentsTier = factory.createTier(ca.phon.session.UserTierType.Comments.getTierName(),
+			final Tier<TierData> commentsTier = factory.createTier(ca.phon.session.UserTierType.Comments.getPhonTierName(),
 					TierData.class, new HashMap<>(), true, false);
 			try {
 				final TierData notesData = TierData.parseTierData(rt.getNotes().getContent());

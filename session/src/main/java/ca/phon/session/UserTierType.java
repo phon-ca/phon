@@ -1,10 +1,12 @@
 package ca.phon.session;
 
 import ca.phon.orthography.Orthography;
-import ca.phon.orthography.mor.Grasp;
 import ca.phon.orthography.mor.GraspTierData;
 import ca.phon.orthography.mor.MorTierData;
 import ca.phon.session.tierdata.TierData;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * An enumeration of suggested dependent tiers names and their
@@ -83,7 +85,7 @@ public enum UserTierType {
         this.alignable = alignable;
     }
 
-    public String getTierName() {
+    public String getPhonTierName() {
         return tierName;
     }
 
@@ -107,7 +109,7 @@ public enum UserTierType {
 
     public static UserTierType fromPhonTierName(String tierName, boolean ignoreCase) {
         for(UserTierType tierType:values()) {
-            if(ignoreCase ? tierType.getTierName().equalsIgnoreCase(tierName) : tierType.getTierName().equals(tierName)) {
+            if(ignoreCase ? tierType.getPhonTierName().equalsIgnoreCase(tierName) : tierType.getPhonTierName().equals(tierName)) {
                 return tierType;
             }
         }
@@ -132,4 +134,51 @@ public enum UserTierType {
         return null;
     }
 
+    /**
+     * Abbreviate given tier name to a CHAT tier name.
+     *
+     * @apram session
+     * @param tierName
+     *
+     * @return tier name for CLAN in the form of %xAAAAAAA
+     */
+    public static String determineCHATTierName(Session session, String tierName) {
+        final Map<String, String> tierNameMap = new HashMap<>();
+        for(TierDescription userTierDesc:session.getUserTiers()) {
+            final UserTierType userTierType = UserTierType.fromPhonTierName(userTierDesc.getName());
+            if(userTierType == null) {
+                String abbreviatedTierName = abbreviateTierName(userTierDesc.getName());
+                int i = 0;
+                String chatTierName = abbreviatedTierName;
+                while (tierNameMap.containsValue(chatTierName)) {
+                    ++i;
+                    if(abbreviatedTierName.length() < 7) {
+                        chatTierName = abbreviatedTierName + i;
+                    } else {
+                        chatTierName = abbreviatedTierName.substring(0, 6) + i;
+                    }
+                }
+                tierNameMap.put(userTierDesc.getName(), chatTierName);
+            } else {
+                if(userTierDesc.getName().equals(tierName)) return userTierType.getChatTierName();
+            }
+        }
+        return "%x" + tierNameMap.get(tierName);
+    }
+
+    /**
+     * CLAN requires user-defined tier names be no longer than 7 characters
+     *
+     * @return mapped tier name
+     */
+    private static String abbreviateTierName(String tierName) {
+        final StringBuilder builder = new StringBuilder();
+        for(int i = 0; i < tierName.length() && builder.length() < 7; i++) {
+            final char c = tierName.charAt(i);
+            if(!Character.isWhitespace(c)) {
+                builder.append(c);
+            }
+        }
+        return builder.toString();
+    }
 }

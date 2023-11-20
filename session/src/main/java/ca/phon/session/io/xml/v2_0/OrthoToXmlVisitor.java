@@ -15,7 +15,6 @@
  */
 package ca.phon.session.io.xml.v2_0;
 
-import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.mor.Grasp;
 import ca.phon.orthography.mor.GraspTierData;
 import ca.phon.orthography.mor.Pos;
@@ -39,14 +38,10 @@ import ca.phon.orthography.Underline;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.UserTierType;
 import ca.phon.session.io.xml.OneToOne;
-import ca.phon.session.io.xml.v2_0.*;
 import ca.phon.util.Language;
 import ca.phon.visitor.annotation.Visits;
-import jakarta.xml.bind.JAXB;
 import jakarta.xml.bind.JAXBElement;
 
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
@@ -231,12 +226,12 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 
 			// check for grasp data
 			if(userTierType == UserTierType.Mor) {
-				final GraspTierData grasp = oneToOne.getGraspTierData().get(UserTierType.Gra.getTierName());
+				final GraspTierData grasp = oneToOne.getGraspTierData().get(UserTierType.Gra.getPhonTierName());
 				if(grasp != null) {
 					writeGraspTierData(writer, xmlMorType, grasp, UserTierType.Gra.getChatTierName().substring(1));
 				}
 			} else if(userTierType == UserTierType.Trn) {
-				final GraspTierData grasp = oneToOne.getGraspTierData().get(UserTierType.Grt.getTierName());
+				final GraspTierData grasp = oneToOne.getGraspTierData().get(UserTierType.Grt.getPhonTierName());
 				if(grasp != null) {
 					writeGraspTierData(writer, xmlMorType, grasp, UserTierType.Grt.getChatTierName().substring(1));
 				}

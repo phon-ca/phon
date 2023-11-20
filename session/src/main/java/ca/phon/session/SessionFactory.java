@@ -25,7 +25,6 @@ import org.apache.logging.log4j.LogManager;
 
 import java.io.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * A factory for creating mutable session objects.
@@ -647,7 +646,7 @@ public final class SessionFactory extends ExtendableObject {
 	 * @return tierDesc
 	 */
 	public TierDescription createTierDescription(UserTierType userTier) {
-		return createTierDescription(userTier.getTierName(), userTier.getType(),
+		return createTierDescription(userTier.getPhonTierName(), userTier.getType(),
 				new LinkedHashMap<>(), !userTier.isAlignable(), false);
 	}
 

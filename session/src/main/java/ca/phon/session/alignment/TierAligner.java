@@ -1,6 +1,5 @@
 package ca.phon.session.alignment;
 
-import ca.phon.orthography.Orthography;
 import ca.phon.orthography.OrthographyElement;
 import ca.phon.orthography.mor.*;
 import ca.phon.session.Record;
@@ -95,9 +94,9 @@ public final class TierAligner {
                     final UserTierType graType = UserTierType.fromPhonTierName(tierName);
                     Tier<MorTierData> morTier = null;
                     if(graType == UserTierType.Gra) {
-                        morTier = record.getTier(UserTierType.Mor.getTierName(), MorTierData.class);
+                        morTier = record.getTier(UserTierType.Mor.getPhonTierName(), MorTierData.class);
                     } else if(graType == UserTierType.Grt) {
-                        morTier = record.getTier(UserTierType.Trn.getTierName(), MorTierData.class);
+                        morTier = record.getTier(UserTierType.Trn.getPhonTierName(), MorTierData.class);
                     }
                     if(morTier != null && morTier.hasValue()) {
                         final TierAlignment orthoMorAlignment = TierAligner.alignTiers(topTier, morTier);

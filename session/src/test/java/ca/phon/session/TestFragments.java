@@ -49,9 +49,9 @@ public class TestFragments {
         final SessionFactory factory = SessionFactory.newFactory();
         final Record record = factory.createRecord();
         record.getOrthographyTier().setText("hello world .");
-        final Tier<MorTierData> morTier = factory.createTier(UserTierType.Mor.getTierName(), MorTierData.class, new HashMap<>(), true);
+        final Tier<MorTierData> morTier = factory.createTier(UserTierType.Mor.getPhonTierName(), MorTierData.class, new HashMap<>(), true);
         morTier.setText("v|hello n|world .");
-        final Tier<GraspTierData> graTier = factory.createTier(UserTierType.Gra.getTierName(), GraspTierData.class, new HashMap<>(), true);
+        final Tier<GraspTierData> graTier = factory.createTier(UserTierType.Gra.getPhonTierName(), GraspTierData.class, new HashMap<>(), true);
         graTier.setText("0|1|FOO 1|0|BAR 3|0|PUNCT");
         record.putTier(morTier);
         record.putTier(graTier);
@@ -74,9 +74,9 @@ public class TestFragments {
         final SessionFactory factory = SessionFactory.newFactory();
         final Record record = factory.createRecord();
         record.getOrthographyTier().setText("hello world .");
-        final Tier<MorTierData> morTier = factory.createTier(UserTierType.Trn.getTierName(), MorTierData.class, new HashMap<>(), true);
+        final Tier<MorTierData> morTier = factory.createTier(UserTierType.Trn.getPhonTierName(), MorTierData.class, new HashMap<>(), true);
         morTier.setText("v|hello n|world .");
-        final Tier<GraspTierData> graTier = factory.createTier(UserTierType.Grt.getTierName(), GraspTierData.class, new HashMap<>(), true);
+        final Tier<GraspTierData> graTier = factory.createTier(UserTierType.Grt.getPhonTierName(), GraspTierData.class, new HashMap<>(), true);
         graTier.setText("0|1|FOO 1|0|BAR 3|0|PUNCT");
         record.putTier(morTier);
         record.putTier(graTier);
@@ -104,9 +104,9 @@ public class TestFragments {
         final SessionFactory factory = SessionFactory.newFactory();
         final Record record = factory.createRecord();
         record.getOrthographyTier().setText("you gonna put the choo+choo's wheel on ?");
-        final Tier<MorTierData> morTier = factory.createTier(UserTierType.Trn.getTierName(), MorTierData.class, new HashMap<>(), true);
+        final Tier<MorTierData> morTier = factory.createTier(UserTierType.Trn.getPhonTierName(), MorTierData.class, new HashMap<>(), true);
         morTier.setText("pro|you part|go-PROG~inf|to v|put&ZERO det|the n|+on|choo+on|choo~v:cop|be&3S n|wheel adv:loc|on ?");
-        final Tier<GraspTierData> graTier = factory.createTier(UserTierType.Grt.getTierName(), GraspTierData.class, new HashMap<>(), true);
+        final Tier<GraspTierData> graTier = factory.createTier(UserTierType.Grt.getPhonTierName(), GraspTierData.class, new HashMap<>(), true);
         graTier.setText("1|2|SUBJ 2|0|ROOT 3|4|INF 4|2|XCOMP 5|6|DET 6|7|SUBJ 7|4|OBJ 8|7|PRED 9|8|JCT 10|2|PUNCT");
         record.putTier(morTier);
         record.putTier(graTier);
