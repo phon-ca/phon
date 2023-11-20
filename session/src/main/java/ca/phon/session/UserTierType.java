@@ -171,7 +171,7 @@ public enum UserTierType {
      *
      * @return mapped tier name
      */
-    private static String abbreviateTierName(String tierName) {
+    public static String abbreviateTierName(String tierName) {
         final StringBuilder builder = new StringBuilder();
         for(int i = 0; i < tierName.length() && builder.length() < 7; i++) {
             final char c = tierName.charAt(i);
