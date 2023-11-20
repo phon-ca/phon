@@ -69,7 +69,7 @@ public class RenameCorpusAction extends ProjectWindowAction {
 			}
 	
 			// Create new corpus, transfer sessions over to it and delete
-			// the old corpus
+			// the oldLoc corpus
 			try {
 				project.renameCorpus(corpusName, newCorpusName);
 				

@@ -21,8 +21,6 @@ import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.common.*;
 import ca.phon.app.session.editor.view.session_information.actions.*;
 import ca.phon.media.MediaLocator;
-import ca.phon.project.Project;
-import ca.phon.script.scripttable.AbstractScriptTableModel;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.ui.action.PhonUIAction;
@@ -181,7 +179,7 @@ public class SessionInfoEditorView extends EditorView {
 		participantTable.setInputMap(WHEN_FOCUSED, participantTableInputMap);
 		participantTable.setActionMap(participantTableActionMap);
 		
-		addParticipantButton = new JButton(new NewParticipantAction(getEditor(), this));
+		addParticipantButton = new JButton(new NewParticipantAction(getEditor()));
 		addParticipantButton.setFocusable(false);
 		
 		ImageIcon editIcon = 
@@ -323,15 +321,15 @@ public class SessionInfoEditorView extends EditorView {
 			final int modelIndex = participantTable.convertRowIndexToModel(viewIndex);
 			final Participant participant = getEditor().getSession().getParticipant(modelIndex);
 			
-			builder.addItem(".", new EditParticipantAction(getEditor(), this, participant));
-			builder.addItem(".", new DeleteParticipantAction(getEditor(), this, participant));
+			builder.addItem(".", new EditParticipantAction(getEditor(), participant));
+			builder.addItem(".", new DeleteParticipantAction(getEditor(), participant));
 			
 			builder.addItem(".", new AssignUnidentifiedSpeakerAction(getEditor(), this, participant));
 			
 			builder.addSeparator(".", "participant_actions");
 		}
 		
-		builder.addItem(".", new NewParticipantAction(getEditor(), this));
+		builder.addItem(".", new NewParticipantAction(getEditor()));
 		
 		popupMenu.show(participantTable, p.x, p.y);
 	}
@@ -343,7 +341,7 @@ public class SessionInfoEditorView extends EditorView {
 		if(selectedRow >= 0 && selectedRow < getEditor().getSession().getParticipantCount()) {
 			final Participant part = getEditor().getSession().getParticipant(selectedRow);
 			
-			final EditParticipantAction act = new EditParticipantAction(getEditor(), this, part);
+			final EditParticipantAction act = new EditParticipantAction(getEditor(), part);
 			act.actionPerformed(new ActionEvent(this, 0, null));
 		}
 	}
@@ -376,7 +374,7 @@ public class SessionInfoEditorView extends EditorView {
 		if(selectedRow >= 0 && selectedRow < session.getParticipantCount()) {
 			final Participant participant = session.getParticipant(selectedRow);
 			
-			final DeleteParticipantAction act = new DeleteParticipantAction(getEditor(), this, participant);
+			final DeleteParticipantAction act = new DeleteParticipantAction(getEditor(), participant);
 			act.actionPerformed(new ActionEvent(this, 0, null));
 		}
 	}
@@ -495,13 +493,13 @@ public class SessionInfoEditorView extends EditorView {
 		for(Participant p:session.getParticipants()) {
 			final JMenu speakerMenu = new JMenu(p.getName());
 			
-			speakerMenu.add(new EditParticipantAction(getEditor(), this, p));
+			speakerMenu.add(new EditParticipantAction(getEditor(), p));
 			speakerMenu.add(new AssignUnidentifiedSpeakerAction(getEditor(), this, p));
-			speakerMenu.add(new DeleteParticipantAction(getEditor(), this, p));
+			speakerMenu.add(new DeleteParticipantAction(getEditor(), p));
 			
 			menu.add(speakerMenu);
 		}
-		menu.add(new NewParticipantAction(getEditor(), this));
+		menu.add(new NewParticipantAction(getEditor()));
 		
 		return menu;
 	}

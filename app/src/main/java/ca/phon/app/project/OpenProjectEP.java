@@ -177,7 +177,7 @@ public class OpenProjectEP implements IPluginEntryPoint {
 		final File oldPropsFile = new File(project.getLocation(), LocalProject.PREV_PROJECT_PROPERTIES_FILE);
 		final File newPropsFile = new File(project.getLocation(), LocalProject.PROJECT_PROPERTIES_FILE);
 		if(oldPropsFile.exists() && !newPropsFile.exists()) {
-			LogUtil.log(Level.INFO, "Moving old .properties file to new project.properties");
+			LogUtil.log(Level.INFO, "Moving oldLoc .properties file to new project.properties");
 			try {
 				Files.move(oldPropsFile.toPath(), newPropsFile.toPath(), StandardCopyOption.ATOMIC_MOVE);
 			} catch (IOException e) {

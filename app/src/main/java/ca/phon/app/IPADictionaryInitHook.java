@@ -50,7 +50,7 @@ public class IPADictionaryInitHook implements PhonStartupHook, IPluginExtensionP
 		System.setProperty(DERBY_LOG_PROP,
 				PrefHelper.get(DERBY_LOG_PROP, DERBY_LOG_LOCATION));
 		
-		// check for old version and copy it to the
+		// check for oldLoc version and copy it to the
 		// new application data
 		// folder
 		final File oldDbFolder = new File(PrefHelper.getUserDocumentsPhonFolder(), "ipadb");

@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.session_information.actions;
+package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.ParticipantUndoableEdit;
 import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
+import ca.phon.app.session.editor.view.session_information.actions.SessionInfoAction;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.ui.CommonModuleFrame;
@@ -27,16 +28,15 @@ import ca.phon.util.icons.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
-public class EditParticipantAction extends SessionInfoAction {
+public class EditParticipantAction extends SessionEditorAction {
 
 	private final Participant participant;
 	
 	private final ImageIcon ICON = 
 			IconManager.getInstance().getIcon("actions/edit_user", IconSize.SMALL);
 	
-	public EditParticipantAction(SessionEditor editor,
-			SessionInfoEditorView view, Participant participant) {
-		super(editor, view);
+	public EditParticipantAction(SessionEditor editor, Participant participant) {
+		super(editor);
 		this.participant = participant;
 		
 		putValue(SMALL_ICON, ICON);

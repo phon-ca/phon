@@ -283,7 +283,7 @@ public class TierEdit<T> extends SessionUndoableEdit {
 	}
 
 	/**
-	 * Fire tier change events for given tier old value and new value
+	 * Fire tier change events for given tier oldLoc value and new value
 	 *
 	 * @param tier
 	 * @param oldValue

@@ -23,7 +23,7 @@ import ca.phon.app.session.editor.actions.*;
 import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
-import ca.phon.app.session.editor.view.session_information.actions.NewParticipantAction;
+import ca.phon.app.session.editor.actions.NewParticipantAction;
 import ca.phon.app.session.editor.view.timeline.RecordGrid.GhostMarker;
 import ca.phon.app.session.editor.view.timeline.actions.*;
 import ca.phon.formatter.MsFormatter;
@@ -1216,9 +1216,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 		builder.addSeparator(".", "speaker_actions");
 
-		final NewParticipantAction newParticipantAct = new NewParticipantAction(getParentView().getEditor(),
-				(SessionInfoEditorView) getParentView().getEditor().getViewModel()
-						.getView(SessionInfoEditorView.VIEW_TITLE));
+		final NewParticipantAction newParticipantAct = new NewParticipantAction(getParentView().getEditor());
 		builder.addItem(".", newParticipantAct);
 	}
 

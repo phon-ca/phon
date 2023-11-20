@@ -39,7 +39,7 @@ public class IPALookupViewMenu extends JMenu {
 		
 		final ImportIPACommand importAct = new ImportIPACommand(lookupView);
 		add(importAct);
-		
+
 		addSeparator();
 		final AutoTranscribeAction autoTranscribeAct = new AutoTranscribeAction(
 				lookupView.getEditor().getProject(), lookupView.getEditor().getSession(),
@@ -48,5 +48,4 @@ public class IPALookupViewMenu extends JMenu {
 		);
 		add(autoTranscribeAct);
 	}
-
 }

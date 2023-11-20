@@ -126,7 +126,7 @@ public class IPALookupView extends EditorView {
 		toolbar.add(importIPABtn);
 		toolbar.add(exportIPABtn);
 		toolbar.addSeparator();
-		toolbar.add(autoTranscribeBtn);
+		//toolbar.add(autoTranscribeBtn);
 		toolbar.setFloatable(false);
 	}
 	
