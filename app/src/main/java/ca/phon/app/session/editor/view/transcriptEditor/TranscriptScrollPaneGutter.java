@@ -18,6 +18,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The gutter that is shown on the left of the {@link TranscriptScrollPane}
+ * */
 public class TranscriptScrollPaneGutter extends JComponent {
 
     private enum IconType {
@@ -28,14 +31,37 @@ public class TranscriptScrollPaneGutter extends JComponent {
     private final TranscriptEditor editor;
     private boolean showRecordNumbers = true;
     private final int DEFAULT_WIDTH = 36;
+    /**
+     * The width of the record numbers (in pixels)
+     * */
     private final int RECORD_NUMBER_WIDTH = 24;
     private final int PADDING = 4;
     private int currentRecord;
-    private Map<Rectangle, Tuple<Tier<?>, IconType>> iconRects = new HashMap();
+
+    /* Interaction Stuff */
+
+    /**
+     * A map of rectangles in screen-space to tuples of tiers and {@link IconType}
+     * */
+    private final Map<Rectangle, Tuple<Tier<?>, IconType>> iconRects = new HashMap<>();
+    /**
+     * A reference to the icon rect that the cursor is currently hovering over
+     * */
     private Rectangle currentIconRect = null;
+    /**
+     * A reference to the current hover popup
+     * */
     private Popup currentHoverPopup = null;
+    /**
+     * A reference to the current hover menu
+     * */
     private JPopupMenu currentHoverMenu = null;
 
+    /**
+     * Constructor
+     *
+     * @param editor a reference to the transcript editor
+     * */
     public TranscriptScrollPaneGutter(TranscriptEditor editor) {
         this.editor = editor;
         setPreferredSize(new Dimension(DEFAULT_WIDTH + PADDING + RECORD_NUMBER_WIDTH + PADDING, getPreferredSize().height));
@@ -83,7 +109,7 @@ public class TranscriptScrollPaneGutter extends JComponent {
                                         (int) (currentIconRect.getMaxX()),
                                         (int) (currentIconRect.getY())
                                     );
-//                                    setToolTipText("Testing\n something");
+                                    setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                                 }
                             }
 
@@ -101,6 +127,7 @@ public class TranscriptScrollPaneGutter extends JComponent {
                         case BLIND -> {
                             currentHoverMenu.setVisible(false);
                             currentHoverMenu = null;
+                            setCursor(Cursor.getDefaultCursor());
                         }
                     }
                     currentIconRect = null;
@@ -113,7 +140,6 @@ public class TranscriptScrollPaneGutter extends JComponent {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (currentIconRect != null && currentIconRect.contains(e.getPoint())) {
-                    System.out.println("Clicked on icon");
                     var clickedRectData = iconRects.get(currentIconRect);
                     IconType iconType = clickedRectData.getObj2();
                     switch (iconType) {
@@ -125,18 +151,6 @@ public class TranscriptScrollPaneGutter extends JComponent {
                 }
             }
         });
-        Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
-                @Override
-                public void eventDispatched(AWTEvent event) {
-                    KeyEvent keyEvent = (KeyEvent) event;
-                    System.out.println("Does this work?");
-                    if (keyEvent.getKeyCode() == KeyEvent.VK_F2) {
-                        System.out.println("Woo!");
-                    }
-                }
-            },
-            AWTEvent.KEY_EVENT_MASK
-        );
     }
 
     @Override
@@ -261,38 +275,56 @@ public class TranscriptScrollPaneGutter extends JComponent {
         return showRecordNumbers;
     }
 
+    /**
+     * Set whether the record numbers are showing, and resizes the gutter accordingly
+     * */
     public void setShowRecordNumbers(boolean show) {
         this.showRecordNumbers = show;
-        int newWidth = show ? DEFAULT_WIDTH + PADDING + RECORD_NUMBER_WIDTH + PADDING: DEFAULT_WIDTH + PADDING;
+        int newWidth = show ? DEFAULT_WIDTH + PADDING + RECORD_NUMBER_WIDTH + PADDING : DEFAULT_WIDTH + PADDING;
         setPreferredSize(new Dimension(newWidth, getPreferredSize().height));
         revalidate();
         repaint();
     }
 
+    /**
+     * Runs when the current record is changed.
+     * Repaints the gutter with the new current record.
+     * */
     public void onRecordChanged(EditorEvent<EditorEventType.RecordChangedData> event) {
         currentRecord = event.data().recordIndex();
         repaint();
     }
 
+    /**
+     * Runs when there are changes to tier data.
+     * Repaints te gutter.
+     * */
     public void onTierChanged(EditorEvent<EditorEventType.TierChangeData> event) {
         if(event.data().valueAdjusting()) return;
         revalidate();
         repaint();
     }
 
+    /**
+     * Sets up the tooltip for the blind tier icon
+     *
+     * @param tier the tier that the icon is referencing
+     * */
     private void setupBlindIconToolTip(Tier<?> tier) {
         TranscriptDocument doc = editor.getTranscriptDocument();
         currentHoverMenu.removeAll();
         List<String> transcribers = tier.getTranscribers();
         for (String transcriber : transcribers) {
             var blindTranscription = tier.getBlindTranscription(transcriber);
-            System.out.println(transcriber + ": " + blindTranscription.toString());
             JMenuItem item = new JMenuItem(transcriber + ": " + doc.getTierText(tier, transcriber));
             item.setEnabled(false);
             currentHoverMenu.add(item);
         }
     }
 
+    /**
+     * Sets up the menu that appears when the user clicks the blind tier icon
+     * */
     private void setupBlindIconClickMenu() {
         TranscriptDocument doc = editor.getTranscriptDocument();
 
@@ -302,7 +334,7 @@ public class TranscriptScrollPaneGutter extends JComponent {
             BlindTranscriptionExtension.VALIDATION_MODE_DEFAULT
         );
         JMenuItem toggleValidationMode = new JMenuItem();
-        PhonUIAction toggleValidationModeAction = PhonUIAction.runnable(() -> doc.putDocumentProperty(
+        PhonUIAction<Void> toggleValidationModeAction = PhonUIAction.runnable(() -> doc.putDocumentProperty(
             BlindTranscriptionExtension.VALIDATION_MODE,
             !currentValidationMode
         ));

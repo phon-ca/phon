@@ -29,14 +29,23 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * An extension that provides header tier support to the {@link TranscriptEditor}
+ * */
 public class HeaderTierExtension implements TranscriptEditorExtension {
-    private final Map<String, Tier<?>> headerTierMap = new HashMap<>();
     private TranscriptEditor editor;
     private TranscriptDocument doc;
     private Session session;
 
+    /* Document property stuff */
+
     public static final String HEADERS_VISIBLE = "isHeadersVisible";
     public static final boolean DEFAULT_HEADERS_VISIBLE = true;
+
+    /* State */
+
+    private final Map<String, Tier<?>> headerTierMap = new HashMap<>();
+
 
     @Override
     public void install(TranscriptEditor editor) {
@@ -150,6 +159,12 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
         return (boolean) doc.getDocumentPropertyOrDefault(HEADERS_VISIBLE, DEFAULT_HEADERS_VISIBLE);
     }
 
+    /**
+     * Gets a list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} that contains the data for
+     * the tiers header
+     *
+     * @return the list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} data
+     * */
     public List<DefaultStyledDocument.ElementSpec> getTiersHeader() {
 
         List<DefaultStyledDocument.ElementSpec> retVal = new ArrayList<>();
@@ -186,6 +201,11 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
         return retVal;
     }
 
+    /**
+     * Updates the tiers header when there is a change to the tier view
+     *
+     * @param event the event that caused the change to the tier view
+     * */
     public void updateTiersHeader(EditorEvent<EditorEventType.TierViewChangedData> event) {
         try {
             Tier<?> tiersHeaderTier = headerTierMap.get("tiers");
@@ -207,6 +227,12 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
         }
     }
 
+    /**
+     * Gets a list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} that contains the data for
+     * the date header
+     *
+     * @return the list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} data
+     * */
     private List<DefaultStyledDocument.ElementSpec> getDateHeader() {
         List<DefaultStyledDocument.ElementSpec> retVal = new ArrayList<>();
 
@@ -219,6 +245,11 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
         return retVal;
     }
 
+    /**
+     * Updates the date header when the session date changes
+     *
+     * @param event the event that caused the change to the session date
+     * */
     public void updateDateHeader(EditorEvent<EditorEventType.SessionDateChangedData> event) {
         try {
             Tier<?> dateHeaderTier = headerTierMap.get("date");
@@ -242,6 +273,9 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
         }
     }
 
+    /**
+     * Get whether the language header is currently being forced to be shown without any content
+     * */
     private boolean isForceShowLanguageHeader() {
         return (boolean) doc.getDocumentPropertyOrDefault("forceShowLanguageHeader", false);
     }

@@ -8,14 +8,18 @@ import javax.swing.*;
 import java.awt.*;
 
 public class TranscriptStatusBar extends JPanel {
-    private final TranscriptEditor transcriptEditor;
+
     private JLabel transcriptElementIndexLabel;
     private JLabel recordIndexLabel;
     private JLabel tierNameLabel;
     private JLabel offsetInContentLabel;
 
+    /**
+     * Constructor
+     *
+     * @param transcriptEditor the {@link TranscriptEditor} that the status bar will be connected to
+     * */
     public TranscriptStatusBar(TranscriptEditor transcriptEditor) {
-        this.transcriptEditor = transcriptEditor;
         initUI();
         transcriptEditor.addCaretListener(e -> {
             // Transcript element index
@@ -57,6 +61,9 @@ public class TranscriptStatusBar extends JPanel {
         });
     }
 
+    /**
+     * Sets up the UI for the status bar
+     * */
     private void initUI() {
 
         FormLayout layout = new FormLayout("80dlu, 50dlu, 50dlu, 50dlu", "pref");

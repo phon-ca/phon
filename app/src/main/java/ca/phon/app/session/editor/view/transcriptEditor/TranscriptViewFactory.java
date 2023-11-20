@@ -4,8 +4,10 @@ import javax.swing.text.*;
 import java.awt.*;
 import java.util.HashMap;
 
+/**
+ * The {@link ViewFactory} used by the {@link TranscriptEditor}
+ * */
 public class TranscriptViewFactory implements ViewFactory {
-    private HashMap<String, Font> fontCache = new HashMap<>();
 
     public TranscriptViewFactory() {}
 
@@ -22,7 +24,7 @@ public class TranscriptViewFactory implements ViewFactory {
         if (kind != null) {
             switch (kind) {
                 case AbstractDocument.ContentElementName -> {
-                    return new TierView(elem);
+                    return new LabelView(elem);
                 }
                 case AbstractDocument.ParagraphElementName -> {
                     return new ParagraphView(elem);
@@ -46,32 +48,10 @@ public class TranscriptViewFactory implements ViewFactory {
         return new LabelView(elem);
     }
 
-    private static class TierView extends LabelView {
-
-        public TierView(Element elem) {
-            super(elem);
-        }
-
-        @Override
-        public Font getFont() {
-            Font superFont = super.getFont();
-            return superFont;
-//            String fontString = superFont.toString();
-//
-//            Font derivedFont;
-//
-//            if (fontCache.containsKey(fontString)) {
-//                derivedFont = fontCache.get(fontString);
-//            }
-//            else {
-//                derivedFont = superFont.deriveFont(superFont.getSize() + PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
-//                fontCache.put(fontString, derivedFont);
-//            }
-//
-//            return derivedFont;
-        }
-    }
-
+    /**
+     * A {@link ComponentView} that dynamically loads components from a component factory referenced in the
+     * {@code TranscriptStyleConstants.ATTR_KEY_COMPONENT_FACTORY} attribute
+     * */
     private static class ComponentFactoryView extends ComponentView {
         public ComponentFactoryView(Element elem) {
             super(elem);

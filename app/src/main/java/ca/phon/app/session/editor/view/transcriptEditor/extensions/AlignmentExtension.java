@@ -14,14 +14,21 @@ import javax.swing.text.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * An extension that provides phone alignment support to the {@link TranscriptEditor}
+ * */
 public class AlignmentExtension implements TranscriptEditorExtension {
     private TranscriptEditor editor;
     private TranscriptDocument doc;
 
+    /* Document property stuff */
+
     public final static String ALIGNMENT_IS_VISIBLE = "isAlignmentVisible";
     public final static boolean ALIGNMENT_IS_VISIBLE_DEFAULT = false;
+
     public final static String ALIGNMENT_IS_COMPONENT = "isAlignmentComponent";
     public final static boolean ALIGNMENT_IS_COMPONENT_DEFAULT = false;
+
     public final static String ALIGNMENT_PARENT = "alignmentParent";
     public final static TierViewItem ALIGNMENT_PARENT_DEFAULT = null;
 
@@ -68,6 +75,12 @@ public class AlignmentExtension implements TranscriptEditorExtension {
         });
     }
 
+    /**
+     * Runs when tier data gets changed.
+     * If the alignment tier is the one that gets changed, update it in the doc.
+     *
+     * @param editorEvent the event that changed the tier data
+     * */
     private void onTierDataChanged(EditorEvent<EditorEventType.TierChangeData> editorEvent) {
 
         Tier<?> tier = editorEvent.data().tier();
@@ -100,6 +113,14 @@ public class AlignmentExtension implements TranscriptEditorExtension {
         }
     }
 
+    /**
+     * Gets a list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} that contains the data for the
+     * properly formatted alignment tier line
+     *
+     * @param tier a reference to the parent tier
+     * @param record a reference to the record containing the alignment tier
+     * @return the list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} data
+     * */
     public List<DefaultStyledDocument.ElementSpec> getFormattedAlignment(Tier<?> tier, Record record) {
         List<DefaultStyledDocument.ElementSpec> retVal = new ArrayList<>();
 
@@ -129,16 +150,19 @@ public class AlignmentExtension implements TranscriptEditorExtension {
         return retVal;
     }
 
+    /**
+     * Calculates which tier the alignment tier line should be parented to
+     *
+     * @return the {@link TierViewItem} associated with the calculated parent tier
+     * */
     public TierViewItem calculateAlignmentParent() {
-        List<TierViewItem> visibleTierView = editor.getSession().getTierView().stream().filter(item -> item.isVisible()).toList();
+        List<TierViewItem> visibleTierView = editor.getSession().getTierView().stream().filter(TierViewItem::isVisible).toList();
 
         var retVal = visibleTierView.stream().filter(item -> item.getTierName().equals("IPA Actual")).findFirst();
         if (retVal.isPresent()) return retVal.get();
 
         retVal = visibleTierView.stream().filter(item -> item.getTierName().equals("IPA Target")).findFirst();
-        if (retVal.isPresent()) return retVal.get();
-
-        return visibleTierView.get(visibleTierView.size()-1);
+        return retVal.orElseGet(() -> visibleTierView.get(visibleTierView.size() - 1));
     }
 
     // region Getters and Setters

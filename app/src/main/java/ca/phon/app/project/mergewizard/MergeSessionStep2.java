@@ -187,7 +187,7 @@ public class MergeSessionStep2 extends WizardStep {
 			}
 		}
 		
-		// remove any old references
+		// remove any oldLoc references
 		for(SessionPath loc:panels.keySet().toArray(new SessionPath[0])) {
 			if(!sessions.contains(loc)) {
 //				UtteranceFilterPanel panel = panels.get(loc);

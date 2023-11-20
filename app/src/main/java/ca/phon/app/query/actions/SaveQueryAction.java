@@ -169,7 +169,7 @@ public class SaveQueryAction extends HookableAction {
 					int retVal = NativeDialogs.showMessageDialog(props);
 					if(retVal == 1) return;
 					
-					// remove old query name
+					// remove oldLoc query name
 					queryHistory.getParamSetByName(queryName).setName(null);
 				}
 				try {

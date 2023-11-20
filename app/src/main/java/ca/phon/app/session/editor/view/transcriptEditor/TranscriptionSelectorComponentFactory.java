@@ -11,6 +11,9 @@ import javax.swing.*;
 import javax.swing.text.AttributeSet;
 import javax.swing.undo.UndoManager;
 
+/**
+ * The {@link ComponentFactory} that creates the selector buttons on blind transcription lines
+ * */
 public class TranscriptionSelectorComponentFactory implements ComponentFactory {
     private final Session session;
     private final EditorEventManager eventManager;
@@ -19,6 +22,9 @@ public class TranscriptionSelectorComponentFactory implements ComponentFactory {
     private final Tier<?> tier;
     private final String transcriptionText;
 
+    /**
+     * Constructor
+     * */
     public TranscriptionSelectorComponentFactory(
         Session session,
         EditorEventManager eventManager,
@@ -39,16 +45,17 @@ public class TranscriptionSelectorComponentFactory implements ComponentFactory {
     public JComponent createComponent(AttributeSet attrs) {
 
         JButton selectTranscriptionButton = new JButton();
-        PhonUIAction selectTranscriptionAction = PhonUIAction.runnable(this::selectTranscription);
+        PhonUIAction<Void> selectTranscriptionAction = PhonUIAction.runnable(this::selectTranscription);
         selectTranscriptionAction.putValue(PhonUIAction.NAME, "Select");
 
         selectTranscriptionButton.setAction(selectTranscriptionAction);
         return selectTranscriptionButton;
     }
 
+    /**
+     * Selects the transcription of the line the button is on
+     * */
     private void selectTranscription() {
-        System.out.println("Transcription selected");
-
         Tier<?> dummy = SessionFactory.newFactory().createTier("dummy", tier.getDeclaredType());
         dummy.setText(transcriptionText);
 
@@ -56,7 +63,6 @@ public class TranscriptionSelectorComponentFactory implements ComponentFactory {
             TierEdit<?> edit = new TierEdit(session, eventManager, Transcriber.VALIDATOR, record, tier, dummy.getValue());
             edit.setValueAdjusting(false);
             undoSupport.postEdit(edit);
-            System.out.println("Tier data changed event posted");
         });
     }
 }

@@ -17,6 +17,7 @@ import ca.phon.app.session.editor.view.transcriptEditor.extensions.HeaderTierExt
 import ca.phon.app.session.editor.view.transcriptEditor.extensions.SyllabificationExtension;
 import ca.phon.plugin.PluginManager;
 import ca.phon.session.*;
+import ca.phon.session.io.SessionOutputFactory;
 import ca.phon.ui.CalloutWindow;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.DropDownButton;
@@ -28,7 +29,6 @@ import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogEvent;
-import ca.phon.ui.nativedialogs.NativeDialogListener;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.Language;
 import ca.phon.util.PrefHelper;
@@ -39,31 +39,38 @@ import org.jdesktop.swingx.JXTable;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
 
+/**
+ * The {@link EditorView} that uses the {@link TranscriptEditor}
+ * */
 public class TranscriptView extends EditorView {
 
     public final static String VIEW_NAME = "Transcript Editor";
     public final static String VIEW_ICON = "blank";
     private final TranscriptEditor transcriptEditor;
     private TranscriptScrollPane transcriptScrollPane;
-    public final static String FONT_SIZE_DELTA_PROP = TranscriptView.class.getName() + ".fontSizeDelta";
-    public final static float DEFAULT_FONT_SIZE_DELTA = 0.0f;
-    public float fontSizeDelta = PrefHelper.getFloat(FONT_SIZE_DELTA_PROP, DEFAULT_FONT_SIZE_DELTA);
-    private boolean findAndReplaceVisible = false;
     private FindAndReplacePanel findAndReplacePanel;
     private JPanel centerPanel;
 
+    /* Preferences stuff */
+
+    public final static String FONT_SIZE_DELTA_PROP = TranscriptView.class.getName() + ".fontSizeDelta";
+    public final static float DEFAULT_FONT_SIZE_DELTA = 0.0f;
+
+    /* State */
+
+    public float fontSizeDelta = PrefHelper.getFloat(FONT_SIZE_DELTA_PROP, DEFAULT_FONT_SIZE_DELTA);
+    private boolean findAndReplaceVisible = false;
+
+    /**
+     * Constructor
+     * */
     public TranscriptView(SessionEditor editor) {
         super(editor);
         this.transcriptEditor = new TranscriptEditor(
@@ -93,8 +100,31 @@ public class TranscriptView extends EditorView {
             PrefHelper.getUserPreferences().putFloat(FONT_SIZE_DELTA_PROP, getFontSizeDelta());
             transcriptEditor.repaint();
         });
+
+
+        InputMap inputMap = transcriptEditor.getInputMap();
+        ActionMap actionMap = transcriptEditor.getActionMap();
+
+        KeyStroke save = KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
+        inputMap.put(save, "save");
+        PhonUIAction<Void> saveAct = PhonUIAction.runnable(() -> {
+            transcriptEditor.saveCurrentLine();
+            SwingUtilities.invokeLater(() -> new SaveSessionAction(editor).hookableActionPerformed(null));
+        });
+        actionMap.put("save", saveAct);
+
+        KeyStroke saveAs = KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | InputEvent.SHIFT_DOWN_MASK);
+        inputMap.put(saveAs, "saveAs");
+        PhonUIAction<Void> saveAsAct = PhonUIAction.runnable(() -> {
+            transcriptEditor.saveCurrentLine();
+            SwingUtilities.invokeLater(() -> new SaveAsAction(editor, new SessionOutputFactory().availableSessionIOs().get(0)).hookableActionPerformed(null));
+        });
+        actionMap.put("saveAs", saveAsAct);
     }
 
+    /**
+     * Sets up the UI
+     * */
     private void initUI() {
 
         setLayout(new BorderLayout());
@@ -116,37 +146,45 @@ public class TranscriptView extends EditorView {
         PhonUIAction<Void> sessionInfoMenuAct = PhonUIAction.eventConsumer(this::showSessionInfoMenu);
         sessionInfoMenuAct.putValue(PhonUIAction.NAME, "Session Information");
         sessionInfoMenuButton.setAction(sessionInfoMenuAct);
+        sessionInfoMenuButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         toolbar.add(sessionInfoMenuButton);
 
         JButton mediaMenuButton = new JButton();
         PhonUIAction<Void> mediaMenuAct = PhonUIAction.eventConsumer(this::showMediaMenu);
         mediaMenuAct.putValue(PhonUIAction.NAME, "Media");
         mediaMenuButton.setAction(mediaMenuAct);
+        mediaMenuButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         toolbar.add(mediaMenuButton);
 
         JButton participantsMenuButton = new JButton();
         PhonUIAction<Void> participantsMenuAct = PhonUIAction.eventConsumer(this::showParticipantsMenu);
         participantsMenuAct.putValue(PhonUIAction.NAME, "Participants");
         participantsMenuButton.setAction(participantsMenuAct);
+        participantsMenuButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         toolbar.add(participantsMenuButton);
 
         JButton transcriptMenuButton = new JButton();
         PhonUIAction<Void> transcriptMenuAct = PhonUIAction.eventConsumer(this::showTranscriptMenu);
         transcriptMenuAct.putValue(PhonUIAction.NAME, "Transcript");
         transcriptMenuButton.setAction(transcriptMenuAct);
+        transcriptMenuButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         toolbar.add(transcriptMenuButton);
 
         JButton tiersMenuButton = new JButton();
         PhonUIAction<Void> tiersMenuAct = PhonUIAction.eventConsumer(this::showTiersMenu);
         tiersMenuAct.putValue(PhonUIAction.NAME, "Tiers");
         tiersMenuAct.putValue(PhonUIAction.SMALL_ICON, new DropDownIcon(blankIcon, SwingConstants.BOTTOM));
+        tiersMenuAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
+        tiersMenuAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
         tiersMenuButton.setAction(tiersMenuAct);
         tiersMenuButton.setHorizontalTextPosition(SwingConstants.LEFT);
+        tiersMenuButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         toolbar.add(tiersMenuButton);
 
 
         JButton findReplaceButton = new JButton();
         findReplaceButton.setAction(new FindAndReplaceAction(getEditor()));
+        findReplaceButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         toolbar.add(findReplaceButton);
 
 
@@ -162,9 +200,15 @@ public class TranscriptView extends EditorView {
         fontScaleMenuAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
         fontScaleMenuAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
         fontScaleMenuButton.setAction(fontScaleMenuAct);
+        fontScaleMenuButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         toolbar.add(fontScaleMenuButton);
     }
 
+    /**
+     * Shows the font scale menu
+     *
+     * @param pae the event from the action that called the function
+     * */
     private void showFontScaleMenu(PhonActionEvent<Void> pae) {
         JPanel fontScaleMenu = new JPanel(new BorderLayout());
         fontScaleMenu.setOpaque(false);
@@ -237,6 +281,11 @@ public class TranscriptView extends EditorView {
         );
     }
 
+    /**
+     * Shows the session info menu
+     *
+     * @param pae the event from the action that called the function
+     * */
     private void showSessionInfoMenu(PhonActionEvent<Void> pae) {
         JPopupMenu menu = new JPopupMenu();
         MenuBuilder menuBuilder = new MenuBuilder(menu);
@@ -250,6 +299,11 @@ public class TranscriptView extends EditorView {
         );
     }
 
+    /**
+     * Sets up the session info menu with the given {@link MenuBuilder}
+     *
+     * @param menuBuilder the builder used to build the menu
+     * */
     private void setupSessionInformationMenu(MenuBuilder menuBuilder) {
         JMenuItem toggleHeadersItem = new JMenuItem();
         toggleHeadersItem.setAction(new ToggleHeadersVisibleAction(getEditor(), TranscriptView.this));
@@ -263,7 +317,6 @@ public class TranscriptView extends EditorView {
             }
             SwingUtilities.invokeLater(() -> {
                 int dateHeaderEnd = getTranscriptEditor().getTranscriptDocument().getGenericEnd("Date")-1;
-                System.out.println("Date header end: " + dateHeaderEnd);
                 if (dateHeaderEnd > -1) {
                     getTranscriptEditor().setCaretPosition(dateHeaderEnd);
                     getTranscriptEditor().requestFocus();
@@ -288,7 +341,6 @@ public class TranscriptView extends EditorView {
             }
             SwingUtilities.invokeLater(() -> {
                 int end = getTranscriptEditor().getTranscriptDocument().getGenericEnd("Languages")-1;
-                System.out.println("Language header tier end: " + end);
                 if (end > -1) {
                     getTranscriptEditor().setCaretPosition(end);
                     getTranscriptEditor().requestFocus();
@@ -308,9 +360,7 @@ public class TranscriptView extends EditorView {
                     var newLangList = sessionLanguages.stream().filter(item -> item != language).toList();
                     SessionLanguageEdit edit = new SessionLanguageEdit(getEditor(), newLangList);
                     getEditor().getUndoSupport().postEdit(edit);
-                    SwingUtilities.invokeLater(() -> {
-                        getTranscriptEditor().getTranscriptDocument().reload();
-                    });
+                    SwingUtilities.invokeLater(() -> getTranscriptEditor().getTranscriptDocument().reload());
                 });
                 removeLanguageAct.putValue(PhonUIAction.NAME, "Remove " + language.getPrimaryLanguage().getName());
                 removeLanguageItem.setAction(removeLanguageAct);
@@ -323,50 +373,7 @@ public class TranscriptView extends EditorView {
 
         JMenuItem viewMetadataItem = new JMenuItem();
         PhonUIAction<Void> viewMetadataAct = PhonUIAction.runnable(() -> {
-//            JDialog metadataDialog = new JDialog(CommonModuleFrame.getCurrentFrame(), "Metadata");
-//            metadataDialog.setLayout(new BorderLayout());
-//
-//            String[] columnNames = { "Key", "Value" };
-//
-//            Map<String, String> metadataMap = getTranscriptEditor().getSession().getMetadata();
-//            List<String[]> metadataList = new ArrayList<>();
-//            for (var pair : metadataMap.entrySet()) {
-//                metadataList.add(new String[]{pair.getKey(), pair.getValue()});
-//            }
-//            metadataList.sort(Comparator.comparing(array -> array[0]));
-//
-//            System.out.println("Metadata");
-//            System.out.println(metadataList);
-//
-//            DefaultTableModel model = new DefaultTableModel(metadataList.toArray(String[][]::new), columnNames);
-//            JXTable metadataTable = new JXTable(model);
-//            metadataTable.setGridColor(Color.BLACK);
-////            model.addTableModelListener(new TableModelListener() {
-////                @Override
-////                public void tableChanged(TableModelEvent e) {
-////                    e.
-////                }
-////            });
-//            metadataDialog.add(new JScrollPane(metadataTable), BorderLayout.CENTER);
-//
-//            metadataDialog.addWindowListener(new WindowAdapter() {
-//                @Override
-//                public void windowClosing(WindowEvent e) {
-//                    super.windowClosing(e);
-//                    // TODO: Make the dialog its own class and override close and call close from windowClosing listener
-//                }
-//            });
-//
-//            // TODO: Set this up
-////            ButtonBarBuilder.buildOkCancelBar();
-//
-//            metadataDialog.pack();
-//            SwingUtilities.invokeLater(metadataTable::packAll);
-//            metadataDialog.setVisible(true);
-
-
-
-            MetadataDialog metadataDialog = new MetadataDialog(CommonModuleFrame.getCurrentFrame(), "Metadata");
+            MetadataDialog metadataDialog = new MetadataDialog(CommonModuleFrame.getCurrentFrame());
             metadataDialog.pack();
             metadataDialog.setVisible(true);
         });
@@ -376,13 +383,18 @@ public class TranscriptView extends EditorView {
 
         JMenuItem showSessionInfoViewItem = new JMenuItem();
         PhonUIAction<Void> showSessionInfoViewAct = PhonUIAction.runnable(
-                () -> getEditor().getViewModel().showView(SessionInfoEditorView.VIEW_TITLE)
+            () -> getEditor().getViewModel().showView(SessionInfoEditorView.VIEW_TITLE)
         );
         showSessionInfoViewAct.putValue(PhonUIAction.NAME, "Show Session Information view");
         showSessionInfoViewItem.setAction(showSessionInfoViewAct);
         menuBuilder.addItem(".", showSessionInfoViewItem);
     }
 
+    /**
+     * Shows the media menu
+     *
+     * @param pae the event from the action that called the function
+     * */
     private void showMediaMenu(PhonActionEvent<Void> pae) {
         JPopupMenu menu = new JPopupMenu();
         MenuBuilder menuBuilder = new MenuBuilder(menu);
@@ -396,6 +408,11 @@ public class TranscriptView extends EditorView {
         );
     }
 
+    /**
+     * Sets up the media menu with the given {@link MenuBuilder}
+     *
+     * @param menuBuilder the builder used to build the menu
+     * */
     private void setupMediaMenu(MenuBuilder menuBuilder) {
         JMenuItem browseMediaItem = new JMenuItem();
         browseMediaItem.setAction(new AssignMediaAction(getEditor()));
@@ -427,6 +444,11 @@ public class TranscriptView extends EditorView {
         menuBuilder.addItem(".", showSpeechAnalysisViewItem);
     }
 
+    /**
+     * Shows the participants menu
+     *
+     * @param pae the event from the action that called the function
+     * */
     private void showParticipantsMenu(PhonActionEvent<Void> pae) {
         JPopupMenu menu = new JPopupMenu();
         MenuBuilder menuBuilder = new MenuBuilder(menu);
@@ -440,6 +462,11 @@ public class TranscriptView extends EditorView {
         );
     }
 
+    /**
+     * Sets up the participants menu with the given {@link MenuBuilder}
+     *
+     * @param menuBuilder the builder used to build the menu
+     * */
     private void setupParticipantsMenu(MenuBuilder menuBuilder) {
         JMenuItem addParticipantItem = new JMenuItem();
         addParticipantItem.setAction(new NewParticipantAction(getEditor()));
@@ -468,6 +495,11 @@ public class TranscriptView extends EditorView {
         menuBuilder.addItem(".", showSessionInfoViewItem);
     }
 
+    /**
+     * Shows the transcript menu
+     *
+     * @param pae the event from the action that called the function
+     * */
     private void showTranscriptMenu(PhonActionEvent<Void> pae) {
         JPopupMenu menu = new JPopupMenu();
         MenuBuilder menuBuilder = new MenuBuilder(menu);
@@ -481,6 +513,11 @@ public class TranscriptView extends EditorView {
         );
     }
 
+    /**
+     * Sets up the transcript menu with the given {@link MenuBuilder}
+     *
+     * @param menuBuilder the builder used to build the menu
+     * */
     private void setupTranscriptMenu(MenuBuilder menuBuilder) {
 
         SessionLocation sessionLocation = getTranscriptEditor().getCurrentSessionLocation();
@@ -577,6 +614,11 @@ public class TranscriptView extends EditorView {
         menuBuilder.addItem(".", insertGemBelowItem);
     }
 
+    /**
+     * Shows the tiers menu
+     *
+     * @param pae the event from the action that called the function
+     * */
     private void showTiersMenu(PhonActionEvent<Void> pae) {
         JPopupMenu menu = new JPopupMenu();
         MenuBuilder menuBuilder = new MenuBuilder(menu);
@@ -590,6 +632,11 @@ public class TranscriptView extends EditorView {
         );
     }
 
+    /**
+     * Sets up the tiers menu with the given {@link MenuBuilder}
+     *
+     * @param menuBuilder the builder used to build the menu
+     * */
     private void setupTiersMenu(MenuBuilder menuBuilder) {
         JMenu addTierSubmenu = menuBuilder.addMenu(".", "Add tier");
 
@@ -701,17 +748,6 @@ public class TranscriptView extends EditorView {
 
         MenuBuilder menuBuilder = new MenuBuilder(retVal);
 
-//        retVal.add(new ToggleSingleRecordAction(getEditor(), this));
-//        retVal.add(new ToggleRecordNumbersAction(getEditor(), this));
-//        retVal.add(new ToggleSyllabificationVisibleAction(getEditor(), this));
-//        retVal.add(new ToggleSyllabificationIsComponent(getEditor(), this));
-//        retVal.add(new ToggleAlignmentVisibleAction(getEditor(), this));
-//        retVal.add(new ToggleAlignmentIsComponentAction(getEditor(), this));
-//        retVal.add(new ToggleValidationModeAction(getEditor(), this));
-//        retVal.add(new ToggleHeadersVisibleAction(getEditor(), this));
-//        retVal.add(new FindAndReplaceAction(getEditor()));
-//        retVal.add(new ExportAsPDFAction(getEditor(), this));
-
         setupSessionInformationMenu(new MenuBuilder(menuBuilder.addMenu(".", "Session information")));
         setupMediaMenu(new MenuBuilder(menuBuilder.addMenu(".", "Media")));
         setupParticipantsMenu(new MenuBuilder(menuBuilder.addMenu(".", "Participants")));
@@ -813,7 +849,6 @@ public class TranscriptView extends EditorView {
 
     public void setFindAndReplaceVisible(boolean findAndReplaceVisible) {
         this.findAndReplaceVisible = findAndReplaceVisible;
-        System.out.println("Find and replace visible?: " + findAndReplaceVisible);
         if (findAndReplaceVisible) {
             var editor = getEditor();
             findAndReplacePanel = new FindAndReplacePanel(
@@ -866,14 +901,21 @@ public class TranscriptView extends EditorView {
 
     //endregion Getters and Setters
 
+    /**
+     * The dialog that shows the metadata for the session
+     * */
     private class MetadataDialog extends JDialog {
-
         private final Map<String, String> data;
         private JXTable metadataTable;
         private DefaultTableModel metadataTableModel;
 
-        public MetadataDialog(Frame owner, String title) {
-            super(owner, title);
+        /**
+         * Constructor
+         *
+         * @param owner the window that this dialog was opened from
+         * */
+        public MetadataDialog(Frame owner) {
+            super(owner, "Metadata");
             this.data = new HashMap<>();
             this.data.putAll(getTranscriptEditor().getSession().getMetadata());
 
@@ -882,10 +924,8 @@ public class TranscriptView extends EditorView {
             addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosing(WindowEvent e) {
-                    System.out.println("The window is trying to close");
 
                     if (!isMetadataChanged()) {
-                        System.out.println("No changes, closing...");
                         dispose();
                         return;
                     }
@@ -911,13 +951,16 @@ public class TranscriptView extends EditorView {
             init();
         }
 
+        /**
+         * Sets up the UI
+         * */
         private void init() {
             setLayout(new BorderLayout());
 
             // region Button Bar
 
             JButton okButton = new JButton();
-            PhonUIAction<Void> okAction = PhonUIAction.runnable(() -> {System.out.println("Ok");});
+            PhonUIAction<Void> okAction = PhonUIAction.runnable(this::saveChanges);
             okAction.putValue(PhonUIAction.NAME, "Ok");
             okButton.setAction(okAction);
 
@@ -941,6 +984,8 @@ public class TranscriptView extends EditorView {
 
             // endregion Button Bar
 
+            // region Table
+
             String[] columnNames = { "Key", "Value" };
 
             List<String[]> metadataList = new ArrayList<>();
@@ -954,15 +999,23 @@ public class TranscriptView extends EditorView {
             metadataTable.setGridColor(Color.BLACK);
             add(new JScrollPane(metadataTable), BorderLayout.CENTER);
 
-            metadataTable.getSelectionModel().addListSelectionListener(e -> {
-                removeRowButton.setEnabled(metadataTable.getSelectedRow() != -1);
-            });
+            metadataTable.getSelectionModel().addListSelectionListener(e ->
+                removeRowButton.setEnabled(metadataTable.getSelectedRow() != -1)
+            );
+
+            // endregion Table
         }
 
+        /**
+         * Adds an empty row to the metadata table
+         * */
         private void addRow() {
             metadataTableModel.addRow(new String[]{"",""});
         }
 
+        /**
+         * Removes the selected row from the metadata table
+         * */
         private void removeRow() {
             int selectedRow = metadataTable.getSelectedRow();
             if (selectedRow == -1) return;
@@ -976,14 +1029,22 @@ public class TranscriptView extends EditorView {
             }
         }
 
+        /**
+         * Saves the changes from the table to the sessions metadata
+         * */
         private void saveChanges() {
-            if (!isMetadataChanged()) {
-                dispose();
-                return;
+            if (isMetadataChanged()) {
+                EditSessionMetadata edit = new EditSessionMetadata(getEditor(), exportTableData());
+                getEditor().getUndoSupport().postEdit(edit);
             }
-
+            dispose();
         }
 
+        /**
+         * Checks if the metadata from the table is different from the sessions current metadata
+         *
+         * @return if there were any differences
+         * */
         private boolean isMetadataChanged() {
             Map<String, String> existingMetadata = getTranscriptEditor().getSession().getMetadata();
             Map<String, String> dialogMetadata = exportTableData();
@@ -997,6 +1058,11 @@ public class TranscriptView extends EditorView {
             return false;
         }
 
+        /**
+         * Converts the data from the table into a map using the appropriate keys and values
+         *
+         * @return the converted map
+         * */
         private Map<String, String> exportTableData() {
             Map<String, String> retVal = new HashMap<>();
 

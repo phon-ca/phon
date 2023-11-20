@@ -89,7 +89,7 @@ public class TranscriptEditorCaret extends DefaultCaret {
                     Rectangle clip = g.getClipBounds();
 
                     if (clip != null && !clip.contains(this)) {
-                        // Clip doesn't contain the old location, force it
+                        // Clip doesn't contain the oldLoc location, force it
                         // to be repainted lest we leave a caret around.
                         repaint();
                     }

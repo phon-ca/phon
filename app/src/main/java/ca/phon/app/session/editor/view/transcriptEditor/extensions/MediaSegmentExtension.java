@@ -19,13 +19,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Media segment extensions for the {@link TranscriptEditor}
+ * An extension that provides media segment support to the {@link TranscriptEditor}
  */
 public class MediaSegmentExtension implements TranscriptEditorExtension {
-
     private TranscriptEditor editor;
+
+    /* State */
+
     private MediaSegment selectedSegment = null;
 
+    /**
+     * Constructor
+     * */
     public MediaSegmentExtension() {
         super();
     }
@@ -50,7 +55,10 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
         });
     }
 
-    // Add playback when pressing space while caret is inside a media segment
+    /**
+     * A {@link KeyAdapter} that lets the user toggle playback of a segment by pressing space
+     * when a segment is selected
+     * */
     private final KeyAdapter onSpace = new KeyAdapter() {
         @Override
         public void keyPressed(KeyEvent e) {
@@ -66,6 +74,9 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
         }
     };
 
+    /**
+     * A {@link CaretListener} that handles segment selection when the caret moves into and out of segments
+     * */
     private final CaretListener onCaretMove = new CaretListener() {
         @Override
         public void caretUpdate(CaretEvent e) {
@@ -82,20 +93,14 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
             }
 
             if (segment != null) {
-                System.out.println("Segment is present");
                 if (!segment.equals(selectedSegment)) {
-                    System.out.println(segment);
-                    System.out.println("Select segment");
                     selectedSegment = segment;
                     var segmentBounds = doc.getSegmentBounds(segment, segmentIncludedPos);
                     editor.boxSelectBounds(segmentBounds);
                 }
             }
             else {
-                System.out.println("Segment is not present");
-                System.out.println("Selected segment is null?: " + selectedSegment == null);
                 if (selectedSegment != null) {
-                    System.out.println("Deselect segment");
                     editor.removeCurrentBoxSelect();
                     selectedSegment = null;
                 }
@@ -103,6 +108,11 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
         }
     };
 
+    /**
+     * Shows the segment edit callout
+     *
+     * @param segment the segment that will be editable in the callout
+     * */
     private void showSegmentEditCallout(MediaSegment segment) {
         var segmentEditor = new SegmentEditorPopup(editor.getMediaModel(), segment);
         segmentEditor.setPreferredSize(new Dimension(segmentEditor.getPreferredPopupWidth(), (int) segmentEditor.getPreferredSize().getHeight()));
@@ -118,9 +128,6 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
 
             point.x += editor.getLocationOnScreen().x;
             point.y += editor.getLocationOnScreen().y;
-
-            System.out.println(point);
-            System.out.println(editor.getLocationOnScreen());
 
             CalloutWindow.showCallout(
                 CommonModuleFrame.getCurrentFrame(),
