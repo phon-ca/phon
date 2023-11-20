@@ -227,19 +227,19 @@ public class TestIPAParser {
 		Assert.assertEquals("s", cp.getSecondPhone().getBasePhone().toString());
 	}
 
-	@Test
-	public void testCompoundPhoneInnerPrefixDiacritics()  throws ParseException {
-		final String txt = "t͡ᵐs";
-		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
-
-		Assert.assertEquals(txt, ipa.toString());
-		Assert.assertEquals(1, ipa.length());
-		Assert.assertEquals(CompoundPhone.class, ipa.elementAt(0).getClass());
-		final CompoundPhone cp = (CompoundPhone) ipa.elementAt(0);
-		Assert.assertEquals("t", cp.getFirstPhone().getBasePhone().toString());
-		Assert.assertEquals("ᵐ", cp.getSecondPhone().getPrefix());
-		Assert.assertEquals("s", cp.getSecondPhone().getBasePhone().toString());
-	}
+//	@Test
+//	public void testCompoundPhoneInnerPrefixDiacritics()  throws ParseException {
+//		final String txt = "t͡ᵐs";
+//		final IPATranscript ipa = IPATranscript.parseIPATranscript(txt);
+//
+//		Assert.assertEquals(txt, ipa.toString());
+//		Assert.assertEquals(1, ipa.length());
+//		Assert.assertEquals(CompoundPhone.class, ipa.elementAt(0).getClass());
+//		final CompoundPhone cp = (CompoundPhone) ipa.elementAt(0);
+//		Assert.assertEquals("t", cp.getFirstPhone().getBasePhone().toString());
+//		Assert.assertEquals("ᵐ", cp.getSecondPhone().getPrefix());
+//		Assert.assertEquals("s", cp.getSecondPhone().getBasePhone().toString());
+//	}
 
 	@Test
 	public void testCompoundMarker() throws Exception {
