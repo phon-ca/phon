@@ -33,9 +33,9 @@
 
     <!-- region Session header -->
     <xs:element name="session" type="SessionType">
-        <xs:key name="uIDKey">
+        <xs:key name="IDKey">
             <xs:selector xpath="transcript/r"/>
-            <xs:field xpath="@uuid"/>
+            <xs:field xpath="@id"/>
         </xs:key>
 
         <xs:key name="partIDKey">
@@ -53,36 +53,15 @@
             <xs:field xpath="@id"/>
         </xs:key>
 
-        <xs:keyref refer="transcriberKey" name="transcriberTargetKeyRef">
+        <xs:keyref refer="transcriberKey" name="transcriberKeyRef">
             <xs:selector xpath="transcript/r/*/blindTranscription"/>
             <xs:field xpath="@transcriber"/>
-        </xs:keyref>
-
-        <xs:keyref refer="transcriberKey" name="transcriberActualKeyRef">
-            <xs:selector xpath="transcript/r/*/blindTranscription"/>
-            <xs:field xpath="@transcriber"/>
-        </xs:keyref>
-
-        <xs:key name="userTierKey">
-            <xs:selector xpath="userTiers/userTier"/>
-            <xs:field xpath="@tierName"/>
-        </xs:key>
-
-        <xs:keyref refer="userTierKey" name="groupTierKeyRef">
-            <xs:selector xpath="transcript/r/flatTier"/>
-            <xs:field xpath="@tierName"/>
-        </xs:keyref>
-
-        <xs:keyref refer="userTierKey" name="recTierKeyRef">
-            <xs:selector xpath="transcript/r/groupTier"/>
-            <xs:field xpath="@tierName"/>
         </xs:keyref>
     </xs:element>
 
-
     <xs:element name="date" type="xs:date"/>
     <xs:element name="languages" type="listOfLanguages"/>
-    <xs:element name="media" type="xs:string"/>
+    <xs:element name="mediaLocation" type="xs:string"/>
     <xs:complexType name="SessionType">
         <xs:annotation>
             <xs:documentation>A recording session.</xs:documentation>
@@ -108,7 +87,7 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element ref="media" minOccurs="0">
+            <xs:element ref="mediaLocation" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>
                         <a href="https://www.phon.ca/phon-manual/session_editor/session_information_view.html">Phon manual section on this topic...</a>
@@ -264,9 +243,9 @@
     </xs:simpleType>
 
     <xs:simpleType name="ageType">
-        <xs:restriction base="xs:duration">
+        <xs:restriction base="xs:string">
             <!-- Negative durations are not allowed, must start with 'P' -->
-            <xs:pattern value="^P.+"/>
+            <xs:pattern value="P([0-9]+Y)?([0-9]+M)?([0-9]+D)?"/>
         </xs:restriction>
     </xs:simpleType>
 
@@ -367,7 +346,7 @@
                 <xs:element ref="subtypeExpr"/>
             </xs:choice>
         </xs:sequence>
-        <xs:attribute name="tierName" type="xs:ID"/>
+        <xs:attribute name="tierName" type="nonemptyStringType"/>
         <xs:attribute name="type" type="userTierTypeType" default="default"/>
         <xs:attribute name="excludeFromAlignment" type="xs:boolean" default="false"/>
     </xs:complexType>
@@ -878,7 +857,7 @@
             <xs:element ref="userTier" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="speaker" type="xs:IDREF"/>
-        <xs:attribute name="uuid" type="nonemptyStringType"/>
+        <xs:attribute name="id" type="xs:ID" use="optional"/>
         <xs:attribute name="excludeFromSearches" type="xs:boolean" default="false"/>
     </xs:complexType>
     <!-- endregion Records -->
@@ -954,6 +933,9 @@
             <xs:element ref="u"/>
             <xs:element ref="pho"/>
             <xs:element ref="tierData"/>
+            <xs:element ref="pm" minOccurs="1" maxOccurs="unbounded"/>
+            <xs:element ref="mors"/>
+            <xs:element ref="gras"/>
             <xs:element ref="unparsed"/>
         </xs:choice>
         <xs:attribute name="transcriber" type="xs:string"/>
@@ -974,8 +956,9 @@
                 <a href="https://www.phon.ca/phon-manual/session_editor/syllabification_and_alignment_view.html?hl=syllabification">Phon manual section on this topic...</a>
             </xs:documentation>
         </xs:annotation>
-        <xs:sequence minOccurs="1" maxOccurs="unbounded">
-            <xs:element ref="pm"/>
+        <xs:sequence>
+            <xs:element ref="pm" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="blindTranscription" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -1521,6 +1504,7 @@
 
     <!-- region CHAT utterance -->
     <xs:element name="u" type="utteranceType"/>
+    <xs:element name="media" type="mediaType"/>
     <xs:complexType name="utteranceType" mixed="false">
         <xs:annotation>
             <xs:documentation>A single utterance</xs:documentation>
@@ -1550,6 +1534,7 @@
             </xs:choice>
             <xs:element ref="t" minOccurs="0" maxOccurs="1"/>
             <xs:element ref="postcode" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="media" minOccurs="0" maxOccurs="1"/>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element ref="k"/>
                 <xs:element ref="error"/>
