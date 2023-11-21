@@ -26,6 +26,9 @@ public class DefaultEditorExtensionProvider implements ExtensionProvider {
 
             final HeaderTierExtension headerTierExtension = new HeaderTierExtension();
             headerTierExtension.install(editor);
+
+            final AutoTranscriptionExtension autoTranscriptionExtension = new AutoTranscriptionExtension();
+            autoTranscriptionExtension.install(editor);
         }
     }
 

@@ -176,6 +176,7 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 		final XmlTranscriptType transcript = factory.createXmlTranscriptType();
 		retVal.setTranscript(transcript);
 		// session data
+		int recordIndex = 0;
 		for(int i = 0; i < session.getTranscript().getNumberOfElements(); i++) {
 			final var ele = session.getTranscript().getElementAt(i);
 			if(ele.isComment()) {
@@ -187,6 +188,7 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 				transcript.getROrCommentOrGem().add(gemType);
 			} else if(ele.isRecord()) {
 				final XmlRecordType recordType = writeRecord(factory, retVal, ele.asRecord());
+				recordType.setId(String.format("u%d", recordIndex++));
 				transcript.getROrCommentOrGem().add(recordType);
 			} else {
 				// should not happen
@@ -580,20 +582,20 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 
 		// ipa
 		final Tier<IPATranscript> ipaTarget = record.getIPATargetTier();
-		if(ipaTarget.hasValue() && ipaTarget.getValue().length() > 0) {
+		if(ipaTarget.isUnvalidated() || (ipaTarget.hasValue() && ipaTarget.getValue().length() > 0)) {
 			final XmlIpaTierType targetType = writeIPATier(factory, ipaTarget);
 			retVal.setIpaTarget(targetType);
 		}
 
 		final Tier<IPATranscript> ipaActual = record.getIPAActualTier();
-		if(ipaActual.hasValue() && ipaActual.getValue().length() > 0) {
+		if(ipaActual.isUnvalidated() || (ipaActual.hasValue() && ipaActual.getValue().length() > 0)) {
 			final XmlIpaTierType actualType = writeIPATier(factory, ipaActual);
 			retVal.setIpaActual(actualType);
 		}
 
 		// notes
 		final Tier<TierData> notesTier = record.getNotesTier();
-		if(notesTier.hasValue() && notesTier.getValue().length() > 0) {
+		if(notesTier.isUnvalidated() || (notesTier.hasValue() && notesTier.getValue().length() > 0)) {
 			final XmlNotesTierType notesTierType = writeNotesTier(factory, notesTier);
 			retVal.setNotes(notesTierType);
 		}
@@ -611,7 +613,7 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 
 		for(String tierName:record.getUserDefinedTierNames()) {
 			Tier<?> userTier = record.getTier(tierName);
-			if(userTier != null && userTier.hasValue() && !userTier.getValue().toString().isEmpty()) {
+			if(userTier != null && (userTier.isUnvalidated() || (userTier.hasValue() && !userTier.getValue().toString().isEmpty()))) {
 				final XmlUserTierType utt = writeUserTier(factory, userTier);
 				utt.setName(userTier.getName());
 				retVal.getUserTier().add(utt);

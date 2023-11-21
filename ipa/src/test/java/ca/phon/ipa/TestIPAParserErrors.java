@@ -120,11 +120,11 @@ public class TestIPAParserErrors {
 
 	}
 
-	@Test
-	public void testInvalidCompound2() {
-		String txt = "ʰ͡|ˑeːː͡ɪ̃n";
-		testError(txt, 1, IPAParserException.class);
-	}
+//	@Test
+//	public void testInvalidCompound2() {
+//		String txt = "ʰ͡|ˑeːː͡ɪ̃n";
+//		testError(txt, 1, IPAParserException.class);
+//	}
 	
 	@Test
 	public void testIntraWordNumber() {

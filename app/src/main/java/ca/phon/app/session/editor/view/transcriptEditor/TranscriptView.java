@@ -2,6 +2,7 @@ package ca.phon.app.session.editor.view.transcriptEditor;
 
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.actions.*;
+import ca.phon.app.session.editor.autotranscribe.AutoTranscribeAction;
 import ca.phon.app.session.editor.search.FindAndReplacePanel;
 import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
@@ -612,6 +613,17 @@ public class TranscriptView extends EditorView {
         insertGemBelowAct.putValue(PhonUIAction.NAME, "Insert gem below");
         insertGemBelowItem.setAction(insertGemBelowAct);
         menuBuilder.addItem(".", insertGemBelowItem);
+
+
+        JMenuItem autoTranscribeItem = new JMenuItem();
+        autoTranscribeItem.setAction(new AutoTranscribeAction(
+            getEditor().getProject(),
+            getEditor().getSession(),
+            getEditor().getEventManager(),
+            getEditor().getUndoSupport(),
+            getEditor().getDataModel().getTranscriber()
+        ));
+        menuBuilder.addItem(".", autoTranscribeItem);
     }
 
     /**
@@ -718,7 +730,7 @@ public class TranscriptView extends EditorView {
         menuBuilder.addItem(".", toggleBlindTiersItem);
 
         JMenuItem toggleChatTierNamesItem = new JMenuItem();
-        PhonUIAction<Void> toggleChatTierNamesAct = PhonUIAction.runnable(() -> {System.out.println("Toggle chat tier names");});
+        PhonUIAction<Void> toggleChatTierNamesAct = PhonUIAction.runnable(this::toggleChatTierNamesShown);
         toggleChatTierNamesAct.putValue(PhonUIAction.NAME, "Toggle chat tier names");
         toggleChatTierNamesItem.setAction(toggleChatTierNamesAct);
         menuBuilder.addItem(".", toggleChatTierNamesItem);
@@ -897,6 +909,14 @@ public class TranscriptView extends EditorView {
             HeaderTierExtension.HEADERS_VISIBLE,
             !isHeadersVisible()
         );
+    }
+
+    public boolean isChatTierNamesShown() {
+        return transcriptEditor.getTranscriptDocument().isChatTierNamesShown();
+    }
+
+    public void toggleChatTierNamesShown() {
+        transcriptEditor.getTranscriptDocument().setChatTierNamesShown(!isChatTierNamesShown());
     }
 
     //endregion Getters and Setters

@@ -18,6 +18,9 @@ import java.awt.event.KeyEvent;
 import java.util.*;
 import java.util.List;
 
+/**
+ * An extension that provides syllabification support to the {@link TranscriptEditor}
+ * */
 public class SyllabificationExtension implements TranscriptEditorExtension {
     private TranscriptEditor editor;
     private TranscriptDocument doc;
@@ -46,6 +49,12 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
         this.editor = editor;
         this.doc = editor.getTranscriptDocument();
 
+        PhonUIAction<Void> syllabificationEditModeAct = PhonUIAction.runnable(() -> {
+            String tierName = editor.getCurrentSessionLocation().getLabel();
+            if (!tierName.equals(SystemTierType.TargetSyllables.getName()) && !tierName.equals(SystemTierType.ActualSyllables.getName())) return;
+            setSyllabificationEditMode(!syllabificationEditMode);
+        });
+
         doc.addInsertionHook(new DefaultInsertionHook() {
             @Override
             public List<DefaultStyledDocument.ElementSpec> endTier(MutableAttributeSet attrs) {
@@ -70,6 +79,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                         // Set up the tier attributes for the dummy tier
                         attrs = new SimpleAttributeSet(attrs);
                         attrs.addAttributes(doc.getTierAttributes(syllableTier));
+                        attrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_ENTER_ACTION, syllabificationEditModeAct);
                         // Set up the attributes for its label
                         SimpleAttributeSet syllabificationLabelAttrs = doc.getTierLabelAttributes(syllableTier);
                         Record record = (Record) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
@@ -101,15 +111,9 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
             }
         });
 
+
         InputMap inputMap = editor.getInputMap();
         ActionMap actionMap = editor.getActionMap();
-
-        PhonUIAction<Void> enterAct = PhonUIAction.runnable(() -> {
-            String tierName = editor.getCurrentSessionLocation().getLabel();
-            if (!tierName.equals(SystemTierType.TargetSyllables.getName()) && !tierName.equals(SystemTierType.ActualSyllables.getName())) return;
-            setSyllabificationEditMode(!syllabificationEditMode);
-        });
-        actionMap.put("pressedEnter", enterAct);
 
         KeyStroke esc = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
         inputMap.put(esc, "pressedEsc");

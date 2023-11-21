@@ -242,12 +242,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         inputMap.put(end, "pressedEnd");
         PhonUIAction<Void> endAct = PhonUIAction.runnable(this::onPressedEnd);
         actionMap.put("pressedEnd", endAct);
-
-
-        KeyStroke autoTranscription = KeyStroke.getKeyStroke(KeyEvent.VK_T, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | InputEvent.SHIFT_DOWN_MASK);
-        inputMap.put(autoTranscription, "autoTranscription");
-        PhonUIAction<Void> autoTranscriptionAct = PhonUIAction.runnable(this::autoTranscription);
-        actionMap.put("autoTranscription", autoTranscriptionAct);
     }
 
     /**
@@ -659,25 +653,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         }
         if (end != -1) {
             setCaretPosition(end-1);
-        }
-    }
-
-    /**
-     * Automatically transcribes an IPA tier if the caret is currently in one
-     * */
-    public void autoTranscription() {
-        SessionLocation sessionLocation = getCurrentSessionLocation();
-        Transcript.Element elem = getSession().getTranscript().getElementAt(sessionLocation.getElementIndex());
-        if (!elem.isRecord()) return;
-        Record record = elem.asRecord();
-        String tierName = sessionLocation.getLabel();
-        if (elem.isRecord() && record.hasTier(tierName)) {
-            Tier<?> tier = record.getTier(tierName);
-            if (!tier.getDeclaredType().equals(IPATranscript.class)) return;
-
-            AutoTranscriber autoTranscriber = new AutoTranscriber(getSession(), getEventManager());
-            IPALookupEdit edit = autoTranscriber.transcribeTier(record, (Tier<IPATranscript>) tier);
-            getUndoSupport().postEdit(edit);
         }
     }
 

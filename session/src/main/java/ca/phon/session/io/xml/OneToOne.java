@@ -2,7 +2,6 @@ package ca.phon.session.io.xml;
 
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.*;
-import ca.phon.orthography.mor.Grasp;
 import ca.phon.orthography.mor.GraspTierData;
 import ca.phon.orthography.mor.Mor;
 import ca.phon.session.Record;
@@ -108,21 +107,21 @@ public class OneToOne {
                 final Map<String, GraspTierData> graMap = new LinkedHashMap<>();
                 final Map<String, IPATranscript> ipaMap = new LinkedHashMap<>();
                 // check for mor tiers and their corresponding grasp tiers
-                if (alignedElements.containsKey(UserTierType.Mor.getTierName())) {
-                    final Mor mor = (Mor) alignedElements.get(UserTierType.Mor.getTierName());
-                    morMap.put(UserTierType.Mor.getTierName(), mor);
+                if (alignedElements.containsKey(UserTierType.Mor.getPhonTierName())) {
+                    final Mor mor = (Mor) alignedElements.get(UserTierType.Mor.getPhonTierName());
+                    morMap.put(UserTierType.Mor.getPhonTierName(), mor);
                 }
-                if (alignedElements.containsKey(UserTierType.Gra.getTierName())) {
-                    final GraspTierData grasp = (GraspTierData) alignedElements.get(UserTierType.Gra.getTierName());
-                    graMap.put(UserTierType.Gra.getTierName(), grasp);
+                if (alignedElements.containsKey(UserTierType.Gra.getPhonTierName())) {
+                    final GraspTierData grasp = (GraspTierData) alignedElements.get(UserTierType.Gra.getPhonTierName());
+                    graMap.put(UserTierType.Gra.getPhonTierName(), grasp);
                 }
-                if (alignedElements.containsKey(UserTierType.Trn.getTierName())) {
-                    final Mor mor = (Mor) alignedElements.get(UserTierType.Trn.getTierName());
-                    morMap.put(UserTierType.Trn.getTierName(), mor);
+                if (alignedElements.containsKey(UserTierType.Trn.getPhonTierName())) {
+                    final Mor mor = (Mor) alignedElements.get(UserTierType.Trn.getPhonTierName());
+                    morMap.put(UserTierType.Trn.getPhonTierName(), mor);
                 }
-                if (alignedElements.containsKey(UserTierType.Grt.getTierName())) {
-                    final GraspTierData grasp = (GraspTierData) alignedElements.get(UserTierType.Grt.getTierName());
-                    graMap.put(UserTierType.Grt.getTierName(), grasp);
+                if (alignedElements.containsKey(UserTierType.Grt.getPhonTierName())) {
+                    final GraspTierData grasp = (GraspTierData) alignedElements.get(UserTierType.Grt.getPhonTierName());
+                    graMap.put(UserTierType.Grt.getPhonTierName(), grasp);
                 }
 
                 // ipa tiers

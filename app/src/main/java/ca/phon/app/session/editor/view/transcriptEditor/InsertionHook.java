@@ -39,7 +39,7 @@ public interface InsertionHook {
 
     List<DefaultStyledDocument.ElementSpec> endRecordHeader();
 
-    List<DefaultStyledDocument.ElementSpec> beginTier();
+    List<DefaultStyledDocument.ElementSpec> startTier();
 
     List<DefaultStyledDocument.ElementSpec> endTier(MutableAttributeSet attrs);
 }

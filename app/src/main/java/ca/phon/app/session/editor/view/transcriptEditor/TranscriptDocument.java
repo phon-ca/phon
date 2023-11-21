@@ -6,7 +6,6 @@ import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.formatter.MediaTimeFormatStyle;
-import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.InternalMedia;
 import ca.phon.orthography.Orthography;
@@ -19,8 +18,6 @@ import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.session.format.MediaSegmentFormatter;
 import ca.phon.session.tierdata.*;
-import ca.phon.syllable.SyllabificationInfo;
-import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.ui.FontFormatter;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.*;
@@ -74,6 +71,10 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * The set of "not editable" attributes
      * */
     private final Set<String> notEditableAttributes;
+    /**
+     * Whether the tier labels show the chat tier names or the regular tier names
+     * */
+    private boolean chatTierNamesShown = false;
 
     /**
      * extension support
@@ -240,6 +241,15 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * */
     public void setBypassDocumentFilter(boolean bypassDocumentFilter) {
         this.bypassDocumentFilter = bypassDocumentFilter;
+    }
+
+    public boolean isChatTierNamesShown() {
+        return chatTierNamesShown;
+    }
+
+    public void setChatTierNamesShown(boolean chatTierNamesShown) {
+        this.chatTierNamesShown = chatTierNamesShown;
+        reload();
     }
 
     // endregion Getters and Setters
@@ -951,6 +961,24 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             Transcript transcript,
             List<TierViewItem> tierView
     ) {
+
+        List<ElementSpec> additionalInsertions = new ArrayList<>();
+        for (var hook : getInsertionHooks()) {
+            additionalInsertions.addAll(hook.startRecord());
+        }
+        if (!additionalInsertions.isEmpty()) {
+            batch.addAll(additionalInsertions);
+            additionalInsertions.clear();
+        }
+
+        for (var hook : getInsertionHooks()) {
+            additionalInsertions.addAll(hook.startRecordHeader());
+        }
+        if (!additionalInsertions.isEmpty()) {
+            batch.addAll(additionalInsertions);
+            additionalInsertions.clear();
+        }
+
         int recordIndex = transcript.getRecordPosition(record);
         SimpleAttributeSet recordAttrs = getRecordAttributes(recordIndex);
 
@@ -980,6 +1008,14 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         appendFormattedSegment(segment, tierAttrs);
         appendBatchLineFeed(tierAttrs);
 
+        for (var hook : getInsertionHooks()) {
+            additionalInsertions.addAll(hook.endRecordHeader());
+        }
+        if (!additionalInsertions.isEmpty()) {
+            batch.addAll(additionalInsertions);
+            additionalInsertions.clear();
+        }
+
         tierAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_SEPARATOR);
 
         List<TierViewItem> visibleTierView = tierView.stream().filter(item -> item.isVisible()).toList();
@@ -995,15 +1031,23 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 tier = sessionFactory.createTier(td);
             }
 
+            for (var hook : getInsertionHooks()) {
+                additionalInsertions.addAll(hook.startTier());
+            }
+            if (!additionalInsertions.isEmpty()) {
+                batch.addAll(additionalInsertions);
+                additionalInsertions.clear();
+            }
 
             tierAttrs = insertTier(recordIndex, tier, item, recordAttrs);
-            List<ElementSpec> additionalInsertions = new ArrayList<>();
+
             for (var hook : getInsertionHooks()) {
                 additionalInsertions.addAll(hook.endTier(tierAttrs));
             }
             if (!additionalInsertions.isEmpty()) {
                 batch.addAll(additionalInsertions);
                 tierAttrs = new SimpleAttributeSet(additionalInsertions.get(additionalInsertions.size()-1).getAttributes());
+                additionalInsertions.clear();
             }
 
             tierAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_COMPONENT_FACTORY);
@@ -1011,6 +1055,13 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             if (i < visibleTierView.size() - 1) {
                 appendBatchLineFeed(tierAttrs);
             }
+        }
+
+        for (var hook : getInsertionHooks()) {
+            additionalInsertions.addAll(hook.endRecord());
+        }
+        if (!additionalInsertions.isEmpty()) {
+            batch.addAll(additionalInsertions);
         }
 
         return tierAttrs;
@@ -1024,6 +1075,15 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * newline after if need be
      * */
     private SimpleAttributeSet writeComment(Comment comment) {
+
+        List<ElementSpec> additionalInsertions = new ArrayList<>();
+        for (var hook : getInsertionHooks()) {
+            additionalInsertions.addAll(hook.startComment());
+        }
+        if (!additionalInsertions.isEmpty()) {
+            batch.addAll(additionalInsertions);
+            additionalInsertions.clear();
+        }
 
         Tier<TierData> commentTier = sessionFactory.createTier("commentTier", TierData.class);
         commentTier.setValue(comment.getValue() == null ? new TierData() : comment.getValue());
@@ -1088,6 +1148,13 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             }
         }
 
+        for (var hook : getInsertionHooks()) {
+            additionalInsertions.addAll(hook.endComment());
+        }
+        if (!additionalInsertions.isEmpty()) {
+            batch.addAll(additionalInsertions);
+        }
+
         return commentAttrs;
     }
 
@@ -1099,6 +1166,15 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * newline after if need be
      * */
     private SimpleAttributeSet writeGem(Gem gem) {
+        List<ElementSpec> additionalInsertions = new ArrayList<>();
+        for (var hook : getInsertionHooks()) {
+            additionalInsertions.addAll(hook.startGem());
+        }
+        if (!additionalInsertions.isEmpty()) {
+            batch.addAll(additionalInsertions);
+            additionalInsertions.clear();
+        }
+
         String text = gem.getLabel();
 
         SimpleAttributeSet gemAttrs = getGemAttributes(gem);
@@ -1120,6 +1196,13 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         appendBatchString(": ", labelAttrs);
 
         appendBatchString(text, gemAttrs);
+
+        for (var hook : getInsertionHooks()) {
+            additionalInsertions.addAll(hook.endGem());
+        }
+        if (!additionalInsertions.isEmpty()) {
+            batch.addAll(additionalInsertions);
+        }
 
         return gemAttrs;
     }
@@ -2223,6 +2306,27 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         }
 
         String labelText = tierName;
+        if (chatTierNamesShown) {
+            SystemTierType systemTierType = SystemTierType.tierFromString(tierName);
+            if (systemTierType != null) {
+                if (systemTierType == SystemTierType.Orthography) {
+                    labelText = "*" + record.getSpeaker().getId();
+                }
+                else {
+                    labelText = systemTierType.getChatTierName();
+                }
+            }
+            else {
+                UserTierType userTierType = UserTierType.fromPhonTierName(tierName);
+                if (userTierType != null) {
+                    labelText = userTierType.getChatTierName();
+                }
+                else {
+                    labelText = UserTierType.determineCHATTierName(session, tierName);
+                }
+            }
+        }
+
         if (labelText.length() < labelColumnWidth) {
             appendBatchString(" ".repeat((labelColumnWidth - labelText.length())), labelAttrs);
         }
@@ -2524,9 +2628,15 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             additionalInsertions.addAll(hook.startSession());
         }
         batch.addAll(additionalInsertions);
+        additionalInsertions.clear();
 
         SimpleAttributeSet newLineAttrs;
 
+        for (var hook : insertionHooks) {
+            additionalInsertions.addAll(hook.startTranscript());
+        }
+        batch.addAll(additionalInsertions);
+        additionalInsertions.clear();
 
         // Single record
         if (singleRecordView) {
@@ -2597,8 +2707,21 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             }
         }
 
+        for (var hook : insertionHooks) {
+            additionalInsertions.addAll(hook.endTranscript());
+        }
+        batch.addAll(additionalInsertions);
+        additionalInsertions.clear();
+
         processBatchUpdates(0);
         setGlobalParagraphAttributes();
+
+        for (var hook : getInsertionHooks()) {
+            additionalInsertions.addAll(hook.endSession());
+        }
+        if (!additionalInsertions.isEmpty()) {
+            batch.addAll(additionalInsertions);
+        }
     }
 
     /**

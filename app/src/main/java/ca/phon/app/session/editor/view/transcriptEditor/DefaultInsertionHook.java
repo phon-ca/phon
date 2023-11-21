@@ -100,7 +100,7 @@ public abstract class DefaultInsertionHook implements InsertionHook {
     }
 
     @Override
-    public List<DefaultStyledDocument.ElementSpec> beginTier() {
+    public List<DefaultStyledDocument.ElementSpec> startTier() {
         return EMPTY_LIST;
     }
     @Override
