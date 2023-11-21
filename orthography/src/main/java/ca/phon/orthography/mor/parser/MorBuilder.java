@@ -34,6 +34,9 @@ public class MorBuilder extends MorBaseListener {
 
     @Override
     public void exitMor(MorParser.MorContext ctx) {
+        if(morDataStack.isEmpty()) {
+            throw new MorParserException(MorParserException.Type.Unknown, "Expecting data", ctx.getStop().getCharPositionInLine());
+        }
         final MorData morData = morDataStack.pop();
         if(morData.elements().size() != 1)
             throw new MorParserException(MorParserException.Type.Unknown, "Invalid number of elements for mor " + morData.elements().size(), ctx.getStart().getCharPositionInLine());
@@ -88,6 +91,8 @@ public class MorBuilder extends MorBaseListener {
 
     @Override
     public void exitMwc(MorParser.MwcContext ctx) {
+        if(morDataStack.isEmpty())
+            throw new MorParserException(MorParserException.Type.Unknown, "Expecting data", ctx.getStop().getCharPositionInLine());
         final MorData morData = morDataStack.pop();
         if(morData.elements().isEmpty()) {
             throw new MorParserException(MorParserException.Type.Unknown, "Must have words in a compound", ctx.getStart().getCharPositionInLine());
@@ -115,6 +120,9 @@ public class MorBuilder extends MorBaseListener {
 
     @Override
     public void exitMorprefix(MorParser.MorprefixContext ctx) {
+        if(morDataStack.isEmpty()) {
+            throw new MorParserException(MorParserException.Type.Unknown, "Expecting data", ctx.getStop().getCharPositionInLine());
+        }
         final MorData morData = morDataStack.pop();
         final MorPre morPre = new MorPre(morData.elements().get(0), morData.translations());
         morDataStack.peek().morPres().add(morPre);
@@ -140,6 +148,9 @@ public class MorBuilder extends MorBaseListener {
 
     @Override
     public void exitMorpost(MorParser.MorpostContext ctx) {
+        if(morDataStack.isEmpty()) {
+            throw new MorParserException(MorParserException.Type.Unknown, "Expecting data", ctx.getStop().getCharPositionInLine());
+        }
         final MorData morData = morDataStack.pop();
         final MorPost morPost = new MorPost(morData.elements().get(0), morData.translations());
         morDataStack.peek().morPosts().add(morPost);
