@@ -97,12 +97,14 @@ public class DefaultTierLabelMenuHandler implements TierLabelMenuHandler, IPlugi
             builder.addSeparator(".", "");
         }
 
-        JMenuItem hideTier = new JMenuItem();
-        PhonUIAction<TierViewItem> hideTierAct = PhonUIAction.eventConsumer(this::hideTier, currentTVI);
-        hideTierAct.putValue(PhonUIAction.NAME, "Hide tier");
-        hideTierAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Hide " + currentTVI.getTierName());
-        hideTier.setAction(hideTierAct);
-        builder.addItem(".", hideTier);
+        if (currentTVI.isVisible()) {
+            JMenuItem hideTier = new JMenuItem();
+            PhonUIAction<TierViewItem> hideTierAct = PhonUIAction.eventConsumer(this::hideTier, currentTVI);
+            hideTierAct.putValue(PhonUIAction.NAME, "Hide tier");
+            hideTierAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Hide " + currentTVI.getTierName());
+            hideTier.setAction(hideTierAct);
+            builder.addItem(".", hideTier);
+        }
 
         JMenu showHiddenTierMenu = new JMenu("Show hidden tier");
         builder.addMenu(".", showHiddenTierMenu);
@@ -114,7 +116,7 @@ public class DefaultTierLabelMenuHandler implements TierLabelMenuHandler, IPlugi
                 showTierAct.putValue(PhonUIAction.NAME, item.getTierName());
                 showTierAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "show " + item.getTierName());
                 showTier.setAction(showTierAct);
-                builder.addItem("./Show hidden tier", showTier);
+                showHiddenTierMenu.add(showTier);
             }
         }
 

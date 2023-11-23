@@ -37,6 +37,8 @@ public class AlignmentExtension implements TranscriptEditorExtension {
         this.editor = editor;
         doc = editor.getTranscriptDocument();
 
+        // TODO: make this stuff happen in the right order
+
         doc.addInsertionHook(new DefaultInsertionHook() {
             @Override
             public List<DefaultStyledDocument.ElementSpec> endTier(MutableAttributeSet attrs) {
@@ -73,6 +75,10 @@ public class AlignmentExtension implements TranscriptEditorExtension {
                 doc.reload();
             }
         });
+
+        editor.getEventManager().registerActionForEvent(EditorEventType.TierViewChanged, (event) -> {
+            doc.putDocumentProperty(ALIGNMENT_PARENT, calculateAlignmentParent());
+        }, EditorEventManager.RunOn.AWTEventDispatchThread);
     }
 
     /**
@@ -129,6 +135,7 @@ public class AlignmentExtension implements TranscriptEditorExtension {
         // Set up the tier attributes for the dummy tier
         var tierAttrs = doc.getTierAttributes(tier);
         tierAttrs.addAttributes(doc.getTierAttributes(alignmentTier));
+        tierAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
         // Set up the attributes for its label
         SimpleAttributeSet alignmentLabelAttrs = doc.getTierLabelAttributes(alignmentTier);
         // Set up record attributes

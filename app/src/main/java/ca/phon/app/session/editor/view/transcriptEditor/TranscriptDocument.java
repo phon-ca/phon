@@ -1095,11 +1095,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         SimpleAttributeSet labelAttrs = getCommentLabelAttributes(comment);
         String labelText = comment.getType().getLabel();
         if (labelText.length() < labelColumnWidth) {
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < (labelColumnWidth - labelText.length()); i++) {
-                builder.append(' ');
-            }
-            appendBatchString(builder.toString(), labelAttrs);
+            appendBatchString(" ".repeat((labelColumnWidth - labelText.length())), labelAttrs);
         }
         else {
             labelText = formatLabelText(labelText);
@@ -1230,11 +1226,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         labelAttrs.addAttributes(getLabelAttributes());
         String labelText = label;
         if (labelText.length() < labelColumnWidth) {
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < (labelColumnWidth - labelText.length()); i++) {
-                builder.append(' ');
-            }
-            retVal.add(getBatchString(builder.toString(), labelAttrs));
+            retVal.add(getBatchString(" ".repeat((labelColumnWidth - labelText.length())), labelAttrs));
         }
         else {
             labelText = formatLabelText(labelText);
@@ -1960,12 +1952,26 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      *
      * @param addedRecord the record that gets added
      * */
-    public void addRecord(Record addedRecord) {
+    public void addRecord(Record addedRecord, int elementIndex) {
         try {
             appendBatchEndStart();
             AttributeSet attrs = writeRecord(addedRecord, session.getTranscript(), session.getTierView());
             appendBatchLineFeed(attrs);
-            processBatchUpdates(getLength());
+            int nextElementStart = getLength();
+
+            Transcript transcript = getSession().getTranscript();
+            Transcript.Element nextElement = transcript.getElementAt(elementIndex + 1);
+            if (nextElement.isRecord()) {
+                nextElementStart = getRecordStart(nextElement.asRecord());
+            }
+            else if (nextElement.isComment()) {
+                nextElementStart = getCommentStart(nextElement.asComment());
+            }
+            else if (nextElement.isGem()) {
+                nextElementStart = getGemStart(nextElement.asGem());
+            }
+
+            processBatchUpdates(nextElementStart);
             setGlobalParagraphAttributes();
         }
         catch (BadLocationException e) {
@@ -2071,7 +2077,8 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
             appendBatchEndStart();
 
-            appendBatchString(formatLabelText(record.getSpeaker().toString()) + "  ", labelAttrs);
+            Participant speaker = record.getSpeaker() == null ? Participant.UNKNOWN : record.getSpeaker();
+            appendBatchString(formatLabelText(speaker.toString()) + "  ", labelAttrs);
 
             MediaSegment segment = record.getMediaSegment();
 

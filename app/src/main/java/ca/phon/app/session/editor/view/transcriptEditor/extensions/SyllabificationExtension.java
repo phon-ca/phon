@@ -93,9 +93,13 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                         // Add component factory if needed
                         if (isSyllabificationComponent()) {
                             attrs.addAttributes(doc.getSyllabificationAttributes());
+                            // Append the content string
+                            retVal.add(doc.getBatchString(syllableTier.getValue().toString(true), attrs));
                         }
-                        // Append the content
-                        retVal.addAll(getFormattedSyllabification(syllableTier.getValue(), attrs));
+                        else {
+                            // Append the formatted content
+                            retVal.addAll(getFormattedSyllabification(syllableTier.getValue(), attrs));
+                        }
                     }
                 }
 
@@ -130,6 +134,8 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                 setSyllabificationEditMode(false);
             }
         });
+
+        doc.addNotEditableAttribute(TranscriptStyleConstants.ATTR_KEY_SYLLABIFICATION);
     }
 
     // region Getters and Setters
@@ -201,13 +207,13 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
             editor.setNavigationFilter(new SyllabificationEditNavigationFilter(editor));
             editor.addNotTraversableAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE_SYLLABIFICATION);
             doc.setDocumentFilter(new SyllabificationEditDocumentFilter(doc));
-            doc.addNotEditableAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE_SYLLABIFICATION);
+            doc.removeNotEditableAttribute(TranscriptStyleConstants.ATTR_KEY_SYLLABIFICATION);
         }
         else {
             editor.setNavigationFilter(new TranscriptEditor.TranscriptNavigationFilter(editor));
             editor.removeNotTraversableAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE_SYLLABIFICATION);
             doc.setDocumentFilter(new TranscriptDocument.TranscriptDocumentFilter(doc));
-            doc.removeNotEditableAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE_SYLLABIFICATION);
+            doc.addNotEditableAttribute(TranscriptStyleConstants.ATTR_KEY_SYLLABIFICATION);
         }
 
         editor.setCaretPosition(editor.getNextValidIndex(editor.getCaretPosition()-1, false));
@@ -425,6 +431,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                             text = textUpper;
                         }
                     }
+                    else return;
                 }
             }
             super.replace(fb, offset, length, text, attrs);

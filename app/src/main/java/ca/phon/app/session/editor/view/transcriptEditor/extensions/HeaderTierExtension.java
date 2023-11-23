@@ -9,10 +9,7 @@ import ca.phon.app.session.editor.view.transcriptEditor.TranscriptDocument;
 import ca.phon.app.session.editor.view.transcriptEditor.TranscriptEditor;
 import ca.phon.formatter.Formatter;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.session.Participant;
-import ca.phon.session.Session;
-import ca.phon.session.Tier;
-import ca.phon.session.TierViewItem;
+import ca.phon.session.*;
 import ca.phon.session.tierdata.TierData;
 import ca.phon.util.Language;
 import ca.phon.util.LanguageEntry;
@@ -128,7 +125,7 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
 
                     // Add Participants header
                     Tier<TierData> participantsTier = (Tier<TierData>) headerTierMap.get("participants");
-                    var participants = session.getParticipants();
+                    Participants participants = session.getParticipants();
                     StringJoiner participantsJoiner = new StringJoiner(", ");
                     for (Participant participant : participants) {
                         if (participant.getName() != null) {

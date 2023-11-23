@@ -27,6 +27,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
 
@@ -269,6 +270,9 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         this.eventManager.registerActionForEvent(EditorEventType.GemTypeChanged, this::onGemTypeChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 
         this.eventManager.registerActionForEvent(sessionLocationChange, this::onSessionLocationChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+
+        // TODO: Get this working
+//        this.eventManager.registerActionForEvent(EditorEventType.ParticipantChanged, this::onParticipantChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
     }
 
     // endregion Init
@@ -1048,10 +1052,11 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
      * */
     private void onRecordAdded(EditorEvent<EditorEventType.RecordAddedData> editorEvent) {
         var data = editorEvent.data();
-        // Get the new record
+        // Get the new record and the element index
         Record addedRecord = getSession().getRecord(data.recordIndex());
+        int elementIndex = data.elementIndex();
         // Add it to the doc
-        getTranscriptDocument().addRecord(addedRecord);
+        getTranscriptDocument().addRecord(addedRecord, elementIndex);
     }
     /**
      * Runs when a record gets deleted
@@ -1160,26 +1165,31 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             errorUnderlineHighlights.remove(changedTier);
         }
 
+        int start = -1;
+        int end = -1;
+
         if (changedTier.isUnvalidated()) {
-            try {
-                int start = doc.getTierStart(changedTier) + changedTier.getUnvalidatedValue().getParseError().getErrorOffset();
-                int end = doc.getTierEnd(changedTier)-1;
-
-                var errorUnderlineHighlight = getHighlighter().addHighlight(
-                    start,
-                    end,
-                    new ErrorUnderlinePainter()
-                );
-                errorUnderlineHighlights.put(changedTier, errorUnderlineHighlight);
-            }
-            catch (BadLocationException e) {
-                LogUtil.severe(e);
-            }
+            start = doc.getTierStart(changedTier) + changedTier.getUnvalidatedValue().getParseError().getErrorOffset();
+            end = doc.getTierStart(changedTier) + changedTier.getUnvalidatedValue().getValue().length();
         }
-
 
         if (internalEdit) {
             internalEdit = false;
+
+            if (changedTier.isUnvalidated()) {
+                try {
+                    var errorUnderlineHighlight = getHighlighter().addHighlight(
+                        start,
+                        end,
+                        new ErrorUnderlinePainter()
+                    );
+                    errorUnderlineHighlights.put(changedTier, errorUnderlineHighlight);
+                }
+                catch (BadLocationException e) {
+                    LogUtil.severe(e);
+                }
+            }
+
             return;
         }
 
@@ -1189,6 +1199,20 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
 
         // Update the changed tier data in the doc
         getTranscriptDocument().onTierDataChanged(changedTier);
+
+        if (changedTier.isUnvalidated()) {
+            try {
+                var errorUnderlineHighlight = getHighlighter().addHighlight(
+                        start,
+                        end,
+                        new ErrorUnderlinePainter()
+                );
+                errorUnderlineHighlights.put(changedTier, errorUnderlineHighlight);
+            }
+            catch (BadLocationException e) {
+                LogUtil.severe(e);
+            }
+        }
 
         if (caretStartTier == null) return;
 
@@ -1682,6 +1706,13 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                     getUndoSupport().postEdit(edit);
                 }
             }
+            else if (genericTier.getDeclaredType() == LocalDate.class) {
+                Tier<LocalDate> dateTier = (Tier<LocalDate>) dummy;
+                if (dateTier.hasValue()) {
+                    SessionDateEdit edit = new SessionDateEdit(getSession(), getEventManager(), dateTier.getValue(), getSession().getDate());
+                    undoSupport.postEdit(edit);
+                }
+            }
 
             TierEdit<?> edit = new TierEdit(getSession(), eventManager, null, genericTier, dummy.getValue());
             edit.setValueAdjusting(false);
@@ -1756,7 +1787,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         TranscriptDocument doc = getTranscriptDocument();
 
         Tier<?> dummy = SessionFactory.newFactory().createTier("dummy", tier.getDeclaredType());
-        dummy.setText(tier.getValue().toString() + " " + doc.getTierText(tier, transcriber));
+        dummy.setText(doc.getTierText(tier, null) + " " + doc.getTierText(tier, transcriber));
 
         SwingUtilities.invokeLater(() -> {
             TierEdit<?> edit = new TierEdit(dataModel.getSession(), eventManager, Transcriber.VALIDATOR, record, tier, dummy.getValue());
@@ -2369,6 +2400,10 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         setCurrentSessionLocation(editorEvent.data().newLoc);
     }
 
+    private void onParticipantChanged() {
+
+    }
+
     /**
      * Checks whether a given attribute set contains any "not traversable" attributes
      *
@@ -2448,8 +2483,10 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                             int start = doc.getTierStart(prevTier);
                             int end = doc.getTierEnd(prevTier) - 1;
                             String newValue = doc.getText(start, end - start);
-                            editor.setInternalEdit(true);
-                            editor.changeTierData((Record)prevAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD), prevTier, newValue);
+                            if (!prevTier.getValue().toString().equals(newValue)) {
+                                editor.setInternalEdit(true);
+                                editor.changeTierData((Record)prevAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD), prevTier, newValue);
+                            }
                         }
                         case TranscriptStyleConstants.ATTR_KEY_COMMENT -> {
                             Comment prevComment = (Comment) prevAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT);
@@ -2485,7 +2522,10 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                             int start = doc.getGenericStart(prevGenericTier);
                             int end = doc.getGenericEnd(prevGenericTier) - 1;
                             String newValue = doc.getText(start, end - start);
-                            editor.genericDataChanged(prevGenericTier, newValue);
+                            if (!prevGenericTier.getValue().toString().equals(newValue)) {
+                                editor.setInternalEdit(true);
+                                editor.genericDataChanged(prevGenericTier, newValue);
+                            }
                         }
                     }
                 }
