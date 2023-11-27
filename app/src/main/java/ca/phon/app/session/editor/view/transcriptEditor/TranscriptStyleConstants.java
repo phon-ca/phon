@@ -11,7 +11,6 @@ public class TranscriptStyleConstants {
     public static final String ATTR_KEY_SEPARATOR = "sep";
     public static final String ATTR_KEY_LABEL = "label";
     public static final String ATTR_KEY_NOT_EDITABLE = "notEditable";
-    public static final String ATTR_KEY_NOT_EDITABLE_SYLLABIFICATION = "notEditableSyllabification";
     public static final String ATTR_KEY_NOT_TRAVERSABLE = "notTraversable";
     public static final String ATTR_KEY_NOT_TRAVERSABLE_SYLLABIFICATION = "notTraversableSyllabification";
     public static final String ATTR_KEY_CLICKABLE = "clickable";

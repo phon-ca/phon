@@ -2,6 +2,7 @@ package ca.phon.app.session.editor.view.transcriptEditor;
 
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.actions.*;
+import ca.phon.app.session.editor.autotranscribe.AutoTranscribeAction;
 import ca.phon.app.session.editor.search.FindAndReplacePanel;
 import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
@@ -528,6 +529,7 @@ public class TranscriptView extends EditorView {
         if (!inHeaders) {
             JMenuItem insertRecordAboveItem = new JMenuItem();
             PhonUIAction<Void> insertRecordAboveAct = PhonUIAction.runnable(() -> {
+
                 final AddRecordEdit edit = new AddRecordEdit(getEditor(), SessionFactory.newFactory().createRecord(), currentTranscriptElementIndex);
                 getEditor().getUndoSupport().postEdit(edit);
             });
@@ -538,7 +540,15 @@ public class TranscriptView extends EditorView {
 
         JMenuItem insertRecordBelowItem = new JMenuItem();
         PhonUIAction<Void> insertRecordBelowAct = PhonUIAction.runnable(() -> {
-            final AddRecordEdit edit = new AddRecordEdit(getEditor(), SessionFactory.newFactory().createRecord(), currentTranscriptElementIndex+1);
+            Transcript transcript = getEditor().getSession().getTranscript();
+            int recordIndex = 0;
+            for (int i = currentTranscriptElementIndex + 1; i < transcript.getNumberOfElements(); i++) {
+                Transcript.Element elem = transcript.getElementAt(i);
+                if (!elem.isRecord()) continue;
+                recordIndex = transcript.getRecordPosition(elem.asRecord());
+                break;
+            }
+            final AddRecordEdit edit = new AddRecordEdit(getEditor(), SessionFactory.newFactory().createRecord(), recordIndex);
             getEditor().getUndoSupport().postEdit(edit);
         });
         insertRecordBelowAct.putValue(PhonUIAction.NAME, "Insert record below");
@@ -605,13 +615,27 @@ public class TranscriptView extends EditorView {
                 getEditor().getSession(),
                 getEditor().getEventManager(),
                 new Transcript.Element(SessionFactory.newFactory().createGem()),
-                currentTranscriptElementIndex
+                currentTranscriptElementIndex+1
             );
             getEditor().getUndoSupport().postEdit(edit);
         });
         insertGemBelowAct.putValue(PhonUIAction.NAME, "Insert gem below");
         insertGemBelowItem.setAction(insertGemBelowAct);
         menuBuilder.addItem(".", insertGemBelowItem);
+
+
+        menuBuilder.addSeparator(".", "");
+
+
+        JMenuItem autoTranscribeItem = new JMenuItem();
+        autoTranscribeItem.setAction(new AutoTranscribeAction(
+            getEditor().getProject(),
+            getEditor().getSession(),
+            getEditor().getEventManager(),
+            getEditor().getUndoSupport(),
+            getEditor().getDataModel().getTranscriber()
+        ));
+        menuBuilder.addItem(".", autoTranscribeItem);
     }
 
     /**
@@ -718,7 +742,7 @@ public class TranscriptView extends EditorView {
         menuBuilder.addItem(".", toggleBlindTiersItem);
 
         JMenuItem toggleChatTierNamesItem = new JMenuItem();
-        PhonUIAction<Void> toggleChatTierNamesAct = PhonUIAction.runnable(() -> {System.out.println("Toggle chat tier names");});
+        PhonUIAction<Void> toggleChatTierNamesAct = PhonUIAction.runnable(this::toggleChatTierNamesShown);
         toggleChatTierNamesAct.putValue(PhonUIAction.NAME, "Toggle chat tier names");
         toggleChatTierNamesItem.setAction(toggleChatTierNamesAct);
         menuBuilder.addItem(".", toggleChatTierNamesItem);
@@ -899,6 +923,14 @@ public class TranscriptView extends EditorView {
         );
     }
 
+    public boolean isChatTierNamesShown() {
+        return transcriptEditor.getTranscriptDocument().isChatTierNamesShown();
+    }
+
+    public void toggleChatTierNamesShown() {
+        transcriptEditor.getTranscriptDocument().setChatTierNamesShown(!isChatTierNamesShown());
+    }
+
     //endregion Getters and Setters
 
     /**
@@ -939,7 +971,10 @@ public class TranscriptView extends EditorView {
                     props.setListener(nativeDialogEvent -> {
                         int result = nativeDialogEvent.getDialogResult();
                         switch (result) {
-                            case NativeDialogEvent.YES_OPTION -> saveChanges();
+                            case NativeDialogEvent.YES_OPTION -> {
+                                saveChanges();
+                                dispose();
+                            }
                             case NativeDialogEvent.NO_OPTION -> dispose();
                         }
                     });
