@@ -210,7 +210,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
             doc.removeNotEditableAttribute(TranscriptStyleConstants.ATTR_KEY_SYLLABIFICATION);
         }
         else {
-            editor.setNavigationFilter(new TranscriptEditor.TranscriptNavigationFilter(editor));
+            editor.setNavigationFilter(new TranscriptNavigationFilter(editor));
             editor.removeNotTraversableAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE_SYLLABIFICATION);
             doc.setDocumentFilter(new TranscriptDocument.TranscriptDocumentFilter(doc));
             doc.addNotEditableAttribute(TranscriptStyleConstants.ATTR_KEY_SYLLABIFICATION);

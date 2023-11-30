@@ -1,12 +1,16 @@
 package ca.phon.app.session.editor.view.transcriptEditor.extensions;
 
 import ca.phon.app.log.LogUtil;
+import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.transcriptEditor.*;
 import ca.phon.app.session.editor.view.transcriptEditor.InsertionHook;
 import ca.phon.session.MediaSegment;
+import ca.phon.session.Record;
+import ca.phon.session.Tier;
 import ca.phon.ui.CalloutWindow;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.event.CaretEvent;
@@ -19,7 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * An extension that provides media segment support to the {@link TranscriptEditor}
+ * An extension that provides media segment playback and editing support to the {@link TranscriptEditor}
+ * for record media segments as well as internal-media segments.
  */
 public class MediaSegmentExtension implements TranscriptEditorExtension {
     private TranscriptEditor editor;
@@ -45,9 +50,11 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
         editor.getTranscriptDocument().addInsertionHook(new DefaultInsertionHook() {
             @Override
             public List<DefaultStyledDocument.ElementSpec> batchInsertString(StringBuilder buffer, MutableAttributeSet attrs) {
-                MediaSegment segment = (MediaSegment) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_MEDIA_SEGMENT);
-                if (segment != null) {
-                    PhonUIAction<MediaSegment> showSegmentEditCalloutAct = PhonUIAction.consumer(MediaSegmentExtension.this::showSegmentEditCallout, segment);
+                Record record = (Record) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
+                Tier<MediaSegment> segmentTier = (Tier<MediaSegment>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
+                if (record != null && segmentTier != null) {
+                    PhonUIAction<SegmentCalloutInfo> showSegmentEditCalloutAct = PhonUIAction.consumer(MediaSegmentExtension.this::showSegmentEditCallout,
+                            new SegmentCalloutInfo(record, segmentTier));
                     attrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_ENTER_ACTION, showSegmentEditCalloutAct);
                 }
                 return new ArrayList<>();
@@ -108,14 +115,15 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
         }
     };
 
+    private record SegmentCalloutInfo(Record record, Tier<MediaSegment> segmentTier) {}
+
     /**
      * Shows the segment edit callout
      *
-     * @param segment the segment that will be editable in the callout
+     * @param segmentCalloutInfo infor for callout
      * */
-    private void showSegmentEditCallout(MediaSegment segment) {
-        var segmentEditor = new SegmentEditorPopup(editor.getMediaModel(), segment);
-        segmentEditor.setPreferredSize(new Dimension(segmentEditor.getPreferredPopupWidth(), (int) segmentEditor.getPreferredSize().getHeight()));
+    private void showSegmentEditCallout(SegmentCalloutInfo segmentCalloutInfo) {
+        final var segmentEditor = getSegmentEditorPopup(segmentCalloutInfo);
 
         try {
             var start = editor.modelToView2D(editor.getSelectionStart());
@@ -140,5 +148,22 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
         catch (BadLocationException e) {
             LogUtil.warning(e);
         }
+    }
+
+    @NotNull
+    private SegmentEditorPopup getSegmentEditorPopup(SegmentCalloutInfo segmentCalloutInfo) {
+        final Tier<MediaSegment> segmentTier = segmentCalloutInfo.segmentTier();
+        final Record record = segmentCalloutInfo.record();
+        var segmentEditor = new SegmentEditorPopup(editor.getMediaModel(), segmentTier.getValue());
+        segmentEditor.setPreferredSize(new Dimension(segmentEditor.getPreferredPopupWidth(), (int) segmentEditor.getPreferredSize().getHeight()));
+
+        segmentEditor.addPropertyChangeListener("segment", e -> {
+            if (e.getNewValue() != null) {
+                final TierEdit<MediaSegment> tierEdit = new TierEdit<MediaSegment>(editor.getSession(),
+                        editor.getEventManager(), record, segmentTier, (MediaSegment) e.getNewValue());
+                editor.getUndoSupport().postEdit(tierEdit);
+            }
+        });
+        return segmentEditor;
     }
 }

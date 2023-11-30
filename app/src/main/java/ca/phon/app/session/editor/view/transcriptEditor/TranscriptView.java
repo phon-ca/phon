@@ -52,7 +52,7 @@ import java.util.List;
  * */
 public class TranscriptView extends EditorView {
 
-    public final static String VIEW_NAME = "Transcript Editor";
+    public final static String VIEW_NAME = "Transcript";
     public final static String VIEW_ICON = "blank";
     private final TranscriptEditor transcriptEditor;
     private TranscriptScrollPane transcriptScrollPane;
