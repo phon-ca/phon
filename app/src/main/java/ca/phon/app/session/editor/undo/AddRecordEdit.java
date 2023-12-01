@@ -52,14 +52,14 @@ public class AddRecordEdit extends SessionUndoableEdit {
 		this(session, editorEventManager, record, -1);
 	}
 
-	public AddRecordEdit(SessionEditor editor, Record record, int recordIndex) {
-		this(editor.getSession(), editor.getEventManager(), record, recordIndex);
+	public AddRecordEdit(SessionEditor editor, Record record, int elementIndex) {
+		this(editor.getSession(), editor.getEventManager(), record, elementIndex);
 	}
 	
-	public AddRecordEdit(Session session, EditorEventManager editorEventManager, Record record, int recordIndex) {
+	public AddRecordEdit(Session session, EditorEventManager editorEventManager, Record record, int elementIndex) {
 		super(session, editorEventManager);
 		this.record = record;
-		this.recordIndex = recordIndex;
+		this.elementIndex = elementIndex;
 	}
 
 	public void setFireEvent(boolean fireEvent) {
@@ -115,14 +115,15 @@ public class AddRecordEdit extends SessionUndoableEdit {
 			record = factory.createRecord(session);
 			record.setSpeaker(Participant.UNKNOWN);
 		}
-		
-		if(recordIndex < 0) {
-			session.addRecord(record);
-			recordIndex = session.getRecordCount() - 1;
-			elementIndex = session.getRecordElementIndex(record);
-		} else
-			session.addRecord(recordIndex, record);
-		
+
+		if(elementIndex < 0) elementIndex = session.getTranscript().getNumberOfElements();
+		if(elementIndex >= 0) {
+			recordIndex = session.getTranscript().getRecordIndex(elementIndex);
+		} else {
+			recordIndex = session.getRecordCount();
+		}
+		session.getTranscript().addElement(elementIndex, new Transcript.Element(record));
+
 		if(isFireEvent()) {
 			final EditorEvent<EditorEventType.ElementAddedData> elementAddedEvt =
 					new EditorEvent<>(EditorEventType.ElementAdded, getSource(),

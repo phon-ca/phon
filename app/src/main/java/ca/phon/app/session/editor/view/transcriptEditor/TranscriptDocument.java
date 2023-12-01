@@ -1915,6 +1915,28 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     }
 
     /**
+     * Update record text in the document
+     *
+     * @param record the record whose media segment is being updated
+     */
+    public void updateRecord(Record record) {
+        int start = getRecordStart(record);
+        int end = getRecordEnd(record);
+
+        try {
+            bypassDocumentFilter = true;
+            remove(start, end - start);
+            appendBatchEndStart();
+            var attrs = writeRecord(record, session.getTranscript(), session.getTierView());
+            appendBatchLineFeed(attrs);
+            processBatchUpdates(start);
+            setGlobalParagraphAttributes();
+        } catch (BadLocationException e) {
+            LogUtil.severe(e);
+        }
+    }
+
+    /**
      * Adds a record to the document
      *
      * @param addedRecord the record that gets added
@@ -1927,13 +1949,15 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             int nextElementStart = getLength();
 
             Transcript transcript = getSession().getTranscript();
-            Transcript.Element nextElement = transcript.getElementAt(elementIndex + 1);
-            if (nextElement.isRecord()) {
-                nextElementStart = getRecordStart(nextElement.asRecord());
-            } else if (nextElement.isComment()) {
-                nextElementStart = getCommentStart(nextElement.asComment());
-            } else if (nextElement.isGem()) {
-                nextElementStart = getGemStart(nextElement.asGem());
+            Transcript.Element nextElement = (elementIndex < transcript.getNumberOfElements() - 1) ? transcript.getElementAt(elementIndex + 1) : null;
+            if(nextElement != null) {
+                if (nextElement.isRecord()) {
+                    nextElementStart = getRecordStart(nextElement.asRecord());
+                } else if (nextElement.isComment()) {
+                    nextElementStart = getCommentStart(nextElement.asComment());
+                } else if (nextElement.isGem()) {
+                    nextElementStart = getGemStart(nextElement.asGem());
+                }
             }
 
             processBatchUpdates(nextElementStart);
@@ -2112,9 +2136,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @param tier the tier whose data gets updated
      */
     public void onTierDataChanged(Tier<?> tier) {
+        // ignore syllable and alignment tiers, they are updated with the parent tier
         if (tier.getName().equals(SystemTierType.TargetSyllables.getName()) || tier.getName().equals(SystemTierType.ActualSyllables.getName()))
             return;
-
         if (tier.getDeclaredType().equals(PhoneAlignment.class)) return;
 
         try {

@@ -16,6 +16,7 @@
 package ca.phon.app.session.editor;
 
 import ca.phon.app.log.LogUtil;
+import ca.phon.util.PrefHelper;
 import ca.phon.worker.*;
 import org.apache.commons.logging.Log;
 
@@ -24,6 +25,7 @@ import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.logging.Level;
 
 /**
  * <p>Handles passing of internal EditorEvents.  Events can be dispatched on the AWT event
@@ -172,8 +174,12 @@ public class EditorEventManager {
 
 				if(event != null) {
 					synchronized (actionMap) {
-						for(EditorEventHandler<?> action: getHandlersForEvent(event.eventType())) {
-							action.handleEvent(event);
+						if(PrefHelper.getBoolean("phon.debug", false)) {
+							LogUtil.info("Dispatching event: " + event.eventType());
+							LogUtil.info("\t" + event.toString());
+							for (EditorEventHandler<?> action : getHandlersForEvent(event.eventType())) {
+								action.handleEvent(event);
+							}
 						}
 					}
 				}

@@ -54,7 +54,7 @@ public class DuplicateRecordAction extends SessionEditorAction {
 		if(r != null) {
 			final Record dup = factory.cloneRecord(r);
 			dup.setSpeaker(r.getSpeaker());
-			final AddRecordEdit edit = new AddRecordEdit(getEditor(), dup, getEditor().getCurrentRecordIndex()+1);
+			final AddRecordEdit edit = new AddRecordEdit(getEditor(), dup, getEditor().getSession().getRecordElementIndex(r) + 1);
 			getEditor().getUndoSupport().postEdit(edit);
 
 			int recordIndex = getEditor().getSession().getRecordPosition(edit.getRecord());

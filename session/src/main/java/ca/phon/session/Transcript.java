@@ -31,7 +31,7 @@ public final class Transcript extends ExtendableObject implements Iterable<Trans
             this.gem = null;
         }
 
-        Element(Record record) {
+        public Element(Record record) {
             this.record = record;
             this.comment = null;
             this.gem = null;
@@ -330,6 +330,19 @@ public final class Transcript extends ExtendableObject implements Iterable<Trans
             }
         }
         return -1;
+    }
+
+    /**
+     * Get the record index of the given element index or the highest record index
+     *
+     * @param elementIndex
+     */
+    public int getRecordIndex(int elementIndex) {
+        int rIdx = -1;
+        for (int i = 0; i < getNumberOfElements() && i <= elementIndex; i++) {
+            if (getElementAt(i).isRecord()) ++rIdx;
+        }
+        return rIdx;
     }
 
     /**

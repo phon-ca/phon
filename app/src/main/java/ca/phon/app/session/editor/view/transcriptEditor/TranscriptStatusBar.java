@@ -9,6 +9,7 @@ import java.awt.*;
 
 public class TranscriptStatusBar extends JPanel {
 
+    private JLabel docPositionLabel;
     private JLabel transcriptElementIndexLabel;
     private JLabel recordIndexLabel;
     private JLabel tierNameLabel;
@@ -22,6 +23,8 @@ public class TranscriptStatusBar extends JPanel {
     public TranscriptStatusBar(TranscriptEditor transcriptEditor) {
         initUI();
         transcriptEditor.addCaretListener(e -> {
+            docPositionLabel.setText("Document position: " + e.getDot());
+
             // Transcript element index
             try {
                 int transcriptElementIndex = transcriptEditor.getCurrentElementIndex();
@@ -66,27 +69,31 @@ public class TranscriptStatusBar extends JPanel {
      * */
     private void initUI() {
 
-        FormLayout layout = new FormLayout("80dlu, 50dlu, 50dlu, 50dlu", "pref");
+        FormLayout layout = new FormLayout("80dlu, 80dlu, 50dlu, 50dlu, 50dlu", "pref");
         final CellConstraints cc = new CellConstraints();
 
         setLayout(layout);
 
         final Font font = Font.decode("monospace-PLAIN-10");
 
+        docPositionLabel = new JLabel("Document position: ");
+        docPositionLabel.setFont(font);
+        add(docPositionLabel, cc.xy(1,1));
+
         transcriptElementIndexLabel = new JLabel("Transcript element index: ");
         transcriptElementIndexLabel.setFont(font);
-        add(transcriptElementIndexLabel, cc.xy(1,1));
+        add(transcriptElementIndexLabel, cc.xy(2,1));
 
         recordIndexLabel = new JLabel("Record index: ");
         recordIndexLabel.setFont(font);
-        add(recordIndexLabel, cc.xy(2,1));
+        add(recordIndexLabel, cc.xy(3,1));
 
         tierNameLabel = new JLabel("Tier: ");
         tierNameLabel.setFont(font);
-        add(tierNameLabel, cc.xy(3,1));
+        add(tierNameLabel, cc.xy(4,1));
 
         offsetInContentLabel = new JLabel("Character: ");
         offsetInContentLabel.setFont(font);
-        add(offsetInContentLabel, cc.xy(4,1));
+        add(offsetInContentLabel, cc.xy(5,1));
     }
 }

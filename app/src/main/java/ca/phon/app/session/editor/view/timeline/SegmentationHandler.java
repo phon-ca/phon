@@ -380,7 +380,7 @@ public final class SegmentationHandler {
 				int idx = editor.getDataModel().getRecordCount();
 				// where are we going to insert
 				if(mode == SegmentationMode.INSERT_AFTER_CURRENT) {
-					idx = (editor.getSession().getRecordCount() == 0 ? 0 : editor.getCurrentRecordIndex() + 1);
+					idx = (editor.getSession().getRecordCount() == 0 ? 0 : editor.getSession().getTranscript().getRecordElementIndex(editor.getCurrentRecordIndex()) + 1);
 				}
 				final AddRecordEdit edit = new AddRecordEdit(editor, utt, idx);
 				editor.getUndoSupport().postEdit(edit);

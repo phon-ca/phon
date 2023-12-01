@@ -529,7 +529,6 @@ public class TranscriptView extends EditorView {
         if (!inHeaders) {
             JMenuItem insertRecordAboveItem = new JMenuItem();
             PhonUIAction<Void> insertRecordAboveAct = PhonUIAction.runnable(() -> {
-
                 final AddRecordEdit edit = new AddRecordEdit(getEditor(), SessionFactory.newFactory().createRecord(), currentTranscriptElementIndex);
                 getEditor().getUndoSupport().postEdit(edit);
             });
@@ -541,23 +540,14 @@ public class TranscriptView extends EditorView {
         JMenuItem insertRecordBelowItem = new JMenuItem();
         PhonUIAction<Void> insertRecordBelowAct = PhonUIAction.runnable(() -> {
             Transcript transcript = getEditor().getSession().getTranscript();
-            int recordIndex = 0;
-            for (int i = currentTranscriptElementIndex + 1; i < transcript.getNumberOfElements(); i++) {
-                Transcript.Element elem = transcript.getElementAt(i);
-                if (!elem.isRecord()) continue;
-                recordIndex = transcript.getRecordPosition(elem.asRecord());
-                break;
-            }
-            final AddRecordEdit edit = new AddRecordEdit(getEditor(), SessionFactory.newFactory().createRecord(), recordIndex);
+            final AddRecordEdit edit = new AddRecordEdit(getEditor(), SessionFactory.newFactory().createRecord(), currentTranscriptElementIndex+1);
             getEditor().getUndoSupport().postEdit(edit);
         });
         insertRecordBelowAct.putValue(PhonUIAction.NAME, "Insert record below");
         insertRecordBelowItem.setAction(insertRecordBelowAct);
         menuBuilder.addItem(".", insertRecordBelowItem);
 
-
         menuBuilder.addSeparator(".", "");
-
 
         if (!inHeaders) {
             JMenuItem insertCommentAboveItem = new JMenuItem();

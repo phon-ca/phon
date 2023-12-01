@@ -54,8 +54,9 @@ public class NewRecordAction extends SpeechAnalysisEditorViewAction {
 		
 		record.getMediaSegment().setSegment(segment);
 		
-		final AddRecordEdit edit = new AddRecordEdit(getEditor(), record, (getEditor().getDataModel().getSession().getRecordCount() > 0 ? 
-				getEditor().getCurrentRecordIndex()+1 : -1));
+		final AddRecordEdit edit = new AddRecordEdit(getEditor(), record,
+				(getEditor().getDataModel().getSession().getRecordCount() > 0 ?
+				getEditor().getSession().getRecordElementIndex(getEditor().getCurrentRecordIndex())+1 : -1));
 		getEditor().getUndoSupport().postEdit(edit);
 	}
 
