@@ -117,12 +117,8 @@ public class AddRecordEdit extends SessionUndoableEdit {
 		}
 
 		if(elementIndex < 0) elementIndex = session.getTranscript().getNumberOfElements();
-		if(elementIndex >= 0) {
-			recordIndex = session.getTranscript().getRecordIndex(elementIndex);
-		} else {
-			recordIndex = session.getRecordCount();
-		}
 		session.getTranscript().addElement(elementIndex, new Transcript.Element(record));
+		recordIndex = session.getTranscript().getRecordIndex(elementIndex);
 
 		if(isFireEvent()) {
 			final EditorEvent<EditorEventType.ElementAddedData> elementAddedEvt =

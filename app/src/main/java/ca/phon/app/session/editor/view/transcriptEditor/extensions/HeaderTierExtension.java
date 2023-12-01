@@ -8,7 +8,6 @@ import ca.phon.app.session.editor.view.transcriptEditor.DefaultInsertionHook;
 import ca.phon.app.session.editor.view.transcriptEditor.TranscriptDocument;
 import ca.phon.app.session.editor.view.transcriptEditor.TranscriptEditor;
 import ca.phon.formatter.Formatter;
-import ca.phon.ipa.IPATranscript;
 import ca.phon.session.*;
 import ca.phon.session.tierdata.TierData;
 import ca.phon.util.Language;
@@ -18,9 +17,6 @@ import ca.phon.util.LanguageParser;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
-import javax.swing.text.SimpleAttributeSet;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.*;
@@ -168,7 +164,7 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
 
         Tier<TierData> tiersTier = (Tier<TierData>) headerTierMap.get("tiers");
 
-        int start = doc.getGenericStart(tiersTier);
+        int start = doc.getGenericContentStart(tiersTier);
         int end = doc.getGenericEnd(tiersTier);
 
         List<TierViewItem> visibleTierView = doc.getSession()
@@ -206,7 +202,7 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
     public void updateTiersHeader(EditorEvent<EditorEventType.TierViewChangedData> event) {
         try {
             Tier<?> tiersHeaderTier = headerTierMap.get("tiers");
-            int start = doc.getGenericStart(tiersHeaderTier);
+            int start = doc.getGenericContentStart(tiersHeaderTier);
             int end = doc.getGenericEnd(tiersHeaderTier);
 
             if (start > -1 && end > -1) {
@@ -250,7 +246,7 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
     public void updateDateHeader(EditorEvent<EditorEventType.SessionDateChangedData> event) {
         try {
             Tier<?> dateHeaderTier = headerTierMap.get("date");
-            int start = doc.getGenericStart(dateHeaderTier);
+            int start = doc.getGenericContentStart(dateHeaderTier);
             int end = doc.getGenericEnd(dateHeaderTier);
 
             if (start > -1 && end > -1) {

@@ -2,7 +2,7 @@ package ca.phon.app.session.editor.view.transcriptEditor.extensions;
 
 import ca.phon.app.session.editor.autotranscribe.AutoTranscriber;
 import ca.phon.app.session.editor.view.ipa_lookup.IPALookupEdit;
-import ca.phon.app.session.editor.view.transcriptEditor.SessionLocation;
+import ca.phon.app.session.editor.view.transcriptEditor.TranscriptLocation;
 import ca.phon.app.session.editor.view.transcriptEditor.TranscriptEditor;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.session.Record;
@@ -41,11 +41,11 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
      * Automatically transcribes an IPA tier if the caret is currently in one
      * */
     public void autoTranscription() {
-        SessionLocation sessionLocation = editor.getCurrentSessionLocation();
-        Transcript.Element elem = editor.getSession().getTranscript().getElementAt(sessionLocation.getElementIndex());
+        TranscriptLocation transcriptLocation = editor.getCurrentSessionLocation();
+        Transcript.Element elem = editor.getSession().getTranscript().getElementAt(transcriptLocation.elementIndex());
         if (!elem.isRecord()) return;
         Record record = elem.asRecord();
-        String tierName = sessionLocation.getLabel();
+        String tierName = transcriptLocation.label();
         if (elem.isRecord() && record.hasTier(tierName)) {
             Tier<?> tier = record.getTier(tierName);
             if (!tier.getDeclaredType().equals(IPATranscript.class)) return;

@@ -108,11 +108,11 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     /**
      * The editor event type for the session location change event
      * */
-    public final static EditorEventType<SessionLocationChangeData> sessionLocationChange = new EditorEventType<>("recordChangedInSingleRecordMode", SessionLocationChangeData.class);
+    public final static EditorEventType<TranscriptLocationChangeData> transcriptLocationChanged = new EditorEventType<>("transcriptLocationChanged", TranscriptLocationChangeData.class);
     /**
      * The session location of the current caret position
      * */
-    private SessionLocation currentSessionLocation = null;
+    private TranscriptLocation currentTranscriptLocation = null;
     /**
      * A set of attributes that the caret should not be able to move to
      * */
@@ -266,7 +266,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         this.eventManager.registerActionForEvent(EditorEventType.CommenTypeChanged, this::onCommentTypeChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
         this.eventManager.registerActionForEvent(EditorEventType.GemTypeChanged, this::onGemTypeChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 
-        this.eventManager.registerActionForEvent(sessionLocationChange, this::onSessionLocationChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+        this.eventManager.registerActionForEvent(transcriptLocationChanged, this::onSessionLocationChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 
         // TODO: Get this working
 //        this.eventManager.registerActionForEvent(EditorEventType.ParticipantChanged, this::onParticipantChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
@@ -433,12 +433,12 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         return dataModel.getTranscriber() == Transcriber.VALIDATOR;
     }
 
-    public SessionLocation getCurrentSessionLocation() {
-        return currentSessionLocation;
+    public TranscriptLocation getCurrentSessionLocation() {
+        return currentTranscriptLocation;
     }
 
-    public void setCurrentSessionLocation(SessionLocation currentSessionLocation) {
-        this.currentSessionLocation = currentSessionLocation;
+    public void setCurrentSessionLocation(TranscriptLocation currentTranscriptLocation) {
+        this.currentTranscriptLocation = currentTranscriptLocation;
     }
 
     /**
@@ -471,7 +471,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
 
     /**
      * Moves the caret to the start of the next tier or transcript element
-     * */
+     */
     public void nextTierOrElement() {
         int caretPos = getCaretPosition();
 
@@ -482,7 +482,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     }
     /**
      * Moves the caret to the start of the previous tier or transcript element
-     * */
+     */
     public void prevTierOrElement() {
         int caretPos = getCaretPosition();
 
@@ -513,7 +513,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                     case TranscriptStyleConstants.ATTR_KEY_RECORD -> {
                         Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
                         if (tier == null) return;
-                        int start = doc.getTierStart(tier);
+                        int start = doc.getTierContentStart(tier);
                         int end = doc.getTierEnd(tier) - 1;
                         String newVal = doc.getText(start, end - start);
                         if (!tier.toString().equals(newVal)) {
@@ -523,21 +523,21 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                     case TranscriptStyleConstants.ATTR_KEY_COMMENT -> {
                         Comment comment = (Comment) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT);
                         if (comment == null) return;
-                        int start = doc.getCommentStart(comment);
+                        int start = doc.getCommentContentStart(comment);
                         int end = doc.getCommentEnd(comment) - 1;
                         commentDataChanged(comment, doc.getText(start, end - start));
                     }
                     case TranscriptStyleConstants.ATTR_KEY_GEM -> {
                         Gem gem = (Gem) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM);
                         if (gem == null) return;
-                        int start = doc.getGemStart(gem);
+                        int start = doc.getGemContentStart(gem);
                         int end = doc.getGemEnd(gem) - 1;
                         gemDataChanged(gem, doc.getText(start, end - start));
                     }
                     case TranscriptStyleConstants.ATTR_KEY_GENERIC -> {
                         Tier<?> genericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
                         if (genericTier == null) return;
-                        int start = doc.getGenericStart(genericTier);
+                        int start = doc.getGenericContentStart(genericTier);
                         int end = doc.getGenericEnd(genericTier) - 1;
                         genericDataChanged(genericTier, doc.getText(start, end - start));
                     }
@@ -589,25 +589,25 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             case TranscriptStyleConstants.ATTR_KEY_RECORD -> {
                 Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
                 if (tier != null) {
-                    start = doc.getTierStart(tier);
+                    start = doc.getTierContentStart(tier);
                 }
             }
             case TranscriptStyleConstants.ATTR_KEY_COMMENT -> {
                 Comment comment = (Comment) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT);
                 if (comment != null) {
-                    start = doc.getCommentStart(comment);
+                    start = doc.getCommentContentStart(comment);
                 }
             }
             case TranscriptStyleConstants.ATTR_KEY_GEM -> {
                 Gem gem = (Gem) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM);
                 if (gem != null) {
-                    start = doc.getGemStart(gem);
+                    start = doc.getGemContentStart(gem);
                 }
             }
             case TranscriptStyleConstants.ATTR_KEY_GENERIC -> {
                 Tier<?> genericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
                 if (genericTier != null) {
-                    start = doc.getGenericStart(genericTier);
+                    start = doc.getGenericContentStart(genericTier);
                 }
             }
         }
@@ -725,7 +725,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         // Correct caret
         if (caretTierOffset > -1) {
             // Move the caret so that it has the same offset from the tiers new pos
-            setCaretPosition(doc.getTierStart(caretTier) + caretTierOffset);
+            setCaretPosition(doc.getTierContentStart(caretTier) + caretTierOffset);
         }
     }
 
@@ -776,7 +776,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                     }
                 }
 
-                int newCaretTierStart = doc.getTierStart(caretRecordIndex, newCaretTierViewItem.getTierName());
+                int newCaretTierStart = doc.getTierContentStart(caretRecordIndex, newCaretTierViewItem.getTierName());
                 int newCaretTierEnd = doc.getTierEnd(caretRecordIndex, newCaretTierViewItem.getTierName());
 
                 int newCaretPos = Math.min(newCaretTierStart + caretOffset, newCaretTierEnd - 1);
@@ -784,7 +784,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             }
             // Caret in tier not deleted
             else {
-                setCaretPosition(doc.getTierStart(caretTier) + caretOffset);
+                setCaretPosition(doc.getTierContentStart(caretTier) + caretOffset);
             }
         }
         // Caret not in record / tier
@@ -792,9 +792,9 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             String elementType = (String) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
             int start = -1;
             switch (elementType) {
-                case TranscriptStyleConstants.ATTR_KEY_COMMENT -> start = doc.getCommentStart((Comment) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT));
-                case TranscriptStyleConstants.ATTR_KEY_GEM -> start = doc.getGemStart((Gem) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM));
-                case TranscriptStyleConstants.ATTR_KEY_GENERIC -> start = doc.getGenericStart((Tier<?>) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC));
+                case TranscriptStyleConstants.ATTR_KEY_COMMENT -> start = doc.getCommentContentStart((Comment) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT));
+                case TranscriptStyleConstants.ATTR_KEY_GEM -> start = doc.getGemContentStart((Gem) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM));
+                case TranscriptStyleConstants.ATTR_KEY_GENERIC -> start = doc.getGenericContentStart((Tier<?>) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC));
             }
 
             setCaretPosition(start + caretOffset);
@@ -827,7 +827,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         // Correct caret
         if (caretTierOffset > -1) {
             // Move the caret so that it has the same offset from the tiers new pos
-            setCaretPosition(doc.getTierStart(caretTier) + caretTierOffset);
+            setCaretPosition(doc.getTierContentStart(caretTier) + caretTierOffset);
         }
         else {
             // Put the caret back where it was before the move
@@ -883,7 +883,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                     }
                 }
 
-                int newCaretTierStart = doc.getTierStart(caretRecordIndex, newCaretTierViewItem.getTierName());
+                int newCaretTierStart = doc.getTierContentStart(caretRecordIndex, newCaretTierViewItem.getTierName());
                 int newCaretTierEnd = doc.getTierEnd(caretRecordIndex, newCaretTierViewItem.getTierName());
 
                 int newCaretPos = Math.min(newCaretTierStart + caretOffset, newCaretTierEnd - 1);
@@ -891,7 +891,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             }
             // Caret in tier not deleted
             else {
-                setCaretPosition(doc.getTierStart(caretTier) + caretOffset);
+                setCaretPosition(doc.getTierContentStart(caretTier) + caretOffset);
             }
         }
         // Caret not in record / tier
@@ -899,9 +899,9 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             String elementType = (String) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
             int start = -1;
             switch (elementType) {
-                case TranscriptStyleConstants.ATTR_KEY_COMMENT -> start = doc.getCommentStart((Comment) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT));
-                case TranscriptStyleConstants.ATTR_KEY_GEM -> start = doc.getGemStart((Gem) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM));
-                case TranscriptStyleConstants.ATTR_KEY_GENERIC -> start = doc.getGenericStart((Tier<?>) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC));
+                case TranscriptStyleConstants.ATTR_KEY_COMMENT -> start = doc.getCommentContentStart((Comment) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT));
+                case TranscriptStyleConstants.ATTR_KEY_GEM -> start = doc.getGemContentStart((Gem) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM));
+                case TranscriptStyleConstants.ATTR_KEY_GENERIC -> start = doc.getGenericContentStart((Tier<?>) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC));
             }
 
             setCaretPosition(start + caretOffset);
@@ -934,7 +934,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         // Correct caret
         if (caretTierOffset > -1) {
             // Move the caret so that it has the same offset from the tiers new pos
-            setCaretPosition(doc.getTierStart(caretTier) + caretTierOffset);
+            setCaretPosition(doc.getTierContentStart(caretTier) + caretTierOffset);
         }
         else {
             // Put the caret back where it was before the move
@@ -1089,7 +1089,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
 
                 int newCaretRecordIndex = deletedRecordWasLast ? deletedRecordIndex - 1 : deletedRecordIndex;
 
-                int newCaretTierStart = doc.getTierStart(newCaretRecordIndex, caretTier.getName());
+                int newCaretTierStart = doc.getTierContentStart(newCaretRecordIndex, caretTier.getName());
                 int newCaretTierEnd = doc.getTierEnd(newCaretRecordIndex, caretTier.getName());
 
                 int newCaretPos = Math.min(newCaretTierStart + caretOffset, newCaretTierEnd - 1);
@@ -1097,7 +1097,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             }
             // Caret in record not deleted
             else {
-                setCaretPosition(doc.getTierStart(caretTier) + caretOffset);
+                setCaretPosition(doc.getTierContentStart(caretTier) + caretOffset);
             }
         }
         // Caret not in record / tier
@@ -1105,9 +1105,9 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             String elementType = (String) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
             int start = -1;
             switch (elementType) {
-                case TranscriptStyleConstants.ATTR_KEY_COMMENT -> start = doc.getCommentStart((Comment) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT));
-                case TranscriptStyleConstants.ATTR_KEY_GEM -> start = doc.getGemStart((Gem) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM));
-                case TranscriptStyleConstants.ATTR_KEY_GENERIC -> start = doc.getGenericStart((Tier<?>) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC));
+                case TranscriptStyleConstants.ATTR_KEY_COMMENT -> start = doc.getCommentContentStart((Comment) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT));
+                case TranscriptStyleConstants.ATTR_KEY_GEM -> start = doc.getGemContentStart((Gem) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM));
+                case TranscriptStyleConstants.ATTR_KEY_GENERIC -> start = doc.getGenericContentStart((Tier<?>) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC));
             }
 
             setCaretPosition(start + caretOffset);
@@ -1170,8 +1170,8 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         int end = -1;
 
         if (changedTier.isUnvalidated()) {
-            start = doc.getTierStart(changedTier) + changedTier.getUnvalidatedValue().getParseError().getErrorOffset();
-            end = doc.getTierStart(changedTier) + changedTier.getUnvalidatedValue().getValue().length();
+            start = doc.getTierContentStart(changedTier) + changedTier.getUnvalidatedValue().getParseError().getErrorOffset();
+            end = doc.getTierContentStart(changedTier) + changedTier.getUnvalidatedValue().getValue().length();
         }
 
         if (internalEdit) {
@@ -1217,7 +1217,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
 
         if (caretStartTier == null) return;
 
-        setCaretPosition(doc.getTierStart(caretStartTier) + offset);
+        setCaretPosition(doc.getTierContentStart(caretStartTier) + offset);
     }
 
     // endregion Record Changes
@@ -1473,18 +1473,18 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
      * Saves the changes made to the line the caret is currently on
      * */
     public void saveCurrentLine() {
-        SessionLocation sessionLocation = getCurrentSessionLocation();
-        if (sessionLocation.getElementIndex() < 0) return;
+        TranscriptLocation transcriptLocation = getCurrentSessionLocation();
+        if (transcriptLocation.elementIndex() < 0) return;
 
         TranscriptDocument doc = getTranscriptDocument();
 
-        var elem = getSession().getTranscript().getElementAt(sessionLocation.getElementIndex());
+        var elem = getSession().getTranscript().getElementAt(transcriptLocation.elementIndex());
         try {
             if (elem.isRecord()) {
                 Record record = elem.asRecord();
-                String tierName = sessionLocation.getLabel();
+                String tierName = transcriptLocation.label();
                 Tier<?> tier = record.getTier(tierName);
-                int startPos = doc.getTierStart(tier);
+                int startPos = doc.getTierContentStart(tier);
                 int endPos = doc.getTierEnd(tier) - 1;
                 if (startPos >= 0 && endPos >= 0) {
                     changeTierData(record, tier, doc.getText(startPos, endPos - startPos));
@@ -1492,7 +1492,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             }
             else if (elem.isComment()) {
                 Comment comment = elem.asComment();
-                int startPos = doc.getCommentStart(comment);
+                int startPos = doc.getCommentContentStart(comment);
                 int endPos = doc.getCommentEnd(comment) - 1;
                 if (startPos >= 0 && endPos >= 0) {
                     commentDataChanged(comment, doc.getText(startPos, endPos - startPos));
@@ -1500,7 +1500,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             }
             else if (elem.isGem()) {
                 Gem gem = elem.asGem();
-                int startPos = doc.getGemStart(gem);
+                int startPos = doc.getGemContentStart(gem);
                 int endPos = doc.getGemEnd(gem) - 1;
                 if (startPos >= 0 && endPos >= 0) {
                     gemDataChanged(gem, doc.getText(startPos, endPos - startPos));
@@ -1550,19 +1550,19 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                     case TranscriptStyleConstants.ATTR_KEY_COMMENT -> {
                         g.setColor(UIManager.getColor(TranscriptEditorUIProps.COMMENT_BACKGROUND));
                         Comment comment = (Comment) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT);
-                        start = doc.getCommentStart(comment);
+                        start = doc.getCommentContentStart(comment);
                         end = doc.getCommentEnd(comment);
                     }
                     case TranscriptStyleConstants.ATTR_KEY_GEM -> {
                         g.setColor(UIManager.getColor(TranscriptEditorUIProps.GEM_BACKGROUND));
                         Gem gem = (Gem) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM);
-                        start = doc.getGemStart(gem);
+                        start = doc.getGemContentStart(gem);
                         end = doc.getGemEnd(gem);
                     }
                     case TranscriptStyleConstants.ATTR_KEY_GENERIC -> {
                         g.setColor(UIManager.getColor(TranscriptEditorUIProps.GENERIC_BACKGROUND));
                         Tier<?> genericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
-                        start = doc.getGenericStart(genericTier);
+                        start = doc.getGenericContentStart(genericTier);
                         end = doc.getGenericEnd(genericTier);
                     }
                 }
@@ -2140,12 +2140,12 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     }
 
     /**
-     * Converts a character position in the document into a {@link SessionLocation} object
+     * Converts a character position in the document into a {@link TranscriptLocation} object
      *
      * @param charPos the position in the document
      * @return the converted session location object
      * */
-    public SessionLocation charPosToSessionLocation(int charPos) {
+    public TranscriptLocation charPosToSessionLocation(int charPos) {
         TranscriptDocument doc = getTranscriptDocument();
         Transcript transcript = getSession().getTranscript();
 
@@ -2164,54 +2164,54 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                 Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
                 if (tier != null) {
                     label = tier.getName();
-                    posInTier = charPos - doc.getTierStart(tier);
+                    posInTier = charPos - doc.getTierContentStart(tier);
                 }
             }
             case TranscriptStyleConstants.ATTR_KEY_COMMENT -> {
                 Comment comment = (Comment) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT);
                 transcriptElementIndex = transcript.getElementIndex(comment);
                 label = comment.getType().getLabel();
-                posInTier = charPos - doc.getCommentStart(comment);
+                posInTier = charPos - doc.getCommentContentStart(comment);
             }
             case TranscriptStyleConstants.ATTR_KEY_GEM -> {
                 Gem gem = (Gem) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM);
                 transcriptElementIndex = transcript.getElementIndex(gem);
                 label = gem.getType().name() + " Gem";
-                posInTier = doc.getGemStart(gem);
+                posInTier = doc.getGemContentStart(gem);
             }
             case TranscriptStyleConstants.ATTR_KEY_GENERIC -> {
                 Tier<?> genericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
                 if (genericTier != null) {
                     label = genericTier.getName();
-                    posInTier = doc.getGenericStart(genericTier);
+                    posInTier = doc.getGenericContentStart(genericTier);
                 }
             }
         }
 
-        return new SessionLocation(transcriptElementIndex, label, posInTier);
+        return new TranscriptLocation(transcriptElementIndex, label, posInTier);
     }
     /**
      * Converts a session location into a character position in the document
      *
-     * @param sessionLocation the session location object
+     * @param transcriptLocation the session location object
      * @return the converted character position
      * */
-    public int sessionLocationToCharPos(SessionLocation sessionLocation) {
+    public int sessionLocationToCharPos(TranscriptLocation transcriptLocation) {
         TranscriptDocument doc = getTranscriptDocument();
         Transcript transcript = getSession().getTranscript();
 
-        if (sessionLocation.getElementIndex() > -1) {
-            Transcript.Element transcriptElement = transcript.getElementAt(sessionLocation.getElementIndex());
+        if (transcriptLocation.elementIndex() > -1) {
+            Transcript.Element transcriptElement = transcript.getElementAt(transcriptLocation.elementIndex());
 
             if (transcriptElement.isRecord()) {
                 int recordIndex = transcript.getRecordPosition(transcriptElement.asRecord());
-                return doc.getTierStart(recordIndex, sessionLocation.getLabel()) + sessionLocation.getPosInTier();
+                return doc.getTierContentStart(recordIndex, transcriptLocation.label()) + transcriptLocation.posInTier();
             }
             else if (transcriptElement.isComment()) {
-                return doc.getCommentStart(transcriptElement.asComment()) + sessionLocation.getPosInTier();
+                return doc.getCommentContentStart(transcriptElement.asComment()) + transcriptLocation.posInTier();
             }
             else if (transcriptElement.isGem()) {
-                return doc.getGemStart(transcriptElement.asGem()) + sessionLocation.getPosInTier();
+                return doc.getGemContentStart(transcriptElement.asGem()) + transcriptLocation.posInTier();
             }
         }
 
@@ -2395,9 +2395,9 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
 
     /**
      * Runs when the session location changes.
-     * Sets the {@code currentSessionLocation} to the new location
+     * Sets the {@code currentTranscriptLocation} to the new location
      * */
-    private void onSessionLocationChanged(EditorEvent<SessionLocationChangeData> editorEvent) {
+    private void onSessionLocationChanged(EditorEvent<TranscriptLocationChangeData> editorEvent) {
         setCurrentSessionLocation(editorEvent.data().newLoc);
     }
 
@@ -2565,15 +2565,15 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                             switch (elementType) {
                                 case TranscriptStyleConstants.ATTR_KEY_RECORD -> {
                                     Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
-                                    select(doc.getTierStart(tier), doc.getTierEnd(tier));
+                                    select(doc.getTierContentStart(tier), doc.getTierEnd(tier));
                                 }
                                 case TranscriptStyleConstants.ATTR_KEY_COMMENT -> {
                                     Comment comment = (Comment) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT);
-                                    select(doc.getCommentStart(comment), doc.getCommentEnd(comment));
+                                    select(doc.getCommentContentStart(comment), doc.getCommentEnd(comment));
                                 }
                                 case TranscriptStyleConstants.ATTR_KEY_GEM -> {
                                     Gem gem = (Gem) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM);
-                                    select(doc.getGemStart(gem), doc.getGemEnd(gem));
+                                    select(doc.getGemContentStart(gem), doc.getGemEnd(gem));
                                 }
                             }
                         }
@@ -2615,28 +2615,28 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                             case TranscriptStyleConstants.ATTR_KEY_RECORD -> {
                                 Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
                                 if (tier != null) {
-                                    setSelectionStart(doc.getTierStart(tier));
+                                    setSelectionStart(doc.getTierContentStart(tier));
                                     setSelectionEnd(doc.getTierEnd(tier)-1);
                                 }
                             }
                             case TranscriptStyleConstants.ATTR_KEY_COMMENT -> {
                                 Comment comment = (Comment) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT);
                                 if (comment != null) {
-                                    setSelectionStart(doc.getCommentStart(comment));
+                                    setSelectionStart(doc.getCommentContentStart(comment));
                                     setSelectionEnd(doc.getCommentEnd(comment)-1);
                                 }
                             }
                             case TranscriptStyleConstants.ATTR_KEY_GEM -> {
                                 Gem gem = (Gem) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM);
                                 if (gem != null) {
-                                    setSelectionStart(doc.getGemStart(gem));
+                                    setSelectionStart(doc.getGemContentStart(gem));
                                     setSelectionEnd(doc.getGemEnd(gem)-1);
                                 }
                             }
                             case TranscriptStyleConstants.ATTR_KEY_GENERIC -> {
                                 Tier<?> generic = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
                                 if (generic != null) {
-                                    setSelectionStart(doc.getGenericStart(generic));
+                                    setSelectionStart(doc.getGenericContentStart(generic));
                                     setSelectionEnd(doc.getGenericEnd(generic)-1);
                                 }
                             }
@@ -2660,7 +2660,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             }
 
             try {
-                int tierStart = getTranscriptDocument().getTierStart(selection.getRecordIndex(), selection.getTierName());
+                int tierStart = getTranscriptDocument().getTierContentStart(selection.getRecordIndex(), selection.getTierName());
                 if (tierStart == -1) return;
 
                 var selectionHighlight = getHighlighter().addHighlight(
@@ -2689,7 +2689,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             }
 
             try {
-                int tierStart = getTranscriptDocument().getTierStart(selection.getRecordIndex(), selection.getTierName());
+                int tierStart = getTranscriptDocument().getTierContentStart(selection.getRecordIndex(), selection.getTierName());
                 if (tierStart == -1) return;
 
                 var selectionHighlight = getHighlighter().addHighlight(
@@ -2728,7 +2728,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
      * @param oldLoc the previous session location
      * @param newLoc the new session location
      * */
-    public record SessionLocationChangeData(SessionLocation oldLoc, SessionLocation newLoc) {}
+    public record TranscriptLocationChangeData(TranscriptLocation oldLoc, TranscriptLocation newLoc) {}
 
     // region IExtendable
 

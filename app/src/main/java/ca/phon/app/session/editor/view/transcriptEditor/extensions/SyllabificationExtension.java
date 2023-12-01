@@ -50,7 +50,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
         this.doc = editor.getTranscriptDocument();
 
         PhonUIAction<Void> syllabificationEditModeAct = PhonUIAction.runnable(() -> {
-            String tierName = editor.getCurrentSessionLocation().getLabel();
+            String tierName = editor.getCurrentSessionLocation().label();
             if (!tierName.equals(SystemTierType.TargetSyllables.getName()) && !tierName.equals(SystemTierType.ActualSyllables.getName())) return;
             setSyllabificationEditMode(!syllabificationEditMode);
         });
@@ -128,8 +128,8 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
 
         editor.addCaretListener(e -> {
             if (!syllabificationEditMode) return;
-            SessionLocation location = editor.charPosToSessionLocation(e.getDot());
-            String tierName = location.getLabel();
+            TranscriptLocation location = editor.charPosToSessionLocation(e.getDot());
+            String tierName = location.label();
             if (!SystemTierType.TargetSyllables.getName().equals(tierName) && !SystemTierType.ActualSyllables.getName().equals(tierName)) {
                 setSyllabificationEditMode(false);
             }
@@ -259,7 +259,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                             if (nextElemType != null && nextElemType.equals(TranscriptStyleConstants.ATTR_KEY_RECORD)) {
                                 if (nextTier != null && nextTier == prevTier) break;
                             }
-                            int start = doc.getTierStart(prevTier);
+                            int start = doc.getTierContentStart(prevTier);
                             int end = doc.getTierEnd(prevTier) - 1;
                             String newValue = doc.getText(start, end - start);
                             editor.setInternalEdit(true);
@@ -287,16 +287,16 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                 fb.setDot(dot, bias);
             }
 
-            TranscriptEditor.SessionLocationChangeData sessionLocationChangeData = new TranscriptEditor.SessionLocationChangeData(
+            TranscriptEditor.TranscriptLocationChangeData transcriptLocationChangeData = new TranscriptEditor.TranscriptLocationChangeData(
                 editor.charPosToSessionLocation(prevCaretPos),
                 editor.charPosToSessionLocation(dot)
             );
 
             SwingUtilities.invokeLater(() -> {
-                final EditorEvent<TranscriptEditor.SessionLocationChangeData> e = new EditorEvent<>(
-                    TranscriptEditor.sessionLocationChange,
+                final EditorEvent<TranscriptEditor.TranscriptLocationChangeData> e = new EditorEvent<>(
+                    TranscriptEditor.transcriptLocationChanged,
                     editor,
-                    sessionLocationChangeData
+                        transcriptLocationChangeData
                 );
                 editor.getEventManager().queueEvent(e);
             });
@@ -392,7 +392,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                                 sInfo.setDiphthongMember(true);
                                 otherSInfo.setDiphthongMember(true);
 
-                                int start = doc.getTierStart(tier);
+                                int start = doc.getTierContentStart(tier);
                                 int end = doc.getTierEnd(tier);
 
                                 for (int i = start; i < end; i++) {
@@ -410,7 +410,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                                 sInfo.setDiphthongMember(false);
                                 otherSInfo.setDiphthongMember(false);
 
-                                int start = doc.getTierStart(tier);
+                                int start = doc.getTierContentStart(tier);
                                 int end = doc.getTierEnd(tier);
 
                                 for (int i = start; i < end; i++) {

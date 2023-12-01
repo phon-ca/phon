@@ -128,7 +128,7 @@ public class MergeSessionStep2 extends WizardStep {
 		
 		// add filter panels
 		for(SessionPath loc:locations) {
-//			SessionLocation loc = sessions.get(i);
+//			TranscriptLocation loc = sessions.get(i);
 			RecordFilterPanel panel = panels.get(loc);
 			cardPanel.add(panel, loc.toString());
 		}

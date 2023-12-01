@@ -497,9 +497,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             if (elementAfterComment.isRecord()) {
                 offset = getRecordStart(session.getRecordPosition(elementAfterComment.asRecord()));
             } else if (elementAfterComment.isComment()) {
-                offset = getCommentStart(elementAfterComment.asComment());
+                offset = getCommentContentStart(elementAfterComment.asComment());
             } else if (elementAfterComment.isGem()) {
-                offset = getGemStart(elementAfterComment.asGem());
+                offset = getGemContentStart(elementAfterComment.asGem());
             } else {
                 throw new RuntimeException("Invalid transcript element");
             }
@@ -539,12 +539,43 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     }
 
     /**
+     * Get the start position of the specified comment including label
+     *
+     * @param comment the comment whose start position is trying to be found
+     * @return the position in the document at the beginning of the comment label
+     */
+    public int getCommentStart(Comment comment) {
+        Element root = getDefaultRootElement();
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() == 0) continue;
+            String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
+            // If transcript element type is comment
+            if (transcriptElementType != null && transcriptElementType.equals(TranscriptStyleConstants.ATTR_KEY_COMMENT)) {
+                for (int j = 0; j < elem.getElementCount(); j++) {
+                    Element innerElem = elem.getElement(j);
+                    AttributeSet attrs = innerElem.getAttributes();
+                    Comment currentComment = (Comment) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT);
+                    Boolean isLabel = (Boolean) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL);
+                    // If correct comment
+                    if (isLabel == null && currentComment != null && currentComment == comment) {
+                        return innerElem.getParentElement().getStartOffset();
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    /**
      * Gets the start position of the specified comment
      *
      * @param comment the comment whose start position is trying to be found
      * @return the position in the document at the beginning of the comments content
      */
-    public int getCommentStart(Comment comment) {
+    public int getCommentContentStart(Comment comment) {
         Element root = getDefaultRootElement();
 
         for (int i = 0; i < root.getElementCount(); i++) {
@@ -573,9 +604,40 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * Gets the start position of the specified gem
      *
      * @param gem the gem whose start position is trying to be found
-     * @return the position in the document at the beginning of the gems content
+     * @return the position in the document at the beginning of the gem label
      */
     public int getGemStart(Gem gem) {
+        Element root = getDefaultRootElement();
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() == 0) continue;
+            String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
+            // If transcript element type is gem
+            if (transcriptElementType != null && transcriptElementType.equals(TranscriptStyleConstants.ATTR_KEY_GEM)) {
+                for (int j = 0; j < elem.getElementCount(); j++) {
+                    Element innerElem = elem.getElement(j);
+                    AttributeSet attrs = innerElem.getAttributes();
+                    Gem currentGem = (Gem) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM);
+                    Boolean isLabel = (Boolean) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL);
+                    // If correct tier
+                    if (isLabel == null && currentGem != null && currentGem == gem) {
+                        return innerElem.getParentElement().getStartOffset();
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    /**
+     * Gets the start position of the specified gem
+     *
+     * @param gem the gem whose start position is trying to be found
+     * @return the position in the document at the beginning of the gems content
+     */
+    public int getGemContentStart(Gem gem) {
         Element root = getDefaultRootElement();
 
         for (int i = 0; i < root.getElementCount(); i++) {
@@ -1158,9 +1220,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             if (elementAfterComment.isRecord()) {
                 offset = getRecordStart(session.getRecordPosition(elementAfterComment.asRecord()));
             } else if (elementAfterComment.isComment()) {
-                offset = getCommentStart(elementAfterComment.asComment());
+                offset = getCommentContentStart(elementAfterComment.asComment());
             } else if (elementAfterComment.isGem()) {
-                offset = getGemStart(elementAfterComment.asGem());
+                offset = getGemContentStart(elementAfterComment.asGem());
             } else {
                 throw new RuntimeException("Invalid transcript element");
             }
@@ -1281,10 +1343,10 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             int endOffset = -1;
 
             if (elem.isComment()) {
-                startOffset = getCommentStart(elem.asComment());
+                startOffset = getCommentContentStart(elem.asComment());
                 endOffset = getCommentEnd(elem.asComment());
             } else if (elem.isGem()) {
-                startOffset = getGemStart(elem.asGem());
+                startOffset = getGemContentStart(elem.asGem());
                 endOffset = getGemEnd(elem.asGem());
             } else if (elem.isRecord()) {
                 return;
@@ -1305,7 +1367,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * Updates the displayed type of the given comment in the document
      */
     public void onChangeCommentType(Comment comment) {
-        int start = getCommentStart(comment);
+        int start = getCommentContentStart(comment);
         int end = getCommentEnd(comment);
 
         start -= labelColumnWidth + 2;
@@ -1327,7 +1389,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * Updates the displayed type of the given gem in the document
      */
     public void onChangeGemType(Gem gem) {
-        int start = getGemStart(gem);
+        int start = getGemContentStart(gem);
         int end = getGemEnd(gem);
 
         start -= labelColumnWidth + 2;
@@ -1658,9 +1720,43 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      *
      * @param recordIndex the index of the record that contains the tier
      * @param tierName    the name of the tier
-     * @return the position in the document at the beginning of the tiers content
+     * @return the position in the document at the beginning of the tier label
      */
     public int getTierStart(int recordIndex, String tierName) {
+        Element root = getDefaultRootElement();
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() < 1) continue;
+            Record currentRecord = (Record) elem.getElement(0).getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
+            if (currentRecord == null) continue;
+            int currentRecordIndex = session.getRecordPosition(currentRecord);
+            // If correct record index
+            if (currentRecordIndex == recordIndex) {
+                for (int j = 0; j < elem.getElementCount(); j++) {
+                    Element innerElem = elem.getElement(j);
+                    AttributeSet attrs = innerElem.getAttributes();
+                    Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
+                    Boolean isLabel = (Boolean) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL);
+                    // If correct tier name
+                    if (isLabel == null && tier != null && tier.getName().equals(tierName)) {
+                        return innerElem.getParentElement().getStartOffset();
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    /**
+     * Gets the start position of a tier with the specified name in the record at the specified index
+     *
+     * @param recordIndex the index of the record that contains the tier
+     * @param tierName    the name of the tier
+     * @return the position in the document at the beginning of the tiers content
+     */
+    public int getTierContentStart(int recordIndex, String tierName) {
         Element root = getDefaultRootElement();
 
         for (int i = 0; i < root.getElementCount(); i++) {
@@ -1763,9 +1859,40 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * Gets the start position of the "generic tier" with the specified name
      *
      * @param genericTierName the name of the generic tier whose start position is trying to be found
-     * @return the position in the document at the beginning of the generic tiers content
+     * @return the position in the document at the beginning of the generic tiers label
      */
     public int getGenericStart(String genericTierName) {
+        Element root = getDefaultRootElement();
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() == 0) continue;
+            String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
+            // If transcript element type is generic
+            if (transcriptElementType != null && transcriptElementType.equals(TranscriptStyleConstants.ATTR_KEY_GENERIC)) {
+                for (int j = 0; j < elem.getElementCount(); j++) {
+                    Element innerElem = elem.getElement(j);
+                    AttributeSet attrs = innerElem.getAttributes();
+                    Tier<?> currentGenericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
+                    Boolean isLabel = (Boolean) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL);
+                    // If correct tier name
+                    if (isLabel == null && currentGenericTier != null && currentGenericTier.getName().equals(genericTierName)) {
+                        return innerElem.getParentElement().getStartOffset();
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    /**
+     * Gets the start position of the "generic tier" with the specified name
+     *
+     * @param genericTierName the name of the generic tier whose start position is trying to be found
+     * @return the position in the document at the beginning of the generic tiers content
+     */
+    public int getGenericContentStart(String genericTierName) {
         Element root = getDefaultRootElement();
 
         for (int i = 0; i < root.getElementCount(); i++) {
@@ -2098,7 +2225,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                     .findFirst()
                     .get()
                     .getTierName();
-            int end = getTierStart(recordIndex, firstVisibleTierName) - (labelColumnWidth + 2);
+            int end = getTierContentStart(recordIndex, firstVisibleTierName) - (labelColumnWidth + 2);
 
             bypassDocumentFilter = true;
             remove(start, end - start);
@@ -2142,7 +2269,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         if (tier.getDeclaredType().equals(PhoneAlignment.class)) return;
 
         try {
-            int start = getTierStart(tier);
+            int start = getTierContentStart(tier);
             int recordIndex = getRecordIndex(start);
             start -= labelColumnWidth + 2;
             int end = getTierEnd(tier);
@@ -2434,24 +2561,24 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             case TranscriptStyleConstants.ATTR_KEY_RECORD -> {
                 Tier<?> tier = (Tier<?>) elem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
                 if (tier == null) return -1;
-                int recordStartPos = getTierStart(tier);
+                int recordStartPos = getTierContentStart(tier);
                 return pos - recordStartPos;
             }
             case TranscriptStyleConstants.ATTR_KEY_COMMENT -> {
                 Comment comment = (Comment) elem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT);
                 if (comment == null) return -1;
-                int commentStartPos = getCommentStart(comment);
+                int commentStartPos = getCommentContentStart(comment);
                 return pos - commentStartPos;
             }
             case TranscriptStyleConstants.ATTR_KEY_GEM -> {
                 Gem gem = (Gem) elem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM);
                 if (gem == null) return -1;
-                return pos - getGemStart(gem);
+                return pos - getGemContentStart(gem);
             }
             case TranscriptStyleConstants.ATTR_KEY_GENERIC -> {
                 Tier<?> genericTier = (Tier<?>) elem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
                 if (genericTier == null) return -1;
-                return pos - getGenericStart(genericTier);
+                return pos - getGenericContentStart(genericTier);
             }
             default -> {
                 return -1;
@@ -2465,7 +2592,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @param tier the tier whose start position is trying to be found
      * @return the position in the document at the beginning of the tiers content
      */
-    public int getTierStart(Tier<?> tier) {
+    public int getTierContentStart(Tier<?> tier) {
         Element root = getDefaultRootElement();
 
         for (int i = 0; i < root.getElementCount(); i++) {
@@ -2496,7 +2623,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @param genericTier a reference to the generic tier whose start position is trying to be found
      * @return the position in the document at the beginning of the generic tiers content
      */
-    public int getGenericStart(Tier<?> genericTier) {
+    public int getGenericContentStart(Tier<?> genericTier) {
         Element root = getDefaultRootElement();
 
         for (int i = 0; i < root.getElementCount(); i++) {

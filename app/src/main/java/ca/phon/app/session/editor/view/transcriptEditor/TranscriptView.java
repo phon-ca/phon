@@ -521,8 +521,8 @@ public class TranscriptView extends EditorView {
      * */
     private void setupTranscriptMenu(MenuBuilder menuBuilder) {
 
-        SessionLocation sessionLocation = getTranscriptEditor().getCurrentSessionLocation();
-        int currentTranscriptElementIndex = sessionLocation == null ? -1 : sessionLocation.getElementIndex();
+        TranscriptLocation transcriptLocation = getTranscriptEditor().getCurrentSessionLocation();
+        int currentTranscriptElementIndex = transcriptLocation == null ? -1 : transcriptLocation.elementIndex();
         boolean inHeaders = currentTranscriptElementIndex < 0;
 
 
