@@ -138,7 +138,7 @@ public class TranscriptView extends EditorView {
         centerPanel.add(transcriptScrollPane, BorderLayout.CENTER);
         centerPanel.add(new TranscriptStatusBar(transcriptEditor), BorderLayout.SOUTH);
 
-        JPanel toolbar = new JPanel(new HorizontalLayout());
+        JToolBar toolbar = new JToolBar();
         add(toolbar, BorderLayout.NORTH);
 
         var blankIcon = IconManager.getInstance().getIcon("blank", IconSize.SMALL);
