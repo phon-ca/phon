@@ -33,8 +33,6 @@ public class RecordEditorPerspective {
 
 	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(RecordEditorPerspective.class.getName());
 
-	public final static String DEFAULT_PERSPECTIVE_NAME = "Default";
-
 	public final static String LAST_USED_PERSPECTIVE_NAME = "Previous";
 
 	private final static String PERSPECTIVE_LIST = "META-INF/layouts/layouts.list";

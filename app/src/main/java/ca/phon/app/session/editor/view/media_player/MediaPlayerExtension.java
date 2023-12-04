@@ -18,8 +18,10 @@ package ca.phon.app.session.editor.view.media_player;
 import ca.phon.app.session.editor.*;
 import ca.phon.plugin.*;
 
+import javax.swing.*;
+
 @PhonPlugin(name="Media Player")
-@EditorViewInfo(name="Media Player", category=EditorViewCategory.MEDIA, icon="apps/vlc")
+@EditorViewInfo(name="Media Player", category=EditorViewCategory.MEDIA, dockPosition = SwingConstants.NORTH_WEST, icon="apps/vlc")
 public class MediaPlayerExtension implements IPluginExtensionPoint<EditorView> {
 
 	@Override

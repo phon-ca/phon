@@ -74,11 +74,6 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 	private CContentArea rootArea;
 
 	/**
-	 * Working area
-	 */
-	private CWorkingArea workingArea;
-
-	/**
 	 * Dockables
 	 */
 	private Map<String, CDockablePerspective> dockables;
@@ -117,13 +112,13 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		super();
 
 		editorRef = new WeakReference<SessionEditor>(editor);
-//		editor.addWindowListener(windowChangeListener);
 		getDockControl();
-		perspectiveFinishedLoading = true;
-//		getEditor().getEventManager().registerActionForEvent(EditorEventType.EditorFinishedLoading,
-//				(e) -> perspectiveFinishedLoading = true, EditorEventManager.RunOn.AWTEventDispatchThread);
+
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.EditorFinishedLoading,
+				(e) -> perspectiveFinishedLoading = true, EditorEventManager.RunOn.AWTEventDispatchThread);
 	}
 
+	// region Dockable control setup
 	private CControl getDockControl() {
 		if(dockControl == null) {
 			dockControl = new CControl( windows );
@@ -201,9 +196,6 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		dockControl.addSingleDockableFactory(dockableFilter, dockFactory);
 
 		rootArea = dockControl.getContentArea();
-		workingArea = dockControl.createWorkingArea("work");
-		dockables = new TreeMap<String, CDockablePerspective>();
-		dockPositions = new LinkedHashMap<>();
 		setupDockables();
 
 		// fix title colours using substance theme on windows/linux
@@ -232,6 +224,9 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 	}
 
 	private void setupDockables() {
+		dockables = new TreeMap<String, CDockablePerspective>();
+		dockPositions = new LinkedHashMap<>();
+
 		CControlPerspective perspectives = dockControl.getPerspectives();
 		CPerspective perspective = perspectives.createEmptyPerspective();
 		CGridPerspective center = perspective.getContentArea().getCenter();
@@ -287,6 +282,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 //		perspectives.setPerspective("default", perspective, true);
 //		dockControl.load("default", true);
 	}
+	// endregion
 
 	private CDockable getViewDockable(String viewName) {
 		CDockable retVal = null;
@@ -300,11 +296,12 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		return retVal;
 	}
 
+	// region EditorViewModel
 	@Override
 	public Container getRoot() {
 		return rootArea;
 	}
-	
+
 	/**
 	 * Return focused view
 	 *
@@ -540,27 +537,6 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		dynamicViews.put(title, comp);
 	}
 
-	/**
-	 * Delete given perspective.
-	 *
-	 * @param perspective
-	 */
-	public void onDeletePerspective(RecordEditorPerspective perspective) {
-		final MessageDialogProperties props = new MessageDialogProperties();
-		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
-		props.setTitle("Delete Layout");
-		props.setHeader("Delete Layout");
-		props.setMessage("Delete layout '" + perspective.getName() + "'?");
-		props.setOptions(MessageDialogProperties.okCancelOptions);
-		props.setRunAsync(false);
-
-		final int retVal = NativeDialogs.showMessageDialog(props);
-		if(retVal == 0) {
-			RecordEditorPerspective.deletePerspective(perspective);
-			removePrespective(perspective);
-		}
-	}
-
 	@Override
 	public void setupWindows(RecordEditorPerspective editorPerspective) {
 		final AccessoryWindow[] windows = accessoryWindows.toArray(new AccessoryWindow[0]);
@@ -633,11 +609,6 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		}
 	}
 
-	public void loadPerspective(RecordEditorPerspective editorPerspective) {
-		setupWindows(editorPerspective);
-		applyPerspective(editorPerspective);
-	}
-
 	@Override
 	public void applyPerspective(RecordEditorPerspective editorPerspective) {
 		CPerspective perspective = null;
@@ -661,7 +632,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			for(var station:dockControl.getStations()) {
 				if(station instanceof StackDockStation) {
 					((StackDockStation)station).addDockableStateListener(new DockableStateListener() {
-						
+
 						@Override
 						public void changed(DockableStateEvent arg0) {
 							System.out.println(arg0);
@@ -672,14 +643,6 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		} catch (IOException e) {
 			LogUtil.severe( e.getLocalizedMessage(), e);
 		}
-	}
-
-	private CommonModuleFrame getFrameForEditor() {
-		final Window window = SwingUtilities.getWindowAncestor(getEditor());
-		if(window instanceof  CommonModuleFrame commonModuleFrame)
-			return commonModuleFrame;
-		else
-			return null;
 	}
 
 	@Override
@@ -714,7 +677,42 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			} catch (IOException | URISyntaxException e) {
 				LogUtil.severe(e);
 			}
-        }
+		}
+	}
+	// endregion
+
+	/**
+	 * Delete given perspective.
+	 *
+	 * @param perspective
+	 */
+	public void onDeletePerspective(RecordEditorPerspective perspective) {
+		final MessageDialogProperties props = new MessageDialogProperties();
+		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
+		props.setTitle("Delete Layout");
+		props.setHeader("Delete Layout");
+		props.setMessage("Delete layout '" + perspective.getName() + "'?");
+		props.setOptions(MessageDialogProperties.okCancelOptions);
+		props.setRunAsync(false);
+
+		final int retVal = NativeDialogs.showMessageDialog(props);
+		if(retVal == 0) {
+			RecordEditorPerspective.deletePerspective(perspective);
+			removePrespective(perspective);
+		}
+	}
+
+	public void loadPerspective(RecordEditorPerspective editorPerspective) {
+		setupWindows(editorPerspective);
+		applyPerspective(editorPerspective);
+	}
+
+	private CommonModuleFrame getFrameForEditor() {
+		final Window window = SwingUtilities.getWindowAncestor(getEditor());
+		if(window instanceof  CommonModuleFrame commonModuleFrame)
+			return commonModuleFrame;
+		else
+			return null;
 	}
 
 	private void writeBoundsInfo(XElement rootBoundsEle, JFrame frame) {

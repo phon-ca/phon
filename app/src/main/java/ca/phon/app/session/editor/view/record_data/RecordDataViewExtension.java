@@ -18,12 +18,14 @@ package ca.phon.app.session.editor.view.record_data;
 import ca.phon.app.session.editor.*;
 import ca.phon.plugin.*;
 
+import javax.swing.*;
+
 /**
  * Provides plug-in extension point for {@link RecordDataEditorView}
  *
  */
 @PhonPlugin(name=RecordDataEditorView.VIEW_NAME)
-@EditorViewInfo(name=RecordDataEditorView.VIEW_NAME, category=EditorViewCategory.RECORD, icon=RecordDataEditorView.VIEW_ICON)
+@EditorViewInfo(name=RecordDataEditorView.VIEW_NAME, category=EditorViewCategory.RECORD, dockPosition = SwingConstants.CENTER, icon=RecordDataEditorView.VIEW_ICON)
 public class RecordDataViewExtension implements IPluginExtensionPoint<EditorView> {
 
 	@Override

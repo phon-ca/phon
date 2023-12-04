@@ -18,8 +18,10 @@ package ca.phon.app.session.editor.view.session_information;
 import ca.phon.app.session.editor.*;
 import ca.phon.plugin.*;
 
+import javax.swing.*;
+
 @PhonPlugin(name="Session Information")
-@EditorViewInfo(name="Session Information", category=EditorViewCategory.SESSION, icon="apps/system-users")
+@EditorViewInfo(name="Session Information", category=EditorViewCategory.SESSION, dockPosition = SwingConstants.NORTH, icon="apps/system-users")
 public class SessionInfoExtension implements IPluginExtensionPoint<EditorView> {
 
 	@Override
