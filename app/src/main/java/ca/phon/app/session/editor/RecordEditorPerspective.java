@@ -15,10 +15,17 @@
  */
 package ca.phon.app.session.editor;
 
+import bibliothek.gui.dock.common.perspective.CControlPerspective;
+import bibliothek.gui.dock.common.perspective.CGridPerspective;
+import bibliothek.gui.dock.common.perspective.CPerspective;
+import bibliothek.gui.dock.common.perspective.CWorkingPerspective;
+import bibliothek.util.xml.XElement;
+import bibliothek.util.xml.XIO;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.resources.*;
 import org.apache.logging.log4j.LogManager;
 
+import javax.swing.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -135,6 +142,11 @@ public class RecordEditorPerspective {
 	 */
 	private URL location;
 
+	/**
+	 * perspective
+	 */
+	private CPerspective perspective;
+
 	public RecordEditorPerspective() {
 		super();
 	}
@@ -148,6 +160,14 @@ public class RecordEditorPerspective {
 		super();
 		this.name = name;
 		this.location = location;
+		this.perspective = null;
+	}
+
+	public RecordEditorPerspective(String name, CPerspective perspective) {
+		super();
+		this.name = name;
+		this.location = null;
+		this.perspective = perspective;
 	}
 
 	public String getName() {
@@ -164,6 +184,21 @@ public class RecordEditorPerspective {
 
 	public void setLocation(URL location) {
 		this.location = location;
+	}
+
+	/**
+	 * Return perspective or load from file if not already loaded
+	 */
+	public CPerspective getPerspective(CControlPerspective perspectives) {
+		if(perspective == null) {
+			try(InputStream is = getLocation().openStream()) {
+				final XElement xele = XIO.readUTF(is);
+				perspective = perspectives.readXML( xele );
+			} catch (IOException e) {
+				LOGGER.error( e.getLocalizedMessage(), e);
+			}
+		}
+		return perspective;
 	}
 
 	/**

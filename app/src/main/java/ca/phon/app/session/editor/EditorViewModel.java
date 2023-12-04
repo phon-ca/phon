@@ -157,7 +157,12 @@ public interface EditorViewModel {
 	 * @param editorPerspective
 	 */
 	public void setupWindows(RecordEditorPerspective editorPerspective);
-	
+
+	/**
+	 * Setup default perspective
+	 */
+	public void setupDefaultPerspective();
+
 	/**
 	 * Setup views based on the given perspective 
 	 * 

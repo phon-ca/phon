@@ -584,6 +584,11 @@ public class DefaultEditorViewModel implements EditorViewModel {
 	}
 
 	@Override
+	public void setupDefaultPerspective() {
+
+	}
+
+	@Override
 	public void applyPerspective(RecordEditorPerspective editorPerspective) {
 		CPerspective perspective = null;
 		try(InputStream is = editorPerspective.getLocation().openStream()) {

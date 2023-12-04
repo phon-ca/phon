@@ -256,15 +256,17 @@ public class SessionEditorEP implements IPluginEntryPoint {
 		final SessionEditorWindow sessionEditorWindow = new SessionEditorWindow(project, session, transcriber);
 		final RecordEditorPerspective prevPerspective =
 				RecordEditorPerspective.getPerspective(RecordEditorPerspective.LAST_USED_PERSPECTIVE_NAME);
-		final RecordEditorPerspective perspective =
-				(prevPerspective != null ? prevPerspective : RecordEditorPerspective.getPerspective(RecordEditorPerspective.DEFAULT_PERSPECTIVE_NAME));
 		final SessionEditor editor = sessionEditorWindow.getSessionEditor();
 		editor.getStatusBar().getProgressBar().setIndeterminate(true);
-		editor.getViewModel().setupWindows(perspective);
+		editor.getViewModel().setupWindows(prevPerspective);
 		sessionEditorWindow.setVisible(true);
 
 		SwingUtilities.invokeLater( () -> {
-//			editor.getViewModel().applyPerspective(perspective);
+			if(prevPerspective != null) {
+				editor.getViewModel().applyPerspective(prevPerspective);
+			} else {
+				editor.getViewModel().setupDefaultPerspective();
+			}
 
 			if(grabFocus) {
 				// XXX this code causes issues with result set editor focus in macos

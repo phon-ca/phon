@@ -74,6 +74,11 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 	private CContentArea rootArea;
 
 	/**
+	 * Work area
+	 */
+	private CWorkingArea workingArea;
+
+	/**
 	 * Dockables
 	 */
 	private Map<String, CDockablePerspective> dockables;
@@ -196,6 +201,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		dockControl.addSingleDockableFactory(dockableFilter, dockFactory);
 
 		rootArea = dockControl.getContentArea();
+		workingArea = dockControl.createWorkingArea("work");
 		setupDockables();
 
 		// fix title colours using substance theme on windows/linux
@@ -227,24 +233,6 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		dockables = new TreeMap<String, CDockablePerspective>();
 		dockPositions = new LinkedHashMap<>();
 
-		CControlPerspective perspectives = dockControl.getPerspectives();
-		CPerspective perspective = perspectives.createEmptyPerspective();
-		CGridPerspective center = perspective.getContentArea().getCenter();
-
-		// grid locations for views
-		final double[] work = new double[] { 50, 50, 100, 100 };
-		final double[] north = new double[] { 0, 0, 150, 50 };
-		final double[] south = new double[] { 0, 150, 150, 50 };
-		final double[] west = new double[] { 0, 50, 50, 100 };
-		final double[] east = new double[] { 100, 50, 50, 100 };
-		final double[] north_west = new double[] { 0, 50, 50, 50 };
-		final double[] south_west = new double[] { 0, 100, 50, 50 };
-		final double[] north_east = new double[] { 150, 50, 50, 50 };
-		final double[] south_east = new double[] { 150, 100, 50, 50 };
-
-		CWorkingPerspective workingPerspective = (CWorkingPerspective) perspective.getStation("work");
-		center.gridAdd( work[0], work[1], work[2], work[3], workingPerspective );
-
 		for(IPluginExtensionPoint<EditorView> extPt:getExtensionPoints()) {
 			final EditorViewInfo viewInfo = extPt.getClass().getAnnotation(EditorViewInfo.class);
 			if(viewInfo == null) continue; // should never happen
@@ -259,28 +247,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 					new SingleCDockablePerspective(dockableName);
 			dockables.put(dockableName, dockable);
 			dockPositions.put(dockableName, viewInfo.dockPosition());
-
-			double[] gridPosition = switch (viewInfo.dockPosition()) {
-				case SwingConstants.NORTH -> north;
-				case SwingConstants.SOUTH -> south;
-				case SwingConstants.WEST -> west;
-				case SwingConstants.EAST -> east;
-				case SwingConstants.NORTH_WEST -> north_west;
-				case SwingConstants.SOUTH_WEST -> south_west;
-				case SwingConstants.NORTH_EAST -> north_east;
-				case SwingConstants.SOUTH_EAST -> south_east;
-				default -> work;
-			};
-			if(viewInfo.dockPosition() == SwingConstants.CENTER) {
-				workingPerspective.gridAdd( 0, 0, 100, 100, dockable );
-			} else {
-				center.gridAdd(gridPosition[0], gridPosition[1], gridPosition[2], gridPosition[3], dockable);
-			}
 		}
-
-		perspectives.setPerspective(perspective, true);
-//		perspectives.setPerspective("default", perspective, true);
-//		dockControl.load("default", true);
 	}
 	// endregion
 
@@ -547,101 +514,135 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			window.dispose();
 		}
 
-		try(InputStream is = editorPerspective.getLocation().openStream()) {
-			if(is != null) {
-				final XElement xele = XIO.readUTF(is);
+		if(editorPerspective != null) {
+			try (InputStream is = editorPerspective.getLocation().openStream()) {
+				if (is != null) {
+					final XElement xele = XIO.readUTF(is);
 
-				final XElement boundsEle = xele.getElement("bounds");
-				Window win = SwingUtilities.getWindowAncestor(getEditor());
-				if(boundsEle != null) {
-					int x = boundsEle.getAttribute("x").getInt();
-					int y = boundsEle.getAttribute("y").getInt();
-					int width = boundsEle.getAttribute("width").getInt();
-					int height = boundsEle.getAttribute("height").getInt();
-					final XAttribute extendedStateAttr = boundsEle.getAttribute("extendedState");
-					int extendedState = JFrame.NORMAL;
-					if(extendedStateAttr != null) {
-						extendedState = extendedStateAttr.getInt();
-					}
-
-					if(win instanceof CommonModuleFrame commonModuleFrame) {
-						if (width >= 0 && height >= 0) {
-							commonModuleFrame.setSize(width, height);
-						}
-						commonModuleFrame.setLocation(x, y);
-						commonModuleFrame.setExtendedState(extendedState);
-					}
-				} else {
-					if(!getEditor().isVisible() && win instanceof CommonModuleFrame cmf)
-						cmf.cascadeWindow(CommonModuleFrame.getCurrentFrame());
-				}
-
-				final XElement windowsEle = xele.getElement("windows");
-				if(windowsEle != null) {
-					for(int i = 0; i < windowsEle.getElementCount(); i++) {
-						final XElement winEle = windowsEle.getElement(i);
-
-						final String uuid = winEle.getAttribute("uid").getString();
-
-						final AccessoryWindow window = (AccessoryWindow)createAccessoryWindow(
-								UUID.fromString(uuid));
-						int x = winEle.getAttribute("x").getInt();
-						int y = winEle.getAttribute("y").getInt();
-						int width = winEle.getAttribute("width").getInt();
-						int height = winEle.getAttribute("height").getInt();
-						final XAttribute extendedStateAttr = winEle.getAttribute("extendedState");
+					final XElement boundsEle = xele.getElement("bounds");
+					Window win = SwingUtilities.getWindowAncestor(getEditor());
+					if (boundsEle != null) {
+						int x = boundsEle.getAttribute("x").getInt();
+						int y = boundsEle.getAttribute("y").getInt();
+						int width = boundsEle.getAttribute("width").getInt();
+						int height = boundsEle.getAttribute("height").getInt();
+						final XAttribute extendedStateAttr = boundsEle.getAttribute("extendedState");
 						int extendedState = JFrame.NORMAL;
-						if(extendedStateAttr != null) {
+						if (extendedStateAttr != null) {
 							extendedState = extendedStateAttr.getInt();
 						}
 
-						if(width >= 0 && height >= 0) {
-							window.setSize(width, height);
+						if (win instanceof CommonModuleFrame commonModuleFrame) {
+							if (width >= 0 && height >= 0) {
+								commonModuleFrame.setSize(width, height);
+							}
+							commonModuleFrame.setLocation(x, y);
+							commonModuleFrame.setExtendedState(extendedState);
 						}
-						window.setLocation(x, y);
-						window.setExtendedState(extendedState);
-						window.setVisible(true);
+					} else {
+						if (!getEditor().isVisible() && win instanceof CommonModuleFrame cmf)
+							cmf.cascadeWindow(CommonModuleFrame.getCurrentFrame());
+					}
+
+					final XElement windowsEle = xele.getElement("windows");
+					if (windowsEle != null) {
+						for (int i = 0; i < windowsEle.getElementCount(); i++) {
+							final XElement winEle = windowsEle.getElement(i);
+
+							final String uuid = winEle.getAttribute("uid").getString();
+
+							final AccessoryWindow window = (AccessoryWindow) createAccessoryWindow(
+									UUID.fromString(uuid));
+							int x = winEle.getAttribute("x").getInt();
+							int y = winEle.getAttribute("y").getInt();
+							int width = winEle.getAttribute("width").getInt();
+							int height = winEle.getAttribute("height").getInt();
+							final XAttribute extendedStateAttr = winEle.getAttribute("extendedState");
+							int extendedState = JFrame.NORMAL;
+							if (extendedStateAttr != null) {
+								extendedState = extendedStateAttr.getInt();
+							}
+
+							if (width >= 0 && height >= 0) {
+								window.setSize(width, height);
+							}
+							window.setLocation(x, y);
+							window.setExtendedState(extendedState);
+							window.setVisible(true);
+						}
 					}
 				}
+			} catch (IOException e) {
+				LogUtil.severe(e);
 			}
-		} catch (IOException e) {
-			LogUtil.severe(e);
+		} else {
+			// default window layout
+			final CommonModuleFrame cmf = getFrameForEditor();
+			if(cmf != null) {
+				cmf.cascadeWindow(CommonModuleFrame.getCurrentFrame());
+			}
 		}
 	}
 
 	@Override
-	public void applyPerspective(RecordEditorPerspective editorPerspective) {
-		CPerspective perspective = null;
-		try(InputStream is = editorPerspective.getLocation().openStream()) {
-			if(is != null) {
-				final XElement xele = XIO.readUTF(is);
-				perspective = dockControl.getPerspectives().readXML( xele );
+	public void setupDefaultPerspective() {
+		CControlPerspective perspectives = dockControl.getPerspectives();
+		CPerspective perspective = perspectives.createEmptyPerspective();
+
+		CGridPerspective center = perspective.getContentArea().getCenter();
+
+		// grid locations for views
+		final double[] work = new double[] { 50, 50, 100, 100 };
+		final double[] north = new double[] { 0, 0, 150, 50 };
+		final double[] south = new double[] { 0, 150, 150, 50 };
+		final double[] west = new double[] { 0, 50, 50, 100 };
+		final double[] east = new double[] { 100, 50, 50, 100 };
+		final double[] north_west = new double[] { 0, 50, 50, 50 };
+		final double[] south_west = new double[] { 0, 100, 50, 50 };
+		final double[] north_east = new double[] { 150, 50, 50, 50 };
+		final double[] south_east = new double[] { 150, 100, 50, 50 };
+
+		CWorkingPerspective workingPerspective = (CWorkingPerspective) perspective.getStation("work");
+		center.gridAdd( work[0], work[1], work[2], work[3], workingPerspective );
+
+		for(String viewName:dockables.keySet()) {
+			double[] gridPosition = switch (dockPositions.get(viewName)) {
+				case SwingConstants.NORTH -> north;
+				case SwingConstants.SOUTH -> south;
+				case SwingConstants.WEST -> west;
+				case SwingConstants.EAST -> east;
+				case SwingConstants.NORTH_WEST -> north_west;
+				case SwingConstants.SOUTH_WEST -> south_west;
+				case SwingConstants.NORTH_EAST -> north_east;
+				case SwingConstants.SOUTH_EAST -> south_east;
+				default -> work;
+			};
+			if (dockPositions.get(viewName) == SwingConstants.CENTER) {
+				workingPerspective.gridAdd(0, 0, 100, 100, dockables.get(viewName));
+			} else {
+				center.gridAdd(gridPosition[0], gridPosition[1], gridPosition[2], gridPosition[3], dockables.get(viewName));
 			}
-			dockControl.getPerspectives().setPerspective( editorPerspective.getName(), perspective);
+		}
+
+		perspectives.setPerspective("default", perspective, true);
+		dockControl.load("default", true);
+	}
+
+	@Override
+	public void applyPerspective(RecordEditorPerspective editorPerspective) {
+		CPerspective perspective = editorPerspective.getPerspective(dockControl.getPerspectives());
+		if(perspective != null) {
+			dockControl.getPerspectives().setPerspective(editorPerspective.getName(), perspective);
 			perspective.storeLocations();
 			dockControl.load(editorPerspective.getName());
 
 			Window win = SwingUtilities.getWindowAncestor(getEditor());
-			if(win instanceof CommonModuleFrame cmf) {
+			if (win instanceof CommonModuleFrame cmf) {
 				cmf.setJMenuBar(MenuManager.createWindowMenuBar(cmf));
-				for(AccessoryWindow accWin:accessoryWindows) {
+				for (AccessoryWindow accWin : accessoryWindows) {
 					accWin.setJMenuBar(MenuManager.createWindowMenuBar(accWin));
 				}
 			}
-
-			for(var station:dockControl.getStations()) {
-				if(station instanceof StackDockStation) {
-					((StackDockStation)station).addDockableStateListener(new DockableStateListener() {
-
-						@Override
-						public void changed(DockableStateEvent arg0) {
-							System.out.println(arg0);
-						}
-					});
-				}
-			}
-		} catch (IOException e) {
-			LogUtil.severe( e.getLocalizedMessage(), e);
 		}
 	}
 
@@ -679,6 +680,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			}
 		}
 	}
+
 	// endregion
 
 	/**
