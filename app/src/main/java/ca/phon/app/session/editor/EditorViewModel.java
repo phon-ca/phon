@@ -101,7 +101,7 @@ public interface EditorViewModel {
 	/**
 	 * Get currently focused view
 	 * 
-	 * @param focused view or <code>null</code>
+	 * @return focused view or <code>null</code>
 	 */
 	public EditorView getFocusedView();
 	
@@ -112,7 +112,7 @@ public interface EditorViewModel {
 	 * 
 	 * @return the close action for the view
 	 */
-	public Action getCloseAction(String viewView);
+	public Action getCloseAction(String viewName);
 	
 	/**
 	 * Is the specified view showing in the current

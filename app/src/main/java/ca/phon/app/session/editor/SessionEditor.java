@@ -179,7 +179,7 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 		this.selectionModelRef =
 				new AtomicReference<EditorSelectionModel>(new DefaultEditorSelectionModel());
 		this.viewModelRef =
-				new AtomicReference<EditorViewModel>(new DefaultEditorViewModel(this));
+				new AtomicReference<EditorViewModel>(new WorkingAreaEditorViewModel(this));
 		this.mediaModelRef = 
 				new AtomicReference<SessionMediaModel>(new SessionMediaModel(this));
 

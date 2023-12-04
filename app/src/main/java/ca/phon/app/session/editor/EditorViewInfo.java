@@ -15,6 +15,7 @@
  */
 package ca.phon.app.session.editor;
 
+import javax.swing.*;
 import java.lang.annotation.*;
 
 /**
@@ -42,5 +43,22 @@ public @interface EditorViewInfo {
 	 * View icon
 	 */
 	public String icon() default "blank";
+
+	/**
+	 * Preferred dock position, defaults to SOUTH.  Options are:
+	 *
+	 *  <ul>
+	 *      <li>{@link SwingConstants#NORTH}</li>
+	 *      <li>{@link SwingConstants#NORTH_EAST}</li>
+	 *      <li>{@link SwingConstants#EAST}</li>
+	 *      <li>{@link SwingConstants#SOUTH_EAST}</li>
+	 *      <li>{@link SwingConstants#SOUTH}</li>
+	 *      <li>{@link SwingConstants#SOUTH_WEST}</li>
+	 *      <li>{@link SwingConstants#WEST}</li>
+	 *      <li>{@link SwingConstants#NORTH_WEST}</li>
+	 *      <li>{@link SwingConstants#CENTER}</li>
+	 *  </ul>
+	 */
+	public int dockPosition() default SwingConstants.SOUTH;
 	
 }
