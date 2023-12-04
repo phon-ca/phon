@@ -34,6 +34,7 @@ import bibliothek.gui.dock.util.color.*;
 import bibliothek.util.Filter;
 import bibliothek.util.xml.*;
 import ca.phon.app.log.LogUtil;
+import ca.phon.app.session.editor.view.transcriptEditor.TranscriptView;
 import ca.phon.plugin.*;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
@@ -578,6 +579,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		} else {
 			// default window layout
 			final CommonModuleFrame cmf = getFrameForEditor();
+			cmf.setSize(1024, 768);
 			if(cmf != null) {
 				cmf.cascadeWindow(CommonModuleFrame.getCurrentFrame());
 			}
@@ -623,6 +625,13 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 				center.gridAdd(gridPosition[0], gridPosition[1], gridPosition[2], gridPosition[3], dockables.get(viewName));
 			}
 		}
+//		perspective.storeLocations();
+
+//		for(String viewName:dockables.keySet()) {
+//			if(!TranscriptView.VIEW_NAME.equals(viewName)) {
+//				perspective.removeDockable(viewName);
+//			}
+//		}
 
 		perspectives.setPerspective("default", perspective, true);
 		dockControl.load("default", true);
