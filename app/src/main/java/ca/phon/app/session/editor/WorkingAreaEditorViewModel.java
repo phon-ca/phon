@@ -28,7 +28,6 @@ import bibliothek.gui.dock.common.intern.action.CDecorateableAction;
 import bibliothek.gui.dock.common.mode.ExtendedMode;
 import bibliothek.gui.dock.common.perspective.*;
 import bibliothek.gui.dock.common.theme.ThemeMap;
-import bibliothek.gui.dock.dockable.*;
 import bibliothek.gui.dock.themes.color.TitleColor;
 import bibliothek.gui.dock.util.*;
 import bibliothek.gui.dock.util.color.*;
@@ -41,7 +40,6 @@ import ca.phon.app.session.editor.view.transcriptEditor.TranscriptView;
 import ca.phon.plugin.*;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
-import ca.phon.session.Transcriber;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuManager;
@@ -914,33 +912,49 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		public void set(String id, Color value, DockColor uiValue) {
 			switch(id) {
 			case "title.flap.active.text":
+				uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_FLAP_ACTIVE_TEXT));
+				break;
+
 			case "title.active.text":
-				uiValue.set(UIManager.getColor("activeCaptionText"));
+				uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_ACTIVE_TEXT));
 				break;
 
 			case "title.flap.inactive.text":
+				uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_TITLE_FLAP_INACTIVE_TEXT));
+				break;
+
 			case "title.inactive.text":
-				uiValue.set(UIManager.getColor("inactiveCaptionText"));
+				uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_INACTIVE_TEXT));
 				break;
 
 			case "title.flap.active.left":
+				uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_FLAP_ACTIVE_LEFT));
+				break;
+
 			case "title.active.left":
-				uiValue.set(UIManager.getColor("activeCaption"));
+				uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_ACTIVE_LEFT));
 				break;
 
 			case "title.flap.active.right":
+				uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_FLAP_ACTIVE_RIGHT));
+				break;
+
 			case "title.active.right":
-				uiValue.set(UIManager.getColor("activeCaption"));
+				uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_ACTIVE_RIGHT));
 				break;
 
 			case "title.flap.inactive.left":
+				uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_FLAP_INACTIVE_LEFT));
+
 			case "title.inactive.left":
-				uiValue.set(UIManager.getColor("control"));
+				uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_INACTIVE_LEFT));
 				break;
 
 			case "title.flap.inactive.right":
+				uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_FLAP_INACTIVE_RIGHT));
+
 			case "title.inactive.right":
-				uiValue.set(UIManager.getColor("control"));
+				uiValue.set(UIManager.getColor(SessionEditorUIProps.VIEW_INACTIVE_RIGHT));
 				break;
 			}
 		}
