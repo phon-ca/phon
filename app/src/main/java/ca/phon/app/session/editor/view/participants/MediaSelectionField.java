@@ -200,7 +200,7 @@ public class MediaSelectionField extends FileSelectionField {
 		if(getEditor() != null) {
 			final MediaPlayerEditorView mediaPlayerView =
 					(MediaPlayerEditorView)getEditor().getViewModel()
-					.getView(MediaPlayerEditorView.VIEW_TITLE);
+					.getView(MediaPlayerEditorView.VIEW_NAME);
 			if(mediaPlayerView != null) {
 				if(mediaPlayerView.getPlayer() != null && mediaPlayerView.getPlayer().isPlaying())
 					mediaPlayerView.getPlayer().pause();

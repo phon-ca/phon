@@ -211,7 +211,7 @@ public class SessionEditorToolbar extends JPanel {
 		}
 		
 		boolean enabled = (mediaModel.isSessionAudioAvailable() || 
-				(mediaModel.isSessionMediaAvailable() && getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)));
+				(mediaModel.isSessionMediaAvailable() && getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_NAME)));
 		builder.addItem(".", new PlaySegmentAction(getEditor())).setEnabled(enabled);
 		builder.addItem(".", new PlayCustomSegmentAction(getEditor())).setEnabled(enabled);
 		builder.addItem(".", new PlaySpeechTurnAction(getEditor())).setEnabled(enabled);

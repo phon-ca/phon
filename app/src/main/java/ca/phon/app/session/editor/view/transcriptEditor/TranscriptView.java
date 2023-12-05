@@ -53,7 +53,8 @@ import java.util.List;
 public class TranscriptView extends EditorView {
 
     public final static String VIEW_NAME = "Transcript";
-    public final static String VIEW_ICON = "blank";
+    public final static String VIEW_ICON = IconManager.FontAwesomeFontName + ":FILE_TEXT_O";
+
     private final TranscriptEditor transcriptEditor;
     private TranscriptScrollPane transcriptScrollPane;
     private FindAndReplacePanel findAndReplacePanel;
@@ -433,7 +434,7 @@ public class TranscriptView extends EditorView {
         menuBuilder.addItem(".", showTimelineViewItem);
 
         JMenuItem showMediaPlayerViewItem = new JMenuItem();
-        PhonUIAction<Void> showMediaPlayerViewAct = PhonUIAction.runnable(() -> getEditor().getViewModel().showView(MediaPlayerEditorView.VIEW_TITLE));
+        PhonUIAction<Void> showMediaPlayerViewAct = PhonUIAction.runnable(() -> getEditor().getViewModel().showView(MediaPlayerEditorView.VIEW_NAME));
         showMediaPlayerViewAct.putValue(PhonUIAction.NAME, "Show Media Player view");
         showMediaPlayerViewItem.setAction(showMediaPlayerViewAct);
         menuBuilder.addItem(".", showMediaPlayerViewItem);
@@ -677,7 +678,7 @@ public class TranscriptView extends EditorView {
         addTierSubmenu.add(new JSeparator());
 
         JMenuItem addCustomTierItem = new JMenuItem();
-        addCustomTierItem.setAction(new NewTierAction(getEditor(), (TierOrderingEditorView) getEditor().getViewModel().getView(TierOrderingEditorView.VIEW_TITLE)));
+        addCustomTierItem.setAction(new NewTierAction(getEditor(), (TierOrderingEditorView) getEditor().getViewModel().getView(TierOrderingEditorView.VIEW_NAME)));
         addTierSubmenu.add(addCustomTierItem);
 
 
@@ -738,7 +739,7 @@ public class TranscriptView extends EditorView {
         menuBuilder.addItem(".", toggleChatTierNamesItem);
 
         JMenuItem showTierManagementViewItem = new JMenuItem();
-        PhonUIAction<Void> showTierManagementViewAct = PhonUIAction.runnable(() -> getEditor().getViewModel().showView(TierOrderingEditorView.VIEW_TITLE));
+        PhonUIAction<Void> showTierManagementViewAct = PhonUIAction.runnable(() -> getEditor().getViewModel().showView(TierOrderingEditorView.VIEW_NAME));
         showTierManagementViewAct.putValue(PhonUIAction.NAME, "Show Tier Management view");
         showTierManagementViewItem.setAction(showTierManagementViewAct);
         menuBuilder.addItem(".", showTierManagementViewItem);
@@ -753,7 +754,8 @@ public class TranscriptView extends EditorView {
 
     @Override
     public ImageIcon getIcon() {
-        return IconManager.getInstance().getIcon(VIEW_ICON, IconSize.SMALL);
+        final String[] iconData = VIEW_ICON.split(":");
+        return IconManager.getInstance().buildFontIcon(iconData[0], iconData[1], IconSize.MEDIUM, Color.darkGray);
     }
 
     @Override

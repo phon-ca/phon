@@ -22,7 +22,10 @@ import ca.phon.plugin.*;
 import javax.swing.*;
 
 @PhonPlugin(name="Media Player")
-@EditorViewInfo(name="Media Player", category=EditorViewCategory.MEDIA, dockPosition = ViewPosition.LEFT_TOP, icon="apps/vlc")
+@EditorViewInfo(name=MediaPlayerEditorView.VIEW_NAME,
+		category=EditorViewCategory.MEDIA,
+		dockPosition = ViewPosition.LEFT_TOP,
+		icon= MediaPlayerEditorView.VIEW_ICON)
 public class MediaPlayerExtension implements IPluginExtensionPoint<EditorView> {
 
 	@Override

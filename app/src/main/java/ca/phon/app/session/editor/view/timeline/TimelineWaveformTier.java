@@ -22,7 +22,6 @@ import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.media.*;
 import ca.phon.media.TimeUIModel.Interval;
-import ca.phon.orthography.Orthography;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.ui.action.*;
@@ -197,9 +196,9 @@ public class TimelineWaveformTier extends TimelineTier  {
 	}
 	
 	public void onEscape(PhonActionEvent<Void> pae) {
-		if(getParentView().getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
+		if(getParentView().getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_NAME)) {
 			MediaPlayerEditorView mediaView =
-					(MediaPlayerEditorView)getParentView().getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+					(MediaPlayerEditorView)getParentView().getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_NAME);
 			if(mediaView.getPlayer().isPlaying()) {
 				mediaView.getPlayer().pause();
 			} else {
@@ -364,7 +363,7 @@ public class TimelineWaveformTier extends TimelineTier  {
 					me.getClickCount() == 1) {
 				// goto position in media
 				MediaPlayerEditorView mediaPlayerView = 
-						(MediaPlayerEditorView)getParentView().getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+						(MediaPlayerEditorView)getParentView().getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_NAME);
 				if(mediaPlayerView != null) {
 					float time = getTimeModel().timeAtX(me.getX());
 					long timeMS = (long)(time * 1000.0f);

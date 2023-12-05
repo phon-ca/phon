@@ -54,7 +54,7 @@ public class FindAndReplaceEditorView extends EditorView {
 	
 	public final static String VIEW_NAME = "Find & Replace";
 	
-	public final static String VIEW_ICON = "actions/edit-find-replace";
+	public final static String VIEW_ICON = IconManager.GoogleMaterialDesignIconsFontName + ":FIND_REPLACE";
 	
 	private final static String ANY_TIER_NAME = "__any_tier__";
 	
@@ -277,7 +277,8 @@ public class FindAndReplaceEditorView extends EditorView {
 
 	@Override
 	public ImageIcon getIcon() {
-		return IconManager.getInstance().getIcon(VIEW_ICON, IconSize.SMALL);
+		final String[] iconData = VIEW_ICON.split(":");
+		return IconManager.getInstance().buildFontIcon(iconData[0], iconData[1], IconSize.MEDIUM, Color.darkGray);
 	}
 
 	@Override

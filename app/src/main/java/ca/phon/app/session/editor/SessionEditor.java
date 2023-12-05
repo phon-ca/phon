@@ -668,7 +668,7 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 				mediaMenu.addSeparator();
 
 				boolean enabled = (mediaModel.isSessionAudioAvailable() ||
-						(mediaModel.isSessionMediaAvailable() && SessionEditor.this.getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)));
+						(mediaModel.isSessionMediaAvailable() && SessionEditor.this.getViewModel().isShowing(MediaPlayerEditorView.VIEW_NAME)));
 				mediaMenu.add(new PlaySegmentAction(SessionEditor.this)).setEnabled(enabled);
 				mediaMenu.add(new PlayCustomSegmentAction(SessionEditor.this)).setEnabled(enabled);
 				mediaMenu.add(new PlaySpeechTurnAction(SessionEditor.this)).setEnabled(enabled);

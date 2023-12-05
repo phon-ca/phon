@@ -69,7 +69,7 @@ public class ShowMediaInfoAction extends SessionEditorAction {
 	}
 	
 	private void appendMediaInformation(File mediaFile, StringBuffer buffer) {
-		MediaPlayerEditorView mediaPlayerView = (MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+		MediaPlayerEditorView mediaPlayerView = (MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_NAME);
 		if(mediaPlayerView == null) return;
 		
 		InfoApi mediaInfo = mediaPlayerView.getPlayer().getMediaPlayer().media().info();

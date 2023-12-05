@@ -39,7 +39,7 @@ public class IPALookupView extends EditorView {
 	
 	public final static String VIEW_NAME = "IPA Lookup";
 	
-	public final static String VIEW_ICON = "misc/ipa-dict";
+	public final static String VIEW_ICON = IconManager.GoogleMaterialDesignIconsFontName + ":SEARCH";
 	
 	/*
 	 * Lookup context
@@ -241,7 +241,8 @@ public class IPALookupView extends EditorView {
 
 	@Override
 	public ImageIcon getIcon() {
-		return IconManager.getInstance().getIcon(VIEW_ICON, IconSize.SMALL);
+		final String[] iconParts = VIEW_ICON.split(":");
+		return IconManager.getInstance().buildFontIcon(iconParts[0], iconParts[1], IconSize.MEDIUM, Color.darkGray);
 	}
 
 	@Override

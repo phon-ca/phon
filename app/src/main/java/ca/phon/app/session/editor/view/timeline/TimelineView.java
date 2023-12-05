@@ -60,8 +60,8 @@ public final class TimelineView extends EditorView {
 	}
 
 	public static final String VIEW_TITLE = "Timeline";
-	
-	public static final String VIEW_ICON = "docking-frames/timeline";
+
+	public static final String VIEW_ICON = IconManager.GoogleMaterialDesignIconsFontName + ":GRAIN";
 	
 	private final static String PLABACK_FPS = "TimelineView.playbackFps";
 	private final float DEFAULT_PLAYBACK_FPS = 30.0f;
@@ -154,7 +154,7 @@ public final class TimelineView extends EditorView {
 						e.getClickCount() == 1) {
 					// goto position in media
 					MediaPlayerEditorView mediaPlayerView = 
-							(MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+							(MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_NAME);
 					if(mediaPlayerView != null) {
 						float time = getTimeModel().timeAtX(e.getX());
 						long timeMS = (long)(time * 1000.0f);
@@ -252,7 +252,7 @@ public final class TimelineView extends EditorView {
 		SessionMediaModel mediaModel = getEditor().getMediaModel();
 		if(mediaModel.isSessionMediaAvailable()) {
 			MediaPlayerEditorView mediaPlayerView = 
-					(MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+					(MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_NAME);
 			if(mediaPlayerView.getPlayer().getMediaFile() != null) {
 				mediaPlayerView.getPlayer().addMediaPlayerListener(playbackMarkerSyncListener);
 			}
@@ -565,7 +565,7 @@ public final class TimelineView extends EditorView {
 			} else {
 				// check if media is loaded in player, if so use time from player
 				MediaPlayerEditorView mediaPlayerView = 
-						(MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+						(MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_NAME);
 				if(mediaPlayerView.getPlayer().getMediaFile() != null) {
 					endTime = Math.max(endTime, mediaPlayerView.getPlayer().getLength() / 1000.0f);
 					timeModel.setMediaEndTime(mediaPlayerView.getPlayer().getLength()/1000.0f);
@@ -840,8 +840,8 @@ public final class TimelineView extends EditorView {
 	private void onRecordChanged(EditorEvent<EditorEventType.RecordChangedData> ee) {
 		Record r = getEditor().currentRecord();
 		
-		if(getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
-			MediaPlayerEditorView mediaPlayerView = (MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+		if(getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_NAME)) {
+			MediaPlayerEditorView mediaPlayerView = (MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_NAME);
 			// don't adjust scroll position while playing
 			if(mediaPlayerView.getPlayer().isPlaying())
 				return;
@@ -1071,7 +1071,8 @@ public final class TimelineView extends EditorView {
 
 	@Override
 	public ImageIcon getIcon() {
-		return IconManager.getInstance().getIcon(VIEW_ICON, IconSize.SMALL);
+		final String[] iconData = VIEW_ICON.split(":");
+		return IconManager.getInstance().buildFontIcon(iconData[0], iconData[1], IconSize.MEDIUM, Color.darkGray);
 	}
 	
 	public void repaint() {

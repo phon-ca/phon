@@ -338,16 +338,16 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 	@Override
 	public ImageIcon getViewIcon(String viewName) {
-		final EditorView registeredView = registeredViews.get(viewName);
-		if(registeredView != null) {
-			return registeredView.getIcon();
-		} else {
-			for(IPluginExtensionPoint<EditorView> extPt:extPts) {
-				final EditorViewInfo pluginAnnotation = extPt.getClass().getAnnotation(EditorViewInfo.class);
-				if(pluginAnnotation != null && pluginAnnotation.name().equals(viewName)) {
-					final String iconName = pluginAnnotation.icon();
-					final ImageIcon icon = IconManager.getInstance().getIcon(iconName, IconSize.SMALL);
-					return icon;
+		for(IPluginExtensionPoint<EditorView> extPt:extPts) {
+			final EditorViewInfo pluginAnnotation = extPt.getClass().getAnnotation(EditorViewInfo.class);
+			if(pluginAnnotation != null && pluginAnnotation.name().equals(viewName)) {
+				final String iconName = pluginAnnotation.icon();
+				final String[] iconData = iconName.split(":");
+				if(iconData.length == 1) {
+					return IconManager.getInstance().getIcon(iconName, IconSize.SMALL);
+				} else {
+					// setup colour as defined by system theme (dark/light)
+					return IconManager.getInstance().buildFontIcon(iconData[0], iconData[1], IconSize.SMALL, Color.darkGray);
 				}
 			}
 		}

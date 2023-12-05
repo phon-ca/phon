@@ -57,6 +57,8 @@ public class SpeechAnalysisEditorView extends EditorView {
 
 	public static final String VIEW_TITLE = "Speech Analysis";
 
+	public static final String VIEW_ICON = IconManager.GoogleMaterialDesignIconsFontName + ":GRAPHIC_EQ";
+
 	public static final int MAX_TIER_HEIGHT = Integer.MAX_VALUE;
 
 	private final static long CLIP_EXTENSION_MIN = 500L;
@@ -816,7 +818,8 @@ public class SpeechAnalysisEditorView extends EditorView {
 
 	@Override
 	public ImageIcon getIcon() {
-		return IconManager.getInstance().getIcon("docking-frames/waveform", IconSize.SMALL);
+		final String[] iconParts = VIEW_ICON.split(":");
+		return IconManager.getInstance().buildFontIcon(iconParts[0], iconParts[1], IconSize.MEDIUM, Color.darkGray);
 	}
 
 	@Override

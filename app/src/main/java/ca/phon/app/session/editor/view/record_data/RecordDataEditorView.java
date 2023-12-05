@@ -42,7 +42,6 @@ import javax.swing.border.BevelBorder;
 import javax.swing.event.*;
 import javax.swing.text.*;
 import javax.swing.text.Highlighter.*;
-import javax.swing.undo.*;
 import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.event.*;
@@ -890,7 +889,7 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 		builder.addSeparator(".", "copy_paste");
 
 		TierOrderingEditorView tierOrderView =
-				(TierOrderingEditorView) getEditor().getViewModel().getView(TierOrderingEditorView.VIEW_TITLE);
+				(TierOrderingEditorView) getEditor().getViewModel().getView(TierOrderingEditorView.VIEW_NAME);
 		if(tierOrderView != null) {
 			for(int i = 0; i < getEditor().getSession().getTierView().size(); i++) {
 				TierViewItem tvi = getEditor().getSession().getTierView().get(i);

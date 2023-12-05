@@ -20,7 +20,6 @@ import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.media_player.actions.GoToEndOfSegmentedAction;
 import ca.phon.media.*;
-import ca.phon.orthography.Orthography;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.ui.CommonModuleFrame;
@@ -508,7 +507,7 @@ public final class SegmentationHandler {
 		
 		// start media playback
 		MediaPlayerEditorView mediaView = 
-				(MediaPlayerEditorView)editor.getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+				(MediaPlayerEditorView)editor.getViewModel().getView(MediaPlayerEditorView.VIEW_NAME);
 		if(mediaView != null) {
 			if(mediaStart == MediaStart.AT_BEGNINNING) {
 				mediaView.getPlayer().setTime(0L);
@@ -556,7 +555,7 @@ public final class SegmentationHandler {
 		}
 		
 		MediaPlayerEditorView mediaView = 
-				(MediaPlayerEditorView)editor.getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+				(MediaPlayerEditorView)editor.getViewModel().getView(MediaPlayerEditorView.VIEW_NAME);
 		if(mediaView != null) {
 			mediaView.getPlayer().removeMediaPlayerListener(mediaTimeListener);
 			if(mediaView.getPlayer().isPlaying())
@@ -638,7 +637,7 @@ public final class SegmentationHandler {
 		long deltaMs = pae.getData();
 		
 		MediaPlayerEditorView mediaView = 
-				(MediaPlayerEditorView)editor.getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+				(MediaPlayerEditorView)editor.getViewModel().getView(MediaPlayerEditorView.VIEW_NAME);
 		if(mediaView != null) {
 			long newTime = Math.max(Math.max(0, window.getStartLockMs()), mediaView.getPlayer().getTime() - deltaMs);
 			mediaView.getPlayer().setTime(newTime);
@@ -649,7 +648,7 @@ public final class SegmentationHandler {
 		long deltaMs = pae.getData();
 		
 		MediaPlayerEditorView mediaView = 
-				(MediaPlayerEditorView)editor.getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+				(MediaPlayerEditorView)editor.getViewModel().getView(MediaPlayerEditorView.VIEW_NAME);
 		if(mediaView != null) {
 			long newTime = Math.min(mediaView.getPlayer().getLength(), mediaView.getPlayer().getTime() + deltaMs);
 			mediaView.getPlayer().setTime(newTime);

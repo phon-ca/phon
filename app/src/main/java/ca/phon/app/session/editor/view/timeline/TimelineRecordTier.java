@@ -434,7 +434,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 	public void onEscape(PhonActionEvent<Boolean> pae) {
 		if (isSplitModeActive()) {
 			onEndSplitRecord(pae);
-		} else if (getParentView().getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
+		} else if (getParentView().getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_NAME)) {
 			SegmentPlayback segmentPlayback = getParentView().getEditor().getMediaModel().getSegmentPlayback();
 			if(segmentPlayback != null && segmentPlayback.isPlaying()) {
 				segmentPlayback.stopPlaying();

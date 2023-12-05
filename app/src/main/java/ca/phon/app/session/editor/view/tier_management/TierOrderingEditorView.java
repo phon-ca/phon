@@ -51,7 +51,9 @@ import java.util.stream.*;
  */
 public class TierOrderingEditorView extends EditorView {
 
-	public final static String VIEW_TITLE = "Tier Management";
+	public final static String VIEW_NAME = "Tier Management";
+
+	public final static String VIEW_ICON = IconManager.GoogleMaterialDesignIconsFontName + ":VIEW_LIST";
 
 	/**
 	 * Tier ordering table
@@ -228,7 +230,7 @@ public class TierOrderingEditorView extends EditorView {
 	
 	@Override
 	public String getName() {
-		return VIEW_TITLE;
+		return VIEW_NAME;
 	}
 	
 	/*
@@ -644,7 +646,8 @@ public class TierOrderingEditorView extends EditorView {
 	
 	@Override
 	public ImageIcon getIcon() {
-		return IconManager.getInstance().getIcon("misc/record-settings", IconSize.SMALL);
+		final String[] iconData = VIEW_ICON.split(":");
+		return IconManager.getInstance().buildFontIcon(iconData[0], iconData[1], IconSize.MEDIUM, Color.darkGray);
 	}
 
 	@Override

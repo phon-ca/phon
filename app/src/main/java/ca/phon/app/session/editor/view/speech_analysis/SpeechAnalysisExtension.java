@@ -26,7 +26,10 @@ import javax.swing.*;
  *
  */
 @PhonPlugin(name=SpeechAnalysisEditorView.VIEW_TITLE)
-@EditorViewInfo(name=SpeechAnalysisEditorView.VIEW_TITLE, category=EditorViewCategory.MEDIA, icon="misc/oscilloscope", dockPosition = ViewPosition.WORK)
+@EditorViewInfo(name=SpeechAnalysisEditorView.VIEW_TITLE,
+		category=EditorViewCategory.MEDIA,
+		icon = SpeechAnalysisEditorView.VIEW_ICON,
+		dockPosition = ViewPosition.WORK)
 public class SpeechAnalysisExtension implements IPluginExtensionPoint<EditorView> {
 
 	@Override

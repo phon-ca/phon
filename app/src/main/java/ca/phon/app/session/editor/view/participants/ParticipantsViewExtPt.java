@@ -18,9 +18,13 @@ package ca.phon.app.session.editor.view.participants;
 import ca.phon.app.session.ViewPosition;
 import ca.phon.app.session.editor.*;
 import ca.phon.plugin.*;
+import ca.phon.util.icons.IconManager;
 
 @PhonPlugin(name="Participants")
-@EditorViewInfo(name="Participants", category=EditorViewCategory.SESSION, dockPosition = ViewPosition.LEFT_TOP, icon="apps/system-users")
+@EditorViewInfo(name="Participants",
+		category=EditorViewCategory.SESSION,
+		dockPosition = ViewPosition.LEFT_TOP,
+		icon=ParticipantsView.VIEW_ICON)
 public class ParticipantsViewExtPt implements IPluginExtensionPoint<EditorView> {
 
 	@Override

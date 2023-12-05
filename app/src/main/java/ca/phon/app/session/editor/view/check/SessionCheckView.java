@@ -42,7 +42,7 @@ public class SessionCheckView extends EditorView {
 	
 	public final static String VIEW_NAME = "Session Check";
 	
-	public final static String ICON_NAME = "emblems/flag-red";
+	public final static String ICON_NAME = IconManager.FontAwesomeFontName + ":FLAG_O";
 
 	private DropDownButton settingsButton;
 
@@ -158,7 +158,8 @@ public class SessionCheckView extends EditorView {
 
 	@Override
 	public ImageIcon getIcon() {
-		return IconManager.getInstance().getIcon(ICON_NAME, IconSize.SMALL);
+		final String[] iconData = ICON_NAME.split(":");
+		return IconManager.getInstance().buildFontIcon(iconData[0], iconData[1], IconSize.MEDIUM, Color.darkGray);
 	}
 
 	@Override

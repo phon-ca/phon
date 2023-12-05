@@ -48,8 +48,10 @@ import java.text.ParseException;
  */
 public class MediaPlayerEditorView extends EditorView {
 
-	public static final String VIEW_TITLE = "Media Player";
-	
+	public static final String VIEW_NAME = "Media Player";
+
+	public static final String VIEW_ICON = IconManager.FontAwesomeFontName + ":FILE_VIDEO_O";
+
 	/** 
 	 * Custom editor event signaled when media loaded 
 	 * Event data: media file (as string)
@@ -124,7 +126,7 @@ public class MediaPlayerEditorView extends EditorView {
 
 	@Override
 	public String getName() {
-		return VIEW_TITLE;
+		return VIEW_NAME;
 	}
 
 	public PhonMediaPlayer getPlayer() {
@@ -354,7 +356,8 @@ public class MediaPlayerEditorView extends EditorView {
 
 	@Override
 	public ImageIcon getIcon() {
-		return IconManager.getInstance().getIcon("apps/vlc", IconSize.SMALL);
+		final String[] iconData = VIEW_ICON.split(":");
+		return IconManager.getInstance().buildFontIcon(iconData[0], iconData[1], IconSize.MEDIUM, Color.darkGray);
 	}
 
 	@Override

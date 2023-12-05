@@ -54,6 +54,8 @@ public class ParticipantsView extends EditorView {
 
 	public static final String VIEW_TITLE = "Participants";
 
+	public static final String VIEW_ICON = IconManager.GoogleMaterialDesignIconsFontName + ":PEOPLE_OUTLINE";
+
 	/**
 	 * Participant Table
 	 * 
@@ -246,7 +248,8 @@ public class ParticipantsView extends EditorView {
 	
 	@Override
 	public ImageIcon getIcon() {
-		return IconManager.getInstance().getIcon("apps/system-users", IconSize.SMALL);
+		final String[] iconData = VIEW_ICON.split(":");
+		return IconManager.getInstance().buildFontIcon(iconData[0], iconData[1], IconSize.MEDIUM, Color.darkGray);
 	}
 
 	@Override

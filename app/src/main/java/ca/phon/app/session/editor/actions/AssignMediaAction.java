@@ -48,7 +48,7 @@ public class AssignMediaAction extends SessionEditorAction {
 	public void hookableActionPerformed(ActionEvent e) {
 		final MediaPlayerEditorView mediaPlayerView = 
 				(MediaPlayerEditorView)getEditor().getViewModel()
-				.getView(MediaPlayerEditorView.VIEW_TITLE);
+				.getView(MediaPlayerEditorView.VIEW_NAME);
 		if(mediaPlayerView != null) {
 			if(mediaPlayerView.getPlayer() != null && mediaPlayerView.getPlayer().isPlaying())
 				mediaPlayerView.getPlayer().pause();

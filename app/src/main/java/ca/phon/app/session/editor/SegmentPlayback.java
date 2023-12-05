@@ -85,7 +85,7 @@ public class SegmentPlayback {
 			CommonModuleFrame.getCurrentFrame().showMessageDialog("Unable to play segment", "No media available", MessageDialogProperties.okOptions);
 			return;
 		} else if(!mediaModel.isSessionAudioAvailable() 
-				&& !viewModel.isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
+				&& !viewModel.isShowing(MediaPlayerEditorView.VIEW_NAME)) {
 			CommonModuleFrame.getCurrentFrame().showMessageDialog("Unable to play segment", "Media player view must be visible", MessageDialogProperties.okOptions);
 			return;
 		}
@@ -107,7 +107,7 @@ public class SegmentPlayback {
 				}
 			}
 			
-			MediaPlayerEditorView mediaPlayerView = (MediaPlayerEditorView)viewModel.getView(MediaPlayerEditorView.VIEW_TITLE);
+			MediaPlayerEditorView mediaPlayerView = (MediaPlayerEditorView)viewModel.getView(MediaPlayerEditorView.VIEW_NAME);
 			if(!mediaModel.isSessionAudioAvailable()) {
 				mediaPlayerView.getPlayer().addMediaPlayerListener(new MediaPlayerListener(mediaPlayerView));
 			}
@@ -132,8 +132,8 @@ public class SegmentPlayback {
 			}
 		}
 		if(getEditor().getMediaModel().isSessionMediaAvailable()
-				&& getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_TITLE)) {
-			MediaPlayerEditorView mediaPlayerView = (MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_TITLE);
+				&& getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_NAME)) {
+			MediaPlayerEditorView mediaPlayerView = (MediaPlayerEditorView)getEditor().getViewModel().getView(MediaPlayerEditorView.VIEW_NAME);
 			if(mediaPlayerView.getPlayer().isPlaying())
 				mediaPlayerView.getPlayer().pause();
 		}
