@@ -345,6 +345,23 @@ public class IconManager {
 	}
 
 	/**
+	 * Get the specified icon with the given size and color
+	 *
+	 * @param name in the format of 'font:icon' or 'icon/path'
+	 * @param size
+	 * @param color
+	 * @return
+	 */
+	public ImageIcon buildFontIcon(String name, IconSize size, Color color) {
+		final String[] iconData = name.split(":");
+		if(iconData.length == 1) {
+			return getIcon(iconData[0], size);
+		} else {
+			return buildFontIcon(iconData[0], iconData[1], size, color);
+		}
+	}
+
+	/**
 	 * Create a new ImageIcon from an Icon.
 	 *
 	 * @param icon

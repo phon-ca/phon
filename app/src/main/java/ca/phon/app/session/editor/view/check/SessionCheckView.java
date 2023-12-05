@@ -119,7 +119,7 @@ public class SessionCheckView extends EditorView {
 		});
 
 		final PhonUIAction<Void> dropDownAct = PhonUIAction.runnable(() -> {});
-		dropDownAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/settings-black", IconSize.SMALL));
+		dropDownAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().buildFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "SETTINGS", IconSize.SMALL, Color.darkGray));
 		dropDownAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select session checks...");
 		dropDownAct.putValue(DropDownButton.BUTTON_POPUP, settingsMenu);
 		dropDownAct.putValue(DropDownButton.ARROW_ICON_GAP, 0);
@@ -158,8 +158,7 @@ public class SessionCheckView extends EditorView {
 
 	@Override
 	public ImageIcon getIcon() {
-		final String[] iconData = ICON_NAME.split(":");
-		return IconManager.getInstance().buildFontIcon(iconData[0], iconData[1], IconSize.MEDIUM, Color.darkGray);
+		return IconManager.getInstance().buildFontIcon(ICON_NAME, IconSize.MEDIUM, Color.darkGray);
 	}
 
 	@Override
@@ -185,7 +184,7 @@ public class SessionCheckView extends EditorView {
 		if(lbl == null) {
 			lbl = new JLabel();
 			lbl.setName(VIEW_NAME);
-			final ImageIcon icn = IconManager.getInstance().getIcon(ICON_NAME, IconSize.XSMALL);
+			final ImageIcon icn = IconManager.getInstance().buildFontIcon(ICON_NAME, IconSize.XSMALL, Color.darkGray);
 			lbl.setIcon(icn);
 			if(events.size() > 0) {
 				lbl.setText("<html><u>" +

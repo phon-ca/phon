@@ -18,6 +18,7 @@ package ca.phon.app.session.editor.view.check.actions;
 import ca.phon.app.session.editor.view.check.SessionCheckView;
 import ca.phon.util.icons.*;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class SessionCheckRefreshAction extends SessionCheckViewAction {
@@ -25,7 +26,7 @@ public class SessionCheckRefreshAction extends SessionCheckViewAction {
 	public SessionCheckRefreshAction(SessionCheckView view) {
 		super(view);
 		
-		putValue(SessionCheckViewAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/reload", IconSize.SMALL));
+		putValue(SessionCheckViewAction.SMALL_ICON, IconManager.getInstance().buildFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "REFRESH", IconSize.SMALL, Color.darkGray));
 		putValue(SessionCheckViewAction.NAME, "Refresh");
 		putValue(SessionCheckViewAction.SHORT_DESCRIPTION, "Refresh session check");
 	}
