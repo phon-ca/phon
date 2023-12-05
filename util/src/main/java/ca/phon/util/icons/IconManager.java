@@ -18,6 +18,9 @@ package ca.phon.util.icons;
 import ca.hedlund.desktopicons.*;
 import ca.phon.plugin.PluginManager;
 import ca.phon.util.*;
+import jiconfont.icons.font_awesome.FontAwesome;
+import jiconfont.icons.google_material_design_icons.GoogleMaterialDesignIcons;
+import jiconfont.swing.IconFontSwing;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,7 +36,8 @@ import java.util.HashMap;
  */
 public class IconManager {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(IconManager.class.getName());
+	public final static String FontAwesomeFontName = "FontAwesome";
+	public final static String GoogleMaterialDesignIconsFontName = "GoogleMaterialDesignIcons";
 	
 	/** The static instance */
 	private static IconManager _instance;
@@ -43,8 +47,11 @@ public class IconManager {
 	 * instance
 	 */
 	public static IconManager getInstance() {
-		if(_instance == null)
+		if(_instance == null) {
 			_instance = new IconManager();
+			IconFontSwing.register(FontAwesome.getIconFont());
+			IconFontSwing.register(GoogleMaterialDesignIcons.getIconFont());
+		}
 		return _instance;
 	}
 	
@@ -130,7 +137,6 @@ public class IconManager {
 	 * 
 	 * @param path
 	 * @param size
-	 * @param backupIcon icon name used as backup if system icon not found
 	 * @return icon for given path or <code>null</code> if not found
 	 */
 	public ImageIcon getSystemIconForPath(String path, IconSize size) {
@@ -156,8 +162,6 @@ public class IconManager {
 				final Image img = DesktopIcons.getIconForPath(path, size.getWidth(), size.getHeight());
 				retVal = new ImageIcon(img);
 			} catch (DesktopIconException e) {
-				LOGGER.warn( e.getLocalizedMessage(), e);
-				
 				if(backupIcon != null && backupIcon.length() > 0) {
 					retVal = getIcon(backupIcon, size);
 				}
@@ -200,8 +204,6 @@ public class IconManager {
 				final Image img = DesktopIcons.getIconForFileType(filetype, size.getWidth(), size.getHeight());
 				retVal = new ImageIcon(img);
 			} catch (DesktopIconException e) {
-				LOGGER.warn( e.getLocalizedMessage(), e);
-				
 				if(backupIcon != null && backupIcon.length() > 0) {
 					retVal = getIcon(backupIcon, size);
 				}
@@ -245,8 +247,6 @@ public class IconManager {
 				final Image img = DesktopIcons.getStockIcon(stockIcon, size.getWidth(), size.getHeight());
 				retVal = new ImageIcon(img);
 			} catch (DesktopIconException e) {
-				LOGGER.warn( e.getLocalizedMessage(), e);
-				
 				if(backupIcon != null && backupIcon.length() > 0) {
 					retVal = getIcon(backupIcon, size);
 				}
@@ -320,11 +320,47 @@ public class IconManager {
 		
 		return new ImageIcon(img);
 	}
-	
+
+	/**
+	 * Create a new icon from the jIconFont library using the given font name,
+	 * icon name, size, and colour.
+	 *
+	 * @param fontName
+	 * @param iconName
+	 * @param size
+	 * @param color
+	 * @return icon
+	 */
+	public ImageIcon buildFontIcon(String fontName, String iconName, IconSize size, Color color) {
+		Icon icon = switch (fontName) {
+			case FontAwesomeFontName -> IconFontSwing.buildIcon(FontAwesome.valueOf(iconName), size.getWidth(), color);
+			case GoogleMaterialDesignIconsFontName -> IconFontSwing.buildIcon(GoogleMaterialDesignIcons.valueOf(iconName), size.getWidth(), color);
+			default -> null;
+		};
+		if(icon == null) {
+			return getIcon("blank", size);
+		} else {
+			return iconToImage(icon);
+		}
+	}
+
+	/**
+	 * Create a new ImageIcon from an Icon.
+	 *
+	 * @param icon
+	 * @return icon image
+	 */
+	private ImageIcon iconToImage(Icon icon) {
+		BufferedImage img = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+		Graphics2D g2 = (Graphics2D)img.createGraphics();
+		icon.paintIcon(null, g2, 0, 0);
+		return new ImageIcon(img);
+	}
+
 	/**
 	 * Load an icon from our classpath
 	 * @param iconName
-	 * @param size
+	 * @param s
 	 * @return <CODE>true</CODE> if the icon is loaded
 	 */
 	private boolean loadIconFromCp(String iconName, IconSize s) {
@@ -371,7 +407,7 @@ public class IconManager {
 	 * Loads (ensures) an icon.
 	 * 
 	 * @param iconName
-	 * @param size
+	 * @param s
 	 * @return <CODE>true</CODE> if the icon is loaded (including
 	 * if it was already loaded.) <CODE>false</CODE> otherwise.
 	 */
@@ -417,8 +453,6 @@ public class IconManager {
 				tuple.size = s;
 				
 				loadedIcons.put(tuple, iconImage);
-			} else {
-				LOGGER.warn( "Icon not found: " + iconName, new StackTraceInfo());
 			}
 		}
 		
