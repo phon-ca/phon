@@ -30,22 +30,22 @@ public class SessionEditorUIProps implements UIDefaultsHandler, IPluginExtension
     public static final Color DEFAULT_VIEW_ACTIVE_LEFT = UIManager.getColor("activeCaption");
 
     public static final String VIEW_INACTIVE_LEFT = "SessionEditor.viewInactiveLeft";
-    public static final Color DEFAULT_VIEW_INACTIVE_LEFT = UIManager.getColor("inactiveCaption");
+    public static final Color DEFAULT_VIEW_INACTIVE_LEFT = UIManager.getColor("Button.background");
 
     public static final String VIEW_ACTIVE_RIGHT = "SessionEditor.viewActiveRight";
     public static final Color DEFAULT_VIEW_ACTIVE_RIGHT = UIManager.getColor("activeCaption");
 
     public static final String VIEW_INACTIVE_RIGHT = "SessionEditor.viewInactiveRight";
-    public static final Color DEFAULT_VIEW_INACTIVE_RIGHT = UIManager.getColor("inactiveCaption");
+    public static final Color DEFAULT_VIEW_INACTIVE_RIGHT = UIManager.getColor("Button.background");
 
     public static final String VIEW_FLAP_ACTIVE_LEFT = "SessionEditor.viewFlapActiveLeft";
     public static final Color DEFAULT_VIEW_FLAP_ACTIVE_LEFT = UIManager.getColor("activeCaption");
 
     public static final String VIEW_FLAP_INACTIVE_RIGHT = "SessionEditor.viewFlapInactiveRight";
-    public static final Color DEFAULT_VIEW_FLAP_INACTIVE_RIGHT = UIManager.getColor("inactiveCaption");
+    public static final Color DEFAULT_VIEW_FLAP_INACTIVE_RIGHT = UIManager.getColor("Button.background");
 
     public static final String VIEW_FLAP_INACTIVE_LEFT = "SessionEditor.viewFlapInactiveLeft";
-    public static final Color DEFAULT_VIEW_FLAP_INACTIVE_LEFT = UIManager.getColor("inactiveCaption");
+    public static final Color DEFAULT_VIEW_FLAP_INACTIVE_LEFT = UIManager.getColor("Button.background");
     // end region
 
     @Override
