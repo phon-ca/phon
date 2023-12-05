@@ -15,11 +15,12 @@
  */
 package ca.phon.app.session.editor.view.timeline;
 
+import ca.phon.app.session.ViewPosition;
 import ca.phon.app.session.editor.*;
 import ca.phon.plugin.*;
 
 @PhonPlugin(name=TimelineView.VIEW_TITLE)
-@EditorViewInfo(name=TimelineView.VIEW_TITLE, category=EditorViewCategory.SESSION, icon=TimelineView.VIEW_ICON)
+@EditorViewInfo(name=TimelineView.VIEW_TITLE, category=EditorViewCategory.SESSION, icon=TimelineView.VIEW_ICON, dockPosition = ViewPosition.BOTTOM_LEFT)
 public class TimelineViewExtension implements IPluginExtensionPoint<EditorView> {
 
 	@Override

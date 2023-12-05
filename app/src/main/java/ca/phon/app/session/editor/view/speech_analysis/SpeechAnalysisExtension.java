@@ -15,15 +15,18 @@
  */
 package ca.phon.app.session.editor.view.speech_analysis;
 
+import ca.phon.app.session.ViewPosition;
 import ca.phon.app.session.editor.*;
 import ca.phon.plugin.*;
+
+import javax.swing.*;
 
 /**
  * Waveform view extension point for the {@link SessionEditor}
  *
  */
 @PhonPlugin(name=SpeechAnalysisEditorView.VIEW_TITLE)
-@EditorViewInfo(name=SpeechAnalysisEditorView.VIEW_TITLE, category=EditorViewCategory.MEDIA, icon="misc/oscilloscope")
+@EditorViewInfo(name=SpeechAnalysisEditorView.VIEW_TITLE, category=EditorViewCategory.MEDIA, icon="misc/oscilloscope", dockPosition = ViewPosition.WORK)
 public class SpeechAnalysisExtension implements IPluginExtensionPoint<EditorView> {
 
 	@Override

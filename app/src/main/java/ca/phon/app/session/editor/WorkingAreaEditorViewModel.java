@@ -22,6 +22,7 @@ import bibliothek.gui.dock.action.actions.SimpleButtonAction;
 import bibliothek.gui.dock.common.*;
 import bibliothek.gui.dock.common.action.*;
 import bibliothek.gui.dock.common.event.*;
+import bibliothek.gui.dock.common.grouping.PlaceholderGrouping;
 import bibliothek.gui.dock.common.intern.CDockable;
 import bibliothek.gui.dock.common.intern.action.CDecorateableAction;
 import bibliothek.gui.dock.common.mode.ExtendedMode;
@@ -32,12 +33,15 @@ import bibliothek.gui.dock.themes.color.TitleColor;
 import bibliothek.gui.dock.util.*;
 import bibliothek.gui.dock.util.color.*;
 import bibliothek.util.Filter;
+import bibliothek.util.Path;
 import bibliothek.util.xml.*;
 import ca.phon.app.log.LogUtil;
+import ca.phon.app.session.ViewPosition;
 import ca.phon.app.session.editor.view.transcriptEditor.TranscriptView;
 import ca.phon.plugin.*;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
+import ca.phon.session.Transcriber;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuManager;
@@ -84,7 +88,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 	 */
 	private Map<String, CDockablePerspective> dockables;
 
-	private Map<String, Integer> dockPositions;
+	private Map<String, ViewPosition> dockPositions;
 
 	/**
 	 * Views
@@ -422,17 +426,18 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			return;
 		}
 
-		SingleCDockable dockable = dockControl.getSingleDockable(viewName);
+		EditorViewDockable dockable = (EditorViewDockable) dockControl.getSingleDockable(viewName);
 		if(dockable == null) {
 			final SingleCDockableFactory factory = dockControl.getSingleDockableFactory(viewName);
-			dockable = factory.createBackup(viewName);
+			dockable = (EditorViewDockable) factory.createBackup(viewName);
 		}
 
 		if(dockable != null) {
-			int dockPosition = dockPositions.get(viewName);
-			if(dockPosition == SwingConstants.CENTER) {
+			ViewPosition dockPosition = dockPositions.get(viewName);
+			if(dockPosition == ViewPosition.WORK) {
 				workingArea.show(dockable);
 			} else {
+				dockable.setGrouping(new PlaceholderGrouping(dockControl, new Path("dock", "single", dockPosition.getName())));
 				dockControl.addDockable(dockable);
 			}
 
@@ -473,8 +478,8 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 //				final CLocation location = CLocation.base( contentArea ).normal();
 //				dockable.setLocation(location);
 //			}
-			dockable.setVisible(true);
 
+			dockable.setVisible(true);
 			savePreviousPerspective();
 
 			Window parentWin = SwingUtilities.getWindowAncestor(getEditor());
@@ -593,45 +598,22 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 		CGridPerspective center = perspective.getContentArea().getCenter();
 
-		// grid locations for views
-		final double[] work = new double[] { 50, 50, 100, 100 };
-		final double[] north = new double[] { 0, 0, 150, 50 };
-		final double[] south = new double[] { 0, 150, 150, 50 };
-		final double[] west = new double[] { 0, 50, 50, 100 };
-		final double[] east = new double[] { 100, 50, 50, 100 };
-		final double[] north_west = new double[] { 0, 50, 50, 50 };
-		final double[] south_west = new double[] { 0, 100, 50, 50 };
-		final double[] north_east = new double[] { 150, 50, 50, 50 };
-		final double[] south_east = new double[] { 150, 100, 50, 50 };
-
 		CWorkingPerspective workingPerspective = (CWorkingPerspective) perspective.getStation("work");
-		center.gridAdd( work[0], work[1], work[2], work[3], workingPerspective );
+		center.gridAdd( ViewPosition.WORK.getX(), ViewPosition.WORK.getY(), ViewPosition.WORK.getWidth(), ViewPosition.WORK.getHeight(), workingPerspective );
 
 		for(String viewName:dockables.keySet()) {
-			double[] gridPosition = switch (dockPositions.get(viewName)) {
-				case SwingConstants.NORTH -> north;
-				case SwingConstants.SOUTH -> south;
-				case SwingConstants.WEST -> west;
-				case SwingConstants.EAST -> east;
-				case SwingConstants.NORTH_WEST -> north_west;
-				case SwingConstants.SOUTH_WEST -> south_west;
-				case SwingConstants.NORTH_EAST -> north_east;
-				case SwingConstants.SOUTH_EAST -> south_east;
-				default -> work;
-			};
-			if (dockPositions.get(viewName) == SwingConstants.CENTER) {
-				workingPerspective.gridAdd(0, 0, 100, 100, dockables.get(viewName));
+			final ViewPosition dockPosition = dockPositions.get(viewName);
+			if (dockPosition == ViewPosition.WORK) {
+				if(TranscriptView.VIEW_NAME.equals(viewName)) {
+					workingPerspective.gridAdd(0, 0, ViewPosition.WORK.getWidth(), ViewPosition.WORK.getHeight(), dockables.get(viewName));
+				} else {
+					workingPerspective.gridPlaceholder(0, 0, ViewPosition.WORK.getWidth(), ViewPosition.WORK.getHeight(), new Path("dock", "single", dockPosition.getName()));
+				}
 			} else {
-				center.gridAdd(gridPosition[0], gridPosition[1], gridPosition[2], gridPosition[3], dockables.get(viewName));
+				center.gridPlaceholder(dockPosition.getX(), dockPosition.getY(), dockPosition.getWidth(), dockPosition.getHeight(), new Path("dock", "single", dockPosition.getName()));
 			}
 		}
-//		perspective.storeLocations();
-
-//		for(String viewName:dockables.keySet()) {
-//			if(!TranscriptView.VIEW_NAME.equals(viewName)) {
-//				perspective.removeDockable(viewName);
-//			}
-//		}
+		perspective.storeLocations();
 
 		perspectives.setPerspective("default", perspective, true);
 		dockControl.load("default", true);
@@ -641,9 +623,9 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 	public void applyPerspective(RecordEditorPerspective editorPerspective) {
 		CPerspective perspective = editorPerspective.getPerspective(dockControl.getPerspectives());
 		if(perspective != null) {
-			dockControl.getPerspectives().setPerspective(editorPerspective.getName(), perspective);
+			dockControl.getPerspectives().setPerspective(editorPerspective.getName(), perspective, true);
 			perspective.storeLocations();
-			dockControl.load(editorPerspective.getName());
+			dockControl.load(editorPerspective.getName(), true);
 
 			Window win = SwingUtilities.getWindowAncestor(getEditor());
 			if (win instanceof CommonModuleFrame cmf) {
@@ -680,7 +662,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 					writeBoundsInfo(winEle, window);
 				}
 
-				dockControl.getPerspectives().writeXML(root, perspective);
+				dockControl.getPerspectives().writeXML(root, perspective, true);
 
 				final File f = new File(editorPerspective.getLocation().toURI());
 				XIO.writeUTF(root, new FileOutputStream(f));

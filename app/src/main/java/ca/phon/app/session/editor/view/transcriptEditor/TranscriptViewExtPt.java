@@ -1,5 +1,6 @@
 package ca.phon.app.session.editor.view.transcriptEditor;
 
+import ca.phon.app.session.ViewPosition;
 import ca.phon.app.session.editor.EditorView;
 import ca.phon.app.session.editor.EditorViewCategory;
 import ca.phon.app.session.editor.EditorViewInfo;
@@ -11,7 +12,7 @@ import ca.phon.plugin.PhonPlugin;
 import javax.swing.*;
 
 @PhonPlugin(name= TranscriptView.VIEW_NAME)
-@EditorViewInfo(name= TranscriptView.VIEW_NAME, category= EditorViewCategory.RECORD, dockPosition = SwingConstants.CENTER, icon= TranscriptView.VIEW_ICON)
+@EditorViewInfo(name= TranscriptView.VIEW_NAME, category= EditorViewCategory.RECORD, dockPosition = ViewPosition.WORK, icon= TranscriptView.VIEW_ICON)
 public class TranscriptViewExtPt implements IPluginExtensionPoint<EditorView>, IPluginExtensionFactory<EditorView> {
 
     @Override

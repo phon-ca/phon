@@ -15,11 +15,12 @@
  */
 package ca.phon.app.session.editor.view.ipa_lookup;
 
+import ca.phon.app.session.ViewPosition;
 import ca.phon.app.session.editor.*;
 import ca.phon.plugin.*;
 
 @PhonPlugin
-@EditorViewInfo(name=IPALookupView.VIEW_NAME, icon=IPALookupView.VIEW_ICON, category=EditorViewCategory.UTILITIES)
+@EditorViewInfo(name=IPALookupView.VIEW_NAME, icon=IPALookupView.VIEW_ICON, category=EditorViewCategory.UTILITIES, dockPosition = ViewPosition.BOTTOM_RIGHT)
 public class IPALookupViewExtension implements IPluginExtensionPoint<EditorView> {
 
 	@Override

@@ -15,11 +15,14 @@
  */
 package ca.phon.app.session.editor.view.find_and_replace;
 
+import ca.phon.app.session.ViewPosition;
 import ca.phon.app.session.editor.*;
 import ca.phon.plugin.*;
 
+import javax.swing.*;
+
 @PhonPlugin(name=FindAndReplaceEditorView.VIEW_NAME)
-@EditorViewInfo(category=EditorViewCategory.UTILITIES,icon=FindAndReplaceEditorView.VIEW_ICON,name=FindAndReplaceEditorView.VIEW_NAME)
+@EditorViewInfo(category=EditorViewCategory.UTILITIES,icon=FindAndReplaceEditorView.VIEW_ICON,name=FindAndReplaceEditorView.VIEW_NAME, dockPosition = ViewPosition.BOTTOM_LEFT)
 public class FindAndReplaceEditorViewExtension implements IPluginExtensionPoint<EditorView> {
 
 	@Override

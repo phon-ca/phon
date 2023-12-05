@@ -15,11 +15,14 @@
  */
 package ca.phon.app.session.editor.view.tier_management;
 
+import ca.phon.app.session.ViewPosition;
 import ca.phon.app.session.editor.*;
 import ca.phon.plugin.*;
 
+import javax.swing.*;
+
 @PhonPlugin(name="Tier Management")
-@EditorViewInfo(name="Tier Management", category=EditorViewCategory.SESSION, icon="misc/record-settings")
+@EditorViewInfo(name="Tier Management", category=EditorViewCategory.SESSION, icon="misc/record-settings", dockPosition = ViewPosition.LEFT_BOTTOM)
 public class TierOrderingExtensionPoint implements IPluginExtensionPoint<EditorView> {
 	
 	@Override

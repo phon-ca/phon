@@ -15,12 +15,15 @@
  */
 package ca.phon.app.session.editor.view.check;
 
+import ca.phon.app.session.ViewPosition;
 import ca.phon.app.session.editor.*;
 import ca.phon.phonex.PhonexPlugin;
 import ca.phon.plugin.*;
 
+import javax.swing.*;
+
 @PhonexPlugin(name="Session Check")
-@EditorViewInfo(category=EditorViewCategory.SESSION, icon=SessionCheckView.ICON_NAME, name=SessionCheckView.VIEW_NAME)
+@EditorViewInfo(category=EditorViewCategory.SESSION, icon=SessionCheckView.ICON_NAME, name=SessionCheckView.VIEW_NAME, dockPosition = ViewPosition.BOTTOM_LEFT)
 public class SessionCheckViewExtension implements IPluginExtensionPoint<EditorView> {
 
 	@Override
