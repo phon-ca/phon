@@ -22,7 +22,6 @@ import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.actions.*;
 import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
-import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
 import ca.phon.app.session.editor.actions.NewParticipantAction;
 import ca.phon.app.session.editor.view.timeline.RecordGrid.GhostMarker;
 import ca.phon.app.session.editor.view.timeline.actions.*;

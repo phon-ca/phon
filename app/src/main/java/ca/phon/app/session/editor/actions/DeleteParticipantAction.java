@@ -17,8 +17,6 @@ package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.*;
-import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
-import ca.phon.app.session.editor.view.session_information.actions.SessionInfoAction;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.ui.CommonModuleFrame;

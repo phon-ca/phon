@@ -17,8 +17,6 @@ package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.AddParticipantEdit;
-import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
-import ca.phon.app.session.editor.view.session_information.actions.SessionInfoAction;
 import ca.phon.session.*;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.participant.ParticipantEditor;

@@ -13,17 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.session_information;
+package ca.phon.app.session.editor.view.participants;
 
 import ca.phon.app.session.ViewPosition;
 import ca.phon.app.session.editor.*;
 import ca.phon.plugin.*;
 
-import javax.swing.*;
-
-@PhonPlugin(name="Session Information")
-@EditorViewInfo(name="Session Information", category=EditorViewCategory.SESSION, dockPosition = ViewPosition.LEFT_TOP, icon="apps/system-users")
-public class SessionInfoExtension implements IPluginExtensionPoint<EditorView> {
+@PhonPlugin(name="Participants")
+@EditorViewInfo(name="Participants", category=EditorViewCategory.SESSION, dockPosition = ViewPosition.LEFT_TOP, icon="apps/system-users")
+public class ParticipantsViewExtPt implements IPluginExtensionPoint<EditorView> {
 
 	@Override
 	public Class<?> getExtensionType() {
@@ -43,7 +41,7 @@ public class SessionInfoExtension implements IPluginExtensionPoint<EditorView> {
 				throw new IllegalArgumentException("Arguments must include SessionEditor reference.");
 			}
 			final SessionEditor editor = (SessionEditor)args[0];
-			return new SessionInfoEditorView(editor);
+			return new ParticipantsView(editor);
 		}
 		
 	};

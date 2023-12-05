@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.session_information.actions;
+package ca.phon.app.session.editor.view.participants.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.ChangeSpeakerEdit;
-import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
+import ca.phon.app.session.editor.view.participants.ParticipantsView;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.ui.CommonModuleFrame;
@@ -39,7 +39,7 @@ public class AssignUnidentifiedSpeakerAction extends SessionInfoAction {
 	
 	private Participant participant;
 	
-	public AssignUnidentifiedSpeakerAction(SessionEditor editor, SessionInfoEditorView view, Participant participant) {
+	public AssignUnidentifiedSpeakerAction(SessionEditor editor, ParticipantsView view, Participant participant) {
 		super(editor, view);
 		this.participant = participant;
 		

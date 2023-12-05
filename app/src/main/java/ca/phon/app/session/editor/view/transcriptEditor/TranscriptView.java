@@ -6,7 +6,7 @@ import ca.phon.app.session.editor.autotranscribe.AutoTranscribeAction;
 import ca.phon.app.session.editor.search.FindAndReplacePanel;
 import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
-import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
+import ca.phon.app.session.editor.view.participants.ParticipantsView;
 import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
 import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
 import ca.phon.app.session.editor.view.tier_management.actions.NewTierAction;
@@ -384,7 +384,7 @@ public class TranscriptView extends EditorView {
 
         JMenuItem showSessionInfoViewItem = new JMenuItem();
         PhonUIAction<Void> showSessionInfoViewAct = PhonUIAction.runnable(
-            () -> getEditor().getViewModel().showView(SessionInfoEditorView.VIEW_TITLE)
+            () -> getEditor().getViewModel().showView(ParticipantsView.VIEW_TITLE)
         );
         showSessionInfoViewAct.putValue(PhonUIAction.NAME, "Show Session Information view");
         showSessionInfoViewItem.setAction(showSessionInfoViewAct);
@@ -489,7 +489,7 @@ public class TranscriptView extends EditorView {
 
         JMenuItem showSessionInfoViewItem = new JMenuItem();
         PhonUIAction<Void> showSessionInfoViewAct = PhonUIAction.runnable(
-                () -> getEditor().getViewModel().showView(SessionInfoEditorView.VIEW_TITLE)
+                () -> getEditor().getViewModel().showView(ParticipantsView.VIEW_TITLE)
         );
         showSessionInfoViewAct.putValue(PhonUIAction.NAME, "Show Session Information view");
         showSessionInfoViewItem.setAction(showSessionInfoViewAct);

@@ -13,24 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.session_information.actions;
+package ca.phon.app.session.editor.view.participants.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.actions.SessionEditorAction;
-import ca.phon.app.session.editor.view.session_information.SessionInfoEditorView;
+import ca.phon.app.session.editor.view.participants.ParticipantsView;
 
 public abstract class SessionInfoAction extends SessionEditorAction {
 	
 	private static final long serialVersionUID = 1842274536935284100L;
 
-	private final SessionInfoEditorView view;
+	private final ParticipantsView view;
 
-	public SessionInfoAction(SessionEditor editor, SessionInfoEditorView view) {
+	public SessionInfoAction(SessionEditor editor, ParticipantsView view) {
 		super(editor);
 		this.view = view;
 	}
 	
-	public SessionInfoEditorView getView() {
+	public ParticipantsView getView() {
 		return this.view;
 	}
 

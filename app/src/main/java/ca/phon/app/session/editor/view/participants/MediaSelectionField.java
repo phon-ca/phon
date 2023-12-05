@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.session_information;
+package ca.phon.app.session.editor.view.participants;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.actions.SaveSessionAction;
@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.*;
 
 /**
- * Media selection field for {@link SessionInfoEditorView}.
+ * Media selection field for {@link ParticipantsView}.
  * This field adds a text completer for media files found in the
  * list of media folders setup in application preferences.  Files
  * found in one of these folders are displayed with a relative path.
