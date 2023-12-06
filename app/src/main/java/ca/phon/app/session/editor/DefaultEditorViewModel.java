@@ -378,7 +378,22 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		}
 		return retVal;
 	}
-	
+
+	@Override
+	public void addEditorViewModelListener(EditorViewModelListener listener) {
+
+	}
+
+	@Override
+	public void removeEditorViewModelListener(EditorViewModelListener listener) {
+
+	}
+
+	@Override
+	public List<EditorViewModelListener> getEditorViewModelListeners() {
+		return null;
+	}
+
 	@Override
 	public void cleanup() {
 

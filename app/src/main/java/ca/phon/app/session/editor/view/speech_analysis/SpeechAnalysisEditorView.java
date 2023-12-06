@@ -55,7 +55,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 	public final static EditorEventType<TimeUIModel> TimeModelUpdated =
 			new EditorEventType<>("_SPEECH_ANALYSIS_TIME_MODEL_UPDATE_", TimeUIModel.class);
 
-	public static final String VIEW_TITLE = "Speech Analysis";
+	public static final String VIEW_NAME = "Speech Analysis";
 
 	public static final String VIEW_ICON = IconManager.GoogleMaterialDesignIconsFontName + ":GRAPHIC_EQ";
 
@@ -245,7 +245,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 	
 	@Override
 	public String getName() {
-		return VIEW_TITLE;
+		return VIEW_NAME;
 	}
 
 	public JToolBar getToolbar() {
@@ -792,8 +792,8 @@ public class SpeechAnalysisEditorView extends EditorView {
 	}
 	
 	private void onRecordChanged(EditorEvent<EditorEventType.RecordChangedData> ee) {
-		if(!isVisible() || !getEditor().getViewModel().isShowing(VIEW_TITLE)
-				|| !getEditor().getViewModel().isShowingInStack(VIEW_TITLE)) return;
+		if(!isVisible() || !getEditor().getViewModel().isShowing(VIEW_NAME)
+				|| !getEditor().getViewModel().isShowingInStack(VIEW_NAME)) return;
 		setupTimeModel();
 	}
 
@@ -807,12 +807,12 @@ public class SpeechAnalysisEditorView extends EditorView {
 
 	private void onMediaSegmentChanged(EditorEvent<EditorEventType.TierChangeData> ee) {
 		if(!ee.data().valueAdjusting() && ee.data().tier().getName().equals(SystemTierType.Segment.getName())
-				&& getEditor().getViewModel().isShowingInStack(VIEW_TITLE))
+				&& getEditor().getViewModel().isShowingInStack(VIEW_NAME))
 			setupTimeModel();
 	}
 
 	private void onRecordRefresh(EditorEvent<EditorEventType.RecordChangedData> ee) {
-		if(!isVisible() || !getEditor().getViewModel().isShowing(VIEW_TITLE)) return;
+		if(!isVisible() || !getEditor().getViewModel().isShowing(VIEW_NAME)) return;
 		update();
 	}
 

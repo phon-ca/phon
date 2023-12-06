@@ -286,7 +286,7 @@ public final class SegmentationHandler {
 		Participant speaker = null;
 		
 		// speaker index is determined by the 'Time Grid' view
-		TimelineView tgView = (TimelineView)editor.getViewModel().getView(TimelineView.VIEW_TITLE);
+		TimelineView tgView = (TimelineView)editor.getViewModel().getView(TimelineView.VIEW_NAME);
 		if(tgView != null) {
 			if(pae.getData() >= 0) {
 				int speakerIdx = pae.getData();
@@ -312,8 +312,8 @@ public final class SegmentationHandler {
 				return;
 			
 			long segmentOffset = 1;
-			if(editor.getViewModel().isShowing(TimelineView.VIEW_TITLE)) {
-				TimelineView timelineView = (TimelineView)editor.getViewModel().getView(TimelineView.VIEW_TITLE);
+			if(editor.getViewModel().isShowing(TimelineView.VIEW_NAME)) {
+				TimelineView timelineView = (TimelineView)editor.getViewModel().getView(TimelineView.VIEW_NAME);
 				float singlePxTime = timelineView.getTimeModel().timeAtX(timelineView.getTimeModel().getTimeInsets().left + 1);
 				segmentOffset = (long)Math.ceil(singlePxTime * 1000.0f);
 			}
@@ -430,9 +430,9 @@ public final class SegmentationHandler {
 				segmentationInterval.getEndMarker().setTime(segEnd / 1000.0f);
 				segmentationInterval.setValueAdjusting(false);
 
-				if (editor.getViewModel().isShowing(TimelineView.VIEW_TITLE)) {
+				if (editor.getViewModel().isShowing(TimelineView.VIEW_NAME)) {
 					TimelineView timelineView =
-							(TimelineView) editor.getViewModel().getView(TimelineView.VIEW_TITLE);
+							(TimelineView) editor.getViewModel().getView(TimelineView.VIEW_NAME);
 
 					// autoscroll if necessary
 					Rectangle visibleRect = timelineView.getRecordTier().getRecordGrid().getVisibleRect();
@@ -497,7 +497,7 @@ public final class SegmentationHandler {
 		Toolkit.getDefaultToolkit().addAWTEventListener(segmentationListener, segmentationEventMask);
 		
 		TimelineView timelineView = 
-				(TimelineView)editor.getViewModel().getView(TimelineView.VIEW_TITLE);
+				(TimelineView)editor.getViewModel().getView(TimelineView.VIEW_NAME);
 		if(timelineView != null) {
 			segmentationInterval = timelineView.getTimeModel().addInterval(0.0f, 0.0f);
 			segmentationInterval.setOwner(timelineView.getWaveformTier().getWaveformDisplay());
@@ -544,7 +544,7 @@ public final class SegmentationHandler {
 		Toolkit.getDefaultToolkit().removeAWTEventListener(segmentationListener);
 		
 		TimelineView timelineView = 
-				(TimelineView)editor.getViewModel().getView(TimelineView.VIEW_TITLE);
+				(TimelineView)editor.getViewModel().getView(TimelineView.VIEW_NAME);
 		if(timelineView != null) {
 			timelineView.getTimeModel().removeInterval(segmentationInterval);
 			segmentationInterval = null;
@@ -569,7 +569,7 @@ public final class SegmentationHandler {
 			window.setStartLockMs(playbackPosition);
 			
 			TimelineView timelineView = 
-					(TimelineView)editor.getViewModel().getView(TimelineView.VIEW_TITLE);
+					(TimelineView)editor.getViewModel().getView(TimelineView.VIEW_NAME);
 			if(timelineView != null && window.getBackwardWindowLengthMs() == 0L) {
 				timelineView.repaint(timelineView.getVisibleRect());
 			}

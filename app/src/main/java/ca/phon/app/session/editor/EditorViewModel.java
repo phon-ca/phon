@@ -26,7 +26,27 @@ import java.util.*;
  *
  */
 public interface EditorViewModel {
-	
+
+	/**
+	 * Add a listener to this model
+	 *
+	 * @param listener
+	 */
+	public void addEditorViewModelListener(EditorViewModelListener listener);
+
+	/**
+	 * Remove a listener from this model
+	 *
+	 * @param listener
+	 */
+	public void removeEditorViewModelListener(EditorViewModelListener listener);
+
+	/**
+	 * Get view model listeners
+	 *
+	 * @return list of listeners
+	 */
+	public List<EditorViewModelListener> getEditorViewModelListeners();
 	
 	/**
 	 * Remove all view references and cleanup resources.

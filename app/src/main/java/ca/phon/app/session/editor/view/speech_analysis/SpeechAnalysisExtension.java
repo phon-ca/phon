@@ -19,14 +19,12 @@ import ca.phon.app.session.ViewPosition;
 import ca.phon.app.session.editor.*;
 import ca.phon.plugin.*;
 
-import javax.swing.*;
-
 /**
  * Waveform view extension point for the {@link SessionEditor}
  *
  */
-@PhonPlugin(name=SpeechAnalysisEditorView.VIEW_TITLE)
-@EditorViewInfo(name=SpeechAnalysisEditorView.VIEW_TITLE,
+@PhonPlugin(name=SpeechAnalysisEditorView.VIEW_NAME)
+@EditorViewInfo(name=SpeechAnalysisEditorView.VIEW_NAME,
 		category=EditorViewCategory.MEDIA,
 		icon = SpeechAnalysisEditorView.VIEW_ICON,
 		dockPosition = ViewPosition.WORK)

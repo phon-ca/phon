@@ -20,6 +20,7 @@ public enum IconSize {
 	XSMALL,
 	SMALL,
 	MEDIUM,
+	MEDIUM_LARGE,
 	LARGE,
 	XLARGE,
 	XXLARGE;
@@ -33,6 +34,8 @@ public enum IconSize {
 			return 16;
 		else if(size == MEDIUM)
 			return 22;
+		else if(size == MEDIUM_LARGE)
+			return 28;
 		else if(size == LARGE)
 			return 32;
 		else if(size == XLARGE)
@@ -79,6 +82,8 @@ public enum IconSize {
 			return 16;
 		else if(size == MEDIUM)
 			return 22;
+		else if(size == MEDIUM_LARGE)
+			return 28;
 		else if(size == LARGE)
 			return 32;
 		else if(size == XLARGE)

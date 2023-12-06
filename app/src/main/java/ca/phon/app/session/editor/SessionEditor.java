@@ -125,6 +125,11 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 	 */
 	private final UndoManager undoManager = new UndoManager();
 
+	/**
+	 * View icon strip
+	 */
+	private ViewIconStrip viewIconStrip;
+
 	private final UndoableEditListener undoListener = new UndoableEditListener() {
 
 		@Override
@@ -233,6 +238,10 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 		// setup content/dock area
 		final Container dock = viewModel.getRoot();
 		add(dock, BorderLayout.CENTER);
+
+		// setup view icon strip
+		viewIconStrip = new ViewIconStrip(viewModel);
+		add(viewIconStrip, BorderLayout.WEST);
 
 		setupEditorActions();
 	}

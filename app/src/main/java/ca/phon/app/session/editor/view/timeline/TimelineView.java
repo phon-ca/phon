@@ -59,9 +59,9 @@ public final class TimelineView extends EditorView {
 		TimelineViewColors.install();
 	}
 
-	public static final String VIEW_TITLE = "Timeline";
+	public static final String VIEW_NAME = "Timeline";
 
-	public static final String VIEW_ICON = IconManager.GoogleMaterialDesignIconsFontName + ":GRAIN";
+	public static final String VIEW_ICON = IconManager.FontAwesomeFontName + ":CLOCK_O";
 	
 	private final static String PLABACK_FPS = "TimelineView.playbackFps";
 	private final float DEFAULT_PLAYBACK_FPS = 30.0f;
@@ -920,7 +920,7 @@ public final class TimelineView extends EditorView {
 				handler.getWindow().setBackwardWindowLengthMs(startDialog.getWindowLength());
 
 				// check for speech analysis view
-				if(getEditor().getViewModel().isShowing(SpeechAnalysisEditorView.VIEW_TITLE)) {
+				if(getEditor().getViewModel().isShowing(SpeechAnalysisEditorView.VIEW_NAME)) {
 					final MessageDialogProperties props = new MessageDialogProperties();
 					props.setHeader("Segmentation Performance");
 					props.setMessage("The Speech Analysis view may cause performance issues with segmentation.");
@@ -930,7 +930,7 @@ public final class TimelineView extends EditorView {
 					int result = NativeDialogs.showMessageDialog(props);
 					switch(result) {
 					case 0:
-						getEditor().getViewModel().getCloseAction(SpeechAnalysisEditorView.VIEW_TITLE).actionPerformed(new ActionEvent(this, -1, "close"));
+						getEditor().getViewModel().getCloseAction(SpeechAnalysisEditorView.VIEW_NAME).actionPerformed(new ActionEvent(this, -1, "close"));
 						break;
 						
 					case 1:
@@ -1066,7 +1066,7 @@ public final class TimelineView extends EditorView {
 		
 	@Override
 	public String getName() {
-		return VIEW_TITLE;
+		return VIEW_NAME;
 	}
 
 	@Override

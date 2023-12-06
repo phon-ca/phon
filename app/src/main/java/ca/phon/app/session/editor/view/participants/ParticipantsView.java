@@ -18,20 +18,14 @@ package ca.phon.app.session.editor.view.participants;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.actions.*;
 import ca.phon.app.session.editor.undo.*;
-import ca.phon.app.session.editor.view.common.*;
 import ca.phon.app.session.editor.view.participants.actions.*;
-import ca.phon.media.MediaLocator;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.*;
 import ca.phon.ui.participant.ParticipantsTableModel;
-import ca.phon.ui.text.*;
-import ca.phon.ui.text.PromptedTextField.FieldState;
-import ca.phon.util.Language;
 import ca.phon.util.icons.*;
 import com.jgoodies.forms.layout.*;
-import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.JXTable;
 
 import javax.swing.*;
@@ -39,22 +33,15 @@ import javax.swing.event.*;
 import javax.swing.undo.CompoundEdit;
 import java.awt.*;
 import java.awt.event.*;
-import java.beans.*;
-import java.io.File;
-import java.time.LocalDate;
-import java.time.Period;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 
  */
 public class ParticipantsView extends EditorView {
 
-	public static final String VIEW_TITLE = "Participants";
+	public static final String VIEW_NAME = "Participants";
 
-	public static final String VIEW_ICON = IconManager.GoogleMaterialDesignIconsFontName + ":PEOPLE_OUTLINE";
+	public static final String VIEW_ICON = IconManager.FontAwesomeFontName + ":USERS";
 
 	/**
 	 * Participant Table
@@ -160,7 +147,7 @@ public class ParticipantsView extends EditorView {
 	
 	@Override
 	public String getName() {
-		return VIEW_TITLE;
+		return VIEW_NAME;
 	}
 
 	private void update() {

@@ -340,7 +340,7 @@ public class IconManager {
 		if(icon == null) {
 			return getIcon("blank", size);
 		} else {
-			return iconToImage(icon);
+			return iconToImage(size, icon);
 		}
 	}
 
@@ -367,11 +367,21 @@ public class IconManager {
 	 * @param icon
 	 * @return icon image
 	 */
-	private ImageIcon iconToImage(Icon icon) {
+	private ImageIcon iconToImage(IconSize size, Icon icon) {
 		BufferedImage img = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_4BYTE_ABGR);
 		Graphics2D g2 = (Graphics2D)img.createGraphics();
 		icon.paintIcon(null, g2, 0, 0);
-		return new ImageIcon(img);
+
+		// create a new buffered image of size and draw icon centered and scaled keeping perspective
+		final BufferedImage scaledImg = new BufferedImage(size.getWidth(), size.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+		Graphics2D scaledImgGraphics = (Graphics2D)scaledImg.createGraphics();
+		scaledImgGraphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		final double scale = Math.min((double)size.getWidth() / (double)icon.getIconWidth(), (double)size.getHeight() / (double)icon.getIconHeight());
+		final int w = (int)(icon.getIconWidth() * scale);
+		final int h = (int)(icon.getIconHeight() * scale);
+		scaledImgGraphics.drawImage(img, (size.getWidth() - w) / 2, (size.getHeight() - h) / 2, w, h, null);
+
+		return new ImageIcon(scaledImg);
 	}
 
 	/**

@@ -53,7 +53,7 @@ import java.util.List;
 public class TranscriptView extends EditorView {
 
     public final static String VIEW_NAME = "Transcript";
-    public final static String VIEW_ICON = IconManager.FontAwesomeFontName + ":FILE_TEXT_O";
+    public final static String VIEW_ICON = IconManager.FontAwesomeFontName + ":BOOK";
 
     private final TranscriptEditor transcriptEditor;
     private TranscriptScrollPane transcriptScrollPane;
@@ -385,7 +385,7 @@ public class TranscriptView extends EditorView {
 
         JMenuItem showSessionInfoViewItem = new JMenuItem();
         PhonUIAction<Void> showSessionInfoViewAct = PhonUIAction.runnable(
-            () -> getEditor().getViewModel().showView(ParticipantsView.VIEW_TITLE)
+            () -> getEditor().getViewModel().showView(ParticipantsView.VIEW_NAME)
         );
         showSessionInfoViewAct.putValue(PhonUIAction.NAME, "Show Session Information view");
         showSessionInfoViewItem.setAction(showSessionInfoViewAct);
@@ -428,7 +428,7 @@ public class TranscriptView extends EditorView {
         menuBuilder.addItem(".", showMediaPlayerItem);
 
         JMenuItem showTimelineViewItem = new JMenuItem();
-        PhonUIAction<Void> showTimelineViewAct = PhonUIAction.runnable(() -> getEditor().getViewModel().showView(TimelineView.VIEW_TITLE));
+        PhonUIAction<Void> showTimelineViewAct = PhonUIAction.runnable(() -> getEditor().getViewModel().showView(TimelineView.VIEW_NAME));
         showTimelineViewAct.putValue(PhonUIAction.NAME, "Show Timeline view");
         showTimelineViewItem.setAction(showTimelineViewAct);
         menuBuilder.addItem(".", showTimelineViewItem);
@@ -440,7 +440,7 @@ public class TranscriptView extends EditorView {
         menuBuilder.addItem(".", showMediaPlayerViewItem);
 
         JMenuItem showSpeechAnalysisViewItem = new JMenuItem();
-        PhonUIAction<Void> showSpeechAnalysisViewAct = PhonUIAction.runnable(() -> getEditor().getViewModel().showView(SpeechAnalysisEditorView.VIEW_TITLE));
+        PhonUIAction<Void> showSpeechAnalysisViewAct = PhonUIAction.runnable(() -> getEditor().getViewModel().showView(SpeechAnalysisEditorView.VIEW_NAME));
         showSpeechAnalysisViewAct.putValue(PhonUIAction.NAME, "Show Speech Analysis view");
         showSpeechAnalysisViewItem.setAction(showSpeechAnalysisViewAct);
         menuBuilder.addItem(".", showSpeechAnalysisViewItem);
@@ -490,7 +490,7 @@ public class TranscriptView extends EditorView {
 
         JMenuItem showSessionInfoViewItem = new JMenuItem();
         PhonUIAction<Void> showSessionInfoViewAct = PhonUIAction.runnable(
-                () -> getEditor().getViewModel().showView(ParticipantsView.VIEW_TITLE)
+                () -> getEditor().getViewModel().showView(ParticipantsView.VIEW_NAME)
         );
         showSessionInfoViewAct.putValue(PhonUIAction.NAME, "Show Session Information view");
         showSessionInfoViewItem.setAction(showSessionInfoViewAct);

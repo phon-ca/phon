@@ -139,7 +139,13 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 	private void setupDockControl() {
 		// theme
 		dockControl.setTheme(ThemeMap.KEY_FLAT_THEME);
-		
+
+		bibliothek.gui.dock.util.IconManager icons = dockControl.getIcons();
+		icons.setIconClient("close", IconManager.getInstance().buildFontIcon(IconManager.FontAwesomeFontName, "TIMES", IconSize.SMALL, Color.darkGray));
+		icons.setIconClient("locationmanager.maximize", IconManager.getInstance().buildFontIcon(IconManager.FontAwesomeFontName, "WINDOW_MAXIMIZE", IconSize.SMALL, Color.darkGray));
+		icons.setIconClient("locationmanager.minimize", IconManager.getInstance().buildFontIcon(IconManager.FontAwesomeFontName, "WINDOW_MINIMIZE", IconSize.SMALL, Color.darkGray));
+		icons.setIconClient("locationmanager.normalize", IconManager.getInstance().buildFontIcon(IconManager.FontAwesomeFontName, "WINDOW_RESTORE", IconSize.SMALL, Color.darkGray));
+
 		dockControl.addControlListener(new CControlListener() {
 			
 			@Override
@@ -395,14 +401,74 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		}
 		return retVal;
 	}
-	
+
+	// region Listeners
+	private final List<EditorViewModelListener> listeners = new ArrayList<EditorViewModelListener>();
+
+	@Override
+	public void addEditorViewModelListener(EditorViewModelListener listener) {
+		listeners.add(listener);
+	}
+
+	@Override
+	public void removeEditorViewModelListener(EditorViewModelListener listener) {
+		listeners.remove(listener);
+	}
+
+	@Override
+	public List<EditorViewModelListener> getEditorViewModelListeners() {
+		return Collections.unmodifiableList(listeners);
+	}
+
+	public void fireViewShown(String viewName) {
+		for(EditorViewModelListener listener:getEditorViewModelListeners()) {
+			listener.viewShown(viewName);
+		}
+	}
+
+	public void fireViewHidden(String viewName) {
+		for(EditorViewModelListener listener:getEditorViewModelListeners()) {
+			listener.viewHidden(viewName);
+		}
+	}
+
+	public void fireViewMinimized(String viewName) {
+		for(EditorViewModelListener listener:getEditorViewModelListeners()) {
+			listener.viewMinimized(viewName);
+		}
+	}
+
+	public void fireViewMaximized(String viewName) {
+		for(EditorViewModelListener listener:getEditorViewModelListeners()) {
+			listener.viewMaximized(viewName);
+		}
+	}
+
+	public void fireViewNormalized(String viewName) {
+		for(EditorViewModelListener listener:getEditorViewModelListeners()) {
+			listener.viewNormalized(viewName);
+		}
+	}
+
+	public void fireViewExternalized(String viewName) {
+		for(EditorViewModelListener listener:getEditorViewModelListeners()) {
+			listener.viewExternalized(viewName);
+		}
+	}
+
+	public void fireViewFocused(String viewName) {
+		for(EditorViewModelListener listener:getEditorViewModelListeners()) {
+			listener.viewFocused(viewName);
+		}
+	}
+	// endregion
+
 	@Override
 	public void cleanup() {
-
 		for(int i = 0; i < dockControl.getCDockableCount(); i++) {
 			final CDockable dockable = dockControl.getCDockable(i);
 			dockable.removeCDockableLocationListener(dockableLocationListener);
-			dockControl.removeDockable((SingleCDockable)dockable);
+//			dockControl.removeDockable((SingleCDockable)dockable);
 		}
 
 		dockControl.getController().kill();
@@ -428,6 +494,27 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		if(dockable == null) {
 			final SingleCDockableFactory factory = dockControl.getSingleDockableFactory(viewName);
 			dockable = (EditorViewDockable) factory.createBackup(viewName);
+			dockable.addCDockableStateListener(new CDockableStateListener() {
+				@Override
+				public void visibilityChanged(CDockable cDockable) {
+					if(cDockable.isVisible()) {
+						fireViewShown(viewName);
+					} else {
+						fireViewHidden(viewName);
+					}
+				}
+
+				@Override
+				public void extendedModeChanged(CDockable cDockable, ExtendedMode extendedMode) {
+					if(extendedMode == ExtendedMode.MAXIMIZED) {
+						fireViewMaximized(viewName);
+					} else if(extendedMode == ExtendedMode.MINIMIZED) {
+						fireViewMinimized(viewName);
+					} else if(extendedMode == ExtendedMode.NORMALIZED) {
+						fireViewNormalized(viewName);
+					}
+				}
+			});
 		}
 
 		if(dockable != null) {
@@ -438,45 +525,6 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 				dockable.setGrouping(new PlaceholderGrouping(dockControl, new Path("dock", "single", dockPosition.getName())));
 				dockControl.addDockable(dockable);
 			}
-
-			final CommonModuleFrame focusedWindow = CommonModuleFrame.getCurrentFrame();
-			CContentArea contentArea = rootArea;
-			if(focusedWindow instanceof AccessoryWindow) {
-				final AccessoryWindow accWin = (AccessoryWindow)focusedWindow;
-				contentArea = accWin.getArea();
-			}
-
-//			// look for placement based on current focus (or historical focus)
-//			var focusedDockable = dockControl.getFocusedCDockable();
-//			if(focusedDockable == null || focusedDockable == dockable) {
-//				focusedDockable = null;
-//				var focusHistory = dockControl.getFocusHistory();
-//				for(var d:focusHistory.getHistory()) {
-//					if(d != dockable) {
-//						focusedDockable = d;
-//						break;
-//					}
-//				}
-//			}
-//
-//			// look for first item in the list that isn't our dockable
-//			if(focusedDockable == null) {
-//				for(var i = 0; i < dockControl.getCDockableCount(); i++) {
-//					var d = dockControl.getCDockable(i);
-//					if(d != dockable) {
-//						focusedDockable = d;
-//						break;
-//					}
-//				}
-//			}
-//
-//			if(focusedDockable != null) {
-//				dockable.setLocationsAside(focusedDockable);
-//			} else {
-//				final CLocation location = CLocation.base( contentArea ).normal();
-//				dockable.setLocation(location);
-//			}
-
 			dockable.setVisible(true);
 			savePreviousPerspective();
 
@@ -494,7 +542,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 	public void hideView(String viewName) {
 		if(!isShowing(viewName)) return;
 
-		// TODO ?
+		dockControl.removeDockable(dockControl.getSingleDockable(viewName));
 	}
 
 	@Override
@@ -820,6 +868,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		public EditorViewDockable(String id, EditorView editorView, CAction[] actions) {
 			super(id, editorView.getIcon(), editorView.getName(), editorView, actions);
 			super.setCloseable(true);
+			super.setExternalizable(false);
 
 //			this.addVetoClosingListener(new CVetoClosingListener() {
 //
@@ -837,7 +886,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 			final SimpleButtonAction externalizeAct = new SimpleButtonAction();
 			externalizeAct.setText("Open view in new window");
-			externalizeAct.setIcon(IconManager.getInstance().getIcon("actions/externalize-to-window", IconSize.SMALL));
+			externalizeAct.setIcon(IconManager.getInstance().buildFontIcon(IconManager.FontAwesomeFontName, "EXTERNAL_LINK_SQUARE", IconSize.SMALL, Color.darkGray));
 			externalizeAct.addActionListener(new ActionListener() {
 
 				@Override
@@ -869,8 +918,6 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 	// wrapp class for CActions
 	private class CActionWrapper extends AbstractAction {
-
-		private static final long serialVersionUID = -4913295698177388752L;
 
 		// dockable
 		private final CDockable dockable;
