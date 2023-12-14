@@ -11,6 +11,7 @@ import ca.phon.app.session.editor.view.timeline.TimelineView;
 import ca.phon.app.session.editor.view.transcriptEditor.TranscriptView;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -36,28 +37,28 @@ public class ViewIconStrip extends JPanel {
     public ViewIconStrip(EditorViewModel viewModel) {
         super();
         this.viewModel = viewModel;
-
         initUI();
     }
 
     private void initUI() {
-        final String cols = "center:pref";
-        final String rows = "fill:pref, fill:pref, fill:pref, fill:pref, fill:pref, fill:pref:grow, fill:pref, fill:pref, fill:pref, fill:pref";
+        final String cols = "3dlu, center:pref";
+        final String rows = "fill:pref, 3dlu, fill:pref, 3dlu, fill:pref, 3dlu, fill:pref," +
+                "3dlu, fill:pref, fill:pref:grow, fill:pref, 3dlu, fill:pref, 3dlu, fill:pref, 3dlu, fill:pref";
         setLayout(new FormLayout(cols, rows));
 
         CellConstraints cc = new CellConstraints();
 
         // add in specific order
-        add(new ViewIcon(TranscriptView.VIEW_NAME), cc.xy(1, 1));
-        add(new ViewIcon(ParticipantsView.VIEW_NAME), cc.xy(1, 2));
-        add(new ViewIcon(TierOrderingEditorView.VIEW_NAME), cc.xy(1, 3));
-        add(new ViewIcon(MediaPlayerEditorView.VIEW_NAME), cc.xy(1, 4));
-        add(new ViewIcon(SpeechAnalysisEditorView.VIEW_NAME), cc.xy(1, 5));
-        add(Box.createVerticalGlue(), cc.xy(1, 6));
-        add(new ViewIcon(TimelineView.VIEW_NAME), cc.xy(1, 7));
-        add(new ViewIcon(SessionCheckView.VIEW_NAME), cc.xy(1, 8));
-        add(new ViewIcon(FindAndReplaceEditorView.VIEW_NAME), cc.xy(1, 9));
-        add(new ViewIcon(IPALookupView.VIEW_NAME), cc.xy(1, 10));
+        add(new ViewIcon(TranscriptView.VIEW_NAME), cc.xy(2, 1));
+        add(new ViewIcon(ParticipantsView.VIEW_NAME), cc.xy(2, 3));
+        add(new ViewIcon(TierOrderingEditorView.VIEW_NAME), cc.xy(2, 5));
+        add(new ViewIcon(MediaPlayerEditorView.VIEW_NAME), cc.xy(2, 7));
+        add(new ViewIcon(SpeechAnalysisEditorView.VIEW_NAME), cc.xy(2, 9));
+        add(Box.createVerticalGlue(), cc.xy(2, 10));
+        add(new ViewIcon(TimelineView.VIEW_NAME), cc.xy(2, 11));
+        add(new ViewIcon(SessionCheckView.VIEW_NAME), cc.xy(2, 13));
+        add(new ViewIcon(FindAndReplaceEditorView.VIEW_NAME), cc.xy(2, 15));
+        add(new ViewIcon(IPALookupView.VIEW_NAME), cc.xy(2, 17));
 
         viewModel.addEditorViewModelListener(new EditorViewModelListener() {
             @Override
@@ -123,6 +124,8 @@ public class ViewIconStrip extends JPanel {
         private boolean pressed = false;
 
         private boolean mouseInside = false;
+
+        private JFrame tooltipFrame;
 
         private final Border insetBorder = BorderFactory.createEmptyBorder(5, 10, 5, 0);
 
@@ -202,12 +205,34 @@ public class ViewIconStrip extends JPanel {
         @Override
         public void mouseEntered(MouseEvent e) {
             mouseInside = true;
+            if(tooltipFrame == null) {
+                tooltipFrame = new JFrame();
+                tooltipFrame.setUndecorated(true);
+                tooltipFrame.setAlwaysOnTop(true);
+                tooltipFrame.setLayout(new BorderLayout());
+                JLabel viewLbl = new JLabel(viewName);
+                viewLbl.setFont(FontPreferences.getTitleFont());
+                viewLbl.setHorizontalTextPosition(SwingConstants.CENTER);
+                viewLbl.setHorizontalAlignment(SwingConstants.CENTER);
+                tooltipFrame.add(viewLbl, BorderLayout.CENTER);
+                tooltipFrame.pack();
+                tooltipFrame.setSize(tooltipFrame.getPreferredSize().width + 10, tooltipFrame.getPreferredSize().height + 10);
+                tooltipFrame.setLocation(getLocationOnScreen().x + getWidth() + 5, getLocationOnScreen().y + ((tooltipFrame.getPreferredSize().height + 10)/2));
+                tooltipFrame.setFocusable(false);
+                tooltipFrame.setFocusableWindowState(false);
+                tooltipFrame.setVisible(true);
+
+            }
             repaint();
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
             mouseInside = false;
+            if(tooltipFrame != null) {
+                tooltipFrame.dispose();
+                tooltipFrame = null;
+            }
             repaint();
         }
 

@@ -141,7 +141,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		dockControl.setTheme(ThemeMap.KEY_FLAT_THEME);
 
 		bibliothek.gui.dock.util.IconManager icons = dockControl.getIcons();
-		icons.setIconClient("close", IconManager.getInstance().buildFontIcon(IconManager.FontAwesomeFontName, "TIMES", IconSize.SMALL, Color.darkGray));
+		icons.setIconClient("close", IconManager.getInstance().buildFontIcon(IconManager.FontAwesomeFontName, "WINDOW_MINIMIZE", IconSize.SMALL, Color.darkGray));
 		icons.setIconClient("locationmanager.maximize", IconManager.getInstance().buildFontIcon(IconManager.FontAwesomeFontName, "WINDOW_MAXIMIZE", IconSize.SMALL, Color.darkGray));
 		icons.setIconClient("locationmanager.minimize", IconManager.getInstance().buildFontIcon(IconManager.FontAwesomeFontName, "WINDOW_MINIMIZE", IconSize.SMALL, Color.darkGray));
 		icons.setIconClient("locationmanager.normalize", IconManager.getInstance().buildFontIcon(IconManager.FontAwesomeFontName, "WINDOW_RESTORE", IconSize.SMALL, Color.darkGray));
@@ -494,27 +494,6 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		if(dockable == null) {
 			final SingleCDockableFactory factory = dockControl.getSingleDockableFactory(viewName);
 			dockable = (EditorViewDockable) factory.createBackup(viewName);
-			dockable.addCDockableStateListener(new CDockableStateListener() {
-				@Override
-				public void visibilityChanged(CDockable cDockable) {
-					if(cDockable.isVisible()) {
-						fireViewShown(viewName);
-					} else {
-						fireViewHidden(viewName);
-					}
-				}
-
-				@Override
-				public void extendedModeChanged(CDockable cDockable, ExtendedMode extendedMode) {
-					if(extendedMode == ExtendedMode.MAXIMIZED) {
-						fireViewMaximized(viewName);
-					} else if(extendedMode == ExtendedMode.MINIMIZED) {
-						fireViewMinimized(viewName);
-					} else if(extendedMode == ExtendedMode.NORMALIZED) {
-						fireViewNormalized(viewName);
-					}
-				}
-			});
 		}
 
 		if(dockable != null) {
@@ -869,41 +848,55 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			super(id, editorView.getIcon(), editorView.getName(), editorView, actions);
 			super.setCloseable(true);
 			super.setExternalizable(false);
+			super.setMinimizable(false);
+			if(TranscriptView.VIEW_NAME.equals(id)) {
+				super.setCloseable(false);
+			}
 
-//			this.addVetoClosingListener(new CVetoClosingListener() {
-//
-//				@Override
-//				public void closing(CVetoClosingEvent arg0) {
-//
-//				}
-//
-//				@Override
-//				public void closed(CVetoClosingEvent arg0) {
-//					getView().onClose();
-//				}
-//
-//			});
-
-			final SimpleButtonAction externalizeAct = new SimpleButtonAction();
-			externalizeAct.setText("Open view in new window");
-			externalizeAct.setIcon(IconManager.getInstance().buildFontIcon(IconManager.FontAwesomeFontName, "EXTERNAL_LINK_SQUARE", IconSize.SMALL, Color.darkGray));
-			externalizeAct.addActionListener(new ActionListener() {
-
+			addCDockableStateListener(new CDockableStateListener() {
 				@Override
-				public void actionPerformed(ActionEvent e) {
-
-					final AccessoryWindow window = (AccessoryWindow)createAccessoryWindow(UUID.randomUUID());
-					window.getArea().getCenter().drop(EditorViewDockable.this.intern());
-					window.pack();
-					window.setVisible(true);
+				public void visibilityChanged(CDockable cDockable) {
+					if(cDockable.isVisible()) {
+						fireViewShown(id);
+					} else {
+						fireViewHidden(id);
+					}
 				}
 
+				@Override
+				public void extendedModeChanged(CDockable cDockable, ExtendedMode extendedMode) {
+					if(extendedMode == ExtendedMode.MAXIMIZED) {
+						fireViewMaximized(id);
+					} else if(extendedMode == ExtendedMode.MINIMIZED) {
+						fireViewMinimized(id);
+					} else if(extendedMode == ExtendedMode.NORMALIZED) {
+						fireViewNormalized(id);
+					}
+				}
 			});
 
-			final DefaultDockActionSource actionSource = new DefaultDockActionSource(
-					new LocationHint( LocationHint.DOCKABLE, LocationHint.RIGHT ));
-			actionSource.add(externalizeAct);
-			super.intern().setActionOffers(actionSource);
+			if(!TranscriptView.VIEW_NAME.equals(id)) {
+				final SimpleButtonAction externalizeAct = new SimpleButtonAction();
+				externalizeAct.setText("Open view in new window");
+				externalizeAct.setIcon(IconManager.getInstance().buildFontIcon(IconManager.FontAwesomeFontName, "EXTERNAL_LINK_SQUARE", IconSize.SMALL, Color.darkGray));
+				externalizeAct.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+
+						final AccessoryWindow window = (AccessoryWindow) createAccessoryWindow(UUID.randomUUID());
+						window.getArea().getCenter().drop(EditorViewDockable.this.intern());
+						window.pack();
+						window.setVisible(true);
+					}
+
+				});
+
+				final DefaultDockActionSource actionSource = new DefaultDockActionSource(
+						new LocationHint(LocationHint.DOCKABLE, LocationHint.LEFT));
+				actionSource.add(externalizeAct);
+				super.intern().setActionOffers(actionSource);
+			}
 
 
 			viewRef = new WeakReference<EditorView>(editorView);
@@ -1153,7 +1146,6 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			addPerspectiveToMenu.accept(stockItr.next());
 		}
 
-
 		final PhonUIAction<Void> showPerspectivesFolderAct = PhonUIAction.runnable(this::onShowLayoutFolder);
 		showPerspectivesFolderAct.putValue(PhonUIAction.NAME, "-- User Library --");
 		showPerspectivesFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, RecordEditorPerspective.PERSPECTIVES_FOLDER.getAbsolutePath());
@@ -1166,7 +1158,6 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			((JPopupMenu)menu).addSeparator();
 			((JPopupMenu)menu).add(showFolderItem);
 		}
-
 
 		final Iterator<RecordEditorPerspective> userItr = RecordEditorPerspective.getUserPerspectives().iterator();
 		while(userItr.hasNext()) {
