@@ -242,6 +242,14 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		dockables = new TreeMap<String, CDockablePerspective>();
 		dockPositions = new LinkedHashMap<>();
 
+		// first add all ViewPosition placeholders
+		for(ViewPosition pos:ViewPosition.values()) {
+			final SingleCDockablePerspective dockable =
+					new SingleCDockablePerspective(pos.getName());
+			dockables.put(pos.getName(), dockable);
+			dockPositions.put(pos.getName(), pos);
+		}
+
 		for(IPluginExtensionPoint<EditorView> extPt:getExtensionPoints()) {
 			final EditorViewInfo viewInfo = extPt.getClass().getAnnotation(EditorViewInfo.class);
 			if(viewInfo == null) continue; // should never happen
@@ -527,12 +535,16 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 	@Override
 	public void showDynamicFloatingDockable(String title, JComponent comp,
 			int x, int y, int w, int h) {
-		final DynamicViewFactory factory = new DynamicViewFactory(comp);
-		final SingleCDockable dockable = factory.createBackup(title);
+		throw new UnsupportedOperationException("Dynamic floating dockables not supported by this view model");
+	}
 
+	@Override
+	public void showDynamicDockable(String title, JComponent comp, ViewPosition position) {
+		final WorkingAreaEditorViewModel.DynamicViewFactory factory = new WorkingAreaEditorViewModel.DynamicViewFactory(comp);
+		final DefaultSingleCDockable dockable =  (DefaultSingleCDockable) factory.createBackup(title);
+		dockable.setGrouping(new PlaceholderGrouping(dockControl, new Path("dock", "single", position.getName())));
 		dockControl.addDockable(dockable);
-		dockControl.getLocationManager().setLocation(dockable.intern(), CLocation.external(x, y, w, h));
-		dynamicViews.put(title, comp);
+		dockable.setVisible(true);
 	}
 
 	@Override

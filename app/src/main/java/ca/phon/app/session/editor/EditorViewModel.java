@@ -15,6 +15,8 @@
  */
 package ca.phon.app.session.editor;
 
+import ca.phon.app.session.ViewPosition;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
@@ -162,7 +164,17 @@ public interface EditorViewModel {
 	 * @param w
 	 * @param h
 	 */
+	@Deprecated
 	public void showDynamicFloatingDockable(String title, JComponent comp, int x, int y, int w, int h);
+
+	/**
+	 * Show the given component as a new dockable at the given position.
+	 *
+	 * @param title
+	 * @param comp
+	 * @param position
+	 */
+	public void showDynamicDockable(String title, JComponent comp, ViewPosition position);
 	
 	/**
 	 * Hide the specified view

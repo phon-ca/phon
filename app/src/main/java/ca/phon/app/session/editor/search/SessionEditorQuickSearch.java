@@ -15,6 +15,7 @@
  */
 package ca.phon.app.session.editor.search;
 
+import ca.phon.app.session.ViewPosition;
 import ca.phon.app.session.editor.*;
 import ca.phon.query.report.csv.CSVTableDataWriter;
 import ca.phon.ui.PhonGuiConstants;
@@ -244,8 +245,8 @@ public class SessionEditorQuickSearch {
 			popupPoint.x -= diff;
 		}
 		
-		editor.getViewModel().showDynamicFloatingDockable("Record List : " + searchText, resultListPanel, 
-				popupPoint.x, popupPoint.y, prefSize.width, prefSize.height);
+		editor.getViewModel().showDynamicDockable("Record List : " + searchText, resultListPanel,
+				ViewPosition.RIGHT_TOP);
 		table.requestFocusInWindow();
 	}
 	

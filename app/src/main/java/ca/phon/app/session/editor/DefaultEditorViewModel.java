@@ -34,6 +34,7 @@ import bibliothek.gui.dock.util.color.*;
 import bibliothek.util.Filter;
 import bibliothek.util.xml.*;
 import ca.phon.app.log.LogUtil;
+import ca.phon.app.session.ViewPosition;
 import ca.phon.plugin.*;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
@@ -498,6 +499,11 @@ public class DefaultEditorViewModel implements EditorViewModel {
 		dockControl.addDockable(dockable);
 		dockControl.getLocationManager().setLocation(dockable.intern(), CLocation.external(x, y, w, h));
 		dynamicViews.put(title, comp);
+	}
+
+	@Override
+	public void showDynamicDockable(String title, JComponent comp, ViewPosition position) {
+		// TODO Auto-generated method stub
 	}
 
 	/**
