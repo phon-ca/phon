@@ -164,7 +164,7 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 	/**
 	 * Editor finished loading.  This is expected to be set to true after all initial views
 	 * have been loaded and the editor is on screen.  Classes which use SessionEditor should
-	 * fire an {@link EditorEventType.EditorFinishedLoading} event.
+	 * fire an {@link EditorEventType#EditorFinishedLoading} event.
 	 */
 	private volatile boolean finishedLoading = false;
 
@@ -227,9 +227,9 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 		// each element is retrieved using the view model
 		final EditorViewModel viewModel = getViewModel();
 
-		// toolbar
-		final SessionEditorToolbar tb = getToolbar();
-		add(tb, BorderLayout.NORTH);
+//		// toolbar
+//		final SessionEditorToolbar tb = getToolbar();
+//		add(tb, BorderLayout.NORTH);
 
 		// status bar
 		final JXStatusBar sb = (JXStatusBar) getStatusBar();
@@ -288,17 +288,17 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 		firePropertyChange("title", oldTitle, title);
 	}
 
-	/**
-	 * Get the editor toolbar.
-	 *
-	 * @return toolbar
-	 */
-	public SessionEditorToolbar getToolbar() {
-		if(this.toolbar == null) {
-			this.toolbar = new SessionEditorToolbar(this);
-		}
-		return this.toolbar;
-	}
+//	/**
+//	 * Get the editor toolbar.
+//	 *
+//	 * @return toolbar
+//	 */
+//	public SessionEditorToolbar getToolbar() {
+//		if(this.toolbar == null) {
+//			this.toolbar = new SessionEditorToolbar(this);
+//		}
+//		return this.toolbar;
+//	}
 
 	/**
 	 * Get the editor status bar
@@ -495,9 +495,9 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 		if(this.currentRecord < 0) {
 			this.currentRecord = 0;
 		}
-		remove(getToolbar());
-		this.toolbar = new SessionEditorToolbar(this);
-		add(this.toolbar, BorderLayout.NORTH);
+//		remove(getToolbar());
+//		this.toolbar = new SessionEditorToolbar(this);
+//		add(this.toolbar, BorderLayout.NORTH);
 
 		setTitle(generateTitle());
 	}
@@ -783,7 +783,7 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 			LogUtil.info(msg);
 
 			final SerializationWarnings warnings = session.getExtension(SerializationWarnings.class);
-			ToastFactory.makeToast(msg).start(getToolbar());
+			ToastFactory.makeToast(msg).start(viewIconStrip);
 			setModified(false);
 			if(warnings != null && warnings.size() > 0) {
 				warnings.clear();

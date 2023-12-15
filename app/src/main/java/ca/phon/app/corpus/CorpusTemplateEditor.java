@@ -37,8 +37,6 @@ public class CorpusTemplateEditor extends SessionEditor {
 			getViewModel().setupWindows(perspective);
 			getViewModel().applyPerspective(perspective);
 		}
-		
-		getToolbar().setVisible(false);
 	}
 	
 	@Override
