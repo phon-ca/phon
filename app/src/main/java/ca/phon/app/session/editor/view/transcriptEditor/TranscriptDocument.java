@@ -25,6 +25,8 @@ import ca.phon.util.PrefHelper;
 import ca.phon.util.Tuple;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
 import javax.swing.text.*;
 import java.awt.*;
 import java.beans.PropertyChangeListener;
@@ -759,9 +761,19 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
     /**
      * Appends the end and start tags to the end of the batch
+     *
      */
     public void appendBatchEndStart() {
-        batch.addAll(getBatchEndStart());
+        appendBatchEndStart(null);
+    }
+
+    /**
+     * Appends the end and start tags to the end of the batch
+     *
+     * @param startAttrs attributes for starting paragraph (may be null)
+     */
+    public void appendBatchEndStart(AttributeSet startAttrs) {
+        batch.addAll(getBatchEndStart(startAttrs));
     }
 
     /**
@@ -913,9 +925,20 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return a list containing the end and start tags
      */
     public List<ElementSpec> getBatchEndStart() {
+        return getBatchEndStart(null);
+    }
+
+    /**
+     * Gets a list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} containing
+     * the {@code ElementSpec.EndTagType} and {@code ElementSpec.StartTagType} tags
+     *
+     * @param startAttrs attributes for start tag (may be null)
+     * @return a list containing the end and start tags
+     */
+    public List<ElementSpec> getBatchEndStart(AttributeSet startAttrs) {
         List<ElementSpec> retVal = new ArrayList<>();
         retVal.add(new ElementSpec(null, ElementSpec.EndTagType));
-        retVal.add(new ElementSpec(null, ElementSpec.StartTagType));
+        retVal.add(new ElementSpec(startAttrs, ElementSpec.StartTagType));
         return retVal;
     }
 
@@ -1087,7 +1110,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     public List<ElementSpec> getBatchEndLineFeed(AttributeSet a) {
         List<ElementSpec> retVal = new ArrayList<>();
         retVal.add(new ElementSpec(a, ElementSpec.ContentType, EOL_ARRAY, 0, 1));
-        retVal.addAll(getBatchEndStart());
+        retVal.addAll(getBatchEndStart(a));
         return retVal;
     }
 
@@ -2834,7 +2857,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 } else {
                     newLineAttrs = writeGem(elem.asGem());
                 }
-
                 appendBatchLineFeed(newLineAttrs);
             }
         }

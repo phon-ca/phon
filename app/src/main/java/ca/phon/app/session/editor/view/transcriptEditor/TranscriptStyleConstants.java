@@ -23,4 +23,5 @@ public class TranscriptStyleConstants {
     public static final String ATTR_KEY_BLIND_TRANSCRIPTION = "blindTranscription";
     public static final String ATTR_KEY_TRANSCRIBER = "transcriber";
     public static final String ATTR_KEY_ENTER_ACTION = "enterAction";
+    public static final String ATTR_KEY_BORDER = "border";
 }

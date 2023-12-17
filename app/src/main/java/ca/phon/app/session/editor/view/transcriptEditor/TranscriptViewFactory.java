@@ -1,5 +1,7 @@
 package ca.phon.app.session.editor.view.transcriptEditor;
 
+import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.text.*;
 import java.awt.*;
 
@@ -87,8 +89,40 @@ public class TranscriptViewFactory implements ViewFactory {
 
     private class TierParagraphView extends ParagraphView {
 
+        private Border border = BorderFactory.createMatteBorder(0, 0, 0, 0, Color.LIGHT_GRAY);
+
         public TierParagraphView(Element elem) {
             super(elem);
+            if(elem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_BORDER) instanceof Border b) {
+                border = b;
+            }
+        }
+
+        // add border insets to view insets
+        @Override
+        public short getTopInset() {
+            return (short) (super.getTopInset() + border.getBorderInsets(getContainer()).top);
+        }
+
+        @Override
+        public short getBottomInset() {
+            return (short) (super.getBottomInset() + border.getBorderInsets(getContainer()).bottom);
+        }
+
+        @Override
+        public short getLeftInset() {
+            return (short) (super.getLeftInset() + border.getBorderInsets(getContainer()).left);
+        }
+
+        @Override
+        public short getRightInset() {
+            return (short) (super.getRightInset() + border.getBorderInsets(getContainer()).right);
+        }
+
+        @Override
+        public void paint(Graphics g, Shape a) {
+            super.paint(g, a);
+            border.paintBorder(getContainer(), g, a.getBounds().x, a.getBounds().y, a.getBounds().width, a.getBounds().height);
         }
 
     }
@@ -96,6 +130,12 @@ public class TranscriptViewFactory implements ViewFactory {
     static class CustomWrapView extends LabelView {
         public CustomWrapView(Element elem) {
             super(elem);
+        }
+
+        @Override
+        public void paint(Graphics g, Shape a) {
+            g.clearRect(a.getBounds().x, a.getBounds().y, a.getBounds().width, a.getBounds().height);
+            super.paint(g, a);
         }
 
         @Override
@@ -109,8 +149,7 @@ public class TranscriptViewFactory implements ViewFactory {
                     return View.BadBreakWeight;
                 }
                 try {
-
-                    if (getDocument().getText(p0, p1 - p0).equals(" ")) {
+                    if (getDocument().getText(p0, p1 - p0).contains(" ")) {
                         return View.ExcellentBreakWeight;
                     }
                 } catch (BadLocationException ble) {
@@ -127,9 +166,7 @@ public class TranscriptViewFactory implements ViewFactory {
                 checkPainter();
                 int p1 = getGlyphPainter().getBoundedPosition(this, p0, pos, len);
                 try {
-                    // if the view contains a newline or line feed character,
-                    // we can break.
-                    int breakPos = getDocument().getText(p0, p1 - p0).indexOf(" ");
+                    int breakPos = getDocument().getText(p0, p1 - p0).lastIndexOf(" ");
                     if (breakPos >= 0) {
                         p1 = p0 + breakPos + 1;
                     }
