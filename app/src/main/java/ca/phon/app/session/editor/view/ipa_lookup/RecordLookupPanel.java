@@ -75,6 +75,9 @@ public class RecordLookupPanel extends JPanel {
 
 		final SessionFactory factory = SessionFactory.newFactory();
 		lookupTier = factory.createTier("IPA Lookup", IPATranscript.class);
+		lookupTier.addTierListener((tier, oldVal, newVal) -> {
+			System.out.println(newVal);
+		});
 
 		editorRef = new WeakReference<SessionEditor>(editor);
 

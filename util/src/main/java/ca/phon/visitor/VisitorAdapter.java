@@ -89,7 +89,7 @@ public abstract class VisitorAdapter<T> implements Visitor<T> {
 	/**
 	 * Generic, i.e., fallback, processing method.
 	 * 
-	 * @param T the object to visit
+	 * @param obj the object to visit
 	 */
 	public abstract void fallbackVisit(T obj);
 }

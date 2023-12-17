@@ -61,7 +61,7 @@ public class WordLookupVisitor extends VisitorAdapter<OrthographyElement> {
 	}
 	
 	private void addWordToTier(String txt) {
-		IPATranscript ipa = recordLookupPanel.lookupTier.getValue();
+		IPATranscript ipa = recordLookupPanel.lookupTier.hasValue() ? recordLookupPanel.lookupTier.getValue() : new IPATranscript();
 		final IPATranscriptBuilder builder = new IPATranscriptBuilder();
 		builder.append(ipa);
 		if(builder.size() > 0)

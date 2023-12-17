@@ -5,6 +5,8 @@ import ca.phon.app.session.editor.view.ipa_lookup.IPALookupEdit;
 import ca.phon.app.session.editor.view.transcriptEditor.TranscriptLocation;
 import ca.phon.app.session.editor.view.transcriptEditor.TranscriptEditor;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipadictionary.IPADictionary;
+import ca.phon.ipadictionary.IPADictionaryLibrary;
 import ca.phon.session.Record;
 import ca.phon.session.Tier;
 import ca.phon.session.Transcript;
@@ -14,12 +16,30 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.util.function.Supplier;
 
 /**
  * An extension that provides auto-transcription support to the {@link TranscriptEditor}
  * */
 public class AutoTranscriptionExtension implements TranscriptEditorExtension {
     private TranscriptEditor editor;
+
+    private Supplier<IPADictionary> ipaDictionarySupplier;
+
+    public AutoTranscriptionExtension() {
+        this(() -> IPADictionaryLibrary.getInstance().defaultDictionary());
+    }
+
+    public AutoTranscriptionExtension(Supplier<IPADictionary> ipaDictionarySupplier) {
+        this.ipaDictionarySupplier = ipaDictionarySupplier;
+    }
+
+    public IPADictionary getDictionary() {
+        var retVal = ipaDictionarySupplier.get();
+        if(retVal == null)
+            retVal = IPADictionaryLibrary.getInstance().defaultDictionary();
+        return retVal;
+    }
 
     @Override
     public void install(TranscriptEditor editor) {
@@ -51,6 +71,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
             if (!tier.getDeclaredType().equals(IPATranscript.class)) return;
 
             AutoTranscriber autoTranscriber = new AutoTranscriber(editor.getSession(), editor.getEventManager());
+            autoTranscriber.setDictionary(getDictionary());
             IPALookupEdit edit = autoTranscriber.transcribeTier(record, (Tier<IPATranscript>) tier);
             editor.getUndoSupport().postEdit(edit);
         }
