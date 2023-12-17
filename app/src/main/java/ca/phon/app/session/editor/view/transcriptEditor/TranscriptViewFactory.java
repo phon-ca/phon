@@ -2,14 +2,17 @@ package ca.phon.app.session.editor.view.transcriptEditor;
 
 import javax.swing.text.*;
 import java.awt.*;
-import java.util.HashMap;
 
 /**
  * The {@link ViewFactory} used by the {@link TranscriptEditor}
- * */
+ */
 public class TranscriptViewFactory implements ViewFactory {
 
-    public TranscriptViewFactory() {}
+    // TODO adjust for graphics dpi - make configurable
+    public static final int PAGE_WIDTH = (int) Math.floor(8.5 * 96);
+
+    public TranscriptViewFactory() {
+    }
 
     @Override
     public View create(Element elem) {
@@ -24,13 +27,13 @@ public class TranscriptViewFactory implements ViewFactory {
         if (kind != null) {
             switch (kind) {
                 case AbstractDocument.ContentElementName -> {
-                    return new LabelView(elem);
+                    return new CustomWrapView(elem);
                 }
                 case AbstractDocument.ParagraphElementName -> {
-                    return new ParagraphView(elem);
+                    return new TierParagraphView(elem);
                 }
                 case AbstractDocument.SectionElementName -> {
-                    return new BoxView(elem, View.Y_AXIS);
+                    return new SessionBoxView(elem, View.Y_AXIS);
                 }
                 case StyleConstants.ComponentElementName -> {
                     return new ComponentView(elem);
@@ -51,7 +54,7 @@ public class TranscriptViewFactory implements ViewFactory {
     /**
      * A {@link ComponentView} that dynamically loads components from a component factory referenced in the
      * {@code TranscriptStyleConstants.ATTR_KEY_COMPONENT_FACTORY} attribute
-     * */
+     */
     private static class ComponentFactoryView extends ComponentView {
         public ComponentFactoryView(Element elem) {
             super(elem);
@@ -67,5 +70,79 @@ public class TranscriptViewFactory implements ViewFactory {
 
             return null;
         }
+    }
+
+    private class SessionBoxView extends BoxView {
+
+        public SessionBoxView(Element elem, int axis) {
+            super(elem, axis);
+        }
+
+        @Override
+        protected void layoutMinorAxis(int targetSpan, int axis, int[] offsets, int[] spans) {
+            super.layoutMinorAxis(PAGE_WIDTH, axis, offsets, spans);
+        }
+
+    }
+
+    private class TierParagraphView extends ParagraphView {
+
+        public TierParagraphView(Element elem) {
+            super(elem);
+        }
+
+    }
+
+    static class CustomWrapView extends LabelView {
+        public CustomWrapView(Element elem) {
+            super(elem);
+        }
+
+        @Override
+        public int getBreakWeight(int axis, float pos, float len) {
+            if (axis == View.X_AXIS) {
+                checkPainter();
+                int p0 = getStartOffset();
+                int p1 = getGlyphPainter().getBoundedPosition(this, p0, pos, len);
+                if (p1 == p0) {
+                    // can't fit anything into this
+                    return View.BadBreakWeight;
+                }
+                try {
+
+                    if (getDocument().getText(p0, p1 - p0).equals(" ")) {
+                        return View.ExcellentBreakWeight;
+                    }
+                } catch (BadLocationException ble) {
+                    // assume we can't break
+                    return View.BadBreakWeight;
+                }
+            }
+            return View.BadBreakWeight;
+        }
+
+        @Override
+        public View breakView(int axis, int p0, float pos, float len) {
+            if (axis == View.X_AXIS) {
+                checkPainter();
+                int p1 = getGlyphPainter().getBoundedPosition(this, p0, pos, len);
+                try {
+                    // if the view contains a newline or line feed character,
+                    // we can break.
+                    int breakPos = getDocument().getText(p0, p1 - p0).indexOf(" ");
+                    if (breakPos >= 0) {
+                        p1 = p0 + breakPos + 1;
+                    }
+                } catch (BadLocationException ble) {
+                    // assume we can't break
+                }
+                if (p0 == getStartOffset() && p1 == getEndOffset()) {
+                    return this;
+                }
+                return createFragment(p0, p1);
+            }
+            return this;
+        }
+
     }
 }
