@@ -12,10 +12,7 @@ import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
 import ca.phon.app.session.editor.view.tier_management.actions.NewTierAction;
 import ca.phon.app.session.editor.view.timeline.TimelineView;
 import ca.phon.app.session.editor.view.transcriptEditor.actions.*;
-import ca.phon.app.session.editor.view.transcriptEditor.extensions.AlignmentExtension;
-import ca.phon.app.session.editor.view.transcriptEditor.extensions.BlindTranscriptionExtension;
-import ca.phon.app.session.editor.view.transcriptEditor.extensions.HeaderTierExtension;
-import ca.phon.app.session.editor.view.transcriptEditor.extensions.SyllabificationExtension;
+import ca.phon.app.session.editor.view.transcriptEditor.extensions.*;
 import ca.phon.plugin.PluginManager;
 import ca.phon.session.*;
 import ca.phon.session.io.SessionOutputFactory;
@@ -82,6 +79,7 @@ public class TranscriptView extends EditorView {
             editor.getUndoSupport(),
             editor.getUndoManager()
         );
+
         this.transcriptEditor.setMediaModel(editor.getMediaModel());
         this.transcriptEditor.addPropertyChangeListener(
             "currentRecordIndex", e -> editor.setCurrentRecordIndex((Integer) e.getNewValue())
@@ -128,7 +126,6 @@ public class TranscriptView extends EditorView {
      * Sets up the UI
      * */
     private void initUI() {
-
         setLayout(new BorderLayout());
         centerPanel = new JPanel(new BorderLayout());
         add(centerPanel, BorderLayout.CENTER);
@@ -371,7 +368,6 @@ public class TranscriptView extends EditorView {
 
             languagesMenu.add(removeLanguageSubmenu);
         }
-
 
         JMenuItem viewMetadataItem = new JMenuItem();
         PhonUIAction<Void> viewMetadataAct = PhonUIAction.runnable(() -> {

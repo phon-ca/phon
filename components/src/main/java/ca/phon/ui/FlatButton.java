@@ -12,13 +12,13 @@ import java.awt.*;
  */
 public class FlatButton extends JButton {
 
-    public final String ICON_SIZE_PROP = FlatButton.class.getName() + ".iconSize";
+    public static final String ICON_SIZE_PROP = FlatButton.class.getName() + ".iconSize";
     private IconSize iconSize;
 
-    public final String ICON_NAME_PROP = FlatButton.class.getName() + ".iconName";
+    public static final String ICON_NAME_PROP = FlatButton.class.getName() + ".iconName";
     private String iconName;
 
-    public final String ICON_FONT_NAME_PROP = FlatButton.class.getName() + ".iconFontName";
+    public static final String ICON_FONT_NAME_PROP = FlatButton.class.getName() + ".iconFontName";
     private String iconFontName;
 
     private Color iconColor;

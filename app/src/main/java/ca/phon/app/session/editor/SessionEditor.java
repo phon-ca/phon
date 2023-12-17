@@ -33,6 +33,8 @@ import ca.phon.session.*;
 import ca.phon.session.io.*;
 import ca.phon.syllabifier.SyllabifierLibrary;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.FlatButton;
+import ca.phon.ui.FlatButtonUIProps;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
 import ca.phon.ui.nativedialogs.NativeDialogs;
@@ -43,7 +45,10 @@ import ca.phon.util.OSInfo;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import org.jdesktop.swingx.JXStatusBar;
+import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
 import javax.swing.event.MenuEvent;
@@ -124,6 +129,14 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 	 * Undo manager
 	 */
 	private final UndoManager undoManager = new UndoManager();
+
+	private JPanel buttonStrip;
+
+	/**
+	 * Save button
+	 */
+	private FlatButton saveButton;
+
 
 	/**
 	 * View icon strip
@@ -231,6 +244,25 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 //		final SessionEditorToolbar tb = getToolbar();
 //		add(tb, BorderLayout.NORTH);
 
+		buttonStrip = new JPanel(new FormLayout("3dlu, center:pref", "pref, pref"));
+		buttonStrip.setOpaque(false);
+		final SaveSessionAction saveSessionAction = new SaveSessionAction(this);
+		saveSessionAction.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+		saveSessionAction.putValue(FlatButton.ICON_NAME_PROP, "SAVE");
+		saveSessionAction.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM_LARGE);
+		saveButton = new FlatButton(saveSessionAction);
+		saveButton.setPadding(3);
+		saveButton.setIconColor(UIManager.getColor(SessionEditorUIProps.ICON_STRIP_ICON_COLOR));
+		saveButton.setIconHoverColor(UIManager.getColor(SessionEditorUIProps.ICON_STRIP_HOVER_COLOR));
+		saveButton.setBgSelectedColor(UIManager.getColor(SessionEditorUIProps.ICON_STRIP_ICON_SELECTED_BACKGROUND));
+		saveButton.setBgPressedColor(UIManager.getColor(SessionEditorUIProps.ICON_STRIP_ICON_PRESSED_BACKGROUND));
+		saveButton.setIconSelectedColor(UIManager.getColor(SessionEditorUIProps.ICON_STRIP_ICON_SELECTED_COLOR));
+		saveButton.setText("");
+		saveButton.setEnabled(isModified());
+		CellConstraints cc = new CellConstraints();
+		buttonStrip.add(saveButton, cc.xy(2, 1));
+		buttonStrip.add(new JToolBar.Separator(new Dimension(IconSize.MEDIUM_LARGE.getWidth() + 6, 10)), cc.xy(2, 2));
+
 		// status bar
 		final JXStatusBar sb = (JXStatusBar) getStatusBar();
 		add(sb, BorderLayout.SOUTH);
@@ -241,7 +273,11 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 
 		// setup view icon strip
 		viewIconStrip = new ViewIconStrip(viewModel);
-		add(viewIconStrip, BorderLayout.WEST);
+
+		JPanel leftPanel = new JPanel(new BorderLayout());
+		leftPanel.add(buttonStrip, BorderLayout.NORTH);
+		leftPanel.add(viewIconStrip, BorderLayout.CENTER);
+		add(leftPanel, BorderLayout.WEST);
 
 		setupEditorActions();
 	}
@@ -505,6 +541,7 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 	private void onModifiedChanged(EditorEvent<Boolean> eee) {
 		final String title = generateTitle();
 		setTitle(title);
+		saveButton.setEnabled(isModified());
 	}
 
 	private void onRecordDeleted(EditorEvent ee) {
