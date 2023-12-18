@@ -2418,6 +2418,15 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
      * @param newLoc the new session location
      */
     public record TranscriptLocationChangeData(TranscriptLocation oldLoc, TranscriptLocation newLoc) {
+
+        @Override
+        public String toString() {
+            return "TranscriptLocationChangeData{" +
+                    "oldLoc=" + oldLoc +
+                    ", newLoc=" + newLoc +
+                    '}';
+        }
+
     }
 
     /**

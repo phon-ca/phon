@@ -1,18 +1,27 @@
 package ca.phon.app.session.editor.view.transcriptEditor.extensions;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.autotranscribe.AutoTranscriber;
+import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.ipa_lookup.IPALookupEdit;
 import ca.phon.app.session.editor.view.transcriptEditor.TranscriptLocation;
 import ca.phon.app.session.editor.view.transcriptEditor.TranscriptEditor;
+import ca.phon.app.session.editor.view.transcriptEditor.TranscriptStyleConstants;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.ipadictionary.IPADictionaryLibrary;
 import ca.phon.session.Record;
 import ca.phon.session.Tier;
+import ca.phon.session.Transcriber;
 import ca.phon.session.Transcript;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.util.Range;
 
 import javax.swing.*;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -25,6 +34,8 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
     private TranscriptEditor editor;
 
     private Supplier<IPADictionary> ipaDictionarySupplier;
+
+    private Range ghostRange = null;
 
     public AutoTranscriptionExtension() {
         this(() -> IPADictionaryLibrary.getInstance().defaultDictionary());
@@ -55,6 +66,61 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
         inputMap.put(autoTranscription, "autoTranscription");
         PhonUIAction<Void> autoTranscriptionAct = PhonUIAction.runnable(this::autoTranscription);
         actionMap.put("autoTranscription", autoTranscriptionAct);
+
+        editor.getEventManager().registerActionForEvent(TranscriptEditor.transcriptLocationChanged, (e) -> {
+            if(ghostRange != null) {
+                try {
+                    editor.getTranscriptDocument().remove(ghostRange.getFirst(), ghostRange.getLast() - ghostRange.getFirst());
+                    ghostRange = null;
+                } catch (BadLocationException ex) {
+                    LogUtil.warning(ex);
+                }
+            }
+
+            final AttributeSet eleAttrs = editor.getTranscriptDocument().getCharacterElement(editor.getCaretPosition()).getAttributes();
+            final Tier<?> tier = (Tier<?>)eleAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
+            final Record record = (Record)eleAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
+            if(record != null && tier != null) {
+                if(tier.getDeclaredType().equals(IPATranscript.class)) {
+                    final IPATranscript tierVal = tier.hasValue() ? (IPATranscript) tier.getValue() : new IPATranscript();
+                    if(!tier.isUnvalidated() && tierVal.length() == 0) {
+                        final IPATranscript autoTranscript = AutoTranscriber.transcribe(record.getOrthography(), getDictionary());
+                        if(autoTranscript.length() > 0) {
+                            final SimpleAttributeSet ghostAttrs = editor.getTranscriptDocument().getTierAttributes(tier);
+                            // make text gray and italic
+                            StyleConstants.setForeground(ghostAttrs, Color.gray);
+                            StyleConstants.setItalic(ghostAttrs, true);
+
+                            final PhonUIAction<Void> acceptAutoTranscriptionAct = PhonUIAction.runnable(() -> {
+                                if(ghostRange != null) {
+                                    try {
+                                        editor.getTranscriptDocument().remove(ghostRange.getStart(), ghostRange.getEnd() - ghostRange.getStart());
+                                        ghostRange = null;
+                                    } catch (BadLocationException ex) {
+                                        LogUtil.warning(ex);
+                                    }
+                                }
+                                final TierEdit<IPATranscript> edit = new TierEdit<>(editor.getSession(), editor.getEventManager(), record, (Tier<IPATranscript>)tier, autoTranscript);
+                                edit.setValueAdjusting(false);
+                                editor.getUndoSupport().postEdit(edit);
+                            });
+
+                            ghostAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE, Boolean.TRUE);
+                            ghostAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_ENTER_ACTION, acceptAutoTranscriptionAct);
+
+                            try {
+                                editor.getTranscriptDocument().appendBatchString(autoTranscript.toString(), ghostAttrs);
+                                editor.getTranscriptDocument().processBatchUpdates(editor.getCaretPosition());
+
+                                ghostRange = new Range(editor.getCaretPosition(), editor.getCaretPosition() + autoTranscript.toString().length());
+                            } catch (BadLocationException ex) {
+                                LogUtil.warning(ex);
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
 
     /**
