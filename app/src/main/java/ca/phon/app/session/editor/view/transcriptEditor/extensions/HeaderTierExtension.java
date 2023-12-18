@@ -64,7 +64,7 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
                     if (session.getDate() != null) {
                         retVal.addAll(getDateHeader());
                         newLineAttrs = doc.getTrailingAttributes(retVal);
-                        retVal.addAll(doc.getBatchEndLineFeed(newLineAttrs));
+                        retVal.addAll(doc.getBatchEndLineFeed(newLineAttrs, null));
                     }
 
                     // Add media line if present
@@ -75,7 +75,7 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
 
                         retVal.addAll(doc.getGeneric("Media", mediaTier, null));
                         newLineAttrs = doc.getTrailingAttributes(retVal);
-                        retVal.addAll(doc.getBatchEndLineFeed(newLineAttrs));
+                        retVal.addAll(doc.getBatchEndLineFeed(newLineAttrs, null));
                     }
 
                     // Add languages line if present
@@ -111,13 +111,13 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
 
                         retVal.addAll(doc.getGeneric("Languages", languagesTier, null));
                         newLineAttrs = doc.getTrailingAttributes(retVal);
-                        retVal.addAll(doc.getBatchEndLineFeed(newLineAttrs));
+                        retVal.addAll(doc.getBatchEndLineFeed(newLineAttrs, null));
                     }
 
                     // Add Tiers header
                     retVal.addAll(getTiersHeader());
                     newLineAttrs = doc.getTrailingAttributes(retVal);
-                    retVal.addAll(doc.getBatchEndLineFeed(newLineAttrs));
+                    retVal.addAll(doc.getBatchEndLineFeed(newLineAttrs, null));
 
                     // Add Participants header
                     Tier<TierData> participantsTier = (Tier<TierData>) headerTierMap.get("participants");
@@ -135,7 +135,7 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
 
                     retVal.addAll(doc.getGeneric("Participants", participantsTier, doc.getParticipantsHeaderAttributes()));
                     newLineAttrs = doc.getTrailingAttributes(retVal);
-                    retVal.addAll(doc.getBatchEndLineFeed(newLineAttrs));
+                    retVal.addAll(doc.getBatchEndLineFeed(newLineAttrs, null));
                 }
 
                 return retVal;
@@ -258,7 +258,7 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
             List<DefaultStyledDocument.ElementSpec> inserts = getDateHeader();
             doc.getBatch().addAll(inserts);
             var newLineAttrs = doc.getTrailingAttributes(doc.getBatch());
-            doc.appendBatchLineFeed(newLineAttrs);
+            doc.appendBatchLineFeed(newLineAttrs, null);
             doc.processBatchUpdates(start > -1 ? start : 0);
         }
         catch (BadLocationException e) {

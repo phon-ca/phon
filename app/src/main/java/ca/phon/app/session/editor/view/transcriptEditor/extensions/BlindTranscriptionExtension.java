@@ -38,7 +38,7 @@ public class BlindTranscriptionExtension implements TranscriptEditorExtension {
                 if (isValidationMode() && tier.isBlind()) {
                     List<String> transcribers = tier.getTranscribers();
                     for (String transcriber : transcribers) {
-                        retVal.addAll(doc.getBatchEndLineFeed(attrs));
+                        retVal.addAll(doc.getBatchEndLineFeed(attrs, null));
                         retVal.addAll(getBlindTranscription(tier, transcriber, record));
                         attrs = new SimpleAttributeSet(retVal.get(retVal.size() - 1).getAttributes());
                         attrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_COMPONENT_FACTORY);

@@ -269,6 +269,17 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     }
 
     /**
+     * Gets the starting paragraph attributes for a record
+     *
+     */
+    public SimpleAttributeSet getRecordParagraphAttributes() {
+        SimpleAttributeSet nextParagraphAttrs = new SimpleAttributeSet();
+        nextParagraphAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_BORDER,
+                BorderFactory.createMatteBorder(1, 0, 0, 0, Color.lightGray));
+        return nextParagraphAttrs;
+    }
+
+    /**
      * Gets the attributes for a given record
      *
      * @param recordIndex the index of the record to get the attributes of
@@ -523,7 +534,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         try {
             appendBatchEndStart();
             var attrs = writeComment(comment);
-            appendBatchLineFeed(attrs);
+            appendBatchLineFeed(attrs, null);
             processBatchUpdates(offset);
         } catch (BadLocationException e) {
             LogUtil.severe(e);
@@ -764,16 +775,17 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      *
      */
     public void appendBatchEndStart() {
-        appendBatchEndStart(null);
+        appendBatchEndStart(null, null);
     }
 
     /**
      * Appends the end and start tags to the end of the batch
      *
+     * @param endAttrs attributes for end tag (may be null)
      * @param startAttrs attributes for starting paragraph (may be null)
      */
-    public void appendBatchEndStart(AttributeSet startAttrs) {
-        batch.addAll(getBatchEndStart(startAttrs));
+    public void appendBatchEndStart(AttributeSet endAttrs, AttributeSet startAttrs) {
+        batch.addAll(getBatchEndStart(endAttrs, startAttrs));
     }
 
     /**
@@ -863,8 +875,8 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     /**
      * Appends a newline character with the given attributes and the start and end tags to the end of the batch
      */
-    public void appendBatchLineFeed(AttributeSet a) {
-        batch.addAll(getBatchEndLineFeed(a));
+    public void appendBatchLineFeed(AttributeSet endAttrs, AttributeSet startAttrs) {
+        batch.addAll(getBatchEndLineFeed(endAttrs, startAttrs));
     }
 
     /**
@@ -925,19 +937,20 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return a list containing the end and start tags
      */
     public List<ElementSpec> getBatchEndStart() {
-        return getBatchEndStart(null);
+        return getBatchEndStart(null, null);
     }
 
     /**
      * Gets a list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} containing
      * the {@code ElementSpec.EndTagType} and {@code ElementSpec.StartTagType} tags
      *
+     * @param endAttrs attributes for end tag (may be null)
      * @param startAttrs attributes for start tag (may be null)
      * @return a list containing the end and start tags
      */
-    public List<ElementSpec> getBatchEndStart(AttributeSet startAttrs) {
+    public List<ElementSpec> getBatchEndStart(AttributeSet endAttrs, AttributeSet startAttrs) {
         List<ElementSpec> retVal = new ArrayList<>();
-        retVal.add(new ElementSpec(null, ElementSpec.EndTagType));
+        retVal.add(new ElementSpec(endAttrs, ElementSpec.EndTagType));
         retVal.add(new ElementSpec(startAttrs, ElementSpec.StartTagType));
         return retVal;
     }
@@ -1105,12 +1118,14 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * Gets a list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} containing a newline character
      * with the specified attributes and the {@code ElementSpec.EndTagType} and {@code ElementSpec.StartTagType} tags
      *
+     * @param endAttrs attributes for end tag (may be null)
+     * @param startAttrs attributes for start tag (may be null)
      * @return a list with the newline character and the end and start tags
      */
-    public List<ElementSpec> getBatchEndLineFeed(AttributeSet a) {
+    public List<ElementSpec> getBatchEndLineFeed(AttributeSet endAttrs, AttributeSet startAttrs) {
         List<ElementSpec> retVal = new ArrayList<>();
-        retVal.add(new ElementSpec(a, ElementSpec.ContentType, EOL_ARRAY, 0, 1));
-        retVal.addAll(getBatchEndStart(a));
+        retVal.add(new ElementSpec(endAttrs, ElementSpec.ContentType, EOL_ARRAY, 0, 1));
+        retVal.addAll(getBatchEndStart(endAttrs, startAttrs));
         return retVal;
     }
 
@@ -1267,7 +1282,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         try {
             appendBatchEndStart();
             var attrs = writeGem(gem);
-            appendBatchLineFeed(attrs);
+            appendBatchLineFeed(attrs, null);
             processBatchUpdates(offset);
         } catch (BadLocationException e) {
             LogUtil.severe(e);
@@ -1400,7 +1415,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             remove(start, end - start);
             appendBatchEndStart();
             var attrs = writeComment(comment);
-            appendBatchLineFeed(attrs);
+            appendBatchLineFeed(attrs, null);
             processBatchUpdates(start);
             setGlobalParagraphAttributes();
         } catch (BadLocationException e) {
@@ -1415,6 +1430,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         int start = getGemContentStart(gem);
         int end = getGemEnd(gem);
 
+
         start -= labelColumnWidth + 2;
 
         try {
@@ -1422,7 +1438,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             remove(start, end - start);
             appendBatchEndStart();
             var attrs = writeGem(gem);
-            appendBatchLineFeed(attrs);
+            appendBatchLineFeed(attrs, null);
             processBatchUpdates(start);
             setGlobalParagraphAttributes();
         } catch (BadLocationException e) {
@@ -1488,7 +1504,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
         tierAttrs.addAttributes(getStandardFontAttributes());
         appendFormattedSegment(segment, tierAttrs);
-        appendBatchLineFeed(tierAttrs);
+        appendBatchLineFeed(tierAttrs, null);
 
         for (var hook : getInsertionHooks()) {
             additionalInsertions.addAll(hook.endRecordHeader());
@@ -1535,7 +1551,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             tierAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_COMPONENT_FACTORY);
 
             if (i < visibleTierView.size() - 1) {
-                appendBatchLineFeed(tierAttrs);
+                appendBatchLineFeed(tierAttrs, null);
             }
         }
 
@@ -2078,7 +2094,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             remove(start, end - start);
             appendBatchEndStart();
             var attrs = writeRecord(record, session.getTranscript(), session.getTierView());
-            appendBatchLineFeed(attrs);
+            appendBatchLineFeed(attrs, null);
             processBatchUpdates(start);
             setGlobalParagraphAttributes();
         } catch (BadLocationException e) {
@@ -2093,9 +2109,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      */
     public void addRecord(Record addedRecord, int elementIndex) {
         try {
-            appendBatchEndStart();
+            appendBatchEndStart(null, getRecordParagraphAttributes());
             AttributeSet attrs = writeRecord(addedRecord, session.getTranscript(), session.getTierView());
-            appendBatchLineFeed(attrs);
+            appendBatchLineFeed(attrs, null);
             int nextElementStart = getLength();
 
             Transcript transcript = getSession().getTranscript();
@@ -2222,8 +2238,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 } else {
                     newLineAttrs = writeGem(elem.asGem());
                 }
-
-                appendBatchLineFeed(newLineAttrs);
+                appendBatchLineFeed(newLineAttrs, null);
             }
 
             processBatchUpdates(start);
@@ -2307,7 +2322,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
             SimpleAttributeSet attrs = insertTier(recordIndex, tier, tierViewItem, getRecordAttributes(recordIndex));
 
-            appendBatchLineFeed(attrs);
+            appendBatchLineFeed(attrs, null);
 
             processBatchUpdates(start);
             setGlobalParagraphAttributes();
@@ -2823,7 +2838,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
                 includedElementIndex++;
 
-                appendBatchLineFeed(newLineAttrs);
+                appendBatchLineFeed(newLineAttrs, null);
             }
 
             newLineAttrs = writeRecord(record, transcript, tierView);
@@ -2832,7 +2847,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             int transcriptElementCount = transcript.getNumberOfElements();
             while (nextElementIndex < transcriptElementCount) {
                 Transcript.Element nextElement = transcript.getElementAt(nextElementIndex);
-                appendBatchLineFeed(newLineAttrs);
+                appendBatchLineFeed(newLineAttrs, null);
                 if (nextElement.isRecord()) {
                     break;
                 }
@@ -2850,6 +2865,13 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         else {
             for (int i = 0; i < transcript.getNumberOfElements(); i++) {
                 Transcript.Element elem = transcript.getElementAt(i);
+                Transcript.Element nextElem = i < transcript.getNumberOfElements() - 1 ? transcript.getElementAt(i + 1) : null;
+
+                SimpleAttributeSet nextParagraphAttrs = null;
+                if(nextElem != null && nextElem.isRecord()) {
+                    nextParagraphAttrs = getRecordParagraphAttributes();
+                }
+
                 if (elem.isRecord()) {
                     newLineAttrs = writeRecord(elem.asRecord(), transcript, tierView);
                 } else if (elem.isComment()) {
@@ -2857,7 +2879,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 } else {
                     newLineAttrs = writeGem(elem.asGem());
                 }
-                appendBatchLineFeed(newLineAttrs);
+                appendBatchLineFeed(newLineAttrs, nextParagraphAttrs);
             }
         }
 

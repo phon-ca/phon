@@ -48,7 +48,7 @@ public class AlignmentExtension implements TranscriptEditorExtension {
 
                 TierViewItem alignmentParent = getAlignmentParent();
                 if (tier != null && isAlignmentVisible() && alignmentParent != null && tier.getName().equals(alignmentParent.getTierName())) {
-                    retVal.addAll(doc.getBatchEndLineFeed(attrs));
+                    retVal.addAll(doc.getBatchEndLineFeed(attrs, null));
 
                     Record record = (Record) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
                     retVal.addAll(getFormattedAlignment(tier, record));
@@ -108,7 +108,7 @@ public class AlignmentExtension implements TranscriptEditorExtension {
             insertions.addAll(getFormattedAlignment(record.getTier(getAlignmentParent().getTierName()), record));
 
             var attrs = insertions.get(insertions.size() - 1).getAttributes();
-            insertions.addAll(doc.getBatchEndLineFeed(attrs));
+            insertions.addAll(doc.getBatchEndLineFeed(attrs, null));
 
             doc.getBatch().addAll(insertions);
             doc.processBatchUpdates(start);

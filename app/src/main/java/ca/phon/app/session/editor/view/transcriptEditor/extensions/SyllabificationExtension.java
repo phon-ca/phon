@@ -68,7 +68,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                         Tier<IPATranscript> ipaTier = (Tier<IPATranscript>) tier;
 
                         // Add a newline at the end of the regular tier content
-                        retVal.addAll(doc.getBatchEndLineFeed(attrs));
+                        retVal.addAll(doc.getBatchEndLineFeed(attrs, null));
                         // Create a dummy tier for the syllabification
                         IPATranscript ipaTarget = ipaTier.getValue();
                         Tier<IPATranscript> syllableTier = doc.getSessionFactory().createTier(
