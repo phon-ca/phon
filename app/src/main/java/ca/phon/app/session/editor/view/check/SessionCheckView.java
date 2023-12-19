@@ -42,7 +42,7 @@ public class SessionCheckView extends EditorView {
 	
 	public final static String VIEW_NAME = "Session Check";
 	
-	public final static String ICON_NAME = IconManager.FontAwesomeFontName + ":EXCLAMATION_TRIANGLE";
+	public final static String ICON_NAME = IconManager.GoogleMaterialDesignIconsFontName + ":error";
 
 	private DropDownButton settingsButton;
 

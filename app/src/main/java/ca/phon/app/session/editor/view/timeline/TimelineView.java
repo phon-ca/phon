@@ -61,7 +61,7 @@ public final class TimelineView extends EditorView {
 
 	public static final String VIEW_NAME = "Timeline";
 
-	public static final String VIEW_ICON = IconManager.FontAwesomeFontName + ":CLOCK_O";
+	public static final String VIEW_ICON = IconManager.GoogleMaterialDesignIconsFontName + ":view_timeline";
 	
 	private final static String PLABACK_FPS = "TimelineView.playbackFps";
 	private final float DEFAULT_PLAYBACK_FPS = 30.0f;

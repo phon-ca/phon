@@ -53,7 +53,7 @@ public class TierOrderingEditorView extends EditorView {
 
 	public final static String VIEW_NAME = "Tier Management";
 
-	public final static String VIEW_ICON = IconManager.FontAwesomeFontName + ":LIST_ALT";
+	public final static String VIEW_ICON = IconManager.GoogleMaterialDesignIconsFontName + ":view_list";
 
 	/**
 	 * Tier ordering table

@@ -50,7 +50,7 @@ import java.util.List;
 public class TranscriptView extends EditorView {
 
     public final static String VIEW_NAME = "Transcript";
-    public final static String VIEW_ICON = IconManager.FontAwesomeFontName + ":BOOK";
+    public final static String VIEW_ICON = IconManager.GoogleMaterialDesignIconsFontName + ":menu_book";
 
     private final TranscriptEditor transcriptEditor;
     private TranscriptScrollPane transcriptScrollPane;

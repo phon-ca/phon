@@ -41,7 +41,7 @@ public class ParticipantsView extends EditorView {
 
 	public static final String VIEW_NAME = "Participants";
 
-	public static final String VIEW_ICON = IconManager.FontAwesomeFontName + ":USERS";
+	public static final String VIEW_ICON = IconManager.GoogleMaterialDesignIconsFontName + ":group";
 
 	/**
 	 * Participant Table

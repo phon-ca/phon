@@ -39,7 +39,7 @@ public class IPALookupView extends EditorView {
 	
 	public final static String VIEW_NAME = "IPA Lookup";
 	
-	public final static String VIEW_ICON = IconManager.GoogleMaterialDesignIconsFontName + ":SEARCH";
+	public final static String VIEW_ICON = IconManager.GoogleMaterialDesignIconsFontName + ":local_library";
 	
 	/*
 	 * Lookup context
