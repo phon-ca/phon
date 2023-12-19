@@ -25,11 +25,6 @@
         </dependency>
 
         <dependency>
-            <groupId>ca.hedlund</groupId>
-            <artifactId>desktopicons</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
         </dependency>
@@ -54,24 +49,6 @@
         <dependency>
             <groupId>ca.hedlund</groupId>
             <artifactId>tst</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.jiconfont</groupId>
-            <artifactId>jiconfont-swing</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.jiconfont</groupId>
-            <artifactId>jiconfont-font_awesome</artifactId>
-            <version>4.7.0.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.jiconfont</groupId>
-            <artifactId>jiconfont-google_material_design_icons</artifactId>
-            <version>2.2.0.2</version>
         </dependency>
 
         <dependency>
