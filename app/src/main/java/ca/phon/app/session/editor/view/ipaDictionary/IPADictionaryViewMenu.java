@@ -13,20 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.ipa_lookup;
+package ca.phon.app.session.editor.view.ipaDictionary;
 
 import ca.phon.app.session.editor.autotranscribe.AutoTranscribeAction;
-import ca.phon.app.session.editor.view.ipa_lookup.actions.*;
+import ca.phon.app.session.editor.view.ipaDictionary.actions.*;
 
 import javax.swing.*;
 
-public class IPALookupViewMenu extends JMenu {
+public class IPADictionaryViewMenu extends JMenu {
 	
 	private static final long serialVersionUID = 3248124841856311448L;
 
-	private final IPALookupView lookupView;
+	private final IPADictionaryView lookupView;
 	
-	public IPALookupViewMenu(IPALookupView lookupView) {
+	public IPADictionaryViewMenu(IPADictionaryView lookupView) {
 		super();
 		this.lookupView = lookupView;
 		

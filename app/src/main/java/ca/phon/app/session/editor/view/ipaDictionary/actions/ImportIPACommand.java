@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.ipa_lookup.actions;
+package ca.phon.app.session.editor.view.ipaDictionary.actions;
 
-import ca.phon.app.session.editor.view.ipa_lookup.IPALookupView;
+import ca.phon.app.session.editor.view.ipaDictionary.IPADictionaryView;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
 
@@ -28,7 +28,7 @@ public class ImportIPACommand extends IPALookupViewAction {
 	
 	private final static String SHORT_DESC = "Import IPA from CSV file into current dictionary";
 
-	public ImportIPACommand(IPALookupView view) {
+	public ImportIPACommand(IPADictionaryView view) {
 		super(view);
 		
 		putValue(NAME, CMD_NAME);

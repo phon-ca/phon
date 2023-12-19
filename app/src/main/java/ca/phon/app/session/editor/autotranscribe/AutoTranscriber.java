@@ -17,12 +17,9 @@ package ca.phon.app.session.editor.autotranscribe;
 
 import ca.phon.app.ipalookup.*;
 import ca.phon.app.session.editor.EditorEventManager;
-import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.undo.*;
-import ca.phon.app.session.editor.view.ipa_lookup.IPALookupEdit;
+import ca.phon.app.session.editor.view.ipaDictionary.IPALookupEdit;
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.*;
-import ca.phon.ipa.alignment.*;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.orthography.Orthography;
 import ca.phon.orthography.OrthographyElement;
@@ -31,10 +28,8 @@ import ca.phon.session.*;
 import ca.phon.session.alignment.TierElementFilter;
 import ca.phon.session.filter.RecordFilter;
 import ca.phon.syllabifier.Syllabifier;
-import ca.phon.util.Tuple;
 
 import javax.swing.undo.*;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;

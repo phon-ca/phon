@@ -1,8 +1,7 @@
 package ca.phon.app.session.editor;
 
 import ca.phon.app.session.editor.view.check.SessionCheckView;
-import ca.phon.app.session.editor.view.find_and_replace.FindAndReplaceEditorView;
-import ca.phon.app.session.editor.view.ipa_lookup.IPALookupView;
+import ca.phon.app.session.editor.view.ipaDictionary.IPADictionaryView;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.participants.ParticipantsView;
 import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
@@ -13,19 +12,12 @@ import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
 import ca.phon.ui.FlatButton;
 import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.event.MouseInputAdapter;
-import javax.swing.event.MouseInputListener;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,7 +52,7 @@ public class ViewIconStrip extends JPanel {
         viewButtons.put(SpeechAnalysisEditorView.VIEW_NAME, createViewButton(SpeechAnalysisEditorView.VIEW_NAME));
         viewButtons.put(TimelineView.VIEW_NAME, createViewButton(TimelineView.VIEW_NAME));
         viewButtons.put(SessionCheckView.VIEW_NAME, createViewButton(SessionCheckView.VIEW_NAME));
-        viewButtons.put(IPALookupView.VIEW_NAME, createViewButton(IPALookupView.VIEW_NAME));
+        viewButtons.put(IPADictionaryView.VIEW_NAME, createViewButton(IPADictionaryView.VIEW_NAME));
 
 
         add(viewButtons.get(TranscriptView.VIEW_NAME), cc.xy(2, 1));
@@ -71,7 +63,7 @@ public class ViewIconStrip extends JPanel {
         add(Box.createVerticalGlue(), cc.xy(2, 10));
         add(viewButtons.get(TimelineView.VIEW_NAME), cc.xy(2, 11));
         add(viewButtons.get(SessionCheckView.VIEW_NAME), cc.xy(2, 13));
-        add(viewButtons.get(IPALookupView.VIEW_NAME), cc.xy(2, 15));
+        add(viewButtons.get(IPADictionaryView.VIEW_NAME), cc.xy(2, 15));
 
         viewModel.addEditorViewModelListener(new EditorViewModelListener() {
             @Override

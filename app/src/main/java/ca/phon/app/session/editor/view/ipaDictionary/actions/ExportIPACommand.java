@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.ipa_lookup.actions;
+package ca.phon.app.session.editor.view.ipaDictionary.actions;
 
-import ca.phon.app.session.editor.view.ipa_lookup.IPALookupView;
+import ca.phon.app.session.editor.view.ipaDictionary.IPADictionaryView;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
 
@@ -31,7 +31,7 @@ public class ExportIPACommand extends IPALookupViewAction {
 	
 	// TODO keystroke
 	
-	public ExportIPACommand(IPALookupView view) {
+	public ExportIPACommand(IPADictionaryView view) {
 		super(view);
 		
 		putValue(NAME, CMD_NAME);

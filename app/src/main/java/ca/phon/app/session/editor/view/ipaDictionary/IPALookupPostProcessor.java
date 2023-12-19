@@ -1,4 +1,4 @@
-package ca.phon.app.session.editor.view.ipa_lookup;
+package ca.phon.app.session.editor.view.ipaDictionary;
 
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipadictionary.IPADictionary;

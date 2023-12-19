@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.ipa_lookup.actions;
+package ca.phon.app.session.editor.view.ipaDictionary.actions;
 
-import ca.phon.app.session.editor.view.ipa_lookup.IPALookupView;
+import ca.phon.app.session.editor.view.ipaDictionary.IPADictionaryView;
 
 import javax.swing.*;
 
@@ -26,14 +26,14 @@ public abstract class IPALookupViewAction extends AbstractAction {
 
 	private static final long serialVersionUID = 7551272812334000000L;
 
-	private final IPALookupView lookupView;
+	private final IPADictionaryView lookupView;
 	
-	public IPALookupViewAction(IPALookupView view) {
+	public IPALookupViewAction(IPADictionaryView view) {
 		super();
 		this.lookupView = view;
 	}
 	
-	public IPALookupView getLookupView() {
+	public IPADictionaryView getLookupView() {
 		return this.lookupView;
 	}
 	

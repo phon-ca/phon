@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.ipa_lookup;
+package ca.phon.app.session.editor.view.ipaDictionary;
 
 import ca.phon.app.ipalookup.OrthoWordIPAOptions;
 import ca.phon.app.log.LogUtil;

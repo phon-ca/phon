@@ -13,17 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.ipa_lookup;
+package ca.phon.app.session.editor.view.ipaDictionary;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.session.EditorViewAdapter;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.autotranscribe.AutoTranscribeAction;
-import ca.phon.app.session.editor.view.ipa_lookup.actions.*;
+import ca.phon.app.session.editor.view.ipaDictionary.actions.*;
 import ca.phon.ipadictionary.*;
 import ca.phon.ipadictionary.ui.*;
-import ca.phon.session.Record;
-import ca.phon.session.*;
 import ca.phon.util.Language;
 import ca.phon.util.icons.*;
 
@@ -35,9 +32,9 @@ import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class IPALookupView extends EditorView {
+public class IPADictionaryView extends EditorView {
 	
-	public final static String VIEW_NAME = "IPA Lookup";
+	public final static String VIEW_NAME = "IPA Dictionary";
 	
 	public final static String VIEW_ICON = IconManager.GoogleMaterialDesignIconsFontName + ":dictionary";
 	
@@ -49,32 +46,26 @@ public class IPALookupView extends EditorView {
 	/* 
 	 * UI
 	 */
-	private JTabbedPane tabPane;
-	
 	private JToolBar toolbar;
 	
 	private JComboBox<IPADictionary> dictBox;
 	
 	private JButton autoTranscribeBtn;
-	
+
 	private JButton importIPABtn;
-	
+
 	private JButton exportIPABtn;
-	
-	private RecordLookupPanel recordLookupPanel;
 	
 	private IPALookupPanel lookupPanel;
 	
 	/**
 	 * constructor
 	 */
-	public IPALookupView(SessionEditor editor) {
+	public IPADictionaryView(SessionEditor editor) {
 		super(editor);
-		addEditorViewListener(editorViewListener);
-		
+
 		lookupContext = new IPALookupViewContext();
 		init();
-		setupEditorActions();
 	}
 	
 	private void init() {
@@ -83,20 +74,11 @@ public class IPALookupView extends EditorView {
 		setLayout(new BorderLayout());
 		add(toolbar, BorderLayout.NORTH);
 		
-		tabPane = new JTabbedPane();
-		setupTierTab();
 		setupConsoleTab();
 		
 		onLanguageSwitch();
 		
-		add(tabPane, BorderLayout.CENTER);
-	}
-	
-	private void setupEditorActions() {
-		final SessionEditor editor = getEditor();
-		
-		editor.getEventManager().registerActionForEvent(EditorEventType.RecordChanged, this::onRecordChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
-		editor.getEventManager().registerActionForEvent(EditorEventType.TierChange, this::onTierChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		add(lookupPanel, BorderLayout.CENTER);
 	}
 	
 	private void setupToolbar() {
@@ -128,14 +110,6 @@ public class IPALookupView extends EditorView {
 		toolbar.addSeparator();
 		//toolbar.add(autoTranscribeBtn);
 		toolbar.setFloatable(false);
-	}
-	
-	private void setupTierTab() {
-		recordLookupPanel = new RecordLookupPanel(getEditor());
-		recordLookupPanel.setRecord(getEditor().currentRecord());
-//		final JScrollPane scroller = new JScrollPane(recordLookupPanel);
-//		scroller.setAutoscrolls(false);
-		tabPane.addTab("Record Lookup", recordLookupPanel);
 	}
 	
 	private void setupConsoleTab() {
@@ -171,7 +145,6 @@ public class IPALookupView extends EditorView {
 				updateLangBox();
 			}
 		});
-		tabPane.addTab("Console", lookupPanel);
 	}
 	
 	private volatile boolean isUpdatingBox = false;
@@ -208,7 +181,6 @@ public class IPALookupView extends EditorView {
 		final IPADictionary dict = (IPADictionary) dictBox.getSelectedItem();
 		if(dict == null) return;
 		lookupContext.switchDictionary(dict.getLanguage().toString());
-		recordLookupPanel.setDictionary(lookupContext.getDictionary());
 	}
 	
 	public IPALookupContext getLookupContext() {
@@ -218,22 +190,6 @@ public class IPALookupView extends EditorView {
 	/*
 	 * Editor actions
 	 */
-	private void onRecordChanged(EditorEvent<EditorEventType.RecordChangedData> ee) {
-		if(!getEditor().getViewModel().isShowingInStack(VIEW_NAME)) return;
-		
-		final Record r = ee.data().record();
-		recordLookupPanel.setRecord(r);
-	}
-	
-	private void onTierChanged(EditorEvent<EditorEventType.TierChangeData> ee) {
-		if(!getEditor().getViewModel().isShowingInStack(VIEW_NAME)) return;
-		if(ee.data().valueAdjusting()) return;
-		
-		if(SystemTierType.Orthography.getName().equals(ee.data().tier().getName())) {
-			recordLookupPanel.update();
-		}
-	}
-	
 	@Override
 	public String getName() {
 		return VIEW_NAME;
@@ -247,18 +203,7 @@ public class IPALookupView extends EditorView {
 
 	@Override
 	public JMenu getMenu() {
-		return new IPALookupViewMenu(this);
+		return new IPADictionaryViewMenu(this);
 	}
-	
-	private final EditorViewAdapter editorViewListener = new EditorViewAdapter() {
-
-		@Override
-		public void onFocused(EditorView view) {
-			final Record r = getEditor().currentRecord();
-			if(r != recordLookupPanel.getRecord()) 
-				recordLookupPanel.setRecord(r);
-		}
-		
-	};
 
 }

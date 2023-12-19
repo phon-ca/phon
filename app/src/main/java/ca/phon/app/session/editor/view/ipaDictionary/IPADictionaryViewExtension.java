@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.ipa_lookup;
+package ca.phon.app.session.editor.view.ipaDictionary;
 
 import ca.phon.app.session.ViewPosition;
 import ca.phon.app.session.editor.*;
 import ca.phon.plugin.*;
 
 @PhonPlugin
-@EditorViewInfo(name=IPALookupView.VIEW_NAME, icon=IPALookupView.VIEW_ICON, category=EditorViewCategory.UTILITIES, dockPosition = ViewPosition.BOTTOM_RIGHT)
-public class IPALookupViewExtension implements IPluginExtensionPoint<EditorView> {
+@EditorViewInfo(name= IPADictionaryView.VIEW_NAME, icon= IPADictionaryView.VIEW_ICON, category=EditorViewCategory.UTILITIES, dockPosition = ViewPosition.BOTTOM_RIGHT)
+public class IPADictionaryViewExtension implements IPluginExtensionPoint<EditorView> {
 
 	@Override
 	public Class<?> getExtensionType() {
@@ -38,7 +38,7 @@ public class IPALookupViewExtension implements IPluginExtensionPoint<EditorView>
 		@Override
 		public EditorView createObject(Object... args) {
 			final SessionEditor editor = (SessionEditor)args[0];
-			return new IPALookupView(editor);
+			return new IPADictionaryView(editor);
 		}
 	};
 

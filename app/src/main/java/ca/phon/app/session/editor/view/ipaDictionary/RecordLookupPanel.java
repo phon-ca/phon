@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.ipa_lookup;
+package ca.phon.app.session.editor.view.ipaDictionary;
 
 import ca.phon.app.ipalookup.OrthoLookupVisitor;
 import ca.phon.app.session.editor.*;
@@ -21,14 +21,11 @@ import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.common.*;
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.*;
-import ca.phon.ipa.alignment.*;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.orthography.Orthography;
 import ca.phon.plugin.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;
-import ca.phon.session.alignment.TierAlignmentRules;
-import ca.phon.syllabifier.*;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import com.jgoodies.forms.layout.*;
