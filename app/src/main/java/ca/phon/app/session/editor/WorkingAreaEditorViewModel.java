@@ -232,9 +232,6 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 	}
 
 	private Map<String, CDockablePerspective> getDockables() {
-//		if(dockables == null) {
-//
-//		}
 		return dockables;
 	}
 
@@ -476,7 +473,6 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		for(int i = 0; i < dockControl.getCDockableCount(); i++) {
 			final CDockable dockable = dockControl.getCDockable(i);
 			dockable.removeCDockableLocationListener(dockableLocationListener);
-//			dockControl.removeDockable((SingleCDockable)dockable);
 		}
 
 		dockControl.getController().kill();
@@ -528,6 +524,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 	@Override
 	public void hideView(String viewName) {
 		if(!isShowing(viewName)) return;
+		if(!dockControl.getSingleDockable(viewName).isCloseable()) return;
 
 		dockControl.removeDockable(dockControl.getSingleDockable(viewName));
 	}
@@ -887,6 +884,26 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 				}
 			});
 
+			final SimpleButtonAction menuAct = new SimpleButtonAction();
+			menuAct.setText("View menu");
+			menuAct.setIcon(IconManager.getInstance().buildFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "MORE_VERT", IconSize.MEDIUM, Color.darkGray));
+			menuAct.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					final JPopupMenu popupMenu = new JPopupMenu();
+					final JMenu viewMenu = editorView.getMenu();
+					for(int i = 0; i < viewMenu.getMenuComponentCount(); i++)
+						popupMenu.add(viewMenu.getMenuComponent(i));
+					popupMenu.show(editorView, editorView.getWidth()-popupMenu.getPreferredSize().width, 0);
+				}
+
+			});
+
+			final DefaultDockActionSource actionSource = new DefaultDockActionSource(
+					new LocationHint(LocationHint.DOCKABLE, LocationHint.LEFT));
+			actionSource.add(menuAct);
+
 			if(!TranscriptView.VIEW_NAME.equals(id)) {
 				final SimpleButtonAction externalizeAct = new SimpleButtonAction();
 				externalizeAct.setText("Open view in new window");
@@ -904,11 +921,9 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 				});
 
-				final DefaultDockActionSource actionSource = new DefaultDockActionSource(
-						new LocationHint(LocationHint.DOCKABLE, LocationHint.LEFT));
 				actionSource.add(externalizeAct);
-				super.intern().setActionOffers(actionSource);
 			}
+			super.intern().setActionOffers(actionSource);
 
 
 			viewRef = new WeakReference<EditorView>(editorView);
