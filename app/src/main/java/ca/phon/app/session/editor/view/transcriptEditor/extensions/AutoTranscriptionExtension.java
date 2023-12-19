@@ -11,6 +11,7 @@ import ca.phon.ipa.IPATranscript;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.ipadictionary.IPADictionaryLibrary;
 import ca.phon.session.Record;
+import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
 import ca.phon.session.Transcript;
 import ca.phon.ui.action.PhonUIAction;
@@ -24,6 +25,7 @@ import javax.swing.text.StyleConstants;
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.text.ParseException;
 import java.util.function.Supplier;
 
 /**
@@ -83,7 +85,19 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
                 if(tier.getDeclaredType().equals(IPATranscript.class)) {
                     final IPATranscript tierVal = tier.hasValue() ? (IPATranscript) tier.getValue() : new IPATranscript();
                     if(!tier.isUnvalidated() && tierVal.length() == 0) {
-                        final IPATranscript autoTranscript = AutoTranscriber.transcribe(record.getOrthography(), getDictionary());
+                        IPATranscript suggestion = new IPATranscript();
+                        if(SystemTierType.IPAActual.getName().equals(tier.getName())) {
+                            if(record.getIPATargetTier().hasValue() && record.getIPATargetTier().getValue().length() > 0) {
+                                try {
+                                    suggestion = IPATranscript.parseIPATranscript(record.getIPATarget().toString());
+                                } catch (ParseException ex) {
+                                    LogUtil.warning(ex);
+                                }
+                            }
+                        }
+                        if(suggestion.length() == 0)
+                            suggestion = AutoTranscriber.transcribe(record.getOrthography(), getDictionary());
+                        final IPATranscript autoTranscript = suggestion;
                         if(autoTranscript.length() > 0) {
                             final SimpleAttributeSet ghostAttrs = editor.getTranscriptDocument().getTierAttributes(tier);
                             // make text gray and italic
