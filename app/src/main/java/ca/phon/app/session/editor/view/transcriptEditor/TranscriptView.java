@@ -207,7 +207,7 @@ public class TranscriptView extends EditorView {
      * Shows the font scale menu
      *
      * @param pae the event from the action that called the function
-     * */
+     **/
     private void showFontScaleMenu(PhonActionEvent<Void> pae) {
         JPanel fontScaleMenu = new JPanel(new BorderLayout());
         fontScaleMenu.setOpaque(false);

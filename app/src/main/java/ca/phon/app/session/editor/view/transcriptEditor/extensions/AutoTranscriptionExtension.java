@@ -90,6 +90,8 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
                             // make text gray and italic
                             StyleConstants.setForeground(ghostAttrs, Color.gray);
                             StyleConstants.setItalic(ghostAttrs, true);
+                            ghostAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE, true);
+                            ghostAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE, "record");
 
                             final PhonUIAction<Void> acceptAutoTranscriptionAct = PhonUIAction.runnable(() -> {
                                 if(ghostRange != null) {
@@ -104,14 +106,11 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
                                 edit.setValueAdjusting(false);
                                 editor.getUndoSupport().postEdit(edit);
                             });
-
-                            ghostAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE, Boolean.TRUE);
                             ghostAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_ENTER_ACTION, acceptAutoTranscriptionAct);
 
                             try {
                                 editor.getTranscriptDocument().appendBatchString(autoTranscript.toString(), ghostAttrs);
                                 editor.getTranscriptDocument().processBatchUpdates(editor.getCaretPosition());
-
                                 ghostRange = new Range(editor.getCaretPosition(), editor.getCaretPosition() + autoTranscript.toString().length());
                             } catch (BadLocationException ex) {
                                 LogUtil.warning(ex);
@@ -125,7 +124,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
 
     /**
      * Automatically transcribes an IPA tier if the caret is currently in one
-     * */
+     **/
     public void autoTranscription() {
         TranscriptLocation transcriptLocation = editor.getCurrentSessionLocation();
         Transcript.Element elem = editor.getSession().getTranscript().getElementAt(transcriptLocation.elementIndex());

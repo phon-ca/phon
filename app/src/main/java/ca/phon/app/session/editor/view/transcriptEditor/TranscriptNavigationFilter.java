@@ -50,13 +50,15 @@ public class TranscriptNavigationFilter extends NavigationFilter {
                     case TranscriptStyleConstants.ATTR_KEY_RECORD -> {
                         Tier<?> prevTier = (Tier<?>) prevAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
                         if (prevTier == null || prevTier.getDeclaredType().equals(PhoneAlignment.class)) break;
+                        if (SystemTierType.Segment.getName().equals(prevTier.getName())) break;
                         if (nextElemType != null && nextElemType.equals(TranscriptStyleConstants.ATTR_KEY_RECORD)) {
                             if (nextTier != null && nextTier == prevTier) break;
                         }
                         int start = doc.getTierContentStart(prevTier);
                         int end = doc.getTierEnd(prevTier) - 1;
                         String newValue = doc.getText(start, end - start);
-                        if (!prevTier.hasValue() || !prevTier.getValue().toString().equals(newValue)) {
+                        String oldString = prevTier.toString();
+                        if (!oldString.equals(newValue)) {
                             editor.setInternalEdit(true);
                             editor.changeTierData((Record) prevAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD), prevTier, newValue);
                         }

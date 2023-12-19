@@ -770,6 +770,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             end = doc.getTierContentStart(changedTier) + changedTier.getUnvalidatedValue().getValue().length();
         }
 
+        System.out.println("Internal edit: " + internalEdit);
         if (internalEdit) {
             internalEdit = false;
 
