@@ -2301,7 +2301,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @param tier the tier whose data gets updated
      */
     public void onTierDataChanged(Tier<?> tier) {
-        System.out.println("Tier data changed: " + tier.getName());
         // ignore syllable and alignment tiers, they are updated with the parent tier
         if (tier.getName().equals(SystemTierType.TargetSyllables.getName()) || tier.getName().equals(SystemTierType.ActualSyllables.getName()))
             return;
