@@ -36,7 +36,7 @@ import java.util.HashMap;
 public class IconManager {
 	
 	public final static String FontAwesomeFontName = "FontAwesome";
-	public final static String GoogleMaterialDesignIconsFontName = "MaterialIconsRound-Regular";
+	public final static String GoogleMaterialDesignIconsFontName = "MaterialIconsRounded";
 	
 	/** The static instance */
 	private static IconManager _instance;
@@ -335,13 +335,12 @@ public class IconManager {
 		if(FontAwesomeFontName.equals(fontName)) {
 			icon = IconFontSwing.buildIcon(FontAwesome.valueOf(iconName), size.getWidth(), color);
 		} else {
-			final GoogleMaterialStaticFonts googleMaterialStaticFont = GoogleMaterialStaticFonts.fromString(fontName);
+			final GoogleMaterialFonts googleMaterialStaticFont = GoogleMaterialFonts.fromString(fontName);
 			if(googleMaterialStaticFont != null) {
 				icon = switch (googleMaterialStaticFont) {
-					case Regular ->IconFontSwing.buildIcon(GoogleMaterialIconFont.getIconFont(GoogleMaterialStaticFonts.Regular).getIconCode(iconName), size.getWidth(), color);
-					case Outlined ->IconFontSwing.buildIcon(GoogleMaterialIconFont.getIconFont(GoogleMaterialStaticFonts.Outlined).getIconCode(iconName), size.getWidth(), color);
-					case Round -> IconFontSwing.buildIcon(GoogleMaterialIconFont.getIconFont(GoogleMaterialStaticFonts.Round).getIconCode(iconName), size.getWidth(), color);
-					case Sharp -> IconFontSwing.buildIcon(GoogleMaterialIconFont.getIconFont(GoogleMaterialStaticFonts.Sharp).getIconCode(iconName), size.getWidth(), color);
+					case Outlined ->IconFontSwing.buildIcon(GoogleMaterialIconFont.getIconFont(GoogleMaterialFonts.Outlined).getIconCode(iconName), size.getWidth(), color);
+					case Round -> IconFontSwing.buildIcon(GoogleMaterialIconFont.getIconFont(GoogleMaterialFonts.Round).getIconCode(iconName), size.getWidth(), color);
+					case Sharp -> IconFontSwing.buildIcon(GoogleMaterialIconFont.getIconFont(GoogleMaterialFonts.Sharp).getIconCode(iconName), size.getWidth(), color);
 				};
 			}
 		}

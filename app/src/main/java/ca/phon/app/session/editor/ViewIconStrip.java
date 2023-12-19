@@ -139,9 +139,9 @@ public class ViewIconStrip extends JPanel {
 
     public FlatButton createViewButton(String viewName) {
         final IconData iconData = getViewIcon(viewName);
-        final FlatButton retVal = new FlatButton(iconData.fontName(), iconData.iconName(), IconSize.MEDIUM_LARGE);
+        final FlatButton retVal = new FlatButton(iconData.fontName(), iconData.iconName(), IconSize.LARGE);
         retVal.setMargin(new Insets(0, 0, 0, 0));
-        retVal.setPadding(3);
+        retVal.setPadding(0);
         retVal.setBorderPainted(false);
         retVal.setFocusPainted(false);
         retVal.setContentAreaFilled(false);

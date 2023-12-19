@@ -14,25 +14,25 @@ import java.util.Map;
 
 public class GoogleMaterialIconFont implements IconFont {
 
-    public static Map<GoogleMaterialStaticFonts, GoogleMaterialIconFont> staticFonts = new HashMap<>();
+    public static Map<GoogleMaterialFonts, GoogleMaterialIconFont> staticFonts = new HashMap<>();
 
     public static void registerFonts() {
-        for(GoogleMaterialStaticFonts font:GoogleMaterialStaticFonts.values()) {
+        for(GoogleMaterialFonts font: GoogleMaterialFonts.values()) {
             final GoogleMaterialIconFont iconFont = new GoogleMaterialIconFont(font);
             IconFontSwing.register(iconFont);
             staticFonts.put(font, iconFont);
         }
     }
 
-    public static GoogleMaterialIconFont getIconFont(GoogleMaterialStaticFonts font) {
+    public static GoogleMaterialIconFont getIconFont(GoogleMaterialFonts font) {
         return staticFonts.get(font);
     }
 
-    private final GoogleMaterialStaticFonts font;
+    private final GoogleMaterialFonts font;
 
     private final Map<String, Character> codepoints;
 
-    private GoogleMaterialIconFont(GoogleMaterialStaticFonts font) {
+    private GoogleMaterialIconFont(GoogleMaterialFonts font) {
         this.font = font;
         this.codepoints = readCodepoints();
     }
