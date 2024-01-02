@@ -94,9 +94,8 @@ public class AlignmentExtension implements TranscriptEditorExtension {
         if (!tier.getDeclaredType().equals(PhoneAlignment.class) || !isAlignmentVisible()) return;
 
         try {
-            int start = doc.getTierContentStart(tier);
+            int start = doc.getTierStart(tier);
             Record record = doc.getRecord(tier);
-            start -= doc.getLabelColumnWidth() + 2;
             int end = doc.getTierEnd(tier);
 
             doc.setBypassDocumentFilter(true);

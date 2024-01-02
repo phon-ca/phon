@@ -202,11 +202,10 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
     public void updateTiersHeader(EditorEvent<EditorEventType.TierViewChangedData> event) {
         try {
             Tier<?> tiersHeaderTier = headerTierMap.get("tiers");
-            int start = doc.getGenericContentStart(tiersHeaderTier);
+            int start = doc.getGenericStart(tiersHeaderTier);
             int end = doc.getGenericEnd(tiersHeaderTier);
 
             if (start > -1 && end > -1) {
-                start -= doc.getLabelColumnWidth() + 2;
                 doc.setBypassDocumentFilter(true);
                 doc.remove(start, end - start);
             }
@@ -246,11 +245,10 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
     public void updateDateHeader(EditorEvent<EditorEventType.SessionDateChangedData> event) {
         try {
             Tier<?> dateHeaderTier = headerTierMap.get("date");
-            int start = doc.getGenericContentStart(dateHeaderTier);
+            int start = doc.getGenericStart(dateHeaderTier);
             int end = doc.getGenericEnd(dateHeaderTier);
 
             if (start > -1 && end > -1) {
-                start -= doc.getLabelColumnWidth() + 2;
                 doc.setBypassDocumentFilter(true);
                 doc.remove(start, end - start);
             }

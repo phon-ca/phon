@@ -1,7 +1,5 @@
 package ca.phon.app.session.editor.view.transcriptEditor;
 
-import org.w3c.dom.css.Rect;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.text.*;
@@ -111,7 +109,7 @@ public class TranscriptViewFactory implements ViewFactory {
         public float getPreferredSpan(int axis) {
             float span = super.getPreferredSpan(axis);
             if(axis == View.X_AXIS) {
-                span = LABEL_WIDTH;
+                span = LABEL_WIDTH - labelEndWidth();
             }
             return span;
         }
@@ -131,40 +129,40 @@ public class TranscriptViewFactory implements ViewFactory {
             return View.BadBreakWeight;
         }
 
-        @Override
-        public Shape modelToView(int pos, Shape a, Position.Bias b) throws BadLocationException {
-            Shape retVal = super.modelToView(pos, a, b);
+        private int labelTextWidth() {
             int p0 = getStartOffset();
             int p1 = getEndOffset();
             Segment text = getText(p0, p1);
             Font font = getFont();
-            Graphics g = getGraphics();
-            Rectangle2D textBounds = g.getFontMetrics(font).getStringBounds(text.toString(), g);
-            Shape newBounds = new Rectangle2D.Double(a.getBounds().x + a.getBounds().width - textBounds.getWidth(),
-                    a.getBounds().y, textBounds.getWidth(), a.getBounds().height);
-            Rectangle2D retValBounds = new Rectangle2D.Double(newBounds.getBounds2D().getX() + retVal.getBounds().getX(),
-                    newBounds.getBounds2D().getY() + retVal.getBounds().getY(),
-                    retVal.getBounds().getWidth(), retVal.getBounds().getHeight());
-            return retValBounds;
+            Rectangle2D textBounds = getGraphics().getFontMetrics(font).getStringBounds(text.toString(), getGraphics());
+            return (int)textBounds.getWidth();
         }
 
+        private int labelEndWidth() {
+            int p0 = getStartOffset();
+            int p1 = getEndOffset();
+            String text = ": ";
+            Font font = getFont();
+            Rectangle2D textBounds = getGraphics().getFontMetrics(font).getStringBounds(text.toString(), getGraphics());
+            return (int)textBounds.getWidth();
+        }
+
+
         @Override
-        public int viewToModel(float x, float y, Shape a, Position.Bias[] biasReturn) {
-            return super.viewToModel(x, y, a, biasReturn);
+        public TabExpander getTabExpander() {
+            final TabExpander defaultExpander = super.getTabExpander();
+            return new TabExpander() {
+                @Override
+                public float nextTabStop(float x, int tabOffset) {
+                    return LABEL_WIDTH - labelTextWidth() - labelEndWidth();
+                }
+            };
         }
 
         @Override
         public void paint(Graphics g, Shape a) {
             g.clearRect(a.getBounds().x, a.getBounds().y, a.getBounds().width, a.getBounds().height);
-            int p0 = getStartOffset();
-            int p1 = getEndOffset();
-            Segment text = getText(p0, p1);
-            Font font = getFont();
-            Rectangle2D textBounds = g.getFontMetrics(font).getStringBounds(text.toString(), g);
-            // right align text
-            Shape newBounds = new Rectangle2D.Double(a.getBounds().x + a.getBounds().width - textBounds.getWidth(),
-                    a.getBounds().y, textBounds.getWidth(), a.getBounds().height);
-            super.paint(g, newBounds);
+            super.paint(g, a);
         }
 
     }
