@@ -2209,7 +2209,14 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     private void underlineElement(Element elem) {
         try {
             removeCurrentUnderline();
-            currentUnderline = getHighlighter().addHighlight(elem.getStartOffset(), elem.getEndOffset(), underlinePainter);
+            // get element text
+            String text = elem.getDocument().getText(elem.getStartOffset(), elem.getEndOffset() - elem.getStartOffset());
+            // special case for labels
+            if(text.startsWith("\t")) {
+                currentUnderline = getHighlighter().addHighlight(elem.getStartOffset()+1, elem.getEndOffset(), underlinePainter);
+            } else {
+                currentUnderline = getHighlighter().addHighlight(elem.getStartOffset(), elem.getEndOffset(), underlinePainter);
+            }
             repaint();
         } catch (BadLocationException ex) {
             throw new RuntimeException(ex);
