@@ -79,12 +79,7 @@ public class BlindTranscriptionExtension implements TranscriptEditorExtension {
         labelAttrs.addAttributes(doc.getLabelAttributes());
 
         String labelText = transcriber;
-        if (labelText.length() < doc.getLabelColumnWidth()) {
-            retVal.add(doc.getBatchString(" ".repeat(Math.max(0, (doc.getLabelColumnWidth() - labelText.length()))), labelAttrs));
-        }
-        else {
-            labelText = doc.formatLabelText(labelText);
-        }
+        labelText = doc.formatLabelText(labelText);
 
         labelAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE, true);
         retVal.add(doc.getBatchString(labelText, labelAttrs));

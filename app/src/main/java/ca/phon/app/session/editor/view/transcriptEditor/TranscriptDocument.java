@@ -42,58 +42,84 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * A character array containing just the newline character
      */
     private static final char[] EOL_ARRAY = {'\n'};
+
+    /**
+     * Session factory for creating new session data objects
+     */
     private final SessionFactory sessionFactory;
+
     /**
      * The list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} that everything gets appended to
      */
     private final ArrayList<ElementSpec> batch;
+
+    /**
+     * Document prop support
+     */
     private final PropertyChangeSupport propertyChangeSupport;
+
     /**
      * The set of "not editable" attributes
      */
     private final Set<String> notEditableAttributes;
+
     /**
      * extension support
      */
     private final ExtensionSupport extensionSupport = new ExtensionSupport(TranscriptDocument.class, this);
+
     /**
      * Insertion hooks, these may be added dynamically but will also be loaded using
      * from registered IPluginExtensionPoints
      */
     private final List<InsertionHook> insertionHooks = new ArrayList<>();
+
     /**
      * The number of monospace characters that make up the width of the label column
      */
     public int labelColumnWidth = 20;
+
     /**
      * A reference to the loaded session
      */
     private Session session;
+
     /**
      * Whether the document is in single-record mode
      */
     private boolean singleRecordView = false;
+
     /**
      * The index of the record that gets displayed if the document is in single-record mode
      */
     private int singleRecordIndex = 0;
+
     /**
      * The spacing between the lines of the document
      */
+
     private float lineSpacing = 0.2f;
     /**
      * Whether the next removal from the document will bypass the document filter
      */
     private boolean bypassDocumentFilter = false;
+
+    /**
+     * Editor undo support
+     */
     private SessionEditUndoSupport undoSupport;
+
+    /**
+     * Editor event manager
+     */
     private EditorEventManager eventManager;
+
     /**
      * Whether the tier labels show the chat tier names or the regular tier names
      */
     private boolean chatTierNamesShown = false;
 
     // region Getters and Setters
-
 
     /**
      * Constructor
@@ -259,14 +285,14 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         return chatTierNamesShown;
     }
 
-    // endregion Getters and Setters
-
-    // region Attribute Getters
-
     public void setChatTierNamesShown(boolean chatTierNamesShown) {
         this.chatTierNamesShown = chatTierNamesShown;
         reload();
     }
+    // endregion Getters and Setters
+
+    // region Attribute Getters
+
 
     /**
      * Gets the starting paragraph attributes for a record
@@ -434,7 +460,8 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_TIER, tier);
 
-        retVal.addAttributes(getMonospaceFontAttributes());
+        Style defaultStyle = getStyle(TranscriptStyleContext.DEFAULT);
+        retVal.addAttributes(defaultStyle);
 
         return retVal;
     }
@@ -815,11 +842,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
         SimpleAttributeSet labelAttrs = getCommentLabelAttributes(comment);
         String labelText = comment.getType().getLabel();
-        if (labelText.length() < labelColumnWidth) {
-            appendBatchString(" ".repeat((labelColumnWidth - labelText.length())), labelAttrs);
-        } else {
-            labelText = formatLabelText(labelText);
-        }
+        labelText = formatLabelText(labelText);
 
         TierData tierData = commentTier.getValue();
 
@@ -1001,11 +1024,12 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         SimpleAttributeSet retVal = new SimpleAttributeSet();
 
         retVal.addAttributes(getCommentAttributes(comment));
-        retVal.addAttributes(getMonospaceFontAttributes());
-
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL, true);
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE, true);
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
+
+        Style defaultStyle = getStyle(TranscriptStyleContext.DEFAULT);
+        retVal.addAttributes(defaultStyle);
 
         return retVal;
     }
@@ -1033,13 +1057,13 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return the formatted text
      */
     public String formatLabelText(String labelText) {
-        int labelTextLen = labelText.length();
-        if (labelTextLen < labelColumnWidth) {
-            return " ".repeat((labelColumnWidth - labelTextLen)) + labelText;
-        } else if (labelTextLen > labelColumnWidth) {
-            String remaining = labelText.substring(labelTextLen - labelColumnWidth + 3, labelTextLen);
-            return "..." + remaining;
-        }
+//        int labelTextLen = labelText.length();
+//        if (labelTextLen < labelColumnWidth) {
+//            return " ".repeat((labelColumnWidth - labelTextLen)) + labelText;
+//        } else if (labelTextLen > labelColumnWidth) {
+//            String remaining = labelText.substring(labelTextLen - labelColumnWidth + 3, labelTextLen);
+//            return "..." + remaining;
+//        }
         return labelText;
     }
 
@@ -1135,13 +1159,13 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     public void setGlobalParagraphAttributes() {
         SimpleAttributeSet paragraphAttrs = new SimpleAttributeSet();
         StyleConstants.setLineSpacing(paragraphAttrs, getLineSpacing());
-        StyleConstants.setForeground(paragraphAttrs, UIManager.getColor(TranscriptEditorUIProps.FOREGROUND));
+//        StyleConstants.setForeground(paragraphAttrs, UIManager.getColor(TranscriptEditorUIProps.FOREGROUND));
 
-        // Soft wrap
+//        // Soft wrap
         Font font = FontPreferences.getMonospaceFont().deriveFont(14.0f);
-        String builder = " ".repeat(Math.max(0, labelColumnWidth + 2));
+//        String builder = " ".repeat(Math.max(0, labelColumnWidth + 2));
         FontMetrics fm = new JLabel().getFontMetrics(font);
-        int indent = fm.stringWidth(builder);
+        int indent = 150;
         int rightInset = fm.stringWidth(" ");
         StyleConstants.setLeftIndent(paragraphAttrs, indent);
         StyleConstants.setRightIndent(paragraphAttrs, rightInset);
@@ -1313,11 +1337,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
         SimpleAttributeSet labelAttrs = getGemLabelAttributes(gem);
         String labelText = gem.getType().toString() + " Gem";
-        if (labelText.length() < labelColumnWidth) {
-            appendBatchString(" ".repeat((labelColumnWidth - labelText.length())), labelAttrs);
-        } else {
-            labelText = formatLabelText(labelText);
-        }
+        labelText = formatLabelText(labelText);
 
         labelAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE, true);
         appendBatchString(labelText, labelAttrs);
@@ -1362,11 +1382,12 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         SimpleAttributeSet retVal = new SimpleAttributeSet();
 
         retVal.addAttributes(getGemAttributes(gem));
-        retVal.addAttributes(getMonospaceFontAttributes());
-
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL, true);
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE, true);
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
+
+        Style defaultStyle = getStyle(TranscriptStyleContext.DEFAULT);
+        retVal.addAttributes(defaultStyle);
 
         return retVal;
     }
@@ -1490,11 +1511,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         labelAttrs.addAttributes(recordAttrs);
 
         String labelText = record.getSpeaker().toString();
-        if (labelText.length() < labelColumnWidth) {
-            appendBatchString(" ".repeat((labelColumnWidth - labelText.length())), labelAttrs);
-        } else {
-            labelText = formatLabelText(labelText);
-        }
+        labelText = formatLabelText(labelText);
         labelAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE, true);
         appendBatchString(labelText, labelAttrs);
         labelAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE);
@@ -1601,11 +1618,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         SimpleAttributeSet labelAttrs = new SimpleAttributeSet(attrs);
         labelAttrs.addAttributes(getLabelAttributes());
         String labelText = label;
-        if (labelText.length() < labelColumnWidth) {
-            retVal.add(getBatchString(" ".repeat((labelColumnWidth - labelText.length())), labelAttrs));
-        } else {
-            labelText = formatLabelText(labelText);
-        }
+        labelText = formatLabelText(labelText);
 
         labelAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE, true);
         retVal.add(getBatchString(labelText, labelAttrs));
@@ -1630,11 +1643,12 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     public SimpleAttributeSet getLabelAttributes() {
         SimpleAttributeSet retVal = new SimpleAttributeSet();
 
-        retVal.addAttributes(getMonospaceFontAttributes());
-
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL, true);
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE, true);
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
+
+        Style defaultStyle = getStyle(TranscriptStyleContext.DEFAULT);
+        retVal.addAttributes(defaultStyle);
 
         return retVal;
     }
@@ -2281,7 +2295,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             appendBatchEndStart();
 
             Participant speaker = record.getSpeaker() == null ? Participant.UNKNOWN : record.getSpeaker();
-            appendBatchString(formatLabelText(speaker.toString()) + "  ", labelAttrs);
+            appendBatchString(formatLabelText(speaker.toString()) + ": ", labelAttrs);
 
             MediaSegment segment = record.getMediaSegment();
 
@@ -2449,12 +2463,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 }
             }
         }
-
-        if (labelText.length() < labelColumnWidth) {
-            appendBatchString(" ".repeat((labelColumnWidth - labelText.length())), labelAttrs);
-        } else {
-            labelText = formatLabelText(labelText);
-        }
+        labelText = formatLabelText(labelText);
 
         labelAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE, true);
         appendBatchString(labelText, labelAttrs);

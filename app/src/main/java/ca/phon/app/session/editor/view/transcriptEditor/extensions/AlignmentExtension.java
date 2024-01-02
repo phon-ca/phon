@@ -145,7 +145,10 @@ public class AlignmentExtension implements TranscriptEditorExtension {
         // Get the string for the label
         String alignmentLabelText = doc.formatLabelText("Alignment");
         // Add the label
-        retVal.add(doc.getBatchString(alignmentLabelText + ": ", alignmentLabelAttrs));
+        retVal.add(doc.getBatchString(alignmentLabelText, alignmentLabelAttrs));
+        alignmentLabelAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE);
+        retVal.add(doc.getBatchString(": ", alignmentLabelAttrs));
+
         // Get the string version of the alignment
         String alignmentContent = alignmentTier.getValue().toString();
         // Add component factory if needed

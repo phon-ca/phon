@@ -89,7 +89,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                         // Get the string for the label
                         String syllabificationLabelText = doc.formatLabelText("Syllabification");
                         // Add the label
-                        retVal.add(doc.getBatchString(syllabificationLabelText + ": ", syllabificationLabelAttrs));
+                        retVal.add(doc.getBatchString(syllabificationLabelText, syllabificationLabelAttrs));
                         // Add component factory if needed
                         if (isSyllabificationComponent()) {
                             attrs.addAttributes(doc.getSyllabificationAttributes());
