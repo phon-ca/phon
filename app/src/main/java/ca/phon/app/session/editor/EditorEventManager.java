@@ -177,9 +177,9 @@ public class EditorEventManager {
 						if(PrefHelper.getBoolean("phon.debug", false)) {
 							LogUtil.info("Dispatching event: " + event.eventType());
 							LogUtil.info("\t" + event.toString());
-							for (EditorEventHandler<?> action : getHandlersForEvent(event.eventType())) {
-								action.handleEvent(event);
-							}
+						}
+						for (EditorEventHandler<?> action : getHandlersForEvent(event.eventType())) {
+							action.handleEvent(event);
 						}
 					}
 				}

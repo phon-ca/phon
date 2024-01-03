@@ -266,8 +266,8 @@ public class SessionCheckView extends EditorView {
 			for(var ve:chunks) {
 				row[0] = ve.getSession().getCorpus() + "." + ve.getSession().getName();
 				row[1] = "" + (ve.getRecord()+1);
-				row[3] = ve.getTierName();
-				row[4] = ve.getMessage();
+				row[2] = ve.getTierName();
+				row[3] = ve.getMessage();
 
 				try {
 					writer.writeNext(row);
