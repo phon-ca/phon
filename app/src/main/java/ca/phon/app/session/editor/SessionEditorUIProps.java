@@ -48,30 +48,6 @@ public class SessionEditorUIProps implements UIDefaultsHandler, IPluginExtension
     public static final Color DEFAULT_VIEW_FLAP_INACTIVE_LEFT = UIManager.getColor("Button.background");
     // endregion
 
-    // region icon strip colours
-    public static final String ICON_STRIP_ICON_COLOR = "SessionEditor.iconStripIconColor";
-    public static final Color DEFAULT_ICON_STRIP_ICON_COLOR = new Color(0x7f7f7f);
-
-    public static final String ICON_STRIP_ICON_SELECTED_COLOR = "SessionEditor.iconStripIconSelectedColor";
-
-    public static final Color DEFAULT_ICON_STRIP_ICON_SELECTED_COLOR = new Color(0x1e88e5);
-
-    public static final String ICON_STRIP_ICON_INACTIVE_COLOR = "SessionEditor.iconStripIconInactiveColor";
-    public static final Color DEFAULT_ICON_STRIP_ICON_INACTIVE_COLOR = UIManager.getColor("inactiveCaptionText");
-
-    public static final String ICON_STRIP_HOVER_COLOR = "SessionEditor.iconStripHoverColor";
-    public static final Color DEFAULT_ICON_STRIP_HOVER_COLOR = Color.darkGray;
-
-    public static final String ICON_STRIP_ICON_BACKGROUND = "SessionEditor.iconStripIconBackground";
-    public static final Color DEFAULT_ICON_STRIP_ICON_BACKGROUND = UIManager.getColor("Button.background");
-
-    public static final String ICON_STRIP_ICON_SELECTED_BACKGROUND = "SessionEditor.iconStripIconSelectedBackground";
-    public static final Color DEFAULT_ICON_STRIP_ICON_SELECTED_BACKGROUND = UIManager.getColor("Button.background");
-
-    public static final String ICON_STRIP_ICON_PRESSED_BACKGROUND = "SessionEditor.iconStripIconPressedBackground";
-    public static final Color DEFAULT_ICON_STRIP_ICON_PRESSED_BACKGROUND = new Color(0x9f9f9f);
-    // endregion
-
     @Override
     public void setupDefaults(UIDefaults defaults) {
         defaults.put(VIEW_ACTIVE_TEXT, DEFAULT_VIEW_ACTIVE_TEXT);
@@ -86,13 +62,6 @@ public class SessionEditorUIProps implements UIDefaultsHandler, IPluginExtension
         defaults.put(VIEW_ACTIVE_LEFT, DEFAULT_VIEW_ACTIVE_LEFT);
         defaults.put(VIEW_INACTIVE_RIGHT, DEFAULT_VIEW_INACTIVE_RIGHT);
         defaults.put(VIEW_INACTIVE_LEFT, DEFAULT_VIEW_INACTIVE_LEFT);
-        defaults.put(ICON_STRIP_ICON_COLOR, DEFAULT_ICON_STRIP_ICON_COLOR);
-        defaults.put(ICON_STRIP_ICON_SELECTED_COLOR, DEFAULT_ICON_STRIP_ICON_SELECTED_COLOR);
-        defaults.put(ICON_STRIP_ICON_INACTIVE_COLOR, DEFAULT_ICON_STRIP_ICON_INACTIVE_COLOR);
-        defaults.put(ICON_STRIP_HOVER_COLOR, DEFAULT_ICON_STRIP_HOVER_COLOR);
-        defaults.put(ICON_STRIP_ICON_BACKGROUND, DEFAULT_ICON_STRIP_ICON_BACKGROUND);
-        defaults.put(ICON_STRIP_ICON_SELECTED_BACKGROUND, DEFAULT_ICON_STRIP_ICON_SELECTED_BACKGROUND);
-        defaults.put(ICON_STRIP_ICON_PRESSED_BACKGROUND, DEFAULT_ICON_STRIP_ICON_PRESSED_BACKGROUND);
     }
 
     @Override

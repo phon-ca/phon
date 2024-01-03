@@ -1,5 +1,10 @@
 package ca.phon.ui;
 
+import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.theme.UIDefaults;
+import ca.phon.ui.theme.UIDefaultsHandler;
+import ca.phon.util.icons.IconSize;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.LinkedHashMap;
@@ -15,8 +20,6 @@ import java.util.LinkedHashMap;
  */
 public class IconStrip extends JPanel {
 
-    private static final long serialVersionUID = 1L;
-
     public enum IconStripPosition {
         LEFT,
         CENTER,
@@ -29,6 +32,31 @@ public class IconStrip extends JPanel {
 
     public IconStrip(int layout) {
         super(new LayoutManager(layout));
+    }
+
+    public FlatButton createButton(Action action) {
+        final FlatButton retVal = new FlatButton(action);
+        retVal.setAction(action);
+        retVal.setMargin(new Insets(0, 0, 0, 0));
+        retVal.setPadding(0);
+        retVal.setBorderPainted(false);
+        retVal.setFocusPainted(false);
+        retVal.setContentAreaFilled(false);
+        retVal.setRolloverEnabled(true);
+        retVal.setIconColor(UIManager.getColor(IconStripUIProps.ICON_STRIP_ICON_COLOR));
+        retVal.setIconHoverColor(UIManager.getColor(IconStripUIProps.ICON_STRIP_HOVER_COLOR));
+        retVal.setBgSelectedColor(UIManager.getColor(IconStripUIProps.ICON_STRIP_ICON_SELECTED_BACKGROUND));
+        retVal.setBgPressedColor(UIManager.getColor(IconStripUIProps.ICON_STRIP_ICON_PRESSED_BACKGROUND));
+        retVal.setIconSelectedColor(UIManager.getColor(IconStripUIProps.ICON_STRIP_ICON_SELECTED_COLOR));
+        retVal.setFont(FontPreferences.getTitleFont());
+        retVal.setPopupLocation(SwingConstants.EAST);
+        return retVal;
+    }
+
+    public FlatButton add(Action action, IconStripPosition position) {
+        final FlatButton retVal = createButton(action);
+        add(retVal, position);
+        return retVal;
     }
 
     /**
@@ -120,8 +148,8 @@ public class IconStrip extends JPanel {
                 final Insets insets = parent.getInsets();
                 final int insetWidth = insets.left + insets.right;
                 final int insetHeight = insets.top + insets.bottom;
-                int prefWidth = insetWidth;
-                int prefHeight = insetHeight;
+                int prefWidth = 0;
+                int prefHeight = 0;
                 for(Component comp:componentMap.keySet()) {
                     final Dimension prefSize = comp.getPreferredSize();
                     if(layout == SwingConstants.HORIZONTAL) {
@@ -132,7 +160,7 @@ public class IconStrip extends JPanel {
                         prefHeight += prefSize.height;
                     }
                 }
-                return new Dimension(prefWidth, prefHeight);
+                return new Dimension(prefWidth + insetWidth, prefHeight + insetHeight);
             } else {
                 throw new IllegalArgumentException("target must be an IconStrip");
             }
@@ -144,8 +172,8 @@ public class IconStrip extends JPanel {
                 final Insets insets = parent.getInsets();
                 final int insetWidth = insets.left + insets.right;
                 final int insetHeight = insets.top + insets.bottom;
-                int prefWidth = insetWidth;
-                int prefHeight = insetHeight;
+                int prefWidth = 0;
+                int prefHeight = 0;
                 for(Component comp:componentMap.keySet()) {
                     final Dimension prefSize = comp.getPreferredSize();
                     if(layout == SwingConstants.HORIZONTAL) {
@@ -156,7 +184,7 @@ public class IconStrip extends JPanel {
                         prefHeight += prefSize.height;
                     }
                 }
-                return new Dimension(prefWidth, prefHeight);
+                return new Dimension(prefWidth + insetWidth, prefHeight + insetHeight);
             } else {
                 throw new IllegalArgumentException("target must be an IconStrip");
             }
@@ -177,12 +205,12 @@ public class IconStrip extends JPanel {
                         final Dimension prefSize = comp.getPreferredSize();
                         // center component vertically/horizontally within left/top section
                         if(layout == SwingConstants.HORIZONTAL) {
-                            currentY = insets.top + (size.height - insets.top - insets.bottom - prefSize.height) / 2;
+                            currentY = (size.height/2 - prefSize.height/2) + insets.top;
                             comp.setBounds(currentX, currentY, prefSize.width, prefSize.height);
                             currentX += prefSize.width;
                         } else {
-                            currentX = insets.left + (size.width - insets.left - insets.right - prefSize.width) / 2;
-                            comp.setBounds(currentX, currentY, size.width - insets.left - insets.right, prefSize.height);
+                            currentX = (size.width/2 - prefSize.width/2) + insets.left;
+                            comp.setBounds(currentX, currentY, prefSize.width, prefSize.height);
                             currentY += prefSize.height;
                         }
                     }
@@ -212,11 +240,11 @@ public class IconStrip extends JPanel {
                     if(position == IconStripPosition.CENTER) {
                         final Dimension prefSize = comp.getPreferredSize();
                         if(layout == SwingConstants.HORIZONTAL) {
-                            currentY = insets.top + (size.height - insets.top - insets.bottom - prefSize.height) / 2;
+                            currentY = (size.height/2 - prefSize.height/2) + insets.top;
                             comp.setBounds(currentX, currentY, prefSize.width, prefSize.height);
                             currentX += prefSize.width;
                         } else {
-                            currentX = insets.left + (size.width - insets.left - insets.right - prefSize.width) / 2;
+                            currentX = (size.width/2 - prefSize.width/2) + insets.left;
                             comp.setBounds(currentX, currentY, prefSize.width, prefSize.height);
                             currentY += prefSize.height;
                         }
@@ -248,12 +276,12 @@ public class IconStrip extends JPanel {
                     if(position == IconStripPosition.RIGHT) {
                         final Dimension prefSize = comp.getPreferredSize();
                         if(layout == SwingConstants.HORIZONTAL) {
-                            currentY = insets.top + (size.height - insets.top - insets.bottom - prefSize.height) / 2;
-                            comp.setBounds(currentX, currentY, prefSize.width, size.height - insets.top - insets.bottom);
+                            currentY = (size.height/2 - prefSize.height/2) + insets.top;
+                            comp.setBounds(currentX, currentY, prefSize.width, prefSize.height);
                             currentX += prefSize.width;
                         } else {
-                            currentX = insets.left + (size.width - insets.left - insets.right - prefSize.width) / 2;
-                            comp.setBounds(currentX, currentY, size.width - insets.left - insets.right, prefSize.height);
+                            currentX = (size.width/2 - prefSize.width/2) + insets.left;
+                            comp.setBounds(currentX, currentY, prefSize.width, prefSize.height);
                             currentY += prefSize.height;
                         }
                     }
