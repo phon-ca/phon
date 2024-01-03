@@ -1,5 +1,9 @@
 package ca.phon.app.session.editor.view.transcriptEditor;
 
+import ca.phon.app.log.LogUtil;
+import ca.phon.session.Tier;
+import ca.phon.ui.fonts.FontPreferences;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.text.*;
@@ -11,17 +15,65 @@ import java.awt.geom.Rectangle2D;
  */
 public class TranscriptViewFactory implements ViewFactory {
 
-    public static final int LABEL_WIDTH = 150;
-
     // TODO adjust for graphics dpi - make configurable
     public static final int PAGE_WIDTH = (int) Math.floor(8.5 * 96);
 
+    private int labelColumnWidth = -1;
+
+    /**
+     * Calculate preferred tier label width for given document
+     *
+     * @param g
+     * @param transcriptDocument
+     * @return width of tier label column
+     */
+    public static int calculatePreferredLabelColumnWidth(Graphics g, TranscriptDocument transcriptDocument) {
+        var root = transcriptDocument.getDefaultRootElement();
+        return calculatePreferredLabelColumnWidth(g, 0, root);
+    }
+
+    private static int calculatePreferredLabelColumnWidth(Graphics g, int currentMax, Element element) {
+        if(element.isLeaf()) {
+            var attrs = element.getAttributes();
+            var isLabel = attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL);
+            if (isLabel != null) {
+                var tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
+                if(tier != null) {
+                    var lblText = "    " + tier.getName() + ": ";
+                    var tierLabelWidth = g.getFontMetrics(FontPreferences.getTierFont()).stringWidth(lblText);
+                    return Math.max(currentMax, tierLabelWidth);
+                }
+            }
+            return currentMax;
+        } else {
+            int retVal = currentMax;
+            for (int i = 0; i < element.getElementCount(); i++) {
+                var elem = element.getElement(i);
+                retVal = Math.max(retVal, calculatePreferredLabelColumnWidth(g, retVal, elem));
+            }
+            return retVal;
+        }
+    }
+
     public TranscriptViewFactory() {
+    }
+
+    public int getLabelColumnWidth(Graphics g, TranscriptDocument transcriptDocument) {
+        if(labelColumnWidth < 0) {
+            labelColumnWidth = calculatePreferredLabelColumnWidth(g, transcriptDocument);
+            SwingUtilities.invokeLater(() -> {
+                transcriptDocument.setLabelColumnWidth(labelColumnWidth);
+            });
+        }
+        return labelColumnWidth;
     }
 
     @Override
     public View create(Element elem) {
         String kind = elem.getName();
+
+
+
         var attrs = elem.getAttributes();
 
         var componentFactory = attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMPONENT_FACTORY);
@@ -109,7 +161,7 @@ public class TranscriptViewFactory implements ViewFactory {
         public float getPreferredSpan(int axis) {
             float span = super.getPreferredSpan(axis);
             if(axis == View.X_AXIS) {
-                span = LABEL_WIDTH - labelEndWidth();
+                span = getLabelColumnWidth(getGraphics(), (TranscriptDocument) getElement().getDocument()) - labelEndWidth();
             }
             return span;
         }
@@ -154,7 +206,7 @@ public class TranscriptViewFactory implements ViewFactory {
             return new TabExpander() {
                 @Override
                 public float nextTabStop(float x, int tabOffset) {
-                    return LABEL_WIDTH - labelTextWidth() - labelEndWidth();
+                    return getLabelColumnWidth(getGraphics(), (TranscriptDocument) getElement().getDocument()) - labelTextWidth() - labelEndWidth();
                 }
             };
         }

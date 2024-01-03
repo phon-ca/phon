@@ -74,10 +74,10 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      */
     private final List<InsertionHook> insertionHooks = new ArrayList<>();
 
-//    /**
-//     * The number of monospace characters that make up the width of the label column
-//     */
-//    public int labelColumnWidth = 20;
+    /**
+     * The amount of space reserved for tier labels, this is calculated in the view factory when necessary
+     */
+    public int labelColumnWidth = -1;
 
     /**
      * A reference to the loaded session
@@ -203,13 +203,14 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         }
     }
 
-//    public int getLabelColumnWidth() {
-//        return labelColumnWidth;
-//    }
-//
-//    public void setLabelColumnWidth(int labelColumnWidth) {
-//        this.labelColumnWidth = labelColumnWidth;
-//    }
+    public int getLabelColumnWidth() {
+        return labelColumnWidth;
+    }
+
+    public void setLabelColumnWidth(int labelColumnWidth) {
+        this.labelColumnWidth = labelColumnWidth;
+        setGlobalParagraphAttributes();
+    }
 
     /**
      * Gets the text value of a given tier for a given transcriber
@@ -1157,16 +1158,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     public void setGlobalParagraphAttributes() {
         SimpleAttributeSet paragraphAttrs = new SimpleAttributeSet();
         StyleConstants.setLineSpacing(paragraphAttrs, getLineSpacing());
-//        StyleConstants.setForeground(paragraphAttrs, UIManager.getColor(TranscriptEditorUIProps.FOREGROUND));
 
-//        // Soft wrap
-        Font font = FontPreferences.getMonospaceFont().deriveFont(14.0f);
-//        String builder = " ".repeat(Math.max(0, labelColumnWidth + 2));
-        FontMetrics fm = new JLabel().getFontMetrics(font);
-        int indent = 150;
-        int rightInset = fm.stringWidth(" ");
+        int indent = getLabelColumnWidth() < 0 ? 0 : getLabelColumnWidth();
         StyleConstants.setLeftIndent(paragraphAttrs, indent);
-        StyleConstants.setRightIndent(paragraphAttrs, rightInset);
         StyleConstants.setFirstLineIndent(paragraphAttrs, -indent);
 
         setParagraphAttributes(0, getLength(), paragraphAttrs, false);
