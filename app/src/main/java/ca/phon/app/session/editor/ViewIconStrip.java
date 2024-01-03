@@ -11,6 +11,7 @@ import ca.phon.app.session.editor.view.transcriptEditor.TranscriptView;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
 import ca.phon.ui.FlatButton;
+import ca.phon.ui.IconStrip;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.icons.IconSize;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -25,25 +26,25 @@ import java.util.Map;
  * Display icons for views in a vertical strip.  Icons are placed in two positions, top and bottom.
  *
  */
-public class ViewIconStrip extends JPanel {
+public class ViewIconStrip extends IconStrip {
 
     private final EditorViewModel viewModel;
 
     private Map<String, FlatButton> viewButtons = new HashMap<>();
 
     public ViewIconStrip(EditorViewModel viewModel) {
-        super();
+        super(SwingConstants.VERTICAL);
         this.viewModel = viewModel;
         initUI();
     }
 
     private void initUI() {
-        final String cols = "3dlu, center:pref";
-        final String rows = "fill:pref, 3dlu, fill:pref, 3dlu, fill:pref, 3dlu, fill:pref," +
-                "3dlu, fill:pref, fill:pref:grow, fill:pref, 3dlu, fill:pref, 3dlu, fill:pref";
-        setLayout(new FormLayout(cols, rows));
-
-        CellConstraints cc = new CellConstraints();
+//        final String cols = "3dlu, center:pref";
+//        final String rows = "fill:pref, 3dlu, fill:pref, 3dlu, fill:pref, 3dlu, fill:pref," +
+//                "3dlu, fill:pref, fill:pref:grow, fill:pref, 3dlu, fill:pref, 3dlu, fill:pref";
+//        setLayout(new FormLayout(cols, rows));
+//
+//        CellConstraints cc = new CellConstraints();
 
         viewButtons.put(TranscriptView.VIEW_NAME, createViewButton(TranscriptView.VIEW_NAME));
         viewButtons.put(ParticipantsView.VIEW_NAME, createViewButton(ParticipantsView.VIEW_NAME));
@@ -55,15 +56,14 @@ public class ViewIconStrip extends JPanel {
         viewButtons.put(IPADictionaryView.VIEW_NAME, createViewButton(IPADictionaryView.VIEW_NAME));
 
 
-        add(viewButtons.get(TranscriptView.VIEW_NAME), cc.xy(2, 1));
-        add(viewButtons.get(ParticipantsView.VIEW_NAME), cc.xy(2, 3));
-        add(viewButtons.get(TierOrderingEditorView.VIEW_NAME), cc.xy(2, 5));
-        add(viewButtons.get(MediaPlayerEditorView.VIEW_NAME), cc.xy(2, 7));
-        add(viewButtons.get(SpeechAnalysisEditorView.VIEW_NAME), cc.xy(2, 9));
-        add(Box.createVerticalGlue(), cc.xy(2, 10));
-        add(viewButtons.get(TimelineView.VIEW_NAME), cc.xy(2, 11));
-        add(viewButtons.get(SessionCheckView.VIEW_NAME), cc.xy(2, 13));
-        add(viewButtons.get(IPADictionaryView.VIEW_NAME), cc.xy(2, 15));
+        add(viewButtons.get(TranscriptView.VIEW_NAME), IconStripPosition.LEFT);
+        add(viewButtons.get(ParticipantsView.VIEW_NAME), IconStripPosition.LEFT);
+        add(viewButtons.get(TierOrderingEditorView.VIEW_NAME), IconStripPosition.LEFT);
+        add(viewButtons.get(MediaPlayerEditorView.VIEW_NAME), IconStripPosition.LEFT);
+        add(viewButtons.get(SpeechAnalysisEditorView.VIEW_NAME), IconStripPosition.LEFT);
+        add(viewButtons.get(TimelineView.VIEW_NAME), IconStripPosition.RIGHT);
+        add(viewButtons.get(SessionCheckView.VIEW_NAME), IconStripPosition.RIGHT);
+        add(viewButtons.get(IPADictionaryView.VIEW_NAME), IconStripPosition.RIGHT);
 
         viewModel.addEditorViewModelListener(new EditorViewModelListener() {
             @Override
@@ -145,6 +145,8 @@ public class ViewIconStrip extends JPanel {
         retVal.setIconSelectedColor(UIManager.getColor(SessionEditorUIProps.ICON_STRIP_ICON_SELECTED_COLOR));
         retVal.setFont(FontPreferences.getTitleFont());
         retVal.setSelected(viewModel.isShowing(viewName));
+        retVal.setPopupText(viewName);
+        retVal.setPopupLocation(SwingConstants.EAST);
         retVal.addActionListener((e) -> {
             if(viewModel.isShowing(viewName)) {
                 viewModel.hideView(viewName);

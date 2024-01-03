@@ -59,6 +59,22 @@ public class FlatButton extends JButton {
 
     private int iconTextGap = 5;
 
+    /**
+     * Custom popup text which will be shown when the mouse hovers over the button
+     */
+    private String popupText = null;
+
+    /**
+     * Location of popup text one of
+     * <ul>
+     *     <li>{@link SwingConstants#NORTH}</li>
+     *     <li>{@link SwingConstants#SOUTH}</li>
+     *     <li>{@link SwingConstants#EAST}</li>
+     *     <li>{@link SwingConstants#WEST}</li>
+     * </ul>
+     */
+    private int popupLocation = SwingConstants.SOUTH;
+
     public FlatButton() {
         super();
         init();
@@ -320,6 +336,26 @@ public class FlatButton extends JButton {
         var oldVal = this.iconTextGap;
         this.iconTextGap = iconTextGap;
         firePropertyChange("iconTextGap", oldVal, iconTextGap);
+    }
+
+    public String getPopupText() {
+        return popupText;
+    }
+
+    public void setPopupText(String popupText) {
+        var oldVal = this.popupText;
+        this.popupText = popupText;
+        firePropertyChange("popupText", oldVal, popupText);
+    }
+
+    public int getPopupLocation() {
+        return popupLocation;
+    }
+
+    public void setPopupLocation(int popupLocation) {
+        var oldVal = this.popupLocation;
+        this.popupLocation = popupLocation;
+        firePropertyChange("popupLocation", oldVal, popupLocation);
     }
 
 }

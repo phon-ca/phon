@@ -1,5 +1,6 @@
 package ca.phon.ui;
 
+import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -12,6 +13,8 @@ import java.awt.event.MouseEvent;
 public class FlatButtonUI extends ButtonUI {
 
     private FlatButton button;
+
+    private JFrame popupFrame;
 
     private MouseHandler mouseHandler = new MouseHandler();
 
@@ -31,6 +34,40 @@ public class FlatButtonUI extends ButtonUI {
         button.removeMouseMotionListener(mouseHandler);
         button = null;
         super.uninstallUI(c);
+    }
+
+    private void showPopup() {
+        if(popupFrame == null) {
+            popupFrame = new JFrame();
+            popupFrame.setUndecorated(true);
+            popupFrame.setAlwaysOnTop(true);
+            final JLabel popupLabel = new JLabel(button.getPopupText());
+            popupLabel.setFont(FontPreferences.getTierFont().deriveFont(Font.BOLD));
+            popupLabel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+            popupFrame.setContentPane(popupLabel);
+            popupFrame.setFocusable(false);
+            popupFrame.setFocusableWindowState(false);
+            popupFrame.pack();
+            // calculate location based on button.popupPosition
+            final Point location = button.getLocationOnScreen();
+            switch(button.getPopupLocation()) {
+                case SwingConstants.NORTH -> location.translate(0, -(int)popupFrame.getPreferredSize().getHeight());
+                // center vertically
+                case SwingConstants.EAST -> location.translate((int)button.getPreferredSize().getWidth(), (int)(button.getPreferredSize().getHeight() - popupFrame.getPreferredSize().getHeight()) / 2);
+                case SwingConstants.WEST -> location.translate(-(int)popupFrame.getPreferredSize().getWidth(), (int)(button.getPreferredSize().getHeight() - popupFrame.getPreferredSize().getHeight()) / 2);
+                default -> location.translate(0, button.getHeight());
+            }
+
+            popupFrame.setLocation(location);
+            popupFrame.setVisible(true);
+        }
+    }
+
+    private void hidePopup() {
+        if(popupFrame != null) {
+            popupFrame.setVisible(false);
+            popupFrame = null;
+        }
     }
 
     @Override
@@ -122,14 +159,17 @@ public class FlatButtonUI extends ButtonUI {
 
         @Override
         public void mouseEntered(MouseEvent e) {
-            if(button.isRolloverEnabled())
+            if(button.isRolloverEnabled()) {
                 button.getModel().setRollover(true);
+            }
+            showPopup();
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
             if(button.isRolloverEnabled())
                 button.getModel().setRollover(false);
+            hidePopup();
         }
 
         @Override
