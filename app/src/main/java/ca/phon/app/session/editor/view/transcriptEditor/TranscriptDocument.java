@@ -2824,9 +2824,13 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         notEditableAttributes.remove(attributeKey);
     }
 
-    private int offs = 0;
-
     private class PopulateWorker extends SwingWorker<List<ElementSpec>, List<ElementSpec>> {
+        private int offs = 0;
+
+        record EndStart(ElementSpec end, ElementSpec start) {}
+
+        private EndStart nextEndStart = null;
+
         @Override
         protected List<ElementSpec> doInBackground() throws Exception {
             firePropertyChange("populate", false, true);
@@ -2963,6 +2967,16 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             for (var chunk : chunks) {
                 if(chunk.isEmpty()) continue;
                 try {
+                    if(nextEndStart != null) {
+                        chunk.add(0, nextEndStart.start);
+                        chunk.add(0, nextEndStart.end);
+                        nextEndStart = null;
+                    }
+                    if(chunk.get(chunk.size() - 1).getType() == ElementSpec.StartTagType) {
+                        ElementSpec nextStart = chunk.remove(chunk.size() - 1);
+                        ElementSpec nextEnd = chunk.remove(chunk.size() - 1);
+                        nextEndStart = new EndStart(nextEnd, nextStart);
+                    }
                     processBatchUpdates(offs, chunk);
                     for(var elementSpec: chunk) {
                         offs += elementSpec.getLength();
