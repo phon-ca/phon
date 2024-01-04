@@ -228,6 +228,12 @@ public class TranscriptViewFactory implements ViewFactory {
             if(elem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_BORDER) instanceof Border b) {
                 border = b;
             }
+            setPropertiesFromAttributes();
+            setLineSpacing(((TranscriptDocument)elem.getDocument()).getLineSpacing());
+            SimpleAttributeSet attrs = new SimpleAttributeSet();
+            StyleConstants.setLeftIndent(attrs, labelColumnWidth);
+            setParagraphInsets(attrs);
+            setFirstLineIndent(-labelColumnWidth);
         }
 
         // add border insets to view insets

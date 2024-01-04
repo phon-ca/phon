@@ -1150,14 +1150,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * Sets the global paragraph attributes to the entirety of the document
      */
     public void setGlobalParagraphAttributes() {
-        SimpleAttributeSet paragraphAttrs = new SimpleAttributeSet();
-        StyleConstants.setLineSpacing(paragraphAttrs, getLineSpacing());
-
-        int indent = getLabelColumnWidth() < 0 ? 0 : getLabelColumnWidth();
-        StyleConstants.setLeftIndent(paragraphAttrs, indent);
-        StyleConstants.setFirstLineIndent(paragraphAttrs, -indent);
-
-        setParagraphAttributes(0, getLength(), paragraphAttrs, false);
     }
 
     /**
