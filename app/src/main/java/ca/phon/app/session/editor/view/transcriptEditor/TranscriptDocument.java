@@ -33,6 +33,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Text document for a {@link Session} that displays the transcript including all tiers, comments, and gems.
@@ -47,11 +48,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * Session factory for creating new session data objects
      */
     private final SessionFactory sessionFactory;
-
-    /**
-     * The list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} that everything gets appended to
-     */
-    private final ArrayList<ElementSpec> batch;
 
     /**
      * Document prop support
@@ -77,7 +73,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     /**
      * The amount of space reserved for tier labels, this is calculated in the view factory when necessary
      */
-    public int labelColumnWidth = -1;
+    public int labelColumnWidth = 150;
 
     /**
      * A reference to the loaded session
@@ -128,7 +124,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         super(new TranscriptStyleContext());
         sessionFactory = SessionFactory.newFactory();
         setDocumentFilter(new TranscriptDocumentFilter(this));
-        batch = new ArrayList<>();
 
         propertyChangeSupport = new PropertyChangeSupport(this);
 
@@ -258,10 +253,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
     public SessionFactory getSessionFactory() {
         return sessionFactory;
-    }
-
-    public ArrayList<ElementSpec> getBatch() {
-        return batch;
     }
 
     /**
@@ -558,10 +549,11 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         }
 
         try {
-            appendBatchEndStart();
-            var attrs = writeComment(comment);
-            appendBatchLineFeed(attrs, null);
-            processBatchUpdates(offset);
+            List<ElementSpec> batch = new ArrayList<>();
+            appendBatchEndStart(batch);
+            var attrs = writeComment(comment, batch);
+            appendBatchLineFeed(attrs, null, batch);
+            processBatchUpdates(offset, batch);
         } catch (BadLocationException e) {
             LogUtil.severe(e);
         }
@@ -799,9 +791,10 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     /**
      * Appends the end and start tags to the end of the batch
      *
+     * @param batch the batch to append the tags to
      */
-    public void appendBatchEndStart() {
-        appendBatchEndStart(null, null);
+    public void appendBatchEndStart(List<ElementSpec> batch) {
+        appendBatchEndStart(null, null, batch);
     }
 
     /**
@@ -809,8 +802,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      *
      * @param endAttrs attributes for end tag (may be null)
      * @param startAttrs attributes for starting paragraph (may be null)
+     * @poaram batch the batch to append the tags to
      */
-    public void appendBatchEndStart(AttributeSet endAttrs, AttributeSet startAttrs) {
+    public void appendBatchEndStart(AttributeSet endAttrs, AttributeSet startAttrs, List<ElementSpec> batch) {
         batch.addAll(getBatchEndStart(endAttrs, startAttrs));
     }
 
@@ -821,7 +815,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return a mutable attribute set containing the attributes of the last character of the comment to add a
      * newline after if need be
      */
-    private SimpleAttributeSet writeComment(Comment comment) {
+    private SimpleAttributeSet writeComment(Comment comment, List<ElementSpec> batch) {
 
         List<ElementSpec> additionalInsertions = new ArrayList<>();
         for (var hook : getInsertionHooks()) {
@@ -846,10 +840,10 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         TierData tierData = commentTier.getValue();
 
         labelAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE, true);
-        appendBatchString(labelText, labelAttrs);
+        appendBatchString(labelText, labelAttrs, batch);
 
         labelAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE);
-        appendBatchString(": ", labelAttrs);
+        appendBatchString(": ", labelAttrs, batch);
 
         for (int i = 0; i < tierData.length(); i++) {
             TierElement userTierElement = tierData.elementAt(i);
@@ -866,7 +860,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             } else if (userTierElement instanceof TierInternalMedia internalMedia) {
                 // Internal media
                 attrs = getTierInternalMediaAttributes();
-                appendFormattedInternalMedia(internalMedia.getInternalMedia(), attrs);
+                appendFormattedInternalMedia(internalMedia.getInternalMedia(), attrs, batch);
             } else if (userTierElement instanceof TierLink link) {
                 // Link
                 text = link.toString();
@@ -877,10 +871,10 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
             attrs.addAttributes(commentAttrs);
 
-            if (text != null) appendBatchString(text, attrs);
+            if (text != null) appendBatchString(text, attrs, batch);
 
             if (i < tierData.length() - 1) {
-                appendBatchString(" ", attrs);
+                appendBatchString(" ", attrs, batch);
             }
         }
 
@@ -897,16 +891,18 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     /**
      * Appends a newline character with the given attributes and the start and end tags to the end of the batch
      */
-    public void appendBatchLineFeed(AttributeSet endAttrs, AttributeSet startAttrs) {
+    public void appendBatchLineFeed(AttributeSet endAttrs, AttributeSet startAttrs, List<ElementSpec> batch) {
         batch.addAll(getBatchEndLineFeed(endAttrs, startAttrs));
     }
 
     /**
      * Adds the contents of the batch to the document at the specified offset,
-     * clears the batch,
      * and sets the global paragraph attributes
+     *
+     * @param offs the offset to insert the batch at
+     * @param batch the batch to insert
      */
-    public void processBatchUpdates(int offs) throws BadLocationException {
+    public void processBatchUpdates(int offs, List<ElementSpec> batch) throws BadLocationException {
         // As with insertBatchString, this could be synchronized if
         // there was a chance multiple threads would be in here.
         ElementSpec[] inserts = new ElementSpec[batch.size()];
@@ -914,9 +910,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
         // Process all the inserts in bulk
         super.insert(offs, inserts);
-
-        // Empty batch the list
-        batch.clear();
 
         setGlobalParagraphAttributes();
     }
@@ -972,8 +965,8 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      */
     public List<ElementSpec> getBatchEndStart(AttributeSet endAttrs, AttributeSet startAttrs) {
         List<ElementSpec> retVal = new ArrayList<>();
-        retVal.add(new ElementSpec(endAttrs, ElementSpec.EndTagType));
-        retVal.add(new ElementSpec(startAttrs, ElementSpec.StartTagType));
+        retVal.add(new ElementSpec(endAttrs != null ? endAttrs.copyAttributes() : null, ElementSpec.EndTagType));
+        retVal.add(new ElementSpec(startAttrs != null ? startAttrs.copyAttributes() : null, ElementSpec.StartTagType));
         return retVal;
     }
 
@@ -1037,7 +1030,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * Appends a {@link javax.swing.text.DefaultStyledDocument.ElementSpec} containing the specified string and
      * attributes to the end of the batch
      */
-    public void appendBatchString(String str, MutableAttributeSet a) {
+    public void appendBatchString(String str, MutableAttributeSet a, List<ElementSpec> batch) {
         final StringBuilder builder = new StringBuilder();
         builder.append(str);
         final List<ElementSpec> additionalInsertions = new ArrayList<>();
@@ -1117,11 +1110,12 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      *
      * @param internalMedia   the internal media that gets appended
      * @param additionalAttrs any additional attributes to be added to the segment (none added if {@code null})
+     * @param batch          the batch to append the segment to
      */
-    public void appendFormattedInternalMedia(InternalMedia internalMedia, AttributeSet additionalAttrs) {
+    public void appendFormattedInternalMedia(InternalMedia internalMedia, AttributeSet additionalAttrs, List<ElementSpec> batch) {
         MediaSegment segment = sessionFactory.createMediaSegment();
         segment.setSegment(internalMedia.getStartTime(), internalMedia.getEndTime(), MediaUnit.Second);
-        appendFormattedSegment(segment, additionalAttrs, MediaTimeFormatStyle.MINUTES_AND_SECONDS);
+        appendFormattedSegment(segment, additionalAttrs, MediaTimeFormatStyle.MINUTES_AND_SECONDS, batch);
     }
 
     /**
@@ -1147,7 +1141,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      */
     public List<ElementSpec> getBatchEndLineFeed(AttributeSet endAttrs, AttributeSet startAttrs) {
         List<ElementSpec> retVal = new ArrayList<>();
-        retVal.add(new ElementSpec(endAttrs, ElementSpec.ContentType, EOL_ARRAY, 0, 1));
+        retVal.add(new ElementSpec(endAttrs != null ? endAttrs.copyAttributes() : null, ElementSpec.ContentType, EOL_ARRAY, 0, 1));
         retVal.addAll(getBatchEndStart(endAttrs, startAttrs));
         return retVal;
     }
@@ -1197,11 +1191,12 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     /**
      * Appends a formatted representation of the provided segment in the provided style to the batch
      *
-     * @param segment         the segment that will be appended
+     * @param segment the segment that will be appended
      * @param additionalAttrs any additional attributes to be added to the segment (none added if {@code null})
-     * @param style           the style to format the times of the segment
+     * @param style the style to format the times of the segment
+     * @param batch the batch to append the segment to
      */
-    private void appendFormattedSegment(MediaSegment segment, AttributeSet additionalAttrs, MediaTimeFormatStyle style) {
+    private void appendFormattedSegment(MediaSegment segment, AttributeSet additionalAttrs, MediaTimeFormatStyle style, List<ElementSpec> batch) {
 
         var formatter = new MediaSegmentFormatter(style);
         String value = formatter.format(segment);
@@ -1215,11 +1210,11 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             segmentDashAttrs.addAttributes(additionalAttrs);
         }
 
-        appendBatchString("•", segmentDashAttrs);
+        appendBatchString("•", segmentDashAttrs, batch);
 
-        appendBatchString(value, segmentTimeAttrs);
+        appendBatchString(value, segmentTimeAttrs, batch);
 
-        appendBatchString("•", segmentDashAttrs);
+        appendBatchString("•", segmentDashAttrs, batch);
     }
 
     public float getLineSpacing() {
@@ -1295,10 +1290,11 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         }
 
         try {
-            appendBatchEndStart();
-            var attrs = writeGem(gem);
-            appendBatchLineFeed(attrs, null);
-            processBatchUpdates(offset);
+            List<ElementSpec> batch = new ArrayList<>();
+            appendBatchEndStart(batch);
+            var attrs = writeGem(gem, batch);
+            appendBatchLineFeed(attrs, null, batch);
+            processBatchUpdates(offset, batch);
         } catch (BadLocationException e) {
             LogUtil.severe(e);
         }
@@ -1308,10 +1304,11 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * Writes a given gem to the batch
      *
      * @param gem the comment that will be written
+     * @param batch the batch to append the gem to
      * @return a mutable attribute set containing the attributes of the last character of the gem to add a
      * newline after if need be
      */
-    private SimpleAttributeSet writeGem(Gem gem) {
+    private SimpleAttributeSet writeGem(Gem gem, List<ElementSpec> batch) {
         List<ElementSpec> additionalInsertions = new ArrayList<>();
         for (var hook : getInsertionHooks()) {
             additionalInsertions.addAll(hook.startGem());
@@ -1331,12 +1328,12 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         labelText = formatLabelText(labelText);
 
         labelAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE, true);
-        appendBatchString(labelText, labelAttrs);
+        appendBatchString(labelText, labelAttrs, batch);
 
         labelAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE);
-        appendBatchString(": ", labelAttrs);
+        appendBatchString(": ", labelAttrs, batch);
 
-        appendBatchString(text, gemAttrs);
+        appendBatchString(text, gemAttrs, batch);
 
         for (var hook : getInsertionHooks()) {
             additionalInsertions.addAll(hook.endGem());
@@ -1419,11 +1416,11 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         try {
             bypassDocumentFilter = true;
             remove(start, end - start);
-            appendBatchEndStart();
-            var attrs = writeComment(comment);
-            appendBatchLineFeed(attrs, null);
-            processBatchUpdates(start);
-            setGlobalParagraphAttributes();
+            List<ElementSpec> batch = new ArrayList<>();
+            appendBatchEndStart(batch);
+            var attrs = writeComment(comment, batch);
+            appendBatchLineFeed(attrs, null, batch);
+            processBatchUpdates(start, batch);
         } catch (BadLocationException e) {
             LogUtil.severe(e);
         }
@@ -1439,11 +1436,11 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         try {
             bypassDocumentFilter = true;
             remove(start, end - start);
-            appendBatchEndStart();
-            var attrs = writeGem(gem);
-            appendBatchLineFeed(attrs, null);
-            processBatchUpdates(start);
-            setGlobalParagraphAttributes();
+            List<ElementSpec> batch = new ArrayList<>();
+            appendBatchEndStart(batch);
+            var attrs = writeGem(gem, batch);
+            appendBatchLineFeed(attrs, null, batch);
+            processBatchUpdates(start, batch);
         } catch (BadLocationException e) {
             LogUtil.severe(e);
         }
@@ -1455,13 +1452,15 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @param record     the record that will be written to the batch
      * @param transcript a reference to the transcript containing the record
      * @param tierView   a list of {@link TierViewItem} specifying how the tiers within the record should be inserted
+     * @param batch     the batch to append the record to
      * @return a mutable attribute set containing the attributes of the last character of the record to add a
      * newline after if need be
      */
     private SimpleAttributeSet writeRecord(
             Record record,
             Transcript transcript,
-            List<TierViewItem> tierView
+            List<TierViewItem> tierView,
+            List<ElementSpec> batch
     ) {
 
         List<ElementSpec> additionalInsertions = new ArrayList<>();
@@ -1523,7 +1522,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 additionalInsertions.clear();
             }
 
-            tierAttrs = insertTier(recordIndex, tier, item, recordAttrs);
+            tierAttrs = insertTier(recordIndex, tier, item, recordAttrs, batch);
 
             for (var hook : getInsertionHooks()) {
                 additionalInsertions.addAll(hook.endTier(tierAttrs));
@@ -1537,7 +1536,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             tierAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_COMPONENT_FACTORY);
 
             if (i < visibleTierView.size() - 1) {
-                appendBatchLineFeed(tierAttrs, null);
+                appendBatchLineFeed(tierAttrs, null, batch);
             }
         }
 
@@ -1556,10 +1555,11 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      *
      * @param label the text for the label
      * @param tier  the generic tier that will be written to the batch
+     * @param batch the batch to append the generic tier to
      * @return a mutable attribute set containing the attributes of the last character of the text to add a
      * newline after if need be
      */
-    private SimpleAttributeSet writeGeneric(String label, Tier<?> tier) {
+    private SimpleAttributeSet writeGeneric(String label, Tier<?> tier, List<ElementSpec> batch) {
         List<ElementSpec> elementSpecs = getGeneric(label, tier, null);
         batch.addAll(elementSpecs);
         return new SimpleAttributeSet(elementSpecs.get(elementSpecs.size() - 1).getAttributes());
@@ -1629,10 +1629,11 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @param tier                 the generic tier that will be written to the batch
      * @param additionalAttributes any additional attributes to be added to the contents of the returned list
      *                             none added if {@code null})
+     * @parma batch the batch to append the generic tier to
      * @return a mutable attribute set containing the attributes of the last character of the text to add a
      * newline after if need be
      */
-    public SimpleAttributeSet writeGeneric(String label, Tier<?> tier, AttributeSet additionalAttributes) {
+    public SimpleAttributeSet writeGeneric(String label, Tier<?> tier, AttributeSet additionalAttributes, List<ElementSpec> batch) {
         List<ElementSpec> elementSpecs = getGeneric(label, tier, additionalAttributes);
         batch.addAll(elementSpecs);
         return new SimpleAttributeSet(elementSpecs.get(elementSpecs.size() - 1).getAttributes());
@@ -2106,11 +2107,11 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         try {
             bypassDocumentFilter = true;
             remove(start, end - start);
-            appendBatchEndStart();
-            var attrs = writeRecord(record, session.getTranscript(), session.getTierView());
-            appendBatchLineFeed(attrs, null);
-            processBatchUpdates(start);
-            setGlobalParagraphAttributes();
+            List<ElementSpec> batch = new ArrayList<>();
+            appendBatchEndStart(batch);
+            var attrs = writeRecord(record, session.getTranscript(), session.getTierView(), batch);
+            appendBatchLineFeed(attrs, null, batch);
+            processBatchUpdates(start, batch);
         } catch (BadLocationException e) {
             LogUtil.severe(e);
         }
@@ -2123,9 +2124,10 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      */
     public void addRecord(Record addedRecord, int elementIndex) {
         try {
-            appendBatchEndStart(null, getRecordParagraphAttributes());
-            AttributeSet attrs = writeRecord(addedRecord, session.getTranscript(), session.getTierView());
-            appendBatchLineFeed(attrs, null);
+            List<ElementSpec> batch = new ArrayList<>();
+            appendBatchEndStart(null, getRecordParagraphAttributes(), batch);
+            AttributeSet attrs = writeRecord(addedRecord, session.getTranscript(), session.getTierView(), batch);
+            appendBatchLineFeed(attrs, null, batch);
             int nextElementStart = getLength();
 
             Transcript transcript = getSession().getTranscript();
@@ -2140,8 +2142,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 }
             }
 
-            processBatchUpdates(nextElementStart);
-            setGlobalParagraphAttributes();
+            processBatchUpdates(nextElementStart, batch);
         } catch (BadLocationException e) {
             LogUtil.severe(e);
         }
@@ -2238,7 +2239,8 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             bypassDocumentFilter = true;
             remove(start, end - start);
 
-            appendBatchEndStart();
+            List<ElementSpec> batch = new ArrayList<>();
+            appendBatchEndStart(batch);
 
             int startElementIndex = Math.min(oldElementIndex, newElementIndex);
             int endElementIndex = Math.max(oldElementIndex, newElementIndex);
@@ -2246,17 +2248,16 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             for (int i = startElementIndex; i < endElementIndex + 1; i++) {
                 Transcript.Element elem = transcript.getElementAt(i);
                 if (elem.isRecord()) {
-                    newLineAttrs = writeRecord(elem.asRecord(), transcript, tierView);
+                    newLineAttrs = writeRecord(elem.asRecord(), transcript, tierView, batch);
                 } else if (elem.isComment()) {
-                    newLineAttrs = writeComment(elem.asComment());
+                    newLineAttrs = writeComment(elem.asComment(), batch);
                 } else {
-                    newLineAttrs = writeGem(elem.asGem());
+                    newLineAttrs = writeGem(elem.asGem(), batch);
                 }
-                appendBatchLineFeed(newLineAttrs, null);
+                appendBatchLineFeed(newLineAttrs, null, batch);
             }
 
-            processBatchUpdates(start);
-            setGlobalParagraphAttributes();
+            processBatchUpdates(start, batch);
         } catch (BadLocationException e) {
             LogUtil.severe(e);
         }
@@ -2292,18 +2293,18 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             labelAttrs.addAttributes(getSeparatorAttributes());
             labelAttrs.addAttributes(recordAttrs);
 
-            appendBatchEndStart();
+            List<ElementSpec> batch = new ArrayList<>();
+            appendBatchEndStart(batch);
 
             Participant speaker = record.getSpeaker() == null ? Participant.UNKNOWN : record.getSpeaker();
-            appendBatchString(formatLabelText(speaker.toString()) + ": ", labelAttrs);
+            appendBatchString(formatLabelText(speaker.toString()) + ": ", labelAttrs, batch);
 
             MediaSegment segment = record.getMediaSegment();
 
             tierAttrs.addAttributes(getStandardFontAttributes());
-            appendFormattedSegment(segment, tierAttrs);
+            appendFormattedSegment(segment, tierAttrs, batch);
 
-            processBatchUpdates(start);
-            setGlobalParagraphAttributes();
+            processBatchUpdates(start, batch);
         } catch (BadLocationException e) {
             LogUtil.severe(e);
         }
@@ -2331,14 +2332,14 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             var tierView = session.getTierView();
             TierViewItem tierViewItem = tierView.stream().filter(item -> item.getTierName().equals(tier.getName())).findFirst().orElse(null);
 
-            appendBatchEndStart();
+            List<ElementSpec> batch = new ArrayList<>();
+            appendBatchEndStart(batch);
 
-            SimpleAttributeSet attrs = insertTier(recordIndex, tier, tierViewItem, getRecordAttributes(recordIndex));
+            SimpleAttributeSet attrs = insertTier(recordIndex, tier, tierViewItem, getRecordAttributes(recordIndex), batch);
 
-            appendBatchLineFeed(attrs, null);
+            appendBatchLineFeed(attrs, null, batch);
 
-            processBatchUpdates(start);
-            setGlobalParagraphAttributes();
+            processBatchUpdates(start, batch);
         } catch (BadLocationException e) {
             LogUtil.severe(e);
         }
@@ -2414,9 +2415,10 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      *
      * @param segment         the segment that will be appended
      * @param additionalAttrs any additional attributes to be added to the segment (none added if {@code null})
+     * @param batch          the batch to append the segment to
      */
-    private void appendFormattedSegment(MediaSegment segment, AttributeSet additionalAttrs) {
-        appendFormattedSegment(segment, additionalAttrs, MediaTimeFormatStyle.PADDED_MINUTES_AND_SECONDS);
+    private void appendFormattedSegment(MediaSegment segment, AttributeSet additionalAttrs, List<ElementSpec> batch) {
+        appendFormattedSegment(segment, additionalAttrs, MediaTimeFormatStyle.PADDED_MINUTES_AND_SECONDS, batch);
     }
 
     /**
@@ -2427,10 +2429,11 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @param tierViewItem a reference to a {@link TierViewItem} used to get font info if any is present
      * @param recordAttrs  an attribute set containing attributes for the containing record to be added to the tier
      *                     attributes (none will be added if {@code null})
+     * @param batch       the batch to append the tier to
      * @return a mutable attribute set containing the attributes of the last character of the tier to add a
      * newline after if need be
      */
-    private SimpleAttributeSet insertTier(int recordIndex, Tier<?> tier, TierViewItem tierViewItem, AttributeSet recordAttrs) {
+    private SimpleAttributeSet insertTier(int recordIndex, Tier<?> tier, TierViewItem tierViewItem, AttributeSet recordAttrs, List<ElementSpec> batch) {
         String tierName = tier.getName();
         Record record = session.getRecord(recordIndex);
 
@@ -2465,17 +2468,17 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         labelText = formatLabelText(labelText);
 
         labelAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE, true);
-        appendBatchString(labelText, labelAttrs);
+        appendBatchString(labelText, labelAttrs, batch);
 
         labelAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE);
-        appendBatchString(": ", labelAttrs);
+        appendBatchString(": ", labelAttrs, batch);
 
         Class<?> tierType = tier.getDeclaredType();
 
         if (!tier.hasValue()) {
-            appendBatchString("", tierAttrs);
+            appendBatchString("", tierAttrs, batch);
         } else if (tier.isUnvalidated()) {
-            appendBatchString(tier.getUnvalidatedValue().getValue(), tierAttrs);
+            appendBatchString(tier.getUnvalidatedValue().getValue(), tierAttrs, batch);
         } else {
             if (tierType.equals(IPATranscript.class)) {
                 Tier<IPATranscript> ipaTier = (Tier<IPATranscript>) tier;
@@ -2492,27 +2495,27 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                     }
                     attrs.addAttributes(tierAttrs);
                     String content = word.toString();
-                    appendBatchString(content, attrs);
+                    appendBatchString(content, attrs, batch);
 
                     if (i < words.size() - 1) {
-                        appendBatchString(" ", tierAttrs);
+                        appendBatchString(" ", tierAttrs, batch);
                     }
                 }
             } else if (tierType.equals(MediaSegment.class)) {
                 MediaSegment segment = record.getMediaSegment();
-                appendFormattedSegment(segment, tierAttrs);
+                appendFormattedSegment(segment, tierAttrs, batch);
             } else if (tierType.equals(Orthography.class)) {
                 Tier<Orthography> orthographyTier = (Tier<Orthography>) tier;
-                orthographyTier.getValue().accept(new TranscriptOrthographyVisitors.KeywordVisitor(this, tierAttrs));
+                orthographyTier.getValue().accept(new TranscriptOrthographyVisitors.KeywordVisitor(this, tierAttrs, batch));
             } else if (tierType.equals(MorTierData.class)) {
                 Tier<MorTierData> morTier = (Tier<MorTierData>) tier;
                 MorTierData mors = morTier.getValue();
 
                 for (int i = 0; i < mors.size(); i++) {
                     Mor mor = mors.get(i);
-                    appendBatchString(mor.toString(), tierAttrs);
+                    appendBatchString(mor.toString(), tierAttrs, batch);
                     if (i < mors.size() - 1) {
-                        appendBatchString(" ", tierAttrs);
+                        appendBatchString(" ", tierAttrs, batch);
                     }
                 }
             } else if (tierType.equals(GraspTierData.class)) {
@@ -2521,9 +2524,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
                 for (int i = 0; i < grasps.size(); i++) {
                     Grasp grasp = grasps.get(i);
-                    appendBatchString(grasp.toString(), tierAttrs);
+                    appendBatchString(grasp.toString(), tierAttrs, batch);
                     if (i < grasps.size() - 1) {
-                        appendBatchString(" ", tierAttrs);
+                        appendBatchString(" ", tierAttrs, batch);
                     }
                 }
             } else if (tierType.equals(TierData.class)) {
@@ -2542,7 +2545,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                             attrs = getTierCommentAttributes();
                         } else if (elem instanceof TierInternalMedia internalMedia) {
                             attrs = getTierInternalMediaAttributes();
-                            appendFormattedInternalMedia(internalMedia.getInternalMedia(), attrs);
+                            appendFormattedInternalMedia(internalMedia.getInternalMedia(), attrs, batch);
                         } else if (elem instanceof TierLink link) {
                             text = link.toString();
                             attrs = getTierLinkAttributes();
@@ -2552,10 +2555,10 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
                         attrs.addAttributes(tierAttrs);
 
-                        if (text != null) appendBatchString(text, attrs);
+                        if (text != null) appendBatchString(text, attrs, batch);
 
                         if (i < tierData.length() - 1) {
-                            appendBatchString(" ", tierAttrs);
+                            appendBatchString(" ", tierAttrs, batch);
                         }
                     }
                 }
@@ -2829,113 +2832,168 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         notEditableAttributes.remove(attributeKey);
     }
 
+    private int offs = 0;
+
+    private class PopulateWorker extends SwingWorker<List<ElementSpec>, List<ElementSpec>> {
+        @Override
+        protected List<ElementSpec> doInBackground() throws Exception {
+            firePropertyChange("populate", false, true);
+            List<ElementSpec> backgroundBatch = new ArrayList<>();
+
+            Transcript transcript = session.getTranscript();
+            var tierView = session.getTierView();
+
+            List<ElementSpec> batch = new ArrayList<>();
+            for (var hook : insertionHooks) {
+                batch.addAll(hook.startSession());
+            }
+            publish(new ArrayList<>(batch));
+            backgroundBatch.addAll(batch);
+            batch.clear();
+
+            SimpleAttributeSet newLineAttrs;
+
+            for (var hook : insertionHooks) {
+                batch.addAll(hook.startTranscript());
+            }
+            publish(new ArrayList<>(batch));
+            backgroundBatch.addAll(batch);
+            batch.clear();
+
+            // Single record
+            if (singleRecordView) {
+                Record record = session.getRecord(singleRecordIndex);
+                int recordTranscriptElementIndex = transcript.getElementIndex(record);
+
+                int includedElementIndex;
+                if (singleRecordIndex == 0) {
+                    includedElementIndex = 0;
+                } else {
+                    includedElementIndex = transcript.getElementIndex(transcript.getRecord(singleRecordIndex - 1)) + 1;
+                }
+                while (includedElementIndex < recordTranscriptElementIndex) {
+                    Transcript.Element previousElement = transcript.getElementAt(includedElementIndex);
+                    if (previousElement.isRecord()) {
+                        break;
+                    }
+
+                    if (previousElement.isComment()) {
+                        newLineAttrs = writeComment(previousElement.asComment(), batch);
+                    } else {
+                        newLineAttrs = writeGem(previousElement.asGem(), batch);
+                    }
+
+                    includedElementIndex++;
+
+                    publish(new ArrayList<>(batch));
+                    backgroundBatch.addAll(batch);
+                    batch.clear();
+                    appendBatchLineFeed(newLineAttrs, null, batch);
+                }
+
+                newLineAttrs = writeRecord(record, transcript, tierView, batch);
+                publish(new ArrayList<>(batch));
+                backgroundBatch.addAll(batch);
+                batch.clear();
+
+                int nextElementIndex = recordTranscriptElementIndex + 1;
+                int transcriptElementCount = transcript.getNumberOfElements();
+                while (nextElementIndex < transcriptElementCount) {
+                    Transcript.Element nextElement = transcript.getElementAt(nextElementIndex);
+                    appendBatchLineFeed(newLineAttrs, null, batch);
+                    if (nextElement.isRecord()) {
+                        break;
+                    }
+
+                    if (nextElement.isComment()) {
+                        newLineAttrs = writeComment(nextElement.asComment(), batch);
+                    } else {
+                        newLineAttrs = writeGem(nextElement.asGem(), batch);
+                    }
+                    publish(new ArrayList<>(batch));
+                    backgroundBatch.addAll(batch);
+                    batch.clear();
+
+                    nextElementIndex++;
+                }
+            }
+            // All records
+            else {
+                for (int i = 0; i < transcript.getNumberOfElements(); i++) {
+                    Transcript.Element elem = transcript.getElementAt(i);
+                    Transcript.Element nextElem = i < transcript.getNumberOfElements() - 1 ? transcript.getElementAt(i + 1) : null;
+
+                    SimpleAttributeSet nextParagraphAttrs = null;
+                    if(nextElem != null && nextElem.isRecord()) {
+                        nextParagraphAttrs = getRecordParagraphAttributes();
+                    }
+
+                    if (elem.isRecord()) {
+                        newLineAttrs = writeRecord(elem.asRecord(), transcript, tierView, batch);
+                    } else if (elem.isComment()) {
+                        newLineAttrs = writeComment(elem.asComment(), batch);
+                    } else {
+                        newLineAttrs = writeGem(elem.asGem(), batch);
+                    }
+                    publish(new ArrayList<>(batch));
+                    backgroundBatch.addAll(batch);
+                    batch.clear();
+                    appendBatchLineFeed(newLineAttrs, nextParagraphAttrs, batch);
+                }
+                if (!batch.isEmpty()) {
+                    publish(new ArrayList<>(batch));
+                    backgroundBatch.addAll(batch);
+                    batch.clear();
+                }
+            }
+
+            for (var hook : insertionHooks) {
+                batch.addAll(hook.endTranscript());
+            }
+            publish(new ArrayList<>(batch));
+            backgroundBatch.addAll(batch);
+            batch.clear();
+
+            for (var hook : getInsertionHooks()) {
+                batch.addAll(hook.endSession());
+            }
+            if (!batch.isEmpty()) {
+                publish(new ArrayList<>(batch));
+                backgroundBatch.addAll(batch);
+                batch.clear();
+            }
+
+            return backgroundBatch;
+        }
+
+        @Override
+        protected void process(List<List<ElementSpec>> chunks) {
+            for (var chunk : chunks) {
+                if(chunk.isEmpty()) continue;
+                try {
+                    processBatchUpdates(offs, chunk);
+                    for(var elementSpec: chunk) {
+                        offs += elementSpec.getLength();
+                    }
+                } catch (BadLocationException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        @Override
+        protected void done() {
+            firePropertyChange("populate", true, false);
+        }
+
+    }
+
     /**
      * Populates the document with the appropriate content
      */
     private void populate() throws BadLocationException {
-        Transcript transcript = session.getTranscript();
-        var tierView = session.getTierView();
-
-        List<ElementSpec> additionalInsertions = new ArrayList<>();
-        for (var hook : insertionHooks) {
-            additionalInsertions.addAll(hook.startSession());
-        }
-        batch.addAll(additionalInsertions);
-        additionalInsertions.clear();
-
-        SimpleAttributeSet newLineAttrs;
-
-        for (var hook : insertionHooks) {
-            additionalInsertions.addAll(hook.startTranscript());
-        }
-        batch.addAll(additionalInsertions);
-        additionalInsertions.clear();
-
-        // Single record
-        if (singleRecordView) {
-            Record record = session.getRecord(singleRecordIndex);
-            int recordTranscriptElementIndex = transcript.getElementIndex(record);
-
-            int includedElementIndex;
-            if (singleRecordIndex == 0) {
-                includedElementIndex = 0;
-            } else {
-                includedElementIndex = transcript.getElementIndex(transcript.getRecord(singleRecordIndex - 1)) + 1;
-            }
-            while (includedElementIndex < recordTranscriptElementIndex) {
-                Transcript.Element previousElement = transcript.getElementAt(includedElementIndex);
-                if (previousElement.isRecord()) {
-                    break;
-                }
-
-                if (previousElement.isComment()) {
-                    newLineAttrs = writeComment(previousElement.asComment());
-                } else {
-                    newLineAttrs = writeGem(previousElement.asGem());
-                }
-
-                includedElementIndex++;
-
-                appendBatchLineFeed(newLineAttrs, null);
-            }
-
-            newLineAttrs = writeRecord(record, transcript, tierView);
-
-            int nextElementIndex = recordTranscriptElementIndex + 1;
-            int transcriptElementCount = transcript.getNumberOfElements();
-            while (nextElementIndex < transcriptElementCount) {
-                Transcript.Element nextElement = transcript.getElementAt(nextElementIndex);
-                appendBatchLineFeed(newLineAttrs, null);
-                if (nextElement.isRecord()) {
-                    break;
-                }
-
-                if (nextElement.isComment()) {
-                    newLineAttrs = writeComment(nextElement.asComment());
-                } else {
-                    newLineAttrs = writeGem(nextElement.asGem());
-                }
-
-                nextElementIndex++;
-            }
-        }
-        // All records
-        else {
-            for (int i = 0; i < transcript.getNumberOfElements(); i++) {
-                Transcript.Element elem = transcript.getElementAt(i);
-                Transcript.Element nextElem = i < transcript.getNumberOfElements() - 1 ? transcript.getElementAt(i + 1) : null;
-
-                SimpleAttributeSet nextParagraphAttrs = null;
-                if(nextElem != null && nextElem.isRecord()) {
-                    nextParagraphAttrs = getRecordParagraphAttributes();
-                }
-
-                if (elem.isRecord()) {
-                    newLineAttrs = writeRecord(elem.asRecord(), transcript, tierView);
-                } else if (elem.isComment()) {
-                    newLineAttrs = writeComment(elem.asComment());
-                } else {
-                    newLineAttrs = writeGem(elem.asGem());
-                }
-                appendBatchLineFeed(newLineAttrs, nextParagraphAttrs);
-            }
-        }
-
-        for (var hook : insertionHooks) {
-            additionalInsertions.addAll(hook.endTranscript());
-        }
-        batch.addAll(additionalInsertions);
-        additionalInsertions.clear();
-
-        processBatchUpdates(0);
-        setGlobalParagraphAttributes();
-
-        for (var hook : getInsertionHooks()) {
-            additionalInsertions.addAll(hook.endSession());
-        }
-        if (!additionalInsertions.isEmpty()) {
-            batch.addAll(additionalInsertions);
-        }
+        PopulateWorker worker = new PopulateWorker();
+        worker.execute();
     }
 
     public boolean removeInsertionHook(InsertionHook hook) {

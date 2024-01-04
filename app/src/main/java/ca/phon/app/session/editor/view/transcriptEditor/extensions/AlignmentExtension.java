@@ -109,9 +109,8 @@ public class AlignmentExtension implements TranscriptEditorExtension {
             var attrs = insertions.get(insertions.size() - 1).getAttributes();
             insertions.addAll(doc.getBatchEndLineFeed(attrs, null));
 
-            doc.getBatch().addAll(insertions);
-            doc.processBatchUpdates(start);
-            doc.setGlobalParagraphAttributes();
+            List<DefaultStyledDocument.ElementSpec> batch = new ArrayList<>(insertions);
+            doc.processBatchUpdates(start, batch);
         }
         catch (BadLocationException e) {
             LogUtil.severe(e);

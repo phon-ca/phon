@@ -211,8 +211,7 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
             }
 
             List<DefaultStyledDocument.ElementSpec> inserts = getTiersHeader();
-            doc.getBatch().addAll(inserts);
-            doc.processBatchUpdates(start > -1 ? start : 0);
+            doc.processBatchUpdates(start > -1 ? start : 0, inserts);
         }
         catch (BadLocationException e) {
             LogUtil.severe(e);
@@ -254,10 +253,9 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
             }
 
             List<DefaultStyledDocument.ElementSpec> inserts = getDateHeader();
-            doc.getBatch().addAll(inserts);
-            var newLineAttrs = doc.getTrailingAttributes(doc.getBatch());
-            doc.appendBatchLineFeed(newLineAttrs, null);
-            doc.processBatchUpdates(start > -1 ? start : 0);
+            var newLineAttrs = doc.getTrailingAttributes(inserts);
+            doc.appendBatchLineFeed(newLineAttrs, null, inserts);
+            doc.processBatchUpdates(start > -1 ? start : 0, inserts);
         }
         catch (BadLocationException e) {
             LogUtil.severe(e);

@@ -18,7 +18,7 @@ public class TranscriptViewFactory implements ViewFactory {
     // TODO adjust for graphics dpi - make configurable
     public static final int PAGE_WIDTH = (int) Math.floor(8.5 * 96);
 
-    private int labelColumnWidth = -1;
+    private int labelColumnWidth = 150;
 
     /**
      * Calculate preferred tier label width for given document
@@ -253,6 +253,8 @@ public class TranscriptViewFactory implements ViewFactory {
 
         @Override
         public void paint(Graphics g, Shape a) {
+            // return if view count is 0 to avoid an issue at the end of the document when populating using a SwingWorker
+            if(getViewCount() == 0) return;
             super.paint(g, a);
             border.paintBorder(getContainer(), g, a.getBounds().x, a.getBounds().y, a.getBounds().width, a.getBounds().height);
         }

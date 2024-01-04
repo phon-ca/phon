@@ -18,14 +18,13 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.Range;
 
 import javax.swing.*;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
+import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
 
 /**
@@ -122,8 +121,9 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
                             ghostAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_ENTER_ACTION, acceptAutoTranscriptionAct);
 
                             try {
-                                editor.getTranscriptDocument().appendBatchString(autoTranscript.toString(), ghostAttrs);
-                                editor.getTranscriptDocument().processBatchUpdates(editor.getCaretPosition());
+                                List<DefaultStyledDocument.ElementSpec> batch = new ArrayList<>();
+                                editor.getTranscriptDocument().appendBatchString(autoTranscript.toString(), ghostAttrs, batch);
+                                editor.getTranscriptDocument().processBatchUpdates(editor.getCaretPosition(), batch);
                                 ghostRange = new Range(editor.getCaretPosition(), editor.getCaretPosition() + autoTranscript.toString().length());
                             } catch (BadLocationException ex) {
                                 LogUtil.warning(ex);
