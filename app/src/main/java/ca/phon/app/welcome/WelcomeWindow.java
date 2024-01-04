@@ -50,8 +50,7 @@ import java.util.Set;
 public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 
 	public final static String WORKSPACE_PROJECTS_COLLAPSED = WelcomeWindow.class.getName() + ".workspaceProjectCollapsed";
-	public final static boolean DEFAULT_COLLAPSE_WORKSPACE_PROJECTS =
-			(!Workspace.userWorkspaceFolder().exists() || Workspace.userWorkspace().getProjects().size() == 0);
+	public final static boolean DEFAULT_COLLAPSE_WORKSPACE_PROJECTS = true;
 	private boolean showWorkspaceProjects = PrefHelper.getBoolean(WORKSPACE_PROJECTS_COLLAPSED, DEFAULT_COLLAPSE_WORKSPACE_PROJECTS);
 
 	private DialogHeader header;
@@ -177,7 +176,7 @@ public class WelcomeWindow extends CommonModuleFrame implements IExtendable {
 		addWindowFocusListener(new WindowAdapter() {
 			@Override
 			public void windowGainedFocus(WindowEvent e) {
-				refreshWorkspaceProjects();
+//				refreshWorkspaceProjects();
 			}
 		});
 	}

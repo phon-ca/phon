@@ -16,6 +16,7 @@
 package ca.phon.app.welcome;
 
 import ca.hedlund.desktopicons.MacOSStockIcon;
+import ca.hedlund.desktopicons.WindowsStockIcon;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.project.DesktopProjectFactory;
@@ -40,9 +41,11 @@ import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 /**
  * List for displaying project in a given directory.
@@ -117,8 +120,7 @@ public class FolderProjectList extends JPanel {
 		sortBar = new SortPanel();
 		add(sortBar, BorderLayout.NORTH);
 		
-		scanDirectory();
-		updateProjectList();
+		SwingUtilities.invokeLater(this::scanDirectory);
 	}
 	
 	public void setFolder(File f) {
@@ -137,9 +139,6 @@ public class FolderProjectList extends JPanel {
 		listPanel.revalidate();
 		listPanel.repaint();
 
-		PhonWorker worker = PhonWorker.createWorker();
-		worker.setFinishWhenQueueEmpty(true);
-		
 		boolean stripRow = false;
 		for(MultiActionButton btn:projectButtons) {
 			listPanel.add(btn);
@@ -153,7 +152,6 @@ public class FolderProjectList extends JPanel {
 			}
 		}
 
-		worker.start();
 		revalidate();
 		listPanel.revalidate();
 		listPanel.repaint();
@@ -161,29 +159,15 @@ public class FolderProjectList extends JPanel {
 	
 	private void scanDirectory() {
 		projectButtons.clear();
-		if(projectFolder == null || projectFolder.listFiles() == null) return;
-		for(File f:projectFolder.listFiles()) {
-			if(f.isDirectory()
-					&& !f.isHidden()
-					&& !f.getName().startsWith("~")
-					&& !f.getName().endsWith("~")
-					&& !f.getName().startsWith("__")
-					&& !f.getName().equals("backups")) {
-				// check for a project.xml file
-				projectButtons.add(getProjectButton(f));
-			}
-		}
-		
-		Collections.sort(projectButtons, new ProjectComparator(sortBar.sortByGrp.getSelectedValue()));
+		var worker = new ScanFolderWorker();
+		worker.execute();
 	}
 
 	private LocalProjectButton getProjectButton(File f) {
 		LocalProjectButton retVal = new LocalProjectButton(f);
 		
-		final String defaultIconName = 
-				(f.isFile() ? "actions/archive-extract" : "actions/document-open");
-		ImageIcon icon = IconManager.getInstance().getSystemIconForPath(f.getAbsolutePath(), defaultIconName, IconSize.SMALL);
-		ImageIcon iconL = IconManager.getInstance().getSystemIconForPath(f.getAbsolutePath(), defaultIconName, IconSize.MEDIUM);
+		ImageIcon icon = IconManager.getInstance().buildFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "folder", IconSize.SMALL, UIManager.getColor(FlatButtonUIProps.ICON_COLOR_PROP));
+		ImageIcon iconL = IconManager.getInstance().buildFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "folder", IconSize.MEDIUM, UIManager.getColor(FlatButtonUIProps.ICON_COLOR_PROP));
 		
 		PhonUIAction<LocalProjectButton> openAction = PhonUIAction.eventConsumer(this::onOpenProject, retVal);
 		
@@ -193,33 +177,14 @@ public class FolderProjectList extends JPanel {
 		openAction.putValue(Action.LARGE_ICON_KEY, iconL);
 		retVal.setDefaultAction(openAction);
 		
-		String fsIconName = "apps/system-file-manager";
+		ImageIcon fsIcon = IconManager.getInstance().buildFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "open_in_browser", IconSize.SMALL, UIManager.getColor(FlatButtonUIProps.ICON_COLOR_PROP));
+		ImageIcon fsIconL = IconManager.getInstance().buildFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "open_in_browser", IconSize.MEDIUM, UIManager.getColor(FlatButtonUIProps.ICON_COLOR_PROP));
+
 		String fsName = "file system viewer";
-		
-		ImageIcon fsIcon = IconManager.getInstance().getIcon(fsIconName, IconSize.SMALL);
-		ImageIcon fsIconL = IconManager.getInstance().getIcon(fsIconName, IconSize.MEDIUM);
-		
 		if(OSInfo.isWindows()) {
 			fsName = "File Explorer";
-			
-			final String explorerPath = "C:\\Windows\\explorer.exe";
-			ImageIcon explorerIcon = IconManager.getInstance().getSystemIconForPath(explorerPath, IconSize.SMALL);
-			ImageIcon explorerIconL = IconManager.getInstance().getSystemIconForPath(explorerPath, IconSize.MEDIUM);
-			
-			if(explorerIcon != null)
-				fsIcon = explorerIcon;
-			if(explorerIconL != null)
-				fsIconL = explorerIconL;
 		} else if(OSInfo.isMacOs()) {
 			fsName = "Finder";
-			
-			ImageIcon finderIcon = IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.FinderIcon, IconSize.SMALL);
-			ImageIcon finderIconL = IconManager.getInstance().getSystemStockIcon(MacOSStockIcon.FinderIcon, IconSize.MEDIUM);
-			
-			if(finderIcon != null)
-				fsIcon = finderIcon;
-			if(finderIconL != null)
-				fsIconL = finderIconL;
 		}
 		
 		PhonUIAction<LocalProjectButton> showAction = PhonUIAction.eventConsumer(this::onShowProject, retVal);
@@ -229,9 +194,9 @@ public class FolderProjectList extends JPanel {
 		showAction.putValue(Action.SHORT_DESCRIPTION, "Show project in " + fsName);
 		retVal.addAction(showAction);
 		
-		final String defaultArchiveIconName = "actions/archive-insert";
-		ImageIcon archiveIcn = IconManager.getInstance().getSystemIconForFileType("zip", defaultArchiveIconName, IconSize.SMALL);
-		ImageIcon archiveIcnL = IconManager.getInstance().getSystemIconForFileType("zip", defaultArchiveIconName, IconSize.MEDIUM);
+		ImageIcon archiveIcn = IconManager.getInstance().buildFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "folder_zip", IconSize.SMALL, UIManager.getColor(FlatButtonUIProps.ICON_COLOR_PROP));
+		ImageIcon archiveIcnL = IconManager.getInstance().buildFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "folder_zip", IconSize.MEDIUM, UIManager.getColor(FlatButtonUIProps.ICON_COLOR_PROP));
+
 		
 		PhonUIAction<LocalProjectButton> archiveAction = PhonUIAction.eventConsumer(this::onArchiveProject, retVal);
 		archiveAction.putValue(Action.NAME, "Archive project");
@@ -246,7 +211,6 @@ public class FolderProjectList extends JPanel {
 	
 	public void refresh() {
 		scanDirectory();
-		updateProjectList();
 	}
 	
 	private class ProjectComparator implements Comparator<MultiActionButton> {
@@ -274,8 +238,8 @@ public class FolderProjectList extends JPanel {
 				
 				retVal = o1Name.compareTo(o2Name);
 			} else if(sortBy == SortBy.MOD_DATE) {
-				Long o1Mod = new File(o1.getProjectFile(), "project.xml").lastModified();
-				Long o2Mod = new File(o2.getProjectFile(), "project.xml").lastModified();
+				Long o1Mod = o1.getProjectFile().lastModified();
+				Long o2Mod = o2.getProjectFile().lastModified();
 				
 				retVal = o2Mod.compareTo(o1Mod);
 			}
@@ -442,6 +406,55 @@ public class FolderProjectList extends JPanel {
 				Toolkit.getDefaultToolkit().beep();
 			}
 		}
+	}
+
+	private class ScanFolderWorker extends SwingWorker<List<File>, File> {
+
+		@Override
+		protected List<File> doInBackground() throws Exception {
+			List<File> projectFiles = new ArrayList<>();
+			if(projectFolder == null || projectFolder.listFiles() == null) return projectFiles;
+
+			// use java nio to list files
+			final Path projectFolderPath = projectFolder.toPath();
+			// stream files using java nio
+			try(final var stream = java.nio.file.Files.list(projectFolderPath)) {
+				stream.forEach( (p) -> {
+					if(java.nio.file.Files.isDirectory(p)
+						&& !p.getFileName().startsWith("~")
+						&& !p.getFileName().endsWith("~")
+						&& !p.getFileName().startsWith("__")
+						&& !p.getFileName().equals("backups")) {
+						final var projectFile = p.toFile();
+						if(projectFile.exists()) {
+							publish(projectFile);
+							projectFiles.add(projectFile);
+						}
+					}
+				});
+			} catch (IOException e) {
+				LogUtil.warning(e);
+			}
+
+			return projectFiles;
+		}
+
+		@Override
+		protected void process(List<File> chunks) {
+			for(File f:chunks) {
+				System.out.println("starting" + f);
+				projectButtons.add(getProjectButton(f));
+				System.out.println("dont " + f);
+			}
+		}
+
+		@Override
+		protected void done() {
+			System.out.println("done");
+//			Collections.sort(projectButtons, new ProjectComparator(sortBar.sortByGrp.getSelectedValue()));
+            updateProjectList();
+		}
+
 	}
 
 	private class ButtonPanel extends JPanel implements Scrollable {
