@@ -34,6 +34,7 @@ import java.beans.PropertyChangeSupport;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Text document for a {@link Session} that displays the transcript including all tiers, comments, and gems.
@@ -156,14 +157,16 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      */
     public void setSession(Session session) {
         this.session = session;
-        try {
-            if (getLength() > 0) {
-                remove(0, getLength());
+        SwingUtilities.invokeLater(() -> {
+            try {
+                if (getLength() > 0) {
+                    remove(0, getLength());
+                }
+                populate();
+            } catch (BadLocationException e) {
+                LogUtil.severe(e);
             }
-            populate();
-        } catch (BadLocationException e) {
-            LogUtil.severe(e);
-        }
+        });
     }
 
     public boolean getSingleRecordView() {
@@ -2813,19 +2816,20 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         notEditableAttributes.add(attributeKey);
     }
 
-    // region TranscriptDocumentInsertionHook
+    // region Populate
+    private final ReentrantLock populateLock = new ReentrantLock();
+
+    private PopulateWorker populateWorker = null;
 
     /**
-     * Removes the given attribute from the set of "not editable" attributes
-     *
-     * @param attributeKey the attribute that will be removed from the set
+     * Determine if the document is currently being populated
      */
-    public void removeNotEditableAttribute(String attributeKey) {
-        notEditableAttributes.remove(attributeKey);
+    public boolean isPopulating() {
+        return populateWorker != null && !populateWorker.isDone();
     }
 
     private class PopulateWorker extends SwingWorker<List<ElementSpec>, List<ElementSpec>> {
-        private int offs = 0;
+        private int offs = getLength();
 
         record EndStart(ElementSpec end, ElementSpec start) {}
 
@@ -2916,6 +2920,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             // All records
             else {
                 for (int i = 0; i < transcript.getNumberOfElements(); i++) {
+                    if(isCancelled()) return backgroundBatch;
                     Transcript.Element elem = transcript.getElementAt(i);
                     Transcript.Element nextElem = i < transcript.getNumberOfElements() - 1 ? transcript.getElementAt(i + 1) : null;
 
@@ -2965,6 +2970,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         @Override
         protected void process(List<List<ElementSpec>> chunks) {
             for (var chunk : chunks) {
+                if(isCancelled()) return;
                 if(chunk.isEmpty()) continue;
                 try {
                     if(nextEndStart != null) {
@@ -2995,11 +3001,40 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     }
 
     /**
-     * Populates the document with the appropriate content
+     * Populates the document with the appropriate content, this thread creates a new PopulateWorker
+     * if necessary and cancels the old one if it is still running.  This method must be executed on the
+     * EDT.
+     *
+     * @throws BadLocationException if there is an error in the document
+     * @throws RuntimeException if this method is not called on the EDT
      */
     private void populate() throws BadLocationException {
-        PopulateWorker worker = new PopulateWorker();
-        worker.execute();
+        if(!SwingUtilities.isEventDispatchThread())
+            throw new RuntimeException("populate must be called on the EDT");
+        if(populateLock.tryLock()) {
+            try {
+                if (populateWorker != null && !populateWorker.isDone()) {
+                    populateWorker.cancel(true);
+                }
+                super.remove(0, getLength());
+                populateWorker = new PopulateWorker();
+                populateWorker.execute();
+            } finally {
+                populateLock.unlock();
+            }
+        }
+    }
+    // endregion Populate
+
+    // region TranscriptDocumentInsertionHook
+
+    /**
+     * Removes the given attribute from the set of "not editable" attributes
+     *
+     * @param attributeKey the attribute that will be removed from the set
+     */
+    public void removeNotEditableAttribute(String attributeKey) {
+        notEditableAttributes.remove(attributeKey);
     }
 
     public boolean removeInsertionHook(InsertionHook hook) {
@@ -3033,6 +3068,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * The default document filter for the {@link TranscriptDocument}
      */
     public static class TranscriptDocumentFilter extends DocumentFilter {
+
         private final TranscriptDocument doc;
 
         /**
