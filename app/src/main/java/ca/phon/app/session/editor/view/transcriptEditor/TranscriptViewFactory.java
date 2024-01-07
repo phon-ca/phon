@@ -21,6 +21,12 @@ public class TranscriptViewFactory implements ViewFactory {
     private int labelColumnWidth = 150;
 
     /**
+     * The spacing between the lines of the document
+     */
+
+    private float lineSpacing = 0.2f;
+
+    /**
      * Calculate preferred tier label width for given document
      *
      * @param g
@@ -58,12 +64,13 @@ public class TranscriptViewFactory implements ViewFactory {
     public TranscriptViewFactory() {
     }
 
+    public float getLineSpacing() {
+        return lineSpacing;
+    }
+
     public int getLabelColumnWidth(Graphics g, TranscriptDocument transcriptDocument) {
         if(labelColumnWidth < 0) {
             labelColumnWidth = calculatePreferredLabelColumnWidth(g, transcriptDocument);
-            SwingUtilities.invokeLater(() -> {
-                transcriptDocument.setLabelColumnWidth(labelColumnWidth);
-            });
         }
         return labelColumnWidth;
     }
@@ -71,9 +78,6 @@ public class TranscriptViewFactory implements ViewFactory {
     @Override
     public View create(Element elem) {
         String kind = elem.getName();
-
-
-
         var attrs = elem.getAttributes();
 
         var componentFactory = attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMPONENT_FACTORY);
@@ -229,7 +233,7 @@ public class TranscriptViewFactory implements ViewFactory {
                 border = b;
             }
             setPropertiesFromAttributes();
-            setLineSpacing(((TranscriptDocument)elem.getDocument()).getLineSpacing());
+            setLineSpacing(getLineSpacing());
             SimpleAttributeSet attrs = new SimpleAttributeSet();
             StyleConstants.setLeftIndent(attrs, labelColumnWidth);
             setParagraphInsets(attrs);

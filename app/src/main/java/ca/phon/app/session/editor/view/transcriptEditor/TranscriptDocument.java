@@ -72,11 +72,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     private final List<InsertionHook> insertionHooks = new ArrayList<>();
 
     /**
-     * The amount of space reserved for tier labels, this is calculated in the view factory when necessary
-     */
-    public int labelColumnWidth = 150;
-
-    /**
      * A reference to the loaded session
      */
     private Session session;
@@ -91,11 +86,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      */
     private int singleRecordIndex = 0;
 
-    /**
-     * The spacing between the lines of the document
-     */
-
-    private float lineSpacing = 0.2f;
     /**
      * Whether the next removal from the document will bypass the document filter
      */
@@ -116,8 +106,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      */
     private boolean chatTierNamesShown = false;
 
-    // region Getters and Setters
-
     /**
      * Constructor
      */
@@ -135,17 +123,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         loadRegisteredInsertionHooks();
     }
 
-    private void loadRegisteredInsertionHooks() {
-        for (var hookExtPt : PluginManager.getInstance().getExtensionPoints(InsertionHook.class)) {
-            final InsertionHook hook = hookExtPt.getFactory().createObject();
-            addInsertionHook(hook);
-        }
-    }
-
-    public void addInsertionHook(InsertionHook hook) {
-        this.insertionHooks.add(hook);
-    }
-
+    // region Getters and Setters
     public Session getSession() {
         return session;
     }
@@ -201,43 +179,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         }
     }
 
-    public int getLabelColumnWidth() {
-        return labelColumnWidth;
-    }
-
-    public void setLabelColumnWidth(int labelColumnWidth) {
-        this.labelColumnWidth = labelColumnWidth;
-        setGlobalParagraphAttributes();
-    }
-
-    /**
-     * Gets the text value of a given tier for a given transcriber
-     *
-     * @param tier        the tier that the value will come from
-     * @param transcriber the transcriber whose text will be returned
-     * @return the text value of a given tier for a given transcriber (or the regular text for the tier if the transcriber is the validator or {@code null})
-     */
-    public String getTierText(Tier<?> tier, String transcriber) {
-        if (tier.isBlind() && transcriber != null && !Transcriber.VALIDATOR.getUsername().equals(transcriber)) {
-
-            if (tier.hasBlindTranscription(transcriber)) {
-                if (tier.isBlindTranscriptionUnvalidated(transcriber)) {
-                    return tier.getBlindUnvalidatedValue(transcriber).getValue();
-                }
-                return tier.getBlindTranscription(transcriber).toString();
-            }
-        } else {
-            if (tier.hasValue()) {
-                if (tier.isUnvalidated()) {
-                    return tier.getUnvalidatedValue().getValue();
-                }
-                return tier.getValue().toString();
-            }
-        }
-
-        return "";
-    }
-
     public SessionEditUndoSupport getUndoSupport() {
         return undoSupport;
     }
@@ -287,8 +228,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     // endregion Getters and Setters
 
     // region Attribute Getters
-
-
     /**
      * Gets the starting paragraph attributes for a record
      *
@@ -307,11 +246,10 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return a mutable attribute set containing all the necessary attributes for the given record
      */
     public SimpleAttributeSet getRecordAttributes(int recordIndex) {
-        SimpleAttributeSet retVal = new SimpleAttributeSet();
+        SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
 
         Record record = session.getRecord(recordIndex);
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD, record);
-
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE, TranscriptStyleConstants.ATTR_KEY_RECORD);
 
         return retVal;
@@ -335,24 +273,22 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return a mutable attribute set containing all the necessary attributes for the given tier
      */
     private SimpleAttributeSet getTierAttributes(Tier<?> tier, TierViewItem item) {
-        final SimpleAttributeSet retVal = new SimpleAttributeSet();
+        final SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
 
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_TIER, tier);
 
         String fontString = "default";
         if (item != null) {
             fontString = item.getTierFont();
-        }
-        if ("default".equalsIgnoreCase(fontString)) {
-            fontString = new FontFormatter().format(FontPreferences.getTierFont());
-        }
+            if (!"default".equalsIgnoreCase(fontString)) {
+                var font = Font.decode(fontString);
 
-        var font = Font.decode(fontString);
-
-        StyleConstants.setFontFamily(retVal, font.getFamily());
-        StyleConstants.setFontSize(retVal, font.getSize() + (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
-        StyleConstants.setBold(retVal, font.isBold());
-        StyleConstants.setItalic(retVal, font.isItalic());
+                StyleConstants.setFontFamily(retVal, font.getFamily());
+                StyleConstants.setFontSize(retVal, font.getSize() + (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
+                StyleConstants.setBold(retVal, font.isBold());
+                StyleConstants.setItalic(retVal, font.isItalic());
+            }
+        }
 
         return retVal;
     }
@@ -365,7 +301,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return an attribute set containing a reference to the syllabification component factory
      */
     public SimpleAttributeSet getSyllabificationAttributes() {
-        final SimpleAttributeSet retVal = new SimpleAttributeSet();
+        final SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_COMPONENT_FACTORY, new SyllabificationComponentFactory());
         return retVal;
     }
@@ -378,7 +314,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return an attribute set containing a reference to the alignment component factory
      */
     public SimpleAttributeSet getAlignmentAttributes() {
-        final SimpleAttributeSet retVal = new SimpleAttributeSet();
+        final SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_COMPONENT_FACTORY, new AlignmentComponentFactory());
         return retVal;
     }
@@ -394,7 +330,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return an attribute set containing a reference to the transcript selector component factory
      */
     public SimpleAttributeSet getTranscriptionSelectorAttributes(Record record, Tier<?> tier, String transcriptionText) {
-        final SimpleAttributeSet retVal = new SimpleAttributeSet();
+        final SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
 
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_COMPONENT_FACTORY, new TranscriptionSelectorComponentFactory(
                 session,
@@ -417,7 +353,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return a mutable attribute set containing the attributes for an IPA word
      */
     private SimpleAttributeSet getIPAWordAttributes(Tier<IPATranscript> tier) {
-        SimpleAttributeSet retVal = new SimpleAttributeSet();
+        SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_TIER, tier);
 
         StyleConstants.setForeground(retVal, UIManager.getColor(TranscriptEditorUIProps.IPA_WORD));
@@ -433,7 +369,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return a mutable attribute set containing the attributes for an IPA pause
      */
     private SimpleAttributeSet getIPAPauseAttributes(Tier<IPATranscript> tier) {
-        SimpleAttributeSet retVal = new SimpleAttributeSet();
+        SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_TIER, tier);
 
         StyleConstants.setForeground(retVal, UIManager.getColor(TranscriptEditorUIProps.IPA_PAUSE));
@@ -448,7 +384,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return a mutable attribute set containing all the necessary attributes for the label of the tier
      */
     public SimpleAttributeSet getTierLabelAttributes(Tier<?> tier) {
-        final SimpleAttributeSet retVal = new SimpleAttributeSet();
+        final SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
 
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL, true);
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE, true);
@@ -467,7 +403,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return the attributes for a separator / record header
      */
     private SimpleAttributeSet getSeparatorAttributes() {
-        final SimpleAttributeSet retVal = new SimpleAttributeSet();
+        final SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
 
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_SEPARATOR, true);
 
@@ -485,7 +421,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return a mutable attribute set containing the necessary attributes for the specified blind transcription
      */
     public SimpleAttributeSet getBlindTranscriptionAttributes(Tier<?> tier, String transcriber) {
-        SimpleAttributeSet retVal = new SimpleAttributeSet();
+        SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
 
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE, TranscriptStyleConstants.ATTR_KEY_BLIND_TRANSCRIPTION);
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_TIER, tier);
@@ -501,7 +437,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return the attributes for the tiers header
      */
     public SimpleAttributeSet getTiersHeaderAttributes() {
-        SimpleAttributeSet retVal = new SimpleAttributeSet();
+        SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
 
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
 
@@ -514,7 +450,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return the attributes for the participants header
      */
     public SimpleAttributeSet getParticipantsHeaderAttributes() {
-        SimpleAttributeSet retVal = new SimpleAttributeSet();
+        SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
 
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
 
@@ -522,44 +458,950 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     }
 
     /**
-     * Adds a comment to the document and the transcript at the given transcript element index
+     * Gets the attributes for the times in a given segment
+     *
+     * @param segment the segment that will be referenced in the attributes with
+     *                the {@code TranscriptStyleConstants.ATTR_KEY_MEDIA_SEGMENT} key
+     * @return a mutable attribute set containing the attributes for the times in a given segment
      */
-    public void addComment(Comment comment, int transcriptElementIndex) {
-        int offset = -1;
+    private SimpleAttributeSet getSegmentTimeAttributes(MediaSegment segment) {
+        SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
+        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_MEDIA_SEGMENT, segment);
 
-        if (transcriptElementIndex == 0) {
-            var elementAfterComment = session.getTranscript().getElementAt(1);
-            if (elementAfterComment.isRecord()) {
-                offset = getRecordStart(session.getRecordPosition(elementAfterComment.asRecord()));
-            } else if (elementAfterComment.isComment()) {
-                offset = getCommentStart(elementAfterComment.asComment());
-            } else if (elementAfterComment.isGem()) {
-                offset = getGemStart(elementAfterComment.asGem());
+        return retVal;
+    }
+
+    /**
+     * Gets the attributes for the dash in a given segment
+     *
+     * @param segment the segment that will be referenced in the attributes with
+     *                the {@code TranscriptStyleConstants.ATTR_KEY_MEDIA_SEGMENT} key
+     * @return a mutable attribute set containing the attributes for the dash in a given segment
+     */
+    private SimpleAttributeSet getSegmentDashAttributes(MediaSegment segment) {
+        SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
+        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_MEDIA_SEGMENT, segment);
+
+        StyleConstants.setForeground(retVal, UIManager.getColor(TranscriptEditorUIProps.SEGMENT_DASH));
+
+        return retVal;
+    }
+
+    /**
+     * Gets the attributes for a {@link TierString} in some {@link TierData}
+     *
+     * @return the attributes for a {@link TierString} in some {@link TierData}
+     */
+    private SimpleAttributeSet getTierStringAttributes() {
+        SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
+
+        // TODO: add a ui prop color  for this
+        StyleConstants.setForeground(retVal, Color.black);
+
+        return retVal;
+    }
+
+    /**
+     * Gets the attributes for a {@link TierComment} in some {@link TierData}
+     *
+     * @return the attributes for a {@link TierComment} in some {@link TierData}
+     */
+    private SimpleAttributeSet getTierCommentAttributes() {
+        SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
+
+        StyleConstants.setForeground(retVal, UIManager.getColor(TranscriptEditorUIProps.TIER_COMMENT));
+
+        return retVal;
+    }
+
+    /**
+     * Gets the attributes for {@link TierInternalMedia} in some {@link TierData}
+     *
+     * @return the attributes for {@link TierInternalMedia} in some {@link TierData}
+     */
+    private SimpleAttributeSet getTierInternalMediaAttributes() {
+        SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
+
+        StyleConstants.setForeground(retVal, UIManager.getColor(TranscriptEditorUIProps.INTERNAL_MEDIA));
+
+        return retVal;
+    }
+
+    /**
+     * Gets the attributes for a {@link TierLink} in some {@link TierData}
+     *
+     * @return the attributes for a {@link TierLink} in some {@link TierData}
+     */
+    private SimpleAttributeSet getTierLinkAttributes() {
+        SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
+
+        return retVal;
+    }
+
+    /**
+     * Gets the attributes corresponding to the monospace font
+     *
+     * @return a mutable attribute set containing the attributes corresponding to the monospace font
+     */
+    private SimpleAttributeSet getMonospaceFontAttributes() {
+        SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
+
+        Font font = FontPreferences.getMonospaceFont();
+        StyleConstants.setFontFamily(retVal, font.getFamily());
+
+        return retVal;
+    }
+
+    /**
+     * Gets the attributes for a given gem
+     *
+     * @param gem the gem that the attributes will be for
+     * @return the attributes for the given gem
+     */
+    private SimpleAttributeSet getGemAttributes(Gem gem) {
+        SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
+
+        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE, TranscriptStyleConstants.ATTR_KEY_GEM);
+        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_GEM, gem);
+
+        return retVal;
+    }
+
+    /**
+     * Gets the attributes for the label of a given gem line.
+     *
+     * @param gem the gem whose label these attributes will be for
+     * @return a mutable attribute set containing all the necessary attributes for the label of the gem
+     */
+    private SimpleAttributeSet getGemLabelAttributes(Gem gem) {
+        SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
+        retVal.addAttributes(getGemAttributes(gem));
+        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL, true);
+        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE, true);
+        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
+        return retVal;
+    }
+
+    /**
+     * Gets the attributes for the label of a line that isn't a tier, record header / separator, comment or gem
+     *
+     * @return a mutable attribute set containing the necessary attributes for a label
+     */
+    public SimpleAttributeSet getLabelAttributes() {
+        SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
+
+        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL, true);
+        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE, true);
+        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
+
+        return retVal;
+    }
+
+    /**
+     * Gets the attributes of the last {@link javax.swing.text.DefaultStyledDocument.ElementSpec} in a provided list
+     *
+     * @param elementSpecs the list of elementspecs
+     * @return the attributes of the last elementspec
+     */
+    public AttributeSet getTrailingAttributes(List<DefaultStyledDocument.ElementSpec> elementSpecs) {
+        if (elementSpecs.isEmpty()) return new SimpleAttributeSet();
+        AttributeSet attrs = elementSpecs.get(elementSpecs.size() - 1).getAttributes();
+        return attrs == null ? new SimpleAttributeSet() : attrs;
+    }
+    // endregion Attribute Getters
+
+    // region Batching
+
+    /**
+     * Gets a list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} containing
+     * the {@code ElementSpec.EndTagType} and {@code ElementSpec.StartTagType} tags
+     *
+     * @return a list containing the end and start tags
+     */
+    public List<ElementSpec> getBatchEndStart() {
+        return getBatchEndStart(null, null);
+    }
+
+    /**
+     * Gets a list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} containing
+     * the {@code ElementSpec.EndTagType} and {@code ElementSpec.StartTagType} tags
+     *
+     * @param endAttrs attributes for end tag (may be null)
+     * @param startAttrs attributes for start tag (may be null)
+     * @return a list containing the end and start tags
+     */
+    public List<ElementSpec> getBatchEndStart(AttributeSet endAttrs, AttributeSet startAttrs) {
+        List<ElementSpec> retVal = new ArrayList<>();
+        retVal.add(new ElementSpec(endAttrs != null ? endAttrs.copyAttributes() : null, ElementSpec.EndTagType));
+        retVal.add(new ElementSpec(startAttrs != null ? startAttrs.copyAttributes() : null, ElementSpec.StartTagType));
+        return retVal;
+    }
+
+    /**
+     * Gets the attributes for a given comment
+     *
+     * @param comment the comment that the attributes will be for
+     * @return the attributes for the given comment
+     */
+    private SimpleAttributeSet getCommentAttributes(Comment comment) {
+        SimpleAttributeSet retVal = new SimpleAttributeSet();
+
+        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE, TranscriptStyleConstants.ATTR_KEY_COMMENT);
+        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT, comment);
+
+        return retVal;
+    }
+
+    /**
+     * Gets the attributes corresponding to the standard tier font
+     *
+     * @return a mutable attribute set containing the attributes corresponding to the standard tier font
+     */
+    public SimpleAttributeSet getStandardFontAttributes() {
+        SimpleAttributeSet retVal = new SimpleAttributeSet();
+
+        Font font = FontPreferences.getTierFont();
+        StyleConstants.setFontFamily(retVal, font.getFamily());
+        StyleConstants.setFontSize(retVal, 14);
+        StyleConstants.setBold(retVal, font.isBold());
+        StyleConstants.setItalic(retVal, font.isItalic());
+
+        return retVal;
+    }
+
+    /**
+     * Gets the attributes for the label of a given comment line.
+     *
+     * @param comment the comment whose label these attributes will be for
+     * @return a mutable attribute set containing all the necessary attributes for the label of the comment
+     */
+    private SimpleAttributeSet getCommentLabelAttributes(Comment comment) {
+        SimpleAttributeSet retVal = new SimpleAttributeSet();
+
+        retVal.addAttributes(getCommentAttributes(comment));
+        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL, true);
+        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE, true);
+        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
+
+        Style defaultStyle = getStyle(TranscriptStyleContext.DEFAULT);
+        retVal.addAttributes(defaultStyle);
+
+        return retVal;
+    }
+
+    /**
+     * Appends a {@link javax.swing.text.DefaultStyledDocument.ElementSpec} containing the specified string and
+     * attributes to the end of the batch
+     */
+    public void appendBatchString(String str, MutableAttributeSet a, List<ElementSpec> batch) {
+        final StringBuilder builder = new StringBuilder();
+        builder.append(str);
+        final List<ElementSpec> additionalInsertions = new ArrayList<>();
+        for (InsertionHook hook : getInsertionHooks()) {
+            additionalInsertions.addAll(hook.batchInsertString(builder, a));
+        }
+        batch.add(getBatchString(builder.toString(), a));
+        batch.addAll(additionalInsertions);
+    }
+
+    /**
+     * Formats the provided text to be used as a label by appending the appropriate number of
+     * spaces at the beginning or ellipses at the end
+     *
+     * @param labelText the text to be formatted
+     * @return the formatted text
+     */
+    public String formatLabelText(String labelText) {
+//        int labelTextLen = labelText.length();
+//        if (labelTextLen < labelColumnWidth) {
+//            return " ".repeat((labelColumnWidth - labelTextLen)) + labelText;
+//        } else if (labelTextLen > labelColumnWidth) {
+//            String remaining = labelText.substring(labelTextLen - labelColumnWidth + 3, labelTextLen);
+//            return "..." + remaining;
+//        }
+        return "\t" + labelText;
+    }
+
+    /**
+     * Appends the end and start tags to the end of the batch
+     *
+     * @param batch the batch to append the tags to
+     */
+    public void appendBatchEndStart(List<ElementSpec> batch) {
+        appendBatchEndStart(null, null, batch);
+    }
+
+    /**
+     * Appends the end and start tags to the end of the batch
+     *
+     * @param endAttrs attributes for end tag (may be null)
+     * @param startAttrs attributes for starting paragraph (may be null)
+     * @poaram batch the batch to append the tags to
+     */
+    public void appendBatchEndStart(AttributeSet endAttrs, AttributeSet startAttrs, List<ElementSpec> batch) {
+        batch.addAll(getBatchEndStart(endAttrs, startAttrs));
+    }
+
+    /**
+     * Writes a given comment to the batch
+     *
+     * @param comment the comment that will be written
+     * @return a mutable attribute set containing the attributes of the last character of the comment to add a
+     * newline after if need be
+     */
+    private SimpleAttributeSet writeComment(Comment comment, List<ElementSpec> batch) {
+
+        List<ElementSpec> additionalInsertions = new ArrayList<>();
+        for (var hook : getInsertionHooks()) {
+            additionalInsertions.addAll(hook.startComment());
+        }
+        if (!additionalInsertions.isEmpty()) {
+            batch.addAll(additionalInsertions);
+            additionalInsertions.clear();
+        }
+
+        Tier<TierData> commentTier = sessionFactory.createTier("commentTier", TierData.class);
+        commentTier.setValue(comment.getValue() == null ? new TierData() : comment.getValue());
+
+        SimpleAttributeSet commentAttrs = getCommentAttributes(comment);
+        commentAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT_TIER, commentTier);
+        commentAttrs.addAttributes(getStandardFontAttributes());
+
+        SimpleAttributeSet labelAttrs = getCommentLabelAttributes(comment);
+        String labelText = comment.getType().getLabel();
+        labelText = formatLabelText(labelText);
+
+        TierData tierData = commentTier.getValue();
+
+        labelAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE, true);
+        appendBatchString(labelText, labelAttrs, batch);
+
+        labelAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE);
+        appendBatchString(": ", labelAttrs, batch);
+
+        for (int i = 0; i < tierData.length(); i++) {
+            TierElement userTierElement = tierData.elementAt(i);
+            String text = null;
+            SimpleAttributeSet attrs;
+            if (userTierElement instanceof TierString tierString) {
+                // Text
+                text = tierString.text();
+                attrs = getTierStringAttributes();
+            } else if (userTierElement instanceof TierComment userTierComment) {
+                // Comment
+                text = userTierComment.toString();
+                attrs = getTierCommentAttributes();
+            } else if (userTierElement instanceof TierInternalMedia internalMedia) {
+                // Internal media
+                attrs = getTierInternalMediaAttributes();
+                appendFormattedInternalMedia(internalMedia.getInternalMedia(), attrs, batch);
+            } else if (userTierElement instanceof TierLink link) {
+                // Link
+                text = link.toString();
+                attrs = getTierLinkAttributes();
             } else {
-                throw new RuntimeException("Invalid transcript element");
+                throw new RuntimeException("Invalid type");
+            }
+
+            attrs.addAttributes(commentAttrs);
+
+            if (text != null) appendBatchString(text, attrs, batch);
+
+            if (i < tierData.length() - 1) {
+                appendBatchString(" ", attrs, batch);
+            }
+        }
+
+        for (var hook : getInsertionHooks()) {
+            additionalInsertions.addAll(hook.endComment());
+        }
+        if (!additionalInsertions.isEmpty()) {
+            batch.addAll(additionalInsertions);
+        }
+
+        return commentAttrs;
+    }
+
+    /**
+     * Writes a given gem to the batch
+     *
+     * @param gem the comment that will be written
+     * @param batch the batch to append the gem to
+     * @return a mutable attribute set containing the attributes of the last character of the gem to add a
+     * newline after if need be
+     */
+    private SimpleAttributeSet writeGem(Gem gem, List<ElementSpec> batch) {
+        List<ElementSpec> additionalInsertions = new ArrayList<>();
+        for (var hook : getInsertionHooks()) {
+            additionalInsertions.addAll(hook.startGem());
+        }
+        if (!additionalInsertions.isEmpty()) {
+            batch.addAll(additionalInsertions);
+            additionalInsertions.clear();
+        }
+
+        String text = gem.getLabel();
+
+        SimpleAttributeSet gemAttrs = getGemAttributes(gem);
+        gemAttrs.addAttributes(getStandardFontAttributes());
+
+        SimpleAttributeSet labelAttrs = getGemLabelAttributes(gem);
+        String labelText = gem.getType().toString() + " Gem";
+        labelText = formatLabelText(labelText);
+
+        labelAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE, true);
+        appendBatchString(labelText, labelAttrs, batch);
+
+        labelAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE);
+        appendBatchString(": ", labelAttrs, batch);
+
+        appendBatchString(text, gemAttrs, batch);
+
+        for (var hook : getInsertionHooks()) {
+            additionalInsertions.addAll(hook.endGem());
+        }
+        if (!additionalInsertions.isEmpty()) {
+            batch.addAll(additionalInsertions);
+        }
+
+        return gemAttrs;
+    }
+
+    /**
+     * Appends a newline character with the given attributes and the start and end tags to the end of the batch
+     */
+    public void appendBatchLineFeed(AttributeSet endAttrs, AttributeSet startAttrs, List<ElementSpec> batch) {
+        batch.addAll(getBatchEndLineFeed(endAttrs, startAttrs));
+    }
+
+    /**
+     * Adds the contents of the batch to the document at the specified offset,
+     * and sets the global paragraph attributes
+     *
+     * @param offs the offset to insert the batch at
+     * @param batch the batch to insert
+     */
+    public void processBatchUpdates(int offs, List<ElementSpec> batch) throws BadLocationException {
+        // As with insertBatchString, this could be synchronized if
+        // there was a chance multiple threads would be in here.
+        ElementSpec[] inserts = new ElementSpec[batch.size()];
+        batch.toArray(inserts);
+
+        // Process all the inserts in bulk
+        super.insert(offs, inserts);
+    }
+
+    /**
+     * Gets the text value of a given tier for a given transcriber
+     *
+     * @param tier        the tier that the value will come from
+     * @param transcriber the transcriber whose text will be returned
+     * @return the text value of a given tier for a given transcriber (or the regular text for the tier if the transcriber is the validator or {@code null})
+     */
+    public String getTierText(Tier<?> tier, String transcriber) {
+        if (tier.isBlind() && transcriber != null && !Transcriber.VALIDATOR.getUsername().equals(transcriber)) {
+
+            if (tier.hasBlindTranscription(transcriber)) {
+                if (tier.isBlindTranscriptionUnvalidated(transcriber)) {
+                    return tier.getBlindUnvalidatedValue(transcriber).getValue();
+                }
+                return tier.getBlindTranscription(transcriber).toString();
             }
         } else {
-            var elementBeforeComment = session.getTranscript().getElementAt(transcriptElementIndex - 1);
-            if (elementBeforeComment.isRecord()) {
-                offset = getRecordEnd(session.getRecordPosition(elementBeforeComment.asRecord()));
-            } else if (elementBeforeComment.isComment()) {
-                offset = getCommentEnd(elementBeforeComment.asComment());
-            } else if (elementBeforeComment.isGem()) {
-                offset = getGemEnd(elementBeforeComment.asGem());
-            } else {
-                throw new RuntimeException("Invalid transcript element");
+            if (tier.hasValue()) {
+                if (tier.isUnvalidated()) {
+                    return tier.getUnvalidatedValue().getValue();
+                }
+                return tier.getValue().toString();
             }
         }
 
-        try {
-            List<ElementSpec> batch = new ArrayList<>();
-            appendBatchEndStart(batch);
-            var attrs = writeComment(comment, batch);
-            appendBatchLineFeed(attrs, null, batch);
-            processBatchUpdates(offset, batch);
-        } catch (BadLocationException e) {
-            LogUtil.severe(e);
+        return "";
+    }
+
+    /**
+     * Appends the specified internal media to the batch
+     *
+     * @param internalMedia   the internal media that gets appended
+     * @param additionalAttrs any additional attributes to be added to the segment (none added if {@code null})
+     * @param batch          the batch to append the segment to
+     */
+    public void appendFormattedInternalMedia(InternalMedia internalMedia, AttributeSet additionalAttrs, List<ElementSpec> batch) {
+        MediaSegment segment = sessionFactory.createMediaSegment();
+        segment.setSegment(internalMedia.getStartTime(), internalMedia.getEndTime(), MediaUnit.Second);
+        appendFormattedSegment(segment, additionalAttrs, MediaTimeFormatStyle.MINUTES_AND_SECONDS, batch);
+    }
+
+    /**
+     * Gets a list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} containing a newline character
+     * with the specified attributes and the {@code ElementSpec.EndTagType} and {@code ElementSpec.StartTagType} tags
+     *
+     * @param endAttrs attributes for end tag (may be null)
+     * @param startAttrs attributes for start tag (may be null)
+     * @return a list with the newline character and the end and start tags
+     */
+    public List<ElementSpec> getBatchEndLineFeed(AttributeSet endAttrs, AttributeSet startAttrs) {
+        List<ElementSpec> retVal = new ArrayList<>();
+        retVal.add(new ElementSpec(endAttrs != null ? endAttrs.copyAttributes() : null, ElementSpec.ContentType, EOL_ARRAY, 0, 1));
+        retVal.addAll(getBatchEndStart(endAttrs, startAttrs));
+        return retVal;
+    }
+
+    /**
+     * Gets a {@link javax.swing.text.DefaultStyledDocument.ElementSpec} containing the specified string and attributes
+     *
+     * @return a {@link javax.swing.text.DefaultStyledDocument.ElementSpec} containing the specified
+     * string and attributes
+     */
+    public ElementSpec getBatchString(String str, MutableAttributeSet a) {
+        char[] chars = str.toCharArray();
+        return new ElementSpec(new SimpleAttributeSet(a), ElementSpec.ContentType, chars, 0, str.length());
+    }
+
+    /**
+     * Appends a formatted representation of the provided segment in the provided style to the batch
+     *
+     * @param segment the segment that will be appended
+     * @param additionalAttrs any additional attributes to be added to the segment (none added if {@code null})
+     * @param style the style to format the times of the segment
+     * @param batch the batch to append the segment to
+     */
+    private void appendFormattedSegment(MediaSegment segment, AttributeSet additionalAttrs, MediaTimeFormatStyle style, List<ElementSpec> batch) {
+
+        var formatter = new MediaSegmentFormatter(style);
+        String value = formatter.format(segment);
+
+        var segmentTimeAttrs = getSegmentTimeAttributes(segment);
+        var segmentDashAttrs = getSegmentDashAttributes(segment);
+        segmentTimeAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
+        segmentDashAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
+        if (additionalAttrs != null) {
+            segmentTimeAttrs.addAttributes(additionalAttrs);
+            segmentDashAttrs.addAttributes(additionalAttrs);
         }
+
+        appendBatchString("•", segmentDashAttrs, batch);
+
+        appendBatchString(value, segmentTimeAttrs, batch);
+
+        appendBatchString("•", segmentDashAttrs, batch);
+    }
+
+    /**
+     * Appends a formatted representation of the provided segment to the batch
+     *
+     * @param segment         the segment that will be appended
+     * @param additionalAttrs any additional attributes to be added to the segment (none added if {@code null})
+     * @param batch          the batch to append the segment to
+     */
+    private void appendFormattedSegment(MediaSegment segment, AttributeSet additionalAttrs, List<ElementSpec> batch) {
+        appendFormattedSegment(segment, additionalAttrs, MediaTimeFormatStyle.PADDED_MINUTES_AND_SECONDS, batch);
+    }
+
+    /**
+     * Inserts a given tier at the end of the batch
+     *
+     * @param recordIndex  the index of the record the tier is in
+     * @param tier         the tier that will be inserted
+     * @param tierViewItem a reference to a {@link TierViewItem} used to get font info if any is present
+     * @param recordAttrs  an attribute set containing attributes for the containing record to be added to the tier
+     *                     attributes (none will be added if {@code null})
+     * @param batch       the batch to append the tier to
+     * @return a mutable attribute set containing the attributes of the last character of the tier to add a
+     * newline after if need be
+     */
+    private SimpleAttributeSet insertTier(int recordIndex, Tier<?> tier, TierViewItem tierViewItem, AttributeSet recordAttrs, List<ElementSpec> batch) {
+        String tierName = tier.getName();
+        Record record = session.getRecord(recordIndex);
+
+        SimpleAttributeSet tierAttrs = getTierAttributes(tier, tierViewItem);
+        if (recordAttrs != null) {
+            tierAttrs.addAttributes(recordAttrs);
+        }
+
+        SimpleAttributeSet labelAttrs = getTierLabelAttributes(tier);
+        if (recordAttrs != null) {
+            labelAttrs.addAttributes(recordAttrs);
+        }
+
+        String labelText = tierName;
+        if (chatTierNamesShown) {
+            SystemTierType systemTierType = SystemTierType.tierFromString(tierName);
+            if (systemTierType != null) {
+                if (systemTierType == SystemTierType.Orthography) {
+                    labelText = "*" + record.getSpeaker().getId();
+                } else {
+                    labelText = systemTierType.getChatTierName();
+                }
+            } else {
+                UserTierType userTierType = UserTierType.fromPhonTierName(tierName);
+                if (userTierType != null) {
+                    labelText = userTierType.getChatTierName();
+                } else {
+                    labelText = UserTierType.determineCHATTierName(session, tierName);
+                }
+            }
+        }
+        labelText = formatLabelText(labelText);
+
+        labelAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE, true);
+        appendBatchString(labelText, labelAttrs, batch);
+
+        labelAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE);
+        appendBatchString(": ", labelAttrs, batch);
+
+        Class<?> tierType = tier.getDeclaredType();
+
+        if (!tier.hasValue()) {
+            appendBatchString("", tierAttrs, batch);
+        } else if (tier.isUnvalidated()) {
+            appendBatchString(tier.getUnvalidatedValue().getValue(), tierAttrs, batch);
+        } else {
+            if (tierType.equals(IPATranscript.class)) {
+                Tier<IPATranscript> ipaTier = (Tier<IPATranscript>) tier;
+                List<IPATranscript> words = (ipaTier).getValue().words();
+                for (int i = 0; i < words.size(); i++) {
+                    var word = words.get(i);
+                    SimpleAttributeSet attrs;
+                    if (word.matches("\\P")) {
+                        // Pause
+                        attrs = getIPAPauseAttributes(ipaTier);
+                    } else {
+                        // Word
+                        attrs = getIPAWordAttributes(ipaTier);
+                    }
+                    attrs.addAttributes(tierAttrs);
+                    String content = word.toString();
+                    appendBatchString(content, attrs, batch);
+
+                    if (i < words.size() - 1) {
+                        appendBatchString(" ", tierAttrs, batch);
+                    }
+                }
+            } else if (tierType.equals(MediaSegment.class)) {
+                MediaSegment segment = record.getMediaSegment();
+                appendFormattedSegment(segment, tierAttrs, batch);
+            } else if (tierType.equals(Orthography.class)) {
+                Tier<Orthography> orthographyTier = (Tier<Orthography>) tier;
+                orthographyTier.getValue().accept(new TranscriptOrthographyVisitors.KeywordVisitor(this, tierAttrs, batch));
+            } else if (tierType.equals(MorTierData.class)) {
+                Tier<MorTierData> morTier = (Tier<MorTierData>) tier;
+                MorTierData mors = morTier.getValue();
+
+                for (int i = 0; i < mors.size(); i++) {
+                    Mor mor = mors.get(i);
+                    appendBatchString(mor.toString(), tierAttrs, batch);
+                    if (i < mors.size() - 1) {
+                        appendBatchString(" ", tierAttrs, batch);
+                    }
+                }
+            } else if (tierType.equals(GraspTierData.class)) {
+                Tier<GraspTierData> graspTier = (Tier<GraspTierData>) tier;
+                GraspTierData grasps = graspTier.getValue();
+
+                for (int i = 0; i < grasps.size(); i++) {
+                    Grasp grasp = grasps.get(i);
+                    appendBatchString(grasp.toString(), tierAttrs, batch);
+                    if (i < grasps.size() - 1) {
+                        appendBatchString(" ", tierAttrs, batch);
+                    }
+                }
+            } else if (tierType.equals(TierData.class)) {
+                Tier<TierData> userTier = (Tier<TierData>) tier;
+                TierData tierData = userTier.getValue();
+                if (tierData != null) {
+                    for (int i = 0; i < tierData.length(); i++) {
+                        TierElement elem = tierData.elementAt(i);
+                        String text = null;
+                        SimpleAttributeSet attrs;
+                        if (elem instanceof TierString tierString) {
+                            text = tierString.text();
+                            attrs = getTierStringAttributes();
+                        } else if (elem instanceof TierComment comment) {
+                            text = comment.toString();
+                            attrs = getTierCommentAttributes();
+                        } else if (elem instanceof TierInternalMedia internalMedia) {
+                            attrs = getTierInternalMediaAttributes();
+                            appendFormattedInternalMedia(internalMedia.getInternalMedia(), attrs, batch);
+                        } else if (elem instanceof TierLink link) {
+                            text = link.toString();
+                            attrs = getTierLinkAttributes();
+                        } else {
+                            throw new RuntimeException("Invalid type");
+                        }
+
+                        attrs.addAttributes(tierAttrs);
+
+                        if (text != null) appendBatchString(text, attrs, batch);
+
+                        if (i < tierData.length() - 1) {
+                            appendBatchString(" ", tierAttrs, batch);
+                        }
+                    }
+                }
+            }
+        }
+
+        tierAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_COMPONENT_FACTORY);
+        return tierAttrs;
+    }
+
+    /**
+     * Writes the contents of the given record to the batch
+     *
+     * @param record     the record that will be written to the batch
+     * @param transcript a reference to the transcript containing the record
+     * @param tierView   a list of {@link TierViewItem} specifying how the tiers within the record should be inserted
+     * @param batch     the batch to append the record to
+     * @return a mutable attribute set containing the attributes of the last character of the record to add a
+     * newline after if need be
+     */
+    private SimpleAttributeSet writeRecord(
+            Record record,
+            Transcript transcript,
+            List<TierViewItem> tierView,
+            List<ElementSpec> batch
+    ) {
+
+        List<ElementSpec> additionalInsertions = new ArrayList<>();
+        for (var hook : getInsertionHooks()) {
+            additionalInsertions.addAll(hook.startRecord());
+        }
+        if (!additionalInsertions.isEmpty()) {
+            batch.addAll(additionalInsertions);
+            additionalInsertions.clear();
+        }
+
+        for (var hook : getInsertionHooks()) {
+            additionalInsertions.addAll(hook.startRecordHeader());
+        }
+        if (!additionalInsertions.isEmpty()) {
+            batch.addAll(additionalInsertions);
+            additionalInsertions.clear();
+        }
+
+        int recordIndex = transcript.getRecordPosition(record);
+        SimpleAttributeSet recordAttrs = getRecordAttributes(recordIndex);
+
+        SimpleAttributeSet tierAttrs = getTierAttributes(record.getSegmentTier());
+        tierAttrs.addAttributes(getSeparatorAttributes());
+        tierAttrs.addAttributes(recordAttrs);
+
+        SimpleAttributeSet labelAttrs = getTierLabelAttributes(record.getSegmentTier());
+        labelAttrs.addAttributes(getSeparatorAttributes());
+        labelAttrs.addAttributes(recordAttrs);
+
+        for (var hook : getInsertionHooks()) {
+            additionalInsertions.addAll(hook.endRecordHeader());
+        }
+        if (!additionalInsertions.isEmpty()) {
+            batch.addAll(additionalInsertions);
+            additionalInsertions.clear();
+        }
+
+        tierAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_SEPARATOR);
+
+        List<TierViewItem> visibleTierView = tierView.stream().filter(item -> item.isVisible()).toList();
+
+        for (int i = 0; i < visibleTierView.size(); i++) {
+            TierViewItem item = visibleTierView.get(i);
+            Tier<?> tier = record.getTier(item.getTierName());
+            // Create a tier if it doesn't exist in the record
+            // This tier will be added to the record when a change is made in the TierEdit
+            if (tier == null) {
+                TierDescription td = session.getUserTiers().get(item.getTierName());
+                if (td == null) continue;
+                tier = sessionFactory.createTier(td);
+            }
+
+            for (var hook : getInsertionHooks()) {
+                additionalInsertions.addAll(hook.startTier());
+            }
+            if (!additionalInsertions.isEmpty()) {
+                batch.addAll(additionalInsertions);
+                additionalInsertions.clear();
+            }
+
+            tierAttrs = insertTier(recordIndex, tier, item, recordAttrs, batch);
+
+            for (var hook : getInsertionHooks()) {
+                additionalInsertions.addAll(hook.endTier(tierAttrs));
+            }
+            if (!additionalInsertions.isEmpty()) {
+                batch.addAll(additionalInsertions);
+                tierAttrs = new SimpleAttributeSet(additionalInsertions.get(additionalInsertions.size() - 1).getAttributes());
+                additionalInsertions.clear();
+            }
+
+            tierAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_COMPONENT_FACTORY);
+
+            if (i < visibleTierView.size() - 1) {
+                appendBatchLineFeed(tierAttrs, null, batch);
+            }
+        }
+
+        for (var hook : getInsertionHooks()) {
+            additionalInsertions.addAll(hook.endRecord());
+        }
+        if (!additionalInsertions.isEmpty()) {
+            batch.addAll(additionalInsertions);
+        }
+
+        return tierAttrs;
+    }
+
+    /**
+     * Writes a given "generic tier" to the batch
+     *
+     * @param label the text for the label
+     * @param tier  the generic tier that will be written to the batch
+     * @param batch the batch to append the generic tier to
+     * @return a mutable attribute set containing the attributes of the last character of the text to add a
+     * newline after if need be
+     */
+    private SimpleAttributeSet writeGeneric(String label, Tier<?> tier, List<ElementSpec> batch) {
+        List<ElementSpec> elementSpecs = getGeneric(label, tier, null);
+        batch.addAll(elementSpecs);
+        return new SimpleAttributeSet(elementSpecs.get(elementSpecs.size() - 1).getAttributes());
+    }
+    /**
+     * Writes a given "generic tier" to the batch
+     *
+     * @param label                the text for the label
+     * @param tier                 the generic tier that will be written to the batch
+     * @param additionalAttributes any additional attributes to be added to the contents of the returned list
+     *                             none added if {@code null})
+     * @parma batch the batch to append the generic tier to
+     * @return a mutable attribute set containing the attributes of the last character of the text to add a
+     * newline after if need be
+     */
+    public SimpleAttributeSet writeGeneric(String label, Tier<?> tier, AttributeSet additionalAttributes, List<ElementSpec> batch) {
+        List<ElementSpec> elementSpecs = getGeneric(label, tier, additionalAttributes);
+        batch.addAll(elementSpecs);
+        return new SimpleAttributeSet(elementSpecs.get(elementSpecs.size() - 1).getAttributes());
+    }
+
+
+    /**
+     * Gets a list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} for a specified "generic tier"
+     *
+     * @param label                the text for the label
+     * @param tier                 the generic tier that the list will contain the data for
+     * @param additionalAttributes any additional attributes to be added to the contents of the returned list
+     *                             (none added if {@code null})
+     * @return a list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} representing the specified
+     * generic tier
+     */
+    public List<ElementSpec> getGeneric(String label, Tier<?> tier, AttributeSet additionalAttributes) {
+        List<ElementSpec> retVal = new ArrayList<>();
+
+        SimpleAttributeSet attrs = new SimpleAttributeSet();
+        attrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE, TranscriptStyleConstants.ATTR_KEY_GENERIC);
+        attrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC, tier);
+        attrs.addAttributes(getStandardFontAttributes());
+        if (additionalAttributes != null) attrs.addAttributes(additionalAttributes);
+
+        SimpleAttributeSet labelAttrs = new SimpleAttributeSet(attrs);
+        labelAttrs.addAttributes(getLabelAttributes());
+        String labelText = label;
+        labelText = formatLabelText(labelText);
+
+        labelAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE, true);
+        retVal.add(getBatchString(labelText, labelAttrs));
+
+        labelAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE);
+        retVal.add(getBatchString(": ", labelAttrs));
+
+        if (tier.isUnvalidated()) {
+            retVal.add(getBatchString(tier.getUnvalidatedValue().toString(), attrs));
+        } else {
+            retVal.add(getBatchString(tier.toString(), attrs));
+        }
+
+        return retVal;
+    }
+    // endregion Batching
+
+
+    // region Transcript <-> Document Positioning
+
+    /**
+     * Gets the start position of the given record
+     *
+     * @param record           the record whose start position is trying to be found
+     * @param includeSeparator whether the separator / record header is included in the
+     *                         calculation of the start position
+     * @return the position in the document at the beginning of the records content
+     */
+    public int getRecordStart(Record record, boolean includeSeparator) {
+        Element root = getDefaultRootElement();
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() < 1) continue;
+            AttributeSet attrs = elem.getElement(0).getAttributes();
+            Record currentRecord = (Record) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
+            if (currentRecord == null) continue;
+            var tier = attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
+            if ((tier != null || includeSeparator) && currentRecord == record) {
+                return elem.getStartOffset();
+            }
+        }
+
+        return -1;
+    }
+
+    /**
+     * Gets the end position of the specified record
+     *
+     * @param record the record whose end is trying to be found
+     * @return the position in the document immediately after the final character of the records content
+     * (newlines included)
+     */
+    public int getRecordEnd(Record record) {
+        Element root = getDefaultRootElement();
+
+        int retVal = -1;
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() < 1) continue;
+            AttributeSet attrs = elem.getElement(0).getAttributes();
+            Record currentRecord = (Record) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
+            if (currentRecord == null) continue;
+            if (record == currentRecord) {
+                retVal = Math.max(retVal, elem.getEndOffset());
+            }
+        }
+
+        return retVal;
+    }
+
+    /**
+     * Gets the start of the record with the specified index
+     *
+     * @param recordIndex      the index of the record
+     * @param includeSeparator whether the separator / record header is included in the
+     *                         calculation of the start position
+     * @return the position in the document at the beginning of the records content
+     */
+    public int getRecordStart(int recordIndex, boolean includeSeparator) {
+        Element root = getDefaultRootElement();
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() < 1) continue;
+            AttributeSet attrs = elem.getElement(0).getAttributes();
+            Record currentRecord = (Record) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
+            if (currentRecord == null) continue;
+            int currentRecordIndex = session.getRecordPosition(currentRecord);
+            var tier = attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
+            if ((tier != null || includeSeparator) && recordIndex == currentRecordIndex) {
+                return elem.getStartOffset();
+            }
+        }
+
+        return -1;
     }
 
     /**
@@ -792,849 +1634,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     }
 
     /**
-     * Appends the end and start tags to the end of the batch
-     *
-     * @param batch the batch to append the tags to
-     */
-    public void appendBatchEndStart(List<ElementSpec> batch) {
-        appendBatchEndStart(null, null, batch);
-    }
-
-    /**
-     * Appends the end and start tags to the end of the batch
-     *
-     * @param endAttrs attributes for end tag (may be null)
-     * @param startAttrs attributes for starting paragraph (may be null)
-     * @poaram batch the batch to append the tags to
-     */
-    public void appendBatchEndStart(AttributeSet endAttrs, AttributeSet startAttrs, List<ElementSpec> batch) {
-        batch.addAll(getBatchEndStart(endAttrs, startAttrs));
-    }
-
-    /**
-     * Writes a given comment to the batch
-     *
-     * @param comment the comment that will be written
-     * @return a mutable attribute set containing the attributes of the last character of the comment to add a
-     * newline after if need be
-     */
-    private SimpleAttributeSet writeComment(Comment comment, List<ElementSpec> batch) {
-
-        List<ElementSpec> additionalInsertions = new ArrayList<>();
-        for (var hook : getInsertionHooks()) {
-            additionalInsertions.addAll(hook.startComment());
-        }
-        if (!additionalInsertions.isEmpty()) {
-            batch.addAll(additionalInsertions);
-            additionalInsertions.clear();
-        }
-
-        Tier<TierData> commentTier = sessionFactory.createTier("commentTier", TierData.class);
-        commentTier.setValue(comment.getValue() == null ? new TierData() : comment.getValue());
-
-        SimpleAttributeSet commentAttrs = getCommentAttributes(comment);
-        commentAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT_TIER, commentTier);
-        commentAttrs.addAttributes(getStandardFontAttributes());
-
-        SimpleAttributeSet labelAttrs = getCommentLabelAttributes(comment);
-        String labelText = comment.getType().getLabel();
-        labelText = formatLabelText(labelText);
-
-        TierData tierData = commentTier.getValue();
-
-        labelAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE, true);
-        appendBatchString(labelText, labelAttrs, batch);
-
-        labelAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE);
-        appendBatchString(": ", labelAttrs, batch);
-
-        for (int i = 0; i < tierData.length(); i++) {
-            TierElement userTierElement = tierData.elementAt(i);
-            String text = null;
-            SimpleAttributeSet attrs;
-            if (userTierElement instanceof TierString tierString) {
-                // Text
-                text = tierString.text();
-                attrs = getTierStringAttributes();
-            } else if (userTierElement instanceof TierComment userTierComment) {
-                // Comment
-                text = userTierComment.toString();
-                attrs = getTierCommentAttributes();
-            } else if (userTierElement instanceof TierInternalMedia internalMedia) {
-                // Internal media
-                attrs = getTierInternalMediaAttributes();
-                appendFormattedInternalMedia(internalMedia.getInternalMedia(), attrs, batch);
-            } else if (userTierElement instanceof TierLink link) {
-                // Link
-                text = link.toString();
-                attrs = getTierLinkAttributes();
-            } else {
-                throw new RuntimeException("Invalid type");
-            }
-
-            attrs.addAttributes(commentAttrs);
-
-            if (text != null) appendBatchString(text, attrs, batch);
-
-            if (i < tierData.length() - 1) {
-                appendBatchString(" ", attrs, batch);
-            }
-        }
-
-        for (var hook : getInsertionHooks()) {
-            additionalInsertions.addAll(hook.endComment());
-        }
-        if (!additionalInsertions.isEmpty()) {
-            batch.addAll(additionalInsertions);
-        }
-
-        return commentAttrs;
-    }
-
-    /**
-     * Appends a newline character with the given attributes and the start and end tags to the end of the batch
-     */
-    public void appendBatchLineFeed(AttributeSet endAttrs, AttributeSet startAttrs, List<ElementSpec> batch) {
-        batch.addAll(getBatchEndLineFeed(endAttrs, startAttrs));
-    }
-
-    /**
-     * Adds the contents of the batch to the document at the specified offset,
-     * and sets the global paragraph attributes
-     *
-     * @param offs the offset to insert the batch at
-     * @param batch the batch to insert
-     */
-    public void processBatchUpdates(int offs, List<ElementSpec> batch) throws BadLocationException {
-        // As with insertBatchString, this could be synchronized if
-        // there was a chance multiple threads would be in here.
-        ElementSpec[] inserts = new ElementSpec[batch.size()];
-        batch.toArray(inserts);
-
-        // Process all the inserts in bulk
-        super.insert(offs, inserts);
-
-        setGlobalParagraphAttributes();
-    }
-
-    /**
-     * Gets the start of the record with the specified index
-     *
-     * @param recordIndex      the index of the record
-     * @param includeSeparator whether the separator / record header is included in the
-     *                         calculation of the start position
-     * @return the position in the document at the beginning of the records content
-     */
-    public int getRecordStart(int recordIndex, boolean includeSeparator) {
-        Element root = getDefaultRootElement();
-
-        for (int i = 0; i < root.getElementCount(); i++) {
-            Element elem = root.getElement(i);
-            if (elem.getElementCount() < 1) continue;
-            AttributeSet attrs = elem.getElement(0).getAttributes();
-            Record currentRecord = (Record) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
-            if (currentRecord == null) continue;
-            int currentRecordIndex = session.getRecordPosition(currentRecord);
-            var tier = attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
-            if ((tier != null || includeSeparator) && recordIndex == currentRecordIndex) {
-                return elem.getStartOffset();
-            }
-        }
-
-        return -1;
-    }
-
-    // endregion Attribute Getters
-
-    // region Batching
-
-    /**
-     * Gets a list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} containing
-     * the {@code ElementSpec.EndTagType} and {@code ElementSpec.StartTagType} tags
-     *
-     * @return a list containing the end and start tags
-     */
-    public List<ElementSpec> getBatchEndStart() {
-        return getBatchEndStart(null, null);
-    }
-
-    /**
-     * Gets a list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} containing
-     * the {@code ElementSpec.EndTagType} and {@code ElementSpec.StartTagType} tags
-     *
-     * @param endAttrs attributes for end tag (may be null)
-     * @param startAttrs attributes for start tag (may be null)
-     * @return a list containing the end and start tags
-     */
-    public List<ElementSpec> getBatchEndStart(AttributeSet endAttrs, AttributeSet startAttrs) {
-        List<ElementSpec> retVal = new ArrayList<>();
-        retVal.add(new ElementSpec(endAttrs != null ? endAttrs.copyAttributes() : null, ElementSpec.EndTagType));
-        retVal.add(new ElementSpec(startAttrs != null ? startAttrs.copyAttributes() : null, ElementSpec.StartTagType));
-        return retVal;
-    }
-
-    public List<InsertionHook> getInsertionHooks() {
-        return Collections.unmodifiableList(this.insertionHooks);
-    }
-
-    /**
-     * Gets the attributes for a given comment
-     *
-     * @param comment the comment that the attributes will be for
-     * @return the attributes for the given comment
-     */
-    private SimpleAttributeSet getCommentAttributes(Comment comment) {
-        SimpleAttributeSet retVal = new SimpleAttributeSet();
-
-        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE, TranscriptStyleConstants.ATTR_KEY_COMMENT);
-        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT, comment);
-
-        return retVal;
-    }
-
-    /**
-     * Gets the attributes corresponding to the standard tier font
-     *
-     * @return a mutable attribute set containing the attributes corresponding to the standard tier font
-     */
-    public SimpleAttributeSet getStandardFontAttributes() {
-        SimpleAttributeSet retVal = new SimpleAttributeSet();
-
-        Font font = FontPreferences.getTierFont();
-        StyleConstants.setFontFamily(retVal, font.getFamily());
-        StyleConstants.setFontSize(retVal, 14);
-        StyleConstants.setBold(retVal, font.isBold());
-        StyleConstants.setItalic(retVal, font.isItalic());
-
-        return retVal;
-    }
-
-    /**
-     * Gets the attributes for the label of a given comment line.
-     *
-     * @param comment the comment whose label these attributes will be for
-     * @return a mutable attribute set containing all the necessary attributes for the label of the comment
-     */
-    private SimpleAttributeSet getCommentLabelAttributes(Comment comment) {
-        SimpleAttributeSet retVal = new SimpleAttributeSet();
-
-        retVal.addAttributes(getCommentAttributes(comment));
-        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL, true);
-        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE, true);
-        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
-
-        Style defaultStyle = getStyle(TranscriptStyleContext.DEFAULT);
-        retVal.addAttributes(defaultStyle);
-
-        return retVal;
-    }
-
-    /**
-     * Appends a {@link javax.swing.text.DefaultStyledDocument.ElementSpec} containing the specified string and
-     * attributes to the end of the batch
-     */
-    public void appendBatchString(String str, MutableAttributeSet a, List<ElementSpec> batch) {
-        final StringBuilder builder = new StringBuilder();
-        builder.append(str);
-        final List<ElementSpec> additionalInsertions = new ArrayList<>();
-        for (InsertionHook hook : getInsertionHooks()) {
-            additionalInsertions.addAll(hook.batchInsertString(builder, a));
-        }
-        batch.add(getBatchString(builder.toString(), a));
-        batch.addAll(additionalInsertions);
-    }
-
-    /**
-     * Formats the provided text to be used as a label by appending the appropriate number of
-     * spaces at the beginning or ellipses at the end
-     *
-     * @param labelText the text to be formatted
-     * @return the formatted text
-     */
-    public String formatLabelText(String labelText) {
-//        int labelTextLen = labelText.length();
-//        if (labelTextLen < labelColumnWidth) {
-//            return " ".repeat((labelColumnWidth - labelTextLen)) + labelText;
-//        } else if (labelTextLen > labelColumnWidth) {
-//            String remaining = labelText.substring(labelTextLen - labelColumnWidth + 3, labelTextLen);
-//            return "..." + remaining;
-//        }
-        return "\t" + labelText;
-    }
-
-    // endregion Batching
-
-    // region Add Comment / Gem
-
-    /**
-     * Gets the attributes for a {@link TierString} in some {@link TierData}
-     *
-     * @return the attributes for a {@link TierString} in some {@link TierData}
-     */
-    private SimpleAttributeSet getTierStringAttributes() {
-        SimpleAttributeSet retVal = new SimpleAttributeSet();
-
-        // TODO: add a ui prop color  for this
-        StyleConstants.setForeground(retVal, Color.black);
-
-        return retVal;
-    }
-
-    /**
-     * Gets the attributes for a {@link TierComment} in some {@link TierData}
-     *
-     * @return the attributes for a {@link TierComment} in some {@link TierData}
-     */
-    private SimpleAttributeSet getTierCommentAttributes() {
-        SimpleAttributeSet retVal = new SimpleAttributeSet();
-
-        StyleConstants.setForeground(retVal, UIManager.getColor(TranscriptEditorUIProps.TIER_COMMENT));
-
-        return retVal;
-    }
-
-    // endregion Add Comment / Gem
-
-    /**
-     * Gets the attributes for {@link TierInternalMedia} in some {@link TierData}
-     *
-     * @return the attributes for {@link TierInternalMedia} in some {@link TierData}
-     */
-    private SimpleAttributeSet getTierInternalMediaAttributes() {
-        SimpleAttributeSet retVal = new SimpleAttributeSet();
-
-        StyleConstants.setForeground(retVal, UIManager.getColor(TranscriptEditorUIProps.INTERNAL_MEDIA));
-
-        return retVal;
-    }
-
-    /**
-     * Appends the specified internal media to the batch
-     *
-     * @param internalMedia   the internal media that gets appended
-     * @param additionalAttrs any additional attributes to be added to the segment (none added if {@code null})
-     * @param batch          the batch to append the segment to
-     */
-    public void appendFormattedInternalMedia(InternalMedia internalMedia, AttributeSet additionalAttrs, List<ElementSpec> batch) {
-        MediaSegment segment = sessionFactory.createMediaSegment();
-        segment.setSegment(internalMedia.getStartTime(), internalMedia.getEndTime(), MediaUnit.Second);
-        appendFormattedSegment(segment, additionalAttrs, MediaTimeFormatStyle.MINUTES_AND_SECONDS, batch);
-    }
-
-    /**
-     * Gets the attributes for a {@link TierLink} in some {@link TierData}
-     *
-     * @return the attributes for a {@link TierLink} in some {@link TierData}
-     */
-    private SimpleAttributeSet getTierLinkAttributes() {
-        SimpleAttributeSet retVal = new SimpleAttributeSet();
-
-        return retVal;
-    }
-
-    // region Write Transcript Element
-
-    /**
-     * Gets a list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} containing a newline character
-     * with the specified attributes and the {@code ElementSpec.EndTagType} and {@code ElementSpec.StartTagType} tags
-     *
-     * @param endAttrs attributes for end tag (may be null)
-     * @param startAttrs attributes for start tag (may be null)
-     * @return a list with the newline character and the end and start tags
-     */
-    public List<ElementSpec> getBatchEndLineFeed(AttributeSet endAttrs, AttributeSet startAttrs) {
-        List<ElementSpec> retVal = new ArrayList<>();
-        retVal.add(new ElementSpec(endAttrs != null ? endAttrs.copyAttributes() : null, ElementSpec.ContentType, EOL_ARRAY, 0, 1));
-        retVal.addAll(getBatchEndStart(endAttrs, startAttrs));
-        return retVal;
-    }
-
-    /**
-     * Sets the global paragraph attributes to the entirety of the document
-     */
-    public void setGlobalParagraphAttributes() {
-    }
-
-    /**
-     * Gets the attributes corresponding to the monospace font
-     *
-     * @return a mutable attribute set containing the attributes corresponding to the monospace font
-     */
-    private SimpleAttributeSet getMonospaceFontAttributes() {
-        SimpleAttributeSet retVal = new SimpleAttributeSet();
-
-        Font font = FontPreferences.getMonospaceFont();
-        StyleConstants.setFontFamily(retVal, font.getFamily());
-        StyleConstants.setFontSize(retVal, 14);
-        StyleConstants.setBold(retVal, font.isBold());
-        StyleConstants.setItalic(retVal, font.isItalic());
-
-        return retVal;
-    }
-
-    /**
-     * Gets a {@link javax.swing.text.DefaultStyledDocument.ElementSpec} containing the specified string and attributes
-     *
-     * @return a {@link javax.swing.text.DefaultStyledDocument.ElementSpec} containing the specified
-     * string and attributes
-     */
-    public ElementSpec getBatchString(String str, MutableAttributeSet a) {
-        char[] chars = str.toCharArray();
-        return new ElementSpec(new SimpleAttributeSet(a), ElementSpec.ContentType, chars, 0, str.length());
-    }
-
-    /**
-     * Appends a formatted representation of the provided segment in the provided style to the batch
-     *
-     * @param segment the segment that will be appended
-     * @param additionalAttrs any additional attributes to be added to the segment (none added if {@code null})
-     * @param style the style to format the times of the segment
-     * @param batch the batch to append the segment to
-     */
-    private void appendFormattedSegment(MediaSegment segment, AttributeSet additionalAttrs, MediaTimeFormatStyle style, List<ElementSpec> batch) {
-
-        var formatter = new MediaSegmentFormatter(style);
-        String value = formatter.format(segment);
-
-        var segmentTimeAttrs = getSegmentTimeAttributes(segment);
-        var segmentDashAttrs = getSegmentDashAttributes(segment);
-        segmentTimeAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
-        segmentDashAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
-        if (additionalAttrs != null) {
-            segmentTimeAttrs.addAttributes(additionalAttrs);
-            segmentDashAttrs.addAttributes(additionalAttrs);
-        }
-
-        appendBatchString("•", segmentDashAttrs, batch);
-
-        appendBatchString(value, segmentTimeAttrs, batch);
-
-        appendBatchString("•", segmentDashAttrs, batch);
-    }
-
-    public float getLineSpacing() {
-        return lineSpacing;
-    }
-
-    // endregion Write Transcript Element
-
-
-    // region Get Record/Tier Start/End
-
-    public void setLineSpacing(float lineSpacing) {
-        this.lineSpacing = lineSpacing;
-    }
-
-    /**
-     * Gets the attributes for the times in a given segment
-     *
-     * @param segment the segment that will be referenced in the attributes with
-     *                the {@code TranscriptStyleConstants.ATTR_KEY_MEDIA_SEGMENT} key
-     * @return a mutable attribute set containing the attributes for the times in a given segment
-     */
-    private SimpleAttributeSet getSegmentTimeAttributes(MediaSegment segment) {
-        SimpleAttributeSet retVal = new SimpleAttributeSet();
-        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_MEDIA_SEGMENT, segment);
-
-        return retVal;
-    }
-
-    /**
-     * Gets the attributes for the dash in a given segment
-     *
-     * @param segment the segment that will be referenced in the attributes with
-     *                the {@code TranscriptStyleConstants.ATTR_KEY_MEDIA_SEGMENT} key
-     * @return a mutable attribute set containing the attributes for the dash in a given segment
-     */
-    private SimpleAttributeSet getSegmentDashAttributes(MediaSegment segment) {
-        SimpleAttributeSet retVal = new SimpleAttributeSet();
-        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_MEDIA_SEGMENT, segment);
-
-        StyleConstants.setForeground(retVal, UIManager.getColor(TranscriptEditorUIProps.SEGMENT_DASH));
-
-        return retVal;
-    }
-
-    // Adds a gem to the document and the transcript at the given transcript element index
-    public void addGem(Gem gem, int transcriptElementIndex) {
-        int offset = -1;
-
-        if (transcriptElementIndex == 0) {
-            var elementAfterComment = session.getTranscript().getElementAt(1);
-            if (elementAfterComment.isRecord()) {
-                offset = getRecordStart(session.getRecordPosition(elementAfterComment.asRecord()));
-            } else if (elementAfterComment.isComment()) {
-                offset = getCommentStart(elementAfterComment.asComment());
-            } else if (elementAfterComment.isGem()) {
-                offset = getGemStart(elementAfterComment.asGem());
-            } else {
-                throw new RuntimeException("Invalid transcript element");
-            }
-
-        } else {
-            var elementBeforeComment = session.getTranscript().getElementAt(transcriptElementIndex - 1);
-            if (elementBeforeComment.isRecord()) {
-                offset = getRecordEnd(session.getRecordPosition(elementBeforeComment.asRecord()));
-            } else if (elementBeforeComment.isComment()) {
-                offset = getCommentEnd(elementBeforeComment.asComment());
-            } else if (elementBeforeComment.isGem()) {
-                offset = getGemEnd(elementBeforeComment.asGem());
-            } else {
-                throw new RuntimeException("Invalid transcript element");
-            }
-        }
-
-        try {
-            List<ElementSpec> batch = new ArrayList<>();
-            appendBatchEndStart(batch);
-            var attrs = writeGem(gem, batch);
-            appendBatchLineFeed(attrs, null, batch);
-            processBatchUpdates(offset, batch);
-        } catch (BadLocationException e) {
-            LogUtil.severe(e);
-        }
-    }
-
-    /**
-     * Writes a given gem to the batch
-     *
-     * @param gem the comment that will be written
-     * @param batch the batch to append the gem to
-     * @return a mutable attribute set containing the attributes of the last character of the gem to add a
-     * newline after if need be
-     */
-    private SimpleAttributeSet writeGem(Gem gem, List<ElementSpec> batch) {
-        List<ElementSpec> additionalInsertions = new ArrayList<>();
-        for (var hook : getInsertionHooks()) {
-            additionalInsertions.addAll(hook.startGem());
-        }
-        if (!additionalInsertions.isEmpty()) {
-            batch.addAll(additionalInsertions);
-            additionalInsertions.clear();
-        }
-
-        String text = gem.getLabel();
-
-        SimpleAttributeSet gemAttrs = getGemAttributes(gem);
-        gemAttrs.addAttributes(getStandardFontAttributes());
-
-        SimpleAttributeSet labelAttrs = getGemLabelAttributes(gem);
-        String labelText = gem.getType().toString() + " Gem";
-        labelText = formatLabelText(labelText);
-
-        labelAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE, true);
-        appendBatchString(labelText, labelAttrs, batch);
-
-        labelAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE);
-        appendBatchString(": ", labelAttrs, batch);
-
-        appendBatchString(text, gemAttrs, batch);
-
-        for (var hook : getInsertionHooks()) {
-            additionalInsertions.addAll(hook.endGem());
-        }
-        if (!additionalInsertions.isEmpty()) {
-            batch.addAll(additionalInsertions);
-        }
-
-        return gemAttrs;
-    }
-
-    /**
-     * Gets the attributes for a given gem
-     *
-     * @param gem the gem that the attributes will be for
-     * @return the attributes for the given gem
-     */
-    private SimpleAttributeSet getGemAttributes(Gem gem) {
-        SimpleAttributeSet retVal = new SimpleAttributeSet();
-
-        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE, TranscriptStyleConstants.ATTR_KEY_GEM);
-        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_GEM, gem);
-
-        return retVal;
-    }
-
-    /**
-     * Gets the attributes for the label of a given gem line.
-     *
-     * @param gem the gem whose label these attributes will be for
-     * @return a mutable attribute set containing all the necessary attributes for the label of the gem
-     */
-    private SimpleAttributeSet getGemLabelAttributes(Gem gem) {
-        SimpleAttributeSet retVal = new SimpleAttributeSet();
-
-        retVal.addAttributes(getGemAttributes(gem));
-        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL, true);
-        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE, true);
-        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
-
-        Style defaultStyle = getStyle(TranscriptStyleContext.DEFAULT);
-        retVal.addAttributes(defaultStyle);
-
-        return retVal;
-    }
-
-    /**
-     * Deletes a given transcript element from the document
-     */
-    public void deleteTranscriptElement(Transcript.Element elem) {
-        try {
-            int startOffset = -1;
-            int endOffset = -1;
-
-            if (elem.isComment()) {
-                startOffset = getCommentStart(elem.asComment());
-                endOffset = getCommentEnd(elem.asComment());
-            } else if (elem.isGem()) {
-                startOffset = getGemStart(elem.asGem());
-                endOffset = getGemEnd(elem.asGem());
-            } else if (elem.isRecord()) {
-                return;
-            }
-            if (startOffset < 0 || endOffset < 0) return;
-
-            bypassDocumentFilter = true;
-            remove(startOffset, endOffset - startOffset);
-        } catch (BadLocationException e) {
-            LogUtil.severe(e);
-        }
-    }
-
-    /**
-     * Updates the displayed type of the given comment in the document
-     */
-    public void onChangeCommentType(Comment comment) {
-        int start = getCommentStart(comment);
-        int end = getCommentEnd(comment);
-
-        try {
-            bypassDocumentFilter = true;
-            remove(start, end - start);
-            List<ElementSpec> batch = new ArrayList<>();
-            appendBatchEndStart(batch);
-            var attrs = writeComment(comment, batch);
-            appendBatchLineFeed(attrs, null, batch);
-            processBatchUpdates(start, batch);
-        } catch (BadLocationException e) {
-            LogUtil.severe(e);
-        }
-    }
-
-    /**
-     * Updates the displayed type of the given gem in the document
-     */
-    public void onChangeGemType(Gem gem) {
-        int start = getGemStart(gem);
-        int end = getGemEnd(gem);
-
-        try {
-            bypassDocumentFilter = true;
-            remove(start, end - start);
-            List<ElementSpec> batch = new ArrayList<>();
-            appendBatchEndStart(batch);
-            var attrs = writeGem(gem, batch);
-            appendBatchLineFeed(attrs, null, batch);
-            processBatchUpdates(start, batch);
-        } catch (BadLocationException e) {
-            LogUtil.severe(e);
-        }
-    }
-
-    /**
-     * Writes the contents of the given record to the batch
-     *
-     * @param record     the record that will be written to the batch
-     * @param transcript a reference to the transcript containing the record
-     * @param tierView   a list of {@link TierViewItem} specifying how the tiers within the record should be inserted
-     * @param batch     the batch to append the record to
-     * @return a mutable attribute set containing the attributes of the last character of the record to add a
-     * newline after if need be
-     */
-    private SimpleAttributeSet writeRecord(
-            Record record,
-            Transcript transcript,
-            List<TierViewItem> tierView,
-            List<ElementSpec> batch
-    ) {
-
-        List<ElementSpec> additionalInsertions = new ArrayList<>();
-        for (var hook : getInsertionHooks()) {
-            additionalInsertions.addAll(hook.startRecord());
-        }
-        if (!additionalInsertions.isEmpty()) {
-            batch.addAll(additionalInsertions);
-            additionalInsertions.clear();
-        }
-
-        for (var hook : getInsertionHooks()) {
-            additionalInsertions.addAll(hook.startRecordHeader());
-        }
-        if (!additionalInsertions.isEmpty()) {
-            batch.addAll(additionalInsertions);
-            additionalInsertions.clear();
-        }
-
-        int recordIndex = transcript.getRecordPosition(record);
-        SimpleAttributeSet recordAttrs = getRecordAttributes(recordIndex);
-
-        SimpleAttributeSet tierAttrs = getTierAttributes(record.getSegmentTier());
-        tierAttrs.addAttributes(getSeparatorAttributes());
-        tierAttrs.addAttributes(recordAttrs);
-
-        SimpleAttributeSet labelAttrs = getTierLabelAttributes(record.getSegmentTier());
-        labelAttrs.addAttributes(getSeparatorAttributes());
-        labelAttrs.addAttributes(recordAttrs);
-
-        for (var hook : getInsertionHooks()) {
-            additionalInsertions.addAll(hook.endRecordHeader());
-        }
-        if (!additionalInsertions.isEmpty()) {
-            batch.addAll(additionalInsertions);
-            additionalInsertions.clear();
-        }
-
-        tierAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_SEPARATOR);
-
-        List<TierViewItem> visibleTierView = tierView.stream().filter(item -> item.isVisible()).toList();
-
-        for (int i = 0; i < visibleTierView.size(); i++) {
-            TierViewItem item = visibleTierView.get(i);
-            Tier<?> tier = record.getTier(item.getTierName());
-            // Create a tier if it doesn't exist in the record
-            // This tier will be added to the record when a change is made in the TierEdit
-            if (tier == null) {
-                TierDescription td = session.getUserTiers().get(item.getTierName());
-                if (td == null) continue;
-                tier = sessionFactory.createTier(td);
-            }
-
-            for (var hook : getInsertionHooks()) {
-                additionalInsertions.addAll(hook.startTier());
-            }
-            if (!additionalInsertions.isEmpty()) {
-                batch.addAll(additionalInsertions);
-                additionalInsertions.clear();
-            }
-
-            tierAttrs = insertTier(recordIndex, tier, item, recordAttrs, batch);
-
-            for (var hook : getInsertionHooks()) {
-                additionalInsertions.addAll(hook.endTier(tierAttrs));
-            }
-            if (!additionalInsertions.isEmpty()) {
-                batch.addAll(additionalInsertions);
-                tierAttrs = new SimpleAttributeSet(additionalInsertions.get(additionalInsertions.size() - 1).getAttributes());
-                additionalInsertions.clear();
-            }
-
-            tierAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_COMPONENT_FACTORY);
-
-            if (i < visibleTierView.size() - 1) {
-                appendBatchLineFeed(tierAttrs, null, batch);
-            }
-        }
-
-        for (var hook : getInsertionHooks()) {
-            additionalInsertions.addAll(hook.endRecord());
-        }
-        if (!additionalInsertions.isEmpty()) {
-            batch.addAll(additionalInsertions);
-        }
-
-        return tierAttrs;
-    }
-
-    /**
-     * Writes a given "generic tier" to the batch
-     *
-     * @param label the text for the label
-     * @param tier  the generic tier that will be written to the batch
-     * @param batch the batch to append the generic tier to
-     * @return a mutable attribute set containing the attributes of the last character of the text to add a
-     * newline after if need be
-     */
-    private SimpleAttributeSet writeGeneric(String label, Tier<?> tier, List<ElementSpec> batch) {
-        List<ElementSpec> elementSpecs = getGeneric(label, tier, null);
-        batch.addAll(elementSpecs);
-        return new SimpleAttributeSet(elementSpecs.get(elementSpecs.size() - 1).getAttributes());
-    }
-
-    /**
-     * Gets a list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} for a specified "generic tier"
-     *
-     * @param label                the text for the label
-     * @param tier                 the generic tier that the list will contain the data for
-     * @param additionalAttributes any additional attributes to be added to the contents of the returned list
-     *                             (none added if {@code null})
-     * @return a list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} representing the specified
-     * generic tier
-     */
-    public List<ElementSpec> getGeneric(String label, Tier<?> tier, AttributeSet additionalAttributes) {
-        List<ElementSpec> retVal = new ArrayList<>();
-
-        SimpleAttributeSet attrs = new SimpleAttributeSet();
-        attrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE, TranscriptStyleConstants.ATTR_KEY_GENERIC);
-        attrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC, tier);
-        attrs.addAttributes(getStandardFontAttributes());
-        if (additionalAttributes != null) attrs.addAttributes(additionalAttributes);
-
-        SimpleAttributeSet labelAttrs = new SimpleAttributeSet(attrs);
-        labelAttrs.addAttributes(getLabelAttributes());
-        String labelText = label;
-        labelText = formatLabelText(labelText);
-
-        labelAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE, true);
-        retVal.add(getBatchString(labelText, labelAttrs));
-
-        labelAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE);
-        retVal.add(getBatchString(": ", labelAttrs));
-
-        if (tier.isUnvalidated()) {
-            retVal.add(getBatchString(tier.getUnvalidatedValue().toString(), attrs));
-        } else {
-            retVal.add(getBatchString(tier.toString(), attrs));
-        }
-
-        return retVal;
-    }
-
-    /**
-     * Gets the attributes for the label of a line that isn't a tier, record header / separator, comment or gem
-     *
-     * @return a mutable attribute set containing the necessary attributes for a label
-     */
-    public SimpleAttributeSet getLabelAttributes() {
-        SimpleAttributeSet retVal = new SimpleAttributeSet();
-
-        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL, true);
-        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE, true);
-        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
-
-        Style defaultStyle = getStyle(TranscriptStyleContext.DEFAULT);
-        retVal.addAttributes(defaultStyle);
-
-        return retVal;
-    }
-
-    /**
-     * Writes a given "generic tier" to the batch
-     *
-     * @param label                the text for the label
-     * @param tier                 the generic tier that will be written to the batch
-     * @param additionalAttributes any additional attributes to be added to the contents of the returned list
-     *                             none added if {@code null})
-     * @parma batch the batch to append the generic tier to
-     * @return a mutable attribute set containing the attributes of the last character of the text to add a
-     * newline after if need be
-     */
-    public SimpleAttributeSet writeGeneric(String label, Tier<?> tier, AttributeSet additionalAttributes, List<ElementSpec> batch) {
-        List<ElementSpec> elementSpecs = getGeneric(label, tier, additionalAttributes);
-        batch.addAll(elementSpecs);
-        return new SimpleAttributeSet(elementSpecs.get(elementSpecs.size() - 1).getAttributes());
-    }
-
-    /**
      * Gets the start position of the given record
      *
      * @param record the record whose start position is trying to be found
@@ -1731,6 +1730,36 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         }
 
         return null;
+    }
+
+    /**
+     * Gets the start position of the specified tier
+     *
+     * @param tier the tier whose start position is trying to be found
+     * @return the position in the document at the beginning of the tiers content
+     */
+    public int getTierStart(Tier<?> tier) {
+        Element root = getDefaultRootElement();
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() < 1) continue;
+            Record currentRecord = (Record) elem.getElement(0).getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
+            if (currentRecord == null) continue;
+            // If correct record index
+            for (int j = 0; j < elem.getElementCount(); j++) {
+                Element innerElem = elem.getElement(j);
+                AttributeSet attrs = innerElem.getAttributes();
+                Tier<?> testTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
+                Boolean isLabel = (Boolean) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL);
+                // If correct tier name
+                if (isLabel == null && testTier != null && testTier == tier) {
+                    return innerElem.getParentElement().getStartOffset();
+                }
+            }
+        }
+
+        return -1;
     }
 
     /**
@@ -1868,10 +1897,67 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         return -1;
     }
 
-    // endregion Get Record/Tier Start/End
+    /**
+     * Gets the start position for the content of the specified tier
+     *
+     * @param tier the tier whose start position is trying to be found
+     * @return the position in the document at the beginning of the tiers content
+     */
+    public int getTierContentStart(Tier<?> tier) {
+        Element root = getDefaultRootElement();
 
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() == 0) continue;
+            String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
+            // If correct record index
+            if (transcriptElementType != null && transcriptElementType.equals(TranscriptStyleConstants.ATTR_KEY_RECORD)) {
+                for (int j = 0; j < elem.getElementCount(); j++) {
+                    Element innerElem = elem.getElement(j);
+                    AttributeSet attrs = innerElem.getAttributes();
+                    Tier<?> currentTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
+                    Boolean isLabel = (Boolean) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL);
+                    // If correct tier
+                    if (isLabel == null && currentTier != null && currentTier == tier) {
+                        return innerElem.getStartOffset();
+                    }
+                }
+            }
+        }
 
-    // region Record Changes
+        return -1;
+    }
+
+    /**
+     * Gets the start position of the specified "generic tier"
+     *
+     * @param genericTier a reference to the generic tier whose start position is trying to be found
+     * @return the position in the document at the beginning of the generic tiers content
+     */
+    public int getGenericContentStart(Tier<?> genericTier) {
+        Element root = getDefaultRootElement();
+
+        for (int i = 0; i < root.getElementCount(); i++) {
+            Element elem = root.getElement(i);
+            if (elem.getElementCount() == 0) continue;
+            String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
+            // If transcript element type is tierData
+            if (transcriptElementType != null && transcriptElementType.equals(TranscriptStyleConstants.ATTR_KEY_GENERIC)) {
+                for (int j = 0; j < elem.getElementCount(); j++) {
+                    Element innerElem = elem.getElement(j);
+                    AttributeSet attrs = innerElem.getAttributes();
+                    Tier<?> currentGenericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
+                    Boolean isLabel = (Boolean) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL);
+                    // If correct tierData
+                    if (isLabel == null && currentGenericTier != null && currentGenericTier == genericTier) {
+                        return innerElem.getStartOffset();
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
 
     /**
      * Gets the start position of the "generic tier" with the specified name
@@ -2090,21 +2176,143 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         return retVal;
     }
 
+
     /**
-     * Update record text in the document
+     * Gets the character at the specified position in the document
      *
-     * @param record the record whose media segment is being updated
+     * @param pos the position to get the character from
+     * @return the character at the specified position
      */
-    public void updateRecord(Record record) {
-        int start = getRecordStart(record);
-        int end = getRecordEnd(record);
+    public Character getCharAtPos(int pos) {
+        try {
+            return getText(pos, 1).charAt(0);
+        } catch (BadLocationException e) {
+            LogUtil.warning(e);
+            return null;
+        }
+    }
+
+
+
+    /**
+     * Gets the index of the record containing the specified position
+     *
+     * @param position a position in the document in a record
+     * @return the index of the record
+     */
+    public int getRecordIndex(int position) {
+        AttributeSet attributes = getCharacterElement(position).getAttributes();
+        Record record = (Record) attributes.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
+        if (record == null) return -1;
+        return session.getRecordPosition(record);
+    }
+
+    /**
+     * Gets the element index of the record containing the specified position
+     *
+     * @param position a position in the document in a record
+     * @return the element index of the record
+     */
+    public int getRecordElementIndex(int position) {
+        AttributeSet attributes = getCharacterElement(position).getAttributes();
+        Record record = (Record) attributes.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
+        if (record == null) return -1;
+        return session.getRecordElementIndex(record);
+    }
+
+    /**
+     * Gets the tier containing the specified position
+     *
+     * @param position a position in the document in a record
+     * @return a reference to the tier
+     */
+    public Tier<?> getTier(int position) {
+        AttributeSet attributes = getCharacterElement(position).getAttributes();
+        return (Tier<?>) attributes.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
+    }
+
+    /**
+     * Gets the offset from the preceding label of a given position in the document
+     *
+     * @param pos the position that the offset will come from
+     */
+    public int getOffsetInContent(int pos) {
+        Element elem = getCharacterElement(pos);
+        String transcriptElementType = (String) elem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
+        if (transcriptElementType == null) return -1;
+
+        switch (transcriptElementType) {
+            case TranscriptStyleConstants.ATTR_KEY_RECORD -> {
+                Tier<?> tier = (Tier<?>) elem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
+                if (tier == null) return -1;
+                int recordStartPos = getTierContentStart(tier);
+                return pos - recordStartPos;
+            }
+            case TranscriptStyleConstants.ATTR_KEY_COMMENT -> {
+                Comment comment = (Comment) elem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT);
+                if (comment == null) return -1;
+                int commentStartPos = getCommentContentStart(comment);
+                return pos - commentStartPos;
+            }
+            case TranscriptStyleConstants.ATTR_KEY_GEM -> {
+                Gem gem = (Gem) elem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM);
+                if (gem == null) return -1;
+                return pos - getGemContentStart(gem);
+            }
+            case TranscriptStyleConstants.ATTR_KEY_GENERIC -> {
+                Tier<?> genericTier = (Tier<?>) elem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
+                if (genericTier == null) return -1;
+                return pos - getGenericContentStart(genericTier);
+            }
+            default -> {
+                return -1;
+            }
+        }
+    }
+    // endregion Transcript <-> Document Positioning
+
+
+    // region Transcript Changes
+
+    /**
+     * Deletes a given transcript element from the document
+     */
+    public void deleteTranscriptElement(Transcript.Element elem) {
+        try {
+            int startOffset = -1;
+            int endOffset = -1;
+
+            if (elem.isComment()) {
+                startOffset = getCommentStart(elem.asComment());
+                endOffset = getCommentEnd(elem.asComment());
+            } else if (elem.isGem()) {
+                startOffset = getGemStart(elem.asGem());
+                endOffset = getGemEnd(elem.asGem());
+            } else if (elem.isRecord()) {
+                return;
+            }
+            if (startOffset < 0 || endOffset < 0) return;
+
+            bypassDocumentFilter = true;
+            remove(startOffset, endOffset - startOffset);
+        } catch (BadLocationException e) {
+            LogUtil.severe(e);
+        }
+    }
+
+    /**
+     * Updates the displayed type of the given comment in the document
+     */
+    public void onChangeCommentType(Comment comment) {
+        int start = getCommentStart(comment);
+        int end = getCommentEnd(comment);
 
         try {
             bypassDocumentFilter = true;
             remove(start, end - start);
             List<ElementSpec> batch = new ArrayList<>();
             appendBatchEndStart(batch);
-            var attrs = writeRecord(record, session.getTranscript(), session.getTierView(), batch);
+            var attrs = writeComment(comment, batch);
             appendBatchLineFeed(attrs, null, batch);
             processBatchUpdates(start, batch);
         } catch (BadLocationException e) {
@@ -2113,105 +2321,23 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     }
 
     /**
-     * Adds a record to the document
-     *
-     * @param addedRecord the record that gets added
+     * Updates the displayed type of the given gem in the document
      */
-    public void addRecord(Record addedRecord, int elementIndex) {
+    public void onChangeGemType(Gem gem) {
+        int start = getGemStart(gem);
+        int end = getGemEnd(gem);
+
         try {
-            List<ElementSpec> batch = new ArrayList<>();
-            appendBatchEndStart(null, getRecordParagraphAttributes(), batch);
-            AttributeSet attrs = writeRecord(addedRecord, session.getTranscript(), session.getTierView(), batch);
-            appendBatchLineFeed(attrs, null, batch);
-            int nextElementStart = getLength();
-
-            Transcript transcript = getSession().getTranscript();
-            Transcript.Element nextElement = (elementIndex < transcript.getNumberOfElements() - 1) ? transcript.getElementAt(elementIndex + 1) : null;
-            if(nextElement != null) {
-                if (nextElement.isRecord()) {
-                    nextElementStart = getRecordStart(nextElement.asRecord());
-                } else if (nextElement.isComment()) {
-                    nextElementStart = getCommentStart(nextElement.asComment());
-                } else if (nextElement.isGem()) {
-                    nextElementStart = getGemStart(nextElement.asGem());
-                }
-            }
-
-            processBatchUpdates(nextElementStart, batch);
-        } catch (BadLocationException e) {
-            LogUtil.severe(e);
-        }
-    }
-
-    // endregion Record Changes
-
-    /**
-     * Removes a record from the document
-     *
-     * @param removedRecord the record that gets removed
-     */
-    public void deleteRecord(Record removedRecord) {
-        try {
-            int start = getRecordStart(removedRecord, true);
-            int end = getRecordEnd(removedRecord);
-
             bypassDocumentFilter = true;
             remove(start, end - start);
+            List<ElementSpec> batch = new ArrayList<>();
+            appendBatchEndStart(batch);
+            var attrs = writeGem(gem, batch);
+            appendBatchLineFeed(attrs, null, batch);
+            processBatchUpdates(start, batch);
         } catch (BadLocationException e) {
             LogUtil.severe(e);
         }
-    }
-
-    /**
-     * Gets the start position of the given record
-     *
-     * @param record           the record whose start position is trying to be found
-     * @param includeSeparator whether the separator / record header is included in the
-     *                         calculation of the start position
-     * @return the position in the document at the beginning of the records content
-     */
-    public int getRecordStart(Record record, boolean includeSeparator) {
-        Element root = getDefaultRootElement();
-
-        for (int i = 0; i < root.getElementCount(); i++) {
-            Element elem = root.getElement(i);
-            if (elem.getElementCount() < 1) continue;
-            AttributeSet attrs = elem.getElement(0).getAttributes();
-            Record currentRecord = (Record) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
-            if (currentRecord == null) continue;
-            var tier = attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
-            if ((tier != null || includeSeparator) && currentRecord == record) {
-                return elem.getStartOffset();
-            }
-        }
-
-        return -1;
-    }
-
-    /**
-     * Gets the end position of the specified record
-     *
-     * @param record the record whose end is trying to be found
-     * @return the position in the document immediately after the final character of the records content
-     * (newlines included)
-     */
-    public int getRecordEnd(Record record) {
-        Element root = getDefaultRootElement();
-
-        int retVal = -1;
-
-        for (int i = 0; i < root.getElementCount(); i++) {
-            Element elem = root.getElement(i);
-            if (elem.getElementCount() < 1) continue;
-            AttributeSet attrs = elem.getElement(0).getAttributes();
-            Record currentRecord = (Record) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
-            if (currentRecord == null) continue;
-            if (record == currentRecord) {
-                retVal = Math.max(retVal, elem.getEndOffset());
-            }
-        }
-
-        return retVal;
     }
 
     /**
@@ -2341,227 +2467,154 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     }
 
     /**
-     * Gets the character at the specified position in the document
-     *
-     * @param pos the position to get the character from
-     * @return the character at the specified position
+     * Adds a comment to the document and the transcript at the given transcript element index
      */
-    public Character getCharAtPos(int pos) {
+    public void addComment(Comment comment, int transcriptElementIndex) {
+        int offset = -1;
+
+        if (transcriptElementIndex == 0) {
+            var elementAfterComment = session.getTranscript().getElementAt(1);
+            if (elementAfterComment.isRecord()) {
+                offset = getRecordStart(session.getRecordPosition(elementAfterComment.asRecord()));
+            } else if (elementAfterComment.isComment()) {
+                offset = getCommentStart(elementAfterComment.asComment());
+            } else if (elementAfterComment.isGem()) {
+                offset = getGemStart(elementAfterComment.asGem());
+            } else {
+                throw new RuntimeException("Invalid transcript element");
+            }
+        } else {
+            var elementBeforeComment = session.getTranscript().getElementAt(transcriptElementIndex - 1);
+            if (elementBeforeComment.isRecord()) {
+                offset = getRecordEnd(session.getRecordPosition(elementBeforeComment.asRecord()));
+            } else if (elementBeforeComment.isComment()) {
+                offset = getCommentEnd(elementBeforeComment.asComment());
+            } else if (elementBeforeComment.isGem()) {
+                offset = getGemEnd(elementBeforeComment.asGem());
+            } else {
+                throw new RuntimeException("Invalid transcript element");
+            }
+        }
+
         try {
-            return getText(pos, 1).charAt(0);
+            List<ElementSpec> batch = new ArrayList<>();
+            appendBatchEndStart(batch);
+            var attrs = writeComment(comment, batch);
+            appendBatchLineFeed(attrs, null, batch);
+            processBatchUpdates(offset, batch);
         } catch (BadLocationException e) {
-            LogUtil.warning(e);
-            return null;
+            LogUtil.severe(e);
         }
     }
 
-    /**
-     * Empties the document and repopulates it with up-to-date data
-     */
-    public void reload() {
+    // Adds a gem to the document and the transcript at the given transcript element index
+    public void addGem(Gem gem, int transcriptElementIndex) {
+        int offset = -1;
+
+        if (transcriptElementIndex == 0) {
+            var elementAfterComment = session.getTranscript().getElementAt(1);
+            if (elementAfterComment.isRecord()) {
+                offset = getRecordStart(session.getRecordPosition(elementAfterComment.asRecord()));
+            } else if (elementAfterComment.isComment()) {
+                offset = getCommentStart(elementAfterComment.asComment());
+            } else if (elementAfterComment.isGem()) {
+                offset = getGemStart(elementAfterComment.asGem());
+            } else {
+                throw new RuntimeException("Invalid transcript element");
+            }
+
+        } else {
+            var elementBeforeComment = session.getTranscript().getElementAt(transcriptElementIndex - 1);
+            if (elementBeforeComment.isRecord()) {
+                offset = getRecordEnd(session.getRecordPosition(elementBeforeComment.asRecord()));
+            } else if (elementBeforeComment.isComment()) {
+                offset = getCommentEnd(elementBeforeComment.asComment());
+            } else if (elementBeforeComment.isGem()) {
+                offset = getGemEnd(elementBeforeComment.asGem());
+            } else {
+                throw new RuntimeException("Invalid transcript element");
+            }
+        }
+
         try {
-            bypassDocumentFilter = true;
-            remove(0, getLength());
-            populate();
+            List<ElementSpec> batch = new ArrayList<>();
+            appendBatchEndStart(batch);
+            var attrs = writeGem(gem, batch);
+            appendBatchLineFeed(attrs, null, batch);
+            processBatchUpdates(offset, batch);
         } catch (BadLocationException e) {
             LogUtil.severe(e);
         }
     }
 
     /**
-     * Gets the index of the record containing the specified position
+     * Update record text in the document
      *
-     * @param position a position in the document in a record
-     * @return the index of the record
+     * @param record the record whose media segment is being updated
      */
-    public int getRecordIndex(int position) {
-        AttributeSet attributes = getCharacterElement(position).getAttributes();
-        Record record = (Record) attributes.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
-        if (record == null) return -1;
-        return session.getRecordPosition(record);
-    }
+    public void updateRecord(Record record) {
+        int start = getRecordStart(record);
+        int end = getRecordEnd(record);
 
-    /**
-     * Gets the element index of the record containing the specified position
-     *
-     * @param position a position in the document in a record
-     * @return the element index of the record
-     */
-    public int getRecordElementIndex(int position) {
-        AttributeSet attributes = getCharacterElement(position).getAttributes();
-        Record record = (Record) attributes.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
-        if (record == null) return -1;
-        return session.getRecordElementIndex(record);
-    }
-
-    /**
-     * Gets the tier containing the specified position
-     *
-     * @param position a position in the document in a record
-     * @return a reference to the tier
-     */
-    public Tier<?> getTier(int position) {
-        AttributeSet attributes = getCharacterElement(position).getAttributes();
-        return (Tier<?>) attributes.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
-    }
-
-    /**
-     * Appends a formatted representation of the provided segment to the batch
-     *
-     * @param segment         the segment that will be appended
-     * @param additionalAttrs any additional attributes to be added to the segment (none added if {@code null})
-     * @param batch          the batch to append the segment to
-     */
-    private void appendFormattedSegment(MediaSegment segment, AttributeSet additionalAttrs, List<ElementSpec> batch) {
-        appendFormattedSegment(segment, additionalAttrs, MediaTimeFormatStyle.PADDED_MINUTES_AND_SECONDS, batch);
-    }
-
-    /**
-     * Inserts a given tier at the end of the batch
-     *
-     * @param recordIndex  the index of the record the tier is in
-     * @param tier         the tier that will be inserted
-     * @param tierViewItem a reference to a {@link TierViewItem} used to get font info if any is present
-     * @param recordAttrs  an attribute set containing attributes for the containing record to be added to the tier
-     *                     attributes (none will be added if {@code null})
-     * @param batch       the batch to append the tier to
-     * @return a mutable attribute set containing the attributes of the last character of the tier to add a
-     * newline after if need be
-     */
-    private SimpleAttributeSet insertTier(int recordIndex, Tier<?> tier, TierViewItem tierViewItem, AttributeSet recordAttrs, List<ElementSpec> batch) {
-        String tierName = tier.getName();
-        Record record = session.getRecord(recordIndex);
-
-        SimpleAttributeSet tierAttrs = getTierAttributes(tier, tierViewItem);
-        if (recordAttrs != null) {
-            tierAttrs.addAttributes(recordAttrs);
+        try {
+            bypassDocumentFilter = true;
+            remove(start, end - start);
+            List<ElementSpec> batch = new ArrayList<>();
+            appendBatchEndStart(batch);
+            var attrs = writeRecord(record, session.getTranscript(), session.getTierView(), batch);
+            appendBatchLineFeed(attrs, null, batch);
+            processBatchUpdates(start, batch);
+        } catch (BadLocationException e) {
+            LogUtil.severe(e);
         }
+    }
 
-        SimpleAttributeSet labelAttrs = getTierLabelAttributes(tier);
-        if (recordAttrs != null) {
-            labelAttrs.addAttributes(recordAttrs);
-        }
+    /**
+     * Adds a record to the document
+     *
+     * @param addedRecord the record that gets added
+     */
+    public void addRecord(Record addedRecord, int elementIndex) {
+        try {
+            List<ElementSpec> batch = new ArrayList<>();
+            appendBatchEndStart(null, getRecordParagraphAttributes(), batch);
+            AttributeSet attrs = writeRecord(addedRecord, session.getTranscript(), session.getTierView(), batch);
+            appendBatchLineFeed(attrs, null, batch);
+            int nextElementStart = getLength();
 
-        String labelText = tierName;
-        if (chatTierNamesShown) {
-            SystemTierType systemTierType = SystemTierType.tierFromString(tierName);
-            if (systemTierType != null) {
-                if (systemTierType == SystemTierType.Orthography) {
-                    labelText = "*" + record.getSpeaker().getId();
-                } else {
-                    labelText = systemTierType.getChatTierName();
-                }
-            } else {
-                UserTierType userTierType = UserTierType.fromPhonTierName(tierName);
-                if (userTierType != null) {
-                    labelText = userTierType.getChatTierName();
-                } else {
-                    labelText = UserTierType.determineCHATTierName(session, tierName);
+            Transcript transcript = getSession().getTranscript();
+            Transcript.Element nextElement = (elementIndex < transcript.getNumberOfElements() - 1) ? transcript.getElementAt(elementIndex + 1) : null;
+            if(nextElement != null) {
+                if (nextElement.isRecord()) {
+                    nextElementStart = getRecordStart(nextElement.asRecord());
+                } else if (nextElement.isComment()) {
+                    nextElementStart = getCommentStart(nextElement.asComment());
+                } else if (nextElement.isGem()) {
+                    nextElementStart = getGemStart(nextElement.asGem());
                 }
             }
+
+            processBatchUpdates(nextElementStart, batch);
+        } catch (BadLocationException e) {
+            LogUtil.severe(e);
         }
-        labelText = formatLabelText(labelText);
+    }
 
-        labelAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE, true);
-        appendBatchString(labelText, labelAttrs, batch);
+    /**
+     * Removes a record from the document
+     *
+     * @param removedRecord the record that gets removed
+     */
+    public void deleteRecord(Record removedRecord) {
+        try {
+            int start = getRecordStart(removedRecord, true);
+            int end = getRecordEnd(removedRecord);
 
-        labelAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE);
-        appendBatchString(": ", labelAttrs, batch);
-
-        Class<?> tierType = tier.getDeclaredType();
-
-        if (!tier.hasValue()) {
-            appendBatchString("", tierAttrs, batch);
-        } else if (tier.isUnvalidated()) {
-            appendBatchString(tier.getUnvalidatedValue().getValue(), tierAttrs, batch);
-        } else {
-            if (tierType.equals(IPATranscript.class)) {
-                Tier<IPATranscript> ipaTier = (Tier<IPATranscript>) tier;
-                List<IPATranscript> words = (ipaTier).getValue().words();
-                for (int i = 0; i < words.size(); i++) {
-                    var word = words.get(i);
-                    SimpleAttributeSet attrs;
-                    if (word.matches("\\P")) {
-                        // Pause
-                        attrs = getIPAPauseAttributes(ipaTier);
-                    } else {
-                        // Word
-                        attrs = getIPAWordAttributes(ipaTier);
-                    }
-                    attrs.addAttributes(tierAttrs);
-                    String content = word.toString();
-                    appendBatchString(content, attrs, batch);
-
-                    if (i < words.size() - 1) {
-                        appendBatchString(" ", tierAttrs, batch);
-                    }
-                }
-            } else if (tierType.equals(MediaSegment.class)) {
-                MediaSegment segment = record.getMediaSegment();
-                appendFormattedSegment(segment, tierAttrs, batch);
-            } else if (tierType.equals(Orthography.class)) {
-                Tier<Orthography> orthographyTier = (Tier<Orthography>) tier;
-                orthographyTier.getValue().accept(new TranscriptOrthographyVisitors.KeywordVisitor(this, tierAttrs, batch));
-            } else if (tierType.equals(MorTierData.class)) {
-                Tier<MorTierData> morTier = (Tier<MorTierData>) tier;
-                MorTierData mors = morTier.getValue();
-
-                for (int i = 0; i < mors.size(); i++) {
-                    Mor mor = mors.get(i);
-                    appendBatchString(mor.toString(), tierAttrs, batch);
-                    if (i < mors.size() - 1) {
-                        appendBatchString(" ", tierAttrs, batch);
-                    }
-                }
-            } else if (tierType.equals(GraspTierData.class)) {
-                Tier<GraspTierData> graspTier = (Tier<GraspTierData>) tier;
-                GraspTierData grasps = graspTier.getValue();
-
-                for (int i = 0; i < grasps.size(); i++) {
-                    Grasp grasp = grasps.get(i);
-                    appendBatchString(grasp.toString(), tierAttrs, batch);
-                    if (i < grasps.size() - 1) {
-                        appendBatchString(" ", tierAttrs, batch);
-                    }
-                }
-            } else if (tierType.equals(TierData.class)) {
-                Tier<TierData> userTier = (Tier<TierData>) tier;
-                TierData tierData = userTier.getValue();
-                if (tierData != null) {
-                    for (int i = 0; i < tierData.length(); i++) {
-                        TierElement elem = tierData.elementAt(i);
-                        String text = null;
-                        SimpleAttributeSet attrs;
-                        if (elem instanceof TierString tierString) {
-                            text = tierString.text();
-                            attrs = getTierStringAttributes();
-                        } else if (elem instanceof TierComment comment) {
-                            text = comment.toString();
-                            attrs = getTierCommentAttributes();
-                        } else if (elem instanceof TierInternalMedia internalMedia) {
-                            attrs = getTierInternalMediaAttributes();
-                            appendFormattedInternalMedia(internalMedia.getInternalMedia(), attrs, batch);
-                        } else if (elem instanceof TierLink link) {
-                            text = link.toString();
-                            attrs = getTierLinkAttributes();
-                        } else {
-                            throw new RuntimeException("Invalid type");
-                        }
-
-                        attrs.addAttributes(tierAttrs);
-
-                        if (text != null) appendBatchString(text, attrs, batch);
-
-                        if (i < tierData.length() - 1) {
-                            appendBatchString(" ", tierAttrs, batch);
-                        }
-                    }
-                }
-            }
+            bypassDocumentFilter = true;
+            remove(start, end - start);
+        } catch (BadLocationException e) {
+            LogUtil.severe(e);
         }
-
-        tierAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_COMPONENT_FACTORY);
-        return tierAttrs;
     }
 
     /**
@@ -2589,151 +2642,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         session.setTierView(newTierView);
     }
 
+    // endregion Record Changes
+
     // region Document Properties
-
-    /**
-     * Gets the offset from the preceding label of a given position in the document
-     *
-     * @param pos the position that the offset will come from
-     */
-    public int getOffsetInContent(int pos) {
-        Element elem = getCharacterElement(pos);
-        String transcriptElementType = (String) elem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
-        if (transcriptElementType == null) return -1;
-
-        switch (transcriptElementType) {
-            case TranscriptStyleConstants.ATTR_KEY_RECORD -> {
-                Tier<?> tier = (Tier<?>) elem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
-                if (tier == null) return -1;
-                int recordStartPos = getTierContentStart(tier);
-                return pos - recordStartPos;
-            }
-            case TranscriptStyleConstants.ATTR_KEY_COMMENT -> {
-                Comment comment = (Comment) elem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT);
-                if (comment == null) return -1;
-                int commentStartPos = getCommentContentStart(comment);
-                return pos - commentStartPos;
-            }
-            case TranscriptStyleConstants.ATTR_KEY_GEM -> {
-                Gem gem = (Gem) elem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM);
-                if (gem == null) return -1;
-                return pos - getGemContentStart(gem);
-            }
-            case TranscriptStyleConstants.ATTR_KEY_GENERIC -> {
-                Tier<?> genericTier = (Tier<?>) elem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
-                if (genericTier == null) return -1;
-                return pos - getGenericContentStart(genericTier);
-            }
-            default -> {
-                return -1;
-            }
-        }
-    }
-
-    /**
-     * Gets the start position of the specified tier
-     *
-     * @param tier the tier whose start position is trying to be found
-     * @return the position in the document at the beginning of the tiers content
-     */
-    public int getTierStart(Tier<?> tier) {
-        Element root = getDefaultRootElement();
-
-        for (int i = 0; i < root.getElementCount(); i++) {
-            Element elem = root.getElement(i);
-            if (elem.getElementCount() < 1) continue;
-            Record currentRecord = (Record) elem.getElement(0).getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
-            if (currentRecord == null) continue;
-            // If correct record index
-            for (int j = 0; j < elem.getElementCount(); j++) {
-                Element innerElem = elem.getElement(j);
-                AttributeSet attrs = innerElem.getAttributes();
-                Tier<?> testTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
-                Boolean isLabel = (Boolean) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL);
-                // If correct tier name
-                if (isLabel == null && testTier != null && testTier == tier) {
-                    return innerElem.getParentElement().getStartOffset();
-                }
-            }
-        }
-
-        return -1;
-    }
-
-    /**
-     * Gets the start position for the content of the specified tier
-     *
-     * @param tier the tier whose start position is trying to be found
-     * @return the position in the document at the beginning of the tiers content
-     */
-    public int getTierContentStart(Tier<?> tier) {
-        Element root = getDefaultRootElement();
-
-        for (int i = 0; i < root.getElementCount(); i++) {
-            Element elem = root.getElement(i);
-            if (elem.getElementCount() == 0) continue;
-            String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
-            // If correct record index
-            if (transcriptElementType != null && transcriptElementType.equals(TranscriptStyleConstants.ATTR_KEY_RECORD)) {
-                for (int j = 0; j < elem.getElementCount(); j++) {
-                    Element innerElem = elem.getElement(j);
-                    AttributeSet attrs = innerElem.getAttributes();
-                    Tier<?> currentTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
-                    Boolean isLabel = (Boolean) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL);
-                    // If correct tier
-                    if (isLabel == null && currentTier != null && currentTier == tier) {
-                        return innerElem.getStartOffset();
-                    }
-                }
-            }
-        }
-
-        return -1;
-    }
-
-    /**
-     * Gets the start position of the specified "generic tier"
-     *
-     * @param genericTier a reference to the generic tier whose start position is trying to be found
-     * @return the position in the document at the beginning of the generic tiers content
-     */
-    public int getGenericContentStart(Tier<?> genericTier) {
-        Element root = getDefaultRootElement();
-
-        for (int i = 0; i < root.getElementCount(); i++) {
-            Element elem = root.getElement(i);
-            if (elem.getElementCount() == 0) continue;
-            String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
-            // If transcript element type is tierData
-            if (transcriptElementType != null && transcriptElementType.equals(TranscriptStyleConstants.ATTR_KEY_GENERIC)) {
-                for (int j = 0; j < elem.getElementCount(); j++) {
-                    Element innerElem = elem.getElement(j);
-                    AttributeSet attrs = innerElem.getAttributes();
-                    Tier<?> currentGenericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
-                    Boolean isLabel = (Boolean) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL);
-                    // If correct tierData
-                    if (isLabel == null && currentGenericTier != null && currentGenericTier == genericTier) {
-                        return innerElem.getStartOffset();
-                    }
-                }
-            }
-        }
-
-        return -1;
-    }
-
-    /**
-     * Gets the attributes of the last {@link javax.swing.text.DefaultStyledDocument.ElementSpec} in a provided list
-     *
-     * @param elementSpecs the list of elementspecs
-     * @return the attributes of the last elementspec
-     */
-    public AttributeSet getTrailingAttributes(List<DefaultStyledDocument.ElementSpec> elementSpecs) {
-        if (elementSpecs.isEmpty()) return new SimpleAttributeSet();
-        AttributeSet attrs = elementSpecs.get(elementSpecs.size() - 1).getAttributes();
-        return attrs == null ? new SimpleAttributeSet() : attrs;
-    }
-
     /**
      * Gets the object associated with a given key from the document properties
      *
@@ -2743,10 +2654,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     public Object getDocumentProperty(String key) {
         return getProperty(key);
     }
-
-    // endregion Document Properties
-
-    // region Not Editable Attributes
 
     /**
      * Gets the object associated with a given key from the document properties
@@ -2773,6 +2680,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         propertyChangeSupport.firePropertyChange(key, existingValue, value);
     }
 
+
     /**
      * Adds a property change listener that responds to changes in the document property with the given key / name
      *
@@ -2783,8 +2691,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         propertyChangeSupport.addPropertyChangeListener(propertyName, propertyChangeListener);
     }
 
-    // endregion Not Editable Attributes
-
     /**
      * Removes a document property change listener
      *
@@ -2793,6 +2699,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     public void removeDocumentPropertyChangeListener(PropertyChangeListener propertyChangeListener) {
         propertyChangeSupport.removePropertyChangeListener(propertyChangeListener);
     }
+    // endregion Document Properties
+
+    // region Not Editable Attributes
 
     /**
      * Checks if the provided attribute set contains any attributes that are currently considered "not editable"
@@ -2816,6 +2725,17 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         notEditableAttributes.add(attributeKey);
     }
 
+    /**
+     * Removes the given attribute from the set of "not editable" attributes
+     *
+     * @param attributeKey the attribute that will be removed from the set
+     */
+    public void removeNotEditableAttribute(String attributeKey) {
+        notEditableAttributes.remove(attributeKey);
+    }
+
+    // endregion Not Editable Attributes
+
     // region Populate
     private final ReentrantLock populateLock = new ReentrantLock();
 
@@ -2829,7 +2749,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     }
 
     private class PopulateWorker extends SwingWorker<List<ElementSpec>, List<ElementSpec>> {
-        private int offs = getLength();
 
         record EndStart(ElementSpec end, ElementSpec start) {}
 
@@ -2983,10 +2902,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                         ElementSpec nextEnd = chunk.remove(chunk.size() - 1);
                         nextEndStart = new EndStart(nextEnd, nextStart);
                     }
-                    processBatchUpdates(offs, chunk);
-                    for(var elementSpec: chunk) {
-                        offs += elementSpec.getLength();
-                    }
+                    processBatchUpdates(getLength(), chunk);
                 } catch (BadLocationException e) {
                     throw new RuntimeException(e);
                 }
@@ -3024,22 +2940,41 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             }
         }
     }
+
+    /**
+     * Empties the document and repopulates it with up-to-date data
+     */
+    public void reload() {
+        try {
+            bypassDocumentFilter = true;
+            remove(0, getLength());
+            populate();
+        } catch (BadLocationException e) {
+            LogUtil.severe(e);
+        }
+    }
     // endregion Populate
 
     // region TranscriptDocumentInsertionHook
+    public List<InsertionHook> getInsertionHooks() {
+        return Collections.unmodifiableList(this.insertionHooks);
+    }
 
-    /**
-     * Removes the given attribute from the set of "not editable" attributes
-     *
-     * @param attributeKey the attribute that will be removed from the set
-     */
-    public void removeNotEditableAttribute(String attributeKey) {
-        notEditableAttributes.remove(attributeKey);
+    private void loadRegisteredInsertionHooks() {
+        for (var hookExtPt : PluginManager.getInstance().getExtensionPoints(InsertionHook.class)) {
+            final InsertionHook hook = hookExtPt.getFactory().createObject();
+            addInsertionHook(hook);
+        }
+    }
+
+    public void addInsertionHook(InsertionHook hook) {
+        this.insertionHooks.add(hook);
     }
 
     public boolean removeInsertionHook(InsertionHook hook) {
         return this.insertionHooks.remove(hook);
     }
+    // endregion TranscriptDocumentInsertionHook
 
     // region IExtendable
     @Override
@@ -3052,8 +2987,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         return extensionSupport.getExtension(cap);
     }
 
-    // endregion TranscriptDocumentInsertionHook
-
     @Override
     public <T> T putExtension(Class<T> cap, T impl) {
         return extensionSupport.putExtension(cap, impl);
@@ -3062,7 +2995,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     @Override
     public <T> T removeExtension(Class<T> cap) {
         return extensionSupport.removeExtension(cap);
+
     }
+    // endregion IExtendable
 
     /**
      * The default document filter for the {@link TranscriptDocument}
@@ -3124,8 +3059,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     /**
      * A wrapper record for a list of {@link Language}
      */
-    public record Languages(List<Language> languageList) {
-    }
+    public record Languages(List<Language> languageList) {}
 
     // endregion
 }
