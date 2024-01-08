@@ -21,6 +21,7 @@ import ca.phon.app.session.editor.view.tier_management.actions.*;
 import ca.phon.session.*;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.FontFormatter;
+import ca.phon.ui.PhonTable;
 import ca.phon.ui.action.*;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
@@ -134,7 +135,7 @@ public class TierOrderingEditorView extends EditorView {
 					}
 			
 		};
-		tierOrderingTable = new JXTable(tableModel);
+		tierOrderingTable = new PhonTable(tableModel);
 
 		tierOrderingTable.setSortable(false);
 		tierOrderingTable.setVisibleRowCount(5);
