@@ -141,10 +141,10 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		dockControl.setTheme(ThemeMap.KEY_FLAT_THEME);
 
 		bibliothek.gui.dock.util.IconManager icons = dockControl.getIcons();
-		icons.setIconClient("close", IconManager.getInstance().buildFontIcon(IconManager.FontAwesomeFontName, "WINDOW_MINIMIZE", IconSize.SMALL, Color.darkGray));
-		icons.setIconClient("locationmanager.maximize", IconManager.getInstance().buildFontIcon(IconManager.FontAwesomeFontName, "WINDOW_MAXIMIZE", IconSize.SMALL, Color.darkGray));
-		icons.setIconClient("locationmanager.minimize", IconManager.getInstance().buildFontIcon(IconManager.FontAwesomeFontName, "WINDOW_MINIMIZE", IconSize.SMALL, Color.darkGray));
-		icons.setIconClient("locationmanager.normalize", IconManager.getInstance().buildFontIcon(IconManager.FontAwesomeFontName, "WINDOW_RESTORE", IconSize.SMALL, Color.darkGray));
+		icons.setIconClient("close", IconManager.getInstance().buildFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "minimize", IconSize.SMALL, Color.darkGray));
+		icons.setIconClient("locationmanager.maximize", IconManager.getInstance().buildFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "fullscreen", IconSize.SMALL, Color.darkGray));
+		icons.setIconClient("locationmanager.minimize", IconManager.getInstance().buildFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "minimize", IconSize.SMALL, Color.darkGray));
+		icons.setIconClient("locationmanager.normalize", IconManager.getInstance().buildFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "fullscreen_exit", IconSize.SMALL, Color.darkGray));
 
 		dockControl.addControlListener(new CControlListener() {
 			
@@ -886,7 +886,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 			final SimpleButtonAction menuAct = new SimpleButtonAction();
 			menuAct.setText("View menu");
-			menuAct.setIcon(IconManager.getInstance().buildFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "MORE_VERT", IconSize.MEDIUM, Color.darkGray));
+			menuAct.setIcon(IconManager.getInstance().buildFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "MORE_VERT", IconSize.SMALL, Color.darkGray));
 			menuAct.addActionListener(new ActionListener() {
 
 				@Override
@@ -907,7 +907,7 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 			if(!TranscriptView.VIEW_NAME.equals(id)) {
 				final SimpleButtonAction externalizeAct = new SimpleButtonAction();
 				externalizeAct.setText("Open view in new window");
-				externalizeAct.setIcon(IconManager.getInstance().buildFontIcon(IconManager.FontAwesomeFontName, "EXTERNAL_LINK_SQUARE", IconSize.SMALL, Color.darkGray));
+				externalizeAct.setIcon(IconManager.getInstance().buildFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "open_in_new", IconSize.SMALL, Color.darkGray));
 				externalizeAct.addActionListener(new ActionListener() {
 
 					@Override
@@ -1316,6 +1316,10 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 	}
 
 	private List<AccessoryWindow> accessoryWindows = new ArrayList<AccessoryWindow>();
+
+	/**
+	 * Accessory window for editor views
+	 */
 	private class AccessoryWindow extends CommonModuleFrame {
 
 		private CContentArea contentArea;

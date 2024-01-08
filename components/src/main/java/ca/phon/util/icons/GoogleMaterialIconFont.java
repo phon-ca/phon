@@ -5,10 +5,16 @@ import jiconfont.IconCode;
 import jiconfont.IconFont;
 import jiconfont.swing.IconFontSwing;
 
+import javax.print.attribute.Attribute;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.font.TextAttribute;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.AttributedCharacterIterator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -71,6 +77,52 @@ public class GoogleMaterialIconFont implements IconFont {
 
     public IconCode getIconCode(String iconName) {
         return new DefaultIconCode(font.getFontName(), codepoints.get(iconName.toLowerCase()));
+    }
+
+    public static class CustomAttributes extends AttributedCharacterIterator.Attribute {
+        public static final AttributedCharacterIterator.Attribute FILL = new CustomAttributes("FILL");
+
+        protected CustomAttributes(String name) {
+            super(name);
+        }
+    }
+
+    public Icon buildIcon(String name, Float size, Color color) {
+        final Font font;
+        try {
+            font = createFont(size);
+        } catch (IOException | FontFormatException e) {
+            throw new RuntimeException(e);
+        }
+        final BufferedImage img = buildImage(Character.toString(codepoints.get(name.toLowerCase())), font, color);
+        final ImageIcon icon = new ImageIcon(img);
+        return icon;
+    }
+
+    public Font createFont(float size) throws IOException, FontFormatException {
+        final Map<AttributedCharacterIterator.Attribute, Object> map = new HashMap<>();
+        map.put(CustomAttributes.FILL, 100.0f);
+        final Font font = Font.createFont(Font.TRUETYPE_FONT, getFontInputStream()).deriveFont(size);
+        return font;
+    }
+
+    private static BufferedImage buildImage(String text, Font font, Color color) {
+        JLabel label = new JLabel(text);
+        label.setForeground(color);
+        label.setFont(font);
+        Dimension dim = label.getPreferredSize();
+        BufferedImage bufImage = new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = bufImage.createGraphics();
+        int width = dim.width;
+        int height = dim.height - g2d.getFontMetrics().getDescent() - g2d.getFontMetrics().getAscent();
+        label.setSize(width, height);
+        bufImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        g2d = bufImage.createGraphics();
+        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+        label.print(g2d);
+        g2d.dispose();
+        return bufImage;
     }
 
 }

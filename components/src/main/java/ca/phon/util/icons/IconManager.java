@@ -21,11 +21,13 @@ import ca.phon.util.*;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.*;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 
@@ -337,17 +339,19 @@ public class IconManager {
 		} else {
 			final GoogleMaterialFonts googleMaterialStaticFont = GoogleMaterialFonts.fromString(fontName);
 			if(googleMaterialStaticFont != null) {
-				icon = switch (googleMaterialStaticFont) {
-					case Outlined ->IconFontSwing.buildIcon(GoogleMaterialIconFont.getIconFont(GoogleMaterialFonts.Outlined).getIconCode(iconName), size.getWidth(), color);
-					case Round -> IconFontSwing.buildIcon(GoogleMaterialIconFont.getIconFont(GoogleMaterialFonts.Round).getIconCode(iconName), size.getWidth(), color);
-					case Sharp -> IconFontSwing.buildIcon(GoogleMaterialIconFont.getIconFont(GoogleMaterialFonts.Sharp).getIconCode(iconName), size.getWidth(), color);
-				};
+//				icon = switch (googleMaterialStaticFont) {
+//					case Outlined ->IconFontSwing.buildIcon(GoogleMaterialIconFont.getIconFont(GoogleMaterialFonts.Outlined).getIconCode(iconName), size.getWidth() * 2, color);
+//					case Round -> IconFontSwing.buildIcon(GoogleMaterialIconFont.getIconFont(GoogleMaterialFonts.Round).getIconCode(iconName), size.getWidth() * 2, color);
+//					case Sharp -> IconFontSwing.buildIcon(GoogleMaterialIconFont.getIconFont(GoogleMaterialFonts.Sharp).getIconCode(iconName), size.getWidth() * 2, color);
+//				};
+				GoogleMaterialIconFont iconFont = GoogleMaterialIconFont.getIconFont(googleMaterialStaticFont);
+				icon = iconFont.buildIcon(iconName, (float)size.getWidth() * 2, color);
 			}
 		}
 		if(icon == null) {
 			return getIcon("blank", size);
 		} else {
-			return iconToImage(size, icon);
+            return iconToImage(size, icon);
 		}
 	}
 
@@ -388,7 +392,9 @@ public class IconManager {
 		final int h = (int)(icon.getIconHeight() * scale);
 		scaledImgGraphics.drawImage(img, (size.getWidth() - w) / 2, (size.getHeight() - h) / 2, w, h, null);
 
-		return new ImageIcon(scaledImg);
+
+
+        return new ImageIcon(scaledImg);
 	}
 
 	/**

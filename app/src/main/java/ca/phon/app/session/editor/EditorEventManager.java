@@ -176,7 +176,8 @@ public class EditorEventManager {
 					synchronized (actionMap) {
 						if(PrefHelper.getBoolean("phon.debug", false)) {
 							LogUtil.info("Dispatching event: " + event.eventType());
-							LogUtil.info("\t" + event.toString());
+							if(event.getData().isPresent())
+								LogUtil.info("\tdata: " + event.getData().get());
 						}
 						for (EditorEventHandler<?> action : getHandlersForEvent(event.eventType())) {
 							action.handleEvent(event);

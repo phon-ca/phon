@@ -55,9 +55,9 @@ public class FlatButton extends JButton {
 
     private Color borderSelectedColor;
 
-    private int padding = 5;
+    private int padding = 0;
 
-    private int iconTextGap = 5;
+    private int iconTextGap = 2;
 
     /**
      * Custom popup text which will be shown when the mouse hovers over the button

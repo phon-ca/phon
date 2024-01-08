@@ -243,7 +243,7 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 		final SaveSessionAction saveSessionAction = new SaveSessionAction(this);
 		saveSessionAction.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
 		saveSessionAction.putValue(FlatButton.ICON_NAME_PROP, "SAVE");
-		saveSessionAction.putValue(FlatButton.ICON_SIZE_PROP, IconSize.LARGE);
+		saveSessionAction.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM_LARGE);
 		saveButton = new FlatButton(saveSessionAction);
 		saveButton.setPadding(0);
 		saveButton.setIconColor(UIManager.getColor(IconStripUIProps.ICON_STRIP_ICON_COLOR));

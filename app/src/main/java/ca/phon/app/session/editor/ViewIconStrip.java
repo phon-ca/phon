@@ -133,11 +133,12 @@ public class ViewIconStrip extends IconStrip {
                 viewModel.showView(viewName);
             }
         });
-        showHideAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.LARGE);
+        showHideAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM_LARGE);
         showHideAct.putValue(FlatButton.ICON_FONT_NAME_PROP, iconData.fontName());
         showHideAct.putValue(FlatButton.ICON_NAME_PROP, iconData.iconName());
         final FlatButton retVal = createButton(showHideAct);
         retVal.setSelected(viewModel.isShowing(viewName));
+        retVal.setPadding(2);
         retVal.setPopupText(viewName);
         retVal.setPopupLocation(SwingConstants.EAST);
         return retVal;

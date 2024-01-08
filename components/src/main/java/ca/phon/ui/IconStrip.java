@@ -37,7 +37,6 @@ public class IconStrip extends JPanel {
     public FlatButton createButton(Action action) {
         final FlatButton retVal = new FlatButton(action);
         retVal.setAction(action);
-        retVal.setMargin(new Insets(0, 0, 0, 0));
         retVal.setPadding(0);
         retVal.setBorderPainted(false);
         retVal.setFocusPainted(false);
