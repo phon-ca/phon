@@ -46,18 +46,18 @@ public class TranscriptScrollPane extends JScrollPane {
      * Sets up the UI for the scroll pane
      * */
     private void initUI() {
-        this.gutter = new TranscriptScrollPaneGutter(transcriptEditor);
-        setRowHeaderView(gutter);
+//        this.gutter = new TranscriptScrollPaneGutter(transcriptEditor);
+//        setRowHeaderView(gutter);
 
         transcriptEditor.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-            gutter.setPreferredSize(new Dimension(
-                (int) gutter.getPreferredSize().getWidth(),
-                transcriptEditor.getHeight())
-            );
-            revalidate();
-            repaint();
+//            gutter.setPreferredSize(new Dimension(
+//                (int) gutter.getPreferredSize().getWidth(),
+//                transcriptEditor.getHeight())
+//            );
+//            revalidate();
+//            repaint();
             }
         });
     }

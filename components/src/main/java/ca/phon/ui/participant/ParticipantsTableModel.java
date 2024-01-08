@@ -29,16 +29,33 @@ public class ParticipantsTableModel extends AbstractTableModel {
 	private boolean showCalculatedAges = true;
 	
 	private enum Columns {
-		Name,
+		Id,
 		Role,
-		Age;
-		
+		Name,
+		Age,
+		Sex,
+		BirthDate,
+		Language,
+		Group,
+		Education,
+		SES,
+		Other;
+
+		// column names with spaces in place of snake case
 		String[] names = {
-				"Participant Name",
+				"ID",
 				"Role",
-				"Age"
+				"Name",
+				"Age",
+				"Sex",
+				"Birth Date",
+				"Language",
+				"Group",
+				"Education",
+				"SES",
+				"Other"
 		};
-		
+
 		public String getName() {
 			return names[ordinal()];
 		}
@@ -81,26 +98,52 @@ public class ParticipantsTableModel extends AbstractTableModel {
 		if(p == null) return "";
 		
 		Columns col = Columns.values()[columnIndex];
-		if(col == Columns.Name) {
-			return
-					(p.getName() != null && p.getName().trim().length() > 0 
-						? p.getName() : p.getId() != null 
-							? p.getId() : p.getRole() );
-		} else if(col == Columns.Role) {
-			return p.getRole().toString();
-		} else if(col == Columns.Age) {
+
+		switch(col) {
+		case Id:
+			return p.getId();
+
+		case Name:
+			return p.getName() != null ? p.getName() : "";
+
+		case Role:
+			return p.getRole();
+
+		case Age:
 			final Period age = p.getAge(null);
-			if(age != null) {
+			if (age != null) {
 				return AgeFormatter.ageToString(age);
 			} else {
-				if(isShowCalculatedAges() && p.getBirthDate() != null && session.getDate() != null
+				if (isShowCalculatedAges() && p.getBirthDate() != null && session.getDate() != null
 						&& p.getBirthDate().isBefore(session.getDate())) {
 					final Period calculatedAge = p.getAge(session.getDate());
 					return AgeFormatter.ageToString(calculatedAge);
-				} else 
+				} else
 					return "Unknown";
 			}
-		} else {
+
+		case BirthDate:
+			return (p.getBirthDate() != null ? p.getBirthDate().toString() : "");
+
+		case Education:
+			return p.getEducation() != null ? p.getEducation() : "";
+
+		case Group:
+			return p.getGroup() != null ? p.getGroup() : "";
+
+		case Language:
+			return p.getLanguage() != null ? p.getLanguage() : "";
+
+		case SES:
+			return p.getSES() != null ? p.getSES() : "";
+
+		case Sex:
+			return p.getSex() != null ? p.getSex() : "";
+
+		case Other:
+			return p.getOther() != null ? p.getOther() : "";
+
+		default:
 			return "";
 		}
 	}

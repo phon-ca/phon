@@ -21,12 +21,17 @@ import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.participants.actions.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.ui.FlatButton;
+import ca.phon.ui.FlatButtonUIProps;
+import ca.phon.ui.IconStrip;
+import ca.phon.ui.PhonTable;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.*;
 import ca.phon.ui.participant.ParticipantsTableModel;
 import ca.phon.util.icons.*;
 import com.jgoodies.forms.layout.*;
 import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.table.ColumnControlButton;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -48,11 +53,8 @@ public class ParticipantsView extends EditorView {
 	 * 
 	 */
 	private JXTable participantTable;
-	private JButton editParticipantButton;
-	private JButton addParticipantButton;
-	private JButton removeParticipantButton;
-	
-	/**
+
+    /**
 	 * Constructor
 	 */
 	public ParticipantsView(SessionEditor editor) {
@@ -72,49 +74,51 @@ public class ParticipantsView extends EditorView {
 	
 	private void init() {
 		setLayout(new BorderLayout());
-		
-		participantTable = new JXTable();
+
+		participantTable = new PhonTable();
 		participantTable.setVisibleRowCount(3);
+		participantTable.setColumnControlVisible(true);
 		
 		ComponentInputMap participantTableInputMap = new ComponentInputMap(participantTable);
 		ActionMap participantTableActionMap = new ActionMap();
 		
-		ImageIcon deleteIcon = 
-				IconManager.getInstance().getIcon("actions/delete_user", IconSize.SMALL);
 		final PhonUIAction<Void> deleteAction = PhonUIAction.runnable(this::deleteParticipant);
 		deleteAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Delete selected participant");
-		deleteAction.putValue(PhonUIAction.SMALL_ICON, deleteIcon);
+		deleteAction.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+		deleteAction.putValue(FlatButton.ICON_NAME_PROP, "person_remove");
+		deleteAction.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
 		participantTableActionMap.put("DELETE_PARTICIPANT", deleteAction);
 		participantTableInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "DELETE_PARTICIPANT");
 		participantTableInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), "DELETE_PARTICIPANT");
-		
-		removeParticipantButton = new JButton(deleteAction);
+        JButton removeParticipantButton = new FlatButton(deleteAction);
 		
 		participantTable.setInputMap(WHEN_FOCUSED, participantTableInputMap);
 		participantTable.setActionMap(participantTableActionMap);
-		
-		addParticipantButton = new JButton(new NewParticipantAction(getEditor()));
+
+		final NewParticipantAction newParticipantAct = new NewParticipantAction(getEditor());
+		newParticipantAct.putValue(PhonUIAction.NAME, null);
+		newParticipantAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+		newParticipantAct.putValue(FlatButton.ICON_NAME_PROP, "person_add");
+		newParticipantAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+        JButton addParticipantButton = new FlatButton(newParticipantAct);
 		addParticipantButton.setFocusable(false);
 		
-		ImageIcon editIcon = 
-			IconManager.getInstance().getIcon("actions/edit_user", IconSize.SMALL);
 		final PhonUIAction<Void> editParticipantAct = PhonUIAction.runnable(this::editParticipant);
-		editParticipantAct.putValue(PhonUIAction.NAME, "Edit participant...");
 		editParticipantAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Edit selected participant...");
-		editParticipantAct.putValue(PhonUIAction.SMALL_ICON, editIcon);
-		editParticipantButton = new JButton(editParticipantAct);
+		editParticipantAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+		editParticipantAct.putValue(FlatButton.ICON_NAME_PROP, "person_edit");
+		editParticipantAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+        JButton editParticipantButton = new FlatButton(editParticipantAct);
 		editParticipantButton.setFocusable(false);
-		
-		final CellConstraints cc = new CellConstraints();
-		FormLayout participantLayout = new FormLayout(
-				"fill:pref:grow, pref, pref, pref",
-				"pref, pref, pref:grow");
-		JPanel participantPanel = new JPanel(participantLayout);
-		participantPanel.setBackground(Color.white);
-		participantPanel.add(new JScrollPane(participantTable), cc.xywh(1, 2, 3, 2));
-		participantPanel.add(addParticipantButton, cc.xy(2,1));
-		participantPanel.add(editParticipantButton, cc.xy(3,1));
-		participantPanel.add(removeParticipantButton, cc.xy(4, 2));
+
+		final IconStrip iconStrip = new IconStrip(SwingConstants.HORIZONTAL);
+		iconStrip.add(addParticipantButton, IconStrip.IconStripPosition.LEFT);
+		iconStrip.add(editParticipantButton, IconStrip.IconStripPosition.LEFT);
+		iconStrip.add(removeParticipantButton, IconStrip.IconStripPosition.RIGHT);
+
+		add(iconStrip, BorderLayout.NORTH);
+		add(new JScrollPane(participantTable), BorderLayout.CENTER);
+
 		participantTable.addMouseListener(new MouseInputAdapter() {
 
 			@Override
@@ -140,9 +144,10 @@ public class ParticipantsView extends EditorView {
 			}
 			
 		});
-		
-		add(participantPanel, BorderLayout.CENTER);
+
 		update();
+		setupInitiallyVisibleColumns();
+		participantTable.packAll();
 	}
 	
 	@Override
@@ -155,6 +160,12 @@ public class ParticipantsView extends EditorView {
 		final Session session = editor.getDataModel().getSession();
 		ParticipantsTableModel tableModel = new ParticipantsTableModel(session);
 		participantTable.setModel(tableModel);
+	}
+
+	private void setupInitiallyVisibleColumns() {
+		for(int i = participantTable.getColumnCount(true) - 1; i >= 0; i--) {
+			participantTable.getColumnExt(i).setVisible(i < 4);
+		}
 	}
 
 	private void showParticipantContextMenu(Point p) {

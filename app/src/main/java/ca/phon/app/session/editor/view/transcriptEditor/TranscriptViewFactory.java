@@ -15,8 +15,7 @@ import java.awt.geom.Rectangle2D;
  */
 public class TranscriptViewFactory implements ViewFactory {
 
-    // TODO adjust for graphics dpi - make configurable
-    public static final int PAGE_WIDTH = (int) Math.floor(8.5 * 96);
+    public int pageWidth = (int)(8.5 * 96);
 
     private int labelColumnWidth = 150;
 
@@ -73,6 +72,10 @@ public class TranscriptViewFactory implements ViewFactory {
             labelColumnWidth = calculatePreferredLabelColumnWidth(g, transcriptDocument);
         }
         return labelColumnWidth;
+    }
+
+    public int getPageWidth() {
+        return pageWidth;
     }
 
     @Override
@@ -142,6 +145,10 @@ public class TranscriptViewFactory implements ViewFactory {
         }
     }
 
+    /**
+     * A {@link BoxView} that is used to display the transcript and is used to set the width of the
+     * transcript to the width of a letter page
+     */
     private class SessionBoxView extends BoxView {
 
         public SessionBoxView(Element elem, int axis) {
@@ -150,11 +157,14 @@ public class TranscriptViewFactory implements ViewFactory {
 
         @Override
         protected void layoutMinorAxis(int targetSpan, int axis, int[] offsets, int[] spans) {
-            super.layoutMinorAxis(PAGE_WIDTH, axis, offsets, spans);
+            super.layoutMinorAxis(getPageWidth(), axis, offsets, spans);
         }
 
     }
 
+    /**
+     * A {@link LabelView} that is used to display tier labels
+     */
     private class TierLabelView extends LabelView {
 
         public TierLabelView(Element elem) {
@@ -223,6 +233,9 @@ public class TranscriptViewFactory implements ViewFactory {
 
     }
 
+    /**
+     * A {@link ParagraphView} that is used to display tier paragraphs including label and content
+     */
     private class TierParagraphView extends ParagraphView {
 
         private Border border = BorderFactory.createMatteBorder(0, 0, 0, 0, Color.LIGHT_GRAY);
@@ -271,6 +284,10 @@ public class TranscriptViewFactory implements ViewFactory {
 
     }
 
+    /**
+     * A {@link LabelView} that is used to display content within a tier paragraph.  Content is wrapped
+     * on spaces only.
+     */
     static class CustomWrapView extends LabelView {
         public CustomWrapView(Element elem) {
             super(elem);

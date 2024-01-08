@@ -18,14 +18,12 @@ import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.format.MediaSegmentFormatter;
 import ca.phon.session.tierdata.*;
-import ca.phon.ui.FontFormatter;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.Language;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.Tuple;
 
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import javax.swing.text.*;
 import java.awt.*;
@@ -33,7 +31,6 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -232,10 +229,21 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * Gets the starting paragraph attributes for a record
      *
      */
-    public SimpleAttributeSet getRecordParagraphAttributes() {
+    public SimpleAttributeSet getRecordStartAttributes() {
+        SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
+        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_BORDER,
+                BorderFactory.createMatteBorder(1, 0, 0, 0, UIManager.getColor(TranscriptEditorUIProps.RECORD_BORDER_COLOR)));
+        return retVal;
+    }
+
+    /**
+     * Return paragraph attributes with given border
+     * @param border
+     * @return
+     */
+    public SimpleAttributeSet getBorderedParagraphAttributes(Border border) {
         SimpleAttributeSet nextParagraphAttrs = new SimpleAttributeSet();
-        nextParagraphAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_BORDER,
-                BorderFactory.createMatteBorder(1, 0, 0, 0, Color.lightGray));
+        nextParagraphAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_BORDER, border);
         return nextParagraphAttrs;
     }
 
@@ -611,7 +619,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     // endregion Attribute Getters
 
     // region Batching
-
     /**
      * Gets a list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} containing
      * the {@code ElementSpec.EndTagType} and {@code ElementSpec.StartTagType} tags
@@ -1324,7 +1331,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
 
     // region Transcript <-> Document Positioning
-
     /**
      * Gets the start position of the given record
      *
@@ -2577,7 +2583,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     public void addRecord(Record addedRecord, int elementIndex) {
         try {
             List<ElementSpec> batch = new ArrayList<>();
-            appendBatchEndStart(null, getRecordParagraphAttributes(), batch);
+            appendBatchEndStart(null, getRecordStartAttributes(), batch);
             AttributeSet attrs = writeRecord(addedRecord, session.getTranscript(), session.getTierView(), batch);
             appendBatchLineFeed(attrs, null, batch);
             int nextElementStart = getLength();
@@ -2845,7 +2851,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
                     SimpleAttributeSet nextParagraphAttrs = null;
                     if(nextElem != null && nextElem.isRecord()) {
-                        nextParagraphAttrs = getRecordParagraphAttributes();
+                        nextParagraphAttrs = getRecordStartAttributes();
                     }
 
                     if (elem.isRecord()) {

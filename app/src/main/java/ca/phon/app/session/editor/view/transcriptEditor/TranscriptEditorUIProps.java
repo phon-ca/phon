@@ -168,7 +168,9 @@ public class TranscriptEditorUIProps implements UIDefaultsHandler, IPluginExtens
     public final static String BLIND_TRANSCRIPTION_FOREGROUND = "TranscriptEditor.blindTranscriptionForeground";
     public final static Color DEFAULT_BLIND_TRANSCRIPTION_FOREGROUND = new Color(34, 49, 29);
 
+    public final static String RECORD_BORDER_COLOR = "TranscriptEditor.recordBorderColor";
 
+    public final static Color DEFAULT_RECORD_BORDER_COLOR = UIManager.getColor("Button.background");
 
     @Override
     public void setupDefaults(UIDefaults uiDefaults) {
@@ -228,6 +230,7 @@ public class TranscriptEditorUIProps implements UIDefaultsHandler, IPluginExtens
         uiDefaults.put(GENERIC_BACKGROUND, DEFAULT_GENERIC_BACKGROUND);
 
         uiDefaults.put(BLIND_TRANSCRIPTION_FOREGROUND, DEFAULT_BLIND_TRANSCRIPTION_FOREGROUND);
+        uiDefaults.put(RECORD_BORDER_COLOR, DEFAULT_RECORD_BORDER_COLOR);
     }
 
     @Override
