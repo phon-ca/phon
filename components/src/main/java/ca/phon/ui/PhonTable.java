@@ -1,5 +1,6 @@
 package ca.phon.ui;
 
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.icons.GoogleMaterialFonts;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -10,6 +11,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.util.Arrays;
 
 /**
  * Table with some default settings such as column control icon, and default cell renderers for boolean

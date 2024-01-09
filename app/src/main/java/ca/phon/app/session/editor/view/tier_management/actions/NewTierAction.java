@@ -34,8 +34,8 @@ public class NewTierAction extends TierManagementAction {
 	
 	private final static String SHORT_DESC = "Add new tier to session.";
 	
-	private final static ImageIcon ICON =
-			IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL);
+	private final static ImageIcon ICON = IconManager.getInstance()
+			.getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "add", IconSize.SMALL, UIManager.getColor("Actions.accentColor"));
 
 	private int index = -1;
 

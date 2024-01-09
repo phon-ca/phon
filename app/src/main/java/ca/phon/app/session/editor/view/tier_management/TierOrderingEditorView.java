@@ -19,9 +19,7 @@ import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.tier_management.actions.*;
 import ca.phon.session.*;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.FontFormatter;
-import ca.phon.ui.PhonTable;
+import ca.phon.ui.*;
 import ca.phon.ui.action.*;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
@@ -138,6 +136,8 @@ public class TierOrderingEditorView extends EditorView {
 		tierOrderingTable = new PhonTable(tableModel);
 
 		tierOrderingTable.setSortable(false);
+		tierOrderingTable.setFocusable(true);
+		tierOrderingTable.setColumnControlVisible(true);
 		tierOrderingTable.setVisibleRowCount(5);
 		tierOrderingTable.addMouseListener(new TierContextMenuListener());
 		tierOrderingTable.setDragEnabled(true);
@@ -146,10 +146,10 @@ public class TierOrderingEditorView extends EditorView {
 		tierOrderingTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tierOrderingTable.getColumn(0).setMaxWidth(75);
 		tierOrderingTable.getColumn(1).setMaxWidth(75);
-		
+
 		// setup tier odering table action map
-		ActionMap tierOrderActionMap = new ActionMap();
-		ComponentInputMap tableInputMap = new ComponentInputMap(tierOrderingTable);
+		ActionMap tierOrderActionMap = tierOrderingTable.getActionMap();
+		InputMap tableInputMap = tierOrderingTable.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 		
 		final PhonUIAction<Void> deleteAction = PhonUIAction.eventConsumer(this::onDeleteTier);
 		deleteAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Delete the currently selected tier.");
@@ -162,62 +162,59 @@ public class TierOrderingEditorView extends EditorView {
 		tierOrderingTable.setInputMap(WHEN_FOCUSED, tableInputMap);
 		
 		final NewTierAction addAction = new NewTierAction(getEditor(), this);
-		newTierButton = new JButton(addAction);
+		addAction.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+		addAction.putValue(FlatButton.ICON_NAME_PROP, "add");
+		addAction.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+		newTierButton = new FlatButton(addAction);
+		newTierButton.setText(null);
 		newTierButton.setFocusable(false);
-		
-		final ImageIcon removeIcon = 
-			IconManager.getInstance().getIcon("actions/list-remove", IconSize.SMALL);
-		deleteAction.putValue(PhonUIAction.SMALL_ICON, removeIcon);
-		deleteTierButton = new JButton(deleteAction);
+
+		deleteAction.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+		deleteAction.putValue(FlatButton.ICON_NAME_PROP, "remove");
+		deleteAction.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+		deleteTierButton = new FlatButton(deleteAction);
 		deleteTierButton.setFocusable(false);
 		
-		final ImageIcon upIcon =
-			IconManager.getInstance().getIcon("actions/go-up", IconSize.SMALL);
 		final PhonUIAction<Void> upAction = PhonUIAction.runnable(this::moveUp);
+		upAction.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+		upAction.putValue(FlatButton.ICON_NAME_PROP, "arrow_upward");
+		upAction.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
 		upAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move tier up");
-		upAction.putValue(PhonUIAction.SMALL_ICON, upIcon);
-		moveUpButton = new JButton(upAction);
+		moveUpButton = new FlatButton(upAction);
 		moveUpButton.setFocusable(false);
 		
-		final ImageIcon downIcon = 
-			IconManager.getInstance().getIcon("actions/go-down", IconSize.SMALL);
 		final PhonUIAction<Void> downAction = PhonUIAction.runnable(this::moveDown);
+		downAction.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+		downAction.putValue(FlatButton.ICON_NAME_PROP, "arrow_downward");
+		downAction.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
 		downAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move tier down");
-		downAction.putValue(PhonUIAction.SMALL_ICON, downIcon);
-		moveDownButton = new JButton(downAction);
+		moveDownButton = new FlatButton(downAction);
 		moveDownButton.setFocusable(false);
 		
-		final ImageIcon fontIcon = 
-			IconManager.getInstance().getIcon("actions/edit", IconSize.SMALL);
-		final PhonUIAction<Void> fontAction = PhonUIAction.eventConsumer(this::onEditTier);
-		fontAction.putValue(PhonUIAction.NAME, "Edit tier...");
-		fontAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Edit tier...");
-		fontAction.putValue(PhonUIAction.SMALL_ICON, fontIcon);
-		editButton = new JButton(fontAction);
+		final PhonUIAction<Void> editAction = PhonUIAction.eventConsumer(this::onEditTier);
+		editAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Edit tier...");
+		editAction.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+		editAction.putValue(FlatButton.ICON_NAME_PROP, "edit");
+		editAction.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+		editButton = new FlatButton(editAction);
 		editButton.setFocusable(false);
 		
-		final ToggleLockAllTiersAction lockAllAction = new ToggleLockAllTiersAction(getEditor(), this);
-		final JButton lockAllButton = new JButton(lockAllAction);
-		
-		final ToggleHideAllTiersAction hideAllAction = new ToggleHideAllTiersAction(getEditor(), this);
-		final JButton hideAllButton = new JButton(hideAllAction);
-		
-		FormLayout layout = new FormLayout(
-				"pref, pref, fill:pref:grow, pref, pref, pref",
-				"pref, pref, pref, pref, pref, fill:pref:grow");
-		CellConstraints cc = new CellConstraints();
-		setLayout(layout);
-		
-		add(new JScrollPane(tierOrderingTable), cc.xywh(1, 2, 5, 5));
-		add(deleteTierButton, cc.xy(6, 2));
-		add(moveUpButton, cc.xy(6, 3));
-		add(moveDownButton, cc.xy(6, 4));
-		add(editButton, cc.xy(5, 1));
-		
-		add(newTierButton, cc.xy(4, 1));
-		
-		add(lockAllButton, cc.xy(1, 1));
-		add(hideAllButton, cc.xy(2, 1));
+//		final ToggleLockAllTiersAction lockAllAction = new ToggleLockAllTiersAction(getEditor(), this);
+//		final JButton lockAllButton = new JButton(lockAllAction);
+//
+//		final ToggleHideAllTiersAction hideAllAction = new ToggleHideAllTiersAction(getEditor(), this);
+//		final JButton hideAllButton = new JButton(hideAllAction);
+
+		setLayout(new BorderLayout());
+		add(new JScrollPane(tierOrderingTable), BorderLayout.CENTER);
+
+		final IconStrip iconStrip = new IconStrip(SwingConstants.HORIZONTAL);
+		iconStrip.add(newTierButton, IconStrip.IconStripPosition.LEFT);
+		iconStrip.add(deleteTierButton, IconStrip.IconStripPosition.LEFT);
+		iconStrip.add(editButton, IconStrip.IconStripPosition.LEFT);
+		iconStrip.add(moveUpButton, IconStrip.IconStripPosition.RIGHT);
+		iconStrip.add(moveDownButton, IconStrip.IconStripPosition.RIGHT);
+		add(iconStrip, BorderLayout.NORTH);
 	}
 	
 	private void setupEditorActions() {
