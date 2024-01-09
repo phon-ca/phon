@@ -34,7 +34,7 @@ public class PhonTable extends JXTable  {
         setShowGrid(false);
 
         final ColumnControlButton columnControlButton = new ColumnControlButton(this,
-                IconManager.getInstance().buildFontIcon(GoogleMaterialFonts.Round.getFontName(),
+                IconManager.getInstance().getFontIcon(GoogleMaterialFonts.Round.getFontName(),
                         "more_vert", IconSize.SMALL,
                         UIManager.getColor(FlatButtonUIProps.ICON_COLOR_PROP)));
         columnControlButton.setBorderPainted(false);
@@ -58,11 +58,11 @@ public class PhonTable extends JXTable  {
             if(value != null && value instanceof Boolean) {
             	Boolean bVal = (Boolean)value;
                 if(bVal) {
-                    retVal.setIcon(IconManager.getInstance().buildFontIcon(GoogleMaterialFonts.Round.getFontName(), "check_box", IconSize.MEDIUM,
-                                                    		UIManager.getColor(FlatButtonUIProps.ICON_COLOR_PROP)));
+                    retVal.setIcon(IconManager.getInstance().getFontIcon(GoogleMaterialFonts.Round.getFontName(), "check_box", IconSize.MEDIUM,
+                                                    		retVal.getForeground()));
                 } else {
-                    retVal.setIcon(IconManager.getInstance().buildFontIcon(GoogleMaterialFonts.Round.getFontName(), "check_box_outline_blank", IconSize.MEDIUM,
-                            UIManager.getColor(FlatButtonUIProps.ICON_COLOR_PROP)));
+                    retVal.setIcon(IconManager.getInstance().getFontIcon(GoogleMaterialFonts.Round.getFontName(), "check_box_outline_blank", IconSize.MEDIUM,
+                            retVal.getForeground()));
                 }
             }
 

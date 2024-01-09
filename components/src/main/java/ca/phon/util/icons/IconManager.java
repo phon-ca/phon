@@ -21,13 +21,11 @@ import ca.phon.util.*;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.*;
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 
@@ -36,10 +34,7 @@ import java.util.HashMap;
  *
  */
 public class IconManager {
-	
-	public final static String FontAwesomeFontName = "FontAwesome";
-	public final static String GoogleMaterialDesignIconsFontName = "MaterialIconsRounded";
-	
+
 	/** The static instance */
 	private static IconManager _instance;
 	
@@ -55,10 +50,13 @@ public class IconManager {
 		}
 		return _instance;
 	}
-	
+
+	// region data/icons/
 	private final String iconDir = System.getProperty("user.dir") + File.separator + "data/icons";
 	
 	private final String iconURI = "data/icons";
+
+	private record IconTuple(String iconName, IconSize size) {}
 
 	/** Only load icons once */
 	private HashMap<IconTuple, ImageIcon> loadedIcons;
@@ -73,22 +71,189 @@ public class IconManager {
 	public ImageIcon getIcon(String iconName, IconSize size) {
 		ImageIcon retVal = null;
 		if(loadIcon(iconName, size)) {
-			IconTuple tuple = new IconTuple();
-			tuple.iconName = iconName;
-			tuple.size = size;
-			
+			IconTuple tuple = new IconTuple(iconName, size);
 			retVal = loadedIcons.get(tuple);
 		}
 		return retVal;
 	}
-	
+
 	public ImageIcon getGrayedIcon(String iconName, IconSize size) {
 		final ImageIcon icon = getIcon(iconName, size);
 		if(icon == null) return null;
 		
 		return getGrayedIcon(icon);
 	}
-	
+
+	public ImageIcon getDisabledIcon(String iconName, IconSize size) {
+		final ImageIcon icon = getIcon(iconName, size);
+		if(icon == null) return null;
+
+		return getDisabledIcon(icon);
+	}
+
+	/**
+	 * Load an icon from our classpath
+	 * @param iconName
+	 * @param s
+	 * @return <CODE>true</CODE> if the icon is loaded
+	 */
+	private boolean loadIconFromCp(String iconName, IconSize s) {
+		boolean found = false;
+		URL iconURL = null;
+
+		for(int i = s.ordinal(); i < IconSize.values().length; i++) {
+			if(found) break;
+			IconSize size = IconSize.values()[i];
+
+			String icnURL =
+					iconURI + "/" + size.getWidth() + "x" + size.getHeight() + "/" + iconName + ".png";
+			iconURL = PluginManager.getInstance().getResource(icnURL);
+			if(iconURL == null) {
+				icnURL =
+						iconURI + "/" + size.getWidth() + "x" + size.getHeight() + "/" + iconName + ".gif";
+				iconURL = PluginManager.getInstance().getResource(icnURL);
+
+				if(iconURL != null) {
+					found = true;
+				}
+			} else {
+				found = true;
+			}
+		}
+
+		if(found) {
+			ImageIcon iconImage = null;
+			iconImage = new ImageIcon(iconURL);
+
+			iconImage = new ImageIcon(
+					iconImage.getImage().getScaledInstance(s.getWidth(), s.getHeight(), Image.SCALE_SMOOTH));
+			IconTuple tuple = new IconTuple(iconName, s);
+			loadedIcons.put(tuple, iconImage);
+		}
+
+		return found;
+	}
+
+	/**
+	 * Loads (ensures) an icon.
+	 *
+	 * @param iconName
+	 * @param s
+	 * @return <CODE>true</CODE> if the icon is loaded (including
+	 * if it was already loaded.) <CODE>false</CODE> otherwise.
+	 */
+	private boolean loadIcon(String iconName, IconSize s) {
+		boolean found = loadIconFromCp(iconName, s);
+		String iconPath = "";
+
+		if(!found) {
+
+			iconPath =
+					iconDir + "/" + s.getWidth() + "x" + s.getHeight() + "/" + iconName + ".png";
+			if(new File(iconPath).exists()) {
+				found = true;
+			} else {
+				for(int i = IconSize.XXLARGE.ordinal(); i >= 0; i--) {
+					if(found) break;
+					IconSize size = IconSize.values()[i];
+
+					iconPath =
+							iconDir + "/" + size.getWidth() + "x" + size.getHeight() + "/" + iconName + ".png";
+					if(!(new File(iconPath)).exists()) {
+						iconPath =
+								iconDir + "/" + size.getWidth() + "x" + size.getHeight() + "/" + iconName + ".gif";
+
+						if(new File(iconPath).exists()) {
+							found = true;
+						}
+					} else {
+						found = true;
+					}
+				}
+			}
+
+			if(found) {
+				ImageIcon iconImage = null;
+				iconImage = new ImageIcon(iconPath);
+
+				iconImage = new ImageIcon(
+						iconImage.getImage().getScaledInstance(s.getWidth(), s.getHeight(), Image.SCALE_SMOOTH));
+
+				IconTuple tuple = new IconTuple(iconName, s);
+				loadedIcons.put(tuple, iconImage);
+			}
+		}
+
+		return found;
+	}
+	// endregion
+
+	// region Icon utils
+	/**
+	 * Create a new icon with a single character
+	 * using the given foreground, background.  The
+	 * size of the icon will be the size of the
+	 * bounding rectangle returned by {@link FontMetrics#getStringBounds(String, java.awt.Graphics)}
+	 *
+	 * @param c
+	 * @param font
+	 * @param foreground
+	 * @param background
+	 */
+	public ImageIcon createGlyphIcon(Character c, Font font, Color foreground, Color background) {
+		final BufferedImage bufferedImage = new BufferedImage(1, 1,
+				BufferedImage.TYPE_4BYTE_ABGR);
+		final Graphics2D g = (Graphics2D)bufferedImage.getGraphics();
+		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
+		g.setFont(font);
+		final FontMetrics fm = g.getFontMetrics(font);
+		final Rectangle2D charRect = fm.getStringBounds(c.toString(), g);
+
+		final BufferedImage img = new BufferedImage((int)charRect.getWidth()+1, (int)charRect.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+		final Graphics2D g2 = (Graphics2D)img.createGraphics();
+
+		// get baseline of character
+		g2.setColor(foreground);
+		g2.drawString(c.toString(), 0, (int)(charRect.getHeight() - fm.getDescent()));
+		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
+		return new ImageIcon(img);
+	}
+
+	/**
+	 * Combine icons into an icon strip.
+	 *
+	 * @param icons
+	 */
+	public ImageIcon createIconStrip(Icon[] icons) {
+		return createIconStrip(icons, 0);
+	}
+
+	public ImageIcon createIconStrip(Icon[] icons, int offset) {
+		// determine size
+		int width = 0;
+		int height = 0;
+
+		for(Icon icon:icons) {
+			width += icon.getIconWidth();
+			height = Math.max(height, icon.getIconHeight());
+		}
+		width += (icons.length - 1) * offset;
+		final BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
+		final Graphics2D g = (Graphics2D)img.createGraphics();
+
+		int x = 0;
+		int y = 0;
+		for(Icon icon:icons) {
+			icon.paintIcon(null, g, x, y);
+//			g.drawImage(icon.getImage(), x, y, null);
+			x += icon.getIconWidth() + offset;
+		}
+
+		return new ImageIcon(img);
+	}
+
 	public ImageIcon getGrayedIcon(Icon icon) {
 		final int w = icon.getIconWidth();
 		final int h = icon.getIconHeight();
@@ -110,18 +275,11 @@ public class IconManager {
 		
 		return new ImageIcon(gray);
 	}
-	
-	public ImageIcon getDisabledIcon(String iconName, IconSize size) {
-		final ImageIcon icon = getIcon(iconName, size);
-		if(icon == null) return null;
-		
-		return getDisabledIcon(icon);
-	}
-	
+
 	public ImageIcon getDisabledIcon(Icon icon) {
 		final int w = icon.getIconWidth();
 		final int h = icon.getIconHeight();
-		
+
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice gd = ge.getDefaultScreenDevice();
 		GraphicsConfiguration gc = gd.getDefaultConfiguration();
@@ -129,10 +287,37 @@ public class IconManager {
 		Graphics2D g2d = img.createGraphics();
 		icon.paintIcon(null, g2d, 0, 0);
 		Image gray = GrayFilter.createDisabledImage(img);
-		
+
 		return new ImageIcon(gray);
 	}
-	
+
+	/**
+	 * Create a new ImageIcon from an Icon.
+	 *
+	 * @param icon
+	 * @return icon image
+	 */
+	private ImageIcon iconToImage(IconSize size, Icon icon) {
+		BufferedImage img = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+		Graphics2D g2 = (Graphics2D)img.createGraphics();
+		icon.paintIcon(null, g2, 0, 0);
+
+		// create a new buffered image of size and draw icon centered and scaled keeping perspective
+		final BufferedImage scaledImg = new BufferedImage(size.getWidth(), size.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+		Graphics2D scaledImgGraphics = (Graphics2D)scaledImg.createGraphics();
+		scaledImgGraphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		final double scale = Math.min((double)size.getWidth() / (double)icon.getIconWidth(), (double)size.getHeight() / (double)icon.getIconHeight());
+		final int w = (int)(icon.getIconWidth() * scale);
+		final int h = (int)(icon.getIconHeight() * scale);
+		scaledImgGraphics.drawImage(img, (size.getWidth() - w) / 2, (size.getHeight() - h) / 2, w, h, null);
+
+
+
+		return new ImageIcon(scaledImg);
+	}
+	// endregion
+
+	// region System icons
 	/**
 	 * Load system icon for given path.
 	 * 
@@ -256,70 +441,34 @@ public class IconManager {
 		
 		return retVal;
 	}
-	
-	/**
-	 * Create a new icon with a single character
-	 * using the given foreground, background.  The
-	 * size of the icon will be the size of the
-	 * bounding rectangle returned by {@link FontMetrics#getStringBounds(String, java.awt.Graphics)}
-	 * 
-	 * @param c
-	 * @param font
-	 * @param foreground
-	 * @param background
-	 */
-	public ImageIcon createGlyphIcon(Character c, Font font, Color foreground, Color background) {
-		final BufferedImage bufferedImage = new BufferedImage(1, 1,
-				BufferedImage.TYPE_4BYTE_ABGR);
-		final Graphics2D g = (Graphics2D)bufferedImage.getGraphics();
-		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+	// endregion
 
-		g.setFont(font);
-		final FontMetrics fm = g.getFontMetrics(font);
-		final Rectangle2D charRect = fm.getStringBounds(c.toString(), g);
-		
-		final BufferedImage img = new BufferedImage((int)charRect.getWidth()+1, (int)charRect.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
-		final Graphics2D g2 = (Graphics2D)img.createGraphics();
-		
-		// get baseline of character
-		g2.setColor(foreground);
-		g2.drawString(c.toString(), 0, (int)(charRect.getHeight() - fm.getDescent()));
-		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		
-		return new ImageIcon(img);
-	}
-	
+	// region Font icons
+	public final static String FontAwesomeFontName = "FontAwesome";
+	public final static String GoogleMaterialDesignIconsFontName = "MaterialIconsRounded";
+
+	private record FontIconInfo(String fontName, String iconName, IconSize size, Color color) {}
+
+	private HashMap<FontIconInfo, ImageIcon> fontIconCache = new HashMap<FontIconInfo, ImageIcon>();
+
 	/**
-	 * Combine icons into an icon strip.
-	 * 
-	 * @param icons
+	 * Get the specified icon with the given size and color
+	 *
+	 * @param fontName
+	 * @param iconName
+	 * @param size
+	 * @param color
+	 * @return icon
 	 */
-	public ImageIcon createIconStrip(Icon[] icons) {
-		return createIconStrip(icons, 0);
-	}
-	
-	public ImageIcon createIconStrip(Icon[] icons, int offset) {
-		// determine size
-		int width = 0;
-		int height = 0;
-		
-		for(Icon icon:icons) {
-			width += icon.getIconWidth();
-			height = Math.max(height, icon.getIconHeight());
+	public ImageIcon getFontIcon(String fontName, String iconName, IconSize size, Color color) {
+		final FontIconInfo info = new FontIconInfo(fontName, iconName, size, color);
+		if(fontIconCache.containsKey(info)) {
+			return fontIconCache.get(info);
+		} else {
+			final ImageIcon icon = buildFontIcon(fontName, iconName, size, color);
+			fontIconCache.put(info, icon);
+			return icon;
 		}
-		width += (icons.length - 1) * offset;
-		final BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
-		final Graphics2D g = (Graphics2D)img.createGraphics();
-		
-		int x = 0;
-		int y = 0;
-		for(Icon icon:icons) {
-			icon.paintIcon(null, g, x, y);
-//			g.drawImage(icon.getImage(), x, y, null);
-			x += icon.getIconWidth() + offset;
-		}
-		
-		return new ImageIcon(img);
 	}
 
 	/**
@@ -330,7 +479,7 @@ public class IconManager {
 	 * @param iconName
 	 * @param size
 	 * @param color
-	 * @return icon
+	 * @return
 	 */
 	public ImageIcon buildFontIcon(String fontName, String iconName, IconSize size, Color color) {
 		Icon icon = null;
@@ -339,11 +488,6 @@ public class IconManager {
 		} else {
 			final GoogleMaterialFonts googleMaterialStaticFont = GoogleMaterialFonts.fromString(fontName);
 			if(googleMaterialStaticFont != null) {
-//				icon = switch (googleMaterialStaticFont) {
-//					case Outlined ->IconFontSwing.buildIcon(GoogleMaterialIconFont.getIconFont(GoogleMaterialFonts.Outlined).getIconCode(iconName), size.getWidth() * 2, color);
-//					case Round -> IconFontSwing.buildIcon(GoogleMaterialIconFont.getIconFont(GoogleMaterialFonts.Round).getIconCode(iconName), size.getWidth() * 2, color);
-//					case Sharp -> IconFontSwing.buildIcon(GoogleMaterialIconFont.getIconFont(GoogleMaterialFonts.Sharp).getIconCode(iconName), size.getWidth() * 2, color);
-//				};
 				GoogleMaterialIconFont iconFont = GoogleMaterialIconFont.getIconFont(googleMaterialStaticFont);
 				icon = iconFont.buildIcon(iconName, (float)size.getWidth() * 2, color);
 			}
@@ -351,172 +495,25 @@ public class IconManager {
 		if(icon == null) {
 			return getIcon("blank", size);
 		} else {
-            return iconToImage(size, icon);
+			return iconToImage(size, icon);
 		}
 	}
 
 	/**
 	 * Get the specified icon with the given size and color
 	 *
-	 * @param name in the format of 'font:icon' or 'icon/path'
+	 * @param name in the format of 'font:icon'.  If 'font' is left out GoogleMaterialDesignIconsFontName is used.
 	 * @param size
 	 * @param color
-	 * @return
+	 * @return icon
 	 */
-	public ImageIcon buildFontIcon(String name, IconSize size, Color color) {
+	public ImageIcon getFontIcon(String name, IconSize size, Color color) {
 		final String[] iconData = name.split(":");
 		if(iconData.length == 1) {
-			return getIcon(iconData[0], size);
+			return getFontIcon(GoogleMaterialDesignIconsFontName, iconData[0], size, color);
 		} else {
-			return buildFontIcon(iconData[0], iconData[1], size, color);
+			return getFontIcon(iconData[0], iconData[1], size, color);
 		}
 	}
-
-	/**
-	 * Create a new ImageIcon from an Icon.
-	 *
-	 * @param icon
-	 * @return icon image
-	 */
-	private ImageIcon iconToImage(IconSize size, Icon icon) {
-		BufferedImage img = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_4BYTE_ABGR);
-		Graphics2D g2 = (Graphics2D)img.createGraphics();
-		icon.paintIcon(null, g2, 0, 0);
-
-		// create a new buffered image of size and draw icon centered and scaled keeping perspective
-		final BufferedImage scaledImg = new BufferedImage(size.getWidth(), size.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
-		Graphics2D scaledImgGraphics = (Graphics2D)scaledImg.createGraphics();
-		scaledImgGraphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-		final double scale = Math.min((double)size.getWidth() / (double)icon.getIconWidth(), (double)size.getHeight() / (double)icon.getIconHeight());
-		final int w = (int)(icon.getIconWidth() * scale);
-		final int h = (int)(icon.getIconHeight() * scale);
-		scaledImgGraphics.drawImage(img, (size.getWidth() - w) / 2, (size.getHeight() - h) / 2, w, h, null);
-
-
-
-        return new ImageIcon(scaledImg);
-	}
-
-	/**
-	 * Load an icon from our classpath
-	 * @param iconName
-	 * @param s
-	 * @return <CODE>true</CODE> if the icon is loaded
-	 */
-	private boolean loadIconFromCp(String iconName, IconSize s) {
-		boolean found = false;
-		URL iconURL = null;
-		
-		for(int i = s.ordinal(); i < IconSize.values().length; i++) {
-			if(found) break;
-			IconSize size = IconSize.values()[i];
-			
-			String icnURL = 
-				iconURI + "/" + size.getWidth() + "x" + size.getHeight() + "/" + iconName + ".png";
-			iconURL = PluginManager.getInstance().getResource(icnURL);
-			if(iconURL == null) {
-				icnURL = 
-					iconURI + "/" + size.getWidth() + "x" + size.getHeight() + "/" + iconName + ".gif";
-				iconURL = PluginManager.getInstance().getResource(icnURL);
-				
-				if(iconURL != null) {
-					found = true;
-				}
-			} else {
-				found = true;
-			}
-		}
-		
-		if(found) {
-			ImageIcon iconImage = null;
-			iconImage = new ImageIcon(iconURL);
-			
-			iconImage = new ImageIcon(
-					iconImage.getImage().getScaledInstance(s.getWidth(), s.getHeight(), Image.SCALE_SMOOTH));
-			IconTuple tuple = new IconTuple();
-			tuple.iconName = iconName;
-			tuple.size = s;
-			
-			loadedIcons.put(tuple, iconImage);
-		}
-		
-		return found;
-	}
-	
-	/**
-	 * Loads (ensures) an icon.
-	 * 
-	 * @param iconName
-	 * @param s
-	 * @return <CODE>true</CODE> if the icon is loaded (including
-	 * if it was already loaded.) <CODE>false</CODE> otherwise.
-	 */
-	private boolean loadIcon(String iconName, IconSize s) {
-		boolean found = loadIconFromCp(iconName, s);
-		String iconPath = "";
-		
-		if(!found) {
-
-			iconPath =
-					iconDir + "/" + s.getWidth() + "x" + s.getHeight() + "/" + iconName + ".png";
-			if(new File(iconPath).exists()) {
-				found = true;
-			} else {
-				for(int i = IconSize.XXLARGE.ordinal(); i >= 0; i--) {
-					if(found) break;
-					IconSize size = IconSize.values()[i];
-
-					iconPath =
-						iconDir + "/" + size.getWidth() + "x" + size.getHeight() + "/" + iconName + ".png";
-					if(!(new File(iconPath)).exists()) {
-						iconPath =
-							iconDir + "/" + size.getWidth() + "x" + size.getHeight() + "/" + iconName + ".gif";
-
-						if(new File(iconPath).exists()) {
-							found = true;
-						}
-					} else {
-						found = true;
-					}
-				}
-			}
-			
-			if(found) {
-				ImageIcon iconImage = null;
-				iconImage = new ImageIcon(iconPath);
-				
-				iconImage = new ImageIcon(
-						iconImage.getImage().getScaledInstance(s.getWidth(), s.getHeight(), Image.SCALE_SMOOTH));
-				
-				IconTuple tuple = new IconTuple();
-				tuple.iconName = iconName;
-				tuple.size = s;
-				
-				loadedIcons.put(tuple, iconImage);
-			}
-		}
-		
-		return found;
-	}
-	
-	private class IconTuple {
-		public String iconName;
-		public IconSize size;
-		
-		@Override
-		public int hashCode() {
-			return iconName.hashCode() + size.hashCode();
-		}
-		
-		@Override
-		public boolean equals(Object o) {
-			if(!(o instanceof IconTuple))
-				return false;
-			
-			IconTuple comp = (IconTuple)o;
-			return 
-				((comp.iconName.equals(iconName)) &&
-						comp.size == size);
-		}
-	}
+	// endregion
 }

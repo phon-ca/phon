@@ -648,7 +648,7 @@ public class TierOrderingEditorView extends EditorView {
 	@Override
 	public ImageIcon getIcon() {
 		final String[] iconData = VIEW_ICON.split(":");
-		return IconManager.getInstance().buildFontIcon(iconData[0], iconData[1], IconSize.MEDIUM, Color.darkGray);
+		return IconManager.getInstance().getFontIcon(iconData[0], iconData[1], IconSize.MEDIUM, Color.darkGray);
 	}
 
 	@Override

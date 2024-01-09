@@ -145,7 +145,7 @@ public class FlatButtonUI extends ButtonUI {
         } else if(button.getModel().isRollover()) {
             iconColor = button.getIconHoverColor();
         }
-        return IconManager.getInstance().buildFontIcon(fontName, iconName, iconSize, iconColor);
+        return IconManager.getInstance().getFontIcon(fontName, iconName, iconSize, iconColor);
     }
 
     @Override

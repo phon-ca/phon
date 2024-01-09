@@ -22,16 +22,13 @@ import ca.phon.app.session.editor.view.participants.actions.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.ui.FlatButton;
-import ca.phon.ui.FlatButtonUIProps;
 import ca.phon.ui.IconStrip;
 import ca.phon.ui.PhonTable;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.*;
 import ca.phon.ui.participant.ParticipantsTableModel;
 import ca.phon.util.icons.*;
-import com.jgoodies.forms.layout.*;
 import org.jdesktop.swingx.JXTable;
-import org.jdesktop.swingx.table.ColumnControlButton;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -247,7 +244,7 @@ public class ParticipantsView extends EditorView {
 	@Override
 	public ImageIcon getIcon() {
 		final String[] iconData = VIEW_ICON.split(":");
-		return IconManager.getInstance().buildFontIcon(iconData[0], iconData[1], IconSize.MEDIUM, Color.darkGray);
+		return IconManager.getInstance().getFontIcon(iconData[0], iconData[1], IconSize.MEDIUM, Color.darkGray);
 	}
 
 	@Override

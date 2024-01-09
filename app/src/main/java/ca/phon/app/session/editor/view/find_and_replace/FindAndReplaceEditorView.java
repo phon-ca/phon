@@ -23,7 +23,6 @@ import ca.phon.app.session.editor.view.common.*;
 import ca.phon.app.session.editor.view.find_and_replace.actions.*;
 import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.alignment.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.position.*;
@@ -278,7 +277,7 @@ public class FindAndReplaceEditorView extends EditorView {
 	@Override
 	public ImageIcon getIcon() {
 		final String[] iconData = VIEW_ICON.split(":");
-		return IconManager.getInstance().buildFontIcon(iconData[0], iconData[1], IconSize.MEDIUM, Color.darkGray);
+		return IconManager.getInstance().getFontIcon(iconData[0], iconData[1], IconSize.MEDIUM, Color.darkGray);
 	}
 
 	@Override

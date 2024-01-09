@@ -26,7 +26,7 @@ public class SessionCheckRefreshAction extends SessionCheckViewAction {
 	public SessionCheckRefreshAction(SessionCheckView view) {
 		super(view);
 		
-		putValue(SessionCheckViewAction.SMALL_ICON, IconManager.getInstance().buildFontIcon(IconManager.FontAwesomeFontName, "REFRESH", IconSize.SMALL, Color.darkGray));
+		putValue(SessionCheckViewAction.SMALL_ICON, IconManager.getInstance().getFontIcon(IconManager.FontAwesomeFontName, "REFRESH", IconSize.SMALL, Color.darkGray));
 		putValue(SessionCheckViewAction.NAME, "Refresh");
 		putValue(SessionCheckViewAction.SHORT_DESCRIPTION, "Refresh session check");
 	}

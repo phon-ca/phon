@@ -18,8 +18,6 @@ import ca.phon.session.*;
 import ca.phon.session.io.SessionOutputFactory;
 import ca.phon.ui.CalloutWindow;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.DropDownButton;
-import ca.phon.ui.DropDownIcon;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
@@ -751,7 +749,7 @@ public class TranscriptView extends EditorView {
     @Override
     public ImageIcon getIcon() {
         final String[] iconData = VIEW_ICON.split(":");
-        return IconManager.getInstance().buildFontIcon(iconData[0], iconData[1], IconSize.MEDIUM, Color.darkGray);
+        return IconManager.getInstance().getFontIcon(iconData[0], iconData[1], IconSize.MEDIUM, Color.darkGray);
     }
 
     @Override

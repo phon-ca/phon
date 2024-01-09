@@ -819,7 +819,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 	@Override
 	public ImageIcon getIcon() {
 		final String[] iconParts = VIEW_ICON.split(":");
-		return IconManager.getInstance().buildFontIcon(iconParts[0], iconParts[1], IconSize.MEDIUM, Color.darkGray);
+		return IconManager.getInstance().getFontIcon(iconParts[0], iconParts[1], IconSize.MEDIUM, Color.darkGray);
 	}
 
 	@Override

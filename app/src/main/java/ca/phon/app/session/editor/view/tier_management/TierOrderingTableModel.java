@@ -28,20 +28,32 @@ public class TierOrderingTableModel extends AbstractTableModel {
 	public static enum TierOrderingTableColumn {
 		LOCK_TIER,
 		SHOW_TIER,
+		BLIND,
 		TIER_NAME,
+		CHAT_TIER_NAME,
+		TIER_TYPE,
+		ALIGNED,
 		TIER_FONT;
-		
+
 		private final String[] columnNames = {
 				"Locked",
-				"Show Tier",
+				"Visible",
+				"Blind",
 				"Tier Name",
+				"CHAT Tier Name",
+				"Type",
+				"Aligned",
 				"Tier Font"
 		};
 		
 		private final Class<?>[] columnClasses = {
 			Boolean.class,
 			Boolean.class,
+			Boolean.class,
 			String.class,
+			String.class,
+			String.class,
+			Boolean.class,
 			String.class
 		};
 		
@@ -55,10 +67,10 @@ public class TierOrderingTableModel extends AbstractTableModel {
 	};
 	
 	/** Session */
-	private Session session;
+	private final Session session;
 
 	/** Tier order list */
-	private List<TierViewItem> tierView;
+	private final List<TierViewItem> tierView;
 
 	/** Constructor */
 	public TierOrderingTableModel(Session session, 
@@ -87,10 +99,16 @@ public class TierOrderingTableModel extends AbstractTableModel {
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
 		boolean isEditable = false;
-		
+
+
+
 		if(columnIndex == TierOrderingTableColumn.SHOW_TIER.ordinal()
-				|| columnIndex == TierOrderingTableColumn.LOCK_TIER.ordinal())
+				|| columnIndex == TierOrderingTableColumn.LOCK_TIER.ordinal()
+				|| columnIndex == TierOrderingTableColumn.BLIND.ordinal()
+				|| columnIndex == TierOrderingTableColumn.ALIGNED.ordinal())
 			isEditable = true;
+
+
 		
 		return isEditable;
 	}
@@ -124,13 +142,31 @@ public class TierOrderingTableModel extends AbstractTableModel {
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		final TierViewItem tv = getTierView()[rowIndex];
 		final TierDescription tierDesc = getTierDescription(tv.getTierName());
+		final SystemTierType systemTier = SystemTierType.tierFromString(tv.getTierName());
+		final UserTierType userTierType = UserTierType.fromPhonTierName(tv.getTierName());
 		Object retVal = null;
 		if (columnIndex == TierOrderingTableColumn.LOCK_TIER.ordinal()) {
 			retVal = tv.isTierLocked();
 		} else if (columnIndex == TierOrderingTableColumn.SHOW_TIER.ordinal()) {
 			retVal = tv.isVisible();
+		} else if (columnIndex == TierOrderingTableColumn.BLIND.ordinal()) {
+			retVal = tierDesc.isBlind();
 		}  else if (columnIndex == TierOrderingTableColumn.TIER_NAME.ordinal()) {
 			retVal = tv.getTierName();
+		} else if (columnIndex == TierOrderingTableColumn.CHAT_TIER_NAME.ordinal()) {
+			if(systemTier != null) {
+				retVal = (systemTier == SystemTierType.Orthography ? "*<ID>" : systemTier.getChatTierName());
+			} else {
+				if(userTierType != null) {
+					retVal = userTierType.getChatTierName();
+				} else {
+					retVal = UserTierType.determineCHATTierName(session, tv.getTierName());
+				}
+			}
+		} else if (columnIndex == TierOrderingTableColumn.TIER_TYPE.ordinal()) {
+			return tierDesc.getDeclaredType().getSimpleName();
+		} else if (columnIndex == TierOrderingTableColumn.ALIGNED.ordinal()) {
+			retVal = !tierDesc.isExcludeFromAlignment();
 		} else if (columnIndex == TierOrderingTableColumn.TIER_FONT.ordinal()) {
 			retVal = (tv.getTierFont().equals("default") ?
 					PrefHelper.get(FontPreferences.TIER_FONT, FontPreferences.DEFAULT_TIER_FONT) : tv.getTierFont());

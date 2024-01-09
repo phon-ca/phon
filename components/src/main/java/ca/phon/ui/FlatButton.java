@@ -8,7 +8,7 @@ import java.awt.*;
 
 /**
  * Flat button component with named icons from FontAwesome or Google Material Icons.
- * See {@link ca.phon.util.icons.IconManager#buildFontIcon(String, String, IconSize, Color)} for more information.
+ * See {@link ca.phon.util.icons.IconManager#getFontIcon(String, String, IconSize, Color)} for more information.
  */
 public class FlatButton extends JButton {
 

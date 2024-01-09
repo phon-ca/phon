@@ -5,10 +5,8 @@ import jiconfont.IconCode;
 import jiconfont.IconFont;
 import jiconfont.swing.IconFontSwing;
 
-import javax.print.attribute.Attribute;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,23 +32,25 @@ public class GoogleMaterialIconFont implements IconFont {
         return staticFonts.get(font);
     }
 
-    private final GoogleMaterialFonts font;
+    private final GoogleMaterialFonts fontInfo;
+
+    private Font font;
 
     private final Map<String, Character> codepoints;
 
-    private GoogleMaterialIconFont(GoogleMaterialFonts font) {
-        this.font = font;
+    private GoogleMaterialIconFont(GoogleMaterialFonts fontInfo) {
+        this.fontInfo = fontInfo;
         this.codepoints = readCodepoints();
     }
 
     @Override
     public InputStream getFontInputStream() {
-        return GoogleMaterialIconFont.class.getClassLoader().getResourceAsStream(font.getFontFile());
+        return GoogleMaterialIconFont.class.getClassLoader().getResourceAsStream(fontInfo.getFontFile());
     }
 
     @Override
     public String getFontFamily() {
-        return font.getFontName();
+        return fontInfo.getFontName();
     }
 
     /**
@@ -61,7 +61,7 @@ public class GoogleMaterialIconFont implements IconFont {
     public Map<String, Character> readCodepoints() {
         final Map<String, Character> retVal = new HashMap<>();
         try {
-            final InputStream is = GoogleMaterialIconFont.class.getClassLoader().getResourceAsStream(font.getCodepointFile());
+            final InputStream is = GoogleMaterialIconFont.class.getClassLoader().getResourceAsStream(fontInfo.getCodepointFile());
             final BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             String line = null;
             while((line = reader.readLine()) != null) {
@@ -76,7 +76,7 @@ public class GoogleMaterialIconFont implements IconFont {
     }
 
     public IconCode getIconCode(String iconName) {
-        return new DefaultIconCode(font.getFontName(), codepoints.get(iconName.toLowerCase()));
+        return new DefaultIconCode(fontInfo.getFontName(), codepoints.get(iconName.toLowerCase()));
     }
 
     public static class CustomAttributes extends AttributedCharacterIterator.Attribute {
@@ -88,13 +88,15 @@ public class GoogleMaterialIconFont implements IconFont {
     }
 
     public Icon buildIcon(String name, Float size, Color color) {
-        final Font font;
-        try {
-            font = createFont(size);
-        } catch (IOException | FontFormatException e) {
-            throw new RuntimeException(e);
+        if(font == null) {
+            try {
+                font = Font.createFont(Font.TRUETYPE_FONT, getFontInputStream());
+            } catch (IOException | FontFormatException e) {
+                throw new RuntimeException(e);
+            }
         }
-        final BufferedImage img = buildImage(Character.toString(codepoints.get(name.toLowerCase())), font, color);
+        final Font iconFont = font.deriveFont(size);
+        final BufferedImage img = buildImage(Character.toString(codepoints.get(name.toLowerCase())), iconFont, color);
         final ImageIcon icon = new ImageIcon(img);
         return icon;
     }

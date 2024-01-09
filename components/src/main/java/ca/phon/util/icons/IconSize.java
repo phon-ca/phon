@@ -15,85 +15,60 @@
  */
 package ca.phon.util.icons;
 
-public enum IconSize {
-	XXSMALL,
-	XSMALL,
-	SMALL,
-	MEDIUM,
-	MEDIUM_LARGE,
-	LARGE,
-	XLARGE,
-	XXLARGE;
-	
-	public static int getHeightForSize(IconSize size) {
-		if(size == XXSMALL)
-			return 8;
-		else if(size == XSMALL)
-			return 12;
-		else if(size == SMALL)
-			return 16;
-		else if(size == MEDIUM)
-			return 22;
-		else if(size == MEDIUM_LARGE)
-			return 28;
-		else if(size == LARGE)
-			return 32;
-		else if(size == XLARGE)
-			return 64;
-		else if(size == XXLARGE)
-			return 128;
-		else
-			return 0;
-	}
-	
-	public int getHeight() {
-		return IconSize.getHeightForSize(this);
-	}
-	
-	public static IconSize getHiDPISize(IconSize size) {
-		if(size == XXSMALL) {
-			return IconSize.SMALL;
-		} else if(size == XSMALL) {
-			return IconSize.MEDIUM;
-		} else if(size == SMALL) {
-			return IconSize.LARGE;
-		} else if(size == MEDIUM) {
-			return IconSize.LARGE;
-		} else if(size == LARGE) {
-			return IconSize.XLARGE;
-		} else if(size == XLARGE) {
-			return IconSize.XXLARGE;
-		} else {
-			// no size available
-			return size;
-		}
-	}
-	
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
+
+/**
+ * Icons size used by IconManager
+ *
+ * @param width
+ * @param height
+ */
+public record IconSize(int width, int height) implements Comparable<IconSize> {
+
+	public static IconSize XXSMALL = new IconSize(8, 8);
+	public static IconSize XSMALL = new IconSize(12, 12);
+	public static IconSize SMALL = new IconSize(16, 16);
+	public static IconSize MEDIUM = new IconSize(22, 22);
+	public static IconSize MEDIUM_LARGE = new IconSize(28, 28);
+	public static IconSize LARGE = new IconSize(32, 32);
+	public static IconSize XLARGE = new IconSize(64, 64);
+	public static IconSize XXLARGE = new IconSize(128, 128);
+
+	private final static IconSize[] values = new IconSize[] {
+		XXSMALL,
+		XSMALL,
+		SMALL,
+		MEDIUM,
+		MEDIUM_LARGE,
+		LARGE,
+		XLARGE,
+		XXLARGE
+	};
+
+	public int getWidth() { return width(); }
+
+	public int getHeight() { return height(); }
+
 	public IconSize getHiDPISize() {
-		return IconSize.getHiDPISize(this);
+		return new IconSize(width * 2, height * 2);
 	}
-	
-	public static int getWidthForSize(IconSize size) {
-		if(size == XXSMALL)
-			return 8;
-		else if(size == XSMALL)
-			return 12;
-		else if(size == SMALL)
-			return 16;
-		else if(size == MEDIUM)
-			return 22;
-		else if(size == MEDIUM_LARGE)
-			return 28;
-		else if(size == LARGE)
-			return 32;
-		else if(size == XLARGE)
-			return 64;
-		else if(size == XXLARGE)
-			return 128;
-		else
-			return 0;
+
+	public static IconSize[] values() {
+		return values;
 	}
-	public int getWidth() {
-		return IconSize.getWidthForSize(this);
+
+	public int ordinal() {
+		int idx = Arrays.binarySearch(values(), this);
+		if(idx < 0)
+			idx = values().length;
+		return idx;
 	}
+
+	@Override
+	public int compareTo(@NotNull IconSize o) {
+		return Integer.compare(getWidth() + getHeight(), o.getWidth() + o.getHeight());
+	}
+
 }

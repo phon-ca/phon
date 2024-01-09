@@ -357,7 +357,7 @@ public class MediaPlayerEditorView extends EditorView {
 	@Override
 	public ImageIcon getIcon() {
 		final String[] iconData = VIEW_ICON.split(":");
-		return IconManager.getInstance().buildFontIcon(iconData[0], iconData[1], IconSize.MEDIUM, UIManager.getColor(SessionEditorUIProps.VIEW_ACTIVE_TEXT));
+		return IconManager.getInstance().getFontIcon(iconData[0], iconData[1], IconSize.MEDIUM, UIManager.getColor(SessionEditorUIProps.VIEW_ACTIVE_TEXT));
 	}
 
 	@Override
