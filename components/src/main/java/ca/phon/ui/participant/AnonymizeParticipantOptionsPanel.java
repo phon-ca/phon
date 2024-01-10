@@ -21,6 +21,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+ * Options for anonymizing participant data.
+ */
 public class AnonymizeParticipantOptionsPanel extends JPanel {
 
 	private static final long serialVersionUID = 2621413046319572275L;
@@ -48,6 +51,11 @@ public class AnonymizeParticipantOptionsPanel extends JPanel {
 	private final static String ANON_LANG_PROP =
 			AnonymizeParticipantOptionsPanel.class.getName() + "anonLang";
 	private JCheckBox anonLangBox;
+
+	private final static String ANON_FIRSTLANG_PROP =
+			AnonymizeParticipantOptionsPanel.class.getName() + "anonFirstLang";
+	private JCheckBox anonFirstLangBox;
+
 	
 	private final static String ANON_GROUP_PROP =
 			AnonymizeParticipantOptionsPanel.class.getName() + "anonGroup";
@@ -60,6 +68,14 @@ public class AnonymizeParticipantOptionsPanel extends JPanel {
 	private final static String ANON_SES_PROP = 
 			AnonymizeParticipantOptionsPanel.class.getName() + "anonSes";
 	private JCheckBox anonSesBox;
+
+	private final static String ANON_OTHER_PROP =
+			AnonymizeParticipantOptionsPanel.class.getName() + "anonOther";
+	private JCheckBox anonOtherBox;
+
+	private final static String ANON_BIRTHPLACE_PROP =
+			AnonymizeParticipantOptionsPanel.class.getName() + "anonBirthplace";
+	private JCheckBox anonBirthplaceBox;
 	
 	public AnonymizeParticipantOptionsPanel() {
 		super();
@@ -102,6 +118,19 @@ public class AnonymizeParticipantOptionsPanel extends JPanel {
 	public boolean isAnonSes() {
 		return anonSesBox.isSelected();
 	}
+
+	public boolean isAnonOther() {
+		return anonOtherBox.isSelected();
+	}
+
+	public boolean isAnonBirthplace() {
+		return anonBirthplaceBox.isSelected();
+	}
+
+	public boolean isAnonFirstLang() {
+		return anonFirstLangBox.isSelected();
+	}
+
 	private void init() {
 		anonIdBox = new JCheckBox("Assign ID from role");
 		anonIdBox.setSelected(PrefHelper.getBoolean(ANON_ID_PROP, true));
@@ -126,6 +155,10 @@ public class AnonymizeParticipantOptionsPanel extends JPanel {
 		anonLangBox = new JCheckBox("Language");
 		anonLangBox.setSelected(PrefHelper.getBoolean(ANON_LANG_PROP, true));
 		anonLangBox.addActionListener(new AnonymizeItemListener(ANON_LANG_PROP, anonLangBox));
+
+		anonFirstLangBox = new JCheckBox("First Language");
+		anonFirstLangBox.setSelected(PrefHelper.getBoolean(ANON_FIRSTLANG_PROP, true));
+		anonFirstLangBox.addActionListener(new AnonymizeItemListener(ANON_FIRSTLANG_PROP, anonFirstLangBox));
 		
 		anonEduBox = new JCheckBox("Education");
 		anonEduBox.setSelected(PrefHelper.getBoolean(ANON_EDU_PROP, true));
@@ -138,6 +171,14 @@ public class AnonymizeParticipantOptionsPanel extends JPanel {
 		anonSesBox = new JCheckBox("SES");
 		anonSesBox.setSelected(PrefHelper.getBoolean(ANON_SES_PROP, true));
 		anonSesBox.addActionListener(new AnonymizeItemListener(ANON_SES_PROP, anonSesBox));
+
+		anonBirthplaceBox = new JCheckBox("Birthplace");
+		anonBirthplaceBox.setSelected(PrefHelper.getBoolean(ANON_BIRTHPLACE_PROP, true));
+		anonBirthplaceBox.addActionListener(new AnonymizeItemListener(ANON_BIRTHPLACE_PROP, anonBirthplaceBox));
+
+		anonOtherBox = new JCheckBox("Other");
+		anonOtherBox.setSelected(PrefHelper.getBoolean(ANON_OTHER_PROP, true));
+		anonOtherBox.addActionListener(new AnonymizeItemListener(ANON_OTHER_PROP, anonOtherBox));
 		
 		setLayout(new GridLayout(0, 3));
 		add(anonIdBox);
@@ -146,9 +187,12 @@ public class AnonymizeParticipantOptionsPanel extends JPanel {
 		add(anonBdayBox);
 		add(anonAgeBox);
 		add(anonLangBox);
+		add(anonFirstLangBox);
 		add(anonEduBox);
 		add(anonGroupBox);
 		add(anonSesBox);
+		add(anonBirthplaceBox);
+		add(anonOtherBox);
 	}
 
 	private class AnonymizeItemListener implements ActionListener {

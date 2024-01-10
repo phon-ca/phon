@@ -508,6 +508,10 @@ public class ParticipantPanel extends JPanel {
 				languageField.setText("");
 			}
 
+			case "firstLanguage" -> {
+				firstLanguageField.setText("");
+			}
+
 			case "birthday" -> {
 				bdayField.getComponent().setDateTime(null);
 			}
@@ -520,6 +524,10 @@ public class ParticipantPanel extends JPanel {
 				groupField.setText("");
 			}
 
+			case "birthplace" -> {
+				birthplaceField.setText("");
+			}
+
 			case "sex" -> {
 				sexBox.setSelectedItem(Sex.UNSPECIFIED);
 			}
@@ -530,6 +538,10 @@ public class ParticipantPanel extends JPanel {
 
 			case "education" -> {
 				educationField.setText("");
+			}
+
+			case "other" -> {
+				otherField.setText("");
 			}
 		}
 	}
@@ -608,6 +620,12 @@ public class ParticipantPanel extends JPanel {
 			clearField("education");
 		if(optionsPanel.isAnonSes())
 			clearField("ses");
+		if(optionsPanel.isAnonOther())
+			clearField("other");
+		if(optionsPanel.isAnonBirthplace())
+			clearField("birthplace");
+		if(optionsPanel.isAnonFirstLang())
+			clearField("firstLanguage");
 	}
 
 	public Participant getParticipant() {
