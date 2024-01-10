@@ -19,7 +19,10 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.MoveTierEdit;
 import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
 import ca.phon.session.TierViewItem;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.*;
 
@@ -38,6 +41,7 @@ public class MoveTierAction extends TierManagementAction {
 		this.direction = direction;
 		
 		putValue(NAME, "Move tier " + (direction < 0 ? "up" : "down"));
+		putValue(SMALL_ICON, IconManager.getInstance().getFontIcon(direction < 0 ? "arrow_upward" : "arrow_downward", IconSize.SMALL, UIManager.getColor("Button.foreground")));
 	}
 
 	@Override

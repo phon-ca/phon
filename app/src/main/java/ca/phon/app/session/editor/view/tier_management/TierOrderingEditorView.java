@@ -199,12 +199,6 @@ public class TierOrderingEditorView extends EditorView {
 		editButton = new FlatButton(editAction);
 		editButton.setFocusable(false);
 		
-//		final ToggleLockAllTiersAction lockAllAction = new ToggleLockAllTiersAction(getEditor(), this);
-//		final JButton lockAllButton = new JButton(lockAllAction);
-//
-//		final ToggleHideAllTiersAction hideAllAction = new ToggleHideAllTiersAction(getEditor(), this);
-//		final JButton hideAllButton = new JButton(hideAllAction);
-
 		setLayout(new BorderLayout());
 		add(new JScrollPane(tierOrderingTable), BorderLayout.CENTER);
 

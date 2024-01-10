@@ -19,7 +19,10 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.TierViewEdit;
 import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
 import ca.phon.session.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.*;
 
@@ -33,6 +36,7 @@ public class ToggleLockAllTiersAction extends TierManagementAction {
 		
 		final boolean locked = areAllLocked();
 		putValue(NAME, (locked ? "Unlock " : "Lock ") + "all tiers");
+		putValue(SMALL_ICON, IconManager.getInstance().getFontIcon(locked ? "lock_open" : "lock", IconSize.SMALL, UIManager.getColor("Button.foreground")));
 	}
 	
 	private boolean areAllLocked() {
