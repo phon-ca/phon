@@ -52,7 +52,7 @@ public class TierOrderingEditorView extends EditorView {
 
 	public final static String VIEW_NAME = "Tier Management";
 
-	public final static String VIEW_ICON = IconManager.GoogleMaterialDesignIconsFontName + ":view_list";
+	public final static String VIEW_ICON = IconManager.GoogleMaterialDesignIconsFontName + ":data_table";
 
 	/**
 	 * Tier ordering table
@@ -645,16 +645,44 @@ public class TierOrderingEditorView extends EditorView {
 	@Override
 	public JMenu getMenu() {
 		final JMenu retVal = new JMenu();
-		
-		retVal.add(new ToggleLockAllTiersAction(getEditor(), this));
-		retVal.add(new ToggleHideAllTiersAction(getEditor(), this));
-		retVal.addSeparator();
+		final MenuBuilder menuBuilder = new MenuBuilder(retVal);
+		JMenu addTierSubmenu = menuBuilder.addMenu(".", "Add tier");
+
+		List<UserTierType> availableUserTierTypes = new ArrayList<>(List.of(UserTierType.values()));
+		availableUserTierTypes.remove(UserTierType.Wor);
+		availableUserTierTypes.remove(UserTierType.Mor);
+		availableUserTierTypes.remove(UserTierType.Trn);
+		availableUserTierTypes.remove(UserTierType.Gra);
+		availableUserTierTypes.remove(UserTierType.Grt);
+		for (UserTierType userTierType : availableUserTierTypes) {
+			JMenuItem addTierItem = new JMenuItem();
+			PhonUIAction<Void> addTierAct = PhonUIAction.runnable(() -> {
+				TierDescription td = SessionFactory.newFactory().createTierDescription(userTierType);
+				TierViewItem tvi = SessionFactory.newFactory().createTierViewItem(td.getName());
+
+				AddTierEdit edit = new AddTierEdit(getEditor(), td, tvi);
+				getEditor().getUndoSupport().postEdit(edit);
+			});
+			addTierAct.putValue(PhonUIAction.NAME, userTierType.name());
+			addTierItem.setAction(addTierAct);
+			addTierSubmenu.add(addTierItem);
+		}
+
+		addTierSubmenu.add(new JSeparator());
+
+		JMenuItem addCustomTierItem = new JMenuItem();
+		addCustomTierItem.setAction(new NewTierAction(getEditor(), (TierOrderingEditorView) getEditor().getViewModel().getView(TierOrderingEditorView.VIEW_NAME)));
+		addTierSubmenu.add(addCustomTierItem);
+
+		menuBuilder.addSeparator(".", "tiers");
+
+
 		
 		final List<TierViewItem> view = getCurrentOrder();
 		for(int i = 0; i < view.size(); i++) {
 			final TierViewItem tvi = view.get(i);
 			final JMenu tierMenu = new JMenu(tvi.getTierName());
-			
+
 			TierDescription tierDesc = null;
 			for(TierDescription td:getEditor().getSession().getUserTiers()) {
 				if(td.getName().equals(tvi.getTierName())) {
@@ -662,7 +690,7 @@ public class TierOrderingEditorView extends EditorView {
 					break;
 				}
 			}
-			
+
 			final MoveTierAction moveUpAction = new MoveTierAction(getEditor(), this, tvi, -1);
 			final MoveTierAction moveDownAction = new MoveTierAction(getEditor(), this, tvi, 1);
 			if(i > 0)
@@ -677,11 +705,14 @@ public class TierOrderingEditorView extends EditorView {
 			tierMenu.add(new ResetTierFontAction(getEditor(), this, tvi));
 			if(tierDesc != null)
 				tierMenu.add(new RemoveTierAction(getEditor(), this, tierDesc, tvi));
-		
+
 			retVal.add(tierMenu);
 		}
-		retVal.add(new NewTierAction(getEditor(), this));
-		
+
+		menuBuilder.addSeparator(".", "lock_hide");
+		retVal.add(new ToggleLockAllTiersAction(getEditor(), this));
+		retVal.add(new ToggleHideAllTiersAction(getEditor(), this));
+
 		return retVal;
 	}
 
