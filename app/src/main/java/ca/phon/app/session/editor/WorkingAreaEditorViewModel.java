@@ -891,11 +891,9 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					final JPopupMenu popupMenu = new JPopupMenu();
 					final JMenu viewMenu = editorView.getMenu();
-					for(int i = 0; i < viewMenu.getMenuComponentCount(); i++)
-						popupMenu.add(viewMenu.getMenuComponent(i));
-					popupMenu.show(editorView, editorView.getWidth()-popupMenu.getPreferredSize().width, 0);
+					final JPopupMenu popupMenu = viewMenu.getPopupMenu();
+					popupMenu.show(editorView, editorView.getWidth() - popupMenu.getPreferredSize().width, 0);
 				}
 
 			});

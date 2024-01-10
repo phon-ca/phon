@@ -251,17 +251,16 @@ public class ParticipantsView extends EditorView {
 	public JMenu getMenu() {
 		final JMenu menu = new JMenu();
 		final Session session = getEditor().getSession();
+		menu.add(new NewParticipantAction(getEditor()));
+		menu.addSeparator();
 		for(Participant p:session.getParticipants()) {
-			final JMenu speakerMenu = new JMenu(p.getName());
-			
+			final JMenu speakerMenu = new JMenu(p.getName() != null ? p.getName() : p.getId());
+			speakerMenu.setIcon(IconManager.getInstance().getFontIcon("person", IconSize.SMALL, UIManager.getColor("Button.foreground")));
 			speakerMenu.add(new EditParticipantAction(getEditor(), p));
 			speakerMenu.add(new AssignUnidentifiedSpeakerAction(getEditor(), this, p));
 			speakerMenu.add(new DeleteParticipantAction(getEditor(), p));
-			
 			menu.add(speakerMenu);
 		}
-		menu.add(new NewParticipantAction(getEditor()));
-		
 		return menu;
 	}
 
