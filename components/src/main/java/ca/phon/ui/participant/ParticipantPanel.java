@@ -63,6 +63,7 @@ public class ParticipantPanel extends JPanel {
 	private JTextField sesField;
 	private JTextField educationField;
 	private LanguageField languageField;
+	private LanguageField firstLanguageField;
 
 	private ComponentWithMessage<DatePicker> bdayField;
 	private final static String BDAY_PROMPT = "Format YYYY-MM-DD";
@@ -75,6 +76,10 @@ public class ParticipantPanel extends JPanel {
 	private LocalDate sessionDate;
 
 	private List<Participant> otherParticipants;
+
+	private JTextField birthplaceField;
+
+	private JTextField otherField;
 
 	private JButton anonymizeBtn;
 
@@ -154,6 +159,9 @@ public class ParticipantPanel extends JPanel {
 		languageField = new LanguageField();
 		languageField.setColumns(defCols);
 
+		firstLanguageField = new LanguageField();
+		firstLanguageField.setColumns(defCols);
+
 		bdayField = new ComponentWithMessage<>(new DatePicker(sessionDate), infoIcn, BDAY_PROMPT);
 		JLabel bdayWarningLbl = bdayField.getLabel();
 		bdayWarningLbl.setIcon(warningIcn);
@@ -166,23 +174,10 @@ public class ParticipantPanel extends JPanel {
 		ageField.getComponent().setToolTipText("Enter age in format YY;MM.YY");
 		ageField.getLabel().setFont(ageField.getLabel().getFont().deriveFont(10.0f));
 		updateAgeWarningLabel();
-//		ageField.addFocusListener(new FocusListener() {
-//
-//			@Override
-//			public void focusLost(FocusEvent arg0) {
-//				if(ageField.getText().length() > 0 &&
-//						!ageField.validateText()) {
-//					ToastFactory.makeToast("Age format: " + AgeFormatter.AGE_FORMAT).start(ageField);
-//					Toolkit.getDefaultToolkit().beep();
-//					bdayField.requestFocus();
-//				}
-//			}
-//
-//			@Override
-//			public void focusGained(FocusEvent arg0) {
-//			}
-//
-//		});
+
+		birthplaceField = new JTextField();
+
+		otherField = new JTextField();
 
 		// setup info
 		if(participant.getRole() != null)
@@ -201,13 +196,20 @@ public class ParticipantPanel extends JPanel {
 			languageField.setText(participant.getLanguage());
 		if(participant.getEducation() != null)
 			educationField.setText(participant.getEducation());
-
 		if(participant.getBirthDate() != null) {
 			bdayField.getComponent().setDateTime(participant.getBirthDate());
 		}
-
 		if(participant.getAge(null) != null) {
 			ageField.getComponent().setValue(participant.getAge(null));
+		}
+		if(participant.getFirstLanguage() != null) {
+			firstLanguageField.setText(participant.getFirstLanguage());
+		}
+		if(participant.getBirthplace() != null) {
+			birthplaceField.setText(participant.getBirthplace());
+		}
+		if(participant.getOther() != null) {
+			otherField.setText(participant.getOther());
 		}
 
 		// setup listeners
@@ -236,6 +238,11 @@ public class ParticipantPanel extends JPanel {
 		};
 		languageField.getDocument().addDocumentListener(new TextFieldUpdater(langUpdater));
 
+		final Consumer<Participant> firstLangUpdater = (obj) -> {
+			obj.setFirstLanguage(firstLanguageField.getText());
+		};
+		firstLanguageField.getDocument().addDocumentListener(new TextFieldUpdater(firstLangUpdater));
+
 		final Consumer<Participant> groupUpdater = (obj) -> {
 			obj.setGroup(groupField.getText());
 		};
@@ -255,6 +262,16 @@ public class ParticipantPanel extends JPanel {
 			obj.setSex((Sex)sexBox.getSelectedItem());
 		};
 		sexBox.addItemListener(new ItemUpdater(sexUpdater));
+
+		final Consumer<Participant> birthplaceUpdater = (obj) -> {
+			obj.setBirthplace(birthplaceField.getText());
+		};
+		birthplaceField.getDocument().addDocumentListener(new TextFieldUpdater(birthplaceUpdater));
+
+		final Consumer<Participant> otherUpdater = (obj) -> {
+			obj.setOther(otherField.getText());
+		};
+		otherField.getDocument().addDocumentListener(new TextFieldUpdater(otherUpdater));
 
 		final Consumer<Participant> bdayUpdater = (obj) -> {
 			final LocalDate bday = bdayField.getComponent().getDateTime();
@@ -304,7 +321,7 @@ public class ParticipantPanel extends JPanel {
 		final CellConstraints cc = new CellConstraints();
 		final FormLayout reqLayout = new FormLayout(
 				"right:pref, 3dlu, fill:pref:grow",
-				"pref, pref, pref");
+				"pref, pref, pref, pref");
 		final JPanel required = new JPanel(reqLayout);
 		required.setBorder(BorderFactory.createTitledBorder("Required Information"));
 		required.add(new JLabel("Role"), cc.xy(1,1));
@@ -314,26 +331,36 @@ public class ParticipantPanel extends JPanel {
 
 		final FormLayout optLayout = new FormLayout(
 				"right:pref, 3dlu, fill:pref:grow, 5dlu, right:pref, 3dlu, fill:pref:grow",
-				"pref, pref, pref, pref");
+				"pref, pref, pref, pref, pref, pref");
 		final JPanel optional = new JPanel(optLayout);
 		optional.setBorder(BorderFactory.createTitledBorder("Optional Information"));
+		// left column: Name, Birthday, Language, Group, Education
 		optional.add(createFieldLabel("Name", "name"), cc.xy(1, 1));
 		optional.add(nameField, cc.xy(3, 1));
-		optional.add(createFieldLabel("Sex", "sex"), cc.xy(1, 2));
-		optional.add(sexBox, cc.xy(3, 2));
-		optional.add(createFieldLabel("Birthday (YYYY-MM-DD)", "birthday"), cc.xy(1, 3));
-		optional.add(bdayField, cc.xy(3, 3));
-		optional.add(createFieldLabel("Age (" + AgeFormatter.AGE_FORMAT + ")", "age"), cc.xy(1, 4));
-		optional.add(ageField, cc.xy(3, 4));
+		optional.add(createFieldLabel("Birthday (YYYY-MM-DD)", "birthday"), cc.xy(1, 2));
+		optional.add(bdayField, cc.xy(3, 2));
+		optional.add(createFieldLabel("Language", "language"), cc.xy(1, 3));
+		optional.add(languageField, cc.xy(3, 3));
+		optional.add(createFieldLabel("Group", "group"), cc.xy(1, 4));
+		optional.add(groupField, cc.xy(3, 4));
+		optional.add(createFieldLabel("Education", "education"), cc.xy(1, 5));
+		optional.add(educationField, cc.xy(3, 5));
 
-		optional.add(createFieldLabel("Language", "language"), cc.xy(5, 1));
-		optional.add(languageField, cc.xy(7, 1));
-		optional.add(createFieldLabel("Group", "group"), cc.xy(5, 2));
-		optional.add(groupField, cc.xy(7, 2));
-		optional.add(createFieldLabel("Education", "education"), cc.xy(5, 3));
-		optional.add(educationField, cc.xy(7, 3));
-		optional.add(createFieldLabel("SES", "ses"), cc.xy(5, 4));
-		optional.add(sesField, cc.xy(7, 4));
+		// right column: Sex, Age, First language, Birthplace, SES
+		optional.add(createFieldLabel("Sex", "sex"), cc.xy(5, 1));
+		optional.add(sexBox, cc.xy(7, 1));
+		optional.add(createFieldLabel("Age (" + AgeFormatter.AGE_FORMAT + ")", "age"), cc.xy(5, 2));
+		optional.add(ageField, cc.xy(7, 2));
+		optional.add(createFieldLabel("First Language", "firstLanguage"), cc.xy(5, 3));
+		optional.add(firstLanguageField, cc.xy(7, 3));
+		optional.add(createFieldLabel("Birthplace", "birthplace"), cc.xy(5, 4));
+		optional.add(birthplaceField, cc.xy(7, 4));
+		optional.add(createFieldLabel("SES", "ses"), cc.xy(5, 5));
+		optional.add(sesField, cc.xy(7, 5));
+
+		// add other at bottom spanning across both columns
+		optional.add(createFieldLabel("Other", "other"), cc.xy(1, 6));
+		optional.add(otherField, cc.xyw(3, 6, 5));
 
 		setLayout(new VerticalLayout(5));
 		add(required);
