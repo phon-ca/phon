@@ -8,8 +8,6 @@ import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.RecordEditorPerspective;
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
-import ca.phon.app.session.editor.view.transcriptEditor.TranscriptView;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
 import ca.phon.session.SessionPath;

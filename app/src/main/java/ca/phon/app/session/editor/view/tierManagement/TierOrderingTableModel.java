@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.tier_management;
+package ca.phon.app.session.editor.view.tierManagement;
 
 import ca.phon.session.*;
 import ca.phon.ui.fonts.FontPreferences;

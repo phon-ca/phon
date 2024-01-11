@@ -16,9 +16,8 @@
 package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.actions.SessionEditorAction;
 import ca.phon.app.session.editor.undo.*;
-import ca.phon.app.session.editor.view.tier_management.*;
+import ca.phon.app.session.editor.view.tierManagement.*;
 import ca.phon.formatter.*;
 import ca.phon.session.*;
 import ca.phon.ui.fonts.FontPreferences;
@@ -26,7 +25,6 @@ import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
-import javax.swing.undo.CompoundEdit;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 

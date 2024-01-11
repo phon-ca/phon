@@ -8,7 +8,7 @@ import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.participants.ParticipantsView;
 import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
-import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
+import ca.phon.app.session.editor.view.tierManagement.TierManagementView;
 import ca.phon.app.session.editor.actions.NewTierAction;
 import ca.phon.app.session.editor.view.timeline.TimelineView;
 import ca.phon.app.session.editor.view.transcriptEditor.actions.*;
@@ -731,7 +731,7 @@ public class TranscriptView extends EditorView {
         menuBuilder.addItem(".", toggleChatTierNamesItem);
 
         JMenuItem showTierManagementViewItem = new JMenuItem();
-        PhonUIAction<Void> showTierManagementViewAct = PhonUIAction.runnable(() -> getEditor().getViewModel().showView(TierOrderingEditorView.VIEW_NAME));
+        PhonUIAction<Void> showTierManagementViewAct = PhonUIAction.runnable(() -> getEditor().getViewModel().showView(TierManagementView.VIEW_NAME));
         showTierManagementViewAct.putValue(PhonUIAction.NAME, "Show Tier Management view");
         showTierManagementViewItem.setAction(showTierManagementViewAct);
         menuBuilder.addItem(".", showTierManagementViewItem);

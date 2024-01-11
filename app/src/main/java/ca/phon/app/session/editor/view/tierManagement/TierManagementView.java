@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.tier_management;
+package ca.phon.app.session.editor.view.tierManagement;
 
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.actions.*;
@@ -47,7 +47,7 @@ import java.util.stream.*;
  * Panel for changing tier ordering, visibility and fonts.
  *
  */
-public class TierOrderingEditorView extends EditorView {
+public class TierManagementView extends EditorView {
 
 	public final static String VIEW_NAME = "Tier Management";
 
@@ -92,7 +92,7 @@ public class TierOrderingEditorView extends EditorView {
 	/**
 	 * Constructor
 	 */
-	public TierOrderingEditorView(SessionEditor editor) {
+	public TierManagementView(SessionEditor editor) {
 		super(editor);
 		init();
 		setupEditorActions();

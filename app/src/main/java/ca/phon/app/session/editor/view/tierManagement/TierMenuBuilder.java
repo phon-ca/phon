@@ -1,4 +1,4 @@
-package ca.phon.app.session.editor.view.tier_management;
+package ca.phon.app.session.editor.view.tierManagement;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.AddTierEdit;
@@ -7,7 +7,6 @@ import ca.phon.session.*;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -16,9 +16,7 @@
 package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.actions.SessionEditorAction;
 import ca.phon.app.session.editor.undo.RemoveTierEdit;
-import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
 import ca.phon.session.*;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;

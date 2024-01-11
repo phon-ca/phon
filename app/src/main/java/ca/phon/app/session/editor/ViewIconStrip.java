@@ -5,7 +5,7 @@ import ca.phon.app.session.editor.view.ipaDictionary.IPADictionaryView;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.participants.ParticipantsView;
 import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
-import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
+import ca.phon.app.session.editor.view.tierManagement.TierManagementView;
 import ca.phon.app.session.editor.view.timeline.TimelineView;
 import ca.phon.app.session.editor.view.transcriptEditor.TranscriptView;
 import ca.phon.plugin.IPluginExtensionPoint;
@@ -13,15 +13,9 @@ import ca.phon.plugin.PluginManager;
 import ca.phon.ui.FlatButton;
 import ca.phon.ui.IconStrip;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.ui.theme.UIDefaults;
-import ca.phon.ui.theme.UIDefaultsHandler;
 import ca.phon.util.icons.IconSize;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,7 +38,7 @@ public class ViewIconStrip extends IconStrip {
     protected void initButtons() {
         viewButtons.put(TranscriptView.VIEW_NAME, createViewButton(TranscriptView.VIEW_NAME));
         viewButtons.put(ParticipantsView.VIEW_NAME, createViewButton(ParticipantsView.VIEW_NAME));
-        viewButtons.put(TierOrderingEditorView.VIEW_NAME, createViewButton(TierOrderingEditorView.VIEW_NAME));
+        viewButtons.put(TierManagementView.VIEW_NAME, createViewButton(TierManagementView.VIEW_NAME));
         viewButtons.put(MediaPlayerEditorView.VIEW_NAME, createViewButton(MediaPlayerEditorView.VIEW_NAME));
         viewButtons.put(SpeechAnalysisEditorView.VIEW_NAME, createViewButton(SpeechAnalysisEditorView.VIEW_NAME));
         viewButtons.put(TimelineView.VIEW_NAME, createViewButton(TimelineView.VIEW_NAME));
@@ -53,7 +47,7 @@ public class ViewIconStrip extends IconStrip {
 
         add(viewButtons.get(TranscriptView.VIEW_NAME), IconStripPosition.LEFT);
         add(viewButtons.get(ParticipantsView.VIEW_NAME), IconStripPosition.LEFT);
-        add(viewButtons.get(TierOrderingEditorView.VIEW_NAME), IconStripPosition.LEFT);
+        add(viewButtons.get(TierManagementView.VIEW_NAME), IconStripPosition.LEFT);
         add(viewButtons.get(MediaPlayerEditorView.VIEW_NAME), IconStripPosition.LEFT);
         add(viewButtons.get(SpeechAnalysisEditorView.VIEW_NAME), IconStripPosition.LEFT);
         add(viewButtons.get(TimelineView.VIEW_NAME), IconStripPosition.RIGHT);

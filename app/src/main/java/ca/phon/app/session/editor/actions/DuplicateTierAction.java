@@ -1,9 +1,8 @@
 package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.actions.SessionEditorAction;
 import ca.phon.app.session.editor.undo.*;
-import ca.phon.app.session.editor.view.tier_management.*;
+import ca.phon.app.session.editor.view.tierManagement.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.tierdata.TierData;
