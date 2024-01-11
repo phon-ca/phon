@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.tier_management;
+package ca.phon.app.session.editor.view.tierManagement;
 
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.layout.ButtonBarBuilder;

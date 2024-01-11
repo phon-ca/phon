@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.tier_management;
+package ca.phon.app.session.editor.view.tierManagement;
 
 import ca.phon.app.session.ViewPosition;
 import ca.phon.app.session.editor.*;
 import ca.phon.plugin.*;
 
 @PhonPlugin(name="Tier Management")
-@EditorViewInfo(name=TierOrderingEditorView.VIEW_NAME, category=EditorViewCategory.SESSION,
-		icon=TierOrderingEditorView.VIEW_ICON,
+@EditorViewInfo(name= TierManagementView.VIEW_NAME, category=EditorViewCategory.SESSION,
+		icon= TierManagementView.VIEW_ICON,
 		dockPosition = ViewPosition.LEFT_BOTTOM)
-public class TierOrderingExtensionPoint implements IPluginExtensionPoint<EditorView> {
+public class TierManagementViewExtPt implements IPluginExtensionPoint<EditorView> {
 	
 	@Override
 	public Class<?> getExtensionType() {
@@ -40,7 +40,7 @@ public class TierOrderingExtensionPoint implements IPluginExtensionPoint<EditorV
 		@Override
 		public EditorView createObject(Object... args) {
 			final SessionEditor editor = SessionEditor.class.cast(args[0]);
-			return new TierOrderingEditorView(editor);
+			return new TierManagementView(editor);
 		}
 		
 	};

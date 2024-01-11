@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.tier_management.actions;
+package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.TierViewItemEdit;
-import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
 import ca.phon.session.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 
-public class ToggleTierVisibleAction extends TierManagementAction {
+public class ToggleTierVisibleAction extends SessionEditorAction {
 
-	private static final long serialVersionUID = -4743364905920496226L;
-	
 	private final static String SHOW_TIER = "Show tier";
 
 	private final static String HIDE_TIER = "Hide tier";
@@ -34,9 +34,8 @@ public class ToggleTierVisibleAction extends TierManagementAction {
 	
 	private final TierViewItem item;
 
-	public ToggleTierVisibleAction(SessionEditor editor,
-			TierOrderingEditorView view, TierViewItem tierViewItem) {
-		super(editor, view);
+	public ToggleTierVisibleAction(SessionEditor editor, TierViewItem tierViewItem) {
+		super(editor);
 		this.item = tierViewItem;
 
 		if(tierViewItem.isVisible())
@@ -44,6 +43,7 @@ public class ToggleTierVisibleAction extends TierManagementAction {
 		else
 			putValue(NAME, SHOW_TIER);
 		putValue(SHORT_DESCRIPTION, SHORT_DESC);
+		putValue(SMALL_ICON, IconManager.getInstance().getFontIcon(item.isVisible() ? "Visibility_Off" : "visibility", IconSize.SMALL, UIManager.getColor("Button.foreground")));
 	}
 
 	@Override

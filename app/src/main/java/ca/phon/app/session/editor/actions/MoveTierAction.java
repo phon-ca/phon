@@ -13,31 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.tier_management.actions;
+package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.MoveTierEdit;
-import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
 import ca.phon.session.TierViewItem;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.*;
 
-public class MoveTierAction extends TierManagementAction {
-	
-	private static final long serialVersionUID = 4932691213871636212L;
+public class MoveTierAction extends SessionEditorAction {
 	
 	private final TierViewItem item;
 
 	private final int direction;
 		
-	public MoveTierAction(SessionEditor editor, TierOrderingEditorView view,
-			TierViewItem item, int direction) {
-		super(editor, view);
+	public MoveTierAction(SessionEditor editor, TierViewItem item, int direction) {
+		super(editor);
 		this.item = item;
 		this.direction = direction;
 		
 		putValue(NAME, "Move tier " + (direction < 0 ? "up" : "down"));
+		putValue(SMALL_ICON, IconManager.getInstance().getFontIcon(direction < 0 ? "arrow_upward" : "arrow_downward", IconSize.SMALL, UIManager.getColor("Button.foreground")));
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class MoveTierAction extends TierManagementAction {
 			final MoveTierEdit edit = new MoveTierEdit(getEditor(), item, nextIndex);
 			getEditor().getUndoSupport().postEdit(edit);
 
-			getView().getTierOrderingTable().getSelectionModel().setSelectionInterval(nextIndex, nextIndex);
+//			getView().getTierOrderingTable().getSelectionModel().setSelectionInterval(nextIndex, nextIndex);
 		}
 	}
 

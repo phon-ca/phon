@@ -22,16 +22,13 @@ import ca.phon.app.session.editor.view.participants.actions.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.ui.FlatButton;
-import ca.phon.ui.FlatButtonUIProps;
 import ca.phon.ui.IconStrip;
 import ca.phon.ui.PhonTable;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.*;
 import ca.phon.ui.participant.ParticipantsTableModel;
 import ca.phon.util.icons.*;
-import com.jgoodies.forms.layout.*;
 import org.jdesktop.swingx.JXTable;
-import org.jdesktop.swingx.table.ColumnControlButton;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -79,13 +76,13 @@ public class ParticipantsView extends EditorView {
 		participantTable.setVisibleRowCount(3);
 		participantTable.setColumnControlVisible(true);
 		
-		ComponentInputMap participantTableInputMap = new ComponentInputMap(participantTable);
-		ActionMap participantTableActionMap = new ActionMap();
+		InputMap participantTableInputMap = participantTable.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+		ActionMap participantTableActionMap = participantTable.getActionMap();
 		
 		final PhonUIAction<Void> deleteAction = PhonUIAction.runnable(this::deleteParticipant);
 		deleteAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Delete selected participant");
 		deleteAction.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
-		deleteAction.putValue(FlatButton.ICON_NAME_PROP, "person_remove");
+		deleteAction.putValue(FlatButton.ICON_NAME_PROP, "remove");
 		deleteAction.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
 		participantTableActionMap.put("DELETE_PARTICIPANT", deleteAction);
 		participantTableInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "DELETE_PARTICIPANT");
@@ -98,7 +95,7 @@ public class ParticipantsView extends EditorView {
 		final NewParticipantAction newParticipantAct = new NewParticipantAction(getEditor());
 		newParticipantAct.putValue(PhonUIAction.NAME, null);
 		newParticipantAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
-		newParticipantAct.putValue(FlatButton.ICON_NAME_PROP, "person_add");
+		newParticipantAct.putValue(FlatButton.ICON_NAME_PROP, "add");
 		newParticipantAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
         JButton addParticipantButton = new FlatButton(newParticipantAct);
 		addParticipantButton.setFocusable(false);
@@ -106,15 +103,15 @@ public class ParticipantsView extends EditorView {
 		final PhonUIAction<Void> editParticipantAct = PhonUIAction.runnable(this::editParticipant);
 		editParticipantAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Edit selected participant...");
 		editParticipantAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
-		editParticipantAct.putValue(FlatButton.ICON_NAME_PROP, "person_edit");
+		editParticipantAct.putValue(FlatButton.ICON_NAME_PROP, "edit");
 		editParticipantAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
         JButton editParticipantButton = new FlatButton(editParticipantAct);
 		editParticipantButton.setFocusable(false);
 
 		final IconStrip iconStrip = new IconStrip(SwingConstants.HORIZONTAL);
 		iconStrip.add(addParticipantButton, IconStrip.IconStripPosition.LEFT);
+		iconStrip.add(removeParticipantButton, IconStrip.IconStripPosition.LEFT);
 		iconStrip.add(editParticipantButton, IconStrip.IconStripPosition.LEFT);
-		iconStrip.add(removeParticipantButton, IconStrip.IconStripPosition.RIGHT);
 
 		add(iconStrip, BorderLayout.NORTH);
 		add(new JScrollPane(participantTable), BorderLayout.CENTER);
@@ -247,24 +244,23 @@ public class ParticipantsView extends EditorView {
 	@Override
 	public ImageIcon getIcon() {
 		final String[] iconData = VIEW_ICON.split(":");
-		return IconManager.getInstance().buildFontIcon(iconData[0], iconData[1], IconSize.MEDIUM, Color.darkGray);
+		return IconManager.getInstance().getFontIcon(iconData[0], iconData[1], IconSize.MEDIUM, Color.darkGray);
 	}
 
 	@Override
 	public JMenu getMenu() {
 		final JMenu menu = new JMenu();
 		final Session session = getEditor().getSession();
+		menu.add(new NewParticipantAction(getEditor()));
+		menu.addSeparator();
 		for(Participant p:session.getParticipants()) {
-			final JMenu speakerMenu = new JMenu(p.getName());
-			
+			final JMenu speakerMenu = new JMenu(p.getName() != null ? p.getName() : p.getId());
+			speakerMenu.setIcon(IconManager.getInstance().getFontIcon("person", IconSize.SMALL, UIManager.getColor("Button.foreground")));
 			speakerMenu.add(new EditParticipantAction(getEditor(), p));
 			speakerMenu.add(new AssignUnidentifiedSpeakerAction(getEditor(), this, p));
 			speakerMenu.add(new DeleteParticipantAction(getEditor(), p));
-			
 			menu.add(speakerMenu);
 		}
-		menu.add(new NewParticipantAction(getEditor()));
-		
 		return menu;
 	}
 

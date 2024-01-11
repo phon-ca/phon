@@ -1,8 +1,8 @@
-package ca.phon.app.session.editor.view.tier_management.actions;
+package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.*;
-import ca.phon.app.session.editor.view.tier_management.*;
+import ca.phon.app.session.editor.view.tierManagement.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.tierdata.TierData;
@@ -14,25 +14,25 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.text.ParseException;
 
-public class DuplicateTierAction extends TierManagementAction {
+public class DuplicateTierAction extends SessionEditorAction {
 
 	private final static String CMD_NAME = "Duplicate tier...";
 
 	private final static String SHORT_DESC = "Duplicate tier.";
 
 	private final static ImageIcon ICON =
-			IconManager.getInstance().getIcon("actions/edit-copy", IconSize.SMALL);
+			IconManager.getInstance().getFontIcon("content_copy", IconSize.SMALL, UIManager.getColor("Button.foreground"));
 
 	private int index = -1;
 
 	private TierDescription td;
 
-	public DuplicateTierAction(SessionEditor editor, TierOrderingEditorView view, TierDescription td) {
-		this(editor, view, td, -1);
+	public DuplicateTierAction(SessionEditor editor, TierDescription td) {
+		this(editor, td, -1);
 	}
 
-	public DuplicateTierAction(SessionEditor editor, TierOrderingEditorView view, TierDescription td, int index) {
-		super(editor, view);
+	public DuplicateTierAction(SessionEditor editor, TierDescription td, int index) {
+		super(editor);
 
 		this.td = td;
 		this.index = index;

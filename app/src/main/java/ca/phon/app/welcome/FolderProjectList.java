@@ -15,8 +15,6 @@
  */
 package ca.phon.app.welcome;
 
-import ca.hedlund.desktopicons.MacOSStockIcon;
-import ca.hedlund.desktopicons.WindowsStockIcon;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.project.DesktopProjectFactory;
@@ -45,7 +43,6 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 
 /**
  * List for displaying project in a given directory.
@@ -166,8 +163,8 @@ public class FolderProjectList extends JPanel {
 	private LocalProjectButton getProjectButton(File f) {
 		LocalProjectButton retVal = new LocalProjectButton(f);
 		
-		ImageIcon icon = IconManager.getInstance().buildFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "folder", IconSize.SMALL, UIManager.getColor(FlatButtonUIProps.ICON_COLOR_PROP));
-		ImageIcon iconL = IconManager.getInstance().buildFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "folder", IconSize.MEDIUM, UIManager.getColor(FlatButtonUIProps.ICON_COLOR_PROP));
+		ImageIcon icon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "folder", IconSize.SMALL, UIManager.getColor(FlatButtonUIProps.ICON_COLOR_PROP));
+		ImageIcon iconL = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "folder", IconSize.MEDIUM, UIManager.getColor(FlatButtonUIProps.ICON_COLOR_PROP));
 		
 		PhonUIAction<LocalProjectButton> openAction = PhonUIAction.eventConsumer(this::onOpenProject, retVal);
 		
@@ -177,8 +174,8 @@ public class FolderProjectList extends JPanel {
 		openAction.putValue(Action.LARGE_ICON_KEY, iconL);
 		retVal.setDefaultAction(openAction);
 		
-		ImageIcon fsIcon = IconManager.getInstance().buildFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "open_in_browser", IconSize.SMALL, UIManager.getColor(FlatButtonUIProps.ICON_COLOR_PROP));
-		ImageIcon fsIconL = IconManager.getInstance().buildFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "open_in_browser", IconSize.MEDIUM, UIManager.getColor(FlatButtonUIProps.ICON_COLOR_PROP));
+		ImageIcon fsIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "open_in_browser", IconSize.SMALL, UIManager.getColor(FlatButtonUIProps.ICON_COLOR_PROP));
+		ImageIcon fsIconL = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "open_in_browser", IconSize.MEDIUM, UIManager.getColor(FlatButtonUIProps.ICON_COLOR_PROP));
 
 		String fsName = "file system viewer";
 		if(OSInfo.isWindows()) {
@@ -194,8 +191,8 @@ public class FolderProjectList extends JPanel {
 		showAction.putValue(Action.SHORT_DESCRIPTION, "Show project in " + fsName);
 		retVal.addAction(showAction);
 		
-		ImageIcon archiveIcn = IconManager.getInstance().buildFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "folder_zip", IconSize.SMALL, UIManager.getColor(FlatButtonUIProps.ICON_COLOR_PROP));
-		ImageIcon archiveIcnL = IconManager.getInstance().buildFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "folder_zip", IconSize.MEDIUM, UIManager.getColor(FlatButtonUIProps.ICON_COLOR_PROP));
+		ImageIcon archiveIcn = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "folder_zip", IconSize.SMALL, UIManager.getColor(FlatButtonUIProps.ICON_COLOR_PROP));
+		ImageIcon archiveIcnL = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "folder_zip", IconSize.MEDIUM, UIManager.getColor(FlatButtonUIProps.ICON_COLOR_PROP));
 
 		
 		PhonUIAction<LocalProjectButton> archiveAction = PhonUIAction.eventConsumer(this::onArchiveProject, retVal);

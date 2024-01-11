@@ -13,29 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.tier_management.actions;
+package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.*;
-import ca.phon.app.session.editor.view.tier_management.*;
+import ca.phon.app.session.editor.view.tierManagement.*;
 import ca.phon.formatter.*;
 import ca.phon.session.*;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
-import javax.swing.undo.CompoundEdit;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
-public class EditTierAction extends TierManagementAction {
+/**
+ * Show edit tier dialog for given tier view item.
+ */
+public class EditTierAction extends SessionEditorAction {
 
 	private final TierViewItem tierItem;
 
-	public EditTierAction(SessionEditor editor, TierOrderingEditorView view,
-			TierViewItem item) {
-		super(editor, view);
+	private final static String TXT = "Edit tier ";
+
+	private final static ImageIcon ICON =
+			IconManager.getInstance().getFontIcon("edit", IconSize.SMALL, UIManager.getColor("Button.foreground"));
+
+	public EditTierAction(SessionEditor editor, TierViewItem item) {
+		super(editor);
 		this.tierItem = item;
 		
-		putValue(NAME, "Edit tier " + item.getTierName());
+		putValue(NAME, TXT + item.getTierName());
+		putValue(SMALL_ICON, ICON);
 	}
 
 	@Override

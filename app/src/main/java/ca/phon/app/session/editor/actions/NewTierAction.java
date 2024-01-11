@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.tier_management.actions;
+package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.AddTierEdit;
-import ca.phon.app.session.editor.view.tier_management.*;
+import ca.phon.app.session.editor.view.tierManagement.*;
 import ca.phon.session.*;
 import ca.phon.ui.toast.*;
 import ca.phon.util.icons.*;
@@ -26,25 +26,22 @@ import org.apache.commons.lang3.StringUtils;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
-public class NewTierAction extends TierManagementAction {
+public class NewTierAction extends SessionEditorAction {
 
-	private static final long serialVersionUID = -25622911440669271L;
-	
-	private final static String CMD_NAME = "New tier...";
+	private final static String CMD_NAME = "New custom tier...";
 	
 	private final static String SHORT_DESC = "Add new tier to session.";
 	
-	private final static ImageIcon ICON =
-			IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL);
+	private final static ImageIcon ICON = IconManager.getInstance().getFontIcon("add", IconSize.SMALL, UIManager.getColor("Button.foreground"));
 
 	private int index = -1;
 
-	public NewTierAction(SessionEditor editor, TierOrderingEditorView view) {
-		this(editor, view, -1);
+	public NewTierAction(SessionEditor editor) {
+		this(editor, -1);
 	}
 
-	public NewTierAction(SessionEditor editor, TierOrderingEditorView view, int index) {
-		super(editor, view);
+	public NewTierAction(SessionEditor editor, int index) {
+		super(editor);
 
 		this.index = index;
 		

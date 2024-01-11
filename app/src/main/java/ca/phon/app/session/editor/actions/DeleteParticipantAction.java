@@ -32,13 +32,13 @@ public class DeleteParticipantAction extends SessionEditorAction {
 	private final Participant participant;
 	
 	private final ImageIcon ICON = 
-			IconManager.getInstance().getIcon("actions/delete_user", IconSize.SMALL);
+			IconManager.getInstance().getFontIcon("person_remove", IconSize.SMALL, UIManager.getColor("Button.foreground"));
 
 	public DeleteParticipantAction(SessionEditor editor, Participant participant) {
 		super(editor);
 		this.participant = participant;
 		
-		putValue(NAME, "Delete " + participant.getName());
+		putValue(NAME, "Delete " + participant.toString());
 		putValue(SMALL_ICON, ICON);
 	}
 

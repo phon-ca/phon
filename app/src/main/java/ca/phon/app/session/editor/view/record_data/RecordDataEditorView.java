@@ -22,7 +22,7 @@ import ca.phon.app.session.editor.actions.PlaySegmentAction;
 import ca.phon.app.session.editor.search.FindAndReplacePanel;
 import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.common.*;
-import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
+import ca.phon.app.session.editor.view.tierManagement.TierManagementView;
 import ca.phon.ipa.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;
@@ -888,8 +888,8 @@ public class RecordDataEditorView extends EditorView implements ClipboardOwner {
 		}
 		builder.addSeparator(".", "copy_paste");
 
-		TierOrderingEditorView tierOrderView =
-				(TierOrderingEditorView) getEditor().getViewModel().getView(TierOrderingEditorView.VIEW_NAME);
+		TierManagementView tierOrderView =
+				(TierManagementView) getEditor().getViewModel().getView(TierManagementView.VIEW_NAME);
 		if(tierOrderView != null) {
 			for(int i = 0; i < getEditor().getSession().getTierView().size(); i++) {
 				TierViewItem tvi = getEditor().getSession().getTierView().get(i);

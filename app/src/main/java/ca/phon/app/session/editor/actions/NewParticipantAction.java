@@ -32,7 +32,7 @@ public class NewParticipantAction extends SessionEditorAction {
 	private final static String DESC = "Add participant to session.";
 	
 	private final static ImageIcon ICON = 
-			IconManager.getInstance().getIcon("actions/add_user", IconSize.SMALL);
+			IconManager.getInstance().getFontIcon("person_add", IconSize.SMALL, UIManager.getColor("Button.foreground"));
 
 	public NewParticipantAction(SessionEditor editor) {
 		super(editor);

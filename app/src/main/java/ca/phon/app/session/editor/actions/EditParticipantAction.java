@@ -24,6 +24,7 @@ import ca.phon.ui.participant.ParticipantEditor;
 import ca.phon.util.icons.*;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class EditParticipantAction extends SessionEditorAction {
@@ -31,14 +32,14 @@ public class EditParticipantAction extends SessionEditorAction {
 	private final Participant participant;
 	
 	private final ImageIcon ICON = 
-			IconManager.getInstance().getIcon("actions/edit_user", IconSize.SMALL);
+			IconManager.getInstance().getFontIcon("person_edit", IconSize.SMALL, UIManager.getColor("Button.foreground"));
 	
 	public EditParticipantAction(SessionEditor editor, Participant participant) {
 		super(editor);
 		this.participant = participant;
 		
 		putValue(SMALL_ICON, ICON);
-		putValue(NAME, "Edit " + participant.getName() + "...");
+		putValue(NAME, "Edit " + participant.toString() + "...");
 	}
 
 	@Override

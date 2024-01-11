@@ -8,8 +8,8 @@ import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.participants.ParticipantsView;
 import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
-import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
-import ca.phon.app.session.editor.view.tier_management.actions.NewTierAction;
+import ca.phon.app.session.editor.view.tierManagement.TierManagementView;
+import ca.phon.app.session.editor.actions.NewTierAction;
 import ca.phon.app.session.editor.view.timeline.TimelineView;
 import ca.phon.app.session.editor.view.transcriptEditor.actions.*;
 import ca.phon.app.session.editor.view.transcriptEditor.extensions.*;
@@ -18,8 +18,6 @@ import ca.phon.session.*;
 import ca.phon.session.io.SessionOutputFactory;
 import ca.phon.ui.CalloutWindow;
 import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.DropDownButton;
-import ca.phon.ui.DropDownIcon;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
@@ -674,10 +672,8 @@ public class TranscriptView extends EditorView {
         addTierSubmenu.add(new JSeparator());
 
         JMenuItem addCustomTierItem = new JMenuItem();
-        addCustomTierItem.setAction(new NewTierAction(getEditor(), (TierOrderingEditorView) getEditor().getViewModel().getView(TierOrderingEditorView.VIEW_NAME)));
+        addCustomTierItem.setAction(new NewTierAction(getEditor()));
         addTierSubmenu.add(addCustomTierItem);
-
-
         menuBuilder.addSeparator(".", "");
 
         var extPts = PluginManager.getInstance().getExtensionPoints(TierLabelMenuHandler.class);
@@ -735,7 +731,7 @@ public class TranscriptView extends EditorView {
         menuBuilder.addItem(".", toggleChatTierNamesItem);
 
         JMenuItem showTierManagementViewItem = new JMenuItem();
-        PhonUIAction<Void> showTierManagementViewAct = PhonUIAction.runnable(() -> getEditor().getViewModel().showView(TierOrderingEditorView.VIEW_NAME));
+        PhonUIAction<Void> showTierManagementViewAct = PhonUIAction.runnable(() -> getEditor().getViewModel().showView(TierManagementView.VIEW_NAME));
         showTierManagementViewAct.putValue(PhonUIAction.NAME, "Show Tier Management view");
         showTierManagementViewItem.setAction(showTierManagementViewAct);
         menuBuilder.addItem(".", showTierManagementViewItem);
@@ -751,7 +747,7 @@ public class TranscriptView extends EditorView {
     @Override
     public ImageIcon getIcon() {
         final String[] iconData = VIEW_ICON.split(":");
-        return IconManager.getInstance().buildFontIcon(iconData[0], iconData[1], IconSize.MEDIUM, Color.darkGray);
+        return IconManager.getInstance().getFontIcon(iconData[0], iconData[1], IconSize.MEDIUM, Color.darkGray);
     }
 
     @Override

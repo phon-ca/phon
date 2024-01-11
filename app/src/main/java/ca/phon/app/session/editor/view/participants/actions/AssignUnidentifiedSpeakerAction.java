@@ -35,7 +35,7 @@ public class AssignUnidentifiedSpeakerAction extends SessionInfoAction {
 	private final static String DESC = "Assign all unidentified records to speaker.";
 	
 	private final static ImageIcon ICON = 
-			IconManager.getInstance().getIcon("actions/edit_user", IconSize.SMALL);
+			IconManager.getInstance().getFontIcon("person", IconSize.SMALL, UIManager.getColor("Button.foreground"));
 	
 	private Participant participant;
 	
