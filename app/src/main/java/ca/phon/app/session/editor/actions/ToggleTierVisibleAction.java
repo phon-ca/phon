@@ -13,43 +13,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.tier_management.actions;
+package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.actions.SessionEditorAction;
 import ca.phon.app.session.editor.undo.TierViewItemEdit;
 import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
 import ca.phon.session.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 
-public class ToggleTierLockAction extends TierManagementAction {
-	
-	private static final long serialVersionUID = 6445019863407426817L;
+public class ToggleTierVisibleAction extends SessionEditorAction {
 
-	private final static String LOCK_TIER = "Lock tier";
+	private final static String SHOW_TIER = "Show tier";
 
-	private final static String UNLOCK_TIER = "Unlock tier";
+	private final static String HIDE_TIER = "Hide tier";
 	
 	private final static String SHORT_DESC = "";
 	
 	private final TierViewItem item;
-	
-	public ToggleTierLockAction(SessionEditor editor,
-			TierOrderingEditorView view, TierViewItem item) {
-		super(editor, view);
-		this.item = item;
 
-		if(item.isTierLocked())
-			putValue(NAME, UNLOCK_TIER);
+	public ToggleTierVisibleAction(SessionEditor editor, TierViewItem tierViewItem) {
+		super(editor);
+		this.item = tierViewItem;
+
+		if(tierViewItem.isVisible())
+			putValue(NAME, HIDE_TIER);
 		else
-			putValue(NAME, LOCK_TIER);
+			putValue(NAME, SHOW_TIER);
 		putValue(SHORT_DESCRIPTION, SHORT_DESC);
+		putValue(SMALL_ICON, IconManager.getInstance().getFontIcon(item.isVisible() ? "Visibility_Off" : "visibility", IconSize.SMALL, UIManager.getColor("Button.foreground")));
 	}
-	
+
 	@Override
 	public void hookableActionPerformed(ActionEvent e) {
 		final SessionFactory factory = SessionFactory.newFactory();
-		final TierViewItem newItem = factory.createTierViewItem(item.getTierName(), item.isVisible(), !item.isTierLocked());
+		final TierViewItem newItem = factory.createTierViewItem(item.getTierName(), !item.isVisible(), item.getTierFont(), item.isTierLocked());
 		
 		final TierViewItemEdit edit = new TierViewItemEdit(getEditor(), item, newItem);
 		getEditor().getUndoSupport().postEdit(edit);

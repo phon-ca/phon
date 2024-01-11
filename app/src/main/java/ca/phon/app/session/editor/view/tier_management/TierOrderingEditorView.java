@@ -16,8 +16,8 @@
 package ca.phon.app.session.editor.view.tier_management;
 
 import ca.phon.app.session.editor.*;
+import ca.phon.app.session.editor.actions.*;
 import ca.phon.app.session.editor.undo.*;
-import ca.phon.app.session.editor.view.tier_management.actions.*;
 import ca.phon.session.*;
 import ca.phon.ui.*;
 import ca.phon.ui.action.*;
@@ -26,7 +26,6 @@ import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.Tuple;
 import ca.phon.util.icons.*;
-import com.jgoodies.forms.layout.*;
 import org.jdesktop.swingx.JXTable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -103,7 +102,7 @@ public class TierOrderingEditorView extends EditorView {
 		final TierViewItem[] tierView = getCurrentOrder().toArray(new TierViewItem[0]);
 		final TierViewItem tv = tierView[rowIndex];
 		
-		final ToggleTierVisibleAction act = new ToggleTierVisibleAction(getEditor(), this, tv);
+		final ToggleTierVisibleAction act = new ToggleTierVisibleAction(getEditor(), tv);
 		act.actionPerformed(new ActionEvent(this, 0, null));
 	}
 	
@@ -111,7 +110,7 @@ public class TierOrderingEditorView extends EditorView {
 		final TierViewItem[] tierView = getCurrentOrder().toArray(new TierViewItem[0]);
 		final TierViewItem tv = tierView[rowIndex];
 		
-		final ToggleTierLockAction act = new ToggleTierLockAction(getEditor(), this, tv);
+		final ToggleTierLockAction act = new ToggleTierLockAction(getEditor(), tv);
 		act.actionPerformed(new ActionEvent(this, 0, null));
 	}
 	
@@ -161,7 +160,7 @@ public class TierOrderingEditorView extends EditorView {
 		tierOrderingTable.setActionMap(tierOrderActionMap);
 		tierOrderingTable.setInputMap(WHEN_FOCUSED, tableInputMap);
 		
-		final NewTierAction addAction = new NewTierAction(getEditor(), this);
+		final NewTierAction addAction = new NewTierAction(getEditor());
 		addAction.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
 		addAction.putValue(FlatButton.ICON_NAME_PROP, "add");
 		addAction.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
@@ -253,25 +252,25 @@ public class TierOrderingEditorView extends EditorView {
 		// may be null
 		SystemTierType systemTier = SystemTierType.tierFromString(tvi.getTierName());
 
-		final ToggleTierVisibleAction toggleTierAct = new ToggleTierVisibleAction(getEditor(), this, tvi);
+		final ToggleTierVisibleAction toggleTierAct = new ToggleTierVisibleAction(getEditor(), tvi);
 		builder.addItem(".", toggleTierAct);
 
 		if(hiddenTiers.size() > 0) {
 			JMenu showTierMenu = builder.addMenu(".", "Show hidden tier");
 			for(TierViewItem hiddenTier:hiddenTiers) {
-				final ToggleTierVisibleAction showTierAct = new ToggleTierVisibleAction(getEditor(), this, hiddenTier);
+				final ToggleTierVisibleAction showTierAct = new ToggleTierVisibleAction(getEditor(), hiddenTier);
 				showTierAct.putValue(Action.NAME, hiddenTier.getTierName());
 				showTierMenu.add(showTierAct);
 			}
 		}
 
-		final ToggleTierLockAction toggleTierLockAction = new ToggleTierLockAction(getEditor(), this, tvi);
+		final ToggleTierLockAction toggleTierLockAction = new ToggleTierLockAction(getEditor(), tvi);
 		builder.addItem(".", toggleTierLockAction);
 
 		builder.addSeparator(".", "font");
 
 		if(!"default".equals(tvi.getTierFont())) {
-			final ResetTierFontAction resetTierFontAction = new ResetTierFontAction(getEditor(), this, tvi);
+			final ResetTierFontAction resetTierFontAction = new ResetTierFontAction(getEditor(), tvi);
 			builder.addItem(".", resetTierFontAction);
 		}
 
@@ -281,17 +280,17 @@ public class TierOrderingEditorView extends EditorView {
 		builder.addSeparator(".", "move");
 
 		if(tierViewIdx > 0) {
-			final MoveTierAction moveUpAction = new MoveTierAction(getEditor(), this, tvi, -1);
+			final MoveTierAction moveUpAction = new MoveTierAction(getEditor(), tvi, -1);
 			builder.addItem(".", moveUpAction);
 		}
 
 		if(tierViewIdx < tierView.size()-1) {
-			final MoveTierAction moveDownAction = new MoveTierAction(getEditor(), this, tvi, 1);
+			final MoveTierAction moveDownAction = new MoveTierAction(getEditor(), tvi, 1);
 			builder.addItem(".", moveDownAction);
 		}
 
 		builder.addSeparator(".", "edit");
-		final NewTierAction newTierAction = new NewTierAction(getEditor(), this, tierViewIdx+1);
+		final NewTierAction newTierAction = new NewTierAction(getEditor(), tierViewIdx+1);
 		builder.addItem(".", newTierAction);
 
 		Optional<TierDescription> tierDesc =
@@ -303,11 +302,11 @@ public class TierOrderingEditorView extends EditorView {
 					SessionFactory.newFactory().createTierDescription(tvi.getTierName()))
 			);
 
-		final DuplicateTierAction dupTierAction = new DuplicateTierAction(getEditor(), this, td, tierViewIdx+1);
+		final DuplicateTierAction dupTierAction = new DuplicateTierAction(getEditor(), td, tierViewIdx+1);
 		builder.addItem(".", dupTierAction);
 
 		if(tierDesc.isPresent()) {
-			final RemoveTierAction removeTierAction = new RemoveTierAction(getEditor(), this, tierDesc.get(), tvi);
+			final RemoveTierAction removeTierAction = new RemoveTierAction(getEditor(), tierDesc.get(), tvi);
 			builder.addItem(".", removeTierAction);
 		}
 	}
@@ -497,7 +496,7 @@ public class TierOrderingEditorView extends EditorView {
 		if(selectedRow > 0) {
 			final TierViewItem tierItem = tierOrder.get(selectedRow);
 			
-			final MoveTierAction act = new MoveTierAction(getEditor(), this, tierItem, -1);
+			final MoveTierAction act = new MoveTierAction(getEditor(), tierItem, -1);
 			act.actionPerformed(new ActionEvent(this, 0, null));
 		}
 	}
@@ -514,7 +513,7 @@ public class TierOrderingEditorView extends EditorView {
 		if(selectedRow >= 0 && selectedRow < tierOrder.size()-1) {
 			final TierViewItem tierItem = tierOrder.get(selectedRow);
 			
-			final MoveTierAction act = new MoveTierAction(getEditor(), this, tierItem, 1);
+			final MoveTierAction act = new MoveTierAction(getEditor(), tierItem, 1);
 			act.actionPerformed(new ActionEvent(this, 0, null));
 		}
 	}
@@ -525,7 +524,7 @@ public class TierOrderingEditorView extends EditorView {
 		
 		if(selectedRow >= 0) {
 			final TierViewItem tierItem = tierOrder.get(selectedRow);
-			final EditTierAction act = new EditTierAction(getEditor(), this, tierItem);
+			final EditTierAction act = new EditTierAction(getEditor(), tierItem);
 			act.actionPerformed(pae.getActionEvent());
 		}
 	}
@@ -556,7 +555,7 @@ public class TierOrderingEditorView extends EditorView {
 				props.setRunAsync(true);
 				props.setListener( (e) -> {
 					if(e.getDialogResult() == 0) {
-						final RemoveTierAction act = new RemoveTierAction(getEditor(), this, td, tierItem);
+						final RemoveTierAction act = new RemoveTierAction(getEditor(), td, tierItem);
 						act.actionPerformed(pae.getActionEvent());
 					}
 				});
@@ -646,38 +645,12 @@ public class TierOrderingEditorView extends EditorView {
 	public JMenu getMenu() {
 		final JMenu retVal = new JMenu();
 		final MenuBuilder menuBuilder = new MenuBuilder(retVal);
-		JMenu addTierSubmenu = menuBuilder.addMenu(".", "Add tier");
+		final JMenu newTierMenu = menuBuilder.addMenu(".", "Add tier");
+		newTierMenu.setIcon(IconManager.getInstance().getFontIcon("add", IconSize.SMALL, UIManager.getColor("Button.foreground")));
+		TierMenuBuilder.setupNewTierMenu(getEditor(), new MenuBuilder(newTierMenu));
+		menuBuilder.addSeparator(".", "existing_tiers");
 
-		List<UserTierType> availableUserTierTypes = new ArrayList<>(List.of(UserTierType.values()));
-		availableUserTierTypes.remove(UserTierType.Wor);
-		availableUserTierTypes.remove(UserTierType.Mor);
-		availableUserTierTypes.remove(UserTierType.Trn);
-		availableUserTierTypes.remove(UserTierType.Gra);
-		availableUserTierTypes.remove(UserTierType.Grt);
-		for (UserTierType userTierType : availableUserTierTypes) {
-			JMenuItem addTierItem = new JMenuItem();
-			PhonUIAction<Void> addTierAct = PhonUIAction.runnable(() -> {
-				TierDescription td = SessionFactory.newFactory().createTierDescription(userTierType);
-				TierViewItem tvi = SessionFactory.newFactory().createTierViewItem(td.getName());
-
-				AddTierEdit edit = new AddTierEdit(getEditor(), td, tvi);
-				getEditor().getUndoSupport().postEdit(edit);
-			});
-			addTierAct.putValue(PhonUIAction.NAME, userTierType.name());
-			addTierItem.setAction(addTierAct);
-			addTierSubmenu.add(addTierItem);
-		}
-
-		addTierSubmenu.add(new JSeparator());
-
-		JMenuItem addCustomTierItem = new JMenuItem();
-		addCustomTierItem.setAction(new NewTierAction(getEditor(), (TierOrderingEditorView) getEditor().getViewModel().getView(TierOrderingEditorView.VIEW_NAME)));
-		addTierSubmenu.add(addCustomTierItem);
-
-		menuBuilder.addSeparator(".", "tiers");
-
-
-		
+		// add existing tier menus
 		final List<TierViewItem> view = getCurrentOrder();
 		for(int i = 0; i < view.size(); i++) {
 			final TierViewItem tvi = view.get(i);
@@ -691,27 +664,27 @@ public class TierOrderingEditorView extends EditorView {
 				}
 			}
 
-			final MoveTierAction moveUpAction = new MoveTierAction(getEditor(), this, tvi, -1);
-			final MoveTierAction moveDownAction = new MoveTierAction(getEditor(), this, tvi, 1);
+			final MoveTierAction moveUpAction = new MoveTierAction(getEditor(), tvi, -1);
+			final MoveTierAction moveDownAction = new MoveTierAction(getEditor(), tvi, 1);
 			if(i > 0)
 				tierMenu.add(moveUpAction);
 			if(i < view.size() - 1)
 				tierMenu.add(moveDownAction);
 			tierMenu.addSeparator();
-			tierMenu.add(new ToggleTierLockAction(getEditor(), this, tvi));
-			tierMenu.add(new ToggleTierVisibleAction(getEditor(), this, tvi));
+			tierMenu.add(new ToggleTierLockAction(getEditor(), tvi));
+			tierMenu.add(new ToggleTierVisibleAction(getEditor(), tvi));
 			tierMenu.addSeparator();
-			tierMenu.add(new EditTierAction(getEditor(), this, tvi));
-			tierMenu.add(new ResetTierFontAction(getEditor(), this, tvi));
+			tierMenu.add(new EditTierAction(getEditor(), tvi));
+			tierMenu.add(new ResetTierFontAction(getEditor(), tvi));
 			if(tierDesc != null)
-				tierMenu.add(new RemoveTierAction(getEditor(), this, tierDesc, tvi));
+				tierMenu.add(new RemoveTierAction(getEditor(), tierDesc, tvi));
 
 			retVal.add(tierMenu);
 		}
 
 		menuBuilder.addSeparator(".", "lock_hide");
-		retVal.add(new ToggleLockAllTiersAction(getEditor(), this));
-		retVal.add(new ToggleHideAllTiersAction(getEditor(), this));
+		retVal.add(new ToggleLockAllTiersAction(getEditor()));
+		retVal.add(new ToggleHideAllTiersAction(getEditor()));
 
 		return retVal;
 	}

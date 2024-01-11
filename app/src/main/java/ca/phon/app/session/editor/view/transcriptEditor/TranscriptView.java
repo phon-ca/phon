@@ -9,7 +9,7 @@ import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.participants.ParticipantsView;
 import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
 import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
-import ca.phon.app.session.editor.view.tier_management.actions.NewTierAction;
+import ca.phon.app.session.editor.actions.NewTierAction;
 import ca.phon.app.session.editor.view.timeline.TimelineView;
 import ca.phon.app.session.editor.view.transcriptEditor.actions.*;
 import ca.phon.app.session.editor.view.transcriptEditor.extensions.*;
@@ -672,10 +672,8 @@ public class TranscriptView extends EditorView {
         addTierSubmenu.add(new JSeparator());
 
         JMenuItem addCustomTierItem = new JMenuItem();
-        addCustomTierItem.setAction(new NewTierAction(getEditor(), (TierOrderingEditorView) getEditor().getViewModel().getView(TierOrderingEditorView.VIEW_NAME)));
+        addCustomTierItem.setAction(new NewTierAction(getEditor()));
         addTierSubmenu.add(addCustomTierItem);
-
-
         menuBuilder.addSeparator(".", "");
 
         var extPts = PluginManager.getInstance().getExtensionPoints(TierLabelMenuHandler.class);

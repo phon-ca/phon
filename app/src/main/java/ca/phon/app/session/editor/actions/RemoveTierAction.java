@@ -13,30 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.tier_management.actions;
+package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.actions.SessionEditorAction;
 import ca.phon.app.session.editor.undo.RemoveTierEdit;
 import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
 import ca.phon.session.*;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 
-public class RemoveTierAction extends TierManagementAction {
-
-	private static final long serialVersionUID = 2530259863724783877L;
+public class RemoveTierAction extends SessionEditorAction {
 
 	private TierDescription td;
 	
 	private TierViewItem tvi;
+
+	private final static String NAME = "Remove tier";
+
+	private final static ImageIcon ICON =
+			IconManager.getInstance().getFontIcon("remove", IconSize.SMALL, UIManager.getColor("Button.foreground"));
 	
-	public RemoveTierAction(SessionEditor editor, TierOrderingEditorView view,
-			TierDescription td, TierViewItem tvi) {
-		super(editor, view);
+	public RemoveTierAction(SessionEditor editor, TierDescription td, TierViewItem tvi) {
+		super(editor);
 		this.td = td;
 		this.tvi = tvi;
 		
-		putValue(NAME, "Delete tier " + td.getName());
+		putValue(NAME, NAME + " " + td.getName());
+		putValue(SMALL_ICON, ICON);
 	}
 
 	@Override

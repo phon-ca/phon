@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.tier_management.actions;
+package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.actions.SessionEditorAction;
 import ca.phon.app.session.editor.undo.TierViewEdit;
 import ca.phon.app.session.editor.view.tier_management.TierOrderingEditorView;
 import ca.phon.session.*;
@@ -26,27 +27,24 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.*;
 
-public class ToggleHideAllTiersAction extends TierManagementAction {
+public class ToggleLockAllTiersAction extends SessionEditorAction {
 
-	private static final long serialVersionUID = 7113354516634976428L;
-
-	public ToggleHideAllTiersAction(SessionEditor editor,
-			TierOrderingEditorView view) {
-		super(editor, view);
+	public ToggleLockAllTiersAction(SessionEditor editor) {
+		super(editor);
 		
-		final boolean allVisible = areAllVisible();
-		putValue(NAME, (allVisible ? "Hide " : "Show ") + "all tiers");
-		putValue(SMALL_ICON, IconManager.getInstance().getFontIcon(allVisible ? "Visibility_Off" : "visibility", IconSize.SMALL, UIManager.getColor("Button.foreground")));
+		final boolean locked = areAllLocked();
+		putValue(NAME, (locked ? "Unlock " : "Lock ") + "all tiers");
+		putValue(SMALL_ICON, IconManager.getInstance().getFontIcon(locked ? "lock_open" : "lock", IconSize.SMALL, UIManager.getColor("Button.foreground")));
 	}
 	
-	private boolean areAllVisible() {
+	private boolean areAllLocked() {
 		boolean retVal = true;
 		final SessionEditor editor = getEditor();
 		final Session session = editor.getSession();
 		
 		final List<TierViewItem> view = session.getTierView();
 		for(TierViewItem tvi:view) {
-			retVal &= tvi.isVisible();
+			retVal &= tvi.isTierLocked();
 		}
 		
 		return retVal;
@@ -61,17 +59,17 @@ public class ToggleHideAllTiersAction extends TierManagementAction {
 		final List<TierViewItem> newView = new ArrayList<TierViewItem>();
 		final SessionFactory factory = SessionFactory.newFactory();
 		
-		final boolean allVisible = areAllVisible();
+		final boolean locked = !areAllLocked();
 		for(TierViewItem oldItem:view) {
-			final TierViewItem newItem = factory.createTierViewItem(oldItem.getTierName(), !allVisible,
-					oldItem.getTierFont(), oldItem.isTierLocked());
+			final TierViewItem newItem = factory.createTierViewItem(oldItem.getTierName(), oldItem.isVisible(),
+					oldItem.getTierFont(), locked);
 			newView.add(newItem);
 		}
 		
 		final TierViewEdit edit = new TierViewEdit(getEditor(), view, newView);
 		editor.getUndoSupport().postEdit(edit);
 		
-		putValue(NAME, (!allVisible ? "Hide " : "Show ") + "all tiers");
+		putValue(NAME, (locked ? "Unlock " : "Lock ") + "all tiers");
 	}
 
 }

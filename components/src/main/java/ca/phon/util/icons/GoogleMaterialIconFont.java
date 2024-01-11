@@ -7,6 +7,7 @@ import jiconfont.swing.IconFontSwing;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.font.LineMetrics;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -116,9 +117,11 @@ public class GoogleMaterialIconFont implements IconFont {
         BufferedImage bufImage = new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = bufImage.createGraphics();
         int width = dim.width;
-        int height = dim.height - g2d.getFontMetrics().getDescent() - g2d.getFontMetrics().getAscent();
+        final LineMetrics lineMetrics = font.getLineMetrics(text, g2d.getFontRenderContext());
+        int height = (int)lineMetrics.getAscent() - (int)lineMetrics.getDescent();
         label.setSize(width, height);
         bufImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        g2d.dispose();
         g2d = bufImage.createGraphics();
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
