@@ -26,11 +26,12 @@ public class TranscriptNavigationFilter extends NavigationFilter {
 
     @Override
     public void setDot(FilterBypass fb, int dot, Position.Bias bias) {
-
         TranscriptDocument doc = editor.getTranscriptDocument();
         if (doc.getLength() == 0) {
             fb.setDot(dot, bias);
         }
+
+        System.out.println("setDot: " + dot);
 
         Element elem = doc.getCharacterElement(dot);
         AttributeSet attrs = elem.getAttributes();

@@ -4,6 +4,7 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.autotranscribe.AutoTranscriber;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.ipaDictionary.IPALookupEdit;
+import ca.phon.app.session.editor.view.transcriptEditor.TranscriptBatchBuilder;
 import ca.phon.app.session.editor.view.transcriptEditor.TranscriptLocation;
 import ca.phon.app.session.editor.view.transcriptEditor.TranscriptEditor;
 import ca.phon.app.session.editor.view.transcriptEditor.TranscriptStyleConstants;
@@ -98,7 +99,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
                             suggestion = AutoTranscriber.transcribe(record.getOrthography(), getDictionary());
                         final IPATranscript autoTranscript = suggestion;
                         if(autoTranscript.length() > 0) {
-                            final SimpleAttributeSet ghostAttrs = editor.getTranscriptDocument().getTierAttributes(tier);
+                            final SimpleAttributeSet ghostAttrs = editor.getTranscriptDocument().getTranscriptStyleContext().getTierAttributes(tier);
                             // make text gray and italic
                             StyleConstants.setForeground(ghostAttrs, Color.gray);
                             StyleConstants.setItalic(ghostAttrs, true);
@@ -121,9 +122,9 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
                             ghostAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_ENTER_ACTION, acceptAutoTranscriptionAct);
 
                             try {
-                                List<DefaultStyledDocument.ElementSpec> batch = new ArrayList<>();
-                                editor.getTranscriptDocument().appendBatchString(autoTranscript.toString(), ghostAttrs, batch);
-                                editor.getTranscriptDocument().processBatchUpdates(editor.getCaretPosition(), batch);
+                                TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder();
+                                batchBuilder.appendBatchString(autoTranscript.toString(), ghostAttrs);
+                                editor.getTranscriptDocument().processBatchUpdates(editor.getCaretPosition(), batchBuilder.getBatch());
                                 ghostRange = new Range(editor.getCaretPosition(), editor.getCaretPosition() + autoTranscript.toString().length());
                             } catch (BadLocationException ex) {
                                 LogUtil.warning(ex);

@@ -48,7 +48,7 @@ public class AlignmentExtension implements TranscriptEditorExtension {
 
                 TierViewItem alignmentParent = getAlignmentParent();
                 if (tier != null && isAlignmentVisible() && alignmentParent != null && tier.getName().equals(alignmentParent.getTierName())) {
-                    retVal.addAll(doc.getBatchEndLineFeed(attrs, null));
+                    retVal.addAll(TranscriptBatchBuilder.getBatchEndLineFeed(attrs, null));
 
                     Record record = (Record) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
                     retVal.addAll(getFormattedAlignment(tier, record));
@@ -102,15 +102,16 @@ public class AlignmentExtension implements TranscriptEditorExtension {
             doc.remove(start, end - start);
 
             List<DefaultStyledDocument.ElementSpec> insertions = new ArrayList<>();
-            insertions.addAll(doc.getBatchEndStart());
+            insertions.addAll(TranscriptBatchBuilder.getBatchEndStart());
 
             insertions.addAll(getFormattedAlignment(record.getTier(getAlignmentParent().getTierName()), record));
 
             var attrs = insertions.get(insertions.size() - 1).getAttributes();
-            insertions.addAll(doc.getBatchEndLineFeed(attrs, null));
+            insertions.addAll(TranscriptBatchBuilder.getBatchEndLineFeed(attrs, null));
 
-            List<DefaultStyledDocument.ElementSpec> batch = new ArrayList<>(insertions);
-            doc.processBatchUpdates(start, batch);
+            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder();
+            batchBuilder.appendAll(insertions);
+            doc.processBatchUpdates(start, batchBuilder.getBatch());
         }
         catch (BadLocationException e) {
             LogUtil.severe(e);
@@ -128,32 +129,34 @@ public class AlignmentExtension implements TranscriptEditorExtension {
     public List<DefaultStyledDocument.ElementSpec> getFormattedAlignment(Tier<?> tier, Record record) {
         List<DefaultStyledDocument.ElementSpec> retVal = new ArrayList<>();
 
+        TranscriptStyleContext transcriptStyleContext = doc.getTranscriptStyleContext();
+
         // Get the alignment tier
         Tier<PhoneAlignment> alignmentTier = record.getPhoneAlignmentTier();
         // Set up the tier attributes for the dummy tier
-        var tierAttrs = doc.getTierAttributes(tier);
-        tierAttrs.addAttributes(doc.getTierAttributes(alignmentTier));
+        var tierAttrs = transcriptStyleContext.getTierAttributes(tier);
+        tierAttrs.addAttributes(transcriptStyleContext.getTierAttributes(alignmentTier));
         tierAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
         // Set up the attributes for its label
-        SimpleAttributeSet alignmentLabelAttrs = doc.getTierLabelAttributes(alignmentTier);
+        SimpleAttributeSet alignmentLabelAttrs = transcriptStyleContext.getTierLabelAttributes(alignmentTier);
         // Set up record attributes
-        SimpleAttributeSet recordAttrs = doc.getRecordAttributes(editor.getSession().getRecordPosition(record));
+        SimpleAttributeSet recordAttrs = transcriptStyleContext.getRecordAttributes(record);
         alignmentLabelAttrs.addAttributes(recordAttrs);
         tierAttrs.addAttributes(recordAttrs);
         // Get the string for the label
         String alignmentLabelText = doc.formatLabelText("Alignment");
         // Add the label
-        retVal.add(doc.getBatchString(alignmentLabelText, alignmentLabelAttrs));
+        retVal.add(TranscriptBatchBuilder.getBatchString(alignmentLabelText, alignmentLabelAttrs));
         alignmentLabelAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE);
-        retVal.add(doc.getBatchString(": ", alignmentLabelAttrs));
+        retVal.add(TranscriptBatchBuilder.getBatchString(": ", alignmentLabelAttrs));
 
         // Get the string version of the alignment
         String alignmentContent = alignmentTier.getValue().toString();
         // Add component factory if needed
         if (isAlignmentComponent()) {
-            tierAttrs.addAttributes(doc.getAlignmentAttributes());
+            tierAttrs.addAttributes(transcriptStyleContext.getAlignmentAttributes());
         }
-        retVal.add(doc.getBatchString(alignmentContent, tierAttrs));
+        retVal.add(TranscriptBatchBuilder.getBatchString(alignmentContent, tierAttrs));
 
         return retVal;
     }

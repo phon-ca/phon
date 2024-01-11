@@ -4,9 +4,7 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.EditorEventType;
-import ca.phon.app.session.editor.view.transcriptEditor.DefaultInsertionHook;
-import ca.phon.app.session.editor.view.transcriptEditor.TranscriptDocument;
-import ca.phon.app.session.editor.view.transcriptEditor.TranscriptEditor;
+import ca.phon.app.session.editor.view.transcriptEditor.*;
 import ca.phon.formatter.Formatter;
 import ca.phon.session.*;
 import ca.phon.session.tierdata.TierData;
@@ -60,11 +58,13 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
                 if (isHeadersVisible()) {
                     AttributeSet newLineAttrs;
 
+                    TranscriptStyleContext transcriptStyleContext = doc.getTranscriptStyleContext();
+
                     // Add date line if present
                     if (session.getDate() != null) {
                         retVal.addAll(getDateHeader());
-                        newLineAttrs = doc.getTrailingAttributes(retVal);
-                        retVal.addAll(doc.getBatchEndLineFeed(newLineAttrs, null));
+                        newLineAttrs = transcriptStyleContext.getTrailingAttributes(retVal);
+                        retVal.addAll(TranscriptBatchBuilder.getBatchEndLineFeed(newLineAttrs, null));
                     }
 
                     // Add media line if present
@@ -74,8 +74,8 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
                         mediaTier.setText(sessionMedia);
 
                         retVal.addAll(doc.getGeneric("Media", mediaTier, null));
-                        newLineAttrs = doc.getTrailingAttributes(retVal);
-                        retVal.addAll(doc.getBatchEndLineFeed(newLineAttrs, null));
+                        newLineAttrs = transcriptStyleContext.getTrailingAttributes(retVal);
+                        retVal.addAll(TranscriptBatchBuilder.getBatchEndLineFeed(newLineAttrs, null));
                     }
 
                     // Add languages line if present
@@ -110,14 +110,14 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
                         languagesTier.setValue(new TranscriptDocument.Languages(sessionLanguages));
 
                         retVal.addAll(doc.getGeneric("Languages", languagesTier, null));
-                        newLineAttrs = doc.getTrailingAttributes(retVal);
-                        retVal.addAll(doc.getBatchEndLineFeed(newLineAttrs, null));
+                        newLineAttrs = transcriptStyleContext.getTrailingAttributes(retVal);
+                        retVal.addAll(TranscriptBatchBuilder.getBatchEndLineFeed(newLineAttrs, null));
                     }
 
                     // Add Tiers header
                     retVal.addAll(getTiersHeader());
-                    newLineAttrs = doc.getTrailingAttributes(retVal);
-                    retVal.addAll(doc.getBatchEndLineFeed(newLineAttrs, null));
+                    newLineAttrs = transcriptStyleContext.getTrailingAttributes(retVal);
+                    retVal.addAll(TranscriptBatchBuilder.getBatchEndLineFeed(newLineAttrs, null));
 
                     // Add Participants header
                     Tier<TierData> participantsTier = (Tier<TierData>) headerTierMap.get("participants");
@@ -133,9 +133,9 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
                     }
                     participantsTier.setText(participantsJoiner.toString());
 
-                    retVal.addAll(doc.getGeneric("Participants", participantsTier, doc.getParticipantsHeaderAttributes()));
-                    newLineAttrs = doc.getTrailingAttributes(retVal);
-                    retVal.addAll(doc.getBatchEndLineFeed(newLineAttrs, null));
+                    retVal.addAll(doc.getGeneric("Participants", participantsTier, transcriptStyleContext.getParticipantsHeaderAttributes()));
+                    newLineAttrs = transcriptStyleContext.getTrailingAttributes(retVal);
+                    retVal.addAll(TranscriptBatchBuilder.getBatchEndLineFeed(newLineAttrs, null));
                 }
 
                 return retVal;
@@ -189,8 +189,8 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
         }
         tiersTier.setText(joiner.toString());
 
-        retVal.addAll(doc.getBatchEndStart());
-        retVal.addAll(doc.getGeneric("Tiers", tiersTier, doc.getTiersHeaderAttributes()));
+        retVal.addAll(TranscriptBatchBuilder.getBatchEndStart());
+        retVal.addAll(doc.getGeneric("Tiers", tiersTier, doc.getTranscriptStyleContext().getTiersHeaderAttributes()));
         return retVal;
     }
 
@@ -211,7 +211,9 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
             }
 
             List<DefaultStyledDocument.ElementSpec> inserts = getTiersHeader();
-            doc.processBatchUpdates(start > -1 ? start : 0, inserts);
+            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder();
+            batchBuilder.appendAll(inserts);
+            doc.processBatchUpdates(start > -1 ? start : 0, batchBuilder.getBatch());
         }
         catch (BadLocationException e) {
             LogUtil.severe(e);
@@ -230,7 +232,7 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
         Tier<LocalDate> dateTier = (Tier<LocalDate>) headerTierMap.get("date");
         dateTier.setValue(editor.getSession().getDate());
 
-        retVal.addAll(doc.getBatchEndStart());
+        retVal.addAll(TranscriptBatchBuilder.getBatchEndStart());
         retVal.addAll(doc.getGeneric("Date", dateTier, null));
 
         return retVal;
@@ -253,9 +255,11 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
             }
 
             List<DefaultStyledDocument.ElementSpec> inserts = getDateHeader();
-            var newLineAttrs = doc.getTrailingAttributes(inserts);
-            doc.appendBatchLineFeed(newLineAttrs, null, inserts);
-            doc.processBatchUpdates(start > -1 ? start : 0, inserts);
+            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder();
+            var newLineAttrs = doc.getTranscriptStyleContext().getTrailingAttributes(inserts);
+            batchBuilder.appendAll(inserts);
+            batchBuilder.appendBatchLineFeed(newLineAttrs, null);
+            doc.processBatchUpdates(start > -1 ? start : 0, batchBuilder.getBatch());
         }
         catch (BadLocationException e) {
             LogUtil.severe(e);

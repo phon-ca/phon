@@ -62,13 +62,15 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
 
                 if (!isSyllabificationVisible()) return retVal;
 
+                TranscriptStyleContext transcriptStyleContext = doc.getTranscriptStyleContext();
+
                 Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
                 if (tier != null && tier.getDeclaredType().equals(IPATranscript.class)) {
                     if (tier.getName().equals("IPA Target") || tier.getName().equals("IPA Actual")) {
                         Tier<IPATranscript> ipaTier = (Tier<IPATranscript>) tier;
 
                         // Add a newline at the end of the regular tier content
-                        retVal.addAll(doc.getBatchEndLineFeed(attrs, null));
+                        retVal.addAll(TranscriptBatchBuilder.getBatchEndLineFeed(attrs, null));
                         // Create a dummy tier for the syllabification
                         IPATranscript ipaTarget = ipaTier.getValue();
                         Tier<IPATranscript> syllableTier = doc.getSessionFactory().createTier(
@@ -78,10 +80,10 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                         syllableTier.setValue(ipaTarget);
                         // Set up the tier attributes for the dummy tier
                         attrs = new SimpleAttributeSet(attrs);
-                        attrs.addAttributes(doc.getTierAttributes(syllableTier));
+                        attrs.addAttributes(transcriptStyleContext.getTierAttributes(syllableTier));
                         attrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_ENTER_ACTION, syllabificationEditModeAct);
                         // Set up the attributes for its label
-                        SimpleAttributeSet syllabificationLabelAttrs = doc.getTierLabelAttributes(syllableTier);
+                        SimpleAttributeSet syllabificationLabelAttrs = transcriptStyleContext.getTierLabelAttributes(syllableTier);
                         Record record = (Record) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
                         if (record != null) {
                             syllabificationLabelAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD, record);
@@ -89,12 +91,12 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                         // Get the string for the label
                         String syllabificationLabelText = doc.formatLabelText("Syllabification");
                         // Add the label
-                        retVal.add(doc.getBatchString(syllabificationLabelText, syllabificationLabelAttrs));
+                        retVal.add(TranscriptBatchBuilder.getBatchString(syllabificationLabelText, syllabificationLabelAttrs));
                         // Add component factory if needed
                         if (isSyllabificationComponent()) {
-                            attrs.addAttributes(doc.getSyllabificationAttributes());
+                            attrs.addAttributes(transcriptStyleContext.getSyllabificationAttributes());
                             // Append the content string
-                            retVal.add(doc.getBatchString(syllableTier.getValue().toString(true), attrs));
+                            retVal.add(TranscriptBatchBuilder.getBatchString(syllableTier.getValue().toString(true), attrs));
                         }
                         else {
                             // Append the formatted content
@@ -174,19 +176,19 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
             if (p.getScType().equals(SyllableConstituentType.UNKNOWN)) {
                 StyleConstants.setForeground(attrs, UIManager.getColor(TranscriptEditorUIProps.IPA_PAUSE));
             }
-            retVal.add(doc.getBatchString(p.toString(), attrs));
+            retVal.add(TranscriptBatchBuilder.getBatchString(p.toString(), attrs));
             final SyllabificationInfo sInfo = p.getExtension(SyllabificationInfo.class);
             if (hiddenConstituent.contains(sInfo.getConstituentType())) continue;
-            retVal.add(doc.getBatchString(":", attrs));
+            retVal.add(TranscriptBatchBuilder.getBatchString(":", attrs));
             attrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE_SYLLABIFICATION);
             attrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE);
             if(sInfo.getConstituentType() == SyllableConstituentType.NUCLEUS && sInfo.isDiphthongMember()) {
                 StyleConstants.setForeground(attrs, Color.RED);
-                retVal.add(doc.getBatchString("D", attrs));
+                retVal.add(TranscriptBatchBuilder.getBatchString("D", attrs));
             }
             else {
                 StyleConstants.setForeground(attrs, sInfo.getConstituentType().getColor());
-                retVal.add(doc.getBatchString(String.valueOf(sInfo.getConstituentType().getIdChar()), attrs));
+                retVal.add(TranscriptBatchBuilder.getBatchString(String.valueOf(sInfo.getConstituentType().getIdChar()), attrs));
             }
         }
         attrs.removeAttribute(StyleConstants.Foreground);

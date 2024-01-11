@@ -24,4 +24,5 @@ public class TranscriptStyleConstants {
     public static final String ATTR_KEY_TRANSCRIBER = "transcriber";
     public static final String ATTR_KEY_ENTER_ACTION = "enterAction";
     public static final String ATTR_KEY_BORDER = "border";
+    public static final String ATTR_KEY_FIRST_SEGMENT_DASH = "firstSegmentDash";
 }

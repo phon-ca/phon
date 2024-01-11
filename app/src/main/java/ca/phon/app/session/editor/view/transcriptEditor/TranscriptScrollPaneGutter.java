@@ -9,7 +9,6 @@ import ca.phon.session.Record;
 import ca.phon.session.Tier;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
-import ca.phon.util.Tuple;
 
 import javax.swing.*;
 import java.awt.*;
@@ -43,7 +42,7 @@ public class TranscriptScrollPaneGutter extends JComponent {
     /**
      * A map of rectangles in screen-space to tuples of tiers and {@link IconType}
      * */
-    private final Map<Rectangle, Tuple<Tier<?>, IconType>> iconRects = new HashMap<>();
+    private final Map<Rectangle, TierAndIconType> iconRects = new HashMap<>();
     /**
      * A reference to the icon rect that the cursor is currently hovering over
      * */
@@ -88,8 +87,8 @@ public class TranscriptScrollPaneGutter extends JComponent {
                             currentIconRect = rect;
                             Point mousePos = e.getLocationOnScreen();
                             var hoverRectData = iconRects.get(currentIconRect);
-                            IconType iconType = hoverRectData.getObj2();
-                            Tier<?> hoverRectTier = hoverRectData.getObj1();
+                            IconType iconType = hoverRectData.iconType();
+                            Tier<?> hoverRectTier = hoverRectData.tier();
                             switch (iconType) {
                                 case ERROR -> {
                                     String errorText = hoverRectTier.getUnvalidatedValue().getParseError().toString();
@@ -119,7 +118,7 @@ public class TranscriptScrollPaneGutter extends JComponent {
                 }
                 if (currentIconRect != null) {
                     var hoverRectData = iconRects.get(currentIconRect);
-                    switch (hoverRectData.getObj2()) {
+                    switch (hoverRectData.iconType()) {
                         case ERROR -> {
                             currentHoverPopup.hide();
                             currentHoverPopup = null;
@@ -141,7 +140,7 @@ public class TranscriptScrollPaneGutter extends JComponent {
             public void mouseClicked(MouseEvent e) {
                 if (currentIconRect != null && currentIconRect.contains(e.getPoint())) {
                     var clickedRectData = iconRects.get(currentIconRect);
-                    IconType iconType = clickedRectData.getObj2();
+                    IconType iconType = clickedRectData.iconType();
                     switch (iconType) {
                         case BLIND -> {
                             setupBlindIconClickMenu();
@@ -235,7 +234,7 @@ public class TranscriptScrollPaneGutter extends JComponent {
                             g.setColor(Color.BLACK);
                             iconRects.put(
                                 hoverRect,
-                                new Tuple<>(tier, IconType.ERROR)
+                                new TierAndIconType(tier, IconType.ERROR)
                             );
                         }
 
@@ -253,7 +252,7 @@ public class TranscriptScrollPaneGutter extends JComponent {
                                 );
                                 iconRects.put(
                                     hoverRect,
-                                    new Tuple<>(tier, IconType.BLIND)
+                                    new TierAndIconType(tier, IconType.BLIND)
                                 );
                             }
 
@@ -360,4 +359,6 @@ public class TranscriptScrollPaneGutter extends JComponent {
 //        toolTip.setPreferredSize(menu.getPreferredSize());
 //        return toolTip;
 //    }
+
+    private record TierAndIconType(Tier<?> tier, IconType iconType) {}
 }

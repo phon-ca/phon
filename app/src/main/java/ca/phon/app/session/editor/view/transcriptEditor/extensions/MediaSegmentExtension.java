@@ -105,7 +105,7 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
             if (segment != null) {
                 if (!segment.equals(selectedSegment)) {
                     selectedSegment = segment;
-                    var segmentBounds = doc.getSegmentBounds(segment, segmentIncludedPos);
+                    TranscriptDocument.StartEnd segmentBounds = doc.getSegmentBounds(segment, segmentIncludedPos);
                     editor.boxSelectBounds(segmentBounds);
                 }
             }

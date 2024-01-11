@@ -31,7 +31,6 @@ import ca.phon.ui.nativedialogs.NativeDialogListener;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.toast.Toast;
 import ca.phon.ui.toast.ToastFactory;
-import ca.phon.util.Tuple;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import org.apache.commons.lang3.StringUtils;
@@ -87,8 +86,8 @@ public class DefaultTierLabelMenuHandler implements TierLabelMenuHandler, IPlugi
 
             if(Toolkit.getDefaultToolkit().getSystemClipboard().isDataFlavorAvailable(TierTransferrable.FLAVOR)
                     || Toolkit.getDefaultToolkit().getSystemClipboard().isDataFlavorAvailable(DataFlavor.stringFlavor)) {
-                final PhonUIAction<Tuple<Record, Tier<?>>> pasteTierAct =
-                        PhonUIAction.eventConsumer(this::onPasteTier, new Tuple<>(record, tier));
+                final PhonUIAction<RecordAndTier> pasteTierAct =
+                        PhonUIAction.eventConsumer(this::onPasteTier, new RecordAndTier(record, tier));
                 pasteTierAct.putValue(PhonUIAction.NAME, "Paste tier");
                 pasteTierAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Paste tier data");
                 builder.addItem(".", pasteTierAct);
@@ -213,10 +212,10 @@ public class DefaultTierLabelMenuHandler implements TierLabelMenuHandler, IPlugi
         Toolkit.getDefaultToolkit().getSystemClipboard().setContents(tierTrans, this);
     }
 
-    public void onPasteTier(PhonActionEvent<Tuple<Record, Tier<?>>> pae) {
-        Tuple<Record, Tier<?>> tuple = pae.getData();
-        Record destRecord = tuple.getObj1();
-        Tier<?> destTier = tuple.getObj2();
+    public void onPasteTier(PhonActionEvent<RecordAndTier> pae) {
+        RecordAndTier data = pae.getData();
+        Record destRecord = data.record();
+        Tier<?> destTier = data.tier();
 
         Transferable transferable = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(this);
         if(transferable.isDataFlavorSupported(TierTransferrable.FLAVOR)) {
@@ -315,16 +314,16 @@ public class DefaultTierLabelMenuHandler implements TierLabelMenuHandler, IPlugi
 
         Font currentFont = ("default".equals(tvi.getTierFont()) ? FontPreferences.getTierFont() : Font.decode(tvi.getTierFont()));
 
-        final PhonUIAction<Tuple<TierViewItem, Integer>> toggleBoldAct =
-                PhonUIAction.eventConsumer(this::onToggleStyle, new Tuple<>(tvi, Font.BOLD));
+        final PhonUIAction<TierViewItemAndInteger> toggleBoldAct =
+                PhonUIAction.eventConsumer(this::onToggleStyle, new TierViewItemAndInteger(tvi, Font.BOLD));
         toggleBoldAct.putValue(PhonUIAction.NAME, "Bold");
         toggleBoldAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle bold modifier");
         toggleBoldAct.putValue(PhonUIAction.SELECTED_KEY, currentFont.isBold());
         toggleBoldAct.putValue(PhonUIAction.SMALL_ICON, boldIcon);
         builder.addItem(".", new JCheckBoxMenuItem(toggleBoldAct));
 
-        final PhonUIAction<Tuple<TierViewItem, Integer>> toggleItalicAct =
-                PhonUIAction.eventConsumer(this::onToggleStyle, new Tuple<>(tvi, Font.ITALIC));
+        final PhonUIAction<TierViewItemAndInteger> toggleItalicAct =
+                PhonUIAction.eventConsumer(this::onToggleStyle, new TierViewItemAndInteger(tvi, Font.ITALIC));
         toggleItalicAct.putValue(PhonUIAction.NAME, "Italic");
         toggleItalicAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle italic modifier");
         toggleItalicAct.putValue(PhonUIAction.SELECTED_KEY, currentFont.isItalic());
@@ -355,8 +354,8 @@ public class DefaultTierLabelMenuHandler implements TierLabelMenuHandler, IPlugi
             // font not found
             if(Font.decode(fontString).getFamily().equals("Dialog")) continue;
 
-            final PhonUIAction<Tuple<TierViewItem, Integer>> selectSuggestedFont =
-                    PhonUIAction.eventConsumer(this::onSelectSuggestedFont, new Tuple<>(tvi, i));
+            final PhonUIAction<TierViewItemAndInteger> selectSuggestedFont =
+                    PhonUIAction.eventConsumer(this::onSelectSuggestedFont, new TierViewItemAndInteger(tvi, i));
             selectSuggestedFont.putValue(PhonUIAction.NAME, suggestedFont);
             selectSuggestedFont.putValue(PhonUIAction.SHORT_DESCRIPTION, "Use font: " + suggestedFont);
             builder.addItem(".", selectSuggestedFont);
@@ -370,11 +369,11 @@ public class DefaultTierLabelMenuHandler implements TierLabelMenuHandler, IPlugi
         builder.addItem(".", defaultAct);
     }
 
-    public void onToggleStyle(PhonActionEvent<Tuple<TierViewItem, Integer>> pae) {
+    public void onToggleStyle(PhonActionEvent<TierViewItemAndInteger> pae) {
         if(pae.getData() == null) return;
-        Tuple<TierViewItem, Integer> tuple = pae.getData();
-        TierViewItem tvi = tuple.getObj1();
-        int style = tuple.getObj2();
+        TierViewItemAndInteger data = pae.getData();
+        TierViewItem tvi = data.tvi();
+        int style = data.integer();
 
         Font currentFont = ("default".equals(tvi.getTierFont()) ? FontPreferences.getTierFont() : Font.decode(tvi.getTierFont()));
         int fontStyle = currentFont.getStyle();
@@ -428,11 +427,11 @@ public class DefaultTierLabelMenuHandler implements TierLabelMenuHandler, IPlugi
         undoSupport.postEdit(edit);
     }
 
-    public void onSelectSuggestedFont(PhonActionEvent<Tuple<TierViewItem, Integer>> pae) {
+    public void onSelectSuggestedFont(PhonActionEvent<TierViewItemAndInteger> pae) {
         if(pae.getData() == null) return;
-        Tuple<TierViewItem, Integer> tuple = pae.getData();
-        TierViewItem tvi = tuple.getObj1();
-        int idx = tuple.getObj2();
+        TierViewItemAndInteger data = pae.getData();
+        TierViewItem tvi = data.tvi();
+        int idx = data.integer();
 
         Font currentFont = ("default".equals(tvi.getTierFont()) ? FontPreferences.getTierFont() : Font.decode(tvi.getTierFont()));
         String suggestedFont = FontPreferences.SUGGESTED_IPA_FONT_NAMES[idx];
@@ -652,4 +651,7 @@ public class DefaultTierLabelMenuHandler implements TierLabelMenuHandler, IPlugi
             }
         }
     };
+
+    public record RecordAndTier(Record record, Tier<?> tier) {}
+    public record TierViewItemAndInteger(TierViewItem tvi, Integer integer) {}
 }

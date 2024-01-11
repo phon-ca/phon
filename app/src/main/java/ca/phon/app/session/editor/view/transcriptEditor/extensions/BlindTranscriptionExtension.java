@@ -38,7 +38,7 @@ public class BlindTranscriptionExtension implements TranscriptEditorExtension {
                 if (isValidationMode() && tier.isBlind()) {
                     List<String> transcribers = tier.getTranscribers();
                     for (String transcriber : transcribers) {
-                        retVal.addAll(doc.getBatchEndLineFeed(attrs, null));
+                        retVal.addAll(TranscriptBatchBuilder.getBatchEndLineFeed(attrs, null));
                         retVal.addAll(getBlindTranscription(tier, transcriber, record));
                         attrs = new SimpleAttributeSet(retVal.get(retVal.size() - 1).getAttributes());
                         attrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_COMPONENT_FACTORY);
@@ -72,25 +72,27 @@ public class BlindTranscriptionExtension implements TranscriptEditorExtension {
 
         List<DefaultStyledDocument.ElementSpec> retVal = new ArrayList<>();
 
-        SimpleAttributeSet blindTranscriptionAttrs = doc.getBlindTranscriptionAttributes(tier, transcriber);
+        TranscriptStyleContext transcriptStyleContext = doc.getTranscriptStyleContext();
+
+        SimpleAttributeSet blindTranscriptionAttrs = transcriptStyleContext.getBlindTranscriptionAttributes(tier, transcriber);
         blindTranscriptionAttrs.addAttributes(doc.getStandardFontAttributes());
         StyleConstants.setForeground(blindTranscriptionAttrs, UIManager.getColor(TranscriptEditorUIProps.BLIND_TRANSCRIPTION_FOREGROUND));
         SimpleAttributeSet labelAttrs = new SimpleAttributeSet(blindTranscriptionAttrs);
-        labelAttrs.addAttributes(doc.getLabelAttributes());
+        labelAttrs.addAttributes(transcriptStyleContext.getLabelAttributes());
 
         String labelText = transcriber;
         labelText = doc.formatLabelText(labelText);
 
         labelAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE, true);
-        retVal.add(doc.getBatchString(labelText, labelAttrs));
+        retVal.add(TranscriptBatchBuilder.getBatchString(labelText, labelAttrs));
 
         labelAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE);
-        retVal.add(doc.getBatchString(": ", labelAttrs));
+        retVal.add(TranscriptBatchBuilder.getBatchString(": ", labelAttrs));
 
         String transcriptionText = doc.getTierText(tier, transcriber);
-        retVal.add(doc.getBatchString(transcriptionText, blindTranscriptionAttrs));
+        retVal.add(TranscriptBatchBuilder.getBatchString(transcriptionText, blindTranscriptionAttrs));
 
-        retVal.add(doc.getBatchString(" ", doc.getTranscriptionSelectorAttributes(record, tier, transcriptionText)));
+        retVal.add(TranscriptBatchBuilder.getBatchString(" ", transcriptStyleContext.getTranscriptionSelectorAttributes(record, tier, transcriptionText, doc.getSession(), doc.getEventManager(), doc.getUndoSupport())));
 
         return retVal;
     }

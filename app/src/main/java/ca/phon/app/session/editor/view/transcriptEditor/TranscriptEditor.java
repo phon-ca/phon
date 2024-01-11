@@ -13,7 +13,6 @@ import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.util.Tuple;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -136,7 +135,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         final TranscriptEditorCaret caret = new TranscriptEditorCaret();
         getCaret().deinstall(this);
         setCaret(caret);
-        caret.install(this);
         this.dataModel = dataModel;
         this.selectionModel = selectionModel;
         this.eventManager = eventManager;
@@ -232,6 +230,60 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         inputMap.put(end, "pressedEnd");
         PhonUIAction<Void> endAct = PhonUIAction.runnable(this::onPressedEnd);
         actionMap.put("pressedEnd", endAct);
+
+
+        KeyStroke delete = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
+        inputMap.put(delete, "deleteElement");
+        PhonUIAction<Void> deleteAct = PhonUIAction.runnable(() -> {
+            TranscriptDocument doc = getTranscriptDocument();
+
+            int currentPos = getCaretPosition();
+            var currentPosAttrs = getTranscriptDocument().getCharacterElement(currentPos).getAttributes();
+            String elementType = (String) currentPosAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
+
+            boolean atEndOfTier = false;
+
+            switch (elementType) {
+                case "record" -> {
+                    currentPosAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
+                    Tier<?> tier = (Tier<?>) currentPosAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
+                    if (tier == null) return;
+                    int endPos = doc.getTierEnd(tier);
+
+                    atEndOfTier = currentPos + 1 == endPos;
+                }
+                case "comment" -> {
+                    Comment currentComment = (Comment) currentPosAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT);
+                    if (currentComment == null) return;
+                    int endPos = doc.getCommentEnd(currentComment);
+
+                    atEndOfTier = currentPos + 1 == endPos;
+                }
+                case "gem" -> {
+                    Gem currentGem = (Gem) currentPosAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM);
+                    if (currentGem == null) return;
+                    int endPos = doc.getGemEnd(currentGem);
+
+                    atEndOfTier = currentPos + 1 == endPos;
+                }
+                case "generic" -> {
+                    Tier<?> currentGeneric = (Tier<?>) currentPosAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
+                    if (currentGeneric == null) return;
+                    int endPos = doc.getGenericEnd(currentGeneric);
+
+                    atEndOfTier = currentPos + 1 == endPos;
+                }
+            }
+
+            if (!atEndOfTier) {
+                try {
+                    getTranscriptDocument().remove(currentPos, 1);
+                } catch (BadLocationException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        actionMap.put("deleteElement", deleteAct);
     }
 
     /**
@@ -372,13 +424,19 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                 if (elemType != null && elemType.equals(transcriptElemType)) {
                     if (transcriptElem.isComment()) {
                         Comment comment = (Comment) innerElem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT);
-                        if (comment.equals(transcriptElem.asComment())) setCaretPosition(innerElem.getStartOffset());
+                        if (comment.equals(transcriptElem.asComment())) {
+                            setCaretPosition(innerElem.getStartOffset());
+                        }
                     } else if (transcriptElem.isGem()) {
                         Gem gem = (Gem) innerElem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM);
-                        if (gem.equals(transcriptElem.asGem())) setCaretPosition(innerElem.getStartOffset());
+                        if (gem.equals(transcriptElem.asGem())) {
+                            setCaretPosition(innerElem.getStartOffset());
+                        }
                     } else {
                         Record record = (Record) innerElem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
-                        if (record.equals(transcriptElem.asRecord())) setCaretPosition(innerElem.getStartOffset());
+                        if (record.equals(transcriptElem.asRecord())) {
+                            setCaretPosition(innerElem.getStartOffset());
+                        }
                     }
                 }
             }
@@ -1751,10 +1809,10 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     /**
      * Changes the speaker of a given record to a given participant
      *
-     * @param data a tuple containing the record and the participant that will become the new speaker
+     * @param data a record containing the record and the participant that will become the new speaker
      */
-    public void changeSpeaker(Tuple<Record, Participant> data) {
-        ChangeSpeakerEdit edit = new ChangeSpeakerEdit(getSession(), eventManager, data.getObj1(), data.getObj2());
+    public void changeSpeaker(RecordParticipant data) {
+        ChangeSpeakerEdit edit = new ChangeSpeakerEdit(getSession(), eventManager, data.record, data.participant);
         undoSupport.postEdit(edit);
     }
 
@@ -2239,10 +2297,10 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
      *
      * @param bounds a touple containing the upper and lower bounds positions
      */
-    public void boxSelectBounds(Tuple<Integer, Integer> bounds) {
+    public void boxSelectBounds(TranscriptDocument.StartEnd bounds) {
         try {
             removeCurrentBoxSelect();
-            currentBoxSelect = getHighlighter().addHighlight(bounds.getObj1(), bounds.getObj2() + 1, boxSelectPainter);
+            currentBoxSelect = getHighlighter().addHighlight(bounds.start(), bounds.end() + 1, boxSelectPainter);
         } catch (BadLocationException ex) {
             throw new RuntimeException(ex);
         }
@@ -2713,6 +2771,11 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             eventManager.queueEvent(e);
         }
     }
+
+    public record RecordParticipant(
+            Record record,
+            Participant participant
+    ) {}
 
     // endregion IExtendable
 }
