@@ -44,7 +44,7 @@ public class DuplicateTierAction extends SessionEditorAction {
 
 	@Override
 	public void hookableActionPerformed(ActionEvent e) {
-		TierEditorDialog newTierDialog = new TierEditorDialog(true);
+		TierEditorDialog newTierDialog = new TierEditorDialog(getEditor().getSession(),true);
 		TierInfoEditor tierEditor = newTierDialog.getTierEditor();
 		newTierDialog.add(tierEditor);
 		newTierDialog.setTitle("Duplicate Tier");

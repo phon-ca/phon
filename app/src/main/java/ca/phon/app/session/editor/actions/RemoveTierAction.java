@@ -30,7 +30,7 @@ public class RemoveTierAction extends SessionEditorAction {
 	
 	private TierViewItem tvi;
 
-	private final static String NAME = "Remove tier";
+	private final static String TXT = "Remove tier";
 
 	private final static ImageIcon ICON =
 			IconManager.getInstance().getFontIcon("remove", IconSize.SMALL, UIManager.getColor("Button.foreground"));
@@ -40,7 +40,7 @@ public class RemoveTierAction extends SessionEditorAction {
 		this.td = td;
 		this.tvi = tvi;
 		
-		putValue(NAME, NAME + " " + td.getName());
+		putValue(NAME, TXT + " " + td.getName());
 		putValue(SMALL_ICON, ICON);
 	}
 

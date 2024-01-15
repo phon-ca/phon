@@ -54,8 +54,7 @@ public class MoveTierEdit extends SessionUndoableEdit {
         final List<TierViewItem> oldView = new ArrayList<>(getSession().getTierView());
         final List<TierViewItem> newView = new ArrayList<>(oldView);
         newView.remove(tierViewItem);
-        int addIndex = newViewIndex > oldViewIndex ? newViewIndex - 1 : newViewIndex;
-        newView.add(addIndex, tierViewItem);
+        newView.add(newViewIndex, tierViewItem);
         getSession().setTierView(newView);
         final EditorEvent<EditorEventType.TierViewChangedData> ee =
                 new EditorEvent<>(EditorEventType.TierViewChanged, getSource(),

@@ -36,15 +36,20 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
      * "single record view" mode
      */
     public final static EditorEventType<Void> recordChangedInSingleRecordMode = new EditorEventType<>("recordChangedInSingleRecordMode", Void.class);
+
     /**
      * The editor event type for the session location change event
      */
     public final static EditorEventType<TranscriptLocationChangeData> transcriptLocationChanged = new EditorEventType<>("transcriptLocationChanged", TranscriptLocationChangeData.class);
+
     /* Editor models */
     private final EditorDataModel dataModel;
+
     private final EditorEventManager eventManager;
+
     /* Undo support */
     private final SessionEditUndoSupport undoSupport;
+
     private final UndoManager undoManager;
 
     /* Extension support */
@@ -55,69 +60,90 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
      * The instance of {@link DefaultHighlighter.DefaultHighlightPainter} that acts as the debug highlight painter
      */
     private final DefaultHighlighter.DefaultHighlightPainter highlightPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
+
     /**
      * An instance of {@link HoverUnderlinePainter}
      */
     private final HoverUnderlinePainter underlinePainter = new HoverUnderlinePainter();
+
     /**
      * A map of tiers with errors to their respective error underline highlight objects
      */
     private final Map<Tier<?>, Object> errorUnderlineHighlights = new HashMap<>();
+
     /**
      * An instance of {@link BoxSelectHighlightPainter}
      */
     private final BoxSelectHighlightPainter boxSelectPainter = new BoxSelectHighlightPainter();
+
     /**
      * A list containing references to all the current selection highlight objects
      */
     private final List<Object> selectionHighlightList = new ArrayList<>();
+
     /**
      * A set of attributes that the caret should not be able to move to
      */
     private final Set<String> notTraversableAttributes;
+
     private SessionMediaModel mediaModel;
+
     private final EditorSelectionModel selectionModel;
+
     /**
      * A reference to the current debug highlight object
      */
     private Object currentHighlight;
+
     /**
      * The index of the current record
      */
     private int currentRecordIndex = -1;
+
     /**
      * Whether the transcript editor is currently in "single record view" mode
      */
     private boolean singleRecordView = false;
+
     /**
      * A reference to the document element currently being hovered over
      */
     private Element hoverElem = null;
+
     /**
      * A reference to the current underline highlight object
      */
     private Object currentUnderline;
+
     /**
      * The stored offset from the label column for when the caret is being moved up and down with the arrow keys
      */
     private int upDownOffset = -1;
+
     /**
      * Whether the caret is currently moving up or down with the arrow keys
      */
     private boolean caretMoveFromUpDown = false;
+
     /**
      * Whether the next edit will change trigger any changes to the document
      */
     private boolean internalEdit = false;
+
     /**
      * A reference to the current box selection highlight object
      */
     private Object currentBoxSelect = null;
+
     /**
      * The session location of the current caret position
      */
     private TranscriptLocation currentTranscriptLocation = null;
 
+    /**
+     * The custom editor caret
+     */
+    private final TranscriptEditorCaret caret;
 
     /**
      * Constructor
@@ -132,9 +158,8 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     public TranscriptEditor(EditorDataModel dataModel, EditorSelectionModel selectionModel, EditorEventManager eventManager, SessionEditUndoSupport undoSupport, UndoManager undoManager) {
         super();
 
-        final TranscriptEditorCaret caret = new TranscriptEditorCaret();
-        getCaret().deinstall(this);
-        setCaret(caret);
+        caret = new TranscriptEditorCaret();
+        super.setCaret(caret);
         this.dataModel = dataModel;
         this.selectionModel = selectionModel;
         this.eventManager = eventManager;
@@ -172,6 +197,9 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         this(session, new EditorEventManager(), new SessionEditUndoSupport(), new UndoManager());
     }
 
+    public TranscriptEditorCaret getTranscriptEditorCaret() {
+        return caret;
+    }
 
     // region Init
 
@@ -828,7 +856,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             end = doc.getTierContentStart(changedTier) + changedTier.getUnvalidatedValue().getValue().length();
         }
 
-        System.out.println("Internal edit: " + internalEdit);
         if (internalEdit) {
             internalEdit = false;
 
@@ -848,8 +875,10 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         Tier<?> caretStartTier = (Tier<?>) caretStartAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
         int offset = doc.getOffsetInContent(getCaretPosition());
 
+        getTranscriptEditorCaret().freeze();
         // Update the changed tier data in the doc
         getTranscriptDocument().onTierDataChanged(changedTier);
+        getTranscriptEditorCaret().unfreeze();
 
         if (changedTier.isUnvalidated()) {
             try {
@@ -859,10 +888,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                 LogUtil.severe(e);
             }
         }
-
-        if (caretStartTier == null) return;
-
-        setCaretPosition(doc.getTierContentStart(caretStartTier) + offset);
     }
 
     /**

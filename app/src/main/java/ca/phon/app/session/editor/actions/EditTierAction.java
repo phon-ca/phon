@@ -19,7 +19,12 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.tierManagement.*;
 import ca.phon.formatter.*;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.orthography.Orthography;
+import ca.phon.orthography.mor.GraspTierData;
+import ca.phon.orthography.mor.MorTierData;
 import ca.phon.session.*;
+import ca.phon.session.tierdata.TierData;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -52,7 +57,7 @@ public class EditTierAction extends SessionEditorAction {
 	public void hookableActionPerformed(ActionEvent e) {
 		final SessionFactory factory = SessionFactory.newFactory();
 			final SystemTierType systemTierType = SystemTierType.tierFromString(tierItem.getTierName());
-			
+
 			TierDescription depTierDesc  = null;
 			if(systemTierType != null) {
 				depTierDesc = factory.createTierDescription(systemTierType);
@@ -75,11 +80,24 @@ public class EditTierAction extends SessionEditorAction {
 								FontPreferences.getTierFont() :
 									Font.decode(tierItem.getTierFont()));
 
-				TierEditorDialog tierDialog = new TierEditorDialog(true);
+				TierEditorDialog tierDialog = new TierEditorDialog(getEditor().getSession(),true);
 				TierInfoEditor tierEditor = tierDialog.getTierEditor();
 				tierEditor.setTierName(tierItem.getTierName());
 				tierEditor.setTierFont(transcriptFont);
-				
+				tierEditor.setBlind(depTierDesc.isBlind());
+				tierEditor.setAligned(!depTierDesc.isExcludeFromAlignment());
+				tierEditor.setVisible(tierItem.isVisible());
+				String tierType = "User defined";
+				if(depTierDesc.getDeclaredType() == Orthography.class)
+					tierType = "CHAT";
+				else if(depTierDesc.getDeclaredType() == IPATranscript.class)
+					tierType = "IPA";
+				else if(depTierDesc.getDeclaredType() == MorTierData.class)
+					tierType = "Morphology";
+				else if(depTierDesc.getDeclaredType() == GraspTierData.class)
+					tierType = "GRASP";
+				tierEditor.setTierType(tierType);
+
 				tierDialog.add(tierEditor);
 				tierDialog.setTitle("New Tier");
 				tierDialog.setModal(true);
@@ -93,7 +111,8 @@ public class EditTierAction extends SessionEditorAction {
 						fontString = "default";
 					final TierViewItem newViewItem = factory.createTierViewItem(
 							tierEditor.getTierName(), tierEditor.isVisible(), fontString, tierItem.isTierLocked());
-					final TierViewItemEdit tierViewItemEdit = new TierViewItemEdit(getEditor(), tierItem, newViewItem);
+					final TierDescription newTierDesc = tierEditor.createTierDescription();
+					final TierViewItemEdit tierViewItemEdit = new TierViewItemEdit(getEditor(), tierItem, newViewItem, depTierDesc, newTierDesc);
 					getEditor().getUndoSupport().postEdit(tierViewItemEdit);
 				} // if (showDialog())
 			} // if (depTierDesc != null)

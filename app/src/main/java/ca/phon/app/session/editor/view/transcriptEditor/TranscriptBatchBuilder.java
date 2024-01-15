@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TranscriptBatchBuilder {
+
     /**
      * A character array containing just the newline character
      */
@@ -130,4 +131,5 @@ public class TranscriptBatchBuilder {
     public boolean isEmpty() {
         return batch.isEmpty();
     }
+
 }

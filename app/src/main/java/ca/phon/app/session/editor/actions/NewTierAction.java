@@ -52,7 +52,7 @@ public class NewTierAction extends SessionEditorAction {
 
 	@Override
 	public void hookableActionPerformed(ActionEvent e) {
-		TierEditorDialog newTierDialog = new TierEditorDialog(false);
+		TierEditorDialog newTierDialog = new TierEditorDialog(getEditor().getSession(), false);
 		TierInfoEditor tierEditor = newTierDialog.getTierEditor();
 		newTierDialog.add(tierEditor);
 		newTierDialog.setTitle("New Tier");

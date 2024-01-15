@@ -27,17 +27,33 @@ public class TierViewItemEdit extends SessionUndoableEdit {
 	
 	private final TierViewItem newItem;
 
+	private final TierDescription oldTierDescription;
+
+	private final TierDescription newTierDescription;
+
 	public TierViewItemEdit(SessionEditor editor, TierViewItem oldItem, TierViewItem newItem) {
 		this(editor.getSession(), editor.getEventManager(), oldItem, newItem);
 	}
 
+	public TierViewItemEdit(SessionEditor editor, TierViewItem oldItem, TierViewItem newItem,
+							TierDescription oldTierDescription, TierDescription tierDescription) {
+		this(editor.getSession(), editor.getEventManager(), oldItem, newItem, oldTierDescription, tierDescription);
+	}
+
 	public TierViewItemEdit(Session session, EditorEventManager editorEventManager, TierViewItem oldItem, TierViewItem newItem) {
+		this(session, editorEventManager, oldItem, newItem, null, null);
+	}
+
+	public TierViewItemEdit(Session session, EditorEventManager editorEventManager, TierViewItem oldItem, TierViewItem newItem,
+							TierDescription oldTierDescription, TierDescription tierDescription) {
 		super(session, editorEventManager);
 		this.oldItem = oldItem;
 		this.newItem = newItem;
+		this.oldTierDescription = oldTierDescription;
+		this.newTierDescription = tierDescription;
 	}
 
-	private List<EditorEventType.TierViewChangeType> calculateChanges(TierViewItem oldItem, TierViewItem newItem) {
+	private List<EditorEventType.TierViewChangeType> calculateChanges(TierViewItem oldItem, TierViewItem newItem, TierDescription oldTierDescription, TierDescription newTierDescription) {
 		final List<EditorEventType.TierViewChangeType> changes = new ArrayList<>();
 		if (!newItem.getTierFont().equals(oldItem.getTierFont())) {
 			changes.add(EditorEventType.TierViewChangeType.TIER_FONT_CHANGE);
@@ -51,6 +67,19 @@ public class TierViewItemEdit extends SessionUndoableEdit {
 		if(newItem.isVisible() != oldItem.isVisible()) {
 			changes.add(newItem.isVisible() ? EditorEventType.TierViewChangeType.SHOW_TIER : EditorEventType.TierViewChangeType.HIDE_TIER);
 		}
+
+		if(oldTierDescription != null && newTierDescription != null) {
+			if(oldTierDescription.isExcludeFromAlignment() != newTierDescription.isExcludeFromAlignment()) {
+				changes.add(EditorEventType.TierViewChangeType.ALIGNED_TIER);
+			}
+			if(oldTierDescription.getDeclaredType() != newTierDescription.getDeclaredType()) {
+				changes.add(EditorEventType.TierViewChangeType.TIER_TYPE);
+			}
+			if(oldTierDescription.isBlind() != newTierDescription.isBlind()) {
+				changes.add(EditorEventType.TierViewChangeType.BLIND_TIER);
+			}
+		}
+
 		return changes;
 	}
 
@@ -65,18 +94,6 @@ public class TierViewItemEdit extends SessionUndoableEdit {
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	private void changeTierNames(Session session, String oldName, String newName) {
-		// replace tier description
-		for(int i = 0; i < getSession().getUserTierCount(); i++) {
-			final TierDescription td = getSession().getUserTier(i);
-
-			if(td.getName().equals(oldName)) {
-				final TierDescription newDesc = SessionFactory.newFactory().createTierDescription(newName, td.getDeclaredType(), td.getTierParameters(), td.isExcludeFromAlignment(),
-						td.isBlind(), td.getSubtypeDelim(), td.getSubtypeExpr());
-				session.removeUserTier(td);
-				session.addUserTier(i, newDesc);
-			}
-		}
-
 		// change tier name in records
 		for(Record r:getSession().getRecords()) {
 			if(r.hasTier(oldName)) {
@@ -89,16 +106,44 @@ public class TierViewItemEdit extends SessionUndoableEdit {
 			}
 		}
 	}
+
+	private void changeTierType(Session session, String tierName, TierDescription tierDescription, Class<?> newType) {
+		// change tier type in records
+		for(Record r:getSession().getRecords()) {
+			if(r.hasTier(tierName)) {
+				final Tier<?> oldTier = r.getTier(tierName);
+				r.removeTier(tierDescription.getName());
+
+				final Tier<?> newTier = SessionFactory.newFactory().createTier(tierDescription);
+				newTier.setText(oldTier.toString());
+				r.putTier(newTier);
+			}
+		}
+	}
 	
 	@Override
 	public void undo() {
-		final List<EditorEventType.TierViewChangeType> changes = calculateChanges(oldItem, newItem);
+		final List<EditorEventType.TierViewChangeType> changes = calculateChanges(newItem, oldItem, newTierDescription, oldTierDescription);
 		final List<TierViewItem> oldView = new ArrayList<>(getSession().getTierView());
 		final List<TierViewItem> tierView = new ArrayList<>(oldView);
 		final int idx = tierView.indexOf(newItem);
 		if(changes.contains(EditorEventType.TierViewChangeType.TIER_NAME_CHANGE)) {
 			// we need to change the tier name in all tiers in the session
 			changeTierNames(getSession(), newItem.getTierName(), oldItem.getTierName());
+		}
+		if(oldTierDescription != null && newTierDescription != null) {
+			// replace tier description
+			for(int i = 0; i < getSession().getUserTierCount(); i++) {
+				final TierDescription td = getSession().getUserTier(i);
+
+				if(td == newTierDescription) {
+					getSession().removeUserTier(td);
+					getSession().addUserTier(i, oldTierDescription);
+				}
+			}
+			if (changes.contains(EditorEventType.TierViewChangeType.TIER_TYPE)) {
+				changeTierType(getSession(), newItem.getTierName(), oldTierDescription, oldTierDescription.getDeclaredType());
+			}
 		}
 		tierView.remove(idx);
 		tierView.add(idx, oldItem);
@@ -108,19 +153,34 @@ public class TierViewItemEdit extends SessionUndoableEdit {
 
 	@Override
 	public void doIt() {
-		final List<EditorEventType.TierViewChangeType> changes = calculateChanges(oldItem, newItem);
+		final List<EditorEventType.TierViewChangeType> changes = calculateChanges(oldItem, newItem, oldTierDescription, newTierDescription);
 		final List<TierViewItem> oldView = new ArrayList<>(getSession().getTierView());
         final List<TierViewItem> tierView = new ArrayList<>(oldView);
 
-		if(changes.contains(EditorEventType.TierViewChangeType.TIER_NAME_CHANGE)) {
+		if (changes.contains(EditorEventType.TierViewChangeType.TIER_NAME_CHANGE)) {
 			// we need to change the tier name in all tiers in the session
 			changeTierNames(getSession(), oldItem.getTierName(), newItem.getTierName());
+		}
+		if(oldTierDescription != null && newTierDescription != null) {
+			// replace tier description
+			for (int i = 0; i < getSession().getUserTierCount(); i++) {
+				final TierDescription td = getSession().getUserTier(i);
+
+				if (td == oldTierDescription) {
+					getSession().removeUserTier(td);
+					getSession().addUserTier(i, newTierDescription);
+				}
+			}
+			if(changes.contains(EditorEventType.TierViewChangeType.TIER_TYPE)) {
+				changeTierType(getSession(), oldTierDescription.getName(), newTierDescription, newTierDescription.getDeclaredType());
+			}
 		}
 
 		final int idx = tierView.indexOf(oldItem);
 		tierView.remove(idx);
 		tierView.add(idx, newItem);
 		getSession().setTierView(tierView);
+
 		fireChangeEvents(changes, tierView, oldView, idx);
 	}
 

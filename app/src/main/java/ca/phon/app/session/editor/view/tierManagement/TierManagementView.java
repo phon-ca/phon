@@ -146,6 +146,10 @@ public class TierManagementView extends EditorView {
 		tierOrderingTable.getColumn(0).setMaxWidth(75);
 		tierOrderingTable.getColumn(1).setMaxWidth(75);
 
+		for(int i = tierOrderingTable.getColumnCount()-1; i >= 0; i--) {
+			tierOrderingTable.getColumnExt(i).setVisible(i < 5);
+		}
+
 		// setup tier odering table action map
 		ActionMap tierOrderActionMap = tierOrderingTable.getActionMap();
 		InputMap tableInputMap = tierOrderingTable.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
@@ -245,141 +249,9 @@ public class TierManagementView extends EditorView {
 	public void setupTierContextMenu(int tierViewIdx, MenuBuilder builder) {
 		List<TierViewItem> tierView = getCurrentOrder();
 		if(tierViewIdx >= tierView.size()) return;
-
-		List<TierViewItem> hiddenTiers = tierView.stream().filter( tvi -> !tvi.isVisible() ).collect(Collectors.toList());
-
 		TierViewItem tvi = tierView.get(tierViewIdx);
-		// may be null
-		SystemTierType systemTier = SystemTierType.tierFromString(tvi.getTierName());
-
-		final ToggleTierVisibleAction toggleTierAct = new ToggleTierVisibleAction(getEditor(), tvi);
-		builder.addItem(".", toggleTierAct);
-
-		if(hiddenTiers.size() > 0) {
-			JMenu showTierMenu = builder.addMenu(".", "Show hidden tier");
-			for(TierViewItem hiddenTier:hiddenTiers) {
-				final ToggleTierVisibleAction showTierAct = new ToggleTierVisibleAction(getEditor(), hiddenTier);
-				showTierAct.putValue(Action.NAME, hiddenTier.getTierName());
-				showTierMenu.add(showTierAct);
-			}
-		}
-
-		final ToggleTierLockAction toggleTierLockAction = new ToggleTierLockAction(getEditor(), tvi);
-		builder.addItem(".", toggleTierLockAction);
-
-		builder.addSeparator(".", "font");
-
-		if(!"default".equals(tvi.getTierFont())) {
-			final ResetTierFontAction resetTierFontAction = new ResetTierFontAction(getEditor(), tvi);
-			builder.addItem(".", resetTierFontAction);
-		}
-
-		JMenu fontMenu = builder.addMenu(".", "Font");
-		setupFontMenu(new MenuBuilder(fontMenu), tvi);
-
-		builder.addSeparator(".", "move");
-
-		if(tierViewIdx > 0) {
-			final MoveTierAction moveUpAction = new MoveTierAction(getEditor(), tvi, -1);
-			builder.addItem(".", moveUpAction);
-		}
-
-		if(tierViewIdx < tierView.size()-1) {
-			final MoveTierAction moveDownAction = new MoveTierAction(getEditor(), tvi, 1);
-			builder.addItem(".", moveDownAction);
-		}
-
-		builder.addSeparator(".", "edit");
-		final NewTierAction newTierAction = new NewTierAction(getEditor(), tierViewIdx+1);
-		builder.addItem(".", newTierAction);
-
-		Optional<TierDescription> tierDesc =
-				StreamSupport.stream(getEditor().getSession().getUserTiers().spliterator(), false)
-					.filter( td -> td.getName().equals(tvi.getTierName()) )
-					.findAny();
-		TierDescription td = (tierDesc.isPresent() ? tierDesc.get() :
-				(systemTier != null ? SessionFactory.newFactory().createTierDescription(systemTier) :
-					SessionFactory.newFactory().createTierDescription(tvi.getTierName()))
-			);
-
-		final DuplicateTierAction dupTierAction = new DuplicateTierAction(getEditor(), td, tierViewIdx+1);
-		builder.addItem(".", dupTierAction);
-
-		if(tierDesc.isPresent()) {
-			final RemoveTierAction removeTierAction = new RemoveTierAction(getEditor(), tierDesc.get(), tvi);
-			builder.addItem(".", removeTierAction);
-		}
-	}
-
-	private void setupFontMenu(MenuBuilder builder, TierViewItem tvi) {
-		final ImageIcon icon =
-				IconManager.getInstance().getIcon("apps/preferences-desktop-font", IconSize.SMALL);
-		final ImageIcon reloadIcon =
-				IconManager.getInstance().getIcon("actions/reload", IconSize.SMALL);
-		final ImageIcon addIcon =
-				IconManager.getInstance().getIcon("actions/list-add", IconSize.SMALL);
-		final ImageIcon subIcon =
-				IconManager.getInstance().getIcon("actions/list-remove", IconSize.SMALL);
-		final ImageIcon boldIcon =
-				IconManager.getInstance().getIcon("actions/format-text-bold", IconSize.SMALL);
-		final ImageIcon italicIcon =
-				IconManager.getInstance().getIcon("actions/format-text-italic", IconSize.SMALL);
-
-		Font currentFont = ("default".equals(tvi.getTierFont()) ? FontPreferences.getTierFont() : Font.decode(tvi.getTierFont()));
-
-		final PhonUIAction<Tuple<TierViewItem, Integer>> toggleBoldAct =
-				PhonUIAction.eventConsumer(this::onToggleStyle, new Tuple<>(tvi, Font.BOLD));
-		toggleBoldAct.putValue(PhonUIAction.NAME, "Bold");
-		toggleBoldAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle bold modifier");
-		toggleBoldAct.putValue(PhonUIAction.SELECTED_KEY, currentFont.isBold());
-		toggleBoldAct.putValue(PhonUIAction.SMALL_ICON, boldIcon);
-		builder.addItem(".", new JCheckBoxMenuItem(toggleBoldAct));
-
-		final PhonUIAction<Tuple<TierViewItem, Integer>> toggleItalicAct =
-				PhonUIAction.eventConsumer(this::onToggleStyle, new Tuple<>(tvi, Font.ITALIC));
-		toggleItalicAct.putValue(PhonUIAction.NAME, "Italic");
-		toggleItalicAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle italic modifier");
-		toggleItalicAct.putValue(PhonUIAction.SELECTED_KEY, currentFont.isItalic());
-		toggleItalicAct.putValue(PhonUIAction.SMALL_ICON, italicIcon);
-		builder.addItem(".", new JCheckBoxMenuItem(toggleItalicAct));
-
-		final PhonUIAction<TierViewItem> onIncreaseFontSize = PhonUIAction.eventConsumer(this::onIncreaseFontSize, tvi);
-		onIncreaseFontSize.putValue(PhonUIAction.NAME, "Increase size");
-		onIncreaseFontSize.putValue(PhonUIAction.SHORT_DESCRIPTION, "Increase point size by 2");
-		onIncreaseFontSize.putValue(PhonUIAction.SMALL_ICON, addIcon);
-		builder.addItem(".", onIncreaseFontSize);
-
-		final PhonUIAction<TierViewItem> onDecreaseFontSize = PhonUIAction.eventConsumer(this::onDecreaseFontSize, tvi);
-		onDecreaseFontSize.putValue(PhonUIAction.NAME, "Decrease size");
-		onDecreaseFontSize.putValue(PhonUIAction.SHORT_DESCRIPTION, "Decrease point size by 2");
-		onDecreaseFontSize.putValue(PhonUIAction.SMALL_ICON, subIcon);
-		builder.addItem(".", onDecreaseFontSize);
-
-		builder.addSeparator(".", "suggested-fonts");
-
-		JMenuItem headerItem = new JMenuItem("-- Suggested Fonts --");
-		headerItem.setEnabled(false);
-		builder.addItem(".", headerItem);
-
-		for(int i = 0; i < FontPreferences.SUGGESTED_IPA_FONT_NAMES.length; i++) {
-			String suggestedFont = FontPreferences.SUGGESTED_IPA_FONT_NAMES[i];
-			String fontString = String.format("%s-PLAIN-12", suggestedFont);
-			// font not found
-			if(Font.decode(fontString).getFamily().equals("Dialog")) continue;
-
-			final PhonUIAction<Tuple<TierViewItem, Integer>> selectSuggestedFont =
-					PhonUIAction.eventConsumer(this::onSelectSuggestedFont, new Tuple<>(tvi, i));
-			selectSuggestedFont.putValue(PhonUIAction.NAME, suggestedFont);
-			selectSuggestedFont.putValue(PhonUIAction.SHORT_DESCRIPTION, "Use font: " + suggestedFont);
-			builder.addItem(".", selectSuggestedFont);
-		}
-
-		builder.addSeparator(".", "font-dialog");
-		final PhonUIAction<TierViewItem> defaultAct = PhonUIAction.eventConsumer(this::onSelectFont, tvi);
-		defaultAct.putValue(PhonUIAction.NAME, "Select font....");
-		defaultAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select font using font selection dialog");
-		defaultAct.putValue(PhonUIAction.LARGE_ICON_KEY, icon);
-		builder.addItem(".", defaultAct);
+		final TierDescription tierDesc = getEditor().getSession().getUserTier(tvi.getTierName());
+		TierMenuBuilder.setupTierMenu(getEditor(), tierDesc, tvi, builder);
 	}
 
 	public void onSelectFont(PhonActionEvent<TierViewItem> pae) {
@@ -649,43 +521,11 @@ public class TierManagementView extends EditorView {
 		newTierMenu.setIcon(IconManager.getInstance().getFontIcon("add", IconSize.SMALL, UIManager.getColor("Button.foreground")));
 		TierMenuBuilder.setupNewTierMenu(getEditor(), new MenuBuilder(newTierMenu));
 		menuBuilder.addSeparator(".", "existing_tiers");
-
 		// add existing tier menus
-		final List<TierViewItem> view = getCurrentOrder();
-		for(int i = 0; i < view.size(); i++) {
-			final TierViewItem tvi = view.get(i);
-			final JMenu tierMenu = new JMenu(tvi.getTierName());
-
-			TierDescription tierDesc = null;
-			for(TierDescription td:getEditor().getSession().getUserTiers()) {
-				if(td.getName().equals(tvi.getTierName())) {
-					tierDesc = td;
-					break;
-				}
-			}
-
-			final MoveTierAction moveUpAction = new MoveTierAction(getEditor(), tvi, -1);
-			final MoveTierAction moveDownAction = new MoveTierAction(getEditor(), tvi, 1);
-			if(i > 0)
-				tierMenu.add(moveUpAction);
-			if(i < view.size() - 1)
-				tierMenu.add(moveDownAction);
-			tierMenu.addSeparator();
-			tierMenu.add(new ToggleTierLockAction(getEditor(), tvi));
-			tierMenu.add(new ToggleTierVisibleAction(getEditor(), tvi));
-			tierMenu.addSeparator();
-			tierMenu.add(new EditTierAction(getEditor(), tvi));
-			tierMenu.add(new ResetTierFontAction(getEditor(), tvi));
-			if(tierDesc != null)
-				tierMenu.add(new RemoveTierAction(getEditor(), tierDesc, tvi));
-
-			retVal.add(tierMenu);
-		}
-
+		TierMenuBuilder.appendExistingTiersMenu(getEditor(), menuBuilder);
 		menuBuilder.addSeparator(".", "lock_hide");
 		retVal.add(new ToggleLockAllTiersAction(getEditor()));
 		retVal.add(new ToggleHideAllTiersAction(getEditor()));
-
 		return retVal;
 	}
 

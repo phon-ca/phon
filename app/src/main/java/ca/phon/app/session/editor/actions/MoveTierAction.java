@@ -43,18 +43,10 @@ public class MoveTierAction extends SessionEditorAction {
 	@Override
 	public void hookableActionPerformed(ActionEvent e) {
 		final List<TierViewItem> view = getEditor().getSession().getTierView();
-		final List<TierViewItem> newView = new ArrayList<TierViewItem>(view);
-		final int currentIndex = view.indexOf(item);
-		final int nextIndex = currentIndex + direction;
-		if(nextIndex >= 0 && nextIndex < view.size()) {
-			newView.remove(currentIndex);
-			newView.add(nextIndex, item);
-
-			final MoveTierEdit edit = new MoveTierEdit(getEditor(), item, nextIndex);
-			getEditor().getUndoSupport().postEdit(edit);
-
-//			getView().getTierOrderingTable().getSelectionModel().setSelectionInterval(nextIndex, nextIndex);
-		}
+		final List<TierViewItem> newView = new ArrayList<>(view);
+		final int currentIndex = newView.indexOf(item);
+		final MoveTierEdit edit = new MoveTierEdit(getEditor(), item, currentIndex + direction);
+		getEditor().getUndoSupport().postEdit(edit);
 	}
 
 }

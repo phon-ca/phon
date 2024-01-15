@@ -31,8 +31,6 @@ public class TranscriptNavigationFilter extends NavigationFilter {
             fb.setDot(dot, bias);
         }
 
-        System.out.println("setDot: " + dot);
-
         Element elem = doc.getCharacterElement(dot);
         AttributeSet attrs = elem.getAttributes();
         if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE) != null) return;

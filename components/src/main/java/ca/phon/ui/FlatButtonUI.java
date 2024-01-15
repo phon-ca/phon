@@ -78,6 +78,11 @@ public class FlatButtonUI extends ButtonUI {
         g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
                 RenderingHints.VALUE_FRACTIONALMETRICS_ON);
 
+        if(c.isOpaque()) {
+            g2.setColor(c.getBackground());
+            g2.fillRect(0, 0, c.getWidth(), c.getHeight());
+        }
+
         final int width = c.getWidth();
         final int height = c.getHeight();
 
@@ -115,19 +120,47 @@ public class FlatButtonUI extends ButtonUI {
         g2.drawRoundRect(0, 0, width-1, height-1, arc, arc);
 
         final ImageIcon icon = buildIcon();
-        final int iconX = (width - icon.getIconWidth()) / 2;
-        final int iconY = (height - icon.getIconHeight()) / 2;
-        icon.paintIcon(c, g2, iconX, iconY);
+        // draw icon based on vertical and horizontal text position
+        int iconX = 0;
+        int iconY = 0;
+        switch(button.getVerticalTextPosition()) {
+            case SwingConstants.TOP -> iconY = button.getPadding() + button.getBorderWidth();
+            case SwingConstants.BOTTOM -> iconY = height - button.getPadding() - button.getBorderWidth() - icon.getIconHeight();
+            default -> iconY = (height - icon.getIconHeight()) / 2;
+        }
+
+        switch(button.getHorizontalTextPosition()) {
+            case SwingConstants.RIGHT, SwingConstants.TRAILING -> iconX = button.getPadding() + button.getBorderWidth();
+            case SwingConstants.LEFT, SwingConstants.LEADING -> iconX = width - button.getPadding() - button.getBorderWidth() - icon.getIconWidth();
+            default -> iconX = (width - icon.getIconWidth()) / 2;
+        }
+        icon.paintIcon(button, g2, iconX, iconY);
 
         final String text = button.getText();
         if(text != null && !text.isEmpty()) {
             final FontMetrics fm = g2.getFontMetrics();
             final int textWidth = fm.stringWidth(text);
             final int textHeight = fm.getHeight();
-            final int textX = (width - textWidth) / 2;
-            final int textY = (height - textHeight) / 2 + fm.getAscent();
+
+            // draw text based on vertical and horizontal text position
+            int textX = 0;
+            int textY = 0;
+            switch(button.getVerticalTextPosition()) {
+                case SwingConstants.TOP -> textY = button.getPadding() + button.getBorderWidth();
+                case SwingConstants.BOTTOM -> textY = height - button.getPadding() - button.getBorderWidth() - textHeight;
+                default -> textY = (height - textHeight) / 2;
+            }
+
+            switch(button.getHorizontalTextPosition()) {
+                case SwingConstants.LEFT -> textX = button.getPadding() + button.getBorderWidth();
+                case SwingConstants.LEADING -> textX = iconX - button.getIconTextGap() - textWidth;
+                case SwingConstants.RIGHT -> textX = width - button.getPadding() - button.getBorderWidth() - textWidth;
+                case SwingConstants.TRAILING -> textX = iconX + icon.getIconWidth() + button.getIconTextGap();
+                default -> textX = (width - textWidth) / 2;
+            }
+
             g2.setColor(button.getForeground());
-            g2.drawString(text, textX, textY);
+            g2.drawString(text, textX, textY + fm.getAscent());
         }
     }
 
@@ -152,6 +185,15 @@ public class FlatButtonUI extends ButtonUI {
     public Dimension getPreferredSize(JComponent c) {
         int prefWidth = button.getIconSize().getWidth() + button.getPadding() * 2 + button.getBorderWidth() * 2;
         int prefHeight = button.getIconSize().getHeight() + button.getPadding() * 2 + button.getBorderWidth() * 2;
+        if(button.getText() != null) {
+            final FontMetrics fm = button.getFontMetrics(button.getFont());
+            if(button.getVerticalTextPosition() == SwingConstants.BOTTOM || button.getHorizontalTextPosition() == SwingConstants.TOP) {
+                prefWidth = Math.max(prefWidth, fm.stringWidth(button.getText()));
+                prefHeight += button.getIconTextGap() + fm.getHeight();
+            } else {
+                prefWidth += button.getIconTextGap() + fm.stringWidth(button.getText());
+            }
+        }
         return new Dimension(prefWidth, prefHeight);
     }
 
@@ -162,7 +204,8 @@ public class FlatButtonUI extends ButtonUI {
             if(button.isRolloverEnabled()) {
                 button.getModel().setRollover(true);
             }
-            showPopup();
+            if(button.getPopupText() != null && !button.getPopupText().isEmpty())
+                showPopup();
         }
 
         @Override

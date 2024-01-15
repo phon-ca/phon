@@ -16,16 +16,26 @@
 package ca.phon.app.session.editor.view.tierManagement;
 
 import ca.phon.formatter.*;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.orthography.Orthography;
+import ca.phon.orthography.mor.GraspTierData;
+import ca.phon.orthography.mor.MorTierData;
 import ca.phon.session.*;
 import ca.phon.session.tierdata.TierData;
+import ca.phon.ui.FlatButton;
+import ca.phon.ui.FontFormatter;
+import ca.phon.ui.PhonCheckbox;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.dialogs.JFontPanel;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.PrefHelper;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 import com.jgoodies.forms.layout.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.text.ParseException;
 import java.util.HashMap;
 
 /**
@@ -38,49 +48,114 @@ public class TierInfoEditor extends JPanel {
 
 	/* UI */
 	private JTextField nameField;
-	
-	private JFontPanel fontPanel;
-	
-	private JButton useDefaultFontButton;
-	
+
+	private JLabel chatNameLabel;
+
+	private JCheckBox visibleBox;
+
+	private JCheckBox lockedBox;
+
+	private JCheckBox blindBox;
+
+	private JCheckBox alignedBox;
+
+	private JComboBox<String> typeBox;
+
+	private JLabel fontLabel;
+
+	private JButton selectFontButton;
+
+	private Session session;
+
 	private boolean editMode = false;
 	
-	public TierInfoEditor() {
-		this(false);
-	}
-	
-	public TierInfoEditor(boolean editMode) {
+	public TierInfoEditor(Session session, boolean editMode) {
 		super();
 		
+		this.session = session;
 		this.editMode = editMode;
-		
+
 		init();
+	}
+
+	public Session getSession() {
+		return this.session;
 	}
 	
 	private void init() {
-		FormLayout layout = new FormLayout(
-				"5dlu, pref, 3dlu, fill:pref:grow, 5dlu",
-				"pref, 3dlu, pref, 3dlu, pref, pref");
-		CellConstraints cc = new CellConstraints();
-		
-		setLayout(layout);
-		
-		add(new JLabel("Tier Name"), cc.xy(2,1));
+		setLayout(new FormLayout(
+				"right:pref, 3dlu, fill:pref:grow, pref",
+				"pref, 3dlu, pref, 3dlu, pref, 3dlu, pref, 3dlu, pref, 3dlu, pref, 3dlu, pref, 3dlu, pref"));
+		final CellConstraints cc = new CellConstraints();
+
+		add(new JLabel("Name:"), cc.xy(1, 1));
 		nameField = new JTextField();
-		add(nameField, cc.xy(4, 1));
-		
-		final PhonUIAction<Void> defaultFontAction = PhonUIAction.runnable(this::useDefaultFont);
-		defaultFontAction.putValue(PhonUIAction.NAME, "Use default font");
-		defaultFontAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Use default tier font set in Preferences");
-		useDefaultFontButton = new JButton(defaultFontAction);
-		
-		fontPanel = new JFontPanel();
-		fontPanel.setSelectedFont(
-				FontPreferences.getTierFont());
-		
-		add(new JLabel("Font"), cc.xy(2, 5));
-		add(useDefaultFontButton, cc.xy(4, 5));
-		add(fontPanel, cc.xy(4, 6));
+		add(nameField, cc.xyw(3, 1, 2));
+
+		chatNameLabel = new JLabel();
+		final JLabel chatTierNameLabel = new JLabel("CHAT name:");
+		chatTierNameLabel.setToolTipText("Name of tier in the CHAT transcription format");
+		add(chatTierNameLabel, cc.xy(1, 3));
+		add(chatNameLabel, cc.xyw(3, 3, 2));
+
+		lockedBox = new PhonCheckbox("Prevent changes to tier in transcript view");
+		lockedBox.setSelected(false);
+		add(new JLabel("Locked:"), cc.xy(1, 5));
+		add(lockedBox, cc.xyw(3, 5, 2));
+
+		visibleBox = new PhonCheckbox("Show tier in transcript view");
+		visibleBox.setSelected(true);
+		add(new JLabel("Visible:"), cc.xy(1, 7));
+		add(visibleBox, cc.xyw(3, 7, 2));
+
+		blindBox = new PhonCheckbox("Include tier in blind transcription");
+		blindBox.setSelected(false);
+		add(new JLabel("Blind:"), cc.xy(1, 9));
+		add(blindBox, cc.xyw(3, 9, 2));
+
+		add(new JLabel("Type:"), cc.xy(1, 11));
+		typeBox = new JComboBox<>();
+		typeBox.addItem("User defined");
+		typeBox.addItem("CHAT");
+		typeBox.addItem("IPA");
+		typeBox.addItem("Morphology");
+		typeBox.addItem("GRASP");
+		typeBox.setSelectedIndex(0);
+		add(typeBox, cc.xy(3, 11));
+
+		alignedBox = new PhonCheckbox("Include tier in cross tier alignment");
+		alignedBox.setSelected(false);
+		add(new JLabel("Aligned:"), cc.xy(1, 13));
+		add(alignedBox, cc.xyw(3, 13, 2));
+
+		final FontFormatter fontFormatter = new FontFormatter();
+		fontLabel = new JLabel(fontFormatter.format(FontPreferences.getTierFont()));
+		add(new JLabel("Font:"), cc.xy(1, 15));
+		add(fontLabel, cc.xy(3, 15));
+
+		final PhonUIAction<Void> selectFontAct = PhonUIAction.runnable(this::onSelectFont);
+		selectFontAct.putValue(PhonUIAction.NAME, "Select font...");
+		selectFontAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select font for tier");
+		selectFontAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+		selectFontAct.putValue(FlatButton.ICON_NAME_PROP, "text_format");
+		selectFontAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+		selectFontButton = new FlatButton(selectFontAct);
+		add(selectFontButton, cc.xy(4, 15));
+	}
+
+	private void onSelectFont() {
+		final JFontPanel fontPanel = new JFontPanel();
+		fontPanel.setSelectedFont(getTierFont());
+
+		final JOptionPane optionPane = new JOptionPane(fontPanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+		final JDialog dialog = optionPane.createDialog(this, "Select font");
+		dialog.setResizable(true);
+		dialog.pack();
+		dialog.setVisible(true);
+
+		if(optionPane.getValue() != null && optionPane.getValue().equals(JOptionPane.OK_OPTION)) {
+			setTierFont(fontPanel.getSelectedFont());
+		}
 	}
 	
 	public String getTierName() {
@@ -89,22 +164,72 @@ public class TierInfoEditor extends JPanel {
 	
 	public void setTierName(String name) {
 		nameField.setText(name);
-		
-		if(SystemTierType.isSystemTier(name)) {
+		final SystemTierType sysTierType = SystemTierType.tierFromString(name);
+		final UserTierType userTierType = UserTierType.fromPhonTierName(name);
+		if(sysTierType != null || userTierType != null) {
 			nameField.setEditable(false);
+			chatNameLabel.setText((sysTierType != null ? sysTierType.getChatTierName() : userTierType.getChatTierName()));
+			alignedBox.setEnabled(false);
+			typeBox.setEnabled(false);
+		} else {
+			chatNameLabel.setText(UserTierType.determineCHATTierName(session, name));
 		}
 	}
 	
 	public Font getTierFont() {
-		return fontPanel.getSelectedFont();
-	}
+        try {
+            return new FontFormatter().parse(fontLabel.getText());
+        } catch (ParseException e) {
+			return FontPreferences.getTierFont();
+        }
+    }
 	
 	public void setTierFont(Font font) {
-		fontPanel.setSelectedFont(font);
+		fontLabel.setText(new FontFormatter().format(font));
 	}
 	
 	public void useDefaultFont() {
-		fontPanel.setSelectedFont(FontPreferences.getTierFont());
+		fontLabel.setText(new FontFormatter().format(FontPreferences.getTierFont()));
+	}
+
+	public boolean isVisible() {
+		return visibleBox.isSelected();
+	}
+
+	public void setVisible(boolean visible) {
+		visibleBox.setSelected(visible);
+	}
+
+	public boolean isLocked() {
+		return lockedBox.isSelected();
+	}
+
+	public void setLocked(boolean locked) {
+		lockedBox.setSelected(locked);
+	}
+
+	public boolean isBlind() {
+		return blindBox.isSelected();
+	}
+
+	public void setBlind(boolean blind) {
+		blindBox.setSelected(blind);
+	}
+
+	public boolean isAligned() {
+		return alignedBox.isSelected();
+	}
+
+	public void setAligned(boolean aligned) {
+		alignedBox.setSelected(aligned);
+	}
+
+	public String getTierType() {
+		return (String)typeBox.getSelectedItem();
+	}
+
+	public void setTierType(String type) {
+		typeBox.setSelectedItem(type);
 	}
 
 	public boolean isEditMode() {
@@ -128,8 +253,15 @@ public class TierInfoEditor extends JPanel {
 	}
 	
 	public TierDescription createTierDescription() {
+		final Class<?> declaredType = switch (getTierType()) {
+			case "CHAT" -> Orthography.class;
+			case "IPA" -> IPATranscript.class;
+			case "Morphology" -> MorTierData.class;
+			case "GRASP" -> GraspTierData.class;
+			default -> TierData.class;
+		};
 		final SessionFactory factory = SessionFactory.newFactory();
-		return factory.createTierDescription(getTierName().trim(), TierData.class, new HashMap<>(), false);
+		return factory.createTierDescription(getTierName().trim(), declaredType, new HashMap<>(), !isAligned(), isBlind());
 	}
 	
 }

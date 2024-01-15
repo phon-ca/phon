@@ -505,7 +505,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @param batchBuilder the builder to append the segment to
      */
     private void appendFormattedSegment(MediaSegment segment, AttributeSet additionalAttrs, MediaTimeFormatStyle style, TranscriptBatchBuilder batchBuilder) {
-
         var formatter = new MediaSegmentFormatter(style);
         String value = formatter.format(segment);
 
@@ -522,9 +521,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         firstDashAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_FIRST_SEGMENT_DASH, true);
 
         batchBuilder.appendBatchString("•", firstDashAttrs);
-
         batchBuilder.appendBatchString(value, segmentTimeAttrs);
-
         batchBuilder.appendBatchString("•", segmentDashAttrs);
     }
 
@@ -1280,11 +1277,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return the position in the document at the beginning of the tiers content
      */
     public int getTierStart(Tier<?> tier) {
-
-        int tierElementIndex = session.getTranscript()
-
         Element root = getDefaultRootElement();
-
         for (int i = 0; i < root.getElementCount(); i++) {
             Element elem = root.getElement(i);
             if (elem.getElementCount() < 1) continue;

@@ -15,6 +15,7 @@
  */
 package ca.phon.app.session.editor.view.tierManagement;
 
+import ca.phon.session.Session;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.layout.ButtonBarBuilder;
 
@@ -28,8 +29,6 @@ import java.awt.event.*;
  */
 public class TierEditorDialog extends JDialog {
 
-	private static final long serialVersionUID = 1218564949424490169L;
-
 	private DialogHeader header;
 
 	private TierInfoEditor tierEditor;
@@ -40,7 +39,7 @@ public class TierEditorDialog extends JDialog {
 
 	private boolean okPressed = false;
 
-	public TierEditorDialog(boolean editMode) {
+	public TierEditorDialog(Session session, boolean editMode) {
 		super();
 
 		if (editMode)
@@ -50,7 +49,7 @@ public class TierEditorDialog extends JDialog {
 
 		super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
-		tierEditor = new TierInfoEditor(editMode);
+		tierEditor = new TierInfoEditor(session, editMode);
 
 		init();
 	}
@@ -88,6 +87,9 @@ public class TierEditorDialog extends JDialog {
 		
 		BorderLayout layout = new BorderLayout();
 		setLayout(layout);
+
+		tierEditor.setBorder(BorderFactory.createEmptyBorder(2, 5, 0, 5));
+		btnPanel.setBorder(BorderFactory.createEmptyBorder(2, 5, 5, 5));
 
 		add(header, BorderLayout.NORTH);
 		add(tierEditor, BorderLayout.CENTER);

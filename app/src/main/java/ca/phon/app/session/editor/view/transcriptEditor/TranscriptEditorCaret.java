@@ -9,16 +9,19 @@ import javax.swing.text.*;
 import java.awt.*;
 
 /**
- * Custom caret implementation for {@link TranscriptEditor}
+ * Custom caret implementation for {@link TranscriptEditor}.
  */
 public class TranscriptEditorCaret extends DefaultCaret {
     private int caretWidth = 1;
+
+    private transient volatile boolean freezeCaret = false;
 
     public TranscriptEditorCaret() {
         super();
         setBlinkRate(500);
     }
 
+    /* Methods copied from DefaultCaret */
     private boolean _contains(int X, int Y, int W, int H) {
         int w = this.width;
         int h = this.height;
@@ -74,7 +77,7 @@ public class TranscriptEditorCaret extends DefaultCaret {
     }
 
     public void paint(Graphics g) {
-        if(isVisible()) {
+        if(isVisible() && !isFreezeCaret()) {
             final TranscriptEditor component = (TranscriptEditor) getComponent();
             try {
                 TextUI mapper = component.getUI();
@@ -120,43 +123,35 @@ public class TranscriptEditorCaret extends DefaultCaret {
         }
     }
 
-    /*@Override
-    protected Highlighter.HighlightPainter getSelectionPainter() {
+    public boolean isFreezeCaret() {
+        return this.freezeCaret;
+    }
 
-        final TranscriptEditor component = (TranscriptEditor) getComponent();
+    public void setFreezeCaret(boolean freezeCaret) {
+        var oldVal = this.freezeCaret;
+        this.freezeCaret = freezeCaret;
+        if(oldVal != freezeCaret)
+            fireStateChanged();
+    }
 
-        if (component.getSelectedSegment() == null) {
-            return super.getSelectionPainter();
-        }
+    public void freeze() {
+        setFreezeCaret(true);
+    }
 
-        return new Highlighter.HighlightPainter() {
-            @Override
-            public void paint(Graphics g, int p0, int p1, Shape bounds, JTextComponent c) {
-                Graphics2D g2d = (Graphics2D) g;
-                g2d.setColor(UIManager.getColor(TranscriptEditorUIProps.SEGMENT_SELECTION));
+    public void unfreeze() {
+        setFreezeCaret(false);
+    }
 
-                try {
-                    var p0Rect = component.modelToView2D(p0);
-                    var p1Rect = component.modelToView2D(p1);
+    @Override
+    public void setDot(int dot, Position.Bias bias) {
+        if(!isFreezeCaret())
+            super.setDot(dot, bias);
+    }
 
-                    Element ele = component.getTranscriptDocument().getCharacterElement(p0);
-                    int actualLineHeight = g.getFontMetrics().getHeight();
-                    if(ele != null) {
-                        final AttributeSet attrs = ele.getAttributes();
-                        if(StyleConstants.getFontFamily(attrs) != null && StyleConstants.getFontSize(attrs) > 0) {
-                            int style = (StyleConstants.isBold(attrs) ? Font.BOLD : 0) |
-                                    (StyleConstants.isItalic(attrs) ? Font.ITALIC : 0);
-                            final Font f = new Font(StyleConstants.getFontFamily(attrs), style, StyleConstants.getFontSize(attrs));
-                            actualLineHeight = g.getFontMetrics(f).getHeight();
-                        }
-                    }
+    @Override
+    public void moveDot(int dot, Position.Bias bias) {
+        if(!isFreezeCaret())
+            super.moveDot(dot, bias);
+    }
 
-                    g2d.drawRect((int) p0Rect.getMinX(), (int) p0Rect.getMinY(), (int) (p1Rect.getMaxX() - p0Rect.getMinX()), actualLineHeight-1);
-                } catch (BadLocationException e) {
-                    LogUtil.severe(e);
-                }
-
-            }
-        };
-    }*/
 }

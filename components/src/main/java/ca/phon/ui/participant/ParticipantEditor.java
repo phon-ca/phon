@@ -16,8 +16,11 @@
 package ca.phon.ui.participant;
 
 import ca.phon.session.Participant;
+import ca.phon.ui.FlatButton;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
 import java.awt.*;
@@ -112,7 +115,8 @@ public class ParticipantEditor extends JDialog {
 
 	private JButton getCancelButton() {
 		if(cancelButton == null) {
-			cancelButton = new JButton("Cancel");
+			cancelButton = new FlatButton(IconManager.GoogleMaterialDesignIconsFontName, "close", IconSize.MEDIUM);
+			cancelButton.setText("Cancel");
 			cancelButton.addActionListener(new ActionListener() {
 
 				@Override
@@ -136,8 +140,8 @@ public class ParticipantEditor extends JDialog {
 	
 	private JButton getSaveButton() {
 		if(saveButton == null) {
-			saveButton = new JButton("Ok");
-			
+			saveButton = new FlatButton(IconManager.GoogleMaterialDesignIconsFontName, "done", IconSize.MEDIUM);
+			saveButton.setText("Ok");
 			saveButton.addActionListener(new ActionListener() {
 
 				@Override

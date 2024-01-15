@@ -16,6 +16,7 @@
 package ca.phon.ui.text;
 
 import ca.phon.session.format.DateFormatter;
+import ca.phon.ui.FlatButton;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.text.PromptedTextField.FieldState;
 import ca.phon.ui.toast.ToastFactory;
@@ -107,7 +108,10 @@ public class DatePicker extends JComponent {
 		final PhonUIAction monthViewAct = PhonUIAction.runnable(this::onShowMonthView);
 		monthViewAct.putValue(PhonUIAction.SMALL_ICON, calIcon);
 		monthViewAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show calendar");
-		monthViewButton = new JButton(monthViewAct);
+		monthViewAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+		monthViewAct.putValue(FlatButton.ICON_NAME_PROP, "calendar_month");
+		monthViewAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+		monthViewButton = new FlatButton(monthViewAct);
 		
 		final GridBagLayout layout = new GridBagLayout();
 		final GridBagConstraints gbc = new GridBagConstraints();
