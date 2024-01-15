@@ -172,6 +172,9 @@ public final class Participants extends ExtendableObject implements Iterable<Par
 		dest.setRole(src.getRole());
 		dest.setSES(src.getSES());
 		dest.setSex(src.getSex());
+		dest.setFirstLanguage(src.getFirstLanguage());
+		dest.setBirthplace(src.getBirthplace());
+		dest.setOther(src.getOther());
 	}
 
 	public Stream<Participant> stream() {

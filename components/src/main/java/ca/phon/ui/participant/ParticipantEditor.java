@@ -17,6 +17,7 @@ package ca.phon.ui.participant;
 
 import ca.phon.session.Participant;
 import ca.phon.ui.FlatButton;
+import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.layout.ButtonBarBuilder;
 import ca.phon.util.icons.IconManager;
@@ -36,6 +37,8 @@ public class ParticipantEditor extends JDialog {
 	private JButton saveButton;
 	
 	private ParticipantPanel participantPanel;
+
+	private JButton anonymizeBtn;
 	
 	/** The participant */
 	private final Participant participant;
@@ -106,8 +109,16 @@ public class ParticipantEditor extends JDialog {
 			repaint();
 		});
 
-		final JComponent btnGroup = ButtonBarBuilder.buildOkCancelBar(saveButton, cancelButton);
-		
+		final PhonUIAction anonymizeAct = PhonUIAction.runnable(participantPanel::onAnonymize);
+		anonymizeAct.putValue(PhonUIAction.NAME, "Anonymize");
+		anonymizeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Remove all optional information");
+		anonymizeAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+		anonymizeAct.putValue(FlatButton.ICON_NAME_PROP, "privacy_tip");
+		anonymizeAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+		anonymizeBtn = new FlatButton(anonymizeAct);
+
+		final JComponent btnGroup = ButtonBarBuilder.buildOkCancelBar(saveButton, cancelButton, anonymizeBtn);
+
 		add(header, BorderLayout.NORTH);
 		add(participantPanel, BorderLayout.CENTER);
 		add(btnGroup, BorderLayout.SOUTH);

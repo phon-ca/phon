@@ -82,8 +82,6 @@ public class ParticipantPanel extends JPanel {
 
 	private JTextField otherField;
 
-	private JButton anonymizeBtn;
-
 	private final Participant participant;
 
 	public ParticipantPanel() {
@@ -140,14 +138,6 @@ public class ParticipantPanel extends JPanel {
 			}
 
 		});
-
-		final PhonUIAction anonymizeAct = PhonUIAction.runnable(this::onAnonymize);
-		anonymizeAct.putValue(PhonUIAction.NAME, "Anonymize");
-		anonymizeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Remove all optional information");
-		anonymizeAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
-		anonymizeAct.putValue(FlatButton.ICON_NAME_PROP, "privacy_tip");
-		anonymizeAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
-		anonymizeBtn = new FlatButton(anonymizeAct);
 
 		int defCols = 20;
 		nameField = new JTextField();
@@ -365,7 +355,6 @@ public class ParticipantPanel extends JPanel {
 		// add other at bottom spanning across both columns
 		optional.add(createFieldLabel("Other", "other"), cc.xy(1, 6));
 		optional.add(otherField, cc.xy(3, 6));
-		optional.add(anonymizeBtn, cc.xy(7, 6));
 
 		setLayout(new VerticalLayout(5));
 		add(required);
@@ -567,7 +556,7 @@ public class ParticipantPanel extends JPanel {
 		}
 	}
 
-	private void onAnonymize() {
+	public void onAnonymize() {
 		final JDialog anonymizeDialog = new JDialog(CommonModuleFrame.getCurrentFrame());
 		anonymizeDialog.setModal(true);
 
