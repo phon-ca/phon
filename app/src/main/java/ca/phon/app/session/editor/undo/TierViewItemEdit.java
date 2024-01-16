@@ -141,8 +141,17 @@ public class TierViewItemEdit extends SessionUndoableEdit {
 					getSession().addUserTier(i, oldTierDescription);
 				}
 			}
-			if (changes.contains(EditorEventType.TierViewChangeType.TIER_TYPE)) {
+			if(changes.contains(EditorEventType.TierViewChangeType.TIER_TYPE)) {
 				changeTierType(getSession(), newItem.getTierName(), oldTierDescription, oldTierDescription.getDeclaredType());
+			}
+			if(changes.contains(EditorEventType.TierViewChangeType.BLIND_TIER)) {
+				if(!oldTierDescription.isBlind()) {
+					// remove blind tier
+					getSession().removeUserTier(oldTierDescription);
+				} else {
+					// add blind tier
+					getSession().addUserTier(oldTierDescription);
+				}
 			}
 		}
 		tierView.remove(idx);
@@ -173,6 +182,15 @@ public class TierViewItemEdit extends SessionUndoableEdit {
 			}
 			if(changes.contains(EditorEventType.TierViewChangeType.TIER_TYPE)) {
 				changeTierType(getSession(), oldTierDescription.getName(), newTierDescription, newTierDescription.getDeclaredType());
+			}
+			if(changes.contains(EditorEventType.TierViewChangeType.BLIND_TIER)) {
+				if(!newTierDescription.isBlind()) {
+					// remove blind tier
+					getSession().removeUserTier(newTierDescription);
+				} else {
+					// add blind tier
+					getSession().addUserTier(newTierDescription);
+				}
 			}
 		}
 
