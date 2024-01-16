@@ -66,7 +66,7 @@ public class TierMenuBuilder {
         menuBuilder.addItem(".", new ToggleTierLockAction(editor, tvi));
         menuBuilder.addItem(".", new ToggleTierVisibleAction(editor, tvi));
         menuBuilder.addSeparator(".", "edit_remove");
-        menuBuilder.addItem(".", new DuplicateTierAction(editor, td));
+        menuBuilder.addItem(".", new DuplicateTierAction(editor, tvi.getTierName()));
 //        tierMenu.add(new ResetTierFontAction(getEditor(), tvi));
         menuBuilder.addItem(".", new EditTierAction(editor, tvi));
         if(td != null)

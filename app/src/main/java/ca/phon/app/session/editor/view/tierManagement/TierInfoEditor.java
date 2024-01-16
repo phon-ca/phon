@@ -222,7 +222,22 @@ public class TierInfoEditor extends JPanel {
     }
 	
 	public void setTierFont(Font font) {
-		fontLabel.setText(new FontFormatter().format(font));
+		if(font == FontPreferences.getTierFont())
+			fontLabel.setText("default");
+		else
+			fontLabel.setText(new FontFormatter().format(font));
+	}
+
+	public void setTierFont(String fontString) {
+		if("default".equals(fontString)) {
+			setTierFont(FontPreferences.getTierFont());
+		} else {
+			try {
+				setTierFont(new FontFormatter().parse(fontString));
+			} catch (ParseException e) {
+				setTierFont(FontPreferences.getTierFont());
+			}
+		}
 	}
 	
 	public void useDefaultFont() {
@@ -267,6 +282,20 @@ public class TierInfoEditor extends JPanel {
 
 	public void setTierType(String type) {
 		typeBox.setSelectedItem(type);
+	}
+
+	public void setTierType(Class<?> declaredType) {
+		if(declaredType == Orthography.class) {
+			setTierType("CHAT");
+		} else if(declaredType == IPATranscript.class) {
+			setTierType("IPA");
+		} else if(declaredType == MorTierData.class) {
+			setTierType("Morphology");
+		} else if(declaredType == GraspTierData.class) {
+			setTierType("GRASP");
+		} else {
+			setTierType("User defined");
+		}
 	}
 
 	public boolean isEditMode() {

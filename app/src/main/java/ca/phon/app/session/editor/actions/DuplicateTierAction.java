@@ -11,6 +11,7 @@ import ca.phon.util.icons.*;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.text.ParseException;
 
@@ -25,17 +26,16 @@ public class DuplicateTierAction extends SessionEditorAction {
 
 	private int index = -1;
 
-	private TierDescription td;
+	private String tierName = null;
 
-	public DuplicateTierAction(SessionEditor editor, TierDescription td) {
-		this(editor, td, -1);
+	public DuplicateTierAction(SessionEditor editor, String  tierName) {
+		this(editor, tierName, -1);
 	}
 
-	public DuplicateTierAction(SessionEditor editor, TierDescription td, int index) {
+	public DuplicateTierAction(SessionEditor editor, String tierName, int index) {
 		super(editor);
 
-		this.td = td;
-		this.index = index;
+		this.tierName = tierName;
 
 		putValue(NAME, CMD_NAME);
 		putValue(SMALL_ICON, ICON);
@@ -44,12 +44,28 @@ public class DuplicateTierAction extends SessionEditorAction {
 
 	@Override
 	public void hookableActionPerformed(ActionEvent e) {
+		final SystemTierType systemTierType = SystemTierType.tierFromString(tierName);
+		TierDescription existingTierDesc = systemTierType != null ?
+				SessionFactory.newFactory().createTierDescription(systemTierType) : getEditor().getSession().getUserTier(tierName);
+		TierViewItem tvi = getEditor().getSession().getTierView().stream().filter( (item) -> item.getTierName().equals(tierName) ).findFirst().orElse(null);
+		if(existingTierDesc == null || tvi == null) {
+			Toolkit.getDefaultToolkit().beep();
+			return;
+		}
 		TierEditorDialog newTierDialog = new TierEditorDialog(getEditor().getSession(),true);
 		TierInfoEditor tierEditor = newTierDialog.getTierEditor();
+		tierEditor.setTierName(tierName + " Copy");
+		tierEditor.setVisible(tvi.isVisible());
+		tierEditor.setBlind(existingTierDesc.isBlind());
+		tierEditor.setAligned(!existingTierDesc.isExcludeFromAlignment());
+		tierEditor.setLocked(tvi.isTierLocked());
+		tierEditor.setTierFont(tvi.getTierFont());
+		tierEditor.setTierType(existingTierDesc.getDeclaredType());
+
 		newTierDialog.add(tierEditor);
 		newTierDialog.setTitle("Duplicate Tier");
 		newTierDialog.getHeader().setHeaderText("Duplicate Tier");
-		newTierDialog.getHeader().setDescText("Create a new tier with the contents of " + td.getName());
+		newTierDialog.getHeader().setDescText("Create a new tier with the contents of " + existingTierDesc.getName());
 		newTierDialog.setModal(true);
 		newTierDialog.pack();
 
@@ -57,29 +73,8 @@ public class DuplicateTierAction extends SessionEditorAction {
 			final SessionEditor editor = getEditor();
 			final Session session = editor.getSession();
 			// get tier info
-			String tierName = tierEditor.getTierName();
-			tierName = StringUtils.strip(tierName);
-			if(tierName.length() == 0) {
-				return;
-			}
-
-			boolean tierExists = false;
-			if(SystemTierType.isSystemTier(tierName)) {
-				tierExists = true;
-			} else {
-				for(TierDescription td:session.getUserTiers()) {
-					if(td.getName().equals(tierName)) {
-						tierExists = true;
-						break;
-					}
-				}
-			}
-
-			if(tierExists){
-				final Toast toast = ToastFactory.makeToast("A tier with name " + tierEditor.getTierName() + " already exists.");
-				toast.start(tierEditor);
-				return;
-			}
+			String newTierName = tierEditor.getTierName();
+			newTierName = StringUtils.strip(newTierName);
 
 			// create tier
 			final TierDescription tierDescription = tierEditor.createTierDescription();
@@ -87,19 +82,17 @@ public class DuplicateTierAction extends SessionEditorAction {
 
 			getEditor().getUndoSupport().beginUpdate();
 
-			final AddTierEdit edit = new AddTierEdit(editor, tierDescription, tierViewItem, index);
-			editor.getUndoSupport().postEdit(edit);
 
 			for(Record r:getEditor().getSession().getRecords()) {
-				Tier<TierData> existingTier = r.getTier(td.getName(), TierData.class);
-				Tier<TierData> dupTier = r.getTier(tierDescription.getName(), TierData.class);
-
-				TierData existingVal = existingTier.getValue();
-				try {
-					TierEdit<TierData> tierEdit = new TierEdit<>(getEditor(), dupTier, TierData.parseTierData(existingVal.toString()));
-					getEditor().getUndoSupport().postEdit(tierEdit);
-				} catch (ParseException pe) {}
+				Tier<?> existingTier = r.getTier(tierName);
+				Tier<?> dupTier = SessionFactory.newFactory().createTier(tierDescription);
+				if(existingTier != null) {
+					dupTier.setText(existingTier.toString());
+				}
+				r.putTier(dupTier);
 			}
+			final AddTierEdit edit = new AddTierEdit(editor, tierDescription, tierViewItem, index);
+			editor.getUndoSupport().postEdit(edit);
 
 			getEditor().getUndoSupport().endUpdate();
 		}
