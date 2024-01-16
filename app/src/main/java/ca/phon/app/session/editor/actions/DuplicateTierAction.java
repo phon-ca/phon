@@ -36,6 +36,7 @@ public class DuplicateTierAction extends SessionEditorAction {
 		super(editor);
 
 		this.tierName = tierName;
+		this.index = index;
 
 		putValue(NAME, CMD_NAME);
 		putValue(SMALL_ICON, ICON);
