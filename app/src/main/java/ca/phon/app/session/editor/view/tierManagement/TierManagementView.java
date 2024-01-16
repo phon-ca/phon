@@ -306,71 +306,6 @@ public class TierManagementView extends EditorView {
 		}
 	};
 
-	public void onSelectSuggestedFont(PhonActionEvent<Tuple<TierViewItem, Integer>> pae) {
-		if(pae.getData() == null) return;
-		Tuple<TierViewItem, Integer> tuple = pae.getData();
-		TierViewItem tvi = tuple.getObj1();
-		int idx = tuple.getObj2();
-
-		Font currentFont = ("default".equals(tvi.getTierFont()) ? FontPreferences.getTierFont() : Font.decode(tvi.getTierFont()));
-		String suggestedFont = FontPreferences.SUGGESTED_IPA_FONT_NAMES[idx];
-		float currentFontSize = currentFont.getSize();
-
-		Font font = Font.decode(String.format("%s-PLAIN-%d", suggestedFont, (int)currentFontSize));
-
-		TierViewItem newItem = SessionFactory.newFactory().createTierViewItem(tvi.getTierName(), tvi.isVisible(),
-				(new FontFormatter()).format(font), tvi.isTierLocked());
-
-		final TierViewItemEdit edit = new TierViewItemEdit(getEditor(), tvi, newItem);
-		getEditor().getUndoSupport().postEdit(edit);
-	}
-
-	public void onIncreaseFontSize(PhonActionEvent<TierViewItem> pae) {
-		TierViewItem tvi = pae.getData();
-		if(tvi == null) return;
-
-		Font currentFont = ("default".equals(tvi.getTierFont()) ? FontPreferences.getTierFont() : Font.decode(tvi.getTierFont()));
-		Font biggerFont = currentFont.deriveFont(Math.min(72.0f, currentFont.getSize() + 2.0f));
-
-		TierViewItem newItem = SessionFactory.newFactory().createTierViewItem(tvi.getTierName(), tvi.isVisible(),
-				(new FontFormatter()).format(biggerFont), tvi.isTierLocked());
-
-		final TierViewItemEdit edit = new TierViewItemEdit(getEditor(), tvi, newItem);
-		getEditor().getUndoSupport().postEdit(edit);
-	}
-
-	public void onDecreaseFontSize(PhonActionEvent<TierViewItem> pae) {
-		TierViewItem tvi = pae.getData();
-		if(tvi == null) return;
-
-		Font currentFont = ("default".equals(tvi.getTierFont()) ? FontPreferences.getTierFont() : Font.decode(tvi.getTierFont()));
-		Font smallerFont = currentFont.deriveFont(Math.max(1.0f, currentFont.getSize() - 2.0f));
-
-		TierViewItem newItem = SessionFactory.newFactory().createTierViewItem(tvi.getTierName(), tvi.isVisible(),
-				(new FontFormatter()).format(smallerFont), tvi.isTierLocked());
-
-		final TierViewItemEdit edit = new TierViewItemEdit(getEditor(), tvi, newItem);
-		getEditor().getUndoSupport().postEdit(edit);
-	}
-
-	public void onToggleStyle(PhonActionEvent<Tuple<TierViewItem, Integer>> pae) {
-		if(pae.getData() == null) return;
-		Tuple<TierViewItem, Integer> tuple = pae.getData();
-		TierViewItem tvi = tuple.getObj1();
-		int style = tuple.getObj2();
-
-		Font currentFont = ("default".equals(tvi.getTierFont()) ? FontPreferences.getTierFont() : Font.decode(tvi.getTierFont()));
-		int fontStyle = currentFont.getStyle();
-		fontStyle ^= style;
-		Font font = currentFont.deriveFont(fontStyle);
-
-		TierViewItem newItem = SessionFactory.newFactory().createTierViewItem(tvi.getTierName(), tvi.isVisible(),
-				(new FontFormatter()).format(font), tvi.isTierLocked());
-
-		final TierViewItemEdit edit = new TierViewItemEdit(getEditor(), tvi, newItem);
-		getEditor().getUndoSupport().postEdit(edit);
-	}
-
 	/**
 	 * Move selected tier up in order
 	 */
@@ -383,11 +318,10 @@ public class TierManagementView extends EditorView {
 			
 			final MoveTierAction act = new MoveTierAction(getEditor(), tierItem, -1);
 			act.actionPerformed(new ActionEvent(this, 0, null));
+			tierOrderingTable.getSelectionModel().setSelectionInterval(selectedRow-1, selectedRow-1);
 		}
 	}
 
-
-	
 	/**
 	 * Move selected tier down in order
 	 */
@@ -400,6 +334,7 @@ public class TierManagementView extends EditorView {
 			
 			final MoveTierAction act = new MoveTierAction(getEditor(), tierItem, 1);
 			act.actionPerformed(new ActionEvent(this, 0, null));
+			tierOrderingTable.getSelectionModel().setSelectionInterval(selectedRow+1, selectedRow+1);
 		}
 	}
 	
@@ -542,9 +477,11 @@ public class TierManagementView extends EditorView {
 		return retVal;
 	}
 
+	private record TierViewDragData(int originalRow, TierViewItem tvi) {}
+
 	private final class TierTableTransferHandler extends TransferHandler {
 
-		final static DataFlavor dataFlavor = new DataFlavor(TierViewItem.class, "Tier name");
+		final static DataFlavor dataFlavor = new DataFlavor(TierViewDragData.class, "Tier name");
 
 		@Override
 		public boolean canImport(TransferSupport support) {
@@ -560,7 +497,11 @@ public class TierManagementView extends EditorView {
 
 			TierViewItem item = null;
 			try {
-				item = (TierViewItem) support.getTransferable().getTransferData(dataFlavor);
+				TierViewDragData data = (TierViewDragData) support.getTransferable().getTransferData(dataFlavor);
+				item = data.tvi();
+				if(data.originalRow() < row) {
+					row--;
+				}
 			} catch (UnsupportedFlavorException | IOException e) {
 				return false;
 			}
@@ -601,7 +542,7 @@ public class TierManagementView extends EditorView {
 					@NotNull
 					@Override
 					public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
-						return getEditor().getSession().getTierView().get(selectedRow);
+						return new TierViewDragData(selectedRow, getEditor().getSession().getTierView().get(selectedRow));
 					}
 				};
 			} else {
