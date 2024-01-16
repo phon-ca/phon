@@ -113,7 +113,11 @@ public class FlatButtonUI extends ButtonUI {
         final Color border = (isDisabled ? borderDisabledColor : (isSelected ? borderSelectedColor : (isPressed ? borderPressedColor : (isHover ? borderHoverColor : borderColor))));
 
         g2.setColor(bg);
-        g2.fillRoundRect(0, 0, width-1, height-1, arc, arc);
+        if(arc > 0) {
+            g2.fillRoundRect(0, 0, width-1, height-1, arc, arc);
+        } else {
+            g2.fillRect(0, 0, width-1, height-1);
+        }
 
         g2.setColor(border);
         g2.setStroke(new BasicStroke(borderWidth));
@@ -159,8 +163,15 @@ public class FlatButtonUI extends ButtonUI {
                 default -> textX = (width - textWidth) / 2;
             }
 
-            g2.setColor(button.getForeground());
+            g2.setColor(button.isRolloverEnabled() && button.getModel().isRollover() ? button.getTextHoverColor() : button.getForeground());
             g2.drawString(text, textX, textY + fm.getAscent());
+        }
+
+        // draw underline if button is default
+        if(button.isDefaultButton()) {
+            g2.setColor(button.getForeground());
+            g2.setStroke(new BasicStroke(2.0f));
+            g2.drawLine(0, height-1, width-1, height-1);
         }
     }
 
@@ -171,12 +182,15 @@ public class FlatButtonUI extends ButtonUI {
         Color iconColor = button.getIconColor();
         if(button.isSelected()) {
             iconColor = button.getIconSelectedColor();
-        } else if(!button.isEnabled()) {
-            iconColor = button.getIconDisabledColor();
-        } else if(button.getModel().isPressed()) {
-            iconColor = button.getIconPressedColor();
-        } else if(button.getModel().isRollover()) {
+        }
+        if(button.getModel().isRollover()) {
             iconColor = button.getIconHoverColor();
+        }
+        if(button.getModel().isPressed()) {
+            iconColor = button.getIconPressedColor();
+        }
+        if(!button.isEnabled()) {
+            iconColor = button.getIconDisabledColor();
         }
         return IconManager.getInstance().getFontIcon(fontName, iconName, iconSize, iconColor);
     }

@@ -163,6 +163,20 @@ public enum UserTierType {
                 if(userTierDesc.getName().equals(tierName)) return userTierType.getChatTierName();
             }
         }
+        if(!tierNameMap.containsKey(tierName)) {
+            String abbreviatedTierName = abbreviateTierName(tierName);
+            int i = 0;
+            String chatTierName = abbreviatedTierName;
+            while (tierNameMap.containsValue(chatTierName)) {
+                ++i;
+                if(abbreviatedTierName.length() < 7) {
+                    chatTierName = abbreviatedTierName + i;
+                } else {
+                    chatTierName = abbreviatedTierName.substring(0, 6) + i;
+                }
+            }
+            tierNameMap.put(tierName, chatTierName);
+        }
         return "%x" + tierNameMap.get(tierName);
     }
 

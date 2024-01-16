@@ -797,7 +797,7 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 			}
 			final IPATranscript groupTranscript = groupBuilder.toIPATranscript();
 			// only assign syllabification if possible
-			if(groupTranscript.length() == pt.getSb().getPh().size()) {
+			if(pt.getSb() != null && groupTranscript.length() == pt.getSb().getPh().size()) {
 				for(int i = 0; i < pt.getSb().getPh().size(); i++) {
 					var ph = pt.getSb().getPh().get(i);
 					final SyllableConstituentType scType = switch (ph.getScType()) {

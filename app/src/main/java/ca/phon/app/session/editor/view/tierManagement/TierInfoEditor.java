@@ -34,6 +34,8 @@ import ca.phon.util.icons.IconSize;
 import com.jgoodies.forms.layout.*;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.text.ParseException;
 import java.util.HashMap;
@@ -91,6 +93,24 @@ public class TierInfoEditor extends JPanel {
 		add(new JLabel("Name:"), cc.xy(1, 1));
 		nameField = new JTextField();
 		add(nameField, cc.xyw(3, 1, 2));
+		nameField.getDocument().addDocumentListener(new DocumentListener() {
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				updateChatName();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				updateChatName();
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+
+			}
+
+		});
 
 		chatNameLabel = new JLabel();
 		final JLabel chatTierNameLabel = new JLabel("CHAT name:");
@@ -157,23 +177,40 @@ public class TierInfoEditor extends JPanel {
 			setTierFont(fontPanel.getSelectedFont());
 		}
 	}
-	
+
+	public JTextField getNameField() {
+		return this.nameField;
+	}
+
 	public String getTierName() {
 		return nameField.getText();
 	}
-	
+
+	private void updateChatName() {
+		final String name = nameField.getText().trim();
+		if(name.isEmpty()) {
+			chatNameLabel.setText("");
+		} else {
+			final SystemTierType sysTierType = SystemTierType.tierFromString(name);
+			final UserTierType userTierType = UserTierType.fromPhonTierName(name);
+			if (sysTierType != null || userTierType != null) {
+				chatNameLabel.setText((sysTierType != null ? sysTierType.getChatTierName() : userTierType.getChatTierName()));
+			} else {
+				chatNameLabel.setText(UserTierType.determineCHATTierName(session, name));
+			}
+		}
+	}
+
 	public void setTierName(String name) {
 		nameField.setText(name);
 		final SystemTierType sysTierType = SystemTierType.tierFromString(name);
 		final UserTierType userTierType = UserTierType.fromPhonTierName(name);
 		if(sysTierType != null || userTierType != null) {
 			nameField.setEditable(false);
-			chatNameLabel.setText((sysTierType != null ? sysTierType.getChatTierName() : userTierType.getChatTierName()));
 			alignedBox.setEnabled(false);
 			typeBox.setEnabled(false);
-		} else {
-			chatNameLabel.setText(UserTierType.determineCHATTierName(session, name));
 		}
+		updateChatName();
 	}
 	
 	public Font getTierFont() {

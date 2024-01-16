@@ -164,19 +164,21 @@ public class TierManagementView extends EditorView {
 		tierOrderingTable.setActionMap(tierOrderActionMap);
 		tierOrderingTable.setInputMap(WHEN_FOCUSED, tableInputMap);
 		
-		final NewTierAction addAction = new NewTierAction(getEditor());
+		final PhonUIAction<Void> addAction = PhonUIAction.runnable(this::onNewTier);
 		addAction.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
 		addAction.putValue(FlatButton.ICON_NAME_PROP, "add");
 		addAction.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
 		newTierButton = new FlatButton(addAction);
 		newTierButton.setText(null);
 		newTierButton.setFocusable(false);
+		((FlatButton)newTierButton).setPadding(2);
 
 		deleteAction.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
 		deleteAction.putValue(FlatButton.ICON_NAME_PROP, "remove");
 		deleteAction.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
 		deleteTierButton = new FlatButton(deleteAction);
 		deleteTierButton.setFocusable(false);
+		((FlatButton)deleteTierButton).setPadding(2);
 		
 		final PhonUIAction<Void> upAction = PhonUIAction.runnable(this::moveUp);
 		upAction.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
@@ -185,6 +187,7 @@ public class TierManagementView extends EditorView {
 		upAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move tier up");
 		moveUpButton = new FlatButton(upAction);
 		moveUpButton.setFocusable(false);
+		((FlatButton)moveUpButton).setPadding(2);
 		
 		final PhonUIAction<Void> downAction = PhonUIAction.runnable(this::moveDown);
 		downAction.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
@@ -193,6 +196,7 @@ public class TierManagementView extends EditorView {
 		downAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Move tier down");
 		moveDownButton = new FlatButton(downAction);
 		moveDownButton.setFocusable(false);
+		((FlatButton)moveDownButton).setPadding(2);
 		
 		final PhonUIAction<Void> editAction = PhonUIAction.eventConsumer(this::onEditTier);
 		editAction.putValue(PhonUIAction.SHORT_DESCRIPTION, "Edit tier...");
@@ -201,6 +205,7 @@ public class TierManagementView extends EditorView {
 		editAction.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
 		editButton = new FlatButton(editAction);
 		editButton.setFocusable(false);
+		((FlatButton)editButton).setPadding(2);
 		
 		setLayout(new BorderLayout());
 		add(new JScrollPane(tierOrderingTable), BorderLayout.CENTER);
@@ -252,6 +257,14 @@ public class TierManagementView extends EditorView {
 		TierViewItem tvi = tierView.get(tierViewIdx);
 		final TierDescription tierDesc = getEditor().getSession().getUserTier(tvi.getTierName());
 		TierMenuBuilder.setupTierMenu(getEditor(), tierDesc, tvi, builder);
+	}
+
+	public void onNewTier() {
+		final JMenu newTierMenu = new JMenu();
+		final MenuBuilder builder = new MenuBuilder(newTierMenu);
+		TierMenuBuilder.setupNewTierMenu(getEditor(), builder);
+		// show popup menu on new tier button
+		newTierMenu.getPopupMenu().show(newTierButton, 0, newTierButton.getHeight());
 	}
 
 	public void onSelectFont(PhonActionEvent<TierViewItem> pae) {

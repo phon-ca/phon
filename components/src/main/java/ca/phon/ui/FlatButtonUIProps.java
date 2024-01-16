@@ -13,6 +13,10 @@ public class FlatButtonUIProps implements UIDefaultsHandler, IPluginExtensionPoi
     public final static String ICON_COLOR_PROP = "FlatButton.iconColor";
     public final static Color DEFAULT_ICON_COLOR = UIManager.getColor("textText");
 
+    public final static String TEXT_HOVER_COLOR_PROP = "FlatButton.textHoverColor";
+    public final static Color DEFAULT_TEXT_HOVER_COLOR = UIManager.getColor("textText");
+
+
     public final static String ICON_HOVER_COLOR_PROP = "FlatButton.iconHoverColor";
     public final static Color DEFAULT_ICON_HOVER_COLOR = UIManager.getColor("textText");
 
@@ -58,7 +62,8 @@ public class FlatButtonUIProps implements UIDefaultsHandler, IPluginExtensionPoi
     @Override
     public void setupDefaults(UIDefaults defaults) {
         defaults.put(ICON_COLOR_PROP, DEFAULT_ICON_COLOR);
-        defaults.put(ICON_HOVER_COLOR_PROP, DEFAULT_ICON_HOVER_COLOR);
+        defaults.put(TEXT_HOVER_COLOR_PROP, UIManager.getColor("Phon.darkBlue").brighter());
+        defaults.put(ICON_HOVER_COLOR_PROP, UIManager.getColor("Phon.darkBlue").brighter());
         defaults.put(ICON_PRESSED_COLOR_PROP, DEFAULT_ICON_PRESSED_COLOR);
         defaults.put(ICON_DISABLED_COLOR_PROP, DEFAULT_ICON_DISABLED_COLOR);
         defaults.put(ICON_SELECTED_COLOR_PROP, DEFAULT_ICON_SELECTED_COLOR);

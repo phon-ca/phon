@@ -87,7 +87,8 @@ public class ParticipantsView extends EditorView {
 		participantTableActionMap.put("DELETE_PARTICIPANT", deleteAction);
 		participantTableInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "DELETE_PARTICIPANT");
 		participantTableInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), "DELETE_PARTICIPANT");
-        JButton removeParticipantButton = new FlatButton(deleteAction);
+        FlatButton removeParticipantButton = new FlatButton(deleteAction);
+		removeParticipantButton.setPadding(2);
 		
 		participantTable.setInputMap(WHEN_FOCUSED, participantTableInputMap);
 		participantTable.setActionMap(participantTableActionMap);
@@ -97,16 +98,18 @@ public class ParticipantsView extends EditorView {
 		newParticipantAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
 		newParticipantAct.putValue(FlatButton.ICON_NAME_PROP, "add");
 		newParticipantAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
-        JButton addParticipantButton = new FlatButton(newParticipantAct);
+        FlatButton addParticipantButton = new FlatButton(newParticipantAct);
 		addParticipantButton.setFocusable(false);
+		addParticipantButton.setPadding(2);
 		
 		final PhonUIAction<Void> editParticipantAct = PhonUIAction.runnable(this::editParticipant);
 		editParticipantAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Edit selected participant...");
 		editParticipantAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
 		editParticipantAct.putValue(FlatButton.ICON_NAME_PROP, "edit");
 		editParticipantAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
-        JButton editParticipantButton = new FlatButton(editParticipantAct);
+        FlatButton editParticipantButton = new FlatButton(editParticipantAct);
 		editParticipantButton.setFocusable(false);
+		editParticipantButton.setPadding(2);
 
 		final IconStrip iconStrip = new IconStrip(SwingConstants.HORIZONTAL);
 		iconStrip.add(addParticipantButton, IconStrip.IconStripPosition.LEFT);

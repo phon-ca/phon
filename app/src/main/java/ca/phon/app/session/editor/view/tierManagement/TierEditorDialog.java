@@ -16,8 +16,14 @@
 package ca.phon.app.session.editor.view.tierManagement;
 
 import ca.phon.session.Session;
+import ca.phon.session.SystemTierType;
+import ca.phon.session.TierDescription;
+import ca.phon.session.UserTierType;
+import ca.phon.ui.FlatButton;
 import ca.phon.ui.decorations.DialogHeader;
 import ca.phon.ui.layout.ButtonBarBuilder;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
 import java.awt.*;
@@ -61,18 +67,43 @@ public class TierEditorDialog extends JDialog {
 	private void init() {
 		header = new DialogHeader(getTitle(), "");
 
-		okButton = new JButton("Ok");
+		okButton = new FlatButton(IconManager.GoogleMaterialDesignIconsFontName, "done", IconSize.MEDIUM);
+		okButton.setText("Ok");
 		okButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				final String tierName = tierEditor.getTierName().trim();
+				if(tierEditor.getNameField().isEditable()) {
+					if(tierName.isEmpty()) {
+						JOptionPane.showMessageDialog(TierEditorDialog.this, "Tier name cannot be empty.", "Error", JOptionPane.ERROR_MESSAGE);
+						return;
+					} else {
+						final SystemTierType systemTierType = SystemTierType.tierFromString(tierName);
+						if(systemTierType != null) {
+							JOptionPane.showMessageDialog(TierEditorDialog.this, "Tier name same as a predefined tier.", "Error", JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+						final UserTierType userTierType = UserTierType.fromPhonTierName(tierName);
+						if(userTierType != null) {
+							JOptionPane.showMessageDialog(TierEditorDialog.this, "Tier name same as a predefined tier.", "Error", JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+						final TierDescription td = tierEditor.getSession().getUserTier(tierName);
+						if(td != null && !tierEditor.isEditMode()) {
+							JOptionPane.showMessageDialog(TierEditorDialog.this, "Tier name already exists.", "Error", JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+					}
+				}
 				okPressed = true;
 				TierEditorDialog.this.setVisible(false);
 			}
 
 		});
 
-		cancelButton = new JButton("Cancel");
+		cancelButton = new FlatButton(IconManager.GoogleMaterialDesignIconsFontName, "close", IconSize.MEDIUM);
+		cancelButton.setText("Cancel");
 		cancelButton.addActionListener(new ActionListener() {
 
 			@Override

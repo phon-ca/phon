@@ -19,7 +19,10 @@ public class FlatButton extends JButton {
     private String iconName;
 
     public static final String ICON_FONT_NAME_PROP = FlatButton.class.getName() + ".iconFontName";
+
     private String iconFontName;
+
+    private Color textHoverColor;
 
     private Color iconColor;
 
@@ -156,6 +159,16 @@ public class FlatButton extends JButton {
         var oldVal = this.iconColor;
         this.iconColor = iconColor;
         firePropertyChange("iconColor", oldVal, iconColor);
+    }
+
+    public Color getTextHoverColor() {
+        return textHoverColor != null ? textHoverColor : UIManager.getColor(FlatButtonUIProps.TEXT_HOVER_COLOR_PROP);
+    }
+
+    public void setTextHoverColor(Color textHoverColor) {
+        var oldVal = this.textHoverColor;
+        this.textHoverColor = textHoverColor;
+        firePropertyChange("textHoverColor", oldVal, textHoverColor);
     }
 
     public Color getIconHoverColor() {
