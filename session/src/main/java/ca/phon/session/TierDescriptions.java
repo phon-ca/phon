@@ -61,6 +61,25 @@ public final class TierDescriptions implements IExtendable, Iterable<TierDescrip
 	}
 
 	/**
+	 * Return index of given tier description
+	 *
+	 * @param td
+	 * @return index of tier description or -1 if not found
+	 */
+	public int indexOf(TierDescription td) {
+		int retVal = -1;
+
+		for(int i = 0; i < session.getUserTierCount(); i++) {
+			if(session.getUserTier(i).equals(td)) {
+				retVal = i;
+				break;
+			}
+		}
+
+		return retVal;
+	}
+
+	/**
 	 * Get tier description for system tier
 	 *
 	 * @param tierName

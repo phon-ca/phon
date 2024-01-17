@@ -164,9 +164,9 @@ public class TierOrderingTableModel extends AbstractTableModel {
 				}
 			}
 		} else if (columnIndex == TierOrderingTableColumn.TIER_TYPE.ordinal()) {
-			return tierDesc.getDeclaredType().getSimpleName();
+			return tierDesc != null ? tierDesc.getDeclaredType().getSimpleName() : "";
 		} else if (columnIndex == TierOrderingTableColumn.ALIGNED.ordinal()) {
-			retVal = !tierDesc.isExcludeFromAlignment();
+			retVal = tierDesc != null && !tierDesc.isExcludeFromAlignment();
 		} else if (columnIndex == TierOrderingTableColumn.TIER_FONT.ordinal()) {
 			retVal = (tv.getTierFont().equals("default") ?
 					PrefHelper.get(FontPreferences.TIER_FONT, FontPreferences.DEFAULT_TIER_FONT) : tv.getTierFont());

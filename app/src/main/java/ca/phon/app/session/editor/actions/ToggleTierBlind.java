@@ -44,7 +44,7 @@ public class ToggleTierBlind extends SessionEditorAction {
             props.setHeader("Remove tier from blind transcription");
             props.setTitle("Remove tier from blind transcription");
             props.setMessage("Are you sure you want to remove tier '" + tierName + "' from blind transcription?");
-            props.setOptions(MessageDialogProperties.okCancelOptions);
+            props.setOptions(MessageDialogProperties.yesNoOptions);
             props.setRunAsync(false);
 
             final int selection = NativeDialogs.showMessageDialog(props);

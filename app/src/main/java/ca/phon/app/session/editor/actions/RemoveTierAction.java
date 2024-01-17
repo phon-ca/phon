@@ -18,6 +18,9 @@ package ca.phon.app.session.editor.actions;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.RemoveTierEdit;
 import ca.phon.session.*;
+import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.nativedialogs.MessageDialogProperties;
+import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -46,6 +49,16 @@ public class RemoveTierAction extends SessionEditorAction {
 
 	@Override
 	public void hookableActionPerformed(ActionEvent e) {
+		final MessageDialogProperties props = new MessageDialogProperties();
+		props.setParentWindow(CommonModuleFrame.getCurrentFrame());
+		props.setTitle("Remove tier");
+		props.setHeader("Remove tier '" + td.getName() + "'");
+		props.setMessage("Are you sure you want to remove tier '" + td.getName() + "'?");
+		props.setOptions(MessageDialogProperties.yesNoOptions);
+		props.setRunAsync(false);
+		final int selection = NativeDialogs.showMessageDialog(props);
+		if(selection != 0) return;
+
 		final RemoveTierEdit edit = new RemoveTierEdit(getEditor(), td, tvi);
 		getEditor().getUndoSupport().postEdit(edit);
 	}

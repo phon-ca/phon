@@ -3,6 +3,7 @@ package ca.phon.app.session.editor.view.tierManagement;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.actions.*;
 import ca.phon.app.session.editor.undo.AddTierEdit;
+import ca.phon.app.session.editor.undo.ToggleTierAlignedEdit;
 import ca.phon.session.*;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
@@ -54,6 +55,8 @@ public class TierMenuBuilder {
      * @param menuBuilder
      */
     public static void setupTierMenu(SessionEditor editor, TierDescription td, TierViewItem tvi, MenuBuilder menuBuilder) {
+        final SystemTierType systemTierType = SystemTierType.tierFromString(tvi.getTierName());
+        final UserTierType userTierType = UserTierType.fromPhonTierName(tvi.getTierName());
         final List<TierViewItem> view = editor.getSession().getTierView();
         final MoveTierAction moveUpAction = new MoveTierAction(editor, tvi, -1);
         final MoveTierAction moveDownAction = new MoveTierAction(editor, tvi, 1);
@@ -67,6 +70,8 @@ public class TierMenuBuilder {
         menuBuilder.addItem(".", new ToggleTierVisibleAction(editor, tvi));
         menuBuilder.addSeparator(".", "edit_remove");
         menuBuilder.addItem(".", new ToggleTierBlind(editor, tvi.getTierName()));
+        if(systemTierType == null && userTierType == null)
+            menuBuilder.addItem(".", new ToggleTierAlignedAction(editor, tvi.getTierName()));
         menuBuilder.addItem(".", new DuplicateTierAction(editor, tvi.getTierName(), tierIdx + 1));
         menuBuilder.addItem(".", new EditTierAction(editor, tvi));
         if(td != null)
