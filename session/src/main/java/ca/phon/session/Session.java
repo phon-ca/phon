@@ -174,6 +174,16 @@ public final class Session extends ExtendableObject {
 	}
 
 	/**
+	 * Return a tier description for the given tier name (may include system tiers)
+	 *
+	 * @param tierName
+	 * @return tier description for given tier name or null if not found
+	 */
+	public TierDescription getTier(String tierName) {
+		return getTiers().stream().filter( (td) -> td.getName().equals(tierName) ).findFirst().orElse(null);
+	}
+
+	/**
 	 * Get tier parameters for system tier
 	 *
 	 * @param systemTier

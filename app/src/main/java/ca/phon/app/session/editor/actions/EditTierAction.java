@@ -58,22 +58,7 @@ public class EditTierAction extends SessionEditorAction {
 		final SessionFactory factory = SessionFactory.newFactory();
 			final SystemTierType systemTierType = SystemTierType.tierFromString(tierItem.getTierName());
 
-			TierDescription depTierDesc  = null;
-			if(systemTierType != null) {
-				depTierDesc = factory.createTierDescription(systemTierType);
-			} else {
-				final SessionEditor editor = getEditor();
-				final Session session = editor.getSession();
-				
-				for(int i = 0; i < session.getUserTierCount(); i++) {
-					final TierDescription td = session.getUserTier(i);
-					if(td.getName().equals(tierItem.getTierName())) {
-						depTierDesc = td;
-						break;
-					}
-				}
-			}
-			
+			TierDescription depTierDesc  = getEditor().getSession().getTier(tierItem.getTierName());
 			if(depTierDesc != null) {
 				final Font transcriptFont = 
 						(tierItem.getTierFont().equals("default") ? 

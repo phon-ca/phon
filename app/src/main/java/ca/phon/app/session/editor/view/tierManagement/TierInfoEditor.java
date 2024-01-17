@@ -90,9 +90,10 @@ public class TierInfoEditor extends JPanel {
 				"pref, 3dlu, pref, 3dlu, pref, 3dlu, pref, 3dlu, pref, 3dlu, pref, 3dlu, pref, 3dlu, pref"));
 		final CellConstraints cc = new CellConstraints();
 
-		add(new JLabel("Name:"), cc.xy(1, 1));
+		int row = 1;
+		add(new JLabel("Name:"), cc.xy(1, row));
 		nameField = new JTextField();
-		add(nameField, cc.xyw(3, 1, 2));
+		add(nameField, cc.xyw(3, row, 2));
 		nameField.getDocument().addDocumentListener(new DocumentListener() {
 
 			@Override
@@ -112,28 +113,15 @@ public class TierInfoEditor extends JPanel {
 
 		});
 
+		row += 2;
 		chatNameLabel = new JLabel();
 		final JLabel chatTierNameLabel = new JLabel("CHAT name:");
 		chatTierNameLabel.setToolTipText("Name of tier in the CHAT transcription format");
-		add(chatTierNameLabel, cc.xy(1, 3));
-		add(chatNameLabel, cc.xyw(3, 3, 2));
+		add(chatTierNameLabel, cc.xy(1, row));
+		add(chatNameLabel, cc.xyw(3, row, 2));
 
-		lockedBox = new PhonCheckbox("Prevent changes to tier in transcript view");
-		lockedBox.setSelected(false);
-		add(new JLabel("Locked:"), cc.xy(1, 5));
-		add(lockedBox, cc.xyw(3, 5, 2));
-
-		visibleBox = new PhonCheckbox("Show tier in transcript view");
-		visibleBox.setSelected(true);
-		add(new JLabel("Visible:"), cc.xy(1, 7));
-		add(visibleBox, cc.xyw(3, 7, 2));
-
-		blindBox = new PhonCheckbox("Include tier in blind transcription");
-		blindBox.setSelected(false);
-		add(new JLabel("Blind:"), cc.xy(1, 9));
-		add(blindBox, cc.xyw(3, 9, 2));
-
-		add(new JLabel("Type:"), cc.xy(1, 11));
+		row += 2;
+		add(new JLabel("Type:"), cc.xy(1, row));
 		typeBox = new JComboBox<>();
 		typeBox.addItem("User defined");
 		typeBox.addItem("CHAT");
@@ -141,17 +129,37 @@ public class TierInfoEditor extends JPanel {
 		typeBox.addItem("Morphology");
 		typeBox.addItem("GRASP");
 		typeBox.setSelectedIndex(0);
-		add(typeBox, cc.xy(3, 11));
+		add(typeBox, cc.xy(3, row));
 
+		row += 2;
+		lockedBox = new PhonCheckbox("Prevent changes to tier in transcript view");
+		lockedBox.setSelected(false);
+		add(new JLabel("Locked:"), cc.xy(1, row));
+		add(lockedBox, cc.xyw(3, row, 2));
+
+		row += 2;
+		visibleBox = new PhonCheckbox("Show tier in transcript view");
+		visibleBox.setSelected(true);
+		add(new JLabel("Visible:"), cc.xy(1, row));
+		add(visibleBox, cc.xyw(3, row, 2));
+
+		row += 2;
+		blindBox = new PhonCheckbox("Include tier in blind transcription");
+		blindBox.setSelected(false);
+		add(new JLabel("Blind:"), cc.xy(1, row));
+		add(blindBox, cc.xyw(3, row, 2));
+
+		row += 2;
 		alignedBox = new PhonCheckbox("Include tier in cross tier alignment");
 		alignedBox.setSelected(false);
-		add(new JLabel("Aligned:"), cc.xy(1, 13));
-		add(alignedBox, cc.xyw(3, 13, 2));
+		add(new JLabel("Aligned:"), cc.xy(1, row));
+		add(alignedBox, cc.xyw(3, row, 2));
 
+		row += 2;
 		final FontFormatter fontFormatter = new FontFormatter();
 		fontLabel = new JLabel(fontFormatter.format(FontPreferences.getTierFont()));
-		add(new JLabel("Font:"), cc.xy(1, 15));
-		add(fontLabel, cc.xy(3, 15));
+		add(new JLabel("Font:"), cc.xy(1, row));
+		add(fontLabel, cc.xy(3, row));
 
 		final PhonUIAction<Void> selectFontAct = PhonUIAction.runnable(this::onSelectFont);
 		selectFontAct.putValue(PhonUIAction.NAME, "Select font...");

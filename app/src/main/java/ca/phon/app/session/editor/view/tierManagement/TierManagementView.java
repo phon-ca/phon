@@ -24,7 +24,6 @@ import ca.phon.ui.action.*;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.nativedialogs.*;
-import ca.phon.util.Tuple;
 import ca.phon.util.icons.*;
 import org.jdesktop.swingx.JXTable;
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +40,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.*;
 
 /**
  * Panel for changing tier ordering, visibility and fonts.
@@ -113,6 +111,22 @@ public class TierManagementView extends EditorView {
 		final ToggleTierLockAction act = new ToggleTierLockAction(getEditor(), tv);
 		act.actionPerformed(new ActionEvent(this, 0, null));
 	}
+
+	private void toggleTierBlind(int rowIndex) {
+		final TierViewItem[] tierView = getCurrentOrder().toArray(new TierViewItem[0]);
+		final TierViewItem tv = tierView[rowIndex];
+
+		final ToggleTierBlind act = new ToggleTierBlind(getEditor(), tv.getTierName());
+		act.actionPerformed(new ActionEvent(this, 0, null));
+	}
+
+	private void toggleTierAligned(int rowIndex) {
+		final TierViewItem[] tierView = getCurrentOrder().toArray(new TierViewItem[0]);
+		final TierViewItem tv = tierView[rowIndex];
+
+//		final ToggleTierAlignedAction act = new ToggleTierAlignedAction(getEditor(), tv);
+//		act.actionPerformed(new ActionEvent(this, 0, null));
+	}
 	
 	private void init() {
 		final SessionEditor sessionEditor = getEditor();
@@ -128,6 +142,10 @@ public class TierManagementView extends EditorView {
 							toggleTierVisible(rowIndex);
 						} else if(columnIndex == TierOrderingTableModel.TierOrderingTableColumn.LOCK_TIER.ordinal()) {
 							toggleTierLocked(rowIndex);
+						} else if(columnIndex == TierOrderingTableColumn.BLIND.ordinal()) {
+							toggleTierBlind(rowIndex);
+						} else if(columnIndex == TierOrderingTableColumn.ALIGNED.ordinal()) {
+							toggleTierAligned(rowIndex);
 						}
 					}
 			

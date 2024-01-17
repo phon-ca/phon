@@ -141,7 +141,7 @@ public class TierOrderingTableModel extends AbstractTableModel {
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		final TierViewItem tv = getTierView()[rowIndex];
-		final TierDescription tierDesc = getTierDescription(tv.getTierName());
+		final TierDescription tierDesc = session.getTier(tv.getTierName());
 		final SystemTierType systemTier = SystemTierType.tierFromString(tv.getTierName());
 		final UserTierType userTierType = UserTierType.fromPhonTierName(tv.getTierName());
 		Object retVal = null;
@@ -174,20 +174,20 @@ public class TierOrderingTableModel extends AbstractTableModel {
 		return retVal;
 	}
 
-	private TierDescription getTierDescription(String tierName) {
-		TierDescription retVal = null;
-		final SystemTierType systemTier = SystemTierType.tierFromString(tierName);
-		if(systemTier != null) {
-			final SessionFactory factory = SessionFactory.newFactory();
-			retVal = factory.createTierDescription(systemTier);
-		} else {
-			for(TierDescription userTier:session.getUserTiers()) {
-				if(userTier.getName().equals(tierName)) { 
-					retVal = userTier;
-				}
-			}
-		}
-		return retVal;
-	}
+//	private TierDescription getTierDescription(String tierName) {
+//		TierDescription retVal = null;
+//		final SystemTierType systemTier = SystemTierType.tierFromString(tierName);
+//		if(systemTier != null) {
+//			final SessionFactory factory = SessionFactory.newFactory();
+//			retVal = factory.createTierDescription(systemTier);
+//		} else {
+//			for(TierDescription userTier:session.getUserTiers()) {
+//				if(userTier.getName().equals(tierName)) {
+//					retVal = userTier;
+//				}
+//			}
+//		}
+//		return retVal;
+//	}
 	
 }
