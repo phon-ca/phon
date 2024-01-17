@@ -124,8 +124,12 @@ public class TierManagementView extends EditorView {
 		final TierViewItem[] tierView = getCurrentOrder().toArray(new TierViewItem[0]);
 		final TierViewItem tv = tierView[rowIndex];
 
-//		final ToggleTierAlignedAction act = new ToggleTierAlignedAction(getEditor(), tv);
-//		act.actionPerformed(new ActionEvent(this, 0, null));
+		final SystemTierType systemTierType = SystemTierType.tierFromString(tv.getTierName());
+		final UserTierType userTierType = UserTierType.fromPhonTierName(tv.getTierName());
+		if(systemTierType != null || userTierType != null) return;
+
+		final ToggleTierAlignedAction act = new ToggleTierAlignedAction(getEditor(), tv.getTierName());
+		act.actionPerformed(new ActionEvent(this, 0, null));
 	}
 	
 	private void init() {

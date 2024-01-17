@@ -70,7 +70,13 @@ public class EditTierAction extends SessionEditorAction {
 				tierEditor.setTierName(tierItem.getTierName());
 				tierEditor.setTierFont(transcriptFont);
 				tierEditor.setBlind(depTierDesc.isBlind());
-				tierEditor.setAligned(!depTierDesc.isExcludeFromAlignment());
+				if(UserTierType.Mor.getPhonTierName().equals(depTierDesc.getName()) ||
+						UserTierType.Gra.getPhonTierName().equals(depTierDesc.getName()) ||
+						UserTierType.Trn.getPhonTierName().equals(depTierDesc.getName()) ||
+						UserTierType.Grt.getPhonTierName().equals(depTierDesc.getName()))
+					tierEditor.setAligned(true);
+				else
+					tierEditor.setAligned(!depTierDesc.isExcludeFromAlignment());
 				tierEditor.setVisible(tierItem.isVisible());
 				String tierType = "User defined";
 				if(depTierDesc.getDeclaredType() == Orthography.class)

@@ -166,7 +166,13 @@ public class TierOrderingTableModel extends AbstractTableModel {
 		} else if (columnIndex == TierOrderingTableColumn.TIER_TYPE.ordinal()) {
 			return tierDesc != null ? tierDesc.getDeclaredType().getSimpleName() : "";
 		} else if (columnIndex == TierOrderingTableColumn.ALIGNED.ordinal()) {
-			retVal = tierDesc != null && !tierDesc.isExcludeFromAlignment();
+			if(UserTierType.Mor.getPhonTierName().equals(tv.getTierName()) ||
+					UserTierType.Gra.getPhonTierName().equals(tv.getTierName()) ||
+					UserTierType.Trn.getPhonTierName().equals(tv.getTierName()) ||
+					UserTierType.Grt.getPhonTierName().equals(tv.getTierName()))
+				return true;
+			else
+				retVal = tierDesc != null && !tierDesc.isExcludeFromAlignment();
 		} else if (columnIndex == TierOrderingTableColumn.TIER_FONT.ordinal()) {
 			retVal = (tv.getTierFont().equals("default") ?
 					PrefHelper.get(FontPreferences.TIER_FONT, FontPreferences.DEFAULT_TIER_FONT) : tv.getTierFont());
