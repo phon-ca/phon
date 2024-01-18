@@ -200,7 +200,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         return caret;
     }
 
-    // region Init
+    
 
     /**
      * Sets up all the input actions
@@ -342,11 +342,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         // TODO: Get this working
 //        this.eventManager.registerActionForEvent(EditorEventType.ParticipantChanged, this::onParticipantChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
     }
-
-    // endregion Init
-
-
-    // region Getters and Setters
 
     public SessionMediaModel getMediaModel() {
         return this.mediaModel;
@@ -565,7 +560,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         }
 
         String elemType = (String) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
-
         if (elemType != null) {
             try {
                 switch (elemType) {
@@ -671,10 +665,10 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         }
     }
 
-    // endregion Getters and Setters
+    
 
 
-    // region Input Actions
+    
 
     /**
      * Runs when the user presses end
@@ -822,10 +816,10 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         getTranscriptDocument().onChangeSpeaker(data.record());
     }
 
-    // endregion Input Actions
+    
 
 
-    // region Tier View Changes
+    
 
     /**
      * Runs when the data for a tier changes
@@ -1056,10 +1050,10 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         return undoSupport;
     }
 
-    // endregion Tier View Changes
+    
 
 
-    // region Record Changes
+    
 
     /**
      * Runs when the user clicks on the label for a blind transcription tier
@@ -1238,10 +1232,10 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         return currentTranscriptLocation;
     }
 
-    // endregion Record Changes
+    
 
 
-    // region On Click
+    
 
     public void setCurrentSessionLocation(TranscriptLocation currentTranscriptLocation) {
         this.currentTranscriptLocation = currentTranscriptLocation;
@@ -1444,7 +1438,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
 
 
 
-    // endregion On Click
+    
 
     /**
      * Removes editor actions for specific events
@@ -2538,7 +2532,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         }
     }
 
-    // region IExtendable
+    
 
     /**
      * The {@link Highlighter.HighlightPainter} that paints the error underlines
@@ -2801,5 +2795,5 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             Participant participant
     ) {}
 
-    // endregion IExtendable
+    
 }
