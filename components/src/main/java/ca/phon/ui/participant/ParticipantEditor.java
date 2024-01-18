@@ -112,10 +112,8 @@ public class ParticipantEditor extends JDialog {
 		final PhonUIAction anonymizeAct = PhonUIAction.runnable(participantPanel::onAnonymize);
 		anonymizeAct.putValue(PhonUIAction.NAME, "Anonymize");
 		anonymizeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Remove all optional information");
-		anonymizeAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
-		anonymizeAct.putValue(FlatButton.ICON_NAME_PROP, "privacy_tip");
-		anonymizeAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
-		anonymizeBtn = new FlatButton(anonymizeAct);
+		anonymizeAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "privacy_tip", IconSize.MEDIUM, UIManager.getColor("Button.foreground")));
+		anonymizeBtn = new JButton(anonymizeAct);
 
 		final JComponent btnGroup = ButtonBarBuilder.buildOkCancelBar(saveButton, cancelButton, anonymizeBtn);
 
@@ -126,8 +124,8 @@ public class ParticipantEditor extends JDialog {
 
 	private JButton getCancelButton() {
 		if(cancelButton == null) {
-			cancelButton = new FlatButton(IconManager.GoogleMaterialDesignIconsFontName, "close", IconSize.MEDIUM);
-			cancelButton.setText("Cancel");
+			cancelButton = new JButton("Cancel");
+			cancelButton.setIcon(IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "close", IconSize.MEDIUM, cancelButton.getForeground()));
 			cancelButton.addActionListener(new ActionListener() {
 
 				@Override
@@ -151,8 +149,8 @@ public class ParticipantEditor extends JDialog {
 	
 	private JButton getSaveButton() {
 		if(saveButton == null) {
-			saveButton = new FlatButton(IconManager.GoogleMaterialDesignIconsFontName, "done", IconSize.MEDIUM);
-			saveButton.setText("Ok");
+			saveButton = new JButton("Ok");
+			saveButton.setIcon(IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "done", IconSize.MEDIUM, saveButton.getForeground()));
 			saveButton.addActionListener(new ActionListener() {
 
 				@Override

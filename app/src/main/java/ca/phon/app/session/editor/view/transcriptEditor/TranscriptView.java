@@ -48,7 +48,7 @@ import java.util.List;
 public class TranscriptView extends EditorView {
 
     public final static String VIEW_NAME = "Transcript";
-    public final static String VIEW_ICON = IconManager.GoogleMaterialDesignIconsFontName + ":menu_book";
+    public final static String VIEW_ICON = IconManager.GoogleMaterialDesignIconsFontName + ":description";
 
     private final TranscriptEditor transcriptEditor;
     private TranscriptScrollPane transcriptScrollPane;

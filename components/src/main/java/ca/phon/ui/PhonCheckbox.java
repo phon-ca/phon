@@ -33,8 +33,8 @@ public class PhonCheckbox extends JCheckBox  {
     private void init() {
         setIcon(IconManager.getInstance().getFontIcon(uncheckedIcon, IconSize.SMALL, UIManager.getColor("Button.foreground")));
         setSelectedIcon(IconManager.getInstance().getFontIcon(checkedIcon, IconSize.SMALL, UIManager.getColor("Button.foreground")));
-        setDisabledIcon(IconManager.getInstance().getFontIcon(uncheckedIcon, IconSize.SMALL, UIManager.getColor("Button.disabledText")));
-        setDisabledSelectedIcon(IconManager.getInstance().getFontIcon(checkedIcon, IconSize.SMALL, UIManager.getColor("Button.disabledText")));
+        setDisabledIcon(IconManager.getInstance().getFontIcon(uncheckedIcon, IconSize.SMALL, UIManager.getColor("textInactiveText")));
+        setDisabledSelectedIcon(IconManager.getInstance().getFontIcon(checkedIcon, IconSize.SMALL, UIManager.getColor("textInactiveText")));
         setPressedIcon(IconManager.getInstance().getFontIcon(uncheckedIcon, IconSize.SMALL, UIManager.getColor("Button.foreground")));
         setRolloverIcon(IconManager.getInstance().getFontIcon(uncheckedIcon, IconSize.SMALL, UIManager.getColor("Button.foreground")));
         setRolloverSelectedIcon(IconManager.getInstance().getFontIcon(checkedIcon, IconSize.SMALL, UIManager.getColor("Button.foreground")));

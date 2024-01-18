@@ -28,6 +28,7 @@ import ca.phon.ui.PhonCheckbox;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.dialogs.JFontPanel;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -63,8 +64,6 @@ public class TierInfoEditor extends JPanel {
 
 	private JComboBox<String> typeBox;
 
-	private JLabel fontLabel;
-
 	private JButton selectFontButton;
 
 	private Session session;
@@ -86,14 +85,14 @@ public class TierInfoEditor extends JPanel {
 	
 	private void init() {
 		setLayout(new FormLayout(
-				"right:pref, 3dlu, fill:pref:grow, pref",
+				"right:pref, 3dlu, fill:pref:grow",
 				"pref, 3dlu, pref, 3dlu, pref, 3dlu, pref, 3dlu, pref, 3dlu, pref, 3dlu, pref, 3dlu, pref"));
 		final CellConstraints cc = new CellConstraints();
 
 		int row = 1;
 		add(new JLabel("Name:"), cc.xy(1, row));
 		nameField = new JTextField();
-		add(nameField, cc.xyw(3, row, 2));
+		add(nameField, cc.xy(3, row));
 		nameField.getDocument().addDocumentListener(new DocumentListener() {
 
 			@Override
@@ -118,7 +117,7 @@ public class TierInfoEditor extends JPanel {
 		final JLabel chatTierNameLabel = new JLabel("CHAT name:");
 		chatTierNameLabel.setToolTipText("Name of tier in the CHAT transcription format");
 		add(chatTierNameLabel, cc.xy(1, row));
-		add(chatNameLabel, cc.xyw(3, row, 2));
+		add(chatNameLabel, cc.xy(3, row));
 
 		row += 2;
 		add(new JLabel("Type:"), cc.xy(1, row));
@@ -135,50 +134,47 @@ public class TierInfoEditor extends JPanel {
 		lockedBox = new PhonCheckbox("Prevent changes to tier in transcript view");
 		lockedBox.setSelected(false);
 		add(new JLabel("Locked:"), cc.xy(1, row));
-		add(lockedBox, cc.xyw(3, row, 2));
+		add(lockedBox, cc.xy(3, row));
 
 		row += 2;
 		visibleBox = new PhonCheckbox("Show tier in transcript view");
 		visibleBox.setSelected(true);
 		add(new JLabel("Visible:"), cc.xy(1, row));
-		add(visibleBox, cc.xyw(3, row, 2));
+		add(visibleBox, cc.xy(3, row));
 
 		row += 2;
 		blindBox = new PhonCheckbox("Include tier in blind transcription");
 		blindBox.setSelected(false);
 		add(new JLabel("Blind:"), cc.xy(1, row));
-		add(blindBox, cc.xyw(3, row, 2));
+		add(blindBox, cc.xy(3, row));
 
 		row += 2;
 		alignedBox = new PhonCheckbox("Include tier in cross tier alignment");
 		alignedBox.setSelected(false);
 		add(new JLabel("Aligned:"), cc.xy(1, row));
-		add(alignedBox, cc.xyw(3, row, 2));
+		add(alignedBox, cc.xy(3, row));
 
 		row += 2;
 		final FontFormatter fontFormatter = new FontFormatter();
-		fontLabel = new JLabel(fontFormatter.format(FontPreferences.getTierFont()));
-		add(new JLabel("Font:"), cc.xy(1, row));
-		add(fontLabel, cc.xy(3, row));
-
 		final PhonUIAction<Void> selectFontAct = PhonUIAction.runnable(this::onSelectFont);
-		selectFontAct.putValue(PhonUIAction.NAME, "Select font...");
-		selectFontAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select font for tier");
+		selectFontAct.putValue(PhonUIAction.NAME, fontFormatter.format(FontPreferences.getTierFont()));
+		selectFontAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select font for tier...");
 		selectFontAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
 		selectFontAct.putValue(FlatButton.ICON_NAME_PROP, "text_format");
 		selectFontAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
 		selectFontButton = new FlatButton(selectFontAct);
-		add(selectFontButton, cc.xy(4, 15));
+		((FlatButton)selectFontButton).setPadding(0);
+		add(new JLabel("Font:"), cc.xy(1, row));
+		add(selectFontButton, cc.xy(3, row));
 	}
 
 	private void onSelectFont() {
-		final JFontPanel fontPanel = new JFontPanel();
-		fontPanel.setSelectedFont(getTierFont());
-
+		final JFontPanel fontPanel = new JFontPanel(getTierFont());
 		final JOptionPane optionPane = new JOptionPane(fontPanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
 		final JDialog dialog = optionPane.createDialog(this, "Select font");
 		dialog.setResizable(true);
 		dialog.pack();
+		dialog.setSize(600, 500);
 		dialog.setVisible(true);
 
 		if(optionPane.getValue() != null && optionPane.getValue().equals(JOptionPane.OK_OPTION)) {
@@ -223,17 +219,14 @@ public class TierInfoEditor extends JPanel {
 	
 	public Font getTierFont() {
         try {
-            return new FontFormatter().parse(fontLabel.getText());
+            return new FontFormatter().parse(selectFontButton.getText());
         } catch (ParseException e) {
 			return FontPreferences.getTierFont();
         }
     }
 	
 	public void setTierFont(Font font) {
-		if(font == FontPreferences.getTierFont())
-			fontLabel.setText("default");
-		else
-			fontLabel.setText(new FontFormatter().format(font));
+		selectFontButton.setText(new FontFormatter().format(font));
 	}
 
 	public void setTierFont(String fontString) {
@@ -249,7 +242,7 @@ public class TierInfoEditor extends JPanel {
 	}
 	
 	public void useDefaultFont() {
-		fontLabel.setText(new FontFormatter().format(FontPreferences.getTierFont()));
+		selectFontButton.setText(new FontFormatter().format(FontPreferences.getTierFont()));
 	}
 
 	public boolean isVisible() {

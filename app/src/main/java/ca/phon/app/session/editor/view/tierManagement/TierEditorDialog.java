@@ -67,8 +67,8 @@ public class TierEditorDialog extends JDialog {
 	private void init() {
 		header = new DialogHeader(getTitle(), "");
 
-		okButton = new FlatButton(IconManager.GoogleMaterialDesignIconsFontName, "done", IconSize.MEDIUM);
-		okButton.setText("Ok");
+		okButton = new JButton("Ok");
+		okButton.setIcon(IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "done", IconSize.MEDIUM, okButton.getForeground()));
 		okButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -102,8 +102,8 @@ public class TierEditorDialog extends JDialog {
 
 		});
 
-		cancelButton = new FlatButton(IconManager.GoogleMaterialDesignIconsFontName, "close", IconSize.MEDIUM);
-		cancelButton.setText("Cancel");
+		cancelButton = new JButton("Cancel");
+		cancelButton.setIcon(IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "close", IconSize.MEDIUM, cancelButton.getForeground()));
 		cancelButton.addActionListener(new ActionListener() {
 
 			@Override
