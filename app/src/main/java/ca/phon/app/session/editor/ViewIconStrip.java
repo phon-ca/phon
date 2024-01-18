@@ -7,7 +7,7 @@ import ca.phon.app.session.editor.view.participants.ParticipantsView;
 import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
 import ca.phon.app.session.editor.view.tierManagement.TierManagementView;
 import ca.phon.app.session.editor.view.timeline.TimelineView;
-import ca.phon.app.session.editor.view.transcriptEditor.TranscriptView;
+import ca.phon.app.session.editor.view.transcript.TranscriptView;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
 import ca.phon.ui.FlatButton;

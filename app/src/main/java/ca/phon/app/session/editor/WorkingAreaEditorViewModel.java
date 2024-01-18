@@ -36,7 +36,7 @@ import bibliothek.util.Path;
 import bibliothek.util.xml.*;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.ViewPosition;
-import ca.phon.app.session.editor.view.transcriptEditor.TranscriptView;
+import ca.phon.app.session.editor.view.transcript.TranscriptView;
 import ca.phon.plugin.*;
 import ca.phon.project.Project;
 import ca.phon.session.Session;

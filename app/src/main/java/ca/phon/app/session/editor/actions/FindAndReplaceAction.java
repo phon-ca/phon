@@ -16,8 +16,7 @@
 package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
-import ca.phon.app.session.editor.view.transcriptEditor.TranscriptView;
+import ca.phon.app.session.editor.view.transcript.TranscriptView;
 import ca.phon.util.icons.*;
 
 import javax.swing.*;
