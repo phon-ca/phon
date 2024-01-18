@@ -34,6 +34,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * Text document for a {@link Session} that displays the transcript including all tiers, comments, and gems.
  */
 public class TranscriptDocument extends DefaultStyledDocument implements IExtendable {
+
     /**
      * Session factory for creating new session data objects
      */
@@ -100,9 +101,8 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * Constructor
      */
     public TranscriptDocument() {
-        super();
-        this.transcriptStyleContext = new TranscriptStyleContext();
-        setLogicalStyle(0, transcriptStyleContext.getStyle(TranscriptStyleContext.DEFAULT));
+        super(new TranscriptStyleContext());
+        this.transcriptStyleContext = (TranscriptStyleContext) getAttributeContext();
 
         sessionFactory = SessionFactory.newFactory();
         setDocumentFilter(new TranscriptDocumentFilter(this));
@@ -225,13 +225,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
     // endregion Getters and Setters
 
-
-
     // region Batching
-
-
-
-
     /**
      * Gets the attributes for a given comment
      *
@@ -239,7 +233,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return the attributes for the given comment
      */
     private SimpleAttributeSet getCommentAttributes(Comment comment) {
-        SimpleAttributeSet retVal = new SimpleAttributeSet();
+        SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
 
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE, TranscriptStyleConstants.ATTR_KEY_COMMENT);
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT, comment);
@@ -253,14 +247,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return a mutable attribute set containing the attributes corresponding to the standard tier font
      */
     public SimpleAttributeSet getStandardFontAttributes() {
-        SimpleAttributeSet retVal = new SimpleAttributeSet();
-
-        Font font = FontPreferences.getTierFont();
-        StyleConstants.setFontFamily(retVal, font.getFamily());
-        StyleConstants.setFontSize(retVal, 14);
-        StyleConstants.setBold(retVal, font.isBold());
-        StyleConstants.setItalic(retVal, font.isItalic());
-
+        SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
         return retVal;
     }
 
@@ -271,15 +258,11 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return a mutable attribute set containing all the necessary attributes for the label of the comment
      */
     private SimpleAttributeSet getCommentLabelAttributes(Comment comment) {
-        SimpleAttributeSet retVal = new SimpleAttributeSet();
+        SimpleAttributeSet retVal = new SimpleAttributeSet(getCommentAttributes(comment));
 
-        retVal.addAttributes(getCommentAttributes(comment));
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL, true);
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE, true);
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
-
-        Style defaultStyle = getStyle(TranscriptStyleContext.DEFAULT);
-        retVal.addAttributes(defaultStyle);
 
         return retVal;
     }
@@ -329,7 +312,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
         SimpleAttributeSet commentAttrs = getCommentAttributes(comment);
         commentAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT_TIER, commentTier);
-        commentAttrs.addAttributes(getStandardFontAttributes());
 
         SimpleAttributeSet labelAttrs = getCommentLabelAttributes(comment);
         String labelText = comment.getType().getLabel();

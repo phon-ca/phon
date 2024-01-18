@@ -22,6 +22,8 @@ public class TranscriptStyleContext extends StyleContext {
 
     public static final String DEFAULT = "default";
 
+    public static final String GHOST_TEXT = "ghost-text";
+
     public TranscriptStyleContext() {
         super();
 
@@ -31,35 +33,24 @@ public class TranscriptStyleContext extends StyleContext {
 
     private void addDefaultStyles() {
         createDefaultStyle();
-//        createTierNameStyle();
-//        createTierContentStyle();
-//        createGhostTextStyle();
+        createGhostTextStyle();
     }
 
     private Style createDefaultStyle() {
         final Style style = addStyle(DEFAULT, null);
         StyleConstants.setFontFamily(style, FontPreferences.getTierFont().getFamily());
         StyleConstants.setFontSize(style, FontPreferences.getTierFont().getSize());
+        StyleConstants.setBold(style, FontPreferences.getTierFont().isBold());
+        StyleConstants.setItalic(style, FontPreferences.getTierFont().isItalic());
         return style;
     }
 
-//    private Style createTierNameStyle() {
-//        final Style style = addStyle(TIER_NAME, getStyle(DEFAULT));
-//        StyleConstants.setBold(style, true);
-//        return style;
-//    }
-//
-//    private Style createTierContentStyle() {
-//    	final Style style = addStyle(TIER_CONTENT, getStyle(DEFAULT));
-//    	return style;
-//    }
-//
-//    private Style createGhostTextStyle() {
-//    	final Style style = addStyle(GHOST_TEXT, getStyle(DEFAULT));
-//    	StyleConstants.setForeground(style, Color.gray);
-//    	StyleConstants.setItalic(style, true);
-//    	return style;
-//    }
+    private Style createGhostTextStyle() {
+    	final Style style = addStyle(GHOST_TEXT, getStyle(DEFAULT));
+    	StyleConstants.setForeground(style, Color.gray);
+    	StyleConstants.setItalic(style, true);
+    	return style;
+    }
 
     // region Attribute Getters
 
