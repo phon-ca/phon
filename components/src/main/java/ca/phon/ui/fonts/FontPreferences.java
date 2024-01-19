@@ -32,7 +32,7 @@ public class FontPreferences {
 
 	private final static String UI_FONT_PREF = FontPreferences.class.getName() + ".uiFont";
 
-	private final static String DEFAULT_UI_FONT = "NotoSans-Regular.ttf";
+	private final static String DEFAULT_UI_FONT = "Noto Sans-PLAIN-14";
 
 	public static final String[] SUGGESTED_IPA_FONT_NAMES = {
 			"Arial",				// sans
@@ -72,6 +72,7 @@ public class FontPreferences {
 	public static void resetAll() {
 		Preferences userPrefs = PrefHelper.getUserPreferences();
 
+		userPrefs.put(UI_FONT_PREF, DEFAULT_UI_FONT);
 		userPrefs.put(TIER_FONT, DEFAULT_TIER_FONT);
 		userPrefs.put(MONOSPACE_FONT, DEFAULT_MONOSPACE_FONT);
 		userPrefs.put(TITLE_FONT, DEFAULT_TITLE_FONT);

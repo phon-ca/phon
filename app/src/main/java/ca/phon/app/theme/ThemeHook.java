@@ -21,7 +21,6 @@ import ca.phon.app.prefs.PhonProperties;
 import ca.phon.plugin.*;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.theme.UIDefaults;
-import ca.phon.ui.theme.UIDefaultsHandler;
 import ca.phon.util.*;
 
 import javax.swing.*;
@@ -51,7 +50,7 @@ public class ThemeHook implements PhonStartupHook,
 						setupMacosCustomizations();
 						return;
 					} else if(OSInfo.isWindows()) {
-						setupWindowsCustomizations();
+						setupFontCustomizations();
 					}
 					
 					try {
@@ -99,9 +98,11 @@ public class ThemeHook implements PhonStartupHook,
 		// fix selected tab foreground color
 		Color listSelectionForeground = UIManager.getColor("List.selectionForeground");
 		UIManager.put("TabbedPane.foreground", Color.black);
+
+		setupFontCustomizations();
 	}
 
-	private void setupWindowsCustomizations() {
+	private void setupFontCustomizations() {
 		final Font defaultFont = FontPreferences.getUIFont();
 		UIManager.put("Button.font", defaultFont);
 		UIManager.put("ToggleButton.font", defaultFont);
