@@ -89,7 +89,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                             syllabificationLabelAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD, record);
                         }
                         // Get the string for the label
-                        String syllabificationLabelText = doc.formatLabelText("Syllabification");
+                        String syllabificationLabelText = "\tSyllabification:";
                         // Add the label
                         retVal.add(TranscriptBatchBuilder.getBatchString(syllabificationLabelText, syllabificationLabelAttrs));
                         // Add component factory if needed

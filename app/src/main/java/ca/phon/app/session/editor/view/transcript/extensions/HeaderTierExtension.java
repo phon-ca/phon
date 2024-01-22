@@ -15,6 +15,7 @@ import ca.phon.util.LanguageParser;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.SimpleAttributeSet;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.*;
@@ -53,7 +54,8 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
         doc.addInsertionHook(new DefaultInsertionHook() {
             @Override
             public List<DefaultStyledDocument.ElementSpec> startSession() {
-                List<DefaultStyledDocument.ElementSpec> retVal = new ArrayList<>();
+//                List<DefaultStyledDocument.ElementSpec> retVal = new ArrayList<>();
+                TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(doc.getTranscriptStyleContext(), doc.getInsertionHooks());
 
                 if (isHeadersVisible()) {
                     AttributeSet newLineAttrs;
@@ -62,9 +64,10 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
 
                     // Add date line if present
                     if (session.getDate() != null) {
-                        retVal.addAll(getDateHeader());
-                        newLineAttrs = transcriptStyleContext.getTrailingAttributes(retVal);
-                        retVal.addAll(TranscriptBatchBuilder.getBatchEndLineFeed(newLineAttrs, null));
+                        appendDateHeader(batchBuilder);
+                        batchBuilder.appendEOL();
+//                        newLineAttrs = transcriptStyleContext.getTrailingAttributes(retVal);
+//                        retVal.addAll(TranscriptBatchBuilder.getBatchEndLineFeed(newLineAttrs, null));
                     }
 
                     // Add media line if present
@@ -72,10 +75,11 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
                     if (sessionMedia != null) {
                         Tier<TierData> mediaTier = (Tier<TierData>) headerTierMap.get("media");
                         mediaTier.setText(sessionMedia);
-
-                        retVal.addAll(doc.getGeneric("Media", mediaTier, null));
-                        newLineAttrs = transcriptStyleContext.getTrailingAttributes(retVal);
-                        retVal.addAll(TranscriptBatchBuilder.getBatchEndLineFeed(newLineAttrs, null));
+                        batchBuilder.appendGeneric("Media", mediaTier, null);
+                        batchBuilder.appendEOL();
+//                        retVal.addAll(doc.getGeneric("Media", mediaTier, null));
+//                        newLineAttrs = transcriptStyleContext.getTrailingAttributes(retVal);
+//                        retVal.addAll(TranscriptBatchBuilder.getBatchEndLineFeed(newLineAttrs, null));
                     }
 
                     // Add languages line if present
@@ -108,16 +112,19 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
                             }
                         });
                         languagesTier.setValue(new TranscriptDocument.Languages(sessionLanguages));
-
-                        retVal.addAll(doc.getGeneric("Languages", languagesTier, null));
-                        newLineAttrs = transcriptStyleContext.getTrailingAttributes(retVal);
-                        retVal.addAll(TranscriptBatchBuilder.getBatchEndLineFeed(newLineAttrs, null));
+                        batchBuilder.appendGeneric("Languages", languagesTier, null);
+                        batchBuilder.appendEOL();
+//                        retVal.addAll(doc.getGeneric("Languages", languagesTier, null));
+//                        newLineAttrs = transcriptStyleContext.getTrailingAttributes(retVal);
+//                        retVal.addAll(TranscriptBatchBuilder.getBatchEndLineFeed(newLineAttrs, null));
                     }
 
                     // Add Tiers header
-                    retVal.addAll(getTiersHeader());
-                    newLineAttrs = transcriptStyleContext.getTrailingAttributes(retVal);
-                    retVal.addAll(TranscriptBatchBuilder.getBatchEndLineFeed(newLineAttrs, null));
+                    appendTiersHeader(batchBuilder);
+                    batchBuilder.appendEOL();
+//                    retVal.addAll(appendTiersHeader());
+//                    newLineAttrs = transcriptStyleContext.getTrailingAttributes(retVal);
+//                    retVal.addAll(TranscriptBatchBuilder.getBatchEndLineFeed(newLineAttrs, null));
 
                     // Add Participants header
                     Tier<TierData> participantsTier = (Tier<TierData>) headerTierMap.get("participants");
@@ -132,13 +139,17 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
                         }
                     }
                     participantsTier.setText(participantsJoiner.toString());
+                    final SimpleAttributeSet attrs = new SimpleAttributeSet();
+                    attrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
+                    batchBuilder.appendGeneric("Participants", participantsTier, attrs);
+                    batchBuilder.appendEOL();
 
-                    retVal.addAll(doc.getGeneric("Participants", participantsTier, transcriptStyleContext.getParticipantsHeaderAttributes()));
-                    newLineAttrs = transcriptStyleContext.getTrailingAttributes(retVal);
-                    retVal.addAll(TranscriptBatchBuilder.getBatchEndLineFeed(newLineAttrs, null));
+//                    retVal.addAll(doc.getGeneric("Participants", participantsTier, transcriptStyleContext.getParticipantsHeaderAttributes()));
+//                    newLineAttrs = transcriptStyleContext.getTrailingAttributes(retVal);
+//                    retVal.addAll(TranscriptBatchBuilder.getBatchEndLineFeed(newLineAttrs, null));
                 }
 
-                return retVal;
+                return batchBuilder.getBatch();
             }
         });
 
@@ -158,10 +169,7 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
      *
      * @return the list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} data
      * */
-    public List<DefaultStyledDocument.ElementSpec> getTiersHeader() {
-
-        List<DefaultStyledDocument.ElementSpec> retVal = new ArrayList<>();
-
+    public void appendTiersHeader(TranscriptBatchBuilder batchBuilder) {
         Tier<TierData> tiersTier = (Tier<TierData>) headerTierMap.get("tiers");
 
         int start = doc.getGenericContentStart(tiersTier);
@@ -188,10 +196,9 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
 //                }
         }
         tiersTier.setText(joiner.toString());
-
-        retVal.addAll(TranscriptBatchBuilder.getBatchEndStart());
-        retVal.addAll(doc.getGeneric("Tiers", tiersTier, doc.getTranscriptStyleContext().getTiersHeaderAttributes()));
-        return retVal;
+        final SimpleAttributeSet attrs = new SimpleAttributeSet();
+        attrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
+        batchBuilder.appendGeneric("Tiers", tiersTier, attrs);
     }
 
     /**
@@ -210,9 +217,9 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
                 doc.remove(start, end - start);
             }
 
-            List<DefaultStyledDocument.ElementSpec> inserts = getTiersHeader();
-            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder();
-            batchBuilder.appendAll(inserts);
+            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(doc.getTranscriptStyleContext(), doc.getInsertionHooks());
+            appendTiersHeader(batchBuilder);
+            batchBuilder.appendEOL();
             doc.processBatchUpdates(start > -1 ? start : 0, batchBuilder.getBatch());
         }
         catch (BadLocationException e) {
@@ -226,16 +233,10 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
      *
      * @return the list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} data
      * */
-    private List<DefaultStyledDocument.ElementSpec> getDateHeader() {
-        List<DefaultStyledDocument.ElementSpec> retVal = new ArrayList<>();
-
+    private void appendDateHeader(TranscriptBatchBuilder batchBuilder) {
         Tier<LocalDate> dateTier = (Tier<LocalDate>) headerTierMap.get("date");
         dateTier.setValue(editor.getSession().getDate());
-
-        retVal.addAll(TranscriptBatchBuilder.getBatchEndStart());
-        retVal.addAll(doc.getGeneric("Date", dateTier, null));
-
-        return retVal;
+        batchBuilder.appendGeneric("Date", dateTier, new SimpleAttributeSet());
     }
 
     /**
@@ -254,11 +255,12 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
                 doc.remove(start, end - start);
             }
 
-            List<DefaultStyledDocument.ElementSpec> inserts = getDateHeader();
-            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder();
-            var newLineAttrs = doc.getTranscriptStyleContext().getTrailingAttributes(inserts);
-            batchBuilder.appendAll(inserts);
-            batchBuilder.appendBatchLineFeed(newLineAttrs, null);
+            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(doc.getTranscriptStyleContext(), doc.getInsertionHooks());
+            appendDateHeader(batchBuilder);
+            batchBuilder.appendEOL();
+//            var newLineAttrs = doc.getTranscriptStyleContext().getTrailingAttributes(inserts);
+//            batchBuilder.appendAll(inserts);
+//            batchBuilder.appendBatchLineFeed(newLineAttrs, null);
             doc.processBatchUpdates(start > -1 ? start : 0, batchBuilder.getBatch());
         }
         catch (BadLocationException e) {

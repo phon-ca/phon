@@ -93,29 +93,29 @@ public class AlignmentExtension implements TranscriptEditorExtension {
 
         if (!tier.getDeclaredType().equals(PhoneAlignment.class) || !isAlignmentVisible()) return;
 
-        try {
-            int start = doc.getTierStart(tier);
-            Record record = doc.getRecord(tier);
-            int end = doc.getTierEnd(tier);
-
-            doc.setBypassDocumentFilter(true);
-            doc.remove(start, end - start);
-
-            List<DefaultStyledDocument.ElementSpec> insertions = new ArrayList<>();
-            insertions.addAll(TranscriptBatchBuilder.getBatchEndStart());
-
-            insertions.addAll(getFormattedAlignment(record.getTier(getAlignmentParent().getTierName()), record));
-
-            var attrs = insertions.get(insertions.size() - 1).getAttributes();
-            insertions.addAll(TranscriptBatchBuilder.getBatchEndLineFeed(attrs, null));
-
-            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder();
-            batchBuilder.appendAll(insertions);
-            doc.processBatchUpdates(start, batchBuilder.getBatch());
-        }
-        catch (BadLocationException e) {
-            LogUtil.severe(e);
-        }
+//        try {
+//            int start = doc.getTierStart(tier);
+//            Record record = doc.getRecord(tier);
+//            int end = doc.getTierEnd(tier);
+//
+//            doc.setBypassDocumentFilter(true);
+//            doc.remove(start, end - start);
+//
+//            List<DefaultStyledDocument.ElementSpec> insertions = new ArrayList<>();
+//            insertions.addAll(TranscriptBatchBuilder.getBatchEndStart());
+//
+//            insertions.addAll(getFormattedAlignment(record.getTier(getAlignmentParent().getTierName()), record));
+//
+//            var attrs = insertions.get(insertions.size() - 1).getAttributes();
+//            insertions.addAll(TranscriptBatchBuilder.getBatchEndLineFeed(attrs, null));
+//
+//            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder();
+//            batchBuilder.appendAll(insertions);
+//            doc.processBatchUpdates(start, batchBuilder.getBatch());
+//        }
+//        catch (BadLocationException e) {
+//            LogUtil.severe(e);
+//        }
     }
 
     /**
@@ -144,7 +144,7 @@ public class AlignmentExtension implements TranscriptEditorExtension {
         alignmentLabelAttrs.addAttributes(recordAttrs);
         tierAttrs.addAttributes(recordAttrs);
         // Get the string for the label
-        String alignmentLabelText = doc.formatLabelText("Alignment");
+        String alignmentLabelText = "\tAlignment";
         // Add the label
         retVal.add(TranscriptBatchBuilder.getBatchString(alignmentLabelText, alignmentLabelAttrs));
         alignmentLabelAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE);

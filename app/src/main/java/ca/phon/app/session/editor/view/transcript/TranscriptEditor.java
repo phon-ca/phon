@@ -1501,7 +1501,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
 
         try {
             // Get rects for the start and end positions of the record
-            int recordStartPos = doc.getRecordStart(editorEvent.data().recordIndex(), true);
+            int recordStartPos = doc.getRecordStart(editorEvent.data().recordIndex());
             int recordEndPos = doc.getRecordEnd(editorEvent.data().recordIndex());
             var startRect = modelToView2D(recordStartPos);
             var endRect = modelToView2D(recordEndPos);

@@ -18,14 +18,14 @@ public class TranscriptOrthographyVisitors {
      */
     public static class KeywordVisitor extends AbstractOrthographyVisitor {
 
-        private final TranscriptDocument doc;
+//        private final TranscriptDocument doc;
         private final SimpleAttributeSet attrs;
         private boolean firstVisit = true;
 
         private final TranscriptBatchBuilder batchBuilder;
 
-        public KeywordVisitor(TranscriptDocument doc, SimpleAttributeSet attrs, TranscriptBatchBuilder batchBuilder) {
-            this.doc = doc;
+        public KeywordVisitor(SimpleAttributeSet attrs, TranscriptBatchBuilder batchBuilder) {
+//            this.doc = doc;
             this.attrs = new SimpleAttributeSet(attrs);
             this.batchBuilder = batchBuilder;
         }
@@ -171,7 +171,7 @@ public class TranscriptOrthographyVisitors {
         @Override
         public void visitInternalMedia(InternalMedia internalMedia) {
             StyleConstants.setForeground(attrs, UIManager.getColor(TranscriptEditorUIProps.ORTHOGRAPHY_INTERNAL_MEDIA));
-            doc.appendFormattedInternalMedia(internalMedia, attrs, batchBuilder);
+            batchBuilder.appendFormattedInternalMedia(internalMedia, attrs);
         }
 
         @Visits

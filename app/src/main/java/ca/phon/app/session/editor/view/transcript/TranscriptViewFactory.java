@@ -39,9 +39,9 @@ public class TranscriptViewFactory implements ViewFactory {
     private static int calculatePreferredLabelColumnWidth(Graphics g, int currentMax, Element element) {
         if(element.isLeaf()) {
             var attrs = element.getAttributes();
-            var isLabel = attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL);
-            if (isLabel != null) {
-                var tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
+            var isLabel = TranscriptStyleConstants.isLabel(attrs);
+            if (isLabel) {
+                var tier = TranscriptStyleConstants.getTier(attrs);
                 if(tier != null) {
                     var lblText = "    " + tier.getName() + ": ";
                     var tierLabelWidth = g.getFontMetrics(FontPreferences.getTierFont()).stringWidth(lblText);
@@ -82,14 +82,14 @@ public class TranscriptViewFactory implements ViewFactory {
         String kind = elem.getName();
         var attrs = elem.getAttributes();
 
-        var componentFactory = attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMPONENT_FACTORY);
-        if (componentFactory instanceof ComponentFactory) {
+        var componentFactory = TranscriptStyleConstants.getComponentFactory(attrs);
+        if (componentFactory != null) {
             kind = "componentFactory";
         }
 
-        var isLabel = attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL);
-        var clickable = attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE);
-        if(isLabel != null && clickable != null) {
+        var isLabel = TranscriptStyleConstants.isLabel(attrs);
+        var clickable = TranscriptStyleConstants.isClickable(attrs);
+        if(isLabel && clickable) {
             kind = "label";
         }
 
@@ -135,9 +135,9 @@ public class TranscriptViewFactory implements ViewFactory {
         @Override
         protected Component createComponent() {
             AttributeSet attrs = getAttributes();
-            var componentFactory = attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMPONENT_FACTORY);
-            if (componentFactory instanceof ComponentFactory factory) {
-                return factory.createComponent(attrs);
+            var componentFactory = TranscriptStyleConstants.getComponentFactory(attrs);
+            if (componentFactory != null) {
+                return componentFactory.createComponent(attrs);
             }
 
             return null;

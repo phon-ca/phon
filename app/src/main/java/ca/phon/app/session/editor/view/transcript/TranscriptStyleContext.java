@@ -404,6 +404,33 @@ public class TranscriptStyleContext extends StyleContext {
     }
 
     /**
+     * Gets the attributes for a given comment
+     *
+     * @param comment the comment that the attributes will be for
+     * @return the attributes for the given comment
+     */
+    public SimpleAttributeSet getCommentAttributes(Comment comment) {
+        SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
+        TranscriptStyleConstants.setElementType(retVal, TranscriptStyleConstants.ELEMENT_TYPE_COMMENT);
+        TranscriptStyleConstants.setComment(retVal, comment);
+        return retVal;
+    }
+
+    /**
+     * Gets the attributes for the label of a given comment line.
+     *
+     * @param comment the comment whose label these attributes will be for
+     * @return a mutable attribute set containing all the necessary attributes for the label of the comment
+     */
+    public SimpleAttributeSet getCommentLabelAttributes(Comment comment) {
+        SimpleAttributeSet retVal = new SimpleAttributeSet(getCommentAttributes(comment));
+        TranscriptStyleConstants.setLabel(retVal, true);
+        TranscriptStyleConstants.setNotTraversable(retVal, true);
+        TranscriptStyleConstants.setNotEditable(retVal, true);
+        return retVal;
+    }
+
+    /**
      * Gets the attributes for the label of a given gem line.
      *
      * @param gem the gem whose label these attributes will be for

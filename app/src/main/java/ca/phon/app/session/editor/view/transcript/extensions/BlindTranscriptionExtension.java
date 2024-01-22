@@ -75,13 +75,11 @@ public class BlindTranscriptionExtension implements TranscriptEditorExtension {
         TranscriptStyleContext transcriptStyleContext = doc.getTranscriptStyleContext();
 
         SimpleAttributeSet blindTranscriptionAttrs = transcriptStyleContext.getBlindTranscriptionAttributes(tier, transcriber);
-        blindTranscriptionAttrs.addAttributes(doc.getStandardFontAttributes());
         StyleConstants.setForeground(blindTranscriptionAttrs, UIManager.getColor(TranscriptEditorUIProps.BLIND_TRANSCRIPTION_FOREGROUND));
         SimpleAttributeSet labelAttrs = new SimpleAttributeSet(blindTranscriptionAttrs);
         labelAttrs.addAttributes(transcriptStyleContext.getLabelAttributes());
 
-        String labelText = transcriber;
-        labelText = doc.formatLabelText(labelText);
+        String labelText = "\t" + transcriber;
 
         labelAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE, true);
         retVal.add(TranscriptBatchBuilder.getBatchString(labelText, labelAttrs));
