@@ -1,19 +1,19 @@
 package ca.phon.app.session.editor.view.transcript;
 
 import ca.phon.session.*;
+import ca.phon.session.Record;
 import ca.phon.session.tierdata.TierData;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.MutableAttributeSet;
-import java.lang.Record;
 
 public class TranscriptStyleConstants {
 
     public static final String ATTR_KEY_RECORD = "record";
 
-    public static Record getRecord(MutableAttributeSet attrs) {
+    public static Record getRecord(AttributeSet attrs) {
         return (Record)attrs.getAttribute(ATTR_KEY_RECORD);
     }
 
@@ -74,10 +74,12 @@ public class TranscriptStyleConstants {
 
     public static final String ATTR_KEY_ELEMENT_TYPE = "elementType";
 
+    public static final String ELEMENT_TYPE_RECORD = "record";
     public static final String ELEMENT_TYPE_TIER = "tier";
     public static final String ELEMENT_TYPE_COMMENT = "comment";
     public static final String ELEMENT_TYPE_GEM = "gem";
     public static final String ELEMENT_TYPE_GENERIC = "generic";
+
 
     public static String getElementType(AttributeSet attrs) {
         return (String)attrs.getAttribute(ATTR_KEY_ELEMENT_TYPE);

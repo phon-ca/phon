@@ -162,7 +162,11 @@ public class TranscriptBatchBuilder {
      * @return this builder
      */
     public TranscriptBatchBuilder appendEOL() {
-        batch.add(new DefaultStyledDocument.ElementSpec(getTrailingAttributes(), DefaultStyledDocument.ElementSpec.ContentType, EOL_ARRAY, 0, 1));
+        return appendEOL(getTrailingAttributes());
+    }
+
+    public TranscriptBatchBuilder appendEOL(AttributeSet attrs) {
+        batch.add(new DefaultStyledDocument.ElementSpec(attrs, DefaultStyledDocument.ElementSpec.ContentType, EOL_ARRAY, 0, 1));
         return this;
     }
 
@@ -486,6 +490,12 @@ public class TranscriptBatchBuilder {
         TranscriptStyleConstants.setClickable(labelAttrs, false);
         appendBatchString(": ", labelAttrs);
 
+        appendTierContent(record, tier, tierAttrs);
+
+        return this;
+    }
+
+    public TranscriptBatchBuilder appendTierContent(Record record, Tier<?> tier, SimpleAttributeSet tierAttrs) {
         Class<?> tierType = tier.getDeclaredType();
 
         if (!tier.hasValue()) {
@@ -496,22 +506,26 @@ public class TranscriptBatchBuilder {
             if (tierType.equals(IPATranscript.class)) {
                 Tier<IPATranscript> ipaTier = (Tier<IPATranscript>) tier;
                 List<IPATranscript> words = (ipaTier).getValue().words();
-                for (int i = 0; i < words.size(); i++) {
-                    var word = words.get(i);
-                    SimpleAttributeSet attrs;
-                    if (word.matches("\\P")) {
-                        // Pause
-                        attrs = styleContext.getIPAPauseAttributes(ipaTier);
-                    } else {
-                        // Word
-                        attrs = styleContext.getIPAWordAttributes(ipaTier);
-                    }
-                    attrs.addAttributes(tierAttrs);
-                    String content = word.toString();
-                    appendBatchString(content, attrs);
+                if(words.isEmpty()) {
+                    appendBatchString("", tierAttrs);
+                } else {
+                    for (int i = 0; i < words.size(); i++) {
+                        var word = words.get(i);
+                        SimpleAttributeSet attrs;
+                        if (word.matches("\\P")) {
+                            // Pause
+                            attrs = styleContext.getIPAPauseAttributes(ipaTier);
+                        } else {
+                            // Word
+                            attrs = styleContext.getIPAWordAttributes(ipaTier);
+                        }
+                        attrs.addAttributes(tierAttrs);
+                        String content = word.toString();
+                        appendBatchString(content, attrs);
 
-                    if (i < words.size() - 1) {
-                        appendBatchString(" ", tierAttrs);
+                        if (i < words.size() - 1) {
+                            appendBatchString(" ", tierAttrs);
+                        }
                     }
                 }
             } else if (tierType.equals(MediaSegment.class)) {
@@ -684,7 +698,8 @@ public class TranscriptBatchBuilder {
      */
     public SimpleAttributeSet getTrailingAttributes() {
         if (batch.isEmpty()) return new SimpleAttributeSet();
-        SimpleAttributeSet attrs = new SimpleAttributeSet(batch.get(batch.size() - 1).getAttributes());
+        final AttributeSet prevAttrs = batch.get(batch.size() - 1).getAttributes();
+        SimpleAttributeSet attrs = new SimpleAttributeSet( prevAttrs != null ? prevAttrs : new SimpleAttributeSet());
         TranscriptStyleConstants.setComponentFactory(attrs, null);
         TranscriptStyleConstants.setEnterAction(attrs, null);
         TranscriptStyleConstants.setClickable(attrs, false);

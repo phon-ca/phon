@@ -2083,14 +2083,14 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
 
         if (elementType == null) {
             return;
-        } else if (elementType.equals(TranscriptStyleConstants.ATTR_KEY_RECORD)) {
-            end = doc.getTierEnd((Tier<?>) nextElementAttributes.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER));
-        } else if (elementType.equals(TranscriptStyleConstants.ATTR_KEY_COMMENT)) {
-            end = doc.getCommentEnd((Comment) nextElementAttributes.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT));
-        } else if (elementType.equals(TranscriptStyleConstants.ATTR_KEY_GEM)) {
-            end = doc.getGemEnd((Gem) nextElementAttributes.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM));
-        } else if (elementType.equals(TranscriptStyleConstants.ATTR_KEY_GENERIC)) {
-            end = doc.getGenericEnd((Tier<?>) nextElementAttributes.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC));
+        } else if (elementType.equals(TranscriptStyleConstants.ELEMENT_TYPE_RECORD)) {
+            end = doc.getTierEnd(TranscriptStyleConstants.getTier(nextElementAttributes));
+        } else if (elementType.equals(TranscriptStyleConstants.ELEMENT_TYPE_COMMENT)) {
+            end = doc.getCommentEnd(TranscriptStyleConstants.getComment(nextElementAttributes));
+        } else if (elementType.equals(TranscriptStyleConstants.ELEMENT_TYPE_GEM)) {
+            end = doc.getGemEnd(TranscriptStyleConstants.getGEM(nextElementAttributes));
+        } else if (elementType.equals(TranscriptStyleConstants.ELEMENT_TYPE_GENERIC)) {
+            end = doc.getGenericEnd(TranscriptStyleConstants.getTier(nextElementAttributes));
         } else {
             return;
         }

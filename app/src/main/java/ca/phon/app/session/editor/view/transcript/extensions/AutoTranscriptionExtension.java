@@ -77,8 +77,8 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
             }
 
             final AttributeSet eleAttrs = editor.getTranscriptDocument().getCharacterElement(editor.getCaretPosition()).getAttributes();
-            final Tier<?> tier = (Tier<?>)eleAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
-            final Record record = (Record)eleAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
+            final Tier<?> tier = TranscriptStyleConstants.getTier(eleAttrs);
+            final Record record = TranscriptStyleConstants.getRecord(eleAttrs);
             if(record != null && tier != null) {
                 if(tier.getDeclaredType().equals(IPATranscript.class)) {
                     final IPATranscript tierVal = tier.hasValue() ? (IPATranscript) tier.getValue() : new IPATranscript();
@@ -101,8 +101,8 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
                             // make text gray and italic
                             StyleConstants.setForeground(ghostAttrs, Color.gray);
                             StyleConstants.setItalic(ghostAttrs, true);
-                            ghostAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE, true);
-                            ghostAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE, "record");
+                            TranscriptStyleConstants.setNotTraversable(ghostAttrs, true);
+                            TranscriptStyleConstants.setElementType(ghostAttrs, TranscriptStyleConstants.ELEMENT_TYPE_RECORD);
 
                             final PhonUIAction<Void> acceptAutoTranscriptionAct = PhonUIAction.runnable(() -> {
                                 if(ghostRange != null) {
@@ -117,10 +117,10 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
                                 edit.setValueAdjusting(false);
                                 editor.getUndoSupport().postEdit(edit);
                             });
-                            ghostAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_ENTER_ACTION, acceptAutoTranscriptionAct);
+                            TranscriptStyleConstants.setEnterAction(ghostAttrs, acceptAutoTranscriptionAct);
 
                             try {
-                                TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder();
+                                TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(editor.getTranscriptDocument());
                                 batchBuilder.appendBatchString(autoTranscript.toString(), ghostAttrs);
                                 editor.getTranscriptDocument().processBatchUpdates(editor.getCaretPosition(), batchBuilder.getBatch());
                                 ghostRange = new Range(editor.getCaretPosition(), editor.getCaretPosition() + autoTranscript.toString().length());

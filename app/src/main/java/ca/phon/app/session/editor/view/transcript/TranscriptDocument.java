@@ -366,7 +366,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         for (int i = 0; i < paraEle.getElementCount(); i++) {
             final Element childEle = paraEle.getElement(i);
             final AttributeSet attrs = childEle.getAttributes();
-            final boolean isLabel = (Boolean) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL);
+            final boolean isLabel = TranscriptStyleConstants.isLabel(attrs);
             if (!isLabel) {
                 break;
             }
@@ -489,9 +489,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         for (int i = 0; i < elem.getElementCount(); i++) {
             Element innerElem = elem.getElement(i);
             AttributeSet attrs = innerElem.getAttributes();
-            Boolean isLabel = (Boolean) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL);
+            boolean isLabel = TranscriptStyleConstants.isLabel(attrs);
             // If correct tier name
-            if (isLabel == null) {
+            if (isLabel) {
                 tierStart = innerElem.getEndOffset();
                 break;
             }
@@ -528,10 +528,10 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         for(int i = transcriptElementIndex; i < getDefaultRootElement().getElementCount(); i++) {
             Element elem = getDefaultRootElement().getElement(i);
             if (elem.getElementCount() < 1) continue;
-            Record currentRecord = (Record) elem.getElement(0).getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
-            if (currentRecord == null) continue;
             AttributeSet attrs = elem.getAttributes();
-            Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
+            Record currentRecord = TranscriptStyleConstants.getRecord(attrs);
+            if (currentRecord == null) continue;
+            Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
             if(tier.getName().equals(tierName)) {
                 return i;
             }
@@ -767,7 +767,8 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 if(firstParagraphIdx >= 0) {
                     for (int i = firstParagraphIdx; i < getDefaultRootElement().getElementCount(); i++) {
                         Element e = getDefaultRootElement().getElement(i);
-                        if (e.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER) == tier) {
+                        Tier<?> eTier = TranscriptStyleConstants.getTier(e.getAttributes());
+                        if (eTier != null && eTier.getName().equals(tier.getName())) {
                             return new Range(e.getStartOffset(), e.getEndOffset());
                         }
                     }
@@ -797,7 +798,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                             for (int j = 0; j < e.getElementCount(); j++) {
                                 Element childEle = e.getElement(j);
                                 AttributeSet attrs = childEle.getAttributes();
-                                Boolean isLabel = (Boolean) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL);
+                                Boolean isLabel = TranscriptStyleConstants.isLabel(attrs);
                                 if (!isLabel) {
                                     break;
                                 }
@@ -888,7 +889,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             int mid = (low + high) >>> 1;
             Element midEle = rootEle.getElement(mid);
             int midEleIdx = getTranscriptElementIndex(midEle);
-
             if (sessionElementIndex == midEleIdx) {
                 for(int i = mid; i >= 0; i--) {
                     Element e = rootEle.getElement(i);
@@ -919,11 +919,11 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         int paraEleIdx = -1;
         // determine transcript element index of midEle
         if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD) != null) {
-            paraEleIdx = getSession().getRecordElementIndex((Record) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD));
+            paraEleIdx = getSession().getRecordElementIndex(TranscriptStyleConstants.getRecord(attrs));
         } else if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT) != null) {
-            paraEleIdx = getSession().getTranscript().getElementIndex((Comment) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT));
+            paraEleIdx = getSession().getTranscript().getElementIndex(TranscriptStyleConstants.getComment(attrs));
         } else if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM) != null) {
-            paraEleIdx = getSession().getTranscript().getElementIndex((Gem) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM));
+            paraEleIdx = getSession().getTranscript().getElementIndex(TranscriptStyleConstants.getGEM(attrs));
         } else if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC) != null) {
             paraEleIdx = -1;
         }
@@ -1251,9 +1251,11 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         if (tier.getDeclaredType().equals(PhoneAlignment.class)) return;
 
         try {
-            int start = getTierStart(tier);
+            final Range tierRange = getTierContentRange(tier);
+            int start = tierRange.getStart();
             int recordIndex = getRecordIndex(start);
-            int end = getTierEnd(tier);
+            int end = tierRange.getEnd() - 1;
+            final SimpleAttributeSet tierAttrs = new SimpleAttributeSet(getCharacterElement(start).getAttributes());
 
             bypassDocumentFilter = true;
             remove(start, end - start);
@@ -1262,11 +1264,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             TierViewItem tierViewItem = tierView.stream().filter(item -> item.getTierName().equals(tier.getName())).findFirst().orElse(null);
 
             TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder();
-            batchBuilder.appendBatchEndStart();
 
             Record record = session.getRecord(recordIndex);
-            batchBuilder.appendTier(session, record, tier, tierViewItem, isChatTierNamesShown(), null);
-            batchBuilder.appendEOL();
+            batchBuilder.appendTierContent(record, tier, tierAttrs);
 
             processBatchUpdates(start, batchBuilder.getBatch());
         } catch (BadLocationException e) {
