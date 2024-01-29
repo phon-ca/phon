@@ -3,7 +3,7 @@ package ca.phon.app.session.editor.view.transcript;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.SessionMediaModel;
 import ca.phon.app.session.editor.view.common.SegmentField;
-import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisViewColors;
+import ca.phon.app.session.editor.view.speechAnalysis.SpeechAnalysisViewColors;
 import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
 import ca.phon.media.*;

@@ -21,7 +21,7 @@ import ca.phon.app.session.EditorViewAdapter;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.actions.*;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
-import ca.phon.app.session.editor.view.speech_analysis.*;
+import ca.phon.app.session.editor.view.speechAnalysis.*;
 import ca.phon.app.session.editor.view.timeline.actions.ZoomAction;
 import ca.phon.media.*;
 import ca.phon.media.TimeUIModel.*;

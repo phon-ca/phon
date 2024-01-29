@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.speech_analysis;
+package ca.phon.app.session.editor.view.speechAnalysis;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.EditorViewAdapter;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.actions.*;
 import ca.phon.app.session.editor.undo.RecordSegmentEdit;
-import ca.phon.app.session.editor.view.speech_analysis.actions.NewRecordAction;
-import ca.phon.app.session.editor.view.speech_analysis.actions.*;
+import ca.phon.app.session.editor.view.speechAnalysis.actions.NewRecordAction;
+import ca.phon.app.session.editor.view.speechAnalysis.actions.*;
 import ca.phon.media.*;
 import ca.phon.media.TimeUIModel.*;
 import ca.phon.media.export.VLCWavExporter;

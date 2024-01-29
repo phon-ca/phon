@@ -7,7 +7,7 @@ import ca.phon.app.session.editor.search.FindAndReplacePanel;
 import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.participants.ParticipantsView;
-import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
+import ca.phon.app.session.editor.view.speechAnalysis.SpeechAnalysisEditorView;
 import ca.phon.app.session.editor.view.tierManagement.TierManagementView;
 import ca.phon.app.session.editor.actions.NewTierAction;
 import ca.phon.app.session.editor.view.timeline.TimelineView;

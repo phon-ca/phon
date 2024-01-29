@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.speech_analysis.actions;
+package ca.phon.app.session.editor.view.speechAnalysis.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.actions.SessionEditorAction;
-import ca.phon.app.session.editor.view.speech_analysis.SpeechAnalysisEditorView;
+import ca.phon.app.session.editor.view.speechAnalysis.SpeechAnalysisEditorView;
 
 public abstract class SpeechAnalysisEditorViewAction extends SessionEditorAction {
 

@@ -1,4 +1,4 @@
-package ca.phon.app.session.editor.view.speech_analysis;
+package ca.phon.app.session.editor.view.speechAnalysis;
 
 import javax.swing.*;
 import java.awt.*;

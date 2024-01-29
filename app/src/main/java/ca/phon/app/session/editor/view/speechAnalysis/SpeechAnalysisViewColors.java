@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.speech_analysis;
+package ca.phon.app.session.editor.view.speechAnalysis;
 
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.ui.theme.UIDefaults;
 import ca.phon.ui.theme.UIDefaultsHandler;
 
-import javax.swing.*;
 import java.awt.*;
 
 public class SpeechAnalysisViewColors implements UIDefaultsHandler, IPluginExtensionPoint<UIDefaultsHandler> {
