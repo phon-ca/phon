@@ -61,9 +61,9 @@ public class SpeechAnalysisEditorView extends EditorView {
 
 	public static final int MAX_TIER_HEIGHT = Integer.MAX_VALUE;
 
-	private final static long CLIP_EXTENSION_MIN = 500L;
+	private final static float CLIP_EXTENSION_MIN = 0.5f;
 
-	private final static long CLIP_EXTENSION_MAX = 1000L;
+	private final static float CLIP_EXTENSION_MAX = 1.0f;
 
 	private TierPanel tierPane;
 	
@@ -291,10 +291,18 @@ public class SpeechAnalysisEditorView extends EditorView {
 			// use selection as new segment for current record
 			Record r = getEditor().currentRecord();
 			if(r == null) return;
-			
+
+			final MediaSegment prevSeg = r.getMediaSegment();
+			final MediaUnit unit = prevSeg != null ? prevSeg.getUnitType() : MediaUnit.Millisecond;
+
 			MediaSegment seg = SessionFactory.newFactory().createMediaSegment();
-			seg.setStartValue(selectionInterval.getStartMarker().getTime() * 1000.0f);
-			seg.setEndValue(selectionInterval.getEndMarker().getTime() * 1000.0f);
+			seg.setUnitType(unit);
+			seg.setStartValue(
+					unit == MediaUnit.Millisecond ? selectionInterval.getStartMarker().getTime() * 1000.0f : selectionInterval.getStartMarker().getTime()
+			);
+			seg.setEndValue(
+					unit == MediaUnit.Millisecond ? selectionInterval.getEndMarker().getTime() * 1000.0f : selectionInterval.getEndMarker().getTime()
+			);
 			
 			clearSelection();
 
@@ -622,19 +630,19 @@ public class SpeechAnalysisEditorView extends EditorView {
 		Record r = getEditor().currentRecord();
 		if(r != null) {
 			final MediaSegment segment = r.getMediaSegment();
+			final float segStartTime = segment.getUnitType() == MediaUnit.Millisecond ? segment.getStartValue() / 1000.0f : segment.getStartValue();
+			final float segEndTime = segment.getUnitType() == MediaUnit.Millisecond ? segment.getEndValue() / 1000.0f : segment.getEndValue();
 
-			double length = (segment.getEndValue() - segment.getStartValue());
-			long preferredClipExtension = (long)Math.ceil(length * 0.4);
+			float length = (segEndTime - segStartTime);
+			float preferredClipExtension = (float)Math.ceil(length * 0.4);
 			if(preferredClipExtension < CLIP_EXTENSION_MIN)
 				preferredClipExtension = CLIP_EXTENSION_MIN;
 			if(preferredClipExtension > CLIP_EXTENSION_MAX)
 				preferredClipExtension = CLIP_EXTENSION_MAX;
 
-			float clipStart = (Math.round(segment.getStartValue() - preferredClipExtension)) / 1000.0f;
+			float clipStart = (Math.round(segStartTime - preferredClipExtension));
 			float displayStart = Math.max(0.0f, clipStart);
-			float segStart = segment.getStartValue() / 1000.0f;
-			float segLength = (segment.getEndValue() - segment.getStartValue()) / 1000.0f;
-			float displayLength = segLength + ((2*preferredClipExtension) / 1000.0f);
+			float displayLength = length + (2*preferredClipExtension);
 			
 			if(waveformTier.getWaveformDisplay().getLongSound() != null) {
 				if((displayStart + displayLength) > waveformTier.getWaveformDisplay().getLongSound().length()) {
@@ -651,7 +659,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 			if(displayWidth > 0)
 				pxPerS = displayWidth / displayLength;
 			
-			currentRecordInterval = timeModel.addInterval(segStart, segStart+segLength);
+			currentRecordInterval = timeModel.addInterval(segStartTime, segStartTime+length);
 			currentRecordInterval.setColor(UIManager.getColor(SpeechAnalysisViewColors.INTERVAL_BACKGROUND));
 			currentRecordInterval.getStartMarker().setColor(UIManager.getColor(SpeechAnalysisViewColors.INTERVAL_MARKER_COLOR));
 			currentRecordInterval.getEndMarker().setColor(UIManager.getColor(SpeechAnalysisViewColors.INTERVAL_MARKER_COLOR));
@@ -676,8 +684,8 @@ public class SpeechAnalysisEditorView extends EditorView {
 
 	public void scrollToRecord(Record r) {
 		MediaSegment seg = r.getMediaSegment();
-		float time = seg.getStartValue() / 1000.0f;
-		float endTime = seg.getEndValue() / 1000.0f;
+		float time = seg.getUnitType() == MediaUnit.Millisecond ? seg.getStartValue() / 1000.0f : seg.getStartValue();
+		float endTime = seg.getUnitType() == MediaUnit.Millisecond ? seg.getEndValue() / 1000.0f : seg.getEndValue();
 		float windowLen = endTime - time;
 
 		float viewStart = getWindowStart();
@@ -1100,13 +1108,15 @@ public class SpeechAnalysisEditorView extends EditorView {
 				}
 			} else if(evt.getPropertyName().endsWith("time")) {
 				MediaSegment newSegment = factory.createMediaSegment();
+				newSegment.setUnitType(segment.getUnitType());
 				newSegment.setStartValue(segment.getStartValue());
 				newSegment.setEndValue(segment.getEndValue());
-				
+
+				float evtSegmentTime = segment.getUnitType() == MediaUnit.Millisecond ? (float)evt.getNewValue() * 1000.0f : (float)evt.getNewValue();
 				if(evt.getPropertyName().startsWith("startMarker")) {
-					newSegment.setStartValue((float)evt.getNewValue() * 1000.0f);
+					newSegment.setStartValue(evtSegmentTime);
 				} else if(evt.getPropertyName().startsWith("endMarker")) {
-					newSegment.setEndValue((float)evt.getNewValue() * 1000.0f);
+					newSegment.setEndValue(evtSegmentTime);
 				}
 
 				final RecordSegmentEdit segmentEdit = new RecordSegmentEdit(getEditor(), r, newSegment);
