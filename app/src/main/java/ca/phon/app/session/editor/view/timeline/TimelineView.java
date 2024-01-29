@@ -53,6 +53,10 @@ import java.util.Timer;
 import java.util.*;
 import java.util.function.*;
 
+/**
+ * View for displaying session records in a timeline along with the audio waveform if available.
+ *
+ */
 public final class TimelineView extends EditorView {
 
 	static {
@@ -546,7 +550,7 @@ public final class TimelineView extends EditorView {
 		for(Record r:getEditor().getSession().getRecords()) {
 			MediaSegment segment = r.getMediaSegment();
 			if(segment != null) {
-				float segEnd = (float)(segment.getEndValue() / 1000.0f);
+				float segEnd = (segment.getUnitType() == MediaUnit.Millisecond ? segment.getEndValue() / 1000.0f : segment.getEndValue());
 				retVal = Math.max(segEnd, retVal);
 			}
 		}
@@ -612,8 +616,8 @@ public final class TimelineView extends EditorView {
 	 */
 	public void scrollToRecord(Record r) {
 		MediaSegment seg = r.getMediaSegment();
-		float time = seg.getStartValue() / 1000.0f;
-		float endTime = seg.getEndValue() / 1000.0f;
+		float time = seg.getUnitType() == MediaUnit.Millisecond ? seg.getStartValue() / 1000.0f : seg.getStartValue();
+		float endTime = seg.getUnitType() == MediaUnit.Millisecond ? seg.getEndValue() / 1000.0f : seg.getEndValue();
 		float windowLen = endTime - time;
 		
 		float viewStart = getWindowStart();

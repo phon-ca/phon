@@ -315,6 +315,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		
 		for(int rIdx = 0; rIdx < session.getRecordCount(); rIdx++) {
 			Record r = session.getRecord(rIdx);
+			if(r.getMediaSegment().isUnset()) continue;
 
 			try {
 				MediaSegment seg = r.getMediaSegment();
@@ -330,8 +331,10 @@ public class DefaultRecordGridUI extends RecordGridUI {
 					ymap.put(r.getSpeaker(), segY);
 				}
 
-				var segXmin = recordGrid.xForTime(seg.getStartValue() / 1000.0f);
-				var segXmax = recordGrid.xForTime(seg.getEndValue() / 1000.0f);
+				var segStart = seg.getUnitType() == MediaUnit.Millisecond ? seg.getStartValue() / 1000.0f : seg.getStartValue();
+				var segEnd = seg.getUnitType() == MediaUnit.Millisecond ? seg.getEndValue() / 1000.0f : seg.getEndValue();
+				var segXmin = recordGrid.xForTime(segStart);
+				var segXmax = recordGrid.xForTime(segEnd);
 
 				// add segment rect to model
 				Rectangle2D segRect = new Rectangle2D.Double(segXmin, segY, segXmax - segXmin, templateRect.getHeight());
