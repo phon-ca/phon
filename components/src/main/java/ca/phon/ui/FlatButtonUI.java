@@ -231,6 +231,7 @@ public class FlatButtonUI extends ButtonUI {
 
         @Override
         public void mousePressed(MouseEvent e) {
+            hidePopup();
             button.getModel().setPressed(true);
             button.repaint();
         }

@@ -977,7 +977,8 @@ public class DefaultEditorViewModel implements EditorViewModel {
 	@Override
 	public void setupPerspectiveMenu(MenuElement menuElement) {
 		final JMenu layoutMenu = new JMenu("Load layout");
-		ImageIcon loadLayoutIcon = IconManager.getInstance().getIcon("actions/layout-content", IconSize.SMALL);
+		ImageIcon loadLayoutIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName,
+				"view_quilt", IconSize.SMALL, UIManager.getColor("MenuItem.foreground"));
 		layoutMenu.setIcon(loadLayoutIcon);
 		layoutMenu.addMenuListener(new MenuListener() {
 
@@ -1002,7 +1003,8 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			((JMenu)menuElement).add(layoutMenu);
 
 		final JMenu deleteMenu = new JMenu("Delete layout");
-		ImageIcon deleteLayoutIcon = IconManager.getInstance().getIcon("actions/layout-delete", IconSize.SMALL);
+		ImageIcon deleteLayoutIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName,
+				"delete", IconSize.SMALL, UIManager.getColor("MenuItem.foreground"));
 		deleteMenu.setIcon(deleteLayoutIcon);
 		deleteMenu.addMenuListener(new MenuListener() {
 
@@ -1027,7 +1029,8 @@ public class DefaultEditorViewModel implements EditorViewModel {
 
 		// save current layout
 		final PhonUIAction<Void> saveLayoutAct = PhonUIAction.runnable(this::onSaveLayout);
-		ImageIcon saveLayoutIcon = IconManager.getInstance().getIcon("actions/layout-add", IconSize.SMALL);
+		ImageIcon saveLayoutIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName,
+				"save", IconSize.SMALL, UIManager.getColor("MenuItem.foreground"));
 		saveLayoutAct.putValue(PhonUIAction.SMALL_ICON, saveLayoutIcon);
 		saveLayoutAct.putValue(PhonUIAction.NAME, "Save current layout...");
 		saveLayoutAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Save current layout as a preset.");

@@ -13,6 +13,8 @@ import ca.phon.plugin.PluginManager;
 import ca.phon.ui.FlatButton;
 import ca.phon.ui.IconStrip;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
@@ -28,6 +30,8 @@ public class ViewIconStrip extends IconStrip {
     private final EditorViewModel viewModel;
 
     private Map<String, FlatButton> viewButtons = new HashMap<>();
+
+    private FlatButton moreButton;
 
     public ViewIconStrip(EditorViewModel viewModel) {
         super(SwingConstants.VERTICAL);
@@ -45,11 +49,14 @@ public class ViewIconStrip extends IconStrip {
         viewButtons.put(SessionCheckView.VIEW_NAME, createViewButton(SessionCheckView.VIEW_NAME));
         viewButtons.put(IPADictionaryView.VIEW_NAME, createViewButton(IPADictionaryView.VIEW_NAME));
 
+        moreButton = createMoreButton();
+
         add(viewButtons.get(TranscriptView.VIEW_NAME), IconStripPosition.LEFT);
         add(viewButtons.get(ParticipantsView.VIEW_NAME), IconStripPosition.LEFT);
         add(viewButtons.get(TierManagementView.VIEW_NAME), IconStripPosition.LEFT);
         add(viewButtons.get(MediaPlayerEditorView.VIEW_NAME), IconStripPosition.LEFT);
         add(viewButtons.get(SpeechAnalysisEditorView.VIEW_NAME), IconStripPosition.LEFT);
+        add(moreButton, IconStripPosition.LEFT);
         add(viewButtons.get(TimelineView.VIEW_NAME), IconStripPosition.RIGHT);
         add(viewButtons.get(SessionCheckView.VIEW_NAME), IconStripPosition.RIGHT);
         add(viewButtons.get(IPADictionaryView.VIEW_NAME), IconStripPosition.RIGHT);
@@ -116,6 +123,46 @@ public class ViewIconStrip extends IconStrip {
             }
         }
         return null;
+    }
+
+    public FlatButton createMoreButton() {
+        final PhonUIAction showMoreMenu = PhonUIAction.runnable(this::onShowMoreMenu);
+        showMoreMenu.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM_LARGE);
+        showMoreMenu.putValue(FlatButton.ICON_NAME_PROP, "more_horiz");
+        showMoreMenu.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+        moreButton = createButton(showMoreMenu);
+        moreButton.setPadding(2);
+        moreButton.setPopupLocation(SwingConstants.EAST);
+        moreButton.setPopupText("More...");
+        return moreButton;
+    }
+
+    private void onShowMoreMenu() {
+        final JMenu menu = new JMenu("More...");
+
+        var pluginViews = viewModel.getViewsByCategory().get(EditorViewCategory.PLUGINS);
+        if(pluginViews != null) {
+            for (String viewName : pluginViews) {
+                final IconData iconData = getViewIcon(viewName);
+                final Action showHideAct = PhonUIAction.runnable(() -> {
+                    if (viewModel.isShowing(viewName)) {
+                        viewModel.hideView(viewName);
+                    } else {
+                        viewModel.showView(viewName);
+                    }
+                });
+                showHideAct.putValue(Action.SMALL_ICON,
+                        IconManager.getInstance().getFontIcon(iconData.fontName(), iconData.iconName(), IconSize.SMALL, UIManager.getColor("MenuItem.foreground")));
+                showHideAct.putValue(Action.NAME, viewName);
+                showHideAct.putValue(Action.SHORT_DESCRIPTION, "Toggle " + viewName);
+                final JMenuItem menuItem = new JMenuItem(showHideAct);
+                menu.add(menuItem);
+            }
+            if (pluginViews.size() > 0) menu.addSeparator();
+        }
+
+        viewModel.setupPerspectiveMenu(menu);
+        menu.getPopupMenu().show(moreButton, 0, moreButton.getHeight());
     }
 
     public FlatButton createViewButton(String viewName) {
