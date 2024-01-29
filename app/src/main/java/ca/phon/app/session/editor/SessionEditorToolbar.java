@@ -17,7 +17,7 @@ package ca.phon.app.session.editor;
 
 import ca.phon.app.session.editor.actions.*;
 import ca.phon.app.session.editor.search.SessionEditorQuickSearch;
-import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
+import ca.phon.app.session.editor.view.mediaPlayer.MediaPlayerEditorView;
 import ca.phon.ui.DropDownButton;
 import ca.phon.ui.action.*;
 import ca.phon.ui.menu.MenuBuilder;

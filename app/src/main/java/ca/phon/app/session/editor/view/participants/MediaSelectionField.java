@@ -17,7 +17,7 @@ package ca.phon.app.session.editor.view.participants;
 
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.actions.SaveSessionAction;
-import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
+import ca.phon.app.session.editor.view.mediaPlayer.MediaPlayerEditorView;
 import ca.phon.media.MediaLocator;
 import ca.phon.project.Project;
 import ca.phon.ui.action.*;

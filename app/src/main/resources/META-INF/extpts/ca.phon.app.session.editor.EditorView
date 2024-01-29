@@ -1,6 +1,6 @@
 ## Editor Views
 ca.phon.app.session.editor.view.participants.ParticipantsViewExtPt
-ca.phon.app.session.editor.view.media_player.MediaPlayerExtension
+ca.phon.app.session.editor.view.mediaPlayer.MediaPlayerExtension
 ca.phon.app.session.editor.view.speechAnalysis.SpeechAnalysisExtension
 ca.phon.app.session.editor.view.tierManagement.TierManagementViewExtPt
 #ca.phon.app.session.editor.view.record_data.RecordDataViewExtension

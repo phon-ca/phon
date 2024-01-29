@@ -17,7 +17,7 @@ package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.log.*;
 import ca.phon.app.session.editor.*;
-import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
+import ca.phon.app.session.editor.view.mediaPlayer.MediaPlayerEditorView;
 import ca.phon.audio.*;
 import ca.phon.formatter.MsFormatter;
 import ca.phon.util.*;

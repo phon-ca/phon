@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.media_player.actions;
+package ca.phon.app.session.editor.view.mediaPlayer.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
+import ca.phon.app.session.editor.view.mediaPlayer.MediaPlayerEditorView;
 import ca.phon.session.Participant;
 import ca.phon.ui.action.PhonActionEvent;
 

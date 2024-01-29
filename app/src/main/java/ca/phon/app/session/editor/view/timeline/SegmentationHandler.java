@@ -17,8 +17,8 @@ package ca.phon.app.session.editor.view.timeline;
 
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.*;
-import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
-import ca.phon.app.session.editor.view.media_player.actions.GoToEndOfSegmentedAction;
+import ca.phon.app.session.editor.view.mediaPlayer.MediaPlayerEditorView;
+import ca.phon.app.session.editor.view.mediaPlayer.actions.GoToEndOfSegmentedAction;
 import ca.phon.media.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;

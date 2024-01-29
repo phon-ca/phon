@@ -13,13 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.media_player;
+package ca.phon.app.session.editor.view.mediaPlayer;
 
 import ca.phon.app.session.ViewPosition;
 import ca.phon.app.session.editor.*;
 import ca.phon.plugin.*;
-
-import javax.swing.*;
 
 @PhonPlugin(name="Media Player")
 @EditorViewInfo(name=MediaPlayerEditorView.VIEW_NAME,

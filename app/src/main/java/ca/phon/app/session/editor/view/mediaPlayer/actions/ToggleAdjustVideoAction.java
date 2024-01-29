@@ -13,23 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.media_player.actions;
+package ca.phon.app.session.editor.view.mediaPlayer.actions;
 
 import ca.phon.app.session.editor.SessionEditor;
-import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
-import ca.phon.ui.action.PhonActionEvent;
+import ca.phon.app.session.editor.view.mediaPlayer.MediaPlayerEditorView;
 
 import java.awt.event.ActionEvent;
 
-public class TakeSnapshotAction extends MediaPlayerAction {
-
-	private static final long serialVersionUID = 6114592569820589801L;
+public class ToggleAdjustVideoAction extends MediaPlayerAction {
 	
-	private final static String CMD_NAME = "Take snapshot...";
+private final static String CMD_NAME = "Move media position with record";
 	
-	private final static String SHORT_DESC = "Save snapshot of video";
+	private final static String SHORT_DESC = "Move media to beginning of each record's segment";
+	
+	private static final long serialVersionUID = 3608304092726478707L;
 
-	public TakeSnapshotAction(SessionEditor editor, MediaPlayerEditorView view) {
+	public ToggleAdjustVideoAction(SessionEditor editor,
+			MediaPlayerEditorView view) {
 		super(editor, view);
 		
 		putValue(NAME, CMD_NAME);
@@ -38,7 +38,7 @@ public class TakeSnapshotAction extends MediaPlayerAction {
 
 	@Override
 	public void hookableActionPerformed(ActionEvent e) {
-		getMediaPlayerView().getPlayer().onTakeSnapshot(new PhonActionEvent(e));
+		super.getMediaPlayerView().onToggleAdjustVideo();
 	}
 
 }

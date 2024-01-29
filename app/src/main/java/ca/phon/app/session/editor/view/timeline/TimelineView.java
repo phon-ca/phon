@@ -20,7 +20,7 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.EditorViewAdapter;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.actions.*;
-import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
+import ca.phon.app.session.editor.view.mediaPlayer.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.speechAnalysis.*;
 import ca.phon.app.session.editor.view.timeline.actions.ZoomAction;
 import ca.phon.media.*;

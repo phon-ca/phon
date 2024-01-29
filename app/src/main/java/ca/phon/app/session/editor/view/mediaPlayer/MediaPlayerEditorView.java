@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package ca.phon.app.session.editor.view.media_player;
+package ca.phon.app.session.editor.view.mediaPlayer;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.EditorViewAdapter;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.actions.AssignMediaAction;
 import ca.phon.app.session.editor.undo.MediaLocationEdit;
-import ca.phon.app.session.editor.view.media_player.actions.*;
+import ca.phon.app.session.editor.view.mediaPlayer.actions.*;
 import ca.phon.formatter.MsFormatter;
 import ca.phon.media.*;
 import ca.phon.media.player.*;

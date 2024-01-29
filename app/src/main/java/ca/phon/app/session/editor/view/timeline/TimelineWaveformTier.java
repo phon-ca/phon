@@ -19,7 +19,7 @@ package ca.phon.app.session.editor.view.timeline;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.actions.*;
 import ca.phon.app.session.editor.undo.*;
-import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
+import ca.phon.app.session.editor.view.mediaPlayer.MediaPlayerEditorView;
 import ca.phon.media.*;
 import ca.phon.media.TimeUIModel.Interval;
 import ca.phon.session.Record;

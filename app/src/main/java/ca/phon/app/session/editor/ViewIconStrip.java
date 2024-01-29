@@ -2,7 +2,7 @@ package ca.phon.app.session.editor;
 
 import ca.phon.app.session.editor.view.check.SessionCheckView;
 import ca.phon.app.session.editor.view.ipaDictionary.IPADictionaryView;
-import ca.phon.app.session.editor.view.media_player.MediaPlayerEditorView;
+import ca.phon.app.session.editor.view.mediaPlayer.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.participants.ParticipantsView;
 import ca.phon.app.session.editor.view.speechAnalysis.SpeechAnalysisEditorView;
 import ca.phon.app.session.editor.view.tierManagement.TierManagementView;
