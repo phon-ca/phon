@@ -262,14 +262,14 @@ public class FindAndReplacePanel extends JPanel {
 	 * 
 	 * @return startLocation
 	 */
-	private SessionLocation startLocation() {
+	private TranscriptElementLocation startLocation() {
 		final FindManager findManager = getFindManager();
 		
 		final String tier = 
 				(findManager.getSearchTiers().length > 0 ? findManager.getSearchTiers()[0] :
 					SystemTierType.Orthography.getName());
 		
-		return new SessionLocation(0, new RecordLocation(tier, 0));
+		return new TranscriptElementLocation(0, tier, 0);
 	}
 
 	/*
@@ -277,7 +277,7 @@ public class FindAndReplacePanel extends JPanel {
 	 *  
 	 * @return endLocation
 	 */
-	private SessionLocation endLocation() {
+	private TranscriptElementLocation endLocation() {
 		final Session session = getSession();
 		final FindManager findManager = getFindManager();
 		
@@ -286,15 +286,14 @@ public class FindAndReplacePanel extends JPanel {
 					SystemTierType.Notes.getName());
 		final Record r = session.getRecord(session.getRecordCount()-1);
 		final Tier<String> tier = r.getTier(tierName, String.class);
-		return new SessionLocation(session.getRecordCount()-1, new RecordLocation(tierName, tier.getValue().length()));
+		return new TranscriptElementLocation(session.getRecordCount()-1, tierName, tier.getValue().length());
 	}
 	
-	private void setupSessionSelection(SessionRange sessionRange) {
-		final SessionEditorSelection selection = 
-				new SessionEditorSelection(sessionRange.getRecordIndex(), sessionRange.getRecordRange().getTier(),
-						sessionRange.getRecordRange().getRange());
+	private void setupSessionSelection(TranscriptElementRange sessionRange) {
+		final SessionEditorSelection selection = new SessionEditorSelection(sessionRange);
 		getSelectionModel().setSelection(selection);
-		getSelectionModel().requestSwitchToRecord(sessionRange.getRecordIndex());
+		// TODO - this should be handled by the selection model
+//		getSelectionModel().requestSwitchToRecord(sessionRange.getRecordIndex());
 	}
 	
 	public void findNext() {
@@ -306,7 +305,7 @@ public class FindAndReplacePanel extends JPanel {
 					findManager.getDirection() == FindDirection.FORWARDS ? startLocation() : endLocation());
 		}
 		
-		SessionRange nextInstance = findManager.findNext();
+		TranscriptElementRange nextInstance = findManager.findNext();
 		if(nextInstance != null) {
 			setupSessionSelection(nextInstance);
 		} else if(findManager.getDirection() == FindDirection.FORWARDS &&
@@ -348,7 +347,7 @@ public class FindAndReplacePanel extends JPanel {
 		}
 		
 		
-		SessionRange nextInstance = findManager.findPrev();
+		TranscriptElementRange nextInstance = findManager.findPrev();
 		if(nextInstance != null) {
 			setupSessionSelection(nextInstance);
 		} else if(findManager.getDirection() == FindDirection.FORWARDS &&
@@ -381,56 +380,56 @@ public class FindAndReplacePanel extends JPanel {
 	}
 	
 	public void replace() {
-		final FindManager findManager = getFindManager();
-		setupFindManager(findManager);
-		if(findManager.getMatchedExpr() != null && findManager.getMatchedRange() != null) {
-			if(replaceTier != null && replaceTier.hasValue()) {
-				final String replaceExpr = replaceTier.getValue();
-				final Object newVal = findManager.getMatchedExpr().replace(replaceExpr);
-				final SessionRange sr = findManager.getMatchedRange();
-				final Record record = getSession().getRecord(sr.getRecordIndex());
-				final Tier<?> tier = record.getTier(sr.getRecordRange().getTier());
-				if(getEditorDataModel().getTranscriber() == Transcriber.VALIDATOR) {
-					@SuppressWarnings({"unchecked", "rawtypes"})
-					final TierEdit tierEdit = new TierEdit(getSession(), getEditorEventManager(), record, tier, newVal);
-					getUndoSupport().postEdit(tierEdit);
-					getSelectionModel().clear();
-				} else {
-				}
-			}
-		}
+//		final FindManager findManager = getFindManager();
+//		setupFindManager(findManager);
+//		if(findManager.getMatchedExpr() != null && findManager.getMatchedRange() != null) {
+//			if(replaceTier != null && replaceTier.hasValue()) {
+//				final String replaceExpr = replaceTier.getValue();
+//				final Object newVal = findManager.getMatchedExpr().replace(replaceExpr);
+//				final SessionRange sr = findManager.getMatchedRange();
+//				final Record record = getSession().getRecord(sr.getRecordIndex());
+//				final Tier<?> tier = record.getTier(sr.getRecordRange().getTier());
+//				if(getEditorDataModel().getTranscriber() == Transcriber.VALIDATOR) {
+//					@SuppressWarnings({"unchecked", "rawtypes"})
+//					final TierEdit tierEdit = new TierEdit(getSession(), getEditorEventManager(), record, tier, newVal);
+//					getUndoSupport().postEdit(tierEdit);
+//					getSelectionModel().clear();
+//				} else {
+//				}
+//			}
+//		}
 	}
 	
 	public void replaceAll() {
-		final String replaceExpr = replaceTier.getValue();
-		// create a new find manager
-		final Session session = getSession();
-		final FindManager findManager = new FindManager(session);
-		setupFindManager(findManager);
-		final SessionLocation startLoc = 
-				new SessionLocation(0, new RecordLocation(findManager.getSearchTiers()[0], 0));
-		findManager.setCurrentLocation(startLoc);
-
-		int occurrences = 0;
-		SessionRange currentRange = null;
-		while((currentRange = findManager.findNext()) != null) {
-			if(occurrences++ == 0)
-				getUndoSupport().beginUpdate();
-
-			final Record r = session.getRecord(currentRange.getRecordIndex());
-			final Tier<?> tier = r.getTier(currentRange.getRecordRange().getTier());
-			final Object newVal = findManager.getMatchedExpr().replace(replaceExpr);
-			
-			@SuppressWarnings({ "unchecked", "rawtypes" })
-			final TierEdit<?> tierEdit = new TierEdit(getSession(), getEditorEventManager(), r, tier, newVal);
-			getUndoSupport().postEdit(tierEdit);
-		}
-		getUndoSupport().endUpdate();
-		
-		final String message =
-				"Replaced " + occurrences + " occurrences with " + replaceExpr;
-		final Toast toast = ToastFactory.makeToast(message);
-		toast.start(replaceAllBtn);
+//		final String replaceExpr = replaceTier.getValue();
+//		// create a new find manager
+//		final Session session = getSession();
+//		final FindManager findManager = new FindManager(session);
+//		setupFindManager(findManager);
+//		final SessionLocation startLoc =
+//				new SessionLocation(0, new TranscriptElementLocation(findManager.getSearchTiers()[0], 0));
+//		findManager.setCurrentLocation(startLoc);
+//
+//		int occurrences = 0;
+//		SessionRange currentRange = null;
+//		while((currentRange = findManager.findNext()) != null) {
+//			if(occurrences++ == 0)
+//				getUndoSupport().beginUpdate();
+//
+//			final Record r = session.getRecord(currentRange.getRecordIndex());
+//			final Tier<?> tier = r.getTier(currentRange.getRecordRange().getTier());
+//			final Object newVal = findManager.getMatchedExpr().replace(replaceExpr);
+//
+//			@SuppressWarnings({ "unchecked", "rawtypes" })
+//			final TierEdit<?> tierEdit = new TierEdit(getSession(), getEditorEventManager(), r, tier, newVal);
+//			getUndoSupport().postEdit(tierEdit);
+//		}
+//		getUndoSupport().endUpdate();
+//
+//		final String message =
+//				"Replaced " + occurrences + " occurrences with " + replaceExpr;
+//		final Toast toast = ToastFactory.makeToast(message);
+//		toast.start(replaceAllBtn);
 	}
 	// endregion
 

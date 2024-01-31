@@ -1,4 +1,4 @@
-package ca.phon.app.session.editor.view.record_data;
+package ca.phon.app.session.editor.view.common;
 
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.alignment.PhoneMap;

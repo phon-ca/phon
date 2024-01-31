@@ -15,27 +15,15 @@
  */
 package ca.phon.session.position;
 
-import ca.phon.util.Tuple;
+/**
+ * Represents a specific character location withing a transcript element.  If the transcript element is
+ * a record, tier will be the name of the specific tier.  If the transcript element is a comment, the
+ * tier name will be the type of comment, if the transcript element is a gem, tier will be the type of gem.
+ *
+ * @param transcriptElementIndex
+ * @param tier
+ * @param charPosition
+ */
+public record TranscriptElementLocation(int transcriptElementIndex, String tier, int charPosition) {
 
-public class RecordLocation extends Tuple<String, Integer> {
-
-	public RecordLocation(String tier, Integer charPositionInLine) {
-		super(tier, charPositionInLine);
-	}
-
-	public String getTier() {
-		return super.getObj1();
-	}
-
-	public void setTier(String tier) {
-		super.setObj1(tier);
-	}
-
-	public Integer getCharPositionInLine() {
-		return super.getObj2();
-	}
-
-	public void setCharPositionInLine(Integer loc) {
-		super.setObj2(loc);
-	}
 }

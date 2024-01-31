@@ -17,8 +17,10 @@ package ca.phon.session;
 
 import ca.phon.extensions.ExtendableObject;
 import ca.phon.session.alignment.TierAlignmentRules;
+import ca.phon.session.position.TranscriptElementRange;
 import ca.phon.session.spi.SessionSPI;
 import ca.phon.util.Language;
+import ca.phon.util.Range;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -449,6 +451,44 @@ public final class Session extends ExtendableObject {
 	 */
 	public Transcript getTranscript() {
 		return sessionImpl.getTranscript();
+	}
+
+	/**
+	 * Get the text of the specified transcript element index and give range.
+	 *
+	 * @param transcriptElementRange
+	 *
+	 * @return text of transcript element at given index and range or null if not found
+	 * @throws ArrayIndexOutOfBoundsException if transcriptElementIndex is out of bounds or range is invalid
+	 */
+	public String getTranscriptText(TranscriptElementRange transcriptElementRange) {
+		return getTranscriptText(transcriptElementRange.transcriptElementIndex(), transcriptElementRange.tier(), transcriptElementRange.range());
+	}
+
+	/**
+	 * Get the text of the specified transcript element index and give range.
+	 *
+	 * @param transcriptElementIndex
+	 * @param tier
+	 * @param range
+	 *
+	 * @return text of transcript element at given index and range or null if not found
+	 * @throws ArrayIndexOutOfBoundsException if transcriptElementIndex is out of bounds or range is invalid
+	 */
+	public String getTranscriptText(int transcriptElementIndex, String tier, Range range) {
+		final Transcript.Element element = getTranscript().getElementAt(transcriptElementIndex);
+		if(element.isGem()) {
+			return element.asGem().getLabel().substring(range.getStart(), range.getEnd());
+		} else if(element.isComment()) {
+			return element.asComment().getValue().toString().substring(range.getStart(), range.getEnd());
+		} else {
+			final Record record = element.asRecord();
+			final Tier<?> t = record.getTier(tier);
+			if(t != null) {
+				return t.toString().substring(range.getStart(), range.getEnd());
+			}
+		}
+		return null;
 	}
 
 	// endregion Transcript

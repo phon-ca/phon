@@ -25,16 +25,21 @@ import ca.phon.util.Range;
 import java.util.*;
 
 /**
- * Class to manage find and replace for a
- * session.
+ * Class to manage find and replace for a transcript.
  */
 public class FindManager {
 
+	/**
+	 * Direction of search
+	 */
 	public enum FindDirection {
 		FORWARDS,
 		BACKWARDS;
 	}
 
+	/**
+	 * Current find status
+	 */
 	public enum FindStatus {
 		HIT_END,			// searching forward, hit end of session
 		HIT_BEGINNING,		// search backward, hit beginning of session
@@ -45,14 +50,15 @@ public class FindManager {
 	/** Session */
 	private Session session;
 	
-	/** Search expr */
+	/** Search expr for all tiers (default) */
 	private FindExpr anyExpr;
-	
+
+	/** Search expr for specific tiers */
 	private final Map<String, FindExpr> tierExprs = new HashMap<String, FindExpr>();
 
 	/** Current location */
-	private SessionLocation forwardsLocation = null;
-	private SessionLocation backwardsLocation = null;
+	private TranscriptElementLocation forwardsLocation = null;
+	private TranscriptElementLocation backwardsLocation = null;
 	
 	/** Direction */
 	private FindDirection direction = FindDirection.FORWARDS;
@@ -67,8 +73,21 @@ public class FindManager {
 	 * Last expression that matched
 	 */
 	private FindExpr lastExpr = null;
-	
-	private SessionRange lastRange = null;
+
+	/**
+	 * Last transcript range found
+	 */
+	private TranscriptElementRange lastRange = null;
+
+	/**
+	 * Include comments
+	 */
+	private boolean includeComments = true;
+
+	/**
+	 * Include gems
+	 */
+	private boolean includeGems = true;
 	
 	/**
 	 * Constructor
@@ -120,22 +139,22 @@ public class FindManager {
 		this.searchTiers.addAll(tiers);
 	}
 
-	public SessionLocation getCurrentLocation() {
+	public TranscriptElementLocation getCurrentLocation() {
 		return (getDirection() == FindDirection.FORWARDS ? 
 				forwardsLocation : backwardsLocation);
 	}
 	
-	private SessionLocation getNextLocation() {
+	private TranscriptElementLocation getNextLocation() {
 		return (getDirection() == FindDirection.FORWARDS ? 
 				forwardsLocation : backwardsLocation);
 	}
 	
-	private SessionLocation getPrevLocation() {
+	private TranscriptElementLocation getPrevLocation() {
 		return (getDirection() == FindDirection.BACKWARDS ?
 				forwardsLocation : backwardsLocation);
 	}
 
-	public void setCurrentLocation(SessionLocation location) {
+	public void setCurrentLocation(TranscriptElementLocation location) {
 		this.forwardsLocation = location;
 		this.backwardsLocation = location;
 	}
@@ -160,8 +179,24 @@ public class FindManager {
 		return this.lastExpr;
 	}
 	
-	public SessionRange getMatchedRange() {
+	public TranscriptElementRange getMatchedRange() {
 		return this.lastRange;
+	}
+
+	public boolean isIncludeComments() {
+		return this.includeComments;
+	}
+
+	public void setIncludeComments(boolean includeComments) {
+		this.includeComments = includeComments;
+	}
+
+	public boolean isIncludeGems() {
+		return this.includeGems;
+	}
+
+	public void setIncludeGems(boolean includeGems) {
+		this.includeGems = includeGems;
 	}
 
 	/**
@@ -173,10 +208,10 @@ public class FindManager {
 	 * @throws FindException
 	 *
 	 */
-	public SessionRange findNext() {
-		SessionRange retVal = null;
+	public TranscriptElementRange findNext() {
+		TranscriptElementRange retVal = null;
 
-		final SessionLocation currentLocation = getNextLocation();
+		final TranscriptElementLocation currentLocation = getNextLocation();
 		// start from current location and in specified direction
 		if(direction == FindDirection.FORWARDS) {
 			retVal = findForwards(currentLocation);
@@ -210,10 +245,10 @@ public class FindManager {
 	 * @throws FindException
 	 *
 	 */
-	public SessionRange findPrev() {
-		SessionRange retVal = null;
+	public TranscriptElementRange findPrev() {
+		TranscriptElementRange retVal = null;
 
-		final SessionLocation currentLocation = getPrevLocation();
+		final TranscriptElementLocation currentLocation = getPrevLocation();
 		// start from current location and in specified direction
 		if(direction == FindDirection.FORWARDS) {
 			retVal = findBackwards(currentLocation);
@@ -239,132 +274,190 @@ public class FindManager {
 
 	}
 
-	private SessionRange findForwards(SessionLocation pos) {
-		SessionRange retVal = null;
+	private TranscriptElementRange findForwards(TranscriptElementLocation pos) {
+		TranscriptElementRange retVal = null;
 		
-		int uttIdx = pos.getRecordIndex();
-		int tierIdx = searchTiers.indexOf(pos.getRecordLocation().getTier());
+		int eleIdx = pos.transcriptElementIndex();
+		int tierIdx = searchTiers.indexOf(pos.tier());
 		if(tierIdx < 0)
 			tierIdx = 0;
-		int charIdx = pos.getRecordLocation().getCharPositionInLine();
+		int charIdx = pos.charPosition();
 
 		final FindExpr anyExpr = getAnyExpr();
-		while(uttIdx < session.getRecordCount()) {
-			Record currentUtt = session.getRecord(uttIdx);
+		while(eleIdx < session.getTranscript().getNumberOfElements()) {
+			final Transcript.Element ele = session.getTranscript().getElementAt(eleIdx);
 
-			while(tierIdx < searchTiers.size() && retVal == null) {
-				String searchTier = searchTiers.get(tierIdx);
+			if(ele.isComment()) {
+				final Comment comment = ele.asComment();
+				if(isIncludeComments()) {
+					if(anyExpr != null) {
+						Range range = anyExpr.findNext(comment.getValue(), charIdx);
+						lastExpr = anyExpr;
+						if(range != null) {
+							range.setExcludesEnd(true);
+							retVal = new TranscriptElementRange(eleIdx, comment.getType().toString(), range);
+							break;
+						}
+					}
+				}
+			} else if(ele.isGem()) {
+				final Gem gem = ele.asGem();
+				if(isIncludeGems()) {
+					if(anyExpr != null) {
+						Range range = anyExpr.findNext(gem.getLabel(), charIdx);
+						lastExpr = anyExpr;
+						if(range != null) {
+							range.setExcludesEnd(true);
+							retVal = new TranscriptElementRange(eleIdx, gem.getType().toString(), range);
+							break;
+						}
+					}
+				}
+			} else if(ele.isRecord()) {
+				Record currentUtt = ele.asRecord();
+				while (tierIdx < searchTiers.size() && retVal == null) {
+					String searchTier = searchTiers.get(tierIdx);
 
-				final Tier<?> tier = currentUtt.getTier(searchTier);
-				if(tier == null) {
+					final Tier<?> tier = currentUtt.getTier(searchTier);
+					if (tier == null) {
+						tierIdx++;
+						continue;
+					}
+
+					Range charRange = null;
+					Range tierExprRange = null;
+					Range anyExprRange = null;
+
+					final FindExpr tierExpr = getExprForTier(tier.getName());
+					if (tierExpr != null) {
+						tierExprRange = tierExpr.findNext(tier.getValue(), charIdx);
+					}
+					if (anyExpr != null) {
+						anyExprRange = anyExpr.findNext(tier.getValue(), charIdx);
+					}
+
+					lastExpr = (tierExprRange != null ? tierExpr :
+							(anyExprRange != null ? anyExpr : null));
+
+					if (tierExprRange != null && anyExprRange != null) {
+						charRange =
+								(tierExprRange.getFirst() <= anyExprRange.getFirst() ? tierExprRange : anyExprRange);
+					} else {
+						charRange =
+								(tierExprRange != null ? tierExprRange : anyExprRange);
+					}
+
+					if (charRange != null) {
+						charRange.setExcludesEnd(true);
+						retVal = new TranscriptElementRange(eleIdx, tier.getName(), charRange);
+						break;
+					}
+					// reset charIdx
+					charIdx = 0;
+
+					if (retVal != null) break;
 					tierIdx++;
-					continue;
 				}
-				
-				Range charRange = null;
-				Range tierExprRange = null;
-				Range anyExprRange = null;
-
-				final FindExpr tierExpr = getExprForTier(tier.getName());
-				if(tierExpr != null) {
-					tierExprRange = tierExpr.findNext(tier.getValue(), charIdx);
-				}
-				if(anyExpr != null) {
-					anyExprRange = anyExpr.findNext(tier.getValue(), charIdx);
-				}
-
-				lastExpr = (tierExprRange != null ? tierExpr :
-					(anyExprRange != null ? anyExpr : null));
-
-				if(tierExprRange != null && anyExprRange != null) {
-					charRange =
-							(tierExprRange.getFirst() <= anyExprRange.getFirst() ? tierExprRange : anyExprRange);
-				} else {
-					charRange =
-							(tierExprRange != null ? tierExprRange : anyExprRange);
-				}
-
-				if(charRange != null) {
-					charRange.setExcludesEnd(true);
-					final RecordRange recRange = new RecordRange(tier.getName(), charRange);
-					retVal = new SessionRange(uttIdx, recRange);
-					break;
-				}
-				// reset charIdx
-				charIdx = 0;
-
-				if(retVal != null) break;
-				tierIdx++;
 			}
+
 			if(retVal != null) break;
-			uttIdx++;
+			eleIdx++;
 			tierIdx = 0;
 		}
 
 		return retVal;
 	}
 
-	private SessionRange findBackwards(SessionLocation pos) {
-		SessionRange retVal = null;
+	private TranscriptElementRange findBackwards(TranscriptElementLocation pos) {
+		TranscriptElementRange retVal = null;
 		
-		int uttIdx = pos.getRecordIndex();
-		int tierIdx = searchTiers.indexOf(pos.getRecordLocation().getTier());
+		int eleIdx = pos.transcriptElementIndex();
+		int tierIdx = searchTiers.indexOf(pos.tier());
 		if(tierIdx < 0)
 			tierIdx = 0;
-		int charIdx = pos.getRecordLocation().getCharPositionInLine();
+		int charIdx = pos.charPosition();
 
 		final FindExpr anyExpr = getAnyExpr();
-		while(uttIdx >= 0) {
-			Record currentUtt = session.getRecord(uttIdx);
-
-			while(tierIdx >= 0 && retVal == null) {
-				String searchTier = searchTiers.get(tierIdx);
-
-				final Tier<?> tier = currentUtt.getTier(searchTier);
-				if(tier == null) continue;
-
-				Range charRange = null;
-				Range tierExprRange = null;
-				Range anyExprRange = null;
-
-				Object grpVal = tier.getValue();
-				if(charIdx == Integer.MAX_VALUE) {
-					final String grpTxt = FormatterUtil.format(grpVal);
-					charIdx = grpTxt.length();
+		while(eleIdx >= 0) {
+			final Transcript.Element ele = session.getTranscript().getElementAt(eleIdx);
+			if(ele.isComment()) {
+				final Comment comment = ele.asComment();
+				if(isIncludeComments()) {
+					if(anyExpr != null) {
+						Range range = anyExpr.findPrev(comment.getValue(), charIdx);
+						lastExpr = anyExpr;
+						if(range != null) {
+							range.setExcludesEnd(true);
+							retVal = new TranscriptElementRange(eleIdx, comment.getType().toString(), range);
+							break;
+						}
+					}
 				}
-
-				final FindExpr tierExpr = getExprForTier(tier.getName());
-				if(tierExpr != null) {
-					tierExprRange = tierExpr.findPrev(tier.getValue(), charIdx);
+			} else if(ele.isGem()) {
+				final Gem gem = ele.asGem();
+				if(isIncludeGems()) {
+					if(anyExpr != null) {
+						Range range = anyExpr.findPrev(gem.getLabel(), charIdx);
+						lastExpr = anyExpr;
+						if(range != null) {
+							range.setExcludesEnd(true);
+							retVal = new TranscriptElementRange(eleIdx, gem.getType().toString(), range);
+							break;
+						}
+					}
 				}
-				if(anyExpr != null) {
-					anyExprRange = anyExpr.findPrev(tier.getValue(), charIdx);
-				}
+			} else if(ele.isRecord()) {
+				Record currentUtt = ele.asRecord();
 
-				lastExpr = (tierExprRange != null ? tierExpr :
-					(anyExprRange != null ? anyExpr : null));
+				while (tierIdx >= 0 && retVal == null) {
+					String searchTier = searchTiers.get(tierIdx);
 
-				if(tierExprRange != null && anyExprRange != null) {
-					charRange =
-							(tierExprRange.getFirst() >= anyExprRange.getFirst() ? tierExprRange : anyExprRange);
-				} else {
-					charRange =
-							(tierExprRange != null ? tierExprRange : anyExprRange);
-				}
+					final Tier<?> tier = currentUtt.getTier(searchTier);
+					if (tier == null) continue;
 
-				if(charRange != null) {
-					charRange.setExcludesEnd(true);
-					final RecordRange recRange = new RecordRange(tier.getName(), charRange);
-					retVal = new SessionRange(uttIdx, recRange);
-					break;
+					Range charRange = null;
+					Range tierExprRange = null;
+					Range anyExprRange = null;
+
+					Object grpVal = tier.getValue();
+					if (charIdx == Integer.MAX_VALUE) {
+						final String grpTxt = FormatterUtil.format(grpVal);
+						charIdx = grpTxt.length();
+					}
+
+					final FindExpr tierExpr = getExprForTier(tier.getName());
+					if (tierExpr != null) {
+						tierExprRange = tierExpr.findPrev(tier.getValue(), charIdx);
+					}
+					if (anyExpr != null) {
+						anyExprRange = anyExpr.findPrev(tier.getValue(), charIdx);
+					}
+
+					lastExpr = (tierExprRange != null ? tierExpr :
+							(anyExprRange != null ? anyExpr : null));
+
+					if (tierExprRange != null && anyExprRange != null) {
+						charRange =
+								(tierExprRange.getFirst() >= anyExprRange.getFirst() ? tierExprRange : anyExprRange);
+					} else {
+						charRange =
+								(tierExprRange != null ? tierExprRange : anyExprRange);
+					}
+
+					if (charRange != null) {
+						charRange.setExcludesEnd(true);
+						retVal = new TranscriptElementRange(eleIdx, tier.getName(), charRange);
+						break;
+					}
+					// reset char idx
+					charIdx = Integer.MAX_VALUE;
+					if (retVal != null) break;
+					tierIdx--;
 				}
-				// reset char idx
-				charIdx = Integer.MAX_VALUE;
-				if(retVal != null) break;
-				tierIdx--;
 			}
+
 			if(retVal != null) break;
-			uttIdx--;
+			eleIdx--;
 			tierIdx = searchTiers.size() - 1;
 		}
 
@@ -376,22 +469,20 @@ public class FindManager {
 	 *
 	 * @return < 0 if A < B, > 0 if A > B and 0 if A == B
 	 */
-	private int compareLocations(SessionLocation A, SessionLocation B) {
+	private int compareLocations(TranscriptElementLocation A, TranscriptElementLocation B) {
 		int retVal = 0;
 
-		if(A.getRecordIndex() < B.getRecordIndex()) {
+		if(A.transcriptElementIndex() < B.transcriptElementIndex()) {
 			retVal = -1;
-		} else if(A.getRecordIndex() > B.getRecordIndex()) {
+		} else if(A.transcriptElementIndex() > B.transcriptElementIndex()) {
 			retVal = 1;
 		} else {
-			RecordLocation Ar = A.getRecordLocation();
-			RecordLocation Br = B.getRecordLocation();
 
-			int AtIdx = searchTiers.indexOf(Ar.getTier());
-			int BtIdx = searchTiers.indexOf(Br.getTier());
+			int AtIdx = searchTiers.indexOf(A.tier());
+			int BtIdx = searchTiers.indexOf(B.tier());
 			
-			int AcIdx = Ar.getCharPositionInLine();
-			int BcIdx = Br.getCharPositionInLine();
+			int AcIdx = A.charPosition();
+			int BcIdx = B.charPosition();
 
 			if(AtIdx < BtIdx) {
 				retVal = -1;

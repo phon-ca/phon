@@ -16,6 +16,7 @@
 package ca.phon.app.session.editor;
 
 import ca.phon.extensions.*;
+import ca.phon.session.position.TranscriptElementRange;
 import ca.phon.util.Range;
 
 import javax.swing.text.Highlighter.HighlightPainter;
@@ -28,33 +29,38 @@ import java.util.Set;
  */
 public class SessionEditorSelection implements IExtendable {
 	
-	private final int recordIndex;
-	
-	private final String tierName;
-	
-	private final Range range;
+	private final TranscriptElementRange range;
 	
 	private final ExtensionSupport extSupport = new ExtensionSupport(SessionEditorSelection.class, this);
 
-	public SessionEditorSelection(int recordIndex, String tierName, Range range) {
+	public SessionEditorSelection(int elementIndex, String tierName, Range range) {
 		super();
-		this.recordIndex = recordIndex;
-		this.tierName = tierName;
-		this.range = range;
+		this.range = new TranscriptElementRange(elementIndex, tierName, range);
 		
 		extSupport.initExtensions();
 	}
 
-	public int getRecordIndex() {
-		return recordIndex;
+	public SessionEditorSelection(TranscriptElementRange range) {
+		super();
+		this.range = range;
+
+		extSupport.initExtensions();
+	}
+
+	public TranscriptElementRange getTranscriptElementRange() {
+		return range;
+	}
+
+	public int getElementIndex() {
+		return range.transcriptElementIndex();
 	}
 
 	public String getTierName() {
-		return tierName;
+		return range.tier();
 	}
 
 	public Range getRange() {
-		return range;
+		return range.range();
 	}
 
 	public Set<Class<?>> getExtensions() {

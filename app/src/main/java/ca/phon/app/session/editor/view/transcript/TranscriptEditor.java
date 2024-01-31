@@ -2738,7 +2738,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             }
 
             try {
-                int tierStart = getTranscriptDocument().getTierContentStart(selection.getRecordIndex(), selection.getTierName());
+                int tierStart = getTranscriptDocument().getTierContentStart(selection.getElementIndex(), selection.getTierName());
                 if (tierStart == -1) return;
 
                 var selectionHighlight = getHighlighter().addHighlight(selection.getRange().getFirst() + tierStart, selection.getRange().getLast() + tierStart, painter);
@@ -2762,7 +2762,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             }
 
             try {
-                int tierStart = getTranscriptDocument().getTierContentStart(selection.getRecordIndex(), selection.getTierName());
+                int tierStart = getTranscriptDocument().getTierContentStart(selection.getElementIndex(), selection.getTierName());
                 if (tierStart == -1) return;
 
                 var selectionHighlight = getHighlighter().addHighlight(selection.getRange().getFirst() + tierStart, selection.getRange().getLast() + tierStart, painter);

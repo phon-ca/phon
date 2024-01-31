@@ -1,0 +1,158 @@
+package ca.phon.app.session.editor.view.search;
+
+import ca.phon.app.session.editor.search.FindManager;
+import ca.phon.session.Session;
+import ca.phon.session.Transcript;
+import ca.phon.session.position.TranscriptElementRange;
+import org.jdesktop.swingx.JXTable;
+
+import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
+import java.util.ArrayList;
+import java.util.List;
+
+public class SearchViewTable extends JXTable {
+
+    public final static String SEARCHING_PROP = SearchViewTable.class.getName() + ".searching";
+
+    public SearchViewTable(FindManager findManager) {
+        super();
+        search(findManager);
+    }
+
+    public SearchViewTable(SearchViewTableModel model) {
+        super(model);
+    }
+
+    public SearchViewTable(Session session, List<TranscriptElementRange> ranges) {
+        super();
+        setModel(new SearchViewTableModel(session, ranges));
+    }
+
+    /**
+     * Search for results using provided find manager.  Exiting results will be cleared first.
+     *
+     * @param findManager
+     */
+    public void search(FindManager findManager) {
+        setModel(new SearchViewTableModel(findManager.getSession(), new ArrayList<>()));
+        final FindWorker worker = new FindWorker(findManager);
+        firePropertyChange(SEARCHING_PROP, false, true);
+        worker.execute();
+    }
+
+    public SearchViewTableModel getSearchViewTableModel() {
+        return (SearchViewTableModel)getModel();
+    }
+
+    /**
+     * Swing worker for finding results
+     */
+    private class FindWorker extends SwingWorker<List<TranscriptElementRange>, TranscriptElementRange> {
+
+        private final FindManager findManager;
+
+        public FindWorker(FindManager findManager) {
+            super();
+            this.findManager = findManager;
+        }
+
+        @Override
+        protected List<TranscriptElementRange> doInBackground() throws Exception {
+            final List<TranscriptElementRange> retVal = new ArrayList<>();
+            TranscriptElementRange range = null;
+            while((range = findManager.findNext()) != null) {
+                retVal.add(range);
+                publish(range);
+            }
+            return retVal;
+        }
+
+        @Override
+        protected void process(List<TranscriptElementRange> chunks) {
+            for(TranscriptElementRange range:chunks) {
+                getSearchViewTableModel().appendResult(range);
+            }
+        }
+
+        @Override
+        protected void done() {
+            firePropertyChange(SEARCHING_PROP, true, false);
+        }
+
+    }
+
+    /**
+     * Search result table
+     */
+    private static class SearchViewTableModel extends AbstractTableModel {
+
+        private Session session;
+
+        enum Columns {
+            RECORD("Record"),
+            TIER("Tier"),
+            TEXT("Text"),
+            Range("Range");
+
+            private final String title;
+
+            Columns(String title) {
+                this.title = title;
+            }
+
+            public String getTitle() {
+                return this.title;
+            }
+
+        }
+
+        private List<TranscriptElementRange> ranges;
+
+        public SearchViewTableModel(Session session, List<TranscriptElementRange> ranges) {
+            super();
+            this.session = session;
+            this.ranges = ranges;
+        }
+
+        @Override
+        public int getRowCount() {
+            return ranges.size();
+        }
+
+        @Override
+        public int getColumnCount() {
+            return Columns.values().length;
+        }
+
+        @Override
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            final TranscriptElementRange range = ranges.get(rowIndex);
+            final Transcript.Element element = session.getTranscript().getElementAt(range.transcriptElementIndex());
+            switch(Columns.values()[columnIndex]) {
+                case RECORD:
+                    if(element.isComment() || element.isGem()) return "";
+                    return session.getTranscript().getRecordIndex(range.transcriptElementIndex());
+                case TIER:
+                    return range.tier();
+                case TEXT:
+                    return session.getTranscriptText(range);
+                case Range:
+                    return range.range();
+            }
+            return "";
+        }
+
+        @Override
+        public String getColumnName(int column) {
+            return Columns.values()[column].getTitle();
+        }
+
+        public void appendResult(TranscriptElementRange range) {
+            this.ranges.add(range);
+            fireTableRowsInserted(ranges.size()-1, ranges.size()-1);
+        }
+
+    }
+
+}

@@ -82,7 +82,7 @@ public class DefaultEditorSelectionModel implements EditorSelectionModel {
 			boolean keep = true;
 
 			if(recordIndex >= 0) {
-				keep &= selection.getRecordIndex() == recordIndex;
+				keep &= selection.getElementIndex() == recordIndex;
 			}
 
 			if(tierName != null) {

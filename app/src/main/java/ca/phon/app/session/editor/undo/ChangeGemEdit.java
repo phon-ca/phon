@@ -3,6 +3,7 @@ package ca.phon.app.session.editor.undo;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.session.Gem;
 import ca.phon.session.Session;
 
@@ -14,6 +15,10 @@ public class ChangeGemEdit extends SessionUndoableEdit {
     private final int elementIndex;
     private final String oldLabel;
     private final String newLabel;
+
+    public ChangeGemEdit(SessionEditor editor, Gem gem, String newLabel) {
+        this(editor.getSession(), editor.getEventManager(), gem, newLabel);
+    }
 
     public ChangeGemEdit(Session session, EditorEventManager editorEventManager, Gem gem, String newLabel) {
         super(session, editorEventManager);

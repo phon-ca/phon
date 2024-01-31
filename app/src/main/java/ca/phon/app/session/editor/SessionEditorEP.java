@@ -21,7 +21,7 @@ import ca.phon.app.menu.file.OpenFileHistory;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.project.UnifiedProjectWindow;
 import ca.phon.app.session.editor.view.check.SessionCheckView;
-import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
+import ca.phon.app.session.editor.view.transcript.TranscriptView;
 import ca.phon.plugin.*;
 import ca.phon.project.*;
 import ca.phon.query.db.*;
@@ -270,8 +270,8 @@ public class SessionEditorEP implements IPluginEntryPoint {
 
 			if(grabFocus) {
 				// XXX this code causes issues with result set editor focus in macos
-				if(editor.getViewModel().isShowing(RecordDataEditorView.VIEW_NAME)) {
-					editor.getViewModel().getView(RecordDataEditorView.VIEW_NAME).requestFocus();
+				if(editor.getViewModel().isShowing(TranscriptView.VIEW_NAME)) {
+					editor.getViewModel().getView(TranscriptView.VIEW_NAME).requestFocus();
 				} else {
 					for(String viewName:editor.getViewModel().getViewNames()) {
 						if(editor.getViewModel().isShowing(viewName)) {

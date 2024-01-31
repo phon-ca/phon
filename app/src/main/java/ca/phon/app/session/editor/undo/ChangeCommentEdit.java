@@ -3,6 +3,7 @@ package ca.phon.app.session.editor.undo;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.session.Comment;
 import ca.phon.session.Session;
 import ca.phon.session.tierdata.TierData;
@@ -15,6 +16,10 @@ public class ChangeCommentEdit extends SessionUndoableEdit {
     private final int elementIndex;
     private final TierData oldValue;
     private final TierData newValue;
+
+    public ChangeCommentEdit(SessionEditor editor, Comment comment, TierData newValue) {
+        this(editor.getSession(), editor.getEventManager(), comment, newValue);
+    }
 
     public ChangeCommentEdit(Session session, EditorEventManager editorEventManager, Comment comment, TierData newValue) {
         super(session, editorEventManager);

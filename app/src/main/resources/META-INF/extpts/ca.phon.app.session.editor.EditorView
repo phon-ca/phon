@@ -11,3 +11,4 @@ ca.phon.app.session.editor.view.ipaDictionary.IPADictionaryViewExtension
 ca.phon.app.session.editor.view.check.SessionCheckViewExtension
 ca.phon.app.session.editor.view.timeline.TimelineViewExtension
 ca.phon.app.session.editor.view.transcript.TranscriptViewExtPt
+ca.phon.app.session.editor.view.search.SearchViewExtPt

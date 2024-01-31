@@ -18,21 +18,22 @@ package ca.phon.app.session.editor.view.find_and_replace;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.search.*;
 import ca.phon.app.session.editor.search.FindManager.*;
+import ca.phon.app.session.editor.undo.ChangeCommentEdit;
+import ca.phon.app.session.editor.undo.ChangeGemEdit;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.common.*;
 import ca.phon.app.session.editor.view.find_and_replace.actions.*;
-import ca.phon.app.session.editor.view.record_data.RecordDataEditorView;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.position.*;
+import ca.phon.session.tierdata.TierData;
 import ca.phon.syllabifier.*;
 import ca.phon.ui.PhonGuiConstants;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.toast.*;
 import ca.phon.util.Language;
-import ca.phon.util.Range;
 import ca.phon.util.icons.*;
 import org.jdesktop.swingx.VerticalLayout;
 
@@ -262,8 +263,8 @@ public class FindAndReplaceEditorView extends EditorView {
 		getFindManager().setSearchTier(getSearchTiers());
 	}
 
-	private void onSessionLocationChanged(EditorEvent<SessionLocation> ee) {
-		final SessionLocation location = ee.data();
+	private void onSessionLocationChanged(EditorEvent<TranscriptElementLocation> ee) {
+		final TranscriptElementLocation location = ee.data();
 		if(location != null) {
 			findManager.setCurrentLocation(location);
 		}
@@ -349,12 +350,12 @@ public class FindAndReplaceEditorView extends EditorView {
 	 * 
 	 * @return startLocation
 	 */
-	private SessionLocation startLocation() {
+	private TranscriptElementLocation startLocation() {
 		final FindManager findManager = getFindManager();
 		final String tier =
 				(findManager.getSearchTiers().length > 0 ? findManager.getSearchTiers()[0] :
 					SystemTierType.Orthography.getName());
-		return new SessionLocation(0, new RecordLocation(tier, 0));
+		return new TranscriptElementLocation(0, tier, 0);
 	}
 
 	/*
@@ -362,7 +363,7 @@ public class FindAndReplaceEditorView extends EditorView {
 	 *  
 	 * @return endLocation
 	 */
-	private SessionLocation endLocation() {
+	private TranscriptElementLocation endLocation() {
 		final Session session = getEditor().getSession();
 		final FindManager findManager = getFindManager();
 		final String tierName =
@@ -371,7 +372,7 @@ public class FindAndReplaceEditorView extends EditorView {
 		final Record r = session.getRecord(session.getRecordCount()-1);
 		final Tier<String> tier = r.getTier(tierName, String.class);
 		final String grp = tier.getValue();
-		return new SessionLocation(session.getRecordCount()-1, new RecordLocation(tierName, grp.length()));
+		return new TranscriptElementLocation(session.getTranscript().getNumberOfElements()-1, tierName, grp.length());
 	}
 	
 	/*
@@ -383,7 +384,7 @@ public class FindAndReplaceEditorView extends EditorView {
 			findManager.setCurrentLocation(
 					findManager.getDirection() == FindDirection.FORWARDS ? startLocation() : endLocation());
 		}
-		SessionRange nextInstance = findManager.findNext();
+		TranscriptElementRange nextInstance = findManager.findNext();
 		if(nextInstance != null) {
 			setupSessionSelection(nextInstance);
 		} else if(findManager.getDirection() == FindDirection.FORWARDS &&
@@ -424,7 +425,7 @@ public class FindAndReplaceEditorView extends EditorView {
 		}
 		
 		
-		SessionRange nextInstance = findManager.findPrev();
+		TranscriptElementRange nextInstance = findManager.findPrev();
 		if(nextInstance != null) {
 			setupSessionSelection(nextInstance);
 		} else if(findManager.getDirection() == FindDirection.FORWARDS &&
@@ -463,31 +464,40 @@ public class FindAndReplaceEditorView extends EditorView {
 			if(replaceTier != null && replaceTier.hasValue() && replaceTier.getValue().toString().length() > 0) {
 				final String replaceExpr = replaceTier.getValue();
 				final Object newVal = findManager.getMatchedExpr().replace(replaceExpr);
-				// re-syllabify if an IPA tier
-				final SessionRange sr = findManager.getMatchedRange();
-				final Record record = getEditor().getSession().getRecord(sr.getRecordIndex());
-				@SuppressWarnings({ "unchecked", "rawtypes" })
-				final TierEdit<?> tierEdit = new TierEdit(getEditor(), getEditor().currentRecord().getTier(sr.getRecordRange().getTier()), newVal);
-				if(newVal instanceof IPATranscript) {
-					final IPATranscript ipa = (IPATranscript)newVal;
-					final Syllabifier syllabifier = getSyllabifier(sr.getRecordRange().getTier());
-					if(syllabifier != null) {
-						syllabifier.syllabify(ipa.toList());
-					}
-					// update alignment
-					final CompoundEdit edit = new CompoundEdit();
-					final PhoneAlignment phoneAlignment = PhoneAlignment.fromTiers(record.getIPATargetTier(), record.getIPAActualTier());
-					final TierEdit<PhoneAlignment> alignmentEdit =
-							new TierEdit<>(getEditor(), record.getPhoneAlignmentTier(), phoneAlignment);
-					tierEdit.doIt();
-					edit.addEdit(tierEdit);
-					alignmentEdit.doIt();
-					edit.addEdit(alignmentEdit);
-					edit.end();
+				final TranscriptElementRange sr = findManager.getMatchedRange();
+				final Transcript.Element transcriptElement = getEditor().getSession().getTranscript().getElementAt(sr.transcriptElementIndex());
+
+				if(transcriptElement.isComment()) {
+					final ChangeCommentEdit edit = new ChangeCommentEdit(getEditor(), transcriptElement.asComment(), (TierData)newVal);
 					getEditor().getUndoSupport().postEdit(edit);
-				} else {
-					getEditor().getUndoSupport().postEdit(tierEdit);
+				} else if(transcriptElement.isGem()) {
+					final ChangeGemEdit edit = new ChangeGemEdit(getEditor(), transcriptElement.asGem(), newVal.toString());
+					getEditor().getUndoSupport().postEdit(edit);
+				} else if(transcriptElement.isRecord()) {
+					final Record record = transcriptElement.asRecord();
+					final TierEdit tierEdit = new TierEdit(getEditor(), getEditor().currentRecord().getTier(sr.tier()), newVal);
+//					if (newVal instanceof IPATranscript)
+//						final IPATranscript ipa = (IPATranscript) newVal;
+//						final Syllabifier syllabifier = getSyllabifier(sr.tier());
+//						if (syllabifier != null) {
+//							syllabifier.syllabify(ipa.toList());
+//						}
+//						// update alignment
+//						final CompoundEdit edit = new CompoundEdit();
+//						final PhoneAlignment phoneAlignment = PhoneAlignment.fromTiers(record.getIPATargetTier(), record.getIPAActualTier());
+//						final TierEdit<PhoneAlignment> alignmentEdit =
+//								new TierEdit<>(getEditor(), record.getPhoneAlignmentTier(), phoneAlignment);
+//						tierEdit.doIt();
+//						edit.addEdit(tierEdit);
+//						alignmentEdit.doIt();
+//						edit.addEdit(alignmentEdit);
+//						edit.end();
+//						getEditor().getUndoSupport().postEdit(edit);
+//					} else {
+						getEditor().getUndoSupport().postEdit(tierEdit);
+//					}
 				}
+
 				getEditor().getSelectionModel().clear();
 			}
 		}
@@ -519,41 +529,36 @@ public class FindAndReplaceEditorView extends EditorView {
 			findManager.setExprForTier(searchTier, exprForTier(searchTier));
 		}
 		findManager.setDirection(FindDirection.FORWARDS);
-		final SessionLocation startLoc = 
-				new SessionLocation(0, new RecordLocation(findManager.getSearchTiers()[0], 0));
+		final TranscriptElementLocation startLoc =
+				new TranscriptElementLocation(0, findManager.getSearchTiers()[0], 0);
 		findManager.setCurrentLocation(startLoc);
 
 		final CompoundEdit edit = new CompoundEdit();
 		int occurrences = 0;
 		
-		SessionRange currentRange = null;
+		TranscriptElementRange currentRange = null;
 		while((currentRange = findManager.findNext()) != null) {
 			++occurrences;
-			
-			final Record r = session.getRecord(currentRange.getRecordIndex());
-			final Tier<?> tier = r.getTier(currentRange.getRecordRange().getTier());
-			
+			final Transcript.Element transcriptElement = session.getTranscript().getElementAt(currentRange.transcriptElementIndex());
 			final Object newVal = findManager.getMatchedExpr().replace(replaceExpr);
-			
-			// re-syllabify if an IPA tier
-			@SuppressWarnings({ "unchecked", "rawtypes" })
-			final TierEdit<?> tierEdit = new TierEdit(getEditor(), tier, newVal);
-			tierEdit.doIt();
-			edit.addEdit(tierEdit);
-			
-			if(newVal instanceof IPATranscript) {
-				final IPATranscript ipa = (IPATranscript)newVal;
-				final Syllabifier syllabifier = getSyllabifier(currentRange.getRecordRange().getTier());
-				if(syllabifier != null) {
-					syllabifier.syllabify(ipa.toList());
-				}
-				// update alignment
-				final PhoneAlignment phoneAlignment = PhoneAlignment.fromTiers(r.getIPATargetTier(), r.getIPAActualTier());
-				final TierEdit<PhoneAlignment> alignmentEdit =
-						new TierEdit<>(getEditor(), r.getPhoneAlignmentTier(), phoneAlignment);
-				alignmentEdit.doIt();
-				edit.addEdit(alignmentEdit);
-				edit.end();
+
+			if(transcriptElement.isComment()) {
+				final Comment c = transcriptElement.asComment();
+				final ChangeCommentEdit commentEdit = new ChangeCommentEdit(getEditor(), c, (TierData)newVal);
+				commentEdit.doIt();
+				edit.addEdit(commentEdit);
+			} else if(transcriptElement.isGem()) {
+				final Gem g = transcriptElement.asGem();
+				final ChangeGemEdit gemEdit = new ChangeGemEdit(getEditor(), g, newVal.toString());
+				gemEdit.doIt();
+				edit.addEdit(gemEdit);
+			} else if(transcriptElement.isRecord()) {
+				final Record r = transcriptElement.asRecord();
+				final Tier<?> tier = r.getTier(currentRange.tier());
+				// re-syllabify if an IPA tier
+				@SuppressWarnings({"unchecked", "rawtypes"}) final TierEdit<?> tierEdit = new TierEdit(getEditor(), tier, newVal);
+				tierEdit.doIt();
+				edit.addEdit(tierEdit);
 			}
 		}
 		edit.end();
@@ -581,29 +586,26 @@ public class FindAndReplaceEditorView extends EditorView {
 		getFindManager().setDirection(direction);
 	}
 	
-	private void setupSessionSelection(SessionRange sessionRange) {
-		final SessionEditorSelection selection = 
-				new SessionEditorSelection(sessionRange.getRecordIndex(), sessionRange.getRecordRange().getTier(),
-						new Range(sessionRange.getRecordRange().start().getCharPositionInLine(),
-								sessionRange.getRecordRange().end().getCharPositionInLine()));
+	private void setupSessionSelection(TranscriptElementRange sessionRange) {
+		final SessionEditorSelection selection = new SessionEditorSelection(sessionRange);
 		getEditor().getSelectionModel().setSelection(selection);
-		getEditor().setCurrentRecordIndex(sessionRange.getRecordIndex());
+		// TODO place caret in correct location
+//		getEditor().setCurrentRecordIndex(sessionRange.getRecordIndex());
 	}
 	
-	private SessionLocation getSessionLocation() {
-		SessionLocation retVal = null;
-		if(getEditor().getViewModel().isShowing(RecordDataEditorView.VIEW_NAME)) {
-			final RecordDataEditorView recordDataView = 
-					(RecordDataEditorView)getEditor().getViewModel().getView(RecordDataEditorView.VIEW_NAME);
-			if(recordDataView.currentTier() != null) {
-				retVal = recordDataView.getSessionLocation();
-			}
-		}
+	private TranscriptElementLocation getSessionLocation() {
+		TranscriptElementLocation retVal = null;
+//		if(getEditor().getViewModel().isShowing(RecordDataEditorView.VIEW_NAME)) {
+//			final RecordDataEditorView recordDataView =
+//					(RecordDataEditorView)getEditor().getViewModel().getView(RecordDataEditorView.VIEW_NAME);
+//			if(recordDataView.currentTier() != null) {
+//				retVal = recordDataView.getSessionLocation();
+//			}
+//		}
 		if(retVal == null) {
 			final String[] searchTiers = findManager.getSearchTiers();
-			final RecordLocation recordLocation = new RecordLocation(
+			retVal = new TranscriptElementLocation(0,
 					(searchTiers.length > 0 ? searchTiers[0] : SystemTierType.Orthography.getName()), 0);
-			retVal = new SessionLocation(getEditor().getCurrentRecordIndex(), recordLocation);
 		}
 		return retVal;
 	}

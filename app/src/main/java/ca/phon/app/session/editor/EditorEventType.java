@@ -2,7 +2,8 @@ package ca.phon.app.session.editor;
 
 import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.position.SessionLocation;
+import ca.phon.session.position.TranscriptElementLocation;
+import ca.phon.session.position.TranscriptElementRange;
 import ca.phon.session.tierdata.TierData;
 import ca.phon.util.Language;
 
@@ -223,8 +224,8 @@ public record  EditorEventType<T>(String eventName, Class<T> type) {
 	/**
 	 * Position of caret changed in record tiers
 	 */
-	public final static EditorEventType<SessionLocation> SessionLocationChanged =
-			new EditorEventType<>(EditorEventName.SESSION_LOCATION_CHANGED_EVT.getEventName(), SessionLocation.class);
+	public final static EditorEventType<TranscriptElementLocation> SessionLocationChanged =
+			new EditorEventType<>(EditorEventName.SESSION_LOCATION_CHANGED_EVT.getEventName(), TranscriptElementLocation.class);
 
 	public record SpeakerChangedData(Record record, Participant oldSpeaker, Participant newSpeaker) { }
 	/**

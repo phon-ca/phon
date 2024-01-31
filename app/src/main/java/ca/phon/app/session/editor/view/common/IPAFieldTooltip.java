@@ -1,6 +1,5 @@
-package ca.phon.app.session.editor.view.record_data;
+package ca.phon.app.session.editor.view.common;
 
-import ca.phon.app.session.editor.view.common.IPAGroupField;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.session.PhoneAlignment;
 import ca.phon.session.Tier;
