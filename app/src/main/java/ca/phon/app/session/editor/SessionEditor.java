@@ -132,9 +132,14 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 
 
 	/**
-	 * View icon strip
+	 * Left view icon strip
 	 */
-	private ViewIconStrip viewIconStrip;
+	private ViewIconStrip leftIconStrip;
+
+	/**
+	 * Right view icon strip
+	 */
+	private ViewIconStrip rightIconStrip;
 
 	private final UndoableEditListener undoListener = new UndoableEditListener() {
 
@@ -263,7 +268,7 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 		add(dock, BorderLayout.CENTER);
 
 		// setup view icon strip
-		viewIconStrip = new ViewIconStrip(viewModel) {
+		leftIconStrip = new ViewIconStrip(viewModel) {
 			@Override
 			protected void initButtons() {
 				add(saveButton, IconStripPosition.LEFT);
@@ -271,8 +276,12 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 				super.initButtons();
 			}
 		};
-		viewIconStrip.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 0));
-		add(viewIconStrip, BorderLayout.WEST);
+		leftIconStrip.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 0));
+		add(leftIconStrip, BorderLayout.WEST);
+
+		rightIconStrip = new ViewIconStrip(SwingConstants.RIGHT, viewModel);
+		rightIconStrip.setBorder(BorderFactory.createEmptyBorder(2, 0, 2, 0));
+		add(rightIconStrip, BorderLayout.EAST);
 
 		setupEditorActions();
 	}
@@ -815,7 +824,7 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 			LogUtil.info(msg);
 
 			final SerializationWarnings warnings = session.getExtension(SerializationWarnings.class);
-			ToastFactory.makeToast(msg).start(viewIconStrip);
+			ToastFactory.makeToast(msg).start(leftIconStrip);
 			setModified(false);
 			if(warnings != null && warnings.size() > 0) {
 				warnings.clear();

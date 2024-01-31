@@ -1,13 +1,13 @@
 package ca.phon.app.session;
 
 public enum ViewPosition {
-    WORK(50, 0, 100, 100, "work"),
-    LEFT_TOP(0, 0, 33, 50, "left-top"),
-    LEFT_BOTTOM(0, 50, 33, 50, "left-bottom"),
-    RIGHT_TOP(133, 0, 33, 50, "right-top"),
-    RIGHT_BOTTOM(133, 50, 33, 100, "right-bottom"),
-    BOTTOM_LEFT(0, 100, 67, 50, "bottom-left"),
-    BOTTOM_RIGHT(67, 100, 66, 50, "bottom-right");
+    WORK(25, 0, 50, 100, "work"),
+    LEFT_TOP(0, 0, 25, 50, "left-top"),
+    LEFT_BOTTOM(0, 50, 25, 50, "left-bottom"),
+    RIGHT_TOP(75, 0, 25, 50, "right-top"),
+    RIGHT_BOTTOM(75, 50, 25, 50, "right-bottom"),
+    BOTTOM_LEFT(0, 100, 50, 50, "bottom-left"),
+    BOTTOM_RIGHT(50, 100, 50, 50, "bottom-right");
 
     private final int x;
     private final int y;

@@ -20,7 +20,7 @@ import ca.phon.app.session.editor.*;
 import ca.phon.plugin.*;
 
 @PhonPlugin
-@EditorViewInfo(name= IPADictionaryView.VIEW_NAME, icon= IPADictionaryView.VIEW_ICON, category=EditorViewCategory.UTILITIES, dockPosition = ViewPosition.BOTTOM_RIGHT)
+@EditorViewInfo(name= IPADictionaryView.VIEW_NAME, icon= IPADictionaryView.VIEW_ICON, category=EditorViewCategory.UTILITIES, dockPosition = ViewPosition.RIGHT_BOTTOM)
 public class IPADictionaryViewExtension implements IPluginExtensionPoint<EditorView> {
 
 	@Override

@@ -4,6 +4,7 @@ import ca.phon.app.session.editor.view.check.SessionCheckView;
 import ca.phon.app.session.editor.view.ipaDictionary.IPADictionaryView;
 import ca.phon.app.session.editor.view.mediaPlayer.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.participants.ParticipantsView;
+import ca.phon.app.session.editor.view.search.SearchView;
 import ca.phon.app.session.editor.view.speechAnalysis.SpeechAnalysisEditorView;
 import ca.phon.app.session.editor.view.tierManagement.TierManagementView;
 import ca.phon.app.session.editor.view.timeline.TimelineView;
@@ -12,6 +13,7 @@ import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.plugin.PluginManager;
 import ca.phon.ui.FlatButton;
 import ca.phon.ui.IconStrip;
+import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.icons.IconManager;
@@ -27,39 +29,50 @@ import java.util.Map;
  */
 public class ViewIconStrip extends IconStrip {
 
+    private int side = SwingConstants.LEFT;
+
     private final EditorViewModel viewModel;
 
     private Map<String, FlatButton> viewButtons = new HashMap<>();
 
-    private FlatButton moreButton;
-
     public ViewIconStrip(EditorViewModel viewModel) {
+        this(SwingConstants.LEFT, viewModel);
+    }
+
+    public ViewIconStrip(int side, EditorViewModel viewModel) {
         super(SwingConstants.VERTICAL);
         this.viewModel = viewModel;
+        this.side = side;
         initButtons();
     }
 
     protected void initButtons() {
-        viewButtons.put(TranscriptView.VIEW_NAME, createViewButton(TranscriptView.VIEW_NAME));
-        viewButtons.put(ParticipantsView.VIEW_NAME, createViewButton(ParticipantsView.VIEW_NAME));
-        viewButtons.put(TierManagementView.VIEW_NAME, createViewButton(TierManagementView.VIEW_NAME));
-        viewButtons.put(MediaPlayerEditorView.VIEW_NAME, createViewButton(MediaPlayerEditorView.VIEW_NAME));
-        viewButtons.put(SpeechAnalysisEditorView.VIEW_NAME, createViewButton(SpeechAnalysisEditorView.VIEW_NAME));
-        viewButtons.put(TimelineView.VIEW_NAME, createViewButton(TimelineView.VIEW_NAME));
-        viewButtons.put(SessionCheckView.VIEW_NAME, createViewButton(SessionCheckView.VIEW_NAME));
-        viewButtons.put(IPADictionaryView.VIEW_NAME, createViewButton(IPADictionaryView.VIEW_NAME));
+        if(side == SwingConstants.LEFT) {
+            viewButtons.put(TranscriptView.VIEW_NAME, createViewButton(TranscriptView.VIEW_NAME));
+            viewButtons.put(ParticipantsView.VIEW_NAME, createViewButton(ParticipantsView.VIEW_NAME));
+            viewButtons.put(TierManagementView.VIEW_NAME, createViewButton(TierManagementView.VIEW_NAME));
+            viewButtons.put(MediaPlayerEditorView.VIEW_NAME, createViewButton(MediaPlayerEditorView.VIEW_NAME));
+            viewButtons.put(SpeechAnalysisEditorView.VIEW_NAME, createViewButton(SpeechAnalysisEditorView.VIEW_NAME));
+            viewButtons.put(TimelineView.VIEW_NAME, createViewButton(TimelineView.VIEW_NAME));
+            viewButtons.put(SessionCheckView.VIEW_NAME, createViewButton(SessionCheckView.VIEW_NAME));
+            viewButtons.put(IPADictionaryView.VIEW_NAME, createViewButton(IPADictionaryView.VIEW_NAME));
+            final FlatButton moreButton = createMoreButton();
 
-        moreButton = createMoreButton();
+            add(viewButtons.get(TranscriptView.VIEW_NAME), IconStripPosition.LEFT);
+            add(viewButtons.get(ParticipantsView.VIEW_NAME), IconStripPosition.LEFT);
+            add(viewButtons.get(TierManagementView.VIEW_NAME), IconStripPosition.LEFT);
+            add(viewButtons.get(MediaPlayerEditorView.VIEW_NAME), IconStripPosition.LEFT);
+            add(viewButtons.get(SpeechAnalysisEditorView.VIEW_NAME), IconStripPosition.LEFT);
+            add(moreButton, IconStripPosition.LEFT);
+            add(viewButtons.get(TimelineView.VIEW_NAME), IconStripPosition.RIGHT);
+            add(viewButtons.get(SessionCheckView.VIEW_NAME), IconStripPosition.RIGHT);
+        } else {
+            viewButtons.put(SearchView.VIEW_NAME, createViewButton(SearchView.VIEW_NAME));
+            viewButtons.put(IPADictionaryView.VIEW_NAME, createViewButton(IPADictionaryView.VIEW_NAME));
 
-        add(viewButtons.get(TranscriptView.VIEW_NAME), IconStripPosition.LEFT);
-        add(viewButtons.get(ParticipantsView.VIEW_NAME), IconStripPosition.LEFT);
-        add(viewButtons.get(TierManagementView.VIEW_NAME), IconStripPosition.LEFT);
-        add(viewButtons.get(MediaPlayerEditorView.VIEW_NAME), IconStripPosition.LEFT);
-        add(viewButtons.get(SpeechAnalysisEditorView.VIEW_NAME), IconStripPosition.LEFT);
-        add(moreButton, IconStripPosition.LEFT);
-        add(viewButtons.get(TimelineView.VIEW_NAME), IconStripPosition.RIGHT);
-        add(viewButtons.get(SessionCheckView.VIEW_NAME), IconStripPosition.RIGHT);
-        add(viewButtons.get(IPADictionaryView.VIEW_NAME), IconStripPosition.RIGHT);
+            add(viewButtons.get(SearchView.VIEW_NAME), IconStripPosition.LEFT);
+            add(viewButtons.get(IPADictionaryView.VIEW_NAME), IconStripPosition.LEFT);
+        }
 
         viewModel.addEditorViewModelListener(new EditorViewModelListener() {
             @Override
@@ -126,18 +139,18 @@ public class ViewIconStrip extends IconStrip {
     }
 
     public FlatButton createMoreButton() {
-        final PhonUIAction showMoreMenu = PhonUIAction.runnable(this::onShowMoreMenu);
+        final PhonUIAction showMoreMenu = PhonUIAction.eventConsumer(this::onShowMoreMenu);
         showMoreMenu.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM_LARGE);
         showMoreMenu.putValue(FlatButton.ICON_NAME_PROP, "more_horiz");
         showMoreMenu.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
-        moreButton = createButton(showMoreMenu);
+        final FlatButton moreButton = createButton(showMoreMenu);
         moreButton.setPadding(2);
         moreButton.setPopupLocation(SwingConstants.EAST);
         moreButton.setPopupText("More...");
         return moreButton;
     }
 
-    private void onShowMoreMenu() {
+    private void onShowMoreMenu(PhonActionEvent pae) {
         final JMenu menu = new JMenu("More...");
 
         var pluginViews = viewModel.getViewsByCategory().get(EditorViewCategory.PLUGINS);
@@ -162,7 +175,8 @@ public class ViewIconStrip extends IconStrip {
         }
 
         viewModel.setupPerspectiveMenu(menu);
-        menu.getPopupMenu().show(moreButton, 0, moreButton.getHeight());
+        final JComponent source = (JComponent)pae.getActionEvent().getSource();
+        menu.getPopupMenu().show(source, 0, source.getHeight());
     }
 
     public FlatButton createViewButton(String viewName) {
@@ -181,7 +195,10 @@ public class ViewIconStrip extends IconStrip {
         retVal.setSelected(viewModel.isShowing(viewName));
         retVal.setPadding(2);
         retVal.setPopupText(viewName);
-        retVal.setPopupLocation(SwingConstants.EAST);
+        if(side == SwingConstants.LEFT)
+            retVal.setPopupLocation(SwingConstants.EAST);
+        else
+            retVal.setPopupLocation(SwingConstants.WEST);
         return retVal;
     }
 
