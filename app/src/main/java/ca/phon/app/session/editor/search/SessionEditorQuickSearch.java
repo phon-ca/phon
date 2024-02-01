@@ -44,6 +44,7 @@ import java.lang.ref.WeakReference;
 
 /**
  */
+@Deprecated
 public class SessionEditorQuickSearch {
 	
 	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(SessionEditorQuickSearch.class.getName());

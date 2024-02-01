@@ -30,6 +30,7 @@ import javax.swing.table.TableModel;
  * 
  * 
  */
+@Deprecated
 public class SessionEditorQuickSearchField extends TableSearchField {
 	
 	private static final long serialVersionUID = -6078848699188278431L;
