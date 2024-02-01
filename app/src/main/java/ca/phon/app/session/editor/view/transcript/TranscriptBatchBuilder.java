@@ -18,6 +18,10 @@ import javax.swing.text.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A class that builds a batch of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} to be used in a
+ * {@link TranscriptDocument}
+ */
 public class TranscriptBatchBuilder {
 
     /**
@@ -498,11 +502,9 @@ public class TranscriptBatchBuilder {
     public TranscriptBatchBuilder appendTierContent(Record record, Tier<?> tier, SimpleAttributeSet tierAttrs) {
         Class<?> tierType = tier.getDeclaredType();
 
-        if (!tier.hasValue()) {
-            appendBatchString("", tierAttrs);
-        } else if (tier.isUnvalidated()) {
+        if (tier.isUnvalidated()) {
             appendBatchString(tier.getUnvalidatedValue().getValue(), tierAttrs);
-        } else {
+        } else if(tier.hasValue()) {
             if (tierType.equals(IPATranscript.class)) {
                 Tier<IPATranscript> ipaTier = (Tier<IPATranscript>) tier;
                 List<IPATranscript> words = (ipaTier).getValue().words();
@@ -533,33 +535,45 @@ public class TranscriptBatchBuilder {
                 appendFormattedSegment(segment, tierAttrs);
             } else if (tierType.equals(Orthography.class)) {
                 Tier<Orthography> orthographyTier = (Tier<Orthography>) tier;
-                orthographyTier.getValue().accept(new TranscriptOrthographyVisitors.KeywordVisitor(tierAttrs, this));
+                if(orthographyTier.getValue().length() == 0) {
+                    appendBatchString("", tierAttrs);
+                } else {
+                    orthographyTier.getValue().accept(new TranscriptOrthographyVisitors.KeywordVisitor(tierAttrs, this));
+                }
             } else if (tierType.equals(MorTierData.class)) {
                 Tier<MorTierData> morTier = (Tier<MorTierData>) tier;
                 MorTierData mors = morTier.getValue();
 
-                for (int i = 0; i < mors.size(); i++) {
-                    Mor mor = mors.get(i);
-                    appendBatchString(mor.toString(), tierAttrs);
-                    if (i < mors.size() - 1) {
-                        appendBatchString(" ", tierAttrs);
+                if(mors.size() == 0) {
+                    appendBatchString("", tierAttrs);
+                } else {
+                    for (int i = 0; i < mors.size(); i++) {
+                        Mor mor = mors.get(i);
+                        appendBatchString(mor.toString(), tierAttrs);
+                        if (i < mors.size() - 1) {
+                            appendBatchString(" ", tierAttrs);
+                        }
                     }
                 }
             } else if (tierType.equals(GraspTierData.class)) {
                 Tier<GraspTierData> graspTier = (Tier<GraspTierData>) tier;
                 GraspTierData grasps = graspTier.getValue();
 
-                for (int i = 0; i < grasps.size(); i++) {
-                    Grasp grasp = grasps.get(i);
-                    appendBatchString(grasp.toString(), tierAttrs);
-                    if (i < grasps.size() - 1) {
-                        appendBatchString(" ", tierAttrs);
+                if(grasps.size() == 0) {
+                    appendBatchString("", tierAttrs);
+                } else {
+                    for (int i = 0; i < grasps.size(); i++) {
+                        Grasp grasp = grasps.get(i);
+                        appendBatchString(grasp.toString(), tierAttrs);
+                        if (i < grasps.size() - 1) {
+                            appendBatchString(" ", tierAttrs);
+                        }
                     }
                 }
             } else if (tierType.equals(TierData.class)) {
                 Tier<TierData> userTier = (Tier<TierData>) tier;
                 TierData tierData = userTier.getValue();
-                if (tierData != null) {
+                if (tierData.length() > 0) {
                     for (int i = 0; i < tierData.length(); i++) {
                         TierElement elem = tierData.elementAt(i);
                         String text = null;
@@ -588,8 +602,12 @@ public class TranscriptBatchBuilder {
                             appendBatchString(" ", tierAttrs);
                         }
                     }
+                } else {
+                    appendBatchString("", tierAttrs);
                 }
             }
+        } else {
+            appendBatchString("", tierAttrs);
         }
 
         return this;
