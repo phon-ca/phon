@@ -58,54 +58,41 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
         doc.addInsertionHook(new DefaultInsertionHook() {
             @Override
             public List<DefaultStyledDocument.ElementSpec> endTier(MutableAttributeSet attrs) {
-                List<DefaultStyledDocument.ElementSpec> retVal = new ArrayList<>();
-
-                if (!isSyllabificationVisible()) return retVal;
-
+                TranscriptBatchBuilder builder = new TranscriptBatchBuilder(editor.getTranscriptDocument());
                 TranscriptStyleContext transcriptStyleContext = doc.getTranscriptStyleContext();
+                if (!isSyllabificationVisible()) return builder.getBatch();
 
                 Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
                 if (tier != null && tier.getDeclaredType().equals(IPATranscript.class)) {
-                    if (tier.getName().equals("IPA Target") || tier.getName().equals("IPA Actual")) {
-                        Tier<IPATranscript> ipaTier = (Tier<IPATranscript>) tier;
+                    Tier<IPATranscript> ipaTier = (Tier<IPATranscript>) tier;
 
-                        // Add a newline at the end of the regular tier content
-                        retVal.addAll(TranscriptBatchBuilder.getBatchEndLineFeed(attrs, null));
-                        // Create a dummy tier for the syllabification
-                        IPATranscript ipaTarget = ipaTier.getValue();
-                        Tier<IPATranscript> syllableTier = doc.getSessionFactory().createTier(
-                            tier.getName().equals("IPA Target") ? SystemTierType.TargetSyllables.getName() : SystemTierType.ActualSyllables.getName(),
-                            IPATranscript.class
-                        );
-                        syllableTier.setValue(ipaTarget);
-                        // Set up the tier attributes for the dummy tier
-                        attrs = new SimpleAttributeSet(attrs);
-                        attrs.addAttributes(transcriptStyleContext.getTierAttributes(syllableTier));
-                        attrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_ENTER_ACTION, syllabificationEditModeAct);
-                        // Set up the attributes for its label
-                        SimpleAttributeSet syllabificationLabelAttrs = transcriptStyleContext.getTierLabelAttributes(syllableTier);
-                        Record record = (Record) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
-                        if (record != null) {
-                            syllabificationLabelAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD, record);
-                        }
-                        // Get the string for the label
-                        String syllabificationLabelText = "\tSyllabification:";
-                        // Add the label
-                        retVal.add(TranscriptBatchBuilder.getBatchString(syllabificationLabelText, syllabificationLabelAttrs));
-                        // Add component factory if needed
-                        if (isSyllabificationComponent()) {
-                            attrs.addAttributes(transcriptStyleContext.getSyllabificationAttributes());
-                            // Append the content string
-                            retVal.add(TranscriptBatchBuilder.getBatchString(syllableTier.getValue().toString(true), attrs));
-                        }
-                        else {
-                            // Append the formatted content
-                            retVal.addAll(getFormattedSyllabification(syllableTier.getValue(), attrs));
-                        }
+                    // Add a newline at the end of the regular tier content
+                    builder.appendEOL();
+
+                    // Create a dummy tier for the syllabification
+                    IPATranscript ipa = ipaTier.getValue();
+                    Tier<IPATranscript> syllableTier = doc.getSessionFactory().createTier(
+                        tier.getName().equals("IPA Target") ? SystemTierType.TargetSyllables.getName() :
+                                (tier.getName().equals("IPA Actual") ? SystemTierType.ActualSyllables.getName() : ipaTier.getName() + " Syllables"),
+                        IPATranscript.class
+                    );
+                    syllableTier.setValue(ipa);
+
+                    // Set up the tier attributes for the dummy tier
+                    MutableAttributeSet tierAttrs = new SimpleAttributeSet();
+                    TranscriptStyleConstants.setEnterAction(tierAttrs, syllabificationEditModeAct);
+                    Record record = (Record) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
+                    builder.appendTierLabel(doc.getSession(), record, syllableTier, null, tierAttrs, doc.isChatTierNamesShown());
+
+                    if(isSyllabificationComponent()) {
+                        tierAttrs.addAttributes(transcriptStyleContext.getSyllabificationAttributes());
+                        builder.appendBatchString(syllableTier.getValue().toString(true), tierAttrs);
+                    } else {
+                        builder.appendAll(getFormattedSyllabification(ipa, tierAttrs));
                     }
                 }
 
-                return retVal;
+                return builder.getBatch();
             }
         });
 

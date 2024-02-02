@@ -76,7 +76,9 @@ public class TranscriptEditorCaret extends DefaultCaret {
     }
 
     public void paint(Graphics g) {
-        if(isVisible() && !isFreezeCaret()) {
+        if(isVisible()) {
+            if(getDot() < 0 || getDot() > getComponent().getDocument().getLength())
+                return;
             final TranscriptEditor component = (TranscriptEditor) getComponent();
             try {
                 TextUI mapper = component.getUI();

@@ -6,6 +6,7 @@ import ca.phon.orthography.Error;
 import ca.phon.visitor.annotation.Visits;
 
 import javax.swing.*;
+import javax.swing.text.AttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import java.util.List;
@@ -24,7 +25,7 @@ public class TranscriptOrthographyVisitors {
 
         private final TranscriptBatchBuilder batchBuilder;
 
-        public KeywordVisitor(SimpleAttributeSet attrs, TranscriptBatchBuilder batchBuilder) {
+        public KeywordVisitor(AttributeSet attrs, TranscriptBatchBuilder batchBuilder) {
 //            this.doc = doc;
             this.attrs = new SimpleAttributeSet(attrs);
             this.batchBuilder = batchBuilder;

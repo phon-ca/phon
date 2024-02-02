@@ -110,14 +110,15 @@ public class TranscriptBatchBuilder {
      * Appends a {@link javax.swing.text.DefaultStyledDocument.ElementSpec} containing the specified string and
      * attributes to the end of the batch
      */
-    public void appendBatchString(String str, MutableAttributeSet a) {
+    public void appendBatchString(String str, AttributeSet a) {
         final StringBuilder builder = new StringBuilder();
         builder.append(str);
         final List<DefaultStyledDocument.ElementSpec> additionalInsertions = new ArrayList<>();
+        final SimpleAttributeSet attrs = new SimpleAttributeSet(a);
         for (InsertionHook hook : insertionHooks) {
-            additionalInsertions.addAll(hook.batchInsertString(builder, a));
+            additionalInsertions.addAll(hook.batchInsertString(builder, attrs));
         }
-        batch.add(getBatchString(builder.toString(), a));
+        batch.add(getBatchString(builder.toString(), attrs));
         batch.addAll(additionalInsertions);
     }
 
@@ -180,7 +181,7 @@ public class TranscriptBatchBuilder {
      * @return a {@link javax.swing.text.DefaultStyledDocument.ElementSpec} containing the specified
      * string and attributes
      */
-    static public DefaultStyledDocument.ElementSpec getBatchString(String str, MutableAttributeSet a) {
+    static public DefaultStyledDocument.ElementSpec getBatchString(String str, AttributeSet a) {
         char[] chars = str.toCharArray();
         return new DefaultStyledDocument.ElementSpec(new SimpleAttributeSet(a), DefaultStyledDocument.ElementSpec.ContentType, chars, 0, str.length());
     }
@@ -193,13 +194,6 @@ public class TranscriptBatchBuilder {
      * @return the formatted text
      */
     public String formatLabelText(String labelText) {
-//        int labelTextLen = labelText.length();
-//        if (labelTextLen < labelColumnWidth) {
-//            return " ".repeat((labelColumnWidth - labelTextLen)) + labelText;
-//        } else if (labelTextLen > labelColumnWidth) {
-//            String remaining = labelText.substring(labelTextLen - labelColumnWidth + 3, labelTextLen);
-//            return "..." + remaining;
-//        }
         return "\t" + labelText;
     }
 
@@ -449,23 +443,36 @@ public class TranscriptBatchBuilder {
      * @param tier         the tier that will be inserted
      * @param tierViewItem a reference to a {@link TierViewItem} used to get font info if any is present
      * @param chatTierNamesShown whether or not chat tier names are shown
-     * @param additionaAttrs  an attribute set containing attributes for the containing record to be added to the tier
+     * @param additionalAttrs  an attribute set containing attributes for the containing record to be added to the tier
      *                     attributes (none will be added if {@code null})
      * @return a mutable attribute set containing the attributes of the last character of the tier to add a
      * newline after if need be
      */
-    public TranscriptBatchBuilder appendTier(Session session, Record record, Tier<?> tier, TierViewItem tierViewItem, boolean chatTierNamesShown, AttributeSet additionaAttrs) {
+    public TranscriptBatchBuilder appendTier(Session session, Record record, Tier<?> tier, TierViewItem tierViewItem, boolean chatTierNamesShown, AttributeSet additionalAttrs) {
+        appendTierLabel(session, record, tier, tierViewItem, additionalAttrs, chatTierNamesShown);
+
+        final SimpleAttributeSet tierAttrs = styleContext.getTierAttributes(tier, tierViewItem);
+        TranscriptStyleConstants.setRecord(tierAttrs, record);
+        if (additionalAttrs != null) {
+            tierAttrs.addAttributes(additionalAttrs);
+        }
+        appendTierContent(record, tier, tierAttrs);
+
+        return this;
+    }
+
+    public TranscriptBatchBuilder appendTierLabel(Session session, Record record, Tier<?> tier, TierViewItem tierViewItem, AttributeSet additionalAttrs, boolean chatTierNamesShown) {
         String tierName = tier.getName();
         SimpleAttributeSet tierAttrs = styleContext.getTierAttributes(tier, tierViewItem);
         tierAttrs.addAttributes(styleContext.getRecordAttributes(record));
-        if (additionaAttrs != null) {
-            tierAttrs.addAttributes(additionaAttrs);
+        if (additionalAttrs != null) {
+            tierAttrs.addAttributes(additionalAttrs);
         }
         appendBatchEndStart(getTrailingAttributes(), tierAttrs);
 
         SimpleAttributeSet labelAttrs = styleContext.getTierLabelAttributes(tier);
-        if (additionaAttrs != null) {
-            labelAttrs.addAttributes(additionaAttrs);
+        if (additionalAttrs != null) {
+            labelAttrs.addAttributes(additionalAttrs);
         }
 
         String labelText = tierName;
@@ -486,20 +493,17 @@ public class TranscriptBatchBuilder {
                 }
             }
         }
-        labelText = formatLabelText(labelText);
 
         TranscriptStyleConstants.setClickable(labelAttrs, true);
-        appendBatchString(labelText, labelAttrs);
+        appendBatchString(formatLabelText(labelText), labelAttrs);
 
         TranscriptStyleConstants.setClickable(labelAttrs, false);
         appendBatchString(": ", labelAttrs);
 
-        appendTierContent(record, tier, tierAttrs);
-
         return this;
     }
 
-    public TranscriptBatchBuilder appendTierContent(Record record, Tier<?> tier, SimpleAttributeSet tierAttrs) {
+    public TranscriptBatchBuilder appendTierContent(Record record, Tier<?> tier, AttributeSet tierAttrs) {
         Class<?> tierType = tier.getDeclaredType();
 
         if (tier.isUnvalidated()) {
@@ -695,6 +699,7 @@ public class TranscriptBatchBuilder {
             }
             if (!additionalInsertions.isEmpty()) {
                 appendAll(additionalInsertions);
+                additionalInsertions.clear();
             }
             appendEOL();
         }

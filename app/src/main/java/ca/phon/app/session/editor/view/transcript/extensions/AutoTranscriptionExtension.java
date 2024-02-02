@@ -120,6 +120,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
                             TranscriptStyleConstants.setEnterAction(ghostAttrs, acceptAutoTranscriptionAct);
 
                             try {
+                                editor.getTranscriptEditorCaret().freeze();
                                 TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(editor.getTranscriptDocument());
                                 batchBuilder.appendBatchString(autoTranscript.toString(), ghostAttrs);
                                 editor.getTranscriptDocument().processBatchUpdates(editor.getCaretPosition(), batchBuilder.getBatch());
