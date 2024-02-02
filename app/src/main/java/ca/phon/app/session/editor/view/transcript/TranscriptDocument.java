@@ -5,20 +5,9 @@ import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
-import ca.phon.formatter.MediaTimeFormatStyle;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.orthography.Happening;
-import ca.phon.orthography.InternalMedia;
-import ca.phon.orthography.Orthography;
-import ca.phon.orthography.mor.Grasp;
-import ca.phon.orthography.mor.GraspTierData;
-import ca.phon.orthography.mor.Mor;
-import ca.phon.orthography.mor.MorTierData;
 import ca.phon.plugin.PluginManager;
 import ca.phon.session.Record;
 import ca.phon.session.*;
-import ca.phon.session.format.MediaSegmentFormatter;
-import ca.phon.session.tierdata.*;
 import ca.phon.util.Language;
 import ca.phon.util.Range;
 
@@ -457,7 +446,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return the position in the document at the beginning of the tier label
      */
     public int getTierStart(int recordIndex, String tierName) {
-        final int paragraphIdx = findParagraphElementIndexForTier(recordIndex, tierName);
+        final int paragraphIdx = findParagraphElementIndexForTier(session.getTranscript().getRecordElementIndex(recordIndex), tierName);
         if (paragraphIdx == -1) return -1;
         Element elem = getDefaultRootElement().getElement(paragraphIdx);
         return elem.getEndOffset();
@@ -482,7 +471,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return the range of the given tier's content
      */
     public Range getTierContentRange(int recordIndex, String tierName) {
-        final int paragraphIdx = findParagraphElementIndexForTier(recordIndex, tierName);
+        final int paragraphIdx = findParagraphElementIndexForTier(session.getTranscript().getRecordElementIndex(recordIndex), tierName);
         if (paragraphIdx == -1) return null;
         Element elem = getDefaultRootElement().getElement(paragraphIdx);
         int tierStart = elem.getStartOffset();
@@ -510,7 +499,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * (newlines included)
      */
     public int getTierEnd(int recordIndex, String tierName) {
-        final int paragraphIdx = findParagraphElementIndexForTier(recordIndex, tierName);
+        final int paragraphIdx = findParagraphElementIndexForTier(session.getTranscript().getRecordElementIndex(recordIndex), tierName);
         if (paragraphIdx == -1) return -1;
         Element elem = getDefaultRootElement().getElement(paragraphIdx);
         return elem.getEndOffset();
@@ -519,21 +508,28 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     /**
      * Find paragraph element index for given tier
      *
-     * @param recordIndex
+     * @param elementIndex
      * @param tierName
      */
-    public int findParagraphElementIndexForTier(int recordIndex, String tierName) {
-        final int sessionElementIndex = session.getTranscript().getRecordElementIndex(recordIndex);
-        final int transcriptElementIndex = findParagraphElementIndexForSessionElementIndex(sessionElementIndex);
+    public int findParagraphElementIndexForTier(int elementIndex, String tierName) {
+        final int transcriptElementIndex = findParagraphElementIndexForSessionElementIndex(elementIndex);
         for(int i = transcriptElementIndex; i < getDefaultRootElement().getElementCount(); i++) {
             Element elem = getDefaultRootElement().getElement(i);
             if (elem.getElementCount() < 1) continue;
             AttributeSet attrs = elem.getAttributes();
             Record currentRecord = TranscriptStyleConstants.getRecord(attrs);
-            if (currentRecord == null) continue;
-            Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
-            if(tier.getName().equals(tierName)) {
-                return i;
+            if(elementIndex >= 0) {
+                if (currentRecord == null) continue;
+                Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
+                if(tier.getName().equals(tierName)) {
+                    return i;
+                }
+            } else {
+                if(currentRecord != null) break;
+                Tier<?> tier = TranscriptStyleConstants.getGenericTier(attrs);
+                if(tier != null && tier.getName().equals(tierName)) {
+                    return i;
+                }
             }
         }
         return -1;
@@ -561,34 +557,74 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     }
 
     /**
+     * Get the range of the given generic tier (header tier)
+     *
+     * @param genericTier
+     * @return the range of the given generic tier or Range(-1, -1) if not found
+     */
+    public Range getGenericRange(Tier<?> genericTier) {
+        return getGenericRange(genericTier.getName());
+    }
+
+    /**
+     * Get the range of the given generic tier (header tier)
+     *
+     * @param genericTierName
+     * @return the range of the given generic tier or Range(-1, -1) if not found
+     */
+    public Range getGenericRange(String genericTierName) {
+        final int paragraphIdx = findParagraphElementIndexForTier(-1, genericTierName);
+        if (paragraphIdx == -1) return new Range(-1, -1);
+
+        Element elem = getDefaultRootElement().getElement(paragraphIdx);
+        return new Range(elem.getStartOffset(), elem.getEndOffset());
+    }
+
+    /**
+     * Get the range of the given generic tier content (header tier)
+     *
+     * @param genericTier
+     * @return the range of the given generic tier or Range(-1, -1) if not found
+     */
+    public Range getGenericContentRange(Tier<?> genericTier) {
+        return getGenericContentRange(genericTier.getName());
+    }
+
+    /**
+     * Get the range of the given generic tier content (header tier)
+     *
+     * @param genericTierName
+     * @return the range of the given generic tier or Range(-1, -1) if not found
+     */
+    public Range getGenericContentRange(String genericTierName) {
+        final int paragraphIdx = findParagraphElementIndexForTier(-1, genericTierName);
+        if (paragraphIdx == -1) return new Range(-1, -1);
+
+        Element elem = getDefaultRootElement().getElement(paragraphIdx);
+        int tierStart = elem.getStartOffset();
+        for (int i = 0; i < elem.getElementCount(); i++) {
+            Element innerElem = elem.getElement(i);
+            AttributeSet attrs = innerElem.getAttributes();
+            boolean isLabel = TranscriptStyleConstants.isLabel(attrs);
+            // If correct tier name
+            if (isLabel) {
+                tierStart = innerElem.getEndOffset();
+                break;
+            }
+        }
+        final int tierEnd = elem.getEndOffset();
+
+        return new Range(tierStart, tierEnd);
+    }
+
+    /**
      * Gets the start position of the specified "generic tier"
      *
      * @param genericTier a reference to the generic tier whose start position is trying to be found
      * @return the position in the document at the beginning of the generic tiers content
      */
     public int getGenericContentStart(Tier<?> genericTier) {
-        Element root = getDefaultRootElement();
-
-        for (int i = 0; i < root.getElementCount(); i++) {
-            Element elem = root.getElement(i);
-            if (elem.getElementCount() == 0) continue;
-            String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
-            // If transcript element type is tierData
-            if (transcriptElementType != null && transcriptElementType.equals(TranscriptStyleConstants.ATTR_KEY_GENERIC)) {
-                for (int j = 0; j < elem.getElementCount(); j++) {
-                    Element innerElem = elem.getElement(j);
-                    AttributeSet attrs = innerElem.getAttributes();
-                    Tier<?> currentGenericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
-                    Boolean isLabel = (Boolean) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL);
-                    // If correct tierData
-                    if (isLabel == null && currentGenericTier != null && currentGenericTier == genericTier) {
-                        return innerElem.getStartOffset();
-                    }
-                }
-            }
-        }
-
-        return -1;
+        return getGenericContentRange(genericTier).getStart();
     }
 
     /**
@@ -598,28 +634,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return the position in the document at the beginning of the generic tiers label
      */
     public int getGenericStart(String genericTierName) {
-        Element root = getDefaultRootElement();
-
-        for (int i = 0; i < root.getElementCount(); i++) {
-            Element elem = root.getElement(i);
-            if (elem.getElementCount() == 0) continue;
-            String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
-            // If transcript element type is generic
-            if (transcriptElementType != null && transcriptElementType.equals(TranscriptStyleConstants.ATTR_KEY_GENERIC)) {
-                for (int j = 0; j < elem.getElementCount(); j++) {
-                    Element innerElem = elem.getElement(j);
-                    AttributeSet attrs = innerElem.getAttributes();
-                    Tier<?> currentGenericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
-                    Boolean isLabel = (Boolean) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL);
-                    // If correct tier name
-                    if (isLabel == null && currentGenericTier != null && currentGenericTier.getName().equals(genericTierName)) {
-                        return innerElem.getParentElement().getStartOffset();
-                    }
-                }
-            }
-        }
-
-        return -1;
+        return getGenericRange(genericTierName).getStart();
     }
 
     /**
@@ -629,28 +644,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return the position in the document at the beginning of the generic tiers label
      */
     public int getGenericStart(Tier<?> genericTier) {
-        Element root = getDefaultRootElement();
-
-        for (int i = 0; i < root.getElementCount(); i++) {
-            Element elem = root.getElement(i);
-            if (elem.getElementCount() == 0) continue;
-            String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
-            // If transcript element type is generic
-            if (transcriptElementType != null && transcriptElementType.equals(TranscriptStyleConstants.ATTR_KEY_GENERIC)) {
-                for (int j = 0; j < elem.getElementCount(); j++) {
-                    Element innerElem = elem.getElement(j);
-                    AttributeSet attrs = innerElem.getAttributes();
-                    Tier<?> currentGenericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
-                    Boolean isLabel = (Boolean) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL);
-                    // If correct tier name
-                    if (isLabel == null && currentGenericTier != null && currentGenericTier == genericTier) {
-                        return innerElem.getParentElement().getStartOffset();
-                    }
-                }
-            }
-        }
-
-        return -1;
+        return getGenericRange(genericTier).getStart();
     }
 
     /**
@@ -660,28 +654,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return the position in the document at the beginning of the generic tiers content
      */
     public int getGenericContentStart(String genericTierName) {
-        Element root = getDefaultRootElement();
-
-        for (int i = 0; i < root.getElementCount(); i++) {
-            Element elem = root.getElement(i);
-            if (elem.getElementCount() == 0) continue;
-            String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
-            // If transcript element type is generic
-            if (transcriptElementType != null && transcriptElementType.equals(TranscriptStyleConstants.ATTR_KEY_GENERIC)) {
-                for (int j = 0; j < elem.getElementCount(); j++) {
-                    Element innerElem = elem.getElement(j);
-                    AttributeSet attrs = innerElem.getAttributes();
-                    Tier<?> currentGenericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
-                    Boolean isLabel = (Boolean) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL);
-                    // If correct tier name
-                    if (isLabel == null && currentGenericTier != null && currentGenericTier.getName().equals(genericTierName)) {
-                        return innerElem.getStartOffset();
-                    }
-                }
-            }
-        }
-
-        return -1;
+        return getGenericContentRange(genericTierName).getStart();
     }
 
     /**
@@ -692,30 +665,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * (newlines included)
      */
     public int getGenericEnd(Tier<?> genericTier) {
-        int retVal = -1;
-
-        Element root = getDefaultRootElement();
-
-        for (int i = 0; i < root.getElementCount(); i++) {
-            Element elem = root.getElement(i);
-            if (elem.getElementCount() < 1) continue;
-            String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
-            // If transcript element type is tierData
-            if (transcriptElementType != null && transcriptElementType.equals(TranscriptStyleConstants.ATTR_KEY_GENERIC)) {
-                for (int j = 0; j < elem.getElementCount(); j++) {
-                    Element innerElem = elem.getElement(j);
-                    AttributeSet attrs = innerElem.getAttributes();
-                    Tier<?> currentGenericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
-                    Boolean isLabel = (Boolean) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL);
-                    // If correct tierData
-                    if (isLabel == null && currentGenericTier != null && currentGenericTier.toString().equals(genericTier.toString())) {
-                        retVal = Math.max(retVal, innerElem.getEndOffset());
-                    }
-                }
-            }
-        }
-
-        return retVal;
+        return getGenericRange(genericTier).getEnd();
     }
 
     /**
@@ -726,30 +676,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * (newlines included)
      */
     public int getGenericEnd(String genericTierName) {
-        int retVal = -1;
-
-        Element root = getDefaultRootElement();
-
-        for (int i = 0; i < root.getElementCount(); i++) {
-            Element elem = root.getElement(i);
-            if (elem.getElementCount() < 1) continue;
-            String transcriptElementType = (String) elem.getElement(0).getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
-            // If transcript element type is tierData
-            if (transcriptElementType != null && transcriptElementType.equals(TranscriptStyleConstants.ATTR_KEY_GENERIC)) {
-                for (int j = 0; j < elem.getElementCount(); j++) {
-                    Element innerElem = elem.getElement(j);
-                    AttributeSet attrs = innerElem.getAttributes();
-                    Tier<?> currentGenericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
-                    Boolean isLabel = (Boolean) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL);
-                    // If correct tierData
-                    if (isLabel == null && currentGenericTier != null && currentGenericTier.getName().equals(genericTierName)) {
-                        retVal = Math.max(retVal, innerElem.getEndOffset());
-                    }
-                }
-            }
-        }
-
-        return retVal;
+        return getGenericRange(genericTierName).getEnd();
     }
 
     /**
@@ -924,7 +851,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             paraEleIdx = getSession().getTranscript().getElementIndex(TranscriptStyleConstants.getComment(attrs));
         } else if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM) != null) {
             paraEleIdx = getSession().getTranscript().getElementIndex(TranscriptStyleConstants.getGEM(attrs));
-        } else if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC) != null) {
+        } else if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER) != null) {
             paraEleIdx = -1;
         }
         return paraEleIdx;
@@ -1065,8 +992,8 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 if (gem == null) return -1;
                 return pos - getGemContentStart(gem);
             }
-            case TranscriptStyleConstants.ATTR_KEY_GENERIC -> {
-                Tier<?> genericTier = (Tier<?>) elem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
+            case TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER -> {
+                Tier<?> genericTier = (Tier<?>) elem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER);
                 if (genericTier == null) return -1;
                 return pos - getGenericContentStart(genericTier);
             }

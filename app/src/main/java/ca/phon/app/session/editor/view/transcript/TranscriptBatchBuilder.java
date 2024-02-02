@@ -215,8 +215,8 @@ public class TranscriptBatchBuilder {
      */
     public TranscriptBatchBuilder appendGeneric(String label, Tier<?> tier, AttributeSet additionalAttributes) {
         SimpleAttributeSet attrs = new SimpleAttributeSet(styleContext.getStyle(TranscriptStyleContext.DEFAULT_STYLE));
-        attrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE, TranscriptStyleConstants.ATTR_KEY_GENERIC);
-        attrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC, tier);
+        attrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE, TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER);
+        attrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER, tier);
         if (additionalAttributes != null) attrs.addAttributes(additionalAttributes);
 
         appendBatchEndStart(getTrailingAttributes(), attrs);

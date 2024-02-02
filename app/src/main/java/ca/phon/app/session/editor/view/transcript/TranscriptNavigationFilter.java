@@ -86,11 +86,11 @@ public class TranscriptNavigationFilter extends NavigationFilter {
                         String newValue = doc.getText(start, end - start);
                         editor.gemDataChanged(prevGem, newValue);
                     }
-                    case TranscriptStyleConstants.ATTR_KEY_GENERIC -> {
-                        Tier<?> prevGenericTier = (Tier<?>) prevAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
+                    case TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER -> {
+                        Tier<?> prevGenericTier = (Tier<?>) prevAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER);
                         if (prevGenericTier == null) break;
-                        if (nextElemType != null && nextElemType.equals(TranscriptStyleConstants.ATTR_KEY_GENERIC)) {
-                            Tier<?> nextGenericTier = (Tier<?>) nextAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
+                        if (nextElemType != null && nextElemType.equals(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER)) {
+                            Tier<?> nextGenericTier = (Tier<?>) nextAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER);
                             if (nextGenericTier != null && nextGenericTier == prevGenericTier) break;
                         }
                         int start = doc.getGenericContentStart(prevGenericTier);
@@ -167,8 +167,8 @@ public class TranscriptNavigationFilter extends NavigationFilter {
                         end = doc.getGemEnd(gem);
                     }
                 }
-                case TranscriptStyleConstants.ATTR_KEY_GENERIC -> {
-                    Tier<?> generic = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
+                case TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER -> {
+                    Tier<?> generic = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER);
                     if (generic != null) {
                         start = doc.getGenericContentStart(generic);
                         end = doc.getGenericEnd(generic);

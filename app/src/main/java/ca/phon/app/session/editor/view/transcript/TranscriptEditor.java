@@ -294,7 +294,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                     atEndOfTier = currentPos + 1 == endPos;
                 }
                 case "generic" -> {
-                    Tier<?> currentGeneric = (Tier<?>) currentPosAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
+                    Tier<?> currentGeneric = (Tier<?>) currentPosAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER);
                     if (currentGeneric == null) return;
                     int endPos = doc.getGenericEnd(currentGeneric);
 
@@ -587,8 +587,8 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                         int end = doc.getGemEnd(gem) - 1;
                         gemDataChanged(gem, doc.getText(start, end - start));
                     }
-                    case TranscriptStyleConstants.ATTR_KEY_GENERIC -> {
-                        Tier<?> genericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
+                    case TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER -> {
+                        Tier<?> genericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER);
                         if (genericTier == null) return;
                         int start = doc.getGenericContentStart(genericTier);
                         int end = doc.getGenericEnd(genericTier) - 1;
@@ -653,8 +653,8 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                     start = doc.getGemContentStart(gem);
                 }
             }
-            case TranscriptStyleConstants.ATTR_KEY_GENERIC -> {
-                Tier<?> genericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
+            case TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER -> {
+                Tier<?> genericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER);
                 if (genericTier != null) {
                     start = doc.getGenericContentStart(genericTier);
                 }
@@ -700,8 +700,8 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                     end = doc.getGemEnd(gem);
                 }
             }
-            case TranscriptStyleConstants.ATTR_KEY_GENERIC -> {
-                Tier<?> genericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
+            case TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER -> {
+                Tier<?> genericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER);
                 if (genericTier != null) {
                     end = doc.getGenericEnd(genericTier);
                 }
@@ -780,8 +780,8 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                         start = doc.getCommentContentStart((Comment) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT));
                 case TranscriptStyleConstants.ATTR_KEY_GEM ->
                         start = doc.getGemContentStart((Gem) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM));
-                case TranscriptStyleConstants.ATTR_KEY_GENERIC ->
-                        start = doc.getGenericContentStart((Tier<?>) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC));
+                case TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER ->
+                        start = doc.getGenericContentStart((Tier<?>) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER));
             }
 
             setCaretPosition(start + caretOffset);
@@ -1626,8 +1626,8 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                         start = doc.getCommentContentStart((Comment) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT));
                 case TranscriptStyleConstants.ATTR_KEY_GEM ->
                         start = doc.getGemContentStart((Gem) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM));
-                case TranscriptStyleConstants.ATTR_KEY_GENERIC ->
-                        start = doc.getGenericContentStart((Tier<?>) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC));
+                case TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER ->
+                        start = doc.getGenericContentStart((Tier<?>) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER));
             }
 
             setCaretPosition(start + caretOffset);
@@ -1734,8 +1734,8 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                         start = doc.getCommentContentStart((Comment) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT));
                 case TranscriptStyleConstants.ATTR_KEY_GEM ->
                         start = doc.getGemContentStart((Gem) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM));
-                case TranscriptStyleConstants.ATTR_KEY_GENERIC ->
-                        start = doc.getGenericContentStart((Tier<?>) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC));
+                case TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER ->
+                        start = doc.getGenericContentStart((Tier<?>) caretAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER));
             }
 
             setCaretPosition(start + caretOffset);
@@ -2042,8 +2042,8 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         } else if (elementType.equals(TranscriptStyleConstants.ATTR_KEY_GEM)) {
             Gem gem = (Gem) prevElementAttributes.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM);
             end = doc.getGemEnd(gem);
-        } else if (elementType.equals(TranscriptStyleConstants.ATTR_KEY_GENERIC)) {
-            Tier<?> genericTier = (Tier<?>) prevElementAttributes.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
+        } else if (elementType.equals(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER)) {
+            Tier<?> genericTier = (Tier<?>) prevElementAttributes.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER);
             end = doc.getGenericEnd(genericTier);
         } else {
             return;
@@ -2090,7 +2090,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         } else if (elementType.equals(TranscriptStyleConstants.ELEMENT_TYPE_GEM)) {
             end = doc.getGemEnd(TranscriptStyleConstants.getGEM(nextElementAttributes));
         } else if (elementType.equals(TranscriptStyleConstants.ELEMENT_TYPE_GENERIC)) {
-            end = doc.getGenericEnd(TranscriptStyleConstants.getTier(nextElementAttributes));
+            end = doc.getGenericEnd(TranscriptStyleConstants.getGenericTier(nextElementAttributes));
         } else {
             return;
         }
@@ -2239,8 +2239,8 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                 label = gem.getType().name() + " Gem";
                 posInTier = doc.getGemContentStart(gem);
             }
-            case TranscriptStyleConstants.ATTR_KEY_GENERIC -> {
-                Tier<?> genericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
+            case TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER -> {
+                Tier<?> genericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER);
                 if (genericTier != null) {
                     label = genericTier.getName();
                     posInTier = doc.getGenericContentStart(genericTier);
@@ -2679,8 +2679,8 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                                     setSelectionEnd(doc.getGemEnd(gem) - 1);
                                 }
                             }
-                            case TranscriptStyleConstants.ATTR_KEY_GENERIC -> {
-                                Tier<?> generic = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC);
+                            case TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER -> {
+                                Tier<?> generic = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER);
                                 if (generic != null) {
                                     setSelectionStart(doc.getGenericContentStart(generic));
                                     setSelectionEnd(doc.getGenericEnd(generic) - 1);

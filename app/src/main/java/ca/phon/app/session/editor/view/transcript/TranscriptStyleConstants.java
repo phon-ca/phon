@@ -59,17 +59,16 @@ public class TranscriptStyleConstants {
             attrs.addAttribute(ATTR_KEY_GEM, gem);
     }
 
-    public static final String ATTR_KEY_GENERIC = "generic";
+    public static final String ATTR_KEY_GENERIC_TIER = "generic";
 
-    public static boolean isGeneric(AttributeSet attrs) {
-        return attrs.isDefined(ATTR_KEY_GENERIC);
+    public static Tier<?> getGenericTier(AttributeSet attrs) {
+        return (Tier<?>)attrs.getAttribute(ATTR_KEY_GENERIC_TIER);
     }
 
-    public static void setGeneric(MutableAttributeSet attrs, boolean generic) {
-        if(generic)
-            attrs.addAttribute(ATTR_KEY_GENERIC, Boolean.TRUE);
-        else
-            attrs.removeAttribute(ATTR_KEY_GENERIC);
+    public static void setGenericTier(MutableAttributeSet attrs, Tier<?> genericTier) {
+        attrs.removeAttribute(ATTR_KEY_GENERIC_TIER);
+        if(genericTier != null)
+            attrs.addAttribute(ATTR_KEY_GENERIC_TIER, genericTier);
     }
 
     public static final String ATTR_KEY_ELEMENT_TYPE = "elementType";
