@@ -1,6 +1,8 @@
 package ca.phon.app.session.editor.view.transcript.extensions;
 
 import ca.phon.app.log.LogUtil;
+import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.autotranscribe.AutoTranscriber;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.ipaDictionary.IPALookupEdit;
@@ -21,8 +23,10 @@ import ca.phon.util.Range;
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
+import java.awt.event.AWTEventListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.text.ParseException;
 import java.util.function.Supplier;
 
@@ -35,6 +39,8 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
     private Supplier<IPADictionary> ipaDictionarySupplier;
 
     private Range ghostRange = null;
+
+    private final static String AUTO_TRANSCRIPTION_ATTR = "autoTranscription";
 
     public AutoTranscriptionExtension() {
         this(() -> IPADictionaryLibrary.getInstance().defaultDictionary());
@@ -66,73 +72,95 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
         PhonUIAction<Void> autoTranscriptionAct = PhonUIAction.runnable(this::autoTranscription);
         actionMap.put("autoTranscription", autoTranscriptionAct);
 
-        editor.getEventManager().registerActionForEvent(TranscriptEditor.transcriptLocationChanged, (e) -> {
-            if(ghostRange != null) {
-                try {
-                    editor.getTranscriptDocument().remove(ghostRange.getFirst(), ghostRange.getLast() - ghostRange.getFirst());
-                    ghostRange = null;
-                } catch (BadLocationException ex) {
-                    LogUtil.warning(ex);
-                }
+        editor.getEventManager().registerActionForEvent(TranscriptEditor.transcriptLocationChanged, this::onTranscriptLocationChanged,
+                EditorEventManager.RunOn.AWTEventDispatchThread);
+    }
+
+    /**
+     * Insert ghost text for auto-transcription
+     *
+     * @param ipa
+     */
+    private void insertGhostText(Record record, Tier<IPATranscript> tier, IPATranscript ipa) {
+        final SimpleAttributeSet ghostAttrs = editor.getTranscriptDocument().getTranscriptStyleContext().getTierAttributes(tier);
+        // make text gray and italic
+        StyleConstants.setForeground(ghostAttrs, Color.gray);
+        StyleConstants.setItalic(ghostAttrs, true);
+        TranscriptStyleConstants.setRecord(ghostAttrs, record);
+        TranscriptStyleConstants.setNotTraversable(ghostAttrs, true);
+        TranscriptStyleConstants.setElementType(ghostAttrs, TranscriptStyleConstants.ELEMENT_TYPE_RECORD);
+        ghostAttrs.addAttribute(AUTO_TRANSCRIPTION_ATTR, ipa);
+        try {
+            editor.getTranscriptEditorCaret().freeze();
+            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(editor.getTranscriptDocument());
+            batchBuilder.appendBatchString(ipa.toString(), ghostAttrs);
+            editor.getTranscriptDocument().processBatchUpdates(editor.getCaretPosition(), batchBuilder.getBatch());
+            ghostRange = new Range(editor.getCaretPosition(), editor.getCaretPosition() + ipa.toString().length());
+        } catch (BadLocationException ex) {
+            LogUtil.warning(ex);
+        }
+    }
+
+    /**
+     * Remove ghost text from document and unfreeze caret
+     *
+     */
+    public void removeGhostRange() {
+        if(ghostRange != null) {
+            try {
+                editor.getTranscriptDocument().remove(ghostRange.getStart(), ghostRange.getEnd() - ghostRange.getStart());
+                ghostRange = null;
+                editor.getTranscriptEditorCaret().unfreeze();
+            } catch (BadLocationException ex) {
+                LogUtil.warning(ex);
             }
+        }
+    }
 
-            final AttributeSet eleAttrs = editor.getTranscriptDocument().getCharacterElement(editor.getCaretPosition()).getAttributes();
-            final Tier<?> tier = TranscriptStyleConstants.getTier(eleAttrs);
-            final Record record = TranscriptStyleConstants.getRecord(eleAttrs);
-            if(record != null && tier != null) {
-                if(tier.getDeclaredType().equals(IPATranscript.class)) {
-                    final IPATranscript tierVal = tier.hasValue() ? (IPATranscript) tier.getValue() : new IPATranscript();
-                    if(!tier.isUnvalidated() && tierVal.length() == 0) {
-                        IPATranscript suggestion = new IPATranscript();
-                        if(SystemTierType.IPAActual.getName().equals(tier.getName())) {
-                            if(record.getIPATargetTier().hasValue() && record.getIPATargetTier().getValue().length() > 0) {
-                                try {
-                                    suggestion = IPATranscript.parseIPATranscript(record.getIPATarget().toString());
-                                } catch (ParseException ex) {
-                                    LogUtil.warning(ex);
-                                }
-                            }
-                        }
-                        if(suggestion.length() == 0)
-                            suggestion = AutoTranscriber.transcribe(record.getOrthography(), getDictionary());
-                        final IPATranscript autoTranscript = suggestion;
-                        if(autoTranscript.length() > 0) {
-                            final SimpleAttributeSet ghostAttrs = editor.getTranscriptDocument().getTranscriptStyleContext().getTierAttributes(tier);
-                            // make text gray and italic
-                            StyleConstants.setForeground(ghostAttrs, Color.gray);
-                            StyleConstants.setItalic(ghostAttrs, true);
-                            TranscriptStyleConstants.setNotTraversable(ghostAttrs, true);
-                            TranscriptStyleConstants.setElementType(ghostAttrs, TranscriptStyleConstants.ELEMENT_TYPE_RECORD);
+    /**
+     * Accept automatic transcription
+     *
+     * @param record
+     * @param tier
+     * @param ipa
+     *
+     */
+    public void acceptAutoTranscription(Record record, Tier<IPATranscript> tier, IPATranscript ipa) {
 
-                            final PhonUIAction<Void> acceptAutoTranscriptionAct = PhonUIAction.runnable(() -> {
-                                if(ghostRange != null) {
-                                    try {
-                                        editor.getTranscriptDocument().remove(ghostRange.getStart(), ghostRange.getEnd() - ghostRange.getStart());
-                                        ghostRange = null;
-                                    } catch (BadLocationException ex) {
-                                        LogUtil.warning(ex);
-                                    }
-                                }
-                                final TierEdit<IPATranscript> edit = new TierEdit<>(editor.getSession(), editor.getEventManager(), record, (Tier<IPATranscript>)tier, autoTranscript);
-                                edit.setValueAdjusting(false);
-                                editor.getUndoSupport().postEdit(edit);
-                            });
-                            TranscriptStyleConstants.setEnterAction(ghostAttrs, acceptAutoTranscriptionAct);
 
-                            try {
-                                editor.getTranscriptEditorCaret().freeze();
-                                TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(editor.getTranscriptDocument());
-                                batchBuilder.appendBatchString(autoTranscript.toString(), ghostAttrs);
-                                editor.getTranscriptDocument().processBatchUpdates(editor.getCaretPosition(), batchBuilder.getBatch());
-                                ghostRange = new Range(editor.getCaretPosition(), editor.getCaretPosition() + autoTranscript.toString().length());
-                            } catch (BadLocationException ex) {
-                                LogUtil.warning(ex);
-                            }
-                        }
+        final TierEdit<IPATranscript> edit = new TierEdit<>(editor.getSession(), editor.getEventManager(), editor.getDataModel().getTranscriber(), record, tier, ipa);
+        edit.setValueAdjusting(false);
+        editor.getUndoSupport().postEdit(edit);
+    }
+
+    /**
+     * On transcript location changed.  Check for an empty IPA tier and suggest transcription
+     *
+     * @param e
+     */
+    private void onTranscriptLocationChanged(EditorEvent<TranscriptEditor.TranscriptLocationChangeData> e) {
+        final AttributeSet eleAttrs = editor.getTranscriptDocument().getCharacterElement(editor.getCaretPosition()).getAttributes();
+        final Tier<?> tier = TranscriptStyleConstants.getTier(eleAttrs);
+        final Record record = TranscriptStyleConstants.getRecord(eleAttrs);
+        if(record != null && tier != null) {
+            if(tier.getDeclaredType().equals(IPATranscript.class)) {
+                final IPATranscript tierVal = tier.hasValue() ? (IPATranscript) tier.getValue() : new IPATranscript();
+                if(!tier.isUnvalidated() && tierVal.length() == 0) {
+                    final IPATranscript autoTranscript = AutoTranscriber.transcribe(record.getOrthography(), getDictionary());
+                    if(autoTranscript.length() > 0) {
+                        final SimpleAttributeSet ghostAttrs = editor.getTranscriptDocument().getTranscriptStyleContext().getTierAttributes(tier);
+                        // make text gray and italic
+                        StyleConstants.setForeground(ghostAttrs, Color.gray);
+                        StyleConstants.setItalic(ghostAttrs, true);
+                        TranscriptStyleConstants.setNotTraversable(ghostAttrs, true);
+                        TranscriptStyleConstants.setElementType(ghostAttrs, TranscriptStyleConstants.ELEMENT_TYPE_RECORD);
+
+                        insertGhostText(record, (Tier<IPATranscript>)tier, autoTranscript);
+                        Toolkit.getDefaultToolkit().addAWTEventListener(alignmentListener, AWTEvent.KEY_EVENT_MASK | AWTEvent.MOUSE_EVENT_MASK);
                     }
                 }
             }
-        });
+        }
     }
 
     /**
@@ -154,4 +182,37 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
             editor.getUndoSupport().postEdit(edit);
         }
     }
+
+    private final AWTEventListener alignmentListener = new AWTEventListener() {
+        @Override
+        public void eventDispatched(AWTEvent event) {
+            if(event instanceof KeyEvent ke) {
+                if(ke.getID() == KeyEvent.KEY_PRESSED) {
+                    switch (ke.getKeyCode()) {
+                        case KeyEvent.VK_UP, KeyEvent.VK_DOWN -> {
+                            removeGhostRange();
+                            Toolkit.getDefaultToolkit().removeAWTEventListener(alignmentListener);
+                            return;
+                        }
+                        case KeyEvent.VK_ESCAPE -> {
+                            removeGhostRange();
+                            Toolkit.getDefaultToolkit().removeAWTEventListener(alignmentListener);
+                        }
+                        case KeyEvent.VK_TAB, KeyEvent.VK_ENTER -> {
+                            final AttributeSet eleAttrs = editor.getTranscriptDocument().getCharacterElement(editor.getCaretPosition()).getAttributes();
+                            final Tier<IPATranscript> tier = (Tier<IPATranscript>) TranscriptStyleConstants.getTier(eleAttrs);
+                            final Record record = TranscriptStyleConstants.getRecord(eleAttrs);
+                            final IPATranscript ipa = (IPATranscript)eleAttrs.getAttribute(AUTO_TRANSCRIPTION_ATTR);
+                            removeGhostRange();
+                            acceptAutoTranscription(record, tier, ipa);
+                            Toolkit.getDefaultToolkit().removeAWTEventListener(alignmentListener);
+                        }
+                    }
+                }
+                ke.consume();
+            } else if(event instanceof MouseEvent me) {
+                // TODO handle mouse events
+            }
+        }
+    };
 }

@@ -343,6 +343,10 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
 //        this.eventManager.registerActionForEvent(EditorEventType.ParticipantChanged, this::onParticipantChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
     }
 
+    public EditorDataModel getDataModel() {
+        return dataModel;
+    }
+
     public SessionMediaModel getMediaModel() {
         return this.mediaModel;
     }
