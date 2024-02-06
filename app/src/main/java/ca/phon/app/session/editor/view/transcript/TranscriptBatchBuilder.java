@@ -609,6 +609,8 @@ public class TranscriptBatchBuilder {
                 } else {
                     appendBatchString("", tierAttrs);
                 }
+            } else {
+                appendBatchString(tier.toString(), tierAttrs);
             }
         } else {
             appendBatchString("", tierAttrs);

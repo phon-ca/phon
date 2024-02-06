@@ -9,6 +9,7 @@ import ca.phon.session.PhoneAlignment;
 import ca.phon.session.Record;
 import ca.phon.session.Tier;
 import ca.phon.session.TierViewItem;
+import com.kitfox.svg.A;
 
 import javax.swing.text.*;
 import java.util.ArrayList;
@@ -42,19 +43,15 @@ public class AlignmentExtension implements TranscriptEditorExtension {
         doc.addInsertionHook(new DefaultInsertionHook() {
             @Override
             public List<DefaultStyledDocument.ElementSpec> endTier(MutableAttributeSet attrs) {
-                List<DefaultStyledDocument.ElementSpec> retVal = new ArrayList<>();
-
                 Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
-
                 TierViewItem alignmentParent = getAlignmentParent();
-                if (tier != null && isAlignmentVisible() && alignmentParent != null && tier.getName().equals(alignmentParent.getTierName())) {
-                    retVal.addAll(TranscriptBatchBuilder.getBatchEndLineFeed(attrs, null));
 
+                if (tier != null && isAlignmentVisible() && alignmentParent != null && tier.getName().equals(alignmentParent.getTierName())) {
                     Record record = (Record) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
-                    retVal.addAll(getFormattedAlignment(tier, record));
+                    return getFormattedAlignment(record.getTier(alignmentParent.getTierName()), record);
                 }
 
-                return retVal;
+                return new ArrayList<>();
             }
         });
 
@@ -122,43 +119,31 @@ public class AlignmentExtension implements TranscriptEditorExtension {
      * Gets a list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} that contains the data for the
      * properly formatted alignment tier line
      *
-     * @param tier a reference to the parent tier
+     * @param parentTier a reference to the parent tier
      * @param record a reference to the record containing the alignment tier
      * @return the list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} data
      * */
-    public List<DefaultStyledDocument.ElementSpec> getFormattedAlignment(Tier<?> tier, Record record) {
-        List<DefaultStyledDocument.ElementSpec> retVal = new ArrayList<>();
-
-        TranscriptStyleContext transcriptStyleContext = doc.getTranscriptStyleContext();
-
+    public List<DefaultStyledDocument.ElementSpec> getFormattedAlignment(Tier<?> parentTier, Record record) {
+        final TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(doc);
         // Get the alignment tier
         Tier<PhoneAlignment> alignmentTier = record.getPhoneAlignmentTier();
+        TranscriptStyleContext transcriptStyleContext = doc.getTranscriptStyleContext();
+
         // Set up the tier attributes for the dummy tier
-        var tierAttrs = transcriptStyleContext.getTierAttributes(tier);
-        tierAttrs.addAttributes(transcriptStyleContext.getTierAttributes(alignmentTier));
-        tierAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
-        // Set up the attributes for its label
-        SimpleAttributeSet alignmentLabelAttrs = transcriptStyleContext.getTierLabelAttributes(alignmentTier);
-        // Set up record attributes
-        SimpleAttributeSet recordAttrs = transcriptStyleContext.getRecordAttributes(record);
-        alignmentLabelAttrs.addAttributes(recordAttrs);
-        tierAttrs.addAttributes(recordAttrs);
-        // Get the string for the label
-        String alignmentLabelText = "\tAlignment";
-        // Add the label
-        retVal.add(TranscriptBatchBuilder.getBatchString(alignmentLabelText, alignmentLabelAttrs));
-        alignmentLabelAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE);
-        retVal.add(TranscriptBatchBuilder.getBatchString(": ", alignmentLabelAttrs));
+        var tierAttrs = new SimpleAttributeSet();
+        TranscriptStyleConstants.setNotEditable(tierAttrs, true);
+        TranscriptStyleConstants.setRecord(tierAttrs, record);
+
+        batchBuilder.appendTierLabel(editor.getSession(), record, alignmentTier, null, tierAttrs, doc.isChatTierNamesShown());
 
         // Get the string version of the alignment
-        String alignmentContent = alignmentTier.getValue().toString();
         // Add component factory if needed
         if (isAlignmentComponent()) {
             tierAttrs.addAttributes(transcriptStyleContext.getAlignmentAttributes());
         }
-        retVal.add(TranscriptBatchBuilder.getBatchString(alignmentContent, tierAttrs));
+        batchBuilder.appendTierContent(record, alignmentTier, tierAttrs);
 
-        return retVal;
+        return batchBuilder.getBatch();
     }
 
     /**
