@@ -131,25 +131,25 @@ public class TierInfoEditor extends JPanel {
 		add(typeBox, cc.xy(3, row));
 
 		row += 2;
-		lockedBox = new PhonCheckbox("Prevent changes to tier in transcript view");
+		lockedBox = new JCheckBox("Prevent changes to tier in transcript view");
 		lockedBox.setSelected(false);
 		add(new JLabel("Locked:"), cc.xy(1, row));
 		add(lockedBox, cc.xy(3, row));
 
 		row += 2;
-		visibleBox = new PhonCheckbox("Show tier in transcript view");
+		visibleBox = new JCheckBox("Show tier in transcript view");
 		visibleBox.setSelected(true);
 		add(new JLabel("Visible:"), cc.xy(1, row));
 		add(visibleBox, cc.xy(3, row));
 
 		row += 2;
-		blindBox = new PhonCheckbox("Include tier in blind transcription");
+		blindBox = new JCheckBox("Include tier in blind transcription");
 		blindBox.setSelected(false);
 		add(new JLabel("Blind:"), cc.xy(1, row));
 		add(blindBox, cc.xy(3, row));
 
 		row += 2;
-		alignedBox = new PhonCheckbox("Include tier in cross tier alignment");
+		alignedBox = new JCheckBox("Include tier in cross tier alignment");
 		alignedBox.setSelected(false);
 		add(new JLabel("Aligned:"), cc.xy(1, row));
 		add(alignedBox, cc.xy(3, row));

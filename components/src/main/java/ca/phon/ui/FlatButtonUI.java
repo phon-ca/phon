@@ -66,6 +66,7 @@ public class FlatButtonUI extends ButtonUI {
     private void hidePopup() {
         if(popupFrame != null) {
             popupFrame.setVisible(false);
+            popupFrame.dispose();
             popupFrame = null;
         }
     }
