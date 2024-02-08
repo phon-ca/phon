@@ -145,7 +145,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
         if(record != null && tier != null) {
             if(tier.getDeclaredType().equals(IPATranscript.class)) {
                 final IPATranscript tierVal = tier.hasValue() ? (IPATranscript) tier.getValue() : new IPATranscript();
-                if(!tier.isUnvalidated() && tierVal.length() == 0) {
+                if(!tier.isUnvalidated() && tierVal.length() == 0 && e.getData().get().newLoc().posInTier() == 0) {
                     final IPATranscript autoTranscript = AutoTranscriber.transcribe(record.getOrthography(), getDictionary());
                     if(autoTranscript.length() > 0) {
                         final SimpleAttributeSet ghostAttrs = editor.getTranscriptDocument().getTranscriptStyleContext().getTierAttributes(tier);
@@ -187,13 +187,9 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
         @Override
         public void eventDispatched(AWTEvent event) {
             if(event instanceof KeyEvent ke) {
+                if(!editor.hasFocus()) return;
                 if(ke.getID() == KeyEvent.KEY_PRESSED) {
                     switch (ke.getKeyCode()) {
-                        case KeyEvent.VK_UP, KeyEvent.VK_DOWN -> {
-                            removeGhostRange();
-                            Toolkit.getDefaultToolkit().removeAWTEventListener(alignmentListener);
-                            return;
-                        }
                         case KeyEvent.VK_ESCAPE -> {
                             removeGhostRange();
                             Toolkit.getDefaultToolkit().removeAWTEventListener(alignmentListener);
@@ -207,11 +203,32 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
                             acceptAutoTranscription(record, tier, ipa);
                             Toolkit.getDefaultToolkit().removeAWTEventListener(alignmentListener);
                         }
+                        default -> {
+                            removeGhostRange();
+                            Toolkit.getDefaultToolkit().removeAWTEventListener(alignmentListener);
+                            return;
+                        }
                     }
                 }
                 ke.consume();
             } else if(event instanceof MouseEvent me) {
-                // TODO handle mouse events
+                // only mouse click events
+                if(me.getID() != MouseEvent.MOUSE_PRESSED) return;
+                if(me.getSource() != editor) return;
+
+                final Point p = me.getPoint();
+
+                // get character element at mouse location
+                final JTextComponent textComponent = editor;
+                final int pos = textComponent.viewToModel(p);
+                if(pos < 0 || pos > textComponent.getDocument().getLength()) return;
+                // if pos is not in ghost range remove ghost range
+                if(ghostRange != null && (pos < ghostRange.getStart() || pos > ghostRange.getEnd())) {
+                    removeGhostRange();
+                    Toolkit.getDefaultToolkit().removeAWTEventListener(alignmentListener);
+                } else {
+                    me.consume();
+                }
             }
         }
     };
