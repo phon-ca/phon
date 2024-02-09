@@ -389,20 +389,8 @@ public class TierManagementView extends EditorView {
 			}
 			
 			if(tierDesc != null) {
-				final TierDescription td = tierDesc;
-				final MessageDialogProperties props = new MessageDialogProperties();
-				props.setParentWindow(CommonModuleFrame.getCurrentFrame());
-				props.setHeader("Delete Tier");
-				props.setMessage("Delete tier " + td.getName() + "?");
-				props.setRunAsync(true);
-				props.setListener( (e) -> {
-					if(e.getDialogResult() == 0) {
-						final RemoveTierAction act = new RemoveTierAction(getEditor(), td, tierItem);
-						act.actionPerformed(pae.getActionEvent());
-					}
-				});
-				props.setOptions(MessageDialogProperties.okCancelOptions);
-				NativeDialogs.showMessageDialog(props);
+				final RemoveTierAction act = new RemoveTierAction(getEditor(), tierDesc, tierItem);
+				act.actionPerformed(pae.getActionEvent());
 			} else {
 				Toolkit.getDefaultToolkit().beep();
 			}
