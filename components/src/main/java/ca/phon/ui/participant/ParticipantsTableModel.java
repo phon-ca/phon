@@ -35,7 +35,9 @@ public class ParticipantsTableModel extends AbstractTableModel {
 		Age,
 		Sex,
 		BirthDate,
+		Birthplace,
 		Language,
+		FirstLanguage,
 		Group,
 		Education,
 		SES,
@@ -49,7 +51,9 @@ public class ParticipantsTableModel extends AbstractTableModel {
 				"Age",
 				"Sex",
 				"Birth Date",
+				"Birthplace",
 				"Language",
+				"First Language",
 				"Group",
 				"Education",
 				"SES",
@@ -125,6 +129,9 @@ public class ParticipantsTableModel extends AbstractTableModel {
 		case BirthDate:
 			return (p.getBirthDate() != null ? p.getBirthDate().toString() : "");
 
+		case Birthplace:
+			return p.getBirthplace() != null ? p.getBirthplace() : "";
+
 		case Education:
 			return p.getEducation() != null ? p.getEducation() : "";
 
@@ -133,6 +140,9 @@ public class ParticipantsTableModel extends AbstractTableModel {
 
 		case Language:
 			return p.getLanguage() != null ? p.getLanguage() : "";
+
+		case FirstLanguage:
+			return p.getFirstLanguage() != null ? p.getFirstLanguage() : "";
 
 		case SES:
 			return p.getSES() != null ? p.getSES() : "";

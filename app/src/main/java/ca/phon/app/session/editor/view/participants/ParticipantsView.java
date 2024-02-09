@@ -37,7 +37,8 @@ import java.awt.*;
 import java.awt.event.*;
 
 /**
- * 
+ * Participants view for session editor.  This view displays a list of participants in the session.
+ * The user can add, edit, and delete participants from this view.
  */
 public class ParticipantsView extends EditorView {
 
