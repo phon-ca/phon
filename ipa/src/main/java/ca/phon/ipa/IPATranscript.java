@@ -654,7 +654,7 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 	 * @return true if any phones have syllabification info set to something other than UNKNOWN
 	 */
 	public boolean hasSyllableInformation() {
-		final PunctuationFilter filter = new PunctuationFilter();
+		final PunctuationFilter filter = new PunctuationFilter(true);
 		accept(filter);
 		for(IPAElement ele:filter.getIPATranscript()) {
 			if(ele.getScType() != SyllableConstituentType.UNKNOWN)
