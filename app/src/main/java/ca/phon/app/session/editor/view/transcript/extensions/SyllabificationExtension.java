@@ -252,7 +252,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                             int start = doc.getTierContentStart(prevTier);
                             int end = doc.getTierEnd(prevTier) - 1;
                             String newValue = doc.getText(start, end - start);
-                            editor.setInternalEdit(true);
+//                            editor.setInternalEdit(true);
                             editor.changeTierData((Record)prevAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD), prevTier, newValue);
                         }
                     }

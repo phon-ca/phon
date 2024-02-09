@@ -125,10 +125,10 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
      */
     private boolean caretMoveFromUpDown = false;
 
-    /**
-     * Whether the next edit will change trigger any changes to the document
-     */
-    private boolean internalEdit = false;
+//    /**
+//     * Whether the next edit will change trigger any changes to the document
+//     */
+//    private boolean internalEdit = false;
 
     /**
      * A reference to the current box selection highlight object
@@ -504,12 +504,12 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         return dataModel.getTranscriber() == Transcriber.VALIDATOR;
     }
 
-    /**
-     * Sets whether the next edit shouldn't cause any changed to the document
-     */
-    public void setInternalEdit(boolean value) {
-        internalEdit = value;
-    }
+//    /**
+//     * Sets whether the next edit shouldn't cause any changed to the document
+//     */
+//    public void setInternalEdit(boolean value) {
+//        internalEdit = value;
+//    }
 
     public int getUpDownOffset() {
         return upDownOffset;
@@ -854,20 +854,20 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             end = doc.getTierContentStart(changedTier) + changedTier.getUnvalidatedValue().getValue().length();
         }
 
-        if (internalEdit) {
-            internalEdit = false;
-
-            if (changedTier.isUnvalidated()) {
-                try {
-                    var errorUnderlineHighlight = getHighlighter().addHighlight(start, end, new ErrorUnderlinePainter());
-                    errorUnderlineHighlights.put(changedTier, errorUnderlineHighlight);
-                } catch (BadLocationException e) {
-                    LogUtil.severe(e);
-                }
-            }
-
-            return;
-        }
+//        if (internalEdit) {
+//            internalEdit = false;
+//
+//            if (changedTier.isUnvalidated()) {
+//                try {
+//                    var errorUnderlineHighlight = getHighlighter().addHighlight(start, end, new ErrorUnderlinePainter());
+//                    errorUnderlineHighlights.put(changedTier, errorUnderlineHighlight);
+//                } catch (BadLocationException e) {
+//                    LogUtil.severe(e);
+//                }
+//            }
+//
+//            return;
+//        }
 
         var caretStartAttrs = doc.getCharacterElement(getCaretPosition()).getAttributes();
         Tier<?> caretStartTier = (Tier<?>) caretStartAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);

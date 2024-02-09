@@ -58,7 +58,7 @@ public class TranscriptNavigationFilter extends NavigationFilter {
                         String newValue = doc.getText(start, end - start);
                         String oldString = prevTier.toString();
                         if (!oldString.equals(newValue)) {
-                            editor.setInternalEdit(true);
+//                            editor.setInternalEdit(true);
                             editor.changeTierData((Record) prevAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD), prevTier, newValue);
                         }
                     }
@@ -97,7 +97,7 @@ public class TranscriptNavigationFilter extends NavigationFilter {
                         int end = doc.getGenericEnd(prevGenericTier) - 1;
                         String newValue = doc.getText(start, end - start);
                         if (!prevGenericTier.hasValue() || !prevGenericTier.getValue().toString().equals(newValue)) {
-                            editor.setInternalEdit(true);
+//                            editor.setInternalEdit(true);
                             editor.genericDataChanged(prevGenericTier, newValue);
                         }
                     }
