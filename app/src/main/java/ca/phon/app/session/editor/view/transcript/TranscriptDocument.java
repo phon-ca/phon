@@ -325,7 +325,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             }
             commentStart = childEle.getEndOffset();
         }
-        final int commentEnd = paraEle.getEndOffset();
+        final int commentEnd = paraEle.getEndOffset() - 1;
 
         return new Range(commentStart, commentEnd);
     }
@@ -361,7 +361,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             }
             gemStart = childEle.getEndOffset();
         }
-        final int gemEnd = paraEle.getEndOffset();
+        final int gemEnd = paraEle.getEndOffset() - 1;
 
         return new Range(gemStart, gemEnd);
     }
@@ -479,13 +479,13 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             Element innerElem = elem.getElement(i);
             AttributeSet attrs = innerElem.getAttributes();
             boolean isLabel = TranscriptStyleConstants.isLabel(attrs);
-            // If correct tier name
             if (isLabel) {
                 tierStart = innerElem.getEndOffset();
+            } else {
                 break;
             }
         }
-        final int tierEnd = elem.getEndOffset();
+        final int tierEnd = elem.getEndOffset() - 1;
 
         return new Range(tierStart, tierEnd);
     }

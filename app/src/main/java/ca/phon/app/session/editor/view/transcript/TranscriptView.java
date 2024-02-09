@@ -202,6 +202,10 @@ public class TranscriptView extends EditorView {
 //        toolbar.add(fontScaleMenuButton);
     }
 
+    public TranscriptEditor getTranscriptEditor() {
+        return this.transcriptEditor;
+    }
+
     /**
      * Shows the font scale menu
      *
@@ -874,10 +878,6 @@ public class TranscriptView extends EditorView {
         }
         revalidate();
         repaint();
-    }
-
-    public TranscriptEditor getTranscriptEditor() {
-        return transcriptEditor;
     }
 
     public boolean isValidationMode() {

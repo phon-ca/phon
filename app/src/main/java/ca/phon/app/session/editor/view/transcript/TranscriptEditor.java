@@ -13,6 +13,7 @@ import ca.phon.session.tierdata.TierData;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.Range;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -1237,11 +1238,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         return currentTranscriptLocation;
     }
 
-    
-
-
-    
-
     public void setCurrentSessionLocation(TranscriptElementLocation currentTranscriptLocation) {
         this.currentTranscriptLocation = currentTranscriptLocation;
     }
@@ -2443,6 +2439,56 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
      */
     private void onSessionLocationChanged(EditorEvent<TranscriptLocationChangeData> editorEvent) {
         setCurrentSessionLocation(editorEvent.data().newLoc);
+
+        final TranscriptElementLocation oldLoc = editorEvent.data().oldLoc;
+        final TranscriptElementLocation newLoc = editorEvent.data().newLoc;
+
+        if(oldLoc.tier() != null && !oldLoc.tier().equals(newLoc.tier())) {
+            if(oldLoc.transcriptElementIndex() < 0) {
+                // generic (header) tier change
+                // TODO handle generic tier change
+            } else {
+                final Transcript.Element transcriptElement = getSession().getTranscript().getElementAt(oldLoc.transcriptElementIndex());
+                if(transcriptElement.isRecord()) {
+                    final Record record = transcriptElement.asRecord();
+                    final Tier<?> tier = record.getTier(oldLoc.tier());
+                    if(tier != null) {
+                        final Range tierContentRange = getTranscriptDocument().getTierContentRange(
+                                getSession().getTranscript().getRecordIndex(oldLoc.transcriptElementIndex()), tier.getName());
+                        try {
+                            final String currentText = getTranscriptDocument().getText(tierContentRange.getStart(), tierContentRange.getEnd() - tierContentRange.getStart());
+                            if(!tier.toString().equals(currentText)) {
+                                changeTierData(record, tier, currentText);
+                            }
+                        } catch (BadLocationException e) {
+                            LogUtil.warning(e);
+                        }
+                    }
+                } else if(transcriptElement.isGem()) {
+                    final Gem gem = transcriptElement.asGem();
+                    final Range gemRange = getTranscriptDocument().getGemContentRange(gem);
+                    try {
+                        final String currentText = getTranscriptDocument().getText(gemRange.getStart(), gemRange.getEnd() - gemRange.getStart());
+                        if(!gem.toString().equals(currentText)) {
+                            gemDataChanged(gem, currentText);
+                        }
+                    } catch (BadLocationException e) {
+                        LogUtil.warning(e);
+                    }
+                } else if(transcriptElement.isComment()) {
+                    final Comment comment = transcriptElement.asComment();
+                    final Range commentRange = getTranscriptDocument().getCommentContentRange(comment);
+                    try {
+                        final String currentText = getTranscriptDocument().getText(commentRange.getStart(), commentRange.getEnd() - commentRange.getStart());
+                        if(!comment.toString().equals(currentText)) {
+                            commentDataChanged(comment, currentText);
+                        }
+                    } catch (BadLocationException e) {
+                        LogUtil.warning(e);
+                    }
+                }
+            }
+        }
     }
 
     private void onParticipantChanged() {
