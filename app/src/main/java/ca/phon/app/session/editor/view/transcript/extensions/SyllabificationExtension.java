@@ -7,6 +7,7 @@ import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.session.*;
 import ca.phon.session.Record;
+import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.ui.action.PhonUIAction;
@@ -50,7 +51,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
         this.doc = editor.getTranscriptDocument();
 
         PhonUIAction<Void> syllabificationEditModeAct = PhonUIAction.runnable(() -> {
-            String tierName = editor.getCurrentSessionLocation().label();
+            String tierName = editor.getCurrentSessionLocation().tier();
             if (!tierName.equals(SystemTierType.TargetSyllables.getName()) && !tierName.equals(SystemTierType.ActualSyllables.getName())) return;
             setSyllabificationEditMode(!syllabificationEditMode);
         });
@@ -117,8 +118,8 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
 
         editor.addCaretListener(e -> {
             if (!syllabificationEditMode) return;
-            TranscriptLocation location = editor.charPosToSessionLocation(e.getDot());
-            String tierName = location.label();
+            TranscriptElementLocation location = editor.charPosToSessionLocation(e.getDot());
+            String tierName = location.tier();
             if (!SystemTierType.TargetSyllables.getName().equals(tierName) && !SystemTierType.ActualSyllables.getName().equals(tierName)) {
                 setSyllabificationEditMode(false);
             }

@@ -8,6 +8,7 @@ import ca.phon.extensions.IExtendable;
 import ca.phon.plugin.PluginManager;
 import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.session.tierdata.TierData;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
@@ -137,7 +138,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     /**
      * The session location of the current caret position
      */
-    private TranscriptLocation currentTranscriptLocation = null;
+    private TranscriptElementLocation currentTranscriptLocation = null;
 
     /**
      * The custom editor caret
@@ -1196,16 +1197,16 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
      * Saves the changes made to the line the caret is currently on
      */
     public void saveCurrentLine() {
-        TranscriptLocation transcriptLocation = getCurrentSessionLocation();
-        if (transcriptLocation.elementIndex() < 0) return;
+        TranscriptElementLocation transcriptLocation = getCurrentSessionLocation();
+        if (transcriptLocation.transcriptElementIndex() < 0) return;
 
         TranscriptDocument doc = getTranscriptDocument();
 
-        var elem = getSession().getTranscript().getElementAt(transcriptLocation.elementIndex());
+        var elem = getSession().getTranscript().getElementAt(transcriptLocation.transcriptElementIndex());
         try {
             if (elem.isRecord()) {
                 Record record = elem.asRecord();
-                String tierName = transcriptLocation.label();
+                String tierName = transcriptLocation.tier();
                 Tier<?> tier = record.getTier(tierName);
                 int startPos = doc.getTierContentStart(tier);
                 int endPos = doc.getTierEnd(tier) - 1;
@@ -1232,7 +1233,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         }
     }
 
-    public TranscriptLocation getCurrentSessionLocation() {
+    public TranscriptElementLocation getCurrentSessionLocation() {
         return currentTranscriptLocation;
     }
 
@@ -1241,7 +1242,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
 
     
 
-    public void setCurrentSessionLocation(TranscriptLocation currentTranscriptLocation) {
+    public void setCurrentSessionLocation(TranscriptElementLocation currentTranscriptLocation) {
         this.currentTranscriptLocation = currentTranscriptLocation;
     }
 
@@ -2204,12 +2205,12 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     }
 
     /**
-     * Converts a character position in the document into a {@link TranscriptLocation} object
+     * Converts a character position in the document into a {@link TranscriptElementLocation} object
      *
      * @param charPos the position in the document
      * @return the converted session location object
      */
-    public TranscriptLocation charPosToSessionLocation(int charPos) {
+    public TranscriptElementLocation charPosToSessionLocation(int charPos) {
         TranscriptDocument doc = getTranscriptDocument();
         Transcript transcript = getSession().getTranscript();
 
@@ -2252,7 +2253,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             }
         }
 
-        return new TranscriptLocation(transcriptElementIndex, label, posInTier);
+        return new TranscriptElementLocation(transcriptElementIndex, label, posInTier);
     }
 
     /**
@@ -2261,20 +2262,20 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
      * @param transcriptLocation the session location object
      * @return the converted character position
      */
-    public int sessionLocationToCharPos(TranscriptLocation transcriptLocation) {
+    public int sessionLocationToCharPos(TranscriptElementLocation transcriptLocation) {
         TranscriptDocument doc = getTranscriptDocument();
         Transcript transcript = getSession().getTranscript();
 
-        if (transcriptLocation.elementIndex() > -1) {
-            Transcript.Element transcriptElement = transcript.getElementAt(transcriptLocation.elementIndex());
+        if (transcriptLocation.transcriptElementIndex() > -1) {
+            Transcript.Element transcriptElement = transcript.getElementAt(transcriptLocation.transcriptElementIndex());
 
             if (transcriptElement.isRecord()) {
                 int recordIndex = transcript.getRecordPosition(transcriptElement.asRecord());
-                return doc.getTierContentStart(recordIndex, transcriptLocation.label()) + transcriptLocation.posInTier();
+                return doc.getTierContentStart(recordIndex, transcriptLocation.tier()) + transcriptLocation.charPosition();
             } else if (transcriptElement.isComment()) {
-                return doc.getCommentContentStart(transcriptElement.asComment()) + transcriptLocation.posInTier();
+                return doc.getCommentContentStart(transcriptElement.asComment()) + transcriptLocation.charPosition();
             } else if (transcriptElement.isGem()) {
-                return doc.getGemContentStart(transcriptElement.asGem()) + transcriptLocation.posInTier();
+                return doc.getGemContentStart(transcriptElement.asGem()) + transcriptLocation.charPosition();
             }
         }
 
@@ -2505,7 +2506,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
      * @param oldLoc the previous session location
      * @param newLoc the new session location
      */
-    public record TranscriptLocationChangeData(TranscriptLocation oldLoc, TranscriptLocation newLoc) {
+    public record TranscriptLocationChangeData(TranscriptElementLocation oldLoc, TranscriptElementLocation newLoc) {
 
         @Override
         public String toString() {

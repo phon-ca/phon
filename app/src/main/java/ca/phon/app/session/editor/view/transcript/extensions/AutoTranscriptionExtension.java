@@ -7,7 +7,6 @@ import ca.phon.app.session.editor.autotranscribe.AutoTranscriber;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.ipaDictionary.IPALookupEdit;
 import ca.phon.app.session.editor.view.transcript.TranscriptBatchBuilder;
-import ca.phon.app.session.editor.view.transcript.TranscriptLocation;
 import ca.phon.app.session.editor.view.transcript.TranscriptEditor;
 import ca.phon.app.session.editor.view.transcript.TranscriptStyleConstants;
 import ca.phon.ipa.IPATranscript;
@@ -17,6 +16,7 @@ import ca.phon.session.Record;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
 import ca.phon.session.Transcript;
+import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.Range;
 
@@ -145,7 +145,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
         if(record != null && tier != null) {
             if(tier.getDeclaredType().equals(IPATranscript.class)) {
                 final IPATranscript tierVal = tier.hasValue() ? (IPATranscript) tier.getValue() : new IPATranscript();
-                if(!tier.isUnvalidated() && tierVal.length() == 0 && e.getData().get().newLoc().posInTier() == 0) {
+                if(!tier.isUnvalidated() && tierVal.length() == 0 && e.getData().get().newLoc().charPosition() == 0) {
                     final IPATranscript autoTranscript = AutoTranscriber.transcribe(record.getOrthography(), getDictionary());
                     if(autoTranscript.length() > 0) {
                         final SimpleAttributeSet ghostAttrs = editor.getTranscriptDocument().getTranscriptStyleContext().getTierAttributes(tier);
@@ -167,11 +167,11 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
      * Automatically transcribes an IPA tier if the caret is currently in one
      **/
     public void autoTranscription() {
-        TranscriptLocation transcriptLocation = editor.getCurrentSessionLocation();
-        Transcript.Element elem = editor.getSession().getTranscript().getElementAt(transcriptLocation.elementIndex());
+        TranscriptElementLocation transcriptLocation = editor.getCurrentSessionLocation();
+        Transcript.Element elem = editor.getSession().getTranscript().getElementAt(transcriptLocation.transcriptElementIndex());
         if (!elem.isRecord()) return;
         Record record = elem.asRecord();
-        String tierName = transcriptLocation.label();
+        String tierName = transcriptLocation.tier();
         if (elem.isRecord() && record.hasTier(tierName)) {
             Tier<?> tier = record.getTier(tierName);
             if (!tier.getDeclaredType().equals(IPATranscript.class)) return;

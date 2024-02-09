@@ -16,6 +16,7 @@ import ca.phon.app.session.editor.view.transcript.extensions.*;
 import ca.phon.plugin.PluginManager;
 import ca.phon.session.*;
 import ca.phon.session.io.SessionOutputFactory;
+import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.ui.CalloutWindow;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonActionEvent;
@@ -516,8 +517,8 @@ public class TranscriptView extends EditorView {
      * */
     private void setupTranscriptMenu(MenuBuilder menuBuilder) {
 
-        TranscriptLocation transcriptLocation = getTranscriptEditor().getCurrentSessionLocation();
-        int currentTranscriptElementIndex = transcriptLocation == null ? -1 : transcriptLocation.elementIndex();
+        TranscriptElementLocation transcriptLocation = getTranscriptEditor().getCurrentSessionLocation();
+        int currentTranscriptElementIndex = transcriptLocation == null ? -1 : transcriptLocation.transcriptElementIndex();
         boolean inHeaders = currentTranscriptElementIndex < 0;
 
 
