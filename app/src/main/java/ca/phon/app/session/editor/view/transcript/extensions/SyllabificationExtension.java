@@ -2,6 +2,8 @@ package ca.phon.app.session.editor.view.transcript.extensions;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.EditorEventManager;
+import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.view.transcript.*;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
@@ -11,6 +13,7 @@ import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.util.Range;
 
 import javax.swing.*;
 import javax.swing.text.*;
@@ -50,12 +53,14 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
         this.editor = editor;
         this.doc = editor.getTranscriptDocument();
 
+        // Begin syllabification edit mode
         PhonUIAction<Void> syllabificationEditModeAct = PhonUIAction.runnable(() -> {
             String tierName = editor.getCurrentSessionLocation().tier();
             if (!tierName.equals(SystemTierType.TargetSyllables.getName()) && !tierName.equals(SystemTierType.ActualSyllables.getName())) return;
             setSyllabificationEditMode(!syllabificationEditMode);
         });
 
+        // add syllabification tier at the end of the regular IPA tier content
         doc.addInsertionHook(new DefaultInsertionHook() {
             @Override
             public List<DefaultStyledDocument.ElementSpec> endTier(MutableAttributeSet attrs) {
@@ -72,11 +77,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
 
                     // Create a dummy tier for the syllabification
                     IPATranscript ipa = ipaTier.getValue();
-                    Tier<IPATranscript> syllableTier = doc.getSessionFactory().createTier(
-                        tier.getName().equals("IPA Target") ? SystemTierType.TargetSyllables.getName() :
-                                (tier.getName().equals("IPA Actual") ? SystemTierType.ActualSyllables.getName() : ipaTier.getName() + " Syllables"),
-                        IPATranscript.class
-                    );
+                    Tier<IPATranscript> syllableTier = doc.getSessionFactory().createTier(getTierNameForSyllabification(tier), IPATranscript.class);
                     syllableTier.setValue(ipa);
 
                     // Set up the tier attributes for the dummy tier
@@ -97,14 +98,12 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
             }
         });
 
-
         doc.addDocumentPropertyChangeListener(SYLLABIFICATION_IS_VISIBLE, evt -> doc.reload());
         doc.addDocumentPropertyChangeListener(SYLLABIFICATION_IS_COMPONENT, evt -> {
             if (isSyllabificationVisible()) {
                 doc.reload();
             }
         });
-
 
         InputMap inputMap = editor.getInputMap();
         ActionMap actionMap = editor.getActionMap();
@@ -125,7 +124,48 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
             }
         });
 
+        editor.getEventManager().registerActionForEvent(EditorEventType.TierChange, this::onTierDataChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+
         doc.addNotEditableAttribute(TranscriptStyleConstants.ATTR_KEY_SYLLABIFICATION);
+    }
+
+    private String getTierNameForSyllabification(Tier<?> tier) {
+        if (tier.getName().equals(SystemTierType.TargetSyllables.getName()) || tier.getName().equals(SystemTierType.ActualSyllables.getName())) {
+            return tier.getName();
+        }
+        return tier.getName() + " Syllables";
+    }
+
+    /**
+     * Update on tier change
+     *
+     */
+    public void onTierDataChanged(EditorEvent<EditorEventType.TierChangeData> event) {
+        final Tier<?> tier = event.data().tier();
+        if(tier.getDeclaredType().equals(IPATranscript.class) && !event.data().valueAdjusting()) {
+            if(isSyllabificationVisible()) {
+                final Range range = doc.getTierContentRange(editor.getSession().getRecordPosition(event.data().record()), getTierNameForSyllabification(tier));
+                if(range.getStart() < 0) return;
+                editor.getTranscriptEditorCaret().freeze();
+                try {
+                    editor.getTranscriptDocument().setBypassDocumentFilter(true);
+                    editor.getTranscriptDocument().remove(range.getStart(), range.getEnd() - range.getStart());
+                    final SimpleAttributeSet tierAttrs = editor.getTranscriptDocument().getTranscriptStyleContext().getTierAttributes(tier);
+                    tierAttrs.addAttributes(editor.getTranscriptDocument().getTranscriptStyleContext().getRecordAttributes(event.data().record()));
+                    TranscriptBatchBuilder builder = new TranscriptBatchBuilder(editor.getTranscriptDocument());
+                    if(isSyllabificationComponent()) {
+                        tierAttrs.addAttributes(editor.getTranscriptDocument().getTranscriptStyleContext().getSyllabificationAttributes());
+                        builder.appendBatchString(((IPATranscript)tier.getValue()).toString(true), tierAttrs);
+                    } else {
+                        builder.appendAll(getFormattedSyllabification((IPATranscript)tier.getValue(), tierAttrs));
+                    }
+                    editor.getTranscriptDocument().processBatchUpdates(range.getStart(), builder.getBatch());
+                } catch (BadLocationException e) {
+                    LogUtil.warning(e);
+                }
+                editor.getTranscriptEditorCaret().unfreeze();
+            }
+        }
     }
 
     // region Getters and Setters

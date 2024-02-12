@@ -472,7 +472,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      */
     public Range getTierContentRange(int recordIndex, String tierName) {
         final int paragraphIdx = findParagraphElementIndexForTier(session.getTranscript().getRecordElementIndex(recordIndex), tierName);
-        if (paragraphIdx == -1) return null;
+        if (paragraphIdx == -1) return new Range(-1, -1);
         Element elem = getDefaultRootElement().getElement(paragraphIdx);
         int tierStart = elem.getStartOffset();
         for (int i = 0; i < elem.getElementCount(); i++) {
@@ -1169,33 +1169,28 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     /**
      * Updates the data of the specified tier
      *
+     * @param record the record that contains the tier
      * @param tier the tier whose data gets updated
      */
-    public void onTierDataChanged(Tier<?> tier) {
-        // ignore syllable and alignment tiers, they are updated with the parent tier
+    public void onTierDataChanged(Record record, Tier<?> tier) {
+        // ignore syllable and alignment tiers, they are updated by extensions
         if (tier.getName().equals(SystemTierType.TargetSyllables.getName()) || tier.getName().equals(SystemTierType.ActualSyllables.getName()))
             return;
         if (tier.getDeclaredType().equals(PhoneAlignment.class)) return;
 
         try {
-            final Range tierRange = getTierContentRange(tier);
-            int start = tierRange.getStart();
-            int recordIndex = getRecordIndex(start);
-            int end = tierRange.getEnd() - 1;
-            final SimpleAttributeSet tierAttrs = new SimpleAttributeSet(getCharacterElement(start).getAttributes());
+            int recordIndex = session.getRecordPosition(record);
+            final Range tierRange = getTierContentRange(recordIndex, tier.getName());
+            if(tierRange.getStart() < 0) return;
+            final SimpleAttributeSet tierAttrs = new SimpleAttributeSet(getCharacterElement(tierRange.getStart()).getAttributes());
 
             bypassDocumentFilter = true;
-            remove(start, end - start);
+            remove(tierRange.getStart(), tierRange.getEnd() - tierRange.getStart());
 
-            var tierView = session.getTierView();
-            TierViewItem tierViewItem = tierView.stream().filter(item -> item.getTierName().equals(tier.getName())).findFirst().orElse(null);
-
-            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder();
-
-            Record record = session.getRecord(recordIndex);
+            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(this);
             batchBuilder.appendTierContent(record, tier, tierAttrs);
 
-            processBatchUpdates(start, batchBuilder.getBatch());
+            processBatchUpdates(tierRange.getStart(), batchBuilder.getBatch());
         } catch (BadLocationException e) {
             LogUtil.severe(e);
         }
