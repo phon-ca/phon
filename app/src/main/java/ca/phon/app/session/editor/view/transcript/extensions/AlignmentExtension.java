@@ -134,7 +134,7 @@ public class AlignmentExtension implements TranscriptEditorExtension {
         TranscriptStyleConstants.setNotEditable(tierAttrs, true);
         TranscriptStyleConstants.setRecord(tierAttrs, record);
 
-        batchBuilder.appendTierLabel(editor.getSession(), record, alignmentTier, null, tierAttrs, doc.isChatTierNamesShown());
+        batchBuilder.appendTierLabel(editor.getSession(), record, alignmentTier, alignmentTier.getName(), null, doc.isChatTierNamesShown(), tierAttrs);
 
         // Get the string version of the alignment
         // Add component factory if needed

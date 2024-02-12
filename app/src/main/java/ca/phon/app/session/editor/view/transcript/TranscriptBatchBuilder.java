@@ -449,7 +449,7 @@ public class TranscriptBatchBuilder {
      * newline after if need be
      */
     public TranscriptBatchBuilder appendTier(Session session, Record record, Tier<?> tier, TierViewItem tierViewItem, boolean chatTierNamesShown, AttributeSet additionalAttrs) {
-        appendTierLabel(session, record, tier, tierViewItem, additionalAttrs, chatTierNamesShown);
+        appendTierLabel(session, record, tier, tier.getName(), tierViewItem, chatTierNamesShown, additionalAttrs);
 
         final SimpleAttributeSet tierAttrs = styleContext.getTierAttributes(tier, tierViewItem);
         TranscriptStyleConstants.setRecord(tierAttrs, record);
@@ -461,7 +461,20 @@ public class TranscriptBatchBuilder {
         return this;
     }
 
-    public TranscriptBatchBuilder appendTierLabel(Session session, Record record, Tier<?> tier, TierViewItem tierViewItem, AttributeSet additionalAttrs, boolean chatTierNamesShown) {
+    /**
+     * Appends the label of the given tier to the batch.  This method may be used to force a label different than
+     * the tier's name to be used.
+     *
+     * @param session
+     * @param record
+     * @param tier
+     * @param label
+     * @param tierViewItem
+     * @param additionalAttrs
+     * @param chatTierNamesShown
+     * @return
+     */
+    public TranscriptBatchBuilder appendTierLabel(Session session, Record record, Tier<?> tier, String label, TierViewItem tierViewItem, boolean chatTierNamesShown, AttributeSet additionalAttrs) {
         String tierName = tier.getName();
         SimpleAttributeSet tierAttrs = styleContext.getTierAttributes(tier, tierViewItem);
         tierAttrs.addAttributes(styleContext.getRecordAttributes(record));
@@ -475,7 +488,7 @@ public class TranscriptBatchBuilder {
             labelAttrs.addAttributes(additionalAttrs);
         }
 
-        String labelText = tierName;
+        String labelText = label;
         if (chatTierNamesShown) {
             SystemTierType systemTierType = SystemTierType.tierFromString(tierName);
             if (systemTierType != null) {
@@ -503,6 +516,14 @@ public class TranscriptBatchBuilder {
         return this;
     }
 
+    /**
+     * Appends the contents of the given tier to the batch
+     *
+     * @param record
+     * @param tier
+     * @param tierAttrs
+     * @return
+     */
     public TranscriptBatchBuilder appendTierContent(Record record, Tier<?> tier, AttributeSet tierAttrs) {
         Class<?> tierType = tier.getDeclaredType();
 
@@ -694,7 +715,13 @@ public class TranscriptBatchBuilder {
             } else {
                 TranscriptStyleConstants.setBorder(recordAttrs, BorderFactory.createEmptyBorder());
             }
-            appendTier(session, record, tier, item, chatTierNamesShown, recordAttrs);
+            if(SystemTierType.Orthography.getName().equals(item.getTierName())) {
+                final String orthoTierLabel = record.getSpeaker().toString();
+                appendTierLabel(session, record, tier, orthoTierLabel, item, chatTierNamesShown, recordAttrs);
+                appendTierContent(record, tier, recordAttrs);
+            } else {
+                appendTier(session, record, tier, item, chatTierNamesShown, recordAttrs);
+            }
 
             for (var hook : getInsertionHooks()) {
                 additionalInsertions.addAll(hook.endTier(getTrailingAttributes()));
