@@ -833,6 +833,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
      * @param editorEvent the event that changes the tiers data
      */
     private void onTierDataChanged(EditorEvent<EditorEventType.TierChangeData> editorEvent) {
+        if(editorEvent.data().valueAdjusting()) return;
         TranscriptDocument doc = getTranscriptDocument();
         Tier<?> changedTier = editorEvent.data().tier();
         if (changedTier.getDeclaredType() == MediaSegment.class) {

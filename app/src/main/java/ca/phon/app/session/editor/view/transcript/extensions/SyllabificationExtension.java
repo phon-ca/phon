@@ -40,7 +40,6 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
 
     private boolean syllabificationEditMode = false;
 
-
     /**
      * Constructor
      * */
