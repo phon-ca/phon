@@ -78,6 +78,7 @@ public class TranscriptStyleConstants {
     public static final String ELEMENT_TYPE_COMMENT = "comment";
     public static final String ELEMENT_TYPE_GEM = "gem";
     public static final String ELEMENT_TYPE_GENERIC = "generic";
+    public static final String ELEMENT_TYPE_BLIND_TRANSCRIPTION = "blindTranscription";
 
 
     public static String getElementType(AttributeSet attrs) {
@@ -226,7 +227,7 @@ public class TranscriptStyleConstants {
 
     public static final String ATTR_KEY_TRANSCRIBER = "transcriber";
 
-    public static String getTranscriber(MutableAttributeSet attrs) {
+    public static String getTranscriber(AttributeSet attrs) {
         return (String) attrs.getAttribute(ATTR_KEY_TRANSCRIBER);
     }
 

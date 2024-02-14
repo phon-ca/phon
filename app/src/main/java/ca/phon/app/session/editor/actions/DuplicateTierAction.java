@@ -1,5 +1,6 @@
 package ca.phon.app.session.editor.actions;
 
+import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.tierManagement.*;
@@ -28,12 +29,12 @@ public class DuplicateTierAction extends SessionEditorAction {
 
 	private String tierName = null;
 
-	public DuplicateTierAction(SessionEditor editor, String  tierName) {
-		this(editor, tierName, -1);
+	public DuplicateTierAction(SessionEditor editor, String tierName, int index) {
+		this(editor.getSession(), editor.getEventManager(), editor.getUndoSupport(), tierName, index);
 	}
 
-	public DuplicateTierAction(SessionEditor editor, String tierName, int index) {
-		super(editor);
+	public DuplicateTierAction(Session session, EditorEventManager eventManager, SessionEditUndoSupport undoSupport, String tierName, int index) {
+		super(session, eventManager, undoSupport);
 
 		this.tierName = tierName;
 		this.index = index;
@@ -47,13 +48,13 @@ public class DuplicateTierAction extends SessionEditorAction {
 	public void hookableActionPerformed(ActionEvent e) {
 		final SystemTierType systemTierType = SystemTierType.tierFromString(tierName);
 		TierDescription existingTierDesc = systemTierType != null ?
-				SessionFactory.newFactory().createTierDescription(systemTierType) : getEditor().getSession().getUserTier(tierName);
-		TierViewItem tvi = getEditor().getSession().getTierView().stream().filter( (item) -> item.getTierName().equals(tierName) ).findFirst().orElse(null);
+				SessionFactory.newFactory().createTierDescription(systemTierType) : getSession().getUserTier(tierName);
+		TierViewItem tvi = getSession().getTierView().stream().filter( (item) -> item.getTierName().equals(tierName) ).findFirst().orElse(null);
 		if(existingTierDesc == null || tvi == null) {
 			Toolkit.getDefaultToolkit().beep();
 			return;
 		}
-		TierEditorDialog newTierDialog = new TierEditorDialog(getEditor().getSession(),true);
+		TierEditorDialog newTierDialog = new TierEditorDialog(getSession(),true);
 		TierInfoEditor tierEditor = newTierDialog.getTierEditor();
 		tierEditor.setTierName(tierName + " Copy");
 		tierEditor.setVisible(tvi.isVisible());
@@ -71,8 +72,7 @@ public class DuplicateTierAction extends SessionEditorAction {
 		newTierDialog.pack();
 
 		if(newTierDialog.showDialog()) {
-			final SessionEditor editor = getEditor();
-			final Session session = editor.getSession();
+			final Session session = getSession();
 			// get tier info
 			String newTierName = tierEditor.getTierName();
 			newTierName = StringUtils.strip(newTierName);
@@ -81,10 +81,8 @@ public class DuplicateTierAction extends SessionEditorAction {
 			final TierDescription tierDescription = tierEditor.createTierDescription();
 			final TierViewItem tierViewItem = tierEditor.createTierViewItem();
 
-			getEditor().getUndoSupport().beginUpdate();
-
-
-			for(Record r:getEditor().getSession().getRecords()) {
+			getUndoSupport().beginUpdate();
+			for(Record r:getSession().getRecords()) {
 				Tier<?> existingTier = r.getTier(tierName);
 				Tier<?> dupTier = SessionFactory.newFactory().createTier(tierDescription);
 				if(existingTier != null) {
@@ -92,10 +90,9 @@ public class DuplicateTierAction extends SessionEditorAction {
 				}
 				r.putTier(dupTier);
 			}
-			final AddTierEdit edit = new AddTierEdit(editor, tierDescription, tierViewItem, index);
-			editor.getUndoSupport().postEdit(edit);
-
-			getEditor().getUndoSupport().endUpdate();
+			final AddTierEdit edit = new AddTierEdit(session, getEventManager(), tierDescription, tierViewItem, index);
+			getUndoSupport().postEdit(edit);
+			getUndoSupport().endUpdate();
 		}
 	}
 

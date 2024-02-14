@@ -1,8 +1,10 @@
 package ca.phon.app.session.editor.view.tierManagement;
 
+import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.actions.*;
 import ca.phon.app.session.editor.undo.AddTierEdit;
+import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
 import ca.phon.app.session.editor.undo.ToggleTierAlignedEdit;
 import ca.phon.session.*;
 import ca.phon.ui.action.PhonUIAction;
@@ -55,27 +57,31 @@ public class TierMenuBuilder {
      * @param menuBuilder
      */
     public static void setupTierMenu(SessionEditor editor, TierDescription td, TierViewItem tvi, MenuBuilder menuBuilder) {
+        setupTierMenu(editor.getSession(), editor.getEventManager(), editor.getUndoSupport(), td, tvi, menuBuilder);
+    }
+
+    public static void setupTierMenu(Session session, EditorEventManager eventManager, SessionEditUndoSupport undoSupport, TierDescription td, TierViewItem tvi, MenuBuilder menuBuilder) {
         final SystemTierType systemTierType = SystemTierType.tierFromString(tvi.getTierName());
         final UserTierType userTierType = UserTierType.fromPhonTierName(tvi.getTierName());
-        final List<TierViewItem> view = editor.getSession().getTierView();
-        final MoveTierAction moveUpAction = new MoveTierAction(editor, tvi, -1);
-        final MoveTierAction moveDownAction = new MoveTierAction(editor, tvi, 1);
+        final List<TierViewItem> view = session.getTierView();
+        final MoveTierAction moveUpAction = new MoveTierAction(session, eventManager, undoSupport, tvi, -1);
+        final MoveTierAction moveDownAction = new MoveTierAction(session, eventManager, undoSupport, tvi, 1);
         final int tierIdx = view.indexOf(tvi);
         if(tierIdx > 0)
             menuBuilder.addItem(".", moveUpAction);
         if(tierIdx < view.size() - 1)
             menuBuilder.addItem(".", moveDownAction);
         menuBuilder.addSeparator(".", "visible_locked");
-        menuBuilder.addItem(".", new ToggleTierLockAction(editor, tvi));
-        menuBuilder.addItem(".", new ToggleTierVisibleAction(editor, tvi));
+        menuBuilder.addItem(".", new ToggleTierLockAction(session, eventManager, undoSupport, tvi));
+        menuBuilder.addItem(".", new ToggleTierVisibleAction(session, eventManager, undoSupport, tvi));
         menuBuilder.addSeparator(".", "edit_remove");
-        menuBuilder.addItem(".", new ToggleTierBlind(editor, tvi.getTierName()));
+        menuBuilder.addItem(".", new ToggleTierBlind(session, eventManager, undoSupport, tvi.getTierName()));
         if(systemTierType == null && userTierType == null)
-            menuBuilder.addItem(".", new ToggleTierAlignedAction(editor, tvi.getTierName()));
-        menuBuilder.addItem(".", new DuplicateTierAction(editor, tvi.getTierName(), tierIdx + 1));
-        menuBuilder.addItem(".", new EditTierAction(editor, tvi));
+            menuBuilder.addItem(".", new ToggleTierAlignedAction(session, eventManager, undoSupport, tvi.getTierName()));
+        menuBuilder.addItem(".", new DuplicateTierAction(session, eventManager, undoSupport, tvi.getTierName(), tierIdx + 1));
+        menuBuilder.addItem(".", new EditTierAction(session, eventManager, undoSupport, tvi));
         if(td != null)
-            menuBuilder.addItem(".", new RemoveTierAction(editor, td, tvi));
+            menuBuilder.addItem(".", new RemoveTierAction(session, eventManager, undoSupport, td, tvi));
     }
 
     /**

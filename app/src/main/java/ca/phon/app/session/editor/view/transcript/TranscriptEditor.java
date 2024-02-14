@@ -3,6 +3,7 @@ package ca.phon.app.session.editor.view.transcript;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.*;
+import ca.phon.app.session.editor.view.tierManagement.TierMenuBuilder;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
 import ca.phon.plugin.PluginManager;
@@ -887,6 +888,16 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         JPopupMenu menu = new JPopupMenu();
         MenuBuilder builder = new MenuBuilder(menu);
 
+        if(SystemTierType.Orthography.getName().equals(tier.getName())) {
+            final JMenu speakerMenu = builder.addMenu(".", "Change speaker");
+            appendChangeSpeakerMenu(record, new MenuBuilder(speakerMenu));
+            builder.addSeparator(".", "speaker");
+        }
+
+        final TierDescription td = getSession().getTier(tier.getName());
+        final TierViewItem tvi = getSession().getTierView().stream().filter(tv -> tv.getTierName().equals(tier.getName())).findFirst().orElse(null);
+        TierMenuBuilder.setupTierMenu(getSession(), getEventManager(), getUndoSupport(), td, tvi, builder);
+
         var extPts = PluginManager.getInstance().getExtensionPoints(TierLabelMenuHandler.class);
 
         for (var extPt : extPts) {
@@ -994,14 +1005,11 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     }
 
     /**
-     * Runs when the user click on the speaker for a record
+     * Append change speaker items to given menu builder
      *
-     * @param point  the point where the user clicks
-     * @param record the record that the speaker belongs to
+     * @param menuBuilder
      */
-    private void onClickSpeakerLabel(Point2D point, Record record) {
-        JPopupMenu menu = new JPopupMenu();
-        MenuBuilder menuBuilder = new MenuBuilder(menu);
+    private void appendChangeSpeakerMenu(Record record, MenuBuilder menuBuilder) {
 
         ButtonGroup buttonGroup = new ButtonGroup();
 
@@ -1030,8 +1038,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         buttonGroup.add(unknownParticipantItem);
         menuBuilder.addItem(".", unknownParticipantItem);
 
-        // Show it where the user clicked
-        menu.show(this, (int) point.getX(), (int) point.getY());
     }
 
     public EditorEventManager getEventManager() {
@@ -2640,21 +2646,21 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                 AttributeSet attrs = elem.getAttributes();
 
 
-                if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE) != null) {
-                    String elementType = (String) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
+                if (TranscriptStyleConstants.isNotTraversable(attrs)) {
+                    String elementType = TranscriptStyleConstants.getElementType(attrs);
                     if (elementType != null) {
                         if (e.getClickCount() > 1) {
                             switch (elementType) {
-                                case TranscriptStyleConstants.ATTR_KEY_RECORD -> {
-                                    Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
+                                case TranscriptStyleConstants.ELEMENT_TYPE_RECORD -> {
+                                    Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
                                     select(doc.getTierContentStart(tier), doc.getTierEnd(tier));
                                 }
-                                case TranscriptStyleConstants.ATTR_KEY_COMMENT -> {
-                                    Comment comment = (Comment) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT);
+                                case TranscriptStyleConstants.ELEMENT_TYPE_COMMENT -> {
+                                    Comment comment = TranscriptStyleConstants.getComment(attrs);
                                     select(doc.getCommentContentStart(comment), doc.getCommentEnd(comment));
                                 }
-                                case TranscriptStyleConstants.ATTR_KEY_GEM -> {
-                                    Gem gem = (Gem) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM);
+                                case TranscriptStyleConstants.ELEMENT_TYPE_GEM -> {
+                                    Gem gem = TranscriptStyleConstants.getGEM(attrs);
                                     select(doc.getGemContentStart(gem), doc.getGemEnd(gem));
                                 }
                             }
@@ -2662,28 +2668,28 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                             setCaretPosition(getNextValidIndex(mousePosInDoc, false));
                         }
 
-                        if (attrs.getAttribute("clickable") != null) {
+                        if (TranscriptStyleConstants.isClickable(attrs)) {
                             switch (elementType) {
-                                case TranscriptStyleConstants.ATTR_KEY_RECORD -> {
-                                    Record record = (Record) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
+                                case TranscriptStyleConstants.ELEMENT_TYPE_RECORD -> {
+                                    Record record = TranscriptStyleConstants.getRecord(attrs);
                                     if (record == null) return;
 
-                                    if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_SEPARATOR) != null) {
-                                        onClickSpeakerLabel(e.getPoint(), record);
-                                        return;
-                                    }
+//                                    if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_SEPARATOR) != null) {
+//                                        onClickSpeakerLabel(e.getPoint(), record);
+//                                        return;
+//                                    }
 
-                                    Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
+                                    Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
                                     if (tier != null) onClickTierLabel(e.getPoint(), tier, record);
                                 }
-                                case TranscriptStyleConstants.ATTR_KEY_COMMENT ->
-                                        onClickCommentLabel(e.getPoint(), (Comment) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT));
-                                case TranscriptStyleConstants.ATTR_KEY_GEM ->
+                                case TranscriptStyleConstants.ELEMENT_TYPE_COMMENT ->
+                                        onClickCommentLabel(e.getPoint(), TranscriptStyleConstants.getComment(attrs));
+                                case TranscriptStyleConstants.ELEMENT_TYPE_GEM ->
                                         onClickGemLabel(e.getPoint(), (Gem) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM));
-                                case TranscriptStyleConstants.ATTR_KEY_BLIND_TRANSCRIPTION -> {
-                                    Record record = (Record) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
-                                    Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
-                                    String transcriber = (String) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TRANSCRIBER);
+                                case TranscriptStyleConstants.ELEMENT_TYPE_BLIND_TRANSCRIPTION -> {
+                                    Record record = TranscriptStyleConstants.getRecord(attrs);
+                                    Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
+                                    String transcriber = TranscriptStyleConstants.getTranscriber(attrs);
                                     onClickBlindTranscriptionLabel(e.getPoint(), record, tier, transcriber);
                                 }
                             }
@@ -2691,33 +2697,33 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                     }
                 }
 
-                String elementType = (String) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
+                String elementType = TranscriptStyleConstants.getElementType(attrs);
                 if (elementType != null) {
                     if (e.getClickCount() == 3) {
                         switch (elementType) {
-                            case TranscriptStyleConstants.ATTR_KEY_RECORD -> {
-                                Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
+                            case TranscriptStyleConstants.ELEMENT_TYPE_RECORD -> {
+                                Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
                                 if (tier != null) {
                                     setSelectionStart(doc.getTierContentStart(tier));
                                     setSelectionEnd(doc.getTierEnd(tier) - 1);
                                 }
                             }
-                            case TranscriptStyleConstants.ATTR_KEY_COMMENT -> {
-                                Comment comment = (Comment) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT);
+                            case TranscriptStyleConstants.ELEMENT_TYPE_COMMENT -> {
+                                Comment comment = TranscriptStyleConstants.getComment(attrs);
                                 if (comment != null) {
                                     setSelectionStart(doc.getCommentContentStart(comment));
                                     setSelectionEnd(doc.getCommentEnd(comment) - 1);
                                 }
                             }
-                            case TranscriptStyleConstants.ATTR_KEY_GEM -> {
-                                Gem gem = (Gem) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM);
+                            case TranscriptStyleConstants.ELEMENT_TYPE_GEM -> {
+                                Gem gem = TranscriptStyleConstants.getGEM(attrs);
                                 if (gem != null) {
                                     setSelectionStart(doc.getGemContentStart(gem));
                                     setSelectionEnd(doc.getGemEnd(gem) - 1);
                                 }
                             }
-                            case TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER -> {
-                                Tier<?> generic = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER);
+                            case TranscriptStyleConstants.ELEMENT_TYPE_GENERIC -> {
+                                Tier<?> generic = TranscriptStyleConstants.getGenericTier(attrs);
                                 if (generic != null) {
                                     setSelectionStart(doc.getGenericContentStart(generic));
                                     setSelectionEnd(doc.getGenericEnd(generic) - 1);
@@ -2745,7 +2751,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             if (elem != null) {
                 if (elem.equals(hoverElem)) return;
                 AttributeSet attrs = elem.getAttributes();
-                boolean isClickable = attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE) != null;
+                boolean isClickable = TranscriptStyleConstants.isClickable(attrs);
                 boolean isWhitespace = doc.getCharAtPos(mousePosInDoc).equals(' ');
                 if (isClickable && !isWhitespace) {
                     hoverElem = elem;

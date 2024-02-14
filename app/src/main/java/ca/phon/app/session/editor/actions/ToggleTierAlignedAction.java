@@ -1,7 +1,10 @@
 package ca.phon.app.session.editor.actions;
 
+import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
 import ca.phon.app.session.editor.undo.ToggleTierAlignedEdit;
+import ca.phon.session.Session;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -15,10 +18,14 @@ public class ToggleTierAlignedAction extends SessionEditorAction {
     private final String tierName;
 
     public ToggleTierAlignedAction(SessionEditor editor, String tierName) {
-        super(editor);
+        this(editor.getSession(), editor.getEventManager(), editor.getUndoSupport(), tierName);
+    }
+
+    public ToggleTierAlignedAction(Session session, EditorEventManager eventManager, SessionEditUndoSupport undoSupport, String tierName) {
+        super(session, eventManager, undoSupport);
 
         this.tierName = tierName;
-        boolean isAligned = !getEditor().getSession().getTier(tierName).isExcludeFromAlignment();
+        boolean isAligned = !getSession().getTier(tierName).isExcludeFromAlignment();
         putValue(NAME, isAligned ? "Remove tier from cross tier alignment" : "Include tier in cross tier alignment");
         putValue(SHORT_DESCRIPTION, SHORT_DESC);
         putValue(SMALL_ICON, IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName,
@@ -27,10 +34,10 @@ public class ToggleTierAlignedAction extends SessionEditorAction {
 
     @Override
     public void hookableActionPerformed(ActionEvent ae) {
-        final boolean isAligned = !getEditor().getSession().getTier(tierName).isExcludeFromAlignment();
+        final boolean isAligned = !getSession().getTier(tierName).isExcludeFromAlignment();
 
-        final ToggleTierAlignedEdit edit = new ToggleTierAlignedEdit(getEditor().getSession(), getEditor().getEventManager(), tierName, !isAligned);
-        getEditor().getUndoSupport().postEdit(edit);
+        final ToggleTierAlignedEdit edit = new ToggleTierAlignedEdit(getSession(), getEventManager(), tierName, !isAligned);
+        getUndoSupport().postEdit(edit);
     }
 
 }

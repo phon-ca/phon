@@ -15,7 +15,9 @@
  */
 package ca.phon.app.session.editor.actions;
 
+import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
 import ca.phon.app.session.editor.undo.TierViewItemEdit;
 import ca.phon.session.*;
 import ca.phon.util.icons.IconManager;
@@ -35,7 +37,11 @@ public class ToggleTierLockAction extends SessionEditorAction {
 	private final TierViewItem item;
 	
 	public ToggleTierLockAction(SessionEditor editor, TierViewItem item) {
-		super(editor);
+		this(editor.getSession(), editor.getEventManager(), editor.getUndoSupport(), item);
+	}
+
+	public ToggleTierLockAction(Session session, EditorEventManager eventManager, SessionEditUndoSupport undoSupport, TierViewItem item) {
+		super(session, eventManager, undoSupport);
 		this.item = item;
 
 		if(item.isTierLocked())
@@ -51,8 +57,8 @@ public class ToggleTierLockAction extends SessionEditorAction {
 		final SessionFactory factory = SessionFactory.newFactory();
 		final TierViewItem newItem = factory.createTierViewItem(item.getTierName(), item.isVisible(), !item.isTierLocked());
 		
-		final TierViewItemEdit edit = new TierViewItemEdit(getEditor(), item, newItem);
-		getEditor().getUndoSupport().postEdit(edit);
+		final TierViewItemEdit edit = new TierViewItemEdit(getSession(), getEventManager(), item, newItem);
+		getUndoSupport().postEdit(edit);
 	}
 
 }

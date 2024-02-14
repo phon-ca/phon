@@ -15,8 +15,10 @@
  */
 package ca.phon.app.session.editor.actions;
 
+import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.RemoveTierEdit;
+import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
 import ca.phon.session.*;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.MessageDialogProperties;
@@ -39,10 +41,14 @@ public class RemoveTierAction extends SessionEditorAction {
 			IconManager.getInstance().getFontIcon("remove", IconSize.SMALL, UIManager.getColor("Button.foreground"));
 	
 	public RemoveTierAction(SessionEditor editor, TierDescription td, TierViewItem tvi) {
-		super(editor);
+		this(editor.getSession(), editor.getEventManager(), editor.getUndoSupport(), td, tvi);
+	}
+
+	public RemoveTierAction(Session session, EditorEventManager eventManager, SessionEditUndoSupport undoSupport, TierDescription td, TierViewItem tvi) {
+		super(session, eventManager, undoSupport);
 		this.td = td;
 		this.tvi = tvi;
-		
+
 		putValue(NAME, TXT + " " + td.getName());
 		putValue(SMALL_ICON, ICON);
 	}
@@ -59,8 +65,8 @@ public class RemoveTierAction extends SessionEditorAction {
 		final int selection = NativeDialogs.showMessageDialog(props);
 		if(selection != 0) return;
 
-		final RemoveTierEdit edit = new RemoveTierEdit(getEditor(), td, tvi);
-		getEditor().getUndoSupport().postEdit(edit);
+		final RemoveTierEdit edit = new RemoveTierEdit(getSession(), getEventManager(), td, tvi);
+		getUndoSupport().postEdit(edit);
 	}
 
 }

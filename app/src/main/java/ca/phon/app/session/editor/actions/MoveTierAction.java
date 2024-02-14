@@ -15,8 +15,12 @@
  */
 package ca.phon.app.session.editor.actions;
 
+import ca.phon.app.hooks.HookableAction;
+import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.MoveTierEdit;
+import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
+import ca.phon.session.Session;
 import ca.phon.session.TierViewItem;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
@@ -26,13 +30,22 @@ import java.awt.event.ActionEvent;
 import java.util.*;
 
 public class MoveTierAction extends SessionEditorAction {
-	
+
 	private final TierViewItem item;
 
 	private final int direction;
 		
 	public MoveTierAction(SessionEditor editor, TierViewItem item, int direction) {
 		super(editor);
+		this.item = item;
+		this.direction = direction;
+
+		putValue(NAME, "Move tier " + (direction < 0 ? "up" : "down"));
+		putValue(SMALL_ICON, IconManager.getInstance().getFontIcon(direction < 0 ? "arrow_upward" : "arrow_downward", IconSize.SMALL, UIManager.getColor("Button.foreground")));
+	}
+
+	public MoveTierAction(Session session, EditorEventManager eventManager, SessionEditUndoSupport undoSupport, TierViewItem item, int direction) {
+		super(session, eventManager, undoSupport);
 		this.item = item;
 		this.direction = direction;
 		
@@ -42,11 +55,11 @@ public class MoveTierAction extends SessionEditorAction {
 
 	@Override
 	public void hookableActionPerformed(ActionEvent e) {
-		final List<TierViewItem> view = getEditor().getSession().getTierView();
+		final List<TierViewItem> view = getSession().getTierView();
 		final List<TierViewItem> newView = new ArrayList<>(view);
 		final int currentIndex = newView.indexOf(item);
-		final MoveTierEdit edit = new MoveTierEdit(getEditor(), item, currentIndex + direction);
-		getEditor().getUndoSupport().postEdit(edit);
+		final MoveTierEdit edit = new MoveTierEdit(getSession(), getEventManager(), item, currentIndex + direction);
+		getUndoSupport().postEdit(edit);
 	}
 
 }

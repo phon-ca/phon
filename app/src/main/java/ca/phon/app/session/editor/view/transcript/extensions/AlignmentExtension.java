@@ -120,7 +120,7 @@ public class AlignmentExtension implements TranscriptEditorExtension {
      * @param alignmentTier the alignment tier to format
      * @param attrs the attributes to apply to the tier
      * @return the list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} data
-     * */
+     */
     public List<DefaultStyledDocument.ElementSpec> getFormattedAlignment(Record record, Tier<PhoneAlignment> alignmentTier, AttributeSet attrs) {
         final TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(doc);
         // Get the alignment tier

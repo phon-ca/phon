@@ -16,7 +16,10 @@
 package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.hooks.HookableAction;
+import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
+import ca.phon.session.Session;
 
 import javax.swing.*;
 import java.lang.ref.WeakReference;
@@ -26,17 +29,59 @@ import java.lang.ref.WeakReference;
  */
 public abstract class SessionEditorAction extends HookableAction {
 
-	private static final long serialVersionUID = -6639660567310323736L;
+	private WeakReference<SessionEditor> editorRef;
 
-	private final WeakReference<SessionEditor> editorRef;
-	
+	private final Session session;
+
+	private final EditorEventManager eventManager;
+
+	private final SessionEditUndoSupport undoSupport;
+
+	/**
+	 * Constructor
+	 * @param editor
+	 * @deprecated
+	 */
+	@Deprecated
 	public SessionEditorAction(SessionEditor editor) {
-		super();
+		this(editor.getSession(), editor.getEventManager(), editor.getUndoSupport());
 		this.editorRef = new WeakReference<SessionEditor>(editor);
 	}
-	
+
+	/**
+	 * Constructor
+	 * @param session
+	 * @param eventManager
+	 * @param undoSupport
+	 */
+	public SessionEditorAction(Session session, EditorEventManager eventManager, SessionEditUndoSupport undoSupport) {
+		super();
+		this.editorRef = new WeakReference<SessionEditor>(null);
+		this.session = session;
+		this.eventManager = eventManager;
+		this.undoSupport = undoSupport;
+	}
+
+	/**
+	 * Get the session editor
+	 * @return the session editor
+	 * @deprecated may be null
+	 */
+	@Deprecated
 	public SessionEditor getEditor() {
 		return this.editorRef.get();
 	}
-	
+
+	public Session getSession() {
+		return this.session;
+	}
+
+	public EditorEventManager getEventManager() {
+		return this.eventManager;
+	}
+
+	public SessionEditUndoSupport getUndoSupport() {
+		return this.undoSupport;
+	}
+
 }
