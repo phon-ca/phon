@@ -204,8 +204,6 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 		final List<TierViewItem> tierOrder = new ArrayList<TierViewItem>();
 		if(xmlSessionType.getTierOrder() != null) {
 			for (XmlTierViewType tot : xmlSessionType.getTierOrder().getTierView()) {
-				// remove segment from tier view if present
-				if(SystemTierType.Segment.getName().equals(tot.getTierName())) continue;
 				final TierViewItem toi = readTierViewItem(factory, tot);
 				tierOrder.add(toi);
 			}
