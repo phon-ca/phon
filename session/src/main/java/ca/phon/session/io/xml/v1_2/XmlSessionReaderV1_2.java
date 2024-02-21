@@ -219,11 +219,9 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 
 		final List<TierViewItem> tierOrder = new ArrayList<TierViewItem>();
 		for(TvType tot:sessionType.getTierOrder().getTier()) {
-			// remove segment tier view tier view
 			String tierName = tot.getTierName();
-			if(SystemTierType.Segment.getName().equals(tierName)) continue;
+			// convert Notes to Comments
 			if(SystemTierType.Notes.getName().equals(tierName)) {
-				// convert Notes to Comments
 				tierName = ca.phon.session.UserTierType.Comments.getPhonTierName();
 
 				// add comments to tier description if necessary

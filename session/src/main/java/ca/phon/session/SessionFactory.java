@@ -128,6 +128,7 @@ public final class SessionFactory extends ExtendableObject {
 		tierView.add(createTierViewItem(SystemTierType.Orthography.getName(), true));
 		tierView.add(createTierViewItem(SystemTierType.IPATarget.getName(), true));
 		tierView.add(createTierViewItem(SystemTierType.IPAActual.getName(), true));
+		tierView.add(createTierViewItem(SystemTierType.Segment.getName(), true));
 		for(TierDescription tierDesc:session.getUserTiers()) {
 			tierView.add(createTierViewItem(tierDesc.getName(), true, "default", false));
 		}

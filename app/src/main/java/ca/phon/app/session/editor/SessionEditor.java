@@ -280,7 +280,7 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 		add(leftIconStrip, BorderLayout.WEST);
 
 		rightIconStrip = new ViewIconStrip(SwingConstants.RIGHT, viewModel);
-		rightIconStrip.setBorder(BorderFactory.createEmptyBorder(2, 0, 2, 0));
+		rightIconStrip.setBorder(BorderFactory.createEmptyBorder(2, 0, 2, 2));
 		add(rightIconStrip, BorderLayout.EAST);
 
 		setupEditorActions();
