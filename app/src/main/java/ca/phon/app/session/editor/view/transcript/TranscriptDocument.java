@@ -28,7 +28,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * */
     public record StartEnd(int start, int end) {
         public boolean valid() {
-            return start >= 0 && end <= start;
+            return start >= 0 && end >= start;
         }
 
         public int length() {

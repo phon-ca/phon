@@ -14,9 +14,13 @@ import java.awt.geom.Rectangle2D;
  */
 public class TranscriptViewFactory implements ViewFactory {
 
-    public int pageWidth = (int)(8.5 * 96);
+    public final static int LABEL_COLUMN_WIDTH = 150;
 
-    private int labelColumnWidth = 150;
+    public final static int PAGE_WIDTH = (int)(8.5 * 96);
+
+    public int pageWidth = PAGE_WIDTH;
+
+    private int labelColumnWidth = LABEL_COLUMN_WIDTH;
 
     /**
      * The spacing between the lines of the document
@@ -227,6 +231,27 @@ public class TranscriptViewFactory implements ViewFactory {
         @Override
         public void paint(Graphics g, Shape a) {
             g.clearRect(a.getBounds().x, a.getBounds().y, a.getBounds().width, a.getBounds().height);
+            final boolean isLabel = TranscriptStyleConstants.isLabel(getAttributes());
+            g.setColor(Color.WHITE);
+            if(isLabel) {
+                g.setColor(UIManager.getColor(TranscriptEditorUIProps.LABEL_BACKGROUND));
+            } else {
+                final String elementType = TranscriptStyleConstants.getElementType(getAttributes());
+                if (elementType != null) {
+                    switch (elementType) {
+                        case TranscriptStyleConstants.ELEMENT_TYPE_COMMENT -> {
+                            g.setColor(UIManager.getColor(TranscriptEditorUIProps.COMMENT_BACKGROUND));
+                        }
+                        case TranscriptStyleConstants.ELEMENT_TYPE_GEM -> {
+                            g.setColor(UIManager.getColor(TranscriptEditorUIProps.GEM_BACKGROUND));
+                        }
+                        case TranscriptStyleConstants.ELEMENT_TYPE_GENERIC -> {
+                            g.setColor(UIManager.getColor(TranscriptEditorUIProps.GENERIC_BACKGROUND));
+                        }
+                    }
+                }
+            }
+            g.fillRect(a.getBounds().x, a.getBounds().y, a.getBounds().width, a.getBounds().height);
             super.paint(g, a);
         }
 
@@ -295,6 +320,27 @@ public class TranscriptViewFactory implements ViewFactory {
         @Override
         public void paint(Graphics g, Shape a) {
             g.clearRect(a.getBounds().x, a.getBounds().y, a.getBounds().width, a.getBounds().height);
+            final boolean isLabel = TranscriptStyleConstants.isLabel(getAttributes());
+            g.setColor(Color.WHITE);
+            if(isLabel) {
+                g.setColor(UIManager.getColor(TranscriptEditorUIProps.LABEL_BACKGROUND));
+            } else {
+                final String elementType = TranscriptStyleConstants.getElementType(getAttributes());
+                if (elementType != null) {
+                    switch (elementType) {
+                        case TranscriptStyleConstants.ELEMENT_TYPE_COMMENT -> {
+                            g.setColor(UIManager.getColor(TranscriptEditorUIProps.COMMENT_BACKGROUND));
+                        }
+                        case TranscriptStyleConstants.ELEMENT_TYPE_GEM -> {
+                            g.setColor(UIManager.getColor(TranscriptEditorUIProps.GEM_BACKGROUND));
+                        }
+                        case TranscriptStyleConstants.ELEMENT_TYPE_GENERIC -> {
+                            g.setColor(UIManager.getColor(TranscriptEditorUIProps.GENERIC_BACKGROUND));
+                        }
+                    }
+                }
+            }
+            g.fillRect(a.getBounds().x, a.getBounds().y, a.getBounds().width, a.getBounds().height);
             super.paint(g, a);
         }
 
