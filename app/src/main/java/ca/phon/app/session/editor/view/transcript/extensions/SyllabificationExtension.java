@@ -13,7 +13,6 @@ import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.util.Range;
 
 import javax.swing.*;
 import javax.swing.text.*;
@@ -143,12 +142,12 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
         final Tier<?> tier = event.data().tier();
         if(tier.getDeclaredType().equals(IPATranscript.class) && !event.data().valueAdjusting()) {
             if(isSyllabificationVisible()) {
-                final Range range = doc.getTierContentRange(editor.getSession().getRecordPosition(event.data().record()), getTierNameForSyllabification(tier));
-                if(range.getStart() < 0) return;
+                final TranscriptDocument.StartEnd range = doc.getTierContentRange(editor.getSession().getRecordPosition(event.data().record()), getTierNameForSyllabification(tier));
+                if(!range.valid()) return;
                 editor.getTranscriptEditorCaret().freeze();
                 try {
                     editor.getTranscriptDocument().setBypassDocumentFilter(true);
-                    editor.getTranscriptDocument().remove(range.getStart(), range.getEnd() - range.getStart());
+                    editor.getTranscriptDocument().remove(range.start(), range.length());
                     final SimpleAttributeSet tierAttrs = editor.getTranscriptDocument().getTranscriptStyleContext().getTierAttributes(tier);
                     tierAttrs.addAttributes(editor.getTranscriptDocument().getTranscriptStyleContext().getRecordAttributes(event.data().record()));
                     TranscriptBatchBuilder builder = new TranscriptBatchBuilder(editor.getTranscriptDocument());
@@ -158,7 +157,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                     } else {
                         builder.appendAll(getFormattedSyllabification((IPATranscript)tier.getValue(), tierAttrs));
                     }
-                    editor.getTranscriptDocument().processBatchUpdates(range.getStart(), builder.getBatch());
+                    editor.getTranscriptDocument().processBatchUpdates(range.start(), builder.getBatch());
                 } catch (BadLocationException e) {
                     LogUtil.warning(e);
                 }

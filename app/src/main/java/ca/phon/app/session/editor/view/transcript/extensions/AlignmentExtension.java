@@ -9,8 +9,6 @@ import ca.phon.session.PhoneAlignment;
 import ca.phon.session.Record;
 import ca.phon.session.Tier;
 import ca.phon.session.TierViewItem;
-import ca.phon.util.Range;
-import com.kitfox.svg.A;
 
 import javax.swing.text.*;
 import java.util.ArrayList;
@@ -96,14 +94,14 @@ public class AlignmentExtension implements TranscriptEditorExtension {
         if (!tier.getDeclaredType().equals(PhoneAlignment.class) || !isAlignmentVisible()) return;
 
         final int recordIndex = editor.getSession().getTranscript().getRecordPosition(editorEvent.data().record());
-        final Range alignmentTierContentRange = doc.getTierContentRange(recordIndex, tier.getName());
-        if(alignmentTierContentRange.getStart() < 0) return;
+        final TranscriptDocument.StartEnd alignmentTierContentRange = doc.getTierContentRange(recordIndex, tier.getName());
+        if(!alignmentTierContentRange.valid()) return;
 
         try {
             editor.getTranscriptEditorCaret().freeze();
             doc.setBypassDocumentFilter(true);
-            doc.remove(alignmentTierContentRange.getStart(), alignmentTierContentRange.getEnd() - alignmentTierContentRange.getStart());
-            doc.processBatchUpdates(alignmentTierContentRange.getStart(), getFormattedAlignment(editorEvent.data().record(), (Tier<PhoneAlignment>) tier, new SimpleAttributeSet()));
+            doc.remove(alignmentTierContentRange.start(), alignmentTierContentRange.length());
+            doc.processBatchUpdates(alignmentTierContentRange.start(), getFormattedAlignment(editorEvent.data().record(), (Tier<PhoneAlignment>) tier, new SimpleAttributeSet()));
         } catch (BadLocationException e) {
             LogUtil.severe(e);
         } finally {

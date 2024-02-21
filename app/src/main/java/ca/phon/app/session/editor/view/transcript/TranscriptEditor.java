@@ -14,7 +14,6 @@ import ca.phon.session.tierdata.TierData;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.util.Range;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -2445,10 +2444,10 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                     final Record record = transcriptElement.asRecord();
                     final Tier<?> tier = record.getTier(oldLoc.tier());
                     if(tier != null) {
-                        final Range tierContentRange = getTranscriptDocument().getTierContentRange(
+                        final TranscriptDocument.StartEnd tierContentRange = getTranscriptDocument().getTierContentRange(
                                 getSession().getTranscript().getRecordIndex(oldLoc.transcriptElementIndex()), tier.getName());
                         try {
-                            final String currentText = getTranscriptDocument().getText(tierContentRange.getStart(), tierContentRange.getEnd() - tierContentRange.getStart());
+                            final String currentText = getTranscriptDocument().getText(tierContentRange.start(), tierContentRange.length());
                             if(!tier.toString().equals(currentText)) {
                                 changeTierData(record, tier, currentText);
                             }
@@ -2458,9 +2457,9 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                     }
                 } else if(transcriptElement.isGem()) {
                     final Gem gem = transcriptElement.asGem();
-                    final Range gemRange = getTranscriptDocument().getGemContentRange(gem);
+                    final TranscriptDocument.StartEnd gemRange = getTranscriptDocument().getGemContentStartEnd(gem);
                     try {
-                        final String currentText = getTranscriptDocument().getText(gemRange.getStart(), gemRange.getEnd() - gemRange.getStart());
+                        final String currentText = getTranscriptDocument().getText(gemRange.start(), gemRange.length());
                         if(!gem.toString().equals(currentText)) {
                             gemDataChanged(gem, currentText);
                         }
@@ -2469,9 +2468,9 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                     }
                 } else if(transcriptElement.isComment()) {
                     final Comment comment = transcriptElement.asComment();
-                    final Range commentRange = getTranscriptDocument().getCommentContentRange(comment);
+                    final TranscriptDocument.StartEnd commentRange = getTranscriptDocument().getCommentContentStartEnd(comment);
                     try {
-                        final String currentText = getTranscriptDocument().getText(commentRange.getStart(), commentRange.getEnd() - commentRange.getStart());
+                        final String currentText = getTranscriptDocument().getText(commentRange.start(), commentRange.length());
                         if(!comment.toString().equals(currentText)) {
                             commentDataChanged(comment, currentText);
                         }

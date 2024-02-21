@@ -9,7 +9,6 @@ import ca.phon.plugin.PluginManager;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.util.Language;
-import ca.phon.util.Range;
 
 import javax.swing.*;
 import javax.swing.text.*;
@@ -23,6 +22,19 @@ import java.util.concurrent.locks.ReentrantLock;
  * Text document for a {@link Session} that displays the transcript including all tiers, comments, and gems.
  */
 public class TranscriptDocument extends DefaultStyledDocument implements IExtendable {
+
+    /**
+     * A wrapper record for a start and end index
+     * */
+    public record StartEnd(int start, int end) {
+        public boolean valid() {
+            return start >= 0 && end <= start;
+        }
+
+        public int length() {
+            return end - start;
+        }
+    }
 
     /**
      * Session factory for creating new session data objects
@@ -271,7 +283,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * (newlines included)
      */
     public int getRecordEnd(Record record) {
-        return getRecordRange(record).getEnd();
+        return getRecordStartEnd(record).end();
     }
 
     /**
@@ -281,7 +293,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return the position in the document at the beginning of the records content
      */
     public int getRecordStart(int recordIndex) {
-        return getRecordRange(recordIndex).getStart();
+        return getRecordStartEnd(recordIndex).start();
     }
 
     /**
@@ -291,7 +303,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return the position in the document at the beginning of the comment label
      */
     public int getCommentStart(Comment comment) {
-        return getCommentRange(comment).getStart();
+        return getCommentStartEnd(comment).start();
     }
 
     /**
@@ -301,16 +313,16 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return the position in the document at the beginning of the comments content
      */
     public int getCommentContentStart(Comment comment) {
-        return getCommentContentRange(comment).getStart();
+        return getCommentContentStartEnd(comment).start();
     }
 
     /**
      * Return the range for the given comment content
      *
      * @param comment
-     * @return the range for the given comment content
+     * @return the range for the given comment content, or StartEnd(-1, -1) if not found
      */
-    public Range getCommentContentRange(Comment comment) {
+    public StartEnd getCommentContentStartEnd(Comment comment) {
         final int commentEleIdx = getSession().getTranscript().getElementIndex(comment);
         final int paraEleIdx = findParagraphElementIndexForSessionElementIndex(commentEleIdx);
         final Element paraEle = getDefaultRootElement().getElement(paraEleIdx);
@@ -327,7 +339,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         }
         final int commentEnd = paraEle.getEndOffset() - 1;
 
-        return new Range(commentStart, commentEnd);
+        return new StartEnd(commentStart, commentEnd);
     }
 
     /**
@@ -337,7 +349,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return the position in the document at the beginning of the gem label
      */
     public int getGemStart(Gem gem) {
-        return getGemRange(gem).getStart();
+        return getGemRange(gem).start();
     }
 
     /**
@@ -346,7 +358,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @param gem
      * @return the range for the given gem's content
      */
-    public Range getGemContentRange(Gem gem) {
+    public StartEnd getGemContentStartEnd(Gem gem) {
         final int gemEleIdx = getSession().getTranscript().getElementIndex(gem);
         final int paraEleIdx = findParagraphElementIndexForSessionElementIndex(gemEleIdx);
         final Element paraEle = getDefaultRootElement().getElement(paraEleIdx);
@@ -363,7 +375,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         }
         final int gemEnd = paraEle.getEndOffset() - 1;
 
-        return new Range(gemStart, gemEnd);
+        return new StartEnd(gemStart, gemEnd);
     }
 
     /**
@@ -373,7 +385,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return the position in the document at the beginning of the gems content
      */
     public int getGemContentStart(Gem gem) {
-        return getGemContentRange(gem).getStart();
+        return getGemContentStartEnd(gem).start();
     }
 
     /**
@@ -384,7 +396,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * (newlines included)
      */
     public int getRecordEnd(int recordIndex) {
-        return getRecordRange(recordIndex).getEnd();
+        return getRecordStartEnd(recordIndex).end();
     }
 
     /**
@@ -392,8 +404,8 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @param recordIndex
      * @return the range of the given recordIndex
      */
-    public Range getRecordRange(int recordIndex) {
-        return getRecordRange(getSession().getRecord(recordIndex));
+    public StartEnd getRecordStartEnd(int recordIndex) {
+        return getRecordStartEnd(getSession().getRecord(recordIndex));
     }
 
     /**
@@ -404,7 +416,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * (newlines included)
      */
     public int getCommentEnd(Comment comment) {
-        return getCommentRange(comment).getEnd();
+        return getCommentStartEnd(comment).end();
     }
 
     /**
@@ -415,7 +427,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * (newlines included)
      */
     public int getGemEnd(Gem gem) {
-        return getGemRange(gem).getEnd();
+        return getGemRange(gem).end();
     }
 
     /**
@@ -425,7 +437,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return the position in the document at the beginning of the records content
      */
     public int getRecordStart(Record record) {
-        return getRecordRange(record).getStart();
+        return getRecordStartEnd(record).start();
     }
 
     /**
@@ -435,7 +447,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return the position in the document at the beginning of the tiers content
      */
     public int getTierStart(Tier<?> tier) {
-        return getTierRange(tier).getStart();
+        return getTierStartEnd(tier).start();
     }
 
     /**
@@ -460,7 +472,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return the position in the document at the beginning of the tiers content
      */
     public int getTierContentStart(int recordIndex, String tierName) {
-        return getTierContentRange(recordIndex, tierName).getStart();
+        return getTierContentRange(recordIndex, tierName).start();
     }
 
     /**
@@ -468,11 +480,11 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      *
      * @param recordIndex
      * @param tierName
-     * @return the range of the given tier's content
+     * @return the start/end of the given tier's content, (-1, -1) if not found
      */
-    public Range getTierContentRange(int recordIndex, String tierName) {
+    public StartEnd getTierContentRange(int recordIndex, String tierName) {
         final int paragraphIdx = findParagraphElementIndexForTier(session.getTranscript().getRecordElementIndex(recordIndex), tierName);
-        if (paragraphIdx == -1) return new Range(-1, -1);
+        if (paragraphIdx == -1) return new StartEnd(-1, -1);
         Element elem = getDefaultRootElement().getElement(paragraphIdx);
         int tierStart = elem.getStartOffset();
         for (int i = 0; i < elem.getElementCount(); i++) {
@@ -487,7 +499,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         }
         final int tierEnd = elem.getEndOffset() - 1;
 
-        return new Range(tierStart, tierEnd);
+        return new StartEnd(tierStart, tierEnd);
     }
 
     /**
@@ -543,7 +555,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * (newlines included)
      */
     public int getTierEnd(Tier<?> tier) {
-        return getTierRange(tier).getEnd();
+        return getTierStartEnd(tier).end();
     }
 
     /**
@@ -553,7 +565,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return the position in the document at the beginning of the tiers content
      */
     public int getTierContentStart(Tier<?> tier) {
-        return getTierContentRange(tier).getStart();
+        return getTierContentRange(tier).start();
     }
 
     /**
@@ -562,8 +574,8 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @param genericTier
      * @return the range of the given generic tier or Range(-1, -1) if not found
      */
-    public Range getGenericRange(Tier<?> genericTier) {
-        return getGenericRange(genericTier.getName());
+    public StartEnd getGenericStartEnd(Tier<?> genericTier) {
+        return getGenericStartEnd(genericTier.getName());
     }
 
     /**
@@ -572,12 +584,12 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @param genericTierName
      * @return the range of the given generic tier or Range(-1, -1) if not found
      */
-    public Range getGenericRange(String genericTierName) {
+    public StartEnd getGenericStartEnd(String genericTierName) {
         final int paragraphIdx = findParagraphElementIndexForTier(-1, genericTierName);
-        if (paragraphIdx == -1) return new Range(-1, -1);
+        if (paragraphIdx == -1) return new StartEnd(-1, -1);
 
         Element elem = getDefaultRootElement().getElement(paragraphIdx);
-        return new Range(elem.getStartOffset(), elem.getEndOffset());
+        return new StartEnd(elem.getStartOffset(), elem.getEndOffset());
     }
 
     /**
@@ -586,19 +598,19 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @param genericTier
      * @return the range of the given generic tier or Range(-1, -1) if not found
      */
-    public Range getGenericContentRange(Tier<?> genericTier) {
-        return getGenericContentRange(genericTier.getName());
+    public StartEnd getGenericContentStartEnd(Tier<?> genericTier) {
+        return getGenericContentStartEnd(genericTier.getName());
     }
 
     /**
      * Get the range of the given generic tier content (header tier)
      *
      * @param genericTierName
-     * @return the range of the given generic tier or Range(-1, -1) if not found
+     * @return the range of the given generic tier or StartEnd(-1, -1) if not found
      */
-    public Range getGenericContentRange(String genericTierName) {
+    public StartEnd getGenericContentStartEnd(String genericTierName) {
         final int paragraphIdx = findParagraphElementIndexForTier(-1, genericTierName);
-        if (paragraphIdx == -1) return new Range(-1, -1);
+        if (paragraphIdx == -1) return new StartEnd(-1, -1);
 
         Element elem = getDefaultRootElement().getElement(paragraphIdx);
         int tierStart = elem.getStartOffset();
@@ -614,7 +626,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         }
         final int tierEnd = elem.getEndOffset();
 
-        return new Range(tierStart, tierEnd);
+        return new StartEnd(tierStart, tierEnd);
     }
 
     /**
@@ -624,7 +636,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return the position in the document at the beginning of the generic tiers content
      */
     public int getGenericContentStart(Tier<?> genericTier) {
-        return getGenericContentRange(genericTier).getStart();
+        return getGenericContentStartEnd(genericTier).start();
     }
 
     /**
@@ -634,7 +646,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return the position in the document at the beginning of the generic tiers label
      */
     public int getGenericStart(String genericTierName) {
-        return getGenericRange(genericTierName).getStart();
+        return getGenericStartEnd(genericTierName).start();
     }
 
     /**
@@ -644,7 +656,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return the position in the document at the beginning of the generic tiers label
      */
     public int getGenericStart(Tier<?> genericTier) {
-        return getGenericRange(genericTier).getStart();
+        return getGenericStartEnd(genericTier).start();
     }
 
     /**
@@ -654,7 +666,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return the position in the document at the beginning of the generic tiers content
      */
     public int getGenericContentStart(String genericTierName) {
-        return getGenericContentRange(genericTierName).getStart();
+        return getGenericContentStartEnd(genericTierName).start();
     }
 
     /**
@@ -665,7 +677,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * (newlines included)
      */
     public int getGenericEnd(Tier<?> genericTier) {
-        return getGenericRange(genericTier).getEnd();
+        return getGenericStartEnd(genericTier).end();
     }
 
     /**
@@ -676,16 +688,16 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * (newlines included)
      */
     public int getGenericEnd(String genericTierName) {
-        return getGenericRange(genericTierName).getEnd();
+        return getGenericStartEnd(genericTierName).end();
     }
 
     /**
      * Return string range for given tier
      *
      * @param tier
-     * @return the range for the given tier or Range(-1, -1) if not found
+     * @return the range for the given tier or StartEnd(-1, -1) if not found
      */
-    public Range getTierRange(Tier<?> tier) {
+    public StartEnd getTierStartEnd(Tier<?> tier) {
         // find record which contains given tier
         for(Record r: getSession().getRecords()) {
             if(r.getTier(tier.getName()) == tier) {
@@ -696,22 +708,22 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                         Element e = getDefaultRootElement().getElement(i);
                         Tier<?> eTier = TranscriptStyleConstants.getTier(e.getAttributes());
                         if (eTier != null && eTier.getName().equals(tier.getName())) {
-                            return new Range(e.getStartOffset(), e.getEndOffset());
+                            return new StartEnd(e.getStartOffset(), e.getEndOffset());
                         }
                     }
                 }
             }
         }
-        return new Range(-1, -1);
+        return new StartEnd(-1, -1);
     }
 
     /**
      * Get tier content range
      *
      * @param tier
-     * @return the range for the given tier or Range(-1, -1) if not found
+     * @return the range for the given tier or StartEnd(-1, -1) if not found
      */
-    public Range getTierContentRange(Tier<?> tier) {
+    public StartEnd getTierContentRange(Tier<?> tier) {
         // find record which contains given tier
         for(Record r: getSession().getRecords()) {
             if(r.getTier(tier.getName()) == tier) {
@@ -732,13 +744,13 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                                 tierStart = childEle.getEndOffset();
                             }
                             final int tierEnd = e.getEndOffset();
-                            return new Range(tierStart, tierEnd);
+                            return new StartEnd(tierStart, tierEnd);
                         }
                     }
                 }
             }
         }
-        return new Range(-1, -1);
+        return new StartEnd(-1, -1);
     }
 
     /**
@@ -747,7 +759,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @param gem
      * @return the range for the given gem or Range(-1, -1) if not found
      */
-    public Range getGemRange(Gem gem) {
+    public StartEnd getGemRange(Gem gem) {
         final int sessionElementIndex = getSession().getTranscript().getElementIndex(gem);
         return getRangeForSessionElementIndex(sessionElementIndex);
     }
@@ -758,7 +770,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @param comment
      * @return the range for the given comment or Range(-1, -1) if not found
      */
-    public Range getCommentRange(Comment comment) {
+    public StartEnd getCommentStartEnd(Comment comment) {
         final int sessionElementIndex = getSession().getTranscript().getElementIndex(comment);
         return getRangeForSessionElementIndex(sessionElementIndex);
     }
@@ -769,7 +781,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @param record
      * @return the range for the given record or Range(-1, -1) if not found
      */
-    public Range getRecordRange(Record record) {
+    public StartEnd getRecordStartEnd(Record record) {
         final int sessionElementIndex = getSession().getTranscript().getElementIndex(record);
         return getRangeForSessionElementIndex(sessionElementIndex);
     }
@@ -778,12 +790,12 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * Return the range for the given transcript element index
      *
      * @param sessionElementIndex the session element index
-     * @return the range for the given transcript element index or Range(-1, -1) if not found
+     * @return the range for the given transcript element index or StartEnd(-1, -1) if not found
      */
-    public Range getRangeForSessionElementIndex(int sessionElementIndex) {
+    public StartEnd getRangeForSessionElementIndex(int sessionElementIndex) {
         int eleIdx = findParagraphElementIndexForSessionElementIndex(sessionElementIndex);
         if(eleIdx == -1) {
-            return new Range(-1, -1);
+            return new StartEnd(-1, -1);
         }
         Element ele = getDefaultRootElement().getElement(eleIdx);
         Element endEle = ele;
@@ -797,9 +809,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             }
         }
         if(ele != null) {
-            return new Range(ele.getStartOffset(), endEle.getEndOffset());
+            return new StartEnd(ele.getStartOffset(), endEle.getEndOffset());
         }
-        return new Range(-1, -1);
+        return new StartEnd(-1, -1);
     }
 
     /**
@@ -1037,11 +1049,11 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * Updates the displayed type of the given comment in the document
      */
     public void onChangeCommentType(Comment comment) {
-        final Range commentRange = getCommentRange(comment);
-        if(commentRange.getStart() < 0) return;
-        final int start = commentRange.getStart();
+        final StartEnd commentRange = getCommentStartEnd(comment);
+        if(commentRange.start() < 0) return;
+        final int start = commentRange.start();
         // don't remove newline
-        final int end = commentRange.getEnd() - 1;
+        final int end = commentRange.end() - 1;
 
         try {
             bypassDocumentFilter = true;
@@ -1058,11 +1070,11 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * Updates the displayed type of the given gem in the document
      */
     public void onChangeGemType(Gem gem) {
-        final Range gemRange = getGemRange(gem);
-        if(gemRange.getStart() < 0) return;
-        final int start = gemRange.getStart();
+        final StartEnd gemRange = getGemRange(gem);
+        if(gemRange.start() < 0) return;
+        final int start = gemRange.start();
         // don't remove newline
-        final int end = gemRange.getEnd() - 1;
+        final int end = gemRange.end() - 1;
 
         try {
             bypassDocumentFilter = true;
@@ -1180,17 +1192,17 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
         try {
             int recordIndex = session.getRecordPosition(record);
-            final Range tierRange = getTierContentRange(recordIndex, tier.getName());
-            if(tierRange.getStart() < 0) return;
-            final SimpleAttributeSet tierAttrs = new SimpleAttributeSet(getCharacterElement(tierRange.getStart()).getAttributes());
+            final StartEnd tierRange = getTierContentRange(recordIndex, tier.getName());
+            if(tierRange.start() < 0) return;
+            final SimpleAttributeSet tierAttrs = new SimpleAttributeSet(getCharacterElement(tierRange.start()).getAttributes());
 
             bypassDocumentFilter = true;
-            remove(tierRange.getStart(), tierRange.getEnd() - tierRange.getStart());
+            remove(tierRange.start(), tierRange.end() - tierRange.start());
 
             TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(this);
             batchBuilder.appendTierContent(record, tier, tierAttrs);
 
-            processBatchUpdates(tierRange.getStart(), batchBuilder.getBatch());
+            processBatchUpdates(tierRange.start(), batchBuilder.getBatch());
         } catch (BadLocationException e) {
             LogUtil.severe(e);
         }
@@ -1281,10 +1293,10 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @param record the record whose media segment is being updated
      */
     public void updateRecord(Record record) {
-        final Range recordRange = getRecordRange(record);
-        if(recordRange.getStart() < 0) return;
-        int start = recordRange.getStart();
-        int end = recordRange.getEnd();
+        final StartEnd recordRange = getRecordStartEnd(record);
+        if(recordRange.start() < 0) return;
+        int start = recordRange.start();
+        int end = recordRange.end();
 
         try {
             bypassDocumentFilter = true;
@@ -1335,10 +1347,10 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      */
     public void deleteRecord(Record removedRecord) {
         try {
-            final Range recordRange = getRecordRange(removedRecord);
-            if(recordRange.getStart() < 0) return;
-            final int start = recordRange.getStart();
-            final int end = recordRange.getEnd();
+            final StartEnd recordRange = getRecordStartEnd(removedRecord);
+            if(recordRange.start() < 0) return;
+            final int start = recordRange.start();
+            final int end = recordRange.end();
 
             bypassDocumentFilter = true;
             remove(start, end - start);
@@ -1793,11 +1805,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * A wrapper record for a list of {@link Language}
      */
     public record Languages(List<Language> languageList) {}
-
-    /**
-     * A wrapper record for a start and end index
-     * */
-    public record StartEnd(int start, int end) {}
 
     // endregion
 }
