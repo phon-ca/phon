@@ -1367,7 +1367,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             }
         }
 
-
         g.setColor(UIManager.getColor(TranscriptEditorUIProps.SEPARATOR_LINE));
         int sepLineHeight = 1;
         int fontHeight = fontMetrics.getHeight();
