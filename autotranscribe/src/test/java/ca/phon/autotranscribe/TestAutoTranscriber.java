@@ -10,7 +10,7 @@ public class TestAutoTranscriber {
 
     @Test
     public void testAutoTranscriber() throws Exception {
-        final String text = "this 0omitted is a test";
+        final String text = "this 0omitted is a tɛ@u test asdf test_is .";
         final AutoTranscriber transcriber = new AutoTranscriber();
         transcriber.addSource( (t) -> {
             switch (t) {
@@ -27,9 +27,11 @@ public class TestAutoTranscriber {
             }
         });
         final AutomaticTranscription transcription = transcriber.transcribe(text);
-        Assert.assertEquals("ðɪs ɪz eɪ tɛst", transcription.getTranscription().toString()) ;
+        Assert.assertEquals("ðɪs ɪz eɪ tɛ tɛst * tɛst‿ɪz", transcription.getTranscription().toString()) ;
         transcription.setSelectedTranscription(transcription.getWords().get(1), 1);
-        Assert.assertEquals("ðɪs əz eɪ tɛst", transcription.getTranscription().toString());
+        Assert.assertEquals("ðɪs əz eɪ tɛ tɛst * tɛst‿ɪz", transcription.getTranscription().toString());
+        transcription.setSelectedTranscription(transcription.getWords().get(6), 1);
+        Assert.assertEquals("ðɪs əz eɪ tɛ tɛst * tɛst‿əz", transcription.getTranscription().toString());
     }
 
 }

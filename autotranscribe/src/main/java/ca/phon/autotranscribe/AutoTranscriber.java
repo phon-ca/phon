@@ -1,5 +1,6 @@
 package ca.phon.autotranscribe;
 
+import ca.phon.alignedTypesDatabase.CartesianProduct;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.orthography.*;
@@ -185,6 +186,40 @@ public class AutoTranscriber {
                 wordCount++;
                 return;
             }
+
+            final String[] wordParts = word.getWord().split("_");
+            if(wordParts.length > 1) {
+                List<IPATranscript[]> partTranscriptions = new ArrayList<>();
+                for(String part:wordParts) {
+                    final Word w = new Word(part);
+
+                    final List<IPATranscript> transcriptions = lookup(w);
+                    partTranscriptions.add(transcriptions.toArray(new IPATranscript[0]));
+                }
+                final String[][] partTranscriptionArray = new String[partTranscriptions.size()][];
+                for(int i = 0; i < partTranscriptions.size(); i++) {
+                    partTranscriptionArray[i] = new String[partTranscriptions.get(i).length];
+                    for (int j = 0; j < partTranscriptions.get(i).length; j++) {
+                        partTranscriptionArray[i][j] = partTranscriptions.get(i)[j].toString();
+                    }
+                }
+                final String[][] product = CartesianProduct.stringArrayProduct(partTranscriptionArray);
+                final List<IPATranscript> transcripts = new ArrayList<>();
+                for(String[] p:product) {
+                    final IPATranscriptBuilder builder = new IPATranscriptBuilder();
+                    for(String part:p) {
+                        if(builder.size() > 0)
+                            builder.appendContraction();
+                        builder.append(part);
+                    }
+                    final IPATranscript ipaTranscript = builder.toIPATranscript();
+                    transcripts.add(ipaTranscript);
+                }
+                transcriptionOptions.put(word, transcripts.toArray(new IPATranscript[0]));
+
+                return;
+            }
+
             final List<IPATranscript> transcriptions = lookup(word);
             transcriptionOptions.put(word, transcriptions.toArray(new IPATranscript[0]));
         }
