@@ -136,6 +136,7 @@
 		<module>ipamap</module>
 		<module>components</module>
 		<module>orthography</module>
+		<module>autotranscribe</module>
 		<module>session</module>
 		<module>project</module>
 		<module>script</module>
