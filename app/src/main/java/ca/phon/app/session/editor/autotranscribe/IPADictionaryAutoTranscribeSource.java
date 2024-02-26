@@ -1,5 +1,6 @@
-package ca.phon.autotranscribe;
+package ca.phon.app.session.editor.autotranscribe;
 
+import ca.phon.autotranscribe.AutoTranscribeSource;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.ipadictionary.IPADictionaryLibrary;
 import ca.phon.util.Language;
