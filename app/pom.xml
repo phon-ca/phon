@@ -46,6 +46,11 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
+			<artifactId>phon-autotranscribe</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>phon-ipadictionary</artifactId>
 			<version>${project.version}</version>
 		</dependency>

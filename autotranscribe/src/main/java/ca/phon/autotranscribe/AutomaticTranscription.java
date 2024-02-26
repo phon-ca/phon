@@ -77,8 +77,6 @@ public class AutomaticTranscription {
         @Visits
         @Override
         public void visitCompoundWord(CompoundWord compoundWord) {
-            if(builder.size() > 0)
-                builder.appendWordBoundary();
             visitWord(compoundWord.getWord1());
             builder.appendCompoundWordMarker();
             visitWord(compoundWord.getWord2());
@@ -88,6 +86,10 @@ public class AutomaticTranscription {
         @Override
         public void visitWord(Word word) {
             if(word.getPrefix() != null && word.getPrefix().getType() == WordType.OMISSION) {
+                return;
+            }
+
+            if(!getTranscriptionOptions().containsKey(word)) {
                 return;
             }
 

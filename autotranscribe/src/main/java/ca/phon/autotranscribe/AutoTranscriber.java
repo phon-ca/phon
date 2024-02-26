@@ -97,6 +97,11 @@ public class AutoTranscriber {
         return transcribe(orthography, 0);
     }
 
+    public AutomaticTranscription transcribe(String text, int fromWord) throws ParseException {
+        final Orthography orthography = Orthography.parseOrthography(text);
+        return transcribe(orthography, fromWord);
+    }
+
     /**
      * Transcribe the given orthography
      *
