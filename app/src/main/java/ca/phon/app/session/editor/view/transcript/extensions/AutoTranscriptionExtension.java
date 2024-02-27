@@ -1,8 +1,12 @@
 package ca.phon.app.session.editor.view.transcript.extensions;
 
+import ca.phon.alignedTypesDatabase.AlignedTypesDatabase;
+import ca.phon.alignedTypesDatabase.AlignedTypesDatabaseFactory;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventManager;
+import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.autotranscribe.AlignedTypesAutoTranscribeSource;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.transcript.TranscriptBatchBuilder;
 import ca.phon.app.session.editor.view.transcript.TranscriptDocument;
@@ -17,13 +21,14 @@ import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.ipadictionary.IPADictionaryLibrary;
 import ca.phon.orthography.Orthography;
 import ca.phon.orthography.Word;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.Tier;
-import ca.phon.session.Transcriber;
-import ca.phon.session.Transcript;
+import ca.phon.session.alignment.CrossTierAlignment;
+import ca.phon.session.alignment.TierAligner;
+import ca.phon.session.alignment.TierAlignment;
 import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.util.Range;
+import ca.phon.worker.PhonWorker;
 
 import javax.swing.*;
 import javax.swing.text.*;
@@ -49,6 +54,12 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
 
     private final AutoTranscriber autoTranscriber;
 
+    /*
+     * Aligned types database including data from all IPA tiers in session.  These are used to
+     * provide automatic transcriptions for IPA tiers suggesting previously used values.
+     */
+    private AlignedTypesDatabase alignedTypesDatabase;
+
     public AutoTranscriptionExtension() {
         this(() -> IPADictionaryLibrary.getInstance().defaultDictionary());
     }
@@ -57,6 +68,8 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
         this.ipaDictionarySupplier = ipaDictionarySupplier;
 
         autoTranscriber = new AutoTranscriber();
+        this.alignedTypesDatabase = AlignedTypesDatabaseFactory.newDatabase();
+        autoTranscriber.addSource(new AlignedTypesAutoTranscribeSource(alignedTypesDatabase));
         autoTranscriber.addSource(new IPADictionaryAutoTranscribeSource(getDictionary()));
     }
 
@@ -71,6 +84,8 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
     public void install(TranscriptEditor editor) {
         this.editor = editor;
 
+        PhonWorker.invokeOnNewWorker(this::scanSession);
+
         InputMap inputMap = editor.getInputMap();
         ActionMap actionMap = editor.getActionMap();
 
@@ -83,6 +98,8 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
         actionMap.put("autoTranscription", autoTranscriptionAct);
 
         editor.getEventManager().registerActionForEvent(TranscriptEditor.transcriptLocationChanged, this::onTranscriptLocationChanged,
+                EditorEventManager.RunOn.AWTEventDispatchThread);
+        editor.getEventManager().registerActionForEvent(EditorEventType.TierChange, this::onTierChange,
                 EditorEventManager.RunOn.AWTEventDispatchThread);
     }
 
@@ -237,6 +254,66 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
                 final TierEdit<IPATranscript> edit = new TierEdit<>(editor.getSession(), editor.getEventManager(),
                         editor.getDataModel().getTranscriber(), record, (Tier<IPATranscript>)tier, newVal, false);
                 editor.getUndoSupport().postEdit(edit);
+            }
+        }
+    }
+
+    private void onTierChange(EditorEvent<EditorEventType.TierChangeData> evt) {
+        if (evt.data().valueAdjusting()) return;
+        final Tier<?> tier = evt.data().tier();
+        if (tier.getDeclaredType().equals(IPATranscript.class)) {
+            final Record record = evt.data().record();
+
+            final Tier<IPATranscript> tempTier = SessionFactory.newFactory().createTier(tier.getName(), IPATranscript.class);
+            tempTier.setValue((IPATranscript) evt.getData().get().oldValue());
+            final TierAlignment oldAlignment = TierAligner.alignTiers(record.getOrthographyTier(), tempTier);
+            removeOldAlignmentValues(oldAlignment);
+
+            final TierAlignment alignment = TierAligner.alignTiers(record.getOrthographyTier(), tier);
+            scanTierAlignment(alignment);
+        }
+    }
+
+    /**
+     * Remove old alignment values from aligned types database
+     *
+     * @param alignment
+     */
+    private void removeOldAlignmentValues(TierAlignment alignment) {
+        for (var alignedEle : alignment.getAlignedElements()) {
+            final IPATranscript ipa = (IPATranscript) alignedEle.getObj2();
+            // ignore empty transcriptions
+            if (ipa != null && ipa.length() > 0 && !"*".equals(ipa.toString())) {
+                alignedTypesDatabase.removeAlignment(SystemTierType.Orthography.getName(), alignedEle.getObj1().toString(),
+                        alignment.getBottomTier().getName(), ipa.toString());
+            }
+        }
+    }
+
+    /**
+     * Scan session for aligned types database
+     *
+     */
+    private void scanSession() {
+        final var session = editor.getSession();
+        for(Record r:session.getRecords()) {
+            CrossTierAlignment alignment = TierAligner.calculateCrossTierAlignment(r, r.getOrthographyTier());
+            for(Tier<IPATranscript> iapTier:r.getTiersOfType(IPATranscript.class)) {
+                final TierAlignment tierAlignment = alignment.getTierAlignment(iapTier.getName());
+                if(tierAlignment != null) {
+                    scanTierAlignment(tierAlignment);
+                }
+            }
+        }
+    }
+
+    private void scanTierAlignment(TierAlignment tierAlignment) {
+        for(var alignedEle:tierAlignment.getAlignedElements()) {
+            final IPATranscript ipa = (IPATranscript)alignedEle.getObj2();
+            // ignore empty transcriptions
+            if (ipa != null && ipa.length() > 0 && !"*".equals(ipa.toString())) {
+                alignedTypesDatabase.addAlignment(SystemTierType.Orthography.getName(),
+                        alignedEle.getObj1().toString(), tierAlignment.getBottomTier().getName(), ipa.toString());
             }
         }
     }

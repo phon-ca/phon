@@ -1,14 +1,20 @@
 package ca.phon.app.session.editor.view.transcript.extensions;
 
+import ca.phon.alignedTypesDatabase.AlignedTypesDatabase;
+import ca.phon.alignedTypesDatabase.AlignedTypesDatabaseFactory;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.view.transcript.*;
-import ca.phon.session.PhoneAlignment;
+import ca.phon.ipa.IPATranscript;
+import ca.phon.orthography.Orthography;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.Tier;
-import ca.phon.session.TierViewItem;
+import ca.phon.session.alignment.CrossTierAlignment;
+import ca.phon.session.alignment.TierAligner;
+import ca.phon.session.alignment.TierAlignment;
+import ca.phon.worker.PhonWorker;
 
 import javax.swing.text.*;
 import java.util.ArrayList;
