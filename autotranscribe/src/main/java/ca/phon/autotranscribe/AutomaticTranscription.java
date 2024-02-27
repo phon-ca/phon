@@ -77,9 +77,7 @@ public class AutomaticTranscription {
         @Visits
         @Override
         public void visitCompoundWord(CompoundWord compoundWord) {
-            visitWord(compoundWord.getWord1());
-            builder.appendCompoundWordMarker();
-            visitWord(compoundWord.getWord2());
+            visitWord(compoundWord);
         }
 
         @Visits

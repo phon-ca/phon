@@ -175,9 +175,27 @@ public class AutoTranscriber {
         @Visits
         @Override
         public void visitCompoundWord(CompoundWord compoundWord) {
-            visitWord(compoundWord.getWord1());
+            visit(compoundWord.getWord1());
+            IPATranscript[] word1Opts = transcriptionOptions.remove(compoundWord.getWord1());
             wordCount--;
-            visitWord(compoundWord.getWord2());
+            visit(compoundWord.getWord2());
+            IPATranscript[] word2Opts = transcriptionOptions.remove(compoundWord.getWord2());
+
+            final String[][] product = CartesianProduct.stringArrayProduct(
+                    new String[][]{Arrays.stream(word1Opts).map(IPATranscript::toString).toArray(String[]::new),
+                            Arrays.stream(word2Opts).map(IPATranscript::toString).toArray(String[]::new)});
+            final List<IPATranscript> transcripts = new ArrayList<>();
+            for(String[] p:product) {
+                final IPATranscriptBuilder builder = new IPATranscriptBuilder();
+                for(String part:p) {
+                    if(builder.size() > 0)
+                        builder.appendCompoundWordMarker();
+                    builder.append(part);
+                }
+                final IPATranscript ipaTranscript = builder.toIPATranscript();
+                transcripts.add(ipaTranscript);
+            }
+            transcriptionOptions.put(compoundWord, transcripts.toArray(new IPATranscript[0]));
         }
 
         @Visits
@@ -214,7 +232,7 @@ public class AutoTranscriber {
                     final IPATranscriptBuilder builder = new IPATranscriptBuilder();
                     for(String part:p) {
                         if(builder.size() > 0)
-                            builder.appendContraction();
+                            builder.appendLinker();
                         builder.append(part);
                     }
                     final IPATranscript ipaTranscript = builder.toIPATranscript();

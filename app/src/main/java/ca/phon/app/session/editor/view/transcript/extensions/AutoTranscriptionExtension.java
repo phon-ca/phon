@@ -12,9 +12,11 @@ import ca.phon.autotranscribe.AutoTranscriber;
 import ca.phon.autotranscribe.AutomaticTranscription;
 import ca.phon.app.session.editor.autotranscribe.IPADictionaryAutoTranscribeSource;
 import ca.phon.ipa.IPATranscript;
+import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.ipadictionary.IPADictionaryLibrary;
 import ca.phon.orthography.Orthography;
+import ca.phon.orthography.Word;
 import ca.phon.session.Record;
 import ca.phon.session.Tier;
 import ca.phon.session.Transcriber;
@@ -30,6 +32,7 @@ import java.awt.event.AWTEventListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.List;
 import java.util.function.Supplier;
 
 /**
@@ -154,6 +157,26 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
     }
 
     /**
+     * Accept automatic transcription up to first word with options
+     *
+     * @param record
+     * @param tier
+     * @param automaticTranscription
+     *
+     */
+    public void acceptAutoTranscriptionToFirstSelection(Record record, Tier<IPATranscript> tier, AutomaticTranscription automaticTranscription) {
+        final IPATranscriptBuilder builder = new IPATranscriptBuilder();
+        final List<Word> words = automaticTranscription.getWords();
+
+
+
+        final IPATranscript ipa = builder.toIPATranscript();
+        final TierEdit<IPATranscript> edit = new TierEdit<>(editor.getSession(), editor.getEventManager(), editor.getDataModel().getTranscriber(), record, tier, ipa);
+        edit.setValueAdjusting(false);
+        editor.getUndoSupport().postEdit(edit);
+    }
+
+    /**
      * On transcript location changed.  Check for an empty IPA tier and suggest transcription
      *
      * @param e
@@ -229,7 +252,17 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
                             removeGhostRange();
                             Toolkit.getDefaultToolkit().removeAWTEventListener(alignmentListener);
                         }
-                        case KeyEvent.VK_TAB, KeyEvent.VK_ENTER -> {
+                        case KeyEvent.VK_TAB -> {
+                            final AttributeSet eleAttrs = editor.getTranscriptDocument().getCharacterElement(editor.getCaretPosition()).getAttributes();
+                            final Tier<IPATranscript> tier = (Tier<IPATranscript>) TranscriptStyleConstants.getTier(eleAttrs);
+                            final Record record = TranscriptStyleConstants.getRecord(eleAttrs);
+                            final AutomaticTranscription automaticTranscription = getAutomaticTranscription(eleAttrs);
+                            removeGhostRange();
+                            acceptAutoTranscriptionToFirstSelection(record, tier, automaticTranscription);
+//                            acceptAutoTranscription(record, tier, automaticTranscription);
+                            Toolkit.getDefaultToolkit().removeAWTEventListener(alignmentListener);
+                        }
+                        case KeyEvent.VK_ENTER -> {
                             final AttributeSet eleAttrs = editor.getTranscriptDocument().getCharacterElement(editor.getCaretPosition()).getAttributes();
                             final Tier<IPATranscript> tier = (Tier<IPATranscript>) TranscriptStyleConstants.getTier(eleAttrs);
                             final Record record = TranscriptStyleConstants.getRecord(eleAttrs);

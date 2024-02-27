@@ -29,17 +29,17 @@ public class TestAutoTranscriber {
 
         // test transcribing the entire text with selections
         final AutomaticTranscription transcription = transcriber.transcribe(text);
-        Assert.assertEquals("ðɪs ɪz eɪ tɛ tɛst * tɛst‿ɪz ɪz+tɛst", transcription.getTranscription().toString()) ;
+        Assert.assertEquals("ðɪs ɪz eɪ tɛ tɛst * tɛst⁀ɪz ɪz+tɛst", transcription.getTranscription().toString()) ;
         transcription.setSelectedTranscription(transcription.getWords().get(1), 1);
-        Assert.assertEquals("ðɪs əz eɪ tɛ tɛst * tɛst‿ɪz ɪz+tɛst", transcription.getTranscription().toString());
+        Assert.assertEquals("ðɪs əz eɪ tɛ tɛst * tɛst⁀ɪz ɪz+tɛst", transcription.getTranscription().toString());
         transcription.setSelectedTranscription(transcription.getWords().get(6), 1);
-        Assert.assertEquals("ðɪs əz eɪ tɛ tɛst * tɛst‿əz ɪz+tɛst", transcription.getTranscription().toString());
+        Assert.assertEquals("ðɪs əz eɪ tɛ tɛst * tɛst⁀əz ɪz+tɛst", transcription.getTranscription().toString());
         transcription.setSelectedTranscription(transcription.getWords().get(7), 1);
-        Assert.assertEquals("ðɪs əz eɪ tɛ tɛst * tɛst‿əz əz+tɛst", transcription.getTranscription().toString());
+        Assert.assertEquals("ðɪs əz eɪ tɛ tɛst * tɛst⁀əz əz+tɛst", transcription.getTranscription().toString());
 
         // test transcribing from a specific word
         final AutomaticTranscription transcription2 = transcriber.transcribe(text, 1);
-        Assert.assertEquals("ɪz eɪ tɛ tɛst * tɛst‿ɪz ɪz+tɛst", transcription2.getTranscription().toString());
+        Assert.assertEquals("ɪz eɪ tɛ tɛst * tɛst⁀ɪz ɪz+tɛst", transcription2.getTranscription().toString());
     }
 
 }
