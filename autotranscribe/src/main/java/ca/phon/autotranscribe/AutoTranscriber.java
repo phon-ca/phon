@@ -4,6 +4,9 @@ import ca.phon.alignedTypesDatabase.CartesianProduct;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.orthography.*;
+import ca.phon.session.SessionFactory;
+import ca.phon.session.Tier;
+import ca.phon.session.alignment.TierElementFilter;
 import ca.phon.visitor.annotation.Visits;
 
 import java.text.ParseException;
@@ -109,8 +112,18 @@ public class AutoTranscriber {
      * @return automatic transcription
      */
     public AutomaticTranscription transcribe(Orthography orthography, int fromWord) {
-        final AutoTranscriberVisitor visitor = new AutoTranscriberVisitor(fromWord);
-        orthography.accept(visitor);
+        final AutoTranscriberVisitor visitor = new AutoTranscriberVisitor();
+        TierElementFilter orthoFilter = TierElementFilter.orthographyFilterForIPAAlignment();
+
+        // wrap orthography in a temp tier
+        final Tier<Orthography> orthoTier = SessionFactory.newFactory().createTier("orthotemp", Orthography.class, new HashMap<>(), false, false);
+        orthoTier.setValue(orthography);
+
+        List<OrthographyElement> orthographyElements = (List<OrthographyElement>) orthoFilter.filterTier(orthoTier);
+        for(int i = fromWord; i < orthographyElements.size(); i++) {
+            final OrthographyElement element = orthographyElements.get(i);
+            visitor.visit(element);
+        }
 
         final Map<Word, IPATranscript[]> transcriptionOptions = visitor.transcriptionOptions;
         return new AutomaticTranscription(orthography, transcriptionOptions);
@@ -158,26 +171,13 @@ public class AutoTranscriber {
 
     public class AutoTranscriberVisitor extends AbstractOrthographyVisitor {
 
-        private final int fromWord;
-
-        private int wordCount = 0;
-
         private final Map<Word, IPATranscript[]> transcriptionOptions = new LinkedHashMap<>();
-
-        public AutoTranscriberVisitor() {
-            this(0);
-        }
-
-        public AutoTranscriberVisitor(int fromWord) {
-            this.fromWord = fromWord;
-        }
 
         @Visits
         @Override
         public void visitCompoundWord(CompoundWord compoundWord) {
             visit(compoundWord.getWord1());
             IPATranscript[] word1Opts = transcriptionOptions.remove(compoundWord.getWord1());
-            wordCount--;
             visit(compoundWord.getWord2());
             IPATranscript[] word2Opts = transcriptionOptions.remove(compoundWord.getWord2());
 
@@ -202,11 +202,6 @@ public class AutoTranscriber {
         @Override
         public void visitWord(Word word) {
             if(word.getPrefix() != null && word.getPrefix().getType() == WordType.OMISSION) {
-                return;
-            }
-
-            if(wordCount++ < fromWord) {
-                wordCount++;
                 return;
             }
 

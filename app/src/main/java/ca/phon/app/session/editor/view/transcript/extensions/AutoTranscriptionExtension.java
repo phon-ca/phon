@@ -94,7 +94,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
             Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | InputEvent.SHIFT_DOWN_MASK
         );
         inputMap.put(autoTranscription, "autoTranscription");
-        PhonUIAction<Void> autoTranscriptionAct = PhonUIAction.runnable(this::autoTranscription);
+        PhonUIAction<Void> autoTranscriptionAct = PhonUIAction.runnable(this::onAutoTranscribe);
         actionMap.put("autoTranscription", autoTranscriptionAct);
 
         editor.getEventManager().registerActionForEvent(TranscriptEditor.transcriptLocationChanged, this::onTranscriptLocationChanged,
@@ -167,8 +167,25 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
      *
      */
     public void acceptAutoTranscription(Record record, Tier<IPATranscript> tier, AutomaticTranscription automaticTranscription) {
+        final IPATranscriptBuilder builder = new IPATranscriptBuilder();
+
+        final TranscriptDocument.StartEnd currentTextRange = editor.getTranscriptDocument().getTierContentRange(tier);
+        try {
+            final String currentText = editor.getTranscriptDocument().getText(currentTextRange.start(), currentTextRange.length());
+            if(!currentText.isBlank()) {
+                builder.append(currentText.trim());
+            }
+        } catch(BadLocationException ex) {
+            LogUtil.warning(ex);
+        }
+
         final IPATranscript ipa = automaticTranscription.getTranscription();
-        final TierEdit<IPATranscript> edit = new TierEdit<>(editor.getSession(), editor.getEventManager(), editor.getDataModel().getTranscriber(), record, tier, ipa);
+        if(ipa.length() > 0) {
+            if(builder.size() > 0)
+                builder.appendWordBoundary();
+            builder.append(ipa);
+        }
+        final TierEdit<IPATranscript> edit = new TierEdit<>(editor.getSession(), editor.getEventManager(), editor.getDataModel().getTranscriber(), record, tier, builder.toIPATranscript());
         edit.setValueAdjusting(false);
         editor.getUndoSupport().postEdit(edit);
     }
@@ -204,24 +221,49 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
         final Record record = TranscriptStyleConstants.getRecord(eleAttrs);
         if(record != null && tier != null) {
             if(tier.getDeclaredType().equals(IPATranscript.class)) {
-                final IPATranscript tierVal = tier.hasValue() ? (IPATranscript) tier.getValue() : new IPATranscript();
-                if(!tier.isUnvalidated() && tierVal.length() == 0 && e.getData().get().newLoc().charPosition() == 0) {
-                    final Orthography orthography = getOrthography(record, editor.getDataModel().getTranscriber());
-                    final AutomaticTranscription autoTranscript = autoTranscriber.transcribe(orthography);
-                    if(autoTranscript.getWords().size() > 0) {
-                        final SimpleAttributeSet ghostAttrs = editor.getTranscriptDocument().getTranscriptStyleContext().getTierAttributes(tier);
-                        // make text gray and italic
-                        StyleConstants.setForeground(ghostAttrs, Color.gray);
-                        StyleConstants.setItalic(ghostAttrs, true);
-                        TranscriptStyleConstants.setNotTraversable(ghostAttrs, true);
-                        TranscriptStyleConstants.setElementType(ghostAttrs, TranscriptStyleConstants.ELEMENT_TYPE_RECORD);
-
-                        insertGhostText(record, (Tier<IPATranscript>)tier, autoTranscript);
-                        Toolkit.getDefaultToolkit().addAWTEventListener(alignmentListener, AWTEvent.KEY_EVENT_MASK | AWTEvent.MOUSE_EVENT_MASK);
+                final TranscriptDocument.StartEnd currentTextRange = editor.getTranscriptDocument().getTierContentRange(tier);
+                try {
+                    final String currentText = editor.getTranscriptDocument().getText(currentTextRange.start(), currentTextRange.length());
+                    final int numWords = currentText.isBlank() ? 0 : currentText.trim().split("\\p{Space}").length;
+                    System.out.println("Current text: " + currentText + ", numWords: " + numWords);
+                    final IPATranscript tierVal = tier.hasValue() ? (IPATranscript) tier.getValue() : new IPATranscript();
+                    if(!tier.isUnvalidated()) {
+                        if(tierVal.length() == 0 && e.getData().get().newLoc().charPosition() == 0) {
+                            final Orthography orthography = getOrthography(record, editor.getDataModel().getTranscriber());
+                            final AutomaticTranscription autoTranscript = autoTranscriber.transcribe(orthography);
+                            if(autoTranscript.getWords().size() > 0) {
+                                insertAutomaticTranscription(record, (Tier<IPATranscript>)tier, autoTranscript);
+                            }
+                        } else if(e.getData().get().newLoc().charPosition() == currentText.length()-1) {
+                            // get previous character, if space then suggest transcription from current word index
+                            final int prevCharPos = editor.getTranscriptEditorCaret().getDot() - 1;
+                            final char prevChar = editor.getTranscriptDocument().getText(prevCharPos, 1).charAt(0);
+                            if (Character.isWhitespace(prevChar)) {
+                                final Orthography orthography = getOrthography(record, editor.getDataModel().getTranscriber());
+                                final AutomaticTranscription autoTranscript = autoTranscriber.transcribe(orthography, numWords);
+                                if(autoTranscript.getWords().size() > 0) {
+                                    insertAutomaticTranscription(record, (Tier<IPATranscript>)tier, autoTranscript);
+                                }
+                            }
+                        }
                     }
+                } catch(BadLocationException ex) {
+                    LogUtil.warning(ex);
                 }
             }
         }
+    }
+
+    private void insertAutomaticTranscription(Record record, Tier<IPATranscript> tier, AutomaticTranscription autoTranscript) {
+        final SimpleAttributeSet ghostAttrs = editor.getTranscriptDocument().getTranscriptStyleContext().getTierAttributes(tier);
+        // make text gray and italic
+        StyleConstants.setForeground(ghostAttrs, Color.gray);
+        StyleConstants.setItalic(ghostAttrs, true);
+        TranscriptStyleConstants.setNotTraversable(ghostAttrs, true);
+        TranscriptStyleConstants.setElementType(ghostAttrs, TranscriptStyleConstants.ELEMENT_TYPE_RECORD);
+
+        insertGhostText(record, (Tier<IPATranscript>)tier, autoTranscript);
+        Toolkit.getDefaultToolkit().addAWTEventListener(alignmentListener, AWTEvent.KEY_EVENT_MASK | AWTEvent.MOUSE_EVENT_MASK);
     }
 
     /**
@@ -237,7 +279,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
     /**
      * Automatically transcribes an IPA tier if the caret is currently in one
      **/
-    public void autoTranscription() {
+    public void onAutoTranscribe() {
         TranscriptElementLocation transcriptLocation = editor.getCurrentSessionLocation();
         Transcript.Element elem = editor.getSession().getTranscript().getElementAt(transcriptLocation.transcriptElementIndex());
         if (!elem.isRecord()) return;
@@ -271,6 +313,19 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
 
             final TierAlignment alignment = TierAligner.alignTiers(record.getOrthographyTier(), tier);
             scanTierAlignment(alignment);
+        } else if(tier.getDeclaredType().equals(Orthography.class)) {
+            if(ghostRange != null && ghostRange.valid()) {
+                final Element ele = editor.getTranscriptDocument().getCharacterElement(ghostRange.start());
+                final AttributeSet attrs = ele.getAttributes();
+                final Tier<IPATranscript> ipaTier = (Tier<IPATranscript>) TranscriptStyleConstants.getTier(attrs);
+                removeGhostRange();
+                final Record record = evt.data().record();
+                final Orthography orthography = (Orthography)evt.data().newValue();
+                final AutomaticTranscription autoTranscription = autoTranscriber.transcribe(orthography);
+                if(autoTranscription.getWords().size() > 0) {
+                    insertAutomaticTranscription(record, ipaTier, autoTranscription);
+                }
+            }
         }
     }
 
@@ -309,11 +364,13 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
 
     private void scanTierAlignment(TierAlignment tierAlignment) {
         for(var alignedEle:tierAlignment.getAlignedElements()) {
+            if(alignedEle.getObj1() == null || alignedEle.getObj2() == null) continue;
+            final Word word = (Word)alignedEle.getObj1();
             final IPATranscript ipa = (IPATranscript)alignedEle.getObj2();
             // ignore empty transcriptions
-            if (ipa != null && ipa.length() > 0 && !"*".equals(ipa.toString())) {
+            if (ipa.length() > 0 && !"*".equals(ipa.toString())) {
                 alignedTypesDatabase.addAlignment(SystemTierType.Orthography.getName(),
-                        alignedEle.getObj1().toString(), tierAlignment.getBottomTier().getName(), ipa.toString());
+                        word.getWord(), tierAlignment.getBottomTier().getName(), ipa.toString());
             }
         }
     }

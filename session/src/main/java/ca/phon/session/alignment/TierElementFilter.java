@@ -73,7 +73,7 @@ public interface TierElementFilter {
         final OrthographyTierElementFilter.Options options = new OrthographyTierElementFilter.Options(
                 true, true, true,
                 false, true, false, true,
-                false, false, true, false);
+                false, false, true, true);
         return new OrthographyTierElementFilter(alignableTypes, options);
     }
 
