@@ -862,10 +862,12 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         Tier<?> caretStartTier = (Tier<?>) caretStartAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
         int offset = doc.getOffsetInContent(getCaretPosition());
 
+        boolean wasCaretFrozen = getTranscriptEditorCaret().isFreezeCaret();
         getTranscriptEditorCaret().freeze();
         // Update the changed tier data in the doc
         getTranscriptDocument().onTierDataChanged(editorEvent.data().record(), changedTier);
-        getTranscriptEditorCaret().unfreeze();
+        if(!wasCaretFrozen)
+            getTranscriptEditorCaret().unfreeze();
 
         if (changedTier.isUnvalidated()) {
             try {

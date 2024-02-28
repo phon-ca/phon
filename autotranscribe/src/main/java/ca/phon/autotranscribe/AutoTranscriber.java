@@ -148,15 +148,19 @@ public class AutoTranscriber {
                 retVal.add((new IPATranscriptBuilder()).append("*").toIPATranscript());
             }
         } else {
+            final Set<String> transcriptions = new LinkedHashSet<>();
             for (AutoTranscribeSource source : sources) {
-                final String[] transcriptions = source.lookup(text);
-                for (String transcription : transcriptions) {
-                    try {
-                        final IPATranscript ipaTranscript = IPATranscript.parseIPATranscript(transcription);
-                        retVal.add(ipaTranscript);
-                    } catch (ParseException e) {
-                        // ignore
-                    }
+                final String[] options = source.lookup(text);
+                for (String opt : options) {
+                    transcriptions.add(opt);
+                }
+            }
+            for (String transcription : transcriptions) {
+                try {
+                    final IPATranscript ipaTranscript = IPATranscript.parseIPATranscript(transcription);
+                    retVal.add(ipaTranscript);
+                } catch (ParseException e) {
+                    // ignore
                 }
             }
 

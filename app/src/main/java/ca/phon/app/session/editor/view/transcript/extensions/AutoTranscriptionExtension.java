@@ -28,6 +28,7 @@ import ca.phon.session.alignment.TierAligner;
 import ca.phon.session.alignment.TierAlignment;
 import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.util.PrefHelper;
 import ca.phon.worker.PhonWorker;
 
 import javax.swing.*;
@@ -121,6 +122,9 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
      * @param automaticTranscription
      */
     private void insertGhostText(Record record, Tier<IPATranscript> tier, AutomaticTranscription automaticTranscription) {
+        if(PrefHelper.getBoolean("phon.debug", false)) {
+            LogUtil.info("Inserting ghost text for auto-transcription");
+        }
         final SimpleAttributeSet ghostAttrs = editor.getTranscriptDocument().getTranscriptStyleContext().getTierAttributes(tier);
         // make text gray and italic
         StyleConstants.setForeground(ghostAttrs, Color.gray);
@@ -148,6 +152,9 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
      */
     public void removeGhostRange() {
         if(ghostRange != null) {
+            if(PrefHelper.getBoolean("phon.debug", false)) {
+                LogUtil.info("Removing ghost text");
+            }
             try {
                 editor.getTranscriptDocument().remove(ghostRange.start(), ghostRange.length());
                 ghostRange = null;
@@ -200,14 +207,51 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
      */
     public void acceptAutoTranscriptionToFirstSelection(Record record, Tier<IPATranscript> tier, AutomaticTranscription automaticTranscription) {
         final IPATranscriptBuilder builder = new IPATranscriptBuilder();
-        final List<Word> words = automaticTranscription.getWords();
 
+        final TranscriptDocument.StartEnd currentTextRange = editor.getTranscriptDocument().getTierContentRange(tier);
+        try {
+            final String currentText = editor.getTranscriptDocument().getText(currentTextRange.start(), currentTextRange.length());
+            if(!currentText.isBlank()) {
+                builder.append(currentText.trim());
+            }
+        } catch(BadLocationException ex) {
+            LogUtil.warning(ex);
+        }
 
+        boolean incomplete = false;
+        for(int i = 0; i < automaticTranscription.getWords().size(); i++) {
+            final Word word = automaticTranscription.getWords().get(i);
+            if(i > 0 && automaticTranscription.getTranscriptionOptions(word).length > 1) {
+                incomplete = true;
+                break;
+            }
+            if(builder.size() > 0)
+                builder.appendWordBoundary();
+            builder.append(automaticTranscription.getSelectedTranscription(word));
+        }
+
+        if(incomplete)
+            builder.appendWordBoundary();
 
         final IPATranscript ipa = builder.toIPATranscript();
-        final TierEdit<IPATranscript> edit = new TierEdit<>(editor.getSession(), editor.getEventManager(), editor.getDataModel().getTranscriber(), record, tier, ipa);
-        edit.setValueAdjusting(false);
-        editor.getUndoSupport().postEdit(edit);
+        try {
+            final int start = currentTextRange.start();
+            editor.getTranscriptEditorCaret().freeze();
+            editor.getTranscriptDocument().remove(start, currentTextRange.length());
+
+            final SimpleAttributeSet attrs = new SimpleAttributeSet();
+            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(editor.getTranscriptDocument());
+            TranscriptStyleConstants.setTier(attrs, tier);
+            TranscriptStyleConstants.setRecord(attrs, record);
+            TranscriptStyleConstants.setElementType(attrs, TranscriptStyleConstants.ELEMENT_TYPE_RECORD);
+            batchBuilder.appendBatchString(ipa.toString(), attrs);
+
+            editor.getTranscriptDocument().processBatchUpdates(start, batchBuilder.getBatch());
+            editor.getTranscriptEditorCaret().unfreeze();
+            editor.getTranscriptEditorCaret().setDot(start + ipa.toString().length());
+        } catch(BadLocationException ex) {
+            LogUtil.warning(ex);
+        }
     }
 
     /**
@@ -226,15 +270,14 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
                     final String currentText = editor.getTranscriptDocument().getText(currentTextRange.start(), currentTextRange.length());
                     final int numWords = currentText.isBlank() ? 0 : currentText.trim().split("\\p{Space}").length;
                     System.out.println("Current text: " + currentText + ", numWords: " + numWords);
-                    final IPATranscript tierVal = tier.hasValue() ? (IPATranscript) tier.getValue() : new IPATranscript();
                     if(!tier.isUnvalidated()) {
-                        if(tierVal.length() == 0 && e.getData().get().newLoc().charPosition() == 0) {
+                        if(currentText.length() == 0 && e.getData().get().newLoc().charPosition() == 0) {
                             final Orthography orthography = getOrthography(record, editor.getDataModel().getTranscriber());
                             final AutomaticTranscription autoTranscript = autoTranscriber.transcribe(orthography);
                             if(autoTranscript.getWords().size() > 0) {
                                 insertAutomaticTranscription(record, (Tier<IPATranscript>)tier, autoTranscript);
                             }
-                        } else if(e.getData().get().newLoc().charPosition() == currentText.length()-1) {
+                        } else if(e.getData().get().newLoc().charPosition() == currentText.length()) {
                             // get previous character, if space then suggest transcription from current word index
                             final int prevCharPos = editor.getTranscriptEditorCaret().getDot() - 1;
                             final char prevChar = editor.getTranscriptDocument().getText(prevCharPos, 1).charAt(0);
@@ -393,7 +436,6 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
                             final AutomaticTranscription automaticTranscription = getAutomaticTranscription(eleAttrs);
                             removeGhostRange();
                             acceptAutoTranscriptionToFirstSelection(record, tier, automaticTranscription);
-//                            acceptAutoTranscription(record, tier, automaticTranscription);
                             Toolkit.getDefaultToolkit().removeAWTEventListener(alignmentListener);
                         }
                         case KeyEvent.VK_ENTER -> {

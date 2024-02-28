@@ -1,6 +1,7 @@
 package ca.phon.app.session.editor.view.transcript;
 
 import ca.phon.app.log.LogUtil;
+import ca.phon.util.PrefHelper;
 import org.apache.logging.log4j.Level;
 
 import javax.swing.plaf.TextUI;
@@ -131,8 +132,12 @@ public class TranscriptEditorCaret extends DefaultCaret {
     public void setFreezeCaret(boolean freezeCaret) {
         var oldVal = this.freezeCaret;
         this.freezeCaret = freezeCaret;
-        if(oldVal != freezeCaret)
+        if(oldVal != freezeCaret) {
             fireStateChanged();
+            if(PrefHelper.getBoolean("phon.debug", false)) {
+                LogUtil.info("Transcript Editor caret freeze: " + freezeCaret);
+            }
+        }
     }
 
     public void freeze() {

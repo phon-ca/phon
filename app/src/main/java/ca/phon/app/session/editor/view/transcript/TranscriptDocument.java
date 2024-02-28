@@ -743,7 +743,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                                 }
                                 tierStart = childEle.getEndOffset();
                             }
-                            final int tierEnd = e.getEndOffset();
+                            final int tierEnd = e.getEndOffset() - 1;
                             return new StartEnd(tierStart, tierEnd);
                         }
                     }
