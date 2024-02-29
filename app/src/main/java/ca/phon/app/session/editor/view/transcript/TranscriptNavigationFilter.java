@@ -30,11 +30,14 @@ public class TranscriptNavigationFilter extends NavigationFilter {
         if (doc.getLength() == 0) {
             fb.setDot(dot, bias);
         }
+        if(doc.isBypassDocumentFilter()) {
+            fb.setDot(dot, bias);
+            return;
+        }
 
         Element elem = doc.getCharacterElement(dot);
         AttributeSet attrs = elem.getAttributes();
         if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE) != null) return;
-
 
 //        AttributeSet prevAttrs = doc.getCharacterElement(fb.getCaret().getDot()).getAttributes();
 //        AttributeSet nextAttrs = doc.getCharacterElement(dot).getAttributes();

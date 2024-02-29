@@ -84,7 +84,6 @@ public class CalloutWindow extends JDialog {
         contentPanel.add(content, BorderLayout.CENTER);
         add(contentPanel, BorderLayout.CENTER);
 
-
         add(closePanel, BorderLayout.NORTH);
 
         closePanel.setOpaque(false);
@@ -110,10 +109,24 @@ public class CalloutWindow extends JDialog {
         }
     }
 
-    public static void showCallout(JFrame owner, Component content, int sideOfWindow, int topMiddleBottom, Point pointAtPos) {
+    public static CalloutWindow showCallout(JFrame owner, Component content, int sideOfWindow, int topMiddleBottom, Point pointAtPos) {
         // Create a custom JDialog
         CalloutWindow dialog = new CalloutWindow(owner, content, sideOfWindow, topMiddleBottom, pointAtPos);
+        dialog.pack();
         dialog.setVisible(true);
+
+        return dialog;
+    }
+
+    public static CalloutWindow showNonFocusableCallout(JFrame owner, Component content, int sideOfWindow, int topMiddleBottom, Point pointAtPos) {
+        // Create a custom JDialog
+        CalloutWindow dialog = new CalloutWindow(owner, content, sideOfWindow, topMiddleBottom, pointAtPos);
+        dialog.setFocusable(false);
+        dialog.setFocusableWindowState(false);
+        dialog.pack();
+        dialog.setVisible(true);
+
+        return dialog;
     }
 
     private Shape createShape(int width, int height, int triangleBase, int triangleHeight, int cornerRadius, int sideOfWindow, int topMiddleBottom) {
@@ -137,12 +150,6 @@ public class CalloutWindow extends JDialog {
         double angleToArrow = Math.atan(2 * TRIANGLE_HEIGHT / (double)TRIANGLE_BASE);
         double n = angleToArrow / (2 * Math.PI);
         double dist = 4 * Math.atan2((2 * n), Math.PI) / 3;
-
-        System.out.println("Dist: " + dist);
-
-        System.out.println("Angle: " + Math.toDegrees(angleToArrow));
-
-        System.out.println("Width: " + width);
 
         // Start the path in the top-left corner of the rectangle, considering the corner radius
         shape.moveTo(leftOfRect + cornerRadius, topOfRect);

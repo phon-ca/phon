@@ -1,6 +1,7 @@
 package ca.phon.app.session.editor.view.transcript;
 
 import ca.phon.app.log.LogUtil;
+import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.util.PrefHelper;
 import org.apache.logging.log4j.Level;
 
@@ -148,9 +149,20 @@ public class TranscriptEditorCaret extends DefaultCaret {
         setFreezeCaret(false);
     }
 
+    private boolean shouldForceDot = false;
+    public void setDot(int dot, boolean force) {
+        shouldForceDot = true;
+        super.setDot(dot);
+        shouldForceDot = false;
+    }
+
     @Override
     public void setDot(int dot, Position.Bias bias) {
-        if(!isFreezeCaret())
+        setDot(dot, bias, shouldForceDot);
+    }
+
+    public void setDot(int dot, Position.Bias bias, boolean force) {
+        if(force || !isFreezeCaret())
             super.setDot(dot, bias);
     }
 
@@ -158,6 +170,14 @@ public class TranscriptEditorCaret extends DefaultCaret {
     public void moveDot(int dot, Position.Bias bias) {
         if(!isFreezeCaret())
             super.moveDot(dot, bias);
+    }
+
+    /**
+     * Get caret transcript location
+     */
+    public TranscriptElementLocation getTranscriptLocation() {
+        final TranscriptEditor editor = (TranscriptEditor)getComponent();
+        return editor.charPosToSessionLocation(getDot());
     }
 
 }

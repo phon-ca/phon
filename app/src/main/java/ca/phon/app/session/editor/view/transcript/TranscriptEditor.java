@@ -27,6 +27,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.*;
@@ -341,7 +342,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         this.eventManager.registerActionForEvent(EditorEventType.CommenTypeChanged, this::onCommentTypeChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
         this.eventManager.registerActionForEvent(EditorEventType.GemTypeChanged, this::onGemTypeChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 
-        this.eventManager.registerActionForEvent(transcriptLocationChanged, this::onSessionLocationChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+        this.eventManager.registerActionForEvent(transcriptLocationChanged, this::onSessionLocationChanged, EditorEventManager.RunOn.EditorEventDispatchThread);
 
         // TODO: Get this working
 //        this.eventManager.registerActionForEvent(EditorEventType.ParticipantChanged, this::onParticipantChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
@@ -858,16 +859,22 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             end = doc.getTierContentStart(changedTier) + changedTier.getUnvalidatedValue().getValue().length();
         }
 
-        var caretStartAttrs = doc.getCharacterElement(getCaretPosition()).getAttributes();
-        Tier<?> caretStartTier = (Tier<?>) caretStartAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
-        int offset = doc.getOffsetInContent(getCaretPosition());
+        final TranscriptElementLocation caretLoc = getTranscriptEditorCaret().getTranscriptLocation();
+        final int currentDot = getTranscriptEditorCaret().getDot();
 
         boolean wasCaretFrozen = getTranscriptEditorCaret().isFreezeCaret();
         getTranscriptEditorCaret().freeze();
         // Update the changed tier data in the doc
         getTranscriptDocument().onTierDataChanged(editorEvent.data().record(), changedTier);
-        if(!wasCaretFrozen)
+        final int newDot = sessionLocationToCharPos(caretLoc);
+        if(newDot != currentDot) {
+            getTranscriptDocument().setBypassDocumentFilter(true);
+            getTranscriptEditorCaret().setDot(newDot, true);
+            getTranscriptDocument().setBypassDocumentFilter(false);
+        }
+        if(!wasCaretFrozen) {
             getTranscriptEditorCaret().unfreeze();
+        }
 
         if (changedTier.isUnvalidated()) {
             try {
@@ -2420,56 +2427,62 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
      * Sets the {@code currentTranscriptLocation} to the new location
      */
     private void onSessionLocationChanged(EditorEvent<TranscriptLocationChangeData> editorEvent) {
-        setCurrentSessionLocation(editorEvent.data().newLoc);
+        try {
+            SwingUtilities.invokeAndWait(() -> {
+                setCurrentSessionLocation(editorEvent.data().newLoc);
 
-        final TranscriptElementLocation oldLoc = editorEvent.data().oldLoc;
-        final TranscriptElementLocation newLoc = editorEvent.data().newLoc;
+                final TranscriptElementLocation oldLoc = editorEvent.data().oldLoc;
+                final TranscriptElementLocation newLoc = editorEvent.data().newLoc;
 
-        if(oldLoc.tier() != null && !oldLoc.tier().equals(newLoc.tier())) {
-            if(oldLoc.transcriptElementIndex() < 0) {
-                // generic (header) tier change
-                // TODO handle generic tier change
-            } else {
-                final Transcript.Element transcriptElement = getSession().getTranscript().getElementAt(oldLoc.transcriptElementIndex());
-                if(transcriptElement.isRecord()) {
-                    final Record record = transcriptElement.asRecord();
-                    final Tier<?> tier = record.getTier(oldLoc.tier());
-                    if(tier != null) {
-                        final TranscriptDocument.StartEnd tierContentRange = getTranscriptDocument().getTierContentRange(
-                                getSession().getTranscript().getRecordIndex(oldLoc.transcriptElementIndex()), tier.getName());
-                        try {
-                            final String currentText = getTranscriptDocument().getText(tierContentRange.start(), tierContentRange.length());
-                            if(!tier.toString().equals(currentText)) {
-                                changeTierData(record, tier, currentText);
+                if (oldLoc.tier() != null && !oldLoc.tier().equals(newLoc.tier())) {
+                    if (oldLoc.transcriptElementIndex() < 0) {
+                        // generic (header) tier change
+                        // TODO handle generic tier change
+                    } else {
+                        final Transcript.Element transcriptElement = getSession().getTranscript().getElementAt(oldLoc.transcriptElementIndex());
+                        if (transcriptElement.isRecord()) {
+                            final Record record = transcriptElement.asRecord();
+                            final Tier<?> tier = record.getTier(oldLoc.tier());
+                            if (tier != null) {
+                                final TranscriptDocument.StartEnd tierContentRange = getTranscriptDocument().getTierContentRange(
+                                        getSession().getTranscript().getRecordIndex(oldLoc.transcriptElementIndex()), tier.getName());
+                                try {
+                                    final String currentText = getTranscriptDocument().getText(tierContentRange.start(), tierContentRange.length());
+                                    if (!tier.toString().equals(currentText)) {
+                                        changeTierData(record, tier, currentText);
+                                    }
+                                } catch (BadLocationException e) {
+                                    LogUtil.warning(e);
+                                }
                             }
-                        } catch (BadLocationException e) {
-                            LogUtil.warning(e);
+                        } else if (transcriptElement.isGem()) {
+                            final Gem gem = transcriptElement.asGem();
+                            final TranscriptDocument.StartEnd gemRange = getTranscriptDocument().getGemContentStartEnd(gem);
+                            try {
+                                final String currentText = getTranscriptDocument().getText(gemRange.start(), gemRange.length());
+                                if (!gem.toString().equals(currentText)) {
+                                    gemDataChanged(gem, currentText);
+                                }
+                            } catch (BadLocationException e) {
+                                LogUtil.warning(e);
+                            }
+                        } else if (transcriptElement.isComment()) {
+                            final Comment comment = transcriptElement.asComment();
+                            final TranscriptDocument.StartEnd commentRange = getTranscriptDocument().getCommentContentStartEnd(comment);
+                            try {
+                                final String currentText = getTranscriptDocument().getText(commentRange.start(), commentRange.length());
+                                if (!comment.toString().equals(currentText)) {
+                                    commentDataChanged(comment, currentText);
+                                }
+                            } catch (BadLocationException e) {
+                                LogUtil.warning(e);
+                            }
                         }
-                    }
-                } else if(transcriptElement.isGem()) {
-                    final Gem gem = transcriptElement.asGem();
-                    final TranscriptDocument.StartEnd gemRange = getTranscriptDocument().getGemContentStartEnd(gem);
-                    try {
-                        final String currentText = getTranscriptDocument().getText(gemRange.start(), gemRange.length());
-                        if(!gem.toString().equals(currentText)) {
-                            gemDataChanged(gem, currentText);
-                        }
-                    } catch (BadLocationException e) {
-                        LogUtil.warning(e);
-                    }
-                } else if(transcriptElement.isComment()) {
-                    final Comment comment = transcriptElement.asComment();
-                    final TranscriptDocument.StartEnd commentRange = getTranscriptDocument().getCommentContentStartEnd(comment);
-                    try {
-                        final String currentText = getTranscriptDocument().getText(commentRange.start(), commentRange.length());
-                        if(!comment.toString().equals(currentText)) {
-                            commentDataChanged(comment, currentText);
-                        }
-                    } catch (BadLocationException e) {
-                        LogUtil.warning(e);
                     }
                 }
-            }
+            });
+        } catch (InterruptedException | InvocationTargetException e) {
+            LogUtil.warning(e);
         }
     }
 

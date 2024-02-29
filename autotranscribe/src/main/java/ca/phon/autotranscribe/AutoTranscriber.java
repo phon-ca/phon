@@ -133,7 +133,8 @@ public class AutoTranscriber {
      * Lookup a single word
      *
      * @param word
-     * @return list of transcriptions from all sources ordered by the IPA comparator.  If no transcriptions are available,
+     * @return list of transcriptions Word word) {
+     *         final List<IPATranscript> retVfrom all sources ordered by the IPA comparator.  If no transcriptions are available,
      * a list with a single '*' is returned.
      */
     public List<IPATranscript> lookup(Word word) {

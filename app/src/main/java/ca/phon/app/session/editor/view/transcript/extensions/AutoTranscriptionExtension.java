@@ -27,11 +27,15 @@ import ca.phon.session.alignment.CrossTierAlignment;
 import ca.phon.session.alignment.TierAligner;
 import ca.phon.session.alignment.TierAlignment;
 import ca.phon.session.position.TranscriptElementLocation;
+import ca.phon.ui.CalloutWindow;
+import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.PrefHelper;
 import ca.phon.worker.PhonWorker;
 
 import javax.swing.*;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.AWTEventListener;
@@ -39,6 +43,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 /**
@@ -48,6 +53,8 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
     private TranscriptEditor editor;
 
     private Supplier<IPADictionary> ipaDictionarySupplier;
+
+    private final AtomicReference<CalloutWindow> calloutWindowRef = new AtomicReference<>();
 
     private TranscriptDocument.StartEnd ghostRange = null;
 
@@ -151,6 +158,10 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
      *
      */
     public void removeGhostRange() {
+        if(calloutWindowRef.get() != null) {
+            calloutWindowRef.get().dispose();
+            calloutWindowRef.set(null);
+        }
         if(ghostRange != null) {
             if(PrefHelper.getBoolean("phon.debug", false)) {
                 LogUtil.info("Removing ghost text");
@@ -298,6 +309,9 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
     }
 
     private void insertAutomaticTranscription(Record record, Tier<IPATranscript> tier, AutomaticTranscription autoTranscript) {
+        if(autoTranscript.getWords().isEmpty()) return;
+        final Word firstWord = autoTranscript.getWords().get(0);
+        final IPATranscript[] options = autoTranscript.getTranscriptionOptions(firstWord);
         final SimpleAttributeSet ghostAttrs = editor.getTranscriptDocument().getTranscriptStyleContext().getTierAttributes(tier);
         // make text gray and italic
         StyleConstants.setForeground(ghostAttrs, Color.gray);
@@ -306,7 +320,61 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
         TranscriptStyleConstants.setElementType(ghostAttrs, TranscriptStyleConstants.ELEMENT_TYPE_RECORD);
 
         insertGhostText(record, (Tier<IPATranscript>)tier, autoTranscript);
+        if(options.length > 1) {
+
+            final String[] optionStrings = new String[options.length];
+            for(int i = 0; i < options.length; i++) {
+                optionStrings[i] = options[i].toString();
+            }
+            final JList<String> optionsList = new JList<>(optionStrings);
+            optionsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+//            for(int i = 0; i < options.length; i++) {
+//                optionStrings[i] = options[i].toString();
+//            }
+//            final JPopupMenu popupMenu = new JPopupMenu();
+//            for(int i = 0; i < options.length; i++) {
+//                final IPATranscript ipa = options[i];
+//                final String ipaString = ipa.toString();
+//                final PhonUIAction act = PhonUIAction.runnable(() -> {
+//                    acceptAutoTranscription(record, tier, autoTranscript);
+//                });
+//                act.putValue(PhonUIAction.NAME, ipaString);
+//                popupMenu.add(act);
+//            }
+            final JTextComponent textComponent = editor;
+            final Point p = textComponent.getCaret().getMagicCaretPosition();
+            SwingUtilities.convertPointToScreen(p, textComponent);
+            final int height = textComponent.getFontMetrics(textComponent.getFont()).getHeight();
+            p.y += height;
+
+            final JPanel optionsPanel = new JPanel(new BorderLayout());
+            optionsPanel.add(new JLabel("Options for " + firstWord.getWord()), BorderLayout.NORTH);
+            optionsPanel.add(new JScrollPane(optionsList), BorderLayout.CENTER);
+            optionsPanel.setPreferredSize(new Dimension(200, 100));
+            final CalloutWindow calloutWindow = CalloutWindow.showNonFocusableCallout(
+                CommonModuleFrame.getCurrentFrame(),
+                optionsPanel,
+                SwingConstants.NORTH,
+                SwingConstants.CENTER,
+                p
+            );
+            calloutWindowRef.set(calloutWindow);
+//            if(p != null) {
+//                popupMenu.show(textComponent, p.x, p.y + height);
+//            }
+        }
         Toolkit.getDefaultToolkit().addAWTEventListener(alignmentListener, AWTEvent.KEY_EVENT_MASK | AWTEvent.MOUSE_EVENT_MASK);
+        // if the caret moves while the ghost text is present, update the ghost range
+        // this happens when the caret moves from the end of the previous tier into an ipa tier
+        editor.addCaretListener(new CaretListener() {
+            @Override
+            public void caretUpdate(CaretEvent e) {
+                if(ghostRange != null && e.getDot() != ghostRange.start()) {
+                    ghostRange = new TranscriptDocument.StartEnd(e.getDot(), e.getDot() + autoTranscript.getTranscription().toString().length());
+                }
+                editor.removeCaretListener(this);
+            }
+        });
     }
 
     /**
