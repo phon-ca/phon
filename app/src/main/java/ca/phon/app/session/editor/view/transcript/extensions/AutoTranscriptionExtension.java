@@ -20,6 +20,7 @@ import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.ipadictionary.IPADictionaryLibrary;
 import ca.phon.orthography.Orthography;
+import ca.phon.orthography.OrthographyElement;
 import ca.phon.orthography.Word;
 import ca.phon.session.*;
 import ca.phon.session.Record;
@@ -231,7 +232,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
 
         boolean incomplete = false;
         for(int i = 0; i < automaticTranscription.getWords().size(); i++) {
-            final Word word = automaticTranscription.getWords().get(i);
+            final OrthographyElement word = automaticTranscription.getWords().get(i);
             if(i > 0 && automaticTranscription.getTranscriptionOptions(word).length > 1) {
                 incomplete = true;
                 break;
@@ -310,59 +311,44 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
 
     private void insertAutomaticTranscription(Record record, Tier<IPATranscript> tier, AutomaticTranscription autoTranscript) {
         if(autoTranscript.getWords().isEmpty()) return;
-        final Word firstWord = autoTranscript.getWords().get(0);
-        final IPATranscript[] options = autoTranscript.getTranscriptionOptions(firstWord);
-        final SimpleAttributeSet ghostAttrs = editor.getTranscriptDocument().getTranscriptStyleContext().getTierAttributes(tier);
-        // make text gray and italic
-        StyleConstants.setForeground(ghostAttrs, Color.gray);
-        StyleConstants.setItalic(ghostAttrs, true);
-        TranscriptStyleConstants.setNotTraversable(ghostAttrs, true);
-        TranscriptStyleConstants.setElementType(ghostAttrs, TranscriptStyleConstants.ELEMENT_TYPE_RECORD);
 
-        insertGhostText(record, (Tier<IPATranscript>)tier, autoTranscript);
-        if(options.length > 1) {
+        insertGhostText(record, tier, autoTranscript);
 
-            final String[] optionStrings = new String[options.length];
-            for(int i = 0; i < options.length; i++) {
-                optionStrings[i] = options[i].toString();
+        // display options callout for first word if options are available
+        final OrthographyElement firstEle = autoTranscript.getWords().get(0);
+        if(firstEle instanceof Word firstWord) {
+            final IPATranscript[] options = autoTranscript.getTranscriptionOptions(firstWord);
+            if (options.length > 1) {
+                final String[] optionStrings = new String[options.length];
+                for (int i = 0; i < options.length; i++) {
+                    optionStrings[i] = options[i].toString();
+                }
+                final JList<String> optionsList = new JList<>(optionStrings);
+                optionsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                optionsList.setSelectedIndex(0);
+                final JTextComponent textComponent = editor;
+                final Point p = textComponent.getCaret().getMagicCaretPosition();
+                SwingUtilities.convertPointToScreen(p, textComponent);
+                final int height = textComponent.getFontMetrics(textComponent.getFont()).getHeight();
+                p.y += height;
+
+                final JPanel optionsPanel = new JPanel(new BorderLayout());
+                final JLabel titleLabel = new JLabel("Options for '" + firstWord.getWord() + "'");
+                optionsPanel.add(titleLabel, BorderLayout.NORTH);
+                optionsPanel.setOpaque(false);
+                optionsPanel.add(new JScrollPane(optionsList), BorderLayout.CENTER);
+                optionsPanel.setPreferredSize(new Dimension(200, 100));
+                final CalloutWindow calloutWindow = CalloutWindow.showNonFocusableCallout(
+                        CommonModuleFrame.getCurrentFrame(),
+                        optionsPanel,
+                        SwingConstants.NORTH,
+                        SwingConstants.CENTER,
+                        p
+                );
+                calloutWindowRef.set(calloutWindow);
             }
-            final JList<String> optionsList = new JList<>(optionStrings);
-            optionsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//            for(int i = 0; i < options.length; i++) {
-//                optionStrings[i] = options[i].toString();
-//            }
-//            final JPopupMenu popupMenu = new JPopupMenu();
-//            for(int i = 0; i < options.length; i++) {
-//                final IPATranscript ipa = options[i];
-//                final String ipaString = ipa.toString();
-//                final PhonUIAction act = PhonUIAction.runnable(() -> {
-//                    acceptAutoTranscription(record, tier, autoTranscript);
-//                });
-//                act.putValue(PhonUIAction.NAME, ipaString);
-//                popupMenu.add(act);
-//            }
-            final JTextComponent textComponent = editor;
-            final Point p = textComponent.getCaret().getMagicCaretPosition();
-            SwingUtilities.convertPointToScreen(p, textComponent);
-            final int height = textComponent.getFontMetrics(textComponent.getFont()).getHeight();
-            p.y += height;
-
-            final JPanel optionsPanel = new JPanel(new BorderLayout());
-            optionsPanel.add(new JLabel("Options for " + firstWord.getWord()), BorderLayout.NORTH);
-            optionsPanel.add(new JScrollPane(optionsList), BorderLayout.CENTER);
-            optionsPanel.setPreferredSize(new Dimension(200, 100));
-            final CalloutWindow calloutWindow = CalloutWindow.showNonFocusableCallout(
-                CommonModuleFrame.getCurrentFrame(),
-                optionsPanel,
-                SwingConstants.NORTH,
-                SwingConstants.CENTER,
-                p
-            );
-            calloutWindowRef.set(calloutWindow);
-//            if(p != null) {
-//                popupMenu.show(textComponent, p.x, p.y + height);
-//            }
         }
+
         Toolkit.getDefaultToolkit().addAWTEventListener(alignmentListener, AWTEvent.KEY_EVENT_MASK | AWTEvent.MOUSE_EVENT_MASK);
         // if the caret moves while the ghost text is present, update the ghost range
         // this happens when the caret moves from the end of the previous tier into an ipa tier
@@ -476,12 +462,14 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
     private void scanTierAlignment(TierAlignment tierAlignment) {
         for(var alignedEle:tierAlignment.getAlignedElements()) {
             if(alignedEle.getObj1() == null || alignedEle.getObj2() == null) continue;
-            final Word word = (Word)alignedEle.getObj1();
-            final IPATranscript ipa = (IPATranscript)alignedEle.getObj2();
-            // ignore empty transcriptions
-            if (ipa.length() > 0 && !"*".equals(ipa.toString())) {
-                alignedTypesDatabase.addAlignment(SystemTierType.Orthography.getName(),
-                        word.getWord(), tierAlignment.getBottomTier().getName(), ipa.toString());
+            final OrthographyElement ele = (OrthographyElement) alignedEle.getObj1();
+            if(ele instanceof Word word) {
+                final IPATranscript ipa = (IPATranscript) alignedEle.getObj2();
+                // ignore empty transcriptions
+                if (ipa.length() > 0 && !"*".equals(ipa.toString())) {
+                    alignedTypesDatabase.addAlignment(SystemTierType.Orthography.getName(),
+                            word.getWord(), tierAlignment.getBottomTier().getName(), ipa.toString());
+                }
             }
         }
     }
@@ -544,4 +532,26 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
             }
         }
     };
+
+    /**
+     * Callout window content for automatic transcription options
+     * Shows options for first word in automatic transcription
+     *
+     */
+    private static class AutoTranscriptionOptionsContent extends JPanel {
+
+        private final AutomaticTranscription autoTranscription;
+
+        private JList<String> optionsList;
+
+        public AutoTranscriptionOptionsContent(AutomaticTranscription autoTranscription) {
+            super(new BorderLayout());
+            this.autoTranscription = autoTranscription;
+        }
+
+        private void init() {
+        }
+
+    }
+
 }

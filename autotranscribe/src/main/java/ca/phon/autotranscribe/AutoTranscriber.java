@@ -1,8 +1,10 @@
 package ca.phon.autotranscribe;
 
 import ca.phon.alignedTypesDatabase.CartesianProduct;
+import ca.phon.ipa.IPAElementFactory;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
+import ca.phon.ipa.IntraWordPause;
 import ca.phon.orthography.*;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.Tier;
@@ -125,7 +127,7 @@ public class AutoTranscriber {
             visitor.visit(element);
         }
 
-        final Map<Word, IPATranscript[]> transcriptionOptions = visitor.transcriptionOptions;
+        final Map<OrthographyElement, IPATranscript[]> transcriptionOptions = visitor.transcriptionOptions;
         return new AutomaticTranscription(orthography, transcriptionOptions);
     }
 
@@ -176,7 +178,25 @@ public class AutoTranscriber {
 
     public class AutoTranscriberVisitor extends AbstractOrthographyVisitor {
 
-        private final Map<Word, IPATranscript[]> transcriptionOptions = new LinkedHashMap<>();
+        private final Map<OrthographyElement, IPATranscript[]> transcriptionOptions = new LinkedHashMap<>();
+
+        @Visits
+        @Override
+        public void visitPause(Pause pause) {
+            final ca.phon.ipa.PauseLength pauseType = switch(pause.getType()) {
+                case SIMPLE -> ca.phon.ipa.PauseLength.SIMPLE;
+                case LONG -> ca.phon.ipa.PauseLength.LONG;
+                case VERY_LONG -> ca.phon.ipa.PauseLength.VERY_LONG;
+                case NUMERIC -> ca.phon.ipa.PauseLength.NUMERIC;
+            };
+            final float length = pause.getLength();
+            final IPAElementFactory factory = new IPAElementFactory();
+
+            final ca.phon.ipa.Pause ipaPause =
+                    pauseType == ca.phon.ipa.PauseLength.NUMERIC ? factory.createPause(length) : factory.createPause(pauseType);
+            final IPATranscript[] ipaTranscripts = new IPATranscript[]{new IPATranscript(new ca.phon.ipa.IPAElement[]{ipaPause})};
+            transcriptionOptions.put(pause, ipaTranscripts);
+        }
 
         @Visits
         @Override

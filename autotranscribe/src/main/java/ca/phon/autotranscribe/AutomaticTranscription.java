@@ -20,16 +20,16 @@ public class AutomaticTranscription {
 
     private final Orthography orthography;
 
-    private final Map<Word, IPATranscript[]> transcriptionOptions;
+    private final Map<OrthographyElement, IPATranscript[]> transcriptionOptions;
 
-    private final Map<Word, Integer> selectedTranscriptions;
+    private final Map<OrthographyElement, Integer> selectedTranscriptions;
 
-    public AutomaticTranscription(Orthography orthography, Map<Word, IPATranscript[]> transcriptionOptions) {
+    public AutomaticTranscription(Orthography orthography, Map<OrthographyElement, IPATranscript[]> transcriptionOptions) {
         this.orthography = orthography;
         this.transcriptionOptions = transcriptionOptions;
         this.selectedTranscriptions = new HashMap<>();
 
-        for(Word w:this.transcriptionOptions.keySet()) {
+        for(OrthographyElement w:this.transcriptionOptions.keySet()) {
             this.selectedTranscriptions.put(w, 0);
         }
     }
@@ -38,11 +38,11 @@ public class AutomaticTranscription {
         return this.orthography;
     }
 
-    public Map<Word, IPATranscript[]> getTranscriptionOptions() {
+    public Map<OrthographyElement, IPATranscript[]> getTranscriptionOptions() {
         return this.transcriptionOptions;
     }
 
-    public IPATranscript[] getTranscriptionOptions(Word word) {
+    public IPATranscript[] getTranscriptionOptions(OrthographyElement word) {
         return this.transcriptionOptions.get(word);
     }
 
@@ -57,22 +57,30 @@ public class AutomaticTranscription {
         return visitor.builder.toIPATranscript();
     }
 
-    public IPATranscript getSelectedTranscription(Word word) {
+    public IPATranscript getSelectedTranscription(OrthographyElement word) {
         return this.transcriptionOptions.get(word)[this.selectedTranscriptions.get(word)];
     }
 
-    public void setSelectedTranscription(Word word, int idx) {
+    public void setSelectedTranscription(OrthographyElement word, int idx) {
         this.selectedTranscriptions.put(word, idx);
     }
 
-    public List<Word> getWords() {
-        final List<Word> retVal = new ArrayList<>(getTranscriptionOptions().keySet());
+    public List<OrthographyElement> getWords() {
+        final List<OrthographyElement> retVal = new ArrayList<>(getTranscriptionOptions().keySet());
         return retVal;
     }
 
     public class AutomaticTranscriptionVisitor extends AbstractOrthographyVisitor {
 
         final IPATranscriptBuilder builder = new IPATranscriptBuilder();
+
+        @Visits
+        @Override
+        public void visitPause(Pause pause) {
+            if(builder.size() > 0 && !(builder.last() instanceof CompoundWordMarker))
+                builder.appendWordBoundary();
+            builder.append(pause.toString());
+        }
 
         @Visits
         @Override
