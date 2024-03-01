@@ -43,7 +43,7 @@ import java.awt.event.AWTEventListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.util.List;
+import java.lang.reflect.Array;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
@@ -56,6 +56,8 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
     private Supplier<IPADictionary> ipaDictionarySupplier;
 
     private final AtomicReference<CalloutWindow> calloutWindowRef = new AtomicReference<>();
+
+    private final AtomicReference<AutoTranscriptionOptionsContent> optionsContentRef = new AtomicReference<>();
 
     private TranscriptDocument.StartEnd ghostRange = null;
 
@@ -78,8 +80,8 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
 
         autoTranscriber = new AutoTranscriber();
         this.alignedTypesDatabase = AlignedTypesDatabaseFactory.newDatabase();
-        autoTranscriber.addSource(new AlignedTypesAutoTranscribeSource(alignedTypesDatabase));
         autoTranscriber.addSource(new IPADictionaryAutoTranscribeSource(getDictionary()));
+        autoTranscriber.addSource(new AlignedTypesAutoTranscribeSource(alignedTypesDatabase));
     }
 
     public IPADictionary getDictionary() {
@@ -162,6 +164,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
         if(calloutWindowRef.get() != null) {
             calloutWindowRef.get().dispose();
             calloutWindowRef.set(null);
+            optionsContentRef.set(null);
         }
         if(ghostRange != null) {
             if(PrefHelper.getBoolean("phon.debug", false)) {
@@ -319,28 +322,32 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
         if(firstEle instanceof Word firstWord) {
             final IPATranscript[] options = autoTranscript.getTranscriptionOptions(firstWord);
             if (options.length > 1) {
-                final String[] optionStrings = new String[options.length];
-                for (int i = 0; i < options.length; i++) {
-                    optionStrings[i] = options[i].toString();
-                }
-                final JList<String> optionsList = new JList<>(optionStrings);
-                optionsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-                optionsList.setSelectedIndex(0);
+//                final String[] optionStrings = new String[options.length];
+//                for (int i = 0; i < options.length; i++) {
+//                    optionStrings[i] = options[i].toString();
+//                }
+//                final JList<String> optionsList = new JList<>(optionStrings);
+//                optionsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+//                optionsList.setSelectedIndex(0);
                 final JTextComponent textComponent = editor;
                 final Point p = textComponent.getCaret().getMagicCaretPosition();
                 SwingUtilities.convertPointToScreen(p, textComponent);
                 final int height = textComponent.getFontMetrics(textComponent.getFont()).getHeight();
                 p.y += height;
+//
+//                final JPanel optionsPanel = new JPanel(new BorderLayout());
+//                final JLabel titleLabel = new JLabel("Options for '" + firstWord.getWord() + "'");
+//                optionsPanel.add(titleLabel, BorderLayout.NORTH);
+//                optionsPanel.setOpaque(false);
+//                optionsPanel.add(new JScrollPane(optionsList), BorderLayout.CENTER);
+//                optionsPanel.setPreferredSize(new Dimension(200, 100));
 
-                final JPanel optionsPanel = new JPanel(new BorderLayout());
-                final JLabel titleLabel = new JLabel("Options for '" + firstWord.getWord() + "'");
-                optionsPanel.add(titleLabel, BorderLayout.NORTH);
-                optionsPanel.setOpaque(false);
-                optionsPanel.add(new JScrollPane(optionsList), BorderLayout.CENTER);
-                optionsPanel.setPreferredSize(new Dimension(200, 100));
+                final AutoTranscriptionOptionsContent optionsContent = new AutoTranscriptionOptionsContent(autoTranscript);
+                optionsContentRef.set(optionsContent);
+
                 final CalloutWindow calloutWindow = CalloutWindow.showNonFocusableCallout(
                         CommonModuleFrame.getCurrentFrame(),
-                        optionsPanel,
+                        optionsContent,
                         SwingConstants.NORTH,
                         SwingConstants.CENTER,
                         p
@@ -393,6 +400,35 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
                 final TierEdit<IPATranscript> edit = new TierEdit<>(editor.getSession(), editor.getEventManager(),
                         editor.getDataModel().getTranscriber(), record, (Tier<IPATranscript>)tier, newVal, false);
                 editor.getUndoSupport().postEdit(edit);
+            }
+        }
+    }
+
+    /**
+     * Select transcription for first word in automatic transcription and update ghost text
+     *
+     * @param transcriptionIndex
+     */
+    private void selectOptionalTranscription(int transcriptionIndex) {
+        final AttributeSet eleAttrs = editor.getTranscriptDocument().getCharacterElement(editor.getCaretPosition()).getAttributes();
+        final Tier<IPATranscript> tier = (Tier<IPATranscript>) TranscriptStyleConstants.getTier(eleAttrs);
+        final Record record = TranscriptStyleConstants.getRecord(eleAttrs);
+        final AutomaticTranscription automaticTranscription = getAutomaticTranscription(eleAttrs);
+
+        if(automaticTranscription != null) {
+            final OrthographyElement firstEle = automaticTranscription.getWords().get(0);
+            if(firstEle instanceof Word firstWord) {
+                if(automaticTranscription.getSelectedTranscriptionIndex(firstWord) == transcriptionIndex) return;
+                // keep our callout window if visible
+                final CalloutWindow calloutWindow = calloutWindowRef.getAndSet(null);
+                removeGhostRange();
+                calloutWindowRef.set(calloutWindow);
+                automaticTranscription.setSelectedTranscriptionIndex(firstWord, transcriptionIndex);
+                insertGhostText(record, tier, automaticTranscription);
+
+                if(optionsContentRef.get() != null && optionsContentRef.get().optionsList.getSelectedIndex() != transcriptionIndex) {
+                    optionsContentRef.get().optionsList.setSelectedIndex(transcriptionIndex);
+                }
             }
         }
     }
@@ -485,6 +521,30 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
                             removeGhostRange();
                             Toolkit.getDefaultToolkit().removeAWTEventListener(alignmentListener);
                         }
+                        case KeyEvent.VK_UP, KeyEvent.VK_DOWN -> {
+                            final AttributeSet eleAttrs = editor.getTranscriptDocument().getCharacterElement(editor.getCaretPosition()).getAttributes();
+                            final AutomaticTranscription automaticTranscription = getAutomaticTranscription(eleAttrs);
+                            // change selected transcription for first word
+                            final OrthographyElement firstEle = automaticTranscription.getWords().get(0);
+                            if(firstEle instanceof Word firstWord) {
+                                final IPATranscript[] options = automaticTranscription.getTranscriptionOptions(firstWord);
+                                final int idx = automaticTranscription.getSelectedTranscriptionIndex(firstWord);
+                                if(options.length > 1) {
+                                    int newIdx = (ke.getKeyCode() == KeyEvent.VK_UP ? idx - 1 : idx + 1);
+                                    if(newIdx < 0) newIdx = options.length - 1;
+                                    else if(newIdx >= options.length) newIdx = 0;
+                                    selectOptionalTranscription(newIdx);
+                                } else {
+                                    removeGhostRange();
+                                    Toolkit.getDefaultToolkit().removeAWTEventListener(alignmentListener);
+                                    return;
+                                }
+                            } else {
+                                removeGhostRange();
+                                Toolkit.getDefaultToolkit().removeAWTEventListener(alignmentListener);
+                                return;
+                            }
+                        }
                         case KeyEvent.VK_TAB -> {
                             final AttributeSet eleAttrs = editor.getTranscriptDocument().getCharacterElement(editor.getCaretPosition()).getAttributes();
                             final Tier<IPATranscript> tier = (Tier<IPATranscript>) TranscriptStyleConstants.getTier(eleAttrs);
@@ -538,7 +598,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
      * Shows options for first word in automatic transcription
      *
      */
-    private static class AutoTranscriptionOptionsContent extends JPanel {
+    private class AutoTranscriptionOptionsContent extends JPanel {
 
         private final AutomaticTranscription autoTranscription;
 
@@ -547,9 +607,36 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
         public AutoTranscriptionOptionsContent(AutomaticTranscription autoTranscription) {
             super(new BorderLayout());
             this.autoTranscription = autoTranscription;
+            init();
+        }
+
+        @Override
+        public Dimension getMinimumSize() {
+            return new Dimension(200, 100);
         }
 
         private void init() {
+            final OrthographyElement firstEle = autoTranscription.getWords().get(0);
+            if(firstEle instanceof Word firstWord) {
+                final IPATranscript[] options = autoTranscription.getTranscriptionOptions(firstWord);
+                if(options.length > 1) {
+                    final String[] optionStrings = new String[options.length];
+                    for(int i = 0; i < options.length; i++) {
+                        optionStrings[i] = options[i].toString();
+                    }
+                    optionsList = new JList<>(optionStrings);
+                    optionsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                    optionsList.setSelectedIndex(autoTranscription.getSelectedTranscriptionIndex(firstWord));
+                    add(new JScrollPane(optionsList), BorderLayout.CENTER);
+
+                    optionsList.addListSelectionListener(e -> {
+                        if(!e.getValueIsAdjusting()) {
+                            final int idx = optionsList.getSelectedIndex();
+                            selectOptionalTranscription(idx);
+                        }
+                    });
+                }
+            }
         }
 
     }

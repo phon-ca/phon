@@ -57,6 +57,14 @@ public class AutomaticTranscription {
         return visitor.builder.toIPATranscript();
     }
 
+    public int getSelectedTranscriptionIndex(OrthographyElement word) {
+        return this.selectedTranscriptions.get(word);
+    }
+
+    public void setSelectedTranscriptionIndex(OrthographyElement word, int idx) {
+        this.selectedTranscriptions.put(word, idx);
+    }
+
     public IPATranscript getSelectedTranscription(OrthographyElement word) {
         return this.transcriptionOptions.get(word)[this.selectedTranscriptions.get(word)];
     }
