@@ -15,6 +15,7 @@
  */
 package ca.phon.media;
 
+import ca.phon.formatter.MediaTimeFormatter;
 import ca.phon.media.TimeUIModel.Marker;
 import ca.phon.formatter.MsFormatter;
 
@@ -138,9 +139,7 @@ public class DefaultTimebarUI extends TimebarUI {
 				tickLine.setLine(tickPos, fm.getHeight() - 2, tickPos, fm.getHeight()- 2 + timebar.getMajorTickHeight());
 				
 				if( (tickPos - leftInset) % 200 == 0 ) {
-					long timeMs = (long)(timebar.timeAtX(tickPos) * 1000.0f);
-					String timeStr = MsFormatter.msToDisplayString(timeMs);
-					
+					String timeStr = MediaTimeFormatter.secondsToMinutesAndSeconds(timebar.timeAtX(tickPos));
 					Rectangle2D timeRect = fm.getStringBounds(timeStr, g2);
 					timeRect.setRect(tickPos, 0, timeRect.getWidth(), timeRect.getHeight());
 					g2.drawString(timeStr, (float)timeRect.getX(), (float)(timeRect.getY() + fm.getAscent()));
@@ -172,8 +171,7 @@ public class DefaultTimebarUI extends TimebarUI {
 		Map<Marker, Rectangle2D> markerRects = new HashMap<>();
 		for(Marker marker:markerList) {
 			int markerX = (int)Math.round(timebar.xForTime(marker.getTime()));
-			long timeMs = (long)(marker.getTime() * 1000.0f);
-			String timeStr = MsFormatter.msToDisplayString(timeMs);
+			String timeStr = MediaTimeFormatter.secondsToMinutesAndSeconds(marker.getTime());
 			Rectangle2D timeRect = fm.getStringBounds(timeStr, g2);
 			timeRect.setRect(markerX, markerY, timeRect.getWidth(), timeRect.getHeight());
 			
