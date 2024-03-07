@@ -276,7 +276,7 @@ public class RecordGrid extends TimeComponent {
 		if(recordIndex >= 0 && recordIndex < session.getRecordCount()) {
 			Record r = session.getRecord(recordIndex);
 			MediaSegment segment = r.getMediaSegment();
-			super.repaint(segment.getStartValue()/1000.0f, segment.getEndValue()/1000.0f);
+			super.repaint(segment.getStartTime(), segment.getEndTime());
 		}
 	}
 

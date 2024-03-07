@@ -226,8 +226,8 @@ public class DefaultRecordGridUI extends RecordGridUI {
 	public Rectangle2D getSegmentRect(Record record) {
 		final MediaSegment seg = record.getMediaSegment();
 		
-		double x1 = recordGrid.getTimeModel().xForTime(seg.getStartValue() / 1000.0f);
-		double x2 = recordGrid.getTimeModel().xForTime(seg.getEndValue() / 1000.0f);
+		double x1 = recordGrid.getTimeModel().xForTime(seg.getStartTime());
+		double x2 = recordGrid.getTimeModel().xForTime(seg.getEndTime());
 		
 		int y = TOP_BOTTOM_MARGIN + (2*getSpeakerLabelHeight()) +
 				( recordGrid.getSpeakers().indexOf(record.getSpeaker()) * (getSpeakerTierHeight() + TIER_GAP));
@@ -315,7 +315,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 		
 		for(int rIdx = 0; rIdx < session.getRecordCount(); rIdx++) {
 			Record r = session.getRecord(rIdx);
-			if(r.getMediaSegment().isUnset()) continue;
+			if(r.getMediaSegment().isPointAtOrigin()) continue;
 
 			try {
 				MediaSegment seg = r.getMediaSegment();
@@ -331,8 +331,8 @@ public class DefaultRecordGridUI extends RecordGridUI {
 					ymap.put(r.getSpeaker(), segY);
 				}
 
-				var segStart = seg.getUnitType() == MediaUnit.Millisecond ? seg.getStartValue() / 1000.0f : seg.getStartValue();
-				var segEnd = seg.getUnitType() == MediaUnit.Millisecond ? seg.getEndValue() / 1000.0f : seg.getEndValue();
+				var segStart = seg.getStartTime();
+				var segEnd = seg.getEndTime();
 				var segXmin = recordGrid.xForTime(segStart);
 				var segXmax = recordGrid.xForTime(segEnd);
 
@@ -350,14 +350,14 @@ public class DefaultRecordGridUI extends RecordGridUI {
 					Record leftRecord = recordGrid.getLeftRecordSplit();
 					MediaSegment leftRecordSeg = leftRecord.getMediaSegment();
 					segRect.setFrame(segRect.getX(), segRect.getY(),
-							recordGrid.xForTime(leftRecordSeg.getEndValue() / 1000.0f) - segRect.getX(), segRect.getHeight());
+							recordGrid.xForTime(leftRecordSeg.getEndTime()) - segRect.getX(), segRect.getHeight());
 					paintSegment(g2, rIdx, recordGrid.getLeftRecordSplit(), segRect);
 					paintSegmentLabelAndActions(g2, rIdx, recordGrid.getLeftRecordSplit(), segRect);
 
 					Record rightRecord = recordGrid.getRightRecordSplit();
 					MediaSegment rightRecordSeg = rightRecord.getMediaSegment();
-					segRect.setFrame(recordGrid.xForTime(rightRecordSeg.getStartValue() / 1000.0f), segRect.getY(),
-							recordGrid.xForTime(rightRecordSeg.getEndValue() / 1000.0f) - recordGrid.xForTime(rightRecordSeg.getStartValue() / 1000.0f), segRect.getHeight());
+					segRect.setFrame(recordGrid.xForTime(rightRecordSeg.getStartTime()), segRect.getY(),
+							recordGrid.xForTime(rightRecordSeg.getEndTime()) - recordGrid.xForTime(rightRecordSeg.getStartTime()), segRect.getHeight());
 					paintSegment(g2, (rIdx + 2) * -1, recordGrid.getRightRecordSplit(), segRect);
 					paintSegmentLabelAndActions(g2, (rIdx + 2) * -1, recordGrid.getRightRecordSplit(), segRect);
 
@@ -1172,9 +1172,7 @@ public class DefaultRecordGridUI extends RecordGridUI {
 				if(record != recordGrid.getCurrentRecord()) {
 					MediaSegment seg = record.getMediaSegment();
 					
-					float markerTime = intersectedMarker.get() > 0 ? 
-					seg.getStartValue() / 1000.0f : seg.getEndValue() / 1000.0f;
-					
+					float markerTime = intersectedMarker.get() > 0 ? seg.getStartTime() : seg.getEndTime();
 					if(currentMouseOverMarker == null || markerTime != currentMouseOverMarker.getTime()) {
 						if(currentMouseOverMarker != null)
 							recordGrid.getTimeModel().removeMarker(currentMouseOverMarker);

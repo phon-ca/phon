@@ -363,11 +363,11 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 			MediaSegment recordSeg = r.getMediaSegment();
 			MediaSegment seg = SessionFactory.newFactory().createMediaSegment();
-			float startValue =  Math.max(0, recordSeg.getStartValue() - (1000.0f * secondsToAdd));
-			float endValue = Math.min(getTimeModel().getEndTime() * 1000.0f, recordSeg.getEndValue() + (1000.0f * secondsToAdd));
+			float startValue =  Math.max(0, recordSeg.getStartTime() - secondsToAdd);
+			float endValue = Math.min(getTimeModel().getEndTime(), recordSeg.getEndTime() + secondsToAdd);
 
-			seg.setStartValue(startValue);
-			seg.setEndValue(endValue);
+			seg.setStartTime(startValue);
+			seg.setEndTime(endValue);
 
 			final RecordSegmentEdit changeSeg = new RecordSegmentEdit(getParentView().getEditor(), r, seg);
 			changeSeg.setFireHardChangeOnUndo(true);
@@ -581,22 +581,22 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 			Toolkit.getDefaultToolkit().beep();
 			return;
 		}
-		float ms = confirmedValue.floatValue();
+		float offset = confirmedValue.floatValue() / 1000.0f;
 
 		boolean firstChange = true;
 		getParentView().getEditor().getUndoSupport().beginUpdate();
 		for(int recordIndex:getSelectionModel().getSelectedIndices()) {
 			Record r = getParentView().getEditor().getSession().getRecord(recordIndex);
 			MediaSegment seg = r.getMediaSegment();
-			float segLength = seg.getEndValue() - seg.getStartValue();
+			float segLength = seg.getLength();
 			MediaSegment newSeg = SessionFactory.newFactory().createMediaSegment();
 
-			if (ms > 0) {
-				newSeg.setEndValue(Math.min(getTimeModel().getEndTime()*1000.0f, seg.getEndValue()+ms));
-				newSeg.setStartValue(newSeg.getEndValue()-segLength);
-			} else if (ms < 0) {
-				newSeg.setStartValue(Math.max(0, seg.getStartValue() + ms));
-				newSeg.setEndValue(newSeg.getStartValue() + segLength);
+			if (offset > 0) {
+				newSeg.setEndTime(Math.min(getTimeModel().getEndTime(), seg.getEndTime()+offset));
+				newSeg.setStartTime(newSeg.getEndTime()-segLength);
+			} else if (offset < 0) {
+				newSeg.setStartTime(Math.max(0, seg.getStartTime() + offset));
+				newSeg.setEndTime(newSeg.getStartTime() + segLength);
 			}
 
 			final RecordSegmentEdit segEdit = new RecordSegmentEdit(getParentView().getEditor(), r, newSeg);
@@ -652,8 +652,8 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		int rIdx = getParentView().getEditor().getCurrentRecordIndex();
 
 		MediaSegment segment = r.getMediaSegment();
-		var segStartTime = segment.getStartValue() / 1000.0f;
-		var segEndTime = segment.getEndValue() / 1000.0f;
+		var segStartTime = segment.getStartTime();
+		var segEndTime = segment.getEndTime();
 
 		// check for 'GhostMarker's which, if present, will
 		// become the start/end marker for the record interval
@@ -861,11 +861,11 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		if (segment == null)
 			return;
 
-		float segLength = segment.getEndValue() - segment.getStartValue();
+		float segLength = segment.getLength();
 		if (segLength <= 0.0f)
 			return;
 
-		float middleOfRecord = (float) TimeUIModel.roundTime((segment.getEndValue() - (segLength / 2.0f)) / 1000.0f);
+		float middleOfRecord = (float) TimeUIModel.roundTime((segment.getEndTime() - (segLength / 2.0f)));
 		SplitMarker splitMarker = new SplitMarker(currentRecordInterval(), middleOfRecord);
 
 		splitMarker.addPropertyChangeListener("time", (e) -> {
@@ -938,15 +938,18 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 	private void updateSplitRecordTimes(float splitTime) {
 		Record leftRecord = recordGrid.getLeftRecordSplit();
 		MediaSegment leftSeg = leftRecord.getMediaSegment();
-		leftSeg.setEndValue(splitTime * 1000.0f);
+		leftSeg.setEndTime(splitTime);
 
 		Record rightRecord = recordGrid.getRightRecordSplit();
 		MediaSegment rightSeg = rightRecord.getMediaSegment();
 
-		long segOffset = (long) Math.ceil(timeAtX(getTimeModel().getTimeInsets().left + 1) * 1000.0f);
-		rightSeg.setStartValue((splitTime * 1000.0f) + segOffset);
+		rightSeg.setStartTime(splitTime);
 
-		getRecordGrid().repaintInterval(currentRecordInterval);
+		final Rectangle intervalRect = getRecordGrid().rectForInterval(currentRecordInterval.getStartMarker().getTime(), currentRecordInterval.getEndMarker().getTime());
+		// include record number, actions, and some padding
+		intervalRect.width += 80;
+
+		getRecordGrid().repaint(intervalRect.x, 0, intervalRect.width, getRecordGrid().getHeight());
 	}
 
 	private Tuple<Record, Record> getRecordSplit(float splitTime) {
@@ -956,13 +959,14 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		MediaSegment seg = recordToSplit.getMediaSegment();
 
 		Record leftRecord = sessionFactory.cloneRecord(recordToSplit);
-		leftRecord.getMediaSegment().setEndValue(splitTime * 1000.0f);
+		leftRecord.getMediaSegment().setEndTime(splitTime);
 
 		Record rightRecord = sessionFactory.createRecord(getParentView().getEditor().getSession());
 		MediaSegment rightSeg = sessionFactory.createMediaSegment();
-		long segOffset = (long) Math.ceil(timeAtX(getTimeModel().getTimeInsets().left + 1) * 1000.0f);
-		rightSeg.setStartValue((splitTime * 1000.0f) + segOffset);
-		rightSeg.setEndValue(seg.getEndValue());
+		rightSeg.setUnitType(seg.getUnitType());
+//		float segOffset = (float) Math.ceil(timeAtX(getTimeModel().getTimeInsets().left + 1));
+		rightSeg.setStartTime(splitTime);
+		rightSeg.setEndTime(seg.getEndTime());
 		rightRecord.setMediaSegment(rightSeg);
 
 		for (String tierName : leftRecord.getUserDefinedTierNames()) {
@@ -1275,13 +1279,14 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 				}
 			} else if(evt.getPropertyName().endsWith("time")) {
 				MediaSegment newSegment = factory.createMediaSegment();
+				newSegment.setUnitType(segment.getUnitType());
 				newSegment.setStartValue(segment.getStartValue());
 				newSegment.setEndValue(segment.getEndValue());
 
 				if(evt.getPropertyName().startsWith("startMarker")) {
-					newSegment.setStartValue((float)evt.getNewValue() * 1000.0f);
+					newSegment.setStartTime((float)evt.getNewValue());
 				} else if(evt.getPropertyName().startsWith("endMarker")) {
-					newSegment.setEndValue((float)evt.getNewValue() * 1000.0f);
+					newSegment.setEndTime((float)evt.getNewValue());
 				}
 
 				final RecordSegmentEdit segmentEdit = new RecordSegmentEdit(getParentView().getEditor(), r, newSegment);
@@ -1361,11 +1366,13 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 			MediaSegment recordSeg = r.getMediaSegment();
 			MediaSegment origSeg = SessionFactory.newFactory().createMediaSegment();
+			origSeg.setUnitType(recordSeg.getUnitType());
 			origSeg.setStartValue(recordSeg.getStartValue());
 			origSeg.setEndValue(recordSeg.getEndValue());
 			dragData.originalSegments.put(selectedRecord, origSeg);
 
 			MediaSegment editSegment = SessionFactory.newFactory().createMediaSegment();
+			editSegment.setUnitType(origSeg.getUnitType());
 			editSegment.setStartValue(origSeg.getStartValue());
 			editSegment.setEndValue(origSeg.getEndValue());
 			dragData.editSegments.put(selectedRecord, editSegment);
@@ -1391,10 +1398,11 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 				r.setSpeaker(dragData.participant);
 			MediaSegment origSegment = dragData.originalSegments.get(recordIndex);
 			if (currentRecordInterval != null && getRecordGrid().getCurrentRecordIndex() == recordIndex) {
-				currentRecordInterval.getStartMarker().setTime(origSegment.getStartValue());
-				currentRecordInterval.getEndMarker().setTime(origSegment.getEndValue());
+				currentRecordInterval.getStartMarker().setTime(origSegment.getStartTime());
+				currentRecordInterval.getEndMarker().setTime(origSegment.getEndTime());
 			} else {
 				MediaSegment recordSeg = r.getMediaSegment();
+				recordSeg.setUnitType(origSegment.getUnitType());
 				recordSeg.setStartValue(origSegment.getStartValue());
 				recordSeg.setEndValue(origSegment.getEndValue());
 			}
@@ -1463,7 +1471,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		public void recordPressed(int recordIndex, MouseEvent me) {
 			Record r = getParentView().getEditor().getSession().getRecord(recordIndex);
 			MediaSegment seg = r.getMediaSegment();
-			dragData.mouseDragOffset = getTimeModel().timeAtX(me.getX()) - seg.getStartValue() / 1000.0f;
+			dragData.mouseDragOffset = getTimeModel().timeAtX(me.getX()) - seg.getStartTime();
 		}
 
 		@Override
@@ -1525,7 +1533,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 				Record dragRecord = getRecordGrid().getSession().getRecord(dragData.draggedRecord);
 				MediaSegment dragSeg = dragRecord.getMediaSegment();
 
-				float startTime = dragSeg.getStartValue() / 1000.0f;
+				float startTime = dragSeg.getStartTime();
 				float oldOffsetTime = startTime + dragData.mouseDragOffset;
 				float newOffsetTime = recordGrid.timeAtX(me.getX());
 				int direction = (oldOffsetTime < newOffsetTime ? 1 : -1);
@@ -1536,9 +1544,9 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 					MediaSegment seg = selectedRecord.getMediaSegment();
 
 					float st = (rIdx == getRecordGrid().getCurrentRecordIndex() ?
-							currentRecordInterval.getStartMarker().getTime() : seg.getStartValue() / 1000.0f);
+							currentRecordInterval.getStartMarker().getTime() : seg.getStartTime());
 					float et = (rIdx == getRecordGrid().getCurrentRecordIndex() ?
-							currentRecordInterval.getEndMarker().getTime() : seg.getEndValue() / 1000.0f);
+							currentRecordInterval.getEndMarker().getTime() : seg.getEndTime());
 					float intervalDuration = et - st;
 
 					float newStartTime = 0.0f;
@@ -1556,8 +1564,8 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 						currentRecordInterval.getEndMarker().setTime(newEndTime);
 					} else {
 						MediaSegment editSeg = dragData.editSegments.get(rIdx);
-						editSeg.setStartValue(newStartTime * 1000.0f);
-						editSeg.setEndValue(newEndTime * 1000.0f);
+						editSeg.setStartTime(newStartTime);
+						editSeg.setEndTime(newEndTime);
 
 						if(dragData.isFirstChange) {
 							final RecordSegmentEdit tierEdit = new RecordSegmentEdit(getParentView().getEditor(), selectedRecord, editSeg);
