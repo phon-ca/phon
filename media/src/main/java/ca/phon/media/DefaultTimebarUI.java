@@ -124,13 +124,11 @@ public class DefaultTimebarUI extends TimebarUI {
 		Rectangle clipRect = timebar.getVisibleRect();
 		int leftInset = timebar.getTimeModel().getTimeInsets().left;
 		int rightInset = timebar.getTimeModel().getTimeInsets().right;
-		int startX = (clipRect.x < leftInset ? leftInset : 
-			// start at most recent major tick
-			clipRect.x - (clipRect.x % 100));
-		
-		for(int tickPos = startX; 
+		int startX = (clipRect.x < leftInset ? leftInset :
+				leftInset + (100 * ((clipRect.x / 100)-1)));
+		for(int tickPos = startX;
 				tickPos <= clipRect.x + clipRect.width && tickPos <= timebar.getWidth() - rightInset; 
-				tickPos += 10) {
+				tickPos += 20) {
 			if(tickPos > timebar.xForTime(timebar.getTimeModel().getEndTime()))
 				break;
 			
