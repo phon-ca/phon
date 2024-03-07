@@ -1194,7 +1194,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             int recordIndex = session.getRecordPosition(record);
             final StartEnd tierRange = getTierContentRange(recordIndex, tier.getName());
             if(tierRange.start() < 0) return;
-            final SimpleAttributeSet tierAttrs = new SimpleAttributeSet(getCharacterElement(tierRange.start()).getAttributes());
+            final SimpleAttributeSet tierAttrs = new SimpleAttributeSet();
+            tierAttrs.addAttributes(getTranscriptStyleContext().getRecordAttributes(record));
+            tierAttrs.addAttributes(getTranscriptStyleContext().getTierAttributes(tier));
 
             bypassDocumentFilter = true;
             remove(tierRange.start(), tierRange.end() - tierRange.start());
