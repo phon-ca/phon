@@ -81,6 +81,144 @@ public final class MediaSegment extends ExtendableObject {
 	}
 
 	/**
+	 * Return start time in seconds
+	 *
+	 * @return start time in seconds
+	 */
+	public float getStartTime() {
+		if(getUnitType() == MediaUnit.Second) {
+			return getStartValue();
+		} else if(getUnitType() == MediaUnit.Millisecond) {
+			return getStartValue() / 1000.0f;
+		} else {
+			throw new IllegalArgumentException("Unsupported unit type: " + getUnitType());
+		}
+	}
+
+	/**
+	 * Set start time in seconds
+	 *
+	 * @param startTime
+	 */
+	public void setStartTime(float startTime) {
+		if(getUnitType() == MediaUnit.Second) {
+			setStartValue(startTime);
+		} else if(getUnitType() == MediaUnit.Millisecond) {
+			setStartValue(startTime * 1000.0f);
+		} else {
+			throw new IllegalArgumentException("Unsupported unit type: " + getUnitType());
+		}
+	}
+
+	/**
+	 * Return start time in milliseconds
+	 *
+	 * @return start time in milliseconds
+	 */
+	public long getStartValueMs() {
+		if(getUnitType() == MediaUnit.Second) {
+			return (long)(getStartValue() * 1000.0f);
+		} else if(getUnitType() == MediaUnit.Millisecond) {
+			return (long)getStartValue();
+		} else {
+			throw new IllegalArgumentException("Unsupported unit type: " + getUnitType());
+		}
+	}
+
+	/**
+	 * Set start time in milliseconds
+	 *
+	 * @param startTime
+	 */
+	public void setStartTimeMs(long startTime) {
+		if(getUnitType() == MediaUnit.Second) {
+			setStartValue(startTime / 1000.0f);
+		} else if(getUnitType() == MediaUnit.Millisecond) {
+			setStartValue(startTime);
+		} else {
+			throw new IllegalArgumentException("Unsupported unit type: " + getUnitType());
+		}
+	}
+
+	/**
+	 * Return end time in seconds
+	 *
+	 * @return end time in seconds
+	 */
+	public float getEndTime() {
+		if(getUnitType() == MediaUnit.Second) {
+			return getEndValue();
+		} else if(getUnitType() == MediaUnit.Millisecond) {
+			return getEndValue() / 1000.0f;
+		} else {
+			throw new IllegalArgumentException("Unsupported unit type: " + getUnitType());
+		}
+	}
+
+	/**
+	 * Set end time in seconds
+	 *
+	 * @param endTime
+	 */
+	public void setEndTime(float endTime) {
+		if(getUnitType() == MediaUnit.Second) {
+			setEndValue(endTime);
+		} else if(getUnitType() == MediaUnit.Millisecond) {
+			setEndValue(endTime * 1000.0f);
+		} else {
+			throw new IllegalArgumentException("Unsupported unit type: " + getUnitType());
+		}
+	}
+
+	/**
+	 * Return end time in milliseconds
+	 *
+	 * @return end time in milliseconds
+	 */
+	public long getEndValueMs() {
+		if(getUnitType() == MediaUnit.Second) {
+			return (long)(getEndValue() * 1000.0f);
+		} else if(getUnitType() == MediaUnit.Millisecond) {
+			return (long)getEndValue();
+		} else {
+			throw new IllegalArgumentException("Unsupported unit type: " + getUnitType());
+		}
+	}
+
+	/**
+	 * Set end time in milliseconds
+	 *
+	 * @param endTime
+	 */
+	public void setEndTimeMs(long endTime) {
+		if(getUnitType() == MediaUnit.Second) {
+			setEndValue(endTime / 1000.0f);
+		} else if(getUnitType() == MediaUnit.Millisecond) {
+			setEndValue(endTime);
+		} else {
+			throw new IllegalArgumentException("Unsupported unit type: " + getUnitType());
+		}
+	}
+
+	/**
+	 * Return segment length in seconds
+	 *
+	 * @return length in seconds
+	 */
+	public float getLength() {
+		return getEndTime() - getStartTime();
+	}
+
+	/**
+	 * Return segment length in milliseconds
+	 *
+	 * @return length in milliseconds
+	 */
+	public long getLengthMs() {
+		return getEndValueMs() - getStartValueMs();
+	}
+
+	/**
 	 * Set media unit for segment
 	 *
 	 * @param mediaUnit
@@ -102,11 +240,11 @@ public final class MediaSegment extends ExtendableObject {
 	}
 
 	/**
-	 * Is the media segment 'unset'
+	 * Is the media segment a single point at the origin (0.0f)
 	 *
 	 * @return true if isPoint() == true && getStartValue() == 0.0f
 	 */
-	public boolean isUnset() {
+	public boolean isPointAtOrigin() {
 		return isPoint() && getStartValue() == 0.0f;
 	}
 
