@@ -896,18 +896,17 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 				&& getRecordGrid().getRightRecordSplit() != null) {
 			getParentView().getEditor().getUndoSupport().beginUpdate();
 
+			final Record record = getParentView().getEditor().currentRecord();
 			int recordIdx = getParentView().getEditor().getCurrentRecordIndex();
-
-			DeleteRecordEdit delRecord = new DeleteRecordEdit(getParentView().getEditor(), getParentView().getEditor().getCurrentRecordIndex());
-			getParentView().getEditor().getUndoSupport().postEdit(delRecord);
+			int recordElementIdx = getParentView().getEditor().getSession().getRecordElementIndex(recordIdx);
 
 			AddRecordEdit rightRecordEdit = new AddRecordEdit(getParentView().getEditor(),
-					getRecordGrid().getRightRecordSplit(), recordIdx);
+					getRecordGrid().getRightRecordSplit(), recordElementIdx+1);
 			getParentView().getEditor().getUndoSupport().postEdit(rightRecordEdit);
 
-			AddRecordEdit leftRecordEdit = new AddRecordEdit(getParentView().getEditor(),
-					getRecordGrid().getLeftRecordSplit(), recordIdx);
-			getParentView().getEditor().getUndoSupport().postEdit(leftRecordEdit);
+			TierEdit<MediaSegment> segEdit = new TierEdit<>(getParentView().getEditor(),
+					record.getSegmentTier(), getRecordGrid().getLeftRecordSplit().getMediaSegment());
+			getParentView().getEditor().getUndoSupport().postEdit(segEdit);
 
 			getParentView().getEditor().getUndoSupport().endUpdate();
 		}
