@@ -1,11 +1,15 @@
 package ca.phon.app.session.editor.view.transcript.extensions;
 
 import ca.phon.app.log.LogUtil;
+import ca.phon.app.session.editor.EditorEvent;
+import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.transcript.*;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.Record;
+import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
+import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.ui.CalloutWindow;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
@@ -44,7 +48,7 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
         this.editor = editor;
 
         editor.addKeyListener(onSpace);
-        editor.addCaretListener(onCaretMove);
+//        editor.addCaretListener(onCaretMove);
 
         editor.getTranscriptDocument().addInsertionHook(new DefaultInsertionHook() {
             @Override
@@ -62,6 +66,8 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
                 return new ArrayList<>();
             }
         });
+
+        editor.getEventManager().registerActionForEvent(TranscriptEditor.transcriptLocationChanged, this::onTranscriptLocationChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
     }
 
     /**
@@ -83,39 +89,78 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
         }
     };
 
-    /**
-     * A {@link CaretListener} that handles segment selection when the caret moves into and out of segments
-     * */
-    private final CaretListener onCaretMove = new CaretListener() {
-        @Override
-        public void caretUpdate(CaretEvent e) {
-            TranscriptDocument doc = editor.getTranscriptDocument();
-            AttributeSet attrs = doc.getCharacterElement(e.getDot()).getAttributes();
-
-            MediaSegment segment = (MediaSegment) attrs.getAttribute("mediaSegment");
-            boolean isSegment = segment != null;
-
-            int segmentIncludedPos = e.getDot();
-            if (!isSegment) {
-                segment = (MediaSegment) doc.getCharacterElement(e.getDot() - 1).getAttributes().getAttribute("mediaSegment");
-                segmentIncludedPos--;
-            }
-
-            if (segment != null) {
-                if (!segment.equals(selectedSegment)) {
-                    selectedSegment = segment;
-                    TranscriptDocument.StartEnd segmentBounds = doc.getSegmentBounds(segment, segmentIncludedPos);
+//    /**
+//     * A {@link CaretListener} that handles segment selection when the caret moves into and out of segments
+//     * */
+//    private final CaretListener onCaretMove = new CaretListener() {
+//        @Override
+//        public void caretUpdate(CaretEvent e) {
+//            TranscriptDocument doc = editor.getTranscriptDocument();
+//            AttributeSet attrs = doc.getCharacterElement(e.getDot()).getAttributes();
+//
+//            MediaSegment segment = (MediaSegment) attrs.getAttribute("mediaSegment");
+//            boolean isSegment = segment != null;
+//
+//            int segmentIncludedPos = e.getDot();
+//            if (!isSegment) {
+//                segment = (MediaSegment) doc.getCharacterElement(e.getDot() - 1).getAttributes().getAttribute("mediaSegment");
+//                segmentIncludedPos--;
+//            }
+//
+//            if (segment != null) {
+//                if (!segment.equals(selectedSegment)) {
+//                    selectedSegment = segment;
+//                    TranscriptDocument.StartEnd segmentBounds = doc.getSegmentBounds(segment, segmentIncludedPos);
+//                    editor.boxSelectBounds(segmentBounds);
+//                }
+//            }
+//            else {
+//                if (selectedSegment != null) {
+//                    editor.removeCurrentBoxSelect();
+//                    selectedSegment = null;
+//                }
+//            }
+//        }
+//    };
+//
+    private void onTranscriptLocationChanged(EditorEvent<TranscriptEditor.TranscriptLocationChangeData> evt) {
+        final TranscriptElementLocation loc = evt.getData().get().newLoc();
+        if(SystemTierType.Segment.getName().equals(loc.tier())) {
+            final int recordIndex = editor.getSession().getTranscript().getRecordIndex(loc.transcriptElementIndex());
+            if(recordIndex >= 0) {
+                final Record record = editor.getSession().getRecord(recordIndex);
+                final var segmentTier = record.getSegmentTier();
+                final var segmentBounds = editor.getTranscriptDocument().getTierContentRange(recordIndex, loc.tier());
+                if (segmentBounds.valid()) {
+                    selectedSegment = segmentTier.getValue();
                     editor.boxSelectBounds(segmentBounds);
-                }
-            }
-            else {
-                if (selectedSegment != null) {
-                    editor.removeCurrentBoxSelect();
-                    selectedSegment = null;
+                    return;
                 }
             }
         }
-    };
+
+        // remove box select if we are not in a segment anymore
+        if(selectedSegment != null) {
+            editor.removeCurrentBoxSelect();
+            selectedSegment = null;
+        }
+//        final var doc = editor.getTranscriptDocument();
+//        final var attrs = doc.getCharacterElement(evt.getData().get().newLoc().).getAttributes();
+//        final var segment = (MediaSegment) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_MEDIA_SEGMENT);
+//        if(segment != null) {
+//            final var segmentIncludedPos = caretPos;
+//            if (!segment.equals(selectedSegment)) {
+//                selectedSegment = segment;
+//                final var segmentBounds = doc.getSegmentBounds(segment, segmentIncludedPos);
+//                editor.boxSelectBounds(segmentBounds);
+//            }
+//        } else {
+//            if (selectedSegment != null) {
+//                editor.removeCurrentBoxSelect();
+//                selectedSegment = null;
+//            }
+//        }
+    }
 
     private record SegmentCalloutInfo(Record record, Tier<MediaSegment> segmentTier) {}
 

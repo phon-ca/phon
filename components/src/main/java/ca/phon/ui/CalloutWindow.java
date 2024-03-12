@@ -1,6 +1,7 @@
 package ca.phon.ui;
 
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.util.OSInfo;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -11,12 +12,20 @@ import java.awt.event.*;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Path2D;
 
+/**
+ * Window with a callout arrow that can be shown at a specific location on the screen.
+ * This class is used to create a custom JDialog with a callout arrow that can point to a specific location on the screen.
+ * The callout arrow can be positioned on the north, south, east, or west side of the window.
+ */
 public class CalloutWindow extends JDialog {
     private final static int TRIANGLE_HEIGHT = 12;
     private final static int TRIANGLE_BASE = 20;
     private final static int ARROW_EDGE_PADDING = 4;
     private Component content;
     private Shape shape;
+
+    private Shape borderShape;
+
     private Point relativeArrowPoint = null;
     private int cornerRadius = 4;
     private int arrowCornerRadius = 2;
@@ -56,6 +65,16 @@ public class CalloutWindow extends JDialog {
         shape = createShape(
             (int) (d.getWidth()),
             (int) (d.getHeight() + closePanel.getPreferredSize().getHeight() + cornerRadius),
+            TRIANGLE_BASE,
+            TRIANGLE_HEIGHT,
+            cornerRadius,
+            sideOfWindow,
+            topMiddleBottom
+        );
+
+        borderShape = createShape(
+            (int) (d.getWidth()-1),
+            (int) (d.getHeight() + closePanel.getPreferredSize().getHeight() + cornerRadius) - 1,
             TRIANGLE_BASE,
             TRIANGLE_HEIGHT,
             cornerRadius,
@@ -106,6 +125,19 @@ public class CalloutWindow extends JDialog {
 
         if (pointAtPos != null) {
             setLocation(pointAtPos.x - relativeArrowPoint.x, pointAtPos.y - relativeArrowPoint.y);
+        }
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+        if(OSInfo.isWindows()) {
+            final Graphics2D g2d = (Graphics2D) g;
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+            g2d.setColor(Color.black);
+            g2d.setStroke(new BasicStroke(2));
+            g2d.draw(borderShape);
         }
     }
 

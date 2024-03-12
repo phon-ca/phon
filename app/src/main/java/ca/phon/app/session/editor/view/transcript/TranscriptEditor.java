@@ -2305,7 +2305,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     public void boxSelectBounds(TranscriptDocument.StartEnd bounds) {
         try {
             removeCurrentBoxSelect();
-            currentBoxSelect = getHighlighter().addHighlight(bounds.start(), bounds.end() + 1, boxSelectPainter);
+            currentBoxSelect = getHighlighter().addHighlight(bounds.start(), bounds.end(), boxSelectPainter);
         } catch (BadLocationException ex) {
             throw new RuntimeException(ex);
         }
