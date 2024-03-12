@@ -176,9 +176,9 @@ public class SegmentEditorPopup extends TimeComponent {
     private void setMediaSegment(float startTime, float endTime) {
         var oldVal = this.segment;
         this.segment = SessionFactory.newFactory().createMediaSegment();
+        this.segment.setUnitType(oldVal.getUnitType());
         this.segment.setStartValue(startTime);
         this.segment.setEndValue(endTime);
-        this.segment.setUnitType(oldVal.getUnitType());
         firePropertyChange("segment", oldVal, this.segment);
     }
 

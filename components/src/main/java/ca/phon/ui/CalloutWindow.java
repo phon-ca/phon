@@ -21,7 +21,7 @@ public class CalloutWindow extends JDialog {
     private final static int TRIANGLE_HEIGHT = 12;
     private final static int TRIANGLE_BASE = 20;
     private final static int ARROW_EDGE_PADDING = 4;
-    private Component content;
+    private JComponent content;
     private Shape shape;
 
     private Shape borderShape;
@@ -30,9 +30,10 @@ public class CalloutWindow extends JDialog {
     private int cornerRadius = 4;
     private int arrowCornerRadius = 2;
 
-    public CalloutWindow(JFrame frame, Component content, int sideOfWindow, int topMiddleBottom, Point pointAtPos) {
+    public CalloutWindow(JFrame frame, JComponent content, int sideOfWindow, int topMiddleBottom, Point pointAtPos) {
         super(frame, false);
         this.content = content;
+        this.content.setBorder(BorderFactory.createEmptyBorder(0, 5, 5, 5));
         init(sideOfWindow, topMiddleBottom, pointAtPos);
         getContentPane().setBackground(UIManager.getColor("CalloutWindow.background"));
     }
@@ -49,15 +50,15 @@ public class CalloutWindow extends JDialog {
 
         JPanel closePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         closePanel.setBorder(new EmptyBorder(topOfRect, 0, 0, rightOfRect));
-        JButton closeButton = new JButton();
         PhonUIAction<Void> closeAct = PhonUIAction.eventConsumer((e) -> dispose(), null);
-        final ImageIcon closeIcon =
-                IconManager.getInstance().getIcon("actions/button_cancel", IconSize.XSMALL);
-        closeAct.putValue(PhonUIAction.SMALL_ICON, closeIcon);
-        closeButton.setAction(closeAct);
-        closeButton.setPreferredSize(new Dimension(12, 12));
-        closeButton.setBorder(null);
-        closeButton.setOpaque(false);
+        closeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Close");
+        closeAct.putValue(FlatButton.ICON_NAME_PROP, "close");
+        closeAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+        closeAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.SMALL);
+        FlatButton closeButton = new FlatButton(closeAct);
+        closeButton.setBackground(UIManager.getColor("CalloutWindow.background"));
+        closeButton.setBgColor(UIManager.getColor("CalloutWindow.background"));
+        closeButton.setPadding(0);
         closePanel.add(closeButton);
 
         // endregion Close button and panel
@@ -141,7 +142,7 @@ public class CalloutWindow extends JDialog {
         }
     }
 
-    public static CalloutWindow showCallout(JFrame owner, Component content, int sideOfWindow, int topMiddleBottom, Point pointAtPos) {
+    public static CalloutWindow showCallout(JFrame owner, JComponent content, int sideOfWindow, int topMiddleBottom, Point pointAtPos) {
         // Create a custom JDialog
         CalloutWindow dialog = new CalloutWindow(owner, content, sideOfWindow, topMiddleBottom, pointAtPos);
         dialog.pack();
@@ -150,7 +151,7 @@ public class CalloutWindow extends JDialog {
         return dialog;
     }
 
-    public static CalloutWindow showNonFocusableCallout(JFrame owner, Component content, int sideOfWindow, int topMiddleBottom, Point pointAtPos) {
+    public static CalloutWindow showNonFocusableCallout(JFrame owner, JComponent content, int sideOfWindow, int topMiddleBottom, Point pointAtPos) {
         // Create a custom JDialog
         CalloutWindow dialog = new CalloutWindow(owner, content, sideOfWindow, topMiddleBottom, pointAtPos);
         dialog.setFocusable(false);
