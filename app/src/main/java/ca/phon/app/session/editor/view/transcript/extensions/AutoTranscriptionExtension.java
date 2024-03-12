@@ -343,6 +343,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
 //                optionsPanel.setPreferredSize(new Dimension(200, 100));
 
                 final AutoTranscriptionOptionsContent optionsContent = new AutoTranscriptionOptionsContent(autoTranscript);
+                optionsContent.setPreferredSize(new Dimension(200, 100));
                 optionsContentRef.set(optionsContent);
 
                 final CalloutWindow calloutWindow = CalloutWindow.showNonFocusableCallout(

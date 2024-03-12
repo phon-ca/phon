@@ -75,7 +75,7 @@ public class CalloutWindow extends JDialog {
 
         borderShape = createShape(
             (int) (d.getWidth()-1),
-            (int) (d.getHeight() + closePanel.getPreferredSize().getHeight() + cornerRadius) - 1,
+            (int) (d.getHeight() + closePanel.getPreferredSize().getHeight() + cornerRadius) - 13,
             TRIANGLE_BASE,
             TRIANGLE_HEIGHT,
             cornerRadius,
@@ -132,7 +132,8 @@ public class CalloutWindow extends JDialog {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        if(OSInfo.isWindows()) {
+        // macos provides its own border
+        if(!OSInfo.isMacOs()) {
             final Graphics2D g2d = (Graphics2D) g;
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
