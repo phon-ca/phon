@@ -231,27 +231,28 @@ public class TranscriptViewFactory implements ViewFactory {
         @Override
         public void paint(Graphics g, Shape a) {
             g.clearRect(a.getBounds().x, a.getBounds().y, a.getBounds().width, a.getBounds().height);
-            final boolean isLabel = TranscriptStyleConstants.isLabel(getAttributes());
-            g.setColor(Color.WHITE);
-            if(isLabel) {
-                g.setColor(UIManager.getColor(TranscriptEditorUIProps.LABEL_BACKGROUND));
-            } else {
-                final String elementType = TranscriptStyleConstants.getElementType(getAttributes());
-                if (elementType != null) {
-                    switch (elementType) {
-                        case TranscriptStyleConstants.ELEMENT_TYPE_COMMENT -> {
-                            g.setColor(UIManager.getColor(TranscriptEditorUIProps.COMMENT_BACKGROUND));
-                        }
-                        case TranscriptStyleConstants.ELEMENT_TYPE_GEM -> {
-                            g.setColor(UIManager.getColor(TranscriptEditorUIProps.GEM_BACKGROUND));
-                        }
-                        case TranscriptStyleConstants.ELEMENT_TYPE_GENERIC -> {
-                            g.setColor(UIManager.getColor(TranscriptEditorUIProps.GENERIC_BACKGROUND));
-                        }
-                    }
-                }
-            }
-            g.fillRect(a.getBounds().x, a.getBounds().y, a.getBounds().width, a.getBounds().height);
+            // XXX - this is a hack to get the background color to paint correctly, not working on windows
+//            final boolean isLabel = TranscriptStyleConstants.isLabel(getAttributes());
+//            g.setColor(Color.WHITE);
+//            if(isLabel) {
+//                g.setColor(UIManager.getColor(TranscriptEditorUIProps.LABEL_BACKGROUND));
+//            } else {
+//                final String elementType = TranscriptStyleConstants.getElementType(getAttributes());
+//                if (elementType != null) {
+//                    switch (elementType) {
+//                        case TranscriptStyleConstants.ELEMENT_TYPE_COMMENT -> {
+//                            g.setColor(UIManager.getColor(TranscriptEditorUIProps.COMMENT_BACKGROUND));
+//                        }
+//                        case TranscriptStyleConstants.ELEMENT_TYPE_GEM -> {
+//                            g.setColor(UIManager.getColor(TranscriptEditorUIProps.GEM_BACKGROUND));
+//                        }
+//                        case TranscriptStyleConstants.ELEMENT_TYPE_GENERIC -> {
+//                            g.setColor(UIManager.getColor(TranscriptEditorUIProps.GENERIC_BACKGROUND));
+//                        }
+//                    }
+//                }
+//            }
+//            g.fillRect(a.getBounds().x, a.getBounds().y, a.getBounds().width, a.getBounds().height);
             super.paint(g, a);
         }
 
@@ -320,27 +321,28 @@ public class TranscriptViewFactory implements ViewFactory {
         @Override
         public void paint(Graphics g, Shape a) {
             g.clearRect(a.getBounds().x, a.getBounds().y, a.getBounds().width, a.getBounds().height);
-            final boolean isLabel = TranscriptStyleConstants.isLabel(getAttributes());
-            g.setColor(Color.WHITE);
-            if(isLabel) {
-                g.setColor(UIManager.getColor(TranscriptEditorUIProps.LABEL_BACKGROUND));
-            } else {
-                final String elementType = TranscriptStyleConstants.getElementType(getAttributes());
-                if (elementType != null) {
-                    switch (elementType) {
-                        case TranscriptStyleConstants.ELEMENT_TYPE_COMMENT -> {
-                            g.setColor(UIManager.getColor(TranscriptEditorUIProps.COMMENT_BACKGROUND));
-                        }
-                        case TranscriptStyleConstants.ELEMENT_TYPE_GEM -> {
-                            g.setColor(UIManager.getColor(TranscriptEditorUIProps.GEM_BACKGROUND));
-                        }
-                        case TranscriptStyleConstants.ELEMENT_TYPE_GENERIC -> {
-                            g.setColor(UIManager.getColor(TranscriptEditorUIProps.GENERIC_BACKGROUND));
-                        }
-                    }
-                }
-            }
-            g.fillRect(a.getBounds().x, a.getBounds().y, a.getBounds().width, a.getBounds().height);
+            // XXX - this is a hack to get the background color to paint correctly, not working on windows
+//            final boolean isLabel = TranscriptStyleConstants.isLabel(getAttributes());
+//            g.setColor(Color.WHITE);
+//            if(isLabel) {
+//                g.setColor(UIManager.getColor(TranscriptEditorUIProps.LABEL_BACKGROUND));
+//            } else {
+//                final String elementType = TranscriptStyleConstants.getElementType(getAttributes());
+//                if (elementType != null) {
+//                    switch (elementType) {
+//                        case TranscriptStyleConstants.ELEMENT_TYPE_COMMENT -> {
+//                            g.setColor(UIManager.getColor(TranscriptEditorUIProps.COMMENT_BACKGROUND));
+//                        }
+//                        case TranscriptStyleConstants.ELEMENT_TYPE_GEM -> {
+//                            g.setColor(UIManager.getColor(TranscriptEditorUIProps.GEM_BACKGROUND));
+//                        }
+//                        case TranscriptStyleConstants.ELEMENT_TYPE_GENERIC -> {
+//                            g.setColor(UIManager.getColor(TranscriptEditorUIProps.GENERIC_BACKGROUND));
+//                        }
+//                    }
+//                }
+//            }
+//            g.fillRect(a.getBounds().x, a.getBounds().y, a.getBounds().width, a.getBounds().height);
             super.paint(g, a);
         }
 

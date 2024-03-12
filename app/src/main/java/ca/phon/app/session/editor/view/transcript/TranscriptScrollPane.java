@@ -4,6 +4,7 @@ import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventManager;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
@@ -30,6 +31,8 @@ public class TranscriptScrollPane extends JScrollPane {
         this.transcriptEditor = transcriptEditor;
         registerEditorActions();
         initUI();
+
+        setBackground(Color.white);
     }
 
     /**

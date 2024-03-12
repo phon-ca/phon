@@ -168,7 +168,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         this.eventManager = eventManager;
         this.undoSupport = undoSupport;
         this.undoManager = undoManager;
-        setOpaque(false);
+//        setOpaque(false);
         initActions();
         registerEditorActions();
         super.setEditorKitForContentType(TranscriptEditorKit.CONTENT_TYPE, new TranscriptEditorKit());
@@ -1301,105 +1301,106 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
 
     @Override
     protected void paintComponent(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setRenderingHint(
-                RenderingHints.KEY_TEXT_ANTIALIASING,
-                RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        g2d.setRenderingHint(
-                RenderingHints.KEY_RENDERING,
-                RenderingHints.VALUE_RENDER_QUALITY);
-
-        TranscriptDocument doc = getTranscriptDocument();
-        // Get the clip bounds of the current view
-        Rectangle drawHere = g.getClipBounds();
-
-        // Fill the background with the appropriate color
-        g.setColor(UIManager.getColor(TranscriptEditorUIProps.BACKGROUND));
-        g.fillRect(0, drawHere.y, drawHere.width, drawHere.height);
-
-        // Fill the label column background with the appropriate color
-        g.setColor(UIManager.getColor(TranscriptEditorUIProps.LABEL_BACKGROUND));
-        FontMetrics fontMetrics = g.getFontMetrics(FontPreferences.getMonospaceFont().deriveFont(14.0f));
-        final int labelColumnWidth = TranscriptViewFactory.LABEL_COLUMN_WIDTH;
-//        char[] template = new char[getTranscriptDocument().getLabelColumnWidth() + 1];
-//        Arrays.fill(template, ' ');
-//        int labelColWidth = fontMetrics.stringWidth(new String(template));
-        Rectangle labelColRect = new Rectangle(0, 0, labelColumnWidth, getHeight());
-        if (labelColRect.intersects(drawHere)) {
-            g.fillRect(0, (int) drawHere.getMinY(), labelColumnWidth, drawHere.height);
-        }
-
-        Element root = doc.getDefaultRootElement();
-        if (root.getElementCount() == 0) return;
-
-        for (int i = 0; i < root.getElementCount(); i++) {
-            Element elem = root.getElement(i);
-            if (elem.getElementCount() == 0) continue;
-            Element innerElem = elem.getElement(0);
-            AttributeSet attrs = elem.getAttributes();
-            String elementType = (String) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
-            if (elementType != null) {
-                var startEnd = new TranscriptDocument.StartEnd(-1, -1);
-
-                switch (elementType) {
-                    case TranscriptStyleConstants.ELEMENT_TYPE_COMMENT -> {
-                        g.setColor(UIManager.getColor(TranscriptEditorUIProps.COMMENT_BACKGROUND));
-                        Comment comment = (Comment) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT);
-                        startEnd = doc.getCommentContentStartEnd(comment);
-                    }
-                    case TranscriptStyleConstants.ELEMENT_TYPE_GEM -> {
-                        g.setColor(UIManager.getColor(TranscriptEditorUIProps.GEM_BACKGROUND));
-                        Gem gem = (Gem) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM);
-                        startEnd = doc.getGemContentStartEnd(gem);
-                    }
-                    case TranscriptStyleConstants.ELEMENT_TYPE_GENERIC -> {
-                        g.setColor(UIManager.getColor(TranscriptEditorUIProps.GENERIC_BACKGROUND));
-                        Tier<?> genericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER);
-                        startEnd = doc.getGenericContentStartEnd(genericTier);
-                    }
-                }
-                if (!startEnd.valid()) continue;
-                try {
-                    var startRect = modelToView2D(startEnd.start());
-                    var endRect = modelToView2D(startEnd.end());
-                    if (startRect == null || endRect == null) continue;
-                    var colorRect = new Rectangle(labelColumnWidth, (int) startRect.getMinY(), (int) (TranscriptViewFactory.PAGE_WIDTH - labelColumnWidth), (int) (endRect.getMaxY() - startRect.getMinY()));
-                    if (!drawHere.intersects(colorRect)) continue;
-                    g.fillRect((int) colorRect.getMinX(), (int) colorRect.getMinY(), (int) colorRect.getWidth(), (int) colorRect.getHeight());
-                } catch (BadLocationException e) {
-                    LogUtil.severe(e);
-                }
-            }
-        }
-
-        g.setColor(UIManager.getColor(TranscriptEditorUIProps.SEPARATOR_LINE));
-        int sepLineHeight = 1;
-        int fontHeight = fontMetrics.getHeight();
-
-        float lineSpacing = StyleConstants.getLineSpacing(root.getElement(0).getAttributes());
-        int sepLineOffset = (int) (((fontHeight * lineSpacing) + sepLineHeight) / 2);
-        // For every element
-        for (int i = 0; i < root.getElementCount(); i++) {
-            Element elem = root.getElement(i);
-            if (elem.getElementCount() == 0) continue;
-            Element innerElem = elem.getElement(0);
-            AttributeSet attrs = innerElem.getAttributes();
-            // If it's a separator
-            if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_SEPARATOR) != null) {
-                try {
-                    var sepRect = modelToView2D(innerElem.getStartOffset());
-                    if (sepRect == null) continue;
-                    boolean topVisible = sepRect.getMinY() >= drawHere.getMinY() && sepRect.getMinY() <= drawHere.getMaxY();
-                    boolean bottomVisible = sepRect.getMaxY() >= drawHere.getMinY() && sepRect.getMaxY() <= drawHere.getMaxY();
-                    // And it's onscreen
-                    if (!topVisible && !bottomVisible) continue;
-                    // Draw the separator line
-                    g.fillRect(drawHere.x, ((int) sepRect.getMinY()) - sepLineOffset, drawHere.width, sepLineHeight);
-                } catch (BadLocationException e) {
-                    LogUtil.severe(e);
-                }
-            }
-        }
+        // XXX background colors are not being drawn correctly on windows
+//        Graphics2D g2d = (Graphics2D) g;
+//        g2d.setRenderingHint(
+//                RenderingHints.KEY_TEXT_ANTIALIASING,
+//                RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+//        g2d.setRenderingHint(
+//                RenderingHints.KEY_RENDERING,
+//                RenderingHints.VALUE_RENDER_QUALITY);
+//
+//        TranscriptDocument doc = getTranscriptDocument();
+//        // Get the clip bounds of the current view
+//        Rectangle drawHere = g.getClipBounds();
+//
+//        // Fill the background with the appropriate color
+//        g.setColor(UIManager.getColor(TranscriptEditorUIProps.BACKGROUND));
+//        g.fillRect(0, drawHere.y, drawHere.width, drawHere.height);
+//
+//        // Fill the label column background with the appropriate color
+//        g.setColor(UIManager.getColor(TranscriptEditorUIProps.LABEL_BACKGROUND));
+//        FontMetrics fontMetrics = g.getFontMetrics(FontPreferences.getMonospaceFont().deriveFont(14.0f));
+//        final int labelColumnWidth = TranscriptViewFactory.LABEL_COLUMN_WIDTH;
+////        char[] template = new char[getTranscriptDocument().getLabelColumnWidth() + 1];
+////        Arrays.fill(template, ' ');
+////        int labelColWidth = fontMetrics.stringWidth(new String(template));
+//        Rectangle labelColRect = new Rectangle(0, 0, labelColumnWidth, getHeight());
+//        if (labelColRect.intersects(drawHere)) {
+//            g.fillRect(0, (int) drawHere.getMinY(), labelColumnWidth, drawHere.height);
+//        }
+//
+//        Element root = doc.getDefaultRootElement();
+//        if (root.getElementCount() == 0) return;
+//
+//        for (int i = 0; i < root.getElementCount(); i++) {
+//            Element elem = root.getElement(i);
+//            if (elem.getElementCount() == 0) continue;
+//            Element innerElem = elem.getElement(0);
+//            AttributeSet attrs = elem.getAttributes();
+//            String elementType = (String) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
+//            if (elementType != null) {
+//                var startEnd = new TranscriptDocument.StartEnd(-1, -1);
+//
+//                switch (elementType) {
+//                    case TranscriptStyleConstants.ELEMENT_TYPE_COMMENT -> {
+//                        g.setColor(UIManager.getColor(TranscriptEditorUIProps.COMMENT_BACKGROUND));
+//                        Comment comment = (Comment) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT);
+//                        startEnd = doc.getCommentContentStartEnd(comment);
+//                    }
+//                    case TranscriptStyleConstants.ELEMENT_TYPE_GEM -> {
+//                        g.setColor(UIManager.getColor(TranscriptEditorUIProps.GEM_BACKGROUND));
+//                        Gem gem = (Gem) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM);
+//                        startEnd = doc.getGemContentStartEnd(gem);
+//                    }
+//                    case TranscriptStyleConstants.ELEMENT_TYPE_GENERIC -> {
+//                        g.setColor(UIManager.getColor(TranscriptEditorUIProps.GENERIC_BACKGROUND));
+//                        Tier<?> genericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER);
+//                        startEnd = doc.getGenericContentStartEnd(genericTier);
+//                    }
+//                }
+//                if (!startEnd.valid()) continue;
+//                try {
+//                    var startRect = modelToView2D(startEnd.start());
+//                    var endRect = modelToView2D(startEnd.end());
+//                    if (startRect == null || endRect == null) continue;
+//                    var colorRect = new Rectangle(labelColumnWidth, (int) startRect.getMinY(), (int) (TranscriptViewFactory.PAGE_WIDTH - labelColumnWidth), (int) (endRect.getMaxY() - startRect.getMinY()));
+//                    if (!drawHere.intersects(colorRect)) continue;
+//                    g.fillRect((int) colorRect.getMinX(), (int) colorRect.getMinY(), (int) colorRect.getWidth(), (int) colorRect.getHeight());
+//                } catch (BadLocationException e) {
+//                    LogUtil.severe(e);
+//                }
+//            }
+//        }
+//
+//        g.setColor(UIManager.getColor(TranscriptEditorUIProps.SEPARATOR_LINE));
+//        int sepLineHeight = 1;
+//        int fontHeight = fontMetrics.getHeight();
+//
+//        float lineSpacing = StyleConstants.getLineSpacing(root.getElement(0).getAttributes());
+//        int sepLineOffset = (int) (((fontHeight * lineSpacing) + sepLineHeight) / 2);
+//        // For every element
+//        for (int i = 0; i < root.getElementCount(); i++) {
+//            Element elem = root.getElement(i);
+//            if (elem.getElementCount() == 0) continue;
+//            Element innerElem = elem.getElement(0);
+//            AttributeSet attrs = innerElem.getAttributes();
+//            // If it's a separator
+//            if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_SEPARATOR) != null) {
+//                try {
+//                    var sepRect = modelToView2D(innerElem.getStartOffset());
+//                    if (sepRect == null) continue;
+//                    boolean topVisible = sepRect.getMinY() >= drawHere.getMinY() && sepRect.getMinY() <= drawHere.getMaxY();
+//                    boolean bottomVisible = sepRect.getMaxY() >= drawHere.getMinY() && sepRect.getMaxY() <= drawHere.getMaxY();
+//                    // And it's onscreen
+//                    if (!topVisible && !bottomVisible) continue;
+//                    // Draw the separator line
+//                    g.fillRect(drawHere.x, ((int) sepRect.getMinY()) - sepLineOffset, drawHere.width, sepLineHeight);
+//                } catch (BadLocationException e) {
+//                    LogUtil.severe(e);
+//                }
+//            }
+//        }
 
         super.paintComponent(g);
 

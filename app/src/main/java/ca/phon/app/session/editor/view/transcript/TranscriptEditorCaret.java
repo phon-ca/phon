@@ -5,6 +5,7 @@ import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.util.PrefHelper;
 import org.apache.logging.log4j.Level;
 
+import javax.swing.*;
 import javax.swing.plaf.TextUI;
 import javax.swing.text.*;
 import java.awt.*;
@@ -99,6 +100,7 @@ public class TranscriptEditorCaret extends DefaultCaret {
                         // to be repainted lest we leave a caret around.
                         repaint();
                     }
+
                     // This will potentially cause a repaint of something
                     // we're already repainting, but without changing the
                     // semantics of damage we can't really get around this.
