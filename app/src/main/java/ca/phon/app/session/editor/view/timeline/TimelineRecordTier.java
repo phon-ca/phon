@@ -912,6 +912,9 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 		}
 		if (currentRecordInterval != null)
 			getRecordGrid().repaintInterval(currentRecordInterval);
+
+		// update record interval
+		updateCurrentRecordInterval(getParentView().getEditor().currentRecord());
 		
 		splitButton.setVisible(true);
 		cancelSplitButton.setVisible(false);
