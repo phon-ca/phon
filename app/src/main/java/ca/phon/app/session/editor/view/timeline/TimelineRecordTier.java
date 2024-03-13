@@ -1569,10 +1569,10 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 						editSeg.setStartTime(newStartTime);
 						editSeg.setEndTime(newEndTime);
 
-						if(dragData.isFirstChange) {
+//						if(dragData.isFirstChange) {
 							final RecordSegmentEdit tierEdit = new RecordSegmentEdit(getParentView().getEditor(), selectedRecord, editSeg);
 							getParentView().getEditor().getUndoSupport().postEdit(tierEdit);
-						}
+//						}
 					}
 				}
 				dragData.isFirstChange = false;
