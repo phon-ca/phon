@@ -236,15 +236,45 @@ public class TranscriptView extends EditorView {
         final FlatButton tiersBtn = new FlatButton(tiersAct);
         tiersBtn.setPadding(2);
 
-        // transcript button
-        final PhonUIAction<Void> transcriptAct = PhonUIAction.eventConsumer(this::showTranscriptMenu);
-        transcriptAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
-        transcriptAct.putValue(FlatButton.ICON_NAME_PROP, "description");
-        transcriptAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
-        transcriptAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Transcript menu");
-        transcriptAct.putValue(PhonUIAction.NAME, "Transcript");
-        final FlatButton transcriptBtn = new FlatButton(transcriptAct);
-        transcriptBtn.setPadding(2);
+        // records button
+        final PhonUIAction<Void> recordsAct = PhonUIAction.eventConsumer(this::showRecordsMenu);
+        recordsAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+        recordsAct.putValue(FlatButton.ICON_NAME_PROP, "article");
+        recordsAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+        recordsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Records menu");
+        recordsAct.putValue(PhonUIAction.NAME, "Records");
+        final FlatButton recordsBtn = new FlatButton(recordsAct);
+        recordsBtn.setPadding(2);
+
+        // comments menu
+        final PhonUIAction<Void> commentsAct = PhonUIAction.eventConsumer(this::showCommentsMenu);
+        commentsAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+        commentsAct.putValue(FlatButton.ICON_NAME_PROP, "comment");
+        commentsAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+        commentsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Comments menu");
+        commentsAct.putValue(PhonUIAction.NAME, "Comments");
+        final FlatButton commentsBtn = new FlatButton(commentsAct);
+        commentsBtn.setPadding(2);
+
+        // gems menu
+        final PhonUIAction<Void> gemsAct = PhonUIAction.eventConsumer(this::showGemsMenu);
+        gemsAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+        gemsAct.putValue(FlatButton.ICON_NAME_PROP, "diamond");
+        gemsAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+        gemsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Gems menu");
+        gemsAct.putValue(PhonUIAction.NAME, "Gems");
+        final FlatButton gemsBtn = new FlatButton(gemsAct);
+        gemsBtn.setPadding(2);
+
+//        // transcript button
+//        final PhonUIAction<Void> transcriptAct = PhonUIAction.eventConsumer(this::showTranscriptMenu);
+//        transcriptAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+//        transcriptAct.putValue(FlatButton.ICON_NAME_PROP, "description");
+//        transcriptAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+//        transcriptAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Transcript menu");
+//        transcriptAct.putValue(PhonUIAction.NAME, "Transcript");
+//        final FlatButton transcriptBtn = new FlatButton(transcriptAct);
+//        transcriptBtn.setPadding(2);
 
 //        // single record mode button
 //        final PhonUIAction<Void> singleRecordModeAct = PhonUIAction.runnable(transcriptEditor::toggleSingleRecordView);
@@ -276,7 +306,10 @@ public class TranscriptView extends EditorView {
 
         iconStrip.add(participantsBtn, IconStrip.IconStripPosition.LEFT);
         iconStrip.add(tiersBtn, IconStrip.IconStripPosition.LEFT);
-        iconStrip.add(transcriptBtn, IconStrip.IconStripPosition.LEFT);
+        iconStrip.add(recordsBtn, IconStrip.IconStripPosition.LEFT);
+        iconStrip.add(commentsBtn, IconStrip.IconStripPosition.LEFT);
+        iconStrip.add(gemsBtn, IconStrip.IconStripPosition.LEFT);
+//        iconStrip.add(transcriptBtn, IconStrip.IconStripPosition.LEFT);
 //        iconStrip.add(findReplaceBtn, IconStrip.IconStripPosition.RIGHT);
 //        iconStrip.add(singleRecordModeBtn, IconStrip.IconStripPosition.RIGHT);
     }
@@ -650,9 +683,7 @@ public class TranscriptView extends EditorView {
         insertCommentBelowItem.setAction(insertCommentBelowAct);
         menuBuilder.addItem(".", insertCommentBelowItem);
 
-
         menuBuilder.addSeparator(".", "");
-
 
         if (!inHeaders) {
             JMenuItem insertGemAboveItem = new JMenuItem();
@@ -769,6 +800,239 @@ public class TranscriptView extends EditorView {
         menuBuilder.addItem(".", toggleChatTierNamesItem);
     }
 
+    /**
+     * Show records menu
+     *
+     */
+    private void showRecordsMenu(PhonActionEvent<Void> pae) {
+        JPopupMenu menu = new JPopupMenu();
+        MenuBuilder menuBuilder = new MenuBuilder(menu);
+        setupRecordMenu(menuBuilder);
+
+        JComponent source = (JComponent) pae.getActionEvent().getSource();
+        menu.show(
+            source,
+            0,
+            source.getHeight()
+        );
+    }
+
+    /**
+     * Setup record menu
+     *
+     * @param menuBuilder
+     */
+    private void setupRecordMenu(MenuBuilder menuBuilder) {
+        TranscriptElementLocation transcriptLocation = getTranscriptEditor().getCurrentSessionLocation();
+        int currentTranscriptElementIndex = transcriptLocation == null ? -1 : transcriptLocation.transcriptElementIndex();
+        boolean inHeaders = currentTranscriptElementIndex < 0;
+
+        JMenuItem insertRecordAboveItem = new JMenuItem();
+        PhonUIAction<Void> insertRecordAboveAct = PhonUIAction.runnable(() -> {
+            final AddRecordEdit edit = new AddRecordEdit(getEditor(), SessionFactory.newFactory().createRecord(), currentTranscriptElementIndex);
+            getEditor().getUndoSupport().postEdit(edit);
+        });
+        insertRecordAboveAct.putValue(PhonUIAction.NAME, "Insert record above");
+        insertRecordAboveItem.setAction(insertRecordAboveAct);
+        insertRecordAboveItem.setEnabled(!inHeaders);
+        menuBuilder.addItem(".", insertRecordAboveItem);
+
+        JMenuItem insertRecordBelowItem = new JMenuItem();
+        PhonUIAction<Void> insertRecordBelowAct = PhonUIAction.runnable(() -> {
+            Transcript transcript = getEditor().getSession().getTranscript();
+            final AddRecordEdit edit = new AddRecordEdit(getEditor(), SessionFactory.newFactory().createRecord(), currentTranscriptElementIndex+1);
+            getEditor().getUndoSupport().postEdit(edit);
+        });
+        insertRecordBelowAct.putValue(PhonUIAction.NAME, "Insert record below");
+        insertRecordBelowItem.setAction(insertRecordBelowAct);
+        menuBuilder.addItem(".", insertRecordBelowItem);
+
+        menuBuilder.addItem(".", new NewRecordAction(getEditor()));
+        menuBuilder.addSeparator(".", "add_record");
+
+        menuBuilder.addItem(".", new DuplicateRecordAction(getEditor()));
+        menuBuilder.addItem(".", new DeleteRecordAction(getEditor()));
+        menuBuilder.addSeparator(".", "edit_record");
+
+        menuBuilder.addItem(".", new MoveRecordToBeginningAction(getEditor()));
+        menuBuilder.addItem(".", new MoveRecordBackwardAction(getEditor()));
+        menuBuilder.addItem(".", new MoveRecordForwardAction(getEditor()));
+        menuBuilder.addItem(".", new MoveRecordToEndAction(getEditor()));
+        menuBuilder.addItem(".", new SortRecordsAction(getEditor()));
+        menuBuilder.addSeparator(".", "move_record");
+
+        menuBuilder.addItem(".", new CutRecordAction(getEditor()));
+        menuBuilder.addItem(".", new CopyRecordAction(getEditor()));
+        menuBuilder.addItem(".", new PasteRecordAction(getEditor()));
+        menuBuilder.addSeparator(".", "copy_paste_record");
+
+        menuBuilder.addItem(".", new FirstRecordAction(getEditor()));
+        menuBuilder.addItem(".", new PreviousRecordAction(getEditor()));
+        menuBuilder.addItem(".", new NextRecordAction(getEditor()));
+        menuBuilder.addItem(".", new LastRecordAction(getEditor()));
+    }
+
+    /**
+     * Show comments menu
+     */
+    private void showCommentsMenu(PhonActionEvent<Void> pae) {
+        JPopupMenu menu = new JPopupMenu();
+        MenuBuilder menuBuilder = new MenuBuilder(menu);
+        setupCommentsMenu(menuBuilder);
+
+        JComponent source = (JComponent) pae.getActionEvent().getSource();
+        menu.show(
+            source,
+            0,
+            source.getHeight()
+        );
+    }
+
+    /**
+     * Setup comments menu
+     *
+     * @param menuBuilder
+     */
+    private void setupCommentsMenu(MenuBuilder menuBuilder) {
+        TranscriptElementLocation transcriptLocation = getTranscriptEditor().getCurrentSessionLocation();
+        int currentTranscriptElementIndex = transcriptLocation == null ? -1 : transcriptLocation.transcriptElementIndex();
+        boolean inHeaders = currentTranscriptElementIndex < 0;
+
+        JMenuItem insertCommentAboveItem = new JMenuItem();
+        PhonUIAction<Void> insertCommentAboveAct = PhonUIAction.runnable(() -> {
+            final AddTranscriptElementEdit edit = new AddTranscriptElementEdit(
+                    getEditor().getSession(),
+                    getEditor().getEventManager(),
+                    new Transcript.Element(SessionFactory.newFactory().createComment()),
+                    currentTranscriptElementIndex
+            );
+            getEditor().getUndoSupport().postEdit(edit);
+        });
+        insertCommentAboveAct.putValue(PhonUIAction.NAME, "Insert comment above");
+        insertCommentAboveItem.setAction(insertCommentAboveAct);
+        insertCommentAboveItem.setEnabled(!inHeaders);
+        menuBuilder.addItem(".", insertCommentAboveItem);
+
+        JMenuItem insertCommentBelowItem = new JMenuItem();
+        PhonUIAction<Void> insertCommentBelowAct = PhonUIAction.runnable(() -> {
+            final AddTranscriptElementEdit edit = new AddTranscriptElementEdit(
+                    getEditor().getSession(),
+                    getEditor().getEventManager(),
+                    new Transcript.Element(SessionFactory.newFactory().createComment()),
+                    currentTranscriptElementIndex+1
+            );
+            getEditor().getUndoSupport().postEdit(edit);
+        });
+        insertCommentBelowAct.putValue(PhonUIAction.NAME, "Insert comment below");
+        insertCommentBelowItem.setAction(insertCommentBelowAct);
+        menuBuilder.addItem(".", insertCommentBelowItem);
+
+        menuBuilder.addSeparator(".", "add_comment");
+
+        // insert goto items for existing comments
+        for(int i = 0; i < getEditor().getSession().getTranscript().getNumberOfElements(); i++) {
+            final Transcript.Element element = getEditor().getSession().getTranscript().getElementAt(i);
+            if(element.isComment()) {
+                final Comment comment = element.asComment();
+                final PhonUIAction<Void> gotoAct = PhonUIAction.runnable(() -> {
+                    final TranscriptDocument.StartEnd commentRange =
+                            getTranscriptEditor().getTranscriptDocument().getCommentContentStartEnd(comment);
+                    if(commentRange.valid()) {
+                        getTranscriptEditor().setCaretPosition(commentRange.start());
+                        getTranscriptEditor().requestFocus();
+                    }
+                });
+                gotoAct.putValue(PhonUIAction.NAME,  String.format("%s: %s", comment.getType(), comment.getValue().toString()));
+                gotoAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance()
+                        .getFontIcon(IconManager.GoogleMaterialDesignIconsFontName,
+                                "comment", IconSize.SMALL, UIManager.getColor("textText")));
+                final JMenuItem gotoItem = new JMenuItem(gotoAct);
+                menuBuilder.addItem(".", gotoItem);
+            }
+        }
+    }
+
+    /**
+     * Show gems menu
+     *
+     */
+    private void showGemsMenu(PhonActionEvent<Void> pae) {
+        JPopupMenu menu = new JPopupMenu();
+        MenuBuilder menuBuilder = new MenuBuilder(menu);
+        setupGemsMenu(menuBuilder);
+
+        JComponent source = (JComponent) pae.getActionEvent().getSource();
+        menu.show(
+                source,
+                0,
+                source.getHeight()
+        );
+    }
+
+    /**
+     * Setup Gems menu
+     *
+     * @param menuBuilder
+     */
+    private void setupGemsMenu(MenuBuilder menuBuilder) {
+        TranscriptElementLocation transcriptLocation = getTranscriptEditor().getCurrentSessionLocation();
+        int currentTranscriptElementIndex = transcriptLocation == null ? -1 : transcriptLocation.transcriptElementIndex();
+        boolean inHeaders = currentTranscriptElementIndex < 0;
+
+        JMenuItem insertGemAboveItem = new JMenuItem();
+        PhonUIAction<Void> insertGemAboveAct = PhonUIAction.runnable(() -> {
+            final AddTranscriptElementEdit edit = new AddTranscriptElementEdit(
+                    getEditor().getSession(),
+                    getEditor().getEventManager(),
+                    new Transcript.Element(SessionFactory.newFactory().createGem()),
+                    currentTranscriptElementIndex
+            );
+            getEditor().getUndoSupport().postEdit(edit);
+        });
+        insertGemAboveAct.putValue(PhonUIAction.NAME, "Insert gem above");
+        insertGemAboveItem.setAction(insertGemAboveAct);
+        insertGemAboveItem.setEnabled(!inHeaders);
+        menuBuilder.addItem(".", insertGemAboveItem);
+
+        JMenuItem insertGemBelowItem = new JMenuItem();
+        PhonUIAction<Void> insertGemBelowAct = PhonUIAction.runnable(() -> {
+            final AddTranscriptElementEdit edit = new AddTranscriptElementEdit(
+                    getEditor().getSession(),
+                    getEditor().getEventManager(),
+                    new Transcript.Element(SessionFactory.newFactory().createGem()),
+                    currentTranscriptElementIndex+1
+            );
+            getEditor().getUndoSupport().postEdit(edit);
+        });
+        insertGemBelowAct.putValue(PhonUIAction.NAME, "Insert gem below");
+        insertGemBelowItem.setAction(insertGemBelowAct);
+        menuBuilder.addItem(".", insertGemBelowItem);
+
+        menuBuilder.addSeparator(".", "add_gem");
+
+        // insert goto items for existing gems
+        for(int i = 0; i < getEditor().getSession().getTranscript().getNumberOfElements(); i++) {
+            final Transcript.Element element = getEditor().getSession().getTranscript().getElementAt(i);
+            if(element.isGem()) {
+                final Gem gem = element.asGem();
+                final PhonUIAction<Void> gotoAct = PhonUIAction.runnable(() -> {
+                    final TranscriptDocument.StartEnd gemRange =
+                            getTranscriptEditor().getTranscriptDocument().getGemContentStartEnd(gem);
+                    if(gemRange.valid()) {
+                        getTranscriptEditor().setCaretPosition(gemRange.start());
+                        getTranscriptEditor().requestFocus();
+                    }
+                });
+                gotoAct.putValue(PhonUIAction.NAME,  String.format("%s: %s", gem.getType(), gem.getLabel()));
+                gotoAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance()
+                        .getFontIcon(IconManager.GoogleMaterialDesignIconsFontName,
+                                "diamond", IconSize.SMALL, UIManager.getColor("textText")));
+                final JMenuItem gotoItem = new JMenuItem(gotoAct);
+                menuBuilder.addItem(".", gotoItem);
+            }
+        }
+    }
+
     // region Getters and Setters
 
     @Override
@@ -788,11 +1052,26 @@ public class TranscriptView extends EditorView {
 
         MenuBuilder menuBuilder = new MenuBuilder(retVal);
 
-        setupSessionInformationMenu(new MenuBuilder(menuBuilder.addMenu(".", "Session information")));
-        setupMediaMenu(new MenuBuilder(menuBuilder.addMenu(".", "Media")));
+//        setupSessionInformationMenu(new MenuBuilder(menuBuilder.addMenu(".", "Session information")));
+//        setupMediaMenu(new MenuBuilder(menuBuilder.addMenu(".", "Media")));
         setupParticipantsMenu(new MenuBuilder(menuBuilder.addMenu(".", "Participants")));
-        setupTranscriptMenu(new MenuBuilder(menuBuilder.addMenu(".", "Transcript")));
         setupTiersMenu(new MenuBuilder(menuBuilder.addMenu(".", "Tiers")));
+        setupRecordMenu(new MenuBuilder(menuBuilder.addMenu(".", "Records")));
+        setupCommentsMenu(new MenuBuilder(menuBuilder.addMenu(".", "Comments")));
+        setupGemsMenu(new MenuBuilder(menuBuilder.addMenu(".", "Gems")));
+//        setupTranscriptMenu(new MenuBuilder(menuBuilder.addMenu(".", "Transcript")));
+
+        menuBuilder.addSeparator(".", "session_menus");
+
+        JMenuItem viewMetadataItem = new JMenuItem();
+        PhonUIAction<Void> viewMetadataAct = PhonUIAction.runnable(() -> {
+            MetadataDialog metadataDialog = new MetadataDialog(CommonModuleFrame.getCurrentFrame());
+            metadataDialog.pack();
+            metadataDialog.setVisible(true);
+        });
+        viewMetadataAct.putValue(PhonUIAction.NAME, "View metadata");
+        viewMetadataItem.setAction(viewMetadataAct);
+        menuBuilder.addItem(".", viewMetadataItem);
 
         return retVal;
     }
