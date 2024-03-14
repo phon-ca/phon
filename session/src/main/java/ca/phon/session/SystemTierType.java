@@ -31,7 +31,7 @@ public enum SystemTierType {
 	IPAActual("IPA Actual", "%pho", IPATranscript.class, false),
 	ActualSyllables("Actual Syllables",  "%xphosyll", IPATranscript.class, true),
 	PhoneAlignment("Alignment", "%xphoalin", PhoneAlignment.class, true),
-	Segment("Segment", "", MediaSegment.class, true),
+	Segment("Segment", "%xseg", MediaSegment.class, true),
 	@Deprecated
 	Notes("Notes", "%xNotes", TierData.class, false);
 	
