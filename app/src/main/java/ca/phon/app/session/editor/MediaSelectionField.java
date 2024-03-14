@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.app.session.editor.view.participants;
+package ca.phon.app.session.editor;
 
-import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.actions.SaveSessionAction;
 import ca.phon.app.session.editor.view.mediaPlayer.MediaPlayerEditorView;
 import ca.phon.media.MediaLocator;
@@ -37,7 +36,7 @@ import java.util.List;
 import java.util.*;
 
 /**
- * Media selection field for {@link ParticipantsView}.
+ * Media selection field for {@link SessionEditor}
  * This field adds a text completer for media files found in the
  * list of media folders setup in application preferences.  Files
  * found in one of these folders are displayed with a relative path.

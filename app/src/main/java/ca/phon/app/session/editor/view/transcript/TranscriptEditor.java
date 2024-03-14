@@ -11,10 +11,14 @@ import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.session.tierdata.TierData;
+import ca.phon.ui.FlatButton;
+import ca.phon.ui.IconStrip;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.util.icons.IconManager;
+import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -149,6 +153,11 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     private final TranscriptEditorCaret caret;
 
     /**
+     * The icon strip for the toolbar
+     */
+    private final IconStrip iconStrip = new IconStrip(SwingConstants.HORIZONTAL);
+
+    /**
      * Constructor
      */
     public TranscriptEditor(Session session, EditorEventManager eventManager, SessionEditUndoSupport undoSupport, UndoManager undoManager) {
@@ -205,8 +214,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         return caret;
     }
 
-    
-
     /**
      * Sets up all the input actions
      */
@@ -224,7 +231,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         PhonUIAction<Void> shiftTabAct = PhonUIAction.runnable(this::prevTierOrElement);
         actionMap.put("prevTierOrElement", shiftTabAct);
 
-
         KeyStroke right = KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0);
         inputMap.put(right, "nextValidIndex");
         PhonUIAction<Void> rightAct = PhonUIAction.runnable(() -> setCaretPosition(getNextValidIndex(getCaretPosition() + 1, true)));
@@ -234,7 +240,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         inputMap.put(left, "prevValidIndex");
         PhonUIAction<Void> leftAct = PhonUIAction.runnable(() -> setCaretPosition(getPrevValidIndex(getCaretPosition() - 1, true)));
         actionMap.put("prevValidIndex", leftAct);
-
 
         KeyStroke up = KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0);
         inputMap.put(up, "sameOffsetPrevTier");
@@ -246,12 +251,10 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         PhonUIAction<Void> downAct = PhonUIAction.runnable(this::sameOffsetInNextTierOrElement);
         actionMap.put("sameOffsetNextTier", downAct);
 
-
         KeyStroke enter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
         inputMap.put(enter, "pressedEnter");
         PhonUIAction<Void> enterAct = PhonUIAction.eventConsumer(this::onPressedEnter, null);
         actionMap.put("pressedEnter", enterAct);
-
 
         KeyStroke home = KeyStroke.getKeyStroke(KeyEvent.VK_HOME, 0);
         inputMap.put(home, "pressedHome");
@@ -262,7 +265,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         inputMap.put(end, "pressedEnd");
         PhonUIAction<Void> endAct = PhonUIAction.runnable(this::onPressedEnd);
         actionMap.put("pressedEnd", endAct);
-
 
         KeyStroke delete = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
         inputMap.put(delete, "deleteElement");
@@ -491,12 +493,33 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         super.firePropertyChange("currentRecordIndex", oldIndex, this.currentRecordIndex);
     }
 
+    /**
+     * Is the document in single record view
+     * @return true if single record view, false otherwise
+     */
     public boolean isSingleRecordView() {
         return singleRecordView;
     }
 
+    /**
+     * Sets whether the document is in single record view
+     *
+     * @param singleRecordView
+     */
     public void setSingleRecordView(boolean singleRecordView) {
+        var wasSingleRecordView = this.singleRecordView;
         this.singleRecordView = singleRecordView;
+        if(wasSingleRecordView != singleRecordView)
+            getTranscriptDocument().setSingleRecordView(singleRecordView);
+        firePropertyChange("singleRecordView", wasSingleRecordView, singleRecordView);
+    }
+
+    /**
+     * Toggle single record view
+     *
+     */
+    public void toggleSingleRecordView() {
+        setSingleRecordView(!isSingleRecordView());
     }
 
     /**

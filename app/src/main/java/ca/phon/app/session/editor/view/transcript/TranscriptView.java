@@ -10,6 +10,7 @@ import ca.phon.app.session.editor.view.participants.ParticipantsView;
 import ca.phon.app.session.editor.view.speechAnalysis.SpeechAnalysisEditorView;
 import ca.phon.app.session.editor.view.tierManagement.TierManagementView;
 import ca.phon.app.session.editor.actions.NewTierAction;
+import ca.phon.app.session.editor.view.tierManagement.TierMenuBuilder;
 import ca.phon.app.session.editor.view.timeline.TimelineView;
 import ca.phon.app.session.editor.view.transcript.actions.*;
 import ca.phon.app.session.editor.view.transcript.extensions.*;
@@ -19,6 +20,8 @@ import ca.phon.session.io.SessionOutputFactory;
 import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.ui.CalloutWindow;
 import ca.phon.ui.CommonModuleFrame;
+import ca.phon.ui.FlatButton;
+import ca.phon.ui.IconStrip;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
@@ -50,6 +53,8 @@ public class TranscriptView extends EditorView {
 
     public final static String VIEW_NAME = "Transcript";
     public final static String VIEW_ICON = IconManager.GoogleMaterialDesignIconsFontName + ":description";
+
+    private IconStrip iconStrip;
 
     private final TranscriptEditor transcriptEditor;
     private TranscriptScrollPane transcriptScrollPane;
@@ -126,6 +131,11 @@ public class TranscriptView extends EditorView {
      * */
     private void initUI() {
         setLayout(new BorderLayout());
+
+        iconStrip = new IconStrip(SwingConstants.HORIZONTAL);
+        setupIconStrip();
+        add(iconStrip, BorderLayout.NORTH);
+
         centerPanel = new JPanel(new BorderLayout());
         add(centerPanel, BorderLayout.CENTER);
 
@@ -200,6 +210,75 @@ public class TranscriptView extends EditorView {
 //        fontScaleMenuButton.setAction(fontScaleMenuAct);
 //        fontScaleMenuButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 //        toolbar.add(fontScaleMenuButton);
+    }
+
+    /**
+     * Setup icon strip
+     */
+    private void setupIconStrip() {
+        // participants button
+        final PhonUIAction<Void> participantsAct = PhonUIAction.eventConsumer(this::showParticipantsMenu);
+        participantsAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+        participantsAct.putValue(FlatButton.ICON_NAME_PROP, "group");
+        participantsAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+        participantsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Participants menu");
+        participantsAct.putValue(PhonUIAction.NAME, "Participants");
+        final FlatButton participantsBtn = new FlatButton(participantsAct);
+        participantsBtn.setPadding(2);
+
+        // tiers button
+        final PhonUIAction<Void> tiersAct = PhonUIAction.eventConsumer(this::showTiersMenu);
+        tiersAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+        tiersAct.putValue(FlatButton.ICON_NAME_PROP, "data_table");
+        tiersAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+        tiersAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Tiers menu");
+        tiersAct.putValue(PhonUIAction.NAME, "Tiers");
+        final FlatButton tiersBtn = new FlatButton(tiersAct);
+        tiersBtn.setPadding(2);
+
+        // transcript button
+        final PhonUIAction<Void> transcriptAct = PhonUIAction.eventConsumer(this::showTranscriptMenu);
+        transcriptAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+        transcriptAct.putValue(FlatButton.ICON_NAME_PROP, "description");
+        transcriptAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+        transcriptAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Transcript menu");
+        transcriptAct.putValue(PhonUIAction.NAME, "Transcript");
+        final FlatButton transcriptBtn = new FlatButton(transcriptAct);
+        transcriptBtn.setPadding(2);
+
+//        // single record mode button
+//        final PhonUIAction<Void> singleRecordModeAct = PhonUIAction.runnable(transcriptEditor::toggleSingleRecordView);
+//        singleRecordModeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Toggle single record view");
+//        singleRecordModeAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+//        singleRecordModeAct.putValue(FlatButton.ICON_NAME_PROP, "view_stream");
+//        singleRecordModeAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+//        singleRecordModeAct.putValue(PhonUIAction.SELECTED_KEY, isSingleRecordActive());
+//        final FlatButton singleRecordModeBtn = new FlatButton(singleRecordModeAct);
+//        singleRecordModeBtn.setPadding(2);
+//        singleRecordModeBtn.setIconColor(UIManager.getColor("textInactiveText"));
+//        singleRecordModeBtn.setIconSelectedColor(UIManager.getColor("Phon.darkBlue"));
+//        transcriptEditor.addPropertyChangeListener("singleRecordView", (e) ->
+//                singleRecordModeBtn.setSelected(isSingleRecordActive()));
+
+//        // find and replace button
+//        final PhonUIAction<Void> findReplaceAct = PhonUIAction.runnable(this::toggleFindAndReplace);
+//        findReplaceAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Find and replace");
+//        findReplaceAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+//        findReplaceAct.putValue(FlatButton.ICON_NAME_PROP, "search");
+//        findReplaceAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+//        final FlatButton findReplaceBtn = new FlatButton(findReplaceAct);
+//        findReplaceBtn.setPadding(2);
+//        findReplaceBtn.setIconColor(UIManager.getColor("textInactiveText"));
+//        findReplaceBtn.setIconSelectedColor(UIManager.getColor("Phon.darkBlue"));
+//        addPropertyChangeListener("findAndReplaceVisible", (e) -> {
+//            findReplaceBtn.setSelected(isFindAndReplaceVisible());
+//        });
+
+        iconStrip.add(participantsBtn, IconStrip.IconStripPosition.LEFT);
+        iconStrip.add(tiersBtn, IconStrip.IconStripPosition.LEFT);
+        iconStrip.add(transcriptBtn, IconStrip.IconStripPosition.LEFT);
+//        iconStrip.add(findReplaceBtn, IconStrip.IconStripPosition.RIGHT);
+//        iconStrip.add(singleRecordModeBtn, IconStrip.IconStripPosition.RIGHT);
     }
 
     public TranscriptEditor getTranscriptEditor() {
@@ -486,14 +565,6 @@ public class TranscriptView extends EditorView {
             removeParticipantItem.setAction(new DeleteParticipantAction(getEditor(), participant));
             participantSubmenu.add(removeParticipantItem);
         }
-
-        JMenuItem showSessionInfoViewItem = new JMenuItem();
-        PhonUIAction<Void> showSessionInfoViewAct = PhonUIAction.runnable(
-                () -> getEditor().getViewModel().showView(ParticipantsView.VIEW_NAME)
-        );
-        showSessionInfoViewAct.putValue(PhonUIAction.NAME, "Show Session Information view");
-        showSessionInfoViewItem.setAction(showSessionInfoViewAct);
-        menuBuilder.addItem(".", showSessionInfoViewItem);
     }
 
     /**
@@ -652,58 +723,14 @@ public class TranscriptView extends EditorView {
      * @param menuBuilder the builder used to build the menu
      * */
     private void setupTiersMenu(MenuBuilder menuBuilder) {
-        JMenu addTierSubmenu = menuBuilder.addMenu(".", "Add tier");
-
-        List<UserTierType> availableUserTierTypes = new ArrayList<>(List.of(UserTierType.values()));
-        availableUserTierTypes.remove(UserTierType.Wor);
-        availableUserTierTypes.remove(UserTierType.Mor);
-        availableUserTierTypes.remove(UserTierType.Trn);
-        availableUserTierTypes.remove(UserTierType.Gra);
-        availableUserTierTypes.remove(UserTierType.Grt);
-        for (UserTierType userTierType : availableUserTierTypes) {
-            JMenuItem addTierItem = new JMenuItem();
-            PhonUIAction<Void> addTierAct = PhonUIAction.runnable(() -> {
-                TierDescription td = SessionFactory.newFactory().createTierDescription(userTierType);
-                TierViewItem tvi = SessionFactory.newFactory().createTierViewItem(td.getName());
-
-                AddTierEdit edit = new AddTierEdit(getEditor(), td, tvi);
-                getEditor().getUndoSupport().postEdit(edit);
-            });
-            addTierAct.putValue(PhonUIAction.NAME, userTierType.name());
-            addTierItem.setAction(addTierAct);
-            addTierSubmenu.add(addTierItem);
-        }
-
-        addTierSubmenu.add(new JSeparator());
-
-        JMenuItem addCustomTierItem = new JMenuItem();
-        addCustomTierItem.setAction(new NewTierAction(getEditor()));
-        addTierSubmenu.add(addCustomTierItem);
-        menuBuilder.addSeparator(".", "");
-
-        var extPts = PluginManager.getInstance().getExtensionPoints(TierLabelMenuHandler.class);
-        var tierView = getEditor().getSession().getTierView();
-        for (TierViewItem item : tierView) {
-
-            MenuBuilder tviMenuBuilder = new MenuBuilder(menuBuilder.addMenu(".", item.getTierName()));
-
-
-            for (var extPt : extPts) {
-                var menuHandler = extPt.getFactory().createObject();
-                menuHandler.addMenuItems(
-                    tviMenuBuilder,
-                    getEditor().getSession(),
-                    getEditor().getEventManager(),
-                    getEditor().getUndoSupport(),
-                    item
-                );
-            }
-
-        }
-
+        JMenu addTierMenu = menuBuilder.addMenu(".", "Add tier");
+        TierMenuBuilder.setupNewTierMenu(getEditor(), new MenuBuilder(addTierMenu));
 
         menuBuilder.addSeparator(".", "");
 
+        TierMenuBuilder.appendExistingTiersMenu(getEditor(), menuBuilder);
+
+        menuBuilder.addSeparator(".", "existing_tiers");
 
         JMenuItem toggleAlignmentVisibleItem = new JMenuItem();
         toggleAlignmentVisibleItem.setAction(new ToggleAlignmentVisibleAction(getEditor(), TranscriptView.this));
@@ -729,17 +756,17 @@ public class TranscriptView extends EditorView {
         toggleBlindTiersItem.setAction(new ToggleValidationModeAction(getEditor(), TranscriptView.this));
         menuBuilder.addItem(".", toggleBlindTiersItem);
 
+        menuBuilder.addSeparator(".", "blind_transcription");
+
+        JMenuItem toggleHeadersItem = new JMenuItem();
+        toggleHeadersItem.setAction(new ToggleHeadersVisibleAction(getEditor(), TranscriptView.this));
+        menuBuilder.addItem(".", toggleHeadersItem);
+
         JMenuItem toggleChatTierNamesItem = new JMenuItem();
         PhonUIAction<Void> toggleChatTierNamesAct = PhonUIAction.runnable(this::toggleChatTierNamesShown);
         toggleChatTierNamesAct.putValue(PhonUIAction.NAME, "Toggle chat tier names");
         toggleChatTierNamesItem.setAction(toggleChatTierNamesAct);
         menuBuilder.addItem(".", toggleChatTierNamesItem);
-
-        JMenuItem showTierManagementViewItem = new JMenuItem();
-        PhonUIAction<Void> showTierManagementViewAct = PhonUIAction.runnable(() -> getEditor().getViewModel().showView(TierManagementView.VIEW_NAME));
-        showTierManagementViewAct.putValue(PhonUIAction.NAME, "Show Tier Management view");
-        showTierManagementViewItem.setAction(showTierManagementViewAct);
-        menuBuilder.addItem(".", showTierManagementViewItem);
     }
 
     // region Getters and Setters
@@ -775,11 +802,11 @@ public class TranscriptView extends EditorView {
     }
 
     public boolean isSingleRecordActive() {
-        return transcriptEditor.getTranscriptDocument().getSingleRecordView();
+        return transcriptEditor.isSingleRecordView();
     }
 
     public void toggleSingleRecordActive() {
-        transcriptEditor.getTranscriptDocument().setSingleRecordView(!isSingleRecordActive());
+        transcriptEditor.toggleSingleRecordView();
     }
 
     public boolean getShowRecordNumbers() {
@@ -861,6 +888,7 @@ public class TranscriptView extends EditorView {
     }
 
     public void setFindAndReplaceVisible(boolean findAndReplaceVisible) {
+        var wasFindAndReplaceVisible = this.findAndReplaceVisible;
         this.findAndReplaceVisible = findAndReplaceVisible;
         if (findAndReplaceVisible) {
             var editor = getEditor();
@@ -876,8 +904,14 @@ public class TranscriptView extends EditorView {
             centerPanel.remove(findAndReplacePanel);
             findAndReplacePanel = null;
         }
+        firePropertyChange("findAndReplaceVisible", wasFindAndReplaceVisible, findAndReplaceVisible);
         revalidate();
         repaint();
+    }
+
+    public boolean toggleFindAndReplace() {
+        setFindAndReplaceVisible(!isFindAndReplaceVisible());
+        return isFindAndReplaceVisible();
     }
 
     public boolean isValidationMode() {

@@ -99,7 +99,7 @@ public class FlatButton extends JButton {
         super(a);
         iconFontName = (String)a.getValue(ICON_FONT_NAME_PROP);
         if(iconFontName == null) {
-            iconFontName = IconManager.FontAwesomeFontName;
+            iconFontName = IconManager.GoogleMaterialDesignIconsFontName;
         }
         iconName = (String)a.getValue(ICON_NAME_PROP);
         if(iconName == null) {
