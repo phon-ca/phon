@@ -258,11 +258,14 @@ public final class MediaSegment extends ExtendableObject {
 		setSegment(seg.getStartValue(), seg.getEndValue(), seg.getUnitType());
 	}
 
+	/**
+	 * Equals will return true if start/end <em>times</em> are the same. Unit is ignored
+	 * @param b
+	 * @return
+	 */
 	public boolean equals(Object b) {
 		if(!(b instanceof MediaSegment bSeg)) return false;
-		return getStartValue() == bSeg.getStartValue()
-				&& getEndValue() == bSeg.getEndValue()
-				&& getUnitType() == bSeg.getUnitType();
+		return (getStartTime() == bSeg.getStartTime() && getEndTime() == bSeg.getEndTime());
 	}
 
 	public String toString() {

@@ -10,6 +10,7 @@ import ca.phon.media.*;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.MediaUnit;
 import ca.phon.session.SessionFactory;
+import ca.phon.ui.fonts.FontPreferences;
 
 import javax.swing.*;
 import java.awt.*;
@@ -69,6 +70,7 @@ public class SegmentEditorPopup extends TimeComponent {
         String tierTxt =
                 (segmentFormatter != null ? segmentFormatter.format(segment) : DEFAULT_SEGMENT_TEXT);
         segmentField.setText(tierTxt);
+        segmentField.setFont(FontPreferences.getTierFont());
     }
 
     public void init() {
@@ -87,8 +89,6 @@ public class SegmentEditorPopup extends TimeComponent {
                 waveformScroller = new JScrollPane(waveformDisplay);
                 waveformScroller.setColumnHeaderView(new Timebar(timeUIModel));
                 add(waveformScroller, BorderLayout.CENTER);
-                add(segmentField, BorderLayout.SOUTH);
-                setupTimeModel();
             } catch (IOException e) {
                 Toolkit.getDefaultToolkit().beep();
                 LogUtil.severe(e);
@@ -97,6 +97,8 @@ public class SegmentEditorPopup extends TimeComponent {
         } else {
             add(new JLabel("No session audio available"), BorderLayout.CENTER);
         }
+        add(segmentField, BorderLayout.SOUTH);
+        setupTimeModel();
     }
 
     private final static float CLIP_EXTENSION_MIN = 0.5f;
@@ -113,9 +115,9 @@ public class SegmentEditorPopup extends TimeComponent {
 //        if(selectionInterval != null)
 //            clearSelection();
 
-        float segStart = segment.getUnitType() == MediaUnit.Millisecond ? segment.getStartValue() / 1000.0f : segment.getStartValue();
-        float segEnd = segment.getUnitType() == MediaUnit.Millisecond ? segment.getEndValue() / 1000.0f : segment.getEndValue();
-        float segLength = segEnd - segStart;
+        float segStart = segment.getStartTime();
+        float segEnd = segment.getEndTime();
+        float segLength = segment.getLength();
 
         float preferredClipExtension = segLength * 0.4f;
         if(preferredClipExtension < CLIP_EXTENSION_MIN)
@@ -148,12 +150,8 @@ public class SegmentEditorPopup extends TimeComponent {
         currentRecordInterval.getEndMarker().setColor(UIManager.getColor(SpeechAnalysisViewColors.INTERVAL_MARKER_COLOR));
         currentRecordInterval.setRepaintEntireInterval(true);
         currentRecordInterval.addPropertyChangeListener(e -> {
-            float startVal = this.segment.getUnitType() == MediaUnit.Millisecond
-                    ? currentRecordInterval.getStartMarker().getTime() * 1000.0f
-                    : currentRecordInterval.getStartMarker().getTime();
-            float endVal = this.segment.getUnitType() == MediaUnit.Millisecond
-                    ? currentRecordInterval.getEndMarker().getTime() * 1000.0f
-                    : currentRecordInterval.getEndMarker().getTime();
+            float startVal = this.segment.getStartTime();
+            float endVal = this.segment.getEndTime();
             setMediaSegment(startVal, endVal);
         });
         scrollTo = displayStart;

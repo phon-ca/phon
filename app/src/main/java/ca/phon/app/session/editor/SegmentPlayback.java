@@ -91,8 +91,8 @@ public class SegmentPlayback {
 		}
 		
 		if(mediaSegment != null) {
-			float startTime = mediaSegment.getStartValue() / 1000.0f;
-			float endTime = mediaSegment.getEndValue() / 1000.0f;
+			float startTime = mediaSegment.getStartTime();
+			float endTime = mediaSegment.getEndTime();
 			if(mediaModel.isSessionAudioAvailable()) {
 				try {
 					LongSound longSound = mediaModel.getSharedSessionAudio();
