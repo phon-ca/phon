@@ -219,10 +219,10 @@ public class TranscriptBatchBuilder {
         labelAttrs.addAttributes(styleContext.getLabelAttributes());
         String labelText = formatLabelText(label);
 
-        labelAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE, true);
+        labelAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_UNDERLINE_ON_HOVER, true);
         appendBatchString(labelText, labelAttrs);
 
-        labelAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE);
+        labelAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_UNDERLINE_ON_HOVER);
         appendBatchString(": ", labelAttrs);
 
         if(tier.hasValue()) {
@@ -316,10 +316,10 @@ public class TranscriptBatchBuilder {
 
         TierData tierData = commentTier.getValue();
 
-        TranscriptStyleConstants.setClickable(labelAttrs, true);
+        TranscriptStyleConstants.setUnderlineOnHover(labelAttrs, true);
         appendBatchString(labelText, labelAttrs);
 
-        TranscriptStyleConstants.setClickable(labelAttrs, false);
+        TranscriptStyleConstants.setUnderlineOnHover(labelAttrs, false);
         appendBatchString(": ", labelAttrs);
 
         for (int i = 0; i < tierData.length(); i++) {
@@ -391,10 +391,10 @@ public class TranscriptBatchBuilder {
         String labelText = gem.getType().toString() + " Gem";
         labelText = formatLabelText(labelText);
 
-        TranscriptStyleConstants.setClickable(labelAttrs, true);
+        TranscriptStyleConstants.setUnderlineOnHover(labelAttrs, true);
         appendBatchString(labelText, labelAttrs);
 
-        TranscriptStyleConstants.setClickable(labelAttrs, false);
+        TranscriptStyleConstants.setUnderlineOnHover(labelAttrs, false);
         appendBatchString(": ", labelAttrs);
 
         appendBatchString(text, gemAttrs);
@@ -507,10 +507,10 @@ public class TranscriptBatchBuilder {
             }
         }
 
-        TranscriptStyleConstants.setClickable(labelAttrs, true);
+        TranscriptStyleConstants.setUnderlineOnHover(labelAttrs, true);
         appendBatchString(formatLabelText(labelText), labelAttrs);
 
-        TranscriptStyleConstants.setClickable(labelAttrs, false);
+        TranscriptStyleConstants.setUnderlineOnHover(labelAttrs, false);
         appendBatchString(": ", labelAttrs);
 
         return this;
@@ -754,7 +754,7 @@ public class TranscriptBatchBuilder {
         SimpleAttributeSet attrs = new SimpleAttributeSet( prevAttrs != null ? prevAttrs : new SimpleAttributeSet());
         TranscriptStyleConstants.setComponentFactory(attrs, null);
         TranscriptStyleConstants.setEnterAction(attrs, null);
-        TranscriptStyleConstants.setClickable(attrs, false);
+        TranscriptStyleConstants.setUnderlineOnHover(attrs, false);
         return attrs;
     }
 

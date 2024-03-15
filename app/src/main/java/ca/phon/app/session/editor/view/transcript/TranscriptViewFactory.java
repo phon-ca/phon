@@ -1,6 +1,5 @@
 package ca.phon.app.session.editor.view.transcript;
 
-import ca.phon.session.Tier;
 import ca.phon.ui.fonts.FontPreferences;
 
 import javax.swing.*;
@@ -92,7 +91,7 @@ public class TranscriptViewFactory implements ViewFactory {
         }
 
         var isLabel = TranscriptStyleConstants.isLabel(attrs);
-        var clickable = TranscriptStyleConstants.isClickable(attrs);
+        var clickable = TranscriptStyleConstants.isUnderlineOnHover(attrs);
         if(isLabel && clickable) {
             kind = "label";
         }

@@ -11,14 +11,10 @@ import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.session.tierdata.TierData;
-import ca.phon.ui.FlatButton;
 import ca.phon.ui.IconStrip;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.menu.MenuBuilder;
-import ca.phon.util.icons.IconManager;
-import ca.phon.util.icons.IconSize;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -35,6 +31,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class TranscriptEditor extends JEditorPane implements IExtendable {
 
@@ -905,170 +903,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         }
     }
 
-    /**
-     * Runs when the user clicks on a tier label
-     *
-     * @param point  the point where the user clicked
-     * @param tier   the tier that the label belongs to
-     * @param record the record containing the tier
-     */
-    private void onClickTierLabel(Point2D point, Tier<?> tier, Record record) {
-        // Build a new popup menu
-        JPopupMenu menu = new JPopupMenu();
-        MenuBuilder builder = new MenuBuilder(menu);
-
-        if(SystemTierType.Orthography.getName().equals(tier.getName())) {
-            final JMenu speakerMenu = builder.addMenu(".", "Change speaker");
-            appendChangeSpeakerMenu(record, new MenuBuilder(speakerMenu));
-            builder.addSeparator(".", "speaker");
-        }
-
-        final TierDescription td = getSession().getTier(tier.getName());
-        final TierViewItem tvi = getSession().getTierView().stream().filter(tv -> tv.getTierName().equals(tier.getName())).findFirst().orElse(null);
-        TierMenuBuilder.setupTierMenu(getSession(), getEventManager(), getUndoSupport(), td, tvi, builder);
-
-        var extPts = PluginManager.getInstance().getExtensionPoints(TierLabelMenuHandler.class);
-
-        for (var extPt : extPts) {
-            var menuHandler = extPt.getFactory().createObject();
-            menuHandler.addMenuItems(builder, getSession(), eventManager, undoSupport, tier, record);
-        }
-
-        // Show it where the user clicked
-        menu.show(this, (int) point.getX(), (int) point.getY());
-    }
-
-    /**
-     * Runs when the user click on a comment label
-     *
-     * @param point   the point where the user clicks
-     * @param comment the comment that the label belongs to
-     */
-    private void onClickCommentLabel(Point2D point, Comment comment) {
-        // Build a new popup menu
-        JPopupMenu menu = new JPopupMenu();
-
-
-        JMenu changeTypeMenu = new JMenu("Change type");
-
-        ButtonGroup changeTypeButtonGroup = new ButtonGroup();
-        for (CommentType type : CommentType.values()) {
-            JRadioButtonMenuItem changeTypeItem = new JRadioButtonMenuItem();
-            changeTypeButtonGroup.add(changeTypeItem);
-            if (comment.getType().equals(type)) {
-                changeTypeButtonGroup.setSelected(changeTypeItem.getModel(), true);
-            }
-            PhonUIAction<Void> changeTypeAct = PhonUIAction.runnable(() -> {
-                ChangeCommentTypeEdit edit = new ChangeCommentTypeEdit(getSession(), eventManager, comment, type);
-                undoSupport.postEdit(edit);
-            });
-            changeTypeAct.putValue(PhonUIAction.NAME, type.getLabel());
-            changeTypeItem.setAction(changeTypeAct);
-            changeTypeMenu.add(changeTypeItem);
-        }
-
-        menu.add(changeTypeMenu);
-
-
-        JMenuItem deleteThis = new JMenuItem();
-        PhonUIAction<Void> deleteThisAct = PhonUIAction.runnable(() -> deleteTranscriptElement(new Transcript.Element(comment)));
-        deleteThisAct.putValue(PhonUIAction.NAME, "Delete this comment");
-        deleteThis.setAction(deleteThisAct);
-        menu.add(deleteThis);
-
-        // Show it where the user clicked
-        menu.show(this, (int) point.getX(), (int) point.getY());
-    }
-
-    /**
-     * Deletes a given transcript element from the transcript
-     *
-     * @param elem the element to be deleted
-     */
-    private void deleteTranscriptElement(Transcript.Element elem) {
-        DeleteTranscriptElementEdit edit = new DeleteTranscriptElementEdit(getSession(), eventManager, elem, getSession().getTranscript().getElementIndex(elem));
-        undoSupport.postEdit(edit);
-    }
-
-    /**
-     * Runs when the user click on a gem label
-     *
-     * @param point the point where the user clicks
-     * @param gem   the gem that the label belongs to
-     */
-    private void onClickGemLabel(Point2D point, Gem gem) {
-        // Build a new popup menu
-        JPopupMenu menu = new JPopupMenu();
-
-
-        JMenu changeTypeMenu = new JMenu("Change type");
-
-        ButtonGroup changeTypeButtonGroup = new ButtonGroup();
-        for (GemType type : GemType.values()) {
-            JRadioButtonMenuItem changeTypeItem = new JRadioButtonMenuItem();
-            changeTypeButtonGroup.add(changeTypeItem);
-            if (gem.getType().equals(type)) {
-                changeTypeButtonGroup.setSelected(changeTypeItem.getModel(), true);
-            }
-            PhonUIAction<Void> changeTypeAct = PhonUIAction.runnable(() -> {
-                ChangeGemTypeEdit edit = new ChangeGemTypeEdit(getSession(), eventManager, gem, type);
-                undoSupport.postEdit(edit);
-            });
-            changeTypeAct.putValue(PhonUIAction.NAME, type.name());
-            changeTypeItem.setAction(changeTypeAct);
-            changeTypeMenu.add(changeTypeItem);
-        }
-
-        menu.add(changeTypeMenu);
-
-
-        JMenuItem deleteThis = new JMenuItem();
-        PhonUIAction<Void> deleteThisAct = PhonUIAction.runnable(() -> deleteTranscriptElement(new Transcript.Element(gem)));
-        deleteThisAct.putValue(PhonUIAction.NAME, "Delete this gem");
-        deleteThis.setAction(deleteThisAct);
-        menu.add(deleteThis);
-
-
-        // Show it where the user clicked
-        menu.show(this, (int) point.getX(), (int) point.getY());
-    }
-
-    /**
-     * Append change speaker items to given menu builder
-     *
-     * @param menuBuilder
-     */
-    private void appendChangeSpeakerMenu(Record record, MenuBuilder menuBuilder) {
-
-        ButtonGroup buttonGroup = new ButtonGroup();
-
-        var participants = getSession().getParticipants();
-        for (Participant participant : participants) {
-            JRadioButtonMenuItem participantItem = new JRadioButtonMenuItem();
-            PhonUIAction<Void> participantAction = PhonUIAction.runnable(() -> {
-                ChangeSpeakerEdit edit = new ChangeSpeakerEdit(getSession(), getEventManager(), record, participant);
-                getUndoSupport().postEdit(edit);
-            });
-            participantAction.putValue(PhonUIAction.NAME, participant.toString());
-            participantItem.setAction(participantAction);
-            buttonGroup.add(participantItem);
-            menuBuilder.addItem(".", participantItem);
-        }
-
-        menuBuilder.addSeparator(".", "");
-
-        JRadioButtonMenuItem unknownParticipantItem = new JRadioButtonMenuItem();
-        PhonUIAction<Void> unknownParticipantAction = PhonUIAction.runnable(() -> {
-            ChangeSpeakerEdit edit = new ChangeSpeakerEdit(getSession(), getEventManager(), record, Participant.UNKNOWN);
-            getUndoSupport().postEdit(edit);
-        });
-        unknownParticipantAction.putValue(PhonUIAction.NAME, Participant.UNKNOWN.toString());
-        unknownParticipantItem.setAction(unknownParticipantAction);
-        buttonGroup.add(unknownParticipantItem);
-        menuBuilder.addItem(".", unknownParticipantItem);
-
-    }
-
     public EditorEventManager getEventManager() {
         return eventManager;
     }
@@ -1076,11 +910,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     public SessionEditUndoSupport getUndoSupport() {
         return undoSupport;
     }
-
-    
-
-
-    
 
     /**
      * Runs when the user clicks on the label for a blind transcription tier
@@ -1206,11 +1035,11 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
 
         menu.add(addGemMenu);
 
-        JMenuItem deleteThis = new JMenuItem();
-        PhonUIAction<Void> deleteThisAct = PhonUIAction.runnable(() -> deleteTranscriptElement(getSession().getTranscript().getElementAt(transcriptElementIndex)));
-        deleteThisAct.putValue(PhonUIAction.NAME, "Delete this element");
-        deleteThis.setAction(deleteThisAct);
-        menu.add(deleteThis);
+//        JMenuItem deleteThis = new JMenuItem();
+//        PhonUIAction<Void> deleteThisAct = PhonUIAction.runnable(() -> deleteTranscriptElement(getSession().getTranscript().getElementAt(transcriptElementIndex)));
+//        deleteThisAct.putValue(PhonUIAction.NAME, "Delete this element");
+//        deleteThis.setAction(deleteThisAct);
+//        menu.add(deleteThis);
 
         menu.show(this, (int) pos.getX(), (int) pos.getY());
     }
@@ -2691,31 +2520,9 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                             setCaretPosition(getNextValidIndex(mousePosInDoc, false));
                         }
 
-                        if (TranscriptStyleConstants.isClickable(attrs)) {
-                            switch (elementType) {
-                                case TranscriptStyleConstants.ELEMENT_TYPE_RECORD -> {
-                                    Record record = TranscriptStyleConstants.getRecord(attrs);
-                                    if (record == null) return;
-
-//                                    if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_SEPARATOR) != null) {
-//                                        onClickSpeakerLabel(e.getPoint(), record);
-//                                        return;
-//                                    }
-
-                                    Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
-                                    if (tier != null) onClickTierLabel(e.getPoint(), tier, record);
-                                }
-                                case TranscriptStyleConstants.ELEMENT_TYPE_COMMENT ->
-                                        onClickCommentLabel(e.getPoint(), TranscriptStyleConstants.getComment(attrs));
-                                case TranscriptStyleConstants.ELEMENT_TYPE_GEM ->
-                                        onClickGemLabel(e.getPoint(), (Gem) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM));
-                                case TranscriptStyleConstants.ELEMENT_TYPE_BLIND_TRANSCRIPTION -> {
-                                    Record record = TranscriptStyleConstants.getRecord(attrs);
-                                    Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
-                                    String transcriber = TranscriptStyleConstants.getTranscriber(attrs);
-                                    onClickBlindTranscriptionLabel(e.getPoint(), record, tier, transcriber);
-                                }
-                            }
+                        final BiConsumer<MouseEvent, AttributeSet> clickHandler = TranscriptStyleConstants.getClickHandler(attrs);
+                        if (clickHandler != null) {
+                            clickHandler.accept(e, attrs);
                         }
                     }
                 }
@@ -2774,7 +2581,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             if (elem != null) {
                 if (elem.equals(hoverElem)) return;
                 AttributeSet attrs = elem.getAttributes();
-                boolean isClickable = TranscriptStyleConstants.isClickable(attrs);
+                boolean isClickable = TranscriptStyleConstants.isUnderlineOnHover(attrs);
                 boolean isWhitespace = doc.getCharAtPos(mousePosInDoc).equals(' ');
                 if (isClickable && !isWhitespace) {
                     hoverElem = elem;

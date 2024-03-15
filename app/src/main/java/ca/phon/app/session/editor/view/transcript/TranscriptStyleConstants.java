@@ -8,6 +8,9 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.MutableAttributeSet;
+import java.awt.event.MouseEvent;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class TranscriptStyleConstants {
 
@@ -156,17 +159,35 @@ public class TranscriptStyleConstants {
             attrs.removeAttribute(ATTR_KEY_NOT_TRAVERSABLE_SYLLABIFICATION);
     }
 
-    public static final String ATTR_KEY_CLICKABLE = "clickable";
+    /**
+     * Attribute key for setting the underline on hover attribute
+     */
+    public static final String ATTR_KEY_UNDERLINE_ON_HOVER = "clickable";
 
-    public static boolean isClickable(AttributeSet attrs) {
-        return attrs.isDefined(ATTR_KEY_CLICKABLE);
+    public static boolean isUnderlineOnHover(AttributeSet attrs) {
+        return attrs.isDefined(ATTR_KEY_UNDERLINE_ON_HOVER);
     }
 
-    public static void setClickable(MutableAttributeSet attrs, boolean clickable) {
+    public static void setUnderlineOnHover(MutableAttributeSet attrs, boolean clickable) {
         if(clickable)
-            attrs.addAttribute(ATTR_KEY_CLICKABLE, Boolean.TRUE);
+            attrs.addAttribute(ATTR_KEY_UNDERLINE_ON_HOVER, Boolean.TRUE);
         else
-            attrs.removeAttribute(ATTR_KEY_CLICKABLE);
+            attrs.removeAttribute(ATTR_KEY_UNDERLINE_ON_HOVER);
+    }
+
+    /**
+     * Attribute key for setting the click handler
+     */
+    public static final String ATTR_KEY_CLICK_HANDLER = "clickHandler";
+
+    public static BiConsumer<MouseEvent, AttributeSet> getClickHandler(AttributeSet attrs) {
+        return (BiConsumer<MouseEvent, AttributeSet>)attrs.getAttribute(ATTR_KEY_CLICK_HANDLER);
+    }
+
+    public static void setClickHandler(MutableAttributeSet attrs, BiConsumer<MouseEvent, AttributeSet> clickHandler) {
+        attrs.removeAttribute(ATTR_KEY_CLICK_HANDLER);
+        if(clickHandler != null)
+            attrs.addAttribute(ATTR_KEY_CLICK_HANDLER, clickHandler);
     }
 
     public static final String ATTR_KEY_COMPONENT_FACTORY = "componentFactory";

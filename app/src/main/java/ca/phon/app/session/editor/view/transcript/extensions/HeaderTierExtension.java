@@ -274,4 +274,5 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
     private boolean isForceShowLanguageHeader() {
         return (boolean) doc.getDocumentPropertyOrDefault("forceShowLanguageHeader", false);
     }
+
 }

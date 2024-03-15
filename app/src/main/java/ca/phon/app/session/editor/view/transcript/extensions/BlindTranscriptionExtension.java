@@ -81,10 +81,10 @@ public class BlindTranscriptionExtension implements TranscriptEditorExtension {
 
         String labelText = "\t" + transcriber;
 
-        labelAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE, true);
+        labelAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_UNDERLINE_ON_HOVER, true);
         retVal.add(TranscriptBatchBuilder.getBatchString(labelText, labelAttrs));
 
-        labelAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_CLICKABLE);
+        labelAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_UNDERLINE_ON_HOVER);
         retVal.add(TranscriptBatchBuilder.getBatchString(": ", labelAttrs));
 
         String transcriptionText = doc.getTierText(tier, transcriber);

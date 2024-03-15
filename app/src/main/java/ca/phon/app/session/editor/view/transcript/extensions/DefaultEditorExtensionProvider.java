@@ -11,6 +11,9 @@ public class DefaultEditorExtensionProvider implements ExtensionProvider {
     @Override
     public void installExtension(IExtendable obj) {
         if (obj instanceof TranscriptEditor editor) {
+            final TierLabelMenuExtension tierLabelMenuExtension = new TierLabelMenuExtension();
+            tierLabelMenuExtension.install(editor);
+
             final MediaSegmentExtension segmentExtension = new MediaSegmentExtension();
             segmentExtension.install(editor);
 

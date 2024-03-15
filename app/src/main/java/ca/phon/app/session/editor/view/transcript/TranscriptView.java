@@ -1052,14 +1052,11 @@ public class TranscriptView extends EditorView {
 
         MenuBuilder menuBuilder = new MenuBuilder(retVal);
 
-//        setupSessionInformationMenu(new MenuBuilder(menuBuilder.addMenu(".", "Session information")));
-//        setupMediaMenu(new MenuBuilder(menuBuilder.addMenu(".", "Media")));
         setupParticipantsMenu(new MenuBuilder(menuBuilder.addMenu(".", "Participants")));
         setupTiersMenu(new MenuBuilder(menuBuilder.addMenu(".", "Tiers")));
         setupRecordMenu(new MenuBuilder(menuBuilder.addMenu(".", "Records")));
         setupCommentsMenu(new MenuBuilder(menuBuilder.addMenu(".", "Comments")));
         setupGemsMenu(new MenuBuilder(menuBuilder.addMenu(".", "Gems")));
-//        setupTranscriptMenu(new MenuBuilder(menuBuilder.addMenu(".", "Transcript")));
 
         menuBuilder.addSeparator(".", "session_menus");
 
@@ -1067,6 +1064,7 @@ public class TranscriptView extends EditorView {
         PhonUIAction<Void> viewMetadataAct = PhonUIAction.runnable(() -> {
             MetadataDialog metadataDialog = new MetadataDialog(CommonModuleFrame.getCurrentFrame());
             metadataDialog.pack();
+            metadataDialog.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
             metadataDialog.setVisible(true);
         });
         viewMetadataAct.putValue(PhonUIAction.NAME, "View metadata");
