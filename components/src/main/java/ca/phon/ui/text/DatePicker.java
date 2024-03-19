@@ -44,7 +44,7 @@ public class DatePicker extends JComponent {
 
 	private LocalDate promptDate;
 	
-	private JButton monthViewButton;
+	private FlatButton monthViewButton;
 	
 	private boolean valueIsAdjusting;
 	
@@ -139,6 +139,14 @@ public class DatePicker extends JComponent {
 	public void setDateTime(LocalDate dateTime) {
 		final LocalDate currentDateTime = getDateTime();
 		textField.setValue(dateTime);
+	}
+
+	public FormatterTextField<LocalDate> getTextFieldComponent() {
+		return textField;
+	}
+
+	public FlatButton getMonthViewButton() {
+		return monthViewButton;
 	}
 	
 	public FormatterTextField<LocalDate> getTextField() {

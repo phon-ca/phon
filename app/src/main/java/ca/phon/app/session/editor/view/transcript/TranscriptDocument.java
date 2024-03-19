@@ -625,7 +625,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 break;
             }
         }
-        final int tierEnd = elem.getEndOffset();
+        final int tierEnd = elem.getEndOffset() - 1;
 
         return new StartEnd(tierStart, tierEnd);
     }

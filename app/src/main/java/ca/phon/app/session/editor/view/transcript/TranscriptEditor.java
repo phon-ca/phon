@@ -2284,10 +2284,8 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                 final TranscriptElementLocation newLoc = editorEvent.data().newLoc;
 
                 if (oldLoc.tier() != null && !oldLoc.tier().equals(newLoc.tier())) {
-                    if (oldLoc.transcriptElementIndex() < 0) {
-                        // generic (header) tier change
-                        // TODO handle generic tier change
-                    } else {
+                    // header tiers are updated in the HeaderTierExtension
+                    if (oldLoc.transcriptElementIndex() >= 0) {
                         final Transcript.Element transcriptElement = getSession().getTranscript().getElementAt(oldLoc.transcriptElementIndex());
                         if (transcriptElement.isRecord()) {
                             final Record record = transcriptElement.asRecord();
@@ -2432,13 +2430,13 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     /**
      * The {@link Highlighter.HighlightPainter} that paints the error underlines
      */
-    private class ErrorUnderlinePainter implements Highlighter.HighlightPainter {
+    public static class ErrorUnderlinePainter implements Highlighter.HighlightPainter {
 
         @Override
         public void paint(Graphics g, int p0, int p1, Shape bounds, JTextComponent c) {
             try {
-                var firstCharRect = modelToView2D(p0);
-                var lastCharRect = modelToView2D(p1);
+                var firstCharRect = c.modelToView2D(p0);
+                var lastCharRect = c.modelToView2D(p1);
                 g.setColor(Color.RED);
                 int lineY = ((int) firstCharRect.getMaxY()) - 9;
                 g.drawLine((int) firstCharRect.getMinX(), lineY, (int) lastCharRect.getMaxX(), lineY);
@@ -2668,5 +2666,4 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             Participant participant
     ) {}
 
-    
 }

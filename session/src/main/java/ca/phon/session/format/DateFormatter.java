@@ -20,6 +20,7 @@ import ca.phon.formatter.*;
 import java.text.ParseException;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 @FormatterType(LocalDate.class)
 public class DateFormatter implements Formatter<LocalDate> {
@@ -86,6 +87,11 @@ public class DateFormatter implements Formatter<LocalDate> {
 
 	@Override
 	public LocalDate parse(String text) throws ParseException {
-		return DateFormatter.stringToDateTime(text);
+		final DateTimeFormatter formatter = createFormatter();
+		try {
+			return LocalDate.parse(text, formatter);
+		} catch (DateTimeParseException e) {
+			throw new ParseException(e.getLocalizedMessage(), e.getErrorIndex());
+		}
 	}
 }

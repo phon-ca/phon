@@ -4,21 +4,30 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.app.session.editor.undo.SessionDateEdit;
 import ca.phon.app.session.editor.view.transcript.*;
+import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.formatter.Formatter;
 import ca.phon.session.*;
 import ca.phon.session.tierdata.TierData;
+import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.ui.text.DatePicker;
 import ca.phon.util.Language;
 import ca.phon.util.LanguageEntry;
 import ca.phon.util.LanguageParser;
+import org.apache.derby.impl.sql.catalog.DD_Version;
 
+import javax.swing.*;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.SimpleAttributeSet;
+import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -37,6 +46,8 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
     /* State */
 
     private final Map<String, Tier<?>> headerTierMap = new HashMap<>();
+
+    private final Map<Tier<?>, Object> errorUnderlineHighlights = new HashMap<>();
 
 
     @Override
@@ -157,6 +168,7 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
 
         editor.getEventManager().registerActionForEvent(EditorEventType.TierViewChanged, this::updateTiersHeader, EditorEventManager.RunOn.AWTEventDispatchThread);
         editor.getEventManager().registerActionForEvent(EditorEventType.SessionDateChanged, this::updateDateHeader, EditorEventManager.RunOn.AWTEventDispatchThread);
+        editor.getEventManager().registerActionForEvent(TranscriptEditor.transcriptLocationChanged, this::onSessionLocationChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
     }
 
     private boolean isHeadersVisible() {
@@ -236,7 +248,28 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
     private void appendDateHeader(TranscriptBatchBuilder batchBuilder) {
         Tier<LocalDate> dateTier = (Tier<LocalDate>) headerTierMap.get("date");
         dateTier.setValue(editor.getSession().getDate());
-        batchBuilder.appendGeneric("Date", dateTier, new SimpleAttributeSet());
+
+        final SimpleAttributeSet attrs = new SimpleAttributeSet(doc.getTranscriptStyleContext().getStyle(TranscriptStyleContext.DEFAULT_STYLE));
+        TranscriptStyleConstants.setElementType(attrs, TranscriptStyleConstants.ELEMENT_TYPE_GENERIC);
+        TranscriptStyleConstants.setGenericTier(attrs, dateTier);
+
+        // start paragraph
+        batchBuilder.appendBatchEndStart(batchBuilder.getTrailingAttributes(), attrs);
+
+        // label
+        final SimpleAttributeSet labelAttrs = new SimpleAttributeSet(attrs);
+        labelAttrs.addAttributes(doc.getTranscriptStyleContext().getLabelAttributes());
+        TranscriptStyleConstants.setClickHandler(labelAttrs, (e, tier) -> {
+            showDateTierMenu(e, dateTier);
+        });
+        String labelText = batchBuilder.formatLabelText("Date");
+        TranscriptStyleConstants.setUnderlineOnHover(labelAttrs, true);
+        batchBuilder.appendBatchString(labelText, labelAttrs);
+        TranscriptStyleConstants.setUnderlineOnHover(labelAttrs, false);
+        batchBuilder.appendBatchString(": ", labelAttrs);
+
+        // value
+        batchBuilder.appendBatchString(dateTier.toString(), attrs);
     }
 
     /**
@@ -246,26 +279,74 @@ public class HeaderTierExtension implements TranscriptEditorExtension {
      * */
     public void updateDateHeader(EditorEvent<EditorEventType.SessionDateChangedData> event) {
         try {
-            Tier<?> dateHeaderTier = headerTierMap.get("date");
-            int start = doc.getGenericStart(dateHeaderTier);
-            int end = doc.getGenericEnd(dateHeaderTier);
-
-            if (start > -1 && end > -1) {
-                doc.setBypassDocumentFilter(true);
-                doc.remove(start, end - start);
+            Tier<LocalDate> dateHeaderTier = (Tier<LocalDate>) headerTierMap.get("date");
+            if(errorUnderlineHighlights.containsKey(dateHeaderTier)) {
+                editor.getHighlighter().removeHighlight(errorUnderlineHighlights.get(dateHeaderTier));
+                errorUnderlineHighlights.remove(dateHeaderTier);
             }
 
-            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(doc.getTranscriptStyleContext(), doc.getInsertionHooks());
-            appendDateHeader(batchBuilder);
-            batchBuilder.appendEOL();
-//            var newLineAttrs = doc.getTranscriptStyleContext().getTrailingAttributes(inserts);
-//            batchBuilder.appendAll(inserts);
-//            batchBuilder.appendBatchLineFeed(newLineAttrs, null);
-            doc.processBatchUpdates(start > -1 ? start : 0, batchBuilder.getBatch());
+            final UnvalidatedValue uv = dateHeaderTier.getUnvalidatedValue();
+            dateHeaderTier.setValue(event.getData().get().newDate());
+            dateHeaderTier.putExtension(UnvalidatedValue.class, uv);
+            TranscriptDocument.StartEnd startEnd = doc.getGenericContentStartEnd(dateHeaderTier);
+
+            if (startEnd.valid()) {
+                doc.setBypassDocumentFilter(true);
+                editor.getTranscriptEditorCaret().freeze();
+                doc.remove(startEnd.start(), startEnd.length());
+
+                final SimpleAttributeSet attrs = new SimpleAttributeSet(doc.getTranscriptStyleContext().getStyle(TranscriptStyleContext.DEFAULT_STYLE));
+                TranscriptStyleConstants.setElementType(attrs, TranscriptStyleConstants.ELEMENT_TYPE_GENERIC);
+                TranscriptStyleConstants.setGenericTier(attrs, dateHeaderTier);
+
+                TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(doc.getTranscriptStyleContext(), doc.getInsertionHooks());
+                batchBuilder.appendBatchString(dateHeaderTier.toString(), attrs);
+                doc.processBatchUpdates(startEnd.start(), batchBuilder.getBatch());
+
+                if(dateHeaderTier.isUnvalidated()) {
+                    errorUnderlineHighlights.put(dateHeaderTier,
+                            editor.getHighlighter().addHighlight(startEnd.start(), startEnd.end(), new TranscriptEditor.ErrorUnderlinePainter()));
+                }
+            }
         }
         catch (BadLocationException e) {
             LogUtil.severe(e);
+        } finally {
+            editor.getTranscriptEditorCaret().unfreeze();
         }
+    }
+
+    private void onSessionLocationChanged(EditorEvent<TranscriptEditor.TranscriptLocationChangeData> evt) {
+        if(evt.getData().get().oldLoc().transcriptElementIndex() == -1) {
+            if(evt.getData().get().oldLoc().tier().equals("Date")) {
+                final Tier<LocalDate> dateTier = (Tier<LocalDate>) headerTierMap.get("date");
+                final TranscriptDocument.StartEnd startEnd = doc.getGenericContentStartEnd(dateTier);
+                if(startEnd.valid()) {
+                    try {
+                        final LocalDate date = dateTier.getValue();
+                        final String dateStr = doc.getText(startEnd.start(), startEnd.length());
+                        dateTier.setText(dateStr);
+
+                        if(dateTier.isUnvalidated()) {
+                            final SessionDateEdit edit = new SessionDateEdit(session, editor.getEventManager(), null, date);
+                            editor.getUndoSupport().postEdit(edit);
+                        } else {
+                            final SessionDateEdit edit = new SessionDateEdit(session, editor.getEventManager(), dateTier.getValue(), date);
+                            editor.getUndoSupport().postEdit(edit);
+                        }
+                    } catch (BadLocationException e) {
+                        LogUtil.warning(e);
+                    }
+                }
+            }
+        }
+    }
+
+    private void showDateTierMenu(MouseEvent e, Tier<LocalDate> dateTier) {
+//        final JMenu menu = new JMenu("Date");
+//        final MenuBuilder builder = new MenuBuilder(menu);
+//
+//        final DatePicker
     }
 
     /**
