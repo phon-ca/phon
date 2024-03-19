@@ -233,9 +233,8 @@ public class TierLabelMenuExtension implements TranscriptEditorExtension {
             if(TranscriptStyleConstants.isLabel(attrs) && TranscriptStyleConstants.isUnderlineOnHover(attrs)) {
                 final String elementType = TranscriptStyleConstants.getElementType(attrs);
                 switch (elementType) {
-                    case TranscriptStyleConstants.ELEMENT_TYPE_RECORD -> {
+                    case TranscriptStyleConstants.ELEMENT_TYPE_RECORD ->
                         TranscriptStyleConstants.setClickHandler(attrs, TierLabelMenuExtension.this::tierLabelClickHandler);
-                    }
                     case TranscriptStyleConstants.ELEMENT_TYPE_COMMENT ->
                         TranscriptStyleConstants.setClickHandler(attrs, TierLabelMenuExtension.this::commentLabelClickHandler);
                     case TranscriptStyleConstants.ELEMENT_TYPE_GEM ->

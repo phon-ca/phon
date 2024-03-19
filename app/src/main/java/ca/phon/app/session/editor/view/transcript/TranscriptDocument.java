@@ -621,6 +621,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             // If correct tier name
             if (isLabel) {
                 tierStart = innerElem.getEndOffset();
+            } else {
                 break;
             }
         }

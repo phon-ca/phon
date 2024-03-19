@@ -1272,7 +1272,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                         var highlightRect = new Rectangle((int) startRect.getMinX(), (int) startRect.getMinY(), (int) (endRect.getMaxX() - startRect.getMinX()), (int) (endRect.getMaxY() - startRect.getMinY()));
                         highlight.getPainter().paint(g, highlight.getStartOffset(), highlight.getEndOffset(), highlightRect, this);
                     } catch (BadLocationException e) {
-                        LogUtil.severe(e);
+                        getHighlighter().removeHighlight(highlight);
                     }
                 }
             }
@@ -2422,7 +2422,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                 int lineY = ((int) firstCharRect.getMaxY()) - 9;
                 g.drawLine((int) firstCharRect.getMinX(), lineY, (int) lastCharRect.getMaxX(), lineY);
             } catch (BadLocationException e) {
-                throw new RuntimeException(e);
+                LogUtil.warning(e);
             }
         }
     }
@@ -2443,7 +2443,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                 int lineY = ((int) firstCharRect.getMaxY()) - 9;
                 g.drawLine((int) firstCharRect.getMinX(), lineY, (int) lastCharRect.getMaxX(), lineY);
             } catch (BadLocationException e) {
-                throw new RuntimeException(e);
+                LogUtil.warning(e);
             }
         }
     }
@@ -2475,7 +2475,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
 
                 g2d.drawRect((int) p0Rect.getMinX(), (int) p0Rect.getMinY(), (int) (p1Rect.getMaxX() - p0Rect.getMinX()) - 1, actualLineHeight - 1);
             } catch (BadLocationException e) {
-                LogUtil.severe(e);
+                LogUtil.warning(e);
             }
 
         }
