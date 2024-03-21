@@ -6,6 +6,7 @@ import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.undo.MediaLocationEdit;
 import ca.phon.app.session.editor.undo.SessionDateEdit;
+import ca.phon.app.session.editor.undo.SessionLanguageEdit;
 import ca.phon.app.session.editor.view.transcript.*;
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.formatter.Formatter;
@@ -82,6 +83,7 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
         editor.getEventManager().registerActionForEvent(EditorEventType.SessionDateChanged, this::updateDateHeader, EditorEventManager.RunOn.AWTEventDispatchThread);
         editor.getEventManager().registerActionForEvent(TranscriptEditor.transcriptLocationChanged, this::onSessionLocationChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
         editor.getEventManager().registerActionForEvent(EditorEventType.SessionMediaChanged, this::onSessionMediaChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+        editor.getEventManager().registerActionForEvent(EditorEventType.SessionLangChanged, this::updateLanguagesHeader, EditorEventManager.RunOn.AWTEventDispatchThread);
     }
 
     @Override
@@ -95,61 +97,20 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
             TranscriptStyleContext transcriptStyleContext = doc.getTranscriptStyleContext();
 
             // Add date line if present
-            if (session.getDate() != null) {
-                appendDateHeader(batchBuilder);
-                batchBuilder.appendEOL();
-            }
+            appendDateHeader(batchBuilder);
+            batchBuilder.appendEOL();
 
             // Add media line if present
-            var sessionMedia = session.getMediaLocation();
-            if (sessionMedia != null) {
-                appendMediaHeader(batchBuilder);
-                batchBuilder.appendEOL();
-            }
+            appendMediaHeader(batchBuilder);
+            batchBuilder.appendEOL();
 
             // Add languages line if present
-            var sessionLanguages = session.getLanguages();
-            if ((sessionLanguages != null && !sessionLanguages.isEmpty()) || isForceShowLanguageHeader()) {
-                Tier<TranscriptDocument.Languages> languagesTier = (Tier<TranscriptDocument.Languages>) headerTierMap.get("languages");
-                languagesTier.setFormatter(new Formatter<>() {
-                    @Override
-                    public String format(TranscriptDocument.Languages obj) {
-                        return obj
-                                .languageList()
-                                .stream()
-                                .map(Language::toString)
-                                .collect(Collectors.joining(" "));
-                    }
-
-                    @Override
-                    public TranscriptDocument.Languages parse(String text) throws ParseException {
-                        List<Language> languageList = new ArrayList<>();
-
-                        String[] languageStrings = text.split(" ");
-                        for (String languageString : languageStrings) {
-                            LanguageEntry languageEntry = LanguageParser.getInstance().getEntryById(languageString);
-                            if (languageEntry == null) throw new ParseException(text, text.indexOf(languageString));
-
-                            languageList.add(Language.parseLanguage(languageString));
-                        }
-
-                        return new TranscriptDocument.Languages(languageList);
-                    }
-                });
-                languagesTier.setValue(new TranscriptDocument.Languages(sessionLanguages));
-                batchBuilder.appendGeneric("Languages", languagesTier, null);
-                batchBuilder.appendEOL();
-//                        retVal.addAll(doc.getGeneric("Languages", languagesTier, null));
-//                        newLineAttrs = transcriptStyleContext.getTrailingAttributes(retVal);
-//                        retVal.addAll(TranscriptBatchBuilder.getBatchEndLineFeed(newLineAttrs, null));
-            }
+            appendLanguagesHeader(batchBuilder);
+            batchBuilder.appendEOL();
 
             // Add Tiers header
             appendTiersHeader(batchBuilder);
             batchBuilder.appendEOL();
-//                    retVal.addAll(appendTiersHeader());
-//                    newLineAttrs = transcriptStyleContext.getTrailingAttributes(retVal);
-//                    retVal.addAll(TranscriptBatchBuilder.getBatchEndLineFeed(newLineAttrs, null));
 
             // Add Participants header
             Tier<TierData> participantsTier = (Tier<TierData>) headerTierMap.get("participants");
@@ -179,6 +140,132 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
 
     private boolean isHeadersVisible() {
         return (boolean) doc.getDocumentPropertyOrDefault(HEADERS_VISIBLE, DEFAULT_HEADERS_VISIBLE);
+    }
+
+    private void appendLanguagesHeader(TranscriptBatchBuilder batchBuilder) {
+        Tier<TranscriptDocument.Languages> languagesTier = (Tier<TranscriptDocument.Languages>) headerTierMap.get("languages");
+        languagesTier.setFormatter(new Formatter<>() {
+            @Override
+            public String format(TranscriptDocument.Languages obj) {
+                return obj
+                        .languageList()
+                        .stream()
+                        .map(Language::toString)
+                        .collect(Collectors.joining(" "));
+            }
+
+            @Override
+            public TranscriptDocument.Languages parse(String text) throws ParseException {
+                List<Language> languageList = new ArrayList<>();
+
+                String[] languageStrings = text.split(" ");
+                int idx = 0;
+                for (String languageString : languageStrings) {
+                    try {
+                        Language lang = Language.parseLanguage(languageString);
+
+                        final LanguageEntry staticEntry = LanguageParser.getInstance().getEntryById(lang.getPrimaryLanguage().getId());
+                        if(staticEntry == null) {
+                            // unknown language
+                            throw new IllegalArgumentException("Unknown language: " + lang.getPrimaryLanguage().getId());
+                        }
+
+                        languageList.add(lang);
+                        idx += languageString.length() + 1;
+                    } catch (IllegalArgumentException e) {
+                       throw new ParseException(e.getMessage(), idx);
+                    }
+                }
+
+                return new TranscriptDocument.Languages(languageList);
+            }
+        });
+        final TranscriptDocument.Languages sessionLanguages = new TranscriptDocument.Languages(session.getLanguages());
+        languagesTier.setValue(sessionLanguages);
+
+        final SimpleAttributeSet attrs = new SimpleAttributeSet(doc.getTranscriptStyleContext().getStyle(TranscriptStyleContext.DEFAULT_STYLE));
+        TranscriptStyleConstants.setElementType(attrs, TranscriptStyleConstants.ELEMENT_TYPE_GENERIC);
+        TranscriptStyleConstants.setGenericTier(attrs, languagesTier);
+
+        // start paragraph
+        batchBuilder.appendBatchEndStart(batchBuilder.getTrailingAttributes(), attrs);
+
+        // label
+        final SimpleAttributeSet labelAttrs = new SimpleAttributeSet(attrs);
+        labelAttrs.addAttributes(doc.getTranscriptStyleContext().getLabelAttributes());
+        TranscriptStyleConstants.setClickHandler(labelAttrs, (e, tier) -> {
+        });
+        String labelText = batchBuilder.formatLabelText("Languages");
+        TranscriptStyleConstants.setUnderlineOnHover(labelAttrs, true);
+        batchBuilder.appendBatchString(labelText, labelAttrs);
+        TranscriptStyleConstants.setUnderlineOnHover(labelAttrs, false);
+        batchBuilder.appendBatchString(": ", labelAttrs);
+
+        // value
+        batchBuilder.appendBatchString(languagesTier.toString(), attrs);
+    }
+
+    private void updateLanguagesHeader(EditorEvent<EditorEventType.SessionLangChangedData> event) {
+        if(event.getData().isEmpty()) return;
+        try {
+            Tier<TranscriptDocument.Languages> languagesHeaderTier = (Tier<TranscriptDocument.Languages>) headerTierMap.get("languages");
+            if(errorUnderlineHighlights.containsKey(languagesHeaderTier)) {
+                editor.getHighlighter().removeHighlight(errorUnderlineHighlights.get(languagesHeaderTier));
+                errorUnderlineHighlights.remove(languagesHeaderTier);
+            }
+
+            final UnvalidatedValue uv = languagesHeaderTier.getUnvalidatedValue();
+            languagesHeaderTier.setValue(new TranscriptDocument.Languages(event.getData().get().newLang()));
+            if((!languagesHeaderTier.hasValue() || languagesHeaderTier.getValue().languageList().isEmpty()) && uv != null) {
+                languagesHeaderTier.putExtension(UnvalidatedValue.class, uv);
+            }
+            TranscriptDocument.StartEnd startEnd = doc.getGenericContentStartEnd(languagesHeaderTier);
+
+            if (startEnd.valid()) {
+                doc.setBypassDocumentFilter(true);
+                editor.getTranscriptEditorCaret().freeze();
+                doc.remove(startEnd.start(), startEnd.length());
+
+                final SimpleAttributeSet attrs = new SimpleAttributeSet(doc.getTranscriptStyleContext().getStyle(TranscriptStyleContext.DEFAULT_STYLE));
+                TranscriptStyleConstants.setElementType(attrs, TranscriptStyleConstants.ELEMENT_TYPE_GENERIC);
+                TranscriptStyleConstants.setGenericTier(attrs, languagesHeaderTier);
+
+                TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(doc.getTranscriptStyleContext(), doc.getInsertionHooks());
+                final String langStr = languagesHeaderTier.isUnvalidated() ? languagesHeaderTier.getUnvalidatedValue().getValue() : languagesHeaderTier.toString();
+                batchBuilder.appendBatchString(langStr, attrs);
+                doc.processBatchUpdates(startEnd.start(), batchBuilder.getBatch());
+
+                if(languagesHeaderTier.isUnvalidated()) {
+                    errorUnderlineHighlights.put(languagesHeaderTier,
+                            editor.getHighlighter().addHighlight(startEnd.start() + languagesHeaderTier.getUnvalidatedValue().getParseError().getErrorOffset(), startEnd.end(), new TranscriptEditor.ErrorUnderlinePainter()));
+                }
+            }
+        }
+        catch (BadLocationException e) {
+            LogUtil.severe(e);
+        } finally {
+            editor.getTranscriptEditorCaret().unfreeze();
+        }
+    }
+
+    private void updateLanguagesFromText() {
+        final Tier<TranscriptDocument.Languages> languagesTier = (Tier<TranscriptDocument.Languages>) headerTierMap.get("languages");
+        final TranscriptDocument.StartEnd startEnd = doc.getGenericContentStartEnd(languagesTier);
+        if(startEnd.valid()) {
+            try {
+                final String currentLanguagesString = languagesTier.toString();
+                final String languagesStr = doc.getText(startEnd.start(), startEnd.length());
+                if(!languagesStr.equals(currentLanguagesString)) {
+                    languagesTier.setText(languagesStr);
+
+                    final List<Language> languages = languagesTier.hasValue() ? languagesTier.getValue().languageList() : Collections.emptyList();
+                    final SessionLanguageEdit edit = new SessionLanguageEdit(session, editor.getEventManager(), languages);
+                    editor.getUndoSupport().postEdit(edit);
+                }
+            } catch (BadLocationException e) {
+                LogUtil.warning(e);
+            }
+        }
     }
 
     /**
@@ -414,6 +501,31 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
         }
     }
 
+    private void updateDateFromText() {
+        final Tier<LocalDate> dateTier = (Tier<LocalDate>) headerTierMap.get("date");
+        final String currentDateString = dateTier.toString();
+        final TranscriptDocument.StartEnd startEnd = doc.getGenericContentStartEnd(dateTier);
+        if(startEnd.valid()) {
+            try {
+                final LocalDate date = dateTier.getValue();
+                final String dateStr = doc.getText(startEnd.start(), startEnd.length());
+                if(!dateStr.equals(currentDateString)) {
+                    dateTier.setText(dateStr);
+
+                    if (dateTier.isUnvalidated()) {
+                        final SessionDateEdit edit = new SessionDateEdit(session, editor.getEventManager(), null, date);
+                        editor.getUndoSupport().postEdit(edit);
+                    } else {
+                        final SessionDateEdit edit = new SessionDateEdit(session, editor.getEventManager(), dateTier.getValue(), date);
+                        editor.getUndoSupport().postEdit(edit);
+                    }
+                }
+            } catch (BadLocationException e) {
+                LogUtil.warning(e);
+            }
+        }
+    }
+
     private void onSessionMediaChanged(EditorEvent<EditorEventType.SessionMediaChangedData> evt) {
         if(!evt.getData().isPresent()) return;
         try {
@@ -459,48 +571,33 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
         }
     }
 
+    private void updateMediaFromText() {
+        final Tier<TierData> mediaTier = (Tier<TierData>) headerTierMap.get("media");
+        final TranscriptDocument.StartEnd startEnd = doc.getGenericContentStartEnd(mediaTier);
+        if(startEnd.valid()) {
+            try {
+                final String currentMediaString = mediaTier.toString();
+                final String mediaStr = doc.getText(startEnd.start(), startEnd.length());
+                if(!mediaStr.equals(currentMediaString)) {
+                    mediaTier.setText(mediaStr);
+
+                    final MediaLocationEdit edit = new MediaLocationEdit(session, editor.getEventManager(), mediaTier.getValue().toString());
+                    editor.getUndoSupport().postEdit(edit);
+                }
+            } catch (BadLocationException e) {
+                LogUtil.warning(e);
+            }
+        }
+    }
+
     private void onSessionLocationChanged(EditorEvent<TranscriptEditor.TranscriptLocationChangeData> evt) {
         if(evt.getData().get().oldLoc().transcriptElementIndex() == -1) {
             if(evt.getData().get().oldLoc().tier().equals("Date")) {
-                final Tier<LocalDate> dateTier = (Tier<LocalDate>) headerTierMap.get("date");
-                final String currentDateString = dateTier.toString();
-                final TranscriptDocument.StartEnd startEnd = doc.getGenericContentStartEnd(dateTier);
-                if(startEnd.valid()) {
-                    try {
-                        final LocalDate date = dateTier.getValue();
-                        final String dateStr = doc.getText(startEnd.start(), startEnd.length());
-                        if(!dateStr.equals(currentDateString)) {
-                            dateTier.setText(dateStr);
-
-                            if (dateTier.isUnvalidated()) {
-                                final SessionDateEdit edit = new SessionDateEdit(session, editor.getEventManager(), null, date);
-                                editor.getUndoSupport().postEdit(edit);
-                            } else {
-                                final SessionDateEdit edit = new SessionDateEdit(session, editor.getEventManager(), dateTier.getValue(), date);
-                                editor.getUndoSupport().postEdit(edit);
-                            }
-                        }
-                    } catch (BadLocationException e) {
-                        LogUtil.warning(e);
-                    }
-                }
+                updateDateFromText();
             } else if(evt.getData().get().oldLoc().tier().equals("Media")) {
-                final Tier<TierData> mediaTier = (Tier<TierData>) headerTierMap.get("media");
-                final TranscriptDocument.StartEnd startEnd = doc.getGenericContentStartEnd(mediaTier);
-                if(startEnd.valid()) {
-                    try {
-                        final String currentMediaString = mediaTier.toString();
-                        final String mediaStr = doc.getText(startEnd.start(), startEnd.length());
-                        if(!mediaStr.equals(currentMediaString)) {
-                            mediaTier.setText(mediaStr);
-
-                            final MediaLocationEdit edit = new MediaLocationEdit(session, editor.getEventManager(), mediaTier.getValue().toString());
-                            editor.getUndoSupport().postEdit(edit);
-                        }
-                    } catch (BadLocationException e) {
-                        LogUtil.warning(e);
-                    }
-                }
+                updateDateFromText();
+            } else if(evt.getData().get().oldLoc().tier().equals("Languages")) {
+                updateLanguagesFromText();
             }
         }
     }

@@ -256,6 +256,7 @@ public final class Tier<T> implements IExtendable {
 			setValue(obj);
 			return true;
 		} catch (ParseException pe) {
+			setValue(null);
 			final UnvalidatedValue uv = new UnvalidatedValue(text, pe);
 			if(IExtendable.class.isAssignableFrom(getDeclaredType())) {
 				try {
