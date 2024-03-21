@@ -16,6 +16,9 @@ import ca.phon.ui.CalloutWindow;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
+import ca.phon.ui.nativedialogs.FileFilter;
+import ca.phon.ui.nativedialogs.NativeDialogs;
+import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.ui.text.DatePicker;
 import ca.phon.util.Language;
 import ca.phon.util.LanguageEntry;
@@ -412,6 +415,7 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
     }
 
     private void onSessionMediaChanged(EditorEvent<EditorEventType.SessionMediaChangedData> evt) {
+        if(!evt.getData().isPresent()) return;
         try {
             Tier<TierData> mediaTier = (Tier<TierData>) headerTierMap.get("media");
             if(errorUnderlineHighlights.containsKey(mediaTier)) {
@@ -419,11 +423,14 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
                 errorUnderlineHighlights.remove(mediaTier);
             }
 
-            mediaTier.setValue(TierData.parseTierData(evt.getData().get().newMedia()));
-            final File file = MediaLocator.findMediaFile(mediaTier.getValue().toString(), editor.getDataModel().getProject(), editor.getSession().getCorpus());
-            if(file == null || !file.exists()) {
-                final UnvalidatedValue uv = new UnvalidatedValue(mediaTier.getValue().toString(), new ParseException("Media file does not exist", 0));
-                mediaTier.getValue().putExtension(UnvalidatedValue.class, uv);
+            final TierData newVal = evt.getData().get().newMedia() != null ? TierData.parseTierData(evt.getData().get().newMedia()) : null;
+            mediaTier.setValue(newVal);
+            if(newVal != null) {
+                final File file = MediaLocator.findMediaFile(mediaTier.getValue().toString(), editor.getDataModel().getProject(), editor.getSession().getCorpus());
+                if (file == null || !file.exists()) {
+                    final UnvalidatedValue uv = new UnvalidatedValue(mediaTier.getValue().toString(), new ParseException("Media file does not exist", 0));
+                    mediaTier.getValue().putExtension(UnvalidatedValue.class, uv);
+                }
             }
 
             TranscriptDocument.StartEnd startEnd = doc.getGenericContentStartEnd(mediaTier);
@@ -525,22 +532,42 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
     }
 
     private void showMediaTierMenu(MouseEvent e, Tier<TierData> mediaTier) {
-//        final JMenu menu = new JMenu("Media");
-//        final MenuBuilder builder = new MenuBuilder(menu);
-//
-//        final JMenuItem editItem = new JMenuItem("Edit");
-//        editItem.addActionListener( e1 -> {
-//            final String oldValue = mediaTier.getValue();
-//            final String newValue = JOptionPane.showInputDialog(editor, "Enter new media location", oldValue);
-//            if(newValue != null) {
-//                mediaTier.setValue(newValue);
-//                final SessionMediaEdit edit = new SessionMediaEdit(session, editor.getEventManager(), oldValue, newValue);
-//                editor.getUndoSupport().postEdit(edit);
-//            }
-//        });
-//        builder.addItem(".", editItem);
-//
-//        menu.show(editor, e.getX(), e.getY());
+        final JMenu menu = new JMenu("Media");
+        final MenuBuilder builder = new MenuBuilder(menu);
+
+        final PhonUIAction<Void> clearMediaAct = PhonUIAction.runnable(() -> {
+            final MediaLocationEdit edit = new MediaLocationEdit(session, editor.getEventManager(), null);
+            editor.getUndoSupport().postEdit(edit);
+        });
+        clearMediaAct.putValue(PhonUIAction.NAME, "Remove media");
+        clearMediaAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Remove media from session");
+        builder.addItem(".", clearMediaAct);
+
+        final PhonUIAction<Void> browseForMediaAct = PhonUIAction.runnable(this::browseForMedia);
+        browseForMediaAct.putValue(PhonUIAction.NAME, "Browse...");
+        browseForMediaAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Browse for media file");
+        builder.addItem(".", browseForMediaAct);
+
+        menu.getPopupMenu().show(editor, e.getX(), e.getY());
+    }
+
+    private void browseForMedia() {
+        final OpenDialogProperties props = new OpenDialogProperties();
+        props.setRunAsync(false);
+        props.setAllowMultipleSelection(false);
+        props.setCanChooseDirectories(false);
+        props.setCanChooseFiles(true);
+        props.setFileFilter(FileFilter.mediaFilter);
+        props.setTitle("Select media for session");
+
+        final List<String> selectedFiles =
+                NativeDialogs.showOpenDialog(props);
+        if(selectedFiles != null && selectedFiles.size() > 0) {
+            final String path = selectedFiles.get(0);
+
+            final MediaLocationEdit edit = new MediaLocationEdit(session, editor.getEventManager(), path);
+            editor.getUndoSupport().postEdit(edit);
+        }
     }
 
     /**
