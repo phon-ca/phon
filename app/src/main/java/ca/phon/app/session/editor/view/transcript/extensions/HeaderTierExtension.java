@@ -108,10 +108,6 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
             appendLanguagesHeader(batchBuilder);
             batchBuilder.appendEOL();
 
-            // Add Tiers header
-            appendTiersHeader(batchBuilder);
-            batchBuilder.appendEOL();
-
             // Add Participants header
             Tier<TierData> participantsTier = (Tier<TierData>) headerTierMap.get("participants");
             Participants participants = session.getParticipants();
@@ -130,9 +126,9 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
             batchBuilder.appendGeneric("Participants", participantsTier, attrs);
             batchBuilder.appendEOL();
 
-//                    retVal.addAll(doc.getGeneric("Participants", participantsTier, transcriptStyleContext.getParticipantsHeaderAttributes()));
-//                    newLineAttrs = transcriptStyleContext.getTrailingAttributes(retVal);
-//                    retVal.addAll(TranscriptBatchBuilder.getBatchEndLineFeed(newLineAttrs, null));
+            // Add Tiers header
+            appendTiersHeader(batchBuilder);
+            batchBuilder.appendEOL();
         }
 
         return batchBuilder.getBatch();
@@ -275,35 +271,31 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
      * @return the list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} data
      * */
     public void appendTiersHeader(TranscriptBatchBuilder batchBuilder) {
-        Tier<TierData> tiersTier = (Tier<TierData>) headerTierMap.get("tiers");
+        Tier<TierData> tiersHeaderTier = (Tier<TierData>) headerTierMap.get("tiers");
+        tiersHeaderTier.setText(session.getTierView().stream()
+                .filter(TierViewItem::isVisible).map(TierViewItem::getTierName).collect(Collectors.joining(", ")));
 
-        int start = doc.getGenericContentStart(tiersTier);
-        int end = doc.getGenericEnd(tiersTier);
+        final SimpleAttributeSet attrs = new SimpleAttributeSet(doc.getTranscriptStyleContext().getStyle(TranscriptStyleContext.DEFAULT_STYLE));
+        TranscriptStyleConstants.setElementType(attrs, TranscriptStyleConstants.ELEMENT_TYPE_GENERIC);
+        TranscriptStyleConstants.setGenericTier(attrs, tiersHeaderTier);
 
-        List<TierViewItem> visibleTierView = doc.getSession()
-            .getTierView()
-            .stream()
-            .filter(item -> item.isVisible())
-            .toList();
-        StringJoiner joiner = new StringJoiner(", ");
-        for (TierViewItem item : visibleTierView) {
-            joiner.add(item.getTierName());
-//                boolean isIPATier = doc.getSession()
-//                    .getTiers()
-//                    .stream()
-//                    .filter(td -> td.getName().equals(item.getTierName()))
-//                    .anyMatch(td -> td.getDeclaredType().equals(IPATranscript.class));
-//                if (isSyllabificationVisible() && isIPATier) {
-//                    joiner.add(item.getTierName() + " Syllabification");
-//                }
-//                if (alignmentVisible && alignmentParent == item) {
-//                    joiner.add("Alignment");
-//                }
-        }
-        tiersTier.setText(joiner.toString());
-        final SimpleAttributeSet attrs = new SimpleAttributeSet();
-        attrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
-        batchBuilder.appendGeneric("Tiers", tiersTier, attrs);
+        // start paragraph
+        batchBuilder.appendBatchEndStart(batchBuilder.getTrailingAttributes(), attrs);
+
+        // label
+        final SimpleAttributeSet labelAttrs = new SimpleAttributeSet(attrs);
+        labelAttrs.addAttributes(doc.getTranscriptStyleContext().getLabelAttributes());
+        TranscriptStyleConstants.setClickHandler(labelAttrs, (e, tier) -> {
+        });
+        String labelText = batchBuilder.formatLabelText("Tiers");
+        TranscriptStyleConstants.setUnderlineOnHover(labelAttrs, true);
+        batchBuilder.appendBatchString(labelText, labelAttrs);
+        TranscriptStyleConstants.setUnderlineOnHover(labelAttrs, false);
+        batchBuilder.appendBatchString(": ", labelAttrs);
+
+        // value
+        TranscriptStyleConstants.setNotEditable(attrs, true);
+        batchBuilder.appendBatchString(tiersHeaderTier.toString(), attrs);
     }
 
     /**
@@ -313,22 +305,33 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
      * */
     public void updateTiersHeader(EditorEvent<EditorEventType.TierViewChangedData> event) {
         try {
-            Tier<?> tiersHeaderTier = headerTierMap.get("tiers");
-            int start = doc.getGenericStart(tiersHeaderTier);
-            int end = doc.getGenericEnd(tiersHeaderTier);
-
-            if (start > -1 && end > -1) {
-                doc.setBypassDocumentFilter(true);
-                doc.remove(start, end - start);
+            Tier<TierData> tiersHeaderTier = (Tier<TierData>) headerTierMap.get("tiers");
+            if(errorUnderlineHighlights.containsKey(tiersHeaderTier)) {
+                editor.getHighlighter().removeHighlight(errorUnderlineHighlights.get(tiersHeaderTier));
+                errorUnderlineHighlights.remove(tiersHeaderTier);
             }
 
-            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(doc.getTranscriptStyleContext(), doc.getInsertionHooks());
-            appendTiersHeader(batchBuilder);
-            batchBuilder.appendEOL();
-            doc.processBatchUpdates(start > -1 ? start : 0, batchBuilder.getBatch());
+            tiersHeaderTier.setText(session.getTierView().stream()
+                    .filter(TierViewItem::isVisible).map(TierViewItem::getTierName).collect(Collectors.joining(", ")));
+            TranscriptDocument.StartEnd startEnd = doc.getGenericContentStartEnd(tiersHeaderTier);
+            if (startEnd.valid()) {
+                doc.setBypassDocumentFilter(true);
+                editor.getTranscriptEditorCaret().freeze();
+                doc.remove(startEnd.start(), startEnd.length());
+
+                final SimpleAttributeSet attrs = new SimpleAttributeSet(doc.getTranscriptStyleContext().getStyle(TranscriptStyleContext.DEFAULT_STYLE));
+                TranscriptStyleConstants.setElementType(attrs, TranscriptStyleConstants.ELEMENT_TYPE_GENERIC);
+                TranscriptStyleConstants.setGenericTier(attrs, tiersHeaderTier);
+
+                TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(doc.getTranscriptStyleContext(), doc.getInsertionHooks());
+                batchBuilder.appendBatchString(tiersHeaderTier.toString(), attrs);
+                doc.processBatchUpdates(startEnd.start(), batchBuilder.getBatch());
+            }
         }
         catch (BadLocationException e) {
             LogUtil.severe(e);
+        } finally {
+            editor.getTranscriptEditorCaret().unfreeze();
         }
     }
 
