@@ -186,6 +186,7 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
 
             CalloutWindow.showCallout(
                 CommonModuleFrame.getCurrentFrame(),
+                true,
                 segmentEditor,
                 SwingConstants.NORTH,
                 SwingConstants.CENTER,

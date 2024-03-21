@@ -35,6 +35,14 @@ public class CalloutWindow extends JDialog {
         this.content = content;
         this.content.setBorder(BorderFactory.createEmptyBorder(0, 5, 5, 5));
         init(sideOfWindow, topMiddleBottom, pointAtPos);
+
+        final KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
+        final PhonUIAction<Void> closeAct = PhonUIAction.runnable(this::dispose);
+
+        final JComponent contentPanel = (JComponent)getContentPane();
+        contentPanel.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ks, "close");
+        contentPanel.getActionMap().put("close", closeAct);
+
         getContentPane().setBackground(UIManager.getColor("CalloutWindow.background"));
     }
 
@@ -143,9 +151,10 @@ public class CalloutWindow extends JDialog {
         }
     }
 
-    public static CalloutWindow showCallout(JFrame owner, JComponent content, int sideOfWindow, int topMiddleBottom, Point pointAtPos) {
+    public static CalloutWindow showCallout(JFrame owner, boolean modal, JComponent content, int sideOfWindow, int topMiddleBottom, Point pointAtPos) {
         // Create a custom JDialog
         CalloutWindow dialog = new CalloutWindow(owner, content, sideOfWindow, topMiddleBottom, pointAtPos);
+        dialog.setModal(modal);
         dialog.pack();
         dialog.setVisible(true);
 

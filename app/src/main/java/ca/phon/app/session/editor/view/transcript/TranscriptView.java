@@ -388,6 +388,7 @@ public class TranscriptView extends EditorView {
 
         CalloutWindow.showCallout(
             CommonModuleFrame.getCurrentFrame(),
+            true,
             fontScaleMenu,
             SwingConstants.TOP,
             SwingConstants.CENTER,
