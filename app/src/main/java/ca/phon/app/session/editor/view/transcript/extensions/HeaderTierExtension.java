@@ -88,14 +88,9 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
 
     @Override
     public List<DefaultStyledDocument.ElementSpec> startSession() {
-//                List<DefaultStyledDocument.ElementSpec> retVal = new ArrayList<>();
         TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(doc.getTranscriptStyleContext(), doc.getInsertionHooks());
 
         if (isHeadersVisible()) {
-            AttributeSet newLineAttrs;
-
-            TranscriptStyleContext transcriptStyleContext = doc.getTranscriptStyleContext();
-
             // Add date line if present
             appendDateHeader(batchBuilder);
             batchBuilder.appendEOL();
@@ -109,21 +104,7 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
             batchBuilder.appendEOL();
 
             // Add Participants header
-            Tier<TierData> participantsTier = (Tier<TierData>) headerTierMap.get("participants");
-            Participants participants = session.getParticipants();
-            StringJoiner participantsJoiner = new StringJoiner(", ");
-            for (Participant participant : participants) {
-                if (participant.getName() != null) {
-                    participantsJoiner.add(participant.getName() + " (" + participant.getId() + ")");
-                }
-                else {
-                    participantsJoiner.add(participant.getId());
-                }
-            }
-            participantsTier.setText(participantsJoiner.toString());
-            final SimpleAttributeSet attrs = new SimpleAttributeSet();
-            attrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
-            batchBuilder.appendGeneric("Participants", participantsTier, attrs);
+            appendParticipantsHeader(batchBuilder);
             batchBuilder.appendEOL();
 
             // Add Tiers header
@@ -136,6 +117,44 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
 
     private boolean isHeadersVisible() {
         return (boolean) doc.getDocumentPropertyOrDefault(HEADERS_VISIBLE, DEFAULT_HEADERS_VISIBLE);
+    }
+
+    private void appendParticipantsHeader(TranscriptBatchBuilder batchBuilder) {
+        Tier<TierData> participantsTier = (Tier<TierData>) headerTierMap.get("participants");
+        Participants participants = session.getParticipants();
+        StringJoiner participantsJoiner = new StringJoiner(", ");
+        for (Participant participant : participants) {
+            if (participant.getName() != null) {
+                participantsJoiner.add(participant.getName() + " (" + participant.getId() + ")");
+            }
+            else {
+                participantsJoiner.add(participant.getId());
+            }
+        }
+        participantsTier.setText(participantsJoiner.toString());
+
+        final SimpleAttributeSet attrs = new SimpleAttributeSet(doc.getTranscriptStyleContext().getStyle(TranscriptStyleContext.DEFAULT_STYLE));
+        TranscriptStyleConstants.setElementType(attrs, TranscriptStyleConstants.ELEMENT_TYPE_GENERIC);
+        TranscriptStyleConstants.setGenericTier(attrs, participantsTier);
+
+        // start paragraph
+        batchBuilder.appendBatchEndStart(batchBuilder.getTrailingAttributes(), attrs);
+
+        // label
+        final SimpleAttributeSet labelAttrs = new SimpleAttributeSet(attrs);
+        labelAttrs.addAttributes(doc.getTranscriptStyleContext().getLabelAttributes());
+        TranscriptStyleConstants.setClickHandler(labelAttrs, (e, tier) -> {
+            showParticipantsMenu(e);
+        });
+        String labelText = batchBuilder.formatLabelText("Participants");
+        TranscriptStyleConstants.setUnderlineOnHover(labelAttrs, true);
+        batchBuilder.appendBatchString(labelText, labelAttrs);
+        TranscriptStyleConstants.setUnderlineOnHover(labelAttrs, false);
+        batchBuilder.appendBatchString(": ", labelAttrs);
+
+        // value
+        TranscriptStyleConstants.setNotEditable(attrs, true);
+        batchBuilder.appendBatchString(participantsTier.toString(), attrs);
     }
 
     private void appendLanguagesHeader(TranscriptBatchBuilder batchBuilder) {
@@ -286,6 +305,7 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
         final SimpleAttributeSet labelAttrs = new SimpleAttributeSet(attrs);
         labelAttrs.addAttributes(doc.getTranscriptStyleContext().getLabelAttributes());
         TranscriptStyleConstants.setClickHandler(labelAttrs, (e, tier) -> {
+            showTierMenu(e);
         });
         String labelText = batchBuilder.formatLabelText("Tiers");
         TranscriptStyleConstants.setUnderlineOnHover(labelAttrs, true);
@@ -649,6 +669,14 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
         builder.addItem(".", browseForMediaAct);
 
         menu.getPopupMenu().show(editor, e.getX(), e.getY());
+    }
+
+    private void showTierMenu(MouseEvent e) {
+
+    }
+
+    private void showParticipantsMenu(MouseEvent e) {
+
     }
 
     private void browseForMedia() {
