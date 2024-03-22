@@ -672,11 +672,27 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
     }
 
     private void showTierMenu(MouseEvent e) {
+        final JMenu menu = new JMenu("Tiers");
+        final MenuBuilder builder = new MenuBuilder(menu);
 
+        final TranscriptView transcriptView = (TranscriptView) SwingUtilities.getAncestorOfClass(TranscriptView.class, editor);
+        if(transcriptView != null) {
+            transcriptView.setupTiersMenu(builder);
+        }
+
+        menu.getPopupMenu().show(editor, e.getX(), e.getY());
     }
 
     private void showParticipantsMenu(MouseEvent e) {
+        final JMenu menu = new JMenu("Participants");
+        final MenuBuilder builder = new MenuBuilder(menu);
 
+        final TranscriptView transcriptView = (TranscriptView) SwingUtilities.getAncestorOfClass(TranscriptView.class, editor);
+        if(transcriptView != null) {
+            transcriptView.setupParticipantsMenu(builder);
+        }
+
+        menu.getPopupMenu().show(editor, e.getX(), e.getY());
     }
 
     private void browseForMedia() {

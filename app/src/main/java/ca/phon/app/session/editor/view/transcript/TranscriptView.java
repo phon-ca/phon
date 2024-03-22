@@ -581,7 +581,7 @@ public class TranscriptView extends EditorView {
      *
      * @param menuBuilder the builder used to build the menu
      * */
-    private void setupParticipantsMenu(MenuBuilder menuBuilder) {
+    public void setupParticipantsMenu(MenuBuilder menuBuilder) {
         JMenuItem addParticipantItem = new JMenuItem();
         addParticipantItem.setAction(new NewParticipantAction(getEditor()));
         menuBuilder.addItem(".", addParticipantItem);
@@ -754,7 +754,7 @@ public class TranscriptView extends EditorView {
      *
      * @param menuBuilder the builder used to build the menu
      * */
-    private void setupTiersMenu(MenuBuilder menuBuilder) {
+    public void setupTiersMenu(MenuBuilder menuBuilder) {
         JMenu addTierMenu = menuBuilder.addMenu(".", "Add tier");
         TierMenuBuilder.setupNewTierMenu(getEditor(), new MenuBuilder(addTierMenu));
 
