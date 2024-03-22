@@ -42,7 +42,7 @@ public class TierMenuBuilder {
                 TierDescription td = SessionFactory.newFactory().createTierDescription(userTierType);
                 TierViewItem tvi = SessionFactory.newFactory().createTierViewItem(td.getName());
                 AddTierEdit edit = new AddTierEdit(session, eventManager, td, tvi);
-                editor.getUndoSupport().postEdit(edit);
+                undoSupport.postEdit(edit);
             });
             addTierAct.putValue(PhonUIAction.NAME, userTierType.getPhonTierName() + " (" + userTierType.getChatTierName() + ")");
             menuBuilder.addItem(".", addTierAct).setEnabled(!exists);
