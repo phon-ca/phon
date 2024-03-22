@@ -15,8 +15,10 @@
  */
 package ca.phon.app.session.editor.actions;
 
+import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.AddTierEdit;
+import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
 import ca.phon.app.session.editor.view.tierManagement.*;
 import ca.phon.session.*;
 import ca.phon.ui.toast.*;
@@ -41,10 +43,17 @@ public class NewTierAction extends SessionEditorAction {
 	}
 
 	public NewTierAction(SessionEditor editor, int index) {
-		super(editor);
+		this(editor.getSession(), editor.getEventManager(), editor.getUndoSupport(), index);
+	}
 
+	public NewTierAction(Session session, EditorEventManager eventManager, SessionEditUndoSupport undoSupport) {
+		this(session, eventManager, undoSupport, -1);
+	}
+
+	public NewTierAction(Session session, EditorEventManager eventManager, SessionEditUndoSupport undoSupport, int index) {
+		super(session, eventManager, undoSupport);
 		this.index = index;
-		
+
 		putValue(NAME, CMD_NAME);
 		putValue(SMALL_ICON, ICON);
 		putValue(SHORT_DESCRIPTION, SHORT_DESC);

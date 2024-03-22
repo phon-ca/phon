@@ -31,20 +31,24 @@ public class TierMenuBuilder {
      * @param menuBuilder
      */
     public static void setupNewTierMenu(SessionEditor editor, MenuBuilder menuBuilder) {
+        setupNewTierMenu(editor.getSession(), editor.getEventManager(), editor.getUndoSupport(), menuBuilder);
+    }
+
+    public static void setupNewTierMenu(Session session, EditorEventManager eventManager, SessionEditUndoSupport undoSupport, MenuBuilder menuBuilder) {
         List<UserTierType> availableUserTierTypes = new ArrayList<>(List.of(UserTierType.values()));
         for (UserTierType userTierType : availableUserTierTypes) {
-            boolean exists = editor.getSession().getUserTiers().get(userTierType.getPhonTierName()) != null;
+            boolean exists = session.getUserTiers().get(userTierType.getPhonTierName()) != null;
             PhonUIAction<Void> addTierAct = PhonUIAction.runnable(() -> {
                 TierDescription td = SessionFactory.newFactory().createTierDescription(userTierType);
                 TierViewItem tvi = SessionFactory.newFactory().createTierViewItem(td.getName());
-                AddTierEdit edit = new AddTierEdit(editor, td, tvi);
+                AddTierEdit edit = new AddTierEdit(session, eventManager, td, tvi);
                 editor.getUndoSupport().postEdit(edit);
             });
             addTierAct.putValue(PhonUIAction.NAME, userTierType.getPhonTierName() + " (" + userTierType.getChatTierName() + ")");
             menuBuilder.addItem(".", addTierAct).setEnabled(!exists);
         }
         menuBuilder.addSeparator(".", "new_tier");
-        final NewTierAction customTierAct = new NewTierAction(editor);
+        final NewTierAction customTierAct = new NewTierAction(session, eventManager, undoSupport);
         menuBuilder.addItem(".", customTierAct);
     }
 
@@ -91,18 +95,22 @@ public class TierMenuBuilder {
      * @param menuBuilder
      */
     public static void appendExistingTiersMenu(SessionEditor editor, MenuBuilder menuBuilder) {
-        final List<TierViewItem> view = editor.getSession().getTierView();
+        appendExistingTiersMenu(editor.getSession(), editor.getEventManager(), editor.getUndoSupport(), menuBuilder);
+    }
+
+    public static void appendExistingTiersMenu(Session session, EditorEventManager eventManager, SessionEditUndoSupport undoSupport, MenuBuilder menuBuilder) {
+        final List<TierViewItem> view = session.getTierView();
         for(int i = 0; i < view.size(); i++) {
             final TierViewItem tvi = view.get(i);
             final JMenu tierMenu = menuBuilder.addMenu(".", tvi.getTierName());
             TierDescription tierDesc = null;
-            for(TierDescription td:editor.getSession().getUserTiers()) {
+            for(TierDescription td:session.getUserTiers()) {
                 if(td.getName().equals(tvi.getTierName())) {
                     tierDesc = td;
                     break;
                 }
             }
-            setupTierMenu(editor, tierDesc, tvi, new MenuBuilder(tierMenu));
+            setupTierMenu(session, eventManager, undoSupport, tierDesc, tvi, new MenuBuilder(tierMenu));
         }
     }
 
