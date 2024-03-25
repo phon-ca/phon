@@ -839,9 +839,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     private void onSpeakerChanged(EditorEvent<EditorEventType.SpeakerChangedData> editorEvent) {
         var data = editorEvent.data();
         // Update the speaker on the separator in the doc
-        getTranscriptEditorCaret().freeze();
         getTranscriptDocument().onChangeSpeaker(data.record());
-        getTranscriptEditorCaret().unfreeze();
     }
 
     /**
@@ -1960,6 +1958,9 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             for (int j = 0; j < docElem.getElementCount(); j++) {
                 Element innerDocElem = docElem.getElement(j);
                 AttributeSet attrs = innerDocElem.getAttributes();
+                if(TranscriptStyleConstants.isNewParagraph(attrs)) {
+                    continue;
+                }
                 Boolean isLabel = (Boolean) attrs.getAttribute("label");
                 String innerDocElemType = (String) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
                 if (isLabel == null && innerDocElemType != null) {
@@ -2009,6 +2010,9 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             for (int j = 0; j < docElem.getElementCount(); j++) {
                 Element innerDocElem = docElem.getElement(j);
                 AttributeSet attrs = innerDocElem.getAttributes();
+                if(TranscriptStyleConstants.isNewParagraph(attrs)) {
+                    continue;
+                }
                 Boolean isLabel = (Boolean) attrs.getAttribute("label");
                 String innerDocElemType = (String) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
                 if (isLabel == null && innerDocElemType != null) {
