@@ -472,7 +472,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return the position in the document at the beginning of the tiers content
      */
     public int getTierContentStart(int recordIndex, String tierName) {
-        return getTierContentRange(recordIndex, tierName).start();
+        return getTierContentStartEnd(recordIndex, tierName).start();
     }
 
     /**
@@ -482,7 +482,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @param tierName
      * @return the start/end of the given tier's content, (-1, -1) if not found
      */
-    public StartEnd getTierContentRange(int recordIndex, String tierName) {
+    public StartEnd getTierContentStartEnd(int recordIndex, String tierName) {
         final int paragraphIdx = findParagraphElementIndexForTier(session.getTranscript().getRecordElementIndex(recordIndex), tierName);
         if (paragraphIdx == -1) return new StartEnd(-1, -1);
         Element elem = getDefaultRootElement().getElement(paragraphIdx);
@@ -500,6 +500,31 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         final int tierEnd = elem.getEndOffset() - 1;
 
         return new StartEnd(tierStart, tierEnd);
+    }
+
+    /**
+     * Get the start and end position of the given tier label
+     *
+     * @param recordIndex
+     * @param tierName
+     *
+     * @return the start and end position of the given tier label or StartEnd(-1, -1) if not found, the position
+     * will not include the starting whitespace char(s) or the ending : char
+     */
+    public StartEnd getTierLabelStartEnd(int recordIndex, String tierName) {
+        final int paragraphIdx = findParagraphElementIndexForTier(session.getTranscript().getRecordElementIndex(recordIndex), tierName);
+        if (paragraphIdx == -1) return new StartEnd(-1, -1);
+        Element elem = getDefaultRootElement().getElement(paragraphIdx);
+        for(int i = 0; i < elem.getElementCount(); i++) {
+            Element innerElem = elem.getElement(i);
+            AttributeSet attrs = innerElem.getAttributes();
+            boolean isLabel = TranscriptStyleConstants.isLabel(attrs);
+            if (isLabel) {
+                // return start of label and end of label excluding starting tab
+                return new StartEnd(innerElem.getStartOffset() + 1, innerElem.getEndOffset());
+            }
+        }
+        return new StartEnd(-1, -1);
     }
 
     /**
@@ -565,7 +590,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return the position in the document at the beginning of the tiers content
      */
     public int getTierContentStart(Tier<?> tier) {
-        return getTierContentRange(tier).start();
+        return getTierContentStartEnd(tier).start();
     }
 
     /**
@@ -719,12 +744,45 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     }
 
     /**
+     * Return string range for given tier label
+     *
+     * @param tier
+     * @return the range for the given tier label or StartEnd(-1, -1) if not found
+     */
+    public StartEnd getTierLabelStartEnd(Tier<?> tier) {
+        // find record which contains given tier
+        for(Record r: getSession().getRecords()) {
+            if(r.getTier(tier.getName()) == tier) {
+                int firstParagraphIdx =
+                        findParagraphElementIndexForSessionElementIndex(getSession().getTranscript().getElementIndex(r));
+                if(firstParagraphIdx >= 0) {
+                    for (int i = firstParagraphIdx; i < getDefaultRootElement().getElementCount(); i++) {
+                        Element e = getDefaultRootElement().getElement(i);
+                        Tier<?> eTier = TranscriptStyleConstants.getTier(e.getAttributes());
+                        if (eTier != null && eTier.getName().equals(tier.getName())) {
+                            for (int j = 0; j < e.getElementCount(); j++) {
+                                Element childEle = e.getElement(j);
+                                AttributeSet attrs = childEle.getAttributes();
+                                boolean isLabel = TranscriptStyleConstants.isLabel(attrs);
+                                if (isLabel) {
+                                    return new StartEnd(childEle.getStartOffset(), childEle.getEndOffset());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return new StartEnd(-1, -1);
+    }
+
+    /**
      * Get tier content range
      *
      * @param tier
      * @return the range for the given tier or StartEnd(-1, -1) if not found
      */
-    public StartEnd getTierContentRange(Tier<?> tier) {
+    public StartEnd getTierContentStartEnd(Tier<?> tier) {
         // find record which contains given tier
         for(Record r: getSession().getRecords()) {
             if(r.getTier(tier.getName()) == tier) {
@@ -1136,47 +1194,21 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * Updates the speaker on the separator / record header
      */
     public void onChangeSpeaker(Record record) {
-//        try {
-//            int recordIndex = session.getRecordPosition(record);
-//            int start = getRecordStart(recordIndex, true);
-//
-//            var tierView = session.getTierView();
-//            String firstVisibleTierName = tierView
-//                    .stream()
-//                    .filter(item -> item.isVisible())
-//                    .findFirst()
-//                    .get()
-//                    .getTierName();
-//            int end = getTierStart(recordIndex, firstVisibleTierName);
-//
-//            bypassDocumentFilter = true;
-//            remove(start, end - start);
-//
-//            AttributeSet recordAttrs = transcriptStyleContext.getRecordAttributes(record);
-//
-//            SimpleAttributeSet tierAttrs = transcriptStyleContext.getTierAttributes(record.getSegmentTier());
-//            tierAttrs.addAttributes(transcriptStyleContext.getSeparatorAttributes());
-//            tierAttrs.addAttributes(recordAttrs);
-//
-//            SimpleAttributeSet labelAttrs = transcriptStyleContext.getTierLabelAttributes(record.getSegmentTier());
-//            labelAttrs.addAttributes(transcriptStyleContext.getSeparatorAttributes());
-//            labelAttrs.addAttributes(recordAttrs);
-//
-//            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder();
-//            batchBuilder.appendBatchEndStart();
-//
-//            Participant speaker = record.getSpeaker() == null ? Participant.UNKNOWN : record.getSpeaker();
-//            batchBuilder.appendBatchString(formatLabelText(speaker.toString()) + ": ", labelAttrs);
-//
-//            MediaSegment segment = record.getMediaSegment();
-//
-//            tierAttrs.addAttributes(getStandardFontAttributes());
-//            appendFormattedSegment(segment, tierAttrs, batchBuilder);
-//
-//            processBatchUpdates(start, batchBuilder.getBatch());
-//        } catch (BadLocationException e) {
-//            LogUtil.severe(e);
-//        }
+        final StartEnd orthoLblStartEnd = getTierLabelStartEnd(record.getOrthographyTier());
+        if(!orthoLblStartEnd.valid()) return;
+
+        try {
+            final AttributeSet lblAttrs = getCharacterElement(orthoLblStartEnd.start()).getAttributes();
+            bypassDocumentFilter = true;
+            remove(orthoLblStartEnd.start(), orthoLblStartEnd.length());
+
+            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(this);
+            final String orthoLbl = isChatTierNamesShown() ? "*" + record.getSpeaker().getId() : record.getSpeaker().toString();
+            batchBuilder.appendBatchString(batchBuilder.formatLabelText(orthoLbl), lblAttrs);
+            processBatchUpdates(orthoLblStartEnd.start(), batchBuilder.getBatch());
+        } catch (BadLocationException e) {
+            LogUtil.severe(e);
+        }
     }
 
     /**
@@ -1193,7 +1225,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
         try {
             int recordIndex = session.getRecordPosition(record);
-            final StartEnd tierRange = getTierContentRange(recordIndex, tier.getName());
+            final StartEnd tierRange = getTierContentStartEnd(recordIndex, tier.getName());
             if(tierRange.start() < 0) return;
             final SimpleAttributeSet tierAttrs = new SimpleAttributeSet();
             tierAttrs.addAttributes(getTranscriptStyleContext().getRecordAttributes(record));

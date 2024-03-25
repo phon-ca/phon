@@ -43,7 +43,6 @@ import java.awt.event.AWTEventListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.lang.reflect.Array;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
@@ -191,7 +190,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
     public void acceptAutoTranscription(Record record, Tier<IPATranscript> tier, AutomaticTranscription automaticTranscription) {
         final IPATranscriptBuilder builder = new IPATranscriptBuilder();
 
-        final TranscriptDocument.StartEnd currentTextRange = editor.getTranscriptDocument().getTierContentRange(tier);
+        final TranscriptDocument.StartEnd currentTextRange = editor.getTranscriptDocument().getTierContentStartEnd(tier);
         try {
             final String currentText = editor.getTranscriptDocument().getText(currentTextRange.start(), currentTextRange.length());
             if(!currentText.isBlank()) {
@@ -223,7 +222,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
     public void acceptAutoTranscriptionToFirstSelection(Record record, Tier<IPATranscript> tier, AutomaticTranscription automaticTranscription) {
         final IPATranscriptBuilder builder = new IPATranscriptBuilder();
 
-        final TranscriptDocument.StartEnd currentTextRange = editor.getTranscriptDocument().getTierContentRange(tier);
+        final TranscriptDocument.StartEnd currentTextRange = editor.getTranscriptDocument().getTierContentStartEnd(tier);
         try {
             final String currentText = editor.getTranscriptDocument().getText(currentTextRange.start(), currentTextRange.length());
             if(!currentText.isBlank()) {
@@ -280,7 +279,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
         final Record record = TranscriptStyleConstants.getRecord(eleAttrs);
         if(record != null && tier != null) {
             if(tier.getDeclaredType().equals(IPATranscript.class)) {
-                final TranscriptDocument.StartEnd currentTextRange = editor.getTranscriptDocument().getTierContentRange(tier);
+                final TranscriptDocument.StartEnd currentTextRange = editor.getTranscriptDocument().getTierContentStartEnd(tier);
                 try {
                     final String currentText = editor.getTranscriptDocument().getText(currentTextRange.start(), currentTextRange.length());
                     final int numWords = currentText.isBlank() ? 0 : currentText.trim().split("\\p{Space}").length;

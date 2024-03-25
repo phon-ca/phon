@@ -16,8 +16,6 @@ import ca.phon.ui.action.PhonUIAction;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
-import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -130,7 +128,7 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
             if(recordIndex >= 0) {
                 final Record record = editor.getSession().getRecord(recordIndex);
                 final var segmentTier = record.getSegmentTier();
-                final var segmentBounds = editor.getTranscriptDocument().getTierContentRange(recordIndex, loc.tier());
+                final var segmentBounds = editor.getTranscriptDocument().getTierContentStartEnd(recordIndex, loc.tier());
                 if (segmentBounds.valid()) {
                     selectedSegment = segmentTier.getValue();
                     editor.boxSelectBounds(segmentBounds);

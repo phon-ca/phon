@@ -3,10 +3,8 @@ package ca.phon.app.session.editor.view.transcript;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.*;
-import ca.phon.app.session.editor.view.tierManagement.TierMenuBuilder;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
-import ca.phon.plugin.PluginManager;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.position.TranscriptElementLocation;
@@ -14,7 +12,6 @@ import ca.phon.session.tierdata.TierData;
 import ca.phon.ui.IconStrip;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.ui.menu.MenuBuilder;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -32,7 +29,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.*;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public class TranscriptEditor extends JEditorPane implements IExtendable {
 
@@ -843,13 +839,10 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     private void onSpeakerChanged(EditorEvent<EditorEventType.SpeakerChangedData> editorEvent) {
         var data = editorEvent.data();
         // Update the speaker on the separator in the doc
+        getTranscriptEditorCaret().freeze();
         getTranscriptDocument().onChangeSpeaker(data.record());
+        getTranscriptEditorCaret().unfreeze();
     }
-
-    
-
-
-    
 
     /**
      * Runs when the data for a tier changes
@@ -2291,7 +2284,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                             final Record record = transcriptElement.asRecord();
                             final Tier<?> tier = record.getTier(oldLoc.tier());
                             if (tier != null) {
-                                final TranscriptDocument.StartEnd tierContentRange = getTranscriptDocument().getTierContentRange(
+                                final TranscriptDocument.StartEnd tierContentRange = getTranscriptDocument().getTierContentStartEnd(
                                         getSession().getTranscript().getRecordIndex(oldLoc.transcriptElementIndex()), tier.getName());
                                 try {
                                     final String currentText = getTranscriptDocument().getText(tierContentRange.start(), tierContentRange.length());
@@ -2659,6 +2652,20 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             final EditorEvent<EditorEventType.RecordChangedData> e = new EditorEvent<>(EditorEventType.RecordChanged, TranscriptEditor.this, data);
             eventManager.queueEvent(e);
         }
+    }
+
+    @Override
+    public void cut() {
+    }
+
+    @Override
+    public void paste() {
+        super.paste();
+    }
+
+    @Override
+    public TransferHandler getTransferHandler() {
+        return super.getTransferHandler();
     }
 
     public record RecordParticipant(

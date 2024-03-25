@@ -142,7 +142,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
         final Tier<?> tier = event.data().tier();
         if(tier.getDeclaredType().equals(IPATranscript.class) && !event.data().valueAdjusting()) {
             if(isSyllabificationVisible()) {
-                final TranscriptDocument.StartEnd range = doc.getTierContentRange(editor.getSession().getRecordPosition(event.data().record()), getTierNameForSyllabification(tier));
+                final TranscriptDocument.StartEnd range = doc.getTierContentStartEnd(editor.getSession().getRecordPosition(event.data().record()), getTierNameForSyllabification(tier));
                 if(!range.valid()) return;
                 editor.getTranscriptEditorCaret().freeze();
                 try {

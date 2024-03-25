@@ -1,20 +1,12 @@
 package ca.phon.app.session.editor.view.transcript.extensions;
 
-import ca.phon.alignedTypesDatabase.AlignedTypesDatabase;
-import ca.phon.alignedTypesDatabase.AlignedTypesDatabaseFactory;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.view.transcript.*;
-import ca.phon.ipa.IPATranscript;
-import ca.phon.orthography.Orthography;
 import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.alignment.CrossTierAlignment;
-import ca.phon.session.alignment.TierAligner;
-import ca.phon.session.alignment.TierAlignment;
-import ca.phon.worker.PhonWorker;
 
 import javax.swing.text.*;
 import java.util.ArrayList;
@@ -100,7 +92,7 @@ public class AlignmentExtension implements TranscriptEditorExtension {
         if (!tier.getDeclaredType().equals(PhoneAlignment.class) || !isAlignmentVisible()) return;
 
         final int recordIndex = editor.getSession().getTranscript().getRecordPosition(editorEvent.data().record());
-        final TranscriptDocument.StartEnd alignmentTierContentRange = doc.getTierContentRange(recordIndex, tier.getName());
+        final TranscriptDocument.StartEnd alignmentTierContentRange = doc.getTierContentStartEnd(recordIndex, tier.getName());
         if(!alignmentTierContentRange.valid()) return;
 
         try {
