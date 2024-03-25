@@ -80,8 +80,11 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
 
                     // Set up the tier attributes for the dummy tier
                     MutableAttributeSet tierAttrs = new SimpleAttributeSet();
+                    Record record = TranscriptStyleConstants.getRecord(attrs);
+                    TranscriptStyleConstants.setElementType(tierAttrs, TranscriptStyleConstants.ELEMENT_TYPE_RECORD);
+                    TranscriptStyleConstants.setRecord(tierAttrs, record);
+                    TranscriptStyleConstants.setTier(tierAttrs, syllableTier);
                     TranscriptStyleConstants.setEnterAction(tierAttrs, syllabificationEditModeAct);
-                    Record record = (Record) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
                     builder.appendTierLabel(doc.getSession(), record, syllableTier, syllableTier.getName(), null, doc.isChatTierNamesShown(), tierAttrs);
 
                     if(isSyllabificationComponent()) {
