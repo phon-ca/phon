@@ -317,6 +317,32 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     }
 
     /**
+     * Gets the start/end position of the specified comment label
+     *
+     * @param comment the comment whose start position is trying to be found
+     * @return the position in the document at the beginning of the comments label or StartEnd(-1, -1) if not found
+     */
+    public StartEnd getCommentLabelStartEnd(Comment comment) {
+        final int commentEleIdx = getSession().getTranscript().getElementIndex(comment);
+        final int paraEleIdx = findParagraphElementIndexForSessionElementIndex(commentEleIdx);
+        final Element paraEle = getDefaultRootElement().getElement(paraEleIdx);
+
+        for(int i = 0; i < paraEle.getElementCount(); i++) {
+            final Element childEle = paraEle.getElement(i);
+            final AttributeSet attrs = childEle.getAttributes();
+            if (TranscriptStyleConstants.isNewParagraph(attrs)) {
+                continue;
+            }
+            final boolean isLabel = TranscriptStyleConstants.isLabel(attrs);
+            if (isLabel) {
+                return new StartEnd(childEle.getStartOffset(), childEle.getEndOffset());
+            }
+        }
+        return new StartEnd(-1, -1);
+    }
+
+
+    /**
      * Return the range for the given comment content
      *
      * @param comment
@@ -1129,18 +1155,16 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * Updates the displayed type of the given comment in the document
      */
     public void onChangeCommentType(Comment comment) {
-        final StartEnd commentRange = getCommentStartEnd(comment);
-        if(commentRange.start() < 0) return;
-        final int start = commentRange.start();
-        // don't remove newline
-        final int end = commentRange.end() - 1;
+        final StartEnd commentLblRange = getCommentLabelStartEnd(comment);
+        if(!commentLblRange.valid()) return;
 
         try {
+            final AttributeSet lblAttrs = getCharacterElement(commentLblRange.start()).getAttributes();
             bypassDocumentFilter = true;
-            remove(start, end - start);
+            remove(commentLblRange.start(), commentLblRange.length());
             TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder();
-            batchBuilder.appendComment(comment);
-            processBatchUpdates(start, batchBuilder.getBatch());
+            batchBuilder.appendBatchString(batchBuilder.formatLabelText(comment.getType().toString()), lblAttrs);
+            processBatchUpdates(commentLblRange.start(), batchBuilder.getBatch());
         } catch (BadLocationException e) {
             LogUtil.severe(e);
         }
