@@ -297,10 +297,11 @@ public class TranscriptBatchBuilder {
      * Writes a given comment to the batch
      *
      * @param comment the comment that will be written
+     * @param chatTierNamesShown whether or not chat tier names are shown
      * @return a mutable attribute set containing the attributes of the last character of the comment to add a
      * newline after if need be
      */
-    public TranscriptBatchBuilder appendComment(Comment comment) {
+    public TranscriptBatchBuilder appendComment(Comment comment, boolean chatTierNamesShown) {
         final SessionFactory sessionFactory = SessionFactory.newFactory();
         Tier<TierData> commentTier = sessionFactory.createTier("commentTier", TierData.class);
         commentTier.setValue(comment.getValue() == null ? new TierData() : comment.getValue());
@@ -319,6 +320,9 @@ public class TranscriptBatchBuilder {
 
         SimpleAttributeSet labelAttrs = styleContext.getCommentLabelAttributes(comment);
         String labelText = comment.getType().getLabel();
+        if(chatTierNamesShown) {
+            labelText = "@" + labelText;
+        }
         labelText = formatLabelText(labelText);
 
         TierData tierData = commentTier.getValue();
@@ -378,9 +382,10 @@ public class TranscriptBatchBuilder {
      * Writes a given gem to the batch
      *
      * @param gem the comment that will be written
+     * @param chatTierNamesShown whether or not chat tier names are shown
      * @return this builder
      */
-    public TranscriptBatchBuilder appendGem(Gem gem) {
+    public TranscriptBatchBuilder appendGem(Gem gem, boolean chatTierNamesShown) {
         String text = gem.getLabel();
         SimpleAttributeSet gemAttrs = styleContext.getGemAttributes(gem);
         appendBatchEndStart(getTrailingAttributes(), gemAttrs);
@@ -395,7 +400,7 @@ public class TranscriptBatchBuilder {
         }
 
         SimpleAttributeSet labelAttrs = styleContext.getGemLabelAttributes(gem);
-        String labelText = gem.getType().toString() + " Gem";
+        String labelText = chatTierNamesShown ? gem.getType().getChatTierName() : gem.getType().getPhonTierName();
         labelText = formatLabelText(labelText);
 
         TranscriptStyleConstants.setUnderlineOnHover(labelAttrs, true);

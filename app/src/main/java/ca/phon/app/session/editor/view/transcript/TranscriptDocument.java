@@ -378,7 +378,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return the position in the document at the beginning of the gem label
      */
     public int getGemStart(Gem gem) {
-        return getGemRange(gem).start();
+        return getGemStartEnd(gem).start();
     }
 
     /**
@@ -459,7 +459,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * (newlines included)
      */
     public int getGemEnd(Gem gem) {
-        return getGemRange(gem).end();
+        return getGemStartEnd(gem).end();
     }
 
     /**
@@ -865,9 +865,34 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @param gem
      * @return the range for the given gem or Range(-1, -1) if not found
      */
-    public StartEnd getGemRange(Gem gem) {
+    public StartEnd getGemStartEnd(Gem gem) {
         final int sessionElementIndex = getSession().getTranscript().getElementIndex(gem);
         return getRangeForSessionElementIndex(sessionElementIndex);
+    }
+
+    /**
+     * Return string range for given gem label
+     *
+     * @param gem
+     * @return the range for the given gem label or StartEnd(-1, -1) if not found
+     */
+    public StartEnd getGemLabelStartEnd(Gem gem) {
+        final int gemEleIdx = getSession().getTranscript().getElementIndex(gem);
+        final int paraEleIdx = findParagraphElementIndexForSessionElementIndex(gemEleIdx);
+        final Element paraEle = getDefaultRootElement().getElement(paraEleIdx);
+
+        for(int i = 0; i < paraEle.getElementCount(); i++) {
+            final Element childEle = paraEle.getElement(i);
+            final AttributeSet attrs = childEle.getAttributes();
+            if (TranscriptStyleConstants.isNewParagraph(attrs)) {
+                continue;
+            }
+            final boolean isLabel = TranscriptStyleConstants.isLabel(attrs);
+            if (isLabel) {
+                return new StartEnd(childEle.getStartOffset(), childEle.getEndOffset());
+            }
+        }
+        return new StartEnd(-1, -1);
     }
 
     /**
@@ -1163,7 +1188,8 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             bypassDocumentFilter = true;
             remove(commentLblRange.start(), commentLblRange.length());
             TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder();
-            batchBuilder.appendBatchString(batchBuilder.formatLabelText(comment.getType().toString()), lblAttrs);
+            final String lblTxt = isChatTierNamesShown() ? "@" + comment.getType().toString() : comment.getType().toString();
+            batchBuilder.appendBatchString(batchBuilder.formatLabelText(lblTxt), lblAttrs);
             processBatchUpdates(commentLblRange.start(), batchBuilder.getBatch());
         } catch (BadLocationException e) {
             LogUtil.severe(e);
@@ -1174,18 +1200,17 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * Updates the displayed type of the given gem in the document
      */
     public void onChangeGemType(Gem gem) {
-        final StartEnd gemRange = getGemRange(gem);
-        if(gemRange.start() < 0) return;
-        final int start = gemRange.start();
-        // don't remove newline
-        final int end = gemRange.end() - 1;
+        final StartEnd gemLblRange = getGemLabelStartEnd(gem);
+        if(!gemLblRange.valid()) return;
 
         try {
+            final AttributeSet lblAttrs = getCharacterElement(gemLblRange.start()).getAttributes();
             bypassDocumentFilter = true;
-            remove(start, end - start);
+            remove(gemLblRange.start(), gemLblRange.length());
             TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder();
-            batchBuilder.appendGem(gem);
-            processBatchUpdates(start, batchBuilder.getBatch());
+            final String lblText = isChatTierNamesShown() ? gem.getType().getChatTierName() : gem.getType().getPhonTierName();
+            batchBuilder.appendBatchString(batchBuilder.formatLabelText(lblText), lblAttrs);
+            processBatchUpdates(gemLblRange.start(), batchBuilder.getBatch());
         } catch (BadLocationException e) {
             LogUtil.severe(e);
         }
@@ -1222,9 +1247,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 if (elem.isRecord()) {
                     batchBuilder.appendRecord(session, elem.asRecord(), isChatTierNamesShown());
                 } else if (elem.isComment()) {
-                    batchBuilder.appendComment(elem.asComment());
+                    batchBuilder.appendComment(elem.asComment(), isChatTierNamesShown());
                 } else {
-                    batchBuilder.appendGem(elem.asGem());
+                    batchBuilder.appendGem(elem.asGem(), isChatTierNamesShown());
                 }
                 batchBuilder.appendEOL();
             }
@@ -1320,7 +1345,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
         try {
             TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder();
-            batchBuilder.appendComment(comment);
+            batchBuilder.appendComment(comment, isChatTierNamesShown());
             batchBuilder.appendEOL();
             processBatchUpdates(offset, batchBuilder.getBatch());
         } catch (BadLocationException e) {
@@ -1359,7 +1384,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
         try {
             TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder();
-            batchBuilder.appendGem(gem);
+            batchBuilder.appendGem(gem, isChatTierNamesShown());
             batchBuilder.appendEOL();
             processBatchUpdates(offset, batchBuilder.getBatch());
         } catch (BadLocationException e) {
@@ -1617,9 +1642,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                     }
 
                     if (previousElement.isComment()) {
-                        batchBuilder.appendComment(previousElement.asComment());
+                        batchBuilder.appendComment(previousElement.asComment(), isChatTierNamesShown());
                     } else {
-                        batchBuilder.appendGem(previousElement.asGem());
+                        batchBuilder.appendGem(previousElement.asGem(), isChatTierNamesShown());
                     }
                     batchBuilder.appendEOL();
 
@@ -1644,9 +1669,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                     }
 
                     if (nextElement.isComment()) {
-                        batchBuilder.appendComment(nextElement.asComment());
+                        batchBuilder.appendComment(nextElement.asComment(), isChatTierNamesShown());
                     } else {
-                        batchBuilder.appendGem(nextElement.asGem());
+                        batchBuilder.appendGem(nextElement.asGem(), isChatTierNamesShown());
                     }
                     batchBuilder.appendEOL();
 
@@ -1671,10 +1696,10 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                     if (elem.isRecord()) {
                         batchBuilder.appendRecord(session, elem.asRecord(), isChatTierNamesShown());
                     } else if (elem.isComment()) {
-                        batchBuilder.appendComment(elem.asComment());
+                        batchBuilder.appendComment(elem.asComment(), isChatTierNamesShown());
                         batchBuilder.appendEOL();
                     } else {
-                        batchBuilder.appendGem(elem.asGem());
+                        batchBuilder.appendGem(elem.asGem(), isChatTierNamesShown());
                         batchBuilder.appendEOL();
                     }
 

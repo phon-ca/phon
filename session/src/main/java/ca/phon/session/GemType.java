@@ -1,15 +1,21 @@
 package ca.phon.session;
 
 public enum GemType {
-    Begin("Bg"),
-    End("Eg"),
-    Lazy("G");
+    Begin("Begin gem", "@Bg"),
+    End("End gem", "@Eg"),
+    Lazy("Gem", "@G");
 
-    private String prefix;
+    private String phonTierName;
 
-    private GemType(String prefix) {
-        this.prefix = prefix;
+    private String chatTierName;
+
+    private GemType(String phonTierName, String chatTierName) {
+        this.phonTierName = phonTierName;
+        this.chatTierName = chatTierName;
     }
 
-    public String getPrefix() { return prefix; }
+    public String getChatTierName() { return chatTierName; }
+
+    public String getPhonTierName() { return phonTierName; }
+
 }
