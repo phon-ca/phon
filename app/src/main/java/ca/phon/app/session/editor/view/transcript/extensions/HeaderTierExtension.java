@@ -618,7 +618,7 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
             if(evt.getData().get().oldLoc().tier().equals("Date")) {
                 updateDateFromText();
             } else if(evt.getData().get().oldLoc().tier().equals("Media")) {
-                updateDateFromText();
+                updateMediaFromText();
             } else if(evt.getData().get().oldLoc().tier().equals("Languages")) {
                 updateLanguagesFromText();
             }

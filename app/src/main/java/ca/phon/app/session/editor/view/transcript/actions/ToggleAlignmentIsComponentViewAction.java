@@ -5,10 +5,10 @@ import ca.phon.app.session.editor.view.transcript.TranscriptView;
 
 import java.awt.event.ActionEvent;
 
-public class ToggleAlignmentIsComponentAction extends TranscriptAction {
+public class ToggleAlignmentIsComponentViewAction extends TranscriptViewAction {
     private static final long serialVersionUID = -6337537839656747666L;
 
-    public ToggleAlignmentIsComponentAction(SessionEditor editor, TranscriptView view) {
+    public ToggleAlignmentIsComponentViewAction(SessionEditor editor, TranscriptView view) {
         super(editor, view);
 
         final boolean alignmentIsComponent = view.isAlignmentComponent();

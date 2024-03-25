@@ -5,18 +5,18 @@ import ca.phon.app.session.editor.view.transcript.TranscriptView;
 
 import java.awt.event.ActionEvent;
 
-public class ToggleValidationModeAction extends TranscriptAction {
+public class ToggleSyllabificationVisibleViewAction extends TranscriptViewAction {
     private static final long serialVersionUID = -6339597839656747666L;
 
-    public ToggleValidationModeAction(SessionEditor editor, TranscriptView view) {
+    public ToggleSyllabificationVisibleViewAction(SessionEditor editor, TranscriptView view) {
         super(editor, view);
 
-        final boolean validationModeEnabled = view.isValidationMode();
-        putValue(NAME, (validationModeEnabled ? "Disable" : "Enable") + " validation mode");
+        final boolean syllabificationVisible = view.isSyllabificationVisible();
+        putValue(NAME, (syllabificationVisible ? "Hide" : "Show") + " syllabification");
     }
 
     @Override
     public void hookableActionPerformed(ActionEvent e) {
-        this.getView().toggleValidationMode();
+        this.getView().toggleSyllabificationVisible();
     }
 }

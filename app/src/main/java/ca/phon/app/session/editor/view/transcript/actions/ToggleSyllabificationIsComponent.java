@@ -5,7 +5,7 @@ import ca.phon.app.session.editor.view.transcript.TranscriptView;
 
 import java.awt.event.ActionEvent;
 
-public class ToggleSyllabificationIsComponent extends TranscriptAction {
+public class ToggleSyllabificationIsComponent extends TranscriptViewAction {
     private static final long serialVersionUID = -6337537839656747666L;
 
     public ToggleSyllabificationIsComponent(SessionEditor editor, TranscriptView view) {

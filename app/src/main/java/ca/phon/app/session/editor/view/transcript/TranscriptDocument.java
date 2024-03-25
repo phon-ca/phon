@@ -1453,7 +1453,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     public void deleteRecord(Record removedRecord) {
         try {
             final StartEnd recordRange = getRecordStartEnd(removedRecord);
-            if(recordRange.start() < 0) return;
+            if(!recordRange.valid()) return;
             final int start = recordRange.start();
             final int end = recordRange.end();
 

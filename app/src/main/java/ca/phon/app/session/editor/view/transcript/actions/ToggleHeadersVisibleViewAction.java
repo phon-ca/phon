@@ -5,10 +5,10 @@ import ca.phon.app.session.editor.view.transcript.TranscriptView;
 
 import java.awt.event.ActionEvent;
 
-public class ToggleHeadersVisibleAction extends TranscriptAction {
+public class ToggleHeadersVisibleViewAction extends TranscriptViewAction {
     private static final long serialVersionUID = -6339057839699747666L;
 
-    public ToggleHeadersVisibleAction(SessionEditor editor, TranscriptView view) {
+    public ToggleHeadersVisibleViewAction(SessionEditor editor, TranscriptView view) {
         super(editor, view);
 
         final boolean headersVisible = view.isHeadersVisible();

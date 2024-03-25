@@ -5,10 +5,10 @@ import ca.phon.app.session.editor.view.transcript.TranscriptView;
 
 import java.awt.event.ActionEvent;
 
-public class ToggleRecordNumbersAction extends TranscriptAction {
+public class ToggleRecordNumbersViewAction extends TranscriptViewAction {
     private static final long serialVersionUID = -6339057839699947666L;
 
-    public ToggleRecordNumbersAction(SessionEditor editor, TranscriptView view) {
+    public ToggleRecordNumbersViewAction(SessionEditor editor, TranscriptView view) {
         super(editor, view);
 
         final boolean showingRecordNumbers = view.getShowRecordNumbers();

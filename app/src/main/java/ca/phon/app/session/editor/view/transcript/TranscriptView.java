@@ -8,13 +8,10 @@ import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.mediaPlayer.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.participants.ParticipantsView;
 import ca.phon.app.session.editor.view.speechAnalysis.SpeechAnalysisEditorView;
-import ca.phon.app.session.editor.view.tierManagement.TierManagementView;
-import ca.phon.app.session.editor.actions.NewTierAction;
 import ca.phon.app.session.editor.view.tierManagement.TierMenuBuilder;
 import ca.phon.app.session.editor.view.timeline.TimelineView;
 import ca.phon.app.session.editor.view.transcript.actions.*;
 import ca.phon.app.session.editor.view.transcript.extensions.*;
-import ca.phon.plugin.PluginManager;
 import ca.phon.session.*;
 import ca.phon.session.io.SessionOutputFactory;
 import ca.phon.session.position.TranscriptElementLocation;
@@ -421,7 +418,7 @@ public class TranscriptView extends EditorView {
      * */
     private void setupSessionInformationMenu(MenuBuilder menuBuilder) {
         JMenuItem toggleHeadersItem = new JMenuItem();
-        toggleHeadersItem.setAction(new ToggleHeadersVisibleAction(getEditor(), TranscriptView.this));
+        toggleHeadersItem.setAction(new ToggleHeadersVisibleViewAction(getEditor(), TranscriptView.this));
         menuBuilder.addItem(".", toggleHeadersItem);
 
         JMenuItem setDateItem = new JMenuItem();
@@ -765,17 +762,17 @@ public class TranscriptView extends EditorView {
         menuBuilder.addSeparator(".", "existing_tiers");
 
         JMenuItem toggleAlignmentVisibleItem = new JMenuItem();
-        toggleAlignmentVisibleItem.setAction(new ToggleAlignmentVisibleAction(getEditor(), TranscriptView.this));
+        toggleAlignmentVisibleItem.setAction(new ToggleAlignmentVisibleViewAction(getEditor(), TranscriptView.this));
         menuBuilder.addItem(".", toggleAlignmentVisibleItem);
 
         JMenuItem toggleAlignmentComponentItem = new JMenuItem();
-        toggleAlignmentComponentItem.setAction(new ToggleAlignmentIsComponentAction(getEditor(), TranscriptView.this));
+        toggleAlignmentComponentItem.setAction(new ToggleAlignmentIsComponentViewAction(getEditor(), TranscriptView.this));
         menuBuilder.addItem(".", toggleAlignmentComponentItem);
 
         menuBuilder.addSeparator(".", "");
 
         JMenuItem toggleSyllabificationVisibleItem = new JMenuItem();
-        toggleSyllabificationVisibleItem.setAction(new ToggleSyllabificationVisibleAction(getEditor(), TranscriptView.this));
+        toggleSyllabificationVisibleItem.setAction(new ToggleSyllabificationVisibleViewAction(getEditor(), TranscriptView.this));
         menuBuilder.addItem(".", toggleSyllabificationVisibleItem);
 
         JMenuItem toggleSyllabificationComponentItem = new JMenuItem();
@@ -785,13 +782,13 @@ public class TranscriptView extends EditorView {
         menuBuilder.addSeparator(".", "");
 
         JMenuItem toggleBlindTiersItem = new JMenuItem();
-        toggleBlindTiersItem.setAction(new ToggleValidationModeAction(getEditor(), TranscriptView.this));
+        toggleBlindTiersItem.setAction(new ToggleValidationModeViewAction(getEditor(), TranscriptView.this));
         menuBuilder.addItem(".", toggleBlindTiersItem);
 
         menuBuilder.addSeparator(".", "blind_transcription");
 
         JMenuItem toggleHeadersItem = new JMenuItem();
-        toggleHeadersItem.setAction(new ToggleHeadersVisibleAction(getEditor(), TranscriptView.this));
+        toggleHeadersItem.setAction(new ToggleHeadersVisibleViewAction(getEditor(), TranscriptView.this));
         menuBuilder.addItem(".", toggleHeadersItem);
 
         JMenuItem toggleChatTierNamesItem = new JMenuItem();
@@ -1071,6 +1068,8 @@ public class TranscriptView extends EditorView {
         viewMetadataAct.putValue(PhonUIAction.NAME, "View metadata");
         viewMetadataItem.setAction(viewMetadataAct);
         menuBuilder.addItem(".", viewMetadataItem);
+
+        menuBuilder.addItem(".", new ShowTranscriptTreeAction(getEditor(),this));
 
         return retVal;
     }

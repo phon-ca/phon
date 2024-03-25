@@ -9,12 +9,12 @@ import com.itextpdf.layout.element.Paragraph;
 
 import java.awt.event.ActionEvent;
 
-public class ExportAsPDFAction extends TranscriptAction {
+public class ExportAsPDFViewAction extends TranscriptViewAction {
     private static final long serialVersionUID = -6337537539656747666L;
     private final Paragraph spacerParagraph = new Paragraph("\n");
     private final TranscriptEditor transcriptEditor;
 
-    public ExportAsPDFAction(SessionEditor editor, TranscriptView view) {
+    public ExportAsPDFViewAction(SessionEditor editor, TranscriptView view) {
         super(editor, view);
 
         transcriptEditor = view.getTranscriptEditor();

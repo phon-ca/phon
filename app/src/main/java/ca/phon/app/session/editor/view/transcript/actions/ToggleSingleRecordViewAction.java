@@ -5,10 +5,10 @@ import ca.phon.app.session.editor.view.transcript.TranscriptView;
 
 import java.awt.event.ActionEvent;
 
-public class ToggleSingleRecordAction extends TranscriptAction {
+public class ToggleSingleRecordViewAction extends TranscriptViewAction {
     private static final long serialVersionUID = -6339057839610947666L;
 
-    public ToggleSingleRecordAction(SessionEditor editor, TranscriptView view) {
+    public ToggleSingleRecordViewAction(SessionEditor editor, TranscriptView view) {
         super(editor, view);
 
         final boolean singleRecordActivated = view.isSingleRecordActive();

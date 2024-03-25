@@ -5,10 +5,10 @@ import ca.phon.app.session.editor.view.transcript.TranscriptView;
 
 import java.awt.event.ActionEvent;
 
-public class ToggleAlignmentVisibleAction extends TranscriptAction{
+public class ToggleAlignmentVisibleViewAction extends TranscriptViewAction {
     private static final long serialVersionUID = -6337537859256747666L;
 
-    public ToggleAlignmentVisibleAction(SessionEditor editor, TranscriptView view) {
+    public ToggleAlignmentVisibleViewAction(SessionEditor editor, TranscriptView view) {
         super(editor, view);
 
         final boolean alignmentVisible = view.isAlignmentVisible();
