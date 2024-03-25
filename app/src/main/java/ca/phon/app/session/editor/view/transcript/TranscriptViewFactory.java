@@ -96,8 +96,15 @@ public class TranscriptViewFactory implements ViewFactory {
             kind = "label";
         }
 
+        if(TranscriptStyleConstants.isNewParagraph(attrs)) {
+            kind = "paragraphMarker";
+        }
+
         if (kind != null) {
             switch (kind) {
+                case "paragraphMarker" -> {
+                    return new ParagraphMarkerView(elem);
+                }
                 case "label" -> {
                     return new TierLabelView(elem);
                 }
@@ -306,6 +313,39 @@ public class TranscriptViewFactory implements ViewFactory {
             border.paintBorder(getContainer(), g, a.getBounds().x, a.getBounds().y, a.getBounds().width, a.getBounds().height);
         }
 
+    }
+
+    static class ParagraphMarkerView extends LabelView {
+
+        /**
+         * Constructs a new view wrapped on an element.
+         *
+         * @param elem the element
+         */
+        public ParagraphMarkerView(Element elem) {
+            super(elem);
+
+            setSize(0, 0);
+
+        }
+
+        @Override
+        public float getMinimumSpan(int axis) {
+            if(axis == View.X_AXIS) {
+                return 0;
+            } else {
+                return super.getMinimumSpan(axis);
+            }
+        }
+
+        @Override
+        public float getPreferredSpan(int axis) {
+            if(axis == View.X_AXIS) {
+                return 0;
+            } else {
+                return super.getPreferredSpan(axis);
+            }
+        }
     }
 
     /**

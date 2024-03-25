@@ -107,6 +107,19 @@ public class TranscriptStyleConstants {
             attrs.removeAttribute(ATTR_KEY_SEPARATOR);
     }
 
+    public static final String ATTR_KEY_NEW_PARAGRAPH = "newParagraph";
+
+    public static boolean isNewParagraph(AttributeSet attrs) {
+        return attrs.isDefined(ATTR_KEY_NEW_PARAGRAPH);
+    }
+
+    public static void setNewParagraph(MutableAttributeSet attrs, boolean newParagraph) {
+        if(newParagraph)
+            attrs.addAttribute(ATTR_KEY_NEW_PARAGRAPH, Boolean.TRUE);
+        else
+            attrs.removeAttribute(ATTR_KEY_NEW_PARAGRAPH);
+    }
+
     public static final String ATTR_KEY_LABEL = "label";
 
     public static boolean isLabel(AttributeSet attrs) {

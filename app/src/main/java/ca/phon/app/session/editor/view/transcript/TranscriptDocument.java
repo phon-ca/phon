@@ -331,6 +331,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         for(int i = 0; i < paraEle.getElementCount(); i++) {
             final Element childEle = paraEle.getElement(i);
             final AttributeSet attrs = childEle.getAttributes();
+            if(TranscriptStyleConstants.isNewParagraph(attrs)) {
+                continue;
+            }
             final boolean isLabel = TranscriptStyleConstants.isLabel(attrs);
             if (!isLabel) {
                 break;
@@ -367,6 +370,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         for (int i = 0; i < paraEle.getElementCount(); i++) {
             final Element childEle = paraEle.getElement(i);
             final AttributeSet attrs = childEle.getAttributes();
+            if (TranscriptStyleConstants.isNewParagraph(attrs)) {
+                continue;
+            }
             final boolean isLabel = TranscriptStyleConstants.isLabel(attrs);
             if (!isLabel) {
                 break;
@@ -490,6 +496,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         for (int i = 0; i < elem.getElementCount(); i++) {
             Element innerElem = elem.getElement(i);
             AttributeSet attrs = innerElem.getAttributes();
+            if(TranscriptStyleConstants.isNewParagraph(attrs)) {
+                continue;
+            }
             boolean isLabel = TranscriptStyleConstants.isLabel(attrs);
             if (isLabel) {
                 tierStart = innerElem.getEndOffset();
@@ -518,6 +527,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         for(int i = 0; i < elem.getElementCount(); i++) {
             Element innerElem = elem.getElement(i);
             AttributeSet attrs = innerElem.getAttributes();
+            if(TranscriptStyleConstants.isNewParagraph(attrs)) {
+                continue;
+            }
             boolean isLabel = TranscriptStyleConstants.isLabel(attrs);
             if (isLabel) {
                 // return start of label and end of label excluding starting tab
@@ -642,6 +654,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         for (int i = 0; i < elem.getElementCount(); i++) {
             Element innerElem = elem.getElement(i);
             AttributeSet attrs = innerElem.getAttributes();
+            if (TranscriptStyleConstants.isNewParagraph(attrs)) {
+                continue;
+            }
             boolean isLabel = TranscriptStyleConstants.isLabel(attrs);
             // If correct tier name
             if (isLabel) {
@@ -763,6 +778,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                             for (int j = 0; j < e.getElementCount(); j++) {
                                 Element childEle = e.getElement(j);
                                 AttributeSet attrs = childEle.getAttributes();
+                                if(TranscriptStyleConstants.isNewParagraph(attrs)) {
+                                    continue;
+                                }
                                 boolean isLabel = TranscriptStyleConstants.isLabel(attrs);
                                 if (isLabel) {
                                     return new StartEnd(childEle.getStartOffset(), childEle.getEndOffset());
@@ -796,6 +814,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                             for (int j = 0; j < e.getElementCount(); j++) {
                                 Element childEle = e.getElement(j);
                                 AttributeSet attrs = childEle.getAttributes();
+                                if(TranscriptStyleConstants.isNewParagraph(attrs)) {
+                                    continue;
+                                }
                                 Boolean isLabel = TranscriptStyleConstants.isLabel(attrs);
                                 if (!isLabel) {
                                     break;

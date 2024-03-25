@@ -138,6 +138,13 @@ public class TranscriptBatchBuilder {
      */
     public void appendBatchEndStart(AttributeSet endAttrs, AttributeSet startAttrs) {
         batch.addAll(getBatchEndStart(endAttrs, startAttrs));
+
+        // append a new paragraph character to anchor the start of the new paragraph
+        final SimpleAttributeSet pAttrs = new SimpleAttributeSet(startAttrs);
+        TranscriptStyleConstants.setNewParagraph(pAttrs, true);
+        TranscriptStyleConstants.setNotTraversable(pAttrs, true);
+        TranscriptStyleConstants.setNotEditable(pAttrs, true);
+        appendBatchString("\u2029", pAttrs);
     }
 
     /**
