@@ -1187,7 +1187,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             final AttributeSet lblAttrs = getCharacterElement(commentLblRange.start()).getAttributes();
             bypassDocumentFilter = true;
             remove(commentLblRange.start(), commentLblRange.length());
-            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder();
+            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(this);
             final String lblTxt = isChatTierNamesShown() ? "@" + comment.getType().toString() : comment.getType().toString();
             batchBuilder.appendBatchString(batchBuilder.formatLabelText(lblTxt), lblAttrs);
             processBatchUpdates(commentLblRange.start(), batchBuilder.getBatch());
@@ -1207,7 +1207,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             final AttributeSet lblAttrs = getCharacterElement(gemLblRange.start()).getAttributes();
             bypassDocumentFilter = true;
             remove(gemLblRange.start(), gemLblRange.length());
-            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder();
+            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(this);
             final String lblText = isChatTierNamesShown() ? gem.getType().getChatTierName() : gem.getType().getPhonTierName();
             batchBuilder.appendBatchString(batchBuilder.formatLabelText(lblText), lblAttrs);
             processBatchUpdates(gemLblRange.start(), batchBuilder.getBatch());
@@ -1236,7 +1236,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             bypassDocumentFilter = true;
             remove(start, end - start);
 
-            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder();
+            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(this);
             batchBuilder.appendBatchEndStart();
 
             int startElementIndex = Math.min(oldElementIndex, newElementIndex);
@@ -1344,7 +1344,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         }
 
         try {
-            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder();
+            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(this);
             batchBuilder.appendComment(comment, isChatTierNamesShown());
             batchBuilder.appendEOL();
             processBatchUpdates(offset, batchBuilder.getBatch());
@@ -1383,7 +1383,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         }
 
         try {
-            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder();
+            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(this);
             batchBuilder.appendGem(gem, isChatTierNamesShown());
             batchBuilder.appendEOL();
             processBatchUpdates(offset, batchBuilder.getBatch());
@@ -1406,7 +1406,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         try {
             bypassDocumentFilter = true;
             remove(start, end - start);
-            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder();
+            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(this);
             batchBuilder.appendRecord(session, record, isChatTierNamesShown());
             batchBuilder.appendEOL();
             processBatchUpdates(start, batchBuilder.getBatch());
@@ -1422,7 +1422,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      */
     public void addRecord(Record addedRecord, int elementIndex) {
         try {
-            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder();
+            TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(this);
             batchBuilder.appendRecord(session, addedRecord, isChatTierNamesShown());
             batchBuilder.appendEOL();
             int nextElementStart = getLength();

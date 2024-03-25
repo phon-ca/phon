@@ -333,38 +333,42 @@ public class TranscriptBatchBuilder {
         TranscriptStyleConstants.setUnderlineOnHover(labelAttrs, false);
         appendBatchString(": ", labelAttrs);
 
-        for (int i = 0; i < tierData.length(); i++) {
-            TierElement userTierElement = tierData.elementAt(i);
-            String text = null;
-            SimpleAttributeSet attrs;
-            if (userTierElement instanceof TierString tierString) {
-                // Text
-                text = tierString.text();
-                attrs = styleContext.getTierStringAttributes();
-            } else if (userTierElement instanceof TierComment userTierComment) {
-                // Comment
-                text = userTierComment.toString();
-                attrs = styleContext.getTierCommentAttributes();
-            } else if (userTierElement instanceof TierInternalMedia internalMedia) {
-                // Internal media
-                attrs = styleContext.getTierInternalMediaAttributes();
-                appendFormattedInternalMedia(internalMedia.getInternalMedia(), attrs);
-            } else if (userTierElement instanceof TierLink link) {
-                // Link
-                text = link.toString();
-                attrs = styleContext.getTierLinkAttributes();
-            } else {
-                throw new RuntimeException("Invalid type");
-            }
+        if(tierData.length() == 0) {
+            appendBatchString("", styleContext.getTierStringAttributes());
+        } else {
+            for (int i = 0; i < tierData.length(); i++) {
+                TierElement userTierElement = tierData.elementAt(i);
+                String text = null;
+                SimpleAttributeSet attrs;
+                if (userTierElement instanceof TierString tierString) {
+                    // Text
+                    text = tierString.text();
+                    attrs = styleContext.getTierStringAttributes();
+                } else if (userTierElement instanceof TierComment userTierComment) {
+                    // Comment
+                    text = userTierComment.toString();
+                    attrs = styleContext.getTierCommentAttributes();
+                } else if (userTierElement instanceof TierInternalMedia internalMedia) {
+                    // Internal media
+                    attrs = styleContext.getTierInternalMediaAttributes();
+                    appendFormattedInternalMedia(internalMedia.getInternalMedia(), attrs);
+                } else if (userTierElement instanceof TierLink link) {
+                    // Link
+                    text = link.toString();
+                    attrs = styleContext.getTierLinkAttributes();
+                } else {
+                    throw new RuntimeException("Invalid type");
+                }
 
-            attrs.addAttributes(commentAttrs);
+                attrs.addAttributes(commentAttrs);
 
-            if (text != null) {
-                appendBatchString(text, attrs);
-            }
+                if (text != null) {
+                    appendBatchString(text, attrs);
+                }
 
-            if (i < tierData.length() - 1) {
-                appendBatchString(" ", attrs);
+                if (i < tierData.length() - 1) {
+                    appendBatchString(" ", attrs);
+                }
             }
         }
 
