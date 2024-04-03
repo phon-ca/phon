@@ -985,7 +985,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return the transcript element index or -1 if not found
      */
     private int getTranscriptElementIndex(Element paraEle) {
-        final AttributeSet attrs = paraEle.getAttributes();
+        if(paraEle.getElementCount() < 1) return -1;
+        final Element innerEle = paraEle.getElement(0);
+        final AttributeSet attrs = innerEle.getAttributes();
         int paraEleIdx = -1;
         // determine transcript element index of midEle
         if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD) != null) {
@@ -1454,11 +1456,19 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         try {
             final StartEnd recordRange = getRecordStartEnd(removedRecord);
             if(!recordRange.valid()) return;
-            final int start = recordRange.start();
-            final int end = recordRange.end();
-
             bypassDocumentFilter = true;
-            remove(start, end - start);
+            remove(recordRange.start(), recordRange.length());
+
+//            // fix paragraph attributes
+//            final Element root = getDefaultRootElement();
+//            final int recordIdx = findParagraphElementIndexForSessionElementIndex(getSession().getTranscript().getElementIndex(removedRecord));
+//            if(recordIdx >= 0) {
+//                final Element recordEle = root.getElement(recordIdx);
+//                final AttributeSet attrs = recordEle.getAttributes();
+//                final SimpleAttributeSet newAttrs = new SimpleAttributeSet(attrs);
+//                newAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
+//                setParagraphAttributes(recordEle.getStartOffset(), recordEle.getEndOffset(), newAttrs, false);
+//            }
         } catch (BadLocationException e) {
             LogUtil.severe(e);
         }

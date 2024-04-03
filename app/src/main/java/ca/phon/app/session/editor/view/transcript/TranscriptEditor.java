@@ -185,7 +185,12 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             TranscriptDocument doc = getTranscriptDocument();
             String transcriptElementType = (String) doc.getCharacterElement(e.getDot()).getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
             if (transcriptElementType != null && transcriptElementType.equals(TranscriptStyleConstants.ATTR_KEY_RECORD)) {
-                setCurrentRecordIndex(doc.getRecordIndex(e.getDot()));
+                int dot = e.getDot();
+                int recordIdx = doc.getRecordIndex(dot);
+                System.out.println("Dot: " + dot + " Record index: " + recordIdx);
+                if(recordIdx >= 0) {
+                    setCurrentRecordIndex(recordIdx);
+                }
             }
         });
         selectionModel.addSelectionModelListener(new TranscriptSelectionListener());
