@@ -41,6 +41,8 @@ public class SessionEditorStatusBar extends JXStatusBar {
 	private JLabel progressLabel;
 	private JProgressBar progressBar;
 
+//	private NavigationPanel navigationPanel;
+
 	private final PhonTaskListener taskListener = new PhonTaskListener() {
 
 		@Override
@@ -112,15 +114,17 @@ public class SessionEditorStatusBar extends JXStatusBar {
 	private void init() {
 		statusLabel = new JLabel();
 
-		modifiedIcon = IconManager.getInstance().getIcon("actions/document-save", IconSize.SMALL);
-		unmodifiedIcon = IconManager.getInstance().getDisabledIcon("actions/document-save", IconSize.SMALL);
-		if(getEditor().isModified()) {
-			statusLabel.setIcon(modifiedIcon);
-		} else {
-			statusLabel.setIcon(unmodifiedIcon);
-		}
-		statusLabel.setToolTipText(getStatusTooltipText());
-		add(statusLabel, new JXStatusBar.Constraint(IconSize.SMALL.getWidth()));
+//		modifiedIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName,
+//				"save", IconSize.SMALL, Color.darkGray);
+//		unmodifiedIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName,
+//				"save", IconSize.SMALL, Color.lightGray);
+//		if(getEditor().isModified()) {
+//			statusLabel.setIcon(modifiedIcon);
+//		} else {
+//			statusLabel.setIcon(unmodifiedIcon);
+//		}
+//		statusLabel.setToolTipText(getStatusTooltipText());
+//		add(statusLabel, new JXStatusBar.Constraint(IconSize.SMALL.getWidth()));
 
 		sessionPathLabel = new JLabel(getEditor().getSession().getSessionPath().toString() );
 		sessionPathLabel.setFont(sessionPathLabel.getFont().deriveFont(10.0f));
@@ -156,8 +160,10 @@ public class SessionEditorStatusBar extends JXStatusBar {
 
 		});
 		sessionPathLabel.setForeground(Color.gray);
-
 		add(sessionPathLabel, new JXStatusBar.Constraint(ResizeBehavior.FILL));
+
+//		navigationPanel = new NavigationPanel(getEditor());
+//		add(navigationPanel, new JXStatusBar.Constraint(ResizeBehavior.FILL));
 
 		extrasPanel = new JPanel(new HorizontalLayout());
 		extrasPanel.setOpaque(false);
