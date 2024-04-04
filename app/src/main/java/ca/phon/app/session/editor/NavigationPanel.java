@@ -16,7 +16,9 @@
 package ca.phon.app.session.editor;
 
 import ca.phon.app.session.editor.actions.*;
+import ca.phon.ui.FlatButton;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.util.icons.IconSize;
 import com.jgoodies.forms.layout.*;
 
 import javax.swing.*;
@@ -68,29 +70,34 @@ public class NavigationPanel extends JPanel {
 	}
 	
 	private void init() {
-		final ButtonGroup btnGroup = new ButtonGroup();
-		final List<JButton> buttons = (new SegmentedButtonBuilder<JButton>(JButton::new)).createSegmentedButtons(4, btnGroup);
-		
 		final Action firstRecordAction = new FirstRecordAction(getEditor());
-		firstRecordButton = buttons.get(0);
+		firstRecordAction.putValue(FlatButton.ICON_NAME_PROP, "FIRST_PAGE");
+		firstRecordAction.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+		firstRecordButton = new FlatButton(firstRecordAction);
 		firstRecordButton.setAction(firstRecordAction);
 		firstRecordButton.setText(null);
 		firstRecordButton.setFocusable(false);
 		
 		final Action lastRecordAction = new LastRecordAction(getEditor());
-		lastRecordButton = buttons.get(3);
+		lastRecordAction.putValue(FlatButton.ICON_NAME_PROP, "LAST_PAGE");
+		lastRecordAction.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+		lastRecordButton = new FlatButton(lastRecordAction);
 		lastRecordButton.setAction(lastRecordAction);
 		lastRecordButton.setText(null);
 		lastRecordButton.setFocusable(false);
 		
 		final Action prevRecordAction = new PreviousRecordAction(getEditor());
-		prevRecordButton = buttons.get(1);
+		prevRecordAction.putValue(FlatButton.ICON_NAME_PROP, "CHEVRON_LEFT");
+		prevRecordAction.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+		prevRecordButton = new FlatButton(prevRecordAction);
 		prevRecordButton.setAction(prevRecordAction);
 		prevRecordButton.setText(null);
 		prevRecordButton.setFocusable(false);
 		
 		final Action nextRecordAction = new NextRecordAction(getEditor());
-		nextRecordButton = buttons.get(2);
+		nextRecordAction.putValue(FlatButton.ICON_NAME_PROP, "CHEVRON_RIGHT");
+		nextRecordAction.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+		nextRecordButton = new FlatButton(nextRecordAction);
 		nextRecordButton.setAction(nextRecordAction);
 		nextRecordButton.setText(null);
 		nextRecordButton.setFocusable(false);
@@ -155,7 +162,11 @@ public class NavigationPanel extends JPanel {
 		
 		CellConstraints cc = new CellConstraints();
 		
-		final JComponent btnComp = (new SegmentedButtonBuilder<JButton>(JButton::new)).createLayoutComponent(buttons);
+		final JPanel buttonPanel = new JPanel(new FormLayout("pref, pref, pref, pref", "pref"));
+		buttonPanel.add(firstRecordButton, cc.xy(1, 1));
+		buttonPanel.add(prevRecordButton, cc.xy(2, 1));
+		buttonPanel.add(nextRecordButton, cc.xy(3, 1));
+		buttonPanel.add(lastRecordButton, cc.xy(4, 1));
 		
 		JLabel rl = new JLabel(" Record: ");
 		add(rl, cc.xy(1, 1));
@@ -163,7 +174,7 @@ public class NavigationPanel extends JPanel {
 		JLabel ol = new JLabel(" of ");
 		add(ol, cc.xy(3, 1));
 		add(numRecordsLabel, cc.xy(4,1));
-		add(btnComp, cc.xy(6, 1));
+		add(buttonPanel, cc.xy(6, 1));
 	}
 	
 	public void gotoRecord() {

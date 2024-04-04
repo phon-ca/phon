@@ -309,6 +309,9 @@ public class TranscriptView extends EditorView {
 //        iconStrip.add(transcriptBtn, IconStrip.IconStripPosition.LEFT);
 //        iconStrip.add(findReplaceBtn, IconStrip.IconStripPosition.RIGHT);
 //        iconStrip.add(singleRecordModeBtn, IconStrip.IconStripPosition.RIGHT);
+
+        NavigationPanel navPanel = new NavigationPanel(getEditor());
+        iconStrip.add(navPanel, IconStrip.IconStripPosition.RIGHT);
     }
 
     public TranscriptEditor getTranscriptEditor() {
