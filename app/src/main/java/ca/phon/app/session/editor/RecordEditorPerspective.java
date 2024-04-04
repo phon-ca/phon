@@ -42,10 +42,10 @@ public class RecordEditorPerspective {
 
 	public final static String LAST_USED_PERSPECTIVE_NAME = "Previous";
 
-	private final static String PERSPECTIVE_LIST = "META-INF/layouts/layouts.list";
+	private final static String PERSPECTIVE_LIST = "META-INF/perspectives/perspectives.list";
 
 	public final static File PERSPECTIVES_FOLDER = new File(PrefHelper.getUserDataFolder() +
-			File.separator + "layouts");
+			File.separator + "perspectives");
 
 	/**
 	 * Resource loader

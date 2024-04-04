@@ -43,6 +43,7 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuManager;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.OSInfo;
+import ca.phon.util.VersionInfo;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.*;
 import org.apache.logging.log4j.LogManager;
@@ -661,6 +662,8 @@ public class DefaultEditorViewModel implements EditorViewModel {
 			try {
 				final XElement root = new XElement("root");
 
+				writeVersionInfo(root);
+
 				// add position of window as attributes
 				final XElement rootBoundsEle = root.addElement("bounds");
 
@@ -686,6 +689,13 @@ public class DefaultEditorViewModel implements EditorViewModel {
 				LogUtil.severe(e);
 			}
         }
+	}
+
+	private void writeVersionInfo(XElement rootEle) {
+		final XElement versionEle = rootEle.addElement("version");
+		final XAttribute versionAttr = new XAttribute("version");
+		versionAttr.setString(VersionInfo.getInstance().getVersion());
+		versionEle.addAttribute(versionAttr);
 	}
 
 	private void writeBoundsInfo(XElement rootBoundsEle, JFrame frame) {
