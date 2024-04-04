@@ -7,6 +7,8 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.search.FindExpr;
 import ca.phon.app.session.editor.search.FindManager;
 import ca.phon.app.session.editor.search.SearchType;
+import ca.phon.session.Participant;
+import ca.phon.session.TierViewItem;
 import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.ui.FlatButton;
 import ca.phon.ui.action.PhonUIAction;
@@ -23,6 +25,7 @@ import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 @EditorViewInfo(name=SearchView.VIEW_NAME, category= EditorViewCategory.UTILITIES, icon=SearchView.VIEW_ICON)
@@ -51,6 +54,16 @@ public class SearchView extends EditorView {
     private FlatButton phonexButton;
 
     private SearchViewTable table;
+
+    // region - filter settings
+    private List<String> filterTiers = new ArrayList<>();
+
+    private List<Participant> filterSpeakers = new ArrayList<>();
+
+    private boolean includeComments = true;
+
+    private boolean includeGems = true;
+    // endregion
 
     public SearchView(SessionEditor editor) {
         super(editor);
@@ -159,9 +172,95 @@ public class SearchView extends EditorView {
 
     private void showFilterMenu() {
         final JPopupMenu filterMenu = new JPopupMenu();
-        filterMenu.add(new JMenuItem("Filter by tier"));
-        filterMenu.add(new JMenuItem("Filter by speaker"));
+
+        filterMenu.add(new JLabel("Filter by tier:"));
+        for(TierViewItem tvi:getEditor().getSession().getTierView()) {
+            if(!tvi.isVisible()) continue;
+            final JCheckBoxMenuItem tierItem = new JCheckBoxMenuItem(tvi.getTierName());
+            tierItem.setSelected(filterTiers.contains(tvi.getTierName()));
+            tierItem.addActionListener( (e) -> {
+                if(tierItem.isSelected()) {
+                    filterTiers.add(tvi.getTierName());
+                } else {
+                    filterTiers.remove(tvi.getTierName());
+                }
+                onQuery();
+            });
+            filterMenu.add(tierItem);
+        }
+
+        filterMenu.addSeparator();
+
+        filterMenu.add(new JLabel("Filter by speaker:"));
+        final List<Participant> participants = new ArrayList<>();
+        for(Participant speaker:getEditor().getSession().getParticipants()) {
+            participants.add(speaker);
+        }
+        participants.add(Participant.UNKNOWN);
+        for(Participant speaker:participants) {
+            final JCheckBoxMenuItem speakerItem = new JCheckBoxMenuItem(speaker.toString());
+            speakerItem.setSelected(filterSpeakers.contains(speaker));
+            speakerItem.addActionListener( (e) -> {
+                if(speakerItem.isSelected()) {
+                    filterSpeakers.add(speaker);
+                } else {
+                    filterSpeakers.remove(speaker);
+                }
+                onQuery();
+            });
+            filterMenu.add(speakerItem);
+        }
+
+        filterMenu.addSeparator();
+        final JCheckBoxMenuItem includeCommentsItem = new JCheckBoxMenuItem("Include comments");
+        includeCommentsItem.setSelected(includeComments);
+        includeCommentsItem.addActionListener( (e) -> {
+            includeComments = includeCommentsItem.isSelected();
+            onQuery();
+        });
+        filterMenu.add(includeCommentsItem);
+
+        final JCheckBoxMenuItem includeGemsItem = new JCheckBoxMenuItem("Include gems");
+        includeGemsItem.setSelected(includeGems);
+        includeGemsItem.addActionListener( (e) -> {
+            includeGems = includeGemsItem.isSelected();
+            onQuery();
+        });
+        filterMenu.add(includeGemsItem);
+
+        filterMenu.addSeparator();
+        final JMenuItem resetItem = new JCheckBoxMenuItem("Reset filters");
+        resetItem.addActionListener( (e) -> {
+            filterTiers.clear();
+            filterSpeakers.clear();
+            includeComments = true;
+            includeGems = true;
+            onQuery();
+        });
+        filterMenu.add(resetItem);
+
         filterMenu.show(filterButton, 0, filterButton.getHeight());
+    }
+
+    private void setupSearchTiers(FindManager findManager) {
+        final List<String> searchTiers = new ArrayList<>();
+        for(TierViewItem tvi:getEditor().getSession().getTierView()) {
+            if(!tvi.isVisible()) continue;
+            if(filterTiers.size() > 0 && !filterTiers.contains(tvi.getTierName())) continue;
+            searchTiers.add(tvi.getTierName());
+        }
+        findManager.setSearchTiers(searchTiers.toArray(new String[0]));
+    }
+
+    private void setupRecordFilter(FindManager findManager) {
+        final List<Participant> speakers = new ArrayList<>();
+        for(Participant speaker:getEditor().getSession().getParticipants()) {
+            if(filterSpeakers.size() > 0 && !filterSpeakers.contains(speaker)) continue;
+            speakers.add(speaker);
+        }
+        findManager.setSpeakers(speakers);
+        findManager.setIncludeComments(includeComments);
+        findManager.setIncludeGems(includeGems);
     }
 
     public void onQuery() {
@@ -182,6 +281,16 @@ public class SearchView extends EditorView {
             findExpr.setType(SearchType.PLAIN);
         }
         findManager.setAnyExpr(findExpr);
+        setupSearchTiers(findManager);
+        setupRecordFilter(findManager);
+
+        if(filterTiers.size() > 0 || filterSpeakers.size() > 0 || !includeComments || !includeGems) {
+            filterButton.setSelected(true);
+        } else {
+            filterButton.setSelected(false);
+        }
+
+        this.resultsLabel.setText("0 results");
         this.resultsLabel.setForeground(UIManager.getColor("textInactiveText"));
         this.table.search(findManager);
         final TableModelListener listener = new TableModelListener() {

@@ -88,6 +88,11 @@ public class FindManager {
 	 * Include gems
 	 */
 	private boolean includeGems = true;
+
+	/**
+	 * Speakers
+	 */
+	private List<Participant> speakers = new ArrayList<Participant>();
 	
 	/**
 	 * Constructor
@@ -128,15 +133,20 @@ public class FindManager {
 		return this.searchTiers.toArray(new String[0]);
 	}
 
-	public void setSearchTier(String[] tiers) {
+	public void setSearchTiers(String[] tiers) {
 		this.searchTiers.clear();
 		for(String tier:tiers)
 			this.searchTiers.add(tier);
 	}
 
-	public void setSearchTier(List<String> tiers) {
+	public void setSearchTiers(List<String> tiers) {
 		this.searchTiers.clear();
 		this.searchTiers.addAll(tiers);
+	}
+
+	public void setSpeakers(List<Participant> speakers) {
+		this.speakers.clear();
+		this.speakers.addAll(speakers);
 	}
 
 	public TranscriptElementLocation getCurrentLocation() {
@@ -315,6 +325,10 @@ public class FindManager {
 				}
 			} else if(ele.isRecord()) {
 				Record currentUtt = ele.asRecord();
+				if(speakers.size() > 0 && !speakers.contains(currentUtt.getSpeaker())) {
+					eleIdx++;
+					continue;
+				}
 				while (tierIdx < searchTiers.size() && retVal == null) {
 					String searchTier = searchTiers.get(tierIdx);
 

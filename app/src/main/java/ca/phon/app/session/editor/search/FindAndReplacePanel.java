@@ -18,12 +18,10 @@ package ca.phon.app.session.editor.search;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.search.FindManager.*;
 import ca.phon.app.session.editor.search.actions.*;
-import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.common.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.position.*;
-import ca.phon.ui.toast.*;
 
 import javax.swing.*;
 import javax.swing.undo.UndoableEditSupport;
@@ -254,7 +252,7 @@ public class FindAndReplacePanel extends JPanel {
 			findManager.setExprForTier(tierNameBox.getSelectedItem().toString(), getFindExpr());
 		}
 		
-		findManager.setSearchTier(getSearchTiers());
+		findManager.setSearchTiers(getSearchTiers());
 	}
 	
 	/*
