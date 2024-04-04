@@ -6,6 +6,7 @@ import ca.phon.app.session.editor.EditorViewInfo;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.search.FindExpr;
 import ca.phon.app.session.editor.search.FindManager;
+import ca.phon.app.session.editor.search.SearchType;
 import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.ui.FlatButton;
 import ca.phon.ui.action.PhonUIAction;
@@ -16,7 +17,11 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -55,7 +60,6 @@ public class SearchView extends EditorView {
 
     private void init() {
         setLayout(new BorderLayout());
-
 
         final PhonUIAction<Void> caseSensitiveAct = PhonUIAction.runnable(this::toggleCaseSensitive);
         caseSensitiveAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
@@ -99,6 +103,9 @@ public class SearchView extends EditorView {
         this.searchField = new SearchField("Search tiers...");
         final PhonUIAction<Void> searchAct = PhonUIAction.runnable(this::onQuery);
         this.searchField.setAction(searchAct);
+        this.searchField.addPropertyChangeListener("text_cleared", (e) -> {
+            clearResults();
+        });
 
         resultsLabel = new JLabel("0 results");
         resultsLabel.setForeground(UIManager.getColor("textInactiveText"));
@@ -120,9 +127,16 @@ public class SearchView extends EditorView {
         add(new JScrollPane(table), BorderLayout.CENTER);
     }
 
+    private void clearResults() {
+        this.table.clearSearch();
+        this.resultsLabel.setText("0 results");
+        this.resultsLabel.setForeground(UIManager.getColor("textInactiveText"));
+    }
+
     private void toggleCaseSensitive() {
         final boolean caseSensitive = caseSensitiveButton.isSelected();
         caseSensitiveButton.setSelected(!caseSensitive);
+        onQuery();
     }
 
     private void toggleRegex() {
@@ -131,6 +145,7 @@ public class SearchView extends EditorView {
         if(regexButton.isSelected() && phonexButton.isSelected()) {
             phonexButton.setSelected(false);
         }
+        onQuery();
     }
 
     private void togglePhonex() {
@@ -139,6 +154,7 @@ public class SearchView extends EditorView {
         if(phonexButton.isSelected() && regexButton.isSelected()) {
             regexButton.setSelected(false);
         }
+        onQuery();
     }
 
     private void showFilterMenu() {
@@ -150,13 +166,41 @@ public class SearchView extends EditorView {
 
     public void onQuery() {
         final String queryText = searchField.getText();
-        if(queryText.trim().length() == 0) return;
-
+        if(queryText.trim().length() == 0) {
+            clearResults();
+            return;
+        }
         final FindManager findManager = new FindManager(getEditor().getSession());
         findManager.setCurrentLocation(new TranscriptElementLocation(0, findManager.getSearchTiers()[0], 0));
         final FindExpr findExpr = new FindExpr(searchField.getText());
+        findExpr.setCaseSensitive(caseSensitiveButton.isSelected());
+        if(regexButton.isSelected()) {
+            findExpr.setType(SearchType.REGEX);
+        } else if(phonexButton.isSelected()) {
+            findExpr.setType(SearchType.PHONEX);
+        } else {
+            findExpr.setType(SearchType.PLAIN);
+        }
         findManager.setAnyExpr(findExpr);
+        this.resultsLabel.setForeground(UIManager.getColor("textInactiveText"));
         this.table.search(findManager);
+        final TableModelListener listener = new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                resultsLabel.setText(table.getRowCount() + " results");
+            }
+        };
+        this.table.getModel().addTableModelListener(listener);
+        this.table.addPropertyChangeListener(SearchViewTable.SEARCHING_PROP, new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if(!(Boolean)evt.getNewValue()) {
+                    resultsLabel.setForeground(UIManager.getColor("textText"));
+                    table.getModel().removeTableModelListener(listener);
+                    table.removePropertyChangeListener(this);
+                }
+            }
+        });
     }
 
     @Override

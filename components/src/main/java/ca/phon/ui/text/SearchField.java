@@ -272,6 +272,7 @@ public class SearchField extends JPanel {
 
 	public void onClearText(PhonActionEvent<Void> pae) {
 		queryField.setText("");
+		firePropertyChange("text_cleared", false, true);
 	}
 	
 	/**

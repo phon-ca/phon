@@ -29,6 +29,10 @@ public class SearchViewTable extends JXTable {
         setModel(new SearchViewTableModel(session, ranges));
     }
 
+    public void clearSearch() {
+        setModel(new SearchViewTableModel(this.getSearchViewTableModel().session, new ArrayList<>()));
+    }
+
     /**
      * Search for results using provided find manager.  Exiting results will be cleared first.
      *
@@ -37,7 +41,7 @@ public class SearchViewTable extends JXTable {
     public void search(FindManager findManager) {
         setModel(new SearchViewTableModel(findManager.getSession(), new ArrayList<>()));
         final FindWorker worker = new FindWorker(findManager);
-        firePropertyChange(SEARCHING_PROP, false, true);
+        SearchViewTable.this.firePropertyChange(SEARCHING_PROP, false, true);
         worker.execute();
     }
 
@@ -77,7 +81,7 @@ public class SearchViewTable extends JXTable {
 
         @Override
         protected void done() {
-            firePropertyChange(SEARCHING_PROP, true, false);
+            SearchViewTable.this.firePropertyChange(SEARCHING_PROP, true, false);
         }
 
     }
