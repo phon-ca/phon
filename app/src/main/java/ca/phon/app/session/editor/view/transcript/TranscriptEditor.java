@@ -19,7 +19,9 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.*;
 import javax.swing.undo.UndoManager;
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -2682,6 +2684,20 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     private class CustomTransferHandler extends TransferHandler {
 
         @Override
+        public void exportToClipboard(JComponent comp, Clipboard clip, int action) throws IllegalStateException {
+            if (getSelectionStart() == getSelectionEnd()) {
+                return;
+            }
+
+            try {
+                StringSelection selection = new StringSelection(getSelectedText());
+                clip.setContents(selection, selection);
+            } catch (IllegalStateException e) {
+                LogUtil.warning(e);
+            }
+        }
+
+        @Override
         public boolean canImport(TransferSupport support) {
             return support.isDataFlavorSupported(DataFlavor.stringFlavor);
         }
@@ -2695,13 +2711,21 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             try {
                 String data = (String) support.getTransferable().getTransferData(DataFlavor.stringFlavor);
 
+                // if data contains a newline character, return
+                if(data.isEmpty() || data.contains("\n")) {
+                    Toolkit.getDefaultToolkit().beep();
+                    return false;
+                }
+
                 final AttributeSet attrs = getTranscriptDocument().getCharacterElement(getCaretPosition()).getAttributes();
                 final String elementType = TranscriptStyleConstants.getElementType(attrs);
                 if(elementType == null) {
+                    Toolkit.getDefaultToolkit().beep();
                     return false;
                 }
 
                 if(TranscriptStyleConstants.isNotTraversable(attrs) || TranscriptStyleConstants.isNotEditable(attrs)) {
+                    Toolkit.getDefaultToolkit().beep();
                     return false;
                 }
 
@@ -2715,6 +2739,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
 
                 return true;
             } catch (UnsupportedFlavorException | IOException | BadLocationException e) {
+                Toolkit.getDefaultToolkit().beep();
                 LogUtil.severe(e);
                 return false;
             }
