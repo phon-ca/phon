@@ -2053,6 +2053,10 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         AttributeSet attrs = charElem.getAttributes();
         String elementType = (String) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
 
+        if(elementType == null) {
+            return new TranscriptElementLocation(-1, null, -1);
+        }
+
         int transcriptElementIndex = -1;
         String label = null;
         int posInTier = -1;
@@ -2248,7 +2252,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
      */
     private void onTranscriptElementDeleted(EditorEvent<EditorEventType.ElementDeletedData> editorEvent) {
         if (!editorEvent.data().element().isRecord()) {
-            getTranscriptDocument().deleteTranscriptElement(editorEvent.data().element());
+            getTranscriptDocument().deleteTranscriptElement(editorEvent.data().elementIndex(), editorEvent.data().element());
         }
     }
 

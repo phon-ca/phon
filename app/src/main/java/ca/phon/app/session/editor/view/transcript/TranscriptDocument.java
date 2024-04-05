@@ -1155,24 +1155,51 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     /**
      * Deletes a given transcript element from the document
      */
-    public void deleteTranscriptElement(Transcript.Element elem) {
+    public void deleteTranscriptElement(int elementIndex, Transcript.Element elem) {
         try {
             int startOffset = -1;
             int endOffset = -1;
 
-            if (elem.isComment()) {
-                startOffset = getCommentStart(elem.asComment());
-                endOffset = getCommentEnd(elem.asComment());
-            } else if (elem.isGem()) {
-                startOffset = getGemStart(elem.asGem());
-                endOffset = getGemEnd(elem.asGem());
-            } else if (elem.isRecord()) {
-                return;
+            for(int i = 0; i < getDefaultRootElement().getElementCount(); i++) {
+                final Element paraEle = getDefaultRootElement().getElement(i);
+                final AttributeSet attrs = paraEle.getAttributes();
+                if (elem.isComment() && TranscriptStyleConstants.getComment(attrs) == elem.asComment()) {
+                    startOffset = paraEle.getStartOffset();
+                    endOffset = paraEle.getEndOffset();
+                    break;
+                } else if (elem.isGem() && TranscriptStyleConstants.getGEM(attrs) == elem.asGem()) {
+                    startOffset = paraEle.getStartOffset();
+                    endOffset = paraEle.getEndOffset();
+                    break;
+                }
             }
-            if (startOffset < 0 || endOffset < 0) return;
+            final StartEnd startEnd = new StartEnd(startOffset, endOffset);
+            if (!startEnd.valid()) return;
+
+            // get attributes of the next element
+            // find the next element range
+            AttributeSet attrs = null;
+            if(elementIndex < session.getTranscript().getNumberOfElements()) {
+                // elementIndex is now our next element since we removed the current one
+                final int nextEleParagraphIdx = findParagraphElementIndexForSessionElementIndex(elementIndex);
+                if(nextEleParagraphIdx >= 0) {
+                    final Element nextEle = getDefaultRootElement().getElement(nextEleParagraphIdx);
+                    attrs = nextEle.getAttributes();
+                }
+            } else {
+                // if we are at the end of the document we need to find the last element
+                final int lastEleIdx = getDefaultRootElement().getElementCount() - 1;
+                final Element lastEle = getDefaultRootElement().getElement(lastEleIdx);
+                attrs = lastEle.getAttributes();
+            }
 
             bypassDocumentFilter = true;
             remove(startOffset, endOffset - startOffset);
+
+            // fix paragraph attributes
+            if(attrs != null) {
+                setParagraphAttributes(startEnd.start(), 0, attrs, true);
+            }
         } catch (BadLocationException e) {
             LogUtil.severe(e);
         }
@@ -1471,15 +1498,18 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
         // find the next element range
         AttributeSet attrs = null;
-        StartEnd nextElementRange = new StartEnd(-1, -1);
-        if(elementIndex + 1 < session.getTranscript().getNumberOfElements()) {
+        if(elementIndex < session.getTranscript().getNumberOfElements()) {
             // elementIndex is now our next element since we removed the current one
             final int nextEleParagraphIdx = findParagraphElementIndexForSessionElementIndex(elementIndex);
             if(nextEleParagraphIdx >= 0) {
                 final Element nextEle = getDefaultRootElement().getElement(nextEleParagraphIdx);
                 attrs = nextEle.getAttributes();
-                nextElementRange = new StartEnd(nextEle.getStartOffset(), nextEle.getEndOffset());
             }
+        } else {
+            // if we are at the end of the document we need to find the last element
+            final int lastEleIdx = getDefaultRootElement().getElementCount() - 1;
+            final Element lastEle = getDefaultRootElement().getElement(lastEleIdx);
+            attrs = lastEle.getAttributes();
         }
 
         if(recordRange.valid()) {
