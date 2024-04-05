@@ -614,6 +614,8 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
     }
 
     private void onSessionLocationChanged(EditorEvent<TranscriptEditor.TranscriptLocationChangeData> evt) {
+        if(!evt.getData().isPresent()) return;
+        if(evt.getData().get().oldLoc().tier() == null) return;
         if(evt.getData().get().oldLoc().transcriptElementIndex() == -1) {
             if(evt.getData().get().oldLoc().tier().equals("Date")) {
                 updateDateFromText();
