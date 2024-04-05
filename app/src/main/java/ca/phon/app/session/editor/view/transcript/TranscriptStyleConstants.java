@@ -285,7 +285,7 @@ public class TranscriptStyleConstants {
 
     public static final String ATTR_KEY_BORDER = "border";
 
-    public static Border getBorder(MutableAttributeSet attrs) {
+    public static Border getBorder(AttributeSet attrs) {
         return (Border)attrs.getAttribute(ATTR_KEY_BORDER);
     }
 

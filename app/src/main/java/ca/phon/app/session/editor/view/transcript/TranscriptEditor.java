@@ -780,8 +780,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
 
         // Delete the record from the doc
         var data = editorEvent.data();
-        getTranscriptDocument().deleteRecord(data.record());
-
+        getTranscriptDocument().deleteRecord(data.elementIndex(), data.recordIndex(), data.record());
 
         // Caret in record / tier
         if (caretTier != null) {

@@ -1452,25 +1452,48 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      *
      * @param removedRecord the record that gets removed
      */
-    public void deleteRecord(Record removedRecord) {
-        try {
-            final StartEnd recordRange = getRecordStartEnd(removedRecord);
-            if(!recordRange.valid()) return;
-            bypassDocumentFilter = true;
-            remove(recordRange.start(), recordRange.length());
+    public void deleteRecord(int elementIndex, int recordIndex, Record removedRecord) {
+        // we need to find the StartEnd of the record which was removed
+        // since our findParagraphElementIndexForSessionElementIndex method only works for
+        // transcript elements which exist in the session we need to do this iteratively
+        int start = -1;
+        int end = -1;
+        for (int i = 0; i < getDefaultRootElement().getElementCount(); i++) {
+            Element elem = getDefaultRootElement().getElement(i);
+            if (elem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD) == removedRecord) {
+                start = start == -1 ? elem.getStartOffset() : start;
+                end = elem.getEndOffset();
+            } else if (start != -1) {
+                break;
+            }
+        }
+        final StartEnd recordRange = new StartEnd(start, end);
 
-//            // fix paragraph attributes
-//            final Element root = getDefaultRootElement();
-//            final int recordIdx = findParagraphElementIndexForSessionElementIndex(getSession().getTranscript().getElementIndex(removedRecord));
-//            if(recordIdx >= 0) {
-//                final Element recordEle = root.getElement(recordIdx);
-//                final AttributeSet attrs = recordEle.getAttributes();
-//                final SimpleAttributeSet newAttrs = new SimpleAttributeSet(attrs);
-//                newAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
-//                setParagraphAttributes(recordEle.getStartOffset(), recordEle.getEndOffset(), newAttrs, false);
-//            }
-        } catch (BadLocationException e) {
-            LogUtil.severe(e);
+        // find the next element range
+        AttributeSet attrs = null;
+        StartEnd nextElementRange = new StartEnd(-1, -1);
+        if(elementIndex + 1 < session.getTranscript().getNumberOfElements()) {
+            // elementIndex is now our next element since we removed the current one
+            final int nextEleParagraphIdx = findParagraphElementIndexForSessionElementIndex(elementIndex);
+            if(nextEleParagraphIdx >= 0) {
+                final Element nextEle = getDefaultRootElement().getElement(nextEleParagraphIdx);
+                attrs = nextEle.getAttributes();
+                nextElementRange = new StartEnd(nextEle.getStartOffset(), nextEle.getEndOffset());
+            }
+        }
+
+        if(recordRange.valid()) {
+            try {
+                bypassDocumentFilter = true;
+                remove(recordRange.start(), recordRange.length());
+
+                // fix paragraph attributes
+                if(attrs != null) {
+                    setParagraphAttributes(recordRange.start(), 0, attrs, true);
+                }
+            } catch (BadLocationException e) {
+                LogUtil.severe(e);
+            }
         }
     }
 

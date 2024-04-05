@@ -1,5 +1,7 @@
 package ca.phon.app.session.editor.view.transcript;
 
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Element;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -47,14 +49,39 @@ public class TranscriptDocumentTreeModel extends DefaultTreeModel {
         }
     }
 
-    public static class TranscriptDocumentNode extends DefaultMutableTreeNode {
+    public class TranscriptDocumentNode extends DefaultMutableTreeNode {
         public TranscriptDocumentNode(Element documentEle) {
             super(documentEle);
+
+            final AttributeSet attrs = documentEle.getAttributes();
+            final var attrsenum = attrs.getAttributeNames();
+            while(attrsenum.hasMoreElements()) {
+                final Object key = attrsenum.nextElement();
+                final Object value = attrs.getAttribute(key);
+                add(new DefaultMutableTreeNode(key + ": " + value));
+            }
         }
 
         public Element getDocumentElement() {
             return (Element) getUserObject();
         }
+
+        @Override
+        public String toString() {
+            final Element ele = getDocumentElement();
+            final String name = ele.getName();
+            final int start = ele.getStartOffset();
+            final int end = ele.getEndOffset();
+            String text = "";
+            if("paragraph".equals(name) || ele.isLeaf()) {
+                try {
+                    text = document.getText(start, end - start);
+                } catch (BadLocationException e) {
+                }
+            }
+            return name + " [" + start + ", " + end + "] " + text;
+        }
+
     }
 
 

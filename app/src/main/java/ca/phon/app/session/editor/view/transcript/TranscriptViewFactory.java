@@ -269,13 +269,10 @@ public class TranscriptViewFactory implements ViewFactory {
      */
     private class TierParagraphView extends ParagraphView {
 
-        private Border border = BorderFactory.createMatteBorder(0, 0, 0, 0, Color.LIGHT_GRAY);
+//        private Border border = BorderFactory.createMatteBorder(0, 0, 0, 0, Color.LIGHT_GRAY);
 
         public TierParagraphView(Element elem) {
             super(elem);
-            if(elem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_BORDER) instanceof Border b) {
-                border = b;
-            }
             setPropertiesFromAttributes();
             setLineSpacing(getLineSpacing());
             SimpleAttributeSet attrs = new SimpleAttributeSet();
@@ -284,25 +281,35 @@ public class TranscriptViewFactory implements ViewFactory {
             setFirstLineIndent(-labelColumnWidth);
         }
 
+        private Border getBorder() {
+            final AttributeSet attrs = getAttributes();
+            final Border border = TranscriptStyleConstants.getBorder(attrs);
+            if(border != null) {
+                return border;
+            } else {
+                return BorderFactory.createEmptyBorder();
+            }
+        }
+
         // add border insets to view insets
         @Override
         public short getTopInset() {
-            return (short) (super.getTopInset() + border.getBorderInsets(getContainer()).top);
+            return (short) (super.getTopInset() + getBorder().getBorderInsets(getContainer()).top);
         }
 
         @Override
         public short getBottomInset() {
-            return (short) (super.getBottomInset() + border.getBorderInsets(getContainer()).bottom);
+            return (short) (super.getBottomInset() + getBorder().getBorderInsets(getContainer()).bottom);
         }
 
         @Override
         public short getLeftInset() {
-            return (short) (super.getLeftInset() + border.getBorderInsets(getContainer()).left);
+            return (short) (super.getLeftInset() + getBorder().getBorderInsets(getContainer()).left);
         }
 
         @Override
         public short getRightInset() {
-            return (short) (super.getRightInset() + border.getBorderInsets(getContainer()).right);
+            return (short) (super.getRightInset() + getBorder().getBorderInsets(getContainer()).right);
         }
 
         @Override
@@ -310,7 +317,7 @@ public class TranscriptViewFactory implements ViewFactory {
             // return if view count is 0 to avoid an issue at the end of the document when populating using a SwingWorker
             if(getViewCount() == 0) return;
             super.paint(g, a);
-            border.paintBorder(getContainer(), g, a.getBounds().x, a.getBounds().y, a.getBounds().width, a.getBounds().height);
+            getBorder().paintBorder(getContainer(), g, a.getBounds().x, a.getBounds().y, a.getBounds().width, a.getBounds().height);
         }
 
     }
