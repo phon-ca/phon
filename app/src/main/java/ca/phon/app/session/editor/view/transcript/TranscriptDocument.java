@@ -951,7 +951,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @param sessionElementIndex the session element index
      * @return the first paragraph element index for the given element index or -1 if not found
      */
-    private int findParagraphElementIndexForSessionElementIndex(int sessionElementIndex) {
+    public int findParagraphElementIndexForSessionElementIndex(int sessionElementIndex) {
         final Element rootEle = getDefaultRootElement();
         int low = 0;
         int high = rootEle.getElementCount() - 1;
