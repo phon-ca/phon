@@ -19,11 +19,14 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.*;
 import javax.swing.undo.UndoManager;
 import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 import java.util.List;
@@ -2667,22 +2670,55 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     }
 
     @Override
-    public void cut() {
-    }
-
-    @Override
-    public void paste() {
-        super.paste();
-    }
-
-    @Override
     public TransferHandler getTransferHandler() {
-        return super.getTransferHandler();
+        return new CustomTransferHandler();
     }
 
     public record RecordParticipant(
             Record record,
             Participant participant
     ) {}
+
+    private class CustomTransferHandler extends TransferHandler {
+
+        @Override
+        public boolean canImport(TransferSupport support) {
+            return support.isDataFlavorSupported(DataFlavor.stringFlavor);
+        }
+
+        @Override
+        public boolean importData(TransferSupport support) {
+            if (!canImport(support)) {
+                return false;
+            }
+
+            try {
+                String data = (String) support.getTransferable().getTransferData(DataFlavor.stringFlavor);
+
+                final AttributeSet attrs = getTranscriptDocument().getCharacterElement(getCaretPosition()).getAttributes();
+                final String elementType = TranscriptStyleConstants.getElementType(attrs);
+                if(elementType == null) {
+                    return false;
+                }
+
+                if(TranscriptStyleConstants.isNotTraversable(attrs) || TranscriptStyleConstants.isNotEditable(attrs)) {
+                    return false;
+                }
+
+                if(getSelectionStart() >= 0 && getSelectionEnd() >= 0) {
+                    getTranscriptDocument().remove(getSelectionStart(), getSelectionEnd() - getSelectionStart());
+                }
+
+                TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(getTranscriptDocument());
+                batchBuilder.appendBatchString(data, attrs);
+                getTranscriptDocument().processBatchUpdates(getCaretPosition(), batchBuilder.getBatch());
+
+                return true;
+            } catch (UnsupportedFlavorException | IOException | BadLocationException e) {
+                LogUtil.severe(e);
+                return false;
+            }
+        }
+    }
 
 }
