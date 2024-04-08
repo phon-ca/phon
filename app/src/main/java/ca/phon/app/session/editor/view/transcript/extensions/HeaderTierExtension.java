@@ -450,12 +450,16 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
 
         yearSelectionBox.addItemListener((evt) -> {
             if(evt.getStateChange() == ItemEvent.SELECTED) {
-                final Date javaDate = monthView.getSelectionDate();
+                Date javaDate = monthView.getSelectionDate();
+                if(javaDate == null) javaDate = monthView.getFirstDisplayedDay();
                 if(javaDate == null) return;
                 final LocalDate localDate = javaDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 final LocalDate newDate = LocalDate.of((int)yearSelectionBox.getSelectedItem(), localDate.getMonth(), localDate.getDayOfMonth());
                 final Date newJavaDate = Date.from(newDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
                 monthView.setFirstDisplayedDay(newJavaDate);
+                if(monthView.getSelectionDate() != null) {
+                    monthView.setSelectionDate(newJavaDate);
+                }
             }
         });
 
