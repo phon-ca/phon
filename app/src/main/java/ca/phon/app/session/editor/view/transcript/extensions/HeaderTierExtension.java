@@ -84,6 +84,9 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
         editor.getEventManager().registerActionForEvent(TranscriptEditor.transcriptLocationChanged, this::onSessionLocationChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
         editor.getEventManager().registerActionForEvent(EditorEventType.SessionMediaChanged, this::onSessionMediaChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
         editor.getEventManager().registerActionForEvent(EditorEventType.SessionLangChanged, this::updateLanguagesHeader, EditorEventManager.RunOn.AWTEventDispatchThread);
+        editor.getEventManager().registerActionForEvent(EditorEventType.ParticipantAdded, this::updateParticipantsHeader, EditorEventManager.RunOn.AWTEventDispatchThread);
+        editor.getEventManager().registerActionForEvent(EditorEventType.ParticipantRemoved, this::updateParticipantsHeader, EditorEventManager.RunOn.AWTEventDispatchThread);
+        editor.getEventManager().registerActionForEvent(EditorEventType.ParticipantChanged, this::updateParticipantsHeader, EditorEventManager.RunOn.AWTEventDispatchThread);
     }
 
     @Override
@@ -117,6 +120,44 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
 
     private boolean isHeadersVisible() {
         return (boolean) doc.getDocumentPropertyOrDefault(HEADERS_VISIBLE, DEFAULT_HEADERS_VISIBLE);
+    }
+
+    private void updateParticipantsHeader(EditorEvent<Participant> participantEditorEvent) {
+        try {
+            Tier<TierData> participantsTier = (Tier<TierData>) headerTierMap.get("participants");
+            Participants participants = session.getParticipants();
+            StringJoiner participantsJoiner = new StringJoiner(", ");
+            for (Participant participant : participants) {
+                if (participant.getName() != null) {
+                    participantsJoiner.add(participant.getName() + " (" + participant.getId() + ")");
+                }
+                else {
+                    participantsJoiner.add(participant.getId());
+                }
+            }
+            participantsTier.setText(participantsJoiner.toString());
+
+            final TranscriptDocument.StartEnd startEnd = doc.getGenericContentStartEnd(participantsTier);
+            if (startEnd.valid()) {
+                doc.setBypassDocumentFilter(true);
+                editor.getTranscriptEditorCaret().freeze();
+                doc.remove(startEnd.start(), startEnd.length());
+
+                final SimpleAttributeSet attrs = new SimpleAttributeSet(doc.getTranscriptStyleContext().getStyle(TranscriptStyleContext.DEFAULT_STYLE));
+                TranscriptStyleConstants.setElementType(attrs, TranscriptStyleConstants.ELEMENT_TYPE_GENERIC);
+                TranscriptStyleConstants.setGenericTier(attrs, participantsTier);
+
+                TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(doc.getTranscriptStyleContext(), doc.getInsertionHooks());
+                TranscriptStyleConstants.setNotEditable(attrs, true);
+                batchBuilder.appendBatchString(participantsTier.toString(), attrs);
+                doc.processBatchUpdates(startEnd.start(), batchBuilder.getBatch());
+            }
+        }
+        catch (BadLocationException e) {
+            LogUtil.severe(e);
+        } finally {
+            editor.getTranscriptEditorCaret().unfreeze();
+        }
     }
 
     private void appendParticipantsHeader(TranscriptBatchBuilder batchBuilder) {
