@@ -1152,53 +1152,69 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
     // region Transcript Changes
 
+    // update global paragraph attributes
+
+    private void updateGlobalParagraphAttributes() {
+        for(int i = 0; i < getDefaultRootElement().getElementCount(); i++) {
+            updateParagraphAttributes(getDefaultRootElement().getElement(i));
+        }
+    }
+
+    private void updateParagraphAttributes(Element paraEle) {
+        AttributeSet attrs = paraEle.getAttributes();
+        SimpleAttributeSet newAttrs = new SimpleAttributeSet(attrs);
+        StyleConstants.setLineSpacing(newAttrs, TranscriptViewFactory.LINE_SPACING);
+        StyleConstants.setLeftIndent(newAttrs, TranscriptViewFactory.LABEL_COLUMN_WIDTH);
+        StyleConstants.setFirstLineIndent(newAttrs, -TranscriptViewFactory.LABEL_COLUMN_WIDTH);
+        setParagraphAttributes(paraEle.getStartOffset(), 0, newAttrs, true);
+    }
+
     /**
      * Deletes a given transcript element from the document
      */
     public void deleteTranscriptElement(int elementIndex, Transcript.Element elem) {
         try {
-            int startOffset = -1;
-            int endOffset = -1;
-
+            int paragraphElementIdx = -1;
             for(int i = 0; i < getDefaultRootElement().getElementCount(); i++) {
-                final Element paraEle = getDefaultRootElement().getElement(i);
-                final AttributeSet attrs = paraEle.getAttributes();
+                final Element currentEle = getDefaultRootElement().getElement(i);
+                final AttributeSet attrs = currentEle.getAttributes();
                 if (elem.isComment() && TranscriptStyleConstants.getComment(attrs) == elem.asComment()) {
-                    startOffset = paraEle.getStartOffset();
-                    endOffset = paraEle.getEndOffset();
+                    paragraphElementIdx = i;
                     break;
                 } else if (elem.isGem() && TranscriptStyleConstants.getGEM(attrs) == elem.asGem()) {
-                    startOffset = paraEle.getStartOffset();
-                    endOffset = paraEle.getEndOffset();
+                    paragraphElementIdx = i;
                     break;
                 }
             }
-            final StartEnd startEnd = new StartEnd(startOffset, endOffset);
+            if(paragraphElementIdx == -1 || paragraphElementIdx >= getDefaultRootElement().getElementCount()) return;
+            final Element paraEle = getDefaultRootElement().getElement(paragraphElementIdx);
+            final StartEnd startEnd = new StartEnd(paraEle.getStartOffset(), paraEle.getEndOffset());
             if (!startEnd.valid()) return;
 
             // get attributes of the next element
             // find the next element range
-            AttributeSet attrs = null;
+            SimpleAttributeSet attrs = new SimpleAttributeSet();
             if(elementIndex < session.getTranscript().getNumberOfElements()) {
                 // elementIndex is now our next element since we removed the current one
                 final int nextEleParagraphIdx = findParagraphElementIndexForSessionElementIndex(elementIndex);
                 if(nextEleParagraphIdx >= 0) {
                     final Element nextEle = getDefaultRootElement().getElement(nextEleParagraphIdx);
-                    attrs = nextEle.getAttributes();
+                    attrs.addAttributes(nextEle.getAttributes());
                 }
             } else {
                 // if we are at the end of the document we need to find the last element
                 final int lastEleIdx = getDefaultRootElement().getElementCount() - 1;
                 final Element lastEle = getDefaultRootElement().getElement(lastEleIdx);
-                attrs = lastEle.getAttributes();
+                attrs.addAttributes(lastEle.getAttributes());
             }
 
             bypassDocumentFilter = true;
-            remove(startOffset, endOffset - startOffset);
+            remove(startEnd.start, startEnd.length());
 
             // fix paragraph attributes
             if(attrs != null) {
                 setParagraphAttributes(startEnd.start(), 0, attrs, true);
+                updateGlobalParagraphAttributes();
             }
         } catch (BadLocationException e) {
             LogUtil.severe(e);
@@ -1520,6 +1536,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 // fix paragraph attributes
                 if(attrs != null) {
                     setParagraphAttributes(recordRange.start(), 0, attrs, true);
+                    updateGlobalParagraphAttributes();
                 }
             } catch (BadLocationException e) {
                 LogUtil.severe(e);

@@ -17,6 +17,8 @@ public class TranscriptViewFactory implements ViewFactory {
 
     public final static int PAGE_WIDTH = (int)(8.5 * 96);
 
+    public final static float LINE_SPACING = 0.2f;
+
     public int pageWidth = PAGE_WIDTH;
 
     private int labelColumnWidth = LABEL_COLUMN_WIDTH;
