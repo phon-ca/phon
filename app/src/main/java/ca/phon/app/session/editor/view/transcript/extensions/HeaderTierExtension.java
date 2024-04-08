@@ -358,8 +358,15 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
 
     private void appendMediaHeader(TranscriptBatchBuilder batchBuilder) {
         final Tier<TierData> mediaTier = (Tier<TierData>) headerTierMap.get("media");
-        mediaTier.setText(session.getMediaLocation() != null ? session.getMediaLocation() : "");
 
+        final String mediaLocation = session.getMediaLocation();
+        if(!mediaLocation.isBlank() && !editor.getMediaModel().isSessionMediaAvailable()) {
+            final TierData unvalidatedValue = new TierData();
+            unvalidatedValue.putExtension(UnvalidatedValue.class, new UnvalidatedValue(mediaLocation, new ParseException("Media file not found", 0)));
+            mediaTier.setValue(unvalidatedValue);
+        } else {
+            mediaTier.setText(session.getMediaLocation() != null ? session.getMediaLocation() : "");
+        }
         final SimpleAttributeSet attrs = new SimpleAttributeSet(doc.getTranscriptStyleContext().getStyle(TranscriptStyleContext.DEFAULT_STYLE));
         TranscriptStyleConstants.setElementType(attrs, TranscriptStyleConstants.ELEMENT_TYPE_GENERIC);
         TranscriptStyleConstants.setGenericTier(attrs, mediaTier);

@@ -344,14 +344,23 @@ public final class Tier<T> implements IExtendable {
 	@Override
 	public String toString() {
 		final StringBuffer buffer = new StringBuffer();
-		if(hasValue()) {
+		if(isUnvalidated()) {
+			buffer.append(getUnvalidatedValue().getValue());
+		} else if(hasValue()) {
 			final Formatter<T> formatter = getFormatter();
 			if(formatter != null)
 				buffer.append(formatter.format(getValue()));
 			else
 				buffer.append(getValue());
-		} else if(isUnvalidated())
-			buffer.append(getUnvalidatedValue().getValue());
+		}
+//		if(hasValue()) {
+//			final Formatter<T> formatter = getFormatter();
+//			if(formatter != null)
+//				buffer.append(formatter.format(getValue()));
+//			else
+//				buffer.append(getValue());
+//		} else if(isUnvalidated())
+//			buffer.append(getUnvalidatedValue().getValue());
 		return buffer.toString();
 	}
 	

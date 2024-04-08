@@ -1683,7 +1683,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
         @Override
         protected Integer doInBackground() throws Exception {
-            firePropertyChange("populate", false, true);
+            propertyChangeSupport.firePropertyChange("populate", false, true);
             int totalElements = 0;
 
             Transcript transcript = session.getTranscript();
@@ -1834,7 +1834,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
         @Override
         protected void done() {
-            firePropertyChange("populate", true, false);
+            propertyChangeSupport.firePropertyChange("populate", true, false);
         }
 
     }

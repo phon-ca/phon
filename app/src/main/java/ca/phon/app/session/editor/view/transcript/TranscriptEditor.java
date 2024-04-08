@@ -5,6 +5,7 @@ import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.*;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
+import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.position.TranscriptElementLocation;
@@ -201,6 +202,13 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
 
         notTraversableAttributes = new HashSet<>();
         notTraversableAttributes.add(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE);
+
+        getTranscriptDocument().addDocumentPropertyChangeListener("populate", (e) -> {
+            if(e.getNewValue() instanceof Boolean b && !b) {
+                // update error highlights
+                updateErrorHighlights();
+            }
+        });
 
         // init extensions
         extensionSupport.initExtensions();
@@ -700,10 +708,41 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         }
     }
 
-    
-
-
-    
+    /**
+     * Update error highlights
+     */
+    private void updateErrorHighlights() {
+        TranscriptDocument doc = getTranscriptDocument();
+        for(int i = 0; i < doc.getDefaultRootElement().getElementCount(); i++) {
+            final Element elem = doc.getDefaultRootElement().getElement(i);
+            final AttributeSet attrs = elem.getAttributes();
+            final String elementType = TranscriptStyleConstants.getElementType(attrs);
+            if(elementType == null) continue;
+            Tier<?> tier = switch (elementType) {
+                case TranscriptStyleConstants.ELEMENT_TYPE_RECORD -> TranscriptStyleConstants.getTier(attrs);
+                case TranscriptStyleConstants.ELEMENT_TYPE_GENERIC -> TranscriptStyleConstants.getGenericTier(attrs);
+                default -> null;
+            };
+            if(tier == null) continue;
+            if(tier.isUnvalidated()) {
+                TranscriptDocument.StartEnd startEnd = switch (elementType) {
+                    case TranscriptStyleConstants.ELEMENT_TYPE_RECORD -> doc.getTierContentStartEnd(tier);
+                    case TranscriptStyleConstants.ELEMENT_TYPE_GENERIC -> doc.getGenericContentStartEnd(tier);
+                    default -> new TranscriptDocument.StartEnd(-1, -1);
+                };
+                if(startEnd.valid()) {
+                    try {
+                        final UnvalidatedValue uv = tier.getUnvalidatedValue();
+                        final int startIdx = uv.getParseError().getErrorOffset() >= 0 ? startEnd.start() + uv.getParseError().getErrorOffset() : startEnd.start();
+                        var errorUnderlineHighlight = getHighlighter().addHighlight(startIdx, startEnd.end(), new ErrorUnderlinePainter());
+                        errorUnderlineHighlights.put(tier, errorUnderlineHighlight);
+                    } catch (BadLocationException e) {
+                        LogUtil.warning(e);
+                    }
+                }
+            }
+        }
+    }
 
     /**
      * Runs when the user presses end
@@ -897,7 +936,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                 var errorUnderlineHighlight = getHighlighter().addHighlight(start, end, new ErrorUnderlinePainter());
                 errorUnderlineHighlights.put(changedTier, errorUnderlineHighlight);
             } catch (BadLocationException e) {
-                LogUtil.severe(e);
+                LogUtil.warning(e);
             }
         }
     }
