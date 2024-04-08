@@ -574,20 +574,29 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
             } else if(event instanceof MouseEvent me) {
                 // only mouse click events
                 if(me.getID() != MouseEvent.MOUSE_PRESSED) return;
-                if(me.getSource() != editor) return;
+                boolean clickOnEditor = SwingUtilities.isDescendingFrom(me.getComponent(), editor);
+                boolean clickOnCallout = calloutWindowRef.get() != null ? SwingUtilities.isDescendingFrom(me.getComponent(), calloutWindowRef.get()) : false;
 
                 final Point p = me.getPoint();
 
-                // get character element at mouse location
-                final JTextComponent textComponent = editor;
-                final int pos = textComponent.viewToModel(p);
-                if(pos < 0 || pos > textComponent.getDocument().getLength()) return;
-                // if pos is not in ghost range remove ghost range
-                if(ghostRange != null && (pos < ghostRange.start() || pos > ghostRange.end())) {
+                if(clickOnEditor) {
+                    // get character element at mouse location
+                    final JTextComponent textComponent = editor;
+                    final int pos = textComponent.viewToModel(p);
+                    if (pos < 0 || pos > textComponent.getDocument().getLength()) return;
+                    // if pos is not in ghost range remove ghost range
+                    if (ghostRange != null && (pos < ghostRange.start() || pos > ghostRange.end())) {
+                        removeGhostRange();
+                        Toolkit.getDefaultToolkit().removeAWTEventListener(alignmentListener);
+                    } else {
+                        me.consume();
+                    }
+                } else if(clickOnCallout) {
+                    return;
+                } else {
+                    // click outside of editor or callout window, remove ghost range
                     removeGhostRange();
                     Toolkit.getDefaultToolkit().removeAWTEventListener(alignmentListener);
-                } else {
-                    me.consume();
                 }
             }
         }
