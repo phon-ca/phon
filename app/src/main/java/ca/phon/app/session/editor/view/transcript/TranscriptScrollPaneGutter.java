@@ -176,6 +176,15 @@ public class TranscriptScrollPaneGutter extends JComponent {
         return gemIcon;
     }
 
+    private ImageIcon errorIcon;
+    private ImageIcon getErrorIcon() {
+        if(errorIcon == null) {
+            errorIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName,
+                    "error", IconSize.SMALL, Color.RED);
+        }
+        return errorIcon;
+    }
+
     // endregion
 
     @Override
@@ -220,7 +229,15 @@ public class TranscriptScrollPaneGutter extends JComponent {
             }
 
             if(TranscriptStyleConstants.ELEMENT_TYPE_GENERIC.equals(elementType)) {
-                // do nothing
+                final Tier<?> genericTier = TranscriptStyleConstants.getGenericTier(attrs);
+                if(genericTier != null && genericTier.isUnvalidated()) {
+                    final ImageIcon icon = getErrorIcon();
+                    final int iconWidth = icon.getIconWidth();
+                    final int iconHeight = icon.getIconHeight();
+                    final int x = getWidth() - iconWidth - PADDING;
+                    final int y = (int)elemRect.getCenterY() - iconHeight/2;
+                    icon.paintIcon(this, g, x, y);
+                }
             } else if(TranscriptStyleConstants.ELEMENT_TYPE_COMMENT.equals(elementType)) {
                 final ImageIcon icon = getCommentIcon();
                 final int iconWidth = icon.getIconWidth();
@@ -239,27 +256,38 @@ public class TranscriptScrollPaneGutter extends JComponent {
                 final String firstTier = editor.getSession().getTierView().get(0).getTierName();
                 final Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
                 final Record record = TranscriptStyleConstants.getRecord(attrs);
-                if(record != null && tier != null && tier.getName().equals(firstTier)) {
-                    final int recordNumber = editor.getSession().getRecordPosition(record);
-                    final String recordNumberText = String.valueOf(recordNumber + 1);
+                if(record != null && tier != null) {
+                    if(tier.getName().equals(firstTier)) {
+                        final int recordNumber = editor.getSession().getRecordPosition(record);
+                        final String recordNumberText = String.valueOf(recordNumber + 1);
 
-                    final FontMetrics fontMetrics = g.getFontMetrics();
-                    final int stringWidth = fontMetrics.stringWidth(recordNumberText);
-                    final int stringBaselineHeight = (int)(elemRect.getCenterY() + 0.8f * (fontMetrics.getFont().getSize() / 2.0f));
+                        final FontMetrics fontMetrics = g.getFontMetrics();
+                        final int stringWidth = fontMetrics.stringWidth(recordNumberText);
+                        final int stringBaselineHeight = (int) (elemRect.getCenterY() + 0.8f * (fontMetrics.getFont().getSize() / 2.0f));
 
-                    if (stringBaselineHeight <= currentSepHeight) continue;
+                        if (stringBaselineHeight <= currentSepHeight) continue;
 
-                    g.setColor(Color.darkGray);
-                    if (recordNumber == currentRecord) {
-                        g.setFont(font.deriveFont(Font.BOLD));
-                        g.setColor(Color.BLACK);
+                        g.setColor(Color.darkGray);
+                        if (recordNumber == currentRecord) {
+                            g.setFont(font.deriveFont(Font.BOLD));
+                            g.setColor(Color.BLACK);
+                        }
+
+                        g.drawString(recordNumberText, PADDING, stringBaselineHeight);
+                        currentSepHeight = stringBaselineHeight;
+
+                        if (recordNumber == currentRecord) {
+                            g.setFont(font);
+                        }
                     }
 
-                    g.drawString(recordNumberText, PADDING, stringBaselineHeight);
-                    currentSepHeight = stringBaselineHeight;
-
-                    if (recordNumber == currentRecord) {
-                        g.setFont(font);
+                    if(tier.isUnvalidated()) {
+                        final ImageIcon icon = getErrorIcon();
+                        final int iconWidth = icon.getIconWidth();
+                        final int iconHeight = icon.getIconHeight();
+                        final int x = getWidth() - iconWidth - PADDING;
+                        final int y = (int)elemRect.getCenterY() - iconHeight/2;
+                        icon.paintIcon(this, g, x, y);
                     }
                 }
             }
