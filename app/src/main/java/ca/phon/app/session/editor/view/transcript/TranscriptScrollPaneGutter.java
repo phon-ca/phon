@@ -81,6 +81,21 @@ public class TranscriptScrollPaneGutter extends JComponent {
             this::onTierChanged,
             EditorEventManager.RunOn.AWTEventDispatchThread
         );
+        editor.getEventManager().registerActionForEvent(
+            EditorEventType.SessionDateChanged,
+            this::onSessionDateChanged,
+            EditorEventManager.RunOn.AWTEventDispatchThread
+        );
+        editor.getEventManager().registerActionForEvent(
+            EditorEventType.SessionMediaChanged,
+            this::onSessionMediaChanged,
+            EditorEventManager.RunOn.AWTEventDispatchThread
+        );
+        editor.getEventManager().registerActionForEvent(
+            EditorEventType.SessionLangChanged,
+            this::onSessionLangsChanged,
+            EditorEventManager.RunOn.AWTEventDispatchThread
+        );
 
 //        addMouseMotionListener(new MouseAdapter() {
 //            @Override
@@ -410,6 +425,21 @@ public class TranscriptScrollPaneGutter extends JComponent {
      * */
     public void onTierChanged(EditorEvent<EditorEventType.TierChangeData> event) {
         if(event.data().valueAdjusting()) return;
+        revalidate();
+        repaint();
+    }
+
+    public void onSessionDateChanged(EditorEvent<EditorEventType.SessionDateChangedData> event) {
+        revalidate();
+        repaint();
+    }
+
+    public void onSessionMediaChanged(EditorEvent<EditorEventType.SessionMediaChangedData> event) {
+        revalidate();
+        repaint();
+    }
+
+    public void onSessionLangsChanged(EditorEvent<EditorEventType.SessionLangChangedData> event) {
         revalidate();
         repaint();
     }

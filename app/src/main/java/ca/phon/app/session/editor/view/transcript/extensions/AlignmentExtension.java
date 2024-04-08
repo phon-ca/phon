@@ -90,7 +90,7 @@ public class AlignmentExtension implements TranscriptEditorExtension {
      * @param editorEvent the event that changed the tier data
      * */
     private void onTierDataChanged(EditorEvent<EditorEventType.TierChangeData> editorEvent) {
-        if(editorEvent.data().valueAdjusting()) return;
+        if(editorEvent.data().valueAdjusting() || editorEvent.data().record() == null) return;
         Tier<?> tier = editorEvent.data().record().getPhoneAlignmentTier();
         if (!tier.getDeclaredType().equals(PhoneAlignment.class) || !isAlignmentVisible()) return;
 

@@ -217,6 +217,7 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
         batchBuilder.appendBatchString(": ", labelAttrs);
 
         // value
+        TranscriptStyleConstants.setEnterAction(attrs, PhonUIAction.runnable(this::updateLanguagesFromText));
         batchBuilder.appendBatchString(languagesTier.toString(), attrs);
     }
 
@@ -379,6 +380,7 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
         batchBuilder.appendBatchString(": ", labelAttrs);
 
         // value
+        TranscriptStyleConstants.setEnterAction(attrs, PhonUIAction.runnable(this::updateMediaFromText));
         batchBuilder.appendBatchString(mediaTier.toString(), attrs);
     }
 

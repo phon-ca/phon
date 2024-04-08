@@ -622,13 +622,13 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                         int end = doc.getGemEnd(gem) - 1;
                         gemDataChanged(gem, doc.getText(start, end - start));
                     }
-                    case TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER -> {
-                        Tier<?> genericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER);
-                        if (genericTier == null) return;
-                        int start = doc.getGenericContentStart(genericTier);
-                        int end = doc.getGenericEnd(genericTier) - 1;
-                        genericDataChanged(genericTier, doc.getText(start, end - start));
-                    }
+//                    case TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER -> {
+//                        Tier<?> genericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER);
+//                        if (genericTier == null) return;
+//                        int start = doc.getGenericContentStart(genericTier);
+//                        int end = doc.getGenericEnd(genericTier) - 1;
+//                        genericDataChanged(genericTier, doc.getText(start, end - start));
+//                    }
                 }
             } catch (BadLocationException e) {
                 LogUtil.severe(e);
