@@ -798,6 +798,22 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         int elementIndex = data.elementIndex();
         // Add it to the doc
         getTranscriptDocument().addRecord(addedRecord, elementIndex);
+
+        // set the caret position to the start of the new record
+        SwingUtilities.invokeLater(() -> {
+            final int paragraphElementIndex = getTranscriptDocument().findParagraphElementIndexForSessionElementIndex(elementIndex);
+            if(paragraphElementIndex >= 0) {
+                final Element paragraphElement = getTranscriptDocument().getDefaultRootElement().getElement(paragraphElementIndex);
+                for(int i = 0; i < paragraphElement.getElementCount(); i++) {
+                    final Element elem = paragraphElement.getElement(i);
+                    final AttributeSet attrs = elem.getAttributes();
+                    if(!TranscriptStyleConstants.isNotEditable(attrs)) {
+                        setCaretPosition(elem.getStartOffset());
+                        break;
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -873,9 +889,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         // Move the records in the doc
         var data = editorEvent.data();
         getTranscriptDocument().moveRecord(data.fromRecordIndex(), data.toRecordIndex(), data.fromElementIndex(), data.toElementIndex());
-
-        // Set the caret to the editable pos closest to the original pos
-        setCaretPosition(getNextValidIndex(caretPos, false));
     }
 
     /**
@@ -2253,6 +2266,12 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     private void onCommentAdded(EditorEvent<EditorEventType.CommentAddedData> editorEvent) {
         var data = editorEvent.data();
         getTranscriptDocument().addComment(data.comment(), data.elementIndex());
+
+        // set the caret to the start of the comment
+        final TranscriptDocument.StartEnd commentRange = getTranscriptDocument().getCommentContentStartEnd(data.comment());
+        if(commentRange.valid()) {
+            SwingUtilities.invokeLater(() -> setCaretPosition(commentRange.start()));
+        }
     }
 
     /**
@@ -2285,6 +2304,12 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     private void onGemAdded(EditorEvent<EditorEventType.GemAddedData> editorEvent) {
         var data = editorEvent.data();
         getTranscriptDocument().addGem(data.gem(), data.elementIndex());
+
+        // set the caret to the start of the gem
+        final TranscriptDocument.StartEnd gemRange = getTranscriptDocument().getGemContentStartEnd(data.gem());
+        if(gemRange.valid()) {
+            SwingUtilities.invokeLater(() -> setCaretPosition(gemRange.start()));
+        }
     }
 
     /**

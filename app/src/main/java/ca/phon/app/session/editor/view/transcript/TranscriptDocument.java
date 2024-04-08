@@ -270,6 +270,8 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
         // Process all the inserts in bulk
         super.insert(offs, inserts);
+
+        propertyChangeSupport.firePropertyChange("processBatch", false, true);
     }
     // endregion Batching
 
@@ -1211,6 +1213,8 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             bypassDocumentFilter = true;
             remove(startEnd.start, startEnd.length());
 
+            propertyChangeSupport.firePropertyChange("transcriptElementRemoved", false, true);
+
             // fix paragraph attributes
             if(attrs != null) {
                 setParagraphAttributes(startEnd.start(), 0, attrs, true);
@@ -1364,28 +1368,32 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     public void addComment(Comment comment, int transcriptElementIndex) {
         int offset = -1;
 
-        if (transcriptElementIndex == 0) {
-            var elementAfterComment = session.getTranscript().getElementAt(1);
-            if (elementAfterComment.isRecord()) {
-                offset = getRecordStart(session.getRecordPosition(elementAfterComment.asRecord()));
-            } else if (elementAfterComment.isComment()) {
-                offset = getCommentStart(elementAfterComment.asComment());
-            } else if (elementAfterComment.isGem()) {
-                offset = getGemStart(elementAfterComment.asGem());
+        if(session.getTranscript().getNumberOfElements() > 1) {
+            if (transcriptElementIndex == 0) {
+                var elementAfterComment = session.getTranscript().getElementAt(1);
+                if (elementAfterComment.isRecord()) {
+                    offset = getRecordStart(session.getRecordPosition(elementAfterComment.asRecord()));
+                } else if (elementAfterComment.isComment()) {
+                    offset = getCommentStart(elementAfterComment.asComment());
+                } else if (elementAfterComment.isGem()) {
+                    offset = getGemStart(elementAfterComment.asGem());
+                } else {
+                    throw new RuntimeException("Invalid transcript element");
+                }
             } else {
-                throw new RuntimeException("Invalid transcript element");
+                var elementBeforeComment = session.getTranscript().getElementAt(transcriptElementIndex - 1);
+                if (elementBeforeComment.isRecord()) {
+                    offset = getRecordEnd(session.getRecordPosition(elementBeforeComment.asRecord()));
+                } else if (elementBeforeComment.isComment()) {
+                    offset = getCommentEnd(elementBeforeComment.asComment());
+                } else if (elementBeforeComment.isGem()) {
+                    offset = getGemEnd(elementBeforeComment.asGem());
+                } else {
+                    throw new RuntimeException("Invalid transcript element");
+                }
             }
         } else {
-            var elementBeforeComment = session.getTranscript().getElementAt(transcriptElementIndex - 1);
-            if (elementBeforeComment.isRecord()) {
-                offset = getRecordEnd(session.getRecordPosition(elementBeforeComment.asRecord()));
-            } else if (elementBeforeComment.isComment()) {
-                offset = getCommentEnd(elementBeforeComment.asComment());
-            } else if (elementBeforeComment.isGem()) {
-                offset = getGemEnd(elementBeforeComment.asGem());
-            } else {
-                throw new RuntimeException("Invalid transcript element");
-            }
+            offset = getLength();
         }
 
         try {
@@ -1402,29 +1410,32 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     public void addGem(Gem gem, int transcriptElementIndex) {
         int offset = -1;
 
-        if (transcriptElementIndex == 0) {
-            var elementAfterComment = session.getTranscript().getElementAt(1);
-            if (elementAfterComment.isRecord()) {
-                offset = getRecordStart(session.getRecordPosition(elementAfterComment.asRecord()));
-            } else if (elementAfterComment.isComment()) {
-                offset = getCommentStart(elementAfterComment.asComment());
-            } else if (elementAfterComment.isGem()) {
-                offset = getGemStart(elementAfterComment.asGem());
+        if(session.getTranscript().getNumberOfElements() > 1) {
+            if (transcriptElementIndex == 0) {
+                var elementAfterComment = session.getTranscript().getElementAt(1);
+                if (elementAfterComment.isRecord()) {
+                    offset = getRecordStart(session.getRecordPosition(elementAfterComment.asRecord()));
+                } else if (elementAfterComment.isComment()) {
+                    offset = getCommentStart(elementAfterComment.asComment());
+                } else if (elementAfterComment.isGem()) {
+                    offset = getGemStart(elementAfterComment.asGem());
+                } else {
+                    throw new RuntimeException("Invalid transcript element");
+                }
             } else {
-                throw new RuntimeException("Invalid transcript element");
+                var elementBeforeComment = session.getTranscript().getElementAt(transcriptElementIndex - 1);
+                if (elementBeforeComment.isRecord()) {
+                    offset = getRecordEnd(session.getRecordPosition(elementBeforeComment.asRecord()));
+                } else if (elementBeforeComment.isComment()) {
+                    offset = getCommentEnd(elementBeforeComment.asComment());
+                } else if (elementBeforeComment.isGem()) {
+                    offset = getGemEnd(elementBeforeComment.asGem());
+                } else {
+                    throw new RuntimeException("Invalid transcript element");
+                }
             }
-
         } else {
-            var elementBeforeComment = session.getTranscript().getElementAt(transcriptElementIndex - 1);
-            if (elementBeforeComment.isRecord()) {
-                offset = getRecordEnd(session.getRecordPosition(elementBeforeComment.asRecord()));
-            } else if (elementBeforeComment.isComment()) {
-                offset = getCommentEnd(elementBeforeComment.asComment());
-            } else if (elementBeforeComment.isGem()) {
-                offset = getGemEnd(elementBeforeComment.asGem());
-            } else {
-                throw new RuntimeException("Invalid transcript element");
-            }
+            offset = getLength();
         }
 
         try {
@@ -1532,6 +1543,8 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             try {
                 bypassDocumentFilter = true;
                 remove(recordRange.start(), recordRange.length());
+
+                propertyChangeSupport.firePropertyChange("transcriptElementRemoved", false, true);
 
                 // fix paragraph attributes
                 if(attrs != null) {

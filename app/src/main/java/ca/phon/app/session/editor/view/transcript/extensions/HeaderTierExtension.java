@@ -360,7 +360,7 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
         final Tier<TierData> mediaTier = (Tier<TierData>) headerTierMap.get("media");
 
         final String mediaLocation = session.getMediaLocation();
-        if(!mediaLocation.isBlank() && !editor.getMediaModel().isSessionMediaAvailable()) {
+        if(mediaLocation != null && !mediaLocation.isBlank() && !editor.getMediaModel().isSessionMediaAvailable()) {
             final TierData unvalidatedValue = new TierData();
             unvalidatedValue.putExtension(UnvalidatedValue.class, new UnvalidatedValue(mediaLocation, new ParseException("Media file not found", 0)));
             mediaTier.setValue(unvalidatedValue);
