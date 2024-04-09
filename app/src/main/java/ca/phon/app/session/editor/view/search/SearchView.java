@@ -263,7 +263,16 @@ public class SearchView extends EditorView {
         findManager.setIncludeGems(includeGems);
     }
 
+    private void updateFilterButton() {
+        if(filterTiers.size() > 0 || filterSpeakers.size() > 0 || !includeComments || !includeGems) {
+            filterButton.setSelected(true);
+        } else {
+            filterButton.setSelected(false);
+        }
+    }
+
     public void onQuery() {
+        updateFilterButton();
         final String queryText = searchField.getText();
         if(queryText.trim().length() == 0) {
             clearResults();
@@ -283,12 +292,6 @@ public class SearchView extends EditorView {
         findManager.setAnyExpr(findExpr);
         setupSearchTiers(findManager);
         setupRecordFilter(findManager);
-
-        if(filterTiers.size() > 0 || filterSpeakers.size() > 0 || !includeComments || !includeGems) {
-            filterButton.setSelected(true);
-        } else {
-            filterButton.setSelected(false);
-        }
 
         this.resultsLabel.setText("0 results");
         this.resultsLabel.setForeground(UIManager.getColor("textInactiveText"));
