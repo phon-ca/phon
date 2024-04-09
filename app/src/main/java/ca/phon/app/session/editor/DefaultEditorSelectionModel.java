@@ -44,6 +44,12 @@ public class DefaultEditorSelectionModel implements EditorSelectionModel {
 	}
 
 	@Override
+	public void removeSelection(SessionEditorSelection selection) {
+		selections.remove(selection);
+		firSelectionRemoved(selection);
+	}
+
+	@Override
 	public void setSelection(SessionEditorSelection selection) {
 		selections.clear();
 		selections.add(selection);
@@ -123,6 +129,12 @@ public class DefaultEditorSelectionModel implements EditorSelectionModel {
 	public void fireSelectionsCleared() {
 		for(EditorSelectionModelListener listener:getSelectionModelListeners()) {
 			listener.selectionsCleared(this);
+		}
+	}
+
+	public void firSelectionRemoved(SessionEditorSelection selection) {
+		for(EditorSelectionModelListener listener:getSelectionModelListeners()) {
+			listener.selectionRemoved(this, selection);
 		}
 	}
 	

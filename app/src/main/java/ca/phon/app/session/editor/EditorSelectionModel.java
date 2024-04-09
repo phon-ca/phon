@@ -51,6 +51,11 @@ public interface EditorSelectionModel {
 	 * 
 	 */
 	public void clear();
+
+	/**
+	 * Remove the given selection from the list of current selections.
+	 */
+	public void removeSelection(SessionEditorSelection selection);
 	
 	/**
 	 * Set the current selection.  This method will clear

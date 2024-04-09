@@ -89,7 +89,7 @@ public class SearchViewTable extends JXTable {
     /**
      * Search result table
      */
-    private static class SearchViewTableModel extends AbstractTableModel {
+    public static class SearchViewTableModel extends AbstractTableModel {
 
         private Session session;
 
@@ -136,7 +136,7 @@ public class SearchViewTable extends JXTable {
             switch(Columns.values()[columnIndex]) {
                 case RECORD:
                     if(element.isComment() || element.isGem()) return "";
-                    return session.getTranscript().getRecordIndex(range.transcriptElementIndex());
+                    return session.getTranscript().getRecordIndex(range.transcriptElementIndex()) + 1;
                 case TIER:
                     return range.tier();
                 case TEXT:
@@ -150,6 +150,25 @@ public class SearchViewTable extends JXTable {
         @Override
         public String getColumnName(int column) {
             return Columns.values()[column].getTitle();
+        }
+
+        @Override
+        public Class<?> getColumnClass(int columnIndex) {
+            switch(Columns.values()[columnIndex]) {
+                case RECORD:
+                    return Integer.class;
+                case TIER:
+                    return String.class;
+                case TEXT:
+                    return String.class;
+                case Range:
+                    return String.class;
+            }
+            return super.getColumnClass(columnIndex);
+        }
+
+        public TranscriptElementRange getRangeAt(int rowIndex) {
+            return ranges.get(rowIndex);
         }
 
         public void appendResult(TranscriptElementRange range) {

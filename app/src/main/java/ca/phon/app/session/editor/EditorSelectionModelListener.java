@@ -25,6 +25,14 @@ public interface EditorSelectionModelListener {
 	 */
 	public void selectionAdded(EditorSelectionModel model, SessionEditorSelection
 			selection);
+
+	/**
+	 * Called when a selection has been removed from the model.
+	 *
+	 * @param model
+	 * @param selection
+	 */
+	public void selectionRemoved(EditorSelectionModel model, SessionEditorSelection selection);
 	
 	/**
 	 * Called when a new selection has been set (clearing other selections)

@@ -1,15 +1,15 @@
 package ca.phon.app.session.editor.view.search;
 
-import ca.phon.app.session.editor.EditorView;
-import ca.phon.app.session.editor.EditorViewCategory;
-import ca.phon.app.session.editor.EditorViewInfo;
-import ca.phon.app.session.editor.SessionEditor;
+import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.search.FindExpr;
 import ca.phon.app.session.editor.search.FindManager;
 import ca.phon.app.session.editor.search.SearchType;
+import ca.phon.app.session.editor.view.transcript.BoxSelectHighlightPainter;
+import ca.phon.app.session.editor.view.transcript.TranscriptView;
 import ca.phon.session.Participant;
 import ca.phon.session.TierViewItem;
 import ca.phon.session.position.TranscriptElementLocation;
+import ca.phon.session.position.TranscriptElementRange;
 import ca.phon.ui.FlatButton;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.text.SearchField;
@@ -21,6 +21,8 @@ import com.jgoodies.forms.layout.FormLayout;
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.text.Highlighter;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -70,6 +72,8 @@ public class SearchView extends EditorView {
 
         init();
     }
+
+    private SessionEditorSelection currentSelection = null;
 
     private void init() {
         setLayout(new BorderLayout());
@@ -137,10 +141,38 @@ public class SearchView extends EditorView {
         add(searchOptionsPanel, BorderLayout.NORTH);
 
         this.table = new SearchViewTable(getEditor().getSession(), new ArrayList<>());
+        this.table.getSelectionModel().addListSelectionListener( (e) -> {
+            final int row = table.getSelectedRow();
+            if(row >= 0) {
+                final TranscriptElementRange range = table.getSearchViewTableModel().getRangeAt(row);
+                final TranscriptElementLocation start = range.start();
+                final TranscriptElementLocation end = range.end();
+                // move transcript view caret
+                if(getEditor().getViewModel().isShowing(TranscriptView.VIEW_NAME)) {
+                    final TranscriptView transcriptView = (TranscriptView) getEditor().getViewModel().getView(TranscriptView.VIEW_NAME);
+                    final int caretLocation = transcriptView.getTranscriptEditor().sessionLocationToCharPos(start);
+                    final int endLocation = transcriptView.getTranscriptEditor().sessionLocationToCharPos(end);
+                    if(caretLocation >= 0 && endLocation >= caretLocation) {
+                        if(currentSelection != null) {
+                            getEditor().getSelectionModel().removeSelection(currentSelection);
+                        }
+                        // add selection to model
+                        final SessionEditorSelection selection = new SessionEditorSelection(range);
+                        getEditor().getSelectionModel().addSelection(selection);
+                        currentSelection = selection;
+
+                        // also select text
+                        transcriptView.getTranscriptEditor().getCaret().setDot(caretLocation);
+                        transcriptView.getTranscriptEditor().getCaret().moveDot(endLocation);
+                    }
+                }
+            }
+        });
         add(new JScrollPane(table), BorderLayout.CENTER);
     }
 
     private void clearResults() {
+        getEditor().getSelectionModel().clear();
         this.table.clearSearch();
         this.resultsLabel.setText("0 results");
         this.resultsLabel.setForeground(UIManager.getColor("textInactiveText"));
@@ -272,6 +304,7 @@ public class SearchView extends EditorView {
     }
 
     public void onQuery() {
+        getEditor().getSelectionModel().clear();
         updateFilterButton();
         final String queryText = searchField.getText();
         if(queryText.trim().length() == 0) {
@@ -299,6 +332,14 @@ public class SearchView extends EditorView {
         final TableModelListener listener = new TableModelListener() {
             @Override
             public void tableChanged(TableModelEvent e) {
+                if(e.getType() != TableModelEvent.INSERT) return;
+                for(int i = e.getFirstRow(); i <= e.getLastRow(); i++) {
+                    final TranscriptElementRange range = table.getSearchViewTableModel().getRangeAt(i);
+                    if(range == null) continue;
+                    final SessionEditorSelection selection = new SessionEditorSelection(range);
+                    selection.putExtension(Highlighter.HighlightPainter.class, new BoxSelectHighlightPainter());
+                    getEditor().getSelectionModel().addSelection(selection);
+                }
                 resultsLabel.setText(table.getRowCount() + " results");
             }
         };

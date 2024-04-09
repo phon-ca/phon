@@ -88,6 +88,8 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
      */
     private final List<Object> selectionHighlightList = new ArrayList<>();
 
+    private final Map<SessionEditorSelection, Object> selectionMap = new HashMap<>();
+
     /**
      * A set of attributes that the caret should not be able to move to
      */
@@ -2520,39 +2522,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     }
 
     /**
-     * The {@link Highlighter.HighlightPainter} that paints "box selection"
-     */
-    private class BoxSelectHighlightPainter implements Highlighter.HighlightPainter {
-
-        @Override
-        public void paint(Graphics g, int p0, int p1, Shape bounds, JTextComponent c) {
-            Graphics2D g2d = (Graphics2D) g;
-            g2d.setColor(UIManager.getColor(TranscriptEditorUIProps.SEGMENT_SELECTION));
-
-            try {
-                var p0Rect = modelToView2D(p0);
-                var p1Rect = modelToView2D(p1);
-
-                Element ele = getTranscriptDocument().getCharacterElement(p0);
-                int actualLineHeight = g.getFontMetrics().getHeight();
-                if (ele != null) {
-                    final AttributeSet attrs = ele.getAttributes();
-                    if (StyleConstants.getFontFamily(attrs) != null && StyleConstants.getFontSize(attrs) > 0) {
-                        int style = (StyleConstants.isBold(attrs) ? Font.BOLD : 0) | (StyleConstants.isItalic(attrs) ? Font.ITALIC : 0);
-                        final Font f = new Font(StyleConstants.getFontFamily(attrs), style, StyleConstants.getFontSize(attrs));
-                        actualLineHeight = g.getFontMetrics(f).getHeight();
-                    }
-                }
-
-                g2d.drawRect((int) p0Rect.getMinX(), (int) p0Rect.getMinY(), (int) (p1Rect.getMaxX() - p0Rect.getMinX()) - 1, actualLineHeight - 1);
-            } catch (BadLocationException e) {
-                LogUtil.warning(e);
-            }
-
-        }
-    }
-
-    /**
      * The {@link MouseAdapter} that handles mouse movement and clicking for the transcript editor
      */
     private class TranscriptMouseAdapter extends MouseAdapter {
@@ -2681,39 +2650,59 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                 painter = new DefaultHighlighter.DefaultHighlightPainter(UIManager.getColor("TextArea.selectionBackground"));
             }
 
-            try {
-                int tierStart = getTranscriptDocument().getTierContentStart(selection.getElementIndex(), selection.getTierName());
+            final Transcript.Element transcriptElement = getSession().getTranscript().getElementAt(selection.getElementIndex());
+            if(transcriptElement.isRecord()) {
+                final int recordIndex = getSession().getTranscript().getRecordIndex(selection.getElementIndex());
+                int tierStart = getTranscriptDocument().getTierContentStart(recordIndex, selection.getTierName());
                 if (tierStart == -1) return;
+                try {
+                    var selectionHighlight = getHighlighter().addHighlight(selection.getRange().getFirst() + tierStart, selection.getRange().getLast() + tierStart + 1, painter);
+                    selectionHighlightList.add(selectionHighlight);
+                    selectionMap.put(selection, selectionHighlight);
+                } catch (BadLocationException e) {
+                    LogUtil.warning(e);
+                }
+            } else if(transcriptElement.isComment()) {
+                final Comment comment = transcriptElement.asComment();
+                final TranscriptDocument.StartEnd commentRange = getTranscriptDocument().getCommentContentStartEnd(comment);
+                if(commentRange.valid()) {
+                    try {
+                        var selectionHighlight = getHighlighter().addHighlight(commentRange.start() + selection.getRange().getFirst(), commentRange.start() + selection.getRange().getLast() + 1, painter);
+                        selectionHighlightList.add(selectionHighlight);
+                        selectionMap.put(selection, selectionHighlight);
+                    } catch (BadLocationException e) {
+                        LogUtil.warning(e);
+                    }
+                }
+            } else if(transcriptElement.isGem()) {
+                final Gem gem = transcriptElement.asGem();
+                final TranscriptDocument.StartEnd gemRange = getTranscriptDocument().getGemContentStartEnd(gem);
+                if(gemRange.valid()) {
+                    try {
+                        var selectionHighlight = getHighlighter().addHighlight(gemRange.start() + selection.getRange().getFirst(), gemRange.start() + selection.getRange().getLast() + 1, painter);
+                        selectionHighlightList.add(selectionHighlight);
+                        selectionMap.put(selection, selectionHighlight);
+                    } catch (BadLocationException e) {
+                        LogUtil.warning(e);
+                    }
+                }
+            }
+        }
 
-                var selectionHighlight = getHighlighter().addHighlight(selection.getRange().getFirst() + tierStart, selection.getRange().getLast() + tierStart, painter);
-                selectionHighlightList.add(selectionHighlight);
-            } catch (BadLocationException e) {
-                LogUtil.severe(e);
+        @Override
+        public void selectionRemoved(EditorSelectionModel model, SessionEditorSelection selection) {
+            Object highlight = selectionMap.get(selection);
+            if (highlight != null) {
+                getHighlighter().removeHighlight(highlight);
+                selectionHighlightList.remove(highlight);
+                selectionMap.remove(selection);
             }
         }
 
         @Override
         public void selectionSet(EditorSelectionModel model, SessionEditorSelection selection) {
-
-            for (Object selectionHighLight : selectionHighlightList) {
-                getHighlighter().removeHighlight(selectionHighLight);
-            }
-            selectionHighlightList.clear();
-
-            Highlighter.HighlightPainter painter = selection.getExtension(Highlighter.HighlightPainter.class);
-            if (painter == null) {
-                painter = new DefaultHighlighter.DefaultHighlightPainter(UIManager.getColor("TextArea.selectionBackground"));
-            }
-
-            try {
-                int tierStart = getTranscriptDocument().getTierContentStart(selection.getElementIndex(), selection.getTierName());
-                if (tierStart == -1) return;
-
-                var selectionHighlight = getHighlighter().addHighlight(selection.getRange().getFirst() + tierStart, selection.getRange().getLast() + tierStart, painter);
-                selectionHighlightList.add(selectionHighlight);
-            } catch (BadLocationException e) {
-                LogUtil.severe(e);
-            }
+            selectionsCleared(model);
+            selectionAdded(model, selection);
         }
 
         @Override
@@ -2722,6 +2711,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                 getHighlighter().removeHighlight(selectionHighLight);
             }
             selectionHighlightList.clear();
+            selectionMap.clear();
         }
 
         @Override
