@@ -351,6 +351,7 @@ public class SearchView extends EditorView {
                     resultsLabel.setForeground(UIManager.getColor("textText"));
                     table.getModel().removeTableModelListener(listener);
                     table.removePropertyChangeListener(this);
+                    table.packAll();
                 }
             }
         });

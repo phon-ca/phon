@@ -1,9 +1,12 @@
 package ca.phon.app.session.editor.view.search;
 
 import ca.phon.app.session.editor.search.FindManager;
+import ca.phon.session.Record;
 import ca.phon.session.Session;
+import ca.phon.session.Tier;
 import ca.phon.session.Transcript;
 import ca.phon.session.position.TranscriptElementRange;
+import ca.phon.util.Range;
 import org.jdesktop.swingx.JXTable;
 
 import javax.swing.*;
@@ -126,7 +129,7 @@ public class SearchViewTable extends JXTable {
 
         @Override
         public int getColumnCount() {
-            return Columns.values().length;
+            return Columns.values().length - 1;
         }
 
         @Override
@@ -140,11 +143,36 @@ public class SearchViewTable extends JXTable {
                 case TIER:
                     return range.tier();
                 case TEXT:
-                    return session.getTranscriptText(range);
+                    return getSearchResultText(range);
                 case Range:
                     return range.range();
             }
             return "";
+        }
+
+        private String getSearchResultText(TranscriptElementRange range) {
+            final Transcript.Element element = session.getTranscript().getElementAt(range.transcriptElementIndex());
+            if(element.isComment()) {
+                final String commentText = element.asComment().getValue().toString();
+                return getTokenizedText(commentText, range.range());
+            } else if(element.isGem()) {
+                final String gemText = element.asGem().getLabel().toString();
+                return getTokenizedText(gemText, range.range());
+            } else {
+                final Record r = element.asRecord();
+                final Tier<?> tier = r.getTier(range.tier());
+                if(tier == null) return "";
+                // TODO blind transcriptions
+                String tierText = tier.toString();
+                return getTokenizedText(tierText, range.range());
+            }
+        }
+
+        private String getTokenizedText(String text, Range range) {
+            final String start = text.substring(0, range.getStart());
+            final String middle = text.substring(range.getStart(), range.getEnd());
+            final String end = text.substring(range.getEnd());
+            return "<html>" + start + "<b>" + middle + "</b>" + end + "</html>";
         }
 
         @Override
