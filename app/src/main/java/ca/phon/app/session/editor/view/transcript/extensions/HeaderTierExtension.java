@@ -694,15 +694,15 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
         final JMenu menu = new JMenu("Date");
         final MenuBuilder builder = new MenuBuilder(menu);
 
-        final PhonUIAction<Void> clearDateAct = PhonUIAction.runnable(this::clearDate);
-        clearDateAct.putValue(PhonUIAction.NAME, "Remove date");
-        clearDateAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Remove date from session");
-        builder.addItem(".", clearDateAct);
-
         final PhonUIAction<Void> showDatePickerAct = PhonUIAction.runnable(this::showDatePicker);
         showDatePickerAct.putValue(PhonUIAction.NAME, "Edit");
         showDatePickerAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Edit date using date picker");
         builder.addItem(".", showDatePickerAct);
+
+        final PhonUIAction<Void> clearDateAct = PhonUIAction.runnable(this::clearDate);
+        clearDateAct.putValue(PhonUIAction.NAME, "Remove date");
+        clearDateAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Remove date from session");
+        builder.addItem(".", clearDateAct);
 
         menu.getPopupMenu().show(e.getComponent(), e.getX(), e.getY());
     }
@@ -711,6 +711,11 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
         final JMenu menu = new JMenu("Media");
         final MenuBuilder builder = new MenuBuilder(menu);
 
+        final PhonUIAction<Void> browseForMediaAct = PhonUIAction.runnable(this::browseForMedia);
+        browseForMediaAct.putValue(PhonUIAction.NAME, "Browse...");
+        browseForMediaAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Browse for media file");
+        builder.addItem(".", browseForMediaAct);
+
         final PhonUIAction<Void> clearMediaAct = PhonUIAction.runnable(() -> {
             final MediaLocationEdit edit = new MediaLocationEdit(session, editor.getEventManager(), null);
             editor.getUndoSupport().postEdit(edit);
@@ -718,11 +723,6 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
         clearMediaAct.putValue(PhonUIAction.NAME, "Remove media");
         clearMediaAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Remove media from session");
         builder.addItem(".", clearMediaAct);
-
-        final PhonUIAction<Void> browseForMediaAct = PhonUIAction.runnable(this::browseForMedia);
-        browseForMediaAct.putValue(PhonUIAction.NAME, "Browse...");
-        browseForMediaAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Browse for media file");
-        builder.addItem(".", browseForMediaAct);
 
         menu.getPopupMenu().show(editor, e.getX(), e.getY());
     }
