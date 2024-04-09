@@ -150,8 +150,8 @@ public class SegmentEditorPopup extends TimeComponent {
         currentRecordInterval.getEndMarker().setColor(UIManager.getColor(SpeechAnalysisViewColors.INTERVAL_MARKER_COLOR));
         currentRecordInterval.setRepaintEntireInterval(true);
         currentRecordInterval.addPropertyChangeListener(e -> {
-            float startVal = this.segment.getStartTime();
-            float endVal = this.segment.getEndTime();
+            float startVal = currentRecordInterval.getStartMarker().getTime();
+            float endVal = currentRecordInterval.getEndMarker().getTime();
             setMediaSegment(startVal, endVal);
         });
         scrollTo = displayStart;
@@ -175,8 +175,8 @@ public class SegmentEditorPopup extends TimeComponent {
         var oldVal = this.segment;
         this.segment = SessionFactory.newFactory().createMediaSegment();
         this.segment.setUnitType(oldVal.getUnitType());
-        this.segment.setStartValue(startTime);
-        this.segment.setEndValue(endTime);
+        this.segment.setStartTime(startTime);
+        this.segment.setEndTime(endTime);
         firePropertyChange("segment", oldVal, this.segment);
     }
 
