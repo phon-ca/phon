@@ -129,6 +129,7 @@
 	</properties>
 
 	<modules>
+		<module>phon-extensions</module>
 		<module>util</module>
 		<module>xml</module>
 		<module>ipa</module>
