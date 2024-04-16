@@ -16,7 +16,6 @@
 package ca.phon.ipa.parser;
 
 import ca.phon.ipa.IPAElement;
-import ca.phon.ipa.xml.TokenType;
 
 /**
  * Every IPA glyph must have an associated token type.

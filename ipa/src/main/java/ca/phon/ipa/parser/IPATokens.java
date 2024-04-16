@@ -15,20 +15,17 @@
  */
 package ca.phon.ipa.parser;
 
-import ca.phon.ipa.xml.*;
-import jakarta.xml.bind.*;
-
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamReader;
 import java.io.*;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Maps individual glyphs to their IPA token type.
  * Tokens are loaded from the ipa.xml file.
  */
 public final class IPATokens {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(IPATokens.class
-			.getName());
 	
 	/**
 	 * Location of ipa token definitions
@@ -93,10 +90,10 @@ public final class IPATokens {
 	/**
 	 * Hidden Constructor
 	 * 
-	 * @param ipaXMLFile - the xml file from which to
+	 * @param ipaXMLPath - the xml file from which to
 	 *  read the ipa tokens.  Retrieved using the
 	 *  getResourceAsStream() method of the system classloader.
-	 * @param antlrTokensFile - mapping of token names to integer
+	 * @param antlrTokensPath - mapping of token names to integer
 	 *  values for the ANTLR IPA parser. Retrieved using the
 	 *  getResourceAsStream() method of the system classloader.
 	 */
@@ -115,48 +112,48 @@ public final class IPATokens {
 			tokenMap = new TreeMap<Character, IPATokenType>();
 			reverseMap = new TreeMap<IPATokenType, Set<Character>>();
 			tokenNames = new TreeMap<Character, String>();
-			
+
+			// read in xml token file using StAX
 			try {
-				// read in xml token file
-				final JAXBContext context = JAXBContext.newInstance(ObjectFactory.class);
-				final Unmarshaller unmarshaller = context.createUnmarshaller();
-				
-				final JAXBElement<?> ipaEle = 
-					JAXBElement.class.cast(unmarshaller.unmarshal(
-							getClass().getResourceAsStream(ipaTokensPath)));
-				// make sure we have the right type of element
-				if(ipaEle.getDeclaredType() == IpaType.class) {
-					IpaType ipaDoc = 
-						IpaType.class.cast(ipaEle.getValue());
-					for(CharType gt:ipaDoc.getChar()) {
-						// parse unicode value
-						Integer intVal = null;
-						try {							
-							final Character c = gt.getValue().charAt(0);
-							
-							tokenNames.put(c, gt.getName());
-							
-							if(gt.getToken() == null)
-								System.out.println(c);
-							final IPATokenType tt = IPATokenType.fromXMLType(gt.getToken());
-							
-							tokenMap.put(c, tt);
-							
-							Set<Character> tokenChars = reverseMap.get(tt);
+				final InputStream in = getClass().getResourceAsStream(ipaTokensPath);
+				if(in == null) {
+					throw new FileNotFoundException(ipaTokensPath + " not found!");
+				}
+				char currentChar = '\0';
+				String name = "";
+				String token = "";
+				final XMLStreamReader reader = XMLInputFactory.newInstance().createXMLStreamReader(in);
+				while(reader.hasNext()) {
+					reader.next();
+					if((reader.isStartElement() && reader.getLocalName().equals("char")) || (reader.isEndElement() && reader.getLocalName().equals("ipa"))) {
+						if (currentChar != '\0') {
+							// add to tokens
+							tokenNames.put(currentChar, name);
+							final TokenType tt = TokenType.valueOf(token);
+							final IPATokenType ipaTokenType = IPATokenType.fromXMLType(tt);
+							tokenMap.put(currentChar, ipaTokenType);
+
+							Set<Character> tokenChars = reverseMap.get(ipaTokenType);
 							if(tokenChars ==  null) {
 								tokenChars = new TreeSet<Character>();
-								reverseMap.put(tt, tokenChars);
+								reverseMap.put(ipaTokenType, tokenChars);
 							}
-							tokenChars.add(c);
-						} catch (NumberFormatException nfe) {
-							LOGGER.warn(nfe.getMessage());
-							nfe.printStackTrace();
+							tokenChars.add(currentChar);
 						}
+						if(reader.isStartElement()) {
+							final String charVal = reader.getAttributeValue(null, "value");
+							currentChar = charVal.charAt(0);
+							name = "";
+							token = "";
+						}
+					} else if(reader.isStartElement() && reader.getLocalName().equals("token")) {
+						token = reader.getElementText();
+					} else if(reader.isStartElement() && reader.getLocalName().equals("name")) {
+						name = reader.getElementText();
 					}
 				}
-			} catch (JAXBException e) {
-				LOGGER.error(e.getMessage());
-				e.printStackTrace();
+			} catch (Exception e) {
+				Logger.getLogger(getClass().getName()).warning(e.getMessage());
 			}
 		}
 		return tokenMap;
@@ -191,8 +188,7 @@ public final class IPATokens {
 				}
 				antlrTokenProps.load(in);
 			} catch (IOException e) {
-				LOGGER.error(e.getMessage());
-				e.printStackTrace();
+				Logger.getLogger(getClass().getName()).warning(e.getMessage());
 			}
 			
 			for(Object key:antlrTokenProps.keySet()) {
@@ -224,7 +220,7 @@ public final class IPATokens {
 	/**
 	 * Return the integer value for the given token type.
 	 * 
-	 * @param tokenType
+	 * @param type
 	 * @return the integer representation of the token
 	 *  or <code>-1</code> if not found.
 	 */
