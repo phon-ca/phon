@@ -72,8 +72,6 @@ import java.util.*;
  */
 public final class ExtensionSupport implements IExtendable {
 
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ExtensionSupport.class.getName());
-
 	private final static Map<Class<?>, List<ExtensionProvider>> _extMap =
 			Collections.synchronizedMap(new HashMap<Class<?>, List<ExtensionProvider>>());
 

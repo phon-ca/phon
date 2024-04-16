@@ -20,6 +20,12 @@
         </dependency>
 
         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>phon-extensions</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>de.susebox</groupId>
             <artifactId>jtopas</artifactId>
         </dependency>
