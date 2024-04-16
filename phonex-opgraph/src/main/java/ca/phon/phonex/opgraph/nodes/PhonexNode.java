@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.opgraph.nodes.phonex;
+package ca.phon.phonex.opgraph.nodes;
 
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.phonex.PhonexPatternException;

@@ -141,44 +141,44 @@
         </node>
         <ogcn:macro id="67767e7084b3434a" name="Obs Patterns" type="ca.phon.opgraph.nodes.general.MacroNode">
             <graph id="2c3aeb0">
-                <ogcn:macro id="42978a93" name="4x0bs" type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
+                <ogcn:macro id="42978a93" name="4x0bs" type="opgraph.nodes.phonex.PhonexFindNode">
                     <graph id="19d45a43">
-                        <node id="4011088a" name="ob3" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                        <node id="4011088a" name="ob3" type="class:opgraph.nodes.phonex.PhonexGroupNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[3]]></oga:property>
+                                    <oga:property key="opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[3]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="100" y="370"/>
                             </extensions>
                         </node>
-                        <node id="784f6235" name="g0" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                        <node id="784f6235" name="g0" type="class:opgraph.nodes.phonex.PhonexGroupNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
+                                    <oga:property key="opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="100" y="70"/>
                             </extensions>
                         </node>
-                        <node id="23b8c348" name="ob1" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                        <node id="23b8c348" name="ob1" type="class:opgraph.nodes.phonex.PhonexGroupNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[1]]></oga:property>
+                                    <oga:property key="opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[1]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="100" y="170"/>
                             </extensions>
                         </node>
-                        <node id="371cbe4a" name="ob2" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                        <node id="371cbe4a" name="ob2" type="class:opgraph.nodes.phonex.PhonexGroupNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[2]]></oga:property>
+                                    <oga:property key="opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[2]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="100" y="270"/>
                             </extensions>
                         </node>
-                        <node id="1e47bce2" name="ob4" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                        <node id="1e47bce2" name="ob4" type="class:opgraph.nodes.phonex.PhonexGroupNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[4]]></oga:property>
+                                    <oga:property key="opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[4]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="100" y="470"/>
                             </extensions>
@@ -306,41 +306,41 @@
                     </graph>
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"><![CDATA[(ob1={obs}:U)(ob2={obs}:U)(ob3={obs}:U)(ob4={obs}:U)]]></oga:property>
+                            <oga:property key="opgraph.nodes.phonex.PhonexFindNode.phonex"><![CDATA[(ob1={obs}:U)(ob2={obs}:U)(ob3={obs}:U)(ob4={obs}:U)]]></oga:property>
                         </oga:settings>
                         <oga:meta x="15" y="15"/>
                     </extensions>
                 </ogcn:macro>
-                <ogcn:macro id="5c7fb43" name="3xobs" type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
+                <ogcn:macro id="5c7fb43" name="3xobs" type="opgraph.nodes.phonex.PhonexFindNode">
                     <graph id="cdc908a">
-                        <node id="d1c5c86" name="ob1" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                        <node id="d1c5c86" name="ob1" type="class:opgraph.nodes.phonex.PhonexGroupNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[1]]></oga:property>
+                                    <oga:property key="opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[1]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="100" y="170"/>
                             </extensions>
                         </node>
-                        <node id="40fe6823" name="ob3" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                        <node id="40fe6823" name="ob3" type="class:opgraph.nodes.phonex.PhonexGroupNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[3]]></oga:property>
+                                    <oga:property key="opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[3]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="100" y="370"/>
                             </extensions>
                         </node>
-                        <node id="7e66f32a" name="ob2" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                        <node id="7e66f32a" name="ob2" type="class:opgraph.nodes.phonex.PhonexGroupNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[2]]></oga:property>
+                                    <oga:property key="opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[2]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="100" y="270"/>
                             </extensions>
                         </node>
-                        <node id="48afca92" name="g0" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                        <node id="48afca92" name="g0" type="class:opgraph.nodes.phonex.PhonexGroupNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
+                                    <oga:property key="opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="100" y="70"/>
                             </extensions>
@@ -438,33 +438,33 @@
                     </graph>
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"><![CDATA[(ob1={obs}:U)(ob2={obs}:U)(ob3={obs}:U)]]></oga:property>
+                            <oga:property key="opgraph.nodes.phonex.PhonexFindNode.phonex"><![CDATA[(ob1={obs}:U)(ob2={obs}:U)(ob3={obs}:U)]]></oga:property>
                         </oga:settings>
                         <oga:meta x="193" y="15"/>
                     </extensions>
                 </ogcn:macro>
-                <ogcn:macro id="29a9b88c" name="2xobs" type="ca.phon.opgraph.nodes.phonex.PhonexFindNode">
+                <ogcn:macro id="29a9b88c" name="2xobs" type="opgraph.nodes.phonex.PhonexFindNode">
                     <graph id="45e09a12">
-                        <node id="238fde89" name="ob2" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                        <node id="238fde89" name="ob2" type="class:opgraph.nodes.phonex.PhonexGroupNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[2]]></oga:property>
+                                    <oga:property key="opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[2]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="100" y="270"/>
                             </extensions>
                         </node>
-                        <node id="7669bcb" name="ob1" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                        <node id="7669bcb" name="ob1" type="class:opgraph.nodes.phonex.PhonexGroupNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[1]]></oga:property>
+                                    <oga:property key="opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[1]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="100" y="170"/>
                             </extensions>
                         </node>
-                        <node id="304321e6" name="g0" type="class:ca.phon.opgraph.nodes.phonex.PhonexGroupNode">
+                        <node id="304321e6" name="g0" type="class:opgraph.nodes.phonex.PhonexGroupNode">
                             <extensions>
                                 <oga:settings>
-                                    <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
+                                    <oga:property key="opgraph.nodes.phonex.PhonexGroupNode.group"><![CDATA[0]]></oga:property>
                                 </oga:settings>
                                 <oga:meta x="100" y="70"/>
                             </extensions>
@@ -532,7 +532,7 @@
                     </graph>
                     <extensions>
                         <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.phonex.PhonexFindNode.phonex"><![CDATA[(ob1={obs}:U)(ob2={obs}:U)]]></oga:property>
+                            <oga:property key="opgraph.nodes.phonex.PhonexFindNode.phonex"><![CDATA[(ob1={obs}:U)(ob2={obs}:U)]]></oga:property>
                         </oga:settings>
                         <oga:meta x="371" y="15"/>
                     </extensions>

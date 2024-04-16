@@ -132,6 +132,7 @@
 		<module>util</module>
 		<module>xml</module>
 		<module>ipa</module>
+		<module>phonex-opgraph</module>
 		<module>ipadictionary</module>
 		<module>ipamap</module>
 		<module>components</module>

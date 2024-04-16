@@ -13,14 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.opgraph.nodes.phonex;
+package ca.phon.phonex.opgraph.nodes;
 
 import ca.phon.ipa.IPATranscript;
 import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
-import ca.phon.phonex.*;
+import ca.phon.phonex.PhonexMatcher;
+import ca.phon.phonex.PhonexPattern;
+import ca.phon.phonex.PhonexPatternException;
 
 import java.awt.*;
 import java.util.Properties;

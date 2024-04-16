@@ -20,8 +20,9 @@ import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.extensions.NodeSettings;
 import ca.phon.opgraph.exceptions.ProcessingException;
-import ca.phon.opgraph.nodes.phonex.*;
 import ca.phon.phonex.*;
+import ca.phon.phonex.opgraph.nodes.PhonexNode;
+import ca.phon.phonex.opgraph.nodes.PhonexSettingsPanel;
 import ca.phon.syllable.*;
 
 import java.awt.*;

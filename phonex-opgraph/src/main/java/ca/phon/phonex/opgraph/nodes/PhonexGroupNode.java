@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.opgraph.nodes.phonex;
+package ca.phon.phonex.opgraph.nodes;
 
 import ca.phon.ipa.IPATranscript;
 import ca.phon.opgraph.*;
@@ -80,7 +80,7 @@ public class PhonexGroupNode extends OpNode implements NodeSettings {
 	public void operate(OpContext context) throws ProcessingException {
 		if(context.get(MATCHER_KEY) == null) return;
 		
-		PhonexMatcher matcher = 
+		PhonexMatcher matcher =
 				(PhonexMatcher)context.get(MATCHER_KEY);
 		IPATranscript ipa = new IPATranscript(matcher.group(getGroup()));
 		context.put(ipaOut, ipa);
