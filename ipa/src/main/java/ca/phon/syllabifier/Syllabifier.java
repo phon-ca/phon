@@ -17,7 +17,7 @@ package ca.phon.syllabifier;
 
 import ca.phon.ipa.IPAElement;
 import ca.phon.syllable.SyllableConstituentType;
-import ca.phon.util.Language;
+import ca.phon.utilm.Language;
 
 import java.util.List;
 

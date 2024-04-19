@@ -8,9 +8,9 @@
         <relativePath>..</relativePath>
     </parent>
 
-    <artifactId>phon-fsa</artifactId>
-    <name>Phon FSA</name>
-    <description>Basic FSA impl.</description>
+    <artifactId>phon-csv</artifactId>
+    <name>Phon CSV Support</name>
+    <description>CSV read/write support compliant with RFC4180</description>
 
     <dependencies>
         <dependency>
