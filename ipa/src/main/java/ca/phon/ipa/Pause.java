@@ -15,11 +15,8 @@
  */
 package ca.phon.ipa;
 
-import ca.phon.formatter.MediaTimeFormat;
-import ca.phon.formatter.MediaTimeFormatStyle;
 import ca.phon.formatter.MediaTimeFormatter;
 import ca.phon.ipa.features.FeatureSet;
-import ca.phon.syllable.SyllableConstituentType;
 
 /**
  * Represents a pause in an IPA transcription.

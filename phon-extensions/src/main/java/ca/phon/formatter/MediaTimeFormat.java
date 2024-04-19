@@ -1,9 +1,5 @@
 package ca.phon.formatter;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.NumberFormat;
@@ -39,7 +35,7 @@ public class MediaTimeFormat extends Format {
     }
 
     @Override
-    public StringBuffer format(Object obj, @NotNull StringBuffer toAppendTo, @NotNull FieldPosition pos) {
+    public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
         if(!(obj instanceof Long) && !(obj instanceof Integer) && !(obj instanceof Float))
             throw new IllegalArgumentException("Invalid type for media time format " + obj.getClass().getName());
         Long value = 0L;
@@ -109,7 +105,7 @@ public class MediaTimeFormat extends Format {
     }
 
     @Override
-    public Object parseObject(String source, @NotNull ParsePosition pos) {
+    public Object parseObject(String source, ParsePosition pos) {
         boolean negative = source.startsWith("-");
         if(negative)
             source = source.substring(1);

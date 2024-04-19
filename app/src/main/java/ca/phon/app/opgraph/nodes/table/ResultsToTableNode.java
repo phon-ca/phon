@@ -15,12 +15,8 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
-import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.GlobalParameter;
-import ca.phon.formatter.Formatter;
-import ca.phon.formatter.*;
 import ca.phon.ipa.*;
-import ca.phon.ipa.features.FeatureMatrix;
 import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.GraphDocument;
 import ca.phon.opgraph.app.extensions.NodeSettings;
@@ -31,21 +27,14 @@ import ca.phon.query.report.ResultsToTable;
 import ca.phon.query.report.datasource.*;
 import ca.phon.query.script.params.*;
 import ca.phon.query.script.params.DiacriticOptionsScriptParam.SelectionMode;
-import ca.phon.session.Record;
-import ca.phon.session.*;
 import ca.phon.worker.PhonWorkerGroup;
 import org.jdesktop.swingx.JXTitledSeparator;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
-import java.text.ParseException;
-import java.time.Period;
-import java.util.List;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.*;
 
 @OpNodeInfo(name="Results To Table",
 	description="Convert a set of result to a table",

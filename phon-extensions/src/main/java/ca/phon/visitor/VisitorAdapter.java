@@ -19,6 +19,7 @@ import ca.phon.visitor.annotation.Visits;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Multiple dispatch visitor adapter.  The generic {@link #visit(Object)}
@@ -29,9 +30,6 @@ import java.util.*;
  */
 public abstract class VisitorAdapter<T> implements Visitor<T> {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(VisitorAdapter.class
-			.getName());
-
 	@Override
 	public void visit(T obj) {
 		if(obj == null) 
@@ -43,12 +41,8 @@ public abstract class VisitorAdapter<T> implements Visitor<T> {
 		if(visitMethod != null) {
 			try {
 				visitMethod.invoke(this, obj);
-			} catch (IllegalArgumentException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
-			} catch (IllegalAccessException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
-			} catch (InvocationTargetException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+			} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
+				Logger.getLogger(VisitorAdapter.class.getName()).warning(e.getLocalizedMessage());
 			}
 		} else {
 			fallbackVisit(obj);

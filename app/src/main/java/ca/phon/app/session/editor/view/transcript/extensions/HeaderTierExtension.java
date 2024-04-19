@@ -20,16 +20,12 @@ import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.NativeDialogs;
 import ca.phon.ui.nativedialogs.OpenDialogProperties;
-import ca.phon.ui.text.DatePicker;
 import ca.phon.util.Language;
 import ca.phon.util.LanguageEntry;
 import ca.phon.util.LanguageParser;
-import org.apache.derby.impl.sql.catalog.DD_Version;
-import org.jdesktop.swingx.JXComboBox;
 import org.jdesktop.swingx.JXMonthView;
 
 import javax.swing.*;
-import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.SimpleAttributeSet;

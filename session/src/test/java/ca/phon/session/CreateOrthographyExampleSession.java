@@ -2,10 +2,6 @@ package ca.phon.session;
 
 import ca.phon.orthography.*;
 import ca.phon.orthography.Error;
-import ca.phon.session.Participant;
-import ca.phon.session.ParticipantRole;
-import ca.phon.session.Session;
-import ca.phon.session.SessionFactory;
 import ca.phon.session.io.SessionOutputFactory;
 import ca.phon.session.io.SessionWriter;
 import ca.phon.session.tierdata.TierData;

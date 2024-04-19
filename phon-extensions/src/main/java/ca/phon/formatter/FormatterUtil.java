@@ -15,13 +15,11 @@
  */
 package ca.phon.formatter;
 
-import org.apache.logging.log4j.LogManager;
-
 import java.text.ParseException;
+import java.util.logging.Logger;
 
 public class FormatterUtil {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(FormatterUtil.class.getName());
 
 	public static Object parse(Class<?> typ, String txt) {
 		@SuppressWarnings("unchecked")
@@ -31,7 +29,7 @@ public class FormatterUtil {
 			try {
 				return formatter.parse(txt);
 			} catch (ParseException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				Logger.getLogger(FormatterUtil.class.getName()).warning(e.getLocalizedMessage());
 				return null;
 			}
 		} else {

@@ -25,7 +25,6 @@ import ca.phon.orthography.Orthography;
 import ca.phon.orthography.mor.GraspTierData;
 import ca.phon.orthography.mor.MorTierData;
 import ca.phon.session.*;
-import ca.phon.session.tierdata.TierData;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;

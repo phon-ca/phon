@@ -18,15 +18,12 @@ package ca.phon.session.io.xml.v2_0;
 import ca.phon.ipa.*;
 import ca.phon.ipa.Linker;
 import ca.phon.ipa.Pause;
-import ca.phon.session.io.xml.v2_0.*;
 import ca.phon.syllable.SyllabificationInfo;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
-import com.ibm.icu.text.ArabicShaping;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.List;

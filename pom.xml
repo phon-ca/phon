@@ -129,8 +129,9 @@
 	</properties>
 
 	<modules>
-		<module>phon-extensions</module>
+		<module>phon-extensions</module>		
 		<module>util</module>
+		<module>fsa</module>
 		<module>xml</module>
 		<module>ipa</module>
 		<module>phonex-opgraph</module>

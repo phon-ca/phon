@@ -8,7 +8,6 @@ import ca.phon.formatter.FormatterFactory;
 import org.jdesktop.swingx.JXTable;
 
 import javax.swing.*;
-import javax.swing.event.MenuEvent;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;

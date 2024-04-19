@@ -8,7 +8,6 @@ import ca.phon.formatter.Formatter;
 import ca.phon.formatter.FormatterFactory;
 import ca.phon.media.*;
 import ca.phon.session.MediaSegment;
-import ca.phon.session.MediaUnit;
 import ca.phon.session.SessionFactory;
 import ca.phon.ui.fonts.FontPreferences;
 

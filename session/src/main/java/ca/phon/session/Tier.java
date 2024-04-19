@@ -17,7 +17,6 @@ package ca.phon.session;
 
 import ca.phon.extensions.*;
 import ca.phon.formatter.Formatter;
-import ca.phon.opgraph.extensions.Extendable;
 import ca.phon.session.spi.TierSPI;
 
 import java.lang.reflect.InvocationTargetException;

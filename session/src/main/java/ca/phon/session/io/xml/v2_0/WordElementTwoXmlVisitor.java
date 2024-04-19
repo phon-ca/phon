@@ -8,9 +8,7 @@ import ca.phon.orthography.LongFeature;
 import ca.phon.orthography.OverlapPoint;
 import ca.phon.orthography.Shortening;
 import ca.phon.orthography.Underline;
-import ca.phon.session.io.xml.v2_0.*;
 import ca.phon.visitor.annotation.Visits;
-import jakarta.xml.bind.JAXBElement;
 
 import java.io.Serializable;
 import java.math.BigInteger;

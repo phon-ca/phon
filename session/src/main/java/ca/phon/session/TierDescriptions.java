@@ -19,7 +19,6 @@ import ca.phon.extensions.*;
 import ca.phon.visitor.*;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 

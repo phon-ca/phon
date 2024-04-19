@@ -4,7 +4,6 @@ import ca.phon.extensions.ExtendableObject;
 import ca.phon.visitor.Visitable;
 import ca.phon.visitor.Visitor;
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.atn.LexerATNSimulator;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.ParseException;

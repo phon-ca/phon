@@ -4,7 +4,6 @@ import ca.phon.alignedTypesDatabase.CartesianProduct;
 import ca.phon.ipa.IPAElementFactory;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
-import ca.phon.ipa.IntraWordPause;
 import ca.phon.orthography.*;
 import ca.phon.session.SessionFactory;
 import ca.phon.session.Tier;

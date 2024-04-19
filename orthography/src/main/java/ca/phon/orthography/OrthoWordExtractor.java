@@ -15,7 +15,6 @@
  */
 package ca.phon.orthography;
 
-import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
 import java.util.*;

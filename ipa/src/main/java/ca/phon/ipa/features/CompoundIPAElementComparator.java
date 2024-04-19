@@ -20,6 +20,7 @@ import ca.phon.util.CompoundComparator;
 
 import java.text.*;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * A compound comparator for features, with a fallback to a string comparator
@@ -27,8 +28,6 @@ import java.util.*;
  */
 public class CompoundIPAElementComparator extends CompoundComparator<IPAElement> {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(CompoundIPAElementComparator.class.getName());
-
 	public CompoundIPAElementComparator() {
 		super();
 	}
@@ -52,7 +51,7 @@ public class CompoundIPAElementComparator extends CompoundComparator<IPAElement>
 				retVal = collator.compare(o1.toString(), o2.toString());
 				retVal = (retVal > 0 ? 1 : (retVal < 0 ? -1 : 0));
 			} catch (ParseException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				Logger.getLogger(getClass().getName()).warning(e.getLocalizedMessage());
 			}
 		}
 		

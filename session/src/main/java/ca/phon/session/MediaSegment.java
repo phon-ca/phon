@@ -18,7 +18,6 @@ package ca.phon.session;
 
 import ca.phon.extensions.ExtendableObject;
 import ca.phon.formatter.MediaTimeFormatStyle;
-import ca.phon.formatter.MediaTimeFormatter;
 import ca.phon.session.format.MediaSegmentFormatter;
 import ca.phon.session.spi.MediaSegmentSPI;
 

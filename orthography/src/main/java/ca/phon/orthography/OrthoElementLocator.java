@@ -2,8 +2,6 @@ package ca.phon.orthography;
 
 import ca.phon.visitor.annotation.Visits;
 
-import java.util.stream.Collectors;
-
 /**
  * Find string index of {@link OrthographyElement}s
  *

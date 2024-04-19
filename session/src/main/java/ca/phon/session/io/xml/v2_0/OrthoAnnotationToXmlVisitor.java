@@ -2,9 +2,6 @@ package ca.phon.session.io.xml.v2_0;
 
 import ca.phon.orthography.*;
 import ca.phon.orthography.Error;
-import ca.phon.orthography.Langs;
-import ca.phon.session.io.xml.v2_0.*;
-import ca.phon.util.Language;
 import ca.phon.visitor.annotation.Visits;
 
 import java.math.BigDecimal;

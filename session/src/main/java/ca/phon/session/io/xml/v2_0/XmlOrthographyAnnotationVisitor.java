@@ -3,7 +3,6 @@ package ca.phon.session.io.xml.v2_0;
 import ca.phon.orthography.*;
 import ca.phon.orthography.Error;
 import ca.phon.orthography.OverlapType;
-import ca.phon.session.io.xml.v2_0.*;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 

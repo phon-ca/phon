@@ -2,7 +2,6 @@ package ca.phon.session.tierdata;
 
 import ca.phon.formatter.MediaTimeFormatter;
 import ca.phon.orthography.InternalMedia;
-import ca.phon.session.Tier;
 
 import java.text.ParseException;
 import java.util.ArrayList;

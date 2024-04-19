@@ -1,7 +1,5 @@
 package ca.phon.formatter;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
@@ -25,7 +23,7 @@ public class PeriodFormat extends Format {
     }
 
     @Override
-    public StringBuffer format(Object obj, @NotNull StringBuffer toAppendTo, @NotNull FieldPosition pos) {
+    public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
         if(!(obj instanceof Period))
             throw new IllegalArgumentException("Must be a java.time.Period object");
         StringBuffer retVal = new StringBuffer();
@@ -38,7 +36,7 @@ public class PeriodFormat extends Format {
     }
 
     @Override
-    public Object parseObject(String source, @NotNull ParsePosition pos) {
+    public Object parseObject(String source, ParsePosition pos) {
         if(source.matches(PeriodFormatStyle.ISO.getRegex())) {
             pos.setIndex(source.length());
             return parsePeriod(source, PeriodFormatStyle.ISO.getRegex());

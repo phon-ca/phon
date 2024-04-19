@@ -15,7 +15,6 @@
  */
 package ca.phon.app.ipalookup;
 
-import ca.phon.ipa.IPAElementFactory;
 import ca.phon.ipadictionary.IPADictionary;
 import ca.phon.orthography.*;
 import ca.phon.visitor.VisitorAdapter;

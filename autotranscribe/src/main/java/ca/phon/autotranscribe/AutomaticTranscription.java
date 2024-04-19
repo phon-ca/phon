@@ -6,7 +6,6 @@ import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.orthography.*;
 import ca.phon.visitor.annotation.Visits;
 
-import javax.swing.plaf.ButtonUI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

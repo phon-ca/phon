@@ -19,7 +19,6 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.formatter.MediaTimeFormatStyle;
 import ca.phon.session.MediaSegment;
 import ca.phon.session.format.MediaSegmentFormatter;
-import org.apache.logging.log4j.LogManager;
 
 import javax.swing.*;
 import javax.swing.event.*;

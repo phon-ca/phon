@@ -19,7 +19,6 @@ import ca.phon.app.excel.*;
 import ca.phon.app.log.LogUtil;
 import ca.phon.formatter.FormatterUtil;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.alignment.PhoneMap;
 import ca.phon.query.db.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;
