@@ -132,6 +132,7 @@
 		<module>csv</module>
 		<module>fsa</module>
 		<module>core</module>		
+		<module>language</module>
 		<module>util</module>
 		<module>xml</module>
 		<module>ipa</module>
