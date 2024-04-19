@@ -19,6 +19,7 @@ import ca.phon.ipa.IPAElement;
 
 import java.text.*;
 import java.util.Comparator;
+import java.util.logging.Logger;
 
 public class IPAElementComparator implements Comparator<IPAElement> {
 	
@@ -30,7 +31,7 @@ public class IPAElementComparator implements Comparator<IPAElement> {
 			retVal = collator.compare(o1.toString(), o2.toString());
 			retVal = (retVal > 0 ? 1 : (retVal < 0 ? -1 : 0));
 		} catch (ParseException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			Logger.getLogger(IPAElementComparator.class.getName()).warning(e.getLocalizedMessage());
 		}
 		return retVal;
 	}

@@ -130,6 +130,7 @@
 
 	<modules>
 		<module>alignment</module>
+		<module>aligned-types-db</module>
 		<module>csv</module>
 		<module>fsa</module>
 		<module>core</module>		
