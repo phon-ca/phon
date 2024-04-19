@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>phon-core</artifactId>
-	<name>phonex-core</name>
+	<name>Phon Core</name>
 	<description>core classes for many phon modules</description>
 
 	<dependencies>

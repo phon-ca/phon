@@ -17,14 +17,12 @@ package ca.phon.util;
 
 import java.io.*;
 import java.util.*;
-
+import java.util.logging.Logger;
 
 /**
  *
  */
 public class LanguageParser implements Iterable<LanguageEntry> {
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(LanguageParser.class.getName());
 
 	private final List<LanguageEntry> entries = new ArrayList<LanguageEntry>();;
 
@@ -60,7 +58,7 @@ public class LanguageParser implements Iterable<LanguageEntry> {
 				entries.add(currentEntry);
 			}
 		} catch(Exception e) {
-			org.apache.logging.log4j.LogManager.getLogger(getClass().getName()).error(e.getMessage());
+			Logger.getLogger(getClass().getName()).warning(e.getLocalizedMessage());
 		} finally {
 			br.close();
 		}
@@ -162,7 +160,7 @@ public class LanguageParser implements Iterable<LanguageEntry> {
 			try {
 				singleton = new LanguageParser();
 			} catch (IOException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				Logger.getLogger(LanguageParser.class.getName()).warning(e.getLocalizedMessage());
 			}
 		}
 		return singleton;

@@ -31,6 +31,7 @@ import org.antlr.v4.runtime.CharStreams;
 import java.text.ParseException;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.logging.Logger;
 
 /**
  * <p>A (somewhat) immutable representation of an IPA transcription.  While the number of elements
@@ -41,11 +42,6 @@ import java.util.function.Predicate;
  * static method or {@link IPATranscriptBuilder}.</p>
  */
 public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAElement>, IExtendable, Comparable<IPATranscript> {
-
-	// TODO the methods which use this should all throw exceptions
-	/** Static logger */
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(IPATranscript.class
-			.getName());
 
 	private static final long serialVersionUID = 8942864962427274326L;
 
@@ -756,7 +752,7 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 
 			retVal = sp.matches(stTypes);
 		} catch (ParseException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			Logger.getLogger(getClass().getName()).warning(e.getLocalizedMessage());
 		}
 		return retVal;
 	}
@@ -778,7 +774,7 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 
 			retVal = sp.findWithin(stTypes);
 		} catch (ParseException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			Logger.getLogger(getClass().getName()).warning(e.getLocalizedMessage());
 		}
 		return retVal;
 	}
@@ -806,7 +802,7 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 				retVal.add(subT);
 			}
 		} catch (ParseException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			Logger.getLogger(getClass().getName()).warning(e.getLocalizedMessage());
 		}
 
 		return retVal;
@@ -828,7 +824,7 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 
 			retVal = cvPattern.matches(cvTypes);
 		} catch (ParseException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			Logger.getLogger(getClass().getName()).warning(e.getLocalizedMessage());
 		}
 
 		return retVal;
@@ -844,7 +840,7 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 
 			retVal = cvPattern.findWithin(cvTypes);
 		} catch (ParseException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			Logger.getLogger(getClass().getName()).warning(e.getLocalizedMessage());
 		}
 
 		return retVal;
@@ -866,7 +862,7 @@ public final class IPATranscript implements Iterable<IPAElement>, Visitable<IPAE
 				retVal.add(subT);
 			}
 		} catch (ParseException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			Logger.getLogger(getClass().getName()).warning(e.getLocalizedMessage());
 		}
 
 		return retVal;

@@ -22,8 +22,6 @@ import java.util.Comparator;
 
 public class IPAElementComparator implements Comparator<IPAElement> {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(IPAElementComparator.class.getName());
-
 	@Override
 	public int compare(IPAElement o1, IPAElement o2) {
 		int retVal = 0;

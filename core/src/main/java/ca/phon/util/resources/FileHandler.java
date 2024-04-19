@@ -17,6 +17,7 @@ package ca.phon.util.resources;
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * A library handler which allow for loading a list of explicit
@@ -24,9 +25,6 @@ import java.util.*;
  * 
  */
 public abstract class FileHandler<T> implements ResourceHandler<T> {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = 
-			org.apache.logging.log4j.LogManager.getLogger(FileHandler.class.getName());
 	
 	/**
 	 * List of files to include in the handler
@@ -42,7 +40,7 @@ public abstract class FileHandler<T> implements ResourceHandler<T> {
 	/**
 	 * Add a file to the handler
 	 * 
-	 * @param file
+	 * @param f
 	 */
 	public void addFile(File f) {
 		if(f != null && !files.contains(f)) {
@@ -53,7 +51,7 @@ public abstract class FileHandler<T> implements ResourceHandler<T> {
 	/**
 	 * Remove a file from the handler
 	 * 
-	 * @param file
+	 * @param f
 	 */
 	public void removeFile(File f) {
 		files.remove(f);
@@ -73,7 +71,7 @@ public abstract class FileHandler<T> implements ResourceHandler<T> {
 	 * Abstract method for loading the given file as
 	 * an instance of the parameterized type.
 	 * 
-	 * @param file
+	 * @param f
 	 * @returns T
 	 * @throws IOException
 	 */
@@ -115,8 +113,7 @@ public abstract class FileHandler<T> implements ResourceHandler<T> {
 			try {
 				obj = loadFromFile(f);
 			} catch (IOException e) {
-				LOGGER.error(e.getMessage());
-				e.printStackTrace();
+				Logger.getLogger(FileHandler.class.getName()).warning(e.getLocalizedMessage());
 			}
 			return obj;
 		}

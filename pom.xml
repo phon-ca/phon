@@ -129,6 +129,7 @@
 	</properties>
 
 	<modules>
+		<module>alignment</module>
 		<module>csv</module>
 		<module>fsa</module>
 		<module>core</module>		

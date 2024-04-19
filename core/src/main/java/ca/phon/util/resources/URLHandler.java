@@ -15,20 +15,16 @@
  */
 package ca.phon.util.resources;
 
-import org.apache.logging.log4j.LogManager;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Load resources from URLs.
  * 
  */
 public abstract class URLHandler<T> implements ResourceHandler<T> {
-	
-	/* static logger for class */
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(URLHandler.class.getName());
 	
 	/**
 	 * URLs to load
@@ -118,8 +114,7 @@ public abstract class URLHandler<T> implements ResourceHandler<T> {
 				try {
 					retVal = loadFromURL(url);
 				} catch (IOException e) {
-					e.printStackTrace();
-					LOGGER.error(e.getMessage());
+					Logger.getLogger(URLHandler.class.getName()).warning(e.getLocalizedMessage());
 				}
 			}
 			return retVal;

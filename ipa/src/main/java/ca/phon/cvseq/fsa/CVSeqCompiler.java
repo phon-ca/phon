@@ -17,8 +17,6 @@ package ca.phon.cvseq.fsa;
 
 import ca.phon.cvseq.CVSeqType;
 import ca.phon.fsa.*;
-import de.susebox.jtopas.*;
-import org.apache.logging.log4j.LogManager;
 
 import java.text.ParseException;
 
@@ -26,8 +24,6 @@ import java.text.ParseException;
  *
  */
 public class CVSeqCompiler {
-	
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(CVSeqCompiler.class.getName());
 	
 	private enum Quantifier {
 		ZeroOrOne,
@@ -66,86 +62,86 @@ public class CVSeqCompiler {
 		stateIndex = 0;
 		currentMatcher = matcherString;
 		
-		Tokenizer tokenizer = getTokenizer();
-		TokenizerSource source = new StringSource(matcherString);
-		tokenizer.setSource(source);
-		
-		return tokensToFSA(tokenizer);
+//		Tokenizer tokenizer = getTokenizer();
+//		TokenizerSource source = new StringSource(matcherString);
+//		tokenizer.setSource(source);
+
+		return new SimpleFSA<>();
 	}
 	
-	private SimpleFSA<CVSeqType> tokensToFSA(Tokenizer tokenizer) 
-		throws ParseException {
-		// create the machine and add initial state
-		SimpleFSA<CVSeqType> fsa = new SimpleFSA<CVSeqType>();
-		String initialState = getNextStateName();
-		fsa.addState(initialState);
-		fsa.setInitialState(initialState);
-		
-		// test first token
-		Token token = null;
-		try {
-			token = tokenizer.nextToken();
-		} catch (TokenizerException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
-		}
-		if(token != null
-				&& !token.getImage().equals("#"))
-			tokenizer.setReadPositionAbsolute(0);
-		
-		CVSeqType currentType = null;
-		while((currentType = readMatcher(tokenizer)) != null) {
-			newTransition(fsa, currentType);
-			
-			// look for quantification
-			// attempt to read a quantifier
-			if(tokenizer.hasMoreToken()) {
-				Token nextToken = null;
-				try {
-					nextToken = tokenizer.nextToken();
-				} catch (TokenizerException e) {
-					throw new ParseException(currentMatcher,
-							tokenizer.getReadPosition());
-				}
-				
-				if(nextToken.getCompanion() != null) {
-					if(nextToken.getCompanion() instanceof Quantifier) {
-						// handle quantifier
-						Quantifier q = (Quantifier)nextToken.getCompanion();
-						if(q == Quantifier.OneOrMore)
-							makeOneOrMore(fsa, currentType);
-						else if(q == Quantifier.ZeroOrMore)
-							makeZeroOrMore(fsa, currentType);
-						else if(q == Quantifier.ZeroOrOne)
-							makeZeroOrOne(fsa, currentType);
-						else
-							// should never get here
-							throw new ParseException(currentMatcher, tokenizer.getReadPosition());
-						
-					} else {
-						// reset tokenzier position
-						tokenizer.setReadPositionRelative(-1*nextToken.getImage().length());
-					}
-				} else {
-					if(nextToken.getType() == Token.EOF)
-						break;
-					else if(nextToken.getType() == Token.WHITESPACE) {
-						// should actually be a WordBoundary type
-						// reset position
-						tokenizer.setReadPositionRelative(-1*nextToken.getImage().length());
-					} else if(nextToken.getImage().equals("#")) { 
-						makeHashAtEnd(fsa);
-						break;
-					} else {
-						// token should not be here without a companion otherwise
-						// throw an exception
-						throw new ParseException(currentMatcher, tokenizer.getReadPosition());
-					}
-				}
-			}
-		}
-		
-		return fsa;
-	}
+//	private SimpleFSA<CVSeqType> tokensToFSA(Tokenizer tokenizer)
+//		throws ParseException {
+//		// create the machine and add initial state
+//		SimpleFSA<CVSeqType> fsa = new SimpleFSA<CVSeqType>();
+//		String initialState = getNextStateName();
+//		fsa.addState(initialState);
+//		fsa.setInitialState(initialState);
+//
+//		// test first token
+//		Token token = null;
+//		try {
+//			token = tokenizer.nextToken();
+//		} catch (TokenizerException e) {
+//			LOGGER.error( e.getLocalizedMessage(), e);
+//		}
+//		if(token != null
+//				&& !token.getImage().equals("#"))
+//			tokenizer.setReadPositionAbsolute(0);
+//
+//		CVSeqType currentType = null;
+//		while((currentType = readMatcher(tokenizer)) != null) {
+//			newTransition(fsa, currentType);
+//
+//			// look for quantification
+//			// attempt to read a quantifier
+//			if(tokenizer.hasMoreToken()) {
+//				Token nextToken = null;
+//				try {
+//					nextToken = tokenizer.nextToken();
+//				} catch (TokenizerException e) {
+//					throw new ParseException(currentMatcher,
+//							tokenizer.getReadPosition());
+//				}
+//
+//				if(nextToken.getCompanion() != null) {
+//					if(nextToken.getCompanion() instanceof Quantifier) {
+//						// handle quantifier
+//						Quantifier q = (Quantifier)nextToken.getCompanion();
+//						if(q == Quantifier.OneOrMore)
+//							makeOneOrMore(fsa, currentType);
+//						else if(q == Quantifier.ZeroOrMore)
+//							makeZeroOrMore(fsa, currentType);
+//						else if(q == Quantifier.ZeroOrOne)
+//							makeZeroOrOne(fsa, currentType);
+//						else
+//							// should never get here
+//							throw new ParseException(currentMatcher, tokenizer.getReadPosition());
+//
+//					} else {
+//						// reset tokenzier position
+//						tokenizer.setReadPositionRelative(-1*nextToken.getImage().length());
+//					}
+//				} else {
+//					if(nextToken.getType() == Token.EOF)
+//						break;
+//					else if(nextToken.getType() == Token.WHITESPACE) {
+//						// should actually be a WordBoundary type
+//						// reset position
+//						tokenizer.setReadPositionRelative(-1*nextToken.getImage().length());
+//					} else if(nextToken.getImage().equals("#")) {
+//						makeHashAtEnd(fsa);
+//						break;
+//					} else {
+//						// token should not be here without a companion otherwise
+//						// throw an exception
+//						throw new ParseException(currentMatcher, tokenizer.getReadPosition());
+//					}
+//				}
+//			}
+//		}
+//
+//		return fsa;
+//	}
 	
 	private static void makeZeroOrOne(SimpleFSA<CVSeqType> fsa, CVSeqType matcher) {
 		// for each final state, find the transitions to it and
@@ -260,38 +256,38 @@ public class CVSeqCompiler {
 		return currentFinals;
 	}
 	
-	private CVSeqType readMatcher(Tokenizer tokenizer) 
-		throws ParseException {
-		if(!tokenizer.hasMoreToken())
-			return null;
-		
-		Token token = null;
-		try {
-			token = tokenizer.nextToken();
-		} catch (TokenizerException e) {
-			throw new ParseException(currentMatcher, 
-					tokenizer.getReadPosition());
-		}
-		
-		if(token.getImage().length() == 0)
-			return null;
-		
-		if(token.getImage().equals("#"))
-			return null;
-		
-		if(token.getCompanion() != null) {
-			if(token.getCompanion() instanceof CVSeqType) {
-				return (CVSeqType)token.getCompanion();
-			} else {
-				throw new ParseException(currentMatcher, tokenizer.getReadPosition());
-			}
-		} else {
-			if(token.getType() == Token.WHITESPACE) {
-				return CVSeqType.WordBoundary;
-			} else 
-				throw new ParseException(currentMatcher, tokenizer.getReadPosition());
-		}
-	}
+//	private CVSeqType readMatcher(Tokenizer tokenizer)
+//		throws ParseException {
+//		if(!tokenizer.hasMoreToken())
+//			return null;
+//
+//		Token token = null;
+//		try {
+//			token = tokenizer.nextToken();
+//		} catch (TokenizerException e) {
+//			throw new ParseException(currentMatcher,
+//					tokenizer.getReadPosition());
+//		}
+//
+//		if(token.getImage().length() == 0)
+//			return null;
+//
+//		if(token.getImage().equals("#"))
+//			return null;
+//
+//		if(token.getCompanion() != null) {
+//			if(token.getCompanion() instanceof CVSeqType) {
+//				return (CVSeqType)token.getCompanion();
+//			} else {
+//				throw new ParseException(currentMatcher, tokenizer.getReadPosition());
+//			}
+//		} else {
+//			if(token.getType() == Token.WHITESPACE) {
+//				return CVSeqType.WordBoundary;
+//			} else
+//				throw new ParseException(currentMatcher, tokenizer.getReadPosition());
+//		}
+//	}
 	
 	/**
 	 * Returns the next state name
@@ -301,31 +297,31 @@ public class CVSeqCompiler {
 		return statePrefix + (stateIndex++);
 	}
 
-	/**
-	 * Get the tokenizer
-	 */
-	private Tokenizer getTokenizer() {
-		TokenizerProperties props = new StandardTokenizerProperties();
-		
-		int parseFlags = 
-			Flags.F_COUNT_LINES | // count lines and cols
-			Flags.F_NO_CASE | // case insensitive
-			Flags.F_RETURN_SIMPLE_WHITESPACES; // spaces are important
-		
-		props.setParseFlags(parseFlags);
-		
-		props.addSpecialSequence("#");
-		
-		// add stress matcher type
-		for(CVSeqType stType:CVSeqType.values()) {
-			props.addSpecialSequence(""+stType.getImage(), stType);
-		}
-		
-		// add quantifiers
-		for(Quantifier q:Quantifier.values()) {
-			props.addSpecialSequence(""+q.getImage(), q);
-		}
-		
-		return new StandardTokenizer(props);
-	}
+//	/**
+//	 * Get the tokenizer
+//	 */
+//	private Tokenizer getTokenizer() {
+//		TokenizerProperties props = new StandardTokenizerProperties();
+//
+//		int parseFlags =
+//			Flags.F_COUNT_LINES | // count lines and cols
+//			Flags.F_NO_CASE | // case insensitive
+//			Flags.F_RETURN_SIMPLE_WHITESPACES; // spaces are important
+//
+//		props.setParseFlags(parseFlags);
+//
+//		props.addSpecialSequence("#");
+//
+//		// add stress matcher type
+//		for(CVSeqType stType:CVSeqType.values()) {
+//			props.addSpecialSequence(""+stType.getImage(), stType);
+//		}
+//
+//		// add quantifiers
+//		for(Quantifier q:Quantifier.values()) {
+//			props.addSpecialSequence(""+q.getImage(), q);
+//		}
+//
+//		return new StandardTokenizer(props);
+//	}
 }

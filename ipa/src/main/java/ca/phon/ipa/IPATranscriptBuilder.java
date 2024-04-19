@@ -16,17 +16,15 @@
 package ca.phon.ipa;
 
 import ca.phon.extensions.UnvalidatedValue;
-import org.apache.logging.log4j.LogManager;
 
 import java.text.ParseException;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Class for building {@link IPATranscript}s.
  */
 public class IPATranscriptBuilder {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(IPATranscriptBuilder.class.getName());
 	
 	private final IPAElementFactory factory = new IPAElementFactory();
 
@@ -154,7 +152,7 @@ public class IPATranscriptBuilder {
 			buffer.clear();
 			append(transcript);
 		} catch (ParseException e) {
-			LOGGER.warn( e.getLocalizedMessage(), e);
+			Logger.getLogger(getClass().getName()).warning(e.getLocalizedMessage());
 
 			// keep as an unvalidated value
 			final IPATranscript transcript = toIPATranscript();

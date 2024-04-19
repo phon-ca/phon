@@ -15,12 +15,11 @@
  */
 package ca.phon.util.resources;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Loads resources from a specified class loader (or the
@@ -30,9 +29,6 @@ import java.util.*;
  * for each specified resource.
  */
 public abstract class ClassLoaderHandler<T> extends URLHandler<T> {
-	
-	private static final org.apache.logging.log4j.Logger LOGGER = 
-			org.apache.logging.log4j.LogManager.getLogger(ClassLoaderHandler.class.getName());
 	
 	/**
 	 * Class loader
@@ -71,7 +67,7 @@ public abstract class ClassLoaderHandler<T> extends URLHandler<T> {
 	/**
 	 * Load resource list from the give resource file.
 	 * 
-	 * @param file
+	 * @param resFile
 	 */
 	public void loadResourceFile(String resFile) {
 		try {
@@ -84,7 +80,7 @@ public abstract class ClassLoaderHandler<T> extends URLHandler<T> {
 						new BufferedReader(new InputStreamReader(resURL.openStream()));
 				String line = null;
 				while((line = in.readLine()) != null) {
-					final String resVal = StringUtils.strip(line);
+					final String resVal = line.strip();
 					if(resVal.length() > 0) {
 						addResource(resVal);
 					}
@@ -92,7 +88,7 @@ public abstract class ClassLoaderHandler<T> extends URLHandler<T> {
 				in.close();
 			}
 		} catch (IOException e) {
-			LOGGER.error(e.getMessage());
+			Logger.getLogger(getClass().getName()).warning(e.getLocalizedMessage());
 		}
 	}
 	
@@ -118,7 +114,7 @@ public abstract class ClassLoaderHandler<T> extends URLHandler<T> {
 					URL url = new URL(res);
 					super.add(url);
 				} catch (MalformedURLException e) {
-					LOGGER.error(e.getMessage());
+					Logger.getLogger(getClass().getName()).warning(e.getLocalizedMessage());
 				}
 			} else {
 				try {
@@ -128,8 +124,7 @@ public abstract class ClassLoaderHandler<T> extends URLHandler<T> {
 					}
 
 				} catch (IOException e) {
-					e.printStackTrace();
-					LOGGER.error(e.getMessage());
+					Logger.getLogger(getClass().getName()).warning(e.getLocalizedMessage());
 				}
 			}
 			
