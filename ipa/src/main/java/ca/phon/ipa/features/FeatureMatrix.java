@@ -16,8 +16,7 @@
 
 package ca.phon.ipa.features;
 
-import ca.phon.featureset.xml.*;
-import jakarta.xml.bind.*;
+import ca.phon.csv.CSVReader;
 
 import javax.xml.stream.*;
 import javax.xml.transform.stream.StreamSource;
@@ -106,110 +105,110 @@ public class FeatureMatrix {
 	}
 	
 	public void saveAsXML(OutputStream stream) throws IOException {
-		try {
-			final ObjectFactory factory = new ObjectFactory();
-			FeatureMatrixType fmType = createFeatureMatrixType();
-			final JAXBElement<FeatureMatrixType> ele = factory.createFeatureMatrix(fmType);
-			
-			final JAXBContext jaxbContext = JAXBContext.newInstance(ObjectFactory.class);
-			final Marshaller marshaller = jaxbContext.createMarshaller();
-			
-			final XMLOutputFactory xof = XMLOutputFactory.newFactory();
-			final XMLEventWriter xsw = xof.createXMLEventWriter(stream);
-			marshaller.setListener(new MarshalListener(xsw));
-
-			marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-			
-			marshaller.marshal(ele, xsw);
-		} catch (JAXBException | XMLStreamException e) {
-			throw new IOException(e);
-		}
+//		try {
+//			final ObjectFactory factory = new ObjectFactory();
+//			FeatureMatrixType fmType = createFeatureMatrixType();
+//			final JAXBElement<FeatureMatrixType> ele = factory.createFeatureMatrix(fmType);
+//
+//			final JAXBContext jaxbContext = JAXBContext.newInstance(ObjectFactory.class);
+//			final Marshaller marshaller = jaxbContext.createMarshaller();
+//
+//			final XMLOutputFactory xof = XMLOutputFactory.newFactory();
+//			final XMLEventWriter xsw = xof.createXMLEventWriter(stream);
+//			marshaller.setListener(new MarshalListener(xsw));
+//
+//			marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+//			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+//
+//			marshaller.marshal(ele, xsw);
+//		} catch (JAXBException | XMLStreamException e) {
+//			throw new IOException(e);
+//		}
 		
 	}
 	
-	private final class MarshalListener extends Marshaller.Listener {
-		
-		private XMLEventWriter xsw;
-		
-		private XMLEventFactory factory;
-		
-		public MarshalListener(XMLEventWriter xsw) {
-			this.xsw = xsw;
-			
-			this.factory = XMLEventFactory.newFactory();
-		}
-		
-		@Override
-		public void beforeMarshal(Object source) {
-			super.beforeMarshal(source);
-			try {
-				xsw.add(factory.createCharacters("\n"));
-			} catch (XMLStreamException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			if(source instanceof FeatureSetType) {
-				final FeatureSetType fsType = (FeatureSetType)source;
-				final String comment = fsType.getChar() + " (0x" + Integer.toHexString(fsType.getChar().charAt(0)) + ")";
-				try {
-					xsw.add(factory.createComment(comment));
-				} catch (XMLStreamException e) {}
-			}
-		}
-		
-	}
+//	private final class MarshalListener extends Marshaller.Listener {
+//
+//		private XMLEventWriter xsw;
+//
+//		private XMLEventFactory factory;
+//
+//		public MarshalListener(XMLEventWriter xsw) {
+//			this.xsw = xsw;
+//
+//			this.factory = XMLEventFactory.newFactory();
+//		}
+//
+//		@Override
+//		public void beforeMarshal(Object source) {
+//			super.beforeMarshal(source);
+//			try {
+//				xsw.add(factory.createCharacters("\n"));
+//			} catch (XMLStreamException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//			if(source instanceof FeatureSetType) {
+//				final FeatureSetType fsType = (FeatureSetType)source;
+//				final String comment = fsType.getChar() + " (0x" + Integer.toHexString(fsType.getChar().charAt(0)) + ")";
+//				try {
+//					xsw.add(factory.createComment(comment));
+//				} catch (XMLStreamException e) {}
+//			}
+//		}
+//
+//	}
 	
-	private FeatureMatrixType createFeatureMatrixType() {
-		final ObjectFactory factory = new ObjectFactory();
-		final FeatureMatrixType retVal = factory.createFeatureMatrixType();
-		
-		// features
-		final Map<String, FeatureType> featureTypeMap = new HashMap<>();
-		for(Feature feature:featureData) {
-			final FeatureType featureType = factory.createFeatureType();
-			featureType.setName(feature.getName());
-			if(feature.getPrimaryFamily() != null && feature.getPrimaryFamily() != FeatureFamily.UNDEFINED)
-				featureType.setPrimaryFamily(Family.fromValue(feature.getPrimaryFamily().toString().toLowerCase().replaceAll("_", " ")));
-			if(feature.getSecondaryFamily() != null && feature.getSecondaryFamily() != FeatureFamily.UNDEFINED)
-				featureType.setSecondaryFamily(Family.fromValue(feature.getSecondaryFamily().toString().toLowerCase().replaceAll("_", " ")));
-			if(feature.getSynonyms() != null) {
-				for(String syn:feature.getSynonyms())
-					featureType.getSynonym().add(syn);
-			}
-			
-			featureTypeMap.put(feature.getName(), featureType);
-			retVal.getFeature().add(featureType);
-		}
-		
-		// named feature sets
-		for(String key:namedFeatureSets.keySet()) {
-			final NamedFeatureSetType fsType = factory.createNamedFeatureSetType();
-			final FeatureSet fs = namedFeatureSets.get(key);
-			fsType.setName(key);
-			
-			for(Feature feature:fs) {
-				fsType.getValue().add(featureTypeMap.get(feature.getName()));
-			}
-			
-			retVal.getNamedFeatureSet().add(fsType);
-		}
-		
-		// character feature sets
-		for(Character c:getCharacterSet()) {
-			final FeatureSetType fsType = factory.createFeatureSetType();
-			final FeatureSet fs = getFeatureSet(c);
-			fsType.setChar(c.toString());
-			
-			for(Feature feature:fs) {
-				fsType.getValue().add(featureTypeMap.get(feature.getName()));
-			}
-			
-			retVal.getFeatureSet().add(fsType);
-		}
-		
-		return retVal;
-	}
+//	private FeatureMatrixType createFeatureMatrixType() {
+//		final ObjectFactory factory = new ObjectFactory();
+//		final FeatureMatrixType retVal = factory.createFeatureMatrixType();
+//
+//		// features
+//		final Map<String, FeatureType> featureTypeMap = new HashMap<>();
+//		for(Feature feature:featureData) {
+//			final FeatureType featureType = factory.createFeatureType();
+//			featureType.setName(feature.getName());
+//			if(feature.getPrimaryFamily() != null && feature.getPrimaryFamily() != FeatureFamily.UNDEFINED)
+//				featureType.setPrimaryFamily(Family.fromValue(feature.getPrimaryFamily().toString().toLowerCase().replaceAll("_", " ")));
+//			if(feature.getSecondaryFamily() != null && feature.getSecondaryFamily() != FeatureFamily.UNDEFINED)
+//				featureType.setSecondaryFamily(Family.fromValue(feature.getSecondaryFamily().toString().toLowerCase().replaceAll("_", " ")));
+//			if(feature.getSynonyms() != null) {
+//				for(String syn:feature.getSynonyms())
+//					featureType.getSynonym().add(syn);
+//			}
+//
+//			featureTypeMap.put(feature.getName(), featureType);
+//			retVal.getFeature().add(featureType);
+//		}
+//
+//		// named feature sets
+//		for(String key:namedFeatureSets.keySet()) {
+//			final NamedFeatureSetType fsType = factory.createNamedFeatureSetType();
+//			final FeatureSet fs = namedFeatureSets.get(key);
+//			fsType.setName(key);
+//
+//			for(Feature feature:fs) {
+//				fsType.getValue().add(featureTypeMap.get(feature.getName()));
+//			}
+//
+//			retVal.getNamedFeatureSet().add(fsType);
+//		}
+//
+//		// character feature sets
+//		for(Character c:getCharacterSet()) {
+//			final FeatureSetType fsType = factory.createFeatureSetType();
+//			final FeatureSet fs = getFeatureSet(c);
+//			fsType.setChar(c.toString());
+//
+//			for(Feature feature:fs) {
+//				fsType.getValue().add(featureTypeMap.get(feature.getName()));
+//			}
+//
+//			retVal.getFeatureSet().add(fsType);
+//		}
+//
+//		return retVal;
+//	}
 	
 	/**
 	 * Creates the feature matrix from an xml file.
@@ -218,95 +217,86 @@ public class FeatureMatrix {
 	private void buildFromXML(InputStream stream)
 		throws IOException {
 		try {
-			// parse the file
-			JAXBContext jaxbContext = JAXBContext.newInstance(ObjectFactory.class);
-			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-			JAXBElement<FeatureMatrixType> featureMatrixEle = unmarshaller.unmarshal(new StreamSource(stream), FeatureMatrixType.class);
-			FeatureMatrixType matrix = featureMatrixEle.getValue();
+			XMLInputFactory factory = XMLInputFactory.newFactory();
+			XMLStreamReader reader = factory.createXMLStreamReader(stream);
 
-			List<FeatureType> featureList = matrix.getFeature();
+			String currentElement = "";
+			String currentFeature = "";
+			FeatureFamily currentFamily = FeatureFamily.UNDEFINED;
+			FeatureFamily currentSecondaryFamily = FeatureFamily.UNDEFINED;
+			List<String> currentSynonyms = new ArrayList<>();
 
-			// read in features and their families
-			// use LinkedHashMap to retain iteration order
-			featureNameHash = new LinkedHashMap<String, Integer>();
-			featureData = new Feature[featureList.size()];
+			featureData = new Feature[20];
+			featureNameHash = new LinkedHashMap<>();
+			featureSets = new LinkedHashMap<>();
 
-			for (int featureIndex = 0; featureIndex < featureList.size(); featureIndex++) {
-				// for(XMLFeatureType feature: featureList){
-				FeatureType feature = featureList.get(featureIndex);
-				String currentFeature = feature.getName().toLowerCase();
+			while(reader.hasNext()) {
+				int evt = reader.next();
+				switch (evt) {
+					case XMLStreamConstants.START_ELEMENT:
+						currentElement = reader.getLocalName();
+						if (currentElement.equals("feature")) {
+							currentFeature = reader.getAttributeValue(null, "name");
+							String primaryFamily = reader.getAttributeValue(null, "primaryFamily");
+							if (primaryFamily != null) {
+								currentFamily = FeatureFamily.fromValue(primaryFamily);
+							}
+							String secondaryFamily = reader.getAttributeValue(null, "secondaryFamily");
+							if (secondaryFamily != null) {
+								currentSecondaryFamily = FeatureFamily.fromValue(secondaryFamily);
+							}
+						} else if (currentElement.equals("namedFeatureSet")) {
+							String name = reader.getAttributeValue(null, "name");
+						} else if (currentElement.equals("feature_set")) {
+							String currentChar = reader.getAttributeValue(null, "char");
+							String featuresStr = reader.getElementText();
+							String[] featureNames = featuresStr.split("\\p{Space}");
 
-				Feature fd = new Feature(currentFeature);
-				if(feature.getPrimaryFamily() != null)
-					fd.setPrimaryFamily(FeatureFamily.fromValue(feature.getPrimaryFamily().value()));
-				if(feature.getSecondaryFamily() != null)
-					fd.setSecondaryFamily(FeatureFamily.fromValue(feature.getSecondaryFamily().value()));
-				
-				BitSet bitSet = new BitSet(featureList.size());
-				bitSet.clear();
-				bitSet.set(featureIndex, true);
-				fd.setFeatureSet(new FeatureSet(bitSet));
-				
-				fd.setSynonyms(feature.getSynonym().toArray(new String[0]));
-				
-				featureNameHash.put(currentFeature, featureIndex);
-				for(String synonym:feature.getSynonym())
-					featureNameHash.put(synonym.toLowerCase(), featureIndex);
-				featureData[featureIndex] = fd;
-				// possibleFeatures.put(currentFeature, fd);
-			}
-			numberOfFeatures = featureList.size();
-			
-			// named features
-			namedFeatureSets = new TreeMap<>();
-			List<NamedFeatureSetType> namedSets = matrix.getNamedFeatureSet();
-			for(NamedFeatureSetType set:namedSets) {
-				BitSet bs = new BitSet(numberOfFeatures);
-				String setName = set.getName();
-				
-				for(Object fsObj:set.getValue()) {
-					if(!(fsObj instanceof FeatureType))
-						continue;
-					
-					FeatureType feature = (FeatureType)fsObj;
-					String fName = feature.getName().toLowerCase();
-					
-					int fIdx = featureNameHash.get(fName);
-					if(fIdx >= 0)
-						bs.set(fIdx, true);
+							FeatureSet fs = new FeatureSet();
+							for (String name : featureNames) {
+								Feature f = getFeature(name);
+								if (f != null) {
+									fs = FeatureSet.union(fs, getFeatureSetForFeature(name));
+								}
+							}
+							featureSets.put(currentChar.charAt(0), fs);
+						} else if (currentElement.equals("synonym")) {
+							currentSynonyms.add(reader.getElementText());
+						}
+						break;
+
+					case XMLStreamConstants.END_ELEMENT:
+						if (reader.getLocalName().equals("feature")) {
+							Feature f = new Feature(currentFeature);
+							f.setPrimaryFamily(currentFamily);
+							f.setSecondaryFamily(currentSecondaryFamily);
+							f.setSynonyms(currentSynonyms.toArray(new String[0]));
+							featureNameHash.put(currentFeature.toLowerCase(), numberOfFeatures);
+							for(String syn:currentSynonyms) {
+								featureNameHash.put(syn.toLowerCase(), numberOfFeatures);
+							}
+							featureData = Arrays.copyOf(featureData, numberOfFeatures + 1);
+							featureData[numberOfFeatures] = f;
+							numberOfFeatures++;
+
+							BitSet bs = new BitSet(numberOfFeatures);
+							bs.clear();
+							bs.set(numberOfFeatures - 1, true);
+							f.setFeatureSet(new FeatureSet(bs));
+
+							currentFamily = FeatureFamily.UNDEFINED;
+							currentSecondaryFamily = FeatureFamily.UNDEFINED;
+							currentSynonyms.clear();
+						}
+						break;
 				}
-				
-				FeatureSet fs = new FeatureSet(bs);
-				namedFeatureSets.put(setName, fs);
 			}
-
-			// feature set for characters
-			featureSets = new LinkedHashMap<Character, FeatureSet>();
-			List<FeatureSetType> sets = matrix.getFeatureSet();
-			for (FeatureSetType set : sets) {
-				BitSet bs = new BitSet(numberOfFeatures);
-				Character theChar = set.getChar().charAt(0);
-				
-				for(Object fsObj:set.getValue()) {
-					if(!(fsObj instanceof FeatureType)) {
-						continue;
-					}
-					
-					FeatureType feature = (FeatureType)fsObj;
-					String fName = feature.getName().toLowerCase();
-					int fIdx = featureNameHash.get(fName);
-					if(fIdx >= 0)
-						bs.set(fIdx, true);
-				}
-
-				FeatureSet fs = new FeatureSet(bs);
-				featureSets.put(theChar, fs);
-			}
-		} catch (JAXBException ex) {
-			throw new IOException(ex.toString());
+			reader.close();
+		} catch (XMLStreamException e) {
+			throw new IOException(e);
 		}
 	}
-	
+
 	/**
 	 * Create the feature matrix from a CSV file.
 	 */
@@ -315,19 +305,19 @@ public class FeatureMatrix {
 		throws IOException {
 //		CSVReader reader = new CSVReader(new FileReader(fmFile));
 //		String[] colLine = reader.readNext();
-//		
+//
 //		// first two cols are char and unicode value
 //		int sFeatureIdx = 2;
 //		featureNameHash = new LinkedHashMap<String, Integer>();
 //		reverseHash = new LinkedHashMap<Integer, String>();
 //		featureData = new FeatureDescription[colLine.length-2];
 //		numberOfFeatures = colLine.length-2;
-//		
+//
 //		// create list of features
 //		for(int i = sFeatureIdx; i < colLine.length; i++) {
 //			int featureIndex = i-2;
 //			String currentFeature = colLine[i];
-//			
+//
 //			FeatureDescription fd = new FeatureDescription();
 //			fd.featureName = currentFeature;
 //			fd.primary = "";
@@ -336,12 +326,12 @@ public class FeatureMatrix {
 //			bs.clear();
 //			bs.set(featureIndex, true);
 //			fd.fs = new FeatureSet(bs);
-//			
+//
 //			featureNameHash.put(currentFeature, featureIndex);
 //			reverseHash.put(featureIndex, currentFeature);
 //			featureData[featureIndex] = fd;
 //		}
-//		
+//
 //		featureSets = new LinkedHashMap<Character, FeatureSet>();
 //		// create feature sets from remainder rows
 //		String[] line = null;
@@ -349,22 +339,22 @@ public class FeatureMatrix {
 //			String unicodeValue = line[1];
 //			Integer charVal = Integer.decode(unicodeValue);
 //			Character currentChar = new Character((char)charVal.byteValue());
-//			
+//
 //			BitSet bs = new BitSet(numberOfFeatures);
 //			bs.clear();
-//			
+//
 //			for(int i = sFeatureIdx; i < line.length; i++) {
 //				String featureIdc = line[i];
 //				if(StringUtils.strip(featureIdc).equals("+")) {
 //					bs.set(i-2, true);
 //				}
 //			}
-//			
+//
 //			FeatureSet fs = new FeatureSet(bs);
 //			fs.setIpaChar(currentChar.charValue());
 //			featureSets.put(currentChar, fs);
 //		}
-//		
+//
 //		reader.close();
 	}
 
