@@ -19,6 +19,7 @@ package ca.phon.ipa.features;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Class to represent a charater's feature set.
@@ -74,7 +75,7 @@ public class FeatureSet implements Iterable<Feature> {
 					if(fObj != null) {
 						fs.add(feature);
 					} else {
-						org.apache.logging.log4j.LogManager.getLogger(FeatureSet.class.getName()).warn("Unknown feature: " + feature);
+						Logger.getLogger(FeatureSet.class.getName()).warning("Unknown feature: " + feature);
 					}
 				}
 				
@@ -82,7 +83,7 @@ public class FeatureSet implements Iterable<Feature> {
 				if(FeatureMatrix.getInstance().getFeature(f.toLowerCase()) != null) {
 					fs.add(f);
 				} else {
-					org.apache.logging.log4j.LogManager.getLogger(FeatureSet.class.getName()).warn("Unknown feature: " + f);
+					Logger.getLogger(FeatureSet.class.getName()).warning("Unknown feature: " + f);
 				}
 			}
 		}

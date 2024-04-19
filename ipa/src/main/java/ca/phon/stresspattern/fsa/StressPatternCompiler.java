@@ -17,8 +17,6 @@ package ca.phon.stresspattern.fsa;
 
 import ca.phon.fsa.*;
 import ca.phon.stresspattern.StressMatcherType;
-import de.susebox.jtopas.*;
-import org.apache.logging.log4j.LogManager;
 
 import java.text.ParseException;
 
@@ -28,8 +26,6 @@ import java.text.ParseException;
  *
  */
 public class StressPatternCompiler {
-	
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(StressPatternCompiler.class.getName());
 	
 	private enum Quantifier {
 		ZeroOrOne,
@@ -73,122 +69,122 @@ public class StressPatternCompiler {
 		stateIndex = 0;
 		currentMatcher = matcherString;
 		
-		Tokenizer tokenizer = getTokenizer();
-		TokenizerSource source = new StringSource(matcherString);
-		tokenizer.setSource(source);
-		
-		return tokensToFSA(tokenizer);
+//		Tokenizer tokenizer = getTokenizer();
+//		TokenizerSource source = new StringSource(matcherString);
+//		tokenizer.setSource(source);
+
+		return new SimpleFSA<>();
 	}
 	
-	private SimpleFSA<StressMatcherType> tokensToFSA(Tokenizer tokenizer) 
-		throws ParseException {
-		SimpleFSA<StressMatcherType> fsa = new SimpleFSA<StressMatcherType>();
-		
-		// add initial state
-		String initialState = getNextStateName();
-		fsa.addState(initialState);
-		fsa.setInitialState(initialState);
-		
-		// test first token
-		Token token = null;
-		try {
-			token = tokenizer.nextToken();
-		} catch (TokenizerException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
-		}
-		if(token != null
-				&& !token.getImage().equals("#"))
-			tokenizer.setReadPositionAbsolute(0);
-		
-		StressMatcherType currentType = null;
-		while((currentType = readMatcher(tokenizer)) != null) {
-			newTransition(fsa, currentType);
-			
-			// attempt to read a quantifier
-			if(tokenizer.hasMoreToken()) {
-				Token nextToken = null;
-				try {
-					nextToken = tokenizer.nextToken();
-				} catch (TokenizerException e) {
-					throw new ParseException(currentMatcher,
-							tokenizer.getReadPosition());
-				}
-				
-				if(nextToken.getCompanion() != null) {
-					if(nextToken.getCompanion() instanceof Quantifier) {
-						// handle quantifier
-						Quantifier q = (Quantifier)nextToken.getCompanion();
-						if(q == Quantifier.OneOrMore)
-							makeOneOrMore(fsa, currentType);
-						else if(q == Quantifier.ZeroOrMore)
-							makeZeroOrMore(fsa, currentType);
-						else if(q == Quantifier.ZeroOrOne)
-							makeZeroOrOne(fsa, currentType);
-						else
-							// should never get here
-							throw new ParseException(currentMatcher, tokenizer.getReadPosition());
-						
-					} else {
-						// reset tokenzier position
-						tokenizer.setReadPositionRelative(-1*nextToken.getImage().length());
-					}
-				} else {
-					if(nextToken.getType() == Token.EOF)
-						break;
-					else if(nextToken.getType() == Token.WHITESPACE) {
-						// should actually be a WordBoundary type
-						// reset position
-						tokenizer.setReadPositionRelative(-1*nextToken.getImage().length());
-					} else if(nextToken.getImage().equals("#")) { 
-						makeHashAtEnd(fsa);
-						break;
-					} else {
-						// token should not be here without a companion otherwise
-						// throw an exception
-						throw new ParseException(currentMatcher, tokenizer.getReadPosition());
-					}
-				}
-			}
-		}
-		
-		
-		return fsa;
-	}
-	
-	private StressMatcherType readMatcher(Tokenizer tokenizer) 
-		throws ParseException {
-		
-		if(!tokenizer.hasMoreToken())
-			return null;
-		
-		Token token = null;
-		try {
-			token = tokenizer.nextToken();
-		} catch (TokenizerException e) {
-			throw new ParseException(currentMatcher, 
-					tokenizer.getReadPosition());
-		}
-		
-		if(token.getImage().length() == 0)
-			return null;
-		
-		if(token.getImage().equals("#"))
-			return null;
-		
-		if(token.getCompanion() != null) {
-			if(token.getCompanion() instanceof StressMatcherType) {
-				return (StressMatcherType)token.getCompanion();
-			} else {
-				throw new ParseException(currentMatcher, tokenizer.getReadPosition());
-			}
-		} else {
-			if(token.getType() == Token.WHITESPACE) {
-				return StressMatcherType.WordBoundary;
-			} else 
-				throw new ParseException(currentMatcher, tokenizer.getReadPosition());
-		}
-		
-	}
+//	private SimpleFSA<StressMatcherType> tokensToFSA(Tokenizer tokenizer)
+//		throws ParseException {
+//		SimpleFSA<StressMatcherType> fsa = new SimpleFSA<StressMatcherType>();
+//
+//		// add initial state
+//		String initialState = getNextStateName();
+//		fsa.addState(initialState);
+//		fsa.setInitialState(initialState);
+//
+//		// test first token
+//		Token token = null;
+//		try {
+//			token = tokenizer.nextToken();
+//		} catch (TokenizerException e) {
+//			LOGGER.error( e.getLocalizedMessage(), e);
+//		}
+//		if(token != null
+//				&& !token.getImage().equals("#"))
+//			tokenizer.setReadPositionAbsolute(0);
+//
+//		StressMatcherType currentType = null;
+//		while((currentType = readMatcher(tokenizer)) != null) {
+//			newTransition(fsa, currentType);
+//
+//			// attempt to read a quantifier
+//			if(tokenizer.hasMoreToken()) {
+//				Token nextToken = null;
+//				try {
+//					nextToken = tokenizer.nextToken();
+//				} catch (TokenizerException e) {
+//					throw new ParseException(currentMatcher,
+//							tokenizer.getReadPosition());
+//				}
+//
+//				if(nextToken.getCompanion() != null) {
+//					if(nextToken.getCompanion() instanceof Quantifier) {
+//						// handle quantifier
+//						Quantifier q = (Quantifier)nextToken.getCompanion();
+//						if(q == Quantifier.OneOrMore)
+//							makeOneOrMore(fsa, currentType);
+//						else if(q == Quantifier.ZeroOrMore)
+//							makeZeroOrMore(fsa, currentType);
+//						else if(q == Quantifier.ZeroOrOne)
+//							makeZeroOrOne(fsa, currentType);
+//						else
+//							// should never get here
+//							throw new ParseException(currentMatcher, tokenizer.getReadPosition());
+//
+//					} else {
+//						// reset tokenzier position
+//						tokenizer.setReadPositionRelative(-1*nextToken.getImage().length());
+//					}
+//				} else {
+//					if(nextToken.getType() == Token.EOF)
+//						break;
+//					else if(nextToken.getType() == Token.WHITESPACE) {
+//						// should actually be a WordBoundary type
+//						// reset position
+//						tokenizer.setReadPositionRelative(-1*nextToken.getImage().length());
+//					} else if(nextToken.getImage().equals("#")) {
+//						makeHashAtEnd(fsa);
+//						break;
+//					} else {
+//						// token should not be here without a companion otherwise
+//						// throw an exception
+//						throw new ParseException(currentMatcher, tokenizer.getReadPosition());
+//					}
+//				}
+//			}
+//		}
+//
+//
+//		return fsa;
+//	}
+//
+//	private StressMatcherType readMatcher(Tokenizer tokenizer)
+//		throws ParseException {
+//
+//		if(!tokenizer.hasMoreToken())
+//			return null;
+//
+//		Token token = null;
+//		try {
+//			token = tokenizer.nextToken();
+//		} catch (TokenizerException e) {
+//			throw new ParseException(currentMatcher,
+//					tokenizer.getReadPosition());
+//		}
+//
+//		if(token.getImage().length() == 0)
+//			return null;
+//
+//		if(token.getImage().equals("#"))
+//			return null;
+//
+//		if(token.getCompanion() != null) {
+//			if(token.getCompanion() instanceof StressMatcherType) {
+//				return (StressMatcherType)token.getCompanion();
+//			} else {
+//				throw new ParseException(currentMatcher, tokenizer.getReadPosition());
+//			}
+//		} else {
+//			if(token.getType() == Token.WHITESPACE) {
+//				return StressMatcherType.WordBoundary;
+//			} else
+//				throw new ParseException(currentMatcher, tokenizer.getReadPosition());
+//		}
+//
+//	}
 	
 	/**
 	 * Strips the final states from the fsa and returns the
@@ -302,31 +298,31 @@ public class StressPatternCompiler {
 		}
 	}
 	
-	/**
-	 * Get the tokenizer
-	 */
-	private Tokenizer getTokenizer() {
-		TokenizerProperties props = new StandardTokenizerProperties();
-		
-		int parseFlags = 
-			Flags.F_COUNT_LINES | // count lines and cols
-			Flags.F_NO_CASE | // case insensitive
-			Flags.F_RETURN_SIMPLE_WHITESPACES; // spaces are important
-		
-		props.setParseFlags(parseFlags);
-		
-		props.addSpecialSequence("#");
-		
-		// add stress matcher type
-		for(StressMatcherType stType:StressMatcherType.values()) {
-			props.addSpecialSequence(""+stType.getImage(), stType);
-		}
-		
-		// add quantifiers
-		for(Quantifier q:Quantifier.values()) {
-			props.addSpecialSequence(""+q.getImage(), q);
-		}
-		
-		return new StandardTokenizer(props);
-	}
+//	/**
+//	 * Get the tokenizer
+//	 */
+//	private Tokenizer getTokenizer() {
+//		TokenizerProperties props = new StandardTokenizerProperties();
+//
+//		int parseFlags =
+//			Flags.F_COUNT_LINES | // count lines and cols
+//			Flags.F_NO_CASE | // case insensitive
+//			Flags.F_RETURN_SIMPLE_WHITESPACES; // spaces are important
+//
+//		props.setParseFlags(parseFlags);
+//
+//		props.addSpecialSequence("#");
+//
+//		// add stress matcher type
+//		for(StressMatcherType stType:StressMatcherType.values()) {
+//			props.addSpecialSequence(""+stType.getImage(), stType);
+//		}
+//
+//		// add quantifiers
+//		for(Quantifier q:Quantifier.values()) {
+//			props.addSpecialSequence(""+q.getImage(), q);
+//		}
+//
+//		return new StandardTokenizer(props);
+//	}
 }

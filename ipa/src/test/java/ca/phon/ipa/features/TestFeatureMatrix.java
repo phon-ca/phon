@@ -17,7 +17,6 @@ package ca.phon.ipa.features;
 
 import ca.phon.ipa.parser.IPATokens;
 import junit.framework.Assert;
-import org.apache.logging.log4j.LogManager;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -27,8 +26,6 @@ import java.util.*;
 @RunWith(JUnit4.class)
 public class TestFeatureMatrix {
 
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(TestFeatureMatrix.class.getName());
-	
 	/**
 	 * Ensures that all phones defined in the {@link FeatureMatrix}
 	 * are supported by the IPA parser.

@@ -16,12 +16,10 @@
 
 package ca.phon.ipa.features;
 
-import ca.phon.csv.CSVReader;
-
 import javax.xml.stream.*;
-import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Holds all defined feature set for IPA characters. This information is held in
@@ -67,13 +65,13 @@ public class FeatureMatrix {
 			try {
 				buildFromXML(fmFile);
 			} catch (IOException e) {
-				org.apache.logging.log4j.LogManager.getLogger(getClass().getName()).error(e.toString());
+				Logger.getLogger(getClass().getName()).severe(e.toString());
 			}
 		} else if(fmFile.endsWith(".csv")) {
 			try {
 				buildFromCSV(fmFile);
 			} catch (IOException e) {
-				org.apache.logging.log4j.LogManager.getLogger(getClass().getName()).error(e.toString());
+				Logger.getLogger(getClass().getName()).severe(e.toString());
 			}
 		} else {
 			throw new IllegalArgumentException("Feature matrix must be in XML or CSV format.");
@@ -84,8 +82,7 @@ public class FeatureMatrix {
 		try {
 			buildFromXML(stream);
 		} catch (IOException e) {
-			org.apache.logging.log4j.LogManager.getLogger(getClass().getName()).error(e.toString());
-			e.printStackTrace();
+			Logger.getLogger(getClass().getName()).severe(e.toString());
 		}
 	}
 	
