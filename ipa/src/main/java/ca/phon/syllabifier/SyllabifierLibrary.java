@@ -171,7 +171,7 @@ public final class SyllabifierLibrary implements IExtendable {
 	/**
 	 * Return all available syllabifiers for the given language.
 	 * 
-	 * @param ang - should be one of the ISO
+	 * @param lang - should be one of the ISO
 	 *  3-letter language codes
 	 * @return the list of syllabifiers for the given language.
 	 */

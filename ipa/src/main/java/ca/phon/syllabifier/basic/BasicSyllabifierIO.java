@@ -26,31 +26,30 @@ import java.io.*;
  */
 public class BasicSyllabifierIO {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(BasicSyllabifierIO.class.getName());
-
-	public BasicSyllabifier readFromFile(File file) 
+	public BasicSyllabifier readFromFile(File file)
 		throws IOException {
 		return readFromStream(new FileInputStream(file));
 	}
 	
 	public BasicSyllabifier readFromStream(InputStream is) 
 		throws IOException {
-		try {
-			final JAXBContext context = JAXBContext.newInstance(ObjectFactory.class);
-			final Unmarshaller unmarshaller = context.createUnmarshaller();
-			
-			final JAXBElement<SyllabifierDef> jaxbEle = 
-					unmarshaller.unmarshal(new StreamSource(is), SyllabifierDef.class);
-			
-			if(jaxbEle.getValue().getName() == null) {
-				throw new IOException("Syllabifier not loaded");
-			}
-			
-			return new BasicSyllabifier(jaxbEle.getValue());
-		} catch (JAXBException e) {
-			LOGGER.error( e.getMessage(), e);
-			throw new IOException(e);
-		}
+		return new BasicSyllabifier();
+//		try {
+//			final JAXBContext context = JAXBContext.newInstance(ObjectFactory.class);
+//			final Unmarshaller unmarshaller = context.createUnmarshaller();
+//
+//			final JAXBElement<SyllabifierDef> jaxbEle =
+//					unmarshaller.unmarshal(new StreamSource(is), SyllabifierDef.class);
+//
+//			if(jaxbEle.getValue().getName() == null) {
+//				throw new IOException("Syllabifier not loaded");
+//			}
+//
+//			return new BasicSyllabifier(jaxbEle.getValue());
+//		} catch (JAXBException e) {
+//			LOGGER.error( e.getMessage(), e);
+//			throw new IOException(e);
+//		}
 	}
 	
 }

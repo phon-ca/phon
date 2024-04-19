@@ -19,6 +19,7 @@ import java.awt.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.text.*;
+import java.util.logging.Logger;
 import java.util.prefs.*;
 
 
@@ -36,14 +37,10 @@ import java.util.prefs.*;
  *  <em>except</em> byte arrays).  These can be specified on the command line
  *  using the <pre>-D&lt;key&gt;=&lt;value&gt;</pre> command line option.</li>
  * <li>User preferences {@link #getUserPreferences()} </li>
- * <li>System preferences {@link #getSystemPreferences()}</li>
  * <li>Finally, the provide default is returned if the key is not found.</li>
  * </ol>
  */
 public class PrefHelper {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = 
-			org.apache.logging.log4j.LogManager.getLogger(PrefHelper.class.getName());
 	
 	/**
 	 * Returns the location of the application data folder for
@@ -99,7 +96,7 @@ public class PrefHelper {
 		try {
 			retVal.sync();
 		} catch (BackingStoreException e) {
-			LOGGER.warn( e.getLocalizedMessage(), e);
+			Logger.getLogger(PrefHelper.class.getName()).warning(e.getLocalizedMessage());
 		}
 		return retVal;
 	}
@@ -203,7 +200,7 @@ public class PrefHelper {
 	/**
 	 * Get the value of the specified {@link Double} preference. If found
 	 * using {@link System#getProperty(String, String)}, the value is
-	 * decoded using {@link Float#parseDouble(String)}.
+	 * decoded using {@link Float#parseFloat(String)}.
 	 * 
 	 * @param key
 	 * @param def
@@ -326,8 +323,7 @@ public class PrefHelper {
 			try {
 				retVal = Color.decode(colorTxt);
 			} catch (NumberFormatException nfe) {
-				LOGGER.error(nfe.toString());
-				nfe.printStackTrace();
+				Logger.getLogger(PrefHelper.class.getName()).warning(nfe.getLocalizedMessage());
 			}
 		}
 		
@@ -364,12 +360,8 @@ public class PrefHelper {
 					String base64 = new String(fontData);
 					ByteArrayInputStream in = new ByteArrayInputStream(Base64.decode(base64));
 					retVal = Font.createFont(Font.TRUETYPE_FONT, in);
-				} catch (FontFormatException e) {
-					e.printStackTrace();
-					LOGGER.error(e.getMessage());
-				} catch (IOException e) {
-					e.printStackTrace();
-					LOGGER.error(e.getMessage());
+				} catch (FontFormatException | IOException e) {
+					Logger.getLogger(PrefHelper.class.getName()).warning(e.getLocalizedMessage());
 				}
 			}
 		}
@@ -394,15 +386,8 @@ public class PrefHelper {
 						new ObjectInputStream(new ByteArrayInputStream(objData));
 				retVal =  type.cast(ois.readObject());
 				ois.close();
-			} catch (IOException e) {
-				LOGGER.error(e.getMessage());
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				LOGGER.error(e.getMessage());
-				e.printStackTrace();
-			} catch (ClassCastException e) {
-				LOGGER.error(e.getMessage());
-				e.printStackTrace();
+			} catch (IOException | ClassNotFoundException | ClassCastException e) {
+				Logger.getLogger(PrefHelper.class.getName()).warning(e.getLocalizedMessage());
 			}
 		}
 		return retVal;
@@ -415,8 +400,7 @@ public class PrefHelper {
 			try {
 				retVal = format.parseObject(objText);
 			} catch (ParseException e) {
-				LOGGER.error(e.getMessage());
-				e.printStackTrace();
+				Logger.getLogger(PrefHelper.class.getName()).warning(e.getLocalizedMessage());
 			}
 		}
 		return retVal;
