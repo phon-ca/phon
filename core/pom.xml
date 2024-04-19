@@ -9,9 +9,9 @@
 		<relativePath>..</relativePath>
 	</parent>
 
-	<artifactId>phon-extensions</artifactId>
-	<name>phonex-extensions</name>
-	<description>Custom extension support for phon</description>
+	<artifactId>phon-core</artifactId>
+	<name>phonex-core</name>
+	<description>core classes for many phon modules</description>
 
 	<dependencies>
 		<dependency>

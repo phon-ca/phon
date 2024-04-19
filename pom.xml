@@ -131,7 +131,7 @@
 	<modules>
 		<module>csv</module>
 		<module>fsa</module>
-		<module>phon-extensions</module>		
+		<module>core</module>		
 		<module>util</module>
 		<module>xml</module>
 		<module>ipa</module>
