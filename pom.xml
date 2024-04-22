@@ -134,6 +134,7 @@
 		<module>csv</module>
 		<module>fsa</module>
 		<module>core</module>		
+		<module>worker</module>
 		<module>plugin</module>
 		<module>language</module>
 		<module>util</module>

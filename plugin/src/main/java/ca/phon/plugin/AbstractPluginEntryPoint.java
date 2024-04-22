@@ -18,10 +18,10 @@ package ca.phon.plugin;
 import ca.phon.worker.PhonTask;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public abstract class AbstractPluginEntryPoint extends PhonTask implements IPluginEntryPoint {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(AbstractPluginEntryPoint.class.getName());
 	
 	/**
 	 * The performTask method calls pluginStart. This property
@@ -44,8 +44,7 @@ public abstract class AbstractPluginEntryPoint extends PhonTask implements IPlug
 			pluginStart(args);
 			super.setStatus(TaskStatus.FINISHED);
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
-			e.printStackTrace();
+			Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getLocalizedMessage(), e);
 			super.err = e;
 			super.setStatus(TaskStatus.ERROR);
 		}

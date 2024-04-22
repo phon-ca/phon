@@ -8,17 +8,11 @@
         <relativePath>..</relativePath>
     </parent>
 
-    <artifactId>phon-plugin</artifactId>
-    <name>Phon Plug-in</name>
-    <description>Phon plug-in support</description>
+    <artifactId>phon-worker</artifactId>
+    <name>Phon Worker</name>
+    <description>Phon threading helpers</description>
 
     <dependencies>
-        <dependency>
-	    <groupId>${project.groupId}</groupId>
-            <artifactId>phon-worker</artifactId>
-	    <version>${project.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

@@ -15,16 +15,17 @@
  */
 package ca.phon.worker;
 
-import javax.swing.event.EventListenerList;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
 
 /**
  *
  */
 public abstract class PhonTask implements Runnable {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(PhonTask.class.getName());
-
 	/*
 	 * Common properties
 	 *
@@ -72,7 +73,7 @@ public abstract class PhonTask implements Runnable {
 	private String taskName = "";
 	
 	/** Listeners */
-	private EventListenerList listeners = new EventListenerList();
+	private List<PhonTaskListener> listeners = Collections.synchronizedList(new ArrayList<>());
 	
 	/** Props */
 	protected ConcurrentHashMap<String, Object> props = new 
@@ -97,7 +98,7 @@ public abstract class PhonTask implements Runnable {
 		props.put(STATUS_PROP, "");
 		
 		// setup progrss prop
-		props.put(PROGRESS_PROP, new Float(0.0f));
+		props.put(PROGRESS_PROP, 0.0f);
 	}
 	
 	public long getStartTime() {
@@ -115,16 +116,11 @@ public abstract class PhonTask implements Runnable {
 		try {
 			performTask();
 		} catch(Exception e) {
-			LOGGER.error( e.getMessage(), e);
+			Logger.getLogger(PhonTask.class.getName()).warning(e.getLocalizedMessage());
 			err = e;
 			setStatus(TaskStatus.ERROR);
 		}
 		endTime = System.currentTimeMillis();
-
-		// tasks will need to call finished
-		// when they need
-//		if(status == TaskStatus.RUNNING)
-//			setStatus(TaskStatus.FINISHED);
 	}
 	
 	/**
@@ -176,17 +172,17 @@ public abstract class PhonTask implements Runnable {
 	}
 	
 	public void addTaskListener(PhonTaskListener l) {
-		listeners.add(PhonTaskListener.class, l);
+		listeners.add(l);
 	}
 	
 	public void removeTaskListener(PhonTaskListener l) {
-		listeners.remove(PhonTaskListener.class, l);
+		listeners.remove(l);
 	}
 	
 	protected void firePropertyChange(String prop, Object oldValue, Object newValue) {
 		if(oldValue == newValue) return;
 		
-		for(PhonTaskListener l:listeners.getListeners(PhonTaskListener.class)) {
+		for(PhonTaskListener l:listeners) {
 			l.propertyChanged(this, prop, oldValue, newValue);
 		}
 	}
@@ -194,7 +190,7 @@ public abstract class PhonTask implements Runnable {
 	protected void fireStatusChange(TaskStatus oldStatus, TaskStatus newStatus) {
 		if(oldStatus == newStatus) return;
 		
-		for(PhonTaskListener l:listeners.getListeners(PhonTaskListener.class)) {
+		for(PhonTaskListener l:listeners) {
 			l.statusChanged(this, oldStatus, newStatus);
 		}
 	}
