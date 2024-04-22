@@ -1,7 +1,6 @@
 package ca.phon.orthography.mor;
 
 import ca.phon.extensions.ExtendableObject;
-import org.jetbrains.annotations.NotNull;
 
 import java.text.ParseException;
 import java.util.*;
@@ -62,7 +61,6 @@ public final class GraspTierData extends ExtendableObject implements Iterable<Gr
         return grasps.stream().map(Grasp::toString).collect(Collectors.joining(" "));
     }
 
-    @NotNull
     @Override
     public Iterator<Grasp> iterator() {
         return grasps.iterator();
