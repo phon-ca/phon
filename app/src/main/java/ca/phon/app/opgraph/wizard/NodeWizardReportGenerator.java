@@ -15,7 +15,7 @@
  */
 package ca.phon.app.opgraph.wizard;
 
-import ca.phon.util.VersionInfo;
+import ca.phon.app.VersionInfo;
 import ca.phon.app.html.HTMLConstants;
 import ca.phon.app.opgraph.report.tree.*;
 import ca.phon.query.report.datasource.DefaultTableDataSource;

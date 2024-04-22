@@ -43,10 +43,9 @@ import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuManager;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.OSInfo;
-import ca.phon.util.VersionInfo;
+import ca.phon.app.VersionInfo;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.*;
-import org.apache.logging.log4j.LogManager;
 
 import javax.swing.*;
 import javax.swing.event.*;

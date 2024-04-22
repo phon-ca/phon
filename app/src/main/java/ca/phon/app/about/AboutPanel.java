@@ -15,7 +15,7 @@
  */
 package ca.phon.app.about;
 
-import ca.phon.util.VersionInfo;
+import ca.phon.app.VersionInfo;
 import ca.phon.app.*;
 import ca.phon.extensions.*;
 import ca.phon.ui.CommonModuleFrame;

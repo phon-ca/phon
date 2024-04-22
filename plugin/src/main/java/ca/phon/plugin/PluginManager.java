@@ -18,6 +18,8 @@ package ca.phon.plugin;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Reads the plugin def xml files and provides methods
@@ -25,8 +27,6 @@ import java.util.*;
  *
  */
 public class PluginManager extends URLClassLoader {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(PluginManager.class.getName());
 	
 	/**
 	 * Plugin folder
@@ -122,11 +122,11 @@ public class PluginManager extends URLClassLoader {
 					if(f.getName().endsWith(".jar") ||
 							f.getName().endsWith(".zip")) {
 						try {
-							LOGGER.info("Adding archive to dynamic class loader: " + f.getAbsolutePath());
+							Logger.getLogger(getClass().getName()).info("Adding jar to class loader: " + f.getAbsolutePath());
 							addFile(f.getAbsolutePath());
 							
 						} catch (MalformedURLException e) {
-							LOGGER.error("Could not add archive to dynamic class loader: " + f.getAbsolutePath());
+							Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getLocalizedMessage(), e);
 						}
 					}
 				}
@@ -209,8 +209,7 @@ public class PluginManager extends URLClassLoader {
 					
 					epIds.add(epId);
 				} catch (PluginException e) {
-					LOGGER.warn(e.getMessage());
-					e.printStackTrace();
+					Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 				}
 			}
 		}
@@ -247,8 +246,7 @@ public class PluginManager extends URLClassLoader {
 						break;
 					}
 				} catch (PluginException e) {
-					LOGGER.warn(e.getMessage());
-					e.printStackTrace();
+					Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 				}
 			}
 		}
@@ -318,8 +316,7 @@ public class PluginManager extends URLClassLoader {
 						retVal.add((IPluginExtensionPoint<T>)extPt);
 					}
 				} catch (PluginException e) {
-					LOGGER.warn(e.getMessage());
-					e.printStackTrace();
+					Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 				}
 			}
 		}
@@ -379,21 +376,18 @@ public class PluginManager extends URLClassLoader {
 										retVal.add((IPluginExtensionPoint<T>)extPt);
 									}
 								} catch (InstantiationException e) {
-									LOGGER.error(
-											e.getLocalizedMessage(), e);
+									Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 								} catch (IllegalAccessException e) {
-									LOGGER.error(
-											e.getLocalizedMessage(), e);
+									Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 								}
 							}
 						} catch (ClassNotFoundException e) {
-							LOGGER.error(
-									e.getLocalizedMessage(), e);
+							Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 						}
 					}
 				}
 			} catch (IOException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		}
 		
@@ -405,7 +399,7 @@ public class PluginManager extends URLClassLoader {
 	 * class to ensure minimum version of Phon is met.
 	 * 
 	 * @param clazz
-	 * @throws PhonException if the given class does
+	 * @throws PluginException if the given class does
 	 * not have a PhonPlugin annotation or the version 
 	 * information does not match
 	 */

@@ -19,14 +19,14 @@ import ca.phon.util.StackTraceInfo;
 import ca.phon.worker.*;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Methods for executing plugin entry points
  * using various methods.
  */
 public class PluginEntryPointRunner {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(PluginEntryPointRunner.class.getName());
 	
 	/**
 	 * Entry point
@@ -286,12 +286,12 @@ public class PluginEntryPointRunner {
 					setStatus(TaskStatus.FINISHED);
 				} catch (Exception e) {
 					final PluginException pe = new PluginException(e);
-					LOGGER.error( e.getMessage(), pe);
+					Logger.getLogger(getClass().getName()).log(Level.WARNING, pe.getLocalizedMessage(), pe);
 					super.err = pe;
 					setStatus(TaskStatus.ERROR);
 				}
 			} else {
-				LOGGER.error( "Cannot find entry point", new StackTraceInfo());
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, "No entry point", new StackTraceInfo());
 				super.err = new PluginException("No entry point");
 				super.setStatus(TaskStatus.ERROR);
 			}

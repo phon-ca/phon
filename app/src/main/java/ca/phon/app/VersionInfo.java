@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.phon.util;
+package ca.phon.app;
 
+import ca.phon.util.PrefHelper;
 import com.github.zafarkhaja.semver.Version;
 
 import java.io.*;

@@ -15,7 +15,7 @@
  */
 package ca.phon.app.session;
 
-import ca.phon.util.VersionInfo;
+import ca.phon.app.VersionInfo;
 import ca.phon.app.html.HTMLConstants;
 import ca.phon.app.log.LogUtil;
 import ca.phon.formatter.FormatterUtil;

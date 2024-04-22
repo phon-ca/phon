@@ -18,16 +18,14 @@ package ca.phon.plugin;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Action for quickly executing plugin entry points.
  *
  */
 public class PluginAction extends AbstractAction {
-	
-	private static final long serialVersionUID = 7414527209391736686L;
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(PluginAction.class.getName());
 	
 	/**
 	 * entry point id
@@ -76,7 +74,7 @@ public class PluginAction extends AbstractAction {
 			try {
 				PluginEntryPointRunner.executePlugin(epId, args);
 			} catch (PluginException pe) {
-				LOGGER.error( pe.getMessage(), pe);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, pe.getLocalizedMessage(), pe);
 			}
 		}
 	}

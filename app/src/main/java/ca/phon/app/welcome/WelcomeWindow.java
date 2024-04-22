@@ -16,11 +16,10 @@
 package ca.phon.app.welcome;
 
 import ca.hedlund.desktopicons.*;
-import ca.phon.util.VersionInfo;
+import ca.phon.app.VersionInfo;
 import ca.phon.app.menu.edit.PreferencesCommand;
 import ca.phon.app.menu.file.*;
 import ca.phon.app.project.*;
-import ca.phon.app.workspace.Workspace;
 import ca.phon.extensions.*;
 import ca.phon.plugin.*;
 import ca.phon.ui.*;
