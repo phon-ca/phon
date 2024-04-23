@@ -56,8 +56,6 @@ import java.util.stream.*;
 @OpNodeInfo(category="Table", description="Custom script for table input", name="Table Script", showInLibrary=true)
 public class TableScriptNode extends TableOpNode implements NodeSettings, ScriptNode {
 
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(TableScriptNode.class.getName());
-
 	private final static String TABLE_SCRIPT_RESOURCE_FILE = "ca/phon/app/opgraph/nodes/table/table_scripts";
 
 	private final static String SCRIPT_TEMPLATE =
@@ -165,7 +163,7 @@ public class TableScriptNode extends TableOpNode implements NodeSettings, Script
 				scriptContext.callFunction(scope, "init", inputFields, outputFields);
 			}
 		} catch (PhonScriptException e) {
-			LOGGER.error( getName() + " (" + getId() + "): " + e.getLocalizedMessage(), e);
+			LogUtil.warning(getName() + " (" + getId() + "): " + e.getLocalizedMessage(), e);
 		}
 
 		// check inputs
@@ -297,7 +295,7 @@ public class TableScriptNode extends TableOpNode implements NodeSettings, Script
 				}
 			}
 		} catch (PhonScriptException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.warning(e);
 		}
 
 
@@ -320,7 +318,7 @@ public class TableScriptNode extends TableOpNode implements NodeSettings, Script
 								URLDecoder.decode(url.getFile(), "UTF-8"));
 						return name.equals(scriptName);
 					} catch (UnsupportedEncodingException e1) {
-						LOGGER.error( e1.getLocalizedMessage(), e1);
+						LogUtil.warning( e1.getLocalizedMessage(), e1);
 					}
 					return false;
 				} )
@@ -337,10 +335,10 @@ public class TableScriptNode extends TableOpNode implements NodeSettings, Script
 					
 					this.script.putExtension(TableScriptName.class, new TableScriptName(scriptName));
 				} catch (IOException e) {
-					LOGGER.warn( e.getLocalizedMessage(), e);
+					LogUtil.warning(e);
 				}
 			} else {
-				LOGGER.warn("Unable to locate table script: " + scriptName);
+				LogUtil.warning("Could not find script with name: " + scriptName);
 			}
 		}
 		QueryScript.setupScriptRequirements(getScript());
@@ -357,7 +355,7 @@ public class TableScriptNode extends TableOpNode implements NodeSettings, Script
 				}
 			}
 		} catch (PhonScriptException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.warning(e);
 		}
 	}
 

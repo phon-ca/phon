@@ -15,6 +15,7 @@
  */
 package ca.phon.app.opgraph.analysis;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.log.MultiBufferPanel;
 import ca.phon.app.opgraph.editor.OpgraphEditorModel;
 import ca.phon.app.opgraph.library.PhonNodeLibrary;
@@ -43,8 +44,6 @@ public class AnalysisOpGraphEditorModel extends OpgraphEditorModel {
 	private JComboBox<Project> projectList;
 
 	private ParticipantsPanel participantSelector;
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(AnalysisOpGraphEditorModel.class.getName());
 
 	public AnalysisOpGraphEditorModel() {
 		this(new OpGraph());
@@ -81,7 +80,7 @@ public class AnalysisOpGraphEditorModel extends OpgraphEditorModel {
 						new OpLink(parentProjectNode, "obj", analysisNode, "project");
 				parentGraph.add(projectLink);
 			} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException | InvalidEdgeException e1) {
-				LOGGER.warn( e1.getLocalizedMessage(), e1);
+				LogUtil.warning( e1.getLocalizedMessage(), e1);
 			}
 		}
 
@@ -91,7 +90,7 @@ public class AnalysisOpGraphEditorModel extends OpgraphEditorModel {
 						new OpLink(parentSessionsNode, "obj", analysisNode, "selectedSessions");
 				parentGraph.add(sessionsLink);
 			} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException | InvalidEdgeException e1) {
-				LOGGER.warn( e1.getLocalizedMessage(), e1);
+				LogUtil.warning( e1.getLocalizedMessage(), e1);
 			}
 		}
 
@@ -101,7 +100,7 @@ public class AnalysisOpGraphEditorModel extends OpgraphEditorModel {
 						new OpLink(parentParticipantsNode, "obj", analysisNode, "selectedParticipants");
 				parentGraph.add(participantsLink);
 			} catch (ItemMissingException | VertexNotFoundException | CycleDetectedException | InvalidEdgeException e1) {
-				LOGGER.warn( e1.getLocalizedMessage(), e1);
+				LogUtil.warning( e1.getLocalizedMessage(), e1);
 			}
 		}
 

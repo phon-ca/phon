@@ -31,11 +31,9 @@ import java.util.*;
  */
 public class LogBuffer extends RSyntaxTextArea {
 	
-	private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(LogBuffer.class
-			.getName());
-	
 	public static final String ESCAPE_CODE_PREFIX = "\u0000\u0000";
 
+	@Serial
 	private static final long serialVersionUID = -7321262414933863183L;
 
 	private final DocumentOutputStream stdOutStream;
@@ -105,7 +103,7 @@ public class LogBuffer extends RSyntaxTextArea {
 		try {
 			stdOutStream.flush();
 		} catch (IOException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.warning(e);
 		}
 		
 		final StringBuffer buffer = new StringBuffer();
@@ -113,12 +111,9 @@ public class LogBuffer extends RSyntaxTextArea {
 		
 		try {
 			stdOutStream.write(buffer.toString().getBytes(encoding));
-		} catch (UnsupportedEncodingException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
 		} catch (IOException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.warning(e);
 		}
-		
 	}
 	
 	private class DocumentOutputStream extends OutputStream {
@@ -151,8 +146,7 @@ public class LogBuffer extends RSyntaxTextArea {
 					try {
 						getDocument().insertString(getDocument().getLength(), data, style);
 					} catch (BadLocationException e) {
-						LOGGER.error(
-								e.getLocalizedMessage(), e);
+						LogUtil.warning(e);
 					}
 				}
 			};

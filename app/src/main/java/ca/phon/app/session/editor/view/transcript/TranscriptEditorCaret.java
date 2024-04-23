@@ -3,7 +3,6 @@ package ca.phon.app.session.editor.view.transcript;
 import ca.phon.app.log.LogUtil;
 import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.util.PrefHelper;
-import org.apache.logging.log4j.Level;
 
 import javax.swing.*;
 import javax.swing.plaf.TextUI;
@@ -123,7 +122,7 @@ public class TranscriptEditorCaret extends DefaultCaret {
                 r.x -= paintWidth >> 1;
                 g.fillRect(r.x, r.y, paintWidth, r.height);
             } catch (BadLocationException e) {
-                LogUtil.log(Level.DEBUG, e.getLocalizedMessage(), e);
+                LogUtil.warning(e.getLocalizedMessage(), e);
             }
         }
     }

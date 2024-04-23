@@ -71,8 +71,6 @@ import java.util.stream.Collectors;
 
 public class SimpleEditorPanel extends JPanel implements IExtendable {
 
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(SimpleEditorPanel.class.getName());
-
 	private final static int Y_START = 50;
 	private final static int X_START = 400;
 	private final static int Y_SEP = 150;
@@ -1083,7 +1081,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 					}
 				}
 			} catch (PhonScriptException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 		}
 	}
@@ -1120,7 +1118,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 					}
 				}
 			} catch (PhonScriptException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 		}
 	}
@@ -1275,7 +1273,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 							new DefaultMutableTreeNode(new StockItemTuple(library.getFolderName() + "/" + relativePath, documentURL), true);
 					parentNode.add(treeNode);
 				} catch (UnsupportedEncodingException e) {
-					LOGGER.error( e.getLocalizedMessage(), e);
+					LogUtil.warning(e);
 				}
 			}
 			root.add(stockNode);
@@ -1324,7 +1322,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 							new DefaultMutableTreeNode(documentURL, true);
 					parentNode.add(treeNode);
 				} catch (UnsupportedEncodingException | URISyntaxException e) {
-					LOGGER.error( e.getLocalizedMessage(), e);
+					LogUtil.warning(e);
 				}
 				
 			}
@@ -1374,7 +1372,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 								new DefaultMutableTreeNode(documentURL, true);
 						parentNode.add(treeNode);
 					} catch (UnsupportedEncodingException | URISyntaxException e) {
-						LOGGER.error( e.getLocalizedMessage(), e);
+						LogUtil.warning(e);
 					}
 				}
 
@@ -1449,7 +1447,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 					final String analysisName = FilenameUtils.getBaseName(analysisFile);
 					setText(analysisName);
 				} catch (UnsupportedEncodingException e) {
-					LOGGER.error( e.getLocalizedMessage(), e);
+					LogUtil.warning(e);
 				}
 			} else if(getDocumentObject() instanceof URL) {
 				final URL analysisURL = (URL)getDocumentObject();
@@ -1458,7 +1456,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 					final String analysisName = FilenameUtils.getBaseName(analysisFile);
 					setText(analysisName);
 				} catch (UnsupportedEncodingException e) {
-					LOGGER.error( e.getLocalizedMessage(), e);
+					LogUtil.warning(e);
 				}
 			} else if(getDocumentObject() instanceof QueryScript) {
 				final QueryScript queryScript = (QueryScript)getDocumentObject();
@@ -1647,10 +1645,10 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 						}
 					} catch (IOException e) {
 						fireDocumentError(documentURL, e);
-						LOGGER.error( e.getLocalizedMessage(), e);
+						LogUtil.warning(e);
 					} catch (URISyntaxException | InstantiationException e) {
 						fireDocumentError(documentURL, new IOException(e));
-						LOGGER.error( e.getLocalizedMessage(), e);
+						LogUtil.warning(e);
 					}
 				} else if(document instanceof URL) {
 					final URL documentURL = (URL)document;
@@ -1686,10 +1684,10 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 						}
 					} catch (IOException e) {
 						fireDocumentError(documentURL, e);
-						LOGGER.error( e.getLocalizedMessage(), e);
+						LogUtil.warning(e);
 					} catch (URISyntaxException | InstantiationException e) {
 						fireDocumentError(documentURL, new IOException(e));
-						LOGGER.error( e.getLocalizedMessage(), e);
+						LogUtil.warning(e);
 					}
 				} else if(document instanceof OpGraph) {
 					try {
@@ -1698,7 +1696,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 						super.publish(node);
 					} catch (InstantiationException e) {
 						fireDocumentError(document, new IOException(e));
-						LOGGER.error( e.getLocalizedMessage(), e);
+						LogUtil.warning(e);
 					}
 				} else if(document instanceof QueryScript) {
 					final QueryScript queryScript = (QueryScript)document;
@@ -1903,7 +1901,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 					addDocuments(fileList, dropLocation.getRow());
 					retVal = true;
 				} catch (IOException | UnsupportedFlavorException e) {
-					LOGGER.error( e.getLocalizedMessage(), e);
+					LogUtil.warning(e);
 				}
 			} else if(support.isDataFlavorSupported(nodeTreeDataFlavor)) {
 				addSelectedDocuments(documentTree, dropLocation.getRow());
@@ -1932,7 +1930,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 	
 	                retVal = true;
 	            } catch (IOException | UnsupportedFlavorException e) {
-	            	LOGGER.error( e.getLocalizedMessage(), e);
+					LogUtil.warning(e);
 	            }
 			}
 			if(!retVal) {
@@ -2078,7 +2076,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 						final String analysisName = FilenameUtils.getBaseName(analysisFile);
 						retVal.setText(analysisName);
 					} catch (UnsupportedEncodingException e) {
-						LOGGER.error( e.getLocalizedMessage(), e);
+						LogUtil.warning(e);
 					}
 				} else if(node.getUserObject() instanceof URL) {
 					final URL analysisURL = (URL)node.getUserObject();
@@ -2087,7 +2085,7 @@ public class SimpleEditorPanel extends JPanel implements IExtendable {
 						final String analysisName = FilenameUtils.getBaseName(analysisFile);
 						retVal.setText(analysisName);
 					} catch (UnsupportedEncodingException e) {
-						LOGGER.error( e.getLocalizedMessage(), e);
+						LogUtil.warning(e);
 					}
 				} else if(node.getUserObject() instanceof QueryScript) {
 					final QueryScript queryScript = (QueryScript)node.getUserObject();

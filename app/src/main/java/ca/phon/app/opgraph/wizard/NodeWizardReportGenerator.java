@@ -17,6 +17,7 @@ package ca.phon.app.opgraph.wizard;
 
 import ca.phon.app.VersionInfo;
 import ca.phon.app.html.HTMLConstants;
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.report.tree.*;
 import ca.phon.query.report.datasource.DefaultTableDataSource;
 import org.commonmark.Extension;
@@ -27,13 +28,13 @@ import org.commonmark.parser.Parser;
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Create a html report using data from generated buffers in wizard.
  */
 public class NodeWizardReportGenerator {
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(NodeWizardReportGenerator.class.getName());
 
 	private final NodeWizard wizard;
 
@@ -190,7 +191,7 @@ public class NodeWizardReportGenerator {
 				sb.append(line).append(nl);
 			}
 		} catch (IOException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.warning(e);
 		}
 	}
 	

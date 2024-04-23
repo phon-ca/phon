@@ -15,6 +15,7 @@
  */
 package ca.phon.app.session.editor.search;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.extensions.*;
 import ca.phon.formatter.FormatterUtil;
 import ca.phon.ipa.*;
@@ -25,9 +26,6 @@ import java.text.ParseException;
 import java.util.regex.*;
 
 public class FindExpr {
-	
-	private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(FindExpr.class
-			.getName());
 	
 	private SearchType type;
 	
@@ -280,8 +278,7 @@ public class FindExpr {
 					try {
 						return replacePhonex((IPATranscript)retVal, IPATranscript.parseIPATranscript(expr));
 					} catch (ParseException e) {
-						LOGGER.error(
-								e.getLocalizedMessage(), e);
+						LogUtil.warning(e);
 					}
 				}
 			}
@@ -314,10 +311,8 @@ public class FindExpr {
 			try {
 				retVal = obj.getClass().newInstance();
 				((IExtendable)retVal).putExtension(UnvalidatedValue.class, new UnvalidatedValue(newTxt));
-			} catch (InstantiationException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
-			} catch (IllegalAccessException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+			} catch (InstantiationException | IllegalAccessException e) {
+				LogUtil.warning(e);
 			}
 		}
 		
@@ -342,10 +337,8 @@ public class FindExpr {
 			try {
 				retVal = obj.getClass().newInstance();
 				((IExtendable)retVal).putExtension(UnvalidatedValue.class, new UnvalidatedValue(newTxt));
-			} catch (InstantiationException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
-			} catch (IllegalAccessException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+			} catch (InstantiationException | IllegalAccessException e) {
+				LogUtil.warning(e);
 			}
 		}
 		

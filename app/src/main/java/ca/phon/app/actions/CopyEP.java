@@ -15,6 +15,7 @@
  */
 package ca.phon.app.actions;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.plugin.*;
 
 import javax.swing.FocusManager;
@@ -28,8 +29,6 @@ import java.util.Map;
 @PhonPlugin(name="default")
 public class CopyEP implements IPluginEntryPoint {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(CopyEP.class.getName());
-
 	private final static String EP_NAME = "Copy";
 	@Override
 	public String getName() {
@@ -58,21 +57,15 @@ public class CopyEP implements IPluginEntryPoint {
 					Method copyMethod = null;
 					try {
 						copyMethod = keyboardComp.getClass().getMethod("copy", new Class[0]);
-					} catch (SecurityException ex) {
-						LOGGER.error( ex.getMessage(), ex);
-					} catch (NoSuchMethodException ex) {
-						LOGGER.error( ex.getMessage(), ex);
+					} catch (SecurityException | NoSuchMethodException ex) {
+						LogUtil.warning(ex);
 					}
 
 					if(copyMethod != null) {
 						try {
 							copyMethod.invoke(keyboardComp, new Object[0]);
-						} catch (IllegalArgumentException ex) {
-							LOGGER.error( ex.getMessage(), ex);
-						} catch (IllegalAccessException ex) {
-							LOGGER.error( ex.getMessage(), ex);
-						} catch (InvocationTargetException ex) {
-							LOGGER.error( ex.getMessage(), ex);
+						} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException ex) {
+							LogUtil.warning(ex);
 						}
 					}
 				}

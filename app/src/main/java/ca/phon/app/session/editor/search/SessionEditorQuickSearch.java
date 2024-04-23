@@ -15,6 +15,7 @@
  */
 package ca.phon.app.session.editor.search;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.ViewPosition;
 import ca.phon.app.session.editor.*;
 import ca.phon.query.report.csv.CSVTableDataWriter;
@@ -29,7 +30,6 @@ import ca.phon.ui.text.SearchField;
 import ca.phon.ui.toast.*;
 import ca.phon.util.icons.*;
 import ca.phon.worker.PhonWorker;
-import org.apache.logging.log4j.LogManager;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 
@@ -46,8 +46,6 @@ import java.lang.ref.WeakReference;
  */
 @Deprecated
 public class SessionEditorQuickSearch {
-	
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(SessionEditorQuickSearch.class.getName());
 	
 	/**
 	 * Search field
@@ -280,7 +278,7 @@ public class SessionEditorQuickSearch {
 		try {
 			writer.writeTableToFile(table, new File(saveAs));
 		} catch (IOException ex) {
-			LOGGER.error( ex.getLocalizedMessage(), ex);
+			LogUtil.warning(ex);
 			
 			final Toast toast = ToastFactory.makeToast("Unable to save table: " + ex.getLocalizedMessage());
 			toast.start(table);

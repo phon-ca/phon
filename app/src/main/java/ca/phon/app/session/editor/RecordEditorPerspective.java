@@ -21,9 +21,9 @@ import bibliothek.gui.dock.common.perspective.CPerspective;
 import bibliothek.gui.dock.common.perspective.CWorkingPerspective;
 import bibliothek.util.xml.XElement;
 import bibliothek.util.xml.XIO;
+import ca.phon.app.log.LogUtil;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.resources.*;
-import org.apache.logging.log4j.LogManager;
 
 import javax.swing.*;
 import java.io.*;
@@ -37,8 +37,6 @@ import java.util.*;
  * the list of available perspectives.
  */
 public class RecordEditorPerspective {
-
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(RecordEditorPerspective.class.getName());
 
 	public final static String LAST_USED_PERSPECTIVE_NAME = "Previous";
 
@@ -108,7 +106,7 @@ public class RecordEditorPerspective {
 			final File file = new File(perspective.location.toURI());
 			if(file.canWrite()) {
 				if(!file.delete()) {
-					LOGGER.warn("Could not remove file: " + file.getAbsolutePath());
+					LogUtil.info("Could not delete perspective file: " + file.getAbsolutePath());
 				}
 			}
 		} catch (URISyntaxException e) {
@@ -195,7 +193,7 @@ public class RecordEditorPerspective {
 				final XElement xele = XIO.readUTF(is);
 				perspective = perspectives.readXML( xele );
 			} catch (IOException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 		}
 		return perspective;

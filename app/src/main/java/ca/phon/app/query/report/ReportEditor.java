@@ -15,6 +15,7 @@
  */
 package ca.phon.app.query.report;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.query.report.ReportIO;
 import ca.phon.query.report.io.*;
 import ca.phon.ui.CommonModuleFrame;
@@ -42,8 +43,6 @@ import java.util.*;
  */
 public class ReportEditor extends JPanel implements SectionListener {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ReportEditor.class.getName());
-
 	private final QName _SECTION_QNAME = new QName("http://phon.ling.mun.ca/ns/report", "report-section");
 	
 	private final QName _GROUP_SECTION_QNAME = new QName("http://phon.ling.mun.ca/ns/report", "group-report-section");
@@ -414,7 +413,7 @@ public class ReportEditor extends JPanel implements SectionListener {
 				ReportIO.writeDesign(report, saveFile);
 				hasSaved = true;
 			} catch (IOException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 		}
 		
@@ -448,8 +447,7 @@ public class ReportEditor extends JPanel implements SectionListener {
 				reportTree.setModel(reportDesignTreeModel);
 			} catch (IOException e) {
 				ToastFactory.makeToast(e.getLocalizedMessage()).start(openButton);
-				
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 		}
 	}

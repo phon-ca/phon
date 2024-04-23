@@ -15,6 +15,7 @@
  */
 package ca.phon.app.opgraph.wizard;
 
+import ca.phon.app.log.LogUtil;
 import org.apache.velocity.Template;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.resource.loader.StringResourceLoader;
@@ -24,8 +25,6 @@ import java.io.*;
 import java.util.*;
 
 public class NodeWizardReportTemplate {
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(NodeWizardReportTemplate.class.getName());
 
 	private String name;
 
@@ -68,7 +67,7 @@ public class NodeWizardReportTemplate {
 		try {
 			p.load(getClass().getResourceAsStream("velocity.properties"));
 		} catch (IOException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.warning(e);
 		}
 
 		final VelocityEngine ve = new VelocityEngine();
