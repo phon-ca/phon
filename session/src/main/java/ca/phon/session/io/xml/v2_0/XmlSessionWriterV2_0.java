@@ -57,6 +57,8 @@ import java.time.ZoneId;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @XMLSerial(
 	namespace="https://phon.ca/ns/session",
@@ -77,8 +79,6 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 	public final static String DEFAULT_NAMESPACE = "https://phon.ca/ns/session";
 
 	public final static String DEFAULT_NAMESPACE_LOCATION = "https://phon.ca/xml/xsd/session/v2_0/session.xsd";
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(XmlSessionWriterV2_0.class.getName());
 
 	/**
 	 * Create a new jaxb version of the session
@@ -107,7 +107,7 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 				cal.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
 				retVal.setDate(cal);
 			} catch (DatatypeConfigurationException e) {
-				LOGGER.warn(e.getMessage(), e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		}
 
@@ -219,7 +219,7 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 				cal.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
 				retVal.setBirthday(cal);
 			} catch (DatatypeConfigurationException e) {
-				LOGGER.warn( e.toString(), e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		}
 
@@ -825,7 +825,7 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 			marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, String.format("%s %s", DEFAULT_NAMESPACE, DEFAULT_NAMESPACE_LOCATION));
 			marshaller.marshal(ele, writer);
 		} catch(XMLStreamException | JAXBException e) {
-			LOGGER.error( e.getMessage(), e);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 	}
 

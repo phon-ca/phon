@@ -19,14 +19,14 @@ import ca.phon.plugin.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Used to create instances of session readers.
  *
  */
 public class SessionInputFactory {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(SessionInputFactory.class.getName());
 	
 	private List<IPluginExtensionPoint<SessionReader>> readerExtPts;
 		
@@ -121,7 +121,7 @@ public class SessionInputFactory {
 						break;
 					}
 				} catch (IOException e) {
-					LOGGER.error( e.getLocalizedMessage(), e);
+					Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 				}
 			}
 		}

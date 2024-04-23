@@ -21,6 +21,8 @@ import ca.phon.session.*;
 import java.io.IOException;
 import java.time.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Keep track of participants and what sessions in which they take part.
@@ -28,8 +30,6 @@ import java.util.*;
  *
  */
 public class ParticipantCache {
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ParticipantCache.class.getName());
 
 	private Project project;
 
@@ -151,7 +151,7 @@ public class ParticipantCache {
 
 			sessionMap.put(sessionPath, project.getSessionModificationTime(session));
 		} catch (IOException e) {
-			LOGGER.warn( e.getLocalizedMessage(), e);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 	}
 

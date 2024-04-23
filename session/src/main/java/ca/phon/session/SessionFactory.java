@@ -21,18 +21,17 @@ import ca.phon.session.impl.GemImpl;
 import ca.phon.session.io.*;
 import ca.phon.session.spi.*;
 import ca.phon.session.tierdata.TierData;
-import org.apache.logging.log4j.LogManager;
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * A factory for creating mutable session objects.
  * 
  */
 public final class SessionFactory extends ExtendableObject {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(SessionFactory.class.getName());
 	
 	private final SessionFactorySPI sessionFactoryImpl;
 	
@@ -416,7 +415,7 @@ public final class SessionFactory extends ExtendableObject {
 			retVal.setUuid(UUID.randomUUID());
 			return retVal;
 		} catch (IOException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			Logger.getLogger(SessionFactory.class.getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 		
 		return null;

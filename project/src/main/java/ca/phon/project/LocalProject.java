@@ -20,7 +20,6 @@ import ca.phon.project.io.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.io.*;
-import ca.phon.util.VersionInfo;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
@@ -32,6 +31,8 @@ import java.nio.file.*;
 import java.nio.file.attribute.*;
 import java.time.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -39,8 +40,6 @@ import java.util.stream.Collectors;
  *
  */
 public class LocalProject extends AbstractProject implements ProjectRefresh {
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(LocalProject.class.getName());
 
 	/**
 	 * Project folder
@@ -107,7 +106,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 			try(final FileInputStream fin = new FileInputStream(propsFile)) {
 				props.load(fin);
 			} catch (IOException e) {
-				LOGGER.warn( "Could not load project properties. " + e.getLocalizedMessage(), e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 			putExtension(Properties.class, props);
 		}
@@ -123,7 +122,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 			try(FileInputStream fin = new FileInputStream(projectXMLFile)) {
 				pt = loadProjectData(fin);
 			} catch (IOException | ProjectConfigurationException e) {
-				LOGGER.warn(e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		}
 		
@@ -150,7 +149,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 									out.write(ct.getDescription());
 									out.flush();
 								} catch (IOException e) {
-									LOGGER.warn(e);
+									Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 								}
 							}
 							break;
@@ -174,7 +173,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 			try {
 				saveProperties();
 			} catch (IOException e) {
-				LOGGER.error(e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		}
 	}
@@ -220,7 +219,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 		try {
 			saveProperties();
 		} catch (IOException e) {
-			LOGGER.error(e);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 
 		final ProjectEvent event = ProjectEvent.newNameChangedEvent(oldName, name);
@@ -250,7 +249,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 		try {
 			scanForCorpusFolders(projectPath, corpusList);
 		} catch (IOException e) {
-			LOGGER.error(e);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 		Collections.sort(corpusList);
 
@@ -366,7 +365,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 			try {
 				retVal = Files.readString(corpusInfoFile.toPath());
 			} catch (IOException e) {
-				LOGGER.error(e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		}
 		
@@ -384,14 +383,14 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 			try {
 				Files.write(corpusInfoFile.toPath(), description.trim().getBytes("UTF-8"));
 			} catch (IOException e) {
-				LOGGER.error(e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		} else {
 			if(corpusInfoFile.exists()) {
 				try {
 					Files.deleteIfExists(corpusInfoFile.toPath());
 				} catch (IOException e) {
-					LOGGER.error(e);
+					Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 				}
 			}
 		}
@@ -426,7 +425,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 		try {
 			saveProperties();
 		} catch (IOException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 
 		ProjectEvent pe = ProjectEvent.newProjectMediaFolderChangedEvent(old, mediaFolder);
@@ -462,7 +461,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 		try {
 			saveProperties();
 		} catch (IOException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 
 		ProjectEvent pe = ProjectEvent.newCorpusMediaFolderChangedEvent(corpus, old, mediaFolder);
@@ -499,7 +498,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 			
 			Collections.sort(retVal);
 		} catch (IOException e) {
-			LOGGER.error(e);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 
 		return retVal;
@@ -570,8 +569,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 
 			return retVal;
 		} catch (Exception e) {
-			// catch all exceptions
-			LOGGER.error( e.getLocalizedMessage(), e);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			throw new IOException(e);
 		}
 	}
@@ -911,7 +909,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 
 				}
 			} catch (IOException e) {
-				LOGGER.warn( e.getLocalizedMessage(), e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		}
 
@@ -931,7 +929,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 
 	@Override
 	public String getVersion() {
-		return VersionInfo.getInstance().getVersion();
+		return "4.0.0";
 	}
 
 	@Override

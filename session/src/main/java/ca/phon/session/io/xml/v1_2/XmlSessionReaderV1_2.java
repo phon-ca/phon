@@ -42,7 +42,6 @@ import ca.phon.xml.XMLObjectReader;
 import ca.phon.xml.annotation.XMLSerial;
 import jakarta.xml.bind.*;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
 import org.w3c.dom.Element;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
@@ -57,6 +56,8 @@ import java.io.*;
 import java.text.ParseException;
 import java.time.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -113,8 +114,6 @@ import java.util.regex.Pattern;
 )
 @Rank(1)
 public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Session>, IPluginExtensionPoint<SessionReader> {
-
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(XmlSessionReaderV1_2.class.getName());
 
 	private boolean fixAlignment = false;
 
@@ -249,10 +248,7 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 					try {
 						record = factory.createRecord(new LazyRecord(factory, retVal, rt));
 					} catch (Exception e) {
-						LOGGER.info(rt.getId());
-						LOGGER.error(
-								e.getLocalizedMessage(), e);
-
+						Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 					}
 					retVal.addRecord(record);
 				}
@@ -367,7 +363,7 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 			final TierData tierData = TierData.parseTierData(buffer.toString());
 			return factory.createComment(type, tierData);
 		} catch (ParseException e) {
-			LOGGER.warn(e);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			return factory.createComment(type, new TierData());
 		}
 	}
@@ -518,8 +514,7 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 					final String name = tt.getId();
 					ipaTier.setBlindTranscription(name, blindTranscript);
 				} catch (ParseException e) {
-					LOGGER.info(
-							e.getLocalizedMessage(), e);
+					Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 				}
 			}
 		}

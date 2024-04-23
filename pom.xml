@@ -137,7 +137,6 @@
 		<module>worker</module>
 		<module>plugin</module>
 		<module>language</module>
-		<module>util</module>
 		<module>xml</module>
 		<module>ipa</module>
 		<module>phonex-opgraph</module>

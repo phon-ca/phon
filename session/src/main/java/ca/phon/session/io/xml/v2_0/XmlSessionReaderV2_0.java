@@ -37,12 +37,10 @@ import ca.phon.xml.XMLObjectReader;
 import ca.phon.xml.annotation.XMLSerial;
 import jakarta.xml.bind.*;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
-import javax.xml.datatype.Duration;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
@@ -61,7 +59,8 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Session XML reader for session files with starting element {https://phon.ca/ns/session}session (version '2.0'.)
@@ -82,8 +81,6 @@ import java.util.stream.Collectors;
 )
 @Rank(0)
 public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReader<Session>, IPluginExtensionPoint<SessionReader> {
-
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(XmlSessionReaderV2_0.class.getName());
 
 	@Override
 	public Session read(Document doc, Element ele)
@@ -145,7 +142,7 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 					Language l = Language.parseLanguage(lang);
 					langs.add(l);
 				} catch (IllegalArgumentException e) {
-					LOGGER.warn(e);
+					Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 				}
 			}
 			retVal.setLanguages(langs);
@@ -229,10 +226,7 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 					try {
 						record = factory.createRecord(new LazyRecord(factory, retVal, rt));
 					} catch (Exception e) {
-//						LOGGER.info(rt.getUuid());
-						LOGGER.error(
-								e.getLocalizedMessage(), e);
-
+						Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 					}
 					retVal.addRecord(record);
 				}
@@ -608,7 +602,7 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 				final Language lang = Language.parseLanguage(ut.getLang());
 				builder.append(new UtteranceLanguage(lang));
 			} catch (IllegalArgumentException e) {
-				LOGGER.warn(e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		}
 		ut.getLinker().forEach(visitor::visit);
@@ -697,7 +691,7 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 		try {
 			return visitor.toIPATranscript();
 		} catch (ParseException pe) {
-			LOGGER.warn(pe);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, pe.getLocalizedMessage(), pe);
 			final IPATranscript retVal = new IPATranscript();
 			retVal.putExtension(UnvalidatedValue.class, new UnvalidatedValue(visitor.toString(), pe));
 			return retVal;
@@ -801,7 +795,7 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 				final TierLink link = new TierLink(tl.getHref(), tl.getLabel());
 				elements.add(link);
 			} else {
-				LOGGER.warn("Invalid element " + obj.toString());
+				Logger.getLogger(getClass().getName()).warning("Unsupported tier element type: " + obj.getClass().getName());
 			}
 		}
 		return new TierData(elements);

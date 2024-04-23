@@ -29,9 +29,6 @@ import java.util.regex.*;
  */
 public class ClasspathXMLEntityResolver implements XMLResolver {
 	
-	/** Logger */
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ClasspathXMLEntityResolver.class.getName());
-	
 	private ClassLoader classLoader = ClassLoader.getSystemClassLoader();
 	
 	private final String CATALOG_FILE = "xml/catalog.cat";
