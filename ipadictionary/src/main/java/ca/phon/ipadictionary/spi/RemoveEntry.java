@@ -17,7 +17,7 @@ package ca.phon.ipadictionary.spi;
 
 import ca.phon.extensions.Extension;
 import ca.phon.ipadictionary.IPADictionary;
-import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
+import ca.phon.ipadictionary.exceptions.IPADictionaryException;
 
 /**
  * Remove an orthography->ipa pair from the
@@ -35,11 +35,11 @@ public interface RemoveEntry {
 	 * 
 	 * @param orthography
 	 * @param ipa
-	 * @throws IPADictionaryExecption if the key->value was not
+	 * @throws IPADictionaryException if the key->value was not
 	 *  removed from the database.  This will usually occur if
 	 *  there was a problem with dictionary storage.
 	 */
 	public void removeEntry(String orthography, String ipa)
-		throws IPADictionaryExecption;
+		throws IPADictionaryException;
 	
 }

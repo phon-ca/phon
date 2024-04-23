@@ -21,6 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.*;
+import java.util.logging.Logger;
 import java.util.regex.*;
 
 /**
@@ -365,7 +366,7 @@ public final class ContractionRule implements Serializable {
 				} else if(vclause.type == ValueClause.LITERAL) {
 					retVal += vclause.value;
 				} else {
-					org.apache.logging.log4j.LogManager.getLogger(getClass().getName()).warn("Unknown clause type");
+					Logger.getLogger(getClass().getName()).warning("Unknown value clause: " + vclause.type);
 				}
 			}
 		}

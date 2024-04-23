@@ -17,18 +17,19 @@ package ca.phon.ipadictionary.impl;
 
 import ca.phon.ipa.*;
 import ca.phon.ipadictionary.IPADictionary;
-import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
+import ca.phon.ipadictionary.exceptions.IPADictionaryException;
 import ca.phon.ipadictionary.spi.*;
 import ca.phon.phonex.*;
 import ca.phon.syllabifier.*;
 import ca.phon.util.*;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
 
 import java.io.*;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.*;
 
 /**
@@ -62,8 +63,6 @@ public class TransliterationDictionary implements IPADictionarySPI,
 			return this.value;
 		}
 	}
-	
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(TransliterationDictionary.class.getName());
 	
 	// token <-> phone mappings
 	private Map<String, String> tokenMap;
@@ -131,7 +130,7 @@ public class TransliterationDictionary implements IPADictionarySPI,
 			try {
 				readMetadataFromStream(mapFile.openStream());
 			} catch (IOException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		}
 		return name;
@@ -143,14 +142,14 @@ public class TransliterationDictionary implements IPADictionarySPI,
 			try {
 				readMetadataFromStream(mapFile.openStream());
 			} catch (IOException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		}
 		return language;
 	}
 
 	@Override
-	public String[] lookup(String orthography) throws IPADictionaryExecption {
+	public String[] lookup(String orthography) throws IPADictionaryException {
 		
 		if(preFindPattern != null && preReplaceExpr != null) {
 			final Matcher m = preFindPattern.matcher(orthography);
@@ -185,7 +184,7 @@ public class TransliterationDictionary implements IPADictionarySPI,
 				matcher.appendTail(ipaBuilder);
 				builderStr = ipaBuilder.toIPATranscript().toString(true);
 			} catch (ParseException e) {
-				LOGGER.warn(e.getLocalizedMessage(), e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		}
 
@@ -196,7 +195,7 @@ public class TransliterationDictionary implements IPADictionarySPI,
 					syllabifier.syllabify(ipa.toList());
 				builderStr = ipa.toString(true);
 			} catch (ParseException e) {
-				LOGGER.warn(e.getLocalizedMessage(), e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		}
 		return new String[] { builderStr };
@@ -207,7 +206,7 @@ public class TransliterationDictionary implements IPADictionarySPI,
 			try { 
 				readTokenMap(mapFile.openStream());
 			} catch (IOException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		}
 		return tokenMap;
@@ -346,7 +345,7 @@ public class TransliterationDictionary implements IPADictionarySPI,
 					currentPhonexFindTuple = new Tuple<>();
 				}
 			} catch (PhonexPatternException e) {
-				LOGGER.error(e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		} else if(token.equalsIgnoreCase(MetadataToken.PHONEXREPLACE.toString())) {
 			try {
@@ -358,7 +357,7 @@ public class TransliterationDictionary implements IPADictionarySPI,
 					currentPhonexFindTuple = new Tuple<>();
 				}
 			} catch (ParseException e) {
-				LOGGER.error(e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		} else {
 			metadata.put(token, value);

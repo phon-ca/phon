@@ -17,12 +17,12 @@ package ca.phon.ipadictionary.spi;
 
 import ca.phon.extensions.Extension;
 import ca.phon.ipadictionary.IPADictionary;
-import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
+import ca.phon.ipadictionary.exceptions.IPADictionaryException;
 
 @Extension(IPADictionary.class)
 public interface ClearEntries {
 	
 	public void clear()
-		throws IPADictionaryExecption;
+		throws IPADictionaryException;
 
 }

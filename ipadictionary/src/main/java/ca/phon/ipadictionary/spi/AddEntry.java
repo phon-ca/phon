@@ -17,7 +17,7 @@ package ca.phon.ipadictionary.spi;
 
 import ca.phon.extensions.Extension;
 import ca.phon.ipadictionary.IPADictionary;
-import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
+import ca.phon.ipadictionary.exceptions.IPADictionaryException;
 
 /**
  * IPADictionary capability for adding a new
@@ -32,12 +32,12 @@ public interface AddEntry {
 	 * 
 	 * @param orthography
 	 * @param ipa
-	 * @throws IPADictionaryExecption if the entry was
+	 * @throws IPADictionaryException if the entry was
 	 *  not added to the dictionary.  E.g., the key->value
 	 *  pair already exists or the dictionary was not able
 	 *  to add the entry to it's storage.
 	 */
 	public void addEntry(String orthography, String ipa)
-		throws IPADictionaryExecption;
+		throws IPADictionaryException;
 	
 }

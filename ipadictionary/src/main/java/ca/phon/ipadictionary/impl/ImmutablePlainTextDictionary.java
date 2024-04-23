@@ -24,12 +24,13 @@ import ca.phon.phonex.*;
 import ca.phon.syllabifier.*;
 import ca.phon.util.*;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
 
 import java.io.*;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.*;
 
 /**
@@ -44,8 +45,6 @@ import java.util.regex.*;
 public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 	LanguageInfo, NameInfo, GenerateSuggestions, OrthoKeyIterator, PrefixSearch, Metadata {
 
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(ImmutablePlainTextDictionary.class.getName());
-	
 	/*
 	 * token descriptions for metadata/processing instructions
 	 */
@@ -316,7 +315,7 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 					currentPhonexFindTuple = new Tuple<>();
 				}
 			} catch (PhonexPatternException e) {
-				LOGGER.error(e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		} else if(token.equalsIgnoreCase(MetadataToken.PHONEXREPLACE.toString())) {
 			try {
@@ -328,7 +327,7 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 					currentPhonexFindTuple = new Tuple<>();
 				}
 			} catch (ParseException e) {
-				LOGGER.error(e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		} else {
 			metadata.put(token, value);
@@ -407,7 +406,7 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 
 	@Override
 	public String[] lookup(String orthography) 
-		throws IPADictionaryExecption {
+		throws IPADictionaryException {
 		orthography = StringUtils.strip(orthography, "?!\"'.\\/@&$()^%#*");
 
 		if(preFindPattern != null && preReplaceExpr != null) {
@@ -454,7 +453,7 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 						matcher.appendTail(ipaBuilder);
 						str = ipaBuilder.toIPATranscript().toString(true);
 					} catch (ParseException e) {
-						LOGGER.warn(e.getLocalizedMessage(), e);
+						Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 					}
 				}
 
@@ -465,7 +464,7 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 							syllabifier.syllabify(ipa.toList());
 						str = ipa.toString(true);
 					} catch (ParseException e) {
-						LOGGER.warn(e.getLocalizedMessage(), e);
+						Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 					}
 				}
 				retVal[i] = str;
@@ -492,14 +491,14 @@ public class ImmutablePlainTextDictionary implements IPADictionarySPI,
 			String[] lhsEntries = new String[0];
 			try {
 				lhsEntries = lookup(lhs);
-			} catch (IPADictionaryExecption e) {
+			} catch (IPADictionaryException e) {
 				
 			}
 			
 			String[] rhsEntries = new String[0];
 			try {
 				rhsEntries = lookup(rhs);
-			} catch (IPADictionaryExecption e ) {
+			} catch (IPADictionaryException e ) {
 				
 			}
 			

@@ -18,7 +18,12 @@
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>phon-util</artifactId>
+      <artifactId>phon-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>phon-plugin</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>

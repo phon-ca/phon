@@ -23,7 +23,7 @@ import ca.phon.ipadictionary.IPADictionary;
  * 
  * 
  */
-public class DuplicateEntry extends IPADictionaryExecption {
+public class DuplicateEntry extends IPADictionaryException {
 	
 	/**
 	 * Orthography

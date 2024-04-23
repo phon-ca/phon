@@ -19,9 +19,10 @@ import ca.phon.extensions.*;
 import ca.phon.ipadictionary.exceptions.*;
 import ca.phon.ipadictionary.spi.*;
 import ca.phon.util.*;
-import org.apache.logging.log4j.LogManager;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * API for the IPA dictionary.  This class is final.
@@ -36,8 +37,6 @@ import java.util.*;
  * 
  */
 public final class IPADictionary implements IExtendable {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(IPADictionary.class.getName());
 
 	/** 
 	 * Implementing dictionary
@@ -52,7 +51,7 @@ public final class IPADictionary implements IExtendable {
 	/**
 	 * Constructor
 	 * 
-	 * @param dictionary implementation
+	 * @param impl implementation
 	 */
 	public IPADictionary(IPADictionarySPI impl) {
 		if(impl == null)
@@ -73,8 +72,8 @@ public final class IPADictionary implements IExtendable {
 		String[] retVal = new String[0];
 		try {
 			retVal = impl.lookup(orthography);
-		} catch (IPADictionaryExecption e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+		} catch (IPADictionaryException e) {
+			Logger.getLogger(IPADictionary.class.getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 		
 		// generate suggestions and add them to the end 
@@ -103,12 +102,12 @@ public final class IPADictionary implements IExtendable {
 	 * 
 	 * @param orthography
 	 * @param ipa
-	 * @throws IPADictionaryExecption if the dictionary is
+	 * @throws IPADictionaryException if the dictionary is
 	 *  not capable of adding entries or the entry was not
 	 *  added because it was a duplicate.
 	 */
 	public void addEntry(String orthography, String ipa)
-		throws IPADictionaryExecption {
+		throws IPADictionaryException {
 		AddEntry cap = getExtension(AddEntry.class);
 		if(cap == null) 
 			throw new CapabilityNotImplemented(AddEntry.class);
@@ -125,7 +124,7 @@ public final class IPADictionary implements IExtendable {
 	 *  not capable of removing the entry.
 	 */
 	public void removeEntry(String orthography, String ipa) 
-		throws IPADictionaryExecption {
+		throws IPADictionaryException {
 		RemoveEntry cap = getExtension(RemoveEntry.class);
 		if(cap == null)
 			throw new CapabilityNotImplemented(RemoveEntry.class);
@@ -137,11 +136,11 @@ public final class IPADictionary implements IExtendable {
 	 * (optional)
 	 * 
 	 * @return the key iterator for the dictionary
-	 * @throws IPADictionaryExecption if the dictionary is
+	 * @throws IPADictionaryException if the dictionary is
 	 *  not capable of iterating it's keys
 	 */
 	public Iterator<String> keyIterator() 
-		throws IPADictionaryExecption {
+		throws IPADictionaryException {
 		OrthoKeyIterator cap = getExtension(OrthoKeyIterator.class);
 		if(cap == null)
 			throw new CapabilityNotImplemented(OrthoKeyIterator.class);
@@ -155,11 +154,11 @@ public final class IPADictionary implements IExtendable {
 	 * @param prefix
 	 * @return the list of keys which have the given
 	 *  prefix
-	 * @throws IPADictionaryExecption if the dictionary does
+	 * @throws IPADictionaryException if the dictionary does
 	 *  not support this function
 	 */
 	public String[] prefixSearch(String prefix) 
-		throws IPADictionaryExecption {
+		throws IPADictionaryException {
 		PrefixSearch cap = getExtension(PrefixSearch.class);
 		if(cap == null)
 			throw new CapabilityNotImplemented(PrefixSearch.class);

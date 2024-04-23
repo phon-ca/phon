@@ -16,7 +16,7 @@
 package ca.phon.ipadictionary.impl;
 
 import ca.phon.ipadictionary.IPADictionary;
-import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
+import ca.phon.ipadictionary.exceptions.IPADictionaryException;
 import ca.phon.ipadictionary.spi.*;
 import ca.phon.util.*;
 
@@ -41,7 +41,7 @@ public class CompoundDictionary implements IPADictionarySPI,
 	}
 	
 	@Override
-	public String[] lookup(String orthography) throws IPADictionaryExecption {
+	public String[] lookup(String orthography) throws IPADictionaryException {
 		Set<String> allTranscripts = new LinkedHashSet<String>();
 		
 		if(orthography.contains("+")) {
@@ -75,14 +75,14 @@ public class CompoundDictionary implements IPADictionarySPI,
 			String[] lhsEntries = new String[0];
 			try {
 				lhsEntries = lookup(lhs);
-			} catch (IPADictionaryExecption e) {
+			} catch (IPADictionaryException e) {
 				
 			}
 			
 			String[] rhsEntries = new String[0];
 			try {
 				rhsEntries = lookup(rhs);
-			} catch (IPADictionaryExecption e ) {
+			} catch (IPADictionaryException e ) {
 				
 			}
 			
@@ -156,7 +156,7 @@ public class CompoundDictionary implements IPADictionarySPI,
 				for(String key:dict.prefixSearch(prefix)) {
 					keys.add(key);
 				}
-			} catch (IPADictionaryExecption e) {
+			} catch (IPADictionaryException e) {
 				e.printStackTrace();
 			}
 		}

@@ -31,9 +31,6 @@ public class DefaultDictionaryProvider extends ClassLoaderHandler<IPADictionary>
 
 	private TransliterationDictionaryProvider transDictProvider;
 
-	private Set<Language> dbDicts = null;
-
-	
 	public DefaultDictionaryProvider() {
 		super(PluginManager.getInstance());
 		loadResourceFile(DICT_LIST);
@@ -43,19 +40,13 @@ public class DefaultDictionaryProvider extends ClassLoaderHandler<IPADictionary>
 	@Override
 	public IPADictionary loadFromURL(URL url) throws IOException {
 		final IPADictionary immutableDict = new IPADictionary(new ImmutablePlainTextDictionary(url));
-		final IPADictionary databaseDict =
-				new IPADictionary(new DatabaseDictionary(immutableDict.getLanguage()));
-		
-		dbDicts.remove(immutableDict.getLanguage());
-		
 		final CompoundDictionary compoundDict =
-				new CompoundDictionary(new IPADictionary[]{ databaseDict, immutableDict });
+				new CompoundDictionary(new IPADictionary[]{ immutableDict });
 		return new IPADictionary(compoundDict);
 	}
 
 	@Override
 	public Iterator<IPADictionary> iterator() {
-		dbDicts = IPADatabaseManager.getInstance().getAvailableLanguages();
 		return new CustomIterator(super.iterator(), transDictProvider.iterator());
 	}
 	
@@ -100,12 +91,10 @@ public class DefaultDictionaryProvider extends ClassLoaderHandler<IPADictionary>
 			} else if(currentItr == transDictItr) {
 				retVal = transDictItr.next();
 				if(!transDictItr.hasNext()) {
-					langItr = dbDicts.iterator();
 					currentItr = langItr;
 				}
 			} else if(currentItr == langItr) {
 				Language lang = langItr.next();
-				retVal = new IPADictionary(new DatabaseDictionary(lang));
 				if(!langItr.hasNext())
 					langItr = null;
 			}
@@ -124,13 +113,8 @@ public class DefaultDictionaryProvider extends ClassLoaderHandler<IPADictionary>
 		@Override
 		public IPADictionary loadFromURL(URL url) throws IOException {
 			IPADictionary transDict = super.loadFromURL(url);
-			final IPADictionary databaseDict =
-					new IPADictionary(new DatabaseDictionary(transDict.getLanguage()));
-
-			dbDicts.remove(transDict.getLanguage());
-
 			final CompoundDictionary compoundDict =
-					new CompoundDictionary(new IPADictionary[]{ databaseDict, transDict });
+					new CompoundDictionary(new IPADictionary[]{  transDict });
 			return new IPADictionary(compoundDict);
 		}
 

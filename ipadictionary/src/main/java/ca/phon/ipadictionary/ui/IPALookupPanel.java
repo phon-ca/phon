@@ -16,30 +16,26 @@
 package ca.phon.ipadictionary.ui;
 
 import ca.phon.formatter.MediaTimeFormatter;
-import ca.phon.ipadictionary.cmd.*;
-import ca.phon.ipadictionary.exceptions.IPADictionaryExecption;
+import ca.phon.ipadictionary.exceptions.IPADictionaryException;
 import ca.phon.util.*;
 import ca.phon.worker.PhonTask;
 import org.antlr.runtime.*;
 import org.antlr.runtime.tree.*;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * UI for IPA Lookups
  *
  */
 public class IPALookupPanel extends JPanel {
-
-	private static final long serialVersionUID = 2278689330995573469L;
-
-	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(IPALookupPanel.class.getName());
 
 	/** The output console */
 	private JTextPane console;
@@ -84,19 +80,19 @@ public class IPALookupPanel extends JPanel {
 				walker.expr();
 				
 			} catch (IOException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 				err = e;
 				context.fireError(e.getLocalizedMessage());
 				super.setStatus(TaskStatus.ERROR);
 				return;
 			} catch (RecognitionException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 				err = e;
 				context.fireError(e.getLocalizedMessage());
 				super.setStatus(TaskStatus.ERROR);
 				return;
-			} catch (IPADictionaryExecption e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+			} catch (IPADictionaryException e) {
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 				err = e;
 				context.fireError(e.getLocalizedMessage());
 				super.setStatus(TaskStatus.ERROR);

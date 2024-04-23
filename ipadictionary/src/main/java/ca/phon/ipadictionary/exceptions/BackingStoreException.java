@@ -21,7 +21,7 @@ package ca.phon.ipadictionary.exceptions;
  * 
  * 
  */
-public class BackingStoreException extends IPADictionaryExecption {
+public class BackingStoreException extends IPADictionaryException {
 
 	public BackingStoreException() {
 		super();

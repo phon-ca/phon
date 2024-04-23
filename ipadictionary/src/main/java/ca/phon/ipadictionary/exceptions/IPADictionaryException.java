@@ -20,23 +20,21 @@ package ca.phon.ipadictionary.exceptions;
  * sub-class this.
  * 
  */
-public class IPADictionaryExecption extends RuntimeException {
+public class IPADictionaryException extends RuntimeException {
 
-	private static final long serialVersionUID = 6826688313535456691L;
-
-	public IPADictionaryExecption() {
+	public IPADictionaryException() {
 		super();
 	}
 
-	public IPADictionaryExecption(String arg0, Throwable arg1) {
+	public IPADictionaryException(String arg0, Throwable arg1) {
 		super(arg0, arg1);
 	}
 
-	public IPADictionaryExecption(String arg0) {
+	public IPADictionaryException(String arg0) {
 		super(arg0);
 	}
 
-	public IPADictionaryExecption(Throwable arg0) {
+	public IPADictionaryException(Throwable arg0) {
 		super(arg0);
 	}
 

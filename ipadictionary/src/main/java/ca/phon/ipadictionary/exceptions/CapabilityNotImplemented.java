@@ -20,7 +20,7 @@ package ca.phon.ipadictionary.exceptions;
  * implemented in the dictionary object.
  * 
  */
-public class CapabilityNotImplemented extends IPADictionaryExecption {
+public class CapabilityNotImplemented extends IPADictionaryException {
 	
 	/**
 	 * Requested capability
