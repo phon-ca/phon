@@ -380,41 +380,42 @@ public class IPALookupContext {
 	 * Export
 	 */
 	public void exportData(String file) {
-		try {
-			IPADatabaseManager.getInstance().saveDataToFile(file, dictionary.getLanguage().toString());
-			fireMessage("User dictionary entries saved to file " + file);
-		} catch (IOException e) {
-			fireError(e.getLocalizedMessage());
-		}
+//		try {
+//			IPADatabaseManager.getInstance().saveDataToFile(file, dictionary.getLanguage().toString());
+//			fireMessage("User dictionary entries saved to file " + file);
+//		} catch (IOException e) {
+//			fireError(e.getLocalizedMessage());
+//		}
 	}
 	
 	/**
 	 * Create
 	 */
 	public void createDictionary(String lang, String name) {
-		try {
-			if(!IPADatabaseManager.getInstance().createDictionary(lang, name)) {
-				fireError("Dictionary not created");
-			} else {
-				fireDictionaryAdded(lang);
-				fireMessage("Added dictionary " + lang);
-			}
-		} catch (IllegalArgumentException e) {
-			fireError(e.getMessage());
-		}
+//		try {
+//			if(!IPADatabaseManager.getInstance().createDictionary(lang, name)) {
+//				fireError("Dictionary not created");
+//			} else {
+//				fireDictionaryAdded(lang);
+//				fireMessage("Added dictionary " + lang);
+//			}
+//		} catch (IllegalArgumentException e) {
+//			fireError(e.getMessage());
+//		}
 	}
 	
 	/**
 	 * Drop
 	 * Only user-defined dictionaries can be dropped.
 	 */
+	@Deprecated
 	public void dropDictionary(String lang) {
-		if(!IPADatabaseManager.getInstance().dropDictionary(lang)) {
-			fireError("Dictionary not dropped");
-		} else {
-			fireDictionaryRemoved(lang);
-			fireMessage("Removed dictionary " + lang);
-		}
+//		if(!IPADatabaseManager.getInstance().dropDictionary(lang)) {
+//			fireError("Dictionary not dropped");
+//		} else {
+//			fireDictionaryRemoved(lang);
+//			fireMessage("Removed dictionary " + lang);
+//		}
 	}
 
 	/**

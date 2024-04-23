@@ -29,7 +29,7 @@ public IPALookupContext getLookupContext() {
 
 // die on any error
 public void reportError(RecognitionException e) {
-	throw new IPADictionaryExecption(e);
+	throw new IPADictionaryException(e);
 }
 
 }
