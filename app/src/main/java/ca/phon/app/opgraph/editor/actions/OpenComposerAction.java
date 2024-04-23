@@ -16,6 +16,7 @@
 package ca.phon.app.opgraph.editor.actions;
 
 import ca.phon.app.hooks.HookableAction;
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.editor.*;
 import ca.phon.app.opgraph.macro.MacroOpgraphEditorModel;
 import ca.phon.opgraph.OpGraph;
@@ -27,8 +28,6 @@ import java.net.*;
 
 public class OpenComposerAction extends HookableAction {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(OpenComposerAction.class.getName());
-
 	private final String TXT = "Composer (advanced)...";
 	
 	private final String DESC = "Open advanced Composer";
@@ -86,14 +85,14 @@ public class OpenComposerAction extends HookableAction {
 			try {
 				editorModel = factory.fromGraph(getGraph());
 			} catch (ClassNotFoundException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 		} else if(getDocumentURL() != null) {
 			try {
 				OpgraphIO.read(getDocumentURL().openStream());
 				editorModel = factory.fromGraph(graph);
 			} catch (IOException | ClassNotFoundException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 		}
 		
@@ -102,7 +101,7 @@ public class OpenComposerAction extends HookableAction {
 			if(getDocumentURL() != null)
 				editor.setCurrentFile(new File(documentURL.toURI()));
 		} catch (URISyntaxException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.warning(e);
 		}
 		editor.pack();
 		editor.setSize(1064, 768);

@@ -15,6 +15,7 @@
  */
 package ca.phon.app.project.actions;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.ProjectWindow;
 import ca.phon.project.Project;
 import ca.phon.util.CollatorFactory;
@@ -35,10 +36,6 @@ import java.util.*;
  */
 public class DuplicateSessionAction extends ProjectWindowAction {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(DuplicateSessionAction.class.getName());
-
-	private static final long serialVersionUID = 140755322409598286L;
-
 	public DuplicateSessionAction(ProjectWindow projectWindow) {
 		super(projectWindow);
 		
@@ -67,7 +64,7 @@ public class DuplicateSessionAction extends ProjectWindowAction {
 				FileUtils.copyFile(oldSessionFile, dupSessionFile);
 				dupSessionNames.add(dupSessionName);
 			} catch (IOException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 				Toolkit.getDefaultToolkit().beep();
 				showMessage("Duplicate Session", e.getLocalizedMessage());
 			}

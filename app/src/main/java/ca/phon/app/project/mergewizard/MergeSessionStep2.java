@@ -15,6 +15,7 @@
  */
 package ca.phon.app.project.mergewizard;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.RecordFilterPanel;
 import ca.phon.project.Project;
 import ca.phon.session.Record;
@@ -39,9 +40,6 @@ import java.util.*;
  *
  */
 public class MergeSessionStep2 extends WizardStep {
-	
-	final private static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(MergeSessionStep2.class.getName());
-	
 	/**
 	 * Project
 	 */
@@ -182,7 +180,7 @@ public class MergeSessionStep2 extends WizardStep {
 					RecordFilterPanel panel = new RecordFilterPanel(project, t);
 					panels.put(loc, panel);
 				} catch (IOException e) {
-					LOGGER.error( e.getLocalizedMessage(), e);
+					LogUtil.warning(e);
 				}
 			}
 		}
@@ -190,12 +188,6 @@ public class MergeSessionStep2 extends WizardStep {
 		// remove any oldLoc references
 		for(SessionPath loc:panels.keySet().toArray(new SessionPath[0])) {
 			if(!sessions.contains(loc)) {
-//				UtteranceFilterPanel panel = panels.get(loc);
-//				
-//				if(cardPanel != null) {
-//					cardPanel.remove(panel);
-//				}
-//				
 				panels.remove(loc);
 			}
 		}

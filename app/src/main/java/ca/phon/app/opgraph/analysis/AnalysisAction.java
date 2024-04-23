@@ -16,7 +16,6 @@
 package ca.phon.app.opgraph.analysis;
 
 import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.opgraph.report.ReportAction;
 import ca.phon.project.Project;
 import ca.phon.session.SessionPath;
 import ca.phon.worker.PhonWorker;
@@ -27,10 +26,6 @@ import java.net.*;
 import java.util.*;
 
 public class AnalysisAction extends HookableAction {
-
-	private static final long serialVersionUID = 7095649504101466591L;
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ReportAction.class.getName());
 
 	private Project project;
 

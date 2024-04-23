@@ -16,6 +16,7 @@
 package ca.phon.app.opgraph.analysis;
 
 import ca.phon.app.hooks.HookableAction;
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.wizard.WizardExtension;
 import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.OpgraphIO;
@@ -28,9 +29,7 @@ import java.io.File;
 
 public class SaveAnalysisAction extends HookableAction {
 
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(SaveAnalysisAction.class.getName());
-	
-	private final static String DEFAULT_FOLDER = 
+	private final static String DEFAULT_FOLDER =
 			PrefHelper.getUserDataFolder() + File.separator + "analysis";
 	
 	public final static String TXT = "Save analysis...";
@@ -84,8 +83,7 @@ public class SaveAnalysisAction extends HookableAction {
 				try {
 					OpgraphIO.write(graph, new File(saveAs));
 				} catch (Exception e1) {
-					e1.printStackTrace();
-					LOGGER.error( e1.getLocalizedMessage(), e1);
+					LogUtil.warning(e1);
 					final MessageDialogProperties msgProps = new MessageDialogProperties();
 					msgProps.setOptions(MessageDialogProperties.okOptions);
 					msgProps.setTitle("Unable to save analysis");

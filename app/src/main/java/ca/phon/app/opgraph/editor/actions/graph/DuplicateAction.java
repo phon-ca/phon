@@ -15,6 +15,7 @@
  */
 package ca.phon.app.opgraph.editor.actions.graph;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
 import ca.phon.opgraph.*;
@@ -32,10 +33,6 @@ import java.awt.event.*;
 import java.util.*;
 
 public class DuplicateAction extends OpgraphEditorAction {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(DuplicateAction.class.getName());
-
-	private static final long serialVersionUID = -2540261955364824184L;
 	
 	public final static String TXT = "Duplicate nodes";
 	
@@ -99,7 +96,7 @@ public class DuplicateAction extends OpgraphEditorAction {
 								final OpLink newLink = new OpLink(srcNode, srcField, dstNode, dstField);
 								cmpEdit.addEdit(new AddLinkEdit(graph, newLink));
 							} catch(VertexNotFoundException | CycleDetectedException | InvalidEdgeException | ItemMissingException exc) {
-								LOGGER.error(exc.getMessage());
+								LogUtil.warning(exc);
 							}
 						}
 					}

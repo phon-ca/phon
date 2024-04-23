@@ -17,23 +17,10 @@ package ca.phon.app;
 
 import ca.phon.app.hooks.PhonStartupHook;
 import ca.phon.app.log.LogUtil;
-import ca.phon.ipadictionary.impl.IPADatabaseManager;
 import ca.phon.plugin.*;
-import ca.phon.util.PrefHelper;
-import org.apache.commons.io.FileUtils;
-import org.apache.logging.log4j.LogManager;
-
-import java.io.*;
 
 public class IPADictionaryInitHook implements PhonStartupHook, IPluginExtensionPoint<PhonStartupHook> {
 
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(IPADictionaryInitHook.class.getName());
-	
-	private static final String DERBY_LOG_PROP = "derby.stream.error.file";
-	
-	private static final String DERBY_LOG_LOCATION = 
-			PrefHelper.getUserDataFolder() + File.separator + "ipadb.log";
-	
 	@Override
 	public Class<?> getExtensionType() {
 		return PhonStartupHook.class;
@@ -46,27 +33,7 @@ public class IPADictionaryInitHook implements PhonStartupHook, IPluginExtensionP
 
 	@Override
 	public void startup() throws PluginException {
-		LOGGER.info("Initializing IPA Dictionaries");
-		System.setProperty(DERBY_LOG_PROP,
-				PrefHelper.get(DERBY_LOG_PROP, DERBY_LOG_LOCATION));
-		
-		// check for oldLoc version and copy it to the
-		// new application data
-		// folder
-		final File oldDbFolder = new File(PrefHelper.getUserDocumentsPhonFolder(), "ipadb");
-		final File dbFolder = new File(PrefHelper.getUserDataFolder(), "ipadb");
-		
-		if(!dbFolder.exists() && oldDbFolder.exists()) {
-			// copy folder
-			try {
-				LogUtil.info("Copying ipa dictionary from:" + oldDbFolder.getAbsolutePath() + " to: " + dbFolder.getAbsolutePath());
-				FileUtils.copyDirectory(oldDbFolder, dbFolder);
-			} catch (IOException e) {
-				LogUtil.severe(e);
-			}
-		}
-		
-		IPADatabaseManager.getInstance();
+		LogUtil.info("Initializing IPA Dictionaries");
 	}
 	
 }

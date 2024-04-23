@@ -39,10 +39,6 @@ import java.io.*;
  */
 public class ReportWizard extends WizardFrame {
 	
-	private static final long serialVersionUID = -334722251289455999L;
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ReportWizard.class.getName());
-	
 	private final static String AUTOSAVE_FILENAME = "lastreport.xml";
 	
 	/*
@@ -192,7 +188,7 @@ public class ReportWizard extends WizardFrame {
 			try {
 				retVal = ReportIO.readDesign(lastDesignFile);
 			} catch (IOException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 		}
 		
@@ -204,7 +200,7 @@ public class ReportWizard extends WizardFrame {
 		try {
 			ReportIO.writeDesign(reportEditor.getReportDesign(), designFile);
 		} catch (IOException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.warning(e);
 		}
 	}
 	
@@ -223,7 +219,7 @@ public class ReportWizard extends WizardFrame {
 			try {
 				generateReport();
 			} catch (IOException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 		}
 	}
@@ -292,8 +288,7 @@ public class ReportWizard extends WizardFrame {
 							out.write(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.STOP_BUSY);
 							out.flush();
 						} catch (IOException e) {
-							LOGGER.error(
-									e.getLocalizedMessage(), e);
+							LogUtil.warning(e);
 						}
 						console.setFirstRowIsHeader(false);
 						btnBack.setVisible(true);
@@ -338,7 +333,7 @@ public class ReportWizard extends WizardFrame {
 				
 				super.setStatus(TaskStatus.FINISHED);
 			} catch (ReportBuilderException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 				NativeDialogs.showMessageDialogBlocking(CommonModuleFrame.getCurrentFrame(), null, "Report Build Failed", "Error: " + e.getMessage());
 				super.setStatus(TaskStatus.ERROR);
 				super.err = e;

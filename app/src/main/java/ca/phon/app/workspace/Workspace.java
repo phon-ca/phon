@@ -15,6 +15,7 @@
  */
 package ca.phon.app.workspace;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.ProjectDetector;
 import ca.phon.project.*;
 import ca.phon.project.exceptions.ProjectConfigurationException;
@@ -24,9 +25,6 @@ import java.io.*;
 import java.util.*;
 
 public class Workspace {
-	
-	private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(Workspace.class
-			.getName());
 	
 	/**
 	 * Property for the current workspace folder setting
@@ -128,7 +126,7 @@ public class Workspace {
 						final Project p = pf.openProject(workspaceFile);
 						retVal.add(p);
 					} catch (IOException | ProjectConfigurationException e) {
-						LOGGER.error(e.getLocalizedMessage(), e);
+						LogUtil.warning(e);
 					}
 				}
 			}

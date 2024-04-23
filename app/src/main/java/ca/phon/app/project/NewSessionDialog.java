@@ -27,10 +27,6 @@ import java.awt.*;
 
 public class NewSessionDialog extends JDialog {
 	
-	private static final long serialVersionUID = 8888896161322222665L;
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(NewSessionDialog.class.getName());
-	
 	private NewSessionPanel newSessionPanel;
 	private JButton btnCreateSession = new JButton();
 	private JButton btnCancel = new JButton();

@@ -40,8 +40,6 @@ import java.util.UUID;
  */
 public class CheckWizard extends BreadcrumbWizardFrame {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(CheckWizard.class.getName());
-	
 	private JXBusyLabel busyLabel;
 	
 	private MultiBufferPanel multiBufferPanel;
@@ -126,7 +124,7 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 				try {
 					session = getProject().openSession(corpusName, sessionName);
 				} catch (IOException e1) {
-					LOGGER.error( e1.getMessage(), e1);
+					LogUtil.warning(e1);
 					return;
 				}
 				
@@ -142,7 +140,7 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 					checkTier(i, record.getIPAActualTier(), out);
 				}
 			} catch (IOException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 			super.setStatus(TaskStatus.FINISHED);
 		}
@@ -193,7 +191,7 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 			try {
 				session = getProject().openSession(corpusName, sessionName);
 			} catch (IOException e1) {
-				LOGGER.error( e1.getMessage(), e1);
+				LogUtil.warning(e1);
 				out.println(e1.getLocalizedMessage());
 				return;
 			}
@@ -240,7 +238,7 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 				
 				super.setStatus(TaskStatus.FINISHED);
 			} catch (IOException e) {
-				LOGGER.error( e.getMessage(), e);
+				LogUtil.warning(e);
 				
 				super.err = e;
 				super.setStatus(TaskStatus.ERROR);
@@ -284,7 +282,7 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 			try {
 				session = project.openSession(corpusName, sessionName);
 			} catch (IOException e) {
-				LOGGER.error( e.getMessage(), e);
+				LogUtil.warning(e);
 				return;
 			}
 			
@@ -324,7 +322,7 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 				
 				super.setStatus(TaskStatus.FINISHED);
 			} catch (IOException e) {
-				LOGGER.error( e.getMessage(), e);
+				LogUtil.warning(e);
 				super.err = e;
 				super.setStatus(TaskStatus.ERROR);
 			}
@@ -374,7 +372,7 @@ public class CheckWizard extends BreadcrumbWizardFrame {
 			try {
 				setupTableHeader(bufferPanel);
 			} catch (IOException e) {
-				LOGGER.warn( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 			
 			busyLabel.setBusy(true);

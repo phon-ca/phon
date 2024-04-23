@@ -15,6 +15,7 @@
  */
 package ca.phon.app.actions;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.plugin.*;
 
 import javax.swing.text.JTextComponent;
@@ -25,8 +26,6 @@ import java.util.Map;
 @PhonPlugin(name="default")
 public class PasteEP implements IPluginEntryPoint {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(PasteEP.class.getName());
-
 	private final static String EP_NAME = "Paste";
 	@Override
 	public String getName() {
@@ -47,21 +46,15 @@ public class PasteEP implements IPluginEntryPoint {
 			Method pasteMethod = null;
 			try {
 				pasteMethod = keyboardComp.getClass().getMethod("paste", new Class[0]);
-			} catch (SecurityException ex) {
-				LOGGER.error( ex.getMessage(), ex);
-			} catch (NoSuchMethodException ex) {
-				LOGGER.error( ex.getMessage(), ex);
+			} catch (SecurityException | NoSuchMethodException ex) {
+				LogUtil.warning(ex);
 			}
 			
 			if(pasteMethod != null) {
 				try {
 					pasteMethod.invoke(keyboardComp, new Object[0]);
-				} catch (IllegalArgumentException ex) {
-					LOGGER.error( ex.getMessage(), ex);
-				} catch (IllegalAccessException ex) {
-					LOGGER.error( ex.getMessage(), ex);
-				} catch (InvocationTargetException ex) {
-					LOGGER.error( ex.getMessage(), ex);
+				} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException ex) {
+					LogUtil.warning(ex);
 				}
 			}
 		}

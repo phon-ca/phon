@@ -15,6 +15,7 @@
  */
 package ca.phon.app.project;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.SessionSelector;
 import ca.phon.project.Project;
 import ca.phon.session.Record;
@@ -24,7 +25,6 @@ import ca.phon.ui.participant.AnonymizeParticipantOptionsPanel;
 import ca.phon.ui.wizard.*;
 import ca.phon.worker.*;
 import ca.phon.worker.PhonTask.TaskStatus;
-import org.apache.logging.log4j.LogManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,10 +37,6 @@ import java.util.UUID;
  *
  */
 public class AnonymizeParticipantInfoWizard extends WizardFrame {
-	
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(AnonymizeParticipantInfoWizard.class.getName());
-	
-	private static final long serialVersionUID = -1433616585660247292L;
 	
 	private AnonymizeParticipantOptionsPanel optionsPanel;
 	
@@ -186,7 +182,7 @@ public class AnonymizeParticipantInfoWizard extends WizardFrame {
 					project.saveSession(session, writeLock);
 					project.releaseSessionWriteLock(session, writeLock);
 				} catch (IOException e) {
-					LOGGER.error(e.getLocalizedMessage(), e);
+					LogUtil.warning(e);
 				}
 			}
 			

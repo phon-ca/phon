@@ -15,6 +15,7 @@
  */
 package ca.phon.app.project;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.project.*;
 import ca.phon.ui.dnd.FileTransferHandler;
 import ca.phon.ui.nativedialogs.FileFilter;
@@ -28,10 +29,6 @@ import java.util.List;
 import java.util.*;
 
 public class ProjectDataTransferHandler extends FileTransferHandler {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ProjectDataTransferHandler.class.getName());
-
-	private static final long serialVersionUID = -4261706466908550605L;
 	
 	private ProjectWindow window;
 	
@@ -63,7 +60,7 @@ public class ProjectDataTransferHandler extends FileTransferHandler {
 						(List<ProjectPath>)transferable.getTransferData(ProjectPathTransferable.projectPathListFlavor);
 				imported = importProjectPathList(support, projectPathList);
 			} catch (IOException | UnsupportedFlavorException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 		} else if(transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
 			imported = importFileList(support, transferable);
@@ -108,7 +105,7 @@ public class ProjectDataTransferHandler extends FileTransferHandler {
 				getWindow().refreshProject();
 				return true;
 			} catch (IOException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 				return false;
 			}
 		} else if(projectPath.isSessionPath()) {
@@ -142,7 +139,7 @@ public class ProjectDataTransferHandler extends FileTransferHandler {
 					dstProjectPath.getProject().addCorpus(dstCorpus, 
 							projectPath.getProject().getCorpusDescription(projectPath.getCorpus()));
 				} catch (IOException e) {
-					LOGGER.error( e.getLocalizedMessage(), e);
+					LogUtil.warning(e);
 					return false;
 				}
 			}
@@ -152,7 +149,7 @@ public class ProjectDataTransferHandler extends FileTransferHandler {
 				window.refreshProject();
 				return true;
 			} catch (IOException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 				return false;
 			}
 		}
@@ -170,7 +167,7 @@ public class ProjectDataTransferHandler extends FileTransferHandler {
 			}
 			return retVal;
 		} catch (IOException | UnsupportedFlavorException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.warning(e);
 		}
 		return false;
 	}

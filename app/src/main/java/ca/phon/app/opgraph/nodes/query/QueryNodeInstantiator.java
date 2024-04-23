@@ -15,14 +15,13 @@
  */
 package ca.phon.app.opgraph.nodes.query;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.opgraph.library.instantiators.Instantiator;
 import ca.phon.query.script.*;
 import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.*;
 
 public class QueryNodeInstantiator implements Instantiator<QueryNode> {
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(QueryNodeInstantiator.class.getName());
 
 	@Override
 	public QueryNode newInstance(Object... params)
@@ -51,7 +50,7 @@ public class QueryNodeInstantiator implements Instantiator<QueryNode> {
 				}
 			}
 		} catch (PhonScriptException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.warning(e);
 		}
 
 		QueryNode retVal = new QueryNode(queryScript);

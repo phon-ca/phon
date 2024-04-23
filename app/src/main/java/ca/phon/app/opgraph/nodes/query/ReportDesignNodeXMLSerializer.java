@@ -15,6 +15,7 @@
  */
 package ca.phon.app.opgraph.nodes.query;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.extensions.Extendable;
 import ca.phon.opgraph.io.xml.*;
@@ -31,8 +32,6 @@ import java.io.*;
 
 
 public class ReportDesignNodeXMLSerializer implements XMLSerializer {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ReportDesignNodeXMLSerializer.class.getName());
 	
 	static final String NAMESPACE = "https://phon.ca/ns/opgraph_query";
 	static final String PREFIX = "opqry";
@@ -123,7 +122,7 @@ public class ReportDesignNodeXMLSerializer implements XMLSerializer {
 						unmarshaller.unmarshal(reader, ReportDesign.class);
 				reportDesign = reportDesignTypeEle.getValue();
 			} catch (JAXBException | XMLStreamException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 		} else {
 			NodeList children = elem.getElementsByTagNameNS(REPORT_NAMESPACE, "report-design");

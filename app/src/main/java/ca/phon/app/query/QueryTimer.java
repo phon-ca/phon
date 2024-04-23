@@ -15,6 +15,7 @@
  */
 package ca.phon.app.query;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.query.script.QueryTask;
 import ca.phon.ui.PhonLoggerConsole;
 import ca.phon.worker.*;
@@ -22,8 +23,6 @@ import ca.phon.worker.PhonTask.TaskStatus;
 
 public class QueryTimer implements PhonTaskListener {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(QueryTimer.class.getName());
-
 	QueryTask tasks[];
 	private long startTimeMS;
 	private Integer tasksCompleted = 0;
@@ -41,7 +40,7 @@ public class QueryTimer implements PhonTaskListener {
 		long finishedTimeMS = System.currentTimeMillis();
 		int queryTimeMS = (int)(finishedTimeMS - startTimeMS);
 		
-		LOGGER.info("--------------------");
+		LogUtil.info("--------------------");
 		
 		int numCompleted = 0;
 		int numError = 0;
@@ -60,8 +59,8 @@ public class QueryTimer implements PhonTaskListener {
 			(numCompleted + " Completed") +
 			(", " + numError + " Errors") + 
 			(numTerminated > 0 ? ", " + numTerminated + " Terminated" : "");
-		LOGGER.info(line);
-		LOGGER.info("Query time: " + queryTimeMS);
+		LogUtil.info(line);
+		LogUtil.info("Query time: " + queryTimeMS);
 	}
 	
 	@Override

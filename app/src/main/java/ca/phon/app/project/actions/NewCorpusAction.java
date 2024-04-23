@@ -15,16 +15,13 @@
  */
 package ca.phon.app.project.actions;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.*;
 
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 
 public class NewCorpusAction extends ProjectWindowAction {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(NewCorpusAction.class.getName());
-
-	private static final long serialVersionUID = -4385987381468266104L;
 	
 	public String corpusName;
 	
@@ -70,7 +67,7 @@ public class NewCorpusAction extends ProjectWindowAction {
 			getWindow().refreshProject();
 		} catch (IOException e) {
 			showMessage("New Corpus", e.getLocalizedMessage());
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.warning(e);
 		}
 	}
 	

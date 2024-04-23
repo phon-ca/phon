@@ -15,6 +15,7 @@
  */
 package ca.phon.app.session.editor;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.actions.SaveSessionAction;
 import ca.phon.app.session.editor.view.mediaPlayer.MediaPlayerEditorView;
 import ca.phon.media.MediaLocator;
@@ -43,10 +44,6 @@ import java.util.*;
  *
  */
 public class MediaSelectionField extends FileSelectionField {
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(MediaSelectionField.class.getName());
-
-	private static final long serialVersionUID = 5171333221664140205L;
 
 	private WeakReference<SessionEditor> editorRef;
 
@@ -142,7 +139,7 @@ public class MediaSelectionField extends FileSelectionField {
 				}
 			}
 		} catch (IOException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.warning(e);
 		}
 	}
 

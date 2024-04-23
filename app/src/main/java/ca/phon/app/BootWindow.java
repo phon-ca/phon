@@ -16,9 +16,11 @@
 package ca.phon.app;
 
 import ca.phon.app.hooks.PhonBootHook;
+import ca.phon.app.log.LogUtil;
 import ca.phon.plugin.*;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.ui.nativedialogs.OSInfo;
+import org.apache.commons.logging.Log;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,8 +31,6 @@ import java.util.List;
 import java.util.*;
 
 public class BootWindow extends Window {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(BootWindow.class.getName());
 	
 	private Image bootImage;
 	
@@ -47,7 +47,7 @@ public class BootWindow extends Window {
 		try {
 			mt.waitForAll();
 		} catch (InterruptedException e) {
-			LOGGER.error( e.getMessage(), e);
+			LogUtil.warning(e);
 		}
 		
 		init();
@@ -92,7 +92,7 @@ public class BootWindow extends Window {
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
-				LOGGER.error( e.getMessage(), e);
+				LogUtil.severe(e);
 			}
 		}
 	
@@ -100,18 +100,8 @@ public class BootWindow extends Window {
 			Class.forName(className)
 				.getMethod("main", new Class[] { String[].class })
 				.invoke(null, new Object[] { args } );
-		} catch (IllegalArgumentException e) {
-			LOGGER.error( e.getMessage(), e);
-		} catch (SecurityException e) {
-			LOGGER.error( e.getMessage(), e);
-		} catch (IllegalAccessException e) {
-			LOGGER.error( e.getMessage(), e);
-		} catch (InvocationTargetException e) {
-			LOGGER.error( e.getMessage(), e);
-		} catch (NoSuchMethodException e) {
-			LOGGER.error( e.getMessage(), e);
-		} catch (ClassNotFoundException e) {
-			LOGGER.error( e.getMessage(), e);
+		} catch (IllegalArgumentException | SecurityException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | ClassNotFoundException e) {
+			LogUtil.severe(e);
 		}
 		
 	}
@@ -136,7 +126,7 @@ public class BootWindow extends Window {
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
-				LOGGER.error( e.getMessage(), e);
+				LogUtil.severe(e);
 			}
 		}
 		
@@ -145,7 +135,7 @@ public class BootWindow extends Window {
 		try {
 			bootHooks = PluginManager.getInstance().getExtensions(PhonBootHook.class);
 		} catch (PluginException e1) {
-			LOGGER.warn( e1.getMessage(), e1);
+			LogUtil.warning(e1);
 		}
 		
 		final String javaHome = System.getProperty("java.home");
@@ -183,11 +173,11 @@ public class BootWindow extends Window {
 			builder.append("\t" + txt + "\n");
 		}
 		
-		LOGGER.info(builder.toString());
+		LogUtil.info(builder.toString());
 		try {
 			final Process p = pb.start();
 		} catch (IOException e) {
-			LOGGER.error( e.getMessage(), e);
+			LogUtil.severe(e);
 		} 
 	}
 	

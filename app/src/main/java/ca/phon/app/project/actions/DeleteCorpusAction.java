@@ -15,6 +15,7 @@
  */
 package ca.phon.app.project.actions;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.ProjectWindow;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
@@ -34,10 +35,6 @@ import java.util.List;
  */
 public class DeleteCorpusAction extends ProjectWindowAction {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(DeleteCorpusAction.class.getName());
-	
-	private static final long serialVersionUID = -6953043638785028830L;
-
 	public DeleteCorpusAction(ProjectWindow projectWindow) {
 		super(projectWindow);
 		
@@ -71,7 +68,7 @@ public class DeleteCorpusAction extends ProjectWindowAction {
 				try {
 					project.removeCorpus(corpus);
 				} catch (IOException e) {
-					LOGGER.error( e.getLocalizedMessage(), e);
+					LogUtil.warning(e);
 					Toolkit.getDefaultToolkit().beep();
 					showMessage("Delete Corpus", e.getLocalizedMessage());
 				}

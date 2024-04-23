@@ -15,6 +15,7 @@
  */
 package ca.phon.app.project.actions;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.*;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
@@ -25,10 +26,6 @@ import java.io.IOException;
 import java.util.UUID;
 
 public class NewSessionAction extends ProjectWindowAction {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(NewSessionAction.class.getName());
-
-	private static final long serialVersionUID = 3077154531739507863L;
 	
 	private String corpus;
 	
@@ -102,7 +99,7 @@ public class NewSessionAction extends ProjectWindowAction {
 		} catch (IOException e) {
 			Toolkit.getDefaultToolkit().beep();
 			showMessage("New Session", e.getLocalizedMessage());
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.warning(e);
 		}
 	}
 	

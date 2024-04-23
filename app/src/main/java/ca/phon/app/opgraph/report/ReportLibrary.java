@@ -52,8 +52,6 @@ public class ReportLibrary implements OpGraphLibrary {
 
 	public final static String REPORT_FOLDER_NAME = "report";
 
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ReportLibrary.class.getName());
-
 	/**
 	 * Report loader
 	 */
@@ -120,7 +118,7 @@ public class ReportLibrary implements OpGraphLibrary {
 
 				builder.addItem(menuPath, act);
 			} catch (UnsupportedEncodingException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 		}
 
@@ -144,7 +142,7 @@ public class ReportLibrary implements OpGraphLibrary {
 				final ReportAction act = new ReportAction(project, queryId, reportURL);
 				userMenuBuilder.addItem(menuPath, act);
 			} catch (URISyntaxException | UnsupportedEncodingException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 		}
 		if(userMenu.getMenuComponentCount() > 0) {
@@ -185,7 +183,7 @@ public class ReportLibrary implements OpGraphLibrary {
 				final ReportAction act = new ReportAction(project, queryId, reportURL);
 				projectMenuBuilder.addItem(menuPath, act);
 			} catch (URISyntaxException | UnsupportedEncodingException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 		}
 		if(projectMenu.getMenuComponentCount() > 0) {
@@ -249,7 +247,7 @@ public class ReportLibrary implements OpGraphLibrary {
 				PhonWorker.getInstance().invokeLater(runner);
 			} catch (IOException e) {
 				Toolkit.getDefaultToolkit().beep();
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 
 				final MessageDialogProperties mprops = new MessageDialogProperties();
 				mprops.setParentWindow(CommonModuleFrame.getCurrentFrame());

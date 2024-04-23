@@ -15,6 +15,7 @@
  */
 package ca.phon.app.project.actions;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.ProjectWindow;
 import ca.phon.plugin.*;
 import ca.phon.session.SessionPath;
@@ -26,10 +27,6 @@ import java.awt.event.ActionEvent;
 import java.util.HashMap;
 
 public class OpenSessionAction extends ProjectWindowAction {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(OpenSessionAction.class.getName());
-
-	private static final long serialVersionUID = 9111187064505853422L;
 
 	private String corpus = null;
 	private String sessionName = null;
@@ -77,7 +74,7 @@ public class OpenSessionAction extends ProjectWindowAction {
 		try {
 			PluginEntryPointRunner.executePlugin("SessionEditor", initInfo);
 		} catch (PluginException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.warning(e);
 			showMessage("Open Session", e.getLocalizedMessage());
 			Toolkit.getDefaultToolkit().beep();
 		}

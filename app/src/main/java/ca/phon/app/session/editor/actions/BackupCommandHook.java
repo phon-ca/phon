@@ -16,6 +16,7 @@
 package ca.phon.app.session.editor.actions;
 
 import ca.phon.app.hooks.ActionHook;
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.plugin.*;
 import ca.phon.project.Project;
@@ -33,8 +34,6 @@ import java.time.format.DateTimeFormatterBuilder;
 
 public class BackupCommandHook implements ActionHook<SaveSessionAction>, IPluginExtensionPoint<ActionHook<SaveSessionAction>> {
 
-	private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(BackupCommandHook.class.getName());
-	
 	@Override
 	public Class<? extends SaveSessionAction> getActionType() {
 		return SaveSessionAction.class;
@@ -79,7 +78,7 @@ public class BackupCommandHook implements ActionHook<SaveSessionAction>, IPlugin
 				fin = new FileInputStream(sessionFile);
 				zipFile.addStream(fin, parameters);
 			} catch (IOException e) {
-				LOGGER.error(e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 				
 			} finally {
 				if(fin != null) fin.close();
@@ -92,10 +91,8 @@ public class BackupCommandHook implements ActionHook<SaveSessionAction>, IPlugin
 		if(PrefHelper.getBoolean(SessionEditor.BACKUP_WHEN_SAVING, Boolean.TRUE)) {
 			try {
 				backupSession(action.getEditor().getProject(), action.getEditor().getSession());
-			} catch (ZipException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
 			} catch (IOException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 		}
 		return false;

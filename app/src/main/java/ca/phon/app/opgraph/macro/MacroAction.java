@@ -16,7 +16,7 @@
 package ca.phon.app.opgraph.macro;
 
 import ca.phon.app.hooks.HookableAction;
-import ca.phon.app.opgraph.report.ReportAction;
+import ca.phon.app.log.LogUtil;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.app.OpgraphIO;
 import ca.phon.project.Project;
@@ -30,10 +30,6 @@ import java.util.concurrent.ExecutionException;
 
 public class MacroAction extends HookableAction {
 
-	private static final long serialVersionUID = 7095649504101466591L;
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ReportAction.class.getName());
-	
 	private Project project;
 	
 	private URL analysisURL;
@@ -88,7 +84,7 @@ public class MacroAction extends HookableAction {
 						new MacroRunner(get(), project, showWizard);
 				PhonWorker.getInstance().invokeLater(analysisRunner);
 			} catch (ExecutionException | InterruptedException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 		}
 		
