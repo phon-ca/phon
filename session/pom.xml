@@ -1,122 +1,122 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>phon</artifactId>
-    <groupId>ca.phon</groupId>
-    <version>4.0.0-SNAPSHOT</version>
-    <relativePath>..</relativePath>
-  </parent>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>phon</artifactId>
+        <groupId>ca.phon</groupId>
+        <version>4.0.0-SNAPSHOT</version>
+        <relativePath>..</relativePath>
+    </parent>
 
-  <artifactId>phon-session</artifactId>
-  <name>Phon Session API</name>
-  <description>API for Phon Sessions.</description>
+    <artifactId>phon-session</artifactId>
+    <name>Phon Session API</name>
+    <description>API for Phon Sessions.</description>
 
-  <dependencies>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>phon-ipa</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>phon-orthography</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>phon-xml</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-      <dependency>
-          <groupId>org.antlr</groupId>
-          <artifactId>antlr4</artifactId>
-      </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-      <dependency>
-          <groupId>org.xmlunit</groupId>
-          <artifactId>xmlunit-core</artifactId>
-          <version>2.9.1</version>
-      </dependency>
-
-      <dependency>
-          <groupId>org.xmlunit</groupId>
-          <artifactId>xmlunit-matchers</artifactId>
-          <version>2.9.1</version>
-      </dependency>
-
-      <dependency>
-          <groupId>org.xmlunit</groupId>
-          <artifactId>xmlunit-jakarta-jaxb-impl</artifactId>
-          <version>2.9.1</version>
-      </dependency>
-  </dependencies>
-  
-  <build>
-      <resources>
-          <resource>
-              <directory>src/main/resources</directory>
-          </resource>
-          <resource>
-              <directory>target/generated-sources/antlr4</directory>
-              <includes>
-                  <include>TierData.tokens</include>
-                  <include>TierDataLexer.tokens</include>
-              </includes>
-          </resource>
-      </resources>
-
-    <plugins>
-        <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>jaxb2-maven-plugin</artifactId>
-            <executions>
-                <execution>
-                    <id>xjc</id>
-                    <goals>
-                        <goal>xjc</goal>
-                    </goals>
-                    <configuration>
-                        <sources>
-                            <source>src/main/resources/xml/xsd</source>
-                        </sources>
-                        <xjbSources>
-                            <xjbSource>src/main/resources/xml/xjb</xjbSource>
-                        </xjbSources>
-                        <outputDirectory>${project.build.directory}/generated-sources/xjc</outputDirectory>
-                    </configuration>
-                </execution>
-
-
-            </executions>
-        </plugin>
-
-        <plugin>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>phon-ipa</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>phon-orthography</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>phon-xml</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.antlr</groupId>
-            <artifactId>antlr4-maven-plugin</artifactId>
-            <executions>
-                <execution>
-                    <id>antlr</id>
-                    <goals>
-                        <goal>antlr4</goal>
-                    </goals>
-                    <configuration>
-                        <sourceDirectory>src/main/resources/antlr4</sourceDirectory>
-                        <libDirectory>target/generated-sources/antlr4/imports</libDirectory>
-                        <visitor>true</visitor>
-                    </configuration>
-                </execution>
-            </executions>
-        </plugin>
+            <artifactId>antlr4</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-core</artifactId>
+            <version>2.9.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-matchers</artifactId>
+            <version>2.9.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-jakarta-jaxb-impl</artifactId>
+            <version>2.9.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
-    </plugins>
-    
-  </build>
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>target/generated-sources/antlr4</directory>
+                <includes>
+                    <include>TierData.tokens</include>
+                    <include>TierDataLexer.tokens</include>
+                </includes>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>xjc</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/main/resources/xml/xsd</source>
+                            </sources>
+                            <xjbSources>
+                                <xjbSource>src/main/resources/xml/xjb</xjbSource>
+                            </xjbSources>
+                            <outputDirectory>${project.build.directory}/generated-sources/xjc</outputDirectory>
+                        </configuration>
+                    </execution>
+
+
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.antlr</groupId>
+                <artifactId>antlr4-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>antlr</id>
+                        <goals>
+                            <goal>antlr4</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirectory>src/main/resources/antlr4</sourceDirectory>
+                            <libDirectory>target/generated-sources/antlr4/imports</libDirectory>
+                            <visitor>true</visitor>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+
+    </build>
 
 </project>

@@ -4,7 +4,6 @@ import ca.phon.extensions.ExtendableObject;
 import ca.phon.visitor.Visitable;
 import ca.phon.visitor.Visitor;
 import org.antlr.v4.runtime.*;
-import org.jetbrains.annotations.NotNull;
 
 import java.text.ParseException;
 import java.util.Arrays;
@@ -103,7 +102,6 @@ public final class TierData extends ExtendableObject implements Iterable<TierEle
         for(TierElement ele:this) visitor.visit(ele);
     }
 
-    @NotNull
     @Override
     public Iterator<TierElement> iterator() {
         return new UserTierElementIterator();

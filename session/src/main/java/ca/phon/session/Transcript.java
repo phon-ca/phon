@@ -4,7 +4,6 @@ import ca.phon.extensions.ExtendableObject;
 import ca.phon.session.spi.TranscriptSPI;
 import ca.phon.visitor.Visitable;
 import ca.phon.visitor.Visitor;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 import java.util.stream.Stream;
@@ -490,7 +489,6 @@ public final class Transcript extends ExtendableObject implements Iterable<Trans
         for(Element ele:this) visitor.visit(ele);
     }
 
-    @NotNull
     @Override
     public Iterator<Element> iterator() {
         return new TranscriptIterator();

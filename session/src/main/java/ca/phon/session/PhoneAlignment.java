@@ -2,12 +2,9 @@ package ca.phon.session;
 
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
-import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.ipa.alignment.PhoneAligner;
 import ca.phon.ipa.alignment.PhoneMap;
-import org.jetbrains.annotations.NotNull;
 
-import javax.swing.text.html.Option;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -249,7 +246,6 @@ public class PhoneAlignment implements Iterable<PhoneMap> {
         return getAlignments().spliterator();
     }
 
-    @NotNull
     @Override
     public Iterator<PhoneMap> iterator() {
         return getAlignments().iterator();
