@@ -23,6 +23,8 @@ import org.jdesktop.swingx.painter.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.prefs.*;
 
 /**
@@ -31,10 +33,6 @@ import java.util.prefs.*;
  * visibility of the panel.
  */
 public class HidablePanel extends MultiActionButton {
-	
-	private static final long serialVersionUID = 360940577329250637L;
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(HidablePanel.class.getName());
 	
 	/**
 	 * Location of hidable panel properties
@@ -53,7 +51,7 @@ public class HidablePanel extends MultiActionButton {
 			getPanelPrefs().clear();
 			return true;
 		} catch (BackingStoreException e) {
-			LOGGER.error( e.getMessage(), e);
+			Logger.getLogger(HidablePanel.class.getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 		return false;
 	}

@@ -24,13 +24,12 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class IPAGrids {
 	
-	private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(IPAGrids.class
-			.getName());
-
 	/**
 	 * Static ref to ipa map data
 	 */
@@ -53,8 +52,7 @@ public class IPAGrids {
 			grids = (IpaGrids)unmarshaller.unmarshal(
 					IPAGrids.class.getResource(GRID_FILE));
 		} catch (JAXBException e) {
-			e.printStackTrace();
-			LOGGER.error(e.getMessage());
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			grids = factory.createIpaGrids();
 		}
 		return grids;

@@ -34,14 +34,14 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
  * The common class for a gui window
  */
 public class CommonModuleFrame extends JFrame implements IExtendable {
-
-	private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(CommonModuleFrame.class.getName());
 
 	/**
 	 * Property to enable fullscreen on macos
@@ -190,7 +190,7 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 					try {
 						PluginEntryPointRunner.executePlugin("Exit");
 					} catch (PluginException e) {
-						LOGGER.error(e);
+						Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 						System.exit(1);
 					}
 				}
@@ -619,7 +619,7 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 			}
 		} catch (IOException e) {
 			Toolkit.getDefaultToolkit().beep();
-			LOGGER.error( e.getLocalizedMessage(), e);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 	}
 	
@@ -646,7 +646,7 @@ public class CommonModuleFrame extends JFrame implements IExtendable {
 	 * The window will be positioned using standard left-to-right, top-to-bottom
 	 * positioning based on this parameter.
 	 *
-	 * @param parentFrame.  The frame to use as the anchor.
+	 * @param component  The frame to use as the anchor.
 	 *
 	 * @throws IllegalArgumentException if boxSize or position are not
 	 * one of the accept values.

@@ -26,9 +26,6 @@ import java.util.function.Consumer;
  */
 public class PhonUIAction<T> extends AbstractAction {
 
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(PhonUIAction.class
-			.getName());
-
 	/** Are we running our action in the background? (def: false) */
 	private boolean runInBackground = false;
 

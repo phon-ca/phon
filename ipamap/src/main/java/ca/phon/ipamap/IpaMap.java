@@ -45,6 +45,8 @@ import java.text.Collator;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -62,9 +64,6 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 	
 	private static final long serialVersionUID = 1758355523938039972L;
 
-	private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(IpaMap.class
-			.getName());
-	
 	/**
 	 * Pref prop for scale
 	 */
@@ -241,8 +240,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 				// add generated grids
 				generateMissingGrids(grids);
 			} catch (JAXBException e) {
-				e.printStackTrace();
-				LOGGER.error(e.getMessage());
+				Logger.getLogger(IpaGrids.class.getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 				grids = factory.createIpaGrids();
 			}
 		}
@@ -529,8 +527,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 				Unmarshaller unmarshaller = ctx.createUnmarshaller();
 				favGrid = (IpaGrids)unmarshaller.unmarshal(new ByteArrayInputStream(favXML.getBytes()));
 			} catch (JAXBException e) {
-				e.printStackTrace();
-				LOGGER.error(e.getMessage());
+				Logger.getLogger(IpaMap.class.getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		}
 		
@@ -1459,8 +1456,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 		try {
 			saveFavData();
 		} catch (IOException e) {
-			e.printStackTrace();
-			LOGGER.warn(e.getMessage());
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 		
 		updateFavoritesPanel();
@@ -1541,8 +1537,7 @@ public class IpaMap extends JPanel implements ClipboardOwner {
 			try {
 				saveFavData();
 			} catch (IOException e) {
-				e.printStackTrace();
-				LOGGER.warn(e.toString());
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		
 			updateFavoritesPanel();

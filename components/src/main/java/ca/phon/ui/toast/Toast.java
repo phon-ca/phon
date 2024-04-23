@@ -24,6 +24,8 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.List;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * <p>A message to the user that is displayed in an 
@@ -42,8 +44,6 @@ import java.util.*;
  * </p>
  */
 public final class Toast {
-	
-	private final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(Toast.class.getName());
 	
 	private String messageTxt;
 	
@@ -224,7 +224,7 @@ public final class Toast {
 	 * Start the tosast displayed under the given
 	 * component.
 	 * 
-	 * @param component
+	 * @param comp
 	 */
 	public void start(JComponent comp) {
 		final Rectangle rect = comp.getVisibleRect();
@@ -297,7 +297,7 @@ public final class Toast {
 			try {
 				rt.exec(cmd);
 			} catch (IOException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		} else {
 			/*
@@ -310,7 +310,7 @@ public final class Toast {
 				try {
 					appleScriptEngine.eval(src.toString());
 				} catch (ScriptException e) {
-					LOGGER.error( e.getLocalizedMessage(), e);
+					Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 				}
 			}
 		}

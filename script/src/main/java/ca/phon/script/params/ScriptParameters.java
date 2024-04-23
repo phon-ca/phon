@@ -21,16 +21,14 @@ import org.antlr.runtime.*;
 import java.io.*;
 import java.security.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.*;
 
 /**
  *
  */
 public class ScriptParameters extends ArrayList<ScriptParam> implements Visitable<ScriptParam> {
-
-	private static final long serialVersionUID = -7240889391306198318L;
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ScriptParameters.class.getName());
 
 	/**
 	 * Regular expression used to detect parameters comment in script
@@ -41,7 +39,7 @@ public class ScriptParameters extends ArrayList<ScriptParam> implements Visitabl
 	 * Extract the first params comment section found in the
 	 * given script text.
 	 *
-	 * @param script
+	 * @param text
 	 *
 	 * @return parameters section if found, <code>null</code>
 	 *  if not found
@@ -76,10 +74,8 @@ public class ScriptParameters extends ArrayList<ScriptParam> implements Visitabl
 			parser.params();
 			final ScriptParam[] params = parser.getScriptParams();
 			retVal.addAll(Arrays.asList(params));
-		} catch (IOException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
-		} catch (RecognitionException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+		} catch (IOException | RecognitionException e) {
+			Logger.getLogger(ScriptParameters.class.getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 		return retVal;
 	}
@@ -118,7 +114,7 @@ public class ScriptParameters extends ArrayList<ScriptParam> implements Visitabl
 	/**
 	 * Copy param values from the given script parameters
 	 *
-	 * @param params
+	 * @param newParams
 	 */
 	public void copyParams(ScriptParameters newParams) {
 		ScriptParameters.copyParams(this, newParams);
@@ -129,7 +125,7 @@ public class ScriptParameters extends ArrayList<ScriptParam> implements Visitabl
 	 * Set the value of the specified paramId
 	 *
 	 * @param paramId
-	 * @param value
+	 * @param val
 	 *
 	 * @return old value of the specified paramId
 	 */
@@ -240,7 +236,7 @@ public class ScriptParameters extends ArrayList<ScriptParam> implements Visitabl
 			}
 			return buffer.toString();
 		} catch (NoSuchAlgorithmException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 		
 		// shouldn't get here!

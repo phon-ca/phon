@@ -18,14 +18,12 @@ package ca.phon.ui;
 import javax.swing.text.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DateTimeDocument extends PlainDocument {
 	
-	private static final long serialVersionUID = -3209553456147504916L;
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(DateTimeDocument.class.getName());
-	
-	String testRegex = 
+	String testRegex =
 		"([0-9]{4})-([0-9]{2})-([0-9]{2})";
 	
 	final DateTimeFormatter dateFormatter = 
@@ -89,13 +87,13 @@ public class DateTimeDocument extends PlainDocument {
 		try {
 			dateText = getText(0, getLength());
 		} catch (BadLocationException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 		
 		try {
 			retVal = LocalDate.parse(dateText, dateFormatter);
 		} catch (Exception e) {
-			LOGGER.info( e.getLocalizedMessage(), e);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 		
 		return retVal;
@@ -107,7 +105,7 @@ public class DateTimeDocument extends PlainDocument {
 			final String dateText = dateFormatter.format(date);
 			super.insertString(0, dateText, null);
 		} catch (BadLocationException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 	}
 }

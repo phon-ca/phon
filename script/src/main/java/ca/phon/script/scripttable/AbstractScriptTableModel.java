@@ -18,7 +18,6 @@ package ca.phon.script.scripttable;
 import ca.phon.script.*;
 import ca.phon.script.scripttable.io.*;
 import jakarta.xml.bind.*;
-import org.apache.logging.log4j.LogManager;
 import org.mozilla.javascript.*;
 
 import javax.script.ScriptException;
@@ -27,6 +26,8 @@ import javax.xml.stream.*;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * <p>Abstract implementation of {@link ScriptTableModel}.  The class include
@@ -34,10 +35,6 @@ import java.util.concurrent.atomic.AtomicReference;
  * 
  */
 public abstract class AbstractScriptTableModel extends AbstractTableModel implements ScriptTableModel {
-	
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(AbstractScriptTableModel.class.getName());
-	
-	private static final long serialVersionUID = -4117009557145424149L;
 	
 	private Map<Integer, PhonScript> columnScripts =
 			Collections.synchronizedMap(new HashMap<Integer, PhonScript>());
@@ -53,15 +50,6 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 		final PhonScriptContext cScript = script.getContext();
 		if(cScript != null) {
 			try {
-//				final WrapFactory wf = ctx.getWrapFactory();
-//				final Scriptable parentScope = cScript.createImporterScope();
-//				// setup column mappings
-//				final Map<String, Object> columnMappings = getMappingsAt(0, col);
-//				for(String key:columnMappings.keySet()) {
-//					final Object val = columnMappings.get(key);
-//					final Object wrappedVal = wf.wrap(ctx, parentScope, val, null);
-//					parentScope.put(key, parentScope, wrappedVal);
-//				}
 				final Scriptable scope = cScript.getEvaluatedScope();
 				
 				if(cScript.hasFunction(scope, "getType", 0)) {
@@ -71,7 +59,7 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 					}
 				}
 			} catch (PhonScriptException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		}
 		
@@ -108,7 +96,7 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 					}
 				}
 			} catch (PhonScriptException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		}
 		
@@ -236,7 +224,7 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 					}
 				}
 			} catch (PhonScriptException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			} finally {
 				cScript.exit();
 			}
@@ -280,7 +268,7 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 		try {
 			ctx.installParams(retVal);
 		} catch(PhonScriptException pse) {
-			LOGGER.warn( pse.getLocalizedMessage(), pse);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, pse.getLocalizedMessage(), pse);
 		}
 		
 		final Map<String, Object> mappings = getMappingsAt(row, col);
@@ -360,7 +348,7 @@ public abstract class AbstractScriptTableModel extends AbstractTableModel implem
 				try {
 					setColumnScript(column.getIndex(), new BasicScript(column.getScript()));
 				} catch (PhonScriptException e) {
-					LOGGER.error( e.getLocalizedMessage(), e);
+					Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 				}
 			}
 		} catch (JAXBException e) {

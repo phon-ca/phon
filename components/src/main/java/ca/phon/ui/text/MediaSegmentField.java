@@ -15,11 +15,11 @@
  */
 package ca.phon.ui.text;
 
-import org.apache.logging.log4j.LogManager;
-
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Text field for editing media segment times.  Times are displayed
@@ -28,10 +28,6 @@ import java.text.ParseException;
  */
 public class MediaSegmentField extends JFormattedTextField {
 	
-	private static final long serialVersionUID = 3170635774945499727L;
-
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(MediaSegmentField.class.getName());
-
 	private static final String MASK = "###:##.###-###:##.###";
 	
 	public MediaSegmentField() {
@@ -50,7 +46,7 @@ public class MediaSegmentField extends JFormattedTextField {
 				retVal = new MaskFormatter(MASK);
 				((MaskFormatter)retVal).setPlaceholderCharacter('0');
 			} catch (ParseException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 			return retVal;
 		}

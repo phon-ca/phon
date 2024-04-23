@@ -16,18 +16,15 @@
 package ca.phon.ui.text;
 
 import ca.phon.formatter.*;
-import org.apache.logging.log4j.LogManager;
 
 import javax.swing.event.*;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class FormatterTextField<T> extends PromptedTextField {
-	
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(FormatterTextField.class.getName());
-
-	private static final long serialVersionUID = 4203616792431039321L;
 	
 	public static <K> FormatterTextField<K> createTextField(Class<K> type) {
 		return new FormatterTextField<K>(type);
@@ -89,7 +86,7 @@ public class FormatterTextField<T> extends PromptedTextField {
 				setToolTipText(null);
 			} catch (Exception e) {
 				setToolTipText(e.getMessage());
-				LOGGER.info( e.getLocalizedMessage(), e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		}
 		
@@ -108,7 +105,7 @@ public class FormatterTextField<T> extends PromptedTextField {
 					final String s = formatter.format(val);
 					setText(s);
 				} catch (Exception e) {
-					LOGGER.error(e.getLocalizedMessage(), e);
+					Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 				}
 			}
 		}

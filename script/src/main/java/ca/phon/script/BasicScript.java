@@ -22,6 +22,8 @@ import java.io.*;
 import java.net.URI;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Basic phon script in memory.  This script stores the script
@@ -30,8 +32,6 @@ import java.util.concurrent.atomic.AtomicReference;
  * using the provided buffer.
  */
 public class BasicScript implements PhonScript, Cloneable {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(BasicScript.class.getName());
 	
 	/*
 	 * Script stored in a buffer.  Sub-classes have
@@ -185,7 +185,7 @@ public class BasicScript implements PhonScript, Cloneable {
 			
 			ScriptParameters.copyParams(myParams, clonedParams);
 		} catch (PhonScriptException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 	
 		retVal.pkgImports.clear();

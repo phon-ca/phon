@@ -1,68 +1,66 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  
-  <parent>
-    <artifactId>phon</artifactId>
-    <groupId>ca.phon</groupId>
-    <version>4.0.0-SNAPSHOT</version>
-    <relativePath>..</relativePath>
-  </parent>
- 
-  <artifactId>phon-components</artifactId>
-  <name>Phon Common UI Components</name>
-  <description>A collection of UI components for use with Phon.</description>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <dependencies>
-  	<dependency>
-  		<groupId>org.swinglabs.swingx</groupId>
-  		<artifactId>swingx-all</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>ca.hedlund</groupId>
-  		<artifactId>tst</artifactId>
-  	</dependency>
-    <dependency>
-      <groupId>com.jgoodies</groupId>
-      <artifactId>jgoodies-forms</artifactId>
-    </dependency>
-    <dependency>
-		<groupId>ca.phon</groupId>
-		<artifactId>jbreadcrumb</artifactId>
-	</dependency>
-	<dependency>
-		<groupId>com.fifesoft</groupId>
-		<artifactId>rsyntaxtextarea</artifactId>
-	</dependency>
-	<dependency>
-		<groupId>com.fifesoft</groupId>
-		<artifactId>autocomplete</artifactId>
-	</dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>native-dialogs</artifactId>
-    </dependency>
-  	<dependency>
-  	    <groupId>${project.groupId}</groupId>
-  		<artifactId>phon-project</artifactId>
-  	  <version>${project.version}</version>
-  	</dependency>
+    <parent>
+        <artifactId>phon</artifactId>
+        <groupId>ca.phon</groupId>
+        <version>4.0.0-SNAPSHOT</version>
+        <relativePath>..</relativePath>
+    </parent>
 
-	  <dependency>
-		  <groupId>ca.hedlund</groupId>
-		  <artifactId>desktopicons</artifactId>
-	  </dependency>
+    <artifactId>phon-components</artifactId>
+    <name>Phon Common UI Components</name>
+    <description>A collection of UI components for use with Phon.</description>
 
-	  <dependency>
-		  <groupId>com.github.jiconfont</groupId>
-		  <artifactId>jiconfont-swing</artifactId>
-		  <version>1.0.0</version>
-	  </dependency>
+    <dependencies>
+        <dependency>
+            <groupId>org.swinglabs.swingx</groupId>
+            <artifactId>swingx-all</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ca.hedlund</groupId>
+            <artifactId>tst</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jgoodies</groupId>
+            <artifactId>jgoodies-forms</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ca.phon</groupId>
+            <artifactId>jbreadcrumb</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fifesoft</groupId>
+            <artifactId>rsyntaxtextarea</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fifesoft</groupId>
+            <artifactId>autocomplete</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>native-dialogs</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>phon-project</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ca.hedlund</groupId>
+            <artifactId>desktopicons</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.jiconfont</groupId>
+            <artifactId>jiconfont-swing</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.jiconfont</groupId>
+            <artifactId>jiconfont-font_awesome</artifactId>
+            <version>4.7.0.1</version>
+        </dependency>
+    </dependencies>
 
-	  <dependency>
-		  <groupId>com.github.jiconfont</groupId>
-		  <artifactId>jiconfont-font_awesome</artifactId>
-		  <version>4.7.0.1</version>
-	  </dependency>
-  </dependencies>
-  
 </project>

@@ -18,9 +18,10 @@ package ca.phon.script.debug;
 import org.mozilla.javascript.*;
 import org.mozilla.javascript.debug.*;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class PhonScriptDebugFrame implements DebugFrame {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(PhonScriptDebugFrame.class.getName());
 	
 	private DebuggableScript fnOrScript;
 	
@@ -40,7 +41,7 @@ public class PhonScriptDebugFrame implements DebugFrame {
 
 	@Override
 	public void onExceptionThrown(Context arg0, Throwable arg1) {
-		LOGGER.error( arg1.getLocalizedMessage(), arg1);
+		Logger.getLogger(arg0.getClass().getName()).log(Level.WARNING, arg1.getLocalizedMessage(), arg1);
 	}
 
 	@Override

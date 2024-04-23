@@ -24,6 +24,8 @@ import javax.xml.stream.*;
 import java.io.*;
 import java.time.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -34,8 +36,6 @@ import java.util.stream.Collectors;
  */
 public class ParamHistoryManager {
 		
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ParamHistoryManager.class.getName());
-	
 	public static ParamHistoryType loadParamHistoryFromFile(File paramHistoryFile) throws IOException {
 		return loadParamHistoryFromStream(new FileInputStream(paramHistoryFile));
 	}
@@ -245,7 +245,7 @@ public class ParamHistoryManager {
 			XMLGregorianCalendar xcal = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);	
 			paramSet.setDate(xcal);
 		} catch (DatatypeConfigurationException e) {
-			LOGGER.warn( e.getLocalizedMessage(), e);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 		for(ScriptParam param:params) {
 			if(param.hasChanged()) {

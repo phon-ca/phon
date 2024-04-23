@@ -22,7 +22,7 @@
     
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>phon-util</artifactId>
+      <artifactId>phon-core</artifactId>
       <version>${project.version}</version>
     </dependency>
     
