@@ -16,20 +16,18 @@
 package ca.phon.app;
 
 import ca.phon.app.hooks.PhonStartupHook;
+import ca.phon.app.log.LogUtil;
 import ca.phon.media.VLCHelper;
 import ca.phon.plugin.*;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.OSInfo;
-import org.apache.logging.log4j.LogManager;
 
 @PhonPlugin
 public class VLCInitHook implements PhonStartupHook, IPluginExtensionPoint<PhonStartupHook> {
 	
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(VLCInitHook.class.getName());
-	
 	@Override
 	public void startup() throws PluginException {
-		LOGGER.info("Initializing VLC library");
+		LogUtil.info("Checking for VLC");
 		
 		// disable VLC check for now
 		if(OSInfo.isNix()) return;

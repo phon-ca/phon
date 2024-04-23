@@ -15,6 +15,7 @@
  */
 package ca.phon.app.project.actions;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.ProjectWindow;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
@@ -30,10 +31,6 @@ import java.util.*;
 
 public class DeleteSessionAction extends ProjectWindowAction {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(DeleteSessionAction.class.getName());
-
-	private static final long serialVersionUID = -1541549069772255530L;
-
 	public DeleteSessionAction(ProjectWindow projectWindow) {
 		super(projectWindow);
 		
@@ -71,7 +68,7 @@ public class DeleteSessionAction extends ProjectWindowAction {
 					project.removeSession(corpus, sessionName, writeLock);
 					project.releaseSessionWriteLock(corpus, sessionName, writeLock);
 				} catch (IOException e) {
-					LOGGER.error( e.getLocalizedMessage(), e);
+					LogUtil.warning(e);
 					Toolkit.getDefaultToolkit().beep();
 					showMessage("Delete Session", e.getLocalizedMessage());
 				}

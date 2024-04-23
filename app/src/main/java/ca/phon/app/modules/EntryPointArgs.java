@@ -15,6 +15,7 @@
  */
 package ca.phon.app.modules;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.DesktopProjectFactory;
 import ca.phon.app.workspace.Workspace;
 import ca.phon.project.*;
@@ -37,10 +38,6 @@ import java.util.*;
  */
 public class EntryPointArgs extends HashMap<String, Object> {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(EntryPointArgs.class.getName());
-
-	private static final long serialVersionUID = -3794413262334673920L;
-
 	/*
 	 * Keys
 	 */
@@ -139,10 +136,8 @@ public class EntryPointArgs extends HashMap<String, Object> {
 			final ProjectFactory factory = new DesktopProjectFactory();
 			try {
 				retVal = factory.openProject(projectFile);
-			} catch (IOException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
-			} catch (ProjectConfigurationException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+			} catch (IOException | ProjectConfigurationException e) {
+				LogUtil.warning(e);
 			}
 		}
 		
@@ -220,7 +215,7 @@ public class EntryPointArgs extends HashMap<String, Object> {
 			}
 			return cmdLine.getArgs();
 		} catch (ParseException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.warning(e);
 		}
 		return new String[0];
 	}

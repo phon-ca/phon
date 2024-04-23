@@ -15,6 +15,7 @@
  */
 package ca.phon.app.project;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.project.Project;
 import ca.phon.util.CollatorFactory;
 
@@ -30,8 +31,6 @@ import java.util.*;
  */
 public class SessionListModel implements ListModel<String> {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(SessionListModel.class.getName());
-
 	/** Data listeners */
 	private ArrayList<ListDataListener> dataListeners;
 	
@@ -76,7 +75,7 @@ public class SessionListModel implements ListModel<String> {
 			Collections.sort(transcripts, collator);
 			return transcripts.get(index);
 		} catch (ArrayIndexOutOfBoundsException e) {
-			LOGGER.warn("Array index out of bounds: " + index);
+			LogUtil.warning(e);
 		}
 		
 		return null;

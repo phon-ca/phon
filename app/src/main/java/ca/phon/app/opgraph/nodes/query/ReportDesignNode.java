@@ -15,6 +15,7 @@
  */
 package ca.phon.app.opgraph.nodes.query;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.query.report.ReportEditor;
 import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.GraphDocument;
@@ -44,8 +45,6 @@ import java.util.Properties;
 		showInLibrary=true
 )
 public class ReportDesignNode extends OpNode implements NodeSettings {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ReportDesignNode.class.getName());
 	
 	public final static String AUTOSAVE_FILENAME = "lastreport.xml";
 	
@@ -136,7 +135,7 @@ public class ReportDesignNode extends OpNode implements NodeSettings {
 						new JAXBElement<ReportDesign>(reportDesignQName, ReportDesign.class, reportDesign);
 				marshaller.marshal(reportDesignEle, new File(PrefHelper.getUserDataFolder(), AUTOSAVE_FILENAME));
 			} catch (JAXBException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 		}
 	}

@@ -18,7 +18,6 @@ package ca.phon.app.opgraph.syllabifier;
 import ca.phon.syllabifier.opgraph.extensions.SyllabifierSettings;
 import ca.phon.util.Language;
 import com.jgoodies.forms.layout.*;
-import org.apache.logging.log4j.LogManager;
 
 import javax.swing.*;
 
@@ -27,10 +26,6 @@ import javax.swing.*;
  * and name.
  */
 public class SyllabifierSettingsPanel extends JPanel {
-
-	private static final long serialVersionUID = 8257931751924360390L;
-	
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(SyllabifierSettingsPanel.class.getName());
 
 	/*
 	 * UI

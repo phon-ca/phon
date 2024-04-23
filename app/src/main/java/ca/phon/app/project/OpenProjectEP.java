@@ -17,7 +17,6 @@ package ca.phon.app.project;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.modules.EntryPointArgs;
-import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.SessionEditorEP;
 import ca.phon.plugin.*;
 import ca.phon.project.*;
@@ -25,9 +24,6 @@ import ca.phon.session.Session;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.PrefHelper;
-import com.jcraft.jsch.IO;
-import org.apache.logging.log4j.Level;
-import org.pushingpixels.lafwidget.contrib.blogofbug.swing.SwingBugUtilities;
 
 import javax.swing.*;
 import java.awt.*;
@@ -177,11 +173,11 @@ public class OpenProjectEP implements IPluginEntryPoint {
 		final File oldPropsFile = new File(project.getLocation(), LocalProject.PREV_PROJECT_PROPERTIES_FILE);
 		final File newPropsFile = new File(project.getLocation(), LocalProject.PROJECT_PROPERTIES_FILE);
 		if(oldPropsFile.exists() && !newPropsFile.exists()) {
-			LogUtil.log(Level.INFO, "Moving oldLoc .properties file to new project.properties");
+			LogUtil.info("Moving oldLoc .properties file to new project.properties");
 			try {
 				Files.move(oldPropsFile.toPath(), newPropsFile.toPath(), StandardCopyOption.ATOMIC_MOVE);
 			} catch (IOException e) {
-				LogUtil.log(Level.ERROR, e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 		}
     }

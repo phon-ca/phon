@@ -15,6 +15,7 @@
  */
 package ca.phon.app.project.actions;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.ProjectWindow;
 import ca.phon.project.Project;
 import ca.phon.util.CollatorFactory;
@@ -34,8 +35,6 @@ import java.util.*;
  *
  */
 public class DuplicateCorpusAction extends ProjectWindowAction {
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(DuplicateCorpusAction.class.getName());
 
 	private static final long serialVersionUID = -500973090454907775L;
 
@@ -71,7 +70,7 @@ public class DuplicateCorpusAction extends ProjectWindowAction {
 				}
 
 			} catch (IOException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 				Toolkit.getDefaultToolkit().beep();
 				showMessage("Duplicate Corpus", e.getLocalizedMessage());
 			}

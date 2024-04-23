@@ -16,6 +16,7 @@
 package ca.phon.app.menu.file;
 
 import ca.phon.app.hooks.HookableAction;
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.project.*;
 import ca.phon.app.welcome.WelcomeWindow;
@@ -39,10 +40,6 @@ private final static String TXT = "New project...";
 
 	private final static KeyStroke KS = KeyStroke.getKeyStroke(KeyEvent.VK_N,
 			Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.SHIFT_MASK);
-
-	private static final long serialVersionUID = -1288974377105467180L;
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(NewProjectCommand.class.getName());
 
 	public NewProjectCommand() {
 		super();
@@ -125,7 +122,7 @@ private final static String TXT = "New project...";
 				}
 			}
 		} catch (IOException ex) {
-			LOGGER.error( ex.getLocalizedMessage(), ex);
+			LogUtil.warning(ex);
 			final MessageDialogProperties p2 = new MessageDialogProperties();
 			p2.setParentWindow(CommonModuleFrame.getCurrentFrame());
 			p2.setHeader("Create Project Failed");

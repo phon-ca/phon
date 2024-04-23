@@ -15,6 +15,7 @@
  */
 package ca.phon.app.project.git.actions;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.ProjectWindow;
 import ca.phon.app.project.actions.ProjectWindowAction;
 import ca.phon.app.project.git.ProjectGitController;
@@ -28,10 +29,6 @@ import java.awt.event.ActionEvent;
 import java.io.*;
 
 public class PushAction extends ProjectWindowAction {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(PushAction.class.getName());
-
-	private static final long serialVersionUID = 8107666582684068017L;
 	
 	public PushAction(ProjectWindow projectWindow) {
 		super(projectWindow);
@@ -80,7 +77,7 @@ public class PushAction extends ProjectWindowAction {
 		} catch (IOException | GitAPIException e) {
 			printer.println(e.getLocalizedMessage());
 			printer.flush();
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.warning(e);
 		}
 	}
 

@@ -31,7 +31,6 @@ import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.PrefHelper;
-import org.apache.logging.log4j.LogManager;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -43,8 +42,6 @@ import java.awt.*;
  */
 public class DefaultMenuFilter implements IPluginMenuFilter {
 
-	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(DefaultMenuFilter.class.getName());
-	
 	@Override
 	public void filterWindowMenu(Window owner, JMenuBar menu) {
 		addFileMenu(owner, menu);

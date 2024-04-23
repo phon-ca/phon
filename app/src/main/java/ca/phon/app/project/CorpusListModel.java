@@ -15,6 +15,7 @@
  */
 package ca.phon.app.project;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.project.Project;
 import ca.phon.util.CollatorFactory;
 
@@ -29,8 +30,6 @@ import java.util.*;
  *
  */
 public class CorpusListModel implements ListModel<String> {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(CorpusListModel.class.getName());
 	
 	/** The project */
 	private Project project;
@@ -81,7 +80,7 @@ public class CorpusListModel implements ListModel<String> {
 			Collections.sort(corpora, collator);
 			return corpora.get(index);
 		} catch (ArrayIndexOutOfBoundsException e) {
-			LOGGER.warn("Array index out of bounds: " + index);
+			LogUtil.warning(e);
 		}
 		return null;
 	}

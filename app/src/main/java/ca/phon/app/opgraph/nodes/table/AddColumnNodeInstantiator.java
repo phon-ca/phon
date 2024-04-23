@@ -15,13 +15,12 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.opgraph.library.instantiators.Instantiator;
 import ca.phon.script.*;
 import ca.phon.script.params.*;
 
 public class AddColumnNodeInstantiator implements Instantiator<AddColumnNode> {
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(AddColumnNodeInstantiator.class.getName());
 
 	@Override
 	public AddColumnNode newInstance(Object... params) throws InstantiationException {
@@ -48,7 +47,7 @@ public class AddColumnNodeInstantiator implements Instantiator<AddColumnNode> {
 				}
 			}
 		} catch (PhonScriptException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.warning(e);
 		}
 
 		AddColumnNode retVal = new AddColumnNode(script);

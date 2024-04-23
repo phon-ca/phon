@@ -15,6 +15,7 @@
  */
 package ca.phon.app.project.git;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.git.CommitTableModel.FileStatus;
 import ca.phon.app.project.git.actions.GitProgressBuffer;
 import ca.phon.project.Project;
@@ -35,10 +36,6 @@ import java.io.IOException;
 import java.util.List;
 
 public class GitCommitWizard extends WizardFrame {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(GitCommitWizard.class.getName());
-
-	private static final long serialVersionUID = -3292049153895936174L;
 	
 	private final static String PUSH_CHANGES_KEY = "GitCommitWizard.pushChanges";
 	private final static Boolean DEFAULT_PUSH_CHANGES = Boolean.TRUE;
@@ -106,7 +103,7 @@ public class GitCommitWizard extends WizardFrame {
 		try(Git git = gitController.open()) {
 			status = gitController.status();
 		} catch (IOException | GitAPIException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.warning(e);
 		}
 		unindexedModel = new CommitTableModel(status, false);
 		unindexedTable = new JXTable(unindexedModel);
@@ -196,7 +193,7 @@ public class GitCommitWizard extends WizardFrame {
 			git.add().addFilepattern(".").setUpdate(true).call();
 			updateStatus(gitController.status());
 		} catch (IOException | GitAPIException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.warning(e);
 			Toolkit.getDefaultToolkit().beep();
 			ToastFactory.makeToast(e.getLocalizedMessage()).start(addAllButton);
 		}
@@ -221,7 +218,7 @@ public class GitCommitWizard extends WizardFrame {
 			}
 			updateStatus(gitController.status());
 		} catch (IOException | GitAPIException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.warning(e);
 			Toolkit.getDefaultToolkit().beep();
 			ToastFactory.makeToast(e.getLocalizedMessage()).start(addToIndexButton);
 		}
@@ -234,7 +231,7 @@ public class GitCommitWizard extends WizardFrame {
 			git.reset().setRef("HEAD").call();
 			updateStatus(gitController.status());
 		} catch (IOException | GitAPIException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.warning(e);
 			Toolkit.getDefaultToolkit().beep();
 			ToastFactory.makeToast(e.getLocalizedMessage()).start(removeFromIndexButton);
 		}
@@ -253,7 +250,7 @@ public class GitCommitWizard extends WizardFrame {
 			}
 			updateStatus(gitController.status());
 		} catch (IOException | GitAPIException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.warning(e);
 			Toolkit.getDefaultToolkit().beep();
 			ToastFactory.makeToast(e.getLocalizedMessage()).start(removeFromIndexButton);
 		}

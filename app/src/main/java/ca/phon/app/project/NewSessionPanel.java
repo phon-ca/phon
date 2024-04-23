@@ -15,6 +15,7 @@
  */
 package ca.phon.app.project;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.plugin.*;
 import ca.phon.project.Project;
 import ca.phon.util.icons.*;
@@ -29,10 +30,7 @@ import java.util.List;
 import java.util.*;
 
 public class NewSessionPanel extends JPanel {
-	private static final long serialVersionUID = 8888896161322222665L;
 
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(NewSessionDialog.class.getName());
-	
 	private JTextField txtName = new JTextField();
 	private JComboBox cmbCorpus = new JComboBox();
 	private JButton btnCreateCorpus = new JButton();
@@ -191,7 +189,7 @@ public class NewSessionPanel extends JPanel {
 			try {
 				PluginEntryPointRunner.executePlugin("NewCorpus", initInfo);
 			} catch (PluginException e) {
-				LOGGER.error( e.getMessage(), e);
+				LogUtil.warning(e);
 			}
 
 			updateCorporaList();

@@ -15,6 +15,7 @@
  */
 package ca.phon.app.project.actions;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.*;
 import ca.phon.project.Project;
 import ca.phon.session.Session;
@@ -27,10 +28,6 @@ import java.util.*;
 
 public class RenameSessionAction extends ProjectWindowAction {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(RenameSessionAction.class.getName());
-
-	private static final long serialVersionUID = 2062009179431805213L;
-
 	public RenameSessionAction(ProjectWindow projectWindow) {
 		super(projectWindow);
 		
@@ -79,7 +76,7 @@ public class RenameSessionAction extends ProjectWindowAction {
 				session = project.openSession(corpusName, sessionName);
 				session.setName(newSessionName);
 			} catch(Exception e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 				showMessage("Rename Session", e.getLocalizedMessage());
 				return;
 			}
@@ -89,14 +86,14 @@ public class RenameSessionAction extends ProjectWindowAction {
 				writeLock = project.getSessionWriteLock(corpusName, newSessionName);
 				project.saveSession(corpusName, newSessionName, session, writeLock);
 			} catch (Exception e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 				showMessage("Rename Session", e.getLocalizedMessage());
 			} finally {
 				if(writeLock != null) {
 					try {
 						project.releaseSessionWriteLock(corpusName, newSessionName, writeLock);
 					} catch (IOException e) {
-						LOGGER.error( e.getLocalizedMessage(), e);
+						LogUtil.warning(e);
 					}
 					writeLock = null;
 				}
@@ -106,14 +103,14 @@ public class RenameSessionAction extends ProjectWindowAction {
 				writeLock = project.getSessionWriteLock(corpusName, sessionName);
 				project.removeSession(corpusName, sessionName, writeLock);
 			} catch (Exception e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 				showMessage("Rename Session", e.getLocalizedMessage());
 			} finally {
 				if(writeLock != null) {
 					try {
 						project.releaseSessionWriteLock(corpusName, sessionName, writeLock);
 					} catch (IOException e) {
-						LOGGER.error( e.getLocalizedMessage(), e);
+						LogUtil.warning(e);
 					}
 				}
 			}

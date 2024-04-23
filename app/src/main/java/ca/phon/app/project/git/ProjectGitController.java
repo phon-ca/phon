@@ -33,8 +33,6 @@ import java.util.function.Consumer;
  */
 public class ProjectGitController {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ProjectGitController.class.getName());
-	
 	private final static String GIT_FOLDER = ".git";
 	
 	private final Project project;
@@ -309,7 +307,7 @@ public class ProjectGitController {
 	 * Push changes
 	 * 
 	 * @param remote
-	 * @param mointor
+	 * @param monitor
 	 * @throws GitAPIException 
 	 * @throws TransportException 
 	 * @throws InvalidRemoteException 

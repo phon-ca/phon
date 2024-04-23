@@ -15,6 +15,7 @@
  */
 package ca.phon.app.session;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.query.*;
 import ca.phon.project.Project;
 import ca.phon.query.db.*;
@@ -45,8 +46,6 @@ import java.util.regex.*;
  */
 public class RecordFilterPanel extends JPanel {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(RangeRecordFilter.class.getName());
-
 	/** The transcript */
 	private Session t;
 	
@@ -547,7 +546,7 @@ public class RecordFilterPanel extends JPanel {
 			try {
 				retVal = new RangeRecordFilter(t, rangeField.getText());
 			} catch (ParseException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 		} else if(speakerBtn.isSelected()) {
 			retVal = new ParticipantRecordFilter(selectedParticipants);

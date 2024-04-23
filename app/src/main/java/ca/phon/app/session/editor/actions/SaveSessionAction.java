@@ -15,10 +15,10 @@
  */
 package ca.phon.app.session.editor.actions;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.session.Session;
 import ca.phon.util.icons.*;
-import org.apache.logging.log4j.LogManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,10 +29,6 @@ import java.io.IOException;
  * <p>Save the {@link Session} currently open in the {@link SessionEditor}.</p>
  */
 public class SaveSessionAction extends SessionEditorAction {
-	
-	private static final long serialVersionUID = 1815240897720486382L;
-
-	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(SaveSessionAction.class.getName());
 	
 	private final static String CMD_NAME = "Save";
 	
@@ -57,7 +53,7 @@ public class SaveSessionAction extends SessionEditorAction {
 		try {
 			getEditor().saveData();
 		} catch (IOException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.warning(e);
 		}
 	}
 

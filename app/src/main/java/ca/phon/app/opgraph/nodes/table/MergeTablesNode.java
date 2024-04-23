@@ -15,6 +15,7 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.nodes.query.ColumnOptionsPanel;
 import ca.phon.opgraph.*;
 import ca.phon.opgraph.app.GraphDocument;
@@ -38,8 +39,6 @@ import java.util.*;
 		showInLibrary=true
 )
 public class MergeTablesNode extends TableOpNode implements NodeSettings {
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(MergeTablesNode.class.getName());
 
 	private InputField table1Input = new InputField("table1", "Table 1", false, true, TableDataSource.class);
 
@@ -534,13 +533,13 @@ public class MergeTablesNode extends TableOpNode implements NodeSettings {
 															colType.getConstructor( String.class );
 													table1Val = numberCtr.newInstance( "0" );
 												} catch (NoSuchMethodException | InvocationTargetException e) {
-													LOGGER.warn( e.getLocalizedMessage(), e);
+													LogUtil.warning(e);
 												}
 											} else {
 												table1Val = colType.newInstance();
 											}
 										} catch (InstantiationException | IllegalAccessException e) {
-											LOGGER.warn( e.getLocalizedMessage(), e);
+											LogUtil.warning(e);
 										}
 									}
 								}
@@ -563,13 +562,13 @@ public class MergeTablesNode extends TableOpNode implements NodeSettings {
 															colType.getConstructor( String.class );
 													table2Val = numberCtr.newInstance( "0" );
 												} catch (NoSuchMethodException | InvocationTargetException e) {
-													LOGGER.warn( e.getLocalizedMessage(), e);
+													LogUtil.warning(e);
 												}
 											} else {
 												table2Val = colType.newInstance();
 											}
 										} catch (InstantiationException | IllegalAccessException e) {
-											LOGGER.warn( e.getLocalizedMessage(), e);
+											LogUtil.warning(e);
 										}
 									}
 								}
