@@ -28,14 +28,14 @@ import org.mozilla.javascript.*;
 import org.mozilla.javascript.tools.debugger.Main;
 
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Run a query given a project, session and query script.
  * 
  */
 public class QueryTask extends PhonTask {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(QueryTask.class.getName());
 	
 	private final Project project;
 	
@@ -145,7 +145,7 @@ public class QueryTask extends PhonTask {
 			setResultSet(rs);
 			super.setStatus(TaskStatus.FINISHED);
 		} catch (PhonScriptException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			super.err = e;
 			super.setStatus(TaskStatus.ERROR);
 		}

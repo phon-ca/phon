@@ -24,14 +24,14 @@ import ca.phon.util.resources.ResourceLoader;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
  * An XML-based implementation of {@link Script}.
  */
 public class XMLScript implements Script, JAXBWrapper<ScriptType> {
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(XMLScript.class.getName());
-	
 	/** JAXB object */
 	ScriptType script;
 	
@@ -70,7 +70,7 @@ public class XMLScript implements Script, JAXBWrapper<ScriptType> {
 				try {
 					cachedSource = readFromUrl(script.getUrl());
 				} catch (IOException e) {
-					LOGGER.error( e.getLocalizedMessage(), e);
+					Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 				}
 			}
 			retVal = cachedSource;

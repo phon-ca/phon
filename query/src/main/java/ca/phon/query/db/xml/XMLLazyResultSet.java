@@ -21,14 +21,14 @@ import ca.phon.query.db.xml.io.resultset.ResultSetType;
 
 import java.io.*;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Similar to {@link XMLResultSet}, except loading of result set data is lazy
  * (i.e., delayed as long as possible).
  */
 public class XMLLazyResultSet extends XMLResultSet {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(XMLLazyResultSet.class.getName());
 	
 	/** The file where data is located */
 	private File resultSetFile;
@@ -60,7 +60,7 @@ public class XMLLazyResultSet extends XMLResultSet {
 					isLoaded = true;
 				}
 			} catch (IOException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		}
 	}

@@ -21,14 +21,14 @@ import ca.phon.query.db.Script;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Similar to {@link XMLQuery}, except loading of result set data is lazy
  * (i.e., delayed as long as possible).
  */
 public class XMLLazyQuery extends XMLQuery {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(XMLLazyQuery.class.getName());
 	
 	/** The file where data is located */
 	private File queryFile;
@@ -61,7 +61,7 @@ public class XMLLazyQuery extends XMLQuery {
 					isLoaded = true;
 				}
 			} catch (IOException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		}
 	}

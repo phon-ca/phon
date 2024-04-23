@@ -19,13 +19,14 @@ import ca.phon.project.*;
 import ca.phon.project.exceptions.ProjectConfigurationException;
 import ca.phon.script.params.EnumScriptParam;
 import ca.phon.session.Session;
-import org.apache.logging.log4j.LogManager;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Tests of the Phones.js query
@@ -33,8 +34,6 @@ import java.util.*;
  */
 @RunWith(Parameterized.class)
 public class TestPhonesQuery extends TestQuery {
-
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(TestPhonesQuery.class.getName());
 
 	public TestPhonesQuery(Project project, Session session, String scriptPath,
 			Map<String, Object> params, int expectedResults) {
@@ -98,10 +97,8 @@ public class TestPhonesQuery extends TestQuery {
 			retVal.add(epenthesis(project, session));
 
 			// TODO metadata tests?
-		} catch (IOException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
-		} catch (ProjectConfigurationException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+		} catch (IOException | ProjectConfigurationException e) {
+			Logger.getLogger(TestPhonesQuery.class.getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 
 		return retVal;

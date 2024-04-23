@@ -27,6 +27,8 @@ import org.mozilla.javascript.Scriptable;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * A data source which lists each
@@ -39,8 +41,6 @@ import java.util.*;
 public class ResultListingDataSource extends AbstractScriptTableModel implements TableDataSource {
 
 	private static final long serialVersionUID = 6508115371509706432L;
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ResultListingDataSource.class.getName());
 
 	/**
 	 * Section information
@@ -93,7 +93,7 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 		try {
 			session = project.openSession(s.getCorpus(), s.getSession());
 		} catch (IOException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 		setupColumns();
 	}
@@ -169,7 +169,7 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 									paramVal = savedParam.getContent();
 								}
 							} catch (Exception e) {
-								LOGGER.warn( e.getLocalizedMessage(), e);
+								Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 							}
 						} else {
 							paramVal = param.getDefaultValue(paramId);
@@ -182,7 +182,7 @@ public class ResultListingDataSource extends AbstractScriptTableModel implements
 					setColumnMappings(colIdx, bindings);
 				colIdx++;
 			} catch (PhonScriptException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		}
 	}

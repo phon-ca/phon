@@ -722,11 +722,6 @@ public class PhonMediaPlayer extends JPanel {
 		@Override
 		public void buffering(MediaPlayer mediaPlayer, float newCache) {
 			super.buffering(mediaPlayer, newCache);
-			
-//			if(newCache >= 100.0f) {
-//				startRenderTimer();
-//			}
-			
 			if(PrefHelper.getBoolean("phon.debug", false)) {
 				final String logMsg = String.format("Buffering %s: %.2f%% complete", 
 						mediaPlayer.media().info().mrl(), newCache);
@@ -737,20 +732,17 @@ public class PhonMediaPlayer extends JPanel {
 		@Override
 		public void playing(MediaPlayer mediaPlayer) {
 			super.playing(mediaPlayer);
-//			startRenderTimer();
 			getPlayPauseButton().getAction().putValue(Action.SMALL_ICON, pauseIcn);
 		}
 		
 		@Override
 		public void paused(MediaPlayer mediaPlayer) {
 			super.paused(mediaPlayer);
-//			stopRenderTimer();
 			getPlayPauseButton().getAction().putValue(Action.SMALL_ICON, playIcn);
 		}
 		
 		@Override
 		public void stopped(MediaPlayer mediaPlayer) {
-//			stopRenderTimer();
 			getPlayPauseButton().getAction().putValue(Action.SMALL_ICON, playIcn);
 		}
 		
@@ -861,10 +853,6 @@ public class PhonMediaPlayer extends JPanel {
 	}
 
 	public void stop() {
-//		if(mediaTimer != null) {
-//			mediaTimer.stop();
-//			mediaTimer = null;
-//		}
 		if(getMediaPlayer() != null)
 			getMediaPlayer().controls().stop();
 	}

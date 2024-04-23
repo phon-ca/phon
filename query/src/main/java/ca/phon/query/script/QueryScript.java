@@ -18,13 +18,14 @@ package ca.phon.query.script;
 import ca.phon.plugin.PluginManager;
 import ca.phon.script.*;
 import ca.phon.script.params.ScriptParameters;
-import org.apache.logging.log4j.LogManager;
 
 import java.io.IOException;
 import java.net.*;
 import java.security.*;
 import java.util.Enumeration;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Holds the text for a query script.
@@ -55,11 +56,11 @@ public class QueryScript extends LazyQueryScript {
 						final URI uri = url.toURI();
 						script.addRequirePath(uri);
 					} catch (URISyntaxException e) {
-						LOGGER.error( e.getLocalizedMessage(), e);
+						Logger.getLogger(QueryScript.class.getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 					}
 				}
 			} catch (IOException e1) {
-				LOGGER.error( e1.getLocalizedMessage(), e1);
+				Logger.getLogger(QueryScript.class.getName()).log(Level.WARNING, e1.getLocalizedMessage(), e1);
 			}
 			
 			script.addPackageImport("Packages.ca.phon.orthography");
@@ -128,7 +129,7 @@ public class QueryScript extends LazyQueryScript {
 		
 		setupLibraryFolders();
 	}
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(QueryScript.class.getName());
+
 	/**
 	 * Setup library folders for 'require'
 	 */
@@ -143,11 +144,11 @@ public class QueryScript extends LazyQueryScript {
 					final URI uri = url.toURI();
 					super.addRequirePath(uri);
 				} catch (URISyntaxException e) {
-					LOGGER.error( e.getLocalizedMessage(), e);
+					Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 				}
 			}
 		} catch (IOException e1) {
-			LOGGER.error( e1.getLocalizedMessage(), e1);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e1.getLocalizedMessage(), e1);
 		}
 		
 		super.addPackageImport("Packages.ca.phon.orthography");
@@ -212,7 +213,7 @@ public class QueryScript extends LazyQueryScript {
 			
 			ScriptParameters.copyParams(myParams, clonedParams);
 		} catch (PhonScriptException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 		
 		final QueryName myName = getExtension(QueryName.class);

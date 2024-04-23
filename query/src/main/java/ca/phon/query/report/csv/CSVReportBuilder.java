@@ -30,14 +30,14 @@ import jakarta.xml.bind.JAXBElement;
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * CSV report builder implementation.
  *
  */
 public class CSVReportBuilder extends ReportBuilder {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(CSVReportBuilder.class.getName());
 	
 	/**
 	 * Property for indenting content at sections (default:false)
@@ -270,7 +270,7 @@ public class CSVReportBuilder extends ReportBuilder {
 				try {
 					writer.flush();
 				} catch (IOException e) {
-					LOGGER.error(e.getLocalizedMessage(), e);
+					Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 				}
 			}
 		}
@@ -297,7 +297,7 @@ public class CSVReportBuilder extends ReportBuilder {
 		try {
 			writer.writeNext(sessionNameLine.toArray(new String[0]));
 		} catch (IOException e) {
-			LOGGER.warn(e);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 		
 		if(group.isPrintParticipantInformation()) {
@@ -342,7 +342,7 @@ public class CSVReportBuilder extends ReportBuilder {
 				writer.writeNext(new String[0]);
 				writer.flush();
 			} catch (IOException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		}
 	}

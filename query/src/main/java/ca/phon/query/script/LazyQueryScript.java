@@ -22,6 +22,8 @@ import ca.phon.script.params.*;
 
 import java.io.*;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Defers loading of the query script until data is needed.
@@ -29,8 +31,6 @@ import java.net.URL;
  */
 public class LazyQueryScript extends BasicScript {
 
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(LazyQueryScript.class.getName());
-	
 	private boolean loaded = false;
 	
 	private final URL scriptURL;
@@ -72,7 +72,7 @@ public class LazyQueryScript extends BasicScript {
 				}
 			}
 		} catch (IOException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 	}
 	
@@ -110,7 +110,7 @@ public class LazyQueryScript extends BasicScript {
 		try {
 			params = getContext().getScriptParameters(getContext().getEvaluatedScope());
 		} catch (PhonScriptException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 		for(ScriptParam sp:params) {
 			for(String id:sp.getParamIds()) {

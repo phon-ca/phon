@@ -20,6 +20,8 @@ import ca.phon.query.db.ScriptLibrary;
 
 import java.io.UnsupportedEncodingException;
 import java.net.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Extension for {@link QueryScript} objects which provides
@@ -28,9 +30,6 @@ import java.net.*;
 @Extension(QueryScript.class)
 public class QueryName {
 	
-	private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(QueryName.class
-			.getName());
-
 	private String name;
 	
 	private URL location;
@@ -55,7 +54,7 @@ public class QueryName {
 				this.name = this.name.substring(0, lastDot);
 			}
 		} catch (UnsupportedEncodingException e) {
-			LOGGER.warn( e.getLocalizedMessage(), e);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 	}
 	

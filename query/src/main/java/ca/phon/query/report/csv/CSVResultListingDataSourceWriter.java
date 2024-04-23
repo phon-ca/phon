@@ -18,16 +18,15 @@ package ca.phon.query.report.csv;
 import ca.phon.csv.CSVWriter;
 import ca.phon.query.report.datasource.ResultListingDataSource;
 import ca.phon.query.report.io.ResultListingFormatType;
-import org.apache.logging.log4j.LogManager;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.*;
 
 public class CSVResultListingDataSourceWriter extends CSVTableDataSourceWriter {
 
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(CSVResultListingDataSourceWriter.class.getName());
-	
 	public CSVResultListingDataSourceWriter(CSVReportBuilder builder, ResultListingDataSource ds) {
 		super(builder, ds);
 	}
@@ -48,7 +47,7 @@ public class CSVResultListingDataSourceWriter extends CSVTableDataSourceWriter {
 			try {
 				writer.writeNext(currentLine.toArray(new String[0]));
 			} catch (IOException e) {
-				LOGGER.warn(e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 			
 			for(int row = 0; row < rsDs.getRowCount(); row++) {
@@ -74,7 +73,7 @@ public class CSVResultListingDataSourceWriter extends CSVTableDataSourceWriter {
 				try {
 					writer.writeNext(currentLine.toArray(new String[0]));
 				} catch (IOException e) {
-					LOGGER.warn(e);
+					Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 				}
 			}
 		}

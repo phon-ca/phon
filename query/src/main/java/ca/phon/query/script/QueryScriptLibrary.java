@@ -23,11 +23,12 @@ import ca.phon.script.PhonScriptException;
 import ca.phon.script.params.ScriptParam;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.resources.ResourceLoader;
-import org.apache.logging.log4j.LogManager;
 
 import java.io.*;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Script library for phon query scripts.
@@ -35,8 +36,6 @@ import java.util.function.Consumer;
  *
  */
 public final class QueryScriptLibrary implements IExtendable {
-
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(QueryScriptLibrary.class.getName());
 
 	/**
 	 * User script folder
@@ -193,7 +192,7 @@ public final class QueryScriptLibrary implements IExtendable {
 					}
 				}
 			} catch (PhonScriptException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				Logger.getLogger(QueryScriptLibrary.class.getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 			s.setParameters(paramMap);
 			q.setScript(s);
