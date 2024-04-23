@@ -15,6 +15,7 @@
  */
 package ca.phon.app.welcome;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.project.Project;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
@@ -29,8 +30,6 @@ import java.util.zip.*;
  */
 public class ProjectArchiveTask extends PhonTask {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ProjectArchiveTask.class.getName());
-
 	private Project project;
 	
 	private boolean includeResources = false;
@@ -125,9 +124,9 @@ public class ProjectArchiveTask extends PhonTask {
 		super.setProperty(STATUS_PROP, "Writing to file " + destFile.getAbsolutePath());
 		if(destFile.exists()) {
 			// print warning and delete file
-			LOGGER.warn("Overwriting file '" + destFile.getAbsolutePath() + "'");
+			LogUtil.info("Overwriting file '" + destFile.getAbsolutePath() + "'");
 			if(!destFile.delete()) {
-				LOGGER.warn("Could not delete file '" + destFile.getAbsolutePath() + "'");
+				LogUtil.warning("Could not delete file '" + destFile.getAbsolutePath() + "'");
 			}
 		}
 		
@@ -185,7 +184,7 @@ public class ProjectArchiveTask extends PhonTask {
 			zos.close();
 			
 		} catch (IOException e) {
-			LOGGER.error(e.toString());
+			LogUtil.warning(e);
 			super.err = e;
 			super.setStatus(TaskStatus.ERROR);
 			return;

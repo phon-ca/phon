@@ -17,6 +17,7 @@ package ca.phon.app.about;
 
 import ca.phon.app.VersionInfo;
 import ca.phon.app.*;
+import ca.phon.app.log.LogUtil;
 import ca.phon.extensions.*;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.fonts.FontPreferences;
@@ -30,8 +31,6 @@ import java.util.Set;
 public class AboutPanel extends JPanel implements IExtendable {
 
 	private final static String DEFAULT_SPLASH_IMAGE = "data/phonboot.png";
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(AboutPanel.class.getName());
 
 	private final ExtensionSupport extSupport = new ExtensionSupport(AboutPanel.class, this);
 
@@ -50,7 +49,7 @@ public class AboutPanel extends JPanel implements IExtendable {
 		try {
 			mt.waitForAll();
 		} catch (InterruptedException e) {
-			LOGGER.error( e.getMessage(), e);
+			LogUtil.severe(e);
 		}
 
 		setPreferredSize(new Dimension(bootImage.getWidth(this), bootImage.getHeight(this)));

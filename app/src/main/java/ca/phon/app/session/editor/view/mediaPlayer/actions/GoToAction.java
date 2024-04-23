@@ -15,19 +15,15 @@
  */
 package ca.phon.app.session.editor.view.mediaPlayer.actions;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.mediaPlayer.MediaPlayerEditorView;
 import ca.phon.ui.action.PhonActionEvent;
-import org.apache.logging.log4j.LogManager;
 
 import java.awt.event.ActionEvent;
 import java.text.ParseException;
 
 public class GoToAction extends MediaPlayerAction {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(GoToAction.class.getName());
-
-	private static final long serialVersionUID = -2265485841201934953L;
 	
 	private final static String CMD_NAME = "Go to...";
 	
@@ -45,7 +41,7 @@ public class GoToAction extends MediaPlayerAction {
 		try {
 			getMediaPlayerView().onMenuSelectGoto(new PhonActionEvent(e));
 		} catch (ParseException e1) {
-			LOGGER.error( e1.getLocalizedMessage(), e1);
+			LogUtil.warning(e1);
 		}
 	}
 

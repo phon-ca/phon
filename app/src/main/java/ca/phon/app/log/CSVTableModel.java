@@ -26,10 +26,6 @@ import java.util.*;
  */
 public class CSVTableModel extends AbstractTableModel {
 	
-	private static final long serialVersionUID = 5228655036751277639L;
-
-	private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(CSVTableModel.class.getName());
-
 	private boolean useFirstRowAsHeader = true;
 	
 	private int maxCols = -1;
@@ -41,7 +37,7 @@ public class CSVTableModel extends AbstractTableModel {
 		try {
 			data = csvReader.readAll();
 		} catch (IOException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.warning(e);
 		}
 	}
 	

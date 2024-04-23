@@ -19,7 +19,6 @@ import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.*;
 import ca.phon.session.*;
 import ca.phon.syllabifier.Syllabifier;
-import org.apache.logging.log4j.LogManager;
 import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;

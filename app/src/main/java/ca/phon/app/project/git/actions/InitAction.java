@@ -15,6 +15,7 @@
  */
 package ca.phon.app.project.git.actions;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.ProjectWindow;
 import ca.phon.app.project.actions.ProjectWindowAction;
 import ca.phon.app.project.git.ProjectGitController;
@@ -32,10 +33,6 @@ import java.io.IOException;
  * all changes.
  */
 public class InitAction extends ProjectWindowAction {
-
-	private static final long serialVersionUID = 7839341789844508097L;
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(InitAction.class.getName());
 
 	public InitAction(ProjectWindow projectWindow) {
 		super(projectWindow);
@@ -60,19 +57,19 @@ public class InitAction extends ProjectWindowAction {
 					"Initializing git repository for project at "
 							+ gitController.getRepositoryFolder() +"...";
 			if(!gitController.hasGitFolder()) {
-				LOGGER.info(msg);
+				LogUtil.info(msg);
 				try(Git git = gitController.init()) {
-					LOGGER.info("Setting up default .gitignore");
+					LogUtil.info("Setting up default .gitignore");
 					gitController.setupDefaultGitIgnore();
-					LOGGER.info("Adding all files to index");
+					LogUtil.info("Adding all files to index");
 					gitController.addToIndex(".");
-					LOGGER.info("Creating initial commit");
+					LogUtil.info("Creating initial commit");
 					gitController.commitAllChanges("Initial commit");
 
 					props.setMessage("Initialized new git repository at "
 							+ git.getRepository().getDirectory().getAbsolutePath());
 				} catch (IOException | GitAPIException e) {
-					LOGGER.error( e.getLocalizedMessage(), e);
+					LogUtil.warning(e);
 					props.setMessage(e.getLocalizedMessage());
 				}
 			} else {

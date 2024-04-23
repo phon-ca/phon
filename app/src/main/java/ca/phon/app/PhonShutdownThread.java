@@ -17,14 +17,13 @@ package ca.phon.app;
 
 import ca.phon.app.hooks.PhonShutdownHook;
 import ca.phon.app.log.LogManager;
+import ca.phon.app.log.LogUtil;
 import ca.phon.plugin.*;
 import ca.phon.worker.*;
 
 import java.util.List;
 
 public class PhonShutdownThread extends PhonWorker {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(PhonShutdownThread.class.getName());
 	
 	private static PhonShutdownThread _instance = null;
 	
@@ -56,7 +55,7 @@ public class PhonShutdownThread extends PhonWorker {
 				try {
 					hook.shutdown();
 				} catch (PluginException e) {
-					LOGGER.error( e.getLocalizedMessage(), e);
+					LogUtil.warning(e);
 				}
 			}
 			

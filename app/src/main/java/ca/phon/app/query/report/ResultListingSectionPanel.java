@@ -15,6 +15,7 @@
  */
 package ca.phon.app.query.report;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.script.ScriptPanel;
 import ca.phon.query.report.io.*;
 import ca.phon.query.script.*;
@@ -43,8 +44,6 @@ import static ca.phon.query.report.util.ResultListingFieldBuilder.*;
  *
  */
 public class ResultListingSectionPanel extends SectionPanel<ResultListing> {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ResultListingSectionPanel.class.getName());
 	
 	/**
 	 * Help text
@@ -405,7 +404,7 @@ public class ResultListingSectionPanel extends SectionPanel<ResultListing> {
 			try {
 				params = ctx.getScriptParameters(ctx.getEvaluatedScope());
 			} catch (PhonScriptException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 			// setup script parameters
 			for(ScriptParam param:params) {
@@ -441,7 +440,7 @@ public class ResultListingSectionPanel extends SectionPanel<ResultListing> {
 							}
 							param.setValue(paramId, paramVal);
 						} catch (Exception e) {
-							LOGGER.warn( e.getLocalizedMessage(), e);
+							LogUtil.warning(e);
 						}
 					}
 				}

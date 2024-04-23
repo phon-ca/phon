@@ -15,6 +15,7 @@
  */
 package ca.phon.app.project.actions;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.*;
 import ca.phon.project.Project;
 import ca.phon.util.CollatorFactory;
@@ -27,10 +28,6 @@ import java.util.*;
 
 public class RenameCorpusAction extends ProjectWindowAction {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(RenameCorpusAction.class.getName());
-
-	private static final long serialVersionUID = 1699053938382896780L;
-
 	public RenameCorpusAction(ProjectWindow projectWindow) {
 		super(projectWindow);
 	
@@ -83,7 +80,7 @@ public class RenameCorpusAction extends ProjectWindowAction {
 				showMessage("Rename Corpus", 
 						"Failed to rename corpus " + corpusName + ". Reason: " + e.getMessage());
 				Toolkit.getDefaultToolkit().beep();
-				LOGGER.error( e.getMessage(), e);
+				LogUtil.warning(e);
 			}
 		}
 	}

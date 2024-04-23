@@ -42,8 +42,6 @@ import java.util.concurrent.atomic.AtomicReference;
 )
 public class PrintBufferNode extends OpNode implements NodeSettings {
 
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(PrintBufferNode.class.getName());
-
 	private InputField dataField =
 			new InputField("data", "Data to print", true, false, Object.class);
 
@@ -178,7 +176,7 @@ public class PrintBufferNode extends OpNode implements NodeSettings {
 					out.flush();
 				}
 			} catch (IOException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 
 		};

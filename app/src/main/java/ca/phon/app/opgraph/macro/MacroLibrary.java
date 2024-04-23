@@ -32,8 +32,6 @@ import java.util.*;
 
 public class MacroLibrary {
 	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(MacroLibrary.class.getName());
-	
 	private final static String MACRO_FOLDER = "macro";
 	
 	/**
@@ -101,7 +99,7 @@ public class MacroLibrary {
 				
 				builder.addItem(menuPath, act);
 			} catch (UnsupportedEncodingException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 		}
 		
@@ -124,7 +122,7 @@ public class MacroLibrary {
 				final MacroAction act = new MacroAction(project, reportURL);
 				userMenuBuilder.addItem(menuPath, act);
 			} catch (URISyntaxException | UnsupportedEncodingException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 		}
 		if(userMenu.getMenuComponentCount() > 0) {
@@ -165,7 +163,7 @@ public class MacroLibrary {
 				final MacroAction act = new MacroAction(project, reportURL);
 				projectMenuBuilder.addItem(menuPath, act);
 			} catch (URISyntaxException | UnsupportedEncodingException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 		}
 		if(projectMenu.getMenuComponentCount() > 0) {

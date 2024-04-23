@@ -21,7 +21,6 @@ import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;
-import org.apache.logging.log4j.LogManager;
 
 import javax.swing.*;
 import java.awt.*;

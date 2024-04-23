@@ -15,6 +15,7 @@
  */
 package ca.phon.app.query.report;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.project.Project;
 import ca.phon.session.*;
 import ca.phon.worker.*;
@@ -33,8 +34,6 @@ import java.util.*;
  *
  */
 public class TierSelector extends JComponent {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(TierSelector.class.getName());
 	
 	public final static String SELECTION_PROP = "_TIER_SELECTION_";
 	public final static String LOADING_FINISHED = "_TIERS_LOADED_";
@@ -131,7 +130,7 @@ public class TierSelector extends JComponent {
 									}
 									
 								} catch (IOException e) {
-									LOGGER.warn( e.getLocalizedMessage(), e);
+									LogUtil.warning(e);
 								}
 							}
 						}

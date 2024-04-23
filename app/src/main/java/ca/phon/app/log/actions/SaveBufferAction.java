@@ -22,17 +22,12 @@ import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.icons.*;
 import ca.phon.worker.PhonWorker;
-import org.apache.logging.log4j.LogManager;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.*;
 
 public class SaveBufferAction extends HookableAction {
-
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(SaveLogBufferAction.class.getName());
-
-	private static final long serialVersionUID = -2827879669257916438L;
 
 	private final static String CMD_NAME = "Save...";
 

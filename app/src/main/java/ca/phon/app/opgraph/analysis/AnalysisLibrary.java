@@ -58,8 +58,6 @@ import java.util.*;
  */
 public class AnalysisLibrary implements OpGraphLibrary {
 
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(AnalysisLibrary.class.getName());
-	
 	private final static String QUERY_REPORT_MAP = "analysis/QueryReportMap.txt";
 	
 	private final static String ANALYSIS_FROM_QUERY_TEMPLATE = "macro/AnalysisFromQueryTemplate.xml";
@@ -133,7 +131,7 @@ public class AnalysisLibrary implements OpGraphLibrary {
 
 				builder.addItem(menuPath, act);
 			} catch (UnsupportedEncodingException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 		}
 
@@ -159,7 +157,7 @@ public class AnalysisLibrary implements OpGraphLibrary {
 				
 				userActionMap.put(path.toLowerCase(), new Tuple<>(menuPath, act));
 			} catch (URISyntaxException | UnsupportedEncodingException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 		}
 		for(String path:userActionMap.keySet()) {
@@ -206,7 +204,7 @@ public class AnalysisLibrary implements OpGraphLibrary {
 				String path = menuPath + "/" + act.getValue(AnalysisAction.NAME);
 				analysisActionMap.put(path.toLowerCase(), new Tuple<>(menuPath, act));
 			} catch (URISyntaxException | UnsupportedEncodingException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 		}
 		for(String path:analysisActionMap.keySet()) {
@@ -267,7 +265,7 @@ public class AnalysisLibrary implements OpGraphLibrary {
 					PhonWorker.getInstance().invokeLater(runner);
 				} catch (IOException ex) {
 					Toolkit.getDefaultToolkit().beep();
-					LOGGER.error( ex.getLocalizedMessage(), ex);
+					LogUtil.warning(ex);
 					
 					final MessageDialogProperties mprops = new MessageDialogProperties();
 					mprops.setParentWindow(CommonModuleFrame.getCurrentFrame());
@@ -298,7 +296,7 @@ public class AnalysisLibrary implements OpGraphLibrary {
 				retVal.put(key, value);
 			}
 		} catch (IOException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.warning(e);
 		}
 		
 		return retVal;

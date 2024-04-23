@@ -162,10 +162,6 @@ public class DefaultMenuFilter implements IPluginMenuFilter {
 		final JMenuItem langItem = new JMenuItem(new LanguageCodesCommand());
 		toolsMenu.add(langItem);
 	
-		if(PrefHelper.getBoolean(PhonProperties.DEBUG, false)) {
-			toolsMenu.add(new BasicSyllabifierTestCommand());
-		}
-	
 		menu.add(toolsMenu);
 	}
 

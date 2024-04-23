@@ -16,6 +16,7 @@
 package ca.phon.app.opgraph.report;
 
 import ca.phon.app.hooks.HookableAction;
+import ca.phon.app.log.LogUtil;
 import ca.phon.opgraph.OpGraph;
 import ca.phon.opgraph.app.OpgraphIO;
 import ca.phon.project.Project;
@@ -28,10 +29,6 @@ import java.net.*;
 import java.util.concurrent.ExecutionException;
 
 public class ReportAction extends HookableAction {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ReportAction.class.getName());
-	
-	private static final long serialVersionUID = -5178033211126700430L;
 	
 	private Project project;
 	
@@ -79,7 +76,7 @@ public class ReportAction extends HookableAction {
 				final ReportRunner reportRunner = new ReportRunner(get(), project, queryId);
 				PhonWorker.getInstance().invokeLater(reportRunner);
 			} catch (ExecutionException | InterruptedException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 		}
 		

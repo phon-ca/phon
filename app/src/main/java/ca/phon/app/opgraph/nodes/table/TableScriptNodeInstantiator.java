@@ -15,14 +15,13 @@
  */
 package ca.phon.app.opgraph.nodes.table;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.opgraph.library.instantiators.Instantiator;
 import ca.phon.query.script.QueryScript;
 import ca.phon.script.*;
 import ca.phon.script.params.*;
 
 public class TableScriptNodeInstantiator implements Instantiator<TableScriptNode> {
-
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(TableScriptNodeInstantiator.class.getName());
 
 	@Override
 	public TableScriptNode newInstance(Object... params) throws InstantiationException {
@@ -54,7 +53,7 @@ public class TableScriptNodeInstantiator implements Instantiator<TableScriptNode
 				}
 			}
 		} catch (PhonScriptException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.warning(e);
 		}
 
 		TableScriptNode retVal = new TableScriptNode(script);

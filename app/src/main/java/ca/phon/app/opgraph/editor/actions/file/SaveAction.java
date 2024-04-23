@@ -15,6 +15,7 @@
  */
 package ca.phon.app.opgraph.editor.actions.file;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.menu.file.OpenFileHistory;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.app.opgraph.editor.actions.OpgraphEditorAction;
@@ -28,10 +29,6 @@ import java.awt.event.*;
 import java.io.IOException;
 
 public class SaveAction extends OpgraphEditorAction {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(SaveAction.class.getName());
-
-	private static final long serialVersionUID = -3563703815236430754L;
 	
 	public final static String TXT = "Save";
 	
@@ -66,7 +63,7 @@ public class SaveAction extends OpgraphEditorAction {
 				openFileHistory.addToHistory(getEditor().getCurrentFile());
 			}
 		} catch (IOException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.warning(e);
 			ToastFactory.makeToast(e.getLocalizedMessage()).start(getEditor());
 			Toolkit.getDefaultToolkit().beep();
 		}

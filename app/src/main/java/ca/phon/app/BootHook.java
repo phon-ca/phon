@@ -16,6 +16,7 @@
 package ca.phon.app;
 
 import ca.phon.app.hooks.PhonBootHook;
+import ca.phon.app.log.LogUtil;
 import ca.phon.plugin.*;
 import ca.phon.util.OSInfo;
 
@@ -30,8 +31,6 @@ import java.util.*;
  */
 @PhonPlugin(name="default", minPhonVersion="1.6.2")
 public class BootHook implements IPluginExtensionPoint<PhonBootHook>, PhonBootHook {
-
-	private final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(BootHook.class.getName());
 
 	/*
 	 * Resource files
@@ -50,7 +49,7 @@ public class BootHook implements IPluginExtensionPoint<PhonBootHook>, PhonBootHo
 		try {
 			retVal = ClassLoader.getSystemClassLoader().getResources(respath);
 		} catch (IOException e) {
-			LOGGER.error( e.getMessage(), e);
+			LogUtil.warning(e);
 		}
 		return retVal;
 	}
@@ -66,10 +65,8 @@ public class BootHook implements IPluginExtensionPoint<PhonBootHook>, PhonBootHo
 		try {
 			final FileInputStream fin = new FileInputStream(file);
 			loadFromInputStream(cmd, fin);
-		} catch (FileNotFoundException e) {
-			LOGGER.info(e.getLocalizedMessage(), e);
 		} catch (IOException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			LogUtil.warning(e);
 		}
 	}
 
@@ -77,13 +74,13 @@ public class BootHook implements IPluginExtensionPoint<PhonBootHook>, PhonBootHo
 		final Enumeration<URL> optURLs = getResourceURLs(path);
 		while(optURLs.hasMoreElements()) {
 			URL url = optURLs.nextElement();
-			LOGGER.info("Loading vmoptions from URL " + url.toString());
+			LogUtil.info("Loading vmoptions from URL " + url.toString());
 
 			try {
 				final InputStream is = url.openStream();
 				loadFromInputStream(cmd, is);
 			} catch (IOException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning( e.getLocalizedMessage(), e);
 			}
 		}
 	}
@@ -109,7 +106,7 @@ public class BootHook implements IPluginExtensionPoint<PhonBootHook>, PhonBootHo
 		final Enumeration<URL> envURLs = getResourceURLs(VM_ENV_FILE);
 		while(envURLs.hasMoreElements()) {
 			URL url = envURLs.nextElement();
-			LOGGER.info("Loading environment settings from URL " + url.toString());
+			LogUtil.info("Loading environment settings from URL " + url.toString());
 
 			try {
 				final InputStream is = url.openStream();
@@ -128,7 +125,7 @@ public class BootHook implements IPluginExtensionPoint<PhonBootHook>, PhonBootHo
 				}
 				isr.close();
 			} catch (IOException e) {
-				LOGGER.error( e.getMessage(), e);
+				LogUtil.severe(e);
 			}
 		}
 

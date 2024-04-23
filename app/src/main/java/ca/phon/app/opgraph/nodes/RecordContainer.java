@@ -15,6 +15,7 @@
  */
 package ca.phon.app.opgraph.nodes;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.nodes.query.ResultSetRecordContainer;
 import ca.phon.project.Project;
 import ca.phon.query.db.ResultSet;
@@ -25,8 +26,6 @@ import java.util.*;
 
 public interface RecordContainer {
 	
-	static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(RecordContainer.class.getName());
-	
 	public static List<RecordContainer> toRecordContainers(Project project, Collection<Participant> selectedParticipants, Object obj) {
 		List<RecordContainer> retVal = new ArrayList<>();
 		if(obj instanceof SessionPath) {
@@ -35,7 +34,7 @@ public interface RecordContainer {
 				Session session = project.openSession(sessionLoc.getFolder(), sessionLoc.getSessionFile());
 				retVal.add(new SessionRecordContainer(session, selectedParticipants));
 			} catch (IOException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 		} else if(obj instanceof SessionPath[]) {
 			SessionPath[] paths = (SessionPath[])obj;
@@ -51,7 +50,7 @@ public interface RecordContainer {
 				Session session = project.openSession(rs.getCorpus(), rs.getSession());
 				retVal.add(new ResultSetRecordContainer(session, rs));
 			} catch (IOException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				LogUtil.warning(e);
 			}
 		} else if(obj instanceof ResultSet[]) {
 			ResultSet[] resultSets = (ResultSet[])obj;
