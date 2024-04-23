@@ -8,9 +8,9 @@
         <relativePath>..</relativePath>
     </parent>
 
-    <artifactId>phon-util</artifactId>
-    <name>Phon Utility Classes</name>
-    <description>A collection of useful classes used withing the Phon libraries.</description>
+    <artifactId>phon-fontconv</artifactId>
+    <name>Phon IPA font converter</name>
+    <description>IPA font mappings to unicode</description>
 
     <dependencies>
 
@@ -29,10 +29,6 @@
             <groupId>de.susebox</groupId>
             <artifactId>jtopas</artifactId>
         </dependency>
-
-
-
-
 
         <dependency>
             <groupId>junit</groupId>
