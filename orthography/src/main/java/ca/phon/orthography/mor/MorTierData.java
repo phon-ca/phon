@@ -8,7 +8,6 @@ import ca.phon.orthography.mor.parser.MorParserErrorListener;
 import ca.phon.orthography.mor.parser.MorParserErrorStrategy;
 import ca.phon.orthography.mor.parser.MorParserException;
 import org.antlr.v4.runtime.*;
-import org.jetbrains.annotations.NotNull;
 
 import java.text.ParseException;
 import java.util.*;
@@ -90,7 +89,6 @@ public final class MorTierData extends ExtendableObject implements Iterable<Mor>
         return getMors().stream().map(Mor::text).collect(Collectors.joining(" "));
     }
 
-    @NotNull
     @Override
     public Iterator<Mor> iterator() {
         return mors.iterator();

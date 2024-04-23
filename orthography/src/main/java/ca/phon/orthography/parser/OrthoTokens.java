@@ -18,6 +18,8 @@ package ca.phon.orthography.parser;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Handles conversion from dynamic Ortho token names
@@ -25,8 +27,6 @@ import java.util.*;
  *
  */
 public class OrthoTokens {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(OrthoTokens.class.getName());
 	
 	private String tokenFile = "UnicodeOrthography.tokens";
 	
@@ -57,9 +57,8 @@ public class OrthoTokens {
 				}
 			}
 			in.close();
-			
 		} catch (IOException e) {
-			LOGGER.warn(e.toString());
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 	}
 	
