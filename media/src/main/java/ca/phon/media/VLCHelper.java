@@ -25,6 +25,8 @@ import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
 import uk.co.caprica.vlcj.support.Info;
 
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Helper methods for using vlc4j
@@ -45,9 +47,6 @@ public class VLCHelper {
 	private final static String VLC_LOCATION_MAC = "/Applications/VLC.app/Contents/MacOS/lib";
 	
 	private final static String VLC_PLUGIN_PATH_MAC = "/Applications/VLC.app/Contents/MacOS/plugins";
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(VLCHelper.class
-			.getName());
 	
 	private static volatile boolean isLoaded = false;
 
@@ -91,7 +90,7 @@ public class VLCHelper {
 					vlcLocation = workingDir + File.separator + vlcLocation;
 				}
 				if(!vlcLocationDefault.equals(vlcLocation)) {
-					LOGGER.info("VLC location:" + vlcLocation);
+					Logger.getLogger(VLCHelper.class.getName()).info("VLC location:" + vlcLocation);
 				}
 				NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), vlcLocation);
 				NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcCoreLibraryName(), vlcLocation);
@@ -105,15 +104,16 @@ public class VLCHelper {
 					// System.getenv("VLC_PLUGIN_PATH") returns null even after the call
 					// but the setting seems to be necessary for vlcj
 					if(LibC.INSTANCE.setenv("VLC_PLUGIN_PATH", vlcPluginPath, 1) < 0) {
-						LOGGER.warn("Unable to set VLC_PLUGIN_PATH");
+						Logger.getLogger(VLCHelper.class.getName()).warning("Could not set VLC_PLUGIN_PATH");
 					}
 				}
 				if(!vlcPluginPathDefault.equals(vlcPluginPath)) {
-					LOGGER.info("VLC plug-in location:" + vlcPluginPath);
+					Logger.getLogger(VLCHelper.class.getName()).info("VLC plugin path:" + vlcPluginPath);
 				}
 
 				
 				Info info = Info.getInstance();
+				Logger LOGGER = Logger.getLogger(VLCHelper.class.getName());
 				LOGGER.info(String.format("vlcj\t\t\t\t: %s", info.vlcjVersion() != null ? info.vlcjVersion() : "<version not available>"));
 				LOGGER.info(String.format("os\t\t\t\t: %s", val(info.os())));
 				LOGGER.info(String.format("java\t\t\t\t: %s", val(info.javaVersion())));
@@ -135,7 +135,7 @@ public class VLCHelper {
 	        	
 				isLoaded = true;
 			} catch (UnsatisfiedLinkError | RuntimeException e) {
-				LOGGER.error( e.getLocalizedMessage(), e);
+				Logger.getLogger(VLCHelper.class.getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 				if(showError)
 					ToastFactory.makeToast(e.getLocalizedMessage()).start();
 			}

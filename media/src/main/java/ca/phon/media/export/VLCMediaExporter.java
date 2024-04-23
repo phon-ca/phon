@@ -28,6 +28,8 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Export video and/or audio with the option
@@ -36,8 +38,6 @@ import java.util.concurrent.CountDownLatch;
  *
  */
 public class VLCMediaExporter extends PhonTask {
-	
-	private final static org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(VLCMediaExporter.class.getName());
 	
 	public static enum Preset {
 		H264_HIGH("h.264 + mp3 (high)", ".mp4",
@@ -158,7 +158,7 @@ public class VLCMediaExporter extends PhonTask {
 			doExport();
 			setStatus(TaskStatus.FINISHED);
 		} catch (PhonMediaException e) {
-			LOGGER.error( e.getLocalizedMessage(), e);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			super.err = e;
 			setStatus(TaskStatus.ERROR);
 		}
@@ -174,7 +174,9 @@ public class VLCMediaExporter extends PhonTask {
 					try {
 						Desktop.getDesktop().moveToTrash(outputFile);
 					} catch (UnsupportedOperationException ex) {
-						LOGGER.error(ex.getLocalizedMessage(), ex);
+						Logger.getLogger(getClass().getName()).log(Level.WARNING, ex.getLocalizedMessage(), ex);
+					} catch (Exception ex) {
+						Logger.getLogger(getClass().getName()).log(Level.WARNING, ex.getLocalizedMessage(), ex);
 					}
 				}
 				

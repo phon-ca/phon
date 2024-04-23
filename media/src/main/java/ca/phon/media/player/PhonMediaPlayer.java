@@ -23,7 +23,6 @@ import ca.phon.ui.nativedialogs.FileFilter;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.*;
-import org.apache.logging.log4j.LogManager;
 import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
 import uk.co.caprica.vlcj.player.base.*;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
@@ -43,16 +42,14 @@ import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.locks.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Media player using vlc4j (including media playback controls.)
  */
 public class PhonMediaPlayer extends JPanel {
 	
-	private static final long serialVersionUID = -5365398623998749265L;
-	
-	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(PhonMediaPlayer.class.getName());
-
 	public final static int VOL_MAX = 200;
 
 	/** UI  components */
@@ -392,7 +389,7 @@ public class PhonMediaPlayer extends JPanel {
 					mediaPlayerCanvas.setToolTipText("Unable to load media");
 				}
 			} catch (UnsatisfiedLinkError | Exception e) {
-				LOGGER.error(e.getLocalizedMessage(), e);
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 				mediaPlayerCanvas.setBufferedImage(noPlayerImage);
 				mediaPlayerCanvas.repaint();
 			}
@@ -411,7 +408,7 @@ public class PhonMediaPlayer extends JPanel {
 		try {
 			return ImageIO.read(PhonMediaPlayer.class.getResourceAsStream(AUDIO_ONLY_IMAGE));
 		} catch (IOException e) {
-			LOGGER.warn(e);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 		return null;
 	}
@@ -420,7 +417,7 @@ public class PhonMediaPlayer extends JPanel {
 		try {
 			return ImageIO.read(PhonMediaPlayer.class.getResourceAsStream(NO_MEDIA_IMAGE));
 		} catch (IOException e) {
-			LOGGER.warn(e);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 		return null;
 	}
@@ -429,7 +426,7 @@ public class PhonMediaPlayer extends JPanel {
 		try {
 			return ImageIO.read(PhonMediaPlayer.class.getResourceAsStream(MEDIA_AVAIL_IMAGE));
 		} catch (IOException e) {
-			LOGGER.warn(e);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 		return null;
 	}
@@ -438,7 +435,7 @@ public class PhonMediaPlayer extends JPanel {
 		try {
 			return ImageIO.read(PhonMediaPlayer.class.getResourceAsStream(NO_PLAYER_IMAGE));
 		} catch (IOException e) {
-			LOGGER.warn(e);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 		return null;
 	}
@@ -733,7 +730,7 @@ public class PhonMediaPlayer extends JPanel {
 			if(PrefHelper.getBoolean("phon.debug", false)) {
 				final String logMsg = String.format("Buffering %s: %.2f%% complete", 
 						mediaPlayer.media().info().mrl(), newCache);
-				LOGGER.trace(logMsg);
+				Logger.getLogger(getClass().getName()).info(logMsg);
 			}
 		}
 
