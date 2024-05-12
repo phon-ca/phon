@@ -7,8 +7,6 @@ import me.friwi.jcefmaven.*;
 import me.friwi.jcefmaven.impl.progress.ConsoleProgressHandler;
 import org.cef.*;
 import org.cef.browser.*;
-import org.cef.handler.CefLoadHandler;
-import org.cef.network.CefRequest;
 
 import java.io.*;
 
