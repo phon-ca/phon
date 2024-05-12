@@ -147,7 +147,7 @@ time_in_minutes_seconds
     ;
 
 number
-    :   INT+
+    :   INT | NUMBER
     ;
 
 /* Other Items */
