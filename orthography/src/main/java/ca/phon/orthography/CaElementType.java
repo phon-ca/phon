@@ -26,7 +26,7 @@ public enum CaElementType {
     @Documentation("https://talkbank.org/manuals/CHAT.html#HurriedStart_Element")
     HURRIED_START('⤇', "hurried start"),
     @Documentation("https://talkbank.org/manuals/CHAT.html#SuddenStop_Element")
-    HURRIED_END('⤆', "sudden stop");
+    SUDDEN_STOP('⤆', "sudden stop");
 
     private char ch;
 

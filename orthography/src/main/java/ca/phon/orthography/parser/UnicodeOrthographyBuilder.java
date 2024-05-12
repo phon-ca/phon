@@ -241,7 +241,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
     public void exitProsody(UnicodeOrthographyParser.ProsodyContext ctx) {
         ProsodyType type = switch(ctx.getText()) {
             case ":" -> ProsodyType.DRAWL;
-            case "^" -> (wordElements.size() == 0 ? ProsodyType.BLOCKING : ProsodyType.PAUSE);
+            case "^" -> ProsodyType.PAUSE;
             default -> null;
         };
         if(type != null) {

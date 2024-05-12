@@ -79,6 +79,9 @@ public class WordElementTwoXmlVisitor extends AbstractWordElementVisitor {
             case PITCH_UP -> XmlCaElementTypeType.PITCH_UP;
             case PRIMARY_STRESS -> XmlCaElementTypeType.PRIMARY_STRESS;
             case SECONDARY_STRESS -> XmlCaElementTypeType.SECONDARY_STRESS;
+            case HARDENING -> XmlCaElementTypeType.HARDENING;
+            case HURRIED_START -> XmlCaElementTypeType.HURRIED_START;
+            case SUDDEN_STOP -> XmlCaElementTypeType.SUDDEN_STOP;
         };
         xmlCaElement.setType(type);
         wordElements.add(factory.createCaElement(xmlCaElement));
@@ -119,7 +122,6 @@ public class WordElementTwoXmlVisitor extends AbstractWordElementVisitor {
     public void visitProsody(Prosody prosody) {
         final XmlProsodyType xmlP = factory.createXmlProsodyType();
         final XmlProsodyTypeType xmlType = switch (prosody.getType()) {
-            case BLOCKING -> XmlProsodyTypeType.BLOCKING;
             case DRAWL -> XmlProsodyTypeType.DRAWL;
             case PAUSE -> XmlProsodyTypeType.PAUSE;
         };

@@ -311,7 +311,7 @@ public class TestUnicodeOrthographyParser {
         final List<WordElement> wordElements = ((Word)ortho.elementAt(0)).getWordElements();
         Assert.assertEquals(2, wordElements.size());
         Assert.assertEquals(Prosody.class, wordElements.get(0).getClass());
-        Assert.assertEquals(ProsodyType.BLOCKING, ((Prosody)wordElements.get(0)).getType());
+        Assert.assertEquals(ProsodyType.PAUSE, ((Prosody)wordElements.get(0)).getType());
         Assert.assertEquals(WordText.class, wordElements.get(1).getClass());
         Assert.assertEquals("word", wordElements.get(1).text());
     }

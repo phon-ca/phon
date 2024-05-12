@@ -17,7 +17,7 @@ public final class XmlWordContentVisitor extends VisitorAdapter<Object> {
 
     private final List<Pos> pos = new ArrayList<>();
 
-    private final List<ca.phon.orthography.Replacement> replacements = new ArrayList<>();
+    private final List<Replacement> replacements = new ArrayList<>();
 
     private List<WordElement> wordElements = new ArrayList<>();
 
@@ -82,6 +82,9 @@ public final class XmlWordContentVisitor extends VisitorAdapter<Object> {
             case PITCH_UP -> CaElementType.PITCH_UP;
             case PRIMARY_STRESS -> CaElementType.PRIMARY_STRESS;
             case SECONDARY_STRESS -> CaElementType.SECONDARY_STRESS;
+            case HARDENING -> CaElementType.HARDENING;
+            case HURRIED_START -> CaElementType.HURRIED_START;
+            case SUDDEN_STOP -> CaElementType.SUDDEN_STOP;
         };
         wordElements.add(new CaElement(caElementType));
     }
@@ -111,7 +114,6 @@ public final class XmlWordContentVisitor extends VisitorAdapter<Object> {
     @Visits
     public void visitProsody(XmlProsodyType xmlP) {
         final ProsodyType type = switch (xmlP.getType()) {
-            case BLOCKING -> ProsodyType.BLOCKING;
             case DRAWL -> ProsodyType.DRAWL;
             case PAUSE -> ProsodyType.PAUSE;
         };
@@ -167,7 +169,7 @@ public final class XmlWordContentVisitor extends VisitorAdapter<Object> {
             if(!(ele instanceof Word word)) throw new IllegalArgumentException();
             wordList.add(word);
         }
-        replacements.add(new ca.phon.orthography.Replacement(xmlReplacement.isReal() != null && xmlReplacement.isReal(), wordList));
+        replacements.add(new Replacement(xmlReplacement.isReal() != null && xmlReplacement.isReal(), wordList));
     }
 
     @Override
@@ -188,7 +190,7 @@ public final class XmlWordContentVisitor extends VisitorAdapter<Object> {
         return pos;
     }
 
-    public List<ca.phon.orthography.Replacement> getReplacements() {
+    public List<Replacement> getReplacements() {
         return replacements;
     }
 
