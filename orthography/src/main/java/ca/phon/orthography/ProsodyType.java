@@ -6,9 +6,7 @@ public enum ProsodyType {
     @Documentation("https://talkbank.org/manuals/CHAT.html#Lengthening_Marker")
     DRAWL(':', "drawl"),
     @Documentation("https://talkbank.org/manuals/CHAT.html#WordInternalPause_Marker")
-    PAUSE('^', "pause"),
-    @Documentation("https://talkbank.org/manuals/CHAT.html#Blocking_Marker")
-    BLOCKING('^', "blocking"); // at beginning
+    PAUSE('^', "pause"); // at beginning
 
     private char ch;
 

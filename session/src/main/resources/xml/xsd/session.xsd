@@ -2309,6 +2309,30 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:enumeration>
+            <xs:enumeration value="hardening">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>⁑</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/chat.html#Hardening_Element">CHAT manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="hurried start">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>⤇</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/chat.html#HurriedStart_Element">CHAT manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="sudden stop">
+                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
+                    <xs:documentation>⤆</xs:documentation>
+                    <xs:documentation>
+                        <a href="https://talkbank.org/manuals/chat.html#SuddenStop_Element">CHAT manual section on this topic...</a>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
         </xs:restriction>
     </xs:simpleType>
 
@@ -2976,15 +3000,6 @@
                     <xs:documentation>
                         <a href="https://talkbank.org/manuals/CHAT.html#WordInternalPause_Marker">CHAT
                             manual section on this topic...</a>
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="blocking">
-                <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                    <xs:documentation>^ at beginning</xs:documentation>
-                    <xs:documentation>
-                        <a href="https://talkbank.org/manuals/CHAT.html#Blocking_Marker">CHAT manual
-                            section on this topic...</a>
                     </xs:documentation>
                 </xs:annotation>
             </xs:enumeration>

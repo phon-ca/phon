@@ -20,7 +20,13 @@ public enum CaElementType {
     @Documentation("https://talkbank.org/manuals/CHAT.html#PrimaryStress_Element")
     PRIMARY_STRESS('\u02c8', "primary stress"),
     @Documentation("https://talkbank.org/manuals/CHAT.html#SecondaryStress_Element")
-    SECONDARY_STRESS('\u02cc', "secondary stress");
+    SECONDARY_STRESS('\u02cc', "secondary stress"),
+    @Documentation("https://talkbank.org/manuals/CHAT.html#Hardening_Element")
+    HARDENING('⁑', "hardening"),
+    @Documentation("https://talkbank.org/manuals/CHAT.html#HurriedStart_Element")
+    HURRIED_START('⤇', "hurried start"),
+    @Documentation("https://talkbank.org/manuals/CHAT.html#SuddenStop_Element")
+    HURRIED_END('⤆', "sudden stop");
 
     private char ch;
 
