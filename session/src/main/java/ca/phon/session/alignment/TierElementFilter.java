@@ -72,7 +72,7 @@ public interface TierElementFilter {
                     OrthographyTierElementFilter.AlignableType.PhoneticGroup);
         final OrthographyTierElementFilter.Options options = new OrthographyTierElementFilter.Options(
                 true, true, true,
-                false, true, false, true,
+                false, true, true, true,
                 false, false, true, true);
         return new OrthographyTierElementFilter(alignableTypes, options);
     }
