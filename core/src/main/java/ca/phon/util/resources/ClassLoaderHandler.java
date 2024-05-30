@@ -81,6 +81,7 @@ public abstract class ClassLoaderHandler<T> extends URLHandler<T> {
 				String line = null;
 				while((line = in.readLine()) != null) {
 					final String resVal = line.strip();
+					if(resVal.startsWith("#")) continue;
 					if(resVal.length() > 0) {
 						addResource(resVal);
 					}

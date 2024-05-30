@@ -1,0 +1,18 @@
+{
+  "name": "Mapudungun",
+  "language": "arn",
+  "sonority": {
+    "{obs}": 0,
+    "{nas,c}": 1,
+    "{liq}": 2,
+    "\\g": 3,
+    "\\v": 4
+  },
+  "rules": {
+    "MarkNuclei #1": "(N\u003d\\v)",
+    "MarkOnset #1": ".:sctype(\"-O\")?(O\u003d\\g:N).:N",
+    "MaxOnset #1": "(O\u003d\\c:U).:O:mdc(\"2\",\"false\")",
+    "MarkCoda #1": ".:N(C\u003d\\c:U)",
+    "MaxCoda #1": ".:C(C\u003d\\c:U)"
+  }
+}

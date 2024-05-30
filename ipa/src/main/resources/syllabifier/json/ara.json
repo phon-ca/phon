@@ -1,0 +1,20 @@
+{
+  "name": "Arabic",
+  "language": "ara",
+  "sonority": {
+    "{obs}": 0,
+    "{nas}": 1,
+    "[{liq}{fri,voiced,labial}]": 2,
+    "\\g": 3,
+    "\\v": 4
+  },
+  "rules": {
+    "MarkNuclei #1": "(N\u003d\\v)",
+    "MarkOnset #1": ".:sctype(\"-O\")?(O\u003d{g}:N).:N",
+    "MaxOnset #1": "(O\u003d\\c:U).:O:mdc(\"1\",\"false\")",
+    "MarkCoda #1": ".:sctype(\"N|C\")(C\u003d\\c:U)\\c",
+    "MaxCoda #1": ".:sctype(\"N|C\")(C\u003d\\c:U)\\c",
+    "InitialOnset #1": "(O\u003d\\c:U).:O",
+    "FinalCoda #1": "(C\u003d\\c:U)"
+  }
+}
