@@ -1,14 +1,17 @@
 package ca.phon.syllabifier;
 
 import ca.phon.phonex.PhonexPattern;
+import ca.phon.phonex.PhonexPatternException;
 import ca.phon.util.Language;
 import ca.phon.util.resources.ClassLoaderHandler;
 
 import javax.json.Json;
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,24 +53,29 @@ public class JsonSyllabifierProvider extends ClassLoaderHandler<Syllabifier> imp
         final List<BasicSyllabifier.SonorityClass> sonorityClasses = new ArrayList<>();
         final List<BasicSyllabifier.SyllabifierStep> syllabifierSteps = new ArrayList<>();
 
-        final JsonObject sonorityClassesObj = json.getJsonObject("sonority");
+        final JsonArray sonorityClassesObj = json.getJsonArray("sonority");
         if(sonorityClassesObj == null) throw new IOException("Missing 'sonority' field in JSON");
-        for(String key:sonorityClassesObj.keySet()) {
+        for(JsonObject sonorityObj:sonorityClassesObj.getValuesAs(JsonObject.class)) {
             try {
-                final PhonexPattern phonexPattern = PhonexPattern.compile(key);
-                final int sonority = sonorityClassesObj.getInt(key);
+                final PhonexPattern phonexPattern = PhonexPattern.compile(sonorityObj.getString("pattern"));
+                final int sonority = sonorityObj.getInt("sonority");
                 sonorityClasses.add(new BasicSyllabifier.SonorityClass(sonority, phonexPattern));
-            } catch (Exception e) {
+            } catch (PhonexPatternException e) {
                 throw new IOException(e);
             }
         }
 
-        final JsonObject rulesObj = json.getJsonObject("rules");
-        if(rulesObj == null) throw new IOException("Missing 'rules' field in JSON");
-        for(String key:rulesObj.keySet()) {
-            final PhonexPattern pattern = PhonexPattern.compile(rulesObj.getString(key));
-            final BasicSyllabifier.SyllabifierStep step = new BasicSyllabifier.SyllabifierStep(key, pattern);
-            syllabifierSteps.add(step);
+        final JsonArray rulesObj = json.getJsonArray("steps");
+        if(rulesObj == null) throw new IOException("Missing 'steps' field in JSON");
+        for(JsonObject ruleObj:rulesObj.getValuesAs(JsonObject.class)) {
+            try {
+                final String ruleName = ruleObj.getString("name");
+                final PhonexPattern pattern = PhonexPattern.compile(ruleObj.getString("pattern"));
+                final BasicSyllabifier.SyllabifierStep step = new BasicSyllabifier.SyllabifierStep(ruleName, pattern);
+                syllabifierSteps.add(step);
+            } catch (PhonexPatternException e) {
+                throw new IOException(e);
+            }
         }
 
         return new BasicSyllabifier(name, language, sonorityClasses, syllabifierSteps);

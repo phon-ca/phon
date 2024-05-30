@@ -1,18 +1,60 @@
 {
   "name": "Mapudungun",
   "language": "arn",
-  "sonority": {
-    "{obs}": 0,
-    "{nas,c}": 1,
-    "{liq}": 2,
-    "\\g": 3,
-    "\\v": 4
-  },
-  "rules": {
-    "MarkNuclei #1": "(N\u003d\\v)",
-    "MarkOnset #1": ".:sctype(\"-O\")?(O\u003d\\g:N).:N",
-    "MaxOnset #1": "(O\u003d\\c:U).:O:mdc(\"2\",\"false\")",
-    "MarkCoda #1": ".:N(C\u003d\\c:U)",
-    "MaxCoda #1": ".:C(C\u003d\\c:U)"
-  }
+  "sonority": [
+    {
+      "pattern": "{obs}",
+      "sonority": 0
+    },
+    {
+      "pattern": "{nas,c}",
+      "sonority": 1
+    },
+    {
+      "pattern": "{liq}",
+      "sonority": 2
+    },
+    {
+      "pattern": "\\g",
+      "sonority": 3
+    },
+    {
+      "pattern": "\\v",
+      "sonority": 4
+    }
+  ],
+  "steps": [
+    {
+      "name": "MarkNuclei #1",
+      "pattern": "(D\u003d\\v{v,high,lax})"
+    },
+    {
+      "name": "MarkNuclei #1",
+      "pattern": "(D\u003d{v,high,lax}\\v)"
+    },
+    {
+      "name": "MarkNuclei #1",
+      "pattern": "(N\u003d\\v)"
+    },
+    {
+      "name": "MarkOnset #1",
+      "pattern": "(O\u003d\\c:U).:N"
+    },
+    {
+      "name": "MarkOnset #1",
+      "pattern": ".:sctype(\"-O\")?(O\u003d\\g:N).:N"
+    },
+    {
+      "name": "MaxOnset #1",
+      "pattern": "(O\u003d\\c:U).:O:mdc(\"2\",\"false\")"
+    },
+    {
+      "name": "MarkCoda #1",
+      "pattern": ".:N(C\u003d\\c:U)"
+    },
+    {
+      "name": "MaxCoda #1",
+      "pattern": ".:C(C\u003d\\c:U)"
+    }
+  ]
 }
