@@ -5,3 +5,6 @@ syllabifier/json/cat.json
 syllabifier/json/cmn.json
 syllabifier/json/cre-simple.json
 syllabifier/json/cre.json
+syllabifier/graphs/deu-ambi.json
+syllabifier/graphs/deu-simple.json
+syllabifier/graphs/deu.json
