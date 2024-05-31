@@ -1,0 +1,100 @@
+{
+  "name": "Greek",
+  "language": "ell",
+  "sonority": [
+    {
+      "pattern": "[{obstruent}]",
+      "sonority": 0
+    },
+    {
+      "pattern": "[{c, nasal}]",
+      "sonority": 1
+    },
+    {
+      "pattern": "[{liquid}]",
+      "sonority": 2
+    },
+    {
+      "pattern": "[{g}]",
+      "sonority": 3
+    },
+    {
+      "pattern": "[{v}]",
+      "sonority": 4
+    }
+  ],
+  "steps": [
+    {
+      "name": "MarkNuclei #1",
+      "pattern": "(D\u003d{v}{g})"
+    },
+    {
+      "name": "MarkNuclei #2",
+      "pattern": "(D\u003d{v}{v,high})"
+    },
+    {
+      "name": "MarkNuclei #3",
+      "pattern": "(N\u003d{v}:U)"
+    },
+    {
+      "name": "MarkOnset #1",
+      "pattern": "(O\u003d\\c:U).:N"
+    },
+    {
+      "name": "MaxOnset #1",
+      "pattern": "(O\u003d{c,-strident}:U)\\c:O:mdc(\"1\",\"false\")"
+    },
+    {
+      "name": "MaxOnset #2",
+      "pattern": "(O\u003d{-alveolar,-voiced,-strident}:U)t:O"
+    },
+    {
+      "name": "MaxOnset #3",
+      "pattern": "(O\u003d{stop,voiceless}:U)s:O"
+    },
+    {
+      "name": "MaxOnset #4",
+      "pattern": "(O\u003d{obstruent, voiceless, -palatal}:U)ç:O"
+    },
+    {
+      "name": "MaxOnset #5",
+      "pattern": "(O\u003d[{-voiced, fricative}{rhotic}]:U)θ:O"
+    },
+    {
+      "name": "MaxOnset #6",
+      "pattern": "(O\u003df:U)x:O"
+    },
+    {
+      "name": "MaxOnset #7",
+      "pattern": "(O\u003dm:U){coronal,nasal}:O"
+    },
+    {
+      "name": "MarkLA #1",
+      "pattern": "(LA\u003ds:U)[{stop, -voiced}{fricative, -strident}{nasal,alveolar}{lateral}]:O"
+    },
+    {
+      "name": "MarkLA #2",
+      "pattern": "(LA\u003dz:U)[{stop, -nasal, voiced}{fricative, -strident, voiced}{nasal, alveolar}{lateral}]:O"
+    },
+    {
+      "name": "MarkCoda #1",
+      "pattern": ".:N(C\u003d[tkgmnfvθðszçʝxɣlɾ]:U)"
+    },
+    {
+      "name": "MaxCoda #1",
+      "pattern": "k:C(C\u003ds:U)"
+    },
+    {
+      "name": "StrayCs #1",
+      "pattern": "^(O\u003d\\c:U)"
+    },
+    {
+      "name": "StrayCs #2",
+      "pattern": ".:N(C\u003d\\c:U)"
+    },
+    {
+      "name": "StrayCs #3",
+      "pattern": "(C\u003d\\c:U)"
+    }
+  ]
+}
