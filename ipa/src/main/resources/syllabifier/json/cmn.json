@@ -1,0 +1,60 @@
+{
+  "name": "Mandarin Chinese",
+  "language": "cmn",
+  "sonority": [
+    {
+      "pattern": "{obs}",
+      "sonority": 0
+    },
+    {
+      "pattern": "{nas,c}",
+      "sonority": 1
+    },
+    {
+      "pattern": "{liq}",
+      "sonority": 2
+    },
+    {
+      "pattern": "\\g",
+      "sonority": 3
+    },
+    {
+      "pattern": "\\v",
+      "sonority": 4
+    }
+  ],
+  "steps": [
+    {
+      "name": "MarkNuclei #1",
+      "pattern": "(D\u003d\\g\\v)"
+    },
+    {
+      "name": "MarkNuclei #2",
+      "pattern": "(N\u003d{c, syllabic})"
+    },
+    {
+      "name": "MarkNuclei #3",
+      "pattern": "(N\u003d\\v)"
+    },
+    {
+      "name": "MarkCoda #1",
+      "pattern": ".:N(C\u003d[{c}{g}]:U)"
+    },
+    {
+      "name": "MaxCoda #1",
+      "pattern": ".:C(C\u003d\\c:U)"
+    },
+    {
+      "name": "MarkOnset #1",
+      "pattern": "(O\u003d\\c:U).:N"
+    },
+    {
+      "name": "MaxOnset #1",
+      "pattern": "(O\u003d\\c:U).:O:mdc(\"2\",\"false\")"
+    },
+    {
+      "name": "Fix Coda After Tone #1",
+      "pattern": "\u0027.+[¹²³⁴⁵⁶⁷⁸⁹⁰]\u0027 (O\u003d\\c:C)"
+    }
+  ]
+}

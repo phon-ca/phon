@@ -2,7 +2,7 @@
 #syllabifier/graphs/arn.xml
 #syllabifier/graphs/cat-simple.xml
 #syllabifier/graphs/cat.xml
-syllabifier/graphs/cmn.xml
+#syllabifier/graphs/cmn.xml
 syllabifier/graphs/cre-simple.xml
 syllabifier/graphs/cre.xml
 syllabifier/graphs/deu-ambi.xml
