@@ -1,17 +1,17 @@
 {
-  "name": "Arabic",
-  "language": "ara",
+  "name": "Catalan",
+  "language": "cat",
   "sonority": [
     {
       "pattern": "{obs}",
       "sonority": 0
     },
     {
-      "pattern": "{nas}",
+      "pattern": "{c,nasal}",
       "sonority": 1
     },
     {
-      "pattern": "[{liq}{fri,voiced,labial}]",
+      "pattern": "{liquid}",
       "sonority": 2
     },
     {
@@ -26,19 +26,19 @@
   "steps": [
     {
       "name": "MarkNuclei #1",
-      "pattern": "(D\u003d\\g\\v\\g)"
-    },
-    {
-      "name": "MarkNuclei #2",
       "pattern": "(D\u003d\\g\\v)"
     },
     {
+      "name": "MarkNuclei #2",
+      "pattern": "(D\u003d\\v[{v,high,lax}{g,-stop,-fricative,-affricate,-liquid}])"
+    },
+    {
       "name": "MarkNuclei #3",
-      "pattern": "(D\u003d\\v\\g)"
+      "pattern": "(D\u003d{v, high, lax}\\v)"
     },
     {
       "name": "MarkNuclei #4",
-      "pattern": "(N\u003d\\v)"
+      "pattern": "(N\u003d\\v:U)"
     },
     {
       "name": "MarkOnset #1",
@@ -50,23 +50,23 @@
     },
     {
       "name": "MaxOnset #1",
-      "pattern": "(O\u003d\\c:U).:O:mdc(\"1\",\"false\")"
+      "pattern": "(O\u003d\\c:U).:O:mdc(\"2\",\"false\")"
     },
     {
       "name": "MarkCoda #1",
-      "pattern": ".:sctype(\"N|C\")(C\u003d\\c:U)\\c"
+      "pattern": ".:N(C\u003d\\c:U)"
     },
     {
       "name": "MaxCoda #1",
-      "pattern": ".:sctype(\"N|C\")(C\u003d\\c:U)\\c"
+      "pattern": ".:C(C\u003d{c}:U:mdc(\"-1\",\"false\"))"
     },
     {
-      "name": "InitialOnset #1",
-      "pattern": "(O\u003d\\c:U).:O"
+      "name": "MarkRA #1",
+      "pattern": ".:C(R\u003d{cor}:U)"
     },
     {
-      "name": "FinalCoda #1",
-      "pattern": "(C\u003d\\c:U)"
+      "name": "MaxRA #1",
+      "pattern": ".:R(R\u003d{cor}:U+)"
     }
   ]
 }

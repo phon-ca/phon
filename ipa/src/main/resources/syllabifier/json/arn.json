@@ -29,11 +29,11 @@
       "pattern": "(D\u003d\\v{v,high,lax})"
     },
     {
-      "name": "MarkNuclei #1",
+      "name": "MarkNuclei #2",
       "pattern": "(D\u003d{v,high,lax}\\v)"
     },
     {
-      "name": "MarkNuclei #1",
+      "name": "MarkNuclei #3",
       "pattern": "(N\u003d\\v)"
     },
     {
@@ -41,7 +41,7 @@
       "pattern": "(O\u003d\\c:U).:N"
     },
     {
-      "name": "MarkOnset #1",
+      "name": "MarkOnset #2",
       "pattern": ".:sctype(\"-O\")?(O\u003d\\g:N).:N"
     },
     {
