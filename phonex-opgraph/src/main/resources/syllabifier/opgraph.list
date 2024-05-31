@@ -3,8 +3,8 @@
 #syllabifier/graphs/cat-simple.xml
 #syllabifier/graphs/cat.xml
 #syllabifier/graphs/cmn.xml
-syllabifier/graphs/cre-simple.xml
-syllabifier/graphs/cre.xml
+#syllabifier/graphs/cre-simple.xml
+#syllabifier/graphs/cre.xml
 syllabifier/graphs/deu-ambi.xml
 syllabifier/graphs/deu-simple.xml
 syllabifier/graphs/deu.xml

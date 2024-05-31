@@ -1,0 +1,68 @@
+{
+  "name": "Cree",
+  "language": "cre",
+  "sonority": [
+    {
+      "pattern": "{obs,-uvular,-fri}",
+      "sonority": 0
+    },
+    {
+      "pattern": "{c, nas}",
+      "sonority": 1
+    },
+    {
+      "pattern": "[{liq}{uvular,fri}]",
+      "sonority": 2
+    },
+    {
+      "pattern": "\\g",
+      "sonority": 3
+    },
+    {
+      "pattern": "\\v",
+      "sonority": 4
+    }
+  ],
+  "steps": [
+    {
+      "name": "MarkNuclei #1",
+      "pattern": "(D\u003d\\v[\\g{v,high,lax}])"
+    },
+    {
+      "name": "MarkNuclei #2",
+      "pattern": "(N\u003d\\v)"
+    },
+    {
+      "name": "MarkFinalConsonant #1",
+      "pattern": "(E\u003d\\c)$"
+    },
+    {
+      "name": "FixFinalCodas #1",
+      "pattern": "(C\u003d[{-v,laryngeal}{-v,nas}{-v,fri,cor}]:OEHS)"
+    },
+    {
+      "name": "MaxOEHS #1",
+      "pattern": "(E\u003d\\c).:OEHS:mdc(\"2\",\"false\")"
+    },
+    {
+      "name": "MarkOnset #1",
+      "pattern": "(O\u003d\\c:U).:N"
+    },
+    {
+      "name": "MarkOnset #2",
+      "pattern": ".:sctype(\"-O\")?(O\u003d{g}:N).:N"
+    },
+    {
+      "name": "MaxOnset #1",
+      "pattern": "(O\u003d\\c:U).:O:mdc(\"2\",\"false\")"
+    },
+    {
+      "name": "MarkCoda #1",
+      "pattern": ".:N(C\u003d[{-v,laryngeal}{-v,nas,-dorsal}{-v,fri,cor}]:U)"
+    },
+    {
+      "name": "MarkOEHSWordMedial #1",
+      "pattern": ".:sctype(\"N|OEHS\")(E\u003d.:U)"
+    }
+  ]
+}
