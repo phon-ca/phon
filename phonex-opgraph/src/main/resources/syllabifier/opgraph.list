@@ -9,11 +9,11 @@
 #syllabifier/graphs/deu-simple.xml
 #syllabifier/graphs/deu.xml
 #syllabifier/graphs/ell.xml
-syllabifier/graphs/eng-ambi.xml
-syllabifier/graphs/eng-simple.xml
-syllabifier/graphs/eng-smith.xml
-syllabifier/graphs/eng-smith-simple.xml
-syllabifier/graphs/eng.xml
+#syllabifier/graphs/eng-ambi.xml
+#syllabifier/graphs/eng-simple.xml
+#syllabifier/graphs/eng-smith.xml
+#syllabifier/graphs/eng-smith-simple.xml
+#syllabifier/graphs/eng.xml
 syllabifier/graphs/fas.xml
 syllabifier/graphs/fas-simple.xml
 syllabifier/graphs/fra-simple.xml
