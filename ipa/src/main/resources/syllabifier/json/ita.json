@@ -1,0 +1,56 @@
+{
+  "name": "Italian",
+  "language": "ita",
+  "sonority": [
+    {
+      "pattern": "{obs}",
+      "sonority": 0
+    },
+    {
+      "pattern": "{nas,c}",
+      "sonority": 1
+    },
+    {
+      "pattern": "{liq}",
+      "sonority": 2
+    },
+    {
+      "pattern": "\\g",
+      "sonority": 3
+    },
+    {
+      "pattern": "\\v",
+      "sonority": 4
+    }
+  ],
+  "steps": [
+    {
+      "name": "MarkNuclei #1",
+      "pattern": "(D\u003d\\v[{v,high,lax}\\g])"
+    },
+    {
+      "name": "MarkNuclei #2",
+      "pattern": "(N\u003d\\v)"
+    },
+    {
+      "name": "MarkOnset #1",
+      "pattern": "(O\u003d\\c:U).:N"
+    },
+    {
+      "name": "MarkOnset #2",
+      "pattern": ".:sctype(\"-O\")?(O\u003d\\g:N).:N"
+    },
+    {
+      "name": "MaxOnset #1",
+      "pattern": "(O\u003d\\c:U).:O:mdc(\"1\",\"false\")"
+    },
+    {
+      "name": "MarkCoda #1",
+      "pattern": ".:N(C\u003d\\c:U)"
+    },
+    {
+      "name": "MarkLA #1",
+      "pattern": "(LA\u003d{strident}:U).:O"
+    }
+  ]
+}

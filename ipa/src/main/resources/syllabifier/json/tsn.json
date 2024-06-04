@@ -1,0 +1,44 @@
+{
+  "name": "Tswana",
+  "language": "tsn",
+  "sonority": [
+    {
+      "pattern": "[{obstruent}]",
+      "sonority": 0
+    },
+    {
+      "pattern": "[{c, nasal}]",
+      "sonority": 1
+    },
+    {
+      "pattern": "[{liquid}]",
+      "sonority": 2
+    },
+    {
+      "pattern": "[{g}]",
+      "sonority": 3
+    },
+    {
+      "pattern": "[{v}]",
+      "sonority": 4
+    }
+  ],
+  "steps": [
+    {
+      "name": "MarkNucleus #1",
+      "pattern": "(N\u003d{v}:U)"
+    },
+    {
+      "name": "MarkNucleus #2",
+      "pattern": "(N\u003d\u0027.*[\\u0329].*\u0027)"
+    },
+    {
+      "name": "MarkOnset #1",
+      "pattern": "(O\u003d\\c:U)"
+    },
+    {
+      "name": "MarkOEHS #1",
+      "pattern": "(E\u003d\\c)\\b"
+    }
+  ]
+}

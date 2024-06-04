@@ -1,0 +1,68 @@
+{
+  "name": "Portuguese-European",
+  "language": "por",
+  "sonority": [
+    {
+      "pattern": "{obs}",
+      "sonority": 0
+    },
+    {
+      "pattern": "{nas,c}",
+      "sonority": 1
+    },
+    {
+      "pattern": "{liq}",
+      "sonority": 2
+    },
+    {
+      "pattern": "\\g",
+      "sonority": 3
+    },
+    {
+      "pattern": "\\v",
+      "sonority": 4
+    }
+  ],
+  "steps": [
+    {
+      "name": "MarkNuclei #1",
+      "pattern": "(D\u003d\\g\\v)"
+    },
+    {
+      "name": "MarkNuclei #2",
+      "pattern": "(D\u003d\\v{g,-stop,-fri,-affricate,-liq})"
+    },
+    {
+      "name": "MarkNuclei #3",
+      "pattern": "(N\u003d\\v)"
+    },
+    {
+      "name": "MarkOnset #1",
+      "pattern": "(O\u003d\\c:U).:N"
+    },
+    {
+      "name": "MarkOnset #2",
+      "pattern": ".:sctype(\"-O\")?(O\u003d\\g:N).:N"
+    },
+    {
+      "name": "MaxOnset #1",
+      "pattern": "(O\u003d\\c:U).:O:mdc(\"2\",\"false\")"
+    },
+    {
+      "name": "MarkCoda #1",
+      "pattern": ".:N(C\u003d{cor,continuant}:U)"
+    },
+    {
+      "name": "MarkInitialCodas #1",
+      "pattern": "(C\u003d[\\u0283\\u0292])[{c,-g}\\s\\.]"
+    },
+    {
+      "name": "MarkOEHS #1",
+      "pattern": "(E\u003d\\c:U)"
+    },
+    {
+      "name": "Ambisyllabicity #1",
+      "pattern": "\\v:N(A\u003d\\g:N)\\v:N"
+    }
+  ]
+}

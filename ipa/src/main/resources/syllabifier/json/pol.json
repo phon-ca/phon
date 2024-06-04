@@ -1,0 +1,68 @@
+{
+  "name": "Polish",
+  "language": "pol",
+  "sonority": [
+    {
+      "pattern": "{obs}",
+      "sonority": 0
+    },
+    {
+      "pattern": "{nas}",
+      "sonority": 1
+    },
+    {
+      "pattern": "{liq}",
+      "sonority": 2
+    },
+    {
+      "pattern": "\\g",
+      "sonority": 3
+    },
+    {
+      "pattern": "\\v",
+      "sonority": 4
+    }
+  ],
+  "steps": [
+    {
+      "name": "MarkNuclei #1",
+      "pattern": "(N\u003d\\v)"
+    },
+    {
+      "name": "MarkOnset #1",
+      "pattern": "(O\u003d\\c:U).:N"
+    },
+    {
+      "name": "MaxOnset1 #1",
+      "pattern": "(O\u003d\\c:U).:O:mdc(\"2\",\"false\")"
+    },
+    {
+      "name": "MaxOnset(Sibilant) #1",
+      "pattern": "[\\g\\v](O\u003d{cor,fri,anterior}){-continuant}:O"
+    },
+    {
+      "name": "MarkCoda #1",
+      "pattern": ".:N(C\u003d\\c:U)"
+    },
+    {
+      "name": "MaxCoda1 #1",
+      "pattern": ".:C(C\u003d\\c:U:mdc(\"-1\",\"true\"))"
+    },
+    {
+      "name": "MaxOnset2 #1",
+      "pattern": "(O\u003d\\c:U).:O:mdc(\"1\",\"false\")"
+    },
+    {
+      "name": "MaxCoda2 #1",
+      "pattern": ".:C(C\u003d\\c:U:mdc(\"-1\",\"false\"))"
+    },
+    {
+      "name": "MaxOnset3 #1",
+      "pattern": "(O\u003d\\c:U+).:O"
+    },
+    {
+      "name": "MaxCoda3 #1",
+      "pattern": ".:C(C\u003d\\c:U+)"
+    }
+  ]
+}
