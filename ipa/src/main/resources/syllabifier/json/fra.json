@@ -26,63 +26,63 @@
   "steps": [
     {
       "name": "MarkNuclei #1",
-      "pattern": "(D\u003d\\g\\v)"
+      "pattern": "(D=\\g\\v)"
     },
     {
       "name": "MarkNuclei #2",
-      "pattern": "(D\u003d\\v{v,high,lax})"
+      "pattern": "(D=\\v{v,high,lax})"
     },
     {
       "name": "MarkNuclei #3",
-      "pattern": "(N\u003d\\v:U)"
+      "pattern": "(N=\\v:U)"
     },
     {
       "name": "Final Consonant #1",
-      "pattern": "(E\u003d\\c:U)\\b"
+      "pattern": "(E=\\c:U)\\b"
     },
     {
       "name": "MarkOnset #1",
-      "pattern": "(O\u003d\\c:U).:N"
+      "pattern": "(O=\\c:U).:N"
     },
     {
       "name": "MarkOnset #2",
-      "pattern": "\\b\\s?(O\u003d\\g:N).:N"
+      "pattern": "\\b\\s?(O=\\g:N).:N"
     },
     {
       "name": "MarkOnset #3",
-      "pattern": ".:N(O\u003d\\g:N).:N"
+      "pattern": ".:N(O=\\g:N).:N"
     },
     {
       "name": "MaxOnset #1",
-      "pattern": "(O\u003d{c, -strident}:U)\\c:O:mdc(\"2\",\"false\")"
+      "pattern": "(O={c, -strident}:U)\\c:O:mdc(\"2\",\"false\")"
     },
     {
       "name": "MaxOnset #2",
-      "pattern": "\\b\\s?(O\u003d{c, -strident}:U)\\c:O:mdc(\"1\",\"false\")"
+      "pattern": "\\b\\s?(O={c, -strident}:U)\\c:O:mdc(\"1\",\"false\")"
     },
     {
       "name": "MaxOnset #3",
-      "pattern": "\\b\\s?(O\u003d\\c:U){fri}:O:mdc(\"1\",\"true\")"
+      "pattern": "\\b\\s?(O=\\c:U){fri}:O:mdc(\"1\",\"true\")"
     },
     {
       "name": "MaxOEHS #1",
-      "pattern": "(E\u003d\\c:U)\\c:E:mdc(\"2\",\"true\")"
+      "pattern": "(E=\\c:U)\\c:E:mdc(\"2\",\"true\")"
     },
     {
       "name": "MaxOEHS #2",
-      "pattern": "(E\u003d{c, -strident}:C)\\c:E:mdc(\"2\",\"false\")"
+      "pattern": "(E={c, -strident}:C)\\c:E:mdc(\"2\",\"false\")"
     },
     {
       "name": "MarkCoda #1",
-      "pattern": ".:N(C\u003d\\c:U)"
+      "pattern": ".:N(C=\\c:U)"
     },
     {
       "name": "MarkLA #1",
-      "pattern": "\\b\\s?(LA\u003d{strident}).:O"
+      "pattern": "\\b\\s?(LA={strident}).:O"
     },
     {
       "name": "MarkLA #2",
-      "pattern": ".:C(LA\u003d{strident}).:O"
+      "pattern": ".:C(LA={strident}).:O"
     }
   ]
 }

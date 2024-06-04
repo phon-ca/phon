@@ -26,27 +26,27 @@
   "steps": [
     {
       "name": "MarkNuclei #1",
-      "pattern": "(D\u003d{v,-long}{g,-long})"
+      "pattern": "(D={v,-long}{g,-long})"
     },
     {
       "name": "MarkNuclei #2",
-      "pattern": "(N\u003d\\v)"
+      "pattern": "(N=\\v)"
     },
     {
       "name": "MarkOnset #1",
-      "pattern": "(O\u003d\\c:U).:N"
+      "pattern": "(O=\\c:U).:N"
     },
     {
       "name": "MarkOnset #2",
-      "pattern": ".:sctype(\"-O\")?(O\u003d{g}:N).:N"
+      "pattern": ".:sctype(\"-O\")?(O={g}:N).:N"
     },
     {
       "name": "MarkCoda #1",
-      "pattern": ".:N(C\u003d\\c:U)"
+      "pattern": ".:N(C=\\c:U)"
     },
     {
       "name": "OEHS #1",
-      "pattern": ".:C(E\u003d\\c:U)"
+      "pattern": ".:C(E=\\c:U)"
     }
   ]
 }

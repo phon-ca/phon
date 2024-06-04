@@ -26,19 +26,19 @@
   "steps": [
     {
       "name": "MarkNucleus #1",
-      "pattern": "(N\u003d{v}:U)"
+      "pattern": "(N={v}:U)"
     },
     {
       "name": "MarkNucleus #2",
-      "pattern": "(N\u003d\u0027.*[\\u0329].*\u0027)"
+      "pattern": "(N=\u0027.*[\\u0329].*\u0027)"
     },
     {
       "name": "MarkOnset #1",
-      "pattern": "(O\u003d\\c:U)"
+      "pattern": "(O=\\c:U)"
     },
     {
       "name": "MarkOEHS #1",
-      "pattern": "(E\u003d\\c)\\b"
+      "pattern": "(E=\\c)\\b"
     }
   ]
 }

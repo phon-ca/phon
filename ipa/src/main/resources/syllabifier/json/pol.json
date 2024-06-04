@@ -26,43 +26,43 @@
   "steps": [
     {
       "name": "MarkNuclei #1",
-      "pattern": "(N\u003d\\v)"
+      "pattern": "(N=\\v)"
     },
     {
       "name": "MarkOnset #1",
-      "pattern": "(O\u003d\\c:U).:N"
+      "pattern": "(O=\\c:U).:N"
     },
     {
       "name": "MaxOnset1 #1",
-      "pattern": "(O\u003d\\c:U).:O:mdc(\"2\",\"false\")"
+      "pattern": "(O=\\c:U).:O:mdc(\"2\",\"false\")"
     },
     {
       "name": "MaxOnset(Sibilant) #1",
-      "pattern": "[\\g\\v](O\u003d{cor,fri,anterior}){-continuant}:O"
+      "pattern": "[\\g\\v](O={cor,fri,anterior}){-continuant}:O"
     },
     {
       "name": "MarkCoda #1",
-      "pattern": ".:N(C\u003d\\c:U)"
+      "pattern": ".:N(C=\\c:U)"
     },
     {
       "name": "MaxCoda1 #1",
-      "pattern": ".:C(C\u003d\\c:U:mdc(\"-1\",\"true\"))"
+      "pattern": ".:C(C=\\c:U:mdc(\"-1\",\"true\"))"
     },
     {
       "name": "MaxOnset2 #1",
-      "pattern": "(O\u003d\\c:U).:O:mdc(\"1\",\"false\")"
+      "pattern": "(O=\\c:U).:O:mdc(\"1\",\"false\")"
     },
     {
       "name": "MaxCoda2 #1",
-      "pattern": ".:C(C\u003d\\c:U:mdc(\"-1\",\"false\"))"
+      "pattern": ".:C(C=\\c:U:mdc(\"-1\",\"false\"))"
     },
     {
       "name": "MaxOnset3 #1",
-      "pattern": "(O\u003d\\c:U+).:O"
+      "pattern": "(O=\\c:U+).:O"
     },
     {
       "name": "MaxCoda3 #1",
-      "pattern": ".:C(C\u003d\\c:U+)"
+      "pattern": ".:C(C=\\c:U+)"
     }
   ]
 }

@@ -26,55 +26,55 @@
   "steps": [
     {
       "name": "MarkNuclei #1",
-      "pattern": "\\c(D\u003dju)"
+      "pattern": "\\c(D=ju)"
     },
     {
       "name": "MarkNuclei #2",
-      "pattern": "(N\u003d{v}:U)"
+      "pattern": "(N={v}:U)"
     },
     {
       "name": "MarkNuclei #3",
-      "pattern": "(D\u003d\\v{v,high,lax})"
+      "pattern": "(D=\\v{v,high,lax})"
     },
     {
       "name": "MarkNuclei #4",
-      "pattern": "(N\u003d\u0027.*[\\u0329].*\u0027)"
+      "pattern": "(N=\u0027.*[\\u0329].*\u0027)"
     },
     {
       "name": "MarkOnset #1",
-      "pattern": "(O\u003d\\c:U).:N"
+      "pattern": "(O=\\c:U).:N"
     },
     {
       "name": "MaxOnset #1",
-      "pattern": "(O\u003d{c,-strident}:U)\\c:O:mdc(\"2\",\"false\")"
+      "pattern": "(O={c,-strident}:U)\\c:O:mdc(\"2\",\"false\")"
     },
     {
       "name": "MaxOnset #2",
-      "pattern": "(O\u003d{c,strident,-anterior}:U)\\c:O:mdc(\"2\",\"false\")"
+      "pattern": "(O={c,strident,-anterior}:U)\\c:O:mdc(\"2\",\"false\")"
     },
     {
       "name": "MarkCoda #1",
-      "pattern": ".:N(C\u003d\\c:U)"
+      "pattern": ".:N(C=\\c:U)"
     },
     {
       "name": "MaxCoda #1",
-      "pattern": ".:C(C\u003d{c}:U:mdc(\"-1\",\"false\"))"
+      "pattern": ".:C(C={c}:U:mdc(\"-1\",\"false\"))"
     },
     {
       "name": "MarkLA #1",
-      "pattern": "\\S(LA\u003d{anterior,strident,voiceless}:U).:O"
+      "pattern": "\\S(LA={anterior,strident,voiceless}:U).:O"
     },
     {
       "name": "MarkRA #1",
-      "pattern": ".:C(R\u003d{cor}:U)"
+      "pattern": ".:C(R={cor}:U)"
     },
     {
       "name": "MaxRA #1",
-      "pattern": ".:R(R\u003d{cor}:U+)"
+      "pattern": ".:R(R={cor}:U+)"
     },
     {
       "name": "MarkOEHS #1",
-      "pattern": "(E\u003d\\c:U)"
+      "pattern": "(E=\\c:U)"
     }
   ]
 }

@@ -26,79 +26,79 @@
   "steps": [
     {
       "name": "MarkNuclei #1",
-      "pattern": "(D\u003d{v,-long}[ə{g,-stop,-fri,-affricate,-liq}{v,high}])"
+      "pattern": "(D={v,-long}[ə{g,-stop,-fri,-affricate,-liq}{v,high}])"
     },
     {
       "name": "MarkNuclei #2",
-      "pattern": "(D\u003dj{v,-long}{v,high})"
+      "pattern": "(D=j{v,-long}{v,high})"
     },
     {
       "name": "MarkNuclei #3",
-      "pattern": "(N\u003d\\v)"
+      "pattern": "(N=\\v)"
     },
     {
       "name": "MarkNuclei #4",
-      "pattern": "(N\u003d\u0027.*[\\u0329].*\u0027)"
+      "pattern": "(N=\u0027.*[\\u0329].*\u0027)"
     },
     {
       "name": "MarkOnset #1",
-      "pattern": "(O\u003d\\c:U).:N"
+      "pattern": "(O=\\c:U).:N"
     },
     {
       "name": "MarkOnset #2",
-      "pattern": ".:sctype(\"-O\")?(O\u003d{g}:N).:N"
+      "pattern": ".:sctype(\"-O\")?(O={g}:N).:N"
     },
     {
       "name": "MaxOnset #1",
-      "pattern": "(O\u003d{c,-strident}:U).:O:mdc(\"2\",\"false\")"
+      "pattern": "(O={c,-strident}:U).:O:mdc(\"2\",\"false\")"
     },
     {
       "name": "MaxOnset #2",
-      "pattern": "(O\u003d{strident, -anterior}:U).:O:mdc(\"2\",\"false\")"
+      "pattern": "(O={strident, -anterior}:U).:O:mdc(\"2\",\"false\")"
     },
     {
       "name": "MaxOnset #3",
-      "pattern": "(O\u003d{c}:U){uvular, fricative}:O:mdc(\"1\",\"true\")"
+      "pattern": "(O={c}:U){uvular, fricative}:O:mdc(\"1\",\"true\")"
     },
     {
       "name": "MaxOnsetCoronalNasal #1",
-      "pattern": "(O\u003d\\c:U){cor}:O:mdc(\"1\",\"false\")"
+      "pattern": "(O=\\c:U){cor}:O:mdc(\"1\",\"false\")"
     },
     {
       "name": "MarkCoda #1",
-      "pattern": ".:N(C\u003d\\c:U)"
+      "pattern": ".:N(C=\\c:U)"
     },
     {
       "name": "MaxCoda #1",
-      "pattern": ".:C(C\u003d\\c:U:mdc(\"-1\",\"false\"))"
+      "pattern": ".:C(C=\\c:U:mdc(\"-1\",\"false\"))"
     },
     {
       "name": "Fix Branching Codas #1",
-      "pattern": ".:N(C\u003d{obs,-cor}:U)"
+      "pattern": ".:N(C={obs,-cor}:U)"
     },
     {
       "name": "MarkLA #1",
-      "pattern": "(L\u003d{strident,voiceless}:U).:O"
+      "pattern": "(L={strident,voiceless}:U).:O"
     },
     {
       "name": "Coda-s-ComplexOnset #1",
-      "pattern": ".:C(C\u003ds)s"
+      "pattern": ".:C(C=s)s"
     },
     {
       "name": "Coda-s-ComplexOnset #2",
-      "pattern": ".:C(C\u003ds).:O\u003c2\u003e"
+      "pattern": ".:C(C=s).:O\u003c2\u003e"
     },
     {
       "name": "MarkRA #1",
-      "pattern": ".:C(R\u003d{cor}:U+)"
+      "pattern": ".:C(R={cor}:U+)"
     },
     {
       "name": "MarkLeftoverOnsets #1",
-      "pattern": "(O\u003d\\c:U)"
+      "pattern": "(O=\\c:U)"
     },
     {
       "name": "Ambisyllabicity #1",
-      "pattern": "\\s\\c:O*{v,-long}:N+(A\u003d\\c:O).:N"
+      "pattern": "\\s\\c:O*{v,-long}:N+(A=\\c:O).:N"
     }
   ]
 }

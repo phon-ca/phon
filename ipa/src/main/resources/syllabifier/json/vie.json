@@ -26,35 +26,35 @@
   "steps": [
     {
       "name": "MarkNuclei #1",
-      "pattern": "(N\u003d\\v)"
+      "pattern": "(N=\\v)"
     },
     {
       "name": "MarkNuclei #2",
-      "pattern": "(D\u003d\\g\\v)"
+      "pattern": "(D=\\g\\v)"
     },
     {
       "name": "MarkNuclei #3",
-      "pattern": "(D\u003d\\g?\\v{schwa})"
+      "pattern": "(D=\\g?\\v{schwa})"
     },
     {
       "name": "MarkOnset #1",
-      "pattern": "(O\u003d\\c:U).:N"
+      "pattern": "(O=\\c:U).:N"
     },
     {
       "name": "MarkOnset #2",
-      "pattern": ".:sctype(\"N|C|RA\")(O\u003d\\g:N).:N"
+      "pattern": ".:sctype(\"N|C|RA\")(O=\\g:N).:N"
     },
     {
       "name": "MarkOnset #3",
-      "pattern": "\\b\\s?(O\u003d\\g:N).:N"
+      "pattern": "\\b\\s?(O=\\g:N).:N"
     },
     {
       "name": "MaxOnset #1",
-      "pattern": "(O\u003d\\c:U)\\g:O:mdc(\"2\",\"false\")"
+      "pattern": "(O=\\c:U)\\g:O:mdc(\"2\",\"false\")"
     },
     {
       "name": "MarkCoda #1",
-      "pattern": ".:N(C\u003d[\\c\\g]:U)"
+      "pattern": ".:N(C=[\\c\\g]:U)"
     }
   ]
 }

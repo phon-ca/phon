@@ -26,47 +26,47 @@
   "steps": [
     {
       "name": "MarkNuclei #1",
-      "pattern": "(D\u003d\\g\\v\\g)"
+      "pattern": "(D=\\g\\v\\g)"
     },
     {
       "name": "MarkNuclei #2",
-      "pattern": "(D\u003d\\g\\v)"
+      "pattern": "(D=\\g\\v)"
     },
     {
       "name": "MarkNuclei #3",
-      "pattern": "(D\u003d\\v\\g)"
+      "pattern": "(D=\\v\\g)"
     },
     {
       "name": "MarkNuclei #4",
-      "pattern": "(N\u003d\\v)"
+      "pattern": "(N=\\v)"
     },
     {
       "name": "MarkOnset #1",
-      "pattern": "(O\u003d\\c:U).:N"
+      "pattern": "(O=\\c:U).:N"
     },
     {
       "name": "MarkOnset #2",
-      "pattern": ".:sctype(\"-O\")?(O\u003d{g}:N).:N"
+      "pattern": ".:sctype(\"-O\")?(O={g}:N).:N"
     },
     {
       "name": "MaxOnset #1",
-      "pattern": "(O\u003d\\c:U).:O:mdc(\"1\",\"false\")"
+      "pattern": "(O=\\c:U).:O:mdc(\"1\",\"false\")"
     },
     {
       "name": "MarkCoda #1",
-      "pattern": ".:sctype(\"N|C\")(C\u003d\\c:U)\\c"
+      "pattern": ".:sctype(\"N|C\")(C=\\c:U)\\c"
     },
     {
       "name": "MaxCoda #1",
-      "pattern": ".:sctype(\"N|C\")(C\u003d\\c:U)\\c"
+      "pattern": ".:sctype(\"N|C\")(C=\\c:U)\\c"
     },
     {
       "name": "InitialOnset #1",
-      "pattern": "(O\u003d\\c:U).:O"
+      "pattern": "(O=\\c:U).:O"
     },
     {
       "name": "FinalCoda #1",
-      "pattern": "(C\u003d\\c:U)"
+      "pattern": "(C=\\c:U)"
     }
   ]
 }
