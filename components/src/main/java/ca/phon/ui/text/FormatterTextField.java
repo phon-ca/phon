@@ -86,7 +86,6 @@ public class FormatterTextField<T> extends PromptedTextField {
 				setToolTipText(null);
 			} catch (Exception e) {
 				setToolTipText(e.getMessage());
-				Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		}
 		
@@ -105,7 +104,6 @@ public class FormatterTextField<T> extends PromptedTextField {
 					final String s = formatter.format(val);
 					setText(s);
 				} catch (Exception e) {
-					Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 				}
 			}
 		}
