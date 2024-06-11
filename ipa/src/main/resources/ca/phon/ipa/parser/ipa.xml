@@ -1644,7 +1644,7 @@
     </char>
     <char value="&#x0387;">
         <name>Greek Ano Teleia</name>
-        <token>TONE_NUMBER</token>
+        <token>SUFFIX_DIACRITIC</token>
     </char>
     <char value="&#x1dc9;">
         <name>Falling Rising Tone</name>

@@ -152,10 +152,10 @@ public enum UserTierType {
                 String chatTierName = abbreviatedTierName;
                 while (tierNameMap.containsValue(chatTierName)) {
                     ++i;
-                    if(abbreviatedTierName.length() < 7) {
+                    if(abbreviatedTierName.length() < 6) {
                         chatTierName = abbreviatedTierName + i;
                     } else {
-                        chatTierName = abbreviatedTierName.substring(0, 6) + i;
+                        chatTierName = abbreviatedTierName.substring(0, 5) + i;
                     }
                 }
                 tierNameMap.put(userTierDesc.getName(), chatTierName);
@@ -187,7 +187,7 @@ public enum UserTierType {
      */
     public static String abbreviateTierName(String tierName) {
         final StringBuilder builder = new StringBuilder();
-        for(int i = 0; i < tierName.length() && builder.length() < 7; i++) {
+        for(int i = 0; i < tierName.length() && builder.length() < 6; i++) {
             final char c = tierName.charAt(i);
             if(!Character.isWhitespace(c)) {
                 builder.append(c);

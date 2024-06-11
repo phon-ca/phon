@@ -1,8 +1,13 @@
 package ca.phon.session.alignment;
 
+import ca.phon.ipa.IPATranscript;
+import ca.phon.orthography.mor.GraspTierData;
+import ca.phon.orthography.mor.MorTierData;
 import ca.phon.session.Record;
 import ca.phon.session.SystemTierType;
 import ca.phon.session.Tier;
+import ca.phon.session.UserTierType;
+import ca.phon.session.tierdata.TierData;
 import ca.phon.util.Tuple;
 
 import java.util.*;
@@ -91,6 +96,51 @@ public class CrossTierAlignment {
         List<Object> retVal = new ArrayList<>();
         if(tierAlignment != null)
             retVal.addAll(tierAlignment.getAlignedElements().stream().map(Tuple::getObj2).toList());
+        return retVal;
+    }
+
+    /**
+     * Determine if the alignment is complete for all tiers.  This means that all tiers have the correct
+     * number of align-able elements with respect to the top tier.
+     *
+     * @return <code>true</code> if alignment is complete, <code>false</code> otherwise
+     */
+    public boolean isComplete() {
+        boolean retVal = true;
+
+        for(Object obj:getTopAlignmentElements()) {
+            for(String tierName:tierAlignments.keySet()) {
+                final TierAlignment tierAlignment = tierAlignments.get(tierName);
+                TierElementFilter filter = TierElementFilter.orthographyFilterForUserTierAlignment();
+                if(tierAlignment.getBottomTier().getDeclaredType() == IPATranscript.class) {
+                    filter = TierElementFilter.orthographyFilterForIPAAlignment();
+                } else if(tierAlignment.getBottomTier().getDeclaredType() == MorTierData.class) {
+                    filter = TierElementFilter.orthographyFilterForMorTierAlignment();
+                } else if(tierAlignment.getBottomTier().getDeclaredType() == TierData.class) {
+                    // already set
+                } else {
+                    // TODO handle grasp tier alignment with mor
+                    continue;
+                }
+                List<?> filteredElements = filter.filterTier(tierAlignment.getTopTier());
+                if(!filteredElements.contains(obj)) {
+                    continue;
+                }
+
+                if(tierAlignment != null) {
+                    Optional<? extends Tuple<?, ?>> alignedEle = tierAlignment.getAlignedElements().stream()
+                            .filter(ae -> ae.getObj1() == obj).findAny();
+                    if(alignedEle.isEmpty()) {
+                        retVal = false;
+                        break;
+                    }
+                } else {
+                    retVal = false;
+                    break;
+                }
+            }
+        }
+
         return retVal;
     }
 

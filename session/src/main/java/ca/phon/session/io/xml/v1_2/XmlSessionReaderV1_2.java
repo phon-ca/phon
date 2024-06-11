@@ -24,6 +24,7 @@ import ca.phon.orthography.Linker;
 import ca.phon.orthography.Pause;
 import ca.phon.orthography.PauseLength;
 import ca.phon.orthography.Word;
+import ca.phon.orthography.mor.MorTierData;
 import ca.phon.plugin.*;
 import ca.phon.session.Comment;
 import ca.phon.session.Record;
@@ -326,6 +327,11 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 		final String name = utt.getTierName();
 		try {
 			Class<?> type = Class.forName(utt.getType(), true, PluginManager.getInstance());
+
+			if("Morphology".equalsIgnoreCase(utt.getTierName())) {
+				type = MorTierData.class;
+			}
+
 			return factory.createTierDescription(name, type, new HashMap<>(), !utt.isGrouped());
 		} catch (ClassNotFoundException e) {
 			throw new IllegalArgumentException(e);
@@ -747,9 +753,9 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 					// not used
 				} else if(ele instanceof PunctuationType) {
 					final PunctuationType pt = (PunctuationType) ele;
-					switch(pt.getType()) {
-						case "PERIOD" -> builder.append(new Terminator(TerminatorType.PERIOD));
-						case "COMMA" -> builder.append(new TagMarker(TagMarkerType.COMMA));
+					final TerminatorType tt = TerminatorType.fromString(pt.getType());
+					if(tt != null) {
+						builder.append(new Terminator(tt));
 					}
 				}
 			}

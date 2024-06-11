@@ -19,6 +19,7 @@ import ca.phon.visitor.annotation.Visits;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -42,7 +43,7 @@ public abstract class VisitorAdapter<T> implements Visitor<T> {
 			try {
 				visitMethod.invoke(this, obj);
 			} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
-				Logger.getLogger(VisitorAdapter.class.getName()).warning(e.getLocalizedMessage());
+				Logger.getLogger(VisitorAdapter.class.getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
 			}
 		} else {
 			fallbackVisit(obj);

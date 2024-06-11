@@ -59,7 +59,7 @@ public enum TerminatorType {
 
     public static TerminatorType fromString(String text) {
         for(TerminatorType tt:TerminatorType.values()) {
-            if(tt.getText().equals(text) || tt.getDisplayName().equals(text)) {
+            if(tt.getText().equals(text) || tt.getDisplayName().equals(text) || tt.name().equalsIgnoreCase(text)) {
                 return tt;
             }
         }

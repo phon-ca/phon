@@ -1238,7 +1238,7 @@
 	<!--⁹ (0x2079)-->
     <feature_set char="⁹">diacritic tone9</feature_set>
 	<!--· (0x387)-->
-    <feature_set char="·">diacritic toneerr</feature_set>
+    <feature_set char="·">diacritic</feature_set>
 	<!--˭ (0x2ed)-->
     <feature_set char="˭">diacritic unaspirated</feature_set>
 	<!--↔ (0x2194)-->

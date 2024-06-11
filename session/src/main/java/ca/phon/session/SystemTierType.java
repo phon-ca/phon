@@ -27,10 +27,10 @@ import ca.phon.session.tierdata.TierData;
 public enum SystemTierType {
 	Orthography("Orthography", "*<ID>", Orthography.class, false),
 	IPATarget("IPA Target", "%mod",IPATranscript.class, false),
-	TargetSyllables("Target Syllables", "%xmodsyll", IPATranscript.class, true),
+	TargetSyllables("Target Syllables", "%xmodsyl", IPATranscript.class, true),
 	IPAActual("IPA Actual", "%pho", IPATranscript.class, false),
-	ActualSyllables("Actual Syllables",  "%xphosyll", IPATranscript.class, true),
-	PhoneAlignment("Alignment", "%xphoalin", PhoneAlignment.class, true),
+	ActualSyllables("Actual Syllables",  "%xphosyl", IPATranscript.class, true),
+	PhoneAlignment("Alignment", "%xphoaln", PhoneAlignment.class, true),
 	Segment("Segment", "%xseg", MediaSegment.class, true),
 	@Deprecated
 	Notes("Notes", "%xNotes", TierData.class, false);
