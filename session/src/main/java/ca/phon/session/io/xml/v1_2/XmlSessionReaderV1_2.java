@@ -338,9 +338,11 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 			final var uttType = ca.phon.session.UserTierType.fromPhonTierName(name);
 			if(uttType != null) {
 				type = uttType.getType();
+			} else {
+				type = TierData.class;
 			}
 
-			return factory.createTierDescription(name, type, new HashMap<>(), !utt.isGrouped());
+			return factory.createTierDescription(name, type, new HashMap<>(), true);
 		} catch (ClassNotFoundException e) {
 			throw new IllegalArgumentException(e);
 		}
