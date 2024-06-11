@@ -24,6 +24,7 @@ import ca.phon.orthography.Linker;
 import ca.phon.orthography.Pause;
 import ca.phon.orthography.PauseLength;
 import ca.phon.orthography.Word;
+import ca.phon.orthography.mor.GraspTierData;
 import ca.phon.orthography.mor.MorTierData;
 import ca.phon.plugin.*;
 import ca.phon.session.Comment;
@@ -212,6 +213,9 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 		final UserTiersType userTiers = sessionType.getUserTiers();
 		if(userTiers != null) {
 			for(UserTierType utt:userTiers.getUserTier()) {
+				if("Postcode".equals(utt.getTierName())) {
+					continue;
+				}
 				final TierDescription td = copyTierDescription(factory, utt);
 				retVal.addUserTier(td);
 			}
@@ -220,6 +224,9 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 		final List<TierViewItem> tierOrder = new ArrayList<TierViewItem>();
 		for(TvType tot:sessionType.getTierOrder().getTier()) {
 			String tierName = tot.getTierName();
+			if("Postcode".equals(tierName)) {
+				continue;
+			}
 			// convert Notes to Comments
 			if(SystemTierType.Notes.getName().equals(tierName)) {
 				tierName = ca.phon.session.UserTierType.Comments.getPhonTierName();
@@ -328,8 +335,9 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 		try {
 			Class<?> type = Class.forName(utt.getType(), true, PluginManager.getInstance());
 
-			if("Morphology".equalsIgnoreCase(utt.getTierName())) {
-				type = MorTierData.class;
+			final var uttType = ca.phon.session.UserTierType.fromPhonTierName(name);
+			if(uttType != null) {
+				type = uttType.getType();
 			}
 
 			return factory.createTierDescription(name, type, new HashMap<>(), !utt.isGrouped());
@@ -557,13 +565,27 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 
 		// user tiers
 		for(FlatTierType ftt:rt.getFlatTier()) {
-			final TierDescription td = session.getUserTier(ftt.getTierName());
-			if(td == null) {
-				throw new IllegalStateException("User tier not found in session " + ftt.getTierName());
+			if("Postcode".equals(ftt.getTierName())) {
+				final String pc = ftt.getContent();
+				if(pc != null && !pc.isBlank()) {
+					final Orthography ortho = retVal.getOrthography();
+					final OrthographyBuilder builder = new OrthographyBuilder();
+					builder.append(ortho);
+					if (!ortho.hasTerminator()) {
+						builder.append(new Terminator(TerminatorType.PERIOD));
+					}
+					builder.append(new Postcode(ftt.getContent()));
+					retVal.setOrthography(builder.toOrthography());
+				}
+			} else {
+				final TierDescription td = session.getUserTier(ftt.getTierName());
+				if (td == null) {
+					throw new IllegalStateException("User tier not found in session " + ftt.getTierName());
+				}
+				final Tier<?> userTier = factory.createTier(td);
+				userTier.setText(ftt.getContent());
+				retVal.putTier(userTier);
 			}
-			final Tier<TierData> userTier = factory.createTier(ftt.getTierName());
-			userTier.setText(ftt.getContent());
-			retVal.putTier(userTier);
 		}
 
 		for(GroupTierType gtt:rt.getGroupTier()) {
@@ -572,7 +594,7 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 				//LOGGER.warning("User tier " + gtt.getTierName() + " not in session tier list");
 				continue;
 			}
-			final Tier<TierData> userTier = factory.createTier(gtt.getTierName(), TierData.class, new LinkedHashMap<>(), false);
+			final Tier<?> userTier = factory.createTier(td);
 			final StringBuffer buffer = new StringBuffer();
 			for(TgType tgt:gtt.getTg()) {
 				if(buffer.length() > 0)
