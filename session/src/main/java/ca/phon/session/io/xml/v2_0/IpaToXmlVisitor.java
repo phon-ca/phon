@@ -155,6 +155,7 @@ public class IpaToXmlVisitor extends VisitorAdapter<IPAElement> {
 			case MAJOR -> XmlPhoneticProsodyTypeType.MAJOR_INTONATION_GROUP;
 			case MINOR -> XmlPhoneticProsodyTypeType.MINOR_INTONATION_GROUP;
 		};
+		pp.setType(ptt);
 		this.currentWord.getStressOrPhOrCmph().add(pp);
 	}
 

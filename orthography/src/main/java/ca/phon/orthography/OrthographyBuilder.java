@@ -15,6 +15,9 @@
  */
 package ca.phon.orthography;
 
+import ca.phon.extensions.ExtendableObject;
+import ca.phon.extensions.UnvalidatedValue;
+
 import java.text.ParseException;
 import java.util.*;
 
@@ -23,7 +26,7 @@ import java.util.*;
  * is <i>not</i> thread-safe.
  *
  */
-public final class OrthographyBuilder {
+public final class OrthographyBuilder extends ExtendableObject {
 	
 	/**
 	 * Internal list of {@link OrthographyElement}s
@@ -32,7 +35,10 @@ public final class OrthographyBuilder {
 
 	private final List<WordElement> wordElements = new ArrayList<>();
 
+	private final UnvalidatedValue uv = null;
+
 	public OrthographyBuilder() {
+		super();
 	}
 	
 	public OrthographyBuilder clear() {

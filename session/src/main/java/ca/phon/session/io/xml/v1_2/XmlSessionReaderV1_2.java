@@ -332,20 +332,13 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 	// tier descriptions
 	private TierDescription copyTierDescription(SessionFactory factory, UserTierType utt) {
 		final String name = utt.getTierName();
-		try {
-			Class<?> type = Class.forName(utt.getType(), true, PluginManager.getInstance());
-
-			final var uttType = ca.phon.session.UserTierType.fromPhonTierName(name);
-			if(uttType != null) {
-				type = uttType.getType();
-			} else {
-				type = TierData.class;
-			}
-
-			return factory.createTierDescription(name, type, new HashMap<>(), true);
-		} catch (ClassNotFoundException e) {
-			throw new IllegalArgumentException(e);
+		Class<?> type = TierData.class;
+		final var uttType = ca.phon.session.UserTierType.fromPhonTierName(name);
+		if(uttType != null) {
+			type = uttType.getType();
 		}
+
+		return factory.createTierDescription(name, type, new HashMap<>(), true);
 	}
 
 	private TierViewItem copyTierViewItem(SessionFactory factory, TvType tvt) {
@@ -488,8 +481,21 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 				}
 			}
 		} else {
+			StringBuilder sb = new StringBuilder();
 			for(Orthography ortho:orthoGroups) {
-				orthoBuilder.append(ortho);
+				if(sb.length() > 0) sb.append(" ");
+				if(ortho.getExtension(UnvalidatedValue.class) != null) {
+					sb.append(ortho.getExtension(UnvalidatedValue.class).getValue());
+				} else {
+					sb.append(ortho.toString());
+				}
+			}
+			try {
+				orthoBuilder.append(sb.toString());
+			} catch (IllegalArgumentException e) {
+				final ParseException pe = (ParseException) e.getCause();
+				final UnvalidatedValue uv = new UnvalidatedValue(sb.toString(), pe);
+				orthoBuilder.putExtension(UnvalidatedValue.class, uv);
 			}
 			for(SystemTierType ipaTierType:ipaGroupMap.keySet()) {
 				final IPATranscriptBuilder builder = ipaTierType == SystemTierType.IPATarget ? ipaTBuilder : ipaABuilder;
@@ -506,7 +512,11 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 				orthoBuilder.append(new Terminator(TerminatorType.PERIOD));
 			orthoBuilder.append(new Postcode(Record.RECORD_XCL_POSTCODE));
 		}
-		retVal.setOrthography(orthoBuilder.toOrthography());
+		final Orthography finalOrtho = orthoBuilder.toOrthography();
+		if(orthoBuilder.getExtension(UnvalidatedValue.class) != null) {
+			finalOrtho.putExtension(UnvalidatedValue.class, orthoBuilder.getExtension(UnvalidatedValue.class));
+		}
+		retVal.setOrthography(finalOrtho);
 		retVal.setIPATarget(ipaTBuilder.toIPATranscript());
 		retVal.setIPAActual(ipaABuilder.toIPATranscript());
 
@@ -599,8 +609,6 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 			final Tier<?> userTier = factory.createTier(td);
 			final StringBuffer buffer = new StringBuffer();
 			for(TgType tgt:gtt.getTg()) {
-				if(buffer.length() > 0)
-					buffer.append(" ");
 				for(WordType wt:tgt.getW()) {
 					if(buffer.length() > 0)
 						buffer.append(" ");
@@ -757,7 +765,11 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 					} else if("happening".equals(tag)) {
 						builder.append(new Happening(txt));
 					} else if("error".equals(tag)) {
-						builder.append(new Error(txt));
+						if(txt.equalsIgnoreCase("error:")) {
+							builder.append(new Error(""));
+						} else {
+							builder.append(new Error(txt));
+						}
 					} else if("long-feature-begin".equals(tag)) {
 						builder.append(new LongFeature(BeginEnd.BEGIN, txt));
 					} else if("long-feature-end".equals(tag)) {

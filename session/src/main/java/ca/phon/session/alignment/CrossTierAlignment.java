@@ -127,12 +127,25 @@ public class CrossTierAlignment {
                     continue;
                 }
 
+                // if bottom tier is empty ignore it
+                if(tierAlignment.getBottomTier().isUnvalidated()) {
+                    continue;
+                }
+                if(tierAlignment.getBottomTier().toString().isBlank()) {
+                    continue;
+                }
+
                 if(tierAlignment != null) {
                     Optional<? extends Tuple<?, ?>> alignedEle = tierAlignment.getAlignedElements().stream()
                             .filter(ae -> ae.getObj1() == obj).findAny();
                     if(alignedEle.isEmpty()) {
                         retVal = false;
                         break;
+                    } else {
+                        if(alignedEle.get().getObj2() == null) {
+                            retVal = false;
+                            break;
+                        }
                     }
                 } else {
                     retVal = false;
