@@ -40,6 +40,7 @@ import ca.phon.syllable.*;
 import ca.phon.util.Language;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
+import ca.phon.worker.PhonWorker;
 import ca.phon.xml.XMLObjectReader;
 import ca.phon.xml.annotation.XMLSerial;
 import jakarta.xml.bind.*;
@@ -481,21 +482,53 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 				}
 			}
 		} else {
-			StringBuilder sb = new StringBuilder();
+			boolean hasInvalidOrthoGroup = false;
+			final OrthographyBuilder tempBuilder = new OrthographyBuilder();
 			for(Orthography ortho:orthoGroups) {
-				if(sb.length() > 0) sb.append(" ");
-				if(ortho.getExtension(UnvalidatedValue.class) != null) {
-					sb.append(ortho.getExtension(UnvalidatedValue.class).getValue());
-				} else {
-					sb.append(ortho.toString());
+				if (ortho.getExtension(UnvalidatedValue.class) != null) {
+					hasInvalidOrthoGroup = true;
+					break;
 				}
+				tempBuilder.append(ortho);
 			}
-			try {
-				orthoBuilder.append(sb.toString());
-			} catch (IllegalArgumentException e) {
-				final ParseException pe = (ParseException) e.getCause();
-				final UnvalidatedValue uv = new UnvalidatedValue(sb.toString(), pe);
-				orthoBuilder.putExtension(UnvalidatedValue.class, uv);
+
+			if(hasInvalidOrthoGroup) {
+				StringBuilder sb = new StringBuilder();
+				for (Orthography ortho : orthoGroups) {
+					if (sb.length() > 0) sb.append(" ");
+					if (ortho.getExtension(UnvalidatedValue.class) != null) {
+						sb.append(ortho.getExtension(UnvalidatedValue.class).getValue());
+					} else {
+						sb.append(ortho.toString());
+					}
+				}
+				try {
+					orthoBuilder.append(sb.toString());
+				} catch (IllegalArgumentException e) {
+					final ParseException pe = (ParseException) e.getCause();
+					final UnvalidatedValue uv = new UnvalidatedValue(sb.toString(), pe);
+					orthoBuilder.putExtension(UnvalidatedValue.class, uv);
+				}
+			} else {
+				// add items in reverse order, keeping track of the first terminator
+				// any other terminators will be converted into freecodes
+				Terminator firstTerminator = null;
+				for(int i = tempBuilder.size()-1; i >= 0; i--) {
+					final OrthographyElement ele = tempBuilder.elementAt(i);
+					if(ele instanceof Terminator t) {
+						if(firstTerminator == null) {
+							firstTerminator = t;
+							orthoBuilder.append(t);
+						} else {
+							final String text = t.text();
+							final Freecode freecode = new Freecode(text);
+							orthoBuilder.append(freecode);
+						}
+					} else {
+						orthoBuilder.append(ele);
+					}
+				}
+				orthoBuilder.reverse();
 			}
 			for(SystemTierType ipaTierType:ipaGroupMap.keySet()) {
 				final IPATranscriptBuilder builder = ipaTierType == SystemTierType.IPATarget ? ipaTBuilder : ipaABuilder;
@@ -638,7 +671,11 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 			for(Object ele:gt.getWOrComOrE()) {
 				if(ele instanceof WordType) {
 					final WordType wt = (WordType)ele;
-					builder.append(new ca.phon.orthography.Word(new WordText(wt.getContent())));
+					String wordContent = wt.getContent();
+					// fix shortenings
+					wordContent.replaceAll("\\<", "\\(");
+					wordContent.replaceAll("\\>", "\\)");
+					builder.append(new ca.phon.orthography.Word(new WordText(wordContent)));
 				} else if(ele instanceof EventType) {
 					final EventType et = (EventType) ele;
 					final String txt = et.getContent();
@@ -649,6 +686,18 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 					final StringBuilder sb = new StringBuilder();
 					ct.getContent().forEach(sb::append);
 					final String txt = sb.toString();
+
+					if(txt.matches("\\.{1,3}")) {
+						// add pause
+						final PauseLength pauseLength = switch(txt) {
+							case "." -> PauseLength.SIMPLE;
+							case ".." -> PauseLength.LONG;
+							case "..." -> PauseLength.VERY_LONG;
+							default -> PauseLength.SIMPLE;
+						};
+						builder.append(new Pause(pauseLength));
+						continue;
+					}
 
 					if(tag == null || tag.length() == 0) {
 						final LinkerType lt = LinkerType.fromString(txt);
