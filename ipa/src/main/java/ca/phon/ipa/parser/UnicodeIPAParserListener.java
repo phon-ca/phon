@@ -77,15 +77,15 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 		while(builder.size() > 0 && builder.last() instanceof WordBoundary) {
 			builder.removeLast();
 		}
-		if(builder.size() > 0) {
-			IPAElement ele = builder.last();
-			if(ele.getScType() == SyllableConstituentType.SYLLABLESTRESSMARKER
-				|| ele.getScType() == SyllableConstituentType.SYLLABLEBOUNDARYMARKER) {
-				int idx = ctx.getStop().getCharPositionInLine();
-				if(ctx.getStop().getType() == CommonToken.EOF) --idx;
-				throw new StrayDiacriticException("Expecting next syllable", idx);
-			}
-		}
+//		if(builder.size() > 0) {
+//			IPAElement ele = builder.last();
+//			if(ele.getScType() == SyllableConstituentType.SYLLABLESTRESSMARKER
+//				|| ele.getScType() == SyllableConstituentType.SYLLABLEBOUNDARYMARKER) {
+//				int idx = ctx.getStop().getCharPositionInLine();
+//				if(ctx.getStop().getType() == CommonToken.EOF) --idx;
+//				throw new StrayDiacriticException("Expecting next syllable", idx);
+//			}
+//		}
 	}
 
 	@Override
@@ -174,15 +174,15 @@ public class UnicodeIPAParserListener extends UnicodeIPABaseListener {
 	@Override
 	public void exitWhiteSpace(UnicodeIPAParser.WhiteSpaceContext ctx) {
 		// check for error with syllable boundary at end of previous word
-		if(builder.size() > 0) {
-			IPAElement ele = builder.last();
-			if(ele.getScType() == SyllableConstituentType.SYLLABLESTRESSMARKER
-					|| ele.getScType() == SyllableConstituentType.SYLLABLEBOUNDARYMARKER) {
-				int idx = ctx.getStop().getCharPositionInLine();
-				if(ctx.getStop().getType() == CommonToken.EOF) --idx;
-				throw new StrayDiacriticException("Expecting next syllable", idx);
-			}
-		}
+//		if(builder.size() > 0) {
+//			IPAElement ele = builder.last();
+//			if(ele.getScType() == SyllableConstituentType.SYLLABLESTRESSMARKER
+//					|| ele.getScType() == SyllableConstituentType.SYLLABLEBOUNDARYMARKER) {
+//				int idx = ctx.getStop().getCharPositionInLine();
+//				if(ctx.getStop().getType() == CommonToken.EOF) --idx;
+//				throw new StrayDiacriticException("Expecting next syllable", idx);
+//			}
+//		}
 		builder.appendWordBoundary();
 	}
 

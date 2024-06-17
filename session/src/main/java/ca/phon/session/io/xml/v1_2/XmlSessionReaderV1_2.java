@@ -673,8 +673,8 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 					final WordType wt = (WordType)ele;
 					String wordContent = wt.getContent();
 					// fix shortenings
-					wordContent.replaceAll("\\<", "\\(");
-					wordContent.replaceAll("\\>", "\\)");
+					wordContent = wordContent.replaceAll("\\<", "\\(");
+					wordContent = wordContent.replaceAll("\\>", "\\)");
 					builder.append(new ca.phon.orthography.Word(new WordText(wordContent)));
 				} else if(ele instanceof EventType) {
 					final EventType et = (EventType) ele;
@@ -686,18 +686,6 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 					final StringBuilder sb = new StringBuilder();
 					ct.getContent().forEach(sb::append);
 					final String txt = sb.toString();
-
-					if(txt.matches("\\.{1,3}")) {
-						// add pause
-						final PauseLength pauseLength = switch(txt) {
-							case "." -> PauseLength.SIMPLE;
-							case ".." -> PauseLength.LONG;
-							case "..." -> PauseLength.VERY_LONG;
-							default -> PauseLength.SIMPLE;
-						};
-						builder.append(new Pause(pauseLength));
-						continue;
-					}
 
 					if(tag == null || tag.length() == 0) {
 						final LinkerType lt = LinkerType.fromString(txt);
@@ -718,9 +706,15 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 							continue;
 						}
 
-						final TerminatorType tt = TerminatorType.fromString(txt);
-						if (tt != null) {
-							builder.append(new Terminator(tt));
+						if(txt.matches("\\.{1,3}")) {
+							// add pause
+							final PauseLength pauseLength = switch(txt) {
+								case "." -> PauseLength.SIMPLE;
+								case ".." -> PauseLength.LONG;
+								case "..." -> PauseLength.VERY_LONG;
+								default -> PauseLength.SIMPLE;
+							};
+							builder.append(new Pause(pauseLength));
 							continue;
 						}
 
@@ -746,17 +740,6 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 								final int index = (matcher.group(2) != null ? Integer.parseInt(matcher.group(2)) : -1);
 								builder.append(new OverlapPoint(overlapPointType, index));
 							}
-							continue;
-						}
-
-						// pause
-						if (txt.matches("\\.{1,3}")) {
-							if (txt.length() == 1)
-								builder.append(new Pause(PauseLength.SIMPLE));
-							else if (txt.length() == 2)
-								builder.append(new Pause(PauseLength.LONG));
-							else if (txt.length() == 3)
-								builder.append(new Pause(PauseLength.VERY_LONG));
 							continue;
 						}
 
@@ -833,6 +816,8 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 						builder.append(new Action());
 					} else if("freecode".equals(tag)) {
 						builder.append(new Freecode(txt));
+					} else {
+						builder.append(new Freecode(txt));
 					}
 				} else if(ele instanceof InnerGroupMarker) {
 					// not used
@@ -841,6 +826,10 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 					final TerminatorType tt = TerminatorType.fromString(pt.getType());
 					if(tt != null) {
 						builder.append(new Terminator(tt));
+					} else if("OPEN_BRACE".equals(pt.getType())) {
+						// ignore
+					} else if("CLOSE_BRACE".equals(pt.getType())) {
+						// ignore
 					}
 				}
 			}
