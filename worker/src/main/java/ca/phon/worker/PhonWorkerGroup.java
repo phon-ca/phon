@@ -22,15 +22,19 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  *
  */
 public class PhonWorkerGroup {
-	
+
 	/** The queue of tasks to complete */
 	private ConcurrentLinkedQueue<Runnable> tasks;
-	
+
 	/** The array of running tasks */
 	private PhonWorker[] runningTasks;
 	
 	/** Shutdown hook */
 	private boolean shutdown = false;
+
+	private int totalTasks = 0;
+
+	private int completedTasks = 0;
 	
 	/**
 	 * Create a new task manager with the specified
@@ -40,11 +44,20 @@ public class PhonWorkerGroup {
 	 */
 	public PhonWorkerGroup(int taskWindow) {
 		super();
-		
+
 		this.tasks = new ConcurrentLinkedQueue<Runnable>();
 		this.runningTasks = new PhonWorker[taskWindow];
-		for(int i = 0; i < taskWindow; i++)
+		for (int i = 0; i < taskWindow; i++) {
 			this.runningTasks[i] = PhonWorker.createWorker(this.tasks);
+			this.runningTasks[i].addPropertyChangeListener("currentTask", (e) -> {
+				if(e.getNewValue() == null) {
+					completedTasks++;
+					if(totalTasks > 0 && completedTasks == totalTasks) {
+						shutdown();
+					}
+				}
+			});
+		}
 	}
 
 	/**
@@ -81,56 +94,13 @@ public class PhonWorkerGroup {
 	public PhonWorker[] getThreads() {
 		return runningTasks;
 	}
-	
-//	public static void main(String[] args) {
-//		// make a bunch of long running tasks
-//		final PhonWorkerGroup tm = new PhonWorkerGroup(3);
-//		
-//		final Random r = new Random();
-//		for(int i = 0; i < 20; i++) {
-//			PhonTask t = new PhonTask() {
-//
-//				@Override
-//				public void performTask() {
-//					for(int j = 0; j < r.nextInt(100); j++) {
-//						try {
-//							Thread.sleep(100);
-//						} catch (InterruptedException ex) {
-//							ex.printStackTrace();
-//						}
-//					}
-//				}
-//				
-//			};
-//			tm.queueTask(t);
-//		}
-//		
-//		JFrame frame = new JFrame();
-//		
-//		JButton startBtn = new JButton("Start Group");
-//		startBtn.addActionListener(new ActionListener() {
-//
-//			public void actionPerformed(ActionEvent e) {
-//				tm.begin();
-//			}
-//			
-//		});
-//		
-//		JButton stopBtn = new JButton("Shutdown Group");
-//		stopBtn.addActionListener(new ActionListener() {
-//
-//			public void actionPerformed(ActionEvent e) {
-//				tm.shutdown();
-//			}
-//			
-//		});
-//		
-//		frame.getContentPane().setLayout(new FlowLayout(FlowLayout.LEFT));
-//		frame.getContentPane().add(startBtn);
-//		frame.getContentPane().add(stopBtn);
-//		
-//		frame.pack();
-//		frame.setVisible(true);
-////		tm.start();
-//	}
+
+	public void setTotalTasks(int totalTasks) {
+		this.totalTasks = totalTasks;
+	}
+
+	public void setFinalTask(Runnable finalTask) {
+		getThreads()[0].setFinalTask(finalTask);
+	}
+
 }

@@ -17,6 +17,8 @@ package ca.phon.worker;
 
 import ca.phon.worker.PhonTask.TaskStatus;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
@@ -30,7 +32,9 @@ import java.util.logging.Logger;
  * Tasks are run FIFO.
  *
  */
-public class PhonWorker extends Thread {
+public class PhonWorker extends Thread implements PropertyChangeListener {
+
+	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 	
 	/** The worker thread name */
 	private static final String STATIC_THREAD_NAME = "PhonWorker-";
@@ -172,10 +176,10 @@ public class PhonWorker extends Thread {
 			// poll instead of peek then poll as other threads may then acquire the task first
 			Runnable nextTask = queue.poll();
 			if(nextTask != null) {
+				pcs.firePropertyChange("currentTask", null, nextTask);
 				// run the next task in the queue
 				try {
 					nextTask.run();
-
 					if(nextTask instanceof PhonTask) {
 						PhonTask pt = (PhonTask)nextTask;
 						if(pt.getStatus() == TaskStatus.ERROR) {
@@ -192,6 +196,7 @@ public class PhonWorker extends Thread {
 					else
 						shutdown = true;
 				}
+				pcs.firePropertyChange("currentTask", nextTask, null);
 			} else {
 				if(this != _shutdownThread && !finishWhenQueueEmpty) {
 					try {
@@ -287,4 +292,18 @@ public class PhonWorker extends Thread {
 	public void setFinishWhenQueueEmpty(boolean finishWhenQueueEmpty) {
 		this.finishWhenQueueEmpty = finishWhenQueueEmpty;
 	}
+
+	public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+		pcs.addPropertyChangeListener(propertyName, listener);
+	}
+
+	public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+		pcs.removePropertyChangeListener(propertyName, listener);
+	}
+
+	@Override
+	public void propertyChange(java.beans.PropertyChangeEvent evt) {
+		pcs.firePropertyChange(evt);
+	}
+
 }
