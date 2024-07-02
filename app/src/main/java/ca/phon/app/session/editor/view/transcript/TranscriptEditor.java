@@ -134,11 +134,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
      */
     private boolean caretMoveFromUpDown = false;
 
-//    /**
-//     * Whether the next edit will change trigger any changes to the document
-//     */
-//    private boolean internalEdit = false;
-
     /**
      * A reference to the current box selection highlight object
      */
@@ -246,12 +241,22 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
 
         KeyStroke right = KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0);
         inputMap.put(right, "nextValidIndex");
-        PhonUIAction<Void> rightAct = PhonUIAction.runnable(() -> setCaretPosition(getNextValidIndex(getCaretPosition() + 1, true)));
+        PhonUIAction<Void> rightAct = PhonUIAction.runnable(() -> {
+            var caretLocation = getNextValidIndex(getCaretPosition() + 1, false);
+            if(caretLocation >= 0) {
+                setCaretPosition(caretLocation);
+            }
+        });
         actionMap.put("nextValidIndex", rightAct);
 
         KeyStroke left = KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0);
         inputMap.put(left, "prevValidIndex");
-        PhonUIAction<Void> leftAct = PhonUIAction.runnable(() -> setCaretPosition(getPrevValidIndex(getCaretPosition() - 1, true)));
+        PhonUIAction<Void> leftAct = PhonUIAction.runnable(() -> {
+            var caretLocation = getPrevValidIndex(getCaretPosition() - 1, false);
+            if(caretLocation >= 0) {
+                setCaretPosition(caretLocation);
+            }
+        });
         actionMap.put("prevValidIndex", leftAct);
 
         KeyStroke up = KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0);
