@@ -439,16 +439,13 @@ public class FolderProjectList extends JPanel {
 		@Override
 		protected void process(List<File> chunks) {
 			for(File f:chunks) {
-				System.out.println("starting" + f);
 				projectButtons.add(getProjectButton(f));
-				System.out.println("dont " + f);
 			}
 		}
 
 		@Override
 		protected void done() {
-			System.out.println("done");
-//			Collections.sort(projectButtons, new ProjectComparator(sortBar.sortByGrp.getSelectedValue()));
+//			Collections.sort(projectButstons, new ProjectComparator(sortBar.sortByGrp.getSelectedValue()));
             updateProjectList();
 		}
 
