@@ -1480,7 +1480,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         try {
             TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(this);
             batchBuilder.appendRecord(session, addedRecord, isChatTierNamesShown());
-            batchBuilder.appendEOL();
             int nextElementStart = getLength();
 
             Transcript transcript = getSession().getTranscript();
