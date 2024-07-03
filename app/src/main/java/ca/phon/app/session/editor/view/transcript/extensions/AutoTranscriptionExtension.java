@@ -149,7 +149,6 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
             batchBuilder.appendBatchString(ipa.toString(), ghostAttrs);
             editor.getTranscriptDocument().processBatchUpdates(editor.getCaretPosition(), batchBuilder.getBatch());
             ghostRange = new TranscriptDocument.StartEnd(editor.getCaretPosition(), editor.getCaretPosition() + ipa.toString().length());
-            System.out.println("Ghost range: " + ghostRange);
         } catch (BadLocationException ex) {
             LogUtil.warning(ex);
         }
@@ -283,13 +282,12 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
                 try {
                     final String currentText = editor.getTranscriptDocument().getText(currentTextRange.start(), currentTextRange.length());
                     final int numWords = currentText.isBlank() ? 0 : currentText.trim().split("\\p{Space}").length;
-                    System.out.println("Current text: " + currentText + ", numWords: " + numWords);
                     if(!tier.isUnvalidated()) {
                         if(currentText.length() == 0 && e.getData().get().newLoc().charPosition() == 0) {
                             final Orthography orthography = getOrthography(record, editor.getDataModel().getTranscriber());
                             final AutomaticTranscription autoTranscript = autoTranscriber.transcribe(orthography);
                             if(autoTranscript.getWords().size() > 0) {
-                                insertAutomaticTranscription(record, (Tier<IPATranscript>)tier, autoTranscript);
+                                SwingUtilities.invokeLater(() -> insertAutomaticTranscription(record, (Tier<IPATranscript>)tier, autoTranscript));
                             }
                         } else if(e.getData().get().newLoc().charPosition() == currentText.length()) {
                             // get previous character, if space then suggest transcription from current word index
@@ -299,7 +297,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
                                 final Orthography orthography = getOrthography(record, editor.getDataModel().getTranscriber());
                                 final AutomaticTranscription autoTranscript = autoTranscriber.transcribe(orthography, numWords);
                                 if(autoTranscript.getWords().size() > 0) {
-                                    insertAutomaticTranscription(record, (Tier<IPATranscript>)tier, autoTranscript);
+                                    SwingUtilities.invokeLater(() -> insertAutomaticTranscription(record, (Tier<IPATranscript>)tier, autoTranscript));
                                 }
                             }
                         }
@@ -321,25 +319,11 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
         if(firstEle instanceof Word firstWord) {
             final IPATranscript[] options = autoTranscript.getTranscriptionOptions(firstWord);
             if (options.length > 1) {
-//                final String[] optionStrings = new String[options.length];
-//                for (int i = 0; i < options.length; i++) {
-//                    optionStrings[i] = options[i].toString();
-//                }
-//                final JList<String> optionsList = new JList<>(optionStrings);
-//                optionsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//                optionsList.setSelectedIndex(0);
                 final JTextComponent textComponent = editor;
                 final Point p = textComponent.getCaret().getMagicCaretPosition();
                 SwingUtilities.convertPointToScreen(p, textComponent);
                 final int height = textComponent.getFontMetrics(textComponent.getFont()).getHeight();
                 p.y += height;
-//
-//                final JPanel optionsPanel = new JPanel(new BorderLayout());
-//                final JLabel titleLabel = new JLabel("Options for '" + firstWord.getWord() + "'");
-//                optionsPanel.add(titleLabel, BorderLayout.NORTH);
-//                optionsPanel.setOpaque(false);
-//                optionsPanel.add(new JScrollPane(optionsList), BorderLayout.CENTER);
-//                optionsPanel.setPreferredSize(new Dimension(200, 100));
 
                 final AutoTranscriptionOptionsContent optionsContent = new AutoTranscriptionOptionsContent(autoTranscript);
                 optionsContent.setPreferredSize(new Dimension(200, 100));
@@ -456,7 +440,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
                 final Orthography orthography = (Orthography)evt.data().newValue();
                 final AutomaticTranscription autoTranscription = autoTranscriber.transcribe(orthography);
                 if(autoTranscription.getWords().size() > 0) {
-                    insertAutomaticTranscription(record, ipaTier, autoTranscription);
+                    SwingUtilities.invokeLater(() -> insertAutomaticTranscription(record, ipaTier, autoTranscription));
                 }
             }
         }

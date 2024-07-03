@@ -303,6 +303,10 @@ public class SearchView extends EditorView {
         }
     }
 
+    /**
+     * Executes query will all current filters
+     *
+     */
     public void onQuery() {
         getEditor().getSelectionModel().clear();
         updateFilterButton();
