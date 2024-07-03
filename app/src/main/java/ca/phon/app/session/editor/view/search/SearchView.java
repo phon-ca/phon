@@ -286,11 +286,16 @@ public class SearchView extends EditorView {
 
     private void setupRecordFilter(FindManager findManager) {
         final List<Participant> speakers = new ArrayList<>();
-        for(Participant speaker:getEditor().getSession().getParticipants()) {
-            if(filterSpeakers.size() > 0 && !filterSpeakers.contains(speaker)) continue;
-            speakers.add(speaker);
+        if(filterSpeakers.size() > 0) {
+            if(filterSpeakers.contains(Participant.UNKNOWN)) {
+                speakers.add(Participant.UNKNOWN);
+            }
+            for (Participant speaker : getEditor().getSession().getParticipants()) {
+                if (!filterSpeakers.contains(speaker)) continue;
+                speakers.add(speaker);
+            }
+            findManager.setSpeakers(speakers);
         }
-        findManager.setSpeakers(speakers);
         findManager.setIncludeComments(includeComments);
         findManager.setIncludeGems(includeGems);
     }
