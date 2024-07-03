@@ -1933,7 +1933,9 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         if (elementType == null) {
             return;
         } else if (elementType.equals(TranscriptStyleConstants.ATTR_KEY_RECORD)) {
-            end = doc.getTierEnd((Tier<?>) prevElementAttributes.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER));
+            final int recordIndex = getSession().getRecordElementIndex(TranscriptStyleConstants.getRecord(prevElementAttributes));
+            final Tier<?> tier = TranscriptStyleConstants.getTier(prevElementAttributes);
+            end = doc.getTierEnd(recordIndex, tier.getName());
         } else if (elementType.equals(TranscriptStyleConstants.ATTR_KEY_COMMENT)) {
             end = doc.getCommentEnd((Comment) prevElementAttributes.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT));
         } else if (elementType.equals(TranscriptStyleConstants.ATTR_KEY_GEM)) {
@@ -1981,7 +1983,9 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         if (elementType == null) {
             return;
         } else if (elementType.equals(TranscriptStyleConstants.ELEMENT_TYPE_RECORD)) {
-            end = doc.getTierEnd(TranscriptStyleConstants.getTier(nextElementAttributes));
+            final int recordIndex = getSession().getRecordElementIndex(TranscriptStyleConstants.getRecord(nextElementAttributes));
+            final Tier<?> tier = TranscriptStyleConstants.getTier(nextElementAttributes);
+            end = doc.getTierEnd(recordIndex, tier.getName());
         } else if (elementType.equals(TranscriptStyleConstants.ELEMENT_TYPE_COMMENT)) {
             end = doc.getCommentEnd(TranscriptStyleConstants.getComment(nextElementAttributes));
         } else if (elementType.equals(TranscriptStyleConstants.ELEMENT_TYPE_GEM)) {
