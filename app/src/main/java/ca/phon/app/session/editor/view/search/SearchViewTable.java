@@ -10,6 +10,7 @@ import ca.phon.util.Range;
 import org.jdesktop.swingx.JXTable;
 
 import javax.swing.*;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,8 @@ public class SearchViewTable extends JXTable {
      * @param findManager
      */
     public void search(FindManager findManager) {
-        setModel(new SearchViewTableModel(findManager.getSession(), new ArrayList<>()));
+        final SearchViewTableModel model = new SearchViewTableModel(findManager.getSession(), new ArrayList<>());
+        setModel(model);
         final FindWorker worker = new FindWorker(findManager);
         SearchViewTable.this.firePropertyChange(SEARCHING_PROP, false, true);
         worker.execute();

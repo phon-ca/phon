@@ -349,7 +349,9 @@ public class SearchView extends EditorView {
                     selection.putExtension(Highlighter.HighlightPainter.class, new BoxSelectHighlightPainter());
                     getEditor().getSelectionModel().addSelection(selection);
                 }
-                resultsLabel.setText(table.getRowCount() + " results");
+                final int range = e.getLastRow() - e.getFirstRow() + 1;
+                final int total =table.getRowCount() + range;
+                resultsLabel.setText(total + (total == 1 ? " result" : " results"));
             }
         };
         this.table.getModel().addTableModelListener(listener);
