@@ -350,7 +350,7 @@ public class SearchView extends EditorView {
                     getEditor().getSelectionModel().addSelection(selection);
                 }
                 final int range = e.getLastRow() - e.getFirstRow() + 1;
-                final int total =table.getRowCount() + range;
+                final int total = table.getRowCount() + range;
                 resultsLabel.setText(total + (total == 1 ? " result" : " results"));
             }
         };

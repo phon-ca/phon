@@ -12,6 +12,10 @@ import java.awt.event.MouseEvent;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+/**
+ * Keys and methods for setting style attributes on {@link AttributeSet}s used in
+ * {@link TranscriptView}s.
+ */
 public class TranscriptStyleConstants {
 
     public static final String ATTR_KEY_RECORD = "record";

@@ -218,7 +218,7 @@ public class TranscriptBatchBuilder {
         SimpleAttributeSet attrs = new SimpleAttributeSet(styleContext.getStyle(TranscriptStyleContext.DEFAULT_STYLE));
         attrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE, TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER);
         attrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER, tier);
-        if (additionalAttributes != null) attrs.addAttributes(additionalAttributes);
+        if (additionalAttributes != null) attrs.addAttributes(TranscriptStyleContext.stripStyle(additionalAttributes));
 
         appendBatchEndStart(getTrailingAttributes(), attrs);
 
@@ -230,7 +230,7 @@ public class TranscriptBatchBuilder {
         appendBatchString(labelText, labelAttrs);
 
         labelAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_UNDERLINE_ON_HOVER);
-        appendBatchString(": ", labelAttrs);
+        appendBatchString(":  ", labelAttrs);
 
         if(tier.hasValue()) {
             appendBatchString(tier.toString(), attrs);
@@ -470,7 +470,7 @@ public class TranscriptBatchBuilder {
         final SimpleAttributeSet tierAttrs = styleContext.getTierAttributes(tier, tierViewItem);
         TranscriptStyleConstants.setRecord(tierAttrs, record);
         if (additionalAttrs != null) {
-            tierAttrs.addAttributes(additionalAttrs);
+            tierAttrs.addAttributes(TranscriptStyleContext.stripStyle(additionalAttrs));
         }
         appendTierContent(record, tier, tierAttrs);
 
@@ -495,13 +495,13 @@ public class TranscriptBatchBuilder {
         SimpleAttributeSet tierAttrs = styleContext.getTierAttributes(tier, tierViewItem);
         tierAttrs.addAttributes(styleContext.getRecordAttributes(record));
         if (additionalAttrs != null) {
-            tierAttrs.addAttributes(additionalAttrs);
+            tierAttrs.addAttributes(TranscriptStyleContext.stripStyle(additionalAttrs));
         }
         appendBatchEndStart(getTrailingAttributes(), tierAttrs);
 
         SimpleAttributeSet labelAttrs = styleContext.getTierLabelAttributes(tier);
         if (additionalAttrs != null) {
-            labelAttrs.addAttributes(additionalAttrs);
+            labelAttrs.addAttributes(TranscriptStyleContext.stripStyle(additionalAttrs));
         }
 
         String labelText = label;
@@ -527,7 +527,7 @@ public class TranscriptBatchBuilder {
         appendBatchString(formatLabelText(labelText), labelAttrs);
 
         TranscriptStyleConstants.setUnderlineOnHover(labelAttrs, false);
-        appendBatchString(": ", labelAttrs);
+        appendBatchString(":  ", labelAttrs);
 
         return this;
     }
@@ -543,6 +543,7 @@ public class TranscriptBatchBuilder {
     public TranscriptBatchBuilder appendTierContent(Record record, Tier<?> tier, AttributeSet tierAttrs) {
         Class<?> tierType = tier.getDeclaredType();
 
+        System.out.println("Tier attrs: " + tierAttrs);
         if (tier.isUnvalidated()) {
             appendBatchString(tier.getUnvalidatedValue().getValue(), tierAttrs);
         } else if(tier.hasValue()) {
@@ -734,7 +735,9 @@ public class TranscriptBatchBuilder {
             if(SystemTierType.Orthography.getName().equals(item.getTierName())) {
                 final String orthoTierLabel = record.getSpeaker().toString();
                 appendTierLabel(session, record, tier, orthoTierLabel, item, chatTierNamesShown, recordAttrs);
-                appendTierContent(record, tier, recordAttrs);
+                final SimpleAttributeSet orthoTierAttrs = styleContext.getTierAttributes(tier, item);
+                orthoTierAttrs.addAttributes(TranscriptStyleContext.stripStyle(recordAttrs));
+                appendTierContent(record, tier, orthoTierAttrs);
             } else {
                 appendTier(session, record, tier, item, chatTierNamesShown, recordAttrs);
             }

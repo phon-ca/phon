@@ -13,6 +13,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.text.*;
 import java.awt.*;
+import java.util.Enumeration;
 import java.util.List;
 
 /**
@@ -50,6 +51,20 @@ public class TranscriptStyleContext extends StyleContext {
     	StyleConstants.setForeground(style, Color.gray);
     	StyleConstants.setItalic(style, true);
     	return style;
+    }
+
+    public static MutableAttributeSet stripStyle(AttributeSet attrs) {
+    	MutableAttributeSet retVal = new SimpleAttributeSet();
+    	final Enumeration<?> names = attrs.getAttributeNames();
+        while(names.hasMoreElements()) {
+            final Object key = names.nextElement();
+            if(key == StyleConstants.Bold || key == StyleConstants.Italic || key == StyleConstants.FontFamily
+                || key == StyleConstants.FontSize || key == StyleConstants.Foreground || key == StyleConstants.Background) {
+                continue;
+            }
+            retVal.addAttribute(key, attrs.getAttribute(key));
+        }
+    	return retVal;
     }
 
     // region Attribute Getters
@@ -229,6 +244,7 @@ public class TranscriptStyleContext extends StyleContext {
 
         Style defaultStyle = getStyle(TranscriptStyleContext.DEFAULT);
         retVal.addAttributes(defaultStyle);
+        StyleConstants.setBold(retVal, true);
 
         return retVal;
     }
@@ -456,6 +472,7 @@ public class TranscriptStyleContext extends StyleContext {
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL, true);
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE, true);
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
+        StyleConstants.setBold(retVal, true);
 
         return retVal;
     }
