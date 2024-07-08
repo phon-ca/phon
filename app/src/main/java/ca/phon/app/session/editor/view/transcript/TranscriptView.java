@@ -62,6 +62,8 @@ public class TranscriptView extends EditorView {
 
     /* State */
 
+    private final static int FONT_SIZE_DELTA_MIN = -8;
+    private final static int FONT_SIZE_DELTA_MAX = 24;
     public float fontSizeDelta = PrefHelper.getFloat(FONT_SIZE_DELTA_PROP, DEFAULT_FONT_SIZE_DELTA);
     private boolean findAndReplaceVisible = false;
 
@@ -98,16 +100,18 @@ public class TranscriptView extends EditorView {
             PrefHelper.getUserPreferences().putFloat(FONT_SIZE_DELTA_PROP, getFontSizeDelta());
             transcriptEditor.repaint();
         });
+        setupKeyboardShortcuts();
+    }
 
-
-        InputMap inputMap = transcriptEditor.getInputMap();
+    private void setupKeyboardShortcuts() {
+        InputMap inputMap = transcriptEditor.getInputMap(JComponent.WHEN_FOCUSED);
         ActionMap actionMap = transcriptEditor.getActionMap();
 
         KeyStroke save = KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
         inputMap.put(save, "save");
         PhonUIAction<Void> saveAct = PhonUIAction.runnable(() -> {
             transcriptEditor.saveCurrentLine();
-            SwingUtilities.invokeLater(() -> new SaveSessionAction(editor).hookableActionPerformed(null));
+            SwingUtilities.invokeLater(() -> new SaveSessionAction(getEditor()).hookableActionPerformed(null));
         });
         actionMap.put("save", saveAct);
 
@@ -115,9 +119,25 @@ public class TranscriptView extends EditorView {
         inputMap.put(saveAs, "saveAs");
         PhonUIAction<Void> saveAsAct = PhonUIAction.runnable(() -> {
             transcriptEditor.saveCurrentLine();
-            SwingUtilities.invokeLater(() -> new SaveAsAction(editor, new SessionOutputFactory().availableSessionIOs().get(0)).hookableActionPerformed(null));
+            SwingUtilities.invokeLater(() -> new SaveAsAction(getEditor(), new SessionOutputFactory().availableSessionIOs().get(0)).hookableActionPerformed(null));
         });
         actionMap.put("saveAs", saveAsAct);
+
+        KeyStroke increaseFontSizeKs = KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
+        inputMap.put(increaseFontSizeKs, "increaseFontSize");
+        PhonUIAction<Void> increaseFontSizeAct = PhonUIAction.runnable(() -> {
+            setFontSizeDelta(Math.min(FONT_SIZE_DELTA_MAX, getFontSizeDelta() + 1));
+            transcriptEditor.getTranscriptDocument().reload();
+        });
+        actionMap.put("increaseFontSize", increaseFontSizeAct);
+
+        KeyStroke decreaseFontSizeKs = KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
+        inputMap.put(decreaseFontSizeKs, "decreaseFontSize");
+        PhonUIAction<Void> decreaseFontSizeAct = PhonUIAction.runnable(() -> {
+            setFontSizeDelta(Math.max(FONT_SIZE_DELTA_MIN, getFontSizeDelta() - 1));
+            transcriptEditor.getTranscriptDocument().reload();
+        });
+        actionMap.put("decreaseFontSize", decreaseFontSizeAct);
     }
 
     /**
@@ -316,6 +336,7 @@ public class TranscriptView extends EditorView {
         return this.transcriptEditor;
     }
 
+
     /**
      * Shows the font scale menu
      *
@@ -334,7 +355,7 @@ public class TranscriptView extends EditorView {
         largeLbl.setFont(getFont().deriveFont(FontPreferences.getDefaultFontSize()*2));
         largeLbl.setHorizontalAlignment(SwingConstants.CENTER);
 
-        final JSlider scaleSlider = new JSlider(-8, 24);
+        final JSlider scaleSlider = new JSlider(FONT_SIZE_DELTA_MIN, FONT_SIZE_DELTA_MAX);
         scaleSlider.setValue((int)getFontSizeDelta());
         scaleSlider.setMajorTickSpacing(8);
         scaleSlider.setMinorTickSpacing(2);
