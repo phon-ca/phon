@@ -98,7 +98,7 @@ public class TranscriptStyleContext extends StyleContext {
      * @return a mutable attribute set containing all the necessary attributes for the given record
      */
     public SimpleAttributeSet getRecordAttributes(Record record) {
-        SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
+        SimpleAttributeSet retVal = new SimpleAttributeSet();
 
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD, record);
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE, TranscriptStyleConstants.ATTR_KEY_RECORD);
@@ -139,10 +139,10 @@ public class TranscriptStyleContext extends StyleContext {
                 StyleConstants.setBold(retVal, font.isBold());
                 StyleConstants.setItalic(retVal, font.isItalic());
             }
-            StyleConstants.setFontSize(retVal,
-                    StyleConstants.getFontSize(retVal)
-                            + (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
         }
+        StyleConstants.setFontSize(retVal,
+                StyleConstants.getFontSize(retVal)
+                        + (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
 
         return retVal;
     }

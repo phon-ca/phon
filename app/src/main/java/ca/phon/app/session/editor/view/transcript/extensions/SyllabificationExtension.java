@@ -79,7 +79,8 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                     syllableTier.setValue(ipa);
 
                     // Set up the tier attributes for the dummy tier
-                    MutableAttributeSet tierAttrs = new SimpleAttributeSet();
+                    final TierViewItem tierViewItem = doc.getSession().getTierView().stream().filter(item -> item.getTierName().equals(tier.getName())).findFirst().orElse(null);
+                    MutableAttributeSet tierAttrs = new SimpleAttributeSet(doc.getTranscriptStyleContext().getTierAttributes(tier, tierViewItem));
                     Record record = TranscriptStyleConstants.getRecord(attrs);
                     TranscriptStyleConstants.setElementType(tierAttrs, TranscriptStyleConstants.ELEMENT_TYPE_RECORD);
                     TranscriptStyleConstants.setRecord(tierAttrs, record);
