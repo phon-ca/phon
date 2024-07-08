@@ -15,10 +15,7 @@ import ca.phon.app.session.editor.view.transcript.extensions.*;
 import ca.phon.session.*;
 import ca.phon.session.io.SessionOutputFactory;
 import ca.phon.session.position.TranscriptElementLocation;
-import ca.phon.ui.CalloutWindow;
-import ca.phon.ui.CommonModuleFrame;
-import ca.phon.ui.FlatButton;
-import ca.phon.ui.IconStrip;
+import ca.phon.ui.*;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
@@ -193,20 +190,7 @@ public class TranscriptView extends EditorView {
 //        toolbar.add(findReplaceButton);
 //
 //
-//        JButton fontScaleMenuButton = new JButton();
-//        DropDownIcon fontScaleIcon = new DropDownIcon(
-//                IconManager.getInstance().getIcon("apps/preferences-desktop-font", IconSize.SMALL),
-//                2,
-//                SwingConstants.BOTTOM
-//        );
-//        PhonUIAction<Void> fontScaleMenuAct = PhonUIAction.eventConsumer(this::showFontScaleMenu, null);
-//        fontScaleMenuAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show font scale menu");
-//        fontScaleMenuAct.putValue(PhonUIAction.SMALL_ICON, fontScaleIcon);
-//        fontScaleMenuAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
-//        fontScaleMenuAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
-//        fontScaleMenuButton.setAction(fontScaleMenuAct);
-//        fontScaleMenuButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-//        toolbar.add(fontScaleMenuButton);
+
     }
 
     /**
@@ -301,11 +285,27 @@ public class TranscriptView extends EditorView {
 //            findReplaceBtn.setSelected(isFindAndReplaceVisible());
 //        });
 
+        JButton fontScaleMenuButton = new JButton();
+        DropDownIcon fontScaleIcon = new DropDownIcon(
+                IconManager.getInstance().getIcon("apps/preferences-desktop-font", IconSize.SMALL),
+                2,
+                SwingConstants.BOTTOM
+        );
+        PhonUIAction<Void> fontScaleMenuAct = PhonUIAction.eventConsumer(this::showFontScaleMenu, null);
+        fontScaleMenuAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show font scale menu");
+        fontScaleMenuAct.putValue(PhonUIAction.SMALL_ICON, fontScaleIcon);
+        fontScaleMenuAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
+        fontScaleMenuAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
+        fontScaleMenuButton.setAction(fontScaleMenuAct);
+        fontScaleMenuButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+//        toolbar.add(fontScaleMenuButton);
+
         iconStrip.add(participantsBtn, IconStrip.IconStripPosition.LEFT);
         iconStrip.add(tiersBtn, IconStrip.IconStripPosition.LEFT);
         iconStrip.add(recordsBtn, IconStrip.IconStripPosition.LEFT);
         iconStrip.add(commentsBtn, IconStrip.IconStripPosition.LEFT);
         iconStrip.add(gemsBtn, IconStrip.IconStripPosition.LEFT);
+        iconStrip.add(fontScaleMenuButton, IconStrip.IconStripPosition.RIGHT);
 //        iconStrip.add(transcriptBtn, IconStrip.IconStripPosition.LEFT);
 //        iconStrip.add(findReplaceBtn, IconStrip.IconStripPosition.RIGHT);
 //        iconStrip.add(singleRecordModeBtn, IconStrip.IconStripPosition.RIGHT);

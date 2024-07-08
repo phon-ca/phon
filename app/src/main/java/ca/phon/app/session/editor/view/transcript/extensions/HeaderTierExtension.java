@@ -23,12 +23,14 @@ import ca.phon.ui.nativedialogs.OpenDialogProperties;
 import ca.phon.util.Language;
 import ca.phon.util.LanguageEntry;
 import ca.phon.util.LanguageParser;
+import ca.phon.util.PrefHelper;
 import org.jdesktop.swingx.JXMonthView;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseEvent;
@@ -173,6 +175,8 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
         final SimpleAttributeSet attrs = new SimpleAttributeSet(doc.getTranscriptStyleContext().getStyle(TranscriptStyleContext.DEFAULT_STYLE));
         TranscriptStyleConstants.setElementType(attrs, TranscriptStyleConstants.ELEMENT_TYPE_GENERIC);
         TranscriptStyleConstants.setGenericTier(attrs, participantsTier);
+        StyleConstants.setFontSize(attrs, StyleConstants.getFontSize(attrs) +
+                (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
 
         // start paragraph
         batchBuilder.appendBatchEndStart(batchBuilder.getTrailingAttributes(), attrs);
@@ -238,6 +242,8 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
         final SimpleAttributeSet attrs = new SimpleAttributeSet(doc.getTranscriptStyleContext().getStyle(TranscriptStyleContext.DEFAULT_STYLE));
         TranscriptStyleConstants.setElementType(attrs, TranscriptStyleConstants.ELEMENT_TYPE_GENERIC);
         TranscriptStyleConstants.setGenericTier(attrs, languagesTier);
+        StyleConstants.setFontSize(attrs, StyleConstants.getFontSize(attrs) +
+                (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
 
         // start paragraph
         batchBuilder.appendBatchEndStart(batchBuilder.getTrailingAttributes(), attrs);
@@ -335,6 +341,8 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
         final SimpleAttributeSet attrs = new SimpleAttributeSet(doc.getTranscriptStyleContext().getStyle(TranscriptStyleContext.DEFAULT_STYLE));
         TranscriptStyleConstants.setElementType(attrs, TranscriptStyleConstants.ELEMENT_TYPE_GENERIC);
         TranscriptStyleConstants.setGenericTier(attrs, tiersHeaderTier);
+        StyleConstants.setFontSize(attrs, StyleConstants.getFontSize(attrs) +
+                (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
 
         // start paragraph
         batchBuilder.appendBatchEndStart(batchBuilder.getTrailingAttributes(), attrs);
@@ -407,6 +415,8 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
         final SimpleAttributeSet attrs = new SimpleAttributeSet(doc.getTranscriptStyleContext().getStyle(TranscriptStyleContext.DEFAULT_STYLE));
         TranscriptStyleConstants.setElementType(attrs, TranscriptStyleConstants.ELEMENT_TYPE_GENERIC);
         TranscriptStyleConstants.setGenericTier(attrs, mediaTier);
+        StyleConstants.setFontSize(attrs, StyleConstants.getFontSize(attrs) +
+                (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
 
         // start paragraph
         batchBuilder.appendBatchEndStart(batchBuilder.getTrailingAttributes(), attrs);
@@ -441,6 +451,8 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
         final SimpleAttributeSet attrs = new SimpleAttributeSet(doc.getTranscriptStyleContext().getStyle(TranscriptStyleContext.DEFAULT_STYLE));
         TranscriptStyleConstants.setElementType(attrs, TranscriptStyleConstants.ELEMENT_TYPE_GENERIC);
         TranscriptStyleConstants.setGenericTier(attrs, dateTier);
+        StyleConstants.setFontSize(attrs, StyleConstants.getFontSize(attrs) +
+                (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
 
         // start paragraph
         batchBuilder.appendBatchEndStart(batchBuilder.getTrailingAttributes(), attrs);

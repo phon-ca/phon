@@ -8,10 +8,7 @@ import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.autotranscribe.AlignedTypesAutoTranscribeSource;
 import ca.phon.app.session.editor.undo.TierEdit;
-import ca.phon.app.session.editor.view.transcript.TranscriptBatchBuilder;
-import ca.phon.app.session.editor.view.transcript.TranscriptDocument;
-import ca.phon.app.session.editor.view.transcript.TranscriptEditor;
-import ca.phon.app.session.editor.view.transcript.TranscriptStyleConstants;
+import ca.phon.app.session.editor.view.transcript.*;
 import ca.phon.autotranscribe.AutoTranscriber;
 import ca.phon.autotranscribe.AutomaticTranscription;
 import ca.phon.app.session.editor.autotranscribe.IPADictionaryAutoTranscribeSource;
@@ -134,7 +131,8 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
         if(PrefHelper.getBoolean("phon.debug", false)) {
             LogUtil.info("Inserting ghost text for auto-transcription");
         }
-        final SimpleAttributeSet ghostAttrs = editor.getTranscriptDocument().getTranscriptStyleContext().getTierAttributes(tier);
+        final TierViewItem tvi = editor.getSession().getTierView().stream().filter(tv -> tv.getTierName().equals(tier.getName())).findFirst().orElse(null);
+        final SimpleAttributeSet ghostAttrs = editor.getTranscriptDocument().getTranscriptStyleContext().getTierAttributes(tier, tvi);
         // make text gray and italic
         StyleConstants.setForeground(ghostAttrs, Color.gray);
         StyleConstants.setItalic(ghostAttrs, true);
@@ -252,7 +250,9 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
             editor.getTranscriptEditorCaret().freeze();
             editor.getTranscriptDocument().remove(start, currentTextRange.length());
 
-            final SimpleAttributeSet attrs = new SimpleAttributeSet();
+            final TierViewItem tvi = editor.getSession().getTierView().stream().filter(tv -> tv.getTierName().equals(tier.getName())).findFirst().orElse(null);
+            final SimpleAttributeSet tierAttrs = editor.getTranscriptDocument().getTranscriptStyleContext().getTierAttributes(tier, tvi);
+            final SimpleAttributeSet attrs = new SimpleAttributeSet(tierAttrs);
             TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(editor.getTranscriptDocument());
             TranscriptStyleConstants.setTier(attrs, tier);
             TranscriptStyleConstants.setRecord(attrs, record);
@@ -618,6 +618,9 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
                         optionStrings[i] = options[i].toString();
                     }
                     optionsList = new JList<>(optionStrings);
+                    Font optionsFont = optionsList.getFont();
+                    optionsList.setFont(optionsFont.deriveFont((float)optionsFont.getSize() +
+                                    (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0)));
                     optionsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
                     optionsList.setSelectedIndex(autoTranscription.getSelectedTranscriptionIndex(firstWord));
                     add(new JScrollPane(optionsList), BorderLayout.CENTER);

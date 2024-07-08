@@ -12,6 +12,7 @@ import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.session.format.MediaSegmentFormatter;
 import ca.phon.session.tierdata.*;
+import ca.phon.util.PrefHelper;
 
 import javax.swing.*;
 import javax.swing.text.*;
@@ -232,6 +233,9 @@ public class TranscriptBatchBuilder {
         labelAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_UNDERLINE_ON_HOVER);
         appendBatchString(":  ", labelAttrs);
 
+        StyleConstants.setFontSize(attrs, StyleConstants.getFontSize(attrs) +
+                (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
+
         if(tier.hasValue()) {
             appendBatchString(tier.toString(), attrs);
         } else if (tier.isUnvalidated()) {
@@ -334,7 +338,7 @@ public class TranscriptBatchBuilder {
         appendBatchString(": ", labelAttrs);
 
         if(tierData.length() == 0) {
-            appendBatchString("", styleContext.getTierStringAttributes());
+            appendBatchString("", commentAttrs);
         } else {
             for (int i = 0; i < tierData.length(); i++) {
                 TierElement userTierElement = tierData.elementAt(i);

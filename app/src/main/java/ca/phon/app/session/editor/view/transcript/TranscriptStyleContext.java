@@ -94,7 +94,7 @@ public class TranscriptStyleContext extends StyleContext {
     /**
      * Gets the attributes for a given record
      *
-     * @param recordIndex the index of the record to get the attributes of
+     * @param record the record to get the attributes of
      * @return a mutable attribute set containing all the necessary attributes for the given record
      */
     public SimpleAttributeSet getRecordAttributes(Record record) {
@@ -135,10 +135,13 @@ public class TranscriptStyleContext extends StyleContext {
                 var font = Font.decode(fontString);
 
                 StyleConstants.setFontFamily(retVal, font.getFamily());
-                StyleConstants.setFontSize(retVal, font.getSize() + (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
+                StyleConstants.setFontSize(retVal, font.getSize());
                 StyleConstants.setBold(retVal, font.isBold());
                 StyleConstants.setItalic(retVal, font.isItalic());
             }
+            StyleConstants.setFontSize(retVal,
+                    StyleConstants.getFontSize(retVal)
+                            + (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
         }
 
         return retVal;
@@ -245,6 +248,8 @@ public class TranscriptStyleContext extends StyleContext {
         Style defaultStyle = getStyle(TranscriptStyleContext.DEFAULT);
         retVal.addAttributes(defaultStyle);
         StyleConstants.setBold(retVal, true);
+        StyleConstants.setFontSize(retVal, StyleConstants.getFontSize(defaultStyle)
+                + (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
 
         return retVal;
     }
@@ -415,6 +420,8 @@ public class TranscriptStyleContext extends StyleContext {
 
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE, TranscriptStyleConstants.ATTR_KEY_GEM);
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_GEM, gem);
+        StyleConstants.setFontSize(retVal, StyleConstants.getFontSize(retVal) +
+                (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
 
         return retVal;
     }
@@ -429,6 +436,8 @@ public class TranscriptStyleContext extends StyleContext {
         SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
         TranscriptStyleConstants.setElementType(retVal, TranscriptStyleConstants.ELEMENT_TYPE_COMMENT);
         TranscriptStyleConstants.setComment(retVal, comment);
+        StyleConstants.setFontSize(retVal, StyleConstants.getFontSize(retVal) +
+                (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
         return retVal;
     }
 
@@ -443,6 +452,7 @@ public class TranscriptStyleContext extends StyleContext {
         TranscriptStyleConstants.setLabel(retVal, true);
         TranscriptStyleConstants.setNotTraversable(retVal, true);
         TranscriptStyleConstants.setNotEditable(retVal, true);
+        StyleConstants.setBold(retVal, true);
         return retVal;
     }
 
@@ -458,6 +468,7 @@ public class TranscriptStyleContext extends StyleContext {
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_LABEL, true);
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE, true);
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
+        StyleConstants.setBold(retVal, true);
         return retVal;
     }
 
@@ -473,6 +484,8 @@ public class TranscriptStyleContext extends StyleContext {
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE, true);
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
         StyleConstants.setBold(retVal, true);
+        StyleConstants.setFontSize(retVal, StyleConstants.getFontSize(retVal) +
+                (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
 
         return retVal;
     }
