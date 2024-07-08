@@ -150,11 +150,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     private final TranscriptEditorCaret caret;
 
     /**
-     * The icon strip for the toolbar
-     */
-    private final IconStrip iconStrip = new IconStrip(SwingConstants.HORIZONTAL);
-
-    /**
      * Constructor
      */
     public TranscriptEditor(Session session, EditorEventManager eventManager, SessionEditUndoSupport undoSupport, UndoManager undoManager) {

@@ -285,27 +285,25 @@ public class TranscriptView extends EditorView {
 //            findReplaceBtn.setSelected(isFindAndReplaceVisible());
 //        });
 
-        JButton fontScaleMenuButton = new JButton();
-        DropDownIcon fontScaleIcon = new DropDownIcon(
-                IconManager.getInstance().getIcon("apps/preferences-desktop-font", IconSize.SMALL),
-                2,
-                SwingConstants.BOTTOM
-        );
         PhonUIAction<Void> fontScaleMenuAct = PhonUIAction.eventConsumer(this::showFontScaleMenu, null);
+        fontScaleMenuAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+        fontScaleMenuAct.putValue(FlatButton.ICON_NAME_PROP, "text_increase");
+        fontScaleMenuAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
         fontScaleMenuAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show font scale menu");
-        fontScaleMenuAct.putValue(PhonUIAction.SMALL_ICON, fontScaleIcon);
         fontScaleMenuAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
         fontScaleMenuAct.putValue(DropDownButton.ARROW_ICON_GAP, 2);
-        fontScaleMenuButton.setAction(fontScaleMenuAct);
+        final FlatButton fontScaleMenuButton = new FlatButton(fontScaleMenuAct);
         fontScaleMenuButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 //        toolbar.add(fontScaleMenuButton);
+
 
         iconStrip.add(participantsBtn, IconStrip.IconStripPosition.LEFT);
         iconStrip.add(tiersBtn, IconStrip.IconStripPosition.LEFT);
         iconStrip.add(recordsBtn, IconStrip.IconStripPosition.LEFT);
         iconStrip.add(commentsBtn, IconStrip.IconStripPosition.LEFT);
         iconStrip.add(gemsBtn, IconStrip.IconStripPosition.LEFT);
-        iconStrip.add(fontScaleMenuButton, IconStrip.IconStripPosition.RIGHT);
+        iconStrip.add(new JSeparator(SwingConstants.VERTICAL), IconStrip.IconStripPosition.LEFT);
+        iconStrip.add(fontScaleMenuButton, IconStrip.IconStripPosition.LEFT);
 //        iconStrip.add(transcriptBtn, IconStrip.IconStripPosition.LEFT);
 //        iconStrip.add(findReplaceBtn, IconStrip.IconStripPosition.RIGHT);
 //        iconStrip.add(singleRecordModeBtn, IconStrip.IconStripPosition.RIGHT);
