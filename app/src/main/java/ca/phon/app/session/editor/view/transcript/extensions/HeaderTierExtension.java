@@ -566,6 +566,8 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
                 final SimpleAttributeSet attrs = new SimpleAttributeSet(doc.getTranscriptStyleContext().getStyle(TranscriptStyleContext.DEFAULT_STYLE));
                 TranscriptStyleConstants.setElementType(attrs, TranscriptStyleConstants.ELEMENT_TYPE_GENERIC);
                 TranscriptStyleConstants.setGenericTier(attrs, dateHeaderTier);
+                StyleConstants.setFontSize(attrs, StyleConstants.getFontSize(attrs) +
+                        (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
 
                 TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(doc.getTranscriptStyleContext(), doc.getInsertionHooks());
                 final PhonUIAction showDatePickerAct = PhonUIAction.runnable(this::showDatePicker);
@@ -639,6 +641,8 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
                 final SimpleAttributeSet attrs = new SimpleAttributeSet(doc.getTranscriptStyleContext().getStyle(TranscriptStyleContext.DEFAULT_STYLE));
                 TranscriptStyleConstants.setElementType(attrs, TranscriptStyleConstants.ELEMENT_TYPE_GENERIC);
                 TranscriptStyleConstants.setGenericTier(attrs, mediaTier);
+                StyleConstants.setFontSize(attrs, StyleConstants.getFontSize(attrs) +
+                        (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
 
                 TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(doc.getTranscriptStyleContext(), doc.getInsertionHooks());
                 batchBuilder.appendBatchString(mediaTier.toString(), attrs);
