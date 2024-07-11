@@ -1927,7 +1927,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         if (elementType == null) {
             return;
         } else if (elementType.equals(TranscriptStyleConstants.ATTR_KEY_RECORD)) {
-            final int recordIndex = getSession().getRecordElementIndex(TranscriptStyleConstants.getRecord(prevElementAttributes));
+            final int recordIndex = getSession().getRecordPosition(TranscriptStyleConstants.getRecord(prevElementAttributes));
             final Tier<?> tier = TranscriptStyleConstants.getTier(prevElementAttributes);
             end = doc.getTierEnd(recordIndex, tier.getName());
         } else if (elementType.equals(TranscriptStyleConstants.ATTR_KEY_COMMENT)) {
@@ -1942,7 +1942,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             return;
         }
 
-        int newCaretPos = Math.min(end - 1, start + offsetInContent);
+        int newCaretPos = Math.min((start == end) ? end : end - 1, start + offsetInContent);
 
         caretMoveFromUpDown = true;
         setCaretPosition(newCaretPos);
@@ -1977,7 +1977,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         if (elementType == null) {
             return;
         } else if (elementType.equals(TranscriptStyleConstants.ELEMENT_TYPE_RECORD)) {
-            final int recordIndex = getSession().getRecordElementIndex(TranscriptStyleConstants.getRecord(nextElementAttributes));
+            final int recordIndex = getSession().getRecordPosition(TranscriptStyleConstants.getRecord(nextElementAttributes));
             final Tier<?> tier = TranscriptStyleConstants.getTier(nextElementAttributes);
             end = doc.getTierEnd(recordIndex, tier.getName());
         } else if (elementType.equals(TranscriptStyleConstants.ELEMENT_TYPE_COMMENT)) {
@@ -1990,7 +1990,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             return;
         }
 
-        int newCaretPos = Math.min(end - 1, start + offsetInContent);
+        int newCaretPos = Math.min((start == end) ? end : end - 1, start + offsetInContent);
 
         caretMoveFromUpDown = true;
         setCaretPosition(newCaretPos);

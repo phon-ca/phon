@@ -9,6 +9,7 @@ import ca.phon.session.Record;
 import ca.phon.session.Tier;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -68,7 +69,8 @@ public class TranscriptScrollPaneGutter extends JComponent {
     public TranscriptScrollPaneGutter(TranscriptEditor editor) {
         this.editor = editor;
         setPreferredSize(new Dimension(DEFAULT_WIDTH + PADDING + RECORD_NUMBER_WIDTH + PADDING, getPreferredSize().height));
-        setFont(FontPreferences.getTierFont());
+        Font font = FontPreferences.getTierFont();
+        setFont(font);
 
         currentRecord = editor.getTranscriptDocument().getSingleRecordIndex();
         editor.getEventManager().registerActionForEvent(
@@ -208,7 +210,8 @@ public class TranscriptScrollPaneGutter extends JComponent {
         g.fillRect(drawHere.x, drawHere.y, drawHere.width, drawHere.height);
         g.setColor(Color.BLACK);
 
-        final Font font = g.getFont();
+        Font font = g.getFont();
+        font = font.deriveFont((float)font.getSize() + (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
 
         var doc = editor.getTranscriptDocument();
 

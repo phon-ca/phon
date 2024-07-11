@@ -231,7 +231,7 @@ public class TranscriptBatchBuilder {
         appendBatchString(labelText, labelAttrs);
 
         labelAttrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_UNDERLINE_ON_HOVER);
-        appendBatchString(":  ", labelAttrs);
+        appendBatchString(": ", labelAttrs);
 
         StyleConstants.setFontSize(attrs, StyleConstants.getFontSize(attrs) +
                 (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
@@ -531,7 +531,7 @@ public class TranscriptBatchBuilder {
         appendBatchString(formatLabelText(labelText), labelAttrs);
 
         TranscriptStyleConstants.setUnderlineOnHover(labelAttrs, false);
-        appendBatchString(":  ", labelAttrs);
+        appendBatchString(": ", labelAttrs);
 
         return this;
     }

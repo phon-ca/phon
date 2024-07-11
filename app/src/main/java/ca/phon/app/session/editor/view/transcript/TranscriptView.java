@@ -63,7 +63,7 @@ public class TranscriptView extends EditorView {
     /* State */
 
     private final static int FONT_SIZE_DELTA_MIN = -8;
-    private final static int FONT_SIZE_DELTA_MAX = 24;
+    private final static int FONT_SIZE_DELTA_MAX = 8;
     public float fontSizeDelta = PrefHelper.getFloat(FONT_SIZE_DELTA_PROP, DEFAULT_FONT_SIZE_DELTA);
     private boolean findAndReplaceVisible = false;
 

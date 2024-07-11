@@ -576,10 +576,8 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * (newlines included)
      */
     public int getTierEnd(int recordIndex, String tierName) {
-        final int paragraphIdx = findParagraphElementIndexForTier(session.getTranscript().getRecordElementIndex(recordIndex), tierName);
-        if (paragraphIdx == -1) return -1;
-        Element elem = getDefaultRootElement().getElement(paragraphIdx);
-        return elem.getEndOffset();
+        final StartEnd startEnd = getTierContentStartEnd(recordIndex, tierName);
+        return startEnd.end();
     }
 
     /**
