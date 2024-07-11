@@ -115,7 +115,7 @@ public class EPMLU {
 		float pmlu = 0.0f;
 		for(IPATranscript syll:t.syllables()) {
 			pmlu += 2.0f;
-			if(syll.matches("^\\c.+\\c$")) {
+			if(syll.matches("^\\s?\\c.+\\c$")) {
 				pmlu += closedSyllBonus;
 			}
 		}
@@ -147,7 +147,7 @@ public class EPMLU {
 		float pmlu = 0.0f;
 		for(IPATranscript syll:t.syllables()) {
 			pmlu += 2.0f;
-			if(syll.matches("^\\c.+\\c$")) {
+			if(syll.matches("^\\s?\\c.+\\c$")) {
 				pmlu += closedSyllBonus;
 			}
 		}
