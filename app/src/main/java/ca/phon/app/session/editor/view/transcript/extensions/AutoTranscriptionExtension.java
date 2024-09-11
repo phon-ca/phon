@@ -361,7 +361,12 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
      * @param transcriber
      */
     public Orthography getOrthography(Record record, Transcriber transcriber) {
-        return (transcriber == Transcriber.VALIDATOR ? record.getOrthography() : record.getOrthographyTier().getBlindTranscription(transcriber.getUsername()));
+        if(transcriber == Transcriber.VALIDATOR || !record.getOrthographyTier().isBlind()) {
+            return record.getOrthography();
+        } else {
+            Orthography blindOrtho = record.getOrthographyTier().getBlindTranscription(transcriber.getUsername());
+            return (blindOrtho != null ? blindOrtho : record.getOrthography());
+        }
     }
 
     /**
