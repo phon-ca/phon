@@ -91,78 +91,78 @@ public class TranscriptScrollPaneGutter extends JComponent {
             });
         });
 
-//        addMouseMotionListener(new MouseAdapter() {
-//            @Override
-//            public void mouseMoved(MouseEvent e) {
-//                for (Rectangle rect : iconRects.keySet()) {
-//                    if (rect.contains(e.getPoint())) {
-//                        if (currentIconRect != rect) {
-//                            currentIconRect = rect;
-//                            Point mousePos = e.getLocationOnScreen();
-//                            var hoverRectData = iconRects.get(currentIconRect);
-//                            IconType iconType = hoverRectData.iconType();
-//                            Tier<?> hoverRectTier = hoverRectData.tier();
-//                            switch (iconType) {
-//                                case ERROR -> {
-//                                    String errorText = hoverRectTier.getUnvalidatedValue().getParseError().toString();
-//                                    currentHoverPopup = PopupFactory.getSharedInstance().getPopup(
-//                                        TranscriptScrollPaneGutter.this,
-//                                        new JLabel(errorText),
-//                                        (int) mousePos.getX(),
-//                                        (int) mousePos.getY()
-//                                    );
-//                                    currentHoverPopup.show();
-//                                }
-//                                case BLIND -> {
-//                                    currentHoverMenu = new JPopupMenu();
-//                                    setupBlindIconToolTip(hoverRectTier);
-//                                    currentHoverMenu.show(
-//                                        TranscriptScrollPaneGutter.this,
-//                                        (int) (currentIconRect.getMaxX()),
-//                                        (int) (currentIconRect.getY())
-//                                    );
-//                                    setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-//                                }
-//                            }
-//
-//                        }
-//                        return;
-//                    }
-//                }
-//                if (currentIconRect != null) {
-//                    var hoverRectData = iconRects.get(currentIconRect);
-//                    switch (hoverRectData.iconType()) {
-//                        case ERROR -> {
-//                            currentHoverPopup.hide();
-//                            currentHoverPopup = null;
-//                        }
-//                        case BLIND -> {
-//                            currentHoverMenu.setVisible(false);
-//                            currentHoverMenu = null;
-//                            setCursor(Cursor.getDefaultCursor());
-//                        }
-//                    }
-//                    currentIconRect = null;
-//                    setToolTipText(null);
-//                }
-//
-//            }
-//        });
-//        addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-//                if (currentIconRect != null && currentIconRect.contains(e.getPoint())) {
-//                    var clickedRectData = iconRects.get(currentIconRect);
-//                    IconType iconType = clickedRectData.iconType();
-//                    switch (iconType) {
-//                        case BLIND -> {
-//                            setupBlindIconClickMenu();
-//                            currentHoverMenu.setVisible(true);
-//                        }
-//                    }
-//                }
-//            }
-//        });
+        addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                for (Rectangle rect : iconRects.keySet()) {
+                    if (rect.contains(e.getPoint())) {
+                        if (currentIconRect != rect) {
+                            currentIconRect = rect;
+                            Point mousePos = e.getLocationOnScreen();
+                            var hoverRectData = iconRects.get(currentIconRect);
+                            IconType iconType = hoverRectData.iconType();
+                            Tier<?> hoverRectTier = hoverRectData.tier();
+                            switch (iconType) {
+                                case ERROR -> {
+                                    String errorText = hoverRectTier.getUnvalidatedValue().getParseError().getLocalizedMessage();
+                                    currentHoverPopup = PopupFactory.getSharedInstance().getPopup(
+                                        TranscriptScrollPaneGutter.this,
+                                        new JLabel(errorText),
+                                        (int) mousePos.getX() + 10,
+                                        (int) mousePos.getY()
+                                    );
+                                    currentHoverPopup.show();
+                                }
+                                case BLIND -> {
+                                    currentHoverMenu = new JPopupMenu();
+                                    setupBlindIconToolTip(hoverRectTier);
+                                    currentHoverMenu.show(
+                                        TranscriptScrollPaneGutter.this,
+                                        (int) (currentIconRect.getMaxX()),
+                                        (int) (currentIconRect.getY())
+                                    );
+                                    setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                                }
+                            }
+
+                        }
+                        return;
+                    }
+                }
+                if (currentIconRect != null) {
+                    var hoverRectData = iconRects.get(currentIconRect);
+                    switch (hoverRectData.iconType()) {
+                        case ERROR -> {
+                            currentHoverPopup.hide();
+                            currentHoverPopup = null;
+                        }
+                        case BLIND -> {
+                            currentHoverMenu.setVisible(false);
+                            currentHoverMenu = null;
+                            setCursor(Cursor.getDefaultCursor());
+                        }
+                    }
+                    currentIconRect = null;
+                    setToolTipText(null);
+                }
+
+            }
+        });
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (currentIconRect != null && currentIconRect.contains(e.getPoint())) {
+                    var clickedRectData = iconRects.get(currentIconRect);
+                    IconType iconType = clickedRectData.iconType();
+                    switch (iconType) {
+                        case BLIND -> {
+                            setupBlindIconClickMenu();
+                            currentHoverMenu.setVisible(true);
+                        }
+                    }
+                }
+            }
+        });
     }
 
     // region Icons
@@ -298,6 +298,15 @@ public class TranscriptScrollPaneGutter extends JComponent {
                         final int x = getWidth() - iconWidth - PADDING;
                         final int y = (int)elemRect.getCenterY() - iconHeight/2;
                         icon.paintIcon(this, g, x, y);
+                        FontMetrics fontMetrics = getFontMetrics(g.getFont());
+                        Rectangle hoverRect = new Rectangle(x, y, iconWidth, iconHeight);
+//                            g.setColor(Color.BLUE);
+//                            g.fillRect(hoverRect.x, hoverRect.y, hoverRect.width, hoverRect.height);
+
+                            iconRects.put(
+                                hoverRect,
+                                new TierAndIconType(tier, IconType.ERROR)
+                            );
                     }
                 }
             }
