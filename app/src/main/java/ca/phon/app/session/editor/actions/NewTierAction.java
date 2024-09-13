@@ -15,6 +15,7 @@
  */
 package ca.phon.app.session.editor.actions;
 
+import ca.phon.app.session.editor.EditorDataModel;
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.undo.AddTierEdit;
@@ -38,20 +39,23 @@ public class NewTierAction extends SessionEditorAction {
 
 	private int index = -1;
 
+	private final EditorDataModel editorDataModel;
+
 	public NewTierAction(SessionEditor editor) {
 		this(editor, -1);
 	}
 
 	public NewTierAction(SessionEditor editor, int index) {
-		this(editor.getSession(), editor.getEventManager(), editor.getUndoSupport(), index);
+		this(editor.getDataModel(), editor.getEventManager(), editor.getUndoSupport(), index);
 	}
 
-	public NewTierAction(Session session, EditorEventManager eventManager, SessionEditUndoSupport undoSupport) {
-		this(session, eventManager, undoSupport, -1);
+	public NewTierAction(EditorDataModel dataModel, EditorEventManager eventManager, SessionEditUndoSupport undoSupport) {
+		this(dataModel, eventManager, undoSupport, -1);
 	}
 
-	public NewTierAction(Session session, EditorEventManager eventManager, SessionEditUndoSupport undoSupport, int index) {
-		super(session, eventManager, undoSupport);
+	public NewTierAction(EditorDataModel dataModel, EditorEventManager eventManager, SessionEditUndoSupport undoSupport, int index) {
+		super(dataModel.getSession(), eventManager, undoSupport);
+		this.editorDataModel = dataModel;
 		this.index = index;
 
 		putValue(NAME, CMD_NAME);
@@ -61,16 +65,21 @@ public class NewTierAction extends SessionEditorAction {
 
 	@Override
 	public void hookableActionPerformed(ActionEvent e) {
-		TierEditorDialog newTierDialog = new TierEditorDialog(getEditor().getSession(), false);
+		TierEditorDialog newTierDialog = new TierEditorDialog(editorDataModel.getSession(), false);
 		TierInfoEditor tierEditor = newTierDialog.getTierEditor();
 		newTierDialog.add(tierEditor);
 		newTierDialog.setTitle("New Tier");
 		newTierDialog.setModal(true);
 		newTierDialog.pack();
+
+		final boolean isBlind = editorDataModel.getTranscriber() != Transcriber.VALIDATOR;
+		if(isBlind) {
+			newTierDialog.getTierEditor().setBlind(true);
+			newTierDialog.getTierEditor().getBlindBox().setEnabled(false);
+		}
 		
 		if(newTierDialog.showDialog()) {
-			final SessionEditor editor = getEditor();
-			final Session session = editor.getSession();
+			final Session session = editorDataModel.getSession();
 			// get tier info
 			String tierName = tierEditor.getTierName();
 			tierName = StringUtils.strip(tierName);
@@ -98,10 +107,12 @@ public class NewTierAction extends SessionEditorAction {
 			
 			// create tier
 			final TierDescription tierDescription = tierEditor.createTierDescription();
+
+			tierDescription.setBlind(isBlind);
 			final TierViewItem tierViewItem = tierEditor.createTierViewItem();
 			
-			final AddTierEdit edit = new AddTierEdit(editor, tierDescription, tierViewItem, index);
-			editor.getUndoSupport().postEdit(edit);
+			final AddTierEdit edit = new AddTierEdit(editorDataModel.getSession(), getEventManager(), tierDescription, tierViewItem, index);
+			getUndoSupport().postEdit(edit);
 		}
 	}
 

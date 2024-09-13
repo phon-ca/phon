@@ -1,5 +1,6 @@
 package ca.phon.app.session.editor.view.tierManagement;
 
+import ca.phon.app.session.editor.EditorDataModel;
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.actions.*;
@@ -31,24 +32,26 @@ public class TierMenuBuilder {
      * @param menuBuilder
      */
     public static void setupNewTierMenu(SessionEditor editor, MenuBuilder menuBuilder) {
-        setupNewTierMenu(editor.getSession(), editor.getEventManager(), editor.getUndoSupport(), menuBuilder);
+        setupNewTierMenu(editor.getDataModel(), editor.getEventManager(), editor.getUndoSupport(), menuBuilder);
     }
 
-    public static void setupNewTierMenu(Session session, EditorEventManager eventManager, SessionEditUndoSupport undoSupport, MenuBuilder menuBuilder) {
+    public static void setupNewTierMenu(EditorDataModel dataModel, EditorEventManager eventManager, SessionEditUndoSupport undoSupport, MenuBuilder menuBuilder) {
         List<UserTierType> availableUserTierTypes = new ArrayList<>(List.of(UserTierType.values()));
         for (UserTierType userTierType : availableUserTierTypes) {
-            boolean exists = session.getUserTiers().get(userTierType.getPhonTierName()) != null;
+            boolean exists = dataModel.getSession().getUserTiers().get(userTierType.getPhonTierName()) != null;
             PhonUIAction<Void> addTierAct = PhonUIAction.runnable(() -> {
                 TierDescription td = SessionFactory.newFactory().createTierDescription(userTierType);
+                boolean isBlind = dataModel.getTranscriber() != Transcriber.VALIDATOR;
+                td.setBlind(isBlind);
                 TierViewItem tvi = SessionFactory.newFactory().createTierViewItem(td.getName());
-                AddTierEdit edit = new AddTierEdit(session, eventManager, td, tvi);
+                AddTierEdit edit = new AddTierEdit(dataModel.getSession(), eventManager, td, tvi);
                 undoSupport.postEdit(edit);
             });
             addTierAct.putValue(PhonUIAction.NAME, userTierType.getPhonTierName() + " (" + userTierType.getChatTierName() + ")");
             menuBuilder.addItem(".", addTierAct).setEnabled(!exists);
         }
         menuBuilder.addSeparator(".", "new_tier");
-        final NewTierAction customTierAct = new NewTierAction(session, eventManager, undoSupport);
+        final NewTierAction customTierAct = new NewTierAction(dataModel, eventManager, undoSupport);
         menuBuilder.addItem(".", customTierAct);
     }
 

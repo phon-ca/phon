@@ -214,7 +214,7 @@ public class TierInfoEditor extends JPanel {
 		}
 		updateChatName();
 	}
-	
+
 	public Font getTierFont() {
         try {
             return new FontFormatter().parse(selectFontButton.getText());
@@ -243,12 +243,20 @@ public class TierInfoEditor extends JPanel {
 		selectFontButton.setText(new FontFormatter().format(FontPreferences.getTierFont()));
 	}
 
+	public JCheckBox getVisibleBox() {
+		return visibleBox;
+	}
+
 	public boolean isVisible() {
 		return visibleBox.isSelected();
 	}
 
 	public void setVisible(boolean visible) {
 		visibleBox.setSelected(visible);
+	}
+
+	public JCheckBox getLockedBox() {
+		return lockedBox;
 	}
 
 	public boolean isLocked() {
@@ -259,6 +267,10 @@ public class TierInfoEditor extends JPanel {
 		lockedBox.setSelected(locked);
 	}
 
+	public JCheckBox getBlindBox() {
+		return blindBox;
+	}
+
 	public boolean isBlind() {
 		return blindBox.isSelected();
 	}
@@ -267,12 +279,20 @@ public class TierInfoEditor extends JPanel {
 		blindBox.setSelected(blind);
 	}
 
+	public JCheckBox getAlignedBox() {
+		return alignedBox;
+	}
+
 	public boolean isAligned() {
 		return alignedBox.isSelected();
 	}
 
 	public void setAligned(boolean aligned) {
 		alignedBox.setSelected(aligned);
+	}
+
+	public JComboBox<String> getTypeBox() {
+		return typeBox;
 	}
 
 	public String getTierType() {

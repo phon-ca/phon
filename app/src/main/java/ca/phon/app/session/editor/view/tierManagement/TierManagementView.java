@@ -152,8 +152,20 @@ public class TierManagementView extends EditorView {
 							toggleTierAligned(rowIndex);
 						}
 					}
-			
-		};
+
+					@Override
+					public boolean isCellEditable(int rowIndex, int columnIndex) {
+						boolean isBlindMode = sessionEditor.getDataModel().getTranscriber() != Transcriber.VALIDATOR;
+						if(isBlindMode) {
+							if(columnIndex == TierOrderingTableColumn.SHOW_TIER.ordinal()) {
+								return true;
+							} else {
+								return false;
+							}
+						}
+						return super.isCellEditable(rowIndex, columnIndex);
+					}
+				};
 		tierOrderingTable = new PhonTable(tableModel);
 
 		tierOrderingTable.setSortable(false);
