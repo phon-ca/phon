@@ -15,10 +15,7 @@ import ca.phon.session.tierdata.*;
 import ca.phon.util.PrefHelper;
 
 import javax.swing.*;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.DefaultStyledDocument;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
+import javax.swing.text.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -554,7 +551,6 @@ public class TranscriptBatchBuilder {
     public TranscriptBatchBuilder appendTierContent(Record record, Tier<?> tier, Transcriber transcriber, AttributeSet tierAttrs) {
         Class<?> tierType = tier.getDeclaredType();
 
-        System.out.println("Tier attrs: " + tierAttrs);
         Object tierValue = tier.hasValue() ? tier.getValue() : null;
         if (transcriber != Transcriber.VALIDATOR && tier.isBlind()) {
             if (tier.isBlindTranscriptionUnvalidated(transcriber.getUsername())) {
@@ -562,6 +558,10 @@ public class TranscriptBatchBuilder {
                 return this;
             } else if (tier.hasBlindTranscription(transcriber.getUsername())) {
                 tierValue = tier.getBlindTranscription(transcriber.getUsername());
+            } else {
+                // add italics to indicate that the transcriber has not transcribed this tier but value
+                // is available from already validated material
+                StyleConstants.setItalic((MutableAttributeSet) tierAttrs, true);
             }
         } else {
             if (tier.isUnvalidated()) {

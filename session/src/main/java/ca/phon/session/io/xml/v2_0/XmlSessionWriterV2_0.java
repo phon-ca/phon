@@ -564,6 +564,14 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 		return null;
 	}
 
+	private boolean isTierUnvalidatedOrHasValue(Tier<?> tier) {
+		return (tier.hasValue() && tier.getValue().toString().length() > 0) || tier.isUnvalidated();
+	}
+
+	private boolean isTierBlindWithTranscriptions(Tier<?> tier) {
+		return tier.isBlind() && tier.getTranscribers().size() > 0;
+	}
+
 	// record
 	private XmlRecordType writeRecord(ObjectFactory factory, XmlSessionType session, Record record) {
 		final XmlRecordType retVal = factory.createXmlRecordType();
@@ -582,20 +590,20 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 
 		// ipa
 		final Tier<IPATranscript> ipaTarget = record.getIPATargetTier();
-		if(ipaTarget.isUnvalidated() || (ipaTarget.hasValue() && ipaTarget.getValue().length() > 0)) {
+		if(isTierUnvalidatedOrHasValue(ipaTarget) || isTierBlindWithTranscriptions(ipaTarget)) {
 			final XmlIpaTierType targetType = writeIPATier(factory, ipaTarget);
 			retVal.setIpaTarget(targetType);
 		}
 
 		final Tier<IPATranscript> ipaActual = record.getIPAActualTier();
-		if(ipaActual.isUnvalidated() || (ipaActual.hasValue() && ipaActual.getValue().length() > 0)) {
+		if(isTierUnvalidatedOrHasValue(ipaActual) || isTierBlindWithTranscriptions(ipaActual)) {
 			final XmlIpaTierType actualType = writeIPATier(factory, ipaActual);
 			retVal.setIpaActual(actualType);
 		}
 
 		// notes
 		final Tier<TierData> notesTier = record.getNotesTier();
-		if(notesTier.isUnvalidated() || (notesTier.hasValue() && notesTier.getValue().length() > 0)) {
+		if(isTierUnvalidatedOrHasValue(notesTier) || isTierBlindWithTranscriptions(notesTier)) {
 			final XmlNotesTierType notesTierType = writeNotesTier(factory, notesTier);
 			retVal.setNotes(notesTierType);
 		}
@@ -606,14 +614,14 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 
 		// alignment
 		final Tier<PhoneAlignment> alignmentTier = record.getPhoneAlignmentTier();
-		if(alignmentTier != null && alignmentTier.getValue().getAlignments().size() > 0) {
+		if((alignmentTier != null && alignmentTier.getValue().getAlignments().size() > 0) || isTierBlindWithTranscriptions(alignmentTier)) {
 			final XmlAlignmentTierType att = writeAlignmentTier(factory, record, alignmentTier);
 			retVal.setAlignment(att);
 		}
 
 		for(String tierName:record.getUserDefinedTierNames()) {
 			Tier<?> userTier = record.getTier(tierName);
-			if(userTier != null && (userTier.isUnvalidated() || (userTier.hasValue() && !userTier.getValue().toString().isEmpty()))) {
+			if(isTierUnvalidatedOrHasValue(userTier) || isTierBlindWithTranscriptions(userTier)) {
 				final XmlUserTierType utt = writeUserTier(factory, userTier);
 				utt.setName(userTier.getName());
 				retVal.getUserTier().add(utt);
