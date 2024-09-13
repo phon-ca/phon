@@ -505,6 +505,9 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 			if(isModified())
 				retVal += "*";
 		}
+		if(getDataModel().getTranscriber() != Transcriber.VALIDATOR) {
+			retVal += " (Transcriber: " + getDataModel().getTranscriber().toString() + ")";
+		}
 		return retVal;
 	}
 

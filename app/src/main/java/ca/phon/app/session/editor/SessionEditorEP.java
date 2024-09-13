@@ -37,6 +37,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -251,6 +253,23 @@ public class SessionEditorEP implements IPluginEntryPoint {
 					}
 				}
 			}
+
+			// lock all tier other than blind tiers
+			final List<TierViewItem> lockedTierView = new ArrayList<>();
+			List<TierViewItem> currentTierView = session.getTierView();
+			if(currentTierView == null || currentTierView.size() == 0) {
+				currentTierView = SessionFactory.newFactory().createDefaultTierView(session);
+			}
+			for(TierViewItem tvi:currentTierView) {
+				final TierDescription td = session.getTiers().stream().filter( (t) -> t.getName().equals(tvi.getTierName()) ).findFirst().orElse(null);
+				if(td != null && !td.isBlind()) {
+					final TierViewItem lockedTvi = SessionFactory.newFactory().createTierViewItem(tvi.getTierName(), tvi.isVisible(), tvi.getTierFont(), true);
+					lockedTierView.add(lockedTvi);
+				} else {
+					lockedTierView.add(tvi);
+				}
+			}
+			session.setTierView(lockedTierView);
 		}
 
 		final SessionEditorWindow sessionEditorWindow = new SessionEditorWindow(project, session, transcriber);
