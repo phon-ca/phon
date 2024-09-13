@@ -8,14 +8,17 @@ import ca.phon.orthography.mor.Grasp;
 import ca.phon.orthography.mor.GraspTierData;
 import ca.phon.orthography.mor.Mor;
 import ca.phon.orthography.mor.MorTierData;
-import ca.phon.session.*;
 import ca.phon.session.Record;
+import ca.phon.session.*;
 import ca.phon.session.format.MediaSegmentFormatter;
 import ca.phon.session.tierdata.*;
 import ca.phon.util.PrefHelper;
 
 import javax.swing.*;
-import javax.swing.text.*;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +41,11 @@ public class TranscriptBatchBuilder {
         this(new TranscriptStyleContext(), new ArrayList<>());
     }
 
+    public TranscriptBatchBuilder(TranscriptStyleContext transcriptStyleContext, List<InsertionHook> insertionHooks) {
+        this.styleContext = transcriptStyleContext;
+        this.insertionHooks = insertionHooks;
+    }
+
     public TranscriptBatchBuilder(TranscriptDocument document) {
         this(document.getTranscriptStyleContext(), document.getInsertionHooks());
     }
@@ -50,9 +58,29 @@ public class TranscriptBatchBuilder {
         this(new TranscriptStyleContext(), insertionHooks);
     }
 
-    public TranscriptBatchBuilder(TranscriptStyleContext transcriptStyleContext, List<InsertionHook> insertionHooks) {
-        this.styleContext = transcriptStyleContext;
-        this.insertionHooks = insertionHooks;
+    /**
+     * Gets a list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} containing
+     * the {@code ElementSpec.EndTagType} and {@code ElementSpec.StartTagType} tags
+     *
+     * @return a list containing the end and start tags
+     */
+    static public List<DefaultStyledDocument.ElementSpec> getBatchEndStart() {
+        return getBatchEndStart(null, null);
+    }
+
+    /**
+     * Gets a list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} containing
+     * the {@code ElementSpec.EndTagType} and {@code ElementSpec.StartTagType} tags
+     *
+     * @param endAttrs   attributes for end tag (may be null)
+     * @param startAttrs attributes for start tag (may be null)
+     * @return a list containing the end and start tags
+     */
+    static public List<DefaultStyledDocument.ElementSpec> getBatchEndStart(AttributeSet endAttrs, AttributeSet startAttrs) {
+        List<DefaultStyledDocument.ElementSpec> retVal = new ArrayList<>();
+        retVal.add(new DefaultStyledDocument.ElementSpec(endAttrs != null ? endAttrs.copyAttributes() : null, DefaultStyledDocument.ElementSpec.EndTagType));
+        retVal.add(new DefaultStyledDocument.ElementSpec(startAttrs != null ? startAttrs.copyAttributes() : null, DefaultStyledDocument.ElementSpec.StartTagType));
+        return retVal;
     }
 
     public List<DefaultStyledDocument.ElementSpec> getBatch() {
@@ -83,28 +111,28 @@ public class TranscriptBatchBuilder {
     }
 
     /**
-     * Gets a list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} containing
-     * the {@code ElementSpec.EndTagType} and {@code ElementSpec.StartTagType} tags
-     *
-     * @return a list containing the end and start tags
+     * Appends the end and start tags to the end of the batch
      */
-    static public List<DefaultStyledDocument.ElementSpec> getBatchEndStart() {
-        return getBatchEndStart(null, null);
+    public void appendBatchEndStart() {
+        appendBatchEndStart(null, null);
     }
 
     /**
-     * Gets a list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} containing
-     * the {@code ElementSpec.EndTagType} and {@code ElementSpec.StartTagType} tags
+     * Appends the end and start tags to the end of the batch
      *
-     * @param endAttrs attributes for end tag (may be null)
-     * @param startAttrs attributes for start tag (may be null)
-     * @return a list containing the end and start tags
+     * @param endAttrs   attributes for end tag (may be null)
+     * @param startAttrs attributes for starting paragraph (may be null)
+     * @poaram batch the batch to append the tags to
      */
-    static public List<DefaultStyledDocument.ElementSpec> getBatchEndStart(AttributeSet endAttrs, AttributeSet startAttrs) {
-        List<DefaultStyledDocument.ElementSpec> retVal = new ArrayList<>();
-        retVal.add(new DefaultStyledDocument.ElementSpec(endAttrs != null ? endAttrs.copyAttributes() : null, DefaultStyledDocument.ElementSpec.EndTagType));
-        retVal.add(new DefaultStyledDocument.ElementSpec(startAttrs != null ? startAttrs.copyAttributes() : null, DefaultStyledDocument.ElementSpec.StartTagType));
-        return retVal;
+    public void appendBatchEndStart(AttributeSet endAttrs, AttributeSet startAttrs) {
+        batch.addAll(getBatchEndStart(endAttrs, startAttrs));
+
+        // append a new paragraph character to anchor the start of the new paragraph
+        final SimpleAttributeSet pAttrs = new SimpleAttributeSet(startAttrs);
+        TranscriptStyleConstants.setNewParagraph(pAttrs, true);
+        TranscriptStyleConstants.setNotTraversable(pAttrs, true);
+        TranscriptStyleConstants.setNotEditable(pAttrs, true);
+        appendBatchString("\u2029", pAttrs);
     }
 
     /**
@@ -124,28 +152,14 @@ public class TranscriptBatchBuilder {
     }
 
     /**
-     * Appends the end and start tags to the end of the batch
-     */
-    public void appendBatchEndStart() {
-        appendBatchEndStart(null, null);
-    }
-
-    /**
-     * Appends the end and start tags to the end of the batch
+     * Gets a {@link javax.swing.text.DefaultStyledDocument.ElementSpec} containing the specified string and attributes
      *
-     * @param endAttrs attributes for end tag (may be null)
-     * @param startAttrs attributes for starting paragraph (may be null)
-     * @poaram batch the batch to append the tags to
+     * @return a {@link javax.swing.text.DefaultStyledDocument.ElementSpec} containing the specified
+     * string and attributes
      */
-    public void appendBatchEndStart(AttributeSet endAttrs, AttributeSet startAttrs) {
-        batch.addAll(getBatchEndStart(endAttrs, startAttrs));
-
-        // append a new paragraph character to anchor the start of the new paragraph
-        final SimpleAttributeSet pAttrs = new SimpleAttributeSet(startAttrs);
-        TranscriptStyleConstants.setNewParagraph(pAttrs, true);
-        TranscriptStyleConstants.setNotTraversable(pAttrs, true);
-        TranscriptStyleConstants.setNotEditable(pAttrs, true);
-        appendBatchString("\u2029", pAttrs);
+    static public DefaultStyledDocument.ElementSpec getBatchString(String str, AttributeSet a) {
+        char[] chars = str.toCharArray();
+        return new DefaultStyledDocument.ElementSpec(new SimpleAttributeSet(a), DefaultStyledDocument.ElementSpec.ContentType, chars, 0, str.length());
     }
 
     /**
@@ -159,7 +173,7 @@ public class TranscriptBatchBuilder {
      * Gets a list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} containing a newline character
      * with the specified attributes and the {@code ElementSpec.EndTagType} and {@code ElementSpec.StartTagType} tags
      *
-     * @param endAttrs attributes for end tag (may be null)
+     * @param endAttrs   attributes for end tag (may be null)
      * @param startAttrs attributes for start tag (may be null)
      * @return a list with the newline character and the end and start tags
      */
@@ -172,6 +186,7 @@ public class TranscriptBatchBuilder {
 
     /**
      * Appends an end of line
+     *
      * @return this builder
      */
     public TranscriptBatchBuilder appendEOL() {
@@ -181,17 +196,6 @@ public class TranscriptBatchBuilder {
     public TranscriptBatchBuilder appendEOL(AttributeSet attrs) {
         batch.add(new DefaultStyledDocument.ElementSpec(attrs, DefaultStyledDocument.ElementSpec.ContentType, EOL_ARRAY, 0, 1));
         return this;
-    }
-
-    /**
-     * Gets a {@link javax.swing.text.DefaultStyledDocument.ElementSpec} containing the specified string and attributes
-     *
-     * @return a {@link javax.swing.text.DefaultStyledDocument.ElementSpec} containing the specified
-     * string and attributes
-     */
-    static public DefaultStyledDocument.ElementSpec getBatchString(String str, AttributeSet a) {
-        char[] chars = str.toCharArray();
-        return new DefaultStyledDocument.ElementSpec(new SimpleAttributeSet(a), DefaultStyledDocument.ElementSpec.ContentType, chars, 0, str.length());
     }
 
     /**
@@ -236,7 +240,7 @@ public class TranscriptBatchBuilder {
         StyleConstants.setFontSize(attrs, StyleConstants.getFontSize(attrs) +
                 (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
 
-        if(tier.hasValue()) {
+        if (tier.hasValue()) {
             appendBatchString(tier.toString(), attrs);
         } else if (tier.isUnvalidated()) {
             appendBatchString(tier.getUnvalidatedValue().toString(), attrs);
@@ -262,9 +266,9 @@ public class TranscriptBatchBuilder {
     /**
      * Appends a formatted representation of the provided segment in the provided style to the batch
      *
-     * @param segment the segment that will be appended
+     * @param segment         the segment that will be appended
      * @param additionalAttrs any additional attributes to be added to the segment (none added if {@code null})
-     * @param style the style to format the times of the segment
+     * @param style           the style to format the times of the segment
      */
     public void appendFormattedSegment(MediaSegment segment, AttributeSet additionalAttrs, MediaTimeFormatStyle style) {
         var formatter = new MediaSegmentFormatter(style);
@@ -300,7 +304,7 @@ public class TranscriptBatchBuilder {
     /**
      * Writes a given comment to the batch
      *
-     * @param comment the comment that will be written
+     * @param comment            the comment that will be written
      * @param chatTierNamesShown whether or not chat tier names are shown
      * @return a mutable attribute set containing the attributes of the last character of the comment to add a
      * newline after if need be
@@ -324,7 +328,7 @@ public class TranscriptBatchBuilder {
 
         SimpleAttributeSet labelAttrs = styleContext.getCommentLabelAttributes(comment);
         String labelText = comment.getType().getLabel();
-        if(chatTierNamesShown) {
+        if (chatTierNamesShown) {
             labelText = "@" + labelText;
         }
         labelText = formatLabelText(labelText);
@@ -337,7 +341,7 @@ public class TranscriptBatchBuilder {
         TranscriptStyleConstants.setUnderlineOnHover(labelAttrs, false);
         appendBatchString(": ", labelAttrs);
 
-        if(tierData.length() == 0) {
+        if (tierData.length() == 0) {
             appendBatchString("", commentAttrs);
         } else {
             for (int i = 0; i < tierData.length(); i++) {
@@ -389,7 +393,7 @@ public class TranscriptBatchBuilder {
     /**
      * Writes a given gem to the batch
      *
-     * @param gem the comment that will be written
+     * @param gem                the comment that will be written
      * @param chatTierNamesShown whether or not chat tier names are shown
      * @return this builder
      */
@@ -460,15 +464,17 @@ public class TranscriptBatchBuilder {
      * Inserts a given tier at the end of the batch
      *
      * @param record
-     * @param tier         the tier that will be inserted
-     * @param tierViewItem a reference to a {@link TierViewItem} used to get font info if any is present
+     * @param tier               the tier that will be inserted
+     * @param tierViewItem       a reference to a {@link TierViewItem} used to get font info if any is present
      * @param chatTierNamesShown whether or not chat tier names are shown
-     * @param additionalAttrs  an attribute set containing attributes for the containing record to be added to the tier
-     *                     attributes (none will be added if {@code null})
+     * @param transcriber        the transcriber whose text will be batched (if tier is blind)
+     * @param additionalAttrs    an attribute set containing attributes for the containing record to be added to the tier
+     *                           attributes (none will be added if {@code null})
      * @return a mutable attribute set containing the attributes of the last character of the tier to add a
      * newline after if need be
      */
-    public TranscriptBatchBuilder appendTier(Session session, Record record, Tier<?> tier, TierViewItem tierViewItem, boolean chatTierNamesShown, AttributeSet additionalAttrs) {
+    public TranscriptBatchBuilder appendTier(Session session, Record record, Tier<?> tier, TierViewItem tierViewItem,
+                                             Transcriber transcriber, boolean chatTierNamesShown, AttributeSet additionalAttrs) {
         appendTierLabel(session, record, tier, tier.getName(), tierViewItem, chatTierNamesShown, additionalAttrs);
 
         final SimpleAttributeSet tierAttrs = styleContext.getTierAttributes(tier, tierViewItem);
@@ -476,7 +482,7 @@ public class TranscriptBatchBuilder {
         if (additionalAttrs != null) {
             tierAttrs.addAttributes(TranscriptStyleContext.stripStyle(additionalAttrs));
         }
-        appendTierContent(record, tier, tierAttrs);
+        appendTierContent(record, tier, transcriber, tierAttrs);
 
         return this;
     }
@@ -541,20 +547,34 @@ public class TranscriptBatchBuilder {
      *
      * @param record
      * @param tier
+     * @param transcriber the transcriber whose text will be batched (if tier is blind)
      * @param tierAttrs
      * @return
      */
-    public TranscriptBatchBuilder appendTierContent(Record record, Tier<?> tier, AttributeSet tierAttrs) {
+    public TranscriptBatchBuilder appendTierContent(Record record, Tier<?> tier, Transcriber transcriber, AttributeSet tierAttrs) {
         Class<?> tierType = tier.getDeclaredType();
 
         System.out.println("Tier attrs: " + tierAttrs);
-        if (tier.isUnvalidated()) {
-            appendBatchString(tier.getUnvalidatedValue().getValue(), tierAttrs);
-        } else if(tier.hasValue()) {
+        Object tierValue = tier.hasValue() ? tier.getValue() : null;
+        if (transcriber != Transcriber.VALIDATOR && tier.isBlind()) {
+            if (tier.isBlindTranscriptionUnvalidated(transcriber.getUsername())) {
+                appendBatchString(tier.getBlindUnvalidatedValue(transcriber.getUsername()).getValue(), tierAttrs);
+                return this;
+            } else if (tier.hasBlindTranscription(transcriber.getUsername())) {
+                tierValue = tier.getBlindTranscription(transcriber.getUsername());
+            }
+        } else {
+            if (tier.isUnvalidated()) {
+                appendBatchString(tier.getUnvalidatedValue().getValue(), tierAttrs);
+                return this;
+            }
+        }
+
+        if (tierValue != null) {
             if (tierType.equals(IPATranscript.class)) {
                 Tier<IPATranscript> ipaTier = (Tier<IPATranscript>) tier;
-                List<IPATranscript> words = (ipaTier).getValue().words();
-                if(words.isEmpty()) {
+                List<IPATranscript> words = ((IPATranscript)tierValue).words();
+                if (words.isEmpty()) {
                     appendBatchString("", tierAttrs);
                 } else {
                     for (int i = 0; i < words.size(); i++) {
@@ -580,17 +600,16 @@ public class TranscriptBatchBuilder {
                 MediaSegment segment = record.getMediaSegment();
                 appendFormattedSegment(segment, tierAttrs);
             } else if (tierType.equals(Orthography.class)) {
-                Tier<Orthography> orthographyTier = (Tier<Orthography>) tier;
-                if(orthographyTier.getValue().length() == 0) {
+                final Orthography ortho = (Orthography) tierValue;
+                if (ortho.length() == 0) {
                     appendBatchString("", tierAttrs);
                 } else {
-                    orthographyTier.getValue().accept(new TranscriptOrthographyVisitors.KeywordVisitor(tierAttrs, this));
+                    ortho.accept(new TranscriptOrthographyVisitors.KeywordVisitor(tierAttrs, this));
                 }
             } else if (tierType.equals(MorTierData.class)) {
-                Tier<MorTierData> morTier = (Tier<MorTierData>) tier;
-                MorTierData mors = morTier.getValue();
+                MorTierData mors = (MorTierData) tierValue;
 
-                if(mors.size() == 0) {
+                if (mors.size() == 0) {
                     appendBatchString("", tierAttrs);
                 } else {
                     for (int i = 0; i < mors.size(); i++) {
@@ -603,9 +622,9 @@ public class TranscriptBatchBuilder {
                 }
             } else if (tierType.equals(GraspTierData.class)) {
                 Tier<GraspTierData> graspTier = (Tier<GraspTierData>) tier;
-                GraspTierData grasps = graspTier.getValue();
+                GraspTierData grasps = (GraspTierData) tierValue;
 
-                if(grasps.size() == 0) {
+                if (grasps.size() == 0) {
                     appendBatchString("", tierAttrs);
                 } else {
                     for (int i = 0; i < grasps.size(); i++) {
@@ -617,8 +636,7 @@ public class TranscriptBatchBuilder {
                     }
                 }
             } else if (tierType.equals(TierData.class)) {
-                Tier<TierData> userTier = (Tier<TierData>) tier;
-                TierData tierData = userTier.getValue();
+                TierData tierData = (TierData) tierValue;
                 if (tierData.length() > 0) {
                     for (int i = 0; i < tierData.length(); i++) {
                         TierElement elem = tierData.elementAt(i);
@@ -664,12 +682,12 @@ public class TranscriptBatchBuilder {
     /**
      * Writes the contents of the given record to the batch
      *
-     * @param session      the session that the record belongs to
-     * @param record       the record that will be written to the batch
-     * @param chatTierNamesShown   whether or not chat tier names are shown
+     * @param session            the session that the record belongs to
+     * @param record             the record that will be written to the batch
+     * @param chatTierNamesShown whether or not chat tier names are shown
      * @return this builder
      */
-    public TranscriptBatchBuilder appendRecord(Session session, Record record, boolean chatTierNamesShown) {
+    public TranscriptBatchBuilder appendRecord(Session session, Record record, Transcriber transcriber, boolean chatTierNamesShown) {
         SimpleAttributeSet recordAttrs = styleContext.getRecordAttributes(record);
 
         List<DefaultStyledDocument.ElementSpec> additionalInsertions = new ArrayList<>();
@@ -731,19 +749,19 @@ public class TranscriptBatchBuilder {
                 additionalInsertions.clear();
             }
 
-            if(i == 0) {
+            if (i == 0) {
                 TranscriptStyleConstants.setBorder(recordAttrs, BorderFactory.createMatteBorder(1, 0, 0, 0, UIManager.getColor("Button.background")));
             } else {
                 TranscriptStyleConstants.setBorder(recordAttrs, BorderFactory.createEmptyBorder());
             }
-            if(SystemTierType.Orthography.getName().equals(item.getTierName())) {
+            if (SystemTierType.Orthography.getName().equals(item.getTierName())) {
                 final String orthoTierLabel = record.getSpeaker().toString();
                 appendTierLabel(session, record, tier, orthoTierLabel, item, chatTierNamesShown, recordAttrs);
                 final SimpleAttributeSet orthoTierAttrs = styleContext.getTierAttributes(tier, item);
                 orthoTierAttrs.addAttributes(TranscriptStyleContext.stripStyle(recordAttrs));
-                appendTierContent(record, tier, orthoTierAttrs);
+                appendTierContent(record, tier, transcriber, orthoTierAttrs);
             } else {
-                appendTier(session, record, tier, item, chatTierNamesShown, recordAttrs);
+                appendTier(session, record, tier, item, transcriber, chatTierNamesShown, recordAttrs);
             }
 
             for (var hook : getInsertionHooks()) {
@@ -774,7 +792,7 @@ public class TranscriptBatchBuilder {
     public SimpleAttributeSet getTrailingAttributes() {
         if (batch.isEmpty()) return new SimpleAttributeSet();
         final AttributeSet prevAttrs = batch.get(batch.size() - 1).getAttributes();
-        SimpleAttributeSet attrs = new SimpleAttributeSet( prevAttrs != null ? prevAttrs : new SimpleAttributeSet());
+        SimpleAttributeSet attrs = new SimpleAttributeSet(prevAttrs != null ? prevAttrs : new SimpleAttributeSet());
         TranscriptStyleConstants.setComponentFactory(attrs, null);
 //        TranscriptStyleConstants.setEnterAction(attrs, null);
         TranscriptStyleConstants.setUnderlineOnHover(attrs, false);

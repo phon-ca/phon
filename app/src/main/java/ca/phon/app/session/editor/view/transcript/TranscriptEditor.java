@@ -201,6 +201,9 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                 updateErrorHighlights();
             }
         });
+        if(dataModel.getTranscriber() != Transcriber.VALIDATOR) {
+            getTranscriptDocument().setTranscriber(dataModel.getTranscriber());
+        }
 
         // init extensions
         extensionSupport.initExtensions();

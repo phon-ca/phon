@@ -68,6 +68,11 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     private Session session;
 
     /**
+     * The transcriber that is currently being displayed
+     */
+    private Transcriber transcriber = Transcriber.VALIDATOR;
+
+    /**
      * Whether the document is in single-record mode
      */
     private boolean singleRecordView = false;
@@ -139,6 +144,21 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 LogUtil.severe(e);
             }
         });
+    }
+
+    /**
+     * Set transcriber for the document, this will not reload the document
+     *
+     */
+    public void setTranscriber(Transcriber transcriber) {
+        this.transcriber = transcriber;
+    }
+
+    /**
+     * Get the transcriber for the document
+     */
+    public Transcriber getTranscriber() {
+        return this.transcriber;
     }
 
     public boolean getSingleRecordView() {
@@ -1292,7 +1312,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             for (int i = startElementIndex; i < endElementIndex + 1; i++) {
                 Transcript.Element elem = transcript.getElementAt(i);
                 if (elem.isRecord()) {
-                    batchBuilder.appendRecord(session, elem.asRecord(), isChatTierNamesShown());
+                    batchBuilder.appendRecord(session, elem.asRecord(), transcriber, isChatTierNamesShown());
                 } else if (elem.isComment()) {
                     batchBuilder.appendComment(elem.asComment(), isChatTierNamesShown());
                 } else {
@@ -1356,7 +1376,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             remove(tierRange.start(), tierRange.end() - tierRange.start());
 
             TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(this);
-            batchBuilder.appendTierContent(record, tier, tierAttrs);
+            batchBuilder.appendTierContent(record, tier, transcriber, tierAttrs);
 
             processBatchUpdates(tierRange.start(), batchBuilder.getBatch());
         } catch (BadLocationException e) {
@@ -1465,7 +1485,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             bypassDocumentFilter = true;
             remove(start, end - start);
             TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(this);
-            batchBuilder.appendRecord(session, record, isChatTierNamesShown());
+            batchBuilder.appendRecord(session, record, transcriber, isChatTierNamesShown());
             batchBuilder.appendEOL();
             processBatchUpdates(start, batchBuilder.getBatch());
         } catch (BadLocationException e) {
@@ -1481,7 +1501,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     public void addRecord(Record addedRecord, int elementIndex) {
         try {
             TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(this);
-            batchBuilder.appendRecord(session, addedRecord, isChatTierNamesShown());
+            batchBuilder.appendRecord(session, addedRecord, transcriber, isChatTierNamesShown());
             int nextElementStart = getLength();
 
             Transcript transcript = getSession().getTranscript();
@@ -1749,7 +1769,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 }
 
                 // add record
-                batchBuilder.appendRecord(session, record, isChatTierNamesShown());
+                batchBuilder.appendRecord(session, record, transcriber, isChatTierNamesShown());
                 publish(new ArrayList<>(batchBuilder.getBatch()));
                 totalElements += batchBuilder.clear();
 
@@ -1788,7 +1808,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                     }
 
                     if (elem.isRecord()) {
-                        batchBuilder.appendRecord(session, elem.asRecord(), isChatTierNamesShown());
+                        batchBuilder.appendRecord(session, elem.asRecord(), transcriber, isChatTierNamesShown());
                     } else if (elem.isComment()) {
                         batchBuilder.appendComment(elem.asComment(), isChatTierNamesShown());
                         batchBuilder.appendEOL();

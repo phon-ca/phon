@@ -52,7 +52,7 @@ public class AlignmentExtension implements TranscriptEditorExtension {
                     TranscriptStyleConstants.setRecord(tierAttrs, record);
                     TranscriptStyleConstants.setTier(tierAttrs, record.getPhoneAlignmentTier());
                     batchBuilder.appendTierLabel(editor.getSession(), record, record.getPhoneAlignmentTier(), record.getPhoneAlignmentTier().getName(), null, doc.isChatTierNamesShown(), tierAttrs);
-                    batchBuilder.appendAll(getFormattedAlignment(record, record.getPhoneAlignmentTier(), tierAttrs));
+                    batchBuilder.appendAll(getFormattedAlignment(record, record.getPhoneAlignmentTier(), editor.getDataModel().getTranscriber(), tierAttrs));
                     return batchBuilder.getBatch();
                 }
 
@@ -102,7 +102,7 @@ public class AlignmentExtension implements TranscriptEditorExtension {
             editor.getTranscriptEditorCaret().freeze();
             doc.setBypassDocumentFilter(true);
             doc.remove(alignmentTierContentRange.start(), alignmentTierContentRange.length());
-            doc.processBatchUpdates(alignmentTierContentRange.start(), getFormattedAlignment(editorEvent.data().record(), (Tier<PhoneAlignment>) tier, new SimpleAttributeSet()));
+            doc.processBatchUpdates(alignmentTierContentRange.start(), getFormattedAlignment(editorEvent.data().record(), (Tier<PhoneAlignment>) tier, editor.getDataModel().getTranscriber(), new SimpleAttributeSet()));
         } catch (BadLocationException e) {
             LogUtil.severe(e);
         } finally {
@@ -120,7 +120,7 @@ public class AlignmentExtension implements TranscriptEditorExtension {
      * @param attrs the attributes to apply to the tier
      * @return the list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} data
      */
-    public List<DefaultStyledDocument.ElementSpec> getFormattedAlignment(Record record, Tier<PhoneAlignment> alignmentTier, AttributeSet attrs) {
+    public List<DefaultStyledDocument.ElementSpec> getFormattedAlignment(Record record, Tier<PhoneAlignment> alignmentTier, Transcriber transcriber, AttributeSet attrs) {
         final TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(doc);
         // Get the alignment tier
         TranscriptStyleContext transcriptStyleContext = doc.getTranscriptStyleContext();
@@ -136,7 +136,7 @@ public class AlignmentExtension implements TranscriptEditorExtension {
         if (isAlignmentComponent()) {
             tierAttrs.addAttributes(transcriptStyleContext.getAlignmentAttributes());
         }
-        batchBuilder.appendTierContent(record, alignmentTier, tierAttrs);
+        batchBuilder.appendTierContent(record, alignmentTier, editor.getDataModel().getTranscriber(), tierAttrs);
 
         return batchBuilder.getBatch();
     }
