@@ -64,12 +64,20 @@ public class TierMenuBuilder {
      * @param menuBuilder
      */
     public static void setupTierMenu(SessionEditor editor, TierDescription td, TierViewItem tvi, MenuBuilder menuBuilder) {
-        setupTierMenu(editor.getSession(), editor.getEventManager(), editor.getUndoSupport(), td, tvi, menuBuilder);
+        setupTierMenu(editor.getDataModel(), editor.getEventManager(), editor.getUndoSupport(), td, tvi, menuBuilder);
     }
 
-    public static void setupTierMenu(Session session, EditorEventManager eventManager, SessionEditUndoSupport undoSupport, TierDescription td, TierViewItem tvi, MenuBuilder menuBuilder) {
+    public static void setupTierMenu(EditorDataModel dataModel, EditorEventManager eventManager, SessionEditUndoSupport undoSupport, TierDescription td, TierViewItem tvi, MenuBuilder menuBuilder) {
+        final Session session = dataModel.getSession();
+        final boolean isBlind = dataModel.getTranscriber() != Transcriber.VALIDATOR;
         final SystemTierType systemTierType = SystemTierType.tierFromString(tvi.getTierName());
         final UserTierType userTierType = UserTierType.fromPhonTierName(tvi.getTierName());
+        if(td == null) {
+            td = session.getTiers().stream().filter(t -> t.getName().equals(tvi.getTierName())).findFirst().orElse(null);
+            if(td == null && systemTierType != null || userTierType != null) {
+                td = systemTierType != null ? SessionFactory.newFactory().createTierDescription(systemTierType) : SessionFactory.newFactory().createTierDescription(userTierType);
+            }
+        }
         final List<TierViewItem> view = session.getTierView();
         final MoveTierAction moveUpAction = new MoveTierAction(session, eventManager, undoSupport, tvi, -1);
         final MoveTierAction moveDownAction = new MoveTierAction(session, eventManager, undoSupport, tvi, 1);
@@ -79,16 +87,31 @@ public class TierMenuBuilder {
         if(tierIdx < view.size() - 1)
             menuBuilder.addItem(".", moveDownAction);
         menuBuilder.addSeparator(".", "visible_locked");
-        menuBuilder.addItem(".", new ToggleTierLockAction(session, eventManager, undoSupport, tvi));
+        final ToggleTierLockAction toggleLockAct = new ToggleTierLockAction(session, eventManager, undoSupport, tvi);
+        toggleLockAct.setEnabled(!isBlind);
+        menuBuilder.addItem(".", toggleLockAct);
         menuBuilder.addItem(".", new ToggleTierVisibleAction(session, eventManager, undoSupport, tvi));
         menuBuilder.addSeparator(".", "edit_remove");
-        menuBuilder.addItem(".", new ToggleTierBlind(session, eventManager, undoSupport, tvi.getTierName()));
-        if(systemTierType == null && userTierType == null)
-            menuBuilder.addItem(".", new ToggleTierAlignedAction(session, eventManager, undoSupport, tvi.getTierName()));
-        menuBuilder.addItem(".", new DuplicateTierAction(session, eventManager, undoSupport, tvi.getTierName(), tierIdx + 1));
+        final ToggleTierBlind toggleBlindAct = new ToggleTierBlind(session, eventManager, undoSupport, tvi.getTierName());
+        toggleBlindAct.setEnabled(!isBlind);
+        menuBuilder.addItem(".", toggleBlindAct);
+
+        if(systemTierType == null && userTierType == null) {
+            final ToggleTierAlignedAction toggleAlignedAct = new ToggleTierAlignedAction(session, eventManager, undoSupport, tvi.getTierName());
+            toggleAlignedAct.setEnabled(!isBlind);
+            menuBuilder.addItem(".", toggleAlignedAct);
+        }
+
+        final DuplicateTierAction duplicateTierAct = new DuplicateTierAction(session, eventManager, undoSupport, tvi.getTierName(), tierIdx + 1);
+        duplicateTierAct.setEnabled(!isBlind);
+        menuBuilder.addItem(".", duplicateTierAct);
         menuBuilder.addItem(".", new EditTierAction(session, eventManager, undoSupport, tvi));
-        if(td != null)
-            menuBuilder.addItem(".", new RemoveTierAction(session, eventManager, undoSupport, td, tvi));
+
+        final RemoveTierAction removeTierAct = new RemoveTierAction(session, eventManager, undoSupport, td, tvi);
+        boolean isBlindAndCanRemove = isBlind && td.isBlind();
+        boolean canRemove = (systemTierType == null && userTierType == null && (!isBlind || isBlindAndCanRemove) && !tvi.isTierLocked());
+        removeTierAct.setEnabled(canRemove);
+        menuBuilder.addItem(".", removeTierAct);
     }
 
     /**
@@ -98,10 +121,11 @@ public class TierMenuBuilder {
      * @param menuBuilder
      */
     public static void appendExistingTiersMenu(SessionEditor editor, MenuBuilder menuBuilder) {
-        appendExistingTiersMenu(editor.getSession(), editor.getEventManager(), editor.getUndoSupport(), menuBuilder);
+        appendExistingTiersMenu(editor.getDataModel(), editor.getEventManager(), editor.getUndoSupport(), menuBuilder);
     }
 
-    public static void appendExistingTiersMenu(Session session, EditorEventManager eventManager, SessionEditUndoSupport undoSupport, MenuBuilder menuBuilder) {
+    public static void appendExistingTiersMenu(EditorDataModel dataModel, EditorEventManager eventManager, SessionEditUndoSupport undoSupport, MenuBuilder menuBuilder) {
+        final Session session = dataModel.getSession();
         final List<TierViewItem> view = session.getTierView();
         for(int i = 0; i < view.size(); i++) {
             final TierViewItem tvi = view.get(i);
@@ -113,7 +137,7 @@ public class TierMenuBuilder {
                     break;
                 }
             }
-            setupTierMenu(session, eventManager, undoSupport, tierDesc, tvi, new MenuBuilder(tierMenu));
+            setupTierMenu(dataModel, eventManager, undoSupport, tierDesc, tvi, new MenuBuilder(tierMenu));
         }
     }
 
