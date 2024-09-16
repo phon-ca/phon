@@ -765,7 +765,7 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 		final Class<?> tierType = userTier.getDeclaredType();
 		if(userTier.isUnvalidated()) {
 			retVal.setUnparsed(writeUnparsed(factory, userTier.getUnvalidatedValue()));
-		} else {
+		} else if(userTier.hasValue()) {
 			if(tierType == Orthography.class) {
 				retVal.setU(writeOrthography(factory, (Orthography) userTier.getValue()));
 			} else if(tierType == IPATranscript.class) {

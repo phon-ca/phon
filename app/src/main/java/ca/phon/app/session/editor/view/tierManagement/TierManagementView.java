@@ -19,6 +19,7 @@ import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.actions.*;
 import ca.phon.app.session.editor.undo.*;
 import ca.phon.session.*;
+import ca.phon.session.Record;
 import ca.phon.ui.*;
 import ca.phon.ui.action.*;
 import ca.phon.ui.fonts.FontPreferences;
@@ -418,6 +419,47 @@ public class TierManagementView extends EditorView {
 			}
 			
 			if(tierDesc != null) {
+				if(tierDesc.isBlind()) {
+					if(editor.getDataModel().getTranscriber() != Transcriber.VALIDATOR) {
+						// make sure this transcriber is only transcriber with data in this tier
+						boolean okToDelete = true;
+						for(Record record:session.getRecords()) {
+							final Tier<?> tier = record.getTier(tierDesc.getName());
+							if(tier != null) {
+								if(tier.getTranscribers().size() <= 1) {
+									okToDelete = tier.getTranscribers().size() == 0 ||
+											(tier.getTranscribers().size() == 1 && tier.getTranscribers().get(0).equals(editor.getDataModel().getTranscriber().getUsername()));
+								} else {
+									okToDelete = false;
+								}
+								if(!okToDelete) break;
+							}
+						}
+						if(!okToDelete) {
+							final MessageDialogProperties props = new MessageDialogProperties();
+							props.setParentWindow(CommonModuleFrame.getCurrentFrame());
+							props.setOptions(MessageDialogProperties.okOptions);
+							props.setTitle("Cannot delete tier");
+							props.setHeader("Cannot delete tier");
+							props.setMessage("Cannot delete tier '" + tierDesc.getName() + "' as it contains data for other transcribers.");
+							NativeDialogs.showMessageDialog(props);
+							return;
+						}
+					}
+				} else {
+					if(editor.getDataModel().getTranscriber() != Transcriber.VALIDATOR) {
+						// blind transcribers may only delete blind tiers
+						final MessageDialogProperties props = new MessageDialogProperties();
+						props.setParentWindow(CommonModuleFrame.getCurrentFrame());
+						props.setOptions(MessageDialogProperties.okOptions);
+						props.setTitle("Cannot delete tier");
+						props.setHeader("Cannot delete tier");
+						props.setMessage("Cannot delete tier '" + tierDesc.getName() + "' as it is not a blind tier.");
+						NativeDialogs.showMessageDialog(props);
+						return;
+					}
+				}
+
 				final RemoveTierAction act = new RemoveTierAction(getEditor(), tierDesc, tierItem);
 				act.actionPerformed(pae.getActionEvent());
 			} else {
