@@ -225,7 +225,7 @@ public class SessionEditorEP implements IPluginEntryPoint {
 				session.addTranscriber(transcriber);
 			} else {
 				transcriber = session.getTranscriber(tsd.getUsername());
-				if(transcriber != null && transcriber.usePassword()) {
+				if (transcriber != null && transcriber.usePassword()) {
 					final PasswordDialog dlg = new PasswordDialog(transcriber.getUsername());
 					dlg.setModal(true);
 					dlg.pack();
@@ -234,7 +234,7 @@ public class SessionEditorEP implements IPluginEntryPoint {
 
 					// wait
 
-					if(dlg.wasDialogCanceled()) return null; // bail if dialog was cancelled
+					if (dlg.wasDialogCanceled()) return null; // bail if dialog was cancelled
 
 					char salt[] = new char[2];
 					salt[0] = transcriber.getPassword().charAt(0);
@@ -242,7 +242,7 @@ public class SessionEditorEP implements IPluginEntryPoint {
 
 					// check password
 					final String passwd = JCrypt.crypt(dlg.getPassword(), new String(salt));
-					if(!passwd.equals(transcriber.getPassword())) {
+					if (!passwd.equals(transcriber.getPassword())) {
 						final MessageDialogProperties props = new MessageDialogProperties();
 						props.setRunAsync(false);
 						props.setTitle("Incorrect password");
@@ -253,23 +253,6 @@ public class SessionEditorEP implements IPluginEntryPoint {
 					}
 				}
 			}
-
-			// lock all tier other than blind tiers
-			final List<TierViewItem> lockedTierView = new ArrayList<>();
-			List<TierViewItem> currentTierView = session.getTierView();
-			if(currentTierView == null || currentTierView.size() == 0) {
-				currentTierView = SessionFactory.newFactory().createDefaultTierView(session);
-			}
-			for(TierViewItem tvi:currentTierView) {
-				final TierDescription td = session.getTiers().stream().filter( (t) -> t.getName().equals(tvi.getTierName()) ).findFirst().orElse(null);
-				if(td != null && !td.isBlind()) {
-					final TierViewItem lockedTvi = SessionFactory.newFactory().createTierViewItem(tvi.getTierName(), tvi.isVisible(), tvi.getTierFont(), true);
-					lockedTierView.add(lockedTvi);
-				} else {
-					lockedTierView.add(tvi);
-				}
-			}
-			session.setTierView(lockedTierView);
 		}
 
 		final SessionEditorWindow sessionEditorWindow = new SessionEditorWindow(project, session, transcriber);

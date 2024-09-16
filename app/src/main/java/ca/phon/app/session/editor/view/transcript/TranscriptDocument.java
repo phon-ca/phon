@@ -8,6 +8,7 @@ import ca.phon.extensions.IExtendable;
 import ca.phon.plugin.PluginManager;
 import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.syllabifier.Syllabifier;
 import ca.phon.util.Language;
 
 import javax.swing.*;
@@ -152,6 +153,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      */
     public void setTranscriber(Transcriber transcriber) {
         this.transcriber = transcriber;
+        if(getLength() > 0) {
+            reload();
+        }
     }
 
     /**
@@ -2006,6 +2010,11 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
             if (tier != null) {
                 String tierName = tier.getName();
+
+                if(!tier.isBlind() && doc.transcriber != Transcriber.VALIDATOR) {
+                    return;
+                }
+
                 var tierViewItem = doc
                         .getSession()
                         .getTierView()

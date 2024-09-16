@@ -558,7 +558,7 @@ public class TranscriptBatchBuilder {
                 return this;
             } else if (tier.hasBlindTranscription(transcriber.getUsername())) {
                 tierValue = tier.getBlindTranscription(transcriber.getUsername());
-            } else {
+            } else if(tierValue != null && tierValue.toString().length() > 0) {
                 // add italics to indicate that the transcriber has not transcribed this tier but value
                 // is available from already validated material
                 StyleConstants.setItalic((MutableAttributeSet) tierAttrs, true);

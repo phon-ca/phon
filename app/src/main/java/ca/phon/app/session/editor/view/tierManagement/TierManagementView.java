@@ -165,6 +165,23 @@ public class TierManagementView extends EditorView {
 						}
 						return super.isCellEditable(rowIndex, columnIndex);
 					}
+
+					@Override
+					public Object getValueAt(int rowIndex, int columnIndex) {
+						Object retVal = super.getValueAt(rowIndex, columnIndex);
+
+						boolean isBlindMode = sessionEditor.getDataModel().getTranscriber() != Transcriber.VALIDATOR;
+						if(isBlindMode && columnIndex == TierOrderingTableColumn.LOCK_TIER.ordinal()) {
+							final String tierName = super.getValueAt(rowIndex, TierOrderingTableColumn.TIER_NAME.ordinal()).toString();
+							final TierDescription td = session.getTiers().stream().filter(t -> t.getName().equals(tierName)).findFirst().orElse(null);
+							final TierViewItem tvi = getCurrentOrder().get(rowIndex);
+							if(td != null) {
+								retVal = tvi.isTierLocked() || !td.isBlind();
+							}
+						}
+
+						return retVal;
+					}
 				};
 		tierOrderingTable = new PhonTable(tableModel);
 
