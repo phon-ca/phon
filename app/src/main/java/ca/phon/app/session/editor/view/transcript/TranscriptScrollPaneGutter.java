@@ -7,6 +7,7 @@ import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.view.transcript.extensions.BlindTranscriptionExtension;
 import ca.phon.session.Record;
 import ca.phon.session.Tier;
+import ca.phon.session.Transcriber;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.fonts.FontPreferences;
 import ca.phon.util.PrefHelper;
@@ -104,7 +105,21 @@ public class TranscriptScrollPaneGutter extends JComponent {
                             Tier<?> hoverRectTier = hoverRectData.tier();
                             switch (iconType) {
                                 case ERROR -> {
-                                    String errorText = hoverRectTier.getUnvalidatedValue().getParseError().getLocalizedMessage();
+                                    boolean isBlindMode = editor.getDataModel().getTranscriber() != Transcriber.VALIDATOR;
+                                    String errorText = "";
+                                    if(isBlindMode && hoverRectTier.isBlind()) {
+                                        if(hoverRectTier.hasBlindTranscription(editor.getDataModel().getTranscriber().getUsername())) {
+                                            if (hoverRectTier.isBlindTranscriptionUnvalidated(editor.getDataModel().getTranscriber().getUsername())) {
+                                                errorText = hoverRectTier.getBlindUnvalidatedValue(editor.getDataModel().getTranscriber().getUsername()).getParseError().getLocalizedMessage();
+                                            }
+                                        } else {
+                                            if (hoverRectTier.isUnvalidated()) {
+                                                errorText = hoverRectTier.getUnvalidatedValue().getParseError().getLocalizedMessage();
+                                            }
+                                        }
+                                    } else if(hoverRectTier.isUnvalidated()) {
+                                        errorText = hoverRectTier.getUnvalidatedValue().getParseError().getLocalizedMessage();
+                                    }
                                     currentHoverPopup = PopupFactory.getSharedInstance().getPopup(
                                         TranscriptScrollPaneGutter.this,
                                         new JLabel(errorText),
@@ -192,6 +207,15 @@ public class TranscriptScrollPaneGutter extends JComponent {
                     "error", IconSize.SMALL, Color.RED);
         }
         return errorIcon;
+    }
+
+    private ImageIcon blindIcon;
+    private ImageIcon getBlindIcon() {
+        if(blindIcon == null) {
+            blindIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName,
+                    "layers", IconSize.SMALL, Color.BLUE);
+        }
+        return blindIcon;
     }
 
     // endregion
@@ -291,23 +315,54 @@ public class TranscriptScrollPaneGutter extends JComponent {
                         }
                     }
 
-                    if(tier.isUnvalidated()) {
+                    boolean isBlindMode = editor.getDataModel().getTranscriber() != Transcriber.VALIDATOR;
+                    if(!isBlindMode && tier.isBlind() && tier.getTranscribers().size() > 0) {
+                        final ImageIcon icon = getBlindIcon();
+                        final int iconWidth = icon.getIconWidth();
+                        final int iconHeight = icon.getIconHeight();
+                        final int x = getWidth() - (iconWidth * 2) - PADDING;
+                        final int y = (int) elemRect.getCenterY() - iconHeight / 2;
+                        icon.paintIcon(this, g, x, y);
+                        FontMetrics fontMetrics = getFontMetrics(g.getFont());
+                        Rectangle hoverRect = new Rectangle(x, y, iconWidth, iconHeight);
+
+                        iconRects.put(
+                            hoverRect,
+                            new TierAndIconType(tier, IconType.BLIND)
+                        );
+                    }
+
+                    boolean hasError = false;
+                    if(isBlindMode && tier.isBlind()) {
+                        if(tier.hasBlindTranscription(editor.getDataModel().getTranscriber().getUsername())) {
+                            if (tier.isBlindTranscriptionUnvalidated(editor.getDataModel().getTranscriber().getUsername())) {
+                                hasError = true;
+                            }
+                        } else {
+                            hasError = tier.isUnvalidated();
+                        }
+                    } else {
+                        hasError = tier.isUnvalidated();
+                    }
+
+                    if (hasError) {
                         final ImageIcon icon = getErrorIcon();
                         final int iconWidth = icon.getIconWidth();
                         final int iconHeight = icon.getIconHeight();
                         final int x = getWidth() - iconWidth - PADDING;
-                        final int y = (int)elemRect.getCenterY() - iconHeight/2;
+                        final int y = (int) elemRect.getCenterY() - iconHeight / 2;
                         icon.paintIcon(this, g, x, y);
                         FontMetrics fontMetrics = getFontMetrics(g.getFont());
                         Rectangle hoverRect = new Rectangle(x, y, iconWidth, iconHeight);
 //                            g.setColor(Color.BLUE);
 //                            g.fillRect(hoverRect.x, hoverRect.y, hoverRect.width, hoverRect.height);
 
-                            iconRects.put(
+                        iconRects.put(
                                 hoverRect,
                                 new TierAndIconType(tier, IconType.ERROR)
-                            );
+                        );
                     }
+
                 }
             }
 

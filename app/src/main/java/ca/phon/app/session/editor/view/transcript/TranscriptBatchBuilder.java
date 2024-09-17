@@ -558,10 +558,14 @@ public class TranscriptBatchBuilder {
                 return this;
             } else if (tier.hasBlindTranscription(transcriber.getUsername())) {
                 tierValue = tier.getBlindTranscription(transcriber.getUsername());
-            } else if(tierValue != null && tierValue.toString().length() > 0) {
+            } else if(tierValue != null) {
                 // add italics to indicate that the transcriber has not transcribed this tier but value
                 // is available from already validated material
                 StyleConstants.setItalic((MutableAttributeSet) tierAttrs, true);
+                if(tierValue.toString().length() == 0 && tier.isUnvalidated()) {
+                    appendBatchString(tier.getUnvalidatedValue().getValue(), tierAttrs);
+                    return this;
+                }
             }
         } else {
             if (tier.isUnvalidated()) {

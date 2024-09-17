@@ -729,7 +729,16 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                 default -> null;
             };
             if(tier == null) continue;
-            if(tier.isUnvalidated()) {
+            UnvalidatedValue uv = null;
+            if(tier.isBlind() && getDataModel().getTranscriber() != Transcriber.VALIDATOR) {
+                if(tier.isBlindTranscriptionUnvalidated(getDataModel().getTranscriber().getUsername())) {
+                    uv = tier.getBlindUnvalidatedValue(getDataModel().getTranscriber().getUsername());
+                }
+            } else {
+                uv = tier.isUnvalidated() ? tier.getUnvalidatedValue() : null;
+            }
+
+            if(uv != null) {
                 TranscriptDocument.StartEnd startEnd = switch (elementType) {
                     case TranscriptStyleConstants.ELEMENT_TYPE_RECORD -> doc.getTierContentStartEnd(tier);
                     case TranscriptStyleConstants.ELEMENT_TYPE_GENERIC -> doc.getGenericContentStartEnd(tier);
@@ -737,7 +746,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                 };
                 if(startEnd.valid()) {
                     try {
-                        final UnvalidatedValue uv = tier.getUnvalidatedValue();
                         final int startIdx = uv.getParseError().getErrorOffset() >= 0 ? startEnd.start() + uv.getParseError().getErrorOffset() : startEnd.start();
                         var errorUnderlineHighlight = getHighlighter().addHighlight(startIdx, startEnd.end(), new ErrorUnderlinePainter());
                         errorUnderlineHighlights.put(tier, errorUnderlineHighlight);
