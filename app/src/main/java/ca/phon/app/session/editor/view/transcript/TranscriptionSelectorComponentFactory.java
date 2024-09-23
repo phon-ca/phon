@@ -42,12 +42,11 @@ public class TranscriptionSelectorComponentFactory implements ComponentFactory {
 
     @Override
     public JComponent createComponent(AttributeSet attrs) {
-
-        JButton selectTranscriptionButton = new JButton();
         PhonUIAction<Void> selectTranscriptionAction = PhonUIAction.runnable(this::selectTranscription);
         selectTranscriptionAction.putValue(PhonUIAction.NAME, "Select");
+        JButton selectTranscriptionButton = new JButton(selectTranscriptionAction);
+        selectTranscriptionButton.setBorderPainted(false);
 
-        selectTranscriptionButton.setAction(selectTranscriptionAction);
         return selectTranscriptionButton;
     }
 

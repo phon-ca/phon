@@ -90,7 +90,7 @@ public class BlindTranscriptionExtension implements TranscriptEditorExtension {
         String transcriptionText = doc.getTierText(tier, transcriber);
         retVal.add(TranscriptBatchBuilder.getBatchString(transcriptionText, blindTranscriptionAttrs));
 
-        retVal.add(TranscriptBatchBuilder.getBatchString(" ", transcriptStyleContext.getTranscriptionSelectorAttributes(record, tier, transcriptionText, doc.getSession(), doc.getEventManager(), doc.getUndoSupport())));
+//        retVal.add(TranscriptBatchBuilder.getBatchString(" ", transcriptStyleContext.getTranscriptionSelectorAttributes(record, tier, transcriptionText, doc.getSession(), doc.getEventManager(), doc.getUndoSupport())));
 
         return retVal;
     }

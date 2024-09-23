@@ -278,7 +278,7 @@ public class TranscriptStyleContext extends StyleContext {
      * @return a mutable attribute set containing the necessary attributes for the specified blind transcription
      */
     public SimpleAttributeSet getBlindTranscriptionAttributes(Tier<?> tier, String transcriber) {
-        SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
+        SimpleAttributeSet retVal = new SimpleAttributeSet(getTierAttributes(tier));
 
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE, TranscriptStyleConstants.ATTR_KEY_BLIND_TRANSCRIPTION);
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_TIER, tier);
