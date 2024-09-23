@@ -730,9 +730,14 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             };
             if(tier == null) continue;
             UnvalidatedValue uv = null;
-            if(tier.isBlind() && getDataModel().getTranscriber() != Transcriber.VALIDATOR) {
+            boolean isBlindMode = getDataModel().getTranscriber() != Transcriber.VALIDATOR;
+            if(tier.isBlind() && isBlindMode) {
                 if(tier.isBlindTranscriptionUnvalidated(getDataModel().getTranscriber().getUsername())) {
                     uv = tier.getBlindUnvalidatedValue(getDataModel().getTranscriber().getUsername());
+                } else {
+                    if(tier.isUnvalidated()) {
+                        uv = tier.getUnvalidatedValue();
+                    }
                 }
             } else {
                 uv = tier.isUnvalidated() ? tier.getUnvalidatedValue() : null;
