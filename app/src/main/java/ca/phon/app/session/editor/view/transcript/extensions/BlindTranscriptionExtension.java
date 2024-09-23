@@ -1,8 +1,8 @@
 package ca.phon.app.session.editor.view.transcript.extensions;
 
 import ca.phon.app.session.editor.view.transcript.*;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.Tier;
 
 import javax.swing.*;
 import javax.swing.text.*;
@@ -37,12 +37,30 @@ public class BlindTranscriptionExtension implements TranscriptEditorExtension {
 
                 if (isValidationMode() && tier.isBlind()) {
                     List<String> transcribers = tier.getTranscribers();
+                    final TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(doc);
+                    batchBuilder.appendEOL();
+                    batchBuilder.setTrailingAttributes(attrs);
                     for (String transcriber : transcribers) {
-                        retVal.addAll(TranscriptBatchBuilder.getBatchEndLineFeed(attrs, null));
-                        retVal.addAll(getBlindTranscription(tier, transcriber, record));
-                        attrs = new SimpleAttributeSet(retVal.get(retVal.size() - 1).getAttributes());
-                        attrs.removeAttribute(TranscriptStyleConstants.ATTR_KEY_COMPONENT_FACTORY);
+                        final SimpleAttributeSet blindAttrs = doc.getTranscriptStyleContext().getBlindTranscriptionAttributes(tier, transcriber);
+
+                        final Tier<Object> transcriberTier = (Tier<Object>)SessionFactory.newFactory().createTier(transcriber, tier.getDeclaredType());
+                        transcriberTier.setValue(tier.getBlindTranscription(transcriber));
+                        blindAttrs.addAttributes(doc.getTranscriptStyleContext().getTierAttributes(transcriberTier));
+
+                        // get tvi for tier
+                        final TierViewItem tierViewItem = editor.getSession().getTierView().stream().filter(tvi -> tvi.getTierName().equals(tier.getName())).findFirst().orElse(
+                                SessionFactory.newFactory().createTierViewItem(tier.getName())
+                        );
+                        final TierViewItem tvi = SessionFactory.newFactory().createTierViewItem(transcriber, tierViewItem.isVisible(), tierViewItem.getTierFont());
+                        batchBuilder.appendTier(editor.getSession(), record, transcriberTier, tvi, Transcriber.VALIDATOR, doc.isChatTierNamesShown(), blindAttrs);
+
+                        final String transcriptionText =
+                                transcriberTier.isUnvalidated() ?
+                                        transcriberTier.getUnvalidatedValue().getValue() :
+                                        transcriberTier.getValue().toString();
+                        batchBuilder.append(TranscriptBatchBuilder.getBatchString(" ", doc.getTranscriptStyleContext().getTranscriptionSelectorAttributes(record, tier, transcriptionText, doc.getSession(), doc.getEventManager(), doc.getUndoSupport())));
                     }
+                    retVal.addAll(batchBuilder.getBatch());
                 }
 
                 return retVal;
@@ -90,7 +108,7 @@ public class BlindTranscriptionExtension implements TranscriptEditorExtension {
         String transcriptionText = doc.getTierText(tier, transcriber);
         retVal.add(TranscriptBatchBuilder.getBatchString(transcriptionText, blindTranscriptionAttrs));
 
-//        retVal.add(TranscriptBatchBuilder.getBatchString(" ", transcriptStyleContext.getTranscriptionSelectorAttributes(record, tier, transcriptionText, doc.getSession(), doc.getEventManager(), doc.getUndoSupport())));
+        retVal.add(TranscriptBatchBuilder.getBatchString(" ", transcriptStyleContext.getTranscriptionSelectorAttributes(record, tier, transcriptionText, doc.getSession(), doc.getEventManager(), doc.getUndoSupport())));
 
         return retVal;
     }

@@ -13,6 +13,7 @@ import ca.phon.session.*;
 import ca.phon.session.format.MediaSegmentFormatter;
 import ca.phon.session.tierdata.*;
 import ca.phon.util.PrefHelper;
+import org.w3c.dom.Attr;
 
 import javax.swing.*;
 import javax.swing.text.*;
@@ -33,6 +34,8 @@ public class TranscriptBatchBuilder {
     private final List<InsertionHook> insertionHooks;
 
     private final TranscriptStyleContext styleContext;
+
+    private AttributeSet trailingAttrs = null;
 
     public TranscriptBatchBuilder() {
         this(new TranscriptStyleContext(), new ArrayList<>());
@@ -794,13 +797,23 @@ public class TranscriptBatchBuilder {
      * @return the attributes of the last elementspec
      */
     public SimpleAttributeSet getTrailingAttributes() {
-        if (batch.isEmpty()) return new SimpleAttributeSet();
-        final AttributeSet prevAttrs = batch.get(batch.size() - 1).getAttributes();
-        SimpleAttributeSet attrs = new SimpleAttributeSet(prevAttrs != null ? prevAttrs : new SimpleAttributeSet());
-        TranscriptStyleConstants.setComponentFactory(attrs, null);
+        if(trailingAttrs == null) {
+            if (batch.isEmpty()) return new SimpleAttributeSet();
+            final AttributeSet prevAttrs = batch.get(batch.size() - 1).getAttributes();
+            SimpleAttributeSet attrs = new SimpleAttributeSet(prevAttrs != null ? prevAttrs : new SimpleAttributeSet());
+            TranscriptStyleConstants.setComponentFactory(attrs, null);
 //        TranscriptStyleConstants.setEnterAction(attrs, null);
-        TranscriptStyleConstants.setUnderlineOnHover(attrs, false);
-        return attrs;
+            TranscriptStyleConstants.setUnderlineOnHover(attrs, false);
+            return attrs;
+        } else {
+            final AttributeSet attrs = trailingAttrs;
+            trailingAttrs = null;
+            return new SimpleAttributeSet(attrs);
+        }
+    }
+
+    public void setTrailingAttributes(AttributeSet attrs) {
+        trailingAttrs = new SimpleAttributeSet(attrs);
     }
 
     public int size() {

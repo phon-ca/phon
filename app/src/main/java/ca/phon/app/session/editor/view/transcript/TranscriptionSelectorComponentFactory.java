@@ -45,7 +45,8 @@ public class TranscriptionSelectorComponentFactory implements ComponentFactory {
         PhonUIAction<Void> selectTranscriptionAction = PhonUIAction.runnable(this::selectTranscription);
         selectTranscriptionAction.putValue(PhonUIAction.NAME, "Select");
         JButton selectTranscriptionButton = new JButton(selectTranscriptionAction);
-        selectTranscriptionButton.setBorderPainted(false);
+        selectTranscriptionButton.setFocusable(false);
+        selectTranscriptionButton.setAlignmentY(0.7f);
 
         return selectTranscriptionButton;
     }
