@@ -1405,12 +1405,6 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 
 		private void init() {
-			setLayout(new BorderLayout());
-
-			SessionEditorToolbar toolbar = new SessionEditorToolbar(getEditor());
-
-			add(toolbar, BorderLayout.NORTH);
-
 			contentArea = dockControl.createContentArea(uuid.toString());
 
 			add(contentArea, BorderLayout.CENTER);

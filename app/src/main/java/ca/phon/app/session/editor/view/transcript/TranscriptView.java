@@ -33,6 +33,8 @@ import org.jdesktop.swingx.JXTable;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
@@ -49,6 +51,8 @@ public class TranscriptView extends EditorView {
     public final static String VIEW_ICON = IconManager.GoogleMaterialDesignIconsFontName + ":description";
 
     private IconStrip iconStrip;
+
+    private DropDownButton playSegmentButton;
 
     private final TranscriptEditor transcriptEditor;
     private TranscriptScrollPane transcriptScrollPane;
@@ -305,6 +309,38 @@ public class TranscriptView extends EditorView {
 //            findReplaceBtn.setSelected(isFindAndReplaceVisible());
 //        });
 
+        JPopupMenu playSegmentMenu = new JPopupMenu();
+        playSegmentMenu.addPopupMenuListener(new PopupMenuListener() {
+
+            @Override
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+                playSegmentMenu.removeAll();
+                setupPlaySegmentMenu(new MenuBuilder(playSegmentMenu));
+            }
+
+            @Override
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+            }
+
+            @Override
+            public void popupMenuCanceled(PopupMenuEvent e) {
+            }
+
+        });
+
+        final ImageIcon playIcn = IconManager.getInstance()
+                .getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "play_circle", IconSize.MEDIUM, Color.black);
+        final PhonUIAction playSegmentAct = PhonUIAction.eventConsumer(this::playPause);
+        playSegmentAct.putValue(PhonUIAction.NAME, "Play segment");
+        playSegmentAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Play segment");
+        playSegmentAct.putValue(PhonUIAction.SMALL_ICON, playIcn);
+        playSegmentAct.putValue(DropDownButton.BUTTON_POPUP, playSegmentMenu);
+        playSegmentButton = new DropDownButton(playSegmentAct);
+        playSegmentButton.setBorderPainted(false);
+        playSegmentButton.setFocusPainted(false);
+        playSegmentButton.setContentAreaFilled(false);
+        playSegmentButton.setRolloverEnabled(true);
+
         PhonUIAction<Void> fontScaleMenuAct = PhonUIAction.eventConsumer(this::showFontScaleMenu, null);
         fontScaleMenuAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
         fontScaleMenuAct.putValue(FlatButton.ICON_NAME_PROP, "text_increase");
@@ -328,8 +364,42 @@ public class TranscriptView extends EditorView {
 //        iconStrip.add(findReplaceBtn, IconStrip.IconStripPosition.RIGHT);
 //        iconStrip.add(singleRecordModeBtn, IconStrip.IconStripPosition.RIGHT);
 
+
         NavigationPanel navPanel = new NavigationPanel(getEditor());
+        iconStrip.add(playSegmentButton, IconStrip.IconStripPosition.RIGHT);
         iconStrip.add(navPanel, IconStrip.IconStripPosition.RIGHT);
+    }
+
+    public void playPause(PhonActionEvent<Void> pae) {
+        final SessionMediaModel mediaModel = getEditor().getMediaModel();
+        final SegmentPlayback segPlayback = mediaModel.getSegmentPlayback();
+        if(segPlayback.isPlaying()) {
+            segPlayback.stopPlaying();
+        } else {
+            (new PlaySegmentAction(getEditor())).actionPerformed(pae.getActionEvent());
+        }
+    }
+
+    private void setupPlaySegmentMenu(MenuBuilder builder) {
+        final SessionMediaModel mediaModel = getEditor().getMediaModel();
+        final SegmentPlayback segPlayback = mediaModel.getSegmentPlayback();
+
+        if(segPlayback.isPlaying()) {
+            final PhonUIAction stopAct = PhonUIAction.runnable(segPlayback::stopPlaying);
+            stopAct.putValue(PhonUIAction.NAME, "Stop playback");
+            stopAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getIcon("actions/media-playback-stop", IconSize.SMALL));
+            stopAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Stop segment playback");
+            builder.addItem(".", stopAct);
+
+            builder.addSeparator(".", "s1");
+        }
+
+        boolean enabled = (mediaModel.isSessionAudioAvailable() ||
+                (mediaModel.isSessionMediaAvailable() && getEditor().getViewModel().isShowing(MediaPlayerEditorView.VIEW_NAME)));
+        builder.addItem(".", new PlaySegmentAction(getEditor())).setEnabled(enabled);
+        builder.addItem(".", new PlayCustomSegmentAction(getEditor())).setEnabled(enabled);
+        builder.addItem(".", new PlaySpeechTurnAction(getEditor())).setEnabled(enabled);
+        builder.addItem(".", new PlayAdjacencySequenceAction(getEditor())).setEnabled(enabled);
     }
 
     public TranscriptEditor getTranscriptEditor() {
