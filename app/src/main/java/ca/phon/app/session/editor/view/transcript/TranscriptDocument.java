@@ -503,8 +503,12 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      *
      * @param tier the tier whose start position is trying to be found
      * @return the position in the document at the beginning of the tiers content
+     *
+     * @deprecated
      */
+    @Deprecated
     public int getTierStart(Tier<?> tier) {
+        LogUtil.warning("Deprecated method, use getTierStart(int recordIndex, String tierName) instead");
         return getTierStartEnd(tier).start();
     }
 
@@ -640,8 +644,12 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @param tier the tier whose end position is trying to be found
      * @return the position in the document immediately after the final character of the tiers content
      * (newlines included)
+     *
+     * @deprecated
      */
+    @Deprecated
     public int getTierEnd(Tier<?> tier) {
+        LogUtil.warning("Deprecated method, use getTierEnd(int recordIndex, String tierName) instead");
         return getTierStartEnd(tier).end();
     }
 
@@ -650,8 +658,12 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      *
      * @param tier the tier whose start position is trying to be found
      * @return the position in the document at the beginning of the tiers content
+     *
+     * @deprecated
      */
+    @Deprecated
     public int getTierContentStart(Tier<?> tier) {
+        LogUtil.warning("Deprecated method, use getTierContentStart(int recordIndex, String tierName) instead");
         return getTierContentStartEnd(tier).start();
     }
 
@@ -787,8 +799,12 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      *
      * @param tier
      * @return the range for the given tier or StartEnd(-1, -1) if not found
+     *
+     * @deprecated
      */
+    @Deprecated
     public StartEnd getTierStartEnd(Tier<?> tier) {
+        LogUtil.warning("Deprecated method, use getTierStartEnd(int recordIndex, String tierName) instead");
         // find record which contains given tier
         for(Record r: getSession().getRecords()) {
             if(r.getTier(tier.getName()) == tier) {
@@ -849,8 +865,12 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      *
      * @param tier
      * @return the range for the given tier or StartEnd(-1, -1) if not found
+     *
+     * @deprecated
      */
+    @Deprecated
     public StartEnd getTierContentStartEnd(Tier<?> tier) {
+        LogUtil.warning("Deprecated method, use getTierContentStartEnd(int recordIndex, String tierName) instead");
         // find record which contains given tier
         for(Record r: getSession().getRecords()) {
             if(r.getTier(tier.getName()) == tier) {
@@ -1140,29 +1160,34 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      */
     public int getOffsetInContent(int pos) {
         Element elem = getCharacterElement(pos);
-        String transcriptElementType = (String) elem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
+        final AttributeSet attrs = elem.getAttributes();
+        String transcriptElementType = TranscriptStyleConstants.getElementType(attrs);
         if (transcriptElementType == null) return -1;
 
         switch (transcriptElementType) {
             case TranscriptStyleConstants.ATTR_KEY_RECORD -> {
-                Tier<?> tier = (Tier<?>) elem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
+                Record record = TranscriptStyleConstants.getRecord(attrs);
+                if (record == null) return -1;
+                int recordIndex = session.getRecordPosition(record);
+                if(recordIndex == -1) return -1;
+                Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
                 if (tier == null) return -1;
-                int recordStartPos = getTierContentStart(tier);
+                int recordStartPos = getTierContentStart(recordIndex, tier.getName());
                 return pos - recordStartPos;
             }
             case TranscriptStyleConstants.ATTR_KEY_COMMENT -> {
-                Comment comment = (Comment) elem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT);
+                Comment comment = TranscriptStyleConstants.getComment(attrs);
                 if (comment == null) return -1;
                 int commentStartPos = getCommentContentStart(comment);
                 return pos - commentStartPos;
             }
             case TranscriptStyleConstants.ATTR_KEY_GEM -> {
-                Gem gem = (Gem) elem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM);
+                Gem gem = TranscriptStyleConstants.getGEM(attrs);
                 if (gem == null) return -1;
                 return pos - getGemContentStart(gem);
             }
             case TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER -> {
-                Tier<?> genericTier = (Tier<?>) elem.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER);
+                Tier<?> genericTier = TranscriptStyleConstants.getGenericTier(attrs);
                 if (genericTier == null) return -1;
                 return pos - getGenericContentStart(genericTier);
             }

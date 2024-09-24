@@ -743,9 +743,11 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                 uv = tier.isUnvalidated() ? tier.getUnvalidatedValue() : null;
             }
 
+            final Record record = TranscriptStyleConstants.getRecord(attrs);
+            final int recordIdx = record != null ? getSession().getRecordPosition(record) : -1;
             if(uv != null) {
                 TranscriptDocument.StartEnd startEnd = switch (elementType) {
-                    case TranscriptStyleConstants.ELEMENT_TYPE_RECORD -> doc.getTierContentStartEnd(tier);
+                    case TranscriptStyleConstants.ELEMENT_TYPE_RECORD -> doc.getTierContentStartEnd(recordIdx, tier.getName());
                     case TranscriptStyleConstants.ELEMENT_TYPE_GENERIC -> doc.getGenericContentStartEnd(tier);
                     default -> new TranscriptDocument.StartEnd(-1, -1);
                 };
@@ -941,8 +943,11 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         int end = -1;
 
         if (changedTier.isUnvalidated()) {
-            start = doc.getTierContentStart(changedTier) + changedTier.getUnvalidatedValue().getParseError().getErrorOffset();
-            end = doc.getTierContentStart(changedTier) + changedTier.getUnvalidatedValue().getValue().length();
+            int recordIndex = doc.getSession().getRecordPosition(editorEvent.data().record());
+            if(recordIndex < 0) return;
+            TranscriptDocument.StartEnd se = doc.getTierContentStartEnd(recordIndex, changedTier.getName());
+            start = se.start() + changedTier.getUnvalidatedValue().getParseError().getErrorOffset();
+            end = se.start() + changedTier.getUnvalidatedValue().getValue().length();
         }
 
         final TranscriptElementLocation caretLoc = getTranscriptEditorCaret().getTranscriptLocation();
@@ -2141,11 +2146,18 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         switch (elementType) {
             case TranscriptStyleConstants.ATTR_KEY_RECORD -> {
                 Record record = (Record) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
+                if(record == null) {
+                    return new TranscriptElementLocation(-1, null, -1);
+                }
+                int recordIndex = transcript.getRecordPosition(record);
+                if(recordIndex == -1) {
+                    return new TranscriptElementLocation(-1, null, -1);
+                }
                 transcriptElementIndex = transcript.getElementIndex(record);
                 Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
                 if (tier != null) {
                     label = tier.getName();
-                    posInTier = charPos - doc.getTierContentStart(tier);
+                    posInTier = charPos - doc.getTierContentStart(recordIndex, tier.getName());
                 }
             }
             case TranscriptStyleConstants.ATTR_KEY_COMMENT -> {
@@ -2591,9 +2603,13 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                     if (e.getClickCount() == 3) {
                         switch (elementType) {
                             case TranscriptStyleConstants.ELEMENT_TYPE_RECORD -> {
+                                Record record = TranscriptStyleConstants.getRecord(attrs);
+                                if(record == null) return;
+                                final int recordIndex = getSession().getRecordPosition(record);
+                                if(recordIndex == -1) return;
                                 Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
                                 if (tier != null) {
-                                    setSelectionStart(doc.getTierContentStart(tier));
+                                    setSelectionStart(doc.getTierContentStart(recordIndex, tier.getName()));
                                     setSelectionEnd(doc.getTierEnd(tier) - 1);
                                 }
                             }

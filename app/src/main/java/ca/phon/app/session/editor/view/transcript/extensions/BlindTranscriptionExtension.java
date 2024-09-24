@@ -43,7 +43,8 @@ public class BlindTranscriptionExtension implements TranscriptEditorExtension {
                     for (String transcriber : transcribers) {
                         final SimpleAttributeSet blindAttrs = doc.getTranscriptStyleContext().getBlindTranscriptionAttributes(tier, transcriber);
 
-                        final Tier<Object> transcriberTier = (Tier<Object>)SessionFactory.newFactory().createTier(transcriber, tier.getDeclaredType());
+                        final Tier<Object> transcriberTier = (Tier<Object>)SessionFactory.newFactory().createTier(
+                                tier.getName() + "__" + transcriber, tier.getDeclaredType());
                         transcriberTier.setValue(tier.getBlindTranscription(transcriber));
                         blindAttrs.addAttributes(doc.getTranscriptStyleContext().getTierAttributes(transcriberTier));
 
@@ -52,7 +53,8 @@ public class BlindTranscriptionExtension implements TranscriptEditorExtension {
                                 SessionFactory.newFactory().createTierViewItem(tier.getName())
                         );
                         final TierViewItem tvi = SessionFactory.newFactory().createTierViewItem(transcriber, tierViewItem.isVisible(), tierViewItem.getTierFont());
-                        batchBuilder.appendTier(editor.getSession(), record, transcriberTier, tvi, Transcriber.VALIDATOR, doc.isChatTierNamesShown(), blindAttrs);
+                        batchBuilder.appendTierLabel(editor.getSession(), record, transcriberTier, transcriber, tvi, doc.isChatTierNamesShown(), blindAttrs);
+                        batchBuilder.appendTierContent(record, transcriberTier, Transcriber.VALIDATOR, blindAttrs);
 
                         final String transcriptionText =
                                 transcriberTier.isUnvalidated() ?

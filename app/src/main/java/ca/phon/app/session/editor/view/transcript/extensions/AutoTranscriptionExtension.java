@@ -277,8 +277,9 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
         final Tier<?> tier = TranscriptStyleConstants.getTier(eleAttrs);
         final Record record = TranscriptStyleConstants.getRecord(eleAttrs);
         if(record != null && tier != null) {
+            int recordIndex = editor.getSession().getRecordPosition(record);
             if(tier.getDeclaredType().equals(IPATranscript.class)) {
-                final TranscriptDocument.StartEnd currentTextRange = editor.getTranscriptDocument().getTierContentStartEnd(tier);
+                final TranscriptDocument.StartEnd currentTextRange = editor.getTranscriptDocument().getTierContentStartEnd(recordIndex, tier.getName());
                 try {
                     final String currentText = editor.getTranscriptDocument().getText(currentTextRange.start(), currentTextRange.length());
                     final int numWords = currentText.isBlank() ? 0 : currentText.trim().split("\\p{Space}").length;

@@ -405,5 +405,9 @@ public class PrefHelper {
 		}
 		return retVal;
 	}
+
+	public static boolean isDebugMode() {
+		return getBoolean("phon.debug", false);
+	}
 	
 }

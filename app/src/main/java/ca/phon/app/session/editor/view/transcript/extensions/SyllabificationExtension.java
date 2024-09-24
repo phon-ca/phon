@@ -265,7 +265,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
 
         @Override
         public void setDot(NavigationFilter.FilterBypass fb, int dot, Position.Bias bias) {
-
+            System.out.println("setDot");
             TranscriptDocument doc = editor.getTranscriptDocument();
             if (doc.getLength() == 0) {
                 fb.setDot(dot, bias);
@@ -334,7 +334,9 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
             });
         }
         @Override
-        public void moveDot(NavigationFilter.FilterBypass fb, int dot, Position.Bias bias) {}
+        public void moveDot(NavigationFilter.FilterBypass fb, int dot, Position.Bias bias) {
+            System.out.println("moveDot");
+        }
     }
 
     /**

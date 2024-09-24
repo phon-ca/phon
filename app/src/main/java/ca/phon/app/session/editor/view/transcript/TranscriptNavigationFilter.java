@@ -4,6 +4,7 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.session.*;
 import ca.phon.session.Record;
+import ca.phon.util.PrefHelper;
 
 import javax.swing.*;
 import javax.swing.text.*;
@@ -117,6 +118,9 @@ public class TranscriptNavigationFilter extends NavigationFilter {
 
         int prevCaretPos = editor.getCaretPosition();
 
+        if(PrefHelper.isDebugMode()) {
+            LogUtil.info("Setting dot to " + dot);
+        }
         fb.setDot(dot, bias);
 
         TranscriptEditor.TranscriptLocationChangeData transcriptLocationChangeData = new TranscriptEditor.TranscriptLocationChangeData(
@@ -149,11 +153,16 @@ public class TranscriptNavigationFilter extends NavigationFilter {
             int end = -1;
 
             switch (elementType) {
-                case TranscriptStyleConstants.ATTR_KEY_RECORD -> {
+                case TranscriptStyleConstants.ATTR_KEY_RECORD, TranscriptStyleConstants.ATTR_KEY_BLIND_TRANSCRIPTION -> {
+                    Record record = TranscriptStyleConstants.getRecord(attrs);
+                    if(record == null) return;
+                    int recordIndex = editor.getSession().getRecordPosition(record);
+                    if(recordIndex < 0) return;
                     Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
                     if (tier != null) {
-                        start = doc.getTierContentStart(tier);
-                        end = doc.getTierEnd(tier);
+                        final TranscriptDocument.StartEnd tierStartEnd = doc.getTierContentStartEnd(recordIndex, tier.getName());
+                        start = tierStartEnd.start();
+                        end = tierStartEnd.end();
                     }
                 }
                 case TranscriptStyleConstants.ATTR_KEY_COMMENT -> {
@@ -180,10 +189,12 @@ public class TranscriptNavigationFilter extends NavigationFilter {
             }
 
             if (start != -1 && end != -1) {
-                dot = Math.min(Math.max(dot, start), end - 1);
+                dot = Math.min(Math.max(dot, start), end);
+                if(PrefHelper.isDebugMode()) {
+                    LogUtil.info("Moving dot to " + dot);
+                }
             }
         }
-
 
         fb.moveDot(dot, bias);
     }
