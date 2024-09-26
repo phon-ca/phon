@@ -277,7 +277,7 @@ public class TranscriptStyleConstants {
 
     public static final String ATTR_KEY_ENTER_ACTION = "enterAction";
 
-    public static Action getEnterAction(MutableAttributeSet attrs) {
+    public static Action getEnterAction(AttributeSet attrs) {
         return (Action)attrs.getAttribute(ATTR_KEY_ENTER_ACTION);
     }
 

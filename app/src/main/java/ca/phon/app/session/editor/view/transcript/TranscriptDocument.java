@@ -8,7 +8,6 @@ import ca.phon.extensions.IExtendable;
 import ca.phon.plugin.PluginManager;
 import ca.phon.session.Record;
 import ca.phon.session.*;
-import ca.phon.syllabifier.Syllabifier;
 import ca.phon.util.Language;
 
 import javax.swing.*;
@@ -302,14 +301,105 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
     // region Transcript <-> Document Positioning
     /**
-     * Gets the end position of the specified record
+     * Find paragraph element index for given tier
      *
-     * @param record the record whose end is trying to be found
-     * @return the position in the document immediately after the final character of the records content
-     * (newlines included)
+     * @param elementIndex
+     * @param tierName
      */
-    public int getRecordEnd(Record record) {
-        return getRecordStartEnd(record).end();
+    public int findParagraphElementIndexForTier(int elementIndex, String tierName) {
+        final int transcriptElementIndex = findParagraphElementIndexForSessionElementIndex(elementIndex);
+        for(int i = transcriptElementIndex; i < getDefaultRootElement().getElementCount(); i++) {
+            Element elem = getDefaultRootElement().getElement(i);
+            if (elem.getElementCount() < 1) continue;
+            AttributeSet attrs = elem.getAttributes();
+            Record currentRecord = TranscriptStyleConstants.getRecord(attrs);
+            if(elementIndex >= 0) {
+                if (currentRecord == null) continue;
+                Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
+                if(tier.getName().equals(tierName)) {
+                    return i;
+                }
+            } else {
+                if(currentRecord != null) break;
+                Tier<?> tier = TranscriptStyleConstants.getGenericTier(attrs);
+                if(tier != null && tier.getName().equals(tierName)) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Binary search for the first paragraph element index for the given session element index
+     *
+     * @param sessionElementIndex the session element index
+     * @return the first paragraph element index for the given element index or -1 if not found
+     */
+    public int findParagraphElementIndexForSessionElementIndex(int sessionElementIndex) {
+        final Element rootEle = getDefaultRootElement();
+        int low = 0;
+        int high = rootEle.getElementCount() - 1;
+        while (low <= high) {
+            int mid = (low + high) >>> 1;
+            Element midEle = rootEle.getElement(mid);
+            int midEleIdx = getTranscriptElementIndex(midEle);
+            if (sessionElementIndex == midEleIdx) {
+                for(int i = mid; i >= 0; i--) {
+                    Element e = rootEle.getElement(i);
+                    if(getTranscriptElementIndex(e) == sessionElementIndex) {
+                        midEleIdx = i;
+                    } else {
+                        break;
+                    }
+                }
+                return midEleIdx;
+            } else if (sessionElementIndex < midEleIdx) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Return the range for the given transcript element index
+     *
+     * @param sessionElementIndex the session element index
+     * @return the range for the given transcript element index or StartEnd(-1, -1) if not found
+     */
+    public StartEnd getRangeForSessionElementIndex(int sessionElementIndex) {
+        int eleIdx = findParagraphElementIndexForSessionElementIndex(sessionElementIndex);
+        if(eleIdx == -1) {
+            return new StartEnd(-1, -1);
+        }
+        Element ele = getDefaultRootElement().getElement(eleIdx);
+        Element endEle = ele;
+        if(ele.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD) != null) {
+            for(int i = eleIdx + 1; i < getDefaultRootElement().getElementCount(); i++) {
+                Element e = getDefaultRootElement().getElement(i);
+                if(getTranscriptElementIndex(e) == sessionElementIndex)
+                    endEle = e;
+                else
+                    break;
+            }
+        }
+        if(ele != null) {
+            return new StartEnd(ele.getStartOffset(), endEle.getEndOffset());
+        }
+        return new StartEnd(-1, -1);
+    }
+
+    /**
+     * Return string range for given record
+     *
+     * @param record
+     * @return the range for the given record or Range(-1, -1) if not found
+     */
+    public StartEnd getRecordStartEnd(Record record) {
+        final int sessionElementIndex = getSession().getTranscript().getElementIndex(record);
+        return getRangeForSessionElementIndex(sessionElementIndex);
     }
 
     /**
@@ -323,23 +413,44 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     }
 
     /**
-     * Get the start position of the specified comment including label
+     * Gets the end position of the specified record
      *
-     * @param comment the comment whose start position is trying to be found
-     * @return the position in the document at the beginning of the comment label
+     * @param record the record whose end is trying to be found
+     * @return the position in the document immediately after the final character of the records content
+     * (newlines included)
      */
-    public int getCommentStart(Comment comment) {
-        return getCommentStartEnd(comment).start();
+    public int getRecordEnd(Record record) {
+        return getRecordStartEnd(record).end();
     }
 
     /**
-     * Gets the start position of the specified comment
-     *
-     * @param comment the comment whose start position is trying to be found
-     * @return the position in the document at the beginning of the comments content
+     * Return the range of the given recordIndex
+     * @param recordIndex
+     * @return the range of the given recordIndex
      */
-    public int getCommentContentStart(Comment comment) {
-        return getCommentContentStartEnd(comment).start();
+    public StartEnd getRecordStartEnd(int recordIndex) {
+        return getRecordStartEnd(getSession().getRecord(recordIndex));
+    }
+
+    /**
+     * Gets the start position of the given record
+     *
+     * @param record the record whose start position is trying to be found
+     * @return the position in the document at the beginning of the records content
+     */
+    public int getRecordStart(Record record) {
+        return getRecordStartEnd(record).start();
+    }
+
+    /**
+     * Gets the end position of the record at the specified index
+     *
+     * @param recordIndex the index of the record whose end is trying to be found
+     * @return the position in the document immediately after the final character of the records content
+     * (newlines included)
+     */
+    public int getRecordEnd(int recordIndex) {
+        return getRecordStartEnd(recordIndex).end();
     }
 
     /**
@@ -366,7 +477,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         }
         return new StartEnd(-1, -1);
     }
-
 
     /**
      * Return the range for the given comment content
@@ -395,6 +505,37 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         final int commentEnd = paraEle.getEndOffset() - 1;
 
         return new StartEnd(commentStart, commentEnd);
+    }
+
+    /**
+     * Get the start position of the specified comment including label
+     *
+     * @param comment the comment whose start position is trying to be found
+     * @return the position in the document at the beginning of the comment label
+     */
+    public int getCommentStart(Comment comment) {
+        return getCommentStartEnd(comment).start();
+    }
+
+    /**
+     * Gets the start position of the specified comment
+     *
+     * @param comment the comment whose start position is trying to be found
+     * @return the position in the document at the beginning of the comments content
+     */
+    public int getCommentContentStart(Comment comment) {
+        return getCommentContentStartEnd(comment).start();
+    }
+
+    /**
+     * Gets the end position of the specified comment
+     *
+     * @param comment the comment whose end position is trying to be found
+     * @return the position in the document immediately after the final character of the comments content
+     * (newlines excluded)
+     */
+    public int getCommentContentEnd(Comment comment) {
+        return getCommentContentStartEnd(comment).end();
     }
 
     /**
@@ -447,23 +588,25 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     }
 
     /**
-     * Gets the end position of the record at the specified index
+     * Gets the end position of the specified gem
      *
-     * @param recordIndex the index of the record whose end is trying to be found
-     * @return the position in the document immediately after the final character of the records content
-     * (newlines included)
+     * @param gem the gem whose end position is trying to be found
+     * @return the position in the document immediately after the final character of the gems content
+     * (newlines excluded)
      */
-    public int getRecordEnd(int recordIndex) {
-        return getRecordStartEnd(recordIndex).end();
+    public int getGemContentEnd(Gem gem) {
+        return getGemStartEnd(gem).end();
     }
 
     /**
-     * Return the range of the given recordIndex
-     * @param recordIndex
-     * @return the range of the given recordIndex
+     * Return string range for given comment
+     *
+     * @param comment
+     * @return the range for the given comment or Range(-1, -1) if not found
      */
-    public StartEnd getRecordStartEnd(int recordIndex) {
-        return getRecordStartEnd(getSession().getRecord(recordIndex));
+    public StartEnd getCommentStartEnd(Comment comment) {
+        final int sessionElementIndex = getSession().getTranscript().getElementIndex(comment);
+        return getRangeForSessionElementIndex(sessionElementIndex);
     }
 
     /**
@@ -489,27 +632,16 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     }
 
     /**
-     * Gets the start position of the given record
+     * Get tier start/end
      *
-     * @param record the record whose start position is trying to be found
-     * @return the position in the document at the beginning of the records content
+     * @param tierName
+     * @return the range for the given tier or StartEnd(-1, -1) if not found
      */
-    public int getRecordStart(Record record) {
-        return getRecordStartEnd(record).start();
-    }
-
-    /**
-     * Gets the start position of the specified tier
-     *
-     * @param tier the tier whose start position is trying to be found
-     * @return the position in the document at the beginning of the tiers content
-     *
-     * @deprecated
-     */
-    @Deprecated
-    public int getTierStart(Tier<?> tier) {
-        LogUtil.warning("Deprecated method, use getTierStart(int recordIndex, String tierName) instead");
-        return getTierStartEnd(tier).start();
+    public StartEnd getTierStartEnd(int recordIndex, String tierName) {
+        final int paragraphIdx = findParagraphElementIndexForTier(session.getTranscript().getRecordElementIndex(recordIndex), tierName);
+        if (paragraphIdx == -1) return new StartEnd(-1, -1);
+        Element elem = getDefaultRootElement().getElement(paragraphIdx);
+        return new StartEnd(elem.getStartOffset(), elem.getEndOffset());
     }
 
     /**
@@ -520,25 +652,24 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @return the position in the document at the beginning of the tier label
      */
     public int getTierStart(int recordIndex, String tierName) {
-        final int paragraphIdx = findParagraphElementIndexForTier(session.getTranscript().getRecordElementIndex(recordIndex), tierName);
-        if (paragraphIdx == -1) return -1;
-        Element elem = getDefaultRootElement().getElement(paragraphIdx);
-        return elem.getEndOffset();
+        return getTierStartEnd(recordIndex, tierName).start();
     }
 
     /**
-     * Gets the start position of a tier with the specified name in the record at the specified index
+     * Gets the end position of a tier with the specified name in the record at the specified index.
+     * End includes newline at the end of the tier.
      *
      * @param recordIndex the index of the record that contains the tier
      * @param tierName    the name of the tier
-     * @return the position in the document at the beginning of the tiers content
+     * @return the position in the document immediately after the final character of the tiers content
+     * (newlines included)
      */
-    public int getTierContentStart(int recordIndex, String tierName) {
-        return getTierContentStartEnd(recordIndex, tierName).start();
+    public int getTierEnd(int recordIndex, String tierName) {
+        return getTierStartEnd(recordIndex, tierName).end();
     }
 
     /**
-     * Get the range of the given tier's content
+     * Get the range of the given tier's content not including the new tier label or newline at end of tier
      *
      * @param recordIndex
      * @param tierName
@@ -562,9 +693,34 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 break;
             }
         }
+        // adjust offset to exclude newline at end of tier
         final int tierEnd = elem.getEndOffset() - 1;
 
         return new StartEnd(tierStart, tierEnd);
+    }
+
+    /**
+     * Gets the start position of a tier with the specified name in the record at the specified index
+     *
+     * @param recordIndex the index of the record that contains the tier
+     * @param tierName    the name of the tier
+     * @return the position in the document at the beginning of the tiers content
+     */
+    public int getTierContentStart(int recordIndex, String tierName) {
+        return getTierContentStartEnd(recordIndex, tierName).start();
+    }
+
+    /**
+     * Gets the end position of a tier with the specified name in the record at the specified index.
+     * End does not include newline at the end of the tier.
+     *
+     * @param recordIndex the index of the record that contains the tier
+     * @param tierName    the name of the tier
+     * @return the position in the document immediately after the final character of the tiers content
+     * (newlines included)
+     */
+    public int getTierContentEnd(int recordIndex, String tierName) {
+        return getTierContentStartEnd(recordIndex, tierName).end();
     }
 
     /**
@@ -593,78 +749,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             }
         }
         return new StartEnd(-1, -1);
-    }
-
-    /**
-     * Gets the end position of a tier with the specified name in the record at the specified index
-     *
-     * @param recordIndex the index of the record that contains the tier
-     * @param tierName    the name of the tier
-     * @return the position in the document immediately after the final character of the tiers content
-     * (newlines included)
-     */
-    public int getTierEnd(int recordIndex, String tierName) {
-        final StartEnd startEnd = getTierContentStartEnd(recordIndex, tierName);
-        return startEnd.end();
-    }
-
-    /**
-     * Find paragraph element index for given tier
-     *
-     * @param elementIndex
-     * @param tierName
-     */
-    public int findParagraphElementIndexForTier(int elementIndex, String tierName) {
-        final int transcriptElementIndex = findParagraphElementIndexForSessionElementIndex(elementIndex);
-        for(int i = transcriptElementIndex; i < getDefaultRootElement().getElementCount(); i++) {
-            Element elem = getDefaultRootElement().getElement(i);
-            if (elem.getElementCount() < 1) continue;
-            AttributeSet attrs = elem.getAttributes();
-            Record currentRecord = TranscriptStyleConstants.getRecord(attrs);
-            if(elementIndex >= 0) {
-                if (currentRecord == null) continue;
-                Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
-                if(tier.getName().equals(tierName)) {
-                    return i;
-                }
-            } else {
-                if(currentRecord != null) break;
-                Tier<?> tier = TranscriptStyleConstants.getGenericTier(attrs);
-                if(tier != null && tier.getName().equals(tierName)) {
-                    return i;
-                }
-            }
-        }
-        return -1;
-    }
-
-    /**
-     * Gets the end position of the specified tier
-     *
-     * @param tier the tier whose end position is trying to be found
-     * @return the position in the document immediately after the final character of the tiers content
-     * (newlines included)
-     *
-     * @deprecated
-     */
-    @Deprecated
-    public int getTierEnd(Tier<?> tier) {
-        LogUtil.warning("Deprecated method, use getTierEnd(int recordIndex, String tierName) instead");
-        return getTierStartEnd(tier).end();
-    }
-
-    /**
-     * Gets the start position for the content of the specified tier
-     *
-     * @param tier the tier whose start position is trying to be found
-     * @return the position in the document at the beginning of the tiers content
-     *
-     * @deprecated
-     */
-    @Deprecated
-    public int getTierContentStart(Tier<?> tier) {
-        LogUtil.warning("Deprecated method, use getTierContentStart(int recordIndex, String tierName) instead");
-        return getTierContentStartEnd(tier).start();
     }
 
     /**
@@ -743,6 +827,17 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     }
 
     /**
+     * Gets the end position of the specified "generic tier"
+     *
+     * @param genericTier a reference to the generic tier whose end position is trying to be found
+     * @return the position in the document immediately after the final character of the generic tiers content
+     * (newlines excluded)
+     */
+    public int getGenericContentEnd(Tier<?> genericTier) {
+        return getGenericContentStartEnd(genericTier).end();
+    }
+
+    /**
      * Gets the start position of the "generic tier" with the specified name
      *
      * @param genericTierName the name of the generic tier whose start position is trying to be found
@@ -795,115 +890,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     }
 
     /**
-     * Return string range for given tier
-     *
-     * @param tier
-     * @return the range for the given tier or StartEnd(-1, -1) if not found
-     *
-     * @deprecated
-     */
-    @Deprecated
-    public StartEnd getTierStartEnd(Tier<?> tier) {
-        LogUtil.warning("Deprecated method, use getTierStartEnd(int recordIndex, String tierName) instead");
-        // find record which contains given tier
-        for(Record r: getSession().getRecords()) {
-            if(r.getTier(tier.getName()) == tier) {
-                int firstParagraphIdx =
-                        findParagraphElementIndexForSessionElementIndex(getSession().getTranscript().getElementIndex(r));
-                if(firstParagraphIdx >= 0) {
-                    for (int i = firstParagraphIdx; i < getDefaultRootElement().getElementCount(); i++) {
-                        Element e = getDefaultRootElement().getElement(i);
-                        Tier<?> eTier = TranscriptStyleConstants.getTier(e.getAttributes());
-                        if (eTier != null && eTier.getName().equals(tier.getName())) {
-                            return new StartEnd(e.getStartOffset(), e.getEndOffset());
-                        }
-                    }
-                }
-            }
-        }
-        return new StartEnd(-1, -1);
-    }
-
-    /**
-     * Return string range for given tier label
-     *
-     * @param tier
-     * @return the range for the given tier label or StartEnd(-1, -1) if not found
-     */
-    public StartEnd getTierLabelStartEnd(Tier<?> tier) {
-        // find record which contains given tier
-        for(Record r: getSession().getRecords()) {
-            if(r.getTier(tier.getName()) == tier) {
-                int firstParagraphIdx =
-                        findParagraphElementIndexForSessionElementIndex(getSession().getTranscript().getElementIndex(r));
-                if(firstParagraphIdx >= 0) {
-                    for (int i = firstParagraphIdx; i < getDefaultRootElement().getElementCount(); i++) {
-                        Element e = getDefaultRootElement().getElement(i);
-                        Tier<?> eTier = TranscriptStyleConstants.getTier(e.getAttributes());
-                        if (eTier != null && eTier.getName().equals(tier.getName())) {
-                            for (int j = 0; j < e.getElementCount(); j++) {
-                                Element childEle = e.getElement(j);
-                                AttributeSet attrs = childEle.getAttributes();
-                                if(TranscriptStyleConstants.isNewParagraph(attrs)) {
-                                    continue;
-                                }
-                                boolean isLabel = TranscriptStyleConstants.isLabel(attrs);
-                                if (isLabel) {
-                                    return new StartEnd(childEle.getStartOffset(), childEle.getEndOffset());
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return new StartEnd(-1, -1);
-    }
-
-    /**
-     * Get tier content range
-     *
-     * @param tier
-     * @return the range for the given tier or StartEnd(-1, -1) if not found
-     *
-     * @deprecated
-     */
-    @Deprecated
-    public StartEnd getTierContentStartEnd(Tier<?> tier) {
-        LogUtil.warning("Deprecated method, use getTierContentStartEnd(int recordIndex, String tierName) instead");
-        // find record which contains given tier
-        for(Record r: getSession().getRecords()) {
-            if(r.getTier(tier.getName()) == tier) {
-                int firstParagraphIdx =
-                        findParagraphElementIndexForSessionElementIndex(getSession().getTranscript().getElementIndex(r));
-                if(firstParagraphIdx >= 0) {
-                    for (int i = firstParagraphIdx; i < getDefaultRootElement().getElementCount(); i++) {
-                        Element e = getDefaultRootElement().getElement(i);
-                        if (e.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER) == tier) {
-                            int tierStart = e.getStartOffset();
-                            for (int j = 0; j < e.getElementCount(); j++) {
-                                Element childEle = e.getElement(j);
-                                AttributeSet attrs = childEle.getAttributes();
-                                if(TranscriptStyleConstants.isNewParagraph(attrs)) {
-                                    continue;
-                                }
-                                Boolean isLabel = TranscriptStyleConstants.isLabel(attrs);
-                                if (!isLabel) {
-                                    break;
-                                }
-                                tierStart = childEle.getEndOffset();
-                            }
-                            final int tierEnd = e.getEndOffset() - 1;
-                            return new StartEnd(tierStart, tierEnd);
-                        }
-                    }
-                }
-            }
-        }
-        return new StartEnd(-1, -1);
-    }
-
-    /**
      * Return string range for given gem
      *
      * @param gem
@@ -937,89 +923,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             }
         }
         return new StartEnd(-1, -1);
-    }
-
-    /**
-     * Return string range for given comment
-     *
-     * @param comment
-     * @return the range for the given comment or Range(-1, -1) if not found
-     */
-    public StartEnd getCommentStartEnd(Comment comment) {
-        final int sessionElementIndex = getSession().getTranscript().getElementIndex(comment);
-        return getRangeForSessionElementIndex(sessionElementIndex);
-    }
-
-    /**
-     * Return string range for given record
-     *
-     * @param record
-     * @return the range for the given record or Range(-1, -1) if not found
-     */
-    public StartEnd getRecordStartEnd(Record record) {
-        final int sessionElementIndex = getSession().getTranscript().getElementIndex(record);
-        return getRangeForSessionElementIndex(sessionElementIndex);
-    }
-
-    /**
-     * Return the range for the given transcript element index
-     *
-     * @param sessionElementIndex the session element index
-     * @return the range for the given transcript element index or StartEnd(-1, -1) if not found
-     */
-    public StartEnd getRangeForSessionElementIndex(int sessionElementIndex) {
-        int eleIdx = findParagraphElementIndexForSessionElementIndex(sessionElementIndex);
-        if(eleIdx == -1) {
-            return new StartEnd(-1, -1);
-        }
-        Element ele = getDefaultRootElement().getElement(eleIdx);
-        Element endEle = ele;
-        if(ele.getAttributes().getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD) != null) {
-            for(int i = eleIdx + 1; i < getDefaultRootElement().getElementCount(); i++) {
-                Element e = getDefaultRootElement().getElement(i);
-                if(getTranscriptElementIndex(e) == sessionElementIndex)
-                    endEle = e;
-                else
-                    break;
-            }
-        }
-        if(ele != null) {
-            return new StartEnd(ele.getStartOffset(), endEle.getEndOffset());
-        }
-        return new StartEnd(-1, -1);
-    }
-
-    /**
-     * Binary search for the first paragraph element index for the given session element index
-     *
-     * @param sessionElementIndex the session element index
-     * @return the first paragraph element index for the given element index or -1 if not found
-     */
-    public int findParagraphElementIndexForSessionElementIndex(int sessionElementIndex) {
-        final Element rootEle = getDefaultRootElement();
-        int low = 0;
-        int high = rootEle.getElementCount() - 1;
-        while (low <= high) {
-            int mid = (low + high) >>> 1;
-            Element midEle = rootEle.getElement(mid);
-            int midEleIdx = getTranscriptElementIndex(midEle);
-            if (sessionElementIndex == midEleIdx) {
-                for(int i = mid; i >= 0; i--) {
-                    Element e = rootEle.getElement(i);
-                    if(getTranscriptElementIndex(e) == sessionElementIndex) {
-                        midEleIdx = i;
-                    } else {
-                        break;
-                    }
-                }
-                return midEleIdx;
-            } else if (sessionElementIndex < midEleIdx) {
-                high = mid - 1;
-            } else {
-                low = mid + 1;
-            }
-        }
-        return -1;
     }
 
     /**
@@ -1360,7 +1263,8 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * Updates the speaker on the separator / record header
      */
     public void onChangeSpeaker(Record record) {
-        final StartEnd orthoLblStartEnd = getTierLabelStartEnd(record.getOrthographyTier());
+        int recordIndex = session.getRecordPosition(record);
+        final StartEnd orthoLblStartEnd = getTierLabelStartEnd(recordIndex, SystemTierType.Orthography.getName());
         if(!orthoLblStartEnd.valid()) return;
 
         try {

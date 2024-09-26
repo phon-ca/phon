@@ -187,7 +187,12 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
     public void acceptAutoTranscription(Record record, Tier<IPATranscript> tier, AutomaticTranscription automaticTranscription) {
         final IPATranscriptBuilder builder = new IPATranscriptBuilder();
 
-        final TranscriptDocument.StartEnd currentTextRange = editor.getTranscriptDocument().getTierContentStartEnd(tier);
+        final int recordIndex = editor.getSession().getRecordPosition(record);
+        if(recordIndex < 0) return;
+
+        final TranscriptDocument.StartEnd currentTextRange = editor.getTranscriptDocument().getTierContentStartEnd(recordIndex, tier.getName());
+        if(!currentTextRange.valid()) return;
+
         try {
             final String currentText = editor.getTranscriptDocument().getText(currentTextRange.start(), currentTextRange.length());
             if(!currentText.isBlank()) {
@@ -219,7 +224,12 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
     public void acceptAutoTranscriptionToFirstSelection(Record record, Tier<IPATranscript> tier, AutomaticTranscription automaticTranscription) {
         final IPATranscriptBuilder builder = new IPATranscriptBuilder();
 
-        final TranscriptDocument.StartEnd currentTextRange = editor.getTranscriptDocument().getTierContentStartEnd(tier);
+        final int recordIndex = editor.getSession().getRecordPosition(record);
+        if(recordIndex < 0) return;
+
+        final TranscriptDocument.StartEnd currentTextRange = editor.getTranscriptDocument().getTierContentStartEnd(recordIndex, tier.getName());
+        if(!currentTextRange.valid()) return;
+
         try {
             final String currentText = editor.getTranscriptDocument().getText(currentTextRange.start(), currentTextRange.length());
             if(!currentText.isBlank()) {
@@ -462,7 +472,8 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
             final IPATranscript ipa = (IPATranscript) alignedEle.getObj2();
             // ignore empty transcriptions
             if (ipa != null && ipa.length() > 0 && !"*".equals(ipa.toString())) {
-                alignedTypesDatabase.removeAlignment(SystemTierType.Orthography.getName(), alignedEle.getObj1().toString(),
+                alignedTypesDatabase.removeAlignment(SystemTierType.Orthography.getName(),
+                        alignedEle.getObj1() != null ? alignedEle.getObj1().toString() : "",
                         alignment.getBottomTier().getName(), ipa.toString());
             }
         }

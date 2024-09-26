@@ -265,7 +265,6 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
 
         @Override
         public void setDot(NavigationFilter.FilterBypass fb, int dot, Position.Bias bias) {
-            System.out.println("setDot");
             TranscriptDocument doc = editor.getTranscriptDocument();
             if (doc.getLength() == 0) {
                 fb.setDot(dot, bias);
@@ -273,29 +272,33 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
 
             Element elem = doc.getCharacterElement(dot);
             AttributeSet attrs = elem.getAttributes();
-            if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE) != null) return;
+            if (TranscriptStyleConstants.isNotTraversable(attrs)) return;
 
             AttributeSet prevAttrs = doc.getCharacterElement(fb.getCaret().getDot()).getAttributes();
             AttributeSet nextAttrs = doc.getCharacterElement(dot).getAttributes();
 
-            String prevElemType = (String) prevAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
-            String nextElemType = (String) nextAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
-            Tier<?> nextTier = (Tier<?>) nextAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
+            String prevElemType = TranscriptStyleConstants.getElementType(prevAttrs);
+            String nextElemType = TranscriptStyleConstants.getElementType(nextAttrs);
+            Tier<?> nextTier = TranscriptStyleConstants.getTier(nextAttrs);
 
             if (prevElemType != null) {
                 try {
                     switch (prevElemType) {
                         case TranscriptStyleConstants.ATTR_KEY_RECORD -> {
-                            Tier<?> prevTier = (Tier<?>) prevAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
+                            final Record record = TranscriptStyleConstants.getRecord(prevAttrs);
+                            if (record == null) break;
+                            int recordIndex = doc.getSession().getRecordPosition(record);
+                            Tier<?> prevTier = TranscriptStyleConstants.getTier(prevAttrs);
                             if (prevTier == null || prevTier.getDeclaredType().equals(PhoneAlignment.class)) break;
                             if (nextElemType != null && nextElemType.equals(TranscriptStyleConstants.ATTR_KEY_RECORD)) {
                                 if (nextTier != null && nextTier == prevTier) break;
                             }
-                            int start = doc.getTierContentStart(prevTier);
-                            int end = doc.getTierEnd(prevTier) - 1;
+                            final TranscriptDocument.StartEnd se = doc.getTierContentStartEnd(recordIndex, prevTier.getName());
+                            int start = se.start();
+                            int end = se.end();
                             String newValue = doc.getText(start, end - start);
 //                            editor.setInternalEdit(true);
-                            editor.changeTierData((Record)prevAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD), prevTier, newValue);
+                            editor.changeTierData(record, prevTier, newValue);
                         }
                     }
                 }
@@ -309,7 +312,9 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
             int prevCaretPos = editor.getCaretPosition();
 
             if (nextTier != null && nextAttrs.getAttribute("syllabification") != null) {
-                int tierEnd = doc.getTierEnd(nextTier)-1;
+                final Record nextRecord = TranscriptStyleConstants.getRecord(nextAttrs);
+                final int recordIndex = doc.getSession().getRecordPosition(nextRecord);
+                int tierEnd = doc.getTierEnd(recordIndex, nextTier.getName());
                 fb.setDot(dot, Position.Bias.Forward);
                 if (dot != tierEnd) {
                     fb.moveDot(editor.getCaretPosition() + 1, Position.Bias.Forward);
@@ -368,7 +373,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
             if (doc.containsNotEditableAttribute(attrs)) return;
 
             // Locked tiers
-            Tier<?> tier = (Tier<?>)attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
+            Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
             if (tier != null) {
                 String tierName = tier.getName();
                 var tierViewItem = doc
@@ -384,6 +389,9 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                 // Syllabification tiers
                 if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_SYLLABIFICATION) != null) {
                     if (text == null || text.isEmpty()) return;
+                    final Record record = TranscriptStyleConstants.getRecord(attrs);
+                    final int recordIndex = doc.getSession().getRecordPosition(record);
+                    if(recordIndex < 0) return;
                     final String textUpper = text.toUpperCase();
                     char c = textUpper.charAt(0);
                     if (syllabificationChars.contains(c)) {
@@ -426,8 +434,9 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                                 sInfo.setDiphthongMember(true);
                                 otherSInfo.setDiphthongMember(true);
 
-                                int start = doc.getTierContentStart(tier);
-                                int end = doc.getTierEnd(tier);
+                                final TranscriptDocument.StartEnd se = doc.getTierContentStartEnd(recordIndex, tier.getName());
+                                int start = se.start();
+                                int end = se.end();
 
                                 for (int i = start; i < end; i++) {
                                     var charAttrs = doc.getCharacterElement(i).getAttributes();
@@ -444,8 +453,9 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                                 sInfo.setDiphthongMember(false);
                                 otherSInfo.setDiphthongMember(false);
 
-                                int start = doc.getTierContentStart(tier);
-                                int end = doc.getTierEnd(tier);
+                                final TranscriptDocument.StartEnd se = doc.getTierContentStartEnd(recordIndex, tier.getName());
+                                int start = se.start();
+                                int end = se.end();
 
                                 for (int i = start; i < end; i++) {
                                     var charAttrs = doc.getCharacterElement(i).getAttributes();
