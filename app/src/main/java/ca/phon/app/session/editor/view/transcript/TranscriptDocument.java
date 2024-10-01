@@ -17,6 +17,7 @@ import java.beans.PropertyChangeSupport;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Function;
 
 /**
  * Text document for a {@link Session} that displays the transcript including all tiers, comments, and gems.
@@ -1115,13 +1116,13 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
     // update global paragraph attributes
 
-    private void updateGlobalParagraphAttributes() {
+    public void updateGlobalParagraphAttributes() {
         for(int i = 0; i < getDefaultRootElement().getElementCount(); i++) {
             updateParagraphAttributes(getDefaultRootElement().getElement(i));
         }
     }
 
-    private void updateParagraphAttributes(Element paraEle) {
+    public void updateParagraphAttributes(Element paraEle) {
         AttributeSet attrs = paraEle.getAttributes();
         SimpleAttributeSet newAttrs = new SimpleAttributeSet(attrs);
         StyleConstants.setLineSpacing(newAttrs, TranscriptViewFactory.LINE_SPACING);
@@ -1503,8 +1504,8 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         }
 
         if(recordRange.valid()) {
+            setBypassDocumentFilter(true);
             try {
-                bypassDocumentFilter = true;
                 remove(recordRange.start(), recordRange.length());
 
                 propertyChangeSupport.firePropertyChange("transcriptElementRemoved", false, true);
@@ -1516,7 +1517,93 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 }
             } catch (BadLocationException e) {
                 LogUtil.severe(e);
+            } finally {
+                setBypassDocumentFilter(false);
             }
+        }
+    }
+
+    /**
+     * Insert tier for all records
+     *
+     * @param tierName
+     * @param tierSupplier
+     */
+    public void addTier(String tierName, int tierIndex, Function<Record, Tier<?>> tierSupplier) {
+        for(int sessionEleIdx = 0; sessionEleIdx < session.getTranscript().getNumberOfElements(); sessionEleIdx++) {
+            final Transcript.Element element = session.getTranscript().getElementAt(sessionEleIdx);
+            if(!element.isRecord()) continue;
+            final Record record = element.asRecord();
+            final Tier<?> tier = tierSupplier.apply(record);
+            if(tier == null) continue;
+            final int recordParagraphIdx = findParagraphElementIndexForSessionElementIndex(sessionEleIdx);
+            final int tierParagraphIdx = recordParagraphIdx + tierIndex;
+
+            final Element prevTierEle = getDefaultRootElement().getElement(tierParagraphIdx-1);
+            final AttributeSet prevAttrs = prevTierEle.getElementCount() > 0
+                    ? prevTierEle.getElement(prevTierEle.getElementCount()-1).getAttributes()
+                    : prevTierEle.getAttributes();
+            int insertPosition = prevTierEle.getEndOffset();
+            final TranscriptBatchBuilder builder = new TranscriptBatchBuilder(this);
+            final TierViewItem tvi = getSession().getTierView().stream().filter(tv -> tv.getTierName().equals(tierName)).findFirst().orElse(null);
+            final SimpleAttributeSet newAttrs = new SimpleAttributeSet();
+            TranscriptStyleConstants.setElementType(newAttrs, TranscriptStyleConstants.ELEMENT_TYPE_RECORD);
+            TranscriptStyleConstants.setRecord(newAttrs, record);
+            TranscriptStyleConstants.setTier(newAttrs, tier);
+            builder.appendTier(getSession(), record, tier, tvi, getTranscriber(), isChatTierNamesShown(), newAttrs);
+            builder.appendEOL(builder.getTrailingAttributes());
+
+            try {
+                processBatchUpdates(insertPosition, builder.getBatch());
+            } catch (BadLocationException e) {
+                LogUtil.severe(e);
+            }
+        }
+    }
+
+    /**
+     * Remove tier from all records
+     *
+     * @param tierName
+     */
+    public void removeTier(String tierName) {
+        try {
+            boolean madeChange = false;
+            for(int i = getDefaultRootElement().getElementCount() - 1; i >= 0; i--) {
+                final Element elem = getDefaultRootElement().getElement(i);
+                final AttributeSet attrs = getParagraphAttributes(i);
+                final String elementType = TranscriptStyleConstants.getElementType(attrs);
+                if(!TranscriptStyleConstants.ELEMENT_TYPE_RECORD.equals(elementType)) {
+                    continue;
+                }
+                final Record record = TranscriptStyleConstants.getRecord(attrs);
+                if(record == null) continue;
+                final Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
+                if(tier == null || !tier.getName().equals(tierName)) continue;
+                final StartEnd tierRange = new StartEnd(elem.getStartOffset(), elem.getEndOffset());
+                if(!tierRange.valid()) continue;
+
+                // get attributes of the next paragraph element
+                AttributeSet nextAttrs = null;
+                if(i+1 < getDefaultRootElement().getElementCount()) {
+                    final Element nextEle = getDefaultRootElement().getElement(i+1);
+                    nextAttrs = new SimpleAttributeSet(nextEle.getAttributes());
+                }
+                setBypassDocumentFilter(true);
+                remove(tierRange.start(), tierRange.length());
+                setBypassDocumentFilter(false);
+                madeChange = true;
+                if(nextAttrs != null) {
+                    setParagraphAttributes(tierRange.start(), 0, nextAttrs, true);
+                }
+            }
+            if(madeChange) {
+                updateGlobalParagraphAttributes();
+            }
+        } catch (BadLocationException e) {
+            LogUtil.severe(e);
+        } finally {
+            setBypassDocumentFilter(false);
         }
     }
 
