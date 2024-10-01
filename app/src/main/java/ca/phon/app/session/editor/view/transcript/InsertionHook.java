@@ -42,4 +42,7 @@ public interface InsertionHook {
     List<DefaultStyledDocument.ElementSpec> startTier();
 
     List<DefaultStyledDocument.ElementSpec> endTier(MutableAttributeSet attrs);
+
+    // called when a tier has been removed from the document
+    void tierRemoved(TranscriptDocument doc, String tierName);
 }

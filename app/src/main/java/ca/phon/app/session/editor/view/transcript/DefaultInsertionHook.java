@@ -107,4 +107,8 @@ public abstract class DefaultInsertionHook implements InsertionHook {
     public List<DefaultStyledDocument.ElementSpec> endTier(MutableAttributeSet attrs) {
         return EMPTY_LIST;
     }
+
+    @Override
+    public void tierRemoved(TranscriptDocument doc, String tierName) {
+    }
 }

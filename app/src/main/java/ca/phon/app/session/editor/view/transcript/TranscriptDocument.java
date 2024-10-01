@@ -1573,7 +1573,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 final Element elem = getDefaultRootElement().getElement(i);
                 final AttributeSet attrs = getParagraphAttributes(i);
                 final String elementType = TranscriptStyleConstants.getElementType(attrs);
-                if(!TranscriptStyleConstants.ELEMENT_TYPE_RECORD.equals(elementType)) {
+                if(!TranscriptStyleConstants.ELEMENT_TYPE_RECORD.equals(elementType) && !TranscriptStyleConstants.ELEMENT_TYPE_BLIND_TRANSCRIPTION.equals(elementType)) {
                     continue;
                 }
                 final Record record = TranscriptStyleConstants.getRecord(attrs);
@@ -1598,6 +1598,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 }
             }
             if(madeChange) {
+                getInsertionHooks().forEach(hook -> hook.tierRemoved(this, tierName));
                 updateGlobalParagraphAttributes();
             }
         } catch (BadLocationException e) {
