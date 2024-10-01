@@ -1453,12 +1453,12 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         var startTierView = data.oldTierView();
         var endTierView = data.newTierView();
 
-        List<TierViewItem> movedTiers = new ArrayList<>();
-        for (int i = 0; i < startTierView.size(); i++) {
-            if (!startTierView.get(i).equals(endTierView.get(i))) {
-                movedTiers.add(startTierView.get(i));
-            }
-        }
+//        List<TierViewItem> movedTiers = new ArrayList<>();
+//        for (int i = 0; i < startTierView.size(); i++) {
+//            if (!startTierView.get(i).equals(endTierView.get(i))) {
+//                movedTiers.add(startTierView.get(i));
+//            }
+//        }
 
         TranscriptDocument doc = getTranscriptDocument();
 
@@ -1469,25 +1469,90 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         Tier<?> caretTier = TranscriptStyleConstants.getTier(attrs);
         int caretTierOffset = -1;
 
-        if (caretTier != null) {
-            String caretTierName = caretTier.getName();
-            boolean caretTierHasMoved = movedTiers.stream().anyMatch(item -> item.getTierName().equals(caretTierName));
-            if (caretTierHasMoved) {
-                caretTierOffset = startCaretPos - elem.getStartOffset();
+//        if (caretTier != null) {
+//            String caretTierName = caretTier.getName();
+//            boolean caretTierHasMoved = movedTiers.stream().anyMatch(item -> item.getTierName().equals(caretTierName));
+//            if (caretTierHasMoved) {
+//                caretTierOffset = startCaretPos - elem.getStartOffset();
+//            }
+//        }
+
+//        Document blank = getEditorKit().createDefaultDocument();
+//        setDocument(blank);
+        // Move tier in doc
+        getTranscriptEditorCaret().freeze();
+
+        boolean forceReload = false;
+        for(int pIdx = doc.getDefaultRootElement().getElementCount()-1; pIdx >= 0; pIdx--) {
+            // if pIdx is a record tier with given name, delete tier range and insert at new position
+            final Element pElem = doc.getDefaultRootElement().getElement(pIdx);
+            if(pElem.getElementCount() == 0) continue;
+            // grab attributes from our paragraph anchor
+            final Element pInnerElem = pElem.getElement(0);
+            final AttributeSet pAttrs = pInnerElem.getAttributes();
+            final String elementType = TranscriptStyleConstants.getElementType(pAttrs);
+            if(elementType != null && elementType.equals(TranscriptStyleConstants.ELEMENT_TYPE_RECORD)) {
+                final Record record = TranscriptStyleConstants.getRecord(pAttrs);
+                final Tier<?> tier = TranscriptStyleConstants.getTier(pAttrs);
+                if(tier == null) continue;
+                final String tierName = tier.getName();
+                if(data.tierNames().contains(tierName)) {
+                    final int recordIndex = getSession().getRecordPosition(TranscriptStyleConstants.getRecord(pAttrs));
+                    if(recordIndex < 0) continue;
+                    final TranscriptDocument.StartEnd tierStartEnd = doc.getTierStartEnd(recordIndex, tierName);
+                    if(tierStartEnd.valid()) {
+                        try {
+                            doc.setBypassDocumentFilter(true);
+                            // remove tier
+                            doc.remove(tierStartEnd.start(), tierStartEnd.end() - tierStartEnd.start());
+                            doc.setBypassDocumentFilter(false);
+                            // insert tier at new position
+                            final int newTierIndex = data.viewIndices().get(1);
+                            // find paragraph index for record and add tier index to it
+                            final int recordParagraphIdx = doc.findParagraphElementIndexForSessionElementIndex(
+                                    getSession().getTranscript().getRecordElementIndex(recordIndex));
+                            final int newParagraphIdx = recordParagraphIdx + newTierIndex;
+                            int insertPosition = 0;
+                            if(newParagraphIdx - 1 >= 0) {
+                                final Element prevParagraph = doc.getDefaultRootElement().getElement(newParagraphIdx - 1);
+                                insertPosition = prevParagraph.getEndOffset();
+                            }
+                            final TranscriptBatchBuilder builder = new TranscriptBatchBuilder(doc);
+                            final TierViewItem tvi = getSession().getTierView().stream().filter(tv -> tv.getTierName().equals(tierName)).findFirst().orElse(null);
+                            final SimpleAttributeSet newAttrs = new SimpleAttributeSet();
+                            TranscriptStyleConstants.setElementType(newAttrs, TranscriptStyleConstants.ELEMENT_TYPE_RECORD);
+                            TranscriptStyleConstants.setRecord(newAttrs, record);
+                            TranscriptStyleConstants.setTier(newAttrs, tier);
+                            builder.appendTier(getSession(), record, tier, tvi, getDataModel().getTranscriber(), doc.isChatTierNamesShown(), newAttrs);
+                            builder.appendEOL(builder.getTrailingAttributes());
+
+                            doc.processBatchUpdates(insertPosition, builder.getBatch());
+                        } catch (BadLocationException e) {
+                            forceReload = true;
+                            LogUtil.severe(e);
+                            break;
+                        }
+                    }
+
+                }
             }
+
         }
 
-        Document blank = getEditorKit().createDefaultDocument();
-        setDocument(blank);
-        // Move tier in doc
-        doc.reload();
-        setDocument(doc);
+        if(forceReload) {
+            doc.reload();
+        }
 
-        // TODO Correct caret
-//        if (caretTierOffset > -1) {
-//            // Move the caret so that it has the same offset from the tiers new pos
-//            setCaretPosition(doc.getTierContentStart(caretTier) + caretTierOffset);
-//        }
+        getTranscriptEditorCaret().unfreeze();
+
+        // Correct caret
+        if (caretTierOffset > -1) {
+            Record caretRecord = TranscriptStyleConstants.getRecord(attrs);
+            int caretRecordIndex = getSession().getRecordPosition(caretRecord);
+            if (caretRecordIndex < 0) return;
+            // Move the caret so that it has the same offset from the tiers new pos
+            setCaretPosition(doc.getTierContentStart(caretRecordIndex, caretTier.getName()) + caretTierOffset);
+        }
     }
 
     /**
@@ -2430,13 +2495,15 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                             if (tier != null) {
                                 final TranscriptDocument.StartEnd tierContentRange = getTranscriptDocument().getTierContentStartEnd(
                                         getSession().getTranscript().getRecordIndex(oldLoc.transcriptElementIndex()), tier.getName());
-                                try {
-                                    final String currentText = getTranscriptDocument().getText(tierContentRange.start(), tierContentRange.length());
-                                    if (!tier.toString().equals(currentText)) {
-                                        changeTierData(record, tier, currentText);
+                                if(tierContentRange.valid()) {
+                                    try {
+                                        final String currentText = getTranscriptDocument().getText(tierContentRange.start(), tierContentRange.length());
+                                        if (!tier.toString().equals(currentText)) {
+                                            changeTierData(record, tier, currentText);
+                                        }
+                                    } catch (BadLocationException e) {
+                                        LogUtil.warning(e);
                                     }
-                                } catch (BadLocationException e) {
-                                    LogUtil.warning(e);
                                 }
                             }
                         } else if (transcriptElement.isGem()) {
