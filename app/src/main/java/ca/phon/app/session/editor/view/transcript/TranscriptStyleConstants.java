@@ -18,6 +18,9 @@ import java.util.function.Consumer;
  */
 public class TranscriptStyleConstants {
 
+    /**
+     * Record associated with a paragraph
+     */
     public static final String ATTR_KEY_RECORD = "record";
 
     public static Record getRecord(AttributeSet attrs) {
@@ -30,6 +33,9 @@ public class TranscriptStyleConstants {
             attrs.addAttribute(ATTR_KEY_RECORD, record);
     }
 
+    /**
+     * Tier associated with a paragraph
+     */
     public static final String ATTR_KEY_TIER = "tier";
 
     public static Tier<?> getTier(AttributeSet attrs) {
@@ -40,6 +46,21 @@ public class TranscriptStyleConstants {
         attrs.removeAttribute(ATTR_KEY_TIER);
         if(tier != null)
             attrs.addAttribute(ATTR_KEY_TIER, tier);
+    }
+
+    /**
+     * Parent tier of a paragraph
+     */
+    public static final String ATTR_KEY_PARENT_TIER = "parentTier";
+
+    public static Tier<?> getParentTier(AttributeSet attrs) {
+        return (Tier<?>)attrs.getAttribute(ATTR_KEY_PARENT_TIER);
+    }
+
+    public static void setParentTier(MutableAttributeSet attrs, Tier<?> parentTier) {
+        attrs.removeAttribute(ATTR_KEY_PARENT_TIER);
+        if(parentTier != null)
+            attrs.addAttribute(ATTR_KEY_PARENT_TIER, parentTier);
     }
 
     public static final String ATTR_KEY_COMMENT = "comment";

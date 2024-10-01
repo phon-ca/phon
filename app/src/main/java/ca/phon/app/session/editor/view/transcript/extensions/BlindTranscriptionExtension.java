@@ -29,22 +29,19 @@ public class BlindTranscriptionExtension implements TranscriptEditorExtension {
         doc.addInsertionHook(new DefaultInsertionHook() {
             @Override
             public void tierRemoved(TranscriptDocument doc, String tierName) {
-                final TierDescription td = doc.getSession().getTiers().stream().filter(t -> t.getName().equals(tierName)).findFirst().orElse(null);
-                if(td == null || !td.isBlind()) return;
-                for(Transcriber transcriber:doc.getSession().getTranscribers()) {
-                    final String tierId = tierName + "__" + transcriber.getUsername();
-                    doc.removeTier(tierId);
-                }
+//                final TierDescription td = doc.getSession().getTiers().stream().filter(t -> t.getName().equals(tierName)).findFirst().orElse(null);
+//                if(td == null || !td.isBlind()) return;
+//                for(Transcriber transcriber:doc.getSession().getTranscribers()) {
+//                    final String tierId = tierName + "__" + transcriber.getUsername();
+//                    doc.removeTier(tierId);
+//                }
             }
 
             @Override
             public List<DefaultStyledDocument.ElementSpec> endTier(MutableAttributeSet attrs) {
-
                 List<DefaultStyledDocument.ElementSpec> retVal = new ArrayList<>();
-
-                Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
-                Record record = (Record) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
-
+                Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
+                Record record = TranscriptStyleConstants.getRecord(attrs);
                 if (isValidationMode() && tier.isBlind()) {
                     List<String> transcribers = tier.getTranscribers();
                     final TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(doc);
@@ -57,6 +54,7 @@ public class BlindTranscriptionExtension implements TranscriptEditorExtension {
                                 tier.getName() + "__" + transcriber, tier.getDeclaredType());
                         transcriberTier.setValue(tier.getBlindTranscription(transcriber));
                         blindAttrs.addAttributes(doc.getTranscriptStyleContext().getTierAttributes(transcriberTier));
+                        TranscriptStyleConstants.setParentTier(blindAttrs, tier);
 
                         // get tvi for tier
                         final TierViewItem tierViewItem = editor.getSession().getTierView().stream().filter(tvi -> tvi.getTierName().equals(tier.getName())).findFirst().orElse(

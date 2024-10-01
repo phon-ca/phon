@@ -1579,7 +1579,13 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 final Record record = TranscriptStyleConstants.getRecord(attrs);
                 if(record == null) continue;
                 final Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
-                if(tier == null || !tier.getName().equals(tierName)) continue;
+                if(tier == null || !tier.getName().equals(tierName)) {
+                    // check if a dependent tier of the tier we are removing
+                    final Tier<?> parentTier = TranscriptStyleConstants.getParentTier(attrs);
+                    if(parentTier == null || !parentTier.getName().equals(tierName)) {
+                        continue;
+                    }
+                }
                 final StartEnd tierRange = new StartEnd(elem.getStartOffset(), elem.getEndOffset());
                 if(!tierRange.valid()) continue;
 

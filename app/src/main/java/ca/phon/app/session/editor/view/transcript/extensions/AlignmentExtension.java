@@ -50,6 +50,7 @@ public class AlignmentExtension implements TranscriptEditorExtension {
                     final SimpleAttributeSet tierAttrs = new SimpleAttributeSet();
                     TranscriptStyleConstants.setElementType(tierAttrs, TranscriptStyleConstants.ELEMENT_TYPE_RECORD);
                     TranscriptStyleConstants.setRecord(tierAttrs, record);
+                    TranscriptStyleConstants.setParentTier(tierAttrs, tier);
                     TranscriptStyleConstants.setTier(tierAttrs, record.getPhoneAlignmentTier());
                     batchBuilder.appendTierLabel(editor.getSession(), record, record.getPhoneAlignmentTier(), record.getPhoneAlignmentTier().getName(), null, doc.isChatTierNamesShown(), tierAttrs);
                     batchBuilder.appendAll(getFormattedAlignment(record, record.getPhoneAlignmentTier(), editor.getDataModel().getTranscriber(), tierAttrs));
