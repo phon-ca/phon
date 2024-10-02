@@ -770,6 +770,7 @@ public class TranscriptBatchBuilder {
             } else {
                 appendTier(session, record, tier, item, transcriber, chatTierNamesShown, recordAttrs);
             }
+            appendEOL();
 
             for (var hook : getInsertionHooks()) {
                 additionalInsertions.addAll(hook.endTier(getTrailingAttributes()));
@@ -778,7 +779,6 @@ public class TranscriptBatchBuilder {
                 appendAll(additionalInsertions);
                 additionalInsertions.clear();
             }
-            appendEOL();
         }
 
         for (var hook : getInsertionHooks()) {

@@ -30,6 +30,7 @@ import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 import org.jdesktop.swingx.HorizontalLayout;
 import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.JXTree;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -70,6 +71,10 @@ public class TranscriptView extends EditorView {
     private final static int FONT_SIZE_DELTA_MAX = 8;
     public float fontSizeDelta = PrefHelper.getFloat(FONT_SIZE_DELTA_PROP, DEFAULT_FONT_SIZE_DELTA);
     private boolean findAndReplaceVisible = false;
+
+    /** Transcript tree view (debug mode) */
+    private JPanel transcriptTreePanel = null;
+    private JXTree transcriptTree = null;
 
     /**
      * Constructor
@@ -1162,9 +1167,38 @@ public class TranscriptView extends EditorView {
         viewMetadataItem.setAction(viewMetadataAct);
         menuBuilder.addItem(".", viewMetadataItem);
 
-        menuBuilder.addItem(".", new ShowTranscriptTreeAction(getEditor(),this));
+        if(PrefHelper.isDebugMode()) {
+        final PhonUIAction<Void> showTranscriptTreeAct = PhonUIAction.runnable(this::onToggleTranscriptTree);
+        showTranscriptTreeAct.putValue(PhonUIAction.NAME, "Toggle transcript tree");
+        menuBuilder.addItem(".", showTranscriptTreeAct);
+        }
 
         return retVal;
+    }
+
+    private void onToggleTranscriptTree() {
+        if (transcriptTree == null) {
+            final TranscriptDocumentTreeModel treeModel = new TranscriptDocumentTreeModel(getTranscriptEditor().getTranscriptDocument());
+            transcriptTree = new JXTree(treeModel);
+            transcriptTree.setRootVisible(false);
+        }
+        if(transcriptTreePanel == null) {
+            transcriptTreePanel = new JPanel(new BorderLayout());
+            transcriptTreePanel.add(new JScrollPane(transcriptTree), BorderLayout.CENTER);
+            transcriptTreePanel.setPreferredSize(new Dimension(500, 0));
+            add(transcriptTreePanel, BorderLayout.EAST);
+            revalidate();
+
+            SwingUtilities.invokeLater(() -> {
+                transcriptTree.expandRow(0);
+            });
+        } else {
+            if(transcriptTreePanel.isVisible()) {
+                transcriptTreePanel.setVisible(false);
+            } else {
+                transcriptTreePanel.setVisible(true);
+            }
+        }
     }
 
     private void onEditorFinishedLoading(EditorEvent<Void> event) {

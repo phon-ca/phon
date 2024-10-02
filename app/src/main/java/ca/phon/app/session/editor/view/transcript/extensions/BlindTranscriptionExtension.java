@@ -29,12 +29,6 @@ public class BlindTranscriptionExtension implements TranscriptEditorExtension {
         doc.addInsertionHook(new DefaultInsertionHook() {
             @Override
             public void tierRemoved(TranscriptDocument doc, String tierName) {
-//                final TierDescription td = doc.getSession().getTiers().stream().filter(t -> t.getName().equals(tierName)).findFirst().orElse(null);
-//                if(td == null || !td.isBlind()) return;
-//                for(Transcriber transcriber:doc.getSession().getTranscribers()) {
-//                    final String tierId = tierName + "__" + transcriber.getUsername();
-//                    doc.removeTier(tierId);
-//                }
             }
 
             @Override
@@ -45,7 +39,6 @@ public class BlindTranscriptionExtension implements TranscriptEditorExtension {
                 if (isValidationMode() && tier.isBlind()) {
                     List<String> transcribers = tier.getTranscribers();
                     final TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(doc);
-                    batchBuilder.appendEOL();
                     batchBuilder.setTrailingAttributes(attrs);
                     for (String transcriber : transcribers) {
                         final SimpleAttributeSet blindAttrs = doc.getTranscriptStyleContext().getBlindTranscriptionAttributes(tier, transcriber);

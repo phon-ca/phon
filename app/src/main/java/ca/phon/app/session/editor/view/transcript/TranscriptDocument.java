@@ -329,6 +329,31 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         return -1;
     }
 
+    /**
+     * Find final paragraph index for tier including dependent tiers.
+     *
+     * @param elementIndex
+     * @param tierName
+     * @return
+     */
+    public int findLastParagraphIndexForTier(int elementIndex, String tierName) {
+        final int firstParagraphIndex = findParagraphElementIndexForTier(elementIndex, tierName);
+        if(firstParagraphIndex == -1) return firstParagraphIndex;
+        int lastParagraphIndex = firstParagraphIndex;
+        for(int i = firstParagraphIndex + 1; i < getDefaultRootElement().getElementCount(); i++) {
+            AttributeSet attrs = getParagraphAttributes(i);
+            Record currentRecord = TranscriptStyleConstants.getRecord(attrs);
+            if(currentRecord == null) break;
+            Tier<?> tier = TranscriptStyleConstants.getParentTier(attrs);
+            if(tier != null && tier.getName().equals(tierName)) {
+                lastParagraphIndex = i;
+            } else {
+                break;
+            }
+        }
+        return lastParagraphIndex;
+    }
+
     public AttributeSet getParagraphAttributes(int paragraphIdx) {
         AttributeSet retVal = new SimpleAttributeSet();
         if(paragraphIdx < 0 || paragraphIdx >= getDefaultRootElement().getElementCount()) return retVal;
@@ -1524,7 +1549,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     }
 
     /**
-     * Insert tier for all records
+     * Insert tier at given tier view index for all records using the provided supplier
      *
      * @param tierName
      * @param tierSupplier
@@ -1534,24 +1559,52 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             final Transcript.Element element = session.getTranscript().getElementAt(sessionEleIdx);
             if(!element.isRecord()) continue;
             final Record record = element.asRecord();
+            final int recordIndex = session.getRecordPosition(record);
             final Tier<?> tier = tierSupplier.apply(record);
             if(tier == null) continue;
             final int recordParagraphIdx = findParagraphElementIndexForSessionElementIndex(sessionEleIdx);
-            final int tierParagraphIdx = recordParagraphIdx + tierIndex;
+            int tierParagraphOffset = -1;
+            if(tierIndex > 0) {
+                // find end of previous tier in view
+                final int prevTierIdx = tierIndex - 1;
+                final TierViewItem tierViewItem = session.getTierView().get(prevTierIdx);
+                final int firstParagraphIndex = findParagraphElementIndexForTier(recordIndex, tierViewItem.getTierName());
+                final int lastParagraphIndex = findLastParagraphIndexForTier(recordIndex, tierViewItem.getTierName());
+                tierParagraphOffset = lastParagraphIndex - recordParagraphIdx;
+            }
+            final int tierParagraphIdx = recordParagraphIdx + tierParagraphOffset;
 
-            final Element prevTierEle = getDefaultRootElement().getElement(tierParagraphIdx-1);
+            final Element prevTierEle = getDefaultRootElement().getElement(tierParagraphIdx);
             final AttributeSet prevAttrs = prevTierEle.getElementCount() > 0
                     ? prevTierEle.getElement(prevTierEle.getElementCount()-1).getAttributes()
                     : prevTierEle.getAttributes();
             int insertPosition = prevTierEle.getEndOffset();
             final TranscriptBatchBuilder builder = new TranscriptBatchBuilder(this);
+            builder.setTrailingAttributes(prevAttrs);
             final TierViewItem tvi = getSession().getTierView().stream().filter(tv -> tv.getTierName().equals(tierName)).findFirst().orElse(null);
             final SimpleAttributeSet newAttrs = new SimpleAttributeSet();
             TranscriptStyleConstants.setElementType(newAttrs, TranscriptStyleConstants.ELEMENT_TYPE_RECORD);
             TranscriptStyleConstants.setRecord(newAttrs, record);
             TranscriptStyleConstants.setTier(newAttrs, tier);
+
+            List<ElementSpec> startTierSpec = new ArrayList<>();
+            for(var insertionHook:getInsertionHooks()) {
+                startTierSpec.addAll(insertionHook.startTier());
+            }
+            if(startTierSpec.size() > 0) {
+                builder.appendAll(startTierSpec);
+            }
+
             builder.appendTier(getSession(), record, tier, tvi, getTranscriber(), isChatTierNamesShown(), newAttrs);
             builder.appendEOL(builder.getTrailingAttributes());
+
+            List<ElementSpec> endTierSpec = new ArrayList<>();
+            for(var insertionHook:getInsertionHooks()) {
+                endTierSpec.addAll(insertionHook.endTier(builder.getTrailingAttributes()));
+            }
+            if(endTierSpec.size() > 0) {
+                builder.appendAll(endTierSpec);
+            }
 
             try {
                 processBatchUpdates(insertPosition, builder.getBatch());

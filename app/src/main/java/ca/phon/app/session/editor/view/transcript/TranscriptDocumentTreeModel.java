@@ -1,17 +1,22 @@
 package ca.phon.app.session.editor.view.transcript;
 
+import ca.phon.session.Comment;
+import ca.phon.session.Gem;
+import ca.phon.session.Record;
+
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Element;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
-import javax.swing.tree.TreeNode;
 
 public class TranscriptDocumentTreeModel extends DefaultTreeModel {
 
     private final TranscriptDocument document;
+
+    private int currentRecordIndex = -1;
+    private MutableTreeNode currentTranscriptEleNode;
 
     public TranscriptDocumentTreeModel(TranscriptDocument document) {
         super(new TranscriptDocumentRootNode(document));
@@ -22,20 +27,41 @@ public class TranscriptDocumentTreeModel extends DefaultTreeModel {
 
     private void buildTree() {
         final TranscriptDocumentRootNode rootNode = (TranscriptDocumentRootNode)getRoot();
-        for(Element documentEle:document.getRootElements()) {
-            final TranscriptDocumentNode documentNode = new TranscriptDocumentNode(documentEle);
-            rootNode.add(documentNode);
-            buildTree(documentNode, documentEle);
-        }
+        final TranscriptDocumentNode documentNode = new TranscriptDocumentNode(document.getRootElements()[0]);
+        rootNode.add(documentNode);
+        buildTree(documentNode, document.getRootElements()[0]);
     }
 
     private void buildTree(TranscriptDocumentNode parent, Element ele) {
         for(int i = 0; i < ele.getElementCount(); i++) {
             final Element childEle = ele.getElement(i);
-            final TranscriptDocumentNode childNode = new TranscriptDocumentNode(childEle);
-            parent.add(childNode);
-            if(childEle.isLeaf()) continue;
-            buildTree(childNode, childEle);
+            final String eleName = childEle.getName();
+            if(childEle.getElementCount() > 0) {
+                final AttributeSet paragraphAttrs = childEle.getElement(0).getAttributes();
+                final String elementType = TranscriptStyleConstants.getElementType(paragraphAttrs);
+                if (TranscriptStyleConstants.ELEMENT_TYPE_RECORD.equals(elementType) ||
+                        TranscriptStyleConstants.ELEMENT_TYPE_BLIND_TRANSCRIPTION.equals(elementType)) {
+                    final Record record = TranscriptStyleConstants.getRecord(paragraphAttrs);
+                    int recordIndex = document.getSession().getRecordPosition(record);
+                    if (recordIndex != currentRecordIndex) {
+                        currentRecordIndex = recordIndex;
+                        currentTranscriptEleNode = new DefaultMutableTreeNode("Record " + (recordIndex + 1));
+                        parent.add(currentTranscriptEleNode);
+                    }
+                    final TranscriptDocumentNode childNode = new TranscriptDocumentNode(childEle);
+                    currentTranscriptEleNode.insert(childNode, currentTranscriptEleNode.getChildCount());
+                    if (childEle.isLeaf()) continue;
+                    buildTree(childNode, childEle);
+                } else {
+                    final TranscriptDocumentNode childNode = new TranscriptDocumentNode(childEle);
+                    parent.add(childNode);
+                    if (childEle.isLeaf()) continue;
+                    buildTree(childNode, childEle);
+                }
+            } else {
+                final TranscriptDocumentNode childNode = new TranscriptDocumentNode(childEle);
+                parent.add(childNode);
+            }
         }
     }
 
@@ -76,13 +102,28 @@ public class TranscriptDocumentTreeModel extends DefaultTreeModel {
             if("paragraph".equals(name) || ele.isLeaf()) {
                 try {
                     text = document.getText(start, end - start);
+                    if(text.equals("\n")) {
+                        text = "<newline>";
+                    } else if(text.equals("\t")) {
+                        text = "<tab>";
+                    } else if(text.length() == 0) {
+                        text = "<empty>";
+                    } else if("\u2029".equals(text)) {
+                        text = "<new tier>";
+                    } else if(text.startsWith("\u2029")) {
+                        text = text.substring(1).trim();
+                    } else {
+                        text = text.trim();
+                    }
                 } catch (BadLocationException e) {
                 }
+            } else if("section".equals(name)) {
+                text = "session";
             }
-            return name + " [" + start + ", " + end + "] " + text;
+            if(text.length() > 40) {
+                text = text.substring(0, 40) + "...";
+            }
+            return "[" + start + ", " + end + "] " + text;
         }
-
     }
-
-
 }
