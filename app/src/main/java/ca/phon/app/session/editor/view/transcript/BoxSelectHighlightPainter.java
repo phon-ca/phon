@@ -1,6 +1,7 @@
 package ca.phon.app.session.editor.view.transcript;
 
 import ca.phon.app.log.LogUtil;
+import ca.phon.util.PrefHelper;
 
 import javax.swing.*;
 import javax.swing.text.*;
@@ -28,7 +29,8 @@ public class BoxSelectHighlightPainter implements Highlighter.HighlightPainter {
                     final AttributeSet attrs = ele.getAttributes();
                     if (StyleConstants.getFontFamily(attrs) != null && StyleConstants.getFontSize(attrs) > 0) {
                         int style = (StyleConstants.isBold(attrs) ? Font.BOLD : 0) | (StyleConstants.isItalic(attrs) ? Font.ITALIC : 0);
-                        final Font f = new Font(StyleConstants.getFontFamily(attrs), style, StyleConstants.getFontSize(attrs));
+                        int fontSizeDelta = PrefHelper.getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0.0f).intValue();
+                        final Font f = new Font(StyleConstants.getFontFamily(attrs), style, StyleConstants.getFontSize(attrs) + fontSizeDelta);
                         actualLineHeight = g.getFontMetrics(f).getHeight();
                     }
                 }

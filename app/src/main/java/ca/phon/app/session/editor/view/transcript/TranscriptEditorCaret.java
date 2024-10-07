@@ -112,7 +112,8 @@ public class TranscriptEditorCaret extends DefaultCaret {
                     if(StyleConstants.getFontFamily(attrs) != null && StyleConstants.getFontSize(attrs) > 0) {
                         int style = (StyleConstants.isBold(attrs) ? Font.BOLD : 0) |
                                 (StyleConstants.isItalic(attrs) ? Font.ITALIC : 0);
-                        final Font f = new Font(StyleConstants.getFontFamily(attrs), style, StyleConstants.getFontSize(attrs));
+                        final float fontSizeDelta = PrefHelper.getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0.0f);
+                        final Font f = new Font(StyleConstants.getFontFamily(attrs), style, StyleConstants.getFontSize(attrs) + (int)fontSizeDelta);
                         actualLineHeight = g.getFontMetrics(f).getHeight();
                     }
                 }

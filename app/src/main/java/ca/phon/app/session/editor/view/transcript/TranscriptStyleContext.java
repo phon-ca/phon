@@ -141,8 +141,7 @@ public class TranscriptStyleContext extends StyleContext {
             }
         }
         StyleConstants.setFontSize(retVal,
-                StyleConstants.getFontSize(retVal)
-                        + (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
+                StyleConstants.getFontSize(retVal));
 
         return retVal;
     }
@@ -248,8 +247,7 @@ public class TranscriptStyleContext extends StyleContext {
         Style defaultStyle = getStyle(TranscriptStyleContext.DEFAULT);
         retVal.addAttributes(defaultStyle);
         StyleConstants.setBold(retVal, true);
-        StyleConstants.setFontSize(retVal, StyleConstants.getFontSize(defaultStyle)
-                + (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
+        StyleConstants.setFontSize(retVal, StyleConstants.getFontSize(defaultStyle));
 
         return retVal;
     }
@@ -420,8 +418,7 @@ public class TranscriptStyleContext extends StyleContext {
 
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE, TranscriptStyleConstants.ATTR_KEY_GEM);
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_GEM, gem);
-        StyleConstants.setFontSize(retVal, StyleConstants.getFontSize(retVal) +
-                (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
+        StyleConstants.setFontSize(retVal, StyleConstants.getFontSize(retVal));
 
         return retVal;
     }
@@ -436,8 +433,7 @@ public class TranscriptStyleContext extends StyleContext {
         SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
         TranscriptStyleConstants.setElementType(retVal, TranscriptStyleConstants.ELEMENT_TYPE_COMMENT);
         TranscriptStyleConstants.setComment(retVal, comment);
-        StyleConstants.setFontSize(retVal, StyleConstants.getFontSize(retVal) +
-                (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
+        StyleConstants.setFontSize(retVal, StyleConstants.getFontSize(retVal));
         return retVal;
     }
 
@@ -484,8 +480,7 @@ public class TranscriptStyleContext extends StyleContext {
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE, true);
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_EDITABLE, true);
         StyleConstants.setBold(retVal, true);
-        StyleConstants.setFontSize(retVal, StyleConstants.getFontSize(retVal) +
-                (int) PrefHelper.getUserPreferences().getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0));
+        StyleConstants.setFontSize(retVal, StyleConstants.getFontSize(retVal));
 
         return retVal;
     }
