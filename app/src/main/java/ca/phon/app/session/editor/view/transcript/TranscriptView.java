@@ -1168,9 +1168,9 @@ public class TranscriptView extends EditorView {
         menuBuilder.addItem(".", viewMetadataItem);
 
         if(PrefHelper.isDebugMode()) {
-        final PhonUIAction<Void> showTranscriptTreeAct = PhonUIAction.runnable(this::onToggleTranscriptTree);
-        showTranscriptTreeAct.putValue(PhonUIAction.NAME, "Toggle transcript tree");
-        menuBuilder.addItem(".", showTranscriptTreeAct);
+            final PhonUIAction<Void> showTranscriptTreeAct = PhonUIAction.runnable(this::onToggleTranscriptTree);
+            showTranscriptTreeAct.putValue(PhonUIAction.NAME, "Toggle transcript tree");
+            menuBuilder.addItem(".", showTranscriptTreeAct);
         }
 
         return retVal;
@@ -1184,6 +1184,20 @@ public class TranscriptView extends EditorView {
         }
         if(transcriptTreePanel == null) {
             transcriptTreePanel = new JPanel(new BorderLayout());
+            IconStrip iconStrip = new IconStrip();
+            transcriptTreePanel.add(iconStrip, BorderLayout.NORTH);
+            final PhonUIAction rebuildTreeAct = PhonUIAction.runnable(() -> {
+                transcriptTree.setModel(new TranscriptDocumentTreeModel(getTranscriptEditor().getTranscriptDocument()));
+                SwingUtilities.invokeLater(() -> {
+                    transcriptTree.expandRow(0);
+                });
+            });
+            rebuildTreeAct.putValue(PhonUIAction.NAME, "Rebuild tree");
+            rebuildTreeAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+            rebuildTreeAct.putValue(FlatButton.ICON_NAME_PROP, "refresh");
+            rebuildTreeAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+            iconStrip.add(rebuildTreeAct, IconStrip.IconStripPosition.LEFT);
+
             transcriptTreePanel.add(new JScrollPane(transcriptTree), BorderLayout.CENTER);
             transcriptTreePanel.setPreferredSize(new Dimension(500, 0));
             add(transcriptTreePanel, BorderLayout.EAST);
