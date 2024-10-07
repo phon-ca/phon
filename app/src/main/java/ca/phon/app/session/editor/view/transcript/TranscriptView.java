@@ -107,6 +107,8 @@ public class TranscriptView extends EditorView {
 
         addPropertyChangeListener("fontSizeDelta", e -> {
             PrefHelper.getUserPreferences().putFloat(FONT_SIZE_DELTA_PROP, getFontSizeDelta());
+            transcriptEditor.getTranscriptDocument().updateGlobalParagraphAttributes();
+            transcriptEditor.revalidate();
             transcriptEditor.repaint();
         });
         setupKeyboardShortcuts();
@@ -442,7 +444,7 @@ public class TranscriptView extends EditorView {
             public void mouseClicked(MouseEvent e) {
                 if (fontSizeDelta != scaleSlider.getValue()) {
                     setFontSizeDelta(scaleSlider.getValue());
-                    transcriptEditor.getTranscriptDocument().reload();
+//                    transcriptEditor.getTranscriptDocument().reload();
                 }
             }
 
@@ -450,7 +452,7 @@ public class TranscriptView extends EditorView {
             public void mouseReleased(MouseEvent e) {
                 if (fontSizeDelta != scaleSlider.getValue()) {
                     setFontSizeDelta(scaleSlider.getValue());
-                    transcriptEditor.getTranscriptDocument().reload();
+//                    transcriptEditor.getTranscriptDocument().reload();
                 }
             }
         });
@@ -468,7 +470,7 @@ public class TranscriptView extends EditorView {
             scaleSlider.setValue(0);
             if (fontSizeDelta != scaleSlider.getValue()) {
                 setFontSizeDelta(0);
-                transcriptEditor.getTranscriptDocument().reload();
+//                transcriptEditor.getTranscriptDocument().reload();
             }
         });
         useDefaultFontSizeAct.putValue(PhonUIAction.NAME, "Use default font size");

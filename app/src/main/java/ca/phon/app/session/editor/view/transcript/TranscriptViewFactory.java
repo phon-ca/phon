@@ -1,6 +1,7 @@
 package ca.phon.app.session.editor.view.transcript;
 
 import ca.phon.ui.fonts.FontPreferences;
+import ca.phon.util.PrefHelper;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -237,6 +238,14 @@ public class TranscriptViewFactory implements ViewFactory {
         }
 
         @Override
+        public Font getFont() {
+            final Font font = super.getFont();
+            final float fontSizeDelta = PrefHelper.getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0.0f);
+            final float newFontSize = Math.max(Math.min(font.getSize() + fontSizeDelta, 72.0f), 6.0f);
+            return font.deriveFont(newFontSize);
+        }
+
+        @Override
         public void paint(Graphics g, Shape a) {
             g.clearRect(a.getBounds().x, a.getBounds().y, a.getBounds().width, a.getBounds().height);
             // XXX - this is a hack to get the background color to paint correctly, not working on windows
@@ -355,6 +364,14 @@ public class TranscriptViewFactory implements ViewFactory {
                 return super.getPreferredSpan(axis);
             }
         }
+
+        @Override
+        public Font getFont() {
+            final Font font = super.getFont();
+            final float fontSizeDelta = PrefHelper.getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0.0f);
+            final float newFontSize = Math.max(Math.min(font.getSize() + fontSizeDelta, 72.0f), 6.0f);
+            return font.deriveFont(newFontSize);
+        }
     }
 
     /**
@@ -364,6 +381,14 @@ public class TranscriptViewFactory implements ViewFactory {
     static class CustomWrapView extends LabelView {
         public CustomWrapView(Element elem) {
             super(elem);
+        }
+
+        @Override
+        public Font getFont() {
+            final Font font = super.getFont();
+            final float fontSizeDelta = PrefHelper.getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0.0f);
+            final float newFontSize = Math.max(Math.min(font.getSize() + fontSizeDelta, 72.0f), 6.0f);
+            return font.deriveFont(newFontSize);
         }
 
         @Override
