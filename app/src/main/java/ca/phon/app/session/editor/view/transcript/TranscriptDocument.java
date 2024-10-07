@@ -336,7 +336,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @param tierName
      * @return
      */
-    public int findLastParagraphIndexForTier(int elementIndex, String tierName) {
+    public int findLastParagraphElementIndexForTier(int elementIndex, String tierName) {
         final int firstParagraphIndex = findParagraphElementIndexForTier(elementIndex, tierName);
         if(firstParagraphIndex == -1) return firstParagraphIndex;
         int lastParagraphIndex = firstParagraphIndex;
@@ -1556,8 +1556,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
     public void addTier(String tierName, int tierIndex, Function<Record, Tier<?>> tierSupplier) {
         for(int sessionEleIdx = 0; sessionEleIdx < session.getTranscript().getNumberOfElements(); sessionEleIdx++) {
             final Transcript.Element element = session.getTranscript().getElementAt(sessionEleIdx);
-            if(!element.isRecord())
-                continue;
+            if(!element.isRecord()) continue;
             final Record record = element.asRecord();
             final int recordIndex = session.getRecordPosition(record);
             final Tier<?> tier = tierSupplier.apply(record);
@@ -1568,7 +1567,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 // find end of previous tier in view
                 final int prevTierIdx = tierIndex - 1;
                 final TierViewItem tierViewItem = session.getTierView().get(prevTierIdx);
-                final int lastParagraphIndex = findLastParagraphIndexForTier(sessionEleIdx, tierViewItem.getTierName());
+                final int lastParagraphIndex = findLastParagraphElementIndexForTier(sessionEleIdx, tierViewItem.getTierName());
                 tierParagraphOffset = lastParagraphIndex - recordParagraphIdx;
             }
             final int tierParagraphIdx = recordParagraphIdx + tierParagraphOffset;
@@ -1580,7 +1579,9 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             int insertPosition = prevTierEle.getEndOffset();
             final TranscriptBatchBuilder builder = new TranscriptBatchBuilder(this);
             builder.setTrailingAttributes(prevAttrs);
-            final TierViewItem tvi = getSession().getTierView().stream().filter(tv -> tv.getTierName().equals(tierName)).findFirst().orElse(null);
+            final TierViewItem tvi = getSession().getTierView().stream()
+                    .filter(tv -> tv.getTierName().equals(tierName))
+                    .findFirst().orElse(null);
             final SimpleAttributeSet newAttrs = new SimpleAttributeSet();
             TranscriptStyleConstants.setElementType(newAttrs, TranscriptStyleConstants.ELEMENT_TYPE_RECORD);
             TranscriptStyleConstants.setRecord(newAttrs, record);
