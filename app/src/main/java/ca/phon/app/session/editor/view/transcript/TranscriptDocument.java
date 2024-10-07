@@ -1608,6 +1608,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
             try {
                 processBatchUpdates(insertPosition, builder.getBatch());
+                updateGlobalParagraphAttributes();
             } catch (BadLocationException e) {
                 LogUtil.severe(e);
             }

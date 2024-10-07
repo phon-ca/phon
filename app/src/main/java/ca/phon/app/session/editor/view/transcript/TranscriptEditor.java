@@ -1761,11 +1761,10 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
 
         if (changedTiers.isEmpty()) return;
 
-        Document blank = getEditorKit().createDefaultDocument();
-        setDocument(blank);
-        // Change tier font in doc
-        doc.reload();
-        setDocument(doc);
+        for(var tvi:changedTiers) {
+            doc.removeTier(tvi.getTierName());
+            doc.addTier(tvi.getTierName(),data.newTierView().indexOf(tvi), record -> record.getTier(tvi.getTierName()));
+        }
 
         setCaretPosition(caretPos);
     }
