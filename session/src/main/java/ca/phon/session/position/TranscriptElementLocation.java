@@ -25,5 +25,7 @@ package ca.phon.session.position;
  * @param charPosition
  */
 public record TranscriptElementLocation(int transcriptElementIndex, String tier, int charPosition) {
-
+    public boolean valid() {
+        return transcriptElementIndex >= -1 && tier != null && charPosition >= 0;
+    }
 }

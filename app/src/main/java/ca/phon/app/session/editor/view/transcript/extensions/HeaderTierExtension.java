@@ -12,6 +12,7 @@ import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.formatter.Formatter;
 import ca.phon.media.MediaLocator;
 import ca.phon.session.*;
+import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.session.tierdata.TierData;
 import ca.phon.ui.CalloutWindow;
 import ca.phon.ui.CommonModuleFrame;
@@ -367,6 +368,7 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
      * @param event the event that caused the change to the tier view
      * */
     public void updateTiersHeader(EditorEvent<EditorEventType.TierViewChangedData> event) {
+        final TranscriptElementLocation startLocation = editor.getCurrentSessionLocation();
         try {
             Tier<TierData> tiersHeaderTier = (Tier<TierData>) headerTierMap.get("tiers");
             if(errorUnderlineHighlights.containsKey(tiersHeaderTier)) {
@@ -394,7 +396,13 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
         catch (BadLocationException e) {
             LogUtil.severe(e);
         } finally {
+            doc.setBypassDocumentFilter(false);
             editor.getTranscriptEditorCaret().unfreeze();
+            if(startLocation.valid()) {
+                final int newPos = editor.sessionLocationToCharPos(startLocation);
+                if(newPos >= 0)
+                    editor.setCaretPosition(newPos);
+            }
         }
     }
 
