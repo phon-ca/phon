@@ -368,7 +368,7 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
      * @param event the event that caused the change to the tier view
      * */
     public void updateTiersHeader(EditorEvent<EditorEventType.TierViewChangedData> event) {
-        final TranscriptElementLocation startLocation = editor.getCurrentSessionLocation();
+        final TranscriptElementLocation startLocation = editor.charPosToSessionLocation(editor.getCaretPosition());
         try {
             Tier<TierData> tiersHeaderTier = (Tier<TierData>) headerTierMap.get("tiers");
             if(errorUnderlineHighlights.containsKey(tiersHeaderTier)) {
