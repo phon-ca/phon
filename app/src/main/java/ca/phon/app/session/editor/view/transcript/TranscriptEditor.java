@@ -1388,8 +1388,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             case RELOAD -> () -> getTranscriptDocument().reload();
             case DELETE_TIER, HIDE_TIER -> () -> hideTier(editorEvent.data());
             case ADD_TIER, SHOW_TIER -> () -> showTier(editorEvent.data());
-            case TIER_NAME_CHANGE -> () -> tierNameChanged(editorEvent.data());
-            case TIER_FONT_CHANGE -> () -> tierFontChanged(editorEvent.data());
+            case TIER_NAME_CHANGE, TIER_FONT_CHANGE -> () -> tierFontOrNameChanged(editorEvent.data());
             default -> () -> {
             };
         };
@@ -1479,7 +1478,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         boolean caretInHiddenTier = false;
         int nextParagraphIndex = -1;
         if (startLocation.valid()) {
-            final Transcript.Element transcriptElement = startLocation.transcriptElementIndex() >= 0 ? getSession().getTranscript().getElementAt(startLocation.transcriptElementIndex()) : null;
             final int caretParagraphIndex = doc.findParagraphElementIndexForSessionElementIndex(startLocation.transcriptElementIndex());
             nextParagraphIndex = caretParagraphIndex < doc.getDefaultRootElement().getElementCount() ? caretParagraphIndex + 1 : caretParagraphIndex;
             final String caretTier = startLocation.tier();
@@ -1539,51 +1537,29 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     }
 
     /**
-     * Updates the names of the specified tiers
-     *
-     * @param data the data from the tier view changed event
-     */
-    public void tierNameChanged(EditorEventType.TierViewChangedData data) {
-
-        boolean nothingChanged = true;
-        for (int i = 0; i < data.newTierView().size(); i++) {
-            if (!data.newTierView().get(i).getTierName().equals(data.oldTierView().get(i).getTierName())) {
-                nothingChanged = false;
-                break;
-            }
-        }
-        if (nothingChanged) return;
-
-        int caretPos = getCaretPosition();
-
-        TranscriptDocument doc = getTranscriptDocument();
-        Document blank = getEditorKit().createDefaultDocument();
-        setDocument(blank);
-        doc.reload();
-        setDocument(doc);
-
-        setCaretPosition(caretPos);
-    }
-
-    /**
      * Updates the fonts of the specified tiers
      *
      * @param data the data from the tier view changed event
      */
-    public void tierFontChanged(EditorEventType.TierViewChangedData data) {
+    public void tierFontOrNameChanged(EditorEventType.TierViewChangedData data) {
         TranscriptDocument doc = getTranscriptDocument();
-        int caretPos = getCaretPosition();
+        final TranscriptElementLocation startLocation = getTranscriptEditorCaret().getTranscriptLocation();
 
-        List<TierViewItem> changedTiers = data.newTierView().stream().filter(item -> data.tierNames().contains(item.getTierName())).toList();
-
-        if (changedTiers.isEmpty()) return;
-
-        for (var tvi : changedTiers) {
-            doc.removeTier(tvi.getTierName());
+        getTranscriptEditorCaret().freeze();
+        for (var tviIdx: data.viewIndices()) {
+            final var tvi = data.newTierView().get(tviIdx);
+            final var oldTvi = data.oldTierView().get(tviIdx);
+            doc.removeTier(oldTvi.getTierName());
             doc.addTier(tvi.getTierName(), data.newTierView().indexOf(tvi), record -> record.getTier(tvi.getTierName()));
         }
+        getTranscriptEditorCaret().unfreeze();
 
-        setCaretPosition(caretPos);
+        if(startLocation.valid()) {
+            final int newPos = sessionLocationToCharPos(startLocation);
+            if(newPos >= 0) {
+                setCaretPosition(newPos);
+            }
+        }
     }
 
     /**
