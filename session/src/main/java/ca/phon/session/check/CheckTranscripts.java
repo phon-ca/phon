@@ -18,6 +18,10 @@ package ca.phon.session.check;
 import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.ipa.*;
 import ca.phon.ipa.parser.exceptions.StrayDiacriticException;
+import ca.phon.orthography.Orthography;
+import ca.phon.orthography.OrthographyBuilder;
+import ca.phon.orthography.Terminator;
+import ca.phon.orthography.TerminatorType;
 import ca.phon.plugin.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;
@@ -72,56 +76,97 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 	@Override
 	public boolean checkSession(SessionValidator validator, Session session) {
 		boolean modified = false;
-//		Syllabifier syllabifier = SyllabifierLibrary.getInstance().defaultSyllabifier();
-//		if(isResetSyllabification() && getSyllabifierLang() != null) {
-//			syllabifier = SyllabifierLibrary.getInstance().getSyllabifierForLanguage(getSyllabifierLang());
-//		}
-//
-//		for(int i = 0; i < session.getRecordCount(); i++) {
-//			final Record r = session.getRecord(i);
-//			for(Tier<IPATranscript> tier:r.getTiersOfType(IPATranscript.class)) {
-//				for(int gIdx = 0; gIdx < r.numberOfGroups(); gIdx++) {
-//					final IPATranscript ipa = tier.getGroup(gIdx);
-//					final UnvalidatedValue uv = ipa.getExtension(UnvalidatedValue.class);
-//					if(uv != null) {
-//						// can we fix this issue?
-//						SessionQuickFix[] quickFixes = getQuickFixes(uv);
-//
-//						// error in this transcription
-//						final ValidationEvent ve = new ValidationEvent(session, i, tier.getName(), gIdx,
-//								uv.getParseError().getMessage(), quickFixes);
-//						validator.fireValidationEvent(ve);
-//					} else {
-//						if(isResetSyllabification() && syllabifier != null) {
-//							String prev = ipa.toString(true);
-//							ipa.resetSyllabification();
-//							syllabifier.syllabify(ipa.toList());
-//
-//							boolean changed = !prev.equals(ipa.toString(true));
-//
-//							if(changed) {
-//								ValidationEvent evt = new ValidationEvent(session, i, tier.getName(), gIdx,
-//										String.format("Reset syllabification (%s)", syllabifier.getName()), new ResetSyllabificationQuickFix(syllabifier));
-//								validator.fireValidationEvent(evt);
-//							}
-//
-//							modified |= changed;
-//						}
-//
-//						// check syllabification, see if any elements are unassigned
-//						Optional<IPAElement> unknownEle = ipa.toList().stream()
-//							.filter( (ele) -> (new IPATranscript(ele)).matches("\\w") && ele.getScType() == SyllableConstituentType.UNKNOWN )
-//							.findFirst();
-//						if(unknownEle.isPresent()) {
-//							ValidationEvent evt = new ValidationEvent(session, i, tier.getName(), gIdx,
-//									String.format("Incomplete syllabification: %s", ipa.toString(true)), new ResetSyllabificationQuickFix(syllabifier));
-//							validator.fireValidationEvent(evt);
-//						}
-//					}
-//				}
-//			}
-//		}
+		Syllabifier syllabifier = SyllabifierLibrary.getInstance().defaultSyllabifier();
+		if(isResetSyllabification() && getSyllabifierLang() != null) {
+			syllabifier = SyllabifierLibrary.getInstance().getSyllabifierForLanguage(getSyllabifierLang());
+		}
+
+		for(int eleIdx = 0; eleIdx < session.getTranscript().getNumberOfElements(); eleIdx++) {
+			final Transcript.Element transcriptElement = session.getTranscript().getElementAt(eleIdx);
+			if(transcriptElement.isRecord()) {
+				final Record record = transcriptElement.asRecord();
+				checkRecord(validator, session, eleIdx, record);
+			} else if(transcriptElement.isGem()) {
+				final Gem gem = transcriptElement.asGem();
+				checkGem(validator, session, eleIdx, gem);
+			} else if(transcriptElement.isComment()) {
+				final Comment comment = transcriptElement.asComment();
+				checkComment(validator, session, eleIdx, comment);
+			}
+		}
+
 		return modified;
+	}
+
+	private void checkRecord(SessionValidator validator, Session session, int eleIdx, Record record) {
+		if(record.getSpeaker() == Participant.UNKNOWN) {
+			validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, "Record", "Speaker is unidentified"));
+		}
+
+		if(record.getOrthographyTier().isUnvalidated()) {
+			validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, SystemTierType.Orthography.getName(),
+				record.getOrthographyTier().getUnvalidatedValue().getParseError().getMessage()));
+			return;
+		} else {
+			if (record.getOrthography() == null || record.getOrthography().length() == 0) {
+				final SessionQuickFix quickFix = new SessionQuickFix() {
+					@Override
+					public boolean fix(ValidationEvent evt) {
+						final OrthographyBuilder builder = new OrthographyBuilder();
+						builder.append("xxx");
+						builder.append(new Terminator(TerminatorType.PERIOD));
+						record.setOrthography(builder.toOrthography());
+						return true;
+					}
+				};
+				validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.ERROR, session, eleIdx, SystemTierType.Orthography.getName(),
+					"Orthography is blank", quickFix));
+			} else {
+				// check for terminator
+				if(record.getOrthography().getTerminator() == null) {
+					final SessionQuickFix quickFix = new SessionQuickFix() {
+						@Override
+						public boolean fix(ValidationEvent evt) {
+							final OrthographyBuilder builder = new OrthographyBuilder();
+							builder.append(record.getOrthography());
+							builder.append(new Terminator(TerminatorType.PERIOD));
+							record.setOrthography(builder.toOrthography());
+							return true;
+						}
+					};
+					validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, SystemTierType.Orthography.getName(),
+						"Orthography does not end with a terminator", quickFix));
+				}
+			}
+		}
+
+		// check default ipa tiers
+		if(record.getIPATargetTier().isUnvalidated()) {
+			validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, SystemTierType.IPATarget.getName(),
+				record.getIPATargetTier().getUnvalidatedValue().getParseError().getMessage()));
+		}
+
+		if(record.getIPAActualTier().isUnvalidated()) {
+			validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, SystemTierType.IPAActual.getName(),
+				record.getIPAActualTier().getUnvalidatedValue().getParseError().getMessage()));
+		}
+	}
+
+	private void checkGem(SessionValidator validator, Session session, int eleIdx, Gem gem) {
+		if(gem.getLabel() == null || gem.getLabel().isBlank()) {
+			validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, "Gem", "Gem label is blank"));
+		}
+	}
+
+	private void checkComment(SessionValidator validator, Session session, int eleIdx, Comment comment) {
+		if(comment.getExtension(UnvalidatedValue.class) != null) {
+			var uv = comment.getExtension(UnvalidatedValue.class);
+			validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.ERROR, session, eleIdx, "Comment", uv.getParseError().getMessage()));
+		} else {
+			if(comment.getValue().toString().isBlank()) {
+				validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, "Comment", "Comment is blank"));
+			}
+		}
 	}
 
 	@Override
