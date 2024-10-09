@@ -23,13 +23,17 @@ import ca.phon.plugin.*;
 import ca.phon.session.Session;
 import ca.phon.session.check.*;
 import ca.phon.ui.DropDownButton;
+import ca.phon.ui.FlatButton;
+import ca.phon.ui.IconStrip;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.*;
 import org.jdesktop.swingx.JXBusyLabel;
+import org.jdesktop.swingx.JXTable;
 
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.io.*;
@@ -44,12 +48,8 @@ public class SessionCheckView extends EditorView {
 	
 	public final static String ICON_NAME = IconManager.GoogleMaterialDesignIconsFontName + ":error";
 
-	private DropDownButton settingsButton;
-
-	private JXBusyLabel busyLabel;
-	private JButton refreshButton;
-
-	private BufferPanel bufferPanel;
+	private SessionCheckTableModel tableModel;
+	private JXTable sessionCheckTable;
 
 	public SessionCheckView(SessionEditor editor) {
 		super(editor);
@@ -68,85 +68,27 @@ public class SessionCheckView extends EditorView {
 		refresh();
 	}
 
-	private boolean doCheck(SessionCheck check) {
-		String checkProp = check.getClass().getName() + ".checkByDefault";
-		boolean doCheck = PrefHelper.getBoolean(checkProp, check.performCheckByDefault());
-		return doCheck;
-	}
-
-	private void setDoCheck(SessionCheck check, boolean doCheck) {
-		String checkProp = check.getClass().getName() + ".checkByDefault";
-		PrefHelper.getUserPreferences().putBoolean(checkProp, doCheck);
-	}
-	
 	private void init() {
 		setLayout(new BorderLayout());
-		
-		JToolBar toolBar = new JToolBar();
-		toolBar.setFloatable(false);
 
-		final JPopupMenu settingsMenu = new JPopupMenu();
-		settingsMenu.addPopupMenuListener(new PopupMenuListener() {
-			@Override
-			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-				settingsMenu.removeAll();
+		final IconStrip iconStrip = new IconStrip();
 
-				for(IPluginExtensionPoint<SessionCheck> extPt:PluginManager.getInstance().getExtensionPoints(SessionCheck.class)) {
-					SessionCheck check = extPt.getFactory().createObject();
-					PhonPlugin pluginInfo = check.getClass().getAnnotation(PhonPlugin.class);
-					if(pluginInfo != null) {
-						JCheckBoxMenuItem item = new JCheckBoxMenuItem(pluginInfo.name());
-						item.setSelected(doCheck(check));
-						item.addActionListener( (evt) -> {
-							setDoCheck(check, item.isSelected());
-							refresh();
-						});
-						settingsMenu.add(item);
-					}
-				}
-			}
+		final PhonUIAction refreshAct = PhonUIAction.runnable(this::refresh);
+		refreshAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+		refreshAct.putValue(FlatButton.ICON_NAME_PROP, "refresh");
+		refreshAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+		final FlatButton refreshBtn = new FlatButton(refreshAct);
+		refreshBtn.setFocusable(false);
+		iconStrip.add(refreshBtn, IconStrip.IconStripPosition.LEFT);
 
-			@Override
-			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+		tableModel = new SessionCheckTableModel();
+		sessionCheckTable = new JXTable(tableModel);
 
-			}
-
-			@Override
-			public void popupMenuCanceled(PopupMenuEvent e) {
-
-			}
-
-		});
-
-		final PhonUIAction<Void> dropDownAct = PhonUIAction.runnable(() -> {});
-		dropDownAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "SETTINGS", IconSize.SMALL, Color.darkGray));
-		dropDownAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Select session checks...");
-		dropDownAct.putValue(DropDownButton.BUTTON_POPUP, settingsMenu);
-		dropDownAct.putValue(DropDownButton.ARROW_ICON_GAP, 0);
-		dropDownAct.putValue(DropDownButton.ARROW_ICON_POSITION, SwingConstants.BOTTOM);
-
-		settingsButton = new DropDownButton(dropDownAct);
-		settingsButton.setOnlyPopup(true);
-		toolBar.add(settingsButton);
-
-		toolBar.addSeparator();
-
-		busyLabel = new JXBusyLabel(new Dimension(16, 16));
-		toolBar.add(busyLabel);
-
-		refreshButton = new JButton(new SessionCheckRefreshAction(this));
-		toolBar.add(refreshButton);
-		
-		bufferPanel = new BufferPanel(VIEW_NAME);
-		
-		add(toolBar, BorderLayout.NORTH);
-		add(bufferPanel, BorderLayout.CENTER);
+		add(iconStrip, BorderLayout.NORTH);
+		add(new JScrollPane(sessionCheckTable), BorderLayout.CENTER);
 	}
 
 	public void refresh() {
-		bufferPanel.clear();
-		busyLabel.setBusy(true);
-		
 		SessionCheckWorker worker = new SessionCheckWorker();
 		worker.execute();
 	}
@@ -216,25 +158,7 @@ public class SessionCheckView extends EditorView {
 	
 	private class SessionCheckWorker extends SwingWorker<List<ValidationEvent>, ValidationEvent> {
 
-		private OutputStreamWriter out;
-		private CSVWriter writer;
-		
-		final String[] cols = new String[] { "Session", "Record #", "Tier", "Message" };
-		
 		public SessionCheckWorker() {
-			try {
-				out = new OutputStreamWriter(bufferPanel.getLogBuffer().getStdOutStream(), StandardCharsets.UTF_8);
-				
-				out.flush();
-				out.write(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.SHOW_BUSY);
-				out.flush();
-
-				writer = new CSVWriter(out);
-				writer.writeNext(cols);
-				writer.flush();
-			} catch (IOException e) {
-				LogUtil.warning(e);
-			}
 		}
 		
 		@Override
@@ -244,8 +168,7 @@ public class SessionCheckView extends EditorView {
 			List<SessionCheck> checks = new ArrayList<>();
 			for(IPluginExtensionPoint<SessionCheck> extPt:PluginManager.getInstance().getExtensionPoints(SessionCheck.class)) {
 				SessionCheck check = extPt.getFactory().createObject();
-				if(doCheck(check))
-					checks.add(check);
+				checks.add(check);
 			}
 
 			SessionValidator validator = new SessionValidator(checks);
@@ -262,56 +185,79 @@ public class SessionCheckView extends EditorView {
 
 		@Override
 		protected void process(List<ValidationEvent> chunks) {
-			String[] row = new String[cols.length];
-			for(var ve:chunks) {
-				row[0] = ve.getSession().getCorpus() + "." + ve.getSession().getName();
-				row[1] = "" + (ve.getRecord()+1);
-				row[2] = ve.getTierName();
-				row[3] = ve.getMessage();
-
-				try {
-					writer.writeNext(row);
-					writer.flush();
-				} catch (IOException e) {
-					LogUtil.warning(e);
-				}
-			}
+			tableModel.addEvents(chunks);
 		}
 
 		@Override
 		protected void done() {
-			try {
-				out.flush();
-				out.write(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.STOP_BUSY);
-				out.flush();
-				out.write(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.SHOW_TABLE_CODE);
-				out.flush();
-				out.write(LogBuffer.ESCAPE_CODE_PREFIX + BufferPanel.PACK_TABLE_COLUMNS);
-				out.flush();
-			} catch (IOException e) {
-				LogUtil.severe( e.getLocalizedMessage(), e);
-			} finally {
-				try {
-					writer.close(); 
-					out.close();
-				} catch (IOException e) {
-					LogUtil.warning( e.getLocalizedMessage(), e);
-				}
-			}
-			
+
 			try {
 				setupStatusBar(get());
 			} catch (InterruptedException | ExecutionException e) {
 				LogUtil.warning(e);
 			}
 
-			SwingUtilities.invokeLater( () -> {
-				bufferPanel.getDataTable().packAll();
-			});
-
-			busyLabel.setBusy(false);
 		}
 		
+	}
+
+	private class SessionCheckTableModel extends DefaultTableModel {
+
+		private List<ValidationEvent> events = new ArrayList<>();
+
+		public SessionCheckTableModel() {
+			super(new String[] { "Type", "Record #", "Tier", "Message" }, 0);
+		}
+
+		@Override
+		public boolean isCellEditable(int row, int column) {
+			return false;
+		}
+
+		@Override
+		public int getRowCount() {
+			if(this.events == null) return 0; // on super initialization
+			return events.size();
+		}
+
+		@Override
+		public Object getValueAt(int row, int col) {
+			Object retVal = null;
+
+			ValidationEvent ve = events.get(row);
+			switch(col) {
+			case 0:
+				retVal = ve.getSeverity().toString();
+				break;
+
+			case 1:
+				retVal = ve.getRecord();
+				break;
+
+			case 2:
+				retVal = ve.getTierName();
+				break;
+
+			case 3:
+				retVal = ve.getMessage();
+				break;
+			}
+
+			return retVal;
+		}
+
+		public void addEvents(List<ValidationEvent> events) {
+			int start = getRowCount();
+			this.events.addAll(events);
+			fireTableRowsInserted(start, events.size()-1);
+		}
+
+		public void reset() {
+			int end = getRowCount()-1;
+			this.events.clear();
+			fireTableRowsDeleted(0, end);
+		}
+
 	}
 
 }
