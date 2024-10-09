@@ -1384,12 +1384,13 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     private void onTierViewChanged(EditorEvent<EditorEventType.TierViewChangedData> editorEvent) {
         var changeType = editorEvent.data().changeType();
         final Runnable runnable = switch (changeType) {
-            case MOVE_TIER -> () -> moveTier(editorEvent.data());
             case RELOAD -> () -> getTranscriptDocument().reload();
+            case MOVE_TIER -> () -> moveTier(editorEvent.data());
             case DELETE_TIER, HIDE_TIER -> () -> hideTier(editorEvent.data());
             case ADD_TIER, SHOW_TIER -> () -> showTier(editorEvent.data());
             case TIER_NAME_CHANGE, TIER_FONT_CHANGE -> () -> tierFontOrNameChanged(editorEvent.data());
             default -> () -> {
+                LogUtil.info("Unhandled tier view change type: " + changeType);
             };
         };
         if (SwingUtilities.isEventDispatchThread()) {
@@ -2528,6 +2529,15 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                     return;
                 }
             }
+            if (hoverElem != null) {
+                hoverElem = null;
+                removeCurrentUnderline();
+                setCursor(Cursor.getDefaultCursor());
+            }
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
             if (hoverElem != null) {
                 hoverElem = null;
                 removeCurrentUnderline();
