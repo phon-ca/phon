@@ -18,17 +18,13 @@ package ca.phon.app.session.editor.view.check;
 import ca.phon.app.log.*;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.view.check.actions.SessionCheckRefreshAction;
-import ca.phon.csv.CSVWriter;
 import ca.phon.plugin.*;
 import ca.phon.session.Session;
 import ca.phon.session.check.*;
-import ca.phon.ui.DropDownButton;
 import ca.phon.ui.FlatButton;
 import ca.phon.ui.IconStrip;
 import ca.phon.ui.action.PhonUIAction;
-import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.*;
-import org.jdesktop.swingx.JXBusyLabel;
 import org.jdesktop.swingx.JXTable;
 
 import javax.swing.*;
@@ -36,8 +32,6 @@ import javax.swing.event.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -231,7 +225,7 @@ public class SessionCheckView extends EditorView {
 				break;
 
 			case 1:
-				retVal = ve.getRecord();
+				retVal = ve.getElementIndex();
 				break;
 
 			case 2:

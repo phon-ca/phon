@@ -139,10 +139,10 @@ public class SessionCheckNode extends OpNode implements NodeSettings{
 			int c = 0;
 			row[c++] = StringUtils.capitalize(ve.getSeverity().toString().toLowerCase());
 			row[c++] = spRef.get();
-			row[c++] = ve.getRecord() + 1;
+			row[c++] = ve.getElementIndex() + 1;
 			row[c++] = ve.getTierName();
 
-			var groupVal = ve.getSession().getRecord(ve.getRecord()).getTier(ve.getTierName()).getValue();
+			var groupVal = ve.getSession().getRecord(ve.getElementIndex()).getTier(ve.getTierName()).getValue();
 			if(groupVal instanceof IExtendable) {
 				if(((IExtendable)groupVal).getExtension(UnvalidatedValue.class) != null) {
 					groupVal = ((IExtendable)groupVal).getExtension(UnvalidatedValue.class).getValue();
