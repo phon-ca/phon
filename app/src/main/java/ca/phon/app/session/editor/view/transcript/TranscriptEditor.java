@@ -2508,11 +2508,12 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         public void mouseMoved(MouseEvent e) {
             TranscriptDocument doc = getTranscriptDocument();
 
-            if ((e.getModifiersEx() & Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()) == Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()) {
-                highlightElementAtPoint(e.getPoint());
-            } else if (currentHighlight != null) {
-                removeCurrentHighlight();
-            }
+            // Highlighting elements on hover with CMD/CTRL held, useful for debugging
+//            if ((e.getModifiersEx() & Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()) == Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()) {
+//                highlightElementAtPoint(e.getPoint());
+//            } else if (currentHighlight != null) {
+//                removeCurrentHighlight();
+//            }
 
             int mousePosInDoc = viewToModel2D(e.getPoint());
 
