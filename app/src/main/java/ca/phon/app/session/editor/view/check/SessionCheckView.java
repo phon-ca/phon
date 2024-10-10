@@ -20,6 +20,7 @@ import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.view.check.actions.SessionCheckRefreshAction;
 import ca.phon.plugin.*;
 import ca.phon.session.Session;
+import ca.phon.session.Transcript;
 import ca.phon.session.check.*;
 import ca.phon.ui.FlatButton;
 import ca.phon.ui.IconStrip;
@@ -49,13 +50,17 @@ public class SessionCheckView extends EditorView {
 		super(editor);
 
 		init();
-		refresh();
 
 		setupEditorActions();
 	}
 
 	private void setupEditorActions() {
-		getEditor().getEventManager().registerActionForEvent(EditorEventType.SessionChanged, this::onSessionChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+//		getEditor().getEventManager().registerActionForEvent(EditorEventType.EditorFinishedLoading, this::onSessionFinishedLoading, EditorEventManager.RunOn.AWTEventDispatchThread);
+//		getEditor().getEventManager().registerActionForEvent(EditorEventType.SessionChanged, this::onSessionChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+	}
+
+	private void onSessionFinishedLoading(EditorEvent<Void> ee) {
+		refresh();
 	}
 
 	private void onSessionChanged(EditorEvent<Session> ee) {
@@ -184,7 +189,6 @@ public class SessionCheckView extends EditorView {
 
 		@Override
 		protected void done() {
-
 			try {
 				setupStatusBar(get());
 			} catch (InterruptedException | ExecutionException e) {
@@ -225,7 +229,13 @@ public class SessionCheckView extends EditorView {
 				break;
 
 			case 1:
-				retVal = ve.getElementIndex();
+				int elementIndex = ve.getElementIndex();
+				Transcript.Element element = getEditor().getSession().getTranscript().getElementAt(elementIndex);
+				if(element.isRecord()) {
+					retVal = getEditor().getSession().getTranscript().getRecordIndex(elementIndex)+1;
+				} else {
+					retVal = "";
+				}
 				break;
 
 			case 2:

@@ -31,8 +31,6 @@ public class TranscriptScrollPane extends JScrollPane {
         this.transcriptEditor = transcriptEditor;
         registerEditorActions();
         initUI();
-
-//        setBackground(Color.white);
     }
 
     /**
