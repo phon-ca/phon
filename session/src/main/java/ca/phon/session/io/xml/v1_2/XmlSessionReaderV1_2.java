@@ -412,6 +412,9 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 		final Map<SystemTierType, List<IPATranscript>> ipaGroupMap = new LinkedHashMap<>();
 		// ipa target/actual
 		for(IpaTierType ipaTt:rt.getIpaTier()) {
+			if(rt.getId().equals("c85835e4-6a11-4bc1-a72d-d3bb6a90d4e0")) {
+				System.out.println("here");
+			}
 			final SystemTierType tierType =
 					(ipaTt.getForm() == PhoTypeType.MODEL ? SystemTierType.IPATarget : SystemTierType.IPAActual);
 			final List<IPATranscript> ipaGroups = copyTranscript(factory, ipaTt);
@@ -459,24 +462,24 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 					}
 
 					if(ipaT.words().isEmpty()) {
-						if(ipaTBuilder.size() > 0) ipaTBuilder.appendWordBoundary();
+						if(!ipaTBuilder.toString().isEmpty()) ipaTBuilder.appendWordBoundary();
 						ipaTBuilder.append("*");
 					} else if(ipaT.words().size() == 1) {
-						if(ipaTBuilder.size() > 0) ipaTBuilder.appendWordBoundary();
+						if(!ipaTBuilder.toString().isEmpty()) ipaTBuilder.appendWordBoundary();
 						ipaTBuilder.append(ipaT);
 					} else {
-						if(ipaTBuilder.size() > 0) ipaTBuilder.appendWordBoundary();
+						if(!ipaTBuilder.toString().isEmpty()) ipaTBuilder.appendWordBoundary();
 						ipaTBuilder.append(PhoneticGroupMarkerType.BEGIN.getMakerChar() + ipaT.toString(true) + PhoneticGroupMarkerType.END.getMakerChar());
 					}
 
 					if(ipaA.words().isEmpty()) {
-						if(ipaABuilder.size() > 0) ipaABuilder.appendWordBoundary();
+						if(!ipaABuilder.toString().isEmpty()) ipaABuilder.appendWordBoundary();
 						ipaABuilder.append("*");
 					} else if(ipaA.words().size() == 1) {
-						if(ipaABuilder.size() > 0) ipaABuilder.appendWordBoundary();
+						if(!ipaABuilder.toString().isEmpty()) ipaABuilder.appendWordBoundary();
 						ipaABuilder.append(ipaA);
 					} else {
-						if(ipaABuilder.size() > 0) ipaABuilder.appendWordBoundary();
+						if(!ipaABuilder.toString().isEmpty()) ipaABuilder.appendWordBoundary();
 						ipaABuilder.append(PhoneticGroupMarkerType.BEGIN.getMakerChar() + ipaA.toString(true) + PhoneticGroupMarkerType.END.getMakerChar());
 					}
 				}
@@ -534,7 +537,7 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 				final IPATranscriptBuilder builder = ipaTierType == SystemTierType.IPATarget ? ipaTBuilder : ipaABuilder;
 				final List<IPATranscript> ipas = ipaGroupMap.get(ipaTierType);
 				for(IPATranscript ipa:ipas) {
-					if(builder.size() > 0) builder.appendWordBoundary();
+					if(!builder.toString().isEmpty()) builder.appendWordBoundary();
 					builder.append(ipa);
 				}
 			}
@@ -862,7 +865,7 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 			if(pt != null && pt.getW() != null) {
 				for(WordType wt:pt.getW()) {
 					if(wt.getContent().trim().length() > 0) {
-						if (groupBuilder.size() > 0 && wt.getContent().trim().length() > 0)
+						if ((groupBuilder.size() > 0 || groupBuilder.getUnvalidatedValue() != null) && wt.getContent().trim().length() > 0)
 							groupBuilder.appendWordBoundary();
 						groupBuilder.append(wt.getContent().trim());
 					}

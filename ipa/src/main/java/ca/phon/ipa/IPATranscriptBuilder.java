@@ -42,6 +42,10 @@ public class IPATranscriptBuilder {
 	public IPATranscriptBuilder() {
 		
 	}
+
+	public UnvalidatedValue getUnvalidatedValue() {
+		return this.unvalidatedValue;
+	}
 	
 	/**
 	 * Append the given {@link IPAElement}
@@ -228,7 +232,11 @@ public class IPATranscriptBuilder {
 	 * @return builder
 	 */
 	public IPATranscriptBuilder appendWordBoundary() {
-		append(factory.createWordBoundary());
+		if(unvalidatedValue != null) {
+			unvalidatedValue.setValue(unvalidatedValue.getValue() + " ");
+		} else {
+			append(factory.createWordBoundary());
+		}
 		return this;
 	}
 	
@@ -375,5 +383,14 @@ public class IPATranscriptBuilder {
 	 */
 	public int size() {
 		return buffer.size();
+	}
+
+	@Override
+	public String toString() {
+		if(unvalidatedValue != null) {
+			return unvalidatedValue.getValue();
+		} else {
+			return toIPATranscript().toString();
+		}
 	}
 }
