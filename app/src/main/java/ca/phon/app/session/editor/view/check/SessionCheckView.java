@@ -18,10 +18,12 @@ package ca.phon.app.session.editor.view.check;
 import ca.phon.app.log.*;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.view.check.actions.SessionCheckRefreshAction;
+import ca.phon.app.session.editor.view.transcript.TranscriptView;
 import ca.phon.plugin.*;
 import ca.phon.session.Session;
 import ca.phon.session.Transcript;
 import ca.phon.session.check.*;
+import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.ui.FlatButton;
 import ca.phon.ui.IconStrip;
 import ca.phon.ui.action.PhonUIAction;
@@ -82,6 +84,31 @@ public class SessionCheckView extends EditorView {
 
 		tableModel = new SessionCheckTableModel();
 		sessionCheckTable = new JXTable(tableModel);
+		sessionCheckTable.addMouseListener(new MouseInputAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(e.getClickCount() == 2) {
+					int row = sessionCheckTable.rowAtPoint(e.getPoint());
+					if(row >= 0) {
+						ValidationEvent ve = tableModel.events.get(row);
+						if(ve.getElementIndex() >= 0) {
+							Transcript.Element element = getEditor().getSession().getTranscript().getElementAt(ve.getElementIndex());
+							if(element.isRecord()) {
+								TranscriptElementLocation loc = new TranscriptElementLocation(ve.getElementIndex(), ve.getTierName(), 0);
+								TranscriptView tv = (TranscriptView) getEditor().getViewModel().getView(TranscriptView.VIEW_NAME);
+								int charPos = tv.getTranscriptEditor().sessionLocationToCharPos(loc);
+								if(charPos >= 0) {
+									tv.getTranscriptEditor().setCaretPosition(charPos);
+									tv.getTranscriptEditor().requestFocus();
+								}
+							} else {
+
+							}
+						}
+					}
+				}
+			}
+		});
 
 		add(iconStrip, BorderLayout.NORTH);
 		add(new JScrollPane(sessionCheckTable), BorderLayout.CENTER);
