@@ -149,6 +149,11 @@ public class TranscriptView extends EditorView {
             transcriptEditor.getTranscriptDocument().reload();
         });
         actionMap.put("decreaseFontSize", decreaseFontSizeAct);
+
+        KeyStroke toggleFindReplaceKs = KeyStroke.getKeyStroke(KeyEvent.VK_F, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
+        inputMap.put(toggleFindReplaceKs, "toggleFindReplace");
+        PhonUIAction<Void> toggleFindReplaceAct = PhonUIAction.runnable(this::toggleFindAndReplace);
+        actionMap.put("toggleFindReplace", toggleFindReplaceAct);
     }
 
     /**

@@ -115,6 +115,8 @@ public class SessionCheckView extends EditorView {
 	}
 
 	public void refresh() {
+		if(tableModel.events.size() > 0)
+			tableModel.reset();
 		SessionCheckWorker worker = new SessionCheckWorker();
 		worker.execute();
 	}

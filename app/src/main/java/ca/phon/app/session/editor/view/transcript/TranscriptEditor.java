@@ -642,28 +642,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
             } catch (BadLocationException e) {
                 LogUtil.severe(e);
             }
-
-            if (elemType.equals(TranscriptStyleConstants.ELEMENT_TYPE_RECORD) || elemType.equals(TranscriptStyleConstants.ELEMENT_TYPE_COMMENT) || elemType.equals(TranscriptStyleConstants.ELEMENT_TYPE_GEM)) {
-                int elementIndex;
-                if (elemType.equals(TranscriptStyleConstants.ELEMENT_TYPE_RECORD)) {
-                    elementIndex = getSession().getRecordElementIndex(TranscriptStyleConstants.getRecord(attrs));
-                } else if (elemType.equals(TranscriptStyleConstants.ELEMENT_TYPE_COMMENT)) {
-                    Comment comment = TranscriptStyleConstants.getComment(attrs);
-                    elementIndex = getSession().getTranscript().getElementIndex(comment);
-                } else {
-                    Gem gem = TranscriptStyleConstants.getGEM(attrs);
-                    elementIndex = getSession().getTranscript().getElementIndex(gem);
-                }
-                if (elementIndex > -1) {
-                    try {
-                        Rectangle2D caretRect = modelToView2D(getCaretPosition());
-                        Point point = new Point((int) caretRect.getCenterX(), (int) caretRect.getMaxY());
-                        showContextMenu(elementIndex, point);
-                    } catch (BadLocationException e) {
-                        LogUtil.severe(e);
-                    }
-                }
-            }
         }
     }
 
