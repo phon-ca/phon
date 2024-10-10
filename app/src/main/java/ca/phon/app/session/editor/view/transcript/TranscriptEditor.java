@@ -23,9 +23,7 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
@@ -191,6 +189,15 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         if (dataModel.getTranscriber() != Transcriber.VALIDATOR) {
             getTranscriptDocument().setTranscriber(dataModel.getTranscriber());
         }
+
+        // save current changes on focus lost
+        addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                System.out.println("Focus lost");
+                saveCurrentLine();
+            }
+        });
 
         // init extensions
         extensionSupport.initExtensions();
@@ -585,6 +592,53 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     }
 
     /**
+     * Commit changed tier data at caret location
+     *
+     */
+    public void commitChanges(int charPos) {
+        final TranscriptElementLocation loc = charPosToSessionLocation(charPos);
+        if(!loc.valid()) return;
+        if(loc.transcriptElementIndex() < 0) return;
+
+        final Element charElem = getTranscriptDocument().getCharacterElement(charPos);
+        final AttributeSet attrs = charElem.getAttributes();
+        final Transcript.Element elem = getSession().getTranscript().getElementAt(loc.transcriptElementIndex());
+        if(elem.isRecord()) {
+            final Record record = elem.asRecord();
+            final Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
+            final int recordIndex = getSession().getRecordPosition(record);
+            final TranscriptDocument.StartEnd startEnd = getTranscriptDocument().getTierContentStartEnd(recordIndex, loc.tier());
+            if(!startEnd.valid()) return;
+            try {
+                final String text = getTranscriptDocument().getText(startEnd.start(), startEnd.end() - startEnd.start());
+                changeTierData(record, tier, text);
+            } catch (BadLocationException e) {
+                LogUtil.severe(e);
+            }
+        } else if(elem.isComment()) {
+            final Comment comment = elem.asComment();
+            final TranscriptDocument.StartEnd startEnd = getTranscriptDocument().getCommentContentStartEnd(comment);
+            if(!startEnd.valid()) return;
+            try {
+                final String text = getTranscriptDocument().getText(startEnd.start(), startEnd.end() - startEnd.start());
+                commentDataChanged(comment, text);
+            } catch (BadLocationException e) {
+                LogUtil.severe(e);
+            }
+        } else if(elem.isGem()) {
+            final Gem gem = elem.asGem();
+            final TranscriptDocument.StartEnd startEnd = getTranscriptDocument().getGemContentStartEnd(gem);
+            if(!startEnd.valid()) return;
+            try {
+                final String text = getTranscriptDocument().getText(startEnd.start(), startEnd.end() - startEnd.start());
+                gemDataChanged(gem, text);
+            } catch (BadLocationException e) {
+                LogUtil.severe(e);
+            }
+        }
+    }
+
+    /**
      * Runs when the user presses enter
      */
     public void onPressedEnter(PhonActionEvent<Void> pae) {
@@ -599,49 +653,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
 
         String elemType = TranscriptStyleConstants.getElementType(attrs);
         if (elemType != null) {
-            try {
-                switch (elemType) {
-                    case TranscriptStyleConstants.ATTR_KEY_RECORD -> {
-                        Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
-                        if (tier == null) return;
-                        Record record = TranscriptStyleConstants.getRecord(attrs);
-                        if (record == null) return;
-                        int recordIndex = getSession().getRecordPosition(record);
-                        if (recordIndex < 0) return;
-                        final TranscriptDocument.StartEnd startEnd = doc.getTierContentStartEnd(recordIndex, tier.getName());
-                        if (!startEnd.valid()) return;
-                        int start = startEnd.start();
-                        int end = startEnd.end();
-                        String newVal = doc.getText(start, end - start);
-                        if (!tier.toString().equals(newVal)) {
-                            changeTierData(record, tier, newVal);
-                        }
-                    }
-                    case TranscriptStyleConstants.ATTR_KEY_COMMENT -> {
-                        Comment comment = (Comment) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT);
-                        if (comment == null) return;
-                        int start = doc.getCommentContentStart(comment);
-                        int end = doc.getCommentEnd(comment) - 1;
-                        commentDataChanged(comment, doc.getText(start, end - start));
-                    }
-                    case TranscriptStyleConstants.ATTR_KEY_GEM -> {
-                        Gem gem = (Gem) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM);
-                        if (gem == null) return;
-                        int start = doc.getGemContentStart(gem);
-                        int end = doc.getGemEnd(gem) - 1;
-                        gemDataChanged(gem, doc.getText(start, end - start));
-                    }
-//                    case TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER -> {
-//                        Tier<?> genericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER);
-//                        if (genericTier == null) return;
-//                        int start = doc.getGenericContentStart(genericTier);
-//                        int end = doc.getGenericEnd(genericTier) - 1;
-//                        genericDataChanged(genericTier, doc.getText(start, end - start));
-//                    }
-                }
-            } catch (BadLocationException e) {
-                LogUtil.severe(e);
-            }
+            saveCurrentLine();
         }
     }
 
@@ -1095,42 +1107,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
      * Saves the changes made to the line the caret is currently on
      */
     public void saveCurrentLine() {
-        TranscriptElementLocation transcriptLocation = getCurrentSessionLocation();
-        if (transcriptLocation.transcriptElementIndex() < 0) return;
-
-        TranscriptDocument doc = getTranscriptDocument();
-
-        var elem = getSession().getTranscript().getElementAt(transcriptLocation.transcriptElementIndex());
-        try {
-            if (elem.isRecord()) {
-                Record record = elem.asRecord();
-                String tierName = transcriptLocation.tier();
-                Tier<?> tier = record.getTier(tierName);
-                int recordIndex = getSession().getRecordPosition(record);
-                if (recordIndex < 0) return;
-                TranscriptDocument.StartEnd startEnd = doc.getTierContentStartEnd(recordIndex, tierName);
-                if (!startEnd.valid()) return;
-                int startPos = startEnd.start();
-                int endPos = startEnd.end();
-                changeTierData(record, tier, doc.getText(startPos, endPos - startPos));
-            } else if (elem.isComment()) {
-                Comment comment = elem.asComment();
-                int startPos = doc.getCommentContentStart(comment);
-                int endPos = doc.getCommentEnd(comment) - 1;
-                if (startPos >= 0 && endPos >= 0) {
-                    commentDataChanged(comment, doc.getText(startPos, endPos - startPos));
-                }
-            } else if (elem.isGem()) {
-                Gem gem = elem.asGem();
-                int startPos = doc.getGemContentStart(gem);
-                int endPos = doc.getGemEnd(gem) - 1;
-                if (startPos >= 0 && endPos >= 0) {
-                    gemDataChanged(gem, doc.getText(startPos, endPos - startPos));
-                }
-            }
-        } catch (BadLocationException e) {
-            LogUtil.severe(e);
-        }
+        commitChanges(getCaretPosition());
     }
 
     public TranscriptElementLocation getCurrentSessionLocation() {
@@ -2207,47 +2184,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
                 if (oldLoc.tier() != null && !oldLoc.tier().equals(newLoc.tier())) {
                     // header tiers are updated in the HeaderTierExtension
                     if (oldLoc.transcriptElementIndex() >= 0) {
-                        final Transcript.Element transcriptElement = getSession().getTranscript().getElementAt(oldLoc.transcriptElementIndex());
-                        if (transcriptElement.isRecord()) {
-                            final Record record = transcriptElement.asRecord();
-                            final Tier<?> tier = record.getTier(oldLoc.tier());
-                            if (tier != null) {
-                                final TranscriptDocument.StartEnd tierContentRange = getTranscriptDocument().getTierContentStartEnd(
-                                        getSession().getTranscript().getRecordIndex(oldLoc.transcriptElementIndex()), tier.getName());
-                                if (tierContentRange.valid()) {
-                                    try {
-                                        final String currentText = getTranscriptDocument().getText(tierContentRange.start(), tierContentRange.length());
-                                        if (!tier.toString().equals(currentText)) {
-                                            changeTierData(record, tier, currentText);
-                                        }
-                                    } catch (BadLocationException e) {
-                                        LogUtil.warning(e);
-                                    }
-                                }
-                            }
-                        } else if (transcriptElement.isGem()) {
-                            final Gem gem = transcriptElement.asGem();
-                            final TranscriptDocument.StartEnd gemRange = getTranscriptDocument().getGemContentStartEnd(gem);
-                            try {
-                                final String currentText = getTranscriptDocument().getText(gemRange.start(), gemRange.length());
-                                if (!gem.toString().equals(currentText)) {
-                                    gemDataChanged(gem, currentText);
-                                }
-                            } catch (BadLocationException e) {
-                                LogUtil.warning(e);
-                            }
-                        } else if (transcriptElement.isComment()) {
-                            final Comment comment = transcriptElement.asComment();
-                            final TranscriptDocument.StartEnd commentRange = getTranscriptDocument().getCommentContentStartEnd(comment);
-                            try {
-                                final String currentText = getTranscriptDocument().getText(commentRange.start(), commentRange.length());
-                                if (!comment.toString().equals(currentText)) {
-                                    commentDataChanged(comment, currentText);
-                                }
-                            } catch (BadLocationException e) {
-                                LogUtil.warning(e);
-                            }
-                        }
+                        commitChanges(sessionLocationToCharPos(oldLoc));
                     }
                 }
             });
