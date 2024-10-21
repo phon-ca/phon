@@ -282,13 +282,12 @@ public class SessionCheckView extends EditorView {
 		public void addEvents(List<ValidationEvent> events) {
 			int start = getRowCount();
 			this.events.addAll(events);
-			fireTableRowsInserted(start, events.size()-1);
+			fireTableRowsInserted(start, start + events.size()-1);
 		}
 
 		public void reset() {
-			int end = getRowCount()-1;
 			this.events.clear();
-			fireTableRowsDeleted(0, end);
+			fireTableDataChanged();
 		}
 
 	}

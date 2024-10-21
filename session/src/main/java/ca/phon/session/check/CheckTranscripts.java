@@ -22,12 +22,20 @@ import ca.phon.orthography.Orthography;
 import ca.phon.orthography.OrthographyBuilder;
 import ca.phon.orthography.Terminator;
 import ca.phon.orthography.TerminatorType;
+import ca.phon.orthography.mor.MorTierData;
 import ca.phon.plugin.*;
 import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.session.alignment.CrossTierAlignment;
+import ca.phon.session.alignment.TierAligner;
+import ca.phon.session.alignment.TierAlignment;
+import ca.phon.session.alignment.TierElementFilter;
+import ca.phon.session.io.xml.OneToOne;
+import ca.phon.session.tierdata.TierData;
 import ca.phon.syllabifier.*;
 import ca.phon.syllable.SyllableConstituentType;
 import ca.phon.util.PrefHelper;
+import ca.phon.util.Tuple;
 
 import java.util.*;
 
@@ -149,6 +157,61 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 		if(record.getIPAActualTier().isUnvalidated()) {
 			validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, SystemTierType.IPAActual.getName(),
 				record.getIPAActualTier().getUnvalidatedValue().getParseError().getMessage()));
+		}
+
+		// check other tiers
+		for(String tierName:record.getUserDefinedTierNames()) {
+			final Tier<?> tier = record.getTier(tierName);
+			if(tier.isUnvalidated()) {
+				validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, tier.getName(),
+					tier.getUnvalidatedValue().getParseError().getMessage()));
+			}
+		}
+
+		// check one-to-one alignment between tiers
+		final CrossTierAlignment xTierAlignment = TierAligner.calculateCrossTierAlignment(record);
+		for(Object obj: xTierAlignment.getTopAlignmentElements()) {
+			for(String tierName: xTierAlignment.getBottomTierNames()) {
+				final TierAlignment tierAlignment = xTierAlignment.getTierAlignment(tierName);
+				TierElementFilter filter = TierElementFilter.orthographyFilterForUserTierAlignment();
+				if(tierAlignment.getBottomTier().getDeclaredType() == IPATranscript.class) {
+					filter = TierElementFilter.orthographyFilterForIPAAlignment();
+				} else if(tierAlignment.getBottomTier().getDeclaredType() == MorTierData.class) {
+					filter = TierElementFilter.orthographyFilterForMorTierAlignment();
+				} else if(tierAlignment.getBottomTier().getDeclaredType() == TierData.class) {
+					// already set
+				} else {
+					// TODO handle grasp tier alignment with mor
+					continue;
+				}
+
+				List<?> filteredElements = filter.filterTier(tierAlignment.getTopTier());
+				if(!filteredElements.contains(obj)) {
+					continue;
+				}
+
+				// if bottom tier is empty ignore it
+				if(tierAlignment.getBottomTier().isUnvalidated()) {
+					continue;
+				}
+				if(tierAlignment.getBottomTier().toString().isBlank()) {
+					continue;
+				}
+
+				Optional<? extends Tuple<?, ?>> alignedEle = tierAlignment.getAlignedElements().stream()
+						.filter(ae -> ae.getObj1() == obj).findAny();
+				if(alignedEle.isEmpty()) {
+					validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, tierName,
+						"Incorrect x-tier alignment"));
+					break;
+				} else {
+					if(alignedEle.get().getObj2() == null) {
+						validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, tierName,
+								"Incorrect x-tier alignment"));
+						break;
+					}
+				}
+			}
 		}
 	}
 

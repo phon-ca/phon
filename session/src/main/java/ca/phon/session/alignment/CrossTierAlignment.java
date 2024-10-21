@@ -32,6 +32,10 @@ public class CrossTierAlignment {
         return topTier;
     }
 
+    public Set<String> getBottomTierNames() {
+        return tierAlignments.keySet();
+    }
+
     /**
      * Return a map of alignments for the given object
      *
