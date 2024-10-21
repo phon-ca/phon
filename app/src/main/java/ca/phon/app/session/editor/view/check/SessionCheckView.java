@@ -61,6 +61,10 @@ public class SessionCheckView extends EditorView {
 //		getEditor().getEventManager().registerActionForEvent(EditorEventType.EditorFinishedLoading, this::onSessionFinishedLoading, EditorEventManager.RunOn.AWTEventDispatchThread);
 //		getEditor().getEventManager().registerActionForEvent(EditorEventType.SessionChanged, this::onSessionChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.TierChange, this::onTierChange, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.CommentChanged, this::onCommentChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.GemChanged, this::onGemChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+
+		// TODO update for header information (e.g, media, date, etc.)
 	}
 
 	private void onSessionFinishedLoading(EditorEvent<Void> ee) {
@@ -76,6 +80,28 @@ public class SessionCheckView extends EditorView {
 		if(data == null) return;
 		if(data.valueAdjusting()) return;
 		final int elementIndex = getEditor().getSession().getRecordElementIndex(data.record());
+		if(elementIndex >= 0) {
+			tableModel.removeEventsForElement(elementIndex);
+		}
+		SessionCheckWorker worker = new SessionCheckWorker(elementIndex);
+		worker.execute();
+	}
+
+	private void onCommentChanged(EditorEvent<EditorEventType.CommentChangedData> ee) {
+		EditorEventType.CommentChangedData data = ee.getData().orElse(null);
+		if(data == null) return;
+		final int elementIndex = getEditor().getSession().getTranscript().getElementIndex(data.comment());
+		if(elementIndex >= 0) {
+			tableModel.removeEventsForElement(elementIndex);
+		}
+		SessionCheckWorker worker = new SessionCheckWorker(elementIndex);
+		worker.execute();
+	}
+
+	private void onGemChanged(EditorEvent<EditorEventType.GemChangedData> ee) {
+		EditorEventType.GemChangedData data = ee.getData().orElse(null);
+		if(data == null) return;
+		final int elementIndex = getEditor().getSession().getTranscript().getElementIndex(data.gem());
 		if(elementIndex >= 0) {
 			tableModel.removeEventsForElement(elementIndex);
 		}
@@ -173,32 +199,50 @@ public class SessionCheckView extends EditorView {
 		if(lbl == null) {
 			lbl = new JLabel();
 			lbl.setName(VIEW_NAME);
-			final ImageIcon icn = IconManager.getInstance().getFontIcon(ICON_NAME, IconSize.XSMALL, Color.darkGray);
+			final ImageIcon icn = IconManager.getInstance().getFontIcon(ICON_NAME, IconSize.SMALL, Color.darkGray);
 			lbl.setIcon(icn);
-			if(events.size() > 0) {
-				lbl.setText("<html><u>" +
-						events.size() + " warning" + 
-						(events.size() == 1 ? "" : "s") + "</u></html>");
-				lbl.setToolTipText("Show warnings");
-				lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-				lbl.addMouseListener(new MouseInputAdapter() {
-	
-					@Override
-					public void mouseClicked(MouseEvent e) {
-						getEditor().getViewModel().showView(VIEW_NAME);
-					}
-	
-				});
-				statusBar.getExtrasPanel().add(lbl);
+			statusBar.getExtrasPanel().add(lbl);
+
+			lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			lbl.addMouseListener(new MouseInputAdapter() {
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					getEditor().getViewModel().showView(VIEW_NAME);
+				}
+
+			});
+		}
+
+		final StringBuilder html = new StringBuilder();
+		if(events.size() > 0) {
+			int numErrors = (int)events.stream().filter( (e) -> e.getSeverity() == ValidationEvent.Severity.ERROR).count();
+			int numWarnings = (int)events.stream().filter( (e) -> e.getSeverity() == ValidationEvent.Severity.WARNING).count();
+
+			html.append("<html>");
+			if(numErrors > 0) {
+				html.append("<font color='red'>");
+				html.append(numErrors);
+				html.append(" error");
+				if(numErrors > 1) html.append("s");
+				html.append("</font>");
 			}
+			if(numWarnings > 0) {
+				if(numErrors > 0) html.append(", ");
+				html.append("<font color='orange'>");
+				html.append(numWarnings);
+				html.append(" warning");
+				if(numWarnings > 1) html.append("s");
+				html.append("</font>");
+			}
+			html.append("</html>");
+			lbl.setText(html.toString());
+			lbl.setToolTipText("Show warnings");
+
+
 		} else {
-			if(events.size() == 0)
-				statusBar.getExtrasPanel().remove(lbl);
-			else {
-				lbl.setText("<html><u>" +
-						events.size() + " warning" + 
-						(events.size() == 1 ? "" : "s") + "</u></html>");
-			}
+			lbl.setText("");
+			lbl.setToolTipText("No warnings");
 		}
 		statusBar.revalidate();
 	}
@@ -249,12 +293,7 @@ public class SessionCheckView extends EditorView {
 
 		@Override
 		protected void done() {
-			try {
-				setupStatusBar(get());
-			} catch (InterruptedException | ExecutionException e) {
-				LogUtil.warning(e);
-			}
-
+			setupStatusBar(tableModel.events);
 		}
 		
 	}
