@@ -213,7 +213,7 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 				} else {
 					if(alignedEle.get().getObj2() == null) {
 						validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, tierName,
-								"Incorrect x-tier alignment"));
+								"Missing aligned value for " + obj));
 						break;
 					}
 				}
