@@ -13,6 +13,7 @@ import ca.phon.app.session.editor.view.timeline.TimelineView;
 import ca.phon.app.session.editor.view.transcript.actions.*;
 import ca.phon.app.session.editor.view.transcript.extensions.*;
 import ca.phon.session.*;
+import ca.phon.session.check.ValidationEvent;
 import ca.phon.session.io.SessionOutputFactory;
 import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.ui.*;
@@ -101,9 +102,9 @@ public class TranscriptView extends EditorView {
             this::onEditorFinishedLoading,
             EditorEventManager.RunOn.EditorEventDispatchThread
         );
-        if (editor.isFinishedLoading()) {
-            transcriptEditor.loadSession();
-        }
+//        if (editor.isFinishedLoading()) {
+//            transcriptEditor.loadSession();
+//        }
 
         addPropertyChangeListener("fontSizeDelta", e -> {
             PrefHelper.getUserPreferences().putFloat(FONT_SIZE_DELTA_PROP, getFontSizeDelta());

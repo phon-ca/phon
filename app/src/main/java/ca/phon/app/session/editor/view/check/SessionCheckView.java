@@ -49,6 +49,10 @@ public class SessionCheckView extends EditorView {
 	private SessionCheckTableModel tableModel;
 	private JXTable sessionCheckTable;
 
+	private FlatButton toggleWarningsBtn;
+	private FlatButton toggleErrorsBtn;
+	private FlatButton toggleCurrentElementBtn;
+
 	public SessionCheckView(SessionEditor editor) {
 		super(editor);
 
@@ -114,6 +118,40 @@ public class SessionCheckView extends EditorView {
 
 		final IconStrip iconStrip = new IconStrip();
 
+
+		final PhonUIAction toggleWarningsAct = PhonUIAction.runnable(() -> {
+			toggleWarningsBtn.setSelected(!toggleWarningsBtn.isSelected());
+			sessionCheckTable.setRowFilter(new SessionCheckRowFilter(toggleWarningsBtn.isSelected(),
+					toggleErrorsBtn.isSelected(), -1));
+		});
+		toggleWarningsAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+		toggleWarningsAct.putValue(FlatButton.ICON_NAME_PROP, "warning");
+		toggleWarningsAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+		toggleWarningsBtn = new FlatButton(toggleWarningsAct);
+		toggleWarningsBtn.setFocusable(false);
+		toggleWarningsBtn.setIconColor(UIManager.getColor("textInactiveText"));
+		toggleWarningsBtn.setIconSelectedColor(UIManager.getColor("Phon.darkBlue"));
+		toggleWarningsBtn.setSelected(true);
+		toggleWarningsBtn.setToolTipText("Toggle warnings");
+		iconStrip.add(toggleWarningsBtn, IconStrip.IconStripPosition.LEFT);
+
+		final PhonUIAction toggleErrorsAct = PhonUIAction.runnable(() -> {
+			toggleErrorsBtn.setSelected(!toggleErrorsBtn.isSelected());
+			sessionCheckTable.setRowFilter(new SessionCheckRowFilter(toggleWarningsBtn.isSelected(),
+					toggleErrorsBtn.isSelected(), -1));
+		});
+		toggleErrorsAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+		toggleErrorsAct.putValue(FlatButton.ICON_NAME_PROP, "error");
+		toggleErrorsAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+		toggleErrorsBtn = new FlatButton(toggleErrorsAct);
+		toggleErrorsBtn.setFocusable(false);
+		toggleErrorsBtn.setIconColor(UIManager.getColor("textInactiveText"));
+		toggleErrorsBtn.setIconSelectedColor(UIManager.getColor("Phon.darkBlue"));
+		toggleErrorsBtn.setSelected(true);
+		toggleErrorsBtn.setToolTipText("Toggle errors");
+		iconStrip.add(toggleErrorsBtn, IconStrip.IconStripPosition.LEFT);
+
+
 		final PhonUIAction refreshAct = PhonUIAction.runnable(this::refresh);
 		refreshAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
 		refreshAct.putValue(FlatButton.ICON_NAME_PROP, "refresh");
@@ -124,6 +162,7 @@ public class SessionCheckView extends EditorView {
 
 		tableModel = new SessionCheckTableModel();
 		sessionCheckTable = new JXTable(tableModel);
+		sessionCheckTable.setRowFilter(new SessionCheckRowFilter(true, true, -1));
 		sessionCheckTable.setDefaultRenderer(ValidationEvent.Severity.class, new SessionCheckSeverityRenderer());
 		sessionCheckTable.getColumn(0).setMaxWidth(30);
 		sessionCheckTable.getColumn(1).setMaxWidth(50);
@@ -425,4 +464,40 @@ public class SessionCheckView extends EditorView {
 
 	}
 
+	private class SessionCheckRowFilter extends RowFilter<DefaultTableModel, Integer> {
+		private final boolean includeWarnings;
+
+		private final boolean includeErrors;
+
+		private final int elementIndex;
+
+		public SessionCheckRowFilter(boolean includeWarnings, boolean includeErrors, int elementIndex) {
+			this.includeWarnings = includeWarnings;
+			this.includeErrors = includeErrors;
+			this.elementIndex = elementIndex;
+		}
+
+		@Override
+		public boolean include(Entry<? extends DefaultTableModel, ? extends Integer> entry) {
+			boolean retVal = false;
+
+			final DefaultTableModel model = entry.getModel();
+			if(model != tableModel) return retVal;
+			final int row = entry.getIdentifier();
+
+			final ValidationEvent validationEvent = (ValidationEvent) tableModel.events.get(row);
+			if(validationEvent.getSeverity() == ValidationEvent.Severity.ERROR && includeErrors) {
+				retVal = true;
+			} else if(validationEvent.getSeverity() == ValidationEvent.Severity.WARNING && includeWarnings) {
+				retVal = true;
+			}
+			if(elementIndex >= 0) {
+				if(validationEvent.getElementIndex() != elementIndex) {
+					retVal = false;
+				}
+			}
+
+			return retVal;
+		}
+	}
 }
