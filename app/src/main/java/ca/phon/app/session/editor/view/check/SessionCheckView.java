@@ -99,6 +99,10 @@ public class SessionCheckView extends EditorView {
 		tableModel = new SessionCheckTableModel();
 		sessionCheckTable = new JXTable(tableModel);
 		sessionCheckTable.setDefaultRenderer(ValidationEvent.Severity.class, new SessionCheckSeverityRenderer());
+		sessionCheckTable.getColumn(0).setMaxWidth(30);
+		sessionCheckTable.getColumn(1).setMaxWidth(50);
+		sessionCheckTable.getColumn(2).setPreferredWidth(150);
+		sessionCheckTable.getColumn(2).setMaxWidth(300);
 		sessionCheckTable.addMouseListener(new MouseInputAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -287,7 +291,7 @@ public class SessionCheckView extends EditorView {
 		private List<ValidationEvent> events = new ArrayList<>();
 
 		public SessionCheckTableModel() {
-			super(new String[] { "Type", "Record #", "Tier", "Message" }, 0);
+			super(new String[] { "", "#", "Tier", "Message" }, 0);
 		}
 
 		@Override
