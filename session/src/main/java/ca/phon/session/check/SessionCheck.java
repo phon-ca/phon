@@ -59,6 +59,16 @@ public interface SessionCheck {
 	 * @return true if session was modified, false otherwise
 	 */
 	public boolean checkSession(SessionValidator validator, Session session);
+
+	/**
+	 * Check specified transcript element index for issues.
+	 *
+	 * @param validator
+	 * @param session
+	 *
+	 * @return true if issues were found, false otherwise
+	 */
+	public boolean checkTranscriptElement(SessionValidator validator, Session session, int elementIndex);
 	
 	public Properties getProperties();
 	

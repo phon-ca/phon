@@ -90,31 +90,37 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 		}
 
 		for(int eleIdx = 0; eleIdx < session.getTranscript().getNumberOfElements(); eleIdx++) {
-			final Transcript.Element transcriptElement = session.getTranscript().getElementAt(eleIdx);
-			if(transcriptElement.isRecord()) {
-				final Record record = transcriptElement.asRecord();
-				checkRecord(validator, session, eleIdx, record);
-			} else if(transcriptElement.isGem()) {
-				final Gem gem = transcriptElement.asGem();
-				checkGem(validator, session, eleIdx, gem);
-			} else if(transcriptElement.isComment()) {
-				final Comment comment = transcriptElement.asComment();
-				checkComment(validator, session, eleIdx, comment);
-			}
+			checkTranscriptElement(validator, session, eleIdx);
 		}
 
 		return modified;
 	}
 
-	private void checkRecord(SessionValidator validator, Session session, int eleIdx, Record record) {
+	@Override
+	public boolean checkTranscriptElement(SessionValidator validator, Session session, int eleIdx) {
+		boolean retVal = false;
+		final Transcript.Element transcriptElement = session.getTranscript().getElementAt(eleIdx);
+		if(transcriptElement.isRecord()) {
+			final Record record = transcriptElement.asRecord();
+			retVal |= checkRecord(validator, session, eleIdx, record);
+		} else if(transcriptElement.isGem()) {
+			final Gem gem = transcriptElement.asGem();
+			retVal |= checkGem(validator, session, eleIdx, gem);
+		} else if(transcriptElement.isComment()) {
+			final Comment comment = transcriptElement.asComment();
+			retVal |= checkComment(validator, session, eleIdx, comment);
+		}
+		return retVal;
+	}
+
+	private boolean checkRecord(SessionValidator validator, Session session, int eleIdx, Record record) {
 		if(record.getSpeaker() == Participant.UNKNOWN) {
 			validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, "Record", "Speaker is unidentified"));
 		}
 
 		if(record.getOrthographyTier().isUnvalidated()) {
-			validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, SystemTierType.Orthography.getName(),
+			validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.ERROR, session, eleIdx, SystemTierType.Orthography.getName(),
 				record.getOrthographyTier().getUnvalidatedValue().getParseError().getMessage()));
-			return;
 		} else {
 			if (record.getOrthography() == null || record.getOrthography().length() == 0) {
 				final SessionQuickFix quickFix = new SessionQuickFix() {
@@ -150,12 +156,12 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 
 		// check default ipa tiers
 		if(record.getIPATargetTier().isUnvalidated()) {
-			validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, SystemTierType.IPATarget.getName(),
+			validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.ERROR, session, eleIdx, SystemTierType.IPATarget.getName(),
 				record.getIPATargetTier().getUnvalidatedValue().getParseError().getMessage()));
 		}
 
 		if(record.getIPAActualTier().isUnvalidated()) {
-			validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, SystemTierType.IPAActual.getName(),
+			validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.ERROR, session, eleIdx, SystemTierType.IPAActual.getName(),
 				record.getIPAActualTier().getUnvalidatedValue().getParseError().getMessage()));
 		}
 
@@ -163,7 +169,7 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 		for(String tierName:record.getUserDefinedTierNames()) {
 			final Tier<?> tier = record.getTier(tierName);
 			if(tier.isUnvalidated()) {
-				validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, tier.getName(),
+				validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.ERROR, session, eleIdx, tier.getName(),
 					tier.getUnvalidatedValue().getParseError().getMessage()));
 			}
 		}
@@ -213,15 +219,18 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 				}
 			}
 		}
+
+		return false;
 	}
 
-	private void checkGem(SessionValidator validator, Session session, int eleIdx, Gem gem) {
+	private boolean checkGem(SessionValidator validator, Session session, int eleIdx, Gem gem) {
 		if(gem.getLabel() == null || gem.getLabel().isBlank()) {
 			validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, "Gem", "Gem label is blank"));
 		}
+		return false;
 	}
 
-	private void checkComment(SessionValidator validator, Session session, int eleIdx, Comment comment) {
+	private boolean checkComment(SessionValidator validator, Session session, int eleIdx, Comment comment) {
 		if(comment.getExtension(UnvalidatedValue.class) != null) {
 			var uv = comment.getExtension(UnvalidatedValue.class);
 			validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.ERROR, session, eleIdx, "Comment", uv.getParseError().getMessage()));
@@ -230,6 +239,7 @@ public class CheckTranscripts implements SessionCheck, IPluginExtensionPoint<Ses
 				validator.fireValidationEvent(new ValidationEvent(ValidationEvent.Severity.WARNING, session, eleIdx, "Comment", "Comment is blank"));
 			}
 		}
+		return false;
 	}
 
 	@Override

@@ -32,6 +32,7 @@ import org.jdesktop.swingx.JXTable;
 
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -59,6 +60,7 @@ public class SessionCheckView extends EditorView {
 	private void setupEditorActions() {
 //		getEditor().getEventManager().registerActionForEvent(EditorEventType.EditorFinishedLoading, this::onSessionFinishedLoading, EditorEventManager.RunOn.AWTEventDispatchThread);
 //		getEditor().getEventManager().registerActionForEvent(EditorEventType.SessionChanged, this::onSessionChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(EditorEventType.TierChange, this::onTierChange, EditorEventManager.RunOn.AWTEventDispatchThread);
 	}
 
 	private void onSessionFinishedLoading(EditorEvent<Void> ee) {
@@ -67,6 +69,18 @@ public class SessionCheckView extends EditorView {
 
 	private void onSessionChanged(EditorEvent<Session> ee) {
 		refresh();
+	}
+
+	private void onTierChange(EditorEvent<EditorEventType.TierChangeData> ee) {
+		EditorEventType.TierChangeData data = ee.getData().orElse(null);
+		if(data == null) return;
+		if(data.valueAdjusting()) return;
+		final int elementIndex = getEditor().getSession().getRecordElementIndex(data.record());
+		if(elementIndex >= 0) {
+			tableModel.removeEventsForElement(elementIndex);
+		}
+		SessionCheckWorker worker = new SessionCheckWorker(elementIndex);
+		worker.execute();
 	}
 
 	private void init() {
@@ -84,6 +98,7 @@ public class SessionCheckView extends EditorView {
 
 		tableModel = new SessionCheckTableModel();
 		sessionCheckTable = new JXTable(tableModel);
+		sessionCheckTable.setDefaultRenderer(ValidationEvent.Severity.class, new SessionCheckSeverityRenderer());
 		sessionCheckTable.addMouseListener(new MouseInputAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -186,7 +201,15 @@ public class SessionCheckView extends EditorView {
 	
 	private class SessionCheckWorker extends SwingWorker<List<ValidationEvent>, ValidationEvent> {
 
+		private final int elementIndex;
+
 		public SessionCheckWorker() {
+			this(-1);
+		}
+
+		public SessionCheckWorker(int elementIndex) {
+			super();
+			this.elementIndex = elementIndex;
 		}
 		
 		@Override
@@ -205,8 +228,12 @@ public class SessionCheckView extends EditorView {
 				events.add(e);
 				publish(e);
 			});
-					
-			validator.validate(getEditor().getSession());
+
+			if(elementIndex >= 0) {
+				validator.validate(getEditor().getSession(), elementIndex);
+			} else {
+				validator.validate(getEditor().getSession());
+			}
 			
 			return events;
 		}
@@ -226,6 +253,33 @@ public class SessionCheckView extends EditorView {
 
 		}
 		
+	}
+
+	private class SessionCheckSeverityRenderer extends DefaultTableCellRenderer {
+
+		@Override
+		protected void setValue(Object value) {
+			if(value instanceof ValidationEvent.Severity ves) {
+				switch (ves) {
+					case ERROR:
+						setIcon(IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName,
+								"error", IconSize.MEDIUM, Color.red));
+						break;
+
+					case WARNING:
+						setIcon(IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName,
+								"warning", IconSize.MEDIUM, Color.orange));
+						break;
+
+					default:
+						setIcon(null);
+						break;
+				}
+			} else {
+				super.setValue(value);
+			}
+		}
+
 	}
 
 	private class SessionCheckTableModel extends DefaultTableModel {
@@ -254,7 +308,7 @@ public class SessionCheckView extends EditorView {
 			ValidationEvent ve = events.get(row);
 			switch(col) {
 			case 0:
-				retVal = ve.getSeverity().toString();
+				retVal = ve.getSeverity();
 				break;
 
 			case 1:
@@ -263,7 +317,7 @@ public class SessionCheckView extends EditorView {
 				if(element.isRecord()) {
 					retVal = getEditor().getSession().getTranscript().getRecordIndex(elementIndex)+1;
 				} else {
-					retVal = "";
+					retVal = -1;
 				}
 				break;
 
@@ -279,15 +333,51 @@ public class SessionCheckView extends EditorView {
 			return retVal;
 		}
 
+		public Class<?> getColumnClass(int col) {
+			Class<?> retVal = Object.class;
+
+			switch(col) {
+			case 0:
+				retVal = ValidationEvent.Severity.class;
+				break;
+
+			case 1:
+				retVal = Integer.class;
+				break;
+			}
+
+			return retVal;
+		}
+
 		public void addEvents(List<ValidationEvent> events) {
-			int start = getRowCount();
-			this.events.addAll(events);
-			fireTableRowsInserted(start, start + events.size()-1);
+			events.stream().forEach(this::insertEvent);
 		}
 
 		public void reset() {
 			this.events.clear();
 			fireTableDataChanged();
+		}
+
+		public void insertEvent(ValidationEvent ve) {
+			// insert event at correct position in list based on element index
+			int idx = 0;
+			for(; idx < events.size(); idx++) {
+				if(events.get(idx).getElementIndex() > ve.getElementIndex()) {
+					break;
+				}
+			}
+			events.add(idx, ve);
+			fireTableRowsInserted(idx, idx);
+		}
+
+		public void removeEventsForElement(int elementIdx) {
+			for(int i = 0; i < events.size(); i++) {
+				if(events.get(i).getElementIndex() == elementIdx) {
+					events.remove(i);
+					fireTableRowsDeleted(i, i);
+					i--;
+				}
+			}
 		}
 
 	}

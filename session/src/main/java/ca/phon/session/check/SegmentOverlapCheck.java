@@ -95,6 +95,11 @@ public class SegmentOverlapCheck implements SessionCheck, IPluginExtensionPoint<
 	}
 
 	@Override
+	public boolean checkTranscriptElement(SessionValidator validator, Session session, int elementIndex) {
+		return false;
+	}
+
+	@Override
 	public Properties getProperties() {
 		return new Properties();
 	}

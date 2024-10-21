@@ -147,6 +147,11 @@ public class CheckAlignment implements SessionCheck, IPluginExtensionPoint<Sessi
 	}
 
 	@Override
+	public boolean checkTranscriptElement(SessionValidator validator, Session session, int elementIndex) {
+		return false;
+	}
+
+	@Override
 	public Properties getProperties() {
 		Properties retVal = new Properties();
 		

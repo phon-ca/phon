@@ -87,6 +87,14 @@ public class SessionValidator implements IExtendable {
 		}
 		return modified;
 	}
+
+	public boolean validate(Session session, int elementIndex) {
+		boolean modified = false;
+		for(SessionCheck check:sessionChecks) {
+			modified |= check.checkTranscriptElement(this, session, elementIndex);
+		}
+		return modified;
+	}
 	
 	public void addValidationListener(ValidationListener listener) {
 		this.listeners.add(listener);
