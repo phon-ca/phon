@@ -238,6 +238,12 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 					retVal.addUserTier(0, td);
 				}
 			}
+
+			if("morphology".equalsIgnoreCase(tierName)) {
+				tierName = "mor";
+			} else if("grasp".equalsIgnoreCase(tierName)) {
+				tierName = "gra";
+			}
 			tot.setTierName(tierName);
 			final TierViewItem toi = copyTierViewItem(factory, tot);
 			tierOrder.add(toi);
@@ -339,7 +345,8 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 			type = uttType.getType();
 		}
 
-		return factory.createTierDescription(name, type, new HashMap<>(), true);
+		return factory.createTierDescription(
+				uttType != null ? uttType.getPhonTierName() : name, type, new HashMap<>(), true);
 	}
 
 	private TierViewItem copyTierViewItem(SessionFactory factory, TvType tvt) {
@@ -637,7 +644,12 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 		}
 
 		for(GroupTierType gtt:rt.getGroupTier()) {
-			final TierDescription td = session.getUserTier(gtt.getTierName());
+			TierDescription td = session.getUserTier(gtt.getTierName());
+			if("morphology".equalsIgnoreCase(gtt.getTierName())) {
+				td = session.getUserTier("mor");
+			} else if("grasp".equalsIgnoreCase(gtt.getTierName())) {
+				td = session.getUserTier("gra");
+			}
 			if(td == null) {
 				//LOGGER.warning("User tier " + gtt.getTierName() + " not in session tier list");
 				continue;

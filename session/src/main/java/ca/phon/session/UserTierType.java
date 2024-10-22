@@ -42,15 +42,17 @@ public enum UserTierType {
      */
     Wor("Word intervals", "", "%wor", Orthography.class, true),
     /**
-     * Morphological tiers from CHAT
+     * umor/mor/trn tiers
      */
-    Mor("Morphology", "", "%mor", MorTierData.class, false),
-    Trn("Speech Turn", "", "%trn", MorTierData.class, false),
+    Umor("umor", "", "%umor", MorTierData.class, false),
+    Mor("mor", "", "%mor", MorTierData.class, false),
+    Trn("trn", "", "%trn", MorTierData.class, false),
     /**
-     * GRASP tiers
+     * ugra/gra/grt tiers
      */
-    Gra("GRASP", "", "%gra", GraspTierData.class, false),
-    Grt("GRASP Turn", "", "%grt", GraspTierData.class, false);
+    Ugra("ugra", "", "%ugra", GraspTierData.class, false),
+    Gra("gra", "", "%gra", GraspTierData.class, false),
+    Grt("grt", "", "%grt", GraspTierData.class, false);
 
     /**
      * tier name in Phon
@@ -104,7 +106,13 @@ public enum UserTierType {
     }
 
     public static UserTierType fromPhonTierName(String tierName) {
-        return fromPhonTierName(tierName, false);
+        if("morphology".equalsIgnoreCase(tierName)) {
+            return Mor;
+        } else if("grasp".equalsIgnoreCase(tierName)) {
+            return Gra;
+        } else {
+            return fromPhonTierName(tierName, false);
+        }
     }
 
     public static UserTierType fromPhonTierName(String tierName, boolean ignoreCase) {
