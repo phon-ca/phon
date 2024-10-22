@@ -63,8 +63,6 @@ public class SessionCheckView extends EditorView {
 	}
 
 	private void setupEditorActions() {
-//		getEditor().getEventManager().registerActionForEvent(EditorEventType.EditorFinishedLoading, this::onSessionFinishedLoading, EditorEventManager.RunOn.AWTEventDispatchThread);
-//		getEditor().getEventManager().registerActionForEvent(EditorEventType.SessionChanged, this::onSessionChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 		getEditor().getEventManager().registerActionForEvent(TranscriptEditor.transcriptDocumentPopulated, this::onSessionFinishedLoading, EditorEventManager.RunOn.AWTEventDispatchThread);
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.TierChange, this::onTierChange, EditorEventManager.RunOn.AWTEventDispatchThread);
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.CommentChanged, this::onCommentChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
