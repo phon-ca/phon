@@ -18,6 +18,7 @@ package ca.phon.app.session.editor.view.check;
 import ca.phon.app.log.*;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.view.check.actions.SessionCheckRefreshAction;
+import ca.phon.app.session.editor.view.transcript.TranscriptEditor;
 import ca.phon.app.session.editor.view.transcript.TranscriptView;
 import ca.phon.plugin.*;
 import ca.phon.session.Session;
@@ -64,6 +65,7 @@ public class SessionCheckView extends EditorView {
 	private void setupEditorActions() {
 //		getEditor().getEventManager().registerActionForEvent(EditorEventType.EditorFinishedLoading, this::onSessionFinishedLoading, EditorEventManager.RunOn.AWTEventDispatchThread);
 //		getEditor().getEventManager().registerActionForEvent(EditorEventType.SessionChanged, this::onSessionChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+		getEditor().getEventManager().registerActionForEvent(TranscriptEditor.transcriptDocumentPopulated, this::onSessionFinishedLoading, EditorEventManager.RunOn.AWTEventDispatchThread);
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.TierChange, this::onTierChange, EditorEventManager.RunOn.AWTEventDispatchThread);
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.CommentChanged, this::onCommentChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
 		getEditor().getEventManager().registerActionForEvent(EditorEventType.GemChanged, this::onGemChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
@@ -116,8 +118,15 @@ public class SessionCheckView extends EditorView {
 	private void init() {
 		setLayout(new BorderLayout());
 
-		final IconStrip iconStrip = new IconStrip();
+		final IconStrip iconStrip = new IconStrip(SwingConstants.VERTICAL);
 
+		final PhonUIAction refreshAct = PhonUIAction.runnable(this::refresh);
+		refreshAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+		refreshAct.putValue(FlatButton.ICON_NAME_PROP, "refresh");
+		refreshAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+		final FlatButton refreshBtn = new FlatButton(refreshAct);
+		refreshBtn.setFocusable(false);
+		iconStrip.add(refreshBtn, IconStrip.IconStripPosition.LEFT);
 
 		final PhonUIAction toggleWarningsAct = PhonUIAction.runnable(() -> {
 			toggleWarningsBtn.setSelected(!toggleWarningsBtn.isSelected());
@@ -152,13 +161,6 @@ public class SessionCheckView extends EditorView {
 		iconStrip.add(toggleErrorsBtn, IconStrip.IconStripPosition.LEFT);
 
 
-		final PhonUIAction refreshAct = PhonUIAction.runnable(this::refresh);
-		refreshAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
-		refreshAct.putValue(FlatButton.ICON_NAME_PROP, "refresh");
-		refreshAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
-		final FlatButton refreshBtn = new FlatButton(refreshAct);
-		refreshBtn.setFocusable(false);
-		iconStrip.add(refreshBtn, IconStrip.IconStripPosition.LEFT);
 
 		tableModel = new SessionCheckTableModel();
 		sessionCheckTable = new JXTable(tableModel);
@@ -194,7 +196,7 @@ public class SessionCheckView extends EditorView {
 			}
 		});
 
-		add(iconStrip, BorderLayout.NORTH);
+		add(iconStrip, BorderLayout.WEST);
 		add(new JScrollPane(sessionCheckTable), BorderLayout.CENTER);
 	}
 

@@ -35,6 +35,8 @@ import java.util.function.BiConsumer;
 
 public class TranscriptEditor extends JEditorPane implements IExtendable {
 
+    public final static EditorEventType<Void> transcriptDocumentPopulated = new EditorEventType<>("transcriptDocumentPopulated", Void.class);
+
     /**
      * The editor event type for the event that gets fired if the current record changes when the editor is in
      * "single record view" mode
@@ -1608,6 +1610,14 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         doc.setUndoSupport(undoSupport);
         doc.setEventManager(eventManager);
 
+        doc.addDocumentPropertyChangeListener("populate", evt -> {
+            if(evt.getNewValue() instanceof Boolean b) {
+                if(!b) {
+                    // populate finished
+                    getEventManager().queueEvent(new EditorEvent<>(TranscriptEditor.transcriptDocumentPopulated, this, null));
+                }
+            }
+        });
         doc.setSession(getSession());
         doc.addDocumentListener(new DocumentListener() {
             @Override

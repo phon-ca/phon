@@ -135,16 +135,14 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      */
     public void setSession(Session session) {
         this.session = session;
-        SwingUtilities.invokeLater(() -> {
-            try {
-                if (getLength() > 0) {
-                    remove(0, getLength());
-                }
-                populate();
-            } catch (BadLocationException e) {
-                LogUtil.severe(e);
+        try {
+            if (getLength() > 0) {
+                remove(0, getLength());
             }
-        });
+            populate();
+        } catch (BadLocationException e) {
+            LogUtil.severe(e);
+        }
     }
 
     /**
@@ -1972,8 +1970,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      * @throws RuntimeException if this method is not called on the EDT
      */
     private void populate() throws BadLocationException {
-        if(!SwingUtilities.isEventDispatchThread())
-            throw new RuntimeException("populate must be called on the EDT");
         if(populateLock.tryLock()) {
             try {
                 if (populateWorker != null && !populateWorker.isDone()) {
