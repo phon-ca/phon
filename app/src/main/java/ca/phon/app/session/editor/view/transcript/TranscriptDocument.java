@@ -777,8 +777,8 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             }
             boolean isLabel = TranscriptStyleConstants.isLabel(attrs);
             if (isLabel) {
-                // return start of label and end of label excluding starting tab
-                return new StartEnd(innerElem.getStartOffset() + 1, innerElem.getEndOffset());
+                // return start of label and end of label including starting tab
+                return new StartEnd(innerElem.getStartOffset(), innerElem.getEndOffset());
             }
         }
         return new StartEnd(-1, -1);
@@ -1310,6 +1310,8 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             processBatchUpdates(orthoLblStartEnd.start(), batchBuilder.getBatch());
         } catch (BadLocationException e) {
             LogUtil.severe(e);
+        } finally {
+            bypassDocumentFilter = false;
         }
     }
 

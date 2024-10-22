@@ -26,6 +26,8 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.*;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
@@ -914,7 +916,15 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
     private void onSpeakerChanged(EditorEvent<EditorEventType.SpeakerChangedData> editorEvent) {
         var data = editorEvent.data();
         // Update the speaker on the separator in the doc
+        final TranscriptElementLocation caretLoc = getTranscriptEditorCaret().getTranscriptLocation();
+        getTranscriptEditorCaret().freeze();
         getTranscriptDocument().onChangeSpeaker(data.record());
+        getTranscriptEditorCaret().unfreeze();
+        // Set the caret position back to where it was
+        final int newDot = sessionLocationToCharPos(caretLoc);
+        if(newDot >= 0) {
+            setCaretPosition(newDot);
+        }
     }
 
     /**
@@ -1610,11 +1620,15 @@ public class TranscriptEditor extends JEditorPane implements IExtendable {
         doc.setUndoSupport(undoSupport);
         doc.setEventManager(eventManager);
 
-        doc.addDocumentPropertyChangeListener("populate", evt -> {
-            if(evt.getNewValue() instanceof Boolean b) {
-                if(!b) {
-                    // populate finished
-                    getEventManager().queueEvent(new EditorEvent<>(TranscriptEditor.transcriptDocumentPopulated, this, null));
+        doc.addDocumentPropertyChangeListener("populate", new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getNewValue() instanceof Boolean b) {
+                    if (!b) {
+                        // populate finished
+                        getEventManager().queueEvent(new EditorEvent<>(TranscriptEditor.transcriptDocumentPopulated, TranscriptEditor.this, null));
+                        doc.removeDocumentPropertyChangeListener(this);
+                    }
                 }
             }
         });
