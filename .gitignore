@@ -9,3 +9,4 @@ external-resources/
 out/
 temp/
 src/main/dita/webhelp_resources/phon_application_manual.pdf
+.idea/

@@ -144,7 +144,7 @@
                         <tbody>
                             <row>
                                 <entry>re-enter</entry>
-                                <entry>ˈɹiː.ˌɛntəɹ</entry>
+                                <entry>ˈɹiː.ɛntəɹ</entry>
                             </row>
                             <row>
                                 <entry>sighing</entry>
@@ -189,7 +189,8 @@
         <topic id="intra-word_pause">
             <title>Pause (Intra-word)</title>
             <body>
-                <p>Intra-word pauses are transcribed using a '^' symbol.</p>
+                <p>Intra-word pauses are transcribed using a '^' symbol.  When at the beginning of
+                    the word is considered 'blocking'.</p>
                 <table frame="none" id="table_d99e21ed-6c72-42dc-b7ff-f42365536be">
                     <title>Intra-word pauses</title>
                     <tgroup cols="2">
@@ -205,6 +206,10 @@
                             <row>
                                 <entry>ca^che</entry>
                                 <entry>ˈkæ^s</entry>
+                            </row>
+                            <row>
+                                <entry>^blocking</entry>
+                                <entry>^ˈblɑkɪŋ</entry>
                             </row>
                         </tbody>
                     </tgroup>
@@ -339,10 +344,11 @@
             <title>Sandhi</title>
             <shortdesc>Description of sandhi.</shortdesc>
             <body>
-                <p>Linkers are symbols to express a phonological relation between two words, for example in the
-                    case of external sandhi phenomenon. For example, while 'an' and 'apple' for two separate
-                    words, the final 'n' of the determiner is syllabified within the onset of the following
-                    syllable. We represent this relations as 'an‿apple' [əˈnæpəl].</p>
+                <p>Linkers are symbols to express a phonological relation between two words, for
+                    example in the case of external sandhi phenomenon. For example, while 'an' and
+                    'apple' for two separate words, the final 'n' of the determiner is syllabified
+                    within the onset of the following syllable. We represent this relation as 'an
+                    apple' /ə‿næpəl/.</p>
                 <section>
                     <title>Contraction</title>
                     <p>A contraction is a combination of two words within a phrase, involving the reduction of one
@@ -350,16 +356,16 @@
                         <codeph>0x2040</codeph>.</p>
                 </section>
                 <example>
-                    <p>Contraction<codeblock>Orthography: [l'ami]
-                        IPA Actual:  [l⁀ami]</codeblock></p>
+                    <p>Contraction<codeblock>Orthography: l'ami
+IPA Actual:  l⁀ami</codeblock></p>
                 </example>
                 <section>
                     <title>Linkers (including Liaison)</title>
                     <p>Linkers are transcribed using the undertie character <codeph>0x203f</codeph>.</p>
                 </section>
                 <example>
-                    <p>Liaison<codeblock>Orthography: [les‿ami]
-                        IPA Target:  [le‿zami]</codeblock></p>
+                    <p>Liaison<codeblock>Orthography: les ami
+IPA Target:  le‿zami</codeblock></p>
                 </example>
             </body>
         </topic>
