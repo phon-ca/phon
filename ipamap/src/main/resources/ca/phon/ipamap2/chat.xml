@@ -192,160 +192,154 @@
 
     <grid rows="6" cols="44" name="Word suffix">
         <cell x="0" y="0" w="4" h="2">
-            <text>#</text>
-            <property name="insert">$$word$$#</property>
-            <property name="Name">separated prefix</property>
-            <property name="doc">https://talkbank.org/manuals/CHAT.html#Separated_Prefix</property>
-        </cell>
-        <cell x="4" y="0" w="4" h="2">
             <text>@a</text>
             <property name="insert">$$word$$@a</property>
             <property name="Name">addition</property>
             <property name="doc">https://talkbank.org/manuals/CHAT.html#Addition_Marker</property>
         </cell>
-        <cell x="8" y="0" w="4" h="2">
+        <cell x="4" y="0" w="4" h="2">
             <text>@b</text>
             <property name="insert">$$word$$@b</property>
             <property name="Name">babbling</property>
             <property name="doc">https://talkbank.org/manuals/CHAT.html#Babbling_Marker</property>
         </cell>
-        <cell x="12" y="0" w="4" h="2">
+        <cell x="8" y="0" w="4" h="2">
             <text>@c</text>
             <property name="insert">$$word$$@c</property>
             <property name="Name">child-invented form</property>
             <property name="doc">https://talkbank.org/manuals/CHAT.html#ChildInvented_Marker</property>
         </cell>
-        <cell x="16" y="0" w="4" h="2">
+        <cell x="12" y="0" w="4" h="2">
             <text>@d</text>
             <property name="insert">$$word$$@d</property>
             <property name="Name">dialect form</property>
             <property name="doc">https://talkbank.org/manuals/CHAT.html#DialectForm_Marker</property>
         </cell>
-        <cell x="20" y="0" w="4" h="2">
+        <cell x="16" y="0" w="4" h="2">
             <text>@e</text>
             <property name="insert">$$word$$@e</property>
             <property name="Name">echolalia</property>
             <property name="doc">https://talkbank.org/manuals/CHAT.html#EcholaliaForm_Marker</property>
         </cell>
-        <cell x="24" y="0" w="4" h="2">
+        <cell x="20" y="0" w="4" h="2">
             <text>@f</text>
             <property name="insert">$$word$$@f</property>
             <property name="Name">family specific form</property>
             <property name="doc">https://talkbank.org/manuals/CHAT.html#FamilySpecificForm_Marker</property>
         </cell>
-        <cell x="28" y="0" w="4" h="2">
+        <cell x="24" y="0" w="4" h="2">
             <text>@fp</text>
             <property name="insert">$$word$$@fp</property>
             <property name="Name">filled pause</property>
             <property name="doc">https://talkbank.org/manuals/CHAT.html#FilledPause_Marker</property>
         </cell>
-        <cell x="32" y="0" w="4" h="2">
+        <cell x="28" y="0" w="4" h="2">
             <text>@g</text>
             <property name="insert">$$word$$@g</property>
             <property name="Name">general special form</property>
             <property name="doc">https://talkbank.org/manuals/CHAT.html#GeneralSpecialForm_Marker</property>
         </cell>
-        <cell x="36" y="0" w="4" h="2">
+        <cell x="32" y="0" w="4" h="2">
             <text>@i</text>
             <property name="insert">$$word$$@i</property>
             <property name="Name">interjection, interaction</property>
             <property name="doc">https://talkbank.org/manuals/CHAT.html#Interjection_Marker</property>
         </cell>
-        <cell x="40" y="0" w="4" h="2">
+        <cell x="36" y="0" w="4" h="2">
             <text>@k</text>
             <property name="insert">$$word$$@k</property>
             <property name="Name">multiple letters</property>
             <property name="doc">https://talkbank.org/manuals/CHAT.html#Kana_Marker</property>
         </cell>
-        <cell x="0" y="2" w="4" h="2">
+        <cell x="40" y="0" w="4" h="2">
             <text>@l</text>
             <property name="insert">$$word$$@l</property>
             <property name="Name">letter</property>
             <property name="doc">https://talkbank.org/manuals/CHAT.html#Letter_Marker</property>
         </cell>
-        <cell x="4" y="2" w="4" h="2">
+        <cell x="0" y="2" w="4" h="2">
             <text>@n</text>
             <property name="insert">$$word$$@n</property>
             <property name="Name">neologism</property>
             <property name="doc">https://talkbank.org/manuals/CHAT.html#Neologism_Marker</property>
         </cell>
-        <cell x="8" y="2" w="4" h="2">
+        <cell x="4" y="2" w="4" h="2">
             <text>@nv</text>
             <property name="insert">$$word$$@nv</property>
             <property name="Name">no voice</property>
             <property name="doc">https://talkbank.org/manuals/CHAT.html#NonvoicedForm_Marker</property>
         </cell>
-        <cell x="12" y="2" w="4" h="2">
+        <cell x="8" y="2" w="4" h="2">
             <text>@o</text>
             <property name="insert">$$word$$@o</property>
             <property name="Name">onomatopoeia</property>
             <property name="doc">https://talkbank.org/manuals/CHAT.html#Onomatopoeia_Marker</property>
         </cell>
-        <cell x="16" y="2" w="4" h="2">
+        <cell x="12" y="2" w="4" h="2">
             <text>@p</text>
             <property name="insert">$$word$$@p</property>
             <property name="Name">phonology consistent form</property>
             <property name="doc">https://talkbank.org/manuals/CHAT.html#PCF_Marker</property>
         </cell>
-        <cell x="20" y="2" w="4" h="2">
+        <cell x="16" y="2" w="4" h="2">
             <text>@q</text>
             <property name="insert">$$word$$@q</property>
             <property name="Name">quoted metareference</property>
             <property name="doc">https://talkbank.org/manuals/CHAT.html#MetalinguisticReference_Marker</property>
         </cell>
-        <cell x="24" y="2" w="4" h="2">
+        <cell x="20" y="2" w="4" h="2">
             <text>@s:*</text>
             <property name="insert">$$word$$@s:*</property>
             <property name="Name">second-language form</property>
         </cell>
-        <cell x="28" y="2" w="4" h="2">
+        <cell x="24" y="2" w="4" h="2">
             <text>@s$n</text>
             <property name="insert">$$word$$@s$n</property>
             <property name="Name">second language noun</property>
         </cell>
-        <cell x="32" y="2" w="4" h="2">
+        <cell x="28" y="2" w="4" h="2">
             <text>@si</text>
             <property name="insert">$$word$$@si</property>
             <property name="Name">singing</property>
             <property name="doc">https://talkbank.org/manuals/CHAT.html#Singing_Marker</property>
         </cell>
-        <cell x="36" y="2" w="4" h="2">
+        <cell x="32" y="2" w="4" h="2">
             <text>@sl</text>
             <property name="insert">$$word$$@sl</property>
             <property name="Name">signed language</property>
             <property name="doc">https://talkbank.org/manuals/CHAT.html#SignLanguage_Marker</property>
         </cell>
-        <cell x="40" y="2" w="4" h="2">
+        <cell x="36" y="2" w="4" h="2">
             <text>@sas</text>
             <property name="insert">$$word$$@sas</property>
             <property name="Name">sign and speech</property>
             <property name="doc">https://talkbank.org/manuals/CHAT.html#SignAndSpeech_Marker</property>
         </cell>
-        <cell x="0" y="4" w="4" h="2">
+        <cell x="40" y="2" w="4" h="2">
             <text>@t</text>
             <property name="insert">$$word$$@t</property>
             <property name="Name">test form</property>
             <property name="doc">https://talkbank.org/manuals/CHAT.html#TestWord_Marker</property>
         </cell>
-        <cell x="4" y="4" w="4" h="2">
+        <cell x="0" y="4" w="4" h="2">
             <text>@u</text>
             <property name="insert">$$word$$@u</property>
             <property name="Name">Unibet transcription</property>
             <property name="doc">https://talkbank.org/manuals/CHAT.html#Unibet_Marker</property>
         </cell>
-        <cell x="8" y="4" w="4" h="2">
+        <cell x="4" y="4" w="4" h="2">
             <text>@wp</text>
             <property name="insert">$$word$$@wp</property>
             <property name="Name">word play</property>
             <property name="doc">https://talkbank.org/manuals/CHAT.html#WordPlay_Marker</property>
         </cell>
-        <cell x="12" y="4" w="4" h="2">
+        <cell x="8" y="4" w="4" h="2">
             <text>@x</text>
             <property name="insert">$$word$$@x</property>
             <property name="Name">excluded words</property>
             <property name="doc">https://talkbank.org/manuals/CHAT.html#Excluded_Marker</property>
         </cell>
-        <cell x="16" y="4" w="4" h="2">
+        <cell x="12" y="4" w="4" h="2">
             <text>@z:*</text>
             <property name="insert">$$word$$@z:xxx</property>
             <property name="Name">user-defined code</property>
