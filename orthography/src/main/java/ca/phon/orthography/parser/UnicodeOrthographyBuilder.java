@@ -58,7 +58,6 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
             if(wordElements.size() == 1 && wordElements.get(0) instanceof OverlapPoint) {
                 builder.replaceLastElement((OverlapPoint)wordElements.get(0));
             } else {
-                boolean separatedPrefix = false;
                 String userSpecialForm = "";
                 WordType wordType = null;
                 WordFormType formType = null;
@@ -75,9 +74,6 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
                     wordType = WordType.OMISSION;
                 }
                 if (ctx.wordsuffix() != null) {
-                    if(ctx.wordsuffix().HASH() != null) {
-                        separatedPrefix = true;
-                    }
                     if (ctx.wordsuffix().formtype() != null) {
                         formType = WordFormType.fromCode(ctx.wordsuffix().formtype().getText());
                         if(ctx.wordsuffix().formsuffix() != null) {
@@ -109,7 +105,7 @@ public final class UnicodeOrthographyBuilder extends AbstractUnicodeOrthographyP
                     untranscribedType = UntranscribedType.UNTRANSCRIBED;
                 }
                 WordPrefix prefix = (wordType == null ? null : new WordPrefix(wordType));
-                WordSuffix suffix = (formType != null || pos != null ? new WordSuffix(separatedPrefix, formType, formSuffix, userSpecialForm, pos) : null);
+                WordSuffix suffix = (formType != null || pos != null ? new WordSuffix(formType, formSuffix, userSpecialForm, pos) : null);
 
                 builder.annnotateWord(langs, prefix, suffix, untranscribedType);
             }

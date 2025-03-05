@@ -154,6 +154,7 @@ wordelement
     |   shortening
     |   prosody
     |   overlap_point
+    |   HASH
     ;
 
 word_text
@@ -217,7 +218,7 @@ prosody
     ;
 
 wordsuffix
-    :   HASH? (formtype formsuffix?)? user_special_form? langs? wordpos*
+    :   (formtype formsuffix?)? user_special_form? langs? wordpos*
     ;
 
 formsuffix
@@ -239,7 +240,6 @@ pos
 
 formtype
     :   FORMTYPE
-    |   HASH
     ;
 
 internal_media

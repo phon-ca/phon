@@ -112,8 +112,6 @@ public class OrthoToXmlVisitor extends AbstractOrthographyVisitor {
 			};
 			w.setFormType(wordFormType);
 			w.setFormSuffix(word.getSuffix().getFormSuffix());
-			if(word.getSuffix().isSeparatedPrefix())
-				w.setSeparatedPrefix(word.getSuffix().isSeparatedPrefix());
 			if(word.isUntranscribed()) {
 				final XmlUntranscribedType untranscribed = switch (word.getUntranscribedType()) {
 					case UNTRANSCRIBED -> XmlUntranscribedType.UNTRANSCRIBED;

@@ -26,8 +26,6 @@ import java.util.List;
  */
 public final class WordSuffix {
 
-	private final boolean separatedPrefix;
-
 	private final WordFormType type;
 
 	private final String formSuffix;
@@ -37,15 +35,14 @@ public final class WordSuffix {
 	private List<Pos> pos;
 	
 	public WordSuffix(WordFormType type) {
-		this(false, type, null, null);
+		this(type, null, null);
 	}
 
-	public WordSuffix(boolean separatedPrefix, WordFormType type, String formSuffix, String userSpecialForm, Pos... pos) {
-		this(separatedPrefix, type, formSuffix, userSpecialForm, Arrays.asList(pos));
+	public WordSuffix(WordFormType type, String formSuffix, String userSpecialForm, Pos... pos) {
+		this(type, formSuffix, userSpecialForm, Arrays.asList(pos));
 	}
 	
-	public WordSuffix(boolean separatedPrefix, WordFormType type, String formSuffix, String userSpecialForm, List<Pos> pos) {
-		this.separatedPrefix = separatedPrefix;
+	public WordSuffix(WordFormType type, String formSuffix, String userSpecialForm, List<Pos> pos) {
 		this.type = type;
 		this.formSuffix = formSuffix;
 		this.userSpecialForm = userSpecialForm;
@@ -68,10 +65,6 @@ public final class WordSuffix {
 		return formSuffix;
 	}
 
-	public boolean isSeparatedPrefix() {
-		return separatedPrefix;
-	}
-
 	public List<Pos> getWordPos() {
 		return pos;
 	}
@@ -79,8 +72,6 @@ public final class WordSuffix {
 	@Override
 	public String toString() {
 		final StringBuffer buffer = new StringBuffer();
-		if(separatedPrefix)
-			buffer.append("#");
 		if(type != null)
 			buffer.append(type.getCode());
 		if(formSuffix != null && formSuffix.length() > 0)

@@ -1700,15 +1700,6 @@
                 </xs:annotation>
             </xs:element>
         </xs:sequence>
-        <xs:attribute name="separated-prefix" type="xs:boolean">
-            <xs:annotation xmlns="http://www.w3.org/1999/xhtml">
-                <xs:documentation>word# indicates the word is a separated prefix</xs:documentation>
-                <xs:documentation>
-                    <a href="https://talkbank.org/manuals/CHAT.html#Separated_Prefix">CHAT manual
-                        section on this topic...</a>
-                </xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
 
         <xs:attribute name="user-special-form" type="xs:string">
             <xs:annotation xmlns="http://www.w3.org/1999/xhtml">

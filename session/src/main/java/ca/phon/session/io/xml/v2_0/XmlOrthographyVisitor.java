@@ -84,8 +84,7 @@ public class XmlOrthographyVisitor extends VisitorAdapter<Object> {
             case UNINTELLIGIBLE_WITH_PHO -> UntranscribedType.UNINTELLIGIBLE_WORD_WITH_PHO;
         };
         final List<Pos> pos = new ArrayList<>();
-        final boolean isSeparatedPrefix = word.isSeparatedPrefix() != null && word.isSeparatedPrefix();
-        final WordSuffix suffix = new WordSuffix(isSeparatedPrefix, formType, word.getFormSuffix(), userSpecialForm, pos);
+        final WordSuffix suffix = new WordSuffix(formType, word.getFormSuffix(), userSpecialForm, pos);
         final XmlWordContentVisitor visitor = new XmlWordContentVisitor();
         word.getContent().forEach(visitor::visit);
         pos.addAll(visitor.getWordPos());
