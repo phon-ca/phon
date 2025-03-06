@@ -35,17 +35,15 @@ public class MediaLocator {
 
 	/**
 	 * Media include path property.
-	 * This value of this property should be a semi-colon separated list of
+	 * This value of this property should be a semicolon separated list of
 	 * paths in order of search priority.
 	 */
 	public static final String MEDIA_INCLUDE_PATH_PROP = "ca.phon.media.util.MediaLocator.includepath";
 
 	/**
-	 * Set media include path as a list of
-	 * paths.
+	 * Set global media include paths for the user.
 	 *
 	 * @param paths
-	 * @param props
 	 */
 	public static void setMediaIncludePaths(List<String> paths) {
 		String includePath = "";
@@ -62,6 +60,8 @@ public class MediaLocator {
 	}
 
 	/**
+	 * Get media include paths for the user and project.
+	 *
 	 * @param project
 	 * @return
 	 */
@@ -69,35 +69,35 @@ public class MediaLocator {
 		return getMediaIncludePaths(project, null);
 	}
 
-	public static List<String> getMediaIncludePaths(Project project, String corpus) {
+	/**
+	 * Get media include paths for the user and project including the given session folder.
+	 *
+	 * @param project a phon project
+	 * @param sessionFolder a session folder
+	 * @return
+	 */
+	public static List<String> getMediaIncludePaths(Project project, String sessionFolder) {
 		List<String> retVal = new ArrayList<String>();
 
 		if(project != null) {
-			String projectMediaPath = project.getProjectMediaFolder();
-			
-			if(corpus != null) {
-				String corpusMediaPath = project.getCorpusMediaFolder(corpus);
-				final File corpusMediaFolder = new File(corpusMediaPath);
-				if(!corpusMediaFolder.isAbsolute())
-					corpusMediaPath = project.getLocation() + File.separator + corpusMediaPath;
-				if(!corpusMediaPath.equals(projectMediaPath))
-					retVal.add(corpusMediaPath);
-				
-				String defaultCorpusMediaPath = projectMediaPath + File.separator + corpus;
-				if(!projectMediaPath.equals(defaultCorpusMediaPath) && !corpusMediaPath.equals(defaultCorpusMediaPath))
-					retVal.add(defaultCorpusMediaPath);
+			// add session folder
+			if(sessionFolder != null) {
+				retVal.add(project.getCorpusPath(sessionFolder));
 			}
-			
-			final File projectMediaFolder = new File(projectMediaPath);
-			if(!projectMediaFolder.isAbsolute())
-				projectMediaPath = project.getLocation() + File.separator + projectMediaPath;
-			retVal.add(projectMediaPath);
+
+			// add project media folders
+			for(String folder:project.getProjectMediaFolders()) {
+				final File projectMediaFolder = new File(folder);
+				if(!projectMediaFolder.isAbsolute())
+					folder = project.getLocation() + File.separator + folder;
+				retVal.add(folder);
+			}
 		}
 
 		// add global paths
 		for(String mediaPath:getMediaIncludePaths()) {
-			if(corpus != null)
-				retVal.add(mediaPath + File.separator + corpus);
+			if(sessionFolder != null)
+				retVal.add(mediaPath + File.separator + sessionFolder);
 			retVal.add(mediaPath);
 		}
 
@@ -108,7 +108,6 @@ public class MediaLocator {
 	 * Get media include path as a list of
 	 * paths.
 	 *
-	 * @param props
 	 * @return media include paths
 	 */
 	private static List<String> parseMediaIncludePaths() {
@@ -182,11 +181,11 @@ public class MediaLocator {
 	 *
 	 * @param filename
 	 * @param project (may be <code>null</code>)
-	 * @param corpus (may be <code>null</code>)
+	 * @param sessionFolder (may be <code>null</code>)
 	 * @return the file object for the file or null if not found
 	 */
-	 public static File findMediaFile(String filename, Project project, String corpus) {
-		 Tuple<File, File> pathTuple = findMediaFileRelative(filename, project, corpus);
+	 public static File findMediaFile(String filename, Project project, String sessionFolder) {
+		 Tuple<File, File> pathTuple = findMediaFileRelative(filename, project, sessionFolder);
 		 if(pathTuple == null) return null;
 		 else {
 			 if(pathTuple.getObj1() == null) {
@@ -196,7 +195,15 @@ public class MediaLocator {
 			 }
 		 }
 	 }
-	 
+
+	/**
+	 * Search for a file in the media include path.
+	 *
+	 * @param filename
+	 * @param project
+	 * @param corpus
+	 * @return
+	 */
 	 public static Tuple<File, File> findMediaFileRelative(String filename, Project project, String corpus) {
 		 Tuple<File, File> retVal = null;
 
