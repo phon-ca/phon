@@ -20,16 +20,17 @@ import ca.phon.project.Project;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.worker.PhonWorker;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
 
-public class SelectProjectMediaFolder extends ProjectWindowAction {
+public class BrowseForProjectMediaFolder extends ProjectWindowAction {
 
 	private final static String TXT = "Select media folder...";
 
 	private final static String DESC = "Select project media folder";
 
-	public SelectProjectMediaFolder(ProjectWindow projectWindow) {
+	public BrowseForProjectMediaFolder(ProjectWindow projectWindow) {
 		super(projectWindow);
 
 		putValue(NAME, TXT);
@@ -64,8 +65,9 @@ public class SelectProjectMediaFolder extends ProjectWindowAction {
 			if(e.getDialogData() == null) return;
 
 			final String selectedFolder = e.getDialogData().toString();
-			
-			PhonWorker.getInstance().invokeLater( () -> project.setProjectMediaFolder(selectedFolder) );
+			project.addProjectMediaFolder(selectedFolder);
+
+			SwingUtilities.invokeLater(() -> getWindow().updateProjectMediaLabel());
 		});
 		NativeDialogs.showOpenDialog(props);
 	}

@@ -144,6 +144,12 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 		putExtension(ChangeProjectLocation.class, new LocalProjectChangeLocation(this));
 	}
 
+	/**
+	 * Load project data from disk
+	 * Project data is stored in a JSON file in the project folder with a file ext of .phonproj
+	 * If opening a Phon 3.x project, the project data will be loaded from the project.properties file
+	 * and saved to a .phonproj file.
+	 */
 	private void loadProjectData() {
 		if(this.projectJson == null) {
 			// load json properties if file is found
@@ -156,7 +162,13 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 			}
 		}
 	}
-	
+
+	/**
+	 * Load project properties from Phon 3.x and earlier properties file.  If no properties file is found, the project
+	 * name and UUID will be set to the project folder name and a new UUID.
+	 *
+	 * The old properties file will be deleted after the project data is loaded.
+	 */
 	private void loadProperties() {
 		final File oldPropertiesFile = new File(getFolder(), PREV_PROJECT_PROPERTIES_FILE);
 		File propsFile = new File(getFolder(), PROJECT_PROPERTIES_FILE);
@@ -214,11 +226,15 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 
 			// add empty properties to avoid runtime issues with plugins
 			putExtension(Properties.class, new Properties());
+		} else {
+			// add project name and UUID
+			this.projectJson.put(PROJECT_NAME_KEY, projectFolder.getName());
+			this.projectJson.put(PROJECT_UUID_KEY, UUID.randomUUID().toString());
 		}
 	}
 
 	/**
-	 * Load project JSON from provided file
+	 * Load project JSON data from provided file
 	 *
 	 * @param projectJsonFile
 	 */
@@ -242,6 +258,10 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 			this.projectJson.put(PROJECT_UUID_KEY, UUID.randomUUID().toString());
 		}
 	}
+
+	/**
+	 *
+	 */
 
 	/**
 	 * Save project data
@@ -990,7 +1010,15 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 
 	@Override
 	public List<String> getProjectMediaFolders() {
-		return List.of();
+		loadProjectData();
+		List<String> retVal = new ArrayList<>();
+		if(this.projectJson.has(PROJECT_MEDIAFOLDERS_KEY)) {
+			JSONArray mediaFolders = this.projectJson.getJSONArray(PROJECT_MEDIAFOLDERS_KEY);
+			for(int i = 0; i < mediaFolders.length(); i++) {
+				retVal.add(mediaFolders.getString(i));
+			}
+		}
+		return retVal;
 	}
 
 	@Override
@@ -1050,6 +1078,21 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 		JSONArray mediaFolders =
 				this.projectJson.has(PROJECT_MEDIAFOLDERS_KEY) ? this.projectJson.getJSONArray(PROJECT_MEDIAFOLDERS_KEY)
 						: new JSONArray();
+
+		File mediaFolderFile = new File(mediaFolder);
+		if(!mediaFolderFile.isAbsolute()) {
+			mediaFolderFile = new File(getFolder(), mediaFolder);
+		}
+		final File resMediaFolder = new File(getResourceLocation(), "media");
+		if(resMediaFolder.getAbsoluteFile().equals(mediaFolderFile.getAbsoluteFile())) {
+			return;
+		}
+
+		// if mediaFolderFile is a child of the project folder, relativize the path
+		if(mediaFolderFile.getAbsolutePath().startsWith(getFolder().getAbsolutePath())) {
+			mediaFolder = getFolder().toPath().relativize(mediaFolderFile.toPath()).toString();
+		}
+
 		mediaFolders.put(mediaFolder);
 		this.projectJson.put(PROJECT_MEDIAFOLDERS_KEY, mediaFolders);
 
@@ -1072,6 +1115,21 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 		JSONArray mediaFolders =
 				this.projectJson.has(PROJECT_MEDIAFOLDERS_KEY) ? this.projectJson.getJSONArray(PROJECT_MEDIAFOLDERS_KEY)
 						: new JSONArray();
+
+		File mediaFolderFile = new File(mediaFolder);
+		if(!mediaFolderFile.isAbsolute()) {
+			mediaFolderFile = new File(getFolder(), mediaFolder);
+		}
+		final File resMediaFolder = new File(getResourceLocation(), mediaFolderFile.getName());
+		if(resMediaFolder.getAbsoluteFile().equals(mediaFolderFile.getAbsoluteFile())) {
+			return;
+		}
+
+		// if mediaFolderFile is a child of the project folder, relativize the path
+		if(mediaFolderFile.getAbsolutePath().startsWith(getFolder().getAbsolutePath())) {
+			mediaFolder = getFolder().toPath().relativize(mediaFolderFile.toPath()).toString();
+		}
+
 		mediaFolders.put(index, mediaFolder);
 		this.projectJson.put(PROJECT_MEDIAFOLDERS_KEY, mediaFolders);
 

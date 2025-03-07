@@ -62,7 +62,9 @@ import java.util.List;
 import java.util.*;
 
 /**
- * The project window.
+ * The project window.  This window is the main interface for managing
+ * corpora and sessions within a project.  Only one project window
+ * is allowed per project.
  *
  */
 public class ProjectWindow extends CommonModuleFrame {
@@ -597,7 +599,7 @@ public class ProjectWindow extends CommonModuleFrame {
 			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
 				projectMediaFolderMenu.removeAll();
-				setupProjectMediaFolderMenu(new MenuBuilder(projectMediaFolderMenu));
+				setupProjectMediaFoldersMenu(new MenuBuilder(projectMediaFolderMenu));
 			}
 			
 			@Override
@@ -670,7 +672,67 @@ public class ProjectWindow extends CommonModuleFrame {
 			}
 		});
 	}
-	
+
+	/**
+	 * Setup project media folders menu
+	 *
+	 * @param builder the menu builder
+	 */
+	private void setupProjectMediaFoldersMenu(MenuBuilder builder) {
+		// show all current project media folders
+		// first the legacy media folder: __res/media
+		final File resMediaFolder = new File(getProject().getResourceLocation(), "media");
+		if (resMediaFolder.exists()) {
+			final PhonUIAction<File> showResMediaFolderAct = PhonUIAction.consumer(this::openFolder, resMediaFolder);
+			showResMediaFolderAct.putValue(PhonUIAction.NAME, "__res/media");
+			showResMediaFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show __res/media folder");
+			builder.addItem(".", showResMediaFolderAct);
+		}
+
+		// now the project media folders
+		for (String folder : getProject().getProjectMediaFolders()) {
+			final File projectMediaFolder = new File(folder);
+			if (!projectMediaFolder.isAbsolute())
+				folder = getProject().getLocation() + File.separator + folder;
+
+			final JMenu folderMenu = builder.addMenu(".", folder);
+			final MenuBuilder folderBuilder = new MenuBuilder(folderMenu);
+
+			final PhonUIAction<File> showProjectMediaFolderAct = PhonUIAction.consumer(this::openFolder, projectMediaFolder);
+			showProjectMediaFolderAct.putValue(PhonUIAction.NAME, folder);
+			showProjectMediaFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show project media folder");
+			folderBuilder.addItem(".", showProjectMediaFolderAct);
+
+			final PhonUIAction<String> removeProjectMediaFolderAct = PhonUIAction.eventConsumer(this::onRemoveProjectMediaFolder, folder);
+			removeProjectMediaFolderAct.putValue(PhonUIAction.NAME, "Remove");
+			removeProjectMediaFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Remove project media folder");
+			folderBuilder.addItem(".", removeProjectMediaFolderAct);
+		}
+
+		builder.addSeparator(".", "s1");
+
+		// add action to add new project media folder
+		final BrowseForProjectMediaFolder browseForMediaFolderAct = new BrowseForProjectMediaFolder(this);
+		browseForMediaFolderAct.putValue(PhonUIAction.NAME, "Add new media folder...");
+		browseForMediaFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Add new project media folder");
+		builder.addItem(".", browseForMediaFolderAct);
+	}
+
+	private void onBrowseForMediaFolder() {
+
+	}
+
+	private void onRemoveProjectMediaFolder(PhonActionEvent<String> pae) {
+		getProject().removeProjectMediaFolder(pae.getData());
+		updateProjectMediaLabel();
+	}
+
+	/**
+	 * Setup project menu
+	 *
+	 * @param builder the menu builder
+	 *
+	 */
 	private void setupProjectMenu(MenuBuilder builder) {
 		final RenameProjectAction renameProjectAction = new RenameProjectAction(this);
 		builder.addItem(".", renameProjectAction);
@@ -703,7 +765,7 @@ public class ProjectWindow extends CommonModuleFrame {
 		
 		builder.addSeparator(".", "project_actions");
 		
-		setupProjectMediaFolderMenu(builder);
+		setupProjectMediaFoldersMenu(builder);
 		builder.addSeparator(".", "project_media_folder");
 
 		builder.addSeparator(".", "team");
@@ -751,7 +813,7 @@ public class ProjectWindow extends CommonModuleFrame {
 		updateProjectMediaLabel();
 	}
 
-	private void updateProjectMediaLabel() {
+	public void updateProjectMediaLabel() {
 		File projectMediaFolder = new File(getProject().getProjectMediaFolder());
 		File absoluteProjectMediaFolder = projectMediaFolder.isAbsolute() ? projectMediaFolder : new File(getProject().getLocation(), getProject().getProjectMediaFolder());
 		
@@ -778,52 +840,52 @@ public class ProjectWindow extends CommonModuleFrame {
 		}
 	}
 
-	private void setupProjectMediaFolderMenu(MenuBuilder builder) {
-		File projectMediaFolder = new File(getProject().getProjectMediaFolder());
-		File absoluteProjectMediaFolder = projectMediaFolder.isAbsolute() ? projectMediaFolder : new File(getProject().getLocation(), getProject().getProjectMediaFolder());
-		
-		final PhonUIAction<File> showProjectFolderAct = PhonUIAction.consumer(this::openFolder, absoluteProjectMediaFolder);
-		showProjectFolderAct.putValue(PhonUIAction.NAME, "Show media folder");
-		showProjectFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open file system browser with project media folder selected");
-		JMenuItem showProjectFolderItem = new JMenuItem(showProjectFolderAct);
-		showProjectFolderItem.setEnabled(absoluteProjectMediaFolder.exists());
-		builder.addItem(".", showProjectFolderItem);
-		
-		builder.addSeparator(".", "s1");
-		
-		final SelectProjectMediaFolder selectFolderAct = new SelectProjectMediaFolder(this);
-		builder.addItem(".", selectFolderAct);
-		
-		if(getProject().hasCustomProjectMediaFolder()) {
-			final PhonUIAction<Void> resetProjectFolderAct = PhonUIAction.eventConsumer(this::onResetProjectMediaFolder);
-			resetProjectFolderAct.putValue(PhonUIAction.NAME, "Clear media folder selection");
-			resetProjectFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Clear media folder selection");
-			builder.addItem(".", resetProjectFolderAct);
-			
-			if(!absoluteProjectMediaFolder.exists()) {
-				final PhonUIAction<Void> createProjectFolderAct = PhonUIAction.runnable(() -> absoluteProjectMediaFolder.mkdirs());
-				createProjectFolderAct.putValue(PhonUIAction.NAME, (getProject().hasCustomProjectMediaFolder() ? "Create media folder" : "Create default media folder"));
-				createProjectFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create folder " + getProject().getProjectMediaFolder());
-				final JMenuItem createProjectFolderItem = new JMenuItem(createProjectFolderAct);
-				createProjectFolderItem.addActionListener( (e) -> SwingUtilities.invokeLater(ProjectWindow.this::updateProjectMediaLabel) );
-				builder.addItem(".", createProjectFolderItem);
-			}
-		}
-		
-		if(getProject().hasCustomProjectMediaFolder()) {
-			if(projectMediaFolder.isAbsolute()) {
-				final PhonUIAction<Void> makeRelativeAct = PhonUIAction.runnable(this::onMakeProjectMediaFolderRelative);
-				makeRelativeAct.putValue(PhonUIAction.NAME,	"Make media folder path relative to project");
-				makeRelativeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Make media folder path relative to project folder");
-				builder.addItem(".", makeRelativeAct);
-			} else {
-				final PhonUIAction<Void> makeAbsoluteAct = PhonUIAction.runnable(this::onMakeProjectMediaFolderAbsolute);
-				makeAbsoluteAct.putValue(PhonUIAction.NAME, "Make media folder path absolute");
-				makeAbsoluteAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Make project media folder an absolute filename");
-				builder.addItem(".", makeAbsoluteAct);
-			}
-		}
-	}
+//	private void setupProjectMediaFolderMenu(MenuBuilder builder) {
+//		File projectMediaFolder = new File(getProject().getProjectMediaFolder());
+//		File absoluteProjectMediaFolder = projectMediaFolder.isAbsolute() ? projectMediaFolder : new File(getProject().getLocation(), getProject().getProjectMediaFolder());
+//
+//		final PhonUIAction<File> showProjectFolderAct = PhonUIAction.consumer(this::openFolder, absoluteProjectMediaFolder);
+//		showProjectFolderAct.putValue(PhonUIAction.NAME, "Show media folder");
+//		showProjectFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Open file system browser with project media folder selected");
+//		JMenuItem showProjectFolderItem = new JMenuItem(showProjectFolderAct);
+//		showProjectFolderItem.setEnabled(absoluteProjectMediaFolder.exists());
+//		builder.addItem(".", showProjectFolderItem);
+//
+//		builder.addSeparator(".", "s1");
+//
+//		final BrowseForProjectMediaFolder selectFolderAct = new BrowseForProjectMediaFolder(this);
+//		builder.addItem(".", selectFolderAct);
+//
+//		if(getProject().hasCustomProjectMediaFolder()) {
+//			final PhonUIAction<Void> resetProjectFolderAct = PhonUIAction.eventConsumer(this::onResetProjectMediaFolder);
+//			resetProjectFolderAct.putValue(PhonUIAction.NAME, "Clear media folder selection");
+//			resetProjectFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Clear media folder selection");
+//			builder.addItem(".", resetProjectFolderAct);
+//
+//			if(!absoluteProjectMediaFolder.exists()) {
+//				final PhonUIAction<Void> createProjectFolderAct = PhonUIAction.runnable(() -> absoluteProjectMediaFolder.mkdirs());
+//				createProjectFolderAct.putValue(PhonUIAction.NAME, (getProject().hasCustomProjectMediaFolder() ? "Create media folder" : "Create default media folder"));
+//				createProjectFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Create folder " + getProject().getProjectMediaFolder());
+//				final JMenuItem createProjectFolderItem = new JMenuItem(createProjectFolderAct);
+//				createProjectFolderItem.addActionListener( (e) -> SwingUtilities.invokeLater(ProjectWindow.this::updateProjectMediaLabel) );
+//				builder.addItem(".", createProjectFolderItem);
+//			}
+//		}
+//
+//		if(getProject().hasCustomProjectMediaFolder()) {
+//			if(projectMediaFolder.isAbsolute()) {
+//				final PhonUIAction<Void> makeRelativeAct = PhonUIAction.runnable(this::onMakeProjectMediaFolderRelative);
+//				makeRelativeAct.putValue(PhonUIAction.NAME,	"Make media folder path relative to project");
+//				makeRelativeAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Make media folder path relative to project folder");
+//				builder.addItem(".", makeRelativeAct);
+//			} else {
+//				final PhonUIAction<Void> makeAbsoluteAct = PhonUIAction.runnable(this::onMakeProjectMediaFolderAbsolute);
+//				makeAbsoluteAct.putValue(PhonUIAction.NAME, "Make media folder path absolute");
+//				makeAbsoluteAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Make project media folder an absolute filename");
+//				builder.addItem(".", makeAbsoluteAct);
+//			}
+//		}
+//	}
 	
 	void setupCorpusFolderMenu(String corpus, MenuBuilder builder) {
 		boolean enabled = (corpus != null);
