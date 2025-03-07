@@ -85,6 +85,12 @@ public class MediaLocator {
 				retVal.add(project.getCorpusPath(sessionFolder));
 			}
 
+			// add default media folder
+			final File resMediaFolder = new File(project.getResourceLocation(), "media");
+			if(resMediaFolder.exists()) {
+				retVal.add(resMediaFolder.getAbsolutePath());
+			}
+
 			// add project media folders
 			for(String folder:project.getProjectMediaFolders()) {
 				final File projectMediaFolder = new File(folder);
@@ -209,9 +215,10 @@ public class MediaLocator {
 
 		 if(filename == null) return retVal;
 
+		 final File file = new File(filename);
 		 // if filename does not have an extension, go through the list
 		 // of supported extensions and return the first found (if any)
-		 int extIdx = filename.lastIndexOf('.');
+		 int extIdx = file.getName().lastIndexOf('.');
 		 if(extIdx < 0) {
 			 FileFilter mediaFileFilter = FileFilter.mediaFilter;
 			 for(String ext:mediaFileFilter.getAllExtensions()) {
