@@ -1012,6 +1012,12 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 	public List<String> getProjectMediaFolders() {
 		loadProjectData();
 		List<String> retVal = new ArrayList<>();
+
+		final File defaultMediaFolder = new File(getResourceLocation(), "media");
+		if(defaultMediaFolder.exists()) {
+			retVal.add(PROJECT_RES_FOLDER + File.separator + "media");
+		}
+
 		if(this.projectJson.has(PROJECT_MEDIAFOLDERS_KEY)) {
 			JSONArray mediaFolders = this.projectJson.getJSONArray(PROJECT_MEDIAFOLDERS_KEY);
 			for(int i = 0; i < mediaFolders.length(); i++) {
@@ -1052,15 +1058,14 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 
 		JSONArray mediaFolders = this.projectJson.getJSONArray(PROJECT_MEDIAFOLDERS_KEY);
 		JSONArray newMediaFolders = new JSONArray();
-		int index = -1;
+		final int index = mediaFolders.toList().indexOf(mediaFolder);
+		if(index < 0) return;
 		for(int i = 0; i < mediaFolders.length(); i++) {
 			String folder = mediaFolders.getString(i);
 			if(!folder.equals(mediaFolder)) {
-				index = i;
 				newMediaFolders.put(folder);
 			}
 		}
-		if(index == -1) return;
 
 		this.projectJson.put(PROJECT_MEDIAFOLDERS_KEY, newMediaFolders);
 		try {

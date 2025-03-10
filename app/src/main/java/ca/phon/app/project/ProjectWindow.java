@@ -40,6 +40,7 @@ import ca.phon.util.*;
 import ca.phon.util.icons.*;
 import ca.phon.worker.PhonWorker;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.errors.NoWorkTreeException;
@@ -680,36 +681,37 @@ public class ProjectWindow extends CommonModuleFrame {
 	 */
 	private void setupProjectMediaFoldersMenu(MenuBuilder builder) {
 		// show all current project media folders
+
 		// first the legacy media folder: __res/media
 		final File resMediaFolder = new File(getProject().getResourceLocation(), "media");
-		if (resMediaFolder.exists()) {
-			final PhonUIAction<File> showResMediaFolderAct = PhonUIAction.consumer(this::openFolder, resMediaFolder);
-			showResMediaFolderAct.putValue(PhonUIAction.NAME, "__res/media");
-			showResMediaFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show __res/media folder");
-			builder.addItem(".", showResMediaFolderAct);
-		}
 
 		// now the project media folders
 		for (String folder : getProject().getProjectMediaFolders()) {
-			final File projectMediaFolder = new File(folder);
-			if (!projectMediaFolder.isAbsolute())
-				folder = getProject().getLocation() + File.separator + folder;
+			File projectMediaFolder = new File(folder);
+			if (!projectMediaFolder.isAbsolute()) {
+//				folder = getProject().getLocation() + File.separator + folder;
+				projectMediaFolder = new File(getProject().getLocation(), folder);
+			}
 
 			final JMenu folderMenu = builder.addMenu(".", folder);
 			final MenuBuilder folderBuilder = new MenuBuilder(folderMenu);
 
 			final PhonUIAction<File> showProjectMediaFolderAct = PhonUIAction.consumer(this::openFolder, projectMediaFolder);
-			showProjectMediaFolderAct.putValue(PhonUIAction.NAME, folder);
+			showProjectMediaFolderAct.putValue(PhonUIAction.NAME, "Show in " + (OSInfo.isMacOs() ? "Finder" : "Explorer"));
 			showProjectMediaFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Show project media folder");
 			folderBuilder.addItem(".", showProjectMediaFolderAct);
 
-			final PhonUIAction<String> removeProjectMediaFolderAct = PhonUIAction.eventConsumer(this::onRemoveProjectMediaFolder, folder);
-			removeProjectMediaFolderAct.putValue(PhonUIAction.NAME, "Remove");
-			removeProjectMediaFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Remove project media folder");
-			folderBuilder.addItem(".", removeProjectMediaFolderAct);
+			if(!resMediaFolder.getAbsolutePath().equals(projectMediaFolder.getAbsolutePath())) {
+				// add action to remove project media folder
+				final PhonUIAction<String> removeProjectMediaFolderAct = PhonUIAction.eventConsumer(this::onRemoveProjectMediaFolder, folder);
+				removeProjectMediaFolderAct.putValue(PhonUIAction.NAME, "Remove");
+				removeProjectMediaFolderAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Remove project media folder");
+				folderBuilder.addItem(".", removeProjectMediaFolderAct);
+			}
 		}
-
-		builder.addSeparator(".", "s1");
+		if(getProject().getProjectMediaFolders().size() > 1) {
+			builder.addSeparator(".", "s1");
+		}
 
 		// add action to add new project media folder
 		final BrowseForProjectMediaFolder browseForMediaFolderAct = new BrowseForProjectMediaFolder(this);
@@ -821,14 +823,15 @@ public class ProjectWindow extends CommonModuleFrame {
 			projectMediaFolderLabel.setText("(click to select)");
 			projectMediaFolderLabel.setForeground(Color.blue);
 		} else {
-			projectMediaFolderLabel.setText(getProject().getProjectMediaFolder());
-			if(absoluteProjectMediaFolder.exists()) {
-				projectMediaFolderLabel.setForeground(Color.blue);
-				projectMediaFolderLabel.setToolTipText("Click to change project media folder");
-			} else {
-				projectMediaFolderLabel.setForeground(Color.red);
-				projectMediaFolderLabel.setToolTipText("Media folder not found, click to create or select new project media folder");
+			StringBuilder sb = new StringBuilder();
+			for(String mediaFolder:getProject().getProjectMediaFolders()) {
+				sb.append(mediaFolder);
+				sb.append(", ");
 			}
+			final String mediaFolders = StringUtils.abbreviate(sb.substring(0, sb.length()-2), 300);
+			projectMediaFolderLabel.setText(mediaFolders);
+			projectMediaFolderLabel.setForeground(Color.blue);
+			projectMediaFolderLabel.setToolTipText("Click to modify project media folders");
 		}
 	}
 

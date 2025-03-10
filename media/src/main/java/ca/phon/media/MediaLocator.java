@@ -85,11 +85,11 @@ public class MediaLocator {
 				retVal.add(project.getCorpusPath(sessionFolder));
 			}
 
-			// add default media folder
-			final File resMediaFolder = new File(project.getResourceLocation(), "media");
-			if(resMediaFolder.exists()) {
-				retVal.add(resMediaFolder.getAbsolutePath());
-			}
+//			// add default media folder
+//			final File resMediaFolder = new File(project.getResourceLocation(), "media");
+//			if(resMediaFolder.exists()) {
+//				retVal.add(resMediaFolder.getAbsolutePath());
+//			}
 
 			// add project media folders
 			for(String folder:project.getProjectMediaFolders()) {
