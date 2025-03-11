@@ -296,7 +296,6 @@ public class TranscriptStyleContext extends StyleContext {
     public SimpleAttributeSet getSegmentTimeAttributes(MediaSegment segment) {
         SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_MEDIA_SEGMENT, segment);
-
         return retVal;
     }
 
@@ -310,9 +309,7 @@ public class TranscriptStyleContext extends StyleContext {
     public SimpleAttributeSet getSegmentDashAttributes(MediaSegment segment) {
         SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
         retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_MEDIA_SEGMENT, segment);
-
         StyleConstants.setForeground(retVal, UIManager.getColor(TranscriptEditorUIProps.SEGMENT_DASH));
-
         return retVal;
     }
 

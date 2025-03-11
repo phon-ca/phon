@@ -8,6 +8,7 @@ import ca.phon.app.session.editor.undo.*;
 import ca.phon.app.session.editor.view.mediaPlayer.MediaPlayerEditorView;
 import ca.phon.app.session.editor.view.participants.ParticipantsView;
 import ca.phon.app.session.editor.view.speechAnalysis.SpeechAnalysisEditorView;
+import ca.phon.app.session.editor.view.speechAnalysis.SpeechAnalysisViewColors;
 import ca.phon.app.session.editor.view.tierManagement.TierMenuBuilder;
 import ca.phon.app.session.editor.view.timeline.TimelineView;
 import ca.phon.app.session.editor.view.transcript.actions.*;
@@ -39,13 +40,15 @@ import javax.swing.event.PopupMenuListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
 
 /**
- * The {@link EditorView} that uses the {@link TranscriptEditor}
- * */
+ * View for editing a session's transcript.  This view provides a text editor for the transcript
+ * as well as a number of tools for editing and navigating the transcript.
+ */
 public class TranscriptView extends EditorView {
 
     public final static String VIEW_NAME = "Transcript";
@@ -112,6 +115,8 @@ public class TranscriptView extends EditorView {
             transcriptEditor.recalculateTierLabelWidth();
         });
         setupKeyboardShortcuts();
+
+        editor.getMediaModel().getSegmentPlayback().addPropertyChangeListener(SegmentPlayback.PLAYBACK_PROP, this::onSegmentPlaybackChange);
     }
 
     private void setupKeyboardShortcuts() {
@@ -332,6 +337,21 @@ public class TranscriptView extends EditorView {
         NavigationPanel navPanel = new NavigationPanel(getEditor());
         iconStrip.add(playSegmentButton, IconStrip.IconStripPosition.RIGHT);
         iconStrip.add(navPanel, IconStrip.IconStripPosition.RIGHT);
+    }
+
+    private void onSegmentPlaybackChange(PropertyChangeEvent evt) {
+        SegmentPlayback segmentPlayback = (SegmentPlayback)evt.getSource();
+        if(SegmentPlayback.PLAYBACK_PROP.contentEquals(evt.getPropertyName())) {
+            if(segmentPlayback.isPlaying()) {
+                final ImageIcon stopIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "stop_circle", IconSize.MEDIUM, UIManager.getColor("Button.foreground"));
+                playSegmentButton.setIcon(stopIcon);
+//                playButton.setText("Stop playback");
+            } else {
+                final ImageIcon playIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "play_circle", IconSize.MEDIUM, UIManager.getColor("Button.foreground"));
+                playSegmentButton.setIcon(playIcon);
+//                playButton.setText("Play segment");
+            }
+        }
     }
 
     public void playPause(PhonActionEvent<Void> pae) {

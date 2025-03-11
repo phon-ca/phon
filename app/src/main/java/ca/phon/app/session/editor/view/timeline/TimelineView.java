@@ -129,7 +129,7 @@ public final class TimelineView extends EditorView {
 		init();
 		update();
 		
-		editor.getMediaModel().getSegmentPlayback().addPropertyChangeListener(segmentPlaybackListener);
+		editor.getMediaModel().getSegmentPlayback().addPropertyChangeListener(this::onSegmentPlaybackChange);
 	}
 	
 	private void init() {
@@ -1187,46 +1187,49 @@ public final class TimelineView extends EditorView {
 		}
 		
 	};
-	
-	private PropertyChangeListener segmentPlaybackListener = new PropertyChangeListener() {
-		
-		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			SegmentPlayback segmentPlayback = (SegmentPlayback)evt.getSource();
-			if(SegmentPlayback.PLAYBACK_PROP.contentEquals(evt.getPropertyName())) {
-				if(segmentPlayback.isPlaying()) {
-					segmentPlaybackMarker = timeModel.addMarker(segmentPlayback.getTime(), UIManager.getColor(SpeechAnalysisViewColors.PLAYBACK_MARKER_COLOR));
-					segmentPlaybackMarker.setOwner(getWaveformTier().getWaveformDisplay());
-					segmentPlaybackMarker.setDraggable(false);
-					
-					if(mediaPlayerPlaybackMarker != null) {
-						timeModel.removeMarker(mediaPlayerPlaybackMarker);
-					}
 
-					final ImageIcon stopIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "stop", IconSize.SMALL, UIManager.getColor("Button.foreground"));
-					playButton.setIcon(stopIcon);
-					playButton.setText("Stop playback");
-				} else {
-					if(segmentPlaybackMarker != null)
-						timeModel.removeMarker(segmentPlaybackMarker);
-					segmentPlaybackMarker = null;
+	/**
+	 * Listener for segment playback, added to the session media model's segment playback object
+	 *
+	 * @param evt the property change event
+	 */
+	private void onSegmentPlaybackChange(PropertyChangeEvent evt) {
+		SegmentPlayback segmentPlayback = (SegmentPlayback)evt.getSource();
+		if(SegmentPlayback.PLAYBACK_PROP.contentEquals(evt.getPropertyName())) {
+			if(segmentPlayback.isPlaying()) {
+				segmentPlaybackMarker = timeModel.addMarker(segmentPlayback.getTime(), UIManager.getColor(SpeechAnalysisViewColors.PLAYBACK_MARKER_COLOR));
+				segmentPlaybackMarker.setOwner(getWaveformTier().getWaveformDisplay());
+				segmentPlaybackMarker.setDraggable(false);
 
-					if(mediaPlayerPlaybackMarker != null)
-						timeModel.addMarker(mediaPlayerPlaybackMarker);
-
-					final ImageIcon playIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "play_arrow", IconSize.SMALL, UIManager.getColor("Button.foreground"));
-					playButton.setIcon(playIcon);
-					playButton.setText("Play segment");
+				if(mediaPlayerPlaybackMarker != null) {
+					timeModel.removeMarker(mediaPlayerPlaybackMarker);
 				}
-			} else if(SegmentPlayback.TIME_PROP.contentEquals(evt.getPropertyName())) {
-				if(segmentPlaybackMarker != null) {
-					segmentPlaybackMarker.setTime((float)evt.getNewValue());
-				}
+
+				final ImageIcon stopIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "stop", IconSize.SMALL, UIManager.getColor("Button.foreground"));
+				playButton.setIcon(stopIcon);
+				playButton.setText("Stop playback");
+			} else {
+				if(segmentPlaybackMarker != null)
+					timeModel.removeMarker(segmentPlaybackMarker);
+				segmentPlaybackMarker = null;
+
+				if(mediaPlayerPlaybackMarker != null)
+					timeModel.addMarker(mediaPlayerPlaybackMarker);
+
+				final ImageIcon playIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "play_arrow", IconSize.SMALL, UIManager.getColor("Button.foreground"));
+				playButton.setIcon(playIcon);
+				playButton.setText("Play segment");
+			}
+		} else if(SegmentPlayback.TIME_PROP.contentEquals(evt.getPropertyName())) {
+			if(segmentPlaybackMarker != null) {
+				segmentPlaybackMarker.setTime((float)evt.getNewValue());
 			}
 		}
-		
-	};
-	
+	}
+
+	/**
+	 * Listener for syncing playback marker with media player
+	 */
 	private class PlaybackMarkerSyncListener extends MediaPlayerEventAdapter {
 
 		private Timer playbackTimer;
@@ -1279,7 +1282,10 @@ public final class TimelineView extends EditorView {
 		}
 		
 	}
-	
+
+	/**
+	 * Task for syncing playback marker with media player
+	 */
 	private class PlaybackMarkerTask extends TimerTask {
 
 		volatile long startTime;
@@ -1307,48 +1313,9 @@ public final class TimelineView extends EditorView {
 		
 	}
 
-	private class SeparatorMouseListener extends MouseInputAdapter {
-		
-		private TimelineTier tier;
-		
-		private boolean valueAdjusting = false;
-		
-		public SeparatorMouseListener(TimelineTier tier) {
-			super();
-			
-			this.tier = tier;
-		}
-		
-		public TimelineTier getTier() {
-			return this.tier;
-		}
-		
-		@Override
-		public void mousePressed(MouseEvent e) {
-			valueAdjusting = true;
-			((JComponent)e.getSource()).firePropertyChange("valueAdjusting", false, valueAdjusting);
-		}
-		
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			valueAdjusting = false;
-			((JComponent)e.getSource()).firePropertyChange("valueAdjusting", true, valueAdjusting);
-		}
-		
-		@Override
-		public void mouseDragged(MouseEvent e) {
-			Dimension currentSize = tier.getSize();
-			Dimension prefSize = tier.getPreferredSize();
-
-			prefSize.height = currentSize.height + e.getY();
-			if(prefSize.height < 0) prefSize.height = 0;
-			
-			tier.setPreferredSize(prefSize);
-			tierPanel.revalidate();
-		}
-		
-	}
-	
+	/**
+	 * Context menu listener
+	 */
 	private MouseListener contextMenuListener = new MouseAdapter() {
 
 		@Override
@@ -1366,7 +1333,10 @@ public final class TimelineView extends EditorView {
 		}
 		
 	};
-	
+
+	/**
+	 * Scrollable panel for tiers
+	 */
 	private class TierPanel extends JPanel implements Scrollable {
 		
 		public TierPanel() {

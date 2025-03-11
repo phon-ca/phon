@@ -73,7 +73,7 @@ public class ViewIconStrip extends IconStrip {
 
             add(viewButtons.get(SearchView.VIEW_NAME), IconStripPosition.LEFT);
             add(viewButtons.get(IPADictionaryView.VIEW_NAME), IconStripPosition.LEFT);
-            add(viewButtons.get(SyllabificationAlignmentEditorView.VIEW_NAME), IconStripPosition.LEFT);
+//            add(viewButtons.get(SyllabificationAlignmentEditorView.VIEW_NAME), IconStripPosition.LEFT);
         }
 
         viewModel.addEditorViewModelListener(new EditorViewModelListener() {

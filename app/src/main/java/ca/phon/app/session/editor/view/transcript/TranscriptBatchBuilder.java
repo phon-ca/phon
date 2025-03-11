@@ -8,12 +8,10 @@ import ca.phon.orthography.mor.Grasp;
 import ca.phon.orthography.mor.GraspTierData;
 import ca.phon.orthography.mor.Mor;
 import ca.phon.orthography.mor.MorTierData;
-import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.session.Record;
 import ca.phon.session.format.MediaSegmentFormatter;
 import ca.phon.session.tierdata.*;
-import ca.phon.util.PrefHelper;
-import org.w3c.dom.Attr;
 
 import javax.swing.*;
 import javax.swing.text.*;
@@ -173,7 +171,7 @@ public class TranscriptBatchBuilder {
      * Gets a list of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} containing a newline character
      * with the specified attributes and the {@code ElementSpec.EndTagType} and {@code ElementSpec.StartTagType} tags
      *
-     * @param endAttrs   attributes for end tag (may be null)
+     * @param endAttrs attributes for end tag (may be null)
      * @param startAttrs attributes for start tag (may be null)
      * @return a list with the newline character and the end and start tags
      */
@@ -265,9 +263,9 @@ public class TranscriptBatchBuilder {
     /**
      * Appends a formatted representation of the provided segment in the provided style to the batch
      *
-     * @param segment         the segment that will be appended
+     * @param segment the segment that will be appended
      * @param additionalAttrs any additional attributes to be added to the segment (none added if {@code null})
-     * @param style           the style to format the times of the segment
+     * @param style the style to format the times of the segment
      */
     public void appendFormattedSegment(MediaSegment segment, AttributeSet additionalAttrs, MediaTimeFormatStyle style) {
         var formatter = new MediaSegmentFormatter(style);
@@ -293,7 +291,7 @@ public class TranscriptBatchBuilder {
     /**
      * Appends a formatted representation of the provided segment to the batch
      *
-     * @param segment         the segment that will be appended
+     * @param segment the segment that will be appended
      * @param additionalAttrs any additional attributes to be added to the segment (none added if {@code null})
      */
     public void appendFormattedSegment(MediaSegment segment, AttributeSet additionalAttrs) {
@@ -303,7 +301,7 @@ public class TranscriptBatchBuilder {
     /**
      * Writes a given comment to the batch
      *
-     * @param comment            the comment that will be written
+     * @param comment the comment that will be written
      * @param chatTierNamesShown whether or not chat tier names are shown
      * @return a mutable attribute set containing the attributes of the last character of the comment to add a
      * newline after if need be
@@ -392,7 +390,7 @@ public class TranscriptBatchBuilder {
     /**
      * Writes a given gem to the batch
      *
-     * @param gem                the comment that will be written
+     * @param gem the comment that will be written
      * @param chatTierNamesShown whether or not chat tier names are shown
      * @return this builder
      */
@@ -435,7 +433,7 @@ public class TranscriptBatchBuilder {
     /**
      * Gets the text value of a given tier for a given transcriber
      *
-     * @param tier        the tier that the value will come from
+     * @param tier the tier that the value will come from
      * @param transcriber the transcriber whose text will be returned
      * @return the text value of a given tier for a given transcriber (or the regular text for the tier if the transcriber is the validator or {@code null})
      */
@@ -463,12 +461,12 @@ public class TranscriptBatchBuilder {
      * Inserts a given tier at the end of the batch
      *
      * @param record
-     * @param tier               the tier that will be inserted
-     * @param tierViewItem       a reference to a {@link TierViewItem} used to get font info if any is present
+     * @param tier the tier that will be inserted
+     * @param tierViewItem a reference to a {@link TierViewItem} used to get font info if any is present
      * @param chatTierNamesShown whether or not chat tier names are shown
-     * @param transcriber        the transcriber whose text will be batched (if tier is blind)
-     * @param additionalAttrs    an attribute set containing attributes for the containing record to be added to the tier
-     *                           attributes (none will be added if {@code null})
+     * @param transcriber the transcriber whose text will be batched (if tier is blind)
+     * @param additionalAttrs an attribute set containing attributes for the containing record to be added to the tier
+     *  attributes (none will be added if {@code null})
      * @return a mutable attribute set containing the attributes of the last character of the tier to add a
      * newline after if need be
      */
@@ -560,11 +558,11 @@ public class TranscriptBatchBuilder {
                 return this;
             } else if (tier.hasBlindTranscription(transcriber.getUsername())) {
                 tierValue = tier.getBlindTranscription(transcriber.getUsername());
-            } else if(tierValue != null) {
+            } else if (tierValue != null) {
                 // add italics to indicate that the transcriber has not transcribed this tier but value
                 // is available from already validated material
                 StyleConstants.setItalic((MutableAttributeSet) tierAttrs, true);
-                if(tierValue.toString().length() == 0 && tier.isUnvalidated()) {
+                if (tierValue.toString().length() == 0 && tier.isUnvalidated()) {
                     appendBatchString(tier.getUnvalidatedValue().getValue(), tierAttrs);
                     return this;
                 }
@@ -579,7 +577,7 @@ public class TranscriptBatchBuilder {
         if (tierValue != null) {
             if (tierType.equals(IPATranscript.class)) {
                 Tier<IPATranscript> ipaTier = (Tier<IPATranscript>) tier;
-                List<IPATranscript> words = ((IPATranscript)tierValue).words();
+                List<IPATranscript> words = ((IPATranscript) tierValue).words();
                 if (words.isEmpty()) {
                     appendBatchString("", tierAttrs);
                 } else {
@@ -688,8 +686,8 @@ public class TranscriptBatchBuilder {
     /**
      * Writes the contents of the given record to the batch
      *
-     * @param session            the session that the record belongs to
-     * @param record             the record that will be written to the batch
+     * @param session the session that the record belongs to
+     * @param record the record that will be written to the batch
      * @param chatTierNamesShown whether or not chat tier names are shown
      * @return this builder
      */
@@ -796,7 +794,7 @@ public class TranscriptBatchBuilder {
      * @return the attributes of the last elementspec
      */
     public SimpleAttributeSet getTrailingAttributes() {
-        if(trailingAttrs == null) {
+        if (trailingAttrs == null) {
             if (batch.isEmpty()) return new SimpleAttributeSet();
             final AttributeSet prevAttrs = batch.get(batch.size() - 1).getAttributes();
             SimpleAttributeSet attrs = new SimpleAttributeSet(prevAttrs != null ? prevAttrs : new SimpleAttributeSet());
