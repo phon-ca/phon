@@ -22,7 +22,7 @@ public class SegmentEditorPopup extends TimeComponent {
 
     private final SessionMediaModel mediaModel;
 
-    private final SegmentField segmentField;
+//    private final SegmentField segmentField;
 
     private JScrollPane waveformScroller;
 
@@ -48,7 +48,7 @@ public class SegmentEditorPopup extends TimeComponent {
         this.segment.setEndValue(segment.getEndValue());
         this.segment.setUnitType(segment.getUnitType());
         this.waveformDisplay = new WaveformDisplay(getTimeModel());
-        this.segmentField = new SegmentField();
+//        this.segmentField = new SegmentField();
         init();
     }
 
@@ -62,21 +62,21 @@ public class SegmentEditorPopup extends TimeComponent {
         firePropertyChange("preferredPopupWidth", oldVal, preferredPopupWidth);
     }
 
-    public void updateText() {
-        final MediaSegment segment = this.segment;
-        final Formatter<MediaSegment> segmentFormatter = FormatterFactory.createFormatter(MediaSegment.class);
-
-        String tierTxt =
-                (segmentFormatter != null ? segmentFormatter.format(segment) : DEFAULT_SEGMENT_TEXT);
-        segmentField.setText(tierTxt);
-        segmentField.setFont(FontPreferences.getTierFont());
-    }
+//    public void updateText() {
+//        final MediaSegment segment = this.segment;
+//        final Formatter<MediaSegment> segmentFormatter = FormatterFactory.createFormatter(MediaSegment.class);
+//
+//        String tierTxt =
+//                (segmentFormatter != null ? segmentFormatter.format(segment) : DEFAULT_SEGMENT_TEXT);
+//        segmentField.setText(tierTxt);
+//        segmentField.setFont(FontPreferences.getTierFont());
+//    }
 
     public void init() {
         setLayout(new BorderLayout());
 
-        updateText();
-        addPropertyChangeListener("segment", e -> updateText());
+//        updateText();
+//        addPropertyChangeListener("segment", e -> updateText());
 
         final TimeUIModel timeUIModel = getTimeModel();
         if(mediaModel.isSessionAudioAvailable()) {
@@ -96,7 +96,7 @@ public class SegmentEditorPopup extends TimeComponent {
         } else {
             add(new JLabel("No session audio available"), BorderLayout.CENTER);
         }
-        add(segmentField, BorderLayout.SOUTH);
+//        add(segmentField, BorderLayout.SOUTH);
         setupTimeModel();
     }
 

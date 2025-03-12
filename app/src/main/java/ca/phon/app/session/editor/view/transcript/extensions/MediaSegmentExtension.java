@@ -90,30 +90,35 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
     /**
      * Shows the segment edit callout
      *
-     * @param segmentCalloutInfo infor for callout
+     * @param segmentCalloutInfo info for callout
      */
     private void showSegmentEditCallout(SegmentCalloutInfo segmentCalloutInfo) {
         final var segmentEditor = getSegmentEditorPopup(segmentCalloutInfo);
 
         try {
-            var start = editor.modelToView2D(editor.getSelectionStart());
-            var end = editor.modelToView2D(editor.getSelectionEnd());
+            final int recordIndex = editor.getSession().getRecordPosition(segmentCalloutInfo.record());
+            if(recordIndex < 0) {
+                return;
+            }
+            final TranscriptDocument.StartEnd startEnd =
+                    editor.getTranscriptDocument().getTierContentStartEnd(recordIndex, segmentCalloutInfo.segmentTier.getName());
+            if(!startEnd.valid()) {
+                return;
+            }
 
-            Point point = new Point(
-                    (int) (((end.getBounds().getMaxX() - start.getBounds().getMinX()) / 2) + start.getBounds().getMinX()),
-                    (int) start.getCenterY()
-            );
+            // box select bounds
+            editor.boxSelectBounds(startEnd);
 
-            point.x += editor.getLocationOnScreen().x;
-            point.y += editor.getLocationOnScreen().y;
+            var start = editor.modelToView2D(startEnd.start());
+            var end = editor.modelToView2D(startEnd.end());
 
-            CalloutWindow.showCallout(
-                    CommonModuleFrame.getCurrentFrame(),
-                    true,
-                    segmentEditor,
-                    SwingConstants.NORTH,
-                    point
-            );
+            final Point topLeft = new Point((int)start.getX(), (int)start.getY());
+            final Point bottomRight = new Point((int)end.getMaxX(), (int)end.getMaxY());
+            SwingUtilities.convertPointToScreen(topLeft, editor);
+            SwingUtilities.convertPointToScreen(bottomRight, editor);
+            var pointAt = new Rectangle(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
+
+            editor.showNonFocusableCallout(false, segmentEditor, SwingConstants.NORTH, pointAt);
         } catch (BadLocationException e) {
             LogUtil.warning(e);
         }
@@ -121,24 +126,26 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
 
     private void onTranscriptLocationChanged(EditorEvent<TranscriptEditor.TranscriptLocationChangeData> evt) {
         final TranscriptElementLocation loc = evt.getData().get().newLoc();
-        if (SystemTierType.Segment.getName().equals(loc.tier())) {
-            final int recordIndex = editor.getSession().getTranscript().getRecordIndex(loc.transcriptElementIndex());
-            if (recordIndex >= 0) {
-                final Record record = editor.getSession().getRecord(recordIndex);
-                final var segmentTier = record.getSegmentTier();
-                final var segmentBounds = editor.getTranscriptDocument().getTierContentStartEnd(recordIndex, loc.tier());
-                if (segmentBounds.valid()) {
-                    selectedSegment = segmentTier.getValue();
-//                    editor.boxSelectBounds(segmentBounds);
-                    return;
+        final TranscriptElementLocation oldLoc = evt.getData().get().oldLoc();
+
+        if((loc.transcriptElementIndex() != oldLoc.transcriptElementIndex()) ||!(loc.tier().equals(oldLoc.tier()))) {
+            if (selectedSegment != null) {
+                editor.removeCurrentBoxSelect();
+                if(editor.getCurrentCallout() != null)
+                    editor.getCurrentCallout().dispose();
+                selectedSegment = null;
+            }
+            if (SystemTierType.Segment.getName().equals(loc.tier())) {
+                final int recordIndex = editor.getSession().getTranscript().getRecordIndex(loc.transcriptElementIndex());
+                if (recordIndex >= 0) {
+                    final Record record = editor.getSession().getRecord(recordIndex);
+                    final var segmentTier = record.getSegmentTier();
+                    final var segmentBounds = editor.getTranscriptDocument().getTierContentStartEnd(recordIndex, loc.tier());
+                    if (segmentBounds.valid()) {
+                        selectedSegment = segmentTier.getValue();
+                    }
                 }
             }
-        }
-
-        // remove box select if we are not in a segment anymore
-        if (selectedSegment != null) {
-//            editor.removeCurrentBoxSelect();
-            selectedSegment = null;
         }
     }
 

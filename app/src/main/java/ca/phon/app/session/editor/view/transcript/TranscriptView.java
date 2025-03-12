@@ -328,11 +328,8 @@ public class TranscriptView extends EditorView {
         iconStrip.add(commentsBtn, IconStrip.IconStripPosition.LEFT);
         iconStrip.add(gemsBtn, IconStrip.IconStripPosition.LEFT);
         iconStrip.add(new JSeparator(SwingConstants.VERTICAL), IconStrip.IconStripPosition.LEFT);
+//        iconStrip.add(singleRecordModeBtn, IconStrip.IconStripPosition.LEFT);
         iconStrip.add(fontScaleMenuButton, IconStrip.IconStripPosition.LEFT);
-//        iconStrip.add(transcriptBtn, IconStrip.IconStripPosition.LEFT);
-//        iconStrip.add(findReplaceBtn, IconStrip.IconStripPosition.RIGHT);
-//        iconStrip.add(singleRecordModeBtn, IconStrip.IconStripPosition.RIGHT);
-
 
         NavigationPanel navPanel = new NavigationPanel(getEditor());
         iconStrip.add(playSegmentButton, IconStrip.IconStripPosition.RIGHT);
@@ -345,11 +342,9 @@ public class TranscriptView extends EditorView {
             if(segmentPlayback.isPlaying()) {
                 final ImageIcon stopIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "stop_circle", IconSize.MEDIUM, UIManager.getColor("Button.foreground"));
                 playSegmentButton.setIcon(stopIcon);
-//                playButton.setText("Stop playback");
             } else {
                 final ImageIcon playIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "play_circle", IconSize.MEDIUM, UIManager.getColor("Button.foreground"));
                 playSegmentButton.setIcon(playIcon);
-//                playButton.setText("Play segment");
             }
         }
     }

@@ -2189,7 +2189,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
         @Override
         public void remove(FilterBypass fb, int offset, int length) throws BadLocationException {
-
             if (!doc.isBypassDocumentFilter()) {
                 var attrs = doc.getCharacterElement(offset).getAttributes();
                 if (doc.containsNotEditableAttribute(attrs)) return;
@@ -2210,16 +2209,13 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
         @Override
         public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet _attrs) throws BadLocationException {
-
-
-
             // For some reason attrs gets the attributes from the previous character, so this fixes that
             SimpleAttributeSet attrs = new SimpleAttributeSet();
             attrs.addAttributes(doc.getCharacterElement(offset).getAttributes());
 
             // Labels and stuff
-            if (doc.containsNotEditableAttribute(attrs)) {
-                if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_FIRST_SEGMENT_DASH) != null) {
+            if (TranscriptStyleConstants.isNotEditable(attrs)) {
+                if (TranscriptStyleConstants.isFirstSegmentDash(attrs)) {
                     super.replace(fb, offset, length, text, _attrs);
                 }
                 return;

@@ -281,7 +281,7 @@ public class TranscriptBatchBuilder {
         }
 
         SimpleAttributeSet firstDashAttrs = new SimpleAttributeSet(segmentDashAttrs);
-        firstDashAttrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_FIRST_SEGMENT_DASH, true);
+        TranscriptStyleConstants.setFirstSegmentDash(firstDashAttrs, true);
 
         appendBatchString("•", firstDashAttrs);
         appendBatchString(value, segmentTimeAttrs);
