@@ -5,11 +5,11 @@ import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.transcript.*;
+import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.formatter.MediaTimeFormatStyle;
-import ca.phon.session.MediaSegment;
+import ca.phon.orthography.InternalMedia;
+import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.SystemTierType;
-import ca.phon.session.Tier;
 import ca.phon.session.format.MediaSegmentFormatter;
 import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.ui.CalloutWindow;
@@ -225,45 +225,41 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
                             + text + currentText.substring(location.charPosition() + text.length());
 
                     final Matcher matcher = mediaSegmentPattern.matcher(replacedText);
+                    MediaSegment newSegment = SessionFactory.newFactory().createMediaSegment();
                     if (matcher.matches()) {
-//                        editor.getTranscriptEditorCaret().freeze();
                         try {
-//                            doc.setBypassDocumentFilter(true);
-//                            doc.remove(mediaSegmentStartEnd.start(), mediaSegmentStartEnd.length());
-//                            final TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(doc);
-//                            final SimpleAttributeSet tierAttrs = new SimpleAttributeSet();
-//                            tierAttrs.addAttributes(doc.getTranscriptStyleContext().getRecordAttributes(record));
-//                            tierAttrs.addAttributes(doc.getTranscriptStyleContext().getTierAttributes(tier));
                             final MediaSegmentFormatter segmentFormatter = new MediaSegmentFormatter(MediaTimeFormatStyle.PADDED_MINUTES_AND_SECONDS);
-                            final MediaSegment newSegment = segmentFormatter.parse(matcher.group(1));
-//                            batchBuilder.appendFormattedSegment(newSegment, tierAttrs);
-//                            doc.processBatchUpdates(mediaSegmentStartEnd.start(), batchBuilder.getBatch());
+                            newSegment = segmentFormatter.parse(matcher.group(1));
 
-                            // update segment
-                            if(SystemTierType.Segment.getName().equals(tier.getName())) {
-                                final TierEdit<MediaSegment> tierEdit = new TierEdit<>(editor.getSession(),
-                                        editor.getEventManager(), record, (Tier<MediaSegment>) tier, newSegment);
-                                editor.getUndoSupport().postEdit(tierEdit);
-                            }
-                            int nextChar = location.charPosition() + text.length();
-                            while(nextChar < replacedText.length() -2 && !Character.isDigit(replacedText.charAt(nextChar))) {
-                                nextChar++;
-                            }
-                            final var newLocation =
-                                    new TranscriptElementLocation(location.transcriptElementIndex(), location.tier(), nextChar);
-                            if (newLocation.valid()) {
-                                SwingUtilities.invokeLater(() -> {
-                                    final int caretPos = doc.sessionLocationToCharPos(newLocation);
-                                    if (caretPos >= 0) {
-                                        editor.setCaretPosition(caretPos);
-                                    }
-                                });
+                            if(newSegment.getStartTime() > newSegment.getEndTime()) {
+                                final UnvalidatedValue uv = new UnvalidatedValue(InternalMedia.MEDIA_BULLET +
+                                        segmentFormatter.format(newSegment) + InternalMedia.MEDIA_BULLET,
+                                        new ParseException("Segment start time > end time", 0));
+                                newSegment = SessionFactory.newFactory().createMediaSegment();
+                                newSegment.putExtension(UnvalidatedValue.class, uv);
                             }
                         } catch (ParseException e) {
-                            LogUtil.severe(e);
-                        } finally {
-//                            doc.setBypassDocumentFilter(false);
-//                            editor.getTranscriptEditorCaret().unfreeze();
+                            mediaSegment.putExtension(UnvalidatedValue.class, new UnvalidatedValue(replacedText, e));
+                        }
+                        // update segment
+                        if(SystemTierType.Segment.getName().equals(tier.getName())) {
+                            final TierEdit<MediaSegment> tierEdit = new TierEdit<>(editor.getSession(),
+                                    editor.getEventManager(), record, (Tier<MediaSegment>) tier, newSegment);
+                            editor.getUndoSupport().postEdit(tierEdit);
+                        }
+                        int nextChar = location.charPosition() + text.length();
+                        while(nextChar < replacedText.length() -2 && !Character.isDigit(replacedText.charAt(nextChar))) {
+                            nextChar++;
+                        }
+                        final var newLocation =
+                                new TranscriptElementLocation(location.transcriptElementIndex(), location.tier(), nextChar);
+                        if (newLocation.valid()) {
+                            SwingUtilities.invokeLater(() -> {
+                                final int caretPos = doc.sessionLocationToCharPos(newLocation);
+                                if (caretPos >= 0) {
+                                    editor.setCaretPosition(caretPos);
+                                }
+                            });
                         }
                     }
                 }

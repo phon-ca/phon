@@ -601,7 +601,7 @@ public class TranscriptBatchBuilder {
                     }
                 }
             } else if (tierType.equals(MediaSegment.class)) {
-                MediaSegment segment = record.getMediaSegment();
+                MediaSegment segment = (MediaSegment) tierValue;
                 appendFormattedSegment(segment, tierAttrs);
             } else if (tierType.equals(Orthography.class)) {
                 final Orthography ortho = (Orthography) tierValue;
