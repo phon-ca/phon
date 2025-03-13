@@ -33,12 +33,16 @@ public class TranscriptNavigationFilter extends NavigationFilter {
         }
         if(doc.isBypassDocumentFilter()) {
             fb.setDot(dot, bias);
+            LogUtil.info("Bypassing document filter");
             return;
         }
 
         Element elem = doc.getCharacterElement(dot);
         AttributeSet attrs = elem.getAttributes();
-        if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE) != null) return;
+        if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_NOT_TRAVERSABLE) != null) {
+            LogUtil.info("Not traversable");
+            return;
+        }
 
 //        AttributeSet prevAttrs = doc.getCharacterElement(fb.getCaret().getDot()).getAttributes();
 //        AttributeSet nextAttrs = doc.getCharacterElement(dot).getAttributes();
@@ -127,14 +131,21 @@ public class TranscriptNavigationFilter extends NavigationFilter {
                 editor.charPosToSessionLocation(prevCaretPos),
                 editor.charPosToSessionLocation(dot)
         );
-        if(!editor.getTranscriptEditorCaret().isFreezeCaret() && !transcriptLocationChangeData.newLoc().equals(transcriptLocationChangeData.oldLoc())) {
-            final EditorEvent<TranscriptEditor.TranscriptLocationChangeData> e = new EditorEvent<>(
-                    TranscriptEditor.transcriptLocationChanged,
-                    editor,
-                    transcriptLocationChangeData
-            );
-            editor.getEventManager().queueEvent(e);
+        if(editor.getTranscriptEditorCaret().isFreezeCaret()) {
+            LogUtil.info("Not sending editor event - freeze caret is enabled");
+            return;
         }
+        if(transcriptLocationChangeData.newLoc().equals(transcriptLocationChangeData.oldLoc())) {
+            LogUtil.info("Not sending editor event - new location is the same as old location");
+            return;
+        }
+
+        final EditorEvent<TranscriptEditor.TranscriptLocationChangeData> e = new EditorEvent<>(
+                TranscriptEditor.transcriptLocationChanged,
+                editor,
+                transcriptLocationChangeData
+        );
+        editor.getEventManager().queueEvent(e);
     }
 
     @Override

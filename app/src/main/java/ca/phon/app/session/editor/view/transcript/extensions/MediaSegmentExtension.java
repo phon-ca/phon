@@ -13,7 +13,6 @@ import ca.phon.session.Tier;
 import ca.phon.session.format.MediaSegmentFormatter;
 import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.ui.CalloutWindow;
-import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,9 +21,12 @@ import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,9 +37,11 @@ import java.util.regex.Pattern;
 public class MediaSegmentExtension implements TranscriptEditorExtension {
     private TranscriptEditor editor;
 
+    private AtomicReference<CalloutWindow> calloutRef = new AtomicReference<>();
+
     /* State */
 
-    private MediaSegment selectedSegment = null;
+//    private MediaSegment selectedSegment = null;
     /**
      * A {@link KeyAdapter} that lets the user toggle playback of a segment by pressing space
      * when a segment is selected
@@ -45,15 +49,15 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
     private final KeyAdapter onSpace = new KeyAdapter() {
         @Override
         public void keyPressed(KeyEvent e) {
-            if (selectedSegment != null && e.getKeyCode() == KeyEvent.VK_SPACE) {
-                if (editor.getSegmentPlayback() != null) {
-                    if (editor.getSegmentPlayback().isPlaying()) {
-                        editor.getSegmentPlayback().stopPlaying();
-                    } else {
-                        editor.getSegmentPlayback().playSegment(selectedSegment);
-                    }
-                }
-            }
+//            if (selectedSegment != null && e.getKeyCode() == KeyEvent.VK_SPACE) {
+//                if (editor.getSegmentPlayback() != null) {
+//                    if (editor.getSegmentPlayback().isPlaying()) {
+//                        editor.getSegmentPlayback().stopPlaying();
+//                    } else {
+//                        editor.getSegmentPlayback().playSegment(selectedSegment);
+//                    }
+//                }
+//            }
         }
     };
 
@@ -71,7 +75,32 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
         editor.addKeyListener(onSpace);
         editor.getTranscriptDocument().addInsertionHook(new MediaSegmentInsertionHook());
 
-        editor.getEventManager().registerActionForEvent(TranscriptEditor.transcriptLocationChanged, this::onTranscriptLocationChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+        editor.getEventManager().registerActionForEvent(TranscriptEditor.transcriptLocationChanged,
+                this::onTranscriptLocationChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+    }
+
+    private void onTranscriptLocationChanged(EditorEvent<TranscriptEditor.TranscriptLocationChangeData> evt) {
+        final TranscriptElementLocation loc = evt.getData().get().newLoc();
+        final TranscriptElementLocation oldLoc = evt.getData().get().oldLoc();
+
+        LogUtil.info("[Media ext] - Transcript location changed: " + oldLoc + " -> " + loc);
+        if ((loc.transcriptElementIndex() != oldLoc.transcriptElementIndex()) || !(loc.tier().equals(oldLoc.tier()))) {
+            if(calloutRef.get() != null && calloutRef.get() == editor.getCurrentCallout()) {
+                editor.getCurrentCallout().setVisible(false);
+                editor.getCurrentCallout().dispose();
+            }
+
+            if (SystemTierType.Segment.getName().equals(loc.tier())) {
+                final int recordIndex = editor.getSession().getTranscript().getRecordIndex(loc.transcriptElementIndex());
+                if (recordIndex >= 0) {
+                    final Record record = editor.getSession().getRecord(recordIndex);
+                    final var segmentTier = record.getSegmentTier();
+                    final var segmentBounds = editor.getTranscriptDocument().getTierContentStartEnd(recordIndex, loc.tier());
+                    if (segmentBounds.valid()) {
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -84,12 +113,12 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
 
         try {
             final int recordIndex = editor.getSession().getRecordPosition(segmentCalloutInfo.record());
-            if(recordIndex < 0) {
+            if (recordIndex < 0) {
                 return;
             }
             final TranscriptDocument.StartEnd startEnd =
                     editor.getTranscriptDocument().getTierContentStartEnd(recordIndex, segmentCalloutInfo.segmentTier.getName());
-            if(!startEnd.valid()) {
+            if (!startEnd.valid()) {
                 return;
             }
 
@@ -99,40 +128,22 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
             var start = editor.modelToView2D(startEnd.start());
             var end = editor.modelToView2D(startEnd.end());
 
-            final Point topLeft = new Point((int)start.getX(), (int)start.getY());
-            final Point bottomRight = new Point((int)end.getMaxX(), (int)end.getMaxY());
+            final Point topLeft = new Point((int) start.getX(), (int) start.getY());
+            final Point bottomRight = new Point((int) end.getMaxX(), (int) end.getMaxY());
             SwingUtilities.convertPointToScreen(topLeft, editor);
             SwingUtilities.convertPointToScreen(bottomRight, editor);
             var pointAt = new Rectangle(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
 
-            editor.showNonFocusableCallout(false, segmentEditor, SwingConstants.NORTH, pointAt);
+            CalloutWindow currentSegmentCallout = editor.showNonFocusableCallout(false, segmentEditor, SwingConstants.NORTH, pointAt);
+            currentSegmentCallout.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    calloutRef.set(null);
+                }
+            });
+            calloutRef.set(currentSegmentCallout);
         } catch (BadLocationException e) {
             LogUtil.warning(e);
-        }
-    }
-
-    private void onTranscriptLocationChanged(EditorEvent<TranscriptEditor.TranscriptLocationChangeData> evt) {
-        final TranscriptElementLocation loc = evt.getData().get().newLoc();
-        final TranscriptElementLocation oldLoc = evt.getData().get().oldLoc();
-
-        if((loc.transcriptElementIndex() != oldLoc.transcriptElementIndex()) ||!(loc.tier().equals(oldLoc.tier()))) {
-            if (selectedSegment != null) {
-                editor.removeCurrentBoxSelect();
-                if(editor.getCurrentCallout() != null)
-                    editor.getCurrentCallout().dispose();
-                selectedSegment = null;
-            }
-            if (SystemTierType.Segment.getName().equals(loc.tier())) {
-                final int recordIndex = editor.getSession().getTranscript().getRecordIndex(loc.transcriptElementIndex());
-                if (recordIndex >= 0) {
-                    final Record record = editor.getSession().getRecord(recordIndex);
-                    final var segmentTier = record.getSegmentTier();
-                    final var segmentBounds = editor.getTranscriptDocument().getTierContentStartEnd(recordIndex, loc.tier());
-                    if (segmentBounds.valid()) {
-                        selectedSegment = segmentTier.getValue();
-                    }
-                }
-            }
         }
     }
 
@@ -151,6 +162,15 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
             }
         });
         return segmentEditor;
+    }
+
+    /**
+     * Information used to show media segment callout window for editing
+     *
+     * @param record
+     * @param segmentTier
+     */
+    private record SegmentCalloutInfo(Record record, Tier<MediaSegment> segmentTier) {
     }
 
     private class MediaSegmentInsertionHook extends DefaultInsertionHook {
@@ -195,11 +215,11 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
 
             // media segment text will be editable, but only with formatted text
             final MediaSegment mediaSegment = TranscriptStyleConstants.getMediaSegment(attrs);
-            if(mediaSegment != null) {
+            if (mediaSegment != null) {
                 // allow editing of media segment text by overwriting it with the new text
                 // first get current value
                 final TranscriptDocument.StartEnd mediaSegmentStartEnd = doc.getSegmentBounds(mediaSegment, offset);
-                if(mediaSegmentStartEnd.valid()) {
+                if (mediaSegmentStartEnd.valid()) {
                     final String currentText = doc.getText(mediaSegmentStartEnd.start(), mediaSegmentStartEnd.length());
 
                     final String replacedText = currentText.substring(0, location.charPosition())
@@ -207,7 +227,7 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
 
                     TranscriptElementLocation newLocation = location;
                     final Matcher matcher = mediaSegmentPattern.matcher(replacedText);
-                    if(matcher.matches()) {
+                    if (matcher.matches()) {
                         editor.getTranscriptEditorCaret().freeze();
                         doc.setBypassDocumentFilter(true);
                         try {
@@ -228,7 +248,7 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
                             doc.setBypassDocumentFilter(false);
                             editor.getTranscriptEditorCaret().unfreeze();
                         }
-                        if(newLocation.valid()) {
+                        if (newLocation.valid()) {
                             final int caretPos = doc.sessionLocationToCharPos(newLocation);
                             if (caretPos >= 0) {
                                 editor.setCaretPosition(caretPos);
@@ -238,15 +258,6 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
                 }
             }
         }
-    }
-
-    /**
-     * Information used to show media segment callout window for editing
-     *
-     * @param record
-     * @param segmentTier
-     */
-    private record SegmentCalloutInfo(Record record, Tier<MediaSegment> segmentTier) {
     }
 
     private class SegmentPlaybackComponentFactory implements ComponentFactory {

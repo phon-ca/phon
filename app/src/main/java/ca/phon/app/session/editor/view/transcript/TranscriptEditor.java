@@ -1158,8 +1158,10 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
      * @param content
      * @param sideOfWindow
      * @param pointAtRect
+     *
+     * @return the callout window
      */
-    public void showNonFocusableCallout(boolean modal, JComponent content, int sideOfWindow, Rectangle pointAtRect) {
+    public CalloutWindow showNonFocusableCallout(boolean modal, JComponent content, int sideOfWindow, Rectangle pointAtRect) {
         final CalloutWindow currentCallout = this.currentCallout.get();
         if (currentCallout != null) {
             currentCallout.dispose();
@@ -1168,6 +1170,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         final CalloutWindow callout = CalloutWindow.showNonFocusableCallout(CommonModuleFrame.getCurrentFrame(),
                 content, sideOfWindow, pointAtRect);
         setCurrentCallout(callout);
+        return callout;
     }
 
     /**

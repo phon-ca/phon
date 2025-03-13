@@ -1408,7 +1408,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 attrs.addAttributes(lastEle.getAttributes());
             }
 
-            bypassDocumentFilter = true;
+            setBypassDocumentFilter(true);
             remove(startEnd.start, startEnd.length());
 
             propertyChangeSupport.firePropertyChange("transcriptElementRemoved", false, true);
@@ -1420,6 +1420,8 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             }
         } catch (BadLocationException e) {
             LogUtil.severe(e);
+        } finally {
+            setBypassDocumentFilter(false);
         }
     }
 
@@ -1431,8 +1433,8 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         if(!commentLblRange.valid()) return;
 
         try {
+            setBypassDocumentFilter(true);
             final AttributeSet lblAttrs = getCharacterElement(commentLblRange.start()).getAttributes();
-            bypassDocumentFilter = true;
             remove(commentLblRange.start(), commentLblRange.length());
             TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(this);
             final String lblTxt = isChatTierNamesShown() ? "@" + comment.getType().toString() : comment.getType().toString();
@@ -1440,6 +1442,8 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             processBatchUpdates(commentLblRange.start(), batchBuilder.getBatch());
         } catch (BadLocationException e) {
             LogUtil.severe(e);
+        } finally {
+            setBypassDocumentFilter(false);
         }
     }
 
@@ -1451,8 +1455,8 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         if(!gemLblRange.valid()) return;
 
         try {
+            setBypassDocumentFilter(true);
             final AttributeSet lblAttrs = getCharacterElement(gemLblRange.start()).getAttributes();
-            bypassDocumentFilter = true;
             remove(gemLblRange.start(), gemLblRange.length());
             TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(this);
             final String lblText = isChatTierNamesShown() ? gem.getType().getChatTierName() : gem.getType().getPhonTierName();
@@ -1460,6 +1464,8 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             processBatchUpdates(gemLblRange.start(), batchBuilder.getBatch());
         } catch (BadLocationException e) {
             LogUtil.severe(e);
+        } finally {
+            setBypassDocumentFilter(false);
         }
     }
 
@@ -1480,7 +1486,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             int start = getRecordStart(Math.min(oldRecordIndex, newRecordIndex));
             int end = getRecordEnd(Math.max(oldRecordIndex, newRecordIndex));
 
-            bypassDocumentFilter = true;
+            setBypassDocumentFilter(true);
             remove(start, end - start);
 
             TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(this);
@@ -1504,6 +1510,8 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             processBatchUpdates(start, batchBuilder.getBatch());
         } catch (BadLocationException e) {
             LogUtil.severe(e);
+        } finally {
+            setBypassDocumentFilter(false);
         }
     }
 
@@ -1517,7 +1525,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
         try {
             final AttributeSet lblAttrs = getCharacterElement(orthoLblStartEnd.start()).getAttributes();
-            bypassDocumentFilter = true;
+            setBypassDocumentFilter(true);
             remove(orthoLblStartEnd.start(), orthoLblStartEnd.length());
 
             TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(this);
@@ -1527,7 +1535,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         } catch (BadLocationException e) {
             LogUtil.severe(e);
         } finally {
-            bypassDocumentFilter = false;
+            setBypassDocumentFilter(false);
         }
     }
 
@@ -1555,7 +1563,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             tierAttrs.addAttributes(getTranscriptStyleContext().getRecordAttributes(record));
             tierAttrs.addAttributes(getTranscriptStyleContext().getTierAttributes(tier, tvi));
 
-            bypassDocumentFilter = true;
+            setBypassDocumentFilter(true);
             remove(tierRange.start(), tierRange.end() - tierRange.start());
 
             TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(this);
@@ -1564,6 +1572,8 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             processBatchUpdates(tierRange.start(), batchBuilder.getBatch());
         } catch (BadLocationException e) {
             LogUtil.severe(e);
+        } finally {
+            setBypassDocumentFilter(false);
         }
     }
 
@@ -1665,7 +1675,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
         int end = recordRange.end();
 
         try {
-            bypassDocumentFilter = true;
+            setBypassDocumentFilter(true);
             remove(start, end - start);
             TranscriptBatchBuilder batchBuilder = new TranscriptBatchBuilder(this);
             batchBuilder.appendRecord(session, record, transcriber, isChatTierNamesShown());
@@ -1673,6 +1683,8 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             processBatchUpdates(start, batchBuilder.getBatch());
         } catch (BadLocationException e) {
             LogUtil.severe(e);
+        } finally {
+            setBypassDocumentFilter(false);
         }
     }
 
@@ -2219,11 +2231,13 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      */
     public void reload() {
         try {
-            bypassDocumentFilter = true;
+            setBypassDocumentFilter(true);
             remove(0, getLength());
             populate();
         } catch (BadLocationException e) {
             LogUtil.severe(e);
+        } finally {
+            setBypassDocumentFilter(false);
         }
     }
     // endregion Populate
