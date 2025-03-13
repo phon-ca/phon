@@ -1023,11 +1023,9 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         // Update the changed tier data in the doc
         getTranscriptDocument().onTierDataChanged(editorEvent.data().record(), changedTier);
         final int newDot = sessionLocationToCharPos(caretLoc);
-        if (newDot != currentDot) {
-            getTranscriptDocument().setBypassDocumentFilter(true);
-            getTranscriptEditorCaret().setDot(newDot, true);
-            getTranscriptDocument().setBypassDocumentFilter(false);
-        }
+        getTranscriptDocument().setBypassDocumentFilter(true);
+        getTranscriptEditorCaret().setDot(newDot, true);
+        getTranscriptDocument().setBypassDocumentFilter(false);
         if (!wasCaretFrozen) {
             getTranscriptEditorCaret().unfreeze();
         }
