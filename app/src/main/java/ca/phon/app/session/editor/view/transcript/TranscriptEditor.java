@@ -1437,10 +1437,21 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         commitChanges(getCaretPosition());
     }
 
+    /**
+     * Returns the current location in the document as a TranscriptElementLocation
+     *
+     * @return the current location in the document
+     */
     public TranscriptElementLocation getCurrentSessionLocation() {
         return currentTranscriptLocation;
     }
 
+    /**
+     * Sets the current location in the document, this method does not set the caret position
+     * only the internal location
+     *
+     * @param currentTranscriptLocation the new location in the document
+     */
     public void setCurrentSessionLocation(TranscriptElementLocation currentTranscriptLocation) {
         TranscriptElementLocation oldLoc = this.currentTranscriptLocation;
         this.currentTranscriptLocation = currentTranscriptLocation;
@@ -2361,93 +2372,18 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
      * @return the converted session location object
      */
     public TranscriptElementLocation charPosToSessionLocation(int charPos) {
-        TranscriptDocument doc = getTranscriptDocument();
-        Transcript transcript = getSession().getTranscript();
-
-        Element charElem = doc.getCharacterElement(charPos);
-        AttributeSet attrs = charElem.getAttributes();
-        String elementType = (String) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
-
-        if (elementType == null) {
-            return new TranscriptElementLocation(-2, null, -1);
-        }
-
-        int transcriptElementIndex = -1;
-        String label = null;
-        int posInTier = -1;
-
-        switch (elementType) {
-            case TranscriptStyleConstants.ATTR_KEY_RECORD -> {
-                Record record = (Record) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
-                if (record == null) {
-                    return new TranscriptElementLocation(-1, null, -1);
-                }
-                int recordIndex = transcript.getRecordPosition(record);
-//                if (recordIndex == -1) {
-//                    return new TranscriptElementLocation(-1, null, -1);
-//                }
-                transcriptElementIndex = recordIndex == -1 ? -2 : transcript.getElementIndex(record);
-                Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
-                if (tier != null) {
-                    label = tier.getName();
-                    int contentStart = doc.getTierContentStart(recordIndex, tier.getName());
-                    if(contentStart > 0) {
-                        posInTier = charPos - doc.getTierContentStart(recordIndex, tier.getName());
-                    } else {
-                        posInTier = 0;
-                    }
-                }
-            }
-            case TranscriptStyleConstants.ATTR_KEY_COMMENT -> {
-                Comment comment = (Comment) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT);
-                transcriptElementIndex = transcript.getElementIndex(comment);
-                label = comment.getType().getLabel();
-                posInTier = charPos - doc.getCommentContentStart(comment);
-            }
-            case TranscriptStyleConstants.ATTR_KEY_GEM -> {
-                Gem gem = (Gem) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM);
-                transcriptElementIndex = transcript.getElementIndex(gem);
-                label = gem.getType().name() + " Gem";
-                posInTier = doc.getGemContentStart(gem);
-            }
-            case TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER -> {
-                Tier<?> genericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER);
-                if (genericTier != null) {
-                    label = genericTier.getName();
-                    posInTier = doc.getGenericContentStart(genericTier);
-                }
-            }
-        }
-
-        return new TranscriptElementLocation(transcriptElementIndex, label, posInTier);
+        return getTranscriptDocument().charPosToSessionLocation(charPos);
     }
 
     /**
      * Converts a session location into a character position in the document
      *
      * @param transcriptLocation the session location object
-     * @return the converted character position
+     * @return the converted character position, or -1 if the location is invalid
      */
     public int sessionLocationToCharPos(TranscriptElementLocation transcriptLocation) {
-        TranscriptDocument doc = getTranscriptDocument();
-        Transcript transcript = getSession().getTranscript();
-
-        if (transcriptLocation.transcriptElementIndex() > -1) {
-            Transcript.Element transcriptElement = transcript.getElementAt(transcriptLocation.transcriptElementIndex());
-
-            if (transcriptElement.isRecord()) {
-                int recordIndex = transcript.getRecordPosition(transcriptElement.asRecord());
-                return doc.getTierContentStart(recordIndex, transcriptLocation.tier()) + transcriptLocation.charPosition();
-            } else if (transcriptElement.isComment()) {
-                return doc.getCommentContentStart(transcriptElement.asComment()) + transcriptLocation.charPosition();
-            } else if (transcriptElement.isGem()) {
-                return doc.getGemContentStart(transcriptElement.asGem()) + transcriptLocation.charPosition();
-            }
-        }
-
-        return -1;
+        return  getTranscriptDocument().sessionLocationToCharPos(transcriptLocation);
     }
-
 
     /**
      * Underlines the given document element

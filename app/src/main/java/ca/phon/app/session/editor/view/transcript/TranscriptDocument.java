@@ -5,21 +5,27 @@ import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
+import ca.phon.formatter.MediaTimeFormatStyle;
 import ca.phon.plugin.PluginManager;
 import ca.phon.session.Record;
 import ca.phon.session.*;
+import ca.phon.session.format.MediaSegmentFormatter;
 import ca.phon.session.io.OriginalFormat;
 import ca.phon.session.io.SessionIO;
+import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.util.Language;
 
 import javax.swing.*;
 import javax.swing.text.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.text.ParseException;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Text document for a {@link Session} that displays the transcript including all tiers, comments, and gems.
@@ -1246,6 +1252,101 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
             }
         }
     }
+
+    /**
+     * Converts a character position in the document into a {@link TranscriptElementLocation} object
+     *
+     * @param charPos the position in the document
+     * @return the converted session location object
+     */
+    public TranscriptElementLocation charPosToSessionLocation(int charPos) {
+        TranscriptDocument doc = this;
+        Transcript transcript = getSession().getTranscript();
+
+        Element charElem = doc.getCharacterElement(charPos);
+        AttributeSet attrs = charElem.getAttributes();
+        String elementType = (String) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
+
+        if (elementType == null) {
+            return new TranscriptElementLocation(-2, null, -1);
+        }
+
+        int transcriptElementIndex = -1;
+        String label = null;
+        int posInTier = -1;
+
+        switch (elementType) {
+            case TranscriptStyleConstants.ATTR_KEY_RECORD -> {
+                Record record = (Record) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
+                if (record == null) {
+                    return new TranscriptElementLocation(-1, null, -1);
+                }
+                int recordIndex = transcript.getRecordPosition(record);
+//                if (recordIndex == -1) {
+//                    return new TranscriptElementLocation(-1, null, -1);
+//                }
+                transcriptElementIndex = recordIndex == -1 ? -2 : transcript.getElementIndex(record);
+                Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
+                if (tier != null) {
+                    label = tier.getName();
+                    int contentStart = doc.getTierContentStart(recordIndex, tier.getName());
+                    if(contentStart > 0) {
+                        posInTier = charPos - doc.getTierContentStart(recordIndex, tier.getName());
+                    } else {
+                        posInTier = 0;
+                    }
+                }
+            }
+            case TranscriptStyleConstants.ATTR_KEY_COMMENT -> {
+                Comment comment = (Comment) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT);
+                transcriptElementIndex = transcript.getElementIndex(comment);
+                label = comment.getType().getLabel();
+                posInTier = charPos - doc.getCommentContentStart(comment);
+            }
+            case TranscriptStyleConstants.ATTR_KEY_GEM -> {
+                Gem gem = (Gem) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM);
+                transcriptElementIndex = transcript.getElementIndex(gem);
+                label = gem.getType().name() + " Gem";
+                posInTier = doc.getGemContentStart(gem);
+            }
+            case TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER -> {
+                Tier<?> genericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER);
+                if (genericTier != null) {
+                    label = genericTier.getName();
+                    posInTier = doc.getGenericContentStart(genericTier);
+                }
+            }
+        }
+
+        return new TranscriptElementLocation(transcriptElementIndex, label, posInTier);
+    }
+
+    /**
+     * Converts a session location into a character position in the document
+     *
+     * @param transcriptLocation the session location object
+     * @return the converted character position
+     */
+    public int sessionLocationToCharPos(TranscriptElementLocation transcriptLocation) {
+        TranscriptDocument doc = this;
+        Transcript transcript = getSession().getTranscript();
+
+        if (transcriptLocation.transcriptElementIndex() > -1) {
+            Transcript.Element transcriptElement = transcript.getElementAt(transcriptLocation.transcriptElementIndex());
+
+            if (transcriptElement.isRecord()) {
+                int recordIndex = transcript.getRecordPosition(transcriptElement.asRecord());
+                return doc.getTierContentStart(recordIndex, transcriptLocation.tier()) + transcriptLocation.charPosition();
+            } else if (transcriptElement.isComment()) {
+                return doc.getCommentContentStart(transcriptElement.asComment()) + transcriptLocation.charPosition();
+            } else if (transcriptElement.isGem()) {
+                return doc.getGemContentStart(transcriptElement.asGem()) + transcriptLocation.charPosition();
+            }
+        }
+
+        return -1;
+    }
+
     // endregion Transcript <-> Document Positioning
 
 
@@ -2170,79 +2271,6 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
 
     }
     // endregion IExtendable
-
-    /**
-     * The default document filter for the {@link TranscriptDocument}
-     */
-    public static class TranscriptDocumentFilter extends DocumentFilter {
-
-        private final TranscriptDocument doc;
-
-        /**
-         * The constructor
-         *
-         * @param doc a reference to the {@link TranscriptDocument}
-         */
-        public TranscriptDocumentFilter(TranscriptDocument doc) {
-            this.doc = doc;
-        }
-
-        @Override
-        public void remove(FilterBypass fb, int offset, int length) throws BadLocationException {
-            if (!doc.isBypassDocumentFilter()) {
-                var attrs = doc.getCharacterElement(offset).getAttributes();
-                if (doc.containsNotEditableAttribute(attrs)) return;
-                if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_SYLLABIFICATION) != null) return;
-                try {
-                    String txt = doc.getText(offset, length);
-                    if(txt.contains("\n")) {
-                        return;
-                    }
-                } catch (BadLocationException e) {
-                    LogUtil.severe(e);
-                }
-            }
-
-            doc.setBypassDocumentFilter(false);
-            super.remove(fb, offset, length);
-        }
-
-        @Override
-        public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet _attrs) throws BadLocationException {
-            // For some reason attrs gets the attributes from the previous character, so this fixes that
-            SimpleAttributeSet attrs = new SimpleAttributeSet();
-            attrs.addAttributes(doc.getCharacterElement(offset).getAttributes());
-
-            // Labels and stuff
-            if (TranscriptStyleConstants.isNotEditable(attrs)) {
-                if (TranscriptStyleConstants.isFirstSegmentDash(attrs)) {
-                    super.replace(fb, offset, length, text, _attrs);
-                }
-                return;
-            }
-
-            // Locked tiers
-            Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
-            if (tier != null) {
-                String tierName = tier.getName();
-
-                if(!tier.isBlind() && doc.transcriber != Transcriber.VALIDATOR) {
-                    return;
-                }
-
-                var tierViewItem = doc
-                        .getSession()
-                        .getTierView()
-                        .stream()
-                        .filter(item -> item.getTierName().equals(tierName))
-                        .findFirst();
-                if (tierViewItem.isPresent() && tierViewItem.get().isTierLocked()) {
-                    return;
-                }
-            }
-            super.replace(fb, offset, length, text, attrs);
-        }
-    }
 
     /**
      * A wrapper record for a list of {@link Language}

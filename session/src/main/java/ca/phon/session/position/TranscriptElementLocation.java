@@ -22,9 +22,9 @@ import java.util.List;
  * a record, tier will be the name of the specific tier.  If the transcript element is a comment, the
  * tier name will be the type of comment, if the transcript element is a gem, tier will be the type of gem.
  *
- * @param transcriptElementIndex
- * @param tier
- * @param charPosition
+ * @param transcriptElementIndex the index of the transcript element
+ * @param tier the tier name
+ * @param charPosition the character position within the tier content
  */
 public record TranscriptElementLocation(int transcriptElementIndex, String tier, int charPosition) {
     public boolean valid() {
