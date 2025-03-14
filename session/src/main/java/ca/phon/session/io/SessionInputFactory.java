@@ -38,6 +38,10 @@ public class SessionInputFactory {
 		readerExtPts = PluginManager.getInstance().getExtensionPoints(SessionReader.class);
 	}
 
+	public static SessionIO getDefaultSessionIO() {
+		return (new SessionInputFactory()).availableReaders().get(0);
+	}
+
 	public static Set<String> getSessionExtensions() {
 		final Set<String> retVal = new LinkedHashSet<>();
 

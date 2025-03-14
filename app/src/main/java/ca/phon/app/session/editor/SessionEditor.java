@@ -18,6 +18,7 @@ package ca.phon.app.session.editor;
 import ca.hedlund.desktopicons.MacOSStockIcon;
 import ca.hedlund.desktopicons.StockIcon;
 import ca.hedlund.desktopicons.WindowsStockIcon;
+import ca.phon.app.VersionInfo;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.menu.edit.EditMenuModifier;
 import ca.phon.app.menu.edit.PreferencesCommand;
@@ -823,6 +824,18 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 				origFormat.setIssueWarning(false);
 			} else {
 				sessionWriter = outputFactory.createWriter(origFormat.getSessionIO());
+			}
+		} else if(origFormat != null && origFormat.getSessionIO().group().equals("ca.phon")) {
+			final SessionIO currentFormat = SessionInputFactory.getDefaultSessionIO();
+			if(!currentFormat.version().equals(origFormat.getSessionIO().version())) {
+				final MessageDialogProperties props = new MessageDialogProperties();
+				props.setRunAsync(false);
+				props.setTitle("Save session");
+				props.setHeader("Save session in newer format?");
+				props.setMessage("This file was created with an older version of Phon, update session to newer format?  This action cannot be undone.");
+				props.setOptions(MessageDialogProperties.okCancelOptions);
+				int retVal = NativeDialogs.showMessageDialog(props);
+				if(retVal == 1) return false;
 			}
 		}
 
