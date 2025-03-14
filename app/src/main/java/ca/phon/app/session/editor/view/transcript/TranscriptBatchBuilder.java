@@ -1,5 +1,6 @@
 package ca.phon.app.session.editor.view.transcript;
 
+import ca.phon.extensions.UnvalidatedValue;
 import ca.phon.formatter.MediaTimeFormatStyle;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.InternalMedia;
@@ -568,7 +569,7 @@ public class TranscriptBatchBuilder {
                 }
             }
         } else {
-            if (tier.isUnvalidated()) {
+            if (tier.isUnvalidated() && !MediaSegment.class.equals(tierType)) {
                 appendBatchString(tier.getUnvalidatedValue().getValue(), tierAttrs);
                 return this;
             }
@@ -602,6 +603,16 @@ public class TranscriptBatchBuilder {
                 }
             } else if (tierType.equals(MediaSegment.class)) {
                 MediaSegment segment = (MediaSegment) tierValue;
+                final UnvalidatedValue uv = tier.getUnvalidatedValue();
+                if (uv != null) {
+                    // attempt to create segment from unvalidated value
+                    final MediaSegmentFormatter formatter = new MediaSegmentFormatter(MediaTimeFormatStyle.PADDED_MINUTES_AND_SECONDS);
+                    try {
+                        segment = formatter.parse(uv.getValue().substring(1, uv.getValue().length() - 2));
+                    } catch (Exception e) {
+                        // ignore
+                    }
+                }
                 appendFormattedSegment(segment, tierAttrs);
             } else if (tierType.equals(Orthography.class)) {
                 final Orthography ortho = (Orthography) tierValue;
