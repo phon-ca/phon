@@ -671,7 +671,7 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
                 if(!mediaStr.equals(currentMediaString)) {
                     mediaTier.setText(mediaStr);
 
-                    final MediaLocationEdit edit = new MediaLocationEdit(session, editor.getEventManager(), mediaTier.getValue().toString());
+                    final MediaLocationEdit edit = new MediaLocationEdit(editor.getDataModel().getProject(), session, editor.getEventManager(), mediaTier.getValue().toString());
                     editor.getUndoSupport().postEdit(edit);
                 }
             } catch (BadLocationException e) {
@@ -730,7 +730,7 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
         builder.addItem(".", browseForMediaAct);
 
         final PhonUIAction<Void> clearMediaAct = PhonUIAction.runnable(() -> {
-            final MediaLocationEdit edit = new MediaLocationEdit(session, editor.getEventManager(), null);
+            final MediaLocationEdit edit = new MediaLocationEdit(editor.getDataModel().getProject(), session, editor.getEventManager(), null);
             editor.getUndoSupport().postEdit(edit);
         });
         clearMediaAct.putValue(PhonUIAction.NAME, "Remove media");
@@ -778,7 +778,7 @@ public class HeaderTierExtension extends DefaultInsertionHook implements Transcr
         if(selectedFiles != null && selectedFiles.size() > 0) {
             final String path = selectedFiles.get(0);
 
-            final MediaLocationEdit edit = new MediaLocationEdit(session, editor.getEventManager(), path);
+            final MediaLocationEdit edit = new MediaLocationEdit(editor.getDataModel().getProject(), session, editor.getEventManager(), path);
             editor.getUndoSupport().postEdit(edit);
         }
     }

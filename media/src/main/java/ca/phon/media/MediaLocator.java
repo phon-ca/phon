@@ -23,6 +23,8 @@ import ca.phon.util.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -255,5 +257,29 @@ public class MediaLocator {
 
 		 return retVal;
 	 }
-	 
+
+	/**
+	 * Check to see if the provided absolute path is inside on of the
+	 * media include paths.
+	 *
+	 * @param project
+	 * @param poth
+	 *
+	 * @return the relative path to one of the media include paths or the
+	 *  absolute path if it is not in a media include path
+	 */
+	public static String getRelativeMediaFilePath(Project project, String path) {
+		final List<String> mediaFolderList = getMediaIncludePaths(project);
+		for(String mediaFolder:mediaFolderList) {
+			if(path.startsWith(mediaFolder)) {
+				// use nio to get relative path
+				final Path mediaPath = Paths.get(mediaFolder);
+				final Path filePath = Paths.get(path);
+				final Path relativePath = mediaPath.relativize(filePath);
+				return relativePath.toString();
+			}
+		}
+		return path;
+	}
+
 }

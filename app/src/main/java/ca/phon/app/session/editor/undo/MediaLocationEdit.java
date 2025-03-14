@@ -16,28 +16,70 @@
 package ca.phon.app.session.editor.undo;
 
 import ca.phon.app.session.editor.*;
+import ca.phon.media.MediaLocator;
+import ca.phon.project.Project;
 import ca.phon.session.Session;
+import ca.phon.util.PrefHelper;
+import org.apache.commons.io.FilenameUtils;
 
 import javax.swing.undo.CannotUndoException;
 import java.awt.*;
+import java.io.File;
 
 public class MediaLocationEdit extends SessionUndoableEdit {
+
+	/**
+	 * User pref property for keeping extension when setting media location
+	 */
+	public final static String KEEP_MEDIA_EXTENSION_PROP = MediaLocationEdit.class.getName() + ".keepExtension";
+	public final boolean DEFAULT_KEEP_MEDIA_EXTENSION = false;
+
+	private final boolean keepExtension = PrefHelper.getBoolean(KEEP_MEDIA_EXTENSION_PROP, DEFAULT_KEEP_MEDIA_EXTENSION);
 
 	private final String mediaLocation;
 	
 	private String oldLocation;
 
+	private Project project;
+
 	public MediaLocationEdit(SessionEditor editor, String mediaLocation) {
-		this(editor.getSession(), editor.getEventManager(), mediaLocation);
+		this(editor.getProject(), editor.getSession(), editor.getEventManager(), mediaLocation);
 	}
 
-	public MediaLocationEdit(Session session, EditorEventManager editorEventManager, String mediaLocation) {
+	public MediaLocationEdit(Project project, Session session, EditorEventManager editorEventManager, String mediaLocation) {
 		super(session, editorEventManager);
+		this.project = project;
 		this.mediaLocation = mediaLocation;
 	}
 	
 	public String getMediaLocation() {
-		return this.mediaLocation;
+		File mediaFile = new File(mediaLocation);
+		if(mediaFile.isAbsolute()) {
+			// check media include paths
+			final String resolvedPath = MediaLocator.getRelativeMediaFilePath(project, mediaFile.getAbsolutePath());
+			if(resolvedPath.equals(mediaFile.getAbsolutePath())) {
+				// attempt to resolve relative to session file location in project
+				final String projectLocation = project.getLocation();
+				final String corpusPath = project.getCorpusPath(getSession().getCorpus());
+				if(mediaLocation.startsWith(projectLocation)) {
+					// relative path to corpusPath parent
+					final File corpusFolder = new File(corpusPath);
+					final File mediaFileParent = mediaFile.getParentFile();
+					final File relativePath = corpusFolder.toPath().relativize(mediaFileParent.toPath()).toFile();
+					mediaFile = new File(relativePath, mediaFile.getName());
+
+					if(!keepExtension) {
+						mediaFile = new File(FilenameUtils.removeExtension(mediaFile.toString()));
+					}
+				}
+			} else {
+				mediaFile = new File(resolvedPath);
+				if(!keepExtension) {
+					mediaFile = new File(FilenameUtils.removeExtension(mediaFile.toString()));
+				}
+			}
+		}
+		return mediaFile.toString();
 	}
 	
 	public String getOldLocation() {
