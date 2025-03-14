@@ -67,7 +67,6 @@ public class MediaLocationEdit extends SessionUndoableEdit {
 					final File mediaFileParent = mediaFile.getParentFile();
 					final File relativePath = corpusFolder.toPath().relativize(mediaFileParent.toPath()).toFile();
 					mediaFile = new File(relativePath, mediaFile.getName());
-
 					if(!keepExtension) {
 						mediaFile = new File(FilenameUtils.removeExtension(mediaFile.toString()));
 					}
