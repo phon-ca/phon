@@ -2965,6 +2965,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
             }
 
             try {
+                getTranscriptDocument().setBypassDocumentFilter(true);
                 String data = (String) support.getTransferable().getTransferData(DataFlavor.stringFlavor);
 
                 // if data contains a newline character, return
@@ -2980,9 +2981,19 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
                     return false;
                 }
 
-                if (TranscriptStyleConstants.isNotTraversable(attrs) || TranscriptStyleConstants.isNotEditable(attrs)) {
+                if (TranscriptStyleConstants.isNotTraversable(attrs)) {
                     Toolkit.getDefaultToolkit().beep();
                     return false;
+                }
+
+                if(TranscriptStyleConstants.isNotEditable(attrs)) {
+                    final DocumentFilter customFilter = TranscriptDocumentFilter.getCustomFilter(attrs);
+                    if(customFilter != null) {
+                        customFilter.replace(null, getCaretPosition(), 0, data, attrs);
+                        return true;
+                    } else {
+                        return false;
+                    }
                 }
 
                 if (getSelectionStart() >= 0 && getSelectionEnd() >= 0) {
@@ -2998,6 +3009,8 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
                 Toolkit.getDefaultToolkit().beep();
                 LogUtil.severe(e);
                 return false;
+            } finally {
+                getTranscriptDocument().setBypassDocumentFilter(false);
             }
         }
 
