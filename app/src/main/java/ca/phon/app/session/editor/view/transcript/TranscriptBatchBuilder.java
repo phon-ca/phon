@@ -722,14 +722,6 @@ public class TranscriptBatchBuilder {
             additionalInsertions.clear();
         }
 
-//        SimpleAttributeSet tierAttrs = styleContext.getTierAttributes(record.getSegmentTier());
-//        tierAttrs.addAttributes(styleContext.getSeparatorAttributes());
-//        tierAttrs.addAttributes(recordAttrs);
-//
-//        SimpleAttributeSet labelAttrs = styleContext.getTierLabelAttributes(record.getSegmentTier());
-//        labelAttrs.addAttributes(styleContext.getSeparatorAttributes());
-//        labelAttrs.addAttributes(recordAttrs);
-
         for (var hook : getInsertionHooks()) {
             additionalInsertions.addAll(hook.endRecordHeader());
         }
@@ -737,8 +729,6 @@ public class TranscriptBatchBuilder {
             appendAll(additionalInsertions);
             additionalInsertions.clear();
         }
-
-//        TranscriptStyleConstants.setSeparator(tierAttrs, false);
 
         final List<TierViewItem> tierView = session.getTierView();
         List<TierViewItem> visibleTierView = tierView.stream().filter(TierViewItem::isVisible).toList();

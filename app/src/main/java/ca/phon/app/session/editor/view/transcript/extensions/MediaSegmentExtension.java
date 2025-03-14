@@ -200,6 +200,43 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
 
         @Override
         public void remove(FilterBypass fb, int offset, int length) throws BadLocationException {
+            final TranscriptElementLocation location = doc.charPosToSessionLocation(offset);
+            final AttributeSet attrs = doc.getCharacterElement(offset).getAttributes();
+            final Record record = TranscriptStyleConstants.getRecord(attrs);
+            final Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
+            final MediaSegment mediaSegment = TranscriptStyleConstants.getMediaSegment(attrs);
+            final TranscriptDocument.StartEnd startEnd = doc.getSegmentBounds(mediaSegment, offset);
+            if(startEnd.valid()) {
+                final String currentText = doc.getText(startEnd.start(), startEnd.length());
+                // attempt to replace all digits with zeros
+                final StringBuilder sb = new StringBuilder();
+                for(int i = 0; i < currentText.length(); i++) {
+                    if(i >= location.charPosition() && i < (location.charPosition() + length)) {
+                        if(Character.isDigit(currentText.charAt(i))) {
+                            sb.append('0');
+                        } else {
+                            sb.append(currentText.charAt(i));
+                        }
+                    } else {
+                        sb.append(currentText.charAt(i));
+                    }
+                }
+                final String replacedText = sb.toString();
+
+                final MediaSegmentFormatter segmentFormatter = new MediaSegmentFormatter(MediaTimeFormatStyle.PADDED_MINUTES_AND_SECONDS);
+                MediaSegment newSegment = SessionFactory.newFactory().createMediaSegment();
+                try {
+                    newSegment = segmentFormatter.parse(replacedText.substring(1, replacedText.length() - 1));
+                } catch (ParseException e) {
+                    mediaSegment.putExtension(UnvalidatedValue.class, new UnvalidatedValue(replacedText, e));
+                }
+                // update segment
+                if(SystemTierType.Segment.getName().equals(tier.getName())) {
+                    final TierEdit<MediaSegment> tierEdit = new TierEdit<>(editor.getSession(),
+                            editor.getEventManager(), record, (Tier<MediaSegment>) tier, newSegment);
+                    editor.getUndoSupport().postEdit(tierEdit);
+                }
+            }
         }
 
         @Override
