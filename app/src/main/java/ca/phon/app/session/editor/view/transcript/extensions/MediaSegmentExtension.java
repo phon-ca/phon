@@ -201,6 +201,8 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
         @Override
         public void remove(FilterBypass fb, int offset, int length) throws BadLocationException {
             final TranscriptElementLocation location = doc.charPosToSessionLocation(offset);
+            final TranscriptElementLocation caretLocation = editor.getTranscriptEditorCaret().getTranscriptLocation();
+            int direction = location.charPosition() - caretLocation.charPosition();
             final AttributeSet attrs = doc.getCharacterElement(offset).getAttributes();
             final Record record = TranscriptStyleConstants.getRecord(attrs);
             final Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
@@ -235,6 +237,17 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
                     final TierEdit<MediaSegment> tierEdit = new TierEdit<>(editor.getSession(),
                             editor.getEventManager(), record, (Tier<MediaSegment>) tier, newSegment);
                     editor.getUndoSupport().postEdit(tierEdit);
+
+                    final var newLocation =
+                            new TranscriptElementLocation(location.transcriptElementIndex(), location.tier(), caretLocation.charPosition() + direction);
+                    if (newLocation.valid()) {
+                        SwingUtilities.invokeLater(() -> {
+                            final int caretPos = doc.sessionLocationToCharPos(newLocation);
+                            if (caretPos >= 0) {
+                                editor.setCaretPosition(caretPos);
+                            }
+                        });
+                    }
                 }
             }
         }
