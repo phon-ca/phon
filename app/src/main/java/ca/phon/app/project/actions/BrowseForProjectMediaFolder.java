@@ -24,6 +24,11 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
 
+/**
+ * Browse for project media folder action for project window.
+ * Adds a media folder to the project using a native file dialog.
+ *
+ */
 public class BrowseForProjectMediaFolder extends ProjectWindowAction {
 
 	private final static String TXT = "Select media folder...";

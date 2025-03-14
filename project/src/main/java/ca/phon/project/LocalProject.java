@@ -24,6 +24,7 @@ import org.json.*;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
+import javax.swing.*;
 import javax.xml.parsers.*;
 import javax.xml.xpath.*;
 import java.io.*;
@@ -1056,6 +1057,11 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 	public void removeProjectMediaFolder(String mediaFolder) {
 		if(!this.projectJson.has(PROJECT_MEDIAFOLDERS_KEY)) return;
 
+		final List<String> currentMediaFolderList = getProjectMediaFolders();
+		if(!currentMediaFolderList.contains(mediaFolder)) {
+			return;
+		}
+
 		JSONArray mediaFolders = this.projectJson.getJSONArray(PROJECT_MEDIAFOLDERS_KEY);
 		JSONArray newMediaFolders = new JSONArray();
 		final int index = mediaFolders.toList().indexOf(mediaFolder);
@@ -1080,6 +1086,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 
 	@Override
 	public void addProjectMediaFolder(String mediaFolder) {
+		final List<String> currentMediaFolderList = getProjectMediaFolders();
 		JSONArray mediaFolders =
 				this.projectJson.has(PROJECT_MEDIAFOLDERS_KEY) ? this.projectJson.getJSONArray(PROJECT_MEDIAFOLDERS_KEY)
 						: new JSONArray();
@@ -1096,6 +1103,9 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 		// if mediaFolderFile is a child of the project folder, relativize the path
 		if(mediaFolderFile.getAbsolutePath().startsWith(getFolder().getAbsolutePath())) {
 			mediaFolder = getFolder().toPath().relativize(mediaFolderFile.toPath()).toString();
+		}
+		if(currentMediaFolderList.contains(mediaFolder)) {
+			return;
 		}
 
 		mediaFolders.put(mediaFolder);
