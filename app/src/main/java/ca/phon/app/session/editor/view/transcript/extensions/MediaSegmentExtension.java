@@ -236,6 +236,7 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
                 if(SystemTierType.Segment.getName().equals(tier.getName())) {
                     final TierEdit<MediaSegment> tierEdit = new TierEdit<>(editor.getSession(),
                             editor.getEventManager(), record, (Tier<MediaSegment>) tier, newSegment);
+                    tierEdit.setValueAdjusting(false);
                     editor.getUndoSupport().postEdit(tierEdit);
 
                     final var newLocation =
@@ -295,6 +296,7 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
                         if(SystemTierType.Segment.getName().equals(tier.getName())) {
                             final TierEdit<MediaSegment> tierEdit = new TierEdit<>(editor.getSession(),
                                     editor.getEventManager(), record, (Tier<MediaSegment>) tier, newSegment);
+                            tierEdit.setValueAdjusting(false);
                             editor.getUndoSupport().postEdit(tierEdit);
                         }
                         int nextChar = location.charPosition() + text.length();
