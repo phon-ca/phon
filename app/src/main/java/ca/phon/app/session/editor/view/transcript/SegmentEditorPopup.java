@@ -40,6 +40,8 @@ public class SegmentEditorPopup extends TimeComponent {
 
     private final static String DEFAULT_SEGMENT_TEXT = "000:00.000-000:00.000";
 
+    private boolean insideSetMediaSegment = false;
+
     public SegmentEditorPopup(SessionMediaModel mediaModel, MediaSegment segment) {
         super();
         this.mediaModel = mediaModel;
@@ -147,6 +149,7 @@ public class SegmentEditorPopup extends TimeComponent {
         currentRecordInterval.getEndMarker().setColor(UIManager.getColor(SpeechAnalysisViewColors.INTERVAL_MARKER_COLOR));
         currentRecordInterval.setRepaintEntireInterval(true);
         currentRecordInterval.addPropertyChangeListener(e -> {
+            if(insideSetMediaSegment) return;
             float startVal = currentRecordInterval.getStartMarker().getTime();
             float endVal = currentRecordInterval.getEndMarker().getTime();
             setMediaSegment(startVal, endVal);
@@ -171,7 +174,20 @@ public class SegmentEditorPopup extends TimeComponent {
         SwingUtilities.invokeLater(() -> {waveformDisplay.scrollRectToVisible(scrollRect);});
     }
 
-    private void setMediaSegment(float startTime, float endTime) {
+    public void setMediaSegmentNoEvent(float startTime, float endTime) {
+        var oldVal = this.segment;
+        this.segment = SessionFactory.newFactory().createMediaSegment();
+        this.segment.setUnitType(oldVal.getUnitType());
+        this.segment.setStartTime(startTime);
+        this.segment.setEndTime(endTime);
+        insideSetMediaSegment = true;
+        currentRecordInterval.getStartMarker().setTime(startTime);
+        currentRecordInterval.getEndMarker().setTime(endTime);
+        insideSetMediaSegment = false;
+//        firePropertyChange("segment", oldVal, this.segment);
+    }
+
+    public void setMediaSegment(float startTime, float endTime) {
         var oldVal = this.segment;
         this.segment = SessionFactory.newFactory().createMediaSegment();
         this.segment.setUnitType(oldVal.getUnitType());

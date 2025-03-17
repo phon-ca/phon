@@ -3,6 +3,7 @@ package ca.phon.app.session.editor.view.transcript.extensions;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventManager;
+import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.app.session.editor.view.transcript.*;
 import ca.phon.extensions.UnvalidatedValue;
@@ -14,6 +15,7 @@ import ca.phon.session.format.MediaSegmentFormatter;
 import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.ui.CalloutWindow;
 import ca.phon.ui.action.PhonUIAction;
+import org.apache.commons.logging.Log;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -37,7 +39,7 @@ import java.util.regex.Pattern;
 public class MediaSegmentExtension implements TranscriptEditorExtension {
     private TranscriptEditor editor;
 
-    private AtomicReference<CalloutWindow> calloutRef = new AtomicReference<>();
+    private AtomicReference<SegmentEditorCalloutInfo> calloutRef = new AtomicReference<>();
 
     private Timer calloutTimer = null;
 
@@ -79,6 +81,30 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
 
         editor.getEventManager().registerActionForEvent(TranscriptEditor.transcriptLocationChanged,
                 this::onTranscriptLocationChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+        editor.getEventManager().registerActionForEvent(EditorEventType.TierChange,
+                this::onTierChange, EditorEventManager.RunOn.AWTEventDispatchThread);
+    }
+
+    private void onTierChange(EditorEvent<EditorEventType.TierChangeData> event) {
+        if(calloutRef.get() == null || !calloutRef.get().callout().isVisible()) {
+            return;
+        }
+        LogUtil.info("onTierChange");
+        final var record = event.getData().get().record();
+        if(calloutRef.get().requestInfo().record() != record) {
+            return;
+        }
+        final var tier = event.getData().get().tier();
+        if(!SystemTierType.Segment.getName().equals(tier.getName())) {
+            return;
+        }
+        if(event.source() == calloutRef.get().editor()) return;
+
+        // update segment in callout
+        final SegmentEditorPopup segmentEditor = calloutRef.get().editor();
+        final var segmentTier = calloutRef.get().requestInfo().segmentTier();
+        final var segment = segmentTier.getValue();
+        segmentEditor.setMediaSegmentNoEvent(segment.getStartTime(), segment.getEndTime());
     }
 
     private void onTranscriptLocationChanged(EditorEvent<TranscriptEditor.TranscriptLocationChangeData> evt) {
@@ -95,34 +121,34 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
             if (!recordEle.isRecord()) return;
             final Record record = recordEle.asRecord();
             if (loc.tier().equals(oldLoc.tier())) {
-                boolean calloutWasVisible = calloutRef.get() != null && calloutRef.get().isVisible();
+                boolean calloutWasVisible = calloutRef.get() != null && calloutRef.get().callout().isVisible();
                 if ((loc.transcriptElementIndex() != oldLoc.transcriptElementIndex())) {
                     // hide callout if switching tiers
-                    if (calloutRef.get() != null && calloutRef.get() == editor.getCurrentCallout()) {
+                    if (calloutRef.get() != null && calloutRef.get().callout() == editor.getCurrentCallout()) {
                         LogUtil.info("Hiding callout due to record switch");
                         editor.getCurrentCallout().setVisible(false);
                         editor.getCurrentCallout().dispose();
                     }
                     // show callout immediately
                     if (calloutWasVisible)
-                        showSegmentEditCallout(new SegmentCalloutInfo(record, record.getSegmentTier()));
+                        showSegmentEditCallout(new SegmentCalloutRequestInfo(record, record.getSegmentTier()));
                 } else {
-                    if (calloutRef.get() == null || calloutRef.get() != editor.getCurrentCallout()) {
+                    if (calloutRef.get() == null || calloutRef.get().callout() != editor.getCurrentCallout()) {
                         // show callout immediately if moving within the media tier
-                        showSegmentEditCallout(new SegmentCalloutInfo(record, record.getSegmentTier()));
+                        showSegmentEditCallout(new SegmentCalloutRequestInfo(record, record.getSegmentTier()));
                     }
                 }
             } else {
                 // start timer to show callout
                 calloutTimer = new Timer(1000, e -> {
-                    showSegmentEditCallout(new SegmentCalloutInfo(record, record.getSegmentTier()));
+                    showSegmentEditCallout(new SegmentCalloutRequestInfo(record, record.getSegmentTier()));
                 });
                 calloutTimer.setRepeats(false);
                 calloutTimer.start();
             }
         } else {
             // hide callout if visible
-            if (calloutRef.get() != null && calloutRef.get() == editor.getCurrentCallout()) {
+            if (calloutRef.get() != null && calloutRef.get().callout() == editor.getCurrentCallout()) {
                 LogUtil.info("Hiding callout due to tier switch");
                 editor.getCurrentCallout().setVisible(false);
                 editor.getCurrentCallout().dispose();
@@ -133,18 +159,18 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
     /**
      * Shows the segment edit callout
      *
-     * @param segmentCalloutInfo info for callout
+     * @param segmentCalloutRequestInfo info for callout
      */
-    private void showSegmentEditCallout(SegmentCalloutInfo segmentCalloutInfo) {
-        final var segmentEditor = getSegmentEditorPopup(segmentCalloutInfo);
+    private void showSegmentEditCallout(SegmentCalloutRequestInfo segmentCalloutRequestInfo) {
+        final var segmentEditor = getSegmentEditorPopup(segmentCalloutRequestInfo);
 
         try {
-            final int recordIndex = editor.getSession().getRecordPosition(segmentCalloutInfo.record());
+            final int recordIndex = editor.getSession().getRecordPosition(segmentCalloutRequestInfo.record());
             if (recordIndex < 0) {
                 return;
             }
             final TranscriptDocument.StartEnd startEnd =
-                    editor.getTranscriptDocument().getTierContentStartEnd(recordIndex, segmentCalloutInfo.segmentTier.getName());
+                    editor.getTranscriptDocument().getTierContentStartEnd(recordIndex, segmentCalloutRequestInfo.segmentTier.getName());
             if (!startEnd.valid()) {
                 return;
             }
@@ -162,24 +188,25 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
             var pointAt = new Rectangle(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
 
             final CalloutWindow currentSegmentCallout = editor.showNonFocusableCallout(false, segmentEditor, SwingConstants.NORTH, pointAt);
+            currentSegmentCallout.setAlwaysOnTop(true);
             currentSegmentCallout.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent e) {
-                    if(calloutRef.get() == currentSegmentCallout)
+                    if(calloutRef.get().callout() == currentSegmentCallout)
                         calloutRef.set(null);
                     currentSegmentCallout.removeWindowListener(this);
                 }
             });
-            calloutRef.set(currentSegmentCallout);
+            calloutRef.set(new SegmentEditorCalloutInfo(currentSegmentCallout, segmentCalloutRequestInfo, segmentEditor));
         } catch (BadLocationException e) {
             LogUtil.warning(e);
         }
     }
 
     @NotNull
-    private SegmentEditorPopup getSegmentEditorPopup(SegmentCalloutInfo segmentCalloutInfo) {
-        final Tier<MediaSegment> segmentTier = segmentCalloutInfo.segmentTier();
-        final Record record = segmentCalloutInfo.record();
+    private SegmentEditorPopup getSegmentEditorPopup(SegmentCalloutRequestInfo segmentCalloutRequestInfo) {
+        final Tier<MediaSegment> segmentTier = segmentCalloutRequestInfo.segmentTier();
+        final Record record = segmentCalloutRequestInfo.record();
         var segmentEditor = new SegmentEditorPopup(editor.getMediaModel(), segmentTier.getValue());
         segmentEditor.setPreferredSize(new Dimension(segmentEditor.getPreferredPopupWidth(), (int) segmentEditor.getPreferredSize().getHeight()));
 
@@ -187,6 +214,7 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
             if ("segment".equals(e.getPropertyName()) && e.getNewValue() != null) {
                 final TierEdit<MediaSegment> tierEdit = new TierEdit<MediaSegment>(editor.getSession(),
                         editor.getEventManager(), record, segmentTier, (MediaSegment) e.getNewValue());
+                tierEdit.setSource(segmentEditor);
                 tierEdit.setValueAdjusting(segmentEditor.valueIsAdjusting());
                 editor.getUndoSupport().postEdit(tierEdit);
             } else if ("valueAdjusting".equals(e.getPropertyName())) {
@@ -196,6 +224,7 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
                     // indicate final change on last edit to update other views
                     final TierEdit<MediaSegment> tierEdit = new TierEdit<MediaSegment>(editor.getSession(),
                             editor.getEventManager(), record, segmentTier, segmentTier.getValue());
+                    tierEdit.setSource(segmentEditor);
                     tierEdit.setValueAdjusting(segmentEditor.valueIsAdjusting());
                     editor.getUndoSupport().postEdit(tierEdit);
 
@@ -213,7 +242,13 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
      * @param record
      * @param segmentTier
      */
-    private record SegmentCalloutInfo(Record record, Tier<MediaSegment> segmentTier) {
+    private record SegmentCalloutRequestInfo(Record record, Tier<MediaSegment> segmentTier) {
+    }
+
+    /**
+     * Information about a currently visible segment editor callout
+     */
+    private record SegmentEditorCalloutInfo(CalloutWindow callout, SegmentCalloutRequestInfo requestInfo, SegmentEditorPopup editor) {
     }
 
     private class MediaSegmentInsertionHook extends DefaultInsertionHook {
@@ -224,8 +259,8 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
                 Record record = (Record) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
                 Tier<MediaSegment> segmentTier = (Tier<MediaSegment>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
                 if (record != null && segmentTier != null) {
-                    PhonUIAction<SegmentCalloutInfo> showSegmentEditCalloutAct = PhonUIAction.consumer(MediaSegmentExtension.this::showSegmentEditCallout,
-                            new SegmentCalloutInfo(record, segmentTier));
+                    PhonUIAction<SegmentCalloutRequestInfo> showSegmentEditCalloutAct = PhonUIAction.consumer(MediaSegmentExtension.this::showSegmentEditCallout,
+                            new SegmentCalloutRequestInfo(record, segmentTier));
                     attrs.addAttribute(TranscriptStyleConstants.ATTR_KEY_ENTER_ACTION, showSegmentEditCalloutAct);
                     TranscriptDocumentFilter.setCustomFilter(attrs, new MediaSegmentDocumentFilter(editor.getTranscriptDocument()));
                 }
@@ -363,31 +398,4 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
         }
     }
 
-    private class SegmentPlaybackComponentFactory implements ComponentFactory {
-
-        @Override
-        public JComponent createComponent(AttributeSet attrs) {
-            return null;
-        }
-
-        @Override
-        public JComponent getComponent() {
-            return null;
-        }
-
-        @Override
-        public void requestFocusStart() {
-
-        }
-
-        @Override
-        public void requestFocusEnd() {
-
-        }
-
-        @Override
-        public void requestFocusAtOffset(int offset) {
-
-        }
-    }
 }
