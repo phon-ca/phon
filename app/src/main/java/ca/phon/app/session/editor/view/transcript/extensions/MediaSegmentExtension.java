@@ -99,6 +99,7 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
                 if ((loc.transcriptElementIndex() != oldLoc.transcriptElementIndex())) {
                     // hide callout if switching tiers
                     if (calloutRef.get() != null && calloutRef.get() == editor.getCurrentCallout()) {
+                        LogUtil.info("Hiding callout due to record switch");
                         editor.getCurrentCallout().setVisible(false);
                         editor.getCurrentCallout().dispose();
                     }
@@ -112,7 +113,7 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
                     }
                 }
             } else {
-                // start time to show callout
+                // start timer to show callout
                 calloutTimer = new Timer(1000, e -> {
                     showSegmentEditCallout(new SegmentCalloutInfo(record, record.getSegmentTier()));
                 });
@@ -122,6 +123,7 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
         } else {
             // hide callout if visible
             if (calloutRef.get() != null && calloutRef.get() == editor.getCurrentCallout()) {
+                LogUtil.info("Hiding callout due to tier switch");
                 editor.getCurrentCallout().setVisible(false);
                 editor.getCurrentCallout().dispose();
             }
@@ -159,11 +161,13 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
             SwingUtilities.convertPointToScreen(bottomRight, editor);
             var pointAt = new Rectangle(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
 
-            CalloutWindow currentSegmentCallout = editor.showNonFocusableCallout(false, segmentEditor, SwingConstants.NORTH, pointAt);
+            final CalloutWindow currentSegmentCallout = editor.showNonFocusableCallout(false, segmentEditor, SwingConstants.NORTH, pointAt);
             currentSegmentCallout.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent e) {
-                    calloutRef.set(null);
+                    if(calloutRef.get() == currentSegmentCallout)
+                        calloutRef.set(null);
+                    currentSegmentCallout.removeWindowListener(this);
                 }
             });
             calloutRef.set(currentSegmentCallout);
