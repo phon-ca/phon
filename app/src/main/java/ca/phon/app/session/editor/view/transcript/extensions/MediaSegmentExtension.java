@@ -183,13 +183,27 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
         var segmentEditor = new SegmentEditorPopup(editor.getMediaModel(), segmentTier.getValue());
         segmentEditor.setPreferredSize(new Dimension(segmentEditor.getPreferredPopupWidth(), (int) segmentEditor.getPreferredSize().getHeight()));
 
-        segmentEditor.addPropertyChangeListener("segment", e -> {
-            if (e.getNewValue() != null) {
+        segmentEditor.addPropertyChangeListener(e -> {
+            if ("segment".equals(e.getPropertyName()) && e.getNewValue() != null) {
                 final TierEdit<MediaSegment> tierEdit = new TierEdit<MediaSegment>(editor.getSession(),
                         editor.getEventManager(), record, segmentTier, (MediaSegment) e.getNewValue());
+                tierEdit.setValueAdjusting(segmentEditor.valueIsAdjusting());
                 editor.getUndoSupport().postEdit(tierEdit);
+            } else if ("valueAdjusting".equals(e.getPropertyName())) {
+                if(segmentEditor.valueIsAdjusting())
+                    editor.getUndoSupport().beginUpdate("Edit record segment");
+                else {
+                    // indicate final change on last edit to update other views
+                    final TierEdit<MediaSegment> tierEdit = new TierEdit<MediaSegment>(editor.getSession(),
+                            editor.getEventManager(), record, segmentTier, segmentTier.getValue());
+                    tierEdit.setValueAdjusting(segmentEditor.valueIsAdjusting());
+                    editor.getUndoSupport().postEdit(tierEdit);
+
+                    editor.getUndoSupport().endUpdate();
+                }
             }
         });
+
         return segmentEditor;
     }
 

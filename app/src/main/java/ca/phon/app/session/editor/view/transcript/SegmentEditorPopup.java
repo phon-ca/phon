@@ -111,8 +111,6 @@ public class SegmentEditorPopup extends TimeComponent {
 
         if(currentRecordInterval != null)
             getTimeModel().removeInterval(currentRecordInterval);
-//        if(selectionInterval != null)
-//            clearSelection();
 
         float segStart = segment.getStartTime();
         float segEnd = segment.getEndTime();
@@ -152,6 +150,9 @@ public class SegmentEditorPopup extends TimeComponent {
             float startVal = currentRecordInterval.getStartMarker().getTime();
             float endVal = currentRecordInterval.getEndMarker().getTime();
             setMediaSegment(startVal, endVal);
+            if("valueAdjusting".equals(e.getPropertyName())) {
+                firePropertyChange(e.getPropertyName(), e.getOldValue(), e.getNewValue());
+            }
         });
         scrollTo = displayStart;
 
@@ -177,6 +178,10 @@ public class SegmentEditorPopup extends TimeComponent {
         this.segment.setStartTime(startTime);
         this.segment.setEndTime(endTime);
         firePropertyChange("segment", oldVal, this.segment);
+    }
+
+    public boolean valueIsAdjusting() {
+        return currentRecordInterval != null ? currentRecordInterval.isValueAdjusting() : false;
     }
 
 }
