@@ -89,7 +89,6 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
         if(calloutRef.get() == null || !calloutRef.get().callout().isVisible()) {
             return;
         }
-        LogUtil.info("onTierChange");
         final var record = event.getData().get().record();
         if(calloutRef.get().requestInfo().record() != record) {
             return;
@@ -99,6 +98,7 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
             return;
         }
         if(event.source() == calloutRef.get().editor()) return;
+        if(event.data().valueAdjusting()) return;
 
         // update segment in callout
         final SegmentEditorPopup segmentEditor = calloutRef.get().editor();
