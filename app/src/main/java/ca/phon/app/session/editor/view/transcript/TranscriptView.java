@@ -127,7 +127,7 @@ public class TranscriptView extends EditorView {
         inputMap.put(save, "save");
         PhonUIAction<Void> saveAct = PhonUIAction.runnable(() -> {
             transcriptEditor.saveCurrentLine();
-            SwingUtilities.invokeLater(() -> new SaveSessionAction(getEditor()).hookableActionPerformed(null));
+            SwingUtilities.invokeLater(() -> new SaveSessionAction(getEditor()).actionPerformed(new ActionEvent(this, 0, "save")));
         });
         actionMap.put("save", saveAct);
 

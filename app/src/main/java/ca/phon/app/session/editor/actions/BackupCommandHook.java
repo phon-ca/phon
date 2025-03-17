@@ -65,7 +65,11 @@ public class BackupCommandHook implements ActionHook<SaveSessionAction>, IPlugin
     			parameters.setCompressionMethod(CompressionMethod.DEFLATE);
     			parameters.setCompressionLevel(CompressionLevel.NORMAL);
 
-    			zipFile.addFile(new File(project.getLocation() + File.separator + "project.properties"), parameters);
+				// add .phonproj file (if exists)
+				final File projectFile = new File(project.getLocation(), project.getName() + ".phonproj");
+				if(projectFile.exists()) {
+					zipFile.addFile(projectFile, parameters);
+				}
         	}
         	// add to zip file
     		ZipParameters parameters = new ZipParameters();

@@ -301,62 +301,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         PhonUIAction<Void> endAct = PhonUIAction.runnable(this::onPressedEnd);
         actionMap.put("pressedEnd", endAct);
 
-//        KeyStroke delete = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
-//        inputMap.put(delete, "deleteElement");
-//        PhonUIAction<Void> deleteAct = PhonUIAction.runnable(() -> {
-//            TranscriptDocument doc = getTranscriptDocument();
-//
-//            int currentPos = getCaretPosition();
-//            var currentPosAttrs = getTranscriptDocument().getCharacterElement(currentPos).getAttributes();
-//            String elementType = TranscriptStyleConstants.getElementType(currentPosAttrs);
-//
-//            boolean atEndOfTier = false;
-//
-//            switch (elementType) {
-//                case "record" -> {
-//                    currentPosAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
-//                    Record currentRecord = TranscriptStyleConstants.getRecord(currentPosAttrs);
-//                    if (currentRecord == null) return;
-//                    int recordIndex = doc.getSession().getRecordPosition(currentRecord);
-//                    Tier<?> tier = TranscriptStyleConstants.getTier(currentPosAttrs);
-//                    if (tier == null) return;
-//                    int endPos = doc.getTierEnd(recordIndex, tier.getName());
-//
-//                    atEndOfTier = currentPos + 1 == endPos;
-//                }
-//                case "comment" -> {
-//                    Comment currentComment = TranscriptStyleConstants.getComment(currentPosAttrs);
-//                    if (currentComment == null) return;
-//                    int endPos = doc.getCommentEnd(currentComment);
-//
-//                    atEndOfTier = currentPos + 1 == endPos;
-//                }
-//                case "gem" -> {
-//                    Gem currentGem = TranscriptStyleConstants.getGEM(currentPosAttrs);
-//                    if (currentGem == null) return;
-//                    int endPos = doc.getGemEnd(currentGem);
-//
-//                    atEndOfTier = currentPos + 1 == endPos;
-//                }
-//                case "generic" -> {
-//                    Tier<?> currentGeneric = TranscriptStyleConstants.getGenericTier(currentPosAttrs);
-//                    if (currentGeneric == null) return;
-//                    int endPos = doc.getGenericEnd(currentGeneric);
-//
-//                    atEndOfTier = currentPos + 1 == endPos;
-//                }
-//            }
-//
-//            if (!atEndOfTier) {
-//                try {
-//                    getTranscriptDocument().remove(currentPos, 1);
-//                } catch (BadLocationException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
-//        });
-//        actionMap.put("deleteElement", deleteAct);
-
         // show ipa character map
         KeyStroke inputCallout = KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0);
         KeyStroke inputCalloutKs2 = KeyStroke.getKeyStroke(KeyEvent.VK_I, KeyEvent.CTRL_DOWN_MASK);
