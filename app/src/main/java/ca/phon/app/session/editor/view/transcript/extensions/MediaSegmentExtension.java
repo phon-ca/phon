@@ -39,6 +39,8 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
 
     private AtomicReference<CalloutWindow> calloutRef = new AtomicReference<>();
 
+    private Timer calloutTimer = null;
+
     /* State */
 
 //    private MediaSegment selectedSegment = null;
@@ -83,21 +85,45 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
         final TranscriptElementLocation loc = evt.getData().get().newLoc();
         final TranscriptElementLocation oldLoc = evt.getData().get().oldLoc();
 
-        if ((loc.transcriptElementIndex() != oldLoc.transcriptElementIndex()) || !(loc.tier().equals(oldLoc.tier()))) {
-            if(calloutRef.get() != null && calloutRef.get() == editor.getCurrentCallout()) {
-                editor.getCurrentCallout().setVisible(false);
-                editor.getCurrentCallout().dispose();
-            }
+        if(calloutTimer != null && calloutTimer.isRunning()) {
+            calloutTimer.stop();
+            calloutTimer = null;
+        }
 
-            if (SystemTierType.Segment.getName().equals(loc.tier())) {
-                final int recordIndex = editor.getSession().getTranscript().getRecordIndex(loc.transcriptElementIndex());
-                if (recordIndex >= 0) {
-                    final Record record = editor.getSession().getRecord(recordIndex);
-                    final var segmentTier = record.getSegmentTier();
-                    final var segmentBounds = editor.getTranscriptDocument().getTierContentStartEnd(recordIndex, loc.tier());
-                    if (segmentBounds.valid()) {
+        if(SystemTierType.Segment.getName().equals(loc.tier())) {
+            final Transcript.Element recordEle = editor.getSession().getTranscript().getElementAt(loc.transcriptElementIndex());
+            if (!recordEle.isRecord()) return;
+            final Record record = recordEle.asRecord();
+            if (loc.tier().equals(oldLoc.tier())) {
+                boolean calloutWasVisible = calloutRef.get() != null && calloutRef.get().isVisible();
+                if ((loc.transcriptElementIndex() != oldLoc.transcriptElementIndex())) {
+                    // hide callout if switching tiers
+                    if (calloutRef.get() != null && calloutRef.get() == editor.getCurrentCallout()) {
+                        editor.getCurrentCallout().setVisible(false);
+                        editor.getCurrentCallout().dispose();
+                    }
+                    // show callout immediately
+                    if (calloutWasVisible)
+                        showSegmentEditCallout(new SegmentCalloutInfo(record, record.getSegmentTier()));
+                } else {
+                    if (calloutRef.get() == null || calloutRef.get() != editor.getCurrentCallout()) {
+                        // show callout immediately if moving within the media tier
+                        showSegmentEditCallout(new SegmentCalloutInfo(record, record.getSegmentTier()));
                     }
                 }
+            } else {
+                // start time to show callout
+                calloutTimer = new Timer(1000, e -> {
+                    showSegmentEditCallout(new SegmentCalloutInfo(record, record.getSegmentTier()));
+                });
+                calloutTimer.setRepeats(false);
+                calloutTimer.start();
+            }
+        } else {
+            // hide callout if visible
+            if (calloutRef.get() != null && calloutRef.get() == editor.getCurrentCallout()) {
+                editor.getCurrentCallout().setVisible(false);
+                editor.getCurrentCallout().dispose();
             }
         }
     }
@@ -122,7 +148,7 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
             }
 
             // box select bounds
-            editor.boxSelectBounds(startEnd);
+//            editor.boxSelectBounds(startEnd);
 
             var start = editor.modelToView2D(startEnd.start());
             var end = editor.modelToView2D(startEnd.end());
