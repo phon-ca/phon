@@ -828,18 +828,34 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 		} else if(origFormat != null && origFormat.getSessionIO().group().equals("ca.phon")) {
 			final SessionIO currentFormat = SessionInputFactory.getDefaultSessionIO();
 			if(!currentFormat.version().equals(origFormat.getSessionIO().version())) {
+				final SessionWriter finalWriter = sessionWriter;
 				final MessageDialogProperties props = new MessageDialogProperties();
-				props.setParentWindow(CommonModuleFrame.getCurrentFrame());
-				props.setRunAsync(false);
+				props.setParentWindow(SwingUtilities.getWindowAncestor(SessionEditor.this));
+				props.setRunAsync(true);
 				props.setTitle("Save session");
 				props.setHeader("Save session in newer format?");
 				props.setMessage("This file will be upgraded when saving, this action cannot be undone.");
 				props.setOptions(MessageDialogProperties.okCancelOptions);
-				int retVal = NativeDialogs.showMessageDialog(props);
-				if(retVal == 1) return false;
+				props.setListener((e) -> {
+					if(e.getDialogResult() == 0) {;
+						try {
+							doSave(project, session, finalWriter);
+						} catch (IOException e1) {
+							Toolkit.getDefaultToolkit().beep();
+							LogUtil.severe(e1);
+						}
+					}
+				});
+
+				NativeDialogs.showMessageDialog(props);
+				return false;
 			}
 		}
 
+		return doSave(project, session, sessionWriter);
+	}
+
+	private boolean doSave(Project project, Session session, SessionWriter sessionWriter) throws IOException {
 		UUID writeLock = null;
 		try {
 			LogUtil.info("Saving " + session.getCorpus() + "." + session.getName() + "...");
