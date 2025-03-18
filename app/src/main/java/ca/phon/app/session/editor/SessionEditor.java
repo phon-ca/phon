@@ -829,10 +829,11 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 			final SessionIO currentFormat = SessionInputFactory.getDefaultSessionIO();
 			if(!currentFormat.version().equals(origFormat.getSessionIO().version())) {
 				final MessageDialogProperties props = new MessageDialogProperties();
+				props.setParentWindow(CommonModuleFrame.getCurrentFrame());
 				props.setRunAsync(false);
 				props.setTitle("Save session");
 				props.setHeader("Save session in newer format?");
-				props.setMessage("This file was created with an older version of Phon, update session to newer format?  This action cannot be undone.");
+				props.setMessage("This file will be upgraded when saving, this action cannot be undone.");
 				props.setOptions(MessageDialogProperties.okCancelOptions);
 				int retVal = NativeDialogs.showMessageDialog(props);
 				if(retVal == 1) return false;
