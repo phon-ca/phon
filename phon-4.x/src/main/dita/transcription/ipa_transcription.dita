@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="transcription">
+    <title>IPA Transcription</title>
+    <body>
+        <p>Phonetic transcriptions - data entered into <keyword>IPA Target</keyword> and
+                <keyword>IPA Actual</keyword> tiers - are parsed into discreet units, or
+                <keyword>IPA elements</keyword>. Each <keyword>IPA element</keyword> constitutes
+            either a timing unit or annotation within the transcription. The following <keyword>IPA
+                Elements</keyword> are identified by <keyword>Phon</keyword>. All characters
+            available in Phon may be accessed using the <xref href="../tools/ipamap.dita"/>.</p>
+    </body>
+    
+    <topic id="ipa_elements">
+        <title>IPA Elements</title>
+        <body>
+            <p/>
+        </body>
+        
+        <topic id="phone">
+            <title>Phone</title> <body>
+                <p>Phones are the main unit of an IPA transcription. They are composed of a vowel or consonant (or
+                    <i>base glyph</i>) along with optional diacritics. Diacritics are of the following types: prefix
+                    (e.g., pre-nasalization), combining (e.g., devoicing), length, suffix (e.g., aspiration), and
+                    tone. The following sections outline each part of a single Phone.</p>
+                <section id="prefix_diacritic">
+                    <title>Prefix Diacritic</title>
+                    <p>A prefix diacritic must appear before the base glyph.  A phone may have multiple prefix
+                        diacritics.</p>
+                </section>
+                <section id="base_phone">
+                    <title>Base Glyph</title>
+                    <p>The base glyph can be any IPA vowel or consonant.</p>
+                </section>
+                <section id="combining_diacritic">
+                    <title>Combining Diacritic</title>
+                    <p>Combining diacritics must appear directly after the base glyph; any number of
+                        combining diacritics may be used. Combining diacritics may also be added to
+                        prefix and suffix diacritics.<note>Some combining diacritic options may
+                            cause rendering issues depending on the selected IPA font.</note></p>
+                </section>
+                <section id="phone_length">
+                    <title>Length</title>
+                    <p>Phone length is indicated using character 0x02D0 (long) and 0x02D1 (half-long.)  Length
+                        diacritics must appear after the phone to which they belong.</p>
+                </section>
+                <section id="suffix_diacritic">
+                    <title>Suffix Diacritic</title>
+                    <p>A suffix diacritic must appear after the base glyph.  A phone may have multiple suffix
+                        diacritics.</p>
+                </section>
+                <section id="tone_number">
+                    <title>Tone Number</title>
+                    <p>Tone number is specified using superscript numbers and must appear as the
+                        last element in a phone.  Tone number applies to all elements inside of a
+                        syllable unit and may be appear on any element within the syllable. (If tone
+                        number diacritics appear on more than one element the numbers are concatonated.)</p>
+                </section>
+                <example>ba²¹⁴  has tone number '214'<p>b²a¹⁴ has tone number '214'</p></example>
+                
+            </body>
+            <related-links>
+                <link href="ipa.dita#ipa_listing"/>
+            </related-links>
+        </topic>
+        
+        <topic id="compound_phone">
+            <title>Compound Phone</title>
+            <body>
+                <p>Compound phones are the combination of two phones using a ligature symbol (either character
+                    0x0361 or 0x035c) between them. Each of the two phones may include prefix, combining, suffix,
+                    length, or tone diacritics.</p>
+                <table id="table_dyv_ytu_pg">
+                    <tgroup cols="2">
+                        <thead>
+                            <row>
+                                <entry>Some Possible Compound Phones</entry>
+                                <entry>Description</entry>
+                            </row>
+                        </thead>
+                        <tbody>
+                            <row>
+                                <entry>b͜ð</entry>
+                                <entry>Combined production of [b] and [ð]</entry>
+                            </row>
+                            <row>
+                                <entry>a͡ʊː</entry>
+                                <entry>Diphthong [a͡ʊ] with second component sound lengthened</entry>
+                            </row>
+                        </tbody>
+                    </tgroup>
+                </table>
+            </body>
+        </topic>
+        
+        <topic id="stress_marker">
+            <title>Stress Marker</title>
+            <body>
+                <p>Prosodically prominant syllables may be coded for primary or secondary stress. Primary stress
+                    is transcribed using a superior vertical stroke (0x2C8) preceding the syllable. Secondary stress
+                    is transcribed using an inferior vertical stroke (0x2CC) preceding the syllable.</p>
+                <table id="table_dyv_gio_pg">
+                    <title>Some Examples</title>
+                    <tgroup cols="2">
+                        <thead>
+                            <row>
+                                <entry>Orthography</entry>
+                                <entry>Transcription</entry>
+                            </row>
+                        </thead>
+                        <tbody>
+                            <row>
+                                <entry>cake</entry>
+                                <entry>ˈkeɪk</entry>
+                            </row>
+                            <row>
+                                <entry>revoke</entry>
+                                <entry>ɹəˈvoʊk</entry>
+                            </row>
+                            <row>
+                                <entry>epiglottis</entry>
+                                <entry>ˈɛpɪˌɡlɑɾɪs</entry>
+                            </row>
+                        </tbody>
+                    </tgroup>
+                </table>
+            </body>
+        </topic>
+        
+        <topic id="syllable_boundary">
+            <title>Syllable Boundary</title>
+            <body>
+                <p>In cases where syllable boundaries may not be obvious, they can be transcribed 
+                    with a period between syllables.</p>
+                <table id="table_ert_gio_pg">
+                    <title>Some Examples</title>
+                    <tgroup cols="2">
+                        <thead>
+                            <row>
+                                <entry>Orthography</entry>
+                                <entry>Transcription</entry>
+                            </row>
+                        </thead>
+                        <tbody>
+                            <row>
+                                <entry>re-enter</entry>
+                                <entry>ˈɹiː.ɛntəɹ</entry>
+                            </row>
+                            <row>
+                                <entry>sighing</entry>
+                                <entry>ˈsaɪ.ɪŋ</entry>
+                            </row>
+                        </tbody>
+                    </tgroup>
+                </table>
+            </body>
+        </topic>
+        
+        <topic id="word_boundary">
+            <title>Word Boundary</title>
+            <body>
+                <p>Boundaries between words are indicated via a space.</p>
+                
+                <table id="table_asd_gio_pg">
+                    <title>Some Examples</title>
+                    <tgroup cols="2">
+                        <thead>
+                            <row>
+                                <entry>Orthography</entry>
+                                <entry>Transcription</entry>
+                            </row>
+                        </thead>
+                        <tbody>
+                            <row>
+                                <entry>ten cats</entry>
+                                <entry>ˈtʰɛn ˈkæts</entry>
+                            </row>
+                            <row>
+                                <entry>on the roof</entry>
+                                <entry>ˈan ðə ˈɹuːf</entry>
+                            </row>
+                        </tbody>
+                    </tgroup>
+                </table>
+            </body>
+        </topic>
+        
+        
+        <topic id="intra-word_pause">
+            <title>Pause (Intra-word)</title>
+            <body>
+                <p>Intra-word pauses are transcribed using a '^' symbol.  When at the beginning of
+                    the word is considered 'blocking'.</p>
+                <table frame="none" id="table_d99e21ed-6c72-42dc-b7ff-f42365536be">
+                    <title>Intra-word pauses</title>
+                    <tgroup cols="2">
+                        <colspec colname="c1" colnum="1" colwidth="1*"/>
+                        <colspec colname="c2" colnum="2" colwidth="1*"/>
+                        <thead>
+                            <row>
+                                <entry>Orthography</entry>
+                                <entry>Transcription</entry>
+                            </row>
+                        </thead>
+                        <tbody>
+                            <row>
+                                <entry>ca^che</entry>
+                                <entry>ˈkæ^s</entry>
+                            </row>
+                            <row>
+                                <entry>^blocking</entry>
+                                <entry>^ˈblɑkɪŋ</entry>
+                            </row>
+                        </tbody>
+                    </tgroup>
+                </table>
+            </body>
+        </topic>
+        
+        <topic id="inter-word_pause">
+            <title>Pause (Inter-word)</title>
+            <body>
+                <p>Inter-word pauses in speech may be transcribed in one of three ways, depending on their
+                    length.</p>
+                <table frame="none" id="table_d99e21ed-6c02-42dc-b7ff-f42365536be">
+                    <title>Inter-word pauses</title>
+                    <tgroup cols="2">
+                        <colspec colname="c1" colnum="1" colwidth="1*"/>
+                        <colspec colname="c2" colnum="2" colwidth="1*"/>
+                        <thead>
+                            <row>
+                                <entry>Code</entry>
+                                <entry>Meaning</entry>
+                            </row>
+                        </thead>
+                        <tbody>
+                            <row>
+                                <entry>(.)</entry>
+                                <entry>Short pause</entry>
+                            </row>
+                            <row>
+                                <entry>(..)</entry>
+                                <entry>Medium-length pause</entry>
+                            </row>
+                            <row>
+                                <entry>(...)</entry>
+                                <entry>Long pause</entry>
+                            </row>
+                        </tbody>
+                    </tgroup>
+                </table>
+                
+                <table frame="none" id="table_d99e21ed-7c02-42dc-b7ff-f42365536be">
+                    <title>Example</title>
+                    <tgroup cols="2">
+                        <colspec colname="c1" colnum="1" colwidth="1*"/>
+                        <colspec colname="c2" colnum="2" colwidth="1*"/>
+                        <thead>
+                            <row>
+                                <entry>Orthography</entry>
+                                <entry>Transcription</entry>
+                            </row>
+                        </thead>
+                        <tbody>
+                            <row>
+                                <entry>cache (.) cache</entry>
+                                <entry>ˈkaʃ (.) ˈkaʃ</entry>
+                            </row>
+                        </tbody>
+                    </tgroup>
+                </table>
+            </body>
+        </topic>
+    </topic>
+    
+    <topic id="other_transcription_items">
+        <title>Other Transcription Items</title>
+        <body/>
+        
+        <topic id="intonation_group">
+            <title>Intonation Group</title>
+            <body>
+                <p>Intonation groups are prosodic domains or units which include complete intonational contours.
+                    Intonation groups can be minor (e.g. corresponding to noun, verb, or prepositional phrases) or
+                    major (e.g. corresponding to entire sentences). Minor groups are separated by a single pipe
+                    symbol (0x1C0), and major groups are separated by a double pipe symbol (0x1C1).</p>
+                <table id="table_dyv_poi_pg">
+                    <title>Some Example Intonation Groups</title>
+                    <tgroup cols="2">
+                        <colspec colnum="1" colname="c1" colwidth="1*"/>
+                        <colspec colnum="2" colname="c2" colwidth="1*"/>
+                        <thead>
+                            <row>
+                                <entry>Minor</entry>
+                                <entry>Major</entry>
+                            </row>
+                        </thead>
+                        <tbody>
+                            <row>
+                                <entry>the dog ǀ jumped ǀ over the fence</entry>
+                                <entry>It's twelve o'clock ǁ It's time for lunch</entry>
+                            </row>
+                            <row>
+                                <entry>the cold wind ǀ gusted strongly</entry>
+                                <entry>I'm tired ǁ Let's go inside</entry>
+                            </row>
+                        </tbody>
+                    </tgroup>
+                </table>
+            </body>
+        </topic>
+        
+        <topic id="compound_word">
+            <title>Compound Word</title>
+            <body>
+                <p>Compound words are transcribed using a plus sign between each word.</p>
+                <table id="table_dyv_poi_pg">
+                    <title>Some Possible Compound Words</title>
+                    <tgroup cols="2">
+                        <colspec colnum="1" colname="c1" colwidth="1*"/>
+                        <colspec colnum="2" colname="c2" colwidth="1*"/>
+                        <thead>
+                            <row>
+                                <entry>Orthography</entry>
+                                <entry>Transcription</entry>
+                            </row>
+                        </thead>
+                        <tbody>
+                            <row>
+                                <entry>dog+house</entry>
+                                <entry>ˈdag+haʊs</entry>
+                            </row>
+                            <row>
+                                <entry>picture+frame</entry>
+                                <entry>ˈpɪkʧɚ+fɹeːm</entry>
+                            </row>
+                        </tbody>
+                    </tgroup>
+                </table>
+            </body>
+        </topic>
+        
+        <topic id="sandhi">
+            <title>Sandhi</title>
+            <shortdesc>Description of sandhi.</shortdesc>
+            <body>
+                <p>Linkers are symbols to express a phonological relation between two words, for
+                    example in the case of external sandhi phenomenon. For example, while 'an' and
+                    'apple' for two separate words, the final 'n' of the determiner is syllabified
+                    within the onset of the following syllable. We represent this relation as 'an
+                    apple' /ə‿næpəl/.</p>
+                <section>
+                    <title>Contraction</title>
+                    <p>A contraction is a combination of two words within a phrase, involving the reduction of one
+                        of the words. In Phon, contractions may be transcribed using the overtie character,
+                        <codeph>0x2040</codeph>.</p>
+                </section>
+                <example>
+                    <p>Contraction<codeblock>Orthography: l'ami
+IPA Actual:  l⁀ami</codeblock></p>
+                </example>
+                <section>
+                    <title>Linkers (including Liaison)</title>
+                    <p>Linkers are transcribed using the undertie character <codeph>0x203f</codeph>.</p>
+                </section>
+                <example>
+                    <p>Liaison<codeblock>Orthography: les ami
+IPA Target:  le‿zami</codeblock></p>
+                </example>
+            </body>
+        </topic>
+        
+    </topic>
+    
+</topic>

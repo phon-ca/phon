@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="consistency_analysis">
+    <title>Consistency Analysis</title>
+    <body>
+        <p>This analysis will calculate consistency of <i>word units</i>, where a <i>word unit</i>
+            is defined as a group of two or more productions with identical targets. (A word must be
+            repeated more than once to be considered.)</p>
+        <p>A table for each <i>word unit</i> in a each selected session will be produced and added
+            to one of four categories:<ol id="ol_xhf_kfj_zrb">
+                <li>Accurate and consistent</li>
+                <li>Accurate and inconsistent (only one production needs to be accurate)</li>
+                <li>Inaccurate and consistent</li>
+                <li>Inaccurate and inconsistent</li>
+            </ol>A summary for each session will be calculated with summary columns
+                <i>A&amp;C</i>,<i>A&amp;I</i>,<i>I&amp;C</i>,<i>I&amp;I</i> coresponding to the
+            aformentioned categories.</p>
+    </body>
+    
+    <topic id="data-preparation">
+        <title>Data Preparation</title>
+        <body>
+            <p>Session data is queried by word for each aligned Orthography, IPA Target and IPA Actual triple. IPA transcriptions
+            should be syllabified and aligned.</p>
+        </body>
+    </topic>
+    <topic id="parameters">
+        <title>Parameters</title>
+        <body>
+            <p>
+                <fig id="fig_cdm_vhn_3nb">
+                    <title>Consistency Analysis Parameters</title>
+                    <image placement="break" href="./images/consistency_analysis_parameters.png"
+                        id="image_ddm_vhn_3nb"/>
+                </fig>
+            </p>
+            
+        </body>
+        
+        <topic id="other_parameters">
+            <title>Other Parameters</title>
+            <body>
+                <p>
+                    <ul>
+                        <li><xref href="./../query/common_query_options.dita#ignore_diacritics"/></li>
+                        <li><xref href="./../query/common_query_options.dita#search_by"/></li>
+                        <li><xref href="./../query/common_query_options.dita#group_options"/></li>
+                        <li><xref href="./../query/common_query_options.dita#word_options"/></li>
+                        <li><xref href="./../query/common_query_options.dita#additional_tier_data"/></li>
+                        <li><xref href="./../query/common_query_options.dita#participant_filter"/></li>
+                    </ul>
+                </p>
+            </body>
+        </topic>
+    </topic>
+    <topic id="example">
+        <title>Example</title>
+        <body>
+            <p>Click the link below to view an example report.</p><p>
+                <xref href="./examples/consistency_analysis_example.html" format="html" scope="external"
+                    ><image align="center" href="../images/report.png" id="image_t3t_nmj_jpb">
+                        <alt>Example Report</alt>
+                    </image> Example Report</xref></p>
+        </body>
+    </topic>
+</topic>

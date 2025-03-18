@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="word_inventory">
+    <title>Phonological Processes</title>
+    <body>
+        <p>The Phonological Processes analyses will query and report on pre-defined and custom IPA
+            Target ↔ IPA Actual processes. These processes are typicalled defined using phonex
+            expressions. Each pre-defined process is available as a named analyis under the
+                <uicontrol>Phonological Processes</uicontrol> submenu.</p>
+    </body>
+    <topic id="params">
+        <title>Parameters</title>
+        <body>
+            <p>
+             <fig id="fig_xyt_pgn_4nb">
+                 <title>Phonological Process Parameters</title>
+                 <image placement="break" href="images/phonological_process_parameters.png" id="image_yyt_pgn_4nb"
+                 />
+             </fig>
+            </p>
+            <p> Phonological processes are defined using a pair of IPA Target/Actual expressions.
+                Custom processes may be defined by entering the appropriate IPA Target/Actual
+                expression in the form under <uicontrol>IPA Target/Actual Options</uicontrol> as
+                shown above. </p>
+            <p>Several pre-defined phonological processes have been defined and are accessible by
+                name under the <menucascade>
+                    <uicontrol>Analysis</uicontrol>
+                    <uicontrol>Phonological Process</uicontrol>
+                </menucascade> menu. The list of pre-defined processes is also availble in the
+                    <uicontrol>Process</uicontrol> combo box at the top of the analysis form. The
+                list of pre-defined processes is:<ul id="ul_sbs_vp2_mnb">
+                    <li>Coronal Backing<p>IPA Target expression:
+                            <codeph>{coronal}</codeph></p><p>IPA Actual expression:
+                                <codeph>{dorsal}</codeph> (exact match)</p></li>
+                    <li>Deaffrication<p>IPA Target expression:
+                            <codeph>{affricate}</codeph></p><p>IPA Actual expression:
+                                <codeph>{-affricate}</codeph> (exact match) </p></li>
+                    <li>Deletion<p>IPA Target expression:
+                        <codeph>\w</codeph></p><p>IPA Actual expression:
+                            <codeph>^$</codeph> (exact match)</p></li>
+                    <li>Devoicing<p>IPA Target expression:
+                        <codeph>{voiced}</codeph></p><p>IPA Actual expression:
+                            <codeph>{voiceless}</codeph> (exact match)</p></li>
+                    <li>Liquid Gliding &amp; Vocalization<p>IPA Target expression:
+                        <codeph>{liquid}</codeph></p><p>IPA Actual expression:
+                            <codeph>[\g\v]</codeph> (exact match)</p></li>
+                    <li>Glottalization<p>IPA Target expression:
+                        <codeph>{-glottal}</codeph></p><p>IPA Actual expression:
+                            <codeph>{glottal}</codeph> (exact match)</p></li>
+                    <li>Lateralization<p>IPA Target expression:
+                        <codeph>{-lateral}</codeph></p><p>IPA Actual expression:
+                            <codeph>{lateral}</codeph> (exact match)</p></li>
+                    <li>Fricative Stopping<p>IPA Target expression:
+                        <codeph>{fricative}</codeph></p><p>IPA Actual expression:
+                            <codeph>{stop}</codeph> (exact match)</p></li>
+                    <li>Velar Fronting<p>IPA Target expression:
+                        <codeph>{velar}</codeph></p><p>IPA Actual expression:
+                            <codeph>{coronal}</codeph> (exact match)</p></li>
+                    <li>Voicing<p>IPA Target expression:
+                        <codeph>{voiceless}</codeph></p><p>IPA Actual expression:
+                            <codeph>{voiced}</codeph> (exact match)</p></li>
+                    <li>Epenthesis<p>IPA Target expression: <codeph>^$</codeph> (exact match)</p><p>IPA Actual expression: <codeph>\w</codeph><note>Unlike the other processes IPA Actual is queried
+                                before IPA Target during the analysis. Likewise the 'count' shown in
+                                tables of this analysis is the number of elements found in IPA
+                                Actual. Epenthesis is not displayed in the drop-down menu but you
+                                can find the epenthesis analysis under the <menucascade>
+                                    <uicontrol>Analysis</uicontrol>
+                                    <uicontrol>Phonlogical Process</uicontrol>
+                                </menucascade> menu.</note></p></li>
+                </ul></p>
+        </body>
+        
+        <topic id="other_parameters">
+            <title>Other Parameters</title>
+            <body>
+                <p><ul id="ol_qkx_cqy_mjb">
+                    <li><xref href="../query/common_query_options.dita#search_by"/></li>
+                    <li><xref href="../query/phones_query.dita#aligned-phones"/></li>
+                    <li><xref href="../query/common_query_options.dita#group_options"/></li>
+                    <li><xref href="../query/common_query_options.dita#word_options"/></li>
+                    <li><xref href="../query/common_query_options.dita#syllable_options"/></li>
+                    <li><xref href="../query/common_query_options.dita#additional_tier_data"/></li>
+                    <li><xref href="../query/common_query_options.dita#participant_filter"/></li>
+                </ul></p>
+            </body>
+        </topic>
+    </topic>
+    <topic id="outline">
+        <title>Report Outline</title>
+        <body>
+            <p>A sample table of contents is displayed below. Bold level elements are section
+                headers while italic items are tables.</p>
+            <ul>
+                <li><p><b>Phonological Process</b></p><ul>
+                    <li>
+                        <p><b>Parameters</b></p>
+                    </li>
+                    <li><b>Summary</b><ul id="ul_vc1_yn2_wmb">
+                                <li><i>All Participants</i></li>
+                                <li><i>Participant 1</i></li>
+                                <li>… (for each selected participant)</li>
+                            </ul></li>
+                        <li><b>Aggregate</b><ul id="ul_pjx_fsx_lnb">
+                                <li><i>All Participants</i> (if more than one participant)</li>
+                                <li><i>Participant 1</i></li>
+                                <li>… (for each selected participant)</li>
+                            </ul></li>
+                    <li>
+                        <p><b><i>Listing</i></b> (All results)</p>
+                    </li>
+                </ul></li>
+            </ul>
+        </body>
+    </topic>
+    <topic id="example">
+        <title>Example</title>
+        <body>
+            <p>Click the link below to view an example report.</p><p>
+                <xref href="./examples/phonological_process_example.html" format="html" scope="external"
+                    ><image align="center" href="../images/report.png" id="image_t3t_nmj_jpb">
+                        <alt>Example Report</alt>
+                    </image> Example Report</xref></p>
+        </body>
+    </topic>
+</topic>

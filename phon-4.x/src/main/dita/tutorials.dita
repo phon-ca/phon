@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="tutorials">
+    <title>Tutorial Videos</title>
+    <body>
+        <foreign outputclass="html-embed">
+            <![CDATA[
+            
+<p>The Phon channel on YouTube presents a series of videos covering the essential aspects of Phon. The tutorials offer practical examples and useful tips about how to use Phon towards corpus building, transcription and annotation, and data analysis. If you want to be notified about additions or updates to the channel, please subscribe to the channel by clicking on <a href="https://www.youtube.com/channel/UCwytMwdPgzmyYSmRO6KdU7A" target="#">this link</a>.
+</p>
+
+<p>Below is a Table of Contents for the channel, with direct links to thematically-organized <b>playlists</b>, as well as to the individual tutorial videos contained within these playlists.</p>
+
+<h2><a href="https://www.youtube.com/playlist?list=PLF1xFtURR4imlibpDg53h3ZahEbgGVsP6">Playlist: Getting started </a></h2>
+<ul>
+    <li><a href="https://youtu.be/T1fu9pxZI-A">Welcome message</a></li>
+    <li><a href="https://youtu.be/F67Vvz1dSks">Website and general Phon settings</a></li>
+</ul>
+
+<h2><a href="https://www.youtube.com/playlist?list=PLF1xFtURR4inG5jI8hNij1fY2nLXRdraM">Playlist: Phon Interface</a></h2>
+<ul>
+    <li><a href="https://youtu.be/G-ptJrL5usk"> General interface: Welcome window, Project Manager, Session Editor</a></li>
+    <li><a href="https://youtu.be/jnNCjMPPTnY"> Media Player, Session Information, Timeline, Record data</a></li>
+    <li><a href="https://youtu.be/WYS2jbBF-LI">Tier Management, Session Check</a></li>
+    <li><a href="https://youtu.be/JvojVA1zHk8">Record Data, Syllabification, and Alignment</a></li>
+    <li><a href="https://youtu.be/ia-GP6S2y2w">Speech Analysis</a></li>
+    <li><a href="https://youtu.be/3GnSa2cojfo">IPA Lookup, Find and Replace</a></li>
+    <li><a href="https://youtu.be/Xrrjt64rLmI">The IPA Map</a></li>
+</ul>
+
+<h2><a href="https://www.youtube.com/playlist?list=PLF1xFtURR4in0o_zHSK5nBpeNIlqHr8K8">Playlist: Local Project Installation</a></h2>
+<ul>
+    <li><a href="https://youtu.be/QE4tewfFaQY">Create Project, Corpus, Session</a></li>
+    <li><a href="https://youtu.be/zRKPfKCKofA">Assign media file to session transcript</a></li>
+    <li><a href="https://youtu.be/uMSH6uU3xxo">Assign date and participant info to transcript</a></li>
+    <li><a href="https://youtu.be/cVYr1cBTTQY">Install an existing Phon corpus on a local drive</a></li>
+</ul>
+
+<h2><a href="https://www.youtube.com/playlist?list=PLF1xFtURR4ilOMbRTKH-TtScKexgGDyb7">Playlist: Segment a Phon session</a></h2>
+<ul>
+    <li><a href="https://youtu.be/vNT2srlruGk">Media segmentation and later adjustments</a></li>
+</ul>
+
+<h2><a href="https://www.youtube.com/playlist?list=PLF1xFtURR4ikPyP01RSq9dmrY6kl0PtED">Playlist: Transcribe and annotate a Phon session</a></h2>
+<ul>
+    <li> <a href="https://youtu.be/JsYw07CqXfY">Orthographic transcription</a></li>
+    <li> IPA transcription:
+        <ul>
+            <li><a href="https://youtu.be/HYaHgMeQ7qw">Introduction</a></li>
+            <li><a href="https://youtu.be/VJX5nMbPpfQ">IPA Lookup</a></li>
+            <li><a href="https://youtu.be/9K2uo-nJX-8">Auto-transcribe</a></li>
+            <li><a href="https://youtu.be/7ePiyBZMIJY">Transcription by modification</a></li>
+            <li><a href="https://youtu.be/EhHUoq7LBiA">Brief discussion</a></li>
+        </ul>
+    </li>
+    <li> <a href="https://youtu.be/Q3eahIh8Nk0">Double-blind transcription and IPA validation</a></li>
+</ul>
+
+<h2><a href="https://www.youtube.com/playlist?list=PLF1xFtURR4inbrg7cAreIzCq5IM1dP0Bl">Playlist: Data query, reporting, and built-in analyses</a></h2>
+<ul>
+    <li><a href="https://youtu.be/NQHkJOH_1S0">Install and check corpus data</a></li>
+    <li> Query forms:
+        <ul>
+            <li><a href="https://youtu.be/mgibylKdCHY">Data tiers</a></li>
+            <li><a href="https://youtu.be/la4c_6uoq24"> Phones</a></li>
+            <li><a href="https://youtu.be/xGcY0LrHmFg">Deletion, epenthesis, and segmental relations</a></li>
+        </ul>
+    </li>
+    <li><a href="https://youtu.be/3UmklPiIXsw">Query reports</a></li>
+    <li><a href="https://youtu.be/mRUs4TMwVnk">Built-in analyses</a></li>
+    <li><a href="https://youtu.be/VPBeItHbQKg">Analysis Composer</a></li>
+</ul>
+
+<h2><a href="https://www.youtube.com/playlist?list=PLF1xFtURR4ilwU_8R3Nn1UIrRqmxXUqJa">Playlist: Processing data exported from Phon</a></h2>
+<ul>
+    <li><a href="https://youtu.be/LDbl3jqC-nE">Distill an aggregate report into a spreadsheet table for chart generation</a></li>
+</ul>
+
+<hr/>
+    
+<p>For additional requests, questions, or feedback about Phon, we encourage all users to subscribe to our mailing list. Information about joining the mailing list is available at <a href="https://talkbank.org/share/email.html">https://talkbank.org/share/email.html</a>.</p>
+
+            ]]>
+        </foreign>
+    </body>
+</topic>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="view_result_set">
+    <title>View Result Set</title>
+    <shortdesc>View a <i>Result Set</i> from a query.</shortdesc>
+    <body>
+        <section>From a <uicontrol>Results</uicontrol> tab in the <wintitle>Query Project</wintitle>
+            window or from the <wintitle>Query History</wintitle> window with a query
+            selected:</section>
+        <ol>
+            <li>
+                <p>Double-click on a result set.</p>
+                <itemgroup>The <wintitle>Results</wintitle> window will open alongside the session
+                    in which the results were found. Each result will be displayed with its
+                        <uicontrol>Record #</uicontrol>, <uicontrol>Speaker</uicontrol>,
+                        <uicontrol>Result</uicontrol>, and any associated metadata.<note>To open
+                        only the <wintitle>Results</wintitle> window, deselect <uicontrol>Open
+                            session with result set</uicontrol> before opening a result set.</note>
+                    <note>To arrange results by a certain column, click on its header. To reorder
+                        columns, click and drag their header to the left or right. To further change
+                        column view options, click on the icon to the right of the column
+                        headers.</note></itemgroup>
+            </li>
+            <li>
+                <p>To view a result in the <wintitle>Session Editor</wintitle>, click on it in the
+                        <wintitle>Results</wintitle> window.</p>
+                <itemgroup>The record in which the result was found will be displayed, with the
+                    result highlighted in the <wintitle>Record Data</wintitle> view.</itemgroup>
+            </li>
+            <li>
+                <p>To exclude an extraneous result from the list, select it and choose the 
+                    <menucascade><uicontrol>Results</uicontrol><uicontrol>Toggle result excluded</uicontrol></menucascade>
+                    menu item or press <userinput>Delete/Backspace</userinput>. You can show or hide 
+                    excluded results by selecting or deselecting <uicontrol>Show excluded
+                    results</uicontrol>.</p>
+            </li>
+            <li>
+                <p>To save any changes to a result set, click <uicontrol>Save</uicontrol>.</p>
+            </li>
+        </ol>
+    </body>
+    
+    <topic id="result_set_actions">
+        <title>Result Set Actions</title>
+        <body/>
+        
+        <topic id="save_results_as_csv">
+            <title>Save Table as CSV</title>
+            <shortdesc>Save the table visible in the <wintitle>Results</wintitle> window as a CSV
+                file.</shortdesc>
+            <body>
+                <section>From the <wintitle>Results</wintitle> window:</section>
+                <ol>
+                    <li>
+                        <p>Click <uicontrol>Save table as CSV...</uicontrol>.</p>
+                        <itemgroup>A browse window will appear, prompting you to choose a file name and
+                            directory in which to save the table.</itemgroup>
+                    </li>
+                    <li>
+                        <p>Choose a file name and directory for your table and click
+                            <uicontrol>Save</uicontrol>.</p>
+                        <itemgroup>The table in the <wintitle>Results</wintitle> window will be saved as a
+                            CSV file in the chosen directory.<note>If excluded records are currently
+                                visible, they will be included in the CSV file.</note></itemgroup>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+        <topic id="filter_results">
+            <title>Filter Results</title>
+            <shortdesc>Search within the results table.</shortdesc>
+            <body>
+                <section>From the <wintitle>Results</wintitle> window:</section>
+                <ol>
+                    <li>
+                        <p>Enter your search term in the <uicontrol>Filter results</uicontrol> bar.</p>
+                        <itemgroup>A list of all results containing your search term will be displayed, showing
+                            their <uicontrol>Record #</uicontrol>, <uicontrol>Speaker</uicontrol>, and
+                            <uicontrol>Result</uicontrol>. If there are no results, this list will be
+                            empty.<note>To search within a specific column (or multiple columns), click
+                                the drop down arrow to the left of the search bar and select it in the list.
+                                Options are also available to allow you to <uicontrol>Use regular
+                                    expression</uicontrol> or to make your search <uicontrol>Case
+                                        sensitive</uicontrol>.</note></itemgroup>
+                    </li>
+                    <li>
+                        <p>To clear the <uicontrol>Search</uicontrol> bar, click <uicontrol>Clear
+                            field/X</uicontrol>.</p>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+        <topic id="edit_columns">
+            <title>Edit Table Columns</title>
+            <shortdesc>Add, remove, edit, or reorder columns currently visible in the
+                <wintitle>Results</wintitle> window.</shortdesc>
+            <body>
+                <section>From the <wintitle>Results</wintitle> window:</section>
+                <ol id="steps_enk_lkw_z3">
+                    <li>
+                        <p>Click the <uicontrol>Edit table columns...</uicontrol> button or choose the
+                            <menucascade>
+                                <uicontrol>Results</uicontrol><uicontrol>Edit table columns...</uicontrol>
+                            </menucascade> menu item.</p>
+                        <itemgroup>This will open the <wintitle>Edit Columns</wintitle> dialog, which shows
+                            the current columns of the table and their options.</itemgroup>
+                    </li>
+                    <li>
+                        <p>To add a column to the table, click <uicontrol>Add field.../+</uicontrol> and select a field name from the list.
+                            Alternatively, you may select <uicontrol>Custom</uicontrol> from the list to
+                            create a custom field.</p>
+                        <itemgroup><note>Creating a custom field may require some familiarity with Javascript.</note></itemgroup>
+                    </li>
+                    <li>
+                        <p>To remove a column from the table, select it and click
+                            <uicontrol>Remove selected field/-</uicontrol> or press
+                            <userinput>Delete/Backspace</userinput>.</p>
+                    </li>
+                    <li>
+                        <p>To re-order a column, select it and use the <uicontrol>up/down arrows</uicontrol>
+                            to move it higher or lower in the outline.</p>
+                    </li>
+                </ol>
+            </body>
+        </topic>
+        
+        
+    </topic>
+</topic>

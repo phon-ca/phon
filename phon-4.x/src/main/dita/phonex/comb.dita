@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="concept_jj4_ygn_gg">
+ <title>comb</title>
+ <shortdesc>Description of the <codeph>comb</codeph> supplementary matcher.</shortdesc>
+ <conbody>
+  <p>The <codeph>comb</codeph> supplementary matcher queries the combining diacritic section of a
+   phone.  It accepts a single parameter which can be either:<ul id="ul_wgg_gfg_dn">
+    <li>A single character</li>
+    <li>A feature set matcher</li>
+    <li>A phone class matcher</li>
+   </ul>The matcher will match if any of the combining diacritics of the phone match the given
+   argument.</p>
+  <example>
+   <p>Search for a phone that has the combining diacritic
+    <codeph>\u0300</codeph><codeblock>.:comb("\u0300")</codeblock></p>
+  </example>
+ </conbody>
+</concept>

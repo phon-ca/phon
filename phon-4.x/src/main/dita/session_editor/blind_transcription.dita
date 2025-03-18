@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="conceptId">
+    <title>Blind Transcription</title>
+    <body>
+        <p>Due to the subjective nature of phonetic transcription (where measurement and
+            verification of all relevant segments may not be feasible), Phon has a built-in system
+            for performing multiple-blind transcriptions.</p>
+        <p>In a multiple-blind transcription process, records are transcribed by any number of
+            separate users, who do not see each other's transcriptions. These separate
+            transcriptions may then be resolved by an objective party, who can choose one over the
+            other or compare them to reach a consensus transcription.</p>
+        <p>A typical example of multiple-blind transcription in Phon may proceed as follows:</p>
+        <p>
+            <ul id="ul_eii_kfb_vc">
+                <li>Two users perform separate blind transcriptions of all records in one session
+                    (see <xref href="../project_manager/sessions.dita#open_session_blind"/> for
+                    instructions).</li>
+                <li>A team of two different users review both sets of blind transcriptions together,
+                    while listening to each record.</li>
+                <li>For each record, this team does one of three things:<ul id="ul_jym_egb_vc">
+                        <li>chooses the best of the two transcriptions</li>
+                        <li>combines both transcriptions to reach a consensus</li>
+                        <li>creates an alternate transcription which they agree upon (in extreme
+                            cases in which both blind transcriptions seem to be in error).</li>
+                    </ul></li>
+            </ul>
+        </p>
+        <p>The transcription which is settled upon is entered into the <uicontrol>IPA
+                Target</uicontrol> or <uicontrol>IPA Actual</uicontrol> field, and can be analyzed
+            accordingly by project researchers, who will now have access to the best and most
+            objective transcriptions possible. See <xref href="ipa_validation_view.dita"/> for
+            instructions on validating IPA Transcriptions. See also the <xref
+                href="inter_transcriber_reliability.dita">inter-transcriber reliability</xref>
+            report which provides several metrics of agreement between blind transcribers in a Phon
+            session.</p>
+    </body>
+</topic>

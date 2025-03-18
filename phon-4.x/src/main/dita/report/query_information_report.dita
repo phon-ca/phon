@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="query-information">
+    <title>Query Information</title>
+    <body>
+        <p>Display query name and parameters.</p>
+    </body>
+    <topic id="settings">
+        <title>Settings</title>
+        <body>
+            <fig>
+                <title>Query Information Settings</title>
+                <image href="./images/query_information_settings.png">
+                    <alt>Query Information Settings</alt>
+                </image>
+            </fig>
+            <p>Use the Includes/Excludes fields for fine control of query parameters output - one per line. Prefix
+                section names with an '@' to control the output of entire sections. Use the checkbox
+                to only print values which have changed from their default values.</p>
+        </body>
+    </topic>
+</topic>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="pntc">
+    <title>Percent Number Tones Correct (PNTC)</title>
+    <body>
+        <p>The Percent Nubmer Tones Correct (PNTC) analysis will calculate the percentage of
+            syllables with correctly produced tones in the sampled data. To review how tone numbers
+            are specified in Phon please see <xref
+                href="../../transcription/ipa_transcription.dita#phone/tone_number"/>.</p>
+    </body>
+    <topic id="data-preparation">
+        <title>Data Preparation</title>
+        <body>
+            <p>Session data is queried by word for each IPA Target and IPA Actual tuple. Proper
+                syllabification and phone alignment is required for accurate results. All
+                participants should have unique names/identification numbers and a speaker should be
+                assigned to all records.</p>
+        </body>
+    </topic>
+    <topic id="parameters">
+        <title>Parameters</title>
+        <body>
+            <p>
+                <fig id="fig_cdm_vhn_3nb">
+                    <title>Percent Number Tones Correct Parameters</title>
+                    <image placement="break" href="../images/pntc_parameters.png"
+                        id="image_ddm_vhn_3nb"/>
+                </fig>
+            </p>
+        </body>
+        
+        <topic id="other_parameters">
+            <title>Other parameters</title>
+            <body>
+                <p>
+                    <ul>
+                        <li><xref href="../../query/common_query_options.dita#search_by"/></li>
+                        <li><xref href="../../query/common_query_options.dita#group_options"/></li>
+                        <li><xref href="../../query/common_query_options.dita#word_options"/></li>
+                        <li><xref href="../../query/common_query_options.dita#syllable_options"/></li>
+                        <li><xref href="../../query/common_query_options.dita#additional_tier_data"/></li>
+                        <li><xref href="../../query/common_query_options.dita#participant_filter"/></li>
+                    </ul>
+                </p>
+            </body>
+        </topic>
+        
+    </topic>
+    <topic id="topic_wgv_ybb_mjb">
+        <title>PNTC Calculation</title>
+        <body>
+            <p>PNTC is calculated using the following equation:</p>
+            <p><foreign outputclass="embed-latex">
+                \begin{align} 
+                PNTC &amp;= \frac{correct}{(correct + incorrect)} \times 100 \\
+                    &amp;= \frac{correct}{(correct + deletions + substitutions)} \times 100
+                \end{align}</foreign></p>
+        </body>
+    </topic>
+    <topic id="report-outline">
+        <title>Report Outline</title>
+        <body>
+            <p>A sample table of contents is displayed below. Bold level elements are section
+                headers while italic items are tables.</p>
+            <ul>
+                <li><p><b>Percent Number Tones Correct (PNTC)</b></p><ul>
+                    <li>
+                        <p><b>Summary</b></p>
+                        <ul>
+                            <li>
+                                <p><i>All Participants</i></p>
+                            </li>
+                            <li><i>Tonal Patterns</i></li>
+                            <li>
+                                <p><i>IPA Patterns</i></p>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><b>Participant 1</b><ul id="ul_vc1_yn2_wmb">
+                        <li><i>Summary</i></li>
+                        <li><i>Tonal Patterns</i></li>
+                        <li><i>IPA Patterns</i></li>
+                    </ul></li>
+                    <li>… (for each selected participant)</li>
+                    <li>
+                        <p><b>Listing (All Results)</b></p>
+                    </li>
+                </ul></li>
+            </ul>
+        </body>
+    </topic>
+    <topic id="example">
+        <title>Example</title>
+        <body>
+            <p>Click the link below to view an example report.</p><p>
+                <xref href="../examples/pntc_example.html" format="html" scope="external"
+                    ><image align="center" href="../../images/report.png" id="image_t3t_nmj_jpb">
+                        <alt>Example Report</alt>
+                    </image> Example Report</xref></p>
+        </body>
+    </topic>
+</topic>

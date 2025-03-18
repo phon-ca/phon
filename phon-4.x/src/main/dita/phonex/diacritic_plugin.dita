@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="concept_wqv_w2g_dn">
+ <title>diacritic</title>
+ <shortdesc>Description of the phonex <codeph>diacritic</codeph> supplementary matcher.</shortdesc>
+ <conbody>
+  <p>The <codeph>diacritic</codeph> supplementary matcher queries the diacritic sections of a phone.
+   It accepts a single parameter which can be either:<ul id="ul_wgg_gfg_dn">
+    <li>A single character</li>
+    <li>A feature set matcher</li>
+    <li>A phone class matcher</li>
+   </ul></p>
+  <p>The matcher will match if any of the diacritics of the phone match the provide argument.  This
+   matcher also has a short-hand within phonex, the argument provided may be specified by using the
+    <codeph>&amp;</codeph> character after a phone matcher.</p>
+  <example>
+   <p>Search for any phone that has a diacritic.
+     <codeblock>.:diacritic("{}")</codeblock> or
+     <codeblock>.&amp;.</codeblock>
+  </p>
+  </example>
+  <example>
+   <p>Both of these expressions will search for any phone with the diacritics which add the
+          <codeph>{labial}</codeph> or <codeph>{aspirated}</codeph> features.
+        <codeblock>.:diacritic("[{aspirated}{labial}]")</codeblock>
+        or<codeblock>.&amp;[{aspirated}{labial}]</codeblock></p>
+  </example>
+ </conbody>
+</concept>

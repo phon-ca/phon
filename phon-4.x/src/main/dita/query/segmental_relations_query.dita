@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="segmental_relations_query">
+    <title>Segmental Relations</title>
+    <body>
+        <p>Look for segmental relations within phone alignment.</p>
+        <fig id="fig_ljn_kjd_flb">
+            <title>Segmental Relations Query</title>
+            <image placement="inline" href="images/segmental_relations_query.png"
+                id="image_mjn_kjd_flb">
+                <alt>Segmental Relations Query</alt>
+            </image>
+        </fig>
+    </body>
+    <topic id="other-parameters">
+        <title>Other Parameters</title>
+        <body>
+            <ul>
+                <li><xref href="common_query_options.dita#search_by"/></li>
+                <li><xref href="common_query_options.dita#group_options"/></li>
+                <li><xref href="common_query_options.dita#aligned_group_options"/></li>
+                <li><xref href="common_query_options.dita#word_options"/></li>
+                <li><xref href="common_query_options.dita#aligned_word_options"/></li>
+                <li><xref href="common_query_options.dita#syllable_options"/></li>
+                <li><xref href="common_query_options.dita#additional_tier_data"/></li>
+                <li><xref href="common_query_options.dita#participant_filter"/></li>
+            </ul>
+        </body>
+    </topic>
+</topic>

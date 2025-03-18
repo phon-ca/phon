@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="concept_psh_xgn_gg">
+ <title>suffix</title>
+ <shortdesc>Description of the <codeph>suffix</codeph> supplementary matcher.</shortdesc>
+ <conbody>
+  <p>The <codeph>prefix</codeph> supplementary matcher queries the prefix section of a phone.  It
+   accepts a single parameter which can be either:<ul id="ul_wgg_gfg_dn">
+    <li>A single character</li>
+    <li>A feature set matcher</li>
+    <li>A phone class matcher</li>
+   </ul></p>
+  <p>The matcher will match if any of the diacritics of the phone match the provide argument.</p>
+  <example>
+   <p>Search for a phone with the suffix diacritic
+    <codeph>\u02b0</codeph><codeblock>.:suffix("\u02b0\")</codeblock></p>
+  </example>
+ </conbody>
+</concept>

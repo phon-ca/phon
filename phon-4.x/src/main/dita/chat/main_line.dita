@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="chat-_main_line">
+    <title>CHAT Main Line</title>
+    <body>
+        <p>The CHAT main line codes the basic transcription of what a speaker said. The main line
+            includes both pronounced forms and markers. In CHAT the main line starts with an
+            asterisk followed by the speaker ID, a colon and a tab; the remainder of the line is the
+            orthographic transcription. More information about the CHAT main line can be found at
+                <xref href="https://talkbank.org/manuals/CHAT.html#_Toc486414395" format="html"
+                scope="external"/>.</p>
+        <p>E.g.,</p>
+        <codeblock xml:space="preserve">*CHI:   hello world!</codeblock>
+        <p>In Phon, the main line is mapped to the <keyword>Orthography</keyword> tier. Each main
+            line in a CHAT document cooresponds to a single record in a Phon session. Phon supports
+            many of the same coding standards as CHAT. See <xref
+                href="https://talkbank.org/manuals/CHAT.html#_Toc486414395" format="html"
+                scope="external"/> for complete documentation.</p>
+    </body>
+    
+</topic>

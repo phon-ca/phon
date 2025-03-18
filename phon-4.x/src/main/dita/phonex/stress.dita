@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="concept_5w3_qnm_gg">
+ <title>stress</title>
+ <shortdesc>Description of the phonex <codeph>stress</codeph> supplementary matcher.</shortdesc>
+ <conbody>
+  <p>The <codeph>stress</codeph> supplementary matcher will query the detected syllable stress of a
+   phone. The argument given to the plug-in must be one of the following characters:<ul
+    id="ul_31f_d4m_gg">
+    <li><codeph>1</codeph> - primary stress</li>
+    <li><codeph>2</codeph> - secondary stress</li>
+    <li><codeph>A</codeph> - any stress</li>
+    <li><codeph>U</codeph> - unstressed</li>
+   </ul></p>
+  <p>The <codeph>stress</codeph> matcher has a short-hand withing phonex.  The stress type may be
+   specified after a <codeph>!</codeph> character after a phone matcher.</p>
+  <example>
+   <title>Onsets of primary stress syllables</title>
+   <p><codeblock>.:sctype("Onset"):stress("1")</codeblock>or<codeblock>.:O!1</codeblock></p>
+  </example>
+ </conbody>
+</concept>

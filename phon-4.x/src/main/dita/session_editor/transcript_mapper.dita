@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="transcript_mapper">
+    <title>Transcript Mapper</title>
+    <body>
+        <p><wintitle>Transcript Mapper</wintitle> allows creation and utilization of an aligned
+            types database to aid with transcribing across multiple tiers based on existing data.
+            Alignment data may be imported from existing Phon sessions, csv files, or from IPA
+            dictionaries available in the application.<note><wintitle>Transcript Mapper</wintitle>
+                is currently available as a downloadable plug-in. See <xref
+                    href="https://github.com/phon-ca/phon-transcript-mapper-plugin" format="html"
+                    scope="external"/> for installation instructions.</note></p>
+        <p>The UI contains three main componenets:<ol id="ol_yhd_1qq_p5b">
+                <li><uicontrol>Key tier</uicontrol> combo box; the <keyword>key tier</keyword> is
+                    the tier used for lookups within the <keyword>aligned types database</keyword>.
+                    By default this is Orthography, but any grouped tier in the session may be
+                    used.</li>
+                <li><uicontrol>Words/morphemes</uicontrol> table; this table displayed the values
+                    for the word/morpheme alignment in the current record. The <keyword>key
+                        tier</keyword> will always be shown as the first column.</li>
+                <li><uicontrol>Alignment options</uicontrol> table; this table displayed data from
+                    the database which may be used to fill record data.</li>
+            </ol></p>
+        <p>
+            <fig id="fig_j4n_rjs_q5b">
+                <title>Transcript Mapper</title>
+                <image placement="break" href="images/transcript_mapper.png" id="image_k4n_rjs_q5b">
+                    <alt>Transcript Mapper</alt>
+                </image>
+            </fig>
+        </p>
+        <p>Transcript mapper is intended to be used with partially transcribed data. Information
+            from one tier, called the <keyword>key tier</keyword>, is used to lookup alignment sets
+            in the database. These sets may then be used to insert values into other tiers in the
+            record. To use the transcript mapper:<ol id="ol_rrn_rkx_p5b">
+                <li>Select the <keyword>key tier</keyword> from the provided combo box, this should
+                    be a tier in the record which contains data.</li>
+                <li>Aligned words/morphemes in the current record will be listed in the
+                        <uicontrol>Word/morphemes</uicontrol> table. Selecting a row in this table
+                    will populate the <uicontrol>Alignment options</uicontrol> table with data
+                    contained in the database for the selected word/morpheme in the indicated
+                        <keyword>key tier</keyword>. Pressing enter (or right clicking) a row in the
+                    Aligned words/morphemes table will display a menu with items to insert/update
+                    alignment sets into the current record for all displayed tiers. If the selected
+                    alignment set does not currently exist in the database an option to add the
+                    alignment will also be presented.<p>
+                        <fig id="fig_xdx_jks_q5b">
+                            <title>Word/morpheme menu</title>
+                            <image placement="break" href="images/transcript_mapper_word_menu.png"
+                                id="image_ydx_jks_q5b">
+                                <alt>Word/morpheme menu</alt>
+                            </image>
+                        </fig>
+                    </p></li>
+                <li>The <uicontrol>Alignment options</uicontrol> table will display alignment sets
+                    available in the database for the currently selected word/morpheme. Selecting a
+                    row in this table and pressing enter (or right clicking) will display a menu
+                    with items to insert//update specific tiers with types from the database (the
+                    number keys 1-9 may also be used to select specific tiers.) Alignment sets may
+                    be removed from the database by pressing delete or using the item in the popup menu.<p>
+                        <fig id="fig_hmv_mks_q5b">
+                            <title>Alignment options menu</title>
+                            <image placement="break"
+                                href="images/transcript_mapper_options_menu.png"
+                                id="image_imv_mks_q5b">
+                                <alt>Alignment options menu</alt>
+                            </image>
+                        </fig>
+                    </p></li>
+            </ol></p>
+    </body>
+    <topic id="database_actions">
+        <title>Aligned Types Database</title>
+        <body>
+            <p>The <keyword>aligned types database</keyword> is stored in the user's application
+                data folder. This database folder is located at <filepath>~/Library/Application
+                    Support/Phon/transcriptMapper</filepath> on macOS and
+                    <filepath>%APPDATA%/Phon/transcriptMapper</filepath> on Windows. The database
+                filename is <filepath>typeMap.atdz</filepath>.</p>
+            <p>Database actions are available from the menu displayed when clicking the
+                    <uicontrol>Database</uicontrol> button in the toolbar. Initially the
+                    <keyword>aligned types database</keyword> is not populated. To import data into
+                the database, use one of the actions in the popup menu. When changes to the aligned
+                types databse are detected the <uicontrol>Database</uicontrol> button will be shown
+                with an asterisk <codeph>'*'</codeph> and a menu item to save the database will be
+                enabled.</p>
+            <p>
+                <fig id="fig_swf_2ls_q5b">
+                    <title>Database menu</title>
+                    <image placement="break" href="images/transcript_mapper_database_menu.png"
+                        id="image_twf_2ls_q5b">
+                        <alt>Database menu</alt>
+                    </image>
+                </fig>
+                <note>A prompt to save the database will be shown on application exit if unsaved
+                    changes are detected.</note>
+                <note>A backup of of the database is created when saving, you can find this file in
+                    the <filepath>transcriptMapper</filepath> folder named
+                        <filepath>typeMap-backup.atdz</filepath>.</note>
+            </p>
+        </body>
+        <topic id="save_database">
+            <title>Save database</title>
+            <body>
+                <p>You may save the database using the appropriate menu item displayed in the
+                    database popup menu. The item is only enabled when changes have been
+                    detected.</p>
+            </body>
+        </topic>
+        <topic id="scan_project">
+            <title>Scan Project</title>
+            <body>
+                <p>The scan project wizard allows for selection of session in the current project,
+                    or in another project, for data import to the database. Each aligned
+                    word/morpheme set - for all grouped tiers - in the scanned sessions will be
+                    added.</p>
+                <p>
+                    <fig id="fig_j1h_rks_q5b">
+                        <title>Scan Project Wizard</title>
+                        <image placement="break" href="images/scan_project.png"
+                            id="image_k1h_rks_q5b">
+                            <alt>Scan Project Wizard</alt>
+                        </image>
+                    </fig>
+                </p>
+            </body>
+        </topic>
+        <topic id="import_csv">
+            <title>Import from CSV</title>
+            <body>
+                <p>Data may be imported from a CSV file. The first line of the CSV file should
+                    contain tier names, while each subsequent line should contain the aligned types
+                    to be added to the database. The CSV file should be UTF-8 encoded, with quotes
+                    around strings and commas separating values.</p>
+            </body>
+        </topic>
+        <topic id="export_csv">
+            <title>Export to CSV</title>
+            <body>
+                <p>The CSV export function will export aligned data for all keys found for the
+                    selected key tier. The first line of the CSV file will contain tier names, while
+                    each subsequent line will contain aligned types contained in the database. The
+                    file will be UTF-8 encoded, with quotes around string and commas separating
+                    values.<note>Only tiers displayed in
+                        the <uicontrol>Alignment options</uicontrol> table will be exported to
+                        CSV.</note></p>
+            </body>
+        </topic>
+        <topic id="import_dict">
+            <title>Import IPA dictionary</title>
+            <body>
+                <p>IPA dictionaries which implement key iteration may be imported to the
+                        <keyword>aligned types database</keyword> (this does not include
+                    tranliteration dictionaries.) Each orthography → IPA entry of the IPA dictionary
+                    will be added as an alignment set with the tiers 'Orthogrpahy', 'IPA Target',
+                    'IPA Actual', and 'Language'. The 'IPA Target' and 'IPA Actual' types will be
+                    the same IPA value for the database entry. The 'Language' tier will contain the
+                    language code of the dictionary from which the alignment was imported.<note>IPA
+                        dictionaries are large and may take considerable amounts of memory if many
+                        are imported into the database.</note></p>
+            </body>
+        </topic>
+        <topic id="import_database">
+            <title>Import Database</title>
+            <body>
+                <p>This feature is not yet available.</p>
+            </body>
+        </topic>
+        <topic id="project_definitions">
+            <title>Project TypeMap Definitions</title>
+            <body>
+                <p>This feature is not yet available.</p>
+            </body>
+        </topic>
+    </topic>
+    <topic id="tiers">
+        <title>Tiers</title>
+        <body>
+            <p>Tiers displayed in transcript mapper tables may be controlled using the popup menu
+                displayed when clicking the <uicontrol>Tiers</uicontrol> toolbar button. Initially
+                all grouped tiers in the session are displayed in the order defined in the session
+                with the exception that the current key tier will always be the first column. Only
+                tiers displayed in the <uicontrol>Words/morphemes</uicontrol> table will be changed
+                when selecting alignment data to insert. </p>
+            <p>It is possible that the database contains tiers which do not exist in the session.
+                Missing tiers are displayed at the end of the <uicontrol>Tiers</uicontrol> menu with
+                options to either add the missing tier to the session, or display the tier data in
+                the <uicontrol>Alignment options</uicontrol> table.</p>
+            <p>
+                <fig id="fig_ypq_gls_q5b">
+                    <title>Tiers menu</title>
+                    <image placement="break" href="images/transcript_mapper_tiers_menu.png"
+                        id="image_zpq_gls_q5b">
+                        <alt>Tiers menu</alt>
+                    </image>
+                </fig>
+            </p>
+        </body>
+        
+        <topic id="generated_tiers">
+            <title>Language Tier</title>
+            <body><p>When importing data to the database a tier 'Langauge' is automatically added to the data if it
+                    does not exist.  The value of this field is filled in the following manner:<ul
+                        id="ul_nhg_xnq_s5b">
+                        <li><uicontrol>Import from CSV</uicontrol><p>During import from CSV the
+                                value for language is determined by (in order): column in the CSV
+                                file; language identified in <uicontrol>Session
+                                    Information</uicontrol>; or default syllabifier language in
+                                application settings.</p></li>
+                        <li>
+                            <p>
+                                <uicontrol>Scan Project</uicontrol></p>
+                            <p>During scan project the value for language is determined by (in
+                                order): langauge identified in the first step of the <wintitle>Scan
+                                    Project</wintitle> wizard; value from a tier named 'Language' in
+                                the session (must be grouped and aligned with each word/morpheme);
+                                language identified in <uicontrol>Session Information</uicontrol>;
+                                or default syllabifier language in application settings.</p>
+                        </li>
+                        <li>Adding entries from <uicontrol>Words/morphemes</uicontrol> table<p>When
+                                adding alignment entries from the
+                                    <uicontrol>Words/morphemes</uicontrol> table the value for
+                                language is determined by (in order): value from a tier named
+                                'Language' in the session (must be grouped and aligned with each
+                                word/morpheme); language identified in <uicontrol>Session
+                                    Information</uicontrol>; or default syllabifier language in
+                                application settings.</p></li>
+                    </ul></p></body>
+        </topic>
+    </topic>
+</topic>
