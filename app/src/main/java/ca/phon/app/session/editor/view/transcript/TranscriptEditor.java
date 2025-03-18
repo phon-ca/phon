@@ -832,7 +832,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
 
         int deletedTranscriptElementIndex = editorEvent.data().elementIndex();
 
-        var currentLocation = getTranscriptEditorCaret().getTranscriptLocation();
+        var currentLocation = getTranscriptEditorCaret().getCurrentLocation();
         if(currentLocation.transcriptElementIndex() == -2) {
             // we are inside deleted record
             currentLocation = new TranscriptElementLocation(deletedTranscriptElementIndex, currentLocation.tier(), currentLocation.charPosition());
@@ -914,7 +914,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
     private void onSpeakerChanged(EditorEvent<EditorEventType.SpeakerChangedData> editorEvent) {
         var data = editorEvent.data();
         // Update the speaker on the separator in the doc
-        final TranscriptElementLocation caretLoc = getTranscriptEditorCaret().getTranscriptLocation();
+        final TranscriptElementLocation caretLoc = getTranscriptEditorCaret().getCurrentLocation();
         getTranscriptEditorCaret().freeze();
         getTranscriptDocument().onChangeSpeaker(data.record());
         getTranscriptEditorCaret().unfreeze();
@@ -956,7 +956,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
             end = se.start() + changedTier.getUnvalidatedValue().getValue().length();
         }
 
-        final TranscriptElementLocation caretLoc = getTranscriptEditorCaret().getTranscriptLocation();
+        final TranscriptElementLocation caretLoc = getTranscriptEditorCaret().getCurrentLocation();
         final int currentDot = getTranscriptEditorCaret().getDot();
 
         if(PrefHelper.isDebugMode()) {
@@ -1196,7 +1196,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
                 final Transferable currentContents = clipboard.getContents(TranscriptEditor.this);
                 clipboard.setContents(new StringSelection(sb.toString()), TranscriptEditor.this);
 
-                final TranscriptElementLocation currentLocation = TranscriptEditor.this.getTranscriptEditorCaret().getTranscriptLocation();
+                final TranscriptElementLocation currentLocation = TranscriptEditor.this.getTranscriptEditorCaret().getCurrentLocation();
                 if(!currentLocation.valid()) return;
 
                 // insert into document
@@ -1280,7 +1280,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
             scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
             tabbedPane.setSelectedIndex(1);
 
-            final TranscriptElementLocation elementLocation = TranscriptEditor.this.getTranscriptEditorCaret().getTranscriptLocation();
+            final TranscriptElementLocation elementLocation = TranscriptEditor.this.getTranscriptEditorCaret().getCurrentLocation();
             if(!elementLocation.valid()) return;
             if(elementLocation.transcriptElementIndex() >= 0) {
                 final Transcript.Element transcriptElement = getSession().getTranscript().getElementAt(elementLocation.transcriptElementIndex());
@@ -1685,7 +1685,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
     private void onRecordChanged(EditorEvent<EditorEventType.RecordChangedData> editorEvent) {
         TranscriptDocument doc = getTranscriptDocument();
 
-        final TranscriptElementLocation currentLocation = getTranscriptEditorCaret().getTranscriptLocation();
+        final TranscriptElementLocation currentLocation = getTranscriptEditorCaret().getCurrentLocation();
         // commit any changes
         getTranscriptEditorCaret().freeze();
         commitChanges(getCaretPosition());
@@ -1787,7 +1787,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
 
         TranscriptDocument doc = getTranscriptDocument();
 
-        final TranscriptElementLocation startLocation = getTranscriptEditorCaret().getTranscriptLocation();
+        final TranscriptElementLocation startLocation = getTranscriptEditorCaret().getCurrentLocation();
         // Move tier in doc
         getTranscriptEditorCaret().freeze();
         for (String tierName : data.tierNames()) {
@@ -1817,7 +1817,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
 
         List<String> hiddenTiersNames = data.tierNames();
 
-        final TranscriptElementLocation startLocation = getTranscriptEditorCaret().getTranscriptLocation();
+        final TranscriptElementLocation startLocation = getTranscriptEditorCaret().getCurrentLocation();
         boolean caretInHiddenTier = false;
         int nextParagraphIndex = -1;
         if (startLocation.valid()) {
@@ -1862,7 +1862,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
     public void showTier(EditorEventType.TierViewChangedData data) {
         var doc = getTranscriptDocument();
 
-        final TranscriptElementLocation startLocation = getTranscriptEditorCaret().getTranscriptLocation();
+        final TranscriptElementLocation startLocation = getTranscriptEditorCaret().getCurrentLocation();
 
         for (int i = 0; i < data.tierNames().size(); i++) {
             var tierName = data.tierNames().get(i);
@@ -1886,7 +1886,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
      */
     public void tierFontOrNameChanged(EditorEventType.TierViewChangedData data) {
         TranscriptDocument doc = getTranscriptDocument();
-        final TranscriptElementLocation startLocation = getTranscriptEditorCaret().getTranscriptLocation();
+        final TranscriptElementLocation startLocation = getTranscriptEditorCaret().getCurrentLocation();
 
         getTranscriptEditorCaret().freeze();
         for (var tviIdx: data.viewIndices()) {

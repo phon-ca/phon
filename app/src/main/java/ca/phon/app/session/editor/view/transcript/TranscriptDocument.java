@@ -1261,6 +1261,8 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
      */
     public TranscriptElementLocation charPosToSessionLocation(int charPos) {
         TranscriptDocument doc = this;
+        if(getSession() == null) return new TranscriptElementLocation(-1, null, -1);
+
         Transcript transcript = getSession().getTranscript();
 
         Element charElem = doc.getCharacterElement(charPos);

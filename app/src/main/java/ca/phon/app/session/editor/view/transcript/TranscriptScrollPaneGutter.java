@@ -240,7 +240,7 @@ public class TranscriptScrollPaneGutter extends JComponent {
         int currentRecord = -1;
 
         // draw background of current record (if any) and current tier (if any)
-        final var transcriptElementLocation = editor.getTranscriptEditorCaret().getTranscriptLocation();
+        final var transcriptElementLocation = editor.getTranscriptEditorCaret().getTranscriptLocation(editor.getCaretPosition());
         if(transcriptElementLocation.valid()) {
             final int elementIndex = transcriptElementLocation.transcriptElementIndex();
             final var range = editor.getTranscriptDocument().getRangeForSessionElementIndex(elementIndex);

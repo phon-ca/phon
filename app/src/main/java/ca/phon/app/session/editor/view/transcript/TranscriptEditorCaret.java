@@ -18,6 +18,10 @@ public class TranscriptEditorCaret extends DefaultCaret {
 
     private transient volatile boolean freezeCaret = false;
 
+    private transient TranscriptElementLocation currentLocation = new TranscriptElementLocation(-1, "Date", 0);
+
+    private transient TranscriptElementLocation previousLocation = currentLocation;
+
     public TranscriptEditorCaret() {
         super();
         setBlinkRate(500);
@@ -201,8 +205,11 @@ public class TranscriptEditorCaret extends DefaultCaret {
     }
 
     public void setDot(int dot, Position.Bias bias, boolean force) {
-        if(force || !isFreezeCaret())
+        if(force || !isFreezeCaret()) {
+            previousLocation = currentLocation;
+            currentLocation = getTranscriptLocation(dot);
             super.setDot(dot, bias);
+        }
     }
 
     @Override
@@ -214,9 +221,27 @@ public class TranscriptEditorCaret extends DefaultCaret {
     /**
      * Get caret transcript location
      */
-    public TranscriptElementLocation getTranscriptLocation() {
+    public TranscriptElementLocation getTranscriptLocation(int caretOffset) {
         final TranscriptEditor editor = (TranscriptEditor)getComponent();
-        return editor.charPosToSessionLocation(getDot());
+        return editor.charPosToSessionLocation(caretOffset);
+    }
+
+    /**
+     * Get the current location of the caret in the transcript
+     *
+     * @return the current location if set
+     */
+    public TranscriptElementLocation getCurrentLocation() {
+        return this.currentLocation;
+    }
+
+    /**
+     * Get the previous location of the caret in the transcript
+     *
+     * @return the previous location if any
+     */
+    public TranscriptElementLocation getPreviousLocation() {
+        return this.previousLocation;
     }
 
 }

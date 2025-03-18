@@ -128,8 +128,8 @@ public class TranscriptNavigationFilter extends NavigationFilter {
         fb.setDot(dot, bias);
 
         TranscriptEditor.TranscriptLocationChangeData transcriptLocationChangeData = new TranscriptEditor.TranscriptLocationChangeData(
-                editor.charPosToSessionLocation(prevCaretPos),
-                editor.charPosToSessionLocation(dot)
+                editor.getTranscriptEditorCaret().getPreviousLocation(),
+                editor.getTranscriptEditorCaret().getCurrentLocation()
         );
         if(editor.getTranscriptEditorCaret().isFreezeCaret()) {
             LogUtil.info("Not sending editor event - freeze caret is enabled");
