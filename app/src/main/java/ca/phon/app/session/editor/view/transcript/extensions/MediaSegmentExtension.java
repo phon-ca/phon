@@ -15,7 +15,6 @@ import ca.phon.session.format.MediaSegmentFormatter;
 import ca.phon.session.position.TranscriptElementLocation;
 import ca.phon.ui.CalloutWindow;
 import ca.phon.ui.action.PhonUIAction;
-import org.apache.commons.logging.Log;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -104,7 +103,7 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
         final SegmentEditorPopup segmentEditor = calloutRef.get().editor();
         final var segmentTier = calloutRef.get().requestInfo().segmentTier();
         final var segment = segmentTier.getValue();
-        segmentEditor.setMediaSegmentNoEvent(segment.getStartTime(), segment.getEndTime());
+        segmentEditor.setMediaSegment(segment.getStartTime(), segment.getEndTime());
     }
 
     private void onTranscriptLocationChanged(EditorEvent<TranscriptEditor.TranscriptLocationChangeData> evt) {
@@ -162,6 +161,8 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
      * @param segmentCalloutRequestInfo info for callout
      */
     private void showSegmentEditCallout(SegmentCalloutRequestInfo segmentCalloutRequestInfo) {
+        if(!editor.getMediaModel().isSessionAudioAvailable()) return;
+
         final var segmentEditor = getSegmentEditorPopup(segmentCalloutRequestInfo);
 
         try {

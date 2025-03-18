@@ -1205,8 +1205,7 @@ public final class TimelineView extends EditorView {
 					timeModel.removeMarker(mediaPlayerPlaybackMarker);
 				}
 
-				final ImageIcon stopIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "stop", IconSize.SMALL, UIManager.getColor("Button.foreground"));
-				playButton.setIcon(stopIcon);
+				playButton.setIconName("stop");
 				playButton.setText("Stop playback");
 			} else {
 				if(segmentPlaybackMarker != null)
@@ -1216,8 +1215,7 @@ public final class TimelineView extends EditorView {
 				if(mediaPlayerPlaybackMarker != null)
 					timeModel.addMarker(mediaPlayerPlaybackMarker);
 
-				final ImageIcon playIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName, "play_arrow", IconSize.SMALL, UIManager.getColor("Button.foreground"));
-				playButton.setIcon(playIcon);
+				playButton.setIconName("play_arrow");
 				playButton.setText("Play segment");
 			}
 		} else if(SegmentPlayback.TIME_PROP.contentEquals(evt.getPropertyName())) {

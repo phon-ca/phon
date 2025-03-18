@@ -65,7 +65,6 @@ public class CalloutWindow extends JDialog {
         closeButton.setBackground(UIManager.getColor("CalloutWindow.background"));
         closeButton.setBgColor(UIManager.getColor("CalloutWindow.background"));
         closeButton.setPadding(0);
-        closePanel.add(closeButton);
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -80,8 +79,13 @@ public class CalloutWindow extends JDialog {
         contentPanel.add(content, BorderLayout.CENTER);
         add(contentPanel, BorderLayout.CENTER);
 
-        add(closePanel, BorderLayout.NORTH);
+        if (content instanceof HasIconStrip hasIconStrip) {
+            hasIconStrip.getIconStrip().add(closeButton, IconStrip.IconStripPosition.RIGHT);
+        } else {
+            closePanel.add(closeButton);
+        }
 
+        add(closePanel, BorderLayout.NORTH);
         closePanel.setOpaque(false);
         contentPanel.setOpaque(false);
 
