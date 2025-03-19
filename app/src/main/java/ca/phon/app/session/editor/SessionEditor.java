@@ -44,6 +44,8 @@ import ca.phon.util.OSInfo;
 import ca.phon.util.PrefHelper;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.jdesktop.swingx.JXStatusBar;
 
 import javax.swing.*;
@@ -57,6 +59,7 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.Transferable;
+import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Set;
@@ -833,12 +836,21 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 				props.setParentWindow(SwingUtilities.getWindowAncestor(SessionEditor.this));
 				props.setRunAsync(true);
 				props.setTitle("Save session");
-				props.setHeader("Save session in newer format?");
-				props.setMessage("This file will be upgraded when saving, this action cannot be undone.");
+				String formatName = currentFormat.name();
+				// remove " (.ext)" from end of name
+				if(formatName.endsWith(" (.xml)")) {
+					formatName = formatName.substring(0, formatName.length()-7);
+				}
+				props.setHeader("Upgrade transcript for " + formatName + "?");
+
+				final String backupFolderName = "__v" + origFormat.getSessionIO().version().replaceAll("\\.", "_") + "-backups__";
+				props.setMessage("A backup file will be created at: " + project.getLocation() + File.separator + backupFolderName +
+						". After upgrading, the current transcript will not open in previous versions of Phon.");
 				props.setOptions(MessageDialogProperties.okCancelOptions);
 				props.setListener((e) -> {
 					if(e.getDialogResult() == 0) {;
 						try {
+							createUpgradeBackup(project, session, backupFolderName);
 							doSave(project, session, finalWriter);
 						} catch (IOException e1) {
 							Toolkit.getDefaultToolkit().beep();
@@ -855,6 +867,56 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 		return doSave(project, session, sessionWriter);
 	}
 
+	/**
+	 * Backup existing session file before upgrading.  Copies file to the backupFolderName directory
+	 * which will be created if it does not exist.  Inner corpus path of the backup file will be the same
+	 * as the original file.
+	 *
+	 * @param project
+	 * @param session
+	 * @param backupFolderName should be a relative path to the project location
+	 *
+	 * @throws IOException
+	 *
+	 */
+	private void createUpgradeBackup(Project project, Session session, String backupFolderName) throws IOException {
+		final File sessionFile = new File(project.getSessionPath(session));
+		if(!sessionFile.exists()) {
+			throw new IOException("Session file does not exist");
+		}
+
+		final File backupsFolder = new File(project.getLocation(), backupFolderName);
+		if(!backupsFolder.exists()) {
+			backupsFolder.mkdirs();
+		}
+
+		// copy file to backup folder, using relative path from project location
+		// as the inner corpus path
+		final String corpusPath = session.getCorpus();
+		final String backupPath = backupFolderName + File.separator + corpusPath;
+		final File backupFolder = new File(project.getLocation(), backupPath);
+		if(!backupFolder.exists()) {
+			backupFolder.mkdirs();
+		}
+
+		final File backupFile = new File(backupFolder, sessionFile.getName());
+		if(backupFile.exists()) {
+			backupFile.delete();
+		}
+
+		// copy file to backup folder
+		FileUtils.copyFile(sessionFile, backupFile);
+	}
+
+	/**
+	 * Save the session in project using provided session writer
+	 *
+	 * @param project
+	 * @param session
+	 * @param sessionWriter
+	 * @return
+	 * @throws IOException
+	 */
 	private boolean doSave(Project project, Session session, SessionWriter sessionWriter) throws IOException {
 		UUID writeLock = null;
 		try {
