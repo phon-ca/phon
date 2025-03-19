@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/4.0.0-alpha.26/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_26.dmg" newVersion="4.0.0-alpha.26" newMediaFileId="macos" fileSize="384567931" md5Sum="ea0257595fd283f6e2849d1359c47336" sha256Sum="b3f14c91ddec49c517f2e68e2eecf8c47dc0c019672a32c122e4540183e80c17" bundledJre="macos-universal-17.0.6.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/4.0.0-alpha.27/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_27.dmg" newVersion="4.0.0-alpha.27" newMediaFileId="macos" fileSize="387508583" md5Sum="c6faad9b30d29d00e1d371e96df71b6d" sha256Sum="ea99378c412ae96abb8949d7c389420737419a31c3234171fe88cae8e1b63123" bundledJre="macos-universal-17.0.6.tar.gz" archive="true" singleBundle="true">
     <comment language="en"># Changes since Phon 3.5
 
+**Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
+
 ## General
- 
- * Improved support for the CHAT transcription format, update to TalkBank 3.0.1/chatter 3.0.9.
+  
+ * Updated transcript format  with improved support for the CHAT transcription format.
+ * Update to TalkBank 3.0.1/chatter 3.0.9.
  * Record 'groups' have been removed in favour of a flat model compatible with the CHAT format.
    Existing projects will be automatically converted to the new format when opened.
  * Icon theme for Phon is now more consistent and primarily uses the Google Material Design icons.
@@ -27,15 +30,18 @@ or one at a time as is traditional in Phon.
  * Improved view layout management, view are now accessible view icons shows on the left and right hand side of the window.
  * A new view 'PhonShell' has been added to the session editor.  This view allows for running Phon scripts in the context of the current session.
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.26
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.27
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_26.dmg" newVersion="4.0.0-alpha.26" newMediaFileId="macos" fileSize="384567931" md5Sum="ea0257595fd283f6e2849d1359c47336" sha256Sum="b3f14c91ddec49c517f2e68e2eecf8c47dc0c019672a32c122e4540183e80c17" bundledJre="macos-universal-17.0.6.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_27.dmg" newVersion="4.0.0-alpha.27" newMediaFileId="macos" fileSize="387508583" md5Sum="c6faad9b30d29d00e1d371e96df71b6d" sha256Sum="ea99378c412ae96abb8949d7c389420737419a31c3234171fe88cae8e1b63123" bundledJre="macos-universal-17.0.6.tar.gz" archive="true" singleBundle="true">
     <comment language="en"># Changes since Phon 3.5
 
+**Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
+
 ## General
- 
- * Improved support for the CHAT transcription format, update to TalkBank 3.0.1/chatter 3.0.9.
+  
+ * Updated transcript format  with improved support for the CHAT transcription format.
+ * Update to TalkBank 3.0.1/chatter 3.0.9.
  * Record 'groups' have been removed in favour of a flat model compatible with the CHAT format.
    Existing projects will be automatically converted to the new format when opened.
  * Icon theme for Phon is now more consistent and primarily uses the Google Material Design icons.
@@ -57,15 +63,18 @@ or one at a time as is traditional in Phon.
  * Improved view layout management, view are now accessible view icons shows on the left and right hand side of the window.
  * A new view 'PhonShell' has been added to the session editor.  This view allows for running Phon scripts in the context of the current session.
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.26
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.27
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_26.exe" newVersion="4.0.0-alpha.26" newMediaFileId="win64" fileSize="367580160" md5Sum="389d6b17f066bea7ce0adc74d292bc05" sha256Sum="c2ee982fa6cc7f906cf0f59440c86fa1ee48b433cf69fbf6b49460f1f7a701bf" bundledJre="windows-amd64-17.0.6.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_27.exe" newVersion="4.0.0-alpha.27" newMediaFileId="win64" fileSize="370460672" md5Sum="30ad45fb961199f88a58020c0882d207" sha256Sum="776276cfe0f6e16d208d185e9ef7aa6f9f17ba94178253e858095b3dab2e358a" bundledJre="windows-amd64-17.0.6.tar.gz" archive="false" singleBundle="false">
     <comment language="en"># Changes since Phon 3.5
 
+**Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
+
 ## General
- 
- * Improved support for the CHAT transcription format, update to TalkBank 3.0.1/chatter 3.0.9.
+  
+ * Updated transcript format  with improved support for the CHAT transcription format.
+ * Update to TalkBank 3.0.1/chatter 3.0.9.
  * Record 'groups' have been removed in favour of a flat model compatible with the CHAT format.
    Existing projects will be automatically converted to the new format when opened.
  * Icon theme for Phon is now more consistent and primarily uses the Google Material Design icons.
@@ -87,15 +96,18 @@ or one at a time as is traditional in Phon.
  * Improved view layout management, view are now accessible view icons shows on the left and right hand side of the window.
  * A new view 'PhonShell' has been added to the session editor.  This view allows for running Phon scripts in the context of the current session.
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.26
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.27
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_26.exe" newVersion="4.0.0-alpha.26" newMediaFileId="win64" fileSize="367580160" md5Sum="389d6b17f066bea7ce0adc74d292bc05" sha256Sum="c2ee982fa6cc7f906cf0f59440c86fa1ee48b433cf69fbf6b49460f1f7a701bf" bundledJre="windows-amd64-17.0.6.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_27.exe" newVersion="4.0.0-alpha.27" newMediaFileId="win64" fileSize="370460672" md5Sum="30ad45fb961199f88a58020c0882d207" sha256Sum="776276cfe0f6e16d208d185e9ef7aa6f9f17ba94178253e858095b3dab2e358a" bundledJre="windows-amd64-17.0.6.tar.gz" archive="false" singleBundle="false">
     <comment language="en"># Changes since Phon 3.5
 
+**Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
+
 ## General
- 
- * Improved support for the CHAT transcription format, update to TalkBank 3.0.1/chatter 3.0.9.
+  
+ * Updated transcript format  with improved support for the CHAT transcription format.
+ * Update to TalkBank 3.0.1/chatter 3.0.9.
  * Record 'groups' have been removed in favour of a flat model compatible with the CHAT format.
    Existing projects will be automatically converted to the new format when opened.
  * Icon theme for Phon is now more consistent and primarily uses the Google Material Design icons.
@@ -117,15 +129,18 @@ or one at a time as is traditional in Phon.
  * Improved view layout management, view are now accessible view icons shows on the left and right hand side of the window.
  * A new view 'PhonShell' has been added to the session editor.  This view allows for running Phon scripts in the context of the current session.
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.26
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.27
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_26.exe" newVersion="4.0.0-alpha.26" newMediaFileId="win64" fileSize="367580160" md5Sum="389d6b17f066bea7ce0adc74d292bc05" sha256Sum="c2ee982fa6cc7f906cf0f59440c86fa1ee48b433cf69fbf6b49460f1f7a701bf" bundledJre="windows-amd64-17.0.6.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_27.exe" newVersion="4.0.0-alpha.27" newMediaFileId="win64" fileSize="370460672" md5Sum="30ad45fb961199f88a58020c0882d207" sha256Sum="776276cfe0f6e16d208d185e9ef7aa6f9f17ba94178253e858095b3dab2e358a" bundledJre="windows-amd64-17.0.6.tar.gz" archive="false" singleBundle="false">
     <comment language="en"># Changes since Phon 3.5
 
+**Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
+
 ## General
- 
- * Improved support for the CHAT transcription format, update to TalkBank 3.0.1/chatter 3.0.9.
+  
+ * Updated transcript format  with improved support for the CHAT transcription format.
+ * Update to TalkBank 3.0.1/chatter 3.0.9.
  * Record 'groups' have been removed in favour of a flat model compatible with the CHAT format.
    Existing projects will be automatically converted to the new format when opened.
  * Icon theme for Phon is now more consistent and primarily uses the Google Material Design icons.
@@ -147,15 +162,18 @@ or one at a time as is traditional in Phon.
  * Improved view layout management, view are now accessible view icons shows on the left and right hand side of the window.
  * A new view 'PhonShell' has been added to the session editor.  This view allows for running Phon scripts in the context of the current session.
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.26
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.27
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_26.zip" newVersion="4.0.0-alpha.26" newMediaFileId="win64zip" fileSize="366314682" md5Sum="b015ebaea62cf0ca888b36e103f681ce" sha256Sum="46b3857cb8c8563401768fa97509697cad37341bf920a0b1592bbc09145cf66c" bundledJre="windows-amd64-17.0.6.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_27.zip" newVersion="4.0.0-alpha.27" newMediaFileId="win64zip" fileSize="369205185" md5Sum="2b3b1d9ab534d3287f078b1d0d1e89ce" sha256Sum="3c7e15f09d3e10c0585350e9d5b9f728a8204e4ebb50e9d44ffe6e08783b8cdc" bundledJre="windows-amd64-17.0.6.tar.gz" archive="true" singleBundle="false">
     <comment language="en"># Changes since Phon 3.5
 
+**Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
+
 ## General
- 
- * Improved support for the CHAT transcription format, update to TalkBank 3.0.1/chatter 3.0.9.
+  
+ * Updated transcript format  with improved support for the CHAT transcription format.
+ * Update to TalkBank 3.0.1/chatter 3.0.9.
  * Record 'groups' have been removed in favour of a flat model compatible with the CHAT format.
    Existing projects will be automatically converted to the new format when opened.
  * Icon theme for Phon is now more consistent and primarily uses the Google Material Design icons.
@@ -177,7 +195,7 @@ or one at a time as is traditional in Phon.
  * Improved view layout management, view are now accessible view icons shows on the left and right hand side of the window.
  * A new view 'PhonShell' has been added to the session editor.  This view allows for running Phon scripts in the context of the current session.
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.26
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.27
 </comment>
   </entry>
 </updateDescriptor>
