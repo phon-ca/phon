@@ -227,21 +227,6 @@ public class TranscriptStyleContext extends StyleContext {
     }
 
     /**
-     * Gets the attributes for a separator / record header
-     *
-     * @return the attributes for a separator / record header
-     */
-    public SimpleAttributeSet getSeparatorAttributes() {
-        final SimpleAttributeSet retVal = new SimpleAttributeSet(getStyle(TranscriptStyleContext.DEFAULT));
-
-        retVal.addAttribute(TranscriptStyleConstants.ATTR_KEY_SEPARATOR, true);
-
-        retVal.addAttributes(getMonospaceFontAttributes());
-
-        return retVal;
-    }
-
-    /**
      * Gets the attributes for the blind transcription of a given transcriber in a given tier
      *
      * @param tier        the tier that contains the transcriptions

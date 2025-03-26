@@ -1,7 +1,6 @@
 package ca.phon.app.session.editor.view.transcript;
 
 import ca.phon.app.log.LogUtil;
-import ca.phon.app.prefs.PhonProperties;
 import ca.phon.app.session.editor.*;
 import ca.phon.app.session.editor.undo.*;
 import ca.phon.extensions.ExtensionSupport;
@@ -23,7 +22,6 @@ import ca.phon.ui.ipamap.io.CellProp;
 import ca.phon.ui.menu.MenuBuilder;
 import ca.phon.util.PrefHelper;
 
-import javax.management.Attribute;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -677,7 +675,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
                 }
             }
             case TranscriptStyleConstants.ATTR_KEY_GEM -> {
-                Gem gem = TranscriptStyleConstants.getGEM(attrs);
+                Gem gem = TranscriptStyleConstants.getGem(attrs);
                 if (gem != null) {
                     start = doc.getGemContentStart(gem);
                 }
@@ -773,7 +771,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
                 }
             }
             case TranscriptStyleConstants.ATTR_KEY_GEM -> {
-                Gem gem = TranscriptStyleConstants.getGEM(attrs);
+                Gem gem = TranscriptStyleConstants.getGem(attrs);
                 if (gem != null) {
                     end = doc.getGemContentEnd(gem);
                 }
@@ -1759,7 +1757,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
                 if(elementIndex < 0) continue;
                 selectedTranscriptElementIndices.add(elementIndex);
             } else if(TranscriptStyleConstants.ELEMENT_TYPE_GEM.equals(elementType)) {
-                final Gem gem = TranscriptStyleConstants.getGEM(attrs);
+                final Gem gem = TranscriptStyleConstants.getGem(attrs);
                 if(gem == null) continue;
                 final int elementIndex = getSession().getTranscript().getElementIndex(gem);
                 if(elementIndex < 0) continue;
@@ -2198,7 +2196,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         } else if (elementType.equals(TranscriptStyleConstants.ELEMENT_TYPE_COMMENT)) {
             end = doc.getCommentEnd(TranscriptStyleConstants.getComment(nextElementAttributes));
         } else if (elementType.equals(TranscriptStyleConstants.ELEMENT_TYPE_GEM)) {
-            end = doc.getGemEnd(TranscriptStyleConstants.getGEM(nextElementAttributes));
+            end = doc.getGemEnd(TranscriptStyleConstants.getGem(nextElementAttributes));
         } else if (elementType.equals(TranscriptStyleConstants.ELEMENT_TYPE_GENERIC)) {
             end = doc.getGenericEnd(TranscriptStyleConstants.getGenericTier(nextElementAttributes));
         } else {
@@ -2689,7 +2687,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
                                     }
                                 }
                                 case TranscriptStyleConstants.ELEMENT_TYPE_GEM -> {
-                                    Gem gem = TranscriptStyleConstants.getGEM(attrs);
+                                    Gem gem = TranscriptStyleConstants.getGem(attrs);
                                     final TranscriptDocument.StartEnd startEnd = doc.getGemContentStartEnd(gem);
                                     if (startEnd.valid()) {
                                         select(startEnd.start(), startEnd.end());
@@ -2734,7 +2732,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
                                 }
                             }
                             case TranscriptStyleConstants.ELEMENT_TYPE_GEM -> {
-                                Gem gem = TranscriptStyleConstants.getGEM(attrs);
+                                Gem gem = TranscriptStyleConstants.getGem(attrs);
                                 if (gem != null) {
                                     final TranscriptDocument.StartEnd startEnd = doc.getGemContentStartEnd(gem);
                                     if (startEnd.valid()) {

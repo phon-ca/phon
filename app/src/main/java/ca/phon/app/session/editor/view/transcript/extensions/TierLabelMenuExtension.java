@@ -132,7 +132,7 @@ public class TierLabelMenuExtension implements TranscriptEditorExtension {
 
     private void gemLabelClickHandler(MouseEvent me, AttributeSet attributeSet) {
         Point2D point = new Point2D.Double(me.getX(), me.getY());
-        Gem gem = TranscriptStyleConstants.getGEM(attributeSet);
+        Gem gem = TranscriptStyleConstants.getGem(attributeSet);
         onClickGemLabel(point, gem);
     }
 

@@ -45,8 +45,8 @@ public class TranscriptDocumentFilter extends DocumentFilter {
                 final DocumentFilter customFilter = getCustomFilter(attrs);
                 if(customFilter != null) {
                     customFilter.remove(fb, offset, length);
-                    return;
                 }
+                return;
             }
             if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_SYLLABIFICATION) != null) return;
             try {

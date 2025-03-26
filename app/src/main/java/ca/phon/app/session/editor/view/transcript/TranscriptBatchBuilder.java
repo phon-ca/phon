@@ -21,7 +21,8 @@ import java.util.List;
 
 /**
  * A class that builds a batch of {@link javax.swing.text.DefaultStyledDocument.ElementSpec} to be used in a
- * {@link TranscriptDocument}
+ * {@link TranscriptDocument}. All document insertions should be done through this class to ensure that the
+ * {@link TranscriptDocument} is updated correctly.
  */
 public class TranscriptBatchBuilder {
 

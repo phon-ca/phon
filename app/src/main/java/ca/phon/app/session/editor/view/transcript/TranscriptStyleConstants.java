@@ -10,7 +10,6 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.MutableAttributeSet;
 import java.awt.event.MouseEvent;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 /**
  * Keys and methods for setting style attributes on {@link AttributeSet}s used in
@@ -19,14 +18,24 @@ import java.util.function.Consumer;
 public class TranscriptStyleConstants {
 
     /**
-     * Record associated with a paragraph
+     * Record associated with text
      */
     public static final String ATTR_KEY_RECORD = "record";
 
+    /**
+     * Get the record associated with the given attributes
+     * @param attrs the attributes
+     * @return the record or {@code null} if not set
+     */
     public static Record getRecord(AttributeSet attrs) {
         return (Record)attrs.getAttribute(ATTR_KEY_RECORD);
     }
 
+    /**
+     * Set the record for the given attributes
+     * @param attrs the attributes
+     * @param record the record
+     */
     public static void setRecord(MutableAttributeSet attrs, Record record) {
         attrs.removeAttribute(ATTR_KEY_RECORD);
         if(record != null)
@@ -34,14 +43,24 @@ public class TranscriptStyleConstants {
     }
 
     /**
-     * Tier associated with a paragraph
+     * Tier associated with text
      */
     public static final String ATTR_KEY_TIER = "tier";
 
+    /**
+     * Get the tier associated with the given attributes
+     * @param attrs the attributes
+     * @return the tier or {@code null} if not set
+     */
     public static Tier<?> getTier(AttributeSet attrs) {
         return (Tier<?>)attrs.getAttribute(ATTR_KEY_TIER);
     }
 
+    /**
+     * Set the tier for the given attributes
+     * @param attrs the attributes
+     * @param tier the tier
+     */
     public static void setTier(MutableAttributeSet attrs, Tier<?> tier) {
         attrs.removeAttribute(ATTR_KEY_TIER);
         if(tier != null)
@@ -49,95 +68,187 @@ public class TranscriptStyleConstants {
     }
 
     /**
-     * Parent tier of a paragraph
+     * Parent tier - some tiers are dependent on other tiers considered their 'parent'.
+     * When a parent tier is moved or changed, the dependent tier should also be updated.
      */
     public static final String ATTR_KEY_PARENT_TIER = "parentTier";
 
+    /**
+     * Get the parent tier associated with the given attributes
+     * @param attrs the attributes
+     * @return the parent tier or {@code null} if not set
+     */
     public static Tier<?> getParentTier(AttributeSet attrs) {
         return (Tier<?>)attrs.getAttribute(ATTR_KEY_PARENT_TIER);
     }
 
+    /**
+     * Set the parent tier for the given attributes
+     * @param attrs the attributes
+     * @param parentTier the parent tier
+     */
     public static void setParentTier(MutableAttributeSet attrs, Tier<?> parentTier) {
         attrs.removeAttribute(ATTR_KEY_PARENT_TIER);
         if(parentTier != null)
             attrs.addAttribute(ATTR_KEY_PARENT_TIER, parentTier);
     }
 
+    /**
+     * Comment associated with text
+     */
     public static final String ATTR_KEY_COMMENT = "comment";
 
+    /**
+     * Get the comment associated with the given attributes
+     * @param attrs the attributes
+     * @return the comment or {@code null} if not set
+     */
     public static Comment getComment(AttributeSet attrs) {
         return (Comment)attrs.getAttribute(ATTR_KEY_COMMENT);
     }
 
+    /**
+     * Set the comment for the given attributes
+     * @param attrs the attributes
+     * @param comment the comment
+     */
     public static void setComment(MutableAttributeSet attrs, Comment comment) {
         attrs.removeAttribute(ATTR_KEY_COMMENT);
         if(comment != null)
             attrs.addAttribute(ATTR_KEY_COMMENT, comment);
     }
 
+    /**
+     * Gem associated with text
+     */
     public static final String ATTR_KEY_GEM = "gem";
 
-    public static Gem getGEM(AttributeSet attrs) {
+    /**
+     * Get the gem associated with the given attributes
+     * @param attrs
+     * @return
+     */
+    public static Gem getGem(AttributeSet attrs) {
         return (Gem)attrs.getAttribute(ATTR_KEY_GEM);
     }
 
-    public static void setGEM(MutableAttributeSet attrs, Gem gem) {
+    /**
+     * Set the gem for the given attributes
+     * @param attrs
+     * @param gem
+     */
+    public static void setGem(MutableAttributeSet attrs, Gem gem) {
         attrs.removeAttribute(ATTR_KEY_GEM);
         if(gem != null)
             attrs.addAttribute(ATTR_KEY_GEM, gem);
     }
 
+    /**
+     * Generic/header tier associated with text
+     */
     public static final String ATTR_KEY_GENERIC_TIER = "generic";
 
+    /**
+     * Get the generic tier associated with the given attributes
+     * @param attrs
+     * @return
+     */
     public static Tier<?> getGenericTier(AttributeSet attrs) {
         return (Tier<?>)attrs.getAttribute(ATTR_KEY_GENERIC_TIER);
     }
 
+    /**
+     * Set the generic tier for the given attributes
+     * @param attrs
+     * @param genericTier
+     */
     public static void setGenericTier(MutableAttributeSet attrs, Tier<?> genericTier) {
         attrs.removeAttribute(ATTR_KEY_GENERIC_TIER);
         if(genericTier != null)
             attrs.addAttribute(ATTR_KEY_GENERIC_TIER, genericTier);
     }
 
+    /**
+     * Element type for text
+     */
     public static final String ATTR_KEY_ELEMENT_TYPE = "elementType";
 
+    /**
+     * Element types
+     */
+    /**
+     * Element type for a record/record tier
+     */
     public static final String ELEMENT_TYPE_RECORD = "record";
-    public static final String ELEMENT_TYPE_TIER = "tier";
+    /**
+     * Element type for a comment
+     */
     public static final String ELEMENT_TYPE_COMMENT = "comment";
+    /**
+     * Element type for a gem
+     */
     public static final String ELEMENT_TYPE_GEM = "gem";
+    /**
+     * Element type for a generic/header tier
+     */
     public static final String ELEMENT_TYPE_GENERIC = "generic";
+    /**
+     * Element type for a blind transcription tier
+     */
     public static final String ELEMENT_TYPE_BLIND_TRANSCRIPTION = "blindTranscription";
 
-
+    /**
+     * Get the element type associated with the given attributes
+     * @param attrs the attributes
+     * @return the element type or {@code null} if not set
+     */
     public static String getElementType(AttributeSet attrs) {
         return (String)attrs.getAttribute(ATTR_KEY_ELEMENT_TYPE);
     }
 
+    /**
+     * Set the element type for the given attributes
+     * @param attrs the attributes
+     * @param elementType the element type
+     */
     public static void setElementType(MutableAttributeSet attrs, String elementType) {
         attrs.removeAttribute(ATTR_KEY_ELEMENT_TYPE);
         if(elementType != null)
             attrs.addAttribute(ATTR_KEY_ELEMENT_TYPE, elementType);
     }
 
-    public static final String ATTR_KEY_SEPARATOR = "sep";
+//    public static final String ATTR_KEY_SEPARATOR = "sep";
+//
+//    public static boolean isSeparator(AttributeSet attrs) {
+//        return attrs.isDefined(ATTR_KEY_SEPARATOR);
+//    }
+//
+//    public static void setSeparator(MutableAttributeSet attrs, boolean separator) {
+//        if(separator)
+//            attrs.addAttribute(ATTR_KEY_SEPARATOR, Boolean.TRUE);
+//        else
+//            attrs.removeAttribute(ATTR_KEY_SEPARATOR);
+//    }
 
-    public static boolean isSeparator(AttributeSet attrs) {
-        return attrs.isDefined(ATTR_KEY_SEPARATOR);
-    }
-
-    public static void setSeparator(MutableAttributeSet attrs, boolean separator) {
-        if(separator)
-            attrs.addAttribute(ATTR_KEY_SEPARATOR, Boolean.TRUE);
-        else
-            attrs.removeAttribute(ATTR_KEY_SEPARATOR);
-    }
-
+    /**
+     * Attribute key for setting the new paragraph attribute
+     */
     public static final String ATTR_KEY_NEW_PARAGRAPH = "newParagraph";
 
+    /**
+     * Get the new paragraph attribute
+     * @param attrs the attributes
+     * @return {@code true} if the new paragraph attribute is set, {@code false} otherwise
+     */
     public static boolean isNewParagraph(AttributeSet attrs) {
         return attrs.isDefined(ATTR_KEY_NEW_PARAGRAPH);
     }
 
+    /**
+     * Set the new paragraph attribute
+     * @param attrs the attributes
+     * @param newParagraph {@code true} to set the new paragraph attribute, {@code false} to remove it
+     */
     public static void setNewParagraph(MutableAttributeSet attrs, boolean newParagraph) {
         if(newParagraph)
             attrs.addAttribute(ATTR_KEY_NEW_PARAGRAPH, Boolean.TRUE);
@@ -145,12 +256,25 @@ public class TranscriptStyleConstants {
             attrs.removeAttribute(ATTR_KEY_NEW_PARAGRAPH);
     }
 
+    /**
+     * Attribute key for setting the label attribute
+     */
     public static final String ATTR_KEY_LABEL = "label";
 
+    /**
+     * Get the label attribute
+     * @param attrs the attributes
+     * @return {@code true} if the label attribute is set, {@code false} otherwise
+     */
     public static boolean isLabel(AttributeSet attrs) {
         return attrs.isDefined(ATTR_KEY_LABEL);
     }
 
+    /**
+     * Set the label attribute
+     * @param attrs the attributes
+     * @param label {@code true} to set the label attribute, {@code false} to remove it
+     */
     public static void setLabel(MutableAttributeSet attrs, boolean label) {
         if(label)
             attrs.addAttribute(ATTR_KEY_LABEL, Boolean.TRUE);
@@ -158,12 +282,26 @@ public class TranscriptStyleConstants {
             attrs.removeAttribute(ATTR_KEY_LABEL);
     }
 
+    /**
+     * Attribute key for setting ability to modify the text.  If this attribute is set
+     * to {@code true} the text will not be editable unless a custom filter is set.
+     */
     public static final String ATTR_KEY_NOT_EDITABLE = "notEditable";
 
+    /**
+     * Check if the text is not editable
+     * @param attrs the attributes
+     * @return {@code true} if the text is not editable, {@code false} otherwise
+     */
     public static boolean isNotEditable(AttributeSet attrs) {
         return attrs.isDefined(ATTR_KEY_NOT_EDITABLE);
     }
 
+    /**
+     * Set the not editable attribute
+     * @param attrs the attributes
+     * @param notEditable {@code true} to set the not editable attribute, {@code false} to remove it
+     */
     public static void setNotEditable(MutableAttributeSet attrs, boolean notEditable) {
         if(notEditable)
             attrs.addAttribute(ATTR_KEY_NOT_EDITABLE, Boolean.TRUE);
@@ -171,12 +309,26 @@ public class TranscriptStyleConstants {
             attrs.removeAttribute(ATTR_KEY_NOT_EDITABLE);
     }
 
+    /**
+     * Set the ability to traverse the text with the text caret.  If this attribute is set
+     * to {@code true} the text will not be traversable.
+     */
     public static final String ATTR_KEY_NOT_TRAVERSABLE = "notTraversable";
 
+    /**
+     * Check if the text is not traversable
+     * @param attrs the attributes
+     * @return {@code true} if the text is not traversable, {@code false} otherwise
+     */
     public static boolean isNotTraversable(AttributeSet attrs) {
         return attrs.isDefined(ATTR_KEY_NOT_TRAVERSABLE);
     }
 
+    /**
+     * Set the not traversable attribute
+     * @param attrs the attributes
+     * @param notTraversable {@code true} to set the not traversable attribute, {@code false} to remove it
+     */
     public static void setNotTraversable(MutableAttributeSet attrs, boolean notTraversable) {
         if(notTraversable)
             attrs.addAttribute(ATTR_KEY_NOT_TRAVERSABLE, Boolean.TRUE);
@@ -228,24 +380,58 @@ public class TranscriptStyleConstants {
             attrs.addAttribute(ATTR_KEY_CLICK_HANDLER, clickHandler);
     }
 
+    /**
+     * Attribute key for setting the component factory for text components,
+     * the component factory will create a component for the given text which
+     * will be inserted in the view.
+     */
     public static final String ATTR_KEY_COMPONENT_FACTORY = "componentFactory";
 
+    /**
+     * Get the component factory associated with the given attributes
+     *
+     * @param attrs the attributes
+     *
+     * @return the component factory or {@code null} if not set
+     */
     public static ComponentFactory getComponentFactory(AttributeSet attrs) {
         return (ComponentFactory)attrs.getAttribute(ATTR_KEY_COMPONENT_FACTORY);
     }
 
+    /**
+     * Set the component factory for the given attributes
+     *
+     * @param attrs the attributes
+     * @param factory the component factory
+     */
     public static void setComponentFactory(MutableAttributeSet attrs, ComponentFactory factory) {
         attrs.removeAttribute(ATTR_KEY_COMPONENT_FACTORY);
         if(factory != null)
             attrs.addAttribute(ATTR_KEY_COMPONENT_FACTORY, factory);
     }
 
+    /**
+     * Attribute key for setting media segment
+     */
     public static final String ATTR_KEY_MEDIA_SEGMENT = "mediaSegment";
 
+    /**
+     * Get the media segment associated with the given attributes
+     *
+     * @param attrs the attributes
+     *
+     * @return the media segment or {@code null} if not set
+     */
     public static MediaSegment getMediaSegment(AttributeSet attrs) {
         return (MediaSegment)attrs.getAttribute(ATTR_KEY_MEDIA_SEGMENT);
     }
 
+    /**
+     * Set the media segment for the given attributes
+     *
+     * @param attrs the attributes
+     * @param segment the media segment
+     */
     public static void setMediaSegment(MutableAttributeSet attrs, MediaSegment segment) {
         attrs.removeAttribute(ATTR_KEY_MEDIA_SEGMENT);
         if(segment != null)

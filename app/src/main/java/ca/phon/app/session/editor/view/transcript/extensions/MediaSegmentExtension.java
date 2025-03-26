@@ -42,28 +42,6 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
 
     private Timer calloutTimer = null;
 
-    /* State */
-
-//    private MediaSegment selectedSegment = null;
-    /**
-     * A {@link KeyAdapter} that lets the user toggle playback of a segment by pressing space
-     * when a segment is selected
-     */
-    private final KeyAdapter onSpace = new KeyAdapter() {
-        @Override
-        public void keyPressed(KeyEvent e) {
-//            if (selectedSegment != null && e.getKeyCode() == KeyEvent.VK_SPACE) {
-//                if (editor.getSegmentPlayback() != null) {
-//                    if (editor.getSegmentPlayback().isPlaying()) {
-//                        editor.getSegmentPlayback().stopPlaying();
-//                    } else {
-//                        editor.getSegmentPlayback().playSegment(selectedSegment);
-//                    }
-//                }
-//            }
-        }
-    };
-
     /**
      * Constructor
      */
@@ -75,7 +53,6 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
     public void install(TranscriptEditor editor) {
         this.editor = editor;
 
-        editor.addKeyListener(onSpace);
         editor.getTranscriptDocument().addInsertionHook(new MediaSegmentInsertionHook());
 
         editor.getEventManager().registerActionForEvent(TranscriptEditor.transcriptLocationChanged,
@@ -252,13 +229,19 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
     private record SegmentEditorCalloutInfo(CalloutWindow callout, SegmentCalloutRequestInfo requestInfo, SegmentEditorPopup editor) {
     }
 
+    /**
+     * Hook for inserting media segments into the transcript document.  This will add a custom document filter to the
+     * attributes to allow for editing of the segment text.
+     *
+     * @see MediaSegmentDocumentFilter
+     */
     private class MediaSegmentInsertionHook extends DefaultInsertionHook {
         @Override
         public List<DefaultStyledDocument.ElementSpec> batchInsertString(StringBuilder buffer, MutableAttributeSet attrs) {
-            MediaSegment segment = (MediaSegment) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_MEDIA_SEGMENT);
+            MediaSegment segment = TranscriptStyleConstants.getMediaSegment(attrs);
             if (segment != null) {
-                Record record = (Record) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD);
-                Tier<MediaSegment> segmentTier = (Tier<MediaSegment>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
+                Record record = TranscriptStyleConstants.getRecord(attrs);
+                Tier<MediaSegment> segmentTier = (Tier<MediaSegment>) TranscriptStyleConstants.getTier(attrs);
                 if (record != null && segmentTier != null) {
                     PhonUIAction<SegmentCalloutRequestInfo> showSegmentEditCalloutAct = PhonUIAction.consumer(MediaSegmentExtension.this::showSegmentEditCallout,
                             new SegmentCalloutRequestInfo(record, segmentTier));
@@ -270,6 +253,10 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
         }
     }
 
+    /**
+     * Document filter for media segment text.  This filter will allow for editing of the media segment text in the
+     * segment tier for the record.
+     */
     private class MediaSegmentDocumentFilter extends DocumentFilter {
 
         private final TranscriptDocument doc;

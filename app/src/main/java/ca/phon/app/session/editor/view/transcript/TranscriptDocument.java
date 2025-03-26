@@ -5,11 +5,9 @@ import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.undo.SessionEditUndoSupport;
 import ca.phon.extensions.ExtensionSupport;
 import ca.phon.extensions.IExtendable;
-import ca.phon.formatter.MediaTimeFormatStyle;
 import ca.phon.plugin.PluginManager;
 import ca.phon.session.Record;
 import ca.phon.session.*;
-import ca.phon.session.format.MediaSegmentFormatter;
 import ca.phon.session.io.OriginalFormat;
 import ca.phon.session.io.SessionIO;
 import ca.phon.session.position.TranscriptElementLocation;
@@ -19,13 +17,10 @@ import javax.swing.*;
 import javax.swing.text.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.text.ParseException;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Text document for a {@link Session} that displays the transcript including all tiers, comments, and gems.
@@ -1092,7 +1087,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 paraEleIdx = TRANSCRIPT_ELEMENT_INDEX_NOT_FOUND;
             }
         } else if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM) != null) {
-            paraEleIdx = getSession().getTranscript().getElementIndex(TranscriptStyleConstants.getGEM(attrs));
+            paraEleIdx = getSession().getTranscript().getElementIndex(TranscriptStyleConstants.getGem(attrs));
             if(paraEleIdx == -1) {
                 paraEleIdx = TRANSCRIPT_ELEMENT_INDEX_NOT_FOUND;
             }
@@ -1238,7 +1233,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 return pos - commentStartPos;
             }
             case TranscriptStyleConstants.ATTR_KEY_GEM -> {
-                Gem gem = TranscriptStyleConstants.getGEM(attrs);
+                Gem gem = TranscriptStyleConstants.getGem(attrs);
                 if (gem == null) return -1;
                 return pos - getGemContentStart(gem);
             }
@@ -1383,7 +1378,7 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 if (elem.isComment() && TranscriptStyleConstants.getComment(attrs) == elem.asComment()) {
                     paragraphElementIdx = i;
                     break;
-                } else if (elem.isGem() && TranscriptStyleConstants.getGEM(attrs) == elem.asGem()) {
+                } else if (elem.isGem() && TranscriptStyleConstants.getGem(attrs) == elem.asGem()) {
                     paragraphElementIdx = i;
                     break;
                 }
