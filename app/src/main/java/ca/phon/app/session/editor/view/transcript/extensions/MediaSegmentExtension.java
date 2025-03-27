@@ -331,6 +331,7 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
         @Override
         public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
             final TranscriptElementLocation location = doc.charPosToSessionLocation(offset);
+            if(location.charPosition() == 0) return;
             // Locked tiers - if locked, do not allow editing
             Record record = TranscriptStyleConstants.getRecord(attrs);
             Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
@@ -342,6 +343,7 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
                 // allow editing of media segment text by overwriting it with the new text
                 // first get current value
                 final TranscriptDocument.StartEnd mediaSegmentStartEnd = doc.getSegmentBounds(mediaSegment, offset);
+                if(location.charPosition() >= mediaSegmentStartEnd.end()-2) return;
                 if (mediaSegmentStartEnd.valid()) {
                     final String currentText = doc.getText(mediaSegmentStartEnd.start(), mediaSegmentStartEnd.length());
                     final String replacedText = currentText.substring(0, location.charPosition())
@@ -357,7 +359,7 @@ public class MediaSegmentExtension implements TranscriptEditorExtension {
                             newSegment.putExtension(UnvalidatedValue.class, uv);
                         }
                     } catch (ParseException e) {
-                        mediaSegment.putExtension(UnvalidatedValue.class, new UnvalidatedValue(replacedText, e));
+                        return;
                     }
                     // update segment
                     if(SystemTierType.Segment.getName().equals(tier.getName())) {

@@ -1418,6 +1418,10 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         String transcriber = dataModel.getTranscriber().getUsername();
 
         Tier<?> dummy = SessionFactory.newFactory().createTier("dummy", tier.getDeclaredType());
+        if(tier.getDeclaredType() == MediaSegment.class) {
+            // fix - remove dots from beginning of media segment and end
+            newData = newData.substring(1, newData.length()-1);
+        }
         dummy.setText(newData);
 
         if (tier.getDeclaredType() == MediaSegment.class) return;
