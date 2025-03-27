@@ -107,12 +107,27 @@ public class AutoTranscriber {
     }
 
     /**
-     * Transcribe the given orthography
+     * Transcribe the given orthography starting at the given word
      *
      * @param orthography
-     * @return automatic transcription
+     * @param fromWord
+     *
+     * @return
      */
     public AutomaticTranscription transcribe(Orthography orthography, int fromWord) {
+        return transcribe(orthography, fromWord, -1);
+    }
+
+    /**
+     * Transcribe the given orthography
+     *
+     * @param orthography orthography
+     * @param fromWord start word
+     * @param toWord end word, -1 to transcribe to end
+     *
+     * @return automatic transcription
+     */
+    public AutomaticTranscription transcribe(Orthography orthography, int fromWord, int toWord) {
         final AutoTranscriberVisitor visitor = new AutoTranscriberVisitor();
         TierElementFilter orthoFilter = TierElementFilter.orthographyFilterForIPAAlignment();
 
@@ -121,7 +136,8 @@ public class AutoTranscriber {
         orthoTier.setValue(orthography);
 
         List<OrthographyElement> orthographyElements = (List<OrthographyElement>) orthoFilter.filterTier(orthoTier);
-        for(int i = fromWord; i < orthographyElements.size(); i++) {
+        int wordCount = 0;
+        for(int i = fromWord; i < orthographyElements.size() && (toWord >= 0 ? i < toWord : true); i++) {
             final OrthographyElement element = orthographyElements.get(i);
             visitor.visit(element);
         }

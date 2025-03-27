@@ -229,32 +229,49 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
         final TranscriptDocument.StartEnd currentTextRange = editor.getTranscriptDocument().getTierContentStartEnd(recordIndex, tier.getName());
         if(!currentTextRange.valid()) return;
 
+        final TranscriptElementLocation transcriptLocation = editor.getCurrentSessionLocation();
+        if(!transcriptLocation.valid()) return;
+
         try {
             final String currentText = editor.getTranscriptDocument().getText(currentTextRange.start(), currentTextRange.length());
+            final String textToCaret = currentText.substring(0, transcriptLocation.charPosition());
+            final String textAfterCaret = currentText.substring(transcriptLocation.charPosition());
             if(!currentText.isBlank()) {
-                builder.append(currentText.trim());
+                builder.append(textToCaret.trim());
             }
-        } catch(BadLocationException ex) {
-            LogUtil.warning(ex);
-        }
+//        } catch(BadLocationException ex) {
+//            LogUtil.warning(ex);
+//        }
 
-        boolean incomplete = false;
-        for(int i = 0; i < automaticTranscription.getWords().size(); i++) {
-            final OrthographyElement word = automaticTranscription.getWords().get(i);
-            if(i > 0 && automaticTranscription.getTranscriptionOptions(word).length > 1) {
-                incomplete = true;
-                break;
+            boolean incomplete = false;
+            for(int i = 0; i < automaticTranscription.getWords().size(); i++) {
+                final OrthographyElement word = automaticTranscription.getWords().get(i);
+                if(i > 0 && automaticTranscription.getTranscriptionOptions(word).length > 1) {
+                    incomplete = true;
+                    break;
+                }
+                if(builder.size() > 0)
+                    builder.appendWordBoundary();
+                builder.append(automaticTranscription.getSelectedTranscription(word));
             }
-            if(builder.size() > 0)
+            int newCaretPos = currentTextRange.start() + builder.toIPATranscript().toString().length();
+
+            if(!textAfterCaret.isBlank()) {
+                builder.append(textAfterCaret);
+            }
+
+            if(incomplete) {
                 builder.appendWordBoundary();
-            builder.append(automaticTranscription.getSelectedTranscription(word));
-        }
+                newCaretPos++;
+            }
 
-        if(incomplete)
-            builder.appendWordBoundary();
+//        try {
+//        } catch(BadLocationException ex) {
+//            LogUtil.warning(ex);
+//        }
 
-        final IPATranscript ipa = builder.toIPATranscript();
-        try {
+            final IPATranscript ipa = builder.toIPATranscript();
+//        try {
             final int start = currentTextRange.start();
             editor.getTranscriptEditorCaret().freeze();
             editor.getTranscriptDocument().remove(start, currentTextRange.length());
@@ -270,7 +287,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
 
             editor.getTranscriptDocument().processBatchUpdates(start, batchBuilder.getBatch());
             editor.getTranscriptEditorCaret().unfreeze();
-            editor.getTranscriptEditorCaret().setDot(start + ipa.toString().length());
+            editor.getTranscriptEditorCaret().setDot(newCaretPos);
         } catch(BadLocationException ex) {
             LogUtil.warning(ex);
         }
@@ -308,6 +325,21 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
                                 final AutomaticTranscription autoTranscript = autoTranscriber.transcribe(orthography, numWords);
                                 if(autoTranscript.getWords().size() > 0) {
                                     insertAutomaticTranscription(record, (Tier<IPATranscript>)tier, autoTranscript);
+                                }
+                            }
+                        } else {
+                            // check to see if we are in a space between words, transcribe only the current word
+                            final int charPos = e.getData().get().newLoc().charPosition();
+                            final String textToCharPos = editor.getTranscriptDocument().getText(currentTextRange.start(), charPos);
+                            final int currentWord = textToCharPos.isBlank() ? 0 : textToCharPos.trim().split("\\p{Space}").length;
+                            final char c = editor.getTranscriptDocument().getText(currentTextRange.start() + charPos, 1).charAt(0);
+                            final char lastChar = charPos > 0 ? editor.getTranscriptDocument().getText(currentTextRange.start() + charPos - 1, 1).charAt(0) : ' ';
+                            System.out.println("c = " + c + ", lastChar = " + lastChar);
+                            if(c == lastChar && Character.isWhitespace(lastChar)) {
+                                final Orthography orthography = getOrthography(record, editor.getDataModel().getTranscriber());
+                                final AutomaticTranscription autoTranscript = autoTranscriber.transcribe(orthography, currentWord, currentWord + 1);
+                                if(autoTranscript.getWords().size() > 0) {
+                                    insertAutomaticTranscription(record, (Tier<IPATranscript>) tier, autoTranscript);
                                 }
                             }
                         }
@@ -358,7 +390,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
             }
         }
 
-        Toolkit.getDefaultToolkit().addAWTEventListener(alignmentListener, AWTEvent.KEY_EVENT_MASK | AWTEvent.MOUSE_EVENT_MASK);
+        Toolkit.getDefaultToolkit().addAWTEventListener(autoTranscriptListener, AWTEvent.KEY_EVENT_MASK | AWTEvent.MOUSE_EVENT_MASK);
         // if the caret moves while the ghost text is present, update the ghost range
         // this happens when the caret moves from the end of the previous tier into an ipa tier
         editor.addCaretListener(new CaretListener() {
@@ -520,7 +552,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
         }
     }
 
-    private final AWTEventListener alignmentListener = new AWTEventListener() {
+    private final AWTEventListener autoTranscriptListener = new AWTEventListener() {
         @Override
         public void eventDispatched(AWTEvent event) {
             if(event instanceof KeyEvent ke) {
@@ -529,7 +561,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
                     switch (ke.getKeyCode()) {
                         case KeyEvent.VK_ESCAPE -> {
                             removeGhostRange();
-                            Toolkit.getDefaultToolkit().removeAWTEventListener(alignmentListener);
+                            Toolkit.getDefaultToolkit().removeAWTEventListener(autoTranscriptListener);
                         }
                         case KeyEvent.VK_UP, KeyEvent.VK_DOWN -> {
                             final AttributeSet eleAttrs = editor.getTranscriptDocument().getCharacterElement(editor.getCaretPosition()).getAttributes();
@@ -546,12 +578,12 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
                                     selectOptionalTranscription(newIdx);
                                 } else {
                                     removeGhostRange();
-                                    Toolkit.getDefaultToolkit().removeAWTEventListener(alignmentListener);
+                                    Toolkit.getDefaultToolkit().removeAWTEventListener(autoTranscriptListener);
                                     return;
                                 }
                             } else {
                                 removeGhostRange();
-                                Toolkit.getDefaultToolkit().removeAWTEventListener(alignmentListener);
+                                Toolkit.getDefaultToolkit().removeAWTEventListener(autoTranscriptListener);
                                 return;
                             }
                         }
@@ -562,7 +594,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
                             final AutomaticTranscription automaticTranscription = getAutomaticTranscription(eleAttrs);
                             removeGhostRange();
                             acceptAutoTranscriptionToFirstSelection(record, tier, automaticTranscription);
-                            Toolkit.getDefaultToolkit().removeAWTEventListener(alignmentListener);
+                            Toolkit.getDefaultToolkit().removeAWTEventListener(autoTranscriptListener);
                         }
                         case KeyEvent.VK_ENTER -> {
                             final AttributeSet eleAttrs = editor.getTranscriptDocument().getCharacterElement(editor.getCaretPosition()).getAttributes();
@@ -571,11 +603,11 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
                             final AutomaticTranscription automaticTranscription = getAutomaticTranscription(eleAttrs);
                             removeGhostRange();
                             acceptAutoTranscription(record, tier, automaticTranscription);
-                            Toolkit.getDefaultToolkit().removeAWTEventListener(alignmentListener);
+                            Toolkit.getDefaultToolkit().removeAWTEventListener(autoTranscriptListener);
                         }
                         default -> {
                             removeGhostRange();
-                            Toolkit.getDefaultToolkit().removeAWTEventListener(alignmentListener);
+                            Toolkit.getDefaultToolkit().removeAWTEventListener(autoTranscriptListener);
                             return;
                         }
                     }
@@ -597,7 +629,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
                     // if pos is not in ghost range remove ghost range
                     if (ghostRange != null && (pos < ghostRange.start() || pos > ghostRange.end())) {
                         removeGhostRange();
-                        Toolkit.getDefaultToolkit().removeAWTEventListener(alignmentListener);
+                        Toolkit.getDefaultToolkit().removeAWTEventListener(autoTranscriptListener);
                     } else {
                         me.consume();
                     }
@@ -606,7 +638,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
                 } else {
                     // click outside of editor or callout window, remove ghost range
                     removeGhostRange();
-                    Toolkit.getDefaultToolkit().removeAWTEventListener(alignmentListener);
+                    Toolkit.getDefaultToolkit().removeAWTEventListener(autoTranscriptListener);
                 }
             }
         }

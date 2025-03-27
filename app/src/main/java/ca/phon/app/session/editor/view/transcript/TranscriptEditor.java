@@ -30,7 +30,6 @@ import javax.swing.undo.UndoManager;
 import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.event.*;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
