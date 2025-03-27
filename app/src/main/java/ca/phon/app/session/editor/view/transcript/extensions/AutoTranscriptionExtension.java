@@ -239,9 +239,6 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
             if(!currentText.isBlank()) {
                 builder.append(textToCaret.trim());
             }
-//        } catch(BadLocationException ex) {
-//            LogUtil.warning(ex);
-//        }
 
             boolean incomplete = false;
             for(int i = 0; i < automaticTranscription.getWords().size(); i++) {
@@ -265,13 +262,7 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
                 newCaretPos++;
             }
 
-//        try {
-//        } catch(BadLocationException ex) {
-//            LogUtil.warning(ex);
-//        }
-
             final IPATranscript ipa = builder.toIPATranscript();
-//        try {
             final int start = currentTextRange.start();
             editor.getTranscriptEditorCaret().freeze();
             editor.getTranscriptDocument().remove(start, currentTextRange.length());
@@ -334,7 +325,6 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
                             final int currentWord = textToCharPos.isBlank() ? 0 : textToCharPos.trim().split("\\p{Space}").length;
                             final char c = editor.getTranscriptDocument().getText(currentTextRange.start() + charPos, 1).charAt(0);
                             final char lastChar = charPos > 0 ? editor.getTranscriptDocument().getText(currentTextRange.start() + charPos - 1, 1).charAt(0) : ' ';
-                            System.out.println("c = " + c + ", lastChar = " + lastChar);
                             if(c == lastChar && Character.isWhitespace(lastChar)) {
                                 final Orthography orthography = getOrthography(record, editor.getDataModel().getTranscriber());
                                 final AutomaticTranscription autoTranscript = autoTranscriber.transcribe(orthography, currentWord, currentWord + 1);

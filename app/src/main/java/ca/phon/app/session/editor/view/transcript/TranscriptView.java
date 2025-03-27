@@ -1616,30 +1616,30 @@ public class TranscriptView extends EditorView {
     private final MouseAdapter contextMouseHandler = new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
-            if(e.isPopupTrigger()) {
-                final JPopupMenu menu = new JPopupMenu();
-                final MenuBuilder menuBuilder = new MenuBuilder(menu);
-                transcriptEditor.setupContextMenu(menuBuilder);
+        if(e.isPopupTrigger()) {
+            final JPopupMenu menu = new JPopupMenu();
+            final MenuBuilder menuBuilder = new MenuBuilder(menu);
+            transcriptEditor.setupContextMenu(menuBuilder);
 
-                menuBuilder.addSeparator(".", "view_items");
+            menuBuilder.addSeparator(".", "view_items");
 
-                final JMenu participantsMenu = menuBuilder.addMenu(".", "Participants");
-                setupParticipantsMenu(new MenuBuilder(participantsMenu));
+            final JMenu participantsMenu = menuBuilder.addMenu(".", "Participants");
+            setupParticipantsMenu(new MenuBuilder(participantsMenu));
 
-                final JMenu tiersMenu = menuBuilder.addMenu(".", "Tiers");
-                setupTiersMenu(new MenuBuilder(tiersMenu));
+            final JMenu tiersMenu = menuBuilder.addMenu(".", "Tiers");
+            setupTiersMenu(new MenuBuilder(tiersMenu));
 
-                final JMenu recordsMenu = menuBuilder.addMenu(".", "Records");
-                setupRecordMenu(new MenuBuilder(recordsMenu));
+            final JMenu recordsMenu = menuBuilder.addMenu(".", "Records");
+            setupRecordMenu(new MenuBuilder(recordsMenu));
 
-                final JMenu commentsMenu = menuBuilder.addMenu(".", "Comments");
-                setupCommentsMenu(new MenuBuilder(commentsMenu));
+            final JMenu commentsMenu = menuBuilder.addMenu(".", "Comments");
+            setupCommentsMenu(new MenuBuilder(commentsMenu));
 
-                final JMenu gemsMenu = menuBuilder.addMenu(".", "Gems");
-                setupGemsMenu(new MenuBuilder(gemsMenu));
+            final JMenu gemsMenu = menuBuilder.addMenu(".", "Gems");
+            setupGemsMenu(new MenuBuilder(gemsMenu));
 
-                menu.show(transcriptEditor, e.getX(), e.getY());
-            }
+            menu.show(transcriptEditor, e.getX(), e.getY());
+        }
         }
     };
 }

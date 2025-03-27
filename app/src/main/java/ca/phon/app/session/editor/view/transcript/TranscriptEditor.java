@@ -2403,6 +2403,22 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
     }
     // endregion
 
+    @Override
+    public void cut() {
+        super.cut();
+
+        // remove text if possible
+        final int selStart = getSelectionStart();
+        final int selEnd = getSelectionEnd();
+        if(selEnd - selStart > 1) {
+            try {
+                getTranscriptDocument().remove(selStart, selEnd - selStart);
+            } catch (BadLocationException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     /**
      * Setup context menu items on provided menu builder
      *
@@ -3008,6 +3024,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         public boolean canImport(TransferSupport support) {
             return support.isDataFlavorSupported(DataFlavor.stringFlavor);
         }
+
     }
 
 }
