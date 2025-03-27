@@ -991,6 +991,14 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
     }
     // endregion
 
+    // region commit changes
+    /**
+     * Saves the changes made to the line the caret is currently on
+     */
+    public void saveCurrentLine() {
+        commitChanges(getCaretPosition());
+    }
+
     /**
      * Commit changed tier data at caret location
      *
@@ -1038,6 +1046,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
             }
         }
     }
+    // endregion
 
     // region event handlers
     /**
@@ -2117,6 +2126,37 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
     }
 
     /**
+     * Select all text for the current transcript element: comment, gem, or record
+     *
+     */
+    private void selectElement() {
+        final TranscriptElementLocation currentLocation = getTranscriptEditorCaret().getCurrentLocation();
+        if (!currentLocation.valid()) return;
+
+        TranscriptDocument.StartEnd startEnd = new TranscriptDocument.StartEnd(-1, -1);
+        if(currentLocation.transcriptElementIndex() == -1) {
+            // header tier
+            startEnd = getTranscriptDocument().getGenericStartEnd(currentLocation.tier());
+        } else {
+            final Transcript.Element element = getSession().getTranscript().getElementAt(currentLocation.transcriptElementIndex());
+            if(element.isComment()) {
+                startEnd = getTranscriptDocument().getCommentStartEnd(element.asComment());
+            } else if(element.isGem()) {
+                startEnd = getTranscriptDocument().getGemStartEnd(element.asGem());
+            } else if(element.isRecord()) {
+                startEnd = getTranscriptDocument().getTierStartEnd(currentLocation.transcriptElementIndex(), currentLocation.tier());
+            }
+        }
+
+        if(startEnd.valid()) {
+            getTranscriptDocument().setBypassDocumentFilter(true);
+            setCaretPosition(startEnd.start());
+            moveCaretPosition(startEnd.end());
+            getTranscriptDocument().setBypassDocumentFilter(false);
+        }
+    }
+
+    /**
      * Show ipa input map as a callout pointing at current cursor location
      *
      */
@@ -2370,6 +2410,8 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
      * @param menuBuilder the menu builder to add the menu items to
      */
     void setupContextMenu(MenuBuilder menuBuilder) {
+        final TranscriptElementLocation currentLocation = getTranscriptEditorCaret().getCurrentLocation();
+
         // add edit menu items
         final Action cutAct = getActionMap().get(DefaultEditorKit.cutAction);
         cutAct.putValue(Action.NAME, "Cut");
@@ -2388,18 +2430,27 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
 
         menuBuilder.addSeparator(".", "edit");
 
+        final Action selectTierAct = PhonUIAction.runnable(this::selectTier);
+        selectTierAct.putValue(PhonUIAction.NAME, "Select tier");
+        selectTierAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_A, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        menuBuilder.addItem(".", selectTierAct);
+
+        menuBuilder.addSeparator(".", "selection");
+
         // add show input dialog item
         final PhonUIAction<Void> showInputAct = PhonUIAction.runnable(this::showInputCallout);
         showInputAct.putValue(PhonUIAction.NAME, "Show input dialog");
         showInputAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
         menuBuilder.addItem(".", showInputAct);
-    }
 
-    /**
-     * Saves the changes made to the line the caret is currently on
-     */
-    public void saveCurrentLine() {
-        commitChanges(getCaretPosition());
+        if(currentLocation.valid()) {
+            if(currentLocation.transcriptElementIndex() >= 0) {
+                final Transcript.Element element = getSession().getTranscript().getElementAt(currentLocation.transcriptElementIndex());
+                if(element.isRecord()) {
+                    // add record specific actions
+                }
+            }
+        }
     }
 
     @Override
