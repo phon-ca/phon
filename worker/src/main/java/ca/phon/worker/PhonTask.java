@@ -22,7 +22,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 /**
- *
+ * A task to be run on a worker thread which includes properties for progress
+ * and status.
  */
 public abstract class PhonTask implements Runnable {
 	

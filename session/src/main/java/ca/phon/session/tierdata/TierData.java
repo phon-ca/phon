@@ -46,6 +46,10 @@ public final class TierData extends ExtendableObject implements Iterable<TierEle
         return userTierBuilder.toTierData();
     }
 
+    public TierData() {
+        this(Collections.emptyList());
+    }
+
     public TierData(TierElement... elements) {
         this(Arrays.asList(elements));
     }

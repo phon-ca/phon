@@ -506,17 +506,17 @@ public class TranscriptStyleConstants {
             attrs.addAttribute(ATTR_KEY_BORDER, border);
     }
 
-    public static final String ATTR_KEY_FIRST_SEGMENT_DASH = "firstSegmentDash";
-
-    public static boolean isFirstSegmentDash(MutableAttributeSet attrs) {
-        return attrs.isDefined(ATTR_KEY_FIRST_SEGMENT_DASH);
-    }
-
-    public static void setFirstSegmentDash(MutableAttributeSet attrs, boolean firstSegmentDash) {
-        if(firstSegmentDash)
-            attrs.addAttribute(ATTR_KEY_FIRST_SEGMENT_DASH, Boolean.TRUE);
-        else
-            attrs.removeAttribute(ATTR_KEY_FIRST_SEGMENT_DASH);
-    }
+//    public static final String ATTR_KEY_FIRST_SEGMENT_DASH = "firstSegmentDash";
+//
+//    public static boolean isFirstSegmentDash(MutableAttributeSet attrs) {
+//        return attrs.isDefined(ATTR_KEY_FIRST_SEGMENT_DASH);
+//    }
+//
+//    public static void setFirstSegmentDash(MutableAttributeSet attrs, boolean firstSegmentDash) {
+//        if(firstSegmentDash)
+//            attrs.addAttribute(ATTR_KEY_FIRST_SEGMENT_DASH, Boolean.TRUE);
+//        else
+//            attrs.removeAttribute(ATTR_KEY_FIRST_SEGMENT_DASH);
+//    }
 
 }

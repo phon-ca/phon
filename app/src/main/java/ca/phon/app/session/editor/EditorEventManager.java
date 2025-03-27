@@ -86,7 +86,7 @@ public class EditorEventManager {
 			LogUtil.warning(e);
 		}
 		// start thread if necessary
-		if (!dispatchThread.isAlive()) {
+		if (!dispatchThread.isAlive() && !dispatchTask.isShutdown()) {
 			dispatchThread.setFinishWhenQueueEmpty(true);
 			dispatchThread.invokeLater(dispatchTask);
 			dispatchThread.start();

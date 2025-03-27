@@ -283,7 +283,7 @@ public class TranscriptBatchBuilder {
         }
 
         SimpleAttributeSet firstDashAttrs = new SimpleAttributeSet(segmentDashAttrs);
-        TranscriptStyleConstants.setFirstSegmentDash(firstDashAttrs, true);
+//        TranscriptStyleConstants.setFirstSegmentDash(firstDashAttrs, true);
 
         appendBatchString("•", firstDashAttrs);
         appendBatchString(value, segmentTimeAttrs);
@@ -666,6 +666,8 @@ public class TranscriptBatchBuilder {
                             attrs = styleContext.getTierCommentAttributes();
                         } else if (elem instanceof TierInternalMedia internalMedia) {
                             attrs = styleContext.getTierInternalMediaAttributes();
+                            if(tierAttrs != null)
+                                attrs.addAttributes(tierAttrs);
                             appendFormattedInternalMedia(internalMedia.getInternalMedia(), attrs);
                         } else if (elem instanceof TierLink link) {
                             text = link.toString();
@@ -675,7 +677,6 @@ public class TranscriptBatchBuilder {
                         }
 
                         attrs.addAttributes(tierAttrs);
-
                         if (text != null) appendBatchString(text, attrs);
 
                         if (i < tierData.length() - 1) {

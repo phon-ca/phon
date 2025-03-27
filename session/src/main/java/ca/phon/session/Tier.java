@@ -264,6 +264,7 @@ public final class Tier<T> implements IExtendable {
 					setValue((T)obj);
 				} catch (InvocationTargetException | InstantiationException | IllegalAccessException |
 						 NoSuchMethodException e) {
+					e.printStackTrace();
 				}
 			} else {
 				putExtension(UnvalidatedValue.class, uv);
