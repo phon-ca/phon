@@ -233,10 +233,7 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         this(session, new EditorEventManager(), new SessionEditUndoSupport(), new UndoManager());
     }
 
-    public TranscriptEditorCaret getTranscriptEditorCaret() {
-        return caret;
-    }
-
+    // region setup
     /**
      * Sets up all the input actions
      */
@@ -337,6 +334,24 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
 
         // TODO: Get this working
 //        this.eventManager.registerActionForEvent(EditorEventType.ParticipantChanged, this::onParticipantChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+    }
+    // endregion
+
+    // region getters/setters
+    public SessionEditUndoSupport getUndoSupport() {
+        return undoSupport;
+    }
+
+    public EditorEventManager getEventManager() {
+        return eventManager;
+    }
+
+    public String getFirstVisibleTierName() {
+        return getSession().getTierView().stream().filter(TierViewItem::isVisible).findFirst().map(TierViewItem::getTierName).orElse(null);
+    }
+
+    public TranscriptEditorCaret getTranscriptEditorCaret() {
+        return caret;
     }
 
     public EditorDataModel getDataModel() {
@@ -519,13 +534,29 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
     public boolean isTranscriberValidator() {
         return dataModel.getTranscriber() == Transcriber.VALIDATOR;
     }
+    // endregion
 
-//    /**
-//     * Sets whether the next edit shouldn't cause any changed to the document
-//     */
-//    public void setInternalEdit(boolean value) {
-//        internalEdit = value;
-//    }
+    // region caret movement
+    /**
+     * Returns the current location in the document as a TranscriptElementLocation
+     *
+     * @return the current location in the document
+     */
+    public TranscriptElementLocation getCurrentSessionLocation() {
+        return currentTranscriptLocation;
+    }
+
+    /**
+     * Sets the current location in the document, this method does not set the caret position
+     * only the internal location
+     *
+     * @param currentTranscriptLocation the new location in the document
+     */
+    public void setCurrentSessionLocation(TranscriptElementLocation currentTranscriptLocation) {
+        TranscriptElementLocation oldLoc = this.currentTranscriptLocation;
+        this.currentTranscriptLocation = currentTranscriptLocation;
+        firePropertyChange("currentSessionLocation", oldLoc, currentTranscriptLocation);
+    }
 
     public int getUpDownOffset() {
         return upDownOffset;
@@ -579,1446 +610,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         if(factory != null) {
             factory.requestFocusStart();
         }
-    }
-
-    /**
-     * Commit changed tier data at caret location
-     *
-     */
-    public void commitChanges(int charPos) {
-        final TranscriptElementLocation loc = charPosToSessionLocation(charPos);
-        if(!loc.valid()) return;
-        if(loc.transcriptElementIndex() < 0) return;
-
-        final Element charElem = getTranscriptDocument().getCharacterElement(charPos);
-        final AttributeSet attrs = charElem.getAttributes();
-        final Transcript.Element elem = getSession().getTranscript().getElementAt(loc.transcriptElementIndex());
-        if(elem.isRecord()) {
-            final Record record = elem.asRecord();
-            final Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
-            if(tier.getDeclaredType() == PhoneAlignment.class) return;
-            final int recordIndex = getSession().getRecordPosition(record);
-            final TranscriptDocument.StartEnd startEnd = getTranscriptDocument().getTierContentStartEnd(recordIndex, loc.tier());
-            if(!startEnd.valid()) return;
-            try {
-                final String text = getTranscriptDocument().getText(startEnd.start(), startEnd.end() - startEnd.start());
-                changeTierData(record, tier, text);
-            } catch (BadLocationException e) {
-                LogUtil.severe(e);
-            }
-        } else if(elem.isComment()) {
-            final Comment comment = elem.asComment();
-            final TranscriptDocument.StartEnd startEnd = getTranscriptDocument().getCommentContentStartEnd(comment);
-            if(!startEnd.valid()) return;
-            try {
-                final String text = getTranscriptDocument().getText(startEnd.start(), startEnd.end() - startEnd.start());
-                commentDataChanged(comment, text);
-            } catch (BadLocationException e) {
-                LogUtil.severe(e);
-            }
-        } else if(elem.isGem()) {
-            final Gem gem = elem.asGem();
-            final TranscriptDocument.StartEnd startEnd = getTranscriptDocument().getGemContentStartEnd(gem);
-            if(!startEnd.valid()) return;
-            try {
-                final String text = getTranscriptDocument().getText(startEnd.start(), startEnd.end() - startEnd.start());
-                gemDataChanged(gem, text);
-            } catch (BadLocationException e) {
-                LogUtil.severe(e);
-            }
-        }
-    }
-
-    /**
-     * Runs when the user presses enter
-     */
-    public void onPressedEnter(PhonActionEvent<Void> pae) {
-
-        TranscriptDocument doc = getTranscriptDocument();
-        AttributeSet attrs = doc.getCharacterElement(getCaretPosition()).getAttributes();
-        var enterAct = TranscriptStyleConstants.getEnterAction(attrs);
-        if (enterAct != null) {
-            enterAct.actionPerformed(pae.getActionEvent());
-            return;
-        }
-
-        String elemType = TranscriptStyleConstants.getElementType(attrs);
-        if (elemType != null) {
-            saveCurrentLine();
-        }
-    }
-
-    /**
-     * Runs when the user presses home
-     */
-    public void onPressedHome() {
-        TranscriptDocument doc = getTranscriptDocument();
-
-        Element caretElem = doc.getCharacterElement(getCaretPosition());
-        AttributeSet attrs = caretElem.getAttributes();
-        String elementType = TranscriptStyleConstants.getElementType(attrs);
-        if (elementType == null) return;
-        int start = -1;
-        switch (elementType) {
-            case TranscriptStyleConstants.ATTR_KEY_RECORD -> {
-                Record record = TranscriptStyleConstants.getRecord(attrs);
-                int recordIndex = getSession().getRecordPosition(record);
-                Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
-                if (tier != null && recordIndex >= 0) {
-                    start = doc.getTierContentStart(recordIndex, tier.getName());
-                }
-            }
-            case TranscriptStyleConstants.ATTR_KEY_COMMENT -> {
-                Comment comment = TranscriptStyleConstants.getComment(attrs);
-                if (comment != null) {
-                    start = doc.getCommentContentStart(comment);
-                }
-            }
-            case TranscriptStyleConstants.ATTR_KEY_GEM -> {
-                Gem gem = TranscriptStyleConstants.getGem(attrs);
-                if (gem != null) {
-                    start = doc.getGemContentStart(gem);
-                }
-            }
-            case TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER -> {
-                Tier<?> genericTier = TranscriptStyleConstants.getGenericTier(attrs);
-                if (genericTier != null) {
-                    start = doc.getGenericContentStart(genericTier);
-                }
-            }
-        }
-        if (start != -1) {
-            setCaretPosition(start);
-        }
-    }
-
-    /**
-     * Update error highlights
-     */
-    private void updateErrorHighlights() {
-        TranscriptDocument doc = getTranscriptDocument();
-        for (int i = 0; i < doc.getDefaultRootElement().getElementCount(); i++) {
-            final Element elem = doc.getDefaultRootElement().getElement(i);
-            final AttributeSet attrs = elem.getAttributes();
-            final String elementType = TranscriptStyleConstants.getElementType(attrs);
-            if (elementType == null) continue;
-            Tier<?> tier = switch (elementType) {
-                case TranscriptStyleConstants.ELEMENT_TYPE_RECORD -> TranscriptStyleConstants.getTier(attrs);
-                case TranscriptStyleConstants.ELEMENT_TYPE_GENERIC -> TranscriptStyleConstants.getGenericTier(attrs);
-                default -> null;
-            };
-            if (tier == null) continue;
-            UnvalidatedValue uv = null;
-            boolean isBlindMode = getDataModel().getTranscriber() != Transcriber.VALIDATOR;
-            if (tier.isBlind() && isBlindMode) {
-                if (tier.isBlindTranscriptionUnvalidated(getDataModel().getTranscriber().getUsername())) {
-                    uv = tier.getBlindUnvalidatedValue(getDataModel().getTranscriber().getUsername());
-                } else {
-                    if (tier.isUnvalidated()) {
-                        uv = tier.getUnvalidatedValue();
-                    }
-                }
-            } else {
-                uv = tier.isUnvalidated() ? tier.getUnvalidatedValue() : null;
-            }
-
-            final Record record = TranscriptStyleConstants.getRecord(attrs);
-            final int recordIdx = record != null ? getSession().getRecordPosition(record) : -1;
-            if (uv != null) {
-                TranscriptDocument.StartEnd startEnd = switch (elementType) {
-                    case TranscriptStyleConstants.ELEMENT_TYPE_RECORD ->
-                            doc.getTierContentStartEnd(recordIdx, tier.getName());
-                    case TranscriptStyleConstants.ELEMENT_TYPE_GENERIC -> doc.getGenericContentStartEnd(tier);
-                    default -> new TranscriptDocument.StartEnd(-1, -1);
-                };
-                if (startEnd.valid()) {
-                    try {
-                        final int startIdx = uv.getParseError().getErrorOffset() >= 0 ? startEnd.start() + uv.getParseError().getErrorOffset() : startEnd.start();
-                        var errorUnderlineHighlight = getHighlighter().addHighlight(startIdx, startEnd.end(), new ErrorUnderlinePainter());
-                        errorUnderlineHighlights.put(tier, errorUnderlineHighlight);
-                    } catch (BadLocationException e) {
-                        LogUtil.warning(e);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Runs when the user presses end
-     */
-    public void onPressedEnd() {
-        TranscriptDocument doc = getTranscriptDocument();
-
-        Element caretElem = doc.getCharacterElement(getCaretPosition());
-        AttributeSet attrs = caretElem.getAttributes();
-        String elementType = TranscriptStyleConstants.getElementType(attrs);
-        if (elementType == null) return;
-        int end = -1;
-        switch (elementType) {
-            case TranscriptStyleConstants.ATTR_KEY_RECORD -> {
-                Record record = TranscriptStyleConstants.getRecord(attrs);
-                int recordIndex = getSession().getRecordPosition(record);
-                Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
-                if (tier != null && recordIndex >= 0) {
-                    end = doc.getTierContentEnd(recordIndex, tier.getName());
-                }
-            }
-            case TranscriptStyleConstants.ATTR_KEY_COMMENT -> {
-                Comment comment = TranscriptStyleConstants.getComment(attrs);
-                if (comment != null) {
-                    end = doc.getCommentContentEnd(comment);
-                }
-            }
-            case TranscriptStyleConstants.ATTR_KEY_GEM -> {
-                Gem gem = TranscriptStyleConstants.getGem(attrs);
-                if (gem != null) {
-                    end = doc.getGemContentEnd(gem);
-                }
-            }
-            case TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER -> {
-                Tier<?> genericTier = TranscriptStyleConstants.getGenericTier(attrs);
-                if (genericTier != null) {
-                    end = doc.getGenericContentEnd(genericTier);
-                }
-            }
-        }
-        if (end >= 0) {
-            setCaretPosition(end);
-        }
-    }
-
-    public String getFirstVisibleTierName() {
-        return getSession().getTierView().stream().filter(TierViewItem::isVisible).findFirst().map(TierViewItem::getTierName).orElse(null);
-    }
-
-    /**
-     * Runs when a new record gets added
-     *
-     * @param editorEvent the event that adds the record
-     */
-    private void onRecordAdded(EditorEvent<EditorEventType.RecordAddedData> editorEvent) {
-        var data = editorEvent.data();
-        // Get the new record and the element index
-        Record addedRecord = getSession().getRecord(data.recordIndex());
-        int elementIndex = data.elementIndex();
-        // Add it to the doc
-        if(isSingleRecordView()) {
-            getTranscriptDocument().setSingleRecordIndex(-1);
-            getTranscriptDocument().setSingleRecordIndex(editorEvent.data().recordIndex());
-        } else {
-            getTranscriptDocument().addRecord(addedRecord, elementIndex);
-        }
-
-        final TranscriptElementLocation newCaretLoc = new TranscriptElementLocation(elementIndex,
-                getFirstVisibleTierName(), 0);
-        if(newCaretLoc.valid()) {
-            final int newDot = sessionLocationToCharPos(newCaretLoc);
-            if(newDot >= 0) {
-                setCaretPosition(newDot);
-            }
-        }
-    }
-
-    /**
-     * Runs when a record gets deleted
-     *
-     * @param editorEvent the event that deletes the record
-     */
-    private void onRecordDeleted(EditorEvent<EditorEventType.RecordDeletedData> editorEvent) {
-        TranscriptDocument doc = getTranscriptDocument();
-
-        int deletedTranscriptElementIndex = editorEvent.data().elementIndex();
-
-        var currentLocation = getTranscriptEditorCaret().getCurrentLocation();
-        if(currentLocation.transcriptElementIndex() == -2) {
-            // we are inside deleted record
-            currentLocation = new TranscriptElementLocation(deletedTranscriptElementIndex, currentLocation.tier(), currentLocation.charPosition());
-        }
-
-        // Delete the record from the doc
-        var data = editorEvent.data();
-        getTranscriptDocument().deleteRecord(data.elementIndex(), data.recordIndex(), data.record());
-
-        // Caret in record / tier
-        if(currentLocation.valid()) {
-            TranscriptElementLocation nextLoc = currentLocation;
-            if(deletedTranscriptElementIndex == currentLocation.transcriptElementIndex()) {
-                if(currentLocation.transcriptElementIndex() < getSession().getTranscript().getNumberOfElements()) {
-                    final Transcript.Element nextElem = getSession().getTranscript().getElementAt(currentLocation.transcriptElementIndex());
-                    if(nextElem.isRecord()) {
-                        // keep caret in same tier
-                        nextLoc = new TranscriptElementLocation(currentLocation.transcriptElementIndex(), currentLocation.tier(), 0);
-                    } else {
-                        // move caret to beginning of comment/gem
-                        nextLoc = new TranscriptElementLocation(currentLocation.transcriptElementIndex(), "", 0);
-                    }
-                } else {
-                    nextLoc = new TranscriptElementLocation(currentLocation.transcriptElementIndex() - 1, null, 0);
-                    if(nextLoc.transcriptElementIndex() < 0) {
-                        nextLoc = new TranscriptElementLocation(-2, null, 0);
-                    }
-                }
-            }
-            if(nextLoc.valid()) {
-                final int newDot = sessionLocationToCharPos(nextLoc);
-                if(newDot >= 0) {
-                    setCaretPosition(newDot);
-                } else {
-                    int prevValidIdx = getPrevValidIndex(getCaretPosition() - 1, false);
-                    if(prevValidIdx >= 0) {
-                        setCaretPosition(prevValidIdx);
-                    } else {
-                        setCaretPosition(0);
-                    }
-                }
-            } else {
-                int prevValidIdx = getPrevValidIndex(getCaretPosition() - 1, false);
-                if(prevValidIdx >= 0) {
-                    setCaretPosition(prevValidIdx);
-                } else {
-                    setCaretPosition(0);
-                }
-            }
-        } else {
-            int prevValidIdx = getPrevValidIndex(getCaretPosition() - 1, false);
-            if(prevValidIdx >= 0) {
-                setCaretPosition(prevValidIdx);
-            } else {
-                setCaretPosition(0);
-            }
-        }
-    }
-
-    /**
-     * Runs when a record moves
-     *
-     * @param editorEvent the event that moves the record
-     */
-    private void onRecordMoved(EditorEvent<EditorEventType.RecordMovedData> editorEvent) {
-        // Record caret pos
-        int caretPos = getCaretPosition();
-
-        // Move the records in the doc
-        var data = editorEvent.data();
-        getTranscriptDocument().moveRecord(data.fromRecordIndex(), data.toRecordIndex(), data.fromElementIndex(), data.toElementIndex());
-    }
-
-    /**
-     * Runs when the speaker for a record changes
-     *
-     * @param editorEvent the event that changes the speaker
-     */
-    private void onSpeakerChanged(EditorEvent<EditorEventType.SpeakerChangedData> editorEvent) {
-        var data = editorEvent.data();
-        // Update the speaker on the separator in the doc
-        final TranscriptElementLocation caretLoc = getTranscriptEditorCaret().getCurrentLocation();
-        getTranscriptEditorCaret().freeze();
-        getTranscriptDocument().onChangeSpeaker(data.record());
-        getTranscriptEditorCaret().unfreeze();
-        // Set the caret position back to where it was
-        final int newDot = sessionLocationToCharPos(caretLoc);
-        if(newDot >= 0) {
-            setCaretPosition(newDot);
-        }
-    }
-
-    /**
-     * Runs when the data for a tier changes
-     *
-     * @param editorEvent the event that changes the tiers data
-     */
-    private void onTierDataChanged(EditorEvent<EditorEventType.TierChangeData> editorEvent) {
-        TranscriptDocument doc = getTranscriptDocument();
-        Tier<?> changedTier = editorEvent.data().tier();
-        // update media segment changes as they occur
-        boolean isMediaSegmentTier = changedTier.getDeclaredType().equals(MediaSegment.class);
-        if (!isMediaSegmentTier && editorEvent.getData().get().valueAdjusting()) return;
-
-        boolean isAlignmentTier = SystemTierType.PhoneAlignment.getName().equals(changedTier.getName());
-        if(isAlignmentTier) return;
-
-        if (errorUnderlineHighlights.containsKey(changedTier)) {
-            getHighlighter().removeHighlight(errorUnderlineHighlights.get(changedTier));
-            errorUnderlineHighlights.remove(changedTier);
-        }
-
-        int start = -1;
-        int end = -1;
-
-        if (changedTier.isUnvalidated()) {
-            int recordIndex = doc.getSession().getRecordPosition(editorEvent.data().record());
-            if (recordIndex < 0) return;
-            TranscriptDocument.StartEnd se = doc.getTierContentStartEnd(recordIndex, changedTier.getName());
-            start = se.start() + changedTier.getUnvalidatedValue().getParseError().getErrorOffset();
-            end = se.start() + changedTier.getUnvalidatedValue().getValue().length();
-        }
-
-        final TranscriptElementLocation caretLoc = getTranscriptEditorCaret().getCurrentLocation();
-        final int currentDot = getTranscriptEditorCaret().getDot();
-
-        if(PrefHelper.isDebugMode()) {
-            LogUtil.info("Updating tier text: " + changedTier.getName());
-        }
-        boolean wasCaretFrozen = getTranscriptEditorCaret().isFreezeCaret();
-        getTranscriptEditorCaret().freeze();
-        // Update the changed tier data in the doc
-        getTranscriptDocument().onTierDataChanged(editorEvent.data().record(), changedTier);
-        final int newDot = sessionLocationToCharPos(caretLoc);
-        getTranscriptDocument().setBypassDocumentFilter(true);
-        getTranscriptEditorCaret().setDot(newDot, true);
-        getTranscriptDocument().setBypassDocumentFilter(false);
-        if (!wasCaretFrozen) {
-            getTranscriptEditorCaret().unfreeze();
-        }
-
-        if (changedTier.isUnvalidated()) {
-            try {
-                var errorUnderlineHighlight = getHighlighter().addHighlight(start, end, new ErrorUnderlinePainter());
-                errorUnderlineHighlights.put(changedTier, errorUnderlineHighlight);
-            } catch (BadLocationException e) {
-                LogUtil.warning(e);
-            }
-        }
-    }
-
-    /**
-     * Runs when the user clicks on the label for a blind transcription tier
-     *
-     * @param point       the point where the user clicks
-     * @param record      the record that the tier belongs to
-     * @param tier        the tier that the blind transcription belongs to
-     * @param transcriber the transcriber that the blind transcription belongs to
-     */
-    private void onClickBlindTranscriptionLabel(Point2D point, Record record, Tier<?> tier, String transcriber) {
-        JPopupMenu menu = new JPopupMenu();
-
-        JMenuItem select = new JMenuItem();
-        PhonUIAction<Void> selectAction = PhonUIAction.runnable(() -> {
-            selectTranscription(record, tier, transcriber);
-        });
-        selectAction.putValue(PhonUIAction.NAME, "Select transcription");
-        select.setAction(selectAction);
-        menu.add(select);
-
-        JMenuItem append = new JMenuItem();
-        PhonUIAction<Void> appendAction = PhonUIAction.runnable(() -> {
-            appendTranscription(record, tier, transcriber);
-        });
-        appendAction.putValue(PhonUIAction.NAME, "Append");
-        append.setAction(appendAction);
-        menu.add(append);
-
-        menu.show(this, (int) point.getX(), (int) point.getY());
-    }
-
-    /**
-     * Selects the transcription of a given transcriber to be the value for the given tier
-     *
-     * @param record      the record that the tier belongs to
-     * @param tier        the tier that the transcription is being selected for
-     * @param transcriber the name / id of the transcriber whose transcription is selected
-     */
-    private void selectTranscription(Record record, Tier<?> tier, String transcriber) {
-        TranscriptDocument doc = getTranscriptDocument();
-
-        Tier<?> dummy = SessionFactory.newFactory().createTier("dummy", tier.getDeclaredType());
-        dummy.setText(doc.getTierText(tier, transcriber));
-
-        SwingUtilities.invokeLater(() -> {
-            TierEdit<?> edit = new TierEdit(dataModel.getSession(), eventManager, Transcriber.VALIDATOR, record, tier, dummy.getValue());
-            edit.setValueAdjusting(false);
-            undoSupport.postEdit(edit);
-        });
-    }
-
-    /**
-     * Appends the transcription of a given transcriber to the value of the given tier
-     *
-     * @param record      the record that the tier belongs to
-     * @param tier        the tier that the transcription is being appended to
-     * @param transcriber the name / id of the transcriber whose transcription is appended
-     */
-    private void appendTranscription(Record record, Tier<?> tier, String transcriber) {
-        TranscriptDocument doc = getTranscriptDocument();
-
-        Tier<?> dummy = SessionFactory.newFactory().createTier("dummy", tier.getDeclaredType());
-        dummy.setText(doc.getTierText(tier, null) + " " + doc.getTierText(tier, transcriber));
-
-        SwingUtilities.invokeLater(() -> {
-            TierEdit<?> edit = new TierEdit(dataModel.getSession(), eventManager, Transcriber.VALIDATOR, record, tier, dummy.getValue());
-            edit.setValueAdjusting(false);
-            undoSupport.postEdit(edit);
-        });
-    }
-
-    /**
-     * Get the current callout window (if any)
-     *
-     * @return the current callout window, null if none
-     */
-    public CalloutWindow getCurrentCallout() {
-        return this.currentCallout.get();
-    }
-
-    /**
-     * Set the current callout window
-     *
-     * @param callout
-     */
-    public void setCurrentCallout(CalloutWindow callout) {
-        this.currentCallout.set(callout);
-    }
-
-    /**
-     * Show a callout window with the provided contents.
-     * If a callout is already shown, it will be disposed.
-     *
-     * @param modal
-     * @param content
-     * @param sideOfWindow
-     * @param pointAtRect
-     */
-    public void showCallout(boolean modal, JComponent content, int sideOfWindow, Rectangle pointAtRect) {
-        hideCallout();
-
-        final CalloutWindow callout = CalloutWindow.showCallout(CommonModuleFrame.getCurrentFrame(),
-                modal, content, sideOfWindow, pointAtRect);
-        setCurrentCallout(callout);
-    }
-
-    /**
-     * Show a callout window with the provided contents.
-     * If a callout is already shown, it will be disposed.
-     *
-     * @param modal
-     * @param content
-     * @param sideOfWindow
-     * @param pointAtRect
-     *
-     * @return the callout window
-     */
-    public CalloutWindow showNonFocusableCallout(boolean modal, JComponent content, int sideOfWindow, Rectangle pointAtRect) {
-        hideCallout();
-
-        final CalloutWindow callout = CalloutWindow.showNonFocusableCallout(CommonModuleFrame.getCurrentFrame(),
-                content, sideOfWindow, pointAtRect);
-        setCurrentCallout(callout);
-        return callout;
-    }
-
-    /**
-     * Hide current callout window
-     */
-    public void hideCallout() {
-        final CalloutWindow currentCallout = this.currentCallout.get();
-        if (currentCallout != null && currentCallout.isVisible()) {
-            currentCallout.setVisible(false);
-            currentCallout.dispose();
-        }
-    }
-
-    /**
-     * Show ipa input map as a callout pointing at current cursor location
-     *
-     */
-    private void showInputCallout() {
-        final CalloutWindow currentCallout = this.currentCallout.get();
-        if(currentCallout != null) {
-            currentCallout.dispose();
-        }
-
-        final IPAMapGridContainer chatMap = new IPAMapGridContainer();
-        for(var ipaGrid: ChatGrids.getInstance().loadGrids().getGrid()) {
-            chatMap.addGrid(ipaGrid);
-        }
-        chatMap.setFont(FontPreferences.getTierFont().deriveFont(FontPreferences.getDefaultFontSize() +
-                PrefHelper.getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0.0f)));
-
-        final IPAMapGridContainer ipaMap = new IPAMapGridContainer();
-        ipaMap.addDefaultGrids();
-        final Font ipaFont = FontPreferences.getTierFont().deriveFont(FontPreferences.getDefaultFontSize() +
-                PrefHelper.getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0.0f));
-        ipaMap.setFont(ipaFont);
-
-        final AtomicReference<URL> currentDocUrl = new AtomicReference<>();
-        final IPAMapGridMouseListener gridMouseListener = new IPAMapGridMouseListener() {
-            @Override
-            public void mousePressed(Cell cell, MouseEvent me) {
-
-            }
-
-            @Override
-            public void mouseReleased(Cell cell, MouseEvent me) {
-
-            }
-
-            @Override
-            public void mouseClicked(Cell cell, MouseEvent me) {
-                final String text = cell.getText().replaceAll("◌", "");
-                final CellProp insertProp =
-                        cell.getProperty().stream().filter(p -> p.getName().equals("insert")).findFirst().orElse(null);
-                final String insertText = (insertProp != null ? insertProp.getContent() : "");
-
-                final List<Integer> markers = new ArrayList<>();
-                final StringBuilder sb = new StringBuilder();
-                if(insertText != null && !insertText.isBlank()) {
-                    for(int i = 0; i < insertText.length(); i++) {
-                        final char c = insertText.charAt(i);
-                        if(c == '$' && (i+1 < insertText.length() && insertText.charAt(i+1) == '$')) {
-                            markers.add(sb.length());
-                            i++;
-                        } else {
-                            sb.append(c);
-                        }
-                    }
-                } else {
-                    sb.append(text);
-                }
-
-                final String selectedText = TranscriptEditor.this.getSelectedText();
-                if(selectedText != null && !selectedText.isBlank()) {
-                    if(markers.size() == 1) {
-                        // insert selected text at marker
-                        sb.insert(markers.get(0), selectedText);
-                    } else if(markers.size() == 2) {
-                        // replace selected text between markers
-                        final int start = markers.get(0);
-                        final int end = markers.get(1);
-                        sb.replace(start, end, selectedText);
-                    }
-                }
-
-                // copy into system clipboard
-                final Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-                final Transferable currentContents = clipboard.getContents(TranscriptEditor.this);
-                clipboard.setContents(new StringSelection(sb.toString()), TranscriptEditor.this);
-
-                final TranscriptElementLocation currentLocation = TranscriptEditor.this.getTranscriptEditorCaret().getCurrentLocation();
-                if(!currentLocation.valid()) return;
-
-                // insert into document
-                TranscriptEditor.this.paste();
-                final EditorAction<EditorEventType.TierChangeData> act = new EditorAction<>() {
-                    @Override
-                    public void eventOccurred(EditorEvent<EditorEventType.TierChangeData> ee) {
-                        if(ee.data().valueAdjusting()) return;
-                        if(markers.size() == 1) {
-                            // set caret position to first marker
-                            final int markerPos = TranscriptEditor.this.getCaretPosition() - sb.length() + markers.get(0);
-                        } else if(markers.size() == 2) {
-                            // set selection to markers
-                            final int start = TranscriptEditor.this.getCaretPosition() - sb.length() + markers.get(0);
-                            final int end = TranscriptEditor.this.getCaretPosition() - sb.length() + markers.get(1);
-                            TranscriptEditor.this.setSelectionStart(start);
-                            TranscriptEditor.this.setSelectionEnd(end);
-                        }
-                        TranscriptEditor.this.getEventManager().removeActionForEvent(EditorEventType.TierChange, this);
-                    }
-                };
-                TranscriptEditor.this.getEventManager().registerActionForEvent(
-                        EditorEventType.TierChange, act, EditorEventManager.RunOn.AWTEventDispatchThread);
-                TranscriptEditor.this.commitChanges(TranscriptEditor.this.getCaretPosition());
-                clipboard.setContents(currentContents, TranscriptEditor.this);
-            }
-
-            @Override
-            public void mouseEntered(Cell cell, MouseEvent me) {
-                final StringBuilder sb = new StringBuilder();
-                final CellProp nameProp = cell.getProperty().stream().filter(p -> p.getName().equalsIgnoreCase("name")).findFirst().orElse(null);
-                if(nameProp != null) {
-                    sb.append(nameProp.getContent());
-                }
-
-                final CellProp docProp = cell.getProperty().stream().filter(p -> p.getName().equalsIgnoreCase("doc")).findFirst().orElse(null);
-                if(docProp != null) {
-                    final String docUri = docProp.getContent();
-                    if(docUri != null && !docUri.isBlank()) {
-                        try {
-                            final URL docUrl = new URL(docUri);
-                            currentDocUrl.set(docUrl);
-
-                            sb.append(" (F2 for more info)");
-                        } catch (MalformedURLException e) {
-                            LogUtil.warning(e);
-                        }
-                    }
-                }
-
-                ((JComponent)me.getSource()).setToolTipText(sb.toString());
-            }
-
-            @Override
-            public void mouseExited(Cell cell, MouseEvent me) {
-
-            }
-        };
-
-        chatMap.addCellMouseListener(gridMouseListener);
-        ipaMap.addCellMouseListener(gridMouseListener);
-
-        try {
-
-            final Rectangle2D caretRect = modelToView2D(getCaretPosition());
-            final Point caretPoint = new Point((int)caretRect.getMinX(), (int)caretRect.getMinY());
-            SwingUtilities.convertPointToScreen(caretPoint, this);
-
-            // get font ascent at caret position
-            final FontMetrics fm = getFontMetrics(getFont());
-            final int fontAscent = fm.getAscent();
-            final Rectangle r = new Rectangle(caretPoint.x, caretPoint.y - fontAscent, (int)caretRect.getWidth(), (int)caretRect.getHeight() + fontAscent);
-
-//            final JPanel p = new JPanel(new BorderLayout());
-            final JTabbedPane tabbedPane = new JTabbedPane();
-            final JScrollPane chatScrollPane = new JScrollPane(chatMap);
-            tabbedPane.addTab("CHAT", chatScrollPane);
-            final JScrollPane scrollPane = new JScrollPane(ipaMap);
-            tabbedPane.addTab("IPA", scrollPane);
-            tabbedPane.setPreferredSize(new Dimension(tabbedPane.getPreferredSize().width, 500));
-            scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-            tabbedPane.setSelectedIndex(1);
-
-            final TranscriptElementLocation elementLocation = TranscriptEditor.this.getTranscriptEditorCaret().getCurrentLocation();
-            if(!elementLocation.valid()) return;
-            if(elementLocation.transcriptElementIndex() >= 0) {
-                final Transcript.Element transcriptElement = getSession().getTranscript().getElementAt(elementLocation.transcriptElementIndex());
-                if(transcriptElement.isRecord()) {
-                    final TierDescription td = getSession().getTier(elementLocation.tier());
-                    if(td.getDeclaredType() == Orthography.class) {
-                        tabbedPane.setSelectedIndex(0);
-                    }
-                }
-            }
-
-            final CalloutWindow window =
-                    CalloutWindow.showNonFocusableCallout(CommonModuleFrame.getCurrentFrame(), tabbedPane, SwingConstants.TOP, r);
-            window.setAlwaysOnTop(true);
-            this.currentCallout.set(window);
-
-            // escape closes window
-            final PhonUIAction<Void> closeAct = PhonUIAction.runnable(() -> {
-                window.setVisible(false);
-                window.dispose();
-
-            });
-            final AWTEventListener escListener = new AWTEventListener() {
-                @Override
-                public void eventDispatched(AWTEvent event) {
-                    if(event instanceof KeyEvent) {
-                        final KeyEvent ke = (KeyEvent)event;
-                        if(ke.getID() == KeyEvent.KEY_PRESSED && ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                            closeAct.actionPerformed(null);
-                        } else if(ke.getID() == KeyEvent.KEY_PRESSED && ke.getKeyCode() == KeyEvent.VK_F2) {
-                            if(currentDocUrl.get() != null) {
-                                try {
-                                    Desktop.getDesktop().browse(currentDocUrl.get().toURI());
-                                } catch (IOException | URISyntaxException e) {
-                                    LogUtil.warning(e);
-                                }
-                            }
-                        }
-                    }
-                }
-            };
-            Toolkit.getDefaultToolkit().addAWTEventListener(escListener, AWTEvent.KEY_EVENT_MASK);
-
-            window.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosed(WindowEvent e) {
-                    Toolkit.getDefaultToolkit().removeAWTEventListener(escListener);
-                }
-            });
-
-            // hide window when caret moves to a different tier
-            TranscriptEditor.this.addPropertyChangeListener("currentSessionLocation", new PropertyChangeListener() {
-                @Override
-                public void propertyChange(PropertyChangeEvent e) {
-                    if(window.isVisible()) {
-                        // if tier had changed
-                        final TranscriptElementLocation oldLoc = (TranscriptElementLocation)e.getOldValue();
-                        final TranscriptElementLocation newLoc = (TranscriptElementLocation)e.getNewValue();
-                        if(oldLoc != null && newLoc != null && (oldLoc.tier() != newLoc.tier() || oldLoc.transcriptElementIndex() != newLoc.transcriptElementIndex())) {
-                            window.setVisible(false);
-                            window.dispose();
-                            TranscriptEditor.this.removePropertyChangeListener("currentSessionLocation", this);
-                        } else {
-                            // move window to new caret position
-                            final Rectangle2D caretRect;
-                            try {
-                                caretRect = modelToView2D(getCaretPosition());
-                            } catch (BadLocationException ex) {
-                                return;
-                            }
-                            final Point caretPoint = new Point((int)caretRect.getMinX(), (int)caretRect.getMinY());
-                            SwingUtilities.convertPointToScreen(caretPoint, TranscriptEditor.this);
-                            // get font ascent at caret position
-                            final FontMetrics fm = getFontMetrics(getFont());
-                            final int fontAscent = fm.getAscent();
-                            final Rectangle r = new Rectangle(caretPoint.x, caretPoint.y - fontAscent, (int)caretRect.getWidth(), (int)caretRect.getHeight() + fontAscent);
-                            window.pointAtRect(SwingConstants.TOP, r);
-                        }
-                    }
-                }
-            });
-        } catch (BadLocationException e) {
-            LogUtil.warning(e);
-        }
-    }
-
-    /**
-     * Setup context menu items on provided menu builder
-     *
-     * @param menuBuilder the menu builder to add the menu items to
-     */
-    void setupContextMenu(MenuBuilder menuBuilder) {
-        // add show input dialog item
-        final PhonUIAction<Void> showInputAct = PhonUIAction.runnable(this::showInputCallout);
-        showInputAct.putValue(PhonUIAction.NAME, "Show input dialog");
-        showInputAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
-        menuBuilder.addItem(".", showInputAct);
-    }
-
-    /**
-     * Saves the changes made to the line the caret is currently on
-     */
-    public void saveCurrentLine() {
-        commitChanges(getCaretPosition());
-    }
-
-    /**
-     * Returns the current location in the document as a TranscriptElementLocation
-     *
-     * @return the current location in the document
-     */
-    public TranscriptElementLocation getCurrentSessionLocation() {
-        return currentTranscriptLocation;
-    }
-
-    /**
-     * Sets the current location in the document, this method does not set the caret position
-     * only the internal location
-     *
-     * @param currentTranscriptLocation the new location in the document
-     */
-    public void setCurrentSessionLocation(TranscriptElementLocation currentTranscriptLocation) {
-        TranscriptElementLocation oldLoc = this.currentTranscriptLocation;
-        this.currentTranscriptLocation = currentTranscriptLocation;
-        firePropertyChange("currentSessionLocation", oldLoc, currentTranscriptLocation);
-    }
-
-    /**
-     * Changes the data in a given tier if the provided data is different
-     *
-     * @param record  the record that the tier belongs to
-     * @param tier    the tier that the data is changing for
-     * @param newData the possible new data for the tier
-     */
-    public void changeTierData(Record record, Tier<?> tier, String newData) {
-        TranscriptDocument doc = getTranscriptDocument();
-        String transcriber = dataModel.getTranscriber().getUsername();
-
-        Tier<?> dummy = SessionFactory.newFactory().createTier("dummy", tier.getDeclaredType());
-        if(tier.getDeclaredType() == MediaSegment.class) {
-            // fix - remove dots from beginning of media segment and end
-            newData = newData.substring(1, newData.length()-1);
-        }
-        dummy.setText(newData);
-
-        if (tier.getDeclaredType() == MediaSegment.class) return;
-        if (doc.getTierText(tier, transcriber).equals(doc.getTierText(dummy, transcriber))) return;
-
-        if(PrefHelper.isDebugMode()) {
-            LogUtil.info("Changing tier data for " + tier.getName() + " to " + newData);
-        }
-
-//        SwingUtilities.invokeLater(() -> {
-            TierEdit<?> edit = new TierEdit(getSession(), eventManager, dataModel.getTranscriber(), record, tier, dummy.getValue());
-            edit.setValueAdjusting(false);
-            getUndoSupport().postEdit(edit);
-//        });
-    }
-
-    /**
-     * Changes the data in a given comment if the provided data is different
-     *
-     * @param comment the comment that the data is changing for
-     * @param newData the possible new data for the tier
-     */
-    public void commentDataChanged(Comment comment, String newData) {
-        Tier<TierData> dummy = SessionFactory.newFactory().createTier("dummy", TierData.class);
-        dummy.setText(newData);
-
-        String transcriber = dataModel.getTranscriber().getUsername();
-        if (comment.getValue().toString().equals(getTranscriptDocument().getTierText(dummy, transcriber))) return;
-
-//        SwingUtilities.invokeLater(() -> {
-            ChangeCommentEdit edit = new ChangeCommentEdit(getSession(), eventManager, comment, dummy.getValue());
-            getUndoSupport().postEdit(edit);
-//        });
-    }
-
-    /**
-     * Changes the data in a given gem if the provided data is different
-     *
-     * @param gem     the gem that the data is changing for
-     * @param newData the possible new data for the tier
-     */
-    public void gemDataChanged(Gem gem, String newData) {
-
-        if (gem.getLabel().equals(newData)) return;
-
-//        SwingUtilities.invokeLater(() -> {
-            ChangeGemEdit edit = new ChangeGemEdit(getSession(), eventManager, gem, newData);
-            getUndoSupport().postEdit(edit);
-//        });
-    }
-
-    public SessionEditUndoSupport getUndoSupport() {
-        return undoSupport;
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        // XXX background colors are not being drawn correctly on windows
-//        g2d.setRenderingHint(
-//                RenderingHints.KEY_TEXT_ANTIALIASING,
-//                RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-//        g2d.setRenderingHint(
-//                RenderingHints.KEY_RENDERING,
-//                RenderingHints.VALUE_RENDER_QUALITY);
-//
-//        TranscriptDocument doc = getTranscriptDocument();
-//        // Get the clip bounds of the current view
-//        Rectangle drawHere = g.getClipBounds();
-//
-//        // Fill the background with the appropriate color
-//        g.setColor(UIManager.getColor(TranscriptEditorUIProps.BACKGROUND));
-//        g.fillRect(0, drawHere.y, drawHere.width, drawHere.height);
-//
-//        // Fill the label column background with the appropriate color
-//        g.setColor(UIManager.getColor(TranscriptEditorUIProps.LABEL_BACKGROUND));
-//        FontMetrics fontMetrics = g.getFontMetrics(FontPreferences.getMonospaceFont().deriveFont(14.0f));
-//        final int labelColumnWidth = TranscriptViewFactory.LABEL_COLUMN_WIDTH;
-////        char[] template = new char[getTranscriptDocument().getLabelColumnWidth() + 1];
-////        Arrays.fill(template, ' ');
-////        int labelColWidth = fontMetrics.stringWidth(new String(template));
-//        Rectangle labelColRect = new Rectangle(0, 0, labelColumnWidth, getHeight());
-//        if (labelColRect.intersects(drawHere)) {
-//            g.fillRect(0, (int) drawHere.getMinY(), labelColumnWidth, drawHere.height);
-//        }
-//
-//        Element root = doc.getDefaultRootElement();
-//        if (root.getElementCount() == 0) return;
-//
-//        for (int i = 0; i < root.getElementCount(); i++) {
-//            Element elem = root.getElement(i);
-//            if (elem.getElementCount() == 0) continue;
-//            Element innerElem = elem.getElement(0);
-//            AttributeSet attrs = elem.getAttributes();
-//            String elementType = (String) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
-//            if (elementType != null) {
-//                var startEnd = new TranscriptDocument.StartEnd(-1, -1);
-//
-//                switch (elementType) {
-//                    case TranscriptStyleConstants.ELEMENT_TYPE_COMMENT -> {
-//                        g.setColor(UIManager.getColor(TranscriptEditorUIProps.COMMENT_BACKGROUND));
-//                        Comment comment = (Comment) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT);
-//                        startEnd = doc.getCommentContentStartEnd(comment);
-//                    }
-//                    case TranscriptStyleConstants.ELEMENT_TYPE_GEM -> {
-//                        g.setColor(UIManager.getColor(TranscriptEditorUIProps.GEM_BACKGROUND));
-//                        Gem gem = (Gem) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM);
-//                        startEnd = doc.getGemContentStartEnd(gem);
-//                    }
-//                    case TranscriptStyleConstants.ELEMENT_TYPE_GENERIC -> {
-//                        g.setColor(UIManager.getColor(TranscriptEditorUIProps.GENERIC_BACKGROUND));
-//                        Tier<?> genericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER);
-//                        startEnd = doc.getGenericContentStartEnd(genericTier);
-//                    }
-//                }
-//                if (!startEnd.valid()) continue;
-//                try {
-//                    var startRect = modelToView2D(startEnd.start());
-//                    var endRect = modelToView2D(startEnd.end());
-//                    if (startRect == null || endRect == null) continue;
-//                    var colorRect = new Rectangle(labelColumnWidth, (int) startRect.getMinY(), (int) (TranscriptViewFactory.PAGE_WIDTH - labelColumnWidth), (int) (endRect.getMaxY() - startRect.getMinY()));
-//                    if (!drawHere.intersects(colorRect)) continue;
-//                    g.fillRect((int) colorRect.getMinX(), (int) colorRect.getMinY(), (int) colorRect.getWidth(), (int) colorRect.getHeight());
-//                } catch (BadLocationException e) {
-//                    LogUtil.severe(e);
-//                }
-//            }
-//        }
-//
-//        g.setColor(UIManager.getColor(TranscriptEditorUIProps.SEPARATOR_LINE));
-//        int sepLineHeight = 1;
-//        int fontHeight = fontMetrics.getHeight();
-//
-//        float lineSpacing = StyleConstants.getLineSpacing(root.getElement(0).getAttributes());
-//        int sepLineOffset = (int) (((fontHeight * lineSpacing) + sepLineHeight) / 2);
-//        // For every element
-//        for (int i = 0; i < root.getElementCount(); i++) {
-//            Element elem = root.getElement(i);
-//            if (elem.getElementCount() == 0) continue;
-//            Element innerElem = elem.getElement(0);
-//            AttributeSet attrs = innerElem.getAttributes();
-//            // If it's a separator
-//            if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_SEPARATOR) != null) {
-//                try {
-//                    var sepRect = modelToView2D(innerElem.getStartOffset());
-//                    if (sepRect == null) continue;
-//                    boolean topVisible = sepRect.getMinY() >= drawHere.getMinY() && sepRect.getMinY() <= drawHere.getMaxY();
-//                    boolean bottomVisible = sepRect.getMaxY() >= drawHere.getMinY() && sepRect.getMaxY() <= drawHere.getMaxY();
-//                    // And it's onscreen
-//                    if (!topVisible && !bottomVisible) continue;
-//                    // Draw the separator line
-//                    g.fillRect(drawHere.x, ((int) sepRect.getMinY()) - sepLineOffset, drawHere.width, sepLineHeight);
-//                } catch (BadLocationException e) {
-//                    LogUtil.severe(e);
-//                }
-//            }
-//        }
-
-        super.paintComponent(g);
-
-        // to fix an issue where label views would repaint their content on some lines causing a 'bold' effect to occur
-        // label views clear their background before painting. We need to repaint our highlights here.
-        if (getHighlighter() != null) {
-            for (var highlight : getHighlighter().getHighlights()) {
-                if (highlight.getPainter() instanceof BoxSelectHighlightPainter || highlight.getPainter() instanceof ErrorUnderlinePainter
-                        || highlight.getPainter() instanceof HoverUnderlinePainter) {
-                    // calculate highlight bounds
-                    var start = highlight.getStartOffset();
-                    var end = highlight.getEndOffset();
-                    try {
-                        var startRect = modelToView2D(start);
-                        var endRect = modelToView2D(end);
-                        if (startRect == null || endRect == null) continue;
-                        var highlightRect = new Rectangle((int) startRect.getMinX(), (int) startRect.getMinY(), (int) (endRect.getMaxX() - startRect.getMinX()), (int) (endRect.getMaxY() - startRect.getMinY()));
-                        highlight.getPainter().paint(g, highlight.getStartOffset(), highlight.getEndOffset(), highlightRect, this);
-                    } catch (BadLocationException e) {
-                        getHighlighter().removeHighlight(highlight);
-                    }
-                }
-            }
-        }
-    }
-
-    @Override
-    public TransferHandler getTransferHandler() {
-        return new CustomTransferHandler();
-    }
-
-    /**
-     * Removes editor actions for specific events
-     */
-    public void removeEditorActions() {
-        this.eventManager.removeActionForEvent(EditorEventType.SessionChanged, this::onSessionChanged);
-        this.eventManager.removeActionForEvent(EditorEventType.TierViewChanged, this::onTierViewChanged);
-        this.eventManager.removeActionForEvent(EditorEventType.RecordChanged, this::onRecordChanged);
-    }
-
-    /**
-     * Runs when the loaded session changes
-     *
-     * @param editorEvent the event that changes the session
-     */
-    private void onSessionChanged(EditorEvent<Session> editorEvent) {
-
-    }
-
-    /**
-     * Runs when any changes are made to the tier view
-     *
-     * @param editorEvent the event that made the changes to the tier view
-     */
-    private void onTierViewChanged(EditorEvent<EditorEventType.TierViewChangedData> editorEvent) {
-        var changeType = editorEvent.data().changeType();
-        final Runnable runnable = switch (changeType) {
-            case RELOAD -> () -> getTranscriptDocument().reload();
-            case MOVE_TIER -> () -> {
-                moveTier(editorEvent.data());
-            };
-            case DELETE_TIER, HIDE_TIER -> () -> {
-                hideTier(editorEvent.data());
-                recalculateTierLabelWidth();
-            };
-            case ADD_TIER, SHOW_TIER -> () -> {
-                showTier(editorEvent.data());
-                recalculateTierLabelWidth();
-            };
-            case TIER_NAME_CHANGE, TIER_FONT_CHANGE -> () -> {
-                tierFontOrNameChanged(editorEvent.data());
-                recalculateTierLabelWidth();
-            };
-            default -> () -> {
-                LogUtil.info("Unhandled tier view change type: " + changeType);
-            };
-        };
-        if (SwingUtilities.isEventDispatchThread()) {
-            runnable.run();
-        } else {
-            SwingUtilities.invokeLater(runnable);
-        }
-    }
-
-    /**
-     * Recalculates the width of the tier labels and updates all paragraph attributes
-     *
-     * @param additionalTierNames additional tier names to consider when recalculating the tier label width
-     */
-    public void recalculateTierLabelWidth(List<String> additionalTierNames) {
-        editorKit.invalidateTierLabelWidth(additionalTierNames);
-        getTranscriptDocument().updateGlobalParagraphAttributes();
-    }
-
-    /**
-     * Recalculates the width of the tier labels and updates all paragraph attributes
-     */
-    public void recalculateTierLabelWidth() {
-        recalculateTierLabelWidth(Collections.emptyList());
-    }
-
-    /**
-     * Runs when the "current record" changes
-     *
-     * @param editorEvent the event that says the current record haas changed
-     */
-    private void onRecordChanged(EditorEvent<EditorEventType.RecordChangedData> editorEvent) {
-        TranscriptDocument doc = getTranscriptDocument();
-
-        final TranscriptElementLocation currentLocation = getTranscriptEditorCaret().getCurrentLocation();
-        // commit any changes
-        getTranscriptEditorCaret().freeze();
-        commitChanges(getCaretPosition());
-        // Update the single record index in the doc
-        doc.setSingleRecordIndex(editorEvent.data().recordIndex());
-        getTranscriptEditorCaret().unfreeze();
-
-        // set dot to start of currently selected record tier
-        if(editorEvent.source() != this && currentLocation.transcriptElementIndex() >= 0) {
-            final int transcriptElementIndex = editorEvent.data().elementIndex();
-            final TranscriptElementLocation newLocation = new TranscriptElementLocation(transcriptElementIndex,
-                    currentLocation.tier(), 0);
-            final int dot = sessionLocationToCharPos(newLocation);
-            if (dot >= 0) {
-                setCaretPosition(dot);
-            }
-        }
-
-        // If it's currently in single record view fire the appropriate event
-        if (doc.getSingleRecordView()) {
-            final EditorEvent<Void> e = new EditorEvent<>(recordChangedInSingleRecordMode, this, null);
-            eventManager.queueEvent(e);
-
-            // update highlights for the new record
-            updateSelectionHighlights();
-
-            return;
-        }
-
-        // If the transcript editor is currently in focus, stop here
-        if (hasFocus()) return;
-
-        try {
-            // Get rects for the start and end positions of the record
-            int recordStartPos = doc.getRecordStart(editorEvent.data().recordIndex());
-            int recordEndPos = doc.getRecordEnd(editorEvent.data().recordIndex());
-            var startRect = modelToView2D(recordStartPos);
-            var endRect = modelToView2D(recordEndPos);
-
-            // Create a rect that contains the whole record
-            Rectangle scrollToRect = new Rectangle((int) startRect.getMinX(), (int) startRect.getMinY(), (int) (endRect.getMaxX() - startRect.getMinX()), (int) (endRect.getMaxY() - startRect.getMinY()));
-            // Scroll to a point where that new rect is visible
-            super.scrollRectToVisible(scrollToRect);
-        } catch (BadLocationException e) {
-            LogUtil.severe(e);
-        }
-    }
-
-    private void updateSelectionHighlights() {
-        if(!isSingleRecordView()) return;
-
-        // clear old highlights
-        for(var highlight:selectionHighlightList) {
-            getHighlighter().removeHighlight(highlight);
-        }
-        selectionHighlightList.clear();
-        selectionMap.clear();
-
-        // get selections for the currently display transcript elements
-        final TranscriptDocument doc = getTranscriptDocument();
-        final Set<Integer> selectedTranscriptElementIndices = new HashSet<>();
-        for(int i = 0; i < doc.getDefaultRootElement().getElementCount(); i++) {
-            final Element elem = doc.getDefaultRootElement().getElement(i);
-            final AttributeSet attrs = elem.getElementCount() > 0 ? elem.getElement(0).getAttributes() : new SimpleAttributeSet();
-            final String elementType = TranscriptStyleConstants.getElementType(attrs);
-            if(elementType == null) continue;
-            if(TranscriptStyleConstants.ELEMENT_TYPE_RECORD.equals(elementType)) {
-                final Record record = TranscriptStyleConstants.getRecord(attrs);
-                if(record == null) continue;
-                final int elementIndex = getSession().getTranscript().getElementIndex(record);
-                if(elementIndex < 0) continue;
-                selectedTranscriptElementIndices.add(elementIndex);
-            } else if(TranscriptStyleConstants.ELEMENT_TYPE_GEM.equals(elementType)) {
-                final Gem gem = TranscriptStyleConstants.getGem(attrs);
-                if(gem == null) continue;
-                final int elementIndex = getSession().getTranscript().getElementIndex(gem);
-                if(elementIndex < 0) continue;
-                selectedTranscriptElementIndices.add(elementIndex);
-            } else if(TranscriptStyleConstants.ELEMENT_TYPE_COMMENT.equals(elementType)) {
-                final Comment comment = TranscriptStyleConstants.getComment(attrs);
-                if(comment == null) continue;
-                final int elementIndex = getSession().getTranscript().getElementIndex(comment);
-                if(elementIndex < 0) continue;
-                selectedTranscriptElementIndices.add(elementIndex);
-            }
-        }
-
-        for(int elementIndex:selectedTranscriptElementIndices) {
-            selectionModel.getSelectionsForElement(elementIndex).forEach(this::addHighlightForSelection);
-        }
-    }
-
-    /**
-     * Moves the specified tiers (and the caret if needed)
-     *
-     * @param data the data from the tier view changed event
-     */
-    public void moveTier(EditorEventType.TierViewChangedData data) {
-
-        TranscriptDocument doc = getTranscriptDocument();
-
-        final TranscriptElementLocation startLocation = getTranscriptEditorCaret().getCurrentLocation();
-        // Move tier in doc
-        getTranscriptEditorCaret().freeze();
-        for (String tierName : data.tierNames()) {
-            int newIdx = data.viewIndices().get(1);
-            doc.removeTier(tierName);
-            doc.addTier(tierName, newIdx, record -> record.getTier(tierName));
-        }
-        doc.updateGlobalParagraphAttributes();
-        getTranscriptEditorCaret().unfreeze();
-
-        // Correct caret
-        if (startLocation.valid()) {
-            final int charPos = sessionLocationToCharPos(startLocation);
-            if (charPos >= 0) {
-                setCaretPosition(charPos);
-            }
-        }
-    }
-
-    /**
-     * Hides the specified tiers (and moves the caret if needed)
-     *
-     * @param data the data from the tier view changed event
-     */
-    public void hideTier(EditorEventType.TierViewChangedData data) {
-        TranscriptDocument doc = getTranscriptDocument();
-
-        List<String> hiddenTiersNames = data.tierNames();
-
-        final TranscriptElementLocation startLocation = getTranscriptEditorCaret().getCurrentLocation();
-        boolean caretInHiddenTier = false;
-        int nextParagraphIndex = -1;
-        if (startLocation.valid()) {
-            final int caretParagraphIndex = doc.findParagraphElementIndexForSessionElementIndex(startLocation.transcriptElementIndex());
-            nextParagraphIndex = caretParagraphIndex < doc.getDefaultRootElement().getElementCount() ? caretParagraphIndex + 1 : caretParagraphIndex;
-            final String caretTier = startLocation.tier();
-            caretInHiddenTier = caretTier != null && hiddenTiersNames.contains(caretTier);
-        }
-
-        getTranscriptEditorCaret().freeze();
-        for (String tierName : hiddenTiersNames) {
-            doc.removeTier(tierName);
-        }
-        getTranscriptEditorCaret().unfreeze();
-
-        // Caret in record / tier
-        if (caretInHiddenTier) {
-            final Element nextParagraph = doc.getDefaultRootElement().getElement(nextParagraphIndex);
-            int newPos = nextParagraph.getStartOffset();
-            for (int i = 0; i < nextParagraph.getElementCount(); i++) {
-                final Element elem = nextParagraph.getElement(i);
-                final AttributeSet attrs = elem.getAttributes();
-                if (!TranscriptStyleConstants.isNotEditable(attrs)) {
-                    newPos = elem.getStartOffset();
-                    break;
-                }
-            }
-            setCaretPosition(newPos);
-        } else {
-            final int charPos = sessionLocationToCharPos(startLocation);
-            if (charPos >= 0) {
-                setCaretPosition(charPos);
-            }
-        }
-    }
-
-    /**
-     * Shows the specified tiers (and moves the caret if needed)
-     *
-     * @param data the data from the tier view changed event
-     */
-    public void showTier(EditorEventType.TierViewChangedData data) {
-        var doc = getTranscriptDocument();
-
-        final TranscriptElementLocation startLocation = getTranscriptEditorCaret().getCurrentLocation();
-
-        for (int i = 0; i < data.tierNames().size(); i++) {
-            var tierName = data.tierNames().get(i);
-            var viewIndex = data.viewIndices().get(i);
-            doc.addTier(tierName, viewIndex, record -> record.getTier(tierName));
-        }
-
-        // Correct caret
-        if (startLocation.valid()) {
-            final int charPos = sessionLocationToCharPos(startLocation);
-            if (charPos >= 0) {
-                setCaretPosition(charPos);
-            }
-        }
-    }
-
-    /**
-     * Updates the fonts of the specified tiers
-     *
-     * @param data the data from the tier view changed event
-     */
-    public void tierFontOrNameChanged(EditorEventType.TierViewChangedData data) {
-        TranscriptDocument doc = getTranscriptDocument();
-        final TranscriptElementLocation startLocation = getTranscriptEditorCaret().getCurrentLocation();
-
-        getTranscriptEditorCaret().freeze();
-        for (var tviIdx: data.viewIndices()) {
-            final var tvi = data.newTierView().get(tviIdx);
-            final var oldTvi = data.oldTierView().get(tviIdx);
-            doc.removeTier(oldTvi.getTierName());
-            doc.addTier(tvi.getTierName(), data.newTierView().indexOf(tvi), record -> record.getTier(tvi.getTierName()));
-        }
-        getTranscriptEditorCaret().unfreeze();
-
-        if(startLocation.valid()) {
-            final int newPos = sessionLocationToCharPos(startLocation);
-            if(newPos >= 0) {
-                setCaretPosition(newPos);
-            }
-        }
-    }
-
-    /**
-     * Changes the speaker of a given record to a given participant
-     *
-     * @param data a record containing the record and the participant that will become the new speaker
-     */
-    public void changeSpeaker(RecordParticipant data) {
-        ChangeSpeakerEdit edit = new ChangeSpeakerEdit(getSession(), eventManager, data.record, data.participant);
-        undoSupport.postEdit(edit);
-    }
-
-    /**
-     * Changes the data in a given generic tier if the provided data is different
-     *
-     * @param genericTier the generic tier that the data is changing for
-     * @param newData     the possible new data for the tier
-     */
-    public void genericDataChanged(Tier<?> genericTier, String newData) {
-        TranscriptDocument doc = getTranscriptDocument();
-        String transcriber = dataModel.getTranscriber().getUsername();
-
-        Tier dummy = SessionFactory.newFactory().createTier("dummy", genericTier.getDeclaredType());
-        dummy.setFormatter(genericTier.getFormatter());
-        dummy.setText(newData);
-
-        if (doc.getTierText(genericTier, transcriber).equals(doc.getTierText(dummy, transcriber))) return;
-
-        SwingUtilities.invokeLater(() -> {
-            getUndoSupport().beginUpdate();
-
-            if (genericTier.getDeclaredType() == TranscriptDocument.Languages.class) {
-                Tier<TranscriptDocument.Languages> languagesTier = (Tier<TranscriptDocument.Languages>) dummy;
-                if (languagesTier.hasValue()) {
-                    SessionLanguageEdit edit = new SessionLanguageEdit(getSession(), eventManager, languagesTier.getValue().languageList());
-                    getUndoSupport().postEdit(edit);
-                }
-            } else if (genericTier.getDeclaredType() == LocalDate.class) {
-                Tier<LocalDate> dateTier = (Tier<LocalDate>) dummy;
-                if (dateTier.hasValue()) {
-                    SessionDateEdit edit = new SessionDateEdit(getSession(), getEventManager(), dateTier.getValue(), getSession().getDate());
-                    undoSupport.postEdit(edit);
-                }
-            }
-
-            TierEdit<?> edit = new TierEdit(getSession(), eventManager, null, genericTier, dummy.getValue());
-            edit.setValueAdjusting(false);
-            getUndoSupport().postEdit(edit);
-            getUndoSupport().endUpdate();
-        });
-    }
-
-    public EditorEventManager getEventManager() {
-        return eventManager;
-    }
-
-    /**
-     * Loads the session on the document
-     */
-    public void loadSession() {
-        TranscriptDocument doc = getTranscriptDocument();
-        doc.setUndoSupport(undoSupport);
-        doc.setEventManager(eventManager);
-
-        doc.addDocumentPropertyChangeListener("populate", new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                if (evt.getNewValue() instanceof Boolean b) {
-                    if (!b) {
-                        // populate finished
-                        getEventManager().queueEvent(new EditorEvent<>(TranscriptEditor.transcriptDocumentPopulated, TranscriptEditor.this, null));
-                        doc.removeDocumentPropertyChangeListener(this);
-
-                        if(isSingleRecordView() && getSession().getRecordCount() > 0 && doc.getSingleRecordIndex() < 0) {
-                            doc.setSingleRecordIndex(0);
-                        }
-                    }
-                }
-            }
-        });
-        doc.setSession(getSession());
-        doc.addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                TranscriptDocument doc = getTranscriptDocument();
-                Element elem = doc.getCharacterElement(e.getOffset());
-                AttributeSet attrs = elem.getAttributes();
-                if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_SYLLABIFICATION) != null) {
-                    Record record = TranscriptStyleConstants.getRecord(attrs);
-                    int recordIndex = getSession().getRecordPosition(record);
-                    if (recordIndex < 0) return;
-                    Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
-                    final TranscriptDocument.StartEnd startEnd = doc.getTierContentStartEnd(recordIndex, tier.getName());
-                    if (!startEnd.valid()) return;
-                    int tierEnd = startEnd.end();
-                    if (getCaretPosition() != tierEnd - 1) {
-                        SwingUtilities.invokeLater(() -> {
-                            setCaretPosition(getNextValidIndex(getCaret().getMark() + 1, false));
-                        });
-                    }
-                }
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-
-            }
-        });
-
     }
 
     /**
@@ -2338,59 +929,208 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
     }
 
     /**
-     * Underlines the given document element
+     * Checks whether a given attribute set contains any "not traversable" attributes
      *
-     * @param elem the element to underline
+     * @param attrs the attribute set to be checked
+     * @return if any "not traversable" attributes were found
      */
-    private void underlineElement(Element elem) {
-        try {
-            removeCurrentUnderline();
-            // get element text
-            String text = elem.getDocument().getText(elem.getStartOffset(), elem.getEndOffset() - elem.getStartOffset());
-            // special case for labels
-            if (text.startsWith("\t")) {
-                currentUnderline = getHighlighter().addHighlight(elem.getStartOffset() + 1, elem.getEndOffset(), underlinePainter);
-            } else {
-                currentUnderline = getHighlighter().addHighlight(elem.getStartOffset(), elem.getEndOffset(), underlinePainter);
+    private boolean containsNotTraversableAttribute(AttributeSet attrs) {
+        for (String key : notTraversableAttributes) {
+            if (attrs.getAttribute(key) != null) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Adds an attribute to the "not traversable" set
+     *
+     * @param attributeKey the attribute to be added
+     */
+    public void addNotTraversableAttribute(String attributeKey) {
+        notTraversableAttributes.add(attributeKey);
+    }
+
+    /**
+     * Removes an attribute from the "not traversable" set
+     *
+     * @param attributeKey the attribute to be removed
+     */
+    public void removeNotTraversableAttribute(String attributeKey) {
+        notTraversableAttributes.remove(attributeKey);
+    }
+
+    /**
+     * A record that contains the data for session location change events
+     *
+     * @param oldLoc the previous session location
+     * @param newLoc the new session location
+     */
+    public record TranscriptLocationChangeData(TranscriptElementLocation oldLoc, TranscriptElementLocation newLoc) {
+
+        @Override
+        public String toString() {
+            return "TranscriptLocationChangeData{" +
+                    "oldLoc=" + oldLoc +
+                    ", newLoc=" + newLoc +
+                    '}';
+        }
+
+    }
+    // endregion
+
+    /**
+     * Commit changed tier data at caret location
+     *
+     */
+    public void commitChanges(int charPos) {
+        final TranscriptElementLocation loc = charPosToSessionLocation(charPos);
+        if(!loc.valid()) return;
+        if(loc.transcriptElementIndex() < 0) return;
+
+        final Element charElem = getTranscriptDocument().getCharacterElement(charPos);
+        final AttributeSet attrs = charElem.getAttributes();
+        final Transcript.Element elem = getSession().getTranscript().getElementAt(loc.transcriptElementIndex());
+        if(elem.isRecord()) {
+            final Record record = elem.asRecord();
+            final Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
+            if(tier.getDeclaredType() == PhoneAlignment.class) return;
+            final int recordIndex = getSession().getRecordPosition(record);
+            final TranscriptDocument.StartEnd startEnd = getTranscriptDocument().getTierContentStartEnd(recordIndex, loc.tier());
+            if(!startEnd.valid()) return;
+            try {
+                final String text = getTranscriptDocument().getText(startEnd.start(), startEnd.end() - startEnd.start());
+                changeTierData(record, tier, text);
+            } catch (BadLocationException e) {
+                LogUtil.severe(e);
             }
-            repaint();
-        } catch (BadLocationException ex) {
-            throw new RuntimeException(ex);
+        } else if(elem.isComment()) {
+            final Comment comment = elem.asComment();
+            final TranscriptDocument.StartEnd startEnd = getTranscriptDocument().getCommentContentStartEnd(comment);
+            if(!startEnd.valid()) return;
+            try {
+                final String text = getTranscriptDocument().getText(startEnd.start(), startEnd.end() - startEnd.start());
+                commentDataChanged(comment, text);
+            } catch (BadLocationException e) {
+                LogUtil.severe(e);
+            }
+        } else if(elem.isGem()) {
+            final Gem gem = elem.asGem();
+            final TranscriptDocument.StartEnd startEnd = getTranscriptDocument().getGemContentStartEnd(gem);
+            if(!startEnd.valid()) return;
+            try {
+                final String text = getTranscriptDocument().getText(startEnd.start(), startEnd.end() - startEnd.start());
+                gemDataChanged(gem, text);
+            } catch (BadLocationException e) {
+                LogUtil.severe(e);
+            }
+        }
+    }
+
+    // region event handlers
+    /**
+     * Runs when the user presses enter
+     */
+    public void onPressedEnter(PhonActionEvent<Void> pae) {
+
+        TranscriptDocument doc = getTranscriptDocument();
+        AttributeSet attrs = doc.getCharacterElement(getCaretPosition()).getAttributes();
+        var enterAct = TranscriptStyleConstants.getEnterAction(attrs);
+        if (enterAct != null) {
+            enterAct.actionPerformed(pae.getActionEvent());
+            return;
+        }
+
+        String elemType = TranscriptStyleConstants.getElementType(attrs);
+        if (elemType != null) {
+            saveCurrentLine();
         }
     }
 
     /**
-     * Removes the current underline
+     * Runs when the user presses home
      */
-    private void removeCurrentUnderline() {
-        if (currentUnderline != null) {
-            getHighlighter().removeHighlight(currentUnderline);
-            currentUnderline = null;
-            repaint();
+    public void onPressedHome() {
+        TranscriptDocument doc = getTranscriptDocument();
+
+        Element caretElem = doc.getCharacterElement(getCaretPosition());
+        AttributeSet attrs = caretElem.getAttributes();
+        String elementType = TranscriptStyleConstants.getElementType(attrs);
+        if (elementType == null) return;
+        int start = -1;
+        switch (elementType) {
+            case TranscriptStyleConstants.ATTR_KEY_RECORD -> {
+                Record record = TranscriptStyleConstants.getRecord(attrs);
+                int recordIndex = getSession().getRecordPosition(record);
+                Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
+                if (tier != null && recordIndex >= 0) {
+                    start = doc.getTierContentStart(recordIndex, tier.getName());
+                }
+            }
+            case TranscriptStyleConstants.ATTR_KEY_COMMENT -> {
+                Comment comment = TranscriptStyleConstants.getComment(attrs);
+                if (comment != null) {
+                    start = doc.getCommentContentStart(comment);
+                }
+            }
+            case TranscriptStyleConstants.ATTR_KEY_GEM -> {
+                Gem gem = TranscriptStyleConstants.getGem(attrs);
+                if (gem != null) {
+                    start = doc.getGemContentStart(gem);
+                }
+            }
+            case TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER -> {
+                Tier<?> genericTier = TranscriptStyleConstants.getGenericTier(attrs);
+                if (genericTier != null) {
+                    start = doc.getGenericContentStart(genericTier);
+                }
+            }
+        }
+        if (start != -1) {
+            setCaretPosition(start);
         }
     }
 
     /**
-     * Sets the box selection to the specified bounds
-     *
-     * @param bounds a touple containing the upper and lower bounds positions
+     * Runs when the user presses end
      */
-    public void boxSelectBounds(TranscriptDocument.StartEnd bounds) {
-        try {
-            removeCurrentBoxSelect();
-            currentBoxSelect = getHighlighter().addHighlight(bounds.start(), bounds.end(), boxSelectPainter);
-        } catch (BadLocationException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
+    public void onPressedEnd() {
+        TranscriptDocument doc = getTranscriptDocument();
 
-    /**
-     * Removes the current box select
-     */
-    public void removeCurrentBoxSelect() {
-        if (currentBoxSelect != null) {
-            getHighlighter().removeHighlight(currentBoxSelect);
-            currentBoxSelect = null;
+        Element caretElem = doc.getCharacterElement(getCaretPosition());
+        AttributeSet attrs = caretElem.getAttributes();
+        String elementType = TranscriptStyleConstants.getElementType(attrs);
+        if (elementType == null) return;
+        int end = -1;
+        switch (elementType) {
+            case TranscriptStyleConstants.ATTR_KEY_RECORD -> {
+                Record record = TranscriptStyleConstants.getRecord(attrs);
+                int recordIndex = getSession().getRecordPosition(record);
+                Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
+                if (tier != null && recordIndex >= 0) {
+                    end = doc.getTierContentEnd(recordIndex, tier.getName());
+                }
+            }
+            case TranscriptStyleConstants.ATTR_KEY_COMMENT -> {
+                Comment comment = TranscriptStyleConstants.getComment(attrs);
+                if (comment != null) {
+                    end = doc.getCommentContentEnd(comment);
+                }
+            }
+            case TranscriptStyleConstants.ATTR_KEY_GEM -> {
+                Gem gem = TranscriptStyleConstants.getGem(attrs);
+                if (gem != null) {
+                    end = doc.getGemContentEnd(gem);
+                }
+            }
+            case TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER -> {
+                Tier<?> genericTier = TranscriptStyleConstants.getGenericTier(attrs);
+                if (genericTier != null) {
+                    end = doc.getGenericContentEnd(genericTier);
+                }
+            }
+        }
+        if (end >= 0) {
+            setCaretPosition(end);
         }
     }
 
@@ -2533,36 +1273,1308 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
     }
 
     /**
-     * Checks whether a given attribute set contains any "not traversable" attributes
+     * Runs when a new record gets added
      *
-     * @param attrs the attribute set to be checked
-     * @return if any "not traversable" attributes were found
+     * @param editorEvent the event that adds the record
      */
-    private boolean containsNotTraversableAttribute(AttributeSet attrs) {
-        for (String key : notTraversableAttributes) {
-            if (attrs.getAttribute(key) != null) return true;
+    private void onRecordAdded(EditorEvent<EditorEventType.RecordAddedData> editorEvent) {
+        var data = editorEvent.data();
+        // Get the new record and the element index
+        Record addedRecord = getSession().getRecord(data.recordIndex());
+        int elementIndex = data.elementIndex();
+        // Add it to the doc
+        if(isSingleRecordView()) {
+            getTranscriptDocument().setSingleRecordIndex(-1);
+            getTranscriptDocument().setSingleRecordIndex(editorEvent.data().recordIndex());
+        } else {
+            getTranscriptDocument().addRecord(addedRecord, elementIndex);
         }
-        return false;
+
+        final TranscriptElementLocation newCaretLoc = new TranscriptElementLocation(elementIndex,
+                getFirstVisibleTierName(), 0);
+        if(newCaretLoc.valid()) {
+            final int newDot = sessionLocationToCharPos(newCaretLoc);
+            if(newDot >= 0) {
+                setCaretPosition(newDot);
+            }
+        }
     }
 
     /**
-     * Adds an attribute to the "not traversable" set
+     * Runs when a record gets deleted
      *
-     * @param attributeKey the attribute to be added
+     * @param editorEvent the event that deletes the record
      */
-    public void addNotTraversableAttribute(String attributeKey) {
-        notTraversableAttributes.add(attributeKey);
+    private void onRecordDeleted(EditorEvent<EditorEventType.RecordDeletedData> editorEvent) {
+        TranscriptDocument doc = getTranscriptDocument();
+
+        int deletedTranscriptElementIndex = editorEvent.data().elementIndex();
+
+        var currentLocation = getTranscriptEditorCaret().getCurrentLocation();
+        if(currentLocation.transcriptElementIndex() == -2) {
+            // we are inside deleted record
+            currentLocation = new TranscriptElementLocation(deletedTranscriptElementIndex, currentLocation.tier(), currentLocation.charPosition());
+        }
+
+        // Delete the record from the doc
+        var data = editorEvent.data();
+        getTranscriptDocument().deleteRecord(data.elementIndex(), data.recordIndex(), data.record());
+
+        // Caret in record / tier
+        if(currentLocation.valid()) {
+            TranscriptElementLocation nextLoc = currentLocation;
+            if(deletedTranscriptElementIndex == currentLocation.transcriptElementIndex()) {
+                if(currentLocation.transcriptElementIndex() < getSession().getTranscript().getNumberOfElements()) {
+                    final Transcript.Element nextElem = getSession().getTranscript().getElementAt(currentLocation.transcriptElementIndex());
+                    if(nextElem.isRecord()) {
+                        // keep caret in same tier
+                        nextLoc = new TranscriptElementLocation(currentLocation.transcriptElementIndex(), currentLocation.tier(), 0);
+                    } else {
+                        // move caret to beginning of comment/gem
+                        nextLoc = new TranscriptElementLocation(currentLocation.transcriptElementIndex(), "", 0);
+                    }
+                } else {
+                    nextLoc = new TranscriptElementLocation(currentLocation.transcriptElementIndex() - 1, null, 0);
+                    if(nextLoc.transcriptElementIndex() < 0) {
+                        nextLoc = new TranscriptElementLocation(-2, null, 0);
+                    }
+                }
+            }
+            if(nextLoc.valid()) {
+                final int newDot = sessionLocationToCharPos(nextLoc);
+                if(newDot >= 0) {
+                    setCaretPosition(newDot);
+                } else {
+                    int prevValidIdx = getPrevValidIndex(getCaretPosition() - 1, false);
+                    if(prevValidIdx >= 0) {
+                        setCaretPosition(prevValidIdx);
+                    } else {
+                        setCaretPosition(0);
+                    }
+                }
+            } else {
+                int prevValidIdx = getPrevValidIndex(getCaretPosition() - 1, false);
+                if(prevValidIdx >= 0) {
+                    setCaretPosition(prevValidIdx);
+                } else {
+                    setCaretPosition(0);
+                }
+            }
+        } else {
+            int prevValidIdx = getPrevValidIndex(getCaretPosition() - 1, false);
+            if(prevValidIdx >= 0) {
+                setCaretPosition(prevValidIdx);
+            } else {
+                setCaretPosition(0);
+            }
+        }
     }
 
     /**
-     * Removes an attribute from the "not traversable" set
+     * Runs when a record moves
      *
-     * @param attributeKey the attribute to be removed
+     * @param editorEvent the event that moves the record
      */
-    public void removeNotTraversableAttribute(String attributeKey) {
-        notTraversableAttributes.remove(attributeKey);
+    private void onRecordMoved(EditorEvent<EditorEventType.RecordMovedData> editorEvent) {
+        // Record caret pos
+        int caretPos = getCaretPosition();
+
+        // Move the records in the doc
+        var data = editorEvent.data();
+        getTranscriptDocument().moveRecord(data.fromRecordIndex(), data.toRecordIndex(), data.fromElementIndex(), data.toElementIndex());
     }
 
+    /**
+     * Runs when the speaker for a record changes
+     *
+     * @param editorEvent the event that changes the speaker
+     */
+    private void onSpeakerChanged(EditorEvent<EditorEventType.SpeakerChangedData> editorEvent) {
+        var data = editorEvent.data();
+        // Update the speaker on the separator in the doc
+        final TranscriptElementLocation caretLoc = getTranscriptEditorCaret().getCurrentLocation();
+        getTranscriptEditorCaret().freeze();
+        getTranscriptDocument().onChangeSpeaker(data.record());
+        getTranscriptEditorCaret().unfreeze();
+        // Set the caret position back to where it was
+        final int newDot = sessionLocationToCharPos(caretLoc);
+        if(newDot >= 0) {
+            setCaretPosition(newDot);
+        }
+    }
+
+    /**
+     * Runs when the data for a tier changes
+     *
+     * @param editorEvent the event that changes the tiers data
+     */
+    private void onTierDataChanged(EditorEvent<EditorEventType.TierChangeData> editorEvent) {
+        TranscriptDocument doc = getTranscriptDocument();
+        Tier<?> changedTier = editorEvent.data().tier();
+        // update media segment changes as they occur
+        boolean isMediaSegmentTier = changedTier.getDeclaredType().equals(MediaSegment.class);
+        if (!isMediaSegmentTier && editorEvent.getData().get().valueAdjusting()) return;
+
+        boolean isAlignmentTier = SystemTierType.PhoneAlignment.getName().equals(changedTier.getName());
+        if(isAlignmentTier) return;
+
+        if (errorUnderlineHighlights.containsKey(changedTier)) {
+            getHighlighter().removeHighlight(errorUnderlineHighlights.get(changedTier));
+            errorUnderlineHighlights.remove(changedTier);
+        }
+
+        int start = -1;
+        int end = -1;
+
+        if (changedTier.isUnvalidated()) {
+            int recordIndex = doc.getSession().getRecordPosition(editorEvent.data().record());
+            if (recordIndex < 0) return;
+            TranscriptDocument.StartEnd se = doc.getTierContentStartEnd(recordIndex, changedTier.getName());
+            start = se.start() + changedTier.getUnvalidatedValue().getParseError().getErrorOffset();
+            end = se.start() + changedTier.getUnvalidatedValue().getValue().length();
+        }
+
+        final TranscriptElementLocation caretLoc = getTranscriptEditorCaret().getCurrentLocation();
+        final int currentDot = getTranscriptEditorCaret().getDot();
+
+        if(PrefHelper.isDebugMode()) {
+            LogUtil.info("Updating tier text: " + changedTier.getName());
+        }
+        boolean wasCaretFrozen = getTranscriptEditorCaret().isFreezeCaret();
+        getTranscriptEditorCaret().freeze();
+        // Update the changed tier data in the doc
+        getTranscriptDocument().onTierDataChanged(editorEvent.data().record(), changedTier);
+        final int newDot = sessionLocationToCharPos(caretLoc);
+        getTranscriptDocument().setBypassDocumentFilter(true);
+        getTranscriptEditorCaret().setDot(newDot, true);
+        getTranscriptDocument().setBypassDocumentFilter(false);
+        if (!wasCaretFrozen) {
+            getTranscriptEditorCaret().unfreeze();
+        }
+
+        if (changedTier.isUnvalidated()) {
+            try {
+                var errorUnderlineHighlight = getHighlighter().addHighlight(start, end, new ErrorUnderlinePainter());
+                errorUnderlineHighlights.put(changedTier, errorUnderlineHighlight);
+            } catch (BadLocationException e) {
+                LogUtil.warning(e);
+            }
+        }
+    }
+
+    /**
+     * Changes the speaker of a given record to a given participant
+     *
+     * @param data a record containing the record and the participant that will become the new speaker
+     */
+    public void changeSpeaker(RecordParticipant data) {
+        ChangeSpeakerEdit edit = new ChangeSpeakerEdit(getSession(), eventManager, data.record, data.participant);
+        undoSupport.postEdit(edit);
+    }
+
+    /**
+     * Changes the data in a given generic tier if the provided data is different
+     *
+     * @param genericTier the generic tier that the data is changing for
+     * @param newData     the possible new data for the tier
+     */
+    public void genericDataChanged(Tier<?> genericTier, String newData) {
+        TranscriptDocument doc = getTranscriptDocument();
+        String transcriber = dataModel.getTranscriber().getUsername();
+
+        Tier dummy = SessionFactory.newFactory().createTier("dummy", genericTier.getDeclaredType());
+        dummy.setFormatter(genericTier.getFormatter());
+        dummy.setText(newData);
+
+        if (doc.getTierText(genericTier, transcriber).equals(doc.getTierText(dummy, transcriber))) return;
+
+        SwingUtilities.invokeLater(() -> {
+            getUndoSupport().beginUpdate();
+
+            if (genericTier.getDeclaredType() == TranscriptDocument.Languages.class) {
+                Tier<TranscriptDocument.Languages> languagesTier = (Tier<TranscriptDocument.Languages>) dummy;
+                if (languagesTier.hasValue()) {
+                    SessionLanguageEdit edit = new SessionLanguageEdit(getSession(), eventManager, languagesTier.getValue().languageList());
+                    getUndoSupport().postEdit(edit);
+                }
+            } else if (genericTier.getDeclaredType() == LocalDate.class) {
+                Tier<LocalDate> dateTier = (Tier<LocalDate>) dummy;
+                if (dateTier.hasValue()) {
+                    SessionDateEdit edit = new SessionDateEdit(getSession(), getEventManager(), dateTier.getValue(), getSession().getDate());
+                    undoSupport.postEdit(edit);
+                }
+            }
+
+            TierEdit<?> edit = new TierEdit(getSession(), eventManager, null, genericTier, dummy.getValue());
+            edit.setValueAdjusting(false);
+            getUndoSupport().postEdit(edit);
+            getUndoSupport().endUpdate();
+        });
+    }
+
+    /**
+     * Shows the specified tiers (and moves the caret if needed)
+     *
+     * @param data the data from the tier view changed event
+     */
+    public void showTier(EditorEventType.TierViewChangedData data) {
+        var doc = getTranscriptDocument();
+
+        final TranscriptElementLocation startLocation = getTranscriptEditorCaret().getCurrentLocation();
+
+        for (int i = 0; i < data.tierNames().size(); i++) {
+            var tierName = data.tierNames().get(i);
+            var viewIndex = data.viewIndices().get(i);
+            doc.addTier(tierName, viewIndex, record -> record.getTier(tierName));
+        }
+
+        // Correct caret
+        if (startLocation.valid()) {
+            final int charPos = sessionLocationToCharPos(startLocation);
+            if (charPos >= 0) {
+                setCaretPosition(charPos);
+            }
+        }
+    }
+
+    /**
+     * Updates the fonts of the specified tiers
+     *
+     * @param data the data from the tier view changed event
+     */
+    public void tierFontOrNameChanged(EditorEventType.TierViewChangedData data) {
+        TranscriptDocument doc = getTranscriptDocument();
+        final TranscriptElementLocation startLocation = getTranscriptEditorCaret().getCurrentLocation();
+
+        getTranscriptEditorCaret().freeze();
+        for (var tviIdx: data.viewIndices()) {
+            final var tvi = data.newTierView().get(tviIdx);
+            final var oldTvi = data.oldTierView().get(tviIdx);
+            doc.removeTier(oldTvi.getTierName());
+            doc.addTier(tvi.getTierName(), data.newTierView().indexOf(tvi), record -> record.getTier(tvi.getTierName()));
+        }
+        getTranscriptEditorCaret().unfreeze();
+
+        if(startLocation.valid()) {
+            final int newPos = sessionLocationToCharPos(startLocation);
+            if(newPos >= 0) {
+                setCaretPosition(newPos);
+            }
+        }
+    }
+
+    /**
+     * Changes the data in a given tier if the provided data is different
+     *
+     * @param record  the record that the tier belongs to
+     * @param tier    the tier that the data is changing for
+     * @param newData the possible new data for the tier
+     */
+    public void changeTierData(Record record, Tier<?> tier, String newData) {
+        TranscriptDocument doc = getTranscriptDocument();
+        String transcriber = dataModel.getTranscriber().getUsername();
+
+        Tier<?> dummy = SessionFactory.newFactory().createTier("dummy", tier.getDeclaredType());
+        if(tier.getDeclaredType() == MediaSegment.class) {
+            // fix - remove dots from beginning of media segment and end
+            newData = newData.substring(1, newData.length()-1);
+        }
+        dummy.setText(newData);
+
+        if (tier.getDeclaredType() == MediaSegment.class) return;
+        if (doc.getTierText(tier, transcriber).equals(doc.getTierText(dummy, transcriber))) return;
+
+        if(PrefHelper.isDebugMode()) {
+            LogUtil.info("Changing tier data for " + tier.getName() + " to " + newData);
+        }
+
+//        SwingUtilities.invokeLater(() -> {
+        TierEdit<?> edit = new TierEdit(getSession(), eventManager, dataModel.getTranscriber(), record, tier, dummy.getValue());
+        edit.setValueAdjusting(false);
+        getUndoSupport().postEdit(edit);
+//        });
+    }
+
+    /**
+     * Changes the data in a given comment if the provided data is different
+     *
+     * @param comment the comment that the data is changing for
+     * @param newData the possible new data for the tier
+     */
+    public void commentDataChanged(Comment comment, String newData) {
+        Tier<TierData> dummy = SessionFactory.newFactory().createTier("dummy", TierData.class);
+        dummy.setText(newData);
+
+        String transcriber = dataModel.getTranscriber().getUsername();
+        if (comment.getValue().toString().equals(getTranscriptDocument().getTierText(dummy, transcriber))) return;
+
+//        SwingUtilities.invokeLater(() -> {
+        ChangeCommentEdit edit = new ChangeCommentEdit(getSession(), eventManager, comment, dummy.getValue());
+        getUndoSupport().postEdit(edit);
+//        });
+    }
+
+    /**
+     * Changes the data in a given gem if the provided data is different
+     *
+     * @param gem     the gem that the data is changing for
+     * @param newData the possible new data for the tier
+     */
+    public void gemDataChanged(Gem gem, String newData) {
+
+        if (gem.getLabel().equals(newData)) return;
+
+//        SwingUtilities.invokeLater(() -> {
+        ChangeGemEdit edit = new ChangeGemEdit(getSession(), eventManager, gem, newData);
+        getUndoSupport().postEdit(edit);
+//        });
+    }
+
+    /**
+     * Runs when the "current record" changes
+     *
+     * @param editorEvent the event that says the current record haas changed
+     */
+    private void onRecordChanged(EditorEvent<EditorEventType.RecordChangedData> editorEvent) {
+        TranscriptDocument doc = getTranscriptDocument();
+
+        final TranscriptElementLocation currentLocation = getTranscriptEditorCaret().getCurrentLocation();
+        // commit any changes
+        getTranscriptEditorCaret().freeze();
+        commitChanges(getCaretPosition());
+        // Update the single record index in the doc
+        doc.setSingleRecordIndex(editorEvent.data().recordIndex());
+        getTranscriptEditorCaret().unfreeze();
+
+        // set dot to start of currently selected record tier
+        if(editorEvent.source() != this && currentLocation.transcriptElementIndex() >= 0) {
+            final int transcriptElementIndex = editorEvent.data().elementIndex();
+            final TranscriptElementLocation newLocation = new TranscriptElementLocation(transcriptElementIndex,
+                    currentLocation.tier(), 0);
+            final int dot = sessionLocationToCharPos(newLocation);
+            if (dot >= 0) {
+                setCaretPosition(dot);
+            }
+        }
+
+        // If it's currently in single record view fire the appropriate event
+        if (doc.getSingleRecordView()) {
+            final EditorEvent<Void> e = new EditorEvent<>(recordChangedInSingleRecordMode, this, null);
+            eventManager.queueEvent(e);
+
+            // update highlights for the new record
+            updateSelectionHighlights();
+
+            return;
+        }
+
+        // If the transcript editor is currently in focus, stop here
+        if (hasFocus()) return;
+
+        try {
+            // Get rects for the start and end positions of the record
+            int recordStartPos = doc.getRecordStart(editorEvent.data().recordIndex());
+            int recordEndPos = doc.getRecordEnd(editorEvent.data().recordIndex());
+            var startRect = modelToView2D(recordStartPos);
+            var endRect = modelToView2D(recordEndPos);
+
+            // Create a rect that contains the whole record
+            Rectangle scrollToRect = new Rectangle((int) startRect.getMinX(), (int) startRect.getMinY(), (int) (endRect.getMaxX() - startRect.getMinX()), (int) (endRect.getMaxY() - startRect.getMinY()));
+            // Scroll to a point where that new rect is visible
+            super.scrollRectToVisible(scrollToRect);
+        } catch (BadLocationException e) {
+            LogUtil.severe(e);
+        }
+    }
+
+    /**
+     * Moves the specified tiers (and the caret if needed)
+     *
+     * @param data the data from the tier view changed event
+     */
+    public void moveTier(EditorEventType.TierViewChangedData data) {
+
+        TranscriptDocument doc = getTranscriptDocument();
+
+        final TranscriptElementLocation startLocation = getTranscriptEditorCaret().getCurrentLocation();
+        // Move tier in doc
+        getTranscriptEditorCaret().freeze();
+        for (String tierName : data.tierNames()) {
+            int newIdx = data.viewIndices().get(1);
+            doc.removeTier(tierName);
+            doc.addTier(tierName, newIdx, record -> record.getTier(tierName));
+        }
+        doc.updateGlobalParagraphAttributes();
+        getTranscriptEditorCaret().unfreeze();
+
+        // Correct caret
+        if (startLocation.valid()) {
+            final int charPos = sessionLocationToCharPos(startLocation);
+            if (charPos >= 0) {
+                setCaretPosition(charPos);
+            }
+        }
+    }
+
+    /**
+     * Hides the specified tiers (and moves the caret if needed)
+     *
+     * @param data the data from the tier view changed event
+     */
+    public void hideTier(EditorEventType.TierViewChangedData data) {
+        TranscriptDocument doc = getTranscriptDocument();
+
+        List<String> hiddenTiersNames = data.tierNames();
+
+        final TranscriptElementLocation startLocation = getTranscriptEditorCaret().getCurrentLocation();
+        boolean caretInHiddenTier = false;
+        int nextParagraphIndex = -1;
+        if (startLocation.valid()) {
+            final int caretParagraphIndex = doc.findParagraphElementIndexForSessionElementIndex(startLocation.transcriptElementIndex());
+            nextParagraphIndex = caretParagraphIndex < doc.getDefaultRootElement().getElementCount() ? caretParagraphIndex + 1 : caretParagraphIndex;
+            final String caretTier = startLocation.tier();
+            caretInHiddenTier = caretTier != null && hiddenTiersNames.contains(caretTier);
+        }
+
+        getTranscriptEditorCaret().freeze();
+        for (String tierName : hiddenTiersNames) {
+            doc.removeTier(tierName);
+        }
+        getTranscriptEditorCaret().unfreeze();
+
+        // Caret in record / tier
+        if (caretInHiddenTier) {
+            final Element nextParagraph = doc.getDefaultRootElement().getElement(nextParagraphIndex);
+            int newPos = nextParagraph.getStartOffset();
+            for (int i = 0; i < nextParagraph.getElementCount(); i++) {
+                final Element elem = nextParagraph.getElement(i);
+                final AttributeSet attrs = elem.getAttributes();
+                if (!TranscriptStyleConstants.isNotEditable(attrs)) {
+                    newPos = elem.getStartOffset();
+                    break;
+                }
+            }
+            setCaretPosition(newPos);
+        } else {
+            final int charPos = sessionLocationToCharPos(startLocation);
+            if (charPos >= 0) {
+                setCaretPosition(charPos);
+            }
+        }
+    }
+
+    /**
+     * Runs when the loaded session changes
+     *
+     * @param editorEvent the event that changes the session
+     */
+    private void onSessionChanged(EditorEvent<Session> editorEvent) {
+
+    }
+
+    /**
+     * Runs when any changes are made to the tier view
+     *
+     * @param editorEvent the event that made the changes to the tier view
+     */
+    private void onTierViewChanged(EditorEvent<EditorEventType.TierViewChangedData> editorEvent) {
+        var changeType = editorEvent.data().changeType();
+        final Runnable runnable = switch (changeType) {
+            case RELOAD -> () -> getTranscriptDocument().reload();
+            case MOVE_TIER -> () -> {
+                moveTier(editorEvent.data());
+            };
+            case DELETE_TIER, HIDE_TIER -> () -> {
+                hideTier(editorEvent.data());
+                recalculateTierLabelWidth();
+            };
+            case ADD_TIER, SHOW_TIER -> () -> {
+                showTier(editorEvent.data());
+                recalculateTierLabelWidth();
+            };
+            case TIER_NAME_CHANGE, TIER_FONT_CHANGE -> () -> {
+                tierFontOrNameChanged(editorEvent.data());
+                recalculateTierLabelWidth();
+            };
+            default -> () -> {
+                LogUtil.info("Unhandled tier view change type: " + changeType);
+            };
+        };
+        if (SwingUtilities.isEventDispatchThread()) {
+            runnable.run();
+        } else {
+            SwingUtilities.invokeLater(runnable);
+        }
+    }
+    // endregion
+
+    // region highlighters
+    /**
+     * Update error highlights
+     */
+    private void updateErrorHighlights() {
+        TranscriptDocument doc = getTranscriptDocument();
+        for (int i = 0; i < doc.getDefaultRootElement().getElementCount(); i++) {
+            final Element elem = doc.getDefaultRootElement().getElement(i);
+            final AttributeSet attrs = elem.getAttributes();
+            final String elementType = TranscriptStyleConstants.getElementType(attrs);
+            if (elementType == null) continue;
+            Tier<?> tier = switch (elementType) {
+                case TranscriptStyleConstants.ELEMENT_TYPE_RECORD -> TranscriptStyleConstants.getTier(attrs);
+                case TranscriptStyleConstants.ELEMENT_TYPE_GENERIC -> TranscriptStyleConstants.getGenericTier(attrs);
+                default -> null;
+            };
+            if (tier == null) continue;
+            UnvalidatedValue uv = null;
+            boolean isBlindMode = getDataModel().getTranscriber() != Transcriber.VALIDATOR;
+            if (tier.isBlind() && isBlindMode) {
+                if (tier.isBlindTranscriptionUnvalidated(getDataModel().getTranscriber().getUsername())) {
+                    uv = tier.getBlindUnvalidatedValue(getDataModel().getTranscriber().getUsername());
+                } else {
+                    if (tier.isUnvalidated()) {
+                        uv = tier.getUnvalidatedValue();
+                    }
+                }
+            } else {
+                uv = tier.isUnvalidated() ? tier.getUnvalidatedValue() : null;
+            }
+
+            final Record record = TranscriptStyleConstants.getRecord(attrs);
+            final int recordIdx = record != null ? getSession().getRecordPosition(record) : -1;
+            if (uv != null) {
+                TranscriptDocument.StartEnd startEnd = switch (elementType) {
+                    case TranscriptStyleConstants.ELEMENT_TYPE_RECORD ->
+                            doc.getTierContentStartEnd(recordIdx, tier.getName());
+                    case TranscriptStyleConstants.ELEMENT_TYPE_GENERIC -> doc.getGenericContentStartEnd(tier);
+                    default -> new TranscriptDocument.StartEnd(-1, -1);
+                };
+                if (startEnd.valid()) {
+                    try {
+                        final int startIdx = uv.getParseError().getErrorOffset() >= 0 ? startEnd.start() + uv.getParseError().getErrorOffset() : startEnd.start();
+                        var errorUnderlineHighlight = getHighlighter().addHighlight(startIdx, startEnd.end(), new ErrorUnderlinePainter());
+                        errorUnderlineHighlights.put(tier, errorUnderlineHighlight);
+                    } catch (BadLocationException e) {
+                        LogUtil.warning(e);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Underlines the given document element
+     *
+     * @param elem the element to underline
+     */
+    private void underlineElement(Element elem) {
+        try {
+            removeCurrentUnderline();
+            // get element text
+            String text = elem.getDocument().getText(elem.getStartOffset(), elem.getEndOffset() - elem.getStartOffset());
+            // special case for labels
+            if (text.startsWith("\t")) {
+                currentUnderline = getHighlighter().addHighlight(elem.getStartOffset() + 1, elem.getEndOffset(), underlinePainter);
+            } else {
+                currentUnderline = getHighlighter().addHighlight(elem.getStartOffset(), elem.getEndOffset(), underlinePainter);
+            }
+            repaint();
+        } catch (BadLocationException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    /**
+     * Removes the current underline
+     */
+    private void removeCurrentUnderline() {
+        if (currentUnderline != null) {
+            getHighlighter().removeHighlight(currentUnderline);
+            currentUnderline = null;
+            repaint();
+        }
+    }
+
+    /**
+     * Sets the box selection to the specified bounds
+     *
+     * @param bounds a touple containing the upper and lower bounds positions
+     */
+    public void boxSelectBounds(TranscriptDocument.StartEnd bounds) {
+        try {
+            removeCurrentBoxSelect();
+            currentBoxSelect = getHighlighter().addHighlight(bounds.start(), bounds.end(), boxSelectPainter);
+        } catch (BadLocationException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    /**
+     * Removes the current box select
+     */
+    public void removeCurrentBoxSelect() {
+        if (currentBoxSelect != null) {
+            getHighlighter().removeHighlight(currentBoxSelect);
+            currentBoxSelect = null;
+        }
+    }
+
+    private void addHighlightForSelection(SessionEditorSelection selection) {
+        Highlighter.HighlightPainter painter = selection.getExtension(Highlighter.HighlightPainter.class);
+        if (painter == null) {
+            painter = new DefaultHighlighter.DefaultHighlightPainter(UIManager.getColor("TextArea.selectionBackground"));
+        }
+
+        final Transcript.Element transcriptElement = getSession().getTranscript().getElementAt(selection.getElementIndex());
+        if (transcriptElement.isRecord()) {
+            final int recordIndex = getSession().getTranscript().getRecordIndex(selection.getElementIndex());
+            int tierStart = getTranscriptDocument().getTierContentStart(recordIndex, selection.getTierName());
+            if (tierStart == -1) return;
+            try {
+                var selectionHighlight = getHighlighter().addHighlight(selection.getRange().getFirst() + tierStart, selection.getRange().getLast() + tierStart + 1, painter);
+                selectionHighlightList.add(selectionHighlight);
+                selectionMap.put(selection, selectionHighlight);
+            } catch (BadLocationException e) {
+                LogUtil.warning(e);
+            }
+        } else if (transcriptElement.isComment()) {
+            final Comment comment = transcriptElement.asComment();
+            final TranscriptDocument.StartEnd commentRange = getTranscriptDocument().getCommentContentStartEnd(comment);
+            if (commentRange.valid()) {
+                try {
+                    var selectionHighlight = getHighlighter().addHighlight(commentRange.start() + selection.getRange().getFirst(), commentRange.start() + selection.getRange().getLast() + 1, painter);
+                    selectionHighlightList.add(selectionHighlight);
+                    selectionMap.put(selection, selectionHighlight);
+                } catch (BadLocationException e) {
+                    LogUtil.warning(e);
+                }
+            }
+        } else if (transcriptElement.isGem()) {
+            final Gem gem = transcriptElement.asGem();
+            final TranscriptDocument.StartEnd gemRange = getTranscriptDocument().getGemContentStartEnd(gem);
+            if (gemRange.valid()) {
+                try {
+                    var selectionHighlight = getHighlighter().addHighlight(gemRange.start() + selection.getRange().getFirst(), gemRange.start() + selection.getRange().getLast() + 1, painter);
+                    selectionHighlightList.add(selectionHighlight);
+                    selectionMap.put(selection, selectionHighlight);
+                } catch (BadLocationException e) {
+                    LogUtil.warning(e);
+                }
+            }
+        }
+    }
+
+    private void updateSelectionHighlights() {
+        if(!isSingleRecordView()) return;
+
+        // clear old highlights
+        for(var highlight:selectionHighlightList) {
+            getHighlighter().removeHighlight(highlight);
+        }
+        selectionHighlightList.clear();
+        selectionMap.clear();
+
+        // get selections for the currently display transcript elements
+        final TranscriptDocument doc = getTranscriptDocument();
+        final Set<Integer> selectedTranscriptElementIndices = new HashSet<>();
+        for(int i = 0; i < doc.getDefaultRootElement().getElementCount(); i++) {
+            final Element elem = doc.getDefaultRootElement().getElement(i);
+            final AttributeSet attrs = elem.getElementCount() > 0 ? elem.getElement(0).getAttributes() : new SimpleAttributeSet();
+            final String elementType = TranscriptStyleConstants.getElementType(attrs);
+            if(elementType == null) continue;
+            if(TranscriptStyleConstants.ELEMENT_TYPE_RECORD.equals(elementType)) {
+                final Record record = TranscriptStyleConstants.getRecord(attrs);
+                if(record == null) continue;
+                final int elementIndex = getSession().getTranscript().getElementIndex(record);
+                if(elementIndex < 0) continue;
+                selectedTranscriptElementIndices.add(elementIndex);
+            } else if(TranscriptStyleConstants.ELEMENT_TYPE_GEM.equals(elementType)) {
+                final Gem gem = TranscriptStyleConstants.getGem(attrs);
+                if(gem == null) continue;
+                final int elementIndex = getSession().getTranscript().getElementIndex(gem);
+                if(elementIndex < 0) continue;
+                selectedTranscriptElementIndices.add(elementIndex);
+            } else if(TranscriptStyleConstants.ELEMENT_TYPE_COMMENT.equals(elementType)) {
+                final Comment comment = TranscriptStyleConstants.getComment(attrs);
+                if(comment == null) continue;
+                final int elementIndex = getSession().getTranscript().getElementIndex(comment);
+                if(elementIndex < 0) continue;
+                selectedTranscriptElementIndices.add(elementIndex);
+            }
+        }
+
+        for(int elementIndex:selectedTranscriptElementIndices) {
+            selectionModel.getSelectionsForElement(elementIndex).forEach(this::addHighlightForSelection);
+        }
+    }
+    // endregion
+
+    // region callout
+    /**
+     * Get the current callout window (if any)
+     *
+     * @return the current callout window, null if none
+     */
+    public CalloutWindow getCurrentCallout() {
+        return this.currentCallout.get();
+    }
+
+    /**
+     * Set the current callout window
+     *
+     * @param callout
+     */
+    public void setCurrentCallout(CalloutWindow callout) {
+        this.currentCallout.set(callout);
+    }
+
+    /**
+     * Show a callout window with the provided contents.
+     * If a callout is already shown, it will be disposed.
+     *
+     * @param modal
+     * @param content
+     * @param sideOfWindow
+     * @param pointAtRect
+     */
+    public void showCallout(boolean modal, JComponent content, int sideOfWindow, Rectangle pointAtRect) {
+        hideCallout();
+
+        final CalloutWindow callout = CalloutWindow.showCallout(CommonModuleFrame.getCurrentFrame(),
+                modal, content, sideOfWindow, pointAtRect);
+        setCurrentCallout(callout);
+    }
+
+    /**
+     * Show a callout window with the provided contents.
+     * If a callout is already shown, it will be disposed.
+     *
+     * @param modal
+     * @param content
+     * @param sideOfWindow
+     * @param pointAtRect
+     *
+     * @return the callout window
+     */
+    public CalloutWindow showNonFocusableCallout(boolean modal, JComponent content, int sideOfWindow, Rectangle pointAtRect) {
+        hideCallout();
+
+        final CalloutWindow callout = CalloutWindow.showNonFocusableCallout(CommonModuleFrame.getCurrentFrame(),
+                content, sideOfWindow, pointAtRect);
+        setCurrentCallout(callout);
+        return callout;
+    }
+
+    /**
+     * Hide current callout window
+     */
+    public void hideCallout() {
+        final CalloutWindow currentCallout = this.currentCallout.get();
+        if (currentCallout != null && currentCallout.isVisible()) {
+            currentCallout.setVisible(false);
+            currentCallout.dispose();
+        }
+    }
+
+    /**
+     * Show ipa input map as a callout pointing at current cursor location
+     *
+     */
+    private void showInputCallout() {
+        final CalloutWindow currentCallout = this.currentCallout.get();
+        if(currentCallout != null) {
+            currentCallout.dispose();
+        }
+
+        final IPAMapGridContainer chatMap = new IPAMapGridContainer();
+        for(var ipaGrid: ChatGrids.getInstance().loadGrids().getGrid()) {
+            chatMap.addGrid(ipaGrid);
+        }
+        chatMap.setFont(FontPreferences.getTierFont().deriveFont(FontPreferences.getDefaultFontSize() +
+                PrefHelper.getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0.0f)));
+
+        final IPAMapGridContainer ipaMap = new IPAMapGridContainer();
+        ipaMap.addDefaultGrids();
+        final Font ipaFont = FontPreferences.getTierFont().deriveFont(FontPreferences.getDefaultFontSize() +
+                PrefHelper.getFloat(TranscriptView.FONT_SIZE_DELTA_PROP, 0.0f));
+        ipaMap.setFont(ipaFont);
+
+        final AtomicReference<URL> currentDocUrl = new AtomicReference<>();
+        final IPAMapGridMouseListener gridMouseListener = new IPAMapGridMouseListener() {
+            @Override
+            public void mousePressed(Cell cell, MouseEvent me) {
+
+            }
+
+            @Override
+            public void mouseReleased(Cell cell, MouseEvent me) {
+
+            }
+
+            @Override
+            public void mouseClicked(Cell cell, MouseEvent me) {
+                final String text = cell.getText().replaceAll("◌", "");
+                final CellProp insertProp =
+                        cell.getProperty().stream().filter(p -> p.getName().equals("insert")).findFirst().orElse(null);
+                final String insertText = (insertProp != null ? insertProp.getContent() : "");
+
+                final List<Integer> markers = new ArrayList<>();
+                final StringBuilder sb = new StringBuilder();
+                if(insertText != null && !insertText.isBlank()) {
+                    for(int i = 0; i < insertText.length(); i++) {
+                        final char c = insertText.charAt(i);
+                        if(c == '$' && (i+1 < insertText.length() && insertText.charAt(i+1) == '$')) {
+                            markers.add(sb.length());
+                            i++;
+                        } else {
+                            sb.append(c);
+                        }
+                    }
+                } else {
+                    sb.append(text);
+                }
+
+                final String selectedText = TranscriptEditor.this.getSelectedText();
+                if(selectedText != null && !selectedText.isBlank()) {
+                    if(markers.size() == 1) {
+                        // insert selected text at marker
+                        sb.insert(markers.get(0), selectedText);
+                    } else if(markers.size() == 2) {
+                        // replace selected text between markers
+                        final int start = markers.get(0);
+                        final int end = markers.get(1);
+                        sb.replace(start, end, selectedText);
+                    }
+                }
+
+                // copy into system clipboard
+                final Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                final Transferable currentContents = clipboard.getContents(TranscriptEditor.this);
+                clipboard.setContents(new StringSelection(sb.toString()), TranscriptEditor.this);
+
+                final TranscriptElementLocation currentLocation = TranscriptEditor.this.getTranscriptEditorCaret().getCurrentLocation();
+                if(!currentLocation.valid()) return;
+
+                // insert into document
+                TranscriptEditor.this.paste();
+                final EditorAction<EditorEventType.TierChangeData> act = new EditorAction<>() {
+                    @Override
+                    public void eventOccurred(EditorEvent<EditorEventType.TierChangeData> ee) {
+                        if(ee.data().valueAdjusting()) return;
+                        if(markers.size() == 1) {
+                            // set caret position to first marker
+                            final int markerPos = TranscriptEditor.this.getCaretPosition() - sb.length() + markers.get(0);
+                        } else if(markers.size() == 2) {
+                            // set selection to markers
+                            final int start = TranscriptEditor.this.getCaretPosition() - sb.length() + markers.get(0);
+                            final int end = TranscriptEditor.this.getCaretPosition() - sb.length() + markers.get(1);
+                            TranscriptEditor.this.setSelectionStart(start);
+                            TranscriptEditor.this.setSelectionEnd(end);
+                        }
+                        TranscriptEditor.this.getEventManager().removeActionForEvent(EditorEventType.TierChange, this);
+                    }
+                };
+                TranscriptEditor.this.getEventManager().registerActionForEvent(
+                        EditorEventType.TierChange, act, EditorEventManager.RunOn.AWTEventDispatchThread);
+                TranscriptEditor.this.commitChanges(TranscriptEditor.this.getCaretPosition());
+                clipboard.setContents(currentContents, TranscriptEditor.this);
+            }
+
+            @Override
+            public void mouseEntered(Cell cell, MouseEvent me) {
+                final StringBuilder sb = new StringBuilder();
+                final CellProp nameProp = cell.getProperty().stream().filter(p -> p.getName().equalsIgnoreCase("name")).findFirst().orElse(null);
+                if(nameProp != null) {
+                    sb.append(nameProp.getContent());
+                }
+
+                final CellProp docProp = cell.getProperty().stream().filter(p -> p.getName().equalsIgnoreCase("doc")).findFirst().orElse(null);
+                if(docProp != null) {
+                    final String docUri = docProp.getContent();
+                    if(docUri != null && !docUri.isBlank()) {
+                        try {
+                            final URL docUrl = new URL(docUri);
+                            currentDocUrl.set(docUrl);
+
+                            sb.append(" (F2 for more info)");
+                        } catch (MalformedURLException e) {
+                            LogUtil.warning(e);
+                        }
+                    }
+                }
+
+                ((JComponent)me.getSource()).setToolTipText(sb.toString());
+            }
+
+            @Override
+            public void mouseExited(Cell cell, MouseEvent me) {
+
+            }
+        };
+
+        chatMap.addCellMouseListener(gridMouseListener);
+        ipaMap.addCellMouseListener(gridMouseListener);
+
+        try {
+
+            final Rectangle2D caretRect = modelToView2D(getCaretPosition());
+            final Point caretPoint = new Point((int)caretRect.getMinX(), (int)caretRect.getMinY());
+            SwingUtilities.convertPointToScreen(caretPoint, this);
+
+            // get font ascent at caret position
+            final FontMetrics fm = getFontMetrics(getFont());
+            final int fontAscent = fm.getAscent();
+            final Rectangle r = new Rectangle(caretPoint.x, caretPoint.y - fontAscent, (int)caretRect.getWidth(), (int)caretRect.getHeight() + fontAscent);
+
+//            final JPanel p = new JPanel(new BorderLayout());
+            final JTabbedPane tabbedPane = new JTabbedPane();
+            final JScrollPane chatScrollPane = new JScrollPane(chatMap);
+            tabbedPane.addTab("CHAT", chatScrollPane);
+            final JScrollPane scrollPane = new JScrollPane(ipaMap);
+            tabbedPane.addTab("IPA", scrollPane);
+            tabbedPane.setPreferredSize(new Dimension(tabbedPane.getPreferredSize().width, 500));
+            scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+            tabbedPane.setSelectedIndex(1);
+
+            final TranscriptElementLocation elementLocation = TranscriptEditor.this.getTranscriptEditorCaret().getCurrentLocation();
+            if(!elementLocation.valid()) return;
+            if(elementLocation.transcriptElementIndex() >= 0) {
+                final Transcript.Element transcriptElement = getSession().getTranscript().getElementAt(elementLocation.transcriptElementIndex());
+                if(transcriptElement.isRecord()) {
+                    final TierDescription td = getSession().getTier(elementLocation.tier());
+                    if(td.getDeclaredType() == Orthography.class) {
+                        tabbedPane.setSelectedIndex(0);
+                    }
+                }
+            }
+
+            final CalloutWindow window =
+                    CalloutWindow.showNonFocusableCallout(CommonModuleFrame.getCurrentFrame(), tabbedPane, SwingConstants.TOP, r);
+            window.setAlwaysOnTop(true);
+            this.currentCallout.set(window);
+
+            // escape closes window
+            final PhonUIAction<Void> closeAct = PhonUIAction.runnable(() -> {
+                window.setVisible(false);
+                window.dispose();
+
+            });
+            final AWTEventListener escListener = new AWTEventListener() {
+                @Override
+                public void eventDispatched(AWTEvent event) {
+                    if(event instanceof KeyEvent) {
+                        final KeyEvent ke = (KeyEvent)event;
+                        if(ke.getID() == KeyEvent.KEY_PRESSED && ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                            closeAct.actionPerformed(null);
+                        } else if(ke.getID() == KeyEvent.KEY_PRESSED && ke.getKeyCode() == KeyEvent.VK_F2) {
+                            if(currentDocUrl.get() != null) {
+                                try {
+                                    Desktop.getDesktop().browse(currentDocUrl.get().toURI());
+                                } catch (IOException | URISyntaxException e) {
+                                    LogUtil.warning(e);
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+            Toolkit.getDefaultToolkit().addAWTEventListener(escListener, AWTEvent.KEY_EVENT_MASK);
+
+            window.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    Toolkit.getDefaultToolkit().removeAWTEventListener(escListener);
+                }
+            });
+
+            // hide window when caret moves to a different tier
+            TranscriptEditor.this.addPropertyChangeListener("currentSessionLocation", new PropertyChangeListener() {
+                @Override
+                public void propertyChange(PropertyChangeEvent e) {
+                    if(window.isVisible()) {
+                        // if tier had changed
+                        final TranscriptElementLocation oldLoc = (TranscriptElementLocation)e.getOldValue();
+                        final TranscriptElementLocation newLoc = (TranscriptElementLocation)e.getNewValue();
+                        if(oldLoc != null && newLoc != null && (oldLoc.tier() != newLoc.tier() || oldLoc.transcriptElementIndex() != newLoc.transcriptElementIndex())) {
+                            window.setVisible(false);
+                            window.dispose();
+                            TranscriptEditor.this.removePropertyChangeListener("currentSessionLocation", this);
+                        } else {
+                            // move window to new caret position
+                            final Rectangle2D caretRect;
+                            try {
+                                caretRect = modelToView2D(getCaretPosition());
+                            } catch (BadLocationException ex) {
+                                return;
+                            }
+                            final Point caretPoint = new Point((int)caretRect.getMinX(), (int)caretRect.getMinY());
+                            SwingUtilities.convertPointToScreen(caretPoint, TranscriptEditor.this);
+                            // get font ascent at caret position
+                            final FontMetrics fm = getFontMetrics(getFont());
+                            final int fontAscent = fm.getAscent();
+                            final Rectangle r = new Rectangle(caretPoint.x, caretPoint.y - fontAscent, (int)caretRect.getWidth(), (int)caretRect.getHeight() + fontAscent);
+                            window.pointAtRect(SwingConstants.TOP, r);
+                        }
+                    }
+                }
+            });
+        } catch (BadLocationException e) {
+            LogUtil.warning(e);
+        }
+    }
+    // endregion
+
+    /**
+     * Setup context menu items on provided menu builder
+     *
+     * @param menuBuilder the menu builder to add the menu items to
+     */
+    void setupContextMenu(MenuBuilder menuBuilder) {
+        // add edit menu items
+        final Action cutAct = getActionMap().get(DefaultEditorKit.cutAction);
+        cutAct.putValue(Action.NAME, "Cut");
+        cutAct.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        menuBuilder.addItem(".", cutAct);
+
+        final Action copyAct = getActionMap().get(DefaultEditorKit.copyAction);
+        copyAct.putValue(Action.NAME, "Copy");
+        copyAct.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        menuBuilder.addItem(".", copyAct);
+
+        final Action pasteAct = getActionMap().get(DefaultEditorKit.pasteAction);
+        pasteAct.putValue(Action.NAME, "Paste");
+        pasteAct.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        menuBuilder.addItem(".", pasteAct);
+
+        menuBuilder.addSeparator(".", "edit");
+
+        // add show input dialog item
+        final PhonUIAction<Void> showInputAct = PhonUIAction.runnable(this::showInputCallout);
+        showInputAct.putValue(PhonUIAction.NAME, "Show input dialog");
+        showInputAct.putValue(PhonUIAction.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
+        menuBuilder.addItem(".", showInputAct);
+    }
+
+    /**
+     * Saves the changes made to the line the caret is currently on
+     */
+    public void saveCurrentLine() {
+        commitChanges(getCaretPosition());
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        // XXX background colors are not being drawn correctly on windows
+//        g2d.setRenderingHint(
+//                RenderingHints.KEY_TEXT_ANTIALIASING,
+//                RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+//        g2d.setRenderingHint(
+//                RenderingHints.KEY_RENDERING,
+//                RenderingHints.VALUE_RENDER_QUALITY);
+//
+//        TranscriptDocument doc = getTranscriptDocument();
+//        // Get the clip bounds of the current view
+//        Rectangle drawHere = g.getClipBounds();
+//
+//        // Fill the background with the appropriate color
+//        g.setColor(UIManager.getColor(TranscriptEditorUIProps.BACKGROUND));
+//        g.fillRect(0, drawHere.y, drawHere.width, drawHere.height);
+//
+//        // Fill the label column background with the appropriate color
+//        g.setColor(UIManager.getColor(TranscriptEditorUIProps.LABEL_BACKGROUND));
+//        FontMetrics fontMetrics = g.getFontMetrics(FontPreferences.getMonospaceFont().deriveFont(14.0f));
+//        final int labelColumnWidth = TranscriptViewFactory.LABEL_COLUMN_WIDTH;
+////        char[] template = new char[getTranscriptDocument().getLabelColumnWidth() + 1];
+////        Arrays.fill(template, ' ');
+////        int labelColWidth = fontMetrics.stringWidth(new String(template));
+//        Rectangle labelColRect = new Rectangle(0, 0, labelColumnWidth, getHeight());
+//        if (labelColRect.intersects(drawHere)) {
+//            g.fillRect(0, (int) drawHere.getMinY(), labelColumnWidth, drawHere.height);
+//        }
+//
+//        Element root = doc.getDefaultRootElement();
+//        if (root.getElementCount() == 0) return;
+//
+//        for (int i = 0; i < root.getElementCount(); i++) {
+//            Element elem = root.getElement(i);
+//            if (elem.getElementCount() == 0) continue;
+//            Element innerElem = elem.getElement(0);
+//            AttributeSet attrs = elem.getAttributes();
+//            String elementType = (String) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
+//            if (elementType != null) {
+//                var startEnd = new TranscriptDocument.StartEnd(-1, -1);
+//
+//                switch (elementType) {
+//                    case TranscriptStyleConstants.ELEMENT_TYPE_COMMENT -> {
+//                        g.setColor(UIManager.getColor(TranscriptEditorUIProps.COMMENT_BACKGROUND));
+//                        Comment comment = (Comment) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT);
+//                        startEnd = doc.getCommentContentStartEnd(comment);
+//                    }
+//                    case TranscriptStyleConstants.ELEMENT_TYPE_GEM -> {
+//                        g.setColor(UIManager.getColor(TranscriptEditorUIProps.GEM_BACKGROUND));
+//                        Gem gem = (Gem) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM);
+//                        startEnd = doc.getGemContentStartEnd(gem);
+//                    }
+//                    case TranscriptStyleConstants.ELEMENT_TYPE_GENERIC -> {
+//                        g.setColor(UIManager.getColor(TranscriptEditorUIProps.GENERIC_BACKGROUND));
+//                        Tier<?> genericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER);
+//                        startEnd = doc.getGenericContentStartEnd(genericTier);
+//                    }
+//                }
+//                if (!startEnd.valid()) continue;
+//                try {
+//                    var startRect = modelToView2D(startEnd.start());
+//                    var endRect = modelToView2D(startEnd.end());
+//                    if (startRect == null || endRect == null) continue;
+//                    var colorRect = new Rectangle(labelColumnWidth, (int) startRect.getMinY(), (int) (TranscriptViewFactory.PAGE_WIDTH - labelColumnWidth), (int) (endRect.getMaxY() - startRect.getMinY()));
+//                    if (!drawHere.intersects(colorRect)) continue;
+//                    g.fillRect((int) colorRect.getMinX(), (int) colorRect.getMinY(), (int) colorRect.getWidth(), (int) colorRect.getHeight());
+//                } catch (BadLocationException e) {
+//                    LogUtil.severe(e);
+//                }
+//            }
+//        }
+//
+//        g.setColor(UIManager.getColor(TranscriptEditorUIProps.SEPARATOR_LINE));
+//        int sepLineHeight = 1;
+//        int fontHeight = fontMetrics.getHeight();
+//
+//        float lineSpacing = StyleConstants.getLineSpacing(root.getElement(0).getAttributes());
+//        int sepLineOffset = (int) (((fontHeight * lineSpacing) + sepLineHeight) / 2);
+//        // For every element
+//        for (int i = 0; i < root.getElementCount(); i++) {
+//            Element elem = root.getElement(i);
+//            if (elem.getElementCount() == 0) continue;
+//            Element innerElem = elem.getElement(0);
+//            AttributeSet attrs = innerElem.getAttributes();
+//            // If it's a separator
+//            if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_SEPARATOR) != null) {
+//                try {
+//                    var sepRect = modelToView2D(innerElem.getStartOffset());
+//                    if (sepRect == null) continue;
+//                    boolean topVisible = sepRect.getMinY() >= drawHere.getMinY() && sepRect.getMinY() <= drawHere.getMaxY();
+//                    boolean bottomVisible = sepRect.getMaxY() >= drawHere.getMinY() && sepRect.getMaxY() <= drawHere.getMaxY();
+//                    // And it's onscreen
+//                    if (!topVisible && !bottomVisible) continue;
+//                    // Draw the separator line
+//                    g.fillRect(drawHere.x, ((int) sepRect.getMinY()) - sepLineOffset, drawHere.width, sepLineHeight);
+//                } catch (BadLocationException e) {
+//                    LogUtil.severe(e);
+//                }
+//            }
+//        }
+
+        super.paintComponent(g);
+
+        // to fix an issue where label views would repaint their content on some lines causing a 'bold' effect to occur
+        // label views clear their background before painting. We need to repaint our highlights here.
+        if (getHighlighter() != null) {
+            for (var highlight : getHighlighter().getHighlights()) {
+                if (highlight.getPainter() instanceof BoxSelectHighlightPainter || highlight.getPainter() instanceof ErrorUnderlinePainter
+                        || highlight.getPainter() instanceof HoverUnderlinePainter) {
+                    // calculate highlight bounds
+                    var start = highlight.getStartOffset();
+                    var end = highlight.getEndOffset();
+                    try {
+                        var startRect = modelToView2D(start);
+                        var endRect = modelToView2D(end);
+                        if (startRect == null || endRect == null) continue;
+                        var highlightRect = new Rectangle((int) startRect.getMinX(), (int) startRect.getMinY(), (int) (endRect.getMaxX() - startRect.getMinX()), (int) (endRect.getMaxY() - startRect.getMinY()));
+                        highlight.getPainter().paint(g, highlight.getStartOffset(), highlight.getEndOffset(), highlightRect, this);
+                    } catch (BadLocationException e) {
+                        getHighlighter().removeHighlight(highlight);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Removes editor actions for specific events
+     */
+    public void removeEditorActions() {
+        this.eventManager.removeActionForEvent(EditorEventType.SessionChanged, this::onSessionChanged);
+        this.eventManager.removeActionForEvent(EditorEventType.TierViewChanged, this::onTierViewChanged);
+        this.eventManager.removeActionForEvent(EditorEventType.RecordChanged, this::onRecordChanged);
+    }
+
+    /**
+     * Recalculates the width of the tier labels and updates all paragraph attributes
+     *
+     * @param additionalTierNames additional tier names to consider when recalculating the tier label width
+     */
+    public void recalculateTierLabelWidth(List<String> additionalTierNames) {
+        editorKit.invalidateTierLabelWidth(additionalTierNames);
+        getTranscriptDocument().updateGlobalParagraphAttributes();
+    }
+
+    /**
+     * Recalculates the width of the tier labels and updates all paragraph attributes
+     */
+    public void recalculateTierLabelWidth() {
+        recalculateTierLabelWidth(Collections.emptyList());
+    }
+
+    /**
+     * Loads the session on the document
+     */
+    public void loadSession() {
+        TranscriptDocument doc = getTranscriptDocument();
+        doc.setUndoSupport(undoSupport);
+        doc.setEventManager(eventManager);
+
+        doc.addDocumentPropertyChangeListener("populate", new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getNewValue() instanceof Boolean b) {
+                    if (!b) {
+                        // populate finished
+                        getEventManager().queueEvent(new EditorEvent<>(TranscriptEditor.transcriptDocumentPopulated, TranscriptEditor.this, null));
+                        doc.removeDocumentPropertyChangeListener(this);
+
+                        if(isSingleRecordView() && getSession().getRecordCount() > 0 && doc.getSingleRecordIndex() < 0) {
+                            doc.setSingleRecordIndex(0);
+                        }
+                    }
+                }
+            }
+        });
+        doc.setSession(getSession());
+        doc.addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                TranscriptDocument doc = getTranscriptDocument();
+                Element elem = doc.getCharacterElement(e.getOffset());
+                AttributeSet attrs = elem.getAttributes();
+                if (attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_SYLLABIFICATION) != null) {
+                    Record record = TranscriptStyleConstants.getRecord(attrs);
+                    int recordIndex = getSession().getRecordPosition(record);
+                    if (recordIndex < 0) return;
+                    Tier<?> tier = TranscriptStyleConstants.getTier(attrs);
+                    final TranscriptDocument.StartEnd startEnd = doc.getTierContentStartEnd(recordIndex, tier.getName());
+                    if (!startEnd.valid()) return;
+                    int tierEnd = startEnd.end();
+                    if (getCaretPosition() != tierEnd - 1) {
+                        SwingUtilities.invokeLater(() -> {
+                            setCaretPosition(getNextValidIndex(getCaret().getMark() + 1, false));
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+
+            }
+        });
+
+    }
+
+    // region IExtendable
     @Override
     public Set<Class<?>> getExtensions() {
         return extensionSupport.getExtensions();
@@ -2582,29 +2594,19 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
     public <T> T removeExtension(Class<T> cap) {
         return extensionSupport.removeExtension(cap);
     }
+    // endregion
 
+    // region ClipboardOwner
     @Override
     public void lostOwnership(Clipboard clipboard, Transferable contents) {
 
     }
 
-    /**
-     * A record that contains the data for session location change events
-     *
-     * @param oldLoc the previous session location
-     * @param newLoc the new session location
-     */
-    public record TranscriptLocationChangeData(TranscriptElementLocation oldLoc, TranscriptElementLocation newLoc) {
-
-        @Override
-        public String toString() {
-            return "TranscriptLocationChangeData{" +
-                    "oldLoc=" + oldLoc +
-                    ", newLoc=" + newLoc +
-                    '}';
-        }
-
+    @Override
+    public TransferHandler getTransferHandler() {
+        return new CustomTransferHandler();
     }
+    // endregion
 
     /**
      * The {@link Highlighter.HighlightPainter} that paints the error underlines
@@ -2798,51 +2800,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
                 hoverElem = null;
                 removeCurrentUnderline();
                 setCursor(Cursor.getDefaultCursor());
-            }
-        }
-    }
-
-    private void addHighlightForSelection(SessionEditorSelection selection) {
-        Highlighter.HighlightPainter painter = selection.getExtension(Highlighter.HighlightPainter.class);
-        if (painter == null) {
-            painter = new DefaultHighlighter.DefaultHighlightPainter(UIManager.getColor("TextArea.selectionBackground"));
-        }
-
-        final Transcript.Element transcriptElement = getSession().getTranscript().getElementAt(selection.getElementIndex());
-        if (transcriptElement.isRecord()) {
-            final int recordIndex = getSession().getTranscript().getRecordIndex(selection.getElementIndex());
-            int tierStart = getTranscriptDocument().getTierContentStart(recordIndex, selection.getTierName());
-            if (tierStart == -1) return;
-            try {
-                var selectionHighlight = getHighlighter().addHighlight(selection.getRange().getFirst() + tierStart, selection.getRange().getLast() + tierStart + 1, painter);
-                selectionHighlightList.add(selectionHighlight);
-                selectionMap.put(selection, selectionHighlight);
-            } catch (BadLocationException e) {
-                LogUtil.warning(e);
-            }
-        } else if (transcriptElement.isComment()) {
-            final Comment comment = transcriptElement.asComment();
-            final TranscriptDocument.StartEnd commentRange = getTranscriptDocument().getCommentContentStartEnd(comment);
-            if (commentRange.valid()) {
-                try {
-                    var selectionHighlight = getHighlighter().addHighlight(commentRange.start() + selection.getRange().getFirst(), commentRange.start() + selection.getRange().getLast() + 1, painter);
-                    selectionHighlightList.add(selectionHighlight);
-                    selectionMap.put(selection, selectionHighlight);
-                } catch (BadLocationException e) {
-                    LogUtil.warning(e);
-                }
-            }
-        } else if (transcriptElement.isGem()) {
-            final Gem gem = transcriptElement.asGem();
-            final TranscriptDocument.StartEnd gemRange = getTranscriptDocument().getGemContentStartEnd(gem);
-            if (gemRange.valid()) {
-                try {
-                    var selectionHighlight = getHighlighter().addHighlight(gemRange.start() + selection.getRange().getFirst(), gemRange.start() + selection.getRange().getLast() + 1, painter);
-                    selectionHighlightList.add(selectionHighlight);
-                    selectionMap.put(selection, selectionHighlight);
-                } catch (BadLocationException e) {
-                    LogUtil.warning(e);
-                }
             }
         }
     }
