@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/4.0.0-alpha.27/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_27.dmg" newVersion="4.0.0-alpha.27" newMediaFileId="macos" fileSize="387508583" md5Sum="c6faad9b30d29d00e1d371e96df71b6d" sha256Sum="ea99378c412ae96abb8949d7c389420737419a31c3234171fe88cae8e1b63123" bundledJre="macos-universal-17.0.6.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/4.0.0-alpha.28/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_28.dmg" newVersion="4.0.0-alpha.28" newMediaFileId="macos" fileSize="387508757" md5Sum="d1a6a374fa66b9221919d8c97feca841" sha256Sum="131395ae3d7ce95d9f4940307cfce198ad737d98d9deeedde6a5d52c46313438" bundledJre="macos-universal-17.0.6.tar.gz" archive="true" singleBundle="true">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
@@ -33,7 +33,7 @@ or one at a time as is traditional in Phon.
 **Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.27
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_27.dmg" newVersion="4.0.0-alpha.27" newMediaFileId="macos" fileSize="387508583" md5Sum="c6faad9b30d29d00e1d371e96df71b6d" sha256Sum="ea99378c412ae96abb8949d7c389420737419a31c3234171fe88cae8e1b63123" bundledJre="macos-universal-17.0.6.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_28.dmg" newVersion="4.0.0-alpha.28" newMediaFileId="macos" fileSize="387508757" md5Sum="d1a6a374fa66b9221919d8c97feca841" sha256Sum="131395ae3d7ce95d9f4940307cfce198ad737d98d9deeedde6a5d52c46313438" bundledJre="macos-universal-17.0.6.tar.gz" archive="true" singleBundle="true">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
@@ -66,7 +66,7 @@ or one at a time as is traditional in Phon.
 **Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.27
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_27.exe" newVersion="4.0.0-alpha.27" newMediaFileId="win64" fileSize="370460672" md5Sum="30ad45fb961199f88a58020c0882d207" sha256Sum="776276cfe0f6e16d208d185e9ef7aa6f9f17ba94178253e858095b3dab2e358a" bundledJre="windows-amd64-17.0.6.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_28.exe" newVersion="4.0.0-alpha.28" newMediaFileId="win64" fileSize="370460160" md5Sum="f885009f4352b132b27545938c40d35e" sha256Sum="cc5ab7eb9c6bef4bf3059b25f4e6b02b625d173bf780c2c41cf6405de1b143dd" bundledJre="windows-amd64-17.0.6.tar.gz" archive="false" singleBundle="false">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
@@ -99,7 +99,7 @@ or one at a time as is traditional in Phon.
 **Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.27
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_27.exe" newVersion="4.0.0-alpha.27" newMediaFileId="win64" fileSize="370460672" md5Sum="30ad45fb961199f88a58020c0882d207" sha256Sum="776276cfe0f6e16d208d185e9ef7aa6f9f17ba94178253e858095b3dab2e358a" bundledJre="windows-amd64-17.0.6.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_28.exe" newVersion="4.0.0-alpha.28" newMediaFileId="win64" fileSize="370460160" md5Sum="f885009f4352b132b27545938c40d35e" sha256Sum="cc5ab7eb9c6bef4bf3059b25f4e6b02b625d173bf780c2c41cf6405de1b143dd" bundledJre="windows-amd64-17.0.6.tar.gz" archive="false" singleBundle="false">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
@@ -132,7 +132,7 @@ or one at a time as is traditional in Phon.
 **Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.27
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_27.exe" newVersion="4.0.0-alpha.27" newMediaFileId="win64" fileSize="370460672" md5Sum="30ad45fb961199f88a58020c0882d207" sha256Sum="776276cfe0f6e16d208d185e9ef7aa6f9f17ba94178253e858095b3dab2e358a" bundledJre="windows-amd64-17.0.6.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_28.exe" newVersion="4.0.0-alpha.28" newMediaFileId="win64" fileSize="370460160" md5Sum="f885009f4352b132b27545938c40d35e" sha256Sum="cc5ab7eb9c6bef4bf3059b25f4e6b02b625d173bf780c2c41cf6405de1b143dd" bundledJre="windows-amd64-17.0.6.tar.gz" archive="false" singleBundle="false">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
@@ -165,7 +165,7 @@ or one at a time as is traditional in Phon.
 **Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.27
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_27.zip" newVersion="4.0.0-alpha.27" newMediaFileId="win64zip" fileSize="369205185" md5Sum="2b3b1d9ab534d3287f078b1d0d1e89ce" sha256Sum="3c7e15f09d3e10c0585350e9d5b9f728a8204e4ebb50e9d44ffe6e08783b8cdc" bundledJre="windows-amd64-17.0.6.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_28.zip" newVersion="4.0.0-alpha.28" newMediaFileId="win64zip" fileSize="369204424" md5Sum="1ca3076301af50c885ab56e43ce832be" sha256Sum="369c139295bbaf4d3a5b61e1cd9dd4ef9a071f22737399e88479ebdb53686bee" bundledJre="windows-amd64-17.0.6.tar.gz" archive="true" singleBundle="false">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
