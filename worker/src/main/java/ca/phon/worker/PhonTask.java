@@ -181,7 +181,8 @@ public abstract class PhonTask implements Runnable {
 	
 	protected void firePropertyChange(String prop, Object oldValue, Object newValue) {
 		if(oldValue == newValue) return;
-		
+
+		final PhonTaskListener[] listeners = this.listeners.toArray(new PhonTaskListener[0]);
 		for(PhonTaskListener l:listeners) {
 			l.propertyChanged(this, prop, oldValue, newValue);
 		}
@@ -189,7 +190,8 @@ public abstract class PhonTask implements Runnable {
 	
 	protected void fireStatusChange(TaskStatus oldStatus, TaskStatus newStatus) {
 		if(oldStatus == newStatus) return;
-		
+
+		final PhonTaskListener[] listeners = this.listeners.toArray(new PhonTaskListener[0]);
 		for(PhonTaskListener l:listeners) {
 			l.statusChanged(this, oldStatus, newStatus);
 		}
