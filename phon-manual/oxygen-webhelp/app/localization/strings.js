@@ -1,4 +1,9 @@
 var localization = new Array();
+localization["ask.me.anything"]="Ask me anything";
+localization["go.to.top"]="Go to top";
+localization["advanced_search_tooltip_title"]="Search Syntax Help";
+localization["reset_search_filters"]="Reset";
+localization["search_filters"]="Filters";
 localization["indexing_in_progress"]="The indexing process is in progress. Try again later.";
 localization["search_index_not_found"]="No content index found to execute the search query.";
 localization["index.terms.page.title"]="Index Terms";

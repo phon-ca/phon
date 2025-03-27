@@ -129,7 +129,3 @@
     font-style: italic;
 }
 
-div.note > span.note__title {
-    background-size: 16px 16px;
-    background: url('images/note.png') no-repeat !important;
-}

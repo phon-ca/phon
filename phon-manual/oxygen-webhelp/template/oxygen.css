@@ -120,8 +120,10 @@ a:hover{
 .wh_top_menu.activated-on-click ul li.active {
     background-color: #333;
 }
+.wh_top_menu ul ul li a:focus,
 .wh_top_menu ul ul li a:hover {
     background: #000;
+    color: #FFF;
 }
 .wh_top_menu ul ul li {
     border-top-color: #000;

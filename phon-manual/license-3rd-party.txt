@@ -57,9 +57,9 @@ xsl/dita/original/relpath_util.xsl                             					Apache-2.0 (
 Additional Third Party Code in standalone Oxygen WebHelp distribution:
 
 ../com.oxygenxml.common/lib/ant-contrib-1.0b3.jar              					Apache-2.0 (see ../com.oxygenxml.common/lib/ant.LICENSE.txt)
-../com.oxygenxml.common/lib/lucene-analyzers-common-4.7.2.jar   					Apache-2.0  with additional 3rd party licenses (see ../com.oxygenxml.common/lib/lucene.LICENSE.txt)     
-../com.oxygenxml.common/lib/lucene-analyzers-kuromoji-4.7.2.jar					Apache-2.0  with additional 3rd party licenses (see ../com.oxygenxml.common/lib/lucene.LICENSE.txt)
-../com.oxygenxml.common/lib/lucene-core-4.7.2.jar              					Apache-2.0  with additional 3rd party license (see ../com.oxygenxml.common/lib/lucene.LICENSE.txt)     
+../com.oxygenxml.common/lib/lucene-analysis-common-9.7.0.jar   					Apache-2.0  with additional 3rd party licenses (see ../com.oxygenxml.common/lib/lucene.LICENSE.txt)     
+../com.oxygenxml.common/lib/lucene-analysis-kuromoji-9.7.0.jar					Apache-2.0  with additional 3rd party licenses (see ../com.oxygenxml.common/lib/lucene.LICENSE.txt)
+../com.oxygenxml.common/lib/lucene-core-9.7.0.jar              					Apache-2.0  with additional 3rd party license (see ../com.oxygenxml.common/lib/lucene.LICENSE.txt)     
 ../com.oxygenxml.highlight/lib/xslthl-2.1.1.jar                					zlib/libpng License (see ../com.oxygenxml.highlight/lib/xslthl.LICENSE.txt)
 ../com.oxygenxml.common/lib/jakarta.activation-1.2.2.jar 						EDL 1.0 (see: ../com.oxygenxml.common/lib/jakarta.activation-1.2.2.jar/META-INF/LICENSE.md)
 ../com.oxygenxml.common/lib/jaxb-impl-2.3.3.jar 								EDL 1.0 (see: ../com.oxygenxml.common/lib/jaxb-impl-2.3.3/META-INF/LICENSE.md)
