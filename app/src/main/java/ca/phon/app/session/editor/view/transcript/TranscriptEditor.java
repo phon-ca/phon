@@ -296,14 +296,18 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
         PhonUIAction<Void> endAct = PhonUIAction.runnable(this::onPressedEnd);
         actionMap.put("pressedEnd", endAct);
 
-        // show ipa character map
+        // show input callout
         KeyStroke inputCallout = KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0);
         KeyStroke inputCalloutKs2 = KeyStroke.getKeyStroke(KeyEvent.VK_I, KeyEvent.CTRL_DOWN_MASK);
         inputMap.put(inputCallout, "showInputCallout");
         inputMap.put(inputCalloutKs2, "showInputCallout");
-
         PhonUIAction<Void> showInputCalloutAct = PhonUIAction.runnable(this::showInputCallout);
         actionMap.put("showInputCallout", showInputCalloutAct);
+
+        KeyStroke selectTierKs = KeyStroke.getKeyStroke(KeyEvent.VK_A, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
+        inputMap.put(selectTierKs, "selectTier");
+        PhonUIAction<Void> selectTierAct = PhonUIAction.runnable(this::selectTier);
+        actionMap.put("selectTier", selectTierAct);
     }
 
     /**
@@ -334,6 +338,15 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
 
         // TODO: Get this working
 //        this.eventManager.registerActionForEvent(EditorEventType.ParticipantChanged, this::onParticipantChanged, EditorEventManager.RunOn.AWTEventDispatchThread);
+    }
+
+    /**
+     * Removes editor actions for specific events
+     */
+    public void removeEditorActions() {
+        this.eventManager.removeActionForEvent(EditorEventType.SessionChanged, this::onSessionChanged);
+        this.eventManager.removeActionForEvent(EditorEventType.TierViewChanged, this::onTierViewChanged);
+        this.eventManager.removeActionForEvent(EditorEventType.RecordChanged, this::onRecordChanged);
     }
     // endregion
 
@@ -2076,6 +2089,34 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
     }
 
     /**
+     * Select all text in current tier
+     */
+    private void selectTier() {
+        final TranscriptElementLocation currentLocation = getTranscriptEditorCaret().getCurrentLocation();
+        if (!currentLocation.valid()) return;
+
+        TranscriptDocument.StartEnd startEnd = new TranscriptDocument.StartEnd(-1, -1);
+        if(currentLocation.transcriptElementIndex() == -1) {
+            // header tier
+            startEnd = getTranscriptDocument().getGenericContentStartEnd(currentLocation.tier());
+        } else {
+            final Transcript.Element element = getSession().getTranscript().getElementAt(currentLocation.transcriptElementIndex());
+            if(element.isComment()) {
+                startEnd = getTranscriptDocument().getCommentContentStartEnd(element.asComment());
+            } else if(element.isGem()) {
+                startEnd = getTranscriptDocument().getGemContentStartEnd(element.asGem());
+            } else if(element.isRecord()) {
+                startEnd = getTranscriptDocument().getTierContentStartEnd(currentLocation.transcriptElementIndex(), currentLocation.tier());
+            }
+        }
+
+        if(startEnd.valid()) {
+            setCaretPosition(startEnd.start());
+            moveCaretPosition(startEnd.end());
+        }
+    }
+
+    /**
      * Show ipa input map as a callout pointing at current cursor location
      *
      */
@@ -2486,15 +2527,6 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
                 }
             }
         }
-    }
-
-    /**
-     * Removes editor actions for specific events
-     */
-    public void removeEditorActions() {
-        this.eventManager.removeActionForEvent(EditorEventType.SessionChanged, this::onSessionChanged);
-        this.eventManager.removeActionForEvent(EditorEventType.TierViewChanged, this::onTierViewChanged);
-        this.eventManager.removeActionForEvent(EditorEventType.RecordChanged, this::onRecordChanged);
     }
 
     /**
