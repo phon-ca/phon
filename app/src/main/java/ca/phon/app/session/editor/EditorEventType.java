@@ -278,4 +278,65 @@ public record  EditorEventType<T>(String eventName, Class<T> type) {
 	public final static EditorEventType<MediaSegment> SegmentPlayback =
 			new EditorEventType<>(EditorEventName.SEGMENT_PLAYBACK_EVENT.getEventName(), MediaSegment.class);
 
+	/**
+	 * Data for addition of timeline tier
+	 * @param tierName
+	 */
+	public record TimelineTierAddData(String tierName) {}
+
+	/**
+	 * Data for removal of timeline tier
+	 * @param tierName
+	 */
+	public record TimelineTierRemoveData(String tierName) {}
+
+	/**
+	 * Add timeline tier
+	 */
+	public final static EditorEventType<TimelineTierAddData> TimelineTierAdd =
+			new EditorEventType<>(EditorEventName.TIMELINE_TIER_ADDED_EVT.getEventName(), TimelineTierAddData.class);
+
+	/**
+	 * Remove timeline tier
+	 */
+	public final static EditorEventType<TimelineTierRemoveData> TimelineTierRemove =
+			new EditorEventType<>(EditorEventName.TIMELINE_TIER_REMOVED_EVT.getEventName(), TimelineTierRemoveData.class);
+
+	/**
+	 * Record for timeline interval addition
+	 * @param tierName
+	 * @param interval
+	 */
+	public record TimelineIntervalAddData(String tierName, TimelineTier.Interval interval) {}
+
+
+	/**
+	 * Record for timeline interval removal
+	 * @param tierName
+	 * @param interval
+	 *
+	 */
+	public record TimelineIntervalRemoveData(String tierName, TimelineTier.Interval interval) {}
+
+	/**
+	 * Record for timeline interval move
+	 * @param tierName
+	 * @param interval
+	 * @param newStart
+	 * @param newEnd
+	 */
+	public record TimelineIntervalMoveData(String tierName, TimelineTier.Interval interval, float newStart, float newEnd) {}
+
+	/**
+	 * Add record timeline tier
+	 */
+	public final static EditorEventType<TimelineTierAddData> RecordTimelineTierAdd =
+			new EditorEventType<>(EditorEventName.RECORD_TIMELINE_TIER_ADDED_EVT.getEventName(), TimelineTierAddData.class);
+
+	/**
+	 * Remove record timeline tier
+	 */
+	public final static EditorEventType<TimelineTierRemoveData> RecordTimelineTierRemove =
+			new EditorEventType<>(EditorEventName.RECORD_TIMELINE_TIER_REMOVED_EVT.getEventName(), TimelineTierRemoveData.class);
+
 }
