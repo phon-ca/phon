@@ -114,7 +114,7 @@ public final class Timeline extends ExtendableObject {
      * Add session level timeline tier
      *
      * @param tierName
-     * @return new TimelineTier if given name does not exist, existing TimelineTier if it does
+     * @return new TimelineTierImpl if given name does not exist, existing TimelineTierImpl if it does
      */
     public TimelineTier addTier(String tierName) {
         return null;

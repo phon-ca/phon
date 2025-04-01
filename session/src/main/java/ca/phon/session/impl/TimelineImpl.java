@@ -4,12 +4,13 @@ import ca.phon.session.MediaUnit;
 import ca.phon.session.TimelineTier;
 import ca.phon.session.spi.TimelineSPI;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Default implementation of a timeline.
  */
-public final class TimelineImpl implements TimelineSPI {
+public class TimelineImpl implements TimelineSPI {
 
     /**
      * Length of timeline in specified media units
@@ -34,8 +35,8 @@ public final class TimelineImpl implements TimelineSPI {
     public TimelineImpl() {
         super();
         this.mediaUnit = MediaUnit.Second;
-        this.recordTimelineTiers = List.of();
-        this.timelineTiers = List.of();
+        this.recordTimelineTiers = new ArrayList<>();
+        this.timelineTiers = new ArrayList<>();
     }
 
     public TimelineImpl(float length, MediaUnit mediaUnit, List<String> recordTimelineTiers, List<TimelineTier> timelineTiers) {

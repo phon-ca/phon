@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * Default implementation of a transcriber.
  */
-public final class TranscriberImpl implements TranscriberSPI {
+public class TranscriberImpl implements TranscriberSPI {
 	
 	private final AtomicReference<String> usernameRef = 
 			new AtomicReference<String>();

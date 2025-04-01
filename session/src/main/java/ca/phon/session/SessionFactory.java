@@ -18,6 +18,7 @@ package ca.phon.session;
 import ca.phon.extensions.ExtendableObject;
 import ca.phon.plugin.*;
 import ca.phon.session.impl.GemImpl;
+import ca.phon.session.impl.TimelineTierImpl;
 import ca.phon.session.io.*;
 import ca.phon.session.spi.*;
 import ca.phon.session.tierdata.TierData;
@@ -28,7 +29,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * A factory for creating mutable session objects.
+ * A factory for creating session objects.
  * 
  */
 public final class SessionFactory extends ExtendableObject {
@@ -735,6 +736,25 @@ public final class SessionFactory extends ExtendableObject {
 		}
 		
 		return retVal;
+	}
+
+	/**
+	 * Create a {@link Timeline} object with default values
+	 *
+	 * @return new timeline object
+	 */
+	public Timeline createTimeline() {
+		return new Timeline(sessionFactoryImpl.createTimeline());
+	}
+
+	/**
+	 * Create a new timeline tier object.
+	 *
+	 * @param name
+	 * @return new timeline tier object
+	 */
+	public TimelineTier createTimelineTier(String name) {
+		return new TimelineTier(sessionFactoryImpl.createTimelineTier(name));
 	}
 
 }

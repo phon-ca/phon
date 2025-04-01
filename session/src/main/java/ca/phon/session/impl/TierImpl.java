@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * Default implementation of a tier.
  * @param <T> tier data type
  */
-public final class TierImpl<T> implements TierSPI<T> {
+public class TierImpl<T> implements TierSPI<T> {
 	
 	/**
 	 * Declared type

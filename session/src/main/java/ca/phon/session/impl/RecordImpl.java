@@ -30,7 +30,7 @@ import java.util.*;
  * Basic record implementation
  *
  */
-public final class RecordImpl implements RecordSPI {
+public class RecordImpl implements RecordSPI {
 
 	private Participant participant = Participant.UNKNOWN;
 

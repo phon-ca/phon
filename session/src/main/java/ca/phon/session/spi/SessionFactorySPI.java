@@ -18,6 +18,7 @@ package ca.phon.session.spi;
 import ca.phon.session.CommentType;
 import ca.phon.session.GemType;
 import ca.phon.session.SystemTierType;
+import ca.phon.session.TimelineTier;
 import ca.phon.session.tierdata.TierData;
 
 import java.util.List;
@@ -126,5 +127,20 @@ public interface SessionFactorySPI {
 	 * @return
 	 */
 	public TierViewItemSPI createTierViewItem(String name, boolean visible, String font, boolean locked);
+
+	/**
+	 * Create a new TimelineSPI object.
+	 *
+	 * @return new TimelineSPI object
+	 */
+	public TimelineSPI createTimeline();
+
+	/**
+	 * Create a new TimelineTierSPI object.
+	 *
+	 * @param name
+	 * @return new TimelineTierSPI object
+	 */
+	public TimelineTierSPI createTimelineTier(String name);
 	
 }

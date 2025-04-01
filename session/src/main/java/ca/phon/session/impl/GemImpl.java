@@ -7,7 +7,7 @@ import ca.phon.session.spi.GemSPI;
 /**
  * Basic implementation of a gem.
  */
-public final class GemImpl implements GemSPI {
+public class GemImpl implements GemSPI {
 
     private GemType gemType;
 

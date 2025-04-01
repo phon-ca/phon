@@ -23,7 +23,7 @@ import java.util.*;
 /**
  * Basic description of a tier.
  */
-public final class TierDescriptionImpl implements TierDescriptionSPI {
+public class TierDescriptionImpl implements TierDescriptionSPI {
 
 	private final String name;
 	

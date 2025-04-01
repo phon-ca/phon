@@ -22,7 +22,7 @@ import ca.phon.session.spi.CommentSPI;
 /**
  * Default implementation for comment elements.
  */
-public final class CommentImpl implements CommentSPI {
+public class CommentImpl implements CommentSPI {
 	
 	private TierData value;
 	

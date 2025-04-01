@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Default implementation of a transcript.
  */
-public final class TranscriptImpl implements TranscriptSPI {
+public class TranscriptImpl implements TranscriptSPI {
 
     /**
      * List of comments and records

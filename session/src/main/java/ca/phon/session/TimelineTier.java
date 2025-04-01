@@ -41,6 +41,15 @@ public final class TimelineTier extends ExtendableObject {
     private TimelineTierSPI spi;
 
     /**
+     * Create a new timeline tier
+     */
+    public TimelineTier(TimelineTierSPI spi) {
+        super();
+        this.spi = spi;
+    }
+
+
+    /**
      * Get tier name
      *
      * @return tierName

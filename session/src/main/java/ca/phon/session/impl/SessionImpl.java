@@ -28,7 +28,7 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * Default implementation of a session.
  */
-public final class SessionImpl implements SessionSPI {
+public class SessionImpl implements SessionSPI {
 	
 	/*
 	 * Properties
