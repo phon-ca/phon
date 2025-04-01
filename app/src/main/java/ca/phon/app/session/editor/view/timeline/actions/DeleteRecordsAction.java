@@ -35,7 +35,7 @@ public class DeleteRecordsAction extends TimelineAction  {
 
     @Override
     public void hookableActionPerformed(ActionEvent ae) {
-        TimelineRecordTier recordTier = getView().getRecordTier();
+        TimelineViewRecordTier recordTier = getView().getRecordTier();
         SessionEditor editor = getView().getEditor();
 
         int[] recordsToDelete = recordTier.getSelectionModel().getSelectedIndices();

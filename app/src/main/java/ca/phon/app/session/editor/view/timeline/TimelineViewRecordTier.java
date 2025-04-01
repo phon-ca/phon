@@ -52,7 +52,7 @@ import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
+public class TimelineViewRecordTier extends TimelineViewTier implements ClipboardOwner {
 
 	private RecordGrid recordGrid;
 
@@ -68,11 +68,11 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 
 	private JButton moveSegmentsButton;
 
-	public final static String FONT_SIZE_DELTA_PROP = TimelineRecordTier.class.getName() + ".fontSizeDelta";
+	public final static String FONT_SIZE_DELTA_PROP = TimelineViewRecordTier.class.getName() + ".fontSizeDelta";
 	public final static float DEFAULT_FONT_SIZE_DELTA = 0.0f;
 	public float fontSizeDelta = PrefHelper.getFloat(FONT_SIZE_DELTA_PROP, DEFAULT_FONT_SIZE_DELTA);
 
-	public TimelineRecordTier(TimelineView parent) {
+	public TimelineViewRecordTier(TimelineView parent) {
 		super(parent);
 
 		init();
@@ -1286,7 +1286,7 @@ public class TimelineRecordTier extends TimelineTier implements ClipboardOwner {
 				} else {
 					getParentView().getEditor().getUndoSupport().endUpdate();
 					getParentView().getEditor().getEventManager().queueEvent(
-							new EditorEvent<>(EditorEventType.TierChange, TimelineRecordTier.this,
+							new EditorEvent<>(EditorEventType.TierChange, TimelineViewRecordTier.this,
 									new EditorEventType.TierChangeData(Transcriber.VALIDATOR, r, r.getSegmentTier(), segment, segment, false)));
 				}
 			} else if(evt.getPropertyName().endsWith("time")) {

@@ -35,11 +35,11 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
 
-public class TimelineWaveformTier extends TimelineTier  {
+public class TimelineViewWaveformTier extends TimelineViewTier {
 
 	private WaveformDisplay wavDisplay;
 	
-	public TimelineWaveformTier(TimelineView parent) {
+	public TimelineViewWaveformTier(TimelineView parent) {
 		super(parent);
 		
 		init();

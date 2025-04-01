@@ -111,9 +111,9 @@ public final class TimelineView extends EditorView {
 	
 	private Timebar timebar;
 	
-	private TimelineWaveformTier wavTier;
+	private TimelineViewWaveformTier wavTier;
 	
-	private TimelineRecordTier recordGrid;
+	private TimelineViewRecordTier recordGrid;
 
 	// playback marker for segment playback
 	private Marker segmentPlaybackMarker;
@@ -177,17 +177,17 @@ public final class TimelineView extends EditorView {
 		// Order here matters - for the purpose of
 		// editor events the record tier object must be created before the
 		// wav tier
-		recordGrid = new TimelineRecordTier(this);
+		recordGrid = new TimelineViewRecordTier(this);
 		recordGrid.getRecordGrid().addMouseListener(contextMenuListener);
 		
-		wavTier = new TimelineWaveformTier(this);
+		wavTier = new TimelineViewWaveformTier(this);
 		wavTier.getPreferredSize();
 		wavTier.getWaveformDisplay().addMouseListener(contextMenuListener);
 		
 		addTier(wavTier);
 		addTier(recordGrid);
 		
-		for(var extPt:PluginManager.getInstance().getExtensionPoints(TimelineTier.class)) {
+		for(var extPt:PluginManager.getInstance().getExtensionPoints(TimelineViewTier.class)) {
 			var tier = extPt.getFactory().createObject(this);
 			addTier(tier);
 		}
@@ -273,11 +273,11 @@ public final class TimelineView extends EditorView {
 		return this.tierPanel;
 	}
 	
-	public TimelineWaveformTier getWaveformTier() {
+	public TimelineViewWaveformTier getWaveformTier() {
 		return this.wavTier;
 	}
 	
-	public TimelineRecordTier getRecordTier() {
+	public TimelineViewRecordTier getRecordTier() {
 		return this.recordGrid;
 	}
 	
@@ -536,7 +536,7 @@ public final class TimelineView extends EditorView {
 	}
 	
 	private int tierIdx = 0;
-	private void addTier(TimelineTier tier) {
+	private void addTier(TimelineViewTier tier) {
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridwidth = 1;
 		gbc.gridheight = 1;

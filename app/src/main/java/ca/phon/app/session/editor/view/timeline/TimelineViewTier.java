@@ -19,13 +19,13 @@ import ca.phon.app.session.editor.EditorView;
 import ca.phon.media.TimeComponent;
 import ca.phon.ui.menu.MenuBuilder;
 
-public abstract class TimelineTier extends TimeComponent {
+public abstract class TimelineViewTier extends TimeComponent {
 
 	private static final long serialVersionUID = 1L;
 
 	public final TimelineView parentView;
 	
-	public TimelineTier(TimelineView parent) {
+	public TimelineViewTier(TimelineView parent) {
 		super(parent.getTimeModel());
 		
 		this.parentView = parent;
