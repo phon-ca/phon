@@ -35,7 +35,7 @@ public class TimelineTierImpl implements TimelineTierSPI {
 
     @Override
     public String getName() {
-        return "";
+        return this.name;
     }
 
     @Override

@@ -72,6 +72,16 @@ public class TimelineImpl implements TimelineSPI {
     }
 
     @Override
+    public boolean addRecordTimelineTier(String tierName) {
+        return this.recordTimelineTiers.add(tierName);
+    }
+
+    @Override
+    public boolean removeRecordTimelineTier(String tierName) {
+        return this.recordTimelineTiers.remove(tierName);
+    }
+
+    @Override
     public List<TimelineTier> getTiers() {
         return List.copyOf(this.timelineTiers);
     }

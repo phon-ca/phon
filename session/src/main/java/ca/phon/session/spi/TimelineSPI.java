@@ -17,6 +17,10 @@ public interface TimelineSPI {
 
     public List<String> getRecordTimelineTiers();
 
+    public boolean addRecordTimelineTier(String tierName);
+
+    public boolean removeRecordTimelineTier(String tierName);
+
     public List<TimelineTier> getTiers();
 
     /**

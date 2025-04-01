@@ -75,6 +75,26 @@ public final class Timeline extends ExtendableObject {
     }
 
     /**
+     * Add record timeline tier
+     *
+     * @param tierName
+     * @return true if added, false if already exists
+     */
+    public boolean addRecordTimelineTier(String tierName) {
+        return spi.addRecordTimelineTier(tierName);
+    }
+
+    /**
+     * Remove record timeline tier
+     *
+     * @param tierName
+     * @return true if removed, false if not found
+     */
+    public boolean removeRecordTimelineTier(String tierName) {
+        return spi.removeRecordTimelineTier(tierName);
+    }
+
+    /**
      * Get session level timeline tiers as an unmodifiable list
      *
      * @return list of timeline tiers

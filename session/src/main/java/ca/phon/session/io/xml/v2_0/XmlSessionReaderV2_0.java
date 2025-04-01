@@ -235,7 +235,16 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 
 		// read timeline
 		if(xmlSessionType.getTimeline() != null) {
-
+			final Timeline timeline = readTimeline(factory, xmlSessionType.getTimeline());
+			// copy timeline data
+			retVal.getTimeline().setLength(timeline.getLength());
+			retVal.getTimeline().setMediaUnit(timeline.getMediaUnit());
+			for(String recordTimelineTier:timeline.getRecordTimelineTiers()) {
+				retVal.getTimeline().addRecordTimelineTier(recordTimelineTier);
+			}
+			for(TimelineTier tier:timeline.getTiers()) {
+				retVal.getTimeline().addTier(tier);
+			}
 		}
 
 		return retVal;
