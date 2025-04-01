@@ -19,9 +19,9 @@ import ca.phon.session.MediaUnit;
 import ca.phon.session.spi.MediaSegmentSPI;
 
 /**
- * Media segment
+ * Default implementation for media segments.
  */
-public class MediaSegmentImpl implements MediaSegmentSPI {
+public final class MediaSegmentImpl implements MediaSegmentSPI {
 	
 	MediaSegmentImpl() {
 		super();

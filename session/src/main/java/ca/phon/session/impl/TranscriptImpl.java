@@ -7,7 +7,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class TranscriptImpl implements TranscriptSPI {
+/**
+ * Default implementation of a transcript.
+ */
+public final class TranscriptImpl implements TranscriptSPI {
 
     /**
      * List of comments and records

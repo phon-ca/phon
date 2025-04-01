@@ -21,7 +21,7 @@ import ca.phon.session.spi.TierViewItemSPI;
  * Information about tier visibility, font and locking.  This
  * item is also used in a list for ordering.
  */
-public class TierViewItemImpl implements TierViewItemSPI {
+public final class TierViewItemImpl implements TierViewItemSPI {
 	
 	private final String name;
 	

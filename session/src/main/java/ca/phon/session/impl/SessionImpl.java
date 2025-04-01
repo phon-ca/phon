@@ -25,7 +25,10 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class SessionImpl implements SessionSPI {
+/**
+ * Default implementation of a session.
+ */
+public final class SessionImpl implements SessionSPI {
 	
 	/*
 	 * Properties

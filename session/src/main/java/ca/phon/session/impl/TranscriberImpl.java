@@ -19,7 +19,10 @@ import ca.phon.session.spi.TranscriberSPI;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-public class TranscriberImpl implements TranscriberSPI {
+/**
+ * Default implementation of a transcriber.
+ */
+public final class TranscriberImpl implements TranscriberSPI {
 	
 	private final AtomicReference<String> usernameRef = 
 			new AtomicReference<String>();

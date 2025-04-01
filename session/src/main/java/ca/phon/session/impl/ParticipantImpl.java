@@ -23,7 +23,7 @@ import java.time.*;
 /**
  * Basic participant implementation.
  */
-public class ParticipantImpl implements ParticipantSPI {
+public final class ParticipantImpl implements ParticipantSPI {
 	
 	/*
 	 * Attributes

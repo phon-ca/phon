@@ -23,7 +23,11 @@ import java.text.ParseException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class TierImpl<T> implements TierSPI<T> {
+/**
+ * Default implementation of a tier.
+ * @param <T> tier data type
+ */
+public final class TierImpl<T> implements TierSPI<T> {
 	
 	/**
 	 * Declared type

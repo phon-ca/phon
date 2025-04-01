@@ -20,10 +20,9 @@ import ca.phon.session.tierdata.TierData;
 import ca.phon.session.spi.CommentSPI;
 
 /**
- * Implemtation for comment elements.
- *
+ * Default implementation for comment elements.
  */
-public class CommentImpl implements CommentSPI {
+public final class CommentImpl implements CommentSPI {
 	
 	private TierData value;
 	

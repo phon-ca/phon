@@ -29,7 +29,7 @@ import java.util.Map;
  * Default implementation of a session factory.
  */
 @Rank(0)
-public class SessionFactoryImpl implements SessionFactorySPI, IPluginExtensionPoint<SessionFactorySPI> {
+public final class SessionFactoryImpl implements SessionFactorySPI, IPluginExtensionPoint<SessionFactorySPI> {
 	
 	@Override
 	public SessionSPI createSession() {
