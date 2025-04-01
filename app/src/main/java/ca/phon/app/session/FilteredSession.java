@@ -230,6 +230,11 @@ public class FilteredSession implements SessionSPI {
     }
 
     @Override
+    public Timeline getTimeline() {
+        return null;
+    }
+
+    @Override
     public String getCorpus() {
         return session.getCorpus();
     }

@@ -493,6 +493,20 @@ public final class Session extends ExtendableObject {
 
 	// endregion Transcript
 
+	// region Timeline
+
+	/**
+	 * Get timeline for session.  Timeline is a collection of intervals
+	 * for each tier in the session.
+	 *
+	 * @return timeline
+	 */
+	public Timeline getTimeline() {
+		return sessionImpl.getTimeline();
+	}
+
+	// endregion Timeline
+
 	// region Records (old api)
 	/**
 	 * Return {@link Records} wrapper object allowing for enumeration

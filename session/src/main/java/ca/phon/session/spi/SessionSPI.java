@@ -257,6 +257,18 @@ public interface SessionSPI {
 	 */
 	public void removeParticipant(int idx);
 
+	/**
+	 * Get the transcript object which is the collection of all comments, gems and records.
+	 *
+	 * @return transcript object
+	 */
 	public Transcript getTranscript();
+
+	/**
+	 * Get the timeline object which is the collection of all timeline tiers.
+	 *
+	 * @return timeline object
+	 */
+	public Timeline getTimeline();
 	
 }

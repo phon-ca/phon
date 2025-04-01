@@ -68,12 +68,15 @@ public class SessionImpl implements SessionSPI {
 			Collections.synchronizedList(new ArrayList<>());
 	
 	private final Transcript transcript;
+
+	private final Timeline timeline;
 	
 	SessionImpl() {
 		super();
 		final SessionFactory factory = SessionFactory.newFactory();
 		metadata = new LinkedHashMap<>();
 		transcript = factory.createTranscript();
+		timeline = factory.createTimeline();
 	}
 
 	@Override
@@ -346,6 +349,16 @@ public class SessionImpl implements SessionSPI {
 	@Override
 	public int getTranscriberCount() {
 		return transcribers.size();
+	}
+
+	/**
+	 * Get the Timeline for this session
+	 *
+	 * @return timeline
+	 */
+	@Override
+	public Timeline getTimeline() {
+		return this.timeline;
 	}
 
 }
