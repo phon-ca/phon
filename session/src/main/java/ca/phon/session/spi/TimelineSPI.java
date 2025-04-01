@@ -9,7 +9,11 @@ public interface TimelineSPI {
 
     public float getLength();
 
+    public void setLength(float length);
+
     public MediaUnit getMediaUnit();
+
+    public void setMediaUnit(MediaUnit mediaUnit);
 
     public List<String> getRecordTimelineTiers();
 

@@ -36,12 +36,32 @@ public final class Timeline extends ExtendableObject {
     }
 
     /**
+     * Set the length of the timeline
+     *
+     * @param length
+     *            length of timeline, this may be different from the actual media length
+     *
+     */
+    public void setLength(float length) {
+        spi.setLength(length);
+    }
+
+    /**
      * Get media unit for value provided by getLength()
      *
      * @return media unit
      */
     public MediaUnit getMediaUnit() {
         return spi.getMediaUnit();
+    }
+
+    /**
+     * Set media unit for value provided by getLength()
+     *
+     * @param mediaUnit
+     */
+    public void setMediaUnit(MediaUnit mediaUnit) {
+        spi.setMediaUnit(mediaUnit);
     }
 
     /**

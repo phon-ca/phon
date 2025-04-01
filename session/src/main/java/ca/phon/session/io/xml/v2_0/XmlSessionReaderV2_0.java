@@ -233,6 +233,11 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 			}
 		}
 
+		// read timeline
+		if(xmlSessionType.getTimeline() != null) {
+
+		}
+
 		return retVal;
 	}
 
@@ -957,6 +962,60 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 		} else {
 			return null;
 		}
+	}
+
+	/**
+	 * Read timeline
+	 *
+	 * @param factory
+	 * @param xmlTimeline
+	 *
+	 * @return timeline session {@link Timeline}
+	 */
+	private Timeline readTimeline(SessionFactory factory, XmlTimelineType xmlTimeline) {
+		final Timeline retVal = factory.createTimeline();
+		retVal.setLength(xmlTimeline.getLength());
+		final MediaUnit unit = switch(xmlTimeline.getUnit()) {
+			case S -> MediaUnit.Second;
+			case MS -> MediaUnit.Millisecond;
+		};
+		retVal.setMediaUnit(unit);
+		for(XmlTimelineTierType xmlTimelineTier:xmlTimeline.getTimelineTier()) {
+			final TimelineTier timelineTier = readTimelineTier(factory, xmlTimelineTier);
+			retVal.addTier(timelineTier);
+		}
+		return retVal;
+	}
+
+	/**
+	 * Read timeline tier
+	 *
+	 * @param factory
+	 * @param xmlTimelineTier
+	 *
+	 * @return timeline tier {@link TimelineTier}
+	 */
+	private TimelineTier readTimelineTier(SessionFactory factory, XmlTimelineTierType xmlTimelineTier) {
+		final TimelineTier retVal = factory.createTimelineTier(xmlTimelineTier.getName());
+
+		for(Object pointOrInterval:xmlTimelineTier.getPointOrInterval()) {
+			if(pointOrInterval instanceof XmlPointType xmlPointType) {
+				final float time = xmlPointType.getValue();
+				final String label = xmlPointType.getContent();
+				final TimelineTier.Point point = new TimelineTier.Point(time, label);
+				retVal.addInterval(point, TimelineTier.InsertionStrategy.ALLOW_OVERLAPS);
+			} else if(pointOrInterval instanceof XmlIntervalType xmlIntervalType) {
+				final float start = xmlIntervalType.getStart();
+				final float end = xmlIntervalType.getEnd();
+				final String label = xmlIntervalType.getContent();
+				final TimelineTier.Interval interval = new TimelineTier.Interval(start, end, label);
+				retVal.addInterval(interval, TimelineTier.InsertionStrategy.ALLOW_OVERLAPS);
+			} else {
+				Logger.getLogger(getClass().getName()).warning("Unsupported timeline element type: " + pointOrInterval.getClass().getName());
+			}
+		}
+
+		return retVal;
 	}
 
 	/**

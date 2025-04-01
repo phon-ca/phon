@@ -48,12 +48,22 @@ public class TimelineImpl implements TimelineSPI {
 
     @Override
     public float getLength() {
-        return 0;
+        return this.length;
+    }
+
+    @Override
+    public void setLength(float length) {
+        this.length = length;
     }
 
     @Override
     public MediaUnit getMediaUnit() {
         return this.mediaUnit;
+    }
+
+    @Override
+    public void setMediaUnit(MediaUnit mediaUnit) {
+        this.mediaUnit = mediaUnit;
     }
 
     @Override

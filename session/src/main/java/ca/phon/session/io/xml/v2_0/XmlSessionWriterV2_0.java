@@ -195,6 +195,15 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 			}
 		}
 
+		// timeline
+		if(session.getTimeline() != null) {
+			if(session.getTimeline().getLength() > 0 &&
+					(session.getTimeline().getTiers().size() > 0 || session.getTimeline().getRecordTimelineTiers().size() > 0)) {
+				final XmlTimelineType timeline = writeTimeline(factory, session.getTimeline());
+				retVal.setTimeline(timeline);
+			}
+		}
+
 		return factory.createSession(retVal);
 	}
 
@@ -799,6 +808,41 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 			}
 		}
 
+		return retVal;
+	}
+
+	private XmlTimelineType writeTimeline(ObjectFactory factory, Timeline timeline) {
+		final XmlTimelineType retVal = factory.createXmlTimelineType();
+		final XmlMediaUnitType unitType = switch (timeline.getMediaUnit()) {
+			case Second -> XmlMediaUnitType.S;
+			default -> XmlMediaUnitType.MS;
+		};
+		retVal.setLength(timeline.getLength());
+		retVal.setUnit(unitType);
+		for(TimelineTier tt:timeline.getTiers()) {
+			final XmlTimelineTierType xmlTimelineTier = writeTimelineTier(factory, tt);
+			retVal.getTimelineTier().add(xmlTimelineTier);
+		}
+		return retVal;
+	}
+
+	private XmlTimelineTierType writeTimelineTier(ObjectFactory factory, TimelineTier timeline) {
+		final XmlTimelineTierType retVal = factory.createXmlTimelineTierType();
+		retVal.setName(timeline.getName());
+		for(TimelineTier.Interval interval:timeline.getIntervals()) {
+			if(interval.isPoint()) {
+				XmlPointType pointType = factory.createXmlPointType();
+				pointType.setValue(BigDecimal.valueOf(interval.getStart()).setScale(3, RoundingMode.HALF_UP).floatValue());
+				pointType.setContent(interval.getLabel());
+				retVal.getPointOrInterval().add(pointType);
+			} else {
+				XmlIntervalType intervalType = factory.createXmlIntervalType();
+				intervalType.setStart(BigDecimal.valueOf(interval.getStart()).setScale(3, RoundingMode.HALF_UP).floatValue());
+				intervalType.setEnd(BigDecimal.valueOf(interval.getEnd()).setScale(3, RoundingMode.HALF_UP).floatValue());
+				intervalType.setContent(interval.getLabel());
+				retVal.getPointOrInterval().add(intervalType);
+			}
+		}
 		return retVal;
 	}
 
