@@ -334,10 +334,18 @@ public record  EditorEventType<T>(String eventName, Class<T> type) {
 	 * Record for timeline interval move
 	 * @param tierName
 	 * @param interval
+	 * @param oldStart
+	 * @param oldEnd
 	 * @param newStart
 	 * @param newEnd
 	 */
-	public record TimelineIntervalMoveData(String tierName, TimelineTier.Interval interval, float newStart, float newEnd) {}
+	public record TimelineIntervalMoveData(String tierName, TimelineTier.Interval interval, float oldStart, float oldEnd, float newStart, float newEnd) {}
+
+	/**
+	 * Move timeline tier interval event
+	 */
+	public final static EditorEventType<TimelineIntervalMoveData> TimelineIntervalMove =
+			new EditorEventType<>(EditorEventName.TIMELINE_TIER_MOVE_INTERVAL.getEventName(), TimelineIntervalMoveData.class);
 
 	/**
 	 * Add record timeline tier
