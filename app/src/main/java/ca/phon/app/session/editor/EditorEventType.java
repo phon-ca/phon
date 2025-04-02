@@ -309,6 +309,12 @@ public record  EditorEventType<T>(String eventName, Class<T> type) {
 	 */
 	public record TimelineIntervalAddData(String tierName, TimelineTier.Interval interval) {}
 
+	/**
+	 * Add timeline tier interval event
+	 */
+	public final static EditorEventType<TimelineIntervalAddData> TimelineIntervalAdd =
+			new EditorEventType<>(EditorEventName.TIMELINE_TIER_ADD_INTERVAL.getEventName(), TimelineIntervalAddData.class);
+
 
 	/**
 	 * Record for timeline interval removal
@@ -317,6 +323,12 @@ public record  EditorEventType<T>(String eventName, Class<T> type) {
 	 *
 	 */
 	public record TimelineIntervalRemoveData(String tierName, TimelineTier.Interval interval) {}
+
+	/**
+	 * Remove timeline tier interval event
+	 */
+	public final static EditorEventType<TimelineIntervalRemoveData> TimelineIntervalRemove =
+			new EditorEventType<>(EditorEventName.TIMELINE_TIER_REMOVE_INTERVAL.getEventName(), TimelineIntervalRemoveData.class);
 
 	/**
 	 * Record for timeline interval move

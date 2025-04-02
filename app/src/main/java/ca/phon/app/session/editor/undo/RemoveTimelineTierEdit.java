@@ -1,8 +1,6 @@
 package ca.phon.app.session.editor.undo;
 
-import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventManager;
-import ca.phon.app.session.editor.EditorEventType;
 import ca.phon.session.Session;
 import ca.phon.session.TimelineTier;
 

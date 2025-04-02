@@ -124,6 +124,9 @@ public final class TimelineTier extends ExtendableObject {
         return spi.removeInterval(interval);
     }
 
+    /**
+     * Interval entity for timeline tier
+     */
     public static class Interval {
         private float start;
         private float end;
@@ -169,6 +172,9 @@ public final class TimelineTier extends ExtendableObject {
 
     }
 
+    /**
+     * Point entity for timeline tier
+     */
     public static class Point extends Interval {
 
         public Point(float point) {
