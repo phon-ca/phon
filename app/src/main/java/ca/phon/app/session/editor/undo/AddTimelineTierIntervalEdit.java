@@ -43,7 +43,7 @@ public class AddTimelineTierIntervalEdit extends SessionUndoableEdit {
                 // fire event
                 final EditorEventManager editorEventManager = getEditorEventManager();
                 if (editorEventManager != null) {
-                    final EditorEvent<EditorEventType.TimelineIntervalAddData> event = new EditorEvent<>(EditorEventType.Tim, getSource(),
+                    final EditorEvent<EditorEventType.TimelineIntervalAddData> event = new EditorEvent<>(EditorEventType.TimelineIntervalAdd, getSource(),
                             new EditorEventType.TimelineIntervalAddData(tierName, interval));
                     editorEventManager.queueEvent(event);
                 }
