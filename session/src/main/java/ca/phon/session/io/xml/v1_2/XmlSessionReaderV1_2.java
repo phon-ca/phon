@@ -634,12 +634,13 @@ public class XmlSessionReaderV1_2 implements SessionReader, XMLObjectReader<Sess
 				}
 			} else {
 				final TierDescription td = session.getUserTier(ftt.getTierName());
-				if (td == null) {
-					throw new IllegalStateException("User tier not found in session " + ftt.getTierName());
+				if (td != null) {
+					final Tier<?> userTier = factory.createTier(td);
+					userTier.setText(ftt.getContent());
+					retVal.putTier(userTier);
+				} else {
+					Logger.getLogger(getClass().getName()).warning("User tier " + ftt.getTierName() + " not in session tier list, dropping");
 				}
-				final Tier<?> userTier = factory.createTier(td);
-				userTier.setText(ftt.getContent());
-				retVal.putTier(userTier);
 			}
 		}
 
