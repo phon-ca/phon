@@ -192,24 +192,30 @@ public class AutoTranscriptionExtension implements TranscriptEditorExtension {
         final TranscriptDocument.StartEnd currentTextRange = editor.getTranscriptDocument().getTierContentStartEnd(recordIndex, tier.getName());
         if(!currentTextRange.valid()) return;
 
-        try {
-            final String currentText = editor.getTranscriptDocument().getText(currentTextRange.start(), currentTextRange.length());
-            if(!currentText.isBlank()) {
-                builder.append(currentText.trim());
+        // get caret position and see if it is at the end of the current text
+        final int caretPos = editor.getTranscriptEditorCaret().getDot();
+        if(caretPos != currentTextRange.end()) {
+            acceptAutoTranscriptionToFirstSelection(record, tier, automaticTranscription);
+        } else {
+            try {
+                final String currentText = editor.getTranscriptDocument().getText(currentTextRange.start(), currentTextRange.length());
+                if (!currentText.isBlank()) {
+                    builder.append(currentText.trim());
+                }
+            } catch (BadLocationException ex) {
+                LogUtil.warning(ex);
             }
-        } catch(BadLocationException ex) {
-            LogUtil.warning(ex);
-        }
 
-        final IPATranscript ipa = automaticTranscription.getTranscription();
-        if(ipa.length() > 0) {
-            if(builder.size() > 0)
-                builder.appendWordBoundary();
-            builder.append(ipa);
+            final IPATranscript ipa = automaticTranscription.getTranscription();
+            if (ipa.length() > 0) {
+                if (builder.size() > 0)
+                    builder.appendWordBoundary();
+                builder.append(ipa);
+            }
+            final TierEdit<IPATranscript> edit = new TierEdit<>(editor.getSession(), editor.getEventManager(), editor.getDataModel().getTranscriber(), record, tier, builder.toIPATranscript());
+            edit.setValueAdjusting(false);
+            editor.getUndoSupport().postEdit(edit);
         }
-        final TierEdit<IPATranscript> edit = new TierEdit<>(editor.getSession(), editor.getEventManager(), editor.getDataModel().getTranscriber(), record, tier, builder.toIPATranscript());
-        edit.setValueAdjusting(false);
-        editor.getUndoSupport().postEdit(edit);
     }
 
     /**
