@@ -71,6 +71,31 @@
                 </ul>
             </body>
         </topic>
+        <topic id="phon_alpha">
+            <title>Phon 4.0.0-alpha.29</title>
+            <body>
+                <note id="note_crv_44t_52c">This is a pre-release version of Phon 4.0. This version
+                    is not feature complete and may contain bugs. Please report any issues to the
+                    Phon issue tracker at <xref href="https://github.com/phon-ca/phon/issues"
+                        format="html" scope="external"/>. Files upgraded or created using this
+                    version of Phon are not compatible with previous versions.</note>
+                <ul>
+                    <li>
+                        <p><xref
+                                href="https://github.com/phon-ca/phon/releases/download/4.0.0-alpha.29/Phon_macos_4_0_0-alpha_29.dmg"
+                                format="dmg" scope="external">macOS 10.14+ (dmg)</xref></p>
+                    </li>
+                    <li>
+                        <p><xref
+                                href="https://github.com/phon-ca/phon/releases/download/4.0.0-alpha.29/Phon_windows-x64_4_0_0-alpha_29.exe"
+                                format="exe" scope="external">Windows (64-bit) (installer)</xref> |
+                            <xref
+                                href="https://github.com/phon-ca/phon/releases/download/4.0.0-alpha.29/Phon_windows-x64_4_0_0-alpha_29.zip"
+                                format="zip" scope="external">Windows (64 bit) (zip)</xref></p>
+                    </li>
+                </ul>
+            </body>
+        </topic>
     </topic>
     <topic id="other_information">
         <title>Other Information</title>
