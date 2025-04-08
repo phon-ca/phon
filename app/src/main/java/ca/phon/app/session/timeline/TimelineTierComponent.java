@@ -23,6 +23,12 @@ public class TimelineTierComponent extends TimeComponent {
     public TimelineTierComponent(TimeUIModel model, TimelineTier timelineTier) {
         super(model);
         this.timelineTier = timelineTier;
+
+        setBackground(UIManager.getColor("TimelineTier.background"));
+        setForeground(UIManager.getColor("TimelineTier.foreground"));
+
+        setOpaque(true);
+        setUI(new TimelineTierComponentUI());
     }
 
     public TimelineTier getTimelineTier() {
@@ -36,7 +42,11 @@ public class TimelineTierComponent extends TimeComponent {
 
     @Override
     public void setUI(ComponentUI ui) {
-        super.setUI(new TimelineTierComponentUI());
+        if(ui instanceof TimelineTierComponentUI) {
+            super.setUI(ui);
+        } else {
+            throw new IllegalArgumentException("ui must be a TimelineTierComponentUI");
+        }
     }
 
 }

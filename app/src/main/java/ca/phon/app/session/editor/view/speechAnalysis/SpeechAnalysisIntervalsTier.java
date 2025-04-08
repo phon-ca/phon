@@ -1,6 +1,8 @@
 package ca.phon.app.session.editor.view.speechAnalysis;
 
 import ca.phon.app.session.timeline.TimelineTierComponent;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
 import ca.phon.session.Session;
 import ca.phon.session.Timeline;
 import org.jdesktop.swingx.VerticalLayout;

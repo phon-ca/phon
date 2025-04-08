@@ -114,12 +114,11 @@ public class SpeechAnalysisEditorView extends EditorView {
 	private VolumeSlider volumeSlider;
 
 	private final List<SpeechAnalysisTier> pluginTiers =
-			Collections.synchronizedList(new ArrayList<SpeechAnalysisTier>());
+			Collections.synchronizedList(new ArrayList<>());
 
 	public SpeechAnalysisEditorView(SessionEditor editor) {
 		super(editor);
-		
-		
+
 		init();
 		update();
 		
