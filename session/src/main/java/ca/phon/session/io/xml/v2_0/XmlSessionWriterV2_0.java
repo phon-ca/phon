@@ -819,6 +819,9 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 		};
 		retVal.setLength(timeline.getLength());
 		retVal.setUnit(unitType);
+		for(String recordTimelineTier:timeline.getRecordTimelineTiers()) {
+			retVal.getRecordTimelineTier().add(recordTimelineTier);
+		}
 		for(TimelineTier tt:timeline.getTiers()) {
 			final XmlTimelineTierType xmlTimelineTier = writeTimelineTier(factory, tt);
 			retVal.getTimelineTier().add(xmlTimelineTier);

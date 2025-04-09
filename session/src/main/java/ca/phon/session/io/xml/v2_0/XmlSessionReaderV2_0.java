@@ -989,6 +989,9 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 			case MS -> MediaUnit.Millisecond;
 		};
 		retVal.setMediaUnit(unit);
+		for(String recordTimelineTier: xmlTimeline.getRecordTimelineTier()) {
+			retVal.addRecordTimelineTier(recordTimelineTier);
+		}
 		for(XmlTimelineTierType xmlTimelineTier:xmlTimeline.getTimelineTier()) {
 			final TimelineTier timelineTier = readTimelineTier(factory, xmlTimelineTier);
 			retVal.addTier(timelineTier);

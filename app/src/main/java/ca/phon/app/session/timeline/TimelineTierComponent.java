@@ -24,10 +24,6 @@ public class TimelineTierComponent extends TimeComponent {
         super(model);
         this.timelineTier = timelineTier;
 
-        setBackground(UIManager.getColor("TimelineTier.background"));
-        setForeground(UIManager.getColor("TimelineTier.foreground"));
-
-        setOpaque(true);
         setUI(new TimelineTierComponentUI());
     }
 

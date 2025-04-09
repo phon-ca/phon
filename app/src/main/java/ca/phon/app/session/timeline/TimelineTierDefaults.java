@@ -17,13 +17,17 @@ public class TimelineTierDefaults implements UIDefaultsHandler, IPluginExtension
     public final static Color DEFAULT_TIMELINE_TIER_FOREGROUND = UIManager.getColor("textText");
 
     public final static String TIMELINE_TIER_TITLE_FOREGROUND = "TimelineTier.titleForeground";
-    public final static Color DEFAULT_TIMELINE_TIER_TITLE_FOREGROUND = UIManager.getColor("selectionForeground");
+    public final static Color DEFAULT_TIMELINE_TIER_TITLE_FOREGROUND = Color.blue;
+
+    public final static String TIMELINE_TIER_INTERVAL_BORDER = "TimelineTier.intervalBorder";
+    public final static Color DEFAULT_TIMELINE_TIER_INTERVAL_BORDER = Color.lightGray;
 
     @Override
     public void setupDefaults(UIDefaults defaults) {
         defaults.put(TIMELINE_TIER_BACKGROUND, DEFAULT_TIMELINE_TIER_BACKGROUND);
         defaults.put(TIMELINE_TIER_FOREGROUND, DEFAULT_TIMELINE_TIER_FOREGROUND);
         defaults.put(TIMELINE_TIER_TITLE_FOREGROUND, DEFAULT_TIMELINE_TIER_TITLE_FOREGROUND);
+        defaults.put(TIMELINE_TIER_INTERVAL_BORDER, DEFAULT_TIMELINE_TIER_INTERVAL_BORDER);
     }
 
     @Override
