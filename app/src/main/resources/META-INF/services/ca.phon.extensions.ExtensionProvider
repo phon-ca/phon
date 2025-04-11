@@ -1,3 +1,4 @@
 ca.phon.app.autosave.AutosavesProvider
 ca.phon.app.session.editor.extensions.IPADependentTierChanges
 ca.phon.app.session.editor.view.transcript.extensions.DefaultEditorExtensionProvider
+ca.phon.app.session.timeline.TimelineDependentTierChanges

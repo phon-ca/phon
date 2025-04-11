@@ -2,6 +2,7 @@ package ca.phon.app.session.timeline;
 
 import ca.phon.orthography.*;
 import ca.phon.session.TimelineTier;
+import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
  * media is encountered.  At that point, a new TimelineInterval is created
  * and added to the list.
  */
-public class OrthoIntervalVisitor extends AbstractOrthographyVisitor {
+public class OrthoIntervalVisitor extends VisitorAdapter<OrthographyElement> {
 
     private final StringBuilder buffer = new StringBuilder();
 
@@ -24,7 +25,6 @@ public class OrthoIntervalVisitor extends AbstractOrthographyVisitor {
     }
 
     @Visits
-    @Override
     public void visitOrthoGroup(OrthoGroup group) {
         for(OrthographyElement element : group.getElements()) {
             super.visit(element);
@@ -32,7 +32,6 @@ public class OrthoIntervalVisitor extends AbstractOrthographyVisitor {
     }
 
     @Visits
-    @Override
     public void visitPhoneticGroup(PhoneticGroup phoneticGroup) {
         for(OrthographyElement element : phoneticGroup.getElements()) {
             super.visit(element);
@@ -40,14 +39,12 @@ public class OrthoIntervalVisitor extends AbstractOrthographyVisitor {
     }
 
     @Visits
-    @Override
     public void visitCompoundWord(CompoundWord compoundWord) {
         if(buffer.length() > 0) buffer.append(" ");
         buffer.append(compoundWord.text());
     }
 
     @Visits
-    @Override
     public void visitWord(Word word) {
         if(buffer.length() > 0) buffer.append(" ");
         buffer.append(word.text());
@@ -55,7 +52,6 @@ public class OrthoIntervalVisitor extends AbstractOrthographyVisitor {
 
 
     @Visits
-    @Override
     public void visitInternalMedia(InternalMedia internalMedia) {
         if(buffer.length() > 0) {
             final String lbl = buffer.toString();
