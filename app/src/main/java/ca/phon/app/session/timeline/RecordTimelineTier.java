@@ -1,5 +1,6 @@
 package ca.phon.app.session.timeline;
 
+import ca.phon.orthography.Orthography;
 import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.session.spi.TimelineTierSPI;
@@ -35,35 +36,48 @@ public class RecordTimelineTier implements TimelineTierSPI {
     }
 
     public List<TimelineTier.Interval> getIntervals(Record record) {
+        final Tier<?> tier = record.getTier(this.tierName);
         // process tier data
-        final Tier<TierData> tier = record.getTier(this.tierName, TierData.class);
         if(tier == null) return List.of();
 
-        final TierData tierData = tier.getValue();
+        if(tier.getValue() instanceof TierData tierData) {
+            return tierDataIntervals(tierData);
+        } else if(tier.getValue() instanceof Orthography orthography) {
+            return orthographyIntervals(orthography);
+        }
+        return List.of();
+    }
+
+    /**
+     * Get intervals from the given {@link Orthography} object.
+     *
+     * @param orthography
+     * @return
+     */
+    public static List<TimelineTier.Interval> orthographyIntervals(Orthography orthography) {
+        final List<TimelineTier.Interval> intervals = new ArrayList<>();
+        if(orthography == null) return List.of();
+
+        final OrthoIntervalVisitor visitor = new OrthoIntervalVisitor();
+        orthography.accept(visitor);
+
+        return visitor.getIntervals();
+    }
+
+    /**
+     * Get intervals from the given {@link TierData} object.
+     *
+     * @param tierData
+     * @return
+     */
+    public static List<TimelineTier.Interval> tierDataIntervals(TierData tierData) {
+        final List<TimelineTier.Interval> intervals = new ArrayList<>();
         if(tierData == null) return List.of();
 
-        final List<TimelineTier.Interval> intervals = new ArrayList<>();
-        final StringBuilder intervalStr = new StringBuilder();
-        for(int i = 0; i < tierData.size(); i++) {
-            final TierElement element = tierData.elementAt(i);
-            if(element instanceof TierInternalMedia internalMedia) {
-                final String lbl = intervalStr.toString();
+        final TierDataIntervalVisitor visitor = new TierDataIntervalVisitor();
+        tierData.accept(visitor);
 
-                // create TimelineTier.Inverval
-                final TimelineTier.Interval interval =
-                        new TimelineTier.Interval(internalMedia.getStartTime(), internalMedia.getEndTime(), lbl);
-                intervals.add(interval);
-
-                // reset interval string
-                intervalStr.setLength(0);
-            } else if(element instanceof TierString tierString) {
-                if(intervalStr.length() > 0) {
-                    intervalStr.append(" ");
-                }
-                intervalStr.append(tierString.text());
-            }
-        }
-        return intervals;
+        return visitor.getIntervals();
     }
 
     @Override
@@ -86,4 +100,5 @@ public class RecordTimelineTier implements TimelineTierSPI {
     public boolean removeInterval(TimelineTier.Interval interval) {
         return false;
     }
+
 }

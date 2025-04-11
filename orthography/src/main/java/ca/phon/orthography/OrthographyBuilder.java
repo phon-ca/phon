@@ -261,6 +261,10 @@ public final class OrthographyBuilder extends ExtendableObject {
 		Collections.reverse(eleList);
 		return this;
 	}
+
+	public List<OrthographyElement> getElements() {
+		return Collections.unmodifiableList(eleList);
+	}
 	
 	public Orthography toOrthography() {
 		return new Orthography(eleList);
