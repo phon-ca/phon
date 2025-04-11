@@ -4,7 +4,6 @@ import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.extensions.Extension;
 import ca.phon.extensions.ExtensionProvider;
 import ca.phon.extensions.IExtendable;
-import ca.phon.orthography.InternalMedia;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.*;
 import ca.phon.session.Record;
@@ -13,12 +12,12 @@ import ca.phon.session.tierdata.TierData;
 import java.util.ArrayList;
 import java.util.List;
 
-@Extension(Tier.class)
 /**
  * Extension for record media segment changes. This extension will update all record tiers
  * which are included in the session Timeline. Internal media segments will be updated to
  * reflect the new record segment.
  */
+@Extension(Tier.class)
 public class TimelineDependentTierChanges implements TierEdit.DependentTierChanges<MediaSegment>, ExtensionProvider {
 
     @Override
@@ -82,7 +81,7 @@ public class TimelineDependentTierChanges implements TierEdit.DependentTierChang
             final double startTime = segment.getStartTime() + ((internalMedia.getStart() - oldSegment.getStartTime()) / oldDuration) * newDuration;
             final double endTime = segment.getStartTime() + ((internalMedia.getEnd() - oldSegment.getStartTime()) / oldDuration) * newDuration;
             final String label = internalMedia.getLabel();
-            final TimelineTier.Interval newInterval = new TimelineTier.Interval((float)startTime, (float)endTime, internalMedia.getLabel());
+            final TimelineTier.Interval newInterval = new TimelineTier.Interval((float)startTime, (float)endTime, label);
             retVal.add(newInterval);
         }
         return retVal;
@@ -97,4 +96,5 @@ public class TimelineDependentTierChanges implements TierEdit.DependentTierChang
             }
         }
     }
+
 }
