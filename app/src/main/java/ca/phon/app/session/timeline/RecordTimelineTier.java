@@ -5,9 +5,6 @@ import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.session.spi.TimelineTierSPI;
 import ca.phon.session.tierdata.TierData;
-import ca.phon.session.tierdata.TierElement;
-import ca.phon.session.tierdata.TierInternalMedia;
-import ca.phon.session.tierdata.TierString;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -60,7 +60,6 @@ public class TimelineDependentTierChanges implements TierEdit.DependentTierChang
                 tierEdit.fireTierChange((Tier<TierData>)tier, tierData, newTierData);
             }
         }
-
     }
 
     /**
