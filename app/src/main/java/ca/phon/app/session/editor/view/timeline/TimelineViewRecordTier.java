@@ -1284,10 +1284,14 @@ public class TimelineViewRecordTier extends TimelineViewTier implements Clipboar
 					isFirstChange = true;
 					getParentView().getEditor().getUndoSupport().beginUpdate();
 				} else {
+					// final event
+					final RecordSegmentEdit segmentEdit = new RecordSegmentEdit(getParentView().getEditor(), r, segment);
+					segmentEdit.setValueAdjusting(false);
+					getParentView().getEditor().getUndoSupport().postEdit(segmentEdit);
 					getParentView().getEditor().getUndoSupport().endUpdate();
-					getParentView().getEditor().getEventManager().queueEvent(
-							new EditorEvent<>(EditorEventType.TierChange, TimelineViewRecordTier.this,
-									new EditorEventType.TierChangeData(Transcriber.VALIDATOR, r, r.getSegmentTier(), segment, segment, false)));
+//					getParentView().getEditor().getEventManager().queueEvent(
+//							new EditorEvent<>(EditorEventType.TierChange, TimelineViewRecordTier.this,
+//									new EditorEventType.TierChangeData(Transcriber.VALIDATOR, r, r.getSegmentTier(), segment, segment, false)));
 				}
 			} else if(evt.getPropertyName().endsWith("time")) {
 				MediaSegment newSegment = factory.createMediaSegment();
@@ -1585,7 +1589,7 @@ public class TimelineViewRecordTier extends TimelineViewTier implements Clipboar
 					newEndTime = Math.min(et + delta, getTimeModel().getEndTime());
 					newStartTime = newEndTime - intervalDuration;
 				}
-				if(rIdx == getRecordGrid().getCurrentRecordIndex() && valueIsAdjusting) {
+				if(rIdx == getRecordGrid().getCurrentRecordIndex()) {
 					currentRecordInterval.getStartMarker().setTime(newStartTime);
 					currentRecordInterval.getEndMarker().setTime(newEndTime);
 				} else {
