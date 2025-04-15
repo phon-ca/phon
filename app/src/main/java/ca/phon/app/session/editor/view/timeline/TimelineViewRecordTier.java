@@ -352,7 +352,7 @@ public class TimelineViewRecordTier extends TimelineViewTier implements Clipboar
 				seg.setEndValue(endValue);
 
 				final RecordSegmentEdit changeSeg = new RecordSegmentEdit(getParentView().getEditor(), r, seg);
-				changeSeg.setFireHardChangeOnUndo(true);
+				changeSeg.setValueAdjusting(false);
 				getParentView().getEditor().getUndoSupport().postEdit(changeSeg);
 			}
 		}
@@ -1397,10 +1397,12 @@ public class TimelineViewRecordTier extends TimelineViewTier implements Clipboar
 	
 	private void endRecordDrag() {
 		Toolkit.getDefaultToolkit().removeAWTEventListener(cancelDragListener);
-		if (currentRecordInterval != null)
+		if (currentRecordInterval != null) {
 			currentRecordInterval.setValueAdjusting(false);
+		}
 		dragData.draggedRecord = -1;
 		dragData.mouseDragOffset = -1.0f;
+
 	}
 	
 	private void cancelRecordDrag() {
@@ -1488,6 +1490,12 @@ public class TimelineViewRecordTier extends TimelineViewTier implements Clipboar
 
 		@Override
 		public void recordReleased(int recordIndex, MouseEvent me) {
+			if (currentRecordInterval != null) {
+				currentRecordInterval.setValueAdjusting(false);
+				if(!dragData.isFirstChange) {
+					updateSelectedRecordIntervals(0, 1, false);
+				}
+			}
 			endRecordDrag();
 		}
 
@@ -1550,42 +1558,45 @@ public class TimelineViewRecordTier extends TimelineViewTier implements Clipboar
 				float newOffsetTime = recordGrid.timeAtX(me.getX());
 				int direction = (oldOffsetTime < newOffsetTime ? 1 : -1);
 				float delta = (direction < 0 ? oldOffsetTime - newOffsetTime : newOffsetTime - oldOffsetTime);
+				updateSelectedRecordIntervals(delta, direction, currentRecordInterval.isValueAdjusting());
 
-				for(int rIdx:getSelectionModel().getSelectedIndices()) {
-					Record selectedRecord = getRecordGrid().getSession().getRecord(rIdx);
-					MediaSegment seg = selectedRecord.getMediaSegment();
-
-					float st = (rIdx == getRecordGrid().getCurrentRecordIndex() ?
-							currentRecordInterval.getStartMarker().getTime() : seg.getStartTime());
-					float et = (rIdx == getRecordGrid().getCurrentRecordIndex() ?
-							currentRecordInterval.getEndMarker().getTime() : seg.getEndTime());
-					float intervalDuration = et - st;
-
-					float newStartTime = 0.0f;
-					float newEndTime = 0.0f;
-
-					if (direction < 0) {
-						newStartTime = Math.max(st - delta, getTimeModel().getStartTime());
-						newEndTime = newStartTime + intervalDuration;
-					} else {
-						newEndTime = Math.min(et + delta, getTimeModel().getEndTime());
-						newStartTime = newEndTime - intervalDuration;
-					}
-					if(rIdx == getRecordGrid().getCurrentRecordIndex()) {
-						currentRecordInterval.getStartMarker().setTime(newStartTime);
-						currentRecordInterval.getEndMarker().setTime(newEndTime);
-					} else {
-						MediaSegment editSeg = dragData.editSegments.get(rIdx);
-						editSeg.setStartTime(newStartTime);
-						editSeg.setEndTime(newEndTime);
-
-//						if(dragData.isFirstChange) {
-							final RecordSegmentEdit tierEdit = new RecordSegmentEdit(getParentView().getEditor(), selectedRecord, editSeg);
-							getParentView().getEditor().getUndoSupport().postEdit(tierEdit);
-//						}
-					}
-				}
 				dragData.isFirstChange = false;
+			}
+		}
+
+		private void updateSelectedRecordIntervals(float delta, int direction, boolean valueIsAdjusting) {
+			for(int rIdx:getSelectionModel().getSelectedIndices()) {
+				Record selectedRecord = getRecordGrid().getSession().getRecord(rIdx);
+				MediaSegment seg = selectedRecord.getMediaSegment();
+
+				float st = (rIdx == getRecordGrid().getCurrentRecordIndex() ?
+						currentRecordInterval.getStartMarker().getTime() : seg.getStartTime());
+				float et = (rIdx == getRecordGrid().getCurrentRecordIndex() ?
+						currentRecordInterval.getEndMarker().getTime() : seg.getEndTime());
+				float intervalDuration = et - st;
+
+				float newStartTime = 0.0f;
+				float newEndTime = 0.0f;
+
+				if (direction < 0) {
+					newStartTime = Math.max(st - delta, getTimeModel().getStartTime());
+					newEndTime = newStartTime + intervalDuration;
+				} else {
+					newEndTime = Math.min(et + delta, getTimeModel().getEndTime());
+					newStartTime = newEndTime - intervalDuration;
+				}
+				if(rIdx == getRecordGrid().getCurrentRecordIndex() && valueIsAdjusting) {
+					currentRecordInterval.getStartMarker().setTime(newStartTime);
+					currentRecordInterval.getEndMarker().setTime(newEndTime);
+				} else {
+					MediaSegment editSeg = dragData.editSegments.get(rIdx);
+					editSeg.setStartTime(newStartTime);
+					editSeg.setEndTime(newEndTime);
+
+					final RecordSegmentEdit tierEdit = new RecordSegmentEdit(getParentView().getEditor(), selectedRecord, editSeg);
+					tierEdit.setValueAdjusting(valueIsAdjusting);
+					getParentView().getEditor().getUndoSupport().postEdit(tierEdit);
+				}
 			}
 		}
 

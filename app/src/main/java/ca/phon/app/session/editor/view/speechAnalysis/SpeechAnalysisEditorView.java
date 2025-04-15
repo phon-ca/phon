@@ -306,7 +306,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 			clearSelection();
 
 			final RecordSegmentEdit segEdit = new RecordSegmentEdit(getEditor(), r, seg);
-			segEdit.setFireHardChangeOnUndo(true);
+			segEdit.setValueAdjusting(false);
 			getEditor().getUndoSupport().postEdit(segEdit);
 		}
 	}
@@ -1082,7 +1082,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 
 	private class RecordIntervalListener implements PropertyChangeListener {
 
-		private boolean isFirstChange = true;
+		private boolean isValueAdjusting = true;
 
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
@@ -1098,12 +1098,14 @@ public class SpeechAnalysisEditorView extends EditorView {
 				}
 								
 				if((boolean)evt.getNewValue()) {
-					isFirstChange = true;
+					isValueAdjusting = true;
 					getEditor().getUndoSupport().beginUpdate();
 				} else {
 					getEditor().getUndoSupport().endUpdate();
-					final EditorEventType.TierChangeData data = new EditorEventType.TierChangeData(getEditor().getDataModel().getTranscriber(), r, r.getSegmentTier(), r.getMediaSegment(), r.getMediaSegment(), false);
-					getEditor().getEventManager().queueEvent(new EditorEvent<>(EditorEventType.TierChange, SpeechAnalysisEditorView.this, data));
+
+					final RecordSegmentEdit segmentEdit = new RecordSegmentEdit(getEditor(), r, segment);
+					segmentEdit.setValueAdjusting(false);
+					getEditor().getUndoSupport().postEdit(segmentEdit);
 				}
 			} else if(evt.getPropertyName().endsWith("time")) {
 				MediaSegment newSegment = factory.createMediaSegment();
@@ -1119,8 +1121,7 @@ public class SpeechAnalysisEditorView extends EditorView {
 
 				final RecordSegmentEdit segmentEdit = new RecordSegmentEdit(getEditor(), r, newSegment);
 				getEditor().getUndoSupport().postEdit(segmentEdit);
-				segmentEdit.setFireHardChangeOnUndo(isFirstChange);
-				isFirstChange = false;
+				segmentEdit.setValueAdjusting(isValueAdjusting);
 			}
 		}
 

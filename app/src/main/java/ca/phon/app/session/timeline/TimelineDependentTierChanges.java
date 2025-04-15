@@ -89,7 +89,7 @@ public class TimelineDependentTierChanges implements TierEdit.DependentTierChang
     @Override
     public void installExtension(IExtendable obj) {
         if(obj instanceof Tier<?> tier) {
-            if(tier.getDeclaredType() == MediaSegment.class) {
+            if(SystemTierType.Segment.getName().equals(tier.getName()) && tier.getDeclaredType() == MediaSegment.class) {
                 final TimelineDependentTierChanges extension = new TimelineDependentTierChanges();
                 tier.putExtension(TierEdit.DependentTierChanges.class, extension);
             }
