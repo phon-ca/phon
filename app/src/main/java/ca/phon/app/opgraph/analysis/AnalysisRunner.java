@@ -30,6 +30,9 @@ import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Execute an analysis graph, optionally showing the graph wizard.
+ */
 public class AnalysisRunner implements Runnable {
 
 	private URL graphURL;
@@ -103,7 +106,12 @@ public class AnalysisRunner implements Runnable {
 	}
 
 	private OpGraph loadAnalysis() throws IOException {
-		return OpgraphIO.read(graphURL.openStream());
+		final OpGraph retVal = OpgraphIO.read(graphURL.openStream());
+
+		// check version, if no version found this analysis was created using Phon 3.x, don't run!
+
+
+		return retVal;
 	}
 	
 	@Override

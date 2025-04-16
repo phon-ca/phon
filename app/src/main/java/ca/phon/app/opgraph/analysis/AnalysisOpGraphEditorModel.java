@@ -37,6 +37,9 @@ import javax.swing.undo.UndoableEdit;
 import java.awt.*;
 import java.util.Map;
 
+/**
+ * opgraph editor model for analysis graphs.
+ */
 public class AnalysisOpGraphEditorModel extends OpgraphEditorModel {
 
 	private JPanel debugSettings;

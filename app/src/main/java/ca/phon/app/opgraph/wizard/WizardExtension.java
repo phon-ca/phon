@@ -15,6 +15,7 @@
  */
 package ca.phon.app.opgraph.wizard;
 
+import ca.phon.app.VersionInfo;
 import ca.phon.app.opgraph.wizard.WizardExtensionEvent.EventType;
 import ca.phon.opgraph.*;
 
@@ -305,6 +306,14 @@ public class WizardExtension implements Iterable<OpNode>, Cloneable {
 		return this.wizardInfo;
 	}
 
+	public void setMadeWithVersion(VersionInfo version) {
+		this.wizardInfo.setMadeWithVersion(version);
+	}
+
+	public VersionInfo getMadeWithVersion() {
+		return this.wizardInfo.getMadeWithVersion();
+	}
+
 	/**
 	 * Setup a map of object which will be added to the
 	 * report generator context.
@@ -322,7 +331,8 @@ public class WizardExtension implements Iterable<OpNode>, Cloneable {
 		
 		retVal.setWizardTitle(getWizardTitle());
 		retVal.setWizardMessage(getWizardMessage(), getWizardMessageFormat());
-		
+		retVal.setMadeWithVersion(getMadeWithVersion());
+
 		for(OpNode node:this) {
 			retVal.addNode(node);
 			retVal.setNodeTitle(node, getNodeTitle(node));

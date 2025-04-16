@@ -25,6 +25,9 @@ import java.io.File;
 import java.net.*;
 import java.util.*;
 
+/**
+ * Action to run an analysis graph.
+ */
 public class AnalysisAction extends HookableAction {
 
 	private Project project;

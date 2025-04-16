@@ -32,6 +32,15 @@ import java.net.URI;
 import java.util.List;
 import java.util.*;
 
+/**
+ * Wizard for running an analysis graph. This wizard allows the user to
+ * select the sessions and participants to be used in the analysis.  It will
+ * also allow the user to configure the settings for the analysis.
+ *
+ * At the end of graph execution, the user will be presented with a tree of results.  Each leaf
+ * in the tree will be a table of results.  The user can then select a table and
+ * export it to a file.  An HTML report will be generated if requested and displayed as well.
+ */
 public class AnalysisWizard extends NodeWizard {
 
 	private static final long serialVersionUID = -3667158379797520370L;

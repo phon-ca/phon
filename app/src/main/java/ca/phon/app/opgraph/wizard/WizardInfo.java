@@ -15,6 +15,7 @@
  */
 package ca.phon.app.opgraph.wizard;
 
+import ca.phon.app.VersionInfo;
 import org.commonmark.Extension;
 import org.commonmark.ext.gfm.tables.TablesExtension;
 import org.commonmark.html.HtmlRenderer;
@@ -33,6 +34,8 @@ public class WizardInfo {
 	private String message;
 	
 	private WizardInfoMessageFormat format = WizardInfoMessageFormat.HTML;
+
+	private VersionInfo madeWithVersion;
 	
 	public WizardInfo() {
 		this("");
@@ -75,6 +78,14 @@ public class WizardInfo {
 
 	public void setFormat(WizardInfoMessageFormat format) {
 		this.format = format;
+	}
+
+	public VersionInfo getMadeWithVersion() {
+		return this.madeWithVersion;
+	}
+
+	public void setMadeWithVersion(VersionInfo version) {
+		this.madeWithVersion = version;
 	}
 	
 	private String markdownToHTML(String md) {

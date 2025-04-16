@@ -15,6 +15,7 @@
  */
 package ca.phon.app.opgraph.wizard;
 
+import ca.phon.app.VersionInfo;
 import ca.phon.opgraph.*;
 import ca.phon.opgraph.io.xml.*;
 import ca.phon.xml.XMLConstants;
@@ -24,6 +25,9 @@ import javax.xml.namespace.QName;
 import java.io.IOException;
 import java.lang.reflect.*;
 
+/**
+ * XML serializer for {@link WizardExtension} objects.
+ */
 public class NodeWizardXMLSerializer implements XMLSerializer {
 	
 	static final String NAMESPACE = "https://phon.ca/ns/opgraph_query";
@@ -37,50 +41,50 @@ public class NodeWizardXMLSerializer implements XMLSerializer {
 		if(obj == null)
 			throw new IOException("Null object given to serializer");
 		
-		if(!(obj instanceof WizardExtension))
+		if(!(obj instanceof WizardExtension wizardExt))
 			throw new IOException(getClass().getName() + " cannot write objects of type " + obj.getClass());
 		
 		final Element rootEle = doc.getDocumentElement();
 		rootEle.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
 				XMLConstants.XMLNS_ATTRIBUTE + ":" + PREFIX, NAMESPACE);
 		
-		final WizardExtension nodeList = (WizardExtension)obj;
 		final Element settingsEle =
 				doc.createElementNS(NAMESPACE, PREFIX + ":" + QNAME.getLocalPart());
 		settingsEle.setAttribute("type", obj.getClass().getName());
 		
 		final Element wizardInfoEle = doc.createElementNS(NAMESPACE, PREFIX + ":info");
-		wizardInfoEle.setAttribute("title", nodeList.getWizardTitle());
-		wizardInfoEle.setAttribute("format", nodeList.getWizardMessageFormat().toString().toLowerCase());
+		wizardInfoEle.setAttribute("title", wizardExt.getWizardTitle());
+		wizardInfoEle.setAttribute("format", wizardExt.getWizardMessageFormat().toString().toLowerCase());
+		wizardInfoEle.setAttribute("madeWithVersion", wizardExt.getMadeWithVersion().toString());
 		final Element wizardMessageEle = doc.createElementNS(NAMESPACE, PREFIX + ":message");
-		wizardMessageEle.setTextContent(nodeList.getWizardMessage());
+		wizardMessageEle.setTextContent(wizardExt.getWizardMessage());
 		wizardInfoEle.appendChild(wizardMessageEle);
 		settingsEle.appendChild(wizardInfoEle);
 		
-		for(OpNode node:nodeList) {
+		for(OpNode node:wizardExt) {
 			final Element nodeEle = 
 					doc.createElementNS(NAMESPACE, PREFIX + ":node");
 			nodeEle.setAttribute("ref", node.getId());
-			if(nodeList.isNodeForced(node)) {
-				nodeEle.setAttribute("showAsStep", Boolean.toString(nodeList.isNodeForced(node)));
+			if(wizardExt.isNodeForced(node)) {
+				nodeEle.setAttribute("showAsStep", Boolean.toString(wizardExt.isNodeForced(node)));
 			}
 			
 			final Element infoEle = doc.createElementNS(NAMESPACE, PREFIX + ":info");
-			infoEle.setAttribute("title", nodeList.getNodeTitle(node));
-			infoEle.setAttribute("format", nodeList.getNodeMessageFormat(node).toString().toLowerCase());
+			infoEle.setAttribute("title", wizardExt.getNodeTitle(node));
+			infoEle.setAttribute("format", wizardExt.getNodeMessageFormat(node).toString().toLowerCase());
 			final Element messageEle = doc.createElementNS(NAMESPACE, PREFIX + ":message");
-			messageEle.setTextContent(nodeList.getNodeMessage(node));
+			messageEle.setTextContent(wizardExt.getNodeMessage(node));
 			infoEle.appendChild(messageEle);
 			nodeEle.appendChild(infoEle);
 			
 			settingsEle.appendChild(nodeEle);
 		}
 		
-		for(OpNode node:nodeList.getOptionalNodes()) {
+		for(OpNode node:wizardExt.getOptionalNodes()) {
 			final Element nodeEle = 
 					doc.createElementNS(NAMESPACE, PREFIX + ":optionalNode");
 			nodeEle.setAttribute("ref", node.getId());
-			nodeEle.setAttribute("enabled", Boolean.toString(nodeList.getOptionalNodeDefault(node)));
+			nodeEle.setAttribute("enabled", Boolean.toString(wizardExt.getOptionalNodeDefault(node)));
 			
 			settingsEle.appendChild(nodeEle);
 		}
@@ -128,10 +132,19 @@ public class NodeWizardXMLSerializer implements XMLSerializer {
 				final NodeList infoNodes = child.getChildNodes();
 				for(int j = 0; j < infoNodes.getLength(); j++) {
 					final Node infoNode = infoNodes.item(j);
-					if(infoNode.getNodeName().equals(PREFIX + ":message")) {
+					if (infoNode.getNodeName().equals(PREFIX + ":message")) {
 						ext.setWizardMessage(infoNode.getTextContent(), format);
 					}
 				}
+				String version = "3.5.0";
+				for(int j = 0; j < child.getAttributes().getLength(); j++) {
+					final Node attr = child.getAttributes().item(j);
+					if(attr.getNodeName().equals("madeWithVersion")) {
+						version = attr.getNodeValue();
+					}
+				}
+				final VersionInfo madeWithVersion = new VersionInfo(version);
+				ext.setMadeWithVersion(madeWithVersion);
 			} else if(child.getNodeName().equals(PREFIX + ":node")) {
 				final String nodeId = child.getAttributes().getNamedItem("ref").getNodeValue();
 				
