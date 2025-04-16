@@ -35,6 +35,8 @@ public class NodeWizardXMLSerializer implements XMLSerializer {
 	
 	static final QName QNAME = new QName(NAMESPACE, "nodewizard", PREFIX);
 
+	private final VersionInfo DEFAULT_MIN_VERSION = new VersionInfo("4.0.0");
+
 	@Override
 	public void write(XMLSerializerFactory serializerFactory, Document doc,
 			Element parentElem, Object obj) throws IOException {
@@ -55,7 +57,8 @@ public class NodeWizardXMLSerializer implements XMLSerializer {
 		final Element wizardInfoEle = doc.createElementNS(NAMESPACE, PREFIX + ":info");
 		wizardInfoEle.setAttribute("title", wizardExt.getWizardTitle());
 		wizardInfoEle.setAttribute("format", wizardExt.getWizardMessageFormat().toString().toLowerCase());
-		wizardInfoEle.setAttribute("minVersion", wizardExt.getMinVersion().toString());
+		final VersionInfo minVersion = wizardExt.getMinVersion() != null ? wizardExt.getMinVersion() : DEFAULT_MIN_VERSION;
+		wizardInfoEle.setAttribute("minVersion", minVersion.toString());
 		final Element wizardMessageEle = doc.createElementNS(NAMESPACE, PREFIX + ":message");
 		wizardMessageEle.setTextContent(wizardExt.getWizardMessage());
 		wizardInfoEle.appendChild(wizardMessageEle);
