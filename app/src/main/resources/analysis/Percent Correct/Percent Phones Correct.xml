@@ -1335,7 +1335,7 @@ function run(context) {
         <link dest="d6eb54e5383f44b7" destField="selectedDiacritics" source="788f7598" sourceField="selectedDiacritics"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
-                <opqry:info format="html" title="Percent Phones Correct">
+                <opqry:info format="html" title="Percent Phones Correct" minVersion="4.0.0">
                     <opqry:message/>
                 </opqry:info>
                 <opqry:node ref="dc4dad38c60648c1" showAsStep="true">

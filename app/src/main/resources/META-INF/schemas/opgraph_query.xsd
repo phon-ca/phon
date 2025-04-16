@@ -271,6 +271,7 @@
 		</xs:sequence>
 		<xs:attribute name="title" type="xs:string" use="optional"/>
 		<xs:attribute name="format" type="WizardInfoMessageFormat" use="optional" default="html"/>
+		<xs:attribute name="minVersion" type="xs:string" use="optional"/>
 	</xs:complexType>
 
 	<xs:complexType name="ReportTemplateType" mixed="true">

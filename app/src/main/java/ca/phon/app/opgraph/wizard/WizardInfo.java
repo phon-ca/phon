@@ -35,7 +35,11 @@ public class WizardInfo {
 	
 	private WizardInfoMessageFormat format = WizardInfoMessageFormat.HTML;
 
-	private VersionInfo madeWithVersion;
+	/**
+	 * Minimum version of Phon required to use this wizard.
+	 * May be null in older documents created with older versions of Phon.
+	 */
+	private VersionInfo minVersion;
 	
 	public WizardInfo() {
 		this("");
@@ -80,12 +84,12 @@ public class WizardInfo {
 		this.format = format;
 	}
 
-	public VersionInfo getMadeWithVersion() {
-		return this.madeWithVersion;
+	public VersionInfo getMinVersion() {
+		return this.minVersion;
 	}
 
-	public void setMadeWithVersion(VersionInfo version) {
-		this.madeWithVersion = version;
+	public void setMinVersion(VersionInfo version) {
+		this.minVersion = version;
 	}
 	
 	private String markdownToHTML(String md) {

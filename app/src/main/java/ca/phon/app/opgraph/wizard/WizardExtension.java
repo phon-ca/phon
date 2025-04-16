@@ -306,12 +306,12 @@ public class WizardExtension implements Iterable<OpNode>, Cloneable {
 		return this.wizardInfo;
 	}
 
-	public void setMadeWithVersion(VersionInfo version) {
-		this.wizardInfo.setMadeWithVersion(version);
+	public void setMinVersion(VersionInfo version) {
+		this.wizardInfo.setMinVersion(version);
 	}
 
-	public VersionInfo getMadeWithVersion() {
-		return this.wizardInfo.getMadeWithVersion();
+	public VersionInfo getMinVersion() {
+		return this.wizardInfo.getMinVersion();
 	}
 
 	/**
@@ -331,7 +331,7 @@ public class WizardExtension implements Iterable<OpNode>, Cloneable {
 		
 		retVal.setWizardTitle(getWizardTitle());
 		retVal.setWizardMessage(getWizardMessage(), getWizardMessageFormat());
-		retVal.setMadeWithVersion(getMadeWithVersion());
+		retVal.setMinVersion(getMinVersion());
 
 		for(OpNode node:this) {
 			retVal.addNode(node);

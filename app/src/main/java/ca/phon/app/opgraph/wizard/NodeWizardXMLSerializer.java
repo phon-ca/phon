@@ -55,7 +55,7 @@ public class NodeWizardXMLSerializer implements XMLSerializer {
 		final Element wizardInfoEle = doc.createElementNS(NAMESPACE, PREFIX + ":info");
 		wizardInfoEle.setAttribute("title", wizardExt.getWizardTitle());
 		wizardInfoEle.setAttribute("format", wizardExt.getWizardMessageFormat().toString().toLowerCase());
-		wizardInfoEle.setAttribute("madeWithVersion", wizardExt.getMadeWithVersion().toString());
+		wizardInfoEle.setAttribute("minVersion", wizardExt.getMinVersion().toString());
 		final Element wizardMessageEle = doc.createElementNS(NAMESPACE, PREFIX + ":message");
 		wizardMessageEle.setTextContent(wizardExt.getWizardMessage());
 		wizardInfoEle.appendChild(wizardMessageEle);
@@ -136,15 +136,11 @@ public class NodeWizardXMLSerializer implements XMLSerializer {
 						ext.setWizardMessage(infoNode.getTextContent(), format);
 					}
 				}
-				String version = "3.5.0";
-				for(int j = 0; j < child.getAttributes().getLength(); j++) {
-					final Node attr = child.getAttributes().item(j);
-					if(attr.getNodeName().equals("madeWithVersion")) {
-						version = attr.getNodeValue();
-					}
+				final Node minVersionNode = child.getAttributes().getNamedItem("minVersion");
+				if(minVersionNode != null) {
+					final VersionInfo minVersion = new VersionInfo(minVersionNode.getNodeValue());
+					ext.setMinVersion(minVersion);
 				}
-				final VersionInfo madeWithVersion = new VersionInfo(version);
-				ext.setMadeWithVersion(madeWithVersion);
 			} else if(child.getNodeName().equals(PREFIX + ":node")) {
 				final String nodeId = child.getAttributes().getNamedItem("ref").getNodeValue();
 				
