@@ -1,0 +1,1 @@
+default=macro/Generic Report.xml
