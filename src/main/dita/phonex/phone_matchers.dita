@@ -2,7 +2,7 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="concept_pjp_4nm_gg">
  <title>Phone Matchers</title>
- <shortdesc>Various methods of matching phones using phonex 2.0.</shortdesc>
+ <shortdesc>Type of matchers available in phonex.</shortdesc>
  <conbody>
   <p>As outlined in the Phonex Constructs section, there are several methods for matching phones in
    phonex.  This section describes these methods in more detail.</p>

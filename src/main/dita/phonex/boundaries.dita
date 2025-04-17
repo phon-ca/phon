@@ -2,10 +2,8 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="concept_qb1_dhn_gg">
  <title>Boundaries</title>
- <shortdesc>Description of special boundary markers.</shortdesc>
+ <shortdesc>Description of special boundary matchers.</shortdesc>
  <conbody>
-  <p>Boundary markers perform special operations.  Since they have the ability to match nothing,
-   quantifiers and plug-in matchers cannot be applied to boundary matchers.</p>
   <section>
    <title>Beginning/End of Input</title>
    <p>The beginning and end of input characters ('^' and '$' respectively) match exactly what their
