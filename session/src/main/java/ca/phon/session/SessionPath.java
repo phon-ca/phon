@@ -93,7 +93,7 @@ public class SessionPath implements IExtendable, Comparable<SessionPath> {
 	public String getSessionName() {
 		final int lastDotIdx = getSessionFile().lastIndexOf('.');
 		if(lastDotIdx >= 0) {
-			return getSessionName().substring(0, lastDotIdx);
+			return getSessionFile().substring(0, lastDotIdx);
 		} else {
 			return getSessionFile();
 		}

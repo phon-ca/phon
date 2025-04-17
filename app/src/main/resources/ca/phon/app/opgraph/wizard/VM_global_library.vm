@@ -48,11 +48,11 @@
 #end
 
 #macro( printSessionLink $sessionPath )
-<td class='session-link'><span onclick="openSession('$sessionPath.corpus', '$sessionPath.session')">$sessionPath</span></td>
+<td class='session-link'><span onclick="openSession('$sessionPath.folder', '$sessionPath.sessionName')">$sessionPath</span></td>
 #end
 
 #macro( printRecordLink $sessionPath $recordNum )
-<td class='session-link'><span onclick="openSessionAtRecord('$sessionPath.corpus', '$sessionPath.session', ($recordNum - 1))">$recordNum</span></td>
+<td class='session-link'><span onclick="openSessionAtRecord('$sessionPath.folder', '$sessionPath.sessionName', ($recordNum - 1))">$recordNum</span></td>
 #end
 
 #macro( printResultValue $sessionPath $result $rv $v )
@@ -66,10 +66,12 @@
 	#elseif($number.isAssignableFrom($clazz))
 		#set($type = "number-value")
 	#else #set($type = "text-value")#end
+	#set($sessionName = $sessionPath.sessionName)
+	#set($corpus = $sessionPath.folder)
+	#set($recordIndex = $result.recordIndex)
 	#set($tiers = $rv.tierName)
-	#set($groups = $rv.groupIndex + "")
 	#set($ranges = $rv.range + "")
-<td class='$type session-link'><span onclick="openSessionWithHighlightedValues('$sessionPath.corpus', '$sessionPath.session', '$groups', '$tiers', '$ranges' )">$txt</span></td>
+<td class='$type session-link'><span onclick="openSessionWithHighlightedValues('$corpus', '$sessionName', $recordIndex, '$tiers', '$ranges' )">$txt</span></td>
 	#end
 #end
 

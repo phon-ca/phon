@@ -174,10 +174,9 @@ function openSessionAtRecord(corpus, session, recordIdx) {
     }
 }
 
-function openSessionWithHighlightedValues(corpus, session, recordIdx, groupIdx, tiers, ranges) {
+function openSessionWithHighlightedValues(corpus, session, recordIdx, tiers, ranges) {
     if(window.projectLocation) {
         var uri = "phon:" + window.projectLocation + corpus + "/" + session + "?record=" + recordIdx;
-        uri += "&group=" + groupIdx;
         uri += "&tier=" + tiers;
         uri += "&range=" + ranges;
         loadUri(uri);
