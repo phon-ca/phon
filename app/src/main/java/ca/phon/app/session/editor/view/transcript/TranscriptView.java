@@ -166,7 +166,11 @@ public class TranscriptView extends EditorView {
         actionMap.put("showReplace", showReplaceAct);
 
         KeyStroke playSegmentKs = KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, KeyEvent.CTRL_DOWN_MASK);
+        KeyStroke playSegmentKs2 = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, KeyEvent.CTRL_DOWN_MASK);
+        KeyStroke playSegmentKs3 = KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0);
         inputMap.put(playSegmentKs, "playSegment");
+        inputMap.put(playSegmentKs2, "playSegment");
+        inputMap.put(playSegmentKs3, "playSegment");
         PhonUIAction<Void> playSegmentAct = PhonUIAction.eventConsumer(this::playPause);
         actionMap.put("playSegment", playSegmentAct);
     }
