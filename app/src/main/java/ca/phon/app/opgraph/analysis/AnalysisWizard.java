@@ -23,7 +23,6 @@ import ca.phon.project.Project;
 import ca.phon.session.*;
 import ca.phon.ui.wizard.WizardStep;
 import ca.phon.util.Tuple;
-import org.apache.commons.lang.StringEscapeUtils;
 
 import java.awt.*;
 import java.io.File;
@@ -72,7 +71,6 @@ public class AnalysisWizard extends NodeWizard {
 
 	@Override
 	protected void setupWizardSteps() {
-		
 		super.setupWizardSteps();
 		Processor processor = getProcessor();
 		

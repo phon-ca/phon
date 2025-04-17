@@ -20,10 +20,12 @@ import bibliothek.gui.dock.common.action.CButton;
 import bibliothek.gui.dock.common.event.CVetoClosingEvent;
 import bibliothek.gui.dock.common.event.CVetoClosingListener;
 import ca.phon.app.JCefHelper;
+import ca.phon.app.VersionInfo;
 import ca.phon.app.actions.PhonURISchemeHandler;
 import ca.phon.app.log.*;
 import ca.phon.app.log.actions.SaveBufferAction;
 import ca.phon.app.opgraph.*;
+import ca.phon.app.opgraph.analysis.AnalysisWizardExtension;
 import ca.phon.app.opgraph.nodes.log.*;
 import ca.phon.app.opgraph.nodes.query.QueryNode;
 import ca.phon.app.opgraph.nodes.report.*;
@@ -208,6 +210,24 @@ public class NodeWizard extends BreadcrumbWizardFrame {
 		SwingUtilities.invokeLater( () -> {
 			setupWizardSteps();
 			updateBreadcrumbButtons();
+
+			// check out minVersion of the analysis graph
+			final WizardExtension wizardExtension = processor.getGraph().getExtension(WizardExtension.class);
+			if(wizardExtension != null) {
+				final VersionInfo minVersion = wizardExtension.getMinVersion();
+				if(minVersion == null) {
+					// no minVersion, assume is too old to run
+					final String msg = String.format("This file was created using an older version of Phon and may not run correctly.");
+					showOkDialog("Version Error", msg);
+				} else {
+					final int cmp = minVersion.compareTo(new VersionInfo(VersionInfo.getInstance().getNumericalVersion()));
+					if(cmp > 0) {
+						// minVersion is greater than current version
+						final String msg = String.format("This file requires Phon version %s or greater. Please update to the latest version of Phon to run this file.", minVersion);
+						showOkDialog("Version Error", msg);
+					}
+				}
+			}
 		});
 	}
 	
