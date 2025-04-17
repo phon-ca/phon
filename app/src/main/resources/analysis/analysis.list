@@ -3,3 +3,14 @@ analysis/Inventory/Word Inventory.xml
 analysis/Percent Correct/Percent Phones Correct.xml
 analysis/Percent Correct/Percent Diacritics Correct.xml
 analysis/Percent Correct/Percent Number Tones Correct.xml
+analysis/Phonological Processes/Coronal Backing.xml
+analysis/Phonological Processes/Custom Process.xml
+analysis/Phonological Processes/Deaffrication.xml
+analysis/Phonological Processes/Deletion.xml
+analysis/Phonological Processes/Devoicing.xml
+analysis/Phonological Processes/Liquid Gliding & Vocalization.xml
+analysis/Phonological Processes/Glottalization.xml
+analysis/Phonological Processes/Lateralization.xml
+analysis/Phonological Processes/Fricative Stopping.xml
+analysis/Phonological Processes/Velar Fronting.xml
+analysis/Phonological Processes/Voicing.xml
