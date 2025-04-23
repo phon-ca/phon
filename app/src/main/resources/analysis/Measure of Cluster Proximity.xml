@@ -25,15 +25,15 @@
                     <oga:property key="filters.wordTiers.tiers"><![CDATA[Orthography,IPA Target,IPA Actual]]></oga:property>
                     <oga:property key="__script"><![CDATA[importClass(Packages.ca.phon.query.script.params.DiacriticOptionsScriptParam)
 
-var GroupFilter = require("lib/GroupFilter").GroupFilter;
-var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
+var AlignedTierFilter = require("lib/TierFilter").TierFilter;
 var WordFilter = require("lib/WordFilter").WordFilter;
 var TierList = require("lib/TierList").TierList;
 var AlignedWordFilter = require("lib/TierFilter").TierFilter;
+var SyllableFilter = require("lib/SyllableFilter").SyllableFilter;
+var ParticipantFilter = require("lib/ParticipantFilter").ParticipantFilter;
 var PatternFilter = require("lib/PatternFilter").PatternFilter;
 var PatternType = require("lib/PatternFilter").PatternType;
-var ResultType = require("lib/PhonScriptConstants").ResultType;
-var ParticipantFilter = require("lib/ParticipantFilter").ParticipantFilter;
+var SearchByOptions = require("lib/SearchByOptions").SearchByOptions;
 
 /********************************
  * Setup params
@@ -42,14 +42,14 @@ var ParticipantFilter = require("lib/ParticipantFilter").ParticipantFilter;
 var filters = {
 	"targetResultFilter": new PatternFilter("filters.targetResultFilter"),
 	"actualResultFilter": new PatternFilter("filters.actualResultFilter"),
-	"group": new GroupFilter("filters.group"),
-	"groupTiers": new TierList("filters.groupTiers"),
-	"groupPattern": new PatternFilter("filters.groupPattern"),
-	"alignedGroup": new AlignedGroupFilter("filters.alignedGroup"),
+	"tierFilter": new PatternFilter("filters.tierFilter"),
+	"alignedTierFilter": new AlignedTierFilter("filters.alignedTierFilter"),
 	"word": new WordFilter("filters.word"),
-	"wordTiers": new TierList("filters.wordTiers"),
 	"wordPattern": new PatternFilter("filters.wordPattern"),
+	"addTiers": new TierList("filters.addTiers"),
+	"wordTiers": new TierList("filters.wordTiers"),
 	"alignedWord": new AlignedWordFilter("filters.alignedWord"),
+	"syllable": new SyllableFilter("filters.syllable"),
 	"speaker": new ParticipantFilter("filters.speaker")
 };
 
@@ -98,16 +98,16 @@ function setup_params(params) {
 			reportTitleParamInfo.id,
 			reportTitleParamInfo.title,
 			reportTitleParamInfo.def);
-     reportTitleParam.setPrompt(reportTitleParamInfo.prompt);
+	reportTitleParam.setPrompt(reportTitleParamInfo.prompt);
 	params.add(reportTitleParam);
-
+	
 	combineParticipantsParam = new BooleanScriptParam(
 		combineParticipantsParamInfo.id,
 		combineParticipantsParamInfo.desc,
 		combineParticipantsParamInfo.title,
 		combineParticipantsParamInfo.def);
 	params.add(combineParticipantsParam);
-
+	
 	var optionsSep = new SeparatorScriptParam("Options", false);
 	params.add(optionsSep);
 	
@@ -118,20 +118,19 @@ function setup_params(params) {
 		clusterTypeParamInfo.desc,
 		clusterTypeParamInfo.cols);
 	params.add(clusterTypeParam);
-
+	
 	diacriticOptionsParam = new DiacriticOptionsScriptParam(
-        diacriticOptionsParamInfo.id,
-        diacriticOptionsParamInfo.desc,
-        diacriticOptionsParamInfo.def,
-        diacriticOptionsParamInfo.retainDia
-    );
-    params.add(diacriticOptionsParam);
-    
-	// setup result filter section
+	   diacriticOptionsParamInfo.id,
+	   diacriticOptionsParamInfo.desc,
+	   diacriticOptionsParamInfo.def,
+	   diacriticOptionsParamInfo.retainDia
+	);
+	params.add(diacriticOptionsParam);
+	
 	var resultFilterSection = new SeparatorScriptParam("alignedPhonesHeader", "Aligned Phones", true);
 	var targetLbl = new LabelScriptParam("", "<html><b>IPA Target Matcher</b></html>");
 	var actualLbl = new LabelScriptParam("", "<html><b>IPA Actual Matcher</b></html>");
-
+	
 	params.add(resultFilterSection);
 	params.add(targetLbl);
 	filters.targetResultFilter.setSelectedPatternType(PatternType.PHONEX);
@@ -139,46 +138,61 @@ function setup_params(params) {
 	params.add(actualLbl);
 	filters.actualResultFilter.setSelectedPatternType(PatternType.PHONEX);
 	filters.actualResultFilter.param_setup(params);
-
-	filters.group.param_setup(params);
-	filters.groupPattern.param_setup(params);
 	
-	var alignedGroupHeader = new LabelScriptParam("", "<html><b>Aligned Group Filter</b></html>");
-	params.add(alignedGroupHeader);
-	filters.alignedGroup.param_setup(params);
-
+	var tierFilterSection = new SeparatorScriptParam("tierFilterHeader", "Tier Options", true);
+	params.add(tierFilterSection);
+	filters.tierFilter.param_setup(params);
+	
+	var alignedTierHeader = new LabelScriptParam("", "<html><b>Aligned Tier Filter</b></html>");
+	params.add(alignedTierHeader);
+	filters.alignedTierFilter.param_setup(params);
+	
 	filters.word.param_setup(params);
 	filters.wordPattern.param_setup(params);
 	filters.wordPattern.setEnabled(false);
-
+	
 	var alignedWordHeader = new LabelScriptParam("", "<html><b>Aligned Word Filter</b></html>");
 	params.add(alignedWordHeader);
 	filters.alignedWord.param_setup(params);
-
+	var searchByWordListener = new java.beans.PropertyChangeListener {
+	   propertyChange: function (e) {
+	       var enabled = e.source.getValue(e.source.paramId);
+	       filters.wordPattern.setEnabled(enabled);
+	       filters.alignedWord.setEnabled(enabled);
+	       filters.wordTiers.setEnabled(enabled);
+	   }
+	};
+	filters.word.searchByWordParam.addPropertyChangeListener(filters.word.searchByWordParam.paramId, searchByWordListener);
+	var enabled = filters.word.searchByWordParam.getValue(filters.word.searchByWordParam.paramId);
+	filters.wordPattern.setEnabled(enabled);
+	filters.alignedWord.setEnabled(enabled);
+	
+	filters.syllable.param_setup(params);
+	
 	var otherDataHeader = new SeparatorScriptParam("otherDataHeader", "Additional Tier Data", true);
 	params.add(otherDataHeader);
-	var sep = new LabelScriptParam("", "<html><b>Add aligned groups</b></html>");
+	var sep = new LabelScriptParam("", "<html><b>Add aligned tiers</b></html>");
 	params.add(sep);
-	filters.groupTiers.param_setup(params);
+	filters.addTiers.param_setup(params);
 	var wordsep = new LabelScriptParam("", "<html><b>Add aligned words</b></html>");
 	params.add(wordsep);
 	filters.wordTiers.param_setup(params);
-
+	filters.wordTiers.setEnabled(enabled);
+	
 	filters.speaker.param_setup(params);
 }
 ]]></oga:property>
                 </oga:settings>
-                <oga:meta x="21" y="624"/>
+                <oga:meta x="23" y="624"/>
             </extensions>
         </node>
         <opqry:queryNode id="291eae19" name="Query : Phones" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-03-25T07:10:46.579-02:30" name="Phones" uuid="f9884930-0414-451e-a4c3-32ca5118a86b">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2025-04-23T09:06:30.430-02:30" name="Phones" uuid="e0179c74-9d56-4d0a-9447-e50d0bfd34e0">
                 <script>
                     <url ref="Phones" rel="stock"/>
                     <param id="filters.actualResultFilter.filterType">Phonex</param>
-                    <param id="filters.alignedGroup.patternFilter.filterType">Plain text</param>
+                    <param id="filters.alignedTierFilter.patternFilter.filterType">Plain text</param>
                     <param id="filters.alignedWord.patternFilter.filterType">Plain text</param>
-                    <param id="filters.groupPattern.filterType">Plain text</param>
                     <param id="filters.primary.filter">// word-initial onsets
 (?&lt;^\s?)(\c:O&lt;2&gt;)(?&gt;\v) ||
 // word-medial onsets
@@ -188,18 +202,25 @@ function setup_params(params) {
 // word-final codas
 (?&lt;\v)(\c:C&lt;2&gt;)$</param>
                     <param id="filters.searchBy.searchBy">Word</param>
+                    <param id="filters.speaker.age1Comparator">equal to</param>
+                    <param id="filters.speaker.age2Comparator">equal to</param>
+                    <param id="filters.speaker.ageOperator">(select operator)</param>
+                    <param id="filters.speaker.participantRole">(select role)</param>
+                    <param id="filters.syllable.otherSyllTypePattern.filterType">Plain text</param>
+                    <param id="filters.syllable.syllableType">Any syllable</param>
                     <param id="filters.targetResultFilter.filterType">Phonex</param>
+                    <param id="filters.tierFilter.filterType">Plain text</param>
                     <param id="filters.wordPattern.filterType">Plain text</param>
                     <param id="filters.wordTiers.tiers">Orthography,IPA Target,IPA Actual</param>
                 </script>
             </qry:query>
             <extensions>
                 <oga:settings/>
-                <oga:meta x="517" y="113"/>
+                <oga:meta x="449" y="123"/>
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="cfaa51a7f0d34ae8" name="Get Report Title" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="43bf0d9b">
+            <graph id="18e4b9d8">
                 <node id="bfe45fece3284315" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -239,7 +260,7 @@ function setup_params(params) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="f38c1a836d1d4edc" name="combineParticipants" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="6e4a6b38">
+            <graph id="244c40">
                 <node id="4576aef8b4624989" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -308,7 +329,7 @@ function setup_params(params) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="fe7af74acf244cc5" name="includeWordInitialOnsets" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="22be58de">
+            <graph id="75bf4fcc">
                 <node id="6adf9970e3f94b11" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -377,7 +398,7 @@ function setup_params(params) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="67c4ef6cb57465f" name="includeWordMedialOnsets" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="3bd68448">
+            <graph id="5b1bc098">
                 <node id="5a5fa9581bad4ec3" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -446,7 +467,7 @@ function setup_params(params) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="ec5354e915a34904" name="includeMedialCodaOnset" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="cb06bc5">
+            <graph id="62b4b235">
                 <node id="ad9f396e94049" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -515,7 +536,7 @@ function setup_params(params) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="6e347499d1f9495b" name="includeWordFinalCodas" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="31886c8">
+            <graph id="5f861cfd">
                 <node id="d916c90248a4049" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -895,7 +916,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="4e1d721b" type="ca.phon.app.opgraph.nodes.ForEachParticipant">
-            <graph id="4bbff5a">
+            <graph id="137a1e26">
                 <node id="38bc2b72" name="Current Speaker" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -913,7 +934,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="113c2d945fcf480b" name="ReportTreeNode" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="61d90fa8">
+                    <graph id="3b365d63">
                         <node id="97fb0dfb876448b8" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -956,7 +977,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="6c8765252b034f4f" name="includeWordInitialOnsets" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="31bdbb24">
+                    <graph id="6ba58e91">
                         <node id="ae98592e91164737" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -1025,7 +1046,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="a82ab12e7c8343c7" name="includeWordMedialOnsets" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="740ae9cd">
+                    <graph id="6e652d10">
                         <node id="fb7de7be98394d78" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -1094,7 +1115,7 @@ function run(context) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="4698b5326e7b421e" name="includeMedialCodaOnset" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="3f84f064">
+                    <graph id="7d1db2d4">
                         <node id="46ba34e0e6c04b78" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -1176,7 +1197,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="329e6c0457940cd" name="includeWordFinalCodas" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="6308ac32">
+                    <graph id="5e08aed8">
                         <node id="500046d8a8794daa" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -1286,7 +1307,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="70bbee82d11f4156" name="If Speaker Has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="1655c0d2">
+                    <graph id="18e84fa2">
                         <node id="a4231891828246ef" name="parameters" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -1348,7 +1369,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="1b5daa1e1a4b4bc2" name="includeWordInitialOnsets" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="8c352ed">
+                            <graph id="56f15510">
                                 <node id="d61121ec3e29484e" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -1417,7 +1438,7 @@ function run(context) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="dc7f49ac7f904ec1" name="includeWordMedialOnsets" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="514c0218">
+                            <graph id="53e5cc3d">
                                 <node id="b6ab1e8ecdda4949" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -1486,7 +1507,7 @@ function run(context) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="6653ac0c882d4798" name="includeMedialCodaOnset" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="7d97c645">
+                            <graph id="61d075aa">
                                 <node id="a63760dcace0451f" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -1566,7 +1587,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="5cef6a05d0884c39" name="includeWordFinalCodas" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="581bae2d">
+                            <graph id="177b7c00">
                                 <node id="6ca33372f7df459c" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -1652,7 +1673,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="f9f18cc6217f4a21" name="Word Initial Onsets" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="2ccbb634">
+                            <graph id="59fd4918">
                                 <node id="e5d852b472d4dcb" name="tableMap" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -1670,7 +1691,7 @@ function run(context) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="6c7572b98d19434b" name="Get Results for Context" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="55503e1b">
+                                    <graph id="374cf4b3">
                                         <node id="488b120953ed4ad8" type="class:ca.phon.opgraph.nodes.general.TextNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1805,7 +1826,7 @@ function run(context) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="54b5463eb6394287" name="Word Medial Onsets" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="4f7cf5ee">
+                            <graph id="49d04f79">
                                 <node id="42bbad7e6e184f87" name="tableMap" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -1823,7 +1844,7 @@ function run(context) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="cf5a5311a3154c44" name="Get Results for Context" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="2f9a9365">
+                                    <graph id="7574845b">
                                         <node id="2e6e11651e2e4c81" type="class:ca.phon.opgraph.nodes.general.TextNode">
                                             <extensions>
                                                 <oga:settings>
@@ -2010,7 +2031,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="384d9d84f69f4cde" name="Word Medial Coda+Onset" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="b9e16d6">
+                            <graph id="2f4f24e6">
                                 <node id="446787edbdcc487e" name="tableMap" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -2028,7 +2049,7 @@ function run(context) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="b96c8c529c73463d" name="Get Results for Context" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="2c6882c7">
+                                    <graph id="2c781d9e">
                                         <node id="13b813f278d24f7a" type="class:ca.phon.opgraph.nodes.general.TextNode">
                                             <extensions>
                                                 <oga:settings>
@@ -2163,7 +2184,7 @@ function run(context) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="c4dfed2dfc1c40aa" name="Word Final Codas" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="1f4507f3">
+                            <graph id="2747ede3">
                                 <node id="88048d638dc7482b" name="tableMap" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -2181,7 +2202,7 @@ function run(context) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="9b94244c64cf482f" name="Get Results for Context" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="5179a0ad">
+                                    <graph id="2f87aaa6">
                                         <node id="6b366f491d8c40a9" type="class:ca.phon.opgraph.nodes.general.TextNode">
                                             <extensions>
                                                 <oga:settings>
@@ -2325,7 +2346,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="51b56305b63b4694" name="For Each Selected Session" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="95f9a81">
+                            <graph id="648fc10f">
                                 <node id="9daaa610f6224737" name="Current Session" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
@@ -2360,7 +2381,7 @@ function run(context) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="f1d36b1d8e674443" name="Get Table of Results For Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="61712800">
+                                    <graph id="66d644cb">
                                         <node id="21e4449bf7ec4281" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                                             <extensions>
                                                 <oga:settings>
@@ -2428,7 +2449,7 @@ function run(context) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="1d8baff84b794958" name="includeWordInitialOnsets" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="4398b44e">
+                                    <graph id="18142dab">
                                         <node id="346df61358c149e8" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -2497,7 +2518,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="f3e47695fa144a64" name="includeWordMedialOnsets" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="4f3118bd">
+                                    <graph id="7d0e1662">
                                         <node id="fc49a90a12394060" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -2566,7 +2587,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="c4c3fd25589f4a1c" name="includeMedialCodaOnset" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="2cc95994">
+                                    <graph id="61529a0f">
                                         <node id="ab0fbd251a9f4fef" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -2635,7 +2656,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="ec087f37cce4c3b" name="includeWordFinalCodas" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="719297f0">
+                                    <graph id="12ffb9f8">
                                         <node id="ce82369ba6d24448" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -2839,8 +2860,8 @@ function run(context) {
                                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
                                 </oga:settings>
                                 <oga:meta x="929" y="759">
-                                    <oga:default for="sectionName" type="java.lang.String">Aggregate (all clusters)</oga:default>
                                     <oga:default for="addToBeginning" type="java.lang.Boolean">true</oga:default>
+                                    <oga:default for="sectionName" type="java.lang.String">Aggregate (all clusters)</oga:default>
                                 </oga:meta>
                             </extensions>
                         </node>
@@ -3120,7 +3141,7 @@ Alignment]]></oga:property>
         <link dest="3d5fc230" destField="table" source="4e1d721b" sourceField="obj"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
-                <opqry:info format="html" title="Measure of Cluster Proximity">
+                <opqry:info format="html" minVersion="4.0.0" title="Measure of Cluster Proximity">
                     <opqry:message/>
                 </opqry:info>
                 <opqry:node ref="20b5d641db254ead" showAsStep="true">
