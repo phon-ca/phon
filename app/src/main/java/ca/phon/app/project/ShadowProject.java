@@ -51,12 +51,12 @@ public final class ShadowProject extends LocalProject {
 			shadowFolder.mkdirs();
 		}
 		
-		Properties props = project.getExtension(Properties.class);
-		try(FileOutputStream fout = new FileOutputStream(new File(shadowFolder, ".properties"))) {
-			props.store(fout, "");
-		} catch (IOException e) {
-			LogUtil.severe(e);
-		}
+//		Properties props = project.getExtension(Properties.class);
+//		try(FileOutputStream fout = new FileOutputStream(new File(shadowFolder, ".properties"))) {
+//			props.store(fout, "");
+//		} catch (IOException e) {
+//			LogUtil.severe(e);
+//		}
 		
 		final ShadowProject retVal = new ShadowProject(shadowFolder, project);
 		for(String corpusName:project.getCorpora()) {
