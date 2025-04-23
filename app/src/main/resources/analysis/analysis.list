@@ -2,6 +2,7 @@ analysis/Inventory/Phone Inventory.xml
 analysis/Inventory/Word Inventory.xml
 analysis/Match/CV Pattern Match.xml
 analysis/Match/Stress Match.xml
+analysis/Match/Syllable Count Match.xml
 
 analysis/Percent Correct/Percent Phones Correct.xml
 analysis/Percent Correct/Percent Diacritics Correct.xml
