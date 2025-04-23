@@ -43,6 +43,7 @@ public class CrossTierAlignment {
      */
     public Map<String, Object> getAlignedElements(Object obj) {
         Map<String, Object> retVal = new LinkedHashMap<>();
+        retVal.put(topTier.getName(), obj);
         for(String tierName:tierAlignments.keySet()) {
             final TierAlignment tierAlignment = tierAlignments.get(tierName);
             if(tierAlignment != null) {
