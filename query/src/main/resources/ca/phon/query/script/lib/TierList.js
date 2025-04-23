@@ -130,8 +130,9 @@ exports.TierList = function(id) {
 
 				var startIndex = 0;
 				var length = (alignedTierVal ? alignedTierVal.toString().length() : 0);
+
 				var tierAlignment = crossTierAlignment.getTierAlignment(alignedTierName);
-				var alignedTier = tierAlignment.getBottomTier();
+				var alignedTier = crossTierAlignment.getTopTier().getName().equals(alignedTierName) ? crossTierAlignment.getTopTier() : tierAlignment.getBottomTier();
 				if(alignedTierVal != null && alignedTier != null) {
 					var wordOffset = 0;
 
