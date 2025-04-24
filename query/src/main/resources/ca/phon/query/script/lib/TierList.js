@@ -156,7 +156,7 @@ exports.TierList = function(id) {
 				tierResultValue.range = new Range(startIndex, startIndex + length, true);
 				resultValues.push(tierResultValue);
 			} else {
-				if(alignedTierName == "Phone Alignment") {
+				if(alignedTierName == "Alignment") {
 					var align = obj.phoneAlignment;
 					alignedTierVal = (align != null ? align.toString(false) : "");
 				} else if(alignedTierName == "Target CV") {
