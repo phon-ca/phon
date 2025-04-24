@@ -16,7 +16,7 @@
                     <oga:property key="contextKey"><![CDATA[_selectedSessions]]></oga:property>
                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
                 </oga:settings>
-                <oga:meta x="15" y="296"/>
+                <oga:meta x="15" y="392"/>
             </extensions>
         </node>
         <node id="3da0e5db" name="Selected Participants" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -25,7 +25,7 @@
                     <oga:property key="contextKey"><![CDATA[_selectedParticipants]]></oga:property>
                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
                 </oga:settings>
-                <oga:meta x="15" y="397"/>
+                <oga:meta x="15" y="505"/>
             </extensions>
         </node>
         <node id="dc596f57c3774064" name="Parameters" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -51,11 +51,11 @@ function setup_params(params) {
 }
 ]]></oga:property>
                 </oga:settings>
-                <oga:meta x="18" y="498"/>
+                <oga:meta x="20" y="621"/>
             </extensions>
         </node>
         <opqry:queryNode id="29ac654b" name="Query : Data Tiers" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-02-19T11:48:31.754-03:30" name="Data Tiers" uuid="285dd159-342c-4a68-b560-22cfcbfcc395">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2025-04-24T08:51:16.151-02:30" name="Data Tiers" uuid="ca279132-25c6-4445-816a-cea0b65f33cf">
                 <script>
                     <url ref="Data Tiers" rel="stock"/>
                     <param id="filters.alignedWord.patternFilter.caseSensitive">false</param>
@@ -74,11 +74,11 @@ function setup_params(params) {
             </qry:query>
             <extensions>
                 <oga:settings/>
-                <oga:meta x="352" y="15"/>
+                <oga:meta x="389" y="15"/>
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="2f5a76e38b4b4c38" name="Get Report Title" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="40e34821">
+            <graph id="40f3c3ea">
                 <node id="cdfe6b17a1ca4b4d" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -114,7 +114,7 @@ function setup_params(params) {
             <ogcn:published_input field="obj" name="parameters" ref="cad0a57030854326"/>
             <ogcn:published_output field="value" name="reportTitle" ref="678c3d022771475d"/>
             <extensions>
-                <oga:meta x="252" y="498"/>
+                <oga:meta x="281" y="621"/>
             </extensions>
         </ogcn:macro>
         <node id="61e6ae5ee8ed4084" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
@@ -125,24 +125,24 @@ function setup_params(params) {
                     <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
                     <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
                 </oga:settings>
-                <oga:meta x="589" y="15"/>
+                <oga:meta x="650" y="15"/>
             </extensions>
         </node>
         <node id="e041a49" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
             <extensions>
                 <oga:settings/>
-                <oga:meta x="485" y="498"/>
+                <oga:meta x="535" y="621"/>
             </extensions>
         </node>
         <node id="763b6571" type="class:ca.phon.app.opgraph.nodes.report.ReportSectionHeaderNode">
             <extensions>
-                <oga:meta x="728" y="504">
+                <oga:meta x="794" y="621">
                     <oga:default for="sectionName" type="java.lang.String">Summary</oga:default>
                 </oga:meta>
             </extensions>
         </node>
         <ogcn:macro id="61208600" name="For Each Participant" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-            <graph id="2cded828">
+            <graph id="4258354d">
                 <node id="282a70f9" name="Current Object" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -153,7 +153,7 @@ function setup_params(params) {
                     </extensions>
                 </node>
                 <ogcn:macro id="55aaa72dc82b4f91" name="Create Summary Table" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="5094e4ea">
+                    <graph id="7020fcf4">
                         <node id="2346342eeb134cfe" name="DefaultTableDataSource#&lt;init&gt;()" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                             <extensions>
                                 <oga:settings>
@@ -348,7 +348,7 @@ function filterRow(table, row, col) {
                     </extensions>
                 </node>
                 <ogcn:macro id="607a331e" name="Vocalizations" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="2d762df5">
+                    <graph id="224e8df6">
                         <node id="28737cd4" name="speaker" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -481,7 +481,7 @@ function tableOp(context, table) {
                             </extensions>
                         </node>
                         <ogcn:macro id="bbf482c5a66541f7" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="4551c7e7">
+                            <graph id="437ffe2f">
                                 <node id="5642bea05e5c4b06" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                                     <extensions>
                                         <oga:settings>
@@ -540,7 +540,7 @@ function run(context) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="350c5a14" name="If Speaker Has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="6212314">
+                            <graph id="16678c39">
                                 <node id="60a76f15" name="Table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -680,7 +680,7 @@ function tableOp(context, table) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="5aee518f" name="Vocalization Analysis" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="ca476d8">
+                                    <graph id="54b249b5">
                                         <node id="c81dda4" name="result total" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -730,7 +730,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </node>
                                         <ogcn:macro id="71606628" name="All Vocalizations" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="56d1f618">
+                                            <graph id="47c491a9">
                                                 <node id="4413c5e1" name="tableMap" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -858,7 +858,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="5c298b00" name="Listing" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="3eb5c822">
+                                            <graph id="6cc0dbab">
                                                 <node id="77fcdc08" name="data" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -906,7 +906,7 @@ Actual Syllabification (Word)]]></oga:property>
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="39f91ef7" name="Initial Consonants" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="748f85ca">
+                                            <graph id="16ee2311">
                                                 <node id="4ceebc1" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -932,7 +932,7 @@ Actual Syllabification (Word)]]></oga:property>
                                                     </extensions>
                                                 </node>
                                                 <ogcn:macro id="3fd5be49" name="Initial Consonants" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="37c5f3a1">
+                                                    <graph id="745a0717">
                                                         <node id="4582b1f9" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -1177,7 +1177,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="37993d4121c64985" name="Initial Consonants (by Session)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="78d4e8c9">
+                                                    <graph id="17e4d2ca">
                                                         <node id="1fe296e468a143cc" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -1493,7 +1493,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="9bee85a827324705" name="Final Consonants" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="201f6e11">
+                                            <graph id="1ab67c95">
                                                 <node id="be648f920a40a0" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -1519,7 +1519,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </node>
                                                 <ogcn:macro id="47ab9f734c8d4a3b" name="Final Consonants" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="30e2a931">
+                                                    <graph id="44f95f5a">
                                                         <node id="390d058f9a044b28" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -1766,7 +1766,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="a2bb4201f25d43e2" name="Final Consonants (by Session)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="51963aa5">
+                                                    <graph id="7ffed428">
                                                         <node id="36f52067ce1f4419" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -2082,7 +2082,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="9dee81f2bd624468" name="Vowels" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="5244b25a">
+                                            <graph id="7b6f2a9a">
                                                 <node id="4286091421414cd3" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -2158,7 +2158,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </node>
                                                 <ogcn:macro id="b22af37adc0e4a9b" name="Vowels (Total)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="28a64a50">
+                                                    <graph id="3b97b34d">
                                                         <node id="598e44aa449b4309" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -2263,7 +2263,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="65bf101fb2f14ead" name="Vowels (by Session)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="2e2e62c">
+                                                    <graph id="64419323">
                                                         <node id="76e8171f93824e4d" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -2528,7 +2528,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="35376622" name="Syllable Structure" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="967e18b">
+                                            <graph id="b2345db">
                                                 <node id="47c22615" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -2602,7 +2602,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </node>
                                                 <ogcn:macro id="3c1623ed" name="Syllable Strucutre (Total)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="5965d57e">
+                                                    <graph id="6f8e0e64">
                                                         <node id="77c929c0" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -2705,7 +2705,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="304f07bd533d4538" name="Syllable Strucutre (by Session)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="67780397">
+                                                    <graph id="23719a64">
                                                         <node id="4c22960fe18b4e7c" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -3010,7 +3010,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="fbb7c1ceae774d2a" name="Vocalization Structure" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="1bfd6c1b">
+                                            <graph id="75ba3e6b">
                                                 <node id="db2fcf7cec6341e0" name="TableDataSource" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -3075,7 +3075,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </node>
                                                 <ogcn:macro id="d6dcaea1e62046f7" name="Structures (Total)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="37dc4869">
+                                                    <graph id="4983a298">
                                                         <node id="7d0ef2fe71254e04" name="TableDataSource" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -3169,7 +3169,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="458fd744de5a4a6a" name="Structures (by Session)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="58e466c6">
+                                                    <graph id="45d09fce">
                                                         <node id="b1a785f5231a4cf2" name="TableDataSource" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -3460,7 +3460,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="6a6f4dc4" name="Harmony" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="4758fe08">
+                                            <graph id="29346126">
                                                 <node id="f95439174b664eb4" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -3690,7 +3690,7 @@ Actual Syllabification (Word)]]></oga:property>
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="c3a5d71d15704c6f" name="Mean Babble Level" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="2c8f5df8">
+                                            <graph id="463e5070">
                                                 <node id="f2b0e896f7884dea" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -3821,7 +3821,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </node>
                                                 <ogcn:macro id="e59f22e93c0416a" name="Mean Babble Level (Total)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="3e013738">
+                                                    <graph id="74635aa8">
                                                         <node id="536cd64980e047a7" name="TableDataSource" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -3917,7 +3917,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="455c63934e7b460c" name="Mean Babble Level (by Session)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="3261baae">
+                                                    <graph id="1c9fe2d1">
                                                         <node id="c5954c4c2e8242f3" name="TableDataSource" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -4277,7 +4277,7 @@ function tableOp(context, table) {
                     </extensions>
                 </ogcn:macro>
                 <ogcn:macro id="7606c46e4d4a488e" name="Words" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="66743d51">
+                    <graph id="60ca7b02">
                         <node id="d3b316447a5c4962" name="speaker" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -4410,7 +4410,7 @@ function tableOp(context, table) {
                             </extensions>
                         </node>
                         <ogcn:macro id="93c060eb54fd4e81" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="66c418b4">
+                            <graph id="3d2cfb69">
                                 <node id="a0a0f6b9f24a4042" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                                     <extensions>
                                         <oga:settings>
@@ -4469,7 +4469,7 @@ function run(context) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="14e8ff33cbaf43c9" name="If Speaker Has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="70c733fd">
+                            <graph id="4bc8d417">
                                 <node id="6893103afc764a97" name="Table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
@@ -4609,7 +4609,7 @@ function tableOp(context, table) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="413ec086002946e0" name="Word Analysis" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="294e864f">
+                                    <graph id="1beed2a9">
                                         <node id="c35f1e7dd60f4a94" name="result total" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -4659,7 +4659,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </node>
                                         <ogcn:macro id="eb12aa21e53e480b" name="All Words" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="7f33831c">
+                                            <graph id="7e4db903">
                                                 <node id="46c5466ef64340f0" name="tableMap" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -4787,7 +4787,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="9d52041deaa7490c" name="Listing" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="2a8ee39e">
+                                            <graph id="233af9b2">
                                                 <node id="902aa7ca97474ef5" name="data" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -4835,7 +4835,7 @@ Actual Syllabification (Word)]]></oga:property>
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="23e91cc1e09845ca" name="Token Summary" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="692c41a0">
+                                            <graph id="4d91d2b6">
                                                 <node id="63f5b25f9a474360" name="data" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -4936,7 +4936,7 @@ function run(context) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="7c813837d09b4c64" name="Initial Consonants" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="47956902">
+                                            <graph id="6379b709">
                                                 <node id="1861d700377f4f8e" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -4962,7 +4962,7 @@ function run(context) {
                                                     </extensions>
                                                 </node>
                                                 <ogcn:macro id="ab04aeb51d214f65" name="Initial Consonants" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="55bbe4c5">
+                                                    <graph id="6fad05a5">
                                                         <node id="58f8b0f649784346" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -5207,7 +5207,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="e263bbc7e9744876" name="Initial Consonants (by Session)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="793c2ba0">
+                                                    <graph id="14a2bcf3">
                                                         <node id="94d2f28bfb3465c" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -5523,7 +5523,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="d7b8cae633634373" name="Final Consonants" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="6f424344">
+                                            <graph id="7de239af">
                                                 <node id="1f5d33ecef304cb0" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -5549,7 +5549,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </node>
                                                 <ogcn:macro id="ba234bc06044493" name="Final Consonants" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="8d0f1f5">
+                                                    <graph id="6d11c559">
                                                         <node id="399d28dd46dd4335" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -5796,7 +5796,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="d6559a0ea6734630" name="Final Consonants (by Session)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="74f505d9">
+                                                    <graph id="35df41be">
                                                         <node id="be83489dc8d04f0b" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -6112,7 +6112,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="a58b0709ae354b92" name="Vowels" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="336943a4">
+                                            <graph id="9cf3e01">
                                                 <node id="83fd1073eaf34354" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -6188,7 +6188,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </node>
                                                 <ogcn:macro id="fa2f01608ff54e43" name="Vowels (Total)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="49662ede">
+                                                    <graph id="61c08f8">
                                                         <node id="978caefd74a04abd" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -6293,7 +6293,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="8f91ec051e594212" name="Vowels (by Session)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="7984132f">
+                                                    <graph id="66a1cedc">
                                                         <node id="b0c8ebc086c147a4" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -6558,7 +6558,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="38af73dc0adf4dbc" name="Syllable Structure" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="208f7d8d">
+                                            <graph id="79540bf6">
                                                 <node id="6cbdc9ae160241af" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -6632,7 +6632,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </node>
                                                 <ogcn:macro id="e5c3213a94e2487d" name="Syllable Strucutre (Total)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="ea82671">
+                                                    <graph id="27b2da53">
                                                         <node id="21f28ba9a66e48da" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -6735,7 +6735,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="2a0c491e6e9247e4" name="Syllable Strucutre (by Session)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="2fdb5141">
+                                                    <graph id="c9bbc5">
                                                         <node id="bed0c00554744209" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -7040,7 +7040,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="9cf64e0a651444ff" name="Vocalization Structure" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="12157d6d">
+                                            <graph id="6eda091">
                                                 <node id="cdea75731ca84205" name="TableDataSource" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -7105,7 +7105,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </node>
                                                 <ogcn:macro id="97817053cb3e4baa" name="Structures (Total)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="7e21b0ea">
+                                                    <graph id="7fc64015">
                                                         <node id="f13d51c9362b4b66" name="TableDataSource" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -7199,7 +7199,7 @@ function tableOp(context, table) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="df4a061e176c42e1" name="Structures (by Session)" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="5f2ee6b2">
+                                                    <graph id="10bdaaff">
                                                         <node id="f63a9528a9de439f" name="TableDataSource" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -7490,7 +7490,7 @@ function tableOp(context, table) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="c73c9bae46474e4d" name="Harmony" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="79e5c759">
+                                            <graph id="74b79355">
                                                 <node id="e9a2cc1a1d8f4df9" name="table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -7842,7 +7842,7 @@ Actual Syllabification (Word)]]></oga:property>
                 <oga:settings>
                     <oga:property key="ca.phon.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[java.util.ArrayList]]></oga:property>
                 </oga:settings>
-                <oga:meta x="785" y="14"/>
+                <oga:meta x="941" y="14"/>
             </extensions>
         </ogcn:macro>
         <link dest="29ac654b" destField="project" source="55f4fba4" sourceField="obj"/>
@@ -7858,7 +7858,7 @@ Actual Syllabification (Word)]]></oga:property>
         <link dest="61208600" destField="rootNode" source="e041a49" sourceField="root"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
-                <opqry:info format="html" title="Vocalization">
+                <opqry:info format="html" minVersion="4.0.0" title="Vocalization">
                     <opqry:message/>
                 </opqry:info>
                 <opqry:node ref="dc596f57c3774064" showAsStep="true">
