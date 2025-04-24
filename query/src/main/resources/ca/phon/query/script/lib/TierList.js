@@ -144,8 +144,7 @@ exports.TierList = function(id) {
 						// TODO
 						wordOffset = 0;
 					} else if(alignedTier.declaredType === UserTierData) {
-						// TODO
-						wordOffset = 0;
+						wordOffset = alignedTier.value.stringIndexOf(alignedTierVal);
 					} else {
 						// unknown tier type
 					}
