@@ -31,18 +31,14 @@
             <extensions>
                 <oga:settings>
                     <oga:property key="filters.searchBy.searchBy"><![CDATA[Word]]></oga:property>
-                    <oga:property key="cvPatternDiacriticOptions.selectionMode"><![CDATA[Except]]></oga:property>
-                    <oga:property key="cvPatternDiacriticOptions.ignoreDiacritics"><![CDATA[true]]></oga:property>
-                    <oga:property key="cvPatternDiacriticOptions.selectedDiacritics"><![CDATA[[ː, ˑ]]]></oga:property>
-                    <oga:property key="__script"><![CDATA[var GroupFilter = require("lib/GroupFilter").GroupFilter;
-var AlignedGroupFilter = require("lib/TierFilter").TierFilter;
+                    <oga:property key="__script"><![CDATA[var AlignedTierFilter = require("lib/TierFilter").TierFilter;
 var WordFilter = require("lib/WordFilter").WordFilter;
 var TierList = require("lib/TierList").TierList;
 var AlignedWordFilter = require("lib/TierFilter").TierFilter;
+var SyllableFilter = require("lib/SyllableFilter").SyllableFilter;
+var ParticipantFilter = require("lib/ParticipantFilter").ParticipantFilter;
 var PatternFilter = require("lib/PatternFilter").PatternFilter;
 var PatternType = require("lib/PatternFilter").PatternType;
-var ResultType = require("lib/PhonScriptConstants").ResultType;
-var ParticipantFilter = require("lib/ParticipantFilter").ParticipantFilter;
 var SearchByOptions = require("lib/SearchByOptions").SearchByOptions;
 
 /********************************
@@ -51,14 +47,16 @@ var SearchByOptions = require("lib/SearchByOptions").SearchByOptions;
 
 var filters = {
 	"searchBy": new SearchByOptions("filters.searchBy"),
-	"group": new GroupFilter("filters.group"),
-	"groupTiers": new TierList("filters.groupTiers"),
-	"groupPattern": new PatternFilter("filters.groupPattern"),
-	"alignedGroup": new AlignedGroupFilter("filters.alignedGroup"),
+	"targetResultFilter": new PatternFilter("filters.targetResultFilter"),
+	"actualResultFilter": new PatternFilter("filters.actualResultFilter"),
+	"tierFilter": new PatternFilter("filters.tierFilter"),
+	"alignedTierFilter": new AlignedTierFilter("filters.alignedTierFilter"),
 	"word": new WordFilter("filters.word"),
-	"wordTiers": new TierList("filters.wordTiers"),
 	"wordPattern": new PatternFilter("filters.wordPattern"),
+	"addTiers": new TierList("filters.addTiers"),
+	"wordTiers": new TierList("filters.wordTiers"),
 	"alignedWord": new AlignedWordFilter("filters.alignedWord"),
+	"syllable": new SyllableFilter("filters.syllable"),
 	"speaker": new ParticipantFilter("filters.speaker")
 };
 
@@ -172,20 +170,32 @@ function setup_params(params) {
 		1);
 	params.add(cvPatternOptionsParam);
 
-	// setup result filter section
-	filters.group.param_setup(params);
-	filters.groupPattern.param_setup(params);
+	var resultFilterSection = new SeparatorScriptParam("alignedPhonesHeader", "Aligned Phones", true);
+	var targetLbl = new LabelScriptParam("", "<html><b>IPA Target Matcher</b></html>");
+	var actualLbl = new LabelScriptParam("", "<html><b>IPA Actual Matcher</b></html>");
 
-	var sep2 = new LabelScriptParam("", "<html><b>Aligned Group Filter</b></html>");
-	params.add(sep2);
-	filters.alignedGroup.param_setup(params);
+	params.add(resultFilterSection);
+	params.add(targetLbl);
+	filters.targetResultFilter.setSelectedPatternType(PatternType.PHONEX);
+	filters.targetResultFilter.param_setup(params);
+	params.add(actualLbl);
+	filters.actualResultFilter.setSelectedPatternType(PatternType.PHONEX);
+	filters.actualResultFilter.param_setup(params);
+
+	var tierFilterSection = new SeparatorScriptParam("tierFilterHeader", "Tier Options", true);
+	params.add(tierFilterSection);
+	filters.tierFilter.param_setup(params);
+
+	var alignedTierHeader = new LabelScriptParam("", "<html><b>Aligned Tier Filter</b></html>");
+	params.add(alignedTierHeader);
+	filters.alignedTierFilter.param_setup(params);
 
 	filters.word.param_setup(params);
 	filters.wordPattern.param_setup(params);
 	filters.wordPattern.setEnabled(false);
 
-	var wordsep2 = new LabelScriptParam("", "<html><b>Aligned Word Filter</b></html>");
-	params.add(wordsep2);
+	var alignedWordHeader = new LabelScriptParam("", "<html><b>Aligned Word Filter</b></html>");
+	params.add(alignedWordHeader);
 	filters.alignedWord.param_setup(params);
 	var searchByWordListener = new java.beans.PropertyChangeListener {
 		propertyChange: function (e) {
@@ -200,14 +210,16 @@ function setup_params(params) {
 	filters.wordPattern.setEnabled(enabled);
 	filters.alignedWord.setEnabled(enabled);
 
-	filters.searchBy.includeSyllableOption = false;
-	filters.searchBy.param_setup(params, filters.word.searchByWordParam, null, insertIdx);
+	filters.syllable.param_setup(params);
+
+	filters.searchBy.includeSyllableOption = true;
+	filters.searchBy.param_setup(params, filters.word.searchByWordParam, filters.syllable.searchBySyllableParam, insertIdx);
 
 	var otherDataHeader = new SeparatorScriptParam("otherDataHeader", "Additional Tier Data", true);
 	params.add(otherDataHeader);
-	var sep = new LabelScriptParam("", "<html><b>Add aligned groups</b></html>");
+	var sep = new LabelScriptParam("", "<html><b>Add aligned tiers</b></html>");
 	params.add(sep);
-	filters.groupTiers.param_setup(params);
+	filters.addTiers.param_setup(params);
 	var wordsep = new LabelScriptParam("", "<html><b>Add aligned words</b></html>");
 	params.add(wordsep);
 	filters.wordTiers.param_setup(params);
@@ -221,17 +233,21 @@ function setup_params(params) {
             </extensions>
         </node>
         <opqry:queryNode id="c23d66e" name="Query : Aligned IPA Domains" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2021-06-14T11:17:48.378-02:30" name="Aligned IPA Domains" uuid="ccefd480-767b-46e5-91b1-b43ac5e5f118">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2025-04-24T08:56:29.535-02:30" name="Aligned IPA Domains" uuid="a54f83f4-1496-4a47-a085-66e503c21446">
                 <script>
                     <url ref="Aligned IPA Domains" rel="stock"/>
-                    <param id="filters.alignedGroup.patternFilter.filterType">Plain text</param>
+                    <param id="filters.actualResultFilter.filterType">Phonex</param>
+                    <param id="filters.alignedTierFilter.patternFilter.filterType">Plain text</param>
                     <param id="filters.alignedWord.patternFilter.filterType">Plain text</param>
-                    <param id="filters.groupPattern.filterType">Plain text</param>
                     <param id="filters.searchBy.searchBy">Word</param>
                     <param id="filters.speaker.age1Comparator">equal to</param>
                     <param id="filters.speaker.age2Comparator">equal to</param>
                     <param id="filters.speaker.ageOperator">(select operator)</param>
                     <param id="filters.speaker.participantRole">(select role)</param>
+                    <param id="filters.syllable.otherSyllTypePattern.filterType">Plain text</param>
+                    <param id="filters.syllable.syllableType">Any syllable</param>
+                    <param id="filters.targetResultFilter.filterType">Phonex</param>
+                    <param id="filters.tierFilter.filterType">Plain text</param>
                     <param id="filters.wordPattern.filterType">Plain text</param>
                 </script>
             </qry:query>
@@ -241,7 +257,7 @@ function setup_params(params) {
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="214d3352f4b34bbd" name="Get Report Title" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="6fce67f0">
+            <graph id="38a7d6e7">
                 <node id="c56d762a8e494f07" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -281,7 +297,7 @@ function setup_params(params) {
             </extensions>
         </ogcn:macro>
         <ogcn:macro id="8adf3ae3283641a5" name="combineParticipants" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="465314fd">
+            <graph id="1a6c9a08">
                 <node id="3b2754d5a9de4ca8" name="obj" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
@@ -560,9 +576,6 @@ function run(context) {
             <output name="matchTable" type="ca.phon.query.report.datasource.DefaultTableDataSource"/>
             <extensions>
                 <oga:settings>
-                    <oga:property key="cvPatternDiacriticOptions.selectionMode"><![CDATA[Except]]></oga:property>
-                    <oga:property key="cvPatternDiacriticOptions.ignoreDiacritics"><![CDATA[true]]></oga:property>
-                    <oga:property key="cvPatternDiacriticOptions.selectedDiacritics"><![CDATA[[ː, ˑ]]]></oga:property>
                     <oga:property key="__script"><![CDATA[importPackage(Packages.ca.phon.query.script.params)
 
 var ignoreTruncatedParamInfo = {
@@ -963,7 +976,7 @@ function run(context) {
             </extensions>
         </node>
         <ogcn:macro id="12592a37" type="ca.phon.app.opgraph.nodes.ForEachParticipant">
-            <graph id="2bc5624c">
+            <graph id="e9d09f9">
                 <node id="4bcac5a4" name="Current Speaker" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                     <extensions>
                         <oga:settings>
@@ -1061,7 +1074,7 @@ function run(context) {
                     </extensions>
                 </node>
                 <ogcn:macro id="de1d0f5ec0604336" name="Speaker Tables" type="ca.phon.opgraph.nodes.general.MacroNode">
-                    <graph id="55303594">
+                    <graph id="40bde2d2">
                         <node id="dc94bfae68de4e33" name="Participant" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                             <extensions>
                                 <oga:settings>
@@ -1343,7 +1356,7 @@ function run(context) {
                             </extensions>
                         </node>
                         <ogcn:macro id="fe9c8577822e4fc1" name="For Each Session" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                            <graph id="7ec391f5">
+                            <graph id="6e637815">
                                 <node id="70bbcf0438cf40ba" name="Current Session" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                                     <extensions>
                                         <oga:settings>
@@ -1441,7 +1454,7 @@ function run(context) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="4bf1b8a048c94395" name="Get Table for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="6255ac27">
+                                    <graph id="5f6d2b7">
                                         <node id="b236aec7e79543be" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1500,7 +1513,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="8a28193a84ad46e3" name="Tier Match Summary Table" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="50ffebc3">
+                                    <graph id="769e580e">
                                         <node id="abc8574952644e38" name="Session" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1628,7 +1641,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="d91a610ffda740a7" name="CV Summary Table" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="4cf395d8">
+                                    <graph id="2531eb4d">
                                         <node id="3cad96d73b714417" name="Session" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1746,7 +1759,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="f96f97a383d145e0" name="Stress Match Summary" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="4ef3922f">
+                                    <graph id="243a528d">
                                         <node id="9e6108ed56ff46e1" name="Session" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1864,7 +1877,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="d68dfbfb5ca48e2" name="Syllable Count Summary" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="1c623c4b">
+                                    <graph id="5e3af3ff">
                                         <node id="a889401e208845d8" name="Session" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -2086,8 +2099,8 @@ Alignment]]></oga:property>
                                     <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
                                 </oga:settings>
                                 <oga:meta x="1247" y="1285">
-                                    <oga:default for="sectionName" type="java.lang.String">Summary</oga:default>
                                     <oga:default for="addToBeginning" type="java.lang.Boolean">true</oga:default>
+                                    <oga:default for="sectionName" type="java.lang.String">Summary</oga:default>
                                 </oga:meta>
                             </extensions>
                         </node>
@@ -2556,8 +2569,8 @@ Result
 Alignment]]></oga:property>
                 </oga:settings>
                 <oga:meta x="816" y="764">
-                    <oga:default for="sectionName" type="java.lang.String">Listing</oga:default>
                     <oga:default for="addToBeginning" type="java.lang.Boolean">false</oga:default>
+                    <oga:default for="sectionName" type="java.lang.String">Listing</oga:default>
                 </oga:meta>
             </extensions>
         </node>
@@ -2601,7 +2614,7 @@ Alignment]]></oga:property>
         <link dest="9cce1541e1c243b5" destField="table" source="4ca34188556a4f65" sourceField="matchTable"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
-                <opqry:info format="html" title="Word Match">
+                <opqry:info format="html" minVersion="4.0.0" title="Word Match">
                     <opqry:message/>
                 </opqry:info>
                 <opqry:node ref="f5c99cb9946c414b" showAsStep="true">
