@@ -156,26 +156,23 @@ exports.TierList = function(id) {
 				tierResultValue.range = new Range(startIndex, startIndex + length, true);
 				resultValues.push(tierResultValue);
 			} else {
-				if(alignedTierName == "Alignment") {
-					var align = obj.phoneAlignment;
-					alignedTierVal = (align != null ? align.toString(false) : "");
-				} else if(alignedTierName == "Target CV") {
-					var ipaT = obj.IPATarget;
+				if(alignedTierName == "Target CV") {
+					var ipaT = alignedElementMap.get("IPA Target");
 					alignedTierVal = (ipaT != null ? ipaT.cvPattern : "");
 				} else if(alignedTierName == "Actual CV") {
-					var ipaA = obj.IPAActual;
+					var ipaA = alignedElementMap.get("IPA Actual");
 					alignedTierVal = (ipaA != null ? ipaA.cvPattern : "");
 				} else if(alignedTierName == "Target Stress") {
-					var ipaT = obj.IPATarget;
+					var ipaT = alignedElementMap.get("IPA Target");
 					alignedTierVal = (ipaT != null ? ipaT.stressPattern : "");
 				} else if(alignedTierName == "Actual Stress") {
-					var ipaA = obj.IPAActual;
+					var ipaA = alignedElementMap.get("IPA Actual");
 					alignedTierVal = (ipaA != null ? ipaA.stressPattern : "");
 				} else if(alignedTierName == "Target Syllabification") {
-					var ipaT = obj.IPATarget;
+					var ipaT = alignedElementMap.get("IPA Target");
 					alignedTierVal = (ipaT != null ? ipaT.toString(true) : "");
 				} else if(alignedTierName == "Actual Syllabification") {
-					var ipaA = obj.IPAActual;
+					var ipaA = alignedElementMap.get("IPA Actual");
 					alignedTierVal = (ipaA != null ? ipaA.toString(true) : "");
 				} else if(alignedTierName.match(coverRegex)) {
 				    var groupData = coverRegex.exec(alignedTierName);
@@ -184,7 +181,7 @@ exports.TierList = function(id) {
 				    var reportTier = groupData[3].trim();
 				    var symbolMap = groupData[4].trim();
 	
-	                var ipa = obj.getTier(phonTier);
+	                var ipa = alignedElementMap.get(phonTier);
 	                alignedTierVal = (ipa != null ? ipa.cover(symbolMap) : "");
 	                
 	                alignedTierName = reportTier;
