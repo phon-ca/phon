@@ -103,7 +103,7 @@
             <xs:element ref="tierOrder" minOccurs="0"/>
             <xs:element ref="blindMode" minOccurs="0"/>
             <xs:element ref="transcript"/>
-            <xs:element ref="timeline" minOccurs="0"/>
+            <xs:element ref="intervalTiers" minOccurs="0"/>
         </xs:sequence>
 
         <!-- ID = session name in Phon -->
@@ -3879,19 +3879,19 @@
     <!-- endregion Mor -->
 
     <!-- region Timeline -->
-    <xs:element name="recordTimelineTier" type="nonemptyStringType"/>
-    <xs:element name="timeline" type="timelineType"/>
-    <xs:complexType name="timelineType">
+    <xs:element name="recordIntervalTier" type="nonemptyStringType"/>
+    <xs:element name="intervalTiers" type="intervalTiersType"/>
+    <xs:complexType name="intervalTiersType">
         <xs:annotation>
-            <xs:documentation>Timeline information for the session.</xs:documentation>
+            <xs:documentation>Interval tiers for the session.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element ref="recordTimelineTier" minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="recordIntervalTier" minOccurs="0" maxOccurs="unbounded">
                 <xs:annotation>
-                    <xs:documentation>Name of record tier. Inline media segments from the tier will be displayed in the timeline view.</xs:documentation>
+                    <xs:documentation>Name of record tier. Inline media segments from the tier will be displayed in the view.</xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element ref="timelineTier" minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="intervalTier" minOccurs="0" maxOccurs="unbounded">
                 <xs:annotation>
                     <xs:documentation>Session level timeline information unassociated with record data</xs:documentation>
                 </xs:annotation>
@@ -3901,8 +3901,8 @@
         <xs:attribute name="unit" type="mediaUnitType" use="required"/>
     </xs:complexType>
 
-    <xs:element name="timelineTier" type="timelineTierType"/>
-    <xs:complexType name="timelineTierType">
+    <xs:element name="intervalTier" type="intervalTierType"/>
+    <xs:complexType name="intervalTierType">
         <xs:annotation>
             <xs:documentation>A collection of points/intervals on the timeline</xs:documentation>
         </xs:annotation>
