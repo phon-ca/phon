@@ -32,7 +32,7 @@ public class TimelineDependentTierChanges implements TierEdit.DependentTierChang
             segment = segmentTier.getValue();
         }
 
-        for(String tierName:session.getTimeline().getRecordTimelineTiers()) {
+        for(String tierName:session.getTimeline().getRecordIntervalTiers()) {
             final Tier<?> tier = record.getTier(tierName);
             if(tier == null) continue;
 

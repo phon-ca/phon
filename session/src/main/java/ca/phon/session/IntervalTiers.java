@@ -69,8 +69,8 @@ public final class IntervalTiers extends ExtendableObject {
      *
      * @return list of record data tier names as an unmodifiable list
      */
-    public List<String> getRecordTimelineTiers() {
-        return Collections.unmodifiableList(spi.getRecordTimelineTiers());
+    public List<String> getRecordIntervalTiers() {
+        return Collections.unmodifiableList(spi.getRecordIntervalTiers());
     }
 
     /**
@@ -79,8 +79,8 @@ public final class IntervalTiers extends ExtendableObject {
      * @param tierName
      * @return true if added, false if already exists
      */
-    public boolean addRecordTimelineTier(String tierName) {
-        return spi.addRecordTimelineTier(tierName);
+    public boolean addRecordIntervalTier(String tierName) {
+        return spi.addRecordIntervalTier(tierName);
     }
 
     /**
@@ -89,8 +89,8 @@ public final class IntervalTiers extends ExtendableObject {
      * @param tierName
      * @return true if removed, false if not found
      */
-    public boolean removeRecordTimelineTier(String tierName) {
-        return spi.removeRecordTimelineTier(tierName);
+    public boolean removeRecordIntervalTier(String tierName) {
+        return spi.removeRecordIntervalTier(tierName);
     }
 
     /**

@@ -198,9 +198,9 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 		// timeline
 		if(session.getTimeline() != null) {
 			if(session.getTimeline().getLength() > 0 &&
-					(session.getTimeline().getTiers().size() > 0 || session.getTimeline().getRecordTimelineTiers().size() > 0)) {
-				final XmlTimelineType timeline = writeTimeline(factory, session.getTimeline());
-				retVal.setTimeline(timeline);
+					(session.getTimeline().getTiers().size() > 0 || session.getTimeline().getRecordIntervalTiers().size() > 0)) {
+				final XmlIntervalTiersType timeline = writeTimeline(factory, session.getTimeline());
+				retVal.setIntervalTiers(timeline);
 			}
 		}
 
@@ -811,26 +811,26 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 		return retVal;
 	}
 
-	private XmlTimelineType writeTimeline(ObjectFactory factory, IntervalTiers intervalTiers) {
-		final XmlTimelineType retVal = factory.createXmlTimelineType();
+	private XmlIntervalTiersType writeTimeline(ObjectFactory factory, IntervalTiers intervalTiers) {
+		final XmlIntervalTiersType retVal = factory.createXmlIntervalTiersType();
 		final XmlMediaUnitType unitType = switch (intervalTiers.getMediaUnit()) {
 			case Second -> XmlMediaUnitType.S;
 			default -> XmlMediaUnitType.MS;
 		};
 		retVal.setLength(intervalTiers.getLength());
 		retVal.setUnit(unitType);
-		for(String recordTimelineTier: intervalTiers.getRecordTimelineTiers()) {
-			retVal.getRecordTimelineTier().add(recordTimelineTier);
+		for(String recordTimelineTier: intervalTiers.getRecordIntervalTiers()) {
+			retVal.getRecordIntervalTier().add(recordTimelineTier);
 		}
 		for(IntervalTier tt: intervalTiers.getTiers()) {
-			final XmlTimelineTierType xmlTimelineTier = writeTimelineTier(factory, tt);
-			retVal.getTimelineTier().add(xmlTimelineTier);
+			final XmlIntervalTierType xmlTimelineTier = writeTimelineTier(factory, tt);
+			retVal.getIntervalTier().add(xmlTimelineTier);
 		}
 		return retVal;
 	}
 
-	private XmlTimelineTierType writeTimelineTier(ObjectFactory factory, IntervalTier timeline) {
-		final XmlTimelineTierType retVal = factory.createXmlTimelineTierType();
+	private XmlIntervalTierType writeTimelineTier(ObjectFactory factory, IntervalTier timeline) {
+		final XmlIntervalTierType retVal = factory.createXmlIntervalTierType();
 		retVal.setName(timeline.getName());
 		for(IntervalTier.Interval interval:timeline.getIntervals()) {
 			if(interval.isPoint()) {

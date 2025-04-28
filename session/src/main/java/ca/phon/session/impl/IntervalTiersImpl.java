@@ -67,17 +67,17 @@ public class IntervalTiersImpl implements IntervalTiersSPI {
     }
 
     @Override
-    public List<String> getRecordTimelineTiers() {
+    public List<String> getRecordIntervalTiers() {
         return List.copyOf(this.recordTimelineTiers);
     }
 
     @Override
-    public boolean addRecordTimelineTier(String tierName) {
+    public boolean addRecordIntervalTier(String tierName) {
         return this.recordTimelineTiers.add(tierName);
     }
 
     @Override
-    public boolean removeRecordTimelineTier(String tierName) {
+    public boolean removeRecordIntervalTier(String tierName) {
         return this.recordTimelineTiers.remove(tierName);
     }
 

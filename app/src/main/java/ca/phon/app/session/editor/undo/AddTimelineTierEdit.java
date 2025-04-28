@@ -46,7 +46,7 @@ public class AddTimelineTierEdit extends SessionUndoableEdit {
     public void doIt() {
         final Session session = getSession();
         if (session.getTimeline().getTierNames().contains(intervalTier.getName())
-                || session.getTimeline().getRecordTimelineTiers().contains(intervalTier.getName())) {
+                || session.getTimeline().getRecordIntervalTiers().contains(intervalTier.getName())) {
             return;
         }
         if (session.getTimeline().addTier(intervalTier)) {

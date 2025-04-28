@@ -238,8 +238,8 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 			// copy intervalTiers data
 			retVal.getTimeline().setLength(intervalTiers.getLength());
 			retVal.getTimeline().setMediaUnit(intervalTiers.getMediaUnit());
-			for(String recordTimelineTier: intervalTiers.getRecordTimelineTiers()) {
-				retVal.getTimeline().addRecordTimelineTier(recordTimelineTier);
+			for(String recordTimelineTier: intervalTiers.getRecordIntervalTiers()) {
+				retVal.getTimeline().addRecordIntervalTier(recordTimelineTier);
 			}
 			for(IntervalTier tier: intervalTiers.getTiers()) {
 				retVal.getTimeline().addTier(tier);
@@ -989,7 +989,7 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 		};
 		retVal.setMediaUnit(unit);
 		for(String recordTimelineTier: xmlTimeline.getRecordIntervalTier()) {
-			retVal.addRecordTimelineTier(recordTimelineTier);
+			retVal.addRecordIntervalTier(recordTimelineTier);
 		}
 		for(XmlIntervalTierType xmlTimelineTier:xmlTimeline.getIntervalTier()) {
 			final IntervalTier intervalTier = readTimelineTier(factory, xmlTimelineTier);

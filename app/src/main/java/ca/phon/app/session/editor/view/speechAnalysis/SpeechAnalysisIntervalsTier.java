@@ -27,7 +27,7 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         final Session session = getParentView().getEditor().getSession();
         final IntervalTiers intervalTiers = session.getTimeline();
 
-        for(String timelineTierName: intervalTiers.getRecordTimelineTiers()) {
+        for(String timelineTierName: intervalTiers.getRecordIntervalTiers()) {
             final RecordIntervalTier recordTimelineTier = new RecordIntervalTier(session, timelineTierName);
             final IntervalTier intervalTier = new IntervalTier(recordTimelineTier);
             final TimelineTierComponent timelineTierComponent = new TimelineTierComponent(getParentView().getTimeModel(), intervalTier);

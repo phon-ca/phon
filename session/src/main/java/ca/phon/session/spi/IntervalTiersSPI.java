@@ -15,11 +15,11 @@ public interface IntervalTiersSPI {
 
     public void setMediaUnit(MediaUnit mediaUnit);
 
-    public List<String> getRecordTimelineTiers();
+    public List<String> getRecordIntervalTiers();
 
-    public boolean addRecordTimelineTier(String tierName);
+    public boolean addRecordIntervalTier(String tierName);
 
-    public boolean removeRecordTimelineTier(String tierName);
+    public boolean removeRecordIntervalTier(String tierName);
 
     public List<IntervalTier> getTiers();
 
