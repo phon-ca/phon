@@ -1,4 +1,4 @@
-package ca.phon.app.session.timeline;
+package ca.phon.app.session.intervalTiers;
 
 import ca.phon.session.IntervalTier;
 import ca.phon.session.tierdata.TierElement;

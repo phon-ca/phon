@@ -1,4 +1,4 @@
 ca.phon.app.session.editor.view.transcript.TranscriptEditorUIProps
 ca.phon.app.session.editor.view.speechAnalysis.SpeechAnalysisViewColors
 ca.phon.app.session.editor.SessionEditorUIProps
-ca.phon.app.session.intervalTiers.TimelineTierDefaults
+ca.phon.app.session.intervalTiers.IntervalTierDefaults

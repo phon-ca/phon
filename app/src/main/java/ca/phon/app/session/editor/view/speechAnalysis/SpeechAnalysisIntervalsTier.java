@@ -1,7 +1,7 @@
 package ca.phon.app.session.editor.view.speechAnalysis;
 
-import ca.phon.app.session.timeline.RecordIntervalTier;
-import ca.phon.app.session.timeline.TimelineTierComponent;
+import ca.phon.app.session.intervalTiers.IntervalTierComponent;
+import ca.phon.app.session.intervalTiers.RecordIntervalTier;
 import ca.phon.session.IntervalTier;
 import ca.phon.session.IntervalTiers;
 import ca.phon.session.Session;
@@ -30,13 +30,13 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
         for(String timelineTierName: intervalTiers.getRecordIntervalTiers()) {
             final RecordIntervalTier recordTimelineTier = new RecordIntervalTier(session, timelineTierName);
             final IntervalTier intervalTier = new IntervalTier(recordTimelineTier);
-            final TimelineTierComponent timelineTierComponent = new TimelineTierComponent(getParentView().getTimeModel(), intervalTier);
-            add(timelineTierComponent);
+            final IntervalTierComponent intervalTierComponent = new IntervalTierComponent(getParentView().getTimeModel(), intervalTier);
+            add(intervalTierComponent);
         }
 
         for(var timelineTier : intervalTiers.getTiers()) {
-            final TimelineTierComponent timelineTierComponent = new TimelineTierComponent(getParentView().getTimeModel(), timelineTier);
-            add(timelineTierComponent);
+            final IntervalTierComponent intervalTierComponent = new IntervalTierComponent(getParentView().getTimeModel(), timelineTier);
+            add(intervalTierComponent);
         }
     }
 

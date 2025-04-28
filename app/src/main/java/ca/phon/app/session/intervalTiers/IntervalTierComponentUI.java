@@ -1,4 +1,4 @@
-package ca.phon.app.session.timeline;
+package ca.phon.app.session.intervalTiers;
 
 import ca.phon.media.TimeComponentUI;
 import ca.phon.session.IntervalTier;
@@ -14,7 +14,7 @@ import java.awt.*;
  * UI for timeline tier components.
  *
  */
-public class TimelineTierComponentUI extends TimeComponentUI {
+public class IntervalTierComponentUI extends TimeComponentUI {
 
     private final static int TOP_BOTTOM_MARGIN = 5;
 
@@ -29,12 +29,12 @@ public class TimelineTierComponentUI extends TimeComponentUI {
 
     private JLabel renderer;
 
-    private TimelineTierComponent timeComponent;
+    private IntervalTierComponent timeComponent;
 
     /**
      * Default constructor
      */
-    public TimelineTierComponentUI() {
+    public IntervalTierComponentUI() {
         super();
 
         markerTree = RTree.create();
@@ -49,11 +49,11 @@ public class TimelineTierComponentUI extends TimeComponentUI {
 
     @Override
     public void installUI(JComponent c) {
-        if(!(c instanceof TimelineTierComponent))
-            throw new IllegalArgumentException("c must be a TimelineTierComponent");
+        if(!(c instanceof IntervalTierComponent))
+            throw new IllegalArgumentException("c must be a IntervalTierComponent");
         super.installUI(c);
 
-        timeComponent = (TimelineTierComponent)c;
+        timeComponent = (IntervalTierComponent)c;
         timeComponent.setDoubleBuffered(true);
 
         timeComponent.setBackground(UIManager.getColor("IntervalTier.background"));
@@ -63,8 +63,8 @@ public class TimelineTierComponentUI extends TimeComponentUI {
 
     @Override
     public void uninstallUI(JComponent c) {
-        if(!(c instanceof TimelineTierComponent))
-            throw new IllegalArgumentException("c must be a TimelineTierComponent");
+        if(!(c instanceof IntervalTierComponent))
+            throw new IllegalArgumentException("c must be a IntervalTierComponent");
         super.uninstallUI(c);
     }
 
@@ -124,7 +124,7 @@ public class TimelineTierComponentUI extends TimeComponentUI {
             g2.fill(g2.getClipBounds());
         }
 
-        final IntervalTier tier = ((TimelineTierComponent)c).getTimelineTier();
+        final IntervalTier tier = ((IntervalTierComponent)c).getTimelineTier();
 
         // draw tier name
         final Rectangle labelRect = paintLabel(g2, tier.getName());
@@ -145,7 +145,7 @@ public class TimelineTierComponentUI extends TimeComponentUI {
             final float startTime = interval.getStart();
             final float endTime = interval.getEnd();
 
-            final TimelineTierComponent tc = (TimelineTierComponent)c;
+            final IntervalTierComponent tc = (IntervalTierComponent)c;
             final var intervalX = tc.xForTime(startTime);
             final var intervalWidth = tc.xForTime(endTime) - intervalX;
 

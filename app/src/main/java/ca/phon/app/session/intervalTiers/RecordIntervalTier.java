@@ -1,4 +1,4 @@
-package ca.phon.app.session.timeline;
+package ca.phon.app.session.intervalTiers;
 
 import ca.phon.orthography.Orthography;
 import ca.phon.session.*;

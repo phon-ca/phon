@@ -1,4 +1,4 @@
-package ca.phon.app.session.timeline;
+package ca.phon.app.session.intervalTiers;
 
 import ca.phon.media.TimeComponent;
 import ca.phon.media.TimeComponentUI;
@@ -12,18 +12,18 @@ import javax.swing.plaf.ComponentUI;
  *
  *
  */
-public class TimelineTierComponent extends TimeComponent {
+public class IntervalTierComponent extends TimeComponent {
 
     /**
      * The timeline tier this component is associated with
      */
     private final IntervalTier intervalTier;
 
-    public TimelineTierComponent(TimeUIModel model, IntervalTier intervalTier) {
+    public IntervalTierComponent(TimeUIModel model, IntervalTier intervalTier) {
         super(model);
         this.intervalTier = intervalTier;
 
-        setUI(new TimelineTierComponentUI());
+        setUI(new IntervalTierComponentUI());
     }
 
     public IntervalTier getTimelineTier() {
@@ -37,10 +37,10 @@ public class TimelineTierComponent extends TimeComponent {
 
     @Override
     public void setUI(ComponentUI ui) {
-        if(ui instanceof TimelineTierComponentUI) {
+        if(ui instanceof IntervalTierComponentUI) {
             super.setUI(ui);
         } else {
-            throw new IllegalArgumentException("ui must be a TimelineTierComponentUI");
+            throw new IllegalArgumentException("ui must be a IntervalTierComponentUI");
         }
     }
 

@@ -1,4 +1,4 @@
-package ca.phon.app.session.timeline;
+package ca.phon.app.session.intervalTiers;
 
 import ca.phon.plugin.IPluginExtensionFactory;
 import ca.phon.plugin.IPluginExtensionPoint;
@@ -8,7 +8,7 @@ import ca.phon.ui.theme.UIDefaultsHandler;
 import javax.swing.*;
 import java.awt.*;
 
-public class TimelineTierDefaults implements UIDefaultsHandler, IPluginExtensionPoint<UIDefaultsHandler> {
+public class IntervalTierDefaults implements UIDefaultsHandler, IPluginExtensionPoint<UIDefaultsHandler> {
 
     public final static String TIMELINE_TIER_BACKGROUND = "IntervalTier.background";
     public final static Color DEFAULT_TIMELINE_TIER_BACKGROUND = UIManager.getColor("text");

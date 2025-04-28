@@ -1,4 +1,4 @@
-package ca.phon.app.session.timeline;
+package ca.phon.app.session.intervalTiers;
 
 import ca.phon.app.session.editor.undo.TierEdit;
 import ca.phon.extensions.Extension;
@@ -18,7 +18,7 @@ import java.util.List;
  * reflect the new record segment.
  */
 @Extension(Tier.class)
-public class TimelineDependentTierChanges implements TierEdit.DependentTierChanges<MediaSegment>, ExtensionProvider {
+public class IntervalTierDependentTierChanges implements TierEdit.DependentTierChanges<MediaSegment>, ExtensionProvider {
 
     @Override
     public void performDependentTierChanges(TierEdit<MediaSegment> tierEdit) {
@@ -90,7 +90,7 @@ public class TimelineDependentTierChanges implements TierEdit.DependentTierChang
     public void installExtension(IExtendable obj) {
         if(obj instanceof Tier<?> tier) {
             if(SystemTierType.Segment.getName().equals(tier.getName()) && tier.getDeclaredType() == MediaSegment.class) {
-                final TimelineDependentTierChanges extension = new TimelineDependentTierChanges();
+                final IntervalTierDependentTierChanges extension = new IntervalTierDependentTierChanges();
                 tier.putExtension(TierEdit.DependentTierChanges.class, extension);
             }
         }
