@@ -63,7 +63,7 @@ public final class TimelineView extends EditorView {
 		TimelineViewColors.install();
 	}
 
-	public static final String VIEW_NAME = "Timeline";
+	public static final String VIEW_NAME = "IntervalTiers";
 
 	public static final String VIEW_ICON = IconManager.GoogleMaterialDesignIconsFontName + ":view_timeline";
 	

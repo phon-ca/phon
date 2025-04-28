@@ -1,7 +1,7 @@
 package ca.phon.session.impl;
 
-import ca.phon.session.TimelineTier;
-import ca.phon.session.spi.TimelineTierSPI;
+import ca.phon.session.IntervalTier;
+import ca.phon.session.spi.IntervalTierSPI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,25 +9,25 @@ import java.util.List;
 /**
  * Basic implementation of a timeline tier.
  */
-public class TimelineTierImpl implements TimelineTierSPI {
+public class IntervalTierImpl implements IntervalTierSPI {
 
     private String name;
 
-    private List<TimelineTier.Interval> intervals;
+    private List<IntervalTier.Interval> intervals;
 
-    public TimelineTierImpl() {
+    public IntervalTierImpl() {
         super();
         this.name = "";
         this.intervals = new ArrayList<>();
     }
 
-    public TimelineTierImpl(String name) {
+    public IntervalTierImpl(String name) {
         super();
         this.name = name;
         this.intervals = new ArrayList<>();
     }
 
-    public TimelineTierImpl(String name, List<TimelineTier.Interval> intervals) {
+    public IntervalTierImpl(String name, List<IntervalTier.Interval> intervals) {
         super();
         this.name = name;
         this.intervals = intervals;
@@ -39,17 +39,17 @@ public class TimelineTierImpl implements TimelineTierSPI {
     }
 
     @Override
-    public List<TimelineTier.Interval> getIntervals() {
+    public List<IntervalTier.Interval> getIntervals() {
         return this.intervals;
     }
 
     @Override
-    public boolean addInterval(TimelineTier.Interval interval, TimelineTier.InsertionStrategy insertionStrategy) {
+    public boolean addInterval(IntervalTier.Interval interval, IntervalTier.InsertionStrategy insertionStrategy) {
         return this.intervals.add(interval);
     }
 
     @Override
-    public boolean removeInterval(TimelineTier.Interval interval) {
+    public boolean removeInterval(IntervalTier.Interval interval) {
         return this.intervals.remove(interval);
     }
 

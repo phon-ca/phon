@@ -91,13 +91,13 @@ public class SessionFactoryImpl implements SessionFactorySPI, IPluginExtensionPo
 	public TranscriptSPI createTranscript() { return new TranscriptImpl(); }
 
 	@Override
-	public TimelineSPI createTimeline() {
-		return new TimelineImpl();
+	public IntervalTiersSPI createTimeline() {
+		return new IntervalTiersImpl();
 	}
 
 	@Override
-	public TimelineTierSPI createTimelineTier(String name) {
-		return new TimelineTierImpl(name);
+	public IntervalTierSPI createTimelineTier(String name) {
+		return new IntervalTierImpl(name);
 	}
 
 	@Override

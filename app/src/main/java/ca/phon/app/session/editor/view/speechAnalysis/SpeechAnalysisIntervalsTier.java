@@ -1,19 +1,16 @@
 package ca.phon.app.session.editor.view.speechAnalysis;
 
-import ca.phon.app.session.timeline.RecordTimelineTier;
+import ca.phon.app.session.timeline.RecordIntervalTier;
 import ca.phon.app.session.timeline.TimelineTierComponent;
-import ca.phon.plugin.IPluginExtensionFactory;
-import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.session.IntervalTier;
+import ca.phon.session.IntervalTiers;
 import ca.phon.session.Session;
-import ca.phon.session.Timeline;
-import ca.phon.session.TimelineTier;
 import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
-import java.sql.Time;
 
 /**
- * Tier for displaying intervals from the session {@link ca.phon.session.Timeline}
+ * Tier for displaying intervals from the session {@link IntervalTiers}
  */
 public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
 
@@ -26,18 +23,18 @@ public class SpeechAnalysisIntervalsTier extends SpeechAnalysisTier {
     private void init() {
         setLayout(new VerticalLayout());
 
-        // add a tier for each session timeline tier
+        // add a tier for each session intervalTiers tier
         final Session session = getParentView().getEditor().getSession();
-        final Timeline timeline = session.getTimeline();
+        final IntervalTiers intervalTiers = session.getTimeline();
 
-        for(String timelineTierName:timeline.getRecordTimelineTiers()) {
-            final RecordTimelineTier recordTimelineTier = new RecordTimelineTier(session, timelineTierName);
-            final TimelineTier timelineTier = new TimelineTier(recordTimelineTier);
-            final TimelineTierComponent timelineTierComponent = new TimelineTierComponent(getParentView().getTimeModel(), timelineTier);
+        for(String timelineTierName: intervalTiers.getRecordTimelineTiers()) {
+            final RecordIntervalTier recordTimelineTier = new RecordIntervalTier(session, timelineTierName);
+            final IntervalTier intervalTier = new IntervalTier(recordTimelineTier);
+            final TimelineTierComponent timelineTierComponent = new TimelineTierComponent(getParentView().getTimeModel(), intervalTier);
             add(timelineTierComponent);
         }
 
-        for(var timelineTier : timeline.getTiers()) {
+        for(var timelineTier : intervalTiers.getTiers()) {
             final TimelineTierComponent timelineTierComponent = new TimelineTierComponent(getParentView().getTimeModel(), timelineTier);
             add(timelineTierComponent);
         }

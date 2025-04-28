@@ -10,16 +10,16 @@ import java.awt.*;
 
 public class TimelineTierDefaults implements UIDefaultsHandler, IPluginExtensionPoint<UIDefaultsHandler> {
 
-    public final static String TIMELINE_TIER_BACKGROUND = "TimelineTier.background";
+    public final static String TIMELINE_TIER_BACKGROUND = "IntervalTier.background";
     public final static Color DEFAULT_TIMELINE_TIER_BACKGROUND = UIManager.getColor("text");
 
-    public final static String TIMELINE_TIER_FOREGROUND = "TimelineTier.foreground";
+    public final static String TIMELINE_TIER_FOREGROUND = "IntervalTier.foreground";
     public final static Color DEFAULT_TIMELINE_TIER_FOREGROUND = UIManager.getColor("textText");
 
-    public final static String TIMELINE_TIER_TITLE_FOREGROUND = "TimelineTier.titleForeground";
+    public final static String TIMELINE_TIER_TITLE_FOREGROUND = "IntervalTier.titleForeground";
     public final static Color DEFAULT_TIMELINE_TIER_TITLE_FOREGROUND = Color.blue;
 
-    public final static String TIMELINE_TIER_INTERVAL_BORDER = "TimelineTier.intervalBorder";
+    public final static String TIMELINE_TIER_INTERVAL_BORDER = "IntervalTier.intervalBorder";
     public final static Color DEFAULT_TIMELINE_TIER_INTERVAL_BORDER = Color.lightGray;
 
     @Override

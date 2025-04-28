@@ -3,7 +3,6 @@ package ca.phon.app.session.editor;
 import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.session.position.TranscriptElementLocation;
-import ca.phon.session.position.TranscriptElementRange;
 import ca.phon.session.tierdata.TierData;
 import ca.phon.util.Language;
 
@@ -307,7 +306,7 @@ public record  EditorEventType<T>(String eventName, Class<T> type) {
 	 * @param tierName
 	 * @param interval
 	 */
-	public record TimelineIntervalAddData(String tierName, TimelineTier.Interval interval) {}
+	public record TimelineIntervalAddData(String tierName, IntervalTier.Interval interval) {}
 
 	/**
 	 * Add timeline tier interval event
@@ -322,7 +321,7 @@ public record  EditorEventType<T>(String eventName, Class<T> type) {
 	 * @param interval
 	 *
 	 */
-	public record TimelineIntervalRemoveData(String tierName, TimelineTier.Interval interval) {}
+	public record TimelineIntervalRemoveData(String tierName, IntervalTier.Interval interval) {}
 
 	/**
 	 * Remove timeline tier interval event
@@ -339,7 +338,7 @@ public record  EditorEventType<T>(String eventName, Class<T> type) {
 	 * @param newStart
 	 * @param newEnd
 	 */
-	public record TimelineIntervalMoveData(String tierName, TimelineTier.Interval interval, float oldStart, float oldEnd, float newStart, float newEnd) {}
+	public record TimelineIntervalMoveData(String tierName, IntervalTier.Interval interval, float oldStart, float oldEnd, float newStart, float newEnd) {}
 
 	/**
 	 * Move timeline tier interval event

@@ -269,6 +269,6 @@ public interface SessionSPI {
 	 *
 	 * @return timeline object
 	 */
-	public Timeline getTimeline();
+	public IntervalTiers getTimeline();
 	
 }

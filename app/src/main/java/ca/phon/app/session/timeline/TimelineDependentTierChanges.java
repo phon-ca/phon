@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * Extension for record media segment changes. This extension will update all record tiers
- * which are included in the session Timeline. Internal media segments will be updated to
+ * which are included in the session IntervalTiers. Internal media segments will be updated to
  * reflect the new record segment.
  */
 @Extension(Tier.class)
@@ -39,8 +39,8 @@ public class TimelineDependentTierChanges implements TierEdit.DependentTierChang
             if(tier.getValue() instanceof Orthography orthography) {
                 final OrthoIntervalVisitor visitor = new OrthoIntervalVisitor();
                 orthography.accept(visitor);
-                final List<TimelineTier.Interval> internalMediaList = visitor.getIntervals();
-                final List<TimelineTier.Interval> newInternalMediaList = updateInternalMedia(segment, oldSegment, internalMediaList);
+                final List<IntervalTier.Interval> internalMediaList = visitor.getIntervals();
+                final List<IntervalTier.Interval> newInternalMediaList = updateInternalMedia(segment, oldSegment, internalMediaList);
                 final OrthoIntervalUpdateVisitor updateVisitor = new OrthoIntervalUpdateVisitor(newInternalMediaList);
                 orthography.accept(updateVisitor);
                 final Orthography newOrtho = updateVisitor.getUpdatedOrthography();
@@ -50,8 +50,8 @@ public class TimelineDependentTierChanges implements TierEdit.DependentTierChang
             } else if(tier.getValue() instanceof TierData tierData) {
                 final TierDataIntervalVisitor visitor = new TierDataIntervalVisitor();
                 tierData.accept(visitor);
-                final List<TimelineTier.Interval> internalMediaList = visitor.getIntervals();
-                final List<TimelineTier.Interval> newInternalMediaList = updateInternalMedia(segment, oldSegment, internalMediaList);
+                final List<IntervalTier.Interval> internalMediaList = visitor.getIntervals();
+                final List<IntervalTier.Interval> newInternalMediaList = updateInternalMedia(segment, oldSegment, internalMediaList);
                 final TierDataIntervalUpdateVisitor updateVisitor = new TierDataIntervalUpdateVisitor(newInternalMediaList);
                 tierData.accept(updateVisitor);
                 final TierData newTierData = updateVisitor.getUpdatedTierData();
@@ -71,16 +71,16 @@ public class TimelineDependentTierChanges implements TierEdit.DependentTierChang
      * @param internalMediaList
      * @return
      */
-    private List<TimelineTier.Interval> updateInternalMedia(MediaSegment segment, MediaSegment oldSegment, List<TimelineTier.Interval> internalMediaList) {
+    private List<IntervalTier.Interval> updateInternalMedia(MediaSegment segment, MediaSegment oldSegment, List<IntervalTier.Interval> internalMediaList) {
         final double oldDuration = oldSegment.getEndTime() - oldSegment.getStartTime();
         final double newDuration = segment.getEndTime() - segment.getStartTime();
 
-        final List<TimelineTier.Interval> retVal = new ArrayList<>();
-        for(TimelineTier.Interval internalMedia:internalMediaList) {
+        final List<IntervalTier.Interval> retVal = new ArrayList<>();
+        for(IntervalTier.Interval internalMedia:internalMediaList) {
             final double startTime = segment.getStartTime() + ((internalMedia.getStart() - oldSegment.getStartTime()) / oldDuration) * newDuration;
             final double endTime = segment.getStartTime() + ((internalMedia.getEnd() - oldSegment.getStartTime()) / oldDuration) * newDuration;
             final String label = internalMedia.getLabel();
-            final TimelineTier.Interval newInterval = new TimelineTier.Interval((float)startTime, (float)endTime, label);
+            final IntervalTier.Interval newInterval = new IntervalTier.Interval((float)startTime, (float)endTime, label);
             retVal.add(newInterval);
         }
         return retVal;

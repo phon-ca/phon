@@ -9,6 +9,6 @@ ca.phon.app.session.editor.view.syllabificationAlignment.SyllabificationAlignmen
 ca.phon.app.session.editor.view.ipaDictionary.IPADictionaryViewExtension
 #ca.phon.app.session.editor.view.find_and_replace.FindAndReplaceEditorViewExtension
 ca.phon.app.session.editor.view.check.SessionCheckViewExtension
-ca.phon.app.session.editor.view.timeline.TimelineViewExtension
+ca.phon.app.session.editor.view.intervalTiers.TimelineViewExtension
 ca.phon.app.session.editor.view.transcript.TranscriptViewExtPt
 ca.phon.app.session.editor.view.search.SearchViewExtPt

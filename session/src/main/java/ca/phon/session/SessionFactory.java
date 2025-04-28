@@ -18,7 +18,6 @@ package ca.phon.session;
 import ca.phon.extensions.ExtendableObject;
 import ca.phon.plugin.*;
 import ca.phon.session.impl.GemImpl;
-import ca.phon.session.impl.TimelineTierImpl;
 import ca.phon.session.io.*;
 import ca.phon.session.spi.*;
 import ca.phon.session.tierdata.TierData;
@@ -739,12 +738,12 @@ public final class SessionFactory extends ExtendableObject {
 	}
 
 	/**
-	 * Create a {@link Timeline} object with default values
+	 * Create a {@link IntervalTiers} object with default values
 	 *
 	 * @return new timeline object
 	 */
-	public Timeline createTimeline() {
-		return new Timeline(sessionFactoryImpl.createTimeline());
+	public IntervalTiers createTimeline() {
+		return new IntervalTiers(sessionFactoryImpl.createTimeline());
 	}
 
 	/**
@@ -753,8 +752,8 @@ public final class SessionFactory extends ExtendableObject {
 	 * @param name
 	 * @return new timeline tier object
 	 */
-	public TimelineTier createTimelineTier(String name) {
-		return new TimelineTier(sessionFactoryImpl.createTimelineTier(name));
+	public IntervalTier createTimelineTier(String name) {
+		return new IntervalTier(sessionFactoryImpl.createTimelineTier(name));
 	}
 
 }

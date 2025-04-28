@@ -1,8 +1,8 @@
 package ca.phon.session.impl;
 
+import ca.phon.session.IntervalTier;
 import ca.phon.session.MediaUnit;
-import ca.phon.session.TimelineTier;
-import ca.phon.session.spi.TimelineSPI;
+import ca.phon.session.spi.IntervalTiersSPI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Default implementation of a timeline.
  */
-public class TimelineImpl implements TimelineSPI {
+public class IntervalTiersImpl implements IntervalTiersSPI {
 
     /**
      * Length of timeline in specified media units
@@ -30,20 +30,20 @@ public class TimelineImpl implements TimelineSPI {
     /**
      * List of session-level timeline tiers
      */
-    private List<TimelineTier> timelineTiers;
+    private List<IntervalTier> intervalTiers;
 
-    public TimelineImpl() {
+    public IntervalTiersImpl() {
         super();
         this.mediaUnit = MediaUnit.Second;
         this.recordTimelineTiers = new ArrayList<>();
-        this.timelineTiers = new ArrayList<>();
+        this.intervalTiers = new ArrayList<>();
     }
 
-    public TimelineImpl(float length, MediaUnit mediaUnit, List<String> recordTimelineTiers, List<TimelineTier> timelineTiers) {
+    public IntervalTiersImpl(float length, MediaUnit mediaUnit, List<String> recordTimelineTiers, List<IntervalTier> intervalTiers) {
         this.length = length;
         this.mediaUnit = mediaUnit;
         this.recordTimelineTiers = recordTimelineTiers;
-        this.timelineTiers = timelineTiers;
+        this.intervalTiers = intervalTiers;
     }
 
     @Override
@@ -82,19 +82,19 @@ public class TimelineImpl implements TimelineSPI {
     }
 
     @Override
-    public List<TimelineTier> getTiers() {
-        return List.copyOf(this.timelineTiers);
+    public List<IntervalTier> getTiers() {
+        return List.copyOf(this.intervalTiers);
     }
 
     @Override
-    public boolean removeTier(TimelineTier tier) {
-        return this.timelineTiers.remove(tier);
+    public boolean removeTier(IntervalTier tier) {
+        return this.intervalTiers.remove(tier);
     }
 
     @Override
-    public boolean addTier(TimelineTier tier) {
-        if(!this.timelineTiers.contains(tier)) {
-            this.timelineTiers.add(tier);
+    public boolean addTier(IntervalTier tier) {
+        if(!this.intervalTiers.contains(tier)) {
+            this.intervalTiers.add(tier);
             return true;
         } else {
             return false;

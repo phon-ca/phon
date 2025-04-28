@@ -3,8 +3,8 @@ package ca.phon.app.session.editor.undo;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.session.IntervalTier;
 import ca.phon.session.Session;
-import ca.phon.session.TimelineTier;
 
 import javax.swing.undo.CannotUndoException;
 
@@ -15,7 +15,7 @@ public class MoveTimelineTierIntervalEdit extends SessionUndoableEdit {
 
     private String tierName;
 
-    private TimelineTier.Interval interval;
+    private IntervalTier.Interval interval;
 
     private float oldStartTime;
 
@@ -26,7 +26,7 @@ public class MoveTimelineTierIntervalEdit extends SessionUndoableEdit {
     private float newEndTime;
 
     public MoveTimelineTierIntervalEdit(Session session, EditorEventManager eventManager,
-                                        String tierName, TimelineTier.Interval interval,
+                                        String tierName, IntervalTier.Interval interval,
                                         float newStartTime, float newEndTime) {
         super(session, eventManager);
         this.tierName = tierName;
@@ -50,10 +50,10 @@ public class MoveTimelineTierIntervalEdit extends SessionUndoableEdit {
     public void doIt() {
         final Session session = getSession();
         if (session.getTimeline().getTierNames().contains(tierName)) {
-            final TimelineTier timelineTier = session.getTimeline().getTier(tierName);
-            if(timelineTier == null) return;
+            final IntervalTier intervalTier = session.getTimeline().getTier(tierName);
+            if(intervalTier == null) return;
             // ensure interval is in tier
-            if (timelineTier.getIntervals().contains(this.interval)) {
+            if (intervalTier.getIntervals().contains(this.interval)) {
                 // adjust interval
                 interval.setStart(newStartTime);
                 interval.setEnd(newEndTime);
@@ -73,10 +73,10 @@ public class MoveTimelineTierIntervalEdit extends SessionUndoableEdit {
     public void undo() throws CannotUndoException {
         final Session session = getSession();
         if (session.getTimeline().getTierNames().contains(tierName)) {
-            final TimelineTier timelineTier = session.getTimeline().getTier(tierName);
-            if(timelineTier == null) return;
+            final IntervalTier intervalTier = session.getTimeline().getTier(tierName);
+            if(intervalTier == null) return;
             // ensure interval is in tier
-            if (timelineTier.getIntervals().contains(this.interval)) {
+            if (intervalTier.getIntervals().contains(this.interval)) {
                 // adjust interval
                 interval.setStart(oldStartTime);
                 interval.setEnd(oldEndTime);

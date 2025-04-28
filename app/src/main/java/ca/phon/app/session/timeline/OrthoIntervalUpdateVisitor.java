@@ -1,7 +1,7 @@
 package ca.phon.app.session.timeline;
 
 import ca.phon.orthography.*;
-import ca.phon.session.TimelineTier;
+import ca.phon.session.IntervalTier;
 import ca.phon.visitor.VisitorAdapter;
 import ca.phon.visitor.annotation.Visits;
 
@@ -17,11 +17,11 @@ public class OrthoIntervalUpdateVisitor extends VisitorAdapter<OrthographyElemen
 
     private Stack<OrthographyBuilder> builderStack = new Stack<>();
 
-    private final List<TimelineTier.Interval> updatedIntervals;
+    private final List<IntervalTier.Interval> updatedIntervals;
 
-    private Iterator<TimelineTier.Interval> updatedIntervalsIter = null;
+    private Iterator<IntervalTier.Interval> updatedIntervalsIter = null;
 
-    public OrthoIntervalUpdateVisitor(List<TimelineTier.Interval> updatedIntervals) {
+    public OrthoIntervalUpdateVisitor(List<IntervalTier.Interval> updatedIntervals) {
         super();
         this.updatedIntervals = updatedIntervals;
         reset();
@@ -36,7 +36,7 @@ public class OrthoIntervalUpdateVisitor extends VisitorAdapter<OrthographyElemen
     @Visits
     public void visitInternalMedia(InternalMedia internalMedia) {
         if(updatedIntervalsIter.hasNext()) {
-            TimelineTier.Interval newInterval = updatedIntervalsIter.next();
+            IntervalTier.Interval newInterval = updatedIntervalsIter.next();
             final InternalMedia newInternalMedia =
                     new InternalMedia(newInterval.getStart(), newInterval.getEnd());
             builderStack.peek().append(newInternalMedia);

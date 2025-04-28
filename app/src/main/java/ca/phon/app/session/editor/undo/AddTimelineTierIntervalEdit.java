@@ -3,8 +3,8 @@ package ca.phon.app.session.editor.undo;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.session.IntervalTier;
 import ca.phon.session.Session;
-import ca.phon.session.TimelineTier;
 
 import javax.swing.undo.CannotUndoException;
 
@@ -15,10 +15,10 @@ public class AddTimelineTierIntervalEdit extends SessionUndoableEdit {
 
     private String tierName;
 
-    private TimelineTier.Interval interval;
+    private IntervalTier.Interval interval;
 
     public AddTimelineTierIntervalEdit(Session session, EditorEventManager eventManager,
-                                       String tierName, TimelineTier.Interval interval) {
+                                       String tierName, IntervalTier.Interval interval) {
         super(session, eventManager);
         this.tierName = tierName;
         this.interval = interval;
@@ -37,9 +37,9 @@ public class AddTimelineTierIntervalEdit extends SessionUndoableEdit {
     public void doIt() {
         final Session session = getSession();
         if (session.getTimeline().getTierNames().contains(tierName)) {
-            final TimelineTier timelineTier = session.getTimeline().getTier(tierName);
-            if(timelineTier == null) return;
-            if (timelineTier.addInterval(this.interval, TimelineTier.InsertionStrategy.ALLOW_OVERLAPS)) {
+            final IntervalTier intervalTier = session.getTimeline().getTier(tierName);
+            if(intervalTier == null) return;
+            if (intervalTier.addInterval(this.interval, IntervalTier.InsertionStrategy.ALLOW_OVERLAPS)) {
                 // fire event
                 final EditorEventManager editorEventManager = getEditorEventManager();
                 if (editorEventManager != null) {
@@ -55,9 +55,9 @@ public class AddTimelineTierIntervalEdit extends SessionUndoableEdit {
     public void undo() throws CannotUndoException {
         final Session session = getSession();
         if (session.getTimeline().getTierNames().contains(tierName)) {
-            final TimelineTier timelineTier = session.getTimeline().getTier(tierName);
-            if(timelineTier == null) return;
-            if (timelineTier.removeInterval(this.interval)) {
+            final IntervalTier intervalTier = session.getTimeline().getTier(tierName);
+            if(intervalTier == null) return;
+            if (intervalTier.removeInterval(this.interval)) {
                 // fire event
                 final EditorEventManager editorEventManager = getEditorEventManager();
                 if (editorEventManager != null) {

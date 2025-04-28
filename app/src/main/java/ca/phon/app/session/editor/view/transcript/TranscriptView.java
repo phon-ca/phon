@@ -617,7 +617,7 @@ public class TranscriptView extends EditorView {
 
         JMenuItem showTimelineViewItem = new JMenuItem();
         PhonUIAction<Void> showTimelineViewAct = PhonUIAction.runnable(() -> getEditor().getViewModel().showView(TimelineView.VIEW_NAME));
-        showTimelineViewAct.putValue(PhonUIAction.NAME, "Show Timeline view");
+        showTimelineViewAct.putValue(PhonUIAction.NAME, "Show IntervalTiers view");
         showTimelineViewItem.setAction(showTimelineViewAct);
         menuBuilder.addItem(".", showTimelineViewItem);
 

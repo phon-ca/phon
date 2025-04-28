@@ -3878,7 +3878,7 @@
     </xs:element>
     <!-- endregion Mor -->
 
-    <!-- region Timeline -->
+    <!-- region IntervalTiers -->
     <xs:element name="recordIntervalTier" type="nonemptyStringType"/>
     <xs:element name="intervalTiers" type="intervalTiersType"/>
     <xs:complexType name="intervalTiersType">
@@ -3893,7 +3893,7 @@
             </xs:element>
             <xs:element ref="intervalTier" minOccurs="0" maxOccurs="unbounded">
                 <xs:annotation>
-                    <xs:documentation>Session level timeline information unassociated with record data</xs:documentation>
+                    <xs:documentation>Session level intervalTiers information unassociated with record data</xs:documentation>
                 </xs:annotation>
             </xs:element>
         </xs:sequence>
@@ -3904,7 +3904,7 @@
     <xs:element name="intervalTier" type="intervalTierType"/>
     <xs:complexType name="intervalTierType">
         <xs:annotation>
-            <xs:documentation>A collection of points/intervals on the timeline</xs:documentation>
+            <xs:documentation>A collection of points/intervals on the intervalTiers</xs:documentation>
         </xs:annotation>
         <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:element ref="point"/>
@@ -3925,11 +3925,11 @@
     <xs:element name="point" type="pointType"/>
     <xs:complexType name="pointType" mixed="true">
         <xs:annotation>
-            <xs:documentation>Point on timeline with label</xs:documentation>
+            <xs:documentation>Point on intervalTiers with label</xs:documentation>
         </xs:annotation>
         <xs:attribute name="value" type="xs:float" use="required"/>
     </xs:complexType>
-    <!-- endregion Timeline -->
+    <!-- endregion IntervalTiers -->
 
     <!-- region Simple types -->
     <xs:simpleType name="beginEndType">

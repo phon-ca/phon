@@ -3,13 +3,12 @@ package ca.phon.app.session.timeline;
 import ca.phon.media.TimeComponent;
 import ca.phon.media.TimeComponentUI;
 import ca.phon.media.TimeUIModel;
-import ca.phon.session.TimelineTier;
+import ca.phon.session.IntervalTier;
 
-import javax.swing.*;
 import javax.swing.plaf.ComponentUI;
 
 /**
- * Time component for session {@link ca.phon.session.TimelineTier}s
+ * Time component for session {@link IntervalTier}s
  *
  *
  */
@@ -18,17 +17,17 @@ public class TimelineTierComponent extends TimeComponent {
     /**
      * The timeline tier this component is associated with
      */
-    private final TimelineTier timelineTier;
+    private final IntervalTier intervalTier;
 
-    public TimelineTierComponent(TimeUIModel model, TimelineTier timelineTier) {
+    public TimelineTierComponent(TimeUIModel model, IntervalTier intervalTier) {
         super(model);
-        this.timelineTier = timelineTier;
+        this.intervalTier = intervalTier;
 
         setUI(new TimelineTierComponentUI());
     }
 
-    public TimelineTier getTimelineTier() {
-        return timelineTier;
+    public IntervalTier getTimelineTier() {
+        return intervalTier;
     }
 
     @Override

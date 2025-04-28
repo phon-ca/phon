@@ -3,7 +3,7 @@ package ca.phon.app.session.timeline;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.*;
 import ca.phon.session.Record;
-import ca.phon.session.spi.TimelineTierSPI;
+import ca.phon.session.spi.IntervalTierSPI;
 import ca.phon.session.tierdata.TierData;
 
 import java.util.ArrayList;
@@ -16,13 +16,13 @@ import java.util.List;
  *
  * e.g., hello •0.-999-1.28• world •1.28-2.08•
  */
-public class RecordTimelineTier implements TimelineTierSPI {
+public class RecordIntervalTier implements IntervalTierSPI {
 
     private final Session session;
 
     private final String tierName;
 
-    public RecordTimelineTier(Session session, String tierName) {
+    public RecordIntervalTier(Session session, String tierName) {
         this.session = session;
         this.tierName = tierName;
     }
@@ -32,7 +32,7 @@ public class RecordTimelineTier implements TimelineTierSPI {
         return tierName;
     }
 
-    public List<TimelineTier.Interval> getIntervals(Record record) {
+    public List<IntervalTier.Interval> getIntervals(Record record) {
         final Tier<?> tier = record.getTier(this.tierName);
         // process tier data
         if(tier == null) return List.of();
@@ -51,8 +51,8 @@ public class RecordTimelineTier implements TimelineTierSPI {
      * @param orthography
      * @return
      */
-    public static List<TimelineTier.Interval> orthographyIntervals(Orthography orthography) {
-        final List<TimelineTier.Interval> intervals = new ArrayList<>();
+    public static List<IntervalTier.Interval> orthographyIntervals(Orthography orthography) {
+        final List<IntervalTier.Interval> intervals = new ArrayList<>();
         if(orthography == null) return List.of();
 
         final OrthoIntervalVisitor visitor = new OrthoIntervalVisitor();
@@ -67,8 +67,8 @@ public class RecordTimelineTier implements TimelineTierSPI {
      * @param tierData
      * @return
      */
-    public static List<TimelineTier.Interval> tierDataIntervals(TierData tierData) {
-        final List<TimelineTier.Interval> intervals = new ArrayList<>();
+    public static List<IntervalTier.Interval> tierDataIntervals(TierData tierData) {
+        final List<IntervalTier.Interval> intervals = new ArrayList<>();
         if(tierData == null) return List.of();
 
         final TierDataIntervalVisitor visitor = new TierDataIntervalVisitor();
@@ -78,8 +78,8 @@ public class RecordTimelineTier implements TimelineTierSPI {
     }
 
     @Override
-    public List<TimelineTier.Interval> getIntervals() {
-        final List<TimelineTier.Interval> intervals = new ArrayList<>();
+    public List<IntervalTier.Interval> getIntervals() {
+        final List<IntervalTier.Interval> intervals = new ArrayList<>();
         for(var record:session.getRecords()) {
             intervals.addAll(getIntervals(record));
         }
@@ -88,13 +88,13 @@ public class RecordTimelineTier implements TimelineTierSPI {
 
     // not implemented
     @Override
-    public boolean addInterval(TimelineTier.Interval interval, TimelineTier.InsertionStrategy insertionStrategy) {
+    public boolean addInterval(IntervalTier.Interval interval, IntervalTier.InsertionStrategy insertionStrategy) {
         return false;
     }
 
     // not implemented
     @Override
-    public boolean removeInterval(TimelineTier.Interval interval) {
+    public boolean removeInterval(IntervalTier.Interval interval) {
         return false;
     }
 

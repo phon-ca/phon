@@ -1,11 +1,11 @@
 package ca.phon.session.spi;
 
 import ca.phon.session.MediaUnit;
-import ca.phon.session.TimelineTier;
+import ca.phon.session.IntervalTier;
 
 import java.util.List;
 
-public interface TimelineSPI {
+public interface IntervalTiersSPI {
 
     public float getLength();
 
@@ -21,15 +21,15 @@ public interface TimelineSPI {
 
     public boolean removeRecordTimelineTier(String tierName);
 
-    public List<TimelineTier> getTiers();
+    public List<IntervalTier> getTiers();
 
     /**
-     * Remove session level timeline tier
+     * Remove session level interval tier
      *
      * @param tier
      * @return true if removed, false if not found in tier list
      */
-    public boolean removeTier(TimelineTier tier);
+    public boolean removeTier(IntervalTier tier);
 
     /**
      * Add timeline tier
@@ -37,6 +37,6 @@ public interface TimelineSPI {
      * @param tier
      * @return true if added, false if not
      */
-    public boolean addTier(TimelineTier tier);
+    public boolean addTier(IntervalTier tier);
 
 }

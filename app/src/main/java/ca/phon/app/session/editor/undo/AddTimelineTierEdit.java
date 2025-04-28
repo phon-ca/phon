@@ -3,8 +3,8 @@ package ca.phon.app.session.editor.undo;
 import ca.phon.app.session.editor.EditorEvent;
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.EditorEventType;
+import ca.phon.session.IntervalTier;
 import ca.phon.session.Session;
-import ca.phon.session.TimelineTier;
 
 import javax.swing.undo.CannotUndoException;
 
@@ -14,28 +14,28 @@ import javax.swing.undo.CannotUndoException;
  */
 public class AddTimelineTierEdit extends SessionUndoableEdit {
 
-    protected final TimelineTier timelineTier;
+    protected final IntervalTier intervalTier;
 
-    public AddTimelineTierEdit(Session session, EditorEventManager editorEventManager, TimelineTier timelineTier) {
+    public AddTimelineTierEdit(Session session, EditorEventManager editorEventManager, IntervalTier intervalTier) {
         super(session, editorEventManager);
-        this.timelineTier = timelineTier;
+        this.intervalTier = intervalTier;
     }
 
     @Override
     public String getPresentationName() {
-        return "add timeline tier: " + timelineTier.getName();
+        return "add timeline tier: " + intervalTier.getName();
     }
 
     @Override
     public void undo() throws CannotUndoException {
         final Session session = getSession();
-        if (session.getTimeline().getTierNames().contains(timelineTier.getName())) {
-            if(session.getTimeline().removeTier(timelineTier)) {
+        if (session.getTimeline().getTierNames().contains(intervalTier.getName())) {
+            if(session.getTimeline().removeTier(intervalTier)) {
                 // fire event
                 final EditorEventManager editorEventManager = getEditorEventManager();
                 if (editorEventManager != null) {
                     final EditorEvent<EditorEventType.TimelineTierRemoveData> event = new EditorEvent<>(EditorEventType.TimelineTierRemove, getSource(),
-                            new EditorEventType.TimelineTierRemoveData(this.timelineTier.getName()));
+                            new EditorEventType.TimelineTierRemoveData(this.intervalTier.getName()));
                     editorEventManager.queueEvent(event);
                 }
             }
@@ -45,16 +45,16 @@ public class AddTimelineTierEdit extends SessionUndoableEdit {
     @Override
     public void doIt() {
         final Session session = getSession();
-        if (session.getTimeline().getTierNames().contains(timelineTier.getName())
-                || session.getTimeline().getRecordTimelineTiers().contains(timelineTier.getName())) {
+        if (session.getTimeline().getTierNames().contains(intervalTier.getName())
+                || session.getTimeline().getRecordTimelineTiers().contains(intervalTier.getName())) {
             return;
         }
-        if (session.getTimeline().addTier(timelineTier)) {
+        if (session.getTimeline().addTier(intervalTier)) {
             // fire event
             final EditorEventManager editorEventManager = getEditorEventManager();
             if (editorEventManager != null) {
                 final EditorEvent<EditorEventType.TimelineTierAddData> event = new EditorEvent<>(EditorEventType.TimelineTierAdd, getSource(),
-                        new EditorEventType.TimelineTierAddData(this.timelineTier.getName()));
+                        new EditorEventType.TimelineTierAddData(this.intervalTier.getName()));
                 editorEventManager.queueEvent(event);
             }
         }

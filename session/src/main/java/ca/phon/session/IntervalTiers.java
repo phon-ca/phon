@@ -1,26 +1,25 @@
 package ca.phon.session;
 
 import ca.phon.extensions.ExtendableObject;
-import ca.phon.session.spi.TimelineSPI;
+import ca.phon.session.spi.IntervalTiersSPI;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Class which holds information about session timeline including:
+ * Class which holds information about session interval tiers including:
  * <ul>
  *     <li>length & media unit</li>
  *     <li>list of record tiers displayed in the timeline</li>
- *     <li>list of session-level timeline tiers</li>
+ *     <li>list of session-level interval tiers</li>
  * </ul>
  */
-public final class Timeline extends ExtendableObject {
+public final class IntervalTiers extends ExtendableObject {
 
-    private final TimelineSPI spi;
+    private final IntervalTiersSPI spi;
 
-    Timeline(TimelineSPI spi) {
+    IntervalTiers(IntervalTiersSPI spi) {
         super();
         this.spi = spi;
     }
@@ -75,7 +74,7 @@ public final class Timeline extends ExtendableObject {
     }
 
     /**
-     * Add record timeline tier
+     * Add record interval tier
      *
      * @param tierName
      * @return true if added, false if already exists
@@ -85,7 +84,7 @@ public final class Timeline extends ExtendableObject {
     }
 
     /**
-     * Remove record timeline tier
+     * Remove record interval tier
      *
      * @param tierName
      * @return true if removed, false if not found
@@ -95,42 +94,42 @@ public final class Timeline extends ExtendableObject {
     }
 
     /**
-     * Get session level timeline tiers as an unmodifiable list
+     * Get session level interval tiers as an unmodifiable list
      *
-     * @return list of timeline tiers
+     * @return list of interval tiers
      */
-    public List<TimelineTier> getTiers() {
+    public List<IntervalTier> getTiers() {
         return Collections.unmodifiableList(spi.getTiers());
     }
 
     /**
-     * Get list of timeline tier names
+     * Get list of interval tier names
      *
-     * @return list of session level timeline tier names
+     * @return list of session level interval tier names
      */
     public List<String> getTierNames() {
-        return getTiers().stream().map(TimelineTier::getName).collect(Collectors.toList());
+        return getTiers().stream().map(IntervalTier::getName).collect(Collectors.toList());
     }
 
     /**
-     * Get timeline tier with given name
+     * Get interval tier with given name
      *
      * @param tierName
-     * @return timeline tier if exists, null otherwise
+     * @return interval tier if exists, null otherwise
      */
-    public TimelineTier getTier(String tierName) {
+    public IntervalTier getTier(String tierName) {
         return getTiers().stream()
                 .filter(t -> t.getName().equals(tierName)).findAny().orElse(null);
     }
 
     /**
-     * Remove session level timeline tier
+     * Remove session level interval tier
      *
      * @param tierName
-     * @return the removed timeline tier or null if not found or not removed
+     * @return the removed interval tier or null if not found or not removed
      */
-    public TimelineTier removeTier(String tierName) {
-        TimelineTier tier = getTier(tierName);
+    public IntervalTier removeTier(String tierName) {
+        IntervalTier tier = getTier(tierName);
         if(tier != null) {
             if(removeTier(tier))
                 return tier;
@@ -141,32 +140,32 @@ public final class Timeline extends ExtendableObject {
     }
 
     /**
-     * Remove session level timeline tier
+     * Remove session level interval tier
      *
      * @param tier
      * @return true if removed, false if not found in tier list
      */
-    public boolean removeTier(TimelineTier tier) {
+    public boolean removeTier(IntervalTier tier) {
         return spi.removeTier(tier);
     }
 
     /**
-     * Add session level timeline tier
+     * Add session level interval tier
      *
      * @param tierName
-     * @return new TimelineTierImpl if given name does not exist, existing TimelineTierImpl if it does
+     * @return new IntervalTierImpl if the given name does not exist, existing IntervalTierImpl if it does
      */
-    public TimelineTier addTier(String tierName) {
+    public IntervalTier addTier(String tierName) {
         return null;
     }
 
     /**
-     * Add session level timeline tier
+     * Add session level interval tier
      *
      * @param tier
      * @return true if added, false if tier with given name already exists
      */
-    public boolean addTier(TimelineTier tier) {
+    public boolean addTier(IntervalTier tier) {
         return spi.addTier(tier);
     }
 

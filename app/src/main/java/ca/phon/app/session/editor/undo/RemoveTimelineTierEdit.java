@@ -1,8 +1,8 @@
 package ca.phon.app.session.editor.undo;
 
 import ca.phon.app.session.editor.EditorEventManager;
+import ca.phon.session.IntervalTier;
 import ca.phon.session.Session;
-import ca.phon.session.TimelineTier;
 
 import javax.swing.undo.CannotUndoException;
 
@@ -12,13 +12,13 @@ import javax.swing.undo.CannotUndoException;
  */
 public class RemoveTimelineTierEdit extends AddTimelineTierEdit {
 
-    public RemoveTimelineTierEdit(Session session, EditorEventManager editorEventManager, TimelineTier timelineTier) {
-        super(session, editorEventManager, timelineTier);
+    public RemoveTimelineTierEdit(Session session, EditorEventManager editorEventManager, IntervalTier intervalTier) {
+        super(session, editorEventManager, intervalTier);
     }
 
     @Override
     public String getPresentationName() {
-        return "remove timeline tier: " + timelineTier.getName();
+        return "remove timeline tier: " + intervalTier.getName();
     }
 
     @Override

@@ -15,7 +15,6 @@
  */
 package ca.phon.session.impl;
 
-import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.alignment.TierAlignmentRules;
 import ca.phon.session.spi.SessionSPI;
@@ -69,14 +68,14 @@ public class SessionImpl implements SessionSPI {
 	
 	private final Transcript transcript;
 
-	private final Timeline timeline;
+	private final IntervalTiers intervalTiers;
 	
 	SessionImpl() {
 		super();
 		final SessionFactory factory = SessionFactory.newFactory();
 		metadata = new LinkedHashMap<>();
 		transcript = factory.createTranscript();
-		timeline = factory.createTimeline();
+		intervalTiers = factory.createTimeline();
 	}
 
 	@Override
@@ -352,13 +351,13 @@ public class SessionImpl implements SessionSPI {
 	}
 
 	/**
-	 * Get the Timeline for this session
+	 * Get the IntervalTiers for this session
 	 *
-	 * @return timeline
+	 * @return intervalTiers
 	 */
 	@Override
-	public Timeline getTimeline() {
-		return this.timeline;
+	public IntervalTiers getTimeline() {
+		return this.intervalTiers;
 	}
 
 }

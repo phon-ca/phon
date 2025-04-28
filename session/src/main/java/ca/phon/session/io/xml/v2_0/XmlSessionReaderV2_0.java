@@ -27,7 +27,6 @@ import ca.phon.plugin.Rank;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 import ca.phon.session.alignment.TierElementFilter;
-import ca.phon.session.io.xml.v2_0.*;
 import ca.phon.session.tierdata.*;
 import ca.phon.session.io.SessionIO;
 import ca.phon.session.io.SessionReader;
@@ -234,15 +233,15 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 		}
 
 		// read timeline
-		if(xmlSessionType.getTimeline() != null) {
-			final Timeline timeline = readTimeline(factory, xmlSessionType.getTimeline());
-			// copy timeline data
-			retVal.getTimeline().setLength(timeline.getLength());
-			retVal.getTimeline().setMediaUnit(timeline.getMediaUnit());
-			for(String recordTimelineTier:timeline.getRecordTimelineTiers()) {
+		if(xmlSessionType.getIntervalTiers() != null) {
+			final IntervalTiers intervalTiers = readTimeline(factory, xmlSessionType.getIntervalTiers());
+			// copy intervalTiers data
+			retVal.getTimeline().setLength(intervalTiers.getLength());
+			retVal.getTimeline().setMediaUnit(intervalTiers.getMediaUnit());
+			for(String recordTimelineTier: intervalTiers.getRecordTimelineTiers()) {
 				retVal.getTimeline().addRecordTimelineTier(recordTimelineTier);
 			}
-			for(TimelineTier tier:timeline.getTiers()) {
+			for(IntervalTier tier: intervalTiers.getTiers()) {
 				retVal.getTimeline().addTier(tier);
 			}
 		}
@@ -979,22 +978,22 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 	 * @param factory
 	 * @param xmlTimeline
 	 *
-	 * @return timeline session {@link Timeline}
+	 * @return timeline session {@link IntervalTiers}
 	 */
-	private Timeline readTimeline(SessionFactory factory, XmlTimelineType xmlTimeline) {
-		final Timeline retVal = factory.createTimeline();
+	private IntervalTiers readTimeline(SessionFactory factory, XmlIntervalTiersType xmlTimeline) {
+		final IntervalTiers retVal = factory.createTimeline();
 		retVal.setLength(xmlTimeline.getLength());
 		final MediaUnit unit = switch(xmlTimeline.getUnit()) {
 			case S -> MediaUnit.Second;
 			case MS -> MediaUnit.Millisecond;
 		};
 		retVal.setMediaUnit(unit);
-		for(String recordTimelineTier: xmlTimeline.getRecordTimelineTier()) {
+		for(String recordTimelineTier: xmlTimeline.getRecordIntervalTier()) {
 			retVal.addRecordTimelineTier(recordTimelineTier);
 		}
-		for(XmlTimelineTierType xmlTimelineTier:xmlTimeline.getTimelineTier()) {
-			final TimelineTier timelineTier = readTimelineTier(factory, xmlTimelineTier);
-			retVal.addTier(timelineTier);
+		for(XmlIntervalTierType xmlTimelineTier:xmlTimeline.getIntervalTier()) {
+			final IntervalTier intervalTier = readTimelineTier(factory, xmlTimelineTier);
+			retVal.addTier(intervalTier);
 		}
 		return retVal;
 	}
@@ -1005,23 +1004,23 @@ public final class XmlSessionReaderV2_0 implements SessionReader, XMLObjectReade
 	 * @param factory
 	 * @param xmlTimelineTier
 	 *
-	 * @return timeline tier {@link TimelineTier}
+	 * @return timeline tier {@link IntervalTier}
 	 */
-	private TimelineTier readTimelineTier(SessionFactory factory, XmlTimelineTierType xmlTimelineTier) {
-		final TimelineTier retVal = factory.createTimelineTier(xmlTimelineTier.getName());
+	private IntervalTier readTimelineTier(SessionFactory factory, XmlIntervalTierType xmlTimelineTier) {
+		final IntervalTier retVal = factory.createTimelineTier(xmlTimelineTier.getName());
 
 		for(Object pointOrInterval:xmlTimelineTier.getPointOrInterval()) {
 			if(pointOrInterval instanceof XmlPointType xmlPointType) {
 				final float time = xmlPointType.getValue();
 				final String label = xmlPointType.getContent();
-				final TimelineTier.Point point = new TimelineTier.Point(time, label);
-				retVal.addInterval(point, TimelineTier.InsertionStrategy.ALLOW_OVERLAPS);
+				final IntervalTier.Point point = new IntervalTier.Point(time, label);
+				retVal.addInterval(point, IntervalTier.InsertionStrategy.ALLOW_OVERLAPS);
 			} else if(pointOrInterval instanceof XmlIntervalType xmlIntervalType) {
 				final float start = xmlIntervalType.getStart();
 				final float end = xmlIntervalType.getEnd();
 				final String label = xmlIntervalType.getContent();
-				final TimelineTier.Interval interval = new TimelineTier.Interval(start, end, label);
-				retVal.addInterval(interval, TimelineTier.InsertionStrategy.ALLOW_OVERLAPS);
+				final IntervalTier.Interval interval = new IntervalTier.Interval(start, end, label);
+				retVal.addInterval(interval, IntervalTier.InsertionStrategy.ALLOW_OVERLAPS);
 			} else {
 				Logger.getLogger(getClass().getName()).warning("Unsupported timeline element type: " + pointOrInterval.getClass().getName());
 			}

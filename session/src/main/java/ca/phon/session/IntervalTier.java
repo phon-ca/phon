@@ -1,7 +1,7 @@
 package ca.phon.session;
 
 import ca.phon.extensions.ExtendableObject;
-import ca.phon.session.spi.TimelineTierSPI;
+import ca.phon.session.spi.IntervalTierSPI;
 
 import java.util.Collections;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Collection of interval/points
  */
-public final class TimelineTier extends ExtendableObject {
+public final class IntervalTier extends ExtendableObject {
 
     /**
      * Insertion strategy used when adding new intervals
@@ -38,12 +38,12 @@ public final class TimelineTier extends ExtendableObject {
      * Start time of timeline tier, this may be used to restrict the values returned by
      */
 
-    private TimelineTierSPI spi;
+    private IntervalTierSPI spi;
 
     /**
      * Create a new timeline tier
      */
-    public TimelineTier(TimelineTierSPI spi) {
+    public IntervalTier(IntervalTierSPI spi) {
         super();
         this.spi = spi;
     }

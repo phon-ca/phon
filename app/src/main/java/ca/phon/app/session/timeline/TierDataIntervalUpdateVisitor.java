@@ -1,7 +1,7 @@
 package ca.phon.app.session.timeline;
 
 import ca.phon.orthography.InternalMedia;
-import ca.phon.session.TimelineTier;
+import ca.phon.session.IntervalTier;
 import ca.phon.session.tierdata.TierData;
 import ca.phon.session.tierdata.TierElement;
 import ca.phon.session.tierdata.TierInternalMedia;
@@ -20,11 +20,11 @@ public class TierDataIntervalUpdateVisitor extends VisitorAdapter<TierElement> {
 
     private final List<TierElement> tierElements = new ArrayList<>();
 
-    private final List<TimelineTier.Interval> updatedIntervals;
+    private final List<IntervalTier.Interval> updatedIntervals;
 
-    private Iterator<TimelineTier.Interval> updatedIntervalsIter = null;
+    private Iterator<IntervalTier.Interval> updatedIntervalsIter = null;
 
-    public TierDataIntervalUpdateVisitor(List<TimelineTier.Interval> updatedIntervals) {
+    public TierDataIntervalUpdateVisitor(List<IntervalTier.Interval> updatedIntervals) {
         super();
         this.updatedIntervals = updatedIntervals;
         reset();
@@ -38,7 +38,7 @@ public class TierDataIntervalUpdateVisitor extends VisitorAdapter<TierElement> {
     @Visits
     public void visitInternalMedia(TierInternalMedia internalMedia) {
         if(updatedIntervalsIter.hasNext()) {
-            TimelineTier.Interval newInterval = updatedIntervalsIter.next();
+            IntervalTier.Interval newInterval = updatedIntervalsIter.next();
             final TierInternalMedia newInternalMedia =
                     new TierInternalMedia(new InternalMedia(newInterval.getStart(), newInterval.getEnd()));
             tierElements.add(newInternalMedia);

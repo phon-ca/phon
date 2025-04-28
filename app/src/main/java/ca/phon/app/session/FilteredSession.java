@@ -3,7 +3,6 @@ package ca.phon.app.session;
 import ca.phon.session.*;
 import ca.phon.session.alignment.TierAlignmentRules;
 import ca.phon.session.filter.RecordFilter;
-import ca.phon.session.impl.SessionImpl;
 import ca.phon.session.spi.SessionSPI;
 import ca.phon.util.Language;
 
@@ -230,7 +229,7 @@ public class FilteredSession implements SessionSPI {
     }
 
     @Override
-    public Timeline getTimeline() {
+    public IntervalTiers getTimeline() {
         return null;
     }
 

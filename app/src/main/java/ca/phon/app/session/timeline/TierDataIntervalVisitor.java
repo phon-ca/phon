@@ -1,6 +1,6 @@
 package ca.phon.app.session.timeline;
 
-import ca.phon.session.TimelineTier;
+import ca.phon.session.IntervalTier;
 import ca.phon.session.tierdata.TierElement;
 import ca.phon.session.tierdata.TierInternalMedia;
 import ca.phon.session.tierdata.TierString;
@@ -20,7 +20,7 @@ public class TierDataIntervalVisitor extends VisitorAdapter<TierElement> {
 
     private final StringBuilder buffer = new StringBuilder();
 
-    private final List<TimelineTier.Interval> intervals = new ArrayList<>();
+    private final List<IntervalTier.Interval> intervals = new ArrayList<>();
 
     public void reset() {
         buffer.setLength(0);
@@ -38,9 +38,9 @@ public class TierDataIntervalVisitor extends VisitorAdapter<TierElement> {
         if(buffer.length() > 0) {
             final String lbl = buffer.toString();
 
-            // create TimelineTier.Interval
-            final TimelineTier.Interval interval =
-                    new TimelineTier.Interval(tierInternalMedia.getStartTime(), tierInternalMedia.getEndTime(), lbl);
+            // create IntervalTier.Interval
+            final IntervalTier.Interval interval =
+                    new IntervalTier.Interval(tierInternalMedia.getStartTime(), tierInternalMedia.getEndTime(), lbl);
             intervals.add(interval);
 
             // reset interval string
@@ -53,7 +53,7 @@ public class TierDataIntervalVisitor extends VisitorAdapter<TierElement> {
      *
      * @return
      */
-    public List<TimelineTier.Interval> getIntervals() {
+    public List<IntervalTier.Interval> getIntervals() {
         return List.copyOf(intervals);
     }
 

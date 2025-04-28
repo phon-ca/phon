@@ -1,9 +1,7 @@
 package ca.phon.app.session.timeline;
 
 import ca.phon.media.TimeComponentUI;
-import ca.phon.media.TimeUIModel;
-import ca.phon.session.Participant;
-import ca.phon.session.TimelineTier;
+import ca.phon.session.IntervalTier;
 import ca.phon.ui.action.PhonActionEvent;
 import ca.phon.ui.action.PhonUIAction;
 import com.github.davidmoten.rtree.RTree;
@@ -58,8 +56,8 @@ public class TimelineTierComponentUI extends TimeComponentUI {
         timeComponent = (TimelineTierComponent)c;
         timeComponent.setDoubleBuffered(true);
 
-        timeComponent.setBackground(UIManager.getColor("TimelineTier.background"));
-        timeComponent.setForeground(UIManager.getColor("TimelineTier.foreground"));
+        timeComponent.setBackground(UIManager.getColor("IntervalTier.background"));
+        timeComponent.setForeground(UIManager.getColor("IntervalTier.foreground"));
         timeComponent.setOpaque(true);
     }
 
@@ -126,7 +124,7 @@ public class TimelineTierComponentUI extends TimeComponentUI {
             g2.fill(g2.getClipBounds());
         }
 
-        final TimelineTier tier = ((TimelineTierComponent)c).getTimelineTier();
+        final IntervalTier tier = ((TimelineTierComponent)c).getTimelineTier();
 
         // draw tier name
         final Rectangle labelRect = paintLabel(g2, tier.getName());
@@ -172,7 +170,7 @@ public class TimelineTierComponentUI extends TimeComponentUI {
             SwingUtilities.paintComponent(g2, renderer, c, intervalRect);
 
             // draw rounded rectangle for interval
-            g2.setColor(UIManager.getColor("TimelineTier.intervalBorder"));
+            g2.setColor(UIManager.getColor("IntervalTier.intervalBorder"));
             g2.drawRoundRect(intervalRect.x, intervalRect.y, intervalRect.width, intervalRect.height, 10, 10);
 //
 //            final int y = (int)(intervalRect.getCenterY() + textHeight / 4);
@@ -195,7 +193,7 @@ public class TimelineTierComponentUI extends TimeComponentUI {
         labelRect.x += timeComponent.getVisibleRect().x;
 
         renderer.setHorizontalTextPosition(SwingConstants.RIGHT);
-        renderer.setForeground(UIManager.getColor("TimelineTier.foreground"));
+        renderer.setForeground(UIManager.getColor("IntervalTier.foreground"));
         renderer.setFont(timeComponent.getFont().deriveFont(Font.BOLD));
         renderer.setText(label);
         renderer.setSize(labelRect.width, labelRect.height);

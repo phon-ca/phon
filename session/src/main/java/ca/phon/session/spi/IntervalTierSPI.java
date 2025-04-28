@@ -1,10 +1,10 @@
 package ca.phon.session.spi;
 
-import ca.phon.session.TimelineTier;
+import ca.phon.session.IntervalTier;
 
 import java.util.List;
 
-public interface TimelineTierSPI {
+public interface IntervalTierSPI {
 
     /**
      * Get tier name
@@ -18,7 +18,7 @@ public interface TimelineTierSPI {
      *
      * @return list of all intervals and points in tier in order
      */
-    public List<TimelineTier.Interval> getIntervals();
+    public List<IntervalTier.Interval> getIntervals();
 
     /**
      * Add new interval to tier
@@ -30,13 +30,13 @@ public interface TimelineTierSPI {
      * @throws IllegalArgumentException if insertionStrategy is ERROR_ON_OVERLAPS and
      *  the given interval overlaps an existing interval in the tier
      */
-    public boolean addInterval(TimelineTier.Interval interval, TimelineTier.InsertionStrategy insertionStrategy);
+    public boolean addInterval(IntervalTier.Interval interval, IntervalTier.InsertionStrategy insertionStrategy);
 
     /**
      * Remove interval from tier
      *
      * @param interval
      */
-    public boolean removeInterval(TimelineTier.Interval interval);
+    public boolean removeInterval(IntervalTier.Interval interval);
 
 }

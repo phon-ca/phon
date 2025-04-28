@@ -811,28 +811,28 @@ public final class XmlSessionWriterV2_0 implements SessionWriter, IPluginExtensi
 		return retVal;
 	}
 
-	private XmlTimelineType writeTimeline(ObjectFactory factory, Timeline timeline) {
+	private XmlTimelineType writeTimeline(ObjectFactory factory, IntervalTiers intervalTiers) {
 		final XmlTimelineType retVal = factory.createXmlTimelineType();
-		final XmlMediaUnitType unitType = switch (timeline.getMediaUnit()) {
+		final XmlMediaUnitType unitType = switch (intervalTiers.getMediaUnit()) {
 			case Second -> XmlMediaUnitType.S;
 			default -> XmlMediaUnitType.MS;
 		};
-		retVal.setLength(timeline.getLength());
+		retVal.setLength(intervalTiers.getLength());
 		retVal.setUnit(unitType);
-		for(String recordTimelineTier:timeline.getRecordTimelineTiers()) {
+		for(String recordTimelineTier: intervalTiers.getRecordTimelineTiers()) {
 			retVal.getRecordTimelineTier().add(recordTimelineTier);
 		}
-		for(TimelineTier tt:timeline.getTiers()) {
+		for(IntervalTier tt: intervalTiers.getTiers()) {
 			final XmlTimelineTierType xmlTimelineTier = writeTimelineTier(factory, tt);
 			retVal.getTimelineTier().add(xmlTimelineTier);
 		}
 		return retVal;
 	}
 
-	private XmlTimelineTierType writeTimelineTier(ObjectFactory factory, TimelineTier timeline) {
+	private XmlTimelineTierType writeTimelineTier(ObjectFactory factory, IntervalTier timeline) {
 		final XmlTimelineTierType retVal = factory.createXmlTimelineTierType();
 		retVal.setName(timeline.getName());
-		for(TimelineTier.Interval interval:timeline.getIntervals()) {
+		for(IntervalTier.Interval interval:timeline.getIntervals()) {
 			if(interval.isPoint()) {
 				XmlPointType pointType = factory.createXmlPointType();
 				pointType.setValue(BigDecimal.valueOf(interval.getStart()).setScale(3, RoundingMode.HALF_UP).floatValue());
