@@ -42,6 +42,11 @@ public enum UserTierType {
      */
     Wor("Word intervals", "", "%wor", Orthography.class, true),
     /**
+     * Phone segment information, each phone in IPA Actual will be reproduced along with an
+     * internal-media element, this tier is not directly editable.
+     */
+    PhoneIntervals("Phone intervals", "", "%xphoint", TierData.class, true),
+    /**
      * umor/mor/trn tiers
      */
     Umor("umor", "", "%umor", MorTierData.class, false),
