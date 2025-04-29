@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * Extension for record media segment changes. This extension will update all record tiers
- * which are included in the session IntervalTiers. Internal media segments will be updated to
+ * that are included in the session IntervalTiers. Internal media segments will be updated to
  * reflect the new record segment.
  */
 @Extension(Tier.class)
@@ -32,7 +32,14 @@ public class IntervalTierDependentTierChanges implements TierEdit.DependentTierC
             segment = segmentTier.getValue();
         }
 
-        for(String tierName:session.getTimeline().getRecordIntervalTiers()) {
+        List<String> tiersToUpdate = new ArrayList<>(session.getTimeline().getRecordIntervalTiers());
+        if(record.hasTier(UserTierType.Wor.getPhonTierName())) {
+            tiersToUpdate.add(UserTierType.Wor.getPhonTierName());
+        } else if(record.hasTier(UserTierType.PhoneIntervals.getPhonTierName())) {
+            tiersToUpdate.add(UserTierType.PhoneIntervals.getPhonTierName());
+        }
+
+        for(String tierName:tiersToUpdate) {
             final Tier<?> tier = record.getTier(tierName);
             if(tier == null) continue;
 
@@ -91,7 +98,12 @@ public class IntervalTierDependentTierChanges implements TierEdit.DependentTierC
         if(obj instanceof Tier<?> tier) {
             if(SystemTierType.Segment.getName().equals(tier.getName()) && tier.getDeclaredType() == MediaSegment.class) {
                 final IntervalTierDependentTierChanges extension = new IntervalTierDependentTierChanges();
-                tier.putExtension(TierEdit.DependentTierChanges.class, extension);
+                final TierEdit.DependentTierChanges existingExtension = tier.getExtension(TierEdit.DependentTierChanges.class);
+                if(existingExtension == null) {
+                    tier.putExtension(TierEdit.DependentTierChanges.class, extension);
+                } else {
+                    tier.putExtension(TierEdit.DependentTierChanges.class, new TierEdit.DependentTierChangeChain(existingExtension, extension));
+                }
             }
         }
     }

@@ -26,7 +26,8 @@ import java.util.List;
 
 /**
  * Add a new tier to the session.  This will also add a new empty tier
- * to each record.
+ * to each record.  Some tiers such as Word Intervals and Phone Intervals
+ * will be populated and locked when added.
  *
  */
 public class AddTierEdit extends SessionUndoableEdit {

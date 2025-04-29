@@ -8,7 +8,7 @@ import ca.phon.visitor.annotation.Visits;
 import java.util.List;
 
 /**
- * Visitor for producing a list of TimelineInterval objects from an
+ * Visitor for producing a list of {@link ca.phon.session.IntervalTier.Interval} objects from an
  * orthography object.  Words are appended to a buffer until an internal
  * media is encountered.  At that point, a new TimelineInterval is created
  * and added to the list.
@@ -18,6 +18,8 @@ public class OrthoIntervalVisitor extends VisitorAdapter<OrthographyElement> {
     private final StringBuilder buffer = new StringBuilder();
 
     private final List<IntervalTier.Interval> intervals = new java.util.ArrayList<>();
+
+    private final List<InternalMedia> internalMediaList = new java.util.ArrayList<>();
 
     public void reset() {
         buffer.setLength(0);
@@ -62,6 +64,7 @@ public class OrthoIntervalVisitor extends VisitorAdapter<OrthographyElement> {
             // reset interval string
             buffer.setLength(0);
         }
+        internalMediaList.add(internalMedia);
     }
 
     /**
@@ -72,6 +75,15 @@ public class OrthoIntervalVisitor extends VisitorAdapter<OrthographyElement> {
      */
     public List<IntervalTier.Interval> getIntervals() {
         return List.copyOf(intervals);
+    }
+
+    /**
+     * Get the list of internal media objects
+     *
+     * @return list of internal media objects
+     */
+    public List<InternalMedia> getInternalMediaList() {
+        return List.copyOf(internalMediaList);
     }
 
     @Override
