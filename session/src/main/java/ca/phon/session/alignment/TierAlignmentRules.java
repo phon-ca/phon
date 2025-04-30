@@ -3,6 +3,8 @@ package ca.phon.session.alignment;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.orthography.Orthography;
 import ca.phon.session.Tier;
+import ca.phon.session.UserTierType;
+import ca.phon.session.tierdata.TierData;
 import ca.phon.util.Tuple;
 
 import java.util.LinkedHashMap;
@@ -26,10 +28,9 @@ public final class TierAlignmentRules {
      * @return default tier alignment rules for given tiers
      */
     public static TierAlignmentRules defaultTierAlignmentRules(Tier<?> tier1, Tier<?> tier2) {
-        final Class<?> type1 = tier1.getDeclaredType();
-        final Class<?> type2 = tier2.getDeclaredType();
-        return new TierAlignmentRules(tier1.getName(), TierElementFilter.defaultElementFilterForAlignedTypes(type1, type2),
-                tier2.getName(), TierElementFilter.defaultElementFilterForAlignedTypes(type2, type1));
+        final TierElementFilter filter1 = TierElementFilter.filterForAlignedTiers(tier1, tier2);
+        final TierElementFilter filter2 = TierElementFilter.filterForAlignedTiers(tier2, tier1);
+        return new TierAlignmentRules(tier1.getName(), filter1, tier2.getName(), filter2);
     }
 
     private final Map<String, TierElementFilter> tierElementFilterMap = new LinkedHashMap<>();
