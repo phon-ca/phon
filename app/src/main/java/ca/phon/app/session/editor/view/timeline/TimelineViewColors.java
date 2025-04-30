@@ -15,27 +15,34 @@
  */
 package ca.phon.app.session.editor.view.timeline;
 
-import javax.swing.*;
+import ca.phon.plugin.IPluginExtensionFactory;
+import ca.phon.plugin.IPluginExtensionPoint;
+import ca.phon.ui.theme.UIDefaults;
+import ca.phon.ui.theme.UIDefaultsHandler;
 import java.awt.*;
 
-public class TimelineViewColors {
-		
-	public static void install() {
-		UIManager.put(INTERVAL_BACKGROUND, DEFAULT_INTERVAL_BACKGROUND);
-		UIManager.put(SELECTION_RECTANGLE, DEFAULT_SELECTION_RECTANGLE);
-		UIManager.put(FOCUSED_INTERVAL_BACKGROUND, DEFAULT_FOCUSED_INTERVAL_BACKGROUND);
-		UIManager.put(SEGMENTATION_INTERVAL_BACKGROUND, DEFAULT_SEGMENTATION_INTERVAL_BACKGROUND);
-		UIManager.put(INTERVAL_MARKER_COLOR, DEFAULT_INTERVAL_MARKER_COLOR);
-		UIManager.put(FOCUSED_INTERVAL_MARKER_COLOR, DEFAULT_FOCUSED_INTERVAL_MARKER_COLOR);
-		UIManager.put(SPLIT_MARKER_COLOR, DEFAULT_SPLIT_MARKER_COLOR);
+public class TimelineViewColors implements UIDefaultsHandler, IPluginExtensionPoint<UIDefaultsHandler> {
+
+	@Override
+	public void setupDefaults(UIDefaults defaults) {
+		defaults.put(INTERVAL_BACKGROUND, DEFAULT_INTERVAL_BACKGROUND);
+		defaults.put(SELECTION_RECTANGLE, DEFAULT_SELECTION_RECTANGLE);
+		defaults.put(FOCUSED_INTERVAL_BACKGROUND, DEFAULT_FOCUSED_INTERVAL_BACKGROUND);
+		defaults.put(SEGMENTATION_INTERVAL_BACKGROUND, DEFAULT_SEGMENTATION_INTERVAL_BACKGROUND);
+		defaults.put(INTERVAL_MARKER_COLOR, DEFAULT_INTERVAL_MARKER_COLOR);
+		defaults.put(FOCUSED_INTERVAL_MARKER_COLOR, DEFAULT_FOCUSED_INTERVAL_MARKER_COLOR);
+		defaults.put(SPLIT_MARKER_COLOR, DEFAULT_SPLIT_MARKER_COLOR);
 	}
 
 	/**
-	 *  Interval background 
+	 *  Interval background for the current unfocused record interval
 	 */
 	public final static String INTERVAL_BACKGROUND = "TimelineView.unfocusedInterval";
 	public final static Color DEFAULT_INTERVAL_BACKGROUND = new Color(255, 255, 255, 50);
 
+	/**
+	 * Current selection background
+	 */
 	public final static String SELECTION_RECTANGLE = "TimelineView.selectionRect";
 	public final static Color DEFAULT_SELECTION_RECTANGLE =  new Color(55, 137, 220, 50);
 	
@@ -68,5 +75,15 @@ public class TimelineViewColors {
 	 */
 	public final static String SPLIT_MARKER_COLOR = "TimelineView.splitMarkerColor";
 	public final static Color DEFAULT_SPLIT_MARKER_COLOR = Color.blue;
-	
+
+
+	@Override
+	public Class<?> getExtensionType() {
+		return UIDefaultsHandler.class;
+	}
+
+	@Override
+	public IPluginExtensionFactory<UIDefaultsHandler> getFactory() {
+		return (args) -> this;
+	}
 }

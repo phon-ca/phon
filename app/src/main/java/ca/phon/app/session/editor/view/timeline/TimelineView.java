@@ -59,10 +59,6 @@ import java.util.function.*;
  */
 public final class TimelineView extends EditorView {
 
-	static {
-		TimelineViewColors.install();
-	}
-
 	public static final String VIEW_NAME = "Timeline";
 
 	public static final String VIEW_ICON = IconManager.GoogleMaterialDesignIconsFontName + ":view_timeline";
