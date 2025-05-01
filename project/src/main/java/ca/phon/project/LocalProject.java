@@ -1008,8 +1008,8 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
             if (writer == null) {
                 writer = outputFactory.createWriter();
                 Logger.getLogger(getClass().getName()).log(Level.WARNING,
-                        "Unable to find session writer for " + origFormat.getSessionIO().extension() +
-                                ", using default writer: " + writer.getClass().getName());
+                        "Unable to find session writer for " + origFormat.getSessionIO() +
+                                ", using default writer: " + writer.getClass().getAnnotation(SessionIO.class));
             }
         }
 
