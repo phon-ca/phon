@@ -23,6 +23,7 @@ import ca.phon.ui.toast.ToastFactory;
 import ca.phon.util.PhonConstants;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 import com.jgoodies.forms.layout.*;
+import org.apache.commons.io.FilenameUtils;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -169,7 +170,6 @@ public class RenameSessionDialog extends JDialog
 		btnRenameSession.setText("Ok");
 		btnRenameSession.addActionListener(e -> {
 			if(!validateForm()) {
-				ToastFactory.makeToast("Session name contains invalid characters").start(txtName);
 				return;
 			}
 			wasCanceled = false;
@@ -227,18 +227,25 @@ public class RenameSessionDialog extends JDialog
 		String oldName = (String)cmbSession.getSelectedItem();				
 		String newName = txtName.getText().trim();
 		
-		// make sure corpus name does not contain illegal characters
-		boolean valid = true;
-		if(newName.indexOf('.') >= 0) {
-			valid = false;
-		}
-		for(char invalidChar:PhonConstants.illegalFilenameChars) {
-			if(newName.indexOf(invalidChar) >= 0) {
-				valid = false;
-				break;
+		// make sure the extension is not changed
+		if(oldName != null && newName != null) {
+			String oldExt = FilenameUtils.getExtension(oldName);
+			String newExt = FilenameUtils.getExtension(newName);
+			if(oldExt != null) {
+				if (!oldExt.equals(newExt)) {
+					ToastFactory.makeToast("Session name must have the same extension as the original session").start(txtName);
+					return false;
+				}
 			}
 		}
-		return valid;
+
+		for(char invalidChar:PhonConstants.illegalFilenameChars) {
+			if(newName.indexOf(invalidChar) >= 0) {
+				ToastFactory.makeToast("Session name contains invalid characters").start(txtName);
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	public boolean wasCanceled() {
