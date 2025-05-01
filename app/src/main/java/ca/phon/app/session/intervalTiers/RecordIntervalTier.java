@@ -38,7 +38,11 @@ public class RecordIntervalTier implements IntervalTierSPI {
         if(tier == null) return List.of();
 
         if(tier.getValue() instanceof TierData tierData) {
-            return tierDataIntervals(tierData);
+            if(UserTierType.PhoneIntervals.getPhonTierName().equals(tier.getName())) {
+                return phoneIntervals(tierData);
+            } else {
+                return tierDataIntervals(tierData);
+            }
         } else if(tier.getValue() instanceof Orthography orthography) {
             return orthographyIntervals(orthography);
         }
@@ -72,6 +76,17 @@ public class RecordIntervalTier implements IntervalTierSPI {
         if(tierData == null) return List.of();
 
         final TierDataIntervalVisitor visitor = new TierDataIntervalVisitor();
+        tierData.accept(visitor);
+
+        return visitor.getIntervals();
+    }
+
+    public static List<IntervalTier.Interval> phoneIntervals(TierData tierData) {
+        final List<IntervalTier.Interval> intervals = new ArrayList<>();
+        if(tierData == null) return List.of();
+
+        final TierDataIntervalVisitor visitor = new TierDataIntervalVisitor();
+        visitor.addIgnoreWord("/");
         tierData.accept(visitor);
 
         return visitor.getIntervals();

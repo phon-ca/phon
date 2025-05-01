@@ -244,6 +244,18 @@ public interface TierElementFilter {
     }
 
     /**
+     * Filter for the phone intervals tier.  This filter will return a list
+     * of TierData objects which are slices of the original TierData object.
+     * The slices are the phones for a single word and their associated intervals.
+     * There should be one slice for each alignable element in the IPA Actual tier.
+     *
+     * @return phone intervals filter
+     */
+    public static TierElementFilter phoneIntervalsElementFilter() {
+        return new PhoneIntervalsElementFilter();
+    }
+
+    /**
      * Filter tier elements for cross tier alignment
      *
      * @param tier

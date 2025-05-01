@@ -14,6 +14,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+/**
+ * User tier data. This is the data type for most user-defined tiers.
+ * Data that may be included in a user tier includes:
+ *
+ */
 public final class TierData extends ExtendableObject implements Iterable<TierElement>, Visitable<TierElement> {
 
     private final List<TierElement> elements;

@@ -35,7 +35,8 @@ public class IntervalTierDependentTierChanges implements TierEdit.DependentTierC
         List<String> tiersToUpdate = new ArrayList<>(session.getTimeline().getRecordIntervalTiers());
         if(record.hasTier(UserTierType.Wor.getPhonTierName())) {
             tiersToUpdate.add(UserTierType.Wor.getPhonTierName());
-        } else if(record.hasTier(UserTierType.PhoneIntervals.getPhonTierName())) {
+        }
+        if(record.hasTier(UserTierType.PhoneIntervals.getPhonTierName())) {
             tiersToUpdate.add(UserTierType.PhoneIntervals.getPhonTierName());
         }
 

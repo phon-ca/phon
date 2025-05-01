@@ -22,6 +22,24 @@ public class TierDataIntervalVisitor extends VisitorAdapter<TierElement> {
 
     private final List<IntervalTier.Interval> intervals = new ArrayList<>();
 
+    private final List<String> ignoreWords = new ArrayList<>();
+
+    public TierDataIntervalVisitor() {
+        super();
+    }
+
+    public void addIgnoreWord(String word) {
+        if(word != null && !word.isEmpty()) {
+            ignoreWords.add(word);
+        }
+    }
+
+    public void removeIgnoreWord(String word) {
+        if(word != null && !word.isEmpty()) {
+            ignoreWords.remove(word);
+        }
+    }
+
     public void reset() {
         buffer.setLength(0);
         intervals.clear();
@@ -29,6 +47,7 @@ public class TierDataIntervalVisitor extends VisitorAdapter<TierElement> {
 
     @Visits
     public void visitTierWord(TierString tierWord) {
+        if(ignoreWords.contains(tierWord.text())) return;
         if(buffer.length() > 0) buffer.append(" ");
         buffer.append(tierWord.text());
     }
