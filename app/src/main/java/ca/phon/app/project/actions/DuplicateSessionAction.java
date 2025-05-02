@@ -20,12 +20,15 @@ import ca.phon.app.project.ProjectWindow;
 import ca.phon.project.Project;
 import ca.phon.util.CollatorFactory;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.*;
 import java.util.List;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Duplicate sessions selected in project window.  Session names
@@ -54,9 +57,23 @@ public class DuplicateSessionAction extends ProjectWindowAction {
 		final Project project = getWindow().getProject();
 		for(String sessionName:sessionNames) {
 			int idx = 0;
-			String dupSessionName = sessionName + " (" + (++idx) + ")";
+			final String sessionExtension = FilenameUtils.getExtension(sessionName);
+			String sessionBase = FilenameUtils.removeExtension(sessionName);
+			final Pattern pattern = Pattern.compile("(.+) \\((\\d+)\\)");
+			final Matcher matcher = pattern.matcher(sessionBase);
+			if(matcher.matches()) {
+				// get index from session name
+				String idxStr = matcher.group(2);
+				try {
+					idx = Integer.parseInt(idxStr);
+					sessionBase = matcher.group(1);
+				} catch (NumberFormatException e) {
+					// ignore - should not happen
+				}
+			}
+			String dupSessionName = sessionBase + " (" + (++idx) + ")." + sessionExtension;
 			while(project.getCorpusSessions(corpus).contains(dupSessionName)) {
-				dupSessionName = sessionName + " (" + (++idx) + ")";
+				dupSessionName = sessionBase + " (" + (++idx) + ")." + sessionExtension;
 			}
 			final File oldSessionFile = new File(project.getSessionPath(corpus, sessionName));
 			final File dupSessionFile = new File(project.getSessionPath(corpus, dupSessionName));
