@@ -16,7 +16,7 @@
                     <oga:property key="contextKey"><![CDATA[_selectedSessions]]></oga:property>
                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
                 </oga:settings>
-                <oga:meta x="15" y="295"/>
+                <oga:meta x="15" y="391"/>
             </extensions>
         </node>
         <node id="338df44a" name="Selected Participants" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -25,7 +25,7 @@
                     <oga:property key="contextKey"><![CDATA[_selectedParticipants]]></oga:property>
                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
                 </oga:settings>
-                <oga:meta x="15" y="396"/>
+                <oga:meta x="15" y="504"/>
             </extensions>
         </node>
         <node id="43d39e9b67384156" name="Parameters" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -51,11 +51,11 @@ function setup_params(params) {
 }
 ]]></oga:property>
                 </oga:settings>
-                <oga:meta x="15" y="497"/>
+                <oga:meta x="15" y="617"/>
             </extensions>
         </node>
         <opqry:queryNode id="7ca6b2ef" name="Query : Data Tiers" type="ca.phon.app.opgraph.nodes.query.QueryNode">
-            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2025-04-24T08:26:00.407-02:30" name="Data Tiers" uuid="4c77c68d-1506-41ba-9b06-a377c779e359">
+            <qry:query xmlns="http://phon.ling.mun.ca/ns/query" date="2025-05-02T06:58:13.333-02:30" name="Data Tiers" uuid="e305a322-feb6-4872-ae8f-5bc1fabddce3">
                 <script>
                     <url ref="Data Tiers" rel="stock"/>
                     <param id="filters.alignedWord.patternFilter.filter">σσ+</param>
@@ -68,15 +68,16 @@ function setup_params(params) {
                     <param id="filters.word.searchByWord">true</param>
                     <param id="filters.word.sectionHeader.collapsed">false</param>
                     <param id="filters.wordTiers.tiers">Orthography,IPA Target,IPA Actual,Alignment,Target Syllabification,Actual Syllabification</param>
+                    <param id="otherDataHeader.collapsed">false</param>
                 </script>
             </qry:query>
             <extensions>
                 <oga:settings/>
-                <oga:meta x="371" y="20"/>
+                <oga:meta x="389" y="20"/>
             </extensions>
         </opqry:queryNode>
         <ogcn:macro id="b7c53c9330914507" name="Get Report Title" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="489deba">
+            <graph id="336ebe93">
                 <node id="40d46ee05cb1462c" name="String#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                     <extensions>
                         <oga:settings>
@@ -118,25 +119,17 @@ function setup_params(params) {
         <node id="40e266e4" type="class:ca.phon.app.opgraph.nodes.report.NewReportNode">
             <extensions>
                 <oga:settings/>
-                <oga:meta x="604" y="497"/>
+                <oga:meta x="625" y="497"/>
             </extensions>
         </node>
         <ogcn:macro id="7e7f6d0b48264831" name="Analysis" type="ca.phon.opgraph.nodes.general.MacroNode">
-            <graph id="5517f854">
+            <graph id="342eece6">
                 <node id="2564dd40d5ce4021" name="project" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                     <extensions>
                         <oga:settings>
                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.project.Project]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="42" y="152"/>
-                    </extensions>
-                </node>
-                <node id="a23f99c423d64c49" name="results" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
-                    <extensions>
-                        <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[[Lca.phon.query.db.ResultSet;]]></oga:property>
-                        </oga:settings>
-                        <oga:meta x="42" y="433"/>
+                        <oga:meta x="33" y="71"/>
                     </extensions>
                 </node>
                 <node id="76dc324150b34376" name="Setup Segmental Totals" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -207,7 +200,15 @@ function run(context) {
 }
 ]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="778" y="504"/>
+                        <oga:meta x="784" y="436"/>
+                    </extensions>
+                </node>
+                <node id="a23f99c423d64c49" name="results" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[[Lca.phon.query.db.ResultSet;]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="33" y="448"/>
                     </extensions>
                 </node>
                 <node id="a12ca1eed6584c87" name="selectedSessions" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -215,15 +216,7 @@ function run(context) {
                         <oga:settings>
                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="42" y="534"/>
-                    </extensions>
-                </node>
-                <node id="9a6b0aacb31f456e" name="selected participants" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
-                    <extensions>
-                        <oga:settings>
-                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
-                        </oga:settings>
-                        <oga:meta x="42" y="635"/>
+                        <oga:meta x="33" y="561"/>
                     </extensions>
                 </node>
                 <node id="962abedafab34827" name="Setup Segmental Inventory" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -245,7 +238,15 @@ function run(context) {
 }
 ]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="778" y="645"/>
+                        <oga:meta x="784" y="597"/>
+                    </extensions>
+                </node>
+                <node id="9a6b0aacb31f456e" name="selected participants" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                    <extensions>
+                        <oga:settings>
+                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
+                        </oga:settings>
+                        <oga:meta x="33" y="674"/>
                     </extensions>
                 </node>
                 <node id="2fef4098" name="ReportTreeNode" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -253,7 +254,7 @@ function run(context) {
                         <oga:settings>
                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="38" y="736"/>
+                        <oga:meta x="29" y="787"/>
                     </extensions>
                 </node>
                 <node id="10b0643dd8714757" name="Setup Prosodic Totals" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -421,7 +422,7 @@ function run(context) {
 }
 ]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="782" y="822"/>
+                        <oga:meta x="779" y="854"/>
                     </extensions>
                 </node>
                 <node id="d3f36ac6e1334f27" name="Setup Prosodic CGV Inventory" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -443,7 +444,7 @@ function run(context) {
 }
 ]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="782" y="963"/>
+                        <oga:meta x="779" y="1015"/>
                     </extensions>
                 </node>
                 <node id="6004c22ee553432c" name="Setup Prosodic Stress Inventory" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -465,7 +466,7 @@ function run(context) {
 }
 ]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="782" y="1104"/>
+                        <oga:meta x="779" y="1176"/>
                     </extensions>
                 </node>
                 <node id="781d5398835c4743" name="Setup Word Totals" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -491,7 +492,7 @@ function run(context) {
 }
 ]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="787" y="1311"/>
+                        <oga:meta x="785" y="1469"/>
                     </extensions>
                 </node>
                 <node id="6a420b3ea1a74806" name="Setup Word Stress Inventory" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -513,7 +514,7 @@ function run(context) {
 }
 ]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="795" y="1448"/>
+                        <oga:meta x="785" y="1630"/>
                     </extensions>
                 </node>
                 <node id="e7eb0f6277c94cc7" type="class:ca.phon.app.opgraph.nodes.table.ResultsToTableNode">
@@ -524,7 +525,7 @@ function run(context) {
                             <oga:property key="includeMetadata"><![CDATA[true]]></oga:property>
                             <oga:property key="includeTierInfo"><![CDATA[true]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="398" y="179"/>
+                        <oga:meta x="510" y="49"/>
                     </extensions>
                 </node>
                 <node id="a067a50295fe48ce" name="Split Table by Speaker" type="class:ca.phon.app.opgraph.nodes.table.TableScriptNode">
@@ -623,11 +624,11 @@ function tableOp(context, table) {
 ]]></oga:property>
                             <oga:property key="columnName"><![CDATA[Speaker]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="601" y="179"/>
+                        <oga:meta x="801" y="49"/>
                     </extensions>
                 </node>
                 <ogcn:macro id="4bb42cb62a99463c" name="For Each Participant" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                    <graph id="4e0753cf">
+                    <graph id="2a97f0c6">
                         <node id="4579a77279ca4a66" name="Current Object" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                             <extensions>
                                 <oga:settings>
@@ -651,7 +652,7 @@ function tableOp(context, table) {
                                     <oga:property key="contextKey"><![CDATA[_selectedSessions]]></oga:property>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
                                 </oga:settings>
-                                <oga:meta x="68" y="309"/>
+                                <oga:meta x="68" y="321"/>
                             </extensions>
                         </node>
                         <node id="6e8d3cbf56644e64" name="Segmental Totals" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -659,7 +660,7 @@ function tableOp(context, table) {
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
                                 </oga:settings>
-                                <oga:meta x="68" y="410"/>
+                                <oga:meta x="70" y="434"/>
                             </extensions>
                         </node>
                         <node id="109c1849" name="ReportTreeNode" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -667,7 +668,7 @@ function tableOp(context, table) {
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
                                 </oga:settings>
-                                <oga:meta x="68" y="511"/>
+                                <oga:meta x="68" y="547"/>
                             </extensions>
                         </node>
                         <node id="fa3a91a457e0455e" name="Segmental Inventory" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -675,7 +676,7 @@ function tableOp(context, table) {
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
                                 </oga:settings>
-                                <oga:meta x="68" y="732"/>
+                                <oga:meta x="68" y="828"/>
                             </extensions>
                         </node>
                         <node id="e5b1641ea8924bbc" name="Prosodic Stress Inventory" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -683,7 +684,7 @@ function tableOp(context, table) {
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
                                 </oga:settings>
-                                <oga:meta x="68" y="893"/>
+                                <oga:meta x="68" y="1013"/>
                             </extensions>
                         </node>
                         <node id="9204e404e10c4e6c" name="Prosodic CGV Inventory" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -691,7 +692,7 @@ function tableOp(context, table) {
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
                                 </oga:settings>
-                                <oga:meta x="68" y="1054"/>
+                                <oga:meta x="68" y="1198"/>
                             </extensions>
                         </node>
                         <node id="9678ec6fbbbf4a6c" name="Prosodic Totals" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -699,7 +700,7 @@ function tableOp(context, table) {
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
                                 </oga:settings>
-                                <oga:meta x="68" y="1215"/>
+                                <oga:meta x="68" y="1383"/>
                             </extensions>
                         </node>
                         <node id="267cbb518d6d4d8f" name="Word Totals" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -707,7 +708,7 @@ function tableOp(context, table) {
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
                                 </oga:settings>
-                                <oga:meta x="68" y="1316"/>
+                                <oga:meta x="68" y="1496"/>
                             </extensions>
                         </node>
                         <node id="1ba6fbba018648d6" name="Word Stress Inventory" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -715,7 +716,7 @@ function tableOp(context, table) {
                                 <oga:settings>
                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
                                 </oga:settings>
-                                <oga:meta x="68" y="1417"/>
+                                <oga:meta x="68" y="1609"/>
                             </extensions>
                         </node>
                         <node id="7d1055dcc76e435a" name="To Participant Object" type="class:ca.phon.opgraph.nodes.reflect.ObjectCastNode">
@@ -727,7 +728,7 @@ function tableOp(context, table) {
                             </extensions>
                         </node>
                         <ogcn:macro id="e8ae4a39fdd74375" name="Get Table of Results For Speaker" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="4c22432">
+                            <graph id="565355d7">
                                 <node id="7a99452f69514e84" name="Object#toString()" type="class:ca.phon.opgraph.nodes.reflect.MethodNode">
                                     <extensions>
                                         <oga:settings>
@@ -786,13 +787,13 @@ function run(context) {
                             </extensions>
                         </ogcn:macro>
                         <ogcn:macro id="e9d3beb84fbe42d4" name="If Speaker has Results" type="ca.phon.opgraph.nodes.general.MacroNode">
-                            <graph id="158d404c">
+                            <graph id="54ec677f">
                                 <node id="fda3b374aa2e4b57" name="Table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                     <extensions>
                                         <oga:settings>
                                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
                                         </oga:settings>
-                                        <oga:meta x="100" y="177"/>
+                                        <oga:meta x="86" y="174"/>
                                     </extensions>
                                 </node>
                                 <node id="a1995dcea18b4ba9" name="Selected Sessions" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -801,7 +802,7 @@ function run(context) {
                                             <oga:property key="contextKey"><![CDATA[_selectedSessions]]></oga:property>
                                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.ArrayList]]></oga:property>
                                         </oga:settings>
-                                        <oga:meta x="109" y="327"/>
+                                        <oga:meta x="86" y="359"/>
                                     </extensions>
                                 </node>
                                 <node id="32b10bbefcb14fb6" name="Participant" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -809,7 +810,7 @@ function run(context) {
                                         <oga:settings>
                                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.session.Participant]]></oga:property>
                                         </oga:settings>
-                                        <oga:meta x="101" y="443"/>
+                                        <oga:meta x="86" y="472"/>
                                     </extensions>
                                 </node>
                                 <node id="c99f708191104f79" name="Setup Segmental Totals" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -883,14 +884,6 @@ function run(context) {
                                         <oga:meta x="635" y="691"/>
                                     </extensions>
                                 </node>
-                                <node id="5db72372" name="ReportTreeNode" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
-                                    <extensions>
-                                        <oga:settings>
-                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
-                                        </oga:settings>
-                                        <oga:meta x="81" y="767"/>
-                                    </extensions>
-                                </node>
                                 <node id="bbe78aecd8f94ff5" name="Setup Segmental Inventory" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
                                     <output name="inventory" type="ca.phon.query.report.datasource.DefaultTableDataSource"/>
                                     <extensions>
@@ -911,6 +904,14 @@ function run(context) {
 ]]></oga:property>
                                         </oga:settings>
                                         <oga:meta x="628" y="838"/>
+                                    </extensions>
+                                </node>
+                                <node id="5db72372" name="ReportTreeNode" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                                    <extensions>
+                                        <oga:settings>
+                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
+                                        </oga:settings>
+                                        <oga:meta x="86" y="921"/>
                                     </extensions>
                                 </node>
                                 <node id="804e47177ea847a3" name="Setup Prosodic Totals" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -1287,7 +1288,7 @@ function tableOp(context, table) {
                                     </extensions>
                                 </node>
                                 <ogcn:macro id="cd529cc9bedf4ecc" name="For Each Session" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                                    <graph id="6065db1b">
+                                    <graph id="6bb8e732">
                                         <node id="9cd592ba93e14241" name="Session Name" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                                             <extensions>
                                                 <oga:settings>
@@ -1302,7 +1303,7 @@ function tableOp(context, table) {
                                                 <oga:settings>
                                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.util.Map]]></oga:property>
                                                 </oga:settings>
-                                                <oga:meta x="54" y="213"/>
+                                                <oga:meta x="50" y="212"/>
                                             </extensions>
                                         </node>
                                         <node id="2cde07591d49421f" name="Participant" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -1310,7 +1311,7 @@ function tableOp(context, table) {
                                                 <oga:settings>
                                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.session.Participant]]></oga:property>
                                                 </oga:settings>
-                                                <oga:meta x="54" y="314"/>
+                                                <oga:meta x="50" y="325"/>
                                             </extensions>
                                         </node>
                                         <node id="9d4e5d5c75304010" name="Segmental Totals" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -1318,7 +1319,7 @@ function tableOp(context, table) {
                                                 <oga:settings>
                                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
                                                 </oga:settings>
-                                                <oga:meta x="54" y="635"/>
+                                                <oga:meta x="50" y="774"/>
                                             </extensions>
                                         </node>
                                         <node id="64fcff23" name="ReportTreeNode" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -1326,7 +1327,7 @@ function tableOp(context, table) {
                                                 <oga:settings>
                                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
                                                 </oga:settings>
-                                                <oga:meta x="54" y="736"/>
+                                                <oga:meta x="50" y="887"/>
                                             </extensions>
                                         </node>
                                         <node id="a5a5820bf71e4629" name="DefaultTableDataSource" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -1334,7 +1335,7 @@ function tableOp(context, table) {
                                                 <oga:settings>
                                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
                                                 </oga:settings>
-                                                <oga:meta x="54" y="917"/>
+                                                <oga:meta x="50" y="1168"/>
                                             </extensions>
                                         </node>
                                         <node id="472d740342384f80" name="Prosodic Stress Inventory" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -1342,7 +1343,7 @@ function tableOp(context, table) {
                                                 <oga:settings>
                                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
                                                 </oga:settings>
-                                                <oga:meta x="54" y="1058"/>
+                                                <oga:meta x="50" y="1353"/>
                                             </extensions>
                                         </node>
                                         <node id="c4c0c10d49e54042" name="Prosodic CGV Inventory" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -1350,7 +1351,7 @@ function tableOp(context, table) {
                                                 <oga:settings>
                                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
                                                 </oga:settings>
-                                                <oga:meta x="54" y="1199"/>
+                                                <oga:meta x="50" y="1538"/>
                                             </extensions>
                                         </node>
                                         <node id="4b1f966a76eb4b88" name="Prosodic Totals" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -1358,7 +1359,7 @@ function tableOp(context, table) {
                                                 <oga:settings>
                                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
                                                 </oga:settings>
-                                                <oga:meta x="54" y="1340"/>
+                                                <oga:meta x="50" y="1723"/>
                                             </extensions>
                                         </node>
                                         <node id="5a76f6232e654ec7" name="Word Totals" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -1366,7 +1367,7 @@ function tableOp(context, table) {
                                                 <oga:settings>
                                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
                                                 </oga:settings>
-                                                <oga:meta x="54" y="1441"/>
+                                                <oga:meta x="50" y="1836"/>
                                             </extensions>
                                         </node>
                                         <node id="eedb0526f33e4643" name="Word Stress Inventory" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -1374,11 +1375,11 @@ function tableOp(context, table) {
                                                 <oga:settings>
                                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
                                                 </oga:settings>
-                                                <oga:meta x="57" y="1538"/>
+                                                <oga:meta x="53" y="1949"/>
                                             </extensions>
                                         </node>
                                         <ogcn:macro id="d0e50cd137aa45c3" name="Get Table for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="91a5bb3">
+                                            <graph id="538546e4">
                                                 <node id="6991d3ca2b8e4413" name="Map" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -1433,7 +1434,15 @@ function run(context) {
                                             </extensions>
                                         </ogcn:macro>
                                         <ogcn:macro id="c243d0cc85994d01" name="If Speaker has Results for Session" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                            <graph id="1da898a5">
+                                            <graph id="3c25febb">
+                                                <node id="6b3143df3116411b" name="Session Name" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                                                    <extensions>
+                                                        <oga:settings>
+                                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
+                                                        </oga:settings>
+                                                        <oga:meta x="45" y="128"/>
+                                                    </extensions>
+                                                </node>
                                                 <node id="7481fcacc2964d6d" name="Integer#&lt;init&gt;(String)" type="class:ca.phon.opgraph.nodes.reflect.ConstructorNode">
                                                     <extensions>
                                                         <oga:settings>
@@ -1445,20 +1454,12 @@ function run(context) {
                                                         </oga:meta>
                                                     </extensions>
                                                 </node>
-                                                <node id="6b3143df3116411b" name="Session Name" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
-                                                    <extensions>
-                                                        <oga:settings>
-                                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
-                                                        </oga:settings>
-                                                        <oga:meta x="45" y="130"/>
-                                                    </extensions>
-                                                </node>
                                                 <node id="b25c5b3d1d7440da" name="Session Table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                     <extensions>
                                                         <oga:settings>
                                                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
                                                         </oga:settings>
-                                                        <oga:meta x="45" y="231"/>
+                                                        <oga:meta x="45" y="241"/>
                                                     </extensions>
                                                 </node>
                                                 <node id="c221b0481e9c496b" name="Participant" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -1466,7 +1467,7 @@ function run(context) {
                                                         <oga:settings>
                                                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.session.Participant]]></oga:property>
                                                         </oga:settings>
-                                                        <oga:meta x="45" y="372"/>
+                                                        <oga:meta x="45" y="426"/>
                                                     </extensions>
                                                 </node>
                                                 <node id="30bbd27d8eff40d1" name="Setup Segmental Totals" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -1540,14 +1541,6 @@ function run(context) {
                                                         <oga:meta x="937" y="603"/>
                                                     </extensions>
                                                 </node>
-                                                <node id="4e5e792d" name="ReportTreeNode" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
-                                                    <extensions>
-                                                        <oga:settings>
-                                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
-                                                        </oga:settings>
-                                                        <oga:meta x="45" y="693"/>
-                                                    </extensions>
-                                                </node>
                                                 <node id="418d68da3a2d4006" name="Setup Segmental Inventory" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
                                                     <output name="inventory" type="ca.phon.query.report.datasource.DefaultTableDataSource"/>
                                                     <extensions>
@@ -1568,6 +1561,14 @@ function run(context) {
 ]]></oga:property>
                                                         </oga:settings>
                                                         <oga:meta x="933" y="764"/>
+                                                    </extensions>
+                                                </node>
+                                                <node id="4e5e792d" name="ReportTreeNode" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
+                                                    <extensions>
+                                                        <oga:settings>
+                                                            <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
+                                                        </oga:settings>
+                                                        <oga:meta x="45" y="875"/>
                                                     </extensions>
                                                 </node>
                                                 <node id="236aab80" name="Setup Prosodic Totals" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -1859,7 +1860,7 @@ function run(context) {
                                                     </extensions>
                                                 </node>
                                                 <ogcn:macro id="6cca2ae5" name="For Each Row" type="ca.phon.opgraph.nodes.reflect.IterableClassNode">
-                                                    <graph id="3f5d19d6">
+                                                    <graph id="12a63026">
                                                         <node id="36e48cb9" name="Current Object" type="class:ca.phon.opgraph.nodes.reflect.ContextualItemClassNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -1874,7 +1875,7 @@ function run(context) {
                                                                 <oga:settings>
                                                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
                                                                 </oga:settings>
-                                                                <oga:meta x="117" y="215"/>
+                                                                <oga:meta x="95" y="215"/>
                                                             </extensions>
                                                         </node>
                                                         <node id="37e5d87a8ee2429a" name="Participant" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -1882,7 +1883,7 @@ function run(context) {
                                                                 <oga:settings>
                                                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.session.Participant]]></oga:property>
                                                                 </oga:settings>
-                                                                <oga:meta x="111" y="356"/>
+                                                                <oga:meta x="95" y="400"/>
                                                             </extensions>
                                                         </node>
                                                         <node id="7d75bcad2044891" name="Segmental Totals" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -1890,7 +1891,7 @@ function run(context) {
                                                                 <oga:settings>
                                                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
                                                                 </oga:settings>
-                                                                <oga:meta x="116" y="682"/>
+                                                                <oga:meta x="95" y="849"/>
                                                             </extensions>
                                                         </node>
                                                         <node id="198af750" name="Report Node" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -1898,7 +1899,7 @@ function run(context) {
                                                                 <oga:settings>
                                                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.app.opgraph.report.tree.ReportTreeNode]]></oga:property>
                                                                 </oga:settings>
-                                                                <oga:meta x="95" y="784"/>
+                                                                <oga:meta x="95" y="962"/>
                                                             </extensions>
                                                         </node>
                                                         <node id="1fba7ca21ccf40cb" name="Segmental Inventory" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -1906,7 +1907,7 @@ function run(context) {
                                                                 <oga:settings>
                                                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
                                                                 </oga:settings>
-                                                                <oga:meta x="109" y="957"/>
+                                                                <oga:meta x="95" y="1243"/>
                                                             </extensions>
                                                         </node>
                                                         <node id="ae20bdbcf7944aa3" name="Prosodic Stress Inventory" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -1914,7 +1915,7 @@ function run(context) {
                                                                 <oga:settings>
                                                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
                                                                 </oga:settings>
-                                                                <oga:meta x="112" y="1100"/>
+                                                                <oga:meta x="95" y="1428"/>
                                                             </extensions>
                                                         </node>
                                                         <node id="41f90df2b5dc4c6a" name="Prosodic CGV Inventory" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -1922,7 +1923,7 @@ function run(context) {
                                                                 <oga:settings>
                                                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
                                                                 </oga:settings>
-                                                                <oga:meta x="113" y="1254"/>
+                                                                <oga:meta x="95" y="1613"/>
                                                             </extensions>
                                                         </node>
                                                         <node id="9180f8cb2c484444" name="Prosodic Totals" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -1930,7 +1931,7 @@ function run(context) {
                                                                 <oga:settings>
                                                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
                                                                 </oga:settings>
-                                                                <oga:meta x="137" y="1402"/>
+                                                                <oga:meta x="95" y="1798"/>
                                                             </extensions>
                                                         </node>
                                                         <node id="33e2b46afe8b4f77" name="Word Level Totals" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -1938,7 +1939,7 @@ function run(context) {
                                                                 <oga:settings>
                                                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
                                                                 </oga:settings>
-                                                                <oga:meta x="125" y="1518"/>
+                                                                <oga:meta x="95" y="1911"/>
                                                             </extensions>
                                                         </node>
                                                         <node id="abaf83695374a2d" name="Word Stress Inventory" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -1946,7 +1947,7 @@ function run(context) {
                                                                 <oga:settings>
                                                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
                                                                 </oga:settings>
-                                                                <oga:meta x="122" y="1631"/>
+                                                                <oga:meta x="95" y="2024"/>
                                                             </extensions>
                                                         </node>
                                                         <node id="64f8407c" name="Row Index" type="class:ca.phon.opgraph.nodes.reflect.ObjectCastNode">
@@ -1954,11 +1955,11 @@ function run(context) {
                                                                 <oga:settings>
                                                                     <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectCastNode.declaredClass"><![CDATA[java.lang.Integer]]></oga:property>
                                                                 </oga:settings>
-                                                                <oga:meta x="249" y="42"/>
+                                                                <oga:meta x="300" y="28"/>
                                                             </extensions>
                                                         </node>
                                                         <ogcn:macro id="4541ca3a0e544ebd" name="Get Row Data" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                            <graph id="d378320">
+                                                            <graph id="58c7331e">
                                                                 <node id="3bd8dba5cdbd4ce8" name="row" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                                     <extensions>
                                                                         <oga:settings>
@@ -2024,7 +2025,7 @@ function run(context) {
                                                                             <oga:property key="ca.phon.opgraph.nodes.reflect.MethodNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
                                                                         </oga:settings>
                                                                         <oga:meta x="467" y="635">
-                                                                            <oga:default for="arg1" type="java.lang.String">Phone Alignment (Word)</oga:default>
+                                                                            <oga:default for="arg1" type="java.lang.String">Alignment (Word)</oga:default>
                                                                         </oga:meta>
                                                                     </extensions>
                                                                 </node>
@@ -2107,11 +2108,11 @@ function run(context) {
                                                             <ogcn:published_output field="alignment" name="alignment" ref="85e177d8c46f4d84"/>
                                                             <ogcn:published_output field="orthography" name="orthography" ref="85e177d8c46f4d84"/>
                                                             <extensions>
-                                                                <oga:meta x="472" y="214"/>
+                                                                <oga:meta x="523" y="200"/>
                                                             </extensions>
                                                         </ogcn:macro>
                                                         <ogcn:macro id="93e56a1c9e0d4fa8" name="WAP" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                            <graph id="60fe5f7b">
+                                                            <graph id="14e02b1a">
                                                                 <node id="429f5069103f4b19" name="Word" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                                     <extensions>
                                                                         <oga:settings>
@@ -2125,7 +2126,7 @@ function run(context) {
                                                                         <oga:settings>
                                                                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
                                                                         </oga:settings>
-                                                                        <oga:meta x="47" y="147"/>
+                                                                        <oga:meta x="47" y="183"/>
                                                                     </extensions>
                                                                 </node>
                                                                 <node id="828342a8827348f6" name="IPA Actual" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -2133,7 +2134,7 @@ function run(context) {
                                                                         <oga:settings>
                                                                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.ipa.IPATranscript]]></oga:property>
                                                                         </oga:settings>
-                                                                        <oga:meta x="46" y="286"/>
+                                                                        <oga:meta x="46" y="368"/>
                                                                     </extensions>
                                                                 </node>
                                                                 <node id="126f6847b0734271" name="Alignment" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -2141,7 +2142,7 @@ function run(context) {
                                                                         <oga:settings>
                                                                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.ipa.alignment.PhoneMap]]></oga:property>
                                                                         </oga:settings>
-                                                                        <oga:meta x="47" y="429"/>
+                                                                        <oga:meta x="47" y="553"/>
                                                                     </extensions>
                                                                 </node>
                                                                 <node id="7ff0063dcd5f4c55" name="Word Level Analysis" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -2644,6 +2645,7 @@ function addCGVRows(table, target, actual, align, syllAlign) {
                                                                     <output name="counts" type="java.lang.Object"/>
                                                                     <extensions>
                                                                         <oga:settings>
+                                                                            <oga:property key="filters.segmentalRelationsOptions.dimensionsRequiredOption"><![CDATA[Any selected dimension]]></oga:property>
                                                                             <oga:property key="__script"><![CDATA[importPackage(Packages.ca.phon.syllable)
 importPackage(Packages.ca.phon.ipa.alignment)
 importPackage(Packages.ca.phon.ipa.relations)
@@ -2944,7 +2946,7 @@ function getSyllable(syllableAlignment, ele) {
 }
 ]]></oga:property>
                                                                         </oga:settings>
-                                                                        <oga:meta x="686" y="919"/>
+                                                                        <oga:meta x="687" y="929"/>
                                                                     </extensions>
                                                                 </node>
                                                                 <node id="56e6371e" name="Word Table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -3040,7 +3042,7 @@ function run(context) {
                                                                         <oga:settings>
                                                                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
                                                                         </oga:settings>
-                                                                        <oga:meta x="1408" y="848"/>
+                                                                        <oga:meta x="1409" y="858"/>
                                                                     </extensions>
                                                                 </node>
                                                                 <node id="37b9418a" type="class:ca.phon.app.opgraph.nodes.table.InventoryNode">
@@ -3054,7 +3056,7 @@ function run(context) {
                                                                             <opqry:column caseSensitive="false" column="IPA Actual"/>
                                                                         </opqry:inventoryoptions>
                                                                         <oga:settings/>
-                                                                        <oga:meta x="1093" y="981"/>
+                                                                        <oga:meta x="1094" y="991"/>
                                                                     </extensions>
                                                                 </node>
                                                                 <node id="257a7e47" name="Segmental Subtotal" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -3062,7 +3064,7 @@ function run(context) {
                                                                         <oga:settings>
                                                                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[java.lang.Object]]></oga:property>
                                                                         </oga:settings>
-                                                                        <oga:meta x="1408" y="1104"/>
+                                                                        <oga:meta x="1409" y="1043"/>
                                                                     </extensions>
                                                                 </node>
                                                                 <node id="bc530d18833e4fab" name="Relations Table" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -3070,7 +3072,7 @@ function run(context) {
                                                                         <oga:settings>
                                                                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.DefaultTableDataSource]]></oga:property>
                                                                         </oga:settings>
-                                                                        <oga:meta x="1413" y="1195"/>
+                                                                        <oga:meta x="1414" y="1156"/>
                                                                     </extensions>
                                                                 </node>
                                                                 <node id="6e80e611" name="Prosodic Stress Inventory" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
@@ -3094,7 +3096,7 @@ function run(context) {
                                                                         <oga:settings>
                                                                             <oga:property key="ca.phon.opgraph.nodes.reflect.ObjectNode.declaredClass"><![CDATA[ca.phon.query.report.datasource.TableDataSource]]></oga:property>
                                                                         </oga:settings>
-                                                                        <oga:meta x="1408" y="981"/>
+                                                                        <oga:meta x="1409" y="1341"/>
                                                                     </extensions>
                                                                 </node>
                                                                 <link dest="d6964130060d4eac" destField="target" source="ac130279f6464980" sourceField="obj"/>
@@ -3122,8 +3124,8 @@ function run(context) {
                                                                 <extensions>
                                                                     <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
                                                                     <oga:notes>
-                                                                        <oga:note color="0xffff96" height="750" title="Inputs" width="431" x="14" y="14"/>
-                                                                        <oga:note color="0x96ff96" height="760" title="Segmental Level" width="1126" x="614" y="800"/>
+                                                                        <oga:note color="0xffff96" height="926" title="Inputs" width="473" x="14" y="14"/>
+                                                                        <oga:note color="0x96ff96" height="760" title="Segmental Level" width="1126" x="615" y="810"/>
                                                                         <oga:note color="0xffc864" height="276" title="Word Level" width="1120" x="615" y="14"/>
                                                                         <oga:note color="0x9696ff" height="505" title="Prosodic Level" width="1123" x="615" y="293"/>
                                                                     </oga:notes>
@@ -3144,7 +3146,7 @@ function run(context) {
                                                             <ogcn:published_output field="inventory" name="word stress inventory" ref="eecf31cb778c485b"/>
                                                             <ogcn:published_output field="obj" name="segmental relations table" ref="bc530d18833e4fab"/>
                                                             <extensions>
-                                                                <oga:meta x="778" y="165"/>
+                                                                <oga:meta x="829" y="151"/>
                                                             </extensions>
                                                         </ogcn:macro>
                                                         <node id="16647069" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -3176,11 +3178,11 @@ function run(context) {
 }
 ]]></oga:property>
                                                                 </oga:settings>
-                                                                <oga:meta x="778" y="424"/>
+                                                                <oga:meta x="826" y="490"/>
                                                             </extensions>
                                                         </node>
                                                         <ogcn:macro id="394b481a" name="Setup Section Name" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                            <graph id="73600850">
+                                                            <graph id="234e0d7f">
                                                                 <node id="584303a5" name="object1" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                                     <extensions>
                                                                         <oga:settings>
@@ -3277,7 +3279,7 @@ function run(context) {
                                                             <ogcn:published_input field="obj" name="obj" ref="f836620a6c134274"/>
                                                             <ogcn:published_output field="value" name="value" ref="37285b91"/>
                                                             <extensions>
-                                                                <oga:meta x="636" y="600"/>
+                                                                <oga:meta x="714" y="725"/>
                                                             </extensions>
                                                         </ogcn:macro>
                                                         <node id="d7870bab58fa43bb" name="Add to Word Stress Inventory" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -3417,11 +3419,6 @@ function run(context) {
                                                                 <oga:meta x="1845" y="526"/>
                                                             </extensions>
                                                         </node>
-                                                        <node id="684ca6f5" type="class:ca.phon.app.opgraph.nodes.report.ReportSectionHeaderNode">
-                                                            <extensions>
-                                                                <oga:meta x="866" y="609"/>
-                                                            </extensions>
-                                                        </node>
                                                         <node id="6d8ef1bab8d74b05" name="Add to Prosodic CGV Inventory" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
                                                             <input name="inventory" optional="false"/>
                                                             <input name="sub-inventory" optional="false"/>
@@ -3458,6 +3455,11 @@ function run(context) {
 ]]></oga:property>
                                                                 </oga:settings>
                                                                 <oga:meta x="1845" y="664"/>
+                                                            </extensions>
+                                                        </node>
+                                                        <node id="684ca6f5" type="class:ca.phon.app.opgraph.nodes.report.ReportSectionHeaderNode">
+                                                            <extensions>
+                                                                <oga:meta x="944" y="734"/>
                                                             </extensions>
                                                         </node>
                                                         <node id="32cf3224f68544b0" name="Prosodic Totals" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -3593,7 +3595,7 @@ function sumcounts(total, subtotal) {
 }
 ]]></oga:property>
                                                                 </oga:settings>
-                                                                <oga:meta x="1851" y="1141"/>
+                                                                <oga:meta x="1849" y="1175"/>
                                                             </extensions>
                                                         </node>
                                                         <node id="715fb7fd" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
@@ -3679,7 +3681,7 @@ function sumcounts(total, subtotal) {
                                                         <link dest="db96029145a048d8" destField="totals" source="7d75bcad2044891" sourceField="obj"/>
                                                         <extensions>
                                                             <oga:notes>
-                                                                <oga:note color="0xffff96" height="1634" title="Inputs" width="407" x="38" y="188"/>
+                                                                <oga:note color="0xffff96" height="2038" title="Inputs" width="448" x="38" y="188"/>
                                                                 <oga:note color="0xffc864" height="417" title="Word Level" width="926" x="1211" y="50"/>
                                                                 <oga:note color="0x96ff96" height="498" title="Segmental Level" width="959" x="1210" y="961"/>
                                                                 <oga:note color="0x9696ff" height="486" title="Prosodic Level" width="927" x="1211" y="472"/>
@@ -3712,7 +3714,7 @@ function sumcounts(total, subtotal) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="1866f2d6" name="Print Segmental Totals" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="34a02e82">
+                                                    <graph id="149662a6">
                                                         <node id="1c103704" name="object1" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -3937,7 +3939,7 @@ function run(context) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="42e3777a" name="Print Segmental Inventory" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="35c7fbd1">
+                                                    <graph id="324b548d">
                                                         <node id="11f459df" name="object1" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -4018,7 +4020,7 @@ function run(context) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="24ad622f" name="Print Prosodic Totals" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="6643cd2">
+                                                    <graph id="e48c14c">
                                                         <node id="15777049" name="object1" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -4162,7 +4164,7 @@ function addRow(table, title, count, syllCount) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="5c8d81fa" name="Print Prosodic CGV Inventory" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="447ebff7">
+                                                    <graph id="38de4c50">
                                                         <node id="69631dde" name="object1" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -4243,7 +4245,7 @@ function addRow(table, title, count, syllCount) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="1d24b4ef" name="Print Prosodic Stress Inventory" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="2717ba1b">
+                                                    <graph id="49acd99c">
                                                         <node id="19ee6a60" name="object1" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -4324,7 +4326,7 @@ function addRow(table, title, count, syllCount) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="a65548d" name="Print Word Totals" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="583fc9ac">
+                                                    <graph id="6dfcfa07">
                                                         <node id="4c9b63df" name="object1" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -4449,7 +4451,7 @@ function addRow(table, category, total, correct, incorrect) {
                                                     </extensions>
                                                 </ogcn:macro>
                                                 <ogcn:macro id="513f7b3" name="Print Word Stress Inventory" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                                    <graph id="e3df58b">
+                                                    <graph id="353eaa52">
                                                         <node id="6932ecdf" name="object1" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                                             <extensions>
                                                                 <oga:settings>
@@ -4570,7 +4572,7 @@ function addRow(table, category, total, correct, incorrect) {
                                                 <extensions>
                                                     <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
                                                     <oga:notes>
-                                                        <oga:note color="0xffff96" height="791" title="Published Inputs" width="310" x="25" y="100"/>
+                                                        <oga:note color="0xffff96" height="1105" title="Published Inputs" width="372" x="25" y="98"/>
                                                         <oga:note color="0x96ff96" height="401" title="Segmental Inventory/Totals" width="932" x="872" y="550"/>
                                                         <oga:note color="0x9696ff" height="597" title="Prosodic Level Information" width="937" x="869" y="961"/>
                                                         <oga:note color="0xffc864" height="387" title="Word Level" width="940" x="868" y="1561"/>
@@ -4627,7 +4629,7 @@ function run(context) {
 }
 ]]></oga:property>
                                                 </oga:settings>
-                                                <oga:meta x="1283" y="105"/>
+                                                <oga:meta x="1281" y="65"/>
                                             </extensions>
                                         </node>
                                         <node id="b2abd77ee9084be3" name="Word Totals" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -4659,7 +4661,7 @@ function run(context) {
 }
 ]]></oga:property>
                                                 </oga:settings>
-                                                <oga:meta x="1283" y="241"/>
+                                                <oga:meta x="1281" y="226"/>
                                             </extensions>
                                         </node>
                                         <node id="fd153936e99f48a8" name="Add to Prosodic Stress Inventory" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -4697,7 +4699,7 @@ function run(context) {
 }
 ]]></oga:property>
                                                 </oga:settings>
-                                                <oga:meta x="1283" y="461"/>
+                                                <oga:meta x="1277" y="440"/>
                                             </extensions>
                                         </node>
                                         <node id="4aa768be512b445d" name="Add to Prosodic CGV Inventory" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -4735,7 +4737,7 @@ function run(context) {
 }
 ]]></oga:property>
                                                 </oga:settings>
-                                                <oga:meta x="1283" y="602"/>
+                                                <oga:meta x="1277" y="601"/>
                                             </extensions>
                                         </node>
                                         <node id="b1653a090b2449f5" name="Prosodic Totals" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -4786,7 +4788,7 @@ function sumcounts(total, subtotal) {
 }
 ]]></oga:property>
                                                 </oga:settings>
-                                                <oga:meta x="1283" y="743"/>
+                                                <oga:meta x="1277" y="762"/>
                                             </extensions>
                                         </node>
                                         <node id="6bbff4b22d2a488e" name="Segmental Totals" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -4833,7 +4835,7 @@ function sumcounts(total, subtotal) {
 }
 ]]></oga:property>
                                                 </oga:settings>
-                                                <oga:meta x="1281" y="917"/>
+                                                <oga:meta x="1283" y="958"/>
                                             </extensions>
                                         </node>
                                         <node id="7e796d8bd06c40be" name="Add to Segmental Inventory" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -4871,7 +4873,7 @@ function run(context) {
 }
 ]]></oga:property>
                                                 </oga:settings>
-                                                <oga:meta x="1283" y="1059"/>
+                                                <oga:meta x="1285" y="1119"/>
                                             </extensions>
                                         </node>
                                         <link dest="d0e50cd137aa45c3" destField="sessionName" source="9cd592ba93e14241" sourceField="obj"/>
@@ -4903,10 +4905,10 @@ function run(context) {
                                         <link dest="6bbff4b22d2a488e" destField="subtotal" source="c243d0cc85994d01" sourceField="segmental totals"/>
                                         <extensions>
                                             <oga:notes>
-                                                <oga:note color="0xffff96" height="1494" title="Published Inputs" width="374" x="26" y="187"/>
-                                                <oga:note color="0xffc864" height="328" title="Word Level" width="377" x="1224" y="70"/>
-                                                <oga:note color="0x9696ff" height="471" title="Prosodic Level" width="378" x="1224" y="406"/>
-                                                <oga:note color="0x96ff96" height="324" title="Segmental Level" width="378" x="1225" y="884"/>
+                                                <oga:note color="0xffff96" height="1963" title="Published Inputs" width="377" x="22" y="178"/>
+                                                <oga:note color="0xffc864" height="366" title="Word Level" width="389" x="1222" y="30"/>
+                                                <oga:note color="0x9696ff" height="508" title="Prosodic Level" width="390" x="1224" y="406"/>
+                                                <oga:note color="0x96ff96" height="364" title="Segmental Level" width="381" x="1227" y="925"/>
                                             </oga:notes>
                                             <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
                                         </extensions>
@@ -4936,7 +4938,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="78d3bb1a" name="Print Segmental Totals" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="4c01c77">
+                                    <graph id="3ca2c14c">
                                         <node id="c493495" name="object1" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -5161,7 +5163,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="1aa05ac1" name="Print Segmental Inventory" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="5aeaa47">
+                                    <graph id="38428704">
                                         <node id="713fbaa8" name="data" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -5231,7 +5233,7 @@ function run(context) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="674ba9c4" name="Print Prosodic Totals" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="16ae24bf">
+                                    <graph id="629fa9c7">
                                         <node id="2e51249" name="object1" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -5375,7 +5377,7 @@ function addRow(table, title, count, syllCount) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="3b9b4b3b" name="Print Prosodic CGV Inventory" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="55afee55">
+                                    <graph id="6107a19e">
                                         <node id="728a95f5" name="object1" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -5457,7 +5459,7 @@ function addRow(table, title, count, syllCount) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="592af60c" name="Print Prosodic Stress Inventory" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="4e06cd5c">
+                                    <graph id="4c6e5e4d">
                                         <node id="9c21137" name="object1" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -5539,7 +5541,7 @@ function addRow(table, title, count, syllCount) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="3f52b69f" name="Print Word Totals" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="446a6621">
+                                    <graph id="21c18fa7">
                                         <node id="19bf134d" name="object1" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -5664,7 +5666,7 @@ function addRow(table, category, total, correct, incorrect) {
                                     </extensions>
                                 </ogcn:macro>
                                 <ogcn:macro id="20f336d" name="Print Word Stress Inventory" type="ca.phon.opgraph.nodes.general.MacroNode">
-                                    <graph id="7b2886b2">
+                                    <graph id="5d1ab1d1">
                                         <node id="37ef1fc6" name="object1" type="class:ca.phon.opgraph.nodes.reflect.ObjectNode">
                                             <extensions>
                                                 <oga:settings>
@@ -5783,7 +5785,7 @@ function addRow(table, category, total, correct, incorrect) {
                                 <link dest="78d3bb1a" destField="totals" source="cd529cc9bedf4ecc" sourceField="segmental totals"/>
                                 <extensions>
                                     <oga:notes>
-                                        <oga:note color="0xffff96" height="868" title="Published Inputs" width="302" x="68" y="117"/>
+                                        <oga:note color="0xffff96" height="1104" title="Published Inputs" width="323" x="68" y="117"/>
                                         <oga:note color="0x96ff96" height="351" title="Segmental Level" width="829" x="572" y="650"/>
                                         <oga:note color="0x9696ff" height="447" title="Prosodic Level" width="832" x="572" y="1007"/>
                                         <oga:note color="0xffc864" height="360" title="Word Level" width="836" x="571" y="1461"/>
@@ -5873,7 +5875,7 @@ function run(context) {
 }
 ]]></oga:property>
                                 </oga:settings>
-                                <oga:meta x="1280" y="168"/>
+                                <oga:meta x="1280" y="195"/>
                             </extensions>
                         </node>
                         <node id="359ed559ae514d1e" name="Add to Prosodic Stress Inventory" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -5911,7 +5913,7 @@ function run(context) {
 }
 ]]></oga:property>
                                 </oga:settings>
-                                <oga:meta x="1280" y="341"/>
+                                <oga:meta x="1285" y="449"/>
                             </extensions>
                         </node>
                         <node id="1c777bf18a05434e" name="Add to Prosodic CGV Inventory" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -5949,7 +5951,7 @@ function run(context) {
 }
 ]]></oga:property>
                                 </oga:settings>
-                                <oga:meta x="1280" y="480"/>
+                                <oga:meta x="1285" y="610"/>
                             </extensions>
                         </node>
                         <node id="a448632b03cc43d2" name="Prosodic Totals" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -6000,7 +6002,7 @@ function sumcounts(total, subtotal) {
 }
 ]]></oga:property>
                                 </oga:settings>
-                                <oga:meta x="1280" y="631"/>
+                                <oga:meta x="1285" y="771"/>
                             </extensions>
                         </node>
                         <node id="1ccd59e9ffe049af" name="Segmental Totals" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -6047,7 +6049,7 @@ function sumcounts(total, subtotal) {
 }
 ]]></oga:property>
                                 </oga:settings>
-                                <oga:meta x="1280" y="825"/>
+                                <oga:meta x="1284" y="1013"/>
                             </extensions>
                         </node>
                         <node id="36eb798766f04a9e" name="Add to Segmental Inventory" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -6085,7 +6087,7 @@ function run(context) {
 }
 ]]></oga:property>
                                 </oga:settings>
-                                <oga:meta x="1280" y="977"/>
+                                <oga:meta x="1284" y="1165"/>
                             </extensions>
                         </node>
                         <link dest="e8ae4a39fdd74375" destField="speaker" source="7d1055dcc76e435a" sourceField="obj"/>
@@ -6118,10 +6120,10 @@ function run(context) {
                         <link dest="3b0e69d380b0423a" destField="inventory" source="1ba6fbba018648d6" sourceField="obj"/>
                         <extensions>
                             <oga:notes>
-                                <oga:note color="0xffff96" height="1429" title="Published Inputs" width="374" x="33" y="160"/>
-                                <oga:note color="0xffc864" height="294" title="Word Level" width="460" x="1177" y="8"/>
-                                <oga:note color="0x9696ff" height="464" title="Prosodic Level" width="464" x="1176" y="309"/>
-                                <oga:note color="0x96ff96" height="345" title="Segmental Level" width="467" x="1174" y="778"/>
+                                <oga:note color="0xffff96" height="1670" title="Published Inputs" width="409" x="33" y="160"/>
+                                <oga:note color="0xffc864" height="399" title="Word Level" width="472" x="1177" y="8"/>
+                                <oga:note color="0x9696ff" height="536" title="Prosodic Level" width="469" x="1181" y="417"/>
+                                <oga:note color="0x96ff96" height="394" title="Segmental Level" width="472" x="1178" y="966"/>
                             </oga:notes>
                             <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
                         </extensions>
@@ -6147,7 +6149,7 @@ function run(context) {
                         <oga:settings>
                             <oga:property key="ca.phon.opgraph.nodes.reflect.IterableClassNode.className"><![CDATA[java.util.ArrayList]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="849" y="140"/>
+                        <oga:meta x="1062" y="49"/>
                     </extensions>
                 </ogcn:macro>
                 <node id="76e659e697ee4400" name="Setup Segmental Totals Table" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -6301,7 +6303,7 @@ function run(context) {
 }
 ]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="1115" y="500"/>
+                        <oga:meta x="1121" y="432"/>
                     </extensions>
                 </node>
                 <node id="1a69240b" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
@@ -6312,7 +6314,7 @@ function run(context) {
                             <opqry:sortBy column="Count" order="ascending" type="plain"/>
                         </opqry:sortoptions>
                         <oga:settings/>
-                        <oga:meta x="1121" y="675"/>
+                        <oga:meta x="1127" y="607"/>
                     </extensions>
                 </node>
                 <node id="646f5de12a184829" name="Setup Prosodic Totals Table" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -6385,7 +6387,7 @@ function addRow(table, title, count, syllCount) {
 }
 ]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="1101" y="813"/>
+                        <oga:meta x="1103" y="844"/>
                     </extensions>
                 </node>
                 <node id="21e2ebf8bf184702" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
@@ -6396,7 +6398,7 @@ function addRow(table, title, count, syllCount) {
                             <opqry:sortBy column="Count" order="ascending" type="plain"/>
                         </opqry:sortoptions>
                         <oga:settings/>
-                        <oga:meta x="1119" y="971"/>
+                        <oga:meta x="1121" y="1002"/>
                     </extensions>
                 </node>
                 <node id="b158d15c7c48437f" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
@@ -6407,7 +6409,7 @@ function addRow(table, title, count, syllCount) {
                             <opqry:sortBy column="Count" order="ascending" type="plain"/>
                         </opqry:sortoptions>
                         <oga:settings/>
-                        <oga:meta x="1119" y="1124"/>
+                        <oga:meta x="1121" y="1155"/>
                     </extensions>
                 </node>
                 <node id="8672ec15a2f74202" name="Setup Word Totals Table" type="class:ca.phon.app.opgraph.nodes.PhonScriptNode">
@@ -6461,7 +6463,7 @@ function addRow(table, category, total, correct, incorrect) {
 }
 ]]></oga:property>
                         </oga:settings>
-                        <oga:meta x="1112" y="1299"/>
+                        <oga:meta x="1065" y="1459"/>
                     </extensions>
                 </node>
                 <node id="e0189b0410fa4391" type="class:ca.phon.app.opgraph.nodes.table.SortNode">
@@ -6472,7 +6474,7 @@ function addRow(table, category, total, correct, incorrect) {
                             <opqry:sortBy column="Count" order="ascending" type="plain"/>
                         </opqry:sortoptions>
                         <oga:settings/>
-                        <oga:meta x="1122" y="1476"/>
+                        <oga:meta x="1065" y="1620"/>
                     </extensions>
                 </node>
                 <node id="8b2fd8b186e54cb3" type="class:ca.phon.app.opgraph.nodes.report.TableSectionNode">
@@ -6481,7 +6483,7 @@ function addRow(table, category, total, correct, incorrect) {
                             <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
                             <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
                         </oga:settings>
-                        <oga:meta x="1375" y="500">
+                        <oga:meta x="1404" y="433">
                             <oga:default for="addToBeginning" type="java.lang.Boolean">true</oga:default>
                             <oga:default for="sectionName" type="java.lang.String">Segmental Level Breakdown (All Participants)</oga:default>
                         </oga:meta>
@@ -6493,9 +6495,9 @@ function addRow(table, category, total, correct, incorrect) {
                             <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
                             <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
                         </oga:settings>
-                        <oga:meta x="1375" y="650">
-                            <oga:default for="addToBeginning" type="java.lang.Boolean">true</oga:default>
+                        <oga:meta x="1406" y="618">
                             <oga:default for="sectionName" type="java.lang.String">Segmental Level Inventory (All Participants)</oga:default>
+                            <oga:default for="addToBeginning" type="java.lang.Boolean">true</oga:default>
                         </oga:meta>
                     </extensions>
                 </node>
@@ -6505,9 +6507,9 @@ function addRow(table, category, total, correct, incorrect) {
                             <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
                             <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
                         </oga:settings>
-                        <oga:meta x="1363" y="813">
-                            <oga:default for="sectionName" type="java.lang.String">Prosodic Level Breakdown (All Participants)</oga:default>
+                        <oga:meta x="1375" y="851">
                             <oga:default for="addToBeginning" type="java.lang.Boolean">true</oga:default>
+                            <oga:default for="sectionName" type="java.lang.String">Prosodic Level Breakdown (All Participants)</oga:default>
                         </oga:meta>
                     </extensions>
                 </node>
@@ -6517,9 +6519,9 @@ function addRow(table, category, total, correct, incorrect) {
                             <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
                             <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
                         </oga:settings>
-                        <oga:meta x="1365" y="960">
-                            <oga:default for="sectionName" type="java.lang.String">Prosodic Level CGV Inventory (All Participants)</oga:default>
+                        <oga:meta x="1375" y="1036">
                             <oga:default for="addToBeginning" type="java.lang.Boolean">true</oga:default>
+                            <oga:default for="sectionName" type="java.lang.String">Prosodic Level CGV Inventory (All Participants)</oga:default>
                         </oga:meta>
                     </extensions>
                 </node>
@@ -6529,9 +6531,9 @@ function addRow(table, category, total, correct, incorrect) {
                             <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
                             <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
                         </oga:settings>
-                        <oga:meta x="1370" y="1106">
-                            <oga:default for="sectionName" type="java.lang.String">Prosodic Level Stress Inventory (All Participants)</oga:default>
+                        <oga:meta x="1375" y="1221">
                             <oga:default for="addToBeginning" type="java.lang.Boolean">true</oga:default>
+                            <oga:default for="sectionName" type="java.lang.String">Prosodic Level Stress Inventory (All Participants)</oga:default>
                         </oga:meta>
                     </extensions>
                 </node>
@@ -6541,7 +6543,7 @@ function addRow(table, category, total, correct, incorrect) {
                             <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
                             <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
                         </oga:settings>
-                        <oga:meta x="1379" y="1304">
+                        <oga:meta x="1357" y="1446">
                             <oga:default for="sectionName" type="java.lang.String">Word Level Accuracy (All Participants)</oga:default>
                             <oga:default for="addToBeginning" type="java.lang.Boolean">true</oga:default>
                         </oga:meta>
@@ -6553,7 +6555,7 @@ function addRow(table, category, total, correct, incorrect) {
                             <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.includeColumns"><![CDATA[true]]></oga:property>
                             <oga:property key="ca.phon.app.opgraph.nodes.report.TableSectionNode.columns"/>
                         </oga:settings>
-                        <oga:meta x="1385" y="1466">
+                        <oga:meta x="1363" y="1631">
                             <oga:default for="sectionName" type="java.lang.String">Word Level Stress Inventory (All Participants)</oga:default>
                             <oga:default for="addToBeginning" type="java.lang.Boolean">true</oga:default>
                         </oga:meta>
@@ -6596,10 +6598,10 @@ function addRow(table, category, total, correct, incorrect) {
                 <link dest="e0189b0410fa4391" destField="table" source="4bb42cb62a99463c" sourceField="word stress inventory"/>
                 <extensions>
                     <oga:notes>
-                        <oga:note color="0xffff96" height="979" title="Published Inputs" width="356" x="20" y="30"/>
-                        <oga:note color="0x96ff96" height="325" title="Segmental Level Information" width="941" x="688" y="467"/>
-                        <oga:note color="0x9696ff" height="460" title="Prosodic Level Information" width="938" x="690" y="790"/>
-                        <oga:note color="0xffc864" height="394" title="Word Level" width="935" x="690" y="1250"/>
+                        <oga:note color="0xffff96" height="1071" title="Published Inputs" width="433" x="20" y="30"/>
+                        <oga:note color="0x96ff96" height="405" title="Segmental Level Information" width="992" x="694" y="399"/>
+                        <oga:note color="0x9696ff" height="580" title="Prosodic Level Information" width="968" x="692" y="821"/>
+                        <oga:note color="0xffc864" height="419" title="Word Level" width="974" x="688" y="1408"/>
                     </oga:notes>
                     <nes:settings type="ca.phon.app.opgraph.analysis.AnalysisOpGraphEditorModel"/>
                 </extensions>
@@ -6611,7 +6613,7 @@ function addRow(table, category, total, correct, incorrect) {
             <ogcn:published_input field="obj" name="report node" ref="2fef4098"/>
             <ogcn:published_output field="obj" name="report node" ref="2fef4098"/>
             <extensions>
-                <oga:meta x="653" y="20"/>
+                <oga:meta x="650" y="20"/>
             </extensions>
         </ogcn:macro>
         <node id="362eabf4943b48eb" type="class:ca.phon.app.opgraph.nodes.report.TextSectionNode">
@@ -6631,9 +6633,9 @@ Citations:
  * Masso, S., McLeod, S., Baker, E., & McCormack, J. (2016). Polysyllable productions in preschool children with speech sound disorders: Error categories and the Framework of Polysyllable Maturity. International Journal of Speech-Language Pathology, 18(3), 272-287. doi:10.3109/17549507.2016.1168483
 ]]></oga:property>
                 </oga:settings>
-                <oga:meta x="840" y="497">
-                    <oga:default for="sectionName" type="java.lang.String">Information</oga:default>
+                <oga:meta x="884" y="497">
                     <oga:default for="addToBeginning" type="java.lang.Boolean">true</oga:default>
+                    <oga:default for="sectionName" type="java.lang.String">Information</oga:default>
                 </oga:meta>
             </extensions>
         </node>
@@ -6641,12 +6643,12 @@ Citations:
         <link dest="7ca6b2ef" destField="project" source="35a0fbb5" sourceField="obj"/>
         <link dest="7ca6b2ef" destField="sessions" source="6420582b" sourceField="obj"/>
         <link dest="7e7f6d0b48264831" destField="project" source="7ca6b2ef" sourceField="project"/>
-        <link dest="7e7f6d0b48264831" destField="results" source="7ca6b2ef" sourceField="results"/>
         <link dest="7e7f6d0b48264831" destField="selected sessions" source="6420582b" sourceField="obj"/>
         <link dest="7e7f6d0b48264831" destField="selected participants" source="338df44a" sourceField="obj"/>
         <link dest="40e266e4" destField="reportName" source="b7c53c9330914507" sourceField="reportTitle"/>
         <link dest="362eabf4943b48eb" destField="parent" source="40e266e4" sourceField="root"/>
         <link dest="7e7f6d0b48264831" destField="report node" source="40e266e4" sourceField="root"/>
+        <link dest="7e7f6d0b48264831" destField="results" source="7ca6b2ef" sourceField="results"/>
         <extensions>
             <opqry:nodewizard type="ca.phon.app.opgraph.analysis.AnalysisWizardExtension">
                 <opqry:info format="html" minVersion="4.0.0" title="Word-Level Analysis of Polysyllables">
