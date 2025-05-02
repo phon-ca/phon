@@ -73,7 +73,7 @@ public class DeleteParticipantAction extends SessionEditorAction {
 		int recordsChanged = 0;
 		for(Record r:session.getRecords()) {
 			if(r.getSpeaker() == participant) {
-				final ChangeSpeakerEdit chSpeakerEdit = new ChangeSpeakerEdit(editor, r, null);
+				final ChangeSpeakerEdit chSpeakerEdit = new ChangeSpeakerEdit(editor, r, Participant.UNKNOWN);
 				chSpeakerEdit.doIt();
 				edit.addEdit(chSpeakerEdit);
 				
