@@ -28,6 +28,12 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 
+/**
+ * Sort table node.  Sorts a table based on the specified column(s) and sort order.  Type
+ * of sorting (ipa vs. plain) is also specified.  If placed on 'automatic' mode, the
+ * node will automatically determine the type of sorting based on the column types for all columns
+ * until a 'number' column is reached.
+ */
 @OpNodeInfo(
 		name="Sort",
 		description="Sort table",
@@ -181,12 +187,10 @@ public class SortNode extends TableOpNode implements NodeSettings {
 							(v1 != null && v1 instanceof IPATranscript ? (IPATranscript)v1 : IPATranscript.parseIPATranscript(v1Txt));
 					IPATranscript v2ipa =
 							(v2 != null && v2 instanceof IPATranscript ? (IPATranscript)v2 : IPATranscript.parseIPATranscript(v2Txt));
-
 					retVal = v1ipa.compareTo(v2ipa);
 				} catch (java.text.ParseException pe) {
-					throw new ProcessingException(null, pe);
+					retVal = v1Txt.compareTo(v2Txt);
 				}
-
 			}
 		}
 		return retVal;
