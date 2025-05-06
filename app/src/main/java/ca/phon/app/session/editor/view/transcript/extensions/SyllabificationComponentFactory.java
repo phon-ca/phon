@@ -5,14 +5,12 @@ import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.syllabificationAlignment.ScTypeEdit;
 import ca.phon.app.session.editor.view.syllabificationAlignment.ToggleDiphthongEdit;
-import ca.phon.app.session.editor.view.transcript.BreakableFlowLayout;
-import ca.phon.app.session.editor.view.transcript.BreakableView;
-import ca.phon.app.session.editor.view.transcript.ComponentFactory;
-import ca.phon.app.session.editor.view.transcript.TranscriptEditor;
+import ca.phon.app.session.editor.view.transcript.*;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
 import ca.phon.ipa.Phone;
+import ca.phon.session.Record;
 import ca.phon.session.Session;
 import ca.phon.session.Tier;
 import ca.phon.session.Transcriber;
@@ -42,6 +40,8 @@ public class SyllabificationComponentFactory implements ComponentFactory {
 
     final Transcriber transcriber;
 
+    private AttributeSet attrs;
+
     private JPanel previousComponent;
 
     public SyllabificationComponentFactory(TranscriptEditor editor) {
@@ -56,6 +56,7 @@ public class SyllabificationComponentFactory implements ComponentFactory {
     public JComponent createComponent(AttributeSet attrs) {
         Tier<IPATranscript> tier = (Tier<IPATranscript>) attrs.getAttribute("tier");
         LogUtil.info("Creating syllabification component for tier: " + tier.getName());
+        this.attrs = attrs;
 
         int breakWidth = -1;
         if(attrs.getAttribute("TranscriptViewFactory.tierWidth") != null) {
@@ -175,12 +176,18 @@ public class SyllabificationComponentFactory implements ComponentFactory {
             }
         }
 
-        if(offset >= 0) {
-            editor.offsetInNextTierOrElement(transcript.stringIndexOfElement(offset));
-        } else {
-            editor.sameOffsetInNextTierOrElement();
+        if(offset < 0) {
+            offset = 0;
         }
-        editor.requestFocus();
+        final Record record = TranscriptStyleConstants.getRecord(this.attrs);
+        final Tier<?> tier = TranscriptStyleConstants.getTier(this.attrs);
+        final int recordEleIdx = editor.getSession().getRecordElementIndex(record);
+        final TranscriptDocument.StartEnd syllabificationRange =
+                editor.getTranscriptDocument().getTierContentStartEnd(recordEleIdx, tier.getName());
+        if(syllabificationRange.valid()) {
+            editor.offsetInNextTierOrElement(syllabificationRange.start()+offset, transcript.stringIndexOfElement(offset));
+            editor.requestFocus();
+        }
     }
 
     private void focusPrevTier(PhonActionEvent<JPanel> pae) {
@@ -197,12 +204,18 @@ public class SyllabificationComponentFactory implements ComponentFactory {
             }
         }
 
-        if(offset >= 0) {
-            editor.offsetInPrevTierOrElement(transcript.stringIndexOfElement(offset));
-        } else {
-            editor.sameOffsetInPrevTierOrElement();
+        if(offset < 0) {
+            offset = 0;
         }
-        editor.requestFocus();
+        final Record record = TranscriptStyleConstants.getRecord(this.attrs);
+        final Tier<?> tier = TranscriptStyleConstants.getTier(this.attrs);
+        final int recordEleIdx = editor.getSession().getRecordElementIndex(record);
+        final TranscriptDocument.StartEnd syllabificationRange =
+                editor.getTranscriptDocument().getTierContentStartEnd(recordEleIdx, tier.getName());
+        if(syllabificationRange.valid()) {
+            editor.offsetInPrevTierOrElement(syllabificationRange.start()+offset, transcript.stringIndexOfElement(offset));
+            editor.requestFocus();
+        }
     }
 
     @Override

@@ -718,8 +718,16 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
      * @param offsetInContent
      */
     public void offsetInPrevTierOrElement(int offsetInContent) {
+        offsetInPrevTierOrElement(getCaretPosition(), offsetInContent);
+    }
+
+    /**
+     * Moves the caret to the position in the previous line with the same offset from the labels
+     *
+     * @param offsetInContent
+     */
+    public void offsetInPrevTierOrElement(int caretPos, int offsetInContent) {
         TranscriptDocument doc = getTranscriptDocument();
-        int caretPos = getCaretPosition();
         int start = getStartOfPrevTierOrElement(caretPos);
         if (start == -1) return;
         int end;
@@ -777,9 +785,18 @@ public class TranscriptEditor extends JEditorPane implements IExtendable, Clipbo
      * @param offsetInContent the offset in the content
      */
     public void offsetInNextTierOrElement(int offsetInContent) {
-        TranscriptDocument doc = getTranscriptDocument();
+        offsetInNextTierOrElement(getCaretPosition(), offsetInContent);
+    }
 
-        int caretPos = getCaretPosition();
+    /**
+     * Moves the caret to the position in the next line with the offset from the labels
+     * (or the end of the line if it's not long enough)
+     *
+     * @param caretPos the current caret position
+     * @param offsetInContent the offset in the content
+     */
+    public void offsetInNextTierOrElement(int caretPos, int offsetInContent) {
+        TranscriptDocument doc = getTranscriptDocument();
 
         int start = getStartOfNextTierOrElement(caretPos);
 

@@ -120,9 +120,9 @@ public class AlignmentExtension implements TranscriptEditorExtension {
 
     private void buildAlignmentBatch(TranscriptBatchBuilder batchBuilder, AttributeSet attrs) {
         Tier<?> tier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
-        TierViewItem alignmentParent = getAlignmentParent();
+        String alignmentParent = getAlignmentParent();
 
-        if (tier != null && isAlignmentVisible() && alignmentParent != null && tier.getName().equals(alignmentParent.getTierName())) {
+        if (tier != null && isAlignmentVisible() && alignmentParent != null && tier.getName().equals(alignmentParent)) {
             Record record = TranscriptStyleConstants.getRecord(attrs);
             final SimpleAttributeSet tierAttrs = new SimpleAttributeSet();
             TranscriptStyleConstants.setElementType(tierAttrs, TranscriptStyleConstants.ELEMENT_TYPE_RECORD);
@@ -218,7 +218,7 @@ public class AlignmentExtension implements TranscriptEditorExtension {
             final JPanel component = (JPanel) componentFactory.getComponent();
             if(component != null) {
                 int i = 0;
-                final PhoneAlignment alignment = (PhoneAlignment) editorEvent.data().tier().getValue();
+                final PhoneAlignment alignment = (PhoneAlignment) tier.getValue();
                 for(; i < component.getComponentCount() && i < alignment.getAlignments().size(); i++) {
                     final Component comp = component.getComponent(i);
                     if(comp instanceof PhoneMapDisplay) {
@@ -292,10 +292,10 @@ public class AlignmentExtension implements TranscriptEditorExtension {
     }
 
     private void addAlignmentTiersForRecord(int transcriptElementIndex) {
-        final TierViewItem alignmentParent = getAlignmentParent();
+        final String alignmentParent = getAlignmentParent();
         if (alignmentParent == null) return;
 
-        final int paraEleIdx = editor.getTranscriptDocument().findParagraphElementIndexForTier(transcriptElementIndex, alignmentParent.getTierName());
+        final int paraEleIdx = editor.getTranscriptDocument().findParagraphElementIndexForTier(transcriptElementIndex, alignmentParent);
         if (paraEleIdx >= 0) {
             final Element paraEle = editor.getTranscriptDocument().getDefaultRootElement().getElement(paraEleIdx);
             final MutableAttributeSet attrs = new SimpleAttributeSet(paraEle.getElement(paraEle.getElementCount() - 1).getAttributes());
@@ -377,17 +377,32 @@ public class AlignmentExtension implements TranscriptEditorExtension {
      *
      * @return the {@link TierViewItem} associated with the calculated parent tier
      * */
-    public TierViewItem calculateAlignmentParent() {
+    public String calculateAlignmentParent() {
         List<TierViewItem> visibleTierView = editor.getSession().getTierView().stream().filter(TierViewItem::isVisible).toList();
 
-        var retVal = visibleTierView.stream().filter(item -> item.getTierName().equals("IPA Actual")).findFirst();
-        if (retVal.isPresent()) return retVal.get();
+        var retVal = visibleTierView.stream().filter(item -> item.getTierName().equals(SystemTierType.IPAActual.getName())).findFirst();
+        if (retVal.isPresent()) {
+            if(isSyllabificationVisible()) {
+                return SystemTierType.ActualSyllables.getName();
+            }
+            return retVal.get().getTierName();
+        }
 
-        retVal = visibleTierView.stream().filter(item -> item.getTierName().equals("IPA Target")).findFirst();
-        return retVal.orElseGet(() -> visibleTierView.get(visibleTierView.size() - 1));
+        retVal = visibleTierView.stream().filter(item -> item.getTierName().equals(SystemTierType.IPATarget.getName())).findFirst();
+        if (retVal.isPresent()) {
+            if(isSyllabificationVisible()) {
+                return SystemTierType.TargetSyllables.getName();
+            }
+            return retVal.get().getTierName();
+        }
+        return visibleTierView.size() > 0 ? visibleTierView.get(visibleTierView.size()-1).getTierName() : null;
     }
 
     // region Getters and Setters
+
+    public boolean isSyllabificationVisible() {
+        return (boolean) doc.getDocumentPropertyOrDefault(SyllabificationExtension.SYLLABIFICATION_IS_VISIBLE, SyllabificationExtension.SYLLABIFICATION_IS_VISIBLE_DEFAULT);
+    }
 
     public boolean isAlignmentVisible() {
         return (boolean) doc.getDocumentPropertyOrDefault(ALIGNMENT_IS_VISIBLE, ALIGNMENT_IS_VISIBLE_DEFAULT);
@@ -397,8 +412,8 @@ public class AlignmentExtension implements TranscriptEditorExtension {
         return (boolean) doc.getDocumentPropertyOrDefault(ALIGNMENT_IS_COMPONENT, ALIGNMENT_IS_COMPONENT_DEFAULT);
     }
 
-    public TierViewItem getAlignmentParent() {
-        return (TierViewItem) doc.getDocumentPropertyOrDefault(ALIGNMENT_PARENT, ALIGNMENT_PARENT_DEFAULT);
+    public String getAlignmentParent() {
+        return (String) doc.getDocumentPropertyOrDefault(ALIGNMENT_PARENT, ALIGNMENT_PARENT_DEFAULT);
     }
 
     // endregion Getters and Setters
