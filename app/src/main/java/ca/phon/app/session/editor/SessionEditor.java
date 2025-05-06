@@ -772,9 +772,13 @@ public class SessionEditor extends JPanel implements IExtendable, ClipboardOwner
 
 		};
 		mediaMenu.addMenuListener(mediaMenuListener);
-
+		// trigger media menu creation to enable keyboard shortcuts
+		mediaMenuListener.menuSelected(new MenuEvent(mediaMenu));
 		menuBar.add(mediaMenu, 3);
+
 		menuBar.add(viewMenu, 3);
+		viewMenuListener.menuSelected(new MenuEvent(menuBar));
+
 		menuBar.add(sessionMenu, 3);
 	}
 

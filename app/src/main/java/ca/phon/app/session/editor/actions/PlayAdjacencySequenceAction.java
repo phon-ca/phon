@@ -30,7 +30,7 @@ public class PlayAdjacencySequenceAction extends PlaySegmentAction {
 	private final static String SHORT_DESC = "";
 	
 	private final static KeyStroke KS = 
-			KeyStroke.getKeyStroke(KeyEvent.VK_R, 
+			KeyStroke.getKeyStroke(KeyEvent.VK_F2,
 					Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.SHIFT_DOWN_MASK);
 	
 	public PlayAdjacencySequenceAction(SessionEditor editor) {
