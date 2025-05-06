@@ -80,18 +80,22 @@ public class AlignmentComponentFactory implements ComponentFactory {
         for (PhoneMap phoneMap:clonedMaps) {
             final PhoneMapDisplay display = new PhoneMapDisplay();
             display.setPhoneMapForWord(0, phoneMap);
+            display.setFocusTraversalKeysEnabled(false);
             retVal.add(display);
 
             // setup tab, shift+tab, up/down key actions
             final InputMap inputMap = display.getInputMap(JComponent.WHEN_FOCUSED);
+            final InputMap ancestorInputMap = display.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
             final ActionMap actionMap = display.getActionMap();
 
             final KeyStroke tabKey = KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0);
             inputMap.put(tabKey, "focusNextTier");
+            ancestorInputMap.put(tabKey, "focusNextTier");
             actionMap.put("focusNextTier", PhonUIAction.eventConsumer(this::focusNextTier, retVal));
 
             final KeyStroke shiftTabKey = KeyStroke.getKeyStroke(KeyEvent.VK_TAB, KeyEvent.SHIFT_DOWN_MASK);
             inputMap.put(shiftTabKey, "focusPrevTier");
+            ancestorInputMap.put(shiftTabKey, "focusPrevTier");
             actionMap.put("focusPrevTier", PhonUIAction.eventConsumer(this::focusPrevTier, retVal));
 
             final KeyStroke upKey = KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0);
