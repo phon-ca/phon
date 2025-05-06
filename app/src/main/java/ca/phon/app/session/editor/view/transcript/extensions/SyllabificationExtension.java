@@ -446,7 +446,7 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                 final TranscriptDocument.StartEnd range = doc.getTierStartEnd(editor.getSession().getRecordPosition(event.data().record()), getSyllabifierTierNameForIPATier(tier.getName()));
                 if(!range.valid()) return;
                 LogUtil.info("Updating syllabification for " + tier.getName());
-                final TranscriptElementLocation currentLocation = editor.getCurrentSessionLocation();
+                final TranscriptElementLocation currentLocation = editor.getTranscriptEditorCaret().getCurrentLocation();
                 editor.getTranscriptEditorCaret().freeze();
                 try {
                     editor.getTranscriptDocument().setBypassDocumentFilter(true);
