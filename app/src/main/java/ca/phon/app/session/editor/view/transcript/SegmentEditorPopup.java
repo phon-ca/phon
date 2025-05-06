@@ -14,6 +14,7 @@ import ca.phon.ui.FlatButton;
 import ca.phon.ui.HasIconStrip;
 import ca.phon.ui.IconStrip;
 import ca.phon.ui.action.PhonUIAction;
+import ca.phon.util.OSInfo;
 import ca.phon.util.icons.IconManager;
 import ca.phon.util.icons.IconSize;
 
@@ -80,6 +81,11 @@ public class SegmentEditorPopup extends TimeComponent implements HasIconStrip {
                 playSegmentButton = new FlatButton(playSegmentAct);
                 playSegmentButton.setBgColor(UIManager.getColor("text"));
 
+                // add play segment keystrokes (F2 or menu shortcut+space)
+                final JLabel playSegmentLabel = new JLabel("F2 / " + "CTRL+SPACE");
+                playSegmentLabel.setFont(UIManager.getFont("Label.font").deriveFont(10.0f));
+                playSegmentLabel.setForeground(UIManager.getColor("textText"));
+
                 mediaModel.getSegmentPlayback().addPropertyChangeListener(SegmentPlayback.PLAYBACK_PROP, e -> {
                     if (mediaModel.getSegmentPlayback().isPlaying()) {
                         playSegmentButton.setIconName("stop");
@@ -92,6 +98,7 @@ public class SegmentEditorPopup extends TimeComponent implements HasIconStrip {
                 iconStrip = new IconStrip(SwingUtilities.HORIZONTAL);
                 iconStrip.setBackground(UIManager.getColor("text"));
                 iconStrip.add(playSegmentButton, IconStrip.IconStripPosition.LEFT);
+                iconStrip.add(playSegmentLabel, IconStrip.IconStripPosition.LEFT);
                 add(iconStrip, BorderLayout.NORTH);
             } catch (IOException e) {
                 Toolkit.getDefaultToolkit().beep();
