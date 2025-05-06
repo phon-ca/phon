@@ -2,10 +2,7 @@ package ca.phon.app.session.editor.view.transcript.extensions;
 
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.undo.TierEdit;
-import ca.phon.app.session.editor.view.transcript.BreakableFlowLayout;
-import ca.phon.app.session.editor.view.transcript.ComponentFactory;
-import ca.phon.app.session.editor.view.transcript.TranscriptEditor;
-import ca.phon.app.session.editor.view.transcript.TranscriptStyleConstants;
+import ca.phon.app.session.editor.view.transcript.*;
 import ca.phon.ipa.IPAElement;
 import ca.phon.ipa.IPATranscript;
 import ca.phon.ipa.IPATranscriptBuilder;
@@ -42,6 +39,8 @@ public class AlignmentComponentFactory implements ComponentFactory {
 
     final Transcriber transcriber;
 
+    private AttributeSet attrs;
+
     private JPanel previousComponent;
 
     public AlignmentComponentFactory(TranscriptEditor editor) {
@@ -55,6 +54,7 @@ public class AlignmentComponentFactory implements ComponentFactory {
     @Override
     public JComponent createComponent(AttributeSet attrs) {
         Tier<PhoneAlignment> tier = (Tier<PhoneAlignment>) attrs.getAttribute("tier");
+        this.attrs = attrs;
 
         int breakWidth = -1;
         if(attrs.getAttribute("TranscriptViewFactory.tierWidth") != null) {
@@ -164,20 +164,27 @@ public class AlignmentComponentFactory implements ComponentFactory {
         for(int i = 0; i < pae.getData().getComponentCount(); i++) {
             if(pae.getData().getComponent(i) instanceof PhoneMapDisplay display) {
                 if(display.hasFocus()) {
+                    int focusedPosition = Math.min(0, Math.max(display.getNumberOfAlignmentPositions(), display.getFocusedPosition()));
                     final var alignedElements =
-                            display.getPhoneMapForWord(0).getAlignedElements(display.getFocusedPosition());
+                            display.getPhoneMapForWord(0).getAlignedElements(focusedPosition);
                     IPAElement focusedElement = alignedElements.get(0) == null ? alignedElements.get(1) : alignedElements.get(0);
                     offset = transcript.indexOf(focusedElement);
                 }
             }
         }
 
-        if(offset >= 0) {
-            editor.offsetInNextTierOrElement(transcript.stringIndexOfElement(offset));
-        } else {
-            editor.sameOffsetInNextTierOrElement();
+        if(offset < 0) {
+            offset = 0;
         }
-        editor.requestFocus();
+        final Record record = TranscriptStyleConstants.getRecord(this.attrs);
+        final Tier<?> tier = TranscriptStyleConstants.getTier(this.attrs);
+        final int recordEleIdx = editor.getSession().getRecordElementIndex(record);
+        final TranscriptDocument.StartEnd alignmentRange =
+                editor.getTranscriptDocument().getTierContentStartEnd(recordEleIdx, tier.getName());
+        if(alignmentRange.valid()) {
+            editor.offsetInNextTierOrElement(alignmentRange.start() + offset, offset);
+            editor.requestFocus();
+        }
     }
 
     private void focusPrevTier(PhonActionEvent<JPanel> pae) {
@@ -187,21 +194,25 @@ public class AlignmentComponentFactory implements ComponentFactory {
         int offset = -1;
         for(int i = 0; i < pae.getData().getComponentCount(); i++) {
             if(pae.getData().getComponent(i) instanceof PhoneMapDisplay display) {
-                if(display.hasFocus()) {
+                if(display.hasFocus() && display.getNumberOfAlignmentPositions() > 0) {
+                    int focusedPosition = Math.min(0, Math.max(display.getNumberOfAlignmentPositions(), display.getFocusedPosition()));
                     final var alignedElements =
-                            display.getPhoneMapForWord(0).getAlignedElements(display.getFocusedPosition());
+                            display.getPhoneMapForWord(0).getAlignedElements(focusedPosition);
                     IPAElement focusedElement = alignedElements.get(0) == null ? alignedElements.get(1) : alignedElements.get(0);
                     offset = transcript.indexOf(focusedElement);
                 }
             }
         }
 
-        if(offset >= 0) {
-            editor.offsetInPrevTierOrElement(transcript.stringIndexOfElement(offset));
-        } else {
-            editor.sameOffsetInPrevTierOrElement();
+        final Record record = TranscriptStyleConstants.getRecord(this.attrs);
+        final Tier<?> tier = TranscriptStyleConstants.getTier(this.attrs);
+        final int recordEleIdx = editor.getSession().getRecordElementIndex(record);
+        final TranscriptDocument.StartEnd alignmentRange =
+                editor.getTranscriptDocument().getTierContentStartEnd(recordEleIdx, tier.getName());
+        if(alignmentRange.valid()) {
+            editor.offsetInPrevTierOrElement(alignmentRange.start() + offset, offset);
+            editor.requestFocus();
         }
-        editor.requestFocus();
     }
 
     @Override
