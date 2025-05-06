@@ -44,87 +44,10 @@ public class TranscriptNavigationFilter extends NavigationFilter {
             return;
         }
 
-//        AttributeSet prevAttrs = doc.getCharacterElement(fb.getCaret().getDot()).getAttributes();
-//        AttributeSet nextAttrs = doc.getCharacterElement(dot).getAttributes();
-
-//        String prevElemType = (String) prevAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
-//        String nextElemType = (String) nextAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_ELEMENT_TYPE);
-//        Tier<?> nextTier = (Tier<?>) nextAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
-
-//        if (prevElemType != null) {
-//            try {
-//                switch (prevElemType) {
-//                    case TranscriptStyleConstants.ATTR_KEY_RECORD -> {
-//                        Tier<?> prevTier = (Tier<?>) prevAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_TIER);
-//                        if (prevTier == null || prevTier.getDeclaredType().equals(PhoneAlignment.class)) break;
-//                        if (SystemTierType.Segment.getName().equals(prevTier.getName())) break;
-//                        if (nextElemType != null && nextElemType.equals(TranscriptStyleConstants.ATTR_KEY_RECORD)) {
-//                            if (nextTier != null && nextTier == prevTier) break;
-//                        }
-//                        int start = doc.getTierContentStart(prevTier);
-//                        int end = doc.getTierEnd(prevTier) - 1;
-//                        String newValue = doc.getText(start, end - start);
-//                        String oldString = prevTier.toString();
-//                        if (!oldString.equals(newValue)) {
-////                            editor.setInternalEdit(true);
-//                            editor.changeTierData((Record) prevAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_RECORD), prevTier, newValue);
-//                        }
-//                    }
-//                    case TranscriptStyleConstants.ATTR_KEY_COMMENT -> {
-//                        Comment prevComment = (Comment) prevAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT);
-//                        if (prevComment == null) break;
-//                        if (nextElemType != null && nextElemType.equals(TranscriptStyleConstants.ATTR_KEY_COMMENT)) {
-//                            Comment nextComment = (Comment) nextAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_COMMENT);
-//                            if (nextComment != null && nextComment == prevComment) break;
-//                        }
-//                        int start = doc.getCommentContentStart(prevComment);
-//                        int end = doc.getCommentEnd(prevComment) - 1;
-//                        String newValue = doc.getText(start, end - start);
-//                        editor.commentDataChanged(prevComment, newValue);
-//                    }
-//                    case TranscriptStyleConstants.ATTR_KEY_GEM -> {
-//                        Gem prevGem = (Gem) prevAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM);
-//                        if (prevGem == null) break;
-//                        if (nextElemType != null && nextElemType.equals(TranscriptStyleConstants.ATTR_KEY_GEM)) {
-//                            Gem nextGem = (Gem) nextAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM);
-//                            if (nextGem != null && nextGem == prevGem) break;
-//                        }
-//                        int start = doc.getGemContentStart(prevGem);
-//                        int end = doc.getGemEnd(prevGem) - 1;
-//                        String newValue = doc.getText(start, end - start);
-//                        editor.gemDataChanged(prevGem, newValue);
-//                    }
-//                    case TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER -> {
-//                        Tier<?> prevGenericTier = (Tier<?>) prevAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER);
-//                        if (prevGenericTier == null) break;
-//                        if (nextElemType != null && nextElemType.equals(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER)) {
-//                            Tier<?> nextGenericTier = (Tier<?>) nextAttrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER);
-//                            if (nextGenericTier != null && nextGenericTier == prevGenericTier) break;
-//                        }
-//                        int start = doc.getGenericContentStart(prevGenericTier);
-//                        int end = doc.getGenericEnd(prevGenericTier) - 1;
-//                        String newValue = doc.getText(start, end - start);
-//                        if (!prevGenericTier.hasValue() || !prevGenericTier.getValue().toString().equals(newValue)) {
-////                            editor.setInternalEdit(true);
-//                            editor.genericDataChanged(prevGenericTier, newValue);
-//                        }
-//                    }
-//                }
-//            } catch (BadLocationException e) {
-//                LogUtil.severe(e);
-//            }
-//        }
-
         if (doc.getLength() == dot) return;
 
         if (!editor.isCaretMoveFromUpDown()) editor.setUpDownOffset(-1);
         editor.setCaretMoveFromUpDown(false);
-
-        int prevCaretPos = editor.getCaretPosition();
-
-        if(PrefHelper.isDebugMode()) {
-            LogUtil.info("Setting dot to " + dot);
-        }
         fb.setDot(dot, bias);
 
         TranscriptEditor.TranscriptLocationChangeData transcriptLocationChangeData = new TranscriptEditor.TranscriptLocationChangeData(
@@ -199,9 +122,6 @@ public class TranscriptNavigationFilter extends NavigationFilter {
 
             if (start != -1 && end != -1) {
                 dot = Math.min(Math.max(dot, start), end);
-                if(PrefHelper.isDebugMode()) {
-                    LogUtil.info("Moving dot to " + dot);
-                }
             }
         }
 

@@ -1304,13 +1304,13 @@ public class TranscriptDocument extends DefaultStyledDocument implements IExtend
                 Gem gem = (Gem) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GEM);
                 transcriptElementIndex = transcript.getElementIndex(gem);
                 label = gem.getType().name() + " Gem";
-                posInTier = doc.getGemContentStart(gem);
+                posInTier = charPos - doc.getGemContentStart(gem);
             }
             case TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER -> {
                 Tier<?> genericTier = (Tier<?>) attrs.getAttribute(TranscriptStyleConstants.ATTR_KEY_GENERIC_TIER);
                 if (genericTier != null) {
                     label = genericTier.getName();
-                    posInTier = doc.getGenericContentStart(genericTier);
+                    posInTier = charPos - doc.getGenericContentStart(genericTier);
                 }
             }
         }
