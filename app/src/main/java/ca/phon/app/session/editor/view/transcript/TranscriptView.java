@@ -195,55 +195,55 @@ public class TranscriptView extends EditorView {
      * Setup icon strip
      */
     private void setupIconStrip() {
-        // participants button
-        final PhonUIAction<Void> participantsAct = PhonUIAction.eventConsumer(this::showParticipantsMenu);
-        participantsAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
-        participantsAct.putValue(FlatButton.ICON_NAME_PROP, "group");
-        participantsAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
-        participantsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Participants menu");
-        participantsAct.putValue(PhonUIAction.NAME, "Participants");
-        final FlatButton participantsBtn = new FlatButton(participantsAct);
-        participantsBtn.setPadding(2);
-
-        // tiers button
-        final PhonUIAction<Void> tiersAct = PhonUIAction.eventConsumer(this::showTiersMenu);
-        tiersAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
-        tiersAct.putValue(FlatButton.ICON_NAME_PROP, "data_table");
-        tiersAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
-        tiersAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Tiers menu");
-        tiersAct.putValue(PhonUIAction.NAME, "Tiers");
-        final FlatButton tiersBtn = new FlatButton(tiersAct);
-        tiersBtn.setPadding(2);
-
-        // records button
-        final PhonUIAction<Void> recordsAct = PhonUIAction.eventConsumer(this::showRecordsMenu);
-        recordsAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
-        recordsAct.putValue(FlatButton.ICON_NAME_PROP, "article");
-        recordsAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
-        recordsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Records menu");
-        recordsAct.putValue(PhonUIAction.NAME, "Records");
-        final FlatButton recordsBtn = new FlatButton(recordsAct);
-        recordsBtn.setPadding(2);
-
-        // comments menu
-        final PhonUIAction<Void> commentsAct = PhonUIAction.eventConsumer(this::showCommentsMenu);
-        commentsAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
-        commentsAct.putValue(FlatButton.ICON_NAME_PROP, "comment");
-        commentsAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
-        commentsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Comments menu");
-        commentsAct.putValue(PhonUIAction.NAME, "Comments");
-        final FlatButton commentsBtn = new FlatButton(commentsAct);
-        commentsBtn.setPadding(2);
-
-        // gems menu
-        final PhonUIAction<Void> gemsAct = PhonUIAction.eventConsumer(this::showGemsMenu);
-        gemsAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
-        gemsAct.putValue(FlatButton.ICON_NAME_PROP, "diamond");
-        gemsAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
-        gemsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Gems menu");
-        gemsAct.putValue(PhonUIAction.NAME, "Gems");
-        final FlatButton gemsBtn = new FlatButton(gemsAct);
-        gemsBtn.setPadding(2);
+//        // participants button
+//        final PhonUIAction<Void> participantsAct = PhonUIAction.eventConsumer(this::showParticipantsMenu);
+//        participantsAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+//        participantsAct.putValue(FlatButton.ICON_NAME_PROP, "group");
+//        participantsAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+//        participantsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Participants menu");
+//        participantsAct.putValue(PhonUIAction.NAME, "Participants");
+//        final FlatButton participantsBtn = new FlatButton(participantsAct);
+//        participantsBtn.setPadding(2);
+//
+//        // tiers button
+//        final PhonUIAction<Void> tiersAct = PhonUIAction.eventConsumer(this::showTiersMenu);
+//        tiersAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+//        tiersAct.putValue(FlatButton.ICON_NAME_PROP, "data_table");
+//        tiersAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+//        tiersAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Tiers menu");
+//        tiersAct.putValue(PhonUIAction.NAME, "Tiers");
+//        final FlatButton tiersBtn = new FlatButton(tiersAct);
+//        tiersBtn.setPadding(2);
+//
+//        // records button
+//        final PhonUIAction<Void> recordsAct = PhonUIAction.eventConsumer(this::showRecordsMenu);
+//        recordsAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+//        recordsAct.putValue(FlatButton.ICON_NAME_PROP, "article");
+//        recordsAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+//        recordsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Records menu");
+//        recordsAct.putValue(PhonUIAction.NAME, "Records");
+//        final FlatButton recordsBtn = new FlatButton(recordsAct);
+//        recordsBtn.setPadding(2);
+//
+//        // comments menu
+//        final PhonUIAction<Void> commentsAct = PhonUIAction.eventConsumer(this::showCommentsMenu);
+//        commentsAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+//        commentsAct.putValue(FlatButton.ICON_NAME_PROP, "comment");
+//        commentsAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+//        commentsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Comments menu");
+//        commentsAct.putValue(PhonUIAction.NAME, "Comments");
+//        final FlatButton commentsBtn = new FlatButton(commentsAct);
+//        commentsBtn.setPadding(2);
+//
+//        // gems menu
+//        final PhonUIAction<Void> gemsAct = PhonUIAction.eventConsumer(this::showGemsMenu);
+//        gemsAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+//        gemsAct.putValue(FlatButton.ICON_NAME_PROP, "diamond");
+//        gemsAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+//        gemsAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Gems menu");
+//        gemsAct.putValue(PhonUIAction.NAME, "Gems");
+//        final FlatButton gemsBtn = new FlatButton(gemsAct);
+//        gemsBtn.setPadding(2);
 
 //        // transcript button
 //        final PhonUIAction<Void> transcriptAct = PhonUIAction.eventConsumer(this::showTranscriptMenu);
@@ -282,6 +282,15 @@ public class TranscriptView extends EditorView {
 //        addPropertyChangeListener("findAndReplaceVisible", (e) -> {
 //            findReplaceBtn.setSelected(isFindAndReplaceVisible());
 //        });
+
+        final PhonUIAction<Void> showMenuAct = PhonUIAction.eventConsumer(this::showTranscriptMenu);
+        showMenuAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Transcript menu");
+        showMenuAct.putValue(PhonUIAction.NAME, "");
+        showMenuAct.putValue(FlatButton.ICON_FONT_NAME_PROP, IconManager.GoogleMaterialDesignIconsFontName);
+        showMenuAct.putValue(FlatButton.ICON_NAME_PROP, "menu");
+        showMenuAct.putValue(FlatButton.ICON_SIZE_PROP, IconSize.MEDIUM);
+        final FlatButton transcriptBtn = new FlatButton(showMenuAct);
+        transcriptBtn.setPadding(2);
 
         JPopupMenu playSegmentMenu = new JPopupMenu();
         playSegmentMenu.addPopupMenuListener(new PopupMenuListener() {
@@ -327,18 +336,19 @@ public class TranscriptView extends EditorView {
 //        toolbar.add(fontScaleMenuButton);
 
 
-        iconStrip.add(participantsBtn, IconStrip.IconStripPosition.LEFT);
-        iconStrip.add(tiersBtn, IconStrip.IconStripPosition.LEFT);
-        iconStrip.add(recordsBtn, IconStrip.IconStripPosition.LEFT);
-        iconStrip.add(commentsBtn, IconStrip.IconStripPosition.LEFT);
-        iconStrip.add(gemsBtn, IconStrip.IconStripPosition.LEFT);
-        iconStrip.add(new JSeparator(SwingConstants.VERTICAL), IconStrip.IconStripPosition.LEFT);
+//        iconStrip.add(participantsBtn, IconStrip.IconStripPosition.LEFT);
+//        iconStrip.add(tiersBtn, IconStrip.IconStripPosition.LEFT);
+//        iconStrip.add(recordsBtn, IconStrip.IconStripPosition.LEFT);
+//        iconStrip.add(commentsBtn, IconStrip.IconStripPosition.LEFT);
+//        iconStrip.add(gemsBtn, IconStrip.IconStripPosition.LEFT);
+//        iconStrip.add(new JSeparator(SwingConstants.VERTICAL), IconStrip.IconStripPosition.LEFT);
 //        iconStrip.add(singleRecordModeBtn, IconStrip.IconStripPosition.LEFT);
-        iconStrip.add(fontScaleMenuButton, IconStrip.IconStripPosition.LEFT);
+        iconStrip.add(fontScaleMenuButton, IconStrip.IconStripPosition.RIGHT);
+        iconStrip.add(transcriptBtn, IconStrip.IconStripPosition.RIGHT);
 
         NavigationPanel navPanel = new NavigationPanel(getEditor());
-        iconStrip.add(playSegmentButton, IconStrip.IconStripPosition.RIGHT);
-        iconStrip.add(navPanel, IconStrip.IconStripPosition.RIGHT);
+        iconStrip.add(navPanel, IconStrip.IconStripPosition.LEFT);
+        iconStrip.add(playSegmentButton, IconStrip.IconStripPosition.LEFT);
     }
 
     private void onSegmentPlaybackChange(PropertyChangeEvent evt) {
@@ -681,7 +691,32 @@ public class TranscriptView extends EditorView {
     private void showTranscriptMenu(PhonActionEvent<Void> pae) {
         JPopupMenu menu = new JPopupMenu();
         MenuBuilder menuBuilder = new MenuBuilder(menu);
-        setupTranscriptMenu(menuBuilder);
+
+        // setup menu
+        setupParticipantsMenu(new MenuBuilder(menuBuilder.addMenu(".", "Participants")));
+        setupTiersMenu(new MenuBuilder(menuBuilder.addMenu(".", "Tiers")));
+        setupRecordMenu(new MenuBuilder(menuBuilder.addMenu(".", "Records")));
+        setupCommentsMenu(new MenuBuilder(menuBuilder.addMenu(".", "Comments")));
+        setupGemsMenu(new MenuBuilder(menuBuilder.addMenu(".", "Gems")));
+
+        menuBuilder.addSeparator(".", "session_menus");
+
+        JMenuItem viewMetadataItem = new JMenuItem();
+        PhonUIAction<Void> viewMetadataAct = PhonUIAction.runnable(() -> {
+            MetadataDialog metadataDialog = new MetadataDialog(CommonModuleFrame.getCurrentFrame());
+            metadataDialog.pack();
+            metadataDialog.setLocationRelativeTo(CommonModuleFrame.getCurrentFrame());
+            metadataDialog.setVisible(true);
+        });
+        viewMetadataAct.putValue(PhonUIAction.NAME, "View metadata");
+        viewMetadataItem.setAction(viewMetadataAct);
+        menuBuilder.addItem(".", viewMetadataItem);
+
+        if(PrefHelper.isDebugMode()) {
+            final PhonUIAction<Void> showTranscriptTreeAct = PhonUIAction.runnable(this::onToggleTranscriptTree);
+            showTranscriptTreeAct.putValue(PhonUIAction.NAME, "Toggle transcript tree");
+            menuBuilder.addItem(".", showTranscriptTreeAct);
+        }
 
         JComponent source = (JComponent) pae.getActionEvent().getSource();
         menu.show(
