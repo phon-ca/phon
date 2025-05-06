@@ -443,26 +443,42 @@ public class SyllabificationExtension implements TranscriptEditorExtension {
                 final IPATranscript transcript = tier.isBlind()
                     ? editor.getTranscriptDocument().getTranscriber() == Transcriber.VALIDATOR ? (IPATranscript)tier.getValue() : (IPATranscript) tier.getBlindTranscription(editor.getTranscriptDocument().getTranscriber().getUsername())
                     : (IPATranscript)tier.getValue();
-                final TranscriptDocument.StartEnd range = doc.getTierContentStartEnd(editor.getSession().getRecordPosition(event.data().record()), getSyllabifierTierNameForIPATier(tier.getName()));
+                final TranscriptDocument.StartEnd range = doc.getTierStartEnd(editor.getSession().getRecordPosition(event.data().record()), getSyllabifierTierNameForIPATier(tier.getName()));
                 if(!range.valid()) return;
+                LogUtil.info("Updating syllabification for " + tier.getName());
+                final TranscriptElementLocation currentLocation = editor.getCurrentSessionLocation();
                 editor.getTranscriptEditorCaret().freeze();
                 try {
                     editor.getTranscriptDocument().setBypassDocumentFilter(true);
                     editor.getTranscriptDocument().remove(range.start(), range.length());
-                    final SimpleAttributeSet tierAttrs = editor.getTranscriptDocument().getTranscriptStyleContext().getTierAttributes(tier);
-                    tierAttrs.addAttributes(editor.getTranscriptDocument().getTranscriptStyleContext().getRecordAttributes(event.data().record()));
-                    TranscriptBatchBuilder builder = new TranscriptBatchBuilder(editor.getTranscriptDocument());
-                    if(isSyllabificationComponent()) {
-                        tierAttrs.addAttributes(getSyllabificationDisplayAttributes());
-                        builder.appendBatchString((transcript).toString(true), tierAttrs);
-                    } else {
-                        builder.appendAll(getFormattedSyllabification(transcript, tierAttrs));
-                    }
+
+                    final int eleIdx = editor.getSession().getRecordElementIndex(event.data().record());
+                    if(eleIdx < 0) return;
+                    final int paraEleIdx = editor.getTranscriptDocument().findParagraphElementIndexForTier(eleIdx, tier.getName());
+                    if (paraEleIdx < 0) return;
+                    final Element paraEle = editor.getTranscriptDocument().getDefaultRootElement().getElement(paraEleIdx);
+                    final MutableAttributeSet attrs = new SimpleAttributeSet(paraEle.getElement(paraEle.getElementCount() - 1).getAttributes());
+                    final TranscriptBatchBuilder builder = new TranscriptBatchBuilder(editor.getTranscriptDocument());
+                    buildSyllabificationBatch(builder, attrs);
+
                     editor.getTranscriptDocument().processBatchUpdates(range.start(), builder.getBatch());
                 } catch (BadLocationException e) {
                     LogUtil.warning(e);
+                } finally {
+                    editor.getTranscriptDocument().setBypassDocumentFilter(false);
                 }
                 editor.getTranscriptEditorCaret().unfreeze();
+                if (currentLocation.valid() && currentLocation.tier().equals(getSyllabifierTierNameForIPATier(tier.getName()))) {
+                    // refocus the caret
+                    final TranscriptDocument.StartEnd contentStartEnd = doc.getTierContentStartEnd(editor.getSession().getRecordPosition(event.data().record()), getSyllabifierTierNameForIPATier(tier.getName()));
+                    final AttributeSet attrs = editor.getTranscriptDocument().getCharacterElement(contentStartEnd.start()).getAttributes();
+                    final ComponentFactory componentFactory = TranscriptStyleConstants.getComponentFactory(attrs);
+                    if (componentFactory instanceof SyllabificationComponentFactory) {
+                        SwingUtilities.invokeLater(() -> {
+                            componentFactory.requestFocusAtOffset(currentLocation.charPosition());
+                        });
+                    }
+                }
             }
         }
     }

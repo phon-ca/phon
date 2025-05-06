@@ -1,5 +1,6 @@
 package ca.phon.app.session.editor.view.transcript.extensions;
 
+import ca.phon.app.log.LogUtil;
 import ca.phon.app.session.editor.EditorEventManager;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.app.session.editor.view.syllabificationAlignment.ScTypeEdit;
@@ -54,6 +55,7 @@ public class SyllabificationComponentFactory implements ComponentFactory {
     @Override
     public JComponent createComponent(AttributeSet attrs) {
         Tier<IPATranscript> tier = (Tier<IPATranscript>) attrs.getAttribute("tier");
+        LogUtil.info("Creating syllabification component for tier: " + tier.getName());
 
         int breakWidth = -1;
         if(attrs.getAttribute("TranscriptViewFactory.tierWidth") != null) {
