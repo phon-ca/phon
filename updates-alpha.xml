@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/4.0.0-alpha.32/">
-  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_32.dmg" newVersion="4.0.0-alpha.32" newMediaFileId="macos" fileSize="387598123" md5Sum="c9c5d318e8d9b8aa2916ac7812874389" sha256Sum="90371b47f484e56265ce76094b83243201f3a1ab33ea0c7ad74d23281830b805" bundledJre="macos-universal-17.0.6.tar.gz" archive="true" singleBundle="true">
+<updateDescriptor baseUrl="https://github.com/phon-ca/phon/releases/download/4.0.0-alpha.33/">
+  <entry targetMediaFileId="macos" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_33.dmg" newVersion="4.0.0-alpha.33" newMediaFileId="macos" fileSize="387592463" md5Sum="9009cf2893d561532e217a709c71fc4d" sha256Sum="dce00cce4b1bcb0dfcde673ce8a0066c2015e0a7544ccbd07ddb1b8dedf96bb6" bundledJre="macos-universal-17.0.6.tar.gz" archive="true" singleBundle="true">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
@@ -30,10 +30,10 @@ or one at a time as is traditional in Phon.
  * Improved view layout management, view are now accessible view icons shows on the left and right hand side of the window.
  * A new view 'PhonShell' has been added to the session editor.  This view allows for running Phon scripts in the context of the current session.
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.32
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.33
 </comment>
   </entry>
-  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_32.dmg" newVersion="4.0.0-alpha.32" newMediaFileId="macos" fileSize="387598123" md5Sum="c9c5d318e8d9b8aa2916ac7812874389" sha256Sum="90371b47f484e56265ce76094b83243201f3a1ab33ea0c7ad74d23281830b805" bundledJre="macos-universal-17.0.6.tar.gz" archive="true" singleBundle="true">
+  <entry targetMediaFileId="24" updatableVersionMin="" updatableVersionMax="" fileName="Phon_macos_4_0_0-alpha_33.dmg" newVersion="4.0.0-alpha.33" newMediaFileId="macos" fileSize="387592463" md5Sum="9009cf2893d561532e217a709c71fc4d" sha256Sum="dce00cce4b1bcb0dfcde673ce8a0066c2015e0a7544ccbd07ddb1b8dedf96bb6" bundledJre="macos-universal-17.0.6.tar.gz" archive="true" singleBundle="true">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
@@ -63,10 +63,10 @@ or one at a time as is traditional in Phon.
  * Improved view layout management, view are now accessible view icons shows on the left and right hand side of the window.
  * A new view 'PhonShell' has been added to the session editor.  This view allows for running Phon scripts in the context of the current session.
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.32
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.33
 </comment>
   </entry>
-  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_32.exe" newVersion="4.0.0-alpha.32" newMediaFileId="win64" fileSize="370513408" md5Sum="09ca0c46704848037784ce6845be0c43" sha256Sum="fcc16758fea52ab061285b79befe0b9d60d273eb045cca1c73dbf7175532d02c" bundledJre="windows-amd64-17.0.6.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="win64" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_33.exe" newVersion="4.0.0-alpha.33" newMediaFileId="win64" fileSize="370513920" md5Sum="b9b8f577b171697292759e27b30bc4f0" sha256Sum="5b1779a91881ddb800b085ba4f770b7c61d1bafd79ff9505fed9e045659afcfe" bundledJre="windows-amd64-17.0.6.tar.gz" archive="false" singleBundle="false">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
@@ -96,10 +96,10 @@ or one at a time as is traditional in Phon.
  * Improved view layout management, view are now accessible view icons shows on the left and right hand side of the window.
  * A new view 'PhonShell' has been added to the session editor.  This view allows for running Phon scripts in the context of the current session.
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.32
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.33
 </comment>
   </entry>
-  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_32.exe" newVersion="4.0.0-alpha.32" newMediaFileId="win64" fileSize="370513408" md5Sum="09ca0c46704848037784ce6845be0c43" sha256Sum="fcc16758fea52ab061285b79befe0b9d60d273eb045cca1c73dbf7175532d02c" bundledJre="windows-amd64-17.0.6.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="119" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_33.exe" newVersion="4.0.0-alpha.33" newMediaFileId="win64" fileSize="370513920" md5Sum="b9b8f577b171697292759e27b30bc4f0" sha256Sum="5b1779a91881ddb800b085ba4f770b7c61d1bafd79ff9505fed9e045659afcfe" bundledJre="windows-amd64-17.0.6.tar.gz" archive="false" singleBundle="false">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
@@ -129,10 +129,10 @@ or one at a time as is traditional in Phon.
  * Improved view layout management, view are now accessible view icons shows on the left and right hand side of the window.
  * A new view 'PhonShell' has been added to the session editor.  This view allows for running Phon scripts in the context of the current session.
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.32
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.33
 </comment>
   </entry>
-  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_32.exe" newVersion="4.0.0-alpha.32" newMediaFileId="win64" fileSize="370513408" md5Sum="09ca0c46704848037784ce6845be0c43" sha256Sum="fcc16758fea52ab061285b79befe0b9d60d273eb045cca1c73dbf7175532d02c" bundledJre="windows-amd64-17.0.6.tar.gz" archive="false" singleBundle="false">
+  <entry targetMediaFileId="1366" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_33.exe" newVersion="4.0.0-alpha.33" newMediaFileId="win64" fileSize="370513920" md5Sum="b9b8f577b171697292759e27b30bc4f0" sha256Sum="5b1779a91881ddb800b085ba4f770b7c61d1bafd79ff9505fed9e045659afcfe" bundledJre="windows-amd64-17.0.6.tar.gz" archive="false" singleBundle="false">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
@@ -162,10 +162,10 @@ or one at a time as is traditional in Phon.
  * Improved view layout management, view are now accessible view icons shows on the left and right hand side of the window.
  * A new view 'PhonShell' has been added to the session editor.  This view allows for running Phon scripts in the context of the current session.
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.32
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.33
 </comment>
   </entry>
-  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_32.zip" newVersion="4.0.0-alpha.32" newMediaFileId="win64zip" fileSize="369257978" md5Sum="38b7f67aed12323021adb06ee2f4b3ab" sha256Sum="a7304cd883f0f6cbc6b935d97945cd0fab8f83e399634e0e708e89002f239572" bundledJre="windows-amd64-17.0.6.tar.gz" archive="true" singleBundle="false">
+  <entry targetMediaFileId="win64zip" updatableVersionMin="" updatableVersionMax="" fileName="Phon_windows-x64_4_0_0-alpha_33.zip" newVersion="4.0.0-alpha.33" newMediaFileId="win64zip" fileSize="369258349" md5Sum="04dd2c6c40e77a27df34dea866183315" sha256Sum="155c27a650e707de0b4f58e6b5fb7de8edb2d9a3c348d96ec2370eca4e89b9b4" bundledJre="windows-amd64-17.0.6.tar.gz" archive="true" singleBundle="false">
     <comment language="en"># Changes since Phon 3.5
 
 **Note**: This is a pre-release version of Phon 4.0.  This version is not feature complete and may contain bugs.  Please report any issues to the Phon issue tracker.
@@ -195,7 +195,7 @@ or one at a time as is traditional in Phon.
  * Improved view layout management, view are now accessible view icons shows on the left and right hand side of the window.
  * A new view 'PhonShell' has been added to the session editor.  This view allows for running Phon scripts in the context of the current session.
 
-**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.32
+**Full Changelog**: https://github.com/phon-ca/phon/compare/3.5.2...4.0.0-alpha.33
 </comment>
   </entry>
 </updateDescriptor>
