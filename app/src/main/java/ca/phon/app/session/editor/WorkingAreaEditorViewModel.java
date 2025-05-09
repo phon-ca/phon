@@ -777,7 +777,11 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		extendedStateAttr.setInt(frame.getExtendedState());
 		rootBoundsEle.addAttribute(extendedStateAttr);
 	}
-	
+
+	/**
+	 * Save pervious perspective for the current session.
+	 *
+	 */
 	private void savePreviousPerspective() {
 		// XXX Only save previous perspective when running as
 		// a 'Session Editor' window
