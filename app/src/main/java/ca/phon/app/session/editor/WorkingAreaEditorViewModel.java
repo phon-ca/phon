@@ -60,6 +60,20 @@ import java.util.List;
 import java.util.*;
 import java.util.function.Consumer;
 
+/**
+ * View model for the session editor window.  This view model keeps a centralized work
+ * area for the TranscriptView.  Other views are placed in one of the other pre-defined
+ * {@link ViewPosition}s:
+ *
+ * <ul>
+ *     <li>left-top</li>
+ *     <li>left-bottom</li>
+ *     <li>right-top</li>
+ *     <li>right-bottom</li>
+ *     <li>bottom-left</li>
+ *     <li>bottom-right</li>
+ * </ul>
+ */
 public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 	/* Since there is not one but many main-Frames, it is hard to specify which one is the root-window. The
@@ -1076,6 +1090,17 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 
 	@Override
 	public void setupPerspectiveMenu(MenuElement menuElement) {
+		final PhonUIAction resetLayoutAct = PhonUIAction.runnable(this::setupDefaultPerspective);
+		resetLayoutAct.putValue(PhonUIAction.NAME, "Reset layout");
+		resetLayoutAct.putValue(PhonUIAction.SHORT_DESCRIPTION, "Reset layout to default.");
+		resetLayoutAct.putValue(PhonUIAction.SMALL_ICON, IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName,
+				"restore_page", IconSize.SMALL, UIManager.getColor("MenuItem.foreground")));
+		final JMenuItem resetLayoutItem = new JMenuItem(resetLayoutAct);
+		if(menuElement instanceof JPopupMenu)
+			((JPopupMenu)menuElement).add(resetLayoutItem);
+		else if(menuElement instanceof JMenu)
+			((JMenu)menuElement).add(resetLayoutItem);
+
 		final JMenu layoutMenu = new JMenu("Load layout");
 		ImageIcon loadLayoutIcon = IconManager.getInstance().getFontIcon(IconManager.GoogleMaterialDesignIconsFontName,
 				"view_quilt", IconSize.SMALL, UIManager.getColor("MenuItem.foreground"));
@@ -1271,35 +1296,10 @@ public class WorkingAreaEditorViewModel implements EditorViewModel {
 		}
 	}
 
-	private final WindowListener windowChangeListener = new WindowListener() {
-
-		@Override
-		public void windowOpened(WindowEvent e) {
-		}
-
-		@Override
-		public void windowIconified(WindowEvent e) {
-		}
-
-		@Override
-		public void windowDeiconified(WindowEvent e) {
-		}
-
-		@Override
-		public void windowDeactivated(WindowEvent e) {
-		}
-
+	private final WindowListener windowChangeListener = new WindowAdapter() {
 		@Override
 		public void windowClosing(WindowEvent e) {
 			savePreviousPerspective();
-		}
-
-		@Override
-		public void windowClosed(WindowEvent e) {
-		}
-
-		@Override
-		public void windowActivated(WindowEvent e) {
 		}
 	};
 
