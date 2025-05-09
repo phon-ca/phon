@@ -48,7 +48,9 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
- * A local on-disk project
+ * A local on-disk project.  Corpora are stored in subfolders of the project folder.
+ * The project folder is the root of the project.
+ *
  */
 public class LocalProject extends AbstractProject implements ProjectRefresh {
 
@@ -71,38 +73,19 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
      * a .phonproj file should open the project in Phon.
      */
     public final static String PROJECT_FILE_EXT = ".phonproj";
-    /**
-     * Media folders for project
-     */
-    @Deprecated
-    public final static String PROJECT_MEDIAFOLDER_PROP = "project.mediaFolder";
-    public final static String PROJECT_MEDIAFOLDERS_KEY = "mediaFolders";
-    @Deprecated
-    public final static String CORPUS_MEDIAFOLDER_PROP = "corpus.mediaFolder";
-    /**
-     * Project name property
-     */
-    @Deprecated
-    public final static String PROJECT_NAME_PROP = "project.name";
-    public final static String PROJECT_NAME_KEY = "name";
-    /**
-     * Project UUID property
-     */
-    @Deprecated
-    public final static String PROJECT_UUID_PROP = "project.uuid";
-    public final static String PROJECT_UUID_KEY = "uuid";
+
     /**
      * Session template filename
      */
-    private final static String sessionTemplateFile = "__sessiontemplate.xml";
+    public final static String sessionTemplateFile = "__sessiontemplate.xml";
     /**
      * Project resources folder
      */
-    private final static String PROJECT_RES_FOLDER = "__res";
+    public final static String PROJECT_RES_FOLDER = "__res";
     /**
      * Corpus description file
      */
-    private final static String CORPUS_DESC_FILE = "__description";
+    public final static String CORPUS_DESC_FILE = "__description";
     /**
      * Session write locks
      */
@@ -112,14 +95,16 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
      * Project folder
      */
     private File projectFolder;
-    /**
-     * Project JSON
-     */
-    private JSONObject projectJson;
+
     /**
      * Resources location for project (if defined as something other that __res
      */
     private String resourceLocation = null;
+
+    /**
+     * Project properties
+     */
+    private final ProjectProperties projectProperties;
 
     /**
      * @param projectFolder
@@ -129,6 +114,10 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
         super();
         this.projectFolder = projectFolder;
 
+        this.projectProperties = new ProjectProperties(this);
+
+        // add project properties extension
+        putExtension(ProjectProperties.class, projectProperties);
         // add project refresh extension
         putExtension(ProjectRefresh.class, this);
         // add change project location extension
@@ -142,16 +131,7 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
      */
     protected void saveProjectData()
             throws IOException {
-        saveProjectJson();
-    }
-
-    protected synchronized void saveProjectJson() throws IOException {
-        final File projectJsonFile = new File(getFolder(), projectFolder.getName() + PROJECT_FILE_EXT);
-        try (final FileOutputStream fout = new FileOutputStream(projectJsonFile)) {
-            final byte[] jsonBytes = projectJson.toString(2).getBytes(StandardCharsets.UTF_8);
-            fout.write(jsonBytes);
-            fout.flush();
-        }
+        projectProperties.saveProjectJson();
     }
 
     private File getFolder() {
@@ -159,9 +139,8 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
     }
 
     /**
-     *
+     * Project version
      */
-
     @Override
     public String getVersion() {
         return "4.0.0";
@@ -174,9 +153,9 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 
     @Override
     public String getName() {
-        loadProjectData();
-        if (projectJson.has(PROJECT_NAME_KEY)) {
-            return projectJson.getString(PROJECT_NAME_KEY);
+        final var projectJson = projectProperties.getProjectJson();
+        if (projectJson.has(ProjectProperties.PROJECT_NAME_KEY)) {
+            return projectJson.getString(ProjectProperties.PROJECT_NAME_KEY);
         } else {
             return getFolder().getName();
         }
@@ -184,11 +163,11 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 
     @Override
     public void setName(String name) {
-        loadProjectData();
         final String oldName = getName();
-        projectJson.put(PROJECT_NAME_KEY, name);
+        final var projectJson = projectProperties.getProjectJson();
+        projectJson.put(ProjectProperties.PROJECT_NAME_KEY, name);
         try {
-            saveProjectJson();
+            projectProperties.saveProjectJson();
         } catch (IOException e) {
             Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
         }
@@ -199,9 +178,9 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 
     @Override
     public UUID getUUID() {
-        loadProjectData();
-        if (projectJson.has(PROJECT_UUID_KEY)) {
-            return UUID.fromString(projectJson.getString(PROJECT_UUID_KEY));
+        final var projectJson = projectProperties.getProjectJson();
+        if (projectJson.has(ProjectProperties.PROJECT_UUID_KEY)) {
+            return UUID.fromString(projectJson.getString(ProjectProperties.PROJECT_UUID_KEY));
         } else {
             UUID uuid = UUID.randomUUID();
             setUUID(uuid);
@@ -211,11 +190,11 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 
     @Override
     public void setUUID(UUID uuid) {
-        loadProjectData();
+        final var projectJson = projectProperties.getProjectJson();
         final UUID oldUUID = getUUID();
-        projectJson.put(PROJECT_UUID_KEY, uuid.toString());
+        projectJson.put(ProjectProperties.PROJECT_UUID_KEY, uuid.toString());
         try {
-            saveProjectJson();
+            projectProperties.saveProjectJson();
         } catch (IOException e) {
             Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
         }
@@ -342,192 +321,18 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 
     @Override
     public boolean hasCustomProjectMediaFolder() {
-        loadProjectData();
-        if (this.projectJson.has(PROJECT_MEDIAFOLDERS_KEY)) {
-            JSONArray mediaFolders = this.projectJson.getJSONArray(PROJECT_MEDIAFOLDERS_KEY);
+        final var projectJson = projectProperties.getProjectJson();
+        if (projectJson.has(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY)) {
+            JSONArray mediaFolders = projectJson.getJSONArray(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY);
             return (!mediaFolders.isEmpty());
         } else {
             return false;
         }
     }
 
-    /**
-     * Load project data from disk
-     * Project data is stored in a JSON file in the project folder with a file ext of .phonproj
-     * If opening a Phon 3.x project, the project data will be loaded from the project.properties file
-     * and saved to a .phonproj file.
-     */
-    private void loadProjectData() {
-        if (this.projectJson == null) {
-            // load json properties if file is found
-            final File projectJsonFile = new File(getFolder(), projectFolder.getName() + PROJECT_FILE_EXT);
-            if (projectJsonFile.exists()) {
-                loadProjectJson(projectJsonFile);
-            } else {
-                // load properties from Phon 3.x and earlier properties file
-                loadProperties();
-            }
-        }
-    }
-
-    /**
-     * Load project JSON data from provided file
-     *
-     * @param projectJsonFile
-     */
-    protected void loadProjectJson(File projectJsonFile) {
-        if (projectJsonFile.exists()) {
-            try (final FileInputStream fin = new FileInputStream(projectJsonFile)) {
-                // read fin into string
-                final byte[] jsonBytes = fin.readAllBytes();
-                final String jsonStr = new String(jsonBytes, StandardCharsets.UTF_8);
-                this.projectJson = new JSONObject(jsonStr);
-
-                // TODO check json for project properties
-            } catch (IOException e) {
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
-            }
-        }
-        if (this.projectJson == null) {
-            // add project name and UUID
-            this.projectJson = new JSONObject();
-            this.projectJson.put(PROJECT_NAME_KEY, projectFolder.getName());
-            this.projectJson.put(PROJECT_UUID_KEY, UUID.randomUUID().toString());
-        }
-    }
-
-    /**
-     * Load project properties from Phon 3.x and earlier properties file.  If no properties file is found, the project
-     * name and UUID will be set to the project folder name and a new UUID.
-     * <p>
-     * The old properties file will be deleted after the project data is loaded.
-     */
-    private void loadProperties() {
-        final File oldPropertiesFile = new File(getFolder(), PREV_PROJECT_PROPERTIES_FILE);
-        File propsFile = new File(getFolder(), PROJECT_PROPERTIES_FILE);
-        propsFile = (propsFile.exists() ? propsFile : oldPropertiesFile);
-
-        this.projectJson = new JSONObject();
-        List<String> projectMediaFolders = new ArrayList<>();
-        if (propsFile.exists()) {
-            // load properties
-            Properties props = new Properties();
-            try (final FileInputStream fin = new FileInputStream(propsFile)) {
-                props.load(fin);
-                checkProperties(props);
-            } catch (IOException e) {
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
-            }
-
-            try {
-                boolean deleted = propsFile.delete();
-                if (!deleted) {
-                    Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unable to delete old properties file.");
-                }
-            } catch (SecurityException e) {
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
-            }
-
-            // convert properties to JSON and save, remove old properties file
-            for (String propKey : props.stringPropertyNames()) {
-                switch (propKey) {
-                    case PROJECT_MEDIAFOLDER_PROP, CORPUS_MEDIAFOLDER_PROP -> {
-                        projectMediaFolders.add(props.getProperty(propKey));
-                    }
-
-                    case PROJECT_NAME_PROP -> {
-                        projectJson.put(PROJECT_NAME_KEY, props.getProperty(propKey));
-                    }
-
-                    case PROJECT_UUID_PROP -> {
-                        projectJson.put(PROJECT_UUID_KEY, props.getProperty(propKey));
-                    }
-
-                    default -> {
-                        projectJson.put(propKey, props.getProperty(propKey));
-                    }
-                }
-            }
-            try {
-                saveProjectJson();
-            } catch (IOException e) {
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
-            }
-            if (!projectMediaFolders.isEmpty()) {
-                projectJson.put(PROJECT_MEDIAFOLDERS_KEY, projectMediaFolders);
-            }
-
-            // add empty properties to avoid runtime issues with plugins
-            putExtension(Properties.class, new Properties());
-        } else {
-            // add project name and UUID
-            this.projectJson.put(PROJECT_NAME_KEY, projectFolder.getName());
-            this.projectJson.put(PROJECT_UUID_KEY, UUID.randomUUID().toString());
-        }
-    }
-
-    /**
-     * Check project setup and copy information from project.xml file if exists
-     *
-     * @deprecated Since Phon 4.x
-     */
-    @Deprecated
-    private void checkProperties(Properties properties) {
-        ProjectType pt = null;
-        final File projectXMLFile = new File(getFolder(), PROJECT_XML_FILE);
-        if (projectXMLFile.exists()) {
-            try (FileInputStream fin = new FileInputStream(projectXMLFile)) {
-                pt = loadProjectData(fin);
-            } catch (IOException | ProjectConfigurationException e) {
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
-            }
-        }
-
-        if (!properties.containsKey(PROJECT_UUID_PROP)) {
-            if (pt != null) {
-                if (pt.getUuid() != null)
-                    properties.put(PROJECT_UUID_PROP, pt.getUuid());
-                else
-                    properties.put(PROJECT_UUID_PROP, UUID.randomUUID().toString());
-
-                // if UUID not found we likely need to upgrade this project
-                // copy corpus descriptions if necessary
-                for (String corpus : getCorpora()) {
-                    final File corpusFolder = getCorpusFolder(corpus);
-                    final File corpusInfoFile = new File(corpusFolder, CORPUS_DESC_FILE);
-
-                    for (CorpusType ct : pt.getCorpus()) {
-                        if (ct.getName().equals(corpus)) {
-                            if (ct.getDescription() != null
-                                    && ct.getDescription().trim().length() > 0
-                                    && !corpusInfoFile.exists()) {
-                                try (PrintWriter out = new PrintWriter(corpusInfoFile)) {
-                                    out.write(ct.getDescription());
-                                    out.flush();
-                                } catch (IOException e) {
-                                    Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
-                                }
-                            }
-                            break;
-                        }
-                    }
-                }
-            } else {
-                properties.put(PROJECT_UUID_PROP, UUID.randomUUID().toString());
-            }
-        }
-        if (!properties.containsKey(PROJECT_NAME_PROP)) {
-            if (pt != null) {
-                properties.put(PROJECT_NAME_PROP, pt.getName());
-            } else {
-                properties.put(PROJECT_NAME_PROP, projectFolder.getName());
-            }
-        }
-    }
-
     @Override
     public List<String> getProjectMediaFolders() {
-        loadProjectData();
+        final var projectJson = projectProperties.getProjectJson();
         List<String> retVal = new ArrayList<>();
 
         final File defaultMediaFolder = new File(getResourceLocation(), "media");
@@ -535,8 +340,8 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
             retVal.add(PROJECT_RES_FOLDER + File.separator + "media");
         }
 
-        if (this.projectJson.has(PROJECT_MEDIAFOLDERS_KEY)) {
-            JSONArray mediaFolders = this.projectJson.getJSONArray(PROJECT_MEDIAFOLDERS_KEY);
+        if (projectJson.has(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY)) {
+            JSONArray mediaFolders = projectJson.getJSONArray(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY);
             for (int i = 0; i < mediaFolders.length(); i++) {
                 retVal.add(mediaFolders.getString(i));
             }
@@ -546,9 +351,10 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 
     @Override
     public void addProjectMediaFolder(String mediaFolder) {
+        final var projectJson = projectProperties.getProjectJson();
         final List<String> currentMediaFolderList = getProjectMediaFolders();
         JSONArray mediaFolders =
-                this.projectJson.has(PROJECT_MEDIAFOLDERS_KEY) ? this.projectJson.getJSONArray(PROJECT_MEDIAFOLDERS_KEY)
+                projectJson.has(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY) ? projectJson.getJSONArray(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY)
                         : new JSONArray();
 
         File mediaFolderFile = new File(mediaFolder);
@@ -569,10 +375,10 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
         }
 
         mediaFolders.put(mediaFolder);
-        this.projectJson.put(PROJECT_MEDIAFOLDERS_KEY, mediaFolders);
+        projectJson.put(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY, mediaFolders);
 
         try {
-            saveProjectJson();
+            projectProperties.saveProjectJson();
         } catch (IOException e) {
             Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
         }
@@ -583,11 +389,12 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 
     @Override
     public void addProjectMediaFolder(int index, String mediaFolder) {
+        final var projectJson = projectProperties.getProjectJson();
         if (index < 0 || index > getProjectMediaFolders().size()) {
             throw new IndexOutOfBoundsException();
         }
         JSONArray mediaFolders =
-                this.projectJson.has(PROJECT_MEDIAFOLDERS_KEY) ? this.projectJson.getJSONArray(PROJECT_MEDIAFOLDERS_KEY)
+                projectJson.has(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY) ? projectJson.getJSONArray(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY)
                         : new JSONArray();
 
         File mediaFolderFile = new File(mediaFolder);
@@ -605,10 +412,10 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
         }
 
         mediaFolders.put(index, mediaFolder);
-        this.projectJson.put(PROJECT_MEDIAFOLDERS_KEY, mediaFolders);
+        projectJson.put(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY, mediaFolders);
 
         try {
-            saveProjectJson();
+            projectProperties.saveProjectJson();
         } catch (IOException e) {
             Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
         }
@@ -619,14 +426,15 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 
     @Override
     public void removeProjectMediaFolder(String mediaFolder) {
-        if (!this.projectJson.has(PROJECT_MEDIAFOLDERS_KEY)) return;
+        final var projectJson = projectProperties.getProjectJson();
+        if (!projectJson.has(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY)) return;
 
         final List<String> currentMediaFolderList = getProjectMediaFolders();
         if (!currentMediaFolderList.contains(mediaFolder)) {
             return;
         }
 
-        JSONArray mediaFolders = this.projectJson.getJSONArray(PROJECT_MEDIAFOLDERS_KEY);
+        JSONArray mediaFolders = projectJson.getJSONArray(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY);
         JSONArray newMediaFolders = new JSONArray();
         final int index = mediaFolders.toList().indexOf(mediaFolder);
         if (index < 0) return;
@@ -637,9 +445,9 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
             }
         }
 
-        this.projectJson.put(PROJECT_MEDIAFOLDERS_KEY, newMediaFolders);
+        projectJson.put(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY, newMediaFolders);
         try {
-            saveProjectJson();
+            projectProperties.saveProjectJson();
         } catch (IOException e) {
             Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
         }
@@ -650,9 +458,10 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 
     @Override
     public void removeProjectMediaFolder(int index) {
-        if (!this.projectJson.has(PROJECT_MEDIAFOLDERS_KEY)) return;
+        final var projectJson = projectProperties.getProjectJson();
+        if (!projectJson.has(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY)) return;
 
-        JSONArray mediaFolders = this.projectJson.getJSONArray(PROJECT_MEDIAFOLDERS_KEY);
+        JSONArray mediaFolders = projectJson.getJSONArray(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY);
         if (index < 0 || index >= mediaFolders.length()) return;
 
         JSONArray newMediaFolders = new JSONArray();
@@ -662,9 +471,9 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
             }
         }
 
-        this.projectJson.put(PROJECT_MEDIAFOLDERS_KEY, newMediaFolders);
+        projectJson.put(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY, newMediaFolders);
         try {
-            saveProjectJson();
+            projectProperties.saveProjectJson();
         } catch (IOException e) {
             Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
         }
@@ -1226,8 +1035,9 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
     @Deprecated
     @Override
     public String getProjectMediaFolder() {
-        if (this.projectJson.has(PROJECT_MEDIAFOLDERS_KEY)) {
-            JSONArray mediaFolders = this.projectJson.getJSONArray(PROJECT_MEDIAFOLDERS_KEY);
+        final var projectJson = projectProperties.getProjectJson();
+        if (projectJson.has(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY)) {
+            JSONArray mediaFolders = projectJson.getJSONArray(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY);
             if (!mediaFolders.isEmpty()) {
                 return mediaFolders.getString(0);
             }
@@ -1238,23 +1048,16 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
     @Deprecated
     @Override
     public void setProjectMediaFolder(String mediaFolder) {
+        final var projectJson = projectProperties.getProjectJson();
         // remove all old media folders
-        if (this.projectJson.has(PROJECT_MEDIAFOLDERS_KEY)) {
-            this.projectJson.remove(PROJECT_MEDIAFOLDERS_KEY);
+        if (projectJson.has(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY)) {
+            projectJson.remove(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY);
         }
 
         final String old = getProjectMediaFolder();
         final Properties props = getExtension(Properties.class);
-        if (mediaFolder == null) {
-            props.remove(PROJECT_MEDIAFOLDER_PROP);
-        } else {
-            props.setProperty(PROJECT_MEDIAFOLDER_PROP, mediaFolder);
-        }
-
-        try {
-            saveProperties();
-        } catch (IOException e) {
-            Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
+        if (mediaFolder != null) {
+            addProjectMediaFolder(mediaFolder);
         }
 
         ProjectEvent pe = ProjectEvent.newProjectMediaFolderChangedEvent(old, mediaFolder);
@@ -1264,42 +1067,18 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
     @Deprecated
     @Override
     public boolean hasCustomCorpusMediaFolder(String corpus) {
-//		final String propName = CORPUS_MEDIAFOLDER_PROP + "." + corpus;
-//		final Properties props = getExtension(Properties.class);
-//		return (props.getProperty(propName) != null);
         return false;
     }
 
     @Deprecated
     @Override
     public String getCorpusMediaFolder(String corpus) {
-//		final String propName = CORPUS_MEDIAFOLDER_PROP + "." + corpus;
-//		final Properties props = getExtension(Properties.class);
-//		return props.getProperty(propName, getProjectMediaFolder());
         return getProjectMediaFolder();
     }
 
     @Deprecated
     @Override
     public void setCorpusMediaFolder(String corpus, String mediaFolder) {
-//		final String old = getCorpusMediaFolder(corpus);
-//		final Properties props = getExtension(Properties.class);
-//		final String propName = CORPUS_MEDIAFOLDER_PROP + "." + corpus;
-//
-//		if(mediaFolder == null) {
-//			props.remove(propName);
-//		} else {
-//			props.setProperty(propName, mediaFolder);
-//		}
-//
-//		try {
-//			saveProperties();
-//		} catch (IOException e) {
-//			Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
-//		}
-//
-//		ProjectEvent pe = ProjectEvent.newCorpusMediaFolderChangedEvent(corpus, old, mediaFolder);
-//		fireProjectDataChanged(pe);
     }
 
     @Deprecated
@@ -1312,22 +1091,6 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
         }
         Collections.sort(retVal);
         return retVal;
-    }
-
-    @Deprecated
-    protected synchronized void saveProperties() throws IOException {
-//		final File oldPropsFile = new File(getFolder(), PREV_PROJECT_PROPERTIES_FILE);
-//		if(oldPropsFile.exists()) {
-//			Files.deleteIfExists(oldPropsFile.toPath());
-//		}
-//
-//		// save properties
-//		final Properties properties = getExtension(Properties.class);
-//		if(properties != null) {
-//			final File propFile = new File(getFolder(), PROJECT_PROPERTIES_FILE);
-//			properties.store(new FileOutputStream(propFile),
-//					String.format("Project: %s @ %s", getName(), LocalDateTime.now()));
-//		}
     }
 
     public File getCorpusFolder(String corpus) {
@@ -1432,6 +1195,9 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 
     }
 
+    /**
+     * Session iterator for local projects
+     */
     private class SessionIterator implements Iterator<String> {
 
         private final String corpus;
