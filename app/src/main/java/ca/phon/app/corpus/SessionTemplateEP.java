@@ -19,12 +19,18 @@ import ca.phon.app.modules.EntryPointArgs;
 import ca.phon.app.session.editor.SessionEditorEP;
 import ca.phon.plugin.PhonPlugin;
 import ca.phon.project.Project;
+import ca.phon.project.SessionTemplate;
 import ca.phon.session.Record;
 import ca.phon.session.*;
 
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * Entry point for session template editor.
+ *
+ * This entry point is used to create a session editor for the corpus session template.
+ */
 @PhonPlugin
 public class SessionTemplateEP extends SessionEditorEP {
 
@@ -40,10 +46,14 @@ public class SessionTemplateEP extends SessionEditorEP {
 		final EntryPointArgs epArgs = new EntryPointArgs(args);
 		final Project project = epArgs.getProject();
 		final String corpus = epArgs.getCorpus();
-		
+
+		final SessionTemplate sessionTemplate = project.getExtension(SessionTemplate.class);
+		if(sessionTemplate == null) {
+			throw new IllegalStateException("No session template extension found for project");
+		}
 		Session template = null;
 		try {
-			template = project.getSessionTemplate(corpus);
+			template = sessionTemplate.getSessionTemplate(corpus);
 		} catch(IOException e) {
 			final SessionFactory factory = SessionFactory.newFactory();
 			template = factory.createSession();

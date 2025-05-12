@@ -16,13 +16,10 @@
 package ca.phon.project;
 
 import ca.phon.project.exceptions.ProjectConfigurationException;
-import ca.phon.project.io.CorpusType;
-import ca.phon.project.io.ProjectType;
 import ca.phon.session.*;
 import ca.phon.session.Record;
 import ca.phon.session.io.*;
 import org.json.JSONArray;
-import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -33,7 +30,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.*;
 import java.io.*;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -50,9 +46,9 @@ import java.util.stream.Collectors;
 /**
  * A local on-disk project.  Corpora are stored in subfolders of the project folder.
  * The project folder is the root of the project.
- *
  */
-public class LocalProject extends AbstractProject implements ProjectRefresh {
+public class LocalProject extends AbstractProject implements ProjectRefresh, SessionTemplate, SessionDetails,
+        ProjectEvents, ProjectDeprecated, ProjectResources {
 
     /**
      * Project XML file (Phon 2.x and earlier)
@@ -92,19 +88,17 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
     private final Map<String, UUID> sessionLocks =
             Collections.synchronizedMap(new HashMap<String, UUID>());
     /**
+     * Project properties
+     */
+    private final ProjectProperties projectProperties;
+    /**
      * Project folder
      */
     private File projectFolder;
-
     /**
      * Resources location for project (if defined as something other that __res
      */
     private String resourceLocation = null;
-
-    /**
-     * Project properties
-     */
-    private final ProjectProperties projectProperties;
 
     /**
      * @param projectFolder
@@ -116,12 +110,22 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 
         this.projectProperties = new ProjectProperties(this);
 
+        // project events extension
+        putExtension(ProjectEvents.class, this);
+        // session details extension
+        putExtension(SessionDetails.class, this);
+        // session template extension
+        putExtension(SessionTemplate.class, this);
         // add project properties extension
         putExtension(ProjectProperties.class, projectProperties);
         // add project refresh extension
         putExtension(ProjectRefresh.class, this);
         // add change project location extension
         putExtension(ChangeProjectLocation.class, new LocalProjectChangeLocation(this));
+        // project resources
+        putExtension(ProjectResources.class, this);
+        // deprecated project extension
+        putExtension(ProjectDeprecated.class, this);
     }
 
     /**
@@ -132,10 +136,6 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
     protected void saveProjectData()
             throws IOException {
         projectProperties.saveProjectJson();
-    }
-
-    private File getFolder() {
-        return this.projectFolder;
     }
 
     /**
@@ -174,6 +174,10 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 
         final ProjectEvent event = ProjectEvent.newNameChangedEvent(oldName, name);
         fireProjectDataChanged(event);
+    }
+
+    private File getFolder() {
+        return this.projectFolder;
     }
 
     @Override
@@ -454,94 +458,6 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 
         final ProjectEvent pe = ProjectEvent.newProjectMediaFolderRemovedEvent(index, mediaFolder);
         fireProjectDataChanged(pe);
-    }
-
-    @Override
-    public void removeProjectMediaFolder(int index) {
-        final var projectJson = projectProperties.getProjectJson();
-        if (!projectJson.has(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY)) return;
-
-        JSONArray mediaFolders = projectJson.getJSONArray(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY);
-        if (index < 0 || index >= mediaFolders.length()) return;
-
-        JSONArray newMediaFolders = new JSONArray();
-        for (int i = 0; i < mediaFolders.length(); i++) {
-            if (i != index) {
-                newMediaFolders.put(mediaFolders.get(i));
-            }
-        }
-
-        projectJson.put(ProjectProperties.PROJECT_MEDIAFOLDERS_KEY, newMediaFolders);
-        try {
-            projectProperties.saveProjectJson();
-        } catch (IOException e) {
-            Logger.getLogger(getClass().getName()).log(Level.WARNING, e.getLocalizedMessage(), e);
-        }
-
-        final ProjectEvent pe = ProjectEvent.newProjectMediaFolderRemovedEvent(index, mediaFolders.getString(index));
-        fireProjectDataChanged(pe);
-    }
-
-    @Override
-    public Session getSessionTemplate(String corpus) throws IOException {
-        final File corpusFolder = new File(getLocation(), corpus);
-        final File templateFile = new File(corpusFolder, sessionTemplateFile);
-
-        if (templateFile.exists()) {
-            final SessionInputFactory inputFactory = new SessionInputFactory();
-            // TODO use method to find which reader will work for the file
-            final SessionReader reader = inputFactory.createReader("phonbank", "1.3");
-            if (reader == null) {
-                throw new IOException("No session reader available for " + templateFile.toURI().toASCIIString());
-            }
-            final Session retVal = reader.readSession(templateFile.toURI().toURL().openStream());
-            return retVal;
-        } else {
-            throw new FileNotFoundException(templateFile.getAbsolutePath());
-        }
-    }
-
-    @Override
-    public void saveSessionTemplate(String corpus, Session template)
-            throws IOException {
-        final File corpusFolder = new File(getLocation(), corpus);
-        final File templateFile = new File(corpusFolder, sessionTemplateFile);
-
-        final SessionOutputFactory outputFactory = new SessionOutputFactory();
-        final SessionWriter writer = outputFactory.createWriter();
-
-        final FileOutputStream fOut = new FileOutputStream(templateFile);
-        writer.writeSession(template, fOut);
-    }
-
-    @Override
-    public Session createSessionFromTemplate(String corpus, String session)
-            throws IOException {
-        if (getCorpusSessions(corpus).contains(session)) {
-            throw new IOException("Session named " + corpus + "." + session + " already exists.");
-        }
-
-        Session template = null;
-        try {
-            template = getSessionTemplate(corpus);
-        } catch (IOException e) { // do nothing
-        }
-
-        final SessionFactory factory = SessionFactory.newFactory();
-        Session s = null;
-        if (template != null) {
-            s = template;
-            s.setCorpus(corpus);
-            s.setName(session);
-        } else {
-            s = factory.createSession(corpus, session);
-        }
-
-        final UUID writeLock = getSessionWriteLock(s);
-        saveSession(s, writeLock);
-        releaseSessionWriteLock(s, writeLock);
-
-        return s;
     }
 
     @Override
@@ -902,25 +818,6 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
         }
     }
 
-    public File getSessionFile(String corpus, String session) {
-        if (session.lastIndexOf('.') < 0) {
-            final List<File> potentialFiles =
-                    SessionInputFactory.getSessionExtensions().stream()
-                            .map((ext) -> new File(getCorpusFolder(corpus), session + "." + ext))
-                            .collect(Collectors.toList());
-            final Optional<File> optionalFile = potentialFiles.stream()
-                    .filter(File::exists)
-                    .findFirst();
-            return optionalFile.orElse(new File(getCorpusFolder(corpus), session + ".xml"));
-        } else {
-            return new File(getCorpusFolder(corpus), session);
-        }
-    }
-
-    private String sessionProjectPath(String corpus, String session) {
-        return corpus + "." + session;
-    }
-
     @Override
     public void removeSession(String corpus, String session, UUID writeLock)
             throws IOException {
@@ -942,6 +839,138 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
 
         final ProjectEvent pe = ProjectEvent.newSessionRemovedEvent(corpus, session);
         fireProjectStructureChanged(pe);
+    }
+
+    public String getResourceLocation() {
+        String retVal = this.resourceLocation;
+        if (retVal == null) {
+            retVal = (new File(getLocation(), PROJECT_RES_FOLDER)).getAbsolutePath();
+        }
+        return retVal;
+    }
+
+    public void setResourceLocation(String location) {
+        this.resourceLocation = location;
+    }
+
+    @Override
+    public InputStream getResourceInputStream(String resourceName)
+            throws IOException {
+        final File resFolder = new File(getResourceLocation());
+        final File resFile = new File(resFolder, resourceName);
+
+        return new FileInputStream(resFile);
+    }
+
+    @Override
+    public OutputStream getResourceOutputStream(String resourceName)
+            throws IOException {
+        final File resFolder = new File(getResourceLocation());
+        final File resFile = new File(resFolder, resourceName);
+
+        // make parent folders as necessary
+        if (!resFile.getParentFile().exists()) {
+            resFile.getParentFile().mkdirs();
+        }
+
+        return new FileOutputStream(resFile);
+    }
+
+    private String sessionProjectPath(String corpus, String session) {
+        return corpus + "." + session;
+    }
+
+    public File getSessionFile(String corpus, String session) {
+        if (session.lastIndexOf('.') < 0) {
+            final List<File> potentialFiles =
+                    SessionInputFactory.getSessionExtensions().stream()
+                            .map((ext) -> new File(getCorpusFolder(corpus), session + "." + ext))
+                            .collect(Collectors.toList());
+            final Optional<File> optionalFile = potentialFiles.stream()
+                    .filter(File::exists)
+                    .findFirst();
+            return optionalFile.orElse(new File(getCorpusFolder(corpus), session + ".xml"));
+        } else {
+            return new File(getCorpusFolder(corpus), session);
+        }
+    }
+
+    public File getCorpusFolder(String corpus) {
+        File retVal = new File(getCorpusPath(corpus));
+        return retVal;
+    }
+
+    /**
+     * Local projects allow changing project location through the {@link ChangeProjectLocation}
+     * extension
+     *
+     * @param location
+     */
+    void setLocation(String location) {
+        File newLocation = new File(location);
+        this.projectFolder = newLocation;
+    }
+
+    @Override
+    public Session getSessionTemplate(String corpus) throws IOException {
+        final File corpusFolder = new File(getLocation(), corpus);
+        final File templateFile = new File(corpusFolder, sessionTemplateFile);
+
+        if (templateFile.exists()) {
+            final SessionInputFactory inputFactory = new SessionInputFactory();
+            // TODO use method to find which reader will work for the file
+            final SessionReader reader = inputFactory.createReader("phonbank", "1.3");
+            if (reader == null) {
+                throw new IOException("No session reader available for " + templateFile.toURI().toASCIIString());
+            }
+            final Session retVal = reader.readSession(templateFile.toURI().toURL().openStream());
+            return retVal;
+        } else {
+            throw new FileNotFoundException(templateFile.getAbsolutePath());
+        }
+    }
+
+    @Override
+    public void saveSessionTemplate(String corpus, Session template)
+            throws IOException {
+        final File corpusFolder = new File(getLocation(), corpus);
+        final File templateFile = new File(corpusFolder, sessionTemplateFile);
+
+        final SessionOutputFactory outputFactory = new SessionOutputFactory();
+        final SessionWriter writer = outputFactory.createWriter();
+
+        final FileOutputStream fOut = new FileOutputStream(templateFile);
+        writer.writeSession(template, fOut);
+    }
+
+    @Override
+    public Session createSessionFromTemplate(String corpus, String session)
+            throws IOException {
+        if (getCorpusSessions(corpus).contains(session)) {
+            throw new IOException("Session named " + corpus + "." + session + " already exists.");
+        }
+
+        Session template = null;
+        try {
+            template = getSessionTemplate(corpus);
+        } catch (IOException e) { // do nothing
+        }
+
+        final SessionFactory factory = SessionFactory.newFactory();
+        Session s = null;
+        if (template != null) {
+            s = template;
+            s.setCorpus(corpus);
+            s.setName(session);
+        } else {
+            s = factory.createSession(corpus, session);
+        }
+
+        final UUID writeLock = getSessionWriteLock(s);
+        saveSession(s, writeLock);
+        releaseSessionWriteLock(s, writeLock);
+
+        return s;
     }
 
     @Override
@@ -980,43 +1009,6 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
         }
 
         return size;
-    }
-
-    @Override
-    public String getResourceLocation() {
-        String retVal = this.resourceLocation;
-        if (retVal == null) {
-            retVal = (new File(getLocation(), PROJECT_RES_FOLDER)).getAbsolutePath();
-        }
-        return retVal;
-    }
-
-    @Override
-    public void setResourceLocation(String location) {
-        this.resourceLocation = location;
-    }
-
-    @Override
-    public InputStream getResourceInputStream(String resourceName)
-            throws IOException {
-        final File resFolder = new File(getResourceLocation());
-        final File resFile = new File(resFolder, resourceName);
-
-        return new FileInputStream(resFile);
-    }
-
-    @Override
-    public OutputStream getResourceOutputStream(String resourceName)
-            throws IOException {
-        final File resFolder = new File(getResourceLocation());
-        final File resFile = new File(resFolder, resourceName);
-
-        // make parent folders as necessary
-        if (!resFile.getParentFile().exists()) {
-            resFile.getParentFile().mkdirs();
-        }
-
-        return new FileOutputStream(resFile);
     }
 
     // region Deprecated methods
@@ -1091,22 +1083,6 @@ public class LocalProject extends AbstractProject implements ProjectRefresh {
         }
         Collections.sort(retVal);
         return retVal;
-    }
-
-    public File getCorpusFolder(String corpus) {
-        File retVal = new File(getCorpusPath(corpus));
-        return retVal;
-    }
-
-    /**
-     * Local projects allow changing project location through the {@link ChangeProjectLocation}
-     * extension
-     *
-     * @param location
-     */
-    void setLocation(String location) {
-        File newLocation = new File(location);
-        this.projectFolder = newLocation;
     }
 
     @Override

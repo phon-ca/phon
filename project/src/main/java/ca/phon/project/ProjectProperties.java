@@ -195,17 +195,5 @@ public final class ProjectProperties {
 
     @Deprecated
     protected synchronized void saveProperties() throws IOException {
-//		final File oldPropsFile = new File(getFolder(), PREV_PROJECT_PROPERTIES_FILE);
-//		if(oldPropsFile.exists()) {
-//			Files.deleteIfExists(oldPropsFile.toPath());
-//		}
-//
-//		// save properties
-//		final Properties properties = getExtension(Properties.class);
-//		if(properties != null) {
-//			final File propFile = new File(getFolder(), PROJECT_PROPERTIES_FILE);
-//			properties.store(new FileOutputStream(propFile),
-//					String.format("Project: %s @ %s", getName(), LocalDateTime.now()));
-//		}
     }
 }
