@@ -17,11 +17,16 @@ package ca.phon.app.corpus;
 
 import ca.phon.app.session.editor.*;
 import ca.phon.project.Project;
+import ca.phon.project.SessionTemplate;
 import ca.phon.session.Session;
 
 import java.io.IOException;
 import java.net.URL;
 
+/**
+ * Editor for corpus templates.  This editor is used to create and modify session templates
+ * for a corpus.
+ */
 public class CorpusTemplateEditor extends SessionEditor {
 
 	private final static String PERSPECTIVE_NAME = "CorpusTemplate";
@@ -48,8 +53,11 @@ public class CorpusTemplateEditor extends SessionEditor {
 	public boolean saveData()
 			throws IOException {
 		final Project project = getProject();
-		project.saveSessionTemplate(getSession().getCorpus(), getSession());
-		setModified(false);
+		final SessionTemplate template = project.getExtension(SessionTemplate.class);
+		if(template != null) {
+			template.saveSessionTemplate(getSession().getCorpus(), getSession());
+			setModified(false);
+		}
 		return true;
 	}
 

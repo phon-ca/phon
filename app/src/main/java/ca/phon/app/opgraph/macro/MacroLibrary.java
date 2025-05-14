@@ -18,6 +18,7 @@ package ca.phon.app.opgraph.macro;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.opgraph.editor.OpgraphEditor;
 import ca.phon.project.Project;
+import ca.phon.project.ProjectResources;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.action.PhonUIAction;
 import ca.phon.ui.menu.MenuBuilder;
@@ -72,12 +73,27 @@ public class MacroLibrary {
 	
 	public ResourceLoader<URL> getProjectGraphs(Project project) {
 		final ResourceLoader<URL> retVal = new ResourceLoader<>();
-		retVal.addHandler(new UserMacroHandler(getProjectAnalysisFolder(project)));
+		final ProjectResources projectResources = project.getExtension(ProjectResources.class);
+		if(projectResources != null) {
+			final String resourceLocation = projectResources.getResourceLocation();
+			if(resourceLocation.startsWith("http:") || resourceLocation.startsWith("https:")) {
+				try {
+					final URL reportListURL = new URL(resourceLocation + "/" + MACRO_FOLDER + "/macro.list");
+					retVal.addHandler(new RemoteMacroHandler(reportListURL));
+				} catch (MalformedURLException e) {
+					LogUtil.warning(e);
+				}
+			} else {
+				retVal.addHandler(new UserMacroHandler(getProjectAnalysisFolder(project)));
+			}
+		}
 		return retVal;
 	}
 	
-	public File getProjectAnalysisFolder(Project project) {
-		return new File(project.getResourceLocation(), MACRO_FOLDER);
+	private File getProjectAnalysisFolder(Project project) {
+		final ProjectResources projectResources = project.getExtension(ProjectResources.class);
+		if(projectResources == null) return null;
+		return new File(projectResources.getResourceLocation(), MACRO_FOLDER);
 	}
 	
 	public void setupMenu(Project project, MenuElement menu) {
@@ -143,48 +159,52 @@ public class MacroLibrary {
 			});
 			builder.appendSubItems(".@-- User Library --", userMenu.getPopupMenu());
 		}
-		
-		final JMenu projectMenu = new JMenu("Project Library");
-		final MenuBuilder projectMenuBuilder = new MenuBuilder(projectMenu);
-		final Iterator<URL> projectGraphIterator = getProjectGraphs(project).iterator();
-		while(projectGraphIterator.hasNext()) {
-			try {
-				final URL reportURL = projectGraphIterator.next();
-				final URI relativeURI = 
-						getProjectAnalysisFolder(project).toURI().relativize(reportURL.toURI());
-				
-				final String relativePath = URLDecoder.decode(relativeURI.getPath(), "UTF-8");
-				String menuPath = ".";
-				int lastFolderIndex = relativePath.lastIndexOf('/');
-				if(lastFolderIndex >= 0) {
-					menuPath += "/" + relativePath.substring(0, lastFolderIndex);
+
+		final ProjectResources projectResources = project.getExtension(ProjectResources.class);
+		if(projectResources != null) {
+
+			final JMenu projectMenu = new JMenu("Project Library");
+			final MenuBuilder projectMenuBuilder = new MenuBuilder(projectMenu);
+			final Iterator<URL> projectGraphIterator = getProjectGraphs(project).iterator();
+			while(projectGraphIterator.hasNext()) {
+				try {
+					final URL reportURL = projectGraphIterator.next();
+					final URI relativeURI =
+							getProjectAnalysisFolder(project).toURI().relativize(reportURL.toURI());
+
+					final String relativePath = URLDecoder.decode(relativeURI.getPath(), "UTF-8");
+					String menuPath = ".";
+					int lastFolderIndex = relativePath.lastIndexOf('/');
+					if(lastFolderIndex >= 0) {
+						menuPath += "/" + relativePath.substring(0, lastFolderIndex);
+					}
+
+					final MacroAction act = new MacroAction(project, reportURL);
+					projectMenuBuilder.addItem(menuPath, act);
+				} catch (URISyntaxException | UnsupportedEncodingException e) {
+					LogUtil.warning(e);
 				}
-				
-				final MacroAction act = new MacroAction(project, reportURL);
-				projectMenuBuilder.addItem(menuPath, act);
-			} catch (URISyntaxException | UnsupportedEncodingException e) {
-				LogUtil.warning(e);
+			}
+			if(projectMenu.getMenuComponentCount() > 0) {
+				builder.addSeparator(".", "project_library");
+				final JMenuItem projectSepItem = builder.addItem(".@project_library", "-- Project Library --");
+				projectSepItem.setFont(projectSepItem.getFont().deriveFont(Font.BOLD));
+				final File projectFolder = getProjectAnalysisFolder(project);
+				projectSepItem.addActionListener( (e) -> {
+					if(Desktop.isDesktopSupported()) {
+						try {
+							Desktop.getDesktop().open(projectFolder);
+						} catch (IOException e1) {
+							LogUtil.warning(e1);
+							Toolkit.getDefaultToolkit().beep();
+						}
+					}
+				});
+				projectSepItem.setToolTipText("Show folder " + projectFolder.getAbsolutePath());
+				projectMenuBuilder.appendSubItems(".@-- Project Library --", projectMenu.getPopupMenu());
 			}
 		}
-		if(projectMenu.getMenuComponentCount() > 0) {
-			builder.addSeparator(".", "project_library");
-			final JMenuItem projectSepItem = builder.addItem(".@project_library", "-- Project Library --");
-			projectSepItem.setFont(projectSepItem.getFont().deriveFont(Font.BOLD));
-			final File projectFolder = getProjectAnalysisFolder(project);
-			projectSepItem.addActionListener( (e) -> {
-				if(Desktop.isDesktopSupported()) {
-					try {
-						Desktop.getDesktop().open(projectFolder);
-					} catch (IOException e1) {
-						LogUtil.warning(e1);
-						Toolkit.getDefaultToolkit().beep();
-					}
-				}
-			});
-			projectSepItem.setToolTipText("Show folder " + projectFolder.getAbsolutePath());
-			projectMenuBuilder.appendSubItems(".@-- Project Library --", projectMenu.getPopupMenu());
-		}
-		
+
 		builder.addSeparator(".", "composer");
 		final PhonUIAction<Void> showComposerAct = PhonUIAction.runnable(MacroLibrary::showComposer);
 		showComposerAct.putValue(PhonUIAction.NAME, "Composer...");

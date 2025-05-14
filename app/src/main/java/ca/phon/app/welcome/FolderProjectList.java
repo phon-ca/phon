@@ -322,7 +322,7 @@ public class FolderProjectList extends JPanel {
 		final LocalProjectButton btn = pae.getData();
 		final ProjectFactory factory = new DesktopProjectFactory();
 		try {
-			final Project project = factory.openProject(btn.getProjectFile());
+			final Project project = factory.openProject(btn.getProjectFile().getAbsolutePath());
 			final String today = DateFormatter.dateTimeToString(LocalDate.now());
 			
 			File backupsDir = new File(Workspace.userWorkspaceFolder(), "backups");

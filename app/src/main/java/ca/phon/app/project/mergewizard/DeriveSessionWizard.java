@@ -166,7 +166,7 @@ public class DeriveSessionWizard extends WizardFrame {
 
 		final Project project = getProject();
 		// first make sure we have a corpus
-		if(!project.getCorpora().contains(step1.getMergedCorpusName())) {
+		if(!project.hasCorpus(step1.getMergedCorpusName())) {
 
 			out.println("Creating corpus '" + corpus + "'");
 			out.flush();
@@ -182,7 +182,7 @@ public class DeriveSessionWizard extends WizardFrame {
 		}
 
 		// check session name
-		if(project.getCorpusSessions(corpus).contains(session)) {
+		if(project.hasSession(corpus, session)) {
 			out.println("A session with name '" + corpus + "." + session + "' already exists.");
 			out.flush();
 			return;

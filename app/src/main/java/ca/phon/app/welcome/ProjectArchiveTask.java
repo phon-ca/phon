@@ -17,6 +17,7 @@ package ca.phon.app.welcome;
 
 import ca.phon.app.log.LogUtil;
 import ca.phon.project.Project;
+import ca.phon.project.ProjectResources;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
 import ca.phon.worker.PhonTask;
@@ -70,9 +71,10 @@ public class ProjectArchiveTask extends PhonTask {
 				}
 			}
 		}
-		
-		if(includeResources) {
-			File resDir = new File(project.getResourceLocation());
+
+		final ProjectResources projectResources = project.getExtension(ProjectResources.class);
+		if(includeResources && projectResources != null) {
+			File resDir = new File(projectResources.getResourceLocation());
 			if(resDir.exists()) {
 				for(File resFile:resDir.listFiles()) {
 					if(resFile.isHidden()) continue;

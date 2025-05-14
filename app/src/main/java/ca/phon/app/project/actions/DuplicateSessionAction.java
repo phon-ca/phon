@@ -72,7 +72,7 @@ public class DuplicateSessionAction extends ProjectWindowAction {
 				}
 			}
 			String dupSessionName = sessionBase + " (" + (++idx) + ")." + sessionExtension;
-			while(project.getCorpusSessions(corpus).contains(dupSessionName)) {
+			while(project.hasSession(corpus, dupSessionName)) {
 				dupSessionName = sessionBase + " (" + (++idx) + ")." + sessionExtension;
 			}
 			final File oldSessionFile = new File(project.getSessionPath(corpus, sessionName));
@@ -89,7 +89,11 @@ public class DuplicateSessionAction extends ProjectWindowAction {
 		if(sessionNames.size() > 0) {
 			int indices[] = new int[dupSessionNames.size()];
 			getWindow().refreshProject();
-			List<String> sessions = project.getCorpusSessions(getWindow().getSelectedCorpus());
+			List<String> sessions = new ArrayList<>();
+			final Iterator<String> sessionNamesIt = project.getSessionIterator(corpus);
+			while(sessionNamesIt.hasNext()) {
+				sessions.add(sessionNamesIt.next());
+			}
 			Collections.sort(sessions, CollatorFactory.defaultCollator());
 			for(int i = 0; i < dupSessionNames.size(); i++) {
 				String sessionName = dupSessionNames.get(i);

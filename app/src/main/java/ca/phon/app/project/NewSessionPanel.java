@@ -19,6 +19,7 @@ import ca.phon.app.log.LogUtil;
 import ca.phon.plugin.*;
 import ca.phon.project.Project;
 import ca.phon.util.icons.*;
+import ca.phon.worker.PhonWorker;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 import com.jgoodies.forms.layout.*;
 
@@ -159,10 +160,16 @@ public class NewSessionPanel extends JPanel {
 	private void updateCorporaList() {
 		// Clear out the combo box
 		cmbCorpus.removeAllItems();
-		
-		final List<String> corporaNames = proj.getCorpora();
-		for (String corpusName : corporaNames)
-			cmbCorpus.addItem(corpusName);
+
+		PhonWorker.getInstance().invokeLater(() -> {
+			final Iterator<String> corpusNames = proj.getCorpusIterator();
+			while (corpusNames.hasNext()) {
+				String corpusName = corpusNames.next();
+				SwingUtilities.invokeLater(() -> {
+					cmbCorpus.addItem(corpusName);
+				});
+			}
+		});
 	}
 
 	public void setSelectedCorpus(String corpus) {

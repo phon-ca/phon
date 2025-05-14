@@ -24,6 +24,7 @@ import ca.phon.ui.*;
 import ca.phon.ui.tristatecheckbox.TristateCheckBoxTreeModel;
 
 import java.awt.event.*;
+import java.util.Iterator;
 
 /**
  * Updates the session selector when session editors open/close.
@@ -42,8 +43,12 @@ public class SessionSelectorActiveEditorSupport {
 	private void updateActiveEditors(SessionSelector selector) {
 		Project project = selector.getProject();
 		selector.getSelectionModel().clearSelection();
-		for(String corpus:project.getCorpora()) {
-			for(String session:project.getCorpusSessions(corpus)) {
+		final Iterator<String> corpusIt = project.getCorpusIterator();
+		while(corpusIt.hasNext()) {
+			final String corpus = corpusIt.next();
+			final Iterator<String> sessionIt = project.getSessionIterator(corpus);
+			while(sessionIt.hasNext()) {
+				final String session = sessionIt.next();
 				SessionPath sessionPath = new SessionPath(corpus, session);
 				
 				var treePath = selector.sessionPathToTreePath(sessionPath);

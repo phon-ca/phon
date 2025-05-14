@@ -119,7 +119,11 @@ public class SessionListModel implements ListModel<String> {
 
 	private void loadSessionCache() {
 		synchronized(cachedMutex) {
-			cachedSessions.clear();
+			if(cachedSessions == null) {
+				cachedSessions = new ArrayList<>();
+			} else {
+				cachedSessions.clear();
+			}
 			final Iterator<String> sessionIter = project.getSessionIterator(corpus);
 			while(sessionIter.hasNext()) {
 				cachedSessions.add(sessionIter.next());

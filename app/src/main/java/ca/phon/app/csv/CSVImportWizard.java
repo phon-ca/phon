@@ -534,14 +534,7 @@ public class CSVImportWizard extends BreadcrumbWizardFrame {
 
             writer.writeNext(headerTitles);
 
-            int beforeSessionCount = 0;
-
             var project = getProject();
-
-            for (String corpus : project.getCorpora()) {
-                beforeSessionCount += project.getCorpusSessions(corpus).size();
-            }
-
             CSVImporter csvImporter = new CSVImporter(project, selectedCorpus);
 
             WizardImporterListener importerListener = new WizardImporterListener(writer);
@@ -554,13 +547,7 @@ public class CSVImportWizard extends BreadcrumbWizardFrame {
                 csvImporter.importCSV(filePath, settings);
             }
 
-            int afterSessionCount = 0;
-
-            for (String corpus : project.getCorpora()) {
-                afterSessionCount += project.getCorpusSessions(corpus).size();
-            }
-
-            int newSessionsCount = afterSessionCount - beforeSessionCount;
+            int newSessionsCount = importerListener.createdSessions;
             String sessionCountString = newSessionsCount + " session";
             if (newSessionsCount != 1) sessionCountString += "s";
 
@@ -1041,6 +1028,18 @@ public class CSVImportWizard extends BreadcrumbWizardFrame {
         }
 
         private int warningCount = 0;
+
+        private int createdSessions = 0;
+
+        @Override
+        public void importComplete(String fileName) {
+
+        }
+
+        @Override
+        public void sessionCreated(String fileName, Session session) {
+            ++createdSessions;
+        }
 
         @Override
         public void parsingError(

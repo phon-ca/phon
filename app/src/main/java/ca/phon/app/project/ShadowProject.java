@@ -15,7 +15,6 @@
  */
 package ca.phon.app.project;
 
-import ca.phon.app.log.LogUtil;
 import ca.phon.project.*;
 import ca.phon.project.exceptions.ProjectConfigurationException;
 
@@ -38,7 +37,7 @@ public final class ShadowProject extends LocalProject {
 	/**
 	 * Create a new shadow project.
 	 * 
-	 * @param preject
+	 * @param project
 	 * @return shadow project
 	 */
 	public static ShadowProject of(Project project) throws ProjectConfigurationException {
@@ -51,18 +50,21 @@ public final class ShadowProject extends LocalProject {
 			shadowFolder.mkdirs();
 		}
 		
-//		Properties props = project.getExtension(Properties.class);
-//		try(FileOutputStream fout = new FileOutputStream(new File(shadowFolder, ".properties"))) {
-//			props.store(fout, "");
-//		} catch (IOException e) {
-//			LogUtil.severe(e);
-//		}
-		
 		final ShadowProject retVal = new ShadowProject(shadowFolder, project);
-		for(String corpusName:project.getCorpora()) {
+		final Iterator<String> corpusItr = project.getCorpusIterator();
+		while(corpusItr.hasNext()) {
+			final String corpusName = corpusItr.next();
 			retVal.setCorpusPath(corpusName, project.getCorpusPath(corpusName));
 		}
-		retVal.setResourceLocation(project.getResourceLocation());
+
+		final ProjectResources projectResources = project.getExtension(ProjectResources.class);
+		if(projectResources != null) {
+			retVal.setResourceLocation(projectResources.getResourceLocation());
+		}
+
+		for(String mediaFolder:project.getProjectMediaFolders()) {
+			retVal.addProjectMediaFolder(mediaFolder);
+		}
 		return retVal;
 	}
 	
@@ -70,24 +72,6 @@ public final class ShadowProject extends LocalProject {
 		super(shadowFolder);
 		
 		this.project = project;
-	}
-
-	@Override
-	public String getProjectMediaFolder() {
-		File mediaFolder = new File(project.getProjectMediaFolder());
-		if(!mediaFolder.isAbsolute()) {
-			mediaFolder = new File(project.getLocation() + File.separator + mediaFolder);
-		}
-		return mediaFolder.getAbsolutePath();
-	}
-
-	@Override
-	public String getCorpusMediaFolder(String corpus) {
-		File mediaFolder = new File(project.getCorpusMediaFolder(corpus));
-		if(!mediaFolder.isAbsolute()) {
-			mediaFolder = new File(project.getLocation() + File.separator + mediaFolder);
-		}
-		return mediaFolder.getAbsolutePath();
 	}
 
 	@Override
@@ -104,18 +88,9 @@ public final class ShadowProject extends LocalProject {
 		corpusPathMap.put(corpus, path);
 	}
 
-	/*
-	 * Delegates
-	 */
+	@Override
 	public String getName() {
 		return project.getName();
-	}
-	
-	public List<String> getCorpora() {
-		if(project != null)
-			return project.getCorpora();
-		else 
-			return new ArrayList<String>();
 	}
 	
 }

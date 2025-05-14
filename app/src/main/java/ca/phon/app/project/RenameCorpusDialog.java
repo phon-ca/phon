@@ -27,6 +27,7 @@ import com.jgoodies.forms.layout.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.Iterator;
 import java.util.List;
 
 public class RenameCorpusDialog extends JDialog {
@@ -129,10 +130,11 @@ public class RenameCorpusDialog extends JDialog {
 		jpanel1.add(jlabel3,cc.xy(2,6));
 
 		// Add existing corpora to combo box
-		final List<String> corpora = project.getCorpora();
-		for(String corpusName : corpora)
-			cmbCorpus.addItem(corpusName);
-
+		final Iterator<String> corpusIt = project.getCorpusIterator();
+		while(corpusIt.hasNext()) {
+			final String corpus = corpusIt.next();
+			cmbCorpus.addItem(corpus);
+		}
 		cmbCorpus.setName("cmbCorpus");
 		jpanel1.add(cmbCorpus,cc.xy(2,3));
 

@@ -118,7 +118,7 @@ public class RenameSessionAction extends ProjectWindowAction {
 			// Run through the sessions to see if the corpus specified exists, and
 			// and also make sure that the new name isn't the name of an existing
 			// corpus
-			if (project.getCorpusSessions(corpusName).contains(newSessionName)) {
+			if (project.hasSession(corpusName, newSessionName)) {
 				showMessage("Rename Session", "A session with that name already exists.");
 				return;
 			}
@@ -213,7 +213,11 @@ public class RenameSessionAction extends ProjectWindowAction {
 			}
 			
 			// select new session
-			final List<String> sessionNames = project.getCorpusSessions(corpusName);
+			final List<String> sessionNames = new ArrayList<>();
+			final Iterator<String> sessionNamesIt = project.getSessionIterator(corpusName);
+			while(sessionNamesIt.hasNext()) {
+				sessionNames.add(sessionNamesIt.next());
+			}
 			Collections.sort(sessionNames, CollatorFactory.defaultCollator());
 			int idx = sessionNames.indexOf(newSessionName);
 			if(idx >= 0) {

@@ -22,6 +22,11 @@ import java.time.format.FormatStyle;
 import java.util.*;
 import java.util.stream.StreamSupport;
 
+/**
+ * Class to import CSV files into a Phon project as one or more sessions.  All sessions
+ * will be imported into the same corpus.  If no corpus is specified, a new corpus
+ * named "imported" will be created.
+ */
 public class CSVImporter {
 
     private final Project project;
@@ -43,12 +48,18 @@ public class CSVImporter {
         var writeLock = project.getSessionWriteLock(session);
         try {
             project.saveSession(session, writeLock);
-        }
-        finally {
+        } finally {
             project.releaseSessionWriteLock(session, writeLock);
         }
     }
 
+    /**
+     * Reformat the tier data from the CSV file.  Older versions of Phon used '[ ]' to divide data into
+     * phonetic groups.  This method removes the brackets and returns the data as a single tier string.
+     *
+     * @param currentTierData the current tier data
+     * @return the reformatted tier data or the original data if it doesn't match the old format
+     */
     private String reformatTierData(String currentTierData) {
         if (currentTierData.matches("\\[.*?\\](\\s\\[.*?\\])*")) {
             return currentTierData.replaceAll("[\\[\\]]", "").trim();
@@ -56,6 +67,15 @@ public class CSVImporter {
         return currentTierData;
     }
 
+    /**&
+     * Import a CSV file into the project.  The CSV file must be in the format
+     * specified by the {@link CSVImportSettings} object.
+     *
+     *
+     * @param filePath csv file path
+     * @param settings csv import settings
+     * @throws IOException if an error occurs while reading the file or writing the session
+     */
     public void importCSV(String filePath, CSVImportSettings settings) throws IOException {
         fileName = filePath;
 
@@ -87,7 +107,7 @@ public class CSVImporter {
         var importColumnList = settings.getImportColumnList();
         String currentCorpus = this.selectedCorpus == null ? "imported" : this.selectedCorpus;
         if (sessionPathTier.isEmpty() && corpusNameTier.isEmpty()) {
-            if (!project.getCorpora().contains(currentCorpus)) {
+            if (!project.hasCorpus(currentCorpus)) {
                 project.addCorpus(currentCorpus);
             }
         }
@@ -119,7 +139,7 @@ public class CSVImporter {
                 if (!currentCorpus.equals(sp.getFolder())) {
                     currentCorpus = sp.getFolder();
                     corpusChanged = true;
-                    if (!project.getCorpora().contains(currentCorpus)) {
+                    if (!project.hasCorpus(currentCorpus)) {
                         project.addCorpus(currentCorpus);
                     }
                 }
@@ -135,7 +155,7 @@ public class CSVImporter {
                     if (!currentCorpus.equals(corpusNameFromRow)) {
                         currentCorpus = corpusNameFromRow;
                         corpusChanged = true;
-                        if (!project.getCorpora().contains(currentCorpus)) {
+                        if (!project.hasCorpus(currentCorpus)) {
                             project.addCorpus(currentCorpus);
                         }
                     }
@@ -198,6 +218,11 @@ public class CSVImporter {
                     participantMap.put(sessionPathObject, new HashMap<>());
                     // Set the current session to the one just created
                     currentSession = Optional.of(newSession);
+
+                    // Notify the listeners that a new session has been created
+                    for (CSVImporterListener listener : this.listenerList) {
+                        listener.sessionCreated(fileName, newSession);
+                    }
                 }
             }
 
@@ -321,6 +346,11 @@ public class CSVImporter {
         }
 
         saveSession(currentSession.get());
+
+        // Notify the listeners that the import is complete
+        for (CSVImporterListener listener : this.listenerList) {
+            listener.importComplete(fileName);
+        }
     }
 
     private void importUserTier(Session session, Record record, CSVColumn importColumn, String field) {

@@ -102,7 +102,11 @@ public class CorpusListModel implements ListModel<String> {
 
 	private void loadCorpora() {
 		synchronized(cachedMutex) {
-			cachedCorpora.clear();
+			if(cachedCorpora == null) {
+				cachedCorpora = new ArrayList<String>();
+			} else {
+				cachedCorpora.clear();
+			}
 			final Iterator<String> corpusIter = project.getCorpusIterator();
 			while(corpusIter.hasNext()) {
 				cachedCorpora.add(corpusIter.next());

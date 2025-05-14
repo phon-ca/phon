@@ -16,6 +16,7 @@
 package ca.phon.app.session;
 
 import ca.hedlund.desktopicons.*;
+import ca.hedlund.tst.TernaryTree;
 import ca.phon.app.session.editor.SessionEditor;
 import ca.phon.project.Project;
 import ca.phon.session.SessionPath;
@@ -44,27 +45,6 @@ public class SessionSelector extends TristateCheckBoxTree {
 		final ProjectTreeNode root = new ProjectTreeNode(project);
 		root.setEnablePartialCheck(false);
 
-		// create new tree structure
-		Collator collator = CollatorFactory.defaultCollator();
-		List<String> corpora = project.getCorpora();
-		Collections.sort(corpora, collator);
-		for(String corpus:corpora) {
-			CorpusTreeNode corpusNode = new CorpusTreeNode(corpus);
-			corpusNode.setEnablePartialCheck(false);
-
-			List<String> sessions = project.getCorpusSessions(corpus);
-			if(sessions.size() == 0 && hideEmptyCorpora) continue;
-			Collections.sort(sessions, collator);
-			for(String session:sessions) {
-				SessionPath sp = new SessionPath(corpus, session);
-				
-				SessionTreeNode sessionNode = new SessionTreeNode(sp);
-				sessionNode.setEnablePartialCheck(false);
-				corpusNode.add(sessionNode);
-			}
-			root.add(corpusNode);
-		}
-
 		return new TristateCheckBoxTreeModel(root);
 	}
 
@@ -89,6 +69,7 @@ public class SessionSelector extends TristateCheckBoxTree {
 		this.hideEmptyCorpora = hideEmptyCorpora;
 
 		init();
+		new ProjectTreeWorker().execute();
 	}
 
 	public Project getProject() {
@@ -121,7 +102,6 @@ public class SessionSelector extends TristateCheckBoxTree {
 		setCellRenderer(renderer);
 		setCellEditor(editor);
 
-		super.expandRow(0);
 	}
 
 	public TreePath sessionPathToTreePath(SessionPath sessionPath) {
@@ -239,5 +219,73 @@ public class SessionSelector extends TristateCheckBoxTree {
 		}
 		
 	}
-	
+
+
+	private record ProjectTreeInsertionData(TristateCheckBoxTreeNode parent, TristateCheckBoxTreeNode child, int index) {
+		public ProjectTreeInsertionData(TristateCheckBoxTreeNode parent, TristateCheckBoxTreeNode child) {
+			this(parent, child, -1);
+		}
+	}
+
+	/**
+	 * Worker for building the tree structure of the project
+	 *
+	 */
+	public class ProjectTreeWorker extends SwingWorker<Void, ProjectTreeInsertionData> {
+
+		@Override
+		protected Void doInBackground() throws Exception {
+			final ProjectTreeNode root = (ProjectTreeNode)getModel().getRoot();
+			// create new tree structure
+			final Iterator<String> corpusNames = project.getCorpusIterator();
+			while (corpusNames.hasNext()) {
+				String corpus = corpusNames.next();
+				CorpusTreeNode corpusNode = new CorpusTreeNode(corpus);
+				corpusNode.setEnablePartialCheck(false);
+
+				final Iterator<String> sessionNames = project.getSessionIterator(corpus);
+				if(!sessionNames.hasNext() && hideEmptyCorpora) continue;
+
+				publish(new ProjectTreeInsertionData(root, corpusNode));
+
+				while(sessionNames.hasNext()) {
+					final String session = sessionNames.next();
+					SessionPath sp = new SessionPath(corpus, session);
+
+					SessionTreeNode sessionNode = new SessionTreeNode(sp);
+					sessionNode.setEnablePartialCheck(false);
+					publish(new ProjectTreeInsertionData(corpusNode, sessionNode));
+				}
+			}
+			return null;
+		}
+
+		@Override
+		protected void process(List<ProjectTreeInsertionData> chunks) {
+			for(ProjectTreeInsertionData chunk:chunks) {
+				TristateCheckBoxTreeNode parent = chunk.parent;
+				TristateCheckBoxTreeNode child = chunk.child;
+				int index = chunk.index;
+
+				if(index == -1)
+					parent.add(child);
+				else
+					parent.insert(child, index);
+				int childIdx = parent.getIndex(child);
+				getCheckboxTreeModel().nodesWereInserted(parent, new int[]{ childIdx });
+			}
+		}
+
+		@Override
+		protected void done() {
+			try {
+				get();
+				expandRow(0);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+
 }

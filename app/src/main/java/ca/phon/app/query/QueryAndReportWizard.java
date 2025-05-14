@@ -33,6 +33,7 @@ import ca.phon.opgraph.exceptions.ProcessingException;
 import ca.phon.opgraph.nodes.general.MacroNode;
 import ca.phon.plugin.*;
 import ca.phon.project.Project;
+import ca.phon.project.SessionDetails;
 import ca.phon.query.db.*;
 import ca.phon.query.history.QueryHistoryManager;
 import ca.phon.query.script.*;
@@ -1278,10 +1279,14 @@ public class QueryAndReportWizard extends NodeWizard {
 		}
 			
 		List<SessionPath> selectedSessions = sessionSelector.getSelectedSessions();
+
+		final SessionDetails sd = project.getExtension(SessionDetails.class);
 		Map<SessionPath, ZonedDateTime> sessionModTimes = new HashMap<>();
-		for(SessionPath sp:selectedSessions) {
-			ZonedDateTime modTime = project.getSessionModificationTime(sp.getFolder(), sp.getSessionFile());
-			sessionModTimes.put(sp, modTime);
+		if(sd != null) {
+			for (SessionPath sp : selectedSessions) {
+				ZonedDateTime modTime = sd.getSessionModificationTime(sp.getFolder(), sp.getSessionFile());
+				sessionModTimes.put(sp, modTime);
+			}
 		}
 			
 		return new QueryExecutionHistory(paramHash, selectedSessions, sessionModTimes);

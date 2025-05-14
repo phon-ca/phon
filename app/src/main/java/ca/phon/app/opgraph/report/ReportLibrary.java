@@ -293,7 +293,12 @@ public class ReportLibrary implements OpGraphLibrary {
 
 	@Override
 	public String getProjectFolderPath(Project project) {
-		return getProjectReportFolder(project).getAbsolutePath();
+		final File projectFolder = getProjectReportFolder(project);
+		if(projectFolder == null) {
+			return null;
+		} else {
+			return getProjectReportFolder(project).getAbsolutePath();
+		}
 	}
 
 }

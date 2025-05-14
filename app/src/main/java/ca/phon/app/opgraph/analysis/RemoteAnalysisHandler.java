@@ -1,4 +1,4 @@
-package ca.phon.app.opgraph.report;
+package ca.phon.app.opgraph.analysis;
 
 import ca.phon.util.resources.URLListHandler;
 
@@ -7,12 +7,12 @@ import java.net.URL;
 /**
  * Load reports from a remote URL list.
  */
-public class RemoteReportHandler extends URLListHandler<URL> {
+public class RemoteAnalysisHandler extends URLListHandler<URL> {
 
     /**
      * Constructor
      */
-    public RemoteReportHandler(URL reportListURL) {
+    public RemoteAnalysisHandler(URL reportListURL) {
         super(reportListURL);
     }
 

@@ -18,7 +18,9 @@ package ca.phon.app.project.actions;
 import ca.phon.app.log.LogUtil;
 import ca.phon.app.project.*;
 import ca.phon.project.Project;
+import ca.phon.project.SessionTemplate;
 import ca.phon.session.Session;
+import ca.phon.session.SessionFactory;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -27,9 +29,9 @@ import java.util.UUID;
 
 public class NewSessionAction extends ProjectWindowAction {
 	
-	private String corpus;
+	private final String corpus;
 	
-	private String sessionName;
+	private final String sessionName;
 	
 	private boolean sessionCreated = false;
 	
@@ -83,7 +85,11 @@ public class NewSessionAction extends ProjectWindowAction {
 		
 		// create session
 		try {
-			Session createdSession = proj.createSessionFromTemplate(corpusName, sessionName);
+			final SessionTemplate template = proj.getExtension(SessionTemplate.class);
+			Session createdSession = SessionFactory.newFactory().createSession();
+			if(template != null) {
+				createdSession = template.createSessionFromTemplate(corpusName, sessionName);
+			}
 			sessionCreated = true;
 			
 //			// setup media if available

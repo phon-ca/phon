@@ -29,6 +29,7 @@ import ca.phon.opgraph.exceptions.ItemMissingException;
 import ca.phon.opgraph.nodes.general.MacroNode;
 import ca.phon.opgraph.nodes.reflect.ObjectNode;
 import ca.phon.project.Project;
+import ca.phon.project.ProjectResources;
 import ca.phon.query.script.*;
 import ca.phon.session.SessionPath;
 import ca.phon.ui.CommonModuleFrame;
@@ -104,12 +105,32 @@ public class AnalysisLibrary implements OpGraphLibrary {
 
 	public ResourceLoader<URL> getProjectGraphs(Project project) {
 		final ResourceLoader<URL> retVal = new ResourceLoader<>();
-		retVal.addHandler(new UserAnalysisHandler(getProjectAnalysisFolder(project)));
+		final ProjectResources projectResources = project.getExtension(ProjectResources.class);
+		if(projectResources != null) {
+			final String resourcesPath = projectResources.getResourceLocation();
+			if(resourcesPath.startsWith("http://") || resourcesPath.startsWith("https://")) {
+				try {
+					final URL analyisListURL =
+							new URL(projectResources.getResourceLocation() + "/" + ANALYSIS_FOLDER + "/analysis.list");
+					retVal.addHandler(new RemoteAnalysisHandler(analyisListURL));
+				} catch (MalformedURLException e) {
+					LogUtil.severe("Unable to load report list from URL: " + projectResources.getResourceLocation());
+					LogUtil.severe(e);
+				}
+			} else {
+				retVal.addHandler(new UserAnalysisHandler(getProjectAnalysisFolder(project)));
+			}
+		}
 		return retVal;
 	}
 
 	private File getProjectAnalysisFolder(Project project) {
-		return new File(project.getResourceLocation(), ANALYSIS_FOLDER);
+		final ProjectResources projectResources = project.getExtension(ProjectResources.class);
+		if(projectResources != null) {
+			return new File(projectResources.getResourceLocation(), ANALYSIS_FOLDER);
+		} else {
+			return null;
+		}
 	}
 
 	public void setupMenu(Project project, List<SessionPath> selectedSessions, MenuElement menu) {
@@ -183,51 +204,55 @@ public class AnalysisLibrary implements OpGraphLibrary {
 			builder.appendSubItems(".@-- User Library --", userMenu.getPopupMenu());
 		}
 
-		final JMenu projectMenu = new JMenu("Project Library");
-		final MenuBuilder projectMenuBuilder = new MenuBuilder(projectMenu.getPopupMenu());
-		final Iterator<URL> projectGraphIterator = getProjectGraphs(project).iterator();
-		final TernaryTree<Tuple<String, AnalysisAction>> analysisActionMap = new TernaryTree<>();
-		while(projectGraphIterator.hasNext()) {
-			try {
-				final URL reportURL = projectGraphIterator.next();
-				final URI relativeURI =
-						getProjectAnalysisFolder(project).toURI().relativize(reportURL.toURI());
+		final ProjectResources projectResources = project.getExtension(ProjectResources.class);
+		if(projectResources != null) {
 
-				final String relativePath = URLDecoder.decode(relativeURI.getPath(), "UTF-8");
-				String menuPath = ".";
-				int lastFolderIndex = relativePath.lastIndexOf('/');
-				if(lastFolderIndex >= 0) {
-					menuPath += "/" + relativePath.substring(0, lastFolderIndex);
-				}
+			final JMenu projectMenu = new JMenu("Project Library");
+			final MenuBuilder projectMenuBuilder = new MenuBuilder(projectMenu.getPopupMenu());
+			final Iterator<URL> projectGraphIterator = getProjectGraphs(project).iterator();
+			final TernaryTree<Tuple<String, AnalysisAction>> analysisActionMap = new TernaryTree<>();
+			while(projectGraphIterator.hasNext()) {
+				try {
+					final URL reportURL = projectGraphIterator.next();
+					final URI relativeURI =
+							getProjectAnalysisFolder(project).toURI().relativize(reportURL.toURI());
 
-				final AnalysisAction act = new AnalysisAction(project, selectedSessions, reportURL);
-				String path = menuPath + "/" + act.getValue(AnalysisAction.NAME);
-				analysisActionMap.put(path.toLowerCase(), new Tuple<>(menuPath, act));
-			} catch (URISyntaxException | UnsupportedEncodingException e) {
-				LogUtil.warning(e);
-			}
-		}
-		for(String path:analysisActionMap.keySet()) {
-			var tuple = analysisActionMap.get(path);
-			projectMenuBuilder.addItem(tuple.getObj1(), tuple.getObj2());
-		}
-		if(projectMenu.getMenuComponentCount() > 0) {
-			builder.addSeparator(".", "project_library");
-			final JMenuItem projectSepItem = builder.addItem(".@project_library", "-- Project Library --");
-			projectSepItem.setFont(projectSepItem.getFont().deriveFont(Font.BOLD));
-			final File projectFolder = getProjectAnalysisFolder(project);
-			projectSepItem.addActionListener( (e) -> {
-				if(Desktop.isDesktopSupported()) {
-					try {
-						Desktop.getDesktop().open(projectFolder);
-					} catch (IOException e1) {
-						LogUtil.warning(e1);
-						Toolkit.getDefaultToolkit().beep();
+					final String relativePath = URLDecoder.decode(relativeURI.getPath(), "UTF-8");
+					String menuPath = ".";
+					int lastFolderIndex = relativePath.lastIndexOf('/');
+					if(lastFolderIndex >= 0) {
+						menuPath += "/" + relativePath.substring(0, lastFolderIndex);
 					}
+
+					final AnalysisAction act = new AnalysisAction(project, selectedSessions, reportURL);
+					String path = menuPath + "/" + act.getValue(AnalysisAction.NAME);
+					analysisActionMap.put(path.toLowerCase(), new Tuple<>(menuPath, act));
+				} catch (URISyntaxException | UnsupportedEncodingException e) {
+					LogUtil.warning(e);
 				}
-			});
-			projectSepItem.setToolTipText("Show folder " + projectFolder.getAbsolutePath());
-			builder.appendSubItems(".@-- Project Library --", projectMenu.getPopupMenu());
+			}
+			for(String path:analysisActionMap.keySet()) {
+				var tuple = analysisActionMap.get(path);
+				projectMenuBuilder.addItem(tuple.getObj1(), tuple.getObj2());
+			}
+			if(projectMenu.getMenuComponentCount() > 0) {
+				builder.addSeparator(".", "project_library");
+				final JMenuItem projectSepItem = builder.addItem(".@project_library", "-- Project Library --");
+				projectSepItem.setFont(projectSepItem.getFont().deriveFont(Font.BOLD));
+				final File projectFolder = getProjectAnalysisFolder(project);
+				projectSepItem.addActionListener( (e) -> {
+					if(Desktop.isDesktopSupported()) {
+						try {
+							Desktop.getDesktop().open(projectFolder);
+						} catch (IOException e1) {
+							LogUtil.warning(e1);
+							Toolkit.getDefaultToolkit().beep();
+						}
+					}
+				});
+				projectSepItem.setToolTipText("Show folder " + projectFolder.getAbsolutePath());
+				builder.appendSubItems(".@-- Project Library --", projectMenu.getPopupMenu());
+			}
 		}
 
 		builder.addSeparator(".", "browse");
@@ -425,7 +450,12 @@ public class AnalysisLibrary implements OpGraphLibrary {
 
 	@Override
 	public String getProjectFolderPath(Project project) {
-		return getProjectAnalysisFolder(project).getAbsolutePath();
+		final File projectFolder = getProjectAnalysisFolder(project);
+		if(projectFolder == null) {
+			return null;
+		} else {
+			return getProjectAnalysisFolder(project).getAbsolutePath();
+		}
 	}
 
 }

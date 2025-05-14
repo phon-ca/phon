@@ -18,7 +18,6 @@ package ca.phon.app.project.actions;
 import ca.phon.app.project.ProjectWindow;
 import ca.phon.project.Project;
 import ca.phon.ui.nativedialogs.*;
-import ca.phon.worker.PhonWorker;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -56,7 +55,7 @@ public class BrowseForProjectMediaFolder extends ProjectWindowAction {
 		props.setCanChooseDirectories(true);
 		props.setCanChooseFiles(true);
 		props.setAllowMultipleSelection(false);
-		final String currentPath = project.getProjectMediaFolder();
+		final String currentPath = project.hasCustomProjectMediaFolder() ? project.getProjectMediaFolders().get(0) : null;
 		if(currentPath != null) {
 			File currentFolder = new File(currentPath);
 			if(!currentFolder.isAbsolute()) {

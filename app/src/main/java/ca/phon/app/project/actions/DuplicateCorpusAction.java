@@ -26,6 +26,8 @@ import java.awt.event.ActionEvent;
 import java.io.*;
 import java.util.List;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Duplicate selected corpora in the project window. Corpus names
@@ -54,8 +56,19 @@ public class DuplicateCorpusAction extends ProjectWindowAction {
 		final Project project = getWindow().getProject();
 		for(String corpus:corpora) {
 			int idx = 0;
+			final Pattern pattern = Pattern.compile("(.+) \\((\\d+)\\)");
+			final Matcher matcher = pattern.matcher(corpus);
+			if(matcher.matches()) {
+				// get index from session name
+				String idxStr = matcher.group(2);
+				try {
+					idx = Integer.parseInt(idxStr);
+				} catch (NumberFormatException e) {
+					// ignore - should not happen
+				}
+			}
 			String corpusName = corpus + " (" + (++idx) + ")";
-			while(project.getCorpora().contains(corpusName)) {
+			while(project.hasCorpus(corpusName)) {
 				corpusName = corpus + " (" + (++idx) + ")";
 			}
 			final File oldCorpusFile = new File(project.getCorpusPath(corpus));
@@ -64,11 +77,6 @@ public class DuplicateCorpusAction extends ProjectWindowAction {
 				FileUtils.copyDirectory(oldCorpusFile, dupCorpusFile);
 				dupCorpusNames.add(corpusName);
 				corpusDescs.add(project.getCorpusDescription(corpus));
-
-				if(!project.getCorpusMediaFolder(corpus).equals(project.getProjectMediaFolder())) {
-					project.setCorpusMediaFolder(corpusName, project.getCorpusMediaFolder(corpus));
-				}
-
 			} catch (IOException e) {
 				LogUtil.warning(e);
 				Toolkit.getDefaultToolkit().beep();
@@ -79,8 +87,12 @@ public class DuplicateCorpusAction extends ProjectWindowAction {
 			int indices[] = new int[dupCorpusNames.size()];
 			getWindow().refreshProject();
 
-			List<String> sessions = project.getCorpora();
-			Collections.sort(sessions, CollatorFactory.defaultCollator());
+			List<String> projectCorpora = new ArrayList<>();
+			final Iterator<String> corpusItr = project.getCorpusIterator();
+			while(corpusItr.hasNext()) {
+				projectCorpora.add(corpusItr.next());
+			}
+			Collections.sort(projectCorpora, CollatorFactory.defaultCollator());
 			for(int i = 0; i < dupCorpusNames.size(); i++) {
 				String corpusName = dupCorpusNames.get(i);
 
@@ -88,7 +100,7 @@ public class DuplicateCorpusAction extends ProjectWindowAction {
 				String corpusDesc = corpusDescs.get(i);
 				project.setCorpusDescription(corpusName, corpusDesc);
 
-				indices[i] = sessions.indexOf(corpusName);
+				indices[i] = projectCorpora.indexOf(corpusName);
 			}
 			getWindow().getCorpusList().setSelectedIndices(indices);
 		}

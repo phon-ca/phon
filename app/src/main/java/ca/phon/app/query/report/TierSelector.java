@@ -111,8 +111,12 @@ public class TierSelector extends JComponent {
 					}
 					
 					if(project != null) {
-						for(String corpus:project.getCorpora()) {
-							for(String session:project.getCorpusSessions(corpus)) {
+						final Iterator<String> corpusIt = project.getCorpusIterator();
+						while(corpusIt.hasNext()) {
+							final String corpus = corpusIt.next();
+							final Iterator<String> sessionIt = project.getSessionIterator(corpus);
+							while(sessionIt.hasNext()) {
+								final String session = sessionIt.next();
 								try {
 									Session t = project.openSession(corpus, session);
 									

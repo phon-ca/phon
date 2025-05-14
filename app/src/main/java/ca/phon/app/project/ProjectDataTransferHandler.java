@@ -28,9 +28,14 @@ import java.io.*;
 import java.util.List;
 import java.util.*;
 
+/**
+ * Data transfer handler for project data. This is used by the ProjectWindow to transfer
+ * data between projects using the Transferable API.
+ *
+ */
 public class ProjectDataTransferHandler extends FileTransferHandler {
 	
-	private ProjectWindow window;
+	private final ProjectWindow window;
 	
 	public ProjectDataTransferHandler(ProjectWindow window) {
 		super();
@@ -95,7 +100,7 @@ public class ProjectDataTransferHandler extends FileTransferHandler {
 			if(projectPath.getProject() == dstProjectPath.getProject()) return false;
 			int idx = 0;
 			String dupCorpusName = projectPath.getCorpus();
-			while(dstProjectPath.getProject().getCorpora().contains(dupCorpusName)) {
+			while(dstProjectPath.getProject().hasCorpus(dupCorpusName)) {
 				dupCorpusName = projectPath.getCorpus() + " (" + (++idx) + ")";
 			}
 			dstProjectPath.setCorpus(dupCorpusName);
@@ -127,14 +132,13 @@ public class ProjectDataTransferHandler extends FileTransferHandler {
 			dstProjectPath.setCorpus(dstCorpus);
 			String dstSessionName = projectPath.getSession();
 			int idx = 0;
-			while(dstProjectPath.getProject().getCorpusSessions(
-					dstProjectPath.getCorpus()).contains(dstSessionName)) {
+			while(dstProjectPath.getProject().hasSession(dstCorpus, dstSessionName)) {
 				dstSessionName = projectPath.getSession() + " (" + (++idx) + ")";
 			}
 			dstProjectPath.setSession(dstSessionName);
 			
 			// create corpus if it does not exist
-			if(!dstProjectPath.getProject().getCorpora().contains(dstCorpus)) {
+			if(!dstProjectPath.getProject().hasCorpus(dstCorpus)) {
 				try {
 					dstProjectPath.getProject().addCorpus(dstCorpus, 
 							projectPath.getProject().getCorpusDescription(projectPath.getCorpus()));
@@ -183,7 +187,7 @@ public class ProjectDataTransferHandler extends FileTransferHandler {
 			if(comp == getWindow().getCorpusList()) {
 				int idx = 0;
 				String corpusName = file.getName();
-				while(project.getCorpora().contains(corpusName)) {
+				while(project.hasCorpus(corpusName)) {
 					corpusName = file.getName() + " (" + (++idx) + ")";
 				}
 				final File destFile = new File(project.getCorpusPath(corpusName));
@@ -202,7 +206,7 @@ public class ProjectDataTransferHandler extends FileTransferHandler {
 					String fileName = 
 							file.getName().substring(0, file.getName().length()-4);
 					String sessionName = fileName;
-					while(project.getCorpusSessions(corpus).contains(sessionName)) {
+					while(project.hasSession(corpus, sessionName)) {
 						sessionName = fileName + " (" + (++idx) + ")";
 					}
 					final File destFile = new File(project.getSessionPath(corpus, sessionName));

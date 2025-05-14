@@ -123,7 +123,7 @@ public class Workspace {
 					&& !workspaceFile.getName().equals("backups")) {
 				if(detector.isPhonProjectFolder(workspaceFile)) {
 					try {
-						final Project p = pf.openProject(workspaceFile);
+						final Project p = pf.openProject(workspaceFile.getAbsolutePath());
 						retVal.add(p);
 					} catch (IOException | ProjectConfigurationException e) {
 						LogUtil.warning(e);

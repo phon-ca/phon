@@ -147,7 +147,7 @@ public class SessionFileOpenHandler implements XMLOpenHandler, IPluginExtensionP
 		}
 		
 		try {
-			return (new DesktopProjectFactory()).openProject(projectFolder);
+			return (new DesktopProjectFactory()).openProject(projectFolder.getAbsolutePath());
 		} catch (IOException | ProjectConfigurationException e) {
 			return null;
 		}

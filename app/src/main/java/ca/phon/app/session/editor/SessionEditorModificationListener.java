@@ -1,5 +1,6 @@
 package ca.phon.app.session.editor;
 
+import ca.phon.project.SessionDetails;
 import ca.phon.session.Session;
 import ca.phon.ui.CommonModuleFrame;
 import ca.phon.ui.nativedialogs.*;
@@ -21,28 +22,42 @@ public class SessionEditorModificationListener implements WindowFocusListener {
 	private final static String DLG2_MESSAGE_TEXT = "Reloading data will lose all current changes, continue?";
 	private final static String[] DLG2_OPTIONS = { "Yes, discard changes", "Cancel" };
 
-	private SessionEditor editor;
+	private final SessionEditor editor;
 
 	private ZonedDateTime lastModificationDate;
 
 	public SessionEditorModificationListener(SessionEditor editor) {
 		super();
 		this.editor = editor;
-		this.lastModificationDate = this.editor.getProject().getSessionModificationTime(this.editor.getSession());
+
+		final SessionDetails sessionDetails = this.editor.getProject().getExtension(SessionDetails.class);
+		if(sessionDetails != null) {
+			this.lastModificationDate = sessionDetails.getSessionModificationTime(this.editor.getSession());
+		} else {
+			this.lastModificationDate = ZonedDateTime.now();
+		}
 
 		this.editor.getEventManager().registerActionForEvent(EditorEventType.SessionChanged, this::onSessionChanged);
 		this.editor.getEventManager().registerActionForEvent(EditorEventType.SessionSaved, this::onSessionChanged);
 	}
 
 	private void onSessionChanged(EditorEvent<Session> ee) {
-		this.lastModificationDate = this.editor.getProject().getSessionModificationTime(this.editor.getSession());
+		final SessionDetails sessionDetails = this.editor.getProject().getExtension(SessionDetails.class);
+		if(sessionDetails != null) {
+			this.lastModificationDate = sessionDetails.getSessionModificationTime(this.editor.getSession());
+		} else {
+			this.lastModificationDate = ZonedDateTime.now();
+		}
 	}
 
 	@Override
 	public void windowGainedFocus(WindowEvent e) {
-		ZonedDateTime currentModifiationTime = this.editor.getProject().getSessionModificationTime(this.editor.getSession());
-		if(currentModifiationTime.isAfter(this.lastModificationDate)) {
-			showReloadDialog();
+		final SessionDetails sessionDetails = this.editor.getProject().getExtension(SessionDetails.class);
+		if(sessionDetails != null) {
+			ZonedDateTime currentModifiationTime = sessionDetails.getSessionModificationTime(this.editor.getSession());
+			if(currentModifiationTime.isAfter(this.lastModificationDate)) {
+				showReloadDialog();
+			}
 		}
 	}
 
