@@ -106,15 +106,28 @@ public class SessionSelector extends TristateCheckBoxTree {
 
 	public TreePath sessionPathToTreePath(SessionPath sessionPath) {
 		final TristateCheckBoxTreeNode root = (TristateCheckBoxTreeNode)getModel().getRoot();
-		for(int i = 0; i < root.getChildCount(); i++) {
-			final TristateCheckBoxTreeNode corpusNode = (TristateCheckBoxTreeNode)root.getChildAt(i);
-			if(corpusNode.getUserObject().equals(sessionPath.getFolder())) {
-				for(int j = 0; j < corpusNode.getChildCount(); j++) {
-					final TristateCheckBoxTreeNode sessionNode = (TristateCheckBoxTreeNode)corpusNode.getChildAt(j);
-					if(sessionNode.getUserObject().equals(sessionPath)) {
-						final TreePath checkPath = new TreePath(
-								new Object[]{ root, corpusNode, sessionNode });
-						return checkPath;
+
+		if(sessionPath.getFolder().equals(".")) {
+			// root node
+			for(int j = 0; j < root.getChildCount(); j++) {
+				final TristateCheckBoxTreeNode sessionNode = (TristateCheckBoxTreeNode)root.getChildAt(j);
+				if(sessionNode.isLeaf() && sessionNode.getUserObject().equals(sessionPath)) {
+					final TreePath checkPath = new TreePath(
+							new Object[]{ root, sessionNode });
+					return checkPath;
+				}
+			}
+		} else {
+			for (int i = 0; i < root.getChildCount(); i++) {
+				final TristateCheckBoxTreeNode corpusNode = (TristateCheckBoxTreeNode) root.getChildAt(i);
+				if (corpusNode.getUserObject().equals(sessionPath.getFolder())) {
+					for (int j = 0; j < corpusNode.getChildCount(); j++) {
+						final TristateCheckBoxTreeNode sessionNode = (TristateCheckBoxTreeNode) corpusNode.getChildAt(j);
+						if (sessionNode.getUserObject().equals(sessionPath)) {
+							final TreePath checkPath = new TreePath(
+									new Object[]{root, corpusNode, sessionNode});
+							return checkPath;
+						}
 					}
 				}
 			}
@@ -129,10 +142,12 @@ public class SessionSelector extends TristateCheckBoxTree {
 		List<TreePath> checkPaths = super.getCheckedPaths();
 
 		for(TreePath checkPath:checkPaths) {
-			if(checkPath.getPath().length != 3)
+			final TristateCheckBoxTreeNode checkNode = (TristateCheckBoxTreeNode)checkPath.getLastPathComponent();
+			if(!checkNode.isLeaf()) {
 				continue;
+			}
 			
-			SessionPath loc = (SessionPath)((SessionTreeNode)checkPath.getPath()[2]).getUserObject();
+			SessionPath loc = (SessionPath) checkNode.getUserObject();
 			retVal.add(loc);
 		}
 
@@ -240,13 +255,16 @@ public class SessionSelector extends TristateCheckBoxTree {
 			final Iterator<String> corpusNames = project.getCorpusIterator();
 			while (corpusNames.hasNext()) {
 				String corpus = corpusNames.next();
-				CorpusTreeNode corpusNode = new CorpusTreeNode(corpus);
+				TristateCheckBoxTreeNode corpusNode = new CorpusTreeNode(corpus);
 				corpusNode.setEnablePartialCheck(false);
 
 				final Iterator<String> sessionNames = project.getSessionIterator(corpus);
 				if(!sessionNames.hasNext() && hideEmptyCorpora) continue;
-
-				publish(new ProjectTreeInsertionData(root, corpusNode));
+				if(".".equals(corpus)) {
+					corpusNode = root;
+				} else {
+					publish(new ProjectTreeInsertionData(root, corpusNode));
+				}
 
 				while(sessionNames.hasNext()) {
 					final String session = sessionNames.next();
